@@ -70,8 +70,14 @@ if (opt('changed')) {
     else jobs.push(c)
   }
 }
+// A table read the agent already published (with its audio) is kept as it is, unless this PR changed its lines: CI may
+// have no ffmpeg, and remaking it there would drop the audio.
 const reads = []
-for (const j of jobs) reads.push(await tableRead(j.place, j.group, { out: path.join(out, 'table-read'), before: j.before }))
+for (const j of jobs) {
+  const made = path.join(out, 'table-read', `${j.place}-${(j.group || 'all').replace(/\./g, '-')}.json`)
+  if (!j.before && existsSync(made)) reads.push(JSON.parse(readFileSync(made, 'utf8')))
+  else reads.push(await tableRead(j.place, j.group, { out: path.join(out, 'table-read'), before: j.before }))
+}
 
 if (!briefFile && !reels.length && !reads.length) {
   console.log('Nothing to review: no review/review.json, no reels and no changed lines.')

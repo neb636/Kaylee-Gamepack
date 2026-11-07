@@ -39,20 +39,26 @@ jobs:
       # The review page Dad opens from the PR (scripts/review.mjs), at <preview>/review/: what the agent published for
       # this branch to the review-pages branch (reels, table reads, questions), plus a table read of every group of
       # spoken lines this PR changes. A failure here never blocks the preview.
+      # It can never hold up the preview (or main's deploys, which share the gh-pages lane): every command is timed out.
       - if: github.event.action != 'closed'
         name: Review page
         continue-on-error: true
+        timeout-minutes: 5
         env:
           BRANCH: ${{ github.head_ref }}
           PR: ${{ github.event.number }}
+          DEBIAN_FRONTEND: noninteractive
+          NEEDRESTART_MODE: a
         run: |
           slug="${BRANCH//\//--}"
           mkdir -p dist/review
-          if git fetch --depth=1 origin review-pages && git cat-file -e "FETCH_HEAD:$slug" 2>/dev/null; then
+          if timeout 60 git fetch --depth=1 origin review-pages && git cat-file -e "FETCH_HEAD:$slug" 2>/dev/null; then
             git archive FETCH_HEAD "$slug" | tar -x -C dist/review --strip-components=1
           fi
-          command -v ffmpeg >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
-          node scripts/review.mjs --out=dist/review --changed=HEAD^1 --pr="$PR"
+          if ! command -v ffmpeg >/dev/null; then
+            (timeout 90 sudo -E apt-get -o DPkg::Lock::Timeout=20 update -qq && timeout 150 sudo -E apt-get -o DPkg::Lock::Timeout=20 install -y -qq --no-install-recommends ffmpeg) < /dev/null || echo "No ffmpeg: changed lines get a script sheet without audio."
+          fi
+          timeout 120 node scripts/review.mjs --out=dist/review --changed=HEAD^1 --pr="$PR" < /dev/null || echo "The review page step failed; the preview goes out without it."
           [ -n "$(ls -A dist/review)" ] || rmdir dist/review
       - uses: rossjrw/pr-preview-action@v1
         with:
