@@ -56,6 +56,8 @@ jobs:
             git archive FETCH_HEAD "$slug" | tar -x -C dist/review --strip-components=1
           fi
           if ! command -v ffmpeg >/dev/null; then
+            # The runner rebuilds its man pages after every install, which took ffmpeg's install past 12 minutes.
+            sudo rm -f /var/lib/man-db/auto-update
             (timeout 90 sudo -E apt-get -o DPkg::Lock::Timeout=20 update -qq && timeout 150 sudo -E apt-get -o DPkg::Lock::Timeout=20 install -y -qq --no-install-recommends ffmpeg) < /dev/null || echo "No ffmpeg: changed lines get a script sheet without audio."
           fi
           timeout 120 node scripts/review.mjs --out=dist/review --changed=HEAD^1 --keep --pr="$PR" < /dev/null || echo "The review page step failed; the preview goes out without it."
