@@ -83,7 +83,7 @@ test('@behavior a new wardrobe drawer keeps its own instruction for replay', asy
   const drawer = page.locator('[data-anchor="trip:ward:drawer:paint"]')
   const sparkle = page.getByRole('button', { name: 'Sparkle', exact: true })
   await drawer.click()
-  const paint = () => page.evaluate(() => (window.__kayleeSpeech ?? []).filter((s) => s.text === 'Drag paint onto your hair, dress, or fur!').length)
+  const paint = () => page.evaluate(() => (window.__kayleeSpeech ?? []).filter((s) => s.text === 'Paint your hair, dress, or fur!').length)
   await expect.poll(paint).toBe(1)
   await sparkle.click()
   await expect.poll(paint).toBe(2)

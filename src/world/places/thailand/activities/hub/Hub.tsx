@@ -144,7 +144,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     arrivedThisVisit = true
     remember()
     setArriving(false)
-    guide.current?.speak(L.house.arrive)
+    guide.current?.speak(L.house.stuck.street)
   }
 
   const onSpot = (s: Spot, at?: string) => {

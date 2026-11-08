@@ -37,7 +37,6 @@ export const L = {
   // Sparkle, at Agong's house: at most two lines before her hands are busy, then only when something is new or she
   // seems stuck.
   house: {
-    arrive: "Welcome to Agong's! Tap the front door.",
     inside: 'Tap your family to say hello!',
     // The first time she rattles the closed bathroom door.
     bathroom: "That door's closed!",
@@ -49,10 +48,10 @@ export const L = {
     // The first time she pokes these: something true about Thailand.
     pokes: {
       'spirit-house': 'Flowers for the spirit house.',
-      altar: "Hands together and bow. That's a wai!",
+      altar: 'Hands together. A wai!',
       'tuk-tuk': 'A tuk-tuk! It goes tuk tuk tuk!',
       'rice-cooker': 'Look, the rice is steaming!',
-      gecko: 'A gecko! Tuk-kae, tuk-kae!',
+      gecko: 'A tokay gecko!',
       motorbike: 'Beep beep! A motorbike!',
     } as Record<string, Line>,
   },
@@ -101,7 +100,7 @@ export const L = {
     open: 'Time to dress up!',
     // The first drawer she pulls out (the paint drawer says its own).
     drawer: 'Drag something onto your unicorn!',
-    paint: 'Drag paint onto your hair, dress, or fur!',
+    paint: 'Paint your hair, dress, or fur!',
     // The mirror takes a picture of her look and pins it to the door; a picture dropped on her puts the whole look on.
     photo: 'Click! Your look is saved!',
     look: 'Ta-da! Your saved look!',
