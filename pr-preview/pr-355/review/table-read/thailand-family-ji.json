@@ -1,0 +1,70 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "family.ji",
+  "title": "Thailand › Family › Ji",
+  "intro": "",
+  "page": "thailand-family-ji.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 2,
+  "missing": 0,
+  "names": 1,
+  "flags": [
+    {
+      "key": "family.ji.hi",
+      "text": "Hi, sweetie!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Hi sweetie! This is our room!"
+    },
+    {
+      "key": "family.ji.again.0",
+      "text": "I love you, Kaylee!",
+      "flags": [
+        "name",
+        "changed"
+      ],
+      "was": "Bounce on the mattress!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "family",
+        "ji",
+        "hi"
+      ],
+      "text": "Hi, sweetie!",
+      "voice": "ji",
+      "key": "family.ji.hi",
+      "part": "family › ji",
+      "when": "",
+      "ms": 1219,
+      "flags": [
+        "changed"
+      ],
+      "was": "Hi sweetie! This is our room!"
+    },
+    {
+      "path": [
+        "family",
+        "ji",
+        "again",
+        "0"
+      ],
+      "text": "I love you, Kaylee!",
+      "voice": "ji",
+      "key": "family.ji.again.0",
+      "part": "family › ji › again",
+      "when": "A few relatives have their own reactions when posing for the family photo.",
+      "ms": 1142,
+      "flags": [
+        "name",
+        "changed"
+      ],
+      "was": "Bounce on the mattress!"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "family.bb",
+  "title": "Thailand › Family › Bb",
+  "intro": "",
+  "page": "thailand-family-bb.html",
+  "audio": null,
+  "lines": 3,
+  "seconds": 3,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "family.bb.hi",
+      "text": "Hi!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Hi Kaylee... one second."
+    },
+    {
+      "key": "family.bb.again.0",
+      "text": "So cute!",
+      "flags": [
+        "changed"
+      ],
+      "was": "So cute, Kaylee."
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "family",
+        "bb",
+        "hi"
+      ],
+      "text": "Hi!",
+      "voice": "bb",
+      "key": "family.bb.hi",
+      "part": "family › bb",
+      "when": "",
+      "ms": 888,
+      "flags": [
+        "changed"
+      ],
+      "was": "Hi Kaylee... one second."
+    },
+    {
+      "path": [
+        "family",
+        "bb",
+        "again",
+        "0"
+      ],
+      "text": "So cute!",
+      "voice": "bb",
+      "key": "family.bb.again.0",
+      "part": "family › bb › again",
+      "when": "The family notice her look the first time she walks up to them in it (hat, glasses, wings, outfit, shoes, paint), once per visible change. Relatives who are only in the family photo use their photo greetings.",
+      "ms": 1248,
+      "flags": [
+        "changed"
+      ],
+      "was": "So cute, Kaylee."
+    },
+    {
+      "path": [
+        "family",
+        "bb",
+        "again",
+        "1"
+      ],
+      "text": "Uh-huh!",
+      "voice": "bb",
+      "key": "family.bb.again.1",
+      "part": "family › bb › again",
+      "when": "",
+      "ms": 526,
+      "flags": []
+    }
+  ]
+}

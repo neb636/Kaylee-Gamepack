@@ -1,0 +1,263 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "house",
+  "title": "Thailand › House",
+  "intro": "Sparkle, at Agong's house: at most two lines before her hands are busy, then only when something is new or she seems stuck.",
+  "page": "thailand-house.html",
+  "audio": null,
+  "lines": 12,
+  "seconds": 34,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "house.arrive",
+      "text": "Welcome to Agong's! Tap the front door.",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "We're at Agong's house in Thailand, Kaylee!"
+    },
+    {
+      "key": "house.pokes.spirit-house",
+      "text": "Flowers for the spirit house.",
+      "flags": [
+        "changed"
+      ],
+      "was": "A spirit house! Thai families give it flowers and a drink."
+    },
+    {
+      "key": "house.pokes.altar",
+      "text": "Hands together and bow. That's a wai!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Put your hands together and bow. In Thailand, that is a wai!"
+    },
+    {
+      "key": "house.pokes.tuk-tuk",
+      "text": "A tuk-tuk! It goes tuk tuk tuk!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "house.pokes.rice-cooker",
+      "text": "Look, the rice is steaming!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Thai families eat rice every day!"
+    },
+    {
+      "key": "house.pokes.gecko",
+      "text": "A gecko! Tuk-kae, tuk-kae!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "A gecko! It sings took-geh, took-geh!"
+    },
+    {
+      "key": "house.pokes.motorbike",
+      "text": "Beep beep! A motorbike!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Lots of people in Thailand ride motorbikes!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "house",
+        "arrive"
+      ],
+      "text": "Welcome to Agong's! Tap the front door.",
+      "voice": "sparkle",
+      "key": "house.arrive",
+      "part": "house",
+      "when": "",
+      "ms": 4368,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "We're at Agong's house in Thailand, Kaylee!"
+    },
+    {
+      "path": [
+        "house",
+        "inside"
+      ],
+      "text": "Tap your family to say hello!",
+      "voice": "sparkle",
+      "key": "house.inside",
+      "part": "house",
+      "when": "",
+      "ms": 2242,
+      "flags": []
+    },
+    {
+      "path": [
+        "house",
+        "bathroom"
+      ],
+      "text": "That door's closed!",
+      "voice": "sparkle",
+      "key": "house.bathroom",
+      "part": "house",
+      "when": "The first time she rattles the closed bathroom door.",
+      "ms": 2136,
+      "flags": []
+    },
+    {
+      "path": [
+        "house",
+        "stuck",
+        "street"
+      ],
+      "text": "Tap the door to go inside!",
+      "voice": "sparkle",
+      "key": "house.stuck.street",
+      "part": "house › stuck",
+      "when": "",
+      "ms": 2450,
+      "flags": []
+    },
+    {
+      "path": [
+        "house",
+        "stuck",
+        "downstairs"
+      ],
+      "text": "Tap the stairs to go up to your room!",
+      "voice": "sparkle",
+      "key": "house.stuck.downstairs",
+      "part": "house › stuck",
+      "when": "",
+      "ms": 2947,
+      "flags": []
+    },
+    {
+      "path": [
+        "house",
+        "stuck",
+        "upstairs"
+      ],
+      "text": "Bounce on the bed!",
+      "voice": "sparkle",
+      "key": "house.stuck.upstairs",
+      "part": "house › stuck",
+      "when": "",
+      "ms": 1488,
+      "flags": []
+    },
+    {
+      "path": [
+        "house",
+        "pokes",
+        "spirit-house"
+      ],
+      "text": "Flowers for the spirit house.",
+      "voice": "sparkle",
+      "key": "house.pokes.spirit-house",
+      "part": "house › pokes",
+      "when": "The first time she pokes these: something true about Thailand.",
+      "ms": 2352,
+      "flags": [
+        "changed"
+      ],
+      "was": "A spirit house! Thai families give it flowers and a drink."
+    },
+    {
+      "path": [
+        "house",
+        "pokes",
+        "altar"
+      ],
+      "text": "Hands together and bow. That's a wai!",
+      "voice": "sparkle",
+      "key": "house.pokes.altar",
+      "part": "house › pokes",
+      "when": "The first time she pokes these: something true about Thailand.",
+      "ms": 3480,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Put your hands together and bow. In Thailand, that is a wai!"
+    },
+    {
+      "path": [
+        "house",
+        "pokes",
+        "tuk-tuk"
+      ],
+      "text": "A tuk-tuk! It goes tuk tuk tuk!",
+      "voice": "sparkle",
+      "key": "house.pokes.tuk-tuk",
+      "part": "house › pokes",
+      "when": "The first time she pokes these: something true about Thailand.",
+      "ms": 3546,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "house",
+        "pokes",
+        "rice-cooker"
+      ],
+      "text": "Look, the rice is steaming!",
+      "voice": "sparkle",
+      "key": "house.pokes.rice-cooker",
+      "part": "house › pokes",
+      "when": "The first time she pokes these: something true about Thailand.",
+      "ms": 2808,
+      "flags": [
+        "changed"
+      ],
+      "was": "Thai families eat rice every day!"
+    },
+    {
+      "path": [
+        "house",
+        "pokes",
+        "gecko"
+      ],
+      "text": "A gecko! Tuk-kae, tuk-kae!",
+      "voice": "sparkle",
+      "key": "house.pokes.gecko",
+      "part": "house › pokes",
+      "when": "The first time she pokes these: something true about Thailand.",
+      "ms": 3936,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "A gecko! It sings took-geh, took-geh!"
+    },
+    {
+      "path": [
+        "house",
+        "pokes",
+        "motorbike"
+      ],
+      "text": "Beep beep! A motorbike!",
+      "voice": "sparkle",
+      "key": "house.pokes.motorbike",
+      "part": "house › pokes",
+      "when": "The first time she pokes these: something true about Thailand.",
+      "ms": 2328,
+      "flags": [
+        "changed"
+      ],
+      "was": "Lots of people in Thailand ride motorbikes!"
+    }
+  ]
+}

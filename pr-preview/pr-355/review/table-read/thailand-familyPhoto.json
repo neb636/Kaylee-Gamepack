@@ -1,0 +1,56 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "familyPhoto",
+  "title": "Thailand › Family Photo",
+  "intro": "A few relatives have their own reactions when posing for the family photo.",
+  "page": "thailand-familyPhoto.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 2,
+  "missing": 0,
+  "names": 1,
+  "flags": [
+    {
+      "key": "familyPhoto.nick",
+      "text": "Big smile!",
+      "flags": [
+        "changed"
+      ],
+      "was": "High five!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "familyPhoto",
+        "ji"
+      ],
+      "text": "I love you, Kaylee!",
+      "voice": "ji",
+      "key": "familyPhoto.ji",
+      "part": "familyPhoto",
+      "when": "",
+      "ms": 1142,
+      "flags": [
+        "name"
+      ]
+    },
+    {
+      "path": [
+        "familyPhoto",
+        "nick"
+      ],
+      "text": "Big smile!",
+      "voice": "nick",
+      "key": "familyPhoto.nick",
+      "part": "familyPhoto",
+      "when": "A few relatives have their own reactions when posing for the family photo.",
+      "ms": 1104,
+      "flags": [
+        "changed"
+      ],
+      "was": "High five!"
+    }
+  ]
+}

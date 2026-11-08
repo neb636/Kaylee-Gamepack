@@ -1,0 +1,57 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "family.ja",
+  "title": "Thailand › Family › Ja",
+  "intro": "",
+  "page": "thailand-family-ja.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 4,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "family.ja.hi",
+      "text": "Sawasdee ka!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Sawasdee ka, Kaylee!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "family",
+        "ja",
+        "hi"
+      ],
+      "text": "Sawasdee ka!",
+      "voice": "ja",
+      "key": "family.ja.hi",
+      "part": "family › ja",
+      "when": "",
+      "ms": 1728,
+      "flags": [
+        "changed"
+      ],
+      "was": "Sawasdee ka, Kaylee!"
+    },
+    {
+      "path": [
+        "family",
+        "ja",
+        "again",
+        "0"
+      ],
+      "text": "Big smile for the photo!",
+      "voice": "ja",
+      "key": "family.ja.again.0",
+      "part": "family › ja › again",
+      "when": "",
+      "ms": 1912,
+      "flags": []
+    }
+  ]
+}

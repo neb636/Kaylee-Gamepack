@@ -1,0 +1,10 @@
+{
+  "title": "Thailand house dialogue",
+  "checkIn": "Fix",
+  "kaylee": "Shorter hellos and clearer dress-up cues. The family talks about what Kaylee can see and do.",
+  "links": [
+    { "label": "Start from the tuk-tuk arrival", "hash": "#/world/thailand/hub/arrive" },
+    { "label": "Meet the family in the photo", "hash": "#/world/thailand/hub/family" },
+    { "label": "Try the wardrobe", "hash": "#/world/thailand/hub/wardrobe" }
+  ]
+}

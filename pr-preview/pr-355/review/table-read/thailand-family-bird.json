@@ -1,0 +1,68 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "family.bird",
+  "title": "Thailand › Family › Bird",
+  "intro": "",
+  "page": "thailand-family-bird.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 3,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "family.bird.hi",
+      "text": "Sawasdee krub!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Sawasdee krub, Kaylee!"
+    },
+    {
+      "key": "family.bird.again.0",
+      "text": "Hey, little unicorn!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Want to sit on my motorbike?"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "family",
+        "bird",
+        "hi"
+      ],
+      "text": "Sawasdee krub!",
+      "voice": "bird",
+      "key": "family.bird.hi",
+      "part": "family › bird",
+      "when": "",
+      "ms": 1440,
+      "flags": [
+        "changed"
+      ],
+      "was": "Sawasdee krub, Kaylee!"
+    },
+    {
+      "path": [
+        "family",
+        "bird",
+        "again",
+        "0"
+      ],
+      "text": "Hey, little unicorn!",
+      "voice": "bird",
+      "key": "family.bird.again.0",
+      "part": "family › bird › again",
+      "when": "",
+      "ms": 1920,
+      "flags": [
+        "changed"
+      ],
+      "was": "Want to sit on my motorbike?"
+    }
+  ]
+}

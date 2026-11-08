@@ -1,0 +1,68 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "family.nick",
+  "title": "Thailand › Family › Nick",
+  "intro": "",
+  "page": "thailand-family-nick.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 2,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "family.nick.hi",
+      "text": "Hey, kiddo!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Hi Kaylee! Welcome to Agong's house!"
+    },
+    {
+      "key": "family.nick.again.0",
+      "text": "Love you!",
+      "flags": [
+        "changed"
+      ],
+      "was": "High five!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "family",
+        "nick",
+        "hi"
+      ],
+      "text": "Hey, kiddo!",
+      "voice": "nick",
+      "key": "family.nick.hi",
+      "part": "family › nick",
+      "when": "",
+      "ms": 1128,
+      "flags": [
+        "changed"
+      ],
+      "was": "Hi Kaylee! Welcome to Agong's house!"
+    },
+    {
+      "path": [
+        "family",
+        "nick",
+        "again",
+        "0"
+      ],
+      "text": "Love you!",
+      "voice": "nick",
+      "key": "family.nick.again.0",
+      "part": "family › nick › again",
+      "when": "",
+      "ms": 792,
+      "flags": [
+        "changed"
+      ],
+      "was": "High five!"
+    }
+  ]
+}

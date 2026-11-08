@@ -1,0 +1,68 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "family.joy",
+  "title": "Thailand › Family › Joy",
+  "intro": "",
+  "page": "thailand-family-joy.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 3,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "family.joy.hi",
+      "text": "Sawasdee ka!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Sawasdee ka, Kaylee! Look at Agong's treasures!"
+    },
+    {
+      "key": "family.joy.again.0",
+      "text": "Hee hee! Hi again!",
+      "flags": [
+        "changed"
+      ],
+      "was": "The lucky cat says hi!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "family",
+        "joy",
+        "hi"
+      ],
+      "text": "Sawasdee ka!",
+      "voice": "joy",
+      "key": "family.joy.hi",
+      "part": "family › joy",
+      "when": "",
+      "ms": 1248,
+      "flags": [
+        "changed"
+      ],
+      "was": "Sawasdee ka, Kaylee! Look at Agong's treasures!"
+    },
+    {
+      "path": [
+        "family",
+        "joy",
+        "again",
+        "0"
+      ],
+      "text": "Hee hee! Hi again!",
+      "voice": "joy",
+      "key": "family.joy.again.0",
+      "part": "family › joy › again",
+      "when": "",
+      "ms": 1834,
+      "flags": [
+        "changed"
+      ],
+      "was": "The lucky cat says hi!"
+    }
+  ]
+}

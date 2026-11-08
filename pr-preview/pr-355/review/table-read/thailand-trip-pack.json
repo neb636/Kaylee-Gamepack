@@ -1,0 +1,206 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "trip.pack",
+  "title": "Thailand › Trip › Pack",
+  "intro": "",
+  "page": "thailand-trip-pack.html",
+  "audio": null,
+  "lines": 11,
+  "seconds": 23,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "trip.pack.start",
+      "text": "Tap things to pack them!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Tap your things to pack them, Kaylee!"
+    },
+    {
+      "key": "trip.pack.full",
+      "text": "Too full! Tap the suitcase again!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "It's too full! Sit on it!"
+    },
+    {
+      "key": "trip.pack.goodHat",
+      "text": "Good sun hat!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Good hat, Kaylee!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "trip",
+        "pack",
+        "start"
+      ],
+      "text": "Tap things to pack them!",
+      "voice": "ji",
+      "key": "trip.pack.start",
+      "part": "trip › pack",
+      "when": "",
+      "ms": 2064,
+      "flags": [
+        "changed"
+      ],
+      "was": "Tap your things to pack them, Kaylee!"
+    },
+    {
+      "path": [
+        "trip",
+        "pack",
+        "close"
+      ],
+      "text": "All packed? Tap the suitcase!",
+      "voice": "ji",
+      "key": "trip.pack.close",
+      "part": "trip › pack",
+      "when": "",
+      "ms": 2547,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "pack",
+        "hint"
+      ],
+      "text": "It's hot and sunny at the sea!",
+      "voice": "ji",
+      "key": "trip.pack.hint",
+      "part": "trip › pack",
+      "when": "",
+      "ms": 2704,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "pack",
+        "hungry"
+      ],
+      "text": "Pack some more!",
+      "voice": "ji",
+      "key": "trip.pack.hungry",
+      "part": "trip › pack",
+      "when": "",
+      "ms": 1256,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "pack",
+        "full"
+      ],
+      "text": "Too full! Tap the suitcase again!",
+      "voice": "ji",
+      "key": "trip.pack.full",
+      "part": "trip › pack",
+      "when": "",
+      "ms": 3072,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "It's too full! Sit on it!"
+    },
+    {
+      "path": [
+        "trip",
+        "pack",
+        "gan"
+      ],
+      "text": "Five more minutes...",
+      "voice": "gan",
+      "key": "trip.pack.gan",
+      "part": "trip › pack",
+      "when": "",
+      "ms": 1811,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "pack",
+        "pillow"
+      ],
+      "text": "Yawn... so sleepy!",
+      "voice": "ji",
+      "key": "trip.pack.pillow",
+      "part": "trip › pack",
+      "when": "",
+      "ms": 2668,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "pack",
+        "fan"
+      ],
+      "text": "The fan blew it open!",
+      "voice": "ji",
+      "key": "trip.pack.fan",
+      "part": "trip › pack",
+      "when": "",
+      "ms": 1512,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "pack",
+        "sunscreen"
+      ],
+      "text": "Mommy always packs sunscreen!",
+      "voice": "ji",
+      "key": "trip.pack.sunscreen",
+      "part": "trip › pack",
+      "when": "",
+      "ms": 2118,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "pack",
+        "hat"
+      ],
+      "text": "Here's Mommy's spare sun hat!",
+      "voice": "ji",
+      "key": "trip.pack.hat",
+      "part": "trip › pack",
+      "when": "",
+      "ms": 2153,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "pack",
+        "goodHat"
+      ],
+      "text": "Good sun hat!",
+      "voice": "ji",
+      "key": "trip.pack.goodHat",
+      "part": "trip › pack",
+      "when": "Her own shady hat (the cap, the cowboy hat...) is a good sun hat: no spare.",
+      "ms": 1488,
+      "flags": [
+        "changed"
+      ],
+      "was": "Good hat, Kaylee!"
+    }
+  ]
+}
