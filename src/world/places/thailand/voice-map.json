@@ -77,18 +77,11 @@
     "file": "88573e942ffd.mp3"
   },
   {
-    "text": "This is your room! Try the mattress!",
+    "text": "That door's closed!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2917,
-    "file": "a3f49991cdbd.mp3"
-  },
-  {
-    "text": "I don't need to go to the bathroom!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2026,
-    "file": "eb6e59742e9a.mp3"
+    "ms": 2136,
+    "file": "c8fd941e4101.mp3"
   },
   {
     "text": "Tap the stairs to go up to your room!",
@@ -98,11 +91,11 @@
     "file": "64b49dc4a710.mp3"
   },
   {
-    "text": "Bounce on the mattress, Kaylee!",
+    "text": "Bounce on the bed!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2249,
-    "file": "2688da9fafc1.mp3"
+    "ms": 1488,
+    "file": "d730bbcc8f49.mp3"
   },
   {
     "text": "A spirit house! Thai families give it flowers and a drink.",
@@ -481,20 +474,6 @@
     "sig": "ed7dbdac3d",
     "ms": 2474,
     "file": "12dee3a6655c.mp3"
-  },
-  {
-    "text": "Pull a drawer!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1258,
-    "file": "920683263799.mp3"
-  },
-  {
-    "text": "Tap the mirror for a picture!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2239,
-    "file": "2c780a2f2efd.mp3"
   },
   {
     "text": "Click! A picture of your look, Kaylee!",
@@ -5458,13 +5437,6 @@
     "sig": "ed7dbdac3d",
     "ms": 1767,
     "file": "98f64f783a8e.mp3"
-  },
-  {
-    "text": "More games to find! Tap the map, Kaylee!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3132,
-    "file": "a20eec759fb2.mp3"
   },
   {
     "text": "Where shall we play, Kaylee?",
