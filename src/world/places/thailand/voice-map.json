@@ -56,13 +56,6 @@
     "file": "8ce90a849b18.mp3"
   },
   {
-    "text": "Welcome to Agong's! Tap the front door.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4368,
-    "file": "87c1e9cdb81b.mp3"
-  },
-  {
     "text": "Tap your family to say hello!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -105,11 +98,11 @@
     "file": "515a704c33ee.mp3"
   },
   {
-    "text": "Hands together and bow. That's a wai!",
+    "text": "Hands together. A wai!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3480,
-    "file": "9a03854908b4.mp3"
+    "ms": 2664,
+    "file": "eec52b1376a4.mp3"
   },
   {
     "text": "A tuk-tuk! It goes tuk tuk tuk!",
@@ -126,11 +119,11 @@
     "file": "85e65ede580b.mp3"
   },
   {
-    "text": "A gecko! Tuk-kae, tuk-kae!",
+    "text": "A tokay gecko!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3936,
-    "file": "9c9de6e5f481.mp3"
+    "ms": 1512,
+    "file": "bfe73f7c5934.mp3"
   },
   {
     "text": "Beep beep! A motorbike!",
@@ -427,11 +420,11 @@
     "file": "c37a93c3048b.mp3"
   },
   {
-    "text": "Drag paint onto your hair, dress, or fur!",
+    "text": "Paint your hair, dress, or fur!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3480,
-    "file": "6e2f45c78a2a.mp3"
+    "ms": 2472,
+    "file": "2d0ac52699d7.mp3"
   },
   {
     "text": "Click! Your look is saved!",
