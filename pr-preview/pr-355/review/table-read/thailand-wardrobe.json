@@ -7,7 +7,7 @@
   "page": "thailand-wardrobe.html",
   "audio": null,
   "lines": 107,
-  "seconds": 198,
+  "seconds": 197,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -30,9 +30,8 @@
     },
     {
       "key": "wardrobe.paint",
-      "text": "Drag paint onto your hair, dress, or fur!",
+      "text": "Paint your hair, dress, or fur!",
       "flags": [
-        "long",
         "changed"
       ],
       "was": "Hair, dress or fur!"
@@ -417,14 +416,13 @@
         "wardrobe",
         "paint"
       ],
-      "text": "Drag paint onto your hair, dress, or fur!",
+      "text": "Paint your hair, dress, or fur!",
       "voice": "sparkle",
       "key": "wardrobe.paint",
       "part": "wardrobe",
       "when": "",
-      "ms": 3480,
+      "ms": 2472,
       "flags": [
-        "long",
         "changed"
       ],
       "was": "Hair, dress or fur!"
