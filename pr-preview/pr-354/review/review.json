@@ -1,9 +1,0 @@
-{
-  "title": "Agong's house voices",
-  "checkIn": "Fix",
-  "kaylee": "Sparkle points to things Kaylee can play with, and the house stays quieter while she explores.",
-  "links": [
-    { "label": "Play from the tuk-tuk arrival", "hash": "#/world/thailand/hub/arrive" },
-    { "label": "Try Sparkle upstairs", "hash": "#/world/thailand/hub/upstairs" }
-  ]
-}
