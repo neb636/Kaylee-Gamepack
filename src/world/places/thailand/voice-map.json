@@ -56,18 +56,11 @@
     "file": "8ce90a849b18.mp3"
   },
   {
-    "text": "We're at Agong's house in Thailand, Kaylee!",
+    "text": "Welcome to Agong's! Tap the front door.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3551,
-    "file": "809c4470b77d.mp3"
-  },
-  {
-    "text": "Tap the door to go inside!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2450,
-    "file": "d1a831ff8ac6.mp3"
+    "ms": 4368,
+    "file": "87c1e9cdb81b.mp3"
   },
   {
     "text": "Tap your family to say hello!",
@@ -84,6 +77,13 @@
     "file": "c8fd941e4101.mp3"
   },
   {
+    "text": "Tap the door to go inside!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2450,
+    "file": "d1a831ff8ac6.mp3"
+  },
+  {
     "text": "Tap the stairs to go up to your room!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -98,18 +98,18 @@
     "file": "d730bbcc8f49.mp3"
   },
   {
-    "text": "A spirit house! Thai families give it flowers and a drink.",
+    "text": "Flowers for the spirit house.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4882,
-    "file": "e6afc4bf0b7d.mp3"
+    "ms": 2352,
+    "file": "515a704c33ee.mp3"
   },
   {
-    "text": "Put your hands together and bow. In Thailand, that is a wai!",
+    "text": "Hands together and bow. That's a wai!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 5003,
-    "file": "6957332598c0.mp3"
+    "ms": 3480,
+    "file": "9a03854908b4.mp3"
   },
   {
     "text": "A tuk-tuk! It goes tuk tuk tuk!",
@@ -119,32 +119,25 @@
     "file": "694cd017d73f.mp3"
   },
   {
-    "text": "Thai families eat rice every day!",
+    "text": "Look, the rice is steaming!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2858,
-    "file": "ab5ad83fe287.mp3"
+    "ms": 2808,
+    "file": "85e65ede580b.mp3"
   },
   {
-    "text": "The lucky cat waves for good luck!",
+    "text": "A gecko! Tuk-kae, tuk-kae!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2727,
-    "file": "fc105715c91c.mp3"
+    "ms": 3936,
+    "file": "9c9de6e5f481.mp3"
   },
   {
-    "text": "A gecko! It sings took-geh, took-geh!",
+    "text": "Beep beep! A motorbike!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3819,
-    "file": "b6c3b009349c.mp3"
-  },
-  {
-    "text": "Lots of people in Thailand ride motorbikes!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4500,
-    "file": "6aec27896584.mp3"
+    "ms": 2328,
+    "file": "9078167ccdb5.mp3"
   },
   {
     "text": "Elephants live in the north of Thailand!",
@@ -210,18 +203,11 @@
     "file": "667a35ed53a1.mp3"
   },
   {
-    "text": "Sawasdee krub, Kaylee! Welcome home!",
+    "text": "Sawasdee krub, Kaylee!",
     "voice": "agong",
     "sig": "0f90e139f5",
-    "ms": 4309,
-    "file": "203262be0267.mp3"
-  },
-  {
-    "text": "Come, sit with Agong.",
-    "voice": "agong",
-    "sig": "0f90e139f5",
-    "ms": 2269,
-    "file": "0bea3df853d9.mp3"
+    "ms": 1488,
+    "file": "e674f929bc64.mp3"
   },
   {
     "text": "Ho ho! My little unicorn!",
@@ -231,18 +217,11 @@
     "file": "b117b3dc1ac8.mp3"
   },
   {
-    "text": "Hi sweetie! This is our room!",
+    "text": "Hi, sweetie!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 2413,
-    "file": "1b154a36c869.mp3"
-  },
-  {
-    "text": "Bounce on the mattress!",
-    "voice": "ji",
-    "sig": "ba2e98c34e",
-    "ms": 1867,
-    "file": "49cbf7bbbc61.mp3"
+    "ms": 1219,
+    "file": "da5da158c5c0.mp3"
   },
   {
     "text": "I love you, Kaylee!",
@@ -252,60 +231,39 @@
     "file": "11f448002934.mp3"
   },
   {
-    "text": "Hi Kaylee! Welcome to Agong's house!",
+    "text": "Hey, kiddo!",
     "voice": "nick",
     "sig": "a2881bb105",
-    "ms": 2507,
-    "file": "34b1b993b42c.mp3"
+    "ms": 1128,
+    "file": "85c49405c127.mp3"
   },
   {
-    "text": "High five!",
+    "text": "Love you!",
     "voice": "nick",
     "sig": "a2881bb105",
-    "ms": 883,
-    "file": "02a28b88283b.mp3"
+    "ms": 792,
+    "file": "a4a56483561f.mp3"
   },
   {
-    "text": "Let's go inside!",
-    "voice": "nick",
-    "sig": "a2881bb105",
-    "ms": 1208,
-    "file": "a6a92009bbdf.mp3"
-  },
-  {
-    "text": "Sawasdee ka, Kaylee! Are you hungry?",
+    "text": "Sawasdee ka!",
     "voice": "jum",
     "sig": "4e8ef39b9e",
-    "ms": 3749,
-    "file": "4a342797426b.mp3"
+    "ms": 1464,
+    "file": "77657137d8a5.mp3"
   },
   {
-    "text": "The rice is almost ready!",
+    "text": "So good to see you!",
     "voice": "jum",
     "sig": "4e8ef39b9e",
-    "ms": 2429,
-    "file": "9034df1eb925.mp3"
+    "ms": 1584,
+    "file": "2865c3e771ac.mp3"
   },
   {
-    "text": "So big now, Kaylee!",
-    "voice": "jum",
-    "sig": "4e8ef39b9e",
-    "ms": 2402,
-    "file": "1bcdb0658ab6.mp3"
-  },
-  {
-    "text": "Sawasdee ka, Kaylee! Look at Agong's treasures!",
+    "text": "Sawasdee ka!",
     "voice": "joy",
     "sig": "c3cd84e045",
-    "ms": 4396,
-    "file": "1b50133000d4.mp3"
-  },
-  {
-    "text": "The lucky cat says hi!",
-    "voice": "joy",
-    "sig": "c3cd84e045",
-    "ms": 1923,
-    "file": "14aaa3b714f7.mp3"
+    "ms": 1248,
+    "file": "dc23e9734718.mp3"
   },
   {
     "text": "Hee hee! Hi again!",
@@ -315,39 +273,32 @@
     "file": "b556bf1864df.mp3"
   },
   {
-    "text": "Sawasdee krub, Kaylee!",
+    "text": "Sawasdee krub!",
     "voice": "bird",
     "sig": "7d72cb4f5c",
-    "ms": 2496,
-    "file": "56b3655214b2.mp3"
+    "ms": 1440,
+    "file": "95a553052e22.mp3"
   },
   {
-    "text": "Want to sit on my motorbike?",
+    "text": "Hey, little unicorn!",
     "voice": "bird",
     "sig": "7d72cb4f5c",
-    "ms": 1952,
-    "file": "459402cfb8e0.mp3"
+    "ms": 1920,
+    "file": "978b2feb13ad.mp3"
   },
   {
-    "text": "Beep beep!",
-    "voice": "bird",
-    "sig": "7d72cb4f5c",
-    "ms": 1490,
-    "file": "9bd09d032869.mp3"
-  },
-  {
-    "text": "Mm-hmm. Hi Kaylee.",
+    "text": "Oh, hey!",
     "voice": "gan",
     "sig": "157be5e474",
-    "ms": 2173,
-    "file": "e9346ca089a2.mp3"
+    "ms": 1848,
+    "file": "fb091aeb5499.mp3"
   },
   {
-    "text": "One sec, I'm winning!",
+    "text": "Hey again!",
     "voice": "gan",
     "sig": "157be5e474",
-    "ms": 1967,
-    "file": "1967f47b0595.mp3"
+    "ms": 1176,
+    "file": "835041dff05f.mp3"
   },
   {
     "text": "Uh-huh...",
@@ -357,18 +308,18 @@
     "file": "d17c3f654ed5.mp3"
   },
   {
-    "text": "Oh. Hi, Kaylee.",
+    "text": "Oh. Hi!",
     "voice": "ken",
     "sig": "8506fed695",
-    "ms": 2691,
-    "file": "11f62f40b159.mp3"
+    "ms": 1416,
+    "file": "d77442da26c3.mp3"
   },
   {
-    "text": "Look, a funny video!",
+    "text": "Hey there!",
     "voice": "ken",
     "sig": "8506fed695",
-    "ms": 1836,
-    "file": "6ed6d857043b.mp3"
+    "ms": 672,
+    "file": "a82f2ae1f8a2.mp3"
   },
   {
     "text": "Mm-hmm...",
@@ -378,18 +329,18 @@
     "file": "fae7c2ad6f33.mp3"
   },
   {
-    "text": "Hi Kaylee... one second.",
+    "text": "Hi!",
     "voice": "bb",
     "sig": "16e7dc84f7",
-    "ms": 2072,
-    "file": "f5266fcb6462.mp3"
+    "ms": 888,
+    "file": "3779ec323f8f.mp3"
   },
   {
-    "text": "So cute, Kaylee.",
+    "text": "So cute!",
     "voice": "bb",
     "sig": "16e7dc84f7",
-    "ms": 2178,
-    "file": "16ae009f5328.mp3"
+    "ms": 1248,
+    "file": "18e4f6ccca4a.mp3"
   },
   {
     "text": "Uh-huh!",
@@ -399,11 +350,11 @@
     "file": "0c958ffa116a.mp3"
   },
   {
-    "text": "Sawasdee ka, Kaylee!",
+    "text": "Sawasdee ka!",
     "voice": "ja",
     "sig": "4d02c3160a",
-    "ms": 2354,
-    "file": "3632ad14cc35.mp3"
+    "ms": 1728,
+    "file": "edec09441a1e.mp3"
   },
   {
     "text": "Big smile for the photo!",
@@ -413,11 +364,11 @@
     "file": "6cc5b01f26be.mp3"
   },
   {
-    "text": "Sawasdee ka, Kaylee!",
+    "text": "Sawasdee ka!",
     "voice": "sri",
     "sig": "db1e0738fa",
-    "ms": 3328,
-    "file": "b3a927a9c7f0.mp3"
+    "ms": 1416,
+    "file": "3faa02d43651.mp3"
   },
   {
     "text": "Say cheese!",
@@ -427,25 +378,25 @@
     "file": "f2933af8b0e6.mp3"
   },
   {
-    "text": "Kaylee! Sawasdee krub!",
+    "text": "Sawasdee krub!",
     "voice": "putto",
     "sig": "c95377be59",
-    "ms": 2500,
-    "file": "7a0b700eeca8.mp3"
+    "ms": 2112,
+    "file": "8b81c609535a.mp3"
   },
   {
-    "text": "Let's play!",
+    "text": "Hi again!",
     "voice": "putto",
     "sig": "c95377be59",
-    "ms": 1066,
-    "file": "d5b13c9e3bda.mp3"
+    "ms": 816,
+    "file": "942b3aacf4e6.mp3"
   },
   {
-    "text": "Hi Kaylee! Hee hee!",
+    "text": "Hi! Hee hee!",
     "voice": "putter",
     "sig": "6f3c0affb3",
-    "ms": 1963,
-    "file": "03c5548ddde8.mp3"
+    "ms": 2040,
+    "file": "126f2c6f140e.mp3"
   },
   {
     "text": "Peep peep!",
@@ -455,39 +406,46 @@
     "file": "9a8bb7438f72.mp3"
   },
   {
-    "text": "Your wardrobe! Dress up, Kaylee!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2805,
-    "file": "7b0c80e35171.mp3"
+    "text": "Big smile!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1104,
+    "file": "d9718ff78e1c.mp3"
   },
   {
-    "text": "Drag it onto you, Kaylee!",
+    "text": "Time to dress up!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 1966,
-    "file": "449ad989f360.mp3"
+    "ms": 2016,
+    "file": "12d02fc3c212.mp3"
   },
   {
-    "text": "Hair, dress or fur!",
+    "text": "Drag something onto your unicorn!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2474,
-    "file": "12dee3a6655c.mp3"
+    "ms": 3024,
+    "file": "c37a93c3048b.mp3"
   },
   {
-    "text": "Click! A picture of your look, Kaylee!",
+    "text": "Drag paint onto your hair, dress, or fur!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2949,
-    "file": "3cf76e75d982.mp3"
+    "ms": 3480,
+    "file": "6e2f45c78a2a.mp3"
   },
   {
-    "text": "Your whole look! Wow, Kaylee!",
+    "text": "Click! Your look is saved!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2812,
-    "file": "eb41b96d744f.mp3"
+    "ms": 2136,
+    "file": "cc93921d6f5d.mp3"
+  },
+  {
+    "text": "Ta-da! Your saved look!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2256,
+    "file": "b5cf1b5dc0fc.mp3"
   },
   {
     "text": "Ta da! Magic!",
@@ -770,67 +728,67 @@
     "file": "f508ac914aaf.mp3"
   },
   {
-    "text": "Ooh, what a pretty hat, Kaylee!",
+    "text": "Ooh, look at you!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 2982,
-    "file": "267dc4cff50a.mp3"
+    "ms": 1968,
+    "file": "cf60b124c8de.mp3"
   },
   {
-    "text": "Ooh, fancy glasses, Kaylee!",
+    "text": "Ooh, fancy glasses!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 2154,
-    "file": "992234669fea.mp3"
+    "ms": 2544,
+    "file": "378f53e060cc.mp3"
   },
   {
-    "text": "Ooh, so pretty, Kaylee!",
+    "text": "Ooh, so pretty!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 2252,
-    "file": "aa360ff46109.mp3"
+    "ms": 2256,
+    "file": "54442edf4887.mp3"
   },
   {
-    "text": "Ooh, what a pretty outfit, Kaylee!",
+    "text": "Ooh, what a pretty outfit!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 3464,
-    "file": "8034fdf79288.mp3"
+    "ms": 2808,
+    "file": "a7bb0e58e9b7.mp3"
   },
   {
-    "text": "Ooh, nice shoes, Kaylee!",
+    "text": "Ooh, nice shoes!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 2387,
-    "file": "013fa09f265a.mp3"
+    "ms": 1824,
+    "file": "0892c6826b34.mp3"
   },
   {
-    "text": "Ooh, new colors, Kaylee!",
+    "text": "Ooh, new colors!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 2191,
-    "file": "d377928ae11b.mp3"
+    "ms": 1944,
+    "file": "c268c97c489f.mp3"
   },
   {
-    "text": "Wow, cool hat!",
+    "text": "Looking good!",
     "voice": "nick",
     "sig": "a2881bb105",
-    "ms": 2322,
-    "file": "779918b02565.mp3"
+    "ms": 1008,
+    "file": "7f334a676077.mp3"
   },
   {
-    "text": "Cool shades, Kaylee!",
+    "text": "Cool glasses!",
     "voice": "nick",
     "sig": "a2881bb105",
-    "ms": 1888,
-    "file": "110dd6e450d1.mp3"
+    "ms": 1392,
+    "file": "48537d516dc8.mp3"
   },
   {
-    "text": "Whoa, cool, Kaylee!",
+    "text": "Whoa, cool!",
     "voice": "nick",
     "sig": "a2881bb105",
-    "ms": 1932,
-    "file": "9ecf809db78e.mp3"
+    "ms": 1488,
+    "file": "a047021bb831.mp3"
   },
   {
     "text": "Whoa, what an outfit!",
@@ -840,11 +798,11 @@
     "file": "e3ce202b53d5.mp3"
   },
   {
-    "text": "Cool shoes, Kaylee!",
+    "text": "Cool shoes!",
     "voice": "nick",
     "sig": "a2881bb105",
-    "ms": 1898,
-    "file": "e270b5745290.mp3"
+    "ms": 1128,
+    "file": "f9fa620a64a3.mp3"
   },
   {
     "text": "Whoa, new colors!",
@@ -868,13 +826,6 @@
     "file": "606b50695e79.mp3"
   },
   {
-    "text": "Ho ho! So pretty, Kaylee!",
-    "voice": "agong",
-    "sig": "0f90e139f5",
-    "ms": 3038,
-    "file": "3585b79a312f.mp3"
-  },
-  {
     "text": "Ho ho! Nice shoes!",
     "voice": "agong",
     "sig": "0f90e139f5",
@@ -889,25 +840,25 @@
     "file": "638f40906600.mp3"
   },
   {
-    "text": "Oh! What a pretty hat, Kaylee!",
+    "text": "Oh! How pretty!",
     "voice": "jum",
     "sig": "4e8ef39b9e",
-    "ms": 2844,
-    "file": "7c911add0933.mp3"
+    "ms": 2160,
+    "file": "6cb8f393687d.mp3"
   },
   {
-    "text": "Oh! So fancy, Kaylee!",
+    "text": "Oh! So fancy!",
     "voice": "jum",
     "sig": "4e8ef39b9e",
-    "ms": 3399,
-    "file": "2d6c0e49ad87.mp3"
+    "ms": 2664,
+    "file": "8c0f90d7f2c3.mp3"
   },
   {
-    "text": "Oh! So pretty, Kaylee!",
+    "text": "Oh! So pretty!",
     "voice": "jum",
     "sig": "4e8ef39b9e",
-    "ms": 2651,
-    "file": "575346be39f5.mp3"
+    "ms": 2064,
+    "file": "16b7e9bb4566.mp3"
   },
   {
     "text": "Oh! What a pretty outfit!",
@@ -917,11 +868,11 @@
     "file": "e39dcbb7cdff.mp3"
   },
   {
-    "text": "Oh! Nice shoes, Kaylee!",
+    "text": "Oh! Nice shoes!",
     "voice": "jum",
     "sig": "4e8ef39b9e",
-    "ms": 2461,
-    "file": "ed8d4e291580.mp3"
+    "ms": 2184,
+    "file": "56523b9704a8.mp3"
   },
   {
     "text": "Oh! I love the colors!",
@@ -931,11 +882,11 @@
     "file": "4dce4c901432.mp3"
   },
   {
-    "text": "Wow! I love your hat!",
+    "text": "Wow! I love that!",
     "voice": "joy",
     "sig": "c3cd84e045",
-    "ms": 2186,
-    "file": "6b380996cfec.mp3"
+    "ms": 1920,
+    "file": "daf6d2cb4c3f.mp3"
   },
   {
     "text": "Wow! Fancy glasses!",
@@ -945,11 +896,11 @@
     "file": "3735670ae1a3.mp3"
   },
   {
-    "text": "Wow! So cute, Kaylee!",
+    "text": "Wow! So cute!",
     "voice": "joy",
     "sig": "c3cd84e045",
-    "ms": 2420,
-    "file": "e2bbe3556bb4.mp3"
+    "ms": 2472,
+    "file": "2e692b75c406.mp3"
   },
   {
     "text": "Wow! What an outfit!",
@@ -973,39 +924,39 @@
     "file": "f50f23f31a03.mp3"
   },
   {
-    "text": "Nice hat, Kaylee!",
+    "text": "Looking good!",
     "voice": "bird",
     "sig": "7d72cb4f5c",
-    "ms": 1521,
-    "file": "ead89fd1096b.mp3"
+    "ms": 1224,
+    "file": "f07b618eca81.mp3"
   },
   {
-    "text": "Nice glasses, Kaylee!",
+    "text": "Nice glasses!",
     "voice": "bird",
     "sig": "7d72cb4f5c",
-    "ms": 2568,
-    "file": "21e8d858e282.mp3"
+    "ms": 1512,
+    "file": "5b348b3be700.mp3"
   },
   {
-    "text": "Ho ho! Nice, Kaylee!",
+    "text": "Ho ho! Nice!",
     "voice": "bird",
     "sig": "7d72cb4f5c",
-    "ms": 2342,
-    "file": "88023a5fc227.mp3"
+    "ms": 1944,
+    "file": "8fec1c5d722f.mp3"
   },
   {
-    "text": "Nice outfit, Kaylee!",
+    "text": "Nice outfit!",
     "voice": "bird",
     "sig": "7d72cb4f5c",
-    "ms": 1839,
-    "file": "c73f409292b6.mp3"
+    "ms": 1800,
+    "file": "894eb44d1a87.mp3"
   },
   {
-    "text": "Nice shoes, Kaylee!",
+    "text": "Nice shoes!",
     "voice": "bird",
     "sig": "7d72cb4f5c",
-    "ms": 1775,
-    "file": "3366505f02ba.mp3"
+    "ms": 1800,
+    "file": "116cfab746c4.mp3"
   },
   {
     "text": "Ho ho! New colors!",
@@ -1015,11 +966,11 @@
     "file": "e737d68be9cc.mp3"
   },
   {
-    "text": "Nice hat... one sec.",
+    "text": "Oh, nice!",
     "voice": "gan",
     "sig": "157be5e474",
-    "ms": 2018,
-    "file": "eaa2881d54b0.mp3"
+    "ms": 1656,
+    "file": "0820d0a3242a.mp3"
   },
   {
     "text": "Cool glasses... uh-huh.",
@@ -1043,11 +994,11 @@
     "file": "74ea5feab065.mp3"
   },
   {
-    "text": "Nice shoes... one sec.",
+    "text": "Nice shoes!",
     "voice": "gan",
     "sig": "157be5e474",
-    "ms": 2114,
-    "file": "61772723ce58.mp3"
+    "ms": 1704,
+    "file": "46cd87de93b7.mp3"
   },
   {
     "text": "New colors... cool.",
@@ -1057,11 +1008,11 @@
     "file": "3766465201a7.mp3"
   },
   {
-    "text": "Oh. Nice hat.",
+    "text": "Oh. Looking good.",
     "voice": "ken",
     "sig": "8506fed695",
-    "ms": 2423,
-    "file": "a3786d9a2226.mp3"
+    "ms": 2160,
+    "file": "15fb938a5bd0.mp3"
   },
   {
     "text": "Oh. Cool glasses.",
@@ -1099,25 +1050,11 @@
     "file": "8a44b687e215.mp3"
   },
   {
-    "text": "So cute, Kaylee... one sec.",
-    "voice": "bb",
-    "sig": "16e7dc84f7",
-    "ms": 2876,
-    "file": "8322fcfa290c.mp3"
-  },
-  {
     "text": "Cute glasses... uh-huh.",
     "voice": "bb",
     "sig": "16e7dc84f7",
     "ms": 2542,
     "file": "560618d67e86.mp3"
-  },
-  {
-    "text": "So cute... one sec.",
-    "voice": "bb",
-    "sig": "16e7dc84f7",
-    "ms": 2571,
-    "file": "4a701534b2ac.mp3"
   },
   {
     "text": "Cute outfit... uh-huh.",
@@ -1127,11 +1064,11 @@
     "file": "659808491de5.mp3"
   },
   {
-    "text": "Nice shoes... one sec.",
+    "text": "Nice shoes!",
     "voice": "bb",
     "sig": "16e7dc84f7",
-    "ms": 2456,
-    "file": "56b082ffe2b6.mp3"
+    "ms": 1320,
+    "file": "cf5db6d7a192.mp3"
   },
   {
     "text": "Cute colors... uh-huh.",
@@ -1141,200 +1078,39 @@
     "file": "07f2400e33f3.mp3"
   },
   {
-    "text": "So pretty, Kaylee!",
-    "voice": "ja",
-    "sig": "4d02c3160a",
-    "ms": 1953,
-    "file": "1c2cc39175f8.mp3"
-  },
-  {
-    "text": "So fancy, Kaylee!",
-    "voice": "ja",
-    "sig": "4d02c3160a",
-    "ms": 2415,
-    "file": "17434d4f3408.mp3"
-  },
-  {
-    "text": "What a pretty outfit!",
-    "voice": "ja",
-    "sig": "4d02c3160a",
-    "ms": 2454,
-    "file": "1aa10810d87f.mp3"
-  },
-  {
-    "text": "What cute shoes!",
-    "voice": "ja",
-    "sig": "4d02c3160a",
-    "ms": 2381,
-    "file": "9fac901866a5.mp3"
-  },
-  {
-    "text": "So pretty, new colors!",
-    "voice": "ja",
-    "sig": "4d02c3160a",
-    "ms": 2578,
-    "file": "f4570e350c7d.mp3"
-  },
-  {
-    "text": "Lovely hat! Say cheese!",
-    "voice": "sri",
-    "sig": "db1e0738fa",
-    "ms": 2817,
-    "file": "14460bf8d10e.mp3"
-  },
-  {
-    "text": "Lovely glasses! Say cheese!",
-    "voice": "sri",
-    "sig": "db1e0738fa",
-    "ms": 3052,
-    "file": "13b7f3cfa17f.mp3"
-  },
-  {
-    "text": "Lovely! Say cheese!",
-    "voice": "sri",
-    "sig": "db1e0738fa",
-    "ms": 1815,
-    "file": "f4976c9aacd0.mp3"
-  },
-  {
-    "text": "Lovely outfit! Say cheese!",
-    "voice": "sri",
-    "sig": "db1e0738fa",
-    "ms": 2594,
-    "file": "286d05f32eae.mp3"
-  },
-  {
-    "text": "Lovely shoes! Say cheese!",
-    "voice": "sri",
-    "sig": "db1e0738fa",
-    "ms": 2490,
-    "file": "eefff07f4283.mp3"
-  },
-  {
-    "text": "Lovely colors! Say cheese!",
-    "voice": "sri",
-    "sig": "db1e0738fa",
-    "ms": 2747,
-    "file": "d2b466f94777.mp3"
-  },
-  {
-    "text": "Cool hat!",
-    "voice": "putto",
-    "sig": "c95377be59",
-    "ms": 952,
-    "file": "2a698b4127c9.mp3"
-  },
-  {
-    "text": "Cool glasses!",
-    "voice": "putto",
-    "sig": "c95377be59",
-    "ms": 1616,
-    "file": "6adcf1fc99e0.mp3"
-  },
-  {
-    "text": "Cool!",
-    "voice": "putto",
-    "sig": "c95377be59",
-    "ms": 587,
-    "file": "d88f9bb79867.mp3"
-  },
-  {
-    "text": "Cool outfit!",
-    "voice": "putto",
-    "sig": "c95377be59",
-    "ms": 1394,
-    "file": "8ea6a38a2160.mp3"
-  },
-  {
-    "text": "Cool shoes!",
-    "voice": "putto",
-    "sig": "c95377be59",
-    "ms": 1531,
-    "file": "52b6e6438b39.mp3"
-  },
-  {
-    "text": "Cool colors!",
-    "voice": "putto",
-    "sig": "c95377be59",
-    "ms": 1466,
-    "file": "e8f6d2c21ba4.mp3"
-  },
-  {
-    "text": "Look, a hat!",
-    "voice": "putter",
-    "sig": "6f3c0affb3",
-    "ms": 1386,
-    "file": "78af0e351728.mp3"
-  },
-  {
-    "text": "Look, glasses!",
-    "voice": "putter",
-    "sig": "6f3c0affb3",
-    "ms": 1611,
-    "file": "6fe7555b8d47.mp3"
-  },
-  {
-    "text": "Look, so cute!",
-    "voice": "putter",
-    "sig": "6f3c0affb3",
-    "ms": 2114,
-    "file": "819e2d81d05f.mp3"
-  },
-  {
-    "text": "Look, new clothes!",
-    "voice": "putter",
-    "sig": "6f3c0affb3",
-    "ms": 1527,
-    "file": "5ff89eaf5614.mp3"
-  },
-  {
-    "text": "Look, new shoes!",
-    "voice": "putter",
-    "sig": "6f3c0affb3",
-    "ms": 1506,
-    "file": "2701a1e0e78c.mp3"
-  },
-  {
-    "text": "Look, new colors!",
-    "voice": "putter",
-    "sig": "6f3c0affb3",
-    "ms": 1970,
-    "file": "c7b5369a423d.mp3"
-  },
-  {
-    "text": "Ooh, a crown, Kaylee!",
+    "text": "Ooh, a crown!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 2666,
-    "file": "c52fd8d8ea1f.mp3"
+    "ms": 1752,
+    "file": "7121d3851c0f.mp3"
   },
   {
-    "text": "Ooh, Kaylee, you can fly!",
+    "text": "Look at those wings!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 2415,
-    "file": "4629c4f4aa29.mp3"
+    "ms": 1416,
+    "file": "98d5996526da.mp3"
   },
   {
-    "text": "Ooh, a princess cape, Kaylee!",
+    "text": "Ooh, a princess cape!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 2191,
-    "file": "437ad0e46b9a.mp3"
+    "ms": 2352,
+    "file": "b16ced5ffebc.mp3"
   },
   {
-    "text": "Ooh, a bunny backpack, Kaylee!",
+    "text": "Ooh, a bunny backpack!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 2531,
-    "file": "041fcaddc670.mp3"
+    "ms": 2064,
+    "file": "58acc193a81e.mp3"
   },
   {
-    "text": "Ooh, cute overalls, Kaylee!",
+    "text": "Ooh, cute overalls!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 2368,
-    "file": "e6ced289bf53.mp3"
+    "ms": 2400,
+    "file": "199514a12351.mp3"
   },
   {
     "text": "Cool wings!",
@@ -1393,11 +1169,11 @@
     "file": "438f26054545.mp3"
   },
   {
-    "text": "Tap your things to pack them, Kaylee!",
+    "text": "Tap things to pack them!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 2357,
-    "file": "af0f79523056.mp3"
+    "ms": 2064,
+    "file": "b4e600568d3c.mp3"
   },
   {
     "text": "All packed? Tap the suitcase!",
@@ -1421,11 +1197,11 @@
     "file": "b88a7fea9462.mp3"
   },
   {
-    "text": "It's too full! Sit on it!",
+    "text": "Too full! Tap the suitcase again!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 2733,
-    "file": "dd28e83b946c.mp3"
+    "ms": 3072,
+    "file": "d012c1eb75c8.mp3"
   },
   {
     "text": "Five more minutes...",
@@ -1463,11 +1239,11 @@
     "file": "7891124e9389.mp3"
   },
   {
-    "text": "Good hat, Kaylee!",
+    "text": "Good sun hat!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 1394,
-    "file": "4dbb199e9a99.mp3"
+    "ms": 1488,
+    "file": "6288fc2a088a.mp3"
   },
   {
     "text": "Bring Agong a photo of the Nail Island!",
@@ -5367,13 +5143,6 @@
     "sig": "3efe47c973",
     "ms": 900,
     "file": "0234f49f1ae0.mp3"
-  },
-  {
-    "text": "Hi, sweetie!",
-    "voice": "ji",
-    "sig": "ba2e98c34e",
-    "ms": 1219,
-    "file": "da5da158c5c0.mp3"
   },
   {
     "text": "Have fun, Kaylee!",
