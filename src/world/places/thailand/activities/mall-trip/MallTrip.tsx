@@ -14,7 +14,7 @@
 // after each leg; saying yes to the mall again offers to keep going, and after a whole day 🛝 or 🍕 straight there.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { sounds, useSaved } from '../../../../../sdk'
+import { sounds, stopSpeaking, useSaved } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { TripGuide, type TripGuideHandle } from '../../trip/legs/Guide'
 import { BoardingPass, type PassChoice } from '../../trip/legs/BoardingPass'
@@ -130,6 +130,8 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
     const plain = mallVoice.say
     mallVoice.say = (l) => (guide.current ? guide.current.speak(l) : plain(l))
     return () => {
+      // A line still downloading or playing in the mall belongs to the mall.
+      stopSpeaking()
       mallVoice.say = plain
     }
   }, [])

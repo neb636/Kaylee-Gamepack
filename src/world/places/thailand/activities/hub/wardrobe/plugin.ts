@@ -1133,17 +1133,15 @@ export class WardrobePlugin implements HousePlugin {
     this.paint.update(dt)
   }
 
-  /** After ~8 seconds with nothing touched: a hint, and the thing to touch glints (at most a few per visit). */
+  /** After ~8 seconds with nothing touched: the thing to touch glints without interrupting free play (at most a few per visit). */
   private hint(dt: number) {
     if (!this.open || this.drag || this.flights.length || this.hints >= MAX_HINTS) return
     this.idle += dt
     if (this.idle < IDLE_S) return
     this.idle = 0
     this.hints++
-    const h = L.wardrobe.hint
     if (!this.drawer) {
       const first = DRAWERS[this.hints === 1 ? 0 : Math.floor(Math.random() * DRAWERS.length)].id
-      this.events.say(h.drawer)
       this.glints.push({ at: () => this.drawers.get(first)?.getWorldPosition(new Vector3()) ?? null, t: 0, next: 0 })
       sfx.plink()
       return
@@ -1152,11 +1150,9 @@ export class WardrobePlugin implements HousePlugin {
     const ids = drawerThings(this.drawer).filter((id) => !on.has(id))
     if (this.dressed < 2 && ids.length) {
       const t = this.thing(ids[0])
-      this.events.say(h.thing)
       this.glints.push({ at: () => (t.holder.visible ? t.holder.getWorldPosition(new Vector3()).add(new Vector3(0, 0.1, 0)) : null), t: 0, next: 0 })
       sfx.plink()
     } else if (this.dressed >= 2 && !this.pictured) {
-      this.events.say(h.photo)
       this.glints.push({ at: () => this.mirrorCenter(), t: 0, next: 0 })
       sfx.plink()
     }

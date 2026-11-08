@@ -55,15 +55,25 @@ test('@behavior going to the party and back leaves no GPU memory behind', async 
 })
 
 
-test('@behavior floor reminders show in Sparkle\'s bubble without her voice', async ({ page }) => {
+test('@behavior house reminders highlight a visible target and only speak when asked', async ({ page }) => {
   test.setTimeout(60_000)
   await page.clock.install()
   await open(page, 'hub/downstairs')
   await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
-  const line = 'Tap the stairs to go up to your room!'
-  const spoken = () => page.evaluate((t) => (window.__kayleeSpeech ?? []).filter((s) => s.text === t).length, line)
+  await expect(page.locator('[data-anchor="family:agong"]')).toBeVisible()
+  const speech = () => page.evaluate(() => (window.__kayleeSpeech ?? []).map((s) => s.text))
+  const before = await speech()
   await page.clock.fastForward(13_000)
-  await expect(page.getByText(line)).toBeVisible()
-  await page.clock.fastForward(200_000)
-  expect(await spoken()).toBe(0)
+  await expect(page.locator('[data-anchor="stairs-up"], [data-anchor^="family:"]').filter({ visible: true }).and(page.locator('[style*="box-shadow: rgba(255, 79, 154"]')).first()).toBeVisible()
+  expect(await speech()).toEqual(before)
+  await page.getByRole('button', { name: 'Sparkle' }).click()
+  const last = (await speech()).at(-1)
+  expect(['Tap the stairs to go up to your room!', 'Tap your family to say hello!']).toContain(last)
+})
+
+test('@behavior Mommy greets the camera from the family photo', async ({ page }) => {
+  await open(page, 'hub/family?who=ji')
+  await page.locator('[data-anchor="family:ji"]').click()
+  const spoken = await page.evaluate(() => (window.__kayleeSpeech ?? []).filter((s) => s.voice === 'ji').map((s) => s.text))
+  expect(spoken).toEqual(['I love you, Kaylee!'])
 })

@@ -26,10 +26,10 @@ export const WALL_SLOTS: Record<string, V3> = {
   // Koh Samet beside it, toward the door.
   'samet-trip': [DIM.left + 0.04, 3.05, -0.43],
 }
-/** What Mommy says when Kaylee taps a trip's photo on the wall. (The mall day's "Our mall day!" isn't recorded yet:
- *  its voice pass adds it here.) */
+/** What Mommy says when Kaylee taps a trip's photo on the wall. */
 export const WALL_LINES: Record<string, Line> = {
   'boat-trip': L.home.wall,
+  'mall-trip': L.mall.trip.wall,
   'nan-trip': L.nan.trip.wall,
   'samet-trip': L.samet.trip.wall,
 }

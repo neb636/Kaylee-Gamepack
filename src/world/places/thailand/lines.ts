@@ -40,13 +40,12 @@ export const L = {
     arrive: `We're at Agong's house in Thailand, ${NAME}!`,
     door: 'Tap the door to go inside!',
     inside: 'Tap your family to say hello!',
-    upstairs: 'This is your room! Try the mattress!',
-    // Every time she taps the bathroom door upstairs (it's locked).
-    bathroom: "I don't need to go to the bathroom!",
+    // The first time she rattles the closed bathroom door.
+    bathroom: "That door's closed!",
     stuck: {
       street: 'Tap the door to go inside!',
       downstairs: 'Tap the stairs to go up to your room!',
-      upstairs: `Bounce on the mattress, ${NAME}!`,
+      upstairs: 'Bounce on the bed!',
     },
     // The first time she pokes these: something true about Thailand.
     pokes: {
@@ -94,6 +93,9 @@ export const L = {
     putter: hello('putter', 'Hi Kaylee! Hee hee!', ['Peep peep!']),
   } as Record<string, { hi: Line; again: Line[] }>,
 
+  // Mommy's and Daddy's normal greetings refer to the room or going inside.
+  familyPhoto: { ji: ji(`I love you, ${NAME}!`), nick: nick('High five!') },
+
   // Kaylee's wardrobe in her room (activities/hub/wardrobe/, plan: thailand/wardrobe.md). Sparkle says what to do the
   // first time and the name of each thing the first time she touches it; the family notice her new look in their own
   // voices (activities/hub/notice.ts).
@@ -102,8 +104,6 @@ export const L = {
     // The first drawer she pulls out (the paint drawer says its own).
     drawer: `Drag it onto you, ${NAME}!`,
     paint: 'Hair, dress or fur!',
-    // After ~8 seconds with nothing touched: a drawer or a thing on the shelf glints.
-    hint: { drawer: 'Pull a drawer!', thing: `Drag it onto you, ${NAME}!`, photo: 'Tap the mirror for a picture!' },
     // The mirror takes a picture of her look and pins it to the door; a picture dropped on her puts the whole look on.
     photo: `Click! A picture of your look, ${NAME}!`,
     look: `Your whole look! Wow, ${NAME}!`,
@@ -940,9 +940,8 @@ export const L = {
       pizza: ji('Hungry, Kaylee? Pizza time?'),
       more: ji('OK! A little more!'),
       // Sparkle, when the finger shows after a while with nothing touched; or, with every new game off the screen, when
-      // the map button bounces. And as the map opens.
+      // the map button bounces silently. And as the map opens.
       hint: 'Tap a door to play!',
-      hintMap: `More games to find! Tap the map, ${NAME}!`,
       map: `Where shall we play, ${NAME}?`,
     },
 

@@ -3,7 +3,7 @@
 // button in the corner opens a card with every mini game as a big picture, in the order they stand along the hall:
 // the ones she's played wear a gold star, the rest wiggle, and a 🦄 shows where she is. Tap one and she goes there and
 // in (hall.ts `travel`). When she's stuck and every new game is off the screen, the button bounces with a finger
-// (`nudge`) and Sparkle says to tap it. Sparkle asks "Where shall we play?" as it opens (lines.ts `L.mall.hall.map`).
+// (`nudge`). Sparkle asks "Where shall we play?" as it opens (lines.ts `L.mall.hall.map`).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { sounds, useLandscape } from '../../../../../../sdk'
