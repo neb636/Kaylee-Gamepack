@@ -126,7 +126,7 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean; dress
         onClick={() => {
           void sparkle.current?.play('hop')
           // A room instruction is chosen at tap time. Only the open wardrobe can replay its own line.
-          const next = dressing ? last.current : hintRef.current(true)
+          const next = dressing ? last.current ?? hintRef.current(false) : hintRef.current(true)
           if (next) speak(next)
         }}
         style={{ pointerEvents: 'auto', background: 'none', border: 'none', padding: 0, width: 'min(130px, 17vh, 26vw)', height: 'min(150px, 20vh, 30vw)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}

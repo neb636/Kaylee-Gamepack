@@ -223,6 +223,11 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     return true
   }
   const hint = (glow: boolean): Line | null => {
+    if (dressing) {
+      // A drawer's automatic instruction plays once. Sparkle can still explain it on demand after reopening it.
+      const drawer = doorNow.current.drawer
+      return drawer === 'paint' ? L.wardrobe.paint : drawer ? L.wardrobe.drawer : L.wardrobe.open
+    }
     const house = houseRef.current
     if (!house) return null
     if (house.view === 'street') return house.guideTarget('shutter', glow) ? L.house.stuck.street : null
