@@ -29,13 +29,14 @@ function kindOf(style: Style): { kind: Kind; item?: string } | null {
 }
 
 /** What `who` says about her look now, once: null if it's today's Kaylee or they've already seen this look. */
-export function noticeLine(who: string, style: Style): Line | null {
+export function noticeLine(who: string, style: Style, shoesVisible: boolean): Line | null {
   const sig = formatLook(style)
   if (!sig || seen.get(who) === sig) return null
   const lines = L.wardrobe.notice[who]
   if (!lines) return null
   const k = kindOf(style)
-  if (!k) return null
+  // Save the compliment for when the shoes are actually on her feet.
+  if (!k || (k.kind === 'feet' && !shoesVisible)) return null
   seen.set(who, sig)
   // (Wings are Daddy's "Cool wings!"; a crown is Mommy's own line.)
   return (k.item && itemById(k.item) ? L.wardrobe.noticeItem[who]?.[k.item] : undefined) ?? lines[k.kind]

@@ -183,6 +183,7 @@ export class House implements World3D {
   /** Kaylee's smoothed velocity: the camera looks a little ahead of where she's going. */
   private vel = new Vector3()
   private lastPos = new Vector3()
+  private guideGlow: { id: string; until: number } | null = null
   private anchorEls = new Map<string, HTMLElement>()
   private hovered: string | null = null
   /** How many times she's said hi to each of them (their first hello is Sawasdee). */
@@ -631,7 +632,7 @@ export class House implements World3D {
     who.react('wave')
     // A new look first (notice.ts): "Ooh, a crown, Kaylee!" instead of the hello, which waits for the next tap. Daddy
     // notices before he asks about a trip (the Hub holds his question back while he talks).
-    const note = noticeLine(m.id, this.kaylee.myLook)
+    const note = noticeLine(m.id, this.kaylee.myLook, this.mode === 'street' || this.trying)
     const handled = this.events.onGreet?.(id, !!note)
     if (note) {
       if (who.onPhone) sfx.phone()
@@ -655,7 +656,7 @@ export class House implements World3D {
   notice(id: string): boolean {
     const who = this.family.get(id)
     if (!who || this.photo || !this.familyVisible(`family:${id}`)) return false
-    const line = noticeLine(id, this.kaylee.myLook)
+    const line = noticeLine(id, this.kaylee.myLook, this.mode === 'street' || this.trying)
     if (!line) return false
     who.react('hop')
     who.react('wave')
@@ -671,12 +672,17 @@ export class House implements World3D {
     if (!m || !who || !this.familyShown(m)) return
     who.react('hop')
     who.react('wave')
-    this.hello(m, who)
+    this.hello(m, who, true)
   }
 
   /** They say hi in their own voice: Sawasdee the first time, then something else each time (the big cousins mumble
    *  it over the tap-tap of their phones). */
-  private hello(m: (typeof FAMILY)[number], who: Member) {
+  private hello(m: (typeof FAMILY)[number], who: Member, photo = false) {
+    // These greetings are written for the room or the front door. Use a greeting that fits the photo instead.
+    if (photo && (m.id === 'ji' || m.id === 'nick')) {
+      void say(L.familyPhoto[m.id])
+      return
+    }
     const n = this.greeted.get(m.id) ?? 0
     this.greeted.set(m.id, n + 1)
     const lines = L.family[m.id]
@@ -952,10 +958,19 @@ export class House implements World3D {
     this.stats.tris = r.info.render.triangles
   }
 
+  /** Use the same on-screen target that Kaylee can actually tap. */
+  guideTarget(id: string, glow: boolean) {
+    const anchor = this.anchorEls.get(id)
+    if (!anchor || anchor.style.display === 'none' || !anchor.style.transform) return false
+    if (glow) this.guideGlow = { id, until: performance.now() + 4000 }
+    return true
+  }
+
   /** Positions the DOM tap targets over their things (style writes only). */
   placeAnchors() {
     const cam = this.rig.camera
     const right = tmp2.set(1, 0, 0).applyQuaternion(cam.quaternion)
+    const hinted = this.guideGlow && this.guideGlow.until > performance.now() ? this.guideGlow.id : null
     for (const [id, el] of this.anchorEls) {
       let at: Vector3 | null = null
       let top: Vector3 | null = null
@@ -1011,7 +1026,7 @@ export class House implements World3D {
           el.style.zIndex = String(Math.round((1 - center.z) * 10000) + (id.startsWith('trip:') ? 3000 : 0))
           // Name pills sit on top of the head, wherever the button's own top is.
           if (top) el.style.setProperty('--pill', `${(((1 - top.project(cam).y) / 2) * this.h - (sy - size / 2)).toFixed(1)}px`)
-          const shadow = glow ? '0 0 0 6px rgba(255,79,154,.55), 0 0 26px 10px rgba(255,200,61,.7)' : ''
+          const shadow = glow || id === hinted ? '0 0 0 6px rgba(255,79,154,.55), 0 0 26px 10px rgba(255,200,61,.7)' : ''
           if (el.style.boxShadow !== shadow) el.style.boxShadow = shadow
         }
       }

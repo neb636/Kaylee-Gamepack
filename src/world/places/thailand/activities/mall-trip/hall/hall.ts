@@ -647,7 +647,7 @@ export class Hall extends Stage {
     this.lights.follow(kp.x, kp.y, kp.z)
 
     // ---- Stuck: when the finger shows, Sparkle says what to do (once each time). With every new way in off the
-    // screen (the far end of the hall), the map button bounces instead and she says to tap it. ----
+    // screen (the far end of the hall), the map button bounces silently instead. ----
     const stuck = this.time - this.lastTouch > STUCK_S && !this.asking && !this.entering
     const near = stuck ? this.hintAt() : null
     const nudge = stuck && !near && !this.walker.busy && OPEN_DOORS.some((d) => !this.done.has(d))
@@ -657,8 +657,8 @@ export class Hall extends Stage {
     }
     if (stuck && this.hintedAt !== this.lastTouch && (near || nudge)) {
       this.hintedAt = this.lastTouch
-      const line = near ? L.mall.hall.hint : L.mall.hall.hintMap
-      if (spendHint(line)) this.hev.say(line)
+      // The bouncing button already shows where to find more games. Keep the map instruction visual.
+      if (near && spendHint(L.mall.hall.hint)) this.hev.say(L.mall.hall.hint)
     }
   }
 

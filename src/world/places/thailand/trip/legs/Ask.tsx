@@ -57,8 +57,9 @@ export function Ask({ open, onYes, onNotYet, trips, who = 'ji' }: Props) {
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
   useEffect(() => {
     if (open) setLater(false)
+    // The house can dismiss the invitation when she walks away. Don't let an old "Not yet" close the next card.
+    return () => clearTimeout(timer.current)
   }, [open])
-  useEffect(() => () => clearTimeout(timer.current), [])
   const where = !!trips && trips.length > 1
   const one = trips?.length === 1 ? trips[0] : null
   const line = later ? asker.later : where ? asker.where : one?.id === 'mall-trip' ? asker.mall : asker.question

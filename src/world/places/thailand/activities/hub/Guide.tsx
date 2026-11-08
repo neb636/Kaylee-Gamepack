@@ -1,16 +1,18 @@
 // Sparkle at Agong's house: a small Sparkle in the corner who says the few things there are to say. She welcomes
 // Kaylee when the tuk-tuk stops, says what to do the first time she's somewhere new, tells her something true about
-// Thailand the first time she pokes certain things, and after a while with nothing touched waves with a hint in her bubble
-// (no voice: the house is a toy, there's nothing to be stuck on). Tap Sparkle to hear the last line again. The house's family speak for themselves (house.ts).
+// Thailand the first time she pokes certain things, and highlights something after a pause. Tap Sparkle for a hint.
+// The house's family speak for themselves (house.ts).
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { lineText, say, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
+import { lineText, say, stopSpeaking, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
 import { L } from '../../lines'
 import type { Spot } from './house'
 
 export interface GuideHandle {
   /** Say a line now (queued after the line before when `after` is set). */
   speak(line: Line, after?: boolean): void
+  /** Discard guidance owned by the room or toy she just left. */
+  clear(): void
   /** The first time she's somewhere: what to do there. */
   arrivedAt(spot: Spot): void
   /** She poked a thing: a fact, once per visit. */
@@ -23,35 +25,42 @@ const STUCK_S = 12
 const REMINDER_S = 60
 const MAX_REMINDERS = 3
 
-export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean }>(function Guide({ spot, quiet }, ref) {
+export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean; dressing: boolean; hint(glow: boolean): Line | null }>(function Guide({ spot, quiet, dressing, hint }, ref) {
   const sparkle = useRef<PuppetHandle>(null)
   const [line, setLine] = useState<Line | null>(null)
-  const last = useRef<Line>(L.house.door)
+  const last = useRef<Line | null>(null)
+  const speech = useRef(0)
+  const speaking = useRef(false)
   const lastTouch = useRef(performance.now())
   const lastTalk = useRef(0)
   const lastPoke = useRef(0)
   const reminders = useRef({ count: 0, last: 0 })
   const hide = useRef<ReturnType<typeof setTimeout>>(undefined)
-  const spotRef = useRef(spot)
-  spotRef.current = spot
+  const hintRef = useRef(hint)
+  hintRef.current = hint
 
   const speak = (l: Line, after = false) => {
+    const spoken = ++speech.current
     last.current = l
+    speaking.current = true
     lastTalk.current = performance.now()
     setLine(l)
     void sparkle.current?.play('wave')
     clearTimeout(hide.current)
     void say(l, { interrupt: !after }).then(() => {
+      if (spoken !== speech.current) return
+      speaking.current = false
       hide.current = setTimeout(() => setLine((cur) => (cur === l ? null : cur)), 2200)
     })
   }
-  /** A hint without the voice: she waves and the bubble shows it for a moment (tap her to hear it). */
-  const show = (l: Line) => {
-    last.current = l
-    setLine(l)
-    void sparkle.current?.play('wave')
+  const clear = () => {
+    // Invalidate queued audio and its completion callback before showing guidance for the next room.
+    speech.current++
+    if (speaking.current) stopSpeaking()
+    speaking.current = false
+    last.current = null
     clearTimeout(hide.current)
-    hide.current = setTimeout(() => setLine((cur) => (cur === l ? null : cur)), 4000)
+    setLine(null)
   }
   const once = (key: string, l: Line, after = false) => {
     if (told.has(key)) return
@@ -61,15 +70,15 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean }>(fun
 
   useImperativeHandle(ref, () => ({
     speak,
+    clear,
     arrivedAt(s) {
       // Sparkle just answered a tap (a deep link straight to the bathroom door): don't talk over that.
-      if (performance.now() - lastPoke.current < 5000) return
+      if (lastPoke.current && performance.now() - lastPoke.current < 5000) return
       if (s === 'downstairs') once('inside', L.house.inside)
-      else if (s === 'upstairs') once('upstairs', L.house.upstairs)
     },
     poked(id) {
       const fact = L.house.pokes[id]
-      if (id === 'bathroom-door') speak(L.house.bathroom)
+      if (id === 'bathroom-door' && !told.has('bathroom')) once('bathroom', L.house.bathroom)
       else if (fact && !told.has(`poke:${id}`)) once(`poke:${id}`, fact)
       else return
       lastPoke.current = performance.now()
@@ -96,22 +105,29 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean }>(fun
       reminder.count++
       reminder.last = now
       lastTouch.current = now
-      show(L.house.stuck[spotRef.current])
+      hintRef.current(true)
     }, 1000)
     return () => {
       window.removeEventListener('pointerdown', touch, true)
       clearInterval(timer)
-      clearTimeout(hide.current)
     }
   }, [quiet])
+
+  useEffect(() => () => {
+    speech.current++
+    clearTimeout(hide.current)
+  }, [])
 
   return (
     <div style={{ position: 'absolute', left: 'calc(var(--safe-left, 0px) + 8px + var(--roam-left, 0px))', bottom: 'calc(var(--safe-bottom) + 6px)', display: 'flex', alignItems: 'flex-end', gap: 6, zIndex: 15, pointerEvents: 'none', maxWidth: 'calc(100% - 120px - var(--roam-left, 0px) - var(--roam-right, 0px))' }}>
       <button
         aria-label="Sparkle"
+        disabled={quiet && !dressing}
         onClick={() => {
           void sparkle.current?.play('hop')
-          speak(last.current)
+          // A room instruction is chosen at tap time. Only the open wardrobe can replay its own line.
+          const next = dressing ? last.current ?? hintRef.current(false) : hintRef.current(true)
+          if (next) speak(next)
         }}
         style={{ pointerEvents: 'auto', background: 'none', border: 'none', padding: 0, width: 'min(130px, 17vh, 26vw)', height: 'min(150px, 20vh, 30vw)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}
       >

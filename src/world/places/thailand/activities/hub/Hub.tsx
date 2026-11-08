@@ -32,9 +32,12 @@ let arrivedThisVisit = false
 let lastSpot: Spot = 'street'
 /** The map's Bangkok pin opens the house where she left off (trip/session.ts). */
 const remember = () => (tripSession.house = arrivedThisVisit ? lastSpot : 'arrive')
-// Mommy asks about the mall on her own the first time Kaylee comes upstairs each visit (after that, tap Mommy). On the
-// street, tap Daddy and he asks right away: no need to go upstairs.
-let askedThisVisit = false
+const WALL_LABELS: Record<string, string> = {
+  'boat-trip': 'Our boat trip',
+  'mall-trip': 'Our mall day',
+  'nan-trip': 'Our trip to Nan',
+  'samet-trip': 'Our trip to Koh Samet',
+}
 
 export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const { start, param, enter } = useSections(HUB_SECTIONS)
@@ -49,10 +52,10 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const [arriving, setArriving] = useState(initial.section === 'arrive')
   const [asking, setAsking] = useState(false)
   const [asker, setAsker] = useState<Asker>('ji')
-  const askTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
-  useEffect(() => () => clearTimeout(askTimer.current), [])
+  const greetedParents = useRef(new Set<Asker>())
   const photo = initial.section === 'family'
   const [spot, setSpot] = useState<Spot>(initial.section === 'arrive' || initial.section === 'family' ? 'street' : initial.section === 'wardrobe' || isTableSection(initial.section) ? 'upstairs' : initial.section)
+  const previousSpot = useRef(spot)
   // The game table (board-games/): what it shows over the house, and whether she's sitting at it with a game open.
   const table = useRef<TablePlugin | null>(null)
   const [tableView, setTableView] = useState<TableView | null>(null)
@@ -94,7 +97,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   // Her trip photos on the wall downstairs (saved on the iPad): tap one and it comes close.
   const [wallPhotos] = useWallPhotos()
   const onWall = useMemo(() => newestByTrip(wallPhotos), [wallPhotos])
-  const wallAnchors = useMemo(() => [...onWall.keys()].filter((t) => t in WALL_SLOTS).map((t) => ({ id: wallAnchorId(t), label: 'Our trip photo', kind: 'thing' as const })), [onWall])
+  const wallAnchors = useMemo(() => [...onWall.keys()].filter((t) => t in WALL_SLOTS).map((t) => ({ id: wallAnchorId(t), label: WALL_LABELS[t], kind: 'thing' as const })), [onWall])
   const [looking, setLooking] = useState<string | null>(null)
   const look = (trip: string) => {
     setLooking(trip)
@@ -110,7 +113,6 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     if (initial.section !== 'arrive') arrivedThisVisit = true
     if (initial.section !== 'arrive' && initial.section !== 'family') lastSpot = initial.section === 'wardrobe' || isTableSection(initial.section) ? 'upstairs' : initial.section
     remember()
-    if (initial.section === 'upstairs' && !askedThisVisit) ask(4000)
   }, [])
   /** The address bar follows the table: the picker, or the game with the pieces where they are now. */
   const tableState = (v: TableView | undefined | null): Record<string, string> => {
@@ -122,9 +124,10 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     const was = playingRef.current
     setTableView(v)
     if (v.open) {
-      // Nobody asks about the mall while she plays.
-      clearTimeout(askTimer.current)
-      setAsking(false)
+      if (!was) {
+        guide.current?.clear()
+        setAsking(false)
+      }
       if (v.phase === 'picking' || v.phase === 'awaiting' || v.phase === 'cousin' || v.phase === 'finished') {
         const id = v.picking ? 'table' : v.game
         // (A game whose greybox isn't built has no section yet.)
@@ -144,26 +147,30 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   }
 
   const onSpot = (s: Spot, at?: string) => {
+    if (previousSpot.current !== s) {
+      previousSpot.current = s
+      guide.current?.clear()
+      setAsking(false)
+    }
     lastSpot = s
     remember()
     setSpot(s)
     enter(s, at ? { at } : {})
-    guide.current?.arrivedAt(s)
-    if (s === 'upstairs' && !askedThisVisit && !photo && !playingRef.current) ask(4000)
+    if (!at) guide.current?.arrivedAt(s)
   }
   /** The wardrobe opened or closed, or she pulled out another drawer. */
   const onWardrobe = (open: boolean, drawer: DrawerId | null) => {
     setDressing(open)
+    // Drawer instructions and outfit reactions only belong to the wardrobe state that produced them.
+    guide.current?.clear()
     if (open) {
-      // Mommy waits to ask about a trip until she's done dressing up.
-      clearTimeout(askTimer.current)
       setAsking(false)
       doorNow.current.drawer = drawer
       enter('wardrobe', wardrobeState())
     } else {
       enter('upstairs')
       // Mommy sees her new look from across the room, once the doors are shut.
-      setTimeout(() => houseRef.current?.notice('ji'), 900)
+      houseRef.current?.notice('ji')
     }
   }
   /** The mirror button: from anywhere in the house, straight to her wardrobe with its doors open. */
@@ -172,6 +179,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     setFlash((n) => n + 1)
     setAsking(false)
     lastSpot = 'upstairs'
+    previousSpot.current = 'upstairs'
     setSpot('upstairs')
     wardrobe.current?.openHere()
   }
@@ -201,21 +209,32 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     table.current = t
     return onWall.size ? bothPlugins(w, t, new WallPlugin(onWall, look, initial.section === 'downstairs' && initial.at === 'photos')) : bothPlugins(w, t)
   }
-  // Tap Mommy and she asks after her hello; tap Daddy and he asks instead of saying hello.
   const onGreet = (id: string, noticed = false) => {
-    if (photo || arriving) return false
-    if (id === 'ji') ask(1200)
-    if (id !== 'nick') return false
-    // (Daddy first says what he thinks of her look, then asks.)
-    ask(noticed ? 2800 : 250, 'nick')
+    if (photo || arriving || dressing || playingRef.current || looking || asking || !trips.length) return false
+    if (id !== 'ji' && id !== 'nick') return false
+    // A first tap gets a hello (or an outfit reaction). Tap the parent again to ask about the mall.
+    if (!greetedParents.current.has(id) || noticed) {
+      greetedParents.current.add(id)
+      return false
+    }
+    guide.current?.clear()
+    setAsker(id)
+    setAsking(true)
     return true
   }
-  /** Mommy asks if she wants to go to the mall (her room is upstairs); Daddy asks on the street. */
-  const ask = (after: number, who: Asker = 'ji') => {
-    askedThisVisit = true
-    clearTimeout(askTimer.current)
-    setAsker(who)
-    askTimer.current = setTimeout(() => !playingRef.current && setAsking(true), after)
+  const hint = (glow: boolean): Line | null => {
+    if (dressing) {
+      // A drawer's automatic instruction plays once. Sparkle can still explain it on demand after reopening it.
+      const drawer = doorNow.current.drawer
+      return drawer === 'paint' ? L.wardrobe.paint : drawer ? L.wardrobe.drawer : L.wardrobe.open
+    }
+    const house = houseRef.current
+    if (!house) return null
+    if (house.view === 'street') return house.guideTarget('shutter', glow) ? L.house.stuck.street : null
+    if (house.view === 'upstairs' && house.guideTarget('mattress', glow)) return L.house.stuck.upstairs
+    if (house.view === 'downstairs' && house.guideTarget('stairs-up', glow)) return L.house.stuck.downstairs
+    const family = house.view === 'upstairs' ? ['ji', 'bb', 'gan', 'ken'] : ['agong', 'jum', 'joy']
+    return family.some((id) => house.guideTarget(`family:${id}`, glow)) ? L.house.inside : null
   }
   const yes = (trip = 'mall-trip') => {
     saidYes.at = performance.now()
@@ -291,7 +310,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
               transition={{ type: 'spring', stiffness: 220, damping: 20 }}
               style={{ display: 'block', width: 'min(640px, 88vw, calc((100vh - 220px) * 4 / 3))', padding: 'clamp(12px, 2.4vmin, 22px)', background: 'var(--hotpink)', borderRadius: 18, boxShadow: 'var(--shadow)' }}
             >
-              <img src={onWall.get(looking)!.src} alt="Our boat trip" style={{ display: 'block', width: '100%', borderRadius: 6, border: '6px solid var(--cream)' }} />
+              <img src={onWall.get(looking)!.src} alt={WALL_LABELS[looking]} style={{ display: 'block', width: '100%', borderRadius: 6, border: '6px solid var(--cream)' }} />
             </motion.span>
           </motion.button>
         )}
@@ -354,7 +373,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           />
         )}
       </AnimatePresence>
-      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking || dressing || playing} />}
+      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking || dressing || playing || !!looking} dressing={dressing && mode !== 'lost'} hint={hint} />}
       {tableView?.open && mode !== 'lost' && <TableUI view={tableView} table={table} />}
       {trips.length > 0 && <Ask open={asking && !arriving && mode !== 'lost'} who={asker} trips={trips} onYes={(t) => yes(t)} onNotYet={() => setAsking(false)} />}
       {debug && <Debug houseRef={houseRef} />}
