@@ -77,3 +77,12 @@ test('@behavior Mommy greets the camera from the family photo', async ({ page })
   const spoken = await page.evaluate(() => (window.__kayleeSpeech ?? []).filter((s) => s.voice === 'ji').map((s) => s.text))
   expect(spoken).toEqual(['I love you, Kaylee!'])
 })
+
+test('@behavior a new wardrobe drawer keeps its own instruction for replay', async ({ page }) => {
+  await open(page, 'hub/wardrobe')
+  await page.locator('[data-anchor="trip:ward:drawer:paint"]').click()
+  const paint = () => page.evaluate(() => (window.__kayleeSpeech ?? []).filter((s) => s.text === 'Hair, dress or fur!').length)
+  await expect.poll(paint).toBe(1)
+  await page.getByRole('button', { name: 'Sparkle' }).click()
+  await expect.poll(paint).toBe(2)
+})

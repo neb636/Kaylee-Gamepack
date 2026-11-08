@@ -259,10 +259,7 @@ export class WardrobePlugin implements HousePlugin {
       sfx.thump()
     } else {
       this.drawer = id
-      if (!now) {
-        sfx.rattle()
-        this.tell(id === 'paint' ? 'paint' : 'drawer', id === 'paint' ? L.wardrobe.paint : L.wardrobe.drawer)
-      }
+      if (!now) sfx.rattle()
       const ids = drawerThings(id)
       ids.forEach((tid, i) => {
         const t = this.thing(tid)
@@ -271,7 +268,9 @@ export class WardrobePlugin implements HousePlugin {
       })
     }
     this.showShelf()
+    // Let the house discard the previous drawer's guidance before speaking for this drawer.
     this.events.onState(true, this.drawer)
+    if (!now && this.drawer) this.tell(id === 'paint' ? 'paint' : 'drawer', id === 'paint' ? L.wardrobe.paint : L.wardrobe.drawer)
   }
 
   /** What's on the shelves: the open drawer's things, except what she's wearing. */
