@@ -7,19 +7,18 @@
   "In Thai, chang means elephant!",
   "Thailand's flag is red, white and blue!",
   "Thai cars drive on the left!",
-  "We're at Agong's house in Thailand, Kaylee!",
-  "Tap the door to go inside!",
+  "Welcome to Agong's! Tap the front door.",
   "Tap your family to say hello!",
   "That door's closed!",
+  "Tap the door to go inside!",
   "Tap the stairs to go up to your room!",
   "Bounce on the bed!",
-  "A spirit house! Thai families give it flowers and a drink.",
-  "Put your hands together and bow. In Thailand, that is a wai!",
+  "Flowers for the spirit house.",
+  "Hands together and bow. That's a wai!",
   "A tuk-tuk! It goes tuk tuk tuk!",
-  "Thai families eat rice every day!",
-  "The lucky cat waves for good luck!",
-  "A gecko! It sings took-geh, took-geh!",
-  "Lots of people in Thailand ride motorbikes!",
+  "Look, the rice is steaming!",
+  "A gecko! Tuk-kae, tuk-kae!",
+  "Beep beep! A motorbike!",
   "Elephants live in the north of Thailand!",
   "It rains a lot in Nan's mountains!",
   "Gibbons swing through the jungle! Whoop whoop!",
@@ -30,11 +29,7 @@
   "A longtail boat! Its motor has a long tail!",
   "Coconuts grow on palm trees by the sea!",
   {
-    "text": "Sawasdee krub, Kaylee! Welcome home!",
-    "voice": "agong"
-  },
-  {
-    "text": "Come, sit with Agong.",
+    "text": "Sawasdee krub, Kaylee!",
     "voice": "agong"
   },
   {
@@ -42,11 +37,7 @@
     "voice": "agong"
   },
   {
-    "text": "Hi sweetie! This is our room!",
-    "voice": "ji"
-  },
-  {
-    "text": "Bounce on the mattress!",
+    "text": "Hi, sweetie!",
     "voice": "ji"
   },
   {
@@ -54,35 +45,23 @@
     "voice": "ji"
   },
   {
-    "text": "Hi Kaylee! Welcome to Agong's house!",
+    "text": "Hey, kiddo!",
     "voice": "nick"
   },
   {
-    "text": "High five!",
+    "text": "Love you!",
     "voice": "nick"
   },
   {
-    "text": "Let's go inside!",
-    "voice": "nick"
-  },
-  {
-    "text": "Sawasdee ka, Kaylee! Are you hungry?",
+    "text": "Sawasdee ka!",
     "voice": "jum"
   },
   {
-    "text": "The rice is almost ready!",
+    "text": "So good to see you!",
     "voice": "jum"
   },
   {
-    "text": "So big now, Kaylee!",
-    "voice": "jum"
-  },
-  {
-    "text": "Sawasdee ka, Kaylee! Look at Agong's treasures!",
-    "voice": "joy"
-  },
-  {
-    "text": "The lucky cat says hi!",
+    "text": "Sawasdee ka!",
     "voice": "joy"
   },
   {
@@ -90,23 +69,19 @@
     "voice": "joy"
   },
   {
-    "text": "Sawasdee krub, Kaylee!",
+    "text": "Sawasdee krub!",
     "voice": "bird"
   },
   {
-    "text": "Want to sit on my motorbike?",
+    "text": "Hey, little unicorn!",
     "voice": "bird"
   },
   {
-    "text": "Beep beep!",
-    "voice": "bird"
-  },
-  {
-    "text": "Mm-hmm. Hi Kaylee.",
+    "text": "Oh, hey!",
     "voice": "gan"
   },
   {
-    "text": "One sec, I'm winning!",
+    "text": "Hey again!",
     "voice": "gan"
   },
   {
@@ -114,11 +89,11 @@
     "voice": "gan"
   },
   {
-    "text": "Oh. Hi, Kaylee.",
+    "text": "Oh. Hi!",
     "voice": "ken"
   },
   {
-    "text": "Look, a funny video!",
+    "text": "Hey there!",
     "voice": "ken"
   },
   {
@@ -126,11 +101,11 @@
     "voice": "ken"
   },
   {
-    "text": "Hi Kaylee... one second.",
+    "text": "Hi!",
     "voice": "bb"
   },
   {
-    "text": "So cute, Kaylee.",
+    "text": "So cute!",
     "voice": "bb"
   },
   {
@@ -138,7 +113,7 @@
     "voice": "bb"
   },
   {
-    "text": "Sawasdee ka, Kaylee!",
+    "text": "Sawasdee ka!",
     "voice": "ja"
   },
   {
@@ -146,7 +121,7 @@
     "voice": "ja"
   },
   {
-    "text": "Sawasdee ka, Kaylee!",
+    "text": "Sawasdee ka!",
     "voice": "sri"
   },
   {
@@ -154,26 +129,30 @@
     "voice": "sri"
   },
   {
-    "text": "Kaylee! Sawasdee krub!",
+    "text": "Sawasdee krub!",
     "voice": "putto"
   },
   {
-    "text": "Let's play!",
+    "text": "Hi again!",
     "voice": "putto"
   },
   {
-    "text": "Hi Kaylee! Hee hee!",
+    "text": "Hi! Hee hee!",
     "voice": "putter"
   },
   {
     "text": "Peep peep!",
     "voice": "putter"
   },
-  "Your wardrobe! Dress up, Kaylee!",
-  "Drag it onto you, Kaylee!",
-  "Hair, dress or fur!",
-  "Click! A picture of your look, Kaylee!",
-  "Your whole look! Wow, Kaylee!",
+  {
+    "text": "Big smile!",
+    "voice": "nick"
+  },
+  "Time to dress up!",
+  "Drag something onto your unicorn!",
+  "Drag paint onto your hair, dress, or fur!",
+  "Click! Your look is saved!",
+  "Ta-da! Your saved look!",
   "Ta da! Magic!",
   "Sparkle magic!",
   "Ooh, a surprise!",
@@ -215,39 +194,39 @@
   "Brown paint!",
   "Cream paint!",
   {
-    "text": "Ooh, what a pretty hat, Kaylee!",
+    "text": "Ooh, look at you!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, fancy glasses, Kaylee!",
+    "text": "Ooh, fancy glasses!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, so pretty, Kaylee!",
+    "text": "Ooh, so pretty!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, what a pretty outfit, Kaylee!",
+    "text": "Ooh, what a pretty outfit!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, nice shoes, Kaylee!",
+    "text": "Ooh, nice shoes!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, new colors, Kaylee!",
+    "text": "Ooh, new colors!",
     "voice": "ji"
   },
   {
-    "text": "Wow, cool hat!",
+    "text": "Looking good!",
     "voice": "nick"
   },
   {
-    "text": "Cool shades, Kaylee!",
+    "text": "Cool glasses!",
     "voice": "nick"
   },
   {
-    "text": "Whoa, cool, Kaylee!",
+    "text": "Whoa, cool!",
     "voice": "nick"
   },
   {
@@ -255,7 +234,7 @@
     "voice": "nick"
   },
   {
-    "text": "Cool shoes, Kaylee!",
+    "text": "Cool shoes!",
     "voice": "nick"
   },
   {
@@ -271,10 +250,6 @@
     "voice": "agong"
   },
   {
-    "text": "Ho ho! So pretty, Kaylee!",
-    "voice": "agong"
-  },
-  {
     "text": "Ho ho! Nice shoes!",
     "voice": "agong"
   },
@@ -283,15 +258,15 @@
     "voice": "agong"
   },
   {
-    "text": "Oh! What a pretty hat, Kaylee!",
+    "text": "Oh! How pretty!",
     "voice": "jum"
   },
   {
-    "text": "Oh! So fancy, Kaylee!",
+    "text": "Oh! So fancy!",
     "voice": "jum"
   },
   {
-    "text": "Oh! So pretty, Kaylee!",
+    "text": "Oh! So pretty!",
     "voice": "jum"
   },
   {
@@ -299,7 +274,7 @@
     "voice": "jum"
   },
   {
-    "text": "Oh! Nice shoes, Kaylee!",
+    "text": "Oh! Nice shoes!",
     "voice": "jum"
   },
   {
@@ -307,7 +282,7 @@
     "voice": "jum"
   },
   {
-    "text": "Wow! I love your hat!",
+    "text": "Wow! I love that!",
     "voice": "joy"
   },
   {
@@ -315,7 +290,7 @@
     "voice": "joy"
   },
   {
-    "text": "Wow! So cute, Kaylee!",
+    "text": "Wow! So cute!",
     "voice": "joy"
   },
   {
@@ -331,23 +306,23 @@
     "voice": "joy"
   },
   {
-    "text": "Nice hat, Kaylee!",
+    "text": "Looking good!",
     "voice": "bird"
   },
   {
-    "text": "Nice glasses, Kaylee!",
+    "text": "Nice glasses!",
     "voice": "bird"
   },
   {
-    "text": "Ho ho! Nice, Kaylee!",
+    "text": "Ho ho! Nice!",
     "voice": "bird"
   },
   {
-    "text": "Nice outfit, Kaylee!",
+    "text": "Nice outfit!",
     "voice": "bird"
   },
   {
-    "text": "Nice shoes, Kaylee!",
+    "text": "Nice shoes!",
     "voice": "bird"
   },
   {
@@ -355,7 +330,7 @@
     "voice": "bird"
   },
   {
-    "text": "Nice hat... one sec.",
+    "text": "Oh, nice!",
     "voice": "gan"
   },
   {
@@ -371,7 +346,7 @@
     "voice": "gan"
   },
   {
-    "text": "Nice shoes... one sec.",
+    "text": "Nice shoes!",
     "voice": "gan"
   },
   {
@@ -379,7 +354,7 @@
     "voice": "gan"
   },
   {
-    "text": "Oh. Nice hat.",
+    "text": "Oh. Looking good.",
     "voice": "ken"
   },
   {
@@ -403,15 +378,7 @@
     "voice": "ken"
   },
   {
-    "text": "So cute, Kaylee... one sec.",
-    "voice": "bb"
-  },
-  {
     "text": "Cute glasses... uh-huh.",
-    "voice": "bb"
-  },
-  {
-    "text": "So cute... one sec.",
     "voice": "bb"
   },
   {
@@ -419,7 +386,7 @@
     "voice": "bb"
   },
   {
-    "text": "Nice shoes... one sec.",
+    "text": "Nice shoes!",
     "voice": "bb"
   },
   {
@@ -427,115 +394,23 @@
     "voice": "bb"
   },
   {
-    "text": "So pretty, Kaylee!",
-    "voice": "ja"
-  },
-  {
-    "text": "So fancy, Kaylee!",
-    "voice": "ja"
-  },
-  {
-    "text": "What a pretty outfit!",
-    "voice": "ja"
-  },
-  {
-    "text": "What cute shoes!",
-    "voice": "ja"
-  },
-  {
-    "text": "So pretty, new colors!",
-    "voice": "ja"
-  },
-  {
-    "text": "Lovely hat! Say cheese!",
-    "voice": "sri"
-  },
-  {
-    "text": "Lovely glasses! Say cheese!",
-    "voice": "sri"
-  },
-  {
-    "text": "Lovely! Say cheese!",
-    "voice": "sri"
-  },
-  {
-    "text": "Lovely outfit! Say cheese!",
-    "voice": "sri"
-  },
-  {
-    "text": "Lovely shoes! Say cheese!",
-    "voice": "sri"
-  },
-  {
-    "text": "Lovely colors! Say cheese!",
-    "voice": "sri"
-  },
-  {
-    "text": "Cool hat!",
-    "voice": "putto"
-  },
-  {
-    "text": "Cool glasses!",
-    "voice": "putto"
-  },
-  {
-    "text": "Cool!",
-    "voice": "putto"
-  },
-  {
-    "text": "Cool outfit!",
-    "voice": "putto"
-  },
-  {
-    "text": "Cool shoes!",
-    "voice": "putto"
-  },
-  {
-    "text": "Cool colors!",
-    "voice": "putto"
-  },
-  {
-    "text": "Look, a hat!",
-    "voice": "putter"
-  },
-  {
-    "text": "Look, glasses!",
-    "voice": "putter"
-  },
-  {
-    "text": "Look, so cute!",
-    "voice": "putter"
-  },
-  {
-    "text": "Look, new clothes!",
-    "voice": "putter"
-  },
-  {
-    "text": "Look, new shoes!",
-    "voice": "putter"
-  },
-  {
-    "text": "Look, new colors!",
-    "voice": "putter"
-  },
-  {
-    "text": "Ooh, a crown, Kaylee!",
+    "text": "Ooh, a crown!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, Kaylee, you can fly!",
+    "text": "Look at those wings!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, a princess cape, Kaylee!",
+    "text": "Ooh, a princess cape!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, a bunny backpack, Kaylee!",
+    "text": "Ooh, a bunny backpack!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, cute overalls, Kaylee!",
+    "text": "Ooh, cute overalls!",
     "voice": "ji"
   },
   {
@@ -571,7 +446,7 @@
     "voice": "nick"
   },
   {
-    "text": "Tap your things to pack them, Kaylee!",
+    "text": "Tap things to pack them!",
     "voice": "ji"
   },
   {
@@ -587,7 +462,7 @@
     "voice": "ji"
   },
   {
-    "text": "It's too full! Sit on it!",
+    "text": "Too full! Tap the suitcase again!",
     "voice": "ji"
   },
   {
@@ -611,7 +486,7 @@
     "voice": "ji"
   },
   {
-    "text": "Good hat, Kaylee!",
+    "text": "Good sun hat!",
     "voice": "ji"
   },
   {
@@ -2109,10 +1984,6 @@
   {
     "text": "Have fun!",
     "voice": "staff"
-  },
-  {
-    "text": "Hi, sweetie!",
-    "voice": "ji"
   },
   {
     "text": "Have fun, Kaylee!",

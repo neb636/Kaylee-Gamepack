@@ -1,5 +1,5 @@
 // Sparkle at Agong's house: a small Sparkle in the corner who says the few things there are to say. She welcomes
-// Kaylee when the tuk-tuk stops, says what to do the first time she's somewhere new, tells her something true about
+// Kaylee when the tuk-tuk stops, tells her something true about
 // Thailand the first time she pokes certain things, and highlights something after a pause. Tap Sparkle for a hint.
 // The house's family speak for themselves (house.ts).
 import { AnimatePresence, motion } from 'motion/react'
@@ -9,12 +9,9 @@ import { L } from '../../lines'
 import type { Spot } from './house'
 
 export interface GuideHandle {
-  /** Say a line now (queued after the line before when `after` is set). */
-  speak(line: Line, after?: boolean): void
+  speak(line: Line): void
   /** Discard guidance owned by the room or toy she just left. */
   clear(): void
-  /** The first time she's somewhere: what to do there. */
-  arrivedAt(spot: Spot): void
   /** She poked a thing: a fact, once per visit. */
   poked(id: string): void
 }
@@ -33,13 +30,12 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean; dress
   const speaking = useRef(false)
   const lastTouch = useRef(performance.now())
   const lastTalk = useRef(0)
-  const lastPoke = useRef(0)
   const reminders = useRef({ count: 0, last: 0 })
   const hide = useRef<ReturnType<typeof setTimeout>>(undefined)
   const hintRef = useRef(hint)
   hintRef.current = hint
 
-  const speak = (l: Line, after = false) => {
+  const speak = (l: Line) => {
     const spoken = ++speech.current
     last.current = l
     speaking.current = true
@@ -47,7 +43,7 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean; dress
     setLine(l)
     void sparkle.current?.play('wave')
     clearTimeout(hide.current)
-    void say(l, { interrupt: !after }).then(() => {
+    void say(l).then(() => {
       if (spoken !== speech.current) return
       speaking.current = false
       hide.current = setTimeout(() => setLine((cur) => (cur === l ? null : cur)), 2200)
@@ -62,26 +58,19 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean; dress
     clearTimeout(hide.current)
     setLine(null)
   }
-  const once = (key: string, l: Line, after = false) => {
+  const once = (key: string, l: Line) => {
     if (told.has(key)) return
     told.add(key)
-    speak(l, after)
+    speak(l)
   }
 
   useImperativeHandle(ref, () => ({
     speak,
     clear,
-    arrivedAt(s) {
-      // Sparkle just answered a tap (a deep link straight to the bathroom door): don't talk over that.
-      if (lastPoke.current && performance.now() - lastPoke.current < 5000) return
-      if (s === 'downstairs') once('inside', L.house.inside)
-    },
     poked(id) {
       const fact = L.house.pokes[id]
-      if (id === 'bathroom-door' && !told.has('bathroom')) once('bathroom', L.house.bathroom)
-      else if (fact && !told.has(`poke:${id}`)) once(`poke:${id}`, fact)
-      else return
-      lastPoke.current = performance.now()
+      if (id === 'bathroom-door') once('bathroom', L.house.bathroom)
+      else if (fact) once(`poke:${id}`, fact)
     },
   }))
 

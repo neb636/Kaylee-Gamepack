@@ -81,6 +81,7 @@ export interface HousePlugin {
   /** Called once, after the house is built and its start section set up. */
   attach(house: House): void
   update(dt: number, t: number): void
+  dispose?(): void
   /** The camera's goal while the plugin wants it (null: the house's own follow camera). */
   shot?(): Shot | null
   /** First refusal on every touch: return true when the plugin used it. */
@@ -106,6 +107,7 @@ export function bothPlugins(...list: HousePlugin[]): HousePlugin {
   return {
     attach: (h) => list.forEach((p) => p.attach(h)),
     update: (dt, t) => list.forEach((p) => p.update(dt, t)),
+    dispose: () => list.forEach((p) => p.dispose?.()),
     shot: () => list.reduce<Shot | null>((s, p) => s ?? p.shot?.() ?? null, null),
     pointerDown: (x, y, id) => list.some((p) => p.pointerDown?.(x, y, id)),
     pointerMove: (x, y, dx, dy) => list.some((p) => p.pointerMove?.(x, y, dx, dy)),
@@ -678,9 +680,9 @@ export class House implements World3D {
   /** They say hi in their own voice: Sawasdee the first time, then something else each time (the big cousins mumble
    *  it over the tap-tap of their phones). */
   private hello(m: (typeof FAMILY)[number], who: Member, photo = false) {
-    // These greetings are written for the room or the front door. Use a greeting that fits the photo instead.
-    if (photo && (m.id === 'ji' || m.id === 'nick')) {
-      void say(L.familyPhoto[m.id])
+    const portrait = photo && L.familyPhoto[m.id]
+    if (portrait) {
+      void say(portrait)
       return
     }
     const n = this.greeted.get(m.id) ?? 0
@@ -1130,6 +1132,7 @@ export class House implements World3D {
   }
 
   dispose() {
+    this.plugin?.dispose?.()
     this.scene.clear()
     this.bag.dispose()
   }

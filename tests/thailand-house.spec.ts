@@ -83,7 +83,7 @@ test('@behavior a new wardrobe drawer keeps its own instruction for replay', asy
   const drawer = page.locator('[data-anchor="trip:ward:drawer:paint"]')
   const sparkle = page.getByRole('button', { name: 'Sparkle', exact: true })
   await drawer.click()
-  const paint = () => page.evaluate(() => (window.__kayleeSpeech ?? []).filter((s) => s.text === 'Hair, dress or fur!').length)
+  const paint = () => page.evaluate(() => (window.__kayleeSpeech ?? []).filter((s) => s.text === 'Drag paint onto your hair, dress, or fur!').length)
   await expect.poll(paint).toBe(1)
   await sparkle.click()
   await expect.poll(paint).toBe(2)
@@ -92,4 +92,23 @@ test('@behavior a new wardrobe drawer keeps its own instruction for replay', asy
   expect(await paint()).toBe(2)
   await sparkle.click()
   await expect.poll(paint).toBe(3)
+})
+
+test('@behavior Aunty Jum does not talk about cooking during a portrait', async ({ page }) => {
+  await open(page, 'hub/family?who=jum')
+  const jum = page.locator('[data-anchor="family:jum"]')
+  await jum.click()
+  await jum.click()
+  const spoken = await page.evaluate(() => (window.__kayleeSpeech ?? []).filter((s) => s.voice === 'jum').map((s) => s.text))
+  expect(spoken).toEqual(['Sawasdee ka!', 'So good to see you!'])
+})
+
+test('@behavior Daddy notices a new look without skipping hello', async ({ page }) => {
+  await open(page, 'hub/street?look=round')
+  const daddy = page.locator('[data-anchor="family:nick"]')
+  await daddy.click()
+  await daddy.click()
+  await daddy.click()
+  const spoken = await page.evaluate(() => (window.__kayleeSpeech ?? []).filter((s) => s.voice === 'nick').map((s) => s.text))
+  expect(spoken).toEqual(['Cool glasses!', 'Hey, kiddo!', 'Want to go to the mall?'])
 })

@@ -1,46 +1,37 @@
-// The family notice her look (planning/around-the-world/thailand/wardrobe.md, "being seen"): the first time she walks
-// up to someone in a new look they say so in their own voice ("Ooh, a crown, Kaylee!"), once per change. What they
-// notice is the newest thing she changed (the wardrobe tells us: markNew), else the first thing she's wearing. Pure data
-// and memory for the visit (no three.js): the house asks for the line when she taps someone.
+// Family members react to something new they can see in Kaylee's wardrobe look.
 import type { Line } from '../../../../../sdk'
 import { L } from '../../lines'
-import { formatLook, itemById, type Style } from '../../characters/style'
+import { BARE, formatLook, PAINT_PARTS, type Style } from '../../characters/style'
 
-export type Kind = 'head' | 'face' | 'back' | 'outfit' | 'feet' | 'paint'
+type Kind = 'head' | 'face' | 'back' | 'outfit' | 'feet' | 'paint'
 /** In the order they're noticed when nothing is newest. */
 const ORDER: Kind[] = ['head', 'back', 'outfit', 'face', 'feet', 'paint']
 
-/** What each person last noticed (the look's `formatLook`), this visit. */
-const seen = new Map<string, string>()
-let newest: { sig: string; kind: Kind; item?: string } | null = null
+/** What each person actually saw this visit. Shoes on the rack don't count. */
+const seen = new Map<string, Style>()
+let newest: { sig: string; kind: Kind } | null = null
 
 /** The wardrobe changed her look: this is what's new about it. */
-export function markNew(style: Style, kind: Kind, item?: string) {
-  newest = { sig: formatLook(style), kind, item }
+export function markNew(style: Style, kind: Kind) {
+  newest = { sig: formatLook(style), kind }
 }
 
-function kindOf(style: Style): { kind: Kind; item?: string } | null {
-  const sig = formatLook(style)
-  if (newest?.sig === sig) return newest
-  for (const k of ORDER) {
-    if (k === 'paint' ? Object.keys(style.paint).length : style.on[k]) return { kind: k, item: k === 'paint' ? undefined : style.on[k] }
-  }
-  return null
-}
-
-/** What `who` says about her look now, once: null if it's today's Kaylee or they've already seen this look. */
+/** Pick a real change since this relative last saw her. Taking something off shouldn't trigger praise for an old item. */
 export function noticeLine(who: string, style: Style, shoesVisible: boolean): Line | null {
-  const sig = formatLook(style)
-  if (!sig || seen.get(who) === sig) return null
   const lines = L.wardrobe.notice[who]
   if (!lines) return null
-  const k = kindOf(style)
-  // Save the compliment for when the shoes are actually on her feet.
-  if (!k || (k.kind === 'feet' && !shoesVisible)) return null
-  seen.set(who, sig)
-  // (Wings are Daddy's "Cool wings!"; a crown is Mommy's own line.)
-  return (k.item && itemById(k.item) ? L.wardrobe.noticeItem[who]?.[k.item] : undefined) ?? lines[k.kind]
+  const before = seen.get(who) ?? BARE
+  const on = { ...style.on }
+  if (!shoesVisible) {
+    if (before.on.feet) on.feet = before.on.feet
+    else delete on.feet
+  }
+  seen.set(who, { ...style, on })
+  const paintChanged = PAINT_PARTS.some((part) => style.paint[part] && style.paint[part] !== before.paint[part])
+  const changed = (kind: Kind) => kind === 'paint' ? paintChanged : !!on[kind] && on[kind] !== before.on[kind]
+  const preferred = newest?.sig === formatLook(style) ? newest.kind : null
+  const kind = preferred && changed(preferred) ? preferred : ORDER.find(changed)
+  if (!kind) return null
+  const item = kind === 'paint' ? undefined : on[kind]
+  return (item && L.wardrobe.noticeItem[who]?.[item]) || lines[kind]
 }
-
-/** What a thing is, for the wardrobe's `markNew`. */
-export const kindOfItem = (id: string): Kind | null => itemById(id)?.slot ?? null

@@ -3,7 +3,7 @@
 // Sparkle (Guide) says the few things there are to say; the family say hello themselves.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { say, sounds, useSaved, type Line } from '../../../../../sdk'
+import { say, sounds, stopSpeaking, useSaved, type Line } from '../../../../../sdk'
 import { updateStickyParam, useSections } from '../../../../kit/sections'
 import type { PlaceProps } from '../../../../types'
 import { flag } from '../../../../engine3d/flags'
@@ -99,6 +99,8 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const onWall = useMemo(() => newestByTrip(wallPhotos), [wallPhotos])
   const wallAnchors = useMemo(() => [...onWall.keys()].filter((t) => t in WALL_SLOTS).map((t) => ({ id: wallAnchorId(t), label: WALL_LABELS[t], kind: 'thing' as const })), [onWall])
   const [looking, setLooking] = useState<string | null>(null)
+  // Exiting the hub can leave the same country mounted. Its dialogue still belongs to this visit.
+  useEffect(() => () => stopSpeaking(), [])
   const look = (trip: string) => {
     setLooking(trip)
     const line = WALL_LINES[trip]
@@ -143,7 +145,6 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     remember()
     setArriving(false)
     guide.current?.speak(L.house.arrive)
-    guide.current?.speak(L.house.door, true)
   }
 
   const onSpot = (s: Spot, at?: string) => {
@@ -156,7 +157,6 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     remember()
     setSpot(s)
     enter(s, at ? { at } : {})
-    if (!at) guide.current?.arrivedAt(s)
   }
   /** The wardrobe opened or closed, or she pulled out another drawer. */
   const onWardrobe = (open: boolean, drawer: DrawerId | null) => {
@@ -212,8 +212,9 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const onGreet = (id: string, noticed = false) => {
     if (photo || arriving || dressing || playingRef.current || looking || asking || !trips.length) return false
     if (id !== 'ji' && id !== 'nick') return false
-    // A first tap gets a hello (or an outfit reaction). Tap the parent again to ask about the mall.
-    if (!greetedParents.current.has(id) || noticed) {
+    // An outfit reaction shouldn't use up the parent's first hello or open an invitation.
+    if (noticed) return false
+    if (!greetedParents.current.has(id)) {
       greetedParents.current.add(id)
       return false
     }
@@ -299,6 +300,8 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
             exit={{ opacity: 0 }}
             onClick={() => {
               sounds.pop()
+              // The photo caption belongs to the close-up she just dismissed.
+              stopSpeaking()
               setLooking(null)
             }}
             style={{ position: 'absolute', inset: 0, zIndex: 45, border: 'none', background: 'rgba(43,35,48,.35)', display: 'grid', placeItems: 'center', padding: 'var(--top-clear) 16px calc(var(--safe-bottom) + 16px)' }}

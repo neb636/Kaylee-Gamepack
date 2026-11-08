@@ -31,7 +31,7 @@ import type { House, HousePlugin } from '../house'
 import { DIM, STARTS, WARDROBE_YAW } from '../layout'
 import type { Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
-import { markNew, type Kind } from '../notice'
+import { markNew } from '../notice'
 import { DOOR_MAX, DOOR_SIZE, type DoorPhoto } from './door'
 import { DOOR_OPEN, DRAWER_OUT, DRAWERS, PHOTO_SIZE, photoPin, shelfRoom, shelfSlot, type DrawerId } from './furniture'
 
@@ -589,7 +589,7 @@ export class WardrobePlugin implements HousePlugin {
     this.events.onLook(style)
     // What's new about her look is what the family notice (notice.ts).
     for (const slot of ['head', 'back', 'outfit', 'face', 'feet'] as Slot[]) {
-      if (style.on[slot] && style.on[slot] !== before.on[slot]) return markNew(style, slot as Kind, style.on[slot])
+      if (style.on[slot] && style.on[slot] !== before.on[slot]) return markNew(style, slot)
     }
     if (PAINT_PARTS.some((p) => style.paint[p] !== before.paint[p])) markNew(style, 'paint')
   }
