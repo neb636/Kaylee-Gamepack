@@ -1,0 +1,32 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "mapName",
+  "title": "Italy › Map Name",
+  "intro": "Sparkle, as the world map closes in on this country on the way there.",
+  "page": "italy-mapName.html",
+  "audio": "italy-mapName.mp3",
+  "lines": 1,
+  "seconds": 1,
+  "missing": 0,
+  "names": 0,
+  "flags": [],
+  "script": [
+    {
+      "path": [
+        "mapName"
+      ],
+      "text": "Italy!",
+      "voice": "sparkle",
+      "key": "mapName",
+      "part": "",
+      "when": "Sparkle, as the world map closes in on this country on the way there.",
+      "ms": 696,
+      "flags": [],
+      "span": [
+        0,
+        0.63
+      ]
+    }
+  ]
+}

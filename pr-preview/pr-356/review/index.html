@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Script check: Australia › Everything, Canada › Everything, China › Everything, Egypt › Everything, Italy › Everything, Peru › Everything, Poles › Everything, Thailand › Everything</title>
+<title>The new world map</title>
 <style>
 :root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a;--lav:#efe6ff;--warn:#b0124f}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}}
@@ -25,12 +25,45 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 .grows li{background:var(--lav);border-radius:12px;padding:8px;font-size:14px;text-align:center}.grows span{display:block;font-size:28px}
 @media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}}
 </style></head><body><main>
+<span class="chip">Check-in 2 of 4: hear the script</span>
+<h1>The new world map</h1>
+<p class="kaylee">A real world map: true shapes and sizes, her eight places shimmering with an animal beside each, and a balloon flight that shows her where each country is.</p>
 
-<h1>Script check: Australia › Everything, Canada › Everything, China › Everything, Egypt › Everything, Italy › Everything, Peru › Everything, Poles › Everything, Thailand › Everything</h1>
-
-
-
-<h2>Hear the script</h2><div class="card"><h3>Australia › Everything</h3>
+<h2>Watch</h2><figure><video src="reel/world-map.mp4" poster="" controls playsinline muted autoplay loop></video>
+<figcaption>World map · 7 s</figcaption></figure>
+<h2>Hear the script</h2><div class="card"><h3>Australia › Map Name</h3>
+<p class="meta">1 lines · 1 s of talk · her name 0×</p>
+<audio controls preload="metadata" src="table-read/australia-mapName.mp3"></audio>
+<p><a href="table-read/australia-mapName.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Canada › Map Name</h3>
+<p class="meta">1 lines · 1 s of talk · her name 0×</p>
+<audio controls preload="metadata" src="table-read/canada-mapName.mp3"></audio>
+<p><a href="table-read/canada-mapName.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>China › Map Name</h3>
+<p class="meta">1 lines · 1 s of talk · her name 0×</p>
+<audio controls preload="metadata" src="table-read/china-mapName.mp3"></audio>
+<p><a href="table-read/china-mapName.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Egypt › Map Name</h3>
+<p class="meta">1 lines · 1 s of talk · her name 0×</p>
+<audio controls preload="metadata" src="table-read/egypt-mapName.mp3"></audio>
+<p><a href="table-read/egypt-mapName.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Italy › Map Name</h3>
+<p class="meta">1 lines · 1 s of talk · her name 0×</p>
+<audio controls preload="metadata" src="table-read/italy-mapName.mp3"></audio>
+<p><a href="table-read/italy-mapName.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Peru › Map Name</h3>
+<p class="meta">1 lines · 1 s of talk · her name 0×</p>
+<audio controls preload="metadata" src="table-read/peru-mapName.mp3"></audio>
+<p><a href="table-read/peru-mapName.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Poles › Map Name</h3>
+<p class="meta">1 lines · 1 s of talk · her name 0×</p>
+<audio controls preload="metadata" src="table-read/poles-mapName.mp3"></audio>
+<p><a href="table-read/poles-mapName.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Map Name</h3>
+<p class="meta">1 lines · 1 s of talk · her name 0×</p>
+<audio controls preload="metadata" src="table-read/thailand-mapName.mp3"></audio>
+<p><a href="table-read/thailand-mapName.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Australia › Everything</h3>
 <p class="meta">116 lines · 328 s of talk · her name 6× · 60 flagged</p>
 
 <p><a href="table-read/australia-all.html">Read along: who says what, and when</a></p></div>
@@ -62,11 +95,12 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 <p class="meta">1058 lines · 2239 s of talk · her name 134× · 287 flagged</p>
 
 <p><a href="table-read/thailand-all.html">Read along: who says what, and when</a></p></div>
-
-
+<h2>Your call</h2><ol><li><p>Are these the right eight animals? (The camel for Egypt and the wolf cub for Italy are the least obvious.)</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
+<li><p>Do the country names sound right?</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><a class="pill" href="https://github.com/neb636/Kaylee-Gamepack/pull/356">Open the PR to paste them</a><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world?view=map">Try the map</a> <a class="pill" href="../#/world?view=map&amp;feel=1">Tune the shimmer and flight</a></p>
 </main>
 <script>
-const qs=[],titles=[]
+const qs=["Are these the right eight animals? (The camel for Egypt and the wolf cub for Italy are the least obvious.)","Do the country names sound right?"],titles=[]
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p]
   try{await navigator.clipboard.writeText(t);document.getElementById('picked').textContent='Copied “'+t+'”. Paste it on the PR, or just say it in chat.'}catch{document.getElementById('picked').textContent=t+': say it on the PR or in chat.'}}))
 document.getElementById('copy')?.addEventListener('click',async()=>{
