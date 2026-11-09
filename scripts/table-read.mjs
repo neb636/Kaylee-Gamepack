@@ -344,7 +344,10 @@ export async function changedGroups(ref = 'origin/main') {
     try {
       const old = spawnSync('git', ['show', `${ref}:${f}`], { cwd: root, encoding: 'utf8' })
       if (old.status === 0) {
-        writeFileSync(path.join(tmp, 'lines.ts'), old.stdout)
+        // Its relative imports (sdk/device.ts) still point into the repo, not into the temp folder.
+        const here = path.dirname(path.join(root, f))
+        const source = old.stdout.replace(/(from\s+['"])(\.{1,2}\/[^'"]+)(['"])/g, (_, a, rel, b) => a + pathToFileURL(path.resolve(here, rel)).href + b)
+        writeFileSync(path.join(tmp, 'lines.ts'), source)
         then = flatten(await loadLines(place, path.join(tmp, 'lines.ts')))
       }
     } finally {

@@ -268,9 +268,9 @@ export const L = {
   },
   campfire: {
     // The story (before the first touch): Maple, then Sparkle's one instruction.
-    story: [maple("Shh! Who's out there?"), onDevice('Move your finger to shine the light!', 'Move the arrow to shine the light!')],
+    story: [maple("Shh! Who's out there?"), onDevice('Move your finger to shine the light!', 'Click and hold, then move to shine the light!')],
     // Sparkle: each part's instruction (the prompt bubble plays it again), and her hints when Kaylee is stuck.
-    eyes: onDevice('Move your finger to shine the light!', 'Move the arrow to shine the light!'),
+    eyes: onDevice('Move your finger to shine the light!', 'Click and hold, then move to shine the light!'),
     eyesHint: 'Look for shiny eyes in the dark!',
     allOut: maple('You found everybody!'),
     sounds: 'Listen! Who made that sound?',
