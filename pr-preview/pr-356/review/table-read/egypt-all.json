@@ -1,0 +1,2373 @@
+{
+  "kind": "table-read",
+  "place": "egypt",
+  "group": "",
+  "title": "Egypt › Everything",
+  "intro": "",
+  "page": "egypt-all.html",
+  "audio": null,
+  "lines": 131,
+  "seconds": 370,
+  "missing": 0,
+  "names": 9,
+  "flags": [
+    {
+      "key": "mapName",
+      "text": "Egypt!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "intro.1",
+      "text": "Ahlan means hello! Come explore Egypt with me!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "trophyWin",
+      "text": "Kaylee, you did it! You won the Egypt Explorer trophy!",
+      "flags": [
+        "long",
+        "name"
+      ]
+    },
+    {
+      "key": "trophyRoom",
+      "text": "Kaylee, Egypt Explorer! From Egypt.",
+      "flags": [
+        "long",
+        "name"
+      ]
+    },
+    {
+      "key": "tickle.jamal.1",
+      "text": "Mmm, I love sweet dates!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "tickle.tutu.0",
+      "text": "Hee hee! My bandages are ticklish!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pyramid.story",
+      "text": "I'm Jamal the camel. Let's build a pyramid!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pyramid.drag",
+      "text": "Drag the stone onto the glowing spot!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pyramid.count.0",
+      "text": "One!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "pyramid.count.1",
+      "text": "Two!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "pyramid.count.2",
+      "text": "Three!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "pyramid.top",
+      "text": "Now one little stone on the very top!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pyramid.cap",
+      "text": "Last, the golden cap! It is a triangle!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pyramid.fact",
+      "text": "Long ago, Egyptians built pyramids for their kings, the pharaohs!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "passage.story",
+      "text": "Let's sneak inside the pyramid! It's dark in here!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "passage.count.0",
+      "text": "One!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "passage.count.1",
+      "text": "Two!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "passage.bat",
+      "text": "Shh! A sleepy bat! Not this way.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "passage.treasure",
+      "text": "The treasure room! Tap the golden box!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "passage.mask",
+      "text": "This gold mask was made for a boy king called Tut!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "passage.tutu",
+      "text": "Yawn! Ahlan, Kaylee! I'm Tutu!",
+      "flags": [
+        "long",
+        "name"
+      ]
+    },
+    {
+      "key": "passage.nap",
+      "text": "I napped for thousands of years! Hee hee!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nile.hippo",
+      "text": "Bump! Hee hee, hello!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nile.count.0",
+      "text": "One!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "nile.count.1",
+      "text": "Two!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "nile.count.2",
+      "text": "Three!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "nile.desert",
+      "text": "Egypt is mostly sandy desert. The Nile makes it green!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nile.longest",
+      "text": "The Nile is one of the longest rivers in the world!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "sphinx.sneeze",
+      "text": "Ah... ah... achoo!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "sphinx.lion",
+      "text": "The Sphinx has a lion's body and a person's head!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "sphinx.pieces",
+      "text": "You found pieces of an old pot! Put it back together!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "sphinx.nose",
+      "text": "Thank you, Kaylee! Hmm, have you seen my nose?",
+      "flags": [
+        "long",
+        "name"
+      ]
+    },
+    {
+      "key": "sphinx.noseAns",
+      "text": "Hee hee! His nose fell off a long, long time ago!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "scribe.story",
+      "text": "Let's write your name like a pharaoh, Kaylee!",
+      "flags": [
+        "long",
+        "name"
+      ]
+    },
+    {
+      "key": "scribe.hold",
+      "text": "Press and hold the stamp that matches!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "scribe.k",
+      "text": "K says kuh! Find the basket!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "scribe.a",
+      "text": "A says ay! Find the bird!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "scribe.y",
+      "text": "Y says yuh! Find the two reeds!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "scribe.l",
+      "text": "L says lll! Find the lion!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "scribe.e",
+      "text": "E says ee! Find the reed!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "market.story",
+      "text": "Welcome to my market stall! Let's make koshari!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "market.order",
+      "text": "Ahlan! One koshari, please!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "market.shukranJamal",
+      "text": "Shukran!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "market.extra",
+      "text": "Ahlan! Extra crispy onions, please!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "market.count.0",
+      "text": "One!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "market.count.1",
+      "text": "Two!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "market.count.2",
+      "text": "Three!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "market.shukranFennec",
+      "text": "Shukran!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "market.pour",
+      "text": "Press and hold to pour! Let go at the gold line!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "market.shukranHippo",
+      "text": "Shukran!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "show.flag",
+      "text": "Egypt's flag is red, white and black, with a golden eagle!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "show.thanks",
+      "text": "Shukran, Kaylee! You're a true Egypt explorer!",
+      "flags": [
+        "long",
+        "name"
+      ]
+    },
+    {
+      "key": "stickers.camel",
+      "text": "Camel sticker! Camels store fat in their humps for long trips!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "stickers.scarab",
+      "text": "Scarab sticker! Egyptians thought scarabs were lucky!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "stickers.hippo",
+      "text": "Hippo sticker! Hippos love the cool Nile water!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "stickers.fennec",
+      "text": "Fennec fox sticker! Big ears help it stay cool in the desert!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "stickers.ibis",
+      "text": "Ibis sticker! Egyptians drew this bird in their picture writing!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "stickers.cat",
+      "text": "Kitty sticker! In Egypt, cats were loved like family!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.weather",
+      "text": "Egypt is hot and sunny, and it hardly ever rains!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.hello",
+      "text": "In Egypt, people say Ahlan! It means hello!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.thanks",
+      "text": "Shukran means thank you in Arabic, the language of Egypt!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.pyramids",
+      "text": "The pyramids are more than four thousand years old!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.nile",
+      "text": "The Nile River gives Egypt water for farms and for drinking.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.writing",
+      "text": "Long ago, Egyptians wrote with pictures called hieroglyphs!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.cats",
+      "text": "In ancient Egypt, cats were loved like family!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.food",
+      "text": "Koshari is rice, lentils and pasta with yummy sauce!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.flag",
+      "text": "Egypt's flag is red, white and black, with a golden eagle!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "passport",
+      "text": "This is Egypt! Tap a picture to learn more.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "videos.nile",
+      "text": "Let's see the real Nile River!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "mapName"
+      ],
+      "text": "Egypt!",
+      "voice": "sparkle",
+      "key": "mapName",
+      "part": "",
+      "when": "Sparkle, as the world map closes in on this country on the way there.",
+      "ms": 864,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "name"
+      ],
+      "text": "Egypt",
+      "voice": "sparkle",
+      "key": "name",
+      "part": "",
+      "when": "",
+      "ms": 893,
+      "flags": []
+    },
+    {
+      "path": [
+        "intro",
+        "0"
+      ],
+      "text": "Ahlan, Kaylee! I'm Miu the kitten!",
+      "voice": "miu",
+      "key": "intro.0",
+      "part": "intro",
+      "when": "",
+      "ms": 2677,
+      "flags": [
+        "name"
+      ]
+    },
+    {
+      "path": [
+        "intro",
+        "1"
+      ],
+      "text": "Ahlan means hello! Come explore Egypt with me!",
+      "voice": "miu",
+      "key": "intro.1",
+      "part": "intro",
+      "when": "",
+      "ms": 3227,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hubFirst"
+      ],
+      "text": "Tap a spot on the map!",
+      "voice": "miu",
+      "key": "hubFirst",
+      "part": "",
+      "when": "",
+      "ms": 2019,
+      "flags": []
+    },
+    {
+      "path": [
+        "hubNext"
+      ],
+      "text": "Where to next, Kaylee?",
+      "voice": "miu",
+      "key": "hubNext",
+      "part": "",
+      "when": "",
+      "ms": 1498,
+      "flags": [
+        "name"
+      ]
+    },
+    {
+      "path": [
+        "hubParty"
+      ],
+      "text": "Everyone is here! Tap the light show!",
+      "voice": "miu",
+      "key": "hubParty",
+      "part": "",
+      "when": "",
+      "ms": 2829,
+      "flags": []
+    },
+    {
+      "path": [
+        "partyLocked"
+      ],
+      "text": "Get all the stamps to start the light show!",
+      "voice": "miu",
+      "key": "partyLocked",
+      "part": "",
+      "when": "",
+      "ms": 2608,
+      "flags": []
+    },
+    {
+      "path": [
+        "trophyWin"
+      ],
+      "text": "Kaylee, you did it! You won the Egypt Explorer trophy!",
+      "voice": "sparkle",
+      "key": "trophyWin",
+      "part": "",
+      "when": "",
+      "ms": 4954,
+      "flags": [
+        "long",
+        "name"
+      ]
+    },
+    {
+      "path": [
+        "trophyRoom"
+      ],
+      "text": "Kaylee, Egypt Explorer! From Egypt.",
+      "voice": "sparkle",
+      "key": "trophyRoom",
+      "part": "",
+      "when": "",
+      "ms": 4015,
+      "flags": [
+        "long",
+        "name"
+      ]
+    },
+    {
+      "path": [
+        "tickle",
+        "miu",
+        "0"
+      ],
+      "text": "Purr! That tickles!",
+      "voice": "miu",
+      "key": "tickle.miu.0",
+      "part": "tickle › miu",
+      "when": "",
+      "ms": 2254,
+      "flags": []
+    },
+    {
+      "path": [
+        "tickle",
+        "miu",
+        "1"
+      ],
+      "text": "Meow! Hee hee!",
+      "voice": "miu",
+      "key": "tickle.miu.1",
+      "part": "tickle › miu",
+      "when": "",
+      "ms": 1494,
+      "flags": []
+    },
+    {
+      "path": [
+        "tickle",
+        "jamal",
+        "0"
+      ],
+      "text": "Harrumph! Hello, little one.",
+      "voice": "jamal",
+      "key": "tickle.jamal.0",
+      "part": "tickle › jamal",
+      "when": "",
+      "ms": 2759,
+      "flags": []
+    },
+    {
+      "path": [
+        "tickle",
+        "jamal",
+        "1"
+      ],
+      "text": "Mmm, I love sweet dates!",
+      "voice": "jamal",
+      "key": "tickle.jamal.1",
+      "part": "tickle › jamal",
+      "when": "",
+      "ms": 3353,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "tickle",
+        "sphinx",
+        "0"
+      ],
+      "text": "Ho ho! That tickles!",
+      "voice": "sphinx",
+      "key": "tickle.sphinx.0",
+      "part": "tickle › sphinx",
+      "when": "",
+      "ms": 2027,
+      "flags": []
+    },
+    {
+      "path": [
+        "tickle",
+        "tutu",
+        "0"
+      ],
+      "text": "Hee hee! My bandages are ticklish!",
+      "voice": "tutu",
+      "key": "tickle.tutu.0",
+      "part": "tickle › tutu",
+      "when": "",
+      "ms": 3053,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pyramid",
+        "story"
+      ],
+      "text": "I'm Jamal the camel. Let's build a pyramid!",
+      "voice": "jamal",
+      "key": "pyramid.story",
+      "part": "pyramid",
+      "when": "",
+      "ms": 4586,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pyramid",
+        "drag"
+      ],
+      "text": "Drag the stone onto the glowing spot!",
+      "voice": "sparkle",
+      "key": "pyramid.drag",
+      "part": "pyramid",
+      "when": "",
+      "ms": 3209,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pyramid",
+        "count",
+        "0"
+      ],
+      "text": "One!",
+      "voice": "miu",
+      "key": "pyramid.count.0",
+      "part": "pyramid › count",
+      "when": "",
+      "ms": 508,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "pyramid",
+        "count",
+        "1"
+      ],
+      "text": "Two!",
+      "voice": "miu",
+      "key": "pyramid.count.1",
+      "part": "pyramid › count",
+      "when": "",
+      "ms": 428,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "pyramid",
+        "count",
+        "2"
+      ],
+      "text": "Three!",
+      "voice": "miu",
+      "key": "pyramid.count.2",
+      "part": "pyramid › count",
+      "when": "",
+      "ms": 475,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "pyramid",
+        "bottom"
+      ],
+      "text": "Three big stones on the bottom!",
+      "voice": "sparkle",
+      "key": "pyramid.bottom",
+      "part": "pyramid",
+      "when": "",
+      "ms": 2570,
+      "flags": []
+    },
+    {
+      "path": [
+        "pyramid",
+        "small"
+      ],
+      "text": "Pick the small stone!",
+      "voice": "sparkle",
+      "key": "pyramid.small",
+      "part": "pyramid",
+      "when": "",
+      "ms": 1896,
+      "flags": []
+    },
+    {
+      "path": [
+        "pyramid",
+        "tooBig"
+      ],
+      "text": "Oof! Too big for up there!",
+      "voice": "jamal",
+      "key": "pyramid.tooBig",
+      "part": "pyramid",
+      "when": "",
+      "ms": 2398,
+      "flags": []
+    },
+    {
+      "path": [
+        "pyramid",
+        "middle"
+      ],
+      "text": "Two stones in the middle!",
+      "voice": "sparkle",
+      "key": "pyramid.middle",
+      "part": "pyramid",
+      "when": "",
+      "ms": 2479,
+      "flags": []
+    },
+    {
+      "path": [
+        "pyramid",
+        "top"
+      ],
+      "text": "Now one little stone on the very top!",
+      "voice": "sparkle",
+      "key": "pyramid.top",
+      "part": "pyramid",
+      "when": "",
+      "ms": 3883,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pyramid",
+        "cap"
+      ],
+      "text": "Last, the golden cap! It is a triangle!",
+      "voice": "sparkle",
+      "key": "pyramid.cap",
+      "part": "pyramid",
+      "when": "",
+      "ms": 4378,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pyramid",
+        "done"
+      ],
+      "text": "Wow! Our pyramid is shining!",
+      "voice": "miu",
+      "key": "pyramid.done",
+      "part": "pyramid",
+      "when": "",
+      "ms": 2714,
+      "flags": []
+    },
+    {
+      "path": [
+        "pyramid",
+        "fact"
+      ],
+      "text": "Long ago, Egyptians built pyramids for their kings, the pharaohs!",
+      "voice": "sparkle",
+      "key": "pyramid.fact",
+      "part": "pyramid",
+      "when": "",
+      "ms": 5557,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "passage",
+        "story"
+      ],
+      "text": "Let's sneak inside the pyramid! It's dark in here!",
+      "voice": "miu",
+      "key": "passage.story",
+      "part": "passage",
+      "when": "",
+      "ms": 3620,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "passage",
+        "drag"
+      ],
+      "text": "Drag Miu to the scarab!",
+      "voice": "sparkle",
+      "key": "passage.drag",
+      "part": "passage",
+      "when": "",
+      "ms": 2543,
+      "flags": []
+    },
+    {
+      "path": [
+        "passage",
+        "door"
+      ],
+      "text": "Now find the door!",
+      "voice": "sparkle",
+      "key": "passage.door",
+      "part": "passage",
+      "when": "",
+      "ms": 1593,
+      "flags": []
+    },
+    {
+      "path": [
+        "passage",
+        "two"
+      ],
+      "text": "Now find two scarabs!",
+      "voice": "sparkle",
+      "key": "passage.two",
+      "part": "passage",
+      "when": "",
+      "ms": 2756,
+      "flags": []
+    },
+    {
+      "path": [
+        "passage",
+        "deeper"
+      ],
+      "text": "Find the way to the treasure room!",
+      "voice": "sparkle",
+      "key": "passage.deeper",
+      "part": "passage",
+      "when": "",
+      "ms": 2550,
+      "flags": []
+    },
+    {
+      "path": [
+        "passage",
+        "scarab"
+      ],
+      "text": "A scarab! Egyptians loved these beetles.",
+      "voice": "miu",
+      "key": "passage.scarab",
+      "part": "passage",
+      "when": "",
+      "ms": 2722,
+      "flags": []
+    },
+    {
+      "path": [
+        "passage",
+        "count",
+        "0"
+      ],
+      "text": "One!",
+      "voice": "miu",
+      "key": "passage.count.0",
+      "part": "passage › count",
+      "when": "",
+      "ms": 508,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "passage",
+        "count",
+        "1"
+      ],
+      "text": "Two!",
+      "voice": "miu",
+      "key": "passage.count.1",
+      "part": "passage › count",
+      "when": "",
+      "ms": 428,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "passage",
+        "bat"
+      ],
+      "text": "Shh! A sleepy bat! Not this way.",
+      "voice": "miu",
+      "key": "passage.bat",
+      "part": "passage",
+      "when": "",
+      "ms": 3969,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "passage",
+        "wall"
+      ],
+      "text": "Not this way! Hee hee.",
+      "voice": "miu",
+      "key": "passage.wall",
+      "part": "passage",
+      "when": "",
+      "ms": 2349,
+      "flags": []
+    },
+    {
+      "path": [
+        "passage",
+        "treasure"
+      ],
+      "text": "The treasure room! Tap the golden box!",
+      "voice": "sparkle",
+      "key": "passage.treasure",
+      "part": "passage",
+      "when": "",
+      "ms": 3708,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "passage",
+        "mask"
+      ],
+      "text": "This gold mask was made for a boy king called Tut!",
+      "voice": "sparkle",
+      "key": "passage.mask",
+      "part": "passage",
+      "when": "",
+      "ms": 4007,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "passage",
+        "tutu"
+      ],
+      "text": "Yawn! Ahlan, Kaylee! I'm Tutu!",
+      "voice": "tutu",
+      "key": "passage.tutu",
+      "part": "passage",
+      "when": "",
+      "ms": 3583,
+      "flags": [
+        "long",
+        "name"
+      ]
+    },
+    {
+      "path": [
+        "passage",
+        "nap"
+      ],
+      "text": "I napped for thousands of years! Hee hee!",
+      "voice": "tutu",
+      "key": "passage.nap",
+      "part": "passage",
+      "when": "",
+      "ms": 3118,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "nile",
+        "story"
+      ],
+      "text": "All aboard! Let's sail down the Nile River!",
+      "voice": "miu",
+      "key": "nile.story",
+      "part": "nile",
+      "when": "",
+      "ms": 2563,
+      "flags": []
+    },
+    {
+      "path": [
+        "nile",
+        "steer"
+      ],
+      "text": "Catch the lotus flowers!",
+      "voice": "sparkle",
+      "key": "nile.steer",
+      "part": "nile",
+      "when": "",
+      "ms": 1785,
+      "flags": []
+    },
+    {
+      "path": [
+        "nile",
+        "hippo"
+      ],
+      "text": "Bump! Hee hee, hello!",
+      "voice": "hippo",
+      "key": "nile.hippo",
+      "part": "nile",
+      "when": "",
+      "ms": 3758,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "nile",
+        "farm"
+      ],
+      "text": "Pull the bucket three times!",
+      "voice": "sparkle",
+      "key": "nile.farm",
+      "part": "nile",
+      "when": "",
+      "ms": 2276,
+      "flags": []
+    },
+    {
+      "path": [
+        "nile",
+        "farm5"
+      ],
+      "text": "Now pull it five times!",
+      "voice": "sparkle",
+      "key": "nile.farm5",
+      "part": "nile",
+      "when": "",
+      "ms": 2538,
+      "flags": []
+    },
+    {
+      "path": [
+        "nile",
+        "count",
+        "0"
+      ],
+      "text": "One!",
+      "voice": "miu",
+      "key": "nile.count.0",
+      "part": "nile › count",
+      "when": "",
+      "ms": 508,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "nile",
+        "count",
+        "1"
+      ],
+      "text": "Two!",
+      "voice": "miu",
+      "key": "nile.count.1",
+      "part": "nile › count",
+      "when": "",
+      "ms": 428,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "nile",
+        "count",
+        "2"
+      ],
+      "text": "Three!",
+      "voice": "miu",
+      "key": "nile.count.2",
+      "part": "nile › count",
+      "when": "",
+      "ms": 475,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "nile",
+        "count",
+        "3"
+      ],
+      "text": "Four!",
+      "voice": "miu",
+      "key": "nile.count.3",
+      "part": "nile › count",
+      "when": "",
+      "ms": 618,
+      "flags": []
+    },
+    {
+      "path": [
+        "nile",
+        "count",
+        "4"
+      ],
+      "text": "Five!",
+      "voice": "miu",
+      "key": "nile.count.4",
+      "part": "nile › count",
+      "when": "",
+      "ms": 664,
+      "flags": []
+    },
+    {
+      "path": [
+        "nile",
+        "green"
+      ],
+      "text": "Look! The water makes the plants grow!",
+      "voice": "miu",
+      "key": "nile.green",
+      "part": "nile",
+      "when": "",
+      "ms": 2753,
+      "flags": []
+    },
+    {
+      "path": [
+        "nile",
+        "desert"
+      ],
+      "text": "Egypt is mostly sandy desert. The Nile makes it green!",
+      "voice": "sparkle",
+      "key": "nile.desert",
+      "part": "nile",
+      "when": "",
+      "ms": 4933,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "nile",
+        "longest"
+      ],
+      "text": "The Nile is one of the longest rivers in the world!",
+      "voice": "sparkle",
+      "key": "nile.longest",
+      "part": "nile",
+      "when": "",
+      "ms": 3729,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "sphinx",
+        "story"
+      ],
+      "text": "Oh no! Someone is buried in the sand!",
+      "voice": "miu",
+      "key": "sphinx.story",
+      "part": "sphinx",
+      "when": "",
+      "ms": 2827,
+      "flags": []
+    },
+    {
+      "path": [
+        "sphinx",
+        "rub"
+      ],
+      "text": "Rub the sand away!",
+      "voice": "sparkle",
+      "key": "sphinx.rub",
+      "part": "sphinx",
+      "when": "",
+      "ms": 2039,
+      "flags": []
+    },
+    {
+      "path": [
+        "sphinx",
+        "sneeze"
+      ],
+      "text": "Ah... ah... achoo!",
+      "voice": "sphinx",
+      "key": "sphinx.sneeze",
+      "part": "sphinx",
+      "when": "",
+      "ms": 3589,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "sphinx",
+        "hello"
+      ],
+      "text": "Thank you! I'm the Sphinx!",
+      "voice": "sphinx",
+      "key": "sphinx.hello",
+      "part": "sphinx",
+      "when": "",
+      "ms": 2119,
+      "flags": []
+    },
+    {
+      "path": [
+        "sphinx",
+        "paws"
+      ],
+      "text": "Now brush the sand off his paws!",
+      "voice": "sparkle",
+      "key": "sphinx.paws",
+      "part": "sphinx",
+      "when": "",
+      "ms": 2874,
+      "flags": []
+    },
+    {
+      "path": [
+        "sphinx",
+        "twoPaws"
+      ],
+      "text": "Two big lion paws!",
+      "voice": "sparkle",
+      "key": "sphinx.twoPaws",
+      "part": "sphinx",
+      "when": "",
+      "ms": 2270,
+      "flags": []
+    },
+    {
+      "path": [
+        "sphinx",
+        "back"
+      ],
+      "text": "Now brush off his back!",
+      "voice": "sparkle",
+      "key": "sphinx.back",
+      "part": "sphinx",
+      "when": "",
+      "ms": 2141,
+      "flags": []
+    },
+    {
+      "path": [
+        "sphinx",
+        "lion"
+      ],
+      "text": "The Sphinx has a lion's body and a person's head!",
+      "voice": "sparkle",
+      "key": "sphinx.lion",
+      "part": "sphinx",
+      "when": "",
+      "ms": 3756,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "sphinx",
+        "pieces"
+      ],
+      "text": "You found pieces of an old pot! Put it back together!",
+      "voice": "sparkle",
+      "key": "sphinx.pieces",
+      "part": "sphinx",
+      "when": "",
+      "ms": 4526,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "sphinx",
+        "potDone"
+      ],
+      "text": "Good as new!",
+      "voice": "miu",
+      "key": "sphinx.potDone",
+      "part": "sphinx",
+      "when": "",
+      "ms": 1638,
+      "flags": []
+    },
+    {
+      "path": [
+        "sphinx",
+        "nose"
+      ],
+      "text": "Thank you, Kaylee! Hmm, have you seen my nose?",
+      "voice": "sphinx",
+      "key": "sphinx.nose",
+      "part": "sphinx",
+      "when": "",
+      "ms": 4314,
+      "flags": [
+        "long",
+        "name"
+      ]
+    },
+    {
+      "path": [
+        "sphinx",
+        "noseAns"
+      ],
+      "text": "Hee hee! His nose fell off a long, long time ago!",
+      "voice": "miu",
+      "key": "sphinx.noseAns",
+      "part": "sphinx",
+      "when": "",
+      "ms": 3320,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "scribe",
+        "story"
+      ],
+      "text": "Let's write your name like a pharaoh, Kaylee!",
+      "voice": "miu",
+      "key": "scribe.story",
+      "part": "scribe",
+      "when": "",
+      "ms": 3364,
+      "flags": [
+        "long",
+        "name"
+      ]
+    },
+    {
+      "path": [
+        "scribe",
+        "hold"
+      ],
+      "text": "Press and hold the stamp that matches!",
+      "voice": "sparkle",
+      "key": "scribe.hold",
+      "part": "scribe",
+      "when": "",
+      "ms": 3046,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "scribe",
+        "k"
+      ],
+      "text": "K says kuh! Find the basket!",
+      "voice": "sparkle",
+      "key": "scribe.k",
+      "part": "scribe",
+      "when": "",
+      "ms": 3366,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "scribe",
+        "a"
+      ],
+      "text": "A says ay! Find the bird!",
+      "voice": "sparkle",
+      "key": "scribe.a",
+      "part": "scribe",
+      "when": "",
+      "ms": 3341,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "scribe",
+        "y"
+      ],
+      "text": "Y says yuh! Find the two reeds!",
+      "voice": "sparkle",
+      "key": "scribe.y",
+      "part": "scribe",
+      "when": "",
+      "ms": 3901,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "scribe",
+        "l"
+      ],
+      "text": "L says lll! Find the lion!",
+      "voice": "sparkle",
+      "key": "scribe.l",
+      "part": "scribe",
+      "when": "",
+      "ms": 3575,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "scribe",
+        "e"
+      ],
+      "text": "E says ee! Find the reed!",
+      "voice": "sparkle",
+      "key": "scribe.e",
+      "part": "scribe",
+      "when": "",
+      "ms": 4269,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "scribe",
+        "e2"
+      ],
+      "text": "E again! One more reed!",
+      "voice": "sparkle",
+      "key": "scribe.e2",
+      "part": "scribe",
+      "when": "",
+      "ms": 2538,
+      "flags": []
+    },
+    {
+      "path": [
+        "scribe",
+        "hint"
+      ],
+      "text": "Look for the same picture!",
+      "voice": "sparkle",
+      "key": "scribe.hint",
+      "part": "scribe",
+      "when": "",
+      "ms": 1863,
+      "flags": []
+    },
+    {
+      "path": [
+        "scribe",
+        "done"
+      ],
+      "text": "Kaylee! That says Kaylee!",
+      "voice": "miu",
+      "key": "scribe.done",
+      "part": "scribe",
+      "when": "",
+      "ms": 2409,
+      "flags": [
+        "name"
+      ]
+    },
+    {
+      "path": [
+        "scribe",
+        "cartouche"
+      ],
+      "text": "Egyptians wrote with pictures called hieroglyphs!",
+      "voice": "sparkle",
+      "key": "scribe.cartouche",
+      "part": "scribe",
+      "when": "",
+      "ms": 2928,
+      "flags": []
+    },
+    {
+      "path": [
+        "market",
+        "story"
+      ],
+      "text": "Welcome to my market stall! Let's make koshari!",
+      "voice": "miu",
+      "key": "market.story",
+      "part": "market",
+      "when": "",
+      "ms": 3294,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "market",
+        "order"
+      ],
+      "text": "Ahlan! One koshari, please!",
+      "voice": "jamal",
+      "key": "market.order",
+      "part": "market",
+      "when": "",
+      "ms": 3224,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "market",
+        "recipe"
+      ],
+      "text": "First, the rice!",
+      "voice": "sparkle",
+      "key": "market.recipe",
+      "part": "market",
+      "when": "",
+      "ms": 1879,
+      "flags": []
+    },
+    {
+      "path": [
+        "market",
+        "lentils"
+      ],
+      "text": "Next, the lentils!",
+      "voice": "sparkle",
+      "key": "market.lentils",
+      "part": "market",
+      "when": "",
+      "ms": 1874,
+      "flags": []
+    },
+    {
+      "path": [
+        "market",
+        "pasta"
+      ],
+      "text": "Now the pasta!",
+      "voice": "sparkle",
+      "key": "market.pasta",
+      "part": "market",
+      "when": "",
+      "ms": 2047,
+      "flags": []
+    },
+    {
+      "path": [
+        "market",
+        "sauce"
+      ],
+      "text": "Now the tomato sauce!",
+      "voice": "sparkle",
+      "key": "market.sauce",
+      "part": "market",
+      "when": "",
+      "ms": 2054,
+      "flags": []
+    },
+    {
+      "path": [
+        "market",
+        "onions"
+      ],
+      "text": "Crispy onions on top!",
+      "voice": "sparkle",
+      "key": "market.onions",
+      "part": "market",
+      "when": "",
+      "ms": 2105,
+      "flags": []
+    },
+    {
+      "path": [
+        "market",
+        "wrong"
+      ],
+      "text": "Look at the recipe! What comes next?",
+      "voice": "sparkle",
+      "key": "market.wrong",
+      "part": "market",
+      "when": "",
+      "ms": 2853,
+      "flags": []
+    },
+    {
+      "path": [
+        "market",
+        "yum"
+      ],
+      "text": "Koshari is a yummy Egyptian food!",
+      "voice": "sparkle",
+      "key": "market.yum",
+      "part": "market",
+      "when": "",
+      "ms": 2719,
+      "flags": []
+    },
+    {
+      "path": [
+        "market",
+        "shukranJamal"
+      ],
+      "text": "Shukran!",
+      "voice": "jamal",
+      "key": "market.shukranJamal",
+      "part": "market",
+      "when": "",
+      "ms": 903,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "market",
+        "shukran"
+      ],
+      "text": "Shukran means thank you!",
+      "voice": "miu",
+      "key": "market.shukran",
+      "part": "market",
+      "when": "",
+      "ms": 1699,
+      "flags": []
+    },
+    {
+      "path": [
+        "market",
+        "extra"
+      ],
+      "text": "Ahlan! Extra crispy onions, please!",
+      "voice": "fennec",
+      "key": "market.extra",
+      "part": "market",
+      "when": "",
+      "ms": 3180,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "market",
+        "pinch"
+      ],
+      "text": "Add three pinches of onions!",
+      "voice": "sparkle",
+      "key": "market.pinch",
+      "part": "market",
+      "when": "",
+      "ms": 2202,
+      "flags": []
+    },
+    {
+      "path": [
+        "market",
+        "count",
+        "0"
+      ],
+      "text": "One!",
+      "voice": "miu",
+      "key": "market.count.0",
+      "part": "market › count",
+      "when": "",
+      "ms": 508,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "market",
+        "count",
+        "1"
+      ],
+      "text": "Two!",
+      "voice": "miu",
+      "key": "market.count.1",
+      "part": "market › count",
+      "when": "",
+      "ms": 428,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "market",
+        "count",
+        "2"
+      ],
+      "text": "Three!",
+      "voice": "miu",
+      "key": "market.count.2",
+      "part": "market › count",
+      "when": "",
+      "ms": 475,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "market",
+        "shukranFennec"
+      ],
+      "text": "Shukran!",
+      "voice": "fennec",
+      "key": "market.shukranFennec",
+      "part": "market",
+      "when": "",
+      "ms": 988,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "market",
+        "tea"
+      ],
+      "text": "Ahlan! Mint tea, please!",
+      "voice": "hippo",
+      "key": "market.tea",
+      "part": "market",
+      "when": "",
+      "ms": 2432,
+      "flags": []
+    },
+    {
+      "path": [
+        "market",
+        "pour"
+      ],
+      "text": "Press and hold to pour! Let go at the gold line!",
+      "voice": "sparkle",
+      "key": "market.pour",
+      "part": "market",
+      "when": "",
+      "ms": 4582,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "market",
+        "whoops"
+      ],
+      "text": "Whoops! A little too much! Hee hee.",
+      "voice": "miu",
+      "key": "market.whoops",
+      "part": "market",
+      "when": "",
+      "ms": 2810,
+      "flags": []
+    },
+    {
+      "path": [
+        "market",
+        "shukranHippo"
+      ],
+      "text": "Shukran!",
+      "voice": "hippo",
+      "key": "market.shukranHippo",
+      "part": "market",
+      "when": "",
+      "ms": 892,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "show",
+        "story"
+      ],
+      "text": "The light show is starting!",
+      "voice": "miu",
+      "key": "show.story",
+      "part": "show",
+      "when": "",
+      "ms": 1760,
+      "flags": []
+    },
+    {
+      "path": [
+        "show",
+        "beam"
+      ],
+      "text": "Drag a light onto the pyramids!",
+      "voice": "sparkle",
+      "key": "show.beam",
+      "part": "show",
+      "when": "",
+      "ms": 2957,
+      "flags": []
+    },
+    {
+      "path": [
+        "show",
+        "jamal"
+      ],
+      "text": "Harrumph! What a pretty show!",
+      "voice": "jamal",
+      "key": "show.jamal",
+      "part": "show",
+      "when": "",
+      "ms": 2725,
+      "flags": []
+    },
+    {
+      "path": [
+        "show",
+        "tutu"
+      ],
+      "text": "Hee hee! I love the lights!",
+      "voice": "tutu",
+      "key": "show.tutu",
+      "part": "show",
+      "when": "",
+      "ms": 2049,
+      "flags": []
+    },
+    {
+      "path": [
+        "show",
+        "hippo"
+      ],
+      "text": "Hello from the Nile!",
+      "voice": "hippo",
+      "key": "show.hippo",
+      "part": "show",
+      "when": "",
+      "ms": 1742,
+      "flags": []
+    },
+    {
+      "path": [
+        "show",
+        "sphinx"
+      ],
+      "text": "Ho ho! I shine at night!",
+      "voice": "sphinx",
+      "key": "show.sphinx",
+      "part": "show",
+      "when": "",
+      "ms": 2468,
+      "flags": []
+    },
+    {
+      "path": [
+        "show",
+        "ibis"
+      ],
+      "text": "Hello! I love writing too!",
+      "voice": "ibis",
+      "key": "show.ibis",
+      "part": "show",
+      "when": "",
+      "ms": 2576,
+      "flags": []
+    },
+    {
+      "path": [
+        "show",
+        "fennec"
+      ],
+      "text": "Yum! Thank you for the koshari!",
+      "voice": "fennec",
+      "key": "show.fennec",
+      "part": "show",
+      "when": "",
+      "ms": 2268,
+      "flags": []
+    },
+    {
+      "path": [
+        "show",
+        "rope"
+      ],
+      "text": "Pull the rope to raise Egypt's flag!",
+      "voice": "sparkle",
+      "key": "show.rope",
+      "part": "show",
+      "when": "",
+      "ms": 2654,
+      "flags": []
+    },
+    {
+      "path": [
+        "show",
+        "flag"
+      ],
+      "text": "Egypt's flag is red, white and black, with a golden eagle!",
+      "voice": "sparkle",
+      "key": "show.flag",
+      "part": "show",
+      "when": "",
+      "ms": 4939,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "show",
+        "thanks"
+      ],
+      "text": "Shukran, Kaylee! You're a true Egypt explorer!",
+      "voice": "miu",
+      "key": "show.thanks",
+      "part": "show",
+      "when": "",
+      "ms": 3580,
+      "flags": [
+        "long",
+        "name"
+      ]
+    },
+    {
+      "path": [
+        "stickers",
+        "camel"
+      ],
+      "text": "Camel sticker! Camels store fat in their humps for long trips!",
+      "voice": "sparkle",
+      "key": "stickers.camel",
+      "part": "stickers",
+      "when": "",
+      "ms": 5871,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "stickers",
+        "scarab"
+      ],
+      "text": "Scarab sticker! Egyptians thought scarabs were lucky!",
+      "voice": "sparkle",
+      "key": "stickers.scarab",
+      "part": "stickers",
+      "when": "",
+      "ms": 4694,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "stickers",
+        "hippo"
+      ],
+      "text": "Hippo sticker! Hippos love the cool Nile water!",
+      "voice": "sparkle",
+      "key": "stickers.hippo",
+      "part": "stickers",
+      "when": "",
+      "ms": 4707,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "stickers",
+        "fennec"
+      ],
+      "text": "Fennec fox sticker! Big ears help it stay cool in the desert!",
+      "voice": "sparkle",
+      "key": "stickers.fennec",
+      "part": "stickers",
+      "when": "",
+      "ms": 4998,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "stickers",
+        "ibis"
+      ],
+      "text": "Ibis sticker! Egyptians drew this bird in their picture writing!",
+      "voice": "sparkle",
+      "key": "stickers.ibis",
+      "part": "stickers",
+      "when": "",
+      "ms": 4572,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "stickers",
+        "cat"
+      ],
+      "text": "Kitty sticker! In Egypt, cats were loved like family!",
+      "voice": "sparkle",
+      "key": "stickers.cat",
+      "part": "stickers",
+      "when": "",
+      "ms": 4541,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "weather"
+      ],
+      "text": "Egypt is hot and sunny, and it hardly ever rains!",
+      "voice": "sparkle",
+      "key": "facts.weather",
+      "part": "facts",
+      "when": "",
+      "ms": 6458,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "hello"
+      ],
+      "text": "In Egypt, people say Ahlan! It means hello!",
+      "voice": "sparkle",
+      "key": "facts.hello",
+      "part": "facts",
+      "when": "",
+      "ms": 4232,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "thanks"
+      ],
+      "text": "Shukran means thank you in Arabic, the language of Egypt!",
+      "voice": "sparkle",
+      "key": "facts.thanks",
+      "part": "facts",
+      "when": "",
+      "ms": 4706,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "pyramids"
+      ],
+      "text": "The pyramids are more than four thousand years old!",
+      "voice": "sparkle",
+      "key": "facts.pyramids",
+      "part": "facts",
+      "when": "",
+      "ms": 3375,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "nile"
+      ],
+      "text": "The Nile River gives Egypt water for farms and for drinking.",
+      "voice": "sparkle",
+      "key": "facts.nile",
+      "part": "facts",
+      "when": "",
+      "ms": 5114,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "writing"
+      ],
+      "text": "Long ago, Egyptians wrote with pictures called hieroglyphs!",
+      "voice": "sparkle",
+      "key": "facts.writing",
+      "part": "facts",
+      "when": "",
+      "ms": 4503,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "cats"
+      ],
+      "text": "In ancient Egypt, cats were loved like family!",
+      "voice": "sparkle",
+      "key": "facts.cats",
+      "part": "facts",
+      "when": "",
+      "ms": 4422,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "food"
+      ],
+      "text": "Koshari is rice, lentils and pasta with yummy sauce!",
+      "voice": "sparkle",
+      "key": "facts.food",
+      "part": "facts",
+      "when": "",
+      "ms": 5062,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "flag"
+      ],
+      "text": "Egypt's flag is red, white and black, with a golden eagle!",
+      "voice": "sparkle",
+      "key": "facts.flag",
+      "part": "facts",
+      "when": "",
+      "ms": 4939,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "passport"
+      ],
+      "text": "This is Egypt! Tap a picture to learn more.",
+      "voice": "sparkle",
+      "key": "passport",
+      "part": "",
+      "when": "",
+      "ms": 4134,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "videos",
+        "pyramids"
+      ],
+      "text": "Want to see the real pyramids?",
+      "voice": "sparkle",
+      "key": "videos.pyramids",
+      "part": "videos",
+      "when": "",
+      "ms": 2663,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "nile"
+      ],
+      "text": "Let's see the real Nile River!",
+      "voice": "sparkle",
+      "key": "videos.nile",
+      "part": "videos",
+      "when": "",
+      "ms": 3134,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "videos",
+        "sphinx"
+      ],
+      "text": "Want to see the real Sphinx?",
+      "voice": "sparkle",
+      "key": "videos.sphinx",
+      "part": "videos",
+      "when": "",
+      "ms": 2779,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "camels"
+      ],
+      "text": "Let's see real camels!",
+      "voice": "sparkle",
+      "key": "videos.camels",
+      "part": "videos",
+      "when": "",
+      "ms": 2295,
+      "flags": []
+    }
+  ]
+}
