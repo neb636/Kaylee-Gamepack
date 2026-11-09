@@ -87,8 +87,28 @@ export const pacing = [
   { name: 'party (finale)', id: 'party', hash: '#/world/australia/party', stampAll: true },
 ]
 
+// The world map: tap Pip, the balloon crosses the whole real map, the map closes in on Australia and Sparkle names it.
+const worldMapFly = {
+  name: 'world-map-fly',
+  seconds: 5,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world?view=map`)
+    await page.waitForTimeout(1800)
+  },
+  act: async (page) => {
+    const b = await page.getByRole('button', { name: 'Australia', exact: true }).boundingBox()
+    if (!b) throw new Error('no Australia marker found')
+    await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2, { steps: 12 })
+    await page.waitForTimeout(350)
+    await page.mouse.down()
+    await page.waitForTimeout(90)
+    await page.mouse.up()
+  },
+}
+
 /** Filmed moments (scripts/qa-motion.mjs): the core verbs, driven the way a child would. */
 export const motion = [
+  worldMapFly,
   {
     name: 'outback-hop',
     seconds: 1.3,
