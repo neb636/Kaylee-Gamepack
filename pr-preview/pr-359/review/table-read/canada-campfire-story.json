@@ -7,7 +7,7 @@
   "page": "canada-campfire-story.html",
   "audio": null,
   "lines": 3,
-  "seconds": 7,
+  "seconds": 8,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -20,7 +20,7 @@
     },
     {
       "key": "campfire.story.1.mouse",
-      "text": "Move the arrow to shine the light!",
+      "text": "Click and hold, then move to shine the light!",
       "flags": [
         "long",
         "new"
@@ -66,12 +66,12 @@
         "1",
         "mouse"
       ],
-      "text": "Move the arrow to shine the light!",
+      "text": "Click and hold, then move to shine the light!",
       "voice": "sparkle",
       "key": "campfire.story.1.mouse",
       "part": "campfire › story",
       "when": "",
-      "ms": 3168,
+      "ms": 3864,
       "flags": [
         "long",
         "new"

@@ -7,7 +7,7 @@
   "page": "canada-campfire-eyes.html",
   "audio": null,
   "lines": 2,
-  "seconds": 5,
+  "seconds": 6,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -20,7 +20,7 @@
     },
     {
       "key": "campfire.eyes.mouse",
-      "text": "Move the arrow to shine the light!",
+      "text": "Click and hold, then move to shine the light!",
       "flags": [
         "long",
         "new"
@@ -50,12 +50,12 @@
         "eyes",
         "mouse"
       ],
-      "text": "Move the arrow to shine the light!",
+      "text": "Click and hold, then move to shine the light!",
       "voice": "sparkle",
       "key": "campfire.eyes.mouse",
       "part": "campfire › eyes",
       "when": "Sparkle: each part's instruction (the prompt bubble plays it again), and her hints when Kaylee is stuck.",
-      "ms": 3168,
+      "ms": 3864,
       "flags": [
         "long",
         "new"
