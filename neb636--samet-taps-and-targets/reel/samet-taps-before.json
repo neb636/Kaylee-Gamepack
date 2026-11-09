@@ -1,0 +1,40 @@
+{
+  "kind": "reel",
+  "name": "samet-taps-before",
+  "title": "Samet taps before",
+  "video": "samet-taps-before.mp4",
+  "gif": "samet-taps-before.gif",
+  "seconds": 48,
+  "browser": "webkit",
+  "viewport": "iphone-portrait",
+  "moments": [
+    {
+      "name": "thailand-samet-taps-snorkel-ring",
+      "where": "thailand-samet-taps-snorkel-ring",
+      "seconds": 11,
+      "fps": 110.6,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-taps-hold-or-poke",
+      "where": "thailand-samet-taps-hold-or-poke",
+      "seconds": 9,
+      "fps": 99.8,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-taps-bin",
+      "where": "thailand-samet-taps-bin",
+      "seconds": 13,
+      "fps": 100,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-taps-pier-rail",
+      "where": "thailand-samet-taps-pier-rail",
+      "seconds": 8,
+      "fps": 99.4,
+      "status": "ok"
+    }
+  ]
+}
