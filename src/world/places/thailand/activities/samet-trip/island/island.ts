@@ -153,7 +153,7 @@ const LUNCH_TABLE = atFrame(DECK, -2.5, 0.8)
 const SIDE = 0.32
 const tmp = new Vector3()
 const tmp2 = new Vector3()
-/** The speedboat at Na Dan pier (layout.ts POKES): once all four flags are up, it takes them home. */
+/** The speedboat at Na Dan pier (layout.ts POKES): once all four flags are up, it takes them to the sunset (the finale). */
 const HOME_BOAT = 'speedboat:0'
 /** Where she stands on the pier for Mommy's photo before they go (beside the speedboat). */
 const HOME_PIER = atFrame(FRAMES.nadan, -4, 22)
@@ -328,9 +328,8 @@ export class SametIsland implements World3D {
   private phoneProp: Group
   private found: Set<AnimalId>
   private pendingSnap: { c: SnapTarget | null; t: number } | null = null
-  /** Going home: null before all four flags are up (or with no way home), false waiting, true on the way. */
+  /** Off to the finale by speedboat: null before all four flags are up (or with no way on), false waiting, true on the way. */
   private goingHome: boolean | null = null
-  private homeSnap = false
   private wantPortraits: ((p: Record<AnimalId, string>) => void) | null = null
   private nearAnimal = false
   private bumpV = { x: 0, z: 0, t: 0 }
@@ -588,8 +587,15 @@ export class SametIsland implements World3D {
   private free = (x: number, z: number) => {
     const on = this.deckOn
     const di = this.deckAt(x, z)
-    if (on >= 0) return di === on
-    if (di < 0) for (let i = 0; i < this.props.decks.length; i++) if (this.inDeckTop(i, x, z)) return false
+    if (on >= 0) {
+      if (di === on) return true
+      if (di >= 0) return false
+      // Off a deck only down its steps (past its land end), then the ground's own rules apply.
+      const d = this.props.decks[on]
+      const v = (x - d.x) * d.n.x + (z - d.z) * d.n.z
+      if (v > -d.hd - d.ramp + 0.05) return false
+    }
+    if (di < 0) for (let i = 0; i < this.props.decks.length; i++) if (i !== on && this.inDeckTop(i, x, z)) return false
     if (di >= 0) {
       // Onto a deck only up its steps (its land end).
       const d = this.props.decks[di]
@@ -1664,16 +1670,18 @@ export class SametIsland implements World3D {
     const k = this.kaylee.root.position
     const near = (x: number, z: number, r = RIDE.near) => Math.hypot(k.x - x, k.z - z) < r
     if (id === HOME_BOAT && this.goingHome !== null) {
-      // The whole island done: the speedboat at Na Dan pier takes them home. She walks to the end of the pier, Mommy
-      // takes their photo (for Agong's wall), and off they go.
+      // The whole island done: the speedboat at Na Dan pier takes them round to Ao Prao for the sunset (the finale),
+      // never straight home: the fire show's 🏠 at the end of the finale is the way home. She walks to the end of the
+      // pier, Daddy calls the sunset, and off they go.
       if (this.goingHome || this.mode !== 'walk') return
       if (!near(HOME_PIER.x, HOME_PIER.z, 2.5)) return this.goTo(id, HOME_PIER.x, HOME_PIER.z, 1)
       this.goingHome = true
       this.kaylee.faceToward(HOME_PIER.x - FRAMES.nadan.t.x * 3, HOME_PIER.z - FRAMES.nadan.t.z * 3)
       this.kaylee.react('wave')
       this.nick.m.react('wave')
-      this.events.say?.(I.home)
-      window.setTimeout(() => (this.homeSnap = true), 700)
+      this.events.say?.(I.sunset)
+      toot()
+      window.setTimeout(() => this.events.open('sunset'), 1600)
       return
     }
     if (id === 'kaylee') {
@@ -2226,15 +2234,6 @@ export class SametIsland implements World3D {
   // ---------------------------------------------------------------- tap targets
 
   render() {
-    if (this.homeSnap) {
-      // Mommy's photo of the island and the family on the pier, for Agong's wall.
-      this.homeSnap = false
-      this.events.shutter?.()
-      this.scene.updateMatrixWorld()
-      const src = snap(this.renderer, this.scene, phoneCamera(this.rig.camera, null, 0, 1.05))
-      tone(500, 900, 0.3, 0.05, 'triangle')
-      window.setTimeout(() => this.events.home?.(src), 1100)
-    }
     if (this.wantPortraits) {
       const cb = this.wantPortraits
       this.wantPortraits = null

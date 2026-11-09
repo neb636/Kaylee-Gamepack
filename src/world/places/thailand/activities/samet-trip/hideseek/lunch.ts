@@ -518,7 +518,20 @@ export class Lunch implements World3D {
 
   // ---------------------------------------------------------------- touches
 
-  pointerDown(_x: number, _y: number, id?: string) {
+  /** The coconut and the plate share her corner of the table and their targets overlap on a phone: a finger on either
+   *  goes to whichever is nearer on screen, so the plate arriving never hides the coconut (or the other way round). */
+  private tableTarget(x: number, y: number, id?: string) {
+    if (id !== 'coconut' && id !== 'plate') return id
+    if (!(this.cocoK >= 1 && this.milk > 0 && this.plateK >= 1 && this.riceLeft > 0)) return id
+    const c = this.coco.root.position
+    const p = this.plate.root.position
+    const cs = this.toScreen(new Vector3(c.x, c.y + 0.2, c.z))
+    const ps = this.toScreen(new Vector3(p.x, p.y + 0.06, p.z))
+    return Math.hypot(x - cs.x, y - cs.y) <= Math.hypot(x - ps.x, y - ps.y) ? 'coconut' : 'plate'
+  }
+
+  pointerDown(x: number, y: number, id?: string) {
+    id = this.tableTarget(x, y, id)
     this.lastTouch = this.time
     this.finger = { id }
     if (id === 'coconut' && this.cocoK >= 1 && this.milk > 0) {
@@ -536,6 +549,7 @@ export class Lunch implements World3D {
   }
 
   tap(x: number, y: number, id?: string) {
+    id = this.tableTarget(x, y, id)
     this.lastTouch = this.time
     this.counts.taps++
     if (!id) return this.tapSea(x, y)
