@@ -4,6 +4,8 @@
 // The toy (core verb): lead Kaylee with her finger. Hold a finger anywhere and she trots after it; hold it far ahead
 // and she gallops; tap a spot and she walks there. Walk into the sea and she's swimming in her pink floatie, bobbing
 // over the waves (a big one spins her round). Walk up to the green taxi or a jet ski and it glows: tap to hop on.
+// A finger held on something (an umbrella, a palm) leads her like a finger on the sand; a quick tap pokes it. Walking
+// into a stop's pink ring opens it, the same as tapping its thing.
 // It opens up as she plays:
 //   1. land and wander: Na Dan pier, the shops, the sand, the sea, the floatie;
 //   2. further: the sandy paths over the rocks to Hin Khok, Phai and Wong Duan, and the green taxi (taxi.ts) round
@@ -53,7 +55,7 @@ import { BeachClean, BIN_IDS, JUNK_IDS } from '../book/clean'
 import { WILD, Wildlife, type Creature, type PalmInfo, type WildCtx } from '../book/creatures'
 import { framing, phoneCamera, portraits, snap } from '../book/photo'
 import { buildSki, type Ski } from '../jetski/ski'
-import { at as atFrame, bay, DECK, FRAMES, PARKED, POKES, spotStart, STOP_IDS, STOPS, SWIMMERS, WAVE_DIR, WAYS, type SpotId, type StopId, type XZ } from './layout'
+import { at as atFrame, bay, DECK, FRAMES, PARKED, POKES, RING, spotStart, STOP_IDS, STOPS, SWIMMERS, WAVE_DIR, WAYS, type SpotId, type StopId, type XZ } from './layout'
 import { buildProps, type PokeThing, type Props } from './props'
 import { buildIsland, DAY, TIMES, type Island, type TimeOfDay } from './scenery'
 import type { Surface } from './ground'
@@ -73,6 +75,8 @@ const WALK = knobs('sametWalk', 'Leading Kaylee round the island', FILE, {
   far: { value: 26, min: 8, max: 60, step: 1, label: 'Swim out to', unit: 'm', note: 'how far from the shore she can paddle' },
   wave: { value: 0.42, min: 0, max: 1.2, step: 0.02, label: 'Wave height', unit: 'm', note: 'the swell rolling in to the beach she is near' },
   spin: { value: 0.78, min: 0.3, max: 1, step: 0.02, label: 'A wave spins her from', note: 'how high on a crest (0..1) before the floatie spins round' },
+  holdLeads: { value: 0.22, min: 0.08, max: 0.6, step: 0.02, label: 'A held finger leads after', unit: 's', note: 'a finger held on an umbrella, a chair, a palm... starts leading her after this long' },
+  tapUpTo: { value: 0.5, min: 0.2, max: 0.9, step: 0.02, label: 'Still a tap up to', unit: 's', note: 'let go sooner than this and the thing under her finger gets its poke' },
 })
 const CAM = knobs('sametCam', 'The island camera', FILE, {
   pitch: { value: 31, min: 15, max: 70, step: 1, label: 'Looks down', unit: '°' },
@@ -289,7 +293,9 @@ export class SametIsland implements World3D {
   private stuckT = 0
 
   // ---- Her finger.
-  private finger: { x: number; y: number; id?: string; leading: boolean } | null = null
+  private finger: { x: number; y: number; id?: string; leading: boolean; moved: boolean; at: number } | null = null
+  /** The finger that just lifted led her (a drag, or held long enough): the thing under it gets no poke. */
+  private ledOff = false
   private target: Vector3 | null = null
   /** What she walks to, to use when she gets there (the taxi, a jet ski, a far stop). */
   private walkTo: { id: string; x: number; z: number } | null = null
@@ -327,6 +333,8 @@ export class SametIsland implements World3D {
   private printNext = 0
   private printSide = 1
   private stopRings: Record<StopId, Mesh>
+  /** Walking into a stop's ring opens it, once she has been outside it (never where she lands, or where a toy put her back). */
+  private ringArmed = {} as Record<StopId, boolean>
   private anim = new Map<string, { t: number; k: number; v: number }>()
   private coconuts: { g: Group; vy: number; y: number; vx: number; vz: number; t: number; bonked: boolean }[] = []
   private coconutGeo: Group
@@ -462,10 +470,12 @@ export class SametIsland implements World3D {
     // ---- The stops: a soft pink ring on the ground at each, and the pink flags already earned.
     this.stopRings = {} as Record<StopId, Mesh>
     for (const id of STOP_IDS) {
-      const r = new Mesh(bag.add(new RingGeometry(2.2, 2.6, 40)), glowMat())
+      const R = STOPS[id].ring ?? RING
+      const r = new Mesh(bag.add(new RingGeometry(R - 0.4, R, 48)), glowMat())
       r.rotation.x = -Math.PI / 2
       r.renderOrder = 3
       const at = STOPS[id].at
+      this.ringArmed[id] = Math.hypot(at.x - s.x, at.z - s.z) > R
       r.position.set(at.x, Math.max(0.05, this.heightAt(at.x, at.z)) + 0.05, at.z)
       scene.add(r)
       this.stopRings[id] = r
@@ -672,12 +682,19 @@ export class SametIsland implements World3D {
     const k = this.kaylee.root.position
     // A finger held still is still playing (no hint while she holds it down).
     if (this.finger) this.lastTouch = t
+    // A finger held on something leads her like a finger held on the sand (a quick tap still pokes it).
+    if (this.finger && !this.finger.leading && t - this.finger.at > WALK.holdLeads) {
+      this.finger.leading = true
+      this.target = null
+      this.walkTo = null
+    }
     if (this.mode === 'walk') this.lead(dt)
     else if (this.mode === 'ski') this.rideSki(dt)
     else if (this.mode === 'kite') this.flyKite(dt)
     this.kaylee.update(dt, t)
     if (this.mode === 'walk' || this.mode === 'kite') this.underfoot(dt)
     this.taxiStep(dt)
+    this.walkIntoStops()
     this.follow(dt, t)
     this.life(dt, t)
     this.animals(dt, t)
@@ -776,8 +793,14 @@ export class SametIsland implements World3D {
         let uz = dz / d
         const probe = 0.55
         if (!this.free(k.x + ux * probe, k.z + uz * probe)) {
-          const side = this.lastTurn || 1
-          for (const a of [0.35, -0.35, 0.7, -0.7, 1.05, -1.05, 1.4, -1.4]) {
+          // (Straight at a pier's or a jetty's rail, with no side to prefer: along it, toward the land.)
+          let side = this.lastTurn
+          if (!side && this.deckOn >= 0) {
+            const n = this.props.decks[this.deckOn].n
+            side = uz * n.x - ux * n.z > 0 ? -1 : 1
+          }
+          side ||= 1
+          for (const a of [0.35, -0.35, 0.7, -0.7, 1.05, -1.05, 1.4, -1.4, Math.PI / 2, -Math.PI / 2]) {
             const r = a * side
             const rx = ux * Math.cos(r) + uz * Math.sin(r)
             const rz = -ux * Math.sin(r) + uz * Math.cos(r)
@@ -823,6 +846,28 @@ export class SametIsland implements World3D {
     firstTime(`samet-beach-${this.spot}`)
     if (this.flags.has('jetski') && firstTime('samet-ski-hers')) say(I.hers)
     if (this.flags.size === STOP_IDS.length && firstTime('samet-sunset-call')) say(I.sunset)
+  }
+
+  /** Walking into a stop's pink ring opens it, if the stop is still to do (or it's the driftwood tree with all four
+   *  flags up: the finale). Not with rubbish in her arms or the phone out: she's on her way somewhere else. */
+  private walkIntoStops() {
+    if (this.mode !== 'walk') return
+    const k = this.kaylee.root.position
+    for (const id of STOP_IDS) {
+      const at = STOPS[id].at
+      const R = STOPS[id].ring ?? RING
+      const d = Math.hypot(k.x - at.x, k.z - at.z)
+      if (d > R) this.ringArmed[id] = true
+      else if (d < R - 0.3 && this.ringArmed[id]) {
+        this.ringArmed[id] = false
+        const todo = !this.flags.has(id) || (id === 'hideseek' && this.flags.size === STOP_IDS.length)
+        if (!todo || this.clean.carrying || this.phone) continue
+        this.target = null
+        this.walkTo = null
+        this.useStop(id)
+        return
+      }
+    }
   }
 
   /** She got where a tap sent her: use what she walked to. */
@@ -1791,7 +1836,8 @@ export class SametIsland implements World3D {
   }
   pointerDown(x: number, y: number, id?: string) {
     this.lastTouch = this.time
-    this.finger = { x, y, id, leading: !id }
+    this.finger = { x, y, id, leading: !id, moved: false, at: this.time }
+    this.ledOff = false
     if (!id) {
       this.target = null
       this.walkTo = null
@@ -1804,7 +1850,8 @@ export class SametIsland implements World3D {
     this.lastTouch = this.time
     f.x = x
     f.y = y
-    if (!f.leading && Math.hypot(x - downX, y - downY) > 12) {
+    if (Math.hypot(x - downX, y - downY) > 12) f.moved = true
+    if (!f.leading && f.moved) {
       f.leading = true
       this.target = null
       this.walkTo = null
@@ -1812,11 +1859,16 @@ export class SametIsland implements World3D {
   }
   pointerUp() {
     if (this.mode === 'ski') this.d.release()
+    const f = this.finger
+    this.ledOff = !!f?.id && f.leading && (f.moved || this.time - f.at >= WALK.tapUpTo)
     this.finger = null
   }
 
   tap(x: number, y: number, id?: string) {
     this.lastTouch = this.time
+    const led = this.ledOff
+    this.ledOff = false
+    if (led && id) return
     this.counts.taps++
     // With the phone out, every tap is a photo: of the animal she tapped (or the one nearest her finger), or of the
     // island. Other things still do their thing.
@@ -2446,7 +2498,7 @@ export class SametIsland implements World3D {
   placeAnchors() {
     const min = Math.min(this.w, this.h) < 500 ? 64 : 88
     const k = this.kaylee.root.position
-    const place = (el: HTMLElement, at: Vector3 | null, height: number, scale = 1.4) => {
+    const place = (el: HTMLElement, at: Vector3 | null, height: number, scale = 1.4, whole = false) => {
       let spot: { x: number; y: number; size: number } | null = null
       if (at) {
         const c = this.toScreen(tmp.set(at.x, at.y + height * 0.5, at.z))
@@ -2454,6 +2506,12 @@ export class SametIsland implements World3D {
         if (c.z < 1) spot = { x: c.x, y: c.y, size: Math.max(min, Math.min(this.w * 0.28, Math.abs(c.y - top.y) * 2 * scale)) }
       }
       const show = !!spot && spot.x > -spot.size / 2 && spot.x < this.w + spot.size / 2 && spot.y > -spot.size / 2 && spot.y < this.h + spot.size / 2
+      // (A stop's target stays all on screen, half off the edge or not, clear of Sparkle's and the book's corners.)
+      if (show && spot && whole) {
+        const s = spot.size / 2
+        spot.x = clamp(spot.x, s, this.w - s)
+        spot.y = clamp(spot.y, s, this.h - Math.min(150, this.h * 0.2) - s)
+      }
       if (show && spot) {
         el.style.transform = `translate3d(${(spot.x - spot.size / 2).toFixed(1)}px, ${(spot.y - spot.size / 2).toFixed(1)}px, 0)`
         el.style.width = el.style.height = `${spot.size.toFixed(0)}px`
@@ -2502,7 +2560,7 @@ export class SametIsland implements World3D {
         const g = this.props.stops[sid]
         const at = sid === 'jetski' ? within(this.skis[0].x, 0, this.skis[0].z) : sid === 'snorkel' ? within(g.position.x, 0, g.position.z, 30) : within(a.x, this.heightAt(a.x, a.z), a.z)
         // (The jet ski stop is the jet ski man's jet ski, until it's hers: then it's a jet ski like the others.)
-        place(el, riding || (sid === 'jetski' && this.flags.has('jetski')) ? null : at, sid === 'hideseek' ? 3.4 : 1.6, 1)
+        place(el, riding || (sid === 'jetski' && this.flags.has('jetski')) ? null : at, sid === 'hideseek' ? 3.4 : 1.6, 1, true)
         // (Over the pokes and bins round it: the stop is what she came for.)
         z = '3'
       } else if (id === 'lunch') {
@@ -2528,6 +2586,8 @@ export class SametIsland implements World3D {
       } else if (id.startsWith('bin:')) {
         const b = this.clean.bins[+id.slice(4)]
         place(el, riding ? null : within(b.at.x, b.g.position.y, b.at.z), 1, 1.4)
+        // (With rubbish in her arms the bin is what she came for: over the driftwood tree's ring, Kaylee, everything.)
+        if (this.clean.carrying) z = '5'
       } else {
         const p = this.props.pokes.get(id)
         place(el, !p || riding ? null : within(p.g.position.x, p.g.position.y, p.g.position.z), p ? Math.min(3, p.h) : 1, p?.kind === 'crab' ? 3 : 1)
@@ -2559,6 +2619,10 @@ export class SametIsland implements World3D {
       riding: this.riding >= 0 ? this.skis[this.riding].id : null,
       skis: Object.fromEntries(this.skis.map((s) => [s.id, sc(new Vector3(s.x, s.ski.root.position.y + 0.6, s.z))])),
       stops: Object.fromEntries(STOP_IDS.map((id) => [id, sc(new Vector3(STOPS[id].at.x, this.heightAt(STOPS[id].at.x, STOPS[id].at.z) + 0.8, STOPS[id].at.z))])),
+      rings: Object.fromEntries(STOP_IDS.map((id) => [id, { x: +STOPS[id].at.x.toFixed(2), z: +STOPS[id].at.z.toFixed(2), r: STOPS[id].ring ?? RING, ring: sc(new Vector3(STOPS[id].at.x, Math.max(0, this.heightAt(STOPS[id].at.x, STOPS[id].at.z)) + 0.1, STOPS[id].at.z)) }])),
+      boat: sc(this.props.stops.snorkel.position.clone()),
+      // On a pier or jetty: the screen points 3 m to either side of her, square across it (a finger straight at the rail).
+      rails: this.deckOn >= 0 ? (({ t, y }) => [1, -1].map((s) => sc(new Vector3(k.x + t.x * s * 3, y, k.z + t.z * s * 3))))(this.props.decks[this.deckOn]) : null,
       kaylee: sc(k.clone().setY(k.y + 0.6)),
       // Mommy (ji) and Daddy (nick): where they are, how high (and the ground there), the deck under them (-1: none) and
       // where they are on screen.

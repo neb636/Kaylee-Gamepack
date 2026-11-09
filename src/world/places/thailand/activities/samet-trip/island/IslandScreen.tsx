@@ -12,7 +12,7 @@ import { L } from '../../../lines'
 import { sfx } from '../../../sfx'
 import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { ANIMAL_IDS, type AnimalId } from '../book/animals'
-import { PhoneAndBook, type BookPhoto, type Flyer } from '../book/Book'
+import { DOCK_CORNER, PhoneAndBook, type BookPhoto, type Flyer } from '../book/Book'
 import { ISLAND_ANCHORS, SametIsland as World, type IslandStart } from './island'
 import type { SpotId, StopId } from './layout'
 
@@ -144,7 +144,7 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
         flyer={flyer}
         cleaned={cleaned}
       />
-      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={open} />}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={open} corner={DOCK_CORNER} />}
       {mode === 'lost' && (
         <button onClick={() => { setMode('webgl'); setN((v) => v + 1) }} style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(213,238,250,.9)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: 'var(--ink)' }}>
           🏝️ Tap to wake the island

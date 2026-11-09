@@ -295,16 +295,6 @@ export const CLEARINGS: (XZ & { r: number })[] = [
   { x: -194, z: 131, r: 5 },
 ]
 
-/** The stops (any order), each with its pink flag's beach and the thing that opens it. */
-export type StopId = 'jetski' | 'sandcastle' | 'snorkel' | 'hideseek'
-export const STOPS: Record<StopId, { place: PlaceId; at: XZ; name: string }> = {
-  jetski: { place: 'saikaew', at: bay(0, 1.2), name: 'The jet ski at Hat Sai Kaew' },
-  sandcastle: { place: 'hinkhok', at: inland({ x: -55, z: 17 }, 5), name: 'The sandcastle at Ao Hin Khok' },
-  snorkel: { place: 'wongduan', at: { x: -150, z: 136 }, name: 'The snorkel boat at Ao Wong Duan' },
-  hideseek: { place: 'prao', at: inland({ x: -172, z: -28 }, 6), name: 'The driftwood tree at Ao Prao' },
-}
-export const STOP_IDS = Object.keys(STOPS) as StopId[]
-
 /** A beach's frame where it meets the sea: a waterline point, along the sand and out to sea. */
 export interface Frame extends XZ {
   t: XZ
@@ -345,6 +335,23 @@ export const FRAMES: Record<Exclude<SpotId, 'deck'>, Frame> = {
   aonoina: frameNear({ x: -76, z: -85 }),
 }
 
+/** Where the snorkel boat is tied up at Ao Wong Duan: on the beach's side of the jetty (she can walk or wade straight
+ *  to it) and close in, its stern at the water's edge, so it's in the picture from the sand. The boat, its pink ring and
+ *  the idle hint all use this one point. */
+export const SNORKEL_BOAT = at(FRAMES.wongduan, -1, 3.2)
+/** The stops (any order), each with its pink flag's beach and the thing that opens it. `ring`: the pink ring's outer
+ *  radius, when it isn't the usual one (it goes round the whole boat). */
+export type StopId = 'jetski' | 'sandcastle' | 'snorkel' | 'hideseek'
+export const STOPS: Record<StopId, { place: PlaceId; at: XZ; name: string; ring?: number }> = {
+  jetski: { place: 'saikaew', at: bay(0, 1.2), name: 'The jet ski at Hat Sai Kaew' },
+  sandcastle: { place: 'hinkhok', at: inland({ x: -55, z: 17 }, 5), name: 'The sandcastle at Ao Hin Khok' },
+  snorkel: { place: 'wongduan', at: SNORKEL_BOAT, name: 'The snorkel boat at Ao Wong Duan', ring: 4.2 },
+  hideseek: { place: 'prao', at: inland({ x: -172, z: -28 }, 6), name: 'The driftwood tree at Ao Prao' },
+}
+export const STOP_IDS = Object.keys(STOPS) as StopId[]
+/** The usual pink ring's outer radius (m). */
+export const RING = 2.6
+
 /** The resort deck above Ao Prao (lunch: a place, not a stop yet), up the slope behind the sand. Its steps (`steps`
  *  wide, in the middle of the sea side) come down to the sand: behind it the slope is forest. */
 export const DECK = { ...at(FRAMES.prao, 10, -16.5), t: FRAMES.prao.t, n: FRAMES.prao.n, face: Math.atan2(FRAMES.prao.n.x, FRAMES.prao.n.z), w: 9, d: 6, y: 2.2, steps: 2.8 }
@@ -359,7 +366,8 @@ export function spotStart(id: SpotId): XZ & { face: number } {
     return { ...p, face: Math.atan2(-FRAMES.nadan.n.x, -FRAMES.nadan.n.z) }
   }
   const f = FRAMES[id]
-  const p = at(f, id === 'saikaew' ? -6 : id === 'hinkhok' ? -7 : id === 'prao' ? -4 : 0, -3)
+  // (Ao Prao: on the open sand, seaward of the row of chairs. Ao Wong Duan: at the water's edge, the snorkel boat in view.)
+  const p = id === 'wongduan' ? at(f, 0.6, -1.4) : at(f, id === 'saikaew' ? -6 : id === 'hinkhok' ? -7 : id === 'prao' ? -4 : 0, id === 'prao' ? -1.6 : -3)
   return { ...p, face: Math.atan2(f.n.x, f.n.z) }
 }
 
