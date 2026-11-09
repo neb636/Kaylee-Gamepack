@@ -190,6 +190,8 @@ interface Follower {
   speed: number
   shadow: Mesh
   lie: number
+  /** The deck (or pier, or jetty) under them, -1 if none. */
+  on: number
 }
 
 type Mode = 'walk' | 'taxi' | 'ski' | 'kite'
@@ -385,7 +387,7 @@ export class SametIsland implements World3D {
       scene.add(m.root)
       const shadow = blobShadow(0.5, bag)
       scene.add(shadow)
-      return { m, back, side, phase: Math.random() * 3, speed: 0, shadow, lie: 0 }
+      return { m, back, side, phase: Math.random() * 3, speed: 0, shadow, lie: 0, on: -1 }
     }
     this.nick = fam('nick', 2.6, 0.9)
     this.ji = fam('ji', 3.8, -0.9)
@@ -553,9 +555,8 @@ export class SametIsland implements World3D {
       const dz = z - d.z
       const u = dx * d.t.x + dz * d.t.z
       const v = dx * d.n.x + dz * d.n.z
-      if (Math.abs(u) > d.hw + 0.05) continue
-      if (Math.abs(v) <= d.hd) return d.y
-      if (v < -d.hd && v > -d.hd - d.ramp) {
+      if (Math.abs(u) <= d.hw + 0.05 && Math.abs(v) <= d.hd) return d.y
+      if (Math.abs(u) <= (d.rw ?? d.hw) + 0.05 && v < -d.hd && v > -d.hd - d.ramp) {
         const k = (-d.hd - v) / d.ramp
         return d.y + (Math.max(g, 0) - d.y) * k
       }
@@ -571,7 +572,8 @@ export class SametIsland implements World3D {
       const dz = z - d.z
       const u = dx * d.t.x + dz * d.t.z
       const v = dx * d.n.x + dz * d.n.z
-      if (Math.abs(u) <= d.hw && v <= d.hd && v >= -d.hd - d.ramp) return i
+      if (Math.abs(u) <= d.hw && Math.abs(v) <= d.hd) return i
+      if (Math.abs(u) <= (d.rw ?? d.hw) && v < -d.hd && v >= -d.hd - d.ramp) return i
     }
     return -1
   }
@@ -583,9 +585,9 @@ export class SametIsland implements World3D {
     const v = dx * d.n.x + dz * d.n.z
     return Math.abs(u) <= d.hw + 0.6 && Math.abs(v) <= d.hd + 0.6
   }
-  /** Can she stand (or paddle) here? */
-  private free = (x: number, z: number) => {
-    const on = this.deckOn
+  /** The decks' rules for a step to (x, z) by someone on deck `on` (-1: on the ground): along the deck they're on,
+   *  off it only down its steps, onto one only up its steps, never under or beside one's top. */
+  private deckOk(x: number, z: number, on: number) {
     const di = this.deckAt(x, z)
     if (on >= 0) {
       if (di === on) return true
@@ -597,11 +599,18 @@ export class SametIsland implements World3D {
     }
     if (di < 0) for (let i = 0; i < this.props.decks.length; i++) if (i !== on && this.inDeckTop(i, x, z)) return false
     if (di >= 0) {
-      // Onto a deck only up its steps (its land end).
+      // Onto a deck only up its steps (its land end), and not over their side high up (the resort deck's are tall).
       const d = this.props.decks[di]
       const v = (x - d.x) * d.n.x + (z - d.z) * d.n.z
       if (v > -d.hd) return false
+      if (this.heightAt(x, z) - Math.max(0, this.isl.ground.heightAt(x, z)) > 1) return false
     }
+    return true
+  }
+  /** Can she stand (or paddle) here? */
+  private free = (x: number, z: number) => {
+    if (!this.deckOk(x, z, this.deckOn)) return false
+    if (this.deckOn >= 0 && this.deckAt(x, z) === this.deckOn) return true
     const s = this.isl.ground.surfaceAt(x, z)
     if (s === 'forest') return false
     if (s === 'water' && this.isl.ground.shoreAt(x, z) > WALK.far) return false
@@ -920,6 +929,26 @@ export class SametIsland implements World3D {
     return p
   }
 
+  /** Somewhere Mommy and Daddy can wait for her: a deck's top or steps, or dry ground they could walk to. */
+  private standable(x: number, z: number) {
+    if (this.deckAt(x, z) >= 0) return true
+    for (let i = 0; i < this.props.decks.length; i++) if (this.inDeckTop(i, x, z)) return false
+    return this.isl.ground.heightAt(x, z) > -0.15 && this.isl.ground.surfaceAt(x, z) !== 'forest'
+  }
+  /** A point of her trail to follow from (x, z): a little nearer her than the footstep they're on, or the nearest
+   *  footstep `can` step toward (her own footsteps never cut through a deck's side). Null if none. */
+  private trailToward(x: number, z: number, can: (p: XZ) => boolean): XZ | null {
+    const tr = this.trail
+    const order = tr.map((p, i) => ({ i, d: Math.hypot(p.x - x, p.z - z) })).sort((a, b) => a.d - b.d)
+    // (Already on it: the next footstep toward her.)
+    if (order.length && order[0].d < 0.35) {
+      const p = tr[Math.max(0, order[0].i - 2)]
+      if (can(p)) return p
+    }
+    for (const o of order) if (o.d >= 0.25 && can(tr[o.i])) return tr[o.i]
+    return null
+  }
+
   private follow(dt: number, t: number) {
     const k = this.kaylee.root.position
     const idle = this.time - this.lastTouch > 7 && this.lastSpeed < 0.1 && this.mode === 'walk' && !this.swimming
@@ -932,24 +961,40 @@ export class SametIsland implements World3D {
         continue
       }
       f.shadow.visible = true
+      f.on = this.deckAt(r.position.x, r.position.z)
+      // Beside her, a step behind; single file on and by a deck (its side would be in the sea, or the other side of
+      // the jetty's rail), or where beside her is no place to stand.
+      const mid = this.trailPoint(f.back, 0)
       let goal = this.trailPoint(f.back, f.side)
+      if (this.deckAt(goal.x, goal.z) !== this.deckAt(mid.x, mid.z) || !this.standable(goal.x, goal.z)) goal = mid
       // They stop at the water's edge when she swims (and wave from the sand).
-      if (this.isl.ground.heightAt(goal.x, goal.z) < -0.15 || !this.free(goal.x, goal.z)) {
+      if (!this.standable(goal.x, goal.z)) {
         for (let i = 0; i < this.trail.length; i += 2) {
           const p = this.trail[i]
-          if (this.isl.ground.heightAt(p.x, p.z) > -0.1 && this.free(p.x, p.z)) {
-            goal = { x: p.x + (f === this.nick ? 0.6 : -0.6), z: p.z }
+          if (this.standable(p.x, p.z)) {
+            const q = { x: p.x + (f === this.nick ? 0.6 : -0.6), z: p.z }
+            goal = this.standable(q.x, q.z) ? q : p
             break
           }
         }
       }
-      const dx = goal.x - r.position.x
-      const dz = goal.z - r.position.z
-      const d = Math.hypot(dx, dz)
+      let dx = goal.x - r.position.x
+      let dz = goal.z - r.position.z
+      let d = Math.hypot(dx, dz)
       // Left far behind (a ride, a long swim): they catch up off screen.
       if (d > 30 && !this.onScreen(r.position)) {
         r.position.set(goal.x, this.heightAt(goal.x, goal.z), goal.z)
         continue
+      }
+      // A straight line that would cut through a deck's side or off it halfway down: along her footsteps instead.
+      // (Somewhere it says they can't be already, a deep link or a catch-up: any way out is fine.)
+      const ok = (ax: number, az: number, l: number) => l < 0.05 || !this.deckOk(r.position.x, r.position.z, f.on) || this.deckOk(r.position.x + (ax / l) * 0.3, r.position.z + (az / l) * 0.3, f.on)
+      if (!ok(dx, dz, d)) {
+        // The nearest of her footsteps they can step toward (back to the foot of the steps, if that's what it takes).
+        const p = this.trailToward(r.position.x, r.position.z, (q) => ok(q.x - r.position.x, q.z - r.position.z, Math.hypot(q.x - r.position.x, q.z - r.position.z)))
+        dx = p ? p.x - r.position.x : 0
+        dz = p ? p.z - r.position.z : 0
+        d = Math.hypot(dx, dz)
       }
       const want = d < 0.25 ? 0 : clamp(d * 1.4, 0, Math.max(WALK.gallop * 1.05, this.lastSpeed + 0.5))
       f.speed += clamp(want - f.speed, -8 * dt, 6 * dt)
@@ -2377,6 +2422,8 @@ export class SametIsland implements World3D {
       skis: Object.fromEntries(this.skis.map((s) => [s.id, sc(new Vector3(s.x, s.ski.root.position.y + 0.6, s.z))])),
       stops: Object.fromEntries(STOP_IDS.map((id) => [id, sc(new Vector3(STOPS[id].at.x, this.heightAt(STOPS[id].at.x, STOPS[id].at.z) + 0.8, STOPS[id].at.z))])),
       kaylee: sc(k.clone().setY(k.y + 0.6)),
+      // Mommy (ji) and Daddy (nick): where they are, how high, and the deck under them (-1: none).
+      family: Object.fromEntries((['nick', 'ji'] as const).map((id) => [id, (({ x, y, z }) => ({ x: +x.toFixed(2), z: +z.toFixed(2), y: +y.toFixed(2), deck: this.deckAt(x, z) }))(this[id].m.root.position)])),
       speed: +this.lastSpeed.toFixed(2),
       cameraYaw: Math.round(wrap(this.camYaw) * DEG),
       fps: this.stats.fps,

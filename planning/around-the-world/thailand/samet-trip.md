@@ -761,6 +761,22 @@ The whole trip talks (Sparkle in the corner, the family and the islanders in the
 - All four flags: the speedboat at Na Dan opens the sunset instead of going home.
 - Still open from #357: the lunch deck's steps face inland, so there's no way down to the beach from it (next: walkable ground and decks).
 
+### Fix: walkable ground and decks (#357, batch 2) ([done] · 2026-11-09)
+
+- Lunch deck: its steps come down from the middle of the sea side to the sand (wooden blocks, a pink-knobbed post each
+  side of the foot), with a rail all round but for the gap. A deck's steps can be narrower than its top (`rw`), and
+  none can be climbed over the side high up. Ao Prao's samet tree and third umbrella moved aside to clear the steps.
+- The ground's walkable surface now matches its color: the green behind the sand (to the sand's edge + 5 m) and the
+  green verges of the paths and roads are grass, not forest. The open-looking strip between the viewpoint path and
+  Wong Duan's sand was all invisible wall (`ground.ts surfaceAt`).
+- Mommy and Daddy keep the decks' rules too (`deckOk`, their own `on` deck): single file on and by a deck or the jetty
+  (its side would be in the sea), and when a straight line would cut through a deck's side they follow her own
+  footsteps. `qa()` reports their positions (`family`).
+- Robot (Chromium + SwiftShader): deck steps down and back up from the deck and up from the beach; across the grass by
+  the viewpoint path 4/4 (main: 0/4); the jetty out and back 0/8 clips or jams (main: 3/4). Na Dan pier still steps off.
+- Seen once in 8 jetty runs: with them single file at the jetty's foot, her finger held ahead can land on Daddy's tap
+  target and she stands still (the family's targets swallow the walk, like Ao Prao's umbrellas in #357).
+
 ## ❓ Open questions for Dad
 
 My picks are in brackets; the plan uses them until Dad says otherwise.

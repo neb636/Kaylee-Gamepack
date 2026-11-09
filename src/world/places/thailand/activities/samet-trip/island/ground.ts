@@ -195,7 +195,9 @@ export function surfaceAt(x: number, z: number): Surface {
   const w = wayAt(x, z)
   if (w.d < w.width / 2 + 0.6 && !(sand > 0.4 && d < W)) return w.kind
   if (d < W) return sand > 0.4 ? (d < 1.6 ? 'wet' : 'sand') : 'rock'
-  if (d < W + 3 && sand > 0.4) return 'grass'
+  // Grass wherever groundColor paints it (the green behind the sand, the verges of the ways): what looks open is.
+  if (d < W + 5 && sand > 0.4) return 'grass'
+  if (d >= W + 2.5 && w.d < w.width / 2 + 2.5) return 'grass'
   for (const c of CLEARINGS) if (Math.hypot(x - c.x, z - c.z) < c.r) return 'grass'
   return 'forest'
 }

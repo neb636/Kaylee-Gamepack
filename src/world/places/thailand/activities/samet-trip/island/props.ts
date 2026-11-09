@@ -139,8 +139,9 @@ export interface Props {
   saikaew: SaiKaew
   /** The night lights (fairy lights, lanterns): their glow follows the day. */
   setLamps(k: number, t: number): void
-  /** Na Dan pier's deck and the resort deck: walkable tops (height and the box). */
-  decks: { x: number; z: number; t: XZ; n: XZ; hw: number; hd: number; y: number; ramp: number }[]
+  /** Na Dan pier, the resort deck and the snorkel jetty: walkable tops (height and the box), each with its steps or
+   *  ramp at its land end (-n): `ramp` long and `rw` half wide (the whole end when it has no `rw`). */
+  decks: { x: number; z: number; t: XZ; n: XZ; hw: number; hd: number; y: number; ramp: number; rw?: number }[]
 }
 
 export function buildProps(bag: Bag, root: Group, ground: Ground, blockers: Blockers, cullable: { g: Group; x: number; z: number }[] = []): Props {
@@ -383,9 +384,10 @@ export function buildProps(bag: Bag, root: Group, ground: Ground, blockers: Bloc
   // ---- The resort deck above Ao Prao (resortDeck below).
   {
     const D = DECK
-    const { parts, y } = resortDeck(yOf)
+    const { parts, y, run } = resortDeck(yOf)
     place.push(...parts)
-    decks.push({ x: D.x, z: D.z, t: D.t, n: D.n, hw: D.w / 2 - 0.2, hd: D.d / 2 - 0.25, y, ramp: 2.5 })
+    // (Its steps face the sand, so its "land end" is toward the sea: the frame turned round.)
+    decks.push({ x: D.x, z: D.z, t: { x: -D.t.x, z: -D.t.z }, n: { x: -D.n.x, z: -D.n.z }, hw: D.w / 2 - 0.2, hd: D.d / 2 - 0.25, y, ramp: run + 0.25, rw: D.steps / 2 - 0.15 })
     for (const id of ['deckbrella:0', 'deckbrella:1']) {
       const p = pokes.get(id)
       if (p) p.g.position.y = y
@@ -497,10 +499,11 @@ export function buildProps(bag: Bag, root: Group, ground: Ground, blockers: Bloc
   }
 }
 
-/** The resort deck above Ao Prao (photo 2): wood on stilts over the slope, a dark rail on the sea side and the ends
- *  (the land side is open, steps down to the sand), two tables with rattan chairs and green and lime cushions. Its
- *  parts in world coordinates, and its top's height. `basket`: a bread basket on each table (the lunch brings its own). */
-export function resortDeck(yOf: (p: XZ) => number, basket = true): { parts: BufferGeometry[]; y: number } {
+/** The resort deck above Ao Prao (photo 2): wood on stilts over the slope, a dark rail all round but for the steps
+ *  in the middle of the sea side (down to the sand), two tables with rattan chairs and green and lime cushions. Its
+ *  parts in world coordinates, its top's height and how far its steps run out toward the sea from its edge.
+ *  `basket`: a bread basket on each table (the lunch brings its own). */
+export function resortDeck(yOf: (p: XZ) => number, basket = true): { parts: BufferGeometry[]; y: number; run: number } {
   const D = DECK
   const place: BufferGeometry[] = []
   const ground0 = Math.max(...[[-1, -1], [1, -1], [-1, 1], [1, 1], [0, 0]].map(([u, v]) => yOf(at(D, (u * D.w) / 2, (v * D.d) / 2))))
@@ -514,16 +517,45 @@ export function resortDeck(yOf: (p: XZ) => number, basket = true): { parts: Buff
     const p = at(D, u, v)
     place.push(P.cyl(0.12, 0.12, y - yOf(p) + 0.5, '#8A5E3C', { at: [p.x, (y + yOf(p)) / 2 - 0.25, p.z] }, 7))
   }
-  // The rail on the sea side and the two ends (the land side is open, with steps down to the sand).
-  place.push(P.box(0.1, 0.1, D.w, '#5A3D2A', { at: L(0, D.d / 2 - 0.1, 0.95), rot: [0, D.face + Math.PI / 2, 0] }))
-  for (let u = -D.w / 2; u <= D.w / 2 + 0.01; u += 1) place.push(P.box(0.07, 0.95, 0.07, '#5A3D2A', { at: L(u, D.d / 2 - 0.1, 0.47) }))
+  // The steps: wooden blocks from the gap in the sea rail down the slope to the sand.
+  const S = D.steps
+  const foot = (r: number) => Math.max(0, yOf(at(D, 0, D.d / 2 + r)))
+  let run = 4
+  for (let k = 0; k < 4; k++) run = Math.max(2.5, (y - foot(run)) / 0.75)
+  const drop = y - foot(run)
+  const n = Math.max(2, Math.round(drop / 0.24))
+  for (let i = 1; i < n; i++) {
+    const v0 = D.d / 2 + ((i - 1) * run) / (n - 1)
+    const v1 = D.d / 2 + (i * run) / (n - 1)
+    const top = y - (i * drop) / n
+    const low = Math.min(...[-S / 2, S / 2].flatMap((u) => [v0, v1].map((v) => yOf(at(D, u, v))))) - 0.1
+    if (top <= low) continue
+    const c = at(D, 0, (v0 + v1) / 2)
+    place.push(P.box(S, top - low, v1 - v0 + 0.02, i % 2 ? '#B07D52' : '#A87449', { at: [c.x, (top + low) / 2, c.z], rot: [0, D.face, 0] }))
+  }
+  // A post with a pink knob each side of the steps' foot (so the way down shows from the sand).
+  for (const s of [-1, 1]) {
+    const p = at(D, s * (S / 2 + 0.08), D.d / 2 + run - 0.1)
+    const g = yOf(p)
+    place.push(P.box(0.12, 0.9, 0.12, '#5A3D2A', { at: [p.x, g + 0.45, p.z] }), P.sphere(0.11, PAL.hotpink, { at: [p.x, g + 0.95, p.z] }, 8))
+  }
+  // The rail all round but for the steps' gap: the sea side (two halves), the land side and the two ends.
+  const half = (D.w - S) / 2
+  for (const s of [-1, 1]) place.push(P.box(0.1, 0.1, half, '#5A3D2A', { at: L((s * (D.w / 2 + S / 2)) / 2, D.d / 2 - 0.1, 0.95), rot: [0, D.face + Math.PI / 2, 0] }))
+  place.push(P.box(0.1, 0.1, D.w, '#5A3D2A', { at: L(0, -D.d / 2 + 0.1, 0.95), rot: [0, D.face + Math.PI / 2, 0] }))
+  for (const v of [D.d / 2 - 0.1, -D.d / 2 + 0.1])
+    for (let u = -D.w / 2; u <= D.w / 2 + 0.01; u += 1) {
+      if (v > 0 && Math.abs(u) < S / 2) continue
+      place.push(P.box(0.07, 0.95, 0.07, '#5A3D2A', { at: L(u, v, 0.47) }))
+    }
+  for (const s of [-1, 1]) place.push(P.box(0.07, 0.95, 0.07, '#5A3D2A', { at: L((s * S) / 2, D.d / 2 - 0.1, 0.47) }))
   for (const s of [-1, 1]) place.push(P.box(0.1, 0.1, D.d, '#5A3D2A', { at: L((s * D.w) / 2, 0, 0.95), rot: [0, D.face, 0] }))
   for (const [u, v] of [[-2.5, 0.8], [2.5, 0.8]]) {
     place.push(P.cyl(0.6, 0.6, 0.06, '#F6EEDD', { at: L(u, v, 0.75) }, 14), P.cyl(0.06, 0.06, 0.72, '#5A3D2A', { at: L(u, v, 0.37) }, 6))
     for (const du of [-0.85, 0.85]) place.push(P.rbox(0.55, 0.5, 0.55, 0.12, '#C79A62', { at: L(u + du, v, 0.25) }), P.rbox(0.5, 0.12, 0.5, 0.06, du < 0 ? '#7CC46A' : '#C6E36A', { at: L(u + du, v, 0.55) }))
     if (basket) place.push(P.sphere(0.18, '#D9A55C', { at: L(u + 0.15, v, 0.85), scale: [1.2, 0.6, 1] }, 10))
   }
-  return { parts: place, y }
+  return { parts: place, y, run }
 }
 
 /** The big driftwood tree from Dad's sunset photo, silver-grey with a tangle of roots and reaching branches: one
