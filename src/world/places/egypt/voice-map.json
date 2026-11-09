@@ -28,6 +28,13 @@
     "file": "2b277baca996.mp3"
   },
   {
+    "text": "Click a spot on the map!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 1608,
+    "file": "64353a809ebd.mp3"
+  },
+  {
     "text": "Where to next, Kaylee?",
     "voice": "miu",
     "sig": "e1570748b7",
@@ -40,6 +47,13 @@
     "sig": "e1570748b7",
     "ms": 2829,
     "file": "2fd40e3bbd39.mp3"
+  },
+  {
+    "text": "Everyone is here! Click the light show!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 3048,
+    "file": "ced96784183d.mp3"
   },
   {
     "text": "Get all the stamps to start the light show!",
@@ -259,6 +273,13 @@
     "file": "90fd39a92d07.mp3"
   },
   {
+    "text": "The treasure room! Click the golden box!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3216,
+    "file": "1ba33a059d82.mp3"
+  },
+  {
     "text": "This gold mask was made for a boy king called Tut!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -364,6 +385,13 @@
     "file": "78c19963c3f6.mp3"
   },
   {
+    "text": "Click and wiggle to rub the sand away!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2952,
+    "file": "fa8ad03cac5a.mp3"
+  },
+  {
     "text": "Ah... ah... achoo!",
     "voice": "sphinx",
     "sig": "10ab3a11c9",
@@ -446,6 +474,13 @@
     "sig": "ed7dbdac3d",
     "ms": 3046,
     "file": "2d2b91be87e4.mp3"
+  },
+  {
+    "text": "Click and hold the stamp that matches!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2760,
+    "file": "92736d8d6acb.mp3"
   },
   {
     "text": "K says kuh! Find the basket!",
@@ -621,6 +656,13 @@
     "sig": "ed7dbdac3d",
     "ms": 4582,
     "file": "8a58b954b14d.mp3"
+  },
+  {
+    "text": "Click and hold to pour! Let go at the gold line!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4056,
+    "file": "fa61763884ae.mp3"
   },
   {
     "text": "Whoops! A little too much! Hee hee.",
@@ -817,6 +859,13 @@
     "sig": "ed7dbdac3d",
     "ms": 4134,
     "file": "60166deee3f4.mp3"
+  },
+  {
+    "text": "This is Egypt! Click a picture to learn more.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4248,
+    "file": "d52367a17a6c.mp3"
   },
   {
     "text": "Want to see the real pyramids?",

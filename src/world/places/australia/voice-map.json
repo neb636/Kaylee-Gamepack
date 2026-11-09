@@ -28,6 +28,13 @@
     "file": "8f685b5afe9e.mp3"
   },
   {
+    "text": "Click a spot on the map!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 1704,
+    "file": "b36bb7e9b19c.mp3"
+  },
+  {
     "text": "Where should we go next, Kaylee?",
     "voice": "pip",
     "sig": "aa4b0c6b7d",
@@ -40,6 +47,13 @@
     "sig": "aa4b0c6b7d",
     "ms": 2062,
     "file": "f69f66732e11.mp3"
+  },
+  {
+    "text": "Everyone is here! Click the party!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 2736,
+    "file": "486739e9c98d.mp3"
   },
   {
     "text": "Get all the stamps to start the party!",
@@ -166,6 +180,13 @@
     "sig": "ed7dbdac3d",
     "ms": 4926,
     "file": "ffec67753d5a.mp3"
+  },
+  {
+    "text": "Click to make Pip hop! Hop three times to the water hole.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4632,
+    "file": "da0ed77a4b80.mp3"
   },
   {
     "text": "one",
@@ -308,6 +329,13 @@
     "file": "d63dcbb1af15.mp3"
   },
   {
+    "text": "Click the notes to sing Koko a lullaby!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3960,
+    "file": "6b7b247ea219.mp3"
+  },
+  {
     "text": "Shh! Koko is fast asleep.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -441,6 +469,13 @@
     "file": "65b8ea7a52ab.mp3"
   },
   {
+    "text": "Click the eggs to help the babies hatch!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2832,
+    "file": "fcc2154dbe14.mp3"
+  },
+  {
     "text": "Baby crocs chirp to call their mama!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -504,6 +539,13 @@
     "file": "7be0e754f9ce.mp3"
   },
   {
+    "text": "Click Chompy to make her go snap snap!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3600,
+    "file": "ef884f47660d.mp3"
+  },
+  {
     "text": "Crocodiles grow new teeth all their lives!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -523,6 +565,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2412,
     "file": "eddc3faa5272.mp3"
+  },
+  {
+    "text": "Click the five twinkly stars!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2856,
+    "file": "919e8390ee37.mp3"
   },
   {
     "text": "You found the Southern Cross!",
@@ -581,11 +630,25 @@
     "file": "52b75b269ef9.mp3"
   },
   {
+    "text": "Pick a color, then click to paint!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3360,
+    "file": "ede98976ed4b.mp3"
+  },
+  {
     "text": "Tap send when you are done!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2149,
     "file": "48dda587fecb.mp3"
+  },
+  {
+    "text": "Click send when you are done!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2184,
+    "file": "69367d1fa013.mp3"
   },
   {
     "text": "G'day, mate! In Australia, mate means friend.",
@@ -607,6 +670,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2668,
     "file": "01c54da18175.mp3"
+  },
+  {
+    "text": "Click each friend to make them dance!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2856,
+    "file": "2b5c545a57e6.mp3"
   },
   {
     "text": "G'day, Kaylee! Thanks for helping Pip!",
@@ -768,6 +838,13 @@
     "sig": "ed7dbdac3d",
     "ms": 3688,
     "file": "83993efa171f.mp3"
+  },
+  {
+    "text": "This is Australia! Click a picture to learn more.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3456,
+    "file": "9bb3e6e459df.mp3"
   },
   {
     "text": "Want to see real koalas?",

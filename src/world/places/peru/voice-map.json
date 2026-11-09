@@ -42,6 +42,13 @@
     "file": "25e8872981a6.mp3"
   },
   {
+    "text": "Click a picture to explore Peru!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2472,
+    "file": "b1ee318b93aa.mp3"
+  },
+  {
     "text": "Another discovery, Kaylee!",
     "voice": "luna",
     "sig": "8c4095048f",
@@ -203,6 +210,13 @@
     "file": "7d7a9ac3feda.mp3"
   },
   {
+    "text": "Done? Click the pond to show Luna!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3504,
+    "file": "b9fe4edb1c9f.mp3"
+  },
+  {
     "text": "Hee hee! A mustache!",
     "voice": "luna",
     "sig": "8c4095048f",
@@ -322,6 +336,13 @@
     "file": "b702d696db3c.mp3"
   },
   {
+    "text": "The wool is yarn now! Click the cactus!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4104,
+    "file": "bbd1f7be070b.mp3"
+  },
+  {
     "text": "A tiny bug makes pink color!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -392,6 +413,13 @@
     "file": "669b45e79699.mp3"
   },
   {
+    "text": "Drag the brush on Luna's fleece!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3336,
+    "file": "f7e7cd26527e.mp3"
+  },
+  {
     "text": "Snip the fluffy puffs!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -404,6 +432,13 @@
     "sig": "ed7dbdac3d",
     "ms": 1934,
     "file": "7a19dcae5ffd.mp3"
+  },
+  {
+    "text": "Click the cactus!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1680,
+    "file": "d722128b1efb.mp3"
   },
   {
     "text": "Drag a hat onto an alpaca!",
@@ -567,6 +602,13 @@
     "file": "cd9334e228a1.mp3"
   },
   {
+    "text": "Click the camera for Luna's journal!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2664,
+    "file": "c8b40397334f.mp3"
+  },
+  {
     "text": "Me too!",
     "voice": "tika",
     "sig": "241b278019",
@@ -693,11 +735,25 @@
     "file": "245628a7848b.mp3"
   },
   {
+    "text": "Click a seed bag to plant it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2592,
+    "file": "2ed280717edb.mp3"
+  },
+  {
     "text": "Tap the camera!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 1171,
     "file": "138078ce77a9.mp3"
+  },
+  {
+    "text": "Click the camera!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1272,
+    "file": "253459b793be.mp3"
   },
   {
     "text": "Me at Machu Picchu!",
@@ -726,6 +782,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2896,
     "file": "7e1fc97c0fcb.mp3"
+  },
+  {
+    "text": "Click a penguin, pull it back, then let go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3384,
+    "file": "5983e99c34b7.mp3"
   },
   {
     "text": "Wheee!",
@@ -1015,11 +1078,25 @@
     "file": "da3f4ad11897.mp3"
   },
   {
+    "text": "Click a chick to feed it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2184,
+    "file": "94f16fe88b9c.mp3"
+  },
+  {
     "text": "Pull a chick back, then let go!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 4138,
     "file": "ede35d8e705b.mp3"
+  },
+  {
+    "text": "Click a chick, pull it back, then let go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3720,
+    "file": "5f3a9ca81c19.mp3"
   },
   {
     "text": "Penguin sticker! Penguins live in Peru too!",
@@ -1279,6 +1356,13 @@
     "sig": "ed7dbdac3d",
     "ms": 3190,
     "file": "ac9dc60941d4.mp3"
+  },
+  {
+    "text": "Click and hold the cloud to make rain!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3168,
+    "file": "3cce64323160.mp3"
   },
   {
     "text": "Hiiiiii...",
@@ -1629,5 +1713,12 @@
     "sig": "ed7dbdac3d",
     "ms": 3750,
     "file": "e6add4cd764f.mp3"
+  },
+  {
+    "text": "This is Peru! Click a picture to explore.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4512,
+    "file": "14105878462c.mp3"
   }
 ]

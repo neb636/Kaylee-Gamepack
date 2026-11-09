@@ -21,6 +21,13 @@
     "file": "9cbdc71bb4e9.mp3"
   },
   {
+    "text": "This is Thailand! Click a picture to explore.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4416,
+    "file": "e95b6cb34b08.mp3"
+  },
+  {
     "text": "In Thailand, we say Sawasdee to say hello!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -70,11 +77,25 @@
     "file": "d1a831ff8ac6.mp3"
   },
   {
+    "text": "Click the door to go inside!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2496,
+    "file": "4859b558c4b4.mp3"
+  },
+  {
     "text": "Tap your family to say hello!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2242,
     "file": "88573e942ffd.mp3"
+  },
+  {
+    "text": "Click your family to say hello!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1944,
+    "file": "f6b96f850acd.mp3"
   },
   {
     "text": "That door's closed!",
@@ -89,6 +110,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2947,
     "file": "64b49dc4a710.mp3"
+  },
+  {
+    "text": "Click the stairs to go up to your room!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3480,
+    "file": "a3ca4f6ec071.mp3"
   },
   {
     "text": "Bounce on the bed!",
@@ -1386,6 +1414,13 @@
     "file": "70094ee39d0a.mp3"
   },
   {
+    "text": "OK! Just click me!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2064,
+    "file": "1fc4709d9222.mp3"
+  },
+  {
     "text": "Want to go to the mall?",
     "voice": "nick",
     "sig": "a2881bb105",
@@ -1400,11 +1435,25 @@
     "file": "af0f79523056.mp3"
   },
   {
+    "text": "Click your things to pack them, Kaylee!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2616,
+    "file": "c1319e7120da.mp3"
+  },
+  {
     "text": "All packed? Tap the suitcase!",
     "voice": "ji",
     "sig": "ba2e98c34e",
     "ms": 2547,
     "file": "506704e23e83.mp3"
+  },
+  {
+    "text": "All packed? Click the suitcase!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2880,
+    "file": "7f4b7ce3cefd.mp3"
   },
   {
     "text": "It's hot and sunny at the sea!",
@@ -1554,6 +1603,13 @@
     "file": "9ab7975bce30.mp3"
   },
   {
+    "text": "Our plane! Click the door!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2400,
+    "file": "ebaf7136df43.mp3"
+  },
+  {
     "text": "Seatbelt on, Kaylee!",
     "voice": "ji",
     "sig": "ba2e98c34e",
@@ -1638,6 +1694,13 @@
     "file": "b1b681770904.mp3"
   },
   {
+    "text": "Click your suitcase!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1680,
+    "file": "01b7335be84c.mp3"
+  },
+  {
     "text": "Tap the plane's door!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1645,11 +1708,25 @@
     "file": "8d178f9ee4cc.mp3"
   },
   {
+    "text": "Click the plane's door!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2232,
+    "file": "f1ee68890af3.mp3"
+  },
+  {
     "text": "Tap the tray!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 1642,
     "file": "001d4a947da6.mp3"
+  },
+  {
+    "text": "Click the tray!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1512,
+    "file": "5e8134f5658a.mp3"
   },
   {
     "text": "Our longtail boat! Tie on ribbons for good luck!",
@@ -1785,6 +1862,13 @@
     "file": "bed340c1cd51.mp3"
   },
   {
+    "text": "Click a ribbon to tie it on!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2592,
+    "file": "86bf4456ba3b.mp3"
+  },
+  {
     "text": "Now the flowers!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1797,6 +1881,13 @@
     "sig": "ed7dbdac3d",
     "ms": 3425,
     "file": "34a6f417f88a.mp3"
+  },
+  {
+    "text": "Click and hold on the water to drive!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2328,
+    "file": "ce5a9bd24c6a.mp3"
   },
   {
     "text": "Drive to a golden light!",
@@ -1825,6 +1916,13 @@
     "sig": "ed7dbdac3d",
     "ms": 1041,
     "file": "cae6d63a47cb.mp3"
+  },
+  {
+    "text": "Click a pose!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1560,
+    "file": "db5934bf12a6.mp3"
   },
   {
     "text": "Drive back to the pier!",
@@ -1995,6 +2093,13 @@
     "file": "9fe76099a884.mp3"
   },
   {
+    "text": "Click and hold on the water to go fast!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3240,
+    "file": "884e18403066.mp3"
+  },
+  {
     "text": "Three!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -2056,6 +2161,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2654,
     "file": "671810135bb9.mp3"
+  },
+  {
+    "text": "Click the boat to go back to the bay!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2736,
+    "file": "f9f3ff7b31e6.mp3"
   },
   {
     "text": "Kaylee, Boat Race Champion! From Thailand.",
@@ -2254,6 +2366,13 @@
     "file": "67c4f08e609b.mp3"
   },
   {
+    "text": "Click the cup to make a drink!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1992,
+    "file": "a784e515ef6a.mp3"
+  },
+  {
     "text": "Pour in the milk!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -2266,6 +2385,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2240,
     "file": "2fabe94b3d6d.mp3"
+  },
+  {
+    "text": "Click and hold to squeeze in the chocolate!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3336,
+    "file": "058ff7efb31c.mp3"
   },
   {
     "text": "Stir it round and round!",
@@ -2289,11 +2415,25 @@
     "file": "b3fcb261b16d.mp3"
   },
   {
+    "text": "Click the elephant to go see them!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2664,
+    "file": "a09077991c9c.mp3"
+  },
+  {
     "text": "Tap the path to walk!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2086,
     "file": "cb7a4a7c0ba5.mp3"
+  },
+  {
+    "text": "Click the path to walk!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1992,
+    "file": "31bce3fb52cd.mp3"
   },
   {
     "text": "Grab a banana!",
@@ -2317,11 +2457,25 @@
     "file": "2dec490247b4.mp3"
   },
   {
+    "text": "Click an elephant for a splash!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2928,
+    "file": "e4113add2e27.mp3"
+  },
+  {
     "text": "Tap the boat to go to the sea!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2415,
     "file": "a17b07b1fc03.mp3"
+  },
+  {
+    "text": "Click the boat to go to the sea!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2520,
+    "file": "e7b17a889c7c.mp3"
   },
   {
     "text": "An elephant's trunk is its nose and its hand!",
@@ -2422,11 +2576,25 @@
     "file": "ab615401d6be.mp3"
   },
   {
+    "text": "Click Agong to give it to him!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2472,
+    "file": "1d1abd396fac.mp3"
+  },
+  {
     "text": "Tap the plane to fly home!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2504,
     "file": "6c585cf25b9f.mp3"
+  },
+  {
+    "text": "Click the plane to fly home!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2904,
+    "file": "f0eb0df2ff1d.mp3"
   },
   {
     "text": "Pack again, or go straight to the boat?",
@@ -2490,6 +2658,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2224,
     "file": "8ece81e39462.mp3"
+  },
+  {
+    "text": "Click to bang the rice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2112,
+    "file": "549803306ac9.mp3"
   },
   {
     "text": "In Nan, people eat sticky rice with their fingers!",
@@ -2632,6 +2807,13 @@
     "file": "68e8c9fcaa22.mp3"
   },
   {
+    "text": "Click the gate to let the water in!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2664,
+    "file": "7637371e09f0.mp3"
+  },
+  {
     "text": "Walk to the birds!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -2653,11 +2835,25 @@
     "file": "9b9895a39343.mp3"
   },
   {
+    "text": "Click the sticky rice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1992,
+    "file": "944cb475633a.mp3"
+  },
+  {
     "text": "Tap Mommy for a photo!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2104,
     "file": "198ba781861c.mp3"
+  },
+  {
+    "text": "Click Mommy for a photo!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1728,
+    "file": "76cbfce9c276.mp3"
   },
   {
     "text": "Look at those rows!",
@@ -2793,6 +2989,13 @@
     "file": "55ed00da0213.mp3"
   },
   {
+    "text": "Click a place to drive there!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1872,
+    "file": "cd57a92d2a71.mp3"
+  },
+  {
     "text": "Home, or one more?",
     "voice": "ji",
     "sig": "ba2e98c34e",
@@ -2819,6 +3022,13 @@
     "sig": "ed7dbdac3d",
     "ms": 3318,
     "file": "f3c6c523d6b6.mp3"
+  },
+  {
+    "text": "Click and drag to steer the car, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3336,
+    "file": "7ce6f8d339d9.mp3"
   },
   {
     "text": "We're driving into a cloud!",
@@ -3108,6 +3318,13 @@
     "file": "b8b87516af2b.mp3"
   },
   {
+    "text": "Click and hold on the bags!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2928,
+    "file": "8ad012b03a5a.mp3"
+  },
+  {
     "text": "Pull a mushroom into the basket!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -3129,11 +3346,25 @@
     "file": "50ebf4757f85.mp3"
   },
   {
+    "text": "Click the oven!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1488,
+    "file": "76a2b03a4589.mp3"
+  },
+  {
     "text": "Tap the pizza to share it!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2371,
     "file": "934fbd982c55.mp3"
+  },
+  {
+    "text": "Click the pizza to share it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2256,
+    "file": "9beeb4f1c8ed.mp3"
   },
   {
     "text": "Mushrooms grow from sawdust, not seeds!",
@@ -3472,6 +3703,13 @@
     "file": "9f5325c47760.mp3"
   },
   {
+    "text": "Click the water by the boat!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2184,
+    "file": "c9ec12e40ee7.mp3"
+  },
+  {
     "text": "Flying fish!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -3701,6 +3939,13 @@
     "sig": "ed7dbdac3d",
     "ms": 3120,
     "file": "de2ff9ed11d9.mp3"
+  },
+  {
+    "text": "Click an animal to take its photo!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2616,
+    "file": "cebd390e992f.mp3"
   },
   {
     "text": "Thank you for cleaning the beach!",
@@ -4130,6 +4375,13 @@
     "file": "ffb8bacdd3e5.mp3"
   },
   {
+    "text": "Click and drag to steer it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2568,
+    "file": "fd862fec39c3.mp3"
+  },
+  {
     "text": "Big waves! Drive over them!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -4326,11 +4578,25 @@
     "file": "1745f4d1ffb0.mp3"
   },
   {
+    "text": "Click the life jacket!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1776,
+    "file": "ec6343358525.mp3"
+  },
+  {
     "text": "Hold your finger on the water!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2160,
     "file": "6906a0bfca5a.mp3"
+  },
+  {
+    "text": "Click and hold on the water!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2400,
+    "file": "872cb262f47f.mp3"
   },
   {
     "text": "Let's build a sandcastle!",
@@ -4347,11 +4613,25 @@
     "file": "e9fdaaf04e71.mp3"
   },
   {
+    "text": "Click and drag to dig the sand!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2712,
+    "file": "89145269df81.mp3"
+  },
+  {
     "text": "Tap a bucket to make a tower!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2688,
     "file": "6f7001822f9e.mp3"
+  },
+  {
+    "text": "Click a bucket to make a tower!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3144,
+    "file": "546cf52f974f.mp3"
   },
   {
     "text": "The sea is coming! Dig a river to it!",
@@ -4459,11 +4739,25 @@
     "file": "77c38e5080ae.mp3"
   },
   {
+    "text": "Click and drag in the sand!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2808,
+    "file": "d5327856a10b.mp3"
+  },
+  {
     "text": "Tap a bucket!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 1440,
     "file": "37d339d4fc00.mp3"
+  },
+  {
+    "text": "Click a bucket!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1704,
+    "file": "084aadb3d424.mp3"
   },
   {
     "text": "Dig a line down to the sea!",
@@ -4485,6 +4779,13 @@
     "sig": "ed7dbdac3d",
     "ms": 3720,
     "file": "c982a84cab79.mp3"
+  },
+  {
+    "text": "Click and hold in the water to swim!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4032,
+    "file": "920189686254.mp3"
   },
   {
     "text": "Follow the parrotfish!",
@@ -4513,6 +4814,13 @@
     "sig": "ed7dbdac3d",
     "ms": 1968,
     "file": "4cdb22ad8147.mp3"
+  },
+  {
+    "text": "Click the camera for a photo!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1920,
+    "file": "ea1e3ea3d7d9.mp3"
   },
   {
     "text": "Coral is alive! Fish live in it.",
@@ -4613,6 +4921,13 @@
     "file": "287add90e868.mp3"
   },
   {
+    "text": "Click the bread basket!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1872,
+    "file": "add5cde6f6b0.mp3"
+  },
+  {
     "text": "Here you go!",
     "voice": "nick",
     "sig": "a2881bb105",
@@ -4711,6 +5026,13 @@
     "file": "61d2cb55f8fa.mp3"
   },
   {
+    "text": "Click the roll to take a bite!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1920,
+    "file": "fba4b901b164.mp3"
+  },
+  {
     "text": "Hold your finger on the coconut!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -4718,11 +5040,25 @@
     "file": "22bc5a0d9dcb.mp3"
   },
   {
+    "text": "Click and hold on the coconut!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3264,
+    "file": "5228b4f58e86.mp3"
+  },
+  {
     "text": "Tap the mango sticky rice!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2160,
     "file": "b7040d7e54b2.mp3"
+  },
+  {
+    "text": "Click the mango sticky rice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2088,
+    "file": "d4c823d9aea7.mp3"
   },
   {
     "text": "Close your eyes and count!",
@@ -5110,6 +5446,13 @@
     "file": "0ace1b030915.mp3"
   },
   {
+    "text": "Click the fire for the show!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2136,
+    "file": "f48e034b2895.mp3"
+  },
+  {
     "text": "Look! Fire dancers!",
     "voice": "ji",
     "sig": "ba2e98c34e",
@@ -5122,6 +5465,13 @@
     "sig": "ed7dbdac3d",
     "ms": 3072,
     "file": "66bfaacacd34.mp3"
+  },
+  {
+    "text": "Click and drag to swirl your lights!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3528,
+    "file": "bc2e030c0008.mp3"
   },
   {
     "text": "Fire is for grown-ups. Yours are lights!",
@@ -5320,11 +5670,25 @@
     "file": "f3e2330da7f2.mp3"
   },
   {
+    "text": "Click and drag to swirl in the sky!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2592,
+    "file": "133005f95f6d.mp3"
+  },
+  {
     "text": "Follow the dots with your finger!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2328,
     "file": "3fe63ed4a546.mp3"
+  },
+  {
+    "text": "Click and drag along the dots!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3312,
+    "file": "b7a02872b177.mp3"
   },
   {
     "text": "Swirl a loop!",
@@ -5348,11 +5712,25 @@
     "file": "0ce47ca72117.mp3"
   },
   {
+    "text": "Click the sky for fireworks!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2472,
+    "file": "f836f1ba1005.mp3"
+  },
+  {
     "text": "Welcome to HarborLand, Kaylee! Tap a place to play!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 4646,
     "file": "bbc06dfbbf04.mp3"
+  },
+  {
+    "text": "Welcome to HarborLand, Kaylee! Click a place to play!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4848,
+    "file": "65942aa9158e.mp3"
   },
   {
     "text": "Sawasdee ka, Kaylee!",
@@ -5437,6 +5815,13 @@
     "sig": "ed7dbdac3d",
     "ms": 1767,
     "file": "98f64f783a8e.mp3"
+  },
+  {
+    "text": "Click a door to play!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1560,
+    "file": "98c39ffbed20.mp3"
   },
   {
     "text": "Where shall we play, Kaylee?",
@@ -5586,6 +5971,13 @@
     "file": "152b55c27c0a.mp3"
   },
   {
+    "text": "Click and wiggle cream on the sore paw!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3288,
+    "file": "9f65c806ab57.mp3"
+  },
+  {
     "text": "Wrap a bandage round the paw!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -5598,6 +5990,13 @@
     "sig": "ed7dbdac3d",
     "ms": 1672,
     "file": "9375c32bd9f6.mp3"
+  },
+  {
+    "text": "Click and wiggle on lots of soap!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3288,
+    "file": "3ce47d1dc781.mp3"
   },
   {
     "text": "Shower it with water!",
@@ -5710,6 +6109,13 @@
     "sig": "ed7dbdac3d",
     "ms": 1383,
     "file": "b7b022333646.mp3"
+  },
+  {
+    "text": "Click the mirror!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1008,
+    "file": "05273b627b20.mp3"
   },
   {
     "text": "Whoa! I love it!",
@@ -6034,6 +6440,13 @@
     "file": "29d95b701b28.mp3"
   },
   {
+    "text": "A slide race, Kaylee! Click the steps to climb!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4104,
+    "file": "f45d5c04fd38.mp3"
+  },
+  {
     "text": "Race you, Kaylee!",
     "voice": "nick",
     "sig": "a2881bb105",
@@ -6048,11 +6461,25 @@
     "file": "31baf8353bfa.mp3"
   },
   {
+    "text": "Click, click, click to go fast!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2424,
+    "file": "d81c2a3f430b.mp3"
+  },
+  {
     "text": "Now tap at each bump to fly!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 3226,
     "file": "d4b0de88c747.mp3"
+  },
+  {
+    "text": "Now click at each bump to fly!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2688,
+    "file": "dec679ee0e17.mp3"
   },
   {
     "text": "Tap now!",
@@ -6062,11 +6489,25 @@
     "file": "f540cec9a35f.mp3"
   },
   {
+    "text": "Click now!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1464,
+    "file": "5d55afa641aa.mp3"
+  },
+  {
     "text": "Rubber rings! Tap to spin!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 3367,
     "file": "510f89864a0b.mp3"
+  },
+  {
+    "text": "Rubber rings! Click to spin!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2832,
+    "file": "ad9ec46d7a57.mp3"
   },
   {
     "text": "Kaylee wins!",
@@ -6125,11 +6566,25 @@
     "file": "ba40bb525159.mp3"
   },
   {
+    "text": "Click the steps to climb!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1704,
+    "file": "d47246aa37e9.mp3"
+  },
+  {
     "text": "Tap to scoot faster!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2681,
     "file": "33a10aa2ee9c.mp3"
+  },
+  {
+    "text": "Click to scoot faster!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2376,
+    "file": "4342a198a7aa.mp3"
   },
   {
     "text": "Can you build higher than me, Kaylee?",
@@ -6235,6 +6690,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2533,
     "file": "a324d6f7d0ca.mp3"
+  },
+  {
+    "text": "Click the tower to push it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1800,
+    "file": "c9f50a44927a.mp3"
   },
   {
     "text": "A chedi is a Thai temple tower!",
@@ -6356,6 +6818,13 @@
     "file": "2f4f4326f687.mp3"
   },
   {
+    "text": "Click your gloves to bow!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1800,
+    "file": "9dcd4df5abaa.mp3"
+  },
+  {
     "text": "Now dance with me!",
     "voice": "coach",
     "sig": "88ce04f1f6",
@@ -6438,6 +6907,13 @@
     "sig": "ed7dbdac3d",
     "ms": 1445,
     "file": "1998c6681086.mp3"
+  },
+  {
+    "text": "Click your gloves!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1704,
+    "file": "9d458074ae1d.mp3"
   },
   {
     "text": "Punch the bag!",
@@ -6643,6 +7119,13 @@
     "file": "9dc58ffd8d7c.mp3"
   },
   {
+    "text": "Click a slide to ride it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2040,
+    "file": "d96fff8a7104.mp3"
+  },
+  {
     "text": "Pick a pizza, Kaylee!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -6797,6 +7280,13 @@
     "file": "52a5a4b94922.mp3"
   },
   {
+    "text": "Click a pizza!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1464,
+    "file": "914b9fa90694.mp3"
+  },
+  {
     "text": "Pull a slice to a plate!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -6886,6 +7376,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2895,
     "file": "e0ddf39c6b7e.mp3"
+  },
+  {
+    "text": "Click Agong to give him the box!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3720,
+    "file": "45b2439cbe40.mp3"
   },
   {
     "text": "Our mall day!",

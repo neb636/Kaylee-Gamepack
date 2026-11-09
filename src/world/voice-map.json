@@ -14,6 +14,13 @@
     "file": "965d4aa4c6d2.mp3"
   },
   {
+    "text": "Let's fly around the world, Kaylee! Click the sparkly pin.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5064,
+    "file": "0a7174c0fbef.mp3"
+  },
+  {
     "text": "Where should we fly?",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -126,6 +133,13 @@
     "file": "e82063b1a7e8.mp3"
   },
   {
+    "text": "How many pieces? Click to choose!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3048,
+    "file": "c46e8a5d14ce.mp3"
+  },
+  {
     "text": "Drag each piece to its spot!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -138,6 +152,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2444,
     "file": "49404cbdc17a.mp3"
+  },
+  {
+    "text": "Click a piece to light up its spot!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3384,
+    "file": "dd16017669d5.mp3"
   },
   {
     "text": "Look for the glowing spot!",
@@ -194,6 +215,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2810,
     "file": "52b75b269ef9.mp3"
+  },
+  {
+    "text": "Pick a color, then click to paint!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2856,
+    "file": "ede98976ed4b.mp3"
   },
   {
     "text": "Sparkle's Theater!",
