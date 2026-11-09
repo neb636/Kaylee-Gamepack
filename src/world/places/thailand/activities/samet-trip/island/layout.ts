@@ -117,6 +117,8 @@ const BEACH_XZ: { name: string; osm: number; xz: number[] }[] = [
   { name: "Nuan Beach", osm: 240058006, xz: [-110.4, 85.4, -106.4, 81.6, -103.8, 81.7, -109.3, 87.5] },
   { name: "a little beach", osm: 475711102, xz: [-16.7, -80.6, -16.5, -79.6, -11.4, -79.0, -5.7, -81.1, -5.9, -81.7, -11.4, -79.6] },
   { name: "Wiang Wan Beach", osm: 475711103, xz: [-149.0, -174.2, -150.1, -172.0, -147.8, -161.3, -144.3, -152.6, -134.3, -132.7, -128.0, -124.1, -127.5, -124.6, -129.7, -126.9, -135.2, -135.5, -142.9, -152.3, -148.3, -167.6] },
+  // Not in OSM's beaches: drawn along the coast here so Ao Noi Na (a deep-link spot, the hammock) has sand to stand on.
+  { name: "Ao Noi Na", osm: 0, xz: [-66.0, -81.8, -69.5, -83.3, -77.4, -90.0, -84.0, -97.7] },
   { name: "Ao Prao Beach", osm: 475711104, xz: [-174.3, -14.4, -173.3, -14.0, -168.5, -24.8, -168.8, -30.4, -169.9, -37.2, -175.2, -49.5, -178.5, -55.6, -179.6, -54.8, -173.2, -42.5, -171.6, -38.1, -170.0, -26.6, -170.3, -23.3] },
 ]
 export const BEACHES = BEACH_XZ.map((b) => ({ name: b.name, osm: b.osm, pts: Array.from({ length: b.xz.length / 2 }, (_, i) => ({ x: b.xz[i * 2], z: b.xz[i * 2 + 1] })) }))
