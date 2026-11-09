@@ -345,8 +345,9 @@ export const FRAMES: Record<Exclude<SpotId, 'deck'>, Frame> = {
   aonoina: frameNear({ x: -76, z: -85 }),
 }
 
-/** The resort deck above Ao Prao (lunch: a place, not a stop yet), up the slope behind the sand. */
-export const DECK = { ...at(FRAMES.prao, 10, -16.5), t: FRAMES.prao.t, n: FRAMES.prao.n, face: Math.atan2(FRAMES.prao.n.x, FRAMES.prao.n.z), w: 9, d: 6, y: 2.2 }
+/** The resort deck above Ao Prao (lunch: a place, not a stop yet), up the slope behind the sand. Its steps (`steps`
+ *  wide, in the middle of the sea side) come down to the sand: behind it the slope is forest. */
+export const DECK = { ...at(FRAMES.prao, 10, -16.5), t: FRAMES.prao.t, n: FRAMES.prao.n, face: Math.atan2(FRAMES.prao.n.x, FRAMES.prao.n.z), w: 9, d: 6, y: 2.2, steps: 2.8 }
 /** Na Dan pier: from the sand out into the bay (where the speedboat ties up). */
 export const PIER = { from: at(FRAMES.nadan, -4, -1), to: at(FRAMES.nadan, -4, 26), w: 3.2, y: 1.1 }
 
@@ -389,9 +390,11 @@ const add = (kind: PokeKind, p: XZ) => pokes.push({ id: `${kind}:${pokes.filter(
 // Coconut palms (bonk: a coconut drops) and samet trees (the papery bark peels), at the back of the sand on each beach.
 for (const [id, us] of [['saikaew', [-20, 4, 26]], ['hinkhok', [-6, 6]], ['phai', [-3, 5]], ['wongduan', [-8, 6]], ['prao', [-4, 6]], ['nadan', [8]], ['aonoina', [-3, 4]]] as const)
   for (const u of us) add('palm', at(FRAMES[id], u, id === 'saikaew' ? -12.5 : -11.5))
-for (const [id, u] of [['saikaew', -10], ['hinkhok', 0], ['prao', 9], ['wongduan', 1]] as const) add('samet', at(FRAMES[id], u, -13.5))
+// (Ao Prao's stands beside the resort deck's end, clear of its steps.)
+for (const [id, u] of [['saikaew', -10], ['hinkhok', 0], ['prao', 15.5], ['wongduan', 1]] as const) add('samet', at(FRAMES[id], u, -13.5))
 // Pink umbrellas (spin; poke one three times and it takes off like a kite with Kaylee holding on) and red chairs (fold up).
-for (const [id, us] of [['hinkhok', [-4, 3]], ['phai', [0]], ['wongduan', [-4, 4]], ['prao', [-7, -1, 10]]] as const) for (const u of us) add('umbrella', at(FRAMES[id], u, -6))
+// (Ao Prao's third stands beside the foot of the resort deck's steps, its loungers clear of them.)
+for (const [id, us] of [['hinkhok', [-4, 3]], ['phai', [0]], ['wongduan', [-4, 4]], ['prao', [-7, -1, 14]]] as const) for (const u of us) add('umbrella', at(FRAMES[id], u, -6))
 for (const u of [-6, -2, 3, 7]) add('chair', at(FRAMES.prao, u, -3.6))
 add('ball', at(FRAMES.hinkhok, 3, -2.5))
 add('icecream', bay(-14, -10))
