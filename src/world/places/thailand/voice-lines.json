@@ -1627,7 +1627,7 @@
   },
   "Steer it with your finger!",
   "Click and drag to steer it!",
-  "Big waves! Drive over them!",
+  "Big waves! Catch the stars!",
   "Race the jet ski man!",
   {
     "text": "Catch me if you can!",
@@ -1691,6 +1691,14 @@
     "voice": "nick"
   },
   {
+    "text": "Boing! Silly rocks!",
+    "voice": "nick"
+  },
+  {
+    "text": "Bonk! Off we go!",
+    "voice": "nick"
+  },
+  {
     "text": "Back in the water!",
     "voice": "otter"
   },
@@ -1727,6 +1735,8 @@
   "Click the life jacket!",
   "Hold your finger on the water!",
   "Click and hold on the water!",
+  "Go round the big orange buoy!",
+  "Back to the flags!",
   {
     "text": "Let's build a sandcastle!",
     "voice": "nick"
