@@ -28,6 +28,8 @@ export interface Flyer {
 const STOP_STICKER: Record<string, string> = { jetski: '🛥️', sandcastle: '🏰', snorkel: '🐠', hideseek: '🙈' }
 const BTN = 'min(104px, max(76px, 12.5vmin))'
 const GAP = 14
+/** The corner the phone and book buttons take (for the speech bubble to keep clear of). */
+export const DOCK_CORNER = { width: `calc(${BTN} * 2 + ${GAP}px + 18px + var(--safe-right, 0px))`, height: `calc(${BTN} + 34px)` }
 
 interface Props {
   phone: boolean

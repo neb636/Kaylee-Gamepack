@@ -32,6 +32,8 @@ async function leadAlong(page, route, ms) {
       const q = window.__thaiSametQA()
       return { x: q.x, z: q.z, yaw: q.cameraYaw, k: q.kaylee }
     })
+    // (A toy opened: the island's not there to lead her on.)
+    if (!c.k || !Number.isFinite(c.yaw)) break
     if (Math.hypot(route[i][0] - c.x, route[i][1] - c.z) < 3) {
       i++
       continue
@@ -239,8 +241,92 @@ async function pullSun(page) {
   await page.mouse.up()
 }
 
+/** The first tap target showing whose name starts with one of these. */
+const firstAnchor = (page, ...prefixes) => page.evaluate((prefixes) => {
+  for (const e of document.querySelectorAll('[data-anchor]')) {
+    if (e.style.display === 'none' || !prefixes.some((p) => e.dataset.anchor.startsWith(p))) continue
+    const r = e.getBoundingClientRect()
+    const x = r.x + r.width / 2
+    const y = r.y + r.height / 2
+    if (x > 20 && x < innerWidth - 20 && y > 120 && y < innerHeight - 140) return { id: e.dataset.anchor, x, y }
+  }
+  return null
+}, prefixes)
+const press = async (page, p, ms) => {
+  await page.mouse.move(p.x, p.y)
+  await page.mouse.down()
+  await page.waitForTimeout(ms)
+  await page.mouse.up()
+}
+
 /** Filmed moments (scripts/qa-motion.mjs). */
 export const motion = [
+  // Taps and targets on the island (#357 batch 4).
+  {
+    name: 'thailand-samet-taps-snorkel-ring',
+    seconds: 11,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=wongduan`)
+      await ready(page)
+      await page.waitForTimeout(3000)
+    },
+    act: async (page) => {
+      const r = (await page.evaluate(() => window.__thaiSametQA())).rings.snorkel
+      await leadAlong(page, [[r.x, r.z]], 8000)
+      await page.waitForTimeout(2500)
+    },
+  },
+  {
+    name: 'thailand-samet-taps-hold-or-poke',
+    seconds: 9,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=prao`)
+      await ready(page)
+      await page.waitForTimeout(3000)
+    },
+    act: async (page) => {
+      // A quick tap pokes the umbrella; a held finger on the next one leads her.
+      const a = await firstAnchor(page, 'umbrella:', 'chair:', 'palm:')
+      if (a) await press(page, a, 120)
+      await page.waitForTimeout(1200)
+      const b = await firstAnchor(page, 'chair:', 'umbrella:', 'palm:')
+      if (b) await press(page, b, 2600)
+      await page.waitForTimeout(800)
+    },
+  },
+  {
+    name: 'thailand-samet-taps-bin',
+    seconds: 13,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=prao`)
+      await ready(page)
+      await page.waitForTimeout(3000)
+    },
+    act: async (page) => {
+      const j = await firstAnchor(page, 'junk:')
+      if (j) await press(page, j, 80)
+      await page.waitForFunction(() => window.__thaiSametQA().carrying, null, { timeout: 7000 }).catch(() => {})
+      await page.waitForTimeout(400)
+      const bin = await firstAnchor(page, 'bin:')
+      if (bin) await press(page, bin, 80)
+      await page.waitForTimeout(5000)
+    },
+  },
+  {
+    name: 'thailand-samet-taps-pier-rail',
+    seconds: 8,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=nadan`)
+      await ready(page)
+      await page.waitForTimeout(3000)
+    },
+    act: async (page) => {
+      // A finger square across the pier, past its rail.
+      const r = (await page.evaluate(() => window.__thaiSametQA())).rails[0]
+      await press(page, r, 4000)
+      await page.waitForTimeout(1500)
+    },
+  },
   {
     name: 'thailand-samet-fireshow-twirl',
     seconds: 10,

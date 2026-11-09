@@ -42,9 +42,11 @@ interface Props {
   raised?: boolean
   /** What tapping Sparkle says before she has said anything (the bay: how to drive); none: she just hops. */
   idle?: Line
+  /** Buttons in the bottom-right corner (CSS sizes): the bubble stops short of them, or goes above them on a narrow phone. */
+  corner?: { width: string; height: string }
 }
 
-export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({ hidden, raised, idle }, ref) {
+export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({ hidden, raised, idle, corner }, ref) {
   const sparkle = useRef<PuppetHandle>(null)
   const [line, setLine] = useState<{ l: Line; n: number } | null>(null)
   const last = useRef<Line | null>(null)
@@ -89,8 +91,9 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
   useEffect(() => () => clearTimeout(hide.current), [])
 
   const who = line ? WHO[lineVoice(line.l)] : undefined
+  const narrow = window.innerWidth < 600
   return (
-    <div style={{ position: 'absolute', left: 'calc(var(--safe-left, 0px) + 8px + var(--roam-left, 0px))', bottom: 'calc(var(--safe-bottom) + 6px)', display: hidden ? 'none' : 'flex', alignItems: 'flex-end', gap: 6, zIndex: 33, pointerEvents: 'none', maxWidth: 'calc(100% - 140px - var(--roam-left, 0px) - var(--roam-right, 0px))' }}>
+    <div style={{ position: 'absolute', left: 'calc(var(--safe-left, 0px) + 8px + var(--roam-left, 0px))', bottom: 'calc(var(--safe-bottom) + 6px)', display: hidden ? 'none' : 'flex', alignItems: 'flex-end', gap: 6, zIndex: 33, pointerEvents: 'none', maxWidth: corner && !narrow ? `calc(100% - ${corner.width} - 24px)` : 'calc(100% - 140px - var(--roam-left, 0px) - var(--roam-right, 0px))' }}>
       <button
         aria-label="Sparkle"
         onClick={() => {
@@ -116,7 +119,7 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9 }}
             style={{ display: 'flex', alignItems: 'center', gap: 8, // Over the pose buttons (on a narrow phone they sit higher, above Sparkle).
-            marginBottom: raised ? (window.innerWidth < 600 ? 'calc(min(150px, 20vh, 30vw) + 96px)' : 'clamp(80px, 14vmin, 128px)') : 'min(60px, 8vh)', background: 'rgba(255,255,255,0.95)', borderRadius: 'var(--radius)', padding: who ? '6px 14px 6px 6px' : '10px 16px', boxShadow: 'var(--shadow)', transformOrigin: 'bottom left' }}
+            marginBottom: raised ? (window.innerWidth < 600 ? 'calc(min(150px, 20vh, 30vw) + 96px)' : 'clamp(80px, 14vmin, 128px)') : corner && narrow ? corner.height : 'min(60px, 8vh)', background: 'rgba(255,255,255,0.95)', borderRadius: 'var(--radius)', padding: who ? '6px 14px 6px 6px' : '10px 16px', boxShadow: 'var(--shadow)', transformOrigin: 'bottom left' }}
           >
             {who && (
               <span title={who.name} style={{ flexShrink: 0, display: 'grid', placeItems: 'center', width: 46, height: 46, borderRadius: 23, background: who.color, fontSize: 24, border: '3px solid #fff' }}>

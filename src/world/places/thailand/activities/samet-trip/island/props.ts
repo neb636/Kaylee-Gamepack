@@ -426,7 +426,7 @@ export function buildProps(bag: Bag, root: Group, ground: Ground, blockers: Bloc
     }
     decks.push({ x: mid.x, z: mid.z, t, n, hw: 0.8, hd: 7.2, y: 0.94, ramp: 2 })
     const boat = new Group()
-    const b = at(f, -5.6, 9.5)
+    const b = STOPS.snorkel.at
     boat.position.set(b.x, 0, b.z)
     boat.rotation.y = yaw
     boat.add(solid(merge([P.rbox(1.8, 0.7, 7.2, 0.3, '#FFFFFF', { at: [0, 0.2, 0] }), P.box(1.82, 0.16, 7.22, '#3F8FE8', { at: [0, 0.42, 0] }), P.cone(0.24, 1.8, '#FFFFFF', { at: [0, 1.0, 3.7], rot: [0.5, 0, 0] }, 6), P.sphere(0.24, PAL.hotpink, { at: [0, 1.7, 4.1] }, 8), P.rbox(1.7, 0.08, 4.4, 0.04, '#5FC4E0', { at: [0, 2.2, -0.6] }), ...[-1, 1].flatMap((s) => [P.cyl(0.04, 0.04, 1.8, '#E9E3D8', { at: [s * 0.75, 1.3, -2.6] }, 5), P.cyl(0.04, 0.04, 1.8, '#E9E3D8', { at: [s * 0.75, 1.3, 1.4] }, 5)]), P.box(0.6, 0.05, 1.2, '#E9E3D8', { at: [1.05, 0.1, -1], rot: [0, 0, 1.2] }), ...[0, 1, 2].map((k) => P.rbox(0.3, 0.14, 0.3, 0.05, [PAL.gold, PAL.mint, PAL.hotpink][k], { at: [-0.5 + k * 0.5, 0.7, -2.8] }))]), bag, 2))
