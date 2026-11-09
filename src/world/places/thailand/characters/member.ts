@@ -70,6 +70,11 @@ export class Member implements Character {
     this.setPose(pose)
   }
 
+  /** The height they stand at, for someone walking over uneven ground (update() puts them back here every frame). */
+  setGround(y: number) {
+    this.baseY = y
+  }
+
   setPose(pose: Pose) {
     this.pose = pose
     const { body } = this.chibi
