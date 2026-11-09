@@ -13,11 +13,19 @@
     "voice": "pip"
   },
   {
+    "text": "Click a spot on the map!",
+    "voice": "pip"
+  },
+  {
     "text": "Where should we go next, Kaylee?",
     "voice": "pip"
   },
   {
     "text": "Everyone is here! Tap the party!",
+    "voice": "pip"
+  },
+  {
+    "text": "Everyone is here! Click the party!",
     "voice": "pip"
   },
   {
@@ -80,6 +88,7 @@
     "voice": "pip"
   },
   "Tap to make Pip hop! Hop three times to the water hole.",
+  "Click to make Pip hop! Hop three times to the water hole.",
   {
     "text": "one",
     "voice": "pip"
@@ -148,6 +157,7 @@
     "voice": "koko"
   },
   "Tap the notes to sing Koko a lullaby!",
+  "Click the notes to sing Koko a lullaby!",
   "Shh! Koko is fast asleep.",
   "Let's dive into the Great Barrier Reef!",
   "Find the sea turtle!",
@@ -170,6 +180,7 @@
     "voice": "chompy"
   },
   "Tap the eggs to help the babies hatch!",
+  "Click the eggs to help the babies hatch!",
   "Baby crocs chirp to call their mama!",
   {
     "text": "Eee! Eee!",
@@ -194,9 +205,11 @@
     "voice": "chompy"
   },
   "Tap Chompy to make her go snap snap!",
+  "Click Chompy to make her go snap snap!",
   "Crocodiles grow new teeth all their lives!",
   "At night in Australia, you can see the Southern Cross stars!",
   "Tap the five twinkly stars!",
+  "Click the five twinkly stars!",
   "You found the Southern Cross!",
   "The stars are on Australia's flag!",
   "Drag the big star onto the flag!",
@@ -205,7 +218,9 @@
   "Look for the stars you found!",
   "Let's color a postcard from the beach to send home!",
   "Pick a color, then tap to paint!",
+  "Pick a color, then click to paint!",
   "Tap send when you are done!",
+  "Click send when you are done!",
   {
     "text": "G'day, mate! In Australia, mate means friend.",
     "voice": "pip"
@@ -215,6 +230,7 @@
     "voice": "pip"
   },
   "Tap each friend to make them dance!",
+  "Click each friend to make them dance!",
   {
     "text": "G'day, Kaylee! Thanks for helping Pip!",
     "voice": "mama"
@@ -259,6 +275,7 @@
   "The Great Barrier Reef is so big, you can see it from space!",
   "Crocodiles live in warm rivers up north. Always stay far from their water!",
   "This is Australia! Tap a picture to learn more.",
+  "This is Australia! Click a picture to learn more.",
   "Want to see real koalas?",
   "Want to see real kangaroos hop?",
   "Let's swim on the Great Barrier Reef!",

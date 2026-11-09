@@ -1,7 +1,8 @@
 // Every phrase that can be spoken in Peru. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
-// (This file is also read by Node, so it imports nothing. NAME matches KID_NAME.)
+// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.)
 // Plain strings are Sparkle, the guide: she gives the instructions. Friends say their own story and reaction lines in
 // their own voices (see cast.json). Straight apostrophes only: curly ones failed the transcription check in PR #63.
+import { onDevice } from '../../../sdk/device.ts'
 const NAME = 'Kaylee'
 const as = (voice: string) => (text: string) => ({ text, voice })
 const luna = as('luna')
@@ -25,7 +26,7 @@ export const L = {
 
   // ---- Hub: Luna's map of Peru ----
   intro: [luna(`Hola, ${NAME}! I'm Luna!`), luna("Let's fill my explorer journal!")],
-  hub: 'Tap a picture to explore Peru!',
+  hub: onDevice('Tap a picture to explore Peru!', 'Click a picture to explore Peru!'),
   hubNext: luna(`Another discovery, ${NAME}!`),
   soon: 'This place opens soon!',
   balloonSoon: 'Our balloon trip comes soon!',
@@ -55,7 +56,7 @@ export const L = {
     see: luna(`I can see you, ${NAME}!`),
     hum: 'Alpacas hum when they are happy!',
     clippers: 'Now the clippers! Snip snip!',
-    pond: 'Done? Tap the pond to show Luna!',
+    pond: onDevice('Done? Tap the pond to show Luna!', 'Done? Click the pond to show Luna!'),
     mustache: luna('Hee hee! A mustache!'),
     mirror: { silly: luna('I look so silly!'), pretty: luna('So pretty!'), skinny: luna('Brrr! Hat please!') },
     chilly: luna("Brrr! It's chilly up here!"),
@@ -66,7 +67,7 @@ export const L = {
     sleepy: abuela('Oh, I am so sleepy...'),
     snore: abuela('Five more minutes...'),
     doneCold: { paco: paco('Brrr! Chilly!'), abuela: abuela('Oh my! Brrr!') },
-    yarn: 'The wool is yarn now! Tap the cactus!',
+    yarn: onDevice('The wool is yarn now! Tap the cactus!', 'The wool is yarn now! Click the cactus!'),
     bug: 'A tiny bug makes pink color!',
     dropGo: 'Drag the pink drop to the yarn!',
     pink: 'Pink yarn! Pink hats!',
@@ -75,9 +76,9 @@ export const L = {
     photo: luna('Click! A picture for my journal!'),
     colors: 'Alpacas come in lots of colors!',
     idle: {
-      brush: "Rub the brush on Luna's fleece!",
+      brush: onDevice("Rub the brush on Luna's fleece!", "Drag the brush on Luna's fleece!"),
       clip: 'Snip the fluffy puffs!',
-      cactus: 'Tap the cactus!',
+      cactus: onDevice('Tap the cactus!', 'Click the cactus!'),
       hats: 'Drag a hat onto an alpaca!',
     },
   },
@@ -97,7 +98,7 @@ export const L = {
     clouds: tika("So many clouds! I can't see!"),
     top: 'The last wall! Up in the clouds!',
     reveal: `${NAME}, look! Machu Picchu!`,
-    photo: "Tap the camera for Luna's journal!",
+    photo: onDevice("Tap the camera for Luna's journal!", "Click the camera for Luna's journal!"),
     bomb: [tika('Me too!'), tika('Cheese!'), tika('My best side!'), tika('Say llama!'), tika('One more!')],
     journal: tika("A picture for Luna's journal!"),
     dance: tika('Dance, dance, dance!'),
@@ -108,14 +109,14 @@ export const L = {
     potatoes: 'Peru has thousands of kinds of potatoes!',
     puzzle: 'The stones fit together like a puzzle!',
     carry: 'Llamas can carry things up the mountain!',
-    idle: { stone: 'Drag a stone into a hole!', seed: 'Tap a seed bag to plant it!', photo: 'Tap the camera!' },
+    idle: { stone: 'Drag a stone into a hole!', seed: onDevice('Tap a seed bag to plant it!', 'Click a seed bag to plant it!'), photo: onDevice('Tap the camera!', 'Click the camera!') },
   },
   terracesWindow: tika('Me at Machu Picchu!'),
   terracesSticker: 'Llama sticker! Llamas can carry things up mountains!',
   // ---- 2. Pepa's Penguin Cliff (the desert coast at Paracas) ----
   penguins: {
     story: [pepa('Hola! My chicks are hungry!')],
-    pull: 'Pull a penguin back, then let go!',
+    pull: onDevice('Pull a penguin back, then let go!', 'Click a penguin, pull it back, then let go!'),
     wheee: [pingo('Wheee!'), pingo('Splash!'), pingo('Yippee!')],
     whoa: pingo('Whoa!'),
     blip: pingo('A teeny splash!'),
@@ -140,10 +141,10 @@ export const L = {
     tern: 'These birds have white mustaches!',
     facts: ['Peru has penguins!', 'The ocean here is cold and full of fish!', 'Penguins fly underwater with their wings!'],
     idle: {
-      launch: 'Pull a penguin back, then let go!',
+      launch: onDevice('Pull a penguin back, then let go!', 'Click a penguin, pull it back, then let go!'),
       fish: 'Jump onto the fish to catch one!',
-      feed: 'Tap a chick to feed it!',
-      swim: 'Pull a chick back, then let go!',
+      feed: onDevice('Tap a chick to feed it!', 'Click a chick to feed it!'),
+      swim: onDevice('Pull a chick back, then let go!', 'Click a chick, pull it back, then let go!'),
     },
   },
   penguinSticker: 'Penguin sticker! Penguins live in Peru too!',
@@ -187,7 +188,7 @@ export const L = {
   // ---- 4. Rosa's Rainy River (make it rain in the Amazon) ----
   river: {
     story: [rosa('Hola! I want to visit my forest friends!')],
-    squeeze: 'Squeeze the cloud to make rain!',
+    squeeze: onDevice('Squeeze the cloud to make rain!', 'Click and hold the cloud to make rain!'),
     // Things in the forest answer the rain (the sloth and Sparkle talk; the rest is sounds and motion).
     slothWake: sloth('Hiiiiii...'),
     slothYawn: sloth('Ooh... a shower...'),
@@ -214,7 +215,7 @@ export const L = {
     facts: ['This dolphin lives in a river!', 'Half of Peru is rainforest!', 'The river grows into the forest!', 'Some fish eat fruit!'],
     fruit: 'Some fish eat fruit!',
     idle: {
-      squeeze: 'Hold the cloud to make rain!',
+      squeeze: onDevice('Hold the cloud to make rain!', 'Click and hold the cloud to make rain!'),
       river: 'Drag the cloud over the river!',
       lagoon: 'Drag the cloud over the lagoon!',
       pads: 'Drag a friend onto a lily pad!',
@@ -242,5 +243,5 @@ export const L = {
     flag: "Peru's flag is red, white, red!",
     bird: "Peru's bird is bright orange!",
   },
-  passport: 'This is Peru! Tap a picture to explore.',
+  passport: onDevice('This is Peru! Tap a picture to explore.', 'This is Peru! Click a picture to explore.'),
 }

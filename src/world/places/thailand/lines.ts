@@ -1,9 +1,10 @@
 // Every phrase that can be spoken in Thailand. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
-// (This file is also read by Node, so it imports nothing. NAME matches KID_NAME.)
+// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.)
 // Thailand's friends are Kaylee's own family, as animal characters (planning/around-the-world/thailand.md). Sparkle
 // guides (plain strings); the family say hello in their own voices (cast.json), with the Thai hello: Sawasdee, ending
 // in "ka" from the women and "krub" from the men. Straight apostrophes only: curly ones failed the transcription check
 // in PR #63.
+import { onDevice } from '../../../sdk/device.ts'
 const NAME = 'Kaylee'
 
 type Line = string | { text: string; voice: string }
@@ -24,7 +25,7 @@ export const L = {
   // The shell's trophy ceremony and the trophy room speak these.
   trophyWin: `${NAME}, you did it! You won the Thailand Explorer trophy!`,
   trophyRoom: `${NAME}, Thailand Explorer! From Thailand.`,
-  passport: 'This is Thailand! Tap a picture to explore.',
+  passport: onDevice('This is Thailand! Tap a picture to explore.', 'This is Thailand! Click a picture to explore.'),
   facts: {
     hello: 'In Thailand, we say Sawasdee to say hello!',
     elephant: "The elephant is Thailand's special animal!",
@@ -38,13 +39,13 @@ export const L = {
   // seems stuck.
   house: {
     arrive: `We're at Agong's house in Thailand, ${NAME}!`,
-    door: 'Tap the door to go inside!',
-    inside: 'Tap your family to say hello!',
+    door: onDevice('Tap the door to go inside!', 'Click the door to go inside!'),
+    inside: onDevice('Tap your family to say hello!', 'Click your family to say hello!'),
     // The first time she rattles the closed bathroom door.
     bathroom: "That door's closed!",
     stuck: {
-      street: 'Tap the door to go inside!',
-      downstairs: 'Tap the stairs to go up to your room!',
+      street: onDevice('Tap the door to go inside!', 'Click the door to go inside!'),
+      downstairs: onDevice('Tap the stairs to go up to your room!', 'Click the stairs to go up to your room!'),
       upstairs: 'Bounce on the bed!',
     },
     // The first time she pokes these: something true about Thailand.
@@ -63,7 +64,7 @@ export const L = {
   // Sparkle on the Thailand map (activities/hub/map/): the welcome (once a visit; after that the pins only glow), and
   // something true the first time she taps each thing on the map.
   map: {
-    hello: 'This is Thailand! Tap a picture to explore.',
+    hello: onDevice('This is Thailand! Tap a picture to explore.', 'This is Thailand! Click a picture to explore.'),
     pokes: {
       elephant: 'Elephants live in the north of Thailand!',
       clouds: "It rains a lot in Nan's mountains!",
@@ -190,13 +191,13 @@ export const L = {
       daddy: {
         question: nick(`Ready for a trip, ${NAME}?`),
         where: nick(`Where do you want to go, ${NAME}?`),
-        later: nick('OK! Just tap me!'),
+        later: onDevice(nick('OK! Just tap me!'), nick('OK! Just click me!')),
         mall: nick('Want to go to the mall?'),
       },
     },
     pack: {
-      start: ji('Tap your things to pack them, Kaylee!'),
-      close: ji('All packed? Tap the suitcase!'),
+      start: onDevice(ji('Tap your things to pack them, Kaylee!'), ji('Click your things to pack them, Kaylee!')),
+      close: onDevice(ji('All packed? Tap the suitcase!'), ji('All packed? Click the suitcase!')),
       hint: ji("It's hot and sunny at the sea!"),
       hungry: ji('Pack some more!'),
       full: ji("It's too full! Sit on it!"),
@@ -223,7 +224,7 @@ export const L = {
       laugh: by('officer')('Ha ha! What a suitcase!'),
       gan: by('officer')('A sleeping fox?!'),
       fan: by('officer')('A fan? Ha ha!'),
-      plane: nick('Our plane! Tap the door!'),
+      plane: onDevice(nick('Our plane! Tap the door!'), nick('Our plane! Click the door!')),
     },
     plane: {
       belt: ji('Seatbelt on, Kaylee!'),
@@ -240,9 +241,9 @@ export const L = {
     // Sparkle: the one fact she sees for herself, and a hint after a while with nothing done.
     elephant: "Thailand looks like an elephant's head!",
     hint: {
-      belt: 'Tap your suitcase!',
-      door: "Tap the plane's door!",
-      tray: 'Tap the tray!',
+      belt: onDevice('Tap your suitcase!', 'Click your suitcase!'),
+      door: onDevice("Tap the plane's door!", "Click the plane's door!"),
+      tray: onDevice('Tap the tray!', 'Click the tray!'),
     },
   },
 
@@ -273,13 +274,13 @@ export const L = {
     ball: kids('The ball, Kaylee!'),
     // Sparkle: what to do (only when something is new, or after a while with nothing done).
     hint: {
-      ribbon: 'Tap a ribbon to tie it on!',
+      ribbon: onDevice('Tap a ribbon to tie it on!', 'Click a ribbon to tie it on!'),
       garland: 'Now the flowers!',
-      drive: 'Put your finger on the water to drive!',
+      drive: onDevice('Put your finger on the water to drive!', 'Click and hold on the water to drive!'),
       glow: 'Drive to a golden light!',
       ball: 'Push the ball back with the boat!',
       lie: 'Lie down! The roof is low!',
-      pose: 'Tap a pose!',
+      pose: onDevice('Tap a pose!', 'Click a pose!'),
       pier: 'Drive back to the pier!',
       out: 'Paddle back out to the boat!',
     },
@@ -316,13 +317,13 @@ export const L = {
   // in their own voices; the kids tease and cheer; the macaque only chatters. She always wins, and the trophy says so.
   race: {
     gate: 'A boat race! Drive through the rainbow gate!',
-    start: 'Hold your finger on the water to go fast!',
+    start: onDevice('Hold your finger on the water to go fast!', 'Click and hold on the water to go fast!'),
     count: ['Three!', 'Two!', 'One!', 'Go!'],
     lap2: 'Lap two!',
     final: 'Last lap!',
     win: `${NAME} wins! First place!`,
     trophy: `A trophy for ${NAME}, the boat race champion!`,
-    back: 'Tap the boat to go back to the bay!',
+    back: onDevice('Tap the boat to go back to the bay!', 'Click the boat to go back to the bay!'),
     // The trophy room speaks this when she taps her race trophy (it's saved there).
     trophyRoom: `${NAME}, Boat Race Champion! From Thailand.`,
     // Daddy and Mommy, in the boat with her.
@@ -366,17 +367,17 @@ export const L = {
     // Sparkle, after a while with nothing done.
     hint: {
       fork: 'Elephants or the boat? You pick!',
-      cup: 'Tap the cup to make a drink!',
+      cup: onDevice('Tap the cup to make a drink!', 'Click the cup to make a drink!'),
       milk: 'Pour in the milk!',
-      choc: 'Squeeze in the chocolate!',
+      choc: onDevice('Squeeze in the chocolate!', 'Click and hold to squeeze in the chocolate!'),
       stir: 'Stir it round and round!',
       straw: 'Pick a straw!',
-      go: 'Tap the elephant to go see them!',
-      walk: 'Tap the path to walk!',
+      go: onDevice('Tap the elephant to go see them!', 'Click the elephant to go see them!'),
+      walk: onDevice('Tap the path to walk!', 'Click the path to walk!'),
       hold: 'Grab a banana!',
       want: 'Give them what they want!',
-      spray: 'Tap an elephant for a splash!',
-      boat: 'Tap the boat to go to the sea!',
+      spray: onDevice('Tap an elephant for a splash!', 'Click an elephant for a splash!'),
+      boat: onDevice('Tap the boat to go to the sea!', 'Click the boat to go to the sea!'),
     },
     // The tap-to-hear facts: the album's sticker, the stamp screen and the passport.
     facts: {
@@ -402,9 +403,9 @@ export const L = {
     sticker: 'Fiddler crabs wave hello!',
     // Sparkle, after a while with nothing done.
     pick: 'Pick a photo for Agong!',
-    give: 'Tap Agong to give it to him!',
+    give: onDevice('Tap Agong to give it to him!', 'Click Agong to give it to him!'),
     // At the pier at sunset, nothing done for a while.
-    fly: 'Tap the plane to fly home!',
+    fly: onDevice('Tap the plane to fly home!', 'Click the plane to fly home!'),
     // The boarding pass on a replay: the whole trip or straight to the boat.
     again: 'Pack again, or go straight to the boat?',
   },
@@ -426,7 +427,7 @@ export const L = {
       dry: 'Rice likes water! Open the gate.',
       grow: 'Shoo them away!',
       harvest: 'Walk through the rice to cut it!',
-      thresh: 'Tap to bang the rice!',
+      thresh: onDevice('Tap to bang the rice!', 'Click to bang the rice!'),
       // The first time she pokes the kratip, the view from the deck, the buffalo and a duck (tap-to-hear facts).
       sticky: 'In Nan, people eat sticky rice with their fingers!',
       steps: 'The steps on the hill keep the water for the rice!',
@@ -447,12 +448,12 @@ export const L = {
       // Sparkle, after a while with nothing done.
       hint: {
         plant: 'Walk through the water to plant!',
-        gate: 'Tap the gate to let the water in!',
+        gate: onDevice('Tap the gate to let the water in!', 'Click the gate to let the water in!'),
         grow: 'Walk to the birds!',
         harvest: 'Walk through the golden rice!',
-        thresh: 'Tap to bang the rice!',
-        eat: 'Tap the sticky rice!',
-        photo: 'Tap Mommy for a photo!',
+        thresh: onDevice('Tap to bang the rice!', 'Click to bang the rice!'),
+        eat: onDevice('Tap the sticky rice!', 'Click the sticky rice!'),
+        photo: onDevice('Tap Mommy for a photo!', 'Click Mommy for a photo!'),
       },
       // Daddy on the farm.
       planted: nick('Look at those rows!'),
@@ -477,14 +478,14 @@ export const L = {
     // The Nan map (map/): Sparkle's first line, her hint, and Mommy after two stops and after all three.
     map: {
       first: `Where shall we go first, ${NAME}?`,
-      hint: 'Tap a place to drive there!',
+      hint: onDevice('Tap a place to drive there!', 'Click a place to drive there!'),
       more: ji('Home, or one more?'),
       home: ji('Time to fly home!'),
       laos: 'Over there is Laos, another country!',
     },
     // The mountain roads (drive/): Mommy drives and says the road lines, Daddy reacts, Sparkle says what's new.
     drive: {
-      steer: `Steer the car with your finger, ${NAME}!`,
+      steer: onDevice(`Steer the car with your finger, ${NAME}!`, `Click and drag to steer the car, ${NAME}!`),
       cloud: "We're driving into a cloud!",
       count: "Let's count the bends!",
       one: 'One!',
@@ -524,11 +525,11 @@ export const L = {
       colors: 'More bags to spray!',
       pizza: 'Put your mushrooms on the pizza!',
       hint: {
-        mist: 'Hold your finger on the bags!',
+        mist: onDevice('Hold your finger on the bags!', 'Click and hold on the bags!'),
         pick: 'Pull a mushroom into the basket!',
         pizza: 'Drag a mushroom to the pizza!',
-        oven: 'Tap the oven!',
-        share: 'Tap the pizza to share it!',
+        oven: onDevice('Tap the oven!', 'Click the oven!'),
+        share: onDevice('Tap the pizza to share it!', 'Click the pizza to share it!'),
       },
       sawdust: 'Mushrooms grow from sawdust, not seeds!',
       hi: by('farmer')('My mushrooms are thirsty!'),
@@ -600,7 +601,7 @@ export const L = {
       boat: {
         hi: by('pelican')('Sawasdee ka! Hold on tight!'),
         go: 'Put your hoof in the water!',
-        hint: 'Touch the water by the boat!',
+        hint: onDevice('Touch the water by the boat!', 'Click the water by the boat!'),
         fish: 'Flying fish!',
         jump: nick('Whoa! We flew!'),
         // A bump with her hoof in the water soaks Mommy (in turn).
@@ -645,7 +646,7 @@ export const L = {
       hers: 'The jet ski is yours now! Hop on!',
       sunset: nick('Sunset time! To the big tree!'),
       // Mommy's phone out for the first time this visit; the first rubbish in the bin.
-      phone: 'Tap an animal to take its photo!',
+      phone: onDevice('Tap an animal to take its photo!', 'Click an animal to take its photo!'),
       clean: ji('Thank you for cleaning the beach!'),
       // The green taxi's driver (a sun bear): the first ride, then each ride in turn.
       taxi: {
@@ -724,7 +725,7 @@ export const L = {
       jacket: by('otter')('Sawasdee krap! Life jacket first!'),
       ready: by('otter')('Hold on tight! Off you go!'),
       // Sparkle, as each round begins (the jacket's tap and the waves and the race moving on by themselves).
-      ride: 'Steer it with your finger!',
+      ride: onDevice('Steer it with your finger!', 'Click and drag to steer it!'),
       waves: 'Big waves! Drive over them!',
       race: 'Race the jet ski man!',
       // Sparkle's countdown (3, 2, 1, go).
@@ -754,8 +755,8 @@ export const L = {
       rope: 'The rope keeps the swimmers safe!',
       // Sparkle, after a while with nothing done (spendHint: shown first, then said at most twice a visit).
       hint: {
-        jacket: 'Tap the life jacket!',
-        steer: 'Hold your finger on the water!',
+        jacket: onDevice('Tap the life jacket!', 'Click the life jacket!'),
+        steer: onDevice('Hold your finger on the water!', 'Click and hold on the water!'),
       },
     },
     // The sandcastle at Ao Hin Khok (sandcastle/): dig, towers, the tide.
@@ -763,8 +764,8 @@ export const L = {
       // Daddy as it opens, then Sparkle's line for each round (dig at once; the moulds and the tide move on by
       // themselves).
       hi: nick("Let's build a sandcastle!"),
-      dig: 'Dig the sand with your finger!',
-      towers: 'Tap a bucket to make a tower!',
+      dig: onDevice('Dig the sand with your finger!', 'Click and drag to dig the sand!'),
+      towers: onDevice('Tap a bucket to make a tower!', 'Click a bucket to make a tower!'),
       tide: 'The sea is coming! Dig a river to it!',
       // The moat fills from the sea; the tide fact (Sparkle, after the fill).
       filled: nick('Water in the moat! Hooray!'),
@@ -782,8 +783,8 @@ export const L = {
       mommy: [ji('So pretty!'), ji('A princess castle!')],
       // Sparkle, after a while with nothing done.
       hint: {
-        dig: 'Drag your finger in the sand!',
-        towers: 'Tap a bucket!',
+        dig: onDevice('Drag your finger in the sand!', 'Click and drag in the sand!'),
+        towers: onDevice('Tap a bucket!', 'Click a bucket!'),
         tide: 'Dig a line down to the sea!',
       },
     },
@@ -793,11 +794,11 @@ export const L = {
       // her first touch), the facts the first time (coral when she first bumps or pokes one, the cuttlefish when it
       // first flashes), and after a while with nothing done what to do. Daddy blows bubble rings.
       jump: by('pelican')('Masks on! Jump in!'),
-      float: 'Hold your finger in the water to swim!',
+      float: onDevice('Hold your finger in the water to swim!', 'Click and hold in the water to swim!'),
       follow: 'Follow the parrotfish!',
       cuttle: 'Swim close to the cuttlefish!',
       pink: 'It turned pink, just for you!',
-      camera: 'Tap the camera for a photo!',
+      camera: onDevice('Tap the camera for a photo!', 'Click the camera for a photo!'),
       coral: 'Coral is alive! Fish live in it.',
       colors: 'Cuttlefish change color to talk!',
       urchin: by('nick')('Boing! Prickly!'),
@@ -807,7 +808,7 @@ export const L = {
       captain: [by('pelican')('Toot toot! Ha ha!'), by('pelican')('Good swimming, little one!'), by('pelican')('My boat waits for you, ka!')],
       // Sparkle, after a while with nothing done.
       hint: {
-        float: 'Hold your finger in the water to swim!',
+        float: onDevice('Hold your finger in the water to swim!', 'Click and hold in the water to swim!'),
         follow: 'Swim after the parrotfish!',
         cuttle: 'Swim to the cuttlefish!',
       },
@@ -817,7 +818,7 @@ export const L = {
       // Daddy passes the rolls, Mommy brings the coconut and the mango sticky rice; Sparkle's one line, and what to do
       // after a while with nothing done.
       hi: by('nick')('Lunch time! Who wants bread?'),
-      start: 'Tap the bread basket!',
+      start: onDevice('Tap the bread basket!', 'Click the bread basket!'),
       // Daddy passing a roll (in turn), then the coconut, the rice, the last slurp and the last bite.
       pass: [by('nick')('Here you go!'), by('nick')('Catch!'), by('nick')('Another one? Ha ha!')],
       coconut: ji('A coconut! Sip it!'),
@@ -830,10 +831,10 @@ export const L = {
       lizard: by('nick')('A big lizard! Hello!'),
       squirrel: ji('A squirrel! Up it goes!'),
       hint: {
-        basket: 'Tap the bread basket!',
-        roll: 'Tap the roll to take a bite!',
-        coconut: 'Hold your finger on the coconut!',
-        rice: 'Tap the mango sticky rice!',
+        basket: onDevice('Tap the bread basket!', 'Click the bread basket!'),
+        roll: onDevice('Tap the roll to take a bite!', 'Click the roll to take a bite!'),
+        coconut: onDevice('Hold your finger on the coconut!', 'Click and hold on the coconut!'),
+        rice: onDevice('Tap the mango sticky rice!', 'Click the mango sticky rice!'),
       },
     },
     // Hide and seek by the driftwood tree (hideseek/).
@@ -883,13 +884,13 @@ export const L = {
         // Tap Daddy (in turn).
         tap: [nick('So pretty!'), nick('Bye bye, sun!'), nick('Ooh, the stars!')],
         // Sparkle, after a while with nothing done (spendHint).
-        hint: { pull: 'Pull the sun down into the sea!', fire: 'Tap the fire for the show!' },
+        hint: { pull: 'Pull the sun down into the sea!', fire: onDevice('Tap the fire for the show!', 'Click the fire for the show!') },
       },
       // The fire show (finale/fireshow.ts): Mommy as it opens, then Sparkle; the gecko fire dancers (one voice) cheer and
       // show off; each pink flag's surprise in the finish gets its friend's line; the big finish is a big moment.
       fire: {
         look: ji('Look! Fire dancers!'),
-        twirl: 'Swirl your lights with your finger!',
+        twirl: onDevice('Swirl your lights with your finger!', 'Click and drag to swirl your lights!'),
         // Once, the first time the dancers answer her with a ring of fire.
         grownups: 'Fire is for grown-ups. Yours are lights!',
         // Big loops of hers (in turn, now and then).
@@ -916,7 +917,7 @@ export const L = {
         jiTap: [ji('So beautiful!'), ji('My little fire dancer!')],
         nickTap: [nick('Twirl, twirl!'), nick('Wow!'), nick('Do a big one!')],
         // Sparkle, after a while with nothing done (spendHint).
-        hint: { twirl: 'Swirl your finger in the sky!', dots: 'Follow the dots with your finger!', loops: 'Swirl a loop!', giant: 'Draw one giant circle!', sky: 'Tap the sky for fireworks!' },
+        hint: { twirl: onDevice('Swirl your finger in the sky!', 'Click and drag to swirl in the sky!'), dots: onDevice('Follow the dots with your finger!', 'Click and drag along the dots!'), loops: 'Swirl a loop!', giant: 'Draw one giant circle!', sky: onDevice('Tap the sky for fireworks!', 'Click the sky for fireworks!') },
       },
     },
   },
@@ -929,7 +930,7 @@ export const L = {
     // HarborLand's hall (hall/).
     hall: {
       // Sparkle, the first time she comes in (not coming back out of a mini game).
-      welcome: `Welcome to HarborLand, ${NAME}! Tap a place to play!`,
+      welcome: onDevice(`Welcome to HarborLand, ${NAME}! Tap a place to play!`, `Welcome to HarborLand, ${NAME}! Click a place to play!`),
       // The staff (a buffalo and a penguin), the first two times she comes near one, and when she taps them (in turn).
       staff: [by('staff')(`Sawasdee ka, ${NAME}!`), by('staff')('Have fun!')],
       // Mommy on her bench and Daddy following her round, when she taps them (in turn).
@@ -941,7 +942,7 @@ export const L = {
       more: ji('OK! A little more!'),
       // Sparkle, when the finger shows after a while with nothing touched; or, with every new game off the screen, when
       // the map button bounces silently. And as the map opens.
-      hint: 'Tap a door to play!',
+      hint: onDevice('Tap a door to play!', 'Click a door to play!'),
       map: `Where shall we play, ${NAME}?`,
     },
 
@@ -979,9 +980,9 @@ export const L = {
         heart: 'Listen to its heart!',
         temp: 'The thermometer goes in its mouth!',
         thorn: 'Pull out the thorn with the tweezers!',
-        cream: 'Rub cream on the sore paw!',
+        cream: onDevice('Rub cream on the sore paw!', 'Click and wiggle cream on the sore paw!'),
         bandage: 'Wrap a bandage round the paw!',
-        soap: 'Rub on lots of soap!',
+        soap: onDevice('Rub on lots of soap!', 'Click and wiggle on lots of soap!'),
         rinse: 'Shower it with water!',
         dry: 'Dry it with the towel!',
         brush: 'Brush the mane!',
@@ -1011,7 +1012,7 @@ export const L = {
         curly: by('kid')('Curly, please!'),
       } as Record<string, Line>,
       // The mirror glows: time for the reveal.
-      mirror: 'Tap the mirror!',
+      mirror: onDevice('Tap the mirror!', 'Click the mirror!'),
       // The reveal: Daddy poses (in turn), the kids giggle, Mommy takes the photo.
       love: [nick('Whoa! I love it!'), nick('So handsome! I love it!')],
       enough: [by('kid')('Close enough!'), by('kid')('Close enough! So pretty!'), by('kid')('Close enough! Yay!')],
@@ -1082,14 +1083,14 @@ export const L = {
     // The Racing Slide (games/race/). Sparkle says what's new each race and counts down; Daddy races her and dives
     // into the balls head first; she always wins.
     race: {
-      open: `A slide race, ${NAME}! Tap the steps to climb!`,
+      open: onDevice(`A slide race, ${NAME}! Tap the steps to climb!`, `A slide race, ${NAME}! Click the steps to climb!`),
       raceYou: nick(`Race you, ${NAME}!`),
       count: ['Three!', 'Two!', 'One!', 'Go!'],
       // The first time something new comes: tap to scoot, tap at a bump, the rubber rings.
-      scoot: 'Tap, tap, tap to go fast!',
-      bumps: 'Now tap at each bump to fly!',
-      now: 'Tap now!',
-      rings: 'Rubber rings! Tap to spin!',
+      scoot: onDevice('Tap, tap, tap to go fast!', 'Click, click, click to go fast!'),
+      bumps: onDevice('Now tap at each bump to fly!', 'Now click at each bump to fly!'),
+      now: onDevice('Tap now!', 'Click now!'),
+      rings: onDevice('Rubber rings! Tap to spin!', 'Rubber rings! Click to spin!'),
       // She wins (in turn); Daddy lands head first; a kid cheers.
       win: [`${NAME} wins!`, `${NAME} wins again!`, `First place, ${NAME}!`],
       dive: [nick('Head first! Whee!'), nick("I'm OK! Ha ha!")],
@@ -1097,8 +1098,8 @@ export const L = {
       allDone: `Three ribbons for ${NAME}!`,
       // Sparkle, when the 👆 shows.
       hint: {
-        climb: 'Tap the steps to climb!',
-        race: 'Tap to scoot faster!',
+        climb: onDevice('Tap the steps to climb!', 'Click the steps to climb!'),
+        race: onDevice('Tap to scoot faster!', 'Click to scoot faster!'),
       },
     },
 
@@ -1124,7 +1125,7 @@ export const L = {
       hint: {
         box: 'Grab a brick from the box!',
         card: 'Put a brick on the picture!',
-        tower: 'Tap the tower to push it!',
+        tower: onDevice('Tap the tower to push it!', 'Click the tower to push it!'),
       },
       // The fact: when the chedi gets its spire, or the first time she pokes its card.
       chedi: 'A chedi is a Thai temple tower!',
@@ -1161,7 +1162,7 @@ export const L = {
     boxing: {
       // The opening, the wai kru: the coach, then Sparkle.
       hello: by('coach')(`Sawasdee krap, ${NAME}! First we say thank you.`),
-      bow: 'Tap your gloves to bow!',
+      bow: onDevice('Tap your gloves to bow!', 'Click your gloves to bow!'),
       // The coach: after the three bows, after rounds 1 and 2, with the gold belt.
       dance: by('coach')('Now dance with me!'),
       again: by('coach')('Yes! Again!'),
@@ -1179,7 +1180,7 @@ export const L = {
       hit: nick('Hit the pad!'),
       // Sparkle, when the finger shows after a while with nothing touched.
       hint: {
-        gloves: 'Tap your gloves!',
+        gloves: onDevice('Tap your gloves!', 'Click your gloves!'),
         bag: 'Punch the bag!',
         pad: "Punch Daddy's pad!",
       },
@@ -1235,7 +1236,7 @@ export const L = {
       // Sparkle's fact, the first time she pokes the giant mask or a Phi Ta Khon on the roller's posts.
       phiTaKhon: 'Phi Ta Khon is a festival with big funny masks!',
       // Sparkle, when the finger shows after a while with nothing touched.
-      hint: 'Tap a slide to ride it!',
+      hint: onDevice('Tap a slide to ride it!', 'Click a slide to ride it!'),
     },
 
     // The Pizza Company (pizza/).
@@ -1264,7 +1265,7 @@ export const L = {
       crunch: ji('Mmm! Crunchy!'),
       // Sparkle, when the finger shows after a while with nothing touched (or the menu waits).
       hint: {
-        menu: 'Tap a pizza!',
+        menu: onDevice('Tap a pizza!', 'Click a pizza!'),
         slice: 'Pull a slice to a plate!',
         box: "Put one in Agong's box!",
       },
@@ -1282,7 +1283,7 @@ export const L = {
       thanks: by('agong')(`Pizza! Thank you, ${NAME}!`),
       pizza: { gan: by('gan')('Pizza?!'), ken: by('ken')('Pizza?!'), bb: by('bb')('Pizza?!') },
       hair: by('agong')("Ho ho ho! Look at Daddy's hair!"),
-      give: 'Tap Agong to give him the box!',
+      give: onDevice('Tap Agong to give him the box!', 'Click Agong to give him the box!'),
       wall: ji('Our mall day!'),
       // ICONSIAM: the glimpse, the lift and the HarborLand counter (arrive.ts).
       arrive: {

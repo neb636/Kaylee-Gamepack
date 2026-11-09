@@ -2,6 +2,7 @@
 //   import { say, sounds, ChoiceCards, praise, type GameProps } from '../../sdk'
 
 export type { GameMeta, GameProps } from './types'
+export { DEVICE, IS_MOUSE, onDevice, type Device } from './device'
 export { say, stopSpeaking, lineText, lineVoice, speechLevel, speakingVoice, type Line, type SayOptions } from './speech'
 export { sounds } from './sounds'
 export { burst, bigCelebration } from './confetti'

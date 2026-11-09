@@ -42,7 +42,7 @@ was handed plan pages, grey boxes and up to 40 PRs a day, he ended up merging wi
 
 - **Between check-ins, don't stop to ask.** Make the reasonable call, say which on the review page, and keep going.
   Stop only for: family facts (Dad decides who each person is, which animal, who comes on a trip), anything sacred
-  (rule 7), a new package, spending money (Tripo credits, paid APIs), or deleting something of Dad's.
+  (rule 8), a new package, spending money (Tripo credits, paid APIs), or deleting something of Dad's.
 - **No grey boxes for Dad or Kaylee.** Greybox privately if it helps you, with robots and numbers (`docs/qa.md`). What
   Kaylee plays at check-in 3 is bright and voiced (scratch voices are fine; in 3D the toon look comes free), its core
   verb works and every section has a link. If her playtest says the toy isn't fun, change the toy, not the decoration.
@@ -98,26 +98,34 @@ was handed plan pages, grey boxes and up to 40 PRs a day, he ended up merging wi
 1. **No reading required.** Every instruction is spoken. Show short text too (for Dad), with a way to hear it again
    (`<SayButton>`, the prompt bubble). Every exact phrase that can be spoken is listed for recording (`docs/voices.md`);
    keep random speech finite. Never use the iPad's built-in voice.
-2. **Losing now and then is fine; failing over and over isn't.** A race she sometimes loses, a tower that sometimes
+2. **Every device.** She plays on the iPad and iPhone (she taps with a finger) *and* on the MacBook (she clicks with
+   the trackpad or a mouse); "tap the door" or "put your finger on the water" confuses her on the Mac. Every spoken line
+   and every bit of on-screen text that names a gesture (tap, touch, finger, swipe, flick, rub, pinch, squeeze, press
+   and hold, tilt) comes in two versions: `onDevice(touch, mouse)` from `src/sdk/device.ts` ("Tap the door!" / "Click
+   the door!"; "Hold your finger on the water!" / "Click and hold on the water!"; "Swipe" / "Drag"; "Rub" / "Click
+   and wiggle"). Both versions are recorded and both show in the table read. Facts and sounds ("tap tap tap", "don't
+   touch") stay as they are. Check a new toy on both: `?device=mouse` in the link gives the Mac's words on any device.
+   Every verb must also *work* with a mouse: nothing that needs two fingers, a pinch or a tilt without another way.
+3. **Losing now and then is fine; failing over and over isn't.** A race she sometimes loses, a tower that sometimes
    topples, a shot the goalie sometimes saves is real play, and winning means more when it was close. What isn't OK
    is something so hard she fails again and again, or a loss that ends the fun: no lives, no "game over", no timers
    that stop play. Tune it so she wins most of the time, and ease off quietly after a miss or two (slower rivals, a
    wider gap, a bigger target). A loss is short and kind ("So close! Again?") and she can go again at once. Odd play
    gets a silly reaction; when she's stuck, *help* (highlight it, bring it closer, show the way). A stamp, a sticker
    or the trophy never waits on winning one round.
-3. **Big touch targets** (≥ 88px on iPad, ≥ 64px on iPhone and for 3D tap targets), one clear thing to do at a time,
+4. **Big touch targets** (≥ 88px on iPad, ≥ 64px on iPhone and for 3D tap targets), one clear thing to do at a time,
    lots of juicy feedback: `sounds.*`, `sfx`, bounces, `burst()` confetti for mini-wins.
-4. **Go easy on her name.** Hearing "Kaylee" in line after line gets annoying: save it for the big moments (a stamp,
+5. **Go easy on her name.** Hearing "Kaylee" in line after line gets annoying: save it for the big moments (a stamp,
    the finale, the trophy), not every cheer or instruction. `KID_NAME` is exported.
-5. Kind, gentle, girly-cute tone. Pink/lavender/pastels. Unicorns welcome (Sparkle is the guide; in Thailand Kaylee
+6. Kind, gentle, girly-cute tone. Pink/lavender/pastels. Unicorns welcome (Sparkle is the guide; in Thailand Kaylee
    herself is a lilac unicorn).
-6. **Characters feel alive** (see Characters, below). Never just slide or bob a flat picture around.
-7. **No temples or Buddhas.** Temples and Buddha images are very sacred to many people in Thailand, and it's easy for a
+7. **Characters feel alive** (see Characters, below). Never just slide or bob a flat picture around.
+8. **No temples or Buddhas.** Temples and Buddha images are very sacred to many people in Thailand, and it's easy for a
    game to do something offensive by accident (where a character puts its feet, a Buddha as a toy you poke, playing
    with offerings). Don't put a temple or a Buddha in a new game or country: not as a stop, an activity, a prop, a
    landmark on a map or road, or a fact. If a plan or a real place the family visited calls for one, leave it out and
    tell Dad instead of building it. (Wat Phumin was dropped from the Nan trip for this, 2026-10-25.)
-8. **Family and privacy.** Dad decides the family: who each person is, which animal, who comes on a trip. Ask, don't
+9. **Family and privacy.** Dad decides the family: who each person is, which animal, who comes on a trip. Ask, don't
    invent family facts. Photos and recordings of Kaylee stay out of this public repo; describe them in words.
    Thailand's house is the family's real home and its code is locked behind the family code: read
    `docs/thailand-3d.md` before touching it.

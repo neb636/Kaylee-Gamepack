@@ -30,8 +30,10 @@ node scripts/table-read.mjs --changed                   # every group this branc
 It prints the flags. Fix these before Dad listens; don't ask him about them:
 - **not recorded**: record it.
 - **long** (over 3 s): shorten it, unless its slowness is the joke (a sleepy moose). Kaylee is five.
-- **name**: her name in more than two or three lines of one toy is too many (rule 4). Keep it for the big moments.
-- **rule 7**: temple or Buddha words. Take them out and tell Dad.
+- **name**: her name in more than two or three lines of one toy is too many (rule 5). Keep it for the big moments.
+- **rule 8**: temple or Buddha words. Take them out and tell Dad.
+- **touch only**: a gesture word (tap, finger, swipe, flick, rub) with no Mac version. If it's an instruction, wrap it in
+  `onDevice(touch, mouse)` (design rule 2); a fact or a sound ("tap tap tap!") can stay.
 - **twice**: the same words in two places. Fine for a repeated hint; otherwise vary it.
 
 Then listen yourself the only way you can: read the sheet top to bottom as the story she'll hear. Is the first touch
