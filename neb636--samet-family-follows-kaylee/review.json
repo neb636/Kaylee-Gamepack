@@ -1,0 +1,14 @@
+{
+  "title": "Koh Samet: Mommy and Daddy follow her properly",
+  "checkIn": "fix",
+  "kaylee": "Mommy and Daddy climb the road with her, wait and wave from the sand while she swims, and stay in the picture beside her.",
+  "questions": ["When she swims out, are Mommy and Daddy waiting and waving from the sand right, or should they swim with floaties?"],
+  "reels": [
+    { "name": "family-before", "moments": ["thailand-samet-family"] },
+    { "name": "family-after", "moments": ["thailand-samet-family"] }
+  ],
+  "links": [
+    { "label": "The road behind Sai Kaew", "hash": "#/world/thailand/samet-trip/island?at=saikaew" },
+    { "label": "Swim from Wong Duan", "hash": "#/world/thailand/samet-trip/island?at=wongduan" }
+  ]
+}

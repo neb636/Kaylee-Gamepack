@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "family-after",
+  "title": "Family after",
+  "video": "family-after.mp4",
+  "gif": "family-after.gif",
+  "seconds": 60,
+  "browser": "webkit",
+  "viewport": "iphone-portrait",
+  "moments": [
+    {
+      "name": "thailand-samet-family-road",
+      "where": "thailand-samet-family-road",
+      "seconds": 13,
+      "fps": 89.3,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-family-swim",
+      "where": "thailand-samet-family-swim",
+      "seconds": 44,
+      "fps": 91.9,
+      "status": "ok"
+    }
+  ]
+}
