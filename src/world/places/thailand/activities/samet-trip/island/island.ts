@@ -935,20 +935,18 @@ export class SametIsland implements World3D {
     for (let i = 0; i < this.props.decks.length; i++) if (this.inDeckTop(i, x, z)) return false
     return this.isl.ground.heightAt(x, z) > -0.15 && this.isl.ground.surfaceAt(x, z) !== 'forest'
   }
-  /** A point of her trail a little nearer her than the one nearest (x, z): her own footsteps, to follow. */
-  private trailToward(x: number, z: number): XZ {
+  /** A point of her trail to follow from (x, z): a little nearer her than the footstep they're on, or the nearest
+   *  footstep `can` step toward (her own footsteps never cut through a deck's side). Null if none. */
+  private trailToward(x: number, z: number, can: (p: XZ) => boolean): XZ | null {
     const tr = this.trail
-    let best = 0
-    let bd = Infinity
-    for (let i = 0; i < tr.length; i++) {
-      const d = Math.hypot(tr[i].x - x, tr[i].z - z)
-      if (d < bd) {
-        bd = d
-        best = i
-      }
+    const order = tr.map((p, i) => ({ i, d: Math.hypot(p.x - x, p.z - z) })).sort((a, b) => a.d - b.d)
+    // (Already on it: the next footstep toward her.)
+    if (order.length && order[0].d < 0.35) {
+      const p = tr[Math.max(0, order[0].i - 2)]
+      if (can(p)) return p
     }
-    // (Already on it: the next footstep toward her; off it: back onto it first.)
-    return tr[bd < 0.35 ? Math.max(0, best - 2) : best]
+    for (const o of order) if (o.d >= 0.25 && can(tr[o.i])) return tr[o.i]
+    return null
   }
 
   private follow(dt: number, t: number) {
@@ -992,11 +990,11 @@ export class SametIsland implements World3D {
       // (Somewhere it says they can't be already, a deep link or a catch-up: any way out is fine.)
       const ok = (ax: number, az: number, l: number) => l < 0.05 || !this.deckOk(r.position.x, r.position.z, f.on) || this.deckOk(r.position.x + (ax / l) * 0.3, r.position.z + (az / l) * 0.3, f.on)
       if (!ok(dx, dz, d)) {
-        const p = this.trailToward(r.position.x, r.position.z)
-        dx = p.x - r.position.x
-        dz = p.z - r.position.z
+        // The nearest of her footsteps they can step toward (back to the foot of the steps, if that's what it takes).
+        const p = this.trailToward(r.position.x, r.position.z, (q) => ok(q.x - r.position.x, q.z - r.position.z, Math.hypot(q.x - r.position.x, q.z - r.position.z)))
+        dx = p ? p.x - r.position.x : 0
+        dz = p ? p.z - r.position.z : 0
         d = Math.hypot(dx, dz)
-        if (!ok(dx, dz, d)) d = 0
       }
       const want = d < 0.25 ? 0 : clamp(d * 1.4, 0, Math.max(WALK.gallop * 1.05, this.lastSpeed + 0.5))
       f.speed += clamp(want - f.speed, -8 * dt, 6 * dt)
