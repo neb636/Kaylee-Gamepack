@@ -1,0 +1,129 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "house.stuck",
+  "title": "Thailand › House › Stuck",
+  "intro": "",
+  "page": "thailand-house-stuck.html",
+  "audio": null,
+  "lines": 5,
+  "seconds": 13,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "house.stuck.street.touch",
+      "text": "Tap the door to go inside!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "house.stuck.street.mouse",
+      "text": "Click the door to go inside!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "house.stuck.downstairs.touch",
+      "text": "Tap the stairs to go up to your room!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "house.stuck.downstairs.mouse",
+      "text": "Click the stairs to go up to your room!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "house",
+        "stuck",
+        "street",
+        "touch"
+      ],
+      "text": "Tap the door to go inside!",
+      "voice": "sparkle",
+      "key": "house.stuck.street.touch",
+      "part": "house › stuck › street",
+      "when": "Sparkle, at Agong's house: at most two lines before her hands are busy, then only when something is new or she seems stuck.",
+      "ms": 2450,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "house",
+        "stuck",
+        "street",
+        "mouse"
+      ],
+      "text": "Click the door to go inside!",
+      "voice": "sparkle",
+      "key": "house.stuck.street.mouse",
+      "part": "house › stuck › street",
+      "when": "",
+      "ms": 2496,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "house",
+        "stuck",
+        "downstairs",
+        "touch"
+      ],
+      "text": "Tap the stairs to go up to your room!",
+      "voice": "sparkle",
+      "key": "house.stuck.downstairs.touch",
+      "part": "house › stuck › downstairs",
+      "when": "",
+      "ms": 2947,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "house",
+        "stuck",
+        "downstairs",
+        "mouse"
+      ],
+      "text": "Click the stairs to go up to your room!",
+      "voice": "sparkle",
+      "key": "house.stuck.downstairs.mouse",
+      "part": "house › stuck › downstairs",
+      "when": "",
+      "ms": 3480,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "house",
+        "stuck",
+        "upstairs"
+      ],
+      "text": "Bounce on the bed!",
+      "voice": "sparkle",
+      "key": "house.stuck.upstairs",
+      "part": "house › stuck",
+      "when": "",
+      "ms": 1488,
+      "flags": []
+    }
+  ]
+}

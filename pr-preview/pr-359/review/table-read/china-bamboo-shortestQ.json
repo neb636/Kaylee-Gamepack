@@ -1,0 +1,65 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "bamboo.shortestQ",
+  "title": "China › Bamboo › Shortest Q",
+  "intro": "",
+  "page": "china-bamboo-shortestQ.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "bamboo.shortestQ.touch",
+      "text": "Which one is the shortest? Tap it!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "bamboo.shortestQ.mouse",
+      "text": "Which one is the shortest? Click it!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "bamboo",
+        "shortestQ",
+        "touch"
+      ],
+      "text": "Which one is the shortest? Tap it!",
+      "voice": "sparkle",
+      "key": "bamboo.shortestQ.touch",
+      "part": "bamboo › shortestQ",
+      "when": "Bamboo Forest (activities/bamboo) and the Great Wall (activities/wall).",
+      "ms": 2891,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bamboo",
+        "shortestQ",
+        "mouse"
+      ],
+      "text": "Which one is the shortest? Click it!",
+      "voice": "sparkle",
+      "key": "bamboo.shortestQ.mouse",
+      "part": "bamboo › shortestQ",
+      "when": "",
+      "ms": 3072,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

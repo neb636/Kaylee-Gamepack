@@ -1,0 +1,522 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "samet.trip",
+  "title": "Thailand › Samet › Trip",
+  "intro": "Getting there and home (PackScreen, speedboat/, the trip frame), the sticker and the stamp screen's facts.",
+  "page": "thailand-samet-trip.html",
+  "audio": null,
+  "lines": 27,
+  "seconds": 69,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "samet.trip.boat.hi",
+      "text": "Sawasdee ka! Hold on tight!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.trip.boat.hint.touch",
+      "text": "Touch the water by the boat!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.trip.boat.hint.mouse",
+      "text": "Click the water by the boat!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.trip.boat.captain.1",
+      "text": "Wiggle wiggle! Ha ha!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.trip.sticker",
+      "text": "Pink mermaid sticker! A mermaid sits on the rocks!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.trip.facts.samet",
+      "text": "The samet tree gave the island its name!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.trip.facts.mermaid",
+      "text": "The mermaid is from an old Thai poem!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.trip.facts.park",
+      "text": "Koh Samet is a national park, a home for animals!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.trip.facts.sunset",
+      "text": "The sun sets in the west, over Ao Prao!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.trip.facts.look",
+      "text": "Take a photo of an animal, then let it be!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "hi"
+      ],
+      "text": "Sawasdee ka! Hold on tight!",
+      "voice": "pelican",
+      "key": "samet.trip.boat.hi",
+      "part": "samet › trip › boat",
+      "when": "The speedboat from Ban Phe (speedboat/): the captain (a pelican) says hello, Sparkle the one instruction, then only reactions to what happens; the stuck hint once the finger has shown.",
+      "ms": 3816,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "go"
+      ],
+      "text": "Put your hoof in the water!",
+      "voice": "sparkle",
+      "key": "samet.trip.boat.go",
+      "part": "samet › trip › boat",
+      "when": "The speedboat from Ban Phe (speedboat/): the captain (a pelican) says hello, Sparkle the one instruction, then only reactions to what happens; the stuck hint once the finger has shown.",
+      "ms": 2064,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "hint",
+        "touch"
+      ],
+      "text": "Touch the water by the boat!",
+      "voice": "sparkle",
+      "key": "samet.trip.boat.hint.touch",
+      "part": "samet › trip › boat › hint",
+      "when": "The speedboat from Ban Phe (speedboat/): the captain (a pelican) says hello, Sparkle the one instruction, then only reactions to what happens; the stuck hint once the finger has shown.",
+      "ms": 2496,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "hint",
+        "mouse"
+      ],
+      "text": "Click the water by the boat!",
+      "voice": "sparkle",
+      "key": "samet.trip.boat.hint.mouse",
+      "part": "samet › trip › boat › hint",
+      "when": "",
+      "ms": 2184,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "fish"
+      ],
+      "text": "Flying fish!",
+      "voice": "sparkle",
+      "key": "samet.trip.boat.fish",
+      "part": "samet › trip › boat",
+      "when": "The speedboat from Ban Phe (speedboat/): the captain (a pelican) says hello, Sparkle the one instruction, then only reactions to what happens; the stuck hint once the finger has shown.",
+      "ms": 1464,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "jump"
+      ],
+      "text": "Whoa! We flew!",
+      "voice": "nick",
+      "key": "samet.trip.boat.jump",
+      "part": "samet › trip › boat",
+      "when": "The speedboat from Ban Phe (speedboat/): the captain (a pelican) says hello, Sparkle the one instruction, then only reactions to what happens; the stuck hint once the finger has shown.",
+      "ms": 2280,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "soak",
+        "0"
+      ],
+      "text": "Hey! I'm all wet!",
+      "voice": "ji",
+      "key": "samet.trip.boat.soak.0",
+      "part": "samet › trip › boat › soak",
+      "when": "A bump with her hoof in the water soaks Mommy (in turn).",
+      "ms": 2184,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "soak",
+        "1"
+      ],
+      "text": "Splash! Ha ha!",
+      "voice": "ji",
+      "key": "samet.trip.boat.soak.1",
+      "part": "samet › trip › boat › soak",
+      "when": "",
+      "ms": 1656,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "soak",
+        "2"
+      ],
+      "text": "Not again!",
+      "voice": "ji",
+      "key": "samet.trip.boat.soak.2",
+      "part": "samet › trip › boat › soak",
+      "when": "Pokes, in turn: Daddy (his cap blows off), Mommy on the sand, the jet ski man.",
+      "ms": 1056,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "captain",
+        "0"
+      ],
+      "text": "Beep beep!",
+      "voice": "pelican",
+      "key": "samet.trip.boat.captain.0",
+      "part": "samet › trip › boat › captain",
+      "when": "",
+      "ms": 1272,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "captain",
+        "1"
+      ],
+      "text": "Wiggle wiggle! Ha ha!",
+      "voice": "pelican",
+      "key": "samet.trip.boat.captain.1",
+      "part": "samet › trip › boat › captain",
+      "when": "",
+      "ms": 3504,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "captain",
+        "2"
+      ],
+      "text": "Hold on to your hats!",
+      "voice": "pelican",
+      "key": "samet.trip.boat.captain.2",
+      "part": "samet › trip › boat › captain",
+      "when": "",
+      "ms": 1752,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "nick",
+        "0"
+      ],
+      "text": "My cap!",
+      "voice": "nick",
+      "key": "samet.trip.boat.nick.0",
+      "part": "samet › trip › boat › nick",
+      "when": "",
+      "ms": 1056,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "nick",
+        "1"
+      ],
+      "text": "So windy!",
+      "voice": "nick",
+      "key": "samet.trip.boat.nick.1",
+      "part": "samet › trip › boat › nick",
+      "when": "",
+      "ms": 1488,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "ji",
+        "0"
+      ],
+      "text": "My sun hat!",
+      "voice": "ji",
+      "key": "samet.trip.boat.ji.0",
+      "part": "samet › trip › boat › ji",
+      "when": "",
+      "ms": 1368,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "ji",
+        "1"
+      ],
+      "text": "Whee! So fast!",
+      "voice": "ji",
+      "key": "samet.trip.boat.ji.1",
+      "part": "samet › trip › boat › ji",
+      "when": "",
+      "ms": 2184,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "boat",
+        "here"
+      ],
+      "text": "Koh Samet! Here we are!",
+      "voice": "pelican",
+      "key": "samet.trip.boat.here",
+      "part": "samet › trip › boat",
+      "when": "",
+      "ms": 2688,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "wall"
+      ],
+      "text": "Our trip to Koh Samet!",
+      "voice": "ji",
+      "key": "samet.trip.wall",
+      "part": "samet › trip",
+      "when": "",
+      "ms": 2688,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "sticker"
+      ],
+      "text": "Pink mermaid sticker! A mermaid sits on the rocks!",
+      "voice": "sparkle",
+      "key": "samet.trip.sticker",
+      "part": "samet › trip",
+      "when": "",
+      "ms": 4944,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "facts",
+        "island"
+      ],
+      "text": "Koh means island in Thai!",
+      "voice": "sparkle",
+      "key": "samet.trip.facts.island",
+      "part": "samet › trip › facts",
+      "when": "",
+      "ms": 2064,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "facts",
+        "samet"
+      ],
+      "text": "The samet tree gave the island its name!",
+      "voice": "sparkle",
+      "key": "samet.trip.facts.samet",
+      "part": "samet › trip › facts",
+      "when": "",
+      "ms": 3048,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "facts",
+        "sand"
+      ],
+      "text": "Sai Kaew means crystal sand!",
+      "voice": "sparkle",
+      "key": "samet.trip.facts.sand",
+      "part": "samet › trip › facts",
+      "when": "",
+      "ms": 2928,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "facts",
+        "mermaid"
+      ],
+      "text": "The mermaid is from an old Thai poem!",
+      "voice": "sparkle",
+      "key": "samet.trip.facts.mermaid",
+      "part": "samet › trip › facts",
+      "when": "",
+      "ms": 3840,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "facts",
+        "park"
+      ],
+      "text": "Koh Samet is a national park, a home for animals!",
+      "voice": "sparkle",
+      "key": "samet.trip.facts.park",
+      "part": "samet › trip › facts",
+      "when": "",
+      "ms": 4728,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "facts",
+        "jacket"
+      ],
+      "text": "Always wear a life jacket on the water!",
+      "voice": "sparkle",
+      "key": "samet.trip.facts.jacket",
+      "part": "samet › trip › facts",
+      "when": "",
+      "ms": 2808,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "facts",
+        "sunset"
+      ],
+      "text": "The sun sets in the west, over Ao Prao!",
+      "voice": "sparkle",
+      "key": "samet.trip.facts.sunset",
+      "part": "samet › trip › facts",
+      "when": "",
+      "ms": 3792,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "trip",
+        "facts",
+        "look"
+      ],
+      "text": "Take a photo of an animal, then let it be!",
+      "voice": "sparkle",
+      "key": "samet.trip.facts.look",
+      "part": "samet › trip › facts",
+      "when": "",
+      "ms": 3672,
+      "flags": [
+        "long"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "campfire.marshmallow",
+  "title": "Canada › Campfire › Marshmallow",
+  "intro": "",
+  "page": "canada-campfire-marshmallow.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "campfire.marshmallow.touch",
+      "text": "Hold the marshmallow near the fire.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "campfire.marshmallow.mouse",
+      "text": "Click and hold the marshmallow near the fire.",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "campfire",
+        "marshmallow",
+        "touch"
+      ],
+      "text": "Hold the marshmallow near the fire.",
+      "voice": "sparkle",
+      "key": "campfire.marshmallow.touch",
+      "part": "campfire › marshmallow",
+      "when": "",
+      "ms": 2743,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "marshmallow",
+        "mouse"
+      ],
+      "text": "Click and hold the marshmallow near the fire.",
+      "voice": "sparkle",
+      "key": "campfire.marshmallow.mouse",
+      "part": "campfire › marshmallow",
+      "when": "",
+      "ms": 2808,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

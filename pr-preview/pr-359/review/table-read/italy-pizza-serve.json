@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "pizza.serve",
+  "title": "Italy › Pizza › Serve",
+  "intro": "",
+  "page": "italy-pizza-serve.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 5,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "pizza.serve.touch",
+      "text": "Tap the pizza to give it to the Queen!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "pizza.serve.mouse",
+      "text": "Click the pizza to give it to the Queen!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "pizza",
+        "serve",
+        "touch"
+      ],
+      "text": "Tap the pizza to give it to the Queen!",
+      "voice": "sparkle",
+      "key": "pizza.serve.touch",
+      "part": "pizza › serve",
+      "when": "",
+      "ms": 2583,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "serve",
+        "mouse"
+      ],
+      "text": "Click the pizza to give it to the Queen!",
+      "voice": "sparkle",
+      "key": "pizza.serve.mouse",
+      "part": "pizza › serve",
+      "when": "",
+      "ms": 2232,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

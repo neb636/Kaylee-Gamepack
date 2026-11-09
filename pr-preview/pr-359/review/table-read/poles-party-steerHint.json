@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "party.steerHint",
+  "title": "Poles › Party › Steer Hint",
+  "intro": "",
+  "page": "poles-party-steerHint.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 7,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "party.steerHint.touch",
+      "text": "Move your finger to steer Terry!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "party.steerHint.mouse",
+      "text": "Hold the click and move to steer Terry!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "party",
+        "steerHint",
+        "touch"
+      ],
+      "text": "Move your finger to steer Terry!",
+      "voice": "sparkle",
+      "key": "party.steerHint.touch",
+      "part": "party › steerHint",
+      "when": "---- The finale: Pole to Pole and the Polar Quiz (activities/party/) ----",
+      "ms": 3813,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "steerHint",
+        "mouse"
+      ],
+      "text": "Hold the click and move to steer Terry!",
+      "voice": "sparkle",
+      "key": "party.steerHint.mouse",
+      "part": "party › steerHint",
+      "when": "",
+      "ms": 3288,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

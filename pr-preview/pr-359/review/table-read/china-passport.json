@@ -1,0 +1,65 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "passport",
+  "title": "China › Passport",
+  "intro": "",
+  "page": "china-passport.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 9,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "passport.touch",
+      "text": "This is China! Tap a picture to learn more.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "passport.mouse",
+      "text": "This is China! Click a picture to learn more.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "passport",
+        "touch"
+      ],
+      "text": "This is China! Tap a picture to learn more.",
+      "voice": "sparkle",
+      "key": "passport.touch",
+      "part": "passport",
+      "when": "",
+      "ms": 4636,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "passport",
+        "mouse"
+      ],
+      "text": "This is China! Click a picture to learn more.",
+      "voice": "sparkle",
+      "key": "passport.mouse",
+      "part": "passport",
+      "when": "",
+      "ms": 4344,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

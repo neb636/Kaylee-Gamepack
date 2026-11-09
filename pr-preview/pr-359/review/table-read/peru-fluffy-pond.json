@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "peru",
+  "group": "fluffy.pond",
+  "title": "Peru › Fluffy › Pond",
+  "intro": "",
+  "page": "peru-fluffy-pond.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 7,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "fluffy.pond.touch",
+      "text": "Done? Tap the pond to show Luna!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "fluffy.pond.mouse",
+      "text": "Done? Click the pond to show Luna!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "fluffy",
+        "pond",
+        "touch"
+      ],
+      "text": "Done? Tap the pond to show Luna!",
+      "voice": "sparkle",
+      "key": "fluffy.pond.touch",
+      "part": "fluffy › pond",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 3682,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "fluffy",
+        "pond",
+        "mouse"
+      ],
+      "text": "Done? Click the pond to show Luna!",
+      "voice": "sparkle",
+      "key": "fluffy.pond.mouse",
+      "part": "fluffy › pond",
+      "when": "",
+      "ms": 3504,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

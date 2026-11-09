@@ -1,0 +1,65 @@
+{
+  "kind": "table-read",
+  "place": "peru",
+  "group": "penguins.pull",
+  "title": "Peru › Penguins › Pull",
+  "intro": "",
+  "page": "peru-penguins-pull.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "penguins.pull.touch",
+      "text": "Pull a penguin back, then let go!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "penguins.pull.mouse",
+      "text": "Click a penguin, pull it back, then let go!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "penguins",
+        "pull",
+        "touch"
+      ],
+      "text": "Pull a penguin back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.pull.touch",
+      "part": "penguins › pull",
+      "when": "---- 2. Pepa's Penguin Cliff (the desert coast at Paracas) ----",
+      "ms": 2896,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "pull",
+        "mouse"
+      ],
+      "text": "Click a penguin, pull it back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.pull.mouse",
+      "part": "penguins › pull",
+      "when": "",
+      "ms": 3384,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

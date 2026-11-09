@@ -1,0 +1,18 @@
+{
+  "title": "Mac words: click, not tap",
+  "checkIn": "fix",
+  "kaylee": "On the MacBook, Sparkle and the family now say \"click\" instead of \"tap\" or \"your finger\" (221 lines); the iPad is unchanged.",
+  "questions": [
+    "Rubbing on the Mac is \"click and wiggle\" (fox snow coats, Egypt sand, Thai soap). Good, or another word?"
+  ],
+  "links": [
+    {
+      "label": "Australia on the Mac (click words)",
+      "hash": "#/world/australia?device=mouse"
+    },
+    {
+      "label": "Australia on the iPad (tap words)",
+      "hash": "#/world/australia?device=touch"
+    }
+  ]
+}

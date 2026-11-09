@@ -1,0 +1,181 @@
+{
+  "kind": "table-read",
+  "place": "peru",
+  "group": "penguins.idle",
+  "title": "Peru › Penguins › Idle",
+  "intro": "",
+  "page": "peru-penguins-idle.html",
+  "audio": null,
+  "lines": 7,
+  "seconds": 21,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "penguins.idle.launch.touch",
+      "text": "Pull a penguin back, then let go!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "penguins.idle.launch.mouse",
+      "text": "Click a penguin, pull it back, then let go!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "penguins.idle.feed.touch",
+      "text": "Tap a chick to feed it!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "penguins.idle.feed.mouse",
+      "text": "Click a chick to feed it!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "penguins.idle.swim.touch",
+      "text": "Pull a chick back, then let go!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "penguins.idle.swim.mouse",
+      "text": "Click a chick, pull it back, then let go!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "launch",
+        "touch"
+      ],
+      "text": "Pull a penguin back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.idle.launch.touch",
+      "part": "penguins › idle › launch",
+      "when": "---- 2. Pepa's Penguin Cliff (the desert coast at Paracas) ----",
+      "ms": 2896,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "launch",
+        "mouse"
+      ],
+      "text": "Click a penguin, pull it back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.idle.launch.mouse",
+      "part": "penguins › idle › launch",
+      "when": "",
+      "ms": 3384,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "fish"
+      ],
+      "text": "Jump onto the fish to catch one!",
+      "voice": "sparkle",
+      "key": "penguins.idle.fish",
+      "part": "penguins › idle",
+      "when": "",
+      "ms": 2654,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "feed",
+        "touch"
+      ],
+      "text": "Tap a chick to feed it!",
+      "voice": "sparkle",
+      "key": "penguins.idle.feed.touch",
+      "part": "penguins › idle › feed",
+      "when": "",
+      "ms": 1856,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "feed",
+        "mouse"
+      ],
+      "text": "Click a chick to feed it!",
+      "voice": "sparkle",
+      "key": "penguins.idle.feed.mouse",
+      "part": "penguins › idle › feed",
+      "when": "",
+      "ms": 2184,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "swim",
+        "touch"
+      ],
+      "text": "Pull a chick back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.idle.swim.touch",
+      "part": "penguins › idle › swim",
+      "when": "",
+      "ms": 4138,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "swim",
+        "mouse"
+      ],
+      "text": "Click a chick, pull it back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.idle.swim.mouse",
+      "part": "penguins › idle › swim",
+      "when": "",
+      "ms": 3720,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "world",
+  "group": "puzzleHint",
+  "title": "World › Puzzle Hint",
+  "intro": "",
+  "page": "world-puzzleHint.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "puzzleHint.touch",
+      "text": "Tap a piece to light up its spot!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "puzzleHint.mouse",
+      "text": "Click a piece to light up its spot!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "puzzleHint",
+        "touch"
+      ],
+      "text": "Tap a piece to light up its spot!",
+      "voice": "sparkle",
+      "key": "puzzleHint.touch",
+      "part": "puzzleHint",
+      "when": "",
+      "ms": 2444,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "puzzleHint",
+        "mouse"
+      ],
+      "text": "Click a piece to light up its spot!",
+      "voice": "sparkle",
+      "key": "puzzleHint.mouse",
+      "part": "puzzleHint",
+      "when": "",
+      "ms": 3384,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

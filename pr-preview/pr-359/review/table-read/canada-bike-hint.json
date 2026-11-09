@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "bike.hint",
+  "title": "Canada › Bike › Hint",
+  "intro": "Stuck for a while: Sparkle helps (the hand shows it too).",
+  "page": "canada-bike-hint.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 7,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "bike.hint.touch",
+      "text": "Push your finger left or right!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "bike.hint.mouse",
+      "text": "Hold the click and move left or right!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "bike",
+        "hint",
+        "touch"
+      ],
+      "text": "Push your finger left or right!",
+      "voice": "sparkle",
+      "key": "bike.hint.touch",
+      "part": "bike › hint",
+      "when": "",
+      "ms": 4060,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bike",
+        "hint",
+        "mouse"
+      ],
+      "text": "Hold the click and move left or right!",
+      "voice": "sparkle",
+      "key": "bike.hint.mouse",
+      "part": "bike › hint",
+      "when": "",
+      "ms": 3168,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

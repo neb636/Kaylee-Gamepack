@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "egypt",
+  "group": "hubParty",
+  "title": "Egypt › Hub Party",
+  "intro": "",
+  "page": "egypt-hubParty.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "hubParty.touch",
+      "text": "Everyone is here! Tap the light show!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "hubParty.mouse",
+      "text": "Everyone is here! Click the light show!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "hubParty",
+        "touch"
+      ],
+      "text": "Everyone is here! Tap the light show!",
+      "voice": "miu",
+      "key": "hubParty.touch",
+      "part": "hubParty",
+      "when": "",
+      "ms": 2829,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "hubParty",
+        "mouse"
+      ],
+      "text": "Everyone is here! Click the light show!",
+      "voice": "miu",
+      "key": "hubParty.mouse",
+      "part": "hubParty",
+      "when": "",
+      "ms": 3048,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

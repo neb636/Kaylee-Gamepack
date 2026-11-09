@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "pizza.toss",
+  "title": "Italy › Pizza › Toss",
+  "intro": "",
+  "page": "italy-pizza-toss.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 5,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "pizza.toss.touch",
+      "text": "Flick the dough up to spin it!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "pizza.toss.mouse",
+      "text": "Drag the dough up fast to spin it!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "pizza",
+        "toss",
+        "touch"
+      ],
+      "text": "Flick the dough up to spin it!",
+      "voice": "sparkle",
+      "key": "pizza.toss.touch",
+      "part": "pizza › toss",
+      "when": "",
+      "ms": 2316,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "toss",
+        "mouse"
+      ],
+      "text": "Drag the dough up fast to spin it!",
+      "voice": "sparkle",
+      "key": "pizza.toss.mouse",
+      "part": "pizza › toss",
+      "when": "",
+      "ms": 2856,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

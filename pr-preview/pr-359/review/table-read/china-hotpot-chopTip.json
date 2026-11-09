@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "hotpot.chopTip",
+  "title": "China › Hotpot › Chop Tip",
+  "intro": "",
+  "page": "china-hotpot-chopTip.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 9,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "hotpot.chopTip.touch",
+      "text": "Tap the chopsticks, then tap the sparkly food!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "hotpot.chopTip.mouse",
+      "text": "Click the chopsticks, then click the sparkly food!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "hotpot",
+        "chopTip",
+        "touch"
+      ],
+      "text": "Tap the chopsticks, then tap the sparkly food!",
+      "voice": "sparkle",
+      "key": "hotpot.chopTip.touch",
+      "part": "hotpot › chopTip",
+      "when": "🍲 Hotpot Night (activities/hotpot). Owner: the hotpot build.",
+      "ms": 3951,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "chopTip",
+        "mouse"
+      ],
+      "text": "Click the chopsticks, then click the sparkly food!",
+      "voice": "sparkle",
+      "key": "hotpot.chopTip.mouse",
+      "part": "hotpot › chopTip",
+      "when": "",
+      "ms": 4584,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

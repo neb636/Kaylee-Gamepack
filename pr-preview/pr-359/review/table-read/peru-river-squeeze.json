@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "peru",
+  "group": "river.squeeze",
+  "title": "Peru › River › Squeeze",
+  "intro": "",
+  "page": "peru-river-squeeze.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "river.squeeze.touch",
+      "text": "Squeeze the cloud to make rain!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "river.squeeze.mouse",
+      "text": "Click and hold the cloud to make rain!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "river",
+        "squeeze",
+        "touch"
+      ],
+      "text": "Squeeze the cloud to make rain!",
+      "voice": "sparkle",
+      "key": "river.squeeze.touch",
+      "part": "river › squeeze",
+      "when": "---- 4. Rosa's Rainy River (make it rain in the Amazon) ----",
+      "ms": 3190,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "squeeze",
+        "mouse"
+      ],
+      "text": "Click and hold the cloud to make rain!",
+      "voice": "sparkle",
+      "key": "river.squeeze.mouse",
+      "part": "river › squeeze",
+      "when": "",
+      "ms": 3168,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

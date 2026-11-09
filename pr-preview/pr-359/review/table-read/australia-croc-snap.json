@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "australia",
+  "group": "croc.snap",
+  "title": "Australia › Croc › Snap",
+  "intro": "",
+  "page": "australia-croc-snap.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 7,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "croc.snap.touch",
+      "text": "Tap Chompy to make her go snap snap!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "croc.snap.mouse",
+      "text": "Click Chompy to make her go snap snap!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "croc",
+        "snap",
+        "touch"
+      ],
+      "text": "Tap Chompy to make her go snap snap!",
+      "voice": "sparkle",
+      "key": "croc.snap.touch",
+      "part": "croc › snap",
+      "when": "",
+      "ms": 3568,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "croc",
+        "snap",
+        "mouse"
+      ],
+      "text": "Click Chompy to make her go snap snap!",
+      "voice": "sparkle",
+      "key": "croc.snap.mouse",
+      "part": "croc › snap",
+      "when": "",
+      "ms": 3600,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

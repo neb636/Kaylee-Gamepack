@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "olives.tapSpina",
+  "title": "Italy › Olives › Tap Spina",
+  "intro": "",
+  "page": "italy-olives-tapSpina.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 5,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "olives.tapSpina.touch",
+      "text": "Tap Spina to shake them off!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "olives.tapSpina.mouse",
+      "text": "Click Spina to shake them off!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "olives",
+        "tapSpina",
+        "touch"
+      ],
+      "text": "Tap Spina to shake them off!",
+      "voice": "sparkle",
+      "key": "olives.tapSpina.touch",
+      "part": "olives › tapSpina",
+      "when": "🫒 The Olive Grove (activities/olives). Every spoken line of the activity goes in here.",
+      "ms": 2827,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "olives",
+        "tapSpina",
+        "mouse"
+      ],
+      "text": "Click Spina to shake them off!",
+      "voice": "sparkle",
+      "key": "olives.tapSpina.mouse",
+      "part": "olives › tapSpina",
+      "when": "",
+      "ms": 2472,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

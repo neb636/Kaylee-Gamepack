@@ -1,0 +1,109 @@
+{
+  "kind": "table-read",
+  "place": "peru",
+  "group": "river.idle",
+  "title": "Peru › River › Idle",
+  "intro": "",
+  "page": "peru-river-idle.html",
+  "audio": null,
+  "lines": 5,
+  "seconds": 14,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "river.idle.squeeze.touch",
+      "text": "Hold the cloud to make rain!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "river.idle.squeeze.mouse",
+      "text": "Click and hold the cloud to make rain!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "river",
+        "idle",
+        "squeeze",
+        "touch"
+      ],
+      "text": "Hold the cloud to make rain!",
+      "voice": "sparkle",
+      "key": "river.idle.squeeze.touch",
+      "part": "river › idle › squeeze",
+      "when": "",
+      "ms": 2538,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "squeeze",
+        "mouse"
+      ],
+      "text": "Click and hold the cloud to make rain!",
+      "voice": "sparkle",
+      "key": "river.idle.squeeze.mouse",
+      "part": "river › idle › squeeze",
+      "when": "",
+      "ms": 3168,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "river"
+      ],
+      "text": "Drag the cloud over the river!",
+      "voice": "sparkle",
+      "key": "river.idle.river",
+      "part": "river › idle",
+      "when": "",
+      "ms": 2718,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "lagoon"
+      ],
+      "text": "Drag the cloud over the lagoon!",
+      "voice": "sparkle",
+      "key": "river.idle.lagoon",
+      "part": "river › idle",
+      "when": "",
+      "ms": 2423,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "pads"
+      ],
+      "text": "Drag a friend onto a lily pad!",
+      "voice": "sparkle",
+      "key": "river.idle.pads",
+      "part": "river › idle",
+      "when": "",
+      "ms": 2711,
+      "flags": []
+    }
+  ]
+}

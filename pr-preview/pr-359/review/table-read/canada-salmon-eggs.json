@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "salmon.eggs",
+  "title": "Canada › Salmon › Eggs",
+  "intro": "",
+  "page": "canada-salmon-eggs.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 7,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "salmon.eggs.touch",
+      "text": "Home! Tap each salmon to lay its eggs.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "salmon.eggs.mouse",
+      "text": "Home! Click each salmon to lay its eggs.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "salmon",
+        "eggs",
+        "touch"
+      ],
+      "text": "Home! Tap each salmon to lay its eggs.",
+      "voice": "sparkle",
+      "key": "salmon.eggs.touch",
+      "part": "salmon › eggs",
+      "when": "",
+      "ms": 3362,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "salmon",
+        "eggs",
+        "mouse"
+      ],
+      "text": "Home! Click each salmon to lay its eggs.",
+      "voice": "sparkle",
+      "key": "salmon.eggs.mouse",
+      "part": "salmon › eggs",
+      "when": "",
+      "ms": 3960,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

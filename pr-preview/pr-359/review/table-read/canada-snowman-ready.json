@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "snowman.ready",
+  "title": "Canada › Snowman › Ready",
+  "intro": "",
+  "page": "canada-snowman-ready.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 8,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "snowman.ready.touch",
+      "text": "Tap the drum for the parade, or make more snowmen!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "snowman.ready.mouse",
+      "text": "Click the drum for the parade, or make more snowmen!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "snowman",
+        "ready",
+        "touch"
+      ],
+      "text": "Tap the drum for the parade, or make more snowmen!",
+      "voice": "sparkle",
+      "key": "snowman.ready.touch",
+      "part": "snowman › ready",
+      "when": "",
+      "ms": 4330,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "ready",
+        "mouse"
+      ],
+      "text": "Click the drum for the parade, or make more snowmen!",
+      "voice": "sparkle",
+      "key": "snowman.ready.mouse",
+      "part": "snowman › ready",
+      "when": "",
+      "ms": 3984,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

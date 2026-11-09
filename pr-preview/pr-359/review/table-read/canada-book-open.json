@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "book.open",
+  "title": "Canada › Book › Open",
+  "intro": "",
+  "page": "canada-book-open.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 10,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "book.open.touch",
+      "text": "Maple's animal book! Tap an animal to hear about it.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "book.open.mouse",
+      "text": "Maple's animal book! Click an animal to hear about it.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "book",
+        "open",
+        "touch"
+      ],
+      "text": "Maple's animal book! Tap an animal to hear about it.",
+      "voice": "sparkle",
+      "key": "book.open.touch",
+      "part": "book › open",
+      "when": "",
+      "ms": 4859,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "book",
+        "open",
+        "mouse"
+      ],
+      "text": "Maple's animal book! Click an animal to hear about it.",
+      "voice": "sparkle",
+      "key": "book.open.mouse",
+      "part": "book › open",
+      "when": "",
+      "ms": 4776,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

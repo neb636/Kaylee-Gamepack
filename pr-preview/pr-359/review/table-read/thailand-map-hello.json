@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "map.hello",
+  "title": "Thailand › Map › Hello",
+  "intro": "",
+  "page": "thailand-map-hello.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 8,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "map.hello.touch",
+      "text": "This is Thailand! Tap a picture to explore.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "map.hello.mouse",
+      "text": "This is Thailand! Click a picture to explore.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "map",
+        "hello",
+        "touch"
+      ],
+      "text": "This is Thailand! Tap a picture to explore.",
+      "voice": "sparkle",
+      "key": "map.hello.touch",
+      "part": "map › hello",
+      "when": "",
+      "ms": 3864,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "map",
+        "hello",
+        "mouse"
+      ],
+      "text": "This is Thailand! Click a picture to explore.",
+      "voice": "sparkle",
+      "key": "map.hello.mouse",
+      "part": "map › hello",
+      "when": "The family (their voices in cast.json; their animals in characters/looks.ts). Sparkle on the Thailand map (activities/hub/map/): the welcome (once a visit; after that the pins only glow), and something true the first time she taps each thing on the map.",
+      "ms": 4416,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

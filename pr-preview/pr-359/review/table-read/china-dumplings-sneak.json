@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "dumplings.sneak",
+  "title": "China › Dumplings › Sneak",
+  "intro": "",
+  "page": "china-dumplings-sneak.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 5,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "dumplings.sneak.touch",
+      "text": "Uh oh! Tap the sneaky monkey!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "dumplings.sneak.mouse",
+      "text": "Uh oh! Click the sneaky monkey!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "dumplings",
+        "sneak",
+        "touch"
+      ],
+      "text": "Uh oh! Tap the sneaky monkey!",
+      "voice": "sparkle",
+      "key": "dumplings.sneak.touch",
+      "part": "dumplings › sneak",
+      "when": "",
+      "ms": 2584,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "sneak",
+        "mouse"
+      ],
+      "text": "Uh oh! Click the sneaky monkey!",
+      "voice": "sparkle",
+      "key": "dumplings.sneak.mouse",
+      "part": "dumplings › sneak",
+      "when": "",
+      "ms": 2664,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

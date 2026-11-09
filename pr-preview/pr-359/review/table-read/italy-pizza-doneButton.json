@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "pizza.doneButton",
+  "title": "Italy › Pizza › Done Button",
+  "intro": "",
+  "page": "italy-pizza-doneButton.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 4,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "pizza.doneButton.touch",
+      "text": "Tap the check when you like it!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "pizza.doneButton.mouse",
+      "text": "Click the check when you like it!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "pizza",
+        "doneButton",
+        "touch"
+      ],
+      "text": "Tap the check when you like it!",
+      "voice": "sparkle",
+      "key": "pizza.doneButton.touch",
+      "part": "pizza › doneButton",
+      "when": "",
+      "ms": 2180,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "doneButton",
+        "mouse"
+      ],
+      "text": "Click the check when you like it!",
+      "voice": "sparkle",
+      "key": "pizza.doneButton.mouse",
+      "part": "pizza › doneButton",
+      "when": "",
+      "ms": 2160,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

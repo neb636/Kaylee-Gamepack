@@ -1,0 +1,65 @@
+{
+  "kind": "table-read",
+  "place": "world",
+  "group": "puzzlePieces",
+  "title": "World › Puzzle Pieces",
+  "intro": "",
+  "page": "world-puzzlePieces.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "puzzlePieces.touch",
+      "text": "How many pieces? Tap to choose!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "puzzlePieces.mouse",
+      "text": "How many pieces? Click to choose!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "puzzlePieces",
+        "touch"
+      ],
+      "text": "How many pieces? Tap to choose!",
+      "voice": "sparkle",
+      "key": "puzzlePieces.touch",
+      "part": "puzzlePieces",
+      "when": "",
+      "ms": 3128,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "puzzlePieces",
+        "mouse"
+      ],
+      "text": "How many pieces? Click to choose!",
+      "voice": "sparkle",
+      "key": "puzzlePieces.mouse",
+      "part": "puzzlePieces",
+      "when": "",
+      "ms": 3048,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

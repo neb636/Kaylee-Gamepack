@@ -1,0 +1,119 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "whales.steer",
+  "title": "Canada › Whales › Steer",
+  "intro": "Sparkle: the one instruction when the bike rolls out of the station, what's new on the way, the stuck hint.",
+  "page": "canada-whales-steer.html",
+  "audio": null,
+  "lines": 4,
+  "seconds": 14,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "whales.steer.finger.touch",
+      "text": "Hold the water where the boat should go!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "whales.steer.finger.mouse",
+      "text": "Click and hold where the boat should go!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "whales.steer.wheel.touch",
+      "text": "Hold and push to steer the boat!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "whales.steer.wheel.mouse",
+      "text": "Click and hold, then push to steer the boat!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "whales",
+        "steer",
+        "finger",
+        "touch"
+      ],
+      "text": "Hold the water where the boat should go!",
+      "voice": "sparkle",
+      "key": "whales.steer.finger.touch",
+      "part": "whales › steer › finger",
+      "when": "Sparkle: how to steer (one line before her hands are busy), then only when something new appears.",
+      "ms": 3362,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "whales",
+        "steer",
+        "finger",
+        "mouse"
+      ],
+      "text": "Click and hold where the boat should go!",
+      "voice": "sparkle",
+      "key": "whales.steer.finger.mouse",
+      "part": "whales › steer › finger",
+      "when": "",
+      "ms": 3552,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "whales",
+        "steer",
+        "wheel",
+        "touch"
+      ],
+      "text": "Hold and push to steer the boat!",
+      "voice": "sparkle",
+      "key": "whales.steer.wheel.touch",
+      "part": "whales › steer › wheel",
+      "when": "",
+      "ms": 2646,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "whales",
+        "steer",
+        "wheel",
+        "mouse"
+      ],
+      "text": "Click and hold, then push to steer the boat!",
+      "voice": "sparkle",
+      "key": "whales.steer.wheel.mouse",
+      "part": "whales › steer › wheel",
+      "when": "",
+      "ms": 4008,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

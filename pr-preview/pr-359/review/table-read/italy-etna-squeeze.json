@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "etna.squeeze",
+  "title": "Italy › Etna › Squeeze",
+  "intro": "",
+  "page": "italy-etna-squeeze.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "etna.squeeze.touch",
+      "text": "Squeeze a lemon or an orange!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "etna.squeeze.mouse",
+      "text": "Click and hold a lemon or an orange!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "etna",
+        "squeeze",
+        "touch"
+      ],
+      "text": "Squeeze a lemon or an orange!",
+      "voice": "sparkle",
+      "key": "etna.squeeze.touch",
+      "part": "etna › squeeze",
+      "when": "🌋 Snow on a Volcano (activities/etna). Nino tells the story; Sparkle only speaks when something new happens (or she's stuck).",
+      "ms": 3104,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "etna",
+        "squeeze",
+        "mouse"
+      ],
+      "text": "Click and hold a lemon or an orange!",
+      "voice": "sparkle",
+      "key": "etna.squeeze.mouse",
+      "part": "etna › squeeze",
+      "when": "",
+      "ms": 3216,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

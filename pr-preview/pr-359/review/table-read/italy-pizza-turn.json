@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "pizza.turn",
+  "title": "Italy › Pizza › Turn",
+  "intro": "",
+  "page": "italy-pizza-turn.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 5,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "pizza.turn.touch",
+      "text": "Tap the pizza to turn it!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "pizza.turn.mouse",
+      "text": "Click the pizza to turn it!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "pizza",
+        "turn",
+        "touch"
+      ],
+      "text": "Tap the pizza to turn it!",
+      "voice": "sparkle",
+      "key": "pizza.turn.touch",
+      "part": "pizza › turn",
+      "when": "",
+      "ms": 2535,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "turn",
+        "mouse"
+      ],
+      "text": "Click the pizza to turn it!",
+      "voice": "sparkle",
+      "key": "pizza.turn.mouse",
+      "part": "pizza › turn",
+      "when": "",
+      "ms": 2400,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "etna.tapCup",
+  "title": "Italy › Etna › Tap Cup",
+  "intro": "",
+  "page": "italy-etna-tapCup.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 2,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "etna.tapCup.touch",
+      "text": "Tap a cup!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "etna.tapCup.mouse",
+      "text": "Click a cup!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "etna",
+        "tapCup",
+        "touch"
+      ],
+      "text": "Tap a cup!",
+      "voice": "sparkle",
+      "key": "etna.tapCup.touch",
+      "part": "etna › tapCup",
+      "when": "🌋 Snow on a Volcano (activities/etna). Nino tells the story; Sparkle only speaks when something new happens (or she's stuck).",
+      "ms": 1170,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "etna",
+        "tapCup",
+        "mouse"
+      ],
+      "text": "Click a cup!",
+      "voice": "sparkle",
+      "key": "etna.tapCup.mouse",
+      "part": "etna › tapCup",
+      "when": "",
+      "ms": 1176,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

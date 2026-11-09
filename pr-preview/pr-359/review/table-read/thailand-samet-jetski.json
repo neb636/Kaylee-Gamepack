@@ -1,0 +1,696 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "samet.jetski",
+  "title": "Thailand › Samet › Jetski",
+  "intro": "The jet ski at Hat Sai Kaew (jetski/): ride, waves, race the jet ski man.",
+  "page": "thailand-samet-jetski.html",
+  "audio": null,
+  "lines": 41,
+  "seconds": 78,
+  "missing": 0,
+  "names": 1,
+  "flags": [
+    {
+      "key": "samet.jetski.jacket",
+      "text": "Sawasdee krap! Life jacket first!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.jetski.ride.touch",
+      "text": "Steer it with your finger!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.jetski.ride.mouse",
+      "text": "Click and drag to steer it!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.jetski.waves",
+      "text": "Big waves! Drive over them!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.jetski.hint.jacket.touch",
+      "text": "Tap the life jacket!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.jetski.hint.jacket.mouse",
+      "text": "Click the life jacket!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.jetski.hint.steer.touch",
+      "text": "Hold your finger on the water!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.jetski.hint.steer.mouse",
+      "text": "Click and hold on the water!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "jacket"
+      ],
+      "text": "Sawasdee krap! Life jacket first!",
+      "voice": "otter",
+      "key": "samet.jetski.jacket",
+      "part": "samet › jetski",
+      "when": "The jet ski man (an otter) as the bare link waits for her life jacket, then Sparkle's line once it's on.",
+      "ms": 4440,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "ready"
+      ],
+      "text": "Hold on tight! Off you go!",
+      "voice": "otter",
+      "key": "samet.jetski.ready",
+      "part": "samet › jetski",
+      "when": "",
+      "ms": 2664,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "ride",
+        "touch"
+      ],
+      "text": "Steer it with your finger!",
+      "voice": "sparkle",
+      "key": "samet.jetski.ride.touch",
+      "part": "samet › jetski › ride",
+      "when": "Sparkle, as each round begins (the jacket's tap and the waves and the race moving on by themselves).",
+      "ms": 2040,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "ride",
+        "mouse"
+      ],
+      "text": "Click and drag to steer it!",
+      "voice": "sparkle",
+      "key": "samet.jetski.ride.mouse",
+      "part": "samet › jetski › ride",
+      "when": "",
+      "ms": 2568,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "waves"
+      ],
+      "text": "Big waves! Drive over them!",
+      "voice": "sparkle",
+      "key": "samet.jetski.waves",
+      "part": "samet › jetski",
+      "when": "",
+      "ms": 3312,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "race"
+      ],
+      "text": "Race the jet ski man!",
+      "voice": "sparkle",
+      "key": "samet.jetski.race",
+      "part": "samet › jetski",
+      "when": "",
+      "ms": 1896,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "count",
+        "0"
+      ],
+      "text": "Three!",
+      "voice": "sparkle",
+      "key": "samet.jetski.count.0",
+      "part": "samet › jetski › count",
+      "when": "Sparkle's countdown (3, 2, 1, go).",
+      "ms": 589,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "count",
+        "1"
+      ],
+      "text": "Two!",
+      "voice": "sparkle",
+      "key": "samet.jetski.count.1",
+      "part": "samet › jetski › count",
+      "when": "Sparkle counting with her (round 1 and 2), Daddy counting in her turn (up to his count knob's most).",
+      "ms": 501,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "count",
+        "2"
+      ],
+      "text": "One!",
+      "voice": "sparkle",
+      "key": "samet.jetski.count.2",
+      "part": "samet › jetski › count",
+      "when": "Hide and seek by the driftwood tree (hideseek/).",
+      "ms": 701,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "count",
+        "3"
+      ],
+      "text": "Go!",
+      "voice": "sparkle",
+      "key": "samet.jetski.count.3",
+      "part": "samet › jetski › count",
+      "when": "The Racing Slide (games/race/). Sparkle says what's new each race and counts down; Daddy races her and dives into the balls head first; she always wins.",
+      "ms": 611,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "tease"
+      ],
+      "text": "Catch me if you can!",
+      "voice": "otter",
+      "key": "samet.jetski.tease",
+      "part": "samet › jetski",
+      "when": "",
+      "ms": 1968,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "won",
+        "0"
+      ],
+      "text": "Wow! You are fast!",
+      "voice": "otter",
+      "key": "samet.jetski.won.0",
+      "part": "samet › jetski › won",
+      "when": "",
+      "ms": 2400,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "won",
+        "1"
+      ],
+      "text": "You win again! Ha ha!",
+      "voice": "otter",
+      "key": "samet.jetski.won.1",
+      "part": "samet › jetski › won",
+      "when": "",
+      "ms": 2616,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "lost"
+      ],
+      "text": "Ha! Just a nose!",
+      "voice": "otter",
+      "key": "samet.jetski.lost",
+      "part": "samet › jetski",
+      "when": "",
+      "ms": 2256,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "close"
+      ],
+      "text": "So close! Again!",
+      "voice": "sparkle",
+      "key": "samet.jetski.close",
+      "part": "samet › jetski",
+      "when": "",
+      "ms": 2472,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "champ"
+      ],
+      "text": "Kaylee wins!",
+      "voice": "nick",
+      "key": "samet.jetski.champ",
+      "part": "samet › jetski",
+      "when": "She wins (in turn); Daddy lands head first; a kid cheers.",
+      "ms": 1272,
+      "flags": [
+        "name"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "jump",
+        "0"
+      ],
+      "text": "Wheee!",
+      "voice": "nick",
+      "key": "samet.jetski.jump.0",
+      "part": "samet › jetski › jump",
+      "when": "",
+      "ms": 2448,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "jump",
+        "1"
+      ],
+      "text": "We can fly!",
+      "voice": "nick",
+      "key": "samet.jetski.jump.1",
+      "part": "samet › jetski › jump",
+      "when": "",
+      "ms": 1368,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "jump",
+        "2"
+      ],
+      "text": "Yee-haw!",
+      "voice": "nick",
+      "key": "samet.jetski.jump.2",
+      "part": "samet › jetski › jump",
+      "when": "",
+      "ms": 1032,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "spin"
+      ],
+      "text": "A spin! Whoa!",
+      "voice": "nick",
+      "key": "samet.jetski.spin",
+      "part": "samet › jetski",
+      "when": "",
+      "ms": 1944,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "loop"
+      ],
+      "text": "Look! The fish!",
+      "voice": "nick",
+      "key": "samet.jetski.loop",
+      "part": "samet › jetski",
+      "when": "",
+      "ms": 1896,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "heart"
+      ],
+      "text": "A heart! For Mommy!",
+      "voice": "nick",
+      "key": "samet.jetski.heart",
+      "part": "samet › jetski",
+      "when": "",
+      "ms": 1968,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "dizzy"
+      ],
+      "text": "Round and round! I'm dizzy!",
+      "voice": "nick",
+      "key": "samet.jetski.dizzy",
+      "part": "samet › jetski",
+      "when": "",
+      "ms": 2424,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "soaked"
+      ],
+      "text": "Hey! I'm all wet!",
+      "voice": "ji",
+      "key": "samet.jetski.soaked",
+      "part": "samet › jetski",
+      "when": "",
+      "ms": 2184,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "beached",
+        "0"
+      ],
+      "text": "Oops! Sandy jet ski!",
+      "voice": "nick",
+      "key": "samet.jetski.beached.0",
+      "part": "samet › jetski › beached",
+      "when": "",
+      "ms": 2640,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "beached",
+        "1"
+      ],
+      "text": "Whoa! Not the beach!",
+      "voice": "nick",
+      "key": "samet.jetski.beached.1",
+      "part": "samet › jetski › beached",
+      "when": "",
+      "ms": 2472,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "beached",
+        "2"
+      ],
+      "text": "Ha ha! Again?",
+      "voice": "nick",
+      "key": "samet.jetski.beached.2",
+      "part": "samet › jetski › beached",
+      "when": "",
+      "ms": 1440,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "push",
+        "0"
+      ],
+      "text": "Back in the water!",
+      "voice": "otter",
+      "key": "samet.jetski.push.0",
+      "part": "samet › jetski › push",
+      "when": "",
+      "ms": 1512,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "push",
+        "1"
+      ],
+      "text": "Ha ha! Boats go in the sea!",
+      "voice": "otter",
+      "key": "samet.jetski.push.1",
+      "part": "samet › jetski › push",
+      "when": "",
+      "ms": 2688,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "cap",
+        "0"
+      ],
+      "text": "My cap!",
+      "voice": "nick",
+      "key": "samet.jetski.cap.0",
+      "part": "samet › jetski › cap",
+      "when": "",
+      "ms": 1056,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "cap",
+        "1"
+      ],
+      "text": "Not again!",
+      "voice": "nick",
+      "key": "samet.jetski.cap.1",
+      "part": "samet › jetski › cap",
+      "when": "",
+      "ms": 1056,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "mommy",
+        "0"
+      ],
+      "text": "Go, go, go!",
+      "voice": "ji",
+      "key": "samet.jetski.mommy.0",
+      "part": "samet › jetski › mommy",
+      "when": "",
+      "ms": 1296,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "mommy",
+        "1"
+      ],
+      "text": "Wave to Mommy!",
+      "voice": "ji",
+      "key": "samet.jetski.mommy.1",
+      "part": "samet › jetski › mommy",
+      "when": "",
+      "ms": 1320,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "man",
+        "0"
+      ],
+      "text": "Sawasdee krap!",
+      "voice": "otter",
+      "key": "samet.jetski.man.0",
+      "part": "samet › jetski › man",
+      "when": "",
+      "ms": 1704,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "man",
+        "1"
+      ],
+      "text": "Zoom zoom!",
+      "voice": "otter",
+      "key": "samet.jetski.man.1",
+      "part": "samet › jetski › man",
+      "when": "",
+      "ms": 1152,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "man",
+        "2"
+      ],
+      "text": "Nice driving!",
+      "voice": "otter",
+      "key": "samet.jetski.man.2",
+      "part": "samet › jetski › man",
+      "when": "",
+      "ms": 1416,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "rope"
+      ],
+      "text": "The rope keeps the swimmers safe!",
+      "voice": "sparkle",
+      "key": "samet.jetski.rope",
+      "part": "samet › jetski",
+      "when": "",
+      "ms": 2880,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "hint",
+        "jacket",
+        "touch"
+      ],
+      "text": "Tap the life jacket!",
+      "voice": "sparkle",
+      "key": "samet.jetski.hint.jacket.touch",
+      "part": "samet › jetski › hint › jacket",
+      "when": "",
+      "ms": 1344,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "hint",
+        "jacket",
+        "mouse"
+      ],
+      "text": "Click the life jacket!",
+      "voice": "sparkle",
+      "key": "samet.jetski.hint.jacket.mouse",
+      "part": "samet › jetski › hint › jacket",
+      "when": "",
+      "ms": 1776,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "hint",
+        "steer",
+        "touch"
+      ],
+      "text": "Hold your finger on the water!",
+      "voice": "sparkle",
+      "key": "samet.jetski.hint.steer.touch",
+      "part": "samet › jetski › hint › steer",
+      "when": "",
+      "ms": 2160,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "hint",
+        "steer",
+        "mouse"
+      ],
+      "text": "Click and hold on the water!",
+      "voice": "sparkle",
+      "key": "samet.jetski.hint.steer.mouse",
+      "part": "samet › jetski › hint › steer",
+      "when": "",
+      "ms": 2400,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

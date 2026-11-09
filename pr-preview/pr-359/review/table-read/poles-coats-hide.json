@@ -1,0 +1,227 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "coats.hide",
+  "title": "Poles › Coats › Hide",
+  "intro": "",
+  "page": "poles-coats-hide.html",
+  "audio": null,
+  "lines": 9,
+  "seconds": 29,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "coats.hide.start.touch",
+      "text": "Now rub them all white, so they can hide!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "coats.hide.start.mouse",
+      "text": "Now click and wiggle them all white, so they can hide!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "coats.hide.hint.touch",
+      "text": "Rub snow on the brown ones.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "coats.hide.hint.mouse",
+      "text": "Click and wiggle snow on the brown ones.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "coats.hide.bear",
+      "text": "Shh! Here comes the polar bear.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "coats.hide.gone",
+      "text": "He can't find anyone! White hides in the snow.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "coats.hide.dusk.touch",
+      "text": "Tap the sun to bring the summer.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "coats.hide.dusk.mouse",
+      "text": "Click the sun to bring the summer.",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "coats",
+        "hide",
+        "start",
+        "touch"
+      ],
+      "text": "Now rub them all white, so they can hide!",
+      "voice": "sparkle",
+      "key": "coats.hide.start.touch",
+      "part": "coats › hide › start",
+      "when": "",
+      "ms": 3115,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "coats",
+        "hide",
+        "start",
+        "mouse"
+      ],
+      "text": "Now click and wiggle them all white, so they can hide!",
+      "voice": "sparkle",
+      "key": "coats.hide.start.mouse",
+      "part": "coats › hide › start",
+      "when": "",
+      "ms": 4416,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "coats",
+        "hide",
+        "hint",
+        "touch"
+      ],
+      "text": "Rub snow on the brown ones.",
+      "voice": "sparkle",
+      "key": "coats.hide.hint.touch",
+      "part": "coats › hide › hint",
+      "when": "",
+      "ms": 2303,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "coats",
+        "hide",
+        "hint",
+        "mouse"
+      ],
+      "text": "Click and wiggle snow on the brown ones.",
+      "voice": "sparkle",
+      "key": "coats.hide.hint.mouse",
+      "part": "coats › hide › hint",
+      "when": "",
+      "ms": 3912,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "coats",
+        "hide",
+        "bear"
+      ],
+      "text": "Shh! Here comes the polar bear.",
+      "voice": "sparkle",
+      "key": "coats.hide.bear",
+      "part": "coats › hide",
+      "when": "",
+      "ms": 3434,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "coats",
+        "hide",
+        "ran"
+      ],
+      "text": "He saw some brown! Make it white.",
+      "voice": "sparkle",
+      "key": "coats.hide.ran",
+      "part": "coats › hide",
+      "when": "",
+      "ms": 2779,
+      "flags": []
+    },
+    {
+      "path": [
+        "coats",
+        "hide",
+        "gone"
+      ],
+      "text": "He can't find anyone! White hides in the snow.",
+      "voice": "sparkle",
+      "key": "coats.hide.gone",
+      "part": "coats › hide",
+      "when": "",
+      "ms": 3711,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "coats",
+        "hide",
+        "dusk",
+        "touch"
+      ],
+      "text": "Tap the sun to bring the summer.",
+      "voice": "sparkle",
+      "key": "coats.hide.dusk.touch",
+      "part": "coats › hide › dusk",
+      "when": "",
+      "ms": 2611,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "coats",
+        "hide",
+        "dusk",
+        "mouse"
+      ],
+      "text": "Click the sun to bring the summer.",
+      "voice": "sparkle",
+      "key": "coats.hide.dusk.mouse",
+      "part": "coats › hide › dusk",
+      "when": "",
+      "ms": 2664,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

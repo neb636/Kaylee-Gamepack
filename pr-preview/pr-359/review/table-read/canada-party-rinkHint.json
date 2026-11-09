@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "party.rinkHint",
+  "title": "Canada › Party › Rink Hint",
+  "intro": "",
+  "page": "canada-party-rinkHint.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 4,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "party.rinkHint.touch",
+      "text": "Swipe from the puck to the net!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.rinkHint.mouse",
+      "text": "Drag from the puck to the net!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "party",
+        "rinkHint",
+        "touch"
+      ],
+      "text": "Swipe from the puck to the net!",
+      "voice": "sparkle",
+      "key": "party.rinkHint.touch",
+      "part": "party › rinkHint",
+      "when": "",
+      "ms": 2330,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "rinkHint",
+        "mouse"
+      ],
+      "text": "Drag from the puck to the net!",
+      "voice": "sparkle",
+      "key": "party.rinkHint.mouse",
+      "part": "party › rinkHint",
+      "when": "",
+      "ms": 2112,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

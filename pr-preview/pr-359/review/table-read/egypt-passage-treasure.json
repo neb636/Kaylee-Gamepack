@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "egypt",
+  "group": "passage.treasure",
+  "title": "Egypt › Passage › Treasure",
+  "intro": "",
+  "page": "egypt-passage-treasure.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 7,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "passage.treasure.touch",
+      "text": "The treasure room! Tap the golden box!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "passage.treasure.mouse",
+      "text": "The treasure room! Click the golden box!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "passage",
+        "treasure",
+        "touch"
+      ],
+      "text": "The treasure room! Tap the golden box!",
+      "voice": "sparkle",
+      "key": "passage.treasure.touch",
+      "part": "passage › treasure",
+      "when": "",
+      "ms": 3708,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "passage",
+        "treasure",
+        "mouse"
+      ],
+      "text": "The treasure room! Click the golden box!",
+      "voice": "sparkle",
+      "key": "passage.treasure.mouse",
+      "part": "passage › treasure",
+      "when": "",
+      "ms": 3216,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

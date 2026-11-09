@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "colosseum.tapHorn",
+  "title": "Italy › Colosseum › Tap Horn",
+  "intro": "",
+  "page": "italy-colosseum-tapHorn.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 3,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "colosseum.tapHorn.touch",
+      "text": "Tap the horn!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "colosseum.tapHorn.mouse",
+      "text": "Click the horn!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "colosseum",
+        "tapHorn",
+        "touch"
+      ],
+      "text": "Tap the horn!",
+      "voice": "sparkle",
+      "key": "colosseum.tapHorn.touch",
+      "part": "colosseum › tapHorn",
+      "when": "🏛️ The Colosseum (activities/colosseum). Every spoken line of the activity goes in here.",
+      "ms": 1507,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "colosseum",
+        "tapHorn",
+        "mouse"
+      ],
+      "text": "Click the horn!",
+      "voice": "sparkle",
+      "key": "colosseum.tapHorn.mouse",
+      "part": "colosseum › tapHorn",
+      "when": "",
+      "ms": 1128,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

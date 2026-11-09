@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "race.askAfter",
+  "title": "China › Race › Ask After",
+  "intro": "",
+  "page": "china-race-askAfter.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 8,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "race.askAfter.touch",
+      "text": "Who came right after Ox? Tap that animal!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "race.askAfter.mouse",
+      "text": "Who came right after Ox? Click that animal!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "race",
+        "askAfter",
+        "touch"
+      ],
+      "text": "Who came right after Ox? Tap that animal!",
+      "voice": "sparkle",
+      "key": "race.askAfter.touch",
+      "part": "race › askAfter",
+      "when": "🐭 The Great Race (activities/race). Owner: the race build.",
+      "ms": 3665,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "askAfter",
+        "mouse"
+      ],
+      "text": "Who came right after Ox? Click that animal!",
+      "voice": "sparkle",
+      "key": "race.askAfter.mouse",
+      "part": "race › askAfter",
+      "when": "",
+      "ms": 3888,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

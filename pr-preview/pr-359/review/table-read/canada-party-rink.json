@@ -1,0 +1,65 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "party.rink",
+  "title": "Canada › Party › Rink",
+  "intro": "Pond Hockey on the frozen Rideau Canal.",
+  "page": "canada-party-rink.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "party.rink.touch",
+      "text": "Flick the puck into the geese's net!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.rink.mouse",
+      "text": "Drag the puck fast into the geese's net!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "party",
+        "rink",
+        "touch"
+      ],
+      "text": "Flick the puck into the geese's net!",
+      "voice": "sparkle",
+      "key": "party.rink.touch",
+      "part": "party › rink",
+      "when": "Pond Hockey on the frozen Rideau Canal.",
+      "ms": 2861,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "rink",
+        "mouse"
+      ],
+      "text": "Drag the puck fast into the geese's net!",
+      "voice": "sparkle",
+      "key": "party.rink.mouse",
+      "part": "party › rink",
+      "when": "",
+      "ms": 3576,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

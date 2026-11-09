@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "trevi.waterOn",
+  "title": "Italy › Trevi › Water On",
+  "intro": "3. Water on!",
+  "page": "italy-trevi-waterOn.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 5,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "trevi.waterOn.touch",
+      "text": "Tap the spring to turn on the water!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "trevi.waterOn.mouse",
+      "text": "Click the spring to turn on the water!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "trevi",
+        "waterOn",
+        "touch"
+      ],
+      "text": "Tap the spring to turn on the water!",
+      "voice": "sparkle",
+      "key": "trevi.waterOn.touch",
+      "part": "trevi › waterOn",
+      "when": "3. Water on!",
+      "ms": 2177,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "trevi",
+        "waterOn",
+        "mouse"
+      ],
+      "text": "Click the spring to turn on the water!",
+      "voice": "sparkle",
+      "key": "trevi.waterOn.mouse",
+      "part": "trevi › waterOn",
+      "when": "",
+      "ms": 2400,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

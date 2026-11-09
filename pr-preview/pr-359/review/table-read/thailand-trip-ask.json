@@ -1,0 +1,160 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "trip.ask",
+  "title": "Thailand › Trip › Ask",
+  "intro": "",
+  "page": "thailand-trip-ask.html",
+  "audio": null,
+  "lines": 8,
+  "seconds": 15,
+  "missing": 0,
+  "names": 3,
+  "flags": [
+    {
+      "key": "trip.ask.daddy.later.touch",
+      "text": "OK! Just tap me!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "trip.ask.daddy.later.mouse",
+      "text": "OK! Just click me!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "trip",
+        "ask",
+        "question"
+      ],
+      "text": "Kaylee, are you ready to go on a trip?",
+      "voice": "ji",
+      "key": "trip.ask.question",
+      "part": "trip › ask",
+      "when": "",
+      "ms": 2666,
+      "flags": [
+        "name"
+      ]
+    },
+    {
+      "path": [
+        "trip",
+        "ask",
+        "later"
+      ],
+      "text": "OK! Tell me when!",
+      "voice": "ji",
+      "key": "trip.ask.later",
+      "part": "trip › ask",
+      "when": "",
+      "ms": 1531,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "ask",
+        "mall"
+      ],
+      "text": "Shall we go to the mall?",
+      "voice": "ji",
+      "key": "trip.ask.mall",
+      "part": "trip › ask",
+      "when": "The house only offers the mall now (the other trips start on the Thailand map).",
+      "ms": 1692,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "ask",
+        "daddy",
+        "question"
+      ],
+      "text": "Ready for a trip, Kaylee?",
+      "voice": "nick",
+      "key": "trip.ask.daddy.question",
+      "part": "trip › ask › daddy",
+      "when": "Daddy on the street, when she taps him (the hub's quick way to a trip).",
+      "ms": 2120,
+      "flags": [
+        "name"
+      ]
+    },
+    {
+      "path": [
+        "trip",
+        "ask",
+        "daddy",
+        "where"
+      ],
+      "text": "Where do you want to go, Kaylee?",
+      "voice": "nick",
+      "key": "trip.ask.daddy.where",
+      "part": "trip › ask › daddy",
+      "when": "Daddy on the street, when she taps him (the hub's quick way to a trip).",
+      "ms": 1774,
+      "flags": [
+        "name"
+      ]
+    },
+    {
+      "path": [
+        "trip",
+        "ask",
+        "daddy",
+        "later",
+        "touch"
+      ],
+      "text": "OK! Just tap me!",
+      "voice": "nick",
+      "key": "trip.ask.daddy.later.touch",
+      "part": "trip › ask › daddy › later",
+      "when": "Daddy on the street, when she taps him (the hub's quick way to a trip).",
+      "ms": 1654,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "trip",
+        "ask",
+        "daddy",
+        "later",
+        "mouse"
+      ],
+      "text": "OK! Just click me!",
+      "voice": "nick",
+      "key": "trip.ask.daddy.later.mouse",
+      "part": "trip › ask › daddy › later",
+      "when": "",
+      "ms": 2064,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "trip",
+        "ask",
+        "daddy",
+        "mall"
+      ],
+      "text": "Want to go to the mall?",
+      "voice": "nick",
+      "key": "trip.ask.daddy.mall",
+      "part": "trip › ask › daddy",
+      "when": "Daddy on the street, when she taps him (the hub's quick way to a trip).",
+      "ms": 1912,
+      "flags": []
+    }
+  ]
+}

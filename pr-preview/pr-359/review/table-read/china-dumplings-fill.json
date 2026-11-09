@@ -1,0 +1,65 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "dumplings.fill",
+  "title": "China › Dumplings › Fill",
+  "intro": "",
+  "page": "china-dumplings-fill.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "dumplings.fill.touch",
+      "text": "Tap the bowl for one spoonful!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "dumplings.fill.mouse",
+      "text": "Click the bowl for one spoonful!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "dumplings",
+        "fill",
+        "touch"
+      ],
+      "text": "Tap the bowl for one spoonful!",
+      "voice": "sparkle",
+      "key": "dumplings.fill.touch",
+      "part": "dumplings › fill",
+      "when": "",
+      "ms": 2753,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "fill",
+        "mouse"
+      ],
+      "text": "Click the bowl for one spoonful!",
+      "voice": "sparkle",
+      "key": "dumplings.fill.mouse",
+      "part": "dumplings › fill",
+      "when": "",
+      "ms": 3312,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "trevi.flickHint",
+  "title": "Italy › Trevi › Flick Hint",
+  "intro": "",
+  "page": "italy-trevi-flickHint.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 4,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "trevi.flickHint.touch",
+      "text": "Swipe up on the coin!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "trevi.flickHint.mouse",
+      "text": "Drag the coin up!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "trevi",
+        "flickHint",
+        "touch"
+      ],
+      "text": "Swipe up on the coin!",
+      "voice": "sparkle",
+      "key": "trevi.flickHint.touch",
+      "part": "trevi › flickHint",
+      "when": "⛲ The Trevi Fountain (activities/trevi). Every spoken line of the activity goes in here.",
+      "ms": 2125,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "trevi",
+        "flickHint",
+        "mouse"
+      ],
+      "text": "Drag the coin up!",
+      "voice": "sparkle",
+      "key": "trevi.flickHint.mouse",
+      "part": "trevi › flickHint",
+      "when": "",
+      "ms": 2304,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

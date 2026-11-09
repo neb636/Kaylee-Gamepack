@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "dumplings.make6",
+  "title": "China › Dumplings › Make6",
+  "intro": "",
+  "page": "china-dumplings-make6.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "dumplings.make6.touch",
+      "text": "Tap the colors to make six dumplings!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "dumplings.make6.mouse",
+      "text": "Click the colors to make six dumplings!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "dumplings",
+        "make6",
+        "touch"
+      ],
+      "text": "Tap the colors to make six dumplings!",
+      "voice": "sparkle",
+      "key": "dumplings.make6.touch",
+      "part": "dumplings › make6",
+      "when": "",
+      "ms": 2873,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "make6",
+        "mouse"
+      ],
+      "text": "Click the colors to make six dumplings!",
+      "voice": "sparkle",
+      "key": "dumplings.make6.mouse",
+      "part": "dumplings › make6",
+      "when": "",
+      "ms": 2952,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

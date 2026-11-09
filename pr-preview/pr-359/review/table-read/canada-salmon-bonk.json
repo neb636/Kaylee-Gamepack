@@ -1,0 +1,65 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "salmon.bonk",
+  "title": "Canada › Salmon › Bonk",
+  "intro": "",
+  "page": "canada-salmon-bonk.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "salmon.bonk.touch",
+      "text": "Bonk! Try a bigger flick.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "salmon.bonk.mouse",
+      "text": "Bonk! Try a bigger, faster drag.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "salmon",
+        "bonk",
+        "touch"
+      ],
+      "text": "Bonk! Try a bigger flick.",
+      "voice": "sparkle",
+      "key": "salmon.bonk.touch",
+      "part": "salmon › bonk",
+      "when": "",
+      "ms": 2829,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "salmon",
+        "bonk",
+        "mouse"
+      ],
+      "text": "Bonk! Try a bigger, faster drag.",
+      "voice": "sparkle",
+      "key": "salmon.bonk.mouse",
+      "part": "salmon › bonk",
+      "when": "",
+      "ms": 3384,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

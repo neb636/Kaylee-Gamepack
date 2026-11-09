@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "trevi.pickArch",
+  "title": "Italy › Trevi › Pick Arch",
+  "intro": "",
+  "page": "italy-trevi-pickArch.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 4,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "trevi.pickArch.touch",
+      "text": "Now tap an arch!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "trevi.pickArch.mouse",
+      "text": "Now click an arch!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "trevi",
+        "pickArch",
+        "touch"
+      ],
+      "text": "Now tap an arch!",
+      "voice": "sparkle",
+      "key": "trevi.pickArch.touch",
+      "part": "trevi › pickArch",
+      "when": "⛲ The Trevi Fountain (activities/trevi). Every spoken line of the activity goes in here.",
+      "ms": 1686,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "trevi",
+        "pickArch",
+        "mouse"
+      ],
+      "text": "Now click an arch!",
+      "voice": "sparkle",
+      "key": "trevi.pickArch.mouse",
+      "part": "trevi › pickArch",
+      "when": "",
+      "ms": 2448,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

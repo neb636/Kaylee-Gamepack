@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "venice.maskCheck",
+  "title": "Italy › Venice › Mask Check",
+  "intro": "",
+  "page": "italy-venice-maskCheck.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 4,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "venice.maskCheck.touch",
+      "text": "Tap the check when you love it!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "venice.maskCheck.mouse",
+      "text": "Click the check when you love it!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "venice",
+        "maskCheck",
+        "touch"
+      ],
+      "text": "Tap the check when you love it!",
+      "voice": "sparkle",
+      "key": "venice.maskCheck.touch",
+      "part": "venice › maskCheck",
+      "when": "🛶 Venice: Gino's Water Taxi. Gino tells the story; Sparkle only speaks when something new happens (or she's stuck).",
+      "ms": 2411,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "venice",
+        "maskCheck",
+        "mouse"
+      ],
+      "text": "Click the check when you love it!",
+      "voice": "sparkle",
+      "key": "venice.maskCheck.mouse",
+      "part": "venice › maskCheck",
+      "when": "",
+      "ms": 1848,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

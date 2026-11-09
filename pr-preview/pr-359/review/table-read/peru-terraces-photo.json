@@ -1,0 +1,65 @@
+{
+  "kind": "table-read",
+  "place": "peru",
+  "group": "terraces.photo",
+  "title": "Peru › Terraces › Photo",
+  "intro": "",
+  "page": "peru-terraces-photo.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "terraces.photo.touch",
+      "text": "Tap the camera for Luna's journal!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "terraces.photo.mouse",
+      "text": "Click the camera for Luna's journal!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "terraces",
+        "photo",
+        "touch"
+      ],
+      "text": "Tap the camera for Luna's journal!",
+      "voice": "sparkle",
+      "key": "terraces.photo.touch",
+      "part": "terraces › photo",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 3530,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "terraces",
+        "photo",
+        "mouse"
+      ],
+      "text": "Click the camera for Luna's journal!",
+      "voice": "sparkle",
+      "key": "terraces.photo.mouse",
+      "part": "terraces › photo",
+      "when": "",
+      "ms": 2664,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

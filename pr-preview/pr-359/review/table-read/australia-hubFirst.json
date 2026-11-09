@@ -1,0 +1,61 @@
+{
+  "kind": "table-read",
+  "place": "australia",
+  "group": "hubFirst",
+  "title": "Australia › Hub First",
+  "intro": "",
+  "page": "australia-hubFirst.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 3,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "hubFirst.touch",
+      "text": "Tap a spot on the map!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "hubFirst.mouse",
+      "text": "Click a spot on the map!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "hubFirst",
+        "touch"
+      ],
+      "text": "Tap a spot on the map!",
+      "voice": "pip",
+      "key": "hubFirst.touch",
+      "part": "hubFirst",
+      "when": "",
+      "ms": 1546,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "hubFirst",
+        "mouse"
+      ],
+      "text": "Click a spot on the map!",
+      "voice": "pip",
+      "key": "hubFirst.mouse",
+      "part": "hubFirst",
+      "when": "",
+      "ms": 1704,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,332 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "mall.blocks",
+  "title": "Thailand › Mall › Blocks",
+  "intro": "Little Land's foam blocks (games/blocks/).",
+  "page": "thailand-mall-blocks.html",
+  "audio": null,
+  "lines": 19,
+  "seconds": 36,
+  "missing": 0,
+  "names": 2,
+  "flags": [
+    {
+      "key": "mall.blocks.sneeze",
+      "text": "Ah... ah... choo!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "mall.blocks.hint.tower.touch",
+      "text": "Tap the tower to push it!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "mall.blocks.hint.tower.mouse",
+      "text": "Click the tower to push it!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "mall.blocks.chedi",
+      "text": "A chedi is a Thai temple tower!",
+      "flags": [
+        "rule 8"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "higher"
+      ],
+      "text": "Can you build higher than me, Kaylee?",
+      "voice": "nick",
+      "key": "mall.blocks.higher",
+      "part": "mall › blocks",
+      "when": "The opening: Daddy's bet, then Sparkle.",
+      "ms": 2312,
+      "flags": [
+        "name"
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "grab"
+      ],
+      "text": "Grab a brick!",
+      "voice": "sparkle",
+      "key": "mall.blocks.grab",
+      "part": "mall › blocks",
+      "when": "",
+      "ms": 1410,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "push"
+      ],
+      "text": "Push it over!",
+      "voice": "sparkle",
+      "key": "mall.blocks.push",
+      "part": "mall › blocks",
+      "when": "Something new: the stack glows (round 1), the picture cards (round 2), Daddy steps up (round 3).",
+      "ms": 997,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "copy"
+      ],
+      "text": "Copy the picture!",
+      "voice": "sparkle",
+      "key": "mall.blocks.copy",
+      "part": "mall › blocks",
+      "when": "",
+      "ms": 2001,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "elephant"
+      ],
+      "text": "Now an elephant!",
+      "voice": "sparkle",
+      "key": "mall.blocks.elephant",
+      "part": "mall › blocks",
+      "when": "",
+      "ms": 1510,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "taller"
+      ],
+      "text": "Taller than Daddy!",
+      "voice": "sparkle",
+      "key": "mall.blocks.taller",
+      "part": "mall › blocks",
+      "when": "",
+      "ms": 1542,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "whoa"
+      ],
+      "text": "Whoa! Careful!",
+      "voice": "nick",
+      "key": "mall.blocks.whoa",
+      "part": "mall › blocks",
+      "when": "Daddy, now and then: a brick half over the edge, a brick hat, a knock-down, the elephant coming alive.",
+      "ms": 1830,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "hat"
+      ],
+      "text": "A brick hat? Ha ha!",
+      "voice": "nick",
+      "key": "mall.blocks.hat",
+      "part": "mall › blocks",
+      "when": "",
+      "ms": 2197,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "crash",
+        "0"
+      ],
+      "text": "Crash!",
+      "voice": "nick",
+      "key": "mall.blocks.crash.0",
+      "part": "mall › blocks › crash",
+      "when": "",
+      "ms": 718,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "crash",
+        "1"
+      ],
+      "text": "Ha ha! Again!",
+      "voice": "nick",
+      "key": "mall.blocks.crash.1",
+      "part": "mall › blocks › crash",
+      "when": "",
+      "ms": 1511,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "crash",
+        "2"
+      ],
+      "text": "Boom!",
+      "voice": "nick",
+      "key": "mall.blocks.crash.2",
+      "part": "mall › blocks › crash",
+      "when": "",
+      "ms": 836,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "trunk"
+      ],
+      "text": "Wow! An elephant!",
+      "voice": "nick",
+      "key": "mall.blocks.trunk",
+      "part": "mall › blocks",
+      "when": "",
+      "ms": 2018,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "sneeze"
+      ],
+      "text": "Ah... ah... choo!",
+      "voice": "nick",
+      "key": "mall.blocks.sneeze",
+      "part": "mall › blocks",
+      "when": "Round 3: his sneeze at every tall tower, then (the first time) he gives in.",
+      "ms": 3694,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "beat"
+      ],
+      "text": "Taller than me, Kaylee!",
+      "voice": "nick",
+      "key": "mall.blocks.beat",
+      "part": "mall › blocks",
+      "when": "",
+      "ms": 1712,
+      "flags": [
+        "name"
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "hint",
+        "box"
+      ],
+      "text": "Grab a brick from the box!",
+      "voice": "sparkle",
+      "key": "mall.blocks.hint.box",
+      "part": "mall › blocks › hint",
+      "when": "Sparkle, when the finger shows after a while with nothing touched.",
+      "ms": 2242,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "hint",
+        "card"
+      ],
+      "text": "Put a brick on the picture!",
+      "voice": "sparkle",
+      "key": "mall.blocks.hint.card",
+      "part": "mall › blocks › hint",
+      "when": "Sparkle, when the finger shows after a while with nothing touched.",
+      "ms": 2075,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "hint",
+        "tower",
+        "touch"
+      ],
+      "text": "Tap the tower to push it!",
+      "voice": "sparkle",
+      "key": "mall.blocks.hint.tower.touch",
+      "part": "mall › blocks › hint › tower",
+      "when": "Sparkle, when the finger shows after a while with nothing touched.",
+      "ms": 2533,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "hint",
+        "tower",
+        "mouse"
+      ],
+      "text": "Click the tower to push it!",
+      "voice": "sparkle",
+      "key": "mall.blocks.hint.tower.mouse",
+      "part": "mall › blocks › hint › tower",
+      "when": "",
+      "ms": 1800,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "blocks",
+        "chedi"
+      ],
+      "text": "A chedi is a Thai temple tower!",
+      "voice": "sparkle",
+      "key": "mall.blocks.chedi",
+      "part": "mall › blocks",
+      "when": "The fact: when the chedi gets its spire, or the first time she pokes its card.",
+      "ms": 2685,
+      "flags": [
+        "rule 8"
+      ]
+    }
+  ]
+}

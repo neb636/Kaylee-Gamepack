@@ -1,0 +1,154 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "coats.summer",
+  "title": "Poles › Coats › Summer",
+  "intro": "",
+  "page": "poles-coats-summer.html",
+  "audio": null,
+  "lines": 6,
+  "seconds": 18,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "coats.summer.start.touch",
+      "text": "Summer is here! Rub the snow away.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "coats.summer.start.mouse",
+      "text": "Summer is here! Click and wiggle the snow away.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "coats.summer.hint.touch",
+      "text": "Rub them brown again.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "coats.summer.hint.mouse",
+      "text": "Click and wiggle them brown again.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "coats.summer.owl",
+      "text": "Snowy owls and polar bears stay white all year!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "coats",
+        "summer",
+        "start",
+        "touch"
+      ],
+      "text": "Summer is here! Rub the snow away.",
+      "voice": "sparkle",
+      "key": "coats.summer.start.touch",
+      "part": "coats › summer › start",
+      "when": "",
+      "ms": 3226,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "coats",
+        "summer",
+        "start",
+        "mouse"
+      ],
+      "text": "Summer is here! Click and wiggle the snow away.",
+      "voice": "sparkle",
+      "key": "coats.summer.start.mouse",
+      "part": "coats › summer › start",
+      "when": "",
+      "ms": 4200,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "coats",
+        "summer",
+        "hint",
+        "touch"
+      ],
+      "text": "Rub them brown again.",
+      "voice": "sparkle",
+      "key": "coats.summer.hint.touch",
+      "part": "coats › summer › hint",
+      "when": "",
+      "ms": 1863,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "coats",
+        "summer",
+        "hint",
+        "mouse"
+      ],
+      "text": "Click and wiggle them brown again.",
+      "voice": "sparkle",
+      "key": "coats.summer.hint.mouse",
+      "part": "coats › summer › hint",
+      "when": "",
+      "ms": 2928,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "coats",
+        "summer",
+        "owl"
+      ],
+      "text": "Snowy owls and polar bears stay white all year!",
+      "voice": "sparkle",
+      "key": "coats.summer.owl",
+      "part": "coats › summer",
+      "when": "",
+      "ms": 3846,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "coats",
+        "summer",
+        "end"
+      ],
+      "text": "Brown coats for the summer!",
+      "voice": "sparkle",
+      "key": "coats.summer.end",
+      "part": "coats › summer",
+      "when": "",
+      "ms": 1970,
+      "flags": []
+    }
+  ]
+}

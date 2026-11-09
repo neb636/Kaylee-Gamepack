@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "parade.envelope",
+  "title": "China › Parade › Envelope",
+  "intro": "",
+  "page": "china-parade-envelope.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 8,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "parade.envelope.touch",
+      "text": "Bao Bao has a red envelope! Tap to open it!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "parade.envelope.mouse",
+      "text": "Bao Bao has a red envelope! Click to open it!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "parade",
+        "envelope",
+        "touch"
+      ],
+      "text": "Bao Bao has a red envelope! Tap to open it!",
+      "voice": "sparkle",
+      "key": "parade.envelope.touch",
+      "part": "parade › envelope",
+      "when": "🐉 The Dragon Parade finale (activities/parade). Owner: the parade build.",
+      "ms": 4226,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "envelope",
+        "mouse"
+      ],
+      "text": "Bao Bao has a red envelope! Click to open it!",
+      "voice": "sparkle",
+      "key": "parade.envelope.mouse",
+      "part": "parade › envelope",
+      "when": "",
+      "ms": 4152,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

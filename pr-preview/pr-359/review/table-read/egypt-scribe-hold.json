@@ -1,0 +1,65 @@
+{
+  "kind": "table-read",
+  "place": "egypt",
+  "group": "scribe.hold",
+  "title": "Egypt › Scribe › Hold",
+  "intro": "",
+  "page": "egypt-scribe-hold.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "scribe.hold.touch",
+      "text": "Press and hold the stamp that matches!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "scribe.hold.mouse",
+      "text": "Click and hold the stamp that matches!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "scribe",
+        "hold",
+        "touch"
+      ],
+      "text": "Press and hold the stamp that matches!",
+      "voice": "sparkle",
+      "key": "scribe.hold.touch",
+      "part": "scribe › hold",
+      "when": "",
+      "ms": 3046,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "scribe",
+        "hold",
+        "mouse"
+      ],
+      "text": "Click and hold the stamp that matches!",
+      "voice": "sparkle",
+      "key": "scribe.hold.mouse",
+      "part": "scribe › hold",
+      "when": "",
+      "ms": 2760,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

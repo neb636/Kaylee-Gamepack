@@ -1,0 +1,113 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "dumplings.pickColor",
+  "title": "China › Dumplings › Pick Color",
+  "intro": "",
+  "page": "china-dumplings-pickColor.html",
+  "audio": null,
+  "lines": 4,
+  "seconds": 7,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "dumplings.pickColor.pink.touch",
+      "text": "Tap the pink dough!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "dumplings.pickColor.pink.mouse",
+      "text": "Click the pink dough!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "dumplings.pickColor.green.touch",
+      "text": "Tap the green dough!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "dumplings.pickColor.green.mouse",
+      "text": "Click the green dough!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "dumplings",
+        "pickColor",
+        "pink",
+        "touch"
+      ],
+      "text": "Tap the pink dough!",
+      "voice": "sparkle",
+      "key": "dumplings.pickColor.pink.touch",
+      "part": "dumplings › pickColor › pink",
+      "when": "",
+      "ms": 2018,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "pickColor",
+        "pink",
+        "mouse"
+      ],
+      "text": "Click the pink dough!",
+      "voice": "sparkle",
+      "key": "dumplings.pickColor.pink.mouse",
+      "part": "dumplings › pickColor › pink",
+      "when": "",
+      "ms": 1776,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "pickColor",
+        "green",
+        "touch"
+      ],
+      "text": "Tap the green dough!",
+      "voice": "sparkle",
+      "key": "dumplings.pickColor.green.touch",
+      "part": "dumplings › pickColor › green",
+      "when": "",
+      "ms": 1820,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "pickColor",
+        "green",
+        "mouse"
+      ],
+      "text": "Click the green dough!",
+      "voice": "sparkle",
+      "key": "dumplings.pickColor.green.mouse",
+      "part": "dumplings › pickColor › green",
+      "when": "",
+      "ms": 1392,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

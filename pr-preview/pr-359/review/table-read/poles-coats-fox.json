@@ -1,0 +1,119 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "coats.fox",
+  "title": "Poles › Coats › Fox",
+  "intro": "",
+  "page": "poles-coats-fox.html",
+  "audio": null,
+  "lines": 4,
+  "seconds": 16,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "coats.fox.start.touch",
+      "text": "Brr, winter is coming! Rub snow on the fox.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "coats.fox.start.mouse",
+      "text": "Brr, winter is coming! Click and wiggle snow on the fox.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "coats.fox.hint.touch",
+      "text": "Rub the fox with your finger.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "coats.fox.hint.mouse",
+      "text": "Hold the click and wiggle on the fox.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "coats",
+        "fox",
+        "start",
+        "touch"
+      ],
+      "text": "Brr, winter is coming! Rub snow on the fox.",
+      "voice": "sparkle",
+      "key": "coats.fox.start.touch",
+      "part": "coats › fox › start",
+      "when": "---- Snow Coats (activities/coats/) ---- Sparkle says what to do as each part starts (and again when nothing's been touched for a while); the facts come the first time she pokes an animal (Guide.once), never as required listening.",
+      "ms": 4730,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "coats",
+        "fox",
+        "start",
+        "mouse"
+      ],
+      "text": "Brr, winter is coming! Click and wiggle snow on the fox.",
+      "voice": "sparkle",
+      "key": "coats.fox.start.mouse",
+      "part": "coats › fox › start",
+      "when": "",
+      "ms": 4680,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "coats",
+        "fox",
+        "hint",
+        "touch"
+      ],
+      "text": "Rub the fox with your finger.",
+      "voice": "sparkle",
+      "key": "coats.fox.hint.touch",
+      "part": "coats › fox › hint",
+      "when": "",
+      "ms": 2607,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "coats",
+        "fox",
+        "hint",
+        "mouse"
+      ],
+      "text": "Hold the click and wiggle on the fox.",
+      "voice": "sparkle",
+      "key": "coats.fox.hint.mouse",
+      "part": "coats › fox › hint",
+      "when": "",
+      "ms": 3648,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

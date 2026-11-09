@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "race.rainHint",
+  "title": "China › Race › Rain Hint",
+  "intro": "",
+  "page": "china-race-rainHint.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 4,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "race.rainHint.touch",
+      "text": "Tap a glowing cloud!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "race.rainHint.mouse",
+      "text": "Click a glowing cloud!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "race",
+        "rainHint",
+        "touch"
+      ],
+      "text": "Tap a glowing cloud!",
+      "voice": "sparkle",
+      "key": "race.rainHint.touch",
+      "part": "race › rainHint",
+      "when": "🐭 The Great Race (activities/race). Owner: the race build.",
+      "ms": 1737,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "rainHint",
+        "mouse"
+      ],
+      "text": "Click a glowing cloud!",
+      "voice": "sparkle",
+      "key": "race.rainHint.mouse",
+      "part": "race › rainHint",
+      "when": "",
+      "ms": 1944,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

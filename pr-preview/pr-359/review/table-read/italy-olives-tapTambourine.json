@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "olives.tapTambourine",
+  "title": "Italy › Olives › Tap Tambourine",
+  "intro": "",
+  "page": "italy-olives-tapTambourine.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 4,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "olives.tapTambourine.touch",
+      "text": "Tap the tambourine!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "olives.tapTambourine.mouse",
+      "text": "Click the tambourine!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "olives",
+        "tapTambourine",
+        "touch"
+      ],
+      "text": "Tap the tambourine!",
+      "voice": "sparkle",
+      "key": "olives.tapTambourine.touch",
+      "part": "olives › tapTambourine",
+      "when": "🫒 The Olive Grove (activities/olives). Every spoken line of the activity goes in here.",
+      "ms": 1768,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "olives",
+        "tapTambourine",
+        "mouse"
+      ],
+      "text": "Click the tambourine!",
+      "voice": "sparkle",
+      "key": "olives.tapTambourine.mouse",
+      "part": "olives › tapTambourine",
+      "when": "",
+      "ms": 2040,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

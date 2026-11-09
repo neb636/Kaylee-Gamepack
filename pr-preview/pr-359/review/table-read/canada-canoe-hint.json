@@ -1,0 +1,117 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "canoe.hint",
+  "title": "Canada › Canoe › Hint",
+  "intro": "Stuck for a while: Sparkle helps (the hand shows it too).",
+  "page": "canada-canoe-hint.html",
+  "audio": null,
+  "lines": 4,
+  "seconds": 12,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "canoe.hint.stroke.touch",
+      "text": "Drag your finger back, beside the canoe.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "canoe.hint.stroke.mouse",
+      "text": "Click and drag back, beside the canoe.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "canoe.hint.pull.touch",
+      "text": "Press the water in front of the canoe.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "canoe.hint.pull.mouse",
+      "text": "Click the water in front of the canoe.",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "canoe",
+        "hint",
+        "stroke",
+        "touch"
+      ],
+      "text": "Drag your finger back, beside the canoe.",
+      "voice": "sparkle",
+      "key": "canoe.hint.stroke.touch",
+      "part": "canoe › hint › stroke",
+      "when": "",
+      "ms": 3616,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "hint",
+        "stroke",
+        "mouse"
+      ],
+      "text": "Click and drag back, beside the canoe.",
+      "voice": "sparkle",
+      "key": "canoe.hint.stroke.mouse",
+      "part": "canoe › hint › stroke",
+      "when": "",
+      "ms": 3720,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "hint",
+        "pull",
+        "touch"
+      ],
+      "text": "Press the water in front of the canoe.",
+      "voice": "sparkle",
+      "key": "canoe.hint.pull.touch",
+      "part": "canoe › hint › pull",
+      "when": "",
+      "ms": 2344,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "hint",
+        "pull",
+        "mouse"
+      ],
+      "text": "Click the water in front of the canoe.",
+      "voice": "sparkle",
+      "key": "canoe.hint.pull.mouse",
+      "part": "canoe › hint › pull",
+      "when": "",
+      "ms": 2520,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

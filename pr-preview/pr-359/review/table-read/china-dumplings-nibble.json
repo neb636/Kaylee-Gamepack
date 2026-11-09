@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "dumplings.nibble",
+  "title": "China › Dumplings › Nibble",
+  "intro": "",
+  "page": "china-dumplings-nibble.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "dumplings.nibble.touch",
+      "text": "Tap the dumpling to take a little nibble!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "dumplings.nibble.mouse",
+      "text": "Click the dumpling to take a little nibble!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "dumplings",
+        "nibble",
+        "touch"
+      ],
+      "text": "Tap the dumpling to take a little nibble!",
+      "voice": "sparkle",
+      "key": "dumplings.nibble.touch",
+      "part": "dumplings › nibble",
+      "when": "",
+      "ms": 3116,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "nibble",
+        "mouse"
+      ],
+      "text": "Click the dumpling to take a little nibble!",
+      "voice": "sparkle",
+      "key": "dumplings.nibble.mouse",
+      "part": "dumplings › nibble",
+      "when": "",
+      "ms": 3144,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

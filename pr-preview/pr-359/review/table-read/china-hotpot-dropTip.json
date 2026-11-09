@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "hotpot.dropTip",
+  "title": "China › Hotpot › Drop Tip",
+  "intro": "",
+  "page": "china-hotpot-dropTip.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 5,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "hotpot.dropTip.touch",
+      "text": "Tap a food, then tap the soup!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "hotpot.dropTip.mouse",
+      "text": "Click a food, then click the soup!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "hotpot",
+        "dropTip",
+        "touch"
+      ],
+      "text": "Tap a food, then tap the soup!",
+      "voice": "sparkle",
+      "key": "hotpot.dropTip.touch",
+      "part": "hotpot › dropTip",
+      "when": "🍲 Hotpot Night (activities/hotpot). Owner: the hotpot build.",
+      "ms": 2348,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "dropTip",
+        "mouse"
+      ],
+      "text": "Click a food, then click the soup!",
+      "voice": "sparkle",
+      "key": "hotpot.dropTip.mouse",
+      "part": "hotpot › dropTip",
+      "when": "",
+      "ms": 2832,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

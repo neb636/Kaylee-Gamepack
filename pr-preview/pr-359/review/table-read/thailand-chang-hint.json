@@ -1,0 +1,393 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "chang.hint",
+  "title": "Thailand › Chang › Hint",
+  "intro": "",
+  "page": "thailand-chang-hint.html",
+  "audio": null,
+  "lines": 18,
+  "seconds": 41,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "chang.hint.cup.touch",
+      "text": "Tap the cup to make a drink!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "chang.hint.cup.mouse",
+      "text": "Click the cup to make a drink!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "chang.hint.choc.touch",
+      "text": "Squeeze in the chocolate!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "chang.hint.choc.mouse",
+      "text": "Click and hold to squeeze in the chocolate!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "chang.hint.go.touch",
+      "text": "Tap the elephant to go see them!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "chang.hint.go.mouse",
+      "text": "Click the elephant to go see them!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "chang.hint.walk.touch",
+      "text": "Tap the path to walk!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "chang.hint.walk.mouse",
+      "text": "Click the path to walk!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "chang.hint.spray.touch",
+      "text": "Tap an elephant for a splash!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "chang.hint.spray.mouse",
+      "text": "Click an elephant for a splash!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "chang.hint.boat.touch",
+      "text": "Tap the boat to go to the sea!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "chang.hint.boat.mouse",
+      "text": "Click the boat to go to the sea!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "chang",
+        "hint",
+        "fork"
+      ],
+      "text": "Elephants or the boat? You pick!",
+      "voice": "sparkle",
+      "key": "chang.hint.fork",
+      "part": "chang › hint",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 2605,
+      "flags": []
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "cup",
+        "touch"
+      ],
+      "text": "Tap the cup to make a drink!",
+      "voice": "sparkle",
+      "key": "chang.hint.cup.touch",
+      "part": "chang › hint › cup",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 3382,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "cup",
+        "mouse"
+      ],
+      "text": "Click the cup to make a drink!",
+      "voice": "sparkle",
+      "key": "chang.hint.cup.mouse",
+      "part": "chang › hint › cup",
+      "when": "",
+      "ms": 1992,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "milk"
+      ],
+      "text": "Pour in the milk!",
+      "voice": "sparkle",
+      "key": "chang.hint.milk",
+      "part": "chang › hint",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 1486,
+      "flags": []
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "choc",
+        "touch"
+      ],
+      "text": "Squeeze in the chocolate!",
+      "voice": "sparkle",
+      "key": "chang.hint.choc.touch",
+      "part": "chang › hint › choc",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 2240,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "choc",
+        "mouse"
+      ],
+      "text": "Click and hold to squeeze in the chocolate!",
+      "voice": "sparkle",
+      "key": "chang.hint.choc.mouse",
+      "part": "chang › hint › choc",
+      "when": "",
+      "ms": 3336,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "stir"
+      ],
+      "text": "Stir it round and round!",
+      "voice": "sparkle",
+      "key": "chang.hint.stir",
+      "part": "chang › hint",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 2160,
+      "flags": []
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "straw"
+      ],
+      "text": "Pick a straw!",
+      "voice": "sparkle",
+      "key": "chang.hint.straw",
+      "part": "chang › hint",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 1178,
+      "flags": []
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "go",
+        "touch"
+      ],
+      "text": "Tap the elephant to go see them!",
+      "voice": "sparkle",
+      "key": "chang.hint.go.touch",
+      "part": "chang › hint › go",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 2656,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "go",
+        "mouse"
+      ],
+      "text": "Click the elephant to go see them!",
+      "voice": "sparkle",
+      "key": "chang.hint.go.mouse",
+      "part": "chang › hint › go",
+      "when": "",
+      "ms": 2664,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "walk",
+        "touch"
+      ],
+      "text": "Tap the path to walk!",
+      "voice": "sparkle",
+      "key": "chang.hint.walk.touch",
+      "part": "chang › hint › walk",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 2086,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "walk",
+        "mouse"
+      ],
+      "text": "Click the path to walk!",
+      "voice": "sparkle",
+      "key": "chang.hint.walk.mouse",
+      "part": "chang › hint › walk",
+      "when": "",
+      "ms": 1992,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "hold"
+      ],
+      "text": "Grab a banana!",
+      "voice": "sparkle",
+      "key": "chang.hint.hold",
+      "part": "chang › hint",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 1193,
+      "flags": []
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "want"
+      ],
+      "text": "Give them what they want!",
+      "voice": "sparkle",
+      "key": "chang.hint.want",
+      "part": "chang › hint",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 1327,
+      "flags": []
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "spray",
+        "touch"
+      ],
+      "text": "Tap an elephant for a splash!",
+      "voice": "sparkle",
+      "key": "chang.hint.spray.touch",
+      "part": "chang › hint › spray",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 2813,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "spray",
+        "mouse"
+      ],
+      "text": "Click an elephant for a splash!",
+      "voice": "sparkle",
+      "key": "chang.hint.spray.mouse",
+      "part": "chang › hint › spray",
+      "when": "",
+      "ms": 2928,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "boat",
+        "touch"
+      ],
+      "text": "Tap the boat to go to the sea!",
+      "voice": "sparkle",
+      "key": "chang.hint.boat.touch",
+      "part": "chang › hint › boat",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 2415,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "chang",
+        "hint",
+        "boat",
+        "mouse"
+      ],
+      "text": "Click the boat to go to the sea!",
+      "voice": "sparkle",
+      "key": "chang.hint.boat.mouse",
+      "part": "chang › hint › boat",
+      "when": "",
+      "ms": 2520,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

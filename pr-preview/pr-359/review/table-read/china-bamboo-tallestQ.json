@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "bamboo.tallestQ",
+  "title": "China › Bamboo › Tallest Q",
+  "intro": "Round 3: tallest and shortest.",
+  "page": "china-bamboo-tallestQ.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "bamboo.tallestQ.touch",
+      "text": "Which one is the tallest? Tap it!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "bamboo.tallestQ.mouse",
+      "text": "Which one is the tallest? Click it!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "bamboo",
+        "tallestQ",
+        "touch"
+      ],
+      "text": "Which one is the tallest? Tap it!",
+      "voice": "sparkle",
+      "key": "bamboo.tallestQ.touch",
+      "part": "bamboo › tallestQ",
+      "when": "Round 3: tallest and shortest.",
+      "ms": 3301,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bamboo",
+        "tallestQ",
+        "mouse"
+      ],
+      "text": "Which one is the tallest? Click it!",
+      "voice": "sparkle",
+      "key": "bamboo.tallestQ.mouse",
+      "part": "bamboo › tallestQ",
+      "when": "",
+      "ms": 3192,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

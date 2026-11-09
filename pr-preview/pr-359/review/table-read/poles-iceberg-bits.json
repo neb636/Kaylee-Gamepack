@@ -1,0 +1,65 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "iceberg.bits",
+  "title": "Poles › Iceberg › Bits",
+  "intro": "",
+  "page": "poles-iceberg-bits.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "iceberg.bits.touch",
+      "text": "Tap the cracks to break off the ice!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "iceberg.bits.mouse",
+      "text": "Click the cracks to break off the ice!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "iceberg",
+        "bits",
+        "touch"
+      ],
+      "text": "Tap the cracks to break off the ice!",
+      "voice": "sparkle",
+      "key": "iceberg.bits.touch",
+      "part": "iceberg › bits",
+      "when": "---- Iceberg Maker (activities/iceberg/) ----",
+      "ms": 3378,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "iceberg",
+        "bits",
+        "mouse"
+      ],
+      "text": "Click the cracks to break off the ice!",
+      "voice": "sparkle",
+      "key": "iceberg.bits.mouse",
+      "part": "iceberg › bits",
+      "when": "",
+      "ms": 2808,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,184 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "snowman.hint",
+  "title": "Canada › Snowman › Hint",
+  "intro": "Stuck for a while: Sparkle helps (the hand shows it too).",
+  "page": "canada-snowman-hint.html",
+  "audio": null,
+  "lines": 7,
+  "seconds": 19,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "snowman.hint.roll.touch",
+      "text": "Put your finger on the snowball and push!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "snowman.hint.roll.mouse",
+      "text": "Click the snowball and push it!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "snowman.hint.stack",
+      "text": "Push the little ball into the big one!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.hint.hat",
+      "text": "Roll a snowball into the hat box!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.hint.sash",
+      "text": "Roll a snowball into the sash box!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.hint.drum.touch",
+      "text": "Tap the big drum!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "snowman.hint.drum.mouse",
+      "text": "Click the big drum!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "roll",
+        "touch"
+      ],
+      "text": "Put your finger on the snowball and push!",
+      "voice": "sparkle",
+      "key": "snowman.hint.roll.touch",
+      "part": "snowman › hint › roll",
+      "when": "",
+      "ms": 3004,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "roll",
+        "mouse"
+      ],
+      "text": "Click the snowball and push it!",
+      "voice": "sparkle",
+      "key": "snowman.hint.roll.mouse",
+      "part": "snowman › hint › roll",
+      "when": "",
+      "ms": 2184,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "stack"
+      ],
+      "text": "Push the little ball into the big one!",
+      "voice": "sparkle",
+      "key": "snowman.hint.stack",
+      "part": "snowman › hint",
+      "when": "",
+      "ms": 3141,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "hat"
+      ],
+      "text": "Roll a snowball into the hat box!",
+      "voice": "sparkle",
+      "key": "snowman.hint.hat",
+      "part": "snowman › hint",
+      "when": "",
+      "ms": 3290,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "sash"
+      ],
+      "text": "Roll a snowball into the sash box!",
+      "voice": "sparkle",
+      "key": "snowman.hint.sash",
+      "part": "snowman › hint",
+      "when": "",
+      "ms": 3464,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "drum",
+        "touch"
+      ],
+      "text": "Tap the big drum!",
+      "voice": "sparkle",
+      "key": "snowman.hint.drum.touch",
+      "part": "snowman › hint › drum",
+      "when": "",
+      "ms": 1922,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "drum",
+        "mouse"
+      ],
+      "text": "Click the big drum!",
+      "voice": "sparkle",
+      "key": "snowman.hint.drum.mouse",
+      "part": "snowman › hint › drum",
+      "when": "",
+      "ms": 1848,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

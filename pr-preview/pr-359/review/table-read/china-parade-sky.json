@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "parade.sky",
+  "title": "China › Parade › Sky",
+  "intro": "",
+  "page": "china-parade-sky.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 7,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "parade.sky.touch",
+      "text": "Tap the sky to make fireworks!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "parade.sky.mouse",
+      "text": "Click the sky to make fireworks!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "parade",
+        "sky",
+        "touch"
+      ],
+      "text": "Tap the sky to make fireworks!",
+      "voice": "sparkle",
+      "key": "parade.sky.touch",
+      "part": "parade › sky",
+      "when": "🐉 The Dragon Parade finale (activities/parade). Owner: the parade build.",
+      "ms": 3290,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "sky",
+        "mouse"
+      ],
+      "text": "Click the sky to make fireworks!",
+      "voice": "sparkle",
+      "key": "parade.sky.mouse",
+      "part": "parade › sky",
+      "when": "",
+      "ms": 3480,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

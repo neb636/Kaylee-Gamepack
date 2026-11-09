@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "olives.purple",
+  "title": "Italy › Olives › Purple",
+  "intro": "",
+  "page": "italy-olives-purple.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 5,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "olives.purple.touch",
+      "text": "Purple! Tap the sun again!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "olives.purple.mouse",
+      "text": "Purple! Click the sun again!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "olives",
+        "purple",
+        "touch"
+      ],
+      "text": "Purple! Tap the sun again!",
+      "voice": "sparkle",
+      "key": "olives.purple.touch",
+      "part": "olives › purple",
+      "when": "🫒 The Olive Grove (activities/olives). Every spoken line of the activity goes in here.",
+      "ms": 2538,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "olives",
+        "purple",
+        "mouse"
+      ],
+      "text": "Purple! Click the sun again!",
+      "voice": "sparkle",
+      "key": "olives.purple.mouse",
+      "part": "olives › purple",
+      "when": "",
+      "ms": 2688,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

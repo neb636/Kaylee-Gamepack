@@ -1,0 +1,65 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "iceberg.push",
+  "title": "Poles › Iceberg › Push",
+  "intro": "",
+  "page": "poles-iceberg-push.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "iceberg.push.touch",
+      "text": "Push the iceberg down with your finger!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "iceberg.push.mouse",
+      "text": "Click and drag to push the iceberg down!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "iceberg",
+        "push",
+        "touch"
+      ],
+      "text": "Push the iceberg down with your finger!",
+      "voice": "sparkle",
+      "key": "iceberg.push.touch",
+      "part": "iceberg › push",
+      "when": "---- Iceberg Maker (activities/iceberg/) ----",
+      "ms": 2525,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "iceberg",
+        "push",
+        "mouse"
+      ],
+      "text": "Click and drag to push the iceberg down!",
+      "voice": "sparkle",
+      "key": "iceberg.push.mouse",
+      "part": "iceberg › push",
+      "when": "",
+      "ms": 3144,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "parade.flag",
+  "title": "China › Parade › Flag",
+  "intro": "",
+  "page": "china-parade-flag.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 5,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "parade.flag.touch",
+      "text": "Tap the flag to raise it!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "parade.flag.mouse",
+      "text": "Click the flag to raise it!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "parade",
+        "flag",
+        "touch"
+      ],
+      "text": "Tap the flag to raise it!",
+      "voice": "sparkle",
+      "key": "parade.flag.touch",
+      "part": "parade › flag",
+      "when": "🐉 The Dragon Parade finale (activities/parade). Owner: the parade build.",
+      "ms": 2417,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "flag",
+        "mouse"
+      ],
+      "text": "Click the flag to raise it!",
+      "voice": "sparkle",
+      "key": "parade.flag.mouse",
+      "part": "parade › flag",
+      "when": "",
+      "ms": 2808,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "pizza.cesareTap",
+  "title": "Italy › Pizza › Cesare Tap",
+  "intro": "",
+  "page": "italy-pizza-cesareTap.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 5,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "pizza.cesareTap.touch",
+      "text": "Uh oh! Tap the sneaky cat!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "pizza.cesareTap.mouse",
+      "text": "Uh oh! Click the sneaky cat!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "pizza",
+        "cesareTap",
+        "touch"
+      ],
+      "text": "Uh oh! Tap the sneaky cat!",
+      "voice": "sparkle",
+      "key": "pizza.cesareTap.touch",
+      "part": "pizza › cesareTap",
+      "when": "",
+      "ms": 2517,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "cesareTap",
+        "mouse"
+      ],
+      "text": "Uh oh! Click the sneaky cat!",
+      "voice": "sparkle",
+      "key": "pizza.cesareTap.mouse",
+      "part": "pizza › cesareTap",
+      "when": "",
+      "ms": 2592,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

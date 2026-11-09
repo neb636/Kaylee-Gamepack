@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "dumplings.tea",
+  "title": "China › Dumplings › Tea",
+  "intro": "",
+  "page": "china-dumplings-tea.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 9,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "dumplings.tea.touch",
+      "text": "Tap the table two times to say thank you for the tea!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "dumplings.tea.mouse",
+      "text": "Click the table two times to say thank you for the tea!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "dumplings",
+        "tea",
+        "touch"
+      ],
+      "text": "Tap the table two times to say thank you for the tea!",
+      "voice": "sparkle",
+      "key": "dumplings.tea.touch",
+      "part": "dumplings › tea",
+      "when": "",
+      "ms": 4740,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "tea",
+        "mouse"
+      ],
+      "text": "Click the table two times to say thank you for the tea!",
+      "voice": "sparkle",
+      "key": "dumplings.tea.mouse",
+      "part": "dumplings › tea",
+      "when": "",
+      "ms": 3936,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

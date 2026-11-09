@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "campfire.onFire",
+  "title": "Canada › Campfire › On Fire",
+  "intro": "",
+  "page": "canada-campfire-onFire.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 7,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "campfire.onFire.touch",
+      "text": "It's on fire! Tap it to blow it out!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "campfire.onFire.mouse",
+      "text": "It's on fire! Click it to blow it out!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "campfire",
+        "onFire",
+        "touch"
+      ],
+      "text": "It's on fire! Tap it to blow it out!",
+      "voice": "sparkle",
+      "key": "campfire.onFire.touch",
+      "part": "campfire › onFire",
+      "when": "",
+      "ms": 3916,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "onFire",
+        "mouse"
+      ],
+      "text": "It's on fire! Click it to blow it out!",
+      "voice": "sparkle",
+      "key": "campfire.onFire.mouse",
+      "part": "campfire › onFire",
+      "when": "",
+      "ms": 3120,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}
