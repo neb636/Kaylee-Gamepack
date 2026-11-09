@@ -404,7 +404,7 @@ Built so far: getting there, the island, the book, the four stops and lunch. The
 9. `#/world/thailand/samet-trip/hideseek?round=1` Hide and seek: easy hides
 10. `#/world/thailand/samet-trip/sunset?flags=all` Finale: the sunset at the driftwood tree (pull the sun down into the sea, Mommy’s photo, night falls)
 11. `#/world/thailand/samet-trip/fireshow?round=twirl&flags=all` Finale: the fire show (twirl the glowing poi; round=shapes, round=finish)
-12. `#/world/thailand/samet-trip/island?at=nadan&flags=all` Home: all four flags, the speedboat at Na Dan pier takes them home (Mommy’s photo for Agong’s wall, the stamp)
+12. `#/world/thailand/samet-trip/island?at=nadan&flags=all` All four flags: the speedboat at Na Dan pier takes them to the sunset (the finale); the fire show’s 🏠 takes them home
 
 ### Handy cases
 
@@ -717,7 +717,7 @@ After Dad’s iPad notes on the finale greybox: the beach goes dark for the fire
 
 With all four flags up the driftwood tree opens the sunset at Ao Prao; then the fire show on Sai Kaew at night, where Kaylee twirls glowing poi with her finger and the gecko fire dancers copy her. Its 🏠 takes them home (the sunset photo on Agong’s wall, the stamp).
 
-- **The way in** (`island/island.ts`): with all four flags, the idle hint points at the driftwood tree instead of the pier, and tapping the tree up close opens `sunset` (`events.open('sunset')`). The speedboat at Na Dan still takes them home too.
+- **The way in** (`island/island.ts`): with all four flags, the idle hint points at the driftwood tree instead of the pier, and tapping the tree up close opens `sunset` (`events.open('sunset')`). The speedboat at Na Dan takes them to the sunset too (it used to go straight home and skip the finale; fixed in PR #358).
 - **The sunset** (`finale/sunset.ts`, `#/world/thailand/samet-trip/sunset?flags=all`): the three of them on the sand by the driftwood tree, the sun low over the sea. She grabs the sun (a generous 150 px grab, knob) and pulls it down; the sky mixes golden to night as it sinks (`isl.setTime({from, to, k})`), it plops in with a glint, night falls by itself in 3 s, the stars and lanterns come on, Daddy: “Fire show time!” and the 🔥 button. Tap Mommy: they turn round and squeeze in for her phone (countdown, flash), the photo lands in the corner as a polaroid and is the one for Agong’s wall; with no photo, Mommy snaps one as the sun touches the sea. Pokes: the tree creaks, the family hop, the sea splashes, sky taps twinkle (a shooting star every fourth after dark).
 - **The fire show** (`finale/fireshow.ts`, `#/world/thailand/samet-trip/fireshow?round=twirl|shapes|finish&flags=...`): the camera looks in from the shallows at her face, behind a pink rope, the two gecko dancers either side, Mommy and Daddy and the lit beach bar behind her. Her finger draws on a plane in front of her; poi A follows it (`follow` knob), poi B chases its path `lag` seconds behind, each leaving a ribbon of light (`finale/ribbon.ts`, three vertices across, additive). Finger up: they keep swinging round gently. A loop is a full turn of the stroke’s direction (`finale/shapes.ts` LoopTracker), so any circle counts from its first point; its size is length/2π. The dancers’ spin and circle size catch up with hers; a loop of 0.85 m or more and they swing one big ring of fire. The drum beats at 104 bpm (tap it: a boom, the dancers hop).
 - **Shapes** (`round=shapes`): a ball of fire draws a circle, a star, then a heart above the bar; 40 dots wait in her plane; any poi passing within 0.3 m lights a dot (a rising note); 75% lit and it lifts into the sky as a lantern of light that stays. Stuck 7 s: the dots count from 30% further (up to 2×) and the finger walks round the unlit ones.
@@ -752,6 +752,14 @@ The whole trip talks (Sparkle in the corner, the family and the islanders in the
 > - “The jet ski always hers” on a replay and the 🌙 night start are still to do.
 > - Sparkle counting with her in hide and seek can trail the numbers on the blind by about half a second after Daddy’s line: check on the iPad.
 > - Book facts and where-lines play through the plain `say`, so they cut off whatever is talking.
+
+### Fix: the four ways to get stuck (#357) ([done] · 2026-11-09 · PR #358)
+
+- Na Dan pier: she can step off a deck past the bottom of its steps (`free()` only ever allowed the deck she was on).
+- Ao Noi Na: a short beach drawn along its coast (OSM has none there, so her start was forest).
+- Lunch: a finger on the coconut or the rice plate goes to whichever is nearer (the plate's target sat on the coconut's on a phone).
+- All four flags: the speedboat at Na Dan opens the sunset instead of going home.
+- Still open from #357: the lunch deck's steps face inland, so there's no way down to the beach from it (next: walkable ground and decks).
 
 ## ❓ Open questions for Dad
 
