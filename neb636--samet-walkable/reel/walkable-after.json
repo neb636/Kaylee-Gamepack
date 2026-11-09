@@ -1,0 +1,32 @@
+{
+  "kind": "reel",
+  "name": "walkable-after",
+  "title": "After: walkable ground and decks",
+  "video": "walkable-after.mp4",
+  "gif": "walkable-after.gif",
+  "seconds": 200,
+  "browser": "chromium (SwiftShader)",
+  "viewport": "ipad-portrait",
+  "moments": [
+    {
+      "name": "Lunch deck: up the steps from the sand",
+      "seconds": 46.4,
+      "status": "ok"
+    },
+    {
+      "name": "Lunch deck: down the steps to the sand",
+      "seconds": 25.7,
+      "status": "ok"
+    },
+    {
+      "name": "Viewpoint path: across the grass to the beach",
+      "seconds": 28.9,
+      "status": "ok"
+    },
+    {
+      "name": "Snorkel jetty: out to the end and back with the family",
+      "seconds": 90.4,
+      "status": "ok"
+    }
+  ]
+}

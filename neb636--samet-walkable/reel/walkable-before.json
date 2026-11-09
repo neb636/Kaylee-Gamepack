@@ -1,0 +1,32 @@
+{
+  "kind": "reel",
+  "name": "walkable-before",
+  "title": "Before: walkable ground and decks",
+  "video": "walkable-before.mp4",
+  "gif": "walkable-before.gif",
+  "seconds": 181,
+  "browser": "chromium (SwiftShader)",
+  "viewport": "ipad-portrait",
+  "moments": [
+    {
+      "name": "Lunch deck: up the steps from the sand",
+      "seconds": 25.1,
+      "status": "ok"
+    },
+    {
+      "name": "Lunch deck: down the steps to the sand",
+      "seconds": 27.7,
+      "status": "ok"
+    },
+    {
+      "name": "Viewpoint path: across the grass to the beach",
+      "seconds": 31.8,
+      "status": "ok"
+    },
+    {
+      "name": "Snorkel jetty: out to the end and back with the family",
+      "seconds": 88.5,
+      "status": "ok"
+    }
+  ]
+}
