@@ -1,0 +1,47 @@
+{
+  "kind": "reel",
+  "name": "jetski-after",
+  "title": "Jetski after",
+  "video": "jetski-after.mp4",
+  "gif": "jetski-after.gif",
+  "seconds": 69,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "thailand-samet-jetski-steer",
+      "where": "thailand-samet-jetski-steer",
+      "seconds": 13,
+      "fps": 70.7,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-jetski-rope",
+      "where": "thailand-samet-jetski-rope",
+      "seconds": 13,
+      "fps": 65.9,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-jetski-race-idle",
+      "where": "thailand-samet-jetski-race-idle",
+      "seconds": 15,
+      "fps": 59.3,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-jetski-stars",
+      "where": "thailand-samet-jetski-stars",
+      "seconds": 16,
+      "fps": 38.2,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand samet trip jetski",
+      "where": "#/world/thailand/samet-trip/jetski?round=ride",
+      "seconds": 4,
+      "fps": 49.9,
+      "status": "ok"
+    }
+  ]
+}
