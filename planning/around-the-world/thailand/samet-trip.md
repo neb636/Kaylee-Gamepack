@@ -922,3 +922,11 @@ Every phrase goes in `lines.ts` under `L.samet` (tagged by speaker) and is recor
 - Snorkeling: [Klook island tour](https://www.klook.com/activity/141437-samed-island-snorkeling-around-5-or-6-island-tour-lunch), [Snorkeling in Koh Samet](https://maytermthailand.org/2019/06/09/snorkeling-in-koh-samet/).
 - Ao Prao: [Thailand Magazine](https://thailandmagazine.com/koh-samet/beaches/ao-phrao-beach/), [Le Vimarn (Audley)](https://www.audleytravel.com/ca/thailand/accommodation/le-vimarn-cottages-and-spa).
 - Left out (rule 7), from OSM and [Koh Samet temple](https://www.khaosanroad.com/places/koh-samet-temple): Wat Ko Samet and its Buddha (12.5698, 101.4660), the shrine by the mermaid (12.5660, 101.4617), the crab shrine at Na Dan (12.5736, 101.4638).
+
+## The family following her (issue #357 batch 3, 2026-11-09)
+
+- `Member.update()` puts them back at `baseY` every frame, so a walker must call `setGround(y)`, not write `root.position.y`. That one line was the sinking (road, hills) and the upright walk over the sea.
+- They wait at the water's edge (`edge`, the last dry place she stood) and wave while she swims or rides. Dad's call if he'd rather they swim with floaties.
+- `familyGoal` keeps them on screen: it pulls their footstep toward her until it's inside `FAMILY_FRAME`, or comes round to a visible side of her when she's not running. `FAMILY_GAP` is the distance from her and each other.
+- Known: at a full gallop reversing every few seconds in phone portrait they can be off the edge for ~2 s; on a jetty the single file isn't pulled in.
+- Robot: `window.__thaiSametQA().family.nick|ji` gives `x, z, y, ground, deck, screen`; the runs `thailand-samet-family-*` film it.

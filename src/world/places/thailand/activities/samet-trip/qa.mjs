@@ -21,6 +21,42 @@
 
 const ready = (page) => page.waitForFunction(() => window.__thaiSametQA?.().phase, null, { timeout: 20000 })
 
+/** A finger held ~150 px ahead of Kaylee, toward each point of a route on the island in turn, for `ms`. */
+async function leadAlong(page, route, ms) {
+  const vp = page.viewportSize()
+  const start = Date.now()
+  let i = 0
+  let down = false
+  while (Date.now() - start < ms && i < route.length) {
+    const c = await page.evaluate(() => {
+      const q = window.__thaiSametQA()
+      return { x: q.x, z: q.z, yaw: q.cameraYaw, k: q.kaylee }
+    })
+    if (Math.hypot(route[i][0] - c.x, route[i][1] - c.z) < 3) {
+      i++
+      continue
+    }
+    const th = (c.yaw * Math.PI) / 180
+    const dx = route[i][0] - c.x
+    const dz = route[i][1] - c.z
+    const n = Math.hypot(dx, dz) || 1
+    const across = (dx * -Math.cos(th) + dz * Math.sin(th)) / n
+    const up = -(dx * Math.sin(th) + dz * Math.cos(th)) / n
+    const len = Math.hypot(across, up * 0.7) || 1
+    const x = Math.max(10, Math.min(vp.width - 10, c.k.x + (across / len) * 150))
+    const y = Math.max(110, Math.min(vp.height - 20, c.k.y + ((up * 0.7) / len) * 150))
+    if (!down) {
+      // (Pressed on Mommy, Daddy or a prop it would tap them instead of leading her.)
+      await page.mouse.move(c.k.x, Math.max(120, c.k.y - 150))
+      await page.mouse.down()
+      down = true
+    }
+    await page.mouse.move(x, y)
+    await page.waitForTimeout(200)
+  }
+  if (down) await page.mouse.up()
+}
+
 /** Screenshots (scripts/qa-screens.mjs). */
 export const screens = [
   { name: 'thailand-samet-pack', hash: '#/world/thailand/samet-trip/pack', reset: true, wait: 3500 },
@@ -366,6 +402,29 @@ export const motion = [
       await page.mouse.move(vp.width * 0.2, vp.height * 0.85)
       await page.waitForTimeout(5000)
       await page.mouse.up()
+    },
+  },
+  {
+    name: 'thailand-samet-family-road',
+    seconds: 13,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=saikaew`)
+      await ready(page)
+    },
+    // Up the slope behind Sai Kaew and along the inland road: Mommy and Daddy climb it with her.
+    act: (page) => leadAlong(page, [[-6, -22], [-6, -17], [-11, -27], [-14, -40]], 13000),
+  },
+  {
+    name: 'thailand-samet-family-swim',
+    seconds: 44,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=wongduan`)
+      await ready(page)
+    },
+    // Out to sea for half a minute: Mommy and Daddy wait at the water's edge, and they're there when she swims back.
+    act: async (page) => {
+      await leadAlong(page, [[-138, 134], [-130, 175]], 23000)
+      await leadAlong(page, [[-140, 140], [-152, 133]], 21000)
     },
   },
   {

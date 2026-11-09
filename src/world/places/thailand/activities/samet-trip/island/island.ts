@@ -153,6 +153,7 @@ const LUNCH_TABLE = atFrame(DECK, -2.5, 0.8)
 const SIDE = 0.32
 const tmp = new Vector3()
 const tmp2 = new Vector3()
+const leashV = new Vector3()
 /** The speedboat at Na Dan pier (layout.ts POKES): once all four flags are up, it takes them to the sunset (the finale). */
 const HOME_BOAT = 'speedboat:0'
 /** Where she stands on the pier for Mommy's photo before they go (beside the speedboat). */
@@ -192,7 +193,19 @@ interface Follower {
   lie: number
   /** The deck (or pier, or jetty) under them, -1 if none. */
   on: number
+  /** How much of the way to their footstep they keep (1: all of it; less to stay on her screen). */
+  reach: number
+  /** How long the sea has been in their way. */
+  blocked: number
+  /** Until the next wave from the water's edge. */
+  waveT: number
 }
+
+/** How close the family comes: to Kaylee, and to each other (m). */
+const FAMILY_GAP = 1.25
+/** How far from the middle of the screen they stay while they follow her (-1..1 across and up the screen; a little
+ *  less at the bottom, where the buttons are). */
+const FAMILY_FRAME = { x: 0.8, top: 0.72, bottom: -0.6 }
 
 type Mode = 'walk' | 'taxi' | 'ski' | 'kite'
 
@@ -261,6 +274,10 @@ export class SametIsland implements World3D {
   private nick: Follower
   private ji: Follower
   private trail: XZ[] = []
+  /** The last dry place she stood: where Mommy and Daddy wait when she swims or rides out to sea. */
+  private edge: XZ = { x: 0, z: 0 }
+  /** The family's first moment on the island: they start in their places, not walking there. */
+  private familySettling = true
   private surface: Surface = 'sand'
   private swimming = false
   private deckOn = -1
@@ -387,7 +404,7 @@ export class SametIsland implements World3D {
       scene.add(m.root)
       const shadow = blobShadow(0.5, bag)
       scene.add(shadow)
-      return { m, back, side, phase: Math.random() * 3, speed: 0, shadow, lie: 0, on: -1 }
+      return { m, back, side, phase: Math.random() * 3, speed: 0, shadow, lie: 0, on: -1, reach: 1, blocked: 0, waveT: 2 + Math.random() * 2 }
     }
     this.nick = fam('nick', 2.6, 0.9)
     this.ji = fam('ji', 3.8, -0.9)
@@ -396,6 +413,7 @@ export class SametIsland implements World3D {
     const s = spotStart(start.at)
     this.y = this.heightAt(s.x, s.z)
     this.kaylee.place(s.x, this.y, s.z, s.face * DEG)
+    this.edge = { x: s.x, z: s.z }
     for (let i = 0; i < 30; i++) this.trail.push({ x: s.x - Math.sin(s.face) * i * 0.3, z: s.z - Math.cos(s.face) * i * 0.3 })
     for (const f of [this.nick, this.ji]) {
       const p = this.trailPoint(f.back, f.side)
@@ -949,9 +967,60 @@ export class SametIsland implements World3D {
     return null
   }
 
+  /** Is this point where she (and the buttons) leave room for them on screen? */
+  private inFamilyFrame(x: number, z: number) {
+    const s = leashV.set(x, Math.max(0, this.heightAt(x, z)) + 0.7, z).project(this.rig.camera)
+    return s.z < 1 && Math.abs(s.x) < FAMILY_FRAME.x && s.y < FAMILY_FRAME.top && s.y > FAMILY_FRAME.bottom
+  }
+  /** Can a parent step from where they are to (x, z)? Solid, standable and allowed by the decks. */
+  private familyCanStand(from: Vector3, x: number, z: number) {
+    return this.standable(x, z) && this.deckOk(x, z, this.deckAt(from.x, from.z))
+  }
+  /** How far along the line from her to their footstep a parent should be to stay on her screen (eased, no snapping);
+   *  on a deck or jetty the footstep decides, so nobody gets pulled off the side. */
+  private familyGoal(f: Follower, k: Vector3, goal: XZ, dt: number): XZ {
+    const dx = goal.x - k.x
+    const dz = goal.z - k.z
+    const dist = Math.hypot(dx, dz)
+    let want = 1
+    if (this.mode === 'walk' && !this.swimming && dist > FAMILY_GAP && this.deckOn < 0 && !this.inFamilyFrame(goal.x, goal.z) && this.inFamilyFrame(k.x, k.z)) {
+      let lo = FAMILY_GAP / dist
+      let hi = 1
+      for (let i = 0; i < 6; i++) {
+        const m = (lo + hi) / 2
+        if (this.inFamilyFrame(k.x + dx * m, k.z + dz * m)) lo = m
+        else hi = m
+      }
+      want = lo
+      // Even a step away would be off the edge (she's near the side of the screen, with the trail behind her going
+      // off it): while she's not running, they come round to a side of her that's in the picture.
+      if (this.lastSpeed < 1.5 && !this.inFamilyFrame(k.x + dx * lo, k.z + dz * lo)) {
+        const base = Math.atan2(dx, dz)
+        const turn = f === this.nick ? 1 : -1
+        for (const a of [0.8, 1.6, 2.4, -0.8, -1.6, -2.4, 3.14]) {
+          const x = k.x + Math.sin(base + a * turn) * (FAMILY_GAP + 0.25)
+          const z = k.z + Math.cos(base + a * turn) * (FAMILY_GAP + 0.25)
+          if (this.inFamilyFrame(x, z) && this.standable(x, z)) return { x, z }
+        }
+      }
+    }
+    f.reach += (want - f.reach) * (this.familySettling ? 1 : ease(dt, 4))
+    const x = k.x + dx * f.reach
+    const z = k.z + dz * f.reach
+    return this.standable(x, z) ? { x, z } : goal
+  }
+
   private follow(dt: number, t: number) {
     const k = this.kaylee.root.position
     const idle = this.time - this.lastTouch > 7 && this.lastSpeed < 0.1 && this.mode === 'walk' && !this.swimming
+    if (this.mode === 'walk' && this.standable(k.x, k.z) && this.isl.ground.heightAt(k.x, k.z) > 0.02) {
+      this.edge.x = k.x
+      this.edge.z = k.z
+    }
+    // Side by side, the way the camera looks at them (at the water's edge they wait together).
+    const rx = -Math.cos(this.camYaw)
+    const rz = Math.sin(this.camYaw)
+    let placed: XZ | null = null
     for (const f of [this.nick, this.ji]) {
       const m = f.m
       const r = m.root
@@ -967,23 +1036,54 @@ export class SametIsland implements World3D {
       const mid = this.trailPoint(f.back, 0)
       let goal = this.trailPoint(f.back, f.side)
       if (this.deckAt(goal.x, goal.z) !== this.deckAt(mid.x, mid.z) || !this.standable(goal.x, goal.z)) goal = mid
-      // They stop at the water's edge when she swims (and wave from the sand).
-      if (!this.standable(goal.x, goal.z)) {
-        for (let i = 0; i < this.trail.length; i += 2) {
-          const p = this.trail[i]
-          if (this.standable(p.x, p.z)) {
-            const q = { x: p.x + (f === this.nick ? 0.6 : -0.6), z: p.z }
-            goal = this.standable(q.x, q.z) ? q : p
-            break
+      // She's out in the sea: they wait at the water's edge where she went in, and wave.
+      const waiting = !this.standable(goal.x, goal.z)
+      if (waiting) {
+        const a = f === this.nick ? 0.8 : -0.8
+        const q = { x: this.edge.x + rx * a, z: this.edge.z + rz * a }
+        goal = this.standable(q.x, q.z) ? q : this.edge
+      } else goal = this.familyGoal(f, k, goal, dt)
+      // Never on top of her, or of each other.
+      const away = (o: XZ, gap: number) => {
+        const ax = goal.x - o.x
+        const az = goal.z - o.z
+        const l = Math.hypot(ax, az)
+        if (l >= gap) return
+        const ux = l > 0.05 ? ax / l : f === this.nick ? rx : -rx
+        const uz = l > 0.05 ? az / l : f === this.nick ? rz : -rz
+        const q = { x: o.x + ux * gap, z: o.z + uz * gap }
+        if (this.standable(q.x, q.z)) goal = q
+      }
+      if (!waiting) away(k, FAMILY_GAP)
+      if (placed) away(placed, FAMILY_GAP)
+      // Standing still, one right behind the other from the camera: Mommy would be hidden behind Daddy. She takes a
+      // place beside him, or on her other side.
+      if (placed && !waiting && this.lastSpeed < 1.5 && this.deckOn < 0) {
+        const p = placed as XZ
+        const across = (goal.x - p.x) * rx + (goal.z - p.z) * rz
+        const along = (goal.x - p.x) * -rz + (goal.z - p.z) * rx
+        if (Math.abs(across) < 1 && Math.abs(along) < 2.6) {
+          for (const q of [{ x: p.x + rx * 1.35, z: p.z + rz * 1.35 }, { x: p.x - rx * 1.35, z: p.z - rz * 1.35 }, { x: 2 * k.x - p.x, z: 2 * k.z - p.z }]) {
+            if (Math.hypot(q.x - k.x, q.z - k.z) >= FAMILY_GAP && this.standable(q.x, q.z) && this.inFamilyFrame(q.x, q.z)) {
+              goal = q
+              break
+            }
           }
         }
       }
+      placed = goal
       let dx = goal.x - r.position.x
       let dz = goal.z - r.position.z
       let d = Math.hypot(dx, dz)
-      // Left far behind (a ride, a long swim): they catch up off screen.
-      if (d > 30 && !this.onScreen(r.position)) {
-        r.position.set(goal.x, this.heightAt(goal.x, goal.z), goal.z)
+      // Coming in (the link's first moment), or left far behind off screen (a ride, a long swim, a bay in the way):
+      // they catch up where she can't see it.
+      if (this.familySettling || (!this.onScreen(r.position) && (d > 30 || f.blocked > 1.5))) {
+        const y = this.heightAt(goal.x, goal.z)
+        r.position.set(goal.x, y, goal.z)
+        m.setGround(y)
+        f.blocked = 0
+        f.shadow.position.set(goal.x, y + 0.03, goal.z)
+        m.update(dt, t)
         continue
       }
       // A straight line that would cut through a deck's side or off it halfway down: along her footsteps instead.
@@ -996,19 +1096,50 @@ export class SametIsland implements World3D {
         dz = p ? p.z - r.position.z : 0
         d = Math.hypot(dx, dz)
       }
-      const want = d < 0.25 ? 0 : clamp(d * 1.4, 0, Math.max(WALK.gallop * 1.05, this.lastSpeed + 0.5))
-      f.speed += clamp(want - f.speed, -8 * dt, 6 * dt)
+      // Quick enough to keep up with her gallop without falling out of the picture.
+      const want = d < 0.25 ? 0 : clamp(d * 3, 0, Math.max(WALK.gallop * 1.15, this.lastSpeed + 0.8))
+      f.speed += clamp(want - f.speed, -8 * dt, 8 * dt)
       if (d > 0.01 && f.speed > 0.01) {
         const step = Math.min(d, f.speed * dt)
-        r.position.x += (dx / d) * step
-        r.position.z += (dz / d) * step
-        r.rotation.y += wrap(Math.atan2(dx, dz) - r.rotation.y) * ease(dt, 8)
-        f.phase += dt * (5 + f.speed * 2.2)
+        const nx = r.position.x + (dx / d) * step
+        const nz = r.position.z + (dz / d) * step
+        // The sea in the way (she went round a bay): they stop at the edge instead of wading out.
+        const wet = (x: number, z: number) => this.deckAt(x, z) < 0 && this.isl.ground.heightAt(x, z) < -0.18
+        if (wet(nx, nz) && !wet(r.position.x, r.position.z)) {
+          f.speed = 0
+          f.blocked += dt
+        } else {
+          f.blocked = 0
+          r.position.x = nx
+          r.position.z = nz
+          r.rotation.y += wrap(Math.atan2(dx, dz) - r.rotation.y) * ease(dt, 8)
+          f.phase += dt * (5 + f.speed * 2.2)
+        }
+      }
+      // She walked right up to them, or they bunched up: a step aside.
+      const other = f === this.nick ? this.ji : this.nick
+      const others: [XZ, number][] = waiting ? [[other.m.root.position, 1.1]] : [[k, 1.05], [other.m.root.position, 1.1]]
+      for (const [o, gap] of others) {
+        const ax = r.position.x - o.x
+        const az = r.position.z - o.z
+        const l = Math.hypot(ax, az)
+        if (l >= gap) continue
+        const push = Math.min(gap - l, dt * 6)
+        const base = l > 0.05 ? Math.atan2(ax, az) : Math.atan2(f === this.nick ? rx : -rx, f === this.nick ? rz : -rz)
+        for (const a of [0, 0.9, -0.9, 1.6, -1.6]) {
+          const nx = r.position.x + Math.sin(base + a) * push
+          const nz = r.position.z + Math.cos(base + a) * push
+          if (this.familyCanStand(r.position, nx, nz)) {
+            r.position.x = nx
+            r.position.z = nz
+            break
+          }
+        }
       }
       // Their walk: a hop-along waddle (the toys have no legs).
       const g = this.heightAt(r.position.x, r.position.z)
       const hop = f.speed > 0.2 ? Math.abs(Math.sin(f.phase)) * 0.07 * Math.min(1, f.speed / 2) * m.height : 0
-      r.position.y = g + hop
+      m.setGround(g + hop)
       r.rotation.z = f.speed > 0.2 ? Math.sin(f.phase) * 0.06 : r.rotation.z * 0.9
       f.shadow.position.set(r.position.x, g + 0.03, r.position.z)
       // When she stops for a while on a beach: Daddy lies down on the sand, Mommy watches her.
@@ -1021,9 +1152,16 @@ export class SametIsland implements World3D {
           m.react('hop')
         }
       }
+      // A wave to her from the sand, every so often.
+      if (waiting && d < 1 && m.pose !== 'lie' && (f.waveT -= dt) <= 0) {
+        f.waveT = 4 + Math.random() * 3
+        m.react('wave')
+      }
       if (m.pose !== 'lie') m.lookAt(k.x, k.y + 0.8, k.z)
       m.update(dt, t)
     }
+    // (Once the camera has found her: its first moments aren't where it will stay.)
+    this.familySettling = this.time < 1
   }
 
   private onScreen(p: Vector3) {
@@ -2422,8 +2560,9 @@ export class SametIsland implements World3D {
       skis: Object.fromEntries(this.skis.map((s) => [s.id, sc(new Vector3(s.x, s.ski.root.position.y + 0.6, s.z))])),
       stops: Object.fromEntries(STOP_IDS.map((id) => [id, sc(new Vector3(STOPS[id].at.x, this.heightAt(STOPS[id].at.x, STOPS[id].at.z) + 0.8, STOPS[id].at.z))])),
       kaylee: sc(k.clone().setY(k.y + 0.6)),
-      // Mommy (ji) and Daddy (nick): where they are, how high, and the deck under them (-1: none).
-      family: Object.fromEntries((['nick', 'ji'] as const).map((id) => [id, (({ x, y, z }) => ({ x: +x.toFixed(2), z: +z.toFixed(2), y: +y.toFixed(2), deck: this.deckAt(x, z) }))(this[id].m.root.position)])),
+      // Mommy (ji) and Daddy (nick): where they are, how high (and the ground there), the deck under them (-1: none) and
+      // where they are on screen.
+      family: Object.fromEntries((['nick', 'ji'] as const).map((id) => [id, (({ x, y, z }) => ({ x: +x.toFixed(2), z: +z.toFixed(2), y: +y.toFixed(2), ground: +this.heightAt(x, z).toFixed(2), deck: this.deckAt(x, z), screen: sc(new Vector3(x, y + 0.7, z)) }))(this[id].m.root.position)])),
       speed: +this.lastSpeed.toFixed(2),
       cameraYaw: Math.round(wrap(this.camYaw) * DEG),
       fps: this.stats.fps,
