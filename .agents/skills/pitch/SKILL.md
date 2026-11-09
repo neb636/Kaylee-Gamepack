@@ -45,4 +45,4 @@ Look at the page at phone width before Dad does. If a card needs a scroll and a 
 
 Write the toy notes from `planning/around-the-world/ACTIVITY-TEMPLATE.md` (for agents; he won't read them) in
 `planning/around-the-world/<country>/<toy>.md`, with his pick and anything he said, and start building on the same
-branch. Family facts in a pitch (who comes, which animal) are Dad's: ask, don't invent. No temples or Buddhas (rule 7).
+branch. Family facts in a pitch (who comes, which animal) are Dad's: ask, don't invent. No temples or Buddhas (rule 8).

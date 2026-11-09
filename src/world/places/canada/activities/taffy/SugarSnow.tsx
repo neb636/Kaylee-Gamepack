@@ -21,7 +21,7 @@
 // voices (lines.ts, L.taffy). A short line at the bottom shows what's said, for Dad.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent, type Ref } from 'react'
-import { BigButton, bigCelebration, burst, say, sounds, spendHint, useElementSize, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, bigCelebration, onDevice, burst, say, sounds, spendHint, useElementSize, type Line, type PuppetHandle } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { noise, sfx, tone } from '../../../../kit/sfx'
@@ -1444,7 +1444,7 @@ class TaffyWorld {
     if (this.now - this.sayAt < 2.5) return
     let text = SAY[this.section]
     if (this.section === 'share' && !this.ended) text = '🍭 One for everybody…'
-    else if (this.pot.level <= 0.01) text = '🌳 The pot is empty: tap the maple tree'
+    else if (this.pot.level <= 0.01) text = onDevice('🌳 The pot is empty: tap the maple tree', '🌳 The pot is empty: click the maple tree')
     else if (this.section === 'orders' && this.lollies.some((l) => l.state === 'ready')) text = '🍭 Who gets this one?'
     else if (this.lollies.some((l) => l.state === 'lying')) text = '🥢 Keep rolling it up'
     else if (set > 0 && !this.finger) text = '🥢 It’s set! Roll it up on a stick'

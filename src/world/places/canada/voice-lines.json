@@ -29,6 +29,7 @@
   "Real spirit bears catching salmon!",
   "Skating on the real frozen canal!",
   "Maple's animal book! Tap an animal to hear about it.",
+  "Maple's animal book! Click an animal to hear about it.",
   "A snowy owl! Quebec's bird.",
   "A red squirrel! It loves sap.",
   "A chickadee! Chick-a-dee-dee!",
@@ -79,7 +80,9 @@
     "voice": "maple"
   },
   "Push the train with your finger!",
+  "Click and drag to push the train!",
   "Tap a bubble to play!",
+  "Click a bubble to play!",
   "That one is coming soon!",
   {
     "text": "Bonjour, Mont-Sainte-Anne!",
@@ -146,6 +149,7 @@
     "voice": "maple"
   },
   "Tap it, so it can move!",
+  "Click it, so it can move!",
   {
     "text": "Oops! Sorry!",
     "voice": "moose"
@@ -203,6 +207,7 @@
   "Still hot! Let it set.",
   "Roll up the rest!",
   "The pot is empty! Tap the maple tree.",
+  "The pot is empty! Click the maple tree.",
   "Sap from the maple tree makes the syrup!",
   "Pour the shape on Maple's card!",
   "Make each friend the size they want!",
@@ -323,11 +328,14 @@
   "Now roll the little ball into the big one!",
   "Roll a snowball into a box!",
   "Tap the drum for the parade, or make more snowmen!",
+  "Click the drum for the parade, or make more snowmen!",
   "Put your finger on the snowball and push!",
+  "Click the snowball and push it!",
   "Push the little ball into the big one!",
   "Roll a snowball into the hat box!",
   "Roll a snowball into the sash box!",
   "Tap the big drum!",
+  "Click the big drum!",
   "This castle is really a big hotel!",
   "A moose made of ice!",
   {
@@ -407,9 +415,11 @@
     "voice": "maple"
   },
   "Hold your finger down and steer the bike!",
+  "Click and hold to steer the bike!",
   "Two trails! Green or blue?",
   "The bridge, or splash through the creek?",
   "Push your finger left or right!",
+  "Hold the click and move left or right!",
   {
     "text": "Wow, so high!",
     "voice": "maple"
@@ -503,6 +513,7 @@
     "voice": "maple"
   },
   "Move your finger to shine the light!",
+  "Click and hold, then move to shine the light!",
   "Look for shiny eyes in the dark!",
   {
     "text": "You found everybody!",
@@ -533,8 +544,10 @@
     "voice": "maple"
   },
   "Hold the marshmallow near the fire.",
+  "Click and hold the marshmallow near the fire.",
   "Give it to Maple or the raccoons.",
   "It's on fire! Tap it to blow it out!",
+  "It's on fire! Click it to blow it out!",
   {
     "text": "Golden! Yummy!",
     "voice": "maple"
@@ -599,8 +612,11 @@
   },
   "Pull the paddle back through the water!",
   "Hold the water where the canoe should go!",
+  "Click and hold where the canoe should go!",
   "Drag your finger back, beside the canoe.",
+  "Click and drag back, beside the canoe.",
   "Press the water in front of the canoe.",
+  "Click the water in front of the canoe.",
   "Paddle to the milky water by the glacier stream!",
   {
     "text": "Ooh! What is that milky water?",
@@ -733,7 +749,9 @@
     "voice": "maple"
   },
   "Hold the water where the boat should go!",
+  "Click and hold where the boat should go!",
   "Hold and push to steer the boat!",
+  "Click and hold, then push to steer the boat!",
   "A sleepy otter floated away. Go gently!",
   "A spout! Steer there to find the whale!",
   "The orca family! Go fast and turn!",
@@ -744,6 +762,7 @@
   "Look for the spout. Steer there!",
   "Go fast and turn. The baby copies you!",
   "Tap the yellow microphone to listen!",
+  "Click the yellow microphone to listen!",
   {
     "text": "Oh! Hello!",
     "voice": "otter"
@@ -829,11 +848,16 @@
     "voice": "maple"
   },
   "Grab a salmon, and flick it up!",
+  "Grab a salmon, and drag it up fast!",
   "The big falls! Try the rock, or the log.",
   "The bears are fishing! Flick the salmon past them.",
+  "The bears are fishing! Drag the salmon up past them.",
   "Home! Tap each salmon to lay its eggs.",
+  "Home! Click each salmon to lay its eggs.",
   "Spring! Tap the eggs.",
+  "Spring! Click the eggs.",
   "Bonk! Try a bigger flick.",
+  "Bonk! Try a bigger, faster drag.",
   "Rain! It's a rainforest.",
   "This cedar tree is taller than a house!",
   "Fall... winter... and spring!",
@@ -947,7 +971,9 @@
     "voice": "maple"
   },
   "Flick the puck into the geese's net!",
+  "Drag the puck fast into the geese's net!",
   "Swipe from the puck to the net!",
+  "Drag from the puck to the net!",
   "The geese are in the way! Bounce it off the snow!",
   "One more goal to win!",
   "The goose saved it! Again!",

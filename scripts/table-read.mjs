@@ -19,7 +19,8 @@
 //   long           over 3 s (she's five: keep lines short)
 //   name           says "Kaylee" (rule 4: save her name for big moments; the sheet counts them)
 //   twice          the same words in two places in this group
-//   rule 7         temple / Buddha / monk words (AGENTS.md design rule 7)
+//   rule 8         temple / Buddha / monk words (AGENTS.md design rule 8)
+//   touch only     a gesture word (tap, finger, swipe...) with no Mac version: onDevice() (AGENTS.md design rule 2)
 //   curly quote    curly quotes fail the clip transcription check
 //   new / changed  with --changed: what this branch added or reworded (the old words are shown)
 // Needs ffmpeg for the audio; without it the sheet is still written.
@@ -35,6 +36,8 @@ const LONG_MS = 3000
 const GAP = 0.35 // seconds between lines
 const PART_GAP = 0.6 // seconds of quiet each side of the chime between parts
 const RULE7 = /\b(temples?|wats?|buddhas?|buddhist|monks?)\b/i
+/** Gesture words that mean nothing on the Mac's trackpad (design rule 2, "Every device"). */
+const TOUCH = /\b(tap|taps|tapping|touch|finger|fingers|swipe|flick|rub|pinch|squeeze|tilt)\b/i
 
 const readJson = (file, fallback) => (existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : fallback)
 const globalCast = readJson(path.join(root, 'src/sdk/cast.json'))
@@ -156,7 +159,8 @@ export async function scriptOf(place, group, { before } = {}) {
     if ((m?.ms ?? 0) > LONG_MS || (!m?.ms && l.text.split(/\s+/).length > 9)) flags.push('long')
     if (l.text.includes(KID)) flags.push('name')
     if (counts.get(l.text) > 1) flags.push('twice')
-    if (RULE7.test(l.text)) flags.push('rule 7')
+    if (RULE7.test(l.text)) flags.push('rule 8')
+    if (TOUCH.test(l.text) && !['touch', 'mouse'].includes(l.path.at(-1))) flags.push('touch only')
     if (/[‘’“”]/.test(l.text)) flags.push('curly quote')
     const was = old?.get(l.path.join('.'))
     let change = null
@@ -279,7 +283,7 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
 .text{font-size:17px}.text s{display:block;color:var(--soft);font-size:14px}
 .when,.meta{grid-column:2;font-size:13px;color:var(--soft)}
 .flag{display:inline-block;font-weight:600;font-size:11.5px;padding:1px 7px;border-radius:99px;margin-left:6px;background:#ffe2a8;color:#5a3d00}
-.flag.name{background:#e9dcff;color:#3d2470}.flag.new,.flag.changed{background:#c9f3dd;color:#0d4a2c}.flag.not-recorded,.flag.rule-7{background:#ffd0d6;color:#6b0717}
+.flag.name{background:#e9dcff;color:#3d2470}.flag.new,.flag.changed{background:#c9f3dd;color:#0d4a2c}.flag.not-recorded,.flag.rule-8,.flag.touch-only{background:#ffd0d6;color:#6b0717}
 </style></head><body>
 <header>
 <h1>Table read: ${esc(title)}</h1>
@@ -340,7 +344,10 @@ export async function changedGroups(ref = 'origin/main') {
     try {
       const old = spawnSync('git', ['show', `${ref}:${f}`], { cwd: root, encoding: 'utf8' })
       if (old.status === 0) {
-        writeFileSync(path.join(tmp, 'lines.ts'), old.stdout)
+        // Its relative imports (sdk/device.ts) still point into the repo, not into the temp folder.
+        const here = path.dirname(path.join(root, f))
+        const source = old.stdout.replace(/(from\s+['"])(\.{1,2}\/[^'"]+)(['"])/g, (_, a, rel, b) => a + pathToFileURL(path.resolve(here, rel)).href + b)
+        writeFileSync(path.join(tmp, 'lines.ts'), source)
         then = flatten(await loadLines(place, path.join(tmp, 'lines.ts')))
       }
     } finally {

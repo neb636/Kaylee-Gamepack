@@ -1,9 +1,10 @@
 // Every phrase that can be spoken at the Poles. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
-// (This file is also read by Node, so it imports nothing. NAME matches KID_NAME.) Plain strings are Sparkle, the guide:
+// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.) Plain strings are Sparkle, the guide:
 // she says what to do. The friends say their own story and reaction lines in their own voices (cast.json): Pola the
 // polar bear cub and Mama Bear up north, Pebble the emperor chick and Papa down south, Terry the Arctic tern who visits
 // both. Each activity has its own block below (one per PR, so they don't collide). Keep lines under ~3 seconds, and the
 // name for the big moments only. Straight apostrophes only: curly ones failed the transcription check in PR #63.
+import { onDevice } from '../../../sdk/device.ts'
 const NAME = 'Kaylee'
 
 // A friend speaking: pola("Hi!") is { text: "Hi!", voice: "pola" }. (Exported, so a block that has no lines yet compiles.)
@@ -57,8 +58,8 @@ export const L = {
     pebbleHi: pebble("Hi! I'm Pebble. I live in Antarctica!"),
     pola: [pola('Ha ha, that tickles!'), pola('The ice floats on the sea!'), pola('Brr! I love the cold!')],
     pebble: [pebble('Hello again!'), pebble('Waddle, waddle!'), pebble('No polar bears down here!')],
-    spots: 'Tap a picture to play!',
-    party: 'You got every stamp! Tap the party!',
+    spots: onDevice('Tap a picture to play!', 'Click a picture to play!'),
+    party: onDevice('You got every stamp! Tap the party!', 'You got every stamp! Click the party!'),
     sunOut: 'Here comes the sun! Drag it!',
     sun: 'Drag the sun up or down!',
     summer: { north: 'Summer up north, and night down south!', south: 'Summer down south, night up north!' },
@@ -84,7 +85,7 @@ export const L = {
     story: [pola('Mama! I am way over here!')],
     // Sparkle: what to do at each stretch (said when it starts, and again when she's stuck).
     hint: {
-      steady: 'Pull Pola back, and let go!',
+      steady: onDevice('Pull Pola back, and let go!', 'Click Pola, pull her back, and let go!'),
       drift: 'The ice is drifting. Wait, then fling!',
       melt: 'Summer melts the ice. Push floes together!',
     },
@@ -112,18 +113,18 @@ export const L = {
   // Sparkle says what to do as each part starts (and again when nothing's been touched for a while); the facts come the
   // first time she pokes an animal (Guide.once), never as required listening.
   coats: {
-    fox: { start: 'Brr, winter is coming! Rub snow on the fox.', hint: 'Rub the fox with your finger.' },
+    fox: { start: onDevice('Brr, winter is coming! Rub snow on the fox.', 'Brr, winter is coming! Click and wiggle snow on the fox.'), hint: onDevice('Rub the fox with your finger.', 'Hold the click and wiggle on the fox.') },
     hide: {
-      start: 'Now rub them all white, so they can hide!',
-      hint: 'Rub snow on the brown ones.',
+      start: onDevice('Now rub them all white, so they can hide!', 'Now click and wiggle them all white, so they can hide!'),
+      hint: onDevice('Rub snow on the brown ones.', 'Click and wiggle snow on the brown ones.'),
       bear: 'Shh! Here comes the polar bear.',
       ran: 'He saw some brown! Make it white.',
       gone: "He can't find anyone! White hides in the snow.",
-      dusk: 'Tap the sun to bring the summer.',
+      dusk: onDevice('Tap the sun to bring the summer.', 'Click the sun to bring the summer.'),
     },
     summer: {
-      start: 'Summer is here! Rub the snow away.',
-      hint: 'Rub them brown again.',
+      start: onDevice('Summer is here! Rub the snow away.', 'Summer is here! Click and wiggle the snow away.'),
+      hint: onDevice('Rub them brown again.', 'Click and wiggle them brown again.'),
       owl: 'Snowy owls and polar bears stay white all year!',
       end: 'Brown coats for the summer!',
     },
@@ -210,10 +211,10 @@ export const L = {
   iceberg: {
     // Sparkle: what to do (each is also the hint when she's stuck there).
     pick: 'Pick a pole: north or south?',
-    bits: 'Tap the cracks to break off the ice!',
-    giant: 'A giant crack! Tap, tap, tap!',
+    bits: onDevice('Tap the cracks to break off the ice!', 'Click the cracks to break off the ice!'),
+    giant: onDevice('A giant crack! Tap, tap, tap!', 'A giant crack! Click, click, click!'),
     under: 'Look! Most of the iceberg hides under the water.',
-    push: 'Push the iceberg down with your finger!',
+    push: onDevice('Push the iceberg down with your finger!', 'Click and drag to push the iceberg down!'),
     sail: 'Now push the icebergs out to sea!',
     done: 'Your icebergs are sailing away!',
     // Sparkle's facts, each the first time it comes up.
@@ -255,8 +256,8 @@ export const L = {
   party: {
     // Pole to Pole: Terry carries Pola's postcard down the world; Sparkle says how to steer.
     setOff: terry("Pola's postcard! Let's fly it to Pebble!"),
-    steer: 'Steer Terry with your finger!',
-    steerHint: 'Move your finger to steer Terry!',
+    steer: onDevice('Steer Terry with your finger!', 'Click and drag to steer Terry!'),
+    steerHint: onDevice('Move your finger to steer Terry!', 'Hold the click and move to steer Terry!'),
     warm: terry("Phew! It's warm in the middle of the world!"),
     south: terry("Brr, it's windy! Nearly at the South Pole!"),
     fish: [terry('Yum, a fish!'), terry('Fishy!'), terry('Got one!')],
@@ -280,9 +281,9 @@ export const L = {
       penguin: 'Put Pebble where penguins live!',
       south: 'Spin the South Pole to the front!',
       north: 'Spin the North Pole to the front!',
-      ocean: 'Which pole is ocean under the ice? Tap it!',
-      coldest: 'Which pole is the coldest? Tap it!',
-      tern: 'Who visits both poles? Tap them!',
+      ocean: onDevice('Which pole is ocean under the ice? Tap it!', 'Which pole is ocean under the ice? Click it!'),
+      coldest: onDevice('Which pole is the coldest? Tap it!', 'Which pole is the coldest? Click it!'),
+      tern: onDevice('Who visits both poles? Tap them!', 'Who visits both poles? Click them!'),
       summer: "It's summer up north. What is it down south?",
     },
     // A miss: something silly, then the right thing glows and she does it herself.

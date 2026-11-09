@@ -8,7 +8,7 @@
 // her along if she's stuck. Stroke detection and its feel numbers are in conduct.ts (FEEL).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent } from 'react'
-import { burst, sounds, useElementSize, useGameLoop } from '../../../../../sdk'
+import { burst, onDevice, sounds, useElementSize, useGameLoop } from '../../../../../sdk'
 import { Flag } from '../../../../kit/Flag'
 import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
@@ -55,7 +55,7 @@ const PROMPTS: Record<Stage, string> = {
   owl: 'Shh! The baby owl is sleepy. Little swings: piano, soft.',
   dance: 'Everyone wants to dance! Big swings: forte, loud!',
   solo: 'Hold the wand on a friend for a solo!',
-  star: 'The wishing star! Tap it!',
+  star: onDevice('The wishing star! Tap it!', 'The wishing star! Click it!'),
   lupa: 'Lupa is singing! Swing bigger and she gets braver!',
   high: 'Lift the wand up high!',
   roses: 'Brava, Kaylee! Brava, Lupa! Catch the roses!',
@@ -66,7 +66,7 @@ const HINTS: Partial<Record<Stage, string>> = {
   candles: 'Swing the wand!',
   owl: 'Little, soft swings.',
   dance: 'Big, big swings!',
-  solo: 'Hold the wand still on a friend, or tap one!',
+  solo: onDevice('Hold the wand still on a friend, or tap one!', 'Hold the wand still on a friend, or click one!'),
   lupa: 'Swing the wand for Lupa!',
   high: 'Up, up, up!',
   sky: 'Swing the wand across the sky!',

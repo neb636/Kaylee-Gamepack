@@ -28,6 +28,13 @@
     "file": "8ff07e7f765f.mp3"
   },
   {
+    "text": "Click the glowing lantern!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2208,
+    "file": "3776667218ce.mp3"
+  },
+  {
     "text": "Where should we go next, Kaylee?",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -40,6 +47,13 @@
     "sig": "ed7dbdac3d",
     "ms": 1981,
     "file": "d940392ccbcf.mp3"
+  },
+  {
+    "text": "Click the dragon parade!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1752,
+    "file": "13b6a7dd023c.mp3"
   },
   {
     "text": "This lantern opens soon!",
@@ -98,6 +112,13 @@
     "file": "03403455ba9e.mp3"
   },
   {
+    "text": "Click the zig-zag bridge!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2328,
+    "file": "f730eb2756c6.mp3"
+  },
+  {
     "text": "Zig-zag bridges keep bad luck away!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -110,6 +131,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2293,
     "file": "f6f2ac843234.mp3"
+  },
+  {
+    "text": "Click the dumpling house door!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2328,
+    "file": "73d9c03eddc3.mp3"
   },
   {
     "text": "Aiyo! So many hungry customers, and no helper!",
@@ -168,11 +196,25 @@
     "file": "3f8d17e962ea.mp3"
   },
   {
+    "text": "Drag across the dough to make a long snake!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4272,
+    "file": "5ee769166faf.mp3"
+  },
+  {
     "text": "Tap to cut the snake into four pieces!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 4047,
     "file": "518cdea5efe6.mp3"
+  },
+  {
+    "text": "Click to cut the snake into four pieces!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3648,
+    "file": "96c9f026fba0.mp3"
   },
   {
     "text": "One!",
@@ -238,6 +280,13 @@
     "file": "0bd75d7cf80d.mp3"
   },
   {
+    "text": "Click the bowl for one spoonful!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3312,
+    "file": "ac6447a9824a.mp3"
+  },
+  {
     "text": "Ho ho ho! Just one spoonful!",
     "voice": "cheffu",
     "sig": "bb2b623567",
@@ -301,11 +350,25 @@
     "file": "53d69b6864a6.mp3"
   },
   {
+    "text": "Click the lid to close the basket!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2712,
+    "file": "49219ce7fde2.mp3"
+  },
+  {
     "text": "Tap the knob to heat the water!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2446,
     "file": "eded7bedf3f5.mp3"
+  },
+  {
+    "text": "Click the knob to heat the water!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2328,
+    "file": "2b299f726815.mp3"
   },
   {
     "text": "Hot water makes steam. Steam cooks dumplings!",
@@ -327,6 +390,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2272,
     "file": "fc5cc9a1035d.mp3"
+  },
+  {
+    "text": "Click the lid to peek!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2256,
+    "file": "056a21210845.mp3"
   },
   {
     "text": "Ta-da! Soup dumplings!",
@@ -357,11 +427,25 @@
     "file": "a609f1e5e9d9.mp3"
   },
   {
+    "text": "Click the dumpling to take a little nibble!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3144,
+    "file": "9ec1a288a1af.mp3"
+  },
+  {
     "text": "Tap again to sip the soup!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 1847,
     "file": "f6783c0e4dcd.mp3"
+  },
+  {
+    "text": "Click again to sip the soup!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2736,
+    "file": "568ce677fb0c.mp3"
   },
   {
     "text": "Now eat it all up!",
@@ -406,11 +490,25 @@
     "file": "5e817c59bd02.mp3"
   },
   {
+    "text": "Click the pink dough!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1776,
+    "file": "62877a6c41d9.mp3"
+  },
+  {
     "text": "Tap the green dough!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 1820,
     "file": "5bb9b0d106d3.mp3"
+  },
+  {
+    "text": "Click the green dough!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1392,
+    "file": "2d55f4944113.mp3"
   },
   {
     "text": "That one is not pink. Find the pink dough!",
@@ -539,6 +637,13 @@
     "file": "e3feb330091b.mp3"
   },
   {
+    "text": "Click the table two times to say thank you for the tea!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3936,
+    "file": "3e0986582792.mp3"
+  },
+  {
     "text": "In China, a tap tap on the table means thank you!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -581,11 +686,25 @@
     "file": "21e1aeeb4f59.mp3"
   },
   {
+    "text": "Click the colors to make six dumplings!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2952,
+    "file": "dbe0801f20fd.mp3"
+  },
+  {
     "text": "Uh oh! Tap the sneaky monkey!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2584,
     "file": "a698e22b9873.mp3"
+  },
+  {
+    "text": "Uh oh! Click the sneaky monkey!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2664,
+    "file": "317d4fb13b78.mp3"
   },
   {
     "text": "Hee hee! Sorry!",
@@ -812,6 +931,13 @@
     "file": "0705a67969c3.mp3"
   },
   {
+    "text": "Drag up! Grow it three tall!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3936,
+    "file": "47467d65f48f.mp3"
+  },
+  {
     "text": "Three tall! Wow!",
     "voice": "baobao",
     "sig": "84ccf586ba",
@@ -875,6 +1001,13 @@
     "file": "0de52a73ff46.mp3"
   },
   {
+    "text": "Which one is the tallest? Click it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3192,
+    "file": "2f00b3872607.mp3"
+  },
+  {
     "text": "Look for the tallest one!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -901,6 +1034,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2891,
     "file": "4bf8a5b36937.mp3"
+  },
+  {
+    "text": "Which one is the shortest? Click it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3072,
+    "file": "99be1777fb10.mp3"
   },
   {
     "text": "Look for the short one!",
@@ -994,6 +1134,13 @@
     "file": "df8268d21400.mp3"
   },
   {
+    "text": "Drag the wall, or click the arrow!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2664,
+    "file": "66c905bdaeb3.mp3"
+  },
+  {
     "text": "Hou Hou ran ahead! Follow him!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1064,6 +1211,13 @@
     "file": "74e959bd4c51.mp3"
   },
   {
+    "text": "Click the tower to light the signal fire!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3528,
+    "file": "83b47ed9653d.mp3"
+  },
+  {
     "text": "Soldiers sent smoke signals tower to tower!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1127,11 +1281,25 @@
     "file": "399912886e02.mp3"
   },
   {
+    "text": "Click a food, then click the soup!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2832,
+    "file": "a13756f4536b.mp3"
+  },
+  {
     "text": "Tap the noodles, then tap the soup!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 3244,
     "file": "42ca54d7b55b.mp3"
+  },
+  {
+    "text": "Click the noodles, then click the soup!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3648,
+    "file": "9dd5e07ac890.mp3"
   },
   {
     "text": "Green! Try the bok choy!",
@@ -1176,6 +1344,13 @@
     "file": "5a1d39290d96.mp3"
   },
   {
+    "text": "Click the chopsticks, then click the sparkly food!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4584,
+    "file": "db509ca5096c.mp3"
+  },
+  {
     "text": "People in China eat with chopsticks!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1188,6 +1363,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2114,
     "file": "dea7efd514ab.mp3"
+  },
+  {
+    "text": "Click and drag to spin the table!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2616,
+    "file": "936a2bae12c8.mp3"
   },
   {
     "text": "Spin the table to Bao Bao!",
@@ -1519,6 +1701,13 @@
     "file": "ea84a1a3e782.mp3"
   },
   {
+    "text": "Click the red stamp!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1968,
+    "file": "c8395c1a46ec.mp3"
+  },
+  {
     "text": "Your name, stamped with a red seal, Kaylee!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1594,6 +1783,13 @@
     "sig": "ed7dbdac3d",
     "ms": 1891,
     "file": "3c868dec927c.mp3"
+  },
+  {
+    "text": "Click Ox to paddle!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2208,
+    "file": "687315d6c947.mp3"
   },
   {
     "text": "Almost there!",
@@ -1680,11 +1876,25 @@
     "file": "19f035e9e5f3.mp3"
   },
   {
+    "text": "Click the clouds to make it rain!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2712,
+    "file": "6acd8a1d51be.mp3"
+  },
+  {
     "text": "Tap a glowing cloud!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 1737,
     "file": "aa97fe4b25b6.mp3"
+  },
+  {
+    "text": "Click a glowing cloud!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1944,
+    "file": "cae292aaa550.mp3"
   },
   {
     "text": "The flowers are so happy!",
@@ -1827,11 +2037,25 @@
     "file": "afdd41c45706.mp3"
   },
   {
+    "text": "Who came right after Ox? Click that animal!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3888,
+    "file": "9aa6c2e4293b.mp3"
+  },
+  {
     "text": "Tiger came right after Ox! Tap the glowing one!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 4360,
     "file": "c4f25bd55440.mp3"
+  },
+  {
+    "text": "Tiger came right after Ox! Click the glowing one!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4080,
+    "file": "691422bfa890.mp3"
   },
   {
     "text": "Yes! Tiger came right after Ox!",
@@ -1895,6 +2119,13 @@
     "sig": "ed7dbdac3d",
     "ms": 3976,
     "file": "3abf27f0225a.mp3"
+  },
+  {
+    "text": "Shh! Someone is sleeping. Click the cat!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4776,
+    "file": "66f2294486c3.mp3"
   },
   {
     "text": "The cat overslept and missed the race! That is why there is no Year of the Cat!",
@@ -2303,6 +2534,13 @@
     "file": "fb3243294111.mp3"
   },
   {
+    "text": "Click the drum! Make the dragon dance!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3648,
+    "file": "7b63a2d02110.mp3"
+  },
+  {
     "text": "Boom boom! I love it!",
     "voice": "longlong",
     "sig": "8d9aa8fb05",
@@ -2324,6 +2562,13 @@
     "file": "c430e2c4aec5.mp3"
   },
   {
+    "text": "Click the sky to make fireworks!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3480,
+    "file": "ccce15c2d97f.mp3"
+  },
+  {
     "text": "Fireworks were invented in China!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -2338,6 +2583,13 @@
     "file": "baebc28af81f.mp3"
   },
   {
+    "text": "Click the flag to raise it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2808,
+    "file": "a2ba0672bfd3.mp3"
+  },
+  {
     "text": "China's flag is red, with one big gold star and four little stars!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -2350,6 +2602,13 @@
     "sig": "ed7dbdac3d",
     "ms": 4226,
     "file": "caa772e6c52a.mp3"
+  },
+  {
+    "text": "Bao Bao has a red envelope! Click to open it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4152,
+    "file": "00aeee437898.mp3"
   },
   {
     "text": "A red envelope is called a hong bao!",
@@ -2616,5 +2875,12 @@
     "sig": "ed7dbdac3d",
     "ms": 4636,
     "file": "2f690adda890.mp3"
+  },
+  {
+    "text": "This is China! Click a picture to learn more.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4344,
+    "file": "85205d0585a3.mp3"
   }
 ]

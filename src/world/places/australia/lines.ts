@@ -1,7 +1,8 @@
 // Every phrase that can be spoken in Australia. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
-// (This file is also read by Node, so it imports nothing. NAME matches KID_NAME.)
+// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.)
 // Plain strings are Sparkle, the guide: she gives the instructions. Friends say their own story and reaction lines in
 // their own voices (see cast.json), and their puppets move their mouths while they talk.
+import { onDevice } from '../../../sdk/device.ts'
 const NAME = 'Kaylee'
 const as = (voice: string) => (text: string) => ({ text, voice })
 const pip = as('pip')
@@ -13,9 +14,9 @@ const COUNT = ['one', 'two', 'three', 'four', 'five']
 export const L = {
   name: 'Australia',
   intro: [pip(`G'day, ${NAME}! I'm Pip the kangaroo!`), pip("G'day means hello! Help with my party?")],
-  hubFirst: pip('Tap a spot on the map!'),
+  hubFirst: onDevice(pip('Tap a spot on the map!'), pip('Click a spot on the map!')),
   hubNext: pip(`Where should we go next, ${NAME}?`),
-  hubParty: pip('Everyone is here! Tap the party!'),
+  hubParty: onDevice(pip('Everyone is here! Tap the party!'), pip('Everyone is here! Click the party!')),
   partyLocked: pip('Get all the stamps to start the party!'),
   trophyWin: `${NAME}, you did it! You won the Australia Explorer trophy!`,
   trophyRoom: `${NAME}, Australia Explorer! From Australia.`,
@@ -34,7 +35,7 @@ export const L = {
     water: pip('Water to drink in the heat!'),
     brrr: pip("Brrr? No way! It's hot in the outback!"),
     ready: pip("I'm ready! Let's hop!"),
-    hop3: 'Tap to make Pip hop! Hop three times to the water hole.',
+    hop3: onDevice('Tap to make Pip hop! Hop three times to the water hole.', 'Click to make Pip hop! Hop three times to the water hole.'),
     count: COUNT.map(pip),
     splash: pip('Splash! A water hole!'),
     hop5: 'Now hop five times to Uluru, the big red rock!',
@@ -49,7 +50,7 @@ export const L = {
     only: koko('Yuck! Koalas only eat gum leaves!'),
     more: koko('Mmm! More, please!'),
     yawn: koko('Yawn! Koalas sleep almost all day.'),
-    lullaby: 'Tap the notes to sing Koko a lullaby!',
+    lullaby: onDevice('Tap the notes to sing Koko a lullaby!', 'Click the notes to sing Koko a lullaby!'),
     asleep: 'Shh! Koko is fast asleep.',
   },
   reef: {
@@ -78,19 +79,19 @@ export const L = {
   },
   croc: {
     story: [chompy("G'day! I'm Chompy! My eggs are hatching!")],
-    hatch: 'Tap the eggs to help the babies hatch!',
+    hatch: onDevice('Tap the eggs to help the babies hatch!', 'Click the eggs to help the babies hatch!'),
     chirp: 'Baby crocs chirp to call their mama!',
     eee: as('hatchling')('Eee! Eee!'),
     carry: 'Mama crocs carry their babies in their mouth!',
     ride: "Put each baby in Chompy's mouth!",
     count: COUNT.slice(0, 3).map(chompy),
     gentle: chompy('Gentle as a cuddle!'),
-    snap: 'Tap Chompy to make her go snap snap!',
+    snap: onDevice('Tap Chompy to make her go snap snap!', 'Click Chompy to make her go snap snap!'),
     teeth: 'Crocodiles grow new teeth all their lives!',
   },
   stars: {
     story: 'At night in Australia, you can see the Southern Cross stars!',
-    tap: 'Tap the five twinkly stars!',
+    tap: onDevice('Tap the five twinkly stars!', 'Click the five twinkly stars!'),
     found: 'You found the Southern Cross!',
     onFlag: "The stars are on Australia's flag!",
     drag: 'Drag the big star onto the flag!',
@@ -100,13 +101,13 @@ export const L = {
   },
   postcard: {
     story: "Let's color a postcard from the beach to send home!",
-    how: 'Pick a color, then tap to paint!',
-    send: 'Tap send when you are done!',
+    how: onDevice('Pick a color, then tap to paint!', 'Pick a color, then click to paint!'),
+    send: onDevice('Tap send when you are done!', 'Click send when you are done!'),
     gday: pip("G'day, mate! In Australia, mate means friend."),
   },
   party: {
     story: pip('Party time at the Sydney Opera House!'),
-    tap: 'Tap each friend to make them dance!',
+    tap: onDevice('Tap each friend to make them dance!', 'Click each friend to make them dance!'),
     mama: mama(`G'day, ${NAME}! Thanks for helping Pip!`),
     koko: koko('Yum! Thanks for the gum leaves!'),
     shelly: as('shelly')('Hello from the reef!'),
@@ -134,7 +135,7 @@ export const L = {
     reef: "The Great Barrier Reef is so big, you can see it from space!",
     crocs: 'Crocodiles live in warm rivers up north. Always stay far from their water!',
   },
-  passport: 'This is Australia! Tap a picture to learn more.',
+  passport: onDevice('This is Australia! Tap a picture to learn more.', 'This is Australia! Click a picture to learn more.'),
   videos: {
     koala: 'Want to see real koalas?',
     kangaroo: 'Want to see real kangaroos hop?',

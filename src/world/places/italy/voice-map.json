@@ -301,11 +301,25 @@
     "file": "5c90671e595a.mp3"
   },
   {
+    "text": "Drag the dough up fast to spin it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2856,
+    "file": "ee2a5fef3e5c.mp3"
+  },
+  {
     "text": "Again! Flick it up!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 1956,
     "file": "72db94da86ae.mp3"
+  },
+  {
+    "text": "Again! Drag it up fast!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2424,
+    "file": "68a561f6e755.mp3"
   },
   {
     "text": "Bellissimo! A big round pizza!",
@@ -392,6 +406,13 @@
     "file": "ab3e36470d0e.mp3"
   },
   {
+    "text": "Click the pizza to turn it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2400,
+    "file": "627351327492.mp3"
+  },
+  {
     "text": "Turn it again!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -411,6 +432,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2583,
     "file": "76d7d1e5fe7e.mp3"
+  },
+  {
+    "text": "Click the pizza to give it to the Queen!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2232,
+    "file": "37cb943c6674.mp3"
   },
   {
     "text": "Buonissima! Red, white and green!",
@@ -460,6 +488,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2340,
     "file": "c41721efba52.mp3"
+  },
+  {
+    "text": "Click the order to start!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2112,
+    "file": "a0b3b1362293.mp3"
   },
   {
     "text": "Mozzarella!",
@@ -579,6 +614,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2493,
     "file": "399c9c4ed340.mp3"
+  },
+  {
+    "text": "Click the pizza to serve it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1824,
+    "file": "86425efd8aef.mp3"
   },
   {
     "text": "Buonissima! Grazie!",
@@ -714,6 +756,13 @@
     "file": "fbb6141544fe.mp3"
   },
   {
+    "text": "Uh oh! Click the sneaky cat!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2592,
+    "file": "e35d7cd9ccd6.mp3"
+  },
+  {
     "text": "Oh. Sorry. Here you go.",
     "voice": "cesare",
     "sig": "959ae58ccf",
@@ -726,6 +775,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2180,
     "file": "cbebe84db164.mp3"
+  },
+  {
+    "text": "Click the check when you like it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2160,
+    "file": "f13863b4eed7.mp3"
   },
   {
     "text": "Cut it any way you like!",
@@ -889,6 +945,13 @@
     "file": "8265e8e02223.mp3"
   },
   {
+    "text": "Click Spina to shake them off!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2472,
+    "file": "487750eddf60.mp3"
+  },
+  {
     "text": "Hee hee! Into the basket!",
     "voice": "spina",
     "sig": "cb98c37ff1",
@@ -938,11 +1001,25 @@
     "file": "b1608e005850.mp3"
   },
   {
+    "text": "This olive is green. Click the sun!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1848,
+    "file": "275e19aec544.mp3"
+  },
+  {
     "text": "Purple! Tap the sun again!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2538,
     "file": "960b06741a84.mp3"
+  },
+  {
+    "text": "Purple! Click the sun again!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2688,
+    "file": "88054868e77f.mp3"
   },
   {
     "text": "Black! Now it is ripe!",
@@ -1085,6 +1162,13 @@
     "file": "6db67ba8c916.mp3"
   },
   {
+    "text": "Click and hold the jug to pour! Fill it all the way!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4416,
+    "file": "74059607b911.mp3"
+  },
+  {
     "text": "Full! All the way to the top!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1155,6 +1239,13 @@
     "file": "3e1c8775df98.mp3"
   },
   {
+    "text": "Click the tambourine!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2040,
+    "file": "8af129aac73b.mp3"
+  },
+  {
     "text": "Let's dance the pizzica!",
     "voice": "spina",
     "sig": "cb98c37ff1",
@@ -1190,6 +1281,13 @@
     "file": "978cf5a83c1c.mp3"
   },
   {
+    "text": "Click the hill and listen!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1872,
+    "file": "db07255efedc.mp3"
+  },
+  {
     "text": "Shh! I hear water!",
     "voice": "lupa",
     "sig": "1200e8d792",
@@ -1209,6 +1307,13 @@
     "sig": "ed7dbdac3d",
     "ms": 1093,
     "file": "174b35c1ab1a.mp3"
+  },
+  {
+    "text": "Click the rocks!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1368,
+    "file": "3276b43114bd.mp3"
   },
   {
     "text": "Acqua! You found water!",
@@ -1288,6 +1393,13 @@
     "file": "45220c5d071f.mp3"
   },
   {
+    "text": "Now click an arch!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2448,
+    "file": "2da63dd06d51.mp3"
+  },
+  {
     "text": "Now all the way to Rome! Look closely!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1309,11 +1421,25 @@
     "file": "aa4d726ddf11.mp3"
   },
   {
+    "text": "Click the spring to turn on the water!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2400,
+    "file": "b508ae567e51.mp3"
+  },
+  {
     "text": "Follow the water with your finger!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2703,
     "file": "68f9ee206dda.mp3"
+  },
+  {
+    "text": "Click and drag along the water!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2208,
+    "file": "93a7b897851b.mp3"
   },
   {
     "text": "The water is going to Rome!",
@@ -1358,11 +1484,25 @@
     "file": "ff90e6983781.mp3"
   },
   {
+    "text": "Drag the coin up fast into the fountain!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3624,
+    "file": "0c99275544fb.mp3"
+  },
+  {
     "text": "Swipe up on the coin!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2125,
     "file": "56d253be6731.mp3"
+  },
+  {
+    "text": "Drag the coin up!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2304,
+    "file": "5bf67e945e7a.mp3"
   },
   {
     "text": "One more coin!",
@@ -1554,6 +1694,13 @@
     "file": "9cc7caf6f529.mp3"
   },
   {
+    "text": "Click the door with the right number!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3144,
+    "file": "de8e093ddeb1.mp3"
+  },
+  {
     "text": "One line. One!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1680,6 +1827,13 @@
     "file": "0e51d89c5eaf.mp3"
   },
   {
+    "text": "Drag across the crowd to make a wave!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3336,
+    "file": "95315afc9c4a.mp3"
+  },
+  {
     "text": "Again! Make a wave!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1720,6 +1874,13 @@
     "sig": "ed7dbdac3d",
     "ms": 1507,
     "file": "756932a0d7ef.mp3"
+  },
+  {
+    "text": "Click the horn!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1128,
+    "file": "1ba7c6bd0135.mp3"
   },
   {
     "text": "Yay! A horn for the band!",
@@ -2184,6 +2345,13 @@
     "file": "ee6b6a5c6f55.mp3"
   },
   {
+    "text": "Click the check when you love it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1848,
+    "file": "5638dad62790.mp3"
+  },
+  {
     "text": "Look! The canal is all lit up!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -2254,6 +2422,13 @@
     "file": "233326ddce3c.mp3"
   },
   {
+    "text": "Click a lemon to pick it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2472,
+    "file": "5227f0433f9b.mp3"
+  },
+  {
     "text": "Lemon!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -2322,6 +2497,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2492,
     "file": "669d3b09aaf8.mp3"
+  },
+  {
+    "text": "Click the scarf for Nino!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2568,
+    "file": "7239d31a394c.mp3"
   },
   {
     "text": "Ahh, cozy! Grazie!",
@@ -2422,11 +2604,25 @@
     "file": "d95e2ce95fad.mp3"
   },
   {
+    "text": "Click the snow to fill the cup!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2304,
+    "file": "36fb5669a544.mp3"
+  },
+  {
     "text": "Tap a cup!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 1170,
     "file": "8efb6f3c3288.mp3"
+  },
+  {
+    "text": "Click a cup!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1176,
+    "file": "4a713998fc55.mp3"
   },
   {
     "text": "One scoop, please!",
@@ -2478,11 +2674,25 @@
     "file": "170262f27de3.mp3"
   },
   {
+    "text": "Click and hold a lemon or an orange!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3216,
+    "file": "99bddd28ac96.mp3"
+  },
+  {
     "text": "Press and hold the fruit!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2223,
     "file": "252931a2dd32.mp3"
+  },
+  {
+    "text": "Click and hold the fruit!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2400,
+    "file": "5f6c700daab7.mp3"
   },
   {
     "text": "Brrr! Brain freeze! Hee hee!",
@@ -2546,6 +2756,13 @@
     "sig": "ed7dbdac3d",
     "ms": 1591,
     "file": "35505056ed1b.mp3"
+  },
+  {
+    "text": "Click the piano!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1512,
+    "file": "f8d07cd6c825.mp3"
   },
   {
     "text": "The piano was invented in Italy!",
@@ -2805,5 +3022,12 @@
     "sig": "ed7dbdac3d",
     "ms": 3763,
     "file": "8c613cab3ce9.mp3"
+  },
+  {
+    "text": "This is Italy! Click a picture to learn more.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3384,
+    "file": "c414fbfb272f.mp3"
   }
 ]

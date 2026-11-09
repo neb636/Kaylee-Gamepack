@@ -2,7 +2,7 @@
 import { useState, type ReactNode } from 'react'
 import { go } from '../router'
 import { AvatarDemo, JigsawDemo, PizzaDemo } from './InteractionDemos'
-import { BigButton, burst, ChoiceCards, MatchPairs, Mascot, SayButton, SortIntoBins, StarProgress, TapCounter, TapToReveal, Trophy } from './sdk-internal'
+import { BigButton, burst, ChoiceCards, onDevice, MatchPairs, Mascot, SayButton, SortIntoBins, StarProgress, TapCounter, TapToReveal, Trophy } from './sdk-internal'
 
 function Demo({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -37,7 +37,7 @@ export function Playground() {
           <Mascot pose="wave" size={140} />
           <Mascot pose="cheer" size={140} />
           <Mascot pose="think" size={140} />
-          <SayButton text="Hi Kaylee! Tap me to hear it again." />
+          <SayButton text={onDevice('Hi Kaylee! Tap me to hear it again.', 'Hi Kaylee! Click me to hear it again.')} />
           <StarProgress done={2} total={5} />
         </div>
       </Demo>

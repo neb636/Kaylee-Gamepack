@@ -2,6 +2,7 @@
   "Kaylee, you did it! You won the Thailand Explorer trophy!",
   "Kaylee, Thailand Explorer! From Thailand.",
   "This is Thailand! Tap a picture to explore.",
+  "This is Thailand! Click a picture to explore.",
   "In Thailand, we say Sawasdee to say hello!",
   "The elephant is Thailand's special animal!",
   "In Thai, chang means elephant!",
@@ -9,9 +10,12 @@
   "Thai cars drive on the left!",
   "We're at Agong's house in Thailand, Kaylee!",
   "Tap the door to go inside!",
+  "Click the door to go inside!",
   "Tap your family to say hello!",
+  "Click your family to say hello!",
   "That door's closed!",
   "Tap the stairs to go up to your room!",
+  "Click the stairs to go up to your room!",
   "Bounce on the bed!",
   "A spirit house! Thai families give it flowers and a drink.",
   "Put your hands together and bow. In Thailand, that is a wai!",
@@ -567,6 +571,10 @@
     "voice": "nick"
   },
   {
+    "text": "OK! Just click me!",
+    "voice": "nick"
+  },
+  {
     "text": "Want to go to the mall?",
     "voice": "nick"
   },
@@ -575,7 +583,15 @@
     "voice": "ji"
   },
   {
+    "text": "Click your things to pack them, Kaylee!",
+    "voice": "ji"
+  },
+  {
     "text": "All packed? Tap the suitcase!",
+    "voice": "ji"
+  },
+  {
+    "text": "All packed? Click the suitcase!",
     "voice": "ji"
   },
   {
@@ -663,6 +679,10 @@
     "voice": "nick"
   },
   {
+    "text": "Our plane! Click the door!",
+    "voice": "nick"
+  },
+  {
     "text": "Seatbelt on, Kaylee!",
     "voice": "ji"
   },
@@ -704,8 +724,11 @@
   },
   "Thailand looks like an elephant's head!",
   "Tap your suitcase!",
+  "Click your suitcase!",
   "Tap the plane's door!",
+  "Click the plane's door!",
   "Tap the tray!",
+  "Click the tray!",
   {
     "text": "Our longtail boat! Tie on ribbons for good luck!",
     "voice": "nick"
@@ -779,12 +802,15 @@
     "voice": "kids"
   },
   "Tap a ribbon to tie it on!",
+  "Click a ribbon to tie it on!",
   "Now the flowers!",
   "Put your finger on the water to drive!",
+  "Click and hold on the water to drive!",
   "Drive to a golden light!",
   "Push the ball back with the boat!",
   "Lie down! The roof is low!",
   "Tap a pose!",
+  "Click a pose!",
   "Drive back to the pier!",
   "Paddle back out to the boat!",
   "Thai boats wear ribbons for good luck!",
@@ -809,6 +835,7 @@
   "This porpoise has no fin on its back!",
   "A boat race! Drive through the rainbow gate!",
   "Hold your finger on the water to go fast!",
+  "Click and hold on the water to go fast!",
   "Three!",
   "Two!",
   "One!",
@@ -818,6 +845,7 @@
   "Kaylee wins! First place!",
   "A trophy for Kaylee, the boat race champion!",
   "Tap the boat to go back to the bay!",
+  "Click the boat to go back to the bay!",
   "Kaylee, Boat Race Champion! From Thailand.",
   {
     "text": "Go, Kaylee, go!",
@@ -897,16 +925,22 @@
   "The elephants are waiting!",
   "Elephants or the boat? You pick!",
   "Tap the cup to make a drink!",
+  "Click the cup to make a drink!",
   "Pour in the milk!",
   "Squeeze in the chocolate!",
+  "Click and hold to squeeze in the chocolate!",
   "Stir it round and round!",
   "Pick a straw!",
   "Tap the elephant to go see them!",
+  "Click the elephant to go see them!",
   "Tap the path to walk!",
+  "Click the path to walk!",
   "Grab a banana!",
   "Give them what they want!",
   "Tap an elephant for a splash!",
+  "Click an elephant for a splash!",
   "Tap the boat to go to the sea!",
+  "Click the boat to go to the sea!",
   "An elephant's trunk is its nose and its hand!",
   "Elephants eat almost all day long!",
   "In Thailand, everyone has a fun nickname!",
@@ -945,7 +979,9 @@
   "Fiddler crabs wave hello!",
   "Pick a photo for Agong!",
   "Tap Agong to give it to him!",
+  "Click Agong to give it to him!",
   "Tap the plane to fly home!",
+  "Click the plane to fly home!",
   "Pack again, or go straight to the boat?",
   {
     "text": "Sawasdee krap! I need a helper!",
@@ -964,6 +1000,7 @@
   "Shoo them away!",
   "Walk through the rice to cut it!",
   "Tap to bang the rice!",
+  "Click to bang the rice!",
   "In Nan, people eat sticky rice with their fingers!",
   "The steps on the hill keep the water for the rice!",
   "Buffalo helped farmers get the mud ready!",
@@ -1029,10 +1066,13 @@
     "voice": "lung"
   },
   "Tap the gate to let the water in!",
+  "Click the gate to let the water in!",
   "Walk to the birds!",
   "Walk through the golden rice!",
   "Tap the sticky rice!",
+  "Click the sticky rice!",
   "Tap Mommy for a photo!",
+  "Click Mommy for a photo!",
   {
     "text": "Look at those rows!",
     "voice": "nick"
@@ -1100,6 +1140,7 @@
   "Want to see real farmers grow rice?",
   "Where shall we go first, Kaylee?",
   "Tap a place to drive there!",
+  "Click a place to drive there!",
   {
     "text": "Home, or one more?",
     "voice": "ji"
@@ -1110,6 +1151,7 @@
   },
   "Over there is Laos, another country!",
   "Steer the car with your finger, Kaylee!",
+  "Click and drag to steer the car, Kaylee!",
   "We're driving into a cloud!",
   "Let's count the bends!",
   "Three! Kaylee drove the three!",
@@ -1250,10 +1292,13 @@
   "More bags to spray!",
   "Put your mushrooms on the pizza!",
   "Hold your finger on the bags!",
+  "Click and hold on the bags!",
   "Pull a mushroom into the basket!",
   "Drag a mushroom to the pizza!",
   "Tap the oven!",
+  "Click the oven!",
   "Tap the pizza to share it!",
+  "Click the pizza to share it!",
   "Mushrooms grow from sawdust, not seeds!",
   {
     "text": "My mushrooms are thirsty!",
@@ -1392,6 +1437,7 @@
   },
   "Put your hoof in the water!",
   "Touch the water by the boat!",
+  "Click the water by the boat!",
   "Flying fish!",
   {
     "text": "Whoa! We flew!",
@@ -1467,6 +1513,7 @@
     "voice": "nick"
   },
   "Tap an animal to take its photo!",
+  "Click an animal to take its photo!",
   {
     "text": "Thank you for cleaning the beach!",
     "voice": "ji"
@@ -1579,6 +1626,7 @@
     "voice": "otter"
   },
   "Steer it with your finger!",
+  "Click and drag to steer it!",
   "Big waves! Drive over them!",
   "Race the jet ski man!",
   {
@@ -1676,13 +1724,17 @@
   },
   "The rope keeps the swimmers safe!",
   "Tap the life jacket!",
+  "Click the life jacket!",
   "Hold your finger on the water!",
+  "Click and hold on the water!",
   {
     "text": "Let's build a sandcastle!",
     "voice": "nick"
   },
   "Dig the sand with your finger!",
+  "Click and drag to dig the sand!",
   "Tap a bucket to make a tower!",
+  "Click a bucket to make a tower!",
   "The sea is coming! Dig a river to it!",
   {
     "text": "Water in the moat! Hooray!",
@@ -1728,17 +1780,21 @@
     "voice": "ji"
   },
   "Drag your finger in the sand!",
+  "Click and drag in the sand!",
   "Tap a bucket!",
+  "Click a bucket!",
   "Dig a line down to the sea!",
   {
     "text": "Masks on! Jump in!",
     "voice": "pelican"
   },
   "Hold your finger in the water to swim!",
+  "Click and hold in the water to swim!",
   "Follow the parrotfish!",
   "Swim close to the cuttlefish!",
   "It turned pink, just for you!",
   "Tap the camera for a photo!",
+  "Click the camera for a photo!",
   "Coral is alive! Fish live in it.",
   "Cuttlefish change color to talk!",
   {
@@ -1780,6 +1836,7 @@
     "voice": "nick"
   },
   "Tap the bread basket!",
+  "Click the bread basket!",
   {
     "text": "Here you go!",
     "voice": "nick"
@@ -1833,8 +1890,11 @@
     "voice": "ji"
   },
   "Tap the roll to take a bite!",
+  "Click the roll to take a bite!",
   "Hold your finger on the coconut!",
+  "Click and hold on the coconut!",
   "Tap the mango sticky rice!",
+  "Click the mango sticky rice!",
   {
     "text": "Close your eyes and count!",
     "voice": "nick"
@@ -2001,11 +2061,13 @@
     "voice": "nick"
   },
   "Tap the fire for the show!",
+  "Click the fire for the show!",
   {
     "text": "Look! Fire dancers!",
     "voice": "ji"
   },
   "Swirl your lights with your finger!",
+  "Click and drag to swirl your lights!",
   "Fire is for grown-ups. Yours are lights!",
   {
     "text": "Whoa! Big circle!",
@@ -2097,11 +2159,15 @@
     "voice": "nick"
   },
   "Swirl your finger in the sky!",
+  "Click and drag to swirl in the sky!",
   "Follow the dots with your finger!",
+  "Click and drag along the dots!",
   "Swirl a loop!",
   "Draw one giant circle!",
   "Tap the sky for fireworks!",
+  "Click the sky for fireworks!",
   "Welcome to HarborLand, Kaylee! Tap a place to play!",
+  "Welcome to HarborLand, Kaylee! Click a place to play!",
   {
     "text": "Sawasdee ka, Kaylee!",
     "voice": "staff"
@@ -2147,6 +2213,7 @@
     "voice": "ji"
   },
   "Tap a door to play!",
+  "Click a door to play!",
   "Where shall we play, Kaylee?",
   {
     "text": "Doctor Kaylee is here!",
@@ -2204,8 +2271,10 @@
   "The thermometer goes in its mouth!",
   "Pull out the thorn with the tweezers!",
   "Rub cream on the sore paw!",
+  "Click and wiggle cream on the sore paw!",
   "Wrap a bandage round the paw!",
   "Rub on lots of soap!",
+  "Click and wiggle on lots of soap!",
   "Shower it with water!",
   "Dry it with the towel!",
   "Brush the mane!",
@@ -2234,6 +2303,7 @@
     "voice": "kid"
   },
   "Tap the mirror!",
+  "Click the mirror!",
   {
     "text": "Whoa! I love it!",
     "voice": "nick"
@@ -2349,14 +2419,19 @@
   "Put in the Thai tea!",
   "Cha yen is Thai iced tea! It's orange!",
   "A slide race, Kaylee! Tap the steps to climb!",
+  "A slide race, Kaylee! Click the steps to climb!",
   {
     "text": "Race you, Kaylee!",
     "voice": "nick"
   },
   "Tap, tap, tap to go fast!",
+  "Click, click, click to go fast!",
   "Now tap at each bump to fly!",
+  "Now click at each bump to fly!",
   "Tap now!",
+  "Click now!",
   "Rubber rings! Tap to spin!",
+  "Rubber rings! Click to spin!",
   "Kaylee wins!",
   "Kaylee wins again!",
   "First place, Kaylee!",
@@ -2374,7 +2449,9 @@
   },
   "Three ribbons for Kaylee!",
   "Tap the steps to climb!",
+  "Click the steps to climb!",
   "Tap to scoot faster!",
+  "Click to scoot faster!",
   {
     "text": "Can you build higher than me, Kaylee?",
     "voice": "nick"
@@ -2414,6 +2491,7 @@
   "Grab a brick from the box!",
   "Put a brick on the picture!",
   "Tap the tower to push it!",
+  "Click the tower to push it!",
   "A chedi is a Thai temple tower!",
   "Climb the Golden Mountain, Kaylee! Count the holds!",
   "You made it, Kaylee!",
@@ -2446,6 +2524,7 @@
     "voice": "coach"
   },
   "Tap your gloves to bow!",
+  "Click your gloves to bow!",
   {
     "text": "Now dance with me!",
     "voice": "coach"
@@ -2479,6 +2558,7 @@
     "voice": "nick"
   },
   "Tap your gloves!",
+  "Click your gloves!",
   "Punch the bag!",
   "Punch Daddy's pad!",
   {
@@ -2556,6 +2636,7 @@
   },
   "Phi Ta Khon is a festival with big funny masks!",
   "Tap a slide to ride it!",
+  "Click a slide to ride it!",
   "Pick a pizza, Kaylee!",
   {
     "text": "Pizza time!",
@@ -2614,6 +2695,7 @@
     "voice": "ji"
   },
   "Tap a pizza!",
+  "Click a pizza!",
   "Pull a slice to a plate!",
   "Put one in Agong's box!",
   {
@@ -2657,6 +2739,7 @@
     "voice": "agong"
   },
   "Tap Agong to give him the box!",
+  "Click Agong to give him the box!",
   {
     "text": "Our mall day!",
     "voice": "ji"

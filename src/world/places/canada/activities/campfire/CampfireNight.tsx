@@ -22,7 +22,7 @@
 // drawn once and slid under her finger (only the compositor moves it).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent, type RefObject } from 'react'
-import { BigButton, bell as bellIn, bigCelebration, burst, lerp, lineText, say, smooth, sounds, span, spendHint, useElementSize, wobble, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, bell as bellIn, onDevice, bigCelebration, burst, lerp, lineText, say, smooth, sounds, span, spendHint, useElementSize, wobble, type Line, type PuppetHandle } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { sfx } from '../../../../kit/sfx'
@@ -895,7 +895,7 @@ class CampWorld {
         s.fire = true
         s.fireT = this.now
         night.whoosh(0.1)
-        this.say('🔥 It’s on fire! Tap it to blow it out')
+        this.say(onDevice('🔥 It’s on fire! Tap it to blow it out', '🔥 It’s on fire! Click it to blow it out'))
         this.ev.speak(T.onFire)
       }
     } else if (s.fire && this.now - s.fireT > ROAST.out) this.blowOut()
@@ -1387,7 +1387,7 @@ class CampWorld {
     let text = SAY[this.section]
     const s = this.stick
     if (this.section === 'marshmallow') {
-      if (s.fire) text = '🔥 It’s on fire! Tap it to blow it out'
+      if (s.fire) text = onDevice('🔥 It’s on fire! Tap it to blow it out', '🔥 It’s on fire! Click it to blow it out')
       else if (s.charred || s.toast >= ROAST.golden * 0.75) text = '🍡 Give it to Maple or the raccoons'
       else if (s.heat > 0.1) text = '♨️ It puffs up… keep it there'
     } else if (this.section === 'sounds' && !this.snd.done) {

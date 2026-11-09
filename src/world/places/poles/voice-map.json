@@ -231,11 +231,25 @@
     "file": "088dc761cf9e.mp3"
   },
   {
+    "text": "Click a picture to play!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2328,
+    "file": "cb524c72d70e.mp3"
+  },
+  {
     "text": "You got every stamp! Tap the party!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 3105,
     "file": "90fdba831de6.mp3"
+  },
+  {
+    "text": "You got every stamp! Click the party!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3120,
+    "file": "2960263293cd.mp3"
   },
   {
     "text": "Here comes the sun! Drag it!",
@@ -369,6 +383,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2782,
     "file": "179149b706c3.mp3"
+  },
+  {
+    "text": "Click Pola, pull her back, and let go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3936,
+    "file": "9653ab6c816e.mp3"
   },
   {
     "text": "The ice is drifting. Wait, then fling!",
@@ -532,11 +553,25 @@
     "file": "34e43f2c1f69.mp3"
   },
   {
+    "text": "Brr, winter is coming! Click and wiggle snow on the fox.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4680,
+    "file": "cbae9d89aff5.mp3"
+  },
+  {
     "text": "Rub the fox with your finger.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2607,
     "file": "af4ac8d6022e.mp3"
+  },
+  {
+    "text": "Hold the click and wiggle on the fox.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3648,
+    "file": "076e19a44cf8.mp3"
   },
   {
     "text": "Now rub them all white, so they can hide!",
@@ -546,11 +581,25 @@
     "file": "bd613e9c493c.mp3"
   },
   {
+    "text": "Now click and wiggle them all white, so they can hide!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4416,
+    "file": "c6641941dc34.mp3"
+  },
+  {
     "text": "Rub snow on the brown ones.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2303,
     "file": "86f13362e303.mp3"
+  },
+  {
+    "text": "Click and wiggle snow on the brown ones.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3912,
+    "file": "e0656ea79ab5.mp3"
   },
   {
     "text": "Shh! Here comes the polar bear.",
@@ -581,6 +630,13 @@
     "file": "5c8eba698083.mp3"
   },
   {
+    "text": "Click the sun to bring the summer.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2664,
+    "file": "949e62bddb18.mp3"
+  },
+  {
     "text": "Summer is here! Rub the snow away.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -588,11 +644,25 @@
     "file": "ca29e89512fb.mp3"
   },
   {
+    "text": "Summer is here! Click and wiggle the snow away.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4200,
+    "file": "8614c15a5e84.mp3"
+  },
+  {
     "text": "Rub them brown again.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 1863,
     "file": "80942e395da6.mp3"
+  },
+  {
+    "text": "Click and wiggle them brown again.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2928,
+    "file": "38a455ef81b8.mp3"
   },
   {
     "text": "Snowy owls and polar bears stay white all year!",
@@ -1015,11 +1085,25 @@
     "file": "444880a39bb1.mp3"
   },
   {
+    "text": "Click the cracks to break off the ice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2808,
+    "file": "966db1f11a3c.mp3"
+  },
+  {
     "text": "A giant crack! Tap, tap, tap!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 3310,
     "file": "d333b52a9703.mp3"
+  },
+  {
+    "text": "A giant crack! Click, click, click!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4104,
+    "file": "c25539400063.mp3"
   },
   {
     "text": "Look! Most of the iceberg hides under the water.",
@@ -1034,6 +1118,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2525,
     "file": "ce16db56197d.mp3"
+  },
+  {
+    "text": "Click and drag to push the iceberg down!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3144,
+    "file": "7530c9bffb94.mp3"
   },
   {
     "text": "Now push the icebergs out to sea!",
@@ -1274,11 +1365,25 @@
     "file": "3b8176178bc2.mp3"
   },
   {
+    "text": "Click and drag to steer Terry!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2544,
+    "file": "bea5a6d7290b.mp3"
+  },
+  {
     "text": "Move your finger to steer Terry!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 3813,
     "file": "720484ab957d.mp3"
+  },
+  {
+    "text": "Hold the click and move to steer Terry!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3288,
+    "file": "92fd31a5aec5.mp3"
   },
   {
     "text": "Phew! It's warm in the middle of the world!",
@@ -1421,6 +1526,13 @@
     "file": "d87409439577.mp3"
   },
   {
+    "text": "Which pole is ocean under the ice? Click it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4080,
+    "file": "6edd2d72b61b.mp3"
+  },
+  {
     "text": "Which pole is the coldest? Tap it!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1428,11 +1540,25 @@
     "file": "1425ce2d7947.mp3"
   },
   {
+    "text": "Which pole is the coldest? Click it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4032,
+    "file": "46c15302d625.mp3"
+  },
+  {
     "text": "Who visits both poles? Tap them!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 3100,
     "file": "b525f3430c92.mp3"
+  },
+  {
+    "text": "Who visits both poles? Click them!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3072,
+    "file": "096a91ac270c.mp3"
   },
   {
     "text": "It's summer up north. What is it down south?",

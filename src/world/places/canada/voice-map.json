@@ -210,6 +210,13 @@
     "file": "3d983a2750ea.mp3"
   },
   {
+    "text": "Maple's animal book! Click an animal to hear about it.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4776,
+    "file": "b84566c67b2e.mp3"
+  },
+  {
     "text": "A snowy owl! Quebec's bird.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -539,11 +546,25 @@
     "file": "7861e3e8e923.mp3"
   },
   {
+    "text": "Click and drag to push the train!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2736,
+    "file": "5e26444430c8.mp3"
+  },
+  {
     "text": "Tap a bubble to play!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 1524,
     "file": "ef4b71acf05f.mp3"
+  },
+  {
+    "text": "Click a bubble to play!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2088,
+    "file": "ef9420136f36.mp3"
   },
   {
     "text": "That one is coming soon!",
@@ -670,6 +691,13 @@
     "sig": "ed7dbdac3d",
     "ms": 1725,
     "file": "ac011d9e7580.mp3"
+  },
+  {
+    "text": "Click it, so it can move!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3024,
+    "file": "5858c78e7978.mp3"
   },
   {
     "text": "Oops! Sorry!",
@@ -817,6 +845,13 @@
     "sig": "ed7dbdac3d",
     "ms": 3893,
     "file": "f8f10058e422.mp3"
+  },
+  {
+    "text": "The pot is empty! Click the maple tree.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3120,
+    "file": "0039def4c9ba.mp3"
   },
   {
     "text": "Sap from the maple tree makes the syrup!",
@@ -1071,11 +1106,25 @@
     "file": "da187c6c14a1.mp3"
   },
   {
+    "text": "Click the drum for the parade, or make more snowmen!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3984,
+    "file": "e73cb41879a6.mp3"
+  },
+  {
     "text": "Put your finger on the snowball and push!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 3004,
     "file": "e34ae81c23e6.mp3"
+  },
+  {
+    "text": "Click the snowball and push it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2184,
+    "file": "01adf56eb939.mp3"
   },
   {
     "text": "Push the little ball into the big one!",
@@ -1104,6 +1153,13 @@
     "sig": "ed7dbdac3d",
     "ms": 1922,
     "file": "08064fdeff90.mp3"
+  },
+  {
+    "text": "Click the big drum!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1848,
+    "file": "a021f098d2b4.mp3"
   },
   {
     "text": "This castle is really a big hotel!",
@@ -1260,6 +1316,13 @@
     "file": "60605b334af3.mp3"
   },
   {
+    "text": "Click and hold to steer the bike!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3192,
+    "file": "cb0d53cccbbf.mp3"
+  },
+  {
     "text": "Two trails! Green or blue?",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1279,6 +1342,13 @@
     "sig": "ed7dbdac3d",
     "ms": 4060,
     "file": "008a6c7d3f39.mp3"
+  },
+  {
+    "text": "Hold the click and move left or right!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3168,
+    "file": "67c7d079bc30.mp3"
   },
   {
     "text": "Wow, so high!",
@@ -1449,6 +1519,13 @@
     "file": "8c8f9b2256af.mp3"
   },
   {
+    "text": "Click and hold, then move to shine the light!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3864,
+    "file": "131b21550d8b.mp3"
+  },
+  {
     "text": "Look for shiny eyes in the dark!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1533,6 +1610,13 @@
     "file": "8e135693d788.mp3"
   },
   {
+    "text": "Click and hold the marshmallow near the fire.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2808,
+    "file": "5e41510429a8.mp3"
+  },
+  {
     "text": "Give it to Maple or the raccoons.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1545,6 +1629,13 @@
     "sig": "ed7dbdac3d",
     "ms": 3916,
     "file": "ca5b53ae205b.mp3"
+  },
+  {
+    "text": "It's on fire! Click it to blow it out!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3120,
+    "file": "73f9ff33d2be.mp3"
   },
   {
     "text": "Golden! Yummy!",
@@ -1680,6 +1771,13 @@
     "file": "1c9fd4fff614.mp3"
   },
   {
+    "text": "Click and hold where the canoe should go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2928,
+    "file": "dd81d1485b37.mp3"
+  },
+  {
     "text": "Drag your finger back, beside the canoe.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1687,11 +1785,25 @@
     "file": "ad6ad55c88b8.mp3"
   },
   {
+    "text": "Click and drag back, beside the canoe.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3720,
+    "file": "3d7598cb359e.mp3"
+  },
+  {
     "text": "Press the water in front of the canoe.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2344,
     "file": "23adfe695275.mp3"
+  },
+  {
+    "text": "Click the water in front of the canoe.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2520,
+    "file": "f23ee8f1ad02.mp3"
   },
   {
     "text": "Paddle to the milky water by the glacier stream!",
@@ -2030,11 +2142,25 @@
     "file": "9835cbf4e151.mp3"
   },
   {
+    "text": "Click and hold where the boat should go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3552,
+    "file": "054c3c5e4f58.mp3"
+  },
+  {
     "text": "Hold and push to steer the boat!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2646,
     "file": "f1de648a9534.mp3"
+  },
+  {
+    "text": "Click and hold, then push to steer the boat!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4008,
+    "file": "feb51d24795a.mp3"
   },
   {
     "text": "A sleepy otter floated away. Go gently!",
@@ -2105,6 +2231,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2456,
     "file": "bf64f88fa796.mp3"
+  },
+  {
+    "text": "Click the yellow microphone to listen!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2112,
+    "file": "59ae199ee0aa.mp3"
   },
   {
     "text": "Oh! Hello!",
@@ -2261,6 +2394,13 @@
     "file": "3cc7e16269ec.mp3"
   },
   {
+    "text": "Grab a salmon, and drag it up fast!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3288,
+    "file": "221551fb32c1.mp3"
+  },
+  {
     "text": "The big falls! Try the rock, or the log.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -2275,11 +2415,25 @@
     "file": "340c5b451491.mp3"
   },
   {
+    "text": "The bears are fishing! Drag the salmon up past them.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4080,
+    "file": "ea21dce8630f.mp3"
+  },
+  {
     "text": "Home! Tap each salmon to lay its eggs.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 3362,
     "file": "598e39e94c01.mp3"
+  },
+  {
+    "text": "Home! Click each salmon to lay its eggs.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3960,
+    "file": "bf92dafc05cd.mp3"
   },
   {
     "text": "Spring! Tap the eggs.",
@@ -2289,11 +2443,25 @@
     "file": "7f7f137065f8.mp3"
   },
   {
+    "text": "Spring! Click the eggs.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2376,
+    "file": "80600036e9c9.mp3"
+  },
+  {
     "text": "Bonk! Try a bigger flick.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2829,
     "file": "054add384a1b.mp3"
+  },
+  {
+    "text": "Bonk! Try a bigger, faster drag.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3384,
+    "file": "81237a372711.mp3"
   },
   {
     "text": "Rain! It's a rainforest.",
@@ -2688,11 +2856,25 @@
     "file": "124910bd0cc3.mp3"
   },
   {
+    "text": "Drag the puck fast into the geese's net!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3576,
+    "file": "d1768c6f99c1.mp3"
+  },
+  {
     "text": "Swipe from the puck to the net!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2330,
     "file": "fb0198e6343e.mp3"
+  },
+  {
+    "text": "Drag from the puck to the net!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2112,
+    "file": "d0eb8481a285.mp3"
   },
   {
     "text": "The geese are in the way! Bounce it off the snow!",

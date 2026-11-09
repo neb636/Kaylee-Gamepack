@@ -1,8 +1,9 @@
 // Every phrase that can be spoken in Canada. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
-// (This file is also read by Node, so it imports nothing. NAME matches KID_NAME.) Plain strings are Sparkle, the guide;
+// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.) Plain strings are Sparkle, the guide;
 // the friends (Maple the beaver, the moose, the raccoon...) talk in their own voices from cast.json. Each activity has
 // its own block below (one per folder in activities/), so activities can be worked on side by side.
 // Straight apostrophes only: curly ones failed the transcription check in PR #63.
+import { onDevice } from '../../../sdk/device.ts'
 const NAME = 'Kaylee'
 
 type Line = string | { text: string; voice: string }
@@ -52,7 +53,7 @@ export const L = {
   // Maple's animal book (book/animals.ts): Sparkle names each animal the first time Kaylee pokes it, with one short fact.
   // The same line plays again when she taps it in the book.
   book: {
-    open: 'Maple\'s animal book! Tap an animal to hear about it.',
+    open: onDevice('Maple\'s animal book! Tap an animal to hear about it.', 'Maple\'s animal book! Click an animal to hear about it.'),
     // Quebec City
     'snowy-owl': "A snowy owl! Quebec's bird.",
     'red-squirrel': 'A red squirrel! It loves sap.',
@@ -109,8 +110,8 @@ export const L = {
   hub: {
     // The first visit: Maple on Quebec City's platform tells the story, then Sparkle says what to do.
     story: [maple("Bonjour! Let's find a hockey team, all across Canada!")],
-    push: 'Push the train with your finger!',
-    bubbles: 'Tap a bubble to play!',
+    push: onDevice('Push the train with your finger!', 'Click and drag to push the train!'),
+    bubbles: onDevice('Tap a bubble to play!', 'Click a bubble to play!'),
     soon: 'That one is coming soon!',
     // Maple, when the train pulls in.
     arrive: {
@@ -137,7 +138,7 @@ export const L = {
       bison: maple('Oh! A bison on the track!'),
       geese: maple('Oh! Geese on the track!'),
     },
-    tapIt: 'Tap it, so it can move!',
+    tapIt: onDevice('Tap it, so it can move!', 'Click it, so it can move!'),
     sorry: by('moose')('Oops! Sorry!'),
     // Tap Maple.
     maple: [maple('Choo choo!'), maple("Let's go!"), maple('Bonjour!')],
@@ -167,7 +168,7 @@ export const L = {
     set: "It's set! Roll it up on a stick.",
     hot: 'Still hot! Let it set.',
     rest: 'Roll up the rest!',
-    empty: 'The pot is empty! Tap the maple tree.',
+    empty: onDevice('The pot is empty! Tap the maple tree.', 'The pot is empty! Click the maple tree.'),
     tree: 'Sap from the maple tree makes the syrup!',
     shapes: "Pour the shape on Maple's card!",
     orders: 'Make each friend the size they want!',
@@ -208,14 +209,14 @@ export const L = {
     roll: 'Push the snowball! Watch it grow!',
     stack: 'Now roll the little ball into the big one!',
     dress: 'Roll a snowball into a box!',
-    ready: 'Tap the drum for the parade, or make more snowmen!',
+    ready: onDevice('Tap the drum for the parade, or make more snowmen!', 'Click the drum for the parade, or make more snowmen!'),
     // Stuck for a while: Sparkle helps (the hand shows it too).
     hint: {
-      roll: 'Put your finger on the snowball and push!',
+      roll: onDevice('Put your finger on the snowball and push!', 'Click the snowball and push it!'),
       stack: 'Push the little ball into the big one!',
       hat: 'Roll a snowball into the hat box!',
       sash: 'Roll a snowball into the sash box!',
-      drum: 'Tap the big drum!',
+      drum: onDevice('Tap the big drum!', 'Click the big drum!'),
     },
     // Tap-to-hear facts, the first time she pokes them.
     castle: 'This castle is really a big hotel!',
@@ -241,10 +242,10 @@ export const L = {
     // The story, in the gondola at the bottom (Maple, then up they go).
     story: [maple('Bonjour! I want to ride all the way down to the waterfall!'), maple('Up we go!')],
     // Sparkle: the one instruction when the bike rolls out of the station, what's new on the way, the stuck hint.
-    steer: 'Hold your finger down and steer the bike!',
+    steer: onDevice('Hold your finger down and steer the bike!', 'Click and hold to steer the bike!'),
     split: 'Two trails! Green or blue?',
     creek: 'The bridge, or splash through the creek?',
-    hint: 'Push your finger left or right!',
+    hint: onDevice('Push your finger left or right!', 'Hold the click and move left or right!'),
     // Maple's whoops and her silly moments.
     high: maple('Wow, so high!'),
     rock: maple('Whoa, wobbly!'),
@@ -267,9 +268,9 @@ export const L = {
   },
   campfire: {
     // The story (before the first touch): Maple, then Sparkle's one instruction.
-    story: [maple("Shh! Who's out there?"), 'Move your finger to shine the light!'],
+    story: [maple("Shh! Who's out there?"), onDevice('Move your finger to shine the light!', 'Click and hold, then move to shine the light!')],
     // Sparkle: each part's instruction (the prompt bubble plays it again), and her hints when Kaylee is stuck.
-    eyes: 'Move your finger to shine the light!',
+    eyes: onDevice('Move your finger to shine the light!', 'Click and hold, then move to shine the light!'),
     eyesHint: 'Look for shiny eyes in the dark!',
     allOut: maple('You found everybody!'),
     sounds: 'Listen! Who made that sound?',
@@ -281,9 +282,9 @@ export const L = {
     caught: by('raccoon')('Hee hee! Marshmallows for my babies!'),
     sorry: by('raccoon')("Oops, sorry! Let's share."),
     roast: maple("Let's roast more!"),
-    marshmallow: 'Hold the marshmallow near the fire.',
+    marshmallow: onDevice('Hold the marshmallow near the fire.', 'Click and hold the marshmallow near the fire.'),
     marshmallowHint: 'Give it to Maple or the raccoons.',
-    onFire: "It's on fire! Tap it to blow it out!",
+    onFire: onDevice("It's on fire! Tap it to blow it out!", "It's on fire! Click it to blow it out!"),
     golden: maple('Golden! Yummy!'),
     squishy: maple('Squishy! Yum anyway.'),
     tooCrunchy: maple('Too crunchy for me!'),
@@ -307,8 +308,8 @@ export const L = {
     // The story: Maple at the dock, in the red canoe.
     story: maple('Why is my lake so blue?'),
     // Sparkle: how to paddle (one way or the other), and the hint when she hasn't paddled for a while.
-    go: { stroke: 'Pull the paddle back through the water!', pull: 'Hold the water where the canoe should go!' },
-    hint: { stroke: 'Drag your finger back, beside the canoe.', pull: 'Press the water in front of the canoe.' },
+    go: { stroke: 'Pull the paddle back through the water!', pull: onDevice('Hold the water where the canoe should go!', 'Click and hold where the canoe should go!') },
+    hint: { stroke: onDevice('Drag your finger back, beside the canoe.', 'Click and drag back, beside the canoe.'), pull: onDevice('Press the water in front of the canoe.', 'Click the water in front of the canoe.') },
     // Where the blue comes from.
     stream: 'Paddle to the milky water by the glacier stream!',
     streamMaple: maple('Ooh! What is that milky water?'),
@@ -370,7 +371,7 @@ export const L = {
     // The story, at the dock (Maple at the wheel of the little boat).
     story: [maple("I've never seen a whale!"), maple("Let's find them!")],
     // Sparkle: how to steer (one line before her hands are busy), then only when something new appears.
-    steer: { finger: 'Hold the water where the boat should go!', wheel: 'Hold and push to steer the boat!' },
+    steer: { finger: onDevice('Hold the water where the boat should go!', 'Click and hold where the boat should go!'), wheel: onDevice('Hold and push to steer the boat!', 'Click and hold, then push to steer the boat!') },
     otters: 'A sleepy otter floated away. Go gently!',
     spouts: 'A spout! Steer there to find the whale!',
     orcas: 'The orca family! Go fast and turn!',
@@ -382,7 +383,7 @@ export const L = {
       tow: 'Take her back to her friends!',
       spouts: 'Look for the spout. Steer there!',
       orcas: 'Go fast and turn. The baby copies you!',
-      mic: 'Tap the yellow microphone to listen!',
+      mic: onDevice('Tap the yellow microphone to listen!', 'Click the yellow microphone to listen!'),
     },
     // The sea otters.
     otterWake: by('otter')('Oh! Hello!'),
@@ -413,12 +414,12 @@ export const L = {
     // The story (Maple, at the river).
     story: [maple('Help the salmon jump home!')],
     // Sparkle: once when each stretch of the river begins, and again when she's stuck.
-    steps: 'Grab a salmon, and flick it up!',
+    steps: onDevice('Grab a salmon, and flick it up!', 'Grab a salmon, and drag it up fast!'),
     falls: 'The big falls! Try the rock, or the log.',
-    bears: 'The bears are fishing! Flick the salmon past them.',
-    eggs: 'Home! Tap each salmon to lay its eggs.',
-    hatch: 'Spring! Tap the eggs.',
-    bonk: 'Bonk! Try a bigger flick.',
+    bears: onDevice('The bears are fishing! Flick the salmon past them.', 'The bears are fishing! Drag the salmon up past them.'),
+    eggs: onDevice('Home! Tap each salmon to lay its eggs.', 'Home! Click each salmon to lay its eggs.'),
+    hatch: onDevice('Spring! Tap the eggs.', 'Spring! Click the eggs.'),
+    bonk: onDevice('Bonk! Try a bigger flick.', 'Bonk! Try a bigger, faster drag.'),
     rain: "Rain! It's a rainforest.",
     cedar: 'This cedar tree is taller than a house!',
     seasons: 'Fall... winter... and spring!',
@@ -487,8 +488,8 @@ export const L = {
     ottawa: "Ottawa is Canada's capital city!",
     allHome: maple("Everybody's home! Now, hockey!"),
     // Pond Hockey on the frozen Rideau Canal.
-    rink: "Flick the puck into the geese's net!",
-    rinkHint: 'Swipe from the puck to the net!',
+    rink: onDevice("Flick the puck into the geese's net!", "Drag the puck fast into the geese's net!"),
+    rinkHint: onDevice('Swipe from the puck to the net!', 'Drag from the puck to the net!'),
     geese: 'The geese are in the way! Bounce it off the snow!',
     last: 'One more goal to win!',
     saved: ['The goose saved it! Again!', 'So close! Try again!'],

@@ -1,8 +1,9 @@
 // Every phrase that can be spoken in China. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
-// (This file is also read by Node, so it imports nothing. NAME matches KID_NAME.)
+// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.)
 // Plain strings are Sparkle, the guide: she gives the instructions. Friends say their own story and reaction lines in
 // their own voices (see cast.json). Mandarin and Shanghainese words are spelled the way they sound, so the voices say
 // them right ("Nong how" = 侬好 nóng hǎo); the screen shows the real words on a WordCard (see words.ts).
+import { onDevice } from '../../../sdk/device.ts'
 const NAME = 'Kaylee'
 const as = (voice: string) => (text: string) => ({ text, voice })
 const doudou = as('doudou')
@@ -29,9 +30,9 @@ const COUNT = ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!']
 export const L = {
   name: 'China',
   intro: [`Nee how, ${NAME}!`, 'Nee how means hello in China!'],
-  hubFirst: 'Tap the glowing lantern!',
+  hubFirst: onDevice('Tap the glowing lantern!', 'Click the glowing lantern!'),
   hubNext: `Where should we go next, ${NAME}?`,
-  hubParty: 'Tap the dragon parade!',
+  hubParty: onDevice('Tap the dragon parade!', 'Click the dragon parade!'),
   soon: 'This lantern opens soon!',
   partyLocked: 'Light up the lanterns to start the parade!',
   paradeSoon: 'The dragon parade is coming soon!',
@@ -41,9 +42,9 @@ export const L = {
   dumplings: {
     // Arrival on the Bund, then a walk through the old town.
     arrive: [doudou(`Nong how, ${NAME}!`), doudou('Chef Fu needs our help!')],
-    bridge: 'Tap the zig-zag bridge!',
+    bridge: onDevice('Tap the zig-zag bridge!', 'Click the zig-zag bridge!'),
     zigzag: 'Zig-zag bridges keep bad luck away!',
-    door: 'Tap the dumpling house door!',
+    door: onDevice('Tap the dumpling house door!', 'Click the dumpling house door!'),
     aiyo: cheffu('Aiyo! So many hungry customers, and no helper!'),
 
     // Service 1: Grandpa Turtle's four dumplings. Each step is one finger move.
@@ -51,12 +52,12 @@ export const L = {
     knead: 'Push the dough three times!',
     kneadCount: [cheffu('Ee!'), cheffu('Are!'), cheffu('San!')],
     kneadDone: cheffu('Smooth and shiny! Ee, are, san means one, two, three!'),
-    snake: 'Swipe the dough to make a long snake!',
-    chop: 'Tap to cut the snake into four pieces!',
+    snake: onDevice('Swipe the dough to make a long snake!', 'Drag across the dough to make a long snake!'),
+    chop: onDevice('Tap to cut the snake into four pieces!', 'Click to cut the snake into four pieces!'),
     count: COUNT,
     roll: 'Roll the rolling pin back and forth!',
     rolled: cheffu('A perfect round wrapper!'),
-    fill: 'Tap the bowl for one spoonful!',
+    fill: onDevice('Tap the bowl for one spoonful!', 'Click the bowl for one spoonful!'),
     blorp: cheffu('Ho ho ho! Just one spoonful!'),
     pleat: 'Draw a circle around the dumpling to fold it!',
     pleated: cheffu('Beautiful! Real chefs make eighteen folds!'),
@@ -65,16 +66,16 @@ export const L = {
     counted4: 'One, two, three, four dumplings!',
     steamer: 'Put each dumpling in the basket, on the cabbage leaf!',
     leaf: 'The cabbage leaf keeps them from sticking!',
-    lid: 'Tap the lid to close the basket!',
-    fire: 'Tap the knob to heat the water!',
+    lid: onDevice('Tap the lid to close the basket!', 'Click the lid to close the basket!'),
+    fire: onDevice('Tap the knob to heat the water!', 'Click the knob to heat the water!'),
     steamFact: 'Hot water makes steam. Steam cooks dumplings!',
     popSteam: 'Pop the steam puffs!',
-    lift: 'Tap the lid to peek!',
+    lift: onDevice('Tap the lid to peek!', 'Click the lid to peek!'),
     tada: cheffu('Ta-da! Soup dumplings!'),
     serve: "Carry the basket to Grandpa Turtle's table!",
     eatHow: grandpa('Hot soup inside! Nibble, sip, eat.'),
-    nibble: 'Tap the dumpling to take a little nibble!',
-    sip: 'Tap again to sip the soup!',
+    nibble: onDevice('Tap the dumpling to take a little nibble!', 'Click the dumpling to take a little nibble!'),
+    sip: onDevice('Tap again to sip the soup!', 'Click again to sip the soup!'),
     eat: 'Now eat it all up!',
     haochi: grandpa('How chir! Delicious!'),
 
@@ -83,8 +84,8 @@ export const L = {
     orderBunnies: bunnies('Two pink and two green, please!'),
     orderGoose: goose("I'll have two yellow, please, dear."),
     pickColor: {
-      pink: 'Tap the pink dough!',
-      green: 'Tap the green dough!',
+      pink: onDevice('Tap the pink dough!', 'Click the pink dough!'),
+      green: onDevice('Tap the green dough!', 'Click the green dough!'),
     },
     notThat: {
       pink: 'That one is not pink. Find the pink dough!',
@@ -100,15 +101,15 @@ export const L = {
     notMine: [grandpa('Not mine, dear!'), goose('Not mine, dear!'), bunnies('Not ours!')],
     bunniesYum: bunnies('Yay! Pink and green! Thank you!'),
     gooseYum: goose('Splendid! Thank you, dear.'),
-    tea: 'Tap the table two times to say thank you for the tea!',
+    tea: onDevice('Tap the table two times to say thank you for the tea!', 'Click the table two times to say thank you for the tea!'),
     teaFact: 'In China, a tap tap on the table means thank you!',
     teaPour: doudou('More tea?'),
 
     // Service 3: Bao Bao's big surprise order.
     jingle: 'Ding ding! Someone is here!',
     baobao: [baobao('Five dumplings, please!'), baobao('No, six!')],
-    make6: 'Tap the colors to make six dumplings!',
-    sneak: 'Uh oh! Tap the sneaky monkey!',
+    make6: onDevice('Tap the colors to make six dumplings!', 'Click the colors to make six dumplings!'),
+    sneak: onDevice('Uh oh! Tap the sneaky monkey!', 'Uh oh! Click the sneaky monkey!'),
     sorry: houhou('Hee hee! Sorry!'),
     six: 'Six dumplings! Now steam them!',
     serveBao: "Take the basket to Bao Bao's table!",
@@ -145,7 +146,7 @@ export const L = {
   bamboo: {
     arrive: [baobao('My tummy is rumbling!'), baobao('Pandas eat bamboo all day!')],
     // Round 1: grow one shoot three tall.
-    grow3: 'Swipe up! Grow it three tall!',
+    grow3: onDevice('Swipe up! Grow it three tall!', 'Drag up! Grow it three tall!'),
     count: ['One!', 'Two!', 'Three!'],
     threeTall: baobao('Three tall! Wow!'),
     enough: 'Three tall is enough!',
@@ -156,11 +157,11 @@ export const L = {
     same: 'Same height! Grow one more!',
     taller: 'Taller! And that one is shorter!',
     // Round 3: tallest and shortest.
-    tallestQ: 'Which one is the tallest? Tap it!',
+    tallestQ: onDevice('Which one is the tallest? Tap it!', 'Which one is the tallest? Click it!'),
     tallestHint: 'Look for the tallest one!',
     tallestWrong: 'Too short! Find the tallest!',
     tallestYes: 'The tallest bamboo!',
-    shortestQ: 'Which one is the shortest? Tap it!',
+    shortestQ: onDevice('Which one is the shortest? Tap it!', 'Which one is the shortest? Click it!'),
     shortestHint: 'Look for the short one!',
     shortestWrong: 'Too tall! Find the shortest!',
     shortestYes: 'The shortest bamboo!',
@@ -175,7 +176,7 @@ export const L = {
   wall: {
     oops: houhou('Oops! I knocked bricks off the Great Wall!'),
     long: 'The wall is so long! Slide it to see more!',
-    follow: 'Slide the wall, or tap the arrow!',
+    follow: onDevice('Slide the wall, or tap the arrow!', 'Drag the wall, or click the arrow!'),
     follow2: 'Hou Hou ran ahead! Follow him!',
     // The pattern out loud (once per gap); a wrong brick just points at the glowing one.
     pattern: [
@@ -186,7 +187,7 @@ export const L = {
     pattern3b: 'One more! What comes next?',
     hint: 'Try the glowing brick!',
     fixed: [houhou('Yay! Thank you, Kaylee!'), houhou('Hee hee! The wall is getting strong!'), houhou('Hooray! The whole wall is fixed!')],
-    beacon: 'Tap the tower to light the signal fire!',
+    beacon: onDevice('Tap the tower to light the signal fire!', 'Click the tower to light the signal fire!'),
     signal: 'Soldiers sent smoke signals tower to tower!',
     signalEnd: 'The message zoomed along the wall!',
     tap: [houhou('Hee hee!'), houhou('Tickles!')],
@@ -196,16 +197,16 @@ export const L = {
   hotpot: {
     story: [nainai(`Hotpot time, ${NAME}! Everybody cooks together!`)],
     ask: ['Bao Bao wants noodles!', 'Hong wants something green from the mild side!', 'Nai Nai wants two dumplings!'],
-    dropTip: 'Tap a food, then tap the soup!',
-    dropTipNoodles: 'Tap the noodles, then tap the soup!',
+    dropTip: onDevice('Tap a food, then tap the soup!', 'Click a food, then click the soup!'),
+    dropTipNoodles: onDevice('Tap the noodles, then tap the soup!', 'Click the noodles, then click the soup!'),
     green: 'Green! Try the bok choy!',
     mild: 'The mild side is the white soup!',
     dumplings: 'Dumplings! We need two!',
     wait: 'Wait for the sparkle!',
     cooked: 'Sparkly! It is ready!',
-    chopTip: 'Tap the chopsticks, then tap the sparkly food!',
+    chopTip: onDevice('Tap the chopsticks, then tap the sparkly food!', 'Click the chopsticks, then click the sparkly food!'),
     chopFact: 'People in China eat with chopsticks!',
-    spinTip: 'Spin the table with your finger!',
+    spinTip: onDevice('Spin the table with your finger!', 'Click and drag to spin the table!'),
     spin: ['Spin the table to Bao Bao!', 'Spin the table to Hong!', 'Spin the table to Nai Nai!'],
     count: COUNT,
     thanks: [baobao('Shyeh shyeh!'), hong('Shyeh shyeh!'), nainai('Shyeh shyeh!')],
@@ -235,7 +236,7 @@ export const L = {
     night: 'Good night, moon!',
     nameIntro: `Now paint your name, ${NAME}! In Chinese!`,
     nameSay: crane('Ky lee!'),
-    stamp: 'Tap the red stamp!',
+    stamp: onDevice('Tap the red stamp!', 'Click the red stamp!'),
     stamped: `Your name, stamped with a red seal, ${NAME}!`,
     fact: "Chinese isn't written with letters. Some characters started as pictures!",
     end: crane('What a beautiful painting!'),
@@ -248,7 +249,7 @@ export const L = {
     mouseHelp: "Mouse can't swim! Put Mouse on Ox's back!",
     mouseHint: "Drag Mouse onto Ox's back!",
     oxHi: ox('Hop on, little one!'),
-    paddle: 'Tap Ox to paddle!',
+    paddle: onDevice('Tap Ox to paddle!', 'Click Ox to paddle!'),
     oxHalf: ox('Almost there!'),
     jumpOff: 'Mouse jumps off first!',
     mouseWin: mouse('Squeak! I won!'),
@@ -263,8 +264,8 @@ export const L = {
     rabbitHop: rabbit('Hop, hop, hop!'),
     // Dragon
     dragonLate: dragon('I stopped to make rain for a thirsty village!'),
-    rainHelp: 'Tap the clouds to make it rain!',
-    rainHint: 'Tap a glowing cloud!',
+    rainHelp: onDevice('Tap the clouds to make it rain!', 'Click the clouds to make it rain!'),
+    rainHint: onDevice('Tap a glowing cloud!', 'Click a glowing cloud!'),
     rainDone: 'The flowers are so happy!',
     dragonFly: dragon('Whoosh! Now I can fly!'),
     // The winners' steps: the question, a hint (Sparkle reminds the order), and praise for each place.
@@ -285,8 +286,8 @@ export const L = {
     ],
     tryGlow: 'Try the glowing one!',
     placed: ['First place!', 'Second place!', 'Third place!', 'Fourth place!', 'Fifth place!'],
-    askAfter: 'Who came right after Ox? Tap that animal!',
-    afterHint: 'Tiger came right after Ox! Tap the glowing one!',
+    askAfter: onDevice('Who came right after Ox? Tap that animal!', 'Who came right after Ox? Click that animal!'),
+    afterHint: onDevice('Tiger came right after Ox! Tap the glowing one!', 'Tiger came right after Ox! Click the glowing one!'),
     afterYes: 'Yes! Tiger came right after Ox!',
     winners: 'Everybody won a place! Hooray!',
     // The zodiac wheel
@@ -298,7 +299,7 @@ export const L = {
     revealOx: ox('Moo-hoo! Hooray, Kaylee!'),
     revealMouse: mouse('Squeak! Hooray, Kaylee!'),
     year: 'This year, 2026, is the Year of the Horse!',
-    catAsk: 'Shh! Someone is sleeping. Tap the cat!',
+    catAsk: onDevice('Shh! Someone is sleeping. Tap the cat!', 'Shh! Someone is sleeping. Click the cat!'),
     catFact: 'The cat overslept and missed the race! That is why there is no Year of the Cat!',
     tap: [mouse('Squeak!'), mouse('Hee hee!')],
     oxTap: ox('Moo!'),
@@ -372,14 +373,14 @@ export const L = {
       dumplings: cheffu('Shyeh shyeh for the dumplings!'),
     },
     lap: longlong(`Wheee! What a dance, ${NAME}!`),
-    drum: 'Tap the drum! Make the dragon dance!',
+    drum: onDevice('Tap the drum! Make the dragon dance!', 'Click the drum! Make the dragon dance!'),
     drumMid: longlong('Boom boom! I love it!'),
     drumDone: `Great drumming, ${NAME}!`,
-    sky: 'Tap the sky to make fireworks!',
+    sky: onDevice('Tap the sky to make fireworks!', 'Click the sky to make fireworks!'),
     skyFact: 'Fireworks were invented in China!',
-    flag: 'Tap the flag to raise it!',
+    flag: onDevice('Tap the flag to raise it!', 'Click the flag to raise it!'),
     flagFact: "China's flag is red, with one big gold star and four little stars!",
-    envelope: "Bao Bao has a red envelope! Tap to open it!",
+    envelope: onDevice("Bao Bao has a red envelope! Tap to open it!", "Bao Bao has a red envelope! Click to open it!"),
     hongbao: 'A red envelope is called a hong bao!',
     greet: baobao(`Sheen nyen kwy luh, ${NAME}! Happy New Year!`),
   },
@@ -429,5 +430,5 @@ export const L = {
     flag: "China's flag is red, with one big gold star and four little stars!",
     people: 'More people live in China than almost anywhere in the world!',
   },
-  passport: 'This is China! Tap a picture to learn more.',
+  passport: onDevice('This is China! Tap a picture to learn more.', 'This is China! Click a picture to learn more.'),
 }

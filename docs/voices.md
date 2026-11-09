@@ -16,6 +16,12 @@ world feel alive and helps a child who can't read know who is talking:
 - In code `say({ text: 'Yum!', voice: 'koko' })` (the SDK type is `Line`). The character's mouth moves automatically
   when their voice plays.
 - Keep spoken lines short (under ~3 seconds); she's five.
+- **Say "click" on the Mac (AGENTS.md design rule 2).** She also plays on the MacBook, where "tap" and "your finger" mean
+  nothing. A line that names a gesture is `onDevice(touch, mouse)` from `src/sdk/device.ts`:
+  `door: onDevice('Tap the door!', 'Click the door!')`, or with a speaker `onDevice(ji('Tap me!'), ji('Click me!'))`.
+  Tap → click; finger on / hold → click and hold; swipe, flick, slide your finger → drag (fast); rub → click and
+  wiggle; pinch, tilt → don't ask for them on the Mac. The app picks one version when it loads; the scripts record
+  both, and the table read flags **touch only** lines. Text on screen that names a gesture uses `onDevice` too.
 - **Don't nag (Dad, 2026-10-29: too many lines repeated by themselves).** A "stuck" hint asks `spendHint(line)` (SDK,
   `src/sdk/hints.ts`) before it speaks: the first time it's only shown (glow, finger, Sparkle's bubble), then said at
   most twice per visit to the app, 25 s apart from any other hint. `kit/Guide` does this for you; `voice={false}` for a

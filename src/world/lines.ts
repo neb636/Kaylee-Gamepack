@@ -1,11 +1,12 @@
 // Every phrase Sparkle can say on the world map, passport and coloring book.
 // `node scripts/world-voice-lines.mjs` copies every string here into voice-lines.json.
-// (Plain strings only: this file is also read by Node, so it imports nothing. NAME matches KID_NAME.)
+// (Plain strings only: this file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.)
+import { onDevice } from '../sdk/device.ts'
 const NAME = 'Kaylee'
 
 export const WORLD_LINES = {
   title: 'Around the World!',
-  firstHello: `Let's fly around the world, ${NAME}! Tap the sparkly pin.`,
+  firstHello: onDevice(`Let's fly around the world, ${NAME}! Tap the sparkly pin.`, `Let's fly around the world, ${NAME}! Click the sparkly pin.`),
   hello: 'Where should we fly?',
   takeoff: 'Up, up and away!',
   continents: {
@@ -25,14 +26,14 @@ export const WORLD_LINES = {
   passport: `This is your passport, ${NAME}! Every stamp is a place you helped.`,
   passportMore: 'Fly to more places to fill your passport!',
   puzzlePick: 'Pick a picture, Kaylee!',
-  puzzlePieces: 'How many pieces? Tap to choose!',
+  puzzlePieces: onDevice('How many pieces? Tap to choose!', 'How many pieces? Click to choose!'),
   puzzleHow: 'Drag each piece to its spot!',
-  puzzleHint: 'Tap a piece to light up its spot!',
+  puzzleHint: onDevice('Tap a piece to light up its spot!', 'Click a piece to light up its spot!'),
   puzzleMiss: 'Look for the glowing spot!',
   puzzleDone: 'You made the picture, Kaylee!',
   puzzleCounts: ['Four pieces!', 'Six pieces!', 'Nine pieces!', 'Twelve pieces!'],
   coloringPick: 'Pick a page to color!',
-  coloringHow: 'Pick a color, then tap to paint!',
+  coloringHow: onDevice('Pick a color, then tap to paint!', 'Pick a color, then click to paint!'),
   theaterName: "Sparkle's Theater!",
   theaterPick: 'Pick a video to watch!',
   videoEnd: `The end! Great watching, ${NAME}!`,

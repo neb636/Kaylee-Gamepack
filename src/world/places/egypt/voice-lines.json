@@ -13,11 +13,19 @@
     "voice": "miu"
   },
   {
+    "text": "Click a spot on the map!",
+    "voice": "miu"
+  },
+  {
     "text": "Where to next, Kaylee?",
     "voice": "miu"
   },
   {
     "text": "Everyone is here! Tap the light show!",
+    "voice": "miu"
+  },
+  {
+    "text": "Everyone is here! Click the light show!",
     "voice": "miu"
   },
   {
@@ -102,6 +110,7 @@
     "voice": "miu"
   },
   "The treasure room! Tap the golden box!",
+  "The treasure room! Click the golden box!",
   "This gold mask was made for a boy king called Tut!",
   {
     "text": "Yawn! Ahlan, Kaylee! I'm Tutu!",
@@ -141,6 +150,7 @@
     "voice": "miu"
   },
   "Rub the sand away!",
+  "Click and wiggle to rub the sand away!",
   {
     "text": "Ah... ah... achoo!",
     "voice": "sphinx"
@@ -171,6 +181,7 @@
     "voice": "miu"
   },
   "Press and hold the stamp that matches!",
+  "Click and hold the stamp that matches!",
   "K says kuh! Find the basket!",
   "A says ay! Find the bird!",
   "Y says yuh! Find the two reeds!",
@@ -220,6 +231,7 @@
     "voice": "hippo"
   },
   "Press and hold to pour! Let go at the gold line!",
+  "Click and hold to pour! Let go at the gold line!",
   {
     "text": "Whoops! A little too much! Hee hee.",
     "voice": "miu"
@@ -278,6 +290,7 @@
   "In ancient Egypt, cats were loved like family!",
   "Koshari is rice, lentils and pasta with yummy sauce!",
   "This is Egypt! Tap a picture to learn more.",
+  "This is Egypt! Click a picture to learn more.",
   "Want to see the real pyramids?",
   "Let's see the real Nile River!",
   "Want to see the real Sphinx?",

@@ -1,7 +1,8 @@
 // Every phrase that can be spoken in Egypt. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
-// (This file is also read by Node, so it imports nothing. NAME matches KID_NAME.)
+// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.)
 // Plain strings are Sparkle, the guide: she gives the instructions. Friends say their own story and reaction lines in
 // their own voices (see cast.json), and their puppets move their mouths while they talk.
+import { onDevice } from '../../../sdk/device.ts'
 const NAME = 'Kaylee'
 const as = (voice: string) => (text: string) => ({ text, voice })
 const miu = as('miu')
@@ -16,9 +17,9 @@ const COUNT = ['One!', 'Two!', 'Three!', 'Four!', 'Five!']
 export const L = {
   name: 'Egypt',
   intro: [miu(`Ahlan, ${NAME}! I'm Miu the kitten!`), miu('Ahlan means hello! Come explore Egypt with me!')],
-  hubFirst: miu('Tap a spot on the map!'),
+  hubFirst: onDevice(miu('Tap a spot on the map!'), miu('Click a spot on the map!')),
   hubNext: miu(`Where to next, ${NAME}?`),
-  hubParty: miu('Everyone is here! Tap the light show!'),
+  hubParty: onDevice(miu('Everyone is here! Tap the light show!'), miu('Everyone is here! Click the light show!')),
   partyLocked: miu('Get all the stamps to start the light show!'),
   trophyWin: `${NAME}, you did it! You won the Egypt Explorer trophy!`,
   trophyRoom: `${NAME}, Egypt Explorer! From Egypt.`,
@@ -52,7 +53,7 @@ export const L = {
     count: COUNT.slice(0, 2).map(miu),
     bat: miu('Shh! A sleepy bat! Not this way.'),
     wall: miu('Not this way! Hee hee.'),
-    treasure: 'The treasure room! Tap the golden box!',
+    treasure: onDevice('The treasure room! Tap the golden box!', 'The treasure room! Click the golden box!'),
     mask: 'This gold mask was made for a boy king called Tut!',
     tutu: tutu(`Yawn! Ahlan, ${NAME}! I'm Tutu!`),
     nap: tutu('I napped for thousands of years! Hee hee!'),
@@ -70,7 +71,7 @@ export const L = {
   },
   sphinx: {
     story: miu('Oh no! Someone is buried in the sand!'),
-    rub: 'Rub the sand away!',
+    rub: onDevice('Rub the sand away!', 'Click and wiggle to rub the sand away!'),
     sneeze: sphinx('Ah... ah... achoo!'),
     hello: sphinx("Thank you! I'm the Sphinx!"),
     paws: 'Now brush the sand off his paws!',
@@ -84,7 +85,7 @@ export const L = {
   },
   scribe: {
     story: miu(`Let's write your name like a pharaoh, ${NAME}!`),
-    hold: 'Press and hold the stamp that matches!',
+    hold: onDevice('Press and hold the stamp that matches!', 'Click and hold the stamp that matches!'),
     k: 'K says kuh! Find the basket!',
     a: 'A says ay! Find the bird!',
     y: 'Y says yuh! Find the two reeds!',
@@ -112,7 +113,7 @@ export const L = {
     count: COUNT.slice(0, 3).map(miu),
     shukranFennec: fennec('Shukran!'),
     tea: hippo('Ahlan! Mint tea, please!'),
-    pour: 'Press and hold to pour! Let go at the gold line!',
+    pour: onDevice('Press and hold to pour! Let go at the gold line!', 'Click and hold to pour! Let go at the gold line!'),
     whoops: miu('Whoops! A little too much! Hee hee.'),
     shukranHippo: hippo('Shukran!'),
   },
@@ -148,7 +149,7 @@ export const L = {
     food: 'Koshari is rice, lentils and pasta with yummy sauce!',
     flag: "Egypt's flag is red, white and black, with a golden eagle!",
   },
-  passport: 'This is Egypt! Tap a picture to learn more.',
+  passport: onDevice('This is Egypt! Tap a picture to learn more.', 'This is Egypt! Click a picture to learn more.'),
   videos: {
     pyramids: "Want to see the real pyramids?",
     nile: "Let's see the real Nile River!",

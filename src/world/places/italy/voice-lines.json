@@ -141,7 +141,9 @@
     "voice": "queen"
   },
   "Flick the dough up to spin it!",
+  "Drag the dough up fast to spin it!",
   "Again! Flick it up!",
+  "Again! Drag it up fast!",
   {
     "text": "Bellissimo! A big round pizza!",
     "voice": "bruno"
@@ -169,9 +171,11 @@
   "Slide the pizza into the oven!",
   "This oven is super hot! Pizza bakes in ninety seconds!",
   "Tap the pizza to turn it!",
+  "Click the pizza to turn it!",
   "Turn it again!",
   "It is golden! Pull the pizza out!",
   "Tap the pizza to give it to the Queen!",
+  "Click the pizza to give it to the Queen!",
   {
     "text": "Buonissima! Red, white and green!",
     "voice": "queen"
@@ -194,6 +198,7 @@
     "voice": "bufala"
   },
   "Tap the order to start!",
+  "Click the order to start!",
   {
     "text": "Mozzarella!",
     "voice": "bruno"
@@ -217,6 +222,7 @@
     "voice": "bufala"
   },
   "Tap the pizza to serve it!",
+  "Click the pizza to serve it!",
   {
     "text": "Buonissima! Grazie!",
     "voice": "bufala"
@@ -257,11 +263,13 @@
     "voice": "cesare"
   },
   "Uh oh! Tap the sneaky cat!",
+  "Uh oh! Click the sneaky cat!",
   {
     "text": "Oh. Sorry. Here you go.",
     "voice": "cesare"
   },
   "Tap the check when you like it!",
+  "Click the check when you like it!",
   "Cut it any way you like!",
   {
     "text": "Buonissima, Kaylee!",
@@ -315,6 +323,7 @@
     "voice": "spina"
   },
   "Tap Spina to shake them off!",
+  "Click Spina to shake them off!",
   {
     "text": "Hee hee! Into the basket!",
     "voice": "spina"
@@ -328,7 +337,9 @@
     "voice": "spina"
   },
   "This olive is green. Tap the sun!",
+  "This olive is green. Click the sun!",
   "Purple! Tap the sun again!",
+  "Purple! Click the sun again!",
   "Black! Now it is ripe!",
   "Green, then purple, then black!",
   "Green goes in the one sun bowl!",
@@ -361,6 +372,7 @@
   },
   "Look! Golden olive oil!",
   "Hold the jug to pour! Fill it all the way!",
+  "Click and hold the jug to pour! Fill it all the way!",
   "Full! All the way to the top!",
   "Now fill it halfway!",
   "A little more, to the line!",
@@ -383,6 +395,7 @@
     "voice": "spina"
   },
   "Tap the tambourine!",
+  "Click the tambourine!",
   {
     "text": "Let's dance the pizzica!",
     "voice": "spina"
@@ -400,6 +413,7 @@
     "voice": "lupa"
   },
   "Tap the hill and listen!",
+  "Click the hill and listen!",
   {
     "text": "Shh! I hear water!",
     "voice": "lupa"
@@ -409,6 +423,7 @@
     "voice": "lupa"
   },
   "Tap the rocks!",
+  "Click the rocks!",
   {
     "text": "Acqua! You found water!",
     "voice": "lupa"
@@ -432,10 +447,13 @@
   "Water only flows downhill!",
   "Try the glowing arch!",
   "Now tap an arch!",
+  "Now click an arch!",
   "Now all the way to Rome! Look closely!",
   "The Romans called a water bridge an aqueduct!",
   "Tap the spring to turn on the water!",
+  "Click the spring to turn on the water!",
   "Follow the water with your finger!",
+  "Click and drag along the water!",
   {
     "text": "The water is going to Rome!",
     "voice": "lupa"
@@ -448,7 +466,9 @@
   "That was 2,000 years ago!",
   "And it still fills the fountain today!",
   "Flick the coin up into the fountain!",
+  "Drag the coin up fast into the fountain!",
   "Swipe up on the coin!",
+  "Drag the coin up!",
   "One more coin!",
   "Now you will come back to Rome one day, Kaylee!",
   {
@@ -515,6 +535,7 @@
     "voice": "cesare"
   },
   "Tap the door with the right number!",
+  "Click the door with the right number!",
   "One line. One!",
   "One, two lines. Two!",
   "One, two, three lines. Three!",
@@ -554,6 +575,7 @@
     "voice": "cesare"
   },
   "Swipe across the crowd to make a wave!",
+  "Drag across the crowd to make a wave!",
   "Again! Make a wave!",
   {
     "text": "Bravissimi! What a show!",
@@ -569,6 +591,7 @@
     "voice": "cesare"
   },
   "Tap the horn!",
+  "Click the horn!",
   {
     "text": "Yay! A horn for the band!",
     "voice": "lupa"
@@ -794,6 +817,7 @@
   "What a beautiful mask!",
   "Ooh! So pretty!",
   "Tap the check when you love it!",
+  "Click the check when you love it!",
   "Look! The canal is all lit up!",
   {
     "text": "Fireworks for Carnevale!",
@@ -819,6 +843,7 @@
     "voice": "nino"
   },
   "Tap a lemon to pick it!",
+  "Click a lemon to pick it!",
   "Lemon!",
   "Orange!",
   "Sicily grows lemons and oranges!",
@@ -844,6 +869,7 @@
   },
   "The higher we go, the colder it gets!",
   "Tap the scarf for Nino!",
+  "Click the scarf for Nino!",
   {
     "text": "Ahh, cozy! Grazie!",
     "voice": "nino"
@@ -873,7 +899,9 @@
   },
   "Let's make granita!",
   "Tap the snow to fill the cup!",
+  "Click the snow to fill the cup!",
   "Tap a cup!",
+  "Click a cup!",
   {
     "text": "One scoop, please!",
     "voice": "lupa"
@@ -899,7 +927,9 @@
     "voice": "pina"
   },
   "Squeeze a lemon or an orange!",
+  "Click and hold a lemon or an orange!",
   "Press and hold the fruit!",
+  "Click and hold the fruit!",
   {
     "text": "Brrr! Brain freeze! Hee hee!",
     "voice": "lupa"
@@ -930,6 +960,7 @@
     "voice": "nino"
   },
   "Tap the piano!",
+  "Click the piano!",
   "The piano was invented in Italy!",
   {
     "text": "Yay! A piano for the band!",
@@ -969,5 +1000,6 @@
   "The piano and the violin were first made in Italy!",
   "Gelato is Italian ice cream! Yum!",
   "The Pantheon in Rome has a big hole in its roof. When it rains, rain falls inside!",
-  "This is Italy! Tap a picture to learn more."
+  "This is Italy! Tap a picture to learn more.",
+  "This is Italy! Click a picture to learn more."
 ]

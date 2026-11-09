@@ -11,6 +11,7 @@
     "voice": "luna"
   },
   "Tap a picture to explore Peru!",
+  "Click a picture to explore Peru!",
   {
     "text": "Another discovery, Kaylee!",
     "voice": "luna"
@@ -76,6 +77,7 @@
   "Alpacas hum when they are happy!",
   "Now the clippers! Snip snip!",
   "Done? Tap the pond to show Luna!",
+  "Done? Click the pond to show Luna!",
   {
     "text": "Hee hee! A mustache!",
     "voice": "luna"
@@ -138,6 +140,7 @@
     "voice": "abuela"
   },
   "The wool is yarn now! Tap the cactus!",
+  "The wool is yarn now! Click the cactus!",
   "A tiny bug makes pink color!",
   "Drag the pink drop to the yarn!",
   "Pink yarn! Pink hats!",
@@ -160,8 +163,10 @@
   },
   "Alpacas come in lots of colors!",
   "Rub the brush on Luna's fleece!",
+  "Drag the brush on Luna's fleece!",
   "Snip the fluffy puffs!",
   "Tap the cactus!",
+  "Click the cactus!",
   "Drag a hat onto an alpaca!",
   {
     "text": "Oh no! Our grass steps fell down!",
@@ -227,6 +232,7 @@
   "The last wall! Up in the clouds!",
   "Kaylee, look! Machu Picchu!",
   "Tap the camera for Luna's journal!",
+  "Click the camera for Luna's journal!",
   {
     "text": "Me too!",
     "voice": "tika"
@@ -281,7 +287,9 @@
   "Llamas can carry things up the mountain!",
   "Drag a stone into a hole!",
   "Tap a seed bag to plant it!",
+  "Click a seed bag to plant it!",
   "Tap the camera!",
+  "Click the camera!",
   {
     "text": "Me at Machu Picchu!",
     "voice": "tika"
@@ -292,6 +300,7 @@
     "voice": "pepa"
   },
   "Pull a penguin back, then let go!",
+  "Click a penguin, pull it back, then let go!",
   {
     "text": "Wheee!",
     "voice": "pingo"
@@ -411,7 +420,9 @@
   "Penguins fly underwater with their wings!",
   "Jump onto the fish to catch one!",
   "Tap a chick to feed it!",
+  "Click a chick to feed it!",
   "Pull a chick back, then let go!",
+  "Click a chick, pull it back, then let go!",
   "Penguin sticker! Penguins live in Peru too!",
   {
     "text": "My chick Pluma is scared to fly.",
@@ -512,6 +523,7 @@
     "voice": "rosa"
   },
   "Squeeze the cloud to make rain!",
+  "Click and hold the cloud to make rain!",
   {
     "text": "Hiiiiii...",
     "voice": "sloth"
@@ -612,5 +624,6 @@
   "The Inca built Machu Picchu long ago!",
   "Peru's flag is red, white, red!",
   "Peru's bird is bright orange!",
-  "This is Peru! Tap a picture to explore."
+  "This is Peru! Tap a picture to explore.",
+  "This is Peru! Click a picture to explore."
 ]
