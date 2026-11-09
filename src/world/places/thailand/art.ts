@@ -7,5 +7,6 @@ import crab from './assets/fiddler-crab.webp'
 import pizza from './assets/pizza-slice.webp'
 import mushroom from './assets/pink-mushroom.webp'
 import mermaid from './assets/pink-mermaid.webp'
+import elephant from './assets/map-elephant.webp'
 
-export const art = { balloon, crab, pizza, mushroom, mermaid }
+export const art = { balloon, crab, pizza, mushroom, mermaid, elephant }

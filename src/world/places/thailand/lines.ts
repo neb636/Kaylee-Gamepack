@@ -21,6 +21,8 @@ const notice = (say: (text: string) => Line, texts: string[]) => Object.fromEntr
 const hello = (voice: string, hi: string, again: string[]) => ({ hi: by(voice)(hi), again: again.map(by(voice)) })
 
 export const L = {
+  // Sparkle, as the world map closes in on this country on the way there.
+  mapName: "Thailand!",
   // The shell's trophy ceremony and the trophy room speak these.
   trophyWin: `${NAME}, you did it! You won the Thailand Explorer trophy!`,
   trophyRoom: `${NAME}, Thailand Explorer! From Thailand.`,

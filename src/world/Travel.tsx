@@ -1,14 +1,13 @@
-// The trip: the globe spins and Sparkle's balloon floats across. Tap to skip.
-import { motion } from 'motion/react'
+// The trip: Sparkle's balloon crosses the real map (WorldMap draws it), the map closes in on the country and Sparkle
+// names it, so every trip shows her where that country is. This part runs the clock. Tap to skip.
 import { useEffect, useRef } from 'react'
 import { say, sounds } from '../sdk'
-import balloon from './assets/balloon.webp'
-import globe from './assets/globe.webp'
 import { WORLD_LINES } from './lines'
 import { needsCode } from './lock'
+import { FEEL } from './map/feel'
 import type { PlaceEntry } from './registry'
 
-export function Travel({ entry, onDone }: { entry: PlaceEntry; onDone: () => void }) {
+export function Travel({ entry, onArrive, onDone }: { entry: PlaceEntry; onArrive: () => void; onDone: () => void }) {
   const done = useRef(false)
   const finish = () => {
     if (done.current) return
@@ -19,36 +18,16 @@ export function Travel({ entry, onDone }: { entry: PlaceEntry; onDone: () => voi
     sounds.whoosh()
     void say(WORLD_LINES.takeoff)
     if (!needsCode(entry.meta.id)) void entry.load() // start downloading the country while we fly (a locked one can't yet)
-    const t = setTimeout(finish, 2800)
-    return () => clearTimeout(t)
+    const arrive = setTimeout(() => {
+      onArrive()
+      void say(entry.meta.map.name)
+    }, FEEL.flight * 1000)
+    const leave = setTimeout(finish, (FEEL.flight + FEEL.zoom + FEEL.hold) * 1000)
+    return () => {
+      clearTimeout(arrive)
+      clearTimeout(leave)
+    }
   }, [entry])
 
-  return (
-    <motion.button
-      aria-label="Skip"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      onClick={finish}
-      style={{ position: 'absolute', inset: 0, zIndex: 60, background: 'linear-gradient(#FFD6E7, #D9CCFF)', overflow: 'hidden', display: 'grid', placeItems: 'center' }}
-    >
-      <motion.img
-        src={globe}
-        alt=""
-        animate={{ rotate: 360 * 2 }}
-        transition={{ duration: 2.8, ease: 'easeInOut' }}
-        style={{ width: 'min(60vw, 55vh)', aspectRatio: '1', objectFit: 'contain' }}
-      />
-      <motion.img
-        src={balloon}
-        alt=""
-        initial={{ x: '-60vw', y: '20vh', scale: 0.7 }}
-        animate={{ x: ['-60vw', '0vw', '60vw'], y: ['20vh', '-28vh', '10vh'], scale: [0.7, 1, 0.8] }}
-        transition={{ duration: 2.8, ease: 'easeInOut' }}
-        style={{ position: 'absolute', width: 'min(30vw, 28vh)', objectFit: 'contain' }}
-      />
-      <div style={{ position: 'absolute', bottom: 'calc(var(--safe-bottom) + 8vh)', fontSize: 'clamp(28px, 6vw, 56px)', fontWeight: 700, color: 'var(--hotpink)', textShadow: '0 4px 0 #fff' }}>
-        {entry.meta.emoji} {entry.meta.name}!
-      </div>
-    </motion.button>
-  )
+  return <button aria-label="Skip" onClick={finish} style={{ position: 'absolute', inset: 0, zIndex: 60, background: 'transparent' }} />
 }

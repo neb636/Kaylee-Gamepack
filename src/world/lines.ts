@@ -17,11 +17,6 @@ export const WORLD_LINES = {
     australia: "That's Australia! It's a country and a continent.",
     antarctica: "That's Antarctica! Brrr, it's icy!",
   },
-  soon: {
-    egypt: "We'll fly to Egypt soon! It has pyramids!",
-    china: "We'll fly to China soon! It has pandas!",
-    thailand: "We'll fly to Thailand soon! It has elephants!",
-  },
   passport: `This is your passport, ${NAME}! Every stamp is a place you helped.`,
   passportMore: 'Fly to more places to fill your passport!',
   puzzlePick: 'Pick a picture, Kaylee!',

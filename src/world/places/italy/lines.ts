@@ -21,6 +21,8 @@ const pina = as('pina')
 const COUNT = ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!', 'Eight!']
 
 export const L = {
+  // Sparkle, as the world map closes in on this country on the way there.
+  mapName: "Italy!",
   name: 'Italy',
   trophyWin: `${NAME}, you did it! You won the Italy Explorer trophy!`,
   trophyRoom: `${NAME}, Italy Explorer! From Italy.`,

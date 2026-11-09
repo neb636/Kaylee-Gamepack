@@ -10,6 +10,8 @@ const by = (voice: string) => (text: string): Line => ({ text, voice })
 const maple = by('maple')
 
 export const L = {
+  // Sparkle, as the world map closes in on this country on the way there.
+  mapName: "Canada!",
   // The shell's trophy ceremony and the trophy room speak these.
   trophyWin: `${NAME}, you did it! You won the Canada Champion trophy!`,
   trophyRoom: `${NAME}, Canada Champion! From Canada.`,

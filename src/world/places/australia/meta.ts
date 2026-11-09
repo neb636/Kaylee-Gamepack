@@ -10,7 +10,7 @@ const meta: PlaceMeta = {
   name: 'Australia',
   emoji: '🦘',
   flag: 'australia',
-  mapPos: { x: 87, y: 67 },
+  map: { iso: 'AUS', name: L.mapName, picture: art.pip, marker: [-2, 14] },
   friend: { name: 'Pip the joey', img: art.pip },
   trophyTitle: 'Australia Explorer',
   // Spots sit where the real places are on the map picture.

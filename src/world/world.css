@@ -59,6 +59,26 @@
   }
 }
 
+/* The light that runs around a country's outline on the world map (src/world/map/WorldAtlas.tsx). */
+@keyframes world-outline-run {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+.world-outline-run {
+  animation: world-outline-run linear infinite;
+}
+
+/* Clouds and the whale drift a little. */
+@keyframes world-drift {
+  50% {
+    translate: 0 -6%;
+  }
+}
+.world-drift {
+  animation: world-drift 5s ease-in-out infinite;
+}
+
 @keyframes world-glow {
   0%,
   100% {
@@ -292,6 +312,7 @@
    home dock floats over it: a bar along the bottom when the screen is tall, a column beside it when it's wide. */
 .world .world-list,
 .world .world-map {
+  --world-sea: #8ccfff;
   --dock-tile: clamp(64px, min(15vw, 8.5vh), 96px);
   --dock-h: calc(var(--dock-tile) + 30px);
   --dock-w: 0px;

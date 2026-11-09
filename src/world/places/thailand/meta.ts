@@ -16,7 +16,7 @@ const meta: PlaceMeta = {
   name: 'Thailand',
   emoji: '🐘',
   flag: 'thailand',
-  mapPos: { x: 74, y: 49 },
+  map: { iso: 'THA', name: L.mapName, picture: art.elephant, marker: [-9, 10] },
   friend: { name: 'Agong', img: art.balloon },
   trophyTitle: 'Thailand Explorer',
   // The Thailand map; the house's back button goes there.

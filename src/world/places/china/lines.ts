@@ -27,6 +27,8 @@ const longlong = as('longlong')
 const COUNT = ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!']
 
 export const L = {
+  // Sparkle, as the world map closes in on this country on the way there.
+  mapName: "China!",
   name: 'China',
   intro: [`Nee how, ${NAME}!`, 'Nee how means hello in China!'],
   hubFirst: 'Tap the glowing lantern!',

@@ -11,6 +11,8 @@ const chompy = as('chompy')
 const COUNT = ['one', 'two', 'three', 'four', 'five']
 
 export const L = {
+  // Sparkle, as the world map closes in on this country on the way there.
+  mapName: "Australia!",
   name: 'Australia',
   intro: [pip(`G'day, ${NAME}! I'm Pip the kangaroo!`), pip("G'day means hello! Help with my party?")],
   hubFirst: pip('Tap a spot on the map!'),

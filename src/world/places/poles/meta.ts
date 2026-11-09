@@ -29,7 +29,7 @@ const meta: PlaceMeta = {
   emoji: '🐧',
   flag: 'poles',
   // On Antarctica, the white strip along the bottom of the map.
-  mapPos: { x: 50, y: 91 },
+  map: { iso: 'ATA', name: L.mapName, picture: art.stickers.adelie, marker: [0, -12] },
   friend: { name: 'Pola the polar bear cub', img: art.friend },
   trophyTitle: 'Polar Explorer',
   activities: ALL.filter(([, ready]) => ready).map(([a]) => a),

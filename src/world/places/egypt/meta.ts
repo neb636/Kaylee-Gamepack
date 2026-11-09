@@ -10,7 +10,7 @@ const meta: PlaceMeta = {
   name: 'Egypt',
   emoji: '🐪',
   flag: 'egypt',
-  mapPos: { x: 53, y: 42 },
+  map: { iso: 'EGY', name: L.mapName, picture: art.jamal, marker: [-4, 13] },
   friend: { name: 'Miu the kitten', img: art.miu },
   trophyTitle: 'Egypt Explorer',
   // Spots sit by the landmarks on the map picture: the pyramids and Sphinx at Giza, Cairo, the Nile, a temple.

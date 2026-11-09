@@ -14,6 +14,8 @@ const ibis = as('ibis')
 const COUNT = ['One!', 'Two!', 'Three!', 'Four!', 'Five!']
 
 export const L = {
+  // Sparkle, as the world map closes in on this country on the way there.
+  mapName: "Egypt!",
   name: 'Egypt',
   intro: [miu(`Ahlan, ${NAME}! I'm Miu the kitten!`), miu('Ahlan means hello! Come explore Egypt with me!')],
   hubFirst: miu('Tap a spot on the map!'),

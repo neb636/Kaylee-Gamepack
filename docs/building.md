@@ -81,7 +81,7 @@ Fredoka. Animations: `motion` (`import { motion, AnimatePresence } from 'motion/
 
 ```
 src/world/places/<id>/
-  meta.ts          # PlaceMeta: name, emoji, flag, mapPos (% on the world map), friend, activities[], inTheWorks[], facts[], coloringPages[]
+  meta.ts          # PlaceMeta: name, emoji, flag, map (country code, spoken name, animal), friend, activities[], inTheWorks[], facts[], coloringPages[]
   Place.tsx        # default export: the country's hub + its activities + the finale (gets PlaceProps)
   lines.ts         # EVERY phrase that can be spoken, tagged by speaker; voice-lines.json is generated from it
   cast.json        # the friends' voices (Sparkle comes from src/sdk/cast.json)
@@ -99,7 +99,11 @@ so the friend talks), `StampEarned`, `sfx` (boing, thump, splash, pop, fwip), `C
 offers one, skippable, right after that activity's stamp); a country with videos gets a Theater button in its top bar,
 and the world map's Theater shows every country's videos.
 
-Adding a country: make the folder, add its pin in `meta.ts` (and remove it from `COMING_SOON` in `WorldMap.tsx`),
+Adding a country: make the folder and put it on the world map with one line in `meta.ts`:
+`map: { iso: 'JPN', name: L.mapName, picture: art.friend, marker: [x, y] }`. Every country's real shape is already in
+`src/world/map/atlas.json`, so there's no picture to regenerate; `iso` is its three-letter code (`marker` moves the animal
+off a small country, in % of the map; `tests/world-map.spec.ts` fails if two collide). The picture is an animal a child wants
+to visit, never a landmark (Dad, 2026-11-09). Then
 write its plan in `planning/around-the-world/`, draw its shelf banner and an icon per activity (`src/world/shelf/STYLE.md`),
 generate backgrounds, props and character reference pictures with Codex
 (`codex exec -m gpt-6.1-sol -c model_reasoning_effort="medium" ...`, style rules from `art/STYLE.md`; tell Codex never

@@ -2,6 +2,7 @@
 import type { ReactNode, Ref } from 'react'
 import type { Line, PuppetHandle } from '../sdk'
 import type { FlagId } from './kit/Flag'
+import type { CountryCode } from './map/WorldAtlas'
 
 export interface ActivityInfo {
   /** Used in the URL: #/world/<place>/<activity>. `hub`, `party` and `theater` are reserved (the hub's sections, the
@@ -46,8 +47,11 @@ export interface PlaceMeta {
   name: string
   emoji: string
   flag: FlagId
-  /** Pin position on the world map, in % of the map picture. */
-  mapPos: { x: number; y: number }
+  /** Where it is on the world map. Every country in the world is already drawn (map/atlas.json), so this is all a new
+   *  one needs: `iso`, its three-letter code; `name`, what Sparkle says when the map closes in on it; `picture`, the animal that
+   *  stands for it (an animal a child wants to go and see, not a landmark); `marker`, how far that animal stands from the
+   *  country, in % of the map, so it doesn't cover a small country's shape (default: just above). */
+  map: { iso: CountryCode; name: Line; picture: string; marker?: [x: number, y: number] }
   /** The friend Sparkle meets there. */
   friend: { name: string; img: string }
   /** Engraved under KAYLEE on the trophy she gets for collecting every stamp. */

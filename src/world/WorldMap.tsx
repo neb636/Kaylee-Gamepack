@@ -4,14 +4,17 @@
 // whichever she used last (#/world?view=list or map opens one).
 // No title and no trophy room here (Dad, 2026-10-29): the map is the picture, the dock beside it is the way in.
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useReducer, useState, type ReactNode } from 'react'
 import { go } from '../router'
 import { firstTime as firstTimeHere, lineText, Mascot, say, sounds, useOnline, useSaved } from '../sdk'
 import balloon from './assets/balloon.webp'
-import mapArt from './assets/bg-world-map.webp'
 import { DOCK, MapIcon, ShelfIcon } from './HomeIcons'
 import { FitBox } from './kit/Chrome'
+import { feelLab } from './kit/knobs'
 import { WORLD_LINES } from './lines'
+import { FEEL } from './map/feel'
+import { MAP_RATIO } from './map/project'
+import { cameraOn, edgesOf, Land, Outlines, spotOf, Stems, type ContinentKey } from './map/WorldAtlas'
 import { places, type PlaceEntry } from './registry'
 import { FROM_SHELF, Shelf } from './Shelf'
 import { totalStamps, usePassport } from './stamps'
@@ -19,66 +22,54 @@ import { useHalloween } from '../shell/season'
 import { HalloweenArt } from '../shell/Halloween'
 import { Travel } from './Travel'
 
-// Hotspots in % of the map picture (x, y = centre; w, h = size).
-const CONTINENTS: { key: keyof typeof WORLD_LINES.continents; x: number; y: number; w: number; h: number }[] = [
-  { key: 'northAmerica', x: 17, y: 26, w: 26, h: 30 },
-  { key: 'southAmerica', x: 25, y: 64, w: 15, h: 30 },
-  { key: 'europe', x: 50, y: 24, w: 16, h: 16 },
-  { key: 'africa', x: 49, y: 56, w: 18, h: 32 },
-  { key: 'asia', x: 76, y: 27, w: 34, h: 30 },
-  { key: 'australia', x: 85, y: 71, w: 16, h: 18 },
-  { key: 'antarctica', x: 50, y: 95, w: 80, h: 10 },
-]
+// Where each continent's name pops up, in % of the map.
+const CONTINENT_LABELS: Record<ContinentKey, [number, number]> = {
+  northAmerica: [22, 30],
+  southAmerica: [31, 66],
+  europe: [51, 22],
+  africa: [52, 55],
+  asia: [76, 26],
+  australia: [85, 72],
+  antarctica: [50, 92],
+}
 
-const COMING_SOON: { id: keyof typeof WORLD_LINES.soon; emoji: string; x: number; y: number }[] = [
-  { id: 'egypt', emoji: '🐪', x: 53, y: 42 },
-  { id: 'thailand', emoji: '🐘', x: 74, y: 49 },
-]
-const HOME = { x: 19, y: 33 }
+// The balloon hangs from this high up the map at most (any higher and the top of it is cut off).
+const BALLOON_TOP = 26
 
-function Pin({ x, y, children, label, onTap, glow, dim }: { x: number; y: number; children: ReactNode; label: string; onTap: () => void; glow?: boolean; dim?: boolean }) {
+function Marker({ x, y, delay, entry, hidden, onTap }: { x: number; y: number; delay: number; entry: PlaceEntry; hidden: boolean; onTap: () => void }) {
+  const { meta } = entry
   return (
     <motion.button
-      aria-label={label}
+      aria-label={meta.name}
       whileTap={{ scale: 0.85 }}
-      animate={glow ? { y: [0, -8, 0] } : {}}
-      transition={{ repeat: Infinity, duration: 1.4 }}
+      animate={{ opacity: hidden ? 0 : 1 }}
       onClick={(e) => {
         e.stopPropagation()
         onTap()
       }}
       style={{
-        // The button is the tap target and keeps its full size; the circle drawn inside it is smaller (82%,
-        // 2026-10-27), so the map looks less crowded without making the pins harder to hit.
+        // The button is the tap target and keeps its full size; the drawing inside is smaller, so the map stays uncluttered.
         position: 'absolute',
         left: `${x}%`,
         top: `${y}%`,
         translate: '-50% -50%',
-        width: 'clamp(56px, 11cqw, var(--target))',
+        width: 'max(64px, min(88px, 14cqw), min(11cqw, var(--target)))', // at least 88 on an iPad, 64 on a phone
         aspectRatio: '1',
         borderRadius: '50%',
         display: 'grid',
         placeItems: 'center',
-        fontSize: 'clamp(23px, 4.5cqw, 40px)',
         zIndex: 3,
+        pointerEvents: hidden ? 'none' : 'auto',
       }}
     >
-      <span
-        className={glow ? 'world-glow' : undefined}
-        style={{
-          position: 'relative',
-          width: '82%',
-          aspectRatio: '1',
-          borderRadius: '50%',
-          background: dim ? 'rgba(255,255,255,0.75)' : '#fff',
-          border: `4px solid ${glow ? 'var(--gold)' : '#fff'}`,
-          boxShadow: 'var(--shadow)',
-          display: 'grid',
-          placeItems: 'center',
-        }}
-      >
-        {children}
-      </span>
+      <motion.img
+        src={meta.map.picture}
+        alt=""
+        draggable={false}
+        animate={{ y: [0, -4, 0], rotate: [-2, 2, -2] }}
+        transition={{ repeat: Infinity, duration: 2.4, delay, ease: 'easeInOut' }}
+        style={{ display: 'block', width: '86%', aspectRatio: '1', objectFit: 'contain', transformOrigin: '50% 100%' }}
+      />
     </motion.button>
   )
 }
@@ -91,6 +82,11 @@ export function WorldMap({ view: linked }: { view?: string }) {
   const online = useOnline() // the Theater needs the internet
   const [label, setLabel] = useState<{ text: string; x: number; y: number } | null>(null)
   const [travelTo, setTravelTo] = useState<PlaceEntry | null>(null)
+  const [arrived, setArrived] = useState(false)
+  const [lastPlace, setLastPlace] = useSaved('world:balloon', 'canada')
+  // The feel lab's sliders change the knobs: draw again.
+  const [, redraw] = useReducer((n: number) => n + 1, 0)
+  useEffect(() => feelLab.subscribe(redraw), [])
   const [saved, setView] = useSaved<View>('world:view', 'map')
   // A link's ?view= wins until she taps the other button.
   const [fromLink, setFromLink] = useState<View | undefined>(linked === 'list' || linked === 'map' ? linked : undefined)
@@ -121,10 +117,35 @@ export function WorldMap({ view: linked }: { view?: string }) {
     void say(next === 'list' ? WORLD_LINES.shelf.showList : WORLD_LINES.shelf.showMap)
   }
 
-  const show = (text: string, x: number, y: number) => {
+  const tapContinent = useCallback((key: ContinentKey) => {
+    const [x, y] = CONTINENT_LABELS[key]
+    const text = WORLD_LINES.continents[key]
     sounds.pop()
     setLabel({ text, x, y })
     void say(text)
+  }, [])
+
+  const fly = (entry: PlaceEntry) => {
+    if (travelTo) return
+    sounds.sparkle()
+    setLabel(null)
+    setTravelTo(entry)
+  }
+  const spots = places.map((entry) => {
+    const plant = spotOf(entry.meta.map.iso)
+    const [dx, dy] = entry.meta.map.marker ?? [0, -8]
+    return { entry, plant, head: [plant[0] + dx, plant[1] + dy] as [number, number] }
+  })
+  const outlines = spots.map((s) => ({ code: s.entry.meta.map.iso, onTap: () => fly(s.entry) }))
+  const from = places.find((p) => p.meta.id === lastPlace) ?? places[0]
+  const camera = arrived && travelTo ? cameraOn(travelTo.meta.map.iso) : undefined
+  // The balloon floats just off the country's edge, on the other side from its animal, and stays inside the map.
+  const balloonAt = (entry: PlaceEntry) => {
+    const { iso, marker } = entry.meta.map
+    const [, y] = spotOf(iso)
+    const [west, east] = edgesOf(iso)
+    const x = (marker?.[0] ?? 0) > 0 ? west - 5 : east + 5
+    return [Math.max(6, Math.min(94, x)), Math.max(BALLOON_TOP, y - 2)]
   }
 
   const dock = (
@@ -160,51 +181,40 @@ export function WorldMap({ view: linked }: { view?: string }) {
       {toggle}
 
       <div className="world-split" style={{ flex: 1, minHeight: 0, gap: 'min(16px, 2vh)', alignItems: 'center' }}>
-        <FitBox ratio={1.5}>
-          <div style={{ position: 'absolute', inset: 0, borderRadius: 28, overflow: 'hidden', boxShadow: 'var(--shadow)', border: '5px solid #fff', background: `url(${mapArt}) center / cover` }} onClick={() => setLabel(null)}>
-            {CONTINENTS.map((c) => (
-              <button
-                key={c.key}
-                aria-label={c.key}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  show(WORLD_LINES.continents[c.key], c.x, c.y)
-                }}
-                style={{ position: 'absolute', left: `${c.x - c.w / 2}%`, top: `${c.y - c.h / 2}%`, width: `${c.w}%`, height: `${c.h}%`, borderRadius: '50%' }}
-              />
-            ))}
-          </div>
-
-          {/* Sparkle's balloon */}
-          <motion.img
-            src={balloon}
-            alt=""
-            animate={{ y: [0, -10, 0], rotate: [-3, 3, -3] }}
-            transition={{ repeat: Infinity, duration: 3 }}
-            style={{ position: 'absolute', left: `${HOME.x + 5}%`, top: `${HOME.y - 26}%`, width: '9%', zIndex: 2 }}
-          />
-
-          {places.map(({ meta }) => (
-            <Pin
-              key={meta.id}
-              x={meta.mapPos.x}
-              y={meta.mapPos.y}
-              label={meta.name}
-              glow
-              onTap={() => {
-                sounds.sparkle()
-                setTravelTo(places.find((p) => p.meta.id === meta.id) ?? null)
-              }}
+        <FitBox ratio={MAP_RATIO}>
+          <div style={{ position: 'absolute', inset: 0, borderRadius: 28, overflow: 'hidden', boxShadow: 'var(--shadow)', border: '5px solid #fff', background: 'var(--world-sea)' }} onClick={() => setLabel(null)}>
+            {/* Everything that zooms in on a country. */}
+            <motion.div
+              animate={camera ?? { scale: 1, x: '0%', y: '0%' }}
+              transition={{ duration: arrived ? FEEL.zoom : 0, ease: 'easeInOut' }}
+              style={{ position: 'absolute', inset: 0, transformOrigin: '0 0' }}
             >
-              {meta.emoji}
-            </Pin>
-          ))}
-          {COMING_SOON.filter((c) => !places.some((p) => p.meta.id === c.id)).map((c) => (
-            <Pin key={c.id} x={c.x} y={c.y} label={`${c.id} coming soon`} dim onTap={() => show(WORLD_LINES.soon[c.id], c.x, c.y)}>
-              <span style={{ opacity: 0.55 }}>{c.emoji}</span>
-              <span style={{ position: 'absolute', right: '-14%', bottom: '-14%', fontSize: '55%' }}>☁️</span>
-            </Pin>
-          ))}
+              <Land onContinent={tapContinent} />
+              <Outlines countries={outlines} lit={travelTo?.meta.map.iso} zoom={camera?.scale} />
+              {!travelTo && <Stems stems={spots.map((s) => ({ key: s.entry.meta.id, from: s.plant, to: s.head }))} />}
+              {spots.map((s, i) => (
+                <Marker key={s.entry.meta.id} x={s.head[0]} y={s.head[1]} delay={i * 0.3} entry={s.entry} hidden={!!travelTo} onTap={() => fly(s.entry)} />
+              ))}
+            </motion.div>
+
+            {/* Sparkle's balloon: waits over the last place she went, flies across the map, and lands when the map closes in. */}
+            <motion.img
+              src={balloon}
+              alt=""
+              initial={false}
+              animate={
+                travelTo
+                  ? {
+                      left: [`${balloonAt(from)[0]}%`, `${(balloonAt(from)[0] + balloonAt(travelTo)[0]) / 2}%`, `${balloonAt(travelTo)[0]}%`],
+                      top: [`${balloonAt(from)[1]}%`, `${Math.max(BALLOON_TOP, Math.min(balloonAt(from)[1], balloonAt(travelTo)[1]) - 8)}%`, `${balloonAt(travelTo)[1]}%`],
+                      opacity: arrived ? 0 : 1,
+                    }
+                  : { left: `${balloonAt(from)[0]}%`, top: `${balloonAt(from)[1]}%`, opacity: 1 }
+              }
+              transition={{ left: { duration: FEEL.flight, ease: 'easeInOut' }, top: { duration: FEEL.flight, ease: 'easeInOut' }, opacity: { duration: FEEL.zoom / 2 } }}
+              style={{ position: 'absolute', width: '9%', translate: '-50% -92%', zIndex: 4, pointerEvents: 'none' }}
+            />
+          </div>
 
           <AnimatePresence>
             {label && (
@@ -248,7 +258,19 @@ export function WorldMap({ view: linked }: { view?: string }) {
       {/* The same floating dock as the game list. */}
       <div className="shelf-dock">{dock}</div>
 
-      {travelTo && <Travel entry={travelTo} onDone={() => go.world(travelTo.meta.id)} />}
+      {travelTo && (
+        <Travel
+          entry={travelTo}
+          onArrive={() => {
+            setArrived(true)
+            setLabel({ text: lineText(travelTo.meta.map.name), x: 50, y: -3 }) // along the top, clear of the country
+          }}
+          onDone={() => {
+            setLastPlace(travelTo.meta.id)
+            go.world(travelTo.meta.id)
+          }}
+        />
+      )}
     </div>
   )
 }

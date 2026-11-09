@@ -19,6 +19,8 @@ const capy = as('capy')
 const monkey = as('monkey')
 
 export const L = {
+  // Sparkle, as the world map closes in on this country on the way there.
+  mapName: "Peru!",
   name: 'Peru',
   trophyWin: `${NAME}, you did it! You won the Peru Explorer trophy!`,
   trophyRoom: `${NAME}, Peru Explorer! From Peru.`,

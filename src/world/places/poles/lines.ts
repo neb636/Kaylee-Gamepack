@@ -15,6 +15,8 @@ export const papa = by('papa')
 export const terry = by('terry')
 
 export const L = {
+  // Sparkle, as the world map closes in on this country on the way there.
+  mapName: "The Poles!",
   // The shell's trophy ceremony and the trophy room speak these.
   trophyWin: `${NAME}, you did it! You won the Polar Explorer trophy!`,
   trophyRoom: `${NAME}, Polar Explorer! From The Poles.`,
