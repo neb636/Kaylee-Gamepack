@@ -32,6 +32,8 @@ export interface Feel {
   dead: number
   /** Lean into turns (radians of roll at full speed and full turn). */
   lean: number
+  /** How hard a finger off to one side asks for a turn (turn rate per radian of error, 3 if not set). */
+  gain?: number
 }
 
 export interface StepEvents {
@@ -195,7 +197,7 @@ export class Driver {
       const sp = clamp(Math.abs(fwd) / f.top, 0, 1)
       const max = f.turn * (0.5 + 0.5 * Math.min(1, sp * 1.4))
       const aim = this.mode === 'hold' ? Math.sign(err) * Math.max(0, Math.abs(err) - f.dead) : err
-      const wantRate = want === null ? 0 : clamp(aim * 3, -max, max)
+      const wantRate = want === null ? 0 : clamp(aim * (f.gain ?? 3), -max, max)
       this.yawRate += (wantRate - this.yawRate) * (1 - Math.exp(-dt * (want === null ? 3 : 6)))
       this.heading += this.yawRate * dt
     }

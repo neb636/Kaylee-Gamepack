@@ -10,13 +10,14 @@
 //          The secret: drive a loop and close it, and the wake circle sparkles and fills with jumping fish (pink
 //          sparkles for a heart).
 //   waves  the wind comes up and bigger waves roll in from the open sea (engine3d/lagoon.ts draws the same waves the
-//          jet ski rides): steer into them to jump, higher waves for bigger jumps, a spin in the air on the biggest. The
-//          terns dive beside her.
+//          jet ski rides): steer into them to jump, higher waves for bigger jumps, a spin in the air on the biggest. Gold
+//          stars hang over the waves, the later ones high enough to need a jump; catching them all moves on to the race.
 //   race   race the jet ski man out round the big orange buoy and back to the flags. She wins most of the time (he
-//          slows behind her, takes a wide turn), and when he wins it's by a nose; the winner rings the bell on the hut.
+//          slows behind her, takes a wide turn), and when he wins it's by a nose; after a loss he waits for her at the
+//          line (design rule 3), and a pink arrow points the way when she's stuck. The winner rings the bell on the hut.
 // Silly, never failing: drive up onto the sand and it skids, everyone tumbles off laughing and the jet ski man pushes
 // it back; spin tight circles and Daddy goes dizzy; splash Mommy on the shore; push into the rope and it stretches
-// like a rubber band and boings her back. Life jacket first: the bare link waits for her tap on the jacket.
+// like a rubber band and turns her along it; wedge it on the rocks and it pops free. Life jacket first: the bare link waits for her tap on the jacket.
 //
 // Talk (lines.ts L.samet.jetski): the jet ski man says the life jacket goes on, Sparkle says what each round is for and
 // counts the race in, Daddy whoops now and then (never after every jump), the jet ski man teases and is a good sport.
@@ -43,7 +44,7 @@ import { JETSKI_MAN } from '../cast'
 import { BANANA, BAY, bay, FAR_BUOY, HUT, LAUNCH, MOMMY, RACE, ROPE, SEAWARD, SWIMMERS, toBay, WAVE_DIR, type RoundId } from '../island/layout'
 import { BananaBoat, Fish, Swimmer, Tern } from './critters'
 import { buildScenery, SKY, type Scenery } from './scenery'
-import { buildSki, HIS, lifeJacket, STERN, type Ski } from './ski'
+import { buildSki, HIS, lifeJacket, loneVest, STERN, type Ski } from './ski'
 import { Wake, type Loop } from './wake'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/jetski/jetski.ts'
@@ -57,6 +58,9 @@ const HELM = knobs('jetHelm', 'Steering the jet ski', FILE, {
   near: { value: 2.5, min: 1, max: 8, step: 0.25, label: 'Crawl when this close', unit: 'm', note: 'her finger this close to the jet ski = a crawl' },
   far: { value: 18, min: 6, max: 40, step: 0.5, label: 'Full speed from', unit: 'm', note: 'her finger this far ahead = full speed' },
   dead: { value: 0.12, min: 0, max: 0.5, step: 0.01, label: 'Straight-ahead zone', unit: 'rad', note: 'a finger this close to straight ahead goes straight' },
+  gain: { value: 3, min: 1, max: 10, step: 0.25, label: 'Turn eagerness', unit: '×', note: 'how hard a finger off to one side asks it to turn (higher = the screen edge is a full turn, even on a phone)' },
+  spread: { value: 2.5, min: 1, max: 5, step: 0.1, label: 'Portrait turn width', unit: '×', note: 'on a tall screen a finger at the edge is only a little off the nose: this widens it, so the edge is a full turn in portrait too' },
+  square: { value: 1, min: 0, max: 1, step: 0.05, label: 'Finger squares with the camera', note: '1 = straight up the screen is straight ahead, though the camera sits to the side; 0 = it pulls toward the camera side' },
   lean: { value: 0.34, min: 0, max: 0.7, step: 0.01, label: 'Lean into turns', unit: 'rad', note: 'how far it tips into a turn at full speed' },
   lift: { value: 0.07, min: 0, max: 0.25, step: 0.005, label: 'Nose lifts', unit: 'rad', note: 'how far the nose comes up as it speeds up' },
   camera: { value: 0.45, min: 0, max: 1, step: 0.05, label: 'Camera turns with it', note: '0 = slow and steady, 1 = right behind it all the time' },
@@ -75,7 +79,9 @@ const WAVES = knobs('jetWaves', 'Waves and jumps', FILE, {
   hop: { value: 1.35, min: 0.5, max: 4, step: 0.05, label: 'Jump', unit: '×', note: 'how hard a crest throws it (times how fast the wave lifted it)' },
   spin: { value: 7.6, min: 3, max: 14, step: 0.1, label: 'Spins from', unit: 'm/s', note: 'a throw this hard spins it round in the air' },
   squash: { value: 1, min: 0, max: 2.5, step: 0.05, label: 'Squash on landing', unit: '×' },
-  jumps: { value: 8, min: 2, max: 30, step: 1, label: 'Jumps before the race', note: 'the waves round moves on to the race after this many jumps' },
+  stars: { value: 10, min: 2, max: 30, step: 1, label: 'Stars to catch', note: 'the waves round moves on to the race after this many stars' },
+  reach: { value: 4.5, min: 2, max: 9, step: 0.25, label: 'Star catch width', unit: 'm', note: 'how close she has to steer to catch a star' },
+  drift: { value: 8, min: 3, max: 20, step: 0.5, label: 'Stars come to her after', unit: 's', note: 'a star she has not caught by then drifts toward her and sinks low' },
 })
 /** The rope, the sand, the silly things. */
 const SILLY = knobs('jetSilly', 'The rope, the sand, the silly things', FILE, {
@@ -85,6 +91,10 @@ const SILLY = knobs('jetSilly', 'The rope, the sand, the silly things', FILE, {
   dizzy: { value: 1.25, min: 0.5, max: 6, step: 0.25, label: 'Dizzy after', unit: 'turns', note: 'full turns round and round one way before Daddy goes dizzy' },
   splash: { value: 5, min: 2, max: 10, step: 0.25, label: 'Splashes Mommy within', unit: 'm' },
   ride: { value: 70, min: 10, max: 200, step: 5, label: 'Ride round lasts', unit: 's', note: 'seconds of riding before the waves come (sooner after a loop)' },
+  margin: { value: 3, min: 0.5, max: 10, step: 0.25, label: 'Stays inside the rope by', unit: 'm', note: 'a finger past the rope steers her along it, this far inside' },
+  rocks: { value: 8, min: -20, max: 30, step: 1, label: 'Keeps off the rocks by', unit: 'm', note: 'past the sand at each end of the beach, a finger on the rocks steers her this far out from the waterline' },
+  wedge: { value: 0.7, min: 0.2, max: 3, step: 0.05, label: 'Pops off the rocks after', unit: 's', note: 'stuck against the rocks or sand this long and it bounces free' },
+  pop: { value: 8, min: 3, max: 14, step: 0.25, label: 'Pops off at', unit: 'm/s', note: 'how hard it bounces free' },
 })
 /** The race. */
 const RACEK = knobs('jetRace', 'Racing the jet ski man', FILE, {
@@ -92,6 +102,9 @@ const RACEK = knobs('jetRace', 'Racing the jet ski man', FILE, {
   ahead: { value: 0.7, min: 0.3, max: 1, step: 0.01, label: 'Slows when ahead', unit: '×', note: 'his speed while he is ahead of her' },
   catchUp: { value: 1.08, min: 1, max: 1.4, step: 0.01, label: 'Catches up', unit: '×', note: 'his speed while she is far ahead (so it stays close)' },
   ease: { value: 0.08, min: 0, max: 0.3, step: 0.01, label: 'Easier after a loss', unit: '×', note: 'how much slower he goes after each race she loses' },
+  mercy: { value: 1, min: 1, max: 5, step: 1, label: 'Waits for her after', unit: 'losses', note: 'after this many losses in a row he waits near the line, so she can never lose over and over' },
+  waitAt: { value: 0.85, min: 0.6, max: 0.95, step: 0.01, label: 'He waits at', note: 'how far round the course he stops to wait (0.5 is the buoy, 1 the line)' },
+  waitGap: { value: 0.05, min: 0, max: 0.3, step: 0.01, label: 'Goes again when she is this close', note: 'he sets off again once she is this close behind him (0.05 is about 12 m)' },
   wide: { value: 9, min: 0, max: 25, step: 0.5, label: 'His wide turn', unit: 'm', note: 'how wide he swings round the buoy' },
 })
 
@@ -110,6 +123,10 @@ export interface JetEvents {
   spray(k: number): void
   /** Someone says a line (lines.ts L.samet.jetski; `mute`: a hint's first time, only its bubble shows). */
   say(l: Line, mute?: boolean): void
+  /** The waves round's stars: `n` caught of `of` (`of` 0: hide them). */
+  stars(n: number, of: number): void
+  /** The first frame is on screen. */
+  ready(): void
 }
 
 const J = LINES.samet.jetski
@@ -193,7 +210,9 @@ export class JetSki implements World3D {
   private w = 1
   private h = 1
   private tall = false
+  private top = 0
   private time = 0
+  private shown = false
   private round: RoundId
   private phase: Phase
 
@@ -238,6 +257,17 @@ export class JetSki implements World3D {
   private stretch = { side: -1, s: 0, k: 0 }
   private boingCool = 0
 
+  // ---- Stuck against the rocks or the sand: how long, and the moment after it pops free (her finger waits).
+  private wedgeT = 0
+  private pin = { x: 0, z: 0 }
+  private freeT = 0
+
+  // ---- The stars of the waves round, the arrow that points the way, and the glow on what she's heading for.
+  private gold: { g: Group; x: number; z: number; y: number; age: number; high: boolean }[] = []
+  private caught = 0
+  private arrow: Group
+  private goalGlow: Mesh
+
   // ---- Silly things.
   private beachT = -1
   private beach = { from: new Vector3(), to: new Vector3(), back: new Vector3(), heading: 0, out: 0 }
@@ -254,6 +284,7 @@ export class JetSki implements World3D {
   private countT = 0
   private lastCount = 99
   private losses = 0
+  private waitCool = 0
   private raceT = 0
   private winner: 'her' | 'him' | null = null
   private endT = 0
@@ -291,7 +322,7 @@ export class JetSki implements World3D {
   private told = new Set<string>()
 
   private rideT = 0
-  private counts = { steers: 0, taps: 0, pokes: 0, jumps: 0, spins: 0, loops: 0, hearts: 0, beachings: 0, dizzy: 0, soaked: 0, boings: 0, races: 0, wins: 0, losses: 0, bells: 0, bonks: 0, squeals: 0, tips: 0 }
+  private counts = { steers: 0, taps: 0, pokes: 0, jumps: 0, spins: 0, loops: 0, hearts: 0, beachings: 0, dizzy: 0, soaked: 0, boings: 0, races: 0, wins: 0, losses: 0, bells: 0, bonks: 0, squeals: 0, tips: 0, wedged: 0, stars: 0 }
 
   constructor(
     private renderer: WebGLRenderer,
@@ -314,7 +345,7 @@ export class JetSki implements World3D {
     this.s.lagoon.waves.height = this.waveGoal()
 
     // ---- Her jet ski with Kaylee and Daddy.
-    this.feel = { top: 0, boost: 1.4, accel: 0, coast: 0, turn: 0, grip: 0, near: 0, far: 0, dead: 0, lean: 0 }
+    this.feel = { top: 0, boost: 1.4, accel: 0, coast: 0, turn: 0, grip: 0, near: 0, far: 0, dead: 0, lean: 0, gain: 3 }
     this.readFeel()
     this.d = new Driver(this.feel)
     this.ski = buildSki(bag)
@@ -332,7 +363,7 @@ export class JetSki implements World3D {
     // Life jackets (on the body, so they lie down with them): Kaylee's pink and white (it waits for her tap on the bare link), Daddy's orange.
     this.jacket = lifeJacket(bag, 0.22, 0.4, 0.3, PAL.hotpink)
     this.kaylee.rig.body.add(this.jacket)
-    this.jacketFloat = lifeJacket(bag, 0.32, 0, 0.44, PAL.hotpink)
+    this.jacketFloat = loneVest(bag, PAL.hotpink)
     scene.add(this.jacketFloat)
     this.nickJacket = lifeJacket(bag, this.nick.rig.radius * 1.12, this.nick.height * 0.3, this.nick.height * 0.2, '#FF8A2E', '#FFE07A')
     this.nick.rig.body.add(this.nickJacket)
@@ -361,6 +392,30 @@ export class JetSki implements World3D {
     this.marker.renderOrder = 3
     this.marker.visible = false
     scene.add(this.marker)
+
+    // The way to go: a big pink arrow over the water by the jet ski, and a pink ring on what she's heading for.
+    this.arrow = new Group()
+    this.arrow.add(solid(merge([P.prism([[-0.5, -1.1], [0.5, -1.1], [0.5, 0.15], [1.25, 0.15], [0, 1.6], [-1.25, 0.15], [-0.5, 0.15]], 0.3, PAL.hotpink, { rot: [Math.PI / 2, 0, 0] })]), bag, 3))
+    this.arrow.visible = false
+    scene.add(this.arrow)
+    this.goalGlow = new Mesh(bag.add(new RingGeometry(3.4, 4.6, 40)), bag.add(new MeshBasicMaterial({ color: PAL.hotpink, transparent: true, opacity: 0.7, depthWrite: false })))
+    this.goalGlow.rotation.x = -Math.PI / 2
+    this.goalGlow.renderOrder = 3
+    this.goalGlow.visible = false
+    scene.add(this.goalGlow)
+    // The stars of the waves round (three at a time).
+    const star = Array.from({ length: 10 }, (_, i): [number, number] => {
+      const a = (i / 10) * Math.PI * 2
+      const r = i % 2 ? 0.55 : 1.25
+      return [Math.sin(a) * r, Math.cos(a) * r]
+    })
+    for (let i = 0; i < 3; i++) {
+      const g = new Group()
+      g.add(solid(merge([P.prism(star, 0.28, PAL.gold)]), bag, 3))
+      g.visible = false
+      scene.add(g)
+      this.gold.push({ g, x: 0, z: 0, y: 1.2, age: -1, high: false })
+    }
 
     // ---- The rope's floats (orange and white, every 2.4 m, only where they're in the water).
     this.floatMesh = new Group()
@@ -425,7 +480,8 @@ export class JetSki implements World3D {
     f.far = HELM.far
     f.dead = HELM.dead
     f.lean = HELM.lean
-    if (this.rival) Object.assign(this.rival.feel, f, { top: f.top * RACEK.rival * (1 - RACEK.ease) ** this.losses, grip: f.grip * 1.4 })
+    f.gain = HELM.gain
+    if (this.rival) Object.assign(this.rival.feel, f, { top: f.top * RACEK.rival * (1 - RACEK.ease) ** this.losses, grip: f.grip * 1.4, gain: 3 })
   }
   private waveGoal() {
     return this.round === 'waves' ? WAVES.waves : this.round === 'race' ? WAVES.race : WAVES.ride
@@ -486,6 +542,7 @@ export class JetSki implements World3D {
     this.w = w
     this.h = h
     this.tall = h > w
+    this.top = top
     this.rig.setSize(w, h, top)
     setOutlineResolution(w, h)
     this.rig.setShot(this.shot(), true)
@@ -509,6 +566,7 @@ export class JetSki implements World3D {
     else if (r === 'race') this.events.say(J.race)
     this.rideT = 0
     this.counts.jumps = r === 'waves' ? 0 : this.counts.jumps
+    this.resetStars()
     // (A little longer before the count, so Sparkle's line comes first.)
     if (r === 'race') this.startRace(false, 1.6)
     else if (this.phase === 'countdown' || this.phase === 'racing' || this.phase === 'raceEnd') {
@@ -520,6 +578,11 @@ export class JetSki implements World3D {
 
   update(dt: number) {
     const t = (this.time += dt)
+    if (!this.shown) {
+      this.shown = true
+      this.events.ready()
+      this.resetStars()
+    }
     this.readFeel()
     if (this.later.length) {
       const due = this.later.filter((l) => l.at <= t)
@@ -543,6 +606,8 @@ export class JetSki implements World3D {
     this.steer()
     this.drive(dt)
     this.raceStep(dt)
+    this.starStep(dt, t)
+    this.pointWay(t)
     this.life(dt, t)
     this.placeSki(dt)
     this.placeRope(t)
@@ -573,13 +638,32 @@ export class JetSki implements World3D {
     if (f && !f.steering && this.time - f.t > 0.3) this.startSteer()
     if (f?.steering) {
       const p = this.waterPoint(f.x, f.y, tmp)
-      if (p) {
-        d.hold(p.x, p.z)
+      // Steering reads the finger from the jet ski's own place on the screen (it sits a little off the middle), so a
+      // finger above it goes straight and the same distance left or right turns the same.
+      const skiX = this.toScreen(tmp2.set(d.x, this.surf, d.z)).x
+      const s = this.waterPoint(f.x + this.w / 2 - skiX, f.y, tmp3)
+      if (p && s && this.freeT > 0) d.stop()
+      else if (p && s) {
+        // The chase camera sits to one side of the jet ski, so straight up the screen is not its nose: turn the finger
+        // back by that much, or a finger straight ahead keeps turning it toward the camera's side, for ever (the
+        // camera follows the turn), and the other way is that much weaker.
+        const a = HELM.square * HELM.side / DEG
+        const px = s.x - d.x
+        const pz = s.z - d.z
+        const rx = px * Math.cos(a) - pz * Math.sin(a)
+        const rz = px * Math.sin(a) + pz * Math.cos(a)
+        // On a tall screen the sides are close together: widen the finger so the screen's edge is a real turn there too.
+        const sh = Math.sin(d.heading)
+        const ch = Math.cos(d.heading)
+        const along = rx * sh + rz * ch
+        const side = (rx * ch - rz * sh) * (this.tall ? HELM.spread : 1)
+        const at = this.insideRope(d.x + along * sh + side * ch, d.z + along * ch - side * sh)
+        d.hold(at.x, at.z)
         this.marker.visible = true
         this.marker.position.set(p.x, this.water(p.x, p.z) + 0.06, p.z)
         this.marker.scale.setScalar(0.9 + Math.sin(this.time * 6) * 0.12)
-        const dx = p.x - d.x
-        const dz = p.z - d.z
+        const dx = at.x - d.x
+        const dz = at.z - d.z
         this.aimAhead = dx * Math.sin(d.heading) + dz * Math.cos(d.heading)
         this.aimTurn = wrap(Math.atan2(dx, dz) - d.heading)
       }
@@ -590,6 +674,15 @@ export class JetSki implements World3D {
       this.marker.position.set(g.x, this.water(g.x, g.z) + 0.06, g.z)
       this.marker.scale.setScalar(0.7)
     }
+  }
+  /** A finger past the rope steers her along it, just inside: she never drives at a wall. */
+  private insideRope(x: number, z: number) {
+    const r = this.ropeNow
+    const b = toBay(x, z)
+    const u = clamp(b.u, r.w + SILLY.margin, r.e - SILLY.margin)
+    // (Past the sand at each end it's rocks: keep off them too. The sand itself is hers to skid up.)
+    const v = Math.min(u < -32 || u > 27 ? Math.max(b.v, SILLY.rocks) : b.v, r.out - SILLY.margin)
+    return bay(u, v)
   }
   private startSteer() {
     const f = this.finger
@@ -739,7 +832,8 @@ export class JetSki implements World3D {
     if (ov > 0) {
       d.vx -= nx * ov * SILLY.rope * dt * 2
       d.vz -= nz * ov * SILLY.rope * dt * 2
-      if (ov > SILLY.give) d.bounce(-nx, -nz, 0.6)
+      // (Past its stretch it just stops her and turns her along it: never throws her backwards.)
+      if (ov > SILLY.give) d.bounce(-nx, -nz, 0.05)
       this.stretch = { side, s, k: Math.max(this.stretch.k, ov) }
       if (ov > 0.6 && this.boingCool <= 0) {
         this.boingCool = 1.2
@@ -753,6 +847,16 @@ export class JetSki implements World3D {
     if (ov > 0) this.stretch.k = Math.max(this.stretch.k, ov)
 
     // The sand: fast onto the beach = a skid and a tumble; slow = it just stops. Rocks (off the sand) bounce.
+    this.freeT -= dt
+    // Pinned (the finger pushing, the jet ski going nowhere, against the shore or the rope): it pops free. This is
+    // measured from where it really got to, because at the rocks it jitters in and out of touching them.
+    if (Math.hypot(d.x - this.pin.x, d.z - this.pin.z) > 2) {
+      this.pin.x = d.x
+      this.pin.z = d.z
+      this.wedgeT = 0
+    } else if (d.driven && (shore < 0.8 || ov > 0)) this.wedgeT += dt
+    else this.wedgeT = 0
+    if (this.wedgeT > SILLY.wedge && this.freeT <= 0) this.popFree(b.u > -32 && b.u < 27 && shore < 0.8)
     if (shore < 0.35) {
       const gx = this.s.terrain.shoreAt(d.x + 0.5, d.z) - this.s.terrain.shoreAt(d.x - 0.5, d.z)
       const gz = this.s.terrain.shoreAt(d.x, d.z + 0.5) - this.s.terrain.shoreAt(d.x, d.z - 0.5)
@@ -795,6 +899,33 @@ export class JetSki implements World3D {
     bump(this.rival.x, this.rival.z, 2.4, () => bonk())
   }
 
+  /** Wedged on the rocks: it bounces free with a boing, nose to the open water, and everyone laughs. */
+  private popFree(sandy: boolean) {
+    const d = this.d
+    // Toward the middle of the bay: always open water, whatever it was jammed against.
+    const c = bay(0, 34)
+    const l = Math.hypot(c.x - d.x, c.z - d.z) || 1
+    const nx = (c.x - d.x) / l
+    const nz = (c.z - d.z) / l
+    this.wedgeT = 0
+    this.freeT = 1.1
+    this.counts.wedged++
+    d.stop()
+    d.heading = Math.atan2(nx, nz)
+    d.vx = nx * SILLY.pop
+    d.vz = nz * SILLY.pop
+    d.yawRate = 0
+    d.jump(4.5)
+    this.spinSum = 0
+    sfx.boing()
+    bonk()
+    this.spray.burst(d.x, 0.4, d.z, 22, 3, 5, 0.22)
+    this.stars.burst(d.x, 1.6, d.z, 8, 1.5, 1.5, 0.16)
+    this.kaylee.react('wiggle')
+    this.nick.react('hop')
+    this.talk('rocks', sandy ? J.beached : J.rocks, 5)
+  }
+
   // ---------------------------------------------------------------- silly: up onto the sand
 
   private startBeach(nx: number, nz: number) {
@@ -815,7 +946,6 @@ export class JetSki implements World3D {
     d.vx = d.vz = 0
     d.yawRate = 0
     hiss(0.6, 0.18, 'bandpass', 900, 300)
-    this.finger = null
   }
   private beached(dt: number) {
     const d = this.d
@@ -1035,13 +1165,25 @@ export class JetSki implements World3D {
       r.cap = gap > 0.03 ? RACEK.ahead : gap < -0.1 ? RACEK.catchUp : 1
       if (pHer > 0.9 && gap < 0.02) r.cap = Math.min(r.cap, 0.85)
       if (gap > 0.12 && pHim > 0.85) r.cap = 0.35
+      // Design rule 3: she can lose, but not over and over. After a loss he stops before the line and waits (a wave, a
+      // tease), goes again only when she's close behind him, and never crosses the line ahead of her.
+      if (this.losses >= RACEK.mercy) {
+        const waiting = pHim > RACEK.waitAt && gap > RACEK.waitGap
+        r.cap = waiting || pHim > 0.97 ? 0 : Math.min(r.cap, 0.8)
+        this.waitCool -= dt
+        if (waiting && this.waitCool <= 0) {
+          this.waitCool = 7
+          this.man.react('wave')
+          this.talk('tease', J.tease, 14)
+        }
+      }
     } else r.goto(bay(-11, 2.4).x, bay(-11, 2.4).z)
     r.step(dt)
     const rb = this.s.terrain.shoreAt(r.x, r.z)
     if (rb < 0.6) r.bounce(...this.shoreNormal(r.x, r.z), 0.2)
     if (this.phase === 'racing') {
       if (this.leg[0] === 1 && home(d.x, d.z)) this.finish('her')
-      else if (this.leg[1] === 1 && home(r.x, r.z)) this.finish('him')
+      else if (this.leg[1] === 1 && home(r.x, r.z) && this.losses < RACEK.mercy) this.finish('him')
     } else {
       this.endT += dt
       if (this.winner === 'him' && this.endT > 2.6) this.startRace(false)
@@ -1067,6 +1209,8 @@ export class JetSki implements World3D {
     this.endT = 0
     if (who === 'her') {
       this.counts.wins++
+      // (She beat him: he gets a little of his speed back, so the next race is still a race.)
+      this.losses = Math.max(0, this.losses - 1)
       this.ringBell()
       this.kaylee.react('wiggle')
       this.nick.react('hop')
@@ -1238,7 +1382,9 @@ export class JetSki implements World3D {
     if (this.phase === 'jacket') {
       const p = bay(-1.8, 2.2)
       this.jacketFloat.position.set(p.x, 1.3 + Math.sin(t * 2.4) * 0.12, p.z)
-      this.jacketFloat.rotation.y = t * 0.9
+      // (It turns to and fro but keeps its front to the camera, buckles and open neck showing: a vest, not a bucket.)
+      this.jacketFloat.rotation.y = this.d.heading + 32 / DEG + Math.sin(t * 1.1) * 0.5
+      this.jacketFloat.rotation.z = Math.sin(t * 1.6) * 0.08
       this.jacketFloat.scale.setScalar(1 + Math.sin(t * 5) * 0.06)
     } else if (this.phase === 'suit') {
       // It flies onto her.
@@ -1264,6 +1410,118 @@ export class JetSki implements World3D {
   private jacketAt = 0
   private jacketFrom = new Vector3()
 
+  // ---------------------------------------------------------------- the waves round's stars, and pointing the way
+
+  private resetStars() {
+    this.caught = 0
+    for (const s of this.gold) {
+      s.age = -1
+      s.g.visible = false
+    }
+    this.events.stars(0, this.round === 'waves' ? WAVES.stars : 0)
+  }
+  /** A new star somewhere ahead of her (further out and off to the side as the round goes on, the later ones high). */
+  private placeStar(s: JetSki['gold'][number]) {
+    const d = this.d
+    const k = clamp(this.caught / Math.max(1, WAVES.stars - 1), 0, 1)
+    for (let tries = 0; tries < 12; tries++) {
+      const side = (Math.random() < 0.5 ? -1 : 1) * (0.2 + k * 0.7 + Math.random() * 0.25)
+      const r = 16 + k * 16 + Math.random() * 6
+      const at = this.insideRope(d.x + Math.sin(d.heading + side) * r, d.z + Math.cos(d.heading + side) * r)
+      if (this.s.terrain.shoreAt(at.x, at.z) < 8) continue
+      if (toBay(at.x, at.z).v < 14) continue
+      s.x = at.x
+      s.z = at.z
+      s.high = k > 0.34
+      s.y = s.high ? 2.6 : 1.3
+      s.age = 0
+      s.g.visible = true
+      s.g.scale.setScalar(0.01)
+      return
+    }
+    s.age = -1
+  }
+  private starStep(dt: number, t: number) {
+    if (this.round !== 'waves' || this.phase !== 'ride') {
+      for (const s of this.gold) s.g.visible = false
+      return
+    }
+    const d = this.d
+    let live = 0
+    for (const s of this.gold) if (s.age >= 0) live++
+    for (const s of this.gold) {
+      if (s.age < 0 && live < Math.min(3, WAVES.stars - this.caught)) {
+        this.placeStar(s)
+        if (s.age >= 0) live++
+      }
+      if (s.age < 0) continue
+      s.age += dt
+      // Not caught after a while: it drifts to her and sinks to where she can't miss it.
+      if (s.age > WAVES.drift) {
+        const dx = d.x - s.x
+        const dz = d.z - s.z
+        const l = Math.hypot(dx, dz) || 1
+        s.x += (dx / l) * Math.min(l, dt * 4)
+        s.z += (dz / l) * Math.min(l, dt * 4)
+        s.y += (1.3 - s.y) * ease(dt, 1.5)
+      }
+      const y = this.water(s.x, s.z) + s.y + Math.sin(t * 2.4 + s.x) * 0.15
+      s.g.position.set(s.x, y, s.z)
+      // (Rocking, its face kept to the camera: spun edge-on a star is just a yellow splinter.)
+      s.g.rotation.y = this.camYaw + Math.sin(t * 2.2 + s.x) * 0.5
+      s.g.scale.setScalar(Math.min(1, s.g.scale.x + dt * 4))
+      // Caught: steered close enough, and level with it (the high ones want a jump).
+      const her = this.surf + d.y + 0.9
+      if (Math.hypot(d.x - s.x, d.z - s.z) < WAVES.reach && Math.abs(y - her) < 1.5) {
+        s.age = -1
+        s.g.visible = false
+        live--
+        this.caught++
+        this.counts.stars++
+        twinkle(false)
+        this.sparkle.burst(s.x, y, s.z, 24, 3, 4, 0.26)
+        this.kaylee.react('wiggle')
+        this.events.stars(this.caught, WAVES.stars)
+        if (this.caught >= WAVES.stars) this.after(0.9, () => this.round === 'waves' && this.setRound('race'))
+      }
+    }
+  }
+  /** What she's heading for right now: the buoy, then the flags, or the nearest star. */
+  private wayGoal(): { x: number; z: number } | null {
+    if (this.phase === 'racing') return this.leg[0] === 0 ? FAR_BUOY : bay(0, RACE.finish.v)
+    if (this.round !== 'waves' || this.phase !== 'ride') return null
+    let best: { x: number; z: number } | null = null
+    let dist = Infinity
+    for (const s of this.gold) {
+      const l = Math.hypot(s.x - this.d.x, s.z - this.d.z)
+      if (s.age >= 0 && l < dist) [best, dist] = [s, l]
+    }
+    return best
+  }
+  /** The arrow over the water, when she stops steering or heads the wrong way; a ring on the buoy or the flags. */
+  private pointWay(t: number) {
+    const d = this.d
+    const g = this.wayGoal()
+    const racing = this.phase === 'racing'
+    this.goalGlow.visible = !!g && racing
+    this.arrow.visible = false
+    if (!g) return
+    if (racing) {
+      this.goalGlow.position.set(g.x, this.water(g.x, g.z) + 0.08, g.z)
+      this.goalGlow.scale.setScalar(1 + Math.sin(t * 4) * 0.12)
+    }
+    const dx = g.x - d.x
+    const dz = g.z - d.z
+    const to = Math.atan2(dx, dz)
+    const off = Math.abs(wrap(to - d.heading))
+    if (Math.hypot(dx, dz) < 6) return
+    if (off < 0.7 && (this.finger || t - this.lastTouch < 3)) return
+    this.arrow.visible = true
+    this.arrow.position.set(d.x + Math.sin(to) * 5, this.surf + d.y + 1.2 + Math.sin(t * 5) * 0.12, d.z + Math.cos(to) * 5)
+    this.arrow.rotation.y = to
+    this.arrow.scale.setScalar(1 + Math.sin(t * 6) * 0.08)
+  }
+
   /** Rounds move on with her play: the calm ride, then the waves, then the race. */
   private progress(dt: number) {
     if (this.phase !== 'ride') return
@@ -1272,7 +1530,8 @@ export class JetSki implements World3D {
       if (this.rideT > SILLY.ride) this.setRound('waves')
     } else if (this.round === 'waves') {
       this.rideT += dt
-      if (this.counts.jumps >= WAVES.jumps || this.rideT > 150) this.setRound('race')
+      // (Catching the last star moves on; this is only if she just wants to ride the waves for ages.)
+      if (this.rideT > 180) this.setRound('race')
     }
   }
 
@@ -1342,7 +1601,8 @@ export class JetSki implements World3D {
     }
     for (let u = -44; u <= 48; u += 2.4) add(u, 0, 0.309, 0.951, 2, u)
     // Two instanced shapes (orange and white, every other float) with their outlines: four draw calls for the rope.
-    const geo = this.bag.add(bake(new SphereGeometry(0.28, 10, 7), '#ffffff', { scale: [1, 0.8, 1] }))
+    // (Big enough to read as a rope of floats from across the bay: she has to see the edge coming.)
+    const geo = this.bag.add(bake(new SphereGeometry(0.62, 10, 7), '#ffffff', { scale: [1, 0.8, 1] }))
     const hull = this.bag.add(hullGeometry(geo))
     for (const c of ['#FF8A2E', '#FFFFFF']) {
       const n = Math.ceil(this.floats.length / 2)
@@ -1412,8 +1672,9 @@ export class JetSki implements World3D {
     }
     const chase = (this.camYaw + Math.PI) * DEG
     const sp = clamp(Math.abs(d.speed) / Math.max(0.1, HELM.top), 0, 1.3)
-    const sx = Math.sin(this.camYaw)
-    const sz = Math.cos(this.camYaw)
+    // (Partly along the way the camera looks, which keeps the jet ski in the middle of the screen at cruising speed.)
+    const sx = Math.sin(this.camYaw + (HELM.side * 0.55) / DEG)
+    const sz = Math.cos(this.camYaw + (HELM.side * 0.55) / DEG)
     const ahead = 2 + sp * HELM.ahead
     const half = tall ? new Vector3(4.4, 2, 7.6) : new Vector3(8, 2, 5.2)
     half.multiplyScalar(1 + 0.15 * sp + (this.round === 'race' ? 0.15 : 0))
@@ -1535,7 +1796,10 @@ export class JetSki implements World3D {
     // A quick tap on the water: drive there and stop.
     if (!id && (this.phase === 'ride' || this.phase === 'racing')) {
       const p = this.waterPoint(x, y, tmp)
-      if (p) this.d.goto(p.x, p.z)
+      if (p) {
+        const at = this.insideRope(p.x, p.z)
+        this.d.goto(at.x, at.z)
+      }
     }
   }
   private pokeBuoy() {
@@ -1548,18 +1812,21 @@ export class JetSki implements World3D {
   private drawHint(t: number) {
     const el = this.hintEl
     if (!el) return
-    const idle = !this.finger && t - this.lastTouch > HINT_S && (this.phase === 'ride' || this.phase === 'jacket')
+    const idle = !this.finger && t - this.lastTouch > HINT_S && (this.phase === 'ride' || this.phase === 'jacket' || this.phase === 'racing')
     // Once each time she goes quiet: Sparkle's hint (only shown the first time, then said at most twice a visit).
     if (idle && !this.hinted) {
       this.hinted = true
-      const l = this.phase === 'jacket' ? J.hint.jacket : J.hint.steer
+      const l = this.phase === 'jacket' ? J.hint.jacket : this.phase === 'racing' ? (this.leg[0] === 0 ? J.hint.buoy : J.hint.home) : J.hint.steer
       this.events.say(l, !spendHint(l))
     } else if (!idle) this.hinted = false
     const want = idle ? '' : 'none'
     if (el.style.display !== want) el.style.display = want
     if (!idle) return
     const d = this.d
-    const at = this.phase === 'jacket' ? this.jacketFloat.position : tmp.set(d.x + Math.sin(d.heading) * 12, 0, d.z + Math.cos(d.heading) * 12)
+    // (In the race the finger presses on the water toward the buoy or the flags.)
+    const g = this.wayGoal()
+    const to = g ? Math.atan2(g.x - d.x, g.z - d.z) : d.heading
+    const at = this.phase === 'jacket' ? this.jacketFloat.position : tmp.set(d.x + Math.sin(to) * 12, 0, d.z + Math.cos(to) * 12)
     const s = this.toScreen(at)
     el.style.transform = `translate3d(${s.x.toFixed(1)}px, ${s.y.toFixed(1)}px, 0)`
   }
@@ -1577,7 +1844,16 @@ export class JetSki implements World3D {
       }
       const show = !!spot && spot.x > -spot.size / 2 && spot.x < this.w + spot.size / 2 && spot.y > -spot.size / 2 && spot.y < this.h + spot.size / 2
       if (show && spot) {
-        el.style.transform = `translate3d(${(spot.x - spot.size / 2).toFixed(1)}px, ${(spot.y - spot.size / 2).toFixed(1)}px, 0)`
+        // Never cut by the screen's edge or under the top bar, and never under Sparkle in her corner (she'd get the tap).
+        let left = clamp(spot.x - spot.size / 2, 4, Math.max(4, this.w - spot.size - 4))
+        let up = clamp(spot.y - spot.size / 2, this.top + 4, Math.max(this.top + 4, this.h - spot.size - 4))
+        const guideW = Math.min(120, this.h * 0.16, this.w * 0.24) + 22
+        const guideTop = this.h - Math.min(140, this.h * 0.19, this.w * 0.28) - 22
+        if (left < guideW && up + spot.size > guideTop) {
+          if (guideTop - spot.size >= this.top + 4) up = guideTop - spot.size
+          else left = guideW
+        }
+        el.style.transform = `translate3d(${left.toFixed(1)}px, ${up.toFixed(1)}px, 0)`
         el.style.width = el.style.height = `${spot.size.toFixed(0)}px`
       }
       const want = show ? '' : 'none'
@@ -1623,6 +1899,9 @@ export class JetSki implements World3D {
       air: +d.y.toFixed(2),
       waves: +this.s.lagoon.waves.height.toFixed(2),
       jacket: this.jacket.visible,
+      arrow: this.arrow.visible,
+      wedge: +this.wedgeT.toFixed(2),
+      rivalLosses: this.losses,
       leg: this.leg[0],
       rivalLeg: this.leg[1],
       rival: (({ u, v }) => ({ u: +u.toFixed(1), v: +v.toFixed(1), speed: +this.rival.speed.toFixed(1), cap: this.rival.cap }))(toBay(this.rival.x, this.rival.z)),

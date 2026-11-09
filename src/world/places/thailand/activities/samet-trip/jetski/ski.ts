@@ -102,3 +102,31 @@ export function lifeJacket(bag: Bag, r: number, y: number, h: number, color: str
   g.position.y = y
   return g
 }
+
+/** Kaylee's life jacket before it's on: a real vest on its own, front panels with a zip gap and three buckles, an open
+ *  neck, wide shoulders and a white hem. Its front faces +z. (A plain tube, the worn one's shape, reads as a bucket.) */
+export function loneVest(bag: Bag, color: string, trim = '#FFFFFF') {
+  const g = new Group()
+  const panel = (x: number) => P.rbox(0.3, 0.68, 0.17, 0.07, color, { at: [x, -0.02, 0.17] })
+  g.add(
+    solid(
+      merge([
+        // The two front panels with the gap between, the back, the sides joining them.
+        panel(-0.2),
+        panel(0.2),
+        P.rbox(0.72, 0.72, 0.15, 0.07, color, { at: [0, 0, -0.17] }),
+        ...[-1, 1].map((s) => P.rbox(0.14, 0.6, 0.34, 0.06, color, { at: [s * 0.36, -0.06, 0] })),
+        // Shoulder straps over an open neck.
+        ...[-1, 1].map((s) => P.rbox(0.2, 0.1, 0.46, 0.04, color, { at: [s * 0.24, 0.36, 0] })),
+        // The white collar and hem, and the buckles across the zip gap.
+        ...[-1, 1].map((s) => P.rbox(0.31, 0.08, 0.19, 0.03, trim, { at: [s * 0.2, -0.33, 0.17] })),
+        P.rbox(0.74, 0.08, 0.17, 0.03, trim, { at: [0, -0.33, -0.17] }),
+        ...[0.2, 0, -0.2].map((y) => P.box(0.46, 0.07, 0.05, '#3A3140', { at: [0, y, 0.27] })),
+        ...[0.2, 0, -0.2].map((y) => P.box(0.13, 0.11, 0.06, trim, { at: [0, y, 0.285] })),
+      ]),
+      bag,
+      2.5,
+    ),
+  )
+  return g
+}
