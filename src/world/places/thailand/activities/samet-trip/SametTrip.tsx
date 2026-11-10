@@ -12,11 +12,14 @@
 // params win over it), and home: with all four flags up the speedboat at Na Dan takes them home, Mommy's photo goes on
 // Agong's wall and the stamp lands on the 🏝️ pin. Step 9 is the finale (finale/): with all four flags up the
 // driftwood tree opens the sunset at Ao Prao (Mommy's photo of the three of them), then the fire show on Sai Kaew at
-// night, and its 🏠 takes them home (the sunset photo on Agong's wall, the stamp).
+// night, and its 🏠 takes them home (the sunset photo on Agong's wall, the stamp). Finding her way (#357, card B): on
+// the island the top-left button calls the beach puppy, and inside a stop it goes back to the beach; she leaves Koh
+// Samet only by the speedboat at Na Dan pier (its home picture), and the next visit lands her on the beach she left.
 import { useEffect, useRef, useState } from 'react'
 import { useSaved } from '../../../../../sdk'
 import { flag } from '../../../../engine3d/flags'
 import { useSections } from '../../../../kit/sections'
+import { useTopLeft } from '../../../../kit/topLeft'
 import { formatPacked, parsePacked } from '../../trip/packing'
 import { addWallPhoto, shrinkPhoto, today, useWallPhotos } from '../../trip/wall-photos'
 import { PackScreen } from './PackScreen'
@@ -45,9 +48,14 @@ const readFlags = (s: string): StopId[] => (s === 'all' ? [...FLAGS] : (s.split(
 interface Props {
   /** Home: Mommy's photo is on Agong's wall: the stamp. */
   onDone?: () => void
+  /** Home on the speedboat before the island is done (the home picture at Na Dan pier): back to the Thailand map. */
+  onExit?: () => void
 }
 
-export function SametTrip({ onDone }: Props = {}) {
+/** Which beach each stop's world is on (its top-left button goes back there). */
+const STOP_BEACH: Record<string, SpotId> = { jetski: 'saikaew', sandcastle: 'hinkhok', snorkel: 'wongduan', deck: 'deck', hideseek: 'prao', sunset: 'prao', fireshow: 'saikaew', book: 'saikaew' }
+
+export function SametTrip({ onDone, onExit }: Props = {}) {
   const { start, param, enter } = useSections(SAMET_SECTIONS)
   // What the iPad saved: where she was, the flags, her book and her suitcase. A link's own params win.
   const [saved, setSaved] = useSaved<SametProgress>(SAMET_SAVE_KEY, NEW_TRIP)
@@ -100,6 +108,24 @@ export function SametTrip({ onDone }: Props = {}) {
     setSaved((p) => ({ ...NEW_TRIP, book: here.current.book.join(','), packed: formatPacked(packedRef.current) || p.packed, trips: (p.trips ?? 0) + 1 }))
     onDone?.()
   }
+
+  // Inside a stop (the jet ski, the sandcastle, the snorkel, lunch, hide and seek, the finale), the top-left button goes
+  // back to its beach (no flag), never off Koh Samet. The island's own is the puppy's (IslandScreen); packing and the
+  // speedboat keep the shell's map button.
+  const inStop = sec.id !== 'pack' && sec.id !== 'speedboat' && sec.id !== 'island' && sec.id !== 'book'
+  useTopLeft(
+    inStop
+      ? {
+          icon: <span style={{ fontSize: 'calc(var(--btn) * 0.5)', lineHeight: 1 }}>🏝️</span>,
+          label: 'Back to the beach',
+          onBack: () => {
+            const at = STOP_BEACH[sec.id] ?? 'saikaew'
+            here.current.at = at
+            setSec((s) => ({ ...s, id: 'island', n: s.n + 1, at }))
+          },
+        }
+      : null,
+  )
 
   if (sec.id === 'pack')
     return (
@@ -237,6 +263,12 @@ export function SametTrip({ onDone }: Props = {}) {
       key={sec.n}
       start={{ at: here.current.at, flags: sec.flags, time, book: here.current.book, phone: here.current.phone, packed }}
       onHome={home}
+      onLeave={() => {
+        // Off home on the speedboat: the trip stays saved, so next time she's back on the beach she left (Na Dan pier).
+        here.current.at = 'nadan'
+        save()
+        onExit?.()
+      }}
       photos={here.current.photos}
       onPhotos={(p) => (here.current.photos = p)}
       onPhone={(on) => {

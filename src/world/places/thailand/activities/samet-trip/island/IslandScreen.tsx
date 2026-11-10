@@ -1,8 +1,9 @@
-// The island to roam, on screen (island.ts is the world): the 3D island with its tap targets, the pink flag arrow that
-// points at the nearest stop without a flag after a while with nothing touched (on the stop itself when it's on
-// screen, at the screen's edge pointing that way when it isn't), and Mommy's phone and the animal book (../book/).
-// Sparkle sits in the corner (trip/legs/Guide.tsx): she says what's new (lines.ts L.samet.island, L.samet.book), the
-// family and the taxi driver react in their own voices. A hub: no idle hints spoken (the flag arrow glows).
+// The island to roam, on screen (island.ts is the world): the 3D island with its tap targets, the beach puppy's
+// thought bubble (a picture of the beach he's taking her to, #357 way-finding), the top-left button that calls him
+// (kit/topLeft.ts: it no longer leaves Koh Samet), the home picture at the end of Na Dan pier (the speedboat is the way
+// home), and Mommy's phone and the animal book (../book/). Sparkle sits in the corner (trip/legs/Guide.tsx): she says
+// what's new (lines.ts L.samet.island, L.samet.puppy, L.samet.book), the family and the taxi driver react in their own
+// voices. A hub: no idle hints spoken (the puppy comes to fetch her).
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../../../engine3d/Anchors'
@@ -11,6 +12,7 @@ import { firstTime, type Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import { sfx } from '../../../sfx'
 import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
+import { useTopLeft } from '../../../../../kit/topLeft'
 import { ANIMAL_IDS, type AnimalId } from '../book/animals'
 import { DOCK_CORNER, PhoneAndBook, type BookPhoto, type Flyer } from '../book/Book'
 import { ISLAND_ANCHORS, SametIsland as World, type IslandStart } from './island'
@@ -33,13 +35,18 @@ interface Props {
   onPhone?(on: boolean): void
   /** All four flags up and the speedboat home tapped: Mommy's photo of the island (for Agong's wall). */
   onHome?(photo: string): void
+  /** The home picture tapped at the end of Na Dan pier: off home on the speedboat (the trip is kept for next time). */
+  onLeave?(): void
 }
 
-export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, photos: kept, onPhotos, onPhone, onHome }: Props) {
+export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, photos: kept, onPhotos, onPhone, onHome, onLeave }: Props) {
   const [n, setN] = useState(0)
   const [mode, setMode] = useState<RenderMode>('webgl')
   const worldRef = useRef<World | null>(null)
-  const hintRef = useRef<HTMLDivElement>(null)
+  const bubbleRef = useRef<HTMLDivElement>(null)
+  const [leave, setLeave] = useState(false)
+  // The top-left button calls the beach puppy (it used to leave Koh Samet with one tap).
+  useTopLeft({ icon: <PuppyFace />, label: 'Call the puppy', onBack: () => worldRef.current?.callPuppy() })
   const guideRef = useRef<TripGuideHandle>(null)
   const speak = (l: Line) => guideRef.current?.speak(l)
   const [phone, setPhone] = useState(!!start.phone)
@@ -94,8 +101,9 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
       },
       say: speak,
       home: onHome ? (src) => cb.current.onHome?.(src) : undefined,
+      leaveAsk: onLeave ? setLeave : undefined,
     })
-    w.setHintElement(hintRef.current)
+    w.setBubbleElement(bubbleRef.current)
     w.requestPortraits(setPortraits)
     return w
   }
@@ -112,8 +120,12 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
         anchors={(input, els) => (
           <>
             <Anchors list={ISLAND_ANCHORS} els={els} {...input} />
-            <div ref={hintRef} className="isle-hint" style={{ display: 'none' }}>
-              <span className="isle-flag" />
+            <div ref={bubbleRef} className="pup-bubble" style={{ display: 'none' }}>
+              <span className="pup-dot pup-dot-1" />
+              <span className="pup-dot pup-dot-2" />
+              <div className="pup-pic">
+                <img alt="" />
+              </div>
             </div>
           </>
         )}
@@ -145,6 +157,19 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
         cleaned={cleaned}
       />
       {mode === 'webgl' && <TripGuide ref={guideRef} hidden={open} corner={DOCK_CORNER} />}
+      {leave && (
+        <button
+          className="isle-home"
+          aria-label="Go home"
+          onClick={() => {
+            sfx.pop()
+            setLeave(false)
+            onLeave?.()
+          }}
+        >
+          <HomePicture />
+        </button>
+      )}
       {mode === 'lost' && (
         <button onClick={() => { setMode('webgl'); setN((v) => v + 1) }} style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(213,238,250,.9)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: 'var(--ink)' }}>
           🏝️ Tap to wake the island
@@ -154,13 +179,45 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
   )
 }
 
+/** The top-left button's picture: the beach puppy's face (cream, brown floppy ears, his tongue out). */
+function PuppyFace() {
+  return (
+    <svg viewBox="0 0 64 64" style={{ width: '78%', height: '78%' }} aria-hidden>
+      <ellipse cx="14" cy="30" rx="9" ry="16" fill="#C98A55" transform="rotate(14 14 30)" />
+      <ellipse cx="50" cy="30" rx="9" ry="16" fill="#C98A55" transform="rotate(-14 50 30)" />
+      <circle cx="32" cy="32" r="20" fill="#FFF1DC" stroke="#2B2330" strokeWidth="2.5" />
+      <ellipse cx="32" cy="40" rx="10" ry="7" fill="#FFFFFF" />
+      <circle cx="24" cy="29" r="3" fill="#2B2330" />
+      <circle cx="40" cy="29" r="3" fill="#2B2330" />
+      <ellipse cx="32" cy="36" rx="4" ry="3" fill="#3B2A26" />
+      <path d="M28 41 Q32 45 36 41" stroke="#2B2330" strokeWidth="2" fill="none" strokeLinecap="round" />
+      <path d="M30 43 Q32 50 34 43 Z" fill="#FF7FB0" />
+      <path d="M20 50 L32 46 L44 50 L32 56 Z" fill="#FF8FB8" />
+    </svg>
+  )
+}
+
+/** The home picture at the end of the pier: the speedboat, and home (a house with a heart). */
+function HomePicture() {
+  return (
+    <svg viewBox="0 0 100 100" style={{ width: '82%', height: '82%' }} aria-hidden>
+      <path d="M20 48 L50 22 L80 48 Z" fill="#FF5FA8" stroke="#2B2330" strokeWidth="3" strokeLinejoin="round" />
+      <rect x="27" y="46" width="46" height="34" rx="3" fill="#FFF6EC" stroke="#2B2330" strokeWidth="3" />
+      <rect x="44" y="60" width="13" height="20" rx="2" fill="#C99A66" stroke="#2B2330" strokeWidth="2.5" />
+      <path d="M36 52 c0 -4 6 -4 6 0 c0 -4 6 -4 6 0 c0 4 -6 7 -6 9 c0 -2 -6 -5 -6 -9 Z" fill="#FF5FA8" transform="translate(-4 0)" />
+      <path d="M10 88 Q30 82 50 88 T90 88" stroke="#7FC8F0" strokeWidth="5" fill="none" strokeLinecap="round" />
+    </svg>
+  )
+}
+
 const CSS = `
-.isle-hint { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: 5; }
-.isle-flag { position: absolute; left: -30px; top: -30px; width: 60px; height: 60px; border-radius: 50%; background: var(--hotpink); box-shadow: 0 4px 12px rgba(43,35,48,.25); animation: isle-bob 1.3s ease-in-out infinite; }
-.isle-flag::before { content: ''; position: absolute; left: 22px; top: 14px; width: 4px; height: 32px; border-radius: 2px; background: #fff; }
-.isle-flag::after { content: ''; position: absolute; left: 26px; top: 14px; border-left: 18px solid #fff; border-top: 8px solid transparent; border-bottom: 8px solid transparent; }
-.isle-hint[data-dir="edge"] .isle-flag { animation: isle-nudge 1.1s ease-in-out infinite; }
-.isle-hint[data-dir="edge"]::after { content: ''; position: absolute; left: 0; top: 0; width: 0; height: 0; transform: rotate(var(--rot, 0deg)) translateX(40px); border-left: 18px solid var(--hotpink); border-top: 12px solid transparent; border-bottom: 12px solid transparent; margin-top: -12px; }
-@keyframes isle-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-@keyframes isle-nudge { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+.pup-bubble { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: 6; --size: 104px; }
+.pup-pic { position: absolute; left: calc(var(--size) / -2); top: calc(var(--size) / -2); width: var(--size); height: var(--size); border-radius: 50%; overflow: hidden; background: #fff; border: 5px solid #fff; box-shadow: 0 0 0 3px var(--hotpink), 0 6px 14px rgba(43,35,48,.25); }
+.pup-pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pup-dot { position: absolute; border-radius: 50%; background: #fff; box-shadow: 0 0 0 2px var(--hotpink); }
+.pup-dot-1 { width: 16px; height: 16px; left: calc(var(--tx) * 0.62 - 8px); top: calc(var(--ty) * 0.62 - 8px); }
+.pup-dot-2 { width: 10px; height: 10px; left: calc(var(--tx) * 0.82 - 5px); top: calc(var(--ty) * 0.82 - 5px); }
+.isle-home { position: absolute; left: 50%; bottom: calc(var(--safe-bottom, 0px) + 22%); width: 132px; height: 132px; margin-left: -66px; border-radius: 50%; border: 6px solid #fff; background: #FFE3F0; box-shadow: 0 0 0 4px var(--hotpink), 0 8px 18px rgba(43,35,48,.3); display: grid; place-items: center; z-index: 40; animation: isle-home-in .5s cubic-bezier(.3,1.6,.5,1) both, isle-home-bob 1.4s ease-in-out .5s infinite; }
+@keyframes isle-home-in { from { transform: scale(0); } to { transform: scale(1); } }
+@keyframes isle-home-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 `

@@ -302,6 +302,44 @@ export function buildProps(bag: Bag, root: Group, ground: Ground, blockers: Bloc
       can.position.y = 2.5
       g.add(solid(P.cyl(0.05, 0.05, 2.4, '#8A6A4D', { at: [0, 1.2, 0] }, 6), bag, 2), can)
       add(p.id, 'deckbrella', g, p.at, y, 2.6, { part: can })
+    } else if (p.kind === 'lifeguard') {
+      // Ao Phai's lifeguard tower (#357 way-finding: something to know the beach by): a tall pink-and-white chair on
+      // stilts with a little roof and a red-and-yellow flag. A tap: the flag flaps and it rocks.
+      const f = facing(p.at)
+      g.rotation.y = f
+      const parts: BufferGeometry[] = []
+      for (const [x, z] of [[-0.55, -0.55], [0.55, -0.55], [-0.55, 0.55], [0.55, 0.55]]) parts.push(P.cyl(0.07, 0.08, 2.2, '#FFFFFF', { at: [x, 1.1, z] }, 7))
+      parts.push(P.rbox(1.4, 0.12, 1.4, 0.04, '#E8D3B0', { at: [0, 2.2, 0] }), P.rbox(1.2, 0.5, 0.12, 0.04, PAL.hotpink, { at: [0, 2.5, 0.62] }), P.rbox(1.0, 0.7, 0.12, 0.04, '#FFFFFF', { at: [0, 2.65, -0.55] }))
+      for (let k = 0; k < 4; k++) parts.push(P.box(0.5, 0.06, 0.08, '#FFFFFF', { at: [0, 0.4 + k * 0.45, 0.7], rot: [0, 0, 0] }))
+      parts.push(P.cone(1.15, 0.55, PAL.pink, { at: [0, 3.55, 0] }, 8), P.cyl(0.04, 0.04, 1.0, '#FFFFFF', { at: [0, 3.2, 0] }, 6), P.cyl(0.03, 0.03, 1.3, '#C9C2B8', { at: [0.62, 3.6, -0.62] }, 5))
+      g.add(solid(merge(parts), bag, 2))
+      const flag = new Group()
+      flag.add(solid(merge([P.box(0.5, 0.17, 0.02, '#E8403F', { at: [0.25, 0.08, 0] }), P.box(0.5, 0.17, 0.02, '#FFC83D', { at: [0.25, -0.09, 0] })]), bag, 2))
+      flag.position.set(0.62, 4.1, -0.62)
+      g.add(flag)
+      blockers.add(p.at.x, p.at.z, 0.9)
+      add(p.id, 'lifeguard', g, p.at, y, 4.2, { part: flag })
+    } else if (p.kind === 'stall') {
+      // The coconut stall where the road tops the spine (a landmark on the long road): a little wooden stand under a
+      // pink-striped awning, green coconuts piled on it and a big painted coconut on a pole. A tap: a coconut rolls off.
+      const parts: BufferGeometry[] = [P.rbox(2.4, 0.9, 1.0, 0.06, '#C99A66', { at: [0, 0.45, 0] }), P.box(2.42, 0.1, 1.02, '#FFFFFF', { at: [0, 0.92, 0] })]
+      for (const [x, z] of [[-1.1, -0.45], [1.1, -0.45], [-1.1, 0.45], [1.1, 0.45]]) parts.push(P.cyl(0.05, 0.05, 2.2, '#A97C50', { at: [x, 1.1, z] }, 6))
+      for (let k = 0; k < 5; k++) parts.push(P.box(0.5, 0.08, 1.4, k % 2 ? PAL.hotpink : '#FFFFFF', { at: [-1.0 + k * 0.5, 2.25, 0.1], rot: [0.18, 0, 0] }))
+      for (let k = 0; k < 7; k++) parts.push(P.sphere(0.17, '#7DBE4E', { at: [-0.7 + (k % 4) * 0.42, 1.12 + (k > 3 ? 0.24 : 0), (k > 3 ? 0 : 0.15) - 0.05] }, 9))
+      parts.push(P.cyl(0.05, 0.05, 3.2, '#F4EEE6', { at: [1.5, 1.6, 0.2] }, 6), P.sphere(0.45, '#8A6A3E', { at: [1.5, 3.35, 0.2] }, 12), P.sphere(0.2, '#FFFFFF', { at: [1.5, 3.55, 0.55] }, 8), P.cyl(0.02, 0.02, 0.5, PAL.hotpink, { at: [1.6, 3.85, 0.3], rot: [0, 0, -0.3] }, 5))
+      g.rotation.y = Math.PI
+      g.add(solid(merge(parts), bag, 2))
+      blockers.add(p.at.x, p.at.z, 1.3)
+      add(p.id, 'stall', g, p.at, y, 3.6)
+    } else if (p.kind === 'rocks') {
+      // The balancing rocks halfway down the road to Ao Wong Duan (a landmark): three round granite boulders stacked
+      // up, the top one a little small. A tap: they wobble and click.
+      const top = new Group()
+      top.add(solid(P.sphere(0.65, '#D2C8BE', { scale: [1.1, 0.85, 1] }, 12), bag, 2))
+      top.position.y = 2.75
+      g.add(solid(merge([P.sphere(1.3, '#BFB5AC', { at: [0, 0.8, 0], scale: [1.15, 0.8, 1] }, 14), P.sphere(0.95, '#C9BFB4', { at: [0.15, 1.95, 0.05], scale: [1.1, 0.8, 1] }, 12)]), bag, 2), top)
+      blockers.add(p.at.x, p.at.z, 1.5)
+      add(p.id, 'rocks', g, p.at, y, 3.3, { part: top })
     } else if (p.kind === 'lantern') {
       g.add(solid(P.sphere(0.25, '#FF8FB8', {}, 10), bag, 2))
       add(p.id, 'lantern', g, p.at, y, 0.6)

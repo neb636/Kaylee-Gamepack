@@ -22,7 +22,8 @@
 //       "finger": "Tilt the syrup bottle and paint the ice.",
 //       "grows": [["🍧", "one cone"], ["🌈", "stripes to order"], ["🐨", "a koala queue"]],
 //       "learns": "Hot days melt ice: she races the sun.", "silly": "Overfill it and it's a fountain.",
-//       "why": "She replays the cafe's pouring every day.", "minutes": "2-3", "touches": "30"
+//       "why": "She replays the cafe's pouring every day.", "minutes": "2-3", "touches": "30",
+//       "also": [["🚕", "The taxi: stops where she rings"]]          // optional: what else the pick changes, a line each
 //     }]
 //   }
 //
@@ -103,7 +104,7 @@ function page({ brief, reels, reads, pr }) {
 <div class="pbody"><h3>${esc(p.title)}</h3>
 <p class="finger">👆 ${esc(p.finger)}</p>
 <ol class="grows">${(p.grows ?? []).map(([icon, words]) => `<li><span>${esc(icon)}</span>${esc(words)}</li>`).join('')}</ol>
-${p.learns ? `<p><b>She learns:</b> ${esc(p.learns)}</p>` : ''}${p.silly ? `<p><b>Silly:</b> ${esc(p.silly)}</p>` : ''}${p.why ? `<p><b>Why her:</b> ${esc(p.why)}</p>` : ''}
+${p.learns ? `<p><b>She learns:</b> ${esc(p.learns)}</p>` : ''}${p.silly ? `<p><b>Silly:</b> ${esc(p.silly)}</p>` : ''}${p.why ? `<p><b>Why her:</b> ${esc(p.why)}</p>` : ''}${(p.also ?? []).map(([icon, words]) => `<p class="also"><span>${esc(icon)}</span> ${esc(words)}</p>`).join('')}
 <p class="meta">${esc(p.minutes ?? '')}${p.minutes ? ' min' : ''}${p.touches ? ` · about ${esc(p.touches)} touches` : ''}</p>
 <button class="pick" data-p="${i}">Pick this one</button></div></article>`)
     .join('\n')
@@ -155,6 +156,7 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 .pitch h3{font-size:20px}.finger{font-size:18px;font-weight:600;margin:6px 0}.pitch p{margin:6px 0}
 .grows{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;counter-reset:g}
 .grows li{background:var(--lav);border-radius:12px;padding:8px;font-size:14px;text-align:center}.grows span{display:block;font-size:28px}
+.also{font-size:15px;color:var(--soft)}.also span{font-size:18px}
 @media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}}
 </style></head><body><main>
 ${brief.checkIn ? `<span class="chip">Check-in ${esc(brief.checkIn)}</span>` : ''}
