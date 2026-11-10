@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Thailand map: which pins?</title>
+<title>Thailand map: friends mark the places</title>
 <style>
 :root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a;--lav:#efe6ff;--warn:#b0124f}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}}
@@ -26,38 +26,18 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 .also{font-size:15px;color:var(--soft)}.also span{font-size:18px}
 @media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}}
 </style></head><body><main>
-<span class="chip">Check-in pick: three real pin styles</span>
-<h1>Thailand map: which pins?</h1>
-<p class="kaylee">She can tell each place on the Thailand map at a glance, without reading.</p>
-<h2>Pick one</h2><div class="pitches"><article class="pitch"><img src="pitch/picture.jpg" alt="">
-<div class="pbody"><h3>1 Picture pins</h3>
-<p class="finger">👆 The pins you have, with a drawing inside: Agong, a baby elephant, Nan's pink mushroom, the otter.</p>
-<ol class="grows"></ol>
+<span class="chip">Check-in fix</span>
+<h1>Thailand map: friends mark the places</h1>
+<p class="kaylee">Agong, the elephant, Moon and the otter float and wave over their places, and the boats and turtle stay in the water.</p>
 
-<p class="meta"></p>
-<button class="pick" data-p="0">Pick this one</button></div></article>
-<article class="pitch"><img src="pitch/friends.jpg" alt="">
-<div class="pbody"><h3>2 Friends on clouds</h3>
-<p class="finger">👆 Who she'll meet: Agong, the elephant, Moon the sun bear and the jet ski otter wave from a puff of cloud.</p>
-<ol class="grows"></ol>
+<h2>Watch</h2><figure><video src="reel/map-friends.mp4" poster="" controls playsinline muted autoplay loop></video>
+<figcaption>Map friends · 17 s</figcaption></figure>
 
-<p class="meta"></p>
-<button class="pick" data-p="1">Pick this one</button></div></article>
-<article class="pitch"><img src="pitch/rides.jpg" alt="">
-<div class="pbody"><h3>3 Rides</h3>
-<p class="finger">👆 What she'll ride: the tuk-tuk, the longtail, the Pajero and the jet ski, showing off on a toy turntable.</p>
-<ol class="grows"></ol>
 
-<p class="meta"></p>
-<button class="pick" data-p="2">Pick this one</button></div></article></div><p class="meta" id="picked"></p>
-<h2>Watch</h2><figure><video src="reel/map-pins.mp4" poster="" controls playsinline muted autoplay loop></video>
-<figcaption>Map pins · 20 s</figcaption></figure>
-
-<h2>Your call</h2><ol><li><p>Which one: 1 picture pins, 2 friends on clouds, or 3 rides?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
-<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/thailand/hub/map?pins=picture">1 Picture pins</a> <a class="pill" href="../#/world/thailand/hub/map?pins=friends">2 Friends on clouds</a> <a class="pill" href="../#/world/thailand/hub/map?pins=rides">3 Rides</a></p>
+<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/thailand/hub/map">The map</a></p>
 </main>
 <script>
-const qs=["Which one: 1 picture pins, 2 friends on clouds, or 3 rides?"],titles=["1 Picture pins","2 Friends on clouds","3 Rides"]
+const qs=[],titles=[]
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p]
   try{await navigator.clipboard.writeText(t);document.getElementById('picked').textContent='Copied “'+t+'”. Paste it on the PR, or just say it in chat.'}catch{document.getElementById('picked').textContent=t+': say it on the PR or in chat.'}}))
 document.getElementById('copy')?.addEventListener('click',async()=>{

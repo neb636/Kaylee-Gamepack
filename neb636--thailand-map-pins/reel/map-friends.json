@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "map-friends",
+  "title": "Map friends",
+  "video": "map-friends.mp4",
+  "gif": "map-friends.gif",
+  "seconds": 17,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Thailand hub map",
+      "where": "#/world/thailand/hub/map",
+      "seconds": 10,
+      "fps": 66,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand hub map",
+      "where": "#/world/thailand/hub/map?stamps=all",
+      "seconds": 4,
+      "fps": 61.2,
+      "status": "ok"
+    }
+  ]
+}
