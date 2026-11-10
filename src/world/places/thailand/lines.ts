@@ -770,7 +770,7 @@ export const L = {
       // themselves).
       hi: nick("Let's build a sandcastle!"),
       dig: onDevice('Dig the sand with your finger!', 'Click and drag to dig the sand!'),
-      towers: onDevice('Tap a bucket to make a tower!', 'Click a bucket to make a tower!'),
+      towers: onDevice('Dig sand into a bucket, then tap it!', 'Dig sand into a bucket, then click it!'),
       tide: 'The sea is coming! Dig a river to it!',
       // The moat fills from the sea; the tide fact (Sparkle, after the fill).
       filled: nick('Water in the moat! Hooray!'),
@@ -791,6 +791,8 @@ export const L = {
         dig: onDevice('Drag your finger in the sand!', 'Click and drag in the sand!'),
         towers: onDevice('Tap a bucket!', 'Click a bucket!'),
         tide: 'Dig a line down to the sea!',
+        // A bucket poked before it's full, or nothing done with none full: dig beside one and the sand flies in.
+        fill: 'Dig next to a bucket to fill it!',
       },
     },
     // Snorkeling at Ko Kudi (snorkel/): the captain's boat, float, follow the parrotfish, the cuttlefish.
