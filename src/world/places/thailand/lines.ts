@@ -770,7 +770,7 @@ export const L = {
       // themselves).
       hi: nick("Let's build a sandcastle!"),
       dig: onDevice('Dig the sand with your finger!', 'Click and drag to dig the sand!'),
-      towers: onDevice('Tap a bucket to make a tower!', 'Click a bucket to make a tower!'),
+      towers: onDevice('Dig sand into a bucket, then tap it!', 'Dig sand into a bucket, then click it!'),
       tide: 'The sea is coming! Dig a river to it!',
       // The moat fills from the sea; the tide fact (Sparkle, after the fill).
       filled: nick('Water in the moat! Hooray!'),
@@ -791,6 +791,8 @@ export const L = {
         dig: onDevice('Drag your finger in the sand!', 'Click and drag in the sand!'),
         towers: onDevice('Tap a bucket!', 'Click a bucket!'),
         tide: 'Dig a line down to the sea!',
+        // A bucket poked before it's full, or nothing done with none full: dig beside one and the sand flies in.
+        fill: 'Dig next to a bucket to fill it!',
       },
     },
     // Snorkeling at Ko Kudi (snorkel/): the captain's boat, float, follow the parrotfish, the cuttlefish.
@@ -802,6 +804,8 @@ export const L = {
       float: onDevice('Hold your finger in the water to swim!', 'Click and hold in the water to swim!'),
       follow: 'Follow the parrotfish!',
       cuttle: 'Swim close to the cuttlefish!',
+      // The cuttlefish jets off to hide again (the first and second time she reaches it).
+      again: ['Whoosh! Find it again!', 'Where did it go?'],
       pink: 'It turned pink, just for you!',
       camera: onDevice('Tap the camera for a photo!', 'Click the camera for a photo!'),
       coral: 'Coral is alive! Fish live in it.',
@@ -857,6 +861,9 @@ export const L = {
       found: [by('nick')('You found me!'), by('nick')('Ha ha! Found!'), by('nick')('Good finding!')],
       achoo: by('nick')('Ah... ah... choo!'),
       hehe: by('nick')('Hee hee hee!'),
+      // Stuck a long time: he jumps out and waves; then he runs over to her (it counts as found).
+      here: by('nick')('Here I am!'),
+      peekaboo: by('nick')('Peekaboo! You found me!'),
       // Her turn: Daddy counts at the tree (tap him: he peeks), searches the wrong places, gives up.
       myTurn: by('nick')('My turn to count! Go hide!'),
       hide: 'Hide in a glowing spot!',
@@ -864,6 +871,8 @@ export const L = {
       ready: by('nick')('Ready or not!'),
       look: [by('nick')('Is she here?'), by('nick')('Not here!'), by('nick')('Hmm, where is she?')],
       mommy: by('nick')('Behind Mommy?'),
+      // Mommy, when she hides somewhere silly (a thin palm, the sea), in turn.
+      silly: [ji('Hee hee! I can see your tail!'), ji("Shh! Daddy won't look!")],
       wrongWay: by('nick')('Hmm... not here!'),
       giveUp: by('nick')('Where is she? I give up!'),
       win: by('nick')('You win! Super hider!'),

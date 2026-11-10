@@ -1743,8 +1743,8 @@
   },
   "Dig the sand with your finger!",
   "Click and drag to dig the sand!",
-  "Tap a bucket to make a tower!",
-  "Click a bucket to make a tower!",
+  "Dig sand into a bucket, then tap it!",
+  "Dig sand into a bucket, then click it!",
   "The sea is coming! Dig a river to it!",
   {
     "text": "Water in the moat! Hooray!",
@@ -1794,6 +1794,7 @@
   "Tap a bucket!",
   "Click a bucket!",
   "Dig a line down to the sea!",
+  "Dig next to a bucket to fill it!",
   {
     "text": "Masks on! Jump in!",
     "voice": "pelican"
@@ -1802,6 +1803,8 @@
   "Click and hold in the water to swim!",
   "Follow the parrotfish!",
   "Swim close to the cuttlefish!",
+  "Whoosh! Find it again!",
+  "Where did it go?",
   "It turned pink, just for you!",
   "Tap the camera for a photo!",
   "Click the camera for a photo!",
@@ -1985,6 +1988,14 @@
     "voice": "nick"
   },
   {
+    "text": "Here I am!",
+    "voice": "nick"
+  },
+  {
+    "text": "Peekaboo! You found me!",
+    "voice": "nick"
+  },
+  {
     "text": "My turn to count! Go hide!",
     "voice": "nick"
   },
@@ -2012,6 +2023,14 @@
   {
     "text": "Behind Mommy?",
     "voice": "nick"
+  },
+  {
+    "text": "Hee hee! I can see your tail!",
+    "voice": "ji"
+  },
+  {
+    "text": "Shh! Daddy won't look!",
+    "voice": "ji"
   },
   {
     "text": "Hmm... not here!",

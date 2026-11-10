@@ -28,8 +28,18 @@ export function mouldModel(bag: Bag, kind: MouldKind) {
   if (kind === 'unicorn') parts.push(P.cone(0.07, 0.2, PAL.gold, { at: [0, -0.06, 0.04], rot: [Math.PI, 0, 0] }, 10), P.sphere(0.07, '#FFFFFF', { at: [0.16, 0.2, 0.22] }, 8), P.sphere(0.07, '#FFFFFF', { at: [-0.16, 0.2, 0.22] }, 8))
   if (kind === 'round') parts.push(P.sphere(0.06, '#FFFFFF', { at: [0, 0.24, 0.26] }, 8))
   body.add(solid(merge(parts), bag, 2))
+  // The sand she digs into it: rises inside (scale.y = how full) and heaps up over the rim once it's full.
+  const sand = new Group()
+  sand.position.y = 0.02
+  sand.add(solid(merge([kind === 'square' ? P.cyl(0.3, 0.25, 0.42, PACKED, { at: [0, 0.21, 0], rot: [0, Math.PI / 4, 0] }, 4) : P.cyl(0.28, 0.23, 0.42, PACKED, { at: [0, 0.21, 0] }, 16)]), bag, 0))
+  sand.scale.y = 0.001
+  sand.visible = false
+  const heap = solid(merge([P.sphere(0.27, PACKED, { at: [0, 0, 0], scale: [1, 0.42, 1] }, 12)]), bag, 2)
+  heap.position.y = 0.45
+  heap.visible = false
+  body.add(sand, heap)
   root.add(body)
-  return { root, body }
+  return { root, body, sand, heap }
 }
 
 /** The tower a mould leaves (its door faces +z, toward the camera when it's placed). */

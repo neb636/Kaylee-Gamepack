@@ -228,6 +228,23 @@ async function poiCircles(page, r, loops, steps = 36) {
   }
   await page.mouse.up()
 }
+/** Her finger round the fire show's dots, in order (QA's `dotsLeft`), or round the plane at the shape's size. */
+async function traceDots(page) {
+  const q = await page.evaluate(() => window.__thaiSametQA?.())
+  if (!q) return
+  let pts = q.dotsLeft
+  if (!pts?.length) {
+    const { x, y, ppm } = q.plane
+    pts = Array.from({ length: 40 }, (_, i) => ({ x: x + Math.sin((i / 40) * Math.PI * 2) * q.shapeSize * ppm, y: y - Math.cos((i / 40) * Math.PI * 2) * q.shapeSize * ppm }))
+  }
+  await page.mouse.move(pts[0].x, pts[0].y)
+  await page.mouse.down()
+  for (const p of [...pts, pts[0]]) {
+    await page.mouse.move(p.x, p.y, { steps: 2 })
+    await page.waitForTimeout(45)
+  }
+  await page.mouse.up()
+}
 /** Pulls the sun down to the sea. */
 async function pullSun(page) {
   const q = await page.evaluate(() => window.__thaiSametQA?.())
@@ -472,6 +489,119 @@ export const motion = [
       await page.waitForTimeout(4000)
     },
   },
+  // #357 sandcastle batch: the moat dug round (each bit twinkles, the moulds bounce in, a cheer, the towers come).
+  {
+    name: 'thailand-samet-sand-moat',
+    seconds: 10,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/sandcastle?round=dig`)
+      await ready(page)
+      await page.waitForTimeout(1500)
+    },
+    act: async (page) => {
+      const q = await page.evaluate(() => window.__thaiSametQA?.())
+      const c = q.castle
+      const pm = Math.abs(q.sea0.y - c.y) / 5.3
+      await page.mouse.move(c.x + 1.25 * pm, c.y)
+      await page.mouse.down()
+      for (let i = 1; i <= 52; i++) {
+        const t = (i / 48) * Math.PI * 2
+        await page.mouse.move(c.x + Math.cos(t) * 1.25 * pm, c.y + Math.sin(t) * 0.8 * pm)
+        await page.waitForTimeout(70)
+      }
+      await page.mouse.up()
+      await page.waitForTimeout(3000)
+    },
+  },
+  // Filling a bucket: drag it through the sand (it scoops) and tap it (a tower); dig beside the next one.
+  {
+    name: 'thailand-samet-sand-bucket',
+    seconds: 12,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/sandcastle?round=towers`)
+      await ready(page)
+      await page.waitForTimeout(2500)
+    },
+    act: async (page) => {
+      const vp = page.viewportSize()
+      const u = Math.min(vp.width, vp.height) / 12
+      let m = (await page.evaluate(() => window.__thaiSametQA?.()))?.moulds?.[0]
+      if (!m) return
+      await page.mouse.move(m.x, m.y)
+      await page.mouse.down()
+      for (let i = 1; i <= 36; i++) {
+        await page.mouse.move(m.x + Math.sin(i * 0.35) * u * 1.4, m.y - (i / 36) * u * 2.2)
+        await page.waitForTimeout(60)
+      }
+      await page.mouse.up()
+      await page.waitForTimeout(600)
+      m = (await page.evaluate(() => window.__thaiSametQA?.()))?.moulds?.[0]
+      await page.mouse.click(m.x, m.y)
+      await page.waitForTimeout(2000)
+      // The square one: dig right beside it, and the sand flies in.
+      const s = (await page.evaluate(() => window.__thaiSametQA?.()))?.moulds?.[1]
+      for (let r = 0; r < 3; r++) {
+        await page.mouse.move(s.x - u * 1.2, s.y - u * (1.1 + r * 0.25))
+        await page.mouse.down()
+        for (let i = 1; i <= 10; i++) {
+          await page.mouse.move(s.x - u * 1.2 + (i / 10) * u * 2.4, s.y - u * (1.1 + r * 0.25))
+          await page.waitForTimeout(60)
+        }
+        await page.mouse.up()
+      }
+      await page.waitForTimeout(1500)
+    },
+  },
+  // Burying Daddy: a few rubs over him, then he wiggles his toes and sneezes himself out.
+  {
+    name: 'thailand-samet-sand-bury',
+    seconds: 10,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/sandcastle?round=dig`)
+      await ready(page)
+      await page.waitForTimeout(1500)
+    },
+    act: async (page) => {
+      const d = (await page.evaluate(() => window.__thaiSametQA?.())).dad
+      const vp = page.viewportSize()
+      const u = Math.min(vp.width, vp.height) / 14
+      await page.mouse.move(d.x - u, d.y + u)
+      await page.mouse.down()
+      for (let i = 1; i <= 60; i++) {
+        await page.mouse.move(d.x + (i % 2 ? u : -u), d.y + u - ((i % 12) / 12) * u * 2.4)
+        await page.waitForTimeout(55)
+      }
+      await page.mouse.up()
+      await page.waitForTimeout(5000)
+    },
+  },
+  // The tide, a channel dug from the moat's rim out to the sea (#357: it left a dam and the moat stayed dry): the
+  // sand left between glints and gives way, and the water runs into the moat.
+  {
+    name: 'thailand-samet-sand-out',
+    seconds: 11,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/sandcastle?round=tide&feel.sandTide.time=3`)
+      await ready(page)
+      await page.waitForTimeout(3500)
+    },
+    act: async (page) => {
+      // (From the castle's and the sea's screen points, so the same spot on main for the before clip.)
+      const q = await page.evaluate(() => window.__thaiSametQA?.())
+      const c = q.castle
+      const pm = Math.abs(q.sea0.y - c.y) / 5.3
+      const a = { x: c.x + 0.7 * pm, y: c.y - 1.45 * pm }
+      const b = { x: c.x + 0.7 * pm, y: q.sea0.y - 0.3 * pm }
+      await page.mouse.move(a.x, a.y)
+      await page.mouse.down()
+      for (let i = 1; i <= 24; i++) {
+        await page.mouse.move(a.x + ((b.x - a.x) * i) / 24, a.y + ((b.y - a.y) * i) / 24)
+        await page.waitForTimeout(60)
+      }
+      await page.mouse.up()
+      await page.waitForTimeout(6500)
+    },
+  },
   {
     name: 'thailand-samet-island-lead',
     seconds: 10,
@@ -682,5 +812,135 @@ export const motion = [
       await page.locator('[data-anchor="bin:4"]').click({ force: true }).catch(() => {})
       await page.waitForTimeout(6000)
     },
+  },
+  // Snorkel and hide and seek, fixed (#357 batch): Daddy's hiding place on screen and the help rising when she's stuck
+  // (he peeks out, his place glows, he pops out and waves, he runs over), every hide of the trickier round found, a
+  // silly hide behind a thin palm (Mommy giggles, Daddy looks the wrong way), the cuttlefish jetting off twice before it
+  // turns pink, and her floaties keeping off the boat's hull.
+  {
+    name: 'thailand-samet-fix-hideseek-help',
+    seconds: 34,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/hideseek?round=2`)
+      await ready(page)
+    },
+    act: async (page) => page.waitForTimeout(34000),
+  },
+  {
+    name: 'thailand-samet-fix-hideseek-tricky',
+    seconds: 30,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/hideseek?round=2`)
+      await ready(page)
+    },
+    act: async (page) => {
+      // Each seek: a moment to look, then tap where he hides (she walks over and finds him).
+      const t0 = Date.now()
+      let last = ''
+      while (Date.now() - t0 < 29000) {
+        const s = await page.evaluate(() => window.__thaiSametQA?.())
+        if (s?.round === 'hide') break
+        if (s?.phase === 'seek' && s.hide !== last) {
+          last = s.hide
+          await page.waitForTimeout(900)
+          await page.locator(`[data-anchor="hide:${s.hide}"]`).click({ force: true, timeout: 2000 }).catch(() => {})
+        }
+        await page.waitForTimeout(300)
+      }
+    },
+  },
+  {
+    name: 'thailand-samet-fix-hide-silly',
+    seconds: 16,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/hideseek?round=hide`)
+      await ready(page)
+      await page.waitForTimeout(1200)
+    },
+    act: async (page) => {
+      await page.locator('[data-anchor="hide:palmL"]').click({ force: true }).catch(() => {})
+      await page.waitForTimeout(15000)
+    },
+  },
+  {
+    name: 'thailand-samet-fix-cuttle',
+    seconds: 34,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/snorkel?round=cuttle`)
+      await ready(page)
+      await page.waitForTimeout(2000)
+    },
+    act: async (page) => snorkelLead(page, 'cuttleAt', 33000),
+  },
+  {
+    name: 'thailand-samet-fix-float-boat',
+    seconds: 12,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/snorkel?round=float`)
+      await ready(page)
+      await page.waitForTimeout(3000)
+    },
+    act: async (page) => {
+      // Swim her right into the boat's side, then along it (she slides along the hull, her floaties outside it).
+      const s = await page.evaluate(() => window.__thaiSametQA?.())
+      const vp = page.viewportSize()
+      const at = (x, y) => [Math.max(5, Math.min(vp.width - 5, x)), Math.max(120, Math.min(vp.height - 5, y))]
+      await page.mouse.move(...at(s.kaylee.x + vp.width * 0.3, s.kaylee.y - 10))
+      await page.mouse.down()
+      for (let i = 0; i < 44; i++) {
+        const k = i / 44
+        await page.mouse.move(...at(s.kaylee.x + vp.width * 0.32, s.kaylee.y - 10 - k * vp.height * 0.25))
+        await page.waitForTimeout(250)
+      }
+      await page.mouse.up()
+    },
+  },
+  // ---- The finale, fixed (#357 batch: the fire show's shapes, the finish badge, the idle sunset).
+  {
+    name: 'thailand-samet-finale-shapes',
+    seconds: 14,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/fireshow?round=shapes&flags=all`)
+      await ready(page)
+      await page.waitForFunction(() => window.__thaiSametQA().phase === 'trace', null, { timeout: 15000 }).catch(() => {})
+      await page.waitForTimeout(800)
+    },
+    act: async (page) => {
+      // The circle's dots up in the sky over the family: she draws round them, it lifts away as lanterns; then the
+      // star the dancers draw next.
+      await traceDots(page)
+      await page.waitForFunction(() => window.__thaiSametQA().phase === 'trace', null, { timeout: 8000 }).catch(() => {})
+      await page.waitForTimeout(600)
+      await traceDots(page)
+      await page.waitForTimeout(2500)
+    },
+  },
+  {
+    name: 'thailand-samet-finale-badge',
+    seconds: 14,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/fireshow?round=finish&flags=all`)
+      await ready(page)
+      await page.waitForTimeout(2000)
+      for (let i = 0; i < 4; i++) {
+        await poiCircles(page, 0.8, 1.15, 30)
+        await page.waitForTimeout(500)
+      }
+      await page.waitForTimeout(1600)
+      await poiCircles(page, (q) => q.bigR, 1.15, 40)
+    },
+    // The ring of fire, the fireworks, the 🔥 🏆 badge and 🏠, while Sparkle and the dancers talk.
+    act: async (page) => page.waitForTimeout(14000),
+  },
+  {
+    name: 'thailand-samet-finale-sunset-idle',
+    seconds: 30,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/sunset?flags=all`)
+      await ready(page)
+    },
+    // Nobody touches it: the finger shows the pull, Sparkle says it once she's been still a while, and the sun sets on
+    // its own (it took 75 s).
+    act: async (page) => page.waitForTimeout(30000),
   },
 ]

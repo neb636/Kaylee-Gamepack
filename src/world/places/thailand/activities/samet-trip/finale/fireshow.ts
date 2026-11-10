@@ -67,8 +67,11 @@ const COPY = knobs('fireCopy', 'The dancers copy her', FILE, {
   bpm: { value: 104, min: 60, max: 160, step: 2, label: 'The drum', unit: 'bpm' },
 })
 const SHAPE = knobs('fireShape', 'Shapes in the sky', FILE, {
-  size: { value: 1.1, min: 0.5, max: 2, step: 0.05, label: 'Her shape’s size', unit: 'm', note: 'half the width of the dots she draws over' },
-  tol: { value: 0.3, min: 0.1, max: 0.8, step: 0.02, label: 'A dot lights within', unit: 'm' },
+  fill: { value: 0.4, min: 0.15, max: 0.5, step: 0.01, label: 'Her shape on screen', note: 'half its width, × the screen’s narrow side: up in the sky above the family, as big as fits there' },
+  gap: { value: 22, min: 0, max: 80, step: 2, label: '…clear of their heads by', unit: 'px' },
+  size: { value: 1.1, min: 0.5, max: 2, step: 0.05, label: 'Her shape’s smallest size', unit: 'm', note: 'half the width of the dots she draws over, when the screen has little room' },
+  tol: { value: 0.3, min: 0.1, max: 0.8, step: 0.02, label: 'A dot lights within', unit: 'm', note: 'at the smallest size; it grows with the shape' },
+  dot: { value: 1.3, min: 0.5, max: 3, step: 0.1, label: 'Dot size ×' },
   need: { value: 0.75, min: 0.3, max: 1, step: 0.05, label: 'Done when lit', note: 'of the dots' },
   stuck: { value: 7, min: 3, max: 20, step: 0.5, label: 'Stuck after', unit: 's', note: 'no new dot this long: the dots count from further away (+30%) and the finger draws it' },
   show: { value: 2.2, min: 0.8, max: 5, step: 0.1, label: 'The dancers draw it in', unit: 's' },
@@ -228,6 +231,7 @@ export class FireShow implements World3D {
   private unwatch: () => void
   private w = 1
   private h = 1
+  private top = 104
   private tall = false
   private time = 0
   private round: FireRound
@@ -276,11 +280,15 @@ export class FireShow implements World3D {
   private guidePts: Pt[] = []
   private hit: boolean[] = []
   private tol = 0
+  /** The middle of the dots in her drawing plane (the shapes sit up in the sky above the family; the big ring round
+   *  her), and how big a dot is. */
+  private guideC: Pt = { x: 0, y: 0 }
+  private dotK = 1
   private lastHit = 0
   private showRib: Ribbon
   private showBall: Mesh
   /** Her shapes, lifted into the sky as paper lanterns: each dot a lantern (offsets from the shape's middle). */
-  private lanterns: { pts: Vector3[]; color: string; t: number; from: Vector3; seed: number }[] = []
+  private lanterns: { pts: Vector3[]; color: string; t: number; from: Vector3; to: Vector3; seed: number; k: number; g: number }[] = []
   private lanternBody: InstancedMesh
   /** The fire (every flame on the beach in one draw), the firelight on the sand, the lanterns' soft halos. */
   private fire: Flames
@@ -488,6 +496,10 @@ export class FireShow implements World3D {
   private planePoint(a: number, b: number, out = new Vector3()) {
     return out.copy(this.O).addScaledVector(this.right, a).addScaledVector(UP, b)
   }
+  /** A point of the dots (in the shape's unit box) in her drawing plane. */
+  private guidePoint(q: Pt, out = new Vector3()) {
+    return this.planePoint(this.guideC.x + q.x * this.guideSize, this.guideC.y + q.y * this.guideSize, out)
+  }
   private planeLocal(p: Vector3): Pt {
     tmp2.subVectors(p, this.O)
     return { x: tmp2.dot(this.right), y: tmp2.y }
@@ -498,10 +510,16 @@ export class FireShow implements World3D {
   setSize(w: number, h: number, top: number) {
     this.w = w
     this.h = h
+    this.top = top
     this.tall = h > w
     this.rig.setSize(w, h, top)
     setOutlineResolution(w, h)
     this.rig.setShot(this.shot(), true)
+    // (The screen turned: the shape she's drawing moves to the new sky.)
+    if (this.phase === 'trace' && this.guideId !== 'ring') {
+      this.fitGuide()
+      this.tol = SHAPE.tol * (this.guideSize / SHAPE.size)
+    }
   }
   setAnchorElements(els: Map<string, HTMLElement>) {
     this.anchorEls = els
@@ -623,7 +641,7 @@ export class FireShow implements World3D {
       }
       case 'trace':
         // Stuck: the dots count from further away (the finger draws it in drawHint).
-        if (t - this.lastHit > SHAPE.stuck && this.tol < SHAPE.tol * 2) {
+        if (t - this.lastHit > SHAPE.stuck && this.tol < SHAPE.tol * (this.guideSize / SHAPE.size) * 2) {
           this.tol *= 1.3
           this.lastHit = t
         }
@@ -718,23 +736,66 @@ export class FireShow implements World3D {
     }
   }
   private setGuide(id: ShapeId | 'ring', size: number) {
+    this.guideId = id
     this.guidePts = id === 'ring' ? shapePoints('circle', 44) : shapePoints(id, 40)
     this.hit = this.guidePts.map(() => false)
-    this.tol = SHAPE.tol
+    this.guideC = { x: 0, y: 0 }
+    this.guideSize = size
+    this.dotK = 1
+    if (id !== 'ring') this.fitGuide()
+    this.tol = SHAPE.tol * (this.guideSize / SHAPE.size)
     this.guide.count = this.guidePts.length
     const m = new Object3D()
     this.guidePts.forEach((q, i) => {
-      this.planePoint(q.x * size, q.y * size, m.position)
-      m.scale.setScalar(1)
+      this.guidePoint(q, m.position)
+      m.scale.setScalar(this.dotK)
       m.updateMatrix()
       this.guide.setMatrixAt(i, m.matrix)
       this.guide.setColorAt(i, new Color('#B45A9C'))
     })
     this.guide.instanceMatrix.needsUpdate = true
     if (this.guide.instanceColor) this.guide.instanceColor.needsUpdate = true
-    this.guideSize = size
   }
   private guideSize = 1
+  private guideId: ShapeId | 'ring' = 'circle'
+  /** The shape's dots up in the sky above the family's heads, as big as fits between them and the top bar (QA
+   *  2026-11-08: at 1.1 m in front of her they were 55-65 px across and sat on Mommy, Daddy and her). */
+  private fitGuide() {
+    this.rig.camera.updateMatrixWorld()
+    // The lowest the shape may come: above everyone's heads (her horn too).
+    let floor = this.h
+    for (const [root, height] of [
+      [this.kaylee.root, this.kaylee.height * 1.08],
+      [this.ji.root, this.ji.height * 1.05],
+      [this.nick.root, this.nick.height * 1.05],
+    ] as const) {
+      const s = this.toScreen(tmp.copy(root.position).setY(root.position.y + height))
+      if (s.z < 1) floor = Math.min(floor, s.y)
+    }
+    const top = this.top + 12
+    const bottom = floor - SHAPE.gap
+    const side = 20
+    const want = SHAPE.fill * Math.min(this.w, this.h)
+    const r = Math.max(32, Math.min(want, (bottom - top) / 2, this.w / 2 - side))
+    // Its middle on screen: across from her, as low as it fits (nearest her poi), on the screen.
+    const k = this.toScreen(this.kaylee.root.position)
+    const sx = clamp(k.x, side + r, this.w - side - r)
+    const sy = Math.max(top + r, bottom - r)
+    const c = this.screenPlane(sx, sy)
+    const e = this.screenPlane(sx + 100, sy)
+    if (!c || !e) return
+    const ppm = 100 / Math.max(1e-3, Math.hypot(e.x - c.x, e.y - c.y))
+    const size = Math.max(SHAPE.size, r / ppm)
+    this.guideC = c
+    this.guideSize = size
+    this.dotK = (size / SHAPE.size) * SHAPE.dot
+  }
+  /** A screen point on her drawing plane (plane coords), or null. */
+  private screenPlane(x: number, y: number): Pt | null {
+    this.raycaster.setFromCamera(new Vector2((x / this.w) * 2 - 1, -(y / this.h) * 2 + 1), this.rig.camera)
+    const p = this.raycaster.ray.intersectPlane(this.plane, tmp3)
+    return p ? this.planeLocal(p) : null
+  }
   private showBigRing() {
     this.setGuide('ring', BIG.r)
     this.lastHit = this.time
@@ -745,9 +806,10 @@ export class FireShow implements World3D {
     if (this.phase !== 'trace' || !this.guidePts.length) return
     let lit = 0
     const s = this.guideSize
+    const c = this.guideC
     this.guidePts.forEach((q, i) => {
       if (this.hit[i]) return
-      if (Math.hypot(q.x * s - p.x, q.y * s - p.y) < this.tol) {
+      if (Math.hypot(c.x + q.x * s - p.x, c.y + q.y * s - p.y) < this.tol) {
         this.hit[i] = true
         lit++
         this.guide.setColorAt(i, new Color('#FFE68A'))
@@ -765,11 +827,15 @@ export class FireShow implements World3D {
     // Each dot becomes a little paper lantern, glowing softly from the light inside.
     const s = this.guideSize
     const pts = this.guidePts.map((q) => new Vector3().addScaledVector(this.right, q.x * s).addScaledVector(UP, q.y * s))
-    pts.forEach((o, i) => {
-      const w = tmp.copy(this.O).add(o)
+    this.guidePts.forEach((q, i) => {
+      const w = this.guidePoint(q, tmp)
       if (i % 2 === 0) this.sparkle.emit(w.x, w.y, w.z, (Math.random() - 0.5) * 1.5, 1 + Math.random(), (Math.random() - 0.5) * 1.5, 1.2, 0.12)
     })
-    this.lanterns.push({ pts, color: PAPER[this.shapeIdx % 3], t: 0, from: this.O.clone(), seed: Math.random() * 10 })
+    const from = this.planePoint(this.guideC.x, this.guideC.y)
+    // (They rise from where she drew it to the same place in the sky, and end the same size there, however big the
+    // shape was on her screen.)
+    const to = this.O.clone().addScaledVector(this.fwd, 26).add(tmp.set(0, 11, 0))
+    this.lanterns.push({ pts, color: PAPER[this.shapeIdx % 3], t: 0, from, to, seed: Math.random() * 10, k: Math.sqrt(s / SHAPE.size), g: (2.4 * SHAPE.size) / s })
     this.guide.count = 0
     this.counts.shapes++
     lift()
@@ -1113,10 +1179,10 @@ export class FireShow implements World3D {
       l.t += dt
       const k = Math.min(1, l.t / 6)
       const e = 1 - (1 - k) * (1 - k)
-      const base = tmp2.copy(l.from).addScaledVector(this.fwd, e * 26).add(tmp.set(0, e * 11, 0))
+      const base = tmp2.copy(l.from).lerp(l.to, e)
       // Bigger as they go, so the shape still reads far away; they loosen a little as they rise.
-      const grow = 1 + e * 1.4
-      const sz = 1.5 * (1 + e * 1.1)
+      const grow = 1 + (l.g - 1) * e
+      const sz = 1.5 * (l.k + (1 - l.k) * e) * (1 + e * 1.1)
       l.pts.forEach((q, i) => {
         if (n >= this.lanternBody.instanceMatrix.count) return
         const sd = l.seed + i * 1.37
@@ -1233,11 +1299,10 @@ export class FireShow implements World3D {
     // The dots she draws over twinkle; the big ring breathes.
     if (this.guide.count) {
       const m = new Object3D()
-      const s = this.guideSize
       this.guidePts.forEach((q, i) => {
-        this.planePoint(q.x * s, q.y * s, m.position)
+        this.guidePoint(q, m.position)
         const tw = this.hit[i] ? 1.5 : 1 + Math.sin(t * 5 + i * 0.7) * 0.2
-        m.scale.setScalar(tw * (this.phase === 'big' ? 1.3 : 1))
+        m.scale.setScalar(tw * this.dotK * (this.phase === 'big' ? 1.3 : 1))
         m.updateMatrix()
         this.guide.setMatrixAt(i, m.matrix)
       })
@@ -1259,7 +1324,17 @@ export class FireShow implements World3D {
     const hitP = this.raycaster.ray.intersectPlane(this.plane, tmp)
     if (!hitP) return null
     const l = this.planeLocal(hitP)
-    return this.planePoint(clamp(l.x, -POI.reachW, POI.reachW), clamp(l.y, -1.3, POI.reachH), new Vector3())
+    // Within reach, and always as far as the dots she's drawing over (the shapes sit up in the sky).
+    let x0 = -POI.reachW
+    let x1 = POI.reachW
+    let y1 = POI.reachH
+    if (this.guide.count) {
+      const g = this.guideSize * 1.3
+      x0 = Math.min(x0, this.guideC.x - g)
+      x1 = Math.max(x1, this.guideC.x + g)
+      y1 = Math.max(y1, this.guideC.y + g)
+    }
+    return this.planePoint(clamp(l.x, x0, x1), clamp(l.y, -1.3, y1), new Vector3())
   }
 
   pointerDown(x: number, y: number, id?: string) {
@@ -1400,7 +1475,7 @@ export class FireShow implements World3D {
       const left = this.guidePts.map((q, i) => (this.hit[i] ? null : q)).filter((q): q is Pt => !!q)
       if (left.length) {
         const q = left[Math.floor(t * 4) % left.length]
-        at = this.planePoint(q.x * this.guideSize, q.y * this.guideSize)
+        at = this.guidePoint(q)
       }
     }
     const want = at ? '' : 'none'
@@ -1466,10 +1541,27 @@ export class FireShow implements World3D {
       // Her drawing plane on screen (its middle, and pixels per meter), for scripts that draw.
       plane: { x: o.x, y: o.y, ppm: Math.abs(edge.x - o.x) },
       shapeSize: this.guideSize,
+      // The dots on screen (the shape's box, and each dot still to light, in order round it), for scripts that draw.
+      guideBox: this.guide.count ? this.guideBox() : null,
+      dotsLeft: this.guide.count ? this.guidePts.flatMap((q, i) => (this.hit[i] ? [] : [sc(this.guidePoint(q))])) : [],
       bigR: BIG.r,
       kaylee: sc(this.kaylee.root.position.clone().setY(this.kaylee.root.position.y + 0.6)),
       ...this.counts,
     }
+  }
+  private guideBox() {
+    let x0 = Infinity
+    let y0 = Infinity
+    let x1 = -Infinity
+    let y1 = -Infinity
+    for (const q of this.guidePts) {
+      const s = this.toScreen(this.guidePoint(q, tmp))
+      x0 = Math.min(x0, s.x)
+      y0 = Math.min(y0, s.y)
+      x1 = Math.max(x1, s.x)
+      y1 = Math.max(y1, s.y)
+    }
+    return { x: Math.round(x0), y: Math.round(y0), w: Math.round(x1 - x0), h: Math.round(y1 - y0) }
   }
   memory() {
     return { ...this.renderer.info.memory }
