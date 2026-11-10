@@ -47,7 +47,8 @@ const LUNCH = knobs('lunchDeck', 'Lunch on the deck', FILE, {
   riceAt: { value: 14, min: 0, max: 60, step: 0.5, label: 'The rice comes after', unit: 's', note: 'or once the coconut is half gone' },
   pitch: { value: 36, min: 5, max: 60, step: 1, label: 'Camera looks down', unit: '°' },
   box: { value: 2.3, min: 1, max: 5, step: 0.05, label: 'Shows round the table', unit: 'm', note: 'half the width across the screen' },
-  tallBox: { value: 1.5, min: 0.8, max: 4, step: 0.05, label: '…on a tall screen', unit: 'm' },
+  tallBox: { value: 1.6, min: 0.8, max: 4, step: 0.05, label: '…on a tall screen', unit: 'm' },
+  clear: { value: 0.6, min: 0, max: 0.9, step: 0.05, label: 'Hides what’s right in front of the camera', unit: '×', note: 'nothing nearer than this much of the way to the table is drawn (the bushes on the slope)' },
 })
 
 export interface LunchStart {
@@ -86,6 +87,8 @@ const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 /** The table she sits at (deck-local u, v), and the table top's height above the deck. */
 const T = { u: -2.5, v: 0.8 }
 const TOP = 0.78
+/** Mommy at the end of the table, by the rail. */
+const MOMMY = { u: T.u - 1.45, v: T.v + 0.95 }
 
 const slurp = (big = false) => hiss(big ? 0.6 : 0.16, big ? 0.16 : 0.07, 'bandpass', big ? 700 : 1100, big ? 300 : 800, 0, 2.5)
 const ding = () => tone(1320, 1320, 0.25, 0.06, 'triangle')
@@ -207,7 +210,8 @@ export class Lunch implements World3D {
     scene.add(this.nick.root, this.ji.root)
     const ns = this.D(T.u + 0.85, T.v, 0.6)
     this.nick.place(ns.x, ns.y - 0.1 * this.nick.height, ns.z, (face + Math.PI) * DEG, 'sit')
-    const ms = this.D(T.u - 1.9, T.v + 1.2)
+    // (Close enough to the table that she's whole on a phone held upright too.)
+    const ms = this.D(MOMMY.u, MOMMY.v)
     const mt = this.D(T.u, T.v)
     this.ji.place(ms.x, ms.y, ms.z, Math.atan2(mt.x - ms.x, mt.z - ms.z) * DEG, 'stand')
 
@@ -284,6 +288,14 @@ export class Lunch implements World3D {
     this.isl.update(dt, t, this.rig.camera.position.x, this.rig.camera.position.z, this.lights)
     this.rig.setShot(this.shot())
     this.rig.update(dt)
+    // The bushes on the slope between the camera and the deck would hide the lunch (and the hint finger's target):
+    // nothing nearer than most of the way to the table is drawn.
+    const cam = this.rig.camera
+    const near = Math.max(0.1, cam.position.distanceTo(this.D(T.u, T.v, TOP)) * LUNCH.clear)
+    if (Math.abs(cam.near - near) > 0.02) {
+      cam.near = near
+      cam.updateProjectionMatrix()
+    }
     this.drawHint(t)
   }
 
@@ -626,7 +638,8 @@ export class Lunch implements World3D {
   // ---------------------------------------------------------------- camera
 
   private shot(): Shot {
-    const center = this.D(T.u, T.v + 0.35, TOP)
+    // (Leaning a little toward Mommy, so all three of them and the table are on screen.)
+    const center = this.D(T.u - 0.3, T.v + 0.35, TOP)
     const b = this.tall ? LUNCH.tallBox : LUNCH.box
     const half = this.tall ? new Vector3(b, 0.7, b * 1.1) : new Vector3(b, 0.7, b * 0.55)
     return { center, half, yaw: (this.seaYaw + Math.PI) * DEG, pitch: LUNCH.pitch, follow: true, minDist: 2.5, maxDist: 30 }

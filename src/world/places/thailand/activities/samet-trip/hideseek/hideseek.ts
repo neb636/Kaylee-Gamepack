@@ -58,8 +58,11 @@ const SEEK = knobs('hideSeek', 'Finding Daddy', FILE, {
   near: { value: 3.4, min: 1, max: 8, step: 0.1, label: 'His place wiggles within', unit: 'm', note: 'Kaylee this close to where Daddy hides: it wiggles and giggles' },
   wiggle: { value: 1.5, min: 0.4, max: 5, step: 0.1, label: '…every', unit: 's' },
   find: { value: 1.25, min: 0.5, max: 3, step: 0.05, label: 'Walking up finds him at', unit: 'm', note: 'she finds him by walking this close, without a tap' },
-  giveaway: { value: 8, min: 3, max: 30, step: 0.5, label: 'He gives himself away after', unit: 's', note: 'a sneeze, a giggle, a splash: the place shakes hard (and again every this long)' },
-  glow: { value: 16, min: 5, max: 60, step: 1, label: 'His place glows after', unit: 's', note: 'and the finger points at it' },
+  giveaway: { value: 8, min: 3, max: 30, step: 0.5, label: 'Help 1: he peeks out after', unit: 's', note: 'stuck this long: a rustle, he pops his head up (a giggle, a splash), then a little rustle now and then' },
+  glow: { value: 16, min: 5, max: 60, step: 1, label: 'Help 2: his place glows after', unit: 's', note: 'a big sneeze, and the finger points at it' },
+  popOut: { value: 26, min: 8, max: 90, step: 1, label: 'Help 3: he pops out after', unit: 's', note: 'he jumps out and waves ("Here I am!"): a tap on him finds him' },
+  runOver: { value: 6, min: 2, max: 30, step: 0.5, label: '…then runs to her after', unit: 's', note: 'still not found: he runs over ("Peekaboo!") and it counts' },
+  busyHelp: { value: 0.5, min: 0, max: 1, step: 0.05, label: 'Help clock while she wanders', unit: '×', note: 'the help clock runs this fast while she leads Kaylee about (1 when she stops)' },
   hop: { value: 0.55, min: 0.2, max: 1.5, step: 0.05, label: 'He jumps out in', unit: 's' },
 })
 /** Her turn to hide (round hide). */
@@ -77,6 +80,7 @@ const CAM = knobs('hideCam', 'The beach camera', FILE, {
   box: { value: 6.2, min: 3, max: 14, step: 0.1, label: 'Shows round her', unit: 'm', note: 'half the width of beach across the screen' },
   tallBox: { value: 4.4, min: 2, max: 12, step: 0.1, label: '…on a tall screen', unit: 'm' },
   pull: { value: 0.35, min: 0, max: 1, step: 0.05, label: 'Leans to the beach’s middle', note: '0 = right on her, 1 = the middle of the beach' },
+  margin: { value: 1.5, min: 0, max: 5, step: 0.1, label: 'While she seeks, room round the hiding places', unit: 'm', note: 'the camera keeps her and every hiding place of the round on screen' },
 })
 
 export type HideRound = '1' | '2' | 'hide'
@@ -128,9 +132,9 @@ const SPOTS: SpotDef[] = [
   { id: 'umbrella', label: 'The pink umbrella', u: -5, v: -5.5, dad: { du: 0, dv: 0.85, pose: 'sit' }, kay: { du: 0.1, dv: 0.8 }, round: '1' },
   { id: 'chairs', label: 'The stack of red chairs', u: -1.2, v: -9, dad: { du: 0.4, dv: 0.75, pose: 'stand' }, kay: { du: 0, dv: 0.7 }, round: '1' },
   { id: 'roots', label: 'The tangle of roots', u: TREE.u + 2.3, v: TREE.v - 0.6, dad: { du: 0, dv: 0, pose: 'lie' }, kay: { du: 0.2, dv: 0.2 }, round: '2' },
-  { id: 'towel', label: 'A beach towel', u: -9, v: -3, dad: { du: 0, dv: 0, pose: 'lie', hidden: true }, kay: { du: 0, dv: 0 }, round: '2' },
-  { id: 'sea', label: 'The sea', u: 1.5, v: 5.5, dad: { du: 0, dv: 0, pose: 'stand', hidden: true }, kay: { du: 0, dv: -2.2 }, round: '2' },
-  { id: 'pandanus', label: 'The pandanus tree', u: -11, v: -9.5, dad: { du: 0.3, dv: 0.05, pose: 'sit', y: 1.75 }, kay: { du: 0, dv: 0.75 }, round: '2' },
+  { id: 'towel', label: 'A beach towel', u: -5.5, v: -1.8, dad: { du: 0, dv: 0, pose: 'lie', hidden: true }, kay: { du: 0, dv: 0 }, round: '2' },
+  { id: 'sea', label: 'The sea', u: 1.5, v: 5, dad: { du: 0, dv: 0, pose: 'stand', hidden: true }, kay: { du: 0, dv: -2.2 }, round: '2' },
+  { id: 'pandanus', label: 'The pandanus tree', u: -6.5, v: -9, dad: { du: 0.3, dv: 0.05, pose: 'sit', y: 1.75 }, kay: { du: 0, dv: 0.75 }, round: '2' },
   { id: 'mommy', label: 'Mommy', u: 8.5, v: -4, dad: { du: 0, dv: 0.9, pose: 'sit' }, kay: { du: 0, dv: 0.85 } },
   { id: 'palmL', label: 'A thin palm', u: -2.5, v: -1.6, dad: { du: 0, dv: 0.5, pose: 'stand' }, kay: { du: 0, dv: 0.45 } },
   { id: 'palmR', label: 'A thin palm', u: 10.5, v: -1.8, dad: { du: 0, dv: 0.5, pose: 'stand' }, kay: { du: 0, dv: 0.45 } },
@@ -249,7 +253,12 @@ export class HideSeek implements World3D {
   private hideIdx = 0
   private hide: SpotId = 'tree'
   private wiggleT = 0
-  private giveT = 0
+  /** The help clock while she seeks (full speed when she's stopped, slower while she wanders), its level (0 none, 1
+   *  he peeked, 2 his place glows, 3 he popped out), and the little rustles between. */
+  private helpT = 0
+  private helpLvl = 0
+  private rustleT = 0
+  private poppedT = -1
   private glowing = false
   private looks: Look[] = []
   private lookT = 0
@@ -268,10 +277,12 @@ export class HideSeek implements World3D {
   private bubbles: Particles
   /** The last line said (for QA), until it's had its moment. */
   private bubble: { text: string; until: number } | null = null
-  private turn = { found: 0, look: 0, spotted: 0, notHere: 0 }
+  private turn = { found: 0, look: 0, spotted: 0, notHere: 0, silly: 0 }
+  /** She ducks down in the sea (her turn, hiding there): only her head shows. */
+  private duck = 0
   private notHereAt = -99
   private hintOn = false
-  private counts = { leads: 0, taps: 0, pokes: 0, peeks: 0, wrong: 0, finds: 0, giveaways: 0, hides: 0, wins: 0, caught: 0, boos: 0, photos: 0 }
+  private counts = { leads: 0, taps: 0, pokes: 0, peeks: 0, wrong: 0, finds: 0, giveaways: 0, popOuts: 0, cameOver: 0, hides: 0, sillyHides: 0, wins: 0, caught: 0, boos: 0, photos: 0 }
 
   constructor(
     private renderer: WebGLRenderer,
@@ -537,29 +548,47 @@ export class HideSeek implements World3D {
           if (this.hideIdx === 0) this.say(this.round === '2' ? H.tricky : H.find)
           this.setPhase('seek')
           this.wiggleT = 0
-          this.giveT = 0
+          this.helpT = 0
+          this.helpLvl = 0
+          this.rustleT = 0
+          this.poppedT = -1
           this.glowing = false
         }
         break
       }
       case 'seek': {
         const def = BYID[this.hide]
-        const dp = this.dadPoint(def)
+        const popped = this.poppedT >= 0
+        const dp = popped ? tmp2.set(this.dad.x, 0, this.dad.z) : this.dadPoint(def)
         const d = Math.hypot(dp.x - k.x, dp.z - k.z)
-        // (She's busy leading her: the clocks for the give-away and the glow only run while she's stuck.)
-        const busy = !!this.finger || this.speed > 0.4
-        if (!busy) this.giveT += dt
-        if (d < SEEK.find + (def.id === 'sea' ? 1.6 : 0)) return void this.found()
+        if (d < SEEK.find + (def.id === 'sea' && !popped ? 1.6 : 0)) return void this.found()
         if (d < SEEK.near && (this.wiggleT += dt) > SEEK.wiggle) {
           this.wiggleT = 0
           this.shake(this.hide, 0.6)
           giggle()
         }
-        if (this.giveT > SEEK.giveaway) {
-          this.giveT = 0
-          this.giveaway()
+        // The help rises while she's stuck (rule 3): he peeks out, his place glows, he pops out, he runs over. The clock
+        // runs slower while she's busy leading Kaylee about (she may be looking), never stops.
+        const busy = !!this.finger || this.speed > 0.4
+        this.helpT += busy ? dt * SEEK.busyHelp : dt
+        if (this.helpLvl < 1 && this.helpT > SEEK.giveaway) this.help(1)
+        else if (this.helpLvl < 2 && this.helpT > SEEK.glow) this.help(2)
+        else if (this.helpLvl < 3 && this.helpT > SEEK.popOut) this.help(3)
+        else if (this.helpLvl >= 1 && this.helpLvl < 3 && (this.rustleT += dt) > SEEK.giveaway * 0.6) {
+          // (Between the big helps: a little rustle and a giggle, no words.)
+          this.rustleT = 0
+          this.shake(this.hide, 0.9)
+          giggle()
         }
-        if (!this.glowing && this.phaseT > SEEK.glow) this.glowing = true
+        if (popped && !this.dad.hop && (this.poppedT += dt) > SEEK.runOver && !busy) {
+          // Still not found: he runs over to her, and that counts.
+          this.poppedT = -2
+          const kk = this.local(k.x, k.z)
+          const to = this.L(kk.u + (kk.u > def.u ? -0.9 : 0.9), kk.v - 0.3)
+          this.dadWalk([{ x: to.x, z: to.z }], 4.2, () => {
+            if (this.phase === 'seek') this.found(true)
+          })
+        }
         break
       }
       case 'found':
@@ -678,14 +707,15 @@ export class HideSeek implements World3D {
     this.cap.visible = def.id === 'sea'
   }
 
-  private found() {
+  private found(came = false) {
     const def = BYID[this.hide]
     this.counts.finds++
+    if (came) this.counts.cameOver++
 
     const k = this.kaylee.root.position
     // He jumps out (the towel flies off, the sea splashes, the pandanus shakes) and lands beside her.
-    if (def.id === 'towel') this.towelLift = 0
-    if (def.id === 'sea') {
+    if (def.id === 'towel' && this.poppedT === -1) this.towelLift = 0
+    if (def.id === 'sea' && this.poppedT === -1) {
       sfx.splash()
       this.spray.burst(this.dad.x, 0.1, this.dad.z, 26, 2.4, 3.4, 0.16)
     }
@@ -699,7 +729,7 @@ export class HideSeek implements World3D {
     this.dad.hop = { from, to, t: 0, dur: SEEK.hop }
     this.setPhase('found')
     this.glowing = false
-    this.say(H.found[this.turn.found++ % H.found.length])
+    this.say(came ? H.peekaboo : H.found[this.turn.found++ % H.found.length])
     tone(700, 1200, 0.2, 0.06, 'triangle')
     window.setTimeout(() => fanfare(), 350)
     this.kaylee.faceToward(to.x, to.z)
@@ -711,21 +741,56 @@ export class HideSeek implements World3D {
     }, (SEEK.hop + 0.1) * 1000)
   }
 
-  /** Stuck for a while: he gives himself away (a sneeze, a giggle, a splash), and the place shakes hard. */
-  private giveaway() {
+  /** Stuck for a while, the help rises a level: 1 he peeks out (a rustle, his head pops up, a giggle or a splash), 2 a
+   *  big sneeze and his place glows (the finger points at it), 3 he jumps out and waves: "Here I am!". */
+  private help(lvl: number) {
     this.counts.giveaways++
+    this.helpLvl = lvl
+    this.rustleT = 0
     const id = this.hide
-    this.shake(id, 1.4)
-    if (id === 'sea') {
-      this.bubbles.burst(this.dad.x, 0.05, this.dad.z, 16, 0.6, 1.4, 0.1)
-      sfx.splash()
-    } else if (id === 'towel' || id === 'roots') {
-      giggle()
-      this.say(H.hehe)
-    } else this.say(H.achoo)
-    if (id === 'pandanus') rustle()
     const p = this.dadPoint(BYID[id])
-    this.puffs.burst(p.x, p.y + 0.4, p.z, 6, 0.8, 1, 0.08)
+    if (lvl === 3) return this.popOut()
+    this.shake(id, lvl === 1 ? 1.2 : 1.8)
+    rustle()
+    this.puffs.burst(p.x, p.y + 0.4, p.z, lvl === 1 ? 6 : 12, 0.8, 1, 0.08)
+    if (lvl === 1) {
+      // A peek: he pops up for a moment (the cap bobs up out of the sea, the towel lump sits up).
+      this.dad.peekT = 0.9
+      this.nick.react('hop')
+      if (id === 'sea') {
+        this.bubbles.burst(this.dad.x, 0.05, this.dad.z, 16, 0.6, 1.4, 0.1)
+        sfx.splash()
+      } else giggle()
+      this.say(H.hehe)
+    } else {
+      this.glowing = true
+      this.say(H.achoo)
+    }
+  }
+  /** Help 3: he jumps out of his hiding place, in front of it, and waves (a tap on him finds him at once). */
+  private popOut() {
+    const def = BYID[this.hide]
+    this.counts.popOuts++
+    this.glowing = true
+    if (def.id === 'towel') this.towelLift = 0
+    if (def.id === 'sea') {
+      sfx.splash()
+      this.spray.burst(this.dad.x, 0.1, this.dad.z, 20, 2.2, 3, 0.15)
+    }
+    this.shake(def.id, 1.6)
+    const from = new Vector3(this.dad.x, this.dadY(), this.dad.z)
+    this.cap.visible = false
+    this.dad.hidden = false
+    this.poppedT = 0
+    const to = def.id === 'sea' ? this.L(def.u, 3.2) : this.L(def.u + def.dad.du * 0.5, def.v - (this.things.get(def.id)!.r + 0.9))
+    this.dad.pose = 'stand'
+    this.dad.yaw = this.seaYaw + Math.PI
+    this.dad.hop = { from, to, t: 0, dur: SEEK.hop }
+    this.say(H.here)
+    tone(500, 900, 0.18, 0.06, 'triangle')
+    window.setTimeout(() => {
+      if (this.phase === 'seek' && this.poppedT >= 0) this.nick.react('wave')
+    }, (SEEK.hop + 0.1) * 1000)
   }
 
   /** She peeked behind the wrong place: a silly little something there, and Daddy giggles from his real one. */
@@ -788,7 +853,8 @@ export class HideSeek implements World3D {
     let bd = Infinity
     const k = this.kaylee.root.position
     for (const def of SPOTS) {
-      if (def.id === 'roots' && this.inHiding('tree')) continue
+      // (Her turn: the roots are the tree's, she hides behind its trunk.)
+      if (def.id === 'roots') continue
       if (!this.inHiding(def.id)) continue
       const p = def.id === 'sea' ? k : this.kayPoint(def)
       const d = Math.hypot(p.x - k.x, p.z - k.z)
@@ -812,6 +878,14 @@ export class HideSeek implements World3D {
     this.hiddenAt = where
     this.counts.hides++
     giggle()
+    if (where === 'sea' || where === 'palmL' || where === 'palmR') {
+      // A silly place (a palm thinner than her, the open sea): Mommy giggles, and Daddy still won't find her (he looks
+      // the wrong way right beside her).
+      this.counts.sillyHides++
+      this.ji.react('wave')
+      giggle(0.25)
+      this.say(H.silly[this.turn.silly++ % H.silly.length])
+    }
     if (where === 'sea') return
     const p = this.kayPoint(BYID[where])
     this.kaylee.walk([[p.x, p.z]], () => {
@@ -948,12 +1022,16 @@ export class HideSeek implements World3D {
   }
   private dadY() {
     const def = BYID[this.hide]
-    const hiding = this.phase === 'seek' && !this.dad.path.length && !this.dad.hop
+    const hiding = this.phase === 'seek' && !this.dad.path.length && !this.dad.hop && this.poppedT === -1
     const g = this.groundY(this.dad.x, this.dad.z)
     if (hiding && def.id === 'sea') return this.water(this.dad.x, this.dad.z) - this.nick.height * 0.97
-    if (hiding && def.dad.y) return g + def.dad.y
-    if (this.dad.pose === 'sit') return g + 0.02
-    return Math.max(g, -0.35)
+    if (hiding && def.dad.y) return g + def.dad.y + this.peekLift()
+    if (this.dad.pose === 'sit') return g + 0.02 + (hiding ? this.peekLift() : 0)
+    return Math.max(g, -0.35) + (hiding ? this.peekLift() : 0)
+  }
+  /** Help 1, his peek: up out of his hiding place for a moment, and back down. */
+  private peekLift() {
+    return this.phase === 'seek' && this.dad.peekT > 0 ? Math.sin(Math.PI * clamp(this.dad.peekT / 0.9, 0, 1)) * 0.35 : 0
   }
   private moveDad(dt: number, t: number) {
     const d = this.dad
@@ -1001,7 +1079,7 @@ export class HideSeek implements World3D {
     // The cap floating over him in the sea, bobbing.
     if (this.cap.visible) {
       const w = this.water(d.x, d.z)
-      this.cap.position.set(d.x, w + 0.06 + Math.sin(t * 2.2) * 0.03, d.z)
+      this.cap.position.set(d.x, w + 0.06 + Math.sin(t * 2.2) * 0.03 + this.peekLift(), d.z)
       this.cap.rotation.set(Math.sin(t * 1.7) * 0.12, t * 0.3, Math.cos(t * 1.3) * 0.1)
       if (Math.random() < dt * 0.8) this.bubbles.burst(d.x + 0.2, w, d.z, 2, 0.2, 0.6, 0.06)
     }
@@ -1099,7 +1177,8 @@ export class HideSeek implements World3D {
     const g = this.groundY(k.x, k.z)
     const wet = g < 0
     this.kY += (g - this.kY) * ease(dt, 16)
-    k.y = this.kY
+    this.duck += ((this.hiddenAt === 'sea' ? 0.5 : 0) - this.duck) * ease(dt, 6)
+    k.y = this.kY - this.duck
     this.shadowAt(this.kShadow, k.x, k.z, this.kaylee.root.visible ? 1 : 0)
     if (wet && this.speed > 0.5 && Math.random() < dt * 8) this.spray.burst(k.x, Math.max(g, this.water(k.x, k.z)), k.z, 3, 1.2, 1.6, 0.08)
   }
@@ -1240,6 +1319,7 @@ export class HideSeek implements World3D {
         }, 900)
         return
       }
+      if (this.phase === 'seek' && this.poppedT !== -1) return this.found()
       if (this.phase === 'seek') return this.goLook('family:nick')
       this.nick.react('hop')
       sfx.boing()
@@ -1263,8 +1343,8 @@ export class HideSeek implements World3D {
       const sid = id.slice(5) as SpotId
       if (this.phase === 'seek') return this.goLook(id)
       if (this.phase === 'dadcount' || this.phase === 'search') {
-        // Off to hide there.
-        const p = sid === 'sea' ? this.L(BYID.sea.u, 2.4) : this.kayPoint(BYID[sid])
+        // Off to hide there (the roots: behind the tree's trunk).
+        const p = sid === 'sea' ? this.L(BYID.sea.u, 2.4) : this.kayPoint(BYID[sid === 'roots' ? 'tree' : sid])
         this.target = p
         this.walkTo = null
         this.shake(sid, 0.4)
@@ -1324,7 +1404,7 @@ export class HideSeek implements World3D {
     // The towel lump breathes; the towel flies off when he's found (or she pops out).
     const lump = this.towelParts.lump
     if (lump.visible && this.towelLift < 0) {
-      const br = 1 + Math.sin(t * 2.4) * 0.05
+      const br = 1 + Math.sin(t * 2.4) * 0.05 + this.peekLift() * 1.2
       lump.scale.y = (this.hiddenAt === 'towel' ? 0.75 : 1) * br
     }
     if (this.towelLift >= 0) {
@@ -1367,7 +1447,33 @@ export class HideSeek implements World3D {
 
   // ---------------------------------------------------------------- camera
 
+  /** While she counts and seeks (rounds 1 and 2): the box round her and Daddy's hiding place (and Daddy, out of it), in
+   *  Ao Prao's u (across the screen) and v (into it), so wherever he hides it's on screen, on every screen shape. */
+  private seekBox() {
+    if (this.round === 'hide' || !(this.phase === 'intro' || this.phase === 'count' || this.phase === 'seek' || this.phase === 'found')) return null
+    const k = this.kaylee.root.position
+    const me = this.local(k.x, k.z)
+    let u0 = me.u
+    let u1 = me.u
+    let v0 = me.v
+    let v1 = me.v
+    const d = BYID[this.hide]
+    for (const { u, v } of [{ u: d.u + d.dad.du, v: d.v + d.dad.dv }, this.local(this.dad.x, this.dad.z)]) {
+      u0 = Math.min(u0, u)
+      u1 = Math.max(u1, u)
+      v0 = Math.min(v0, v)
+      v1 = Math.max(v1, v)
+    }
+    const m = CAM.margin
+    return { u: (u0 + u1) / 2, v: (v0 + v1) / 2, hu: (u1 - u0) / 2 + m, hv: (v1 - v0) / 2 + m }
+  }
   private camCenter() {
+    const box = this.seekBox()
+    if (box) {
+      const c = this.L(box.u, box.v)
+      c.y = Math.max(0, c.y) + 0.9
+      return c
+    }
     const k = this.kaylee.root.position
     const mid = this.L(0, -5)
     const c = new Vector3(k.x + (mid.x - k.x) * CAM.pull, 0, k.z + (mid.z - k.z) * CAM.pull)
@@ -1384,6 +1490,8 @@ export class HideSeek implements World3D {
     let b = this.tall ? CAM.tallBox : CAM.box
     if (this.phase === 'search' || this.phase === 'giveup' || this.phase === 'caught') b = Math.max(b, this.dadDist() / 2 + 2)
     const half = this.tall ? new Vector3(b, 0.6, b * 1.15) : new Vector3(b, 0.6, b * 0.6)
+    const box = this.seekBox()
+    if (box) half.set(Math.max(half.x, box.hu), 1.1, Math.max(half.z * 0.6, box.hv))
     return { center, half, yaw: (this.seaYaw + Math.PI) * DEG, pitch: CAM.pitch, follow: true, minDist: 6, maxDist: 60 }
   }
 
@@ -1472,6 +1580,10 @@ export class HideSeek implements World3D {
       round: this.round,
       phase: this.phase,
       hide: this.round === 'hide' ? null : this.hide,
+      helpLvl: this.helpLvl,
+      helpT: +this.helpT.toFixed(1),
+      popped: this.poppedT !== -1,
+      onScreen: this.round === 'hide' ? null : ROUND_HIDES[this.round].map((id) => (({ x, y }) => x >= 0 && x <= this.w && y >= 0 && y <= this.h)(this.toScreen(this.dadPoint(BYID[id]).setY(this.dadPoint(BYID[id]).y + 0.5)))).every(Boolean),
       hidingIn: this.hiddenAt,
       openFinds: this.openFinds,
       looksLeft: this.looks.length,
