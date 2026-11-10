@@ -1,0 +1,112 @@
+{
+  "title": "Koh Samet: finding her way",
+  "checkIn": "1 of 4: pick",
+  "kaylee": "On Koh Samet she always knows which beach she's on and how to reach the next one, and the taxi takes her where she wants. Pick how her finger finds the way.",
+  "questions": [
+    "Leaving Koh Samet moves to the speedboat at the pier (tap it, then the home picture). OK?"
+  ],
+  "links": [
+    {
+      "label": "The island today",
+      "hash": "#/world/thailand/samet-trip/island?at=hinkhok"
+    }
+  ],
+  "pitches": [
+    {
+      "title": "Kaylee's Island Map",
+      "image": "pitch/island-map.jpg",
+      "finger": "Open her toy map, tap a beach, follow the glowing shells.",
+      "grows": [
+        [
+          "🐚",
+          "tap a beach, follow the shells"
+        ],
+        [
+          "🚕",
+          "far ones: the shells hop in the taxi"
+        ],
+        [
+          "🚩",
+          "her flags and animals fill the map"
+        ]
+      ],
+      "learns": "Reading a map: where she is, which beach is which.",
+      "silly": "Tap the sea on the map: a whale splashes out.",
+      "why": "A map that fills with her pink flags is her own trophy board.",
+      "also": [
+        [
+          "🗺️",
+          "Top-left button: her map, her pin always on it"
+        ],
+        [
+          "🚕",
+          "Taxi: tap a beach on its map, it drives straight there"
+        ]
+      ]
+    },
+    {
+      "title": "Follow the Beach Puppy",
+      "image": "pitch/beach-puppy.jpg",
+      "finger": "Tap the puppy and chase him to a beach she hasn't played.",
+      "grows": [
+        [
+          "🐶",
+          "chase him to the next beach"
+        ],
+        [
+          "🛝",
+          "his shortcuts: a sand slide, a rope swing"
+        ],
+        [
+          "🛟",
+          "he swims, she paddles after"
+        ]
+      ],
+      "learns": "Beach names: he barks each one when they arrive.",
+      "silly": "Run the other way: he runs back and tugs her tail.",
+      "why": "She loves a friend who needs her, and he's a puppy.",
+      "also": [
+        [
+          "🐾",
+          "Top-left button: the puppy, tap and he comes"
+        ],
+        [
+          "🚕",
+          "Taxi: he jumps in, it drives where he wants"
+        ]
+      ]
+    },
+    {
+      "title": "The Sun Bear's Taxi Bell",
+      "image": "pitch/taxi-bell.jpg",
+      "finger": "Ride the taxi, pull the bell when her beach's picture glows.",
+      "grows": [
+        [
+          "🔔",
+          "ring at the glowing picture"
+        ],
+        [
+          "🚏",
+          "seven stops, every beach"
+        ],
+        [
+          "🛶",
+          "the pelican's longtail boat has a bell too"
+        ]
+      ],
+      "learns": "Island life: green taxis, beach names, counting stops.",
+      "silly": "Ring and ring: the sun bear sings along.",
+      "why": "A small win at every stop, and the whole island from the taxi.",
+      "also": [
+        [
+          "📣",
+          "Top-left button: the horn, the taxi comes to her"
+        ],
+        [
+          "🪧",
+          "Every beach: a big picture sign that says its name"
+        ]
+      ]
+    }
+  ]
+}
