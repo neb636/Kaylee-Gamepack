@@ -1,0 +1,1082 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "nan.cup",
+  "title": "Thailand › Nan › Cup",
+  "intro": "The Nan Mountain Cup (activities/nan-trip/cup/, plan: thailand/nan-cup.md): a kart race on three mountain tracks against three Nan locals (cast.json): Grandma Taeng the tortoise, Pao the hornbill postman and Moon the sun bear honey seller. Sparkle says what's new and counts down in Thai; the rivals tease, bump and are good sports in their own voices; Mommy and Daddy cheer from the grandstand. Kaylee never talks: she giggles.",
+  "page": "thailand-nan-cup.html",
+  "audio": "thailand-nan-cup.mp3",
+  "lines": 52,
+  "seconds": 120,
+  "missing": 0,
+  "names": 3,
+  "flags": [
+    {
+      "key": "nan.cup.taeng.0",
+      "text": "Sawasdee ka! Three Cups, dear!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.cup.pao.0",
+      "text": "Sawasdee krap! Ready?",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.cup.facts.moon",
+      "text": "Sun bears are the smallest bears!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.cup.tease.forest",
+      "text": "My forest! Catch me if you can!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.cup.start.touch",
+      "text": "Hold your finger on the road to go!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.cup.counted",
+      "text": "That's three, two, one in Thai!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.cup.mud",
+      "text": "Splash! Mud makes you fast!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.cup.cup.touch",
+      "text": "The Nan Mountain Cup! Tap it, Kaylee!",
+      "flags": [
+        "long",
+        "name"
+      ]
+    },
+    {
+      "key": "nan.cup.champion",
+      "text": "Kaylee is the Nan Mountain Cup champion!",
+      "flags": [
+        "long",
+        "name"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "nan",
+        "cup",
+        "arrive"
+      ],
+      "text": "Look! A race!",
+      "voice": "nick",
+      "key": "nan.cup.arrive",
+      "part": "nan › cup",
+      "when": "Daddy, as the city road pulls in at the race ground.",
+      "ms": 1464,
+      "flags": [],
+      "span": [
+        0,
+        1.41
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "board",
+        "touch"
+      ],
+      "text": "Tap a track to race!",
+      "voice": "sparkle",
+      "key": "nan.cup.board.touch",
+      "part": "nan › cup › board",
+      "when": "Sparkle at the board, the first time this visit (and the stuck hint, glow first).",
+      "ms": 1920,
+      "flags": [],
+      "span": [
+        3.03,
+        4.9
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "board",
+        "mouse"
+      ],
+      "text": "Click a track to race!",
+      "voice": "sparkle",
+      "key": "nan.cup.board.mouse",
+      "part": "nan › cup › board",
+      "when": "",
+      "ms": 1920,
+      "flags": [],
+      "span": [
+        5.25,
+        7.12
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "taeng",
+        "0"
+      ],
+      "text": "Sawasdee ka! Three Cups, dear!",
+      "voice": "taeng",
+      "key": "nan.cup.taeng.0",
+      "part": "nan › cup › taeng",
+      "when": "Tap a rival on the board or the podium (each in turn).",
+      "ms": 3384,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        8.74,
+        12.05
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "taeng",
+        "1"
+      ],
+      "text": "Oh! Is it time?",
+      "voice": "taeng",
+      "key": "nan.cup.taeng.1",
+      "part": "nan › cup › taeng",
+      "when": "",
+      "ms": 2400,
+      "flags": [],
+      "span": [
+        12.4,
+        14.75
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "taeng",
+        "2"
+      ],
+      "text": "My husband built my kart!",
+      "voice": "taeng",
+      "key": "nan.cup.taeng.2",
+      "part": "nan › cup › taeng",
+      "when": "",
+      "ms": 2880,
+      "flags": [],
+      "span": [
+        15.1,
+        17.91
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "pao",
+        "0"
+      ],
+      "text": "Sawasdee krap! Ready?",
+      "voice": "pao",
+      "key": "nan.cup.pao.0",
+      "part": "nan › cup › pao",
+      "when": "",
+      "ms": 3072,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        19.53,
+        22.55
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "pao",
+        "1"
+      ],
+      "text": "Special delivery! Ha ha!",
+      "voice": "pao",
+      "key": "nan.cup.pao.1",
+      "part": "nan › cup › pao",
+      "when": "",
+      "ms": 2352,
+      "flags": [],
+      "span": [
+        22.9,
+        25.2
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "pao",
+        "2"
+      ],
+      "text": "Up the mountain every day!",
+      "voice": "pao",
+      "key": "nan.cup.pao.2",
+      "part": "nan › cup › pao",
+      "when": "",
+      "ms": 2112,
+      "flags": [],
+      "span": [
+        25.55,
+        27.6
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "moon",
+        "0"
+      ],
+      "text": "Sawasdee ka! Want some honey?",
+      "voice": "moon",
+      "key": "nan.cup.moon.0",
+      "part": "nan › cup › moon",
+      "when": "",
+      "ms": 2832,
+      "flags": [],
+      "span": [
+        29.22,
+        31.99
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "moon",
+        "1"
+      ],
+      "text": "Shoo, bee! Shoo!",
+      "voice": "moon",
+      "key": "nan.cup.moon.1",
+      "part": "nan › cup › moon",
+      "when": "",
+      "ms": 2040,
+      "flags": [],
+      "span": [
+        32.34,
+        34.32
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "moon",
+        "2"
+      ],
+      "text": "I love the straight bits!",
+      "voice": "moon",
+      "key": "nan.cup.moon.2",
+      "part": "nan › cup › moon",
+      "when": "",
+      "ms": 2592,
+      "flags": [],
+      "span": [
+        34.67,
+        37.2
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "facts",
+        "taeng"
+      ],
+      "text": "Tortoises can live to be more than a hundred!",
+      "voice": "sparkle",
+      "key": "nan.cup.facts.taeng",
+      "part": "nan › cup › facts",
+      "when": "The first time she pokes each rival this visit, after their line, Sparkle's fact.",
+      "ms": 2880,
+      "flags": [],
+      "span": [
+        38.82,
+        41.63
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "facts",
+        "pao"
+      ],
+      "text": "Hornbills have a big helmet on their beak!",
+      "voice": "sparkle",
+      "key": "nan.cup.facts.pao",
+      "part": "nan › cup › facts",
+      "when": "The first time she pokes each rival this visit, after their line, Sparkle's fact.",
+      "ms": 2928,
+      "flags": [],
+      "span": [
+        41.98,
+        44.85
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "facts",
+        "moon"
+      ],
+      "text": "Sun bears are the smallest bears!",
+      "voice": "sparkle",
+      "key": "nan.cup.facts.moon",
+      "part": "nan › cup › facts",
+      "when": "The first time she pokes each rival this visit, after their line, Sparkle's fact.",
+      "ms": 3192,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        45.2,
+        48.33
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "tease",
+        "forest"
+      ],
+      "text": "My forest! Catch me if you can!",
+      "voice": "moon",
+      "key": "nan.cup.tease.forest",
+      "part": "nan › cup › tease",
+      "when": "The race: the home rival's tease on the grid, Sparkle's one instruction (her first race), the lights in Thai.",
+      "ms": 3096,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        49.95,
+        52.99
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "tease",
+        "steps"
+      ],
+      "text": "My rice steps, dear!",
+      "voice": "taeng",
+      "key": "nan.cup.tease.steps",
+      "part": "nan › cup › tease",
+      "when": "The race: the home rival's tease on the grid, Sparkle's one instruction (her first race), the lights in Thai.",
+      "ms": 2472,
+      "flags": [],
+      "span": [
+        53.34,
+        55.76
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "tease",
+        "cloud"
+      ],
+      "text": "Up, up, into the clouds!",
+      "voice": "pao",
+      "key": "nan.cup.tease.cloud",
+      "part": "nan › cup › tease",
+      "when": "The race: the home rival's tease on the grid, Sparkle's one instruction (her first race), the lights in Thai.",
+      "ms": 2184,
+      "flags": [],
+      "span": [
+        56.11,
+        58.25
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "start",
+        "touch"
+      ],
+      "text": "Hold your finger on the road to go!",
+      "voice": "sparkle",
+      "key": "nan.cup.start.touch",
+      "part": "nan › cup › start",
+      "when": "",
+      "ms": 3120,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        59.87,
+        62.93
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "start",
+        "mouse"
+      ],
+      "text": "Click and hold on the road to go!",
+      "voice": "sparkle",
+      "key": "nan.cup.start.mouse",
+      "part": "nan › cup › start",
+      "when": "",
+      "ms": 2832,
+      "flags": [],
+      "span": [
+        63.28,
+        66.06
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "count",
+        "0"
+      ],
+      "text": "Sahm!",
+      "voice": "sparkle",
+      "key": "nan.cup.count.0",
+      "part": "nan › cup › count",
+      "when": "",
+      "ms": 936,
+      "flags": [],
+      "span": [
+        67.68,
+        68.56
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "count",
+        "1"
+      ],
+      "text": "Song!",
+      "voice": "sparkle",
+      "key": "nan.cup.count.1",
+      "part": "nan › cup › count",
+      "when": "",
+      "ms": 1104,
+      "flags": [],
+      "span": [
+        68.91,
+        69.96
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "count",
+        "2"
+      ],
+      "text": "Neung!",
+      "voice": "sparkle",
+      "key": "nan.cup.count.2",
+      "part": "nan › cup › count",
+      "when": "",
+      "ms": 1704,
+      "flags": [],
+      "span": [
+        70.31,
+        71.96
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "count",
+        "3"
+      ],
+      "text": "Go!",
+      "voice": "sparkle",
+      "key": "nan.cup.count.3",
+      "part": "nan › cup › count",
+      "when": "Sparkle's countdown (3, 2, 1, go).",
+      "ms": 611,
+      "flags": [],
+      "span": [
+        72.31,
+        72.92
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "counted"
+      ],
+      "text": "That's three, two, one in Thai!",
+      "voice": "sparkle",
+      "key": "nan.cup.counted",
+      "part": "nan › cup",
+      "when": "",
+      "ms": 3144,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        74.54,
+        77.63
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "boing"
+      ],
+      "text": "Boing! A bouncy mushroom!",
+      "voice": "sparkle",
+      "key": "nan.cup.boing",
+      "part": "nan › cup",
+      "when": "",
+      "ms": 2760,
+      "flags": [],
+      "span": [
+        77.98,
+        80.67
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "mud"
+      ],
+      "text": "Splash! Mud makes you fast!",
+      "voice": "sparkle",
+      "key": "nan.cup.mud",
+      "part": "nan › cup",
+      "when": "",
+      "ms": 3168,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        81.02,
+        84.12
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "cloud"
+      ],
+      "text": "Follow the lanterns!",
+      "voice": "sparkle",
+      "key": "nan.cup.cloud",
+      "part": "nan › cup",
+      "when": "",
+      "ms": 1920,
+      "flags": [],
+      "span": [
+        84.47,
+        86.34
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "hint",
+        "touch"
+      ],
+      "text": "Hold your finger on the road!",
+      "voice": "sparkle",
+      "key": "nan.cup.hint.touch",
+      "part": "nan › cup › hint",
+      "when": "",
+      "ms": 2160,
+      "flags": [],
+      "span": [
+        87.96,
+        90.06
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "hint",
+        "mouse"
+      ],
+      "text": "Click and hold on the road!",
+      "voice": "sparkle",
+      "key": "nan.cup.hint.mouse",
+      "part": "nan › cup › hint",
+      "when": "",
+      "ms": 2712,
+      "flags": [],
+      "span": [
+        90.41,
+        93.06
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "bump",
+        "taeng"
+      ],
+      "text": "Oh my!",
+      "voice": "taeng",
+      "key": "nan.cup.bump.taeng",
+      "part": "nan › cup › bump",
+      "when": "",
+      "ms": 1272,
+      "flags": [],
+      "span": [
+        94.68,
+        95.89
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "bump",
+        "pao"
+      ],
+      "text": "Hey! My letters!",
+      "voice": "pao",
+      "key": "nan.cup.bump.pao",
+      "part": "nan › cup › bump",
+      "when": "",
+      "ms": 1800,
+      "flags": [],
+      "span": [
+        96.24,
+        97.98
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "bump",
+        "moon"
+      ],
+      "text": "Hey! My honey!",
+      "voice": "moon",
+      "key": "nan.cup.bump.moon",
+      "part": "nan › cup › bump",
+      "when": "",
+      "ms": 2112,
+      "flags": [],
+      "span": [
+        98.33,
+        100.37
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "final"
+      ],
+      "text": "Nearly there!",
+      "voice": "sparkle",
+      "key": "nan.cup.final",
+      "part": "nan › cup",
+      "when": "",
+      "ms": 1176,
+      "flags": [],
+      "span": [
+        101.99,
+        103.11
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "win"
+      ],
+      "text": "First place!",
+      "voice": "sparkle",
+      "key": "nan.cup.win",
+      "part": "nan › cup",
+      "when": "",
+      "ms": 1392,
+      "flags": [],
+      "span": [
+        103.46,
+        104.79
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "close"
+      ],
+      "text": "So close! Second place!",
+      "voice": "sparkle",
+      "key": "nan.cup.close",
+      "part": "nan › cup",
+      "when": "",
+      "ms": 2832,
+      "flags": [],
+      "span": [
+        105.14,
+        107.91
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "gold",
+        "0"
+      ],
+      "text": "Gold! Woo hoo!",
+      "voice": "nick",
+      "key": "nan.cup.gold.0",
+      "part": "nan › cup › gold",
+      "when": "",
+      "ms": 2112,
+      "flags": [],
+      "span": [
+        109.53,
+        111.59
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "gold",
+        "1"
+      ],
+      "text": "You won, sweetie!",
+      "voice": "ji",
+      "key": "nan.cup.gold.1",
+      "part": "nan › cup › gold",
+      "when": "",
+      "ms": 1560,
+      "flags": [],
+      "span": [
+        111.94,
+        113.43
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "good",
+        "taeng"
+      ],
+      "text": "Oh my! So fast, dear!",
+      "voice": "taeng",
+      "key": "nan.cup.good.taeng",
+      "part": "nan › cup › good",
+      "when": "",
+      "ms": 2544,
+      "flags": [],
+      "span": [
+        115.05,
+        117.52
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "good",
+        "pao"
+      ],
+      "text": "You beat me up my mountain!",
+      "voice": "pao",
+      "key": "nan.cup.good.pao",
+      "part": "nan › cup › good",
+      "when": "",
+      "ms": 2112,
+      "flags": [],
+      "span": [
+        117.87,
+        119.93
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "good",
+        "moon"
+      ],
+      "text": "Wow! You beat me!",
+      "voice": "moon",
+      "key": "nan.cup.good.moon",
+      "part": "nan › cup › good",
+      "when": "",
+      "ms": 2328,
+      "flags": [],
+      "span": [
+        120.28,
+        122.55
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "five",
+        "touch"
+      ],
+      "text": "Tap the winner for a high five!",
+      "voice": "sparkle",
+      "key": "nan.cup.five.touch",
+      "part": "nan › cup › five",
+      "when": "",
+      "ms": 2088,
+      "flags": [],
+      "span": [
+        124.17,
+        126.2
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "five",
+        "mouse"
+      ],
+      "text": "Click the winner for a high five!",
+      "voice": "sparkle",
+      "key": "nan.cup.five.mouse",
+      "part": "nan › cup › five",
+      "when": "",
+      "ms": 2520,
+      "flags": [],
+      "span": [
+        126.55,
+        129.01
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "gift",
+        "taeng"
+      ],
+      "text": "My lucky ribbon, for you!",
+      "voice": "taeng",
+      "key": "nan.cup.gift.taeng",
+      "part": "nan › cup › gift",
+      "when": "",
+      "ms": 2616,
+      "flags": [],
+      "span": [
+        130.63,
+        133.18
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "gift",
+        "pao"
+      ],
+      "text": "Well driven! Have a feather!",
+      "voice": "pao",
+      "key": "nan.cup.gift.pao",
+      "part": "nan › cup › gift",
+      "when": "",
+      "ms": 2424,
+      "flags": [],
+      "span": [
+        133.53,
+        135.89
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "gift",
+        "moon"
+      ],
+      "text": "Great race! A honey sticker for you!",
+      "voice": "moon",
+      "key": "nan.cup.gift.moon",
+      "part": "nan › cup › gift",
+      "when": "",
+      "ms": 2904,
+      "flags": [],
+      "span": [
+        136.24,
+        139.08
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "silver"
+      ],
+      "text": "Next race, sweetie!",
+      "voice": "ji",
+      "key": "nan.cup.silver",
+      "part": "nan › cup",
+      "when": "",
+      "ms": 1752,
+      "flags": [],
+      "span": [
+        140.7,
+        142.4
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "cup",
+        "touch"
+      ],
+      "text": "The Nan Mountain Cup! Tap it, Kaylee!",
+      "voice": "sparkle",
+      "key": "nan.cup.cup.touch",
+      "part": "nan › cup › cup",
+      "when": "",
+      "ms": 3312,
+      "flags": [
+        "long",
+        "name"
+      ],
+      "span": [
+        144.02,
+        147.27
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "cup",
+        "mouse"
+      ],
+      "text": "The Nan Mountain Cup! Click it, Kaylee!",
+      "voice": "sparkle",
+      "key": "nan.cup.cup.mouse",
+      "part": "nan › cup › cup",
+      "when": "",
+      "ms": 2976,
+      "flags": [
+        "name"
+      ],
+      "span": [
+        147.62,
+        150.54
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "champion"
+      ],
+      "text": "Kaylee is the Nan Mountain Cup champion!",
+      "voice": "sparkle",
+      "key": "nan.cup.champion",
+      "part": "nan › cup",
+      "when": "",
+      "ms": 3408,
+      "flags": [
+        "long",
+        "name"
+      ],
+      "span": [
+        152.16,
+        155.5
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "lift",
+        "0"
+      ],
+      "text": "Champion!",
+      "voice": "nick",
+      "key": "nan.cup.lift.0",
+      "part": "nan › cup › lift",
+      "when": "",
+      "ms": 792,
+      "flags": [],
+      "span": [
+        157.12,
+        157.85
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "cup",
+        "lift",
+        "1"
+      ],
+      "text": "Smile, champion!",
+      "voice": "ji",
+      "key": "nan.cup.lift.1",
+      "part": "nan › cup › lift",
+      "when": "",
+      "ms": 1872,
+      "flags": [],
+      "span": [
+        158.2,
+        160
+      ]
+    }
+  ]
+}

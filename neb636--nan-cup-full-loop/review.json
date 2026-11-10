@@ -1,0 +1,12 @@
+{
+  "title": "The Nan Mountain Cup: the full loop",
+  "checkIn": "2 of 4: hear the script",
+  "kaylee": "The kart race is on her Nan map: three races against Grandma Taeng, Pao and Moon, who now talk, and the Cup with KAYLEE on it goes in her Trophy Room.",
+  "questions": ["Do Grandma Taeng, Pao and Moon sound right?"],
+  "tableReads": [["thailand", "nan.cup"]],
+  "reels": [{ "name": "nan-cup", "moments": ["nan-kart", "nan-bounce", "nan-splash", "nan-high-five", "nan-cup-lift"] }],
+  "links": [
+    { "label": "Play it from the board", "hash": "#/world/thailand/nan-trip/cup" },
+    { "label": "Tune the kart (feel lab)", "hash": "#/world/thailand/nan-trip/race?track=steps&feel=1" }
+  ]
+}

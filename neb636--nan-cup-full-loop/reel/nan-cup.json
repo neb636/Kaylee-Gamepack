@@ -1,0 +1,47 @@
+{
+  "kind": "reel",
+  "name": "nan-cup",
+  "title": "Nan cup",
+  "video": "nan-cup.mp4",
+  "gif": "nan-cup.gif",
+  "seconds": 49,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "nan-kart",
+      "where": "nan-kart",
+      "seconds": 12,
+      "fps": 22.1,
+      "status": "ok"
+    },
+    {
+      "name": "nan-bounce",
+      "where": "nan-bounce",
+      "seconds": 8,
+      "fps": 23.9,
+      "status": "ok"
+    },
+    {
+      "name": "nan-splash",
+      "where": "nan-splash",
+      "seconds": 8,
+      "fps": 9.1,
+      "status": "ok"
+    },
+    {
+      "name": "nan-high-five",
+      "where": "nan-high-five",
+      "seconds": 6,
+      "fps": 20.1,
+      "status": "ok"
+    },
+    {
+      "name": "nan-cup-lift",
+      "where": "nan-cup-lift",
+      "seconds": 7,
+      "fps": 21.6,
+      "status": "ok"
+    }
+  ]
+}
