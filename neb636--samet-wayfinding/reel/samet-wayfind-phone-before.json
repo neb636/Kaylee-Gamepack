@@ -1,0 +1,40 @@
+{
+  "kind": "reel",
+  "name": "samet-wayfind-phone-before",
+  "title": "Samet wayfind phone before",
+  "video": "samet-wayfind-phone-before.mp4",
+  "gif": "samet-wayfind-phone-before.gif",
+  "seconds": 58,
+  "browser": "webkit",
+  "viewport": "iphone-portrait",
+  "moments": [
+    {
+      "name": "thailand-samet-wayfind-idle",
+      "where": "thailand-samet-wayfind-idle",
+      "seconds": 14,
+      "fps": 91.1,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-wayfind-beside",
+      "where": "thailand-samet-wayfind-beside",
+      "seconds": 14,
+      "fps": 93.5,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-wayfind-topleft",
+      "where": "thailand-samet-wayfind-topleft",
+      "seconds": 8,
+      "fps": 126.6,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-wayfind-home",
+      "where": "thailand-samet-wayfind-home",
+      "seconds": 16,
+      "fps": 95,
+      "status": "ok"
+    }
+  ]
+}
