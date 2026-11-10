@@ -3598,6 +3598,363 @@
     "file": "cc8fbdc17405.mp3"
   },
   {
+    "text": "Look! A race!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1464,
+    "file": "011e5c5fcc8d.mp3"
+  },
+  {
+    "text": "Tap a track to race!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1920,
+    "file": "1ff49a313e8f.mp3"
+  },
+  {
+    "text": "Click a track to race!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1920,
+    "file": "4288e32bd873.mp3"
+  },
+  {
+    "text": "Sawasdee ka! Three Cups in a row, dear!",
+    "voice": "taeng",
+    "sig": "0da1b1b1e5",
+    "ms": 3816,
+    "file": "71bd1cf4aa98.mp3"
+  },
+  {
+    "text": "Zzz... Oh! Is it time?",
+    "voice": "taeng",
+    "sig": "0da1b1b1e5",
+    "ms": 3312,
+    "file": "03a16f8cbf53.mp3"
+  },
+  {
+    "text": "My husband built my kart!",
+    "voice": "taeng",
+    "sig": "0da1b1b1e5",
+    "ms": 2880,
+    "file": "86b9e5deaed4.mp3"
+  },
+  {
+    "text": "Sawasdee krap! I know every bend!",
+    "voice": "pao",
+    "sig": "42f6ea27f5",
+    "ms": 3696,
+    "file": "1e38d5019e28.mp3"
+  },
+  {
+    "text": "Special delivery! Ha ha!",
+    "voice": "pao",
+    "sig": "42f6ea27f5",
+    "ms": 2352,
+    "file": "6cf89835b1f7.mp3"
+  },
+  {
+    "text": "Up the mountain every day!",
+    "voice": "pao",
+    "sig": "42f6ea27f5",
+    "ms": 2112,
+    "file": "286b9d297302.mp3"
+  },
+  {
+    "text": "Sawasdee ka! Want some honey?",
+    "voice": "moon",
+    "sig": "36844a3892",
+    "ms": 2832,
+    "file": "32b09e9d754e.mp3"
+  },
+  {
+    "text": "Shoo, bee! Shoo!",
+    "voice": "moon",
+    "sig": "36844a3892",
+    "ms": 2040,
+    "file": "11be48eccbae.mp3"
+  },
+  {
+    "text": "I love the straight bits!",
+    "voice": "moon",
+    "sig": "36844a3892",
+    "ms": 2592,
+    "file": "37b9123c8800.mp3"
+  },
+  {
+    "text": "Tortoises can live to be more than a hundred!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2880,
+    "file": "4ab39b6746e1.mp3"
+  },
+  {
+    "text": "Hornbills have a big helmet on their beak!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2928,
+    "file": "ebf7142a0c71.mp3"
+  },
+  {
+    "text": "Sun bears are the smallest bears in the world!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3960,
+    "file": "11ceba137b99.mp3"
+  },
+  {
+    "text": "My forest! Catch me if you can!",
+    "voice": "moon",
+    "sig": "36844a3892",
+    "ms": 3096,
+    "file": "423cbef1bab4.mp3"
+  },
+  {
+    "text": "My rice steps, dear. Off we go!",
+    "voice": "taeng",
+    "sig": "0da1b1b1e5",
+    "ms": 3384,
+    "file": "257af6722dab.mp3"
+  },
+  {
+    "text": "Up, up, into the clouds!",
+    "voice": "pao",
+    "sig": "42f6ea27f5",
+    "ms": 2184,
+    "file": "d06deab3ed5a.mp3"
+  },
+  {
+    "text": "Hold your finger on the road to go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3120,
+    "file": "9709611db34e.mp3"
+  },
+  {
+    "text": "Click and hold on the road to go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2832,
+    "file": "4d70f38e8454.mp3"
+  },
+  {
+    "text": "Sahm!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 936,
+    "file": "20ac47cc2e60.mp3"
+  },
+  {
+    "text": "Song!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1104,
+    "file": "3b876d2b311f.mp3"
+  },
+  {
+    "text": "Neung!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1704,
+    "file": "c5504e3fd999.mp3"
+  },
+  {
+    "text": "That's three, two, one in Thai!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3144,
+    "file": "439d79bac845.mp3"
+  },
+  {
+    "text": "Boing! A bouncy mushroom!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2760,
+    "file": "169deb92d419.mp3"
+  },
+  {
+    "text": "Splash! Muddy karts go faster!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3840,
+    "file": "cee00b3f9c3a.mp3"
+  },
+  {
+    "text": "We're in a cloud! Follow the lanterns!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3384,
+    "file": "41d6dfc614e5.mp3"
+  },
+  {
+    "text": "Hold your finger on the road!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2160,
+    "file": "77c9a359267f.mp3"
+  },
+  {
+    "text": "Click and hold on the road!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2712,
+    "file": "080e8bdf47f6.mp3"
+  },
+  {
+    "text": "Oh my!",
+    "voice": "taeng",
+    "sig": "0da1b1b1e5",
+    "ms": 1272,
+    "file": "c4e8191fd16b.mp3"
+  },
+  {
+    "text": "Hey! My letters!",
+    "voice": "pao",
+    "sig": "42f6ea27f5",
+    "ms": 1800,
+    "file": "510a2bcb8897.mp3"
+  },
+  {
+    "text": "Hey! My honey!",
+    "voice": "moon",
+    "sig": "36844a3892",
+    "ms": 2112,
+    "file": "f43b23fa5397.mp3"
+  },
+  {
+    "text": "Nearly there!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1176,
+    "file": "99c4b26b4cbf.mp3"
+  },
+  {
+    "text": "First place!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1392,
+    "file": "471ebe9eafc9.mp3"
+  },
+  {
+    "text": "So close! Second place!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2832,
+    "file": "3b0ce98c1b08.mp3"
+  },
+  {
+    "text": "Gold! Woo hoo!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2112,
+    "file": "d1a1f35643ab.mp3"
+  },
+  {
+    "text": "You won, sweetie!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1560,
+    "file": "f40fb57bd029.mp3"
+  },
+  {
+    "text": "Oh my! So fast, dear!",
+    "voice": "taeng",
+    "sig": "0da1b1b1e5",
+    "ms": 2544,
+    "file": "50a79f250df2.mp3"
+  },
+  {
+    "text": "You beat me up my mountain!",
+    "voice": "pao",
+    "sig": "42f6ea27f5",
+    "ms": 2112,
+    "file": "bd01c6d3fe9b.mp3"
+  },
+  {
+    "text": "Wow! You beat me!",
+    "voice": "moon",
+    "sig": "36844a3892",
+    "ms": 2328,
+    "file": "f6e332137e9a.mp3"
+  },
+  {
+    "text": "Tap the winner for a high five!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2088,
+    "file": "ed1487970de6.mp3"
+  },
+  {
+    "text": "Click the winner for a high five!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2520,
+    "file": "a86a31b6f9c4.mp3"
+  },
+  {
+    "text": "Good race! My lucky ribbon, for you.",
+    "voice": "taeng",
+    "sig": "0da1b1b1e5",
+    "ms": 4440,
+    "file": "a6ab26818fb8.mp3"
+  },
+  {
+    "text": "Well driven! Have a feather!",
+    "voice": "pao",
+    "sig": "42f6ea27f5",
+    "ms": 2424,
+    "file": "7d21f8a6c6d0.mp3"
+  },
+  {
+    "text": "Great race! A honey sticker for you!",
+    "voice": "moon",
+    "sig": "36844a3892",
+    "ms": 2904,
+    "file": "04593a47a02f.mp3"
+  },
+  {
+    "text": "Next race, sweetie!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1752,
+    "file": "f0aea66fa861.mp3"
+  },
+  {
+    "text": "The Nan Mountain Cup! Tap it, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3312,
+    "file": "d42b09456641.mp3"
+  },
+  {
+    "text": "The Nan Mountain Cup! Click it, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2976,
+    "file": "575e26d5b116.mp3"
+  },
+  {
+    "text": "Kaylee is the Nan Mountain Cup champion!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3408,
+    "file": "42559836f45f.mp3"
+  },
+  {
+    "text": "Champion!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 792,
+    "file": "0dfe6d02aceb.mp3"
+  },
+  {
+    "text": "Smile, champion!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1872,
+    "file": "c32dbd33a840.mp3"
+  },
+  {
     "text": "It's cool and rainy in the mountains!",
     "voice": "ji",
     "sig": "ba2e98c34e",
@@ -3680,6 +4037,20 @@
     "sig": "ed7dbdac3d",
     "ms": 5238,
     "file": "bfc0dcbaf1b1.mp3"
+  },
+  {
+    "text": "A pink flower grows on the mountain, only in Nan!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4536,
+    "file": "2db4a26f3336.mp3"
+  },
+  {
+    "text": "Doi Phu Kha is a big mountain in Nan!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3552,
+    "file": "601aff3f45df.mp3"
   },
   {
     "text": "Sawasdee ka! Hold on tight!",
