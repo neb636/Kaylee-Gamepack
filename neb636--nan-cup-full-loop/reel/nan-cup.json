@@ -12,35 +12,35 @@
       "name": "nan-kart",
       "where": "nan-kart",
       "seconds": 12,
-      "fps": 22.1,
+      "fps": 48.9,
       "status": "ok"
     },
     {
       "name": "nan-bounce",
       "where": "nan-bounce",
       "seconds": 8,
-      "fps": 23.9,
+      "fps": 52.2,
       "status": "ok"
     },
     {
       "name": "nan-splash",
       "where": "nan-splash",
       "seconds": 8,
-      "fps": 9.1,
+      "fps": 39.5,
       "status": "ok"
     },
     {
       "name": "nan-high-five",
       "where": "nan-high-five",
       "seconds": 6,
-      "fps": 20.1,
+      "fps": 70.7,
       "status": "ok"
     },
     {
       "name": "nan-cup-lift",
       "where": "nan-cup-lift",
       "seconds": 7,
-      "fps": 21.6,
+      "fps": 68.6,
       "status": "ok"
     }
   ]
