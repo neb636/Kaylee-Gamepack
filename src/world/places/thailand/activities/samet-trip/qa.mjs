@@ -943,4 +943,80 @@ export const motion = [
     // its own (it took 75 s).
     act: async (page) => page.waitForTimeout(30000),
   },
+  // Visual polish (#357 batch): see-through, the swim area's rope, the suitcase, the speedboat.
+  {
+    name: 'thailand-samet-polish-road',
+    seconds: 15,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=saikaew`)
+      await ready(page)
+    },
+    // Up from Sai Kaew past the shelter and under the trees on the inland road: whatever is between the camera and her
+    // opens in a clean round hole (it was a screen-door dither with a dark smudge inside the crowns).
+    act: (page) => leadAlong(page, [[-6, -22], [-6, -17], [-11, -27], [-14, -40], [-20, -60]], 15000),
+  },
+  {
+    name: 'thailand-samet-polish-sunset',
+    seconds: 4,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/sunset?flags=all`)
+      await ready(page)
+    },
+    // The three of them at the driftwood tree: the deck and the tree beyond them stay whole, nothing is banded.
+    act: (page) => page.waitForTimeout(4000),
+  },
+  {
+    name: 'thailand-samet-polish-rope',
+    seconds: 36,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=saikaew`)
+      await ready(page)
+    },
+    // Out to sea from Sai Kaew (the floats come up round her near the edge), then a finger held seaward of her: the
+    // rope boings her back and the floats bob (`rope.bumps`).
+    act: async (page) => {
+      await leadAlong(page, [[40, -20], [80, -20]], 26000)
+      const vp = page.viewportSize()
+      const t0 = Date.now()
+      let down = false
+      while (Date.now() - t0 < 10000) {
+        const q = await page.evaluate(() => window.__thaiSametQA())
+        // (Seaward: the camera looks back at the beach from the sea there.)
+        const x = Math.max(10, Math.min(vp.width - 10, q.kaylee.x + 105))
+        const y = Math.max(110, Math.min(vp.height - 10, q.kaylee.y + 105))
+        await page.mouse.move(x, y)
+        if (!down) await page.mouse.down()
+        down = true
+        await page.waitForTimeout(250)
+      }
+      await page.mouse.up()
+    },
+  },
+  {
+    name: 'thailand-samet-polish-pack',
+    seconds: 9,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/pack?packed=sunhat,sunscreen,duck`)
+      await page.waitForFunction(() => window.__thaiSametQA?.().trip === 'pack', null, { timeout: 20000 })
+      await page.waitForTimeout(1200)
+    },
+    // A tap in the middle of each thing in the suitcase: that thing hops out (their targets overlap on a phone).
+    act: async (page) => {
+      for (const id of ['sunhat', 'sunscreen', 'duck']) {
+        const r = await page.locator(`[data-anchor="trip:item:${id}"]`).boundingBox()
+        if (r) await page.mouse.click(r.x + r.width / 2, r.y + r.height / 2)
+        await page.waitForTimeout(2200)
+      }
+    },
+  },
+  {
+    name: 'thailand-samet-polish-boat',
+    seconds: 14,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/speedboat`)
+      await ready(page)
+    },
+    // Nobody touching it: the finger shows her hoof's place in the spray at once, and flying fish leap by themselves.
+    act: (page) => page.waitForTimeout(14000),
+  },
 ]
