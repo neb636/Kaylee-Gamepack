@@ -1,0 +1,40 @@
+{
+  "kind": "reel",
+  "name": "thai-map",
+  "title": "Thai map",
+  "video": "thai-map.mp4",
+  "gif": "thai-map.gif",
+  "seconds": 31,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "thai-map-alive",
+      "where": "thai-map-alive",
+      "seconds": 5,
+      "fps": 63.6,
+      "status": "ok"
+    },
+    {
+      "name": "thai-map-pokes",
+      "where": "thai-map-pokes",
+      "seconds": 11,
+      "fps": 52.7,
+      "status": "ok"
+    },
+    {
+      "name": "thai-map-spin",
+      "where": "thai-map-spin",
+      "seconds": 5,
+      "fps": 70.9,
+      "status": "ok"
+    },
+    {
+      "name": "thai-map-pin",
+      "where": "thai-map-pin",
+      "seconds": 4,
+      "fps": 46.6,
+      "status": "ok"
+    }
+  ]
+}
