@@ -48,7 +48,6 @@ const LUNCH = knobs('lunchDeck', 'Lunch on the deck', FILE, {
   pitch: { value: 36, min: 5, max: 60, step: 1, label: 'Camera looks down', unit: '°' },
   box: { value: 2.3, min: 1, max: 5, step: 0.05, label: 'Shows round the table', unit: 'm', note: 'half the width across the screen' },
   tallBox: { value: 1.6, min: 0.8, max: 4, step: 0.05, label: '…on a tall screen', unit: 'm' },
-  clear: { value: 0.6, min: 0, max: 0.9, step: 0.05, label: 'Hides what’s right in front of the camera', unit: '×', note: 'nothing nearer than this much of the way to the table is drawn (the bushes on the slope)' },
 })
 
 export interface LunchStart {
@@ -288,14 +287,6 @@ export class Lunch implements World3D {
     this.isl.update(dt, t, this.rig.camera.position.x, this.rig.camera.position.z, this.lights)
     this.rig.setShot(this.shot())
     this.rig.update(dt)
-    // The bushes on the slope between the camera and the deck would hide the lunch (and the hint finger's target):
-    // nothing nearer than most of the way to the table is drawn.
-    const cam = this.rig.camera
-    const near = Math.max(0.1, cam.position.distanceTo(this.D(T.u, T.v, TOP)) * LUNCH.clear)
-    if (Math.abs(cam.near - near) > 0.02) {
-      cam.near = near
-      cam.updateProjectionMatrix()
-    }
     this.drawHint(t)
   }
 

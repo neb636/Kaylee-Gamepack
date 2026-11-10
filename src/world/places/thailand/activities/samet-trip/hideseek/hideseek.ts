@@ -134,7 +134,7 @@ const SPOTS: SpotDef[] = [
   { id: 'roots', label: 'The tangle of roots', u: TREE.u + 2.3, v: TREE.v - 0.6, dad: { du: 0, dv: 0, pose: 'lie' }, kay: { du: 0.2, dv: 0.2 }, round: '2' },
   { id: 'towel', label: 'A beach towel', u: -5.5, v: -1.8, dad: { du: 0, dv: 0, pose: 'lie', hidden: true }, kay: { du: 0, dv: 0 }, round: '2' },
   { id: 'sea', label: 'The sea', u: 1.5, v: 5, dad: { du: 0, dv: 0, pose: 'stand', hidden: true }, kay: { du: 0, dv: -2.2 }, round: '2' },
-  { id: 'pandanus', label: 'The pandanus tree', u: -6.5, v: -9, dad: { du: 0.3, dv: 0.05, pose: 'sit', y: 1.75 }, kay: { du: 0, dv: 0.75 }, round: '2' },
+  { id: 'pandanus', label: 'The pandanus tree', u: -6.5, v: -9, dad: { du: 0.3, dv: 0.05, pose: 'sit', y: 1.75 }, kay: { du: 0, dv: 0.95 }, round: '2' },
   { id: 'mommy', label: 'Mommy', u: 8.5, v: -4, dad: { du: 0, dv: 0.9, pose: 'sit' }, kay: { du: 0, dv: 0.85 } },
   { id: 'palmL', label: 'A thin palm', u: -2.5, v: -1.6, dad: { du: 0, dv: 0.5, pose: 'stand' }, kay: { du: 0, dv: 0.45 } },
   { id: 'palmR', label: 'A thin palm', u: 10.5, v: -1.8, dad: { du: 0, dv: 0.5, pose: 'stand' }, kay: { du: 0, dv: 0.45 } },
@@ -278,7 +278,7 @@ export class HideSeek implements World3D {
   /** The last line said (for QA), until it's had its moment. */
   private bubble: { text: string; until: number } | null = null
   private turn = { found: 0, look: 0, spotted: 0, notHere: 0, silly: 0 }
-  /** She ducks down in the sea (her turn, hiding there): only her head shows. */
+  /** She ducks down in the sea (her turn, hiding there): only her head shows; up in the pandanus it's negative. */
   private duck = 0
   private notHereAt = -99
   private hintOn = false
@@ -892,6 +892,13 @@ export class HideSeek implements World3D {
       if (this.hiddenAt !== where) return
       this.kaylee.face(this.seaYaw + Math.PI)
       this.kaylee.setPose('sit')
+      if (where === 'pandanus') {
+        // Up into its leaves (where Daddy hid): underfoot() lifts her.
+        const d = this.dadPoint(BYID.pandanus)
+        this.kaylee.root.position.x = d.x
+        this.kaylee.root.position.z = d.z
+        rustle()
+      }
       if (where === 'towel') {
         // Under the towel: a little lump (her horn's just a bump).
         this.towelParts.lump.visible = true
@@ -1122,7 +1129,7 @@ export class HideSeek implements World3D {
         const probe = 0.55
         if (!this.free(k.x + ux * probe, k.z + uz * probe)) {
           const side = this.lastTurn || 1
-          for (const a of [0.35, -0.35, 0.7, -0.7, 1.05, -1.05, 1.4, -1.4]) {
+          for (const a of [0.35, -0.35, 0.7, -0.7, 1.05, -1.05, 1.4, -1.4, 1.75, -1.75]) {
             const r = a * side
             const rx = ux * Math.cos(r) + uz * Math.sin(r)
             const rz = -ux * Math.sin(r) + uz * Math.cos(r)
@@ -1177,7 +1184,9 @@ export class HideSeek implements World3D {
     const g = this.groundY(k.x, k.z)
     const wet = g < 0
     this.kY += (g - this.kY) * ease(dt, 16)
-    this.duck += ((this.hiddenAt === 'sea' ? 0.5 : 0) - this.duck) * ease(dt, 6)
+    // (Hiding: down in the sea to her head, or up in the pandanus's leaves like Daddy.)
+    const duck = this.hiddenAt === 'sea' ? 0.5 : this.hiddenAt === 'pandanus' && !this.kaylee.walking ? -1.55 : 0
+    this.duck += (duck - this.duck) * ease(dt, 6)
     k.y = this.kY - this.duck
     this.shadowAt(this.kShadow, k.x, k.z, this.kaylee.root.visible ? 1 : 0)
     if (wet && this.speed > 0.5 && Math.random() < dt * 8) this.spray.burst(k.x, Math.max(g, this.water(k.x, k.z)), k.z, 3, 1.2, 1.6, 0.08)
@@ -1583,11 +1592,13 @@ export class HideSeek implements World3D {
       helpLvl: this.helpLvl,
       helpT: +this.helpT.toFixed(1),
       popped: this.poppedT !== -1,
+      poppedT: +this.poppedT.toFixed(1),
+      speed: +this.speed.toFixed(2),
+      dadPath: this.dad.path.length,
       onScreen: this.round === 'hide' ? null : ROUND_HIDES[this.round].map((id) => (({ x, y }) => x >= 0 && x <= this.w && y >= 0 && y <= this.h)(this.toScreen(this.dadPoint(BYID[id]).setY(this.dadPoint(BYID[id]).y + 0.5)))).every(Boolean),
       hidingIn: this.hiddenAt,
       openFinds: this.openFinds,
       looksLeft: this.looks.length,
-      dadPath: this.dad.path.length,
       dadAt: [+this.dad.x.toFixed(1), +this.dad.z.toFixed(1)],
       lookT: +this.lookT.toFixed(1),
       bubble: this.bubble?.text ?? null,

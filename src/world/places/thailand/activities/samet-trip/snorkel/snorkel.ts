@@ -73,7 +73,7 @@ const FISH = knobs('snorkelFish', 'The fish', FILE, {
   flash: { value: 5.5, min: 2, max: 10, step: 0.1, label: 'Cuttlefish shows its colors at', unit: 'm', note: 'further off it’s sand-colored (hiding)' },
   pink: { value: 2.0, min: 0.6, max: 5, step: 0.1, label: '…she reaches it at', unit: 'm', note: 'a new color each time (rainbow, stripes, pink); the first two times it jets off to hide again' },
   jet: { value: 1.1, min: 0.3, max: 3, step: 0.05, label: '…jets off in', unit: 's' },
-  shy: { value: 0.55, min: 0, max: 2, step: 0.05, label: 'The last time it backs away at', unit: 'm/s', note: 'slower than her paddle, so she catches it' },
+  shy: { value: 0.4, min: 0, max: 2, step: 0.05, label: 'The last time it backs away at', unit: 'm/s', note: 'slower than her paddle, so she catches it' },
   glint: { value: 14, min: 4, max: 60, step: 1, label: 'Stuck: it glints after', unit: 's', note: 'a rainbow flash where it hides, and again every 5 s' },
   comes: { value: 24, min: 8, max: 90, step: 1, label: 'Stuck: it swims to her after', unit: 's' },
 })
@@ -234,7 +234,7 @@ export class Snorkel implements World3D {
   /** Since it last settled to hide (the stuck clock), and its jet to the next hiding place. */
   private lapT = 0
   private glintT = 0
-  private jet: { from: Vector3; to: Vector3; t: number } | null = null
+  private jet: { from: Vector3; to: Vector3; t: number; wait: number } | null = null
   private flashT = -1
   private doneAt = -1
   /** The captain's face (her beak opens with her voice). */
@@ -961,7 +961,12 @@ export class Snorkel implements World3D {
     if (this.jet) {
       // Jetting off to its next hiding place: a whoosh and a puff of ink, tentacles first.
       const j = this.jet
-      j.t += dt / FISH.jet
+      // (A moment showing off its new color first.)
+      if (j.wait > 0 && (j.wait -= dt) <= 0) {
+        hiss(0.45, 0.1, 'bandpass', 900, 2400)
+        this.once(`again${this.best}`, S.again[this.best - 1])
+      }
+      if (j.wait <= 0) j.t += dt / FISH.jet
       const k = clamp(j.t)
       const e = 1 - (1 - k) ** 3
       c.set(j.from.x + (j.to.x - j.from.x) * e, j.from.y - bellK(k) * 0.4, j.from.z + (j.to.z - j.from.z) * e)
@@ -1002,7 +1007,8 @@ export class Snorkel implements World3D {
     }
     const d = Math.hypot(this.pos.x - c.x, this.pos.z - c.z)
     const near = on && !this.jet && d < FISH.flash
-    const stage = this.round !== 'cuttle' ? 0 : this.best >= 3 ? 3 : near ? this.best + 1 : 0
+    // (Its color: sand far off, the time's own color near; showing it off before a jet, rainbow while it jets.)
+    const stage = this.round !== 'cuttle' ? 0 : this.best >= 3 ? 3 : this.jet ? (this.jet.wait > 0 ? this.best : 1) : near ? this.best + 1 : 0
     if (stage > this.stage) tone(700 + stage * 200, 1000 + stage * 260, 0.2, 0.05, 'sine')
     if (near && stage === 1) this.once('colors', S.colors)
     if (on && !this.jet && d < FISH.pink) {
@@ -1016,12 +1022,7 @@ export class Snorkel implements World3D {
         this.once('camera', S.camera)
       } else {
         twinkle(4)
-        window.setTimeout(() => {
-          if (this.best >= 3 || this.round !== 'cuttle') return
-          hiss(0.45, 0.1, 'bandpass', 900, 2400)
-          this.jet = { from: c.clone(), to: new Vector3(CUTTLE_SPOTS[this.best].x, -1.15, CUTTLE_SPOTS[this.best].z), t: 0 }
-          this.once(`again${this.best}`, S.again[this.best - 1])
-        }, 700)
+        this.jet = { from: c.clone(), to: new Vector3(CUTTLE_SPOTS[this.best].x, -1.15, CUTTLE_SPOTS[this.best].z), t: 0, wait: 0.8 }
       }
     }
     this.stage = stage
@@ -1031,7 +1032,7 @@ export class Snorkel implements World3D {
       col.setHSL((t * 2.4) % 1, 0.85, 0.62)
       if (this.flashT > 1.4) this.flashT = -1
     } else if (stage === 0) col.set('#E9D8B4')
-    else if (stage === 1 || this.jet) col.setHSL((t * 1.6) % 1, 0.8, 0.62)
+    else if (stage === 1) col.setHSL((t * 1.6) % 1, 0.8, 0.62)
     else if (stage === 2) col.set(Math.sin(t * 22) > 0 ? '#8A63E8' : '#FFE15C')
     else col.set('#FF6FB5').offsetHSL(0, 0, Math.sin(t * 4) * 0.05)
     // Hovering, fins rippling, turned to her when she's near.
