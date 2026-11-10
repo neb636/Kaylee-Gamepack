@@ -9,6 +9,8 @@ art/source/games/
 .env
 # Full-size generated world art is scratch space too
 art/source/world/
+# First-pass ElevenLabs sound effects (scripts/mcp/elevenlabs.sh) stay scratch until one is picked
+art/source/sfx/
 # QA screenshots and reports
 qa-output/
 # Review pages (scripts/review.mjs): media goes to the review-pages branch, never into main's history

@@ -1,11 +1,13 @@
-// The Cup's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise): the kart's buzzing engine,
-// its horn, the rumble on the grass, the mushrooms' boing, and "so close" when she's second by a nose. The rest is
-// Thailand's sfx (the countdown lights, the burst of speed, the fireworks) and the mountain road's (the puddles' splosh,
-// into the cloud and out above it).
+// The Cup's sounds: the kart's buzzing engine, its horn, the rumble on the grass, the bamboo bridge, the mushrooms'
+// boing, and "so close" when she's second by a nose. Recorded clips (sfx/, ElevenLabs) with the synthesized ones (the
+// world kit's tone/noise) as their fallbacks. The rest is Thailand's sfx (the countdown lights, the burst of speed, the
+// fireworks) and the mountain road's (the puddles' splosh, into the cloud and out above it, the countryside).
+import { clip, held } from '../../../../../kit/clips'
 import { noise, tone } from '../../../../../kit/sfx'
-import { roadSfx } from '../drive/sounds'
+import { roadBed, roadSfx } from '../drive/sounds'
+import { nanClip } from '../sfx'
 
-export const cupSfx = {
+const synth = {
   ...roadSfx,
   /** One beat of the kart's little engine (`level` 0..1): a buzz that climbs with the speed. */
   engine: (level: number) => {
@@ -26,3 +28,16 @@ export const cupSfx = {
     ;[0, 1, 2].forEach((i) => tone(523 * 2 ** (i / 4), 523 * 2 ** (i / 4), 0.18, 0.05, 'sine', 0.45 + i * 0.12))
   },
 }
+
+export const cupSfx = {
+  ...synth,
+  /** One beat of the kart's engine (`level` 0..1): a loop whose pitch climbs with the speed. */
+  engine: held(nanClip('cup-engine'), synth.engine, (level: number) => ({ rate: 0.75 + level * 1.1, vol: 0.35 + level * 0.5 }), { linger: 0.4 }),
+  honk: clip(nanClip('cup-honk'), synth.honk, { vol: 0.6 }),
+  rumble: held(nanClip('cup-grass'), synth.rumble, () => ({ vol: 0.45 }), { linger: 0.45 }),
+  quack: clip(nanClip('rice-duck'), synth.quack, { vol: 0.6 }),
+  creak: clip(nanClip('cup-bridge'), synth.creak, { vol: 0.6 }),
+}
+
+/** The countryside around the track, until stop(). */
+export const cupBed = () => roadBed(false)

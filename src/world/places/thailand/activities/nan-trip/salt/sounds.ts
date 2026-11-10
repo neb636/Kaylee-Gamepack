@@ -1,10 +1,13 @@
-// The salt hut's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise); the voices are lines.ts
-// L.nan.salt. The bucket in the well, the brine pouring, the fire, the boiling, the paddle's scrape, the basket, and the
-// pokes' answers.
+// The salt hut's sounds (the voices are lines.ts L.nan.salt): the bucket in the well, the brine pouring, the fire, the
+// boiling, the paddle's scrape, the basket, the pokes' answers, the scooter going by and the village around her.
+// Recorded clips (sfx/, ElevenLabs) with the synthesized ones (the world kit's tone/noise) as their fallbacks; the
+// climbing notes and the bell runs stay synthesized (they're in tune), played over the clips.
+import { bed, clip, held, playClip } from '../../../../../kit/clips'
 import { noise, tone } from '../../../../../kit/sfx'
 import { sfx } from '../../../sfx'
+import { nanClip } from '../sfx'
 
-export const saltSfx = {
+const synth = {
   ...sfx,
   /** The bucket hitting the brine down the well: a deep, echoing splash. */
   plunge: () => {
@@ -84,3 +87,50 @@ export const saltSfx = {
   /** A plunk down the well: an echo. */
   echo: () => [0, 0.25, 0.5].forEach((d, i) => tone(520, 380, 0.14, 0.07 / (1 + i * 1.5), 'sine', d)),
 }
+
+export const saltSfx = {
+  ...synth,
+  plunge: clip(nanClip('salt-plunge'), synth.plunge, { vol: 0.8 }),
+  /** Climbing as it fills (`k` 0..1). */
+  glug: (k: number) => {
+    if (!playClip(nanClip('salt-glug'), { vol: 0.6, rate: 0.8 + k * 0.7 })) synth.glug(k)
+  },
+  creak: clip(nanClip('salt-creak'), synth.creak, { vol: 0.5 }),
+  pour: held(nanClip('salt-pour'), synth.pour, () => ({ vol: 0.55 })),
+  /** Higher as the pan fills (`level` 0..1). */
+  slosh: (level: number) => {
+    if (!playClip(nanClip('salt-slosh'), { vol: 0.6, rate: 0.9 + level * 0.35 })) synth.slosh(level)
+  },
+  log: clip(nanClip('salt-log'), synth.log, { vol: 0.7 }),
+  puff: clip(nanClip('salt-blow'), synth.puff, { vol: 0.6 }),
+  /** More the bigger the fire (`k` 0..1). */
+  crackle: (k: number) => {
+    if (!playClip(nanClip('salt-crackle'), { vol: 0.35 + k * 0.5, rate: 0.9 + Math.random() * 0.2 })) synth.crackle(k)
+  },
+  bubble: (): void => {
+    if (!playClip(nanClip('salt-bubble'), { vol: 0.3, rate: 0.8 + Math.random() * 0.5 })) synth.bubble()
+  },
+  hiss: clip(nanClip('salt-sizzle'), synth.hiss, { vol: 0.6 }),
+  scrape: held(nanClip('salt-scrape'), synth.scrape, () => ({ vol: 0.5 }), { linger: 0.35 }),
+  /** The sandy shush, and the note that climbs with how full the basket is. */
+  pourSalt: (n: number) => {
+    if (!playClip(nanClip('salt-pour-salt'), { vol: 0.6 })) return synth.pourSalt(n)
+    const f = 523 * Math.pow(2, Math.min(n, 14) / 12)
+    tone(f, f, 0.18, 0.05, 'triangle', 0.1)
+  },
+  /** The soft pat, and a bell, higher each time. */
+  bag: (k: number) => {
+    if (!playClip(nanClip('salt-pat'), { vol: 0.6 })) return synth.bag(k)
+    const f = 784 * Math.pow(2, k / 6)
+    tone(f, f, 0.3, 0.05, 'sine', 0.05)
+  },
+  crow: clip(nanClip('salt-rooster'), synth.crow, { vol: 0.6 }),
+  cluck: clip(nanClip('salt-hen'), synth.cluck, { vol: 0.6 }),
+  wobble: clip(nanClip('salt-wobble'), synth.wobble, { vol: 0.6 }),
+  echo: clip(nanClip('salt-echo'), synth.echo, { vol: 0.7 }),
+  /** The scooter puttering past on the road (it used to go by in silence). */
+  scooter: () => void playClip(nanClip('salt-scooter'), { vol: 0.45 }),
+}
+
+/** The village around the hut: drizzle, birds, a far-off rooster, until stop(). */
+export const villageBed = () => bed(nanClip('salt-village'), 0.3)

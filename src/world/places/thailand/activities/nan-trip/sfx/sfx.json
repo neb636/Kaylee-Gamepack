@@ -1,0 +1,475 @@
+[
+ {
+  "id": "drive-engine",
+  "prompt": "Steady engine hum of a small SUV heard from inside the cabin, smooth even low rumble, no gear changes. Seamless loop, no music, no voices.",
+  "seconds": 6,
+  "loop": true
+ },
+ {
+  "id": "drive-scooter",
+  "prompt": "A small motor scooter putters past on a quiet country road, light buzzy engine coming near and going away. Clean close recording, no music, no voices.",
+  "seconds": 4
+ },
+ {
+  "id": "drive-tuktuk",
+  "prompt": "A Thai tuk-tuk three-wheeler drives past, rattly buzzing little engine coming near and going away. Clean close recording, no music, no voices.",
+  "seconds": 4
+ },
+ {
+  "id": "drive-songthaew",
+  "prompt": "A small pickup truck taxi drives past on a country road, diesel engine coming near and going away. Clean close recording, no music, no voices.",
+  "seconds": 4
+ },
+ {
+  "id": "drive-car",
+  "prompt": "A small car drives past on a country road, engine coming near and whooshing away. Clean close recording, no music, no voices.",
+  "seconds": 3.5
+ },
+ {
+  "id": "drive-honk",
+  "prompt": "One single honk of a real pickup truck horn, deep and full, about half a second. Recorded outdoors on a street, realistic, no music, no voices.",
+  "seconds": 1,
+  "influence": 0.7
+ },
+ {
+  "id": "drive-honk-tune",
+  "prompt": "Three short rhythmic taps on a real pickup truck horn, beep beep beeep, deep and full. Recorded outdoors on a street, realistic, no music, no voices.",
+  "seconds": 1.5,
+  "influence": 0.7
+ },
+ {
+  "id": "drive-moo",
+  "prompt": "A water buffalo gives one long, low, gentle moo in a field. Clean close recording, no music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "drive-cluck",
+  "prompt": "A few chickens clucking, bawk bawk, farmyard. Clean close recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "drive-monkey",
+  "prompt": "A small monkey chattering playfully. Clean close recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "drive-rail",
+  "prompt": "Cartoon rubber bumper boing, springy bouncy pinball bounce. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "drive-rain-roof",
+  "prompt": "Gentle rain pattering on a car roof heard from inside the car, steady, soft and cozy. Seamless loop, no music, no voices.",
+  "seconds": 8,
+  "loop": true
+ },
+ {
+  "id": "drive-wet-tyres",
+  "prompt": "Car tyres hissing on a wet road, steady, heard from inside the car. Seamless loop, no music, no voices.",
+  "seconds": 6,
+  "loop": true
+ },
+ {
+  "id": "drive-cloud-in",
+  "prompt": "Soft airy whoosh of driving into a thick cloud of fog, gentle swoosh fading. Clean close recording, no music, no voices.",
+  "seconds": 1.6
+ },
+ {
+  "id": "drive-screech",
+  "prompt": "Cartoon tyre squeal as a small car swerves round a corner, short and playful, not scary. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "drive-wiper",
+  "prompt": "A windscreen wiper sweeping once across a wet windshield, inside the car. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "drive-wiper-dry",
+  "prompt": "A windscreen wiper squeaking once across a dry windshield, rubbery squeak. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "drive-puddle",
+  "prompt": "A car driving through a big puddle, big splashy water spray. Clean close recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "drive-squeak",
+  "prompt": "A squeaky rubber toy elephant squeezed, a funny little squeaky trumpet. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "drive-country",
+  "prompt": "Peaceful countryside in the green hills of northern Thailand, birds singing, gentle breeze, distant insects, no traffic. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "drive-town",
+  "prompt": "A calm small-town street in northern Thailand, distant scooters, birds, gentle hum of a market far away, no horns. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "map-putter",
+  "prompt": "A tiny wind-up toy car motor buzzing, steady. Seamless loop, no music, no voices.",
+  "seconds": 3,
+  "loop": true
+ },
+ {
+  "id": "map-zoom",
+  "prompt": "A toy car zooms off quickly, cartoon zip. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "map-rain",
+  "prompt": "A short light rain sprinkle, a few gentle drops on leaves and water. Clean close recording, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "map-plip",
+  "prompt": "A small fish jumps out of a river and splashes back in, little plip and splash. Clean close recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "map-takeoff",
+  "prompt": "A small propeller airplane takes off and climbs away into the distance. Clean close recording, no music, no voices.",
+  "seconds": 3
+ },
+ {
+  "id": "map-flutter",
+  "prompt": "A small cloth flag flapping in the wind. Clean close recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "map-breeze",
+  "prompt": "Gentle outdoor breeze with soft birdsong, very calm and peaceful. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "shroom-mist",
+  "prompt": "A garden hose misting nozzle spraying a fine soft mist, steady gentle hiss. Seamless loop, no music, no voices.",
+  "seconds": 4,
+  "loop": true
+ },
+ {
+  "id": "shroom-pop",
+  "prompt": "A tiny wet cute bloop, like a small bubble popping out of mud, cartoon. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "shroom-swell",
+  "prompt": "A soft rubbery inflating whoomp, like a balloon puffing up quickly, cute cartoon. Clean close recording, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "shroom-stretch",
+  "prompt": "A short rubbery stretching creak, like pulling a rubber toy. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "shroom-twist",
+  "prompt": "A mushroom twisted and snapped off its stem, a crisp little pop. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "shroom-basket",
+  "prompt": "Something soft dropped into a wicker basket, light thump and creak. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "shroom-boing",
+  "prompt": "Big deep wobbly cartoon boing, like bouncing on a giant jelly mushroom. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "shroom-drip",
+  "prompt": "A single water drop falling into a small puddle, plink. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "shroom-plop",
+  "prompt": "A soft little plop of a mushroom slice landing on pizza dough. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "shroom-crackle",
+  "prompt": "A wood fire crackling in a brick pizza oven, cozy pops. Clean close recording, no music, no voices.",
+  "seconds": 3
+ },
+ {
+  "id": "shroom-slide",
+  "prompt": "A wooden pizza peel sliding across a stone oven floor. Clean close recording, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "shroom-snore",
+  "prompt": "A sleepy little dog snoring softly, one cute snore. Clean close recording, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "shroom-shake",
+  "prompt": "A wet dog shaking water off its fur, quick flappy shake. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "shroom-farm",
+  "prompt": "Inside a humid mushroom greenhouse on a farm, soft water drips, birds outside, gentle fan hum, calm. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "rice-sploosh",
+  "prompt": "A small hoof stepping into shallow water in a rice paddy, light splash. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "rice-step-grass",
+  "prompt": "A single soft footstep on grass. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "rice-step-wood",
+  "prompt": "A single small hoof step on a wooden boardwalk plank, light knock. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "rice-squelch",
+  "prompt": "A small hoof stepping in wet mud, squelch. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "rice-seedling",
+  "prompt": "A rice seedling pushed into soft wet mud, small squish. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "rice-gate",
+  "prompt": "A small wooden water gate sliding up in its slot, wooden creak. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "rice-gush",
+  "prompt": "Water rushing through an irrigation channel into a rice field, gushing. Clean close recording, no music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "rice-drain",
+  "prompt": "Water draining and gurgling out of a field, trickling away. Clean close recording, no music, no voices.",
+  "seconds": 2.5
+ },
+ {
+  "id": "rice-cheep",
+  "prompt": "A tiny bird cheeping twice, small sparrow chirp. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "rice-flutter",
+  "prompt": "A small bird flapping its wings and flying up. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "rice-swish",
+  "prompt": "A sickle swishing through rice stalks. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "rice-tie",
+  "prompt": "A bundle of rice straw tied up, rustle and tug. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "rice-thunk",
+  "prompt": "A bundle of rice straw dropped onto a wooden drying rack, soft thunk. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "rice-rustle",
+  "prompt": "Dry straw rustling as it puffs up. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "rice-frog",
+  "prompt": "A frog croaking ribbit twice, in a rice field. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "rice-duck",
+  "prompt": "A duck quacking twice. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "rice-splat",
+  "prompt": "A clump of wet mud landing, muddy splat. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "rice-chime",
+  "prompt": "A small bamboo and metal wind chime tinkling softly in the breeze. Clean close recording, no music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "rice-spin",
+  "prompt": "A quick whoosh of a straw hat spinning up into the air. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "rice-milk",
+  "prompt": "Pouring milk into a glass, short pour. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "rice-thwack",
+  "prompt": "A bundle of rice stalks slapped onto a wooden threshing board, thwack, grains rattling into a basket. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "rice-swing",
+  "prompt": "A quick swoosh of a bundle swung through the air. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "rice-toss",
+  "prompt": "A bundle of straw tossed onto a pile, rustle. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "rice-steam",
+  "prompt": "Soft steam hissing from a bamboo basket of sticky rice. Clean close recording, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "rice-wet",
+  "prompt": "A playful splash of water. Clean close recording, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "rice-field",
+  "prompt": "Rice fields in northern Thailand on a calm day, frogs, insects, distant birds, gentle breeze, peaceful. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "salt-plunge",
+  "prompt": "A wooden bucket dropped down a deep well hitting the water, deep echoing splash. Clean close recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "salt-glug",
+  "prompt": "A single glug of a bucket filling with water. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "salt-creak",
+  "prompt": "A rope creaking on a wooden beam as a heavy bucket is pulled up. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "salt-pour",
+  "prompt": "Water pouring steadily from a bucket into a wide metal pan. Seamless loop, no music, no voices.",
+  "seconds": 3,
+  "loop": true
+ },
+ {
+  "id": "salt-slosh",
+  "prompt": "Water sloshing into a wide shallow metal pan. Clean close recording, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "salt-log",
+  "prompt": "A log thrown onto a wood fire, woody clunk and the flames whooshing up. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "salt-blow",
+  "prompt": "A puff of air on a fire and the flames roaring up for a moment. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "salt-crackle",
+  "prompt": "A wood fire crackling, a few pops. Clean close recording, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "salt-bubble",
+  "prompt": "A single bubble bloop of boiling water. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "salt-sizzle",
+  "prompt": "Water splashed onto a hot fire, big hiss and sizzle of steam. Clean close recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "salt-scrape",
+  "prompt": "A wooden paddle scraping wet salt across a metal pan, gritty scrape. Seamless loop, no music, no voices.",
+  "seconds": 2,
+  "loop": true
+ },
+ {
+  "id": "salt-pour-salt",
+  "prompt": "Coarse salt poured into a woven basket, sandy shush. Clean close recording, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "salt-pat",
+  "prompt": "A small cloth bag of salt patted down onto a wooden shelf. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "salt-rooster",
+  "prompt": "A rooster crowing cock-a-doodle-doo once, in a village. Clean close recording, no music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "salt-hen",
+  "prompt": "A hen clucking buk buk bukaawk. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "salt-wobble",
+  "prompt": "Stacked woven baskets wobbling and rattling. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "salt-echo",
+  "prompt": "A small pebble dropped down a deep well, plunk and echo. Clean close recording, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "salt-scooter",
+  "prompt": "A small motor scooter putters past slowly on a wet village road, light buzzy engine coming near and going away. Clean close recording, no music, no voices.",
+  "seconds": 5
+ },
+ {
+  "id": "salt-village",
+  "prompt": "A quiet mountain village morning in northern Thailand, light drizzle, birds, a distant rooster now and then, calm. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "cup-engine",
+  "prompt": "A small go-kart engine running at steady speed, buzzy little motor, even pitch. Seamless loop, no music, no voices.",
+  "seconds": 4,
+  "loop": true
+ },
+ {
+  "id": "cup-honk",
+  "prompt": "Two quick beeps of a real motor scooter horn on a street in Asia, meep meep. Recorded outdoors on a street, realistic, no music, no voices.",
+  "seconds": 1,
+  "influence": 0.7
+ },
+ {
+  "id": "cup-grass",
+  "prompt": "Small kart tyres bumping and rumbling over grass. Seamless loop, no music, no voices.",
+  "seconds": 3,
+  "loop": true
+ },
+ {
+  "id": "cup-bridge",
+  "prompt": "Karts rolling over a bamboo bridge, bamboo creaking and knocking. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ }
+]

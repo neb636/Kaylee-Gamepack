@@ -153,7 +153,7 @@ and `docs/3d-characters.md`.
 
 **Skills** (in `.agents/skills/`, shared by Claude Code and Codex): `pitch` (three pitch cards), `table-read` (hear a
 script), `reel` (film the game), `ship` (the review page and the PR, fixes too), `playtest` (a recording of Kaylee into
-fixes), `kaylee-week` (the play diary). **Agent:** `fresh-eyes` reviews a toy it hasn't seen before check-ins 3 and 4.
+fixes), `kaylee-week` (the play diary), `sfx` (first-pass ElevenLabs sound effects). **Agent:** `fresh-eyes` reviews a toy it hasn't seen before check-ins 3 and 4.
 
 ## Rules the checks enforce
 

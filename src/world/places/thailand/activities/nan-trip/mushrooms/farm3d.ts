@@ -87,7 +87,7 @@ import {
   type ShroomColor,
 } from './layout'
 import { buildBasket, collar, heapSpot, ShroomKit } from './shroom'
-import { shroomSfx as sfx } from './sounds'
+import { farmBed, shroomSfx as sfx } from './sounds'
 
 export interface FarmEvents extends LegEvents {
   /** A new round began (the address bar follows). */
@@ -288,6 +288,7 @@ export class MushroomFarm extends Stage {
 
   constructor(renderer: WebGLRenderer, private ev: FarmEvents, start: { round: Round; basket: string }) {
     super(renderer, ev)
+    this.bag.add({ dispose: farmBed() })
     const { scene, bag } = this
     scene.background = new Color('#DCD6E8')
     this.rig.fov = 32

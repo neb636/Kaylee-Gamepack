@@ -42,6 +42,8 @@ export interface TrafficEvents {
   moo(): void
   cluck(): void
   chatter(): void
+  /** Something oncoming is about to go by her (once each; for its engine's sound). */
+  pass?(kind: MoverKind): void
   /** Feathers or dust at a spot. */
   puff(x: number, y: number, z: number): void
 }
@@ -66,6 +68,8 @@ interface Mover {
   /** Pulled onto the verge for her (and tooted). */
   yielded: boolean
   replied: boolean
+  /** Gone by her (its pass sound played). */
+  passed: boolean
   hop: number
   i: number
 }
@@ -333,6 +337,10 @@ export class Traffic {
     m.v += (wantV - m.v) * (1 - Math.exp(-dt * 2.5))
     m.lat += (wantLat - m.lat) * (1 - Math.exp(-dt * 2))
     m.s -= m.v * dt
+    if (!m.passed && m.v > 1 && gap < 14) {
+      m.passed = true
+      ev.pass?.(m.plan.kind)
+    }
     // The blind car beeps first if she hasn't, as it comes round (friendly: no failing).
     if (m.plan.blind !== undefined && !m.replied && gap < 22) {
       m.replied = true
@@ -427,7 +435,7 @@ export class Traffic {
     root.add(blobShadow(plan.kind === 'scooter' ? 0.9 : 1.9, bag))
     root.visible = false
     this.root.add(root)
-    return { plan, root, body, wheels, lamps, s: plan.from, lat: 0, v: 0, state: 'wait', yielded: false, replied: false, hop: 0, i }
+    return { plan, root, body, wheels, lamps, s: plan.from, lat: 0, v: 0, state: 'wait', yielded: false, replied: false, passed: false, hop: 0, i }
   }
 
   // ---------------------------------------------------------------- the animals

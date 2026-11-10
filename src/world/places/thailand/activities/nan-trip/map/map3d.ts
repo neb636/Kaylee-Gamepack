@@ -31,7 +31,7 @@ import { Floaters } from '../mushrooms/fx'
 import { buildDiorama, PLACE_SCALE, type Diorama } from './diorama'
 import { BOARD, CAR_SPEED, CLOUDS, DRAG_SPEED, FISH, heightAt, HOME_AFTER, LAOS_FLAG, liveStops, modelAt, PLACE_IDS, PLACES, RUNWAY, STAMP_Y, STOP_PLACE, STOPS, THAI_FLAG, type PlaceId, type Stop } from './layout'
 import { buildNet, nearest, route, STEP } from './net'
-import { mapSfx as sfx } from './sounds'
+import { mapBed, mapSfx as sfx } from './sounds'
 
 export interface MapEvents extends LegEvents {
   /** The little Pajero got to the place she picked: drive there for real. */
@@ -102,6 +102,7 @@ export class NanMap extends Stage {
 
   constructor(renderer: WebGLRenderer, private ev: MapEvents, start: { stops: Stop[]; from?: PlaceId | null; cup?: boolean }) {
     super(renderer, ev)
+    this.bag.add({ dispose: mapBed() })
     const { scene, bag } = this
     this.scene.background = new Color('#E4DDF4')
     this.rig.fov = 34

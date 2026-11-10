@@ -99,7 +99,7 @@ import {
   type Round,
   type V3,
 } from './layout'
-import { riceSfx as sfx } from './sounds'
+import { fieldBed, riceSfx as sfx } from './sounds'
 import { FarmWater } from './water'
 
 export interface RiceEvents extends LegEvents {
@@ -359,6 +359,7 @@ export class RiceFarm extends Stage {
 
   constructor(renderer: WebGLRenderer, private ev: RiceEvents, start: { round: Round }) {
     super(renderer, ev)
+    this.bag.add({ dispose: fieldBed() })
     const { scene, bag } = this
     scene.background = new Color(SKY)
     this.rig.fov = 28

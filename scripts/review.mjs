@@ -17,6 +17,8 @@
 //     "tableReads": [["thailand", "mall.barber"]],
 //     "reels": [{ "name": "barber", "moments": ["barber"] }],      // reel.mjs names: qa.mjs motion runs or #/links~s
 //     "links": [{ "label": "Play it", "hash": "#/world/thailand/mall-trip/barber" }],
+//     "listens": [{ "title": "The salt hut", "audio": "sfx/salt.mp3", "items": ["the bucket down the well", "..."] }],
+//                                                   // sound effects: one track each, the items numbered in play order
 //     "pitches": [{                                                 // check-in 1 only: three cards, Dad picks one
 //       "title": "Snow Cones with Pip", "image": "pitch/snow-cones.png",   // a picture, relative to review/
 //       "finger": "Tilt the syrup bottle and paint the ice.",
@@ -125,6 +127,11 @@ ${r.audio ? `<audio controls preload="metadata" src="table-read/${esc(r.audio)}"
 <p><a href="table-read/${esc(r.page)}">Read along: who says what, and when</a></p></div>`
     })
     .join('\n')
+  const listenHtml = (brief.listens ?? [])
+    .map((l) => `<div class="card"><h3>${esc(l.title)}</h3>
+<audio controls preload="metadata" src="${esc(l.audio)}"></audio>
+<ol class="meta">${(l.items ?? []).map((i) => `<li>${esc(i)}</li>`).join('')}</ol></div>`)
+    .join('\n')
   const qs = (brief.questions ?? []).slice(0, 3)
   const qHtml = qs
     .map((q, i) => `<li><p>${esc(q)}</p><textarea rows="2" data-q="${i}" placeholder="Your answer (a word is fine)"></textarea></li>`)
@@ -165,6 +172,7 @@ ${brief.kaylee ? `<p class="kaylee">${esc(brief.kaylee)}</p>` : ''}
 ${pitchHtml ? `<h2>Pick one</h2><div class="pitches">${pitchHtml}</div><p class="meta" id="picked"></p>` : ''}
 ${reelHtml ? `<h2>Watch</h2>${reelHtml}` : ''}
 ${readHtml ? `<h2>Hear the script</h2>${readHtml}` : ''}
+${listenHtml ? `<h2>Listen</h2>${listenHtml}` : ''}
 ${qHtml ? `<h2>Your call</h2><ol>${qHtml}</ol><button id="copy">Copy my answers</button>${prLink ? `<a class="pill" href="${prLink}">Open the PR to paste them</a>` : ''}<p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>` : ''}
 ${links ? `<h2>Play it yourself (optional)</h2><p>${links}</p>` : ''}
 </main>

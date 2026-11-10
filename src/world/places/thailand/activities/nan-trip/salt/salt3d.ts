@@ -88,7 +88,7 @@ import {
   WOODPILE,
   type Round,
 } from './layout'
-import { saltSfx as sfx } from './sounds'
+import { villageBed, saltSfx as sfx } from './sounds'
 import { stepVillage } from './village'
 
 export interface SaltEvents extends LegEvents {
@@ -223,6 +223,7 @@ export class SaltHut extends Stage {
 
   constructor(renderer: WebGLRenderer, private ev: SaltEvents, start: { round: Round }) {
     super(renderer, ev)
+    this.bag.add({ dispose: villageBed() })
     const { scene, bag } = this
     scene.background = new Color('#DCE0EC')
     this.rig.fov = 32
@@ -1151,6 +1152,7 @@ export class SaltHut extends Stage {
     this.scooterT -= dt
     const sc = this.hut.scooter
     if (this.scooterT < 0) {
+      if (sc.position.x <= -9.99) sfx.scooter()
       sc.position.x += dt * 2.4
       sc.position.y = Math.abs(Math.sin(t * 9)) * 0.015
       for (const w of this.hut.village.wheels) w.rotation.z -= (dt * 2.4) / 0.14
