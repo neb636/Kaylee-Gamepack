@@ -2758,13 +2758,6 @@
     "file": "ccfda7b2865a.mp3"
   },
   {
-    "text": "That's one to five in Thai!",
-    "voice": "lung",
-    "sig": "a47a4251da",
-    "ms": 2474,
-    "file": "4bac9c3a1c4e.mp3"
-  },
-  {
     "text": "Sticky rice, for my helper!",
     "voice": "lung",
     "sig": "a47a4251da",
@@ -3619,11 +3612,11 @@
     "file": "4288e32bd873.mp3"
   },
   {
-    "text": "Sawasdee ka! Three Cups, dear!",
+    "text": "Sawasdee ka! I won three Cups!",
     "voice": "taeng",
     "sig": "0da1b1b1e5",
-    "ms": 3384,
-    "file": "dba51cc49ec8.mp3"
+    "ms": 4296,
+    "file": "80a215898565.mp3"
   },
   {
     "text": "Oh! Is it time?",
@@ -3703,18 +3696,18 @@
     "file": "7a07475f252a.mp3"
   },
   {
-    "text": "My forest! Catch me if you can!",
+    "text": "Vroom! Here I go!",
     "voice": "moon",
     "sig": "36844a3892",
-    "ms": 3096,
-    "file": "423cbef1bab4.mp3"
+    "ms": 2736,
+    "file": "04f1f21e2200.mp3"
   },
   {
-    "text": "My rice steps, dear!",
+    "text": "Race you down the hill!",
     "voice": "taeng",
     "sig": "0da1b1b1e5",
-    "ms": 2472,
-    "file": "77f529ecfdd5.mp3"
+    "ms": 1944,
+    "file": "b1890d9ac046.mp3"
   },
   {
     "text": "Up, up, into the clouds!",
@@ -3757,13 +3750,6 @@
     "sig": "ed7dbdac3d",
     "ms": 1704,
     "file": "c5504e3fd999.mp3"
-  },
-  {
-    "text": "That's three, two, one in Thai!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3144,
-    "file": "439d79bac845.mp3"
   },
   {
     "text": "Boing! A bouncy mushroom!",
@@ -3976,11 +3962,11 @@
     "file": "71db4c38d5fb.mp3"
   },
   {
-    "text": "Everybody say three!",
+    "text": "Everybody, smile!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 1531,
-    "file": "afc9e7235776.mp3"
+    "ms": 1968,
+    "file": "a00e1f1eba86.mp3"
   },
   {
     "text": "Our trip to Nan!",
