@@ -345,7 +345,9 @@ export class Sunset implements World3D {
     this.rig.setShot(this.shot())
     this.rig.update(dt)
     SEE.uEye.value.copy(this.rig.camera.position)
-    SEE.uFocus.value.copy(this.camCenter())
+    // (The see-through hole is round the three of them, not the middle of the frame: what's beyond them stays whole.)
+    SEE.uFocus.value.copy(this.kaylee.root.position).add(this.ji.root.position).add(this.nick.root.position).divideScalar(3)
+    SEE.uFocus.value.y += 0.9
     // The sun faces the camera.
     this.sunAt(this.elev, this.sun.position)
     this.sun.lookAt(this.rig.camera.position)

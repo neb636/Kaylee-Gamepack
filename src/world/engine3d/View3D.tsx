@@ -11,7 +11,7 @@ import type { CameraRig } from './camera'
 import { camLab, type LabWorld } from './camLab'
 import { automated } from './flags'
 import { frameLoop } from './loop'
-import { acquireRenderer, dropRenderer, releaseRenderer } from './renderer'
+import { acquireRenderer, dropRenderer, releaseRenderer, warmUp } from './renderer'
 import { ROAM, type Roamable } from './roam'
 import { RoamPad, type RoamPadHandle } from './RoamPad'
 
@@ -192,10 +192,10 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
         () => pausedRef.current || world.calm,
       )
     }
-    // Compile the shaders before the first frame so the first seconds don't stutter. (three.js polls every material
-    // until its program is ready, and throws if one was disposed meanwhile: an unmount waits for it, below.)
+    // Compile the shaders before the first frame so the first seconds don't stutter. (It waits for every material's
+    // program; an unmount waits for it, below, and warmUp drops a material another world disposed meanwhile.)
     let compiled = false
-    const ready = renderer.compileAsync(world.scene, world.rig.camera)
+    const ready = warmUp(renderer, world.scene, world.rig.camera)
     ready.then(() => (compiled = true), () => (compiled = true))
     ready.then(begin, begin)
 
