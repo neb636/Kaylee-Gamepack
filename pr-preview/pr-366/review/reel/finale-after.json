@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "finale-after",
+  "title": "Finale after",
+  "video": "finale-after.mp4",
+  "gif": "finale-after.gif",
+  "seconds": 63,
+  "browser": "webkit",
+  "viewport": "iphone-portrait",
+  "moments": [
+    {
+      "name": "thailand-samet-finale-shapes",
+      "where": "thailand-samet-finale-shapes",
+      "seconds": 14,
+      "fps": 94.5,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-finale-badge",
+      "where": "thailand-samet-finale-badge",
+      "seconds": 14,
+      "fps": 99.8,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-finale-sunset-idle",
+      "where": "thailand-samet-finale-sunset-idle",
+      "seconds": 30,
+      "fps": 95.5,
+      "status": "ok"
+    }
+  ]
+}
