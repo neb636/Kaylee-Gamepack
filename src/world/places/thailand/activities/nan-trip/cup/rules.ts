@@ -16,8 +16,11 @@ import { flag } from '../../../../../engine3d/flags'
 import { HOME, RIVAL_IDS, type Result, type RivalId } from './rivals'
 import { TRACK_IDS, type TrackId } from './track'
 
-/** Is the Cup on the trip? Off until Dad turns it on (step 5, the full loop). */
-export const CUP_OPEN = false
+/** Is the Cup on the trip? On since the full loop (step 5); false hides it again (`?cup=1` still tries it). */
+export const CUP_OPEN = true
+
+/** What the Cup in her Trophy Room says. */
+export const CUP_TROPHY = 'Nan Mountain Cup Champion'
 
 /** Read once when the trip mounts: on when the link has `cup` (`1`, or the record the trip carries while it's on). */
 export const cupOpen = () => CUP_OPEN || !!flag('cup')

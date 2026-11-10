@@ -1,6 +1,6 @@
 // The rivals as toy animals on the chibi rig (the look step; greybox 1 had blocks): Grandma Taeng the tortoise, Pao the
 // hornbill postman and Moon the sun bear (rivals.ts RIVAL_LOOKS), built by the shared rig (engine3d/characters/animal.ts)
-// with their faces' small life (they blink; their mouths will move with their voices in the full loop).
+// with their faces' small life (they blink; their mouths move with their voices, `taeng`, `pao`, `moon` in cast.json).
 // In a kart they sit low in the seat with both hands on the wheel, lean into the bends and look where they're going;
 // standing (the podium) their arms rest at their sides. Either way they hop when tapped or bumped and wave when they
 // win. Grandma Taeng naps at the wheel on the grid (her head drops, her eyes close, she sways). A bee buzzes round Moon

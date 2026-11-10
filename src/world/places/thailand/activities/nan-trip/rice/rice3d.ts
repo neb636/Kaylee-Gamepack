@@ -712,9 +712,7 @@ export class RiceFarm extends Stage {
     this.cheer()
     const mid = new Vector3(BASKET[0], 0.6, BASKET[2])
     this.sparkles.burst(mid, 12, 1, 1.4, 1, 0.06)
-    // Lung's "one to five" (2.5 s) right after his "Hah!", then his sticky rice line once it's done (two of his lines
-    // would cut each other off), then the deck once that's done too.
-    this.after(0.5, () => this.once('counted', R.counted))
+    // (No "That's one to five in Thai!": Kaylee speaks Thai, Dad 2026-11-09.) Then his sticky rice line, then the deck.
     this.after(1.0, () => {
       this.basketShake = -1.2
       sfx.blow()

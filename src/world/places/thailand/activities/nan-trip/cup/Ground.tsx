@@ -9,7 +9,7 @@ import type { WebGLRenderer } from 'three'
 import { sounds } from '../../../../../../sdk'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
-import { TripGuide } from '../../../trip/legs/Guide'
+import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { drawPhoto } from '../photo'
 import { Snapshot } from '../Snapshot'
 import { CupGround, GROUND_ANCHORS, type GroundStart, type GroundUi } from './ground3d'
@@ -34,6 +34,7 @@ export function Ground({ start, onRace, onNext, last = false, onMap }: Props) {
   const [ui, setUi] = useState<GroundUi>(NONE)
   const worldRef = useRef<CupGround | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
   const startRef = useRef(start)
   const race = useRef(onRace)
   race.current = onRace
@@ -47,7 +48,7 @@ export function Ground({ start, onRace, onNext, last = false, onMap }: Props) {
   const photo = useMemo(() => (ui.photo ? drawPhoto('cup') : ''), [ui.photo])
 
   const make = (renderer: WebGLRenderer) => {
-    const w = new CupGround(renderer, { race: (t) => race.current(t), ui: setUi }, startRef.current)
+    const w = new CupGround(renderer, { race: (t) => race.current(t), ui: setUi, say: (l) => guideRef.current?.speak(l) }, startRef.current)
     w.setHintElement(hintRef.current)
     return w
   }
@@ -104,7 +105,7 @@ export function Ground({ start, onRace, onNext, last = false, onMap }: Props) {
           🏁 Tap to wake the race ground
         </button>
       )}
-      {mode === 'webgl' && <TripGuide hidden={ui.end} />}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={ui.end} corner={{ width: 'clamp(92px, 15vmin, 128px)', height: 'clamp(92px, 15vmin, 128px)' }} />}
       <AnimatePresence>{ui.photo && mode === 'webgl' && <Snapshot key="cup" src={photo} />}</AnimatePresence>
       <div style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 18px)', bottom: 'calc(var(--safe-bottom, 0px) + 18px)', display: 'flex', gap: 'clamp(12px, 2.6vw, 24px)', zIndex: 50 }}>
         <AnimatePresence>

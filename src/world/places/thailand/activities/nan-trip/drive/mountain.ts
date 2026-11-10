@@ -699,8 +699,8 @@ export class NanDrive implements World3D {
       const T = L.nan.drive.to
       const line = { city: T.market, valley: T.mushrooms, sky: this.to === 'salt' ? T.salt : T.rice, three: T.view }[this.r.id]
       this.told.add('arrive')
-      // (The Cup's race ground has no line yet: its voices come with the full loop.)
-      if (!(this.r.id === 'city' && this.cup)) this.speak(line)
+      // (At the Cup's race ground, Daddy: "Look! A race!")
+      this.speak(this.r.id === 'city' && this.cup ? L.nan.cup.arrive : line)
       this.ji.react('wave')
     }
     if (this.phase !== 'drive') {

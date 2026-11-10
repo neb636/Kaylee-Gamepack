@@ -64,10 +64,7 @@ export function dressKart(kart: Kart, who: RacerId, bag: Bag): KartDress {
       const a = (i / 16) * Math.PI * 2
       canopy.push(P.sphere(0.07, i % 2 ? '#FFFFFF' : '#FFD6E6', { at: [Math.cos(a) * 0.76, -0.16, Math.sin(a) * 0.76], scale: [1, 0.6, 1] }, 8))
     }
-    for (let i = 0; i < 8; i++) {
-      const a = (i / 8) * Math.PI * 2
-      canopy.push(P.cyl(0.01, 0.01, 0.8, '#FFFFFF', { at: [Math.cos(a) * 0.39, -0.01, Math.sin(a) * 0.39], rot: [Math.sin(a) * 1.2, 0, -Math.cos(a) * 1.2] }, 4))
-    }
+    // (No ribs: tilted sticks poked out through the canopy, Dad 2026-11-09.)
     spin.add(solid(merge(canopy), bag, 1.5))
     kart.body.add(spin)
   } else if (who === 'pao') {

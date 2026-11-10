@@ -34,6 +34,9 @@ const WHO: Record<string, { name: string; icon: string; color: string }> = {
   pelican: { name: 'The captain', icon: '🐦', color: '#8FB4F2' },
   sunbear: { name: 'The taxi driver', icon: '🐻', color: '#7FD6A3' },
   gecko: { name: 'The fire dancers', icon: '🦎', color: '#FF9A6B' },
+  taeng: { name: 'Grandma Taeng', icon: '🐢', color: '#7BBF8E' },
+  pao: { name: 'Pao', icon: '🐦', color: '#FF9A3C' },
+  moon: { name: 'Moon', icon: '🐻', color: '#8A6450' },
 }
 
 interface Props {
