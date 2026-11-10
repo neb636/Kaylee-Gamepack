@@ -4,7 +4,7 @@
 //
 // We create the WebGL2 context ourselves: if three.js creates it and that fails, it logs console.error first (the
 // smoke tests fail on any console error) and WebGL1 isn't supported any more. Every iPad has WebGL2.
-import { NoToneMapping, SRGBColorSpace, WebGLRenderer } from 'three'
+import { NoToneMapping, SRGBColorSpace, WebGLRenderer, type Camera, type Object3D } from 'three'
 import { automated } from './flags'
 
 let shared: { renderer: WebGLRenderer; users: number; timer?: ReturnType<typeof setTimeout> } | null = null
@@ -44,4 +44,29 @@ export function releaseRenderer(renderer: WebGLRenderer) {
 /** After a lost context the renderer can't be reused: the next mount makes a new one. */
 export function dropRenderer(renderer: WebGLRenderer) {
   if (shared?.renderer === renderer) shared = null
+}
+
+/**
+ * `renderer.compileAsync`, minus its crash. three.js polls every material of the scene until its shader program is
+ * ready, and throws inside that poll ("reading 'isReady'", uncaught: the promise never settles and the world is never
+ * drawn) when a material is disposed meanwhile. That happens when two worlds share a material and the first one is
+ * freed while the second warms up: a section left during its own warm-up is freed when its shaders are done (View3D),
+ * which can land in the middle of the next section's. A disposed material has nothing left to wait for, so it's dropped.
+ */
+export function warmUp(renderer: WebGLRenderer, scene: Object3D, camera: Camera): Promise<void> {
+  const pending = renderer.compile(scene, camera)
+  const props = renderer.properties
+  return new Promise((resolve) => {
+    const check = () => {
+      for (const m of pending) {
+        const program = (props.get(m) as { currentProgram?: { isReady(): boolean } }).currentProgram
+        if (!program || program.isReady()) pending.delete(m)
+      }
+      if (pending.size === 0) resolve()
+      else setTimeout(check, 10)
+    }
+    // (Without parallel compiling, give the driver a moment first, as three.js does.)
+    if (renderer.extensions.has('KHR_parallel_shader_compile')) check()
+    else setTimeout(check, 10)
+  })
 }
