@@ -7,18 +7,18 @@
     "file": "3bb97b151bd4.mp3"
   },
   {
-    "text": "Let's fly around the world, Kaylee! Tap the sparkly pin.",
+    "text": "Let's fly around the world, Kaylee! Tap an animal to visit.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3974,
-    "file": "965d4aa4c6d2.mp3"
+    "ms": 5016,
+    "file": "3b7fa4ed4c1d.mp3"
   },
   {
-    "text": "Let's fly around the world, Kaylee! Click the sparkly pin.",
+    "text": "Let's fly around the world, Kaylee! Click an animal to visit.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 5064,
-    "file": "0a7174c0fbef.mp3"
+    "ms": 4464,
+    "file": "dfb0048a9bf4.mp3"
   },
   {
     "text": "Where should we fly?",
@@ -84,25 +84,60 @@
     "file": "fd9d2c2c836f.mp3"
   },
   {
-    "text": "We'll fly to Egypt soon! It has pyramids!",
+    "text": "Australia!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4377,
-    "file": "28d4d1287874.mp3"
+    "ms": 1006,
+    "file": "0414ea933854.mp3"
   },
   {
-    "text": "We'll fly to China soon! It has pandas!",
+    "text": "Canada!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4065,
-    "file": "541a047b1f47.mp3"
+    "ms": 671,
+    "file": "af90d2b4b389.mp3"
   },
   {
-    "text": "We'll fly to Thailand soon! It has elephants!",
+    "text": "China!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4376,
-    "file": "0391e0b86cdb.mp3"
+    "ms": 709,
+    "file": "6a2cbbc5423a.mp3"
+  },
+  {
+    "text": "Egypt!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 699,
+    "file": "f54d8414427a.mp3"
+  },
+  {
+    "text": "Italy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 643,
+    "file": "4b75a0cba3b8.mp3"
+  },
+  {
+    "text": "Peru!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 690,
+    "file": "9931dcf87ecc.mp3"
+  },
+  {
+    "text": "The Poles!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1560,
+    "file": "0beabe6ed9d1.mp3"
+  },
+  {
+    "text": "Thailand!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1152,
+    "file": "f31316816de9.mp3"
   },
   {
     "text": "This is your passport, Kaylee! Every stamp is a place you helped.",
@@ -446,48 +481,6 @@
     "sig": "ed7dbdac3d",
     "ms": 1440,
     "file": "30fa02656d45.mp3"
-  },
-  {
-    "text": "Australia!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1006,
-    "file": "0414ea933854.mp3"
-  },
-  {
-    "text": "China!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 709,
-    "file": "6a2cbbc5423a.mp3"
-  },
-  {
-    "text": "Egypt!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 699,
-    "file": "f54d8414427a.mp3"
-  },
-  {
-    "text": "Italy!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 643,
-    "file": "4b75a0cba3b8.mp3"
-  },
-  {
-    "text": "Peru!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 690,
-    "file": "9931dcf87ecc.mp3"
-  },
-  {
-    "text": "Canada!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 671,
-    "file": "af90d2b4b389.mp3"
   },
   {
     "text": "Your room!",
