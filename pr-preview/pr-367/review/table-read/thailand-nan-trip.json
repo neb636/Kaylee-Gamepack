@@ -19,6 +19,14 @@
       ]
     },
     {
+      "key": "nan.trip.three",
+      "text": "Everybody, smile!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Everybody say three!"
+    },
+    {
       "key": "nan.trip.sticker",
       "text": "Pink mushroom sticker! Mushrooms love the rain.",
       "flags": [
@@ -121,13 +129,16 @@
         "trip",
         "three"
       ],
-      "text": "Everybody say three!",
+      "text": "Everybody, smile!",
       "voice": "ji",
       "key": "nan.trip.three",
       "part": "nan › trip",
       "when": "",
-      "ms": 1531,
-      "flags": []
+      "ms": 1968,
+      "flags": [
+        "changed"
+      ],
+      "was": "Everybody say three!"
     },
     {
       "path": [

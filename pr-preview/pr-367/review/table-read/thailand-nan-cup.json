@@ -6,8 +6,8 @@
   "intro": "The Nan Mountain Cup (activities/nan-trip/cup/, plan: thailand/nan-cup.md): a kart race on three mountain tracks against three Nan locals (cast.json): Grandma Taeng the tortoise, Pao the hornbill postman and Moon the sun bear honey seller. Sparkle says what's new and counts down in Thai; the rivals tease, bump and are good sports in their own voices; Mommy and Daddy cheer from the grandstand. Kaylee never talks: she giggles.",
   "page": "thailand-nan-cup.html",
   "audio": null,
-  "lines": 52,
-  "seconds": 120,
+  "lines": 51,
+  "seconds": 117,
   "missing": 0,
   "names": 3,
   "flags": [
@@ -34,7 +34,7 @@
     },
     {
       "key": "nan.cup.taeng.0",
-      "text": "Sawasdee ka! Three Cups, dear!",
+      "text": "Sawasdee ka! I won three Cups!",
       "flags": [
         "long",
         "new"
@@ -121,15 +121,14 @@
     },
     {
       "key": "nan.cup.tease.forest",
-      "text": "My forest! Catch me if you can!",
+      "text": "Vroom! Here I go!",
       "flags": [
-        "long",
         "new"
       ]
     },
     {
       "key": "nan.cup.tease.steps",
-      "text": "My rice steps, dear!",
+      "text": "Race you down the hill!",
       "flags": [
         "new"
       ]
@@ -181,14 +180,6 @@
       "key": "nan.cup.count.3",
       "text": "Go!",
       "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "nan.cup.counted",
-      "text": "That's three, two, one in Thai!",
-      "flags": [
-        "long",
         "new"
       ]
     },
@@ -446,12 +437,12 @@
         "taeng",
         "0"
       ],
-      "text": "Sawasdee ka! Three Cups, dear!",
+      "text": "Sawasdee ka! I won three Cups!",
       "voice": "taeng",
       "key": "nan.cup.taeng.0",
       "part": "nan › cup › taeng",
       "when": "Tap a rival on the board or the podium (each in turn).",
-      "ms": 3384,
+      "ms": 4296,
       "flags": [
         "long",
         "new"
@@ -653,14 +644,13 @@
         "tease",
         "forest"
       ],
-      "text": "My forest! Catch me if you can!",
+      "text": "Vroom! Here I go!",
       "voice": "moon",
       "key": "nan.cup.tease.forest",
       "part": "nan › cup › tease",
       "when": "The race: the home rival's tease on the grid, Sparkle's one instruction (her first race), the lights in Thai.",
-      "ms": 3096,
+      "ms": 2736,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -671,12 +661,12 @@
         "tease",
         "steps"
       ],
-      "text": "My rice steps, dear!",
+      "text": "Race you down the hill!",
       "voice": "taeng",
       "key": "nan.cup.tease.steps",
       "part": "nan › cup › tease",
       "when": "The race: the home rival's tease on the grid, Sparkle's one instruction (her first race), the lights in Thai.",
-      "ms": 2472,
+      "ms": 1944,
       "flags": [
         "new"
       ]
@@ -798,23 +788,6 @@
       "when": "Sparkle's countdown (3, 2, 1, go).",
       "ms": 611,
       "flags": [
-        "new"
-      ]
-    },
-    {
-      "path": [
-        "nan",
-        "cup",
-        "counted"
-      ],
-      "text": "That's three, two, one in Thai!",
-      "voice": "sparkle",
-      "key": "nan.cup.counted",
-      "part": "nan › cup",
-      "when": "",
-      "ms": 3144,
-      "flags": [
-        "long",
         "new"
       ]
     },
