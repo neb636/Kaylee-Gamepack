@@ -1,12 +1,8 @@
 {
  "title": "Nan: real sound effects",
  "checkIn": "fix",
- "kaylee": "The toy horns are gone: Nan's traffic and her kart now honk like real vehicles.",
- "questions": [
-  "Road honk: A, B or C?",
-  "Pulling-over toot: A, B or C?",
-  "Her kart: A, B or C?"
- ],
+ "kaylee": "Nan's traffic honks like real trucks now, and her kart has a real scooter horn.",
+ "questions": [],
  "links": [
   {
    "label": "The mountain road (honks)",
@@ -15,30 +11,12 @@
  ],
  "listens": [
   {
-   "title": "The road honk (cars, songthaews, tuk-tuks)",
-   "audio": "sfx/honk-options.mp3",
+   "title": "The horns you picked",
+   "audio": "sfx/horns.mp3",
    "items": [
-    "A: full-size car (in the game now)",
-    "B: pickup truck, deeper",
-    "C: SUV, mellow"
-   ]
-  },
-  {
-   "title": "Pulling over and tooting at her",
-   "audio": "sfx/tune-options.mp3",
-   "items": [
-    "A: two quick taps (in the game now)",
-    "B: three taps, deeper",
-    "C: five cheerful beeps"
-   ]
-  },
-  {
-   "title": "Her kart at the Cup",
-   "audio": "sfx/kart-options.mp3",
-   "items": [
-    "A: small motorcycle",
-    "B: compact car (in the game now)",
-    "C: motor scooter"
+    "Road honk: pickup truck",
+    "Pulling-over toot: three taps",
+    "Her kart: motor scooter"
    ]
   }
  ]
