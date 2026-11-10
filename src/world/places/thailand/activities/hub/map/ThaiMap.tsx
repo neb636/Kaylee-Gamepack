@@ -13,6 +13,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { sounds } from '../../../../../../sdk'
+import { onDevice } from '../../../../../../sdk/device'
 import { worldLink } from '../../../../../../router'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type AnchorInput, type RenderMode } from '../../../../../engine3d/View3D'
@@ -163,7 +164,7 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
           }}
           style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(227,243,255,.88)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: 'var(--ink)' }}
         >
-          🗺️ Tap to wake the map
+          🗺️ {onDevice('Tap to wake the map', 'Click to wake the map')}
         </button>
       )}
 

@@ -640,6 +640,10 @@ export class ThaiMapWorld implements World3D {
     if (this.picked) return
     if (id?.startsWith('pin:')) {
       const p = this.places.find((k) => k.id === id.slice(4))!
+      // A pin's target is big and sits over everything: if her finger is really on a toy passing by (the tuk-tuk
+      // driving past Bangkok on a small screen), the toy answers instead of the place opening.
+      const near = this.toyUnder(x, y, p)
+      if (near) return this.poke(near)
       p.t = 0
       this.picked = p
       // The camera swoops down to the place she picked.
@@ -676,6 +680,30 @@ export class ThaiMapWorld implements World3D {
       sounds.pop()
       for (let i = 0; i < 7; i++) this.spray.emit(at.x, at.y + 0.05, at.z, (Math.random() - 0.5) * 0.9, 0.9 + Math.random() * 0.6, (Math.random() - 0.5) * 0.9, 0.7, 0.08, 2 + (i % 2) + (i % 3 === 0 ? 3 : 0))
     }
+  }
+
+  /** The toy her finger is on, when it is nearer to the toy than to this place's pin and model (null: the place). */
+  private toyUnder(x: number, y: number, p: Place): ToyId | null {
+    const head = this.toScreen(tmp.copy(p.pin.position).setY(p.pin.position.y + 0.5))
+    const hx = head.x
+    const hy = head.y
+    const foot = this.toScreen(tmp.copy(p.at).setY(p.at.y + 0.2))
+    // Distance to the line from the pin's head down to the model.
+    const dx = foot.x - hx
+    const dy = foot.y - hy
+    const k = clamp(((x - hx) * dx + (y - hy) * dy) / Math.max(1, dx * dx + dy * dy), 0, 1)
+    const toPin = Math.hypot(x - (hx + dx * k), y - (hy + dy * k))
+    let best: ToyId | null = null
+    let bestD = toPin
+    for (const toy of this.toys.values()) {
+      const s = this.toScreen(toy.at)
+      const d = Math.hypot(x - s.x, y - s.y)
+      if (d < bestD && d < Math.max(24, this.pxPerUnit(toy.at) * toy.size * 0.5)) {
+        bestD = d
+        best = toy.id
+      }
+    }
+    return best
   }
 
   placeAnchors() {
