@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "world-board",
+  "title": "World board",
+  "video": "world-board.mp4",
+  "gif": "world-board.gif",
+  "seconds": 24,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "world-board-poke",
+      "where": "world-board-poke",
+      "seconds": 11,
+      "fps": 56.4,
+      "status": "ok"
+    },
+    {
+      "name": "world-board-fly-italy",
+      "where": "world-board-fly-italy",
+      "seconds": 4,
+      "fps": 55.7,
+      "status": "ok"
+    },
+    {
+      "name": "world-board-fly-australia",
+      "where": "world-board-fly-australia",
+      "seconds": 4,
+      "fps": 62.8,
+      "status": "ok"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "title": "The world map, in 3D",
+  "checkIn": "2 of 4: see it",
+  "kaylee": "Her world map is a toy board now, like Thailand's: her eight countries stand up in their real shapes with an animal on each, and Sparkle's balloon flies to the one she taps.",
+  "questions": [
+    "Is this the look you wanted for the home map?",
+    "Italy, Thailand, Egypt and Peru are drawn a little bigger than life so she can see their shapes. Keep that, or true size?",
+    "Right animals? (beaver, wolf cub, camel, panda, elephant, alpaca, kangaroo, penguin, and a polar bear in the Arctic)"
+  ],
+  "reels": [{ "name": "world-board", "moments": ["world-board-poke", "world-board-fly-italy", "world-board-fly-australia"] }],
+  "links": [
+    { "label": "Play it", "hash": "#/world?view=map" },
+    { "label": "With the Mac's words", "hash": "#/world?view=map&device=mouse" }
+  ]
+}
