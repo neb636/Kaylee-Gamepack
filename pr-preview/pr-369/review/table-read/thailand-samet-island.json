@@ -7,8 +7,8 @@
   "page": "thailand-samet-island.html",
   "audio": null,
   "lines": 32,
-  "seconds": 65,
-  "missing": 6,
+  "seconds": 76,
+  "missing": 0,
   "names": 0,
   "flags": [
     {
@@ -85,7 +85,6 @@
       "key": "samet.island.taxi.stop.nadan",
       "text": "Na Dan pier!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -93,7 +92,6 @@
       "key": "samet.island.taxi.stop.saikaew",
       "text": "Hat Sai Kaew!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -101,7 +99,6 @@
       "key": "samet.island.taxi.stop.prao",
       "text": "Ao Prao!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -109,7 +106,6 @@
       "key": "samet.island.taxi.stop.wongduan",
       "text": "Ao Wong Duan!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -117,7 +113,6 @@
       "key": "samet.island.slide",
       "text": "Wheee! A sand slide!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -125,7 +120,6 @@
       "key": "samet.island.leave",
       "text": "Time to go home?",
       "flags": [
-        "not recorded",
         "new"
       ]
     }
@@ -403,9 +397,8 @@
       "key": "samet.island.taxi.stop.nadan",
       "part": "samet › island › taxi › stop",
       "when": "Each stop's name, when the taxi pulls in there (never before it sets off).",
-      "ms": 0,
+      "ms": 1944,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -422,9 +415,8 @@
       "key": "samet.island.taxi.stop.saikaew",
       "part": "samet › island › taxi › stop",
       "when": "Each stop's name, when the taxi pulls in there (never before it sets off).",
-      "ms": 0,
+      "ms": 1368,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -441,9 +433,8 @@
       "key": "samet.island.taxi.stop.prao",
       "part": "samet › island › taxi › stop",
       "when": "Each stop's name, when the taxi pulls in there (never before it sets off).",
-      "ms": 0,
+      "ms": 1632,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -460,9 +451,8 @@
       "key": "samet.island.taxi.stop.wongduan",
       "part": "samet › island › taxi › stop",
       "when": "Each stop's name, when the taxi pulls in there (never before it sets off).",
-      "ms": 0,
+      "ms": 1632,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -477,9 +467,8 @@
       "key": "samet.island.slide",
       "part": "samet › island",
       "when": "The first time down the sand slide at the end of the puppy's shortcut.",
-      "ms": 0,
+      "ms": 2352,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -494,9 +483,8 @@
       "key": "samet.island.leave",
       "part": "samet › island",
       "when": "At the end of Na Dan pier by the speedboat, before the whole island is done: the home picture comes up.",
-      "ms": 0,
+      "ms": 1440,
       "flags": [
-        "not recorded",
         "new"
       ]
     },

@@ -7,15 +7,15 @@
   "page": "thailand-samet-puppy.html",
   "audio": null,
   "lines": 9,
-  "seconds": 0,
-  "missing": 9,
+  "seconds": 21,
+  "missing": 0,
   "names": 0,
   "flags": [
     {
       "key": "samet.puppy.hi",
       "text": "A beach puppy! He knows the way. Follow him!",
       "flags": [
-        "not recorded",
+        "long",
         "new"
       ]
     },
@@ -23,7 +23,6 @@
       "key": "samet.puppy.come",
       "text": "The puppy wants you to come!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -31,7 +30,6 @@
       "key": "samet.puppy.name.nadan",
       "text": "Na Dan pier!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -39,7 +37,6 @@
       "key": "samet.puppy.name.saikaew",
       "text": "Hat Sai Kaew!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -47,7 +44,6 @@
       "key": "samet.puppy.name.hinkhok",
       "text": "Ao Hin Khok!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -55,7 +51,6 @@
       "key": "samet.puppy.name.phai",
       "text": "Ao Phai!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -63,7 +58,6 @@
       "key": "samet.puppy.name.wongduan",
       "text": "Ao Wong Duan!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -71,7 +65,6 @@
       "key": "samet.puppy.name.prao",
       "text": "Ao Prao!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -79,7 +72,6 @@
       "key": "samet.puppy.name.aonoina",
       "text": "Ao Noi Na!",
       "flags": [
-        "not recorded",
         "new"
       ]
     }
@@ -96,9 +88,9 @@
       "key": "samet.puppy.hi",
       "part": "samet › puppy",
       "when": "",
-      "ms": 0,
+      "ms": 4584,
       "flags": [
-        "not recorded",
+        "long",
         "new"
       ]
     },
@@ -113,9 +105,8 @@
       "key": "samet.puppy.come",
       "part": "samet › puppy",
       "when": "",
-      "ms": 0,
+      "ms": 1872,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -131,9 +122,8 @@
       "key": "samet.puppy.name.nadan",
       "part": "samet › puppy › name",
       "when": "",
-      "ms": 0,
+      "ms": 3000,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -149,9 +139,8 @@
       "key": "samet.puppy.name.saikaew",
       "part": "samet › puppy › name",
       "when": "",
-      "ms": 0,
+      "ms": 1968,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -167,9 +156,8 @@
       "key": "samet.puppy.name.hinkhok",
       "part": "samet › puppy › name",
       "when": "",
-      "ms": 0,
+      "ms": 2136,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -185,9 +173,8 @@
       "key": "samet.puppy.name.phai",
       "part": "samet › puppy › name",
       "when": "",
-      "ms": 0,
+      "ms": 1488,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -203,9 +190,8 @@
       "key": "samet.puppy.name.wongduan",
       "part": "samet › puppy › name",
       "when": "",
-      "ms": 0,
+      "ms": 2160,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -221,9 +207,8 @@
       "key": "samet.puppy.name.prao",
       "part": "samet › puppy › name",
       "when": "",
-      "ms": 0,
+      "ms": 1200,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -239,9 +224,8 @@
       "key": "samet.puppy.name.aonoina",
       "part": "samet › puppy › name",
       "when": "",
-      "ms": 0,
+      "ms": 2184,
       "flags": [
-        "not recorded",
         "new"
       ]
     }
