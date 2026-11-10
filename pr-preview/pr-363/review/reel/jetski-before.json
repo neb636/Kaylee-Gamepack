@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "jetski-before",
+  "title": "Jetski before",
+  "video": "jetski-before.mp4",
+  "gif": "jetski-before.gif",
+  "seconds": 46,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "thailand-samet-jetski-steer",
+      "where": "thailand-samet-jetski-steer",
+      "seconds": 13,
+      "fps": 75.9,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-jetski-rope",
+      "where": "thailand-samet-jetski-rope",
+      "seconds": 13,
+      "fps": 72.6,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-jetski-race-idle",
+      "where": "thailand-samet-jetski-race-idle",
+      "seconds": 15,
+      "fps": 65.4,
+      "status": "ok"
+    }
+  ]
+}
