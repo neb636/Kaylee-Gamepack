@@ -89,7 +89,7 @@ The mall (from the house): 🏠 Bangkok pin → the house → 👩 Mommy or Dadd
 
 > **🔁 “Once per session”**
 >
-> A session is one opening of the app (it resets when the app reloads, like Australia's intro). The first Krabi or Nan trip in it packs and rides the window seat; every later one goes straight to its landing spot. Deep links still open any leg directly.
+> **Changed 2026-11-10:** tapping a pin on the map now goes straight to the trip's landing spot (Krabi `land?quick=1`, the Nan map, Koh Samet's speedboat or saved island); no packing or window seat from the map. The pack/goodbye/airport/takeoff/fly legs are untouched and deep links still open them; a place-picker inside Agong's house will start them again. (Before: the first Krabi or Nan trip of an app session packed and rode the window seat.)
 
 ### What leaves the path (the links still work for now)
 
