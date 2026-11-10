@@ -228,7 +228,7 @@ export const around = (n, y) => Array.from({ length: n }, (_, i) => [Math.cos(i 
  * src/games/<id>/qa.mjs), in folder order. Each is an array of the same shape the script's own central list uses.
  */
 export async function loadScenarios(kind) {
-  const files = globSync('src/{world/places,games}/**/qa.mjs', { cwd: root }).sort()
+  const files = globSync('src/{world/places,world/board,games}/**/qa.mjs', { cwd: root }).sort()
   const all = []
   for (const f of files) all.push(...((await import(pathToFileURL(path.join(root, f)).href))[kind] ?? []))
   return all

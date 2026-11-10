@@ -6,7 +6,7 @@ const NAME = 'Kaylee'
 
 export const WORLD_LINES = {
   title: 'Around the World!',
-  firstHello: onDevice(`Let's fly around the world, ${NAME}! Tap the sparkly pin.`, `Let's fly around the world, ${NAME}! Click the sparkly pin.`),
+  firstHello: onDevice(`Let's fly around the world, ${NAME}! Tap an animal to visit.`, `Let's fly around the world, ${NAME}! Click an animal to visit.`),
   hello: 'Where should we fly?',
   takeoff: 'Up, up and away!',
   continents: {
@@ -18,10 +18,16 @@ export const WORLD_LINES = {
     australia: "That's Australia! It's a country and a continent.",
     antarctica: "That's Antarctica! Brrr, it's icy!",
   },
-  soon: {
-    egypt: "We'll fly to Egypt soon! It has pyramids!",
-    china: "We'll fly to China soon! It has pandas!",
-    thailand: "We'll fly to Thailand soon! It has elephants!",
+  // Sparkle names the country as her balloon flies there (the world board).
+  fly: {
+    australia: 'Australia!',
+    canada: 'Canada!',
+    china: 'China!',
+    egypt: 'Egypt!',
+    italy: 'Italy!',
+    peru: 'Peru!',
+    poles: 'The Poles!',
+    thailand: 'Thailand!',
   },
   passport: `This is your passport, ${NAME}! Every stamp is a place you helped.`,
   passportMore: 'Fly to more places to fill your passport!',
