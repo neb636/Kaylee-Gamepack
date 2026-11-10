@@ -1,10 +1,10 @@
 # 🏁 The Nan Mountain Cup: a kart race in the mountains
 
-The look built (behind a flag) · Nan trip stop · updated 2026-10-27
+Full loop built, on for Kaylee · Nan trip stop · updated 2026-11-09
 
 At the end of the city road, Nan town's market square becomes the race ground for the **Nan Mountain Cup**. Kaylee drives her own pink kart against three mountain racers on three tracks, each one different: a misty mushroom forest, the rice steps and the climb into the clouds. She wins two races and loses one. Which one she loses is rolled fresh every time she plays. Winning two makes her the champion, so the Cup with KAYLEE on it is hers.
 
-**Next:** Dad plays the look on the iPad: [the board](#/world/thailand/nan-trip/cup) (the rivals in their dressed karts, the race ground dressed for the Cup), [the Mushroom Forest](#/world/thailand/nan-trip/race) (the stream, the dark bit with the fireflies, the hollow log near the end), [the Rice Steps Rally](#/world/thailand/nan-trip/race?track=steps) (the cafe's cheering deck, the ducks crossing, the scarecrows, the buffalo, the bamboo bridge), [the Cloud Top Climb](#/world/thailand/nan-trip/race?track=cloud) (the ring of flags at the summit), [a podium](#/world/thailand/nan-trip/podium?track=steps&place=2&cup=forest:1,steps:2) and [the three rivals in the character lab](#/world/characters/taeng?lineup=taeng,pao,moon). Still behind the flag (`CUP_OPEN` in `cup/rules.ts`, `?cup=1` to try). No feel-lab numbers came back from greybox 3, so the kart keeps its first guesses ([the feel lab](#/world/thailand/nan-trip/race?track=steps&feel=1)). Then step 5, the full loop.
+**Next:** Kaylee plays it (check-in 3): [the board](#/world/thailand/nan-trip/cup) is the way in, or the city road from the Nan map. Dad hears the rivals' voices first (the table read on the review page). The kart still has its first-guess feel numbers ([the feel lab](#/world/thailand/nan-trip/race?track=steps&feel=1)); her playtest says whether they need tuning.
 
 - tracks, any order: 3
 - rolled each time: 2 wins, 1 loss
@@ -183,16 +183,16 @@ Greybox 1 built the race (the Mushroom Forest), greybox 2 the other two tracks, 
 | `place` | `1` | the podium's place, 1 (gold) or 2 (silver) |
 | `kart` | `pink` | her kart's color, if she gets to pick (open question) |
 | `result` | `win` | greybox 1: how the race ends, `win` (she crosses first) or `lose` (the home rival edges past and wins by a nose). From the board it comes from the roll (`cup/rules.ts` `resultFor`) |
-| `cup=1` | off | any `cup` value turns the Cup on for the trip (`CUP_OPEN` in `cup/rules.ts`): `1` before any race, then the record, which the map, the roads and the stops carry along with `lose` while it's on; a link that starts in one of the Cup's sections turns it on too |
+| `cup=1` | on | the Cup is on (`CUP_OPEN = true` in `cup/rules.ts` since the full loop; set it false to hide it again, and then any `cup` value turns it on for the trip): `1` before any race, then the record, which the map, the roads and the stops carry along with `lose` while it's on; a link that starts in one of the Cup's sections turns it on too |
 
 ## ❓ Questions for Dad
 
-- **What does she drive?** OPEN: I suggest **her own pink kart** with a little horn on the nose. It's a race, so she drives, like the longtail in Krabi. The other choice is the family Pajero with Mommy driving, as on the roads, but a Pajero racing animal karts feels odd.
+- **What does she drive?** Decided (Dad let me pick, 2026-11-09): her own pink kart. I suggested **her own pink kart** with a little horn on the nose. It's a race, so she drives, like the longtail in Krabi. The other choice is the family Pajero with Mommy driving, as on the roads, but a Pajero racing animal karts feels odd.
 - **Is the last race always a win?** Yes (Dad, 2026-10-27): the loss is rolled, but never the last race she runs, so the Cup always comes right after a win.
-- **Which steering?** OPEN: The boat race's verb (hold a finger on the track and the kart goes there) is my pick, since she already knows it and it's made for racing. The mountain road's steering wheel under her finger is for gentle driving with Mommy.
-- **Are the rivals right?** OPEN: Grandma Taeng the tortoise, Pao the hornbill postman and Moon the sun bear honey seller are all made up. Swap any of them, or put someone from the family in the race (a cousin?). You decide the family.
-- **Where are Mommy and Daddy?** OPEN: I'd put them in the grandstand cheering, with Daddy waving the checkered flag at the finish. Tell me if they should be somewhere else.
-- **One stamp or three?** OPEN: I suggest one stamp (Nan town) after the Cup, with the airport opening after two stops as now. Each race still gets its medal.
+- **Which steering?** Decided (2026-11-09): hold a finger on the road. The boat race's verb (hold a finger on the track and the kart goes there) is my pick, since she already knows it and it's made for racing. The mountain road's steering wheel under her finger is for gentle driving with Mommy.
+- **Are the rivals right?** Decided (2026-11-09): kept as made-up Nan locals, not family, so no family facts are invented. Grandma Taeng the tortoise, Pao the hornbill postman and Moon the sun bear honey seller are all made up. Swap any of them, or put someone from the family in the race (a cousin?). You decide the family.
+- **Where are Mommy and Daddy?** Decided (2026-11-09): in the grandstand cheering, and they cheer out loud on the podium. No checkered flag for Daddy at the finish (the race is a separate world from the race ground; not worth a third Daddy).
+- **One stamp or three?** Decided (2026-11-09): one stamp. I suggested one stamp (Nan town) after the Cup, with the airport opening after two stops as now. Each race still gets its medal.
 
 ## 🧱 Build plan
 
@@ -205,10 +205,27 @@ Greybox 1 built the race (the Mushroom Forest), greybox 2 the other two tracks, 
    The race ground at the end of the city road (it replaces the market square), the board, the roll for the loss, each podium with its gift, the Cup ceremony, the stamp on the map. Behind a flag, so Kaylee doesn't reach it yet.
 4. **The look** [done] · 2026-10-27
    The rivals on the chibi rig (a tortoise, a hornbill and a sun bear), each kart dressed as its own, each track's scenery (the log, the stream and the fireflies in the forest; the cafe's deck, the ducks, the scarecrows, the buffalo and the bamboo bridge on the rice steps; the summit's flags), and the race ground dressed up. Still behind the flag.
-5. **Full loop** [next]
+5. **Full loop** [done] · 2026-11-09
    Voices (the rivals' cast with northern Thai accents), facts, the Trophy Room cup, QA, and the flag turned on.
 
 ## ✅ What's built (for the builder)
+
+### Step 5: the full loop ([done] · 2026-11-09)
+
+**Dad's first look (2026-11-09):** 35% faster (her kart's top speed 13 → 17.5 m/s, speeding up 9 → 12; the rivals follow hers, races now 40-60 s, robot runs still won and lost as scripted, no grass or bales); Grandma Taeng's parasol lost its ribs (they poked through the canopy); the mud is flat smears, not lumps that read as rocks; the bamboo bridge has a dark floor under its slats (the stream showed through as blue stripes); her medal hangs on her chest with a short ribbon (it went up over her face); the crowd pony and the hen moved out of the bottom-left corner, where Sparkle's bubble sits. Lines reworded: "Sawasdee ka! I won three Cups!", "Race you down the hill!", "Vroom! Here I go!", and Mommy's photo at the 3, "Everybody, smile!". No more "in Thai" explainers ("That's three, two, one in Thai!", Lung's "That's one to five in Thai!"): Kaylee speaks Thai.
+
+- **Voices** (`lines.ts` `L.nan.cup`, cast `taeng`, `pao`, `moon` in `cast.json`, northern Thai accents; their mouths move with them through `FaceLife`): Daddy's "Look! A race!" as the city road pulls in; Sparkle's "Tap a track to race!" the first time at the board; the rivals' three lines each in turn when tapped (Grandma Taeng's sleepy "Oh! Is it time?" when a tap wakes her), with Sparkle's fact about the animal the first time; in the race, Sparkle's "Hold your finger on the road to go!" before her first race (not on a tilting phone; the intro waits 0.9 s longer for it), the lights counted in Thai (Sahm, Song, Neung, Go!), the home rival's tease 1.3 s after GO, Sparkle the first time each trick happens (boing, mud, the cloud), a rival's "Hey!" when she bumps them (8 s apart each, not on the last stretch), "Nearly there!", "First place!" or "So close! Second place!"; on gold Mommy or Daddy cheers and the home rival is a good sport; on silver Sparkle asks for the high five and the winner says their gift line, then Mommy "Next race, sweetie!"; the Cup: Sparkle's "Tap it" line, then "Kaylee is the Nan Mountain Cup champion!", Daddy's "Champion!" and Mommy's "Smile, champion!" before the photo (the photo now comes at 5.2 s, the 🗺️ at 6.8 s).
+- **Hints:** after 9 s with nothing done on the race ground Sparkle says what to tap (the track, the high five, the Cup); in the race, with the 👆 showing, "Hold your finger on the road!". Both go through `spendHint` (shown first, said twice a visit at most).
+- **Facts:** the stamp screen's `NAN_FACTS` gain the Nan flower (Chomphu Phu Kha), Doi Phu Kha and "That's three, two, one in Thai!"; the rivals' animal facts are Sparkle's on the first poke.
+- **The Trophy Room:** winning the Cup calls `awardTrophy` (`world-thailand-nan-cup`, "Nan Mountain Cup Champion", 🏆), the same as the boat race.
+- **On:** `CUP_OPEN = true`. The city road ends at the race ground and the Cup is the fourth stop on Nan town.
+- **Tall screens:** the board's shot is closer in portrait (`tallCenter`, half 4.75 m wide), so the track tiles are about 85 px on an iPhone (they were about 70).
+
+> **Changed from the plan**
+>
+> - No checkered flag for Daddy (see the questions).
+> - The map's hint still points at the nearest stop left; Nan town is one of four now, which is what we want.
+
 
 ### Greybox 1: the kart toy on the Mushroom Forest track ([done] · 2026-10-27)
 
@@ -279,11 +296,6 @@ The Cup as a whole, behind a flag: the race ground at the end of the city road, 
 > - No voices yet: no Daddy “Look! A race!”, no Sparkle “Sam! Song! Neung!”, no rivals' lines; the city road's arrival line is skipped at the race ground.
 > - Mommy and Daddy sit in the grandstand (my suggestion, still an open question); Daddy doesn't wave the checkered flag yet.
 > - The rivals' tap-to-hear lines on the board, the bump-a-rival “Hey!” and the start lights' Thai count wait for the full loop. The Trophy Room cup waits for the full loop too.
-
-#### Known small things
-
-- The Cup is still a plain stop on the map's hint: the hint finger points at Nan town only when it's the nearest stop left.
-- In portrait the board's shot fits the board's width, so the race ground looks small on a tall iPhone.
 
 ### Step 4: the look ([done] · 2026-10-27)
 

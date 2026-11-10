@@ -431,11 +431,14 @@ export class Scenery {
       return [p.x + p.lx * lat - c.x, p.y + y - c.y, p.z + p.lz * lat - c.z]
     }
     const deck: BufferGeometry[] = []
+    const floor: BufferGeometry[] = []
     const COLORS = ['#D8C77A', '#C9B865', '#E2D48C']
     let i = 0
     for (let a = -BRIDGE_LEN / 2; a <= BRIDGE_LEN / 2; a += 0.26) {
       const p = this.road.sampleAt(s + a)
       deck.push(P.cyl(0.11, 0.11, half * 2, COLORS[i++ % 3], { at: local(a, 0, 0.08), rot: [0, Math.atan2(p.tx, p.tz), Math.PI / 2] }, 8))
+      // A dark floor under the slats, so the stream doesn't show through the gaps as blue stripes (Dad, 2026-11-09).
+      floor.push(P.box(half * 2, 0.1, 0.3, '#8E7A3E', { at: local(a, 0, 0.07), rot: [0, Math.atan2(p.tx, p.tz), 0] }))
     }
     // Two long poles under the ends of the slats, along each side.
     for (const k of [-1, 1]) deck.push(this.pole(local(-BRIDGE_LEN / 2, k * (half - 0.3), -0.02), local(BRIDGE_LEN / 2, k * (half - 0.3), -0.02), 0.13, '#B9A55A'))
@@ -456,7 +459,7 @@ export class Scenery {
         }
     }
     const deckG = new Group()
-    deckG.add(solid(merge(deck), this.bag, 1.5))
+    deckG.add(solid(merge(deck), this.bag, 1.5), solid(merge(floor), this.bag, 0))
     const railG = new Group()
     railG.add(solid(merge(rails), this.bag, 1.5))
     g.add(deckG, railG)

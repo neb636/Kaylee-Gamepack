@@ -12,7 +12,7 @@
 //   flies home on the Thailand map (Dad, 2026-10-27; section home, the flight home and picking a photo for Agong, is
 //   only reached by its link now). The trips start on the Thailand map: the first of a session packs and goes down
 //   the stairs straight to the window seat; later ones open straight on the Nan map.
-//   In the works: the Nan Mountain Cup (cup/, greyboxes 1-3, behind CUP_OPEN in cup/rules.ts, `?cup=1` turns it on): the
+//   The Nan Mountain Cup (cup/, plan: thailand/nan-cup.md; on since the full loop, CUP_OPEN in cup/rules.ts): the
 //   city road ends at its race ground (section cup: the board), a kart race on each of three tracks (race), a podium
 //   after each (podium), the Cup ceremony after the third (cup-win), and its stamp on Nan town (stop `cup`). The Cup's
 //   record and the rolled loss ride along in the link (`cup`, `lose`) and are saved with the trip.
@@ -33,8 +33,9 @@ import { liveStops, PLACES, type PlaceId, type Stop } from './map/layout'
 import { NanMap } from './map/NanMap'
 import { BASKET_SEED, ROUNDS as FARM_ROUNDS, type Round } from './mushrooms/layout'
 import { Mushrooms } from './mushrooms/Mushrooms'
+import { awardTrophy } from '../../../../../sdk/trophies'
 import { Cup } from './cup/Cup'
-import { addRace, cupDone, cupOpen, formatCup, FULL_CUP, giftsOf, isTrack, parseCup, resultFor, rollLose, type CupRecord, type Place } from './cup/rules'
+import { addRace, CUP_TROPHY, cupDone, cupOpen, formatCup, FULL_CUP, giftsOf, isTrack, parseCup, resultFor, rollLose, type CupRecord, type Place } from './cup/rules'
 import { Ground } from './cup/Ground'
 import { RESULTS, type Result } from './cup/rivals'
 import { TRACK_IDS, type TrackId } from './cup/track'
@@ -274,6 +275,8 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
   const raced = (track: TrackId, result: Result) => {
     const place: Place = result === 'lose' ? 2 : 1
     const next = addRace(cup, track, place)
+    // The Cup won: it goes in her Trophy Room (KAYLEE on it, ×2 on another trip's Cup).
+    if (!cupDone(cup) && cupDone(next)) awardTrophy({ gameId: 'world-thailand-nan-cup', gameTitle: 'Thailand', trophyTitle: CUP_TROPHY, emoji: '🏆' })
     setCup(next)
     saveCup(next, lose)
     setRacedHere((n) => n + 1)

@@ -9,7 +9,7 @@ import { bigCelebration, sounds, useLandscape } from '../../../../../../sdk'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { flag } from '../../../../../engine3d/flags'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
-import { TripGuide } from '../../../trip/legs/Guide'
+import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { GasPedal } from '../../../trip/race/GasPedal'
 import { Banner, CoinsAndMap, Countdown, Standings, type Face } from '../../../trip/race/RaceHud'
 import { askForTilt, needsAsking, steerFor, Tilt, type SteerMode } from '../../../trip/race/tilt'
@@ -45,6 +45,7 @@ export function Cup({ track, result, packed, gifts = [], again: before = false, 
   const [done, setDone] = useState(false)
   const worldRef = useRef<KartRace | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
   const mapEls = useRef(new Map<string, SVGElement>())
   const raced = useRef(before ? 1 : 0)
   const finish = useRef(onFinish)
@@ -88,6 +89,7 @@ export function Cup({ track, result, packed, gifts = [], again: before = false, 
   const make = (renderer: WebGLRenderer) => {
     const w = new KartRace(renderer, { track, result, packed, again: raced.current > 0, gifts }, {
       onHud: setHud,
+      say: (l) => guideRef.current?.speak(l),
       onDone: (place) => {
         setDone(true)
         // (A moment of the fireworks, then the podium.)
@@ -147,7 +149,7 @@ export function Cup({ track, result, packed, gifts = [], again: before = false, 
           <Banner banner={hud.banner} texts={{ final: '🏁 Nearly there!' }} />
         </>
       )}
-      {mode === 'webgl' && <TripGuide hidden={done} />}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={done} />}
       <TiltSetup
         stage={tiltSetup}
         onSkip={() => {

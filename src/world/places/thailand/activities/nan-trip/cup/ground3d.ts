@@ -1,5 +1,5 @@
 // The Nan Mountain Cup's race ground (plan: planning/around-the-world/thailand/nan-cup.md, greybox 3): Nan town's
-// market square at the end of the city road, dressed for the Cup. One 3D world in the toon look, simple shapes, no
+// market square at the end of the city road, dressed for the Cup. One 3D world in the toon look, simple shapes, with
 // voices; the camera glides between its three places:
 // - The board (section `cup`): a big board with the three tracks (the Mushroom Forest, the Rice Steps, the Cloud Top),
 //   each rival sitting in their kart under their home track (Grandma Taeng napping, her three old cups on top of the
@@ -19,8 +19,13 @@
 // Things to poke: the rivals (hop; Grandma Taeng wakes up), Kaylee, her kart (beep beep, the gifts wiggle), Mommy and
 // Daddy, the crowd (they cheer), the balloons on the board (one floats off), Moon's honey stall (the bee buzzes round),
 // a hen (flaps), the Cup on its stand (a twinkle).
+// Talk (lines.ts L.nan.cup): Sparkle says "Tap a track to race!" the first time at the board, asks for the high five
+// on silver, and says the Cup's lines; the rivals say their lines in turn when tapped (Sparkle's fact about each the
+// first time), the home rival is a good sport on gold and the winner gives her their gift on silver, Mommy and Daddy
+// cheer. After a while with nothing done Sparkle says what to do (spendHint: glow first, then twice a visit at most).
 import { CanvasTexture, Color, Group, Mesh, MeshBasicMaterial, PlaneGeometry, Vector3, type BufferGeometry, type Object3D, type WebGLRenderer } from 'three'
-import { bell, clamp, KID_NAME, sounds } from '../../../../../../sdk'
+import { bell, clamp, firstTime, KID_NAME, sounds, spendHint, type Line } from '../../../../../../sdk'
+import { L } from '../../../lines'
 import type { Avatar } from '../../../characters/avatar'
 import type { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
@@ -61,7 +66,14 @@ export interface GroundEvents {
   /** A track picked on the board: off to the race. */
   race(track: TrackId): void
   ui(ui: GroundUi): void
+  /** Someone says something, in their own voice. */
+  say(l: Line): void
 }
+
+const C = L.nan.cup
+/** Nothing done for this long: Sparkle says what to do (spendHint decides if it's out loud). */
+const SAY_S = 9
+const SAY_EVERY = 14
 
 export const GROUND_ANCHORS: AnchorInfo[] = [
   ...TRACK_IDS.map((t): AnchorInfo => ({ id: `track:${t}`, label: { forest: 'The Mushroom Forest', steps: 'The Rice Steps Rally', cloud: 'The Cloud Top Climb' }[t], kind: 'thing' })),
@@ -107,7 +119,8 @@ const CUP_SCALE = 0.8
 const CUP_BY = new Vector3(0.75, 0.2, 0.45)
 const CUP_UP = new Vector3(0, 1.0, 0.05)
 const STALL = { x: -9.7, z: -3.6 }
-const HEN = { x: -7.7, z: -1.3 }
+// (Out of the bottom-left corner, where Sparkle and her bubble sit, Dad 2026-11-09.)
+const HEN = { x: -2.5, z: -1.2 }
 const BALLOONS = [
   { x: BOARD.x - BOARD.w / 2 - 0.1, y: BOARD.y1 + 0.5 },
   { x: BOARD.x + BOARD.w / 2 + 0.1, y: BOARD.y1 + 0.5 },
@@ -128,12 +141,13 @@ const CROWD_AT = [
   { x: 3.5, z: -6.9 },
   { x: 11.3, z: -6.9 },
   { x: 12.4, z: -7.1 },
-  { x: -9.1, z: -0.6 },
+  { x: -11.4, z: -5.6 },
 ]
 
 /** Where the camera looks: the board, the podium (and the scoreboard over it for the Cup). */
 const SHOTS = {
-  board: { center: new Vector3(-3.3, 2.9, -4.2), half: new Vector3(6.4, 3.1, 2.6), tallHalf: new Vector3(5.9, 3.4, 2.6) },
+  // (Tall: in closer, on the three tracks and Kaylee, so the tiles are big on a phone; her kart is half in, at the edge.)
+  board: { center: new Vector3(-3.3, 2.9, -4.2), half: new Vector3(6.4, 3.1, 2.6), tallCenter: new Vector3(-3.1, 2.9, -4.2), tallHalf: new Vector3(4.75, 3.4, 2.6) },
   podium: { center: new Vector3(7.6, 2.2, -5.6), half: new Vector3(4.2, 2.4, 3.2), tallHalf: new Vector3(3.9, 3, 3.2) },
   cup: { center: new Vector3(7.2, 2.8, -6), half: new Vector3(4.6, 2.9, 3.4), tallHalf: new Vector3(4.1, 3.5, 3.4) },
 }
@@ -192,9 +206,13 @@ export class CupGround extends Stage {
   private cupHere = false
   private lifted = -1
   private napUntil = 0
+  /** Each rival's tap lines, in turn; when someone last spoke on a tap; when Sparkle last hinted. */
+  private chats = new Map<RivalId, number>()
+  private chatT = new Map<string, number>()
+  private hintSaid = -99
 
   constructor(renderer: WebGLRenderer, private ev: GroundEvents, start: GroundStart) {
-    const legEv: LegEvents = { say: () => {}, section: () => {}, done: () => {} }
+    const legEv: LegEvents = { say: (l) => ev.say(l), section: () => {}, done: () => {} }
     super(renderer, legEv)
     const { scene, bag } = this
     scene.background = new Color('#C9E6F4')
@@ -214,7 +232,7 @@ export class CupGround extends Stage {
       scene.add(m.g)
       this.medals.set(t, { ...m, drop: 1, spin: 1 })
     }
-    const chest = buildMedal(bag)
+    const chest = buildMedal(bag, true)
     chest.g.visible = false
     chest.g.scale.setScalar(0.62)
     scene.add(chest.g)
@@ -388,6 +406,8 @@ export class CupGround extends Stage {
     }
     if (cupDone(this.record)) this.after(0.4, () => (this.cupSpin = 1))
     this.after(0.6, () => this.setUi({ map: true }))
+    // Sparkle's one instruction, the first time at the board this visit.
+    if (!cupDone(this.record) && firstTime('nan-cup-board')) this.after(fresh ? 1.4 : 0.9, () => this.ev.say(C.board))
   }
 
   private toPodium(track: TrackId, place: Place) {
@@ -412,6 +432,12 @@ export class CupGround extends Stage {
       sounds.fanfare()
       this.after(0.3, () => this.cheerAll())
       this.after(0.4, () => this.confettiBurst(STEP[1].x, 6))
+      // Mommy or Daddy cheers (in turn, race by race), then the home rival is a good sport.
+      this.after(0.9, () => this.ev.say(C.gold[this.record.length % 2]))
+      this.after(2.4, () => {
+        this.holders.get(who.second as RivalId)!.rider.react('wave', 1.6)
+        this.ev.say(C.good[who.second as RivalId])
+      })
       this.after(2.2, () => this.setUi({ next: true }))
     } else {
       sfx.soClose()
@@ -420,6 +446,8 @@ export class CupGround extends Stage {
         this.confettiBurst(STEP[1].x, 3)
       })
       this.after(1.2, () => sfx.cheer())
+      // Sparkle asks for the high five (the winner glows).
+      this.after(1.8, () => this.ev.say(C.five))
     }
     this.holders.get(who.clap)!.rider.react('wave', 4)
   }
@@ -571,13 +599,27 @@ export class CupGround extends Stage {
     if (this.mode === 'podium' && id === this.winner && !this.fiveDone) return this.highFive()
     h.rider.react('hop')
     if (h.rider.nap) {
-      // Grandma Taeng wakes up with a start, then nods off again.
+      // Grandma Taeng wakes up with a start ("Oh! Is it time?"), then nods off again.
       h.rider.nap = false
       this.napUntil = this.time + 6
       sfx.boop()
+      if (this.chatty('taeng')) this.ev.say(C.taeng[1])
       return
     }
     ;({ taeng: sfx.giggle, pao: sfx.peep, moon: sfx.snort } as const)[id]()
+    if (!this.chatty(id)) return
+    const n = this.chats.get(id) ?? 0
+    this.chats.set(id, n + 1)
+    this.ev.say(C[id][n % C[id].length])
+    // The first time this visit: Sparkle's fact about the animal.
+    if (firstTime(`nan-cup-fact-${id}`)) this.after(0.3, () => this.ev.say(C.facts[id]))
+  }
+
+  /** May a tap make them talk now? Not more than once every few seconds each. */
+  private chatty(key: string) {
+    if (this.time - (this.chatT.get(key) ?? -99) < 3.5) return false
+    this.chatT.set(key, this.time)
+    return true
   }
 
   /** Silver: a high five to the winner, who hops down and puts their gift on her kart. */
@@ -608,6 +650,8 @@ export class CupGround extends Stage {
     const k = this.kart.root.position
     this.sparkle.burst(k.x, 1.3, k.z, 30, 2, 1.6, 0.15)
     this.holders.get(id)!.rider.react('hop')
+    this.ev.say(C.gift[id])
+    this.after(2.6, () => this.ev.say(C.silver))
     this.fiveDone = true
     // …and back up on top.
     this.after(0.9, () => this.moveRival(id, new Vector3(STEP[1].x, STEP[1].h, POD.z), 0.8, () => this.holders.get(id)!.rider.react('wave', 1.4)))
@@ -627,11 +671,15 @@ export class CupGround extends Stage {
     this.cheerAll()
     this.confettiBurst(STEP[1].x, 8)
     for (let i = 0; i < 7; i++) this.after(0.2 + i * 0.45, () => this.fireworksBurst())
-    this.after(2.0, () => {
+    // Sparkle says it, Daddy cheers, and Mommy takes the photo.
+    this.ev.say(C.champion)
+    this.after(0.4, () => this.ev.say(C.lift[0]))
+    this.after(3.6, () => this.ev.say(C.lift[1]))
+    this.after(5.2, () => {
       sfx.shutter()
       this.setUi({ photo: true })
     })
-    this.after(3.6, () => this.setUi({ end: true }))
+    this.after(6.8, () => this.setUi({ end: true }))
   }
 
   private balloonAway() {
@@ -664,6 +712,7 @@ export class CupGround extends Stage {
       }
       h.rider.update(dt, t, 0)
     }
+    this.stuckLine()
     if (this.mode === 'board' && !this.leaving && this.napUntil && this.time > this.napUntil) {
       this.napUntil = 0
       this.holders.get('taeng')!.rider.nap = true
@@ -708,7 +757,7 @@ export class CupGround extends Stage {
     c.drop = Math.min(1, c.drop + dt / 0.7)
     c.spin = Math.min(1, c.spin + dt / 0.8)
     const kp = this.kaylee.position
-    c.g.position.set(kp.x, kp.y + 0.5 + (1 - easeOutBounce(c.drop)) * 2.5, kp.z + 0.36)
+    c.g.position.set(kp.x, kp.y + 0.34 + (1 - easeOutBounce(c.drop)) * 2.5, kp.z + 0.36)
     c.g.rotation.y = c.spin < 1 ? c.spin * Math.PI * 4 : 0
     // ---- The Cup: on its stand, flying over to her, held up ----
     this.cupSpin = Math.max(0, this.cupSpin - dt / 1.1)
@@ -725,6 +774,7 @@ export class CupGround extends Stage {
         this.cupHere = true
         sfx.chime()
         this.lastTouch = this.time
+        this.ev.say(C.cup)
       }
     } else if (this.cupHere) {
       if (this.lifted >= 0) {
@@ -783,7 +833,8 @@ export class CupGround extends Stage {
       const kp = this.kaylee.position
       return { center: new Vector3(kp.x, kp.y + 1.1, kp.z), half: new Vector3(tall ? 2.2 : 2.8, tall ? 2.2 : 1.7, 1.5), yaw: 0, pitch: 8 }
     }
-    return { center: s.center.clone(), half: (tall ? s.tallHalf : s.half).clone(), yaw: 0, pitch: this.mode === 'board' ? 9 : 11 }
+    const center = tall && 'tallCenter' in s ? s.tallCenter : s.center
+    return { center: center.clone(), half: (tall ? s.tallHalf : s.half).clone(), yaw: 0, pitch: this.mode === 'board' ? 9 : 11 }
   }
 
   /** What she should tap next: a track to race, the winner to high-five, the Cup to lift. */
@@ -798,6 +849,14 @@ export class CupGround extends Stage {
   }
   protected hintAt() {
     return this.next()
+  }
+
+  /** After a while with nothing done: Sparkle says what to tap (the board's track, the high five, the Cup). */
+  private stuckLine() {
+    if (this.time - this.lastTouch < SAY_S || this.time - this.hintSaid < SAY_EVERY || !this.next()) return
+    this.hintSaid = this.time
+    const l: Line = this.mode === 'board' ? C.board : this.mode === 'podium' ? C.five : C.cup
+    if (spendHint(l)) this.ev.say(l)
   }
 
   protected anchorAt(id: string): AnchorSpot | null {
@@ -1149,9 +1208,12 @@ function buildTrophy(bag: Bag): Group {
 }
 
 /** A medal on its ribbon: gold and silver discs (one shown), a pink ribbon. */
-function buildMedal(bag: Bag) {
+/** A medal on its ribbon. `worn`: the one round her neck, with a short ribbon that stops at her neck (a long one
+ *  went up over her face, Dad 2026-11-09). */
+function buildMedal(bag: Bag, worn = false) {
   const g = new Group()
-  g.add(solid(merge([P.box(0.09, 0.5, 0.03, PAL.hotpink, { at: [-0.1, 0.3, 0], rot: [0, 0, -0.35] }), P.box(0.09, 0.5, 0.03, PAL.hotpink, { at: [0.1, 0.3, 0], rot: [0, 0, 0.35] })]), bag, 1.5))
+  const [h, y, x] = worn ? [0.26, 0.17, 0.07] : [0.5, 0.3, 0.1]
+  g.add(solid(merge([P.box(0.09, h, 0.03, PAL.hotpink, { at: [-x, y, 0], rot: [0, 0, -0.35] }), P.box(0.09, h, 0.03, PAL.hotpink, { at: [x, y, 0], rot: [0, 0, 0.35] })]), bag, 1.5))
   const disc = (c: string, shine: string) => {
     const d = solid(merge([P.cyl(0.2, 0.2, 0.05, c, { rot: [Math.PI / 2, 0, 0] }, 18), P.sphere(0.06, shine, { at: [-0.06, 0.06, 0.03], scale: [1, 1, 0.3] }, 8)]), bag, 1.5)
     g.add(d)
