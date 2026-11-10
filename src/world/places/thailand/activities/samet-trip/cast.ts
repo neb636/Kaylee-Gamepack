@@ -21,4 +21,4 @@ export const FIRE_DANCERS: Look[] = [
 
 /** The beach puppy (#357 way-finding): a cream island dog with brown floppy ears and a pink bandana, smaller than
  *  Kaylee. He knows the way; his voice is barks. */
-export const PUPPY: Look = { species: 'puppy', height: 0.7, chub: 1.05, fur: '#FFF1DC', light: '#FFFFFF', dark: '#3B2A26', ear: '#C98A55', extras: ['scarf'], open: true }
+export const PUPPY: Look = { species: 'puppy', height: 0.8, chub: 1.05, fur: '#FFF1DC', light: '#FFFFFF', dark: '#3B2A26', ear: '#C98A55', extras: ['scarf'], open: true }

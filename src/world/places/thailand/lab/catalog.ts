@@ -10,7 +10,7 @@ import { KID_C, STAFF_LOOKS } from '../activities/mall-trip/hall/kids'
 import { SERVER } from '../activities/mall-trip/pizza/room'
 import { RIVAL_LOOKS } from '../activities/nan-trip/cup/rivals'
 import { LUNG } from '../activities/nan-trip/rice/farm'
-import { CAPTAIN, FIRE_DANCERS, JETSKI_MAN, TAXI_DRIVER } from '../activities/samet-trip/cast'
+import { CAPTAIN, FIRE_DANCERS, JETSKI_MAN, PUPPY, TAXI_DRIVER } from '../activities/samet-trip/cast'
 import { FAMILY } from '../characters/family'
 import { POLES_LOOKS } from '../../poles/characters/looks'
 import { CANADA_LOOKS } from '../../canada/characters/looks'
@@ -97,6 +97,7 @@ const samet: CastEntry[] = [
   person('jetski-man', 'The jet ski man', 'Koh Samet: runs the jet skis on Sai Kaew, an otter', 'samet', JETSKI_MAN, 'activities/samet-trip/cast.ts'),
   person('samet-captain', 'The captain', 'Koh Samet: drives the speedboat and the snorkel boat, a pelican', 'samet', CAPTAIN, 'activities/samet-trip/cast.ts'),
   person('taxi-driver', 'The taxi driver', 'Koh Samet: drives the green taxi, a sun bear', 'samet', TAXI_DRIVER, 'activities/samet-trip/cast.ts'),
+  person('beach-puppy', 'The beach puppy', 'Koh Samet: knows the way round the island, a cream beach dog in a pink bandana', 'samet', PUPPY, 'activities/samet-trip/cast.ts'),
   ...FIRE_DANCERS.map((look, i) => person(`fire-dancer-${i + 1}`, `Fire dancer ${i + 1}`, 'Koh Samet: dances with fire on Sai Kaew at night, a tokay gecko', 'samet', look, 'activities/samet-trip/cast.ts', undefined, 'fire-dancers')),
 ]
 

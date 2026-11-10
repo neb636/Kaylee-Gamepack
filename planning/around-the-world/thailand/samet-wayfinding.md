@@ -4,7 +4,7 @@ Written 2026-11-10. A rethink of how Kaylee finds her way round the island in `s
 seven "Finding her way" and taxi items still open in issue #357. Read it with `samet-trip.md`,
 `../ACTIVITY-TEMPLATE.md` and `docs/play-design.md`. Branch `neb636/samet-wayfinding`.
 
-**Status:** three pitch cards on the review page, waiting for Dad's pick. Nothing built yet.
+**Status:** card B built (2026-11-10, PR #369): the beach puppy, his shortcut and sand slide, the taxi that goes where he goes, the top-left button that calls him, home by the speedboat. Next: Kaylee's playtest.
 
 ## What it has to fix (#357)
 
@@ -41,4 +41,66 @@ Pictures: `review/pitch/` (mock-ups drawn over real screenshots of the island, p
 
 ## Dad's pick
 
-(waiting)
+**B, Follow the Beach Puppy.** Dad asked for a guiding wind too, then dropped it as too much like Ghost of Tsushima:
+the world doesn't point the way, the puppy does.
+
+## What's built (card B)
+
+- **The beach puppy** (`island/puppy.ts`, his look `PUPPY` in `cast.ts`, in the character lab): a cream island dog with
+  brown floppy ears and a pink bandana, on the islanders' chibi rig. He breathes (pants after a run), wags (harder when
+  she's near), trots with a bounce, sits to wait, turns his head to look back for her. Poke him: in turn he chases his
+  tail, rolls over, does a big hop, with two woofs. His voice is barks (synth woofs, no clips).
+- **Where he goes** (`island.ts`, "the beach puppy"): the stop still to do that's quickest to reach from her (all four
+  done: the driftwood tree for the sunset). The way is found with A* over what she can walk on (`island/route.ts`:
+  roads and paths cheapest, sand, rocks, the shallows; never the forest or the deep sea) and pulled straight. He runs
+  ahead `wait` m (less where that's off her screen), sits and looks back; when she's within `lead` m he runs on. At
+  the stop he sits beside its pink ring. Any order: if she goes her own way he watches, comes along if she goes far,
+  and plans again from wherever she is; a new beach is a new plan.
+- **His bubble**: a picture of the beach he's taking her to (never words), drawn from the island itself on the 4th
+  frame (`LANDMARKS` in `layout.ts`: the pier, the mermaid, the sandcastle spot, Ao Phai's new pink lifeguard tower,
+  the snorkel boat, the driftwood tree, the hammock).
+- **He fetches her** when nothing's touched for `idle` (8 s): runs back, hops, two woofs, off again. Each fetch waits
+  `again` (1.6×) longer until she touches again (help, not nagging). The first time, Sparkle: "The puppy wants you to
+  come!". The old flag badge is gone.
+- **Arriving**: he barks the beach's name (a woof a syllable, `BEATS`) and Sparkle says it (`L.samet.puppy.name`;
+  the first visit's longer beach line instead; not again within 45 s).
+- **Shortcut**: `path-west` over the low west hills from Ao Prao's south end to Ao Wong Duan, ending in the sand slide
+  (`SLIDE`): walk onto its top heading down and she sits and whooshes down (`slide` s); Daddy: "Wheee! A sand slide!"
+  the first time. Landmarks on the long road: the coconut stall where it tops the spine, the balancing rocks halfway
+  to Wong Duan (both poke).
+- **The taxi** (`taxi.ts`): drives straight between any two stops (`roadBetween`). For a far beach (a walk over
+  `taxiFrom` m and the ride quicker) the puppy calls it to the stop nearest her and jumps in; walking up to it (or
+  tapping him) gets her in; it drives straight to the stop nearest his beach, the sun bear names the stop there (never
+  before), and everyone hops off, the puppy first. It waits while she's near, while it's on her screen, while the
+  puppy waits in it. Beside it, the camera takes it in (`frame` m). Every beach is reachable on foot (Hin Khok, Phai,
+  Ao Noi Na) or by taxi.
+- **The top-left button** calls the puppy (`kit/topLeft.ts`, a small shared hook PlaceFrame reads). Inside a stop it
+  goes back to that beach (no flag). Packing and the speedboat ride keep the map button.
+- **Home**: tap the speedboat at Na Dan pier: she walks to the pier's end, Mommy: "Time to go home?", the home picture
+  comes up; tap it and they go (back to the Thailand map, the trip saved). The Thailand map's 🏝️ pin puts a trip half
+  done straight back on the beach she left (no packing, no boat ride). All four flags: the speedboat still opens the
+  sunset.
+- **Knobs** (`sametPuppy`, `?feel=1`): lead, wait, speed, idle, again, taxiFrom, slide, frame.
+- **Robot readout**: `__thaiSametQA().puppy` (state, goal, beach, taxi from/to, x, z, d, screen, onScreen, route,
+  ahead, bubble, pictures, fetches, named, calls, pokes); `clock` (scene seconds), `reach` (every beach on foot from Na
+  Dan), `taxi.next/onScreen/d`, `leaving`. Robot runs `thailand-samet-wayfind-*`.
+
+## Numbers (WebKit robot, iPad landscape unless said)
+
+| | main | card B |
+|---|---|---|
+| Ao Prao → Ao Wong Duan, a finger held toward the way | 74.5 s (the road) | 44 s (following the puppy: the shortcut and the slide) |
+| Beaches the taxi reaches | its fixed 107 s loop of 4, no choice | the stop nearest the puppy's beach, straight there; Hin Khok, Phai, Ao Noi Na on foot (`reach`: 146, 170, 91 m from Na Dan) |
+| Na Dan → Wong Duan (only the snorkel left) | — | 62 s: walk to the taxi, ride straight there, off |
+| Top-left button | leaves for the Thailand map | the puppy comes (hash stays on the island) |
+| Reopening from the 🏝️ pin | packing, then the boat ride | the beach she left (`island?at=hinkhok`) |
+| Idle at Ao Phai | a silent flag badge on the phone button | the puppy fetches her at 8.0-9.0 s, again at ~21 s (iPhone portrait, iPad landscape) |
+| Standing beside the taxi at Sai Kaew (14 s) | can be off screen, can leave | on screen 14/14, left 0 |
+
+## Known, and next
+
+- Kaylee's playtest decides: does she follow him, does the bubble mean anything to her, is a fetch every 8 s too much.
+- The puppy waits at the water's edge when she swims; he doesn't swim (the pitch's third panel, "he swims, she
+  paddles after", isn't built).
+- The bubble pictures are taken once in the light of the moment (at night they're dark).
+- New lines are recorded by the PR's voices job.

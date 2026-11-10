@@ -60,6 +60,59 @@ async function leadAlong(page, route, ms) {
 }
 
 /** Screenshots (scripts/qa-screens.mjs). */
+/** A finger held ~150 px from Kaylee toward the beach puppy (where there is one: #357 way-finding), else along a
+ *  route, until `done(q)` or `ms` run out. In the taxi the finger lifts (it drives); with the puppy waiting in the
+ *  taxi, toward the taxi. */
+async function followPuppy(page, route, done, ms) {
+  const vp = page.viewportSize()
+  const t0 = Date.now()
+  let i = 0
+  let down = false
+  while (Date.now() - t0 < ms) {
+    const q = await page.evaluate(() => window.__thaiSametQA?.())
+    if (!q || !q.kaylee || done(q)) break
+    let x = null
+    let y = null
+    if (q.phase === 'taxi') {
+      if (down) await page.mouse.up()
+      down = false
+      await page.waitForTimeout(300)
+      continue
+    }
+    const aim = q.puppy ? (q.puppy.state === 'aboard' ? { x: q.taxi.x, y: q.taxi.y } : q.puppy.onScreen ? q.puppy.screen : null) : null
+    if (aim) {
+      const dx = aim.x - q.kaylee.x
+      const dy = aim.y - q.kaylee.y
+      const l = Math.hypot(dx, dy) || 1
+      x = q.kaylee.x + (dx / l) * Math.min(150, l)
+      y = q.kaylee.y + (dy / l) * Math.min(150, l)
+    } else {
+      const goal = q.puppy ? [q.puppy.x, q.puppy.z] : route[i]
+      while (!q.puppy && i < route.length && Math.hypot(route[i][0] - q.x, route[i][1] - q.z) < 3) i++
+      if (!goal || (!q.puppy && i >= route.length)) break
+      const th = (q.cameraYaw * Math.PI) / 180
+      const dx = goal[0] - q.x
+      const dz = goal[1] - q.z
+      const n = Math.hypot(dx, dz) || 1
+      const across = (dx * -Math.cos(th) + dz * Math.sin(th)) / n
+      const up = -(dx * Math.sin(th) + dz * Math.cos(th)) / n
+      const len = Math.hypot(across, up * 0.7) || 1
+      x = q.kaylee.x + (across / len) * 150
+      y = q.kaylee.y + ((up * 0.7) / len) * 150
+    }
+    x = Math.max(10, Math.min(vp.width - 10, x))
+    y = Math.max(120, Math.min(vp.height - 20, y))
+    if (!down) {
+      await page.mouse.move(q.kaylee.x, Math.max(130, q.kaylee.y - 150))
+      await page.mouse.down()
+      down = true
+    }
+    await page.mouse.move(x, y)
+    await page.waitForTimeout(200)
+  }
+  if (down) await page.mouse.up()
+}
+
 export const screens = [
   { name: 'thailand-samet-pack', hash: '#/world/thailand/samet-trip/pack', reset: true, wait: 3500 },
   { name: 'thailand-samet-speedboat-pier', hash: '#/world/thailand/samet-trip/speedboat', reset: true, wait: 2500 },
@@ -1018,5 +1071,89 @@ export const motion = [
     },
     // Nobody touching it: the finger shows her hoof's place in the spray at once, and flying fish leap by themselves.
     act: (page) => page.waitForTimeout(14000),
+  },
+  // #357 way-finding, card B: the beach puppy. The same moments film on main (no puppy: the old way) for before/after.
+  {
+    name: 'thailand-samet-wayfind-idle',
+    seconds: 14,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=phai`)
+      await ready(page)
+    },
+    // Nobody touching at Ao Phai: the puppy runs ahead toward the sandcastle (his bubble a picture of it), sits and
+    // looks back, and after ~8 s comes back to fetch her (main: a small flag badge on the phone button).
+    act: (page) => page.waitForTimeout(14000),
+  },
+  {
+    name: 'thailand-samet-wayfind-prao',
+    seconds: 50,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=prao&flags=hideseek`)
+      await ready(page)
+      await page.waitForTimeout(1500)
+    },
+    // Ao Prao to Ao Wong Duan following the puppy: his shortcut over the west hills and the sand slide (main: the road
+    // round by the spine, ~75 s).
+    act: (page) => followPuppy(page, [[-160, -40], [-153, -37], [-134, -40], [-110, -44], [-85, -46], [-95, -20], [-104, 10], [-111, 40], [-121, 70], [-134, 100], [-146, 121], [-150, 135]], (q) => q.at === 'wongduan', 50000),
+  },
+  {
+    name: 'thailand-samet-wayfind-taxi',
+    seconds: 40,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=nadan&flags=jetski,sandcastle,hideseek`)
+      await ready(page)
+      await page.waitForTimeout(1500)
+    },
+    // Only the snorkel left, from Na Dan pier: the puppy runs to the taxi and jumps in, she follows him in, it drives
+    // straight to Ao Wong Duan and names it there (main: no puppy, she walks to the taxi and taps it).
+    act: async (page) => {
+      await followPuppy(page, [[-11, -80], [-14, -74]], (q) => q.phase === 'taxi', 16000)
+      const q = await page.evaluate(() => window.__thaiSametQA())
+      if (q.phase !== 'taxi') await page.mouse.click(q.taxi.x, q.taxi.y)
+      await page.waitForTimeout(24000)
+    },
+  },
+  {
+    name: 'thailand-samet-wayfind-beside',
+    seconds: 14,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=saikaew`)
+      await ready(page)
+    },
+    // Up the sand to the waiting taxi and stand beside it: it stays, and the camera takes it in.
+    act: async (page) => {
+      await leadAlong(page, [[-4, -10], [-4, -14]], 8000)
+      await page.waitForTimeout(6000)
+    },
+  },
+  {
+    name: 'thailand-samet-wayfind-topleft',
+    seconds: 8,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=saikaew`)
+      await ready(page)
+      await page.waitForTimeout(1500)
+    },
+    // The big top-left button: the puppy comes running and woofs (main: it leaves Koh Samet for the map).
+    act: async (page) => {
+      await page.getByRole('button', { name: /Back to the map|Call the puppy/ }).first().click()
+      await page.waitForTimeout(6000)
+    },
+  },
+  {
+    name: 'thailand-samet-wayfind-home',
+    seconds: 16,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=nadan&flags=jetski`)
+      await ready(page)
+      await page.waitForTimeout(1500)
+    },
+    // Tap the speedboat at the end of Na Dan pier: she walks to it, Mommy asks, the home picture comes up.
+    act: async (page) => {
+      await page.locator('[data-anchor="speedboat:0"]').click({ force: true }).catch(() => {})
+      await page.waitForTimeout(8000)
+      await page.locator('[data-anchor="speedboat:0"]').click({ force: true }).catch(() => {})
+      await page.waitForTimeout(6000)
+    },
   },
 ]
