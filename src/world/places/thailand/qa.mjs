@@ -22,8 +22,8 @@ export const screens = [
   // Thailand: the Thailand map (thailand-map.md: where she lands; home from a trip with a stamp landing, every stamp
   // in), then Agong's house in 3D (the arrival mid-ride, each spot, a few things in
   // use), and the party card.
-  { name: 'thailand-map', hash: '#/world/thailand', reset: true, wait: 1500 },
-  { name: 'thailand-map-home', hash: '#/world/thailand/hub/map?stamp=boat-trip', stampAll: 'thailand', wait: 2200 },
+  { name: 'thailand-map', hash: '#/world/thailand', reset: true, wait: 3000 },
+  { name: 'thailand-map-home', hash: '#/world/thailand/hub/map?stamp=boat-trip', stampAll: 'thailand', wait: 3200 },
   { name: 'thailand-arrive', hash: '#/world/thailand/hub/arrive', reset: true, wait: 1400 },
   ...['street', 'downstairs', 'downstairs?at=table', 'downstairs?at=desk', 'downstairs?at=altar', 'downstairs?at=photos', 'upstairs', 'upstairs?at=mattress', 'upstairs?at=couch', 'upstairs?at=bathroom-door'].map((to) => ({
     name: `thailand-${to.replace('?at=', '-')}`,
@@ -844,6 +844,40 @@ export const pacing = [
 
 /** Filmed moments (scripts/qa-motion.mjs): the core verbs, driven the way a child would. */
 export const motion = []
+
+// The Thailand map (3D, activities/hub/map/): the board with everything alive on it, a few things poked (the elephants
+// trumpet, the dolphins leap, the cloud rains and leaves a rainbow, the coconut drops), the board swung round with a
+// drag, and a pin tapped (the camera swoops to Krabi and the trip opens).
+const thaiMap = (name, seconds, act) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/hub/map`)
+    await page.waitForFunction(() => window.__thaiMapQA?.().mode, null, { timeout: 20000 })
+    await page.waitForTimeout(1500)
+  },
+  act,
+})
+const mapTaps = (taps) => async (page) => {
+  for (const [what, wait] of taps) {
+    await tapAnchor(page, what)
+    await page.waitForTimeout(wait)
+  }
+}
+motion.push(
+  thaiMap('thai-map-alive', 5, async (page) => page.waitForTimeout(5000)),
+  thaiMap('thai-map-pokes', 11, mapTaps([['poke:elephant', 2300], ['poke:dolphins', 1900], ['poke:clouds', 4200], ['poke:palm', 2200]])),
+  thaiMap('thai-map-spin', 5, async (page) => {
+    const y = vp.height * 0.55
+    await page.mouse.move(vp.width * 0.7, y)
+    await page.mouse.down()
+    await page.mouse.move(vp.width * 0.3, y - 30, { steps: 30 })
+    await page.mouse.move(vp.width * 0.75, y + 40, { steps: 40 })
+    await page.mouse.up()
+    await page.waitForTimeout(800)
+  }),
+  thaiMap('thai-map-pin', 4, mapTaps([['pin:krabi', 3200]])),
+)
 
 // Agong's house (Thailand, 3D): Kaylee's hop-trot across the floor, hopping up the stairs (the camera follows her to
 // the other floor), and the mattress bounce getting higher until she flops down. Taps go through the house's tap

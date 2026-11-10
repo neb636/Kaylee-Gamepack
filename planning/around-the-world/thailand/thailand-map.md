@@ -1,6 +1,6 @@
 # 🗺️ The Thailand map: tap a pin
 
-Built: a tap map, like Australia’s · Country hub (2D) · updated 2026-10-28
+Built: a 3D toy map · Country hub (3D) · updated 2026-11-10
 
 Thailand has grown past one house. Now when Sparkle's balloon lands in Thailand, Kaylee sees a big **map of Thailand** with a pin for each place, like Australia's map. She taps **Bangkok** (Agong's house), **Krabi** (the boat and the elephants) or **Nan** (the mountains) and that place opens; the animals and boats on the map hop when she taps them. Trips end back on the map, where their stamp lands on the pin. The mall day still starts at the house: Mommy or Daddy asks if she wants to go to the mall.
 
@@ -32,6 +32,7 @@ New: 🌍 World map → 🗺️ Thailand map (fly the plane) → 📍 Land on a 
 - **Packing, the goodbye, the x-ray, the window seat?** **Packing and the window seat, once per session** (the first trip after the app opens). Every trip after that: the plane flies across the map for a moment and lands her straight at the landing spot (Krabi) or the other map (Nan's). The goodbye at Agong's door and the x-ray belt drop out of the path. *(Since 2026-10-28 there's no flight on the map: a later trip opens straight at its landing spot.)*
 - **Where does a trip end?** **Back on the Thailand map**, where the stamp lands on that place's pin.
 - **The mall?** **Still starts at the house**: Mommy (upstairs) or Daddy (on the street) asks only if she wants to go to the mall, 👍 or ✋.
+- **2D or 3D, again (2026-11-10):** “The thailand map looks super lame. Since Thailand is full 3d I think the map should be as well.” He sent three pictures of 3D diorama maps: great, but too realistic; ours keeps the app's fun, kid-game look. **The map is 3D now** (see What's built).
 - **The toy plane? (2026-10-28)** **Too confusing. Make it a normal map to tap, like Australia's.** The plane, its flights and its feel knobs are gone: tap a pin and that place opens.
 
 ## 👆 The map: tap a pin
@@ -126,7 +127,7 @@ The mall (from the house): 🏠 Bangkok pin → the house → 👩 Mommy or Dadd
    The first trip per session: pack, the plane takes off on the map, the window seat, landing. Trips end on the map with the stamp landing on the pin. Mommy's and Daddy's cards in the house ask only about the mall. AGENTS.md and the Thailand plan updated (“trips start from the house” isn't true any more).
 4. **Greybox 3: a tap map, no plane** [done] · 2026-10-28
    Dad found flying the plane confusing: the map is a normal tap map like Australia's. The plane, its flights, its knobs and the `plane`/`fly` params are gone.
-5. **The look** [next]
+5. **The look** [done] · 2026-11-10 · in 3D (see What's built)
    The painted map in layers (sea, land, landmarks, clouds above), the pokeables as sprites in the same camera, their reactions.
 6. **Voices, hints, QA** [todo]
    Sparkle's welcome and the first-time facts (lines.ts), the hint after ~8 s (a fresh “tap a pin” line), the map in `qa-screens`, a `qa-motion` scenario for a tap, `qa-pacing`, full QA.
@@ -139,6 +140,19 @@ The mall (from the house): 🏠 Bangkok pin → the house → 👩 Mommy or Dadd
 - **Where does Sparkle's balloon go?** OPEN: My pick: it floats in at the map's edge when she arrives, and Sparkle talks from the corner as she does in the trips. *For now Sparkle sits in the corner, as in the trips; no balloon yet.*
 
 ## 📒 What's built
+
+### The look, in 3D ([done] · 2026-11-10)
+
+Dad: the 2D map “looks super lame”; make it 3D like the rest of Thailand, with the fun of his diorama pictures but in our toy look.
+
+- **A toy board in the sky** (`map/world.ts`, `terrain.ts`, `toys.ts`, `field.ts`): a pink and cream tray with clouds drifting under and over it. Thailand stands up out of a turquoise sea like a slice of cake, cut from its **real coastline** (`land.ts`, from Natural Earth by `scripts/thailand-map-land.mjs`), with beaches, hills, rice fields, rivers and a dotted trail from Bangkok to each place painted on top. The neighbours are low cream paper with dashed borders, doodled hills and a compass rose. The sea foams along every shore.
+- **The four places are little models** with a fat bobbing pin over each: Bangkok's pastel shophouses, towers and flag; Nan's rice terraces and mountains; Krabi's limestone towers; Koh Samet's beach island with a speedboat going round it. Tap one: the pin spins, the camera swoops down, the place opens (the same rules as before). A stamp rides on its pin.
+- **Everything answers a poke:** the elephants trumpet and squirt, the rain cloud rains on Nan and leaves a rainbow, the gibbon swings wildly, the buffalo shakes its head, the hornbill loops, the tuk-tuk honks and zooms, the dolphins leap, the longtail roars off, the big palm drops a coconut, plus (no line) Sparkle's balloon, a sea turtle, a rice barge. Trees and mountains puff leaves, the sea splashes, the ground pops confetti, clouds squish.
+- **She can turn it:** a drag swings the board round, a pinch brings it closer (the same camera as her Roblox controls, `Shot.roam`).
+- **Voices:** no new lines. The welcome and the nine facts are the recorded ones.
+- **No temples or Buddhas** (rule 8): Dad's pictures had several; none are on the map.
+- QA: `thai-map-alive`, `thai-map-pokes`, `thai-map-spin`, `thai-map-pin` motion runs; `window.__thaiMapQA()`.
+- Not done: the game shelf's card picture still shows the old map; Koh Samet sits a little south of where it really is, and bigger, so she can see and tap it.
 
 ### Greybox 3: a normal tap map ([done] · 2026-10-28)
 
