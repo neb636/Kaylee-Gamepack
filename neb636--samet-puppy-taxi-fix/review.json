@@ -1,0 +1,11 @@
+{
+  "title": "Koh Samet: the puppy comes out of the taxi",
+  "checkIn": "fix",
+  "kaylee": "Before: if she walked off after the puppy jumped in the taxi, he stayed in it forever and the taxi waited with him. After: a few seconds later he hops out and runs after her (or at once when she calls him), then shows the way again.",
+  "questions": [],
+  "reels": [{ "name": "samet-puppy-taxi-after", "moments": ["thailand-samet-wayfind-walkoff"] }],
+  "links": [
+    { "label": "Na Dan, only the snorkel left: let him jump in, then walk off", "hash": "#/world/thailand/samet-trip/island?at=nadan&flags=jetski,sandcastle,hideseek" },
+    { "label": "Tune when he hops out (feel lab)", "hash": "#/world/thailand/samet-trip/island?at=nadan&flags=jetski,sandcastle,hideseek&feel=1" }
+  ]
+}

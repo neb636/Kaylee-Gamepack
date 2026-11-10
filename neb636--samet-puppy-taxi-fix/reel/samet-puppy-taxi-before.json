@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "samet-puppy-taxi-before",
+  "title": "Samet puppy taxi before",
+  "video": "samet-puppy-taxi-before.mp4",
+  "gif": "samet-puppy-taxi-before.gif",
+  "seconds": 24,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "thailand-samet-wayfind-walkoff",
+      "where": "thailand-samet-wayfind-walkoff",
+      "seconds": 22,
+      "fps": 31.6,
+      "status": "ok"
+    }
+  ]
+}
