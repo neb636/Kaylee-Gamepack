@@ -1,9 +1,0 @@
-{
-  "title": "The new world map",
-  "checkIn": "2 of 4: hear the script",
-  "kaylee": "A real world map: true shapes and sizes, her eight places shimmering with an animal beside each, and a balloon flight that shows her where each country is.",
-  "questions": ["Are these the right eight animals? (The camel for Egypt and the wolf cub for Italy are the least obvious.)", "Do the country names sound right?"],
-  "tableReads": [["australia", "mapName"], ["canada", "mapName"], ["china", "mapName"], ["egypt", "mapName"], ["italy", "mapName"], ["peru", "mapName"], ["poles", "mapName"], ["thailand", "mapName"]],
-  "reels": [{ "name": "world-map", "moments": ["world-map-fly"] }],
-  "links": [{ "label": "Try the map", "hash": "#/world?view=map" }, { "label": "Tune the shimmer and flight", "hash": "#/world?view=map&feel=1" }]
-}

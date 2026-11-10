@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100"><title>A brown bear</title>
-<ellipse cx="66" cy="66" rx="42" ry="28" fill="#a46e4b"/><path d="M26 66c0-16 16-30 40-30 26 0 42 14 42 30z" fill="#c99266"/>
-<rect x="34" y="72" width="16" height="22" rx="7" fill="#a46e4b"/><rect x="80" y="72" width="16" height="22" rx="7" fill="#a46e4b"/>
-<circle cx="22" cy="24" r="9" fill="#a46e4b"/><circle cx="52" cy="24" r="9" fill="#a46e4b"/><circle cx="37" cy="44" r="25" fill="#c99266"/>
-<ellipse cx="37" cy="51" rx="12" ry="9" fill="#e5b78f"/><ellipse cx="37" cy="46" rx="4.5" ry="3" fill="#2b2330"/>
-<ellipse cx="28" cy="38" rx="3" ry="4" fill="#2b2330"/><ellipse cx="46" cy="38" rx="3" ry="4" fill="#2b2330"/><ellipse cx="22" cy="46" rx="5" ry="3" fill="#ff8fb8" opacity=".6"/><ellipse cx="52" cy="46" rx="5" ry="3" fill="#ff8fb8" opacity=".6"/>
-<path d="M32 54q5 4 10 0" fill="none" stroke="#2b2330" stroke-width="2.4" stroke-linecap="round"/></svg>
