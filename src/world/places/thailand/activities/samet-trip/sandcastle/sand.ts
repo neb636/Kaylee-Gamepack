@@ -24,9 +24,11 @@ const smooth = (a: number, b: number, x: number) => {
   return t * t * (3 - 2 * t)
 }
 
-/** The patch's size in its frame (meters), and the part she can dig (the rest blends into the beach). */
-export const PATCH = { a0: -6, a1: 6, v0: -9.5, v1: 3.5, cell: 0.125 }
-export const DIGGABLE = { a0: -4.2, a1: 4.2, v0: -7.6, v1: 0.6 }
+/** The patch's size in its frame (meters), and the part she can dig (the rest blends into the beach). It reaches far
+ *  up the beach (v0) because a tall phone looks down over a long strip of sand below the castle: every bit of sand on
+ *  any screen digs (#357: the bottom third of an iPhone in portrait didn't). */
+export const PATCH = { a0: -6, a1: 6, v0: -15, v1: 3.5, cell: 0.125 }
+export const DIGGABLE = { a0: -4.2, a1: 4.2, v0: -13.9, v1: 0.6 }
 /** Inland of this the lagoon is cut out and the patch's own water shows. */
 export const CUT_V = -2.1
 
@@ -75,6 +77,8 @@ export class Sand {
   private az: number
   /** Where water was last frame (so the mesh only changes there). */
   private wetRows = [0, 0]
+  /** Seconds until the next pass that wets the sand under water and dries the rest, over the whole patch. */
+  private wetT = 0
   sea = 0
 
   constructor(
@@ -280,7 +284,7 @@ export class Sand {
   // ---------------------------------------------------------------- every frame
 
   /** Dry sand runs, wet sand sticks; the dug sand slowly dries. */
-  settle(dt: number, feel: SandFeel) {
+  settle(_dt: number, feel: SandFeel) {
     const b = this.active
     if (!b) return
     const n = this.nx
@@ -306,20 +310,35 @@ export class Sand {
             moved += Math.abs(m)
           }
         }
-    // Drying.
-    for (let j = j0; j <= j1; j++)
-      for (let i = i0; i <= i1; i++) {
-        const k = j * n + i
-        if (this.W[k] > 0.004) this.wet[k] = 1
-        else if (this.wet[k] > this.dryBase[k]) this.wet[k] = Math.max(this.dryBase[k], this.wet[k] - dt / 70)
-      }
     this.dirty = this.dirty ? [Math.min(this.dirty[0], i0), Math.min(this.dirty[1], j0), Math.max(this.dirty[2], i1), Math.max(this.dirty[3], j1)] : [i0, j0, i1, j1]
-    // (Still and dried out: nothing more to do here.)
-    if (moved < 1e-4 && !this.drying(i0, j0, i1, j1)) this.active = null
+    if (moved < 1e-4) this.active = null
   }
-  private drying(i0: number, j0: number, i1: number, j1: number) {
-    for (let j = j0; j <= j1; j += 2) for (let i = i0; i <= i1; i += 2) if (this.wet[j * this.nx + i] > this.dryBase[j * this.nx + i] + 0.02) return true
-    return false
+
+  /** Sand under water turns wet (and a little round it), the rest dries back slowly: over the whole patch, a few
+   *  times a second. (It used to happen only where she had dug, so the tide left a hard-edged dark box, #357.) */
+  soak(dt: number) {
+    if ((this.wetT -= dt) > 0) return
+    const step = 0.2 - this.wetT
+    this.wetT = 0.2
+    const n = this.nx
+    const { W, wet, dryBase } = this
+    let box: [number, number, number, number] | null = null
+    for (let j = 1; j < this.nz - 1; j++)
+      for (let i = 1; i < n - 1; i++) {
+        const k = j * n + i
+        let to = wet[k]
+        if (W[k] > 0.004) to = 1
+        else {
+          // Drying, but never much drier than its neighbors: the wet sand fades out over a few cells, not at a line.
+          if (to > dryBase[k]) to = Math.max(dryBase[k], to - step / 70)
+          to = Math.max(to, Math.max(wet[k - 1], wet[k + 1], wet[k - n], wet[k + n]) - 0.22)
+          to = Math.min(1, to)
+        }
+        if (Math.abs(to - wet[k]) < 1e-4) continue
+        wet[k] = to
+        box = box ? [Math.min(box[0], i), Math.min(box[1], j), Math.max(box[2], i), Math.max(box[3], j)] : [i, j, i, j]
+      }
+    if (box) this.dirty = this.dirty ? [Math.min(this.dirty[0], box[0]), Math.min(this.dirty[1], box[1]), Math.max(this.dirty[2], box[2]), Math.max(this.dirty[3], box[3])] : box
   }
 
   /** The water: the sea's rows held at `sea`, everything else flowing downhill and soaking away. */
@@ -502,6 +521,116 @@ export class Sand {
       }
     return best
   }
+  /** The biggest hollow she has dug inland of `inlandOf` (the moat, or her biggest hole): its cells, the deepest of
+   *  them (`core`, at least half as deep as its deepest point) and the cell of it nearest the sea. */
+  hollow(inlandOf = -2.4, dug = 0.1) {
+    const n = this.nx
+    const jMax = Math.floor((inlandOf - PATCH.v0) / PATCH.cell)
+    const seen = new Uint8Array(n * this.nz)
+    let best: number[] = []
+    const stack: number[] = []
+    for (let j = 1; j <= jMax; j++)
+      for (let i = 1; i < n - 1; i++) {
+        const k0 = j * n + i
+        if (seen[k0] || this.rest[k0] - this.h[k0] < dug) continue
+        const cells: number[] = []
+        seen[k0] = 1
+        stack.push(k0)
+        while (stack.length) {
+          const k = stack.pop()!
+          cells.push(k)
+          const kj = Math.floor(k / n)
+          const ki = k - kj * n
+          for (const [di, dj] of NEIGHBORS) {
+            const ii = ki + di
+            const jj = kj + dj
+            if (ii < 1 || ii >= n - 1 || jj < 1 || jj > jMax) continue
+            const k2 = jj * n + ii
+            if (seen[k2] || this.rest[k2] - this.h[k2] < dug) continue
+            seen[k2] = 1
+            stack.push(k2)
+          }
+        }
+        if (cells.length > best.length) best = cells
+      }
+    let deep = 0
+    for (const k of best) deep = Math.max(deep, this.rest[k] - this.h[k])
+    const core = best.filter((k) => this.rest[k] - this.h[k] >= Math.max(dug, deep * 0.5))
+    return { cells: best, core, deep }
+  }
+  /** How much of these cells has water standing deeper than `min` (m²). */
+  wetArea(cells: number[], min = 0.03) {
+    let c = 0
+    for (const k of cells) if (this.W[k] > min) c++
+    return c * PATCH.cell * PATCH.cell
+  }
+  /** The shortest way from the open sea's water (water joined to the sea) to any of `cells`, up to `max` meters:
+   *  where it starts in the water (`from`), where it reaches the cells (`to`) and how long it is. Null if further. */
+  gap(cells: number[], max: number, min = 0.01, ok: (dug: number) => boolean = () => true) {
+    if (!cells.length) return null
+    const n = this.nx
+    const nz = this.nz
+    const N = n * nz
+    // The sea's water: from the sea's rows through every cell with water, joined side to side.
+    const sea = new Uint8Array(N)
+    const q: number[] = []
+    for (let j = nz - 3; j < nz; j++) for (let i = 1; i < n - 1; i++) if (this.W[j * n + i] > min) (sea[j * n + i] = 1), q.push(j * n + i)
+    for (let h = 0; h < q.length; h++) {
+      const k = q[h]
+      for (const k2 of [k - 1, k + 1, k - n, k + n]) if (k2 >= 0 && k2 < N && !sea[k2] && this.W[k2] > min) (sea[k2] = 1), q.push(k2)
+    }
+    // Out from the target cells over the sand until a sea cell is met (8 neighbors, so diagonals count about right).
+    const dist = new Float32Array(N).fill(Infinity)
+    const src = new Int32Array(N).fill(-1)
+    let front: number[] = []
+    for (const k of cells) {
+      if (sea[k]) return { from: this.cellAt(k), to: this.cellAt(k), d: 0 }
+      dist[k] = 0
+      src[k] = k
+      front.push(k)
+    }
+    const c = PATCH.cell
+    let found: { k: number; d: number } | null = null
+    while (front.length) {
+      const next: number[] = []
+      for (const k of front) {
+        const kj = Math.floor(k / n)
+        const ki = k - kj * n
+        for (const [di, dj] of NEIGHBORS8) {
+          const ii = ki + di
+          const jj = kj + dj
+          if (ii < 1 || ii >= n - 1 || jj < 1 || jj >= nz - 1) continue
+          const k2 = jj * n + ii
+          const d = dist[k] + c * (di && dj ? Math.SQRT2 : 1)
+          if (d > max || d >= dist[k2]) continue
+          dist[k2] = d
+          src[k2] = src[k]
+          if (sea[k2]) {
+            if (ok(this.rest[k2] - this.h[k2]) && (!found || d < found.d)) found = { k: k2, d }
+            continue
+          }
+          next.push(k2)
+        }
+      }
+      front = next
+    }
+    if (!found) return null
+    return { from: this.cellAt(found.k), to: this.cellAt(src[found.k]), d: found.d }
+  }
+  private cellAt(k: number) {
+    const j = Math.floor(k / this.nx)
+    const i = k - j * this.nx
+    return { a: PATCH.a0 + i * PATCH.cell, v: PATCH.v0 + j * PATCH.cell }
+  }
+  /** Scoops the sand out down to `floor` (m, world height) in a soft round of radius `r` (the sand washes away). */
+  carve(a: number, v: number, r: number, floor: number) {
+    this.each(a, v, r, (k, w) => {
+      const to = Math.max(this.rest[k] - 0.6, floor)
+      if (this.h[k] <= to) return
+      this.h[k] -= (this.h[k] - to) * Math.min(1, w * 1.6)
+      this.wet[k] = 1
+    })
+  }
   /** How much sand she has moved in all (m³), for QA. */
   moved() {
     let s = 0
@@ -522,6 +651,8 @@ export class Sand {
   }
 }
 
+const NEIGHBORS = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+const NEIGHBORS8 = [...NEIGHBORS, [1, 1], [1, -1], [-1, 1], [-1, -1]]
 const tint = new Color()
 const WET = new Color('#E2C597')
 const DEEP = new Color('#C9A472')

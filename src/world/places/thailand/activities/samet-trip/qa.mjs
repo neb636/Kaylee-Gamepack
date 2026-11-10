@@ -489,6 +489,119 @@ export const motion = [
       await page.waitForTimeout(4000)
     },
   },
+  // #357 sandcastle batch: the moat dug round (each bit twinkles, the moulds bounce in, a cheer, the towers come).
+  {
+    name: 'thailand-samet-sand-moat',
+    seconds: 10,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/sandcastle?round=dig`)
+      await ready(page)
+      await page.waitForTimeout(1500)
+    },
+    act: async (page) => {
+      const q = await page.evaluate(() => window.__thaiSametQA?.())
+      const c = q.castle
+      const pm = Math.abs(q.sea0.y - c.y) / 5.3
+      await page.mouse.move(c.x + 1.25 * pm, c.y)
+      await page.mouse.down()
+      for (let i = 1; i <= 52; i++) {
+        const t = (i / 48) * Math.PI * 2
+        await page.mouse.move(c.x + Math.cos(t) * 1.25 * pm, c.y + Math.sin(t) * 0.8 * pm)
+        await page.waitForTimeout(70)
+      }
+      await page.mouse.up()
+      await page.waitForTimeout(3000)
+    },
+  },
+  // Filling a bucket: drag it through the sand (it scoops) and tap it (a tower); dig beside the next one.
+  {
+    name: 'thailand-samet-sand-bucket',
+    seconds: 12,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/sandcastle?round=towers`)
+      await ready(page)
+      await page.waitForTimeout(2500)
+    },
+    act: async (page) => {
+      const vp = page.viewportSize()
+      const u = Math.min(vp.width, vp.height) / 12
+      let m = (await page.evaluate(() => window.__thaiSametQA?.()))?.moulds?.[0]
+      if (!m) return
+      await page.mouse.move(m.x, m.y)
+      await page.mouse.down()
+      for (let i = 1; i <= 36; i++) {
+        await page.mouse.move(m.x + Math.sin(i * 0.35) * u * 1.4, m.y - (i / 36) * u * 2.2)
+        await page.waitForTimeout(60)
+      }
+      await page.mouse.up()
+      await page.waitForTimeout(600)
+      m = (await page.evaluate(() => window.__thaiSametQA?.()))?.moulds?.[0]
+      await page.mouse.click(m.x, m.y)
+      await page.waitForTimeout(2000)
+      // The square one: dig right beside it, and the sand flies in.
+      const s = (await page.evaluate(() => window.__thaiSametQA?.()))?.moulds?.[1]
+      for (let r = 0; r < 3; r++) {
+        await page.mouse.move(s.x - u * 1.2, s.y - u * (1.1 + r * 0.25))
+        await page.mouse.down()
+        for (let i = 1; i <= 10; i++) {
+          await page.mouse.move(s.x - u * 1.2 + (i / 10) * u * 2.4, s.y - u * (1.1 + r * 0.25))
+          await page.waitForTimeout(60)
+        }
+        await page.mouse.up()
+      }
+      await page.waitForTimeout(1500)
+    },
+  },
+  // Burying Daddy: a few rubs over him, then he wiggles his toes and sneezes himself out.
+  {
+    name: 'thailand-samet-sand-bury',
+    seconds: 10,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/sandcastle?round=dig`)
+      await ready(page)
+      await page.waitForTimeout(1500)
+    },
+    act: async (page) => {
+      const d = (await page.evaluate(() => window.__thaiSametQA?.())).dad
+      const vp = page.viewportSize()
+      const u = Math.min(vp.width, vp.height) / 14
+      await page.mouse.move(d.x - u, d.y + u)
+      await page.mouse.down()
+      for (let i = 1; i <= 60; i++) {
+        await page.mouse.move(d.x + (i % 2 ? u : -u), d.y + u - ((i % 12) / 12) * u * 2.4)
+        await page.waitForTimeout(55)
+      }
+      await page.mouse.up()
+      await page.waitForTimeout(5000)
+    },
+  },
+  // The tide, a channel dug from the moat's rim out to the sea (#357: it left a dam and the moat stayed dry): the
+  // sand left between glints and gives way, and the water runs into the moat.
+  {
+    name: 'thailand-samet-sand-out',
+    seconds: 11,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/sandcastle?round=tide&feel.sandTide.time=3`)
+      await ready(page)
+      await page.waitForTimeout(3500)
+    },
+    act: async (page) => {
+      // (From the castle's and the sea's screen points, so the same spot on main for the before clip.)
+      const q = await page.evaluate(() => window.__thaiSametQA?.())
+      const c = q.castle
+      const pm = Math.abs(q.sea0.y - c.y) / 5.3
+      const a = { x: c.x + 0.7 * pm, y: c.y - 1.45 * pm }
+      const b = { x: c.x + 0.7 * pm, y: q.sea0.y - 0.3 * pm }
+      await page.mouse.move(a.x, a.y)
+      await page.mouse.down()
+      for (let i = 1; i <= 24; i++) {
+        await page.mouse.move(a.x + ((b.x - a.x) * i) / 24, a.y + ((b.y - a.y) * i) / 24)
+        await page.waitForTimeout(60)
+      }
+      await page.mouse.up()
+      await page.waitForTimeout(6500)
+    },
+  },
   {
     name: 'thailand-samet-island-lead',
     seconds: 10,
