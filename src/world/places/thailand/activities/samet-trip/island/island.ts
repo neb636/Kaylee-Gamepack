@@ -118,7 +118,7 @@ const RIDE = knobs('sametRide', 'The green taxi and the jet ski', FILE, {
 /** The beach puppy who shows her the way (#357 way-finding, card B). */
 const PUP = knobs('sametPuppy', 'The beach puppy', FILE, {
   lead: { value: 4.5, min: 1.5, max: 10, step: 0.25, label: 'Runs on when she is this close', unit: 'm', note: 'she catches up to within this of him and he runs on ahead' },
-  wait: { value: 8, min: 3, max: 16, step: 0.25, label: 'Waits this far ahead', unit: 'm', note: 'he runs this far ahead of her, then sits, looks back and waits' },
+  wait: { value: 8, min: 3, max: 16, step: 0.25, label: 'Waits this far ahead', unit: 'm', note: 'he runs this far ahead of her (less if that would be off her screen), then sits, looks back and waits' },
   speed: { value: 5.2, min: 2, max: 9, step: 0.1, label: 'His run', unit: 'm/s' },
   idle: { value: 8, min: 3, max: 20, step: 0.5, label: 'Comes to fetch her after', unit: 's', note: 'with nothing touched this long, he runs back to her, barks and tugs her on' },
   again: { value: 1.6, min: 1, max: 3, step: 0.1, label: 'Each fetch waits longer', unit: '×', note: 'the next fetch waits this many times longer (help, not nagging)' },
@@ -433,6 +433,7 @@ export class SametIsland implements World3D {
   /** Arrived where the puppy was going: everyone hops off in a moment. */
   private autoOffT = -1
   private frames = 0
+  private reachMemo: Record<string, number | null> | null = null
   private talk = { nick: 0, ji: 0, taxi: 0 }
 
   constructor(
@@ -1359,8 +1360,8 @@ export class SametIsland implements World3D {
     // It waits while she's close by, while it's on her screen, while the puppy waits in it (or at its stop for it), and
     // while she rides and hasn't got off: it never drives off from under her nose.
     const seen = this.mode === 'walk' && d < 70 && this.onScreen(tmp.set(tp.x, tp.y + 1.2, tp.z))
-    const called = !!this.pupTaxi && this.pupState === 'taxi' && tx.stop === this.pupTaxi.from
-    tx.hold = tx.state === 'wait' && (near || seen || this.pupAboard || called || (this.aboard && this.autoOffT >= 0))
+    const called = !this.aboard && !!this.pupTaxi && this.pupState === 'taxi' && tx.stop === this.pupTaxi.from
+    tx.hold = tx.state === 'wait' && (near || seen || (this.pupAboard && !this.aboard) || called || (this.aboard && this.autoOffT >= 0))
     tx.update(dt, (x, z) => Math.max(0, this.isl.ground.heightAt(x, z)), RIDE.taxi)
     if (tx.arrived) {
       tx.arrived = false
@@ -1382,7 +1383,7 @@ export class SametIsland implements World3D {
       if (this.aboard) tune()
     }
     // The puppy in the back: walking right up to it is getting in.
-    if (this.pupAboard && this.mode === 'walk' && tx.state === 'wait' && d < 4.2) this.boardTaxi()
+    if (this.pupAboard && this.mode === 'walk' && tx.state === 'wait' && d < RIDE.near + 0.5) this.boardTaxi()
     const gm = this.taxiGlow.material as MeshBasicMaterial
     const glow = this.mode === 'walk' && tx.state === 'wait' && (near || this.pupAboard) ? 0.55 + 0.3 * Math.sin(this.time * 5) : 0
     gm.opacity += (glow - gm.opacity) * ease(dt, 6)
@@ -2850,7 +2851,14 @@ export class SametIsland implements World3D {
           if (this.time - this.pupPlanAt > 4) this.planPuppy()
           break
         }
-        if (!this.pupWaiting && (ahead >= PUP.wait - 0.3 || end)) this.pupWaiting = true
+        // He runs on to `wait` meters ahead of her, or less where that would be off her screen.
+        let want = Math.min(r.len, h.s + PUP.wait)
+        for (let d = PUP.wait; d > PUP.lead + 1; d -= 0.5) {
+          const p = pointAt(r, Math.min(r.len, h.s + d))
+          want = Math.min(r.len, h.s + d)
+          if (this.inFamilyFrame(p.x, p.z)) break
+        }
+        if (!this.pupWaiting && (this.pupS >= want - 0.3 || end)) this.pupWaiting = true
         if (this.pupWaiting && ahead < PUP.lead && !end) this.pupWaiting = false
         if (this.pupWaiting) {
           // Waiting for her: he sits, looks back at her, wags.
@@ -2859,7 +2867,7 @@ export class SametIsland implements World3D {
           else P.stay(dt, her)
           P.look = look(her)
         } else {
-          this.pupS = P.alongRoute(r, this.pupS, Math.min(r.len, h.s + PUP.wait), PUP.speed, dt)
+          this.pupS = P.alongRoute(r, this.pupS, want, PUP.speed, dt)
           // (A glance back now and then as he runs.)
           P.look = ahead > PUP.lead + 1 && Math.sin(t * 1.7) > 0.6 ? look(her) : null
         }
@@ -3243,6 +3251,8 @@ export class SametIsland implements World3D {
           pokes: this.counts.pupPokes,
         }
       })(),
+      // Every beach on foot from Na Dan pier (meters along the puppy's best walk; null: no way there).
+      reach: (this.reachMemo ??= Object.fromEntries((Object.keys(FRAMES) as (keyof typeof FRAMES)[]).map((id) => [id, ((r) => (r ? Math.round(r.len) : null))(this.planner.plan(spotStart('nadan'), spotStart(id)))]))),
       cameraYaw: Math.round(wrap(this.camYaw) * DEG),
       fps: this.stats.fps,
       calls: this.stats.calls,
