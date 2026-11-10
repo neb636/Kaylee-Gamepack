@@ -7,8 +7,8 @@
   "page": "thailand-nan-cup.html",
   "audio": null,
   "lines": 51,
-  "seconds": 108,
-  "missing": 3,
+  "seconds": 117,
+  "missing": 0,
   "names": 3,
   "flags": [
     {
@@ -36,7 +36,7 @@
       "key": "nan.cup.taeng.0",
       "text": "Sawasdee ka! I won three Cups!",
       "flags": [
-        "not recorded",
+        "long",
         "new"
       ]
     },
@@ -123,7 +123,6 @@
       "key": "nan.cup.tease.forest",
       "text": "Vroom! Here I go!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -131,7 +130,6 @@
       "key": "nan.cup.tease.steps",
       "text": "Race you down the hill!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -444,9 +442,9 @@
       "key": "nan.cup.taeng.0",
       "part": "nan › cup › taeng",
       "when": "Tap a rival on the board or the podium (each in turn).",
-      "ms": 0,
+      "ms": 4296,
       "flags": [
-        "not recorded",
+        "long",
         "new"
       ]
     },
@@ -651,9 +649,8 @@
       "key": "nan.cup.tease.forest",
       "part": "nan › cup › tease",
       "when": "The race: the home rival's tease on the grid, Sparkle's one instruction (her first race), the lights in Thai.",
-      "ms": 0,
+      "ms": 2736,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -669,9 +666,8 @@
       "key": "nan.cup.tease.steps",
       "part": "nan › cup › tease",
       "when": "The race: the home rival's tease on the grid, Sparkle's one instruction (her first race), the lights in Thai.",
-      "ms": 0,
+      "ms": 1944,
       "flags": [
-        "not recorded",
         "new"
       ]
     },

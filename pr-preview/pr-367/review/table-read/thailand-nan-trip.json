@@ -7,8 +7,8 @@
   "page": "thailand-nan-trip.html",
   "audio": null,
   "lines": 14,
-  "seconds": 45,
-  "missing": 1,
+  "seconds": 47,
+  "missing": 0,
   "names": 0,
   "flags": [
     {
@@ -22,7 +22,6 @@
       "key": "nan.trip.three",
       "text": "Everybody, smile!",
       "flags": [
-        "not recorded",
         "changed"
       ],
       "was": "Everybody say three!"
@@ -135,9 +134,8 @@
       "key": "nan.trip.three",
       "part": "nan › trip",
       "when": "",
-      "ms": 0,
+      "ms": 1968,
       "flags": [
-        "not recorded",
         "changed"
       ],
       "was": "Everybody say three!"
