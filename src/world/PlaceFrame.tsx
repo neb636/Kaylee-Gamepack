@@ -61,14 +61,10 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
   // the hub's top bar, but the section link keeps 'hub' so the hub's useSections finds it.
   const activity = route === HUB ? undefined : route
   const Place = useMemo(() => lazy(entry.load), [entry])
-  // A test link to a finale (#/world/<place>/party?stamps=all) collects every stamp first, before the passport is read.
-  // The initializer covers the first mount; the effect covers a later hash change inside the same country (RunningPlace
-  // stays mounted), and `stamps` below reads as full right away so a gated finale never falls back to the hub.
+  // A test link to a finale (#/world/<place>/party?stamps=all) opens it as if every stamp were collected: `stamps` below
+  // reads as full, so a gated finale never falls back to the hub. It's pretend: nothing is saved to her real passport,
+  // so opening a published test link can't hand her stamps she didn't earn.
   const seedAll = params.stamps === 'all'
-  useState(() => seedAll && setStamps(meta.id, meta.activities.map((a) => a.id)))
-  useEffect(() => {
-    if (seedAll) setStamps(meta.id, meta.activities.map((a) => a.id))
-  }, [seedAll, meta])
   const query = new URLSearchParams(params).toString()
   const link: SectionLink = useMemo(() => ({ place: meta.id, activity: route, section, params }), [meta.id, route, section, query])
   const passport = usePassport()
