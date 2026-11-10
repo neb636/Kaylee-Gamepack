@@ -53,13 +53,14 @@ import { buildIsland, DAY, palmGeo, rng, type Island, type TimeOfDay } from '../
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/speedboat/speedboat.ts'
 const BOAT = knobs('sametBoat', 'The speedboat ride', FILE, {
-  top: { value: 12, min: 4, max: 25, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'Ban Phe to Na Dan is 570 m: at 12 m/s the ride takes about a minute' },
-  accel: { value: 1.8, min: 0.4, max: 6, step: 0.1, label: 'Speeds up', unit: 'm/s²' },
+  top: { value: 17, min: 4, max: 25, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'Ban Phe to Na Dan is 570 m: at 17 m/s the ride takes about 45 s (#357: at 12 it was a minute with little to do)' },
+  accel: { value: 2.8, min: 0.4, max: 6, step: 0.1, label: 'Speeds up', unit: 'm/s²' },
   brake: { value: 1.1, min: 0.3, max: 4, step: 0.05, label: 'Slows in to the pier', unit: 'm/s²' },
   waves: { value: 0.38, min: 0, max: 1.2, step: 0.02, label: 'Waves out at sea', unit: 'm' },
   bump: { value: 2.6, min: 0, max: 6, step: 0.1, label: 'A wake bumps it up', unit: 'm/s' },
   plane: { value: 0.07, min: 0, max: 0.25, step: 0.01, label: 'Bow lifts at speed', unit: 'rad' },
   skip: { value: 12, min: 3, max: 40, step: 1, label: 'Skip button after', unit: 's' },
+  hint: { value: 3, min: 0, max: 10, step: 0.5, label: 'The finger shows her after', unit: 's', note: 'until her hoof has been in the water once (then after 8 s with nothing touched)' },
 })
 const SPRAY = knobs('sametSpray', 'Her hoof in the spray', FILE, {
   rate: { value: 120, min: 10, max: 300, step: 5, label: 'Drops a second', note: 'at full speed (fewer when slow)' },
@@ -69,6 +70,7 @@ const SPRAY = knobs('sametSpray', 'Her hoof in the spray', FILE, {
   along: { value: 2.4, min: 0.5, max: 3.2, step: 0.1, label: 'Hoof reaches along', unit: 'm', note: 'how far forward and back along the side her hoof can go' },
   lean: { value: 0.32, min: 0, max: 0.8, step: 0.02, label: 'Leans over', unit: 'rad' },
   fish: { value: 3.2, min: 0.8, max: 12, step: 0.1, label: 'A flying fish every', unit: 's', note: 'while her hoof is in the water at speed' },
+  wild: { value: 5, min: 1.5, max: 20, step: 0.5, label: 'A flying fish by itself every', unit: 's', note: 'at speed, beside the boat even with her hoof out of the water: something to tap (it flips)' },
   rainbow: { value: 0.55, min: 0, max: 1, step: 0.05, label: 'Rainbow', note: 'how bright the rainbow in the spray is' },
 })
 const CAM = knobs('sametBoatCam', 'The speedboat camera', FILE, {
@@ -373,6 +375,7 @@ export class SametSpeedboat implements World3D {
   private dip = 0
   private sprayAcc = 0
   private fishT = 0
+  private wildT = 0
   private hissT = 0
   private lastTouch = 0
   private captainLife: FaceLife
@@ -778,6 +781,11 @@ export class SametSpeedboat implements World3D {
       this.rainbow.g.visible = false
       this.fishT = Math.min(this.fishT, SPRAY.fish * 0.6)
     }
+    // Now and then one leaps out by itself beside the boat, on whichever side she's sitting: hers to tap.
+    if (this.phase === 'ride' && this.v > BOAT.top * 0.6 && (this.wildT += dt) > SPRAY.wild) {
+      this.wildT = 0
+      this.launchFish(this.handPoint(tmp3))
+    }
 
     // The flying fish glide along beside the boat and dive back in.
     for (const f of this.fish) {
@@ -1093,7 +1101,8 @@ export class SametSpeedboat implements World3D {
   private drawHint(t: number) {
     const el = this.hintEl
     if (!el) return
-    const idle = !this.finger && t - this.lastTouch > HINT_S && this.phase === 'ride'
+    // (Until her hoof has been in the water once, the finger shows her almost at once.)
+    const idle = !this.finger && (t - this.lastTouch > HINT_S || (!this.counts.sprays && t > BOAT.hint)) && this.phase === 'ride'
     const want = idle ? '' : 'none'
     if (el.style.display !== want) el.style.display = want
     // Each time the finger comes up: Sparkle's hint (shown the first time, then said at most twice a visit).
@@ -1153,6 +1162,8 @@ export class SametSpeedboat implements World3D {
     return {
       section: 'speedboat',
       phase: this.phase,
+      // Seconds since it opened (the scene's clock: a slow robot browser runs it slower than the wall clock).
+      time: +this.time.toFixed(1),
       cine: this.rig.cinema ? this.dir.move.id : null,
       cuts: this.dir.cuts,
       along: +(this.s / this.len).toFixed(3),
