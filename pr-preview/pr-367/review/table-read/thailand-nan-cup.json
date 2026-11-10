@@ -7,7 +7,7 @@
   "page": "thailand-nan-cup.html",
   "audio": null,
   "lines": 52,
-  "seconds": 127,
+  "seconds": 120,
   "missing": 0,
   "names": 3,
   "flags": [
@@ -34,7 +34,7 @@
     },
     {
       "key": "nan.cup.taeng.0",
-      "text": "Sawasdee ka! Three Cups in a row, dear!",
+      "text": "Sawasdee ka! Three Cups, dear!",
       "flags": [
         "long",
         "new"
@@ -42,9 +42,8 @@
     },
     {
       "key": "nan.cup.taeng.1",
-      "text": "Zzz... Oh! Is it time?",
+      "text": "Oh! Is it time?",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -57,7 +56,7 @@
     },
     {
       "key": "nan.cup.pao.0",
-      "text": "Sawasdee krap! I know every bend!",
+      "text": "Sawasdee krap! Ready?",
       "flags": [
         "long",
         "new"
@@ -114,7 +113,7 @@
     },
     {
       "key": "nan.cup.facts.moon",
-      "text": "Sun bears are the smallest bears in the world!",
+      "text": "Sun bears are the smallest bears!",
       "flags": [
         "long",
         "new"
@@ -130,9 +129,8 @@
     },
     {
       "key": "nan.cup.tease.steps",
-      "text": "My rice steps, dear. Off we go!",
+      "text": "My rice steps, dear!",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -203,7 +201,7 @@
     },
     {
       "key": "nan.cup.mud",
-      "text": "Splash! Muddy karts go faster!",
+      "text": "Splash! Mud makes you fast!",
       "flags": [
         "long",
         "new"
@@ -211,9 +209,8 @@
     },
     {
       "key": "nan.cup.cloud",
-      "text": "We're in a cloud! Follow the lanterns!",
+      "text": "Follow the lanterns!",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -324,9 +321,8 @@
     },
     {
       "key": "nan.cup.gift.taeng",
-      "text": "Good race! My lucky ribbon, for you.",
+      "text": "My lucky ribbon, for you!",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -450,12 +446,12 @@
         "taeng",
         "0"
       ],
-      "text": "Sawasdee ka! Three Cups in a row, dear!",
+      "text": "Sawasdee ka! Three Cups, dear!",
       "voice": "taeng",
       "key": "nan.cup.taeng.0",
       "part": "nan › cup › taeng",
       "when": "Tap a rival on the board or the podium (each in turn).",
-      "ms": 3816,
+      "ms": 3384,
       "flags": [
         "long",
         "new"
@@ -468,14 +464,13 @@
         "taeng",
         "1"
       ],
-      "text": "Zzz... Oh! Is it time?",
+      "text": "Oh! Is it time?",
       "voice": "taeng",
       "key": "nan.cup.taeng.1",
       "part": "nan › cup › taeng",
       "when": "",
-      "ms": 3312,
+      "ms": 2400,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -503,12 +498,12 @@
         "pao",
         "0"
       ],
-      "text": "Sawasdee krap! I know every bend!",
+      "text": "Sawasdee krap! Ready?",
       "voice": "pao",
       "key": "nan.cup.pao.0",
       "part": "nan › cup › pao",
       "when": "",
-      "ms": 3696,
+      "ms": 3072,
       "flags": [
         "long",
         "new"
@@ -640,12 +635,12 @@
         "facts",
         "moon"
       ],
-      "text": "Sun bears are the smallest bears in the world!",
+      "text": "Sun bears are the smallest bears!",
       "voice": "sparkle",
       "key": "nan.cup.facts.moon",
       "part": "nan › cup › facts",
       "when": "The first time she pokes each rival this visit, after their line, Sparkle's fact.",
-      "ms": 3960,
+      "ms": 3192,
       "flags": [
         "long",
         "new"
@@ -676,14 +671,13 @@
         "tease",
         "steps"
       ],
-      "text": "My rice steps, dear. Off we go!",
+      "text": "My rice steps, dear!",
       "voice": "taeng",
       "key": "nan.cup.tease.steps",
       "part": "nan › cup › tease",
       "when": "The race: the home rival's tease on the grid, Sparkle's one instruction (her first race), the lights in Thai.",
-      "ms": 3384,
+      "ms": 2472,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -846,12 +840,12 @@
         "cup",
         "mud"
       ],
-      "text": "Splash! Muddy karts go faster!",
+      "text": "Splash! Mud makes you fast!",
       "voice": "sparkle",
       "key": "nan.cup.mud",
       "part": "nan › cup",
       "when": "",
-      "ms": 3840,
+      "ms": 3168,
       "flags": [
         "long",
         "new"
@@ -863,14 +857,13 @@
         "cup",
         "cloud"
       ],
-      "text": "We're in a cloud! Follow the lanterns!",
+      "text": "Follow the lanterns!",
       "voice": "sparkle",
       "key": "nan.cup.cloud",
       "part": "nan › cup",
       "when": "",
-      "ms": 3384,
+      "ms": 1920,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -1133,14 +1126,13 @@
         "gift",
         "taeng"
       ],
-      "text": "Good race! My lucky ribbon, for you.",
+      "text": "My lucky ribbon, for you!",
       "voice": "taeng",
       "key": "nan.cup.gift.taeng",
       "part": "nan › cup › gift",
       "when": "",
-      "ms": 4440,
+      "ms": 2616,
       "flags": [
-        "long",
         "new"
       ]
     },
