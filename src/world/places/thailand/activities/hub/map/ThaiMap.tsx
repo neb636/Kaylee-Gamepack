@@ -123,10 +123,15 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
     setTimeout(() => {
       if (id === 'bangkok') return void (location.hash = worldLink(meta.id, 'hub', tripSession.house))
       const trip = PINS.find((p) => p.id === id)!.activity
+      // Koh Samet half done: straight back to the beach she left (not packing and the boat ride again).
+      if (id === 'samet' && readSametSave()?.at) {
+        tripSession.kitDone = true
+        return void (location.hash = worldLink(meta.id, trip, 'island'))
+      }
       if (!tripSession.kitDone) {
         tripSession.kitDone = true
         location.hash = worldLink(meta.id, trip, 'pack')
-      } else if (id === 'samet') location.hash = worldLink(meta.id, trip, readSametSave()?.at ? 'island' : 'speedboat')
+      } else if (id === 'samet') location.hash = worldLink(meta.id, trip, 'speedboat')
       else location.hash = id === 'krabi' ? worldLink(meta.id, trip, 'land', { quick: '1' }) : worldLink(meta.id, trip, 'map')
     }, 450)
   }

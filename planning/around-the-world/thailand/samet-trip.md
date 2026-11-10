@@ -974,3 +974,19 @@ Every phrase goes in `lines.ts` under `L.samet` (tagged by speaker) and is recor
 - **The warm-up crash** (`engine3d/renderer.ts warmUp`, used by `View3D`): three.js's `compileAsync` polls every material until its program is ready and throws ("reading 'isReady'", uncaught: the world is never drawn) when one is disposed meanwhile. It happened when a section was left during its warm-up (its world is freed once its shaders finish) while the next section was warming up with a material it shared: the see-through cache above. `warmUp` is the same poll but drops a disposed material. Robot (Chromium, a device with parallel shader compiling simulated, every program 3 s to link; the island left during its warm-up for the Thailand map and on to the sunset): main crashed 3/6 runs and the sunset never started; this branch 0/6, the sunset plays every time.
 - Robot runs: `thailand-samet-polish-{road,sunset,rope,pack,boat}`.
 - Known: the Wong Duan palm report (1/1) didn't reproduce for the robot before or after; fixed by its likely cause (the 1.6 m). Things within ~8 m of the camera have no ink outline (a palm at the edge of hide and seek's shot, the driftwood tree up close at the sunset).
+
+## Finding her way: the beach puppy (issue #357 way-finding batch, card B, 2026-11-10, PR #369)
+
+- Dad picked card B. The whole toy's notes are `samet-wayfinding.md`; in short: a beach puppy (`island/puppy.ts`) runs
+  ahead to a stop she hasn't played, waits on her screen, fetches her when she's idle 8 s, barks the beach's name on
+  arrival (Sparkle says it), and his thought bubble is a picture of the beach (drawn from the island). The flag badge
+  is gone.
+- His way is A* over the walkable ground (`island/route.ts`), with a new shortcut `path-west` and the sand slide
+  (`SLIDE`) from Ao Prao to Ao Wong Duan: 74.5 s → 44 s. New landmarks: Ao Phai's lifeguard tower, the coconut stall
+  on the spine, the balancing rocks on the Wong Duan road.
+- The taxi drives straight to any stop (`roadBetween`), names a stop only on arrival, drops everyone at the puppy's
+  stop, waits while on her screen, and the camera takes it in when she's beside it.
+- The top-left button calls the puppy (`kit/topLeft.ts`); inside a stop it goes back to the beach. Home is the
+  speedboat at Na Dan (the home picture), and the 🏝️ pin reopens on the beach she left.
+- Knobs `sametPuppy`. Robot: `qa().puppy`, `clock`, `reach`; runs `thailand-samet-wayfind-*`.
+- Leftovers: he doesn't swim; the bubble pictures keep the light they were taken in.

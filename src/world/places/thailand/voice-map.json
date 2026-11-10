@@ -4340,6 +4340,48 @@
     "file": "0d15a817cbed.mp3"
   },
   {
+    "text": "Na Dan pier!",
+    "voice": "sunbear",
+    "sig": "b772c24652",
+    "ms": 1944,
+    "file": "9ce7fdab3e6c.mp3"
+  },
+  {
+    "text": "Hat Sai Kaew!",
+    "voice": "sunbear",
+    "sig": "b772c24652",
+    "ms": 1368,
+    "file": "8f327a25e1f1.mp3"
+  },
+  {
+    "text": "Ao Prao!",
+    "voice": "sunbear",
+    "sig": "b772c24652",
+    "ms": 1632,
+    "file": "9af756a9d08d.mp3"
+  },
+  {
+    "text": "Ao Wong Duan!",
+    "voice": "sunbear",
+    "sig": "b772c24652",
+    "ms": 1632,
+    "file": "b747e107861f.mp3"
+  },
+  {
+    "text": "Wheee! A sand slide!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2352,
+    "file": "f0a9f4cd1110.mp3"
+  },
+  {
+    "text": "Time to go home?",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1440,
+    "file": "a6c0bacceef8.mp3"
+  },
+  {
     "text": "Hi, sweetie!",
     "voice": "nick",
     "sig": "a2881bb105",
@@ -4408,6 +4450,69 @@
     "sig": "ba2e98c34e",
     "ms": 2880,
     "file": "28aa128d19c9.mp3"
+  },
+  {
+    "text": "A beach puppy! He knows the way. Follow him!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4584,
+    "file": "16a31a006f39.mp3"
+  },
+  {
+    "text": "The puppy wants you to come!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1872,
+    "file": "7c632e8c2925.mp3"
+  },
+  {
+    "text": "Na Dan pier!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3000,
+    "file": "5cd30f506661.mp3"
+  },
+  {
+    "text": "Hat Sai Kaew!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1968,
+    "file": "6965b995a4ac.mp3"
+  },
+  {
+    "text": "Ao Hin Khok!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2136,
+    "file": "329a5ce51ecb.mp3"
+  },
+  {
+    "text": "Ao Phai!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1488,
+    "file": "93a7eb0b33ae.mp3"
+  },
+  {
+    "text": "Ao Wong Duan!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2160,
+    "file": "1f9d294cc871.mp3"
+  },
+  {
+    "text": "Ao Prao!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1200,
+    "file": "ce9814857294.mp3"
+  },
+  {
+    "text": "Ao Noi Na!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2184,
+    "file": "bc7cab874652.mp3"
   },
   {
     "text": "A tern!",

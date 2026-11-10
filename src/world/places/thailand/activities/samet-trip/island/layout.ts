@@ -284,7 +284,14 @@ export const WAYS: Way[] = [
   way('path-noina', 'path', 2.4, 5, [[-12, -80], [-30, -80], [-45, -80], [-60, -82], [-74, -84]]),
   way('path-view', 'path', 2.4, 4, [[-134, 100], [-160, 112], [-180, 124], [-194, 131]]),
   way('path-prao', 'path', 2.4, 7, [[-153, -37], [-160, -40], [-166, -46]]),
+  // The beach puppy's shortcut (#357 way-finding): from the south end of Ao Prao's sand down the low west hills to Ao
+  // Wong Duan, ending in the sand slide (SLIDE). About 170 m, where the road round by the spine is 245.
+  way('path-west', 'path', 2.4, 7, [[-172, -14], [-180, 0], [-182, 20], [-176, 40], [-172, 60], [-178, 80], [-180, 100], [-174, 112], [-161, 132]]),
 ]
+
+/** The sand slide at the end of the puppy's shortcut: a smooth pale chute down the dune to Ao Wong Duan's sand. Walk onto
+ *  its top heading down and she sits and whooshes to the foot. */
+export const SLIDE = { top: { x: -174, z: 112 }, foot: { x: -161.5, z: 131.5 }, w: 1.6 }
 
 /** Open grass the forest keeps clear of (a beach bar's yard, the resort, the village by the pier): center and radius. */
 export const CLEARINGS: (XZ & { r: number })[] = [
@@ -387,7 +394,7 @@ export const PARKED: { id: SpotId; at: XZ; face: number }[] = (['saikaew', 'hink
 })
 
 /** The things to poke, island-wide (each a tap target when she's near). `at` is on the ground. */
-export type PokeKind = 'palm' | 'samet' | 'umbrella' | 'chair' | 'ball' | 'icecream' | 'beads' | 'crab' | 'bush' | 'longtail' | 'speedboat' | 'hammock' | 'telescope' | 'tamarind' | 'deckbrella' | 'lantern'
+export type PokeKind = 'palm' | 'samet' | 'umbrella' | 'chair' | 'ball' | 'icecream' | 'beads' | 'crab' | 'bush' | 'longtail' | 'speedboat' | 'hammock' | 'telescope' | 'tamarind' | 'deckbrella' | 'lantern' | 'lifeguard' | 'stall' | 'rocks'
 export interface Poke {
   id: string
   kind: PokeKind
@@ -418,4 +425,21 @@ add('telescope', { x: -193, z: 132 })
 add('tamarind', at(FRAMES.wongduan, -2, -16))
 add('deckbrella', at(DECK, -2.5, 0))
 add('deckbrella', at(DECK, 2.5, 0))
+// Something to know each beach and the long road by (#357 way-finding): Ao Phai's pink lifeguard tower, the coconut stall
+// where the road tops the spine, the balancing rocks halfway down the road to Ao Wong Duan.
+add('lifeguard', at(FRAMES.phai, 5, -4.5))
+add('stall', { x: -85, z: -50.6 })
+add('rocks', { x: -102.8, z: 26 })
 export const POKES: Poke[] = pokes
+
+/** The thing she knows each beach by (the puppy's thought bubble is a picture of it): where to look, and from which way
+ *  (a unit vector from the thing toward the camera, roughly out to sea). */
+export const LANDMARKS: Record<Exclude<SpotId, 'deck'>, { at: XZ; y: number; from: XZ; dist: number }> = {
+  nadan: { at: at(FRAMES.nadan, -4, 16), y: 1.4, from: FRAMES.nadan.t, dist: 15 },
+  saikaew: { at: PLACES.mermaid, y: 1.6, from: BAY.n, dist: 9 },
+  hinkhok: { at: STOPS.sandcastle.at, y: 0.6, from: FRAMES.hinkhok.n, dist: 8 },
+  phai: { at: at(FRAMES.phai, 5, -4.5), y: 1.8, from: FRAMES.phai.n, dist: 9 },
+  wongduan: { at: SNORKEL_BOAT, y: 1, from: { x: -FRAMES.wongduan.n.z, z: FRAMES.wongduan.n.x }, dist: 10 },
+  prao: { at: STOPS.hideseek.at, y: 2.2, from: FRAMES.prao.n, dist: 10 },
+  aonoina: { at: at(FRAMES.aonoina, 0, -9), y: 1.2, from: FRAMES.aonoina.n, dist: 9 },
+}

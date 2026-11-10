@@ -27,11 +27,14 @@
 // gold frame. The animals live on the island (../book/creatures.ts: wander, flee, perch, swim) and react to a tap
 // without the phone too. The beach clean (../book/clean.ts) is the side verb: lift the rubbish on the wet sand (an
 // animal pops out where it was), carry it to the green bin, plonk.
-// Quiet hub: no idle lines. After ~8 s with nothing touched, a pink flag arrow points at the nearest stop without a
-// flag. Talk (lines.ts L.samet.island): Sparkle only when something is new (her first landing this visit, each beach the
+// Quiet hub: no idle lines. The beach puppy shows the way (#357 way-finding, puppy.ts): he runs ahead to a stop she
+// hasn't played (by the shortest walk, his shortcut over the west hills and its sand slide too, or by the green taxi
+// for a far one: he jumps in and it drives straight to his beach), looks back and waits for her, comes to fetch her
+// when she stands still, and barks the beach's name when they get there (Sparkle says it). His thought bubble is a
+// picture of where he's going. Any order: he only suggests; she can always go elsewhere, and he comes along. Talk (lines.ts L.samet.island): Sparkle only when something is new (her first landing this visit, each beach the
 // first time, the jet ski becoming hers, a fact the first time she pokes the mermaid or a samet tree), the family and the
 // taxi driver react to her taps in their own voices. Its feel numbers are knobs (?feel=1).
-import { Color, DynamicDrawUsage, Fog, Frustum, Object3D, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, Quaternion, Raycaster, RingGeometry, Scene, CircleGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
+import { Color, DynamicDrawUsage, Fog, Frustum, Object3D, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PerspectiveCamera, Quaternion, Raycaster, RingGeometry, Scene, CircleGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { clamp, firstTime, type Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import { knobs, watch } from '../../../../../kit/knobs'
@@ -53,15 +56,18 @@ import { BananaBoat, Fish, Swimmer, Tern } from '../jetski/critters'
 import { ANIMALS, type AnimalId } from '../book/animals'
 import { BeachClean, BIN_IDS, JUNK_IDS } from '../book/clean'
 import { WILD, Wildlife, type Creature, type PalmInfo, type WildCtx } from '../book/creatures'
-import { framing, phoneCamera, portraits, snap } from '../book/photo'
+import { framing, phoneCamera, PHOTO_SIZE, portraits, snap } from '../book/photo'
 import { buildSki, type Ski } from '../jetski/ski'
-import { at as atFrame, bay, DECK, FRAMES, PARKED, POKES, RING, spotStart, STOP_IDS, STOPS, SWIMMERS, WAVE_DIR, WAYS, type SpotId, type StopId, type XZ } from './layout'
+import { at as atFrame, bay, DECK, FRAMES, LANDMARKS, PARKED, POKES, RING, SLIDE, spotStart, STOP_IDS, STOPS, SWIMMERS, TAXI_STOPS, WAVE_DIR, WAYS, type SpotId, type StopId, type XZ } from './layout'
+import { FINE } from './scenery'
+import { BEATS, Puppy, type Trick } from './puppy'
+import { Planner, pointAt, project, type Route } from './route'
 import { buildProps, type PokeThing, type Props } from './props'
 import { buildIsland, DAY, TIMES, type Island, type TimeOfDay } from './scenery'
 import type { Surface } from './ground'
 import { makeSeeThrough, SEE } from './seethrough'
 import { SwimRope } from './swimrope'
-import { Taxi } from './taxi'
+import { roadLength, Taxi } from './taxi'
 import { FireDancers } from './dancers'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/island/island.ts'
@@ -109,6 +115,18 @@ const RIDE = knobs('sametRide', 'The green taxi and the jet ski', FILE, {
   dock: { value: 4.5, min: 1, max: 10, step: 0.25, label: 'Lands on a beach below', unit: 'm/s', note: 'slower than this onto a beach and she hops off; faster and it bounces off' },
 })
 
+/** The beach puppy who shows her the way (#357 way-finding, card B). */
+const PUP = knobs('sametPuppy', 'The beach puppy', FILE, {
+  lead: { value: 4.5, min: 1.5, max: 10, step: 0.25, label: 'Runs on when she is this close', unit: 'm', note: 'she catches up to within this of him and he runs on ahead' },
+  wait: { value: 8, min: 3, max: 16, step: 0.25, label: 'Waits this far ahead', unit: 'm', note: 'he runs this far ahead of her (less if that would be off her screen), then sits, looks back and waits' },
+  speed: { value: 5.2, min: 2, max: 9, step: 0.1, label: 'His run', unit: 'm/s' },
+  idle: { value: 8, min: 3, max: 20, step: 0.5, label: 'Comes to fetch her after', unit: 's', note: 'with nothing touched this long, he runs back to her, barks and tugs her on' },
+  again: { value: 1.6, min: 1, max: 3, step: 0.1, label: 'Each fetch waits longer', unit: '×', note: 'the next fetch waits this many times longer (help, not nagging)' },
+  taxiFrom: { value: 200, min: 80, max: 400, step: 10, label: 'Takes the taxi past', unit: 'm', note: 'a walk longer than this, and the taxi is quicker: he jumps in the taxi' },
+  slide: { value: 2.4, min: 1, max: 5, step: 0.1, label: 'The sand slide takes', unit: 's' },
+  frame: { value: 11, min: 4, max: 20, step: 0.5, label: 'Taxi in the picture within', unit: 'm', note: 'she is this close to the waiting taxi: the camera takes it in too' },
+})
+
 export type IslandFlag = StopId
 export interface IslandStart {
   at: SpotId
@@ -137,6 +155,10 @@ export interface IslandEvents {
   /** The shutter clicked (the screen flashes); the photo itself follows in `snap`. */
   shutter?(): void
   snap?(s: Snap): void
+  /** The speedboat at Na Dan pier, before the whole island is done: the home picture comes up (on) or goes (off). */
+  leaveAsk?(on: boolean): void
+  /** The beach pictures for the puppy's thought bubble (rendered from the island once it's drawn). */
+  pictures?(p: Partial<Record<SpotId, string>>): void
   /** An animal she hasn't snapped is close by (the phone button glows). */
   near?(on: boolean): void
   /** Something went in a bin (the beach clean's count). */
@@ -149,9 +171,10 @@ export interface IslandEvents {
 }
 
 const I = L.samet.island
+const PL = L.samet.puppy
+const lookV = new Vector3()
 
 const DEG = 180 / Math.PI
-const HINT_S = 8
 /** The table on the resort deck where the family has lunch (resortDeck's first table). */
 const LUNCH_TABLE = atFrame(DECK, -2.5, 0.8)
 /** How much the beach camera looks inland (vs along the sand): 0.6 ≈ 35° off the sand's line. */
@@ -212,7 +235,7 @@ const FAMILY_GAP = 1.25
  *  less at the bottom, where the buttons are). */
 const FAMILY_FRAME = { x: 0.8, top: 0.72, bottom: -0.6 }
 
-type Mode = 'walk' | 'taxi' | 'ski' | 'kite'
+type Mode = 'walk' | 'taxi' | 'ski' | 'kite' | 'slide'
 
 /** Something the phone can snap: one of the book's animals (a creature, a tern, a crab from its hole). */
 interface SnapTarget {
@@ -225,13 +248,14 @@ interface SnapTarget {
   pose(): void
 }
 
-const LABELS: Record<string, string> = { palm: 'A coconut palm', samet: 'A samet tree', umbrella: 'A beach umbrella', chair: 'A beach chair', ball: 'The beach ball', icecream: 'The ice cream cart', beads: "The bead seller's tray", crab: 'A crab hole', bush: 'Pink flowers', longtail: 'A longtail boat', speedboat: 'The speedboat', hammock: 'The hammock', telescope: 'The telescope', tamarind: 'The tamarind tree', deckbrella: 'An umbrella on the deck', lantern: 'A lantern' }
+const LABELS: Record<string, string> = { palm: 'A coconut palm', samet: 'A samet tree', umbrella: 'A beach umbrella', chair: 'A beach chair', ball: 'The beach ball', icecream: 'The ice cream cart', beads: "The bead seller's tray", crab: 'A crab hole', bush: 'Pink flowers', longtail: 'A longtail boat', speedboat: 'The speedboat', hammock: 'The hammock', telescope: 'The telescope', tamarind: 'The tamarind tree', deckbrella: 'An umbrella on the deck', lantern: 'A lantern', lifeguard: 'The lifeguard tower', stall: 'The coconut stall', rocks: 'The balancing rocks' }
 
 export const ISLAND_ANCHORS: AnchorInfo[] = [
   { id: 'kaylee', label: 'Kaylee', kind: 'thing' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'taxi', label: 'The green taxi', kind: 'thing' },
+  { id: 'puppy', label: 'The beach puppy', kind: 'thing' },
   { id: 'mermaid', label: 'The mermaid statue', kind: 'thing' },
   { id: 'bell', label: 'The bell on the jet ski hut', kind: 'thing' },
   { id: 'banana', label: 'The banana boat', kind: 'thing' },
@@ -257,7 +281,7 @@ export class SametIsland implements World3D {
   private isl: Island
   private props: Props
   private anchorEls = new Map<string, HTMLElement>()
-  private hintEl: HTMLElement | null = null
+  private bubbleEl: HTMLElement | null = null
   private raycaster = new Raycaster()
   private unwatch: () => void
   private w = 1
@@ -365,9 +389,51 @@ export class SametIsland implements World3D {
   private nearAnimal = false
   private bumpV = { x: 0, z: 0, t: 0 }
   private wctx!: WildCtx
-  private counts = { snaps: 0, animalSnaps: 0, golds: 0, cleaned: 0, lifted: 0, boings: 0, taps: 0, pokes: 0, swims: 0, spins: 0, taxiRides: 0, skiRides: 0, kites: 0, coconuts: 0, bonks: 0, kicks: 0, gallops: 0, beaches: 0, ropes: 0 }
+  private counts = { snaps: 0, animalSnaps: 0, golds: 0, cleaned: 0, lifted: 0, boings: 0, taps: 0, pokes: 0, swims: 0, spins: 0, taxiRides: 0, skiRides: 0, kites: 0, coconuts: 0, bonks: 0, kicks: 0, gallops: 0, beaches: 0, ropes: 0, fetches: 0, named: 0, pupCalls: 0, slides: 0, pupPokes: 0, taxiStops: 0, leaveAsks: 0 }
   private seen = new Set<SpotId>()
   private greeted = false
+
+  // ---- The beach puppy (#357 way-finding).
+  private pup: Puppy
+  private planner: Planner
+  /** Where he's taking her: a stop still to do (on its beach), or the driftwood tree for the sunset. Null: all done,
+   *  he trots along beside her. */
+  private pupGoal: { stop: StopId; beach: SpotId; at: XZ } | null = null
+  /** His route there (planned from where she was), and how far along it he is. */
+  private pupRoute: Route | null = null
+  private pupS = 0
+  /** lead: ahead of her (sitting to wait when she falls behind); fetch: running back for her; taxi: to the taxi stop (or
+   *  in the taxi); here: at the stop; free: nowhere to go, beside her. */
+  private pupState: 'lead' | 'fetch' | 'taxi' | 'here' | 'free' = 'lead'
+  /** By taxi: the stop he gets on at and the one he gets off at. */
+  private pupTaxi: { from: number; to: number } | null = null
+  private pupAboard = false
+  /** His place on the taxi's floor by the back step, facing out. */
+  private pupSeat = new Group()
+  private pupWaiting = false
+  private pupPlanAt = -99
+  private pupBarkAt = 0
+  private pupPokes = 0
+  /** The next fetch, in seconds of nothing touched (it waits longer each time), and the touch it counts from. */
+  private fetchWait: number = PUP.idle
+  private fetchFrom = 0
+  /** Meters from each taxi stop to each stop's goal, on foot (they never change). */
+  private stopWalk = new Map<string, number>()
+  private pics: Partial<Record<SpotId, string>> = {}
+  private bubbleK = 0
+  private bubbleSpot: SpotId | null = null
+  /** When Sparkle last said each beach's name (not over and over going back and forth). */
+  private namedAt = new Map<SpotId, number>()
+  /** The sand slide: how far down (-1: not sliding). */
+  private slideT = -1
+  /** Asked at the speedboat whether to go home (the home picture is up). */
+  private leaving = false
+  /** The camera taking in the waiting taxi beside her (0..1). */
+  private taxiFrameK = 0
+  /** Arrived where the puppy was going: everyone hops off in a moment. */
+  private autoOffT = -1
+  private frames = 0
+  private reachMemo: Record<string, number | null> | null = null
   private talk = { nick: 0, ji: 0, taxi: 0 }
 
   constructor(
@@ -450,6 +516,46 @@ export class SametIsland implements World3D {
     this.taxi = new Taxi(bag, ti)
     this.taxi.waitT = 14
     scene.add(this.taxi.root)
+
+    // ---- The beach puppy: a step in front of her, ready to run (he picks where to on the first frame).
+    this.pup = new Puppy(bag)
+    scene.add(this.pup.root, this.pup.shadow)
+    this.pup.place(s.x + Math.sin(s.face) * 1.6, s.z + Math.cos(s.face) * 1.6, s.face + Math.PI)
+    this.planner = new Planner(this.pupCost, FINE)
+    this.pupSeat.position.set(this.taxi.st.luggage.position.x - 0.7, 0.9, 0.15)
+    this.pupSeat.rotation.y = -Math.PI / 2
+    this.taxi.st.body.add(this.pupSeat)
+    // The sand slide at the end of his shortcut: a smooth pale chute down the dune, pink rims, two pink posts at its top.
+    {
+      const parts: ReturnType<typeof P.box>[] = []
+      const ux = SLIDE.foot.x - SLIDE.top.x
+      const uz = SLIDE.foot.z - SLIDE.top.z
+      const len = Math.hypot(ux, uz)
+      const yaw = Math.atan2(ux, uz)
+      const N = 12
+      for (let i = 0; i < N; i++) {
+        const a0 = i / N
+        const a1 = (i + 1) / N
+        const x0 = SLIDE.top.x + ux * a0
+        const z0 = SLIDE.top.z + uz * a0
+        const x1 = SLIDE.top.x + ux * a1
+        const z1 = SLIDE.top.z + uz * a1
+        const y0 = Math.max(0.05, this.isl.ground.heightAt(x0, z0))
+        const y1 = Math.max(0.05, this.isl.ground.heightAt(x1, z1))
+        const seg = Math.hypot(len / N, y1 - y0)
+        const pitch = Math.atan2(y0 - y1, len / N)
+        const at: [number, number, number] = [(x0 + x1) / 2, (y0 + y1) / 2 + 0.06, (z0 + z1) / 2]
+        parts.push(P.box(SLIDE.w, 0.08, seg + 0.05, '#FFF8EC', { at, rot: [pitch, yaw, 0] }))
+        for (const sd of [-1, 1]) parts.push(P.box(0.16, 0.2, seg + 0.05, i % 2 ? PAL.pink : '#FFFFFF', { at: [at[0] + Math.cos(yaw) * sd * (SLIDE.w / 2 + 0.06), at[1] + 0.08, at[2] - Math.sin(yaw) * sd * (SLIDE.w / 2 + 0.06)], rot: [pitch, yaw, 0] }))
+      }
+      const ty = Math.max(0.05, this.isl.ground.heightAt(SLIDE.top.x, SLIDE.top.z))
+      for (const sd of [-1, 1]) {
+        const px = SLIDE.top.x + Math.cos(yaw) * sd * (SLIDE.w / 2 + 0.3)
+        const pz = SLIDE.top.z - Math.sin(yaw) * sd * (SLIDE.w / 2 + 0.3)
+        parts.push(P.cyl(0.07, 0.08, 1.3, '#FFFFFF', { at: [px, ty + 0.65, pz] }, 8), P.sphere(0.16, PAL.hotpink, { at: [px, ty + 1.38, pz] }, 10))
+      }
+      scene.add(solid(merge(parts), bag, 2))
+    }
     const glowMat = () => bag.add(new MeshBasicMaterial({ color: PAL.hotpink, transparent: true, opacity: 0, depthWrite: false }))
     this.taxiGlow = new Mesh(bag.add(new RingGeometry(3.4, 3.9, 40)), glowMat())
     this.taxiGlow.rotation.x = -Math.PI / 2
@@ -669,8 +775,9 @@ export class SametIsland implements World3D {
   setAnchorElements(els: Map<string, HTMLElement>) {
     this.anchorEls = els
   }
-  setHintElement(el: HTMLElement | null) {
-    this.hintEl = el
+  /** The puppy's thought bubble (a picture of where he's going), placed over his head each frame. */
+  setBubbleElement(el: HTMLElement | null) {
+    this.bubbleEl = el
   }
   get calm() {
     return false
@@ -696,8 +803,10 @@ export class SametIsland implements World3D {
     if (this.mode === 'walk') this.lead(dt)
     else if (this.mode === 'ski') this.rideSki(dt)
     else if (this.mode === 'kite') this.flyKite(dt)
+    else if (this.mode === 'slide') this.slideStep(dt)
     this.kaylee.update(dt, t)
-    if (this.mode === 'walk' || this.mode === 'kite') this.underfoot(dt)
+    if (this.mode === 'walk' || this.mode === 'kite' || this.mode === 'slide') this.underfoot(dt)
+    if (this.mode === 'walk') this.intoSlide()
     {
       // The swim area's edge comes up round her as she paddles near it.
       const gr = this.isl.ground
@@ -707,6 +816,7 @@ export class SametIsland implements World3D {
     this.taxiStep(dt)
     this.walkIntoStops()
     this.follow(dt, t)
+    this.puppyStep(dt, t)
     this.life(dt, t)
     this.animals(dt, t)
     this.whereAmI()
@@ -738,7 +848,8 @@ export class SametIsland implements World3D {
     if (this.mode === 'ski') SEE.uFocus.value.set(this.d.x, 0.8, this.d.z)
     else if (this.mode === 'taxi') SEE.uFocus.value.copy(this.taxi.root.position).setY(this.taxi.root.position.y + 1.4)
     else SEE.uFocus.value.set(k.x, k.y + 0.7, k.z)
-    this.drawHint(t)
+    this.drawBubble(dt)
+    this.leaveStep()
   }
 
   // ---------------------------------------------------------------- leading Kaylee
@@ -868,6 +979,8 @@ export class SametIsland implements World3D {
     firstTime(`samet-beach-${this.spot}`)
     if (this.flags.has('jetski') && firstTime('samet-ski-hers')) say(I.hers)
     if (this.flags.size === STOP_IDS.length && firstTime('samet-sunset-call')) say(I.sunset)
+    // The beach puppy, the first time: Sparkle says who he is.
+    if (firstTime('samet-puppy-hi')) say(PL.hi)
   }
 
   /** Walking into a stop's pink ring opens it, if the stop is still to do (or it's the driftwood tree with all four
@@ -929,7 +1042,7 @@ export class SametIsland implements World3D {
     this.ringK += ((deep ? 1 : 0) - this.ringK) * ease(dt, 8)
     this.ring.scale.setScalar(Math.max(0.001, this.ringK))
     this.ring.visible = this.ringK > 0.02
-    this.kaylee.setPose(deep ? 'sit' : this.kaylee.pose === 'sit' ? 'stand' : this.kaylee.pose)
+    if (this.mode !== 'slide') this.kaylee.setPose(deep ? 'sit' : this.kaylee.pose === 'sit' ? 'stand' : this.kaylee.pose)
     // A big wave lifts her and spins the floatie round.
     this.spinCool -= dt
     if (deep && this.spinT < 0 && this.spinCool <= 0) {
@@ -1241,23 +1354,40 @@ export class SametIsland implements World3D {
   private taxiStep(dt: number) {
     const tx = this.taxi
     const k = this.kaylee.root.position
-    const near = this.mode === 'walk' && Math.hypot(k.x - tx.root.position.x, k.z - tx.root.position.z) < RIDE.near + 2
-    // It waits while she's close by (and a moment after she climbs in), or while she rides and hasn't hopped off.
-    tx.hold = near && tx.state === 'wait'
+    const tp = tx.root.position
+    const d = Math.hypot(k.x - tp.x, k.z - tp.z)
+    const near = this.mode === 'walk' && d < RIDE.near + 2
+    // It waits while she's close by, while it's on her screen, while the puppy waits in it (or at its stop for it), and
+    // while she rides and hasn't got off: it never drives off from under her nose.
+    const seen = this.mode === 'walk' && d < 70 && this.onScreen(tmp.set(tp.x, tp.y + 1.2, tp.z))
+    const called = !this.aboard && !!this.pupTaxi && this.pupState === 'taxi' && tx.stop === this.pupTaxi.from
+    tx.hold = tx.state === 'wait' && (near || seen || (this.pupAboard && !this.aboard) || called || (this.aboard && this.autoOffT >= 0))
     tx.update(dt, (x, z) => Math.max(0, this.isl.ground.heightAt(x, z)), RIDE.taxi)
-    if (this.aboard && tx.state === 'wait' && tx.waitT > 6.5 && !this.taxiArrived) {
-      this.taxiArrived = true
-      toot()
+    if (tx.arrived) {
+      tx.arrived = false
+      if (this.aboard) {
+        // It names the stop now it's there (not before it sets off), then everyone hops off, the puppy first.
+        toot()
+        this.events.say?.(I.taxi.stop[tx.stopId as keyof typeof I.taxi.stop])
+        this.namedAt.set(tx.stopId, this.time)
+        this.autoOffT = 1.8
+        tx.hold = true
+      }
     }
-    if (tx.state === 'drive') this.taxiArrived = false
+    if (this.autoOffT >= 0 && (this.autoOffT -= dt) < 0) {
+      this.autoOffT = -1
+      if (this.aboard) this.leaveTaxi()
+    }
     if (tx.laps !== this.taxiLaps) {
       this.taxiLaps = tx.laps
       if (this.aboard) tune()
     }
+    // The puppy in the back: walking right up to it is getting in.
+    if (this.pupAboard && this.mode === 'walk' && tx.state === 'wait' && d < RIDE.near + 0.5) this.boardTaxi()
     const gm = this.taxiGlow.material as MeshBasicMaterial
-    const glow = this.mode === 'walk' && tx.state === 'wait' && near ? 0.55 + 0.3 * Math.sin(this.time * 5) : 0
+    const glow = this.mode === 'walk' && tx.state === 'wait' && (near || this.pupAboard) ? 0.55 + 0.3 * Math.sin(this.time * 5) : 0
     gm.opacity += (glow - gm.opacity) * ease(dt, 6)
-    this.taxiGlow.position.set(tx.root.position.x, tx.root.position.y + 0.06, tx.root.position.z)
+    this.taxiGlow.position.set(tp.x, tp.y + 0.06, tp.z)
     this.taxiGlow.visible = gm.opacity > 0.02
     if (this.aboard) {
       // Riding: they sit in the back, and their shadows ride along.
@@ -1265,7 +1395,6 @@ export class SametIsland implements World3D {
       for (const f of [this.nick, this.ji]) f.shadow.visible = false
     }
   }
-  private taxiArrived = false
   private taxiLaps = 0
 
   private boardTaxi() {
@@ -1287,6 +1416,11 @@ export class SametIsland implements World3D {
     seat(this.nick.m, tx.st.seats.nick)
     seat(this.ji.m, tx.st.seats.ji)
     this.ring.visible = false
+    // Where to: straight to the stop nearest the puppy's beach (he jumps in too), else on round to the next stop.
+    let to = this.pupTaxi?.to ?? (this.pupGoal ? this.nearestTaxiStop(this.pupGoal.at) : -1)
+    if (to === tx.stop) to = -1
+    tx.next = to
+    if (!this.pupAboard) this.pupIntoTaxi()
     tx.waitT = Math.min(tx.waitT, 1.2)
     tx.hold = false
   }
@@ -1315,6 +1449,11 @@ export class SametIsland implements World3D {
     this.lastPos.copy(this.kaylee.root.position)
     // It waits a little so she can climb back in.
     tx.waitT = 8
+    this.autoOffT = -1
+    // The puppy hops out first, and plans the rest of the way on foot.
+    if (this.pupAboard) this.pupOutOfTaxi()
+    this.pupTaxi = null
+    this.pupPlanAt = -99
     return true
   }
 
@@ -1474,6 +1613,8 @@ export class SametIsland implements World3D {
 
   /** Which beach she's on (the address bar's `at`), and where the camera should face. */
   private whereAmI() {
+    // (In the taxi she sits in its seat: the taxi says where they are when it stops.)
+    if (this.mode === 'taxi') return
     const k = this.mode === 'ski' ? { x: this.d.x, z: this.d.z } : this.kaylee.root.position
     let best: SpotId | null = null
     let bd = 34
@@ -1496,9 +1637,20 @@ export class SametIsland implements World3D {
         }
         // Sparkle, the first time she reaches each beach this visit.
         const line = (I.beach as Partial<Record<SpotId, string>>)[best]
-        if (line && this.greeted && firstTime(`samet-beach-${best}`)) this.events.say?.(line)
+        const first = !!line && this.greeted && firstTime(`samet-beach-${best}`)
+        if (first) this.events.say?.(line)
+        // The puppy brought her (he's right there): he barks the beach's name, a woof a beat, and Sparkle says it
+        // (not each time she runs back and forth).
+        if (this.greeted && !this.pupAboard && Math.hypot(this.pup.x - k.x, this.pup.z - k.z) < 16) {
+          this.pup.bark(BEATS[best] ?? 2, 0.24)
+          this.counts.named++
+          if (!first && this.time - (this.namedAt.get(best) ?? -99) > 45) this.events.say?.(PL.name[best])
+          this.namedAt.set(best, this.time)
+        }
+        // (A new beach: he plans again from here.)
+        this.pupPlanAt = -99
       }
-      if (this.mode !== 'taxi') this.camGoal = this.spotYaw(best)!
+      this.camGoal = this.spotYaw(best)!
       return
     }
     // On a road or a path: look along it, the way she's going (once she's been going that way for a few meters).
@@ -1571,10 +1723,16 @@ export class SametIsland implements World3D {
     const sea = (1 - this.inland) * (this.swimming ? 0 : 2.2)
     this.seaShift.x += (f.n.x * sea - this.seaShift.x) * 0.05
     this.seaShift.z += (f.n.z * sea - this.seaShift.z) * 0.05
+    // Beside the waiting taxi: the camera takes it in too, so it's never off the screen right next to her.
+    const tp = this.taxi.root.position
+    const td = Math.hypot(tp.x - k.x, tp.z - k.z)
+    this.taxiFrameK += ((this.mode === 'walk' && this.taxi.state === 'wait' && td < PUP.frame && td > 1.5 ? 1 : 0) - this.taxiFrameK) * 0.05
+    const fk = this.taxiFrameK
+    const grow = td * 0.3 * fk
     return {
       // (Flying under the umbrella, the camera stays down: she rises up the screen.)
-      center: new Vector3(k.x + hx * CAM.ahead * run + this.seaShift.x + this.leanV.x, Math.max(this.kite ? this.kite.from.y : k.y, 0) + 0.7, k.z + hz * CAM.ahead * run + this.seaShift.z + this.leanV.z),
-      half: tall ? new Vector3(b * 0.62, 2, b * 0.9) : new Vector3(b, 2, b * 0.62),
+      center: new Vector3(k.x + hx * CAM.ahead * run + this.seaShift.x + this.leanV.x + (tp.x - k.x) * 0.45 * fk, Math.max(this.kite ? this.kite.from.y : k.y, 0) + 0.7, k.z + hz * CAM.ahead * run + this.seaShift.z + this.leanV.z + (tp.z - k.z) * 0.45 * fk),
+      half: tall ? new Vector3(b * 0.62 + grow, 2, b * 0.9 + grow) : new Vector3(b + grow, 2, b * 0.62 + grow),
       yaw,
       pitch: CAM.pitch + (tall ? 4 : 0) + (CAM.forest - CAM.pitch) * this.inland - (this.phone ? 3 : 0),
       follow: true,
@@ -1815,6 +1973,23 @@ export class SametIsland implements World3D {
         p.g.scale.set(1 - s * 0.15, 1 + s * 0.25, 1 - s * 0.15)
         if (p.kind === 'telescope' && p.part) p.part.rotation.y = Math.sin(t * 0.6) * 0.5 + s
         break
+      case 'lifeguard':
+        p.g.rotation.z = s * 0.08
+        // The flag flutters in the breeze, and flaps hard after a tap.
+        if (p.part) p.part.rotation.y = Math.sin(t * 5 + p.at.x) * 0.25 + Math.sin(t * 17) * Math.min(1, (this.spin.get(id) ?? 0) / 10) * 0.6
+        this.spin.set(id, (this.spin.get(id) ?? 0) * Math.exp(-dt * 0.9))
+        break
+      case 'stall':
+        p.g.scale.set(1 - s * 0.1, 1 + s * 0.15, 1 - s * 0.1)
+        break
+      case 'rocks':
+        // The top rock wobbles on the stack, the middle one a little.
+        if (p.part) {
+          p.part.rotation.z = s * 0.35
+          p.part.position.x = s * 0.25
+        }
+        p.g.rotation.z = s * 0.04
+        break
       case 'hammock':
         if (p.part) p.part.rotation.z = Math.sin(t * 1.6) * (0.06 + Math.abs(this.swing.get(id) ?? 0))
         this.swing.set(id, (this.swing.get(id) ?? 0) * Math.exp(-dt * 0.4))
@@ -1939,6 +2114,33 @@ export class SametIsland implements World3D {
       this.events.say?.(I.sunset)
       toot()
       window.setTimeout(() => this.events.open('sunset'), 1600)
+      return
+    }
+    if (id === 'puppy') {
+      // In the back of the taxi, he's showing her the way in: a tap on him is getting in.
+      if (this.pupAboard && this.mode === 'walk') {
+        const tp = this.taxi.root.position
+        if (near(tp.x, tp.z)) return void this.boardTaxi()
+        return this.goTo('taxi', tp.x, tp.z)
+      }
+      // A silly trick in turn (chase his tail, roll over, a big hop) and a happy woof.
+      const tricks: Trick[] = ['spin', 'roll', 'hop']
+      this.pup.play(tricks[this.pupPokes++ % tricks.length])
+      this.pup.bark(2)
+      this.counts.pupPokes++
+      return
+    }
+    if (id === HOME_BOAT && this.goingHome === null && this.events.leaveAsk) {
+      // Before the whole island is done, the speedboat is the way home: she walks to the end of the pier, Mommy asks
+      // and the home picture comes up (a tap on it and off they go). Nothing else leaves Koh Samet.
+      this.kick(id, 3)
+      toot()
+      if (this.mode !== 'walk' || this.leaving) return
+      if (!near(HOME_PIER.x, HOME_PIER.z, 2.5)) return this.goTo(id, HOME_PIER.x, HOME_PIER.z, 1)
+      this.leaving = true
+      this.counts.leaveAsks++
+      this.events.leaveAsk(true)
+      this.events.say?.(I.leave)
       return
     }
     if (id === 'kaylee') {
@@ -2428,69 +2630,430 @@ export class SametIsland implements World3D {
         this.kick(p.id, 5)
         sfx.fwip()
         break
+      case 'lifeguard':
+        this.kick(p.id, 3)
+        if (p.part) this.spin.set(p.id, 10)
+        tone(1046, 1568, 0.18, 0.05, 'triangle')
+        tone(1568, 1046, 0.18, 0.05, 'triangle', 0.2)
+        break
+      case 'stall': {
+        this.kick(p.id, 4)
+        ding()
+        // A green coconut rolls off the stand.
+        if (this.coconuts.length < 8) {
+          const c = this.coconutGeo.clone()
+          c.position.set(p.at.x + (Math.random() - 0.5) * 1.2, p.y + 1.2, p.at.z + 0.3)
+          this.scene.add(c)
+          this.coconuts.push({ g: c, vy: 1.5, y: 0, vx: (k.x - p.at.x) * 0.3, vz: (k.z - p.at.z) * 0.3, t: 0, bonked: false })
+        }
+        break
+      }
+      case 'rocks':
+        this.kick(p.id, 7)
+        clack()
+        tone(300, 220, 0.12, 0.05, 'triangle', 0.12)
+        break
       default:
         break
     }
   }
 
-  // ---------------------------------------------------------------- the hint
+  // ---------------------------------------------------------------- the beach puppy (#357 way-finding)
 
-  /** After a while with nothing touched: a pink flag arrow pointing at the nearest stop without its flag. */
-  private drawHint(t: number) {
-    const el = this.hintEl
-    if (!el) return
-    const k = this.kaylee.root.position
-    let best: StopId | null = null
+  /** Where she is in the world (in the taxi: the taxi; on the jet ski: the jet ski). */
+  private herXZ(): XZ {
+    if (this.aboard) return { x: this.taxi.root.position.x, z: this.taxi.root.position.z }
+    if (this.mode === 'ski') return { x: this.d.x, z: this.d.z }
+    return { x: this.kaylee.root.position.x, z: this.kaylee.root.position.z }
+  }
+  /** What a meter costs the puppy's planner (and her, following him): roads and paths cheapest, the sand, the rocks,
+   *  the shallows dear; never the forest, the deep sea, a deck's side or a palm's trunk. */
+  private pupCost = (x: number, z: number) => {
+    if (this.deckAt(x, z) >= 0) return 1
+    for (let i = 0; i < this.props.decks.length; i++) if (this.inDeckTop(i, x, z)) return Infinity
+    const s = this.isl.ground.surfaceAt(x, z)
+    if (s === 'forest') return Infinity
+    if (s === 'water') return this.isl.ground.heightAt(x, z) > -0.45 ? 4 : Infinity
+    for (const [bx, bz, r] of this.isl.blockers.near(x, z)) if (Math.hypot(x - bx, z - bz) < r + 0.25) return 8
+    return s === 'road' || s === 'path' ? 1 : s === 'sand' || s === 'grass' ? 1.15 : s === 'wet' ? 1.3 : 1.8
+  }
+  private nearestTaxiStop(p: XZ) {
+    let best = 0
     let bd = Infinity
-    for (const id of STOP_IDS) {
-      if (this.flags.has(id)) continue
-      const a = STOPS[id].at
-      const d = Math.hypot(a.x - k.x, a.z - k.z)
+    TAXI_STOPS.forEach((t, i) => {
+      const d = Math.hypot(t.at.x - p.x, t.at.z - p.z)
       if (d < bd) {
         bd = d
-        best = id
+        best = i
+      }
+    })
+    return best
+  }
+  /** Where he sits to show her a stop: beside its pink ring, on the side she comes from. */
+  private goalPoint(id: StopId): XZ {
+    const a = STOPS[id].at
+    const R = STOPS[id].ring ?? RING
+    const sp = spotStart(STOPS[id].place as SpotId)
+    const dx = sp.x - a.x
+    const dz = sp.z - a.z
+    const l = Math.hypot(dx, dz) || 1
+    return { x: a.x + (dx / l) * (R + 1.2), z: a.z + (dz / l) * (R + 1.2) }
+  }
+  /** Meters on foot from taxi stop `i` to a stop's goal (they never change). */
+  private stopWalkLen(i: number, id: StopId) {
+    const key = `${i}:${id}`
+    let v = this.stopWalk.get(key)
+    if (v === undefined) {
+      v = this.planner.plan(TAXI_STOPS[i].at, this.goalPoint(id))?.len ?? Infinity
+      this.stopWalk.set(key, v)
+    }
+    return v
+  }
+
+  /** Picks where he takes her (the stop still to do that's quickest to reach, on foot or by taxi) and the way there. */
+  private planPuppy() {
+    this.pupPlanAt = this.time
+    const her = this.mode === 'walk' && this.swimming ? this.edge : this.herXZ()
+    const todo = STOP_IDS.filter((id) => !this.flags.has(id))
+    // (All four done: the driftwood tree, for the sunset.)
+    const cands: StopId[] = todo.length ? todo : this.goingHome === false ? ['hideseek'] : []
+    let best: { id: StopId; cost: number; route: Route; taxi: { from: number; to: number } | null } | null = null
+    for (const id of cands) {
+      const at = this.goalPoint(id)
+      const walk = this.planner.plan(her, at)
+      const wl = walk?.len ?? Infinity
+      let taxi: { from: number; to: number; first: Route } | null = null
+      let tl = Infinity
+      if (wl > PUP.taxiFrom) {
+        const a = this.nearestTaxiStop(her)
+        const b = this.nearestTaxiStop(at)
+        const first = a !== b ? this.planner.plan(her, TAXI_STOPS[a].at) : null
+        const last = this.stopWalkLen(b, id)
+        // (The ride counts at her walking speed over the taxi's, and a little for the wait.)
+        if (first && Number.isFinite(last)) {
+          tl = first.len + roadLength(a, b) * ((WALK.gallop * 0.8) / RIDE.taxi) + last + 12
+          taxi = { from: a, to: b, first }
+        }
+      }
+      const byTaxi = !!taxi && tl < wl
+      const cost = Math.min(wl, tl)
+      const route = byTaxi && taxi ? taxi.first : walk
+      if (route && Number.isFinite(cost) && (!best || cost < best.cost)) best = { id, cost, route, taxi: byTaxi && taxi ? { from: taxi.from, to: taxi.to } : null }
+    }
+    if (!best) {
+      this.pupGoal = null
+      this.pupRoute = null
+      this.pupTaxi = null
+      this.pupState = 'free'
+      return
+    }
+    this.pupGoal = { stop: best.id, beach: STOPS[best.id].place as SpotId, at: this.goalPoint(best.id) }
+    this.pupTaxi = best.taxi
+    this.pupRoute = best.route
+    this.pupS = project(best.route, this.pup.x, this.pup.z).s
+    this.pupWaiting = false
+    if (this.pupState !== 'fetch') this.pupState = best.taxi ? 'taxi' : 'lead'
+    // By taxi: he calls it to the stop nearest her (it comes, and waits there).
+    const tx = this.taxi
+    if (best.taxi && !this.aboard && !(tx.state === 'wait' && tx.stop === best.taxi.from) && tx.next !== best.taxi.from) tx.driveTo(best.taxi.from)
+  }
+
+  private puppyStep(dt: number, t: number) {
+    const P = this.pup
+    if (this.pupAboard) {
+      // In the back of the taxi: wagging, and a woof now and then while he waits for her (not on and on).
+      P.speed = 0
+      P.place(0, 0, 0)
+      P.look = null
+      P.wag = 1
+      P.update(dt, t, 0)
+      P.shadow.visible = false
+      if (!this.aboard && t - this.pupBarkAt > 6 && t - this.lastTouch > 3) {
+        this.pupBarkAt = t
+        P.bark(2)
+      }
+      return
+    }
+    P.shadow.visible = true
+    if (this.pupPlanAt < -50) this.planPuppy()
+    const herAt = this.herXZ()
+    // (She swims: he waits at the water's edge, where she went in.)
+    const her = this.swimming ? this.edge : herAt
+    const dHer = Math.hypot(P.x - her.x, P.z - her.z)
+    const look = (p: XZ) => lookV.set(p.x, 0, p.z)
+    // She rode, slid or swam off: once he's out of sight and far behind, he comes running from just behind her.
+    if (this.mode === 'walk' && dHer > 28 && !this.onScreen(tmp.set(P.x, P.y + 0.4, P.z))) {
+      const b = this.trailPoint(8, 0)
+      P.place(b.x, b.z)
+      this.pupState = 'fetch'
+    }
+    P.wag = clamp(1.2 - dHer / 10, 0.25, 1)
+    const g = this.pupGoal
+    const busy = this.mode !== 'walk'
+    switch (busy ? 'busy' : this.pupState) {
+      case 'busy':
+        // On the jet ski, flying under an umbrella, down the slide: he sits and watches (and catches up after).
+        P.stay(dt, herAt)
+        P.look = look(herAt)
+        break
+      case 'free':
+        // Nowhere to go: he trots along at her side.
+        if (dHer > 3.2) P.moveToward(her, PUP.speed, dt, 2.2)
+        else P.stay(dt, her)
+        P.look = dHer < 6 ? look(her) : null
+        break
+      case 'fetch': {
+        // Back to her at a run; there, a hop and two woofs, then off he goes again (looking back).
+        const left = P.moveToward(her, PUP.speed * 1.15, dt, 1.3)
+        P.look = null
+        if (left < 0.1) {
+          P.bark(2)
+          P.play('hop')
+          this.pupState = this.pupTaxi ? 'taxi' : 'lead'
+          this.planPuppy()
+        }
+        break
+      }
+      case 'here': {
+        if (!g) {
+          this.pupState = 'free'
+          break
+        }
+        // At the stop: he sits beside its ring, wagging hard, looking at her.
+        if (P.moveToward(g.at, PUP.speed, dt, 0.3) < 0.1) P.stay(dt, her)
+        P.look = look(her)
+        P.wag = 1
+        if (Math.hypot(herAt.x - g.at.x, herAt.z - g.at.z) > 14) this.planPuppy()
+        break
+      }
+      case 'lead':
+      case 'taxi': {
+        const r = this.pupRoute
+        if (!r) {
+          this.pupState = 'free'
+          break
+        }
+        const h = project(r, her.x, her.z)
+        const ahead = this.pupS - h.s
+        const end = this.pupS >= r.len - 0.4
+        if (this.pupState === 'lead' && g && Math.hypot(herAt.x - g.at.x, herAt.z - g.at.z) < (STOPS[g.stop].ring ?? RING) + 3.5) {
+          this.pupState = 'here'
+          P.bark(2)
+          P.hop()
+          break
+        }
+        if (h.off > 12) {
+          // She's gone her own way: he watches her, comes along if she goes far, and plans again from where she is.
+          if (dHer > 14) P.moveToward(her, PUP.speed, dt, 4)
+          else P.stay(dt, her)
+          P.look = look(her)
+          this.pupS = project(r, P.x, P.z).s
+          if (this.time - this.pupPlanAt > 4) this.planPuppy()
+          break
+        }
+        // He runs on to `wait` meters ahead of her, or less where that would be off her screen.
+        let want = Math.min(r.len, h.s + PUP.wait)
+        for (let d = PUP.wait; d > PUP.lead + 1; d -= 0.5) {
+          const p = pointAt(r, Math.min(r.len, h.s + d))
+          want = Math.min(r.len, h.s + d)
+          if (this.inFamilyFrame(p.x, p.z)) break
+        }
+        if (!this.pupWaiting && (this.pupS >= want - 0.3 || end)) this.pupWaiting = true
+        if (this.pupWaiting && ahead < PUP.lead && !end) this.pupWaiting = false
+        if (this.pupWaiting) {
+          // Waiting for her: he sits, looks back at her, wags.
+          const on = pointAt(r, this.pupS)
+          if (Math.hypot(P.x - on.x, P.z - on.z) > 0.6) this.pupS = P.alongRoute(r, this.pupS, this.pupS, PUP.speed, dt)
+          else P.stay(dt, her)
+          P.look = look(her)
+        } else {
+          this.pupS = P.alongRoute(r, this.pupS, want, PUP.speed, dt)
+          // (A glance back now and then as he runs.)
+          P.look = ahead > PUP.lead + 1 && Math.sin(t * 1.7) > 0.6 ? look(her) : null
+        }
+        // At the taxi stop: in he hops, once the taxi's there (he called it).
+        const last = r.pts[r.pts.length - 1]
+        if (this.pupState === 'taxi' && this.pupTaxi && Math.hypot(P.x - last.x, P.z - last.z) < 3) {
+          const tx = this.taxi
+          const tp = tx.root.position
+          if (tx.state === 'wait' && tx.stop === this.pupTaxi.from && Math.hypot(P.x - tp.x, P.z - tp.z) < 8) this.pupIntoTaxi()
+        }
+        break
       }
     }
-    // All four flags up: the way to the finale, the driftwood tree at Ao Prao (the sunset, then the fire show).
-    const home = best === null && this.goingHome === false
-    const END = STOPS.hideseek.at
-    const hb = Math.hypot(END.x - k.x, END.z - k.z)
-    const idle = !this.finger && !this.target && t - this.lastTouch > HINT_S && this.mode === 'walk' && (home ? hb > 6 : best !== null && bd > 6)
-    const want = idle ? '' : 'none'
+    // Nothing touched for a while, and she's not with him: he comes to fetch her (each time a little later: help, not
+    // nagging). The first time, Sparkle says why.
+    if (this.lastTouch !== this.fetchFrom) {
+      this.fetchFrom = this.lastTouch
+      this.fetchWait = PUP.idle
+    }
+    const idle = t - this.lastTouch
+    if (this.mode === 'walk' && !this.swimming && !this.phone && (this.pupState === 'lead' || this.pupState === 'taxi') && idle > this.fetchWait && dHer > 2.6) {
+      this.fetchWait = idle + PUP.idle * PUP.again
+      this.pupState = 'fetch'
+      this.counts.fetches++
+      P.bark(1)
+      if (firstTime('samet-puppy-fetch')) this.events.say?.(PL.come)
+    }
+    if (!this.pupAboard) P.update(dt, t, Math.max(this.heightAt(P.x, P.z), -0.35))
+  }
+
+  /** Into the back of the taxi (he jumps in first, or right after her). */
+  private pupIntoTaxi() {
+    if (this.pupAboard) return
+    this.pupAboard = true
+    this.pupSeat.add(this.pup.root)
+    this.pup.place(0, 0, 0)
+    this.pup.hop(3)
+    this.pup.bark(2)
+    this.pupBarkAt = this.time
+  }
+  private pupOutOfTaxi() {
+    const tx = this.taxi
+    this.pupAboard = false
+    this.scene.add(this.pup.root)
+    const back = tx.heading + Math.PI
+    // Off the back step first, a little ahead of everyone.
+    const x = tx.root.position.x + Math.sin(back) * 3.2 - Math.cos(back) * 2.2
+    const z = tx.root.position.z + Math.cos(back) * 3.2 + Math.sin(back) * 2.2
+    this.pup.place(x, z, back)
+    this.pup.hop(3)
+    this.pup.bark(BEATS[tx.stopId] ?? 2, 0.24)
+  }
+
+  /** The top-left button: the puppy comes running to her (from just behind her, if he's far), woofs, and shows the way. */
+  callPuppy() {
+    this.counts.pupCalls++
+    this.lastTouch = this.time
+    if (this.mode !== 'walk' || this.pupAboard) {
+      this.pup.bark(2)
+      return
+    }
+    const k = this.kaylee.root.position
+    if (Math.hypot(this.pup.x - k.x, this.pup.z - k.z) > 14 || !this.onScreen(tmp.set(this.pup.x, this.pup.y + 0.4, this.pup.z))) {
+      const b = this.trailPoint(8, 0)
+      this.pup.place(b.x, b.z)
+    }
+    this.pupState = 'fetch'
+    this.pup.bark(2)
+  }
+
+  /** The thought bubble over his head: a picture of the beach he's taking her to (never words). */
+  private drawBubble(dt: number) {
+    const el = this.bubbleEl
+    if (!el) return
+    const P = this.pup
+    const spot = this.pupGoal?.beach ?? null
+    const src = spot ? this.pics[spot] : undefined
+    const wp = P.root.getWorldPosition(tmp2)
+    const sc = this.toScreen(tmp.set(wp.x, wp.y + P.height * 1.2, wp.z))
+    const show = !!src && (this.mode === 'walk' || this.mode === 'taxi') && this.pupState !== 'free' && !this.phone && sc.z < 1 && sc.x > -30 && sc.x < this.w + 30 && sc.y > 0 && sc.y < this.h
+    this.bubbleK += ((show ? 1 : 0) - this.bubbleK) * ease(dt, 8)
+    if (src && spot !== this.bubbleSpot) {
+      this.bubbleSpot = spot
+      const img = el.querySelector('img')
+      if (img) img.src = src
+    }
+    const vis = this.bubbleK > 0.03
+    const want = vis ? '' : 'none'
     if (el.style.display !== want) el.style.display = want
-    if (!idle || (!best && !home)) return
-    const a = best ? STOPS[best].at : END
-    const s = this.toScreen(tmp.set(a.x, this.heightAt(a.x, a.z) + 2.5, a.z))
-    const m = 54
-    const inside = s.z < 1 && s.x > m && s.x < this.w - m && s.y > m && s.y < this.h - m
-    let x = s.x
-    let y = s.y
-    let rot = 0
-    if (!inside) {
-      // Off screen: on the edge, pointing that way.
-      const c = this.toScreen(tmp2.set(k.x, k.y + 1, k.z))
-      let dx = s.x - c.x
-      let dy = s.y - c.y
-      if (s.z >= 1) {
-        dx = -dx
-        dy = -dy
-      }
-      const l = Math.hypot(dx, dy) || 1
-      const kx = (this.w / 2 - m) / Math.max(1e-3, Math.abs(dx / l))
-      const ky = (this.h / 2 - m) / Math.max(1e-3, Math.abs(dy / l))
-      const r = Math.min(kx, ky)
-      x = this.w / 2 + (dx / l) * r
-      y = this.h / 2 + (dy / l) * r
-      rot = Math.atan2(dy, dx) * DEG
+    if (!vis) return
+    const size = Math.min(this.w, this.h) < 500 ? 76 : 104
+    // Above his head and a little to the side, kept on screen and clear of the top bar.
+    const x = clamp(sc.x + size * 0.45, size / 2 + 8, this.w - size / 2 - 8)
+    const y = clamp(sc.y - size * 0.7, size / 2 + 84, this.h - size / 2 - 8)
+    el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) scale(${this.bubbleK.toFixed(3)})`
+    el.style.setProperty('--size', `${size}px`)
+    el.style.setProperty('--tx', `${clamp(sc.x - x, -size, size).toFixed(0)}px`)
+    el.style.setProperty('--ty', `${clamp(sc.y - y, 0, size * 1.4).toFixed(0)}px`)
+  }
+
+  /** The pictures for his bubble: each beach's landmark, drawn from the island itself (once, when it's first drawn). */
+  private renderPics() {
+    const cam = new PerspectiveCamera(42, PHOTO_SIZE.w / PHOTO_SIZE.h, 0.3, 500)
+    const out: Partial<Record<SpotId, string>> = {}
+    for (const id of Object.keys(LANDMARKS) as (keyof typeof LANDMARKS)[]) {
+      const m = LANDMARKS[id]
+      const y = Math.max(0, this.heightAt(m.at.x, m.at.z)) + m.y
+      cam.position.set(m.at.x + m.from.x * m.dist, y + m.dist * 0.42, m.at.z + m.from.z * m.dist)
+      cam.lookAt(m.at.x, y, m.at.z)
+      cam.updateMatrixWorld()
+      this.isl.cull(cam.position.x, cam.position.z, CAM.far)
+      this.lights.follow(m.at.x, 0, m.at.z)
+      SEE.uEye.value.copy(cam.position)
+      SEE.uFocus.value.set(m.at.x, y - 3, m.at.z)
+      out[id] = snap(this.renderer, this.scene, cam)
     }
-    el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`
-    el.dataset.dir = inside ? 'here' : 'edge'
-    el.style.setProperty('--rot', `${rot.toFixed(0)}deg`)
+    out.deck = out.prao
+    const c = this.rig.camera.position
+    this.isl.cull(c.x, c.z, CAM.far)
+    return out
+  }
+
+  // ---------------------------------------------------------------- the sand slide and the way home
+
+  /** Onto the sand slide's top, heading down it: she sits and whooshes down. */
+  private intoSlide() {
+    if (this.swimming) return
+    const k = this.kaylee.root.position
+    if (Math.hypot(k.x - SLIDE.top.x, k.z - SLIDE.top.z) > 1.2 || this.lastSpeed < 0.4) return
+    const ux = SLIDE.foot.x - SLIDE.top.x
+    const uz = SLIDE.foot.z - SLIDE.top.z
+    const l = Math.hypot(ux, uz)
+    const yaw = this.kaylee.root.rotation.y
+    if ((Math.sin(yaw) * ux + Math.cos(yaw) * uz) / l < 0.45) return
+    this.mode = 'slide'
+    this.slideT = 0
+    this.target = null
+    this.walkTo = null
+    this.kaylee.steer(0, 0, 0, this.free)
+    this.kaylee.faceToward(SLIDE.foot.x, SLIDE.foot.z)
+    this.kaylee.setPose('sit')
+    this.counts.slides++
+    whee()
+    if (firstTime('samet-slide')) this.events.say?.(I.slide)
+  }
+  private slideStep(dt: number) {
+    const k = this.kaylee.root.position
+    this.slideT = Math.min(1, this.slideT + dt / PUP.slide)
+    // Slow off the top, quick at the bottom.
+    const e = this.slideT ** 1.6
+    k.x = SLIDE.top.x + (SLIDE.foot.x - SLIDE.top.x) * e
+    k.z = SLIDE.top.z + (SLIDE.foot.z - SLIDE.top.z) * e
+    if (Math.random() < dt * 14) this.puffs.burst(k.x, this.y + 0.05, k.z, 2, 1.2, 1.4, 0.1)
+    const last = this.trail[0]
+    if (!last || Math.hypot(k.x - last.x, k.z - last.z) > 0.3) {
+      this.trail.unshift({ x: k.x, z: k.z })
+      if (this.trail.length > 80) this.trail.pop()
+    }
+    if (this.slideT >= 1) {
+      this.mode = 'walk'
+      this.slideT = -1
+      this.kaylee.setPose('stand')
+      this.kaylee.react('hop')
+      this.puffs.burst(k.x, this.y + 0.05, k.z, 14, 1.6, 1.4, 0.12)
+      sfx.thump()
+      this.lastPos.copy(k)
+    }
+  }
+  /** Walked away from the end of the pier: the home picture goes. */
+  private leaveStep() {
+    if (!this.leaving) return
+    const k = this.kaylee.root.position
+    if (this.mode !== 'walk' || Math.hypot(k.x - HOME_PIER.x, k.z - HOME_PIER.z) > 6) {
+      this.leaving = false
+      this.events.leaveAsk?.(false)
+    }
   }
 
   // ---------------------------------------------------------------- tap targets
 
   render() {
+    // The puppy's pictures of each beach, once the island has drawn a few times (its shaders warm).
+    if (++this.frames === 4) {
+      this.pics = this.renderPics()
+      this.events.pictures?.(this.pics)
+    }
     if (this.wantPortraits) {
       const cb = this.wantPortraits
       this.wantPortraits = null
@@ -2557,6 +3120,10 @@ export class SametIsland implements World3D {
         const p = this.taxi.root.position
         place(el, this.mode === 'ski' ? null : within(p.x, p.y, p.z, 40), 2.6, 0.9)
         z = this.aboard ? '1' : '2'
+      } else if (id === 'puppy') {
+        const p = this.pup.root.getWorldPosition(v)
+        place(el, this.mode === 'ski' || this.mode === 'slide' ? null : within(p.x, p.y, p.z, 40), this.pup.height, 1.4)
+        z = '4'
       } else if (id === 'mermaid') {
         const p = this.props.saikaew.mermaid.position
         place(el, riding ? null : within(p.x, p.y, p.z), 3.6, 0.8)
@@ -2639,7 +3206,8 @@ export class SametIsland implements World3D {
       time: this.timeKey,
       flags: [...this.flags],
       goingHome: this.goingHome,
-      taxi: { stop: this.taxi.stopId, state: this.taxi.state, aboard: this.aboard, ...sc(this.taxi.root.position.clone().setY(this.taxi.root.position.y + 1.5)) },
+      taxi: { stop: this.taxi.stopId, state: this.taxi.state, next: this.taxi.next >= 0 ? TAXI_STOPS[this.taxi.next].id : null, aboard: this.aboard, onScreen: this.onScreen(this.taxi.root.position.clone().setY(this.taxi.root.position.y + 1.5)), d: +Math.hypot(this.taxi.root.position.x - k.x, this.taxi.root.position.z - k.z).toFixed(1), ...sc(this.taxi.root.position.clone().setY(this.taxi.root.position.y + 1.5)) },
+      leaving: this.leaving,
       riding: this.riding >= 0 ? this.skis[this.riding].id : null,
       skis: Object.fromEntries(this.skis.map((s) => [s.id, sc(new Vector3(s.x, s.ski.root.position.y + 0.6, s.z))])),
       stops: Object.fromEntries(STOP_IDS.map((id) => [id, sc(new Vector3(STOPS[id].at.x, this.heightAt(STOPS[id].at.x, STOPS[id].at.z) + 0.8, STOPS[id].at.z))])),
@@ -2652,6 +3220,39 @@ export class SametIsland implements World3D {
       // where they are on screen.
       family: Object.fromEntries((['nick', 'ji'] as const).map((id) => [id, (({ x, y, z }) => ({ x: +x.toFixed(2), z: +z.toFixed(2), y: +y.toFixed(2), ground: +this.heightAt(x, z).toFixed(2), deck: this.deckAt(x, z), screen: sc(new Vector3(x, y + 0.7, z)) }))(this[id].m.root.position)])),
       speed: +this.lastSpeed.toFixed(2),
+      // The scene's own clock (s): timings from it don't depend on how fast a headless browser draws.
+      clock: +this.time.toFixed(2),
+      // The beach puppy (#357 way-finding): what he's doing, where he's taking her (the stop, its beach, by taxi from
+      // and to which taxi stop), where he is and on screen, how far from her, his route's length and how far ahead of
+      // her along it he is, and the times he fetched her, barked a beach's name, came when called, was poked.
+      puppy: (() => {
+        const P = this.pup
+        const wp = P.root.getWorldPosition(new Vector3())
+        const her = this.herXZ()
+        const r = this.pupRoute
+        return {
+          state: this.pupAboard ? 'aboard' : this.pupState,
+          waiting: this.pupWaiting,
+          goal: this.pupGoal?.stop ?? null,
+          beach: this.pupGoal?.beach ?? null,
+          taxi: this.pupTaxi ? { from: TAXI_STOPS[this.pupTaxi.from].id, to: TAXI_STOPS[this.pupTaxi.to].id } : null,
+          x: +wp.x.toFixed(2),
+          z: +wp.z.toFixed(2),
+          d: +Math.hypot(wp.x - her.x, wp.z - her.z).toFixed(1),
+          screen: sc(wp.clone().setY(wp.y + 0.4)),
+          onScreen: this.onScreen(wp.clone().setY(wp.y + 0.4)),
+          route: r ? +r.len.toFixed(1) : null,
+          ahead: r ? +(this.pupS - project(r, her.x, her.z).s).toFixed(1) : null,
+          bubble: this.bubbleK > 0.5 ? this.bubbleSpot : null,
+          pictures: Object.keys(this.pics).length,
+          fetches: this.counts.fetches,
+          named: this.counts.named,
+          calls: this.counts.pupCalls,
+          pokes: this.counts.pupPokes,
+        }
+      })(),
+      // Every beach on foot from Na Dan pier (meters along the puppy's best walk; null: no way there).
+      reach: (this.reachMemo ??= Object.fromEntries((Object.keys(FRAMES) as (keyof typeof FRAMES)[]).map((id) => [id, ((r) => (r ? Math.round(r.len) : null))(this.planner.plan(spotStart('nadan'), spotStart(id)))]))),
       cameraYaw: Math.round(wrap(this.camYaw) * DEG),
       fps: this.stats.fps,
       calls: this.stats.calls,
