@@ -28,26 +28,18 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 </style></head><body><main>
 <span class="chip">Check-in fix</span>
 <h1>Nan: real sound effects</h1>
-<p class="kaylee">The toy horns are gone: Nan's traffic and her kart now honk like real vehicles.</p>
+<p class="kaylee">Nan's traffic honks like real trucks now, and her kart has a real scooter horn.</p>
 
 
 
-<h2>Listen</h2><div class="card"><h3>The road honk (cars, songthaews, tuk-tuks)</h3>
-<audio controls preload="metadata" src="sfx/honk-options.mp3"></audio>
-<ol class="meta"><li>A: full-size car (in the game now)</li><li>B: pickup truck, deeper</li><li>C: SUV, mellow</li></ol></div>
-<div class="card"><h3>Pulling over and tooting at her</h3>
-<audio controls preload="metadata" src="sfx/tune-options.mp3"></audio>
-<ol class="meta"><li>A: two quick taps (in the game now)</li><li>B: three taps, deeper</li><li>C: five cheerful beeps</li></ol></div>
-<div class="card"><h3>Her kart at the Cup</h3>
-<audio controls preload="metadata" src="sfx/kart-options.mp3"></audio>
-<ol class="meta"><li>A: small motorcycle</li><li>B: compact car (in the game now)</li><li>C: motor scooter</li></ol></div>
-<h2>Your call</h2><ol><li><p>Road honk: A, B or C?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
-<li><p>Pulling-over toot: A, B or C?</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li>
-<li><p>Her kart: A, B or C?</p><textarea rows="2" data-q="2" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><a class="pill" href="https://github.com/neb636/Kaylee-Gamepack/pull/375">Open the PR to paste them</a><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+<h2>Listen</h2><div class="card"><h3>The horns you picked</h3>
+<audio controls preload="metadata" src="sfx/horns.mp3"></audio>
+<ol class="meta"><li>Road honk: pickup truck</li><li>Pulling-over toot: three taps</li><li>Her kart: motor scooter</li></ol></div>
+
 <h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/thailand/nan-trip/drive?road=city">The mountain road (honks)</a></p>
 </main>
 <script>
-const qs=["Road honk: A, B or C?","Pulling-over toot: A, B or C?","Her kart: A, B or C?"],titles=[]
+const qs=[],titles=[]
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p]
   try{await navigator.clipboard.writeText(t);document.getElementById('picked').textContent='Copied “'+t+'”. Paste it on the PR, or just say it in chat.'}catch{document.getElementById('picked').textContent=t+': say it on the PR or in chat.'}}))
 document.getElementById('copy')?.addEventListener('click',async()=>{
