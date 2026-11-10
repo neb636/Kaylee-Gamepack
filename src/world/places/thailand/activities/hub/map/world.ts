@@ -18,6 +18,7 @@ import { noise, sfx, tone } from '../../../../../kit/sfx'
 import { buildField, type Field } from './field'
 import { BOARD, PINS, POKES, SAMET, toLat, toLon, toX, toZ, type PinId, type ToyId } from './geo'
 import type { LonLat } from './land'
+import { buildPin, type PinStyle, type PinToy } from './pins'
 import { buildLand, buildTray, Sea } from './terrain'
 import * as T from './toys'
 
@@ -44,6 +45,7 @@ interface Place {
   at: Vector3
   model: Group
   pin: Group
+  toy: PinToy
   live: boolean
   done: boolean
   /** Seconds since she tapped it (-1: not tapped). */
@@ -98,6 +100,8 @@ export class ThaiMapWorld implements World3D {
   private close: Shot = { center: new Vector3(), half: new Vector3(1.7, 0.8, 1.7), yaw: -6, pitch: 46, maxDist: 200 }
   private picked: Place | null = null
   private hint = false
+  /** Every pin style built so far (Dad flips between them), so a flip doesn't build a style twice. */
+  private pinSets = new Map<PinStyle, Record<PinId, PinToy>>()
 
   private places: Place[] = []
   private toys = new Map<ToyId, Toy>()
@@ -130,6 +134,7 @@ export class ThaiMapWorld implements World3D {
   constructor(
     private renderer: WebGLRenderer,
     private events: MapEvents,
+    pinStyle: PinStyle = 'picture',
   ) {
     const began = performance.now()
     this.scene.background = sky(this.bag)
@@ -143,7 +148,7 @@ export class ThaiMapWorld implements World3D {
     this.spray = new Particles({ kind: 'spray', count: 110, colors: ['#8FD3F7', '#FFFFFF', '#FF8FB8', '#FBEA9A', '#8BD79A', '#D9CCFF'], gravity: 3.2 }, this.bag)
     this.foam = new Particles({ kind: 'foam', count: 70, opacity: 0.92 }, this.bag)
     this.scene.add(this.spray.mesh, this.foam.mesh)
-    this.buildPlaces()
+    this.buildPlaces(pinStyle)
     this.buildToys()
     this.buildClouds()
     this.buildMs = Math.round(performance.now() - began)
@@ -160,15 +165,25 @@ export class ThaiMapWorld implements World3D {
     return new Vector3(toX(lon), this.ground(lon, lat) + up, toZ(lat))
   }
 
-  private buildPlaces() {
+  private pinSet(style: PinStyle) {
+    let set = this.pinSets.get(style)
+    if (!set) {
+      set = {} as Record<PinId, PinToy>
+      PINS.forEach((p, i) => (set![p.id] = buildPin(style, p.id, p.color, this.bag, i * 1.7)))
+      this.pinSets.set(style, set)
+    }
+    return set
+  }
+
+  private buildPlaces(pinStyle: PinStyle) {
     const parts: Record<PinId, () => ReturnType<typeof T.bangkokParts>> = { bangkok: T.bangkokParts, nan: T.nanParts, krabi: T.krabiParts, samet: T.sametParts }
     PINS.forEach((p, i) => {
       const at = this.spot(p.at)
       const model = solid(merge(parts[p.id]()), this.bag, 1.5)
       model.position.copy(at)
-      const pin = solid(merge(T.pinParts(p.color)), this.bag, 2)
-      this.scene.add(model, pin)
-      this.places.push({ id: p.id, at, model, pin, live: true, done: false, t: -1, phase: i * 1.7 })
+      const toy = this.pinSet(pinStyle)[p.id]
+      this.scene.add(model, toy.root)
+      this.places.push({ id: p.id, at, model, pin: toy.root, toy, live: true, done: false, t: -1, phase: i * 1.7 })
     })
     // The speedboat that goes round and round Koh Samet.
     this.speedboat = T.speedboat(this.bag)
@@ -290,6 +305,19 @@ export class ThaiMapWorld implements World3D {
     }
   }
 
+  /** Swaps what floats over every place (Dad's 1 2 3 buttons). */
+  setPinStyle(style: PinStyle) {
+    const set = this.pinSet(style)
+    for (const p of this.places) {
+      if (p.toy === set[p.id]) continue
+      this.scene.remove(p.pin)
+      p.toy = set[p.id]
+      p.pin = p.toy.root
+      p.pin.visible = p.live
+      this.scene.add(p.pin)
+    }
+  }
+
   setSize(w: number, h: number, top: number) {
     this.w = w
     this.h = h
@@ -348,7 +376,11 @@ export class ThaiMapWorld implements World3D {
       const bob = p.done ? 0.03 * Math.sin(t * 1.5 + p.phase) : (this.hint ? 0.2 : 0.1) * Math.abs(Math.sin(t * (this.hint ? 3.2 : 2.2) + p.phase))
       const jump = p.t >= 0 ? 0.45 * bell(clamp(p.t / 0.7, 0, 1)) : 0
       p.pin.position.copy(p.at).setY(p.at.y + PIN_LIFT[p.id] + bob + jump)
-      p.pin.rotation.y = p.t >= 0 ? p.t * 9 : Math.sin(t * 0.9 + p.phase) * 0.35
+      // Each one turns to look at her wherever she swings the board.
+      const cam = this.rig.camera.position
+      const rest = Math.atan2(cam.x - p.at.x, cam.z - p.at.z) + Math.sin(t * 0.9 + p.phase) * 0.16
+      p.pin.rotation.y = p.t >= 0 ? rest + p.t * 9 : rest
+      p.toy.update(t, Math.atan2(cam.y - p.pin.position.y, Math.hypot(cam.x - p.at.x, cam.z - p.at.z)))
       const squash = p.done ? 0 : 0.07 * Math.max(0, Math.cos(t * (this.hint ? 6.4 : 4.4) + p.phase * 2))
       p.pin.scale.set(1 + squash, 1 - squash, 1 + squash)
       // The model gives a happy bounce when its pin is tapped.
@@ -684,7 +716,7 @@ export class ThaiMapWorld implements World3D {
 
   /** The toy her finger is on, when it is nearer to the toy than to this place's pin and model (null: the place). */
   private toyUnder(x: number, y: number, p: Place): ToyId | null {
-    const head = this.toScreen(tmp.copy(p.pin.position).setY(p.pin.position.y + 0.5))
+    const head = this.toScreen(tmp.copy(p.pin.position).setY(p.pin.position.y + p.toy.head))
     const hx = head.x
     const hy = head.y
     const foot = this.toScreen(tmp.copy(p.at).setY(p.at.y + 0.2))
@@ -714,12 +746,12 @@ export class ThaiMapWorld implements World3D {
         const p = this.places.find((k) => k.id === id.slice(4))
         if (p?.live && !this.picked) {
           // One target over the place's model and its pin; its top is the pin's head (the stamp rides there).
-          const head = this.toScreen(tmp.copy(p.pin.position).setY(p.pin.position.y + 0.7))
+          const head = this.toScreen(tmp.copy(p.pin.position).setY(p.pin.position.y + p.toy.head))
           const hx = head.x
           const hy = head.y
           const foot = this.toScreen(tmp.copy(p.at).setY(p.at.y + 0.1))
           const hgt = Math.max(min, foot.y - hy + min * 0.2)
-          const wid = Math.max(min, this.pxPerUnit(p.at) * 1.25)
+          const wid = Math.max(min, this.pxPerUnit(p.at) * p.toy.wide)
           spot = { x: hx, y: hy + hgt / 2 - min * 0.1, w: wid, h: hgt, z: 9000 }
         }
       } else if (id.startsWith('poke:')) {
