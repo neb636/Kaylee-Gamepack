@@ -726,7 +726,7 @@ export const L = {
       ready: by('otter')('Hold on tight! Off you go!'),
       // Sparkle, as each round begins (the jacket's tap and the waves and the race moving on by themselves).
       ride: onDevice('Steer it with your finger!', 'Click and drag to steer it!'),
-      waves: 'Big waves! Drive over them!',
+      waves: 'Big waves! Catch the stars!',
       race: 'Race the jet ski man!',
       // Sparkle's countdown (3, 2, 1, go).
       count: ['Three!', 'Two!', 'One!', 'Go!'],
@@ -746,6 +746,8 @@ export const L = {
       dizzy: nick("Round and round! I'm dizzy!"),
       soaked: ji("Hey! I'm all wet!"),
       beached: [nick('Oops! Sandy jet ski!'), nick('Whoa! Not the beach!'), nick('Ha ha! Again?')],
+      // Daddy, when it's wedged on the rocks and pops free.
+      rocks: [nick('Boing! Silly rocks!'), nick('Bonk! Off we go!')],
       push: [by('otter')('Back in the water!'), by('otter')('Ha ha! Boats go in the sea!')],
       // Pokes, in turn: Daddy (his cap blows off), Mommy on the sand, the jet ski man.
       cap: [nick('My cap!'), nick('Not again!')],
@@ -757,6 +759,9 @@ export const L = {
       hint: {
         jacket: onDevice('Tap the life jacket!', 'Click the life jacket!'),
         steer: onDevice('Hold your finger on the water!', 'Click and hold on the water!'),
+        // In the race: where to go next.
+        buoy: 'Go round the big orange buoy!',
+        home: 'Back to the flags!',
       },
     },
     // The sandcastle at Ao Hin Khok (sandcastle/): dig, towers, the tide.

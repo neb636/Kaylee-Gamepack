@@ -29,6 +29,8 @@ export function JetSkiScreen({ round: first, onRound, onIsland }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [count, setCount] = useState(-1)
   const [over, setOver] = useState<'won' | 'lost' | null>(null)
+  const [stars, setStars] = useState({ n: 0, of: 0 })
+  const [ready, setReady] = useState(false)
   const [round, setRound] = useState<RoundId>(first)
   const [feel] = useState(feelOn)
   const worldRef = useRef<World | null>(null)
@@ -53,6 +55,8 @@ export function JetSkiScreen({ round: first, onRound, onIsland }: Props) {
       else window.setTimeout(() => setOver(null), 2600)
     },
     count: (n) => setCount(n),
+    stars: (n, of) => setStars({ n, of }),
+    ready: () => setReady(true),
     spray: (k) => {
       const el = sprayRef.current
       if (!el) return
@@ -95,6 +99,21 @@ export function JetSkiScreen({ round: first, onRound, onIsland }: Props) {
           </>
         )}
       />
+      {/* While the bay is being built: the sea and the sun, bobbing, never a blank screen. */}
+      {!ready && mode === 'webgl' && (
+        <div className="jet-wait" aria-hidden>
+          <div className="jet-wait-sun" />
+          <div className="jet-wait-ski">🛟</div>
+          <div className="jet-wait-sea" />
+        </div>
+      )}
+      {stars.of > 0 && (
+        <div className="jet-stars" aria-label={`${stars.n} of ${stars.of} stars`}>
+          {Array.from({ length: stars.of }, (_, i) => (
+            <span key={i} className={i < stars.n ? 'on' : ''}>★</span>
+          ))}
+        </div>
+      )}
       {/* Spray on the lens after a big splash-down. */}
       <div ref={sprayRef} className="jet-spray" style={{ opacity: 0 }} />
       <AnimatePresence>
@@ -125,7 +144,8 @@ export function JetSkiScreen({ round: first, onRound, onIsland }: Props) {
           </motion.div>
         )}
       </AnimatePresence>
-      {mode === 'webgl' && <TripGuide ref={guideRef} />}
+      {/* (While the bottom-corner buttons are up, her bubble goes above them.) */}
+      {mode === 'webgl' && <TripGuide ref={guideRef} corner={over === 'won' ? { width: '380px', height: '200px' } : undefined} />}
       {feel && (
         <div className="jet-chips">
           {(['ride', 'waves', 'race'] as const).map((r) => (
@@ -160,7 +180,16 @@ const CSS = `
     radial-gradient(ellipse at 50% 50%, transparent 60%, rgba(230,248,255,.5) 100%); }
 .jet-count { position: absolute; left: 50%; top: 38%; translate: -50% -50%; z-index: 12; pointer-events: none;
   font-size: clamp(90px, 22vmin, 200px); font-weight: 700; color: var(--hotpink); text-shadow: 0 4px 16px rgba(43,35,48,.22); }
-.jet-over { position: absolute; left: 16px; right: 16px; bottom: calc(var(--safe-bottom, 0px) + 18px); z-index: 12; display: flex; gap: 14px; justify-content: center; align-items: center; }
+.jet-over { position: absolute; left: 16px; right: 16px; bottom: calc(var(--safe-bottom, 0px) + 18px); z-index: 12; display: flex; gap: 14px; justify-content: flex-end; align-items: center; }
+@media (max-width: 599px) { .jet-over { flex-wrap: wrap; } .jet-over > .jet-badge:first-child:not(:last-child) { flex-basis: 100%; text-align: center; background: none; box-shadow: none; padding: 0; } }
+.jet-wait { position: absolute; inset: 0; z-index: 5; pointer-events: none; overflow: hidden; background: linear-gradient(#A8E2FA 0%, #D5F1FF 55%, #7FD8E8 56%, #4CC0DA 100%); }
+.jet-wait-sun { position: absolute; left: 12%; top: 12%; width: 18vmin; height: 18vmin; border-radius: 50%; background: #FFE08A; }
+.jet-wait-ski { position: absolute; left: 50%; top: 56%; translate: -50% -50%; font-size: 18vmin; line-height: 1; animation: jet-bob 1.2s ease-in-out infinite; }
+.jet-wait-sea { position: absolute; left: -10%; right: -10%; top: 66%; height: 4vmin; border-radius: 50%; background: rgba(255,255,255,.55); animation: jet-roll 2.4s ease-in-out infinite; }
+@keyframes jet-bob { 0%, 100% { transform: translateY(-3%) rotate(-5deg); } 50% { transform: translateY(5%) rotate(5deg); } }
+@keyframes jet-roll { 0%, 100% { transform: translateX(-3%); } 50% { transform: translateX(3%); } }
+.jet-stars { position: absolute; left: 50%; translate: -50% 0; top: calc(var(--top-clear) + 6px); z-index: 11; pointer-events: none; display: flex; gap: 2px; padding: 4px 12px; border-radius: 999px; background: rgba(255,255,255,.75); font-size: clamp(20px, 3.8vmin, 34px); line-height: 1.1; color: rgba(43,35,48,.2); }
+.jet-stars .on { color: var(--gold, #FFC83D); }
 .jet-badge { padding: 12px 24px; border-radius: 999px; background: rgba(255,255,255,.92); box-shadow: var(--shadow); font-size: clamp(26px, 5vmin, 44px); font-weight: 700; color: var(--ink); }
 .jet-chips { position: absolute; right: 12px; top: calc(var(--top-clear) + 6px); z-index: 20; display: flex; gap: 6px; }
 .jet-chips button { min-height: 48px; padding: 6px 14px; border-radius: 999px; border: none; background: rgba(255,255,255,.85); box-shadow: var(--shadow); font: inherit; font-size: 16px; font-weight: 600; color: var(--ink); }

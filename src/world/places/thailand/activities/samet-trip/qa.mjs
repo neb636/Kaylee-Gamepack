@@ -535,6 +535,7 @@ export const motion = [
     setup: async (page, base) => {
       await page.goto(`${base}#/world/thailand/samet-trip/jetski?round=ride`)
       await ready(page)
+      await page.locator('[data-anchor="jacket"]').waitFor({ state: 'visible', timeout: 15000 })
       await page.locator('[data-anchor="jacket"]').click({ force: true })
       await page.waitForFunction(() => window.__thaiSametQA?.().phase === 'ride', null, { timeout: 8000 })
     },
@@ -547,6 +548,81 @@ export const motion = [
       await page.mouse.move(vp.width * 0.95, vp.height * 0.62)
       await page.waitForTimeout(7000)
       await page.mouse.up()
+    },
+  },
+  {
+    // Issue #357: a finger straight up the screen goes straight, then the same distance right and left.
+    name: 'thailand-samet-jetski-steer',
+    seconds: 13,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/jetski?round=ride`)
+      await ready(page)
+      await page.locator('[data-anchor="jacket"]').waitFor({ state: 'visible', timeout: 15000 })
+      await page.locator('[data-anchor="jacket"]').click({ force: true })
+      await page.waitForFunction(() => window.__thaiSametQA?.().phase === 'ride', null, { timeout: 8000 })
+      await page.waitForTimeout(2500)
+    },
+    act: async (page) => {
+      const vp = page.viewportSize()
+      await page.mouse.move(vp.width / 2, vp.height * 0.3)
+      await page.mouse.down()
+      await page.waitForTimeout(4500)
+      await page.mouse.move(vp.width * 0.8, vp.height * 0.3)
+      await page.waitForTimeout(4000)
+      await page.mouse.move(vp.width * 0.2, vp.height * 0.3)
+      await page.waitForTimeout(4000)
+      await page.mouse.up()
+    },
+  },
+  {
+    // The rope: she runs into the edge of the bay and rides along it.
+    name: 'thailand-samet-jetski-rope',
+    seconds: 13,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/jetski?round=ride`)
+      await ready(page)
+      await page.locator('[data-anchor="jacket"]').waitFor({ state: 'visible', timeout: 15000 })
+      await page.locator('[data-anchor="jacket"]').click({ force: true })
+      await page.waitForFunction(() => window.__thaiSametQA?.().phase === 'ride', null, { timeout: 8000 })
+    },
+    act: async (page) => {
+      const vp = page.viewportSize()
+      await page.mouse.move(vp.width / 2, vp.height * 0.3)
+      await page.mouse.down()
+      await page.waitForTimeout(13000)
+      await page.mouse.up()
+    },
+  },
+  {
+    // The waves round's stars: wander over the waves and catch them.
+    name: 'thailand-samet-jetski-stars',
+    seconds: 16,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/jetski?round=waves`)
+      await ready(page)
+      await page.waitForTimeout(1000)
+    },
+    act: async (page) => {
+      const vp = page.viewportSize()
+      await page.mouse.move(vp.width / 2, vp.height * 0.3)
+      await page.mouse.down()
+      for (let i = 0; i < 150; i++) {
+        await page.mouse.move(vp.width / 2 + Math.sin(i / 9) * vp.width * 0.4, vp.height * 0.3)
+        await page.waitForTimeout(100)
+      }
+      await page.mouse.up()
+    },
+  },
+  {
+    // The race with no finger on the screen: the arrow, the ring on the buoy, Sparkle's hint.
+    name: 'thailand-samet-jetski-race-idle',
+    seconds: 15,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/jetski?round=race`)
+      await ready(page)
+    },
+    act: async (page) => {
+      await page.waitForTimeout(15000)
     },
   },
   {

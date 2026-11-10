@@ -4382,11 +4382,11 @@
     "file": "fd862fec39c3.mp3"
   },
   {
-    "text": "Big waves! Drive over them!",
+    "text": "Big waves! Catch the stars!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3312,
-    "file": "5772a029445e.mp3"
+    "ms": 3120,
+    "file": "86e2cb1ae44c.mp3"
   },
   {
     "text": "Race the jet ski man!",
@@ -4508,6 +4508,20 @@
     "file": "0b2a8d719d84.mp3"
   },
   {
+    "text": "Boing! Silly rocks!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2064,
+    "file": "0f0afe6f9dc4.mp3"
+  },
+  {
+    "text": "Bonk! Off we go!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1968,
+    "file": "1c69163729a0.mp3"
+  },
+  {
     "text": "Back in the water!",
     "voice": "otter",
     "sig": "1d5457faf8",
@@ -4597,6 +4611,20 @@
     "sig": "ed7dbdac3d",
     "ms": 2400,
     "file": "872cb262f47f.mp3"
+  },
+  {
+    "text": "Go round the big orange buoy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2424,
+    "file": "b5fd40b46dcd.mp3"
+  },
+  {
+    "text": "Back to the flags!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1800,
+    "file": "0af13b05f422.mp3"
   },
   {
     "text": "Let's build a sandcastle!",
