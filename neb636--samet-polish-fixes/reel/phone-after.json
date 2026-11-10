@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "phone-after",
+  "title": "Phone after",
+  "video": "phone-after.mp4",
+  "gif": "phone-after.gif",
+  "seconds": 16,
+  "browser": "webkit",
+  "viewport": "iphone-portrait",
+  "moments": [
+    {
+      "name": "thailand-samet-polish-pack",
+      "where": "thailand-samet-polish-pack",
+      "seconds": 9,
+      "fps": 81.7,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-polish-sunset",
+      "where": "thailand-samet-polish-sunset",
+      "seconds": 4,
+      "fps": 91.5,
+      "status": "ok"
+    }
+  ]
+}
