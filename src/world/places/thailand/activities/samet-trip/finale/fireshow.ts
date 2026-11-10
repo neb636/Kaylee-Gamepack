@@ -71,7 +71,7 @@ const SHAPE = knobs('fireShape', 'Shapes in the sky', FILE, {
   gap: { value: 22, min: 0, max: 80, step: 2, label: '…clear of their heads by', unit: 'px' },
   size: { value: 1.1, min: 0.5, max: 2, step: 0.05, label: 'Her shape’s smallest size', unit: 'm', note: 'half the width of the dots she draws over, when the screen has little room' },
   tol: { value: 0.3, min: 0.1, max: 0.8, step: 0.02, label: 'A dot lights within', unit: 'm', note: 'at the smallest size; it grows with the shape' },
-  dot: { value: 1.5, min: 0.5, max: 3, step: 0.1, label: 'Dot size ×' },
+  dot: { value: 1.3, min: 0.5, max: 3, step: 0.1, label: 'Dot size ×' },
   need: { value: 0.75, min: 0.3, max: 1, step: 0.05, label: 'Done when lit', note: 'of the dots' },
   stuck: { value: 7, min: 3, max: 20, step: 0.5, label: 'Stuck after', unit: 's', note: 'no new dot this long: the dots count from further away (+30%) and the finger draws it' },
   show: { value: 2.2, min: 0.8, max: 5, step: 0.1, label: 'The dancers draw it in', unit: 's' },
@@ -288,7 +288,7 @@ export class FireShow implements World3D {
   private showRib: Ribbon
   private showBall: Mesh
   /** Her shapes, lifted into the sky as paper lanterns: each dot a lantern (offsets from the shape's middle). */
-  private lanterns: { pts: Vector3[]; color: string; t: number; from: Vector3; seed: number; k: number }[] = []
+  private lanterns: { pts: Vector3[]; color: string; t: number; from: Vector3; to: Vector3; seed: number; k: number; g: number }[] = []
   private lanternBody: InstancedMesh
   /** The fire (every flame on the beach in one draw), the firelight on the sand, the lanterns' soft halos. */
   private fire: Flames
@@ -832,7 +832,10 @@ export class FireShow implements World3D {
       if (i % 2 === 0) this.sparkle.emit(w.x, w.y, w.z, (Math.random() - 0.5) * 1.5, 1 + Math.random(), (Math.random() - 0.5) * 1.5, 1.2, 0.12)
     })
     const from = this.planePoint(this.guideC.x, this.guideC.y)
-    this.lanterns.push({ pts, color: PAPER[this.shapeIdx % 3], t: 0, from, seed: Math.random() * 10, k: Math.sqrt(s / SHAPE.size) })
+    // (They rise from where she drew it to the same place in the sky, and end the same size there, however big the
+    // shape was on her screen.)
+    const to = this.O.clone().addScaledVector(this.fwd, 26).add(tmp.set(0, 11, 0))
+    this.lanterns.push({ pts, color: PAPER[this.shapeIdx % 3], t: 0, from, to, seed: Math.random() * 10, k: Math.sqrt(s / SHAPE.size), g: (2.4 * SHAPE.size) / s })
     this.guide.count = 0
     this.counts.shapes++
     lift()
@@ -1176,10 +1179,10 @@ export class FireShow implements World3D {
       l.t += dt
       const k = Math.min(1, l.t / 6)
       const e = 1 - (1 - k) * (1 - k)
-      const base = tmp2.copy(l.from).addScaledVector(this.fwd, e * 26).add(tmp.set(0, e * 11, 0))
+      const base = tmp2.copy(l.from).lerp(l.to, e)
       // Bigger as they go, so the shape still reads far away; they loosen a little as they rise.
-      const grow = 1 + e * 1.4
-      const sz = 1.5 * l.k * (1 + e * 1.1)
+      const grow = 1 + (l.g - 1) * e
+      const sz = 1.5 * (l.k + (1 - l.k) * e) * (1 + e * 1.1)
       l.pts.forEach((q, i) => {
         if (n >= this.lanternBody.instanceMatrix.count) return
         const sd = l.seed + i * 1.37

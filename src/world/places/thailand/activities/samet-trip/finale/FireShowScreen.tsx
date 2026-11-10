@@ -86,7 +86,8 @@ export function FireShowScreen({ round: first, flags, onRound, onHome }: Props) 
       {mode === 'webgl' && <TripGuide ref={guideRef} corner={done !== null ? OVER_CORNER : undefined} />}
       <AnimatePresence>
         {done !== null && (
-          <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }} className="fin-over">
+          // (A moment after the fireworks' photo, once the bubble showing then has moved up out of its way.)
+          <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }} transition={{ delay: 0.45 }} className="fin-over">
             <div className="fin-badge">🔥 🏆</div>
             {onHome && (
               <BigButton color="mint" onClick={() => onHome(done)} ariaLabel="Home to Agong's house">
