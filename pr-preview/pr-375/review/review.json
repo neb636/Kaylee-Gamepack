@@ -1,151 +1,44 @@
 {
  "title": "Nan: real sound effects",
  "checkIn": "fix",
- "kaylee": "Nan sounds real now: scooters and tuk-tuks whoosh past the Pajero, buffalo moo, the fire crackles, frogs and birds all around each stop.",
+ "kaylee": "The toy horns are gone: Nan's traffic and her kart now honk like real vehicles.",
  "questions": [
-  "Any sound to redo? Name the stop and number (e.g. salt 4).",
-  "The background birds, breeze and village: keep, quieter, or off?"
+  "Road honk: A, B or C?",
+  "Pulling-over toot: A, B or C?",
+  "Her kart: A, B or C?"
  ],
  "links": [
   {
-   "label": "The mountain road (scooters go by)",
+   "label": "The mountain road (honks)",
    "hash": "#/world/thailand/nan-trip/drive?road=city"
-  },
-  {
-   "label": "The salt hut",
-   "hash": "#/world/thailand/nan-trip/salt"
-  },
-  {
-   "label": "The rice farm",
-   "hash": "#/world/thailand/nan-trip/rice?round=plant"
   }
  ],
  "listens": [
   {
-   "title": "The mountain road (21 sounds)",
-   "audio": "sfx/drive.mp3",
+   "title": "The road honk (cars, songthaews, tuk-tuks)",
+   "audio": "sfx/honk-options.mp3",
    "items": [
-    "steady engine hum of a small SUV heard from inside the cabin (loop)",
-    "a small motor scooter putters past on a quiet country road",
-    "a Thai tuk-tuk three-wheeler drives past",
-    "a small pickup truck taxi drives past on a country road",
-    "a small car drives past on a country road",
-    "a single short friendly honk from a small van horn",
-    "a playful musical car horn playing four quick happy rising notes",
-    "a water buffalo gives one long",
-    "a few chickens clucking",
-    "a small monkey chattering playfully",
-    "cartoon rubber bumper boing",
-    "gentle rain pattering on a car roof heard from inside the car (loop)",
-    "car tyres hissing on a wet road (loop)",
-    "soft airy whoosh of driving into a thick cloud of fog",
-    "cartoon tyre squeal as a small car swerves round a corner",
-    "a windscreen wiper sweeping once across a wet windshield",
-    "a windscreen wiper squeaking once across a dry windshield",
-    "a car driving through a big puddle",
-    "a squeaky rubber toy elephant squeezed",
-    "peaceful countryside in the green hills of northern Thailand (loop)",
-    "a calm small-town street in northern Thailand (loop)"
+    "A: full-size car (in the game now)",
+    "B: pickup truck, deeper",
+    "C: SUV, mellow"
    ]
   },
   {
-   "title": "The Nan map (7 sounds)",
-   "audio": "sfx/map.mp3",
+   "title": "Pulling over and tooting at her",
+   "audio": "sfx/tune-options.mp3",
    "items": [
-    "a tiny wind-up toy car motor buzzing (loop)",
-    "a toy car zooms off quickly",
-    "a short light rain sprinkle",
-    "a small fish jumps out of a river and splashes back in",
-    "a small propeller airplane takes off and climbs away into the distance",
-    "a small cloth flag flapping in the wind",
-    "gentle outdoor breeze with soft birdsong (loop)"
+    "A: two quick taps (in the game now)",
+    "B: three taps, deeper",
+    "C: five cheerful beeps"
    ]
   },
   {
-   "title": "The mushroom farm (14 sounds)",
-   "audio": "sfx/shroom.mp3",
+   "title": "Her kart at the Cup",
+   "audio": "sfx/kart-options.mp3",
    "items": [
-    "a garden hose misting nozzle spraying a fine soft mist (loop)",
-    "a tiny wet cute bloop",
-    "a soft rubbery inflating whoomp",
-    "a short rubbery stretching creak",
-    "a mushroom twisted and snapped off its stem",
-    "something soft dropped into a wicker basket",
-    "big deep wobbly cartoon boing",
-    "a single water drop falling into a small puddle",
-    "a soft little plop of a mushroom slice landing on pizza dough",
-    "a wood fire crackling in a brick pizza oven",
-    "a wooden pizza peel sliding across a stone oven floor",
-    "a sleepy little dog snoring softly",
-    "a wet dog shaking water off its fur",
-    "inside a humid mushroom greenhouse on a farm (loop)"
-   ]
-  },
-  {
-   "title": "The rice farm (26 sounds)",
-   "audio": "sfx/rice.mp3",
-   "items": [
-    "a small hoof stepping into shallow water in a rice paddy",
-    "a single soft footstep on grass",
-    "a single small hoof step on a wooden boardwalk plank",
-    "a small hoof stepping in wet mud",
-    "a rice seedling pushed into soft wet mud",
-    "a small wooden water gate sliding up in its slot",
-    "water rushing through an irrigation channel into a rice field",
-    "water draining and gurgling out of a field",
-    "a tiny bird cheeping twice",
-    "a small bird flapping its wings and flying up",
-    "a sickle swishing through rice stalks",
-    "a bundle of rice straw tied up",
-    "a bundle of rice straw dropped onto a wooden drying rack",
-    "dry straw rustling as it puffs up",
-    "a frog croaking ribbit twice",
-    "a duck quacking twice",
-    "a clump of wet mud landing",
-    "a small bamboo and metal wind chime tinkling softly in the breeze",
-    "a quick whoosh of a straw hat spinning up into the air",
-    "pouring milk into a glass",
-    "a bundle of rice stalks slapped onto a wooden threshing board",
-    "a quick swoosh of a bundle swung through the air",
-    "a bundle of straw tossed onto a pile",
-    "soft steam hissing from a bamboo basket of sticky rice",
-    "a playful splash of water",
-    "rice fields in northern Thailand on a calm day (loop)"
-   ]
-  },
-  {
-   "title": "The salt hut (19 sounds)",
-   "audio": "sfx/salt.mp3",
-   "items": [
-    "a wooden bucket dropped down a deep well hitting the water",
-    "a single glug of a bucket filling with water",
-    "a rope creaking on a wooden beam as a heavy bucket is pulled up",
-    "water pouring steadily from a bucket into a wide metal pan (loop)",
-    "water sloshing into a wide shallow metal pan",
-    "a log thrown onto a wood fire",
-    "a puff of air on a fire and the flames roaring up for a moment",
-    "a wood fire crackling",
-    "a single bubble bloop of boiling water",
-    "water splashed onto a hot fire",
-    "a wooden paddle scraping wet salt across a metal pan (loop)",
-    "coarse salt poured into a woven basket",
-    "a small cloth bag of salt patted down onto a wooden shelf",
-    "a rooster crowing cock-a-doodle-doo once",
-    "a hen clucking buk buk bukaawk",
-    "stacked woven baskets wobbling and rattling",
-    "a small pebble dropped down a deep well",
-    "a small motor scooter putters past slowly on a wet village road",
-    "a quiet mountain village morning in northern Thailand (loop)"
-   ]
-  },
-  {
-   "title": "The Mountain Cup (4 sounds)",
-   "audio": "sfx/cup.mp3",
-   "items": [
-    "a small go-kart engine running at steady speed (loop)",
-    "a toy go-kart horn beeping twice",
-    "small kart tyres bumping and rumbling over grass (loop)",
-    "karts rolling over a bamboo bridge"
+    "A: small motorcycle",
+    "B: compact car (in the game now)",
+    "C: motor scooter"
    ]
   }
  ]
