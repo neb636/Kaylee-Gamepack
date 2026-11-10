@@ -124,6 +124,8 @@ const PUP = knobs('sametPuppy', 'The beach puppy', FILE, {
   again: { value: 1.6, min: 1, max: 3, step: 0.1, label: 'Each fetch waits longer', unit: '×', note: 'the next fetch waits this many times longer (help, not nagging)' },
   taxiFrom: { value: 200, min: 80, max: 400, step: 10, label: 'Takes the taxi past', unit: 'm', note: 'a walk longer than this, and the taxi is quicker: he jumps in the taxi' },
   slide: { value: 2.4, min: 1, max: 5, step: 0.1, label: 'The sand slide takes', unit: 's' },
+  offFrom: { value: 14, min: 6, max: 40, step: 1, label: 'Hops out of the taxi when she walks off past', unit: 'm', note: 'waiting in the taxi, he hops out and comes after her when she is this far from it...' },
+  offAfter: { value: 3, min: 0.5, max: 10, step: 0.5, label: '...for this long', unit: 's' },
   frame: { value: 11, min: 4, max: 20, step: 0.5, label: 'Taxi in the picture within', unit: 'm', note: 'she is this close to the waiting taxi: the camera takes it in too' },
 })
 
@@ -389,7 +391,7 @@ export class SametIsland implements World3D {
   private nearAnimal = false
   private bumpV = { x: 0, z: 0, t: 0 }
   private wctx!: WildCtx
-  private counts = { snaps: 0, animalSnaps: 0, golds: 0, cleaned: 0, lifted: 0, boings: 0, taps: 0, pokes: 0, swims: 0, spins: 0, taxiRides: 0, skiRides: 0, kites: 0, coconuts: 0, bonks: 0, kicks: 0, gallops: 0, beaches: 0, ropes: 0, fetches: 0, named: 0, pupCalls: 0, slides: 0, pupPokes: 0, taxiStops: 0, leaveAsks: 0 }
+  private counts = { snaps: 0, animalSnaps: 0, golds: 0, cleaned: 0, lifted: 0, boings: 0, taps: 0, pokes: 0, swims: 0, spins: 0, taxiRides: 0, skiRides: 0, kites: 0, coconuts: 0, bonks: 0, kicks: 0, gallops: 0, beaches: 0, ropes: 0, fetches: 0, named: 0, pupCalls: 0, slides: 0, pupPokes: 0, taxiStops: 0, leaveAsks: 0, taxiHops: 0 }
   private seen = new Set<SpotId>()
   private greeted = false
 
@@ -408,6 +410,8 @@ export class SametIsland implements World3D {
   /** By taxi: the stop he gets on at and the one he gets off at. */
   private pupTaxi: { from: number; to: number } | null = null
   private pupAboard = false
+  /** How long she has been far from the taxi he's waiting in. */
+  private pupAwayT = 0
   /** His place on the taxi's floor by the back step, facing out. */
   private pupSeat = new Group()
   private pupWaiting = false
@@ -2772,6 +2776,13 @@ export class SametIsland implements World3D {
         this.pupBarkAt = t
         P.bark(2)
       }
+      // She walked off instead of getting in: after a moment he hops out, runs after her and plans again (and the
+      // taxi stops waiting for him).
+      const tp = this.taxi.root.position
+      const k = this.kaylee.root.position
+      const away = !this.aboard && this.mode === 'walk' && Math.hypot(k.x - tp.x, k.z - tp.z) > PUP.offFrom
+      this.pupAwayT = away ? this.pupAwayT + dt : 0
+      if (this.pupAwayT > PUP.offAfter) this.pupLeaveTaxi()
       return
     }
     P.shadow.visible = true
@@ -2898,6 +2909,15 @@ export class SametIsland implements World3D {
     if (!this.pupAboard) P.update(dt, t, Math.max(this.heightAt(P.x, P.z), -0.35))
   }
 
+  /** Out of the taxi without her (she went elsewhere, or called him): he comes running to her and plans again. */
+  private pupLeaveTaxi() {
+    if (!this.pupAboard || this.aboard) return
+    this.pupOutOfTaxi()
+    this.pupAwayT = 0
+    this.pupTaxi = null
+    this.pupState = 'fetch'
+    this.counts.taxiHops++
+  }
   /** Into the back of the taxi (he jumps in first, or right after her). */
   private pupIntoTaxi() {
     if (this.pupAboard) return
@@ -2925,9 +2945,19 @@ export class SametIsland implements World3D {
   callPuppy() {
     this.counts.pupCalls++
     this.lastTouch = this.time
-    if (this.mode !== 'walk' || this.pupAboard) {
+    if (this.mode !== 'walk') {
       this.pup.bark(2)
       return
+    }
+    // (Waiting in the taxi while she's elsewhere: out he hops.)
+    if (this.pupAboard) {
+      const tp = this.taxi.root.position
+      const k = this.kaylee.root.position
+      if (Math.hypot(k.x - tp.x, k.z - tp.z) < RIDE.near + 0.5) {
+        this.pup.bark(2)
+        return
+      }
+      this.pupLeaveTaxi()
     }
     const k = this.kaylee.root.position
     if (Math.hypot(this.pup.x - k.x, this.pup.z - k.z) > 14 || !this.onScreen(tmp.set(this.pup.x, this.pup.y + 0.4, this.pup.z))) {
@@ -3249,6 +3279,8 @@ export class SametIsland implements World3D {
           named: this.counts.named,
           calls: this.counts.pupCalls,
           pokes: this.counts.pupPokes,
+          // Times he hopped out of the taxi to come after her (she walked off, or called him).
+          hops: this.counts.taxiHops,
         }
       })(),
       // Every beach on foot from Na Dan pier (meters along the puppy's best walk; null: no way there).

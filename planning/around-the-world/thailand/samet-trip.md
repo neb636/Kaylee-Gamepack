@@ -990,3 +990,7 @@ Every phrase goes in `lines.ts` under `L.samet` (tagged by speaker) and is recor
   speedboat at Na Dan (the home picture), and the 🏝️ pin reopens on the beach she left.
 - Knobs `sametPuppy`. Robot: `qa().puppy`, `clock`, `reach`; runs `thailand-samet-wayfind-*`.
 - Leftovers: he doesn't swim; the bubble pictures keep the light they were taken in.
+- Fix (#369 Codex, 2026-11-10): waiting in the taxi while she walks off, he hops out after `offAfter` (3 s) once she's
+  `offFrom` (14 m) from it, or at once when she calls him, runs to her and plans again; the taxi no longer waits for
+  him alone. Robot (walking back up Na Dan pier): main still aboard 21 s later, 18.9 m away; now out at 6.3 s and beside
+  her (1.9 m) by 15 s; called at 15.8 m, out at once. `qa().puppy.hops`, run `thailand-samet-wayfind-walkoff`.
