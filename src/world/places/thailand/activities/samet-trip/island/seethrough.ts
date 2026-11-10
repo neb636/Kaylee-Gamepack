@@ -38,7 +38,7 @@ const pars = /* glsl */ `
     // Off the line of sight, as meters at her distance: the same for every point along one pixel's ray.
     float r = length(v - dir * t) * L / max(t, 0.5);
     float R = uSeeR * 1.3;
-    float k = (1.0 - smoothstep(R * 0.8, R, r)) * smoothstep(0.0, 0.8, L - 1.6 + deeper - t);
+    float k = (1.0 - smoothstep(R * 0.8, R, r)) * smoothstep(0.0, 0.6, L - 0.9 + deeper - t);
     return max(k, near);
   }
 `
@@ -50,10 +50,11 @@ const cutToon = /* glsl */ `
   }
 `
 // Its ink hull: wherever the shape is cut at all, the line goes, a few meters deeper too (its far side, behind the cut
-// near side, would otherwise show through as a dark patch); at the lens only a little deeper, or whatever stands near
-// the camera uncut would lose its line. (No dither: a dotted ink line reads as a smudge.)
+// near side, would otherwise show through as a dark patch). At the lens it reaches a crown's width deeper: with the
+// camera in or right by a crown whose near side is gone, its hull's inside would fill the screen with black. (So
+// things within about 10 m of the camera have no ink line. No dither: a dotted ink line reads as a smudge.)
 const cutHull = /* glsl */ `
-  if (seeCut(4.0, 1.5) > 0.0) discard;
+  if (seeCut(4.0, 5.5) > 0.0) discard;
 `
 
 /** Each world's own see-through materials (in its bag, freed with it: a cache shared by every world would hand the

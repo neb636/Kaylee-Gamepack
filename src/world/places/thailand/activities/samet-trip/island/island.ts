@@ -60,6 +60,7 @@ import { buildProps, type PokeThing, type Props } from './props'
 import { buildIsland, DAY, TIMES, type Island, type TimeOfDay } from './scenery'
 import type { Surface } from './ground'
 import { makeSeeThrough, SEE } from './seethrough'
+import { SwimRope } from './swimrope'
 import { Taxi } from './taxi'
 import { FireDancers } from './dancers'
 
@@ -274,6 +275,9 @@ export class SametIsland implements World3D {
   private kaylee: Avatar
   private kShadow: Mesh
   private ring: Group
+  /** The rope of floats at the edge of the swim area, and when she last bumped it. */
+  private swimRope: SwimRope
+  private ropeAt = -9
   private ringK = 0
   private nick: Follower
   private ji: Follower
@@ -361,7 +365,7 @@ export class SametIsland implements World3D {
   private nearAnimal = false
   private bumpV = { x: 0, z: 0, t: 0 }
   private wctx!: WildCtx
-  private counts = { snaps: 0, animalSnaps: 0, golds: 0, cleaned: 0, lifted: 0, boings: 0, taps: 0, pokes: 0, swims: 0, spins: 0, taxiRides: 0, skiRides: 0, kites: 0, coconuts: 0, bonks: 0, kicks: 0, gallops: 0, beaches: 0 }
+  private counts = { snaps: 0, animalSnaps: 0, golds: 0, cleaned: 0, lifted: 0, boings: 0, taps: 0, pokes: 0, swims: 0, spins: 0, taxiRides: 0, skiRides: 0, kites: 0, coconuts: 0, bonks: 0, kicks: 0, gallops: 0, beaches: 0, ropes: 0 }
   private seen = new Set<SpotId>()
   private greeted = false
   private talk = { nick: 0, ji: 0, taxi: 0 }
@@ -394,6 +398,7 @@ export class SametIsland implements World3D {
     scene.add(this.kaylee.root)
     this.kShadow = blobShadow(0.45, bag)
     scene.add(this.kShadow)
+    this.swimRope = new SwimRope(bag, scene)
     this.ring = new Group()
     const H = this.kaylee.height
     this.ring.add(solid(merge([P.torus(H * 0.33, H * 0.11, PAL.hotpink, { rot: [Math.PI / 2, 0, 0] }), ...[0, 1, 2, 3].map((k) => P.torus(H * 0.33, H * 0.115, '#FFFFFF', { rot: [Math.PI / 2, 0, (k * Math.PI) / 2] }, 0.5))]), bag, 2))
@@ -693,6 +698,12 @@ export class SametIsland implements World3D {
     else if (this.mode === 'kite') this.flyKite(dt)
     this.kaylee.update(dt, t)
     if (this.mode === 'walk' || this.mode === 'kite') this.underfoot(dt)
+    {
+      // The swim area's edge comes up round her as she paddles near it.
+      const gr = this.isl.ground
+      const near = this.mode === 'walk' && this.swimming && gr.shoreAt(k.x, k.z) > WALK.far - 9
+      this.swimRope.update(dt, t, k.x, k.z, near, WALK.far + 0.5, gr.shoreAt, (x, z) => this.isl.lagoon.heightAt(x, z, t, gr.shoreAt(x, z)))
+    }
     this.taxiStep(dt)
     this.walkIntoStops()
     this.follow(dt, t)
@@ -771,6 +782,17 @@ export class SametIsland implements World3D {
     if (this.finger?.leading) goal = this.pick(this.finger.x, this.finger.y, tmp)
     else if (this.target) goal = this.target
     this.aimDist = 0
+    // Paddling out against the swim area's rope: it boings her back, softly (the floats dip and bob, a little splash).
+    if (goal && this.swimming && this.time - this.ropeAt > 1.4) {
+      const gr = this.isl.ground
+      if (gr.shoreAt(k.x, k.z) > WALK.far - 1.4 && gr.shoreAt(goal.x, goal.z) > WALK.far) {
+        this.ropeAt = this.time
+        this.counts.ropes++
+        sfx.boing()
+        this.swimRope.bump(k.x, k.z)
+        this.spray.burst(k.x, this.isl.lagoon.heightAt(k.x, k.z, this.time, gr.shoreAt(k.x, k.z)), k.z, 8, 1.2, 1.6, 0.1)
+      }
+    }
     if (goal && !this.kaylee.walking) {
       const dx = goal.x - k.x
       const dz = goal.z - k.z
@@ -2611,6 +2633,8 @@ export class SametIsland implements World3D {
       y: +k.y.toFixed(2),
       surface: this.surface,
       swimming: this.swimming,
+      // The swim area's rope: floats drawn round her, and meters to the shore where she is (the rope is at far + 0.5).
+      rope: { floats: this.swimRope.shown, bumps: this.counts.ropes, shore: +this.isl.ground.shoreAt(this.kaylee.root.position.x, this.kaylee.root.position.z).toFixed(1), far: WALK.far },
       deck: this.deckOn,
       time: this.timeKey,
       flags: [...this.flags],
