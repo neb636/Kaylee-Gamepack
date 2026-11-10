@@ -1,7 +1,0 @@
-{
-  "title": "Fix: passport, offline and broken links",
-  "checkIn": "fix",
-  "kaylee": "Her stamps stay safe with two tabs open, test links no longer give free stamps, the iPad uses its saved copy when the server hiccups, and a broken link opens home instead of a blank screen.",
-  "questions": [],
-  "links": [{ "label": "Broken link → home", "hash": "#/world/%" }]
-}
