@@ -796,4 +796,86 @@ export const motion = [
       await page.waitForTimeout(6000)
     },
   },
+  // Snorkel and hide and seek, fixed (#357 batch): Daddy's hiding place on screen and the help rising when she's stuck
+  // (he peeks out, his place glows, he pops out and waves, he runs over), every hide of the trickier round found, a
+  // silly hide behind a thin palm (Mommy giggles, Daddy looks the wrong way), the cuttlefish jetting off twice before it
+  // turns pink, and her floaties keeping off the boat's hull.
+  {
+    name: 'thailand-samet-fix-hideseek-help',
+    seconds: 34,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/hideseek?round=2`)
+      await ready(page)
+    },
+    act: async (page) => page.waitForTimeout(34000),
+  },
+  {
+    name: 'thailand-samet-fix-hideseek-tricky',
+    seconds: 30,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/hideseek?round=2`)
+      await ready(page)
+    },
+    act: async (page) => {
+      // Each seek: a moment to look, then tap where he hides (she walks over and finds him).
+      const t0 = Date.now()
+      let last = ''
+      while (Date.now() - t0 < 29000) {
+        const s = await page.evaluate(() => window.__thaiSametQA?.())
+        if (s?.round === 'hide') break
+        if (s?.phase === 'seek' && s.hide !== last) {
+          last = s.hide
+          await page.waitForTimeout(900)
+          await page.locator(`[data-anchor="hide:${s.hide}"]`).click({ force: true, timeout: 2000 }).catch(() => {})
+        }
+        await page.waitForTimeout(300)
+      }
+    },
+  },
+  {
+    name: 'thailand-samet-fix-hide-silly',
+    seconds: 16,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/hideseek?round=hide`)
+      await ready(page)
+      await page.waitForTimeout(1200)
+    },
+    act: async (page) => {
+      await page.locator('[data-anchor="hide:palmL"]').click({ force: true }).catch(() => {})
+      await page.waitForTimeout(15000)
+    },
+  },
+  {
+    name: 'thailand-samet-fix-cuttle',
+    seconds: 34,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/snorkel?round=cuttle`)
+      await ready(page)
+      await page.waitForTimeout(2000)
+    },
+    act: async (page) => snorkelLead(page, 'cuttleAt', 33000),
+  },
+  {
+    name: 'thailand-samet-fix-float-boat',
+    seconds: 12,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/snorkel?round=float`)
+      await ready(page)
+      await page.waitForTimeout(3000)
+    },
+    act: async (page) => {
+      // Swim her right into the boat's side, then along it (she slides along the hull, her floaties outside it).
+      const s = await page.evaluate(() => window.__thaiSametQA?.())
+      const vp = page.viewportSize()
+      const at = (x, y) => [Math.max(5, Math.min(vp.width - 5, x)), Math.max(120, Math.min(vp.height - 5, y))]
+      await page.mouse.move(...at(s.kaylee.x + vp.width * 0.3, s.kaylee.y - 10))
+      await page.mouse.down()
+      for (let i = 0; i < 44; i++) {
+        const k = i / 44
+        await page.mouse.move(...at(s.kaylee.x + vp.width * 0.32, s.kaylee.y - 10 - k * vp.height * 0.25))
+        await page.waitForTimeout(250)
+      }
+      await page.mouse.up()
+    },
+  },
 ]

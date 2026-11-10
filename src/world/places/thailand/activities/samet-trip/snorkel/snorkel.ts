@@ -54,6 +54,7 @@ const SWIM = knobs('snorkelSwim', 'Swimming (her finger leads her)', FILE, {
   turn: { value: 5, min: 1, max: 15, step: 0.5, label: 'Turns', unit: '/s' },
   kick: { value: 1.5, min: 0.5, max: 3, step: 0.05, label: 'Kicks per speed', unit: '×', note: 'how fast her legs go for how fast she swims' },
   body: { value: 0.45, min: 0.2, max: 0.9, step: 0.01, label: 'Bumps from', unit: 'm', note: 'her size for bumping into the coral and the rocks' },
+  reach: { value: 0.85, min: 0.3, max: 1.5, step: 0.01, label: 'Keeps off the boat by', unit: 'm', note: 'her arms and floaties reach out sideways: the hull stays this far from her middle' },
   boing: { value: 3.2, min: 1, max: 7, step: 0.1, label: 'An urchin boings her', unit: 'm/s' },
   bump: { value: 1.6, min: 1, max: 2.5, step: 0.05, label: 'Coral bounces her', unit: '×', note: '1 = she just stops, 2 = she bounces straight back' },
   float: { value: -0.12, min: -0.5, max: 0.1, step: 0.01, label: 'Floats at', unit: 'm', note: 'her middle, against the surface' },
@@ -69,10 +70,17 @@ const FISH = knobs('snorkelFish', 'The fish', FILE, {
   near: { value: 3.4, min: 1, max: 8, step: 0.1, label: '…on when she’s within', unit: 'm', note: 'closer than this and it swims on to its next spot; further and it waits' },
   waitFor: { value: 5, min: 1, max: 20, step: 0.5, label: '…comes back to fetch her after', unit: 's', note: 'waiting this long without her coming closer' },
   back: { value: 11, min: 5, max: 25, step: 0.5, label: '…comes back for her past', unit: 'm' },
-  flash: { value: 5.5, min: 2, max: 10, step: 0.1, label: 'Cuttlefish flashes at', unit: 'm' },
-  stripes: { value: 3.4, min: 1, max: 7, step: 0.1, label: '…stripes at', unit: 'm' },
-  pink: { value: 2.0, min: 0.6, max: 5, step: 0.1, label: '…turns pink at', unit: 'm' },
+  flash: { value: 5.5, min: 2, max: 10, step: 0.1, label: 'Cuttlefish shows its colors at', unit: 'm', note: 'further off it’s sand-colored (hiding)' },
+  pink: { value: 2.0, min: 0.6, max: 5, step: 0.1, label: '…she reaches it at', unit: 'm', note: 'a new color each time (rainbow, stripes, pink); the first two times it jets off to hide again' },
+  jet: { value: 1.1, min: 0.3, max: 3, step: 0.05, label: '…jets off in', unit: 's' },
+  shy: { value: 0.4, min: 0, max: 2, step: 0.05, label: 'The last time it backs away at', unit: 'm/s', note: 'slower than her paddle, so she catches it' },
+  glint: { value: 14, min: 4, max: 60, step: 1, label: 'Stuck: it glints after', unit: 's', note: 'a rainbow flash where it hides, and again every 5 s' },
+  comes: { value: 24, min: 8, max: 90, step: 1, label: 'Stuck: it swims to her after', unit: 's' },
 })
+/** Where the cuttlefish hides each time (it jets from one to the next): the garden's middle, then further each time. */
+/** The boat's hull for bumping: half its width, and half the length of its straight middle (reef.ts boat()). */
+const HULL = { r: 0.92, len: 2.7 }
+const CUTTLE_SPOTS: XZ[] = [GARDEN, { x: GARDEN.x - 4.5, z: GARDEN.z - 4.5 }, { x: GARDEN.x + 6.5, z: GARDEN.z - 5 }]
 /** The rounds and the camera. */
 const PLAY = knobs('snorkelPlay', 'Rounds and the half-under camera', FILE, {
   float: { value: 28, min: 5, max: 120, step: 1, label: 'Swim before the parrotfish', unit: 'm' },
@@ -220,8 +228,13 @@ export class Snorkel implements World3D {
   private pWiggle = 0
   private cuttle: Model & { mat: import('three').MeshToonMaterial }
   private cPos = new Vector3(GARDEN.x, -1.15, GARDEN.z)
+  /** Its color now (0 sand, 1 rainbow, 2 stripes, 3 pink) and how many times she has reached it (3 = done). */
   private stage = 0
   private best = 0
+  /** Since it last settled to hide (the stuck clock), and its jet to the next hiding place. */
+  private lapT = 0
+  private glintT = 0
+  private jet: { from: Vector3; to: Vector3; t: number; wait: number } | null = null
   private flashT = -1
   private doneAt = -1
   /** The captain's face (her beak opens with her voice). */
@@ -252,7 +265,7 @@ export class Snorkel implements World3D {
   private spray: Particles
   private sparkle: Particles
   private patches: { root: Group; at: Vector3 }[] = []
-  private counts = { leads: 0, taps: 0, pokes: 0, kicks: 0, bumps: 0, boings: 0, rings: 0, peeks: 0, snaps: 0, stages: 0 }
+  private counts = { leads: 0, taps: 0, pokes: 0, kicks: 0, bumps: 0, boings: 0, rings: 0, peeks: 0, snaps: 0, stages: 0, glints: 0 }
 
   constructor(
     private renderer: WebGLRenderer,
@@ -649,6 +662,8 @@ export class Snorkel implements World3D {
     const v = this.vel
     this.bumpT = Math.max(0, this.bumpT - dt)
     OBSTACLES.forEach((o, i) => {
+      // (The boat is one long hull, below.)
+      if (o.kind === 'boat') return
       const dx = p.x - o.x
       const dz = p.z - o.z
       const d = Math.hypot(dx, dz)
@@ -687,7 +702,7 @@ export class Snorkel implements World3D {
           this.peek(CORALS.findIndex((c) => c.i === i), true)
         }
       } else {
-        // Rocks and the boat: she slides along them.
+        // Rocks: she slides along them.
         v.x -= nx * vn
         v.z -= nz * vn
         if (this.bumpT <= 0 && -vn > 0.8) {
@@ -696,6 +711,30 @@ export class Snorkel implements World3D {
         }
       }
     })
+    // The boat: its whole hull (a capsule along z), kept clear of her arms and floaties as well as her middle; she
+    // slides along it.
+    {
+      const oz = clamp(p.z, BOAT.z - HULL.len, BOAT.z + HULL.len)
+      const dx = p.x - BOAT.x
+      const dz = p.z - oz
+      const d = Math.hypot(dx, dz)
+      const min = HULL.r + SWIM.reach
+      if (d < min && d > 1e-4) {
+        const nx = dx / d
+        const nz = dz / d
+        p.x = BOAT.x + nx * min
+        p.z = oz + nz * min
+        const vn = v.x * nx + v.z * nz
+        if (vn < 0) {
+          v.x -= nx * vn
+          v.z -= nz * vn
+          if (this.bumpT <= 0 && -vn > 0.8) {
+            this.bumpT = 0.5
+            thud()
+          }
+        }
+      }
+    }
     // The reef's edge: the water gently turns her back.
     const b = BOUNDS
     if (p.x < b.x0) v.x += (b.x0 - p.x) * 4 * dt
@@ -917,22 +956,73 @@ export class Snorkel implements World3D {
 
   private cuttlefish(dt: number, t: number) {
     const c = this.cPos
-    const d = Math.hypot(this.pos.x - c.x, this.pos.z - c.z)
     // (It hides, sand-colored, until the parrotfish has brought her to the garden.)
-    const stage = this.round !== 'cuttle' ? 0 : d < FISH.pink ? 3 : d < FISH.stripes ? 2 : d < FISH.flash ? 1 : 0
-    if (stage > this.stage) {
-      // Each step closer, a new color (and a twinkle up).
-      tone(700 + stage * 200, 1000 + stage * 260, 0.2, 0.05, 'sine')
-      if (stage > this.best) {
-        this.counts.stages++
-        this.best = stage
-        if (stage === 1) this.once('colors', S.colors)
-        if (stage === 3) {
-          twinkle(6)
-          this.burstAt(c, 40)
-          this.once('pink', S.pink)
-          this.once('camera', S.camera)
+    const on = this.round === 'cuttle' && this.best < 3
+    if (this.jet) {
+      // Jetting off to its next hiding place: a whoosh and a puff of ink, tentacles first.
+      const j = this.jet
+      // (A moment showing off its new color first.)
+      if (j.wait > 0 && (j.wait -= dt) <= 0) {
+        hiss(0.45, 0.1, 'bandpass', 900, 2400)
+        this.once(`again${this.best}`, S.again[this.best - 1])
+      }
+      if (j.wait <= 0) j.t += dt / FISH.jet
+      const k = clamp(j.t)
+      const e = 1 - (1 - k) ** 3
+      c.set(j.from.x + (j.to.x - j.from.x) * e, j.from.y - bellK(k) * 0.4, j.from.z + (j.to.z - j.from.z) * e)
+      if (Math.random() < dt * 30 * (1 - k)) this.bubbles.emit(c.x, c.y, c.z, (Math.random() - 0.5) * 0.4, 0.3, (Math.random() - 0.5) * 0.4, 1.2, 0.05 + Math.random() * 0.05)
+      if (k >= 1) {
+        this.jet = null
+        this.lapT = 0
+        this.glintT = 0
+      }
+    } else if (on) {
+      this.lapT += dt
+      const home = CUTTLE_SPOTS[this.best]
+      const d0 = Math.hypot(this.pos.x - c.x, this.pos.z - c.z)
+      const dx = c.x - this.pos.x
+      const dz = c.z - this.pos.z
+      if (this.lapT > FISH.comes) {
+        // Stuck a long while: it comes to her (rule 3), and she reaches it.
+        const l = Math.max(0.01, d0)
+        c.x -= (dx / l) * 0.7 * dt
+        c.z -= (dz / l) * 0.7 * dt
+      } else if (this.best === 2 && d0 < 4.5 && d0 > FISH.pink && FISH.shy > 0) {
+        // The last time it's shy: it backs away from her (slower than her paddle), never far from its place.
+        const l = Math.max(0.01, d0)
+        const nx = c.x + (dx / l) * FISH.shy * dt
+        const nz = c.z + (dz / l) * FISH.shy * dt
+        if (Math.hypot(nx - home.x, nz - home.z) < 3 && nx > BOUNDS.x0 + 1 && nx < BOUNDS.x1 - 1 && nz > BOUNDS.z0 + 1) {
+          c.x = nx
+          c.z = nz
         }
+      }
+      // Stuck: a rainbow glint where it hides, now and then.
+      if (this.lapT > FISH.glint && (this.glintT -= dt) <= 0) {
+        this.glintT = 5
+        this.flashT = 0
+        twinkle(3)
+        this.counts.glints++
+      }
+    }
+    const d = Math.hypot(this.pos.x - c.x, this.pos.z - c.z)
+    const near = on && !this.jet && d < FISH.flash
+    // (Its color: sand far off, the time's own color near; showing it off before a jet, rainbow while it jets.)
+    const stage = this.round !== 'cuttle' ? 0 : this.best >= 3 ? 3 : this.jet ? (this.jet.wait > 0 ? this.best : 1) : near ? this.best + 1 : 0
+    if (stage > this.stage) tone(700 + stage * 200, 1000 + stage * 260, 0.2, 0.05, 'sine')
+    if (near && stage === 1) this.once('colors', S.colors)
+    if (on && !this.jet && d < FISH.pink) {
+      // She reached it: its new color bursts out; the first two times it jets off to hide again.
+      this.best++
+      this.counts.stages++
+      this.burstAt(c, this.best === 3 ? 40 : 22)
+      if (this.best === 3) {
+        twinkle(6)
+        this.once('pink', S.pink)
+        this.once('camera', S.camera)
+      } else {
+        twinkle(4)
+        this.jet = { from: c.clone(), to: new Vector3(CUTTLE_SPOTS[this.best].x, -1.15, CUTTLE_SPOTS[this.best].z), t: 0, wait: 0.8 }
       }
     }
     this.stage = stage
@@ -946,7 +1036,7 @@ export class Snorkel implements World3D {
     else if (stage === 2) col.set(Math.sin(t * 22) > 0 ? '#8A63E8' : '#FFE15C')
     else col.set('#FF6FB5').offsetHSL(0, 0, Math.sin(t * 4) * 0.05)
     // Hovering, fins rippling, turned to her when she's near.
-    const want = d < 9 ? Math.atan2(this.pos.x - c.x, this.pos.z - c.z) : t * 0.2
+    const want = this.jet ? Math.atan2(this.jet.from.x - this.jet.to.x, this.jet.from.z - this.jet.to.z) : d < 9 ? Math.atan2(this.pos.x - c.x, this.pos.z - c.z) : t * 0.2
     const r = this.cuttle.root
     r.rotation.y += angleTo(r.rotation.y, want) * ease(dt, 2)
     r.position.set(c.x + Math.sin(t * 0.5) * 0.3, c.y + Math.sin(t * 1.3) * 0.08, c.z + Math.cos(t * 0.4) * 0.2)

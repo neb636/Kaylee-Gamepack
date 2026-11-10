@@ -1803,6 +1803,8 @@
   "Click and hold in the water to swim!",
   "Follow the parrotfish!",
   "Swim close to the cuttlefish!",
+  "Whoosh! Find it again!",
+  "Where did it go?",
   "It turned pink, just for you!",
   "Tap the camera for a photo!",
   "Click the camera for a photo!",
@@ -1986,6 +1988,14 @@
     "voice": "nick"
   },
   {
+    "text": "Here I am!",
+    "voice": "nick"
+  },
+  {
+    "text": "Peekaboo! You found me!",
+    "voice": "nick"
+  },
+  {
     "text": "My turn to count! Go hide!",
     "voice": "nick"
   },
@@ -2013,6 +2023,14 @@
   {
     "text": "Behind Mommy?",
     "voice": "nick"
+  },
+  {
+    "text": "Hee hee! I can see your tail!",
+    "voice": "ji"
+  },
+  {
+    "text": "Shh! Daddy won't look!",
+    "voice": "ji"
   },
   {
     "text": "Hmm... not here!",
