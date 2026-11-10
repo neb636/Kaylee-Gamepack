@@ -1,0 +1,40 @@
+{
+  "kind": "reel",
+  "name": "sandcastle-after",
+  "title": "Sandcastle after",
+  "video": "sandcastle-after.mp4",
+  "gif": "sandcastle-after.gif",
+  "seconds": 50,
+  "browser": "webkit",
+  "viewport": "iphone-portrait",
+  "moments": [
+    {
+      "name": "thailand-samet-sand-moat",
+      "where": "thailand-samet-sand-moat",
+      "seconds": 10,
+      "fps": 136.9,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-sand-bucket",
+      "where": "thailand-samet-sand-bucket",
+      "seconds": 12,
+      "fps": 146.2,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-sand-bury",
+      "where": "thailand-samet-sand-bury",
+      "seconds": 10,
+      "fps": 151,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-sand-out",
+      "where": "thailand-samet-sand-out",
+      "seconds": 11,
+      "fps": 94,
+      "status": "ok"
+    }
+  ]
+}
