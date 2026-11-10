@@ -1,9 +1,12 @@
-// The Nan map's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise; the voices are lines.ts
-// L.nan.map): the little Pajero's beep and putter, the stamp landing, the pokes' answers.
+// The Nan map's sounds (the voices are lines.ts L.nan.map): the little Pajero's beep and putter, the stamp landing,
+// the pokes' answers, and a soft breeze over the board. Recorded clips (sfx/, ElevenLabs) where a real sound fits, with
+// the synthesized ones (the world kit's tone/noise) as their fallbacks; the happy note runs stay synthesized.
+import { bed, clip, held } from '../../../../../kit/clips'
 import { noise, tone } from '../../../../../kit/sfx'
 import { roadSfx } from '../drive/sounds'
+import { nanClip } from '../sfx'
 
-export const mapSfx = {
+const synth = {
   ...roadSfx,
   /** The little Pajero driving along the board's roads: a toy's putter (over and over while it goes). */
   putter: () => tone(150 + Math.random() * 30, 130, 0.06, 0.035, 'square'),
@@ -33,3 +36,16 @@ export const mapSfx = {
   /** A flag waving in the wind. */
   flutter: () => [0, 0.08, 0.16, 0.24].forEach((d) => noise(0.06, 0.04, 'bandpass', 900 + Math.random() * 400, 1400, d, 1.5)),
 }
+
+export const mapSfx = {
+  ...synth,
+  putter: held(nanClip('map-putter'), synth.putter, () => ({ vol: 0.5 })),
+  zoom: clip(nanClip('map-zoom'), synth.zoom, { vol: 0.6 }),
+  rain: clip(nanClip('map-rain'), synth.rain, { vol: 0.6 }),
+  plip: clip(nanClip('map-plip'), synth.plip, { vol: 0.7 }),
+  takeoff: clip(nanClip('map-takeoff'), synth.takeoff, { vol: 0.5 }),
+  flutter: clip(nanClip('map-flutter'), synth.flutter, { vol: 0.6 }),
+}
+
+/** A soft breeze and birds over the board, until stop(). */
+export const mapBed = () => bed(nanClip('map-breeze'), 0.45)

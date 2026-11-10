@@ -60,7 +60,7 @@ import { buildRider, type Rider } from './riders'
 import { Scenery } from './scenery'
 import { animateGifts, giveGifts, type Gift } from './gifts'
 import { GRID, HOME, RIVAL_IDS, RIVALS, scripts, type RacerId, type Result, type Rival, type RivalId } from './rivals'
-import { cupSfx as sfx } from './sounds'
+import { cupBed, cupSfx as sfx } from './sounds'
 import { SHOWER_LEN, STREAM_LEN, Track, type Mushroom, type TrackId } from './track'
 
 const FILE = 'src/world/places/thailand/activities/nan-trip/cup/race.ts'
@@ -283,6 +283,7 @@ export class KartRace implements World3D {
     private events: KartEvents,
   ) {
     const { scene, bag } = this
+    bag.add({ dispose: cupBed() })
     const track = (this.track = new Track(start.track))
     const road = track.road
     applyBands()

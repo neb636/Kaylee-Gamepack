@@ -1,10 +1,15 @@
-// The mountain road's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise): the other drivers'
-// toots, the animals, the guard rail's boing, the wipers, the tyres in the wet and the puddles, the nodding
-// elephant's squeak, the tyres squealing round a sharp swerve. (The voices are lines.ts L.nan.drive.)
+// The mountain road's sounds: the Pajero's engine, the scooters, tuk-tuks and songthaews going by, the other drivers'
+// toots, the animals, the guard rail's boing, the wipers, the rain on the roof and the tyres in the wet, the puddles,
+// the nodding elephant's squeak, the tyres squealing round a sharp swerve, and the countryside outside. Recorded clips
+// (sfx/, ElevenLabs) with the synthesized ones (the world kit's tone/noise) as their fallbacks. (The voices are
+// lines.ts L.nan.drive.)
+import { bed, clip, held, playClip } from '../../../../../kit/clips'
 import { noise, tone } from '../../../../../kit/sfx'
+import type { MoverKind } from '../../../trip/road/traffic'
 import { sfx } from '../../../sfx'
+import { nanClip } from '../sfx'
 
-export const roadSfx = {
+const synth = {
   ...sfx,
   /** An oncoming driver's horn: one honk, or a happy little tune (she's on their side of the road). */
   toot: (tune: boolean, low = false) => {
@@ -55,3 +60,41 @@ export const roadSfx = {
     tone(1180, 880, 0.16, 0.05, 'triangle', 0.13)
   },
 }
+
+const honk = nanClip('drive-honk')
+const tune = nanClip('drive-honk-tune')
+const pass: Record<MoverKind, string> = {
+  scooter: nanClip('drive-scooter'),
+  tuktuk: nanClip('drive-tuktuk'),
+  songthaew: nanClip('drive-songthaew'),
+  car: nanClip('drive-car'),
+}
+
+export const roadSfx = {
+  ...synth,
+  /** One beat of the Pajero's engine (`level` 0..1): a loop whose pitch climbs with the speed, quiet when it stops. */
+  engine: held(nanClip('drive-engine'), sfx.engine, (level: number) => ({ rate: 0.85 + level * 1.4, vol: 0.45 + level }), { linger: 0.6 }),
+  toot: (isTune: boolean, low = false) => {
+    if (!playClip(isTune ? tune : honk, { vol: 0.7, rate: low ? 0.84 : 1 })) synth.toot(isTune, low)
+  },
+  /** Something on the other side of the road going by her (no synth: they used to pass in silence). */
+  pass: (kind: MoverKind) => void playClip(pass[kind], { vol: 0.55, rate: 0.95 + Math.random() * 0.1 }),
+  moo: clip(nanClip('drive-moo'), synth.moo, { vol: 0.8 }),
+  cluck: clip(nanClip('drive-cluck'), synth.cluck, { vol: 0.6 }),
+  chatter: clip(nanClip('drive-monkey'), sfx.chatter, { vol: 0.6 }),
+  rail: clip(nanClip('drive-rail'), synth.rail, { vol: 0.7 }),
+  patter: held(nanClip('drive-rain-roof'), synth.patter, () => ({ vol: 0.5 }), { linger: 1, fade: 1 }),
+  cloudIn: clip(nanClip('drive-cloud-in'), synth.cloudIn, { vol: 0.6 }),
+  screech: (k = 1) => {
+    if (!playClip(nanClip('drive-screech'), { vol: 0.25 + 0.35 * k, rate: 0.95 + Math.random() * 0.15 })) synth.screech(k)
+  },
+  wiper: (dry = false) => {
+    if (!playClip(nanClip(dry ? 'drive-wiper-dry' : 'drive-wiper'), { vol: 0.45 })) synth.wiper(dry)
+  },
+  hiss: held(nanClip('drive-wet-tyres'), synth.hiss, (k = 1) => ({ vol: 0.35 * k, rate: 0.9 + 0.2 * k }), { linger: 0.6 }),
+  puddle: clip(nanClip('drive-puddle'), synth.puddle, { vol: 0.75 }),
+  squeak: clip(nanClip('drive-squeak'), synth.squeak, { vol: 0.6 }),
+}
+
+/** The countryside outside the car (or Nan town's street on the city road), quiet under everything until stop(). */
+export const roadBed = (town: boolean) => bed(nanClip(town ? 'drive-town' : 'drive-country'), 0.3)

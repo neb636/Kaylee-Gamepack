@@ -1,2 +1,10 @@
 # Project command approvals are handled by rules/commands.rules.
 approval_policy = "on-request"
+
+# ElevenLabs sound effects (.agents/skills/sfx). Off by default; start a session with it on:
+#   codex -c mcp_servers.elevenlabs.enabled=true
+[mcp_servers.elevenlabs]
+command = "bash"
+args = ["scripts/mcp/elevenlabs.sh"]
+enabled = false
+startup_timeout_sec = 60

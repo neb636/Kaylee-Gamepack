@@ -1,10 +1,13 @@
-// The mushroom farm's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet (the
-// greybox): the hose's hiss, the mushrooms popping out and swelling, the twist and pop of a pick, the basket, the
-// pizza's plops, the oven, and the pokes' answers.
+// The mushroom farm's sounds: the hose's mist, the mushrooms popping out and swelling, the twist and pop of a pick, the
+// basket, the pizza's plops, the oven, the pokes' answers and the greenhouse around her. Recorded clips (sfx/,
+// ElevenLabs) with the synthesized ones (the world kit's tone/noise) as their fallbacks; the climbing notes and the bell
+// runs stay synthesized (they're in tune), played over the clips.
+import { bed, clip, held, playClip } from '../../../../../kit/clips'
 import { noise, tone } from '../../../../../kit/sfx'
 import { sfx } from '../../../sfx'
+import { nanClip } from '../sfx'
 
-export const shroomSfx = {
+const synth = {
   ...sfx,
   /** The misting hose: a soft hiss (played over and over while she holds it). */
   hiss: () => noise(0.24, 0.03, 'highpass', 3600, 5200, 0, 0.6),
@@ -69,3 +72,40 @@ export const shroomSfx = {
   },
   shake: () => [0, 0.07, 0.14, 0.21, 0.28].forEach((d) => noise(0.06, 0.05, 'bandpass', 1800, 2400, d, 1.5)),
 }
+
+const semis = (k: number) => Math.pow(2, k / 12)
+
+export const shroomSfx = {
+  ...synth,
+  hiss: held(nanClip('shroom-mist'), synth.hiss, () => ({ vol: 0.4 })),
+  /** Higher for each one in a row. */
+  bloop: (k = 0) => {
+    if (!playClip(nanClip('shroom-pop'), { vol: 0.7, rate: semis(Math.min(k, 12)) })) synth.bloop(k)
+  },
+  swell: clip(nanClip('shroom-swell'), synth.swell, { vol: 0.6 }),
+  /** Climbs as she pulls (`k` 0..1). */
+  pull: (k: number) => {
+    if (!playClip(nanClip('shroom-stretch'), { vol: 0.35, rate: 0.85 + k * 0.6 })) synth.pull(k)
+  },
+  twist: clip(nanClip('shroom-twist'), synth.twist, { vol: 0.8 }),
+  /** The wicker thump, and the note that climbs with how full it is. */
+  basket: (n: number) => {
+    if (!playClip(nanClip('shroom-basket'), { vol: 0.6 })) return synth.basket(n)
+    const f = 523 * semis(Math.min(n, 14))
+    tone(f, f, 0.16, 0.05, 'triangle', 0.05)
+  },
+  giant: (k = 0) => {
+    if (!playClip(nanClip('shroom-boing'), { vol: 0.75, rate: 1 + k * 0.12 })) synth.giant(k)
+  },
+  drip: clip(nanClip('shroom-drip'), synth.drip, { vol: 0.5 }),
+  plopPizza: clip(nanClip('shroom-plop'), synth.plopPizza, { vol: 0.6 }),
+  crackle: (dur = 2) => {
+    if (!playClip(nanClip('shroom-crackle'), { vol: 0.5 })) synth.crackle(dur)
+  },
+  slide: clip(nanClip('shroom-slide'), synth.slide, { vol: 0.5 }),
+  snore: clip(nanClip('shroom-snore'), synth.snore, { vol: 0.6 }),
+  shake: clip(nanClip('shroom-shake'), synth.shake, { vol: 0.6 }),
+}
+
+/** The greenhouse around her: drips, the fan, birds outside, until stop(). */
+export const farmBed = () => bed(nanClip('shroom-farm'), 0.22)

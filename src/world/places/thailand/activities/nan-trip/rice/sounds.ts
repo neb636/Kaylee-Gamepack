@@ -2,14 +2,18 @@
 // the water and her thud on the banks, the seedlings' plips (climbing a happy scale), a gate's creak and the water
 // gushing in, the birds' cheeps and flutters, the sickle's swish, a bundle tied and thunked onto the rack, the thwack of
 // the threshing and the grains, the steam off the sticky rice, the frogs, ducks and the buffalo, the chimes, the pink
-// milk on the deck, Lung Kham's chuckle, and the far-off farm life the farm plays quietly now and then.
+// milk on the deck, Lung Kham's chuckle, and the far-off farm life the farm plays quietly now and then. Recorded clips
+// (sfx/, ElevenLabs) with the synthesized ones as their fallbacks; the plips' scale, the bells and the chuckle stay
+// synthesized (in tune, and Lung Kham has his own voice).
+import { bed, clip, playClip } from '../../../../../kit/clips'
 import { noise, tone } from '../../../../../kit/sfx'
 import { sfx } from '../../../sfx'
+import { nanClip } from '../sfx'
 
 const PENTA = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21]
 const note = (base: number, k: number) => base * Math.pow(2, PENTA[k % PENTA.length] / 12) * (k >= PENTA.length ? 2 : 1)
 
-export const riceSfx = {
+const synth = {
   ...sfx,
   /** A hoof in the paddy's water. */
   sploosh: () => {
@@ -135,3 +139,58 @@ export const riceSfx = {
     tone(500, 260, 0.2, 0.04, 'sine', 0.04)
   },
 }
+
+const c = (id: string) => nanClip(id)
+/** A clip from far off: quiet, a little slower. */
+const far = (id: string, vol: number, fallback: () => void) => () => {
+  if (!playClip(c(id), { vol, rate: 0.92 + Math.random() * 0.1 })) fallback()
+}
+
+export const riceSfx = {
+  ...synth,
+  sploosh: clip(c('rice-sploosh'), synth.sploosh, { vol: 0.5, jitter: 0.12 }),
+  step: (wood = false) => {
+    if (!playClip(c(wood ? 'rice-step-wood' : 'rice-step-grass'), { vol: 0.35, rate: 0.9 + Math.random() * 0.25 })) synth.step(wood)
+  },
+  squelch: clip(c('rice-squelch'), synth.squelch, { vol: 0.6, jitter: 0.12 }),
+  /** The squish into the mud, and the plip climbing the scale. */
+  plip: (k = 0) => {
+    playClip(c('rice-seedling'), { vol: 0.5, rate: 0.9 + Math.random() * 0.2 })
+    synth.plip(k)
+  },
+  gate: clip(c('rice-gate'), synth.gate, { vol: 0.6 }),
+  gush: clip(c('rice-gush'), synth.gush, { vol: 0.6 }),
+  drain: clip(c('rice-drain'), synth.drain, { vol: 0.6 }),
+  cheep: clip(c('rice-cheep'), synth.cheep, { vol: 0.5, jitter: 0.1 }),
+  flutter: clip(c('rice-flutter'), synth.flutter, { vol: 0.6 }),
+  swish: clip(c('rice-swish'), synth.swish, { vol: 0.6, jitter: 0.1 }),
+  tie: clip(c('rice-tie'), synth.tie, { vol: 0.6 }),
+  thunk: clip(c('rice-thunk'), synth.thunk, { vol: 0.7 }),
+  rustle: clip(c('rice-rustle'), synth.rustle, { vol: 0.5 }),
+  rain: clip(c('map-rain'), synth.rain, { vol: 0.6 }),
+  croak: clip(c('rice-frog'), synth.croak, { vol: 0.6, jitter: 0.08 }),
+  quack: clip(c('rice-duck'), synth.quack, { vol: 0.6 }),
+  moo: clip(c('drive-moo'), synth.moo, { vol: 0.8 }),
+  splat: clip(c('rice-splat'), synth.splat, { vol: 0.7 }),
+  windChime: clip(c('rice-chime'), synth.windChime, { vol: 0.4 }),
+  spin: clip(c('rice-spin'), synth.spin, { vol: 0.6 }),
+  pourMilk: clip(c('rice-milk'), synth.pourMilk, { vol: 0.6 }),
+  /** THWACK, a little bigger each time (`k`). */
+  thwack: (k = 0) => {
+    if (!playClip(c('rice-thwack'), { vol: 0.8, rate: 1 + Math.min(k, 8) * 0.02 })) synth.thwack(k)
+  },
+  swingUp: clip(c('rice-swing'), synth.swingUp, { vol: 0.5 }),
+  toss: clip(c('rice-toss'), synth.toss, { vol: 0.6 }),
+  steam: clip(c('rice-steam'), synth.steam, { vol: 0.45 }),
+  wet: clip(c('rice-wet'), synth.wet, { vol: 0.7 }),
+  far: [
+    far('rice-frog', 0.18, synth.far[0]),
+    far('rice-cheep', 0.15, synth.far[1]),
+    far('rice-duck', 0.15, synth.far[2]),
+    far('rice-chime', 0.12, synth.far[3]),
+    far('drive-moo', 0.2, synth.far[4]),
+  ],
+}
+
+/** The fields around her: frogs, insects, birds, a breeze, until stop(). */
+export const fieldBed = () => bed(nanClip('rice-field'), 0.25)

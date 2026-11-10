@@ -54,7 +54,7 @@ import { buildPajero, type Pajero } from '../../../trip/vehicles/pajero'
 import { L } from '../../../lines'
 import { buildFalls, buildLandmark, buildMarket } from './landmarks'
 import { LANE_LAT, nanRoad, rollDrive, type DriveRoll, type NanRoad, type RoadId, type Weather } from './roads'
-import { roadSfx as sfx } from './sounds'
+import { roadBed, roadSfx as sfx } from './sounds'
 
 export type DrivePhase = 'drive' | 'arrive' | 'view' | 'end'
 
@@ -300,6 +300,7 @@ export class NanDrive implements World3D {
   ) {
     const { scene, bag } = this
     const r = (this.r = nanRoad(road))
+    bag.add({ dispose: roadBed(r.id === 'city') })
     this.weather = roll.weather
     applyBands()
     this.rig.fov = 55
@@ -427,6 +428,7 @@ export class NanDrive implements World3D {
       moo: () => sfx.moo(),
       cluck: () => sfx.cluck(),
       chatter: () => sfx.chatter(),
+      pass: (kind) => sfx.pass(kind),
       puff: (x, y, z) => this.dust.burst(x, y, z, 10, 1.6, 2.4, 0.18),
     }
 
