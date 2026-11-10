@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nan: real sound effects</title>
+<style>
+:root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a;--lav:#efe6ff;--warn:#b0124f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}}
+:root[data-theme="dark"]{--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;font:17px/1.45 ui-rounded,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink)}
+main{max-width:720px;margin:0 auto;padding-block:16px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}h1{font-size:24px;line-height:1.2;margin:4px 0 6px}
+h2{font-size:14px;letter-spacing:.05em;text-transform:uppercase;color:var(--soft);margin:28px 0 8px}h3{margin:0 0 4px;font-size:17px}
+.chip{display:inline-block;background:var(--lav);border-radius:99px;padding:2px 12px;font-size:14px;font-weight:600}
+.kaylee{font-size:19px;margin:10px 0 0}
+figure{margin:0 0 14px}video{width:100%;border-radius:16px;background:#000;display:block}figcaption{font-size:14px;color:var(--soft);margin-top:6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:0 0 12px}
+.card audio{width:100%;margin:8px 0 0}.meta{font-size:14px;color:var(--soft);margin:0}.warn{color:var(--warn)}
+#answers{display:none;margin-top:8px}
+ol{padding-left:22px}li p{margin:0 0 6px;font-weight:600}textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--card);color:inherit}
+button,.pill{font:inherit;font-weight:700;border:0;border-radius:99px;padding:10px 18px;background:var(--pink);color:var(--bg);text-decoration:none;display:inline-block;margin:4px 6px 4px 0;cursor:pointer}
+button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.pill{background:var(--lav);color:var(--ink)}a{color:var(--pink)}
+.pitch{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin:0 0 16px}
+.pitch img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--lav)}.pbody{padding:14px 16px}
+.pitch h3{font-size:20px}.finger{font-size:18px;font-weight:600;margin:6px 0}.pitch p{margin:6px 0}
+.grows{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;counter-reset:g}
+.grows li{background:var(--lav);border-radius:12px;padding:8px;font-size:14px;text-align:center}.grows span{display:block;font-size:28px}
+.also{font-size:15px;color:var(--soft)}.also span{font-size:18px}
+@media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}}
+</style></head><body><main>
+<span class="chip">Check-in fix</span>
+<h1>Nan: real sound effects</h1>
+<p class="kaylee">Nan sounds real now: scooters and tuk-tuks whoosh past the Pajero, buffalo moo, the fire crackles, frogs and birds all around each stop.</p>
+
+
+
+<h2>Listen</h2><div class="card"><h3>The mountain road (21 sounds)</h3>
+<audio controls preload="metadata" src="sfx/drive.mp3"></audio>
+<ol class="meta"><li>steady engine hum of a small SUV heard from inside the cabin (loop)</li><li>a small motor scooter putters past on a quiet country road</li><li>a Thai tuk-tuk three-wheeler drives past</li><li>a small pickup truck taxi drives past on a country road</li><li>a small car drives past on a country road</li><li>a single short friendly honk from a small van horn</li><li>a playful musical car horn playing four quick happy rising notes</li><li>a water buffalo gives one long</li><li>a few chickens clucking</li><li>a small monkey chattering playfully</li><li>cartoon rubber bumper boing</li><li>gentle rain pattering on a car roof heard from inside the car (loop)</li><li>car tyres hissing on a wet road (loop)</li><li>soft airy whoosh of driving into a thick cloud of fog</li><li>cartoon tyre squeal as a small car swerves round a corner</li><li>a windscreen wiper sweeping once across a wet windshield</li><li>a windscreen wiper squeaking once across a dry windshield</li><li>a car driving through a big puddle</li><li>a squeaky rubber toy elephant squeezed</li><li>peaceful countryside in the green hills of northern Thailand (loop)</li><li>a calm small-town street in northern Thailand (loop)</li></ol></div>
+<div class="card"><h3>The Nan map (7 sounds)</h3>
+<audio controls preload="metadata" src="sfx/map.mp3"></audio>
+<ol class="meta"><li>a tiny wind-up toy car motor buzzing (loop)</li><li>a toy car zooms off quickly</li><li>a short light rain sprinkle</li><li>a small fish jumps out of a river and splashes back in</li><li>a small propeller airplane takes off and climbs away into the distance</li><li>a small cloth flag flapping in the wind</li><li>gentle outdoor breeze with soft birdsong (loop)</li></ol></div>
+<div class="card"><h3>The mushroom farm (14 sounds)</h3>
+<audio controls preload="metadata" src="sfx/shroom.mp3"></audio>
+<ol class="meta"><li>a garden hose misting nozzle spraying a fine soft mist (loop)</li><li>a tiny wet cute bloop</li><li>a soft rubbery inflating whoomp</li><li>a short rubbery stretching creak</li><li>a mushroom twisted and snapped off its stem</li><li>something soft dropped into a wicker basket</li><li>big deep wobbly cartoon boing</li><li>a single water drop falling into a small puddle</li><li>a soft little plop of a mushroom slice landing on pizza dough</li><li>a wood fire crackling in a brick pizza oven</li><li>a wooden pizza peel sliding across a stone oven floor</li><li>a sleepy little dog snoring softly</li><li>a wet dog shaking water off its fur</li><li>inside a humid mushroom greenhouse on a farm (loop)</li></ol></div>
+<div class="card"><h3>The rice farm (26 sounds)</h3>
+<audio controls preload="metadata" src="sfx/rice.mp3"></audio>
+<ol class="meta"><li>a small hoof stepping into shallow water in a rice paddy</li><li>a single soft footstep on grass</li><li>a single small hoof step on a wooden boardwalk plank</li><li>a small hoof stepping in wet mud</li><li>a rice seedling pushed into soft wet mud</li><li>a small wooden water gate sliding up in its slot</li><li>water rushing through an irrigation channel into a rice field</li><li>water draining and gurgling out of a field</li><li>a tiny bird cheeping twice</li><li>a small bird flapping its wings and flying up</li><li>a sickle swishing through rice stalks</li><li>a bundle of rice straw tied up</li><li>a bundle of rice straw dropped onto a wooden drying rack</li><li>dry straw rustling as it puffs up</li><li>a frog croaking ribbit twice</li><li>a duck quacking twice</li><li>a clump of wet mud landing</li><li>a small bamboo and metal wind chime tinkling softly in the breeze</li><li>a quick whoosh of a straw hat spinning up into the air</li><li>pouring milk into a glass</li><li>a bundle of rice stalks slapped onto a wooden threshing board</li><li>a quick swoosh of a bundle swung through the air</li><li>a bundle of straw tossed onto a pile</li><li>soft steam hissing from a bamboo basket of sticky rice</li><li>a playful splash of water</li><li>rice fields in northern Thailand on a calm day (loop)</li></ol></div>
+<div class="card"><h3>The salt hut (19 sounds)</h3>
+<audio controls preload="metadata" src="sfx/salt.mp3"></audio>
+<ol class="meta"><li>a wooden bucket dropped down a deep well hitting the water</li><li>a single glug of a bucket filling with water</li><li>a rope creaking on a wooden beam as a heavy bucket is pulled up</li><li>water pouring steadily from a bucket into a wide metal pan (loop)</li><li>water sloshing into a wide shallow metal pan</li><li>a log thrown onto a wood fire</li><li>a puff of air on a fire and the flames roaring up for a moment</li><li>a wood fire crackling</li><li>a single bubble bloop of boiling water</li><li>water splashed onto a hot fire</li><li>a wooden paddle scraping wet salt across a metal pan (loop)</li><li>coarse salt poured into a woven basket</li><li>a small cloth bag of salt patted down onto a wooden shelf</li><li>a rooster crowing cock-a-doodle-doo once</li><li>a hen clucking buk buk bukaawk</li><li>stacked woven baskets wobbling and rattling</li><li>a small pebble dropped down a deep well</li><li>a small motor scooter putters past slowly on a wet village road</li><li>a quiet mountain village morning in northern Thailand (loop)</li></ol></div>
+<div class="card"><h3>The Mountain Cup (4 sounds)</h3>
+<audio controls preload="metadata" src="sfx/cup.mp3"></audio>
+<ol class="meta"><li>a small go-kart engine running at steady speed (loop)</li><li>a toy go-kart horn beeping twice</li><li>small kart tyres bumping and rumbling over grass (loop)</li><li>karts rolling over a bamboo bridge</li></ol></div>
+<h2>Your call</h2><ol><li><p>Any sound to redo? Name the stop and number (e.g. salt 4).</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
+<li><p>The background birds, breeze and village: keep, quieter, or off?</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><a class="pill" href="https://github.com/neb636/Kaylee-Gamepack/pull/375">Open the PR to paste them</a><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/thailand/nan-trip/drive?road=city">The mountain road (scooters go by)</a> <a class="pill" href="../#/world/thailand/nan-trip/salt">The salt hut</a> <a class="pill" href="../#/world/thailand/nan-trip/rice?round=plant">The rice farm</a></p>
+</main>
+<script>
+const qs=["Any sound to redo? Name the stop and number (e.g. salt 4).","The background birds, breeze and village: keep, quieter, or off?"],titles=[]
+document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p]
+  try{await navigator.clipboard.writeText(t);document.getElementById('picked').textContent='Copied “'+t+'”. Paste it on the PR, or just say it in chat.'}catch{document.getElementById('picked').textContent=t+': say it on the PR or in chat.'}}))
+document.getElementById('copy')?.addEventListener('click',async()=>{
+  const a=[...document.querySelectorAll('textarea')].map((t,i)=>(i+1)+'. '+qs[i]+'\n   '+(t.value.trim()||'(no answer)')).join('\n')
+  try{await navigator.clipboard.writeText(a);document.getElementById('done').textContent='Copied. Paste it as a comment on the PR.'}
+  catch{const t=document.getElementById('answers');t.value=a;t.style.display='block';t.select();document.getElementById('done').textContent='Copy the text below, then paste it on the PR.'}})
+</script></body></html>
