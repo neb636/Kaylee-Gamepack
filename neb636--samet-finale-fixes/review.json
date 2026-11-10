@@ -1,0 +1,12 @@
+{
+  "title": "Koh Samet: the finale, fixed",
+  "checkIn": "fix",
+  "kaylee": "At the fire show her shapes are big and up in the night sky over the family, the trophy badge isn't covered by Sparkle's words, and if she just watches the sunset it sets in about 25 seconds (was 75), with the finger showing her the pull at once.",
+  "questions": [],
+  "reels": [{ "name": "finale-after", "moments": ["thailand-samet-finale-shapes", "thailand-samet-finale-badge", "thailand-samet-finale-sunset-idle"] }],
+  "links": [
+    { "label": "The shapes", "hash": "#/world/thailand/samet-trip/fireshow?round=shapes&flags=all" },
+    { "label": "The sunset (feel knobs)", "hash": "#/world/thailand/samet-trip/sunset?flags=all&feel=1" },
+    { "label": "The shapes (feel knobs)", "hash": "#/world/thailand/samet-trip/fireshow?round=shapes&flags=all&feel=1" }
+  ]
+}
