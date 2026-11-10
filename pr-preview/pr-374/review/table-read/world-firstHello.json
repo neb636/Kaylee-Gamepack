@@ -1,0 +1,73 @@
+{
+  "kind": "table-read",
+  "place": "world",
+  "group": "firstHello",
+  "title": "World › First Hello",
+  "intro": "",
+  "page": "world-firstHello.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 9,
+  "missing": 0,
+  "names": 2,
+  "flags": [
+    {
+      "key": "firstHello.touch",
+      "text": "Let's fly around the world, Kaylee! Tap an animal to visit.",
+      "flags": [
+        "long",
+        "name",
+        "changed"
+      ],
+      "was": "Let's fly around the world, Kaylee! Tap the sparkly pin."
+    },
+    {
+      "key": "firstHello.mouse",
+      "text": "Let's fly around the world, Kaylee! Click an animal to visit.",
+      "flags": [
+        "long",
+        "name",
+        "changed"
+      ],
+      "was": "Let's fly around the world, Kaylee! Click the sparkly pin."
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "firstHello",
+        "touch"
+      ],
+      "text": "Let's fly around the world, Kaylee! Tap an animal to visit.",
+      "voice": "sparkle",
+      "key": "firstHello.touch",
+      "part": "firstHello",
+      "when": "",
+      "ms": 5016,
+      "flags": [
+        "long",
+        "name",
+        "changed"
+      ],
+      "was": "Let's fly around the world, Kaylee! Tap the sparkly pin."
+    },
+    {
+      "path": [
+        "firstHello",
+        "mouse"
+      ],
+      "text": "Let's fly around the world, Kaylee! Click an animal to visit.",
+      "voice": "sparkle",
+      "key": "firstHello.mouse",
+      "part": "firstHello",
+      "when": "",
+      "ms": 4464,
+      "flags": [
+        "long",
+        "name",
+        "changed"
+      ],
+      "was": "Let's fly around the world, Kaylee! Click the sparkly pin."
+    }
+  ]
+}

@@ -1,0 +1,193 @@
+{
+  "kind": "table-read",
+  "place": "world",
+  "group": "fly",
+  "title": "World › Fly",
+  "intro": "Sparkle names the country as her balloon flies there (the world board).",
+  "page": "world-fly.html",
+  "audio": null,
+  "lines": 8,
+  "seconds": 7,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "fly.australia",
+      "text": "Australia!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "fly.canada",
+      "text": "Canada!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "fly.china",
+      "text": "China!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "fly.egypt",
+      "text": "Egypt!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "fly.italy",
+      "text": "Italy!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "fly.peru",
+      "text": "Peru!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "fly.poles",
+      "text": "The Poles!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "fly.thailand",
+      "text": "Thailand!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "fly",
+        "australia"
+      ],
+      "text": "Australia!",
+      "voice": "sparkle",
+      "key": "fly.australia",
+      "part": "fly",
+      "when": "",
+      "ms": 1006,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "fly",
+        "canada"
+      ],
+      "text": "Canada!",
+      "voice": "sparkle",
+      "key": "fly.canada",
+      "part": "fly",
+      "when": "",
+      "ms": 671,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "fly",
+        "china"
+      ],
+      "text": "China!",
+      "voice": "sparkle",
+      "key": "fly.china",
+      "part": "fly",
+      "when": "",
+      "ms": 709,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "fly",
+        "egypt"
+      ],
+      "text": "Egypt!",
+      "voice": "sparkle",
+      "key": "fly.egypt",
+      "part": "fly",
+      "when": "",
+      "ms": 699,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "fly",
+        "italy"
+      ],
+      "text": "Italy!",
+      "voice": "sparkle",
+      "key": "fly.italy",
+      "part": "fly",
+      "when": "",
+      "ms": 643,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "fly",
+        "peru"
+      ],
+      "text": "Peru!",
+      "voice": "sparkle",
+      "key": "fly.peru",
+      "part": "fly",
+      "when": "",
+      "ms": 690,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "fly",
+        "poles"
+      ],
+      "text": "The Poles!",
+      "voice": "sparkle",
+      "key": "fly.poles",
+      "part": "fly",
+      "when": "",
+      "ms": 1560,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "fly",
+        "thailand"
+      ],
+      "text": "Thailand!",
+      "voice": "sparkle",
+      "key": "fly.thailand",
+      "part": "fly",
+      "when": "",
+      "ms": 1152,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}
