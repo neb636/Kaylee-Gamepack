@@ -35,6 +35,7 @@ import { monitorModel, squirrelModel, type Model } from '../book/models'
 import { at as atFrame, DECK } from '../island/layout'
 import { resortDeck } from '../island/props'
 import { buildIsland, DAY, type Island, type TimeOfDay } from '../island/scenery'
+import { makeSeeThrough, SEE } from '../island/seethrough'
 import { breadBasket, coconut, deckUmbrella, pandanus, roll, stickyRice } from './props'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/hideseek/lunch.ts'
@@ -180,6 +181,8 @@ export class Lunch implements World3D {
     scene.add(this.isl.root)
     this.isl.setTime(time)
     this.isl.lagoon.waves.height = 0.14
+    // (The island's plants on the slope melt away where they'd stand between the camera and the table.)
+    makeSeeThrough(this.isl.root, bag, new Set([...this.isl.fine.meshes, ...this.isl.coarse.meshes]))
     const deck = resortDeck((p) => Math.max(0, this.isl.ground.heightAt(p.x, p.z)), false)
     this.deckY = deck.y
     scene.add(solid(merge(deck.parts), bag, 2))
@@ -287,6 +290,8 @@ export class Lunch implements World3D {
     this.isl.update(dt, t, this.rig.camera.position.x, this.rig.camera.position.z, this.lights)
     this.rig.setShot(this.shot())
     this.rig.update(dt)
+    SEE.uEye.value.copy(this.rig.camera.position)
+    SEE.uFocus.value.copy(this.D(T.u, T.v, TOP))
     this.drawHint(t)
   }
 

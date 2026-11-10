@@ -41,6 +41,7 @@ import { Member } from '../../../characters/member'
 import { at as atFrame, FRAMES, STOPS, type XZ } from '../island/layout'
 import { driftwoodGeo } from '../island/props'
 import { buildIsland, DAY, type Island, type TimeOfDay } from '../island/scenery'
+import { makeSeeThrough, SEE } from '../island/seethrough'
 import { beachChair, cap, chairStack, pandanus, shieldUmbrella, thinPalm, towel } from './props'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/hideseek/hideseek.ts'
@@ -305,6 +306,8 @@ export class HideSeek implements World3D {
     scene.add(this.isl.root)
     this.isl.setTime(time)
     this.isl.lagoon.waves.height = 0.18
+    // (The island's palms melt away where they'd stand between the camera and her, or right in front of the lens.)
+    makeSeeThrough(this.isl.root, bag, new Set([...this.isl.fine.meshes, ...this.isl.coarse.meshes]))
     this.tree = new Group()
     this.tree.add(solid(driftwoodGeo(), bag, 2))
     this.tree.position.copy(this.L(TREE.u, TREE.v))
@@ -520,6 +523,8 @@ export class HideSeek implements World3D {
     this.isl.update(dt, t, this.rig.camera.position.x, this.rig.camera.position.z, this.lights)
     this.rig.setShot(this.shot())
     this.rig.update(dt)
+    SEE.uEye.value.copy(this.rig.camera.position)
+    SEE.uFocus.value.copy(c)
     this.drawHint(t)
   }
 
