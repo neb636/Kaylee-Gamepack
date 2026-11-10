@@ -27,13 +27,13 @@
  },
  {
   "id": "drive-honk",
-  "prompt": "One single honk of a real full-size sedan car horn, rich two-tone electric horn, medium pitch, about half a second. Recorded outdoors on a street, realistic, no music, no voices.",
+  "prompt": "One single honk of a real pickup truck horn, deep and full, about half a second. Recorded outdoors on a street, realistic, no music, no voices.",
   "seconds": 1,
   "influence": 0.7
  },
  {
   "id": "drive-honk-tune",
-  "prompt": "Two quick polite taps on a real full-size car horn, beep-beep, rich two-tone electric horn. Recorded outdoors on a street, realistic, no music, no voices.",
+  "prompt": "Three short rhythmic taps on a real pickup truck horn, beep beep beeep, deep and full. Recorded outdoors on a street, realistic, no music, no voices.",
   "seconds": 1.5,
   "influence": 0.7
  },
@@ -457,7 +457,7 @@
  },
  {
   "id": "cup-honk",
-  "prompt": "Two quick beeps of a real compact hatchback car horn, beep beep, medium pitch. Recorded outdoors on a street, realistic, no music, no voices.",
+  "prompt": "Two quick beeps of a real motor scooter horn on a street in Asia, meep meep. Recorded outdoors on a street, realistic, no music, no voices.",
   "seconds": 1,
   "influence": 0.7
  },
