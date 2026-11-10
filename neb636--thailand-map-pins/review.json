@@ -1,0 +1,17 @@
+{
+  "title": "Thailand map: which pins?",
+  "checkIn": "pick: three real pin styles",
+  "kaylee": "She can tell each place on the Thailand map at a glance, without reading.",
+  "questions": ["Which one: 1 picture pins, 2 friends on clouds, or 3 rides?"],
+  "reels": [{ "name": "map-pins", "moments": ["#/world/thailand/hub/map?pins=picture~5", "#/world/thailand/hub/map?pins=friends~5", "#/world/thailand/hub/map?pins=rides~5"] }],
+  "links": [
+    { "label": "1 Picture pins", "hash": "#/world/thailand/hub/map?pins=picture" },
+    { "label": "2 Friends on clouds", "hash": "#/world/thailand/hub/map?pins=friends" },
+    { "label": "3 Rides", "hash": "#/world/thailand/hub/map?pins=rides" }
+  ],
+  "pitches": [
+    { "title": "1 Picture pins", "image": "pitch/picture.jpg", "finger": "The pins you have, with a drawing inside: Agong, a baby elephant, Nan's pink mushroom, the otter." },
+    { "title": "2 Friends on clouds", "image": "pitch/friends.jpg", "finger": "Who she'll meet: Agong, the elephant, Moon the sun bear and the jet ski otter wave from a puff of cloud." },
+    { "title": "3 Rides", "image": "pitch/rides.jpg", "finger": "What she'll ride: the tuk-tuk, the longtail, the Pajero and the jet ski, showing off on a toy turntable." }
+  ]
+}
