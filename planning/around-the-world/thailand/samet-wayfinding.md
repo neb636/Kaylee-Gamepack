@@ -80,7 +80,9 @@ the world doesn't point the way, the puppy does.
   comes up; tap it and they go (back to the Thailand map, the trip saved). The Thailand map's 🏝️ pin puts a trip half
   done straight back on the beach she left (no packing, no boat ride). All four flags: the speedboat still opens the
   sunset.
-- **Knobs** (`sametPuppy`, `?feel=1`): lead, wait, speed, idle, again, taxiFrom, slide, frame.
+- **Knobs** (`sametPuppy`, `?feel=1`): lead, wait, speed, idle, again, taxiFrom, offFrom, offAfter, slide, frame.
+- **She walks off from the taxi** (Codex on #369): he hops out after `offAfter` s with her `offFrom` m away, or when
+  she calls him, and comes after her.
 - **Robot readout**: `__thaiSametQA().puppy` (state, goal, beach, taxi from/to, x, z, d, screen, onScreen, route,
   ahead, bubble, pictures, fetches, named, calls, pokes); `clock` (scene seconds), `reach` (every beach on foot from Na
   Dan), `taxi.next/onScreen/d`, `leaving`. Robot runs `thailand-samet-wayfind-*`.

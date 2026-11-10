@@ -1156,4 +1156,20 @@ export const motion = [
       await page.waitForTimeout(6000)
     },
   },
+  {
+    name: 'thailand-samet-wayfind-walkoff',
+    seconds: 22,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=nadan&flags=jetski,sandcastle,hideseek`)
+      await ready(page)
+      await page.waitForTimeout(1500)
+    },
+    // The puppy jumps in the taxi, but she walks back up the pier instead: after a moment he hops out and runs after
+    // her (#369 Codex: he used to wait in the taxi forever, and the taxi with him).
+    act: async (page) => {
+      await followPuppy(page, [], (q) => q.puppy?.state === 'aboard', 14000)
+      await leadAlong(page, [[-10, -88], [-10, -97]], 6000)
+      await page.waitForTimeout(10000)
+    },
+  },
 ]
