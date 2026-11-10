@@ -1,0 +1,249 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "samet.puppy",
+  "title": "Thailand › Samet › Puppy",
+  "intro": "The beach puppy who shows her the way (island/puppy.ts, #357 way-finding). His voice is barks; Sparkle says who he is the first time, why he runs back the first time he fetches her, and each beach's name when he brings her there.",
+  "page": "thailand-samet-puppy.html",
+  "audio": null,
+  "lines": 9,
+  "seconds": 0,
+  "missing": 9,
+  "names": 0,
+  "flags": [
+    {
+      "key": "samet.puppy.hi",
+      "text": "A beach puppy! He knows the way. Follow him!",
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.puppy.come",
+      "text": "The puppy wants you to come!",
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.puppy.name.nadan",
+      "text": "Na Dan pier!",
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.puppy.name.saikaew",
+      "text": "Hat Sai Kaew!",
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.puppy.name.hinkhok",
+      "text": "Ao Hin Khok!",
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.puppy.name.phai",
+      "text": "Ao Phai!",
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.puppy.name.wongduan",
+      "text": "Ao Wong Duan!",
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.puppy.name.prao",
+      "text": "Ao Prao!",
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.puppy.name.aonoina",
+      "text": "Ao Noi Na!",
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "samet",
+        "puppy",
+        "hi"
+      ],
+      "text": "A beach puppy! He knows the way. Follow him!",
+      "voice": "sparkle",
+      "key": "samet.puppy.hi",
+      "part": "samet › puppy",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "puppy",
+        "come"
+      ],
+      "text": "The puppy wants you to come!",
+      "voice": "sparkle",
+      "key": "samet.puppy.come",
+      "part": "samet › puppy",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "puppy",
+        "name",
+        "nadan"
+      ],
+      "text": "Na Dan pier!",
+      "voice": "sparkle",
+      "key": "samet.puppy.name.nadan",
+      "part": "samet › puppy › name",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "puppy",
+        "name",
+        "saikaew"
+      ],
+      "text": "Hat Sai Kaew!",
+      "voice": "sparkle",
+      "key": "samet.puppy.name.saikaew",
+      "part": "samet › puppy › name",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "puppy",
+        "name",
+        "hinkhok"
+      ],
+      "text": "Ao Hin Khok!",
+      "voice": "sparkle",
+      "key": "samet.puppy.name.hinkhok",
+      "part": "samet › puppy › name",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "puppy",
+        "name",
+        "phai"
+      ],
+      "text": "Ao Phai!",
+      "voice": "sparkle",
+      "key": "samet.puppy.name.phai",
+      "part": "samet › puppy › name",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "puppy",
+        "name",
+        "wongduan"
+      ],
+      "text": "Ao Wong Duan!",
+      "voice": "sparkle",
+      "key": "samet.puppy.name.wongduan",
+      "part": "samet › puppy › name",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "puppy",
+        "name",
+        "prao"
+      ],
+      "text": "Ao Prao!",
+      "voice": "sparkle",
+      "key": "samet.puppy.name.prao",
+      "part": "samet › puppy › name",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "puppy",
+        "name",
+        "aonoina"
+      ],
+      "text": "Ao Noi Na!",
+      "voice": "sparkle",
+      "key": "samet.puppy.name.aonoina",
+      "part": "samet › puppy › name",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "new"
+      ]
+    }
+  ]
+}
