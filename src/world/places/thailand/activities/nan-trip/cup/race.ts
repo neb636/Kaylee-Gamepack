@@ -66,8 +66,8 @@ import { SHOWER_LEN, STREAM_LEN, Track, type Mushroom, type TrackId } from './tr
 const FILE = 'src/world/places/thailand/activities/nan-trip/cup/race.ts'
 /** Her kart: how it drives under her finger. */
 const KART = knobs('kart', 'Her kart', FILE, {
-  top: { value: 13, min: 6, max: 24, step: 0.5, label: 'Top speed', unit: 'm/s' },
-  accel: { value: 9, min: 2, max: 25, step: 0.5, label: 'Speeding up', unit: 'm/s²' },
+  top: { value: 17.5, min: 6, max: 26, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'Dad, 2026-11-09: 35% faster (was 13)' },
+  accel: { value: 12, min: 2, max: 25, step: 0.5, label: 'Speeding up', unit: 'm/s²' },
   turn: { value: 2.4, min: 0.8, max: 5, step: 0.1, label: 'Turn toward her finger', unit: 'rad/s', note: 'how hard it turns toward where her finger is' },
   grip: { value: 4, min: 0.5, max: 12, step: 0.1, label: 'Grip', unit: '1/s', note: 'low = it slides wide through the bends' },
   near: { value: 9, min: 3, max: 20, step: 0.5, label: 'Aim, nearest', unit: 'm', note: 'a finger close in front of the kart still aims this far up the road' },
@@ -510,13 +510,14 @@ export class KartRace implements World3D {
         const side = rand() < 0.5 ? 1 : -1
         const where = rand()
         // On a side, the nose or the back bumper.
-        const at: [number, number, number] =
-          where < 0.55 ? [side * 0.62, 0.42 + rand() * 0.2, -0.9 + rand() * 1.6] : where < 0.8 ? [(rand() - 0.5) * 0.8, 0.55, 0.6 + rand() * 0.4] : [(rand() - 0.5) * 1, 0.32, -1.18]
-        const r = 0.09 + rand() * 0.1
-        parts.push(P.sphere(r, MUDDY[i % 3], { at, scale: [1.3, 0.8, 1.3] }, 7))
+        // (Flat smears pressed onto the body, no outline: round lumps read as rocks, Dad 2026-11-09.)
+        const r = 0.08 + rand() * 0.08
+        const [at, scale]: [[number, number, number], [number, number, number]] =
+          where < 0.55 ? [[side * 0.6, 0.44 + rand() * 0.16, -0.8 + rand() * 1.4], [0.18, 0.8, 1.5]] : where < 0.8 ? [[(rand() - 0.5) * 0.7, 0.53, 0.6 + rand() * 0.35], [1.5, 0.18, 1.1]] : [[(rand() - 0.5) * 0.9, 0.34, -1.16], [1.5, 0.9, 0.18]]
+        parts.push(P.sphere(r, MUDDY[i % 3], { at, scale }, 10))
       }
       const g = new Group()
-      g.add(solid(merge(parts), this.bag, 1))
+      g.add(solid(merge(parts), this.bag, 0))
       g.visible = false
       v.body.add(g)
       steps.push(g)

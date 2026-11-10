@@ -119,7 +119,8 @@ const CUP_SCALE = 0.8
 const CUP_BY = new Vector3(0.75, 0.2, 0.45)
 const CUP_UP = new Vector3(0, 1.0, 0.05)
 const STALL = { x: -9.7, z: -3.6 }
-const HEN = { x: -7.7, z: -1.3 }
+// (Out of the bottom-left corner, where Sparkle and her bubble sit, Dad 2026-11-09.)
+const HEN = { x: -2.5, z: -1.2 }
 const BALLOONS = [
   { x: BOARD.x - BOARD.w / 2 - 0.1, y: BOARD.y1 + 0.5 },
   { x: BOARD.x + BOARD.w / 2 + 0.1, y: BOARD.y1 + 0.5 },
@@ -140,7 +141,7 @@ const CROWD_AT = [
   { x: 3.5, z: -6.9 },
   { x: 11.3, z: -6.9 },
   { x: 12.4, z: -7.1 },
-  { x: -9.1, z: -0.6 },
+  { x: -11.4, z: -5.6 },
 ]
 
 /** Where the camera looks: the board, the podium (and the scoreboard over it for the Cup). */
@@ -231,7 +232,7 @@ export class CupGround extends Stage {
       scene.add(m.g)
       this.medals.set(t, { ...m, drop: 1, spin: 1 })
     }
-    const chest = buildMedal(bag)
+    const chest = buildMedal(bag, true)
     chest.g.visible = false
     chest.g.scale.setScalar(0.62)
     scene.add(chest.g)
@@ -756,7 +757,7 @@ export class CupGround extends Stage {
     c.drop = Math.min(1, c.drop + dt / 0.7)
     c.spin = Math.min(1, c.spin + dt / 0.8)
     const kp = this.kaylee.position
-    c.g.position.set(kp.x, kp.y + 0.5 + (1 - easeOutBounce(c.drop)) * 2.5, kp.z + 0.36)
+    c.g.position.set(kp.x, kp.y + 0.34 + (1 - easeOutBounce(c.drop)) * 2.5, kp.z + 0.36)
     c.g.rotation.y = c.spin < 1 ? c.spin * Math.PI * 4 : 0
     // ---- The Cup: on its stand, flying over to her, held up ----
     this.cupSpin = Math.max(0, this.cupSpin - dt / 1.1)
@@ -1207,9 +1208,12 @@ function buildTrophy(bag: Bag): Group {
 }
 
 /** A medal on its ribbon: gold and silver discs (one shown), a pink ribbon. */
-function buildMedal(bag: Bag) {
+/** A medal on its ribbon. `worn`: the one round her neck, with a short ribbon that stops at her neck (a long one
+ *  went up over her face, Dad 2026-11-09). */
+function buildMedal(bag: Bag, worn = false) {
   const g = new Group()
-  g.add(solid(merge([P.box(0.09, 0.5, 0.03, PAL.hotpink, { at: [-0.1, 0.3, 0], rot: [0, 0, -0.35] }), P.box(0.09, 0.5, 0.03, PAL.hotpink, { at: [0.1, 0.3, 0], rot: [0, 0, 0.35] })]), bag, 1.5))
+  const [h, y, x] = worn ? [0.26, 0.17, 0.07] : [0.5, 0.3, 0.1]
+  g.add(solid(merge([P.box(0.09, h, 0.03, PAL.hotpink, { at: [-x, y, 0], rot: [0, 0, -0.35] }), P.box(0.09, h, 0.03, PAL.hotpink, { at: [x, y, 0], rot: [0, 0, 0.35] })]), bag, 1.5))
   const disc = (c: string, shine: string) => {
     const d = solid(merge([P.cyl(0.2, 0.2, 0.05, c, { rot: [Math.PI / 2, 0, 0] }, 18), P.sphere(0.06, shine, { at: [-0.06, 0.06, 0.03], scale: [1, 1, 0.3] }, 8)]), bag, 1.5)
     g.add(d)

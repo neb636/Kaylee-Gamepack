@@ -1042,10 +1042,6 @@
     "voice": "lung"
   },
   {
-    "text": "That's one to five in Thai!",
-    "voice": "lung"
-  },
-  {
     "text": "Sticky rice, for my helper!",
     "voice": "lung"
   },
@@ -1411,7 +1407,7 @@
   "Tap a track to race!",
   "Click a track to race!",
   {
-    "text": "Sawasdee ka! Three Cups, dear!",
+    "text": "Sawasdee ka! I won three Cups!",
     "voice": "taeng"
   },
   {
@@ -1450,11 +1446,11 @@
   "Hornbills have a big helmet on their beak!",
   "Sun bears are the smallest bears!",
   {
-    "text": "My forest! Catch me if you can!",
+    "text": "Vroom! Here I go!",
     "voice": "moon"
   },
   {
-    "text": "My rice steps, dear!",
+    "text": "Race you down the hill!",
     "voice": "taeng"
   },
   {
@@ -1466,7 +1462,6 @@
   "Sahm!",
   "Song!",
   "Neung!",
-  "That's three, two, one in Thai!",
   "Boing! A bouncy mushroom!",
   "Splash! Mud makes you fast!",
   "Follow the lanterns!",
@@ -1549,7 +1544,7 @@
     "voice": "nick"
   },
   {
-    "text": "Everybody say three!",
+    "text": "Everybody, smile!",
     "voice": "ji"
   },
   {

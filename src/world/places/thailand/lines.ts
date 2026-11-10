@@ -440,7 +440,6 @@ export const L = {
       tall: lung('Look how tall it grows!'),
       ripe: lung('Golden! My rice is ready!'),
       count: [lung('Neung!'), lung('Song!'), lung('Sahm!'), lung('See!'), lung('Hah!')],
-      counted: lung("That's one to five in Thai!"),
       helper: lung('Sticky rice, for my helper!'),
       scarecrow: lung('Hey! My scarecrow!'),
       // Tap Lung (in turn).
@@ -574,7 +573,7 @@ export const L = {
       // Sparkle at the board, the first time this visit (and the stuck hint, glow first).
       board: onDevice('Tap a track to race!', 'Click a track to race!'),
       // Tap a rival on the board or the podium (each in turn).
-      taeng: [by('taeng')('Sawasdee ka! Three Cups, dear!'), by('taeng')('Oh! Is it time?'), by('taeng')('My husband built my kart!')],
+      taeng: [by('taeng')('Sawasdee ka! I won three Cups!'), by('taeng')('Oh! Is it time?'), by('taeng')('My husband built my kart!')],
       pao: [by('pao')('Sawasdee krap! Ready?'), by('pao')('Special delivery! Ha ha!'), by('pao')('Up the mountain every day!')],
       moon: [by('moon')('Sawasdee ka! Want some honey?'), by('moon')('Shoo, bee! Shoo!'), by('moon')('I love the straight bits!')],
       // The first time she pokes each rival this visit, after their line, Sparkle's fact.
@@ -585,13 +584,12 @@ export const L = {
       },
       // The race: the home rival's tease on the grid, Sparkle's one instruction (her first race), the lights in Thai.
       tease: {
-        forest: by('moon')('My forest! Catch me if you can!'),
-        steps: by('taeng')('My rice steps, dear!'),
+        forest: by('moon')('Vroom! Here I go!'),
+        steps: by('taeng')('Race you down the hill!'),
         cloud: by('pao')('Up, up, into the clouds!'),
       },
       start: onDevice('Hold your finger on the road to go!', 'Click and hold on the road to go!'),
       count: ['Sahm!', 'Song!', 'Neung!', 'Go!'],
-      counted: "That's three, two, one in Thai!",
       // Sparkle, the first time each track's trick happens this visit.
       boing: 'Boing! A bouncy mushroom!',
       mud: 'Splash! Mud makes you fast!',
@@ -631,7 +629,7 @@ export const L = {
       cool: ji("It's cool and rainy in the mountains!"),
       umbrella: ji('Mommy always packs an umbrella!'),
       landed: nick("Yay! We're in Nan!"),
-      three: ji('Everybody say three!'),
+      three: ji('Everybody, smile!'),
       // The frame on the wall, tapped in the house.
       wall: ji('Our trip to Nan!'),
       // The stamp screen's sticker.

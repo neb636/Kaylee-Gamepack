@@ -41,7 +41,6 @@ export const NAN_FACTS = [
   { icon: '🌊', label: 'An old sea', say: L.nan.trip.facts.sea },
   { icon: '🌸', label: 'A Nan flower', say: L.nan.trip.facts.flower },
   { icon: '🏔️', label: 'Doi Phu Kha', say: L.nan.trip.facts.mountain },
-  { icon: '🚦', label: 'Sahm, song, neung', say: L.nan.cup.counted },
 ]
 
 // The Koh Samet trip's tap-to-hear facts (plan: thailand/samet-trip.md), for its stamp screen and the passport.
