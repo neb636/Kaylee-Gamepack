@@ -329,10 +329,10 @@ export class Sand {
         let to = wet[k]
         if (W[k] > 0.004) to = 1
         else {
-          // Next to water: damp, so the edge of the wet sand is soft.
-          const near = Math.max(W[k - 1], W[k + 1], W[k - n], W[k + n])
-          if (near > 0.004) to = Math.max(to, 0.7)
-          else if (to > dryBase[k]) to = Math.max(dryBase[k], to - step / 70)
+          // Drying, but never much drier than its neighbors: the wet sand fades out over a few cells, not at a line.
+          if (to > dryBase[k]) to = Math.max(dryBase[k], to - step / 70)
+          to = Math.max(to, Math.max(wet[k - 1], wet[k + 1], wet[k - n], wet[k + n]) - 0.22)
+          to = Math.min(1, to)
         }
         if (Math.abs(to - wet[k]) < 1e-4) continue
         wet[k] = to

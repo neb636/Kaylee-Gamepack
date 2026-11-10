@@ -68,7 +68,7 @@ const TIDE = knobs('sandTide', 'The tide and the water', FILE, {
   flow: { value: 4, min: 1, max: 12, step: 1, label: 'Water runs', unit: 'steps', note: 'flow steps a frame: more = the water rushes down the channel faster' },
   seep: { value: 0.003, min: 0, max: 0.05, step: 0.001, label: 'Sand soaks up', unit: 'm/s', note: 'how fast a pool cut off from the sea drains away' },
   filled: { value: 0.3, min: 0.05, max: 2, step: 0.05, label: 'Moat counts as filled at', unit: 'm²', note: 'water this big standing in the deep part of her moat = the moat filled' },
-  help: { value: 1.1, min: 0, max: 3, step: 0.05, label: 'A channel this close breaks through', unit: 'm', note: 'when the water stops this short of the moat, the sand between gives way by itself (0 = never)' },
+  help: { value: 1.25, min: 0, max: 3, step: 0.05, label: 'A channel this close breaks through', unit: 'm', note: 'when the water stops this short of the moat, the sand between gives way by itself (0 = never)' },
   helpAfter: { value: 1.2, min: 0, max: 8, step: 0.1, label: '…after her finger is up for', unit: 's' },
 })
 /** How the rounds move on, the towers, burying Daddy. */
@@ -77,11 +77,11 @@ const PLAY = knobs('sandPlay', 'Rounds, towers and Daddy', FILE, {
   ring: { value: 0.85, min: 0.3, max: 1, step: 0.05, label: 'A moat is done at', unit: '× round', note: 'how much of the way round the castle she must dig for the moat to count' },
   towers: { value: 6, min: 1, max: 12, step: 1, label: 'Towers before the tide', note: 'the tide comes in after this many towers' },
   towersFor: { value: 150, min: 20, max: 300, step: 5, label: '…or after', unit: 's' },
-  fill: { value: 0.03, min: 0.005, max: 0.3, step: 0.005, label: 'Sand to fill the first bucket', unit: 'm³', note: 'the sand she digs beside a mould flies into it; full, a tap flips it' },
-  fillMore: { value: 0.45, min: 0, max: 2, step: 0.05, label: '…more each tower', unit: '×', note: 'each next tower this round needs this much more sand (it gets harder)' },
-  fillNear: { value: 1.9, min: 0.5, max: 4, step: 0.1, label: 'Digging this near a mould fills it', unit: 'm' },
+  fill: { value: 0.08, min: 0.005, max: 0.3, step: 0.005, label: 'Sand to fill the first bucket', unit: 'm³', note: 'the sand she digs beside a mould flies into it; full, a tap flips it' },
+  fillMore: { value: 0.5, min: 0, max: 2, step: 0.05, label: '…more each tower', unit: '×', note: 'each next tower this round needs this much more sand (it gets harder)' },
+  fillNear: { value: 1.2, min: 0.5, max: 4, step: 0.1, label: 'Digging this near a mould fills it', unit: 'm' },
   sink: { value: 0.12, min: 0.04, max: 0.4, step: 0.01, label: 'A tower slumps when dug under', unit: 'm' },
-  bury: { value: 2.6, min: 0.3, max: 8, step: 0.1, label: 'Burying Daddy', unit: '/s', note: 'how fast rubbing over him heaps the sand (1 = one part covered)' },
+  bury: { value: 1.6, min: 0.3, max: 8, step: 0.1, label: 'Burying Daddy', unit: '/s', note: 'how fast rubbing over him heaps the sand (1 = one part covered)' },
   wiggleOut: { value: 3.2, min: 0.5, max: 15, step: 0.1, label: 'Buried Daddy sneezes himself out after', unit: 's' },
   crab: { value: 0.32, min: 0.1, max: 0.6, step: 0.01, label: 'A crab pops out at', unit: 'm deep' },
   pitch: { value: 44, min: 25, max: 75, step: 1, label: 'Camera looks down', unit: '°', note: 'steeper shows more sand, lower shows more of Kaylee and the sea' },
@@ -244,6 +244,8 @@ export class Sandcastle implements World3D {
   private moat: ReturnType<Sand['hollow']> = { cells: [], core: [], deep: 0 }
   /** The sand giving way between a channel's water and the moat it nearly reached (rule 3: help, #357). */
   private breach: { from: { a: number; v: number }; to: { a: number; v: number }; t: number } | null = null
+  /** The shortest way still to dig from the sea's water (her channel) to the moat, for the pressing finger. */
+  private way: { from: { a: number; v: number }; to: { a: number; v: number }; d: number } | null = null
   /** Where the castle goes (the middle of the screen). */
   private C = { a: -0.6, v: -4.9 }
   private seaYaw: number
@@ -414,11 +416,6 @@ export class Sandcastle implements World3D {
     }
     this.placeThings(0)
 
-    ;(window as unknown as Record<string, unknown>).__sandProbe = (a: number, v: number) => {
-      const s = this.toScreen(this.at(a, v))
-      return { x: Math.round(s.x), y: Math.round(s.y), h: +this.sand.heightAt(a, v).toFixed(3), r: +this.sand.restAt(a, v).toFixed(3), w: +this.sand.depthAt(a, v).toFixed(3), sea: +this.sea.toFixed(3) }
-    }
-    ;(window as unknown as Record<string, unknown>).__sandInv = (x: number, y: number) => this.groundPoint(x, y)
     this.unwatch = watch('sandcastle', () => ({
       'her finger moves (m/s)': [this.fingerSpeed, 4],
       'dug under it (m)': [this.lastDug, 0.5],
@@ -576,7 +573,10 @@ export class Sandcastle implements World3D {
       this.checkT = 0.4
       this.moat = this.sand.hollow()
       if (this.filledAt < 0 && this.moat.core.length && this.sand.wetArea(this.moat.core) >= Math.min(TIDE.filled, this.moat.core.length * PATCH.cell * PATCH.cell * 0.5)) this.fill()
-      else if (this.filledAt < 0) this.helpCheck()
+      else if (this.filledAt < 0 && this.round === 'tide') {
+        this.way = this.sand.gap(this.moat.core, 3.5, 0.01, (dug) => dug > 0.06)
+        this.helpCheck()
+      }
     }
     this.breaching(dt)
   }
@@ -636,8 +636,8 @@ export class Sandcastle implements World3D {
     if (this.round !== 'tide' || this.breach || this.finger || TIDE.help <= 0 || this.moat.core.length < 6) return
     if (this.time - this.lastTouch < TIDE.helpAfter) return
     // (From water in something she dug: the tide creeping up the bare beach near the moat doesn't count.)
-    const g = this.sand.gap(this.moat.core, TIDE.help, 0.01, (dug) => dug > 0.06)
-    if (!g || g.d <= 0) return
+    const g = this.way
+    if (!g || g.d <= 0 || g.d > TIDE.help) return
     this.breach = { from: g.from, to: g.to, t: 0 }
     this.counts.helped++
     twinkle()
@@ -662,13 +662,13 @@ export class Sandcastle implements World3D {
     if (was < 0.7) hiss(0.7, 0.12, 'lowpass', 420, 900)
     const k0 = span(was, 0.7, 1.4)
     const k1 = span(b.t, 0.7, 1.4)
-    const floor = Math.min(this.sea, TIDE.high * this.tideK) - 0.1
+    const floor = Math.min(this.sea, TIDE.high * this.tideK) - 0.22
     // (From a little inside the water to a little inside the moat.)
     for (let k = k0; k <= k1 + 1e-6; k += 0.04) {
       const s = -0.2 / l + k * (1 + 0.45 / l)
       const a = b.from.a + da * s
       const v = b.from.v + dv * s
-      this.sand.carve(a, v, 0.3, floor)
+      this.sand.carve(a, v, 0.32, floor)
       if (Math.random() < 0.5) {
         const p = this.at(a, v, 0.05)
         this.puffs.emit(p.x, p.y, p.z, (Math.random() - 0.5) * 1.2, 1 + Math.random(), (Math.random() - 0.5) * 1.2, 0.6, 0.05)
@@ -861,8 +861,12 @@ export class Sandcastle implements World3D {
       if (!f.moved) return
       if (this.grab.kind === 'mould') (it as Mould).state = 'held'
       else if (!(it as Shell).held) this.liftShell(it as Shell)
+      const pa = it.a
+      const pv = it.v
       it.a = clamp(g.a, PATCH.a0 + 0.4, PATCH.a1 - 0.4)
       it.v = clamp(g.v, PATCH.v0 + 0.4, 0.6)
+      // A mould dragged through the sand scoops it up (a trench behind it) until it's full.
+      if (this.grab.kind === 'mould') this.scoop(it as Mould, it.a - pa, it.v - pv, dt)
       return
     }
     if (f.mode === 'none') return
@@ -955,14 +959,32 @@ export class Sandcastle implements World3D {
       const T = 0.45
       this.puffs.emit(p.x, p.y, p.z, (q.x - p.x) / T, (q.y - p.y) / T + 4.5 * T, (q.z - p.z) / T, T, 0.07 + Math.random() * 0.03)
     }
-    if (best.fill >= 1) {
-      // Full: a pop, a twinkle and a bounce; now a tap flips it.
-      best.wob = 1
-      sfx.pop()
-      twinkle()
-      const p = this.at(best.a, best.v, 0.6)
-      for (let i = 0; i < 10; i++) this.sparkle.emit(p.x, p.y, p.z, (Math.random() - 0.5) * 0.8, 0.8 + Math.random(), (Math.random() - 0.5) * 0.8, 0.9, 0.06)
+    if (best.fill >= 1) this.mouldFull(best)
+  }
+  /** A mould skimming the sand as she drags it: it digs under itself and fills with what it dug. */
+  private scoop(m: Mould, da: number, dv: number, dt: number) {
+    if (m.fill >= 1 || Math.hypot(da, dv) < 0.005 || !this.sand.diggable(m.a, m.v) || this.onDad(m.a, m.v) >= 0) return
+    const took = this.sand.dig(m.a, m.v, da, dv, dt, this.feel)
+    if (took <= 0) return
+    this.counts.dug += took
+    m.fill = Math.min(1, m.fill + took / this.fillNeed())
+    if ((this.scrapeT -= dt) <= 0) {
+      this.scrapeT = 0.11
+      scrape(0.5)
     }
+    if (Math.random() < dt * 30) {
+      const p = this.at(m.a, m.v, 0.05)
+      this.puffs.emit(p.x, p.y, p.z, (Math.random() - 0.5) * 1.2, 1 + Math.random(), (Math.random() - 0.5) * 1.2, 0.5, 0.05)
+    }
+    if (m.fill >= 1) this.mouldFull(m)
+  }
+  private mouldFull(m: Mould) {
+    // Full: a pop, a twinkle and a bounce; now a tap flips it.
+    m.wob = 1
+    sfx.pop()
+    twinkle()
+    const p = this.at(m.a, m.v, 0.6)
+    for (let i = 0; i < 10; i++) this.sparkle.emit(p.x, p.y, p.z, (Math.random() - 0.5) * 0.8, 0.8 + Math.random(), (Math.random() - 0.5) * 0.8, 0.9, 0.06)
   }
   /** Sand a mould needs to fill (m³): a little for the first tower of the round, more for each one after. */
   private fillNeed() {
@@ -1339,7 +1361,7 @@ export class Sandcastle implements World3D {
     // Daddy's blanket of sand: each mound eases to how buried that part is; a sneeze blows them all off. All buried,
     // he lies still a moment, wiggles his toes, then sneezes himself out (and she can bury him again).
     const d = this.dad
-    if (d.outT >= 0 && d.sneezeT < 0) {
+    if (d.outT >= 0 && d.sneezeT < 0 && this.finger?.mode !== 'bury') {
       const was = d.outT
       d.outT += dt
       const at = PLAY.wiggleOut
@@ -1401,7 +1423,7 @@ export class Sandcastle implements World3D {
           m.state = 'home'
           sfx.thump()
         }
-      } else if (m.state === 'held') lift = 0.3
+      } else if (m.state === 'held') lift = m.fill < 1 ? 0.04 : 0.3
       else if (m.state === 'flip' && m.t < 0) {
         // Hopping over to the castle first.
         const kk = span(m.t, -0.45, 0)
@@ -1629,10 +1651,15 @@ export class Sandcastle implements World3D {
         else if (m) at = { a: m.a + 0.9 + Math.cos(t * 2.4) * 0.35, v: m.v + 0.55 + Math.sin(t * 2.4) * 0.25 }
         hintLine = full ? S.hint.towers : S.hint.fill
       } else if (this.round === 'tide' && this.filledAt < 0 && this.tideK > 0.5 && !this.breach) {
-        // Along the way a channel would go: from the moat's side nearest the sea, straight down to the water.
-        const from = this.moatSea() ?? this.C
+        // Along the way a channel would go: from the moat to where her channel's water stops, or else from the moat's
+        // side nearest the sea straight down to the water.
         const k = (t * 0.6) % 1
-        at = { a: from.a, v: from.v + (this.edgeV(from.a) + 0.3 - from.v) * k }
+        const w = this.way
+        if (w) at = { a: w.to.a + (w.from.a - w.to.a) * k, v: w.to.v + (w.from.v - w.to.v) * k }
+        else {
+          const from = this.moatSea() ?? this.C
+          at = { a: from.a, v: from.v + (this.edgeV(from.a) + 0.3 - from.v) * k }
+        }
       }
     }
     // Once each time she goes quiet: Sparkle's hint (only shown the first time, then said at most twice a visit).
@@ -1706,11 +1733,21 @@ export class Sandcastle implements World3D {
       sea: +this.sea.toFixed(3),
       pooled: +this.sand.pooled().toFixed(2),
       moatFilled: this.filledAt >= 0,
+      // Her moat: how big its deep part is and how much of it has water (m²); how far round the castle she has dug
+      // (0..1) and how far the dig round has got; each mould's sand (0..1).
+      moat: { core: +(this.moat.core.length * PATCH.cell * PATCH.cell).toFixed(2), wet: +this.sand.wetArea(this.moat.core).toFixed(2) },
+      ring: +(this.ring.filter(Boolean).length / this.ring.length).toFixed(2),
+      digK: +this.digK().toFixed(2),
+      fills: this.moulds.map((m) => +m.fill.toFixed(2)),
       sand: this.sand.summary(),
       towersStanding: this.towers.filter((tw) => tw.slump < 0).length,
       dadBuried: d.buried.map((b) => +b.toFixed(2)),
       castle: sc(this.at(this.C.a, this.C.v)),
       sea0: sc(this.at(this.C.a, 0.4)),
+      // Spots for the robots: inside the moat on its sea side, its rim just past it, the water's edge out from there.
+      moatIn: sc(this.at(this.C.a + 0.7, this.C.v + 0.85)),
+      moatRim: sc(this.at(this.C.a + 0.7, this.C.v + 1.45)),
+      seaEdge: sc(this.at(this.C.a + 0.7, this.edgeV(this.C.a + 0.7) + 0.35)),
       dad: sc(this.at(d.a, d.feet - d.len * 0.4, 0.3)),
       kaylee: sc(this.kaylee.root.getWorldPosition(new Vector3()).setY(this.kHold.position.y + 0.4)),
       moulds: this.moulds.map((m) => ({ state: m.state, ...sc(this.at(m.a, m.v, 0.25)) })),
