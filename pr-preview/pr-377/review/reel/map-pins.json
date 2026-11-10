@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "map-pins",
+  "title": "Map pins",
+  "video": "map-pins.mp4",
+  "gif": "map-pins.gif",
+  "seconds": 20,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Thailand hub map",
+      "where": "#/world/thailand/hub/map?pins=picture",
+      "seconds": 5,
+      "fps": 60.7,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand hub map",
+      "where": "#/world/thailand/hub/map?pins=friends",
+      "seconds": 5,
+      "fps": 53.4,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand hub map",
+      "where": "#/world/thailand/hub/map?pins=rides",
+      "seconds": 5,
+      "fps": 53.7,
+      "status": "ok"
+    }
+  ]
+}
