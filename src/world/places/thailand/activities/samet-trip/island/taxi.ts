@@ -1,7 +1,8 @@
 // Koh Samet's green taxi: a songthaew (trip/vehicles/songthaew.ts, painted island green) that drives the concrete
 // road round its four stops (layout.ts TAXI_STOPS: Na Dan pier, Sai Kaew, over the spine to Ao Prao, down the middle
 // to Ao Wong Duan and back up to the pier), bouncing along, its driver waving each lap. It waits at each stop; the
-// island (island.ts) decides who climbs in and out. Faces +x in its own frame, so its heading turns it by -90°.
+// island (island.ts) decides who climbs in and out. Called (`driveTo`), it drives straight to any stop: the beach puppy
+// calls it to the stop nearest Kaylee, and it takes her straight to the stop nearest his beach (#357 way-finding). Faces +x in its own frame, so its heading turns it by -90°.
 import { Group, Vector3 } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
@@ -38,18 +39,35 @@ const S = road('road-wongduan')
 const north = N[nearest(N, W[0])]
 const spine = W[nearest(W, S[0])]
 const [nadan, saikaew, prao, wongduan] = TAXI_STOPS.map((s) => s.at)
-/** The four legs, stop to stop. */
+/** The four legs of its loop when nobody's riding, stop to stop. */
 const LEGS: XZ[][] = [
   part(N, nadan, saikaew),
   [...part(N, saikaew, north), ...part(W, north, prao)],
   [...part(W, prao, spine), ...part(S, spine, wongduan)],
   [...part(S, wongduan, spine), ...part(W, spine, north), ...part(N, north, nadan)],
 ]
-const lengths = LEGS.map((l) => {
+/** Each stop's way to the road's north corner (the roads make a tree, so any stop to any other is one up and one
+ *  down, with the shared bit cut off). */
+const UP: XZ[][] = [part(N, nadan, north), part(N, saikaew, north), part(W, prao, north), [...part(S, wongduan, spine), ...part(W, spine, north)]]
+const same = (a: XZ, b: XZ) => Math.hypot(a.x - b.x, a.z - b.z) < 0.5
+/** The road from stop `a` straight to stop `b`. */
+export function roadBetween(a: number, b: number): XZ[] {
+  const up = [...UP[a]]
+  const down = [...UP[b]]
+  // (Both go up the same way for a while: Ao Prao and Ao Wong Duan share the road from the spine.)
+  while (up.length > 1 && down.length > 1 && same(up[up.length - 2], down[down.length - 2])) {
+    up.pop()
+    down.pop()
+  }
+  return [...up, ...down.reverse().slice(1)]
+}
+const lengthOf = (l: XZ[]) => {
   let s = 0
   for (let i = 1; i < l.length; i++) s += Math.hypot(l[i].x - l[i - 1].x, l[i].z - l[i - 1].z)
   return s
-})
+}
+/** How far the taxi drives from stop `a` to stop `b` (m). */
+export const roadLength = (a: number, b: number) => (a === b ? 0 : lengthOf(roadBetween(a, b)))
 
 export type TaxiState = 'wait' | 'drive'
 
@@ -57,8 +75,14 @@ export class Taxi {
   readonly root: Group
   readonly st: Songthaew
   readonly driver: Rig
-  /** Which stop it's at (or driving from), and the state. */
+  /** Which stop it's at (or driving to), and the state. */
   stop = 0
+  /** Where it's going next, when someone called it there or it's taking her somewhere (-1: round its loop). */
+  next = -1
+  /** It just pulled in at a stop (the island reads and clears it). */
+  arrived = false
+  private leg: XZ[] = []
+  private legLen = 0
   state: TaxiState = 'wait'
   /** Meters along the leg, and the speed. */
   s = 0
@@ -85,7 +109,8 @@ export class Taxi {
     this.life = new FaceLife(this.driver, 'sunbear')
     this.root.userData.pick = 'taxi'
     this.stop = start
-    this.place(LEGS[start], 0, 0)
+    this.leg = [TAXI_STOPS[start].at]
+    this.place(this.leg, 0, 0)
   }
 
   /** Where it waits at stop `i`. */
@@ -98,11 +123,25 @@ export class Taxi {
   get moving() {
     return this.state === 'drive'
   }
-  /** Off it goes to the next stop (now). */
+  /** Off it goes: to the stop it was asked to (`next`), or round its loop to the next one. */
   go() {
     if (this.state === 'drive') return
+    const to = this.next >= 0 ? this.next : (this.stop + 1) % TAXI_STOPS.length
+    this.next = -1
+    if (to === this.stop) {
+      this.waitT = 6
+      return
+    }
+    this.leg = to === (this.stop + 1) % TAXI_STOPS.length ? LEGS[this.stop] : roadBetween(this.stop, to)
+    this.legLen = lengthOf(this.leg)
+    this.stop = to
     this.state = 'drive'
     this.s = 0
+  }
+  /** Drive to stop `i` now (or next, if it's on its way somewhere). */
+  driveTo(i: number) {
+    this.next = i
+    if (this.state === 'wait') this.go()
   }
   honk() {
     this.bounceV += 1.6
@@ -118,8 +157,8 @@ export class Taxi {
       if (!this.hold) this.waitT -= dt
       if (this.waitT <= 0) this.go()
     } else {
-      const leg = LEGS[this.stop]
-      const len = lengths[this.stop]
+      const leg = this.leg
+      const len = this.legLen
       // Speed: up to `speed`, slower round the bends and into the stop.
       const ahead = this.pointAt(leg, Math.min(len, this.s + 6))
       const here = this.pointAt(leg, this.s)
@@ -128,18 +167,17 @@ export class Taxi {
       this.speed += Math.max(-4 * dt, Math.min(2.5 * dt, want - this.speed))
       this.s += this.speed * dt
       if (this.s >= len) {
-        this.stop = (this.stop + 1) % LEGS.length
         if (this.stop === 0) {
           this.laps++
           this.waveHello()
         }
         this.state = 'wait'
+        this.arrived = true
         this.waitT = 7
-        this.s = 0
+        this.s = len
       }
     }
-    const leg = this.state === 'drive' ? LEGS[this.stop] : LEGS[this.stop]
-    this.place(leg, this.state === 'drive' ? this.s : 0, dt, ground)
+    this.place(this.leg, this.s, dt, ground)
     // The bouncy road: a little spring under the body, kicked by the bumps.
     this.bounceV += (-this.bounce * 90 - this.bounceV * 9) * dt + (this.speed > 1 ? (Math.random() - 0.5) * this.speed * 0.9 * dt * 10 : 0)
     this.bounce += this.bounceV * dt

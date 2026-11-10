@@ -86,12 +86,13 @@ export default function Place(props: PlaceProps) {
     )
   }
   // The Koh Samet trip, from the map's 🏝️ pin. Home from
-  // the island (Mommy's photo on Agong's wall), the stamp, then the map: the stamp lands on the 🏝️ pin.
+  // the island (Mommy's photo on Agong's wall), the stamp, then the map: the stamp lands on the 🏝️ pin. The speedboat
+  // home before the island is done (its home picture at Na Dan pier) goes back to the map, the trip kept.
   if (activity === 'samet-trip' && info) {
     if (window.__kayleeWorld) window.__kayleeWorld.finish = finish
     return (
       <>
-        <SametTrip onDone={finish} />
+        <SametTrip onDone={finish} onExit={backToMap} />
         {stamp}
       </>
     )

@@ -10,6 +10,7 @@ import { BarPill, TopBar } from './kit/Chrome'
 import { Flag } from './kit/Flag'
 import { HUB, SectionLinkProvider, type SectionLink } from './kit/sections'
 import { Theater } from './kit/Theater'
+import { useTopLeftOverride } from './kit/topLeft'
 import { findPlace, type PlaceEntry } from './registry'
 import { FROM_SHELF } from './Shelf'
 import { addStamp, markVisited, resetPassport, setStamps, usePassport } from './stamps'
@@ -77,6 +78,8 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
   const [progress, setProgressState] = useState({ done: 0, total: 0 })
 
   const setProgress = useCallback((done: number, total: number) => setProgressState({ done, total }), [])
+  // An activity can take over the top-left button while it's open (kit/topLeft.ts: Koh Samet's beach puppy).
+  const topLeft = useTopLeftOverride()
   const backToMap = useCallback(() => go.world(meta.id), [meta.id])
   // Opened from the game shelf (Shelf.tsx): the top bar's back button goes back to the shelf, not the country map.
   const fromShelf = useMemo(() => {
@@ -152,9 +155,9 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
       {/* The theater draws its own top bar (its back button goes to the shelf while a video plays). */}
       {activity === 'theater' ? null : activity || (meta.hubHome && section && section !== meta.hubHome) ? (
         <TopBar
-          icon={<span style={{ width: '58%', height: '58%' }}>{fromShelf ? <ShelfIcon color="var(--lavender-dark)" /> : <MapIcon color="var(--lavender-dark)" />}</span>}
-          label={fromShelf ? 'Back to the games' : 'Back to the map'}
-          onBack={fromShelf ? () => (location.hash = '#/world?view=list') : backToMap}
+          icon={topLeft ? topLeft.icon : <span style={{ width: '58%', height: '58%' }}>{fromShelf ? <ShelfIcon color="var(--lavender-dark)" /> : <MapIcon color="var(--lavender-dark)" />}</span>}
+          label={topLeft ? topLeft.label : fromShelf ? 'Back to the games' : 'Back to the map'}
+          onBack={topLeft ? () => topLeft.onBack() : fromShelf ? () => (location.hash = '#/world?view=list') : backToMap}
         >
           {progress.total > 0 && (
             <BarPill>

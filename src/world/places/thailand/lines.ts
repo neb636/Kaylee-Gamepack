@@ -652,7 +652,18 @@ export const L = {
       taxi: {
         hi: by('sunbear')('Sawasdee krap! Hop in!'),
         ride: [by('sunbear')('Beep beep!'), by('sunbear')('Hold on! Bumpy road!'), by('sunbear')('Next stop, the beach!')],
+        // Each stop's name, when the taxi pulls in there (never before it sets off).
+        stop: {
+          nadan: by('sunbear')('Na Dan pier!'),
+          saikaew: by('sunbear')('Hat Sai Kaew!'),
+          prao: by('sunbear')('Ao Prao!'),
+          wongduan: by('sunbear')('Ao Wong Duan!'),
+        },
       },
+      // The first time down the sand slide at the end of the puppy's shortcut.
+      slide: nick('Wheee! A sand slide!'),
+      // At the end of Na Dan pier by the speedboat, before the whole island is done: the home picture comes up.
+      leave: ji('Time to go home?'),
       // Tap Daddy (in turn; asleep on the sand he wakes up), tap Mommy (in turn).
       nick: [nick('Hi, sweetie!'), nick('I love this beach!'), nick('Race you to the sea!')],
       wake: nick('Huh? I was sleeping!'),
@@ -662,6 +673,21 @@ export const L = {
       kite: ji('Whoa! Hold on tight!'),
       // On Na Dan pier going home: Mommy's photo.
       home: ji('Smile! Bye bye, Koh Samet!'),
+    },
+    // The beach puppy who shows her the way (island/puppy.ts, #357 way-finding). His voice is barks; Sparkle says who he
+    // is the first time, why he runs back the first time he fetches her, and each beach's name when he brings her there.
+    puppy: {
+      hi: 'A beach puppy! He knows the way. Follow him!',
+      come: 'The puppy wants you to come!',
+      name: {
+        nadan: 'Na Dan pier!',
+        saikaew: 'Hat Sai Kaew!',
+        hinkhok: 'Ao Hin Khok!',
+        phai: 'Ao Phai!',
+        wongduan: 'Ao Wong Duan!',
+        prao: 'Ao Prao!',
+        aonoina: 'Ao Noi Na!',
+      },
     },
     // Mommy's phone and the animal book (book/): Sparkle says the name once when it's snapped; a tap on its photo plays
     // the fact.
