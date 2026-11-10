@@ -4830,6 +4830,20 @@
     "file": "8d5b80c7b427.mp3"
   },
   {
+    "text": "Whoosh! Find it again!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2304,
+    "file": "cb9ba666ee60.mp3"
+  },
+  {
+    "text": "Where did it go?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1176,
+    "file": "4c6b3b0af3e6.mp3"
+  },
+  {
     "text": "It turned pink, just for you!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -5285,6 +5299,20 @@
     "file": "81f08127f64a.mp3"
   },
   {
+    "text": "Here I am!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 864,
+    "file": "ba538d2ab124.mp3"
+  },
+  {
+    "text": "Peekaboo! You found me!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2064,
+    "file": "bb7b1061f130.mp3"
+  },
+  {
     "text": "My turn to count! Go hide!",
     "voice": "nick",
     "sig": "a2881bb105",
@@ -5339,6 +5367,20 @@
     "sig": "a2881bb105",
     "ms": 1224,
     "file": "b940c4b3cb57.mp3"
+  },
+  {
+    "text": "Hee hee! I can see your tail!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2664,
+    "file": "575a8d761dd3.mp3"
+  },
+  {
+    "text": "Shh! Daddy won't look!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2712,
+    "file": "7066e936adc7.mp3"
   },
   {
     "text": "Hmm... not here!",
