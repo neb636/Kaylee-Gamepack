@@ -7,8 +7,8 @@
   "page": "thailand-nan-cup.html",
   "audio": null,
   "lines": 52,
-  "seconds": 98,
-  "missing": 8,
+  "seconds": 120,
+  "missing": 0,
   "names": 3,
   "flags": [
     {
@@ -36,7 +36,7 @@
       "key": "nan.cup.taeng.0",
       "text": "Sawasdee ka! Three Cups, dear!",
       "flags": [
-        "not recorded",
+        "long",
         "new"
       ]
     },
@@ -44,7 +44,6 @@
       "key": "nan.cup.taeng.1",
       "text": "Oh! Is it time?",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -59,7 +58,7 @@
       "key": "nan.cup.pao.0",
       "text": "Sawasdee krap! Ready?",
       "flags": [
-        "not recorded",
+        "long",
         "new"
       ]
     },
@@ -116,7 +115,7 @@
       "key": "nan.cup.facts.moon",
       "text": "Sun bears are the smallest bears!",
       "flags": [
-        "not recorded",
+        "long",
         "new"
       ]
     },
@@ -132,7 +131,6 @@
       "key": "nan.cup.tease.steps",
       "text": "My rice steps, dear!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -205,7 +203,7 @@
       "key": "nan.cup.mud",
       "text": "Splash! Mud makes you fast!",
       "flags": [
-        "not recorded",
+        "long",
         "new"
       ]
     },
@@ -213,7 +211,6 @@
       "key": "nan.cup.cloud",
       "text": "Follow the lanterns!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -326,7 +323,6 @@
       "key": "nan.cup.gift.taeng",
       "text": "My lucky ribbon, for you!",
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -455,9 +451,9 @@
       "key": "nan.cup.taeng.0",
       "part": "nan › cup › taeng",
       "when": "Tap a rival on the board or the podium (each in turn).",
-      "ms": 0,
+      "ms": 3384,
       "flags": [
-        "not recorded",
+        "long",
         "new"
       ]
     },
@@ -473,9 +469,8 @@
       "key": "nan.cup.taeng.1",
       "part": "nan › cup › taeng",
       "when": "",
-      "ms": 0,
+      "ms": 2400,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -508,9 +503,9 @@
       "key": "nan.cup.pao.0",
       "part": "nan › cup › pao",
       "when": "",
-      "ms": 0,
+      "ms": 3072,
       "flags": [
-        "not recorded",
+        "long",
         "new"
       ]
     },
@@ -645,9 +640,9 @@
       "key": "nan.cup.facts.moon",
       "part": "nan › cup › facts",
       "when": "The first time she pokes each rival this visit, after their line, Sparkle's fact.",
-      "ms": 0,
+      "ms": 3192,
       "flags": [
-        "not recorded",
+        "long",
         "new"
       ]
     },
@@ -681,9 +676,8 @@
       "key": "nan.cup.tease.steps",
       "part": "nan › cup › tease",
       "when": "The race: the home rival's tease on the grid, Sparkle's one instruction (her first race), the lights in Thai.",
-      "ms": 0,
+      "ms": 2472,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -851,9 +845,9 @@
       "key": "nan.cup.mud",
       "part": "nan › cup",
       "when": "",
-      "ms": 0,
+      "ms": 3168,
       "flags": [
-        "not recorded",
+        "long",
         "new"
       ]
     },
@@ -868,9 +862,8 @@
       "key": "nan.cup.cloud",
       "part": "nan › cup",
       "when": "",
-      "ms": 0,
+      "ms": 1920,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
@@ -1138,9 +1131,8 @@
       "key": "nan.cup.gift.taeng",
       "part": "nan › cup › gift",
       "when": "",
-      "ms": 0,
+      "ms": 2616,
       "flags": [
-        "not recorded",
         "new"
       ]
     },
