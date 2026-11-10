@@ -21,8 +21,11 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
 - **The hub is a toy:** tap the floor and Kaylee walks there; tap a thing and it reacts at once, then she uses it; tap
   someone and they hop and say hello. Sacred things (the altar, the spirit house) never wobble: they glow, a bell rings,
   she does a wai.
-- **The Thailand map** (`activities/hub/map/`, 2D, plan `thailand/thailand-map.md`) is where she lands: a tap map like
-  Australia's, where tapping a pin opens that place. Bangkok opens the house; a trip somewhere else gets a pin, starts there and ends there
+- **The Thailand map** (`activities/hub/map/`, 3D, plan `thailand/thailand-map.md`) is where she lands: a toy board
+  with Thailand standing up out of the sea (its real coastline, `land.ts`, written by `scripts/thailand-map-land.mjs`
+  from Natural Earth), a little model and a bobbing pin for each place, and animals, boats and clouds that answer a
+  poke. A drag swings the board round, a pinch brings it closer. Tapping a pin opens that place. `field.ts` works out
+  the ground once (distance to the coast); the terrain, its painted top and the sea's foam all read it. Bangkok opens the house; a trip somewhere else gets a pin, starts there and ends there
   (the stamp lands on its pin, the trip's photo goes on Agong's wall by itself). Only the first trip of a session packs
   and rides the window seat (`trip/session.ts`); later ones go straight to their landing spot. The mall day, in Bangkok,
   still starts in the house (Mommy or Daddy asks) and ends there.
