@@ -83,10 +83,11 @@ export function FireShowScreen({ round: first, flags, onRound, onHome }: Props) 
           </>
         )}
       />
-      {mode === 'webgl' && <TripGuide ref={guideRef} />}
+      {mode === 'webgl' && <TripGuide ref={guideRef} corner={done !== null ? OVER_CORNER : undefined} />}
       <AnimatePresence>
         {done !== null && (
-          <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }} className="fin-over">
+          // (A moment after the fireworks' photo, once the bubble showing then has moved up out of its way.)
+          <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }} transition={{ delay: 0.45 }} className="fin-over">
             <div className="fin-badge">🔥 🏆</div>
             {onHome && (
               <BigButton color="mint" onClick={() => onHome(done)} ariaLabel="Home to Agong's house">
@@ -113,6 +114,10 @@ export function FireShowScreen({ round: first, flags, onRound, onHome }: Props) 
     </div>
   )
 }
+
+/** The badge and 🏠 in the bottom-right corner: Sparkle's bubble stops short of them (or goes above them on a narrow
+ *  phone; QA 2026-11-08: it sat on the badge). */
+export const OVER_CORNER = { width: '300px', height: '112px' }
 
 export const FINALE_CSS = `
 .fin-hint { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: 4; }

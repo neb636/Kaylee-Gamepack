@@ -228,6 +228,23 @@ async function poiCircles(page, r, loops, steps = 36) {
   }
   await page.mouse.up()
 }
+/** Her finger round the fire show's dots, in order (QA's `dotsLeft`), or round the plane at the shape's size. */
+async function traceDots(page) {
+  const q = await page.evaluate(() => window.__thaiSametQA?.())
+  if (!q) return
+  let pts = q.dotsLeft
+  if (!pts?.length) {
+    const { x, y, ppm } = q.plane
+    pts = Array.from({ length: 40 }, (_, i) => ({ x: x + Math.sin((i / 40) * Math.PI * 2) * q.shapeSize * ppm, y: y - Math.cos((i / 40) * Math.PI * 2) * q.shapeSize * ppm }))
+  }
+  await page.mouse.move(pts[0].x, pts[0].y)
+  await page.mouse.down()
+  for (const p of [...pts, pts[0]]) {
+    await page.mouse.move(p.x, p.y, { steps: 2 })
+    await page.waitForTimeout(45)
+  }
+  await page.mouse.up()
+}
 /** Pulls the sun down to the sea. */
 async function pullSun(page) {
   const q = await page.evaluate(() => window.__thaiSametQA?.())
@@ -877,5 +894,53 @@ export const motion = [
       }
       await page.mouse.up()
     },
+  },
+  // ---- The finale, fixed (#357 batch: the fire show's shapes, the finish badge, the idle sunset).
+  {
+    name: 'thailand-samet-finale-shapes',
+    seconds: 14,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/fireshow?round=shapes&flags=all`)
+      await ready(page)
+      await page.waitForFunction(() => window.__thaiSametQA().phase === 'trace', null, { timeout: 15000 }).catch(() => {})
+      await page.waitForTimeout(800)
+    },
+    act: async (page) => {
+      // The circle's dots up in the sky over the family: she draws round them, it lifts away as lanterns; then the
+      // star the dancers draw next.
+      await traceDots(page)
+      await page.waitForFunction(() => window.__thaiSametQA().phase === 'trace', null, { timeout: 8000 }).catch(() => {})
+      await page.waitForTimeout(600)
+      await traceDots(page)
+      await page.waitForTimeout(2500)
+    },
+  },
+  {
+    name: 'thailand-samet-finale-badge',
+    seconds: 14,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/fireshow?round=finish&flags=all`)
+      await ready(page)
+      await page.waitForTimeout(2000)
+      for (let i = 0; i < 4; i++) {
+        await poiCircles(page, 0.8, 1.15, 30)
+        await page.waitForTimeout(500)
+      }
+      await page.waitForTimeout(1600)
+      await poiCircles(page, (q) => q.bigR, 1.15, 40)
+    },
+    // The ring of fire, the fireworks, the 🔥 🏆 badge and 🏠, while Sparkle and the dancers talk.
+    act: async (page) => page.waitForTimeout(14000),
+  },
+  {
+    name: 'thailand-samet-finale-sunset-idle',
+    seconds: 30,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/sunset?flags=all`)
+      await ready(page)
+    },
+    // Nobody touches it: the finger shows the pull, Sparkle says it once she's been still a while, and the sun sets on
+    // its own (it took 75 s).
+    act: async (page) => page.waitForTimeout(30000),
   },
 ]

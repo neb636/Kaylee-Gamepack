@@ -41,7 +41,8 @@ const SUN = knobs('sunsetSun', 'Pulling the sun down', FILE, {
   start: { value: 9, min: 4, max: 25, step: 0.5, label: 'It starts this high', unit: '°' },
   grab: { value: 150, min: 60, max: 300, step: 10, label: 'Grab it within', unit: 'px', note: 'her finger this close to the sun picks it up' },
   follow: { value: 10, min: 2, max: 30, step: 0.5, label: 'It follows her finger', unit: '/s' },
-  sink: { value: 0.12, min: 0, max: 1, step: 0.02, label: 'It sinks by itself', unit: '°/s', note: 'slowly, while she leaves it alone' },
+  alone: { value: 22, min: 8, max: 90, step: 1, label: 'Left alone it sets in', unit: 's', note: 'it sinks by itself while she doesn’t hold it, so an idle sunset never drags on (QA 2026-11-08: 75 s)' },
+  hint: { value: 2.5, min: 0, max: 10, step: 0.5, label: 'The finger shows the pull after', unit: 's', note: 'until she has grabbed it once; then after 6 s with nothing done' },
   dusk: { value: 3, min: 1, max: 8, step: 0.25, label: 'Night falls in', unit: 's', note: 'after it touches the sea' },
   size: { value: 9, min: 4, max: 20, step: 0.5, label: 'Sun size', unit: 'm', note: 'its radius, 260 m out to sea' },
 })
@@ -70,7 +71,7 @@ const phoneQ = new Quaternion()
 const phoneE = new Euler()
 const HINT_S = 6
 /** Sparkle says what to do after this long with nothing done (and no sooner again). */
-const SAY_S = 9
+const SAY_S = 8
 const SUN_DIST = 260
 const SUN_GOLD = new Color('#FFD27A')
 const SUN_PINK = new Color('#FF7A8C')
@@ -267,7 +268,7 @@ export class Sunset implements World3D {
         const d = this.raycaster.ray.direction
         // (She can only pull it down, or back up a little to where it was.)
         this.goal = clamp(Math.asin(clamp(d.y, -1, 1)), -0.06, SUN.start / DEG)
-      } else this.goal = Math.max(-0.06, this.goal - (SUN.sink / DEG) * dt)
+      } else this.goal = Math.max(-0.06, this.goal - (SUN.start / DEG / SUN.alone) * dt)
       this.elev += (this.goal - this.elev) * ease(dt, SUN.follow)
       if (this.elev < SUN.start / DEG - 0.01 && this.phase === 'day') this.setPhase('sinking')
       if (this.elev < 0) this.sunSet()
@@ -522,7 +523,8 @@ export class Sunset implements World3D {
     const el = this.hintEl
     if (!el) return
     let at: { x: number; y: number } | null = null
-    const idle = !this.finger && t - this.lastTouch > HINT_S
+    // (Until she has picked the sun up once the finger shows her how almost at once; then when she's idle a while.)
+    const idle = !this.finger && (t - this.lastTouch > HINT_S || (!this.counts.grabs && t > SUN.hint))
     if (idle && (this.phase === 'day' || this.phase === 'sinking')) {
       // On the sun, pressing and sliding down toward the sea.
       const s = this.toScreen(this.sun.position)
@@ -577,6 +579,8 @@ export class Sunset implements World3D {
     return {
       section: 'sunset',
       phase: this.phase,
+      // Seconds since it opened (the scene's own clock, for timing the sunset when nobody touches it).
+      time: +this.time.toFixed(1),
       sunElev: +(this.elev * DEG).toFixed(1),
       dark: +this.dark.toFixed(2),
       sun: sc(this.sun.position),
