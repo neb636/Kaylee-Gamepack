@@ -491,7 +491,26 @@ export class TripHouse implements HousePlugin {
     return true
   }
 
-  tap(_x: number, _y: number, id?: string) {
+  /** The packed thing drawn nearest a screen point: in the heap their targets overlap on a phone (each is at least
+   *  64 px, the things only ~20 px apart), so a tap goes to the thing under her finger, not whichever target is on top
+   *  (#357: tapping one unpacked its neighbour). */
+  private packedNear(x: number, y: number) {
+    const { w, h } = this.house.size
+    let best: Thing | null = null
+    let bd = Infinity
+    for (const th of this.things.values()) {
+      if (!th.packed || !th.g.visible) continue
+      const c = th.g.position.clone().setY(th.g.position.y + 0.12).project(this.house.rig.camera)
+      const d = Math.hypot(((c.x + 1) / 2) * w - x, ((1 - c.y) / 2) * h - y)
+      if (d < bd) {
+        bd = d
+        best = th
+      }
+    }
+    return best
+  }
+
+  tap(x: number, y: number, id?: string) {
     const ph = this.phase
     if (ph === 'invite') {
       // Mommy's card is the thing to answer, so Kaylee stays put; but whatever she taps still answers: Mommy waves,
@@ -511,7 +530,7 @@ export class TripHouse implements HousePlugin {
     if (ph === 'pack' || ph === 'sitting') {
       if (id?.startsWith('trip:item:') && ph === 'pack') {
         const th = this.things.get(id.slice(10))
-        if (th) th.packed ? this.unpack(th) : this.pack(th)
+        if (th) th.packed ? this.unpack(this.packedNear(x, y) ?? th) : this.pack(th)
         return true
       }
       if (id === 'family:gan' && ph === 'pack') {
