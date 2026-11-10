@@ -1455,6 +1455,8 @@ export class JetSki implements World3D {
         if (s.age >= 0) live++
       }
       if (s.age < 0) continue
+      // (Hidden while she was up on the sand: back it comes.)
+      s.g.visible = true
       s.age += dt
       // Not caught after a while: it drifts to her and sinks to where she can't miss it.
       if (s.age > WAVES.drift) {
