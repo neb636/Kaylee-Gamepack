@@ -1,0 +1,13 @@
+{
+  "title": "Koh Samet: snorkel and hide and seek, fixed",
+  "checkIn": "fix",
+  "kaylee": "Daddy always hides somewhere she can see, and when she's stuck he peeks out, sneezes, then pops out and runs over. The cuttlefish plays chase three times, and silly hiding places get a giggle from Mommy.",
+  "questions": [],
+  "tableReads": [["thailand", "samet.hideseek"], ["thailand", "samet.snorkel"]],
+  "reels": [{ "name": "samet-snorkel-hideseek-after", "moments": ["thailand-samet-fix-hideseek-tricky", "thailand-samet-fix-hideseek-help", "thailand-samet-fix-hide-silly", "thailand-samet-fix-cuttle", "thailand-samet-fix-float-boat", "#/world/thailand/samet-trip/deck~4"] }],
+  "links": [
+    { "label": "Hide and seek, the trickier round", "hash": "#/world/thailand/samet-trip/hideseek?round=2" },
+    { "label": "The cuttlefish", "hash": "#/world/thailand/samet-trip/snorkel?round=cuttle" },
+    { "label": "Tune the help (feel lab)", "hash": "#/world/thailand/samet-trip/hideseek?round=2&feel=1" }
+  ]
+}

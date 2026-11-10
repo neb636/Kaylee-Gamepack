@@ -1,0 +1,523 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "samet.snorkel",
+  "title": "Thailand › Samet › Snorkel",
+  "intro": "Snorkeling at Ko Kudi (snorkel/): the captain's boat, float, follow the parrotfish, the cuttlefish.",
+  "page": "thailand-samet-snorkel.html",
+  "audio": "thailand-samet-snorkel.mp3",
+  "lines": 24,
+  "seconds": 54,
+  "missing": 2,
+  "names": 0,
+  "flags": [
+    {
+      "key": "samet.snorkel.float.touch",
+      "text": "Hold your finger in the water to swim!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.snorkel.float.mouse",
+      "text": "Click and hold in the water to swim!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.snorkel.again.0",
+      "text": "Whoosh! Find it again!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "samet.snorkel.again.1",
+      "text": "Where did it go?",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "samet.snorkel.hint.float.touch",
+      "text": "Hold your finger in the water to swim!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.snorkel.hint.float.mouse",
+      "text": "Click and hold in the water to swim!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "jump"
+      ],
+      "text": "Masks on! Jump in!",
+      "voice": "pelican",
+      "key": "samet.snorkel.jump",
+      "part": "samet › snorkel",
+      "when": "The captain (the pelican) toots and sends her in; Sparkle says what each round is for (the first two before her first touch), the facts the first time (coral when she first bumps or pokes one, the cuttlefish when it first flashes), and after a while with nothing done what to do. Daddy blows bubble rings.",
+      "ms": 2064,
+      "flags": [],
+      "span": [
+        0,
+        2
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "float",
+        "touch"
+      ],
+      "text": "Hold your finger in the water to swim!",
+      "voice": "sparkle",
+      "key": "samet.snorkel.float.touch",
+      "part": "samet › snorkel › float",
+      "when": "",
+      "ms": 3720,
+      "flags": [
+        "long",
+        "twice"
+      ],
+      "span": [
+        3.62,
+        7.28
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "float",
+        "mouse"
+      ],
+      "text": "Click and hold in the water to swim!",
+      "voice": "sparkle",
+      "key": "samet.snorkel.float.mouse",
+      "part": "samet › snorkel › float",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 4032,
+      "flags": [
+        "long",
+        "twice"
+      ],
+      "span": [
+        7.63,
+        11.6
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "follow"
+      ],
+      "text": "Follow the parrotfish!",
+      "voice": "sparkle",
+      "key": "samet.snorkel.follow",
+      "part": "samet › snorkel",
+      "when": "",
+      "ms": 2616,
+      "flags": [],
+      "span": [
+        13.22,
+        15.78
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "cuttle"
+      ],
+      "text": "Swim close to the cuttlefish!",
+      "voice": "sparkle",
+      "key": "samet.snorkel.cuttle",
+      "part": "samet › snorkel",
+      "when": "",
+      "ms": 2448,
+      "flags": [],
+      "span": [
+        16.13,
+        18.52
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "again",
+        "0"
+      ],
+      "text": "Whoosh! Find it again!",
+      "voice": "sparkle",
+      "key": "samet.snorkel.again.0",
+      "part": "samet › snorkel › again",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ],
+      "span": null
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "again",
+        "1"
+      ],
+      "text": "Where did it go?",
+      "voice": "sparkle",
+      "key": "samet.snorkel.again.1",
+      "part": "samet › snorkel › again",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ],
+      "span": null
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "pink"
+      ],
+      "text": "It turned pink, just for you!",
+      "voice": "sparkle",
+      "key": "samet.snorkel.pink",
+      "part": "samet › snorkel",
+      "when": "",
+      "ms": 2856,
+      "flags": [],
+      "span": [
+        18.87,
+        21.66
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "camera",
+        "touch"
+      ],
+      "text": "Tap the camera for a photo!",
+      "voice": "sparkle",
+      "key": "samet.snorkel.camera.touch",
+      "part": "samet › snorkel › camera",
+      "when": "",
+      "ms": 1968,
+      "flags": [],
+      "span": [
+        23.28,
+        25.19
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "camera",
+        "mouse"
+      ],
+      "text": "Click the camera for a photo!",
+      "voice": "sparkle",
+      "key": "samet.snorkel.camera.mouse",
+      "part": "samet › snorkel › camera",
+      "when": "",
+      "ms": 1920,
+      "flags": [],
+      "span": [
+        25.54,
+        27.4
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "coral"
+      ],
+      "text": "Coral is alive! Fish live in it.",
+      "voice": "sparkle",
+      "key": "samet.snorkel.coral",
+      "part": "samet › snorkel",
+      "when": "",
+      "ms": 2904,
+      "flags": [],
+      "span": [
+        29.02,
+        31.86
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "colors"
+      ],
+      "text": "Cuttlefish change color to talk!",
+      "voice": "sparkle",
+      "key": "samet.snorkel.colors",
+      "part": "samet › snorkel",
+      "when": "",
+      "ms": 2424,
+      "flags": [],
+      "span": [
+        32.21,
+        34.58
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "urchin"
+      ],
+      "text": "Boing! Prickly!",
+      "voice": "nick",
+      "key": "samet.snorkel.urchin",
+      "part": "samet › snorkel",
+      "when": "",
+      "ms": 1728,
+      "flags": [],
+      "span": [
+        34.93,
+        36.58
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "ring"
+      ],
+      "text": "A bubble ring for you!",
+      "voice": "nick",
+      "key": "samet.snorkel.ring",
+      "part": "samet › snorkel",
+      "when": "",
+      "ms": 1728,
+      "flags": [],
+      "span": [
+        36.93,
+        38.61
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "dad",
+        "0"
+      ],
+      "text": "Blub blub!",
+      "voice": "nick",
+      "key": "samet.snorkel.dad.0",
+      "part": "samet › snorkel › dad",
+      "when": "",
+      "ms": 1416,
+      "flags": [],
+      "span": [
+        40.23,
+        41.59
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "dad",
+        "1"
+      ],
+      "text": "Look at all the fish!",
+      "voice": "nick",
+      "key": "samet.snorkel.dad.1",
+      "part": "samet › snorkel › dad",
+      "when": "",
+      "ms": 1896,
+      "flags": [],
+      "span": [
+        41.94,
+        43.78
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "dad",
+        "2"
+      ],
+      "text": "Swim, swim, swim!",
+      "voice": "nick",
+      "key": "samet.snorkel.dad.2",
+      "part": "samet › snorkel › dad",
+      "when": "",
+      "ms": 1752,
+      "flags": [],
+      "span": [
+        44.13,
+        45.83
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "captain",
+        "0"
+      ],
+      "text": "Toot toot! Ha ha!",
+      "voice": "pelican",
+      "key": "samet.snorkel.captain.0",
+      "part": "samet › snorkel › captain",
+      "when": "",
+      "ms": 2136,
+      "flags": [],
+      "span": [
+        47.45,
+        49.53
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "captain",
+        "1"
+      ],
+      "text": "Good swimming, little one!",
+      "voice": "pelican",
+      "key": "samet.snorkel.captain.1",
+      "part": "samet › snorkel › captain",
+      "when": "",
+      "ms": 1848,
+      "flags": [],
+      "span": [
+        49.88,
+        51.66
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "captain",
+        "2"
+      ],
+      "text": "My boat waits for you, ka!",
+      "voice": "pelican",
+      "key": "samet.snorkel.captain.2",
+      "part": "samet › snorkel › captain",
+      "when": "",
+      "ms": 2520,
+      "flags": [],
+      "span": [
+        52.01,
+        54.47
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "hint",
+        "float",
+        "touch"
+      ],
+      "text": "Hold your finger in the water to swim!",
+      "voice": "sparkle",
+      "key": "samet.snorkel.hint.float.touch",
+      "part": "samet › snorkel › hint › float",
+      "when": "",
+      "ms": 3720,
+      "flags": [
+        "long",
+        "twice"
+      ],
+      "span": [
+        56.09,
+        59.74
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "hint",
+        "float",
+        "mouse"
+      ],
+      "text": "Click and hold in the water to swim!",
+      "voice": "sparkle",
+      "key": "samet.snorkel.hint.float.mouse",
+      "part": "samet › snorkel › hint › float",
+      "when": "",
+      "ms": 4032,
+      "flags": [
+        "long",
+        "twice"
+      ],
+      "span": [
+        60.09,
+        64.06
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "hint",
+        "follow"
+      ],
+      "text": "Swim after the parrotfish!",
+      "voice": "sparkle",
+      "key": "samet.snorkel.hint.follow",
+      "part": "samet › snorkel › hint",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 2256,
+      "flags": [],
+      "span": [
+        65.68,
+        67.87
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "snorkel",
+        "hint",
+        "cuttle"
+      ],
+      "text": "Swim to the cuttlefish!",
+      "voice": "sparkle",
+      "key": "samet.snorkel.hint.cuttle",
+      "part": "samet › snorkel › hint",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 2472,
+      "flags": [],
+      "span": [
+        68.22,
+        70.63
+      ]
+    }
+  ]
+}
