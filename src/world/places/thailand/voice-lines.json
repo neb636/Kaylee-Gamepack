@@ -1411,11 +1411,11 @@
   "Tap a track to race!",
   "Click a track to race!",
   {
-    "text": "Sawasdee ka! Three Cups in a row, dear!",
+    "text": "Sawasdee ka! Three Cups, dear!",
     "voice": "taeng"
   },
   {
-    "text": "Zzz... Oh! Is it time?",
+    "text": "Oh! Is it time?",
     "voice": "taeng"
   },
   {
@@ -1423,7 +1423,7 @@
     "voice": "taeng"
   },
   {
-    "text": "Sawasdee krap! I know every bend!",
+    "text": "Sawasdee krap! Ready?",
     "voice": "pao"
   },
   {
@@ -1448,13 +1448,13 @@
   },
   "Tortoises can live to be more than a hundred!",
   "Hornbills have a big helmet on their beak!",
-  "Sun bears are the smallest bears in the world!",
+  "Sun bears are the smallest bears!",
   {
     "text": "My forest! Catch me if you can!",
     "voice": "moon"
   },
   {
-    "text": "My rice steps, dear. Off we go!",
+    "text": "My rice steps, dear!",
     "voice": "taeng"
   },
   {
@@ -1468,8 +1468,8 @@
   "Neung!",
   "That's three, two, one in Thai!",
   "Boing! A bouncy mushroom!",
-  "Splash! Muddy karts go faster!",
-  "We're in a cloud! Follow the lanterns!",
+  "Splash! Mud makes you fast!",
+  "Follow the lanterns!",
   "Hold your finger on the road!",
   "Click and hold on the road!",
   {
@@ -1510,7 +1510,7 @@
   "Tap the winner for a high five!",
   "Click the winner for a high five!",
   {
-    "text": "Good race! My lucky ribbon, for you.",
+    "text": "My lucky ribbon, for you!",
     "voice": "taeng"
   },
   {

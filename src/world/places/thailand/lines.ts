@@ -574,19 +574,19 @@ export const L = {
       // Sparkle at the board, the first time this visit (and the stuck hint, glow first).
       board: onDevice('Tap a track to race!', 'Click a track to race!'),
       // Tap a rival on the board or the podium (each in turn).
-      taeng: [by('taeng')('Sawasdee ka! Three Cups in a row, dear!'), by('taeng')('Zzz... Oh! Is it time?'), by('taeng')('My husband built my kart!')],
-      pao: [by('pao')('Sawasdee krap! I know every bend!'), by('pao')('Special delivery! Ha ha!'), by('pao')('Up the mountain every day!')],
+      taeng: [by('taeng')('Sawasdee ka! Three Cups, dear!'), by('taeng')('Oh! Is it time?'), by('taeng')('My husband built my kart!')],
+      pao: [by('pao')('Sawasdee krap! Ready?'), by('pao')('Special delivery! Ha ha!'), by('pao')('Up the mountain every day!')],
       moon: [by('moon')('Sawasdee ka! Want some honey?'), by('moon')('Shoo, bee! Shoo!'), by('moon')('I love the straight bits!')],
       // The first time she pokes each rival this visit, after their line, Sparkle's fact.
       facts: {
         taeng: 'Tortoises can live to be more than a hundred!',
         pao: 'Hornbills have a big helmet on their beak!',
-        moon: 'Sun bears are the smallest bears in the world!',
+        moon: 'Sun bears are the smallest bears!',
       },
       // The race: the home rival's tease on the grid, Sparkle's one instruction (her first race), the lights in Thai.
       tease: {
         forest: by('moon')('My forest! Catch me if you can!'),
-        steps: by('taeng')('My rice steps, dear. Off we go!'),
+        steps: by('taeng')('My rice steps, dear!'),
         cloud: by('pao')('Up, up, into the clouds!'),
       },
       start: onDevice('Hold your finger on the road to go!', 'Click and hold on the road to go!'),
@@ -594,8 +594,8 @@ export const L = {
       counted: "That's three, two, one in Thai!",
       // Sparkle, the first time each track's trick happens this visit.
       boing: 'Boing! A bouncy mushroom!',
-      mud: 'Splash! Muddy karts go faster!',
-      cloud: "We're in a cloud! Follow the lanterns!",
+      mud: 'Splash! Mud makes you fast!',
+      cloud: 'Follow the lanterns!',
       // Sparkle, after a while with her finger off the road.
       hint: onDevice('Hold your finger on the road!', 'Click and hold on the road!'),
       // Bump a rival (each in turn).
@@ -614,7 +614,7 @@ export const L = {
       // Silver: Sparkle asks for a high five, and the winner gives her their gift for her kart.
       five: onDevice('Tap the winner for a high five!', 'Click the winner for a high five!'),
       gift: {
-        taeng: by('taeng')('Good race! My lucky ribbon, for you.'),
+        taeng: by('taeng')('My lucky ribbon, for you!'),
         pao: by('pao')('Well driven! Have a feather!'),
         moon: by('moon')('Great race! A honey sticker for you!'),
       },

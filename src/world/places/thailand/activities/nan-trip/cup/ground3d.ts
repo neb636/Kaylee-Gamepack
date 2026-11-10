@@ -598,7 +598,7 @@ export class CupGround extends Stage {
     if (this.mode === 'podium' && id === this.winner && !this.fiveDone) return this.highFive()
     h.rider.react('hop')
     if (h.rider.nap) {
-      // Grandma Taeng wakes up with a start ("Zzz... Oh! Is it time?"), then nods off again.
+      // Grandma Taeng wakes up with a start ("Oh! Is it time?"), then nods off again.
       h.rider.nap = false
       this.napUntil = this.time + 6
       sfx.boop()
