@@ -16,9 +16,9 @@ import { makeLights } from '../../../../../engine3d/toon'
 import type { World3D } from '../../../../../engine3d/View3D'
 import { noise, sfx, tone } from '../../../../../kit/sfx'
 import { buildField, type Field } from './field'
-import { BOARD, PINS, POKES, SAMET, toLat, toLon, toX, toZ, type PinId, type ToyId } from './geo'
+import { BOARD, PINS, POKES, SPEEDBOAT_LOOP, toLat, toLon, toX, toZ, WATER_LOOPS, type PinId, type ToyId } from './geo'
 import type { LonLat } from './land'
-import { buildPin, type PinStyle, type PinToy } from './pins'
+import { buildPin, type PinToy } from './pins'
 import { buildLand, buildTray, Sea } from './terrain'
 import * as T from './toys'
 
@@ -100,8 +100,6 @@ export class ThaiMapWorld implements World3D {
   private close: Shot = { center: new Vector3(), half: new Vector3(1.7, 0.8, 1.7), yaw: -6, pitch: 46, maxDist: 200 }
   private picked: Place | null = null
   private hint = false
-  /** Every pin style built so far (Dad flips between them), so a flip doesn't build a style twice. */
-  private pinSets = new Map<PinStyle, Record<PinId, PinToy>>()
 
   private places: Place[] = []
   private toys = new Map<ToyId, Toy>()
@@ -134,7 +132,6 @@ export class ThaiMapWorld implements World3D {
   constructor(
     private renderer: WebGLRenderer,
     private events: MapEvents,
-    pinStyle: PinStyle = 'picture',
   ) {
     const began = performance.now()
     this.scene.background = sky(this.bag)
@@ -148,7 +145,7 @@ export class ThaiMapWorld implements World3D {
     this.spray = new Particles({ kind: 'spray', count: 110, colors: ['#8FD3F7', '#FFFFFF', '#FF8FB8', '#FBEA9A', '#8BD79A', '#D9CCFF'], gravity: 3.2 }, this.bag)
     this.foam = new Particles({ kind: 'foam', count: 70, opacity: 0.92 }, this.bag)
     this.scene.add(this.spray.mesh, this.foam.mesh)
-    this.buildPlaces(pinStyle)
+    this.buildPlaces()
     this.buildToys()
     this.buildClouds()
     this.buildMs = Math.round(performance.now() - began)
@@ -165,23 +162,13 @@ export class ThaiMapWorld implements World3D {
     return new Vector3(toX(lon), this.ground(lon, lat) + up, toZ(lat))
   }
 
-  private pinSet(style: PinStyle) {
-    let set = this.pinSets.get(style)
-    if (!set) {
-      set = {} as Record<PinId, PinToy>
-      PINS.forEach((p, i) => (set![p.id] = buildPin(style, p.id, p.color, this.bag, i * 1.7)))
-      this.pinSets.set(style, set)
-    }
-    return set
-  }
-
-  private buildPlaces(pinStyle: PinStyle) {
+  private buildPlaces() {
     const parts: Record<PinId, () => ReturnType<typeof T.bangkokParts>> = { bangkok: T.bangkokParts, nan: T.nanParts, krabi: T.krabiParts, samet: T.sametParts }
     PINS.forEach((p, i) => {
       const at = this.spot(p.at)
       const model = solid(merge(parts[p.id]()), this.bag, 1.5)
       model.position.copy(at)
-      const toy = this.pinSet(pinStyle)[p.id]
+      const toy = buildPin(p.id, this.bag, i * 1.7)
       this.scene.add(model, toy.root)
       this.places.push({ id: p.id, at, model, pin: toy.root, toy, live: true, done: false, t: -1, phase: i * 1.7 })
     })
@@ -305,19 +292,6 @@ export class ThaiMapWorld implements World3D {
     }
   }
 
-  /** Swaps what floats over every place (Dad's 1 2 3 buttons). */
-  setPinStyle(style: PinStyle) {
-    const set = this.pinSet(style)
-    for (const p of this.places) {
-      if (p.toy === set[p.id]) continue
-      this.scene.remove(p.pin)
-      p.toy = set[p.id]
-      p.pin = p.toy.root
-      p.pin.visible = p.live
-      this.scene.add(p.pin)
-    }
-  }
-
   setSize(w: number, h: number, top: number) {
     this.w = w
     this.h = h
@@ -389,9 +363,9 @@ export class ThaiMapWorld implements World3D {
     }
     // The speedboat round the island.
     const a = t * 0.55
-    const [sx, sz] = [toX(SAMET[0]), toZ(SAMET[1])]
-    this.speedboat.position.set(sx + Math.cos(a) * 0.62, 0.012 + Math.sin(t * 5) * 0.006, sz + Math.sin(a) * 0.72)
-    this.speedboat.rotation.set(-0.08, Math.atan2(-Math.sin(a) * 0.62, Math.cos(a) * 0.72), 0)
+    const { lon, lat, rx, rz } = SPEEDBOAT_LOOP
+    this.speedboat.position.set(toX(lon) + Math.cos(a) * rx, 0.012 + Math.sin(t * 5) * 0.006, toZ(lat) + Math.sin(a) * rz)
+    this.speedboat.rotation.set(-0.08, Math.atan2(-Math.sin(a) * rx, Math.cos(a) * rz), 0)
     if (Math.random() < dt * 9) this.foam.emit(this.speedboat.position.x - Math.sin(this.speedboat.rotation.y) * 0.2, 0.012, this.speedboat.position.z - Math.cos(this.speedboat.rotation.y) * 0.2, 0, 0, 0, 0.9, 0.1)
   }
 
@@ -509,9 +483,9 @@ export class ThaiMapWorld implements World3D {
     }
 
     // The longtail: round and round on the Andaman Sea with a foamy wake; poked, it roars off faster with spray.
-    this.sail('boat', this.boat, dt, t, 0.75, 0.5, 0.42, 3.2)
+    this.sail('boat', this.boat, dt, t, ...WATER_LOOPS.boat, 0.42, 3.2)
     // The rice barge: slow and fat; poked, it toots and puffs.
-    this.sail('barge', this.barge, dt, t, 0.32, 0.5, 0.2, 2.4)
+    this.sail('barge', this.barge, dt, t, ...WATER_LOOPS.barge, 0.2, 2.4)
 
     // Turtle: paddles in a circle; poked, it dives and pops back up.
     {
@@ -521,8 +495,9 @@ export class ThaiMapWorld implements World3D {
       g.root.userData.a = (g.root.userData.a ?? 1) + dt * 0.3
       const a = g.root.userData.a as number
       const dive = k >= 0 ? bell(clamp(k / 1.6, 0, 1)) : 0
-      g.root.position.set(toy.home.x + Math.cos(a) * 0.35, 0.0 + Math.sin(t * 1.4) * 0.01 - dive * 0.3, toy.home.z + Math.sin(a) * 0.3)
-      g.root.rotation.set(k >= 0 ? Math.sin(clamp(k / 1.6, 0, 1) * TAU) * 0.9 : 0, Math.atan2(-Math.sin(a) * 0.35, Math.cos(a) * 0.3) + (k >= 0 ? k * 4 : 0), 0)
+      const [rx, rz] = WATER_LOOPS.turtle
+      g.root.position.set(toy.home.x + Math.cos(a) * rx, 0.0 + Math.sin(t * 1.4) * 0.01 - dive * 0.3, toy.home.z + Math.sin(a) * rz)
+      g.root.rotation.set(k >= 0 ? Math.sin(clamp(k / 1.6, 0, 1) * TAU) * 0.9 : 0, Math.atan2(-Math.sin(a) * rx, Math.cos(a) * rz) + (k >= 0 ? k * 4 : 0), 0)
       const paddle = Math.sin(t * (k >= 0 ? 12 : 3)) * 0.5
       g.flipL.rotation.y = paddle
       g.flipR.rotation.y = -paddle

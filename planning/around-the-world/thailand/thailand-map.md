@@ -75,7 +75,7 @@ New: 🌍 World map → 🗺️ Thailand map (fly the plane) → 📍 Land on a 
 - 🚤 **Krabi: the boat and the elephants**: Lands at Krabi airport, where Daddy's postcards ask 🐘 the elephants or 🚤 the boat (the fork that's already built). The boat trip's stamp lands here.
 - 🏔️ **Nan: the mountains**: Lands straight on the **Nan map**, the Pajero waiting at the airport (PR #228 already skips the rental desk). The Nan trip's stamp lands here.
 
-**What floats over each place (2026-11-10, Dad choosing):** three real styles behind `?pins=` and 1 2 3 buttons on the map (`map/pins.ts`): `picture` (a drawing on the teardrop pin), `friends` (a character waving on a cloud), `rides` (the vehicle on a turntable). Next: keep the one he picks, delete the other two and the buttons.
+**What floats over each place (Dad, 2026-11-10):** a friend she'll meet there, bobbing and waving like a pin (`map/pins.ts`): Agong in Bangkok, the baby elephant in Krabi, Moon the sun bear in Nan, the jet ski otter on Koh Samet. The boats' and the turtle's loops (`geo.ts`) are measured to stay out at sea.
 
 A new trip later (Chiang Mai, Songkran, the night market) is a new pin. Until it's built there's no pin for it (see the open questions).
 

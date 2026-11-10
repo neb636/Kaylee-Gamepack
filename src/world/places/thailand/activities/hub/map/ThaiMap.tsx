@@ -16,7 +16,6 @@ import { sounds } from '../../../../../../sdk'
 import { onDevice } from '../../../../../../sdk/device'
 import { worldLink } from '../../../../../../router'
 import { Anchors } from '../../../../../engine3d/Anchors'
-import { flag } from '../../../../../engine3d/flags'
 import { View3D, type AnchorInput, type RenderMode } from '../../../../../engine3d/View3D'
 import { sfx } from '../../../../../kit/sfx'
 import { useSections } from '../../../../../kit/sections'
@@ -27,7 +26,6 @@ import { tripSession } from '../../../trip/session'
 import { readSametSave } from '../../samet-trip/trip'
 import HUB_SECTIONS from '../sections'
 import { PINS, type Pin, type PinId, type ToyId } from './geo'
-import { PIN_STYLES, type PinStyle } from './pins'
 import { MAP_ANCHORS, ThaiMapWorld, type MapEvents } from './world'
 
 // Once a session: Sparkle's welcome, and each thing's fact.
@@ -48,8 +46,6 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
   const lastTouch = useRef(performance.now() + 3000)
   // The stamp that lands: hidden on its pin until it drops in.
   const [landed, setLanded] = useState(!arriving)
-  // Dad is choosing what floats over each place: `?pins=picture|friends|rides`, or the 1 2 3 buttons (delete with the two he doesn't pick).
-  const [pinStyle, setPinStyle] = useState<PinStyle>(() => PIN_STYLES.find((s) => s === flag('pins')) ?? 'picture')
 
   const live = (pin: Pin) => pin.id === 'bangkok' || meta.activities.some((a) => a.id === pin.activity)
   const stamped = (pin: Pin) => stamps.includes(pin.activity) && (landed || pin.activity !== arriving)
@@ -81,8 +77,6 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
       clearInterval(idle)
     }
   }, [])
-
-  useEffect(() => worldRef.current?.setPinStyle(pinStyle), [pinStyle, engine])
 
   // The 3D pins show what the page knows: which places are stamped, and when Sparkle is hinting.
   useEffect(() => worldRef.current?.setPins(pins.map((p) => p.id), done, hint), [doneKey, hint, engine])
@@ -136,7 +130,7 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
         worldRef={worldRef}
         onMode={setMode}
         make={(renderer) => {
-          const world = new ThaiMapWorld(renderer, { pin: (id) => events.current.pin(id), poked: (id) => events.current.poked(id), touched: () => events.current.touched() }, pinStyle)
+          const world = new ThaiMapWorld(renderer, { pin: (id) => events.current.pin(id), poked: (id) => events.current.poked(id), touched: () => events.current.touched() })
           world.setPins(pins.map((p) => p.id), done, false)
           return world
         }}
@@ -194,22 +188,6 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
           🎉
         </motion.button>
       )}
-      <div style={{ position: 'absolute', left: '50%', translate: '-50% 0', bottom: 'calc(var(--safe-bottom) + 12px)', display: 'flex', gap: 10, zIndex: 20 }}>
-        {PIN_STYLES.map((s, i) => (
-          <button
-            key={s}
-            aria-label={`Pin style ${i + 1}: ${s}`}
-            data-pin-style={s}
-            onClick={() => {
-              sounds.pop()
-              setPinStyle(s)
-            }}
-            style={{ width: 64, height: 64, borderRadius: '50%', border: '4px solid #fff', background: pinStyle === s ? 'var(--hotpink)' : 'var(--lavender)', color: pinStyle === s ? '#fff' : 'var(--ink)', fontSize: 28, fontWeight: 700, boxShadow: 'var(--shadow)' }}
-          >
-            {i + 1}
-          </button>
-        ))}
-      </div>
       <TripGuide ref={guide} />
     </div>
   )
