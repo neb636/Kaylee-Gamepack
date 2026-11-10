@@ -564,6 +564,66 @@ export const L = {
       salty: nick('Too salty? Ha ha!'),
       dad: [nick('Look at that steam!'), nick('Salt from a well!')],
     },
+    // The Nan Mountain Cup (activities/nan-trip/cup/, plan: thailand/nan-cup.md): a kart race on three mountain tracks
+    // against three Nan locals (cast.json): Grandma Taeng the tortoise, Pao the hornbill postman and Moon the sun bear
+    // honey seller. Sparkle says what's new and counts down in Thai; the rivals tease, bump and are good sports in their
+    // own voices; Mommy and Daddy cheer from the grandstand. Kaylee never talks: she giggles.
+    cup: {
+      // Daddy, as the city road pulls in at the race ground.
+      arrive: nick('Look! A race!'),
+      // Sparkle at the board, the first time this visit (and the stuck hint, glow first).
+      board: onDevice('Tap a track to race!', 'Click a track to race!'),
+      // Tap a rival on the board or the podium (each in turn).
+      taeng: [by('taeng')('Sawasdee ka! Three Cups in a row, dear!'), by('taeng')('Zzz... Oh! Is it time?'), by('taeng')('My husband built my kart!')],
+      pao: [by('pao')('Sawasdee krap! I know every bend!'), by('pao')('Special delivery! Ha ha!'), by('pao')('Up the mountain every day!')],
+      moon: [by('moon')('Sawasdee ka! Want some honey?'), by('moon')('Shoo, bee! Shoo!'), by('moon')('I love the straight bits!')],
+      // The first time she pokes each rival this visit, after their line, Sparkle's fact.
+      facts: {
+        taeng: 'Tortoises can live to be more than a hundred!',
+        pao: 'Hornbills have a big helmet on their beak!',
+        moon: 'Sun bears are the smallest bears in the world!',
+      },
+      // The race: the home rival's tease on the grid, Sparkle's one instruction (her first race), the lights in Thai.
+      tease: {
+        forest: by('moon')('My forest! Catch me if you can!'),
+        steps: by('taeng')('My rice steps, dear. Off we go!'),
+        cloud: by('pao')('Up, up, into the clouds!'),
+      },
+      start: onDevice('Hold your finger on the road to go!', 'Click and hold on the road to go!'),
+      count: ['Sahm!', 'Song!', 'Neung!', 'Go!'],
+      counted: "That's three, two, one in Thai!",
+      // Sparkle, the first time each track's trick happens this visit.
+      boing: 'Boing! A bouncy mushroom!',
+      mud: 'Splash! Muddy karts go faster!',
+      cloud: "We're in a cloud! Follow the lanterns!",
+      // Sparkle, after a while with her finger off the road.
+      hint: onDevice('Hold your finger on the road!', 'Click and hold on the road!'),
+      // Bump a rival (each in turn).
+      bump: { taeng: by('taeng')('Oh my!'), pao: by('pao')('Hey! My letters!'), moon: by('moon')('Hey! My honey!') },
+      // The last stretch, and the finish: she wins by a nose, or the home rival does.
+      final: 'Nearly there!',
+      win: 'First place!',
+      close: 'So close! Second place!',
+      // The podium. Gold: Mommy and Daddy cheer, the home rival is a good sport.
+      gold: [nick('Gold! Woo hoo!'), ji('You won, sweetie!')],
+      good: {
+        taeng: by('taeng')('Oh my! So fast, dear!'),
+        pao: by('pao')('You beat me up my mountain!'),
+        moon: by('moon')('Wow! You beat me!'),
+      },
+      // Silver: Sparkle asks for a high five, and the winner gives her their gift for her kart.
+      five: onDevice('Tap the winner for a high five!', 'Click the winner for a high five!'),
+      gift: {
+        taeng: by('taeng')('Good race! My lucky ribbon, for you.'),
+        pao: by('pao')('Well driven! Have a feather!'),
+        moon: by('moon')('Great race! A honey sticker for you!'),
+      },
+      silver: ji('Next race, sweetie!'),
+      // The Cup: Sparkle when it flies over to her, then everyone when she lifts it.
+      cup: onDevice(`The Nan Mountain Cup! Tap it, ${NAME}!`, `The Nan Mountain Cup! Click it, ${NAME}!`),
+      champion: `${NAME} is the Nan Mountain Cup champion!`,
+      lift: [nick('Champion!'), ji('Smile, champion!')],
+    },
     // The trip around the stops (activities/nan-trip/Loop.tsx, the trip kit): packing for the mountains, landing in Nan,
     // the photo at the 3's viewpoint, and the photo on Agong's wall. The rest of the way there and home is the boat
     // trip's (L.trip, L.home).
@@ -584,6 +644,9 @@ export const L = {
         rice: 'Rice grows standing in water!',
         salt: 'Bo Kluea makes salt from a well!',
         sea: 'Long ago the sea was here, and it left its salt!',
+        // The Nan Mountain Cup's facts.
+        flower: 'A pink flower grows on the mountain, only in Nan!',
+        mountain: 'Doi Phu Kha is a big mountain in Nan!',
       },
     },
   },

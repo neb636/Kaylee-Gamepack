@@ -24,11 +24,16 @@
 //   rival, Moon here, edges past on the last stretch and wins by a nose in a slow-motion photo finish, with her second,
 //   never last. Fireworks either way, and then the podium (Cup.tsx hands over to the race ground, ground.ts). The gifts
 //   from the races she lost ride on her kart (gifts.ts).
-// Greybox: no voices. The numbers that decide how it feels are knobs (?feel=1): her kart,
+// Talk (lines.ts L.nan.cup): Sparkle's one instruction before her first race, the lights counted in Thai (Sahm, Song,
+// Neung, Go!), the home rival's tease just after GO, Sparkle the first time each track's trick happens this visit, a
+// rival's "Hey!" when she bumps them, "Nearly there!" and the finish. After a while with her finger off the road the
+// 👆 shows and Sparkle says what to do (spendHint). On a phone that tilts to steer, the finger lines aren't said.
+// The numbers that decide how it feels are knobs (?feel=1): her kart,
 // the bounce, the mud, the cloud and the blossoms, the rivals' rubber band; the lab's graph shows her finger across the
 // road against the kart.
 import { BufferAttribute, BufferGeometry, CanvasTexture, Color, DoubleSide, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Raycaster, RepeatWrapping, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
-import { clamp, sounds } from '../../../../../../sdk'
+import { clamp, firstTime, sounds, spendHint, type Line } from '../../../../../../sdk'
+import { L } from '../../../lines'
 import { knobs, watch } from '../../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
@@ -117,7 +122,11 @@ export interface KartEvents {
   onHud(hud: KartHud): void
   /** The race is over (everyone's over the line, the fireworks are going): the end card. */
   onDone(place: number): void
+  /** Someone says something, in their own voice. */
+  say?(l: Line): void
 }
+
+const C = L.nan.cup
 
 export const KART_ANCHORS: AnchorInfo[] = [
   { id: 'kart', label: 'Her kart', kind: 'thing' },
@@ -258,6 +267,10 @@ export class KartRace implements World3D {
   private waiting = false
   private counts = { coinsTaken: 0, pads: 0, bounces: 0, bigBounces: 0, bales: 0, grass: 0, bumps: 0, honks: 0, pokes: 0, splashes: 0, washes: 0, lanterns: 0, showers: 0, fords: 0 }
   private timers: number[] = []
+  /** Her first race this visit: Sparkle's instruction, and a longer look before the lights. */
+  private firstRace = false
+  private bumpSaid = new Map<RacerId, number>()
+  private hintSaid = -99
   private anchorEls = new Map<string, HTMLElement>()
   private hintEl: HTMLElement | null = null
   private mapEls = new Map<string, SVGElement>()
@@ -926,7 +939,10 @@ export class KartRace implements World3D {
     this.fog.near = base.near + (AIR.inside.near - base.near) * c
     this.fog.far = base.far + (CLOUD.see - base.far) * c
     const inside = c > 0.6
-    if (inside && !this.wasIn) sfx.cloudIn()
+    if (inside && !this.wasIn) {
+      sfx.cloudIn()
+      if (this.phase === 'race' && firstTime('nan-cup-cloud')) this.say(C.cloud)
+    }
     if (this.sea) this.sea.visible = y > y1 - 4
     if (above && !this.wasAbove && this.phase === 'race') {
       sfx.cloudOut()
@@ -955,10 +971,19 @@ export class KartRace implements World3D {
   }
 
   /** The intro, the countdown, GO, the finish and the end. */
+  private say(l: Line) {
+    this.events.say?.(l)
+  }
+
   private updatePhase() {
     const t = this.phaseT
     if (this.phase === 'intro') {
-      if (t > (this.start.again ? 1.6 : 2.6)) {
+      if (!this.told.has('intro') && t > 0.3) {
+        this.told.add('intro')
+        this.firstRace = this.steer === 'finger' && firstTime('nan-cup-start')
+        if (this.firstRace) this.say(C.start)
+      }
+      if (t > (this.start.again ? 1.6 : 2.6) + (this.firstRace ? 0.9 : 0)) {
         this.phase = 'count'
         this.phaseT = 0
       }
@@ -967,6 +992,7 @@ export class KartRace implements World3D {
       if (!this.told.has(`count${n}`)) {
         this.told.add(`count${n}`)
         sfx.light(n === 4)
+        this.say(C.count[n - 1])
         if (n === 4) this.go()
       }
     } else if (this.phase === 'finish' && t > 5.5 && !this.ended) {
@@ -984,6 +1010,10 @@ export class KartRace implements World3D {
     const taeng = this.racer('taeng').rider!
     taeng.nap = false
     taeng.react('hop')
+    // The home rival's tease, as they pull away.
+    this.later(() => {
+      if (this.phase === 'race') this.say(C.tease[this.start.track])
+    }, 1300)
     const k = this.k
     if (this.pressing) {
       this.rocket = true
@@ -1173,6 +1203,7 @@ export class KartRace implements World3D {
         if (m.big) this.counts.bigBounces++
         this.slow = Math.max(this.slow, BOUNCE.slow * (m.big ? 1.6 : 1))
         sounds.sparkle()
+        if (firstTime('nan-cup-boing')) this.say(C.boing)
       } else r.rider?.react('hop')
     }
     r.splashCool -= dt
@@ -1196,6 +1227,7 @@ export class KartRace implements World3D {
         sfx.puddle()
         this.slow = Math.max(this.slow, MUD.splash)
         this.kaylee.react('hop')
+        if (firstTime('nan-cup-mud')) this.say(C.mud)
       } else r.rider?.react('hop')
     }
     // The waterfall's stream: washed clean, and a burst of speed.
@@ -1273,6 +1305,7 @@ export class KartRace implements World3D {
       this.told.add('final')
       this.banner = { kind: 'final', n: this.time }
       this.music.setFinal(true)
+      this.say(C.final)
     }
   }
 
@@ -1328,7 +1361,16 @@ export class KartRace implements World3D {
       sfx.soClose()
       this.later(() => sounds.correct(), 900)
     }
+    this.say(place === 1 ? C.win : C.close)
     this.kaylee.react('hop')
+  }
+
+  /** She bumped a rival: their "Hey!" (not too often, and not on the last stretch or after the line). */
+  private bumped(r: Racer) {
+    if (!r.rival || this.phase !== 'race' || this.told.has('final')) return
+    if (this.time - (this.bumpSaid.get(r.id) ?? -99) < 8) return
+    this.bumpSaid.set(r.id, this.time)
+    this.say(C.bump[r.rival.id])
   }
 
   /** Everyone's place: those over the line by when they crossed, then by how far along they are. */
@@ -1383,7 +1425,10 @@ export class KartRace implements World3D {
             B.d.vz -= nz * j * (1 - share)
             if (-vn * 1.5 > 1.5 && A.bumpCool <= 0) {
               A.bumpCool = B.bumpCool = 0.5
-              if (A === this.k || B === this.k) this.counts.bumps++
+              if (A === this.k || B === this.k) {
+                this.counts.bumps++
+                this.bumped(A === this.k ? B : A)
+              }
               sfx.boing()
               A.squash = B.squash = 0.3
               A.roll.v += nz * 2
@@ -1548,6 +1593,11 @@ export class KartRace implements World3D {
       const lat = l && l.s < this.k.s + 30 ? l.lat : 0
       const p = this.track.place(this.k.s + 14, lat)
       at = new Vector3(p.x, p.y + 0.3, p.z)
+    }
+    // In the race, with the finger showing: Sparkle says it too (spendHint: shown first, then twice a visit at most).
+    if (at && this.phase === 'race' && this.time - this.hintSaid > 15) {
+      this.hintSaid = this.time
+      if (spendHint(C.hint)) this.say(C.hint)
     }
     const s = at ? this.toScreen(at, 1) : null
     el.style.display = s ? '' : 'none'

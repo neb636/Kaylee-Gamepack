@@ -1405,6 +1405,138 @@
     "voice": "nick"
   },
   {
+    "text": "Look! A race!",
+    "voice": "nick"
+  },
+  "Tap a track to race!",
+  "Click a track to race!",
+  {
+    "text": "Sawasdee ka! Three Cups in a row, dear!",
+    "voice": "taeng"
+  },
+  {
+    "text": "Zzz... Oh! Is it time?",
+    "voice": "taeng"
+  },
+  {
+    "text": "My husband built my kart!",
+    "voice": "taeng"
+  },
+  {
+    "text": "Sawasdee krap! I know every bend!",
+    "voice": "pao"
+  },
+  {
+    "text": "Special delivery! Ha ha!",
+    "voice": "pao"
+  },
+  {
+    "text": "Up the mountain every day!",
+    "voice": "pao"
+  },
+  {
+    "text": "Sawasdee ka! Want some honey?",
+    "voice": "moon"
+  },
+  {
+    "text": "Shoo, bee! Shoo!",
+    "voice": "moon"
+  },
+  {
+    "text": "I love the straight bits!",
+    "voice": "moon"
+  },
+  "Tortoises can live to be more than a hundred!",
+  "Hornbills have a big helmet on their beak!",
+  "Sun bears are the smallest bears in the world!",
+  {
+    "text": "My forest! Catch me if you can!",
+    "voice": "moon"
+  },
+  {
+    "text": "My rice steps, dear. Off we go!",
+    "voice": "taeng"
+  },
+  {
+    "text": "Up, up, into the clouds!",
+    "voice": "pao"
+  },
+  "Hold your finger on the road to go!",
+  "Click and hold on the road to go!",
+  "Sahm!",
+  "Song!",
+  "Neung!",
+  "That's three, two, one in Thai!",
+  "Boing! A bouncy mushroom!",
+  "Splash! Muddy karts go faster!",
+  "We're in a cloud! Follow the lanterns!",
+  "Hold your finger on the road!",
+  "Click and hold on the road!",
+  {
+    "text": "Oh my!",
+    "voice": "taeng"
+  },
+  {
+    "text": "Hey! My letters!",
+    "voice": "pao"
+  },
+  {
+    "text": "Hey! My honey!",
+    "voice": "moon"
+  },
+  "Nearly there!",
+  "First place!",
+  "So close! Second place!",
+  {
+    "text": "Gold! Woo hoo!",
+    "voice": "nick"
+  },
+  {
+    "text": "You won, sweetie!",
+    "voice": "ji"
+  },
+  {
+    "text": "Oh my! So fast, dear!",
+    "voice": "taeng"
+  },
+  {
+    "text": "You beat me up my mountain!",
+    "voice": "pao"
+  },
+  {
+    "text": "Wow! You beat me!",
+    "voice": "moon"
+  },
+  "Tap the winner for a high five!",
+  "Click the winner for a high five!",
+  {
+    "text": "Good race! My lucky ribbon, for you.",
+    "voice": "taeng"
+  },
+  {
+    "text": "Well driven! Have a feather!",
+    "voice": "pao"
+  },
+  {
+    "text": "Great race! A honey sticker for you!",
+    "voice": "moon"
+  },
+  {
+    "text": "Next race, sweetie!",
+    "voice": "ji"
+  },
+  "The Nan Mountain Cup! Tap it, Kaylee!",
+  "The Nan Mountain Cup! Click it, Kaylee!",
+  "Kaylee is the Nan Mountain Cup champion!",
+  {
+    "text": "Champion!",
+    "voice": "nick"
+  },
+  {
+    "text": "Smile, champion!",
+    "voice": "ji"
+  },
+  {
     "text": "It's cool and rainy in the mountains!",
     "voice": "ji"
   },
@@ -1431,6 +1563,8 @@
   "Rice grows standing in water!",
   "Bo Kluea makes salt from a well!",
   "Long ago the sea was here, and it left its salt!",
+  "A pink flower grows on the mountain, only in Nan!",
+  "Doi Phu Kha is a big mountain in Nan!",
   {
     "text": "Sawasdee ka! Hold on tight!",
     "voice": "pelican"
