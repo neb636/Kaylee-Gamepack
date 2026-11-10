@@ -57,9 +57,14 @@ self.addEventListener('fetch', (event) => {
 
 async function networkFirst(event, network, key) {
   const cache = await caches.open(CACHE)
-  const saved = network.then((res) => {
-    if (res.ok) event.waitUntil(cache.put(key, res.clone()))
-    return res
+  const saved = network.then(async (res) => {
+    if (res.ok) {
+      event.waitUntil(cache.put(key, res.clone()))
+      return res
+    }
+    // A server error (503 during a deploy, a 404 for a chunk) answers fetch() without rejecting: prefer the saved
+    // copy, exactly as when the network fails, and pass the error through only when there's nothing saved.
+    return (await cache.match(key)) ?? res
   })
   saved.catch(() => {})
   const slow = new Promise((resolve) => setTimeout(resolve, TIMEOUT_MS)).then(async () => (await cache.match(key)) ?? saved)

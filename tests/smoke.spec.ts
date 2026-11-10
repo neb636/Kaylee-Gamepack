@@ -206,3 +206,34 @@ test('Italy ignores retired saved stamps and keeps current activities', async ({
   expect(await page.locator('button[aria-label]').evaluateAll((buttons) => buttons.filter((b) => b.getAttribute('aria-label')?.includes('Tower')).length)).toBe(0)
   expect(errors).toEqual([])
 })
+
+const KEY = 'kaylee-gamepack:/:world'
+const saved = (page: Page) => page.evaluate((key) => JSON.parse(localStorage.getItem(key) ?? '{}'), KEY)
+
+test('a broken link opens the home screen instead of stopping the app', async ({ page }) => {
+  const errors = trackErrors(page)
+  await page.goto('./#/world/%')
+  await expect(page.getByRole('button', { name: /let's play/i })).toBeVisible()
+  expect(errors).toEqual([])
+})
+
+test("a finale test link doesn't save stamps to the real passport", async ({ page }) => {
+  await start(page, '#/world/australia/party/story?stamps=all')
+  await page.waitForTimeout(500)
+  expect((await saved(page)).stamps?.australia ?? []).toEqual([])
+})
+
+test("a second tab can't erase stamps the first tab saved", async ({ context }) => {
+  const a = await context.newPage()
+  const b = await context.newPage()
+  // Both tabs read the passport before either saves.
+  await start(a, '#/world/australia')
+  await start(b, '#/world/italy')
+  await a.waitForFunction(() => window.__kayleeWorld)
+  await b.waitForFunction(() => window.__kayleeWorld)
+  await a.evaluate(() => window.__kayleeWorld!.stampAll())
+  await b.evaluate(() => window.__kayleeWorld!.stampAll())
+  const data = await saved(b)
+  expect(data.stamps.australia?.length).toBeGreaterThan(0)
+  expect(data.stamps.italy?.length).toBeGreaterThan(0)
+})

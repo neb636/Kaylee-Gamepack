@@ -12,21 +12,30 @@ const KEY = `kaylee-gamepack:${import.meta.env.BASE_URL}:world`
 const EMPTY: PassportData = { visited: [], stamps: {} }
 const listeners = new Set<() => void>()
 
+function load(): PassportData {
+  try {
+    const data = { ...EMPTY, ...(JSON.parse(localStorage.getItem(KEY) ?? '{}') as Partial<PassportData>) }
+    const stamps = { ...data.stamps }
+    // Retired activities must not count toward the current passport or country's progress.
+    for (const { meta } of places) {
+      const current = new Set(meta.activities.map((a) => a.id))
+      if (stamps[meta.id]) stamps[meta.id] = stamps[meta.id].filter((id) => current.has(id))
+    }
+    return { ...data, stamps }
+  } catch {
+    return EMPTY
+  }
+}
+
 let cache: PassportData | undefined
 function read(): PassportData {
-  if (!cache) {
-    try {
-      cache = { ...EMPTY, ...(JSON.parse(localStorage.getItem(KEY) ?? '{}') as Partial<PassportData>) }
-      // Retired activities must not count toward the current passport or country's progress.
-      for (const { meta } of places) {
-        const current = new Set(meta.activities.map((a) => a.id))
-        if (cache.stamps[meta.id]) cache.stamps[meta.id] = cache.stamps[meta.id].filter((id) => current.has(id))
-      }
-    } catch {
-      cache = EMPTY
-    }
-  }
-  return cache
+  return (cache ??= load())
+}
+
+// Another tab (or the same app in a second window) may have saved since this tab last looked: every change starts
+// from what's saved now, never from this tab's in-memory copy, so one tab can't erase the other's stamps.
+function fresh(): PassportData {
+  return (cache = load())
 }
 
 function write(next: PassportData) {
@@ -35,14 +44,23 @@ function write(next: PassportData) {
   listeners.forEach((l) => l())
 }
 
+// Keep this tab's screens in step when another tab saves.
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (e) => {
+    if (e.key !== KEY && e.key !== null) return
+    cache = load()
+    listeners.forEach((l) => l())
+  })
+}
+
 export function markVisited(place: string) {
-  const data = read()
+  const data = fresh()
   if (!data.visited.includes(place)) write({ ...data, visited: [...data.visited, place] })
 }
 
 /** Returns true if this is a new stamp. */
 export function addStamp(place: string, activity: string): boolean {
-  const data = read()
+  const data = fresh()
   const have = data.stamps[place] ?? []
   if (have.includes(activity)) return false
   write({ ...data, stamps: { ...data.stamps, [place]: [...have, activity] } })
@@ -51,7 +69,7 @@ export function addStamp(place: string, activity: string): boolean {
 
 /** Test/dev helper. */
 export function setStamps(place: string, activities: string[]) {
-  const data = read()
+  const data = fresh()
   write({ ...data, visited: [...new Set([...data.visited, place])], stamps: { ...data.stamps, [place]: activities } })
 }
 

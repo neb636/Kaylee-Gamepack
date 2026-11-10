@@ -8,7 +8,16 @@ export type Route =
   // and deep links into one section of an activity: #/world/<place>/<activity>/<section>?<state> (see world/kit/sections.ts)
   | { name: 'world'; place?: string; activity?: string; section?: string; params: Record<string, string> }
 
+// A broken link (bad percent encoding, e.g. #/world/%) opens the home screen instead of stopping the app.
 function parse(hash: string): Route {
+  try {
+    return parseRoute(hash)
+  } catch {
+    return { name: 'home' }
+  }
+}
+
+function parseRoute(hash: string): Route {
   const [path, query = ''] = hash.replace(/^#/, '').split('?')
   const [, first, second, third, fourth] = path.split('/')
   if (first === 'game' && second) return { name: 'game', id: decodeURIComponent(second) }

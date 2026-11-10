@@ -64,3 +64,47 @@ for (const folder of ['/Kaylee-Gamepack/', '/Kaylee-Gamepack/pr-preview/pr-298/'
     expect(await (await cache.match(index))?.text()).toBe('GAME')
   })
 }
+
+test('a server error answers with the saved copy instead of the error', async () => {
+  const scope = 'https://example.test/Kaylee-Gamepack/'
+  const index = new URL('index.html', scope).href
+  const chunk = new URL('assets/reef-abc123.js', scope).href
+  const stored = new Map<string, Response>([[index, new Response('GAME')], [chunk, new Response('CHUNK')]])
+  const handlers = new Map<string, (event: unknown) => void>()
+  let status = 200
+  const cache = {
+    async put(key: string, response: Response) { stored.set(key, response.clone()) },
+    async match(key: string) { return stored.get(key)?.clone() },
+  }
+  const worker = readFileSync('src/offline/sw.js', 'utf8')
+    .replace('__PRECACHE__', JSON.stringify(['index.html', 'assets/reef-abc123.js', 'assets/new-def456.js']))
+    .replace('__CACHE__', JSON.stringify('gamepack:/Kaylee-Gamepack/'))
+  runInNewContext(worker, {
+    self: { registration: { scope }, addEventListener: (name: string, handler: (event: unknown) => void) => handlers.set(name, handler) },
+    URL, Response, caches: { open: async () => cache },
+    fetch: async () => new Response(status === 200 ? 'FRESH' : 'ERROR', { status }),
+    setTimeout: () => 0,
+  })
+  async function request(path: string, mode: string) {
+    let response: Promise<Response> | undefined
+    const pending: Promise<unknown>[] = []
+    handlers.get('fetch')!({
+      request: { method: 'GET', url: new URL(path, scope).href, headers: new Headers(), mode },
+      respondWith(value: Promise<Response>) { response = value },
+      waitUntil(value: Promise<unknown>) { pending.push(value) },
+    })
+    const result = await response!
+    await Promise.all(pending)
+    return result
+  }
+
+  status = 503
+  expect(await (await request('', 'navigate')).text()).toBe('GAME')
+  status = 404
+  expect(await (await request('assets/reef-abc123.js', 'cors')).text()).toBe('CHUNK')
+  // Nothing saved: the error goes through, and it never replaces a saved copy.
+  expect((await request('assets/new-def456.js', 'cors')).status).toBe(404)
+  expect(await (await cache.match(index))!.text()).toBe('GAME')
+  status = 200
+  expect(await (await request('', 'navigate')).text()).toBe('FRESH')
+})
