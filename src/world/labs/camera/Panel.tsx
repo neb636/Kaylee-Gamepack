@@ -28,6 +28,8 @@ export interface PanelProps {
   screen: { w: number; h: number }
 }
 
+/** The Game list's map entries: `map:<activity>` (an activity id never has a colon). */
+const MAP = 'map:'
 const f = (n: number, d = 2) => String(+n.toFixed(d))
 const v3 = (v: Vector3) => `(${f(v.x)}, ${f(v.y)}, ${f(v.z)})`
 const signed = (n: number, d = 1) => `${n > 0 ? '+' : ''}${f(n, d)}`
@@ -50,6 +52,14 @@ export function CamPanel({ place, view, set, ab, setAb, orbit, setOrbit, frozen,
     ? [...(sectionsFor(place, HUB) ? [{ id: HUB, name: 'Home base', icon: '🏠' }] : []), ...meta.activities, ...(meta.inTheWorks ?? [])].filter((a) => sectionsFor(place, a.id))
     : []
   const activity = here?.activity ?? activities[0]?.id
+  // The country's maps (a section called `map`: the Thailand map in Home base, the Nan map in the road trip) sit at
+  // the top of the Game list, so a map is one pick away instead of buried in its game's sections.
+  const maps = activities.flatMap((a) => {
+    const s = sectionsFor(place, a.id)?.sections.find((x) => x.id === 'map')
+    return s ? [{ id: `${MAP}${a.id}`, activity: a.id, name: s.name.split(':')[0] }] : []
+  })
+  const onMap = maps.find((m) => m.activity === activity && here?.id === 'map')
+  const games = [...maps.map((m) => ({ id: m.id, label: `🗺️ ${m.name}` })), ...activities.map((a) => ({ id: a.id, label: `${a.icon ?? ''} ${a.name}` }))]
   const sections = activity ? (sectionsFor(place, activity)?.sections ?? []) : []
   const state = (() => {
     const qa = world?.qa() ?? {}
@@ -142,11 +152,11 @@ export function CamPanel({ place, view, set, ab, setAb, orbit, setOrbit, frozen,
         <Section title="Scene">
           <Field label={<span className="cl-sub">Game</span>}>
             <Select
-              value={activity ?? ''}
-              options={activities.map((a) => ({ id: a.id, label: `${a.icon ?? ''} ${a.name}` }))}
-              label={<span className="cm-ellipsis">{activities.find((a) => a.id === activity)?.name ?? 'Pick a game'}</span>}
+              value={onMap?.id ?? activity ?? ''}
+              options={games}
+              label={<span className="cm-ellipsis">{onMap ? `🗺️ ${onMap.name}` : (activities.find((a) => a.id === activity)?.name ?? 'Pick a game')}</span>}
               align="right"
-              onChange={(id) => open(id, undefined)}
+              onChange={(id) => (id.startsWith(MAP) ? open(id.slice(MAP.length), 'map') : open(id, undefined))}
             />
           </Field>
           <Field label={<span className="cl-sub">Section</span>}>
