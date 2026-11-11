@@ -28,7 +28,7 @@ export interface ParamSpec {
   doc?: string
 }
 
-/** A link to one state of a section, for the README's "Jump to a game section" directory (scripts/sections-readme.mjs). */
+/** A link to one state of a section, for the "Jump to a game section" page (docs/game-sections.html) (scripts/sections-readme.mjs). */
 export interface StateLink<P extends string = string> {
   /** What Dad reads, e.g. "Pink and golden mushrooms". */
   label: string
@@ -40,7 +40,7 @@ export interface StateLink<P extends string = string> {
   bare?: boolean
 }
 
-/** A README entry: a state link, with other ways into the same step listed in brackets on its line. */
+/** A game-sections page entry: a state link, with other ways into the same step listed in brackets on its line. */
 export interface DirectoryLink<P extends string = string> extends StateLink<P> {
   also?: readonly StateLink<P>[]
 }
@@ -51,10 +51,10 @@ export interface SectionDef<P extends string = string> {
   name: string
   /** Which params matter when starting here (for the section index and PR links). */
   params?: readonly P[]
-  /** The stage of a long activity this section belongs to, e.g. "Getting there": the README lists the sections of one
+  /** The stage of a long activity this section belongs to, e.g. "Getting there": the game-sections page lists the sections of one
    *  group together under it. */
   group?: string
-  /** The section's README entries, when one link named `name` isn't enough: a step per round (`?round=2`), or a
+  /** The section's game-sections page entries, when one link named `name` isn't enough: a step per round (`?round=2`), or a
    *  variant of the step in brackets (`also`: `?steer=tilt`). Leave out for one link to the bare section. */
   links?: readonly DirectoryLink<P>[]
 }
@@ -62,9 +62,9 @@ export interface SectionDef<P extends string = string> {
 export interface ActivitySections<P extends string = string, S extends string = string> {
   place: string
   activity: string
-  /** The README heading's name for an activity that isn't in meta.ts (the finale, the hub). */
+  /** The game-sections page heading's name for an activity that isn't in meta.ts (the finale, the hub). */
   title?: string
-  /** A line under the activity's README heading (a switch every link takes, how to turn on a greybox). */
+  /** A line under the activity's heading on the game-sections page (a switch every link takes, how to turn on a greybox). */
   note?: string
   params: Record<P, ParamSpec>
   sections: readonly (SectionDef<P> & { id: S })[]

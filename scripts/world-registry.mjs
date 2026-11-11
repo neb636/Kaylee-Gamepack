@@ -1,6 +1,6 @@
 // The world's countries and their section links, read in Node from the same files the app uses (each place's meta.ts
 // and every activity's sections.ts, like src/world/registry.ts), so scripts never keep their own lists of activities:
-// the README directory (sections-readme.mjs) and the QA scripts' default screens (qa-lib.mjs) come from here.
+// the game-sections page (sections-readme.mjs) and the QA scripts' default screens (qa-lib.mjs) come from here.
 // Vite loads the TypeScript (it resolves the imports and the pictures those files pull in); a few browser globals are
 // stubbed because router.ts reads the address bar when it loads.
 import { globSync } from 'node:fs'

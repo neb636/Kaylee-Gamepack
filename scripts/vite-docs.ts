@@ -1,4 +1,4 @@
-// Publish the gameplay report beside the app, including on PR previews. Keep the
+// Publish the gameplay report and the game-sections page beside the app, including on PR previews. Keep the
 // allowlist narrow: other docs are repository notes, not automatically public pages.
 import { cpSync, mkdirSync } from 'node:fs'
 import { resolve } from 'node:path'
@@ -15,7 +15,7 @@ export function docs(): Plugin {
     writeBundle() {
       const out = resolve(config.root, config.build.outDir, 'docs')
       mkdirSync(out, { recursive: true })
-      for (const name of ['gameplay-reference-report.html', 'gameplay-reference-assets']) {
+      for (const name of ['gameplay-reference-report.html', 'gameplay-reference-assets', 'game-sections.html']) {
         cpSync(resolve(config.root, 'docs', name), resolve(out, name), { recursive: true })
       }
     },

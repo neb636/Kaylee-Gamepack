@@ -951,6 +951,6 @@ src/world/places/poles/
 - **Greybox risks first:** the fling feel and floe bob (Ice Floe Hop, knobs from day one), the globe spin on a finger (grab the ball, not an invisible swipe zone), and the huddle packing (decide Phaser vs a simple circle-packing loop with `useGameLoop`). Decided (greybox 6): a simple circle-packing loop on SVG, no Phaser.
 - **One camera per scene:** the 2D scenes (Snow Coats, the huddle) are straight-on side views. In 3D the camera frames a box (`engine3d/camera.ts`) in portrait and landscape; Iceberg Maker's underwater view is the same camera sinking below the waterline, not a cross-section drawing.
 - **Distinct art:** sea ice (thin, flat, floating, cracks showing water) must not look like the Antarctic land ice (thick, rising to mountains), and snow drifts must not look like clouds (AGENTS.md).
-- **Sections:** every activity gets its `sections.ts`, and the README's Jump to a game section directory gets a Poles heading in the same PR.
+- **Sections:** every activity gets its `sections.ts`, and the Jump to a game section page (`docs/game-sections.html`, generated) gets a Poles heading in the same PR.
 - **Facts to check before recording:** the Inuktitut hello word; Antarctica's record low (−89.2 °C at Vostok, 1983); ice up to ~4.8 km thick; ~70% of the world's fresh water.
 - **The quiz:** `party/quiz.ts` holds the question pool as data (id, spoken line, answer target). It reuses the hub globe component and the drag pieces; `?q=<id>` opens one question and `?stars=N` sets the badge. Every question line goes in `lines.ts`.

@@ -6,7 +6,7 @@ on something a script could have caught. **Passing QA means it works, not that i
 
 ## Every change, however small
 
-1. `npm run verify` must pass (heavy imports, file names that differ only in case, the README directory, typecheck,
+1. `npm run verify` must pass (heavy imports, file names that differ only in case, the game-sections page, typecheck,
    build; about 2 minutes). Its voice-clip check fails while new lines have no clips: without a key that's expected.
    Push, and the PR records them for you: its preview workflow's voices job uses the `OPENAI_API_KEY` repository secret, commits the clips to your branch and re-runs CI.
 2. Look at what you changed: open its section link, or screenshot it
