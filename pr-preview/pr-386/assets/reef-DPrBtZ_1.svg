@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Great Barrier Reef</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0f2ff"/><stop offset="1" stop-color="#9fd0fb"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <clipPath id="shell"><ellipse cx="56" cy="54" rx="26" ry="18.5" transform="rotate(-12 56 54)"/></clipPath>
+    <clipPath id="head"><circle cx="89" cy="40.5" r="11.5"/></clipPath>
+    <clipPath id="fish"><ellipse cx="91" cy="86" rx="10.5" ry="7"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <!-- sun rays slanting down through the water -->
+  <g fill="#fff" opacity="0.28">
+    <path d="M18 0H34L12 86H2Z"/>
+    <path d="M48 0H58L40 80H32Z"/>
+  </g>
+  <circle cx="58" cy="54" r="50" fill="url(#glow)"/>
+
+  <!-- the sandy floor -->
+  <path d="M0 104C24 98 46 100 64 104C84 108 104 104 120 100V120H0Z" fill="#f5dba8"/>
+  <path d="M0 112C30 108 60 112 84 114C98 115 110 113 120 110V120H0Z" fill="#e3bb7a"/>
+
+  <!-- orange knobbly coral on the right -->
+  <g>
+    <circle cx="100" cy="100" r="9" fill="#ff9c57"/>
+    <circle cx="111" cy="96" r="7.5" fill="#e57a35"/>
+    <circle cx="91" cy="104" r="6.5" fill="#ff9c57"/>
+    <circle cx="107" cy="106" r="7" fill="#e57a35"/>
+    <circle cx="97.5" cy="97" r="3" fill="#ffc595"/>
+    <circle cx="89.5" cy="102" r="2" fill="#ffc595"/>
+    <circle cx="109" cy="93.5" r="2" fill="#ff9c57"/>
+  </g>
+  <!-- pink branching coral on the left -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M22 110C21 100 18 92 12 86M21 100C25 94 26 88 25 82M18 92C15 90 12 90 9 92" stroke="#ff8fb8" stroke-width="5"/>
+    <path d="M32 110C33 100 36 94 41 89M34 99C31 95 30 91 31 86" stroke="#e7699c" stroke-width="5"/>
+  </g>
+  <g fill="#ffc4da"><circle cx="12" cy="86" r="2.5"/><circle cx="25" cy="82" r="2.5"/><circle cx="9" cy="92" r="2.2"/></g>
+  <g fill="#ff8fb8"><circle cx="41" cy="89" r="2.5"/><circle cx="31" cy="86" r="2.5"/></g>
+  <!-- a hot pink sea fan -->
+  <path d="M48.5 111L49.5 104.5C41.5 102.5 38 95.5 41 89.5C44 83.5 53 82 57.5 87C61.5 91.5 61 99.5 53.5 104.5L54.5 111Z" fill="#ff4f9a"/>
+  <path d="M57.5 87C61.5 91.5 61 99.5 53.5 104.5L54.5 111H51.5L52 104C56.5 99 58.5 92.5 57.5 87Z" fill="#d8367f"/>
+  <path d="M51 103.5L44.5 91.5M51.3 103.5L50 86M51.5 103.5L56 90" fill="none" stroke="#ff8fc0" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- the sea turtle, swimming up and to the right, its shadow on the sand -->
+  <ellipse cx="62" cy="106" rx="22" ry="3.5" fill="#4b3a8c" opacity="0.12"/>
+  <g transform="translate(0 4)">
+  <!-- back flipper and far front flipper, behind the shell -->
+  <path d="M33 62C26 63 20 67 17 72C24 72 30 70 35 66Z" fill="#5cc6a6"/>
+  <path d="M68 40C72 31 78 24 87 20C88 26 83 34 76 41Z" fill="#5cc6a6"/>
+  <!-- neck, then the belly plate peeking under the shell -->
+  <path d="M74 48C78 44 82 42 86 42L88 52C84 53 80 54 76 56Z" fill="#8fe3c8"/>
+  <ellipse cx="56.5" cy="57.5" rx="26" ry="17" transform="rotate(-12 56.5 57.5)" fill="#ecc95c"/>
+  <ellipse cx="56" cy="55.5" rx="26" ry="17.5" transform="rotate(-12 56 55.5)" fill="#fbea9a"/>
+  <!-- the shell: green plates, shaded on the lower right -->
+  <g clip-path="url(#shell)">
+    <rect x="26" y="30" width="60" height="50" fill="#48a96c"/>
+    <path d="M44 40L53 36L61 40L60 48L51 51L43 47Z" fill="#73cf86"/>
+    <path d="M64 37L72 37L78 43L75 50L65 50L63 43Z" fill="#73cf86"/>
+    <path d="M40 51L49 54L49 62L41 66L34 61L34 54Z" fill="#73cf86"/>
+    <path d="M53 54L63 53L69 59L65 66L55 67L52 61Z" fill="#73cf86"/>
+    <path d="M71 54L79 52L82 58L77 64L71 62Z" fill="#73cf86"/>
+    <path d="M30 46L38 40L41 45L38 50L32 52Z" fill="#73cf86"/>
+    <path d="M46 42L52 39.5L56 41" fill="none" stroke="#aee8b7" stroke-width="2.5" stroke-linecap="round"/>
+    <ellipse cx="66" cy="68" rx="28" ry="12" transform="rotate(-12 66 68)" fill="#2b7a5f" opacity="0.35"/>
+  </g>
+  <path d="M34 47C38 41 44 37.5 51 36" fill="none" stroke="#c7f3e4" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- near flippers, in front -->
+  <path d="M36 64C32 69 30 75 31 80C36 77 40 72 42 66Z" fill="#8fe3c8"/>
+  <path d="M70 60C74 70 72 82 64 92C60 86 61 76 64 66Z" fill="#8fe3c8"/>
+  <path d="M70 60C74 70 72 82 64 92C68 82 68 72 67 63Z" fill="#5cc6a6"/>
+  <path d="M65.5 70C65 76 64.5 81 63 85" fill="none" stroke="#c7f3e4" stroke-width="2.2" stroke-linecap="round"/>
+  <!-- head: mint, a shaded crescent, a few light spots -->
+  <g clip-path="url(#head)">
+    <rect x="76" y="28" width="26" height="26" fill="#5cc6a6"/>
+    <circle cx="87" cy="38.5" r="11.5" fill="#8fe3c8"/>
+  </g>
+  <circle cx="83" cy="32" r="1.6" fill="#c7f3e4"/><circle cx="87.5" cy="30.8" r="1.2" fill="#c7f3e4"/>
+  <ellipse cx="85" cy="40.5" rx="2.6" ry="3.2" fill="#2b2330"/>
+  <ellipse cx="94.5" cy="39.5" rx="2.3" ry="3" fill="#2b2330"/>
+  <circle cx="86" cy="39.3" r="1.05" fill="#fff"/>
+  <circle cx="95.4" cy="38.4" r="0.95" fill="#fff"/>
+  <path d="M85.5 46Q90 49.5 95 45.5" fill="none" stroke="#2b2330" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="81" cy="45" rx="3" ry="1.8" fill="#ff8fb8" opacity="0.55"/>
+  <ellipse cx="97.5" cy="44" rx="2.4" ry="1.6" fill="#ff8fb8" opacity="0.55"/>
+  </g>
+
+  <!-- the clownfish -->
+  <path d="M100 86L109 80C110 84 110 88 109 92Z" fill="#e57a35"/>
+  <g clip-path="url(#fish)">
+    <rect x="80" y="78" width="22" height="16" fill="#ff9c57"/>
+    <path d="M84 78C82 82 82 89 84 94H89C87 89 87 82 89 78Z" fill="#fff"/>
+    <path d="M94 78C92 82 92 89 94 94H98C96 89 96 82 98 78Z" fill="#fff"/>
+    <ellipse cx="91" cy="91" rx="12" ry="3.5" fill="#d9603a" opacity="0.35"/>
+  </g>
+  <path d="M89 79.5C90 76 93 75 95.5 76.5L94 80Z" fill="#ff9c57"/>
+  <circle cx="84.5" cy="84.5" r="1.7" fill="#2b2330"/>
+  <circle cx="85" cy="84" r="0.6" fill="#fff"/>
+
+  <!-- bubbles -->
+  <g fill="#fff" opacity="0.85">
+    <circle cx="100" cy="30" r="2.5"/><circle cx="104" cy="22" r="1.8"/><circle cx="101" cy="15" r="1.3"/>
+    <circle cx="80" cy="76" r="1.6"/><circle cx="77" cy="70" r="1.1"/>
+  </g>
+</svg>
