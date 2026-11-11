@@ -1,0 +1,9 @@
+{
+  "title": "Outback: a real water hole, and hop to Mama",
+  "checkIn": "fix",
+  "kaylee": "Pip hops into a real water hole (red stones, reeds, a pink lily, sparkles and a big splash ring), then Sparkle says \"Now hop five times to Pip's mama!\" instead of \"to Uluru\".",
+  "questions": [],
+  "tableReads": [["australia", "outback"]],
+  "reels": [{ "name": "outback-waterhole", "moments": ["outback-waterhole"] }],
+  "links": [{ "label": "Play the water hole", "hash": "#/world/australia/outback/water" }]
+}

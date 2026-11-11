@@ -1,0 +1,316 @@
+{
+  "kind": "table-read",
+  "place": "australia",
+  "group": "outback",
+  "title": "Australia › Outback",
+  "intro": "",
+  "page": "australia-outback.html",
+  "audio": null,
+  "lines": 18,
+  "seconds": 40,
+  "missing": 1,
+  "names": 0,
+  "flags": [
+    {
+      "key": "outback.story",
+      "text": "Welcome to the outback! It's hot and dry here.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "outback.pack",
+      "text": "Give Pip the things she needs for the hot sun!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "outback.brrr",
+      "text": "Brrr? No way! It's hot in the outback!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "outback.hop3.touch",
+      "text": "Tap to make Pip hop! Hop three times to the water hole.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "outback.hop3.mouse",
+      "text": "Click to make Pip hop! Hop three times to the water hole.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "outback.hop5",
+      "text": "Now hop five times to Pip's mama!",
+      "flags": [
+        "not recorded",
+        "changed"
+      ],
+      "was": "Now hop five times to Uluru, the big red rock!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "outback",
+        "story"
+      ],
+      "text": "Welcome to the outback! It's hot and dry here.",
+      "voice": "pip",
+      "key": "outback.story",
+      "part": "outback",
+      "when": "",
+      "ms": 3407,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "outback",
+        "pack"
+      ],
+      "text": "Give Pip the things she needs for the hot sun!",
+      "voice": "sparkle",
+      "key": "outback.pack",
+      "part": "outback",
+      "when": "",
+      "ms": 4200,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "outback",
+        "hat"
+      ],
+      "text": "A sun hat for shade!",
+      "voice": "pip",
+      "key": "outback.hat",
+      "part": "outback",
+      "when": "",
+      "ms": 1602,
+      "flags": []
+    },
+    {
+      "path": [
+        "outback",
+        "glasses"
+      ],
+      "text": "Sunglasses for the bright sun!",
+      "voice": "pip",
+      "key": "outback.glasses",
+      "part": "outback",
+      "when": "",
+      "ms": 2130,
+      "flags": []
+    },
+    {
+      "path": [
+        "outback",
+        "water"
+      ],
+      "text": "Water to drink in the heat!",
+      "voice": "pip",
+      "key": "outback.water",
+      "part": "outback",
+      "when": "",
+      "ms": 2288,
+      "flags": []
+    },
+    {
+      "path": [
+        "outback",
+        "brrr"
+      ],
+      "text": "Brrr? No way! It's hot in the outback!",
+      "voice": "pip",
+      "key": "outback.brrr",
+      "part": "outback",
+      "when": "",
+      "ms": 3624,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "outback",
+        "ready"
+      ],
+      "text": "I'm ready! Let's hop!",
+      "voice": "pip",
+      "key": "outback.ready",
+      "part": "outback",
+      "when": "",
+      "ms": 2122,
+      "flags": []
+    },
+    {
+      "path": [
+        "outback",
+        "hop3",
+        "touch"
+      ],
+      "text": "Tap to make Pip hop! Hop three times to the water hole.",
+      "voice": "sparkle",
+      "key": "outback.hop3.touch",
+      "part": "outback › hop3",
+      "when": "",
+      "ms": 4926,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "outback",
+        "hop3",
+        "mouse"
+      ],
+      "text": "Click to make Pip hop! Hop three times to the water hole.",
+      "voice": "sparkle",
+      "key": "outback.hop3.mouse",
+      "part": "outback › hop3",
+      "when": "",
+      "ms": 4632,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "outback",
+        "count",
+        "0"
+      ],
+      "text": "one",
+      "voice": "pip",
+      "key": "outback.count.0",
+      "part": "outback › count",
+      "when": "",
+      "ms": 598,
+      "flags": []
+    },
+    {
+      "path": [
+        "outback",
+        "count",
+        "1"
+      ],
+      "text": "two",
+      "voice": "pip",
+      "key": "outback.count.1",
+      "part": "outback › count",
+      "when": "",
+      "ms": 444,
+      "flags": []
+    },
+    {
+      "path": [
+        "outback",
+        "count",
+        "2"
+      ],
+      "text": "three",
+      "voice": "pip",
+      "key": "outback.count.2",
+      "part": "outback › count",
+      "when": "",
+      "ms": 491,
+      "flags": []
+    },
+    {
+      "path": [
+        "outback",
+        "count",
+        "3"
+      ],
+      "text": "four",
+      "voice": "pip",
+      "key": "outback.count.3",
+      "part": "outback › count",
+      "when": "",
+      "ms": 533,
+      "flags": []
+    },
+    {
+      "path": [
+        "outback",
+        "count",
+        "4"
+      ],
+      "text": "five",
+      "voice": "pip",
+      "key": "outback.count.4",
+      "part": "outback › count",
+      "when": "",
+      "ms": 632,
+      "flags": []
+    },
+    {
+      "path": [
+        "outback",
+        "splash"
+      ],
+      "text": "Splash! A water hole!",
+      "voice": "pip",
+      "key": "outback.splash",
+      "part": "outback",
+      "when": "",
+      "ms": 2196,
+      "flags": []
+    },
+    {
+      "path": [
+        "outback",
+        "hop5"
+      ],
+      "text": "Now hop five times to Pip's mama!",
+      "voice": "sparkle",
+      "key": "outback.hop5",
+      "part": "outback",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "changed"
+      ],
+      "was": "Now hop five times to Uluru, the big red rock!"
+    },
+    {
+      "path": [
+        "outback",
+        "mama"
+      ],
+      "text": "There you are, Pip! Hop into my pouch!",
+      "voice": "mama",
+      "key": "outback.mama",
+      "part": "outback",
+      "when": "",
+      "ms": 2907,
+      "flags": []
+    },
+    {
+      "path": [
+        "outback",
+        "pouch"
+      ],
+      "text": "Baby kangaroos ride in their mama's pouch!",
+      "voice": "pip",
+      "key": "outback.pouch",
+      "part": "outback",
+      "when": "",
+      "ms": 2804,
+      "flags": []
+    }
+  ]
+}
