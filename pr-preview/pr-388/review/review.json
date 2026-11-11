@@ -1,8 +1,0 @@
-{
-  "title": "Koh Samet speedboat: the pink flag",
-  "checkIn": "fix",
-  "kaylee": "The boat's pink flag stands on the back rail now, instead of floating in the air and poking through Mommy's head.",
-  "questions": [],
-  "reels": [{ "name": "samet-boat-flag", "moments": ["thailand-samet-speedboat-spray"] }],
-  "links": [{ "label": "Ride the speedboat", "hash": "#/world/thailand/samet-trip/speedboat" }]
-}
