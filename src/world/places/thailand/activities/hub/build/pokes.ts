@@ -6,6 +6,7 @@ import { bell, clamp, sounds, span, wobble } from '../../../../../../sdk'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { PAL } from '../../../../../engine3d/toon'
 import { sfx } from '../../../sfx'
+import { sounds as house } from '../sounds'
 import type { Pickable } from '../layout'
 import type { Kit } from './kit'
 
@@ -41,7 +42,7 @@ export class Reactor {
   setShutter(open: boolean, instant = false) {
     this.shutter.open = open
     if (instant) this.shutter.value = open ? 1 : 0
-    else if (open) sfx.rattle()
+    else if (open) house.gate()
   }
 
   /** True while something is still moving because of a tap (the frame loop stays at full speed). */
@@ -66,7 +67,7 @@ export class Reactor {
         sfx.whir()
         break
       case 'open':
-        sfx.fwip()
+        house.open()
         break
       case 'tilt':
       case 'flip':
@@ -77,11 +78,10 @@ export class Reactor {
         else sfx.thump()
         break
       case 'birds':
-        sfx.chirp()
-        setTimeout(() => sfx.chirp(), 260)
+        house.birds()
         break
       case 'cat':
-        sfx.meow()
+        house.meow()
         break
       case 'beep':
         sfx.beep()
@@ -90,10 +90,11 @@ export class Reactor {
         sfx.toot()
         break
       case 'puff':
-        sfx.puff()
+        if (p.id === 'rice-cooker') house.steam()
+        else sfx.puff()
         break
       case 'tick':
-        sfx.tick()
+        house.tick()
         break
       case 'wave':
         sounds.sparkle()
@@ -105,10 +106,10 @@ export class Reactor {
         sfx.ding()
         break
       case 'gecko':
-        sfx.tukkae()
+        house.gecko()
         break
       case 'rattle':
-        sfx.jiggle()
+        house.jiggle()
         break
     }
   }

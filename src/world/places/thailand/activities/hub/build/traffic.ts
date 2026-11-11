@@ -3,7 +3,7 @@
 import { Group } from 'three'
 import { P } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
-import { sfx } from '../../../sfx'
+import { sounds } from '../sounds'
 import { scenery, type Kit } from './kit'
 
 const LANE_Z = 6.7
@@ -15,11 +15,16 @@ interface Car {
   /** Seconds until it sets off again (while waiting off-screen). */
   wait: number
   honked: boolean
+  /** Which sound it makes when it passes. */
+  sound: () => void
 }
 
 export class Traffic {
   readonly root = new Group()
   private cars: Car[]
+  /** Seconds until the next motorbike we only hear (the street is busy past the camera), and the next old diesel truck. */
+  private unseen = 4
+  private truck = 14 + Math.random() * 8
 
   constructor(kit: Kit) {
     const wheel = (x: number, z: number, r = 0.22) => P.torus(r, r * 0.35, PAL.ink, { at: [x, r, z] })
@@ -52,8 +57,8 @@ export class Traffic {
       ]),
     )
     this.cars = [
-      { g: scooter, speed: 6.5, wait: 3, honked: false },
-      { g: taxi, speed: 4.6, wait: 11, honked: false },
+      { g: scooter, speed: 6.5, wait: 3, honked: false, sound: () => sounds.bike() },
+      { g: taxi, speed: 4.6, wait: 11, honked: false, sound: () => sounds.taxi() },
     ]
     for (const c of this.cars) {
       c.g.position.set(FROM, 0, LANE_Z)
@@ -63,6 +68,18 @@ export class Traffic {
 
   /** `audible`: she's outside to hear it go by. */
   update(dt: number, audible: boolean) {
+    if (audible) {
+      this.unseen -= dt
+      if (this.unseen <= 0) {
+        sounds.bike(0.45)
+        this.unseen = 3 + Math.random() * 6
+      }
+      this.truck -= dt
+      if (this.truck <= 0) {
+        sounds.truck(0.7)
+        this.truck = 20 + Math.random() * 20
+      }
+    }
     for (const c of this.cars) {
       if (c.wait > 0) {
         c.wait -= dt
@@ -73,7 +90,7 @@ export class Traffic {
       p.y = Math.abs(Math.sin(p.x * 3)) * 0.015
       if (!c.honked && p.x < 4) {
         c.honked = true
-        if (audible) sfx.putt()
+        if (audible) c.sound()
       }
       if (p.x < -FROM) {
         p.x = FROM

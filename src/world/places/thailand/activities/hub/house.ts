@@ -29,6 +29,7 @@ import type { World3D } from '../../../../engine3d/View3D'
 import { say } from '../../../../../sdk'
 import { L } from '../../lines'
 import { sfx } from '../../sfx'
+import { sounds } from './sounds'
 import { snapPhoto } from '../../../../engine3d/photo'
 import { noticeLine } from './notice'
 import { Gecko } from './build/gecko'
@@ -581,7 +582,7 @@ export class House implements World3D {
     // Already doing it? Do it again (bounce higher, sit tighter), no walking.
     if (this.using === p.id && p.use) {
       if (p.use.pose === 'bounce') {
-        sfx.boingAt(k.bounceHigher())
+        sounds.boingAt(k.bounceHigher())
         // After the biggest bounce she flops down along the mattress, head on the pillows at the left wall.
         k.face(k.pose === 'lie' ? 90 : p.use.face * deg)
       } else k.react('wiggle')
@@ -607,7 +608,7 @@ export class House implements World3D {
     k.face(use.face * deg)
     if (p.gentle) k.lookAt(...p.at)
     const pose = () => {
-      if (use.pose === 'bounce') sfx.boingAt(k.bounceHigher())
+      if (use.pose === 'bounce') sounds.boingAt(k.bounceHigher())
       else k.setPose(use.pose)
       if (!this.quiet) this.events.onSpot(this.spot, p.id)
     }
@@ -904,7 +905,8 @@ export class House implements World3D {
       f.update(dt, t)
     }
     this.reactor.update(dt, t)
-    if (this.gecko.update(dt, t) && this.mode === 'inside1') sfx.tukkae()
+    if (this.gecko.update(dt, t) && this.mode === 'inside1') sounds.gecko()
+    this.ambience()
     this.traffic.update(dt, this.mode === 'street' && !this.arriving && !this.photo)
     this.marker.update(dt)
     // Inside or outside? (with a little dead band so she doesn't flicker on the doorstep)
@@ -1050,6 +1052,7 @@ export class House implements World3D {
     a.t += dt
     const k = this.kaylee
     const STOP = 2.8
+    if (a.t === dt) sounds.tukArrive()
     if (a.t >= 99) {
       // Skipped.
       this.parkTuk()
@@ -1082,6 +1085,7 @@ export class House implements World3D {
     this.arrival.done = true
     if (!snap && this.tuk) {
       this.tukDrive = { t: 0 }
+      sounds.tukAway()
       sfx.toot()
     }
     this.rig.setShot(this.shot(), snap)
@@ -1129,7 +1133,20 @@ export class House implements World3D {
     return { grid: this.nav[floor], cells: this.nav[floor].cells() }
   }
 
+  /** The street's bed outside and the quiet hum inside, swapped as she goes through the door. */
+  private bedMode: 'street' | 'indoor' | undefined
+  private stopBed: (() => void) | undefined
+  private ambience() {
+    const want = this.mode === 'street' ? 'street' : 'indoor'
+    if (want === this.bedMode) return
+    this.bedMode = want
+    this.stopBed?.()
+    this.stopBed = want === 'street' ? sounds.streetBed() : sounds.indoorBed()
+  }
+
   dispose() {
+    this.stopBed?.()
+    this.stopBed = undefined
     this.scene.clear()
     this.bag.dispose()
   }

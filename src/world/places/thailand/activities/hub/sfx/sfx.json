@@ -1,0 +1,94 @@
+[
+ {
+  "id": "street-bed",
+  "prompt": "Busy Bangkok-style shophouse street ambience heard from the sidewalk: steady distant traffic, motorbikes buzzing by now and then, a soft city hum, a few cicadas and a distant bird. No horns, no beeping, no voices, no music. Seamless loop.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "bike-1",
+  "prompt": "A Thai motorbike scooter zips past on a city street, buzzy small two-stroke style engine coming near and going away fast. Clean close recording, no horn, no beeping, no voices, no music.",
+  "seconds": 3.5
+ },
+ {
+  "id": "bike-2",
+  "prompt": "A small motorbike putters past on a street, lower and slower engine, coming near and fading away. Clean close recording, no horn, no beeping, no voices, no music.",
+  "seconds": 3.5
+ },
+ {
+  "id": "bike-3",
+  "prompt": "Two motorbikes buzz past one after another on a busy street, high revving little engines near then away. No horn, no beeping, no voices, no music.",
+  "seconds": 3.5
+ },
+ {
+  "id": "truck-diesel",
+  "prompt": "A classic old diesel pickup truck rumbles past slowly, clattering knocking diesel engine chugging and rattling, coming near and going away. Clean outdoor recording, no horn, no beeping, no voices, no music.",
+  "seconds": 5
+ },
+ {
+  "id": "taxi-pass",
+  "prompt": "A small city taxi car drives past on a street at a gentle speed, engine and tyres on asphalt coming near and going away. No horn, no beeping, no voices, no music.",
+  "seconds": 3.5
+ },
+ {
+  "id": "tuktuk-arrive",
+  "prompt": "A tuk-tuk three-wheeler rattles in along a street and slows to a stop, buzzy two-stroke engine dropping to a little idle putter. No horn, no voices, no music.",
+  "seconds": 3
+ },
+ {
+  "id": "tuktuk-away",
+  "prompt": "A tuk-tuk three-wheeler pulls away from the curb, buzzy little engine revving up and going a short way. No horn, no voices, no music.",
+  "seconds": 2
+ },
+ {
+  "id": "gate-rattle",
+  "prompt": "A metal folding shop gate being pulled open along its track, rattling and clanking, accordion shutter. Realistic, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "door-jiggle",
+  "prompt": "A thin aluminium bathroom door handle jiggling and rattling on a locked latch, three quick rattles. No voices, no music.",
+  "seconds": 1
+ },
+ {
+  "id": "door-open",
+  "prompt": "A wooden cupboard door swings open with a soft creak and a gentle thunk. Realistic, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "indoor-bed",
+  "prompt": "Quiet inside of a Thai family shophouse: a steady electric standing fan whirring softly, a faint muffled hum of distant street traffic through the walls, an occasional tiny house creak. Cozy, calm, no voices, no music, no beeping. Seamless loop.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "gecko",
+  "prompt": "A tokay gecko calling from a wall, a croaky 'tuk-kae, tuk-kae' call, three times. Realistic, no music, no voices.",
+  "seconds": 2.5
+ },
+ {
+  "id": "cat-meow",
+  "prompt": "One sleepy small cat meow, soft and sweet, with a little purr at the end. Realistic, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "birds-chirp",
+  "prompt": "Two small tropical songbirds chirping happily, short bright tweets. Realistic, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "clock-tick",
+  "prompt": "A wall clock ticking, four slow tick tock ticks. Close recording, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "rice-cooker",
+  "prompt": "An electric rice cooker bubbling and puffing steam, a soft hiss and a little pop-click of the lid. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "mattress-boing",
+  "prompt": "One soft bouncy mattress spring boing, a single friendly springy bounce on a bed. Toy-like, no music, no voices.",
+  "seconds": 0.8
+ }
+]
