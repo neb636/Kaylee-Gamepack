@@ -1,8 +1,0 @@
-{
-  "title": "Thailand map: friends mark the places",
-  "checkIn": "fix",
-  "kaylee": "Agong, the elephant, Moon and the otter float and wave over their places, and the boats and turtle stay in the water.",
-  "questions": [],
-  "reels": [{ "name": "map-friends", "moments": ["#/world/thailand/hub/map~10", "#/world/thailand/hub/map?stamps=all~4"] }],
-  "links": [{ "label": "The map", "hash": "#/world/thailand/hub/map" }]
-}
