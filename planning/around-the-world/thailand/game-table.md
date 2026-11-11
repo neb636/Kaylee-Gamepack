@@ -367,16 +367,15 @@ Chutes and Ladders on the same table, die and face pawns: the 6 by 6 snake board
 
 Built in one go on one branch (the new studio loop: no greybox for you to play first), and the games switched on for her.
 
-- **Voices** (`lines.ts` `L.games`): Sparkle says the picker's line and each game's how-to once a visit (tap Sparkle on her turn to hear it again; her stuck hint is the same line), and the rule of the 4 the first time a unicorn naps. Her first win in a visit says her name. The cousin talks in a cheerful table voice (`cast.json` `bbplay`, `ganplay`, `kenplay`: the same OpenAI voices, off their phones; `FaceLife` takes more than one voice so their mouth moves with either): sitting down, every third of their turns before a roll (in turn), their own naps, ladders and slides, their win, losing to her, and getting up.
+- **Voices** (`lines.ts` `L.games`): Sparkle says the picker's line and each game's how-to once a visit (tap Sparkle on her turn to hear it again; her stuck hint is the same line), and the rule of the 4 the first time a unicorn naps. Her first win in a visit gets Sparkle's "You won!" (no name: you dropped her name from the dialog, 2026-11-11). The cousin talks in a cheerful table voice (`cast.json` `bbplay`, `ganplay`, `kenplay`: the same OpenAI voices, off their phones; `FaceLife` takes more than one voice so their mouth moves with either): sitting down, every third of their turns before a roll (in turn), their own naps, ladders and slides, their win, losing to her, and getting up.
 - **Faces** (`faces.ts`): each cousin built on their own for a moment (no phone) and Kaylee borrowed in today's look, shot in a tiny studio with the house's renderer (`house.snap` takes a scene), one a frame once she's at the table. Emoji show until then.
 - **Picker cards** (`cards/*.svg`): a pink die and a unicorn castle on a rainbow; a lollipop and the cupcake house on a path of colors; a gold ladder, a striped slide and the star.
-- **The table**: pieces 1.3x (knob `pieceSize`), the camera closer (`camFit` 0.8 trims only the sides, pitch 58), the cousin hops over to the stool in three little hops, the unicorn bag chimes and twinkles from its horn (in the room too), and a win rains sparkles over the board and wobbles the bag.
+- **The table**: pieces 1.3x (knob `pieceSize`), the camera closer and lower (`camFit` 0.8 trims only the sides; your feel-lab numbers: pitch 30, yaw 9, so both faces show across the table), the cousin hops over to the stool in three little hops, the unicorn bag chimes and twinkles from its horn (in the room too), and a win rains sparkles over the board and wobbles the bag.
 - **On for Kaylee**: all three `ready: true`, so the table in her own room opens the picker.
 - **QA**: motion runs `table-sit` (from the room: sit, picker, Play, BB hops over) and `table-kind-loss`; the reel `game-table`.
 
 #### Known small things
 
-- The players' big heads still fill the sides in landscape (the camera's knobs are in the feel lab).
 - The boards themselves are still the greybox shapes (bright, readable); fancier board art waits on her playtest.
 - On a phone in landscape the board is small but every space reads.
 
