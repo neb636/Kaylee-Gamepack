@@ -175,6 +175,279 @@
     "file": "6aec27896584.mp3"
   },
   {
+    "text": "Pick a game and a cousin!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2136,
+    "file": "84c7d78d3344.mp3"
+  },
+  {
+    "text": "Tap the die! Race to the castle!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2904,
+    "file": "8404703cfad3.mp3"
+  },
+  {
+    "text": "Click the die! Race to the castle!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4008,
+    "file": "6c8cb352da2b.mp3"
+  },
+  {
+    "text": "Tap the cards! Hop to that color!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3552,
+    "file": "424b55622d18.mp3"
+  },
+  {
+    "text": "Click the cards! Hop to that color!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2976,
+    "file": "68a16feb8138.mp3"
+  },
+  {
+    "text": "Tap the die! Ladders go up, slides go down!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3624,
+    "file": "830a43c029c1.mp3"
+  },
+  {
+    "text": "Click the die! Ladders go up, slides go down!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3960,
+    "file": "c33519131dc3.mp3"
+  },
+  {
+    "text": "A four! Time for a little nap.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2784,
+    "file": "883e4c7d8b4d.mp3"
+  },
+  {
+    "text": "You won, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1872,
+    "file": "4249d5266667.mp3"
+  },
+  {
+    "text": "You won!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1440,
+    "file": "1fcaa896df3e.mp3"
+  },
+  {
+    "text": "Yay! You did it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2184,
+    "file": "b210b1aa7aba.mp3"
+  },
+  {
+    "text": "Winner winner!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1392,
+    "file": "12bc913db114.mp3"
+  },
+  {
+    "text": "Yay, let's play!",
+    "voice": "bbplay",
+    "sig": "f243d65831",
+    "ms": 1680,
+    "file": "6659f7867092.mp3"
+  },
+  {
+    "text": "My turn!",
+    "voice": "bbplay",
+    "sig": "f243d65831",
+    "ms": 1032,
+    "file": "56482114b023.mp3"
+  },
+  {
+    "text": "Come on, six!",
+    "voice": "bbplay",
+    "sig": "f243d65831",
+    "ms": 1896,
+    "file": "72153ab0ad64.mp3"
+  },
+  {
+    "text": "Nap time! Yawn!",
+    "voice": "bbplay",
+    "sig": "f243d65831",
+    "ms": 3792,
+    "file": "87352cf5a543.mp3"
+  },
+  {
+    "text": "Up I go!",
+    "voice": "bbplay",
+    "sig": "f243d65831",
+    "ms": 1104,
+    "file": "9bf1127830ec.mp3"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "bbplay",
+    "sig": "f243d65831",
+    "ms": 1224,
+    "file": "45711fdaf4a9.mp3"
+  },
+  {
+    "text": "I won! Again?",
+    "voice": "bbplay",
+    "sig": "f243d65831",
+    "ms": 1968,
+    "file": "c2e3bf48ae70.mp3"
+  },
+  {
+    "text": "You won! Good game!",
+    "voice": "bbplay",
+    "sig": "f243d65831",
+    "ms": 2328,
+    "file": "4620abc9d009.mp3"
+  },
+  {
+    "text": "Fun game!",
+    "voice": "bbplay",
+    "sig": "f243d65831",
+    "ms": 1032,
+    "file": "cea2692a5108.mp3"
+  },
+  {
+    "text": "Okay, I'm in!",
+    "voice": "ganplay",
+    "sig": "cfaf66de8b",
+    "ms": 1728,
+    "file": "49c8b92d2d7d.mp3"
+  },
+  {
+    "text": "Here goes!",
+    "voice": "ganplay",
+    "sig": "cfaf66de8b",
+    "ms": 888,
+    "file": "b941e7c95c98.mp3"
+  },
+  {
+    "text": "Big number!",
+    "voice": "ganplay",
+    "sig": "cfaf66de8b",
+    "ms": 1560,
+    "file": "78d293940b4c.mp3"
+  },
+  {
+    "text": "Aw, sleepy!",
+    "voice": "ganplay",
+    "sig": "cfaf66de8b",
+    "ms": 1944,
+    "file": "e3a951a91af6.mp3"
+  },
+  {
+    "text": "Ladder! Yes!",
+    "voice": "ganplay",
+    "sig": "cfaf66de8b",
+    "ms": 2016,
+    "file": "b909e94c9985.mp3"
+  },
+  {
+    "text": "Nooo! Wheee!",
+    "voice": "ganplay",
+    "sig": "cfaf66de8b",
+    "ms": 1920,
+    "file": "6d1c9a837e42.mp3"
+  },
+  {
+    "text": "I won! One more?",
+    "voice": "ganplay",
+    "sig": "cfaf66de8b",
+    "ms": 1824,
+    "file": "0e21aec4ad09.mp3"
+  },
+  {
+    "text": "Nice one, you won!",
+    "voice": "ganplay",
+    "sig": "cfaf66de8b",
+    "ms": 2184,
+    "file": "e5244d6bd6c8.mp3"
+  },
+  {
+    "text": "Good game!",
+    "voice": "ganplay",
+    "sig": "cfaf66de8b",
+    "ms": 1152,
+    "file": "e4837c369ce5.mp3"
+  },
+  {
+    "text": "Let's play!",
+    "voice": "kenplay",
+    "sig": "b2c7f4e55f",
+    "ms": 1416,
+    "file": "c0e03ba1d876.mp3"
+  },
+  {
+    "text": "My go!",
+    "voice": "kenplay",
+    "sig": "b2c7f4e55f",
+    "ms": 1224,
+    "file": "3959af1ebd53.mp3"
+  },
+  {
+    "text": "Lucky roll!",
+    "voice": "kenplay",
+    "sig": "b2c7f4e55f",
+    "ms": 1200,
+    "file": "548db54a4bd8.mp3"
+  },
+  {
+    "text": "Snooze time!",
+    "voice": "kenplay",
+    "sig": "b2c7f4e55f",
+    "ms": 1536,
+    "file": "0f51ece71ddb.mp3"
+  },
+  {
+    "text": "Up, up, up!",
+    "voice": "kenplay",
+    "sig": "b2c7f4e55f",
+    "ms": 2520,
+    "file": "cb2debf03d50.mp3"
+  },
+  {
+    "text": "Whoa! Wheee!",
+    "voice": "kenplay",
+    "sig": "b2c7f4e55f",
+    "ms": 1872,
+    "file": "f5985d0d6ac6.mp3"
+  },
+  {
+    "text": "I won! Again?",
+    "voice": "kenplay",
+    "sig": "b2c7f4e55f",
+    "ms": 1944,
+    "file": "9cfdd21f66e7.mp3"
+  },
+  {
+    "text": "You got me! Good game!",
+    "voice": "kenplay",
+    "sig": "b2c7f4e55f",
+    "ms": 2064,
+    "file": "7744ea2ceed0.mp3"
+  },
+  {
+    "text": "See you!",
+    "voice": "kenplay",
+    "sig": "b2c7f4e55f",
+    "ms": 672,
+    "file": "c013a978308e.mp3"
+  },
+  {
     "text": "Elephants live in the north of Thailand!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
