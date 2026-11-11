@@ -1,25 +1,25 @@
 {
   "kind": "reel",
   "name": "name-before",
-  "title": "Name before",
+  "title": "Before: her name on the trophy",
   "video": "name-before.mp4",
   "gif": "name-before.gif",
-  "seconds": 11,
+  "seconds": 10,
   "browser": "webkit",
   "viewport": "ipad-landscape",
   "moments": [
     {
-      "name": "# world",
-      "where": "#/world?view=map",
+      "name": "australia-trophy-ceremony",
+      "where": "australia-trophy-ceremony",
       "seconds": 4,
-      "fps": 20.4,
+      "fps": 40.5,
       "status": "ok"
     },
     {
-      "name": "# playground",
-      "where": "#/playground",
-      "seconds": 4,
-      "fps": 47.3,
+      "name": "# world",
+      "where": "#/world?view=map",
+      "seconds": 3,
+      "fps": 21.5,
       "status": "ok"
     }
   ]
