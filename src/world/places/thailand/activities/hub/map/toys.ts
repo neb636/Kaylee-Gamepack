@@ -227,15 +227,6 @@ export function sametParts(): BufferGeometry[] {
   ]
 }
 
-/** The pin that bobs over a place: a fat teardrop in the place's color with a white dot. */
-export function pinParts(color: string): BufferGeometry[] {
-  return [
-    P.sphere(0.27, color, { at: [0, 0.66, 0] }, 18),
-    P.cone(0.24, 0.52, color, { at: [0, 0.31, 0], rot: [Math.PI, 0, 0] }, 18),
-    P.sphere(0.125, '#FFFFFF', { at: [0, 0.68, 0.19], scale: [1, 1, 0.55] }, 12),
-  ]
-}
-
 // ------------------------------------------------------------------------------------------------ things that move
 
 const piece = (parts: BufferGeometry[], bag: Bag, px = 1.5) => solid(merge(parts), bag, px)

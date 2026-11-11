@@ -46,13 +46,12 @@ export interface Pin {
   /** The activity whose stamp shows on it. */
   activity: string
   label: string
-  color: string
 }
 export const PINS: Pin[] = [
-  { id: 'nan', at: [100.85, 18.85], activity: 'nan-trip', label: 'Nan, the mountains', color: '#8FE3C8' },
-  { id: 'bangkok', at: [100.75, 14.25], activity: 'mall-trip', label: "Bangkok, Agong's house", color: '#FF8FB8' },
-  { id: 'krabi', at: [98.75, 8.2], activity: 'boat-trip', label: 'Krabi, the boat and the elephants', color: '#7CC4F2' },
-  { id: 'samet', at: SAMET, activity: 'samet-trip', label: 'Koh Samet, the island', color: '#FFD46B' },
+  { id: 'nan', at: [100.85, 18.85], activity: 'nan-trip', label: 'Nan, the mountains' },
+  { id: 'bangkok', at: [100.75, 14.25], activity: 'mall-trip', label: "Bangkok, Agong's house" },
+  { id: 'krabi', at: [98.75, 8.2], activity: 'boat-trip', label: 'Krabi, the boat and the elephants' },
+  { id: 'samet', at: SAMET, activity: 'samet-trip', label: 'Koh Samet, the island' },
 ]
 
 /** Things to poke that Sparkle has something true to say about (lines.ts L.map.pokes). */
@@ -67,9 +66,16 @@ export const POKES: { id: ToyId; at: LonLat; label: string }[] = [
   { id: 'hornbill', at: [102.35, 14.75], label: 'The hornbill' },
   { id: 'tuktuk', at: [100.5, 16.55], label: 'The tuk-tuk' },
   { id: 'dolphins', at: [101.0, 9.9], label: 'The dolphins' },
-  { id: 'boat', at: [97.75, 9.35], label: 'The longtail boat' },
+  { id: 'boat', at: [97.6, 9.75], label: 'The longtail boat' },
   { id: 'palm', at: [99.15, 10.75], label: 'The coconut palm' },
   { id: 'balloon', at: [103.9, 8.3], label: "Sparkle's balloon" },
-  { id: 'turtle', at: [102.8, 10.9], label: 'The sea turtle' },
-  { id: 'barge', at: [100.35, 12.6], label: 'The rice barge' },
+  { id: 'turtle', at: [102.49, 10.9], label: 'The sea turtle' },
+  { id: 'barge', at: [100.61, 11.85], label: 'The rice barge' },
 ]
+
+/** The loops the boats and the turtle go round (east-west and north-south radius, in units), each centered on its POKES
+ *  spot. These spots and sizes were measured against the coast: every point of the loop, bow to stern, stays out at
+ *  sea, so change them together. */
+export const WATER_LOOPS = { boat: [0.45, 0.5], barge: [0.32, 0.5], turtle: [0.35, 0.3] } as const
+/** The speedboat's loop round Koh Samet: a little south of the island, so it clears the mainland to the north. */
+export const SPEEDBOAT_LOOP = { lon: SAMET[0], lat: SAMET[1] - 0.1, rx: 0.48, rz: 0.6 }
