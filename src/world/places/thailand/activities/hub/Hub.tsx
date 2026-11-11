@@ -387,7 +387,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       </AnimatePresence>
       {/* At the game table Sparkle stays quiet while the move plays, gives her hint when it's Kaylee's turn, and says
           how to play again when tapped. */}
-      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking || dressing || (playing && !(tableView?.phase === 'awaiting' || tableView?.picking)) || !!looking} dressing={dressing && mode !== 'lost'} hint={hint} />}
+      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking || dressing || (playing && !(tableView?.phase === 'awaiting' || tableView?.picking)) || !!looking} dressing={dressing && mode !== 'lost'} talk={playing} hint={hint} />}
       {tableView?.open && mode !== 'lost' && <TableUI view={tableView} table={table} />}
       {trips.length > 0 && <Ask open={asking && !arriving && mode !== 'lost'} who={asker} trips={trips} onYes={(t) => yes(t)} onNotYet={() => setAsking(false)} />}
       {debug && <Debug houseRef={houseRef} />}
