@@ -1,0 +1,9 @@
+{
+  "title": "Your PostHog error tracking",
+  "checkIn": "fix",
+  "kaylee": "You get React and console errors alongside unhandled exceptions, plus rage-click events. The SDK and source-map plugin are current. Readable source frames still need POSTHOG_API_KEY and POSTHOG_PROJECT_ID in GitHub; missing settings now produce a deployment warning.",
+  "questions": [],
+  "tableReads": [],
+  "reels": [],
+  "links": []
+}
