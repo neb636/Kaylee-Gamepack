@@ -1,7 +1,12 @@
 {
-  "title": "Nan drive: a small circle instead of the steering wheel",
+  "title": "Steering: a small circle and a dot instead of the wheel",
   "checkIn": "fix",
-  "kaylee": "When she steers the Pajero, a small half-see-through pink circle shows where she pressed, instead of the big steering wheel.",
+  "kaylee": "When she steers (the Nan drive, the penguin slide, the bike ride), a small half-see-through pink circle shows where she pressed and a little dot follows her finger, instead of the big steering wheel.",
   "questions": [],
-  "links": [{ "label": "Drive it", "hash": "#/world/thailand/nan-trip/drive?road=valley" }]
+  "links": [
+    { "label": "The Nan drive", "hash": "#/world/thailand/nan-trip/drive?road=valley" },
+    { "label": "The penguin slide", "hash": "#/world/poles/slide" },
+    { "label": "The bike ride", "hash": "#/world/canada/bike/berms?trail=blue" },
+    { "label": "Whale Watch (wheel steering)", "hash": "#/world/canada/whales/spouts?steer=wheel" }
+  ]
 }
