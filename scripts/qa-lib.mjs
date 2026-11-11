@@ -153,12 +153,12 @@ export async function serve(basePort) {
  */
 export function assertCanLaunchBrowser() {
   if (process.env.CODEX_SANDBOX !== 'seatbelt') return
-  console.error(
+  // Throw (not exit) so callers' finally blocks still stop the preview server they started.
+  throw new Error(
     "Browsers can't start inside Codex's sandbox. Rerun this as one plain command with no redirect, pipe, heredoc or\n" +
       "`;` (for example `node scripts/reel.mjs ...`) so the `node` allow rule in .codex/rules runs it outside the\n" +
       'sandbox, or request escalated permissions for it.',
   )
-  process.exit(2)
 }
 
 export const launch = () => {
