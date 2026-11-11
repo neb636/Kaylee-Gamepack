@@ -65,9 +65,19 @@ Fixes go faster: you ask, the AI fixes it with a short before-and-after clip, yo
    (for a US project, `https://us.i.posthog.com`). Only the main Pages deployment enables PostHog;
    PR previews and local builds do not send events.
    The project token is public and bundled into the website; do not use a PostHog personal API key here.
-   Error tracking captures uncaught errors on its own. For readable stack traces, also add the secret
+   Error tracking captures uncaught errors, unhandled promise rejections, `console.error` calls, and React root errors
+   (including caught and recoverable render errors). Caught errors that are silently ignored still need an explicit
+   `posthog.captureException(error)` where appropriate. Repeated clicks produce PostHog's `$rageclick` events;
+   in a game these can also be intentional rapid play, so use the replay and play diary to interpret them.
+   For readable stack traces, also add the secret
    `POSTHOG_API_KEY` (a PostHog personal API key with *Error tracking: write*) and the variable
    `POSTHOG_PROJECT_ID`: the main deploy then uploads source maps to PostHog and leaves them off the site.
+   The deploy emits a warning and job summary when either value is missing. After configuring them, deploy main and
+   check Error tracking → Symbol sets for the upload, then check a new exception for original source frames.
+   Source maps cannot recreate a stack the browser never supplied (for example, some Safari module-load failures),
+   and cannot repair historical events from builds whose source maps were never uploaded.
+   `node scripts/qa-posthog.mjs` checks exception stacks, React capture without duplicates, and `$rageclick` in a
+   browser with all PostHog traffic intercepted. CI runs this check too; it never sends production test events.
 2. After the first deploy to `main` creates the `gh-pages` branch:
    Settings → Pages → *Deploy from a branch* → `gh-pages` / `(root)`.
 

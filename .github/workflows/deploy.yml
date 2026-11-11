@@ -29,6 +29,10 @@ jobs:
           : "${VITE_POSTHOG_KEY:?Set the VITE_POSTHOG_KEY repository variable to the PostHog project token}"
           : "${VITE_POSTHOG_HOST:?Set the VITE_POSTHOG_HOST repository variable to the PostHog ingestion URL}"
           : "${LOCK_CODE:?Set the THAILAND_CODE repository secret to the family code (Thailand is locked behind it)}"
+          if [ -z "$POSTHOG_API_KEY" ] || [ -z "$POSTHOG_PROJECT_ID" ]; then
+            echo "::warning::PostHog source maps are disabled. Set the POSTHOG_API_KEY secret and POSTHOG_PROJECT_ID variable for readable error stacks."
+            echo "PostHog: source maps were NOT uploaded. Configure POSTHOG_API_KEY (secret, Error tracking: write) and POSTHOG_PROJECT_ID (variable)." >> "$GITHUB_STEP_SUMMARY"
+          fi
           npm run build
         env:
           BASE_PATH: /${{ github.event.repository.name }}/

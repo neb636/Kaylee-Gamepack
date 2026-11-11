@@ -24,14 +24,14 @@
     "motion": "^13.4.2",
     "perfect-freehand": "^1.2.3",
     "phaser": "^4.2.1",
-    "posthog-js": "^1.434.13",
+    "posthog-js": "^1.447.12",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "three": "^0.180.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
-    "@posthog/rollup-plugin": "^1.6.1",
+    "@posthog/rollup-plugin": "^1.6.4",
     "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^26.6.2",
     "@types/react": "^19.3.0",
