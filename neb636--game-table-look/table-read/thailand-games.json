@@ -6,10 +6,10 @@
   "intro": "The game table in Kaylee's room (activities/hub/board-games/, plan: thailand/game-table.md). Sparkle says how to play the first time she opens each game in a visit (tap Sparkle to hear it again), and the rule of the 4 the first time a unicorn naps. The cousin across the table talks in their own voice, now cheerful and playing (cast.json's bbplay, ganplay, kenplay: the same voices, off their phones): sitting down, now and then before a roll, on a nap, a ladder or a slide, and when someone wins. Never after every move.",
   "page": "thailand-games.html",
   "audio": "thailand-games.mp3",
-  "lines": 39,
-  "seconds": 77,
+  "lines": 38,
+  "seconds": 75,
   "missing": 0,
-  "names": 1,
+  "names": 0,
   "flags": [
     {
       "key": "games.howto.unicorn.mouse",
@@ -202,18 +202,16 @@
         "games",
         "won"
       ],
-      "text": "You won, Kaylee!",
+      "text": "You won!",
       "voice": "sparkle",
       "key": "games.won",
       "part": "games",
-      "when": "Her first win in a visit says her name; after that, one of the others in turn.",
-      "ms": 1872,
-      "flags": [
-        "name"
-      ],
+      "when": "Her first win in a visit; after that the cousin says well done (without a cousin, Sparkle's others in turn).",
+      "ms": 1440,
+      "flags": [],
       "span": [
         33.72,
-        35.53
+        35.09
       ]
     },
     {
@@ -222,16 +220,16 @@
         "wonAgain",
         "0"
       ],
-      "text": "You won!",
+      "text": "Yay! You did it!",
       "voice": "sparkle",
       "key": "games.wonAgain.0",
       "part": "games › wonAgain",
       "when": "",
-      "ms": 1440,
+      "ms": 2184,
       "flags": [],
       "span": [
-        37.15,
-        38.52
+        36.71,
+        38.83
       ]
     },
     {
@@ -240,34 +238,16 @@
         "wonAgain",
         "1"
       ],
-      "text": "Yay! You did it!",
-      "voice": "sparkle",
-      "key": "games.wonAgain.1",
-      "part": "games › wonAgain",
-      "when": "",
-      "ms": 2184,
-      "flags": [],
-      "span": [
-        38.87,
-        40.99
-      ]
-    },
-    {
-      "path": [
-        "games",
-        "wonAgain",
-        "2"
-      ],
       "text": "Winner winner!",
       "voice": "sparkle",
-      "key": "games.wonAgain.2",
+      "key": "games.wonAgain.1",
       "part": "games › wonAgain",
       "when": "",
       "ms": 1392,
       "flags": [],
       "span": [
-        41.34,
-        42.67
+        39.18,
+        40.5
       ]
     },
     {
@@ -285,8 +265,8 @@
       "ms": 1680,
       "flags": [],
       "span": [
-        44.29,
-        45.9
+        42.12,
+        43.73
       ]
     },
     {
@@ -305,8 +285,8 @@
       "ms": 1032,
       "flags": [],
       "span": [
-        47.52,
-        48.48
+        45.35,
+        46.32
       ]
     },
     {
@@ -325,8 +305,8 @@
       "ms": 1896,
       "flags": [],
       "span": [
-        48.83,
-        50.68
+        46.67,
+        48.51
       ]
     },
     {
@@ -344,8 +324,8 @@
       "ms": 1152,
       "flags": [],
       "span": [
-        52.3,
-        53.4
+        50.13,
+        51.23
       ]
     },
     {
@@ -363,8 +343,8 @@
       "ms": 1104,
       "flags": [],
       "span": [
-        53.75,
-        54.8
+        51.58,
+        52.63
       ]
     },
     {
@@ -382,8 +362,8 @@
       "ms": 1224,
       "flags": [],
       "span": [
-        55.15,
-        56.32
+        52.98,
+        54.15
       ]
     },
     {
@@ -401,8 +381,8 @@
       "ms": 1968,
       "flags": [],
       "span": [
-        56.67,
-        58.57
+        54.5,
+        56.4
       ]
     },
     {
@@ -420,8 +400,8 @@
       "ms": 2328,
       "flags": [],
       "span": [
-        58.92,
-        61.18
+        56.75,
+        59.02
       ]
     },
     {
@@ -439,8 +419,8 @@
       "ms": 1032,
       "flags": [],
       "span": [
-        61.53,
-        62.5
+        59.37,
+        60.34
       ]
     },
     {
@@ -458,8 +438,8 @@
       "ms": 1728,
       "flags": [],
       "span": [
-        64.12,
-        65.79
+        61.96,
+        63.62
       ]
     },
     {
@@ -478,8 +458,8 @@
       "ms": 888,
       "flags": [],
       "span": [
-        67.41,
-        68.23
+        65.24,
+        66.07
       ]
     },
     {
@@ -498,8 +478,8 @@
       "ms": 1560,
       "flags": [],
       "span": [
-        68.58,
-        70.08
+        66.42,
+        67.92
       ]
     },
     {
@@ -517,8 +497,8 @@
       "ms": 1944,
       "flags": [],
       "span": [
-        71.7,
-        73.59
+        69.54,
+        71.43
       ]
     },
     {
@@ -536,8 +516,8 @@
       "ms": 2016,
       "flags": [],
       "span": [
-        73.94,
-        75.91
+        71.78,
+        73.74
       ]
     },
     {
@@ -555,8 +535,8 @@
       "ms": 1920,
       "flags": [],
       "span": [
-        76.26,
-        78.11
+        74.09,
+        75.94
       ]
     },
     {
@@ -574,8 +554,8 @@
       "ms": 1824,
       "flags": [],
       "span": [
-        78.46,
-        80.22
+        76.29,
+        78.05
       ]
     },
     {
@@ -593,8 +573,8 @@
       "ms": 2184,
       "flags": [],
       "span": [
-        80.57,
-        82.68
+        78.4,
+        80.52
       ]
     },
     {
@@ -612,8 +592,8 @@
       "ms": 1152,
       "flags": [],
       "span": [
-        83.03,
-        84.14
+        80.87,
+        81.97
       ]
     },
     {
@@ -631,8 +611,8 @@
       "ms": 1416,
       "flags": [],
       "span": [
-        85.76,
-        87.11
+        83.59,
+        84.94
       ]
     },
     {
@@ -651,8 +631,8 @@
       "ms": 1224,
       "flags": [],
       "span": [
-        88.73,
-        89.88
+        86.56,
+        87.72
       ]
     },
     {
@@ -671,8 +651,8 @@
       "ms": 1200,
       "flags": [],
       "span": [
-        90.23,
-        91.38
+        88.07,
+        89.21
       ]
     },
     {
@@ -690,8 +670,8 @@
       "ms": 1536,
       "flags": [],
       "span": [
-        93,
-        94.47
+        90.83,
+        92.3
       ]
     },
     {
@@ -709,8 +689,8 @@
       "ms": 2520,
       "flags": [],
       "span": [
-        94.82,
-        97.27
+        92.65,
+        95.1
       ]
     },
     {
@@ -728,8 +708,8 @@
       "ms": 1872,
       "flags": [],
       "span": [
-        97.62,
-        99.44
+        95.45,
+        97.27
       ]
     },
     {
@@ -747,8 +727,8 @@
       "ms": 2376,
       "flags": [],
       "span": [
-        99.79,
-        102.1
+        97.62,
+        99.94
       ]
     },
     {
@@ -766,8 +746,8 @@
       "ms": 2064,
       "flags": [],
       "span": [
-        102.45,
-        104.47
+        100.29,
+        102.3
       ]
     },
     {
@@ -785,8 +765,8 @@
       "ms": 672,
       "flags": [],
       "span": [
-        104.82,
-        105.44
+        102.65,
+        103.27
       ]
     }
   ]

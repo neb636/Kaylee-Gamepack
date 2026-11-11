@@ -12,49 +12,49 @@
       "name": "table-sit",
       "where": "table-sit",
       "seconds": 14,
-      "fps": 52.8,
+      "fps": 39.3,
       "status": "ok"
     },
     {
       "name": "table-rest",
       "where": "table-rest",
       "seconds": 6,
-      "fps": 54.4,
+      "fps": 28.3,
       "status": "ok"
     },
     {
       "name": "table-candy",
       "where": "table-candy",
       "seconds": 7,
-      "fps": 51.8,
+      "fps": 26.8,
       "status": "ok"
     },
     {
       "name": "table-ladder",
       "where": "table-ladder",
       "seconds": 6,
-      "fps": 56.7,
+      "fps": 46.8,
       "status": "ok"
     },
     {
       "name": "table-slide",
       "where": "table-slide",
       "seconds": 6,
-      "fps": 53.5,
+      "fps": 51.7,
       "status": "ok"
     },
     {
       "name": "table-castle",
       "where": "table-castle",
       "seconds": 5,
-      "fps": 45.9,
+      "fps": 45.3,
       "status": "ok"
     },
     {
       "name": "table-kind-loss",
       "where": "table-kind-loss",
       "seconds": 6,
-      "fps": 48.4,
+      "fps": 43.8,
       "status": "ok"
     }
   ]
