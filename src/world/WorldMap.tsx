@@ -12,7 +12,7 @@ import mapArt from './assets/bg-world-map.webp'
 import { DOCK, MapIcon, ShelfIcon } from './HomeIcons'
 import { FitBox } from './kit/Chrome'
 import { WORLD_LINES } from './lines'
-import { places, type PlaceEntry } from './registry'
+import { listed, places, type PlaceEntry } from './registry'
 import { FROM_SHELF, Shelf } from './Shelf'
 import { totalStamps, usePassport } from './stamps'
 import { useHalloween } from '../shell/season'
@@ -184,7 +184,7 @@ export function WorldMap({ view: linked }: { view?: string }) {
             style={{ position: 'absolute', left: `${HOME.x + 5}%`, top: `${HOME.y - 26}%`, width: '9%', zIndex: 2 }}
           />
 
-          {places.map(({ meta }) => (
+          {listed.map(({ meta }) => (
             <Pin
               key={meta.id}
               x={meta.mapPos.x}

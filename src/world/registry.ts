@@ -24,6 +24,11 @@ export const places: PlaceEntry[] = Object.entries(metas)
   .filter((p): p is PlaceEntry => p !== null)
   .sort((a, b) => a.meta.createdAt.localeCompare(b.meta.createdAt))
 
+/** The places on the world map and the game shelf: every place except a `hidden` one (not ready to play), unless the
+ *  link has `?all=1`. Read once at startup. Hidden places still open from their links (#/world/canada). */
+const showAll = [location.search, location.hash.split('?')[1] ?? ''].some((q) => new URLSearchParams(q).get('all') === '1')
+export const listed: PlaceEntry[] = showAll ? places : places.filter((p) => !p.meta.hidden)
+
 export const findPlace = (id: string) => places.find((p) => p.meta.id === id)
 
 // Deep-linkable sections (kit/sections.ts): each activity's sections.ts (or <Name>.sections.ts), found automatically.

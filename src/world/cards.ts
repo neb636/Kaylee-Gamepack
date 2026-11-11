@@ -6,7 +6,7 @@
 import { HUB } from './kit/sections'
 import type { FlagId } from './kit/Flag'
 import { WORLD_LINES } from './lines'
-import { places } from './registry'
+import { listed, places } from './registry'
 
 /** A card's or a row's spoken name (a new country's or activity's line is added to lines.ts with its card). */
 export const nameLine = (key: string): string | undefined => (WORLD_LINES.shelf.games as Record<string, string>)[key] ?? (WORLD_LINES.shelf.rows as Record<string, string>)[key]
@@ -131,7 +131,7 @@ const THAILAND: ShelfRow[] = [
  *  is its ready activities (not `inTheWorks`), each with its icon, or the activity's emoji until it has one. */
 export const SHELF: ShelfRow[] = [
   ...THAILAND.filter(() => places.some((p) => p.meta.id === 'thailand')),
-  ...places
+  ...listed
     .filter(({ meta }) => meta.id !== 'thailand' && meta.activities.length > 0)
     .map(({ meta }) => ({
       id: meta.id,

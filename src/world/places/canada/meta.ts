@@ -78,5 +78,8 @@ const meta: PlaceMeta = {
   ],
   passportLine: L.passport,
   createdAt: '2026-10-27',
+  // Not ready to play yet (2026-11-11): off the world map and the game shelf. #/world/canada and every section link
+  // still work, and ?all=1 shows it on the map and shelf. Delete this line to put it back.
+  hidden: true,
 }
 export default meta
