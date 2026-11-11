@@ -1,39 +1,34 @@
-// The sled-style steering wheel on screen (the Nan drive's, now shared by any 3D country's steering): it appears centred
-// where her finger went down and turns as she pushes left or right (her finger is on its rim). The world shows it,
-// places it (transform), sizes it (--r) and turns it (--turn) every frame (wheel.ts `FingerWheel.draw`). <SteerHint>
-// is the 👆 sliding side to side when she hasn't steered for a while.
+// What shows while she steers, sled style (the Nan drive, the Poles slide, Canada's bike and whales): a small
+// half-see-through circle where her finger went down, and a smaller dot that follows her finger (Dad, 2026-11-11: the
+// old steering wheel looked lame; on the Mac the dot shows the push the finger hides on the iPad). She pushes left or
+// right of the circle to steer. The world shows it, places it (transform), sizes it (--r, a full push) and moves the
+// dot (--dx, --dy: her finger from the circle, px) every frame (wheel.ts `FingerWheel.draw`). <SteerHint> is the 👆
+// sliding side to side when she hasn't steered for a while.
 import { motion } from 'motion/react'
 import { forwardRef } from 'react'
 
+const round = (d: string) =>
+  ({
+    position: 'absolute',
+    left: `calc(var(--r, 72px) * -${d})`,
+    top: `calc(var(--r, 72px) * -${d})`,
+    width: `calc(var(--r, 72px) * ${d} * 2)`,
+    height: `calc(var(--r, 72px) * ${d} * 2)`,
+    boxSizing: 'border-box',
+    borderRadius: '50%',
+    // (White edged so it reads on the road, the grass, the water and the snow.)
+    outline: '3px solid #FFFFFF',
+  }) as const
+
 export const SteerWheel = forwardRef<HTMLDivElement>(function SteerWheel(_, ref) {
   return (
-    <div ref={ref} aria-hidden style={{ position: 'absolute', left: 0, top: 0, width: 0, height: 0, display: 'none', pointerEvents: 'none', zIndex: 19000 }}>
-      <svg
-        viewBox="-50 -50 100 100"
-        style={{
-          position: 'absolute',
-          left: 'calc(var(--r, 72px) * -1)',
-          top: 'calc(var(--r, 72px) * -1)',
-          width: 'calc(var(--r, 72px) * 2)',
-          height: 'calc(var(--r, 72px) * 2)',
-          overflow: 'visible',
-          rotate: 'var(--turn, 0deg)',
-          opacity: 0.92,
-          filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.3))',
-        }}
-      >
-        {/* The rim (white edged so it reads on the road, the grass and the snow), three spokes, the pink middle with a heart. */}
-        <circle r={44} fill="none" stroke="#FFFFFF" strokeWidth={15} />
-        <circle r={44} fill="none" stroke="#6E5C8A" strokeWidth={10} />
-        <circle r={44} fill="none" stroke="#8A78A6" strokeWidth={3} strokeDasharray="5 8" />
-        {[90, 210, 330].map((a) => (
-          <rect key={a} x={-5} y={10} width={10} height={32} rx={4} fill="#6E5C8A" stroke="#FFFFFF" strokeWidth={2} transform={`rotate(${a})`} />
-        ))}
-        <circle r={17} fill="#FF4F9A" stroke="#FFFFFF" strokeWidth={4} />
-        <path d="M0 8 C -11 0, -9 -9, -3.5 -8 C -1.5 -7.6, -0.5 -6, 0 -4.5 C 0.5 -6, 1.5 -7.6, 3.5 -8 C 9 -9, 11 0, 0 8 Z" fill="#FFFFFF" />
-        {/* Where her hands hold it, on top: it swings round as the wheel turns. */}
-        <circle cy={-44} r={8} fill="#FFC83D" stroke="#FFFFFF" strokeWidth={3} />
-      </svg>
+    <div ref={ref} aria-hidden style={{ position: 'absolute', left: 0, top: 0, width: 0, height: 0, display: 'none', pointerEvents: 'none', zIndex: 19000, opacity: 0.5 }}>
+      {/* Where her finger went down. */}
+      <div style={{ ...round('0.4'), border: '6px solid #FF4F9A', background: 'rgba(255,255,255,.35)' }} />
+      {/* Where her finger is now. */}
+      <div style={{ position: 'absolute', transform: 'translate3d(var(--dx, 0px), var(--dy, 0px), 0)' }}>
+        <div style={{ ...round('0.15'), background: '#FF4F9A' }} />
+      </div>
     </div>
   )
 })

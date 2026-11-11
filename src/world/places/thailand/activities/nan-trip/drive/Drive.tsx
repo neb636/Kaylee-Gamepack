@@ -1,5 +1,5 @@
 // The mountain road's screen: the 3D road (mountain.ts) with its tap targets, the circle where her finger went down (sled
-// style: she pushes left or right of it; mountain.ts places it every frame, touch.tsx), the 3 road's
+// style: she pushes left or right of it; mountain.ts places it every frame, engine3d/SteerWheel), the 3 road's
 // big numbers as she counts the bends, the 👆 when she hasn't steered for a while, Sparkle in the other corner
 // (trip/legs/Guide.tsx: she and the family talk out loud in their own voices), and at the end of the road its stop
 // (when she picked one on the Nan map, it opens by itself) or the end card: the stop, 🔁 this road again, 🗺️ back to
@@ -10,14 +10,13 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../../../engine3d/Anchors'
-import { SteerHint } from '../../../../../engine3d/SteerWheel'
+import { SteerHint, SteerWheel } from '../../../../../engine3d/SteerWheel'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
 import { driveAnchors, NanDrive, type DriveHud } from './mountain'
 import { L } from '../../../lines'
 import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { drawPhoto } from '../photo'
 import { Snapshot } from '../Snapshot'
-import { TapCircle } from './touch'
 import { nanRoad, ROAD_IDS, rollDrive, WEATHERS, type RoadId, type Weather } from './roads'
 
 const hashParam = (k: string) => new URLSearchParams(location.hash.split('?')[1] ?? '').get(k) ?? ''
@@ -111,7 +110,7 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
         anchors={(input, els) => (
           <>
             <Anchors list={driveAnchors(road, roll.traffic, to, cup)} els={els} {...input} />
-            <TapCircle ref={stickRef} />
+            <SteerWheel ref={stickRef} />
             {/* Not steering for a while: a finger sliding side to side, the way the wheel steers. */}
             <SteerHint ref={hintRef} />
           </>

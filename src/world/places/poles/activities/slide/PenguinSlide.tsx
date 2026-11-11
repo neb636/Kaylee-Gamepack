@@ -1,7 +1,7 @@
 // Penguin Slide: steer Pebble's papa down the ice and through the sea, home to feed Pebble (slide.ts is the world). A
 // fresh start opens on the story (Pebble is hungry, Papa goes fishing; a tap skips it) while Papa waits at the top. The
-// address bar follows him from stretch to stretch (sections.ts). The steering wheel appears under her finger
-// (engine3d/SteerWheel.tsx, the Nan drive's). Sparkle in the corner (kit/Guide.tsx) says what to do when each stretch
+// address bar follows him from stretch to stretch (sections.ts). The steering circle appears where her finger
+// goes down, a dot following it (engine3d/SteerWheel.tsx, the Nan drive's). Sparkle in the corner (kit/Guide.tsx) says what to do when each stretch
 // starts and when she's stuck, and something true the first time she pokes someone; Papa and Pebble say their own
 // lines when something happens to them (lines.ts, L.slide). His round tummy in the corner fills with the krill he
 // catches. Pebble fed: the stamp (onDone).
