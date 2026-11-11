@@ -4,7 +4,7 @@ The full loop built: on the Thailand map (its voice clips still to record) · Fa
 
 Mommy, Daddy and Kaylee take the speedboat to **Koh Samet**, a little island of white sand off Rayong. The whole island is **one world she roams by herself** (in the spirit of cozy island games like Alba): sandy paths, five real beaches, the green taxi, the sea all round, and real island animals to snap with Mommy's phone for her animal book. On the beaches she **rides the jet ski** with Daddy, builds a sandcastle the waves fill, snorkels with the fish at Ko Kudi and plays hide and seek by the big driftwood tree. At night the fire dancers light up the beach for her. Every word is spoken.
 
-**Next:** Dad plays the whole trip on the iPad from **[the Thailand map](#/world/thailand/hub/map)**: tap the 🏝️ pin, pack, **[the speedboat](#/world/thailand/samet-trip/speedboat)**, **[the island](#/world/thailand/samet-trip/island?at=nadan)**, the four stops in any order, **[the sunset](#/world/thailand/samet-trip/sunset?flags=all)** and **[the fire show](#/world/thailand/samet-trip/fireshow?round=twirl&flags=all)**, home and the pink mermaid stamp. Every line is written and wired; **the 264 new clips need a working OpenAI key** (the one in the main checkout’s `.env` returns 401), then `node scripts/generate-voice.mjs` and listen on the iPad.
+**Next:** The user plays the whole trip on the iPad from **[the Thailand map](#/world/thailand/hub/map)**: tap the 🏝️ pin, pack, **[the speedboat](#/world/thailand/samet-trip/speedboat)**, **[the island](#/world/thailand/samet-trip/island?at=nadan)**, the four stops in any order, **[the sunset](#/world/thailand/samet-trip/sunset?flags=all)** and **[the fire show](#/world/thailand/samet-trip/fireshow?round=twirl&flags=all)**, home and the pink mermaid stamp. Every line is written and wired; **the 264 new clips need a working OpenAI key** (the one in the main checkout’s `.env` returns 401), then `node scripts/generate-voice.mjs` and listen on the iPad.
 
 - a whole day on the island, all four stops and the fire show: 15-25 min
 - touches: 230-350
@@ -25,24 +25,24 @@ Written 2026-11-04. Thailand's fourth family trip, and the first **open world**:
 
 ### The stops (any order)
 
-- 🛥️ **The jet ski at Sai Kaew** (jetski): Dad's must-have. She steers, Daddy holds on behind her: carve and spray, jump the waves, race the jet ski man to the far buoy. After it, the jet ski is hers to ride round the coast.
+- 🛥️ **The jet ski at Sai Kaew** (jetski): the user's must-have. She steers, Daddy holds on behind her: carve and spray, jump the waves, race the jet ski man to the far buoy. After it, the jet ski is hers to ride round the coast.
 - 🏰 **Sandcastle at Ao Hin Khok** (sandcastle): Dig a moat, flip bucket towers, then dig a channel and the waves fill the moat. A crab moves in. Daddy gets buried.
 - 🐠 **Snorkel at Ko Kudi** (snorkel): The snorkel boat to the little island, mask on, float and follow the parrotfish over the coral to a cuttlefish that changes color.
-- 🙈 **Hide and seek at Ao Prao** (hideseek): From Dad's photo: she covers her eyes by the giant driftwood tree, Daddy hides, she finds him. Then her turn to hide.
+- 🙈 **Hide and seek at Ao Prao** (hideseek): From the user's photo: she covers her eyes by the giant driftwood tree, Daddy hides, she finds him. Then her turn to hide.
 - 🔥 **The fire show (the finale)** (fireshow): After all four stamps: the sunset at the driftwood tree, night on Sai Kaew, fire dancers, and Kaylee twirling glowing poi of her own.
 
-## 🧔 Dad's picks and answers
+## 🧔 the user's picks and answers
 
 2026-11-04
 
-- **Where?** **Koh Samet** (เกาะเสม็ด) in Rayong, from the family's real vacation. (Dad typed “koh somae”; the folder is `photos/koh samae/`.)
+- **Where?** **Koh Samet** (เกาะเสม็ด) in Rayong, from the family's real vacation. (the user typed “koh somae”; the folder is `photos/koh samae/`.)
 - **What kind of game?** An **open-world island** in the style of cozy island games (Alba), very fun and very good looking.
 - **Who comes?** Just **Mommy, Daddy and Kaylee**.
-- **What did we do?** The **jet ski** (Dad: be sure she does it), the **resort lunch** on a deck above a cove, the **sunset beach** with the big driftwood tree, the **boat over** to the island, **sandcastles and swimming**, the **fire show** at night, **snorkeling** on a boat trip.
-- **Words?** **Spoken**: every line is recorded in each character's voice (Sparkle gives the instructions), short text only for Dad.
-- **Real places?** Use the photos' GPS for the real locations. **The photos have no GPS left** (see below), so the places come from the real map instead (OpenStreetMap), and Dad answered “plan from answers now” rather than export originals.
+- **What did we do?** The **jet ski** (User feedback: be sure she does it), the **resort lunch** on a deck above a cove, the **sunset beach** with the big driftwood tree, the **boat over** to the island, **sandcastles and swimming**, the **fire show** at night, **snorkeling** on a boat trip.
+- **Words?** **Spoken**: every line is recorded in each character's voice (Sparkle gives the instructions), short text only for the user.
+- **Real places?** Use the photos' GPS for the real locations. **The photos have no GPS left** (see below), so the places come from the real map instead (OpenStreetMap), and the user answered “plan from answers now” rather than export originals.
 
-## 📸 What Dad's photos show
+## 📸 What the user's photos show
 
 `KayleeGamepack-planning-assets/photos/koh samae/`, three photos, kept out of this repo (Kaylee is in them).
 
@@ -52,7 +52,7 @@ Written 2026-11-04. Thailand's fourth family trip, and the first **open world**:
 
 > **📍 No GPS in any of them**
 >
-> The three JPEGs carry only a 202-byte EXIF block (orientation and resolution, location stripped by the export). None of the 133 geotagged originals in `Jul 11, 2022 – Jun 28, 2026/` are on Samet: they are Nan, Bangkok, the Pattaya coast, Hua Hin and Khao Yai. So the map below comes from the real positions of the places in the photos and Dad's list. If Dad exports the Samet originals from Photos with **Include location** on, step 2 can pin the exact spots (the lunch table, the driftwood tree).
+> The three JPEGs carry only a 202-byte EXIF block (orientation and resolution, location stripped by the export). None of the 133 geotagged originals in `Jul 11, 2022 – Jun 28, 2026/` are on Samet: they are Nan, Bangkok, the Pattaya coast, Hua Hin and Khao Yai. So the map below comes from the real positions of the places in the photos and the user's list. If the user exports the Samet originals from Photos with **Include location** on, step 2 can pin the exact spots (the lunch table, the driftwood tree).
 
 ## 🧭 What's really there
 
@@ -212,7 +212,7 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 
 ## 🛥️ The jet ski at Sai Kaew
 
-`jetski`; Dad's must-have, and greybox 1.
+`jetski`; the user's must-have, and greybox 1.
 
 > **👆 Core verb: steer the jet ski with her finger**
 >
@@ -261,7 +261,7 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 
 > **🎛️ Feel on knobs (step 1)**
 >
-> Steering is the thing we got wrong twice (Nan, the bay): the jet ski's top speed, acceleration, turn rate, slide, the finger's dead zone and how big a wave makes a jump are all `knobs()`, with `watch()` graphing her finger against the jet ski's heading. The greybox PR has a `?feel=1` link for Dad's finger.
+> Steering is the thing we got wrong twice (Nan, the bay): the jet ski's top speed, acceleration, turn rate, slide, the finger's dead zone and how big a wave makes a jump are all `knobs()`, with `watch()` graphing her finger against the jet ski's heading. The greybox PR has a `?feel=1` link for the user's finger.
 
 ## 🏰 Sandcastle at Ao Hin Khok
 
@@ -314,7 +314,7 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 
 ## 🙈 Hide and seek at Ao Prao
 
-`hideseek`; from Dad's sunset photo: Kaylee covering her eyes by the driftwood tree.
+`hideseek`; from the user's sunset photo: Kaylee covering her eyes by the driftwood tree.
 
 > **👆 Core verb: walk and look (the island's verb)**
 >
@@ -447,12 +447,12 @@ Built so far: getting there, the island, the book, the four stops and lunch. The
 
 ## 🧱 Build plan
 
-One PR per step; Dad plays each greybox on the iPad before the next. Until the whole trip is ready it's in `inTheWorks`: links work, Kaylee can't get there.
+One PR per step; the user plays each greybox on the iPad before the next. Until the whole trip is ready it's in `inTheWorks`: links work, Kaylee can't get there.
 
 0. **This plan** [done] · 2026-11-04 · PR #312
-   Dad reads it and answers the open questions.
+   the user reads it and answers the open questions.
 1. **Greybox 1: the jet ski** [done] · 2026-11-04 · PR #322
-   Sai Kaew bay in the toon look with placeholder shapes: the beach strip, the hut, the buoy rope, the box jet ski with Kaylee and Daddy on it. The three rounds (`ride`, `waves`, `race`), the wake loop, silly beaching. **Feel on knobs** (`?feel=1`). Built in the island's real coordinates from day one (`island/layout.ts`) so it drops straight into step 2. The riskiest-for-fun piece, and Dad's must-have, so it goes first.
+   Sai Kaew bay in the toon look with placeholder shapes: the beach strip, the hut, the buoy rope, the box jet ski with Kaylee and Daddy on it. The three rounds (`ride`, `waves`, `race`), the wake loop, silly beaching. **Feel on knobs** (`?feel=1`). Built in the island's real coordinates from day one (`island/layout.ts`) so it drops straight into step 2. The riskiest-for-fun piece, and the user's must-have, so it goes first.
 2. **Greybox 2: the island to roam** [done] · 2026-11-04 · PR #326
    The open world itself, in blocks: the coastline and hills at 1:10, the five beaches, the paths over the rocks, the green taxi, Na Dan pier. Lead-to-walk, gallop, the floatie swim, Mommy and Daddy following, the day's light moving with `flags`, 20+ pokes, the pink flags. **The riskiest tech:** a world ~10× the house's size at 60 fps on the iPad (see the tech plan).
 3. **Greybox 3: Mommy's phone and the animal book** [done] · 2026-11-04
@@ -468,9 +468,9 @@ One PR per step; Dad plays each greybox on the iPad before the next. Until the w
 8. **The look** [done] · 2026-11-05
    The island made beautiful: the real sand and water colors, palms, samet trees, pandanus, boulders, the umbrellas, the deck, the sky through the day, the reef. The characters (the jet ski man, the boat captain, the fire dancers). See “The look”.
 9. **The finale: sunset and the fire show** [done] · 2026-11-05 · PR #343 · PR #344
-   Greybox, then its look. The greybox is built (2026-11-05): the sunset at the driftwood tree and the fire show’s three rounds, the feel on knobs. Its look (2026-11-05, after Dad’s iPad notes): a darker beach, real flame shapes, Mommy’s phone, the fire poi on chains, the lanterns as soft paper-lantern glow.
+   Greybox, then its look. The greybox is built (2026-11-05): the sunset at the driftwood tree and the fire show’s three rounds, the feel on knobs. Its look (2026-11-05, after the user’s iPad notes): a darker beach, real flame shapes, Mommy’s phone, the fire poi on chains, the lanterns as soft paper-lantern glow.
 10. **The full loop** [doing] · 2026-11-05 · PR #345
-   Every line in `lines.ts`, the new voices in `cast.json`, clips generated, hints, the facts, the sticker, full QA (layout-qa + playtest-qa) on the trip's sections, then out of `inTheWorks` and onto the Thailand map. Built (2026-11-05): every line, the voices, hints, the facts, the pink mermaid sticker, the shelf row, onto the map. Waiting: recording the clips (the OpenAI key) and Dad’s iPad play.
+   Every line in `lines.ts`, the new voices in `cast.json`, clips generated, hints, the facts, the sticker, full QA (layout-qa + playtest-qa) on the trip's sections, then out of `inTheWorks` and onto the Thailand map. Built (2026-11-05): every line, the voices, hints, the facts, the pink mermaid sticker, the shelf row, onto the map. Waiting: recording the clips (the OpenAI key) and the user’s iPad play.
 
 ## ✅ What's built
 
@@ -480,7 +480,7 @@ Kaylee steers the jet ski with her finger, Daddy behind her, in the island's rea
 
 - **The island from the real map:** `island/layout.ts` holds OSM's real coastline of Ko Samet (way 26609854, 394 points at 1:10) and every beach's sand outline (OSM `natural=beach`), the plan's places from their lat/lon, and the bay laid out in the beach's own frame (`bay(u, v)`: along the sand, out to sea). `island/ground.ts` turns it into ground: wide crystal sand on the beaches, granite boulders and a quick rise elsewhere, a green spine of hills, shallows that slope away gently off the sand.
 - **New in the engine, opt-in so the bay and Canada don't change:** `engine3d/terrain.ts` (a height field from data, toon vertex colors, `heightAt`/`shoreAt`, and a sea texture of depth and shore distance) and `engine3d/lagoon.ts` (tropical water: see-through mint shallows to turquoise, teal and blue in soft bands, a swash line sliding up the sand, rolling waves in the vertex shader that the jet ski rides exactly, lighter crests and white water on big ones, sun glints).
-- **The look, pushed past a greybox (Dad: “make it visually impressive, best graphics in game so far”):** a gradient sky with the sun's glow, fat toon clouds with lavender bellies, Ko Kudi and its neighbors on the eastern horizon, the mainland's blue hills to the north, coconut palms leaning out over the sand, samet trees and forest up the hill, the pink umbrellas and red chairs, the thatched jet ski hut with its bell, and the mermaid on her rocks. All code-built shapes, no generated art.
+- **The look, pushed past a greybox (User feedback: “make it visually impressive, best graphics in game so far”):** a gradient sky with the sun's glow, fat toon clouds with lavender bellies, Ko Kudi and its neighbors on the eastern horizon, the mainland's blue hills to the north, coconut palms leaning out over the sand, samet trees and forest up the hill, the pink umbrellas and red chairs, the thatched jet ski hut with its bell, and the mermaid on her rocks. All code-built shapes, no generated art.
 - **The jet ski** (`jetski/ski.ts`): white with red and yellow stripes and a black seat like the photo, Kaylee up front, Daddy behind with his hands forward, both in life jackets; the jet ski man's has blue stripes.
 - **The toy** (`jetski/jetski.ts`): finger on the water and it heads there (the shared `engine3d/drive.ts`), a rooster tail of spray, side spray on hard turns, a lean, a slide, the nose lifting, a white wake that stays ~20 s (`jetski/wake.ts`).
 - **Ride** (`?round=ride`): the life jacket floats by the jet ski and waits for her tap, then the jet ski man pushes them off. The buoy rope stretches like a rubber band where she pushes and boings her back. **The loop secret:** close a loop of wake and it sparkles and fills with jumping fish (a rough heart test makes the sparkles pink).
@@ -494,13 +494,13 @@ Kaylee steers the jet ski with her finger, Daddy behind her, in the island's rea
 >
 > - **Sai Kaew faces south-south-east, not east:** OSM's sand outline runs west-north-west to east-south-east, from the mermaid's rocks to a little headland. The bay, the camera and the waves follow the real beach.
 > - **The sand is widened:** at 1:10 a real beach would be a 3 m strip, too thin for a hut, umbrellas and people, so beach sand is 15 m deep (the waterline stays where OSM has it).
-> - **More than placeholder blocks:** Dad asked for the best-looking scene so far, so the island, water and sky are already near the look gate. Characters other than the family are still stand-ins.
+> - **More than placeholder blocks:** The user asked for the best-looking scene so far, so the island, water and sky are already near the look gate. Characters other than the family are still stand-ins.
 > - **The rounds move on by themselves:** ride → waves after ~70 s of riding (sooner after a loop), waves → race after 8 jumps. Knobs `jetSilly.ride` and `jetWaves.jumps`.
 
 > **Known small things**
 >
 > - No voices yet (greybox): no spoken lines, only the 🏁 countdown and the end badges. The full loop adds Sparkle's few lines and the jet ski man's.
-> - The jet ski man is a stand-in (a brown, round-eared animal in an orange vest and a cap) until Dad picks his animal (the plan's pick is an otter).
+> - The jet ski man is a stand-in (a brown, round-eared animal in an orange vest and a cap) until the user picks his animal (the plan's pick is an otter).
 > - The heart test for the pink loop is rough: a generous one-dent-and-a-point check.
 > - WebKit on a Mac counts about 100 draw calls and ~420k triangles: measure on the iPad with `?fps` and `?debug=1` before greybox 2 makes the island bigger.
 
@@ -518,7 +518,7 @@ Kaylee roams the north half of Koh Samet by herself: she follows her finger alon
 - **The day moves with the flags** (`scenery.ts` DAY): morning, noon, afternoon, then golden with all four; `?time=night` for the fire show's night (the stars, a crescent moon, fairy lights and lanterns glowing). The sky, the light, the haze, the clouds' bellies, the water's bands and the horizon all follow.
 - **30+ things to poke** (`props.ts`, `layout.ts` POKES): coconut palms (a coconut drops; on Daddy's head if he's under it, with stars), samet trees (the papery bark flutters off), pink umbrellas (spin; three quick pokes and one takes off like a kite with Kaylee holding on), red chairs (fold flat), the beach ball (she kicks it by running into it; it floats back from the sea), the coconut ice cream cart (a cone in her hand), the bead seller's tray (jingles), crab holes (a crab pops out and scuttles), pink bougainvillea (petals burst), longtails and the speedboat (bob and toot), the hammock at Ao Noi Na, the telescope at the viewpoint, the tamarind tree, the deck's cream umbrellas, the mermaid (a magic-flute tune, her tail splashes), the jet ski hut's bell, the banana boat, swimmers, terns, the flags, the taxi (honk), the family.
 - **Places:** Na Dan pier on posts with a blue rail and a shelter (she lands at its end), the little shops by the pier, a beach bar on Sai Kaew, Ao Phai, Ao Wong Duan and Ao Prao with fairy lights, lanterns between the palms at Sai Kaew (where the fire show will be), the resort deck on stilts above Ao Prao with tables and rattan chairs (walk up its steps), the snorkel jetty at Ao Wong Duan, the big silver driftwood tree. Mommy's phone, the animal book and the animals are greybox 3.
-- **The look** (Dad: make it the best-looking place in Thailand): the ground as a fine grid where she walks and a coarse one beyond; coconut palms leaning over every beach, samet trees with pale papery bark, pandanus on stilt roots, round granite boulders on the rocky shores, pink bougainvillea and flowers along the paths, tufts of beach grass; leaves and grass sway in the breeze, soft cloud shadows drift across the island, the crystal sand twinkles, light ripples over the sand in the shallows, hoofprints. **See-through:** whatever stands between the camera and Kaylee dissolves in an even screen-door dither (`island/seethrough.ts`), so the trees never hide her.
+- **The look** (User feedback: make it the best-looking place in Thailand): the ground as a fine grid where she walks and a coarse one beyond; coconut palms leaning over every beach, samet trees with pale papery bark, pandanus on stilt roots, round granite boulders on the rocky shores, pink bougainvillea and flowers along the paths, tufts of beach grass; leaves and grass sway in the breeze, soft cloud shadows drift across the island, the crystal sand twinkles, light ripples over the sand in the shallows, hoofprints. **See-through:** whatever stands between the camera and Kaylee dissolves in an even screen-door dither (`island/seethrough.ts`), so the trees never hide her.
 - **The camera:** on a beach, three-quarters along the sand from over the water's edge (the sea down one side of the screen, the hill and its palms up the other), framed a little out to sea; on the roads and paths it rises over the trees and looks along the way she's going; the taxi and the jet ski get their own. Turns are eased, never with her finger.
 - **Feel on knobs** (`?feel=1`): her trot, gallop and the distance it starts from, where she stops, the swim speed, how deep before she swims, how far out, the swell and when it spins her; the camera's angle on the beach and in the forest, how much it shows, looks ahead, turns and follows, how far it draws plants; the taxi's speed, how close she hops on, the jet ski's steering and how slowly it must land. The lab graphs her finger against her speed.
 
@@ -533,7 +533,7 @@ Kaylee roams the north half of Koh Samet by herself: she follows her finger alon
 >
 > - No voices yet (greybox): no spoken lines, Sparkle's “Let's explore the island!” and each new beach come with the full loop.
 > - **Frame rate, measure on the iPad:** WebKit on a Mac draws 115-170 calls and 290-490k triangles per frame (about 60 calls are the three characters). Plants and props are drawn in 40 m tiles and dropped past 95 m (knob `sametCam.far`); the ground is in 64 m chunks. Open any island link with `?fps=1` or `?debug=1` on the iPad.
-> - The taxi driver is a stand-in puppy in a green shirt (Dad hasn't picked who drives).
+> - The taxi driver is a stand-in puppy in a green shirt (the user hasn't picked who drives).
 > - Mommy and Daddy hop along rather than walk (the code-built family toys have no legs).
 > - `time=night` is a first pass (the fire show's PR gives the night its look).
 
@@ -636,7 +636,7 @@ Two pieces on the island’s real Ao Prao. Lunch on the resort deck (a place, no
 
 > **Known small things**
 >
-> - No voices yet (greybox): the counting, “Found you!” and “Kaylee wins!” show in a bubble for Dad.
+> - No voices yet (greybox): the counting, “Found you!” and “Kaylee wins!” show in a bubble for the user.
 > - Daddy walks straight through things while her eyes are shut (nobody sees), and round the front of them while he searches.
 > - Hooves over the eyes (hers and his) are rough arm poses on top of the rig; the look gate can make them nicer.
 > - Mommy’s photo of the two of them at the tree isn’t in the book yet.
@@ -657,7 +657,7 @@ The way onto the island and home again. The Thailand map gets a 🏝️ pin; the
 
 > **Changed from the plan**
 >
-> - **No `home` section in the house:** the trips end on the Thailand map now (Dad, 2026-10-27), and Mommy’s photo goes on Agong’s wall by itself. See it at [the house’s photo wall](#/world/thailand/hub/downstairs?at=photos). The sections list’s home link is the island with all four flags.
+> - **No `home` section in the house:** the trips end on the Thailand map now (user feedback, 2026-10-27), and Mommy’s photo goes on Agong’s wall by itself. See it at [the house’s photo wall](#/world/thailand/hub/downstairs?at=photos). The sections list’s home link is the island with all four flags.
 > - **The way home is the speedboat at Na Dan** for now: the finale (the sunset and the fire show, step 9) will come between the fourth flag and the boat home.
 > - **No car ride to Ban Phe:** Mommy drives (the trip’s `car` leg), but like every trip from the map, packing goes straight to the first ride; the speedboat starts at Ban Phe pier.
 > - **A replay starts afresh** (the flags down, her book kept); “the jet ski always hers” on a replay and the 🌙 night start wait for the full loop.
@@ -668,7 +668,7 @@ The way onto the island and home again. The Thailand map gets a 🏝️ pin; the
 > - The stamp screen shows the placeholder fiddler crab sticker until the mermaid sticker is drawn (full loop).
 > - **Frame rate, measure on the iPad:** WebKit on a Mac draws ~130 calls in portrait and up to ~360 in landscape out at sea (the whole island’s ground and buildings in view at once, ~530k triangles). Open [the speedboat](#/world/thailand/samet-trip/speedboat?fps=1) with `?fps=1` on the iPad; if it’s slow, the island’s far buildings and ground can hide until the boat is closer.
 > - Kaylee’s hoof in the water is a rough arm pose on top of the rig (the look gate can make it nicer); saving her sandcastle (`castle`) still waits.
-> - The captain is a stand-in (Dad hasn’t picked who drives the boat).
+> - The captain is a stand-in (the user hasn’t picked who drives the boat).
 
 ### The cinema camera for the speedboat (?cine=1) ([done] · 2026-11-05)
 
@@ -681,7 +681,7 @@ A cutscene camera any 3D world can use (`engine3d/cinema.ts`): a director cuts b
 
 ### The look: the island’s colors and its islanders ([done] · 2026-11-05)
 
-The sand, the water and the reef in Koh Samet’s real colors, and the islanders as real animals (Dad: “you pick animals”).
+The sand, the water and the reef in Koh Samet’s real colors, and the islanders as real animals (User feedback: “you pick animals”).
 
 - **The islanders** (`samet-trip/cast.ts`, three new species on the shared chibi rig in `engine3d/characters/animal.ts`): the jet ski man is a smooth-coated **otter** (a wide flat head, little round ears, a two-puff cream muzzle with whiskers, a long thick tail) in his orange tee and life vest; the **pelican** captain (a white head with a little crest, a long pale-pink bill resting down her chest over the orange pouch, a navy polo and a captain’s cap) drives both the speedboat from Ban Phe and the snorkel boat to Ko Kudi; the green taxi’s driver is a **sun bear** in an island-green shirt; and two **tokay geckos** (big round eyes, a wide smile, orange or pink spots, a long banded tail) are the fire dancers. All five are in the character lab under **Koh Samet** (`lab/catalog.ts`).
 - **The fire dancers come out at night** (`island/dancers.ts`): on Sai Kaew by the water, swaying to the beat and swinging fire poi round and round, each flame dragging a fading ribbon of glow; they show when the lamps are lit (`time=night`, the finale’s night) and fade away by day.
@@ -693,7 +693,7 @@ The sand, the water and the reef in Koh Samet’s real colors, and the islanders
 >
 > - **The taxi driver** wasn’t in the plan’s cast; he’s a sun bear (the buffalo is the family’s).
 > - **One captain for both boats:** the plan named “the boat captain”; the same pelican drives the speedboat and the snorkel boat.
-> - **The palms, samet trees, pandanus, boulders, umbrellas, deck and the sky through the day** were already built to the look in greybox 2 (Dad asked for the best graphics from the start), so this step retuned the colors round them.
+> - **The palms, samet trees, pandanus, boulders, umbrellas, deck and the sky through the day** were already built to the look in greybox 2 (the user asked for the best graphics from the start), so this step retuned the colors round them.
 
 > **Known small things**
 >
@@ -704,7 +704,7 @@ The sand, the water and the reef in Koh Samet’s real colors, and the islanders
 
 ### The finale’s look: fire that glows in the dark ([done] · 2026-11-05)
 
-After Dad’s iPad notes on the finale greybox: the beach goes dark for the fire show so the ribbons and the flames glow, the flames get real shapes, Mommy holds her phone for the sunset selfie, the dancers’ fire poi hang on chains, and her shapes float up as soft paper lanterns.
+After the user’s iPad notes on the finale greybox: the beach goes dark for the fire show so the ribbons and the flames glow, the flames get real shapes, Mommy holds her phone for the sunset selfie, the dancers’ fire poi hang on chains, and her shapes float up as soft paper lanterns.
 
 - **A darker night** (`SHOW_NIGHT` in `finale/fireshow.ts`): a deep indigo sky, darker sea and much less moonlight than the island’s usual night (`island/scenery.ts` `setTime` now takes a scene’s own `Key`). The bars’ lamps stay lit. Pools of firelight lie on the sand round each dancer, each flame of the ring and (pink) round Kaylee’s poi.
 - **Real flames** (`finale/flame.ts`, `Flames`): cartoon flames in three flat bands (a red-orange edge, an orange middle, a pale gold core) with a licking, flickering tip and a little tongue breaking off, all in one draw, additive so they glow. The dancers’ fireballs stream back from where they go (longer the faster they spin); the ball that draws the shapes, the castle’s candles and the ring of fire round the beach use them too.
@@ -777,9 +777,9 @@ The whole trip talks (Sparkle in the corner, the family and the islanders in the
 - Seen once in 8 jetty runs: with them single file at the jetty's foot, her finger held ahead can land on Daddy's tap
   target and she stands still (the family's targets swallow the walk, like Ao Prao's umbrellas in #357).
 
-## ❓ Open questions for Dad
+## ❓ Open questions for the user
 
-My picks are in brackets; the plan uses them until Dad says otherwise.
+My picks are in brackets; the plan uses them until the user says otherwise.
 
 - **Who drove the jet ski?** OPEN: [Kaylee steers, Daddy sits behind her with his hands over hers, the jet ski man pushes them off.] Or did the jet ski man drive her?
 - **How did you get to Ban Phe, and over to the island?** OPEN: [Mommy drives the car from Bangkok (a short drive leg, or none: the trip opens at Ban Phe pier), then a **speedboat** to Na Dan pier.] Or Aunty Sri's van, the ferry, a speedboat straight onto a beach?
@@ -788,7 +788,7 @@ My picks are in brackets; the plan uses them until Dad says otherwise.
 - **Which snorkel trip?** OPEN: [A snorkel boat from Ao Wong Duan to **Ko Kudi**.] Or Ko Kham, Bat Island, a longtail?
 - **When was the trip?** OPEN: Month and year, for the plan and the tap-to-hear facts (rainy or dry).
 - **The sticker?** OPEN: [A pink **mermaid**, from the island's story.] Or a parrotfish, or the jet ski.
-- **The new characters' animals?** OPEN: **Answered** (Dad, 2026-11-05: “you pick animals”): the jet ski man is a smooth-coated **otter** in an orange life vest, the boat captain (the speedboat and the snorkel boat) a **pelican** in a navy captain’s cap, the green taxi’s driver a **sun bear**, the fire dancers two **tokay geckos** (the island’s “tukkae”). The family stay unicorns as everywhere.
+- **The new characters' animals?** OPEN: **Answered** (user feedback, 2026-11-05: “you pick animals”): the jet ski man is a smooth-coated **otter** in an orange life vest, the boat captain (the speedboat and the snorkel boat) a **pelican** in a navy captain’s cap, the green taxi’s driver a **sun bear**, the fire dancers two **tokay geckos** (the island’s “tukkae”). The family stay unicorns as everywhere.
 - **The open island is the north half only, shrunk to 1:10?** OPEN: [Yes: Na Dan to Ao Wong Duan plus Ao Prao, about 210 × 240 game meters; the south is hills on the horizon.] A bigger island means longer walks for her short legs.
 - **Leave out the sea giant at Na Dan pier?** OPEN: [Yes, she's the poem's baddie and a bit scary; the mermaid tells the story.]
 
@@ -868,7 +868,7 @@ engine3d/
 
 ## 🎨 The look (for the builder)
 
-The house's flat pastel 3D (toon bands with lavender shadows, ink outlines, blob shadows, no post-processing), pushed to its prettiest. The island should make Dad say “wow” the first time the speedboat rounds the point. Everything is built from code; the photos guide the colors and shapes.
+The house's flat pastel 3D (toon bands with lavender shadows, ink outlines, blob shadows, no post-processing), pushed to its prettiest. The island should make the user say “wow” the first time the speedboat rounds the point. Everything is built from code; the photos guide the colors and shapes.
 
 - 🤍 **Crystal sand**: near-white with a warm cream band, wet sand a soft tan with a shine line
 - 💎 **The water**: clear mint-turquoise over the sand, teal further out, deep blue beyond the buoys; foam bands sliding up the beach
@@ -889,7 +889,7 @@ The house's flat pastel 3D (toon bands with lavender shadows, ink outlines, blob
 
 - **Kaylee** (the modelled vinyl-toy unicorn, wearing her saved look from the wardrobe) with the trip's costumes on top: a pink-and-white life jacket (photo 1), a snorkel mask, a pink floatie ring, a sun hat.
 - **Mommy** (Ji) and **Daddy** (Nick), the unicorns from `characters/looks.ts`; Daddy in a cap and sunglasses like the photos.
-- **The jet ski man**, **the snorkel boat captain** and **the fire dancers**: new characters on the shared chibi rig (`engine3d/characters/animal.ts`), animals as Dad picks, added to the character lab's `lab/catalog.ts`.
+- **The jet ski man**, **the snorkel boat captain** and **the fire dancers**: new characters on the shared chibi rig (`engine3d/characters/animal.ts`), animals as the user picks, added to the character lab's `lab/catalog.ts`.
 - **The animals** for the book: simple chibi critters in the same look, each with one behavior and one reaction to the camera.
 
 ## 🗣️ Voices and lines (for the builder)
@@ -926,7 +926,7 @@ Every phrase goes in `lines.ts` under `L.samet` (tagged by speaker) and is recor
 ## The family following her (issue #357 batch 3, 2026-11-09)
 
 - `Member.update()` puts them back at `baseY` every frame, so a walker must call `setGround(y)`, not write `root.position.y`. That one line was the sinking (road, hills) and the upright walk over the sea.
-- They wait at the water's edge (`edge`, the last dry place she stood) and wave while she swims or rides. Dad's call if he'd rather they swim with floaties.
+- They wait at the water's edge (`edge`, the last dry place she stood) and wave while she swims or rides. The user's call if he'd rather they swim with floaties.
 - `familyGoal` keeps them on screen: it pulls their footstep toward her until it's inside `FAMILY_FRAME`, or comes round to a visible side of her when she's not running. `FAMILY_GAP` is the distance from her and each other.
 - Known: at a full gallop reversing every few seconds in phone portrait they can be off the edge for ~2 s; on a jetty the single file isn't pulled in.
 - Robot: `window.__thaiSametQA().family.nick|ji` gives `x, z, y, ground, deck, screen`; the runs `thailand-samet-family-*` film it.
@@ -977,7 +977,7 @@ Every phrase goes in `lines.ts` under `L.samet` (tagged by speaker) and is recor
 
 ## Finding her way: the beach puppy (issue #357 way-finding batch, card B, 2026-11-10, PR #369)
 
-- Dad picked card B. The whole toy's notes are `samet-wayfinding.md`; in short: a beach puppy (`island/puppy.ts`) runs
+- the user picked card B. The whole toy's notes are `samet-wayfinding.md`; in short: a beach puppy (`island/puppy.ts`) runs
   ahead to a stop she hasn't played, waits on her screen, fetches her when she's idle 8 s, barks the beach's name on
   arrival (Sparkle says it), and his thought bubble is a picture of the beach (drawn from the island). The flag badge
   is gone.

@@ -1,8 +1,8 @@
 # The game shelf's pictures
 
 The world map's list view (`src/world/Shelf.tsx`, cards in `src/world/cards.ts`) shows every place as a **banner**
-and every game as an **icon**. Both are SVG drawn by hand in code. Dad, 2026-10-30: no generated pictures here (the
-generated thumbnails looked bad); follow the flat travel-app illustrations he picked as the style guide.
+and every game as an **icon**. Both are SVG drawn by hand in code. User feedback, 2026-10-30: no generated pictures here (the
+generated thumbnails looked bad); follow the flat travel-app illustrations the user picked as the style guide.
 
 ```
 src/world/shelf/banners/<row>.svg          # favorites, house, mall, krabi, nan, or a country's id

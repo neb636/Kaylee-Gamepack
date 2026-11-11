@@ -12,53 +12,61 @@ Canada (a 3D toy-table map) and the Poles (a 3D globe) mix 3D and 2D activities.
 
 Kaylee loves **unicorns, the color pink, winning, and trophies with her name on them.** She **cannot read yet**.
 
+## How we address the user
+
+Address the user directly as "you" and "your" in chat, PR titles and descriptions, review pages, pitch cards and
+other generated material. Don't call the user "Dad" or narrate their role in the third person (for example,
+"Dad says" or "Dad needs to pick"). Write "Your feedback" or "Choose one" instead. In internal guidance,
+"the user" means the person directing the work; "you" means the agent. Family roles and character names in the
+game, such as Daddy, stay as written.
+
 ## How we work (read this first)
 
-**Dad is the director. Kaylee is the playtester. You are the rest of the studio:** designer, builder, artist, voice
+**The user is the director. Kaylee is the playtester. You are the rest of the studio:** designer, builder, artist, voice
 director, QA and producer.
 
-**Dad's attention is the scarcest thing in this studio.** Making things is cheap for you; his minutes are not. When he
-was handed plan pages, grey boxes and up to 40 PRs a day, he ended up merging without really seeing them. So:
+**The user's attention is the scarcest thing in this studio.** Making things is cheap for you; their minutes are not. When they
+were handed plan pages, grey boxes and up to 40 PRs a day, they ended up merging without really seeing them. So:
 
-1. **Never make Dad read.** He picks from pictures, listens to a table read, watches a reel, watches Kaylee. No plan
-   documents for him, no walls of PR text, no list of fifteen links. Words he does get: one line per idea.
-2. **Ask only what only he can answer:** taste (is it funny, does it feel right), family facts, what Kaylee did. Every
+1. **Keep reviews visual and concise.** They pick from pictures, listen to a table read, watch a reel, watch Kaylee. No plan
+   documents for them, no walls of PR text, no list of fifteen links. Words they do get: one line per idea.
+2. **Ask only what only they can answer:** taste (is it funny, does it feel right), family facts, what Kaylee did. Every
    question a robot can answer, you answer: check it yourself (`docs/qa.md`).
-3. **Let him choose, not approve.** Bring options he can compare (three pitch cards, A or B clips), never one thing to
+3. **Let them choose, not approve.** Bring options they can compare (three pitch cards, A or B clips), never one thing to
    rubber-stamp. At most three questions per check-in, each answerable in a word.
 4. **One toy at a time.** One toy in the works (one branch, one PR), plus small fixes. The next toy starts when this
-   one ships or Dad shelves it.
-5. **Kaylee decides what's fun.** Not you, not a critic agent, not Dad guessing for her. Her playtest and her play
+   one ships or the user shelves it.
+5. **Kaylee decides what's fun.** Not you, not a critic agent, not the user guessing for her. Her playtest and her play
    diary (what she replays, where she quits) decide what gets built, fixed or retired.
 
 ### The toy loop: four check-ins of a few minutes
 
-| | Dad's check-in | You bring him (and only this) | Then, on your own |
+| | User check-in | You bring them (and only this) | Then, on your own |
 |---|---|---|---|
 | 1 | **Pick** (3 min) | Three pitch cards on one page (`pitch` skill): a picture each, the verb in a line, how it grows in three panels | Toy notes from `planning/around-the-world/ACTIVITY-TEMPLATE.md`; build it on one branch; robot-play it; record its lines as scratch |
-| 2 | **Hear** (3 min) | The review page: the table read (every line in its real voice, in play order) and a first reel | Fix what he said. Lines he heard are locked; new or reworded ones go in the next table read |
-| 3 | **Watch Kaylee** (10 min) | A build she can play, and the one-line playtest how-to (`playtest` skill) | Turn his recording and notes into fixes; finish the art, story and payoff |
-| 4 | **Ship** (2 min) | The review page: the reel of the finished toy, what changed since her playtest, at most three questions | After he merges it's on her iPad; the play diary shows what she does with it |
+| 2 | **Hear** (3 min) | The review page: the table read (every line in its real voice, in play order) and a first reel | Fix what they said. Lines they heard are locked; new or reworded ones go in the next table read |
+| 3 | **Watch Kaylee** (10 min) | A build she can play, and the one-line playtest how-to (`playtest` skill) | Turn their recording and notes into fixes; finish the art, story and payoff |
+| 4 | **Ship** (2 min) | The review page: the reel of the finished toy, what changed since her playtest, at most three questions | After they merge it's on her iPad; the play diary shows what she does with it |
 
 - **Between check-ins, don't stop to ask.** Make the reasonable call, say which on the review page, and keep going.
-  Stop only for: family facts (Dad decides who each person is, which animal, who comes on a trip), anything sacred
-  (rule 8), a new package, spending money (Tripo credits, paid APIs), or deleting something of Dad's.
-- **No grey boxes for Dad or Kaylee.** Greybox privately if it helps you, with robots and numbers (`docs/qa.md`). What
+  Stop only for: family facts (the user decides who each person is, which animal, who comes on a trip), anything sacred
+  (rule 8), a new package, spending money (Tripo credits, paid APIs), or deleting something of the user's.
+- **No grey boxes for the user or Kaylee.** Greybox privately if it helps you, with robots and numbers (`docs/qa.md`). What
   Kaylee plays at check-in 3 is bright and voiced (scratch voices are fine; in 3D the toon look comes free), its core
   verb works and every section has a link. If her playtest says the toy isn't fun, change the toy, not the decoration.
 - **Feel numbers are knobs.** When a verb's feel hangs on numbers (steering, dragging, a hop), declare them with
   `knobs()` and put a `?feel=1` link on the review page (`docs/thailand-3d.md`, the feel lab). A "Copy for agent" note
-  from Dad gets baked into the knobs' values.
-- **The fix lane.** Dad asks for a fix or a tweak: one small PR whose review page shows a before-and-after clip
-  (`reel` skill) and one line on what changed. No questions unless one is truly his call.
+  from the user gets baked into the knobs' values.
+- **The fix lane.** The user asks for a fix or a tweak: one small PR whose review page shows a before-and-after clip
+  (`reel` skill) and one line on what changed. No questions unless one is truly their call.
 - **Every PR has a review page** (`ship` skill): `review/review.json` → `node scripts/review.mjs` → publish → push.
   The PR body leads with what Kaylee gets, the reel's GIF, the review page link and the questions. Code notes go below,
   folded, for whoever reads code.
-- **Codex reviews every PR.** Handle its findings yourself (`ship` skill); never pass them to Dad.
+- **Codex reviews every PR.** Handle its findings yourself (`ship` skill); never pass them to the user.
 
 ### Kaylee's loop
 
-- **Her playtest** (check-in 3): Dad hands her the iPad, says little, screen-records. You pull her words and stuck
+- **Her playtest** (check-in 3): the user hands her the iPad, says little, screen-records. You pull her words and stuck
   moments from the recording (`playtest` skill). Recordings of Kaylee never go in this repo: it's public.
 - **Her play diary:** the main site tells PostHog which section she's in, how long, how many taps, when a hint fires
   and when she leaves before the stamp. No names, no pictures. `kaylee-week` turns a week of it into her favorites,
@@ -95,7 +103,7 @@ was handed plan pages, grey boxes and up to 40 PRs a day, he ended up merging wi
 
 ## Design rules
 
-1. **No reading required.** Every instruction is spoken. Show short text too (for Dad), with a way to hear it again
+1. **No reading required.** Every instruction is spoken. Show short text too (for the user), with a way to hear it again
    (`<SayButton>`, the prompt bubble). Every exact phrase that can be spoken is listed for recording (`docs/voices.md`);
    keep random speech finite. Never use the iPad's built-in voice.
 2. **Every device.** She plays on the iPad and iPhone (she taps with a finger) *and* on the MacBook (she clicks with
@@ -124,8 +132,8 @@ was handed plan pages, grey boxes and up to 40 PRs a day, he ended up merging wi
    game to do something offensive by accident (where a character puts its feet, a Buddha as a toy you poke, playing
    with offerings). Don't put a temple or a Buddha in a new game or country: not as a stop, an activity, a prop, a
    landmark on a map or road, or a fact. If a plan or a real place the family visited calls for one, leave it out and
-   tell Dad instead of building it. (Wat Phumin was dropped from the Nan trip for this, 2026-10-25.)
-9. **Family and privacy.** Dad decides the family: who each person is, which animal, who comes on a trip. Ask, don't
+   tell the user instead of building it. (Wat Phumin was dropped from the Nan trip for this, 2026-10-25.)
+9. **Family and privacy.** The user decides the family: who each person is, which animal, who comes on a trip. Ask, don't
    invent family facts. Photos and recordings of Kaylee stay out of this public repo; describe them in words.
    Thailand's house is the family's real home and its code is locked behind the family code: read
    `docs/thailand-3d.md` before touching it.
@@ -162,7 +170,7 @@ fixes), `kaylee-week` (the play diary), `sfx` (first-pass ElevenLabs sound effec
   Changed lines? Push them: the PR records them for you: its preview workflow's voices job uses the `OPENAI_API_KEY` repository secret, commits the clips to your branch and re-runs CI. `git pull` to get the clips. With a key of your own you can record
   them first (`node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`); you don't need one.
 - Every section of every activity opens from a link, with its state in the URL (`tests/sections.spec.ts`).
-- Ask Dad before adding a package (`docs/building.md`, Dependencies).
+- Ask the user before adding a package (`docs/building.md`, Dependencies).
 - Don't run `npm run test` or `npm run check` locally; CI runs the specs on the PR.
 
 ## Before you finish

@@ -1,6 +1,6 @@
 # Voices
 
-Every spoken line is recorded ahead of time and played from a file. Dad hears a toy's lines as a **table read**
+Every spoken line is recorded ahead of time and played from a file. The user hears a toy's lines as a **table read**
 before they are final (`AGENTS.md`, check-in 2), so record them early as scratch: they're cheap to change.
 
 Every line is recorded ahead of time with OpenAI text-to-speech (`scripts/generate-voice.mjs`; the iPad only plays
@@ -22,7 +22,7 @@ world feel alive and helps a child who can't read know who is talking:
   Tap → click; finger on / hold → click and hold; swipe, flick, slide your finger → drag (fast); rub → click and
   wiggle; pinch, tilt → don't ask for them on the Mac. The app picks one version when it loads; the scripts record
   both, and the table read flags **touch only** lines. Text on screen that names a gesture uses `onDevice` too.
-- **Don't nag (Dad, 2026-10-29: too many lines repeated by themselves).** A "stuck" hint asks `spendHint(line)` (SDK,
+- **Don't nag (user feedback, 2026-10-29: too many lines repeated by themselves).** A "stuck" hint asks `spendHint(line)` (SDK,
   `src/sdk/hints.ts`) before it speaks: the first time it's only shown (glow, finger, Sparkle's bubble), then said at
   most twice per visit to the app, 25 s apart from any other hint. `kit/Guide` does this for you; `voice={false}` for a
   hub. Hubs and free-play toys (the maps, the house, the globe, the train) never speak an idle hint: they glow. A
@@ -41,5 +41,5 @@ world feel alive and helps a child who can't read know who is talking:
 into one mp3 with a script sheet beside it: who says what, when it plays (the comment above it in `lines.ts`), how long,
 tap a line to hear it. `--changed` makes one for every group this branch changed and marks new and reworded lines (the
 old words shown). It flags lines that aren't recorded, run over 3 s, say her name, use temple or Buddha words, or have
-curly quotes. Fix the easy flags before Dad listens. Write `lines.ts` in play order, with a comment above each line or
+curly quotes. Fix the easy flags before the user listens. Write `lines.ts` in play order, with a comment above each line or
 list saying when it plays: the table read is only as good as that order and those comments.

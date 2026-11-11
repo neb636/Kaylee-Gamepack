@@ -72,6 +72,6 @@ For each activity, answer honestly:
 - **Choices:** at least a few moments where *she* decides (which way, which color, which friend first, how big).
 - **Pokeables:** at least 5 things in each scene that react to a tap and aren't the answer.
 - **Grows:** does the verb get richer three times? Does something visibly build up (the payoff)?
-- **Surprise:** at least one funny or magical moment she'll want to show Dad.
+- **Surprise:** at least one funny or magical moment she'll want to show the user.
 - **Learning by doing:** is the country's lesson something she *does*, not just hears?
 - **Replay:** would she want to play it again tomorrow? What's different the second time (random friends, a new boat)?

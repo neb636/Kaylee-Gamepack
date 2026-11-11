@@ -1,19 +1,19 @@
 ---
 name: ship
-description: Build and publish the review page and open or update the PR for a toy check-in or a fix, so Dad judges it in a few minutes on his phone (a reel to watch, a table read to hear, at most three questions) instead of reading a wall of PR text. Use whenever you commit work in this repo and open or update a pull request, and to handle Codex's review.
+description: Build and publish the review page and open or update the PR for a toy check-in or a fix, so the user judges it in a few minutes on their phone (a reel to watch, a table read to hear, at most three questions) instead of reading a wall of PR text. Use whenever you commit work in this repo and open or update a pull request, and to handle Codex's review.
 ---
 
 # Ship: the review page is the PR
 
-Dad reviews on his phone, in the few minutes he has. The PR body leads with what Kaylee gets and a reel moving
-inline; one tap opens the review page with the table read and his questions. Everything for code readers is folded
-below. Never paste fifteen links or a page of prose at him.
+The user reviews on their phone, in the few minutes they have. The PR body leads with what Kaylee gets and a reel moving
+inline; one tap opens the review page with the table read and their questions. Everything for code readers is folded
+below. Never paste fifteen links or a page of prose at them.
 
 ## 1. Branches and PRs
 
 - **A toy:** one branch (`<your GitHub login>/<toy>`) and one PR for its whole life, opened as a **draft** at check-in
   1 and marked ready only at check-in 4 (ship). A draft can't be merged by accident, so nothing reaches Kaylee before
-  Dad has seen it finished.
+  the user has seen it finished.
 - **A fix:** its own small branch and PR, ready for review at once.
 - Commit with clear messages. Before pushing a shallow clone's branch, `git fetch origin main` (and rebase if needed).
 
@@ -30,6 +30,14 @@ below. Never paste fifteen links or a page of prose at him.
    The PR preview copies the page to `<preview>/review/` and adds the script sheet of any lines the PR changes.
 
 ## 3. The PR body
+
+Address the reader directly in the PR and review brief: "you", "your feedback", "choose one". Don't refer to the
+reader as "Dad" or describe what they need to do in the third person. Apply this to every text field in
+`review/review.json`, including questions, pitch cards, captions and link labels. Family character names in a toy's
+story stay as written.
+
+For guidance, tooling or documentation changes, summarize what changes for the reader in plain language. A short
+review page is enough; reels and table reads are only needed when play or spoken lines change.
 
 Write it to a file and open the PR with the REST API (it works in every session; GraphQL doesn't in the cloud):
 
@@ -61,7 +69,7 @@ What changed and where, decisions you made on your own (and why), `npm run verif
 The first PR of a toy has no preview yet: write the body, then edit in the links once the number exists. At check-in 4
 the top line says what changed since Kaylee's playtest. A fix's top line is the before and after, one line.
 
-## 4. Codex's review (handle it; Dad never sees it)
+## 4. Codex's review (handle it; the user never sees it)
 
 Codex reviews every PR on open and on each push. Right after a push, watch it once in the background (it's silent
 until it prints and stops by itself after 7 minutes): `node scripts/watch-codex-review.mjs --pr <n>`. It prints
@@ -76,14 +84,14 @@ until it prints and stops by itself after 7 minutes): `node scripts/watch-codex-
      whose fix adds code; an overstated severity; a style preference): react 👎 (`-f content=-1`) and reply
      `Not worth it: <why>`. A feature that doesn't work as built (a line that can never play, a crash, a lost save, a
      growing leak) is never nitpicky.
-   - **Needs Dad** (art, family, what a toy does): say so in one line on the review page's next version, not in a
-     thread he has to find.
+   - **Needs your input** (art, family, what a toy does): say so in one line on the review page's next version, not in a
+     thread they have to find.
 3. One round only: after a pushed fix, comment `@codex review` once with a line on what changed. Then stop.
 
 ## 5. Small rules
 
 - `npm run verify` before every push (`docs/qa.md`). A failing voice check means unrecorded lines: the voices job
-  records them after you push. If that job fails, say so at the top of the PR; never leave it for Dad to discover
+  records them after you push. If that job fails, say so at the top of the PR; never leave it for the user to discover
   on the iPad.
 - Deep links for the review page come from `node scripts/pr-links.mjs --pr <n>` and the section's address bar; put the
   one or two that matter in `links`, not in the PR body.

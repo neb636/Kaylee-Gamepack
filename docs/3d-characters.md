@@ -11,7 +11,7 @@ every walk, wave, wai, outfit and voice keeps working.
 ## 1. The concept picture (Codex image gen, one image at a time)
 
 **The look: a soft-vinyl designer art toy.** Smooth matte plastic, puffy rounded shapes, soft studio light, glossy
-eyes, a very simple cute face. (Dad's style reference was a Pop Mart-style bunny figure. The earlier flat-illustration
+eyes, a very simple cute face. (the user's style reference was a Pop Mart-style bunny figure. The earlier flat-illustration
 look made Tripo meshes that read as "the same as before".)
 
 What worked:
@@ -22,7 +22,7 @@ What worked:
   stay in `~/repos/KayleeGamepack-planning-assets/photos/family/<id>/`, never in this repo.
 - **Normal-ish chibi proportions:** ask for the head to be about a third of her height. Copying a big-headed picture
   keeps the big head; say the proportion as a number.
-- **One color per animal:** no mismatched pastel limbs (the style reference had them; Dad didn't want them).
+- **One color per animal:** no mismatched pastel limbs (the style reference had them; the user didn't want them).
 - **The final picture is the Tripo input:** exactly front-facing, symmetrical **A-pose** (arms ~40° out with a clear
   gap to the body, legs apart with a gap), gentle smile, eyes forward, even lighting, no floor, no shadow.
 - **Transparent background works:** say "WITH A TRANSPARENT BACKGROUND (the PNG must have a real alpha channel)".
@@ -127,7 +127,7 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   nodes onto a `Rig`, so `Avatar` (`new Avatar(bag, model)`) walks, poses, waves and wears outfits unchanged.
 - **Look:** each mesh's texture goes on a `MeshToonMaterial` with the shared `toonGradient()`, and each piece gets an
   ink hull, except the eye domes, 1.35 px on screen (`PX` 1.8 × the game-wide `TUNE.outline` 0.75; 0.45 of the
-  code-built toys' 3 px: Dad's pick, it hides most of what goes wrong at the bangs and shoulders). A scanned-looking mesh needs a **smoothed hull** (`smoothHull`): the plain `makeHull`
+  code-built toys' 3 px: the user's pick, it hides most of what goes wrong at the bangs and shoulders). A scanned-looking mesh needs a **smoothed hull** (`smoothHull`): the plain `makeHull`
   zigzags along low-poly hair tips and bangs and blotches in tight creases. It takes the normals from a Taubin-smoothed
   copy but keeps the real surface, so the line hugs the shape (a smoothed hull sags below the bangs and leaves a gap
   between hair and line). Only the face stays smoothed and stood 4 mm off, which keeps ink out of its dimples and eye
@@ -168,7 +168,7 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
 
 ## Open questions
 
-- A GLB of a family member is OK in this repo (Dad, 2026-10-25); photos never are.
+- A GLB of a family member is OK in this repo (user feedback, 2026-10-25); photos never are.
 - The wai with tilted arms; the painted mouth (a little toothy close up, with dark ticks at its corners: paint them
   out of the texture).
 - The code-built characters still have no legs of their own (only the modelled Kaylee does).

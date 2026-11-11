@@ -49,15 +49,15 @@ wifi before a trip so it saves the changed files.
 
 ## How new things get made
 
-One toy at a time, and Dad never has to read a plan or play a grey box (`AGENTS.md`, "How we work"):
+One toy at a time, and you never have to read a plan or play a grey box (`AGENTS.md`, "How we work"):
 
-1. **Pick:** the AI makes three one-page pitch cards; Dad picks one.
-2. **Hear:** the AI builds the toy and makes a **table read** (every line in the real voices, in play order); Dad
-   listens and says what to change.
-3. **Watch Kaylee:** she plays it on the PR preview while Dad watches (and screen-records); the AI turns that into fixes.
+1. **Pick:** the AI makes three one-page pitch cards; you pick one.
+2. **Hear:** the AI builds the toy and makes a **table read** (every line in the real voices, in play order); you
+   listen and say what to change.
+3. **Watch Kaylee:** she plays it on the PR preview while you watch (and screen-record); the AI turns that into fixes.
 4. **Ship:** the PR's **review page** has a reel of the finished toy and at most three questions. **Merge** → it deploys.
 
-Fixes go faster: Dad asks, the AI fixes it with a short before-and-after clip, Dad merges.
+Fixes go faster: you ask, the AI fixes it with a short before-and-after clip, you merge.
 
 ## One-time setup
 
@@ -88,7 +88,7 @@ Fixes go faster: Dad asks, the AI fixes it with a short before-and-after clip, D
   Try them at `#/playground`.
 - `src/shell/`: the app wrapper (splash, trophy ceremony); the world map is the home screen.
 - `planning/around-the-world/`: the builder's notes per country and trip (`thailand.md`, `thailand/nan-trip.md`, ...)
-  and `ACTIVITY-TEMPLATE.md` for a new toy's notes. They're for the agents; Dad sees pitch cards, table reads and reels.
+  and `ACTIVITY-TEMPLATE.md` for a new toy's notes. They're for the agents; you see pitch cards, table reads and reels.
 - `AGENTS.md`: how we work and the rules AI agents follow (read this to change how toys are made).
   `docs/play-design.md` says what makes an activity fun; `docs/building.md` is the technical guide.
 - `scripts/table-read.mjs`, `scripts/reel.mjs`, `scripts/review.mjs`: the review tools (hear the script, watch the

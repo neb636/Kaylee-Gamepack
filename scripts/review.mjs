@@ -1,5 +1,5 @@
-// The review page: one phone-sized page per PR with everything Dad needs to judge it in a few minutes, and nothing
-// he has to read twice. A reel to watch, a table read to hear, and at most three questions. The PR body links it and
+// The review page: one phone-sized page per PR with everything the user needs to judge it in a few minutes, and nothing
+// they have to read twice. A reel to watch, a table read to hear, and at most three questions. The PR body links it and
 // shows the reel's GIF inline.
 //
 //   node scripts/review.mjs                       build review/index.html from review/review.json
@@ -7,6 +7,9 @@
 //   node scripts/review.mjs --changed[=<ref>]     also add a table read for every group of lines that changed
 //   node scripts/review.mjs --publish             push review/ to the review-pages branch (see below)
 //   --out=<dir> (default review/)   --pr=<n> (links "Open the PR")   --keep (CI: keep published table reads)
+//
+// Address the reader as "you" and "your" in every brief field; use direct prompts such as "Choose one".
+// Family character names in the toy's story stay as written.
 //
 // review/review.json (the agent writes it; it's the brief for this check-in):
 //   {
@@ -19,7 +22,7 @@
 //     "links": [{ "label": "Play it", "hash": "#/world/thailand/mall-trip/barber" }],
 //     "listens": [{ "title": "The salt hut", "audio": "sfx/salt.mp3", "items": ["the bucket down the well", "..."] }],
 //                                                   // sound effects: one track each, the items numbered in play order
-//     "pitches": [{                                                 // check-in 1 only: three cards, Dad picks one
+//     "pitches": [{                                                 // check-in 1 only: three cards, the user picks one
 //       "title": "Snow Cones with Pip", "image": "pitch/snow-cones.png",   // a picture, relative to review/
 //       "finger": "Tilt the syrup bottle and paint the ice.",
 //       "grows": [["🍧", "one cone"], ["🌈", "stripes to order"], ["🐨", "a koala queue"]],

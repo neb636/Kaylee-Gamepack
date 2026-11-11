@@ -1,4 +1,4 @@
-// Reel: a short video of the game being played, so Dad watches a minute instead of playing grey boxes. A robot finger
+// Reel: a short video of the game being played, so the user watches a minute instead of playing grey boxes. A robot finger
 // plays the core verb (each country's qa.mjs `motion` runs: the same ones QA films), a pink dot shows where it touches,
 // and a title card names each moment. Like a studio's dailies: show the work moving, every time.
 //

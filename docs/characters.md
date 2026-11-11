@@ -10,7 +10,7 @@ The reference pictures in `art/source/mascot/` are exported from that puppet. Se
 **In 3D (Thailand):** the characters are built from code, not generated pictures, except Kaylee herself: she is a
 modelled vinyl toy made with Tripo3D and split in Blender into the same rig (`characters/model.ts`; the next family
 members follow `docs/3d-characters.md`). `characters/looks.ts` describes each
-family member (Dad picked them from `planning/around-the-world/thailand/lineup.webp`). The shared
+family member (the user picked them from `planning/around-the-world/thailand/lineup.webp`). The shared
 `src/world/engine3d/characters/animal.ts` builds the chibi rig from any `Look` (body, head, arms, tail on their own pivots;
 any 3D country's friends use it too), and `engine3d/characters/face.ts` blinks, looks at her and opens the
 mouth with the character's voice. They wave, hop, sit, lie down, do a wai: ease into each pose (lean, settle), never
