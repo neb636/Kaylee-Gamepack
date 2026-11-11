@@ -1,0 +1,12 @@
+{
+  "title": "Canada off the map for now",
+  "checkIn": "fix",
+  "kaylee": "Canada's pin and its shelf row are gone until it's ready; you can still open it to work on it.",
+  "questions": [],
+  "links": [
+    { "label": "The map (no Canada)", "hash": "#/world" },
+    { "label": "The shelf (no Canada)", "hash": "#/world?view=list" },
+    { "label": "The map with Canada (?all=1)", "hash": "#/world?all=1" },
+    { "label": "Canada, straight in", "hash": "#/world/canada" }
+  ]
+}
