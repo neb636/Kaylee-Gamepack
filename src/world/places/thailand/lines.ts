@@ -18,6 +18,13 @@ const kids = by('kids')
 /** One line for each thing a look can change, in order: hat, glasses, wings, outfit, shoes, paint. */
 const notice = (say: (text: string) => Line, texts: string[]) => Object.fromEntries(['head', 'face', 'back', 'outfit', 'feet', 'paint'].map((k, i) => [k, say(texts[i])]))
 
+/** A cousin at the game table: what they say sitting down, before a roll (in turn), on a nap, a ladder, a slide, a win,
+ *  losing, and getting up. */
+const cousin = (voice: string, t: { sit: string; roll: string[]; nap: string; ladder: string; slide: string; win: string; lose: string; bye: string }) => {
+  const s = by(voice)
+  return { sit: s(t.sit), roll: t.roll.map(s), nap: s(t.nap), ladder: s(t.ladder), slide: s(t.slide), win: s(t.win), lose: s(t.lose), bye: s(t.bye) }
+}
+
 /** Each person's first hello, then what they say each time after (in turn). */
 const hello = (voice: string, hi: string, again: string[]) => ({ hi: by(voice)(hi), again: again.map(by(voice)) })
 
@@ -58,6 +65,33 @@ export const L = {
       gecko: 'A gecko! It sings took-geh, took-geh!',
       motorbike: 'Lots of people in Thailand ride motorbikes!',
     } as Record<string, Line>,
+  },
+
+  // The game table in Kaylee's room (activities/hub/board-games/, plan: thailand/game-table.md). Sparkle says how to
+  // play the first time she opens each game in a visit (tap Sparkle to hear it again), and the rule of the 4 the first
+  // time a unicorn naps. The cousin across the table talks in their own voice, now cheerful and playing (cast.json's
+  // bbplay, ganplay, kenplay: the same voices, off their phones): sitting down, now and then before a roll, on a nap, a
+  // ladder or a slide, and when someone wins. Never after every move.
+  games: {
+    // The picker opens (once a visit).
+    pick: 'Pick a game and a cousin!',
+    // A game starts (once a visit each); also Sparkle's hint when she waits on her turn.
+    howto: {
+      unicorn: onDevice('Tap the die! Race to the castle!', 'Click the die! Race to the castle!'),
+      candy: onDevice('Tap the cards! Hop to that color!', 'Click the cards! Hop to that color!'),
+      chutes: onDevice('Tap the die! Ladders go up, slides go down!', 'Click the die! Ladders go up, slides go down!'),
+    },
+    // The first time a unicorn rolls a 4 and naps (once a visit).
+    nap: 'A four! Time for a little nap.',
+    // Her first win in a visit says her name; after that, one of the others in turn.
+    won: `You won, ${NAME}!`,
+    wonAgain: ['You won!', 'Yay! You did it!', 'Winner winner!'],
+    // The cousin, in turn (cousin.ts).
+    cousins: {
+      bb: cousin('bbplay', { sit: "Yay, let's play!", roll: ['My turn!', 'Come on, six!'], nap: 'Nap time! Yawn!', ladder: 'Up I go!', slide: 'Wheee!', win: 'I won! Again?', lose: 'You won! Good game!', bye: 'Fun game!' }),
+      gan: cousin('ganplay', { sit: "Okay, I'm in!", roll: ['Here goes!', 'Big number!'], nap: 'Aw, sleepy!', ladder: 'Ladder! Yes!', slide: 'Nooo! Wheee!', win: 'I won! One more?', lose: 'Nice one, you won!', bye: 'Good game!' }),
+      ken: cousin('kenplay', { sit: "Let's play!", roll: ['My go!', 'Lucky roll!'], nap: 'Snooze time!', ladder: 'Up, up, up!', slide: 'Whoa! Wheee!', win: 'I won! Again?', lose: 'You got me! Good game!', bye: 'See you!' }),
+    },
   },
 
   // The family (their voices in cast.json; their animals in characters/looks.ts).

@@ -8,8 +8,12 @@ export class FaceLife {
   private blink = -1
   private level = 0
 
-  /** `voice`: their cast id (Kaylee has none: she never talks). */
-  constructor(private rig: Rig, private voice?: string) {}
+  private voices: string[]
+  /** `voice`: their cast id, or several when one character has more than one way of talking (a cousin on their phone,
+   *  and the same cousin cheering at the game table). Kaylee has none: she never talks. */
+  constructor(private rig: Rig, voice?: string | string[]) {
+    this.voices = voice === undefined ? [] : typeof voice === 'string' ? [voice] : voice
+  }
 
   update(dt: number) {
     const { eyes, mouth, talk, open } = this.rig
@@ -28,7 +32,8 @@ export class FaceLife {
     if (this.rig.blink) this.rig.blink(lid)
     else eyes.scale.y = lid
 
-    const target = this.voice ? speechLevel(this.voice) : 0
+    let target = 0
+    for (const v of this.voices) target = Math.max(target, speechLevel(v))
     // Opens fast, closes a little slower (reads as syllables, not flicker).
     this.level += (target - this.level) * (1 - Math.exp(-dt * (target > this.level ? 30 : 14)))
     const k = this.level

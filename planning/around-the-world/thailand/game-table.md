@@ -1,10 +1,10 @@
 # 🎲 Game table: board games with a cousin
 
-All three greyboxes built: Unicorn Dice, Candy Land, Chutes and Ladders · Toy in Agong's house · updated 2026-11-06
+All three games built, voiced and on in her room (draft PR, check-in 2) · Toy in Agong's house · updated 2026-11-11
 
 A little game table stands on the right side of Kaylee's room upstairs, past the couch, with a pink unicorn bag sitting beside it. She taps the table, sits down, picks a game from three big pictures and a cousin from three faces (BB is ready by default), and that cousin really comes and sits across from her. Then they play: **Kaylee's Unicorn Dice Game** (her own rules), **Candy Land** and **Chutes and Ladders**, on boards made for this house, taking turns until someone wins and it's “Again!”.
 
-**Next:** The user plays the three greyboxes on the iPad (PRs #348, #349 and greybox 3's), with BB, Gan and Ken: is rolling fun, does drawing feel different, are the ladders and slides the highlight, is the turn rhythm right (the feel lab has every number)? His notes go into each game. Then the look gate: the table, the bag, the boards, the pieces and the picker's pictures made pretty.
+**Next:** Check-in 2 (hear): you listen to the table read and watch the reel on the draft PR's review page. Then check-in 3: Kaylee plays all three at the table in her room (they're on in her own house on the branch) and her playtest decides what stays, gets fixed or goes. Under the new studio loop (AGENTS.md, PR #351) the look and the voices were built together on one branch instead of a greybox for you to play first.
 
 - games: Unicorn Dice, Candy Land, Chutes and Ladders: 3
 - the cousin across the table (BB first): BB, Gan, Ken
@@ -288,14 +288,11 @@ One PR each; stop for the user after each. A game is only on for Kaylee (open fr
    The candy path (36 spaces, six colors with their shapes), the deck that flips a card and the trail to where it's going, the pawns, the finish. Section `candy` and its cases. Rules tests (single, double, past the end, the deck running out).
 3. **Greybox 3: Chutes and Ladders** [done] · 2026-11-06 · PR #350
    The 6 by 6 board, the three ladders and three slides drawn on it, climbing and sliding. Section `chutes` and its cases. Rules tests (the snake numbering, ladders and slides, no chaining, the finish).
-4. **The look** [next]
-   The table, stools and unicorn bag made pretty; the three boards, the castle, the cupcake house, the pieces and pawns, the die and the cards; the picker's three picture cards (hand-drawn SVG, like the game shelf) and the cousins' faces from their real 3D selves; the cousin's walk over; the small win party. Can split into one PR per game if it's big.
-5. **Full loop: voices, reactions, QA, and on for Kaylee** [todo]
-   Sparkle's how-to lines and the 🔊, the cousins' lines in their own voices, reactions on rests, ladders, slides and wins, the QA screens, motion and pacing runs, both QA agents. Then each game the user approves is switched on for Kaylee (`ready`), one at a time.
+4. **The look and the voices, on for Kaylee** [done] · 2026-11-11 · one draft PR (check-ins 2-4)
+   The picker's three picture cards (SVG, the shelf's style), the faces as pictures of their real 3D selves, bigger pieces, a closer camera, the cousin hopping over, the bag's jingle and twinkle, a small win party; Sparkle's how-to per game and the cousins' lines in cheerful table voices; all three games `ready`. See the log below.
+5. **Kaylee's playtest and the fixes it brings** [next]
+   Her playtest (check-in 3), then the ship check-in. Boards' art beyond the greybox shapes (a sparklier castle, the candy world's scenery) only if her playtest says the boards need it.
 
-> **📋 The prompt for gate 4: the look**
->
-> Work in neb636/Kaylee-Gamepack. Read AGENTS.md, then `planning/around-the-world/thailand/game-table.md` (`node scripts/plan.mjs md planning/around-the-world/thailand/game-table.md`), including its builder sections, the three greybox logs, their known small things and the user's notes from playing them. Build **gate 4 only: the look**: the table, stools and unicorn bag made pretty (the bag gets a little jingle and a twinkle on its horn); the three boards (a sparkly unicorn castle, the candy world and cupcake house, the ladders and slides) and their pieces and pawns at a size that reads from the table camera; the picker's three game cards as hand-drawn SVG in the game shelf's style (`src/world/shelf/STYLE.md`) and the cousins' faces as pictures of their real 3D selves (`snapPhoto`, like the wardrobe's door); the cousin walking or hopping over to the stool; the small win party at the table. Keep every game `ready: false`. No voices yet (gate 5). Run full QA for the table sections (both QA agents, `--only=ipad-portrait,ipad-landscape,iphone-landscape`), `npm run verify`, update this plan (build step 4, a log entry), and open the PR with the `open-pr` skill. Stop for the user.
 
 ### Greybox 1: the table, a cousin, and the Unicorn Dice Game ([done] · 2026-11-06 · PR #348)
 
@@ -365,6 +362,23 @@ Chutes and Ladders on the same table, die and face pawns: the 6 by 6 snake board
 
 - The slides cover part of a few squares' numbers.
 - On an iPhone in landscape the board is small (the squares still read).
+
+### The look and the voices ([done] · 2026-11-11)
+
+Built in one go on one branch (the new studio loop: no greybox for you to play first), and the games switched on for her.
+
+- **Voices** (`lines.ts` `L.games`): Sparkle says the picker's line and each game's how-to once a visit (tap Sparkle on her turn to hear it again; her stuck hint is the same line), and the rule of the 4 the first time a unicorn naps. Her first win in a visit says her name. The cousin talks in a cheerful table voice (`cast.json` `bbplay`, `ganplay`, `kenplay`: the same OpenAI voices, off their phones; `FaceLife` takes more than one voice so their mouth moves with either): sitting down, every third of their turns before a roll (in turn), their own naps, ladders and slides, their win, losing to her, and getting up.
+- **Faces** (`faces.ts`): each cousin built on their own for a moment (no phone) and Kaylee borrowed in today's look, shot in a tiny studio with the house's renderer (`house.snap` takes a scene), one a frame once she's at the table. Emoji show until then.
+- **Picker cards** (`cards/*.svg`): a pink die and a unicorn castle on a rainbow; a lollipop and the cupcake house on a path of colors; a gold ladder, a striped slide and the star.
+- **The table**: pieces 1.3x (knob `pieceSize`), the camera closer (`camFit` 0.8 trims only the sides, pitch 58), the cousin hops over to the stool in three little hops, the unicorn bag chimes and twinkles from its horn (in the room too), and a win rains sparkles over the board and wobbles the bag.
+- **On for Kaylee**: all three `ready: true`, so the table in her own room opens the picker.
+- **QA**: motion runs `table-sit` (from the room: sit, picker, Play, BB hops over) and `table-kind-loss`; the reel `game-table`.
+
+#### Known small things
+
+- The players' big heads still fill the sides in landscape (the camera's knobs are in the feel lab).
+- The boards themselves are still the greybox shapes (bright, readable); fancier board art waits on her playtest.
+- On a phone in landscape the board is small but every space reads.
 
 ## 🔌 Where it plugs in (for the builder)
 

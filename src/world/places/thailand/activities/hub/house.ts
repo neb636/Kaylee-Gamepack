@@ -946,9 +946,9 @@ export class House implements World3D {
   }
 
   /** A JPEG of the room from `cam` (the wardrobe's mirror pictures). Call it in the plugin's update: the next frame draws
-   *  over it. */
-  snap(cam: PerspectiveCamera, size: { w: number; h: number }) {
-    return snapPhoto(this.renderer, this.scene, cam, size)
+   *  over it. `scene`: another little scene drawn with the house's renderer (the game table's face pictures). */
+  snap(cam: PerspectiveCamera, size: { w: number; h: number }, scene: Scene = this.scene) {
+    return snapPhoto(this.renderer, scene, cam, size)
   }
 
   render() {

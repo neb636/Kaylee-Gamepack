@@ -1,9 +1,10 @@
 // The game table's games and cousins (planning/around-the-world/thailand/game-table.md). Pure data, loaded at startup
 // by the hub's sections.ts: no three.js, and nothing about the house (the table's place is in layout.ts).
 //
-// `built`: the game is in the code (the picker shows it on Dad's links). `ready`: Dad played its full loop on the iPad,
-// so it opens from the table in Kaylee's own house too. Until then a game is reached only from a board-game section
-// link (#/world/thailand/hub/table, .../unicorn, ...), like an activity in meta.ts's inTheWorks.
+// `built`: the game is in the code (the picker shows it on the board-game links). `ready`: it opens from the table in
+// Kaylee's own house too (all three since the look and voices, 2026-11-11, for her playtest). A game that isn't ready is
+// reached only from a board-game section link (#/world/thailand/hub/table, .../unicorn, ...), like an activity in
+// meta.ts's inTheWorks.
 
 export type GameId = 'unicorn' | 'candy' | 'chutes'
 export type CousinId = 'bb' | 'gan' | 'ken'
@@ -17,9 +18,9 @@ export interface GameInfo {
 }
 
 export const GAMES: readonly GameInfo[] = [
-  { id: 'unicorn', name: "Kaylee's Unicorn Dice Game", icon: '🦄', built: true, ready: false },
-  { id: 'candy', name: 'Candy Land', icon: '🍭', built: true, ready: false },
-  { id: 'chutes', name: 'Chutes and Ladders', icon: '🪜', built: true, ready: false },
+  { id: 'unicorn', name: "Kaylee's Unicorn Dice Game", icon: '🦄', built: true, ready: true },
+  { id: 'candy', name: 'Candy Land', icon: '🍭', built: true, ready: true },
+  { id: 'chutes', name: 'Chutes and Ladders', icon: '🪜', built: true, ready: true },
 ]
 
 /** BB first: Kaylee picked her (2026-11-06). */
