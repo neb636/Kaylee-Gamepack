@@ -18,7 +18,7 @@ export interface GameInfo {
 }
 
 export const GAMES: readonly GameInfo[] = [
-  { id: 'unicorn', name: "Kaylee's Unicorn Dice Game", icon: '🦄', built: true, ready: true },
+  { id: 'unicorn', name: 'Unicorn Dice Game', icon: '🦄', built: true, ready: true },
   { id: 'candy', name: 'Candy Land', icon: '🍭', built: true, ready: true },
   { id: 'chutes', name: 'Chutes and Ladders', icon: '🪜', built: true, ready: true },
 ]

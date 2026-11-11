@@ -83,9 +83,9 @@ export const L = {
     },
     // The first time a unicorn rolls a 4 and naps (once a visit).
     nap: 'A four! Time for a little nap.',
-    // Her first win in a visit says her name; after that, one of the others in turn.
-    won: `You won, ${NAME}!`,
-    wonAgain: ['You won!', 'Yay! You did it!', 'Winner winner!'],
+    // Her first win in a visit; after that the cousin says well done (without a cousin, Sparkle's others in turn).
+    won: 'You won!',
+    wonAgain: ['Yay! You did it!', 'Winner winner!'],
     // The cousin across the table: sitting down; before a roll now and then (in turn); their own nap, ladder and slide;
     // their win; losing to her; getting up.
     cousins: {

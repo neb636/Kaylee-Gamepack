@@ -46,11 +46,11 @@ const FEEL = knobs('gameTable', 'Game table', FILE, {
   hopArc: { value: 0.045, min: 0.01, max: 0.12, step: 0.005, label: 'Hop height', unit: 'm' },
   cousinWait: { value: 0.6, min: 0, max: 2, step: 0.05, label: "Cousin's wait", unit: 's', note: 'a little anticipation before the cousin rolls' },
   passPause: { value: 0.45, min: 0, max: 1.5, step: 0.05, label: 'Pass pause', unit: 's', note: 'between one turn and the next' },
-  restTime: { value: 1.0, min: 0.4, max: 2.5, step: 0.05, label: 'Rest on a 4', unit: 's', note: 'how long the unicorn naps' },
-  camPitch: { value: 58, min: 30, max: 85, step: 1, label: 'Camera pitch', unit: '°', note: 'how steeply it looks down at the board' },
-  camYaw: { value: 0, min: -30, max: 45, step: 1, label: 'Camera yaw', unit: '°', note: 'from the front (0) round to the right' },
+  restTime: { value: 1.05, min: 0.4, max: 2.5, step: 0.05, label: 'Rest on a 4', unit: 's', note: 'how long the unicorn naps' },
+  camPitch: { value: 30, min: 30, max: 85, step: 1, label: 'Camera pitch', unit: '°', note: 'how steeply it looks down at the board' },
+  camYaw: { value: 9, min: -30, max: 45, step: 1, label: 'Camera yaw', unit: '°', note: 'from the front (0) round to the right' },
   camFit: { value: 0.8, min: 0.6, max: 1.6, step: 0.05, label: 'Camera fit', note: 'below 1: closer' },
-  flipTime: { value: 0.7, min: 0.3, max: 1.6, step: 0.05, label: 'Card flip', unit: 's', note: 'Candy Land: from the deck to face up on the pile' },
+  flipTime: { value: 0.75, min: 0.3, max: 1.6, step: 0.05, label: 'Card flip', unit: 's', note: 'Candy Land: from the deck to face up on the pile' },
   cardShow: { value: 0.6, min: 0.2, max: 1.6, step: 0.05, label: 'Card shown', unit: 's', note: 'Candy Land: how long the card and the glowing space show before the piece goes' },
   climbTime: { value: 1.1, min: 0.4, max: 3, step: 0.05, label: 'Ladder climb', unit: 's', note: 'Chutes and Ladders: rung by rung to the top' },
   slideTime: { value: 0.9, min: 0.3, max: 3, step: 0.05, label: 'Slide down', unit: 's', note: 'Chutes and Ladders: whee, down the slide' },
@@ -99,7 +99,7 @@ const told = new Set<string>()
 /** The cousins' roll lines go in turn, and only now and then (every ROLL_EVERY-th of their turns). */
 const ROLL_EVERY = 3
 let rollLine = 0
-/** Her wins this visit: the first one says her name. */
+/** Her wins this visit: Sparkle cheers the first one. */
 let wins = 0
 
 export interface TableStart {
@@ -608,8 +608,8 @@ export class TablePlugin implements HousePlugin {
         if (s.who === 0) {
           this.house.kaylee.react('wave')
           m?.react('wave')
-          // Her first win of the visit: Sparkle, with her name. After that the cousin says well done (or, without a
-          // cousin, Sparkle in turn).
+          // Her first win of the visit: Sparkle. After that the cousin says well done (or, without a cousin, Sparkle in
+          // turn).
           if (wins++ === 0) this.events.say(L.games.won)
           else if (this.lines) this.events.say(this.lines.lose)
           else this.events.say(L.games.wonAgain[(wins - 2) % L.games.wonAgain.length])
