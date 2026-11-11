@@ -182,7 +182,7 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   - [The x-ray belt](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/airport)
   - [Window seat: seatbelt and takeoff](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/takeoff)
   - [Window seat: tray, snacks, the elephant below](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/fly)
-  - [Landing in Krabi (and the signpost: 🐘 or 🚤)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/land) ([after the map's short flight: straight to the signpost](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/land?quick=1))
+  - [Landing in Krabi (and the signpost: 🐘 or 🚤)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/land) ([from the Thailand map: straight to Krabi airport, no plane](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/land?quick=1))
 - **Baan Chang**
   - [The songthaew to the elephant cafe](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/chang)
   - [The bamboo sign wall and a photo](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/sign)
