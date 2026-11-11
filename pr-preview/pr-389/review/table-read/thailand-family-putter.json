@@ -1,0 +1,57 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "family.putter",
+  "title": "Thailand › Family › Putter",
+  "intro": "",
+  "page": "thailand-family-putter.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 2,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "family.putter.hi",
+      "text": "Hi! Hee hee!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Hi Kaylee! Hee hee!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "family",
+        "putter",
+        "hi"
+      ],
+      "text": "Hi! Hee hee!",
+      "voice": "putter",
+      "key": "family.putter.hi",
+      "part": "family › putter",
+      "when": "",
+      "ms": 1392,
+      "flags": [
+        "changed"
+      ],
+      "was": "Hi Kaylee! Hee hee!"
+    },
+    {
+      "path": [
+        "family",
+        "putter",
+        "again",
+        "0"
+      ],
+      "text": "Peep peep!",
+      "voice": "putter",
+      "key": "family.putter.again.0",
+      "part": "family › putter › again",
+      "when": "",
+      "ms": 754,
+      "flags": []
+    }
+  ]
+}

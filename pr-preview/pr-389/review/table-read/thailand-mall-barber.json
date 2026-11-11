@@ -1,0 +1,443 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "mall.barber",
+  "title": "Thailand › Mall › Barber",
+  "intro": "The Barber Salon (games/barber/). Daddy wants a new look; Sparkle says what's new each round; the kids in round 3 ask for a picture and say \"close enough!\" whatever she makes; Mommy takes the photo at every reveal.",
+  "page": "thailand-mall-barber.html",
+  "audio": null,
+  "lines": 27,
+  "seconds": 51,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "mall.barber.open",
+      "text": "I want a new look!",
+      "flags": [
+        "changed"
+      ],
+      "was": "I want a new look, Kaylee!"
+    },
+    {
+      "key": "mall.barber.allDone",
+      "text": "Great haircuts!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Great haircuts, Kaylee!"
+    },
+    {
+      "key": "mall.barber.hint.tonic",
+      "text": "Squirt the grow tonic on his hair!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "mall",
+        "barber",
+        "open"
+      ],
+      "text": "I want a new look!",
+      "voice": "nick",
+      "key": "mall.barber.open",
+      "part": "mall › barber",
+      "when": "",
+      "ms": 1680,
+      "flags": [
+        "changed"
+      ],
+      "was": "I want a new look, Kaylee!"
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "start"
+      ],
+      "text": "Grab a tool and do his hair!",
+      "voice": "sparkle",
+      "key": "mall.barber.start",
+      "part": "mall › barber",
+      "when": "",
+      "ms": 2341,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "colors"
+      ],
+      "text": "Now colors and the hair dryer!",
+      "voice": "sparkle",
+      "key": "mall.barber.colors",
+      "part": "mall › barber",
+      "when": "Round 2's new tools, round 3's kids.",
+      "ms": 2758,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "copy"
+      ],
+      "text": "Copy the picture!",
+      "voice": "sparkle",
+      "key": "mall.barber.copy",
+      "part": "mall › barber",
+      "when": "",
+      "ms": 2001,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "ask",
+        "spiky"
+      ],
+      "text": "Spiky, please!",
+      "voice": "kid",
+      "key": "mall.barber.ask.spiky",
+      "part": "mall › barber › ask",
+      "when": "Each kid, as they sit down with their picture card.",
+      "ms": 1939,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "ask",
+        "pigtails"
+      ],
+      "text": "Pigtails, please!",
+      "voice": "kid",
+      "key": "mall.barber.ask.pigtails",
+      "part": "mall › barber › ask",
+      "when": "Each kid, as they sit down with their picture card.",
+      "ms": 1374,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "ask",
+        "curly"
+      ],
+      "text": "Curly, please!",
+      "voice": "kid",
+      "key": "mall.barber.ask.curly",
+      "part": "mall › barber › ask",
+      "when": "Each kid, as they sit down with their picture card.",
+      "ms": 1739,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "mirror",
+        "touch"
+      ],
+      "text": "Tap the mirror!",
+      "voice": "sparkle",
+      "key": "mall.barber.mirror.touch",
+      "part": "mall › barber › mirror",
+      "when": "The mirror glows: time for the reveal.",
+      "ms": 1383,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "mirror",
+        "mouse"
+      ],
+      "text": "Click the mirror!",
+      "voice": "sparkle",
+      "key": "mall.barber.mirror.mouse",
+      "part": "mall › barber › mirror",
+      "when": "",
+      "ms": 1008,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "love",
+        "0"
+      ],
+      "text": "Whoa! I love it!",
+      "voice": "nick",
+      "key": "mall.barber.love.0",
+      "part": "mall › barber › love",
+      "when": "The reveal: Daddy poses (in turn), the kids giggle, Mommy takes the photo.",
+      "ms": 2345,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "love",
+        "1"
+      ],
+      "text": "So handsome! I love it!",
+      "voice": "nick",
+      "key": "mall.barber.love.1",
+      "part": "mall › barber › love",
+      "when": "",
+      "ms": 1523,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "enough",
+        "0"
+      ],
+      "text": "Close enough!",
+      "voice": "kid",
+      "key": "mall.barber.enough.0",
+      "part": "mall › barber › enough",
+      "when": "",
+      "ms": 1253,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "enough",
+        "1"
+      ],
+      "text": "Close enough! So pretty!",
+      "voice": "kid",
+      "key": "mall.barber.enough.1",
+      "part": "mall › barber › enough",
+      "when": "",
+      "ms": 2110,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "enough",
+        "2"
+      ],
+      "text": "Close enough! Yay!",
+      "voice": "kid",
+      "key": "mall.barber.enough.2",
+      "part": "mall › barber › enough",
+      "when": "",
+      "ms": 2240,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "cheese"
+      ],
+      "text": "Say cheese!",
+      "voice": "ji",
+      "key": "mall.barber.cheese",
+      "part": "mall › barber",
+      "when": "",
+      "ms": 1084,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "allDone"
+      ],
+      "text": "Great haircuts!",
+      "voice": "sparkle",
+      "key": "mall.barber.allDone",
+      "part": "mall › barber",
+      "when": "",
+      "ms": 1920,
+      "flags": [
+        "changed"
+      ],
+      "was": "Great haircuts, Kaylee!"
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "horn"
+      ],
+      "text": "Hey! My horn!",
+      "voice": "nick",
+      "key": "mall.barber.horn",
+      "part": "mall › barber",
+      "when": "The silly bits, in Daddy's and Mommy's voices.",
+      "ms": 1634,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "brows"
+      ],
+      "text": "My eyebrows!",
+      "voice": "nick",
+      "key": "mall.barber.brows",
+      "part": "mall › barber",
+      "when": "",
+      "ms": 1462,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "windy"
+      ],
+      "text": "Whoa! My hair!",
+      "voice": "ji",
+      "key": "mall.barber.windy",
+      "part": "mall › barber",
+      "when": "",
+      "ms": 1905,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "hint",
+        "tonic"
+      ],
+      "text": "Squirt the grow tonic on his hair!",
+      "voice": "sparkle",
+      "key": "mall.barber.hint.tonic",
+      "part": "mall › barber › hint",
+      "when": "Sparkle, when the 👆 shows: a tool she hasn't tried yet.",
+      "ms": 3021,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "hint",
+        "scissors"
+      ],
+      "text": "Snip, snip with the scissors!",
+      "voice": "sparkle",
+      "key": "mall.barber.hint.scissors",
+      "part": "mall › barber › hint",
+      "when": "Sparkle, when the 👆 shows: a tool she hasn't tried yet.",
+      "ms": 2671,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "hint",
+        "comb"
+      ],
+      "text": "Comb it up for spikes!",
+      "voice": "sparkle",
+      "key": "mall.barber.hint.comb",
+      "part": "mall › barber › hint",
+      "when": "Sparkle, when the 👆 shows: a tool she hasn't tried yet.",
+      "ms": 2231,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "hint",
+        "spray"
+      ],
+      "text": "Spray on some colors!",
+      "voice": "sparkle",
+      "key": "mall.barber.hint.spray",
+      "part": "mall › barber › hint",
+      "when": "Sparkle, when the 👆 shows: a tool she hasn't tried yet.",
+      "ms": 2033,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "hint",
+        "dryer"
+      ],
+      "text": "Try the hair dryer!",
+      "voice": "sparkle",
+      "key": "mall.barber.hint.dryer",
+      "part": "mall › barber › hint",
+      "when": "Sparkle, when the 👆 shows: a tool she hasn't tried yet.",
+      "ms": 1392,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "hint",
+        "bow"
+      ],
+      "text": "Put in a bow!",
+      "voice": "sparkle",
+      "key": "mall.barber.hint.bow",
+      "part": "mall › barber › hint",
+      "when": "Sparkle, when the 👆 shows: a tool she hasn't tried yet.",
+      "ms": 1192,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "hint",
+        "clip"
+      ],
+      "text": "Put in a clip!",
+      "voice": "sparkle",
+      "key": "mall.barber.hint.clip",
+      "part": "mall › barber › hint",
+      "when": "Sparkle, when the 👆 shows: a tool she hasn't tried yet.",
+      "ms": 1883,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "barber",
+        "pole"
+      ],
+      "text": "A spinning pole means haircuts here!",
+      "voice": "sparkle",
+      "key": "mall.barber.pole",
+      "part": "mall › barber",
+      "when": "Sparkle's fact, the first time she pokes the pole.",
+      "ms": 2883,
+      "flags": []
+    }
+  ]
+}

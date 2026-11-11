@@ -1,0 +1,504 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "mall.cafe",
+  "title": "Thailand › Mall › Cafe",
+  "intro": "Cafe & Cake (games/cafe/). Sparkle says what to do when something new comes; Daddy and Mommy order and drink in their own voices (one line per drink); Daddy's brain freeze and the ceiling splat get a laugh.",
+  "page": "thailand-mall-cafe.html",
+  "audio": null,
+  "lines": 28,
+  "seconds": 62,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "mall.cafe.thirsty",
+      "text": "I'm thirsty!",
+      "flags": [
+        "changed"
+      ],
+      "was": "I'm thirsty, Kaylee!"
+    },
+    {
+      "key": "mall.cafe.button",
+      "text": "Press the pink button!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "mall.cafe.thai",
+      "text": "Thai drinks! Two cups at once!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "mall.cafe.yum.nick.0",
+      "text": "Yum! Thank you!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Yum! Thank you, Kaylee!"
+    },
+    {
+      "key": "mall.cafe.teaCup",
+      "text": "Khob khun ka, sweetie!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "mall.cafe.allDone",
+      "text": "Best cafe ever!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Best cafe ever, Kaylee!"
+    },
+    {
+      "key": "mall.cafe.hint.button",
+      "text": "Press the pink button!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "mall.cafe.chaYenFact",
+      "text": "Cha yen is Thai iced tea! It's orange!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "open"
+      ],
+      "text": "Drop fruit in the blender!",
+      "voice": "sparkle",
+      "key": "mall.cafe.open",
+      "part": "mall › cafe",
+      "when": "",
+      "ms": 2036,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "thirsty"
+      ],
+      "text": "I'm thirsty!",
+      "voice": "nick",
+      "key": "mall.cafe.thirsty",
+      "part": "mall › cafe",
+      "when": "",
+      "ms": 1440,
+      "flags": [
+        "changed"
+      ],
+      "was": "I'm thirsty, Kaylee!"
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "button"
+      ],
+      "text": "Press the pink button!",
+      "voice": "sparkle",
+      "key": "mall.cafe.button",
+      "part": "mall › cafe",
+      "when": "The first time in a round: the button, then the pour.",
+      "ms": 1940,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "pour"
+      ],
+      "text": "Lift the jar and pour it in the cup!",
+      "voice": "sparkle",
+      "key": "mall.cafe.pour",
+      "part": "mall › cafe",
+      "when": "",
+      "ms": 2633,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "orders"
+      ],
+      "text": "Make the drink in the bubble!",
+      "voice": "sparkle",
+      "key": "mall.cafe.orders",
+      "part": "mall › cafe",
+      "when": "Round 2's picture orders; round 3's Thai drinks.",
+      "ms": 2132,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "pink"
+      ],
+      "text": "Pink, please!",
+      "voice": "nick",
+      "key": "mall.cafe.pink",
+      "part": "mall › cafe",
+      "when": "",
+      "ms": 1326,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "yellow"
+      ],
+      "text": "Yellow, please!",
+      "voice": "ji",
+      "key": "mall.cafe.yellow",
+      "part": "mall › cafe",
+      "when": "",
+      "ms": 1339,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "thai"
+      ],
+      "text": "Thai drinks! Two cups at once!",
+      "voice": "sparkle",
+      "key": "mall.cafe.thai",
+      "part": "mall › cafe",
+      "when": "",
+      "ms": 3355,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "chaYen"
+      ],
+      "text": "Cha yen, please!",
+      "voice": "nick",
+      "key": "mall.cafe.chaYen",
+      "part": "mall › cafe",
+      "when": "",
+      "ms": 2003,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "yum",
+        "nick",
+        "0"
+      ],
+      "text": "Yum! Thank you!",
+      "voice": "nick",
+      "key": "mall.cafe.yum.nick.0",
+      "part": "mall › cafe › yum › nick",
+      "when": "They drink it: a yum for a match (or for anything in round 1), a happy surprise for anything else.",
+      "ms": 2328,
+      "flags": [
+        "changed"
+      ],
+      "was": "Yum! Thank you, Kaylee!"
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "yum",
+        "nick",
+        "1"
+      ],
+      "text": "Mmm! Just right!",
+      "voice": "nick",
+      "key": "mall.cafe.yum.nick.1",
+      "part": "mall › cafe › yum › nick",
+      "when": "",
+      "ms": 2324,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "yum",
+        "ji",
+        "0"
+      ],
+      "text": "Delicious, sweetie!",
+      "voice": "ji",
+      "key": "mall.cafe.yum.ji.0",
+      "part": "mall › cafe › yum › ji",
+      "when": "They drink it: a yum for a match (or for anything in round 1), a happy surprise for anything else.",
+      "ms": 1767,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "yum",
+        "ji",
+        "1"
+      ],
+      "text": "Mmm! Yummy!",
+      "voice": "ji",
+      "key": "mall.cafe.yum.ji.1",
+      "part": "mall › cafe › yum › ji",
+      "when": "",
+      "ms": 1946,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "funny",
+        "nick"
+      ],
+      "text": "A funny color! But yum!",
+      "voice": "nick",
+      "key": "mall.cafe.funny.nick",
+      "part": "mall › cafe › funny",
+      "when": "",
+      "ms": 2090,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "funny",
+        "ji"
+      ],
+      "text": "Surprise! Yummy!",
+      "voice": "ji",
+      "key": "mall.cafe.funny.ji",
+      "part": "mall › cafe › funny",
+      "when": "",
+      "ms": 2109,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "freeze"
+      ],
+      "text": "Brrr! Brain freeze!",
+      "voice": "nick",
+      "key": "mall.cafe.freeze",
+      "part": "mall › cafe",
+      "when": "",
+      "ms": 2357,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "splat"
+      ],
+      "text": "Splat! Ha ha!",
+      "voice": "nick",
+      "key": "mall.cafe.splat",
+      "part": "mall › cafe",
+      "when": "The lid was off.",
+      "ms": 1874,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "coffee"
+      ],
+      "text": "My coffee! Thank you!",
+      "voice": "nick",
+      "key": "mall.cafe.coffee",
+      "part": "mall › cafe",
+      "when": "The pokeables, now and then.",
+      "ms": 1805,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "teaCup"
+      ],
+      "text": "Khob khun ka, sweetie!",
+      "voice": "ji",
+      "key": "mall.cafe.teaCup",
+      "part": "mall › cafe",
+      "when": "",
+      "ms": 3050,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "allDone"
+      ],
+      "text": "Best cafe ever!",
+      "voice": "sparkle",
+      "key": "mall.cafe.allDone",
+      "part": "mall › cafe",
+      "when": "",
+      "ms": 1704,
+      "flags": [
+        "changed"
+      ],
+      "was": "Best cafe ever, Kaylee!"
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "hint",
+        "straw"
+      ],
+      "text": "Put a straw in the cup!",
+      "voice": "sparkle",
+      "key": "mall.cafe.hint.straw",
+      "part": "mall › cafe › hint",
+      "when": "Sparkle, when the 👆 shows: the next thing to do.",
+      "ms": 1466,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "hint",
+        "milk"
+      ],
+      "text": "Pour the milk on top!",
+      "voice": "sparkle",
+      "key": "mall.cafe.hint.milk",
+      "part": "mall › cafe › hint",
+      "when": "Sparkle, when the 👆 shows: the next thing to do.",
+      "ms": 2870,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "hint",
+        "jar"
+      ],
+      "text": "Lift the jar and pour!",
+      "voice": "sparkle",
+      "key": "mall.cafe.hint.jar",
+      "part": "mall › cafe › hint",
+      "when": "Sparkle, when the 👆 shows: the next thing to do.",
+      "ms": 2605,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "hint",
+        "button"
+      ],
+      "text": "Press the pink button!",
+      "voice": "sparkle",
+      "key": "mall.cafe.hint.button",
+      "part": "mall › cafe › hint",
+      "when": "Sparkle, when the 👆 shows: the next thing to do.",
+      "ms": 1940,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "hint",
+        "fruit"
+      ],
+      "text": "Drop some fruit in!",
+      "voice": "sparkle",
+      "key": "mall.cafe.hint.fruit",
+      "part": "mall › cafe › hint",
+      "when": "Sparkle, when the 👆 shows: the next thing to do.",
+      "ms": 1731,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "hint",
+        "want"
+      ],
+      "text": "Drop in the fruit from the bubble!",
+      "voice": "sparkle",
+      "key": "mall.cafe.hint.want",
+      "part": "mall › cafe › hint",
+      "when": "Sparkle, when the 👆 shows: the next thing to do.",
+      "ms": 2746,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "hint",
+        "tea"
+      ],
+      "text": "Put in the Thai tea!",
+      "voice": "sparkle",
+      "key": "mall.cafe.hint.tea",
+      "part": "mall › cafe › hint",
+      "when": "Sparkle, when the 👆 shows: the next thing to do.",
+      "ms": 2407,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "cafe",
+        "chaYenFact"
+      ],
+      "text": "Cha yen is Thai iced tea! It's orange!",
+      "voice": "sparkle",
+      "key": "mall.cafe.chaYenFact",
+      "part": "mall › cafe",
+      "when": "Sparkle's fact, the first time she pokes the Thai tea.",
+      "ms": 4447,
+      "flags": [
+        "long"
+      ]
+    }
+  ]
+}

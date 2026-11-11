@@ -1,0 +1,79 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "wall.fixed",
+  "title": "China › Wall › Fixed",
+  "intro": "",
+  "page": "china-wall-fixed.html",
+  "audio": null,
+  "lines": 3,
+  "seconds": 8,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "wall.fixed.0",
+      "text": "Yay! Thank you!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Yay! Thank you, Kaylee!"
+    },
+    {
+      "key": "wall.fixed.2",
+      "text": "Hooray! The whole wall is fixed!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "wall",
+        "fixed",
+        "0"
+      ],
+      "text": "Yay! Thank you!",
+      "voice": "houhou",
+      "key": "wall.fixed.0",
+      "part": "wall › fixed",
+      "when": "",
+      "ms": 2280,
+      "flags": [
+        "changed"
+      ],
+      "was": "Yay! Thank you, Kaylee!"
+    },
+    {
+      "path": [
+        "wall",
+        "fixed",
+        "1"
+      ],
+      "text": "Hee hee! The wall is getting strong!",
+      "voice": "houhou",
+      "key": "wall.fixed.1",
+      "part": "wall › fixed",
+      "when": "",
+      "ms": 2769,
+      "flags": []
+    },
+    {
+      "path": [
+        "wall",
+        "fixed",
+        "2"
+      ],
+      "text": "Hooray! The whole wall is fixed!",
+      "voice": "houhou",
+      "key": "wall.fixed.2",
+      "part": "wall › fixed",
+      "when": "",
+      "ms": 3002,
+      "flags": [
+        "long"
+      ]
+    }
+  ]
+}

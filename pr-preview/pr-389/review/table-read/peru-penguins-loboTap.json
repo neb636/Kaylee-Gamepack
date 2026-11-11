@@ -1,0 +1,70 @@
+{
+  "kind": "table-read",
+  "place": "peru",
+  "group": "penguins.loboTap",
+  "title": "Peru › Penguins › Lobo Tap",
+  "intro": "",
+  "page": "peru-penguins-loboTap.html",
+  "audio": null,
+  "lines": 3,
+  "seconds": 4,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "penguins.loboTap.2",
+      "text": "Hola!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Hola, Kaylee!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "penguins",
+        "loboTap",
+        "0"
+      ],
+      "text": "Arf arf!",
+      "voice": "lobo",
+      "key": "penguins.loboTap.0",
+      "part": "penguins › loboTap",
+      "when": "---- 2. Pepa's Penguin Cliff (the desert coast at Paracas) ----",
+      "ms": 997,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "loboTap",
+        "1"
+      ],
+      "text": "I love splashes!",
+      "voice": "lobo",
+      "key": "penguins.loboTap.1",
+      "part": "penguins › loboTap",
+      "when": "",
+      "ms": 2155,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "loboTap",
+        "2"
+      ],
+      "text": "Hola!",
+      "voice": "lobo",
+      "key": "penguins.loboTap.2",
+      "part": "penguins › loboTap",
+      "when": "---- 2. Pepa's Penguin Cliff (the desert coast at Paracas) ----",
+      "ms": 888,
+      "flags": [
+        "changed"
+      ],
+      "was": "Hola, Kaylee!"
+    }
+  ]
+}

@@ -1,0 +1,592 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "snowman",
+  "title": "Canada › Snowman",
+  "intro": "",
+  "page": "canada-snowman.html",
+  "audio": null,
+  "lines": 34,
+  "seconds": 76,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "snowman.ready.touch",
+      "text": "Tap the drum for the parade, or make more snowmen!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.ready.mouse",
+      "text": "Click the drum for the parade, or make more snowmen!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.hint.roll.touch",
+      "text": "Put your finger on the snowball and push!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.hint.stack",
+      "text": "Push the little ball into the big one!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.hint.hat",
+      "text": "Roll a snowball into the hat box!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.hint.sash",
+      "text": "Roll a snowball into the sash box!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.castle",
+      "text": "This castle is really a big hotel!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.made.0",
+      "text": "A snowman! Ta-da!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.poke.1",
+      "text": "Bonjour!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "snowman.wake.0",
+      "text": "Bonjour!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "snowman.upside",
+      "text": "Hello! Why is the sky down there?",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.done",
+      "text": "You made a whole parade!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Kaylee, you made a whole parade!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "snowman",
+        "story",
+        "0"
+      ],
+      "text": "Bonjour! It's the Winter Carnival!",
+      "voice": "maple",
+      "key": "snowman.story.0",
+      "part": "snowman › story",
+      "when": "The story (Maple, in the park below the castle), then Sparkle's one instruction per part.",
+      "ms": 2538,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "story",
+        "1"
+      ],
+      "text": "Let's roll snowmen!",
+      "voice": "maple",
+      "key": "snowman.story.1",
+      "part": "snowman › story",
+      "when": "",
+      "ms": 1680,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "roll"
+      ],
+      "text": "Push the snowball! Watch it grow!",
+      "voice": "sparkle",
+      "key": "snowman.roll",
+      "part": "snowman",
+      "when": "",
+      "ms": 2960,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "stack"
+      ],
+      "text": "Now roll the little ball into the big one!",
+      "voice": "sparkle",
+      "key": "snowman.stack",
+      "part": "snowman",
+      "when": "",
+      "ms": 2943,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "dress"
+      ],
+      "text": "Roll a snowball into a box!",
+      "voice": "sparkle",
+      "key": "snowman.dress",
+      "part": "snowman",
+      "when": "",
+      "ms": 2968,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "ready",
+        "touch"
+      ],
+      "text": "Tap the drum for the parade, or make more snowmen!",
+      "voice": "sparkle",
+      "key": "snowman.ready.touch",
+      "part": "snowman › ready",
+      "when": "",
+      "ms": 4330,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "ready",
+        "mouse"
+      ],
+      "text": "Click the drum for the parade, or make more snowmen!",
+      "voice": "sparkle",
+      "key": "snowman.ready.mouse",
+      "part": "snowman › ready",
+      "when": "",
+      "ms": 3984,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "roll",
+        "touch"
+      ],
+      "text": "Put your finger on the snowball and push!",
+      "voice": "sparkle",
+      "key": "snowman.hint.roll.touch",
+      "part": "snowman › hint › roll",
+      "when": "Stuck for a while: Sparkle helps (the hand shows it too).",
+      "ms": 3004,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "roll",
+        "mouse"
+      ],
+      "text": "Click the snowball and push it!",
+      "voice": "sparkle",
+      "key": "snowman.hint.roll.mouse",
+      "part": "snowman › hint › roll",
+      "when": "",
+      "ms": 2184,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "stack"
+      ],
+      "text": "Push the little ball into the big one!",
+      "voice": "sparkle",
+      "key": "snowman.hint.stack",
+      "part": "snowman › hint",
+      "when": "Stuck for a while: Sparkle helps (the hand shows it too).",
+      "ms": 3141,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "hat"
+      ],
+      "text": "Roll a snowball into the hat box!",
+      "voice": "sparkle",
+      "key": "snowman.hint.hat",
+      "part": "snowman › hint",
+      "when": "Stuck for a while: Sparkle helps (the hand shows it too).",
+      "ms": 3290,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "sash"
+      ],
+      "text": "Roll a snowball into the sash box!",
+      "voice": "sparkle",
+      "key": "snowman.hint.sash",
+      "part": "snowman › hint",
+      "when": "Stuck for a while: Sparkle helps (the hand shows it too).",
+      "ms": 3464,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "drum",
+        "touch"
+      ],
+      "text": "Tap the big drum!",
+      "voice": "sparkle",
+      "key": "snowman.hint.drum.touch",
+      "part": "snowman › hint › drum",
+      "when": "Stuck for a while: Sparkle helps (the hand shows it too).",
+      "ms": 1922,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "drum",
+        "mouse"
+      ],
+      "text": "Click the big drum!",
+      "voice": "sparkle",
+      "key": "snowman.hint.drum.mouse",
+      "part": "snowman › hint › drum",
+      "when": "",
+      "ms": 1848,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "castle"
+      ],
+      "text": "This castle is really a big hotel!",
+      "voice": "sparkle",
+      "key": "snowman.castle",
+      "part": "snowman",
+      "when": "Tap-to-hear facts, the first time she pokes them.",
+      "ms": 3325,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "iceMoose"
+      ],
+      "text": "A moose made of ice!",
+      "voice": "sparkle",
+      "key": "snowman.iceMoose",
+      "part": "snowman",
+      "when": "",
+      "ms": 1970,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "big"
+      ],
+      "text": "Wow, a big one!",
+      "voice": "maple",
+      "key": "snowman.big",
+      "part": "snowman",
+      "when": "Maple acting it out.",
+      "ms": 1655,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "made",
+        "0"
+      ],
+      "text": "A snowman! Ta-da!",
+      "voice": "maple",
+      "key": "snowman.made.0",
+      "part": "snowman › made",
+      "when": "",
+      "ms": 3057,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "made",
+        "1"
+      ],
+      "text": "Another snowman!",
+      "voice": "maple",
+      "key": "snowman.made.1",
+      "part": "snowman › made",
+      "when": "",
+      "ms": 1272,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "made",
+        "2"
+      ],
+      "text": "He's so wobbly!",
+      "voice": "maple",
+      "key": "snowman.made.2",
+      "part": "snowman › made",
+      "when": "",
+      "ms": 1506,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "climb"
+      ],
+      "text": "Whee! I'm on top!",
+      "voice": "maple",
+      "key": "snowman.climb",
+      "part": "snowman",
+      "when": "",
+      "ms": 1955,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "ride"
+      ],
+      "text": "Look at me!",
+      "voice": "maple",
+      "key": "snowman.ride",
+      "part": "snowman",
+      "when": "",
+      "ms": 736,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "mapleHat"
+      ],
+      "text": "Hee hee! That's for a snowman!",
+      "voice": "maple",
+      "key": "snowman.mapleHat",
+      "part": "snowman",
+      "when": "",
+      "ms": 2153,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "dodge"
+      ],
+      "text": "Eek! Watch out!",
+      "voice": "maple",
+      "key": "snowman.dodge",
+      "part": "snowman",
+      "when": "",
+      "ms": 1566,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "poke",
+        "0"
+      ],
+      "text": "Hee hee!",
+      "voice": "maple",
+      "key": "snowman.poke.0",
+      "part": "snowman › poke",
+      "when": "",
+      "ms": 506,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "poke",
+        "1"
+      ],
+      "text": "Bonjour!",
+      "voice": "maple",
+      "key": "snowman.poke.1",
+      "part": "snowman › poke",
+      "when": "The snowmen wake up and talk.",
+      "ms": 790,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "parade"
+      ],
+      "text": "Here comes the parade!",
+      "voice": "maple",
+      "key": "snowman.parade",
+      "part": "snowman",
+      "when": "",
+      "ms": 1242,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "wake",
+        "0"
+      ],
+      "text": "Bonjour!",
+      "voice": "snowman",
+      "key": "snowman.wake.0",
+      "part": "snowman › wake",
+      "when": "Maple's hello, anywhere she meets Kaylee.",
+      "ms": 1115,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "wake",
+        "1"
+      ],
+      "text": "Hello, hello!",
+      "voice": "snowman",
+      "key": "snowman.wake.1",
+      "part": "snowman › wake",
+      "when": "",
+      "ms": 1693,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "wake",
+        "2"
+      ],
+      "text": "To the parade!",
+      "voice": "snowman",
+      "key": "snowman.wake.2",
+      "part": "snowman › wake",
+      "when": "",
+      "ms": 1439,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "upside"
+      ],
+      "text": "Hello! Why is the sky down there?",
+      "voice": "snowman",
+      "key": "snowman.upside",
+      "part": "snowman",
+      "when": "",
+      "ms": 3482,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "tickle"
+      ],
+      "text": "Hee hee, that tickles!",
+      "voice": "snowman",
+      "key": "snowman.tickle",
+      "part": "snowman",
+      "when": "",
+      "ms": 2647,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "bye"
+      ],
+      "text": "Merci! Bye bye!",
+      "voice": "snowman",
+      "key": "snowman.bye",
+      "part": "snowman",
+      "when": "",
+      "ms": 2006,
+      "flags": []
+    },
+    {
+      "path": [
+        "snowman",
+        "done"
+      ],
+      "text": "You made a whole parade!",
+      "voice": "maple",
+      "key": "snowman.done",
+      "part": "snowman",
+      "when": "",
+      "ms": 1824,
+      "flags": [
+        "changed"
+      ],
+      "was": "Kaylee, you made a whole parade!"
+    }
+  ]
+}

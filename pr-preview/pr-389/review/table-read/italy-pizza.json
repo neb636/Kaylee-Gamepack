@@ -1,0 +1,1565 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "pizza",
+  "title": "Italy › Pizza",
+  "intro": "",
+  "page": "italy-pizza.html",
+  "audio": null,
+  "lines": 91,
+  "seconds": 223,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "pizza.arrive.0",
+      "text": "Welcome to Naples! Pizza was born here!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.hello",
+      "text": "Benvenuta, Chef!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Benvenuta, Chef Kaylee!"
+    },
+    {
+      "key": "pizza.storyIntro",
+      "text": "Let me tell you the story of the most famous pizza!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.story1",
+      "text": "Long ago, a queen named Margherita came to Naples.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.story2",
+      "text": "For the Queen, I will make a special pizza!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.queenHello",
+      "text": "Hello! I would love a pizza, please.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.tossed",
+      "text": "Bellissimo! A big round pizza!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "pizza.tossedOld",
+      "text": "Bellissimo! A big round pizza!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "pizza.sauce",
+      "text": "Swirl the ladle to spread the sauce!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.sauced",
+      "text": "Perfetto! Red tomato sauce!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "pizza.saucedOld",
+      "text": "Perfetto! Red tomato sauce!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "pizza.tomatoFact",
+      "text": "Tomatoes love the hot, sunny weather in Italy!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.cheese3",
+      "text": "Put three pieces of white mozzarella on the pizza!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.flagColors",
+      "text": "Red, white and green, like the flag of Italy!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.ovenFact",
+      "text": "This oven is super hot! Pizza bakes in ninety seconds!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.takeOut",
+      "text": "It is golden! Pull the pizza out!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.queenYum",
+      "text": "Buonissima! Red, white and green!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.named",
+      "text": "So we call it pizza Margherita!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.bufalaFact",
+      "text": "Mozzarella is made from milk. Some comes from buffalo!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.cheeseRain",
+      "text": "Mozzarella!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "pizza.tooMany",
+      "text": "Oops, too many! Drag one off the pizza.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.cutAgain",
+      "text": "Drag all the way across the pizza!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.bufalaCut",
+      "text": "One half for me, one for my baby!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.ginoHello",
+      "text": "Ciao! Half mushrooms, half olives, please!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.halfBoth",
+      "text": "Put mushrooms on one half and olives on the other!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.cutQuarter",
+      "text": "Cut it into four slices! Two cuts!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.ginoCut",
+      "text": "Four slices, for me and my friends!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.prego",
+      "text": "When someone says grazie, you say prego!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.own",
+      "text": "Now make a pizza just for YOU, Chef!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Now make a pizza just for YOU, Chef Kaylee!"
+    },
+    {
+      "key": "pizza.cesareSorry",
+      "text": "Oh. Sorry. Here you go.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.lupaYum",
+      "text": "Buonissima!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Buonissima, Kaylee!"
+    },
+    {
+      "key": "pizza.toppings.mozzarella",
+      "text": "Mozzarella!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "pizza.toppings.pepper",
+      "text": "Peperoni! In Italy, that means peppers!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "pizza.serviceDone",
+      "text": "Great job, Chef!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Great job, Chef Kaylee!"
+    },
+    {
+      "key": "pizza.hat",
+      "text": "Grazie, Chef! A chef hat for you!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Grazie, Chef Kaylee! A chef hat for you!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "pizza",
+        "arrive",
+        "0"
+      ],
+      "text": "Welcome to Naples! Pizza was born here!",
+      "voice": "lupa",
+      "key": "pizza.arrive.0",
+      "part": "pizza › arrive",
+      "when": "Arrival in Naples.",
+      "ms": 4112,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "arrive",
+        "1"
+      ],
+      "text": "Zio Bruno needs a helper chef!",
+      "voice": "lupa",
+      "key": "pizza.arrive.1",
+      "part": "pizza › arrive",
+      "when": "",
+      "ms": 2582,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "hello"
+      ],
+      "text": "Benvenuta, Chef!",
+      "voice": "bruno",
+      "key": "pizza.hello",
+      "part": "pizza",
+      "when": "",
+      "ms": 1728,
+      "flags": [
+        "changed"
+      ],
+      "was": "Benvenuta, Chef Kaylee!"
+    },
+    {
+      "path": [
+        "pizza",
+        "storyIntro"
+      ],
+      "text": "Let me tell you the story of the most famous pizza!",
+      "voice": "bruno",
+      "key": "pizza.storyIntro",
+      "part": "pizza",
+      "when": "",
+      "ms": 3054,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "story1"
+      ],
+      "text": "Long ago, a queen named Margherita came to Naples.",
+      "voice": "sparkle",
+      "key": "pizza.story1",
+      "part": "pizza",
+      "when": "Service 1: the storybook, 1889.",
+      "ms": 4339,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "story2"
+      ],
+      "text": "For the Queen, I will make a special pizza!",
+      "voice": "raffaele",
+      "key": "pizza.story2",
+      "part": "pizza",
+      "when": "",
+      "ms": 3535,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "queenHello"
+      ],
+      "text": "Hello! I would love a pizza, please.",
+      "voice": "queen",
+      "key": "pizza.queenHello",
+      "part": "pizza",
+      "when": "",
+      "ms": 3544,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "toss",
+        "touch"
+      ],
+      "text": "Flick the dough up to spin it!",
+      "voice": "sparkle",
+      "key": "pizza.toss.touch",
+      "part": "pizza › toss",
+      "when": "",
+      "ms": 2316,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "toss",
+        "mouse"
+      ],
+      "text": "Drag the dough up fast to spin it!",
+      "voice": "sparkle",
+      "key": "pizza.toss.mouse",
+      "part": "pizza › toss",
+      "when": "",
+      "ms": 2856,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "tossMore",
+        "touch"
+      ],
+      "text": "Again! Flick it up!",
+      "voice": "sparkle",
+      "key": "pizza.tossMore.touch",
+      "part": "pizza › tossMore",
+      "when": "",
+      "ms": 1956,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "tossMore",
+        "mouse"
+      ],
+      "text": "Again! Drag it up fast!",
+      "voice": "sparkle",
+      "key": "pizza.tossMore.mouse",
+      "part": "pizza › tossMore",
+      "when": "",
+      "ms": 2424,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "tossed"
+      ],
+      "text": "Bellissimo! A big round pizza!",
+      "voice": "bruno",
+      "key": "pizza.tossed",
+      "part": "pizza",
+      "when": "",
+      "ms": 3196,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "tossedOld"
+      ],
+      "text": "Bellissimo! A big round pizza!",
+      "voice": "raffaele",
+      "key": "pizza.tossedOld",
+      "part": "pizza",
+      "when": "",
+      "ms": 3017,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "sauce"
+      ],
+      "text": "Swirl the ladle to spread the sauce!",
+      "voice": "sparkle",
+      "key": "pizza.sauce",
+      "part": "pizza",
+      "when": "",
+      "ms": 3542,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "sauced"
+      ],
+      "text": "Perfetto! Red tomato sauce!",
+      "voice": "bruno",
+      "key": "pizza.sauced",
+      "part": "pizza",
+      "when": "",
+      "ms": 2625,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "saucedOld"
+      ],
+      "text": "Perfetto! Red tomato sauce!",
+      "voice": "raffaele",
+      "key": "pizza.saucedOld",
+      "part": "pizza",
+      "when": "",
+      "ms": 2888,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "tomatoFact"
+      ],
+      "text": "Tomatoes love the hot, sunny weather in Italy!",
+      "voice": "sparkle",
+      "key": "pizza.tomatoFact",
+      "part": "pizza",
+      "when": "",
+      "ms": 3364,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "cheese3"
+      ],
+      "text": "Put three pieces of white mozzarella on the pizza!",
+      "voice": "sparkle",
+      "key": "pizza.cheese3",
+      "part": "pizza",
+      "when": "",
+      "ms": 3461,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "basil3"
+      ],
+      "text": "Now three green basil leaves!",
+      "voice": "sparkle",
+      "key": "pizza.basil3",
+      "part": "pizza",
+      "when": "",
+      "ms": 2573,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "flagColors"
+      ],
+      "text": "Red, white and green, like the flag of Italy!",
+      "voice": "raffaele",
+      "key": "pizza.flagColors",
+      "part": "pizza",
+      "when": "",
+      "ms": 3548,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "oven"
+      ],
+      "text": "Slide the pizza into the oven!",
+      "voice": "sparkle",
+      "key": "pizza.oven",
+      "part": "pizza",
+      "when": "",
+      "ms": 2815,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "ovenFact"
+      ],
+      "text": "This oven is super hot! Pizza bakes in ninety seconds!",
+      "voice": "sparkle",
+      "key": "pizza.ovenFact",
+      "part": "pizza",
+      "when": "",
+      "ms": 4391,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "turn",
+        "touch"
+      ],
+      "text": "Tap the pizza to turn it!",
+      "voice": "sparkle",
+      "key": "pizza.turn.touch",
+      "part": "pizza › turn",
+      "when": "",
+      "ms": 2535,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "turn",
+        "mouse"
+      ],
+      "text": "Click the pizza to turn it!",
+      "voice": "sparkle",
+      "key": "pizza.turn.mouse",
+      "part": "pizza › turn",
+      "when": "",
+      "ms": 2400,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "turnMore"
+      ],
+      "text": "Turn it again!",
+      "voice": "sparkle",
+      "key": "pizza.turnMore",
+      "part": "pizza",
+      "when": "",
+      "ms": 1358,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "takeOut"
+      ],
+      "text": "It is golden! Pull the pizza out!",
+      "voice": "sparkle",
+      "key": "pizza.takeOut",
+      "part": "pizza",
+      "when": "",
+      "ms": 3370,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "serve",
+        "touch"
+      ],
+      "text": "Tap the pizza to give it to the Queen!",
+      "voice": "sparkle",
+      "key": "pizza.serve.touch",
+      "part": "pizza › serve",
+      "when": "",
+      "ms": 2583,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "serve",
+        "mouse"
+      ],
+      "text": "Click the pizza to give it to the Queen!",
+      "voice": "sparkle",
+      "key": "pizza.serve.mouse",
+      "part": "pizza › serve",
+      "when": "",
+      "ms": 2232,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "queenYum"
+      ],
+      "text": "Buonissima! Red, white and green!",
+      "voice": "queen",
+      "key": "pizza.queenYum",
+      "part": "pizza",
+      "when": "",
+      "ms": 3562,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "named"
+      ],
+      "text": "So we call it pizza Margherita!",
+      "voice": "bruno",
+      "key": "pizza.named",
+      "part": "pizza",
+      "when": "",
+      "ms": 3003,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "rush"
+      ],
+      "text": "Mamma mia! Customers!",
+      "voice": "bruno",
+      "key": "pizza.rush",
+      "part": "pizza",
+      "when": "Service 2: the lunch rush.",
+      "ms": 2474,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "bufalaHello"
+      ],
+      "text": "Fresh mozzarella, from my family's milk!",
+      "voice": "bufala",
+      "key": "pizza.bufalaHello",
+      "part": "pizza",
+      "when": "",
+      "ms": 2937,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "bufalaFact"
+      ],
+      "text": "Mozzarella is made from milk. Some comes from buffalo!",
+      "voice": "sparkle",
+      "key": "pizza.bufalaFact",
+      "part": "pizza",
+      "when": "",
+      "ms": 4562,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "bufalaOrder"
+      ],
+      "text": "Five olives on mine, please!",
+      "voice": "bufala",
+      "key": "pizza.bufalaOrder",
+      "part": "pizza",
+      "when": "",
+      "ms": 2856,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "start",
+        "touch"
+      ],
+      "text": "Tap the order to start!",
+      "voice": "sparkle",
+      "key": "pizza.start.touch",
+      "part": "pizza › start",
+      "when": "",
+      "ms": 2340,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "start",
+        "mouse"
+      ],
+      "text": "Click the order to start!",
+      "voice": "sparkle",
+      "key": "pizza.start.mouse",
+      "part": "pizza › start",
+      "when": "",
+      "ms": 2112,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "cheeseRain"
+      ],
+      "text": "Mozzarella!",
+      "voice": "bruno",
+      "key": "pizza.cheeseRain",
+      "part": "pizza",
+      "when": "",
+      "ms": 1078,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "olives5"
+      ],
+      "text": "Put five olives on the pizza!",
+      "voice": "sparkle",
+      "key": "pizza.olives5",
+      "part": "pizza",
+      "when": "",
+      "ms": 2478,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "count",
+        "0"
+      ],
+      "text": "One!",
+      "voice": "sparkle",
+      "key": "pizza.count.0",
+      "part": "pizza › count",
+      "when": "🫒 The Olive Grove (activities/olives). Every spoken line of the activity goes in here.",
+      "ms": 606,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "count",
+        "1"
+      ],
+      "text": "Two!",
+      "voice": "sparkle",
+      "key": "pizza.count.1",
+      "part": "pizza › count",
+      "when": "⛲ The Trevi Fountain (activities/trevi). Every spoken line of the activity goes in here.",
+      "ms": 526,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "count",
+        "2"
+      ],
+      "text": "Three!",
+      "voice": "sparkle",
+      "key": "pizza.count.2",
+      "part": "pizza › count",
+      "when": "🌋 Snow on a Volcano (activities/etna). Nino tells the story; Sparkle only speaks when something new happens (or she's stuck).",
+      "ms": 628,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "count",
+        "3"
+      ],
+      "text": "Four!",
+      "voice": "sparkle",
+      "key": "pizza.count.3",
+      "part": "pizza › count",
+      "when": "",
+      "ms": 698,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "count",
+        "4"
+      ],
+      "text": "Five!",
+      "voice": "sparkle",
+      "key": "pizza.count.4",
+      "part": "pizza › count",
+      "when": "",
+      "ms": 715,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "count",
+        "5"
+      ],
+      "text": "Six!",
+      "voice": "sparkle",
+      "key": "pizza.count.5",
+      "part": "pizza › count",
+      "when": "",
+      "ms": 764,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "count",
+        "6"
+      ],
+      "text": "Seven!",
+      "voice": "sparkle",
+      "key": "pizza.count.6",
+      "part": "pizza › count",
+      "when": "",
+      "ms": 808,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "count",
+        "7"
+      ],
+      "text": "Eight!",
+      "voice": "sparkle",
+      "key": "pizza.count.7",
+      "part": "pizza › count",
+      "when": "",
+      "ms": 554,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "tooMany"
+      ],
+      "text": "Oops, too many! Drag one off the pizza.",
+      "voice": "sparkle",
+      "key": "pizza.tooMany",
+      "part": "pizza",
+      "when": "",
+      "ms": 3641,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "orderDone"
+      ],
+      "text": "That's the order!",
+      "voice": "sparkle",
+      "key": "pizza.orderDone",
+      "part": "pizza",
+      "when": "",
+      "ms": 901,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "cutHalf"
+      ],
+      "text": "Cut it in half! Drag across the pizza.",
+      "voice": "sparkle",
+      "key": "pizza.cutHalf",
+      "part": "pizza",
+      "when": "",
+      "ms": 2990,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "halves"
+      ],
+      "text": "Two halves!",
+      "voice": "sparkle",
+      "key": "pizza.halves",
+      "part": "pizza",
+      "when": "",
+      "ms": 1303,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "cutAgain"
+      ],
+      "text": "Drag all the way across the pizza!",
+      "voice": "sparkle",
+      "key": "pizza.cutAgain",
+      "part": "pizza",
+      "when": "",
+      "ms": 3183,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "bufalaCut"
+      ],
+      "text": "One half for me, one for my baby!",
+      "voice": "bufala",
+      "key": "pizza.bufalaCut",
+      "part": "pizza",
+      "when": "",
+      "ms": 3222,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "serveIt",
+        "touch"
+      ],
+      "text": "Tap the pizza to serve it!",
+      "voice": "sparkle",
+      "key": "pizza.serveIt.touch",
+      "part": "pizza › serveIt",
+      "when": "",
+      "ms": 2493,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "serveIt",
+        "mouse"
+      ],
+      "text": "Click the pizza to serve it!",
+      "voice": "sparkle",
+      "key": "pizza.serveIt.mouse",
+      "part": "pizza › serveIt",
+      "when": "",
+      "ms": 1824,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "bufalaYum"
+      ],
+      "text": "Buonissima! Grazie!",
+      "voice": "bufala",
+      "key": "pizza.bufalaYum",
+      "part": "pizza",
+      "when": "",
+      "ms": 2243,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "ginoHello"
+      ],
+      "text": "Ciao! Half mushrooms, half olives, please!",
+      "voice": "gino",
+      "key": "pizza.ginoHello",
+      "part": "pizza",
+      "when": "",
+      "ms": 4007,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "quickHands"
+      ],
+      "text": "I made this one for you. Watch!",
+      "voice": "bruno",
+      "key": "pizza.quickHands",
+      "part": "pizza",
+      "when": "",
+      "ms": 2990,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "halfMush"
+      ],
+      "text": "Mushrooms go on this half!",
+      "voice": "sparkle",
+      "key": "pizza.halfMush",
+      "part": "pizza",
+      "when": "",
+      "ms": 2618,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "halfOlive"
+      ],
+      "text": "Olives go on that half!",
+      "voice": "sparkle",
+      "key": "pizza.halfOlive",
+      "part": "pizza",
+      "when": "",
+      "ms": 1919,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "halfBoth"
+      ],
+      "text": "Put mushrooms on one half and olives on the other!",
+      "voice": "sparkle",
+      "key": "pizza.halfBoth",
+      "part": "pizza",
+      "when": "",
+      "ms": 4104,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "cutQuarter"
+      ],
+      "text": "Cut it into four slices! Two cuts!",
+      "voice": "sparkle",
+      "key": "pizza.cutQuarter",
+      "part": "pizza",
+      "when": "",
+      "ms": 3238,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "otherWay"
+      ],
+      "text": "Now cut the other way!",
+      "voice": "sparkle",
+      "key": "pizza.otherWay",
+      "part": "pizza",
+      "when": "",
+      "ms": 2547,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "quarters"
+      ],
+      "text": "Four slices!",
+      "voice": "sparkle",
+      "key": "pizza.quarters",
+      "part": "pizza",
+      "when": "",
+      "ms": 1581,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "ginoCut"
+      ],
+      "text": "Four slices, for me and my friends!",
+      "voice": "gino",
+      "key": "pizza.ginoCut",
+      "part": "pizza",
+      "when": "",
+      "ms": 3041,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "ginoYum"
+      ],
+      "text": "Delizioso! Grazie mille!",
+      "voice": "gino",
+      "key": "pizza.ginoYum",
+      "part": "pizza",
+      "when": "",
+      "ms": 2560,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "prego"
+      ],
+      "text": "When someone says grazie, you say prego!",
+      "voice": "sparkle",
+      "key": "pizza.prego",
+      "part": "pizza",
+      "when": "",
+      "ms": 4259,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "own"
+      ],
+      "text": "Now make a pizza just for YOU, Chef!",
+      "voice": "bruno",
+      "key": "pizza.own",
+      "part": "pizza",
+      "when": "",
+      "ms": 3168,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Now make a pizza just for YOU, Chef Kaylee!"
+    },
+    {
+      "path": [
+        "pizza",
+        "pickSauce"
+      ],
+      "text": "Red sauce or pink sauce?",
+      "voice": "sparkle",
+      "key": "pizza.pickSauce",
+      "part": "pizza",
+      "when": "",
+      "ms": 2920,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "redSauce"
+      ],
+      "text": "Red tomato sauce!",
+      "voice": "sparkle",
+      "key": "pizza.redSauce",
+      "part": "pizza",
+      "when": "",
+      "ms": 1634,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "pinkSauce"
+      ],
+      "text": "Pink beet sauce! Yum!",
+      "voice": "sparkle",
+      "key": "pizza.pinkSauce",
+      "part": "pizza",
+      "when": "",
+      "ms": 2598,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "decorate"
+      ],
+      "text": "Put on anything you like!",
+      "voice": "sparkle",
+      "key": "pizza.decorate",
+      "part": "pizza",
+      "when": "",
+      "ms": 2750,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "cesareSneak"
+      ],
+      "text": "Mmm... mozzarella...",
+      "voice": "cesare",
+      "key": "pizza.cesareSneak",
+      "part": "pizza",
+      "when": "",
+      "ms": 2570,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "cesareTap",
+        "touch"
+      ],
+      "text": "Uh oh! Tap the sneaky cat!",
+      "voice": "sparkle",
+      "key": "pizza.cesareTap.touch",
+      "part": "pizza › cesareTap",
+      "when": "",
+      "ms": 2517,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "cesareTap",
+        "mouse"
+      ],
+      "text": "Uh oh! Click the sneaky cat!",
+      "voice": "sparkle",
+      "key": "pizza.cesareTap.mouse",
+      "part": "pizza › cesareTap",
+      "when": "",
+      "ms": 2592,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "cesareSorry"
+      ],
+      "text": "Oh. Sorry. Here you go.",
+      "voice": "cesare",
+      "key": "pizza.cesareSorry",
+      "part": "pizza",
+      "when": "",
+      "ms": 3329,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "doneButton",
+        "touch"
+      ],
+      "text": "Tap the check when you like it!",
+      "voice": "sparkle",
+      "key": "pizza.doneButton.touch",
+      "part": "pizza › doneButton",
+      "when": "",
+      "ms": 2180,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "doneButton",
+        "mouse"
+      ],
+      "text": "Click the check when you like it!",
+      "voice": "sparkle",
+      "key": "pizza.doneButton.mouse",
+      "part": "pizza › doneButton",
+      "when": "",
+      "ms": 2160,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "cutOwn"
+      ],
+      "text": "Cut it any way you like!",
+      "voice": "sparkle",
+      "key": "pizza.cutOwn",
+      "part": "pizza",
+      "when": "",
+      "ms": 1979,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "lupaYum"
+      ],
+      "text": "Buonissima!",
+      "voice": "lupa",
+      "key": "pizza.lupaYum",
+      "part": "pizza",
+      "when": "",
+      "ms": 1008,
+      "flags": [
+        "changed"
+      ],
+      "was": "Buonissima, Kaylee!"
+    },
+    {
+      "path": [
+        "pizza",
+        "toppings",
+        "mozzarella"
+      ],
+      "text": "Mozzarella!",
+      "voice": "sparkle",
+      "key": "pizza.toppings.mozzarella",
+      "part": "pizza › toppings",
+      "when": "",
+      "ms": 1071,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "toppings",
+        "basil"
+      ],
+      "text": "Basil!",
+      "voice": "sparkle",
+      "key": "pizza.toppings.basil",
+      "part": "pizza › toppings",
+      "when": "",
+      "ms": 665,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "toppings",
+        "olive"
+      ],
+      "text": "Olive!",
+      "voice": "sparkle",
+      "key": "pizza.toppings.olive",
+      "part": "pizza › toppings",
+      "when": "",
+      "ms": 484,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "toppings",
+        "mushroom"
+      ],
+      "text": "Mushroom!",
+      "voice": "sparkle",
+      "key": "pizza.toppings.mushroom",
+      "part": "pizza › toppings",
+      "when": "",
+      "ms": 1002,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "toppings",
+        "pepper"
+      ],
+      "text": "Peperoni! In Italy, that means peppers!",
+      "voice": "sparkle",
+      "key": "pizza.toppings.pepper",
+      "part": "pizza › toppings",
+      "when": "",
+      "ms": 3390,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "pizza",
+        "toppings",
+        "tomato"
+      ],
+      "text": "Tomato!",
+      "voice": "sparkle",
+      "key": "pizza.toppings.tomato",
+      "part": "pizza › toppings",
+      "when": "",
+      "ms": 908,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "serviceDone"
+      ],
+      "text": "Great job, Chef!",
+      "voice": "sparkle",
+      "key": "pizza.serviceDone",
+      "part": "pizza",
+      "when": "",
+      "ms": 1512,
+      "flags": [
+        "changed"
+      ],
+      "was": "Great job, Chef Kaylee!"
+    },
+    {
+      "path": [
+        "pizza",
+        "clap"
+      ],
+      "text": "Everybody loves your pizza!",
+      "voice": "bruno",
+      "key": "pizza.clap",
+      "part": "pizza",
+      "when": "",
+      "ms": 1957,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "spin"
+      ],
+      "text": "Now watch me spin!",
+      "voice": "bruno",
+      "key": "pizza.spin",
+      "part": "pizza",
+      "when": "",
+      "ms": 1693,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "hat"
+      ],
+      "text": "Grazie, Chef! A chef hat for you!",
+      "voice": "bruno",
+      "key": "pizza.hat",
+      "part": "pizza",
+      "when": "",
+      "ms": 3624,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Grazie, Chef Kaylee! A chef hat for you!"
+    },
+    {
+      "path": [
+        "pizza",
+        "mandolin"
+      ],
+      "text": "And my mandolin, for Lupa's band!",
+      "voice": "bruno",
+      "key": "pizza.mandolin",
+      "part": "pizza",
+      "when": "",
+      "ms": 2912,
+      "flags": []
+    },
+    {
+      "path": [
+        "pizza",
+        "band"
+      ],
+      "text": "Yay! Our first friend for the band!",
+      "voice": "lupa",
+      "key": "pizza.band",
+      "part": "pizza",
+      "when": "",
+      "ms": 2577,
+      "flags": []
+    }
+  ]
+}

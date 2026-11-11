@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A quieter adventure</title>
+<style>
+:root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a;--lav:#efe6ff;--warn:#b0124f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}}
+:root[data-theme="dark"]{--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;font:17px/1.45 ui-rounded,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink)}
+main{max-width:720px;margin:0 auto;padding-block:16px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}h1{font-size:24px;line-height:1.2;margin:4px 0 6px}
+h2{font-size:14px;letter-spacing:.05em;text-transform:uppercase;color:var(--soft);margin:28px 0 8px}h3{margin:0 0 4px;font-size:17px}
+.chip{display:inline-block;background:var(--lav);border-radius:99px;padding:2px 12px;font-size:14px;font-weight:600}
+.kaylee{font-size:19px;margin:10px 0 0}
+figure{margin:0 0 14px}video{width:100%;border-radius:16px;background:#000;display:block}figcaption{font-size:14px;color:var(--soft);margin-top:6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:0 0 12px}
+.card audio{width:100%;margin:8px 0 0}.meta{font-size:14px;color:var(--soft);margin:0}.warn{color:var(--warn)}
+#answers{display:none;margin-top:8px}
+ol{padding-left:22px}li p{margin:0 0 6px;font-weight:600}textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--card);color:inherit}
+button,.pill{font:inherit;font-weight:700;border:0;border-radius:99px;padding:10px 18px;background:var(--pink);color:var(--bg);text-decoration:none;display:inline-block;margin:4px 6px 4px 0;cursor:pointer}
+button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.pill{background:var(--lav);color:var(--ink)}a{color:var(--pink)}
+.pitch{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin:0 0 16px}
+.pitch img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--lav)}.pbody{padding:14px 16px}
+.pitch h3{font-size:20px}.finger{font-size:18px;font-weight:600;margin:6px 0}.pitch p{margin:6px 0}
+.grows{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;counter-reset:g}
+.grows li{background:var(--lav);border-radius:12px;padding:8px;font-size:14px;text-align:center}.grows span{display:block;font-size:28px}
+.also{font-size:15px;color:var(--soft)}.also span{font-size:18px}
+@media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}}
+</style></head><body><main>
+<span class="chip">Check-in fix</span>
+<h1>A quieter adventure</h1>
+<p class="kaylee">Shorter greetings and celebrations. Her name stays on the landing page and in the two writing activities. Replacement audio is waiting for GitHub’s queued recording job.</p>
+
+<h2>Watch</h2><figure><video src="reel/name-after.mp4" poster="" controls playsinline muted autoplay loop></video>
+<figcaption>After: celebrate the achievement · 10 s</figcaption></figure>
+<figure><video src="reel/name-before.mp4" poster="" controls playsinline muted autoplay loop></video>
+<figcaption>Before: her name on the trophy · 10 s</figcaption></figure>
+<h2>Hear the script</h2><div class="card"><h3>World › First Hello</h3>
+<p class="meta">2 lines · 10 s of talk · her name 0× · 2 flagged</p>
+
+<p><a href="table-read/world-firstHello.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Canada › Trophy Win</h3>
+<p class="meta">1 lines · 0 s of talk · her name 0× · <b class="warn">1 not recorded</b> · 1 flagged</p>
+
+<p><a href="table-read/canada-trophyWin.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Family › Ji</h3>
+<p class="meta">3 lines · 5 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/thailand-family-ji.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Family › Nick</h3>
+<p class="meta">3 lines · 5 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/thailand-family-nick.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Race › Win</h3>
+<p class="meta">1 lines · 0 s of talk · her name 0× · <b class="warn">1 not recorded</b> · 1 flagged</p>
+
+<p><a href="table-read/thailand-race-win.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>World › Everything</h3>
+<p class="meta">139 lines · 244 s of talk · her name 0× · 22 flagged</p>
+
+<p><a href="table-read/world-all.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>World › Praise</h3>
+<p class="meta">6 lines · 6 s of talk · her name 0× · 2 flagged</p>
+
+<p><a href="table-read/world-praise.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Australia › Intro</h3>
+<p class="meta">2 lines · 6 s of talk · her name 0× · 2 flagged</p>
+
+<p><a href="table-read/australia-intro.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Australia › Everything</h3>
+<p class="meta">126 lines · 358 s of talk · her name 0× · 66 flagged</p>
+
+<p><a href="table-read/australia-all.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Australia › Party</h3>
+<p class="meta">11 lines · 33 s of talk · her name 0× · 7 flagged</p>
+
+<p><a href="table-read/australia-party.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Canada › Everything</h3>
+<p class="meta">442 lines · 1128 s of talk · her name 0× · 161 flagged</p>
+
+<p><a href="table-read/canada-all.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Canada › Taffy</h3>
+<p class="meta">37 lines · 78 s of talk · her name 0× · 7 flagged</p>
+
+<p><a href="table-read/canada-taffy.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Canada › Snowman</h3>
+<p class="meta">34 lines · 76 s of talk · her name 0× · 12 flagged</p>
+
+<p><a href="table-read/canada-snowman.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Canada › Bike</h3>
+<p class="meta">30 lines · 59 s of talk · her name 0× · 6 flagged</p>
+
+<p><a href="table-read/canada-bike.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Canada › Bridge</h3>
+<p class="meta">24 lines · 61 s of talk · her name 0× · 7 flagged</p>
+
+<p><a href="table-read/canada-bridge.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Canada › Whales</h3>
+<p class="meta">37 lines · 85 s of talk · her name 0× · 9 flagged</p>
+
+<p><a href="table-read/canada-whales.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Canada › Salmon</h3>
+<p class="meta">32 lines · 76 s of talk · her name 0× · 9 flagged</p>
+
+<p><a href="table-read/canada-salmon.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>China › Intro</h3>
+<p class="meta">2 lines · 5 s of talk · her name 0× · 2 flagged</p>
+
+<p><a href="table-read/china-intro.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>China › Everything</h3>
+<p class="meta">426 lines · 1132 s of talk · her name 2× · 197 flagged</p>
+
+<p><a href="table-read/china-all.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>China › Dumplings › Arrive</h3>
+<p class="meta">2 lines · 3 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/china-dumplings-arrive.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>China › Dumplings</h3>
+<p class="meta">117 lines · 298 s of talk · her name 0× · 42 flagged</p>
+
+<p><a href="table-read/china-dumplings.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>China › Wall › Fixed</h3>
+<p class="meta">3 lines · 8 s of talk · her name 0× · 2 flagged</p>
+
+<p><a href="table-read/china-wall-fixed.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>China › Hotpot › Story</h3>
+<p class="meta">1 lines · 3 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/china-hotpot-story.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>China › Brush</h3>
+<p class="meta">34 lines · 69 s of talk · her name 2× · 7 flagged</p>
+
+<p><a href="table-read/china-brush.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>China › Race › Reveal</h3>
+<p class="meta">2 lines · 7 s of talk · her name 0× · 2 flagged</p>
+
+<p><a href="table-read/china-race-reveal.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>China › Race</h3>
+<p class="meta">59 lines · 170 s of talk · her name 0× · 27 flagged</p>
+
+<p><a href="table-read/china-race.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>China › Train</h3>
+<p class="meta">44 lines · 115 s of talk · her name 0× · 13 flagged</p>
+
+<p><a href="table-read/china-train.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>China › Parade</h3>
+<p class="meta">25 lines · 76 s of talk · her name 0× · 14 flagged</p>
+
+<p><a href="table-read/china-parade.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Egypt › Intro</h3>
+<p class="meta">2 lines · 5 s of talk · her name 0× · 2 flagged</p>
+
+<p><a href="table-read/egypt-intro.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Egypt › Everything</h3>
+<p class="meta">137 lines · 388 s of talk · her name 2× · 74 flagged</p>
+
+<p><a href="table-read/egypt-all.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Egypt › Passage</h3>
+<p class="meta">15 lines · 40 s of talk · her name 0× · 7 flagged</p>
+
+<p><a href="table-read/egypt-passage.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Egypt › Sphinx</h3>
+<p class="meta">13 lines · 39 s of talk · her name 0× · 5 flagged</p>
+
+<p><a href="table-read/egypt-sphinx.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Egypt › Show</h3>
+<p class="meta">11 lines · 29 s of talk · her name 0× · 2 flagged</p>
+
+<p><a href="table-read/egypt-show.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Italy › Everything</h3>
+<p class="meta">448 lines · 1075 s of talk · her name 0× · 184 flagged</p>
+
+<p><a href="table-read/italy-all.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Italy › Intro</h3>
+<p class="meta">2 lines · 4 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/italy-intro.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Italy › Pizza</h3>
+<p class="meta">91 lines · 223 s of talk · her name 0× · 35 flagged</p>
+
+<p><a href="table-read/italy-pizza.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Italy › Olives › Arrive</h3>
+<p class="meta">2 lines · 4 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/italy-olives-arrive.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Italy › Olives › Branch Done</h3>
+<p class="meta">3 lines · 6 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/italy-olives-branchDone.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Italy › Olives</h3>
+<p class="meta">62 lines · 134 s of talk · her name 0× · 10 flagged</p>
+
+<p><a href="table-read/italy-olives.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Italy › Trevi</h3>
+<p class="meta">44 lines · 97 s of talk · her name 0× · 12 flagged</p>
+
+<p><a href="table-read/italy-trevi.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Italy › Colosseum</h3>
+<p class="meta">48 lines · 117 s of talk · her name 0× · 14 flagged</p>
+
+<p><a href="table-read/italy-colosseum.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Italy › Venice › Arrive</h3>
+<p class="meta">1 lines · 5 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/italy-venice-arrive.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Italy › Venice › Thanks</h3>
+<p class="meta">4 lines · 3 s of talk · her name 0× · 4 flagged</p>
+
+<p><a href="table-read/italy-venice-thanks.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Peru › Everything</h3>
+<p class="meta">254 lines · 563 s of talk · her name 0× · 85 flagged</p>
+
+<p><a href="table-read/peru-all.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Peru › Intro</h3>
+<p class="meta">2 lines · 4 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/peru-intro.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Peru › Fluffy</h3>
+<p class="meta">45 lines · 99 s of talk · her name 0× · 11 flagged</p>
+
+<p><a href="table-read/peru-fluffy.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Peru › Terraces</h3>
+<p class="meta">44 lines · 81 s of talk · her name 0× · 6 flagged</p>
+
+<p><a href="table-read/peru-terraces.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Peru › Penguins › Lobo Tap</h3>
+<p class="meta">3 lines · 4 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/peru-penguins-loboTap.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Peru › Penguins</h3>
+<p class="meta">49 lines · 93 s of talk · her name 0× · 14 flagged</p>
+
+<p><a href="table-read/peru-penguins.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Peru › Canyon</h3>
+<p class="meta">33 lines · 76 s of talk · her name 0× · 10 flagged</p>
+
+<p><a href="table-read/peru-canyon.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Peru › River</h3>
+<p class="meta">41 lines · 94 s of talk · her name 0× · 11 flagged</p>
+
+<p><a href="table-read/peru-river.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Poles › Everything</h3>
+<p class="meta">241 lines · 680 s of talk · her name 0× · 108 flagged</p>
+
+<p><a href="table-read/poles-all.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Poles › Floe</h3>
+<p class="meta">25 lines · 63 s of talk · her name 0× · 6 flagged</p>
+
+<p><a href="table-read/poles-floe.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Poles › Huddle</h3>
+<p class="meta">25 lines · 65 s of talk · her name 0× · 7 flagged</p>
+
+<p><a href="table-read/poles-huddle.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Everything</h3>
+<p class="meta">1211 lines · 2548 s of talk · her name 0× · 444 flagged</p>
+
+<p><a href="table-read/thailand-all.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › House</h3>
+<p class="meta">18 lines · 55 s of talk · her name 0× · 11 flagged</p>
+
+<p><a href="table-read/thailand-house.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Family › Agong</h3>
+<p class="meta">3 lines · 7 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/thailand-family-agong.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Family › Jum</h3>
+<p class="meta">3 lines · 8 s of talk · her name 0× · 2 flagged</p>
+
+<p><a href="table-read/thailand-family-jum.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Family › Joy</h3>
+<p class="meta">3 lines · 7 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/thailand-family-joy.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Family › Bird</h3>
+<p class="meta">3 lines · 5 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/thailand-family-bird.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Family › Gan</h3>
+<p class="meta">3 lines · 6 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/thailand-family-gan.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Family › Ken</h3>
+<p class="meta">3 lines · 4 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/thailand-family-ken.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Family › Bb</h3>
+<p class="meta">3 lines · 4 s of talk · her name 0× · 2 flagged</p>
+
+<p><a href="table-read/thailand-family-bb.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Family › Ja</h3>
+<p class="meta">2 lines · 3 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/thailand-family-ja.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Family › Sri</h3>
+<p class="meta">2 lines · 3 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/thailand-family-sri.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Family › Putto</h3>
+<p class="meta">2 lines · 2 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/thailand-family-putto.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Family › Putter</h3>
+<p class="meta">2 lines · 2 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/thailand-family-putter.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Family Photo</h3>
+<p class="meta">2 lines · 2 s of talk · her name 0× · 1 flagged</p>
+
+<p><a href="table-read/thailand-familyPhoto.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Wardrobe</h3>
+<p class="meta">131 lines · 253 s of talk · her name 0× · 45 flagged</p>
+
+<p><a href="table-read/thailand-wardrobe.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Trip › Ask</h3>
+<p class="meta">8 lines · 14 s of talk · her name 0× · 3 flagged</p>
+
+<p><a href="table-read/thailand-trip-ask.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Trip › Pack</h3>
+<p class="meta">13 lines · 28 s of talk · her name 0× · 3 flagged</p>
+
+<p><a href="table-read/thailand-trip-pack.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Trip › Plane</h3>
+<p class="meta">10 lines · 17 s of talk · her name 0× · 2 flagged</p>
+
+<p><a href="table-read/thailand-trip-plane.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Bay</h3>
+<p class="meta">50 lines · 116 s of talk · her name 0× · 18 flagged</p>
+
+<p><a href="table-read/thailand-bay.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Race</h3>
+<p class="meta">23 lines · 42 s of talk · her name 0× · 9 flagged</p>
+
+<p><a href="table-read/thailand-race.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Chang</h3>
+<p class="meta">37 lines · 86 s of talk · her name 0× · 7 flagged</p>
+
+<p><a href="table-read/thailand-chang.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Home</h3>
+<p class="meta">15 lines · 28 s of talk · her name 0× · 3 flagged</p>
+
+<p><a href="table-read/thailand-home.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Nan › Rice</h3>
+<p class="meta">55 lines · 115 s of talk · her name 0× · 16 flagged</p>
+
+<p><a href="table-read/thailand-nan-rice.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Nan › Map</h3>
+<p class="meta">6 lines · 13 s of talk · her name 0× · 2 flagged</p>
+
+<p><a href="table-read/thailand-nan-map.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Nan › Drive</h3>
+<p class="meta">41 lines · 69 s of talk · her name 0× · 9 flagged</p>
+
+<p><a href="table-read/thailand-nan-drive.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Nan › Mushrooms</h3>
+<p class="meta">26 lines · 52 s of talk · her name 0× · 2 flagged</p>
+
+<p><a href="table-read/thailand-nan-mushrooms.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Nan › Salt</h3>
+<p class="meta">19 lines · 41 s of talk · her name 0× · 2 flagged</p>
+
+<p><a href="table-read/thailand-nan-salt.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Nan › Cup</h3>
+<p class="meta">51 lines · 116 s of talk · her name 0× · 8 flagged</p>
+
+<p><a href="table-read/thailand-nan-cup.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Samet › Book</h3>
+<p class="meta">43 lines · 118 s of talk · her name 0× · 19 flagged</p>
+
+<p><a href="table-read/thailand-samet-book.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Samet › Jetski</h3>
+<p class="meta">45 lines · 86 s of talk · her name 0× · 3 flagged</p>
+
+<p><a href="table-read/thailand-samet-jetski.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Samet › Hideseek</h3>
+<p class="meta">53 lines · 77 s of talk · her name 0× · 25 flagged</p>
+
+<p><a href="table-read/thailand-samet-hideseek.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Samet › Finale</h3>
+<p class="meta">50 lines · 107 s of talk · her name 0× · 10 flagged</p>
+
+<p><a href="table-read/thailand-samet-finale.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Mall › Hall</h3>
+<p class="meta">16 lines · 29 s of talk · her name 0× · 8 flagged</p>
+
+<p><a href="table-read/thailand-mall-hall.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Mall › Vet</h3>
+<p class="meta">32 lines · 72 s of talk · her name 0× · 9 flagged</p>
+
+<p><a href="table-read/thailand-mall-vet.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Mall › Barber</h3>
+<p class="meta">27 lines · 51 s of talk · her name 0× · 3 flagged</p>
+
+<p><a href="table-read/thailand-mall-barber.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Mall › Cafe</h3>
+<p class="meta">28 lines · 62 s of talk · her name 0× · 8 flagged</p>
+
+<p><a href="table-read/thailand-mall-cafe.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Mall › Race</h3>
+<p class="meta">26 lines · 52 s of talk · her name 0× · 10 flagged</p>
+
+<p><a href="table-read/thailand-mall-race.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Mall › Blocks</h3>
+<p class="meta">19 lines · 35 s of talk · her name 0× · 4 flagged</p>
+
+<p><a href="table-read/thailand-mall-blocks.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Mall › Mountain</h3>
+<p class="meta">21 lines · 37 s of talk · her name 0× · 5 flagged</p>
+
+<p><a href="table-read/thailand-mall-mountain.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Mall › Boxing</h3>
+<p class="meta">21 lines · 42 s of talk · her name 0× · 5 flagged</p>
+
+<p><a href="table-read/thailand-mall-boxing.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Mall › Skypod</h3>
+<p class="meta">23 lines · 29 s of talk · her name 0× · 5 flagged</p>
+
+<p><a href="table-read/thailand-mall-skypod.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Mall › Frame</h3>
+<p class="meta">14 lines · 32 s of talk · her name 0× · 4 flagged</p>
+
+<p><a href="table-read/thailand-mall-frame.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Mall › Pizza</h3>
+<p class="meta">25 lines · 41 s of talk · her name 0× · 5 flagged</p>
+
+<p><a href="table-read/thailand-mall-pizza.html">Read along: who says what, and when</a></p></div>
+<div class="card"><h3>Thailand › Mall › Trip</h3>
+<p class="meta">33 lines · 82 s of talk · her name 0× · 18 flagged</p>
+
+<p><a href="table-read/thailand-mall-trip.html">Read along: who says what, and when</a></p></div>
+
+
+<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world?view=map">Explore the updated map</a> <a class="pill" href="../#/world/egypt/scribe/framed">Egypt: the name-writing exception</a> <a class="pill" href="../#/world/china/brush/stamp">China: the name-writing exception</a></p>
+</main>
+<script>
+const qs=[],titles=[]
+document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p]
+  try{await navigator.clipboard.writeText(t);document.getElementById('picked').textContent='Copied “'+t+'”. Paste it on the PR, or just say it in chat.'}catch{document.getElementById('picked').textContent=t+': say it on the PR or in chat.'}}))
+document.getElementById('copy')?.addEventListener('click',async()=>{
+  const a=[...document.querySelectorAll('textarea')].map((t,i)=>(i+1)+'. '+qs[i]+'\n   '+(t.value.trim()||'(no answer)')).join('\n')
+  try{await navigator.clipboard.writeText(a);document.getElementById('done').textContent='Copied. Paste it as a comment on the PR.'}
+  catch{const t=document.getElementById('answers');t.value=a;t.style.display='block';t.select();document.getElementById('done').textContent='Copy the text below, then paste it on the PR.'}})
+</script></body></html>

@@ -1,0 +1,85 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "family.jum",
+  "title": "Thailand › Family › Jum",
+  "intro": "",
+  "page": "thailand-family-jum.html",
+  "audio": null,
+  "lines": 3,
+  "seconds": 8,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "family.jum.hi",
+      "text": "Sawasdee ka! Are you hungry?",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Sawasdee ka, Kaylee! Are you hungry?"
+    },
+    {
+      "key": "family.jum.again.1",
+      "text": "So big now!",
+      "flags": [
+        "changed"
+      ],
+      "was": "So big now, Kaylee!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "family",
+        "jum",
+        "hi"
+      ],
+      "text": "Sawasdee ka! Are you hungry?",
+      "voice": "jum",
+      "key": "family.jum.hi",
+      "part": "family › jum",
+      "when": "",
+      "ms": 3096,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Sawasdee ka, Kaylee! Are you hungry?"
+    },
+    {
+      "path": [
+        "family",
+        "jum",
+        "again",
+        "0"
+      ],
+      "text": "The rice is almost ready!",
+      "voice": "jum",
+      "key": "family.jum.again.0",
+      "part": "family › jum › again",
+      "when": "",
+      "ms": 2429,
+      "flags": []
+    },
+    {
+      "path": [
+        "family",
+        "jum",
+        "again",
+        "1"
+      ],
+      "text": "So big now!",
+      "voice": "jum",
+      "key": "family.jum.again.1",
+      "part": "family › jum › again",
+      "when": "",
+      "ms": 2016,
+      "flags": [
+        "changed"
+      ],
+      "was": "So big now, Kaylee!"
+    }
+  ]
+}

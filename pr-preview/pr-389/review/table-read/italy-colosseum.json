@@ -1,0 +1,795 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "colosseum",
+  "title": "Italy › Colosseum",
+  "intro": "🏛️ The Colosseum (activities/colosseum). Every spoken line of the activity goes in here.",
+  "page": "italy-colosseum.html",
+  "audio": null,
+  "lines": 48,
+  "seconds": 117,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "colosseum.arrive.0",
+      "text": "I am Cesare, Emperor of the Colosseum!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "colosseum.hotFact",
+      "text": "Rome is hot and sunny in summer!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "colosseum.pull",
+      "text": "Pull the rope down to make shade!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "colosseum.sailors",
+      "text": "Long ago, sailors pulled the shade ropes!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "colosseum.under",
+      "text": "Under the floor are secret tunnels and elevators!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "colosseum.tapDoor.mouse",
+      "text": "Click the door with the right number!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "colosseum.countLines.2",
+      "text": "One, two, three lines. Three!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "colosseum.slowBow",
+      "text": "A very, very slow bow!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "colosseum.round2",
+      "text": "Now the big doors: four and five!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "colosseum.youAreFive",
+      "text": "V is five! Just like you!",
+      "flags": [
+        "changed"
+      ],
+      "was": "V is five! Just like you, Kaylee!"
+    },
+    {
+      "key": "colosseum.wave.touch",
+      "text": "Swipe across the crowd to make a wave!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "colosseum.wave.mouse",
+      "text": "Drag across the crowd to make a wave!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "colosseum.old",
+      "text": "The Colosseum is almost 2,000 years old!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "colosseum.bow",
+      "text": "Grazie. I bow to you.",
+      "flags": [
+        "changed"
+      ],
+      "was": "Grazie, Kaylee. I bow to you."
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "colosseum",
+        "arrive",
+        "0"
+      ],
+      "text": "I am Cesare, Emperor of the Colosseum!",
+      "voice": "cesare",
+      "key": "colosseum.arrive.0",
+      "part": "colosseum › arrive",
+      "when": "",
+      "ms": 3771,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "colosseum",
+        "arrive",
+        "1"
+      ],
+      "text": "Tonight: a surprise show!",
+      "voice": "cesare",
+      "key": "colosseum.arrive.1",
+      "part": "colosseum › arrive",
+      "when": "",
+      "ms": 2546,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "hot"
+      ],
+      "text": "But it is so hot!",
+      "voice": "cesare",
+      "key": "colosseum.hot",
+      "part": "colosseum",
+      "when": "1. The sun-shade.",
+      "ms": 2220,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "hotFact"
+      ],
+      "text": "Rome is hot and sunny in summer!",
+      "voice": "sparkle",
+      "key": "colosseum.hotFact",
+      "part": "colosseum",
+      "when": "",
+      "ms": 3418,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "colosseum",
+        "pull"
+      ],
+      "text": "Pull the rope down to make shade!",
+      "voice": "sparkle",
+      "key": "colosseum.pull",
+      "part": "colosseum",
+      "when": "",
+      "ms": 3133,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "colosseum",
+        "pullNext"
+      ],
+      "text": "Pull the next rope!",
+      "voice": "sparkle",
+      "key": "colosseum.pullNext",
+      "part": "colosseum",
+      "when": "",
+      "ms": 2088,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "pullLast"
+      ],
+      "text": "One more rope!",
+      "voice": "sparkle",
+      "key": "colosseum.pullLast",
+      "part": "colosseum",
+      "when": "",
+      "ms": 1813,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "pullHint"
+      ],
+      "text": "Drag the rope handle all the way down!",
+      "voice": "sparkle",
+      "key": "colosseum.pullHint",
+      "part": "colosseum",
+      "when": "",
+      "ms": 2869,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "shade",
+        "0"
+      ],
+      "text": "Ahh, shade!",
+      "voice": "cesare",
+      "key": "colosseum.shade.0",
+      "part": "colosseum › shade",
+      "when": "",
+      "ms": 1595,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "shade",
+        "1"
+      ],
+      "text": "Ahh, much better!",
+      "voice": "cesare",
+      "key": "colosseum.shade.1",
+      "part": "colosseum › shade",
+      "when": "",
+      "ms": 2365,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "shade",
+        "2"
+      ],
+      "text": "Ahh! Grazie!",
+      "voice": "cesare",
+      "key": "colosseum.shade.2",
+      "part": "colosseum › shade",
+      "when": "",
+      "ms": 1754,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "sailors"
+      ],
+      "text": "Long ago, sailors pulled the shade ropes!",
+      "voice": "sparkle",
+      "key": "colosseum.sailors",
+      "part": "colosseum",
+      "when": "",
+      "ms": 3851,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "colosseum",
+        "under"
+      ],
+      "text": "Under the floor are secret tunnels and elevators!",
+      "voice": "sparkle",
+      "key": "colosseum.under",
+      "part": "colosseum",
+      "when": "2. Roman numeral trapdoors.",
+      "ms": 3809,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "colosseum",
+        "lines"
+      ],
+      "text": "Romans wrote numbers with lines!",
+      "voice": "sparkle",
+      "key": "colosseum.lines",
+      "part": "colosseum",
+      "when": "",
+      "ms": 2212,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "call",
+        "0"
+      ],
+      "text": "Door one!",
+      "voice": "cesare",
+      "key": "colosseum.call.0",
+      "part": "colosseum › call",
+      "when": "",
+      "ms": 2914,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "call",
+        "1"
+      ],
+      "text": "Door two!",
+      "voice": "cesare",
+      "key": "colosseum.call.1",
+      "part": "colosseum › call",
+      "when": "",
+      "ms": 1123,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "call",
+        "2"
+      ],
+      "text": "Door three!",
+      "voice": "cesare",
+      "key": "colosseum.call.2",
+      "part": "colosseum › call",
+      "when": "",
+      "ms": 1504,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "call",
+        "3"
+      ],
+      "text": "Door four!",
+      "voice": "cesare",
+      "key": "colosseum.call.3",
+      "part": "colosseum › call",
+      "when": "",
+      "ms": 1241,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "call",
+        "4"
+      ],
+      "text": "Door five!",
+      "voice": "cesare",
+      "key": "colosseum.call.4",
+      "part": "colosseum › call",
+      "when": "",
+      "ms": 1391,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "tapDoor",
+        "touch"
+      ],
+      "text": "Tap the door with the right number!",
+      "voice": "sparkle",
+      "key": "colosseum.tapDoor.touch",
+      "part": "colosseum › tapDoor",
+      "when": "",
+      "ms": 1956,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "tapDoor",
+        "mouse"
+      ],
+      "text": "Click the door with the right number!",
+      "voice": "sparkle",
+      "key": "colosseum.tapDoor.mouse",
+      "part": "colosseum › tapDoor",
+      "when": "",
+      "ms": 3144,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "colosseum",
+        "countLines",
+        "0"
+      ],
+      "text": "One line. One!",
+      "voice": "sparkle",
+      "key": "colosseum.countLines.0",
+      "part": "colosseum › countLines",
+      "when": "",
+      "ms": 1606,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "countLines",
+        "1"
+      ],
+      "text": "One, two lines. Two!",
+      "voice": "sparkle",
+      "key": "colosseum.countLines.1",
+      "part": "colosseum › countLines",
+      "when": "",
+      "ms": 2660,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "countLines",
+        "2"
+      ],
+      "text": "One, two, three lines. Three!",
+      "voice": "sparkle",
+      "key": "colosseum.countLines.2",
+      "part": "colosseum › countLines",
+      "when": "",
+      "ms": 3741,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "colosseum",
+        "four"
+      ],
+      "text": "Four is one line, then a V!",
+      "voice": "sparkle",
+      "key": "colosseum.four",
+      "part": "colosseum",
+      "when": "",
+      "ms": 2762,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "five"
+      ],
+      "text": "Five looks like a V!",
+      "voice": "sparkle",
+      "key": "colosseum.five",
+      "part": "colosseum",
+      "when": "",
+      "ms": 2119,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "lever"
+      ],
+      "text": "Pull the lever down!",
+      "voice": "sparkle",
+      "key": "colosseum.lever",
+      "part": "colosseum",
+      "when": "",
+      "ms": 2015,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "leverHint"
+      ],
+      "text": "Drag the lever all the way down!",
+      "voice": "sparkle",
+      "key": "colosseum.leverHint",
+      "part": "colosseum",
+      "when": "",
+      "ms": 2515,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "up"
+      ],
+      "text": "Up goes the elevator!",
+      "voice": "sparkle",
+      "key": "colosseum.up",
+      "part": "colosseum",
+      "when": "",
+      "ms": 1904,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "pop",
+        "spina"
+      ],
+      "text": "Ta-da! Olive juggling!",
+      "voice": "spina",
+      "key": "colosseum.pop.spina",
+      "part": "colosseum › pop",
+      "when": "",
+      "ms": 1821,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "pop",
+        "gino"
+      ],
+      "text": "Ta-da! The spinning pigeon!",
+      "voice": "gino",
+      "key": "colosseum.pop.gino",
+      "part": "colosseum › pop",
+      "when": "",
+      "ms": 2605,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "pop",
+        "tortoise"
+      ],
+      "text": "Ta... daaa...",
+      "voice": "tortoise",
+      "key": "colosseum.pop.tortoise",
+      "part": "colosseum › pop",
+      "when": "",
+      "ms": 2476,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "pop",
+        "bruno"
+      ],
+      "text": "Ta-da! Pizza spin!",
+      "voice": "bruno",
+      "key": "colosseum.pop.bruno",
+      "part": "colosseum › pop",
+      "when": "",
+      "ms": 2122,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "pop",
+        "lupa"
+      ],
+      "text": "Ta-da! Awoooo!",
+      "voice": "lupa",
+      "key": "colosseum.pop.lupa",
+      "part": "colosseum › pop",
+      "when": "",
+      "ms": 2073,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "slowBow"
+      ],
+      "text": "A very, very slow bow!",
+      "voice": "sparkle",
+      "key": "colosseum.slowBow",
+      "part": "colosseum",
+      "when": "",
+      "ms": 3890,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "colosseum",
+        "round2"
+      ],
+      "text": "Now the big doors: four and five!",
+      "voice": "cesare",
+      "key": "colosseum.round2",
+      "part": "colosseum",
+      "when": "",
+      "ms": 3225,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "colosseum",
+        "youAreFive"
+      ],
+      "text": "V is five! Just like you!",
+      "voice": "sparkle",
+      "key": "colosseum.youAreFive",
+      "part": "colosseum",
+      "when": "",
+      "ms": 2376,
+      "flags": [
+        "changed"
+      ],
+      "was": "V is five! Just like you, Kaylee!"
+    },
+    {
+      "path": [
+        "colosseum",
+        "allDoors"
+      ],
+      "text": "Everybody, up!",
+      "voice": "cesare",
+      "key": "colosseum.allDoors",
+      "part": "colosseum",
+      "when": "3. Grand finale: every door opens, the crowd does a wave.",
+      "ms": 1299,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "wave",
+        "touch"
+      ],
+      "text": "Swipe across the crowd to make a wave!",
+      "voice": "sparkle",
+      "key": "colosseum.wave.touch",
+      "part": "colosseum › wave",
+      "when": "",
+      "ms": 3116,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "colosseum",
+        "wave",
+        "mouse"
+      ],
+      "text": "Drag across the crowd to make a wave!",
+      "voice": "sparkle",
+      "key": "colosseum.wave.mouse",
+      "part": "colosseum › wave",
+      "when": "",
+      "ms": 3336,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "colosseum",
+        "waveAgain"
+      ],
+      "text": "Again! Make a wave!",
+      "voice": "sparkle",
+      "key": "colosseum.waveAgain",
+      "part": "colosseum",
+      "when": "",
+      "ms": 2103,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "bravo"
+      ],
+      "text": "Bravissimi! What a show!",
+      "voice": "cesare",
+      "key": "colosseum.bravo",
+      "part": "colosseum",
+      "when": "",
+      "ms": 2467,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "old"
+      ],
+      "text": "The Colosseum is almost 2,000 years old!",
+      "voice": "sparkle",
+      "key": "colosseum.old",
+      "part": "colosseum",
+      "when": "",
+      "ms": 4121,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "colosseum",
+        "bow"
+      ],
+      "text": "Grazie. I bow to you.",
+      "voice": "cesare",
+      "key": "colosseum.bow",
+      "part": "colosseum",
+      "when": "Payoff.",
+      "ms": 2256,
+      "flags": [
+        "changed"
+      ],
+      "was": "Grazie, Kaylee. I bow to you."
+    },
+    {
+      "path": [
+        "colosseum",
+        "horn"
+      ],
+      "text": "My Roman horn, for Lupa's band!",
+      "voice": "cesare",
+      "key": "colosseum.horn",
+      "part": "colosseum",
+      "when": "",
+      "ms": 2643,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "tapHorn",
+        "touch"
+      ],
+      "text": "Tap the horn!",
+      "voice": "sparkle",
+      "key": "colosseum.tapHorn.touch",
+      "part": "colosseum › tapHorn",
+      "when": "",
+      "ms": 1507,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "tapHorn",
+        "mouse"
+      ],
+      "text": "Click the horn!",
+      "voice": "sparkle",
+      "key": "colosseum.tapHorn.mouse",
+      "part": "colosseum › tapHorn",
+      "when": "",
+      "ms": 1128,
+      "flags": []
+    },
+    {
+      "path": [
+        "colosseum",
+        "band"
+      ],
+      "text": "Yay! A horn for the band!",
+      "voice": "lupa",
+      "key": "colosseum.band",
+      "part": "colosseum",
+      "when": "",
+      "ms": 2515,
+      "flags": []
+    }
+  ]
+}

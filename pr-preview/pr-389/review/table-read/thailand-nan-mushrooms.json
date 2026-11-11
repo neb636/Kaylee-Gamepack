@@ -1,0 +1,420 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "nan.mushrooms",
+  "title": "Thailand › Nan › Mushrooms",
+  "intro": "",
+  "page": "thailand-nan-mushrooms.html",
+  "audio": null,
+  "lines": 26,
+  "seconds": 52,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "nan.mushrooms.mist",
+      "text": "Spray the bags!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Spray the bags, Kaylee!"
+    },
+    {
+      "key": "nan.mushrooms.sawdust",
+      "text": "Mushrooms grow from sawdust, not seeds!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "mist"
+      ],
+      "text": "Spray the bags!",
+      "voice": "sparkle",
+      "key": "nan.mushrooms.mist",
+      "part": "nan › mushrooms",
+      "when": "Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.",
+      "ms": 1656,
+      "flags": [
+        "changed"
+      ],
+      "was": "Spray the bags, Kaylee!"
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "pick"
+      ],
+      "text": "Pull the mushrooms off!",
+      "voice": "sparkle",
+      "key": "nan.mushrooms.pick",
+      "part": "nan › mushrooms",
+      "when": "Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.",
+      "ms": 1994,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "colors"
+      ],
+      "text": "More bags to spray!",
+      "voice": "sparkle",
+      "key": "nan.mushrooms.colors",
+      "part": "nan › mushrooms",
+      "when": "Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.",
+      "ms": 1676,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "pizza"
+      ],
+      "text": "Put your mushrooms on the pizza!",
+      "voice": "sparkle",
+      "key": "nan.mushrooms.pizza",
+      "part": "nan › mushrooms",
+      "when": "Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.",
+      "ms": 1997,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "hint",
+        "mist",
+        "touch"
+      ],
+      "text": "Hold your finger on the bags!",
+      "voice": "sparkle",
+      "key": "nan.mushrooms.hint.mist.touch",
+      "part": "nan › mushrooms › hint › mist",
+      "when": "",
+      "ms": 2121,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "hint",
+        "mist",
+        "mouse"
+      ],
+      "text": "Click and hold on the bags!",
+      "voice": "sparkle",
+      "key": "nan.mushrooms.hint.mist.mouse",
+      "part": "nan › mushrooms › hint › mist",
+      "when": "",
+      "ms": 2928,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "hint",
+        "pick"
+      ],
+      "text": "Pull a mushroom into the basket!",
+      "voice": "sparkle",
+      "key": "nan.mushrooms.hint.pick",
+      "part": "nan › mushrooms › hint",
+      "when": "",
+      "ms": 2555,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "hint",
+        "pizza"
+      ],
+      "text": "Drag a mushroom to the pizza!",
+      "voice": "sparkle",
+      "key": "nan.mushrooms.hint.pizza",
+      "part": "nan › mushrooms › hint",
+      "when": "",
+      "ms": 2144,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "hint",
+        "oven",
+        "touch"
+      ],
+      "text": "Tap the oven!",
+      "voice": "sparkle",
+      "key": "nan.mushrooms.hint.oven.touch",
+      "part": "nan › mushrooms › hint › oven",
+      "when": "",
+      "ms": 1786,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "hint",
+        "oven",
+        "mouse"
+      ],
+      "text": "Click the oven!",
+      "voice": "sparkle",
+      "key": "nan.mushrooms.hint.oven.mouse",
+      "part": "nan › mushrooms › hint › oven",
+      "when": "",
+      "ms": 1488,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "hint",
+        "share",
+        "touch"
+      ],
+      "text": "Tap the pizza to share it!",
+      "voice": "sparkle",
+      "key": "nan.mushrooms.hint.share.touch",
+      "part": "nan › mushrooms › hint › share",
+      "when": "",
+      "ms": 2371,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "hint",
+        "share",
+        "mouse"
+      ],
+      "text": "Click the pizza to share it!",
+      "voice": "sparkle",
+      "key": "nan.mushrooms.hint.share.mouse",
+      "part": "nan › mushrooms › hint › share",
+      "when": "",
+      "ms": 2256,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "sawdust"
+      ],
+      "text": "Mushrooms grow from sawdust, not seeds!",
+      "voice": "sparkle",
+      "key": "nan.mushrooms.sawdust",
+      "part": "nan › mushrooms",
+      "when": "Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.",
+      "ms": 4002,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "hi"
+      ],
+      "text": "My mushrooms are thirsty!",
+      "voice": "farmer",
+      "key": "nan.mushrooms.hi",
+      "part": "nan › mushrooms",
+      "when": "Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.",
+      "ms": 2426,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "grown"
+      ],
+      "text": "Look at them grow!",
+      "voice": "farmer",
+      "key": "nan.mushrooms.grown",
+      "part": "nan › mushrooms",
+      "when": "Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.",
+      "ms": 1731,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "colors2"
+      ],
+      "text": "Pink ones and gold ones!",
+      "voice": "farmer",
+      "key": "nan.mushrooms.colors2",
+      "part": "nan › mushrooms",
+      "when": "Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.",
+      "ms": 2546,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "oven"
+      ],
+      "text": "Into the oven!",
+      "voice": "farmer",
+      "key": "nan.mushrooms.oven",
+      "part": "nan › mushrooms",
+      "when": "Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.",
+      "ms": 1320,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "tap",
+        "0"
+      ],
+      "text": "Ha ha ha!",
+      "voice": "farmer",
+      "key": "nan.mushrooms.tap.0",
+      "part": "nan › mushrooms › tap",
+      "when": "Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.",
+      "ms": 1202,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "tap",
+        "1"
+      ],
+      "text": "Good spraying!",
+      "voice": "farmer",
+      "key": "nan.mushrooms.tap.1",
+      "part": "nan › mushrooms › tap",
+      "when": "",
+      "ms": 1316,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "tap",
+        "2"
+      ],
+      "text": "Yummy mushrooms!",
+      "voice": "farmer",
+      "key": "nan.mushrooms.tap.2",
+      "part": "nan › mushrooms › tap",
+      "when": "",
+      "ms": 1702,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "hat"
+      ],
+      "text": "A mushroom hat?!",
+      "voice": "nick",
+      "key": "nan.mushrooms.hat",
+      "part": "nan › mushrooms",
+      "when": "Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.",
+      "ms": 1215,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "giant"
+      ],
+      "text": "A giant mushroom!",
+      "voice": "nick",
+      "key": "nan.mushrooms.giant",
+      "part": "nan › mushrooms",
+      "when": "Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.",
+      "ms": 2167,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "yum"
+      ],
+      "text": "Mmm! Mushroom pizza!",
+      "voice": "nick",
+      "key": "nan.mushrooms.yum",
+      "part": "nan › mushrooms",
+      "when": "Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.",
+      "ms": 2140,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "dad",
+        "0"
+      ],
+      "text": "Spray me again!",
+      "voice": "nick",
+      "key": "nan.mushrooms.dad.0",
+      "part": "nan › mushrooms › dad",
+      "when": "Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.",
+      "ms": 1315,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "dad",
+        "1"
+      ],
+      "text": "So many mushrooms!",
+      "voice": "nick",
+      "key": "nan.mushrooms.dad.1",
+      "part": "nan › mushrooms › dad",
+      "when": "",
+      "ms": 1952,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "mushrooms",
+        "share"
+      ],
+      "text": "A slice for everyone!",
+      "voice": "ji",
+      "key": "nan.mushrooms.share",
+      "part": "nan › mushrooms",
+      "when": "Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.",
+      "ms": 1658,
+      "flags": []
+    }
+  ]
+}

@@ -1,0 +1,478 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "bike",
+  "title": "Canada › Bike",
+  "intro": "",
+  "page": "canada-bike.html",
+  "audio": null,
+  "lines": 30,
+  "seconds": 59,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "bike.story.0",
+      "text": "Bonjour! I want to ride all the way down to the waterfall!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bike.steer.touch",
+      "text": "Hold your finger down and steer the bike!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bike.steer.mouse",
+      "text": "Click and hold to steer the bike!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bike.hint.touch",
+      "text": "Push your finger left or right!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bike.hint.mouse",
+      "text": "Hold the click and move left or right!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bike.thanks",
+      "text": "Thank you! What a ride!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Thank you, Kaylee! What a ride!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "bike",
+        "story",
+        "0"
+      ],
+      "text": "Bonjour! I want to ride all the way down to the waterfall!",
+      "voice": "maple",
+      "key": "bike.story.0",
+      "part": "bike › story",
+      "when": "The story, in the gondola at the bottom (Maple, then up they go).",
+      "ms": 4287,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bike",
+        "story",
+        "1"
+      ],
+      "text": "Up we go!",
+      "voice": "maple",
+      "key": "bike.story.1",
+      "part": "bike › story",
+      "when": "",
+      "ms": 1000,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "steer",
+        "touch"
+      ],
+      "text": "Hold your finger down and steer the bike!",
+      "voice": "sparkle",
+      "key": "bike.steer.touch",
+      "part": "bike › steer",
+      "when": "Sparkle: the one instruction when the bike rolls out of the station, what's new on the way, the stuck hint.",
+      "ms": 3323,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bike",
+        "steer",
+        "mouse"
+      ],
+      "text": "Click and hold to steer the bike!",
+      "voice": "sparkle",
+      "key": "bike.steer.mouse",
+      "part": "bike › steer",
+      "when": "",
+      "ms": 3192,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bike",
+        "split"
+      ],
+      "text": "Two trails! Green or blue?",
+      "voice": "sparkle",
+      "key": "bike.split",
+      "part": "bike",
+      "when": "",
+      "ms": 2733,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "creek"
+      ],
+      "text": "The bridge, or splash through the creek?",
+      "voice": "sparkle",
+      "key": "bike.creek",
+      "part": "bike",
+      "when": "",
+      "ms": 2585,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "hint",
+        "touch"
+      ],
+      "text": "Push your finger left or right!",
+      "voice": "sparkle",
+      "key": "bike.hint.touch",
+      "part": "bike › hint",
+      "when": "",
+      "ms": 4060,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bike",
+        "hint",
+        "mouse"
+      ],
+      "text": "Hold the click and move left or right!",
+      "voice": "sparkle",
+      "key": "bike.hint.mouse",
+      "part": "bike › hint",
+      "when": "",
+      "ms": 3168,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bike",
+        "high"
+      ],
+      "text": "Wow, so high!",
+      "voice": "maple",
+      "key": "bike.high",
+      "part": "bike",
+      "when": "Maple's whoops and her silly moments.",
+      "ms": 1654,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "rock"
+      ],
+      "text": "Whoa, wobbly!",
+      "voice": "maple",
+      "key": "bike.rock",
+      "part": "bike",
+      "when": "",
+      "ms": 1432,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "go"
+      ],
+      "text": "Here we go!",
+      "voice": "maple",
+      "key": "bike.go",
+      "part": "bike",
+      "when": "",
+      "ms": 775,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "whee",
+        "0"
+      ],
+      "text": "Wheee!",
+      "voice": "maple",
+      "key": "bike.whee.0",
+      "part": "bike › whee",
+      "when": "",
+      "ms": 1041,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "whee",
+        "1"
+      ],
+      "text": "Woo-hoo!",
+      "voice": "maple",
+      "key": "bike.whee.1",
+      "part": "bike › whee",
+      "when": "",
+      "ms": 829,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "whee",
+        "2"
+      ],
+      "text": "Yahoo!",
+      "voice": "maple",
+      "key": "bike.whee.2",
+      "part": "bike › whee",
+      "when": "",
+      "ms": 729,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "leaves",
+        "0"
+      ],
+      "text": "Ha ha! I am all leaves!",
+      "voice": "maple",
+      "key": "bike.leaves.0",
+      "part": "bike › leaves",
+      "when": "",
+      "ms": 2541,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "leaves",
+        "1"
+      ],
+      "text": "Leaf shower!",
+      "voice": "maple",
+      "key": "bike.leaves.1",
+      "part": "bike › leaves",
+      "when": "",
+      "ms": 1394,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "bell",
+        "0"
+      ],
+      "text": "Ding ding!",
+      "voice": "maple",
+      "key": "bike.bell.0",
+      "part": "bike › bell",
+      "when": "",
+      "ms": 703,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "bell",
+        "1"
+      ],
+      "text": "Boing!",
+      "voice": "maple",
+      "key": "bike.bell.1",
+      "part": "bike › bell",
+      "when": "",
+      "ms": 1357,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "splash"
+      ],
+      "text": "Splash! My tail is wet!",
+      "voice": "maple",
+      "key": "bike.splash",
+      "part": "bike",
+      "when": "",
+      "ms": 2460,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "bridge"
+      ],
+      "text": "Tock, tock, tock!",
+      "voice": "maple",
+      "key": "bike.bridge",
+      "part": "bike",
+      "when": "",
+      "ms": 2036,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "bonk"
+      ],
+      "text": "Oops, bumpy!",
+      "voice": "maple",
+      "key": "bike.bonk",
+      "part": "bike",
+      "when": "",
+      "ms": 1370,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "green"
+      ],
+      "text": "The green way!",
+      "voice": "maple",
+      "key": "bike.green",
+      "part": "bike",
+      "when": "",
+      "ms": 997,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "blue"
+      ],
+      "text": "The blue way! Hold on!",
+      "voice": "maple",
+      "key": "bike.blue",
+      "part": "bike",
+      "when": "",
+      "ms": 1971,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "jump"
+      ],
+      "text": "Up, up and away!",
+      "voice": "maple",
+      "key": "bike.jump",
+      "part": "bike",
+      "when": "",
+      "ms": 1658,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "falls"
+      ],
+      "text": "We made it! The waterfall!",
+      "voice": "maple",
+      "key": "bike.falls",
+      "part": "bike",
+      "when": "",
+      "ms": 2272,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "thanks"
+      ],
+      "text": "Thank you! What a ride!",
+      "voice": "maple",
+      "key": "bike.thanks",
+      "part": "bike",
+      "when": "",
+      "ms": 1728,
+      "flags": [
+        "changed"
+      ],
+      "was": "Thank you, Kaylee! What a ride!"
+    },
+    {
+      "path": [
+        "bike",
+        "moose",
+        "0"
+      ],
+      "text": "Mmm. Bonjour.",
+      "voice": "moose",
+      "key": "bike.moose.0",
+      "part": "bike › moose",
+      "when": "The animals, in their own voices.",
+      "ms": 2324,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "moose",
+        "1"
+      ],
+      "text": "Munch, munch.",
+      "voice": "moose",
+      "key": "bike.moose.1",
+      "part": "bike › moose",
+      "when": "",
+      "ms": 2104,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "chipmunk"
+      ],
+      "text": "Seeds! Seeds!",
+      "voice": "chipmunk",
+      "key": "bike.chipmunk",
+      "part": "bike",
+      "when": "",
+      "ms": 1497,
+      "flags": []
+    },
+    {
+      "path": [
+        "bike",
+        "bear"
+      ],
+      "text": "Mmm, berries!",
+      "voice": "bear",
+      "key": "bike.bear",
+      "part": "bike",
+      "when": "",
+      "ms": 2196,
+      "flags": []
+    }
+  ]
+}

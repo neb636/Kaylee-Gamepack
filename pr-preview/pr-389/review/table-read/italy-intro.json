@@ -1,0 +1,54 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "intro",
+  "title": "Italy › Intro",
+  "intro": "",
+  "page": "italy-intro.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 4,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "intro.0",
+      "text": "Ciao! I'm Lupa!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Ciao, Kaylee! I'm Lupa!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "intro",
+        "0"
+      ],
+      "text": "Ciao! I'm Lupa!",
+      "voice": "lupa",
+      "key": "intro.0",
+      "part": "intro",
+      "when": "",
+      "ms": 1944,
+      "flags": [
+        "changed"
+      ],
+      "was": "Ciao, Kaylee! I'm Lupa!"
+    },
+    {
+      "path": [
+        "intro",
+        "1"
+      ],
+      "text": "Help me get ready to sing at the opera?",
+      "voice": "lupa",
+      "key": "intro.1",
+      "part": "intro",
+      "when": "",
+      "ms": 2442,
+      "flags": []
+    }
+  ]
+}

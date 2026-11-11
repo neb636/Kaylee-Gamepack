@@ -1,0 +1,404 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "bridge",
+  "title": "Canada › Bridge",
+  "intro": "",
+  "page": "canada-bridge.html",
+  "audio": null,
+  "lines": 24,
+  "seconds": 61,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "bridge.fence",
+      "text": "Not on the road! Over the bridge.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bridge.camera",
+      "text": "Click! The camera takes a photo of every animal.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bridge.bonk",
+      "text": "Bonk! The rams bump heads.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bridge.lost",
+      "text": "Oh! A baby stopped to smell a flower.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bridge.seeds",
+      "text": "Walk the others over. They carry seeds!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bridge.bearYes",
+      "text": "Ooh! It looks like the forest!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bridge.done",
+      "text": "You helped them all cross!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "You helped them all cross, Kaylee!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "bridge",
+        "story",
+        "0"
+      ],
+      "text": "The animals need to cross!",
+      "voice": "maple",
+      "key": "bridge.story.0",
+      "part": "bridge › story",
+      "when": "The story (Maple, then Sparkle's one instruction).",
+      "ms": 1663,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "story",
+        "1"
+      ],
+      "text": "Lead them over the animal bridge!",
+      "voice": "sparkle",
+      "key": "bridge.story.1",
+      "part": "bridge › story",
+      "when": "",
+      "ms": 2574,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "lead",
+        "elk"
+      ],
+      "text": "Drag mama elk over the bridge.",
+      "voice": "sparkle",
+      "key": "bridge.lead.elk",
+      "part": "bridge › lead",
+      "when": "Sparkle: whose turn it is (a link that starts there, the next family, and the hint when she's stuck).",
+      "ms": 2509,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "lead",
+        "sheep"
+      ],
+      "text": "The sheep love the rocky way!",
+      "voice": "sparkle",
+      "key": "bridge.lead.sheep",
+      "part": "bridge › lead",
+      "when": "Sparkle: whose turn it is (a link that starts there, the next family, and the hint when she's stuck).",
+      "ms": 2403,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "lead",
+        "bears"
+      ],
+      "text": "Lead the grizzlies over the bridge.",
+      "voice": "sparkle",
+      "key": "bridge.lead.bears",
+      "part": "bridge › lead",
+      "when": "Sparkle: whose turn it is (a link that starts there, the next family, and the hint when she's stuck).",
+      "ms": 2918,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "fence"
+      ],
+      "text": "Not on the road! Over the bridge.",
+      "voice": "sparkle",
+      "key": "bridge.fence",
+      "part": "bridge",
+      "when": "",
+      "ms": 3393,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bridge",
+        "fenceTap"
+      ],
+      "text": "The fence keeps the animals off the road.",
+      "voice": "sparkle",
+      "key": "bridge.fenceTap",
+      "part": "bridge",
+      "when": "",
+      "ms": 2813,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "camera"
+      ],
+      "text": "Click! The camera takes a photo of every animal.",
+      "voice": "sparkle",
+      "key": "bridge.camera",
+      "part": "bridge",
+      "when": "",
+      "ms": 3371,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bridge",
+        "bonk"
+      ],
+      "text": "Bonk! The rams bump heads.",
+      "voice": "sparkle",
+      "key": "bridge.bonk",
+      "part": "bridge",
+      "when": "",
+      "ms": 3072,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bridge",
+        "lost"
+      ],
+      "text": "Oh! A baby stopped to smell a flower.",
+      "voice": "sparkle",
+      "key": "bridge.lost",
+      "part": "bridge",
+      "when": "",
+      "ms": 3347,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bridge",
+        "fetch"
+      ],
+      "text": "Go get the little one!",
+      "voice": "sparkle",
+      "key": "bridge.fetch",
+      "part": "bridge",
+      "when": "",
+      "ms": 1652,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "seeds"
+      ],
+      "text": "Walk the others over. They carry seeds!",
+      "voice": "sparkle",
+      "key": "bridge.seeds",
+      "part": "bridge",
+      "when": "",
+      "ms": 3640,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bridge",
+        "elkGo"
+      ],
+      "text": "Come along, babies!",
+      "voice": "elk",
+      "key": "bridge.elkGo",
+      "part": "bridge",
+      "when": "Mama elk.",
+      "ms": 1326,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "elkHome"
+      ],
+      "text": "Mmm, yummy meadow!",
+      "voice": "elk",
+      "key": "bridge.elkHome",
+      "part": "bridge",
+      "when": "",
+      "ms": 2481,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "elkFound"
+      ],
+      "text": "There you are, little one!",
+      "voice": "elk",
+      "key": "bridge.elkFound",
+      "part": "bridge",
+      "when": "",
+      "ms": 1816,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "bareNo"
+      ],
+      "text": "Hmm. Too bare for me.",
+      "voice": "bear",
+      "key": "bridge.bareNo",
+      "part": "bridge",
+      "when": "Mama grizzly.",
+      "ms": 2547,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "bearYes"
+      ],
+      "text": "Ooh! It looks like the forest!",
+      "voice": "bear",
+      "key": "bridge.bearYes",
+      "part": "bridge",
+      "when": "",
+      "ms": 3131,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bridge",
+        "bearHome"
+      ],
+      "text": "Thank you! Berries!",
+      "voice": "bear",
+      "key": "bridge.bearHome",
+      "part": "bridge",
+      "when": "",
+      "ms": 2934,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "cheer",
+        "elk"
+      ],
+      "text": "Bravo! The elk made it!",
+      "voice": "maple",
+      "key": "bridge.cheer.elk",
+      "part": "bridge › cheer",
+      "when": "Maple, watching from the meadow.",
+      "ms": 2430,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "cheer",
+        "sheep"
+      ],
+      "text": "Yay, the bighorn sheep!",
+      "voice": "maple",
+      "key": "bridge.cheer.sheep",
+      "part": "bridge › cheer",
+      "when": "Maple, watching from the meadow.",
+      "ms": 1934,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "cheer",
+        "bears"
+      ],
+      "text": "The bears too! Bravo!",
+      "voice": "maple",
+      "key": "bridge.cheer.bears",
+      "part": "bridge › cheer",
+      "when": "Maple, watching from the meadow.",
+      "ms": 2268,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "giggle"
+      ],
+      "text": "Hee hee! That tickles!",
+      "voice": "maple",
+      "key": "bridge.giggle",
+      "part": "bridge",
+      "when": "",
+      "ms": 1560,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "album"
+      ],
+      "text": "Look! Photos of everyone!",
+      "voice": "maple",
+      "key": "bridge.album",
+      "part": "bridge",
+      "when": "",
+      "ms": 2228,
+      "flags": []
+    },
+    {
+      "path": [
+        "bridge",
+        "done"
+      ],
+      "text": "You helped them all cross!",
+      "voice": "sparkle",
+      "key": "bridge.done",
+      "part": "bridge",
+      "when": "",
+      "ms": 3120,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "You helped them all cross, Kaylee!"
+    }
+  ]
+}

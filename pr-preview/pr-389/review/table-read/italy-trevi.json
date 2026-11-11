@@ -1,0 +1,722 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "trevi",
+  "title": "Italy › Trevi",
+  "intro": "⛲ The Trevi Fountain (activities/trevi). Every spoken line of the activity goes in here.",
+  "page": "italy-trevi.html",
+  "audio": null,
+  "lines": 44,
+  "seconds": 97,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "trevi.girl1",
+      "text": "Long ago, a girl helped the Romans find water.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "trevi.girl2",
+      "text": "Today, that girl is YOU!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Today, that girl is YOU, Kaylee!"
+    },
+    {
+      "key": "trevi.drag",
+      "text": "Drag the arch that fits each gap!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "trevi.fits.2",
+      "text": "Brava!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Brava, Kaylee!"
+    },
+    {
+      "key": "trevi.round2",
+      "text": "Now all the way to Rome! Look closely!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "trevi.aqueduct",
+      "text": "The Romans called a water bridge an aqueduct!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "trevi.full",
+      "text": "Bellissima! The fountain is full!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "trevi.longAgo",
+      "text": "That was 2,000 years ago!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "trevi.flick.mouse",
+      "text": "Drag the coin up fast into the fountain!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "trevi.comeBack",
+      "text": "Now you will come back to Rome one day!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Now you will come back to Rome one day, Kaylee!"
+    },
+    {
+      "key": "trevi.starWaits",
+      "text": "It waits for Lupa's big night.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "trevi.help",
+      "text": "Coins from the fountain help people who need it.",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "trevi",
+        "dry"
+      ],
+      "text": "Oh no! It's dry!",
+      "voice": "lupa",
+      "key": "trevi.dry",
+      "part": "trevi",
+      "when": "",
+      "ms": 2057,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "where"
+      ],
+      "text": "Where did the water go?",
+      "voice": "lupa",
+      "key": "trevi.where",
+      "part": "trevi",
+      "when": "",
+      "ms": 1827,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "listen",
+        "touch"
+      ],
+      "text": "Tap the hill and listen!",
+      "voice": "sparkle",
+      "key": "trevi.listen.touch",
+      "part": "trevi › listen",
+      "when": "1. Find the spring on the hill.",
+      "ms": 2067,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "listen",
+        "mouse"
+      ],
+      "text": "Click the hill and listen!",
+      "voice": "sparkle",
+      "key": "trevi.listen.mouse",
+      "part": "trevi › listen",
+      "when": "",
+      "ms": 1872,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "hear"
+      ],
+      "text": "Shh! I hear water!",
+      "voice": "lupa",
+      "key": "trevi.hear",
+      "part": "trevi",
+      "when": "",
+      "ms": 2468,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "louder"
+      ],
+      "text": "It's getting louder!",
+      "voice": "lupa",
+      "key": "trevi.louder",
+      "part": "trevi",
+      "when": "",
+      "ms": 1351,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "tapRocks",
+        "touch"
+      ],
+      "text": "Tap the rocks!",
+      "voice": "sparkle",
+      "key": "trevi.tapRocks.touch",
+      "part": "trevi › tapRocks",
+      "when": "",
+      "ms": 1093,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "tapRocks",
+        "mouse"
+      ],
+      "text": "Click the rocks!",
+      "voice": "sparkle",
+      "key": "trevi.tapRocks.mouse",
+      "part": "trevi › tapRocks",
+      "when": "",
+      "ms": 1368,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "found"
+      ],
+      "text": "Acqua! You found water!",
+      "voice": "lupa",
+      "key": "trevi.found",
+      "part": "trevi",
+      "when": "",
+      "ms": 2347,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "girl1"
+      ],
+      "text": "Long ago, a girl helped the Romans find water.",
+      "voice": "sparkle",
+      "key": "trevi.girl1",
+      "part": "trevi",
+      "when": "",
+      "ms": 3738,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "trevi",
+        "girl2"
+      ],
+      "text": "Today, that girl is YOU!",
+      "voice": "sparkle",
+      "key": "trevi.girl2",
+      "part": "trevi",
+      "when": "",
+      "ms": 3192,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Today, that girl is YOU, Kaylee!"
+    },
+    {
+      "path": [
+        "trevi",
+        "bridge"
+      ],
+      "text": "Build a water bridge to Rome!",
+      "voice": "sparkle",
+      "key": "trevi.bridge",
+      "part": "trevi",
+      "when": "2. Build the aqueduct (a water bridge) over the valley.",
+      "ms": 2546,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "drag"
+      ],
+      "text": "Drag the arch that fits each gap!",
+      "voice": "sparkle",
+      "key": "trevi.drag",
+      "part": "trevi",
+      "when": "",
+      "ms": 3041,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "trevi",
+        "fits",
+        "0"
+      ],
+      "text": "It fits!",
+      "voice": "lupa",
+      "key": "trevi.fits.0",
+      "part": "trevi › fits",
+      "when": "",
+      "ms": 1002,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "fits",
+        "1"
+      ],
+      "text": "Perfetto!",
+      "voice": "lupa",
+      "key": "trevi.fits.1",
+      "part": "trevi › fits",
+      "when": "",
+      "ms": 879,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "fits",
+        "2"
+      ],
+      "text": "Brava!",
+      "voice": "lupa",
+      "key": "trevi.fits.2",
+      "part": "trevi › fits",
+      "when": "",
+      "ms": 816,
+      "flags": [
+        "changed"
+      ],
+      "was": "Brava, Kaylee!"
+    },
+    {
+      "path": [
+        "trevi",
+        "downhill"
+      ],
+      "text": "Water only flows downhill!",
+      "voice": "sparkle",
+      "key": "trevi.downhill",
+      "part": "trevi",
+      "when": "",
+      "ms": 2516,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "glowing"
+      ],
+      "text": "Try the glowing arch!",
+      "voice": "sparkle",
+      "key": "trevi.glowing",
+      "part": "trevi",
+      "when": "",
+      "ms": 1682,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "pickArch",
+        "touch"
+      ],
+      "text": "Now tap an arch!",
+      "voice": "sparkle",
+      "key": "trevi.pickArch.touch",
+      "part": "trevi › pickArch",
+      "when": "",
+      "ms": 1686,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "pickArch",
+        "mouse"
+      ],
+      "text": "Now click an arch!",
+      "voice": "sparkle",
+      "key": "trevi.pickArch.mouse",
+      "part": "trevi › pickArch",
+      "when": "",
+      "ms": 2448,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "round2"
+      ],
+      "text": "Now all the way to Rome! Look closely!",
+      "voice": "sparkle",
+      "key": "trevi.round2",
+      "part": "trevi",
+      "when": "",
+      "ms": 4203,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "trevi",
+        "aqueduct"
+      ],
+      "text": "The Romans called a water bridge an aqueduct!",
+      "voice": "sparkle",
+      "key": "trevi.aqueduct",
+      "part": "trevi",
+      "when": "",
+      "ms": 3204,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "trevi",
+        "waterOn",
+        "touch"
+      ],
+      "text": "Tap the spring to turn on the water!",
+      "voice": "sparkle",
+      "key": "trevi.waterOn.touch",
+      "part": "trevi › waterOn",
+      "when": "3. Water on!",
+      "ms": 2177,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "waterOn",
+        "mouse"
+      ],
+      "text": "Click the spring to turn on the water!",
+      "voice": "sparkle",
+      "key": "trevi.waterOn.mouse",
+      "part": "trevi › waterOn",
+      "when": "",
+      "ms": 2400,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "follow",
+        "touch"
+      ],
+      "text": "Follow the water with your finger!",
+      "voice": "sparkle",
+      "key": "trevi.follow.touch",
+      "part": "trevi › follow",
+      "when": "",
+      "ms": 2703,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "follow",
+        "mouse"
+      ],
+      "text": "Click and drag along the water!",
+      "voice": "sparkle",
+      "key": "trevi.follow.mouse",
+      "part": "trevi › follow",
+      "when": "",
+      "ms": 2208,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "toRome"
+      ],
+      "text": "The water is going to Rome!",
+      "voice": "lupa",
+      "key": "trevi.toRome",
+      "part": "trevi",
+      "when": "",
+      "ms": 2349,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "full"
+      ],
+      "text": "Bellissima! The fountain is full!",
+      "voice": "lupa",
+      "key": "trevi.full",
+      "part": "trevi",
+      "when": "4. The fountain fills up.",
+      "ms": 3414,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "trevi",
+        "romans"
+      ],
+      "text": "The Romans built this water bridge!",
+      "voice": "sparkle",
+      "key": "trevi.romans",
+      "part": "trevi",
+      "when": "",
+      "ms": 2264,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "longAgo"
+      ],
+      "text": "That was 2,000 years ago!",
+      "voice": "sparkle",
+      "key": "trevi.longAgo",
+      "part": "trevi",
+      "when": "",
+      "ms": 3053,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "trevi",
+        "still"
+      ],
+      "text": "And it still fills the fountain today!",
+      "voice": "sparkle",
+      "key": "trevi.still",
+      "part": "trevi",
+      "when": "",
+      "ms": 2437,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "flick",
+        "touch"
+      ],
+      "text": "Flick the coin up into the fountain!",
+      "voice": "sparkle",
+      "key": "trevi.flick.touch",
+      "part": "trevi › flick",
+      "when": "5. Toss a coin.",
+      "ms": 2551,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "flick",
+        "mouse"
+      ],
+      "text": "Drag the coin up fast into the fountain!",
+      "voice": "sparkle",
+      "key": "trevi.flick.mouse",
+      "part": "trevi › flick",
+      "when": "",
+      "ms": 3624,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "trevi",
+        "flickHint",
+        "touch"
+      ],
+      "text": "Swipe up on the coin!",
+      "voice": "sparkle",
+      "key": "trevi.flickHint.touch",
+      "part": "trevi › flickHint",
+      "when": "",
+      "ms": 2125,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "flickHint",
+        "mouse"
+      ],
+      "text": "Drag the coin up!",
+      "voice": "sparkle",
+      "key": "trevi.flickHint.mouse",
+      "part": "trevi › flickHint",
+      "when": "",
+      "ms": 2304,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "one"
+      ],
+      "text": "One!",
+      "voice": "sparkle",
+      "key": "trevi.one",
+      "part": "trevi",
+      "when": "",
+      "ms": 606,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "oneMore"
+      ],
+      "text": "One more coin!",
+      "voice": "sparkle",
+      "key": "trevi.oneMore",
+      "part": "trevi",
+      "when": "",
+      "ms": 1547,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "two"
+      ],
+      "text": "Two!",
+      "voice": "sparkle",
+      "key": "trevi.two",
+      "part": "trevi",
+      "when": "",
+      "ms": 526,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "comeBack"
+      ],
+      "text": "Now you will come back to Rome one day!",
+      "voice": "sparkle",
+      "key": "trevi.comeBack",
+      "part": "trevi",
+      "when": "",
+      "ms": 2568,
+      "flags": [
+        "changed"
+      ],
+      "was": "Now you will come back to Rome one day, Kaylee!"
+    },
+    {
+      "path": [
+        "trevi",
+        "lupaTurn"
+      ],
+      "text": "My turn!",
+      "voice": "lupa",
+      "key": "trevi.lupaTurn",
+      "part": "trevi",
+      "when": "",
+      "ms": 953,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "wish"
+      ],
+      "text": "I wish I could sing!",
+      "voice": "lupa",
+      "key": "trevi.wish",
+      "part": "trevi",
+      "when": "",
+      "ms": 1553,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "star"
+      ],
+      "text": "A wishing star!",
+      "voice": "sparkle",
+      "key": "trevi.star",
+      "part": "trevi",
+      "when": "",
+      "ms": 1363,
+      "flags": []
+    },
+    {
+      "path": [
+        "trevi",
+        "starWaits"
+      ],
+      "text": "It waits for Lupa's big night.",
+      "voice": "sparkle",
+      "key": "trevi.starWaits",
+      "part": "trevi",
+      "when": "",
+      "ms": 3124,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "trevi",
+        "help"
+      ],
+      "text": "Coins from the fountain help people who need it.",
+      "voice": "sparkle",
+      "key": "trevi.help",
+      "part": "trevi",
+      "when": "",
+      "ms": 3424,
+      "flags": [
+        "long"
+      ]
+    }
+  ]
+}

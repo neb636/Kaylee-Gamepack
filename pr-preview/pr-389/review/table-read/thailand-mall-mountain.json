@@ -1,0 +1,375 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "mall.mountain",
+  "title": "Thailand › Mall › Mountain",
+  "intro": "",
+  "page": "thailand-mall-mountain.html",
+  "audio": null,
+  "lines": 21,
+  "seconds": 37,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "mall.mountain.climb",
+      "text": "Climb the Golden Mountain! Count the holds!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Climb the Golden Mountain, Kaylee! Count the holds!"
+    },
+    {
+      "key": "mall.mountain.top",
+      "text": "You made it!",
+      "flags": [
+        "changed"
+      ],
+      "was": "You made it, Kaylee!"
+    },
+    {
+      "key": "mall.mountain.beat",
+      "text": "You beat me!",
+      "flags": [
+        "changed"
+      ],
+      "was": "You beat me, Kaylee!"
+    },
+    {
+      "key": "mall.mountain.mount",
+      "text": "In Bangkok, the Golden Mount has over 300 steps!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "mall.mountain.monkeys",
+      "text": "In Lopburi, monkeys live all over town!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "climb"
+      ],
+      "text": "Climb the Golden Mountain! Count the holds!",
+      "voice": "sparkle",
+      "key": "mall.mountain.climb",
+      "part": "mall › mountain",
+      "when": "The opening (Sparkle).",
+      "ms": 5544,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Climb the Golden Mountain, Kaylee! Count the holds!"
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "count",
+        "0"
+      ],
+      "text": "One!",
+      "voice": "sparkle",
+      "key": "mall.mountain.count.0",
+      "part": "mall › mountain › count",
+      "when": "The count, one number as each hold pops (up to round 3's seven).",
+      "ms": 701,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "count",
+        "1"
+      ],
+      "text": "Two!",
+      "voice": "sparkle",
+      "key": "mall.mountain.count.1",
+      "part": "mall › mountain › count",
+      "when": "The count as her score climbs (rounds 1 and 3).",
+      "ms": 501,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "count",
+        "2"
+      ],
+      "text": "Three!",
+      "voice": "sparkle",
+      "key": "mall.mountain.count.2",
+      "part": "mall › mountain › count",
+      "when": "",
+      "ms": 589,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "count",
+        "3"
+      ],
+      "text": "Four!",
+      "voice": "sparkle",
+      "key": "mall.mountain.count.3",
+      "part": "mall › mountain › count",
+      "when": "",
+      "ms": 642,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "count",
+        "4"
+      ],
+      "text": "Five!",
+      "voice": "sparkle",
+      "key": "mall.mountain.count.4",
+      "part": "mall › mountain › count",
+      "when": "",
+      "ms": 854,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "count",
+        "5"
+      ],
+      "text": "Six!",
+      "voice": "sparkle",
+      "key": "mall.mountain.count.5",
+      "part": "mall › mountain › count",
+      "when": "",
+      "ms": 844,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "count",
+        "6"
+      ],
+      "text": "Seven!",
+      "voice": "sparkle",
+      "key": "mall.mountain.count.6",
+      "part": "mall › mountain › count",
+      "when": "",
+      "ms": 765,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "top"
+      ],
+      "text": "You made it!",
+      "voice": "sparkle",
+      "key": "mall.mountain.top",
+      "part": "mall › mountain",
+      "when": "",
+      "ms": 1320,
+      "flags": [
+        "changed"
+      ],
+      "was": "You made it, Kaylee!"
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "pink"
+      ],
+      "text": "Only the pink ones!",
+      "voice": "sparkle",
+      "key": "mall.mountain.pink",
+      "part": "mall › mountain",
+      "when": "",
+      "ms": 1444,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "race"
+      ],
+      "text": "Race Daddy to the top!",
+      "voice": "sparkle",
+      "key": "mall.mountain.race",
+      "part": "mall › mountain",
+      "when": "",
+      "ms": 2450,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "win"
+      ],
+      "text": "I'm going to win!",
+      "voice": "nick",
+      "key": "mall.mountain.win",
+      "part": "mall › mountain",
+      "when": "",
+      "ms": 1309,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "huff"
+      ],
+      "text": "Huff... puff...",
+      "voice": "nick",
+      "key": "mall.mountain.huff",
+      "part": "mall › mountain",
+      "when": "",
+      "ms": 2553,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "beat"
+      ],
+      "text": "You beat me!",
+      "voice": "nick",
+      "key": "mall.mountain.beat",
+      "part": "mall › mountain",
+      "when": "",
+      "ms": 1008,
+      "flags": [
+        "changed"
+      ],
+      "was": "You beat me, Kaylee!"
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "whoa"
+      ],
+      "text": "Whoa-oa-oa!",
+      "voice": "nick",
+      "key": "mall.mountain.whoa",
+      "part": "mall › mountain",
+      "when": "",
+      "ms": 1994,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "hint",
+        "hold"
+      ],
+      "text": "Grab a glowing hold!",
+      "voice": "sparkle",
+      "key": "mall.mountain.hint.hold",
+      "part": "mall › mountain › hint",
+      "when": "",
+      "ms": 1874,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "hint",
+        "pink"
+      ],
+      "text": "Grab a pink one!",
+      "voice": "sparkle",
+      "key": "mall.mountain.hint.pink",
+      "part": "mall › mountain › hint",
+      "when": "",
+      "ms": 1154,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "hint",
+        "bell"
+      ],
+      "text": "Ring the bell!",
+      "voice": "sparkle",
+      "key": "mall.mountain.hint.bell",
+      "part": "mall › mountain › hint",
+      "when": "",
+      "ms": 1268,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "hint",
+        "slide"
+      ],
+      "text": "Down the slide!",
+      "voice": "sparkle",
+      "key": "mall.mountain.hint.slide",
+      "part": "mall › mountain › hint",
+      "when": "",
+      "ms": 1439,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "mount"
+      ],
+      "text": "In Bangkok, the Golden Mount has over 300 steps!",
+      "voice": "sparkle",
+      "key": "mall.mountain.mount",
+      "part": "mall › mountain",
+      "when": "",
+      "ms": 4912,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "mountain",
+        "monkeys"
+      ],
+      "text": "In Lopburi, monkeys live all over town!",
+      "voice": "sparkle",
+      "key": "mall.mountain.monkeys",
+      "part": "mall › mountain",
+      "when": "",
+      "ms": 3938,
+      "flags": [
+        "long"
+      ]
+    }
+  ]
+}

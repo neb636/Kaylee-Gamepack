@@ -1,0 +1,421 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "race",
+  "title": "Thailand › Race",
+  "intro": "The boat race (activities/boat-trip/race/): through the rainbow gate in the bay, three laps round a lagoon against the village kids and a cheeky macaque. Sparkle gives the few instructions and the countdown; Mommy and Daddy cheer in their own voices; the kids tease and cheer; the macaque only chatters. She always wins, and the trophy says so.",
+  "page": "thailand-race.html",
+  "audio": null,
+  "lines": 23,
+  "seconds": 42,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "race.gate",
+      "text": "A boat race! Drive through the rainbow gate!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.start.touch",
+      "text": "Hold your finger on the water to go fast!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.start.mouse",
+      "text": "Click and hold on the water to go fast!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.win",
+      "text": "You win! First place!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Kaylee wins! First place!"
+    },
+    {
+      "key": "race.trophy",
+      "text": "A trophy for you, the boat race champion!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "A trophy for Kaylee, the boat race champion!"
+    },
+    {
+      "key": "race.trophyRoom",
+      "text": "Boat Race Champion! From Thailand.",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Kaylee, Boat Race Champion! From Thailand."
+    },
+    {
+      "key": "race.go",
+      "text": "Go, go, go!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Go, Kaylee, go!"
+    },
+    {
+      "key": "race.raceYou",
+      "text": "Race you!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Race you, Kaylee!"
+    },
+    {
+      "key": "race.goodRace",
+      "text": "Good race!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Good race, Kaylee!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "race",
+        "gate"
+      ],
+      "text": "A boat race! Drive through the rainbow gate!",
+      "voice": "sparkle",
+      "key": "race.gate",
+      "part": "race",
+      "when": "",
+      "ms": 3042,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "start",
+        "touch"
+      ],
+      "text": "Hold your finger on the water to go fast!",
+      "voice": "sparkle",
+      "key": "race.start.touch",
+      "part": "race › start",
+      "when": "",
+      "ms": 3485,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "start",
+        "mouse"
+      ],
+      "text": "Click and hold on the water to go fast!",
+      "voice": "sparkle",
+      "key": "race.start.mouse",
+      "part": "race › start",
+      "when": "",
+      "ms": 3240,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "count",
+        "0"
+      ],
+      "text": "Three!",
+      "voice": "sparkle",
+      "key": "race.count.0",
+      "part": "race › count",
+      "when": "",
+      "ms": 589,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "count",
+        "1"
+      ],
+      "text": "Two!",
+      "voice": "sparkle",
+      "key": "race.count.1",
+      "part": "race › count",
+      "when": "The mountain roads (drive/): Mommy drives and says the road lines, Daddy reacts, Sparkle says what's new.",
+      "ms": 501,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "count",
+        "2"
+      ],
+      "text": "One!",
+      "voice": "sparkle",
+      "key": "race.count.2",
+      "part": "race › count",
+      "when": "Sparkle's countdown (3, 2, 1, go).",
+      "ms": 701,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "count",
+        "3"
+      ],
+      "text": "Go!",
+      "voice": "sparkle",
+      "key": "race.count.3",
+      "part": "race › count",
+      "when": "The Racing Slide (games/race/). Sparkle says what's new each race and counts down; Daddy races her and dives into the balls head first; she always wins.",
+      "ms": 611,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "lap2"
+      ],
+      "text": "Lap two!",
+      "voice": "sparkle",
+      "key": "race.lap2",
+      "part": "race",
+      "when": "",
+      "ms": 1311,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "final"
+      ],
+      "text": "Last lap!",
+      "voice": "sparkle",
+      "key": "race.final",
+      "part": "race",
+      "when": "",
+      "ms": 1646,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "win"
+      ],
+      "text": "You win! First place!",
+      "voice": "sparkle",
+      "key": "race.win",
+      "part": "race",
+      "when": "",
+      "ms": 2592,
+      "flags": [
+        "changed"
+      ],
+      "was": "Kaylee wins! First place!"
+    },
+    {
+      "path": [
+        "race",
+        "trophy"
+      ],
+      "text": "A trophy for you, the boat race champion!",
+      "voice": "sparkle",
+      "key": "race.trophy",
+      "part": "race",
+      "when": "",
+      "ms": 3936,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "A trophy for Kaylee, the boat race champion!"
+    },
+    {
+      "path": [
+        "race",
+        "back",
+        "touch"
+      ],
+      "text": "Tap the boat to go back to the bay!",
+      "voice": "sparkle",
+      "key": "race.back.touch",
+      "part": "race › back",
+      "when": "",
+      "ms": 2654,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "back",
+        "mouse"
+      ],
+      "text": "Click the boat to go back to the bay!",
+      "voice": "sparkle",
+      "key": "race.back.mouse",
+      "part": "race › back",
+      "when": "",
+      "ms": 2736,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "trophyRoom"
+      ],
+      "text": "Boat Race Champion! From Thailand.",
+      "voice": "sparkle",
+      "key": "race.trophyRoom",
+      "part": "race",
+      "when": "",
+      "ms": 3936,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Kaylee, Boat Race Champion! From Thailand."
+    },
+    {
+      "path": [
+        "race",
+        "go"
+      ],
+      "text": "Go, go, go!",
+      "voice": "nick",
+      "key": "race.go",
+      "part": "race",
+      "when": "",
+      "ms": 936,
+      "flags": [
+        "changed"
+      ],
+      "was": "Go, Kaylee, go!"
+    },
+    {
+      "path": [
+        "race",
+        "banana"
+      ],
+      "text": "Whoa! A banana!",
+      "voice": "nick",
+      "key": "race.banana",
+      "part": "race",
+      "when": "",
+      "ms": 1821,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "almost"
+      ],
+      "text": "Almost there!",
+      "voice": "nick",
+      "key": "race.almost",
+      "part": "race",
+      "when": "",
+      "ms": 1048,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "won"
+      ],
+      "text": "We won!",
+      "voice": "nick",
+      "key": "race.won",
+      "part": "race",
+      "when": "",
+      "ms": 1099,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "wheee"
+      ],
+      "text": "Wheee!",
+      "voice": "ji",
+      "key": "race.wheee",
+      "part": "race",
+      "when": "",
+      "ms": 984,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "proud"
+      ],
+      "text": "You did it, sweetie!",
+      "voice": "ji",
+      "key": "race.proud",
+      "part": "race",
+      "when": "",
+      "ms": 1422,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "raceYou"
+      ],
+      "text": "Race you!",
+      "voice": "kids",
+      "key": "race.raceYou",
+      "part": "race",
+      "when": "Round 3, Daddy: the race, she took his light, a miss, a rest, she wins.",
+      "ms": 840,
+      "flags": [
+        "changed"
+      ],
+      "was": "Race you, Kaylee!"
+    },
+    {
+      "path": [
+        "race",
+        "catchUs"
+      ],
+      "text": "You can't catch us!",
+      "voice": "kids",
+      "key": "race.catchUs",
+      "part": "race",
+      "when": "",
+      "ms": 1130,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "goodRace"
+      ],
+      "text": "Good race!",
+      "voice": "kids",
+      "key": "race.goodRace",
+      "part": "race",
+      "when": "",
+      "ms": 1272,
+      "flags": [
+        "changed"
+      ],
+      "was": "Good race, Kaylee!"
+    }
+  ]
+}

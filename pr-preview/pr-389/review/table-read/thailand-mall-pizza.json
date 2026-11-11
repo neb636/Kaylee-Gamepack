@@ -1,0 +1,443 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "mall.pizza",
+  "title": "Thailand › Mall › Pizza",
+  "intro": "",
+  "page": "thailand-mall-pizza.html",
+  "audio": null,
+  "lines": 25,
+  "seconds": 41,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "mall.pizza.menu",
+      "text": "Pick a pizza!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Pick a pizza, Kaylee!"
+    },
+    {
+      "key": "mall.pizza.count.kaylee.0",
+      "text": "One for you!",
+      "flags": [
+        "changed"
+      ],
+      "was": "One for Kaylee!"
+    },
+    {
+      "key": "mall.pizza.count.kaylee.1",
+      "text": "Two for you!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Two for Kaylee!"
+    },
+    {
+      "key": "mall.pizza.ham.0",
+      "text": "Mommy's hungry too!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Kaylee, Mommy's hungry too!"
+    },
+    {
+      "key": "mall.pizza.fair",
+      "text": "Sharing fairly means everyone gets the same!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "menu"
+      ],
+      "text": "Pick a pizza!",
+      "voice": "sparkle",
+      "key": "mall.pizza.menu",
+      "part": "mall › pizza",
+      "when": "Sparkle at the menu; the server sets the pizza down; Sparkle's one instruction.",
+      "ms": 1392,
+      "flags": [
+        "changed"
+      ],
+      "was": "Pick a pizza, Kaylee!"
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "served"
+      ],
+      "text": "Pizza time!",
+      "voice": "server",
+      "key": "mall.pizza.served",
+      "part": "mall › pizza",
+      "when": "The Pizza Company (pizza/).",
+      "ms": 898,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "start"
+      ],
+      "text": "Pull a slice!",
+      "voice": "sparkle",
+      "key": "mall.pizza.start",
+      "part": "mall › pizza",
+      "when": "The Pizza Company (pizza/).",
+      "ms": 995,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "count",
+        "ji",
+        "0"
+      ],
+      "text": "One for Mommy!",
+      "voice": "sparkle",
+      "key": "mall.pizza.count.ji.0",
+      "part": "mall › pizza › count › ji",
+      "when": "Sparkle counting round the table, as each plate gets its first and second slice.",
+      "ms": 1354,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "count",
+        "ji",
+        "1"
+      ],
+      "text": "Two for Mommy!",
+      "voice": "sparkle",
+      "key": "mall.pizza.count.ji.1",
+      "part": "mall › pizza › count › ji",
+      "when": "",
+      "ms": 1586,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "count",
+        "nick",
+        "0"
+      ],
+      "text": "One for Daddy!",
+      "voice": "sparkle",
+      "key": "mall.pizza.count.nick.0",
+      "part": "mall › pizza › count › nick",
+      "when": "Sparkle counting round the table, as each plate gets its first and second slice.",
+      "ms": 1595,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "count",
+        "nick",
+        "1"
+      ],
+      "text": "Two for Daddy!",
+      "voice": "sparkle",
+      "key": "mall.pizza.count.nick.1",
+      "part": "mall › pizza › count › nick",
+      "when": "",
+      "ms": 1301,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "count",
+        "kaylee",
+        "0"
+      ],
+      "text": "One for you!",
+      "voice": "sparkle",
+      "key": "mall.pizza.count.kaylee.0",
+      "part": "mall › pizza › count › kaylee",
+      "when": "Sparkle counting round the table, as each plate gets its first and second slice.",
+      "ms": 1080,
+      "flags": [
+        "changed"
+      ],
+      "was": "One for Kaylee!"
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "count",
+        "kaylee",
+        "1"
+      ],
+      "text": "Two for you!",
+      "voice": "sparkle",
+      "key": "mall.pizza.count.kaylee.1",
+      "part": "mall › pizza › count › kaylee",
+      "when": "",
+      "ms": 1104,
+      "flags": [
+        "changed"
+      ],
+      "was": "Two for Kaylee!"
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "ham",
+        "0"
+      ],
+      "text": "Mommy's hungry too!",
+      "voice": "nick",
+      "key": "mall.pizza.ham.0",
+      "part": "mall › pizza › ham",
+      "when": "Daddy with more than anyone (in turn), the cheese tug on his nose.",
+      "ms": 1320,
+      "flags": [
+        "changed"
+      ],
+      "was": "Kaylee, Mommy's hungry too!"
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "ham",
+        "1"
+      ],
+      "text": "Ho ho! More for Daddy!",
+      "voice": "nick",
+      "key": "mall.pizza.ham.1",
+      "part": "mall › pizza › ham",
+      "when": "",
+      "ms": 2194,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "nose"
+      ],
+      "text": "My nose!",
+      "voice": "nick",
+      "key": "mall.pizza.nose",
+      "part": "mall › pizza",
+      "when": "The Pizza Company (pizza/).",
+      "ms": 931,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "agong"
+      ],
+      "text": "Those are for Agong!",
+      "voice": "ji",
+      "key": "mall.pizza.agong",
+      "part": "mall › pizza",
+      "when": "Two each: the last two go in Agong's box; the lid closes; then Sparkle's fact once it's all shared.",
+      "ms": 1775,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "closed"
+      ],
+      "text": "Yay! Pizza for Agong!",
+      "voice": "nick",
+      "key": "mall.pizza.closed",
+      "part": "mall › pizza",
+      "when": "The Pizza Company (pizza/).",
+      "ms": 2818,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "fair"
+      ],
+      "text": "Sharing fairly means everyone gets the same!",
+      "voice": "sparkle",
+      "key": "mall.pizza.fair",
+      "part": "mall › pizza",
+      "when": "The Pizza Company (pizza/).",
+      "ms": 3813,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "thanks"
+      ],
+      "text": "Khob khun ka!",
+      "voice": "server",
+      "key": "mall.pizza.thanks",
+      "part": "mall › pizza",
+      "when": "The pokes: the server's bow, Daddy's chili sneeze, Mommy's onion-ring bracelets (three in turn, then she eats one).",
+      "ms": 1433,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "spicy"
+      ],
+      "text": "So spicy!",
+      "voice": "nick",
+      "key": "mall.pizza.spicy",
+      "part": "mall › pizza",
+      "when": "The Pizza Company (pizza/).",
+      "ms": 1503,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "rings",
+        "0"
+      ],
+      "text": "Look! A bracelet!",
+      "voice": "ji",
+      "key": "mall.pizza.rings.0",
+      "part": "mall › pizza › rings",
+      "when": "The Pizza Company (pizza/).",
+      "ms": 1658,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "rings",
+        "1"
+      ],
+      "text": "So fancy!",
+      "voice": "ji",
+      "key": "mall.pizza.rings.1",
+      "part": "mall › pizza › rings",
+      "when": "",
+      "ms": 1507,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "rings",
+        "2"
+      ],
+      "text": "Three bracelets!",
+      "voice": "ji",
+      "key": "mall.pizza.rings.2",
+      "part": "mall › pizza › rings",
+      "when": "",
+      "ms": 1242,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "crunch"
+      ],
+      "text": "Mmm! Crunchy!",
+      "voice": "ji",
+      "key": "mall.pizza.crunch",
+      "part": "mall › pizza",
+      "when": "The Pizza Company (pizza/).",
+      "ms": 1951,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "hint",
+        "menu",
+        "touch"
+      ],
+      "text": "Tap a pizza!",
+      "voice": "sparkle",
+      "key": "mall.pizza.hint.menu.touch",
+      "part": "mall › pizza › hint › menu",
+      "when": "Sparkle, when the finger shows after a while with nothing touched (or the menu waits).",
+      "ms": 1516,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "hint",
+        "menu",
+        "mouse"
+      ],
+      "text": "Click a pizza!",
+      "voice": "sparkle",
+      "key": "mall.pizza.hint.menu.mouse",
+      "part": "mall › pizza › hint › menu",
+      "when": "",
+      "ms": 1464,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "hint",
+        "slice"
+      ],
+      "text": "Pull a slice to a plate!",
+      "voice": "sparkle",
+      "key": "mall.pizza.hint.slice",
+      "part": "mall › pizza › hint",
+      "when": "Sparkle, when the finger shows after a while with nothing touched (or the menu waits).",
+      "ms": 1860,
+      "flags": []
+    },
+    {
+      "path": [
+        "mall",
+        "pizza",
+        "hint",
+        "box"
+      ],
+      "text": "Put one in Agong's box!",
+      "voice": "sparkle",
+      "key": "mall.pizza.hint.box",
+      "part": "mall › pizza › hint",
+      "when": "Sparkle, when the finger shows after a while with nothing touched (or the menu waits).",
+      "ms": 2600,
+      "flags": []
+    }
+  ]
+}

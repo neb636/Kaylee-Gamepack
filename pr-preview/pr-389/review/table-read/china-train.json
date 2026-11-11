@@ -1,0 +1,743 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "train",
+  "title": "China › Train",
+  "intro": "🚄 Bullet Train (activities/train). Owner: the train build.",
+  "page": "china-train.html",
+  "audio": null,
+  "lines": 44,
+  "seconds": 115,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "train.story",
+      "text": "China is so big! Let's ride the super-fast train!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.fast",
+      "text": "China has some of the fastest trains in the world!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.big",
+      "text": "China is so big! Snowy in the north, sunny beach in the south!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.arrive.harbin",
+      "text": "Harbin! It is far up north. Brrr, snow!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.arrive.hainan",
+      "text": "Hainan! It is far down south. So hot!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.arrive.gobi",
+      "text": "The Gobi Desert! Sunny days and chilly nights!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.arrive.himalaya",
+      "text": "The Himalayas! The tallest mountains in the world!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.ask.scarf",
+      "text": "The tiger is shivering! Give him the scarf!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.ask.gobiDay",
+      "text": "It is a hot, sunny day! What does Bao Bao need?",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.ask.gobiNight",
+      "text": "Now it is night, and cold! What does Bao Bao need?",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.ask.himalaya",
+      "text": "Which one fits the tall, snowy mountains?",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.yes.scarf",
+      "text": "Ahh! Warm now. Thank you!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.end",
+      "text": "What a trip! Thank you!",
+      "flags": [
+        "changed"
+      ],
+      "was": "What a trip! Thank you, Kaylee!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "train",
+        "story"
+      ],
+      "text": "China is so big! Let's ride the super-fast train!",
+      "voice": "baobao",
+      "key": "train.story",
+      "part": "train",
+      "when": "",
+      "ms": 3750,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "push"
+      ],
+      "text": "Push the lever up to zoom!",
+      "voice": "sparkle",
+      "key": "train.push",
+      "part": "train",
+      "when": "",
+      "ms": 2861,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "pushAgain"
+      ],
+      "text": "Push it up!",
+      "voice": "sparkle",
+      "key": "train.pushAgain",
+      "part": "train",
+      "when": "",
+      "ms": 1202,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "fast"
+      ],
+      "text": "China has some of the fastest trains in the world!",
+      "voice": "sparkle",
+      "key": "train.fast",
+      "part": "train",
+      "when": "",
+      "ms": 3581,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "big"
+      ],
+      "text": "China is so big! Snowy in the north, sunny beach in the south!",
+      "voice": "sparkle",
+      "key": "train.big",
+      "part": "train",
+      "when": "",
+      "ms": 5054,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "toot"
+      ],
+      "text": "Toot toot!",
+      "voice": "sparkle",
+      "key": "train.toot",
+      "part": "train",
+      "when": "",
+      "ms": 1212,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "arrive",
+        "harbin"
+      ],
+      "text": "Harbin! It is far up north. Brrr, snow!",
+      "voice": "sparkle",
+      "key": "train.arrive.harbin",
+      "part": "train › arrive",
+      "when": "Arriving at each stop (Sparkle), then what to do.",
+      "ms": 5297,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "arrive",
+        "hainan"
+      ],
+      "text": "Hainan! It is far down south. So hot!",
+      "voice": "sparkle",
+      "key": "train.arrive.hainan",
+      "part": "train › arrive",
+      "when": "Arriving at each stop (Sparkle), then what to do.",
+      "ms": 4611,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "arrive",
+        "gobi"
+      ],
+      "text": "The Gobi Desert! Sunny days and chilly nights!",
+      "voice": "sparkle",
+      "key": "train.arrive.gobi",
+      "part": "train › arrive",
+      "when": "Arriving at each stop (Sparkle), then what to do.",
+      "ms": 4789,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "arrive",
+        "himalaya"
+      ],
+      "text": "The Himalayas! The tallest mountains in the world!",
+      "voice": "sparkle",
+      "key": "train.arrive.himalaya",
+      "part": "train › arrive",
+      "when": "Arriving at each stop (Sparkle), then what to do.",
+      "ms": 4394,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "ask",
+        "harbin"
+      ],
+      "text": "Keep Bao Bao warm!",
+      "voice": "sparkle",
+      "key": "train.ask.harbin",
+      "part": "train › ask",
+      "when": "",
+      "ms": 2471,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "ask",
+        "scarf"
+      ],
+      "text": "The tiger is shivering! Give him the scarf!",
+      "voice": "sparkle",
+      "key": "train.ask.scarf",
+      "part": "train › ask",
+      "when": "",
+      "ms": 3556,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "ask",
+        "hainan"
+      ],
+      "text": "Get Bao Bao ready for the beach!",
+      "voice": "sparkle",
+      "key": "train.ask.hainan",
+      "part": "train › ask",
+      "when": "",
+      "ms": 2402,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "ask",
+        "gobiDay"
+      ],
+      "text": "It is a hot, sunny day! What does Bao Bao need?",
+      "voice": "sparkle",
+      "key": "train.ask.gobiDay",
+      "part": "train › ask",
+      "when": "",
+      "ms": 4040,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "ask",
+        "gobiNight"
+      ],
+      "text": "Now it is night, and cold! What does Bao Bao need?",
+      "voice": "sparkle",
+      "key": "train.ask.gobiNight",
+      "part": "train › ask",
+      "when": "",
+      "ms": 5382,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "ask",
+        "himalaya"
+      ],
+      "text": "Which one fits the tall, snowy mountains?",
+      "voice": "sparkle",
+      "key": "train.ask.himalaya",
+      "part": "train › ask",
+      "when": "",
+      "ms": 3554,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "harbin:swimring"
+      ],
+      "text": "A swim ring in the snow? Silly!",
+      "voice": "baobao",
+      "key": "train.wrong.harbin:swimring",
+      "part": "train › wrong",
+      "when": "Wrong picks: Bao Bao giggles (keyed by stop + item); the right ones glow.",
+      "ms": 2454,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "hainan:mittens"
+      ],
+      "text": "Mittens at the beach? Silly!",
+      "voice": "baobao",
+      "key": "train.wrong.hainan:mittens",
+      "part": "train › wrong",
+      "when": "Wrong picks: Bao Bao giggles (keyed by stop + item); the right ones glow.",
+      "ms": 2372,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "gobiDay:blanket"
+      ],
+      "text": "A blanket in the hot sun? Silly!",
+      "voice": "baobao",
+      "key": "train.wrong.gobiDay:blanket",
+      "part": "train › wrong",
+      "when": "Wrong picks: Bao Bao giggles (keyed by stop + item); the right ones glow.",
+      "ms": 2697,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "gobiDay:mittens"
+      ],
+      "text": "Mittens in the desert sun? Silly!",
+      "voice": "baobao",
+      "key": "train.wrong.gobiDay:mittens",
+      "part": "train › wrong",
+      "when": "Wrong picks: Bao Bao giggles (keyed by stop + item); the right ones glow.",
+      "ms": 2585,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "gobiNight:sunhat"
+      ],
+      "text": "A sun hat at night? Silly!",
+      "voice": "baobao",
+      "key": "train.wrong.gobiNight:sunhat",
+      "part": "train › wrong",
+      "when": "Wrong picks: Bao Bao giggles (keyed by stop + item); the right ones glow.",
+      "ms": 2651,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "gobiNight:water"
+      ],
+      "text": "I am not thirsty. I am cold!",
+      "voice": "baobao",
+      "key": "train.wrong.gobiNight:water",
+      "part": "train › wrong",
+      "when": "Wrong picks: Bao Bao giggles (keyed by stop + item); the right ones glow.",
+      "ms": 2555,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "himalaya:sunhat"
+      ],
+      "text": "A sun hat on a snowy mountain? Silly!",
+      "voice": "baobao",
+      "key": "train.wrong.himalaya:sunhat",
+      "part": "train › wrong",
+      "when": "Wrong picks: Bao Bao giggles (keyed by stop + item); the right ones glow.",
+      "ms": 2796,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "himalaya:swimring"
+      ],
+      "text": "A swim ring on a mountain? Silly!",
+      "voice": "baobao",
+      "key": "train.wrong.himalaya:swimring",
+      "part": "train › wrong",
+      "when": "Wrong picks: Bao Bao giggles (keyed by stop + item); the right ones glow.",
+      "ms": 2706,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "himalaya:water"
+      ],
+      "text": "I need something warm!",
+      "voice": "baobao",
+      "key": "train.wrong.himalaya:water",
+      "part": "train › wrong",
+      "when": "Wrong picks: Bao Bao giggles (keyed by stop + item); the right ones glow.",
+      "ms": 1331,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "scarf"
+      ],
+      "text": "Brrr! I need the scarf!",
+      "voice": "tiger",
+      "key": "train.wrong.scarf",
+      "part": "train › wrong",
+      "when": "Wrong picks: Bao Bao giggles (keyed by stop + item); the right ones glow.",
+      "ms": 2501,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "hint"
+      ],
+      "text": "Try the glowing one!",
+      "voice": "sparkle",
+      "key": "train.hint",
+      "part": "train",
+      "when": "",
+      "ms": 1576,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "yes",
+        "mittens"
+      ],
+      "text": "Mittens! So cozy!",
+      "voice": "baobao",
+      "key": "train.yes.mittens",
+      "part": "train › yes",
+      "when": "Right picks.",
+      "ms": 2173,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "yes",
+        "hat"
+      ],
+      "text": "A warm hat! Yay!",
+      "voice": "baobao",
+      "key": "train.yes.hat",
+      "part": "train › yes",
+      "when": "Right picks.",
+      "ms": 1986,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "yes",
+        "scarf"
+      ],
+      "text": "Ahh! Warm now. Thank you!",
+      "voice": "tiger",
+      "key": "train.yes.scarf",
+      "part": "train › yes",
+      "when": "Right picks.",
+      "ms": 3270,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "yes",
+        "sunhat"
+      ],
+      "text": "A sun hat! Yay!",
+      "voice": "baobao",
+      "key": "train.yes.sunhat",
+      "part": "train › yes",
+      "when": "Right picks.",
+      "ms": 1614,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "yes",
+        "swimring"
+      ],
+      "text": "A swim ring! Wheee!",
+      "voice": "baobao",
+      "key": "train.yes.swimring",
+      "part": "train › yes",
+      "when": "Right picks.",
+      "ms": 1650,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "yes",
+        "water"
+      ],
+      "text": "Glug glug! Yum!",
+      "voice": "baobao",
+      "key": "train.yes.water",
+      "part": "train › yes",
+      "when": "Right picks.",
+      "ms": 1899,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "yes",
+        "blanket"
+      ],
+      "text": "A cozy blanket!",
+      "voice": "baobao",
+      "key": "train.yes.blanket",
+      "part": "train › yes",
+      "when": "Right picks.",
+      "ms": 1246,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "yes",
+        "coat"
+      ],
+      "text": "A big warm coat!",
+      "voice": "baobao",
+      "key": "train.yes.coat",
+      "part": "train › yes",
+      "when": "Right picks.",
+      "ms": 1822,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "shiver"
+      ],
+      "text": "Brrr! So cold!",
+      "voice": "tiger",
+      "key": "train.shiver",
+      "part": "train",
+      "when": "",
+      "ms": 2899,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "hello",
+        "camel"
+      ],
+      "text": "Hello, little panda!",
+      "voice": "camel",
+      "key": "train.hello.camel",
+      "part": "train › hello",
+      "when": "",
+      "ms": 1783,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "hello",
+        "yak"
+      ],
+      "text": "Hello up here!",
+      "voice": "yak",
+      "key": "train.hello.yak",
+      "part": "train › hello",
+      "when": "",
+      "ms": 1506,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "tap",
+        "0"
+      ],
+      "text": "Hee hee!",
+      "voice": "baobao",
+      "key": "train.tap.0",
+      "part": "train › tap",
+      "when": "",
+      "ms": 667,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "tap",
+        "1"
+      ],
+      "text": "Tickles!",
+      "voice": "baobao",
+      "key": "train.tap.1",
+      "part": "train › tap",
+      "when": "",
+      "ms": 576,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "animalTap",
+        "tiger"
+      ],
+      "text": "Rrr, hello!",
+      "voice": "tiger",
+      "key": "train.animalTap.tiger",
+      "part": "train › animalTap",
+      "when": "",
+      "ms": 1474,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "animalTap",
+        "camel"
+      ],
+      "text": "Two humps, no hurry.",
+      "voice": "camel",
+      "key": "train.animalTap.camel",
+      "part": "train › animalTap",
+      "when": "",
+      "ms": 2482,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "animalTap",
+        "yak"
+      ],
+      "text": "Hello, friend!",
+      "voice": "yak",
+      "key": "train.animalTap.yak",
+      "part": "train › animalTap",
+      "when": "",
+      "ms": 1130,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "end"
+      ],
+      "text": "What a trip! Thank you!",
+      "voice": "baobao",
+      "key": "train.end",
+      "part": "train",
+      "when": "",
+      "ms": 2040,
+      "flags": [
+        "changed"
+      ],
+      "was": "What a trip! Thank you, Kaylee!"
+    }
+  ]
+}

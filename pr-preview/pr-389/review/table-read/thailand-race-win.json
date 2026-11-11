@@ -1,0 +1,39 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "race.win",
+  "title": "Thailand › Race › Win",
+  "intro": "",
+  "page": "thailand-race-win.html",
+  "audio": null,
+  "lines": 1,
+  "seconds": 0,
+  "missing": 1,
+  "names": 0,
+  "flags": [
+    {
+      "key": "race.win",
+      "text": "You win! First place!",
+      "flags": [
+        "not recorded"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "race",
+        "win"
+      ],
+      "text": "You win! First place!",
+      "voice": "sparkle",
+      "key": "race.win",
+      "part": "race",
+      "when": "The boat race (activities/boat-trip/race/): through the rainbow gate in the bay, three laps round a lagoon against the village kids and a cheeky macaque. Sparkle gives the few instructions and the countdown; Mommy and Daddy cheer in their own voices; the kids tease and cheer; the macaque only chatters. She always wins, and the trophy says so.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    }
+  ]
+}

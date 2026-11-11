@@ -1,0 +1,44 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "venice.arrive",
+  "title": "Italy › Venice › Arrive",
+  "intro": "",
+  "page": "italy-venice-arrive.html",
+  "audio": null,
+  "lines": 1,
+  "seconds": 5,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "venice.arrive.0",
+      "text": "Ciao! In Venice, the streets are water!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Ciao, Kaylee! In Venice, the streets are water!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "venice",
+        "arrive",
+        "0"
+      ],
+      "text": "Ciao! In Venice, the streets are water!",
+      "voice": "gino",
+      "key": "venice.arrive.0",
+      "part": "venice › arrive",
+      "when": "🛶 Venice: Gino's Water Taxi. Gino tells the story; Sparkle only speaks when something new happens (or she's stuck).",
+      "ms": 4992,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Ciao, Kaylee! In Venice, the streets are water!"
+    }
+  ]
+}

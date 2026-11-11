@@ -1,0 +1,495 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "parade",
+  "title": "China › Parade",
+  "intro": "🐉 The Dragon Parade finale (activities/parade). Owner: the parade build.",
+  "page": "china-parade.html",
+  "audio": null,
+  "lines": 25,
+  "seconds": 76,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "parade.arrive",
+      "text": "I'm Long Long! Let's dance!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "I'm Long Long! Let's dance, Kaylee!"
+    },
+    {
+      "key": "parade.drive",
+      "text": "Drag Long Long around the lanterns!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.lap",
+      "text": "Wheee! What a dance!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Wheee! What a dance, Kaylee!"
+    },
+    {
+      "key": "parade.drum.touch",
+      "text": "Tap the drum! Make the dragon dance!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.drum.mouse",
+      "text": "Click the drum! Make the dragon dance!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.drumDone",
+      "text": "Great drumming!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Great drumming, Kaylee!"
+    },
+    {
+      "key": "parade.sky.touch",
+      "text": "Tap the sky to make fireworks!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.sky.mouse",
+      "text": "Click the sky to make fireworks!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.skyFact",
+      "text": "Fireworks were invented in China!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.flagFact",
+      "text": "China's flag is red, with one big gold star and four little stars!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.envelope.touch",
+      "text": "Bao Bao has a red envelope! Tap to open it!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.envelope.mouse",
+      "text": "Bao Bao has a red envelope! Click to open it!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.hongbao",
+      "text": "A red envelope is called a hong bao!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.greet",
+      "text": "Sheen nyen kwy luh! Happy New Year!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Sheen nyen kwy luh, Kaylee! Happy New Year!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "parade",
+        "arrive"
+      ],
+      "text": "I'm Long Long! Let's dance!",
+      "voice": "longlong",
+      "key": "parade.arrive",
+      "part": "parade",
+      "when": "",
+      "ms": 3048,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "I'm Long Long! Let's dance, Kaylee!"
+    },
+    {
+      "path": [
+        "parade",
+        "drive"
+      ],
+      "text": "Drag Long Long around the lanterns!",
+      "voice": "sparkle",
+      "key": "parade.drive",
+      "part": "parade",
+      "when": "",
+      "ms": 3422,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "hint"
+      ],
+      "text": "Follow the glowing lanterns!",
+      "voice": "sparkle",
+      "key": "parade.hint",
+      "part": "parade",
+      "when": "",
+      "ms": 2998,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "thanks",
+        "bamboo"
+      ],
+      "text": "Shyeh shyeh for the bamboo!",
+      "voice": "baobao",
+      "key": "parade.thanks.bamboo",
+      "part": "parade › thanks",
+      "when": "",
+      "ms": 2177,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "thanks",
+        "wall"
+      ],
+      "text": "Shyeh shyeh for fixing the wall!",
+      "voice": "houhou",
+      "key": "parade.thanks.wall",
+      "part": "parade › thanks",
+      "when": "",
+      "ms": 2863,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "thanks",
+        "hotpot"
+      ],
+      "text": "Shyeh shyeh for the hotpot!",
+      "voice": "hong",
+      "key": "parade.thanks.hotpot",
+      "part": "parade › thanks",
+      "when": "",
+      "ms": 1946,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "thanks",
+        "brush"
+      ],
+      "text": "Shyeh shyeh for the magic brush!",
+      "voice": "crane",
+      "key": "parade.thanks.brush",
+      "part": "parade › thanks",
+      "when": "",
+      "ms": 2806,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "thanks",
+        "race"
+      ],
+      "text": "Shyeh shyeh for the race!",
+      "voice": "mouse",
+      "key": "parade.thanks.race",
+      "part": "parade › thanks",
+      "when": "",
+      "ms": 1946,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "thanks",
+        "train"
+      ],
+      "text": "Shyeh shyeh for the train ride!",
+      "voice": "tiger",
+      "key": "parade.thanks.train",
+      "part": "parade › thanks",
+      "when": "",
+      "ms": 2388,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "thanks",
+        "dumplings"
+      ],
+      "text": "Shyeh shyeh for the dumplings!",
+      "voice": "cheffu",
+      "key": "parade.thanks.dumplings",
+      "part": "parade › thanks",
+      "when": "",
+      "ms": 2522,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "lap"
+      ],
+      "text": "Wheee! What a dance!",
+      "voice": "longlong",
+      "key": "parade.lap",
+      "part": "parade",
+      "when": "",
+      "ms": 2424,
+      "flags": [
+        "changed"
+      ],
+      "was": "Wheee! What a dance, Kaylee!"
+    },
+    {
+      "path": [
+        "parade",
+        "drum",
+        "touch"
+      ],
+      "text": "Tap the drum! Make the dragon dance!",
+      "voice": "sparkle",
+      "key": "parade.drum.touch",
+      "part": "parade › drum",
+      "when": "",
+      "ms": 3319,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "drum",
+        "mouse"
+      ],
+      "text": "Click the drum! Make the dragon dance!",
+      "voice": "sparkle",
+      "key": "parade.drum.mouse",
+      "part": "parade › drum",
+      "when": "",
+      "ms": 3648,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "drumMid"
+      ],
+      "text": "Boom boom! I love it!",
+      "voice": "longlong",
+      "key": "parade.drumMid",
+      "part": "parade",
+      "when": "",
+      "ms": 2933,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "drumDone"
+      ],
+      "text": "Great drumming!",
+      "voice": "sparkle",
+      "key": "parade.drumDone",
+      "part": "parade",
+      "when": "",
+      "ms": 1200,
+      "flags": [
+        "changed"
+      ],
+      "was": "Great drumming, Kaylee!"
+    },
+    {
+      "path": [
+        "parade",
+        "sky",
+        "touch"
+      ],
+      "text": "Tap the sky to make fireworks!",
+      "voice": "sparkle",
+      "key": "parade.sky.touch",
+      "part": "parade › sky",
+      "when": "",
+      "ms": 3290,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "sky",
+        "mouse"
+      ],
+      "text": "Click the sky to make fireworks!",
+      "voice": "sparkle",
+      "key": "parade.sky.mouse",
+      "part": "parade › sky",
+      "when": "",
+      "ms": 3480,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "skyFact"
+      ],
+      "text": "Fireworks were invented in China!",
+      "voice": "sparkle",
+      "key": "parade.skyFact",
+      "part": "parade",
+      "when": "",
+      "ms": 3951,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "flag",
+        "touch"
+      ],
+      "text": "Tap the flag to raise it!",
+      "voice": "sparkle",
+      "key": "parade.flag.touch",
+      "part": "parade › flag",
+      "when": "",
+      "ms": 2417,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "flag",
+        "mouse"
+      ],
+      "text": "Click the flag to raise it!",
+      "voice": "sparkle",
+      "key": "parade.flag.mouse",
+      "part": "parade › flag",
+      "when": "",
+      "ms": 2808,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "flagFact"
+      ],
+      "text": "China's flag is red, with one big gold star and four little stars!",
+      "voice": "sparkle",
+      "key": "parade.flagFact",
+      "part": "parade",
+      "when": "",
+      "ms": 5603,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "envelope",
+        "touch"
+      ],
+      "text": "Bao Bao has a red envelope! Tap to open it!",
+      "voice": "sparkle",
+      "key": "parade.envelope.touch",
+      "part": "parade › envelope",
+      "when": "",
+      "ms": 4226,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "envelope",
+        "mouse"
+      ],
+      "text": "Bao Bao has a red envelope! Click to open it!",
+      "voice": "sparkle",
+      "key": "parade.envelope.mouse",
+      "part": "parade › envelope",
+      "when": "",
+      "ms": 4152,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "hongbao"
+      ],
+      "text": "A red envelope is called a hong bao!",
+      "voice": "sparkle",
+      "key": "parade.hongbao",
+      "part": "parade",
+      "when": "",
+      "ms": 3368,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "greet"
+      ],
+      "text": "Sheen nyen kwy luh! Happy New Year!",
+      "voice": "baobao",
+      "key": "parade.greet",
+      "part": "parade",
+      "when": "",
+      "ms": 3240,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Sheen nyen kwy luh, Kaylee! Happy New Year!"
+    }
+  ]
+}

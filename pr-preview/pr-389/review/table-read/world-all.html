@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Table read: World › Everything</title>
+<style>
+:root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;color-scheme:dark}}
+:root[data-theme="dark"]{--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;font:16px/1.4 ui-rounded,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink)}
+header{padding-block:16px 4px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:760px;margin:0 auto}
+.player{position:sticky;top:env(safe-area-inset-top,0px);z-index:2;background:var(--bg);padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line)}
+.player audio{display:block;max-width:728px;margin:0 auto}
+h1{font-size:20px;margin:0 0 4px}.sum{color:var(--soft);font-size:14px;margin:0 0 10px}.intro{font-size:14px;margin:0 0 6px}
+audio{width:100%}main{padding-block:4px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:760px;margin:0 auto}
+h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft);margin:22px 0 6px}
+.cast{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+.cast li{font-size:13px;padding:3px 10px;border-radius:99px;background:hsl(var(--h) 80% 50% / .14)}
+.cast small{color:var(--soft)}
+.line{display:grid;grid-template-columns:88px 1fr;gap:2px 10px;width:100%;text-align:left;font:inherit;color:inherit;background:var(--card);border:1px solid var(--line);border-left:5px solid hsl(var(--h) 75% 58%);border-radius:12px;padding:10px 12px;margin:6px 0;cursor:pointer}
+.line.playing{outline:3px solid var(--pink)}.line.silent{opacity:.6;border-left-style:dashed}
+.who{font-weight:700;font-size:14px;color:hsl(var(--h) 60% 42%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .who{color:hsl(var(--h) 80% 74%)}}:root[data-theme="dark"] .who{color:hsl(var(--h) 80% 74%)}
+.text{font-size:17px}.text s{display:block;color:var(--soft);font-size:14px}
+.when,.meta{grid-column:2;font-size:13px;color:var(--soft)}
+.flag{display:inline-block;font-weight:600;font-size:11.5px;padding:1px 7px;border-radius:99px;margin-left:6px;background:#ffe2a8;color:#5a3d00}
+.flag.name{background:#e9dcff;color:#3d2470}.flag.new,.flag.changed{background:#c9f3dd;color:#0d4a2c}.flag.name,.flag.not-recorded,.flag.rule-8,.flag.touch-only{background:#ffd0d6;color:#6b0717}
+</style></head><body>
+<header>
+<h1>Table read: World › Everything</h1>
+
+<p class="sum">139 lines · 4.1 min of talk · her name 0× · 22 flagged</p>
+<ul class="cast"><li style="--h:330"><b>Sparkle</b> 139 lines <small>coral voice</small></li></ul>
+</header>
+<div class="player"><p class="sum">No audio yet (no recorded lines, or no ffmpeg).</p></div>
+<main>
+<h2>Lines</h2><button class="line" data-i="0" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Around the World!</span>
+  
+  <span class="meta">2.0 s</span>
+</button>
+<h2>first Hello</h2><button class="line" data-i="1" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Let's fly around the world! Tap the sparkly pin.<s>Let's fly around the world, Kaylee! Tap the sparkly pin.</s></span>
+  
+  <span class="meta">4.5 s<b class="flag long">long</b><b class="flag changed">changed</b></span>
+</button>
+<button class="line" data-i="2" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Let's fly around the world! Click the sparkly pin.<s>Let's fly around the world, Kaylee! Click the sparkly pin.</s></span>
+  
+  <span class="meta">5.4 s<b class="flag long">long</b><b class="flag changed">changed</b></span>
+</button>
+<h2>Lines</h2><button class="line" data-i="3" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Where should we fly?</span>
+  
+  <span class="meta">1.5 s<b class="flag twice">twice</b></span>
+</button>
+<button class="line" data-i="4" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Up, up and away!</span>
+  
+  <span class="meta">2.0 s</span>
+</button>
+<h2>continents</h2><button class="line" data-i="5" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">That's North America!</span>
+  
+  <span class="meta">2.4 s</span>
+</button>
+<button class="line" data-i="6" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">That's South America!</span>
+  
+  <span class="meta">1.5 s</span>
+</button>
+<button class="line" data-i="7" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">That's Europe!</span>
+  
+  <span class="meta">1.4 s</span>
+</button>
+<button class="line" data-i="8" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">That's Africa!</span>
+  
+  <span class="meta">1.4 s</span>
+</button>
+<button class="line" data-i="9" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">That's Asia! It's the biggest continent.</span>
+  
+  <span class="meta">3.5 s<b class="flag long">long</b></span>
+</button>
+<button class="line" data-i="10" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">That's Australia! It's a country and a continent.</span>
+  
+  <span class="meta">4.9 s<b class="flag long">long</b></span>
+</button>
+<button class="line" data-i="11" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">That's Antarctica! Brrr, it's icy!</span>
+  
+  <span class="meta">4.2 s<b class="flag long">long</b></span>
+</button>
+<h2>soon</h2><button class="line" data-i="12" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">We'll fly to Egypt soon! It has pyramids!</span>
+  
+  <span class="meta">4.4 s<b class="flag long">long</b></span>
+</button>
+<button class="line" data-i="13" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">We'll fly to China soon! It has pandas!</span>
+  
+  <span class="meta">4.1 s<b class="flag long">long</b></span>
+</button>
+<button class="line" data-i="14" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">We'll fly to Thailand soon! It has elephants!</span>
+  
+  <span class="meta">4.4 s<b class="flag long">long</b></span>
+</button>
+<h2>Lines</h2><button class="line" data-i="15" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">This is your passport! Every stamp is a place you helped.<s>This is your passport, Kaylee! Every stamp is a place you helped.</s></span>
+  
+  <span class="meta">4.6 s<b class="flag long">long</b><b class="flag changed">changed</b></span>
+</button>
+<button class="line" data-i="16" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Fly to more places to fill your passport!</span>
+  
+  <span class="meta">3.3 s<b class="flag long">long</b></span>
+</button>
+<button class="line" data-i="17" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Pick a picture!<s>Pick a picture, Kaylee!</s></span>
+  
+  <span class="meta">1.3 s<b class="flag changed">changed</b></span>
+</button>
+<h2>puzzle Pieces</h2><button class="line" data-i="18" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">How many pieces? Tap to choose!</span>
+  
+  <span class="meta">3.1 s<b class="flag long">long</b></span>
+</button>
+<button class="line" data-i="19" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">How many pieces? Click to choose!</span>
+  
+  <span class="meta">3.0 s<b class="flag long">long</b></span>
+</button>
+<h2>Lines</h2><button class="line" data-i="20" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Drag each piece to its spot!</span>
+  
+  <span class="meta">2.6 s</span>
+</button>
+<h2>puzzle Hint</h2><button class="line" data-i="21" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Tap a piece to light up its spot!</span>
+  
+  <span class="meta">2.4 s</span>
+</button>
+<button class="line" data-i="22" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Click a piece to light up its spot!</span>
+  
+  <span class="meta">3.4 s<b class="flag long">long</b></span>
+</button>
+<h2>Lines</h2><button class="line" data-i="23" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Look for the glowing spot!</span>
+  
+  <span class="meta">2.5 s</span>
+</button>
+<button class="line" data-i="24" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">You made the picture!<s>You made the picture, Kaylee!</s></span>
+  
+  <span class="meta">2.0 s<b class="flag changed">changed</b></span>
+</button>
+<h2>puzzle Counts</h2><button class="line" data-i="25" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Four pieces!</span>
+  
+  <span class="meta">1.2 s</span>
+</button>
+<button class="line" data-i="26" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Six pieces!</span>
+  
+  <span class="meta">1.2 s</span>
+</button>
+<button class="line" data-i="27" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Nine pieces!</span>
+  
+  <span class="meta">1.4 s</span>
+</button>
+<button class="line" data-i="28" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Twelve pieces!</span>
+  
+  <span class="meta">1.7 s</span>
+</button>
+<h2>Lines</h2><button class="line" data-i="29" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Pick a page to color!</span>
+  
+  <span class="meta">1.9 s</span>
+</button>
+<h2>coloring How</h2><button class="line" data-i="30" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Pick a color, then tap to paint!</span>
+  
+  <span class="meta">2.8 s</span>
+</button>
+<button class="line" data-i="31" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Pick a color, then click to paint!</span>
+  
+  <span class="meta">2.9 s</span>
+</button>
+<h2>Lines</h2><button class="line" data-i="32" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Sparkle's Theater!</span>
+  
+  <span class="meta">1.8 s</span>
+</button>
+<button class="line" data-i="33" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Pick a video to watch!</span>
+  
+  <span class="meta">1.5 s</span>
+</button>
+<button class="line" data-i="34" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The end! Great watching!<s>The end! Great watching, Kaylee!</s></span>
+  
+  <span class="meta">2.6 s<b class="flag changed">changed</b></span>
+</button>
+<button class="line" data-i="35" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Oh no, the video can't play right now.</span>
+  
+  <span class="meta">2.8 s</span>
+</button>
+<h2>numbers</h2><button class="line" data-i="36" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">one</span>
+  
+  <span class="meta">0.5 s</span>
+</button>
+<button class="line" data-i="37" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">two</span>
+  
+  <span class="meta">0.5 s</span>
+</button>
+<button class="line" data-i="38" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">three</span>
+  
+  <span class="meta">0.6 s</span>
+</button>
+<button class="line" data-i="39" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">four</span>
+  
+  <span class="meta">0.6 s</span>
+</button>
+<button class="line" data-i="40" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">five</span>
+  
+  <span class="meta">0.5 s</span>
+</button>
+<button class="line" data-i="41" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">six</span>
+  
+  <span class="meta">0.9 s</span>
+</button>
+<button class="line" data-i="42" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">seven</span>
+  
+  <span class="meta">0.8 s</span>
+</button>
+<button class="line" data-i="43" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">eight</span>
+  
+  <span class="meta">0.5 s</span>
+</button>
+<button class="line" data-i="44" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">nine</span>
+  
+  <span class="meta">0.6 s</span>
+</button>
+<button class="line" data-i="45" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">ten</span>
+  
+  <span class="meta">0.6 s</span>
+</button>
+<h2>praise</h2><button class="line" data-i="46" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Great job!<s>Great job, Kaylee!</s></span>
+  
+  <span class="meta">1.4 s<b class="flag changed">changed</b></span>
+</button>
+<button class="line" data-i="47" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Yay!</span>
+  
+  <span class="meta">1.0 s</span>
+</button>
+<button class="line" data-i="48" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">You did it!</span>
+  
+  <span class="meta">1.1 s</span>
+</button>
+<button class="line" data-i="49" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Amazing!<s>Amazing, Kaylee!</s></span>
+  
+  <span class="meta">1.0 s<b class="flag changed">changed</b></span>
+</button>
+<button class="line" data-i="50" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Super!</span>
+  
+  <span class="meta">0.7 s</span>
+</button>
+<button class="line" data-i="51" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Hooray!</span>
+  
+  <span class="meta">1.0 s</span>
+</button>
+<h2>Lines</h2><button class="line" data-i="52" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Hmm, let's try again!</span>
+  
+  <span class="meta">2.1 s</span>
+</button>
+<h2>shelf</h2><button class="line" data-i="53" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The world map!</span>
+  <span class="when">The game shelf (the list view beside the world map, Shelf.tsx): every game as a picture card.</span>
+  <span class="meta">1.6 s</span>
+</button>
+<button class="line" data-i="54" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">All the games!</span>
+  
+  <span class="meta">1.5 s</span>
+</button>
+<button class="line" data-i="55" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Pick any game!</span>
+  
+  <span class="meta">1.3 s</span>
+</button>
+<button class="line" data-i="56" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Surprise!</span>
+  
+  <span class="meta">1.1 s</span>
+</button>
+<button class="line" data-i="57" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Yay, a favorite!</span>
+  
+  <span class="meta">2.0 s</span>
+</button>
+<button class="line" data-i="58" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Your favorites!</span>
+  
+  <span class="meta">1.5 s</span>
+</button>
+<h2>shelf › rows</h2><button class="line" data-i="59" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Agong's house!</span>
+  
+  <span class="meta">1.5 s<b class="flag twice">twice</b></span>
+</button>
+<button class="line" data-i="60" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Mall day!</span>
+  
+  <span class="meta">1.3 s</span>
+</button>
+<button class="line" data-i="61" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Krabi!</span>
+  
+  <span class="meta">0.7 s</span>
+</button>
+<button class="line" data-i="62" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Nan!</span>
+  
+  <span class="meta">0.8 s</span>
+</button>
+<button class="line" data-i="63" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Koh Samet!</span>
+  
+  <span class="meta">1.4 s</span>
+</button>
+<button class="line" data-i="64" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Australia!</span>
+  
+  <span class="meta">1.0 s</span>
+</button>
+<button class="line" data-i="65" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">China!</span>
+  
+  <span class="meta">0.7 s</span>
+</button>
+<button class="line" data-i="66" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Egypt!</span>
+  
+  <span class="meta">0.7 s</span>
+</button>
+<button class="line" data-i="67" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Italy!</span>
+  
+  <span class="meta">0.6 s</span>
+</button>
+<button class="line" data-i="68" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Peru!</span>
+  
+  <span class="meta">0.7 s</span>
+</button>
+<button class="line" data-i="69" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Canada!</span>
+  
+  <span class="meta">0.7 s</span>
+</button>
+<h2>shelf › games</h2><button class="line" data-i="70" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Agong's house!</span>
+  
+  <span class="meta">1.5 s<b class="flag twice">twice</b></span>
+</button>
+<button class="line" data-i="71" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Your room!</span>
+  
+  <span class="meta">0.9 s</span>
+</button>
+<button class="line" data-i="72" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Your wardrobe!</span>
+  
+  <span class="meta">1.9 s</span>
+</button>
+<button class="line" data-i="73" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Where should we fly?</span>
+  
+  <span class="meta">1.5 s<b class="flag twice">twice</b></span>
+</button>
+<button class="line" data-i="74" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">HarborLand!</span>
+  
+  <span class="meta">1.5 s</span>
+</button>
+<button class="line" data-i="75" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The vet!</span>
+  
+  <span class="meta">0.9 s</span>
+</button>
+<button class="line" data-i="76" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The barber!</span>
+  
+  <span class="meta">1.2 s</span>
+</button>
+<button class="line" data-i="77" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The cafe!</span>
+  
+  <span class="meta">1.2 s</span>
+</button>
+<button class="line" data-i="78" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The racing slide!</span>
+  
+  <span class="meta">1.5 s</span>
+</button>
+<button class="line" data-i="79" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Giant blocks!</span>
+  
+  <span class="meta">1.3 s</span>
+</button>
+<button class="line" data-i="80" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The climbing wall!</span>
+  
+  <span class="meta">1.5 s</span>
+</button>
+<button class="line" data-i="81" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Muay Thai!</span>
+  
+  <span class="meta">1.3 s</span>
+</button>
+<button class="line" data-i="82" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The sky pod!</span>
+  
+  <span class="meta">1.4 s</span>
+</button>
+<button class="line" data-i="83" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The big frame!</span>
+  
+  <span class="meta">1.9 s</span>
+</button>
+<button class="line" data-i="84" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Pizza time!</span>
+  
+  <span class="meta">0.9 s</span>
+</button>
+<button class="line" data-i="85" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Feed the elephants!</span>
+  
+  <span class="meta">1.7 s</span>
+</button>
+<button class="line" data-i="86" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The elephant cafe!</span>
+  
+  <span class="meta">1.7 s</span>
+</button>
+<button class="line" data-i="87" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Ribbons on the boat!</span>
+  
+  <span class="meta">1.6 s</span>
+</button>
+<button class="line" data-i="88" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The boat ride!</span>
+  
+  <span class="meta">1.2 s</span>
+</button>
+<button class="line" data-i="89" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Floating football!</span>
+  
+  <span class="meta">1.5 s</span>
+</button>
+<button class="line" data-i="90" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The boat race!</span>
+  
+  <span class="meta">1.3 s</span>
+</button>
+<button class="line" data-i="91" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The mountain road!</span>
+  
+  <span class="meta">1.8 s</span>
+</button>
+<button class="line" data-i="92" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The mushroom farm!</span>
+  
+  <span class="meta">1.5 s</span>
+</button>
+<button class="line" data-i="93" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The rice farm!</span>
+  
+  <span class="meta">1.6 s</span>
+</button>
+<button class="line" data-i="94" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The salt wells!</span>
+  
+  <span class="meta">1.8 s</span>
+</button>
+<button class="line" data-i="95" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The island!</span>
+  
+  <span class="meta">1.2 s</span>
+</button>
+<button class="line" data-i="96" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The jet ski!</span>
+  
+  <span class="meta">1.6 s</span>
+</button>
+<button class="line" data-i="97" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The sandcastle!</span>
+  
+  <span class="meta">1.6 s</span>
+</button>
+<button class="line" data-i="98" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Snorkeling!</span>
+  
+  <span class="meta">1.2 s</span>
+</button>
+<button class="line" data-i="99" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Hide and seek!</span>
+  
+  <span class="meta">1.7 s</span>
+</button>
+<button class="line" data-i="100" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The fire show!</span>
+  
+  <span class="meta">1.4 s</span>
+</button>
+<button class="line" data-i="101" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The Red Outback!</span>
+  
+  <span class="meta">1.8 s</span>
+</button>
+<button class="line" data-i="102" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The gum tree forest!</span>
+  
+  <span class="meta">1.9 s</span>
+</button>
+<button class="line" data-i="103" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The Great Barrier Reef!</span>
+  
+  <span class="meta">2.5 s</span>
+</button>
+<button class="line" data-i="104" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The starry night!</span>
+  
+  <span class="meta">1.6 s</span>
+</button>
+<button class="line" data-i="105" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Crocodile River!</span>
+  
+  <span class="meta">1.3 s</span>
+</button>
+<button class="line" data-i="106" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The beach postcard!</span>
+  
+  <span class="meta">2.3 s</span>
+</button>
+<button class="line" data-i="107" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The bamboo forest!</span>
+  
+  <span class="meta">1.6 s</span>
+</button>
+<button class="line" data-i="108" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The Great Wall!</span>
+  
+  <span class="meta">1.3 s</span>
+</button>
+<button class="line" data-i="109" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Hotpot night!</span>
+  
+  <span class="meta">1.1 s</span>
+</button>
+<button class="line" data-i="110" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The magic brush!</span>
+  
+  <span class="meta">2.2 s</span>
+</button>
+<button class="line" data-i="111" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The great race!</span>
+  
+  <span class="meta">1.5 s</span>
+</button>
+<button class="line" data-i="112" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The bullet train!</span>
+  
+  <span class="meta">1.6 s</span>
+</button>
+<button class="line" data-i="113" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The dumpling house!</span>
+  
+  <span class="meta">1.8 s</span>
+</button>
+<button class="line" data-i="114" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Build a pyramid!</span>
+  
+  <span class="meta">1.5 s</span>
+</button>
+<button class="line" data-i="115" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The secret passage!</span>
+  
+  <span class="meta">2.2 s</span>
+</button>
+<button class="line" data-i="116" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Wake the Sphinx!</span>
+  
+  <span class="meta">1.9 s</span>
+</button>
+<button class="line" data-i="117" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Sail the Nile!</span>
+  
+  <span class="meta">1.3 s</span>
+</button>
+<button class="line" data-i="118" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Write like a pharaoh!</span>
+  
+  <span class="meta">1.7 s</span>
+</button>
+<button class="line" data-i="119" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Miu's market!</span>
+  
+  <span class="meta">2.2 s</span>
+</button>
+<button class="line" data-i="120" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Make a pizza!</span>
+  
+  <span class="meta">1.8 s</span>
+</button>
+<button class="line" data-i="121" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The olive grove!</span>
+  
+  <span class="meta">1.9 s</span>
+</button>
+<button class="line" data-i="122" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The Colosseum!</span>
+  
+  <span class="meta">1.3 s</span>
+</button>
+<button class="line" data-i="123" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Venice!</span>
+  
+  <span class="meta">0.8 s</span>
+</button>
+<button class="line" data-i="124" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Snow on a volcano!</span>
+  
+  <span class="meta">1.7 s</span>
+</button>
+<button class="line" data-i="125" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The Trevi Fountain!</span>
+  
+  <span class="meta">1.9 s</span>
+</button>
+<button class="line" data-i="126" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Luna's fluffy day!</span>
+  
+  <span class="meta">1.5 s</span>
+</button>
+<button class="line" data-i="127" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The mountain terraces!</span>
+  
+  <span class="meta">1.9 s</span>
+</button>
+<button class="line" data-i="128" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The penguin cliff!</span>
+  
+  <span class="meta">1.7 s</span>
+</button>
+<button class="line" data-i="129" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Fly with the condor!</span>
+  
+  <span class="meta">1.9 s</span>
+</button>
+<button class="line" data-i="130" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The rainy river!</span>
+  
+  <span class="meta">1.9 s</span>
+</button>
+<button class="line" data-i="131" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">Maple taffy on snow!</span>
+  
+  <span class="meta">2.4 s</span>
+</button>
+<button class="line" data-i="132" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The snowman parade!</span>
+  
+  <span class="meta">2.3 s</span>
+</button>
+<button class="line" data-i="133" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The mountain bike!</span>
+  
+  <span class="meta">1.9 s</span>
+</button>
+<button class="line" data-i="134" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The campfire night!</span>
+  
+  <span class="meta">1.8 s</span>
+</button>
+<button class="line" data-i="135" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The red canoe!</span>
+  
+  <span class="meta">1.8 s</span>
+</button>
+<button class="line" data-i="136" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The animal bridge!</span>
+  
+  <span class="meta">1.6 s</span>
+</button>
+<button class="line" data-i="137" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The whale watch!</span>
+  
+  <span class="meta">2.2 s</span>
+</button>
+<button class="line" data-i="138" style="--h:330">
+  <span class="who">Sparkle</span>
+  <span class="text">The salmon leap!</span>
+  
+  <span class="meta">1.8 s</span>
+</button>
+</main>
+<script>
+const spans=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];const a=document.querySelector('audio');let stop=null,cur=null
+const mark=(el)=>{cur?.classList.remove('playing');cur=el;el?.classList.add('playing')}
+document.querySelectorAll('.line').forEach(el=>el.addEventListener('click',()=>{const s=spans[+el.dataset.i];if(!a||!s)return;a.currentTime=s[0];stop=s[1];mark(el);a.play()}))
+a?.addEventListener('timeupdate',()=>{if(stop!==null&&a.currentTime>=stop){a.pause();stop=null}
+  if(stop===null){const i=spans.findIndex(s=>s&&a.currentTime>=s[0]&&a.currentTime<s[1]);if(i>=0)mark(document.querySelector('.line[data-i="'+i+'"]'))}})
+a?.addEventListener('play',()=>{if(stop===null)mark(null)})
+</script>
+</body></html>

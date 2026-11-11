@@ -1,0 +1,948 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "olives",
+  "title": "Italy › Olives",
+  "intro": "🫒 The Olive Grove (activities/olives). Every spoken line of the activity goes in here.",
+  "page": "italy-olives.html",
+  "audio": null,
+  "lines": 62,
+  "seconds": 134,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "olives.arrive.0",
+      "text": "Ciao! The olives are ready!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Ciao, Kaylee! The olives are ready!"
+    },
+    {
+      "key": "olives.comb",
+      "text": "Drag the rake along the glowing branch!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "olives.combHint",
+      "text": "Slide the rake all the way to the end!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "olives.branchDone.1",
+      "text": "Great combing!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Great combing, Kaylee!"
+    },
+    {
+      "key": "olives.ripenIntro.touch",
+      "text": "This olive is green. Tap the sun!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "olives.sortDone",
+      "text": "Green, purple, black! Well done!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Green, purple, black! Well done, Kaylee!"
+    },
+    {
+      "key": "olives.pourFull.touch",
+      "text": "Hold the jug to pour! Fill it all the way!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "olives.pourFull.mouse",
+      "text": "Click and hold the jug to pour! Fill it all the way!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "olives.everything",
+      "text": "Olive oil goes on almost everything in Italy!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "olives.band",
+      "text": "Yay! A tambourine for the band!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "olives",
+        "arrive",
+        "0"
+      ],
+      "text": "Ciao! The olives are ready!",
+      "voice": "spina",
+      "key": "olives.arrive.0",
+      "part": "olives › arrive",
+      "when": "",
+      "ms": 2016,
+      "flags": [
+        "changed"
+      ],
+      "was": "Ciao, Kaylee! The olives are ready!"
+    },
+    {
+      "path": [
+        "olives",
+        "arrive",
+        "1"
+      ],
+      "text": "Help me pick them for olive oil!",
+      "voice": "spina",
+      "key": "olives.arrive.1",
+      "part": "olives › arrive",
+      "when": "",
+      "ms": 1850,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "comb"
+      ],
+      "text": "Drag the rake along the glowing branch!",
+      "voice": "sparkle",
+      "key": "olives.comb",
+      "part": "olives",
+      "when": "Comb the branches.",
+      "ms": 3078,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "olives",
+        "combNext"
+      ],
+      "text": "Now comb this branch!",
+      "voice": "sparkle",
+      "key": "olives.combNext",
+      "part": "olives",
+      "when": "",
+      "ms": 2457,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "combLast"
+      ],
+      "text": "One more branch!",
+      "voice": "sparkle",
+      "key": "olives.combLast",
+      "part": "olives",
+      "when": "",
+      "ms": 1693,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "combHint"
+      ],
+      "text": "Slide the rake all the way to the end!",
+      "voice": "sparkle",
+      "key": "olives.combHint",
+      "part": "olives",
+      "when": "",
+      "ms": 3062,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "olives",
+        "bonk"
+      ],
+      "text": "Eek! They stuck on my quills!",
+      "voice": "spina",
+      "key": "olives.bonk",
+      "part": "olives",
+      "when": "",
+      "ms": 2432,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "bonkAgain"
+      ],
+      "text": "Oops! Again!",
+      "voice": "spina",
+      "key": "olives.bonkAgain",
+      "part": "olives",
+      "when": "",
+      "ms": 1320,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "tapSpina",
+        "touch"
+      ],
+      "text": "Tap Spina to shake them off!",
+      "voice": "sparkle",
+      "key": "olives.tapSpina.touch",
+      "part": "olives › tapSpina",
+      "when": "",
+      "ms": 2827,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "tapSpina",
+        "mouse"
+      ],
+      "text": "Click Spina to shake them off!",
+      "voice": "sparkle",
+      "key": "olives.tapSpina.mouse",
+      "part": "olives › tapSpina",
+      "when": "",
+      "ms": 2472,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "shook"
+      ],
+      "text": "Hee hee! Into the basket!",
+      "voice": "spina",
+      "key": "olives.shook",
+      "part": "olives",
+      "when": "",
+      "ms": 1717,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "branchDone",
+        "0"
+      ],
+      "text": "Olives in the net!",
+      "voice": "sparkle",
+      "key": "olives.branchDone.0",
+      "part": "olives › branchDone",
+      "when": "",
+      "ms": 1277,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "branchDone",
+        "1"
+      ],
+      "text": "Great combing!",
+      "voice": "sparkle",
+      "key": "olives.branchDone.1",
+      "part": "olives › branchDone",
+      "when": "",
+      "ms": 2136,
+      "flags": [
+        "changed"
+      ],
+      "was": "Great combing, Kaylee!"
+    },
+    {
+      "path": [
+        "olives",
+        "branchDone",
+        "2"
+      ],
+      "text": "The net is full!",
+      "voice": "sparkle",
+      "key": "olives.branchDone.2",
+      "part": "olives › branchDone",
+      "when": "",
+      "ms": 2376,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "sun"
+      ],
+      "text": "Olive trees love hot, dry summers!",
+      "voice": "sparkle",
+      "key": "olives.sun",
+      "part": "olives",
+      "when": "",
+      "ms": 2936,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "toBasket"
+      ],
+      "text": "Into the basket! Grazie!",
+      "voice": "spina",
+      "key": "olives.toBasket",
+      "part": "olives",
+      "when": "",
+      "ms": 2179,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "ripenIntro",
+        "touch"
+      ],
+      "text": "This olive is green. Tap the sun!",
+      "voice": "sparkle",
+      "key": "olives.ripenIntro.touch",
+      "part": "olives › ripenIntro",
+      "when": "Green to black.",
+      "ms": 3421,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "olives",
+        "ripenIntro",
+        "mouse"
+      ],
+      "text": "This olive is green. Click the sun!",
+      "voice": "sparkle",
+      "key": "olives.ripenIntro.mouse",
+      "part": "olives › ripenIntro",
+      "when": "",
+      "ms": 1848,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "purple",
+        "touch"
+      ],
+      "text": "Purple! Tap the sun again!",
+      "voice": "sparkle",
+      "key": "olives.purple.touch",
+      "part": "olives › purple",
+      "when": "",
+      "ms": 2538,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "purple",
+        "mouse"
+      ],
+      "text": "Purple! Click the sun again!",
+      "voice": "sparkle",
+      "key": "olives.purple.mouse",
+      "part": "olives › purple",
+      "when": "",
+      "ms": 2688,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "black"
+      ],
+      "text": "Black! Now it is ripe!",
+      "voice": "sparkle",
+      "key": "olives.black",
+      "part": "olives",
+      "when": "",
+      "ms": 2150,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "sortIntro"
+      ],
+      "text": "Green, then purple, then black!",
+      "voice": "sparkle",
+      "key": "olives.sortIntro",
+      "part": "olives",
+      "when": "",
+      "ms": 2986,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "hintGreen"
+      ],
+      "text": "Green goes in the one sun bowl!",
+      "voice": "sparkle",
+      "key": "olives.hintGreen",
+      "part": "olives",
+      "when": "",
+      "ms": 2863,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "hintPurple"
+      ],
+      "text": "Purple goes in the two sun bowl!",
+      "voice": "sparkle",
+      "key": "olives.hintPurple",
+      "part": "olives",
+      "when": "",
+      "ms": 2942,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "hintBlack"
+      ],
+      "text": "Black goes in the three sun bowl!",
+      "voice": "sparkle",
+      "key": "olives.hintBlack",
+      "part": "olives",
+      "when": "",
+      "ms": 2997,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "sortDone"
+      ],
+      "text": "Green, purple, black! Well done!",
+      "voice": "sparkle",
+      "key": "olives.sortDone",
+      "part": "olives",
+      "when": "",
+      "ms": 3384,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Green, purple, black! Well done, Kaylee!"
+    },
+    {
+      "path": [
+        "olives",
+        "tryOne"
+      ],
+      "text": "Mmm! Let me try one!",
+      "voice": "spina",
+      "key": "olives.tryOne",
+      "part": "olives",
+      "when": "",
+      "ms": 2180,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "bitter"
+      ],
+      "text": "Bleh! Bitter!",
+      "voice": "spina",
+      "key": "olives.bitter",
+      "part": "olives",
+      "when": "",
+      "ms": 1770,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "bitterWhy",
+        "0"
+      ],
+      "text": "Fresh olives are too bitter!",
+      "voice": "sparkle",
+      "key": "olives.bitterWhy.0",
+      "part": "olives › bitterWhy",
+      "when": "",
+      "ms": 2767,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "bitterWhy",
+        "1"
+      ],
+      "text": "They have to soak first.",
+      "voice": "sparkle",
+      "key": "olives.bitterWhy.1",
+      "part": "olives › bitterWhy",
+      "when": "",
+      "ms": 2728,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "mill"
+      ],
+      "text": "Welcome to the frantoio, the olive mill!",
+      "voice": "spina",
+      "key": "olives.mill",
+      "part": "olives",
+      "when": "The olive mill.",
+      "ms": 2754,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "millDrop"
+      ],
+      "text": "Drop ten olives in the big funnel!",
+      "voice": "sparkle",
+      "key": "olives.millDrop",
+      "part": "olives",
+      "when": "",
+      "ms": 2799,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "millHint"
+      ],
+      "text": "Drop an olive in the funnel!",
+      "voice": "sparkle",
+      "key": "olives.millHint",
+      "part": "olives",
+      "when": "",
+      "ms": 2282,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "count",
+        "0"
+      ],
+      "text": "One!",
+      "voice": "sparkle",
+      "key": "olives.count.0",
+      "part": "olives › count",
+      "when": "",
+      "ms": 606,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "count",
+        "1"
+      ],
+      "text": "Two!",
+      "voice": "sparkle",
+      "key": "olives.count.1",
+      "part": "olives › count",
+      "when": "⛲ The Trevi Fountain (activities/trevi). Every spoken line of the activity goes in here.",
+      "ms": 526,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "count",
+        "2"
+      ],
+      "text": "Three!",
+      "voice": "sparkle",
+      "key": "olives.count.2",
+      "part": "olives › count",
+      "when": "🌋 Snow on a Volcano (activities/etna). Nino tells the story; Sparkle only speaks when something new happens (or she's stuck).",
+      "ms": 628,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "count",
+        "3"
+      ],
+      "text": "Four!",
+      "voice": "sparkle",
+      "key": "olives.count.3",
+      "part": "olives › count",
+      "when": "",
+      "ms": 698,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "count",
+        "4"
+      ],
+      "text": "Five!",
+      "voice": "sparkle",
+      "key": "olives.count.4",
+      "part": "olives › count",
+      "when": "",
+      "ms": 715,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "count",
+        "5"
+      ],
+      "text": "Six!",
+      "voice": "sparkle",
+      "key": "olives.count.5",
+      "part": "olives › count",
+      "when": "",
+      "ms": 764,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "count",
+        "6"
+      ],
+      "text": "Seven!",
+      "voice": "sparkle",
+      "key": "olives.count.6",
+      "part": "olives › count",
+      "when": "",
+      "ms": 808,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "count",
+        "7"
+      ],
+      "text": "Eight!",
+      "voice": "sparkle",
+      "key": "olives.count.7",
+      "part": "olives › count",
+      "when": "",
+      "ms": 554,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "count",
+        "8"
+      ],
+      "text": "Nine!",
+      "voice": "sparkle",
+      "key": "olives.count.8",
+      "part": "olives › count",
+      "when": "",
+      "ms": 702,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "count",
+        "9"
+      ],
+      "text": "Ten!",
+      "voice": "sparkle",
+      "key": "olives.count.9",
+      "part": "olives › count",
+      "when": "",
+      "ms": 561,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "lots"
+      ],
+      "text": "It takes lots of olives to make oil!",
+      "voice": "sparkle",
+      "key": "olives.lots",
+      "part": "olives",
+      "when": "",
+      "ms": 2821,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "roll"
+      ],
+      "text": "Here comes the big stone wheel!",
+      "voice": "sparkle",
+      "key": "olives.roll",
+      "part": "olives",
+      "when": "",
+      "ms": 2366,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "squish"
+      ],
+      "text": "Squish, squish, squish!",
+      "voice": "spina",
+      "key": "olives.squish",
+      "part": "olives",
+      "when": "",
+      "ms": 1742,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "oil"
+      ],
+      "text": "Look! Golden olive oil!",
+      "voice": "sparkle",
+      "key": "olives.oil",
+      "part": "olives",
+      "when": "",
+      "ms": 2536,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "pourFull",
+        "touch"
+      ],
+      "text": "Hold the jug to pour! Fill it all the way!",
+      "voice": "sparkle",
+      "key": "olives.pourFull.touch",
+      "part": "olives › pourFull",
+      "when": "",
+      "ms": 4018,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "olives",
+        "pourFull",
+        "mouse"
+      ],
+      "text": "Click and hold the jug to pour! Fill it all the way!",
+      "voice": "sparkle",
+      "key": "olives.pourFull.mouse",
+      "part": "olives › pourFull",
+      "when": "",
+      "ms": 4416,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "olives",
+        "full"
+      ],
+      "text": "Full! All the way to the top!",
+      "voice": "sparkle",
+      "key": "olives.full",
+      "part": "olives",
+      "when": "",
+      "ms": 2610,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "pourHalf"
+      ],
+      "text": "Now fill it halfway!",
+      "voice": "sparkle",
+      "key": "olives.pourHalf",
+      "part": "olives",
+      "when": "",
+      "ms": 2315,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "more"
+      ],
+      "text": "A little more, to the line!",
+      "voice": "sparkle",
+      "key": "olives.more",
+      "part": "olives",
+      "when": "",
+      "ms": 2080,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "tooMuch"
+      ],
+      "text": "Hee hee! Just a taste!",
+      "voice": "spina",
+      "key": "olives.tooMuch",
+      "part": "olives",
+      "when": "",
+      "ms": 1514,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "half"
+      ],
+      "text": "Halfway full!",
+      "voice": "sparkle",
+      "key": "olives.half",
+      "part": "olives",
+      "when": "",
+      "ms": 1378,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "everything"
+      ],
+      "text": "Olive oil goes on almost everything in Italy!",
+      "voice": "sparkle",
+      "key": "olives.everything",
+      "part": "olives",
+      "when": "",
+      "ms": 3776,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "olives",
+        "bruschetta"
+      ],
+      "text": "Bruschetta for everyone!",
+      "voice": "spina",
+      "key": "olives.bruschetta",
+      "part": "olives",
+      "when": "",
+      "ms": 1514,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "yum"
+      ],
+      "text": "Crunch! Buonissima!",
+      "voice": "spina",
+      "key": "olives.yum",
+      "part": "olives",
+      "when": "",
+      "ms": 2355,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "tambourine"
+      ],
+      "text": "And my tambourine, for Lupa's band!",
+      "voice": "spina",
+      "key": "olives.tambourine",
+      "part": "olives",
+      "when": "",
+      "ms": 2578,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "tapTambourine",
+        "touch"
+      ],
+      "text": "Tap the tambourine!",
+      "voice": "sparkle",
+      "key": "olives.tapTambourine.touch",
+      "part": "olives › tapTambourine",
+      "when": "",
+      "ms": 1768,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "tapTambourine",
+        "mouse"
+      ],
+      "text": "Click the tambourine!",
+      "voice": "sparkle",
+      "key": "olives.tapTambourine.mouse",
+      "part": "olives › tapTambourine",
+      "when": "",
+      "ms": 2040,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "pizzica"
+      ],
+      "text": "Let's dance the pizzica!",
+      "voice": "spina",
+      "key": "olives.pizzica",
+      "part": "olives",
+      "when": "",
+      "ms": 1616,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "band"
+      ],
+      "text": "Yay! A tambourine for the band!",
+      "voice": "lupa",
+      "key": "olives.band",
+      "part": "olives",
+      "when": "",
+      "ms": 3143,
+      "flags": [
+        "long"
+      ]
+    }
+  ]
+}

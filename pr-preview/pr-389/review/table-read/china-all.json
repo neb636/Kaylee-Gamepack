@@ -1,0 +1,7639 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "",
+  "title": "China › Everything",
+  "intro": "",
+  "page": "china-all.html",
+  "audio": null,
+  "lines": 426,
+  "seconds": 1132,
+  "missing": 0,
+  "names": 2,
+  "flags": [
+    {
+      "key": "intro.0",
+      "text": "Nee how!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Nee how, Kaylee!"
+    },
+    {
+      "key": "intro.1",
+      "text": "Nee how means hello in China!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hubNext",
+      "text": "Where should we go next?",
+      "flags": [
+        "changed"
+      ],
+      "was": "Where should we go next, Kaylee?"
+    },
+    {
+      "key": "partyLocked",
+      "text": "Light up the lanterns to start the parade!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "trophyWin",
+      "text": "You did it! You won the China Explorer trophy!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Kaylee, you did it! You won the China Explorer trophy!"
+    },
+    {
+      "key": "trophyRoom",
+      "text": "China Explorer! From China.",
+      "flags": [
+        "changed"
+      ],
+      "was": "Kaylee, China Explorer! From China."
+    },
+    {
+      "key": "dumplings.arrive.0",
+      "text": "Nong how!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Nong how, Kaylee!"
+    },
+    {
+      "key": "dumplings.zigzag",
+      "text": "Zig-zag bridges keep bad luck away!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.aiyo",
+      "text": "Aiyo! So many hungry customers, and no helper!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.knead",
+      "text": "Push the dough three times!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.kneadDone",
+      "text": "Smooth and shiny! Ee, are, san means one, two, three!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.snake.touch",
+      "text": "Swipe the dough to make a long snake!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.snake.mouse",
+      "text": "Drag across the dough to make a long snake!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.chop.touch",
+      "text": "Tap to cut the snake into four pieces!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.chop.mouse",
+      "text": "Click to cut the snake into four pieces!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.count.0",
+      "text": "One!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "dumplings.count.1",
+      "text": "Two!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "dumplings.count.2",
+      "text": "Three!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "dumplings.count.3",
+      "text": "Four!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "dumplings.count.4",
+      "text": "Five!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "dumplings.count.5",
+      "text": "Six!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "dumplings.fill.mouse",
+      "text": "Click the bowl for one spoonful!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.blorp",
+      "text": "Ho ho ho! Just one spoonful!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.pleated",
+      "text": "Beautiful! Real chefs make eighteen folds!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.counted4",
+      "text": "One, two, three, four dumplings!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.steamer",
+      "text": "Put each dumpling in the basket, on the cabbage leaf!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.leaf",
+      "text": "The cabbage leaf keeps them from sticking!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.lid.touch",
+      "text": "Tap the lid to close the basket!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.steamFact",
+      "text": "Hot water makes steam. Steam cooks dumplings!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.serve",
+      "text": "Carry the basket to Grandpa Turtle's table!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.eatHow",
+      "text": "Hot soup inside! Nibble, sip, eat.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.nibble.touch",
+      "text": "Tap the dumpling to take a little nibble!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.nibble.mouse",
+      "text": "Click the dumpling to take a little nibble!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.haochi",
+      "text": "How chir! Delicious!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.notThat.pink",
+      "text": "That one is not pink. Find the pink dough!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.notThat.green",
+      "text": "That one is not green. Find the green dough!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.stackFact",
+      "text": "Dumpling chefs stack their baskets up high!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.serveBunnies",
+      "text": "Take the pink ribbon basket to the Bunny Twins!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.notMine.0",
+      "text": "Not mine, dear!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "dumplings.notMine.1",
+      "text": "Not mine, dear!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "dumplings.tea.touch",
+      "text": "Tap the table two times to say thank you for the tea!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.tea.mouse",
+      "text": "Click the table two times to say thank you for the tea!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.teaFact",
+      "text": "In China, a tap tap on the table means thank you!",
+      "flags": [
+        "long",
+        "touch only"
+      ]
+    },
+    {
+      "key": "dumplings.six",
+      "text": "Six dumplings! Now steam them!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.serveBao",
+      "text": "Take the basket to Bao Bao's table!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.baoYum",
+      "text": "Mmm! How chir! I love dumplings!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.serviceDone",
+      "text": "Great cooking! Ready for the next customers?",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.hat",
+      "text": "Shyeh shyeh, Chef! A chef hat for you!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Shyeh shyeh, Chef Kaylee! A chef hat for you!"
+    },
+    {
+      "key": "dumplings.lulu",
+      "text": "Achoo! Thank you!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Achoo! Thank you, Kaylee!"
+    },
+    {
+      "key": "dumplings.dimsum.eggTart",
+      "text": "An egg tart! Sweet and yummy!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.dimsum.sesameBall",
+      "text": "A sesame ball! Crunchy and chewy!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.tickle.doudou.1",
+      "text": "Shanghai is the biggest city in China!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.tickle.cheffu.0",
+      "text": "Ho ho ho!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "dumplings.tickle.cheffu.1",
+      "text": "Dumplings make everyone happy!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.tickle.grandpa.0",
+      "text": "Slow and steady, like me.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "dumplings.tickle.bunnies.0",
+      "text": "Hee hee hee!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "bamboo.grow3.touch",
+      "text": "Swipe up! Grow it three tall!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bamboo.grow3.mouse",
+      "text": "Drag up! Grow it three tall!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bamboo.count.0",
+      "text": "One!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "bamboo.count.1",
+      "text": "Two!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "bamboo.count.2",
+      "text": "Three!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "bamboo.taller",
+      "text": "Taller! And that one is shorter!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bamboo.tallestQ.touch",
+      "text": "Which one is the tallest? Tap it!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bamboo.tallestQ.mouse",
+      "text": "Which one is the tallest? Click it!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bamboo.shortestQ.mouse",
+      "text": "Which one is the shortest? Click it!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bamboo.shortestWrong",
+      "text": "Too tall! Find the shortest!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bamboo.giggle.0",
+      "text": "Hee hee hee!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "wall.oops",
+      "text": "Oops! I knocked bricks off the Great Wall!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "wall.long",
+      "text": "The wall is so long! Slide it to see more!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "wall.follow.touch",
+      "text": "Slide the wall, or tap the arrow!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "wall.pattern.0",
+      "text": "Red, gold, red, gold... what comes next?",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "wall.pattern.1",
+      "text": "Red, gold, gold, red, gold... what comes next?",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "wall.pattern.2",
+      "text": "Red, gold, jade, red... what comes next?",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "wall.fixed.0",
+      "text": "Yay! Thank you!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Yay! Thank you, Kaylee!"
+    },
+    {
+      "key": "wall.fixed.2",
+      "text": "Hooray! The whole wall is fixed!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "wall.beacon.mouse",
+      "text": "Click the tower to light the signal fire!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "wall.signal",
+      "text": "Soldiers sent smoke signals tower to tower!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "wall.tap.0",
+      "text": "Hee hee!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "wall.tap.1",
+      "text": "Tickles!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "hotpot.story.0",
+      "text": "Hotpot time! Everybody cooks together!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Hotpot time, Kaylee! Everybody cooks together!"
+    },
+    {
+      "key": "hotpot.ask.0",
+      "text": "Bao Bao wants noodles!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hotpot.ask.1",
+      "text": "Hong wants something green from the mild side!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hotpot.dropTipNoodles.touch",
+      "text": "Tap the noodles, then tap the soup!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hotpot.dropTipNoodles.mouse",
+      "text": "Click the noodles, then click the soup!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hotpot.chopTip.touch",
+      "text": "Tap the chopsticks, then tap the sparkly food!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hotpot.chopTip.mouse",
+      "text": "Click the chopsticks, then click the sparkly food!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hotpot.chopFact",
+      "text": "People in China eat with chopsticks!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "hotpot.count.0",
+      "text": "One!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "hotpot.count.1",
+      "text": "Two!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "hotpot.count.2",
+      "text": "Three!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "hotpot.count.3",
+      "text": "Four!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "hotpot.count.4",
+      "text": "Five!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "hotpot.count.5",
+      "text": "Six!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "hotpot.thanks.0",
+      "text": "Shyeh shyeh!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "hotpot.thanks.1",
+      "text": "Shyeh shyeh!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "hotpot.thanks.2",
+      "text": "Shyeh shyeh!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "hotpot.teach",
+      "text": "Shyeh shyeh means thank you!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "hotpot.factPot",
+      "text": "Everyone shares one pot in the middle!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hotpot.factRound",
+      "text": "A round table means everybody can reach!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hotpot.tap.0",
+      "text": "Hee hee!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "hotpot.tap.2",
+      "text": "Ho ho ho!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "brush.story.0",
+      "text": "This magic brush makes pictures come alive!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "brush.intro.0",
+      "text": "Paint a person! Follow the glowing line.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "brush.retry",
+      "text": "Try again! Follow the glowing line.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "brush.word.3",
+      "text": "Moo!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "brush.fade",
+      "text": "The water writing fades away, but the picture stays!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "brush.nameIntro",
+      "text": "Now paint your name, Kaylee! In Chinese!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "brush.stamped",
+      "text": "Your name, stamped with a red seal!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Your name, stamped with a red seal, Kaylee!"
+    },
+    {
+      "key": "brush.fact",
+      "text": "Chinese isn't written with letters. Some characters started as pictures!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "brush.tapCrane.1",
+      "text": "Hee hee!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "race.story.0",
+      "text": "The Jade Emperor is holding a big race across the river!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.mouseHelp",
+      "text": "Mouse can't swim! Put Mouse on Ox's back!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.stonesHelp",
+      "text": "Rabbit hops! Put stones in the glowing spots!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.dragonLate",
+      "text": "I stopped to make rain for a thirsty village!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.dragonFly",
+      "text": "Whoosh! Now I can fly!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.stepsIntro",
+      "text": "Everybody wins a step! Who came first?",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.ask.0",
+      "text": "Who came first? Put Mouse on the first step!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.ask.1",
+      "text": "Who came second? Put that animal on the second step!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.ask.2",
+      "text": "Who came third? Put that animal on the third step!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.ask.3",
+      "text": "Now the last two! Who came fourth?",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.hintOrder.1",
+      "text": "Ox carried Mouse. Ox came second!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.hintOrder.3",
+      "text": "Rabbit hopped over the stones. Rabbit came fourth!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.hintOrder.4",
+      "text": "Dragon stopped to make rain. Dragon came fifth!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.tryGlow",
+      "text": "Try the glowing one!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "race.askAfter.touch",
+      "text": "Who came right after Ox? Tap that animal!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.askAfter.mouse",
+      "text": "Who came right after Ox? Click that animal!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.afterHint.touch",
+      "text": "Tiger came right after Ox! Tap the glowing one!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.afterHint.mouse",
+      "text": "Tiger came right after Ox! Click the glowing one!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.afterYes",
+      "text": "Yes! Tiger came right after Ox!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.wheel",
+      "text": "There are twelve zodiac animals, one for every year!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.reveal.ox",
+      "text": "You were born in the Year of the Ox!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Kaylee, you were born in the Year of the Ox!"
+    },
+    {
+      "key": "race.reveal.mouse",
+      "text": "You were born in the Year of the Rat!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Kaylee, you were born in the Year of the Rat!"
+    },
+    {
+      "key": "race.revealOx",
+      "text": "Moo-hoo! Hooray!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Moo-hoo! Hooray, Kaylee!"
+    },
+    {
+      "key": "race.revealMouse",
+      "text": "Squeak! Hooray!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Squeak! Hooray, Kaylee!"
+    },
+    {
+      "key": "race.year",
+      "text": "This year, 2026, is the Year of the Horse!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.catAsk.touch",
+      "text": "Shh! Someone is sleeping. Tap the cat!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.catAsk.mouse",
+      "text": "Shh! Someone is sleeping. Click the cat!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.catFact",
+      "text": "The cat overslept and missed the race! That is why there is no Year of the Cat!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "race.tap.1",
+      "text": "Hee hee!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "race.oxTap",
+      "text": "Moo!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "train.story",
+      "text": "China is so big! Let's ride the super-fast train!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.fast",
+      "text": "China has some of the fastest trains in the world!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.big",
+      "text": "China is so big! Snowy in the north, sunny beach in the south!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.arrive.harbin",
+      "text": "Harbin! It is far up north. Brrr, snow!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.arrive.hainan",
+      "text": "Hainan! It is far down south. So hot!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.arrive.gobi",
+      "text": "The Gobi Desert! Sunny days and chilly nights!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.arrive.himalaya",
+      "text": "The Himalayas! The tallest mountains in the world!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.ask.scarf",
+      "text": "The tiger is shivering! Give him the scarf!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.ask.gobiDay",
+      "text": "It is a hot, sunny day! What does Bao Bao need?",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.ask.gobiNight",
+      "text": "Now it is night, and cold! What does Bao Bao need?",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.ask.himalaya",
+      "text": "Which one fits the tall, snowy mountains?",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.hint",
+      "text": "Try the glowing one!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "train.yes.scarf",
+      "text": "Ahh! Warm now. Thank you!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "train.tap.0",
+      "text": "Hee hee!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "train.tap.1",
+      "text": "Tickles!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "train.end",
+      "text": "What a trip! Thank you!",
+      "flags": [
+        "changed"
+      ],
+      "was": "What a trip! Thank you, Kaylee!"
+    },
+    {
+      "key": "parade.arrive",
+      "text": "I'm Long Long! Let's dance!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "I'm Long Long! Let's dance, Kaylee!"
+    },
+    {
+      "key": "parade.drive",
+      "text": "Drag Long Long around the lanterns!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.lap",
+      "text": "Wheee! What a dance!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Wheee! What a dance, Kaylee!"
+    },
+    {
+      "key": "parade.drum.touch",
+      "text": "Tap the drum! Make the dragon dance!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.drum.mouse",
+      "text": "Click the drum! Make the dragon dance!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.drumDone",
+      "text": "Great drumming!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Great drumming, Kaylee!"
+    },
+    {
+      "key": "parade.sky.touch",
+      "text": "Tap the sky to make fireworks!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.sky.mouse",
+      "text": "Click the sky to make fireworks!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.skyFact",
+      "text": "Fireworks were invented in China!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.flagFact",
+      "text": "China's flag is red, with one big gold star and four little stars!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "parade.envelope.touch",
+      "text": "Bao Bao has a red envelope! Tap to open it!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.envelope.mouse",
+      "text": "Bao Bao has a red envelope! Click to open it!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.hongbao",
+      "text": "A red envelope is called a hong bao!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "parade.greet",
+      "text": "Sheen nyen kwy luh! Happy New Year!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Sheen nyen kwy luh, Kaylee! Happy New Year!"
+    },
+    {
+      "key": "videos.overview",
+      "text": "Let's see where China is!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "videos.harbin",
+      "text": "Wow, a city made of ice!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "stickers.bamboo",
+      "text": "Giant panda sticker! Panda babies are born as tiny as a stick of butter!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "stickers.wall",
+      "text": "Golden monkey sticker! These monkeys have sky-blue faces!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "stickers.dumplings",
+      "text": "Pekingese sticker! These puppies from China look like tiny lions!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "stickers.hotpot",
+      "text": "Red panda sticker! Red pandas stand up tall when they are surprised!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "stickers.brush",
+      "text": "Crane sticker! Red-crowned cranes dance to say hello!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "stickers.race",
+      "text": "Ox sticker! You were born in the Year of the Ox!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "stickers.train",
+      "text": "Tiger sticker! Amur tigers live where it is snowy and cold!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.hello",
+      "text": "In China, people say nee how! It means hello!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.shanghai",
+      "text": "Shanghai is the biggest city in China! It has a tower with pink balls!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.dumplings",
+      "text": "Soup dumplings come from Shanghai. There is soup inside!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.dimsum",
+      "text": "Dim sum is lots of little dishes, shared with tea.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.newYear",
+      "text": "Chinese New Year has lanterns, dragons and red envelopes!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.pandas",
+      "text": "Giant pandas live in the bamboo mountains of China.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.wall",
+      "text": "The Great Wall of China is super long!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.big",
+      "text": "China is a huge country with snowy places and sunny beaches!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.thanks",
+      "text": "Shyeh shyeh means thank you!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "facts.counting",
+      "text": "One, two, three in Chinese: ee, are, san!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.red",
+      "text": "In China, red is the color of luck and happiness!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.dragons",
+      "text": "Chinese dragons are kind! They bring rain and good luck.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.chopsticks",
+      "text": "People in China eat with chopsticks!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "facts.inventions",
+      "text": "Paper, kites and fireworks were first made in China!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.flag",
+      "text": "China's flag is red, with one big gold star and four little stars!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "facts.people",
+      "text": "More people live in China than almost anywhere in the world!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "passport.touch",
+      "text": "This is China! Tap a picture to learn more.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "passport.mouse",
+      "text": "This is China! Click a picture to learn more.",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "name"
+      ],
+      "text": "China",
+      "voice": "sparkle",
+      "key": "name",
+      "part": "",
+      "when": "",
+      "ms": 703,
+      "flags": []
+    },
+    {
+      "path": [
+        "intro",
+        "0"
+      ],
+      "text": "Nee how!",
+      "voice": "sparkle",
+      "key": "intro.0",
+      "part": "intro",
+      "when": "",
+      "ms": 1704,
+      "flags": [
+        "changed"
+      ],
+      "was": "Nee how, Kaylee!"
+    },
+    {
+      "path": [
+        "intro",
+        "1"
+      ],
+      "text": "Nee how means hello in China!",
+      "voice": "sparkle",
+      "key": "intro.1",
+      "part": "intro",
+      "when": "",
+      "ms": 3044,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hubFirst",
+        "touch"
+      ],
+      "text": "Tap the glowing lantern!",
+      "voice": "sparkle",
+      "key": "hubFirst.touch",
+      "part": "hubFirst",
+      "when": "",
+      "ms": 1852,
+      "flags": []
+    },
+    {
+      "path": [
+        "hubFirst",
+        "mouse"
+      ],
+      "text": "Click the glowing lantern!",
+      "voice": "sparkle",
+      "key": "hubFirst.mouse",
+      "part": "hubFirst",
+      "when": "",
+      "ms": 2208,
+      "flags": []
+    },
+    {
+      "path": [
+        "hubNext"
+      ],
+      "text": "Where should we go next?",
+      "voice": "sparkle",
+      "key": "hubNext",
+      "part": "",
+      "when": "",
+      "ms": 1848,
+      "flags": [
+        "changed"
+      ],
+      "was": "Where should we go next, Kaylee?"
+    },
+    {
+      "path": [
+        "hubParty",
+        "touch"
+      ],
+      "text": "Tap the dragon parade!",
+      "voice": "sparkle",
+      "key": "hubParty.touch",
+      "part": "hubParty",
+      "when": "",
+      "ms": 1981,
+      "flags": []
+    },
+    {
+      "path": [
+        "hubParty",
+        "mouse"
+      ],
+      "text": "Click the dragon parade!",
+      "voice": "sparkle",
+      "key": "hubParty.mouse",
+      "part": "hubParty",
+      "when": "",
+      "ms": 1752,
+      "flags": []
+    },
+    {
+      "path": [
+        "soon"
+      ],
+      "text": "This lantern opens soon!",
+      "voice": "sparkle",
+      "key": "soon",
+      "part": "",
+      "when": "",
+      "ms": 2217,
+      "flags": []
+    },
+    {
+      "path": [
+        "partyLocked"
+      ],
+      "text": "Light up the lanterns to start the parade!",
+      "voice": "sparkle",
+      "key": "partyLocked",
+      "part": "",
+      "when": "",
+      "ms": 3734,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "paradeSoon"
+      ],
+      "text": "The dragon parade is coming soon!",
+      "voice": "sparkle",
+      "key": "paradeSoon",
+      "part": "",
+      "when": "",
+      "ms": 2714,
+      "flags": []
+    },
+    {
+      "path": [
+        "trophyWin"
+      ],
+      "text": "You did it! You won the China Explorer trophy!",
+      "voice": "sparkle",
+      "key": "trophyWin",
+      "part": "",
+      "when": "",
+      "ms": 3624,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Kaylee, you did it! You won the China Explorer trophy!"
+    },
+    {
+      "path": [
+        "trophyRoom"
+      ],
+      "text": "China Explorer! From China.",
+      "voice": "sparkle",
+      "key": "trophyRoom",
+      "part": "",
+      "when": "",
+      "ms": 2928,
+      "flags": [
+        "changed"
+      ],
+      "was": "Kaylee, China Explorer! From China."
+    },
+    {
+      "path": [
+        "dumplings",
+        "arrive",
+        "0"
+      ],
+      "text": "Nong how!",
+      "voice": "doudou",
+      "key": "dumplings.arrive.0",
+      "part": "dumplings › arrive",
+      "when": "Arrival on the Bund, then a walk through the old town.",
+      "ms": 1176,
+      "flags": [
+        "changed"
+      ],
+      "was": "Nong how, Kaylee!"
+    },
+    {
+      "path": [
+        "dumplings",
+        "arrive",
+        "1"
+      ],
+      "text": "Chef Fu needs our help!",
+      "voice": "doudou",
+      "key": "dumplings.arrive.1",
+      "part": "dumplings › arrive",
+      "when": "",
+      "ms": 2215,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "bridge",
+        "touch"
+      ],
+      "text": "Tap the zig-zag bridge!",
+      "voice": "sparkle",
+      "key": "dumplings.bridge.touch",
+      "part": "dumplings › bridge",
+      "when": "",
+      "ms": 2216,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "bridge",
+        "mouse"
+      ],
+      "text": "Click the zig-zag bridge!",
+      "voice": "sparkle",
+      "key": "dumplings.bridge.mouse",
+      "part": "dumplings › bridge",
+      "when": "",
+      "ms": 2328,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "zigzag"
+      ],
+      "text": "Zig-zag bridges keep bad luck away!",
+      "voice": "sparkle",
+      "key": "dumplings.zigzag",
+      "part": "dumplings",
+      "when": "",
+      "ms": 3488,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "door",
+        "touch"
+      ],
+      "text": "Tap the dumpling house door!",
+      "voice": "sparkle",
+      "key": "dumplings.door.touch",
+      "part": "dumplings › door",
+      "when": "",
+      "ms": 2293,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "door",
+        "mouse"
+      ],
+      "text": "Click the dumpling house door!",
+      "voice": "sparkle",
+      "key": "dumplings.door.mouse",
+      "part": "dumplings › door",
+      "when": "",
+      "ms": 2328,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "aiyo"
+      ],
+      "text": "Aiyo! So many hungry customers, and no helper!",
+      "voice": "cheffu",
+      "key": "dumplings.aiyo",
+      "part": "dumplings",
+      "when": "",
+      "ms": 4684,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "order4"
+      ],
+      "text": "Just four dumplings, please.",
+      "voice": "grandpa",
+      "key": "dumplings.order4",
+      "part": "dumplings",
+      "when": "Service 1: Grandpa Turtle's four dumplings. Each step is one finger move.",
+      "ms": 1854,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "knead"
+      ],
+      "text": "Push the dough three times!",
+      "voice": "sparkle",
+      "key": "dumplings.knead",
+      "part": "dumplings",
+      "when": "",
+      "ms": 3189,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "kneadCount",
+        "0"
+      ],
+      "text": "Ee!",
+      "voice": "cheffu",
+      "key": "dumplings.kneadCount.0",
+      "part": "dumplings › kneadCount",
+      "when": "",
+      "ms": 632,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "kneadCount",
+        "1"
+      ],
+      "text": "Are!",
+      "voice": "cheffu",
+      "key": "dumplings.kneadCount.1",
+      "part": "dumplings › kneadCount",
+      "when": "",
+      "ms": 530,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "kneadCount",
+        "2"
+      ],
+      "text": "San!",
+      "voice": "cheffu",
+      "key": "dumplings.kneadCount.2",
+      "part": "dumplings › kneadCount",
+      "when": "",
+      "ms": 641,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "kneadDone"
+      ],
+      "text": "Smooth and shiny! Ee, are, san means one, two, three!",
+      "voice": "cheffu",
+      "key": "dumplings.kneadDone",
+      "part": "dumplings",
+      "when": "",
+      "ms": 5614,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "snake",
+        "touch"
+      ],
+      "text": "Swipe the dough to make a long snake!",
+      "voice": "sparkle",
+      "key": "dumplings.snake.touch",
+      "part": "dumplings › snake",
+      "when": "",
+      "ms": 3051,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "snake",
+        "mouse"
+      ],
+      "text": "Drag across the dough to make a long snake!",
+      "voice": "sparkle",
+      "key": "dumplings.snake.mouse",
+      "part": "dumplings › snake",
+      "when": "",
+      "ms": 4272,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "chop",
+        "touch"
+      ],
+      "text": "Tap to cut the snake into four pieces!",
+      "voice": "sparkle",
+      "key": "dumplings.chop.touch",
+      "part": "dumplings › chop",
+      "when": "",
+      "ms": 4047,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "chop",
+        "mouse"
+      ],
+      "text": "Click to cut the snake into four pieces!",
+      "voice": "sparkle",
+      "key": "dumplings.chop.mouse",
+      "part": "dumplings › chop",
+      "when": "",
+      "ms": 3648,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "count",
+        "0"
+      ],
+      "text": "One!",
+      "voice": "sparkle",
+      "key": "dumplings.count.0",
+      "part": "dumplings › count",
+      "when": "Bamboo Forest (activities/bamboo) and the Great Wall (activities/wall).",
+      "ms": 506,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "count",
+        "1"
+      ],
+      "text": "Two!",
+      "voice": "sparkle",
+      "key": "dumplings.count.1",
+      "part": "dumplings › count",
+      "when": "",
+      "ms": 561,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "count",
+        "2"
+      ],
+      "text": "Three!",
+      "voice": "sparkle",
+      "key": "dumplings.count.2",
+      "part": "dumplings › count",
+      "when": "",
+      "ms": 680,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "count",
+        "3"
+      ],
+      "text": "Four!",
+      "voice": "sparkle",
+      "key": "dumplings.count.3",
+      "part": "dumplings › count",
+      "when": "",
+      "ms": 692,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "count",
+        "4"
+      ],
+      "text": "Five!",
+      "voice": "sparkle",
+      "key": "dumplings.count.4",
+      "part": "dumplings › count",
+      "when": "",
+      "ms": 800,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "count",
+        "5"
+      ],
+      "text": "Six!",
+      "voice": "sparkle",
+      "key": "dumplings.count.5",
+      "part": "dumplings › count",
+      "when": "",
+      "ms": 796,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "roll"
+      ],
+      "text": "Roll the rolling pin back and forth!",
+      "voice": "sparkle",
+      "key": "dumplings.roll",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2788,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "rolled"
+      ],
+      "text": "A perfect round wrapper!",
+      "voice": "cheffu",
+      "key": "dumplings.rolled",
+      "part": "dumplings",
+      "when": "",
+      "ms": 1916,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "fill",
+        "touch"
+      ],
+      "text": "Tap the bowl for one spoonful!",
+      "voice": "sparkle",
+      "key": "dumplings.fill.touch",
+      "part": "dumplings › fill",
+      "when": "",
+      "ms": 2753,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "fill",
+        "mouse"
+      ],
+      "text": "Click the bowl for one spoonful!",
+      "voice": "sparkle",
+      "key": "dumplings.fill.mouse",
+      "part": "dumplings › fill",
+      "when": "",
+      "ms": 3312,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "blorp"
+      ],
+      "text": "Ho ho ho! Just one spoonful!",
+      "voice": "cheffu",
+      "key": "dumplings.blorp",
+      "part": "dumplings",
+      "when": "",
+      "ms": 3309,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "pleat"
+      ],
+      "text": "Draw a circle around the dumpling to fold it!",
+      "voice": "sparkle",
+      "key": "dumplings.pleat",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2852,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "pleated"
+      ],
+      "text": "Beautiful! Real chefs make eighteen folds!",
+      "voice": "cheffu",
+      "key": "dumplings.pleated",
+      "part": "dumplings",
+      "when": "",
+      "ms": 4348,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "quickHands"
+      ],
+      "text": "Watch my quick hands!",
+      "voice": "cheffu",
+      "key": "dumplings.quickHands",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2171,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "pleatMore"
+      ],
+      "text": "Fold these dumplings too!",
+      "voice": "sparkle",
+      "key": "dumplings.pleatMore",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2187,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "counted4"
+      ],
+      "text": "One, two, three, four dumplings!",
+      "voice": "sparkle",
+      "key": "dumplings.counted4",
+      "part": "dumplings",
+      "when": "",
+      "ms": 4412,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "steamer"
+      ],
+      "text": "Put each dumpling in the basket, on the cabbage leaf!",
+      "voice": "sparkle",
+      "key": "dumplings.steamer",
+      "part": "dumplings",
+      "when": "",
+      "ms": 4317,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "leaf"
+      ],
+      "text": "The cabbage leaf keeps them from sticking!",
+      "voice": "sparkle",
+      "key": "dumplings.leaf",
+      "part": "dumplings",
+      "when": "",
+      "ms": 3061,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "lid",
+        "touch"
+      ],
+      "text": "Tap the lid to close the basket!",
+      "voice": "sparkle",
+      "key": "dumplings.lid.touch",
+      "part": "dumplings › lid",
+      "when": "",
+      "ms": 3042,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "lid",
+        "mouse"
+      ],
+      "text": "Click the lid to close the basket!",
+      "voice": "sparkle",
+      "key": "dumplings.lid.mouse",
+      "part": "dumplings › lid",
+      "when": "",
+      "ms": 2712,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "fire",
+        "touch"
+      ],
+      "text": "Tap the knob to heat the water!",
+      "voice": "sparkle",
+      "key": "dumplings.fire.touch",
+      "part": "dumplings › fire",
+      "when": "",
+      "ms": 2446,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "fire",
+        "mouse"
+      ],
+      "text": "Click the knob to heat the water!",
+      "voice": "sparkle",
+      "key": "dumplings.fire.mouse",
+      "part": "dumplings › fire",
+      "when": "",
+      "ms": 2328,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "steamFact"
+      ],
+      "text": "Hot water makes steam. Steam cooks dumplings!",
+      "voice": "sparkle",
+      "key": "dumplings.steamFact",
+      "part": "dumplings",
+      "when": "",
+      "ms": 5747,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "popSteam"
+      ],
+      "text": "Pop the steam puffs!",
+      "voice": "sparkle",
+      "key": "dumplings.popSteam",
+      "part": "dumplings",
+      "when": "",
+      "ms": 1760,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "lift",
+        "touch"
+      ],
+      "text": "Tap the lid to peek!",
+      "voice": "sparkle",
+      "key": "dumplings.lift.touch",
+      "part": "dumplings › lift",
+      "when": "",
+      "ms": 2272,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "lift",
+        "mouse"
+      ],
+      "text": "Click the lid to peek!",
+      "voice": "sparkle",
+      "key": "dumplings.lift.mouse",
+      "part": "dumplings › lift",
+      "when": "",
+      "ms": 2256,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "tada"
+      ],
+      "text": "Ta-da! Soup dumplings!",
+      "voice": "cheffu",
+      "key": "dumplings.tada",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2325,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "serve"
+      ],
+      "text": "Carry the basket to Grandpa Turtle's table!",
+      "voice": "sparkle",
+      "key": "dumplings.serve",
+      "part": "dumplings",
+      "when": "",
+      "ms": 3621,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "eatHow"
+      ],
+      "text": "Hot soup inside! Nibble, sip, eat.",
+      "voice": "grandpa",
+      "key": "dumplings.eatHow",
+      "part": "dumplings",
+      "when": "",
+      "ms": 3698,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "nibble",
+        "touch"
+      ],
+      "text": "Tap the dumpling to take a little nibble!",
+      "voice": "sparkle",
+      "key": "dumplings.nibble.touch",
+      "part": "dumplings › nibble",
+      "when": "",
+      "ms": 3116,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "nibble",
+        "mouse"
+      ],
+      "text": "Click the dumpling to take a little nibble!",
+      "voice": "sparkle",
+      "key": "dumplings.nibble.mouse",
+      "part": "dumplings › nibble",
+      "when": "",
+      "ms": 3144,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "sip",
+        "touch"
+      ],
+      "text": "Tap again to sip the soup!",
+      "voice": "sparkle",
+      "key": "dumplings.sip.touch",
+      "part": "dumplings › sip",
+      "when": "",
+      "ms": 1847,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "sip",
+        "mouse"
+      ],
+      "text": "Click again to sip the soup!",
+      "voice": "sparkle",
+      "key": "dumplings.sip.mouse",
+      "part": "dumplings › sip",
+      "when": "",
+      "ms": 2736,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "eat"
+      ],
+      "text": "Now eat it all up!",
+      "voice": "sparkle",
+      "key": "dumplings.eat",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2241,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "haochi"
+      ],
+      "text": "How chir! Delicious!",
+      "voice": "grandpa",
+      "key": "dumplings.haochi",
+      "part": "dumplings",
+      "when": "",
+      "ms": 3022,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "rush"
+      ],
+      "text": "Aiyo! The lunch rush!",
+      "voice": "cheffu",
+      "key": "dumplings.rush",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2175,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "orderBunnies"
+      ],
+      "text": "Two pink and two green, please!",
+      "voice": "bunnies",
+      "key": "dumplings.orderBunnies",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2227,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "orderGoose"
+      ],
+      "text": "I'll have two yellow, please, dear.",
+      "voice": "goose",
+      "key": "dumplings.orderGoose",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2763,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "pickColor",
+        "pink",
+        "touch"
+      ],
+      "text": "Tap the pink dough!",
+      "voice": "sparkle",
+      "key": "dumplings.pickColor.pink.touch",
+      "part": "dumplings › pickColor › pink",
+      "when": "",
+      "ms": 2018,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "pickColor",
+        "pink",
+        "mouse"
+      ],
+      "text": "Click the pink dough!",
+      "voice": "sparkle",
+      "key": "dumplings.pickColor.pink.mouse",
+      "part": "dumplings › pickColor › pink",
+      "when": "",
+      "ms": 1776,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "pickColor",
+        "green",
+        "touch"
+      ],
+      "text": "Tap the green dough!",
+      "voice": "sparkle",
+      "key": "dumplings.pickColor.green.touch",
+      "part": "dumplings › pickColor › green",
+      "when": "",
+      "ms": 1820,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "pickColor",
+        "green",
+        "mouse"
+      ],
+      "text": "Click the green dough!",
+      "voice": "sparkle",
+      "key": "dumplings.pickColor.green.mouse",
+      "part": "dumplings › pickColor › green",
+      "when": "",
+      "ms": 1392,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "notThat",
+        "pink"
+      ],
+      "text": "That one is not pink. Find the pink dough!",
+      "voice": "sparkle",
+      "key": "dumplings.notThat.pink",
+      "part": "dumplings › notThat",
+      "when": "",
+      "ms": 4346,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "notThat",
+        "green"
+      ],
+      "text": "That one is not green. Find the green dough!",
+      "voice": "sparkle",
+      "key": "dumplings.notThat.green",
+      "part": "dumplings › notThat",
+      "when": "",
+      "ms": 4445,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "colorName",
+        "cream"
+      ],
+      "text": "Cream!",
+      "voice": "sparkle",
+      "key": "dumplings.colorName.cream",
+      "part": "dumplings › colorName",
+      "when": "",
+      "ms": 1912,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "colorName",
+        "pink"
+      ],
+      "text": "Pink!",
+      "voice": "sparkle",
+      "key": "dumplings.colorName.pink",
+      "part": "dumplings › colorName",
+      "when": "",
+      "ms": 607,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "colorName",
+        "green"
+      ],
+      "text": "Green!",
+      "voice": "sparkle",
+      "key": "dumplings.colorName.green",
+      "part": "dumplings › colorName",
+      "when": "",
+      "ms": 1164,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "colorName",
+        "yellow"
+      ],
+      "text": "Yellow!",
+      "voice": "sparkle",
+      "key": "dumplings.colorName.yellow",
+      "part": "dumplings › colorName",
+      "when": "",
+      "ms": 824,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "fillFold"
+      ],
+      "text": "Now fill it and fold it!",
+      "voice": "sparkle",
+      "key": "dumplings.fillFold",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2709,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "gooseMine"
+      ],
+      "text": "I'll make Mrs. Goose's dumplings!",
+      "voice": "cheffu",
+      "key": "dumplings.gooseMine",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2469,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "stack"
+      ],
+      "text": "Stack the baskets on the wok!",
+      "voice": "sparkle",
+      "key": "dumplings.stack",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2626,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "stackFact"
+      ],
+      "text": "Dumpling chefs stack their baskets up high!",
+      "voice": "sparkle",
+      "key": "dumplings.stackFact",
+      "part": "dumplings",
+      "when": "",
+      "ms": 3851,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "serveBunnies"
+      ],
+      "text": "Take the pink ribbon basket to the Bunny Twins!",
+      "voice": "sparkle",
+      "key": "dumplings.serveBunnies",
+      "part": "dumplings",
+      "when": "",
+      "ms": 4470,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "serveGoose"
+      ],
+      "text": "Take the yellow ribbon basket to Mrs. Goose!",
+      "voice": "sparkle",
+      "key": "dumplings.serveGoose",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2913,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "notMine",
+        "0"
+      ],
+      "text": "Not mine, dear!",
+      "voice": "grandpa",
+      "key": "dumplings.notMine.0",
+      "part": "dumplings › notMine",
+      "when": "",
+      "ms": 2380,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "notMine",
+        "1"
+      ],
+      "text": "Not mine, dear!",
+      "voice": "goose",
+      "key": "dumplings.notMine.1",
+      "part": "dumplings › notMine",
+      "when": "",
+      "ms": 2147,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "notMine",
+        "2"
+      ],
+      "text": "Not ours!",
+      "voice": "bunnies",
+      "key": "dumplings.notMine.2",
+      "part": "dumplings › notMine",
+      "when": "",
+      "ms": 979,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "bunniesYum"
+      ],
+      "text": "Yay! Pink and green! Thank you!",
+      "voice": "bunnies",
+      "key": "dumplings.bunniesYum",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2961,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "gooseYum"
+      ],
+      "text": "Splendid! Thank you, dear.",
+      "voice": "goose",
+      "key": "dumplings.gooseYum",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2420,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "tea",
+        "touch"
+      ],
+      "text": "Tap the table two times to say thank you for the tea!",
+      "voice": "sparkle",
+      "key": "dumplings.tea.touch",
+      "part": "dumplings › tea",
+      "when": "",
+      "ms": 4740,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "tea",
+        "mouse"
+      ],
+      "text": "Click the table two times to say thank you for the tea!",
+      "voice": "sparkle",
+      "key": "dumplings.tea.mouse",
+      "part": "dumplings › tea",
+      "when": "",
+      "ms": 3936,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "teaFact"
+      ],
+      "text": "In China, a tap tap on the table means thank you!",
+      "voice": "sparkle",
+      "key": "dumplings.teaFact",
+      "part": "dumplings",
+      "when": "",
+      "ms": 4583,
+      "flags": [
+        "long",
+        "touch only"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "teaPour"
+      ],
+      "text": "More tea?",
+      "voice": "doudou",
+      "key": "dumplings.teaPour",
+      "part": "dumplings",
+      "when": "",
+      "ms": 1093,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "jingle"
+      ],
+      "text": "Ding ding! Someone is here!",
+      "voice": "sparkle",
+      "key": "dumplings.jingle",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2249,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "baobao",
+        "0"
+      ],
+      "text": "Five dumplings, please!",
+      "voice": "baobao",
+      "key": "dumplings.baobao.0",
+      "part": "dumplings › baobao",
+      "when": "",
+      "ms": 1802,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "baobao",
+        "1"
+      ],
+      "text": "No, six!",
+      "voice": "baobao",
+      "key": "dumplings.baobao.1",
+      "part": "dumplings › baobao",
+      "when": "",
+      "ms": 1704,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "make6",
+        "touch"
+      ],
+      "text": "Tap the colors to make six dumplings!",
+      "voice": "sparkle",
+      "key": "dumplings.make6.touch",
+      "part": "dumplings › make6",
+      "when": "",
+      "ms": 2873,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "make6",
+        "mouse"
+      ],
+      "text": "Click the colors to make six dumplings!",
+      "voice": "sparkle",
+      "key": "dumplings.make6.mouse",
+      "part": "dumplings › make6",
+      "when": "",
+      "ms": 2952,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "sneak",
+        "touch"
+      ],
+      "text": "Uh oh! Tap the sneaky monkey!",
+      "voice": "sparkle",
+      "key": "dumplings.sneak.touch",
+      "part": "dumplings › sneak",
+      "when": "",
+      "ms": 2584,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "sneak",
+        "mouse"
+      ],
+      "text": "Uh oh! Click the sneaky monkey!",
+      "voice": "sparkle",
+      "key": "dumplings.sneak.mouse",
+      "part": "dumplings › sneak",
+      "when": "",
+      "ms": 2664,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "sorry"
+      ],
+      "text": "Hee hee! Sorry!",
+      "voice": "houhou",
+      "key": "dumplings.sorry",
+      "part": "dumplings",
+      "when": "",
+      "ms": 1604,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "six"
+      ],
+      "text": "Six dumplings! Now steam them!",
+      "voice": "sparkle",
+      "key": "dumplings.six",
+      "part": "dumplings",
+      "when": "",
+      "ms": 3450,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "serveBao"
+      ],
+      "text": "Take the basket to Bao Bao's table!",
+      "voice": "sparkle",
+      "key": "dumplings.serveBao",
+      "part": "dumplings",
+      "when": "",
+      "ms": 4117,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "baoYum"
+      ],
+      "text": "Mmm! How chir! I love dumplings!",
+      "voice": "baobao",
+      "key": "dumplings.baoYum",
+      "part": "dumplings",
+      "when": "",
+      "ms": 3680,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "serviceDone"
+      ],
+      "text": "Great cooking! Ready for the next customers?",
+      "voice": "sparkle",
+      "key": "dumplings.serviceDone",
+      "part": "dumplings",
+      "when": "",
+      "ms": 3147,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "clap"
+      ],
+      "text": "Everyone is clapping for you!",
+      "voice": "sparkle",
+      "key": "dumplings.clap",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2009,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "hat"
+      ],
+      "text": "Shyeh shyeh, Chef! A chef hat for you!",
+      "voice": "cheffu",
+      "key": "dumplings.hat",
+      "part": "dumplings",
+      "when": "",
+      "ms": 3408,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Shyeh shyeh, Chef Kaylee! A chef hat for you!"
+    },
+    {
+      "path": [
+        "dumplings",
+        "lulu"
+      ],
+      "text": "Achoo! Thank you!",
+      "voice": "lulu",
+      "key": "dumplings.lulu",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2184,
+      "flags": [
+        "changed"
+      ],
+      "was": "Achoo! Thank you, Kaylee!"
+    },
+    {
+      "path": [
+        "dumplings",
+        "doudouBye"
+      ],
+      "text": "Take some dumplings to the New Year parade!",
+      "voice": "doudou",
+      "key": "dumplings.doudouBye",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2398,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "dimsum",
+        "harGow"
+      ],
+      "text": "Har gow! Shrimp dumplings!",
+      "voice": "sparkle",
+      "key": "dumplings.dimsum.harGow",
+      "part": "dumplings › dimsum",
+      "when": "",
+      "ms": 2751,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "dimsum",
+        "charSiuBao"
+      ],
+      "text": "Char siu bao! A fluffy bun!",
+      "voice": "sparkle",
+      "key": "dumplings.dimsum.charSiuBao",
+      "part": "dumplings › dimsum",
+      "when": "",
+      "ms": 2826,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "dimsum",
+        "eggTart"
+      ],
+      "text": "An egg tart! Sweet and yummy!",
+      "voice": "sparkle",
+      "key": "dumplings.dimsum.eggTart",
+      "part": "dumplings › dimsum",
+      "when": "",
+      "ms": 3445,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "dimsum",
+        "sesameBall"
+      ],
+      "text": "A sesame ball! Crunchy and chewy!",
+      "voice": "sparkle",
+      "key": "dumplings.dimsum.sesameBall",
+      "part": "dumplings › dimsum",
+      "when": "",
+      "ms": 3215,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "dimsum",
+        "springRoll"
+      ],
+      "text": "Spring rolls! Crispy!",
+      "voice": "sparkle",
+      "key": "dumplings.dimsum.springRoll",
+      "part": "dumplings › dimsum",
+      "when": "",
+      "ms": 2091,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "dimsumCart"
+      ],
+      "text": "Dim sum means lots of little dishes to share!",
+      "voice": "sparkle",
+      "key": "dumplings.dimsumCart",
+      "part": "dumplings",
+      "when": "",
+      "ms": 2906,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "tickle",
+        "doudou",
+        "0"
+      ],
+      "text": "Hee hee! Woof!",
+      "voice": "doudou",
+      "key": "dumplings.tickle.doudou.0",
+      "part": "dumplings › tickle › doudou",
+      "when": "",
+      "ms": 1597,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "tickle",
+        "doudou",
+        "1"
+      ],
+      "text": "Shanghai is the biggest city in China!",
+      "voice": "doudou",
+      "key": "dumplings.tickle.doudou.1",
+      "part": "dumplings › tickle › doudou",
+      "when": "",
+      "ms": 3200,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "tickle",
+        "cheffu",
+        "0"
+      ],
+      "text": "Ho ho ho!",
+      "voice": "cheffu",
+      "key": "dumplings.tickle.cheffu.0",
+      "part": "dumplings › tickle › cheffu",
+      "when": "🍲 Hotpot Night (activities/hotpot). Owner: the hotpot build.",
+      "ms": 1030,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "tickle",
+        "cheffu",
+        "1"
+      ],
+      "text": "Dumplings make everyone happy!",
+      "voice": "cheffu",
+      "key": "dumplings.tickle.cheffu.1",
+      "part": "dumplings › tickle › cheffu",
+      "when": "",
+      "ms": 3164,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "tickle",
+        "grandpa",
+        "0"
+      ],
+      "text": "Slow and steady, like me.",
+      "voice": "grandpa",
+      "key": "dumplings.tickle.grandpa.0",
+      "part": "dumplings › tickle › grandpa",
+      "when": "",
+      "ms": 3488,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "tickle",
+        "grandpa",
+        "1"
+      ],
+      "text": "Hello, little chef.",
+      "voice": "grandpa",
+      "key": "dumplings.tickle.grandpa.1",
+      "part": "dumplings › tickle › grandpa",
+      "when": "",
+      "ms": 1799,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "tickle",
+        "bunnies",
+        "0"
+      ],
+      "text": "Hee hee hee!",
+      "voice": "bunnies",
+      "key": "dumplings.tickle.bunnies.0",
+      "part": "dumplings › tickle › bunnies",
+      "when": "",
+      "ms": 1322,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "dumplings",
+        "tickle",
+        "bunnies",
+        "1"
+      ],
+      "text": "We're twins!",
+      "voice": "bunnies",
+      "key": "dumplings.tickle.bunnies.1",
+      "part": "dumplings › tickle › bunnies",
+      "when": "",
+      "ms": 1147,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "tickle",
+        "goose",
+        "0"
+      ],
+      "text": "Oh, how lovely.",
+      "voice": "goose",
+      "key": "dumplings.tickle.goose.0",
+      "part": "dumplings › tickle › goose",
+      "when": "",
+      "ms": 1829,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "tickle",
+        "goose",
+        "1"
+      ],
+      "text": "Honk! Pardon me.",
+      "voice": "goose",
+      "key": "dumplings.tickle.goose.1",
+      "part": "dumplings › tickle › goose",
+      "when": "",
+      "ms": 1781,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "tickle",
+        "baobao",
+        "0"
+      ],
+      "text": "More dumplings, please!",
+      "voice": "baobao",
+      "key": "dumplings.tickle.baobao.0",
+      "part": "dumplings › tickle › baobao",
+      "when": "",
+      "ms": 1250,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "tickle",
+        "baobao",
+        "1"
+      ],
+      "text": "Hee hee! I love you!",
+      "voice": "baobao",
+      "key": "dumplings.tickle.baobao.1",
+      "part": "dumplings › tickle › baobao",
+      "when": "",
+      "ms": 1959,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "tickle",
+        "dumpling",
+        "0"
+      ],
+      "text": "Squishy!",
+      "voice": "sparkle",
+      "key": "dumplings.tickle.dumpling.0",
+      "part": "dumplings › tickle › dumpling",
+      "when": "",
+      "ms": 1843,
+      "flags": []
+    },
+    {
+      "path": [
+        "dumplings",
+        "tickle",
+        "dumpling",
+        "1"
+      ],
+      "text": "Hello, little dumpling!",
+      "voice": "sparkle",
+      "key": "dumplings.tickle.dumpling.1",
+      "part": "dumplings › tickle › dumpling",
+      "when": "",
+      "ms": 2386,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "arrive",
+        "0"
+      ],
+      "text": "My tummy is rumbling!",
+      "voice": "baobao",
+      "key": "bamboo.arrive.0",
+      "part": "bamboo › arrive",
+      "when": "",
+      "ms": 2533,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "arrive",
+        "1"
+      ],
+      "text": "Pandas eat bamboo all day!",
+      "voice": "baobao",
+      "key": "bamboo.arrive.1",
+      "part": "bamboo › arrive",
+      "when": "",
+      "ms": 2657,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "grow3",
+        "touch"
+      ],
+      "text": "Swipe up! Grow it three tall!",
+      "voice": "sparkle",
+      "key": "bamboo.grow3.touch",
+      "part": "bamboo › grow3",
+      "when": "",
+      "ms": 4194,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bamboo",
+        "grow3",
+        "mouse"
+      ],
+      "text": "Drag up! Grow it three tall!",
+      "voice": "sparkle",
+      "key": "bamboo.grow3.mouse",
+      "part": "bamboo › grow3",
+      "when": "",
+      "ms": 3936,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bamboo",
+        "count",
+        "0"
+      ],
+      "text": "One!",
+      "voice": "sparkle",
+      "key": "bamboo.count.0",
+      "part": "bamboo › count",
+      "when": "",
+      "ms": 506,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "bamboo",
+        "count",
+        "1"
+      ],
+      "text": "Two!",
+      "voice": "sparkle",
+      "key": "bamboo.count.1",
+      "part": "bamboo › count",
+      "when": "",
+      "ms": 561,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "bamboo",
+        "count",
+        "2"
+      ],
+      "text": "Three!",
+      "voice": "sparkle",
+      "key": "bamboo.count.2",
+      "part": "bamboo › count",
+      "when": "",
+      "ms": 680,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "bamboo",
+        "threeTall"
+      ],
+      "text": "Three tall! Wow!",
+      "voice": "baobao",
+      "key": "bamboo.threeTall",
+      "part": "bamboo",
+      "when": "",
+      "ms": 1664,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "enough"
+      ],
+      "text": "Three tall is enough!",
+      "voice": "sparkle",
+      "key": "bamboo.enough",
+      "part": "bamboo",
+      "when": "",
+      "ms": 1931,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "munch",
+        "0"
+      ],
+      "text": "Crunch crunch! Yum!",
+      "voice": "baobao",
+      "key": "bamboo.munch.0",
+      "part": "bamboo › munch",
+      "when": "",
+      "ms": 1731,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "munch",
+        "1"
+      ],
+      "text": "Mmm! More bamboo, please!",
+      "voice": "baobao",
+      "key": "bamboo.munch.1",
+      "part": "bamboo › munch",
+      "when": "",
+      "ms": 2058,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "grow2"
+      ],
+      "text": "Make this one taller than that one!",
+      "voice": "sparkle",
+      "key": "bamboo.grow2",
+      "part": "bamboo",
+      "when": "",
+      "ms": 2647,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "glowHint"
+      ],
+      "text": "Grow the glowing bamboo!",
+      "voice": "sparkle",
+      "key": "bamboo.glowHint",
+      "part": "bamboo",
+      "when": "",
+      "ms": 1874,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "same"
+      ],
+      "text": "Same height! Grow one more!",
+      "voice": "sparkle",
+      "key": "bamboo.same",
+      "part": "bamboo",
+      "when": "",
+      "ms": 2340,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "taller"
+      ],
+      "text": "Taller! And that one is shorter!",
+      "voice": "sparkle",
+      "key": "bamboo.taller",
+      "part": "bamboo",
+      "when": "",
+      "ms": 3015,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bamboo",
+        "tallestQ",
+        "touch"
+      ],
+      "text": "Which one is the tallest? Tap it!",
+      "voice": "sparkle",
+      "key": "bamboo.tallestQ.touch",
+      "part": "bamboo › tallestQ",
+      "when": "",
+      "ms": 3301,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bamboo",
+        "tallestQ",
+        "mouse"
+      ],
+      "text": "Which one is the tallest? Click it!",
+      "voice": "sparkle",
+      "key": "bamboo.tallestQ.mouse",
+      "part": "bamboo › tallestQ",
+      "when": "",
+      "ms": 3192,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bamboo",
+        "tallestHint"
+      ],
+      "text": "Look for the tallest one!",
+      "voice": "sparkle",
+      "key": "bamboo.tallestHint",
+      "part": "bamboo",
+      "when": "",
+      "ms": 2503,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "tallestWrong"
+      ],
+      "text": "Too short! Find the tallest!",
+      "voice": "sparkle",
+      "key": "bamboo.tallestWrong",
+      "part": "bamboo",
+      "when": "",
+      "ms": 2262,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "tallestYes"
+      ],
+      "text": "The tallest bamboo!",
+      "voice": "sparkle",
+      "key": "bamboo.tallestYes",
+      "part": "bamboo",
+      "when": "",
+      "ms": 2070,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "shortestQ",
+        "touch"
+      ],
+      "text": "Which one is the shortest? Tap it!",
+      "voice": "sparkle",
+      "key": "bamboo.shortestQ.touch",
+      "part": "bamboo › shortestQ",
+      "when": "",
+      "ms": 2891,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "shortestQ",
+        "mouse"
+      ],
+      "text": "Which one is the shortest? Click it!",
+      "voice": "sparkle",
+      "key": "bamboo.shortestQ.mouse",
+      "part": "bamboo › shortestQ",
+      "when": "",
+      "ms": 3072,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bamboo",
+        "shortestHint"
+      ],
+      "text": "Look for the short one!",
+      "voice": "sparkle",
+      "key": "bamboo.shortestHint",
+      "part": "bamboo",
+      "when": "",
+      "ms": 1443,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "shortestWrong"
+      ],
+      "text": "Too tall! Find the shortest!",
+      "voice": "sparkle",
+      "key": "bamboo.shortestWrong",
+      "part": "bamboo",
+      "when": "",
+      "ms": 3021,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bamboo",
+        "shortestYes"
+      ],
+      "text": "The shortest bamboo!",
+      "voice": "sparkle",
+      "key": "bamboo.shortestYes",
+      "part": "bamboo",
+      "when": "",
+      "ms": 2138,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "climb"
+      ],
+      "text": "Bao Bao climbs the tallest bamboo!",
+      "voice": "sparkle",
+      "key": "bamboo.climb",
+      "part": "bamboo",
+      "when": "",
+      "ms": 2570,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "up"
+      ],
+      "text": "Up, up, up!",
+      "voice": "baobao",
+      "key": "bamboo.up",
+      "part": "bamboo",
+      "when": "",
+      "ms": 1853,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "whoa"
+      ],
+      "text": "Whoa! Wheeee!",
+      "voice": "baobao",
+      "key": "bamboo.whoa",
+      "part": "bamboo",
+      "when": "",
+      "ms": 1965,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "leaves"
+      ],
+      "text": "Soft leaves! Hee hee!",
+      "voice": "baobao",
+      "key": "bamboo.leaves",
+      "part": "bamboo",
+      "when": "",
+      "ms": 1833,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "yum"
+      ],
+      "text": "Yum! Best snack ever!",
+      "voice": "baobao",
+      "key": "bamboo.yum",
+      "part": "bamboo",
+      "when": "",
+      "ms": 2280,
+      "flags": []
+    },
+    {
+      "path": [
+        "bamboo",
+        "giggle",
+        "0"
+      ],
+      "text": "Hee hee hee!",
+      "voice": "baobao",
+      "key": "bamboo.giggle.0",
+      "part": "bamboo › giggle",
+      "when": "",
+      "ms": 1362,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "bamboo",
+        "giggle",
+        "1"
+      ],
+      "text": "Wheee!",
+      "voice": "baobao",
+      "key": "bamboo.giggle.1",
+      "part": "bamboo › giggle",
+      "when": "",
+      "ms": 802,
+      "flags": []
+    },
+    {
+      "path": [
+        "wall",
+        "oops"
+      ],
+      "text": "Oops! I knocked bricks off the Great Wall!",
+      "voice": "houhou",
+      "key": "wall.oops",
+      "part": "wall",
+      "when": "",
+      "ms": 3801,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "wall",
+        "long"
+      ],
+      "text": "The wall is so long! Slide it to see more!",
+      "voice": "sparkle",
+      "key": "wall.long",
+      "part": "wall",
+      "when": "",
+      "ms": 4094,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "wall",
+        "follow",
+        "touch"
+      ],
+      "text": "Slide the wall, or tap the arrow!",
+      "voice": "sparkle",
+      "key": "wall.follow.touch",
+      "part": "wall › follow",
+      "when": "",
+      "ms": 3412,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "wall",
+        "follow",
+        "mouse"
+      ],
+      "text": "Drag the wall, or click the arrow!",
+      "voice": "sparkle",
+      "key": "wall.follow.mouse",
+      "part": "wall › follow",
+      "when": "",
+      "ms": 2664,
+      "flags": []
+    },
+    {
+      "path": [
+        "wall",
+        "follow2"
+      ],
+      "text": "Hou Hou ran ahead! Follow him!",
+      "voice": "sparkle",
+      "key": "wall.follow2",
+      "part": "wall",
+      "when": "",
+      "ms": 2926,
+      "flags": []
+    },
+    {
+      "path": [
+        "wall",
+        "pattern",
+        "0"
+      ],
+      "text": "Red, gold, red, gold... what comes next?",
+      "voice": "sparkle",
+      "key": "wall.pattern.0",
+      "part": "wall › pattern",
+      "when": "",
+      "ms": 4818,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "wall",
+        "pattern",
+        "1"
+      ],
+      "text": "Red, gold, gold, red, gold... what comes next?",
+      "voice": "sparkle",
+      "key": "wall.pattern.1",
+      "part": "wall › pattern",
+      "when": "",
+      "ms": 4473,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "wall",
+        "pattern",
+        "2"
+      ],
+      "text": "Red, gold, jade, red... what comes next?",
+      "voice": "sparkle",
+      "key": "wall.pattern.2",
+      "part": "wall › pattern",
+      "when": "",
+      "ms": 5182,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "wall",
+        "pattern3b"
+      ],
+      "text": "One more! What comes next?",
+      "voice": "sparkle",
+      "key": "wall.pattern3b",
+      "part": "wall",
+      "when": "",
+      "ms": 2316,
+      "flags": []
+    },
+    {
+      "path": [
+        "wall",
+        "hint"
+      ],
+      "text": "Try the glowing brick!",
+      "voice": "sparkle",
+      "key": "wall.hint",
+      "part": "wall",
+      "when": "",
+      "ms": 2586,
+      "flags": []
+    },
+    {
+      "path": [
+        "wall",
+        "fixed",
+        "0"
+      ],
+      "text": "Yay! Thank you!",
+      "voice": "houhou",
+      "key": "wall.fixed.0",
+      "part": "wall › fixed",
+      "when": "",
+      "ms": 2280,
+      "flags": [
+        "changed"
+      ],
+      "was": "Yay! Thank you, Kaylee!"
+    },
+    {
+      "path": [
+        "wall",
+        "fixed",
+        "1"
+      ],
+      "text": "Hee hee! The wall is getting strong!",
+      "voice": "houhou",
+      "key": "wall.fixed.1",
+      "part": "wall › fixed",
+      "when": "",
+      "ms": 2769,
+      "flags": []
+    },
+    {
+      "path": [
+        "wall",
+        "fixed",
+        "2"
+      ],
+      "text": "Hooray! The whole wall is fixed!",
+      "voice": "houhou",
+      "key": "wall.fixed.2",
+      "part": "wall › fixed",
+      "when": "",
+      "ms": 3002,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "wall",
+        "beacon",
+        "touch"
+      ],
+      "text": "Tap the tower to light the signal fire!",
+      "voice": "sparkle",
+      "key": "wall.beacon.touch",
+      "part": "wall › beacon",
+      "when": "",
+      "ms": 2560,
+      "flags": []
+    },
+    {
+      "path": [
+        "wall",
+        "beacon",
+        "mouse"
+      ],
+      "text": "Click the tower to light the signal fire!",
+      "voice": "sparkle",
+      "key": "wall.beacon.mouse",
+      "part": "wall › beacon",
+      "when": "",
+      "ms": 3528,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "wall",
+        "signal"
+      ],
+      "text": "Soldiers sent smoke signals tower to tower!",
+      "voice": "sparkle",
+      "key": "wall.signal",
+      "part": "wall",
+      "when": "",
+      "ms": 3592,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "wall",
+        "signalEnd"
+      ],
+      "text": "The message zoomed along the wall!",
+      "voice": "sparkle",
+      "key": "wall.signalEnd",
+      "part": "wall",
+      "when": "",
+      "ms": 2570,
+      "flags": []
+    },
+    {
+      "path": [
+        "wall",
+        "tap",
+        "0"
+      ],
+      "text": "Hee hee!",
+      "voice": "houhou",
+      "key": "wall.tap.0",
+      "part": "wall › tap",
+      "when": "🖌️ The Magic Brush (activities/brush). Owner: the brush build.",
+      "ms": 764,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "wall",
+        "tap",
+        "1"
+      ],
+      "text": "Tickles!",
+      "voice": "houhou",
+      "key": "wall.tap.1",
+      "part": "wall › tap",
+      "when": "🚄 Bullet Train (activities/train). Owner: the train build.",
+      "ms": 798,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "story",
+        "0"
+      ],
+      "text": "Hotpot time! Everybody cooks together!",
+      "voice": "nainai",
+      "key": "hotpot.story.0",
+      "part": "hotpot › story",
+      "when": "",
+      "ms": 2760,
+      "flags": [
+        "changed"
+      ],
+      "was": "Hotpot time, Kaylee! Everybody cooks together!"
+    },
+    {
+      "path": [
+        "hotpot",
+        "ask",
+        "0"
+      ],
+      "text": "Bao Bao wants noodles!",
+      "voice": "sparkle",
+      "key": "hotpot.ask.0",
+      "part": "hotpot › ask",
+      "when": "",
+      "ms": 3154,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "ask",
+        "1"
+      ],
+      "text": "Hong wants something green from the mild side!",
+      "voice": "sparkle",
+      "key": "hotpot.ask.1",
+      "part": "hotpot › ask",
+      "when": "",
+      "ms": 3135,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "ask",
+        "2"
+      ],
+      "text": "Nai Nai wants two dumplings!",
+      "voice": "sparkle",
+      "key": "hotpot.ask.2",
+      "part": "hotpot › ask",
+      "when": "",
+      "ms": 2123,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "dropTip",
+        "touch"
+      ],
+      "text": "Tap a food, then tap the soup!",
+      "voice": "sparkle",
+      "key": "hotpot.dropTip.touch",
+      "part": "hotpot › dropTip",
+      "when": "",
+      "ms": 2348,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "dropTip",
+        "mouse"
+      ],
+      "text": "Click a food, then click the soup!",
+      "voice": "sparkle",
+      "key": "hotpot.dropTip.mouse",
+      "part": "hotpot › dropTip",
+      "when": "",
+      "ms": 2832,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "dropTipNoodles",
+        "touch"
+      ],
+      "text": "Tap the noodles, then tap the soup!",
+      "voice": "sparkle",
+      "key": "hotpot.dropTipNoodles.touch",
+      "part": "hotpot › dropTipNoodles",
+      "when": "",
+      "ms": 3244,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "dropTipNoodles",
+        "mouse"
+      ],
+      "text": "Click the noodles, then click the soup!",
+      "voice": "sparkle",
+      "key": "hotpot.dropTipNoodles.mouse",
+      "part": "hotpot › dropTipNoodles",
+      "when": "",
+      "ms": 3648,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "green"
+      ],
+      "text": "Green! Try the bok choy!",
+      "voice": "sparkle",
+      "key": "hotpot.green",
+      "part": "hotpot",
+      "when": "",
+      "ms": 2748,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "mild"
+      ],
+      "text": "The mild side is the white soup!",
+      "voice": "sparkle",
+      "key": "hotpot.mild",
+      "part": "hotpot",
+      "when": "",
+      "ms": 2453,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "dumplings"
+      ],
+      "text": "Dumplings! We need two!",
+      "voice": "sparkle",
+      "key": "hotpot.dumplings",
+      "part": "hotpot",
+      "when": "",
+      "ms": 2039,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "wait"
+      ],
+      "text": "Wait for the sparkle!",
+      "voice": "sparkle",
+      "key": "hotpot.wait",
+      "part": "hotpot",
+      "when": "",
+      "ms": 2163,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "cooked"
+      ],
+      "text": "Sparkly! It is ready!",
+      "voice": "sparkle",
+      "key": "hotpot.cooked",
+      "part": "hotpot",
+      "when": "",
+      "ms": 2664,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "chopTip",
+        "touch"
+      ],
+      "text": "Tap the chopsticks, then tap the sparkly food!",
+      "voice": "sparkle",
+      "key": "hotpot.chopTip.touch",
+      "part": "hotpot › chopTip",
+      "when": "",
+      "ms": 3951,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "chopTip",
+        "mouse"
+      ],
+      "text": "Click the chopsticks, then click the sparkly food!",
+      "voice": "sparkle",
+      "key": "hotpot.chopTip.mouse",
+      "part": "hotpot › chopTip",
+      "when": "",
+      "ms": 4584,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "chopFact"
+      ],
+      "text": "People in China eat with chopsticks!",
+      "voice": "sparkle",
+      "key": "hotpot.chopFact",
+      "part": "hotpot",
+      "when": "",
+      "ms": 3262,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "spinTip",
+        "touch"
+      ],
+      "text": "Spin the table with your finger!",
+      "voice": "sparkle",
+      "key": "hotpot.spinTip.touch",
+      "part": "hotpot › spinTip",
+      "when": "",
+      "ms": 2114,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "spinTip",
+        "mouse"
+      ],
+      "text": "Click and drag to spin the table!",
+      "voice": "sparkle",
+      "key": "hotpot.spinTip.mouse",
+      "part": "hotpot › spinTip",
+      "when": "",
+      "ms": 2616,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "spin",
+        "0"
+      ],
+      "text": "Spin the table to Bao Bao!",
+      "voice": "sparkle",
+      "key": "hotpot.spin.0",
+      "part": "hotpot › spin",
+      "when": "",
+      "ms": 2133,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "spin",
+        "1"
+      ],
+      "text": "Spin the table to Hong!",
+      "voice": "sparkle",
+      "key": "hotpot.spin.1",
+      "part": "hotpot › spin",
+      "when": "",
+      "ms": 1871,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "spin",
+        "2"
+      ],
+      "text": "Spin the table to Nai Nai!",
+      "voice": "sparkle",
+      "key": "hotpot.spin.2",
+      "part": "hotpot › spin",
+      "when": "",
+      "ms": 2776,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "count",
+        "0"
+      ],
+      "text": "One!",
+      "voice": "sparkle",
+      "key": "hotpot.count.0",
+      "part": "hotpot › count",
+      "when": "",
+      "ms": 506,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "count",
+        "1"
+      ],
+      "text": "Two!",
+      "voice": "sparkle",
+      "key": "hotpot.count.1",
+      "part": "hotpot › count",
+      "when": "",
+      "ms": 561,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "count",
+        "2"
+      ],
+      "text": "Three!",
+      "voice": "sparkle",
+      "key": "hotpot.count.2",
+      "part": "hotpot › count",
+      "when": "",
+      "ms": 680,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "count",
+        "3"
+      ],
+      "text": "Four!",
+      "voice": "sparkle",
+      "key": "hotpot.count.3",
+      "part": "hotpot › count",
+      "when": "",
+      "ms": 692,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "count",
+        "4"
+      ],
+      "text": "Five!",
+      "voice": "sparkle",
+      "key": "hotpot.count.4",
+      "part": "hotpot › count",
+      "when": "",
+      "ms": 800,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "count",
+        "5"
+      ],
+      "text": "Six!",
+      "voice": "sparkle",
+      "key": "hotpot.count.5",
+      "part": "hotpot › count",
+      "when": "",
+      "ms": 796,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "thanks",
+        "0"
+      ],
+      "text": "Shyeh shyeh!",
+      "voice": "baobao",
+      "key": "hotpot.thanks.0",
+      "part": "hotpot › thanks",
+      "when": "",
+      "ms": 1299,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "thanks",
+        "1"
+      ],
+      "text": "Shyeh shyeh!",
+      "voice": "hong",
+      "key": "hotpot.thanks.1",
+      "part": "hotpot › thanks",
+      "when": "",
+      "ms": 1471,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "thanks",
+        "2"
+      ],
+      "text": "Shyeh shyeh!",
+      "voice": "nainai",
+      "key": "hotpot.thanks.2",
+      "part": "hotpot › thanks",
+      "when": "",
+      "ms": 1234,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "teach"
+      ],
+      "text": "Shyeh shyeh means thank you!",
+      "voice": "sparkle",
+      "key": "hotpot.teach",
+      "part": "hotpot",
+      "when": "",
+      "ms": 3407,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "bigBubbles"
+      ],
+      "text": "Whoa! Big bubbles!",
+      "voice": "hong",
+      "key": "hotpot.bigBubbles",
+      "part": "hotpot",
+      "when": "",
+      "ms": 1938,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "tingle"
+      ],
+      "text": "Tingly lips!",
+      "voice": "hong",
+      "key": "hotpot.tingle",
+      "part": "hotpot",
+      "when": "",
+      "ms": 1121,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "factPot"
+      ],
+      "text": "Everyone shares one pot in the middle!",
+      "voice": "sparkle",
+      "key": "hotpot.factPot",
+      "part": "hotpot",
+      "when": "",
+      "ms": 3314,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "factRound"
+      ],
+      "text": "A round table means everybody can reach!",
+      "voice": "sparkle",
+      "key": "hotpot.factRound",
+      "part": "hotpot",
+      "when": "",
+      "ms": 3458,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "factPepper"
+      ],
+      "text": "Sichuan peppers make your lips tingle!",
+      "voice": "sparkle",
+      "key": "hotpot.factPepper",
+      "part": "hotpot",
+      "when": "",
+      "ms": 2822,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "finale"
+      ],
+      "text": "Everybody eat together!",
+      "voice": "sparkle",
+      "key": "hotpot.finale",
+      "part": "hotpot",
+      "when": "",
+      "ms": 1538,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "yum",
+        "0"
+      ],
+      "text": "Yum yum!",
+      "voice": "baobao",
+      "key": "hotpot.yum.0",
+      "part": "hotpot › yum",
+      "when": "",
+      "ms": 1130,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "yum",
+        "1"
+      ],
+      "text": "Hao chi! Delicious!",
+      "voice": "nainai",
+      "key": "hotpot.yum.1",
+      "part": "hotpot › yum",
+      "when": "",
+      "ms": 2259,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "yum",
+        "2"
+      ],
+      "text": "Hooray!",
+      "voice": "hong",
+      "key": "hotpot.yum.2",
+      "part": "hotpot › yum",
+      "when": "",
+      "ms": 672,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "tap",
+        "0"
+      ],
+      "text": "Hee hee!",
+      "voice": "baobao",
+      "key": "hotpot.tap.0",
+      "part": "hotpot › tap",
+      "when": "",
+      "ms": 667,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "hotpot",
+        "tap",
+        "1"
+      ],
+      "text": "Eep!",
+      "voice": "hong",
+      "key": "hotpot.tap.1",
+      "part": "hotpot › tap",
+      "when": "",
+      "ms": 416,
+      "flags": []
+    },
+    {
+      "path": [
+        "hotpot",
+        "tap",
+        "2"
+      ],
+      "text": "Ho ho ho!",
+      "voice": "nainai",
+      "key": "hotpot.tap.2",
+      "part": "hotpot › tap",
+      "when": "",
+      "ms": 1294,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "brush",
+        "story",
+        "0"
+      ],
+      "text": "This magic brush makes pictures come alive!",
+      "voice": "crane",
+      "key": "brush.story.0",
+      "part": "brush › story",
+      "when": "",
+      "ms": 3167,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "brush",
+        "intro",
+        "0"
+      ],
+      "text": "Paint a person! Follow the glowing line.",
+      "voice": "sparkle",
+      "key": "brush.intro.0",
+      "part": "brush › intro",
+      "when": "",
+      "ms": 3828,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "brush",
+        "intro",
+        "1"
+      ],
+      "text": "Now paint a mountain!",
+      "voice": "sparkle",
+      "key": "brush.intro.1",
+      "part": "brush › intro",
+      "when": "",
+      "ms": 1956,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "intro",
+        "2"
+      ],
+      "text": "Now paint the sun!",
+      "voice": "sparkle",
+      "key": "brush.intro.2",
+      "part": "brush › intro",
+      "when": "",
+      "ms": 1835,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "intro",
+        "3"
+      ],
+      "text": "Now paint a tree!",
+      "voice": "sparkle",
+      "key": "brush.intro.3",
+      "part": "brush › intro",
+      "when": "",
+      "ms": 1726,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "intro",
+        "4"
+      ],
+      "text": "Now paint something big!",
+      "voice": "sparkle",
+      "key": "brush.intro.4",
+      "part": "brush › intro",
+      "when": "",
+      "ms": 1946,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "intro",
+        "5"
+      ],
+      "text": "Last one! Paint the moon!",
+      "voice": "sparkle",
+      "key": "brush.intro.5",
+      "part": "brush › intro",
+      "when": "",
+      "ms": 2682,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "next"
+      ],
+      "text": "Now the next line!",
+      "voice": "sparkle",
+      "key": "brush.next",
+      "part": "brush",
+      "when": "",
+      "ms": 1886,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "hint"
+      ],
+      "text": "Start at the glowing dot!",
+      "voice": "sparkle",
+      "key": "brush.hint",
+      "part": "brush",
+      "when": "",
+      "ms": 2307,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "retry"
+      ],
+      "text": "Try again! Follow the glowing line.",
+      "voice": "sparkle",
+      "key": "brush.retry",
+      "part": "brush",
+      "when": "",
+      "ms": 3130,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "brush",
+        "word",
+        "0"
+      ],
+      "text": "Ren!",
+      "voice": "crane",
+      "key": "brush.word.0",
+      "part": "brush › word",
+      "when": "",
+      "ms": 658,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "word",
+        "1"
+      ],
+      "text": "Shahn!",
+      "voice": "crane",
+      "key": "brush.word.1",
+      "part": "brush › word",
+      "when": "",
+      "ms": 719,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "word",
+        "2"
+      ],
+      "text": "Rr!",
+      "voice": "crane",
+      "key": "brush.word.2",
+      "part": "brush › word",
+      "when": "",
+      "ms": 514,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "word",
+        "3"
+      ],
+      "text": "Moo!",
+      "voice": "crane",
+      "key": "brush.word.3",
+      "part": "brush › word",
+      "when": "",
+      "ms": 724,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "brush",
+        "word",
+        "4"
+      ],
+      "text": "Dah!",
+      "voice": "crane",
+      "key": "brush.word.4",
+      "part": "brush › word",
+      "when": "",
+      "ms": 679,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "word",
+        "5"
+      ],
+      "text": "Yweh!",
+      "voice": "crane",
+      "key": "brush.word.5",
+      "part": "brush › word",
+      "when": "",
+      "ms": 711,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "means",
+        "0"
+      ],
+      "text": "Ren means person!",
+      "voice": "sparkle",
+      "key": "brush.means.0",
+      "part": "brush › means",
+      "when": "",
+      "ms": 2127,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "means",
+        "1"
+      ],
+      "text": "Shan means mountain!",
+      "voice": "sparkle",
+      "key": "brush.means.1",
+      "part": "brush › means",
+      "when": "",
+      "ms": 1834,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "means",
+        "2"
+      ],
+      "text": "Ri means sun!",
+      "voice": "sparkle",
+      "key": "brush.means.2",
+      "part": "brush › means",
+      "when": "",
+      "ms": 2177,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "means",
+        "3"
+      ],
+      "text": "Mu means tree!",
+      "voice": "sparkle",
+      "key": "brush.means.3",
+      "part": "brush › means",
+      "when": "",
+      "ms": 1976,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "means",
+        "4"
+      ],
+      "text": "Da means big!",
+      "voice": "sparkle",
+      "key": "brush.means.4",
+      "part": "brush › means",
+      "when": "",
+      "ms": 2020,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "means",
+        "5"
+      ],
+      "text": "Yue means moon!",
+      "voice": "sparkle",
+      "key": "brush.means.5",
+      "part": "brush › means",
+      "when": "",
+      "ms": 2365,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "fade"
+      ],
+      "text": "The water writing fades away, but the picture stays!",
+      "voice": "sparkle",
+      "key": "brush.fade",
+      "part": "brush",
+      "when": "",
+      "ms": 4205,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "brush",
+        "baoBig"
+      ],
+      "text": "I can be big too!",
+      "voice": "baobao",
+      "key": "brush.baoBig",
+      "part": "brush",
+      "when": "",
+      "ms": 1202,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "night"
+      ],
+      "text": "Good night, moon!",
+      "voice": "sparkle",
+      "key": "brush.night",
+      "part": "brush",
+      "when": "",
+      "ms": 1847,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "nameIntro"
+      ],
+      "text": "Now paint your name, Kaylee! In Chinese!",
+      "voice": "sparkle",
+      "key": "brush.nameIntro",
+      "part": "brush",
+      "when": "",
+      "ms": 3777,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "brush",
+        "nameSay"
+      ],
+      "text": "Ky lee!",
+      "voice": "crane",
+      "key": "brush.nameSay",
+      "part": "brush",
+      "when": "",
+      "ms": 1438,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "stamp",
+        "touch"
+      ],
+      "text": "Tap the red stamp!",
+      "voice": "sparkle",
+      "key": "brush.stamp.touch",
+      "part": "brush › stamp",
+      "when": "",
+      "ms": 1845,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "stamp",
+        "mouse"
+      ],
+      "text": "Click the red stamp!",
+      "voice": "sparkle",
+      "key": "brush.stamp.mouse",
+      "part": "brush › stamp",
+      "when": "",
+      "ms": 1968,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "stamped"
+      ],
+      "text": "Your name, stamped with a red seal!",
+      "voice": "sparkle",
+      "key": "brush.stamped",
+      "part": "brush",
+      "when": "",
+      "ms": 2976,
+      "flags": [
+        "changed"
+      ],
+      "was": "Your name, stamped with a red seal, Kaylee!"
+    },
+    {
+      "path": [
+        "brush",
+        "fact"
+      ],
+      "text": "Chinese isn't written with letters. Some characters started as pictures!",
+      "voice": "sparkle",
+      "key": "brush.fact",
+      "part": "brush",
+      "when": "",
+      "ms": 4996,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "brush",
+        "end"
+      ],
+      "text": "What a beautiful painting!",
+      "voice": "crane",
+      "key": "brush.end",
+      "part": "brush",
+      "when": "",
+      "ms": 2117,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "tapCrane",
+        "0"
+      ],
+      "text": "Oh my!",
+      "voice": "crane",
+      "key": "brush.tapCrane.0",
+      "part": "brush › tapCrane",
+      "when": "",
+      "ms": 959,
+      "flags": []
+    },
+    {
+      "path": [
+        "brush",
+        "tapCrane",
+        "1"
+      ],
+      "text": "Hee hee!",
+      "voice": "crane",
+      "key": "brush.tapCrane.1",
+      "part": "brush › tapCrane",
+      "when": "",
+      "ms": 888,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "story",
+        "0"
+      ],
+      "text": "The Jade Emperor is holding a big race across the river!",
+      "voice": "sparkle",
+      "key": "race.story.0",
+      "part": "race › story",
+      "when": "",
+      "ms": 4990,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "story",
+        "1"
+      ],
+      "text": "I'm small, but I'm clever!",
+      "voice": "mouse",
+      "key": "race.story.1",
+      "part": "race › story",
+      "when": "",
+      "ms": 1861,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "mouseHelp"
+      ],
+      "text": "Mouse can't swim! Put Mouse on Ox's back!",
+      "voice": "sparkle",
+      "key": "race.mouseHelp",
+      "part": "race",
+      "when": "",
+      "ms": 4490,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "mouseHint"
+      ],
+      "text": "Drag Mouse onto Ox's back!",
+      "voice": "sparkle",
+      "key": "race.mouseHint",
+      "part": "race",
+      "when": "",
+      "ms": 2671,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "oxHi"
+      ],
+      "text": "Hop on, little one!",
+      "voice": "ox",
+      "key": "race.oxHi",
+      "part": "race",
+      "when": "",
+      "ms": 1754,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "paddle",
+        "touch"
+      ],
+      "text": "Tap Ox to paddle!",
+      "voice": "sparkle",
+      "key": "race.paddle.touch",
+      "part": "race › paddle",
+      "when": "",
+      "ms": 1891,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "paddle",
+        "mouse"
+      ],
+      "text": "Click Ox to paddle!",
+      "voice": "sparkle",
+      "key": "race.paddle.mouse",
+      "part": "race › paddle",
+      "when": "",
+      "ms": 2208,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "oxHalf"
+      ],
+      "text": "Almost there!",
+      "voice": "ox",
+      "key": "race.oxHalf",
+      "part": "race",
+      "when": "",
+      "ms": 1172,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "jumpOff"
+      ],
+      "text": "Mouse jumps off first!",
+      "voice": "sparkle",
+      "key": "race.jumpOff",
+      "part": "race",
+      "when": "",
+      "ms": 2534,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "mouseWin"
+      ],
+      "text": "Squeak! I won!",
+      "voice": "mouse",
+      "key": "race.mouseWin",
+      "part": "race",
+      "when": "",
+      "ms": 2431,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "oxWell"
+      ],
+      "text": "Well done, little one!",
+      "voice": "ox",
+      "key": "race.oxWell",
+      "part": "race",
+      "when": "",
+      "ms": 2476,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "tigerSwim"
+      ],
+      "text": "Tiger swims across all by himself!",
+      "voice": "sparkle",
+      "key": "race.tigerSwim",
+      "part": "race",
+      "when": "",
+      "ms": 2887,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "tigerLine"
+      ],
+      "text": "Splash, splash! I can swim!",
+      "voice": "tiger",
+      "key": "race.tigerLine",
+      "part": "race",
+      "when": "",
+      "ms": 2647,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "stonesHelp"
+      ],
+      "text": "Rabbit hops! Put stones in the glowing spots!",
+      "voice": "sparkle",
+      "key": "race.stonesHelp",
+      "part": "race",
+      "when": "",
+      "ms": 3825,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "stonesHint"
+      ],
+      "text": "Put a stone on a glowing spot!",
+      "voice": "sparkle",
+      "key": "race.stonesHint",
+      "part": "race",
+      "when": "",
+      "ms": 2456,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "stonesDone"
+      ],
+      "text": "Now Rabbit can hop across!",
+      "voice": "sparkle",
+      "key": "race.stonesDone",
+      "part": "race",
+      "when": "",
+      "ms": 2648,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "rabbitHop"
+      ],
+      "text": "Hop, hop, hop!",
+      "voice": "rabbit",
+      "key": "race.rabbitHop",
+      "part": "race",
+      "when": "",
+      "ms": 1477,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "dragonLate"
+      ],
+      "text": "I stopped to make rain for a thirsty village!",
+      "voice": "dragon",
+      "key": "race.dragonLate",
+      "part": "race",
+      "when": "",
+      "ms": 3017,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "rainHelp",
+        "touch"
+      ],
+      "text": "Tap the clouds to make it rain!",
+      "voice": "sparkle",
+      "key": "race.rainHelp.touch",
+      "part": "race › rainHelp",
+      "when": "",
+      "ms": 2368,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "rainHelp",
+        "mouse"
+      ],
+      "text": "Click the clouds to make it rain!",
+      "voice": "sparkle",
+      "key": "race.rainHelp.mouse",
+      "part": "race › rainHelp",
+      "when": "",
+      "ms": 2712,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "rainHint",
+        "touch"
+      ],
+      "text": "Tap a glowing cloud!",
+      "voice": "sparkle",
+      "key": "race.rainHint.touch",
+      "part": "race › rainHint",
+      "when": "",
+      "ms": 1737,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "rainHint",
+        "mouse"
+      ],
+      "text": "Click a glowing cloud!",
+      "voice": "sparkle",
+      "key": "race.rainHint.mouse",
+      "part": "race › rainHint",
+      "when": "",
+      "ms": 1944,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "rainDone"
+      ],
+      "text": "The flowers are so happy!",
+      "voice": "sparkle",
+      "key": "race.rainDone",
+      "part": "race",
+      "when": "",
+      "ms": 2347,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "dragonFly"
+      ],
+      "text": "Whoosh! Now I can fly!",
+      "voice": "dragon",
+      "key": "race.dragonFly",
+      "part": "race",
+      "when": "",
+      "ms": 3850,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "stepsIntro"
+      ],
+      "text": "Everybody wins a step! Who came first?",
+      "voice": "sparkle",
+      "key": "race.stepsIntro",
+      "part": "race",
+      "when": "",
+      "ms": 3237,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "ask",
+        "0"
+      ],
+      "text": "Who came first? Put Mouse on the first step!",
+      "voice": "sparkle",
+      "key": "race.ask.0",
+      "part": "race › ask",
+      "when": "",
+      "ms": 3095,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "ask",
+        "1"
+      ],
+      "text": "Who came second? Put that animal on the second step!",
+      "voice": "sparkle",
+      "key": "race.ask.1",
+      "part": "race › ask",
+      "when": "",
+      "ms": 3994,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "ask",
+        "2"
+      ],
+      "text": "Who came third? Put that animal on the third step!",
+      "voice": "sparkle",
+      "key": "race.ask.2",
+      "part": "race › ask",
+      "when": "",
+      "ms": 4851,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "ask",
+        "3"
+      ],
+      "text": "Now the last two! Who came fourth?",
+      "voice": "sparkle",
+      "key": "race.ask.3",
+      "part": "race › ask",
+      "when": "",
+      "ms": 3023,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "ask",
+        "4"
+      ],
+      "text": "And who came fifth?",
+      "voice": "sparkle",
+      "key": "race.ask.4",
+      "part": "race › ask",
+      "when": "",
+      "ms": 1788,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "hintOrder",
+        "0"
+      ],
+      "text": "Mouse jumped off Ox first!",
+      "voice": "sparkle",
+      "key": "race.hintOrder.0",
+      "part": "race › hintOrder",
+      "when": "",
+      "ms": 2868,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "hintOrder",
+        "1"
+      ],
+      "text": "Ox carried Mouse. Ox came second!",
+      "voice": "sparkle",
+      "key": "race.hintOrder.1",
+      "part": "race › hintOrder",
+      "when": "",
+      "ms": 4171,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "hintOrder",
+        "2"
+      ],
+      "text": "Tiger swam across third!",
+      "voice": "sparkle",
+      "key": "race.hintOrder.2",
+      "part": "race › hintOrder",
+      "when": "",
+      "ms": 1995,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "hintOrder",
+        "3"
+      ],
+      "text": "Rabbit hopped over the stones. Rabbit came fourth!",
+      "voice": "sparkle",
+      "key": "race.hintOrder.3",
+      "part": "race › hintOrder",
+      "when": "",
+      "ms": 4419,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "hintOrder",
+        "4"
+      ],
+      "text": "Dragon stopped to make rain. Dragon came fifth!",
+      "voice": "sparkle",
+      "key": "race.hintOrder.4",
+      "part": "race › hintOrder",
+      "when": "",
+      "ms": 4337,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "tryGlow"
+      ],
+      "text": "Try the glowing one!",
+      "voice": "sparkle",
+      "key": "race.tryGlow",
+      "part": "race",
+      "when": "",
+      "ms": 1576,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "placed",
+        "0"
+      ],
+      "text": "First place!",
+      "voice": "sparkle",
+      "key": "race.placed.0",
+      "part": "race › placed",
+      "when": "",
+      "ms": 1388,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "placed",
+        "1"
+      ],
+      "text": "Second place!",
+      "voice": "sparkle",
+      "key": "race.placed.1",
+      "part": "race › placed",
+      "when": "",
+      "ms": 1305,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "placed",
+        "2"
+      ],
+      "text": "Third place!",
+      "voice": "sparkle",
+      "key": "race.placed.2",
+      "part": "race › placed",
+      "when": "",
+      "ms": 1203,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "placed",
+        "3"
+      ],
+      "text": "Fourth place!",
+      "voice": "sparkle",
+      "key": "race.placed.3",
+      "part": "race › placed",
+      "when": "",
+      "ms": 1514,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "placed",
+        "4"
+      ],
+      "text": "Fifth place!",
+      "voice": "sparkle",
+      "key": "race.placed.4",
+      "part": "race › placed",
+      "when": "",
+      "ms": 1388,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "askAfter",
+        "touch"
+      ],
+      "text": "Who came right after Ox? Tap that animal!",
+      "voice": "sparkle",
+      "key": "race.askAfter.touch",
+      "part": "race › askAfter",
+      "when": "",
+      "ms": 3665,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "askAfter",
+        "mouse"
+      ],
+      "text": "Who came right after Ox? Click that animal!",
+      "voice": "sparkle",
+      "key": "race.askAfter.mouse",
+      "part": "race › askAfter",
+      "when": "",
+      "ms": 3888,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "afterHint",
+        "touch"
+      ],
+      "text": "Tiger came right after Ox! Tap the glowing one!",
+      "voice": "sparkle",
+      "key": "race.afterHint.touch",
+      "part": "race › afterHint",
+      "when": "",
+      "ms": 4360,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "afterHint",
+        "mouse"
+      ],
+      "text": "Tiger came right after Ox! Click the glowing one!",
+      "voice": "sparkle",
+      "key": "race.afterHint.mouse",
+      "part": "race › afterHint",
+      "when": "",
+      "ms": 4080,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "afterYes"
+      ],
+      "text": "Yes! Tiger came right after Ox!",
+      "voice": "sparkle",
+      "key": "race.afterYes",
+      "part": "race",
+      "when": "",
+      "ms": 3365,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "winners"
+      ],
+      "text": "Everybody won a place! Hooray!",
+      "voice": "sparkle",
+      "key": "race.winners",
+      "part": "race",
+      "when": "",
+      "ms": 2554,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "wheel"
+      ],
+      "text": "There are twelve zodiac animals, one for every year!",
+      "voice": "sparkle",
+      "key": "race.wheel",
+      "part": "race",
+      "when": "",
+      "ms": 4582,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "reveal",
+        "ox"
+      ],
+      "text": "You were born in the Year of the Ox!",
+      "voice": "sparkle",
+      "key": "race.reveal.ox",
+      "part": "race › reveal",
+      "when": "",
+      "ms": 3504,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Kaylee, you were born in the Year of the Ox!"
+    },
+    {
+      "path": [
+        "race",
+        "reveal",
+        "mouse"
+      ],
+      "text": "You were born in the Year of the Rat!",
+      "voice": "sparkle",
+      "key": "race.reveal.mouse",
+      "part": "race › reveal",
+      "when": "",
+      "ms": 3264,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Kaylee, you were born in the Year of the Rat!"
+    },
+    {
+      "path": [
+        "race",
+        "revealOx"
+      ],
+      "text": "Moo-hoo! Hooray!",
+      "voice": "ox",
+      "key": "race.revealOx",
+      "part": "race",
+      "when": "",
+      "ms": 3144,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Moo-hoo! Hooray, Kaylee!"
+    },
+    {
+      "path": [
+        "race",
+        "revealMouse"
+      ],
+      "text": "Squeak! Hooray!",
+      "voice": "mouse",
+      "key": "race.revealMouse",
+      "part": "race",
+      "when": "",
+      "ms": 1968,
+      "flags": [
+        "changed"
+      ],
+      "was": "Squeak! Hooray, Kaylee!"
+    },
+    {
+      "path": [
+        "race",
+        "year"
+      ],
+      "text": "This year, 2026, is the Year of the Horse!",
+      "voice": "sparkle",
+      "key": "race.year",
+      "part": "race",
+      "when": "",
+      "ms": 4648,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "catAsk",
+        "touch"
+      ],
+      "text": "Shh! Someone is sleeping. Tap the cat!",
+      "voice": "sparkle",
+      "key": "race.catAsk.touch",
+      "part": "race › catAsk",
+      "when": "",
+      "ms": 3976,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "catAsk",
+        "mouse"
+      ],
+      "text": "Shh! Someone is sleeping. Click the cat!",
+      "voice": "sparkle",
+      "key": "race.catAsk.mouse",
+      "part": "race › catAsk",
+      "when": "",
+      "ms": 4776,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "catFact"
+      ],
+      "text": "The cat overslept and missed the race! That is why there is no Year of the Cat!",
+      "voice": "sparkle",
+      "key": "race.catFact",
+      "part": "race",
+      "when": "",
+      "ms": 6638,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "tap",
+        "0"
+      ],
+      "text": "Squeak!",
+      "voice": "mouse",
+      "key": "race.tap.0",
+      "part": "race › tap",
+      "when": "",
+      "ms": 832,
+      "flags": []
+    },
+    {
+      "path": [
+        "race",
+        "tap",
+        "1"
+      ],
+      "text": "Hee hee!",
+      "voice": "mouse",
+      "key": "race.tap.1",
+      "part": "race › tap",
+      "when": "",
+      "ms": 987,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "race",
+        "oxTap"
+      ],
+      "text": "Moo!",
+      "voice": "ox",
+      "key": "race.oxTap",
+      "part": "race",
+      "when": "",
+      "ms": 1066,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "story"
+      ],
+      "text": "China is so big! Let's ride the super-fast train!",
+      "voice": "baobao",
+      "key": "train.story",
+      "part": "train",
+      "when": "",
+      "ms": 3750,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "push"
+      ],
+      "text": "Push the lever up to zoom!",
+      "voice": "sparkle",
+      "key": "train.push",
+      "part": "train",
+      "when": "",
+      "ms": 2861,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "pushAgain"
+      ],
+      "text": "Push it up!",
+      "voice": "sparkle",
+      "key": "train.pushAgain",
+      "part": "train",
+      "when": "",
+      "ms": 1202,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "fast"
+      ],
+      "text": "China has some of the fastest trains in the world!",
+      "voice": "sparkle",
+      "key": "train.fast",
+      "part": "train",
+      "when": "",
+      "ms": 3581,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "big"
+      ],
+      "text": "China is so big! Snowy in the north, sunny beach in the south!",
+      "voice": "sparkle",
+      "key": "train.big",
+      "part": "train",
+      "when": "",
+      "ms": 5054,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "toot"
+      ],
+      "text": "Toot toot!",
+      "voice": "sparkle",
+      "key": "train.toot",
+      "part": "train",
+      "when": "",
+      "ms": 1212,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "arrive",
+        "harbin"
+      ],
+      "text": "Harbin! It is far up north. Brrr, snow!",
+      "voice": "sparkle",
+      "key": "train.arrive.harbin",
+      "part": "train › arrive",
+      "when": "",
+      "ms": 5297,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "arrive",
+        "hainan"
+      ],
+      "text": "Hainan! It is far down south. So hot!",
+      "voice": "sparkle",
+      "key": "train.arrive.hainan",
+      "part": "train › arrive",
+      "when": "",
+      "ms": 4611,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "arrive",
+        "gobi"
+      ],
+      "text": "The Gobi Desert! Sunny days and chilly nights!",
+      "voice": "sparkle",
+      "key": "train.arrive.gobi",
+      "part": "train › arrive",
+      "when": "",
+      "ms": 4789,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "arrive",
+        "himalaya"
+      ],
+      "text": "The Himalayas! The tallest mountains in the world!",
+      "voice": "sparkle",
+      "key": "train.arrive.himalaya",
+      "part": "train › arrive",
+      "when": "",
+      "ms": 4394,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "ask",
+        "harbin"
+      ],
+      "text": "Keep Bao Bao warm!",
+      "voice": "sparkle",
+      "key": "train.ask.harbin",
+      "part": "train › ask",
+      "when": "",
+      "ms": 2471,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "ask",
+        "scarf"
+      ],
+      "text": "The tiger is shivering! Give him the scarf!",
+      "voice": "sparkle",
+      "key": "train.ask.scarf",
+      "part": "train › ask",
+      "when": "",
+      "ms": 3556,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "ask",
+        "hainan"
+      ],
+      "text": "Get Bao Bao ready for the beach!",
+      "voice": "sparkle",
+      "key": "train.ask.hainan",
+      "part": "train › ask",
+      "when": "",
+      "ms": 2402,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "ask",
+        "gobiDay"
+      ],
+      "text": "It is a hot, sunny day! What does Bao Bao need?",
+      "voice": "sparkle",
+      "key": "train.ask.gobiDay",
+      "part": "train › ask",
+      "when": "",
+      "ms": 4040,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "ask",
+        "gobiNight"
+      ],
+      "text": "Now it is night, and cold! What does Bao Bao need?",
+      "voice": "sparkle",
+      "key": "train.ask.gobiNight",
+      "part": "train › ask",
+      "when": "",
+      "ms": 5382,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "ask",
+        "himalaya"
+      ],
+      "text": "Which one fits the tall, snowy mountains?",
+      "voice": "sparkle",
+      "key": "train.ask.himalaya",
+      "part": "train › ask",
+      "when": "",
+      "ms": 3554,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "harbin:swimring"
+      ],
+      "text": "A swim ring in the snow? Silly!",
+      "voice": "baobao",
+      "key": "train.wrong.harbin:swimring",
+      "part": "train › wrong",
+      "when": "",
+      "ms": 2454,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "hainan:mittens"
+      ],
+      "text": "Mittens at the beach? Silly!",
+      "voice": "baobao",
+      "key": "train.wrong.hainan:mittens",
+      "part": "train › wrong",
+      "when": "",
+      "ms": 2372,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "gobiDay:blanket"
+      ],
+      "text": "A blanket in the hot sun? Silly!",
+      "voice": "baobao",
+      "key": "train.wrong.gobiDay:blanket",
+      "part": "train › wrong",
+      "when": "",
+      "ms": 2697,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "gobiDay:mittens"
+      ],
+      "text": "Mittens in the desert sun? Silly!",
+      "voice": "baobao",
+      "key": "train.wrong.gobiDay:mittens",
+      "part": "train › wrong",
+      "when": "",
+      "ms": 2585,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "gobiNight:sunhat"
+      ],
+      "text": "A sun hat at night? Silly!",
+      "voice": "baobao",
+      "key": "train.wrong.gobiNight:sunhat",
+      "part": "train › wrong",
+      "when": "",
+      "ms": 2651,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "gobiNight:water"
+      ],
+      "text": "I am not thirsty. I am cold!",
+      "voice": "baobao",
+      "key": "train.wrong.gobiNight:water",
+      "part": "train › wrong",
+      "when": "",
+      "ms": 2555,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "himalaya:sunhat"
+      ],
+      "text": "A sun hat on a snowy mountain? Silly!",
+      "voice": "baobao",
+      "key": "train.wrong.himalaya:sunhat",
+      "part": "train › wrong",
+      "when": "",
+      "ms": 2796,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "himalaya:swimring"
+      ],
+      "text": "A swim ring on a mountain? Silly!",
+      "voice": "baobao",
+      "key": "train.wrong.himalaya:swimring",
+      "part": "train › wrong",
+      "when": "",
+      "ms": 2706,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "himalaya:water"
+      ],
+      "text": "I need something warm!",
+      "voice": "baobao",
+      "key": "train.wrong.himalaya:water",
+      "part": "train › wrong",
+      "when": "",
+      "ms": 1331,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "wrong",
+        "scarf"
+      ],
+      "text": "Brrr! I need the scarf!",
+      "voice": "tiger",
+      "key": "train.wrong.scarf",
+      "part": "train › wrong",
+      "when": "",
+      "ms": 2501,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "hint"
+      ],
+      "text": "Try the glowing one!",
+      "voice": "sparkle",
+      "key": "train.hint",
+      "part": "train",
+      "when": "",
+      "ms": 1576,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "yes",
+        "mittens"
+      ],
+      "text": "Mittens! So cozy!",
+      "voice": "baobao",
+      "key": "train.yes.mittens",
+      "part": "train › yes",
+      "when": "",
+      "ms": 2173,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "yes",
+        "hat"
+      ],
+      "text": "A warm hat! Yay!",
+      "voice": "baobao",
+      "key": "train.yes.hat",
+      "part": "train › yes",
+      "when": "",
+      "ms": 1986,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "yes",
+        "scarf"
+      ],
+      "text": "Ahh! Warm now. Thank you!",
+      "voice": "tiger",
+      "key": "train.yes.scarf",
+      "part": "train › yes",
+      "when": "",
+      "ms": 3270,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "yes",
+        "sunhat"
+      ],
+      "text": "A sun hat! Yay!",
+      "voice": "baobao",
+      "key": "train.yes.sunhat",
+      "part": "train › yes",
+      "when": "",
+      "ms": 1614,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "yes",
+        "swimring"
+      ],
+      "text": "A swim ring! Wheee!",
+      "voice": "baobao",
+      "key": "train.yes.swimring",
+      "part": "train › yes",
+      "when": "",
+      "ms": 1650,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "yes",
+        "water"
+      ],
+      "text": "Glug glug! Yum!",
+      "voice": "baobao",
+      "key": "train.yes.water",
+      "part": "train › yes",
+      "when": "",
+      "ms": 1899,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "yes",
+        "blanket"
+      ],
+      "text": "A cozy blanket!",
+      "voice": "baobao",
+      "key": "train.yes.blanket",
+      "part": "train › yes",
+      "when": "",
+      "ms": 1246,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "yes",
+        "coat"
+      ],
+      "text": "A big warm coat!",
+      "voice": "baobao",
+      "key": "train.yes.coat",
+      "part": "train › yes",
+      "when": "",
+      "ms": 1822,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "shiver"
+      ],
+      "text": "Brrr! So cold!",
+      "voice": "tiger",
+      "key": "train.shiver",
+      "part": "train",
+      "when": "",
+      "ms": 2899,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "hello",
+        "camel"
+      ],
+      "text": "Hello, little panda!",
+      "voice": "camel",
+      "key": "train.hello.camel",
+      "part": "train › hello",
+      "when": "",
+      "ms": 1783,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "hello",
+        "yak"
+      ],
+      "text": "Hello up here!",
+      "voice": "yak",
+      "key": "train.hello.yak",
+      "part": "train › hello",
+      "when": "",
+      "ms": 1506,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "tap",
+        "0"
+      ],
+      "text": "Hee hee!",
+      "voice": "baobao",
+      "key": "train.tap.0",
+      "part": "train › tap",
+      "when": "",
+      "ms": 667,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "tap",
+        "1"
+      ],
+      "text": "Tickles!",
+      "voice": "baobao",
+      "key": "train.tap.1",
+      "part": "train › tap",
+      "when": "",
+      "ms": 576,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "train",
+        "animalTap",
+        "tiger"
+      ],
+      "text": "Rrr, hello!",
+      "voice": "tiger",
+      "key": "train.animalTap.tiger",
+      "part": "train › animalTap",
+      "when": "",
+      "ms": 1474,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "animalTap",
+        "camel"
+      ],
+      "text": "Two humps, no hurry.",
+      "voice": "camel",
+      "key": "train.animalTap.camel",
+      "part": "train › animalTap",
+      "when": "",
+      "ms": 2482,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "animalTap",
+        "yak"
+      ],
+      "text": "Hello, friend!",
+      "voice": "yak",
+      "key": "train.animalTap.yak",
+      "part": "train › animalTap",
+      "when": "",
+      "ms": 1130,
+      "flags": []
+    },
+    {
+      "path": [
+        "train",
+        "end"
+      ],
+      "text": "What a trip! Thank you!",
+      "voice": "baobao",
+      "key": "train.end",
+      "part": "train",
+      "when": "",
+      "ms": 2040,
+      "flags": [
+        "changed"
+      ],
+      "was": "What a trip! Thank you, Kaylee!"
+    },
+    {
+      "path": [
+        "parade",
+        "arrive"
+      ],
+      "text": "I'm Long Long! Let's dance!",
+      "voice": "longlong",
+      "key": "parade.arrive",
+      "part": "parade",
+      "when": "",
+      "ms": 3048,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "I'm Long Long! Let's dance, Kaylee!"
+    },
+    {
+      "path": [
+        "parade",
+        "drive"
+      ],
+      "text": "Drag Long Long around the lanterns!",
+      "voice": "sparkle",
+      "key": "parade.drive",
+      "part": "parade",
+      "when": "",
+      "ms": 3422,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "hint"
+      ],
+      "text": "Follow the glowing lanterns!",
+      "voice": "sparkle",
+      "key": "parade.hint",
+      "part": "parade",
+      "when": "",
+      "ms": 2998,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "thanks",
+        "bamboo"
+      ],
+      "text": "Shyeh shyeh for the bamboo!",
+      "voice": "baobao",
+      "key": "parade.thanks.bamboo",
+      "part": "parade › thanks",
+      "when": "",
+      "ms": 2177,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "thanks",
+        "wall"
+      ],
+      "text": "Shyeh shyeh for fixing the wall!",
+      "voice": "houhou",
+      "key": "parade.thanks.wall",
+      "part": "parade › thanks",
+      "when": "",
+      "ms": 2863,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "thanks",
+        "hotpot"
+      ],
+      "text": "Shyeh shyeh for the hotpot!",
+      "voice": "hong",
+      "key": "parade.thanks.hotpot",
+      "part": "parade › thanks",
+      "when": "",
+      "ms": 1946,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "thanks",
+        "brush"
+      ],
+      "text": "Shyeh shyeh for the magic brush!",
+      "voice": "crane",
+      "key": "parade.thanks.brush",
+      "part": "parade › thanks",
+      "when": "",
+      "ms": 2806,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "thanks",
+        "race"
+      ],
+      "text": "Shyeh shyeh for the race!",
+      "voice": "mouse",
+      "key": "parade.thanks.race",
+      "part": "parade › thanks",
+      "when": "",
+      "ms": 1946,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "thanks",
+        "train"
+      ],
+      "text": "Shyeh shyeh for the train ride!",
+      "voice": "tiger",
+      "key": "parade.thanks.train",
+      "part": "parade › thanks",
+      "when": "",
+      "ms": 2388,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "thanks",
+        "dumplings"
+      ],
+      "text": "Shyeh shyeh for the dumplings!",
+      "voice": "cheffu",
+      "key": "parade.thanks.dumplings",
+      "part": "parade › thanks",
+      "when": "",
+      "ms": 2522,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "lap"
+      ],
+      "text": "Wheee! What a dance!",
+      "voice": "longlong",
+      "key": "parade.lap",
+      "part": "parade",
+      "when": "",
+      "ms": 2424,
+      "flags": [
+        "changed"
+      ],
+      "was": "Wheee! What a dance, Kaylee!"
+    },
+    {
+      "path": [
+        "parade",
+        "drum",
+        "touch"
+      ],
+      "text": "Tap the drum! Make the dragon dance!",
+      "voice": "sparkle",
+      "key": "parade.drum.touch",
+      "part": "parade › drum",
+      "when": "",
+      "ms": 3319,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "drum",
+        "mouse"
+      ],
+      "text": "Click the drum! Make the dragon dance!",
+      "voice": "sparkle",
+      "key": "parade.drum.mouse",
+      "part": "parade › drum",
+      "when": "",
+      "ms": 3648,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "drumMid"
+      ],
+      "text": "Boom boom! I love it!",
+      "voice": "longlong",
+      "key": "parade.drumMid",
+      "part": "parade",
+      "when": "",
+      "ms": 2933,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "drumDone"
+      ],
+      "text": "Great drumming!",
+      "voice": "sparkle",
+      "key": "parade.drumDone",
+      "part": "parade",
+      "when": "",
+      "ms": 1200,
+      "flags": [
+        "changed"
+      ],
+      "was": "Great drumming, Kaylee!"
+    },
+    {
+      "path": [
+        "parade",
+        "sky",
+        "touch"
+      ],
+      "text": "Tap the sky to make fireworks!",
+      "voice": "sparkle",
+      "key": "parade.sky.touch",
+      "part": "parade › sky",
+      "when": "",
+      "ms": 3290,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "sky",
+        "mouse"
+      ],
+      "text": "Click the sky to make fireworks!",
+      "voice": "sparkle",
+      "key": "parade.sky.mouse",
+      "part": "parade › sky",
+      "when": "",
+      "ms": 3480,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "skyFact"
+      ],
+      "text": "Fireworks were invented in China!",
+      "voice": "sparkle",
+      "key": "parade.skyFact",
+      "part": "parade",
+      "when": "",
+      "ms": 3951,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "flag",
+        "touch"
+      ],
+      "text": "Tap the flag to raise it!",
+      "voice": "sparkle",
+      "key": "parade.flag.touch",
+      "part": "parade › flag",
+      "when": "",
+      "ms": 2417,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "flag",
+        "mouse"
+      ],
+      "text": "Click the flag to raise it!",
+      "voice": "sparkle",
+      "key": "parade.flag.mouse",
+      "part": "parade › flag",
+      "when": "",
+      "ms": 2808,
+      "flags": []
+    },
+    {
+      "path": [
+        "parade",
+        "flagFact"
+      ],
+      "text": "China's flag is red, with one big gold star and four little stars!",
+      "voice": "sparkle",
+      "key": "parade.flagFact",
+      "part": "parade",
+      "when": "",
+      "ms": 5603,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "envelope",
+        "touch"
+      ],
+      "text": "Bao Bao has a red envelope! Tap to open it!",
+      "voice": "sparkle",
+      "key": "parade.envelope.touch",
+      "part": "parade › envelope",
+      "when": "",
+      "ms": 4226,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "envelope",
+        "mouse"
+      ],
+      "text": "Bao Bao has a red envelope! Click to open it!",
+      "voice": "sparkle",
+      "key": "parade.envelope.mouse",
+      "part": "parade › envelope",
+      "when": "",
+      "ms": 4152,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "hongbao"
+      ],
+      "text": "A red envelope is called a hong bao!",
+      "voice": "sparkle",
+      "key": "parade.hongbao",
+      "part": "parade",
+      "when": "",
+      "ms": 3368,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "parade",
+        "greet"
+      ],
+      "text": "Sheen nyen kwy luh! Happy New Year!",
+      "voice": "baobao",
+      "key": "parade.greet",
+      "part": "parade",
+      "when": "",
+      "ms": 3240,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Sheen nyen kwy luh, Kaylee! Happy New Year!"
+    },
+    {
+      "path": [
+        "videos",
+        "pandas"
+      ],
+      "text": "Let's see real baby pandas!",
+      "voice": "sparkle",
+      "key": "videos.pandas",
+      "part": "videos",
+      "when": "",
+      "ms": 2787,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "wall"
+      ],
+      "text": "Want to see the real Great Wall?",
+      "voice": "sparkle",
+      "key": "videos.wall",
+      "part": "videos",
+      "when": "",
+      "ms": 2819,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "redPandas"
+      ],
+      "text": "Let's see real red pandas!",
+      "voice": "sparkle",
+      "key": "videos.redPandas",
+      "part": "videos",
+      "when": "",
+      "ms": 2551,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "calligraphy"
+      ],
+      "text": "Look! Painting with water!",
+      "voice": "sparkle",
+      "key": "videos.calligraphy",
+      "part": "videos",
+      "when": "",
+      "ms": 2445,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "race"
+      ],
+      "text": "Want to hear the Great Race story?",
+      "voice": "sparkle",
+      "key": "videos.race",
+      "part": "videos",
+      "when": "",
+      "ms": 2518,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "train"
+      ],
+      "text": "Zoom! A real bullet train!",
+      "voice": "sparkle",
+      "key": "videos.train",
+      "part": "videos",
+      "when": "",
+      "ms": 2529,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "dumplings"
+      ],
+      "text": "See real soup dumplings!",
+      "voice": "sparkle",
+      "key": "videos.dumplings",
+      "part": "videos",
+      "when": "",
+      "ms": 2588,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "shanghai"
+      ],
+      "text": "Let's see Shanghai at night!",
+      "voice": "sparkle",
+      "key": "videos.shanghai",
+      "part": "videos",
+      "when": "",
+      "ms": 2375,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "dragonDance"
+      ],
+      "text": "Look, a real dragon dance!",
+      "voice": "sparkle",
+      "key": "videos.dragonDance",
+      "part": "videos",
+      "when": "",
+      "ms": 2660,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "overview"
+      ],
+      "text": "Let's see where China is!",
+      "voice": "sparkle",
+      "key": "videos.overview",
+      "part": "videos",
+      "when": "",
+      "ms": 3050,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "videos",
+        "harbin"
+      ],
+      "text": "Wow, a city made of ice!",
+      "voice": "sparkle",
+      "key": "videos.harbin",
+      "part": "videos",
+      "when": "",
+      "ms": 3620,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "videos",
+        "counting"
+      ],
+      "text": "Let's count in Chinese!",
+      "voice": "sparkle",
+      "key": "videos.counting",
+      "part": "videos",
+      "when": "",
+      "ms": 1816,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "liRiver"
+      ],
+      "text": "Let's float down the Li River!",
+      "voice": "sparkle",
+      "key": "videos.liRiver",
+      "part": "videos",
+      "when": "",
+      "ms": 2275,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "newYear"
+      ],
+      "text": "What is Chinese New Year?",
+      "voice": "sparkle",
+      "key": "videos.newYear",
+      "part": "videos",
+      "when": "",
+      "ms": 2218,
+      "flags": []
+    },
+    {
+      "path": [
+        "stickers",
+        "bamboo"
+      ],
+      "text": "Giant panda sticker! Panda babies are born as tiny as a stick of butter!",
+      "voice": "sparkle",
+      "key": "stickers.bamboo",
+      "part": "stickers",
+      "when": "",
+      "ms": 6863,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "stickers",
+        "wall"
+      ],
+      "text": "Golden monkey sticker! These monkeys have sky-blue faces!",
+      "voice": "sparkle",
+      "key": "stickers.wall",
+      "part": "stickers",
+      "when": "",
+      "ms": 4746,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "stickers",
+        "dumplings"
+      ],
+      "text": "Pekingese sticker! These puppies from China look like tiny lions!",
+      "voice": "sparkle",
+      "key": "stickers.dumplings",
+      "part": "stickers",
+      "when": "",
+      "ms": 4887,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "stickers",
+        "hotpot"
+      ],
+      "text": "Red panda sticker! Red pandas stand up tall when they are surprised!",
+      "voice": "sparkle",
+      "key": "stickers.hotpot",
+      "part": "stickers",
+      "when": "",
+      "ms": 4864,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "stickers",
+        "brush"
+      ],
+      "text": "Crane sticker! Red-crowned cranes dance to say hello!",
+      "voice": "sparkle",
+      "key": "stickers.brush",
+      "part": "stickers",
+      "when": "",
+      "ms": 4922,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "stickers",
+        "race"
+      ],
+      "text": "Ox sticker! You were born in the Year of the Ox!",
+      "voice": "sparkle",
+      "key": "stickers.race",
+      "part": "stickers",
+      "when": "",
+      "ms": 3390,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "stickers",
+        "train"
+      ],
+      "text": "Tiger sticker! Amur tigers live where it is snowy and cold!",
+      "voice": "sparkle",
+      "key": "stickers.train",
+      "part": "stickers",
+      "when": "",
+      "ms": 4738,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "hello"
+      ],
+      "text": "In China, people say nee how! It means hello!",
+      "voice": "sparkle",
+      "key": "facts.hello",
+      "part": "facts",
+      "when": "",
+      "ms": 4318,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "shanghai"
+      ],
+      "text": "Shanghai is the biggest city in China! It has a tower with pink balls!",
+      "voice": "sparkle",
+      "key": "facts.shanghai",
+      "part": "facts",
+      "when": "",
+      "ms": 5221,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "dumplings"
+      ],
+      "text": "Soup dumplings come from Shanghai. There is soup inside!",
+      "voice": "sparkle",
+      "key": "facts.dumplings",
+      "part": "facts",
+      "when": "",
+      "ms": 4966,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "dimsum"
+      ],
+      "text": "Dim sum is lots of little dishes, shared with tea.",
+      "voice": "sparkle",
+      "key": "facts.dimsum",
+      "part": "facts",
+      "when": "",
+      "ms": 3685,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "newYear"
+      ],
+      "text": "Chinese New Year has lanterns, dragons and red envelopes!",
+      "voice": "sparkle",
+      "key": "facts.newYear",
+      "part": "facts",
+      "when": "",
+      "ms": 4880,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "pandas"
+      ],
+      "text": "Giant pandas live in the bamboo mountains of China.",
+      "voice": "sparkle",
+      "key": "facts.pandas",
+      "part": "facts",
+      "when": "",
+      "ms": 3502,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "wall"
+      ],
+      "text": "The Great Wall of China is super long!",
+      "voice": "sparkle",
+      "key": "facts.wall",
+      "part": "facts",
+      "when": "",
+      "ms": 3338,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "big"
+      ],
+      "text": "China is a huge country with snowy places and sunny beaches!",
+      "voice": "sparkle",
+      "key": "facts.big",
+      "part": "facts",
+      "when": "",
+      "ms": 4933,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "thanks"
+      ],
+      "text": "Shyeh shyeh means thank you!",
+      "voice": "sparkle",
+      "key": "facts.thanks",
+      "part": "facts",
+      "when": "",
+      "ms": 3407,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "counting"
+      ],
+      "text": "One, two, three in Chinese: ee, are, san!",
+      "voice": "sparkle",
+      "key": "facts.counting",
+      "part": "facts",
+      "when": "",
+      "ms": 6156,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "red"
+      ],
+      "text": "In China, red is the color of luck and happiness!",
+      "voice": "sparkle",
+      "key": "facts.red",
+      "part": "facts",
+      "when": "",
+      "ms": 4302,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "dragons"
+      ],
+      "text": "Chinese dragons are kind! They bring rain and good luck.",
+      "voice": "sparkle",
+      "key": "facts.dragons",
+      "part": "facts",
+      "when": "",
+      "ms": 4775,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "chopsticks"
+      ],
+      "text": "People in China eat with chopsticks!",
+      "voice": "sparkle",
+      "key": "facts.chopsticks",
+      "part": "facts",
+      "when": "",
+      "ms": 3262,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "inventions"
+      ],
+      "text": "Paper, kites and fireworks were first made in China!",
+      "voice": "sparkle",
+      "key": "facts.inventions",
+      "part": "facts",
+      "when": "",
+      "ms": 4502,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "haochi"
+      ],
+      "text": "How chir means delicious!",
+      "voice": "sparkle",
+      "key": "facts.haochi",
+      "part": "facts",
+      "when": "",
+      "ms": 2798,
+      "flags": []
+    },
+    {
+      "path": [
+        "facts",
+        "flag"
+      ],
+      "text": "China's flag is red, with one big gold star and four little stars!",
+      "voice": "sparkle",
+      "key": "facts.flag",
+      "part": "facts",
+      "when": "",
+      "ms": 5603,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "people"
+      ],
+      "text": "More people live in China than almost anywhere in the world!",
+      "voice": "sparkle",
+      "key": "facts.people",
+      "part": "facts",
+      "when": "",
+      "ms": 4828,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "passport",
+        "touch"
+      ],
+      "text": "This is China! Tap a picture to learn more.",
+      "voice": "sparkle",
+      "key": "passport.touch",
+      "part": "passport",
+      "when": "",
+      "ms": 4636,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "passport",
+        "mouse"
+      ],
+      "text": "This is China! Click a picture to learn more.",
+      "voice": "sparkle",
+      "key": "passport.mouse",
+      "part": "passport",
+      "when": "",
+      "ms": 4344,
+      "flags": [
+        "long"
+      ]
+    }
+  ]
+}

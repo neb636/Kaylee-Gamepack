@@ -1,0 +1,70 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "olives.branchDone",
+  "title": "Italy › Olives › Branch Done",
+  "intro": "",
+  "page": "italy-olives-branchDone.html",
+  "audio": null,
+  "lines": 3,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "olives.branchDone.1",
+      "text": "Great combing!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Great combing, Kaylee!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "olives",
+        "branchDone",
+        "0"
+      ],
+      "text": "Olives in the net!",
+      "voice": "sparkle",
+      "key": "olives.branchDone.0",
+      "part": "olives › branchDone",
+      "when": "🫒 The Olive Grove (activities/olives). Every spoken line of the activity goes in here.",
+      "ms": 1277,
+      "flags": []
+    },
+    {
+      "path": [
+        "olives",
+        "branchDone",
+        "1"
+      ],
+      "text": "Great combing!",
+      "voice": "sparkle",
+      "key": "olives.branchDone.1",
+      "part": "olives › branchDone",
+      "when": "",
+      "ms": 2136,
+      "flags": [
+        "changed"
+      ],
+      "was": "Great combing, Kaylee!"
+    },
+    {
+      "path": [
+        "olives",
+        "branchDone",
+        "2"
+      ],
+      "text": "The net is full!",
+      "voice": "sparkle",
+      "key": "olives.branchDone.2",
+      "part": "olives › branchDone",
+      "when": "",
+      "ms": 2376,
+      "flags": []
+    }
+  ]
+}

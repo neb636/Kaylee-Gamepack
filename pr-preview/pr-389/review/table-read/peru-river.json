@@ -1,0 +1,692 @@
+{
+  "kind": "table-read",
+  "place": "peru",
+  "group": "river",
+  "title": "Peru › River",
+  "intro": "---- 4. Rosa's Rainy River (make it rain in the Amazon) ----",
+  "page": "peru-river.html",
+  "audio": null,
+  "lines": 41,
+  "seconds": 94,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "river.story.0",
+      "text": "Hola! I want to visit my forest friends!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "river.squeeze.touch",
+      "text": "Squeeze the cloud to make rain!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "river.squeeze.mouse",
+      "text": "Click and hold the cloud to make rain!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "river.flooded",
+      "text": "The river grows into the forest!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "river.pads",
+      "text": "Lily pads! Help the friends hop on!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "river.rainbow",
+      "text": "A rainbow! Gracias!",
+      "flags": [
+        "changed"
+      ],
+      "was": "A rainbow! Gracias, Kaylee!"
+    },
+    {
+      "key": "river.facts.2",
+      "text": "The river grows into the forest!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "river.facts.3",
+      "text": "Some fish eat fruit!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "river.fruit",
+      "text": "Some fish eat fruit!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "river.idle.squeeze.mouse",
+      "text": "Click and hold the cloud to make rain!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "river.sticker",
+      "text": "Pink dolphin sticker! These dolphins live in rivers!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "river",
+        "story",
+        "0"
+      ],
+      "text": "Hola! I want to visit my forest friends!",
+      "voice": "rosa",
+      "key": "river.story.0",
+      "part": "river › story",
+      "when": "",
+      "ms": 3245,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "squeeze",
+        "touch"
+      ],
+      "text": "Squeeze the cloud to make rain!",
+      "voice": "sparkle",
+      "key": "river.squeeze.touch",
+      "part": "river › squeeze",
+      "when": "",
+      "ms": 3190,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "squeeze",
+        "mouse"
+      ],
+      "text": "Click and hold the cloud to make rain!",
+      "voice": "sparkle",
+      "key": "river.squeeze.mouse",
+      "part": "river › squeeze",
+      "when": "",
+      "ms": 3168,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "slothWake"
+      ],
+      "text": "Hiiiiii...",
+      "voice": "sloth",
+      "key": "river.slothWake",
+      "part": "river",
+      "when": "",
+      "ms": 2558,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "slothYawn"
+      ],
+      "text": "Ooh... a shower...",
+      "voice": "sloth",
+      "key": "river.slothYawn",
+      "part": "river",
+      "when": "",
+      "ms": 2629,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "wet"
+      ],
+      "text": "I'm all wet! Hee hee!",
+      "voice": "sparkle",
+      "key": "river.wet",
+      "part": "river",
+      "when": "",
+      "ms": 2023,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "river"
+      ],
+      "text": "Make it rain on the river!",
+      "voice": "sparkle",
+      "key": "river.river",
+      "part": "river",
+      "when": "",
+      "ms": 1899,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "more"
+      ],
+      "text": "Wheee! More water!",
+      "voice": "rosa",
+      "key": "river.more",
+      "part": "river",
+      "when": "",
+      "ms": 2354,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hello",
+        "capy",
+        "0"
+      ],
+      "text": "Hola, capybaras!",
+      "voice": "rosa",
+      "key": "river.hello.capy.0",
+      "part": "river › hello › capy",
+      "when": "",
+      "ms": 1710,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hello",
+        "capy",
+        "1"
+      ],
+      "text": "Ahh... a swim!",
+      "voice": "capy",
+      "key": "river.hello.capy.1",
+      "part": "river › hello › capy",
+      "when": "",
+      "ms": 2093,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hello",
+        "sloth",
+        "0"
+      ],
+      "text": "Hola, sloth!",
+      "voice": "rosa",
+      "key": "river.hello.sloth.0",
+      "part": "river › hello › sloth",
+      "when": "",
+      "ms": 1670,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hello",
+        "sloth",
+        "1"
+      ],
+      "text": "Hiii, Rosa...",
+      "voice": "sloth",
+      "key": "river.hello.sloth.1",
+      "part": "river › hello › sloth",
+      "when": "",
+      "ms": 1502,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hello",
+        "monkey",
+        "0"
+      ],
+      "text": "Hola, monkeys!",
+      "voice": "rosa",
+      "key": "river.hello.monkey.0",
+      "part": "river › hello › monkey",
+      "when": "",
+      "ms": 1671,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hello",
+        "monkey",
+        "1"
+      ],
+      "text": "Splash! Splash!",
+      "voice": "monkey",
+      "key": "river.hello.monkey.1",
+      "part": "river › hello › monkey",
+      "when": "",
+      "ms": 1701,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "flooded"
+      ],
+      "text": "The river grows into the forest!",
+      "voice": "sparkle",
+      "key": "river.flooded",
+      "part": "river",
+      "when": "",
+      "ms": 3030,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "lagoonGo"
+      ],
+      "text": "Let's swim to the lagoon!",
+      "voice": "rosa",
+      "key": "river.lagoonGo",
+      "part": "river",
+      "when": "",
+      "ms": 1555,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "lagoon"
+      ],
+      "text": "Rain on the lagoon!",
+      "voice": "sparkle",
+      "key": "river.lagoon",
+      "part": "river",
+      "when": "",
+      "ms": 1551,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "buds"
+      ],
+      "text": "Rain on the lily buds!",
+      "voice": "sparkle",
+      "key": "river.buds",
+      "part": "river",
+      "when": "",
+      "ms": 2550,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "pads"
+      ],
+      "text": "Lily pads! Help the friends hop on!",
+      "voice": "sparkle",
+      "key": "river.pads",
+      "part": "river",
+      "when": "",
+      "ms": 4058,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "hop",
+        "frog"
+      ],
+      "text": "Hop, frog!",
+      "voice": "sparkle",
+      "key": "river.hop.frog",
+      "part": "river › hop",
+      "when": "",
+      "ms": 1260,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hop",
+        "monkey"
+      ],
+      "text": "Wheee!",
+      "voice": "monkey",
+      "key": "river.hop.monkey",
+      "part": "river › hop",
+      "when": "",
+      "ms": 1062,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hop",
+        "capy"
+      ],
+      "text": "Comfy!",
+      "voice": "capy",
+      "key": "river.hop.capy",
+      "part": "river › hop",
+      "when": "",
+      "ms": 685,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hop",
+        "macaw"
+      ],
+      "text": "Flap, flap, macaw!",
+      "voice": "sparkle",
+      "key": "river.hop.macaw",
+      "part": "river › hop",
+      "when": "",
+      "ms": 2407,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "sun"
+      ],
+      "text": "Bye-bye, cloud! Hello, sun!",
+      "voice": "sparkle",
+      "key": "river.sun",
+      "part": "river",
+      "when": "",
+      "ms": 2388,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "rainbow"
+      ],
+      "text": "A rainbow! Gracias!",
+      "voice": "rosa",
+      "key": "river.rainbow",
+      "part": "river",
+      "when": "",
+      "ms": 2712,
+      "flags": [
+        "changed"
+      ],
+      "was": "A rainbow! Gracias, Kaylee!"
+    },
+    {
+      "path": [
+        "river",
+        "photo"
+      ],
+      "text": "Click! A picture for Luna!",
+      "voice": "sparkle",
+      "key": "river.photo",
+      "part": "river",
+      "when": "",
+      "ms": 2138,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "spout",
+        "0"
+      ],
+      "text": "Hee hee!",
+      "voice": "rosa",
+      "key": "river.spout.0",
+      "part": "river › spout",
+      "when": "",
+      "ms": 458,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "spout",
+        "1"
+      ],
+      "text": "Pfff! Bubbles!",
+      "voice": "rosa",
+      "key": "river.spout.1",
+      "part": "river › spout",
+      "when": "",
+      "ms": 1622,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "spout",
+        "2"
+      ],
+      "text": "Splashy!",
+      "voice": "rosa",
+      "key": "river.spout.2",
+      "part": "river › spout",
+      "when": "",
+      "ms": 883,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "rosaTap"
+      ],
+      "text": "I live in a river, not the sea!",
+      "voice": "rosa",
+      "key": "river.rosaTap",
+      "part": "river",
+      "when": "",
+      "ms": 2249,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "facts",
+        "0"
+      ],
+      "text": "This dolphin lives in a river!",
+      "voice": "sparkle",
+      "key": "river.facts.0",
+      "part": "river › facts",
+      "when": "",
+      "ms": 2614,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "facts",
+        "1"
+      ],
+      "text": "Half of Peru is rainforest!",
+      "voice": "sparkle",
+      "key": "river.facts.1",
+      "part": "river › facts",
+      "when": "",
+      "ms": 2901,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "facts",
+        "2"
+      ],
+      "text": "The river grows into the forest!",
+      "voice": "sparkle",
+      "key": "river.facts.2",
+      "part": "river › facts",
+      "when": "",
+      "ms": 3030,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "facts",
+        "3"
+      ],
+      "text": "Some fish eat fruit!",
+      "voice": "sparkle",
+      "key": "river.facts.3",
+      "part": "river › facts",
+      "when": "",
+      "ms": 2600,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "fruit"
+      ],
+      "text": "Some fish eat fruit!",
+      "voice": "sparkle",
+      "key": "river.fruit",
+      "part": "river",
+      "when": "",
+      "ms": 2600,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "squeeze",
+        "touch"
+      ],
+      "text": "Hold the cloud to make rain!",
+      "voice": "sparkle",
+      "key": "river.idle.squeeze.touch",
+      "part": "river › idle › squeeze",
+      "when": "",
+      "ms": 2538,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "squeeze",
+        "mouse"
+      ],
+      "text": "Click and hold the cloud to make rain!",
+      "voice": "sparkle",
+      "key": "river.idle.squeeze.mouse",
+      "part": "river › idle › squeeze",
+      "when": "",
+      "ms": 3168,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "river"
+      ],
+      "text": "Drag the cloud over the river!",
+      "voice": "sparkle",
+      "key": "river.idle.river",
+      "part": "river › idle",
+      "when": "",
+      "ms": 2718,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "lagoon"
+      ],
+      "text": "Drag the cloud over the lagoon!",
+      "voice": "sparkle",
+      "key": "river.idle.lagoon",
+      "part": "river › idle",
+      "when": "",
+      "ms": 2423,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "pads"
+      ],
+      "text": "Drag a friend onto a lily pad!",
+      "voice": "sparkle",
+      "key": "river.idle.pads",
+      "part": "river › idle",
+      "when": "",
+      "ms": 2711,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "sticker"
+      ],
+      "text": "Pink dolphin sticker! These dolphins live in rivers!",
+      "voice": "sparkle",
+      "key": "river.sticker",
+      "part": "river",
+      "when": "",
+      "ms": 4707,
+      "flags": [
+        "long"
+      ]
+    }
+  ]
+}

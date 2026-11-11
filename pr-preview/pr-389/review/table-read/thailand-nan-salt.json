@@ -1,0 +1,312 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "nan.salt",
+  "title": "Thailand › Nan › Salt",
+  "intro": "",
+  "page": "thailand-nan-salt.html",
+  "audio": null,
+  "lines": 19,
+  "seconds": 41,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "nan.salt.dip",
+      "text": "Dip the bucket in the well!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Dip the bucket in the well, Kaylee!"
+    },
+    {
+      "key": "nan.salt.boil",
+      "text": "The water boils away, and the salt stays!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "nan",
+        "salt",
+        "dip"
+      ],
+      "text": "Dip the bucket in the well!",
+      "voice": "sparkle",
+      "key": "nan.salt.dip",
+      "part": "nan › salt",
+      "when": "Bo Kluea's salt wells (salt/): the salt aunty (a pony) and Daddy react, Sparkle says what's new.",
+      "ms": 2136,
+      "flags": [
+        "changed"
+      ],
+      "was": "Dip the bucket in the well, Kaylee!"
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "fire"
+      ],
+      "text": "Put a log on the fire!",
+      "voice": "sparkle",
+      "key": "nan.salt.fire",
+      "part": "nan › salt",
+      "when": "Bo Kluea's salt wells (salt/): the salt aunty (a pony) and Daddy react, Sparkle says what's new.",
+      "ms": 1370,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "scrape"
+      ],
+      "text": "Scrape up the salt!",
+      "voice": "sparkle",
+      "key": "nan.salt.scrape",
+      "part": "nan › salt",
+      "when": "Bo Kluea's salt wells (salt/): the salt aunty (a pony) and Daddy react, Sparkle says what's new.",
+      "ms": 2975,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "hint",
+        "dip"
+      ],
+      "text": "Pull the bucket down into the well!",
+      "voice": "sparkle",
+      "key": "nan.salt.hint.dip",
+      "part": "nan › salt › hint",
+      "when": "",
+      "ms": 2771,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "hint",
+        "pour"
+      ],
+      "text": "Carry it over the big pan!",
+      "voice": "sparkle",
+      "key": "nan.salt.hint.pour",
+      "part": "nan › salt › hint",
+      "when": "",
+      "ms": 2221,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "hint",
+        "fire"
+      ],
+      "text": "Throw a log in the fire!",
+      "voice": "sparkle",
+      "key": "nan.salt.hint.fire",
+      "part": "nan › salt › hint",
+      "when": "",
+      "ms": 2396,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "hint",
+        "scrape"
+      ],
+      "text": "Move the paddle through the salt!",
+      "voice": "sparkle",
+      "key": "nan.salt.hint.scrape",
+      "part": "nan › salt › hint",
+      "when": "",
+      "ms": 2644,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "boil"
+      ],
+      "text": "The water boils away, and the salt stays!",
+      "voice": "sparkle",
+      "key": "nan.salt.boil",
+      "part": "nan › salt",
+      "when": "Bo Kluea's salt wells (salt/): the salt aunty (a pony) and Daddy react, Sparkle says what's new.",
+      "ms": 4227,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "hi"
+      ],
+      "text": "This well is very salty!",
+      "voice": "saltaunty",
+      "key": "nan.salt.hi",
+      "part": "nan › salt",
+      "when": "Bo Kluea's salt wells (salt/): the salt aunty (a pony) and Daddy react, Sparkle says what's new.",
+      "ms": 2654,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "lit"
+      ],
+      "text": "Now we light the fire!",
+      "voice": "saltaunty",
+      "key": "nan.salt.lit",
+      "part": "nan › salt",
+      "when": "Bo Kluea's salt wells (salt/): the salt aunty (a pony) and Daddy react, Sparkle says what's new.",
+      "ms": 1917,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "white"
+      ],
+      "text": "Look! White salt!",
+      "voice": "saltaunty",
+      "key": "nan.salt.white",
+      "part": "nan › salt",
+      "when": "Bo Kluea's salt wells (salt/): the salt aunty (a pony) and Daddy react, Sparkle says what's new.",
+      "ms": 1758,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "bags"
+      ],
+      "text": "Salt for everyone!",
+      "voice": "saltaunty",
+      "key": "nan.salt.bags",
+      "part": "nan › salt",
+      "when": "Bo Kluea's salt wells (salt/): the salt aunty (a pony) and Daddy react, Sparkle says what's new.",
+      "ms": 1766,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "tap",
+        "0"
+      ],
+      "text": "Hee hee! Taste it!",
+      "voice": "saltaunty",
+      "key": "nan.salt.tap.0",
+      "part": "nan › salt › tap",
+      "when": "Bo Kluea's salt wells (salt/): the salt aunty (a pony) and Daddy react, Sparkle says what's new.",
+      "ms": 1985,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "tap",
+        "1"
+      ],
+      "text": "Strong girl!",
+      "voice": "saltaunty",
+      "key": "nan.salt.tap.1",
+      "part": "nan › salt › tap",
+      "when": "",
+      "ms": 1210,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "tap",
+        "2"
+      ],
+      "text": "Hot, hot fire!",
+      "voice": "saltaunty",
+      "key": "nan.salt.tap.2",
+      "part": "nan › salt › tap",
+      "when": "Tap a dancer, Mommy, Daddy (each in turn).",
+      "ms": 2207,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "foot"
+      ],
+      "text": "Ow! A salty foot!",
+      "voice": "nick",
+      "key": "nan.salt.foot",
+      "part": "nan › salt",
+      "when": "",
+      "ms": 2044,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "salty"
+      ],
+      "text": "Too salty? Ha ha!",
+      "voice": "nick",
+      "key": "nan.salt.salty",
+      "part": "nan › salt",
+      "when": "",
+      "ms": 1836,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "dad",
+        "0"
+      ],
+      "text": "Look at that steam!",
+      "voice": "nick",
+      "key": "nan.salt.dad.0",
+      "part": "nan › salt › dad",
+      "when": "",
+      "ms": 1392,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "dad",
+        "1"
+      ],
+      "text": "Salt from a well!",
+      "voice": "nick",
+      "key": "nan.salt.dad.1",
+      "part": "nan › salt › dad",
+      "when": "",
+      "ms": 1255,
+      "flags": []
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "kind": "table-read",
+  "place": "china",
+  "group": "hotpot.story",
+  "title": "China › Hotpot › Story",
+  "intro": "",
+  "page": "china-hotpot-story.html",
+  "audio": null,
+  "lines": 1,
+  "seconds": 3,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "hotpot.story.0",
+      "text": "Hotpot time! Everybody cooks together!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Hotpot time, Kaylee! Everybody cooks together!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "hotpot",
+        "story",
+        "0"
+      ],
+      "text": "Hotpot time! Everybody cooks together!",
+      "voice": "nainai",
+      "key": "hotpot.story.0",
+      "part": "hotpot › story",
+      "when": "🍲 Hotpot Night (activities/hotpot). Owner: the hotpot build.",
+      "ms": 2760,
+      "flags": [
+        "changed"
+      ],
+      "was": "Hotpot time, Kaylee! Everybody cooks together!"
+    }
+  ]
+}

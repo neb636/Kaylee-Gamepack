@@ -1,0 +1,553 @@
+{
+  "kind": "table-read",
+  "place": "peru",
+  "group": "canyon",
+  "title": "Peru › Canyon",
+  "intro": "---- 3. Coco's Canyon Glide (Colca Canyon: condors soar on warm air) ----",
+  "page": "peru-canyon.html",
+  "audio": null,
+  "lines": 33,
+  "seconds": 76,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "canyon.story.0",
+      "text": "My chick Pluma is scared to fly.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canyon.upWeGo",
+      "text": "Ahh, warm air! Up we go!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canyon.lead",
+      "text": "Lead Pluma to the shiny circles!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canyon.sunMoved",
+      "text": "The sun moved! Find the new warm air!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canyon.solo",
+      "text": "Now you fly Pluma!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Now you fly Pluma, Kaylee!"
+    },
+    {
+      "key": "canyon.bigSwirl",
+      "text": "Fly Pluma into the big swirl!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canyon.lookMe",
+      "text": "Look at me!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Look at me, Kaylee!"
+    },
+    {
+      "key": "canyon.proud",
+      "text": "My Pluma can fly! Gracias!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "My Pluma can fly! Gracias, Kaylee!"
+    },
+    {
+      "key": "canyon.facts.1",
+      "text": "Condor wings are wider than a grown-up is tall!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canyon.facts.3",
+      "text": "The sun warms the air, and warm air rises!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "canyon",
+        "story",
+        "0"
+      ],
+      "text": "My chick Pluma is scared to fly.",
+      "voice": "coco",
+      "key": "canyon.story.0",
+      "part": "canyon › story",
+      "when": "",
+      "ms": 3317,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canyon",
+        "grab"
+      ],
+      "text": "Grab Coco and show her how!",
+      "voice": "sparkle",
+      "key": "canyon.grab",
+      "part": "canyon",
+      "when": "",
+      "ms": 2542,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "warm"
+      ],
+      "text": "Fly into the warm air!",
+      "voice": "sparkle",
+      "key": "canyon.warm",
+      "part": "canyon",
+      "when": "",
+      "ms": 1895,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "upWeGo"
+      ],
+      "text": "Ahh, warm air! Up we go!",
+      "voice": "coco",
+      "key": "canyon.upWeGo",
+      "part": "canyon",
+      "when": "",
+      "ms": 3716,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canyon",
+        "needWarm"
+      ],
+      "text": "I need warm air to go up!",
+      "voice": "coco",
+      "key": "canyon.needWarm",
+      "part": "canyon",
+      "when": "",
+      "ms": 2788,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "whoosh"
+      ],
+      "text": "Whoooosh!",
+      "voice": "coco",
+      "key": "canyon.whoosh",
+      "part": "canyon",
+      "when": "",
+      "ms": 1137,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "sneeze"
+      ],
+      "text": "Achoo!",
+      "voice": "coco",
+      "key": "canyon.sneeze",
+      "part": "canyon",
+      "when": "",
+      "ms": 674,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "scared"
+      ],
+      "text": "It's so high!",
+      "voice": "pluma",
+      "key": "canyon.scared",
+      "part": "canyon",
+      "when": "",
+      "ms": 1493,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "callPluma"
+      ],
+      "text": "Come on, Pluma! Fly with me!",
+      "voice": "coco",
+      "key": "canyon.callPluma",
+      "part": "canyon",
+      "when": "",
+      "ms": 2941,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "pTry"
+      ],
+      "text": "I'll try! Here I come!",
+      "voice": "pluma",
+      "key": "canyon.pTry",
+      "part": "canyon",
+      "when": "",
+      "ms": 2115,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "lead"
+      ],
+      "text": "Lead Pluma to the shiny circles!",
+      "voice": "sparkle",
+      "key": "canyon.lead",
+      "part": "canyon",
+      "when": "",
+      "ms": 3555,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canyon",
+        "wait"
+      ],
+      "text": "Wait for me!",
+      "voice": "pluma",
+      "key": "canyon.wait",
+      "part": "canyon",
+      "when": "",
+      "ms": 996,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "wheee"
+      ],
+      "text": "Wheee!",
+      "voice": "pluma",
+      "key": "canyon.wheee",
+      "part": "canyon",
+      "when": "",
+      "ms": 973,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "dizzy"
+      ],
+      "text": "I'm dizzy!",
+      "voice": "pluma",
+      "key": "canyon.dizzy",
+      "part": "canyon",
+      "when": "",
+      "ms": 970,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "falls"
+      ],
+      "text": "Ooh, a waterfall!",
+      "voice": "pluma",
+      "key": "canyon.falls",
+      "part": "canyon",
+      "when": "",
+      "ms": 2883,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "condors"
+      ],
+      "text": "Hello, friends!",
+      "voice": "coco",
+      "key": "canyon.condors",
+      "part": "canyon",
+      "when": "",
+      "ms": 1130,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "lookout"
+      ],
+      "text": "People are waving!",
+      "voice": "pluma",
+      "key": "canyon.lookout",
+      "part": "canyon",
+      "when": "",
+      "ms": 1507,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "smile"
+      ],
+      "text": "Smile for the photo!",
+      "voice": "coco",
+      "key": "canyon.smile",
+      "part": "canyon",
+      "when": "",
+      "ms": 1549,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "sunMoved"
+      ],
+      "text": "The sun moved! Find the new warm air!",
+      "voice": "sparkle",
+      "key": "canyon.sunMoved",
+      "part": "canyon",
+      "when": "",
+      "ms": 3318,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canyon",
+        "top"
+      ],
+      "text": "Fly to the very top!",
+      "voice": "sparkle",
+      "key": "canyon.top",
+      "part": "canyon",
+      "when": "",
+      "ms": 1731,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "alone"
+      ],
+      "text": "I can fly by myself!",
+      "voice": "pluma",
+      "key": "canyon.alone",
+      "part": "canyon",
+      "when": "",
+      "ms": 2131,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "solo"
+      ],
+      "text": "Now you fly Pluma!",
+      "voice": "sparkle",
+      "key": "canyon.solo",
+      "part": "canyon",
+      "when": "",
+      "ms": 3192,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Now you fly Pluma, Kaylee!"
+    },
+    {
+      "path": [
+        "canyon",
+        "bigSwirl"
+      ],
+      "text": "Fly Pluma into the big swirl!",
+      "voice": "sparkle",
+      "key": "canyon.bigSwirl",
+      "part": "canyon",
+      "when": "",
+      "ms": 3447,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canyon",
+        "lookMe"
+      ],
+      "text": "Look at me!",
+      "voice": "pluma",
+      "key": "canyon.lookMe",
+      "part": "canyon",
+      "when": "",
+      "ms": 1200,
+      "flags": [
+        "changed"
+      ],
+      "was": "Look at me, Kaylee!"
+    },
+    {
+      "path": [
+        "canyon",
+        "proud"
+      ],
+      "text": "My Pluma can fly! Gracias!",
+      "voice": "coco",
+      "key": "canyon.proud",
+      "part": "canyon",
+      "when": "",
+      "ms": 3600,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "My Pluma can fly! Gracias, Kaylee!"
+    },
+    {
+      "path": [
+        "canyon",
+        "photo"
+      ],
+      "text": "Click! A picture for Luna's journal!",
+      "voice": "sparkle",
+      "key": "canyon.photo",
+      "part": "canyon",
+      "when": "",
+      "ms": 2702,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "nestTap"
+      ],
+      "text": "Hi, Dad!",
+      "voice": "pluma",
+      "key": "canyon.nestTap",
+      "part": "canyon",
+      "when": "",
+      "ms": 981,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "idle",
+        "grab"
+      ],
+      "text": "Grab Coco and fly!",
+      "voice": "sparkle",
+      "key": "canyon.idle.grab",
+      "part": "canyon › idle",
+      "when": "",
+      "ms": 2304,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "idle",
+        "places"
+      ],
+      "text": "Fly to a shiny circle!",
+      "voice": "sparkle",
+      "key": "canyon.idle.places",
+      "part": "canyon › idle",
+      "when": "",
+      "ms": 1955,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "facts",
+        "0"
+      ],
+      "text": "Condors hardly flap their wings!",
+      "voice": "sparkle",
+      "key": "canyon.facts.0",
+      "part": "canyon › facts",
+      "when": "",
+      "ms": 2831,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "facts",
+        "1"
+      ],
+      "text": "Condor wings are wider than a grown-up is tall!",
+      "voice": "sparkle",
+      "key": "canyon.facts.1",
+      "part": "canyon › facts",
+      "when": "",
+      "ms": 3399,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canyon",
+        "facts",
+        "2"
+      ],
+      "text": "This canyon is super deep!",
+      "voice": "sparkle",
+      "key": "canyon.facts.2",
+      "part": "canyon › facts",
+      "when": "",
+      "ms": 2822,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "facts",
+        "3"
+      ],
+      "text": "The sun warms the air, and warm air rises!",
+      "voice": "sparkle",
+      "key": "canyon.facts.3",
+      "part": "canyon › facts",
+      "when": "",
+      "ms": 4650,
+      "flags": [
+        "long"
+      ]
+    }
+  ]
+}

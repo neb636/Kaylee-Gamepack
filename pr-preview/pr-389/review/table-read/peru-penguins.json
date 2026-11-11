@@ -1,0 +1,841 @@
+{
+  "kind": "table-read",
+  "place": "peru",
+  "group": "penguins",
+  "title": "Peru › Penguins",
+  "intro": "---- 2. Pepa's Penguin Cliff (the desert coast at Paracas) ----",
+  "page": "peru-penguins.html",
+  "audio": null,
+  "lines": 49,
+  "seconds": 93,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "penguins.pull.touch",
+      "text": "Pull a penguin back, then let go!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "penguins.pull.mouse",
+      "text": "Click a penguin, pull it back, then let go!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "penguins.loboTap.2",
+      "text": "Hola!",
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Hola, Kaylee!"
+    },
+    {
+      "key": "penguins.feed",
+      "text": "Feed my chicks!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Feed my chicks, Kaylee!"
+    },
+    {
+      "key": "penguins.yum.2",
+      "text": "Gracias!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "penguins.egg",
+      "text": "Look! The egg is wiggling!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Kaylee, look! The egg is wiggling!"
+    },
+    {
+      "key": "penguins.swimGo",
+      "text": "The chicks are ready to swim! Pull them back!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "penguins.thanks",
+      "text": "Gracias!",
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Gracias, Kaylee!"
+    },
+    {
+      "key": "penguins.pepaTap.0",
+      "text": "Hola!",
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Hola, Kaylee!"
+    },
+    {
+      "key": "penguins.facts.1",
+      "text": "The ocean here is cold and full of fish!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "penguins.idle.launch.touch",
+      "text": "Pull a penguin back, then let go!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "penguins.idle.launch.mouse",
+      "text": "Click a penguin, pull it back, then let go!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "penguins.idle.swim.touch",
+      "text": "Pull a chick back, then let go!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "penguins.idle.swim.mouse",
+      "text": "Click a chick, pull it back, then let go!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "penguins",
+        "story",
+        "0"
+      ],
+      "text": "Hola! My chicks are hungry!",
+      "voice": "pepa",
+      "key": "penguins.story.0",
+      "part": "penguins › story",
+      "when": "",
+      "ms": 2346,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "pull",
+        "touch"
+      ],
+      "text": "Pull a penguin back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.pull.touch",
+      "part": "penguins › pull",
+      "when": "",
+      "ms": 2896,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "pull",
+        "mouse"
+      ],
+      "text": "Click a penguin, pull it back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.pull.mouse",
+      "part": "penguins › pull",
+      "when": "",
+      "ms": 3384,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "wheee",
+        "0"
+      ],
+      "text": "Wheee!",
+      "voice": "pingo",
+      "key": "penguins.wheee.0",
+      "part": "penguins › wheee",
+      "when": "---- 3. Coco's Canyon Glide (Colca Canyon: condors soar on warm air) ----",
+      "ms": 1436,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "wheee",
+        "1"
+      ],
+      "text": "Splash!",
+      "voice": "pingo",
+      "key": "penguins.wheee.1",
+      "part": "penguins › wheee",
+      "when": "",
+      "ms": 1058,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "wheee",
+        "2"
+      ],
+      "text": "Yippee!",
+      "voice": "pingo",
+      "key": "penguins.wheee.2",
+      "part": "penguins › wheee",
+      "when": "",
+      "ms": 634,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "whoa"
+      ],
+      "text": "Whoa!",
+      "voice": "pingo",
+      "key": "penguins.whoa",
+      "part": "penguins",
+      "when": "",
+      "ms": 580,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "blip"
+      ],
+      "text": "A teeny splash!",
+      "voice": "pingo",
+      "key": "penguins.blip",
+      "part": "penguins",
+      "when": "",
+      "ms": 1755,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "sock"
+      ],
+      "text": "I found a sock!",
+      "voice": "pingo",
+      "key": "penguins.sock",
+      "part": "penguins",
+      "when": "",
+      "ms": 2151,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "lobo",
+        "0"
+      ],
+      "text": "Hey! You splashed me!",
+      "voice": "lobo",
+      "key": "penguins.lobo.0",
+      "part": "penguins › lobo",
+      "when": "",
+      "ms": 2350,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "lobo",
+        "1"
+      ],
+      "text": "Do it again!",
+      "voice": "lobo",
+      "key": "penguins.lobo.1",
+      "part": "penguins › lobo",
+      "when": "",
+      "ms": 950,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "lobo",
+        "2"
+      ],
+      "text": "Ha ha! Seaweed hat!",
+      "voice": "lobo",
+      "key": "penguins.lobo.2",
+      "part": "penguins › lobo",
+      "when": "",
+      "ms": 2455,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "loboTap",
+        "0"
+      ],
+      "text": "Arf arf!",
+      "voice": "lobo",
+      "key": "penguins.loboTap.0",
+      "part": "penguins › loboTap",
+      "when": "",
+      "ms": 997,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "loboTap",
+        "1"
+      ],
+      "text": "I love splashes!",
+      "voice": "lobo",
+      "key": "penguins.loboTap.1",
+      "part": "penguins › loboTap",
+      "when": "",
+      "ms": 2155,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "loboTap",
+        "2"
+      ],
+      "text": "Hola!",
+      "voice": "lobo",
+      "key": "penguins.loboTap.2",
+      "part": "penguins › loboTap",
+      "when": "",
+      "ms": 888,
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Hola, Kaylee!"
+    },
+    {
+      "path": [
+        "penguins",
+        "fishGo"
+      ],
+      "text": "Catch fish for the chicks!",
+      "voice": "sparkle",
+      "key": "penguins.fishGo",
+      "part": "penguins",
+      "when": "",
+      "ms": 1754,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "aim"
+      ],
+      "text": "Land in the gold circle!",
+      "voice": "sparkle",
+      "key": "penguins.aim",
+      "part": "penguins",
+      "when": "",
+      "ms": 1831,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "got",
+        "0"
+      ],
+      "text": "Got one!",
+      "voice": "pingo",
+      "key": "penguins.got.0",
+      "part": "penguins › got",
+      "when": "",
+      "ms": 870,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "got",
+        "1"
+      ],
+      "text": "A fish!",
+      "voice": "pingo",
+      "key": "penguins.got.1",
+      "part": "penguins › got",
+      "when": "",
+      "ms": 773,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "orders",
+        "0"
+      ],
+      "text": "One fish, please!",
+      "voice": "pepa",
+      "key": "penguins.orders.0",
+      "part": "penguins › orders",
+      "when": "",
+      "ms": 1736,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "orders",
+        "1"
+      ],
+      "text": "Two fish, please!",
+      "voice": "pepa",
+      "key": "penguins.orders.1",
+      "part": "penguins › orders",
+      "when": "",
+      "ms": 1667,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "orders",
+        "2"
+      ],
+      "text": "Three fish, please!",
+      "voice": "pepa",
+      "key": "penguins.orders.2",
+      "part": "penguins › orders",
+      "when": "",
+      "ms": 1904,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "count",
+        "0"
+      ],
+      "text": "One!",
+      "voice": "sparkle",
+      "key": "penguins.count.0",
+      "part": "penguins › count",
+      "when": "",
+      "ms": 645,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "count",
+        "1"
+      ],
+      "text": "Two!",
+      "voice": "sparkle",
+      "key": "penguins.count.1",
+      "part": "penguins › count",
+      "when": "",
+      "ms": 541,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "count",
+        "2"
+      ],
+      "text": "Three!",
+      "voice": "sparkle",
+      "key": "penguins.count.2",
+      "part": "penguins › count",
+      "when": "",
+      "ms": 722,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "feed"
+      ],
+      "text": "Feed my chicks!",
+      "voice": "pepa",
+      "key": "penguins.feed",
+      "part": "penguins",
+      "when": "",
+      "ms": 1272,
+      "flags": [
+        "changed"
+      ],
+      "was": "Feed my chicks, Kaylee!"
+    },
+    {
+      "path": [
+        "penguins",
+        "yum",
+        "0"
+      ],
+      "text": "Yummy!",
+      "voice": "pepa",
+      "key": "penguins.yum.0",
+      "part": "penguins › yum",
+      "when": "",
+      "ms": 720,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "yum",
+        "1"
+      ],
+      "text": "So round and fluffy!",
+      "voice": "pepa",
+      "key": "penguins.yum.1",
+      "part": "penguins › yum",
+      "when": "",
+      "ms": 2061,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "yum",
+        "2"
+      ],
+      "text": "Gracias!",
+      "voice": "pepa",
+      "key": "penguins.yum.2",
+      "part": "penguins › yum",
+      "when": "",
+      "ms": 894,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "egg"
+      ],
+      "text": "Look! The egg is wiggling!",
+      "voice": "sparkle",
+      "key": "penguins.egg",
+      "part": "penguins",
+      "when": "",
+      "ms": 2736,
+      "flags": [
+        "changed"
+      ],
+      "was": "Kaylee, look! The egg is wiggling!"
+    },
+    {
+      "path": [
+        "penguins",
+        "hatch"
+      ],
+      "text": "A new baby!",
+      "voice": "pepa",
+      "key": "penguins.hatch",
+      "part": "penguins",
+      "when": "",
+      "ms": 1442,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "pelican"
+      ],
+      "text": "A pelican wants fish too!",
+      "voice": "sparkle",
+      "key": "penguins.pelican",
+      "part": "penguins",
+      "when": "",
+      "ms": 2661,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "swimGo"
+      ],
+      "text": "The chicks are ready to swim! Pull them back!",
+      "voice": "sparkle",
+      "key": "penguins.swimGo",
+      "part": "penguins",
+      "when": "",
+      "ms": 3331,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "firstSwim"
+      ],
+      "text": "Their very first swim!",
+      "voice": "pepa",
+      "key": "penguins.firstSwim",
+      "part": "penguins",
+      "when": "",
+      "ms": 1699,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "thanks"
+      ],
+      "text": "Gracias!",
+      "voice": "pepa",
+      "key": "penguins.thanks",
+      "part": "penguins",
+      "when": "",
+      "ms": 894,
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Gracias, Kaylee!"
+    },
+    {
+      "path": [
+        "penguins",
+        "photo"
+      ],
+      "text": "Click! A picture for Luna's journal!",
+      "voice": "sparkle",
+      "key": "penguins.photo",
+      "part": "penguins",
+      "when": "---- 3. Coco's Canyon Glide (Colca Canyon: condors soar on warm air) ----",
+      "ms": 2702,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "pepaTap",
+        "0"
+      ],
+      "text": "Hola!",
+      "voice": "pepa",
+      "key": "penguins.pepaTap.0",
+      "part": "penguins › pepaTap",
+      "when": "",
+      "ms": 576,
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Hola, Kaylee!"
+    },
+    {
+      "path": [
+        "penguins",
+        "pepaTap",
+        "1"
+      ],
+      "text": "My babies love fish!",
+      "voice": "pepa",
+      "key": "penguins.pepaTap.1",
+      "part": "penguins › pepaTap",
+      "when": "",
+      "ms": 2045,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "tern"
+      ],
+      "text": "These birds have white mustaches!",
+      "voice": "sparkle",
+      "key": "penguins.tern",
+      "part": "penguins",
+      "when": "",
+      "ms": 2846,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "facts",
+        "0"
+      ],
+      "text": "Peru has penguins!",
+      "voice": "sparkle",
+      "key": "penguins.facts.0",
+      "part": "penguins › facts",
+      "when": "",
+      "ms": 1809,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "facts",
+        "1"
+      ],
+      "text": "The ocean here is cold and full of fish!",
+      "voice": "sparkle",
+      "key": "penguins.facts.1",
+      "part": "penguins › facts",
+      "when": "",
+      "ms": 3643,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "facts",
+        "2"
+      ],
+      "text": "Penguins fly underwater with their wings!",
+      "voice": "sparkle",
+      "key": "penguins.facts.2",
+      "part": "penguins › facts",
+      "when": "",
+      "ms": 2692,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "launch",
+        "touch"
+      ],
+      "text": "Pull a penguin back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.idle.launch.touch",
+      "part": "penguins › idle › launch",
+      "when": "",
+      "ms": 2896,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "launch",
+        "mouse"
+      ],
+      "text": "Click a penguin, pull it back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.idle.launch.mouse",
+      "part": "penguins › idle › launch",
+      "when": "",
+      "ms": 3384,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "fish"
+      ],
+      "text": "Jump onto the fish to catch one!",
+      "voice": "sparkle",
+      "key": "penguins.idle.fish",
+      "part": "penguins › idle",
+      "when": "",
+      "ms": 2654,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "feed",
+        "touch"
+      ],
+      "text": "Tap a chick to feed it!",
+      "voice": "sparkle",
+      "key": "penguins.idle.feed.touch",
+      "part": "penguins › idle › feed",
+      "when": "",
+      "ms": 1856,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "feed",
+        "mouse"
+      ],
+      "text": "Click a chick to feed it!",
+      "voice": "sparkle",
+      "key": "penguins.idle.feed.mouse",
+      "part": "penguins › idle › feed",
+      "when": "",
+      "ms": 2184,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "swim",
+        "touch"
+      ],
+      "text": "Pull a chick back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.idle.swim.touch",
+      "part": "penguins › idle › swim",
+      "when": "",
+      "ms": 4138,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "swim",
+        "mouse"
+      ],
+      "text": "Click a chick, pull it back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.idle.swim.mouse",
+      "part": "penguins › idle › swim",
+      "when": "",
+      "ms": 3720,
+      "flags": [
+        "long"
+      ]
+    }
+  ]
+}

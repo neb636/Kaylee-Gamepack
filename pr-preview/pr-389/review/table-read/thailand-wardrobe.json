@@ -1,0 +1,2421 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "wardrobe",
+  "title": "Thailand › Wardrobe",
+  "intro": "Kaylee's wardrobe in her room (activities/hub/wardrobe/, plan: thailand/wardrobe.md). Sparkle says what to do the first time and the name of each thing the first time she touches it; the family notice her new look in their own voices (activities/hub/notice.ts).",
+  "page": "thailand-wardrobe.html",
+  "audio": null,
+  "lines": 131,
+  "seconds": 253,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "wardrobe.open",
+      "text": "Your wardrobe! Dress up!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Your wardrobe! Dress up, Kaylee!"
+    },
+    {
+      "key": "wardrobe.drawer",
+      "text": "Drag it onto you!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Drag it onto you, Kaylee!"
+    },
+    {
+      "key": "wardrobe.photo",
+      "text": "Click! A picture of your look!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Click! A picture of your look, Kaylee!"
+    },
+    {
+      "key": "wardrobe.look",
+      "text": "Your whole look! Wow!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Your whole look! Wow, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.ji.head",
+      "text": "Ooh, what a pretty hat!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, what a pretty hat, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.ji.face",
+      "text": "Ooh, fancy glasses!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, fancy glasses, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.ji.back",
+      "text": "Ooh, so pretty!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, so pretty, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.ji.outfit",
+      "text": "Ooh, what a pretty outfit!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, what a pretty outfit, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.ji.feet",
+      "text": "Ooh, nice shoes!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, nice shoes, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.ji.paint",
+      "text": "Ooh, new colors!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, new colors, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.nick.face",
+      "text": "Cool shades!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Cool shades, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.nick.back",
+      "text": "Whoa, cool!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Whoa, cool, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.nick.feet",
+      "text": "Cool shoes!",
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Cool shoes, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.agong.head",
+      "text": "Ho ho! So pretty!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "wardrobe.notice.agong.back",
+      "text": "Ho ho! So pretty!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "wardrobe.notice.agong.outfit",
+      "text": "Ho ho! So pretty!",
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Ho ho! So pretty, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.agong.paint",
+      "text": "Ho ho! New colors!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "wardrobe.notice.jum.head",
+      "text": "Oh! What a pretty hat!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Oh! What a pretty hat, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.jum.face",
+      "text": "Oh! So fancy!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Oh! So fancy, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.jum.back",
+      "text": "Oh! So pretty!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Oh! So pretty, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.jum.feet",
+      "text": "Oh! Nice shoes!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Oh! Nice shoes, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.joy.back",
+      "text": "Wow! So cute!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Wow! So cute, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.bird.head",
+      "text": "Nice hat!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Nice hat, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.bird.face",
+      "text": "Nice glasses!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Nice glasses, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.bird.back",
+      "text": "Ho ho! Nice!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Ho ho! Nice, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.bird.outfit",
+      "text": "Nice outfit!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Nice outfit, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.bird.feet",
+      "text": "Nice shoes!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Nice shoes, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.bird.paint",
+      "text": "Ho ho! New colors!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "wardrobe.notice.gan.feet",
+      "text": "Nice shoes... one sec.",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "wardrobe.notice.bb.head",
+      "text": "So cute... one sec.",
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "So cute, Kaylee... one sec."
+    },
+    {
+      "key": "wardrobe.notice.bb.back",
+      "text": "So cute... one sec.",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "wardrobe.notice.bb.feet",
+      "text": "Nice shoes... one sec.",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "wardrobe.notice.ja.head",
+      "text": "So pretty!",
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "So pretty, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.ja.face",
+      "text": "So fancy!",
+      "flags": [
+        "changed"
+      ],
+      "was": "So fancy, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.ja.back",
+      "text": "So pretty!",
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "So pretty, Kaylee!"
+    },
+    {
+      "key": "wardrobe.notice.sri.face",
+      "text": "Lovely glasses! Say cheese!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "wardrobe.notice.putto.feet",
+      "text": "Cool shoes!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "wardrobe.noticeItem.ji.crown",
+      "text": "Ooh, a crown!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, a crown, Kaylee!"
+    },
+    {
+      "key": "wardrobe.noticeItem.ji.fairy",
+      "text": "Ooh, you can fly!",
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Ooh, Kaylee, you can fly!"
+    },
+    {
+      "key": "wardrobe.noticeItem.ji.wings",
+      "text": "Ooh, you can fly!",
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Ooh, Kaylee, you can fly!"
+    },
+    {
+      "key": "wardrobe.noticeItem.ji.cape",
+      "text": "Ooh, a princess cape!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, a princess cape, Kaylee!"
+    },
+    {
+      "key": "wardrobe.noticeItem.ji.backpack",
+      "text": "Ooh, a bunny backpack!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, a bunny backpack, Kaylee!"
+    },
+    {
+      "key": "wardrobe.noticeItem.ji.overalls",
+      "text": "Ooh, cute overalls!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, cute overalls, Kaylee!"
+    },
+    {
+      "key": "wardrobe.noticeItem.nick.fairy",
+      "text": "Cool wings!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "wardrobe.noticeItem.nick.wings",
+      "text": "Cool wings!",
+      "flags": [
+        "twice"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "wardrobe",
+        "open"
+      ],
+      "text": "Your wardrobe! Dress up!",
+      "voice": "sparkle",
+      "key": "wardrobe.open",
+      "part": "wardrobe",
+      "when": "",
+      "ms": 2808,
+      "flags": [
+        "changed"
+      ],
+      "was": "Your wardrobe! Dress up, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "drawer"
+      ],
+      "text": "Drag it onto you!",
+      "voice": "sparkle",
+      "key": "wardrobe.drawer",
+      "part": "wardrobe",
+      "when": "The first drawer she pulls out (the paint drawer says its own).",
+      "ms": 2160,
+      "flags": [
+        "changed"
+      ],
+      "was": "Drag it onto you, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "paint"
+      ],
+      "text": "Hair, dress or fur!",
+      "voice": "sparkle",
+      "key": "wardrobe.paint",
+      "part": "wardrobe",
+      "when": "",
+      "ms": 2474,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "photo"
+      ],
+      "text": "Click! A picture of your look!",
+      "voice": "sparkle",
+      "key": "wardrobe.photo",
+      "part": "wardrobe",
+      "when": "The mirror takes a picture of her look and pins it to the door; a picture dropped on her puts the whole look on.",
+      "ms": 3024,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Click! A picture of your look, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "look"
+      ],
+      "text": "Your whole look! Wow!",
+      "voice": "sparkle",
+      "key": "wardrobe.look",
+      "part": "wardrobe",
+      "when": "",
+      "ms": 2376,
+      "flags": [
+        "changed"
+      ],
+      "was": "Your whole look! Wow, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "wand",
+        "0"
+      ],
+      "text": "Ta da! Magic!",
+      "voice": "sparkle",
+      "key": "wardrobe.wand.0",
+      "part": "wardrobe › wand",
+      "when": "Sparkle's wand: a surprise look, a different one each tap (in turn).",
+      "ms": 1752,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "wand",
+        "1"
+      ],
+      "text": "Sparkle magic!",
+      "voice": "sparkle",
+      "key": "wardrobe.wand.1",
+      "part": "wardrobe › wand",
+      "when": "",
+      "ms": 1778,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "wand",
+        "2"
+      ],
+      "text": "Ooh, a surprise!",
+      "voice": "sparkle",
+      "key": "wardrobe.wand.2",
+      "part": "wardrobe › wand",
+      "when": "",
+      "ms": 2794,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "wand",
+        "3"
+      ],
+      "text": "Whoosh! A new look!",
+      "voice": "sparkle",
+      "key": "wardrobe.wand.3",
+      "part": "wardrobe › wand",
+      "when": "",
+      "ms": 2222,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "silly",
+        "shoe"
+      ],
+      "text": "A shoe on your head! Hee hee!",
+      "voice": "sparkle",
+      "key": "wardrobe.silly.shoe",
+      "part": "wardrobe › silly",
+      "when": "Silly, never wrong.",
+      "ms": 2673,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "silly",
+        "glasses"
+      ],
+      "text": "Glasses on your tail! Hee hee!",
+      "voice": "sparkle",
+      "key": "wardrobe.silly.glasses",
+      "part": "wardrobe › silly",
+      "when": "",
+      "ms": 2557,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "silly",
+        "mirror"
+      ],
+      "text": "Splat on the mirror! Hee hee!",
+      "voice": "sparkle",
+      "key": "wardrobe.silly.mirror",
+      "part": "wardrobe › silly",
+      "when": "",
+      "ms": 2314,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "crown"
+      ],
+      "text": "A crown!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.crown",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 954,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "tiara"
+      ],
+      "text": "A tiara!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.tiara",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1422,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "orchid"
+      ],
+      "text": "An orchid crown!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.orchid",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1711,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "bow"
+      ],
+      "text": "A big bow!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.bow",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1511,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "bunny"
+      ],
+      "text": "Bunny ears!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.bunny",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1118,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "kitty"
+      ],
+      "text": "Cat ears!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.kitty",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1189,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "cap"
+      ],
+      "text": "A baseball cap!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.cap",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1554,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "cowboy"
+      ],
+      "text": "A cowboy hat!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.cowboy",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1424,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "bucket"
+      ],
+      "text": "A bucket hat!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.bucket",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1274,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "sunhat"
+      ],
+      "text": "A sun hat!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.sunhat",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1323,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "hearts"
+      ],
+      "text": "Heart sunglasses!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.hearts",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1858,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "stars"
+      ],
+      "text": "Star sunglasses!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.stars",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1611,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "round"
+      ],
+      "text": "Round glasses!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.round",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1795,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "fairy"
+      ],
+      "text": "Fairy wings!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.fairy",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1203,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "wings"
+      ],
+      "text": "Unicorn wings!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.wings",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1468,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "cape"
+      ],
+      "text": "A princess cape!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.cape",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1562,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "backpack"
+      ],
+      "text": "A bunny backpack!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.backpack",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1587,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "tutu"
+      ],
+      "text": "A twirly tutu!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.tutu",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 2378,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "gown"
+      ],
+      "text": "A princess gown!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.gown",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1244,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "overalls"
+      ],
+      "text": "Overalls!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.overalls",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1036,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "chut-thai"
+      ],
+      "text": "Chut thai, a Thai dress!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.chut-thai",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 2779,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "sneakers"
+      ],
+      "text": "Light-up sneakers!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.sneakers",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1318,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "party"
+      ],
+      "text": "Party shoes!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.party",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1112,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "boots"
+      ],
+      "text": "Rain boots!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.boots",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1186,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "sandals"
+      ],
+      "text": "Sandals!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.sandals",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1127,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "pot-pink"
+      ],
+      "text": "Pink paint!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.pot-pink",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1026,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "pot-lilac"
+      ],
+      "text": "Lilac paint!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.pot-lilac",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1670,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "pot-mint"
+      ],
+      "text": "Mint paint!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.pot-mint",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1290,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "pot-sky"
+      ],
+      "text": "Sky blue paint!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.pot-sky",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1458,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "pot-butter"
+      ],
+      "text": "Butter yellow paint!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.pot-butter",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1727,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "pot-peach"
+      ],
+      "text": "Peachy orange paint!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.pot-peach",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1411,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "pot-brown"
+      ],
+      "text": "Brown paint!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.pot-brown",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1250,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "names",
+        "pot-cream"
+      ],
+      "text": "Cream paint!",
+      "voice": "sparkle",
+      "key": "wardrobe.names.pot-cream",
+      "part": "wardrobe › names",
+      "when": "The first time she touches each thing (by item id; `pot-` and the color for the paint).",
+      "ms": 1170,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ji",
+        "head"
+      ],
+      "text": "Ooh, what a pretty hat!",
+      "voice": "ji",
+      "key": "wardrobe.notice.ji.head",
+      "part": "wardrobe › notice › ji",
+      "when": "The family notice her look the first time she walks up to them in it (hat, glasses, wings, outfit, shoes, paint), once per change. Mommy: a crown has its own line; Daddy: so do wings.",
+      "ms": 2664,
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, what a pretty hat, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ji",
+        "face"
+      ],
+      "text": "Ooh, fancy glasses!",
+      "voice": "ji",
+      "key": "wardrobe.notice.ji.face",
+      "part": "wardrobe › notice › ji",
+      "when": "",
+      "ms": 2712,
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, fancy glasses, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ji",
+        "back"
+      ],
+      "text": "Ooh, so pretty!",
+      "voice": "ji",
+      "key": "wardrobe.notice.ji.back",
+      "part": "wardrobe › notice › ji",
+      "when": "",
+      "ms": 2280,
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, so pretty, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ji",
+        "outfit"
+      ],
+      "text": "Ooh, what a pretty outfit!",
+      "voice": "ji",
+      "key": "wardrobe.notice.ji.outfit",
+      "part": "wardrobe › notice › ji",
+      "when": "",
+      "ms": 2544,
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, what a pretty outfit, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ji",
+        "feet"
+      ],
+      "text": "Ooh, nice shoes!",
+      "voice": "ji",
+      "key": "wardrobe.notice.ji.feet",
+      "part": "wardrobe › notice › ji",
+      "when": "",
+      "ms": 2304,
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, nice shoes, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ji",
+        "paint"
+      ],
+      "text": "Ooh, new colors!",
+      "voice": "ji",
+      "key": "wardrobe.notice.ji.paint",
+      "part": "wardrobe › notice › ji",
+      "when": "",
+      "ms": 2064,
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, new colors, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "nick",
+        "head"
+      ],
+      "text": "Wow, cool hat!",
+      "voice": "nick",
+      "key": "wardrobe.notice.nick.head",
+      "part": "wardrobe › notice › nick",
+      "when": "The family notice her look the first time she walks up to them in it (hat, glasses, wings, outfit, shoes, paint), once per change. Mommy: a crown has its own line; Daddy: so do wings.",
+      "ms": 2322,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "nick",
+        "face"
+      ],
+      "text": "Cool shades!",
+      "voice": "nick",
+      "key": "wardrobe.notice.nick.face",
+      "part": "wardrobe › notice › nick",
+      "when": "",
+      "ms": 1152,
+      "flags": [
+        "changed"
+      ],
+      "was": "Cool shades, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "nick",
+        "back"
+      ],
+      "text": "Whoa, cool!",
+      "voice": "nick",
+      "key": "wardrobe.notice.nick.back",
+      "part": "wardrobe › notice › nick",
+      "when": "",
+      "ms": 1896,
+      "flags": [
+        "changed"
+      ],
+      "was": "Whoa, cool, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "nick",
+        "outfit"
+      ],
+      "text": "Whoa, what an outfit!",
+      "voice": "nick",
+      "key": "wardrobe.notice.nick.outfit",
+      "part": "wardrobe › notice › nick",
+      "when": "",
+      "ms": 1602,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "nick",
+        "feet"
+      ],
+      "text": "Cool shoes!",
+      "voice": "nick",
+      "key": "wardrobe.notice.nick.feet",
+      "part": "wardrobe › notice › nick",
+      "when": "The family notice her look the first time she walks up to them in it (hat, glasses, wings, outfit, shoes, paint), once per change. Mommy: a crown has its own line; Daddy: so do wings.",
+      "ms": 1368,
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Cool shoes, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "nick",
+        "paint"
+      ],
+      "text": "Whoa, new colors!",
+      "voice": "nick",
+      "key": "wardrobe.notice.nick.paint",
+      "part": "wardrobe › notice › nick",
+      "when": "",
+      "ms": 1719,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "agong",
+        "head"
+      ],
+      "text": "Ho ho! So pretty!",
+      "voice": "agong",
+      "key": "wardrobe.notice.agong.head",
+      "part": "wardrobe › notice › agong",
+      "when": "",
+      "ms": 2160,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "agong",
+        "face"
+      ],
+      "text": "Ho ho! So fancy!",
+      "voice": "agong",
+      "key": "wardrobe.notice.agong.face",
+      "part": "wardrobe › notice › agong",
+      "when": "",
+      "ms": 2282,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "agong",
+        "back"
+      ],
+      "text": "Ho ho! So pretty!",
+      "voice": "agong",
+      "key": "wardrobe.notice.agong.back",
+      "part": "wardrobe › notice › agong",
+      "when": "",
+      "ms": 2160,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "agong",
+        "outfit"
+      ],
+      "text": "Ho ho! So pretty!",
+      "voice": "agong",
+      "key": "wardrobe.notice.agong.outfit",
+      "part": "wardrobe › notice › agong",
+      "when": "",
+      "ms": 2160,
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Ho ho! So pretty, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "agong",
+        "feet"
+      ],
+      "text": "Ho ho! Nice shoes!",
+      "voice": "agong",
+      "key": "wardrobe.notice.agong.feet",
+      "part": "wardrobe › notice › agong",
+      "when": "",
+      "ms": 2447,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "agong",
+        "paint"
+      ],
+      "text": "Ho ho! New colors!",
+      "voice": "agong",
+      "key": "wardrobe.notice.agong.paint",
+      "part": "wardrobe › notice › agong",
+      "when": "",
+      "ms": 2188,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "jum",
+        "head"
+      ],
+      "text": "Oh! What a pretty hat!",
+      "voice": "jum",
+      "key": "wardrobe.notice.jum.head",
+      "part": "wardrobe › notice › jum",
+      "when": "",
+      "ms": 2640,
+      "flags": [
+        "changed"
+      ],
+      "was": "Oh! What a pretty hat, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "jum",
+        "face"
+      ],
+      "text": "Oh! So fancy!",
+      "voice": "jum",
+      "key": "wardrobe.notice.jum.face",
+      "part": "wardrobe › notice › jum",
+      "when": "",
+      "ms": 2472,
+      "flags": [
+        "changed"
+      ],
+      "was": "Oh! So fancy, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "jum",
+        "back"
+      ],
+      "text": "Oh! So pretty!",
+      "voice": "jum",
+      "key": "wardrobe.notice.jum.back",
+      "part": "wardrobe › notice › jum",
+      "when": "",
+      "ms": 2640,
+      "flags": [
+        "changed"
+      ],
+      "was": "Oh! So pretty, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "jum",
+        "outfit"
+      ],
+      "text": "Oh! What a pretty outfit!",
+      "voice": "jum",
+      "key": "wardrobe.notice.jum.outfit",
+      "part": "wardrobe › notice › jum",
+      "when": "",
+      "ms": 2331,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "jum",
+        "feet"
+      ],
+      "text": "Oh! Nice shoes!",
+      "voice": "jum",
+      "key": "wardrobe.notice.jum.feet",
+      "part": "wardrobe › notice › jum",
+      "when": "",
+      "ms": 2160,
+      "flags": [
+        "changed"
+      ],
+      "was": "Oh! Nice shoes, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "jum",
+        "paint"
+      ],
+      "text": "Oh! I love the colors!",
+      "voice": "jum",
+      "key": "wardrobe.notice.jum.paint",
+      "part": "wardrobe › notice › jum",
+      "when": "",
+      "ms": 2900,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "joy",
+        "head"
+      ],
+      "text": "Wow! I love your hat!",
+      "voice": "joy",
+      "key": "wardrobe.notice.joy.head",
+      "part": "wardrobe › notice › joy",
+      "when": "",
+      "ms": 2186,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "joy",
+        "face"
+      ],
+      "text": "Wow! Fancy glasses!",
+      "voice": "joy",
+      "key": "wardrobe.notice.joy.face",
+      "part": "wardrobe › notice › joy",
+      "when": "",
+      "ms": 1923,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "joy",
+        "back"
+      ],
+      "text": "Wow! So cute!",
+      "voice": "joy",
+      "key": "wardrobe.notice.joy.back",
+      "part": "wardrobe › notice › joy",
+      "when": "",
+      "ms": 2352,
+      "flags": [
+        "changed"
+      ],
+      "was": "Wow! So cute, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "joy",
+        "outfit"
+      ],
+      "text": "Wow! What an outfit!",
+      "voice": "joy",
+      "key": "wardrobe.notice.joy.outfit",
+      "part": "wardrobe › notice › joy",
+      "when": "",
+      "ms": 2059,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "joy",
+        "feet"
+      ],
+      "text": "Wow! Cute shoes!",
+      "voice": "joy",
+      "key": "wardrobe.notice.joy.feet",
+      "part": "wardrobe › notice › joy",
+      "when": "",
+      "ms": 2752,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "joy",
+        "paint"
+      ],
+      "text": "Wow! New colors!",
+      "voice": "joy",
+      "key": "wardrobe.notice.joy.paint",
+      "part": "wardrobe › notice › joy",
+      "when": "",
+      "ms": 1934,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "bird",
+        "head"
+      ],
+      "text": "Nice hat!",
+      "voice": "bird",
+      "key": "wardrobe.notice.bird.head",
+      "part": "wardrobe › notice › bird",
+      "when": "",
+      "ms": 1104,
+      "flags": [
+        "changed"
+      ],
+      "was": "Nice hat, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "bird",
+        "face"
+      ],
+      "text": "Nice glasses!",
+      "voice": "bird",
+      "key": "wardrobe.notice.bird.face",
+      "part": "wardrobe › notice › bird",
+      "when": "",
+      "ms": 1392,
+      "flags": [
+        "changed"
+      ],
+      "was": "Nice glasses, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "bird",
+        "back"
+      ],
+      "text": "Ho ho! Nice!",
+      "voice": "bird",
+      "key": "wardrobe.notice.bird.back",
+      "part": "wardrobe › notice › bird",
+      "when": "",
+      "ms": 2256,
+      "flags": [
+        "changed"
+      ],
+      "was": "Ho ho! Nice, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "bird",
+        "outfit"
+      ],
+      "text": "Nice outfit!",
+      "voice": "bird",
+      "key": "wardrobe.notice.bird.outfit",
+      "part": "wardrobe › notice › bird",
+      "when": "",
+      "ms": 1368,
+      "flags": [
+        "changed"
+      ],
+      "was": "Nice outfit, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "bird",
+        "feet"
+      ],
+      "text": "Nice shoes!",
+      "voice": "bird",
+      "key": "wardrobe.notice.bird.feet",
+      "part": "wardrobe › notice › bird",
+      "when": "",
+      "ms": 1416,
+      "flags": [
+        "changed"
+      ],
+      "was": "Nice shoes, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "bird",
+        "paint"
+      ],
+      "text": "Ho ho! New colors!",
+      "voice": "bird",
+      "key": "wardrobe.notice.bird.paint",
+      "part": "wardrobe › notice › bird",
+      "when": "",
+      "ms": 2297,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "gan",
+        "head"
+      ],
+      "text": "Nice hat... one sec.",
+      "voice": "gan",
+      "key": "wardrobe.notice.gan.head",
+      "part": "wardrobe › notice › gan",
+      "when": "",
+      "ms": 2018,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "gan",
+        "face"
+      ],
+      "text": "Cool glasses... uh-huh.",
+      "voice": "gan",
+      "key": "wardrobe.notice.gan.face",
+      "part": "wardrobe › notice › gan",
+      "when": "",
+      "ms": 2457,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "gan",
+        "back"
+      ],
+      "text": "Cool... uh-huh.",
+      "voice": "gan",
+      "key": "wardrobe.notice.gan.back",
+      "part": "wardrobe › notice › gan",
+      "when": "",
+      "ms": 1485,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "gan",
+        "outfit"
+      ],
+      "text": "Nice outfit... uh-huh.",
+      "voice": "gan",
+      "key": "wardrobe.notice.gan.outfit",
+      "part": "wardrobe › notice › gan",
+      "when": "",
+      "ms": 1918,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "gan",
+        "feet"
+      ],
+      "text": "Nice shoes... one sec.",
+      "voice": "gan",
+      "key": "wardrobe.notice.gan.feet",
+      "part": "wardrobe › notice › gan",
+      "when": "",
+      "ms": 2114,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "gan",
+        "paint"
+      ],
+      "text": "New colors... cool.",
+      "voice": "gan",
+      "key": "wardrobe.notice.gan.paint",
+      "part": "wardrobe › notice › gan",
+      "when": "",
+      "ms": 2259,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ken",
+        "head"
+      ],
+      "text": "Oh. Nice hat.",
+      "voice": "ken",
+      "key": "wardrobe.notice.ken.head",
+      "part": "wardrobe › notice › ken",
+      "when": "",
+      "ms": 2423,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ken",
+        "face"
+      ],
+      "text": "Oh. Cool glasses.",
+      "voice": "ken",
+      "key": "wardrobe.notice.ken.face",
+      "part": "wardrobe › notice › ken",
+      "when": "",
+      "ms": 1573,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ken",
+        "back"
+      ],
+      "text": "Oh. Nice.",
+      "voice": "ken",
+      "key": "wardrobe.notice.ken.back",
+      "part": "wardrobe › notice › ken",
+      "when": "",
+      "ms": 1582,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ken",
+        "outfit"
+      ],
+      "text": "Oh. Nice outfit.",
+      "voice": "ken",
+      "key": "wardrobe.notice.ken.outfit",
+      "part": "wardrobe › notice › ken",
+      "when": "",
+      "ms": 2168,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ken",
+        "feet"
+      ],
+      "text": "Oh. Nice shoes.",
+      "voice": "ken",
+      "key": "wardrobe.notice.ken.feet",
+      "part": "wardrobe › notice › ken",
+      "when": "",
+      "ms": 2123,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ken",
+        "paint"
+      ],
+      "text": "Oh. New colors.",
+      "voice": "ken",
+      "key": "wardrobe.notice.ken.paint",
+      "part": "wardrobe › notice › ken",
+      "when": "",
+      "ms": 2544,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "bb",
+        "head"
+      ],
+      "text": "So cute... one sec.",
+      "voice": "bb",
+      "key": "wardrobe.notice.bb.head",
+      "part": "wardrobe › notice › bb",
+      "when": "",
+      "ms": 2571,
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "So cute, Kaylee... one sec."
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "bb",
+        "face"
+      ],
+      "text": "Cute glasses... uh-huh.",
+      "voice": "bb",
+      "key": "wardrobe.notice.bb.face",
+      "part": "wardrobe › notice › bb",
+      "when": "",
+      "ms": 2542,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "bb",
+        "back"
+      ],
+      "text": "So cute... one sec.",
+      "voice": "bb",
+      "key": "wardrobe.notice.bb.back",
+      "part": "wardrobe › notice › bb",
+      "when": "",
+      "ms": 2571,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "bb",
+        "outfit"
+      ],
+      "text": "Cute outfit... uh-huh.",
+      "voice": "bb",
+      "key": "wardrobe.notice.bb.outfit",
+      "part": "wardrobe › notice › bb",
+      "when": "",
+      "ms": 2611,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "bb",
+        "feet"
+      ],
+      "text": "Nice shoes... one sec.",
+      "voice": "bb",
+      "key": "wardrobe.notice.bb.feet",
+      "part": "wardrobe › notice › bb",
+      "when": "",
+      "ms": 2456,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "bb",
+        "paint"
+      ],
+      "text": "Cute colors... uh-huh.",
+      "voice": "bb",
+      "key": "wardrobe.notice.bb.paint",
+      "part": "wardrobe › notice › bb",
+      "when": "",
+      "ms": 2190,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ja",
+        "head"
+      ],
+      "text": "So pretty!",
+      "voice": "ja",
+      "key": "wardrobe.notice.ja.head",
+      "part": "wardrobe › notice › ja",
+      "when": "The way home (the boat trip's `home`): Aunty Sri's van brings them back to Agong's house, she picks the photo for Agong's wall, and even the big cousins look up from their phones. Then, in the house, the photo on the wall.",
+      "ms": 1392,
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "So pretty, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ja",
+        "face"
+      ],
+      "text": "So fancy!",
+      "voice": "ja",
+      "key": "wardrobe.notice.ja.face",
+      "part": "wardrobe › notice › ja",
+      "when": "The Pizza Company (pizza/).",
+      "ms": 1704,
+      "flags": [
+        "changed"
+      ],
+      "was": "So fancy, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ja",
+        "back"
+      ],
+      "text": "So pretty!",
+      "voice": "ja",
+      "key": "wardrobe.notice.ja.back",
+      "part": "wardrobe › notice › ja",
+      "when": "",
+      "ms": 1392,
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "So pretty, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ja",
+        "outfit"
+      ],
+      "text": "What a pretty outfit!",
+      "voice": "ja",
+      "key": "wardrobe.notice.ja.outfit",
+      "part": "wardrobe › notice › ja",
+      "when": "",
+      "ms": 2454,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ja",
+        "feet"
+      ],
+      "text": "What cute shoes!",
+      "voice": "ja",
+      "key": "wardrobe.notice.ja.feet",
+      "part": "wardrobe › notice › ja",
+      "when": "",
+      "ms": 2381,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "ja",
+        "paint"
+      ],
+      "text": "So pretty, new colors!",
+      "voice": "ja",
+      "key": "wardrobe.notice.ja.paint",
+      "part": "wardrobe › notice › ja",
+      "when": "",
+      "ms": 2578,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "sri",
+        "head"
+      ],
+      "text": "Lovely hat! Say cheese!",
+      "voice": "sri",
+      "key": "wardrobe.notice.sri.head",
+      "part": "wardrobe › notice › sri",
+      "when": "",
+      "ms": 2817,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "sri",
+        "face"
+      ],
+      "text": "Lovely glasses! Say cheese!",
+      "voice": "sri",
+      "key": "wardrobe.notice.sri.face",
+      "part": "wardrobe › notice › sri",
+      "when": "",
+      "ms": 3052,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "sri",
+        "back"
+      ],
+      "text": "Lovely! Say cheese!",
+      "voice": "sri",
+      "key": "wardrobe.notice.sri.back",
+      "part": "wardrobe › notice › sri",
+      "when": "",
+      "ms": 1815,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "sri",
+        "outfit"
+      ],
+      "text": "Lovely outfit! Say cheese!",
+      "voice": "sri",
+      "key": "wardrobe.notice.sri.outfit",
+      "part": "wardrobe › notice › sri",
+      "when": "",
+      "ms": 2594,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "sri",
+        "feet"
+      ],
+      "text": "Lovely shoes! Say cheese!",
+      "voice": "sri",
+      "key": "wardrobe.notice.sri.feet",
+      "part": "wardrobe › notice › sri",
+      "when": "",
+      "ms": 2490,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "sri",
+        "paint"
+      ],
+      "text": "Lovely colors! Say cheese!",
+      "voice": "sri",
+      "key": "wardrobe.notice.sri.paint",
+      "part": "wardrobe › notice › sri",
+      "when": "",
+      "ms": 2747,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "putto",
+        "head"
+      ],
+      "text": "Cool hat!",
+      "voice": "putto",
+      "key": "wardrobe.notice.putto.head",
+      "part": "wardrobe › notice › putto",
+      "when": "",
+      "ms": 952,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "putto",
+        "face"
+      ],
+      "text": "Cool glasses!",
+      "voice": "putto",
+      "key": "wardrobe.notice.putto.face",
+      "part": "wardrobe › notice › putto",
+      "when": "",
+      "ms": 1616,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "putto",
+        "back"
+      ],
+      "text": "Cool!",
+      "voice": "putto",
+      "key": "wardrobe.notice.putto.back",
+      "part": "wardrobe › notice › putto",
+      "when": "",
+      "ms": 587,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "putto",
+        "outfit"
+      ],
+      "text": "Cool outfit!",
+      "voice": "putto",
+      "key": "wardrobe.notice.putto.outfit",
+      "part": "wardrobe › notice › putto",
+      "when": "",
+      "ms": 1394,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "putto",
+        "feet"
+      ],
+      "text": "Cool shoes!",
+      "voice": "putto",
+      "key": "wardrobe.notice.putto.feet",
+      "part": "wardrobe › notice › putto",
+      "when": "",
+      "ms": 1531,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "putto",
+        "paint"
+      ],
+      "text": "Cool colors!",
+      "voice": "putto",
+      "key": "wardrobe.notice.putto.paint",
+      "part": "wardrobe › notice › putto",
+      "when": "",
+      "ms": 1466,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "putter",
+        "head"
+      ],
+      "text": "Look, a hat!",
+      "voice": "putter",
+      "key": "wardrobe.notice.putter.head",
+      "part": "wardrobe › notice › putter",
+      "when": "",
+      "ms": 1386,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "putter",
+        "face"
+      ],
+      "text": "Look, glasses!",
+      "voice": "putter",
+      "key": "wardrobe.notice.putter.face",
+      "part": "wardrobe › notice › putter",
+      "when": "",
+      "ms": 1611,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "putter",
+        "back"
+      ],
+      "text": "Look, so cute!",
+      "voice": "putter",
+      "key": "wardrobe.notice.putter.back",
+      "part": "wardrobe › notice › putter",
+      "when": "",
+      "ms": 2114,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "putter",
+        "outfit"
+      ],
+      "text": "Look, new clothes!",
+      "voice": "putter",
+      "key": "wardrobe.notice.putter.outfit",
+      "part": "wardrobe › notice › putter",
+      "when": "",
+      "ms": 1527,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "putter",
+        "feet"
+      ],
+      "text": "Look, new shoes!",
+      "voice": "putter",
+      "key": "wardrobe.notice.putter.feet",
+      "part": "wardrobe › notice › putter",
+      "when": "",
+      "ms": 1506,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "notice",
+        "putter",
+        "paint"
+      ],
+      "text": "Look, new colors!",
+      "voice": "putter",
+      "key": "wardrobe.notice.putter.paint",
+      "part": "wardrobe › notice › putter",
+      "when": "",
+      "ms": 1970,
+      "flags": []
+    },
+    {
+      "path": [
+        "wardrobe",
+        "noticeItem",
+        "ji",
+        "crown"
+      ],
+      "text": "Ooh, a crown!",
+      "voice": "ji",
+      "key": "wardrobe.noticeItem.ji.crown",
+      "part": "wardrobe › noticeItem › ji",
+      "when": "",
+      "ms": 2112,
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, a crown, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "noticeItem",
+        "ji",
+        "fairy"
+      ],
+      "text": "Ooh, you can fly!",
+      "voice": "ji",
+      "key": "wardrobe.noticeItem.ji.fairy",
+      "part": "wardrobe › noticeItem › ji",
+      "when": "",
+      "ms": 1992,
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Ooh, Kaylee, you can fly!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "noticeItem",
+        "ji",
+        "wings"
+      ],
+      "text": "Ooh, you can fly!",
+      "voice": "ji",
+      "key": "wardrobe.noticeItem.ji.wings",
+      "part": "wardrobe › noticeItem › ji",
+      "when": "",
+      "ms": 1992,
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Ooh, Kaylee, you can fly!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "noticeItem",
+        "ji",
+        "cape"
+      ],
+      "text": "Ooh, a princess cape!",
+      "voice": "ji",
+      "key": "wardrobe.noticeItem.ji.cape",
+      "part": "wardrobe › noticeItem › ji",
+      "when": "",
+      "ms": 1800,
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, a princess cape, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "noticeItem",
+        "ji",
+        "backpack"
+      ],
+      "text": "Ooh, a bunny backpack!",
+      "voice": "ji",
+      "key": "wardrobe.noticeItem.ji.backpack",
+      "part": "wardrobe › noticeItem › ji",
+      "when": "",
+      "ms": 2496,
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, a bunny backpack, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "noticeItem",
+        "ji",
+        "overalls"
+      ],
+      "text": "Ooh, cute overalls!",
+      "voice": "ji",
+      "key": "wardrobe.noticeItem.ji.overalls",
+      "part": "wardrobe › noticeItem › ji",
+      "when": "",
+      "ms": 2784,
+      "flags": [
+        "changed"
+      ],
+      "was": "Ooh, cute overalls, Kaylee!"
+    },
+    {
+      "path": [
+        "wardrobe",
+        "noticeItem",
+        "nick",
+        "fairy"
+      ],
+      "text": "Cool wings!",
+      "voice": "nick",
+      "key": "wardrobe.noticeItem.nick.fairy",
+      "part": "wardrobe › noticeItem › nick",
+      "when": "",
+      "ms": 1205,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "wardrobe",
+        "noticeItem",
+        "nick",
+        "wings"
+      ],
+      "text": "Cool wings!",
+      "voice": "nick",
+      "key": "wardrobe.noticeItem.nick.wings",
+      "part": "wardrobe › noticeItem › nick",
+      "when": "",
+      "ms": 1205,
+      "flags": [
+        "twice"
+      ]
+    }
+  ]
+}

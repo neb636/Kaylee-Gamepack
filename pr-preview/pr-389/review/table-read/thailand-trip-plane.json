@@ -1,0 +1,179 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "trip.plane",
+  "title": "Thailand › Trip › Plane",
+  "intro": "",
+  "page": "thailand-trip-plane.html",
+  "audio": null,
+  "lines": 10,
+  "seconds": 17,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "trip.plane.belt",
+      "text": "Seatbelt on!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Seatbelt on, Kaylee!"
+    },
+    {
+      "key": "trip.plane.snack",
+      "text": "Snacks for you!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Snacks for Kaylee!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "trip",
+        "plane",
+        "belt"
+      ],
+      "text": "Seatbelt on!",
+      "voice": "ji",
+      "key": "trip.plane.belt",
+      "part": "trip › plane",
+      "when": "",
+      "ms": 1416,
+      "flags": [
+        "changed"
+      ],
+      "was": "Seatbelt on, Kaylee!"
+    },
+    {
+      "path": [
+        "trip",
+        "plane",
+        "wheee"
+      ],
+      "text": "Whee! Up we go!",
+      "voice": "ji",
+      "key": "trip.plane.wheee",
+      "part": "trip › plane",
+      "when": "",
+      "ms": 1894,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "plane",
+        "tray"
+      ],
+      "text": "Tray down, then press the button!",
+      "voice": "ji",
+      "key": "trip.plane.tray",
+      "part": "trip › plane",
+      "when": "",
+      "ms": 2450,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "plane",
+        "snack"
+      ],
+      "text": "Snacks for you!",
+      "voice": "attendant",
+      "key": "trip.plane.snack",
+      "part": "trip › plane",
+      "when": "",
+      "ms": 1248,
+      "flags": [
+        "changed"
+      ],
+      "was": "Snacks for Kaylee!"
+    },
+    {
+      "path": [
+        "trip",
+        "plane",
+        "more"
+      ],
+      "text": "More snacks?!",
+      "voice": "attendant",
+      "key": "trip.plane.more",
+      "part": "trip › plane",
+      "when": "",
+      "ms": 1214,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "plane",
+        "share"
+      ],
+      "text": "Want some of mine?",
+      "voice": "ji",
+      "key": "trip.plane.share",
+      "part": "trip › plane",
+      "when": "",
+      "ms": 1226,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "plane",
+        "snore"
+      ],
+      "text": "Night night!",
+      "voice": "ji",
+      "key": "trip.plane.snore",
+      "part": "trip › plane",
+      "when": "",
+      "ms": 935,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "plane",
+        "dad"
+      ],
+      "text": "Huh? Are we there yet?",
+      "voice": "nick",
+      "key": "trip.plane.dad",
+      "part": "trip › plane",
+      "when": "",
+      "ms": 2146,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "plane",
+        "land"
+      ],
+      "text": "Seatbelts on! We are landing!",
+      "voice": "ji",
+      "key": "trip.plane.land",
+      "part": "trip › plane",
+      "when": "",
+      "ms": 2309,
+      "flags": []
+    },
+    {
+      "path": [
+        "trip",
+        "plane",
+        "krabi"
+      ],
+      "text": "Yay! We're in Krabi!",
+      "voice": "nick",
+      "key": "trip.plane.krabi",
+      "part": "trip › plane",
+      "when": "",
+      "ms": 2405,
+      "flags": []
+    }
+  ]
+}

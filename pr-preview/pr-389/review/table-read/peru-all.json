@@ -1,0 +1,4277 @@
+{
+  "kind": "table-read",
+  "place": "peru",
+  "group": "",
+  "title": "Peru › Everything",
+  "intro": "",
+  "page": "peru-all.html",
+  "audio": null,
+  "lines": 254,
+  "seconds": 563,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "trophyWin",
+      "text": "You did it! You won the Peru Explorer trophy!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Kaylee, you did it! You won the Peru Explorer trophy!"
+    },
+    {
+      "key": "trophyRoom",
+      "text": "Peru Explorer! From Peru.",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Kaylee, Peru Explorer! From Peru."
+    },
+    {
+      "key": "intro.0",
+      "text": "Hola! I'm Luna!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Hola, Kaylee! I'm Luna!"
+    },
+    {
+      "key": "hubNext",
+      "text": "Another discovery!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Another discovery, Kaylee!"
+    },
+    {
+      "key": "tickle.0",
+      "text": "Hee hee!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "worlds.coast",
+      "text": "By the sea, Peru has a sandy desert!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "worlds.mountains",
+      "text": "The Andes mountains are tall and cold!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "worlds.forest",
+      "text": "Half of Peru is rainforest!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "fluffy.brush",
+      "text": "Brush Luna's fleece!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Brush Luna's fleece, Kaylee!"
+    },
+    {
+      "key": "fluffy.found.dandelion",
+      "text": "Achoo!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "fluffy.see",
+      "text": "I can see you!",
+      "flags": [
+        "changed"
+      ],
+      "was": "I can see you, Kaylee!"
+    },
+    {
+      "key": "fluffy.pond.touch",
+      "text": "Done? Tap the pond to show Luna!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "fluffy.pond.mouse",
+      "text": "Done? Click the pond to show Luna!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "fluffy.familyGo",
+      "text": "Paco and Abuela want haircuts too!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "fluffy.sleepy",
+      "text": "Oh, I am so sleepy...",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "fluffy.yarn.touch",
+      "text": "The wool is yarn now! Tap the cactus!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "fluffy.yarn.mouse",
+      "text": "The wool is yarn now! Click the cactus!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "fluffy.bug",
+      "text": "A tiny bug makes pink color!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "fluffy.hats",
+      "text": "Put a warm hat on each alpaca!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "fluffy.idle.brush.mouse",
+      "text": "Drag the brush on Luna's fleece!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "terraces.story.0",
+      "text": "Oh no! Our grass steps fell down!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "terraces.go",
+      "text": "Fit the stones back in!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Fit the stones back in, Kaylee!"
+    },
+    {
+      "key": "terraces.top",
+      "text": "The last wall! Up in the clouds!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "terraces.reveal",
+      "text": "Look! Machu Picchu!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Kaylee, look! Machu Picchu!"
+    },
+    {
+      "key": "terraces.photo.touch",
+      "text": "Tap the camera for Luna's journal!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "terraces.tickle.0",
+      "text": "Hee hee!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "terraces.tickle.1",
+      "text": "Hola!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "terraces.potatoes",
+      "text": "Peru has thousands of kinds of potatoes!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "terracesSticker",
+      "text": "Llama sticker! Llamas can carry things up mountains!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "penguins.pull.touch",
+      "text": "Pull a penguin back, then let go!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "penguins.pull.mouse",
+      "text": "Click a penguin, pull it back, then let go!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "penguins.wheee.0",
+      "text": "Wheee!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "penguins.loboTap.2",
+      "text": "Hola!",
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Hola, Kaylee!"
+    },
+    {
+      "key": "penguins.feed",
+      "text": "Feed my chicks!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Feed my chicks, Kaylee!"
+    },
+    {
+      "key": "penguins.yum.2",
+      "text": "Gracias!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "penguins.egg",
+      "text": "Look! The egg is wiggling!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Kaylee, look! The egg is wiggling!"
+    },
+    {
+      "key": "penguins.swimGo",
+      "text": "The chicks are ready to swim! Pull them back!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "penguins.thanks",
+      "text": "Gracias!",
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Gracias, Kaylee!"
+    },
+    {
+      "key": "penguins.photo",
+      "text": "Click! A picture for Luna's journal!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "penguins.pepaTap.0",
+      "text": "Hola!",
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Hola, Kaylee!"
+    },
+    {
+      "key": "penguins.facts.1",
+      "text": "The ocean here is cold and full of fish!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "penguins.idle.launch.touch",
+      "text": "Pull a penguin back, then let go!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "penguins.idle.launch.mouse",
+      "text": "Click a penguin, pull it back, then let go!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "penguins.idle.swim.touch",
+      "text": "Pull a chick back, then let go!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "penguins.idle.swim.mouse",
+      "text": "Click a chick, pull it back, then let go!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "penguinSticker",
+      "text": "Penguin sticker! Penguins live in Peru too!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canyon.story.0",
+      "text": "My chick Pluma is scared to fly.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canyon.upWeGo",
+      "text": "Ahh, warm air! Up we go!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canyon.sneeze",
+      "text": "Achoo!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "canyon.lead",
+      "text": "Lead Pluma to the shiny circles!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canyon.wheee",
+      "text": "Wheee!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "canyon.sunMoved",
+      "text": "The sun moved! Find the new warm air!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canyon.solo",
+      "text": "Now you fly Pluma!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Now you fly Pluma, Kaylee!"
+    },
+    {
+      "key": "canyon.bigSwirl",
+      "text": "Fly Pluma into the big swirl!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canyon.lookMe",
+      "text": "Look at me!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Look at me, Kaylee!"
+    },
+    {
+      "key": "canyon.proud",
+      "text": "My Pluma can fly! Gracias!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "My Pluma can fly! Gracias, Kaylee!"
+    },
+    {
+      "key": "canyon.photo",
+      "text": "Click! A picture for Luna's journal!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "canyon.facts.1",
+      "text": "Condor wings are wider than a grown-up is tall!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canyon.facts.3",
+      "text": "The sun warms the air, and warm air rises!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "condorSticker",
+      "text": "Condor sticker! Condors soar on warm air!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "river.story.0",
+      "text": "Hola! I want to visit my forest friends!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "river.squeeze.touch",
+      "text": "Squeeze the cloud to make rain!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "river.squeeze.mouse",
+      "text": "Click and hold the cloud to make rain!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "river.flooded",
+      "text": "The river grows into the forest!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "river.pads",
+      "text": "Lily pads! Help the friends hop on!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "river.hop.monkey",
+      "text": "Wheee!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "river.rainbow",
+      "text": "A rainbow! Gracias!",
+      "flags": [
+        "changed"
+      ],
+      "was": "A rainbow! Gracias, Kaylee!"
+    },
+    {
+      "key": "river.spout.0",
+      "text": "Hee hee!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "river.facts.1",
+      "text": "Half of Peru is rainforest!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "river.facts.2",
+      "text": "The river grows into the forest!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "river.facts.3",
+      "text": "Some fish eat fruit!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "river.fruit",
+      "text": "Some fish eat fruit!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "river.idle.squeeze.mouse",
+      "text": "Click and hold the cloud to make rain!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "river.sticker",
+      "text": "Pink dolphin sticker! These dolphins live in rivers!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "sticker",
+      "text": "Alpaca sticker! Alpacas have soft, warm fleece!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.worlds",
+      "text": "Peru has a coast, mountains, and rainforest!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.languages",
+      "text": "People in Peru also speak Quechua and Aymara!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.penguins",
+      "text": "Peru has penguins on its desert coast!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.alpacas",
+      "text": "Alpacas live high in the mountains!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.machuPicchu",
+      "text": "The Inca built Machu Picchu long ago!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.potatoes",
+      "text": "Peru has thousands of kinds of potatoes!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "facts.flag",
+      "text": "Peru's flag is red, white, red!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "facts.bird",
+      "text": "Peru's bird is bright orange!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "passport.touch",
+      "text": "This is Peru! Tap a picture to explore.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "passport.mouse",
+      "text": "This is Peru! Click a picture to explore.",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "name"
+      ],
+      "text": "Peru",
+      "voice": "sparkle",
+      "key": "name",
+      "part": "",
+      "when": "",
+      "ms": 677,
+      "flags": []
+    },
+    {
+      "path": [
+        "trophyWin"
+      ],
+      "text": "You did it! You won the Peru Explorer trophy!",
+      "voice": "sparkle",
+      "key": "trophyWin",
+      "part": "",
+      "when": "",
+      "ms": 4368,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Kaylee, you did it! You won the Peru Explorer trophy!"
+    },
+    {
+      "path": [
+        "trophyRoom"
+      ],
+      "text": "Peru Explorer! From Peru.",
+      "voice": "sparkle",
+      "key": "trophyRoom",
+      "part": "",
+      "when": "",
+      "ms": 3216,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Kaylee, Peru Explorer! From Peru."
+    },
+    {
+      "path": [
+        "intro",
+        "0"
+      ],
+      "text": "Hola! I'm Luna!",
+      "voice": "luna",
+      "key": "intro.0",
+      "part": "intro",
+      "when": "---- Hub: Luna's map of Peru ----",
+      "ms": 1824,
+      "flags": [
+        "changed"
+      ],
+      "was": "Hola, Kaylee! I'm Luna!"
+    },
+    {
+      "path": [
+        "intro",
+        "1"
+      ],
+      "text": "Let's fill my explorer journal!",
+      "voice": "luna",
+      "key": "intro.1",
+      "part": "intro",
+      "when": "",
+      "ms": 2194,
+      "flags": []
+    },
+    {
+      "path": [
+        "hub",
+        "touch"
+      ],
+      "text": "Tap a picture to explore Peru!",
+      "voice": "sparkle",
+      "key": "hub.touch",
+      "part": "hub",
+      "when": "",
+      "ms": 2834,
+      "flags": []
+    },
+    {
+      "path": [
+        "hub",
+        "mouse"
+      ],
+      "text": "Click a picture to explore Peru!",
+      "voice": "sparkle",
+      "key": "hub.mouse",
+      "part": "hub",
+      "when": "",
+      "ms": 2472,
+      "flags": []
+    },
+    {
+      "path": [
+        "hubNext"
+      ],
+      "text": "Another discovery!",
+      "voice": "luna",
+      "key": "hubNext",
+      "part": "",
+      "when": "",
+      "ms": 1272,
+      "flags": [
+        "changed"
+      ],
+      "was": "Another discovery, Kaylee!"
+    },
+    {
+      "path": [
+        "soon"
+      ],
+      "text": "This place opens soon!",
+      "voice": "sparkle",
+      "key": "soon",
+      "part": "",
+      "when": "",
+      "ms": 1818,
+      "flags": []
+    },
+    {
+      "path": [
+        "balloonSoon"
+      ],
+      "text": "Our balloon trip comes soon!",
+      "voice": "sparkle",
+      "key": "balloonSoon",
+      "part": "",
+      "when": "",
+      "ms": 2690,
+      "flags": []
+    },
+    {
+      "path": [
+        "tickle",
+        "0"
+      ],
+      "text": "Hee hee!",
+      "voice": "luna",
+      "key": "tickle.0",
+      "part": "tickle",
+      "when": "",
+      "ms": 956,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "tickle",
+        "1"
+      ],
+      "text": "I love exploring with you!",
+      "voice": "luna",
+      "key": "tickle.1",
+      "part": "tickle",
+      "when": "",
+      "ms": 1712,
+      "flags": []
+    },
+    {
+      "path": [
+        "journal"
+      ],
+      "text": "My explorer journal!",
+      "voice": "luna",
+      "key": "journal",
+      "part": "",
+      "when": "",
+      "ms": 1811,
+      "flags": []
+    },
+    {
+      "path": [
+        "alpacaWindow"
+      ],
+      "text": "My cozy alpaca family!",
+      "voice": "luna",
+      "key": "alpacaWindow",
+      "part": "",
+      "when": "",
+      "ms": 2294,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguinWindow"
+      ],
+      "text": "My fluffy chicks!",
+      "voice": "pepa",
+      "key": "penguinWindow",
+      "part": "",
+      "when": "",
+      "ms": 1976,
+      "flags": []
+    },
+    {
+      "path": [
+        "riverWindow"
+      ],
+      "text": "My rainbow river!",
+      "voice": "rosa",
+      "key": "riverWindow",
+      "part": "",
+      "when": "",
+      "ms": 1605,
+      "flags": []
+    },
+    {
+      "path": [
+        "worlds",
+        "coast"
+      ],
+      "text": "By the sea, Peru has a sandy desert!",
+      "voice": "sparkle",
+      "key": "worlds.coast",
+      "part": "worlds",
+      "when": "Tap the map: Peru's three worlds.",
+      "ms": 4217,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "worlds",
+        "mountains"
+      ],
+      "text": "The Andes mountains are tall and cold!",
+      "voice": "sparkle",
+      "key": "worlds.mountains",
+      "part": "worlds",
+      "when": "Tap the map: Peru's three worlds.",
+      "ms": 3883,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "worlds",
+        "forest"
+      ],
+      "text": "Half of Peru is rainforest!",
+      "voice": "sparkle",
+      "key": "worlds.forest",
+      "part": "worlds",
+      "when": "Tap the map: Peru's three worlds.",
+      "ms": 2901,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "fluffy",
+        "story",
+        "0"
+      ],
+      "text": "My fleece is so long, I can't see!",
+      "voice": "luna",
+      "key": "fluffy.story.0",
+      "part": "fluffy › story",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 2957,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "brush"
+      ],
+      "text": "Brush Luna's fleece!",
+      "voice": "sparkle",
+      "key": "fluffy.brush",
+      "part": "fluffy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 2616,
+      "flags": [
+        "changed"
+      ],
+      "was": "Brush Luna's fleece, Kaylee!"
+    },
+    {
+      "path": [
+        "fluffy",
+        "found",
+        "burr"
+      ],
+      "text": "Ouch! Prickly!",
+      "voice": "luna",
+      "key": "fluffy.found.burr",
+      "part": "fluffy › found",
+      "when": "",
+      "ms": 1389,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "found",
+        "twig"
+      ],
+      "text": "A twig!",
+      "voice": "luna",
+      "key": "fluffy.found.twig",
+      "part": "fluffy › found",
+      "when": "",
+      "ms": 759,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "found",
+        "dandelion"
+      ],
+      "text": "Achoo!",
+      "voice": "luna",
+      "key": "fluffy.found.dandelion",
+      "part": "fluffy › found",
+      "when": "",
+      "ms": 530,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "fluffy",
+        "found",
+        "bird"
+      ],
+      "text": "A baby bird!",
+      "voice": "luna",
+      "key": "fluffy.found.bird",
+      "part": "fluffy › found",
+      "when": "",
+      "ms": 1180,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "found",
+        "beetle"
+      ],
+      "text": "Bye-bye, beetle!",
+      "voice": "luna",
+      "key": "fluffy.found.beetle",
+      "part": "fluffy › found",
+      "when": "",
+      "ms": 944,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "see"
+      ],
+      "text": "I can see you!",
+      "voice": "luna",
+      "key": "fluffy.see",
+      "part": "fluffy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 1224,
+      "flags": [
+        "changed"
+      ],
+      "was": "I can see you, Kaylee!"
+    },
+    {
+      "path": [
+        "fluffy",
+        "hum"
+      ],
+      "text": "Alpacas hum when they are happy!",
+      "voice": "sparkle",
+      "key": "fluffy.hum",
+      "part": "fluffy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 2388,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "clippers"
+      ],
+      "text": "Now the clippers! Snip snip!",
+      "voice": "sparkle",
+      "key": "fluffy.clippers",
+      "part": "fluffy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 2570,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "pond",
+        "touch"
+      ],
+      "text": "Done? Tap the pond to show Luna!",
+      "voice": "sparkle",
+      "key": "fluffy.pond.touch",
+      "part": "fluffy › pond",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 3682,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "fluffy",
+        "pond",
+        "mouse"
+      ],
+      "text": "Done? Click the pond to show Luna!",
+      "voice": "sparkle",
+      "key": "fluffy.pond.mouse",
+      "part": "fluffy › pond",
+      "when": "",
+      "ms": 3504,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "fluffy",
+        "mustache"
+      ],
+      "text": "Hee hee! A mustache!",
+      "voice": "luna",
+      "key": "fluffy.mustache",
+      "part": "fluffy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 1708,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "mirror",
+        "silly"
+      ],
+      "text": "I look so silly!",
+      "voice": "luna",
+      "key": "fluffy.mirror.silly",
+      "part": "fluffy › mirror",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 1604,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "mirror",
+        "pretty"
+      ],
+      "text": "So pretty!",
+      "voice": "luna",
+      "key": "fluffy.mirror.pretty",
+      "part": "fluffy › mirror",
+      "when": "",
+      "ms": 1211,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "mirror",
+        "skinny"
+      ],
+      "text": "Brrr! Hat please!",
+      "voice": "luna",
+      "key": "fluffy.mirror.skinny",
+      "part": "fluffy › mirror",
+      "when": "",
+      "ms": 2466,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "chilly"
+      ],
+      "text": "Brrr! It's chilly up here!",
+      "voice": "luna",
+      "key": "fluffy.chilly",
+      "part": "fluffy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 2742,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "family",
+        "0"
+      ],
+      "text": "Me next! Me next!",
+      "voice": "paco",
+      "key": "fluffy.family.0",
+      "part": "fluffy › family",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 1879,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "family",
+        "1"
+      ],
+      "text": "My turn, dear.",
+      "voice": "abuela",
+      "key": "fluffy.family.1",
+      "part": "fluffy › family",
+      "when": "",
+      "ms": 1475,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "familyGo"
+      ],
+      "text": "Paco and Abuela want haircuts too!",
+      "voice": "sparkle",
+      "key": "fluffy.familyGo",
+      "part": "fluffy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 4208,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "fluffy",
+        "tickle",
+        "0"
+      ],
+      "text": "Hee hee! That tickles!",
+      "voice": "paco",
+      "key": "fluffy.tickle.0",
+      "part": "fluffy › tickle",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 1881,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "tickle",
+        "1"
+      ],
+      "text": "Not my tummy!",
+      "voice": "paco",
+      "key": "fluffy.tickle.1",
+      "part": "fluffy › tickle",
+      "when": "",
+      "ms": 1598,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "tickle",
+        "2"
+      ],
+      "text": "Ha ha ha!",
+      "voice": "paco",
+      "key": "fluffy.tickle.2",
+      "part": "fluffy › tickle",
+      "when": "",
+      "ms": 1044,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "roll"
+      ],
+      "text": "Too tickly!",
+      "voice": "paco",
+      "key": "fluffy.roll",
+      "part": "fluffy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 1015,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "sleepy"
+      ],
+      "text": "Oh, I am so sleepy...",
+      "voice": "abuela",
+      "key": "fluffy.sleepy",
+      "part": "fluffy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 3406,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "fluffy",
+        "snore"
+      ],
+      "text": "Five more minutes...",
+      "voice": "abuela",
+      "key": "fluffy.snore",
+      "part": "fluffy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 1830,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "doneCold",
+        "paco"
+      ],
+      "text": "Brrr! Chilly!",
+      "voice": "paco",
+      "key": "fluffy.doneCold.paco",
+      "part": "fluffy › doneCold",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 2269,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "doneCold",
+        "abuela"
+      ],
+      "text": "Oh my! Brrr!",
+      "voice": "abuela",
+      "key": "fluffy.doneCold.abuela",
+      "part": "fluffy › doneCold",
+      "when": "",
+      "ms": 2684,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "yarn",
+        "touch"
+      ],
+      "text": "The wool is yarn now! Tap the cactus!",
+      "voice": "sparkle",
+      "key": "fluffy.yarn.touch",
+      "part": "fluffy › yarn",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 3640,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "fluffy",
+        "yarn",
+        "mouse"
+      ],
+      "text": "The wool is yarn now! Click the cactus!",
+      "voice": "sparkle",
+      "key": "fluffy.yarn.mouse",
+      "part": "fluffy › yarn",
+      "when": "",
+      "ms": 4104,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "fluffy",
+        "bug"
+      ],
+      "text": "A tiny bug makes pink color!",
+      "voice": "sparkle",
+      "key": "fluffy.bug",
+      "part": "fluffy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 3101,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "fluffy",
+        "dropGo"
+      ],
+      "text": "Drag the pink drop to the yarn!",
+      "voice": "sparkle",
+      "key": "fluffy.dropGo",
+      "part": "fluffy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 2594,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "pink"
+      ],
+      "text": "Pink yarn! Pink hats!",
+      "voice": "sparkle",
+      "key": "fluffy.pink",
+      "part": "fluffy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 2738,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "hats"
+      ],
+      "text": "Put a warm hat on each alpaca!",
+      "voice": "sparkle",
+      "key": "fluffy.hats",
+      "part": "fluffy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 3387,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "fluffy",
+        "cozy",
+        "luna"
+      ],
+      "text": "Cozy!",
+      "voice": "luna",
+      "key": "fluffy.cozy.luna",
+      "part": "fluffy › cozy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 1012,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "cozy",
+        "paco"
+      ],
+      "text": "Yay! Warm ears!",
+      "voice": "paco",
+      "key": "fluffy.cozy.paco",
+      "part": "fluffy › cozy",
+      "when": "",
+      "ms": 2064,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "cozy",
+        "abuela"
+      ],
+      "text": "Thank you, dear!",
+      "voice": "abuela",
+      "key": "fluffy.cozy.abuela",
+      "part": "fluffy › cozy",
+      "when": "",
+      "ms": 1160,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "photo"
+      ],
+      "text": "Click! A picture for my journal!",
+      "voice": "luna",
+      "key": "fluffy.photo",
+      "part": "fluffy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 2385,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "colors"
+      ],
+      "text": "Alpacas come in lots of colors!",
+      "voice": "sparkle",
+      "key": "fluffy.colors",
+      "part": "fluffy",
+      "when": "---- 1. Luna's Fluffy Day (the alpaca salon) ----",
+      "ms": 2582,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "idle",
+        "brush",
+        "touch"
+      ],
+      "text": "Rub the brush on Luna's fleece!",
+      "voice": "sparkle",
+      "key": "fluffy.idle.brush.touch",
+      "part": "fluffy › idle › brush",
+      "when": "",
+      "ms": 2367,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "idle",
+        "brush",
+        "mouse"
+      ],
+      "text": "Drag the brush on Luna's fleece!",
+      "voice": "sparkle",
+      "key": "fluffy.idle.brush.mouse",
+      "part": "fluffy › idle › brush",
+      "when": "",
+      "ms": 3336,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "fluffy",
+        "idle",
+        "clip"
+      ],
+      "text": "Snip the fluffy puffs!",
+      "voice": "sparkle",
+      "key": "fluffy.idle.clip",
+      "part": "fluffy › idle",
+      "when": "",
+      "ms": 1995,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "idle",
+        "cactus",
+        "touch"
+      ],
+      "text": "Tap the cactus!",
+      "voice": "sparkle",
+      "key": "fluffy.idle.cactus.touch",
+      "part": "fluffy › idle › cactus",
+      "when": "",
+      "ms": 1934,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "idle",
+        "cactus",
+        "mouse"
+      ],
+      "text": "Click the cactus!",
+      "voice": "sparkle",
+      "key": "fluffy.idle.cactus.mouse",
+      "part": "fluffy › idle › cactus",
+      "when": "",
+      "ms": 1680,
+      "flags": []
+    },
+    {
+      "path": [
+        "fluffy",
+        "idle",
+        "hats"
+      ],
+      "text": "Drag a hat onto an alpaca!",
+      "voice": "sparkle",
+      "key": "fluffy.idle.hats",
+      "part": "fluffy › idle",
+      "when": "",
+      "ms": 2546,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "story",
+        "0"
+      ],
+      "text": "Oh no! Our grass steps fell down!",
+      "voice": "tika",
+      "key": "terraces.story.0",
+      "part": "terraces › story",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 3373,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "terraces",
+        "go"
+      ],
+      "text": "Fit the stones back in!",
+      "voice": "sparkle",
+      "key": "terraces.go",
+      "part": "terraces",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 1944,
+      "flags": [
+        "changed"
+      ],
+      "was": "Fit the stones back in, Kaylee!"
+    },
+    {
+      "path": [
+        "terraces",
+        "clonk",
+        "0"
+      ],
+      "text": "Clonk!",
+      "voice": "tika",
+      "key": "terraces.clonk.0",
+      "part": "terraces › clonk",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 610,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "clonk",
+        "1"
+      ],
+      "text": "It fits!",
+      "voice": "tika",
+      "key": "terraces.clonk.1",
+      "part": "terraces › clonk",
+      "when": "",
+      "ms": 859,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "clonk",
+        "2"
+      ],
+      "text": "Like a puzzle!",
+      "voice": "tika",
+      "key": "terraces.clonk.2",
+      "part": "terraces › clonk",
+      "when": "",
+      "ms": 1807,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "clonk",
+        "3"
+      ],
+      "text": "Perfect!",
+      "voice": "tika",
+      "key": "terraces.clonk.3",
+      "part": "terraces › clonk",
+      "when": "",
+      "ms": 738,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "glow"
+      ],
+      "text": "Look for the glowing spot!",
+      "voice": "sparkle",
+      "key": "terraces.glow",
+      "part": "terraces",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 1826,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "wallDone",
+        "0"
+      ],
+      "text": "Our terrace is back!",
+      "voice": "tika",
+      "key": "terraces.wallDone.0",
+      "part": "terraces › wallDone",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 1673,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "wallDone",
+        "1"
+      ],
+      "text": "Yum! Fresh grass!",
+      "voice": "tika",
+      "key": "terraces.wallDone.1",
+      "part": "terraces › wallDone",
+      "when": "",
+      "ms": 2466,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "wallDone",
+        "2"
+      ],
+      "text": "Another step!",
+      "voice": "tika",
+      "key": "terraces.wallDone.2",
+      "part": "terraces › wallDone",
+      "when": "",
+      "ms": 1173,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "wallDone",
+        "3"
+      ],
+      "text": "We made it to the top!",
+      "voice": "tika",
+      "key": "terraces.wallDone.3",
+      "part": "terraces › wallDone",
+      "when": "",
+      "ms": 1814,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "seeds"
+      ],
+      "text": "What should we grow here?",
+      "voice": "sparkle",
+      "key": "terraces.seeds",
+      "part": "terraces",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 1789,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "grew",
+        "potato"
+      ],
+      "text": "Potatoes!",
+      "voice": "tika",
+      "key": "terraces.grew.potato",
+      "part": "terraces › grew",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 1001,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "grew",
+        "corn"
+      ],
+      "text": "Corn!",
+      "voice": "tika",
+      "key": "terraces.grew.corn",
+      "part": "terraces › grew",
+      "when": "",
+      "ms": 608,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "grew",
+        "flower"
+      ],
+      "text": "Flowers!",
+      "voice": "tika",
+      "key": "terraces.grew.flower",
+      "part": "terraces › grew",
+      "when": "",
+      "ms": 815,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "next"
+      ],
+      "text": "Build the next step!",
+      "voice": "sparkle",
+      "key": "terraces.next",
+      "part": "terraces",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 1734,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "friends"
+      ],
+      "text": "Come on up, friends!",
+      "voice": "tika",
+      "key": "terraces.friends",
+      "part": "terraces",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 1754,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "corners"
+      ],
+      "text": "This stone has so many corners!",
+      "voice": "sparkle",
+      "key": "terraces.corners",
+      "part": "terraces",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 2622,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "clouds"
+      ],
+      "text": "So many clouds! I can't see!",
+      "voice": "tika",
+      "key": "terraces.clouds",
+      "part": "terraces",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 2554,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "top"
+      ],
+      "text": "The last wall! Up in the clouds!",
+      "voice": "sparkle",
+      "key": "terraces.top",
+      "part": "terraces",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 3608,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "terraces",
+        "reveal"
+      ],
+      "text": "Look! Machu Picchu!",
+      "voice": "sparkle",
+      "key": "terraces.reveal",
+      "part": "terraces",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 2472,
+      "flags": [
+        "changed"
+      ],
+      "was": "Kaylee, look! Machu Picchu!"
+    },
+    {
+      "path": [
+        "terraces",
+        "photo",
+        "touch"
+      ],
+      "text": "Tap the camera for Luna's journal!",
+      "voice": "sparkle",
+      "key": "terraces.photo.touch",
+      "part": "terraces › photo",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 3530,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "terraces",
+        "photo",
+        "mouse"
+      ],
+      "text": "Click the camera for Luna's journal!",
+      "voice": "sparkle",
+      "key": "terraces.photo.mouse",
+      "part": "terraces › photo",
+      "when": "",
+      "ms": 2664,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "bomb",
+        "0"
+      ],
+      "text": "Me too!",
+      "voice": "tika",
+      "key": "terraces.bomb.0",
+      "part": "terraces › bomb",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 1327,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "bomb",
+        "1"
+      ],
+      "text": "Cheese!",
+      "voice": "tika",
+      "key": "terraces.bomb.1",
+      "part": "terraces › bomb",
+      "when": "",
+      "ms": 659,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "bomb",
+        "2"
+      ],
+      "text": "My best side!",
+      "voice": "tika",
+      "key": "terraces.bomb.2",
+      "part": "terraces › bomb",
+      "when": "",
+      "ms": 1946,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "bomb",
+        "3"
+      ],
+      "text": "Say llama!",
+      "voice": "tika",
+      "key": "terraces.bomb.3",
+      "part": "terraces › bomb",
+      "when": "",
+      "ms": 1453,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "bomb",
+        "4"
+      ],
+      "text": "One more!",
+      "voice": "tika",
+      "key": "terraces.bomb.4",
+      "part": "terraces › bomb",
+      "when": "",
+      "ms": 1131,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "journal"
+      ],
+      "text": "A picture for Luna's journal!",
+      "voice": "tika",
+      "key": "terraces.journal",
+      "part": "terraces",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 2255,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "dance"
+      ],
+      "text": "Dance, dance, dance!",
+      "voice": "tika",
+      "key": "terraces.dance",
+      "part": "terraces",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 1970,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "innocent"
+      ],
+      "text": "Who, me?",
+      "voice": "tika",
+      "key": "terraces.innocent",
+      "part": "terraces",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 1319,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "hey"
+      ],
+      "text": "Hey! A stage!",
+      "voice": "tika",
+      "key": "terraces.hey",
+      "part": "terraces",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 1814,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "tickle",
+        "0"
+      ],
+      "text": "Hee hee!",
+      "voice": "tika",
+      "key": "terraces.tickle.0",
+      "part": "terraces › tickle",
+      "when": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+      "ms": 921,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "terraces",
+        "tickle",
+        "1"
+      ],
+      "text": "Hola!",
+      "voice": "tika",
+      "key": "terraces.tickle.1",
+      "part": "terraces › tickle",
+      "when": "---- 2. Pepa's Penguin Cliff (the desert coast at Paracas) ----",
+      "ms": 486,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "terraces",
+        "tickle",
+        "2"
+      ],
+      "text": "Munch munch.",
+      "voice": "tika",
+      "key": "terraces.tickle.2",
+      "part": "terraces › tickle",
+      "when": "",
+      "ms": 1812,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "bear"
+      ],
+      "text": "A shy spectacled bear!",
+      "voice": "sparkle",
+      "key": "terraces.bear",
+      "part": "terraces",
+      "when": "",
+      "ms": 2667,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "potatoes"
+      ],
+      "text": "Peru has thousands of kinds of potatoes!",
+      "voice": "sparkle",
+      "key": "terraces.potatoes",
+      "part": "terraces",
+      "when": "",
+      "ms": 3089,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "terraces",
+        "puzzle"
+      ],
+      "text": "The stones fit together like a puzzle!",
+      "voice": "sparkle",
+      "key": "terraces.puzzle",
+      "part": "terraces",
+      "when": "",
+      "ms": 2618,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "carry"
+      ],
+      "text": "Llamas can carry things up the mountain!",
+      "voice": "sparkle",
+      "key": "terraces.carry",
+      "part": "terraces",
+      "when": "",
+      "ms": 2906,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "idle",
+        "stone"
+      ],
+      "text": "Drag a stone into a hole!",
+      "voice": "sparkle",
+      "key": "terraces.idle.stone",
+      "part": "terraces › idle",
+      "when": "",
+      "ms": 2121,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "idle",
+        "seed",
+        "touch"
+      ],
+      "text": "Tap a seed bag to plant it!",
+      "voice": "sparkle",
+      "key": "terraces.idle.seed.touch",
+      "part": "terraces › idle › seed",
+      "when": "",
+      "ms": 2486,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "idle",
+        "seed",
+        "mouse"
+      ],
+      "text": "Click a seed bag to plant it!",
+      "voice": "sparkle",
+      "key": "terraces.idle.seed.mouse",
+      "part": "terraces › idle › seed",
+      "when": "",
+      "ms": 2592,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "idle",
+        "photo",
+        "touch"
+      ],
+      "text": "Tap the camera!",
+      "voice": "sparkle",
+      "key": "terraces.idle.photo.touch",
+      "part": "terraces › idle › photo",
+      "when": "",
+      "ms": 1171,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "idle",
+        "photo",
+        "mouse"
+      ],
+      "text": "Click the camera!",
+      "voice": "sparkle",
+      "key": "terraces.idle.photo.mouse",
+      "part": "terraces › idle › photo",
+      "when": "",
+      "ms": 1272,
+      "flags": []
+    },
+    {
+      "path": [
+        "terracesWindow"
+      ],
+      "text": "Me at Machu Picchu!",
+      "voice": "tika",
+      "key": "terracesWindow",
+      "part": "",
+      "when": "",
+      "ms": 1684,
+      "flags": []
+    },
+    {
+      "path": [
+        "terracesSticker"
+      ],
+      "text": "Llama sticker! Llamas can carry things up mountains!",
+      "voice": "sparkle",
+      "key": "terracesSticker",
+      "part": "",
+      "when": "",
+      "ms": 3960,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "story",
+        "0"
+      ],
+      "text": "Hola! My chicks are hungry!",
+      "voice": "pepa",
+      "key": "penguins.story.0",
+      "part": "penguins › story",
+      "when": "",
+      "ms": 2346,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "pull",
+        "touch"
+      ],
+      "text": "Pull a penguin back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.pull.touch",
+      "part": "penguins › pull",
+      "when": "",
+      "ms": 2896,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "pull",
+        "mouse"
+      ],
+      "text": "Click a penguin, pull it back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.pull.mouse",
+      "part": "penguins › pull",
+      "when": "",
+      "ms": 3384,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "wheee",
+        "0"
+      ],
+      "text": "Wheee!",
+      "voice": "pingo",
+      "key": "penguins.wheee.0",
+      "part": "penguins › wheee",
+      "when": "",
+      "ms": 1436,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "wheee",
+        "1"
+      ],
+      "text": "Splash!",
+      "voice": "pingo",
+      "key": "penguins.wheee.1",
+      "part": "penguins › wheee",
+      "when": "",
+      "ms": 1058,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "wheee",
+        "2"
+      ],
+      "text": "Yippee!",
+      "voice": "pingo",
+      "key": "penguins.wheee.2",
+      "part": "penguins › wheee",
+      "when": "",
+      "ms": 634,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "whoa"
+      ],
+      "text": "Whoa!",
+      "voice": "pingo",
+      "key": "penguins.whoa",
+      "part": "penguins",
+      "when": "",
+      "ms": 580,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "blip"
+      ],
+      "text": "A teeny splash!",
+      "voice": "pingo",
+      "key": "penguins.blip",
+      "part": "penguins",
+      "when": "",
+      "ms": 1755,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "sock"
+      ],
+      "text": "I found a sock!",
+      "voice": "pingo",
+      "key": "penguins.sock",
+      "part": "penguins",
+      "when": "",
+      "ms": 2151,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "lobo",
+        "0"
+      ],
+      "text": "Hey! You splashed me!",
+      "voice": "lobo",
+      "key": "penguins.lobo.0",
+      "part": "penguins › lobo",
+      "when": "",
+      "ms": 2350,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "lobo",
+        "1"
+      ],
+      "text": "Do it again!",
+      "voice": "lobo",
+      "key": "penguins.lobo.1",
+      "part": "penguins › lobo",
+      "when": "",
+      "ms": 950,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "lobo",
+        "2"
+      ],
+      "text": "Ha ha! Seaweed hat!",
+      "voice": "lobo",
+      "key": "penguins.lobo.2",
+      "part": "penguins › lobo",
+      "when": "",
+      "ms": 2455,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "loboTap",
+        "0"
+      ],
+      "text": "Arf arf!",
+      "voice": "lobo",
+      "key": "penguins.loboTap.0",
+      "part": "penguins › loboTap",
+      "when": "",
+      "ms": 997,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "loboTap",
+        "1"
+      ],
+      "text": "I love splashes!",
+      "voice": "lobo",
+      "key": "penguins.loboTap.1",
+      "part": "penguins › loboTap",
+      "when": "",
+      "ms": 2155,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "loboTap",
+        "2"
+      ],
+      "text": "Hola!",
+      "voice": "lobo",
+      "key": "penguins.loboTap.2",
+      "part": "penguins › loboTap",
+      "when": "",
+      "ms": 888,
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Hola, Kaylee!"
+    },
+    {
+      "path": [
+        "penguins",
+        "fishGo"
+      ],
+      "text": "Catch fish for the chicks!",
+      "voice": "sparkle",
+      "key": "penguins.fishGo",
+      "part": "penguins",
+      "when": "",
+      "ms": 1754,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "aim"
+      ],
+      "text": "Land in the gold circle!",
+      "voice": "sparkle",
+      "key": "penguins.aim",
+      "part": "penguins",
+      "when": "",
+      "ms": 1831,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "got",
+        "0"
+      ],
+      "text": "Got one!",
+      "voice": "pingo",
+      "key": "penguins.got.0",
+      "part": "penguins › got",
+      "when": "",
+      "ms": 870,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "got",
+        "1"
+      ],
+      "text": "A fish!",
+      "voice": "pingo",
+      "key": "penguins.got.1",
+      "part": "penguins › got",
+      "when": "",
+      "ms": 773,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "orders",
+        "0"
+      ],
+      "text": "One fish, please!",
+      "voice": "pepa",
+      "key": "penguins.orders.0",
+      "part": "penguins › orders",
+      "when": "",
+      "ms": 1736,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "orders",
+        "1"
+      ],
+      "text": "Two fish, please!",
+      "voice": "pepa",
+      "key": "penguins.orders.1",
+      "part": "penguins › orders",
+      "when": "",
+      "ms": 1667,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "orders",
+        "2"
+      ],
+      "text": "Three fish, please!",
+      "voice": "pepa",
+      "key": "penguins.orders.2",
+      "part": "penguins › orders",
+      "when": "",
+      "ms": 1904,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "count",
+        "0"
+      ],
+      "text": "One!",
+      "voice": "sparkle",
+      "key": "penguins.count.0",
+      "part": "penguins › count",
+      "when": "",
+      "ms": 645,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "count",
+        "1"
+      ],
+      "text": "Two!",
+      "voice": "sparkle",
+      "key": "penguins.count.1",
+      "part": "penguins › count",
+      "when": "",
+      "ms": 541,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "count",
+        "2"
+      ],
+      "text": "Three!",
+      "voice": "sparkle",
+      "key": "penguins.count.2",
+      "part": "penguins › count",
+      "when": "",
+      "ms": 722,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "feed"
+      ],
+      "text": "Feed my chicks!",
+      "voice": "pepa",
+      "key": "penguins.feed",
+      "part": "penguins",
+      "when": "",
+      "ms": 1272,
+      "flags": [
+        "changed"
+      ],
+      "was": "Feed my chicks, Kaylee!"
+    },
+    {
+      "path": [
+        "penguins",
+        "yum",
+        "0"
+      ],
+      "text": "Yummy!",
+      "voice": "pepa",
+      "key": "penguins.yum.0",
+      "part": "penguins › yum",
+      "when": "",
+      "ms": 720,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "yum",
+        "1"
+      ],
+      "text": "So round and fluffy!",
+      "voice": "pepa",
+      "key": "penguins.yum.1",
+      "part": "penguins › yum",
+      "when": "",
+      "ms": 2061,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "yum",
+        "2"
+      ],
+      "text": "Gracias!",
+      "voice": "pepa",
+      "key": "penguins.yum.2",
+      "part": "penguins › yum",
+      "when": "",
+      "ms": 894,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "egg"
+      ],
+      "text": "Look! The egg is wiggling!",
+      "voice": "sparkle",
+      "key": "penguins.egg",
+      "part": "penguins",
+      "when": "",
+      "ms": 2736,
+      "flags": [
+        "changed"
+      ],
+      "was": "Kaylee, look! The egg is wiggling!"
+    },
+    {
+      "path": [
+        "penguins",
+        "hatch"
+      ],
+      "text": "A new baby!",
+      "voice": "pepa",
+      "key": "penguins.hatch",
+      "part": "penguins",
+      "when": "",
+      "ms": 1442,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "pelican"
+      ],
+      "text": "A pelican wants fish too!",
+      "voice": "sparkle",
+      "key": "penguins.pelican",
+      "part": "penguins",
+      "when": "",
+      "ms": 2661,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "swimGo"
+      ],
+      "text": "The chicks are ready to swim! Pull them back!",
+      "voice": "sparkle",
+      "key": "penguins.swimGo",
+      "part": "penguins",
+      "when": "",
+      "ms": 3331,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "firstSwim"
+      ],
+      "text": "Their very first swim!",
+      "voice": "pepa",
+      "key": "penguins.firstSwim",
+      "part": "penguins",
+      "when": "",
+      "ms": 1699,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "thanks"
+      ],
+      "text": "Gracias!",
+      "voice": "pepa",
+      "key": "penguins.thanks",
+      "part": "penguins",
+      "when": "",
+      "ms": 894,
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Gracias, Kaylee!"
+    },
+    {
+      "path": [
+        "penguins",
+        "photo"
+      ],
+      "text": "Click! A picture for Luna's journal!",
+      "voice": "sparkle",
+      "key": "penguins.photo",
+      "part": "penguins",
+      "when": "",
+      "ms": 2702,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "pepaTap",
+        "0"
+      ],
+      "text": "Hola!",
+      "voice": "pepa",
+      "key": "penguins.pepaTap.0",
+      "part": "penguins › pepaTap",
+      "when": "",
+      "ms": 576,
+      "flags": [
+        "twice",
+        "changed"
+      ],
+      "was": "Hola, Kaylee!"
+    },
+    {
+      "path": [
+        "penguins",
+        "pepaTap",
+        "1"
+      ],
+      "text": "My babies love fish!",
+      "voice": "pepa",
+      "key": "penguins.pepaTap.1",
+      "part": "penguins › pepaTap",
+      "when": "",
+      "ms": 2045,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "tern"
+      ],
+      "text": "These birds have white mustaches!",
+      "voice": "sparkle",
+      "key": "penguins.tern",
+      "part": "penguins",
+      "when": "",
+      "ms": 2846,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "facts",
+        "0"
+      ],
+      "text": "Peru has penguins!",
+      "voice": "sparkle",
+      "key": "penguins.facts.0",
+      "part": "penguins › facts",
+      "when": "",
+      "ms": 1809,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "facts",
+        "1"
+      ],
+      "text": "The ocean here is cold and full of fish!",
+      "voice": "sparkle",
+      "key": "penguins.facts.1",
+      "part": "penguins › facts",
+      "when": "",
+      "ms": 3643,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "facts",
+        "2"
+      ],
+      "text": "Penguins fly underwater with their wings!",
+      "voice": "sparkle",
+      "key": "penguins.facts.2",
+      "part": "penguins › facts",
+      "when": "",
+      "ms": 2692,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "launch",
+        "touch"
+      ],
+      "text": "Pull a penguin back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.idle.launch.touch",
+      "part": "penguins › idle › launch",
+      "when": "",
+      "ms": 2896,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "launch",
+        "mouse"
+      ],
+      "text": "Click a penguin, pull it back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.idle.launch.mouse",
+      "part": "penguins › idle › launch",
+      "when": "",
+      "ms": 3384,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "fish"
+      ],
+      "text": "Jump onto the fish to catch one!",
+      "voice": "sparkle",
+      "key": "penguins.idle.fish",
+      "part": "penguins › idle",
+      "when": "",
+      "ms": 2654,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "feed",
+        "touch"
+      ],
+      "text": "Tap a chick to feed it!",
+      "voice": "sparkle",
+      "key": "penguins.idle.feed.touch",
+      "part": "penguins › idle › feed",
+      "when": "",
+      "ms": 1856,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "feed",
+        "mouse"
+      ],
+      "text": "Click a chick to feed it!",
+      "voice": "sparkle",
+      "key": "penguins.idle.feed.mouse",
+      "part": "penguins › idle › feed",
+      "when": "",
+      "ms": 2184,
+      "flags": []
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "swim",
+        "touch"
+      ],
+      "text": "Pull a chick back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.idle.swim.touch",
+      "part": "penguins › idle › swim",
+      "when": "",
+      "ms": 4138,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "penguins",
+        "idle",
+        "swim",
+        "mouse"
+      ],
+      "text": "Click a chick, pull it back, then let go!",
+      "voice": "sparkle",
+      "key": "penguins.idle.swim.mouse",
+      "part": "penguins › idle › swim",
+      "when": "",
+      "ms": 3720,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "penguinSticker"
+      ],
+      "text": "Penguin sticker! Penguins live in Peru too!",
+      "voice": "sparkle",
+      "key": "penguinSticker",
+      "part": "",
+      "when": "",
+      "ms": 3857,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canyon",
+        "story",
+        "0"
+      ],
+      "text": "My chick Pluma is scared to fly.",
+      "voice": "coco",
+      "key": "canyon.story.0",
+      "part": "canyon › story",
+      "when": "",
+      "ms": 3317,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canyon",
+        "grab"
+      ],
+      "text": "Grab Coco and show her how!",
+      "voice": "sparkle",
+      "key": "canyon.grab",
+      "part": "canyon",
+      "when": "",
+      "ms": 2542,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "warm"
+      ],
+      "text": "Fly into the warm air!",
+      "voice": "sparkle",
+      "key": "canyon.warm",
+      "part": "canyon",
+      "when": "",
+      "ms": 1895,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "upWeGo"
+      ],
+      "text": "Ahh, warm air! Up we go!",
+      "voice": "coco",
+      "key": "canyon.upWeGo",
+      "part": "canyon",
+      "when": "",
+      "ms": 3716,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canyon",
+        "needWarm"
+      ],
+      "text": "I need warm air to go up!",
+      "voice": "coco",
+      "key": "canyon.needWarm",
+      "part": "canyon",
+      "when": "",
+      "ms": 2788,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "whoosh"
+      ],
+      "text": "Whoooosh!",
+      "voice": "coco",
+      "key": "canyon.whoosh",
+      "part": "canyon",
+      "when": "",
+      "ms": 1137,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "sneeze"
+      ],
+      "text": "Achoo!",
+      "voice": "coco",
+      "key": "canyon.sneeze",
+      "part": "canyon",
+      "when": "",
+      "ms": 674,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "canyon",
+        "scared"
+      ],
+      "text": "It's so high!",
+      "voice": "pluma",
+      "key": "canyon.scared",
+      "part": "canyon",
+      "when": "",
+      "ms": 1493,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "callPluma"
+      ],
+      "text": "Come on, Pluma! Fly with me!",
+      "voice": "coco",
+      "key": "canyon.callPluma",
+      "part": "canyon",
+      "when": "",
+      "ms": 2941,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "pTry"
+      ],
+      "text": "I'll try! Here I come!",
+      "voice": "pluma",
+      "key": "canyon.pTry",
+      "part": "canyon",
+      "when": "",
+      "ms": 2115,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "lead"
+      ],
+      "text": "Lead Pluma to the shiny circles!",
+      "voice": "sparkle",
+      "key": "canyon.lead",
+      "part": "canyon",
+      "when": "",
+      "ms": 3555,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canyon",
+        "wait"
+      ],
+      "text": "Wait for me!",
+      "voice": "pluma",
+      "key": "canyon.wait",
+      "part": "canyon",
+      "when": "",
+      "ms": 996,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "wheee"
+      ],
+      "text": "Wheee!",
+      "voice": "pluma",
+      "key": "canyon.wheee",
+      "part": "canyon",
+      "when": "",
+      "ms": 973,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "canyon",
+        "dizzy"
+      ],
+      "text": "I'm dizzy!",
+      "voice": "pluma",
+      "key": "canyon.dizzy",
+      "part": "canyon",
+      "when": "",
+      "ms": 970,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "falls"
+      ],
+      "text": "Ooh, a waterfall!",
+      "voice": "pluma",
+      "key": "canyon.falls",
+      "part": "canyon",
+      "when": "",
+      "ms": 2883,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "condors"
+      ],
+      "text": "Hello, friends!",
+      "voice": "coco",
+      "key": "canyon.condors",
+      "part": "canyon",
+      "when": "",
+      "ms": 1130,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "lookout"
+      ],
+      "text": "People are waving!",
+      "voice": "pluma",
+      "key": "canyon.lookout",
+      "part": "canyon",
+      "when": "",
+      "ms": 1507,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "smile"
+      ],
+      "text": "Smile for the photo!",
+      "voice": "coco",
+      "key": "canyon.smile",
+      "part": "canyon",
+      "when": "",
+      "ms": 1549,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "sunMoved"
+      ],
+      "text": "The sun moved! Find the new warm air!",
+      "voice": "sparkle",
+      "key": "canyon.sunMoved",
+      "part": "canyon",
+      "when": "",
+      "ms": 3318,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canyon",
+        "top"
+      ],
+      "text": "Fly to the very top!",
+      "voice": "sparkle",
+      "key": "canyon.top",
+      "part": "canyon",
+      "when": "",
+      "ms": 1731,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "alone"
+      ],
+      "text": "I can fly by myself!",
+      "voice": "pluma",
+      "key": "canyon.alone",
+      "part": "canyon",
+      "when": "",
+      "ms": 2131,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "solo"
+      ],
+      "text": "Now you fly Pluma!",
+      "voice": "sparkle",
+      "key": "canyon.solo",
+      "part": "canyon",
+      "when": "",
+      "ms": 3192,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Now you fly Pluma, Kaylee!"
+    },
+    {
+      "path": [
+        "canyon",
+        "bigSwirl"
+      ],
+      "text": "Fly Pluma into the big swirl!",
+      "voice": "sparkle",
+      "key": "canyon.bigSwirl",
+      "part": "canyon",
+      "when": "",
+      "ms": 3447,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canyon",
+        "lookMe"
+      ],
+      "text": "Look at me!",
+      "voice": "pluma",
+      "key": "canyon.lookMe",
+      "part": "canyon",
+      "when": "",
+      "ms": 1200,
+      "flags": [
+        "changed"
+      ],
+      "was": "Look at me, Kaylee!"
+    },
+    {
+      "path": [
+        "canyon",
+        "proud"
+      ],
+      "text": "My Pluma can fly! Gracias!",
+      "voice": "coco",
+      "key": "canyon.proud",
+      "part": "canyon",
+      "when": "",
+      "ms": 3600,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "My Pluma can fly! Gracias, Kaylee!"
+    },
+    {
+      "path": [
+        "canyon",
+        "photo"
+      ],
+      "text": "Click! A picture for Luna's journal!",
+      "voice": "sparkle",
+      "key": "canyon.photo",
+      "part": "canyon",
+      "when": "",
+      "ms": 2702,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "canyon",
+        "nestTap"
+      ],
+      "text": "Hi, Dad!",
+      "voice": "pluma",
+      "key": "canyon.nestTap",
+      "part": "canyon",
+      "when": "",
+      "ms": 981,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "idle",
+        "grab"
+      ],
+      "text": "Grab Coco and fly!",
+      "voice": "sparkle",
+      "key": "canyon.idle.grab",
+      "part": "canyon › idle",
+      "when": "",
+      "ms": 2304,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "idle",
+        "places"
+      ],
+      "text": "Fly to a shiny circle!",
+      "voice": "sparkle",
+      "key": "canyon.idle.places",
+      "part": "canyon › idle",
+      "when": "",
+      "ms": 1955,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "facts",
+        "0"
+      ],
+      "text": "Condors hardly flap their wings!",
+      "voice": "sparkle",
+      "key": "canyon.facts.0",
+      "part": "canyon › facts",
+      "when": "",
+      "ms": 2831,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "facts",
+        "1"
+      ],
+      "text": "Condor wings are wider than a grown-up is tall!",
+      "voice": "sparkle",
+      "key": "canyon.facts.1",
+      "part": "canyon › facts",
+      "when": "",
+      "ms": 3399,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canyon",
+        "facts",
+        "2"
+      ],
+      "text": "This canyon is super deep!",
+      "voice": "sparkle",
+      "key": "canyon.facts.2",
+      "part": "canyon › facts",
+      "when": "",
+      "ms": 2822,
+      "flags": []
+    },
+    {
+      "path": [
+        "canyon",
+        "facts",
+        "3"
+      ],
+      "text": "The sun warms the air, and warm air rises!",
+      "voice": "sparkle",
+      "key": "canyon.facts.3",
+      "part": "canyon › facts",
+      "when": "",
+      "ms": 4650,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "condorWindow"
+      ],
+      "text": "I can fly!",
+      "voice": "pluma",
+      "key": "condorWindow",
+      "part": "",
+      "when": "",
+      "ms": 1047,
+      "flags": []
+    },
+    {
+      "path": [
+        "condorSticker"
+      ],
+      "text": "Condor sticker! Condors soar on warm air!",
+      "voice": "sparkle",
+      "key": "condorSticker",
+      "part": "",
+      "when": "",
+      "ms": 5636,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "story",
+        "0"
+      ],
+      "text": "Hola! I want to visit my forest friends!",
+      "voice": "rosa",
+      "key": "river.story.0",
+      "part": "river › story",
+      "when": "",
+      "ms": 3245,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "squeeze",
+        "touch"
+      ],
+      "text": "Squeeze the cloud to make rain!",
+      "voice": "sparkle",
+      "key": "river.squeeze.touch",
+      "part": "river › squeeze",
+      "when": "",
+      "ms": 3190,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "squeeze",
+        "mouse"
+      ],
+      "text": "Click and hold the cloud to make rain!",
+      "voice": "sparkle",
+      "key": "river.squeeze.mouse",
+      "part": "river › squeeze",
+      "when": "",
+      "ms": 3168,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "slothWake"
+      ],
+      "text": "Hiiiiii...",
+      "voice": "sloth",
+      "key": "river.slothWake",
+      "part": "river",
+      "when": "",
+      "ms": 2558,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "slothYawn"
+      ],
+      "text": "Ooh... a shower...",
+      "voice": "sloth",
+      "key": "river.slothYawn",
+      "part": "river",
+      "when": "",
+      "ms": 2629,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "wet"
+      ],
+      "text": "I'm all wet! Hee hee!",
+      "voice": "sparkle",
+      "key": "river.wet",
+      "part": "river",
+      "when": "",
+      "ms": 2023,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "river"
+      ],
+      "text": "Make it rain on the river!",
+      "voice": "sparkle",
+      "key": "river.river",
+      "part": "river",
+      "when": "",
+      "ms": 1899,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "more"
+      ],
+      "text": "Wheee! More water!",
+      "voice": "rosa",
+      "key": "river.more",
+      "part": "river",
+      "when": "",
+      "ms": 2354,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hello",
+        "capy",
+        "0"
+      ],
+      "text": "Hola, capybaras!",
+      "voice": "rosa",
+      "key": "river.hello.capy.0",
+      "part": "river › hello › capy",
+      "when": "",
+      "ms": 1710,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hello",
+        "capy",
+        "1"
+      ],
+      "text": "Ahh... a swim!",
+      "voice": "capy",
+      "key": "river.hello.capy.1",
+      "part": "river › hello › capy",
+      "when": "",
+      "ms": 2093,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hello",
+        "sloth",
+        "0"
+      ],
+      "text": "Hola, sloth!",
+      "voice": "rosa",
+      "key": "river.hello.sloth.0",
+      "part": "river › hello › sloth",
+      "when": "",
+      "ms": 1670,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hello",
+        "sloth",
+        "1"
+      ],
+      "text": "Hiii, Rosa...",
+      "voice": "sloth",
+      "key": "river.hello.sloth.1",
+      "part": "river › hello › sloth",
+      "when": "",
+      "ms": 1502,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hello",
+        "monkey",
+        "0"
+      ],
+      "text": "Hola, monkeys!",
+      "voice": "rosa",
+      "key": "river.hello.monkey.0",
+      "part": "river › hello › monkey",
+      "when": "",
+      "ms": 1671,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hello",
+        "monkey",
+        "1"
+      ],
+      "text": "Splash! Splash!",
+      "voice": "monkey",
+      "key": "river.hello.monkey.1",
+      "part": "river › hello › monkey",
+      "when": "",
+      "ms": 1701,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "flooded"
+      ],
+      "text": "The river grows into the forest!",
+      "voice": "sparkle",
+      "key": "river.flooded",
+      "part": "river",
+      "when": "",
+      "ms": 3030,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "lagoonGo"
+      ],
+      "text": "Let's swim to the lagoon!",
+      "voice": "rosa",
+      "key": "river.lagoonGo",
+      "part": "river",
+      "when": "",
+      "ms": 1555,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "lagoon"
+      ],
+      "text": "Rain on the lagoon!",
+      "voice": "sparkle",
+      "key": "river.lagoon",
+      "part": "river",
+      "when": "",
+      "ms": 1551,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "buds"
+      ],
+      "text": "Rain on the lily buds!",
+      "voice": "sparkle",
+      "key": "river.buds",
+      "part": "river",
+      "when": "",
+      "ms": 2550,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "pads"
+      ],
+      "text": "Lily pads! Help the friends hop on!",
+      "voice": "sparkle",
+      "key": "river.pads",
+      "part": "river",
+      "when": "",
+      "ms": 4058,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "hop",
+        "frog"
+      ],
+      "text": "Hop, frog!",
+      "voice": "sparkle",
+      "key": "river.hop.frog",
+      "part": "river › hop",
+      "when": "",
+      "ms": 1260,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hop",
+        "monkey"
+      ],
+      "text": "Wheee!",
+      "voice": "monkey",
+      "key": "river.hop.monkey",
+      "part": "river › hop",
+      "when": "",
+      "ms": 1062,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "hop",
+        "capy"
+      ],
+      "text": "Comfy!",
+      "voice": "capy",
+      "key": "river.hop.capy",
+      "part": "river › hop",
+      "when": "",
+      "ms": 685,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "hop",
+        "macaw"
+      ],
+      "text": "Flap, flap, macaw!",
+      "voice": "sparkle",
+      "key": "river.hop.macaw",
+      "part": "river › hop",
+      "when": "",
+      "ms": 2407,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "sun"
+      ],
+      "text": "Bye-bye, cloud! Hello, sun!",
+      "voice": "sparkle",
+      "key": "river.sun",
+      "part": "river",
+      "when": "",
+      "ms": 2388,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "rainbow"
+      ],
+      "text": "A rainbow! Gracias!",
+      "voice": "rosa",
+      "key": "river.rainbow",
+      "part": "river",
+      "when": "",
+      "ms": 2712,
+      "flags": [
+        "changed"
+      ],
+      "was": "A rainbow! Gracias, Kaylee!"
+    },
+    {
+      "path": [
+        "river",
+        "photo"
+      ],
+      "text": "Click! A picture for Luna!",
+      "voice": "sparkle",
+      "key": "river.photo",
+      "part": "river",
+      "when": "",
+      "ms": 2138,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "spout",
+        "0"
+      ],
+      "text": "Hee hee!",
+      "voice": "rosa",
+      "key": "river.spout.0",
+      "part": "river › spout",
+      "when": "",
+      "ms": 458,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "spout",
+        "1"
+      ],
+      "text": "Pfff! Bubbles!",
+      "voice": "rosa",
+      "key": "river.spout.1",
+      "part": "river › spout",
+      "when": "",
+      "ms": 1622,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "spout",
+        "2"
+      ],
+      "text": "Splashy!",
+      "voice": "rosa",
+      "key": "river.spout.2",
+      "part": "river › spout",
+      "when": "",
+      "ms": 883,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "rosaTap"
+      ],
+      "text": "I live in a river, not the sea!",
+      "voice": "rosa",
+      "key": "river.rosaTap",
+      "part": "river",
+      "when": "",
+      "ms": 2249,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "facts",
+        "0"
+      ],
+      "text": "This dolphin lives in a river!",
+      "voice": "sparkle",
+      "key": "river.facts.0",
+      "part": "river › facts",
+      "when": "",
+      "ms": 2614,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "facts",
+        "1"
+      ],
+      "text": "Half of Peru is rainforest!",
+      "voice": "sparkle",
+      "key": "river.facts.1",
+      "part": "river › facts",
+      "when": "",
+      "ms": 2901,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "facts",
+        "2"
+      ],
+      "text": "The river grows into the forest!",
+      "voice": "sparkle",
+      "key": "river.facts.2",
+      "part": "river › facts",
+      "when": "",
+      "ms": 3030,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "facts",
+        "3"
+      ],
+      "text": "Some fish eat fruit!",
+      "voice": "sparkle",
+      "key": "river.facts.3",
+      "part": "river › facts",
+      "when": "",
+      "ms": 2600,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "fruit"
+      ],
+      "text": "Some fish eat fruit!",
+      "voice": "sparkle",
+      "key": "river.fruit",
+      "part": "river",
+      "when": "",
+      "ms": 2600,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "squeeze",
+        "touch"
+      ],
+      "text": "Hold the cloud to make rain!",
+      "voice": "sparkle",
+      "key": "river.idle.squeeze.touch",
+      "part": "river › idle › squeeze",
+      "when": "",
+      "ms": 2538,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "squeeze",
+        "mouse"
+      ],
+      "text": "Click and hold the cloud to make rain!",
+      "voice": "sparkle",
+      "key": "river.idle.squeeze.mouse",
+      "part": "river › idle › squeeze",
+      "when": "",
+      "ms": 3168,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "river"
+      ],
+      "text": "Drag the cloud over the river!",
+      "voice": "sparkle",
+      "key": "river.idle.river",
+      "part": "river › idle",
+      "when": "",
+      "ms": 2718,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "lagoon"
+      ],
+      "text": "Drag the cloud over the lagoon!",
+      "voice": "sparkle",
+      "key": "river.idle.lagoon",
+      "part": "river › idle",
+      "when": "",
+      "ms": 2423,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "idle",
+        "pads"
+      ],
+      "text": "Drag a friend onto a lily pad!",
+      "voice": "sparkle",
+      "key": "river.idle.pads",
+      "part": "river › idle",
+      "when": "",
+      "ms": 2711,
+      "flags": []
+    },
+    {
+      "path": [
+        "river",
+        "sticker"
+      ],
+      "text": "Pink dolphin sticker! These dolphins live in rivers!",
+      "voice": "sparkle",
+      "key": "river.sticker",
+      "part": "river",
+      "when": "",
+      "ms": 4707,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "sticker"
+      ],
+      "text": "Alpaca sticker! Alpacas have soft, warm fleece!",
+      "voice": "sparkle",
+      "key": "sticker",
+      "part": "",
+      "when": "",
+      "ms": 4722,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "videos",
+        "condor"
+      ],
+      "text": "Want to see real condors?",
+      "voice": "sparkle",
+      "key": "videos.condor",
+      "part": "videos",
+      "when": "",
+      "ms": 2470,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "machuPicchu"
+      ],
+      "text": "Want to see Machu Picchu?",
+      "voice": "sparkle",
+      "key": "videos.machuPicchu",
+      "part": "videos",
+      "when": "",
+      "ms": 2117,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "penguins"
+      ],
+      "text": "Want to see real penguins?",
+      "voice": "sparkle",
+      "key": "videos.penguins",
+      "part": "videos",
+      "when": "",
+      "ms": 1935,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "alpacas"
+      ],
+      "text": "Want to see real alpacas?",
+      "voice": "sparkle",
+      "key": "videos.alpacas",
+      "part": "videos",
+      "when": "",
+      "ms": 2812,
+      "flags": []
+    },
+    {
+      "path": [
+        "videos",
+        "dolphin"
+      ],
+      "text": "Want to see river dolphins?",
+      "voice": "sparkle",
+      "key": "videos.dolphin",
+      "part": "videos",
+      "when": "",
+      "ms": 1894,
+      "flags": []
+    },
+    {
+      "path": [
+        "facts",
+        "location"
+      ],
+      "text": "Peru is in South America!",
+      "voice": "sparkle",
+      "key": "facts.location",
+      "part": "facts",
+      "when": "",
+      "ms": 2423,
+      "flags": []
+    },
+    {
+      "path": [
+        "facts",
+        "worlds"
+      ],
+      "text": "Peru has a coast, mountains, and rainforest!",
+      "voice": "sparkle",
+      "key": "facts.worlds",
+      "part": "facts",
+      "when": "",
+      "ms": 3539,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "hello"
+      ],
+      "text": "Hola means hello in Spanish!",
+      "voice": "sparkle",
+      "key": "facts.hello",
+      "part": "facts",
+      "when": "",
+      "ms": 2812,
+      "flags": []
+    },
+    {
+      "path": [
+        "facts",
+        "languages"
+      ],
+      "text": "People in Peru also speak Quechua and Aymara!",
+      "voice": "sparkle",
+      "key": "facts.languages",
+      "part": "facts",
+      "when": "",
+      "ms": 4255,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "penguins"
+      ],
+      "text": "Peru has penguins on its desert coast!",
+      "voice": "sparkle",
+      "key": "facts.penguins",
+      "part": "facts",
+      "when": "",
+      "ms": 3329,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "alpacas"
+      ],
+      "text": "Alpacas live high in the mountains!",
+      "voice": "sparkle",
+      "key": "facts.alpacas",
+      "part": "facts",
+      "when": "",
+      "ms": 3194,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "machuPicchu"
+      ],
+      "text": "The Inca built Machu Picchu long ago!",
+      "voice": "sparkle",
+      "key": "facts.machuPicchu",
+      "part": "facts",
+      "when": "",
+      "ms": 4148,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "potatoes"
+      ],
+      "text": "Peru has thousands of kinds of potatoes!",
+      "voice": "sparkle",
+      "key": "facts.potatoes",
+      "part": "facts",
+      "when": "",
+      "ms": 3089,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "flag"
+      ],
+      "text": "Peru's flag is red, white, red!",
+      "voice": "sparkle",
+      "key": "facts.flag",
+      "part": "facts",
+      "when": "",
+      "ms": 3326,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "facts",
+        "bird"
+      ],
+      "text": "Peru's bird is bright orange!",
+      "voice": "sparkle",
+      "key": "facts.bird",
+      "part": "facts",
+      "when": "",
+      "ms": 3068,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "passport",
+        "touch"
+      ],
+      "text": "This is Peru! Tap a picture to explore.",
+      "voice": "sparkle",
+      "key": "passport.touch",
+      "part": "passport",
+      "when": "",
+      "ms": 3750,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "passport",
+        "mouse"
+      ],
+      "text": "This is Peru! Click a picture to explore.",
+      "voice": "sparkle",
+      "key": "passport.mouse",
+      "part": "passport",
+      "when": "",
+      "ms": 4512,
+      "flags": [
+        "long"
+      ]
+    }
+  ]
+}

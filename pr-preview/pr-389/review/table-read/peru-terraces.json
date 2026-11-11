@@ -1,0 +1,678 @@
+{
+  "kind": "table-read",
+  "place": "peru",
+  "group": "terraces",
+  "title": "Peru › Terraces",
+  "intro": "---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----",
+  "page": "peru-terraces.html",
+  "audio": null,
+  "lines": 44,
+  "seconds": 81,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "terraces.story.0",
+      "text": "Oh no! Our grass steps fell down!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "terraces.go",
+      "text": "Fit the stones back in!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Fit the stones back in, Kaylee!"
+    },
+    {
+      "key": "terraces.top",
+      "text": "The last wall! Up in the clouds!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "terraces.reveal",
+      "text": "Look! Machu Picchu!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Kaylee, look! Machu Picchu!"
+    },
+    {
+      "key": "terraces.photo.touch",
+      "text": "Tap the camera for Luna's journal!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "terraces.potatoes",
+      "text": "Peru has thousands of kinds of potatoes!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "terraces",
+        "story",
+        "0"
+      ],
+      "text": "Oh no! Our grass steps fell down!",
+      "voice": "tika",
+      "key": "terraces.story.0",
+      "part": "terraces › story",
+      "when": "",
+      "ms": 3373,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "terraces",
+        "go"
+      ],
+      "text": "Fit the stones back in!",
+      "voice": "sparkle",
+      "key": "terraces.go",
+      "part": "terraces",
+      "when": "",
+      "ms": 1944,
+      "flags": [
+        "changed"
+      ],
+      "was": "Fit the stones back in, Kaylee!"
+    },
+    {
+      "path": [
+        "terraces",
+        "clonk",
+        "0"
+      ],
+      "text": "Clonk!",
+      "voice": "tika",
+      "key": "terraces.clonk.0",
+      "part": "terraces › clonk",
+      "when": "",
+      "ms": 610,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "clonk",
+        "1"
+      ],
+      "text": "It fits!",
+      "voice": "tika",
+      "key": "terraces.clonk.1",
+      "part": "terraces › clonk",
+      "when": "",
+      "ms": 859,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "clonk",
+        "2"
+      ],
+      "text": "Like a puzzle!",
+      "voice": "tika",
+      "key": "terraces.clonk.2",
+      "part": "terraces › clonk",
+      "when": "",
+      "ms": 1807,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "clonk",
+        "3"
+      ],
+      "text": "Perfect!",
+      "voice": "tika",
+      "key": "terraces.clonk.3",
+      "part": "terraces › clonk",
+      "when": "",
+      "ms": 738,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "glow"
+      ],
+      "text": "Look for the glowing spot!",
+      "voice": "sparkle",
+      "key": "terraces.glow",
+      "part": "terraces",
+      "when": "",
+      "ms": 1826,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "wallDone",
+        "0"
+      ],
+      "text": "Our terrace is back!",
+      "voice": "tika",
+      "key": "terraces.wallDone.0",
+      "part": "terraces › wallDone",
+      "when": "",
+      "ms": 1673,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "wallDone",
+        "1"
+      ],
+      "text": "Yum! Fresh grass!",
+      "voice": "tika",
+      "key": "terraces.wallDone.1",
+      "part": "terraces › wallDone",
+      "when": "",
+      "ms": 2466,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "wallDone",
+        "2"
+      ],
+      "text": "Another step!",
+      "voice": "tika",
+      "key": "terraces.wallDone.2",
+      "part": "terraces › wallDone",
+      "when": "",
+      "ms": 1173,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "wallDone",
+        "3"
+      ],
+      "text": "We made it to the top!",
+      "voice": "tika",
+      "key": "terraces.wallDone.3",
+      "part": "terraces › wallDone",
+      "when": "",
+      "ms": 1814,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "seeds"
+      ],
+      "text": "What should we grow here?",
+      "voice": "sparkle",
+      "key": "terraces.seeds",
+      "part": "terraces",
+      "when": "",
+      "ms": 1789,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "grew",
+        "potato"
+      ],
+      "text": "Potatoes!",
+      "voice": "tika",
+      "key": "terraces.grew.potato",
+      "part": "terraces › grew",
+      "when": "",
+      "ms": 1001,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "grew",
+        "corn"
+      ],
+      "text": "Corn!",
+      "voice": "tika",
+      "key": "terraces.grew.corn",
+      "part": "terraces › grew",
+      "when": "",
+      "ms": 608,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "grew",
+        "flower"
+      ],
+      "text": "Flowers!",
+      "voice": "tika",
+      "key": "terraces.grew.flower",
+      "part": "terraces › grew",
+      "when": "",
+      "ms": 815,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "next"
+      ],
+      "text": "Build the next step!",
+      "voice": "sparkle",
+      "key": "terraces.next",
+      "part": "terraces",
+      "when": "",
+      "ms": 1734,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "friends"
+      ],
+      "text": "Come on up, friends!",
+      "voice": "tika",
+      "key": "terraces.friends",
+      "part": "terraces",
+      "when": "",
+      "ms": 1754,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "corners"
+      ],
+      "text": "This stone has so many corners!",
+      "voice": "sparkle",
+      "key": "terraces.corners",
+      "part": "terraces",
+      "when": "",
+      "ms": 2622,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "clouds"
+      ],
+      "text": "So many clouds! I can't see!",
+      "voice": "tika",
+      "key": "terraces.clouds",
+      "part": "terraces",
+      "when": "",
+      "ms": 2554,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "top"
+      ],
+      "text": "The last wall! Up in the clouds!",
+      "voice": "sparkle",
+      "key": "terraces.top",
+      "part": "terraces",
+      "when": "",
+      "ms": 3608,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "terraces",
+        "reveal"
+      ],
+      "text": "Look! Machu Picchu!",
+      "voice": "sparkle",
+      "key": "terraces.reveal",
+      "part": "terraces",
+      "when": "",
+      "ms": 2472,
+      "flags": [
+        "changed"
+      ],
+      "was": "Kaylee, look! Machu Picchu!"
+    },
+    {
+      "path": [
+        "terraces",
+        "photo",
+        "touch"
+      ],
+      "text": "Tap the camera for Luna's journal!",
+      "voice": "sparkle",
+      "key": "terraces.photo.touch",
+      "part": "terraces › photo",
+      "when": "",
+      "ms": 3530,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "terraces",
+        "photo",
+        "mouse"
+      ],
+      "text": "Click the camera for Luna's journal!",
+      "voice": "sparkle",
+      "key": "terraces.photo.mouse",
+      "part": "terraces › photo",
+      "when": "",
+      "ms": 2664,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "bomb",
+        "0"
+      ],
+      "text": "Me too!",
+      "voice": "tika",
+      "key": "terraces.bomb.0",
+      "part": "terraces › bomb",
+      "when": "",
+      "ms": 1327,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "bomb",
+        "1"
+      ],
+      "text": "Cheese!",
+      "voice": "tika",
+      "key": "terraces.bomb.1",
+      "part": "terraces › bomb",
+      "when": "",
+      "ms": 659,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "bomb",
+        "2"
+      ],
+      "text": "My best side!",
+      "voice": "tika",
+      "key": "terraces.bomb.2",
+      "part": "terraces › bomb",
+      "when": "",
+      "ms": 1946,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "bomb",
+        "3"
+      ],
+      "text": "Say llama!",
+      "voice": "tika",
+      "key": "terraces.bomb.3",
+      "part": "terraces › bomb",
+      "when": "",
+      "ms": 1453,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "bomb",
+        "4"
+      ],
+      "text": "One more!",
+      "voice": "tika",
+      "key": "terraces.bomb.4",
+      "part": "terraces › bomb",
+      "when": "",
+      "ms": 1131,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "journal"
+      ],
+      "text": "A picture for Luna's journal!",
+      "voice": "tika",
+      "key": "terraces.journal",
+      "part": "terraces",
+      "when": "",
+      "ms": 2255,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "dance"
+      ],
+      "text": "Dance, dance, dance!",
+      "voice": "tika",
+      "key": "terraces.dance",
+      "part": "terraces",
+      "when": "",
+      "ms": 1970,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "innocent"
+      ],
+      "text": "Who, me?",
+      "voice": "tika",
+      "key": "terraces.innocent",
+      "part": "terraces",
+      "when": "",
+      "ms": 1319,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "hey"
+      ],
+      "text": "Hey! A stage!",
+      "voice": "tika",
+      "key": "terraces.hey",
+      "part": "terraces",
+      "when": "",
+      "ms": 1814,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "tickle",
+        "0"
+      ],
+      "text": "Hee hee!",
+      "voice": "tika",
+      "key": "terraces.tickle.0",
+      "part": "terraces › tickle",
+      "when": "",
+      "ms": 921,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "tickle",
+        "1"
+      ],
+      "text": "Hola!",
+      "voice": "tika",
+      "key": "terraces.tickle.1",
+      "part": "terraces › tickle",
+      "when": "---- 2. Pepa's Penguin Cliff (the desert coast at Paracas) ----",
+      "ms": 486,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "tickle",
+        "2"
+      ],
+      "text": "Munch munch.",
+      "voice": "tika",
+      "key": "terraces.tickle.2",
+      "part": "terraces › tickle",
+      "when": "",
+      "ms": 1812,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "bear"
+      ],
+      "text": "A shy spectacled bear!",
+      "voice": "sparkle",
+      "key": "terraces.bear",
+      "part": "terraces",
+      "when": "",
+      "ms": 2667,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "potatoes"
+      ],
+      "text": "Peru has thousands of kinds of potatoes!",
+      "voice": "sparkle",
+      "key": "terraces.potatoes",
+      "part": "terraces",
+      "when": "",
+      "ms": 3089,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "terraces",
+        "puzzle"
+      ],
+      "text": "The stones fit together like a puzzle!",
+      "voice": "sparkle",
+      "key": "terraces.puzzle",
+      "part": "terraces",
+      "when": "",
+      "ms": 2618,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "carry"
+      ],
+      "text": "Llamas can carry things up the mountain!",
+      "voice": "sparkle",
+      "key": "terraces.carry",
+      "part": "terraces",
+      "when": "",
+      "ms": 2906,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "idle",
+        "stone"
+      ],
+      "text": "Drag a stone into a hole!",
+      "voice": "sparkle",
+      "key": "terraces.idle.stone",
+      "part": "terraces › idle",
+      "when": "",
+      "ms": 2121,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "idle",
+        "seed",
+        "touch"
+      ],
+      "text": "Tap a seed bag to plant it!",
+      "voice": "sparkle",
+      "key": "terraces.idle.seed.touch",
+      "part": "terraces › idle › seed",
+      "when": "",
+      "ms": 2486,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "idle",
+        "seed",
+        "mouse"
+      ],
+      "text": "Click a seed bag to plant it!",
+      "voice": "sparkle",
+      "key": "terraces.idle.seed.mouse",
+      "part": "terraces › idle › seed",
+      "when": "",
+      "ms": 2592,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "idle",
+        "photo",
+        "touch"
+      ],
+      "text": "Tap the camera!",
+      "voice": "sparkle",
+      "key": "terraces.idle.photo.touch",
+      "part": "terraces › idle › photo",
+      "when": "",
+      "ms": 1171,
+      "flags": []
+    },
+    {
+      "path": [
+        "terraces",
+        "idle",
+        "photo",
+        "mouse"
+      ],
+      "text": "Click the camera!",
+      "voice": "sparkle",
+      "key": "terraces.idle.photo.mouse",
+      "part": "terraces › idle › photo",
+      "when": "",
+      "ms": 1272,
+      "flags": []
+    }
+  ]
+}

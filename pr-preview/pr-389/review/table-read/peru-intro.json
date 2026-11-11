@@ -1,0 +1,54 @@
+{
+  "kind": "table-read",
+  "place": "peru",
+  "group": "intro",
+  "title": "Peru › Intro",
+  "intro": "---- Hub: Luna's map of Peru ----",
+  "page": "peru-intro.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 4,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "intro.0",
+      "text": "Hola! I'm Luna!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Hola, Kaylee! I'm Luna!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "intro",
+        "0"
+      ],
+      "text": "Hola! I'm Luna!",
+      "voice": "luna",
+      "key": "intro.0",
+      "part": "intro",
+      "when": "---- Hub: Luna's map of Peru ----",
+      "ms": 1824,
+      "flags": [
+        "changed"
+      ],
+      "was": "Hola, Kaylee! I'm Luna!"
+    },
+    {
+      "path": [
+        "intro",
+        "1"
+      ],
+      "text": "Let's fill my explorer journal!",
+      "voice": "luna",
+      "key": "intro.1",
+      "part": "intro",
+      "when": "",
+      "ms": 2194,
+      "flags": []
+    }
+  ]
+}
