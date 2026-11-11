@@ -1,0 +1,16 @@
+{
+  "title": "The game table: games with a cousin",
+  "checkIn": "2 of 4: hear the script",
+  "kaylee": "She taps the table in her room, picks a game and a cousin, and BB, Gan or Ken hops over and plays the Unicorn Dice Game, Candy Land or Chutes and Ladders with her, cheering and groaning along.",
+  "questions": [
+    "Do the cousins sound like they're having fun at the table? (yes / redo)",
+    "Should the board fill more of the screen, even if it cuts off the heads? (yes / no)",
+    "Ready for Kaylee to play it? (yes / not yet)"
+  ],
+  "tableReads": [["thailand", "games"]],
+  "reels": [{ "name": "game-table", "moments": ["table-sit", "table-rest", "table-candy", "table-ladder", "table-slide", "table-castle", "table-kind-loss"] }],
+  "links": [
+    { "label": "Play it from her room", "hash": "#/world/thailand/hub/upstairs?at=game-table" },
+    { "label": "Tune the feel (camera, hops, rolls)", "hash": "#/world/thailand/hub/unicorn?feel=1" }
+  ]
+}

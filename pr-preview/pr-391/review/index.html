@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Script check: Thailand › Games</title>
+<title>The game table: games with a cousin</title>
 <style>
 :root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a;--lav:#efe6ff;--warn:#b0124f}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}}
@@ -26,21 +26,24 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 .also{font-size:15px;color:var(--soft)}.also span{font-size:18px}
 @media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}}
 </style></head><body><main>
+<span class="chip">Check-in 2 of 4: hear the script</span>
+<h1>The game table: games with a cousin</h1>
+<p class="kaylee">She taps the table in her room, picks a game and a cousin, and BB, Gan or Ken hops over and plays the Unicorn Dice Game, Candy Land or Chutes and Ladders with her, cheering and groaning along.</p>
 
-<h1>Script check: Thailand › Games</h1>
-
-
-
+<h2>Watch</h2><figure><video src="reel/game-table.mp4" poster="" controls playsinline muted autoplay loop></video>
+<figcaption>Game table · 61 s</figcaption></figure>
 <h2>Hear the script</h2><div class="card"><h3>Thailand › Games</h3>
 <p class="meta">39 lines · 77 s of talk · her name 1× · 39 flagged</p>
 
 <p><a href="table-read/thailand-games.html">Read along: who says what, and when</a></p></div>
 
-
-
+<h2>Your call</h2><ol><li><p>Do the cousins sound like they're having fun at the table? (yes / redo)</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
+<li><p>Should the board fill more of the screen, even if it cuts off the heads? (yes / no)</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li>
+<li><p>Ready for Kaylee to play it? (yes / not yet)</p><textarea rows="2" data-q="2" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><a class="pill" href="https://github.com/neb636/Kaylee-Gamepack/pull/391">Open the PR to paste them</a><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/thailand/hub/upstairs?at=game-table">Play it from her room</a> <a class="pill" href="../#/world/thailand/hub/unicorn?feel=1">Tune the feel (camera, hops, rolls)</a></p>
 </main>
 <script>
-const qs=[],titles=[]
+const qs=["Do the cousins sound like they're having fun at the table? (yes / redo)","Should the board fill more of the screen, even if it cuts off the heads? (yes / no)","Ready for Kaylee to play it? (yes / not yet)"],titles=[]
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p]
   try{await navigator.clipboard.writeText(t);document.getElementById('picked').textContent='Copied “'+t+'”. Paste it on the PR, or just say it in chat.'}catch{document.getElementById('picked').textContent=t+': say it on the PR or in chat.'}}))
 document.getElementById('copy')?.addEventListener('click',async()=>{

@@ -1,0 +1,61 @@
+{
+  "kind": "reel",
+  "name": "game-table",
+  "title": "Game table",
+  "video": "game-table.mp4",
+  "gif": "game-table.gif",
+  "seconds": 61,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "table-sit",
+      "where": "table-sit",
+      "seconds": 14,
+      "fps": 52.8,
+      "status": "ok"
+    },
+    {
+      "name": "table-rest",
+      "where": "table-rest",
+      "seconds": 6,
+      "fps": 54.4,
+      "status": "ok"
+    },
+    {
+      "name": "table-candy",
+      "where": "table-candy",
+      "seconds": 7,
+      "fps": 51.8,
+      "status": "ok"
+    },
+    {
+      "name": "table-ladder",
+      "where": "table-ladder",
+      "seconds": 6,
+      "fps": 56.7,
+      "status": "ok"
+    },
+    {
+      "name": "table-slide",
+      "where": "table-slide",
+      "seconds": 6,
+      "fps": 53.5,
+      "status": "ok"
+    },
+    {
+      "name": "table-castle",
+      "where": "table-castle",
+      "seconds": 5,
+      "fps": 45.9,
+      "status": "ok"
+    },
+    {
+      "name": "table-kind-loss",
+      "where": "table-kind-loss",
+      "seconds": 6,
+      "fps": 48.4,
+      "status": "ok"
+    }
+  ]
+}
