@@ -1,5 +1,5 @@
-// The mountain road's screen: the 3D road (mountain.ts) with its tap targets, the steering wheel (sled style: it appears
-// under her finger and turns as she pushes it left or right; mountain.ts places and turns it every frame), the 3 road's
+// The mountain road's screen: the 3D road (mountain.ts) with its tap targets, the circle where her finger went down (sled
+// style: she pushes left or right of it; mountain.ts places it every frame, engine3d/SteerWheel), the 3 road's
 // big numbers as she counts the bends, the 👆 when she hasn't steered for a while, Sparkle in the other corner
 // (trip/legs/Guide.tsx: she and the family talk out loud in their own voices), and at the end of the road its stop
 // (when she picked one on the Nan map, it opens by itself) or the end card: the stop, 🔁 this road again, 🗺️ back to

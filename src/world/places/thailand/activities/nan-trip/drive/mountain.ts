@@ -1491,8 +1491,7 @@ export class NanDrive implements World3D {
     }
   }
 
-  /** The steering wheel: under her finger while she steers, turned as far as she's pushed it sideways (up to a
-   *  quarter turn and a bit). */
+  /** While she steers: the circle where her finger went down, and the dot where it is now (engine3d/SteerWheel). */
   private writeStick() {
     const el = this.stickEl
     if (!el) return
@@ -1501,10 +1500,9 @@ export class NanDrive implements World3D {
     const want = show ? '' : 'none'
     if (el.style.display !== want) el.style.display = want
     if (!show || !f) return
-    const R = this.stickR
-    const turn = clamp((f.x - f.ox) / R, -1, 1) * 110
-    el.style.setProperty('--r', `${R.toFixed(0)}px`)
-    el.style.setProperty('--turn', `${turn.toFixed(1)}deg`)
+    el.style.setProperty('--r', `${this.stickR.toFixed(0)}px`)
+    el.style.setProperty('--dx', `${(f.x - f.ox).toFixed(0)}px`)
+    el.style.setProperty('--dy', `${(f.y - f.oy).toFixed(0)}px`)
     el.style.transform = `translate3d(${f.ox.toFixed(0)}px, ${f.oy.toFixed(0)}px, 0)`
   }
 

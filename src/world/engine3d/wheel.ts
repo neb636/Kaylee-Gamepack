@@ -76,7 +76,7 @@ export class FingerWheel {
     return this.k
   }
 
-  /** Places the <SteerWheel> element under her finger, turned as far as she's pushed (up to a quarter turn and a bit). */
+  /** Places the <SteerWheel> circle where her finger went down, and its dot where her finger is now. */
   draw(el: HTMLElement | null, show: boolean, reach: number) {
     if (!el) return
     const f = this.finger
@@ -85,7 +85,8 @@ export class FingerWheel {
     if (el.style.display !== want) el.style.display = want
     if (!on || !f) return
     el.style.setProperty('--r', `${this.radius(reach).toFixed(0)}px`)
-    el.style.setProperty('--turn', `${(this.push * 110).toFixed(1)}deg`)
+    el.style.setProperty('--dx', `${(f.x - f.ox).toFixed(0)}px`)
+    el.style.setProperty('--dy', `${(f.y - f.oy).toFixed(0)}px`)
     el.style.transform = `translate3d(${f.ox.toFixed(0)}px, ${f.oy.toFixed(0)}px, 0)`
   }
 

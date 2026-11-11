@@ -1,8 +1,8 @@
 // Mountain Bike: Maple wants to ride all the way down Mont-Sainte-Anne to the waterfall. The story plays in her gondola
 // cabin at the bottom of the line (Maple waves and tells Kaylee, tap anywhere skips), the gondola carries her and the
 // bike up, then Kaylee steers the bike down the forest trail (ride.ts is the world). The address bar follows her from
-// stretch to stretch (sections.ts), and to whichever way round the island she takes. The steering wheel appears under
-// her finger (engine3d/SteerWheel.tsx, the Nan drive's). Sparkle gives the one instruction from the corner (and a hint
+// stretch to stretch (sections.ts), and to whichever way round the island she takes. The steering circle appears where
+// her finger goes down, a dot following it (engine3d/SteerWheel.tsx, the Nan drive's). Sparkle gives the one instruction from the corner (and a hint
 // when she's stuck, and says what's new: the two trails, the creek); Maple whoops and giggles in her own voice. At the
 // waterfall: Maple cheers, a rainbow, a photo flash, her thank-you, then the stamp (onDone). 🔁 rides down again.
 import { AnimatePresence, motion } from 'motion/react'

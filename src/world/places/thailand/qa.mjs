@@ -2090,3 +2090,28 @@ motion.push({
     await page.waitForTimeout(1900)
   },
 })
+
+// The mountain road's steering (sled style): her finger goes down low on the road and pushes right, back through the
+// middle and left, then lets go (what shows where she pressed: drive/touch.tsx).
+motion.push({
+  name: 'nan-drive-steer',
+  seconds: 7,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/nan-trip/drive?road=valley&weather=sun`)
+    await page.waitForFunction(() => window.__thaiNanQA?.().mode === 'webgl', null, { timeout: 30000 })
+    await page.waitForTimeout(2500)
+  },
+  act: async (page) => {
+    const [x, y] = [vp.width * 0.5, vp.height * 0.78]
+    await page.mouse.move(x, y)
+    await page.mouse.down()
+    await page.mouse.move(x + vp.width * 0.07, y, { steps: 12 })
+    await page.waitForTimeout(1600)
+    await page.mouse.move(x - vp.width * 0.07, y, { steps: 24 })
+    await page.waitForTimeout(1600)
+    await page.mouse.move(x, y, { steps: 10 })
+    await page.waitForTimeout(600)
+    await page.mouse.up()
+    await page.waitForTimeout(1200)
+  },
+})
