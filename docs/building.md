@@ -146,7 +146,7 @@ with any state they need carried in the URL: `#/world/<place>/<activity>/<sectio
 - `#/world/sections` lists every section link (for the iPad), and `tests/sections.spec.ts` fails if an activity has no
   sections or a link doesn't land in its section.
 
-**README directory (generated).** The README's **Jump to a game section** directory is written from the sections
+**Game sections page (generated).** The **Jump to a game section** page, `docs/game-sections.html` (linked from the README, published beside the app), is written from the sections
 every activity declares: `npm run sections-readme` rewrites it, and `npm run verify` fails when it's out of date, so
 never edit it by hand. What it shows lives in `sections.ts`, next to the section:
 - A section's `name` is its link. `group` ("Getting there", "Baan Chang") puts sections under a bullet for that stage,
@@ -174,8 +174,8 @@ that needs the internet (YouTube) checks `useOnline()` from the SDK and hides it
 ```
 npm run dev          # http://localhost:5173 (then #/world, #/world/sections, #/world/puppets or #/playground)
 npm run typecheck    # fast check while you iterate
-npm run verify       # voice clips, heavy imports, name case, README directory, plans, typecheck, build (before every PR)
-npm run sections-readme  # rewrite the README's section directory from every sections.ts
+npm run verify       # voice clips, heavy imports, name case, game-sections page, plans, typecheck, build (before every PR)
+npm run sections-readme  # rewrite docs/game-sections.html from every sections.ts
 npm run art -- world # PNG -> webp with background cutout
 npm run icons        # rebuild app icons from art/source/icon-1024.png
 node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs   # lines.ts -> voice-lines.json -> clips

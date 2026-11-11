@@ -158,7 +158,7 @@ fixes), `kaylee-week` (the play diary), `sfx` (first-pass ElevenLabs sound effec
 ## Rules the checks enforce
 
 - `npm run verify` must pass before every PR: voice clips for every line, heavy libraries (three, phaser) only inside
-  a country or game folder, no file names that differ only in case, the README's section directory, typecheck, build.
+  a country or game folder, no file names that differ only in case, the game-sections page (`docs/game-sections.html`, generated: run `npm run sections-readme`), typecheck, build.
   Changed lines? Push them: the PR records them for you: its preview workflow's voices job uses the `OPENAI_API_KEY` repository secret, commits the clips to your branch and re-runs CI. `git pull` to get the clips. With a key of your own you can record
   them first (`node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`); you don't need one.
 - Every section of every activity opens from a link, with its state in the URL (`tests/sections.spec.ts`).

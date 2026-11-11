@@ -1192,7 +1192,7 @@ src/world/places/canada/
 - three, phaser and perfect-freehand only inside `places/canada/` and `engine3d/`, never from `meta.ts`, `sections.ts` or `puppets/index.ts`.
 - Each activity's `sections.ts` with its params from the start (inTheWorks activities need one too: Poles lesson).
 - Feel numbers are knobs with a `?feel=1` link in each greybox PR.
-- The README's directory gets each activity's links as they're built.
+- The game-sections page gets each activity's links as they're built.
 
 ### Risks to try first in each greybox
 

@@ -246,7 +246,7 @@ every hill planted in neat full rows, `harvest` all golden and drained, `thresh`
 paddies stubble, `deck` with the kratip on the table. No other params: nothing she makes changes a later round except
 the planting pattern, and a bare link uses full rows. Old links (`rice?round=1|2|3`) fall back to `plant`.
 
-Update the `round` param's doc in `sections.ts` and the README's "Jump to a game section" entries for `rice` (one link
+Update the `round` param's doc in `sections.ts` and the "Jump to a game section" page's entries for `rice` (one link
 per round, in play order).
 
 ## Camera and screens
