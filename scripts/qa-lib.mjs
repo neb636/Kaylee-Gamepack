@@ -147,7 +147,24 @@ export async function serve(basePort) {
   throw new Error(`No free port near ${basePort + slot * 100}`)
 }
 
-export const launch = () => browserType.launch()
+/**
+ * Codex's macOS sandbox (seatbelt) blocks the window server, so WebKit and Chromium abort on launch and macOS
+ * pops a "Playwright quit unexpectedly" dialog. Stop before spawning the browser and say how to rerun it.
+ */
+export function assertCanLaunchBrowser() {
+  if (process.env.CODEX_SANDBOX !== 'seatbelt') return
+  console.error(
+    "Browsers can't start inside Codex's sandbox. Rerun this as one plain command with no redirect, pipe, heredoc or\n" +
+      "`;` (for example `node scripts/reel.mjs ...`) so the `node` allow rule in .codex/rules runs it outside the\n" +
+      'sandbox, or request escalated permissions for it.',
+  )
+  process.exit(2)
+}
+
+export const launch = () => {
+  assertCanLaunchBrowser()
+  return browserType.launch()
+}
 
 /** A touch-screen context like the real device (Chromium and WebKit both support isMobile); desktops get a mouse. */
 export function device(browser, vp, extra = {}) {
