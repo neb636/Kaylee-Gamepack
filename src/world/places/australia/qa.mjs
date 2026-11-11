@@ -103,6 +103,21 @@ export const motion = [
     },
   },
   {
+    // Three hops into the water hole: the splash ring, then Mama hops in.
+    name: 'outback-waterhole',
+    seconds: 11,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/australia/outback/water`)
+      await page.waitForTimeout(1200)
+    },
+    act: async (page) => {
+      for (let i = 0; i < 3; i++) {
+        await page.mouse.click(vp.width / 2, vp.height * 0.7)
+        await page.waitForTimeout(2200)
+      }
+    },
+  },
+  {
     name: 'forest-feed',
     seconds: 3,
     setup: async (page, base) => {
