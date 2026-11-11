@@ -210,18 +210,18 @@
     "file": "68a16feb8138.mp3"
   },
   {
-    "text": "Tap the die! Ladders go up, slides go down!",
+    "text": "Tap the die! Ladders up, slides down!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3624,
-    "file": "830a43c029c1.mp3"
+    "ms": 4344,
+    "file": "e2c217309061.mp3"
   },
   {
-    "text": "Click the die! Ladders go up, slides go down!",
+    "text": "Click the die! Ladders up, slides down!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3960,
-    "file": "c33519131dc3.mp3"
+    "ms": 3576,
+    "file": "e79707f520c9.mp3"
   },
   {
     "text": "A four! Time for a little nap.",
@@ -280,11 +280,11 @@
     "file": "72153ab0ad64.mp3"
   },
   {
-    "text": "Nap time! Yawn!",
+    "text": "Nap time!",
     "voice": "bbplay",
     "sig": "f243d65831",
-    "ms": 3792,
-    "file": "87352cf5a543.mp3"
+    "ms": 1152,
+    "file": "af1408d5905b.mp3"
   },
   {
     "text": "Up I go!",
@@ -427,11 +427,11 @@
     "file": "f5985d0d6ac6.mp3"
   },
   {
-    "text": "I won! Again?",
+    "text": "Ha! I won!",
     "voice": "kenplay",
     "sig": "b2c7f4e55f",
-    "ms": 1944,
-    "file": "9cfdd21f66e7.mp3"
+    "ms": 2376,
+    "file": "1c99f1e522f7.mp3"
   },
   {
     "text": "You got me! Good game!",

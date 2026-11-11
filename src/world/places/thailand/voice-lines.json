@@ -29,8 +29,8 @@
   "Click the die! Race to the castle!",
   "Tap the cards! Hop to that color!",
   "Click the cards! Hop to that color!",
-  "Tap the die! Ladders go up, slides go down!",
-  "Click the die! Ladders go up, slides go down!",
+  "Tap the die! Ladders up, slides down!",
+  "Click the die! Ladders up, slides down!",
   "A four! Time for a little nap.",
   "You won, Kaylee!",
   "You won!",
@@ -49,7 +49,7 @@
     "voice": "bbplay"
   },
   {
-    "text": "Nap time! Yawn!",
+    "text": "Nap time!",
     "voice": "bbplay"
   },
   {
@@ -133,7 +133,7 @@
     "voice": "kenplay"
   },
   {
-    "text": "I won! Again?",
+    "text": "Ha! I won!",
     "voice": "kenplay"
   },
   {
