@@ -1,0 +1,7 @@
+{
+  "title": "Nan drive: a small circle instead of the steering wheel",
+  "checkIn": "fix",
+  "kaylee": "When she steers the Pajero, a small half-see-through pink circle shows where she pressed, instead of the big steering wheel.",
+  "questions": [],
+  "links": [{ "label": "Drive it", "hash": "#/world/thailand/nan-trip/drive?road=valley" }]
+}
