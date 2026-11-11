@@ -1,0 +1,793 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "games",
+  "title": "Thailand › Games",
+  "intro": "The game table in Kaylee's room (activities/hub/board-games/, plan: thailand/game-table.md). Sparkle says how to play the first time she opens each game in a visit (tap Sparkle to hear it again), and the rule of the 4 the first time a unicorn naps. The cousin across the table talks in their own voice, now cheerful and playing (cast.json's bbplay, ganplay, kenplay: the same voices, off their phones): sitting down, now and then before a roll, on a nap, a ladder or a slide, and when someone wins. Never after every move.",
+  "page": "thailand-games.html",
+  "audio": "thailand-games.mp3",
+  "lines": 39,
+  "seconds": 77,
+  "missing": 0,
+  "names": 1,
+  "flags": [
+    {
+      "key": "games.howto.unicorn.mouse",
+      "text": "Click the die! Race to the castle!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "games.howto.candy.touch",
+      "text": "Tap the cards! Hop to that color!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "games.howto.chutes.touch",
+      "text": "Tap the die! Ladders up, slides down!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "games.howto.chutes.mouse",
+      "text": "Click the die! Ladders up, slides down!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "games",
+        "pick"
+      ],
+      "text": "Pick a game and a cousin!",
+      "voice": "sparkle",
+      "key": "games.pick",
+      "part": "games",
+      "when": "The picker opens (once a visit).",
+      "ms": 2136,
+      "flags": [],
+      "span": [
+        0,
+        2.07
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "howto",
+        "unicorn",
+        "touch"
+      ],
+      "text": "Tap the die! Race to the castle!",
+      "voice": "sparkle",
+      "key": "games.howto.unicorn.touch",
+      "part": "games › howto › unicorn",
+      "when": "A game starts (once a visit each); also Sparkle's hint when she waits on her turn.",
+      "ms": 2904,
+      "flags": [],
+      "span": [
+        3.69,
+        6.54
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "howto",
+        "unicorn",
+        "mouse"
+      ],
+      "text": "Click the die! Race to the castle!",
+      "voice": "sparkle",
+      "key": "games.howto.unicorn.mouse",
+      "part": "games › howto › unicorn",
+      "when": "",
+      "ms": 4008,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        6.89,
+        10.85
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "howto",
+        "candy",
+        "touch"
+      ],
+      "text": "Tap the cards! Hop to that color!",
+      "voice": "sparkle",
+      "key": "games.howto.candy.touch",
+      "part": "games › howto › candy",
+      "when": "A game starts (once a visit each); also Sparkle's hint when she waits on her turn.",
+      "ms": 3552,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        12.47,
+        15.97
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "howto",
+        "candy",
+        "mouse"
+      ],
+      "text": "Click the cards! Hop to that color!",
+      "voice": "sparkle",
+      "key": "games.howto.candy.mouse",
+      "part": "games › howto › candy",
+      "when": "",
+      "ms": 2976,
+      "flags": [],
+      "span": [
+        16.32,
+        19.25
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "howto",
+        "chutes",
+        "touch"
+      ],
+      "text": "Tap the die! Ladders up, slides down!",
+      "voice": "sparkle",
+      "key": "games.howto.chutes.touch",
+      "part": "games › howto › chutes",
+      "when": "A game starts (once a visit each); also Sparkle's hint when she waits on her turn.",
+      "ms": 4344,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        20.87,
+        25.15
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "howto",
+        "chutes",
+        "mouse"
+      ],
+      "text": "Click the die! Ladders up, slides down!",
+      "voice": "sparkle",
+      "key": "games.howto.chutes.mouse",
+      "part": "games › howto › chutes",
+      "when": "",
+      "ms": 3576,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        25.5,
+        29.02
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "nap"
+      ],
+      "text": "A four! Time for a little nap.",
+      "voice": "sparkle",
+      "key": "games.nap",
+      "part": "games",
+      "when": "The first time a unicorn rolls a 4 and naps (once a visit).",
+      "ms": 2784,
+      "flags": [],
+      "span": [
+        30.64,
+        33.37
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "won"
+      ],
+      "text": "You won, Kaylee!",
+      "voice": "sparkle",
+      "key": "games.won",
+      "part": "games",
+      "when": "Her first win in a visit says her name; after that, one of the others in turn.",
+      "ms": 1872,
+      "flags": [
+        "name"
+      ],
+      "span": [
+        33.72,
+        35.53
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "wonAgain",
+        "0"
+      ],
+      "text": "You won!",
+      "voice": "sparkle",
+      "key": "games.wonAgain.0",
+      "part": "games › wonAgain",
+      "when": "",
+      "ms": 1440,
+      "flags": [],
+      "span": [
+        37.15,
+        38.52
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "wonAgain",
+        "1"
+      ],
+      "text": "Yay! You did it!",
+      "voice": "sparkle",
+      "key": "games.wonAgain.1",
+      "part": "games › wonAgain",
+      "when": "",
+      "ms": 2184,
+      "flags": [],
+      "span": [
+        38.87,
+        40.99
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "wonAgain",
+        "2"
+      ],
+      "text": "Winner winner!",
+      "voice": "sparkle",
+      "key": "games.wonAgain.2",
+      "part": "games › wonAgain",
+      "when": "",
+      "ms": 1392,
+      "flags": [],
+      "span": [
+        41.34,
+        42.67
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "bb",
+        "sit"
+      ],
+      "text": "Yay, let's play!",
+      "voice": "bbplay",
+      "key": "games.cousins.bb.sit",
+      "part": "games › cousins › bb",
+      "when": "The cousin across the table: sitting down; before a roll now and then (in turn); their own nap, ladder and slide; their win; losing to her; getting up.",
+      "ms": 1680,
+      "flags": [],
+      "span": [
+        44.29,
+        45.9
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "bb",
+        "roll",
+        "0"
+      ],
+      "text": "My turn!",
+      "voice": "bbplay",
+      "key": "games.cousins.bb.roll.0",
+      "part": "games › cousins › bb › roll",
+      "when": "",
+      "ms": 1032,
+      "flags": [],
+      "span": [
+        47.52,
+        48.48
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "bb",
+        "roll",
+        "1"
+      ],
+      "text": "Come on, six!",
+      "voice": "bbplay",
+      "key": "games.cousins.bb.roll.1",
+      "part": "games › cousins › bb › roll",
+      "when": "",
+      "ms": 1896,
+      "flags": [],
+      "span": [
+        48.83,
+        50.68
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "bb",
+        "nap"
+      ],
+      "text": "Nap time!",
+      "voice": "bbplay",
+      "key": "games.cousins.bb.nap",
+      "part": "games › cousins › bb",
+      "when": "",
+      "ms": 1152,
+      "flags": [],
+      "span": [
+        52.3,
+        53.4
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "bb",
+        "ladder"
+      ],
+      "text": "Up I go!",
+      "voice": "bbplay",
+      "key": "games.cousins.bb.ladder",
+      "part": "games › cousins › bb",
+      "when": "",
+      "ms": 1104,
+      "flags": [],
+      "span": [
+        53.75,
+        54.8
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "bb",
+        "slide"
+      ],
+      "text": "Wheee!",
+      "voice": "bbplay",
+      "key": "games.cousins.bb.slide",
+      "part": "games › cousins › bb",
+      "when": "The boat race (activities/boat-trip/race/): through the rainbow gate in the bay, three laps round a lagoon against the village kids and a cheeky macaque. Sparkle gives the few instructions and the countdown; Mommy and Daddy cheer in their own voices; the kids tease and cheer; the macaque only chatters. She always wins, and the trophy says so.",
+      "ms": 1224,
+      "flags": [],
+      "span": [
+        55.15,
+        56.32
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "bb",
+        "win"
+      ],
+      "text": "I won! Again?",
+      "voice": "bbplay",
+      "key": "games.cousins.bb.win",
+      "part": "games › cousins › bb",
+      "when": "",
+      "ms": 1968,
+      "flags": [],
+      "span": [
+        56.67,
+        58.57
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "bb",
+        "lose"
+      ],
+      "text": "You won! Good game!",
+      "voice": "bbplay",
+      "key": "games.cousins.bb.lose",
+      "part": "games › cousins › bb",
+      "when": "",
+      "ms": 2328,
+      "flags": [],
+      "span": [
+        58.92,
+        61.18
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "bb",
+        "bye"
+      ],
+      "text": "Fun game!",
+      "voice": "bbplay",
+      "key": "games.cousins.bb.bye",
+      "part": "games › cousins › bb",
+      "when": "",
+      "ms": 1032,
+      "flags": [],
+      "span": [
+        61.53,
+        62.5
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "gan",
+        "sit"
+      ],
+      "text": "Okay, I'm in!",
+      "voice": "ganplay",
+      "key": "games.cousins.gan.sit",
+      "part": "games › cousins › gan",
+      "when": "",
+      "ms": 1728,
+      "flags": [],
+      "span": [
+        64.12,
+        65.79
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "gan",
+        "roll",
+        "0"
+      ],
+      "text": "Here goes!",
+      "voice": "ganplay",
+      "key": "games.cousins.gan.roll.0",
+      "part": "games › cousins › gan › roll",
+      "when": "",
+      "ms": 888,
+      "flags": [],
+      "span": [
+        67.41,
+        68.23
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "gan",
+        "roll",
+        "1"
+      ],
+      "text": "Big number!",
+      "voice": "ganplay",
+      "key": "games.cousins.gan.roll.1",
+      "part": "games › cousins › gan › roll",
+      "when": "",
+      "ms": 1560,
+      "flags": [],
+      "span": [
+        68.58,
+        70.08
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "gan",
+        "nap"
+      ],
+      "text": "Aw, sleepy!",
+      "voice": "ganplay",
+      "key": "games.cousins.gan.nap",
+      "part": "games › cousins › gan",
+      "when": "",
+      "ms": 1944,
+      "flags": [],
+      "span": [
+        71.7,
+        73.59
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "gan",
+        "ladder"
+      ],
+      "text": "Ladder! Yes!",
+      "voice": "ganplay",
+      "key": "games.cousins.gan.ladder",
+      "part": "games › cousins › gan",
+      "when": "",
+      "ms": 2016,
+      "flags": [],
+      "span": [
+        73.94,
+        75.91
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "gan",
+        "slide"
+      ],
+      "text": "Nooo! Wheee!",
+      "voice": "ganplay",
+      "key": "games.cousins.gan.slide",
+      "part": "games › cousins › gan",
+      "when": "",
+      "ms": 1920,
+      "flags": [],
+      "span": [
+        76.26,
+        78.11
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "gan",
+        "win"
+      ],
+      "text": "I won! One more?",
+      "voice": "ganplay",
+      "key": "games.cousins.gan.win",
+      "part": "games › cousins › gan",
+      "when": "",
+      "ms": 1824,
+      "flags": [],
+      "span": [
+        78.46,
+        80.22
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "gan",
+        "lose"
+      ],
+      "text": "Nice one, you won!",
+      "voice": "ganplay",
+      "key": "games.cousins.gan.lose",
+      "part": "games › cousins › gan",
+      "when": "",
+      "ms": 2184,
+      "flags": [],
+      "span": [
+        80.57,
+        82.68
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "gan",
+        "bye"
+      ],
+      "text": "Good game!",
+      "voice": "ganplay",
+      "key": "games.cousins.gan.bye",
+      "part": "games › cousins › gan",
+      "when": "",
+      "ms": 1152,
+      "flags": [],
+      "span": [
+        83.03,
+        84.14
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "ken",
+        "sit"
+      ],
+      "text": "Let's play!",
+      "voice": "kenplay",
+      "key": "games.cousins.ken.sit",
+      "part": "games › cousins › ken",
+      "when": "",
+      "ms": 1416,
+      "flags": [],
+      "span": [
+        85.76,
+        87.11
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "ken",
+        "roll",
+        "0"
+      ],
+      "text": "My go!",
+      "voice": "kenplay",
+      "key": "games.cousins.ken.roll.0",
+      "part": "games › cousins › ken › roll",
+      "when": "",
+      "ms": 1224,
+      "flags": [],
+      "span": [
+        88.73,
+        89.88
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "ken",
+        "roll",
+        "1"
+      ],
+      "text": "Lucky roll!",
+      "voice": "kenplay",
+      "key": "games.cousins.ken.roll.1",
+      "part": "games › cousins › ken › roll",
+      "when": "",
+      "ms": 1200,
+      "flags": [],
+      "span": [
+        90.23,
+        91.38
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "ken",
+        "nap"
+      ],
+      "text": "Snooze time!",
+      "voice": "kenplay",
+      "key": "games.cousins.ken.nap",
+      "part": "games › cousins › ken",
+      "when": "",
+      "ms": 1536,
+      "flags": [],
+      "span": [
+        93,
+        94.47
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "ken",
+        "ladder"
+      ],
+      "text": "Up, up, up!",
+      "voice": "kenplay",
+      "key": "games.cousins.ken.ladder",
+      "part": "games › cousins › ken",
+      "when": "",
+      "ms": 2520,
+      "flags": [],
+      "span": [
+        94.82,
+        97.27
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "ken",
+        "slide"
+      ],
+      "text": "Whoa! Wheee!",
+      "voice": "kenplay",
+      "key": "games.cousins.ken.slide",
+      "part": "games › cousins › ken",
+      "when": "",
+      "ms": 1872,
+      "flags": [],
+      "span": [
+        97.62,
+        99.44
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "ken",
+        "win"
+      ],
+      "text": "Ha! I won!",
+      "voice": "kenplay",
+      "key": "games.cousins.ken.win",
+      "part": "games › cousins › ken",
+      "when": "",
+      "ms": 2376,
+      "flags": [],
+      "span": [
+        99.79,
+        102.1
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "ken",
+        "lose"
+      ],
+      "text": "You got me! Good game!",
+      "voice": "kenplay",
+      "key": "games.cousins.ken.lose",
+      "part": "games › cousins › ken",
+      "when": "",
+      "ms": 2064,
+      "flags": [],
+      "span": [
+        102.45,
+        104.47
+      ]
+    },
+    {
+      "path": [
+        "games",
+        "cousins",
+        "ken",
+        "bye"
+      ],
+      "text": "See you!",
+      "voice": "kenplay",
+      "key": "games.cousins.ken.bye",
+      "part": "games › cousins › ken",
+      "when": "",
+      "ms": 672,
+      "flags": [],
+      "span": [
+        104.82,
+        105.44
+      ]
+    }
+  ]
+}
