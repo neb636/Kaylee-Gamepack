@@ -26,8 +26,8 @@ prefix_rule(
 )
 
 # --- GitHub CLI: reads run freely. Writes are "prompt" rules, so they go to the automatic reviewer (config.toml).
-# Note: a command that matches no rule runs inside the sandbox with no approval at all, because the sandbox
-# allows network. So every write has to be listed here. Don't add a catch-all gh prompt: it would outrank the allows.
+# Note: a command that matches no rule runs with no approval at all (config.toml turns the sandbox off so
+# browsers can start). So every write has to be listed here. Don't add a catch-all gh prompt: it would outrank the allows.
 prefix_rule(pattern = ["gh", "pr", "view"], decision = "allow")
 prefix_rule(pattern = ["gh", "pr", "list"], decision = "allow")
 prefix_rule(pattern = ["gh", "pr", "checks"], decision = "allow")

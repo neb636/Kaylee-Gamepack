@@ -5,12 +5,13 @@
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { webkit } from '@playwright/test'
 import sharp from 'sharp'
-import { filmstrip, VIEWPORTS } from './qa-lib.mjs'
+import { assertCanLaunchBrowser, filmstrip, VIEWPORTS } from './qa-lib.mjs'
 
 const base = process.argv.find((a) => a.startsWith('--base='))?.slice(7) ?? 'http://127.0.0.1:4185/'
 const only = process.argv.find((a) => a.startsWith('--only='))?.slice(7).split(',')
 const output = 'qa-output/sparkle'
 mkdirSync(output, { recursive: true })
+assertCanLaunchBrowser()
 const browser = await webkit.launch()
 const errors = []
 const report = []

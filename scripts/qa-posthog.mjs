@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { chromium } from '@playwright/test'
 import { createServer } from 'vite'
+import { assertCanLaunchBrowser } from './qa-lib.mjs'
 
 const host = 'https://posthog.invalid'
 process.env.VITE_POSTHOG_ENABLED = 'true'
@@ -49,6 +50,7 @@ const server = await createServer({
 let browser
 try {
   await server.listen()
+  assertCanLaunchBrowser()
   browser = await chromium.launch()
   // Emulate a real browser: PostHog intentionally drops automated browser events.
   const page = await browser.newPage({ userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36' })
