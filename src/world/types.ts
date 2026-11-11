@@ -71,6 +71,9 @@ export interface PlaceMeta {
   /** Spoken on the passport page: "This is Australia!" */
   passportLine: Line
   createdAt: string
+  /** Not ready to play: off the world map and the game shelf (`listed` in registry.ts). Its links still work, and
+   *  `?all=1` puts it back on the map and shelf to try. Remove the line (or set false) to show it again. */
+  hidden?: boolean
 }
 
 export interface PlaceProps {
