@@ -1,5 +1,15 @@
-# Project command approvals are handled by rules/commands.rules.
+# Codex in this repo, set up like Claude Code's auto mode: routine work runs without asking Dad.
+#
+# - rules/commands.rules: the command allowlist (what Claude's permission allow list does).
+# - approvals_reviewer = "auto_review": anything outside the list that needs to leave the sandbox goes to
+#   Codex's automatic reviewer, not to Dad's screen.
+# - workspace-write + network: the agent edits this worktree and reaches npm, GitHub and OpenAI without asking.
 approval_policy = "on-request"
+approvals_reviewer = "auto_review"
+sandbox_mode = "workspace-write"
+
+[sandbox_workspace_write]
+network_access = true
 
 # ElevenLabs sound effects (.agents/skills/sfx). Off by default; start a session with it on:
 #   codex -c mcp_servers.elevenlabs.enabled=true
