@@ -707,7 +707,7 @@ The finale end to end in placeholder shapes. Terry the Arctic tern flies Pola's 
 - **The badge** (`badge`): six stars, confetti, then the shell's trophy (`onWin`) after 4.5 s or on 🏆.
 - **Feel knobs** (`?feel=1`, *Fly Terry*): flying speed, shortest flight, reach, steer smoothing, catch width, fish every, gusts. The graph shows her finger against Terry, the gust and the fish.
 - **Files:** `activities/party/` (`party.ts` the world, `route.ts`, `Finale.tsx`, `sections.ts`; `Party.sections.ts` and `Soon.tsx` are gone). The Earth's parts (the Arctic, Antarctica, Pola, Pebble) are now functions in `globe/globe.ts` (`buildNorth`, `buildSouth`, `makePola`, `makePebble`) that the hub and the finale share. QA: `qa-screens` (each leg, the postcard, a question of each kind, the badge), a `qa-motion` scenario (`poles-party-fly`) and `qa-pacing`.
-- **Changed from the plan:** the iceberg question and “who lives up north” aren't in the pool yet (8 questions instead of 9; the iceberg one needs the water from Iceberg Maker). Terry flies over the passport's countries, not the world map's pins. There's no “Wow, Kaylee” line yet (voices are the full-loop gate).
+- **Changed from the plan:** the iceberg question and “who lives up north” aren't in the pool yet (8 questions instead of 9; the iceberg one needs the water from Iceberg Maker). Terry flies over the passport's countries, not the world map's pins. The encouragement stays name-free (updated 2026-11-11).
 - **Known small things:**
   - Over a big continent (Africa) there are no fish for a while, only clouds.
   - A wrong drop on the South Pole lands under the globe, where the “?” is hard to see.

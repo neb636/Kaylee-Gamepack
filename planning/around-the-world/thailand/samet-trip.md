@@ -908,7 +908,7 @@ Every phrase goes in `lines.ts` under `L.samet` (tagged by speaker) and is recor
 | Daddy | sandcastle | “Let's build a sandcastle!” |
 | Captain | snorkel | “Masks on! Jump in!” |
 | Sparkle | sea urchin bump | “Prickly! Look, don't touch!” |
-| Daddy | hide and seek | “Close your eyes and count!” / “Found you!” / “Where's Kaylee?” |
+| Daddy | hide and seek | “Close your eyes and count!” / “Found you!” / “Where did you go?” |
 | Mommy | finale | “Look! Fire dancers!” |
 | Sparkle | a new animal | “A hornbill!” (one per animal) |
 

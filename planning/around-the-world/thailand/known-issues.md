@@ -112,8 +112,7 @@ Code paths are under `src/world/places/thailand/`.
 - [ ] **Daddy stands still while she threshes,** apart from a hop on the third bang (Lung counts the bundles now).
   - Check: `#/world/thailand/nan-trip/rice?round=thresh`.
 - [ ] **The 🏠 sits on the hut's roof corner** at the top left of the farm (the hut is scenery, not a target).
-- [ ] **Listen to the rice farm's voices**: is Daddy too chatty (8-10 one-time lines a run)? The transcription
-  check heard "Go, farmer Kaylee!" as "Cayley" (likely just spelling). Since 2026-10-27 Lung Kham talks too: listen to
+- [ ] **Listen to the rice farm's voices**: is Daddy too chatty (8-10 one-time lines a run)? The player-name pronunciation concern was superseded by the name-free dialogue update (2026-11-11). Since 2026-10-27 Lung Kham talks too: listen to
   his Thai numbers and "Khob khun krap!".
 - [ ] **The mushroom aunty's mouth may not move when she talks:** her `FaceLife` is made without her voice
   (`activities/nan-trip/mushrooms/farm3d.ts`, `new FaceLife(this.house.farmer)`; it needs `'farmer'`).
@@ -157,14 +156,11 @@ Found by layout QA (WebKit, iPad and iPhone landscape). None of these block play
 
 ## Listen on the iPad (automated checks can't hear)
 - [ ] **The mall trip's new voices** (2026-10-21): the transcription check flagged Thai words written back in Thai
-  ("Sawasdee ka", "Khob khun ka"), "Kaylee" heard as "Kaley", Daddy's "Ooh, strong!" heard in Japanese, the coach's
+  ("Sawasdee ka", "Khob khun ka"), Daddy's "Ooh, strong!" heard in Japanese, the coach's
   "wai kru" heard as "Y crew", and "Phi Ta Khon" as "Fi ta'kan". Listen in the vet, the barber, the hall's staff, the
   Muay Thai warm-up and the Big Frame's mask.
 
-- [ ] **The village kids say "Kaylee".** The transcription check heard "Haley" (and "เคลลี่" in the Thai line). It's
-  likely the accent, but listen to "The ball, Kaylee!" and "Khob khun ka, Kaylee!". The kids' voice is OpenAI `coral`
-  at +4 semitones; it's one line in `cast.json` (`kids`) to try another.
-  - Check: `#/world/thailand/boat-trip/village`, wait for the kids to call, then score a goal.
+- [x] **The village kids’ player-name pronunciation issue was superseded** (2026-11-11): their lines are now "The ball!" and "Khob khun ka!", with no player name. The PR recording job supplies the replacement clips.
 - [ ] **Daddy's "Pai!"** The transcription check heard it as Chinese (派). Listen for whether it sounds like the Thai word.
   - Check: `#/world/thailand/boat-trip/pier`, tie three ribbons and the garland, then drive off.
 - [ ] **Lip sync and sound in the bay overall.** The engine putt-putt to RRRAAAH, the echoes in the cave, the
