@@ -38,7 +38,7 @@ export const L = {
     hop3: onDevice('Tap to make Pip hop! Hop three times to the water hole.', 'Click to make Pip hop! Hop three times to the water hole.'),
     count: COUNT.map(pip),
     splash: pip('Splash! A water hole!'),
-    hop5: 'Now hop five times to Uluru, the big red rock!',
+    hop5: "Now hop five times to Pip's mama!",
     mama: mama('There you are, Pip! Hop into my pouch!'),
     pouch: pip("Baby kangaroos ride in their mama's pouch!"),
   },
