@@ -40,7 +40,7 @@ for (const viewport of [{ width: 820, height: 1180 }, { width: 1180, height: 820
       // This target keeps wiggling; tap its center without a stability wait.
       const bounds = (await envelope.boundingBox())!
       await page.touchscreen.tap(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2)
-      await expect(page.getByRole('heading', { name: /you did it, kaylee/i })).toBeVisible()
+      await expect(page.getByRole('heading', { name: /^you did it!$/i })).toBeVisible()
 
       // Visibility alone misses overlays intercepting touches (the original bug).
       for (const name of ['Play again', 'Home']) {
