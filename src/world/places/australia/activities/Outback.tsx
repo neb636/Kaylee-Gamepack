@@ -1,4 +1,4 @@
-// Red Outback: dress Pip for the hot sun (climate), then hop-count her to the water hole, Uluru and Mama's pouch.
+// Red Outback: dress Pip for the hot sun (climate), then hop-count her to the water hole and on to Mama's pouch.
 // Pip and Mama are live puppets: Pip fans herself in the heat, shakes her head at mittens, crouches before every hop,
 // lands with a puff of dust and leaves footprints to count; Mama hops in and Pip jumps into her pouch.
 import { AnimatePresence, motion } from 'motion/react'
@@ -133,7 +133,7 @@ function Pack({ onDone }: { onDone: () => void }) {
   )
 }
 
-// Positions are % of the play area. Leg 1: 3 hops to the water hole. Leg 2: 5 hops to Mama by Uluru.
+// Positions are % of the play area. Leg 1: 3 hops to the water hole. Leg 2: 5 hops to Mama.
 const LEGS = [
   { hops: 3, from: 10, to: 40, prompt: L.outback.hop3 },
   { hops: 5, from: 40, to: 66, prompt: L.outback.hop5 },
@@ -250,9 +250,7 @@ function Hop({ onDone, setProgress, start, onSection }: ActivityProps & { start:
           </AnimatePresence>
         </div>
         {/* Water hole */}
-        <div style={{ position: 'absolute', left: `${WATER_X}%`, bottom: '5%', width: 'min(22cqw, 40cqh)', aspectRatio: '4.5', translate: '-50% 0', borderRadius: '50%', background: 'radial-gradient(#A8DCFF, #6EC1F5)', border: '4px solid #fff', overflow: 'hidden' }}>
-          <motion.div animate={{ scale: [0.3, 1.1], opacity: [0.8, 0] }} transition={{ repeat: Infinity, duration: 2.2 }} style={{ position: 'absolute', inset: '25% 30%', borderRadius: '50%', border: '3px solid rgba(255,255,255,0.9)' }} />
-        </div>
+        <WaterHole splash={splash} />
         <AnimatePresence>
           {splash > 0 &&
             Array.from({ length: 9 }, (_, i) => (
@@ -297,5 +295,135 @@ function Hop({ onDone, setProgress, start, onSection }: ActivityProps & { start:
         )}
       </button>
     </Stage>
+  )
+}
+
+const RIPPLE = { transformBox: 'fill-box', transformOrigin: 'center' } as const
+const ROCKS = [
+  { x: 52, y: 92, r: 15, c: '#B5532F' },
+  { x: 74, y: 112, r: 10, c: '#9E4528' },
+  { x: 336, y: 76, r: 13, c: '#B5532F' },
+  { x: 356, y: 98, r: 17, c: '#A14A2B' },
+  { x: 318, y: 122, r: 9, c: '#C2643C' },
+  { x: 150, y: 132, r: 8, c: '#B5532F' },
+]
+
+/** A real billabong: a muddy bank and red stones round the edge, reeds and a pink water lily, a sky reflection,
+ *  sparkles and slow ripples. Pip's splash sends a big ring across it. */
+function WaterHole({ splash }: { splash: number }) {
+  return (
+    <svg
+      viewBox="0 0 400 150"
+      aria-hidden
+      style={{ position: 'absolute', left: `${WATER_X}%`, bottom: '1%', width: 'min(40cqw, 72cqh)', translate: '-50% 0', overflow: 'visible', pointerEvents: 'none' }}
+    >
+      <defs>
+        <radialGradient id="wh-water" cx="50%" cy="40%" r="60%">
+          <stop offset="0%" stopColor="#3FB4E0" />
+          <stop offset="65%" stopColor="#5CCBEA" />
+          <stop offset="100%" stopColor="#9BE3F2" />
+        </radialGradient>
+        <radialGradient id="wh-bank" cx="50%" cy="50%" r="50%">
+          <stop offset="78%" stopColor="#7A3B22" />
+          <stop offset="100%" stopColor="#C96A3D" />
+        </radialGradient>
+        <clipPath id="wh-clip">
+          <ellipse cx="200" cy="92" rx="150" ry="40" />
+        </clipPath>
+      </defs>
+      {/* Soft shadow on the dirt, then the sandy rim and the wet mud bank */}
+      <ellipse cx="200" cy="100" rx="190" ry="54" fill="#D9774A" opacity="0.55" />
+      <ellipse cx="200" cy="96" rx="172" ry="50" fill="#EBA06C" />
+      <ellipse cx="200" cy="94" rx="160" ry="45" fill="url(#wh-bank)" />
+      {/* The water */}
+      <ellipse cx="200" cy="92" rx="150" ry="40" fill="url(#wh-water)" />
+      <g clipPath="url(#wh-clip)">
+        {/* A darker band under the far bank, and the sky's reflection */}
+        <ellipse cx="200" cy="56" rx="160" ry="14" fill="#2A8FC0" opacity="0.5" />
+        <ellipse cx="150" cy="80" rx="60" ry="9" fill="#fff" opacity="0.28" />
+        <path d="M110 100 q14 -6 28 0 t28 0" stroke="#fff" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.7" />
+        <path d="M232 112 q11 -5 22 0 t22 0" stroke="#fff" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.6" />
+        <path d="M250 74 q9 -4 18 0" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.55" />
+        {/* Slow ripples */}
+        {[0, 1.3].map((delay) => (
+          <motion.ellipse
+            key={delay}
+            cx="230"
+            cy="96"
+            rx="34"
+            ry="9"
+            fill="none"
+            stroke="#fff"
+            strokeWidth="2.5"
+            style={RIPPLE}
+            animate={{ scale: [0.3, 1.6], opacity: [0.85, 0] }}
+            transition={{ repeat: Infinity, duration: 2.6, delay, ease: 'easeOut' }}
+          />
+        ))}
+        {/* Pip's splash: a big ring across the whole water hole */}
+        {splash > 0 && (
+          <motion.ellipse
+            key={splash}
+            cx="200"
+            cy="94"
+            rx="40"
+            ry="11"
+            fill="none"
+            stroke="#fff"
+            strokeWidth="4"
+            style={RIPPLE}
+            initial={{ scale: 0.2, opacity: 1 }}
+            animate={{ scale: 3.6, opacity: 0 }}
+            transition={{ duration: 1.4, ease: 'easeOut' }}
+          />
+        )}
+      </g>
+      {/* A lily pad with a pink flower, bobbing */}
+      <motion.g animate={{ y: [0, -2, 0], rotate: [0, 2, 0] }} transition={{ repeat: Infinity, duration: 3.4, ease: 'easeInOut' }} style={RIPPLE}>
+        <path d="M292 98 L314 96 A22 8 0 1 0 313 101 Z" fill="#5FAE4E" />
+        <ellipse cx="292" cy="98" rx="22" ry="7.5" fill="none" stroke="#3F8A3A" strokeWidth="1.5" opacity="0.5" />
+        {[-30, 0, 30, 60, -60].map((a) => (
+          <ellipse key={a} cx="296" cy="88" rx="4.5" ry="10" fill="#FF8FC4" stroke="#fff" strokeWidth="1.2" transform={`rotate(${a} 296 94)`} />
+        ))}
+        <circle cx="296" cy="93" r="3.5" fill="#FFD84D" />
+      </motion.g>
+      <ellipse cx="124" cy="104" rx="16" ry="5.5" fill="#5FAE4E" />
+      {/* Reeds and spinifex on the far bank */}
+      {[
+        { x: 78, h: 54, lean: -8 },
+        { x: 90, h: 68, lean: -3 },
+        { x: 102, h: 50, lean: 6 },
+        { x: 300, h: 46, lean: -6 },
+        { x: 312, h: 62, lean: 2 },
+        { x: 322, h: 44, lean: 9 },
+      ].map((r, i) => (
+        <motion.g key={i} animate={{ rotate: [0, r.lean > 0 ? 3 : -3, 0] }} transition={{ repeat: Infinity, duration: 3 + i * 0.4, ease: 'easeInOut' }} style={{ transformBox: 'fill-box', transformOrigin: 'bottom center' }}>
+          <path d={`M${r.x} 66 q${r.lean} ${-r.h / 2} ${r.lean * 1.6} ${-r.h}`} stroke="#6C9A3B" strokeWidth="4" strokeLinecap="round" fill="none" />
+          {i % 3 === 1 && <rect x={r.x + r.lean * 1.6 - 4} y={66 - r.h - 4} width="8" height="18" rx="4" fill="#8A5230" />}
+        </motion.g>
+      ))}
+      {/* Red stones round the edge, each with a sunny top */}
+      {ROCKS.map((k, i) => (
+        <g key={i}>
+          <ellipse cx={k.x} cy={k.y} rx={k.r * 1.3} ry={k.r} fill={k.c} />
+          <ellipse cx={k.x - k.r * 0.25} cy={k.y - k.r * 0.4} rx={k.r * 0.7} ry={k.r * 0.35} fill="#fff" opacity="0.22" />
+        </g>
+      ))}
+      {/* Sparkles on the water */}
+      {[
+        { x: 170, y: 86, d: 0 },
+        { x: 262, y: 104, d: 0.9 },
+        { x: 214, y: 70, d: 1.7 },
+      ].map((s) => (
+        <motion.path
+          key={s.x}
+          d={`M${s.x} ${s.y - 7} L${s.x + 2} ${s.y - 2} L${s.x + 7} ${s.y} L${s.x + 2} ${s.y + 2} L${s.x} ${s.y + 7} L${s.x - 2} ${s.y + 2} L${s.x - 7} ${s.y} L${s.x - 2} ${s.y - 2} Z`}
+          fill="#fff"
+          style={RIPPLE}
+          animate={{ scale: [0, 1, 0], opacity: [0, 1, 0] }}
+          transition={{ repeat: Infinity, duration: 2.4, delay: s.d, repeatDelay: 0.6 }}
+        />
+      ))}
+    </svg>
   )
 }
