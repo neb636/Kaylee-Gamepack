@@ -7,8 +7,8 @@
   "page": "australia-outback.html",
   "audio": null,
   "lines": 18,
-  "seconds": 40,
-  "missing": 1,
+  "seconds": 42,
+  "missing": 0,
   "names": 0,
   "flags": [
     {
@@ -50,7 +50,6 @@
       "key": "outback.hop5",
       "text": "Now hop five times to Pip's mama!",
       "flags": [
-        "not recorded",
         "changed"
       ],
       "was": "Now hop five times to Uluru, the big red rock!"
@@ -279,9 +278,8 @@
       "key": "outback.hop5",
       "part": "outback",
       "when": "",
-      "ms": 0,
+      "ms": 2712,
       "flags": [
-        "not recorded",
         "changed"
       ],
       "was": "Now hop five times to Uluru, the big red rock!"
