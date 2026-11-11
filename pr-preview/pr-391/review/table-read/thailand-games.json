@@ -7,7 +7,7 @@
   "page": "thailand-games.html",
   "audio": null,
   "lines": 39,
-  "seconds": 79,
+  "seconds": 77,
   "missing": 0,
   "names": 1,
   "flags": [
@@ -50,7 +50,7 @@
     },
     {
       "key": "games.howto.chutes.touch",
-      "text": "Tap the die! Ladders go up, slides go down!",
+      "text": "Tap the die! Ladders up, slides down!",
       "flags": [
         "long",
         "new"
@@ -58,7 +58,7 @@
     },
     {
       "key": "games.howto.chutes.mouse",
-      "text": "Click the die! Ladders go up, slides go down!",
+      "text": "Click the die! Ladders up, slides down!",
       "flags": [
         "long",
         "new"
@@ -123,9 +123,8 @@
     },
     {
       "key": "games.cousins.bb.nap",
-      "text": "Nap time! Yawn!",
+      "text": "Nap time!",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -147,7 +146,6 @@
       "key": "games.cousins.bb.win",
       "text": "I won! Again?",
       "flags": [
-        "twice",
         "new"
       ]
     },
@@ -272,9 +270,8 @@
     },
     {
       "key": "games.cousins.ken.win",
-      "text": "I won! Again?",
+      "text": "Ha! I won!",
       "flags": [
-        "twice",
         "new"
       ]
     },
@@ -386,12 +383,12 @@
         "chutes",
         "touch"
       ],
-      "text": "Tap the die! Ladders go up, slides go down!",
+      "text": "Tap the die! Ladders up, slides down!",
       "voice": "sparkle",
       "key": "games.howto.chutes.touch",
       "part": "games › howto › chutes",
       "when": "A game starts (once a visit each); also Sparkle's hint when she waits on her turn.",
-      "ms": 3624,
+      "ms": 4344,
       "flags": [
         "long",
         "new"
@@ -404,12 +401,12 @@
         "chutes",
         "mouse"
       ],
-      "text": "Click the die! Ladders go up, slides go down!",
+      "text": "Click the die! Ladders up, slides down!",
       "voice": "sparkle",
       "key": "games.howto.chutes.mouse",
       "part": "games › howto › chutes",
       "when": "",
-      "ms": 3960,
+      "ms": 3576,
       "flags": [
         "long",
         "new"
@@ -505,7 +502,7 @@
       "voice": "bbplay",
       "key": "games.cousins.bb.sit",
       "part": "games › cousins › bb",
-      "when": "The cousin, in turn (cousin.ts).",
+      "when": "The cousin across the table: sitting down; before a roll now and then (in turn); their own nap, ladder and slide; their win; losing to her; getting up.",
       "ms": 1680,
       "flags": [
         "new"
@@ -554,14 +551,13 @@
         "bb",
         "nap"
       ],
-      "text": "Nap time! Yawn!",
+      "text": "Nap time!",
       "voice": "bbplay",
       "key": "games.cousins.bb.nap",
       "part": "games › cousins › bb",
       "when": "",
-      "ms": 3792,
+      "ms": 1152,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -613,7 +609,6 @@
       "when": "",
       "ms": 1968,
       "flags": [
-        "twice",
         "new"
       ]
     },
@@ -917,14 +912,13 @@
         "ken",
         "win"
       ],
-      "text": "I won! Again?",
+      "text": "Ha! I won!",
       "voice": "kenplay",
       "key": "games.cousins.ken.win",
       "part": "games › cousins › ken",
       "when": "",
-      "ms": 1944,
+      "ms": 2376,
       "flags": [
-        "twice",
         "new"
       ]
     },
