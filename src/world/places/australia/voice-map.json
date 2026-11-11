@@ -7,11 +7,11 @@
     "file": "b40c3a067e65.mp3"
   },
   {
-    "text": "G'day, Kaylee! I'm Pip the kangaroo!",
+    "text": "G'day! I'm Pip the kangaroo!",
     "voice": "pip",
     "sig": "aa4b0c6b7d",
-    "ms": 2923,
-    "file": "324f69e94d48.mp3"
+    "ms": 2184,
+    "file": "18bfd171156b.mp3"
   },
   {
     "text": "G'day means hello! Help with my party?",
@@ -35,11 +35,11 @@
     "file": "b36bb7e9b19c.mp3"
   },
   {
-    "text": "Where should we go next, Kaylee?",
+    "text": "Where should we go next?",
     "voice": "pip",
     "sig": "aa4b0c6b7d",
-    "ms": 2073,
-    "file": "64f53538c1c0.mp3"
+    "ms": 2928,
+    "file": "27ceaf34b04b.mp3"
   },
   {
     "text": "Everyone is here! Tap the party!",
@@ -63,18 +63,18 @@
     "file": "4ffc25295302.mp3"
   },
   {
-    "text": "Kaylee, you did it! You won the Australia Explorer trophy!",
+    "text": "You did it! You won the Australia Explorer trophy!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 5198,
-    "file": "88419f3377fb.mp3"
+    "ms": 4608,
+    "file": "015ad28b8312.mp3"
   },
   {
-    "text": "Kaylee, Australia Explorer! From Australia.",
+    "text": "Australia Explorer! From Australia.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4603,
-    "file": "662d95899efb.mp3"
+    "ms": 4632,
+    "file": "deedf0718c2a.mp3"
   },
   {
     "text": "Hee hee! That tickles!",
@@ -679,11 +679,11 @@
     "file": "2b5c545a57e6.mp3"
   },
   {
-    "text": "G'day, Kaylee! Thanks for helping Pip!",
+    "text": "G'day! Thanks for helping Pip!",
     "voice": "mama",
     "sig": "7cae6c13ff",
-    "ms": 3160,
-    "file": "c304ef25158c.mp3"
+    "ms": 2520,
+    "file": "f7d8116e79f4.mp3"
   },
   {
     "text": "Yum! Thanks for the gum leaves!",
@@ -728,11 +728,11 @@
     "file": "9a0b8f24d15b.mp3"
   },
   {
-    "text": "Thank you, Kaylee! You're a true Aussie mate!",
+    "text": "Thank you! You're a true Aussie mate!",
     "voice": "pip",
     "sig": "aa4b0c6b7d",
-    "ms": 2620,
-    "file": "acad69d79398.mp3"
+    "ms": 2472,
+    "file": "2e2fbf302a44.mp3"
   },
   {
     "text": "Kangaroo sticker! Kangaroos can only hop forward, never backward!",

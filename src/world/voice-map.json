@@ -7,18 +7,18 @@
     "file": "3bb97b151bd4.mp3"
   },
   {
-    "text": "Let's fly around the world, Kaylee! Tap the sparkly pin.",
+    "text": "Let's fly around the world! Tap the sparkly pin.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3974,
-    "file": "965d4aa4c6d2.mp3"
+    "ms": 4464,
+    "file": "6ecbef46bdb3.mp3"
   },
   {
-    "text": "Let's fly around the world, Kaylee! Click the sparkly pin.",
+    "text": "Let's fly around the world! Click the sparkly pin.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 5064,
-    "file": "0a7174c0fbef.mp3"
+    "ms": 5400,
+    "file": "b6547deca4a4.mp3"
   },
   {
     "text": "Where should we fly?",
@@ -105,11 +105,11 @@
     "file": "0391e0b86cdb.mp3"
   },
   {
-    "text": "This is your passport, Kaylee! Every stamp is a place you helped.",
+    "text": "This is your passport! Every stamp is a place you helped.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 5279,
-    "file": "594483aadfbd.mp3"
+    "ms": 4608,
+    "file": "6133d6da6626.mp3"
   },
   {
     "text": "Fly to more places to fill your passport!",
@@ -119,11 +119,11 @@
     "file": "10bd5086995d.mp3"
   },
   {
-    "text": "Pick a picture, Kaylee!",
+    "text": "Pick a picture!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 1817,
-    "file": "f9ccbc655ae4.mp3"
+    "ms": 1296,
+    "file": "f30bfcee8d5f.mp3"
   },
   {
     "text": "How many pieces? Tap to choose!",
@@ -168,11 +168,11 @@
     "file": "34d7fb849aba.mp3"
   },
   {
-    "text": "You made the picture, Kaylee!",
+    "text": "You made the picture!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 1847,
-    "file": "d180f86b4c21.mp3"
+    "ms": 2016,
+    "file": "0a22f09890bc.mp3"
   },
   {
     "text": "Four pieces!",
@@ -238,11 +238,11 @@
     "file": "a5adb3de29da.mp3"
   },
   {
-    "text": "The end! Great watching, Kaylee!",
+    "text": "The end! Great watching!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2558,
-    "file": "6b7188a17962.mp3"
+    "ms": 2616,
+    "file": "c7826fcafac6.mp3"
   },
   {
     "text": "Oh no, the video can't play right now.",
@@ -322,11 +322,11 @@
     "file": "a51db52724e4.mp3"
   },
   {
-    "text": "Great job, Kaylee!",
+    "text": "Great job!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 1400,
-    "file": "6d177aab71d4.mp3"
+    "ms": 1440,
+    "file": "f821f9bbd5b9.mp3"
   },
   {
     "text": "Yay!",
@@ -343,11 +343,11 @@
     "file": "8d60f1247c80.mp3"
   },
   {
-    "text": "Amazing, Kaylee!",
+    "text": "Amazing!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 1480,
-    "file": "916e57304c4b.mp3"
+    "ms": 984,
+    "file": "07e1258a4223.mp3"
   },
   {
     "text": "Super!",

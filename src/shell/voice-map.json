@@ -1,17 +1,17 @@
 [
   {
-    "text": "Hi Kaylee! Tap me to hear it again.",
+    "text": "Hi! Tap me to hear it again.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2810,
-    "file": "e489531dada6.mp3"
+    "ms": 2688,
+    "file": "435be3d0738c.mp3"
   },
   {
-    "text": "Hi Kaylee! Click me to hear it again.",
+    "text": "Hi! Click me to hear it again.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3168,
-    "file": "8a64418ce3b0.mp3"
+    "ms": 2880,
+    "file": "65fd70b857f6.mp3"
   },
   {
     "text": "Find the unicorn!",
