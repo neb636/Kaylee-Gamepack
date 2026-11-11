@@ -217,12 +217,13 @@ function buildBoat(bag: Bag, stripe: string = PAL.hotpink) {
     ...[-0.5, 0.5].flatMap((x) => [P.rbox(0.42, 0.75, 0.55, 0.12, '#5C5468', { at: [x, 0.95, STERN_Z - 0.35] }), P.box(0.12, 0.9, 0.16, '#3E3848', { at: [x, 0.2, STERN_Z - 0.45] })]),
   ]
   body.add(solid(merge(parts), bag, 2.5))
-  // The pink flag at the stern (it flutters).
+  // The pink flag at the stern (it flutters). Its pole stands in a socket on the back corner of the left gunwale, out
+  // past the end of the back bench, so it clears Mommy's head and reaches all the way down to the boat.
   const flag = new Group()
-  flag.position.set(-0.85, FLOOR + 1.85, -3.05)
-  flag.add(solid(merge([P.cyl(0.025, 0.025, 1.1, '#D8DEEA', { at: [0, 0.55, 0] }, 5)]), bag, 2))
+  flag.position.set(-(HALF_W - 0.07), FLOOR + 0.42, STERN_Z + 0.12)
+  flag.add(solid(merge([P.cyl(0.07, 0.08, 0.14, '#D8DEEA', { at: [0, 0.07, 0] }, 8), P.cyl(0.03, 0.03, 2.3, '#D8DEEA', { at: [0, 1.15, 0] }, 6)]), bag, 2))
   const cloth = new Group()
-  cloth.position.y = 0.95
+  cloth.position.y = 2.12
   cloth.add(solid(P.box(0.02, 0.32, 0.5, PAL.pink, { at: [0, 0, -0.25] }), bag, 1.5))
   flag.add(cloth)
   body.add(flag)
@@ -1142,7 +1143,7 @@ export class SametSpeedboat implements World3D {
       else if (id === 'family:nick') place(el, off ? null : this.nick.root.getWorldPosition(v), this.nick.height * 0.9, 0.7, 64)
       else if (id === 'family:ji') place(el, off ? null : this.ji.root.getWorldPosition(v), this.ji.height * 0.9, 0.7, 64)
       else if (id === 'captain') place(el, this.captain.root.getWorldPosition(v), 1.3, 0.7, 64)
-      else if (id === 'flag') place(el, this.boat.flag.getWorldPosition(v).setY(v.y + 0.6), 0.6, 1, 64)
+      else if (id === 'flag') place(el, this.boat.cloth.getWorldPosition(v).setY(v.y - 0.3), 0.6, 1, 64)
       else if (id === 'ring') place(el, this.boat.ring.getWorldPosition(v).setY(v.y - 0.3), 0.6, 1, 64)
       else if (id.startsWith('pass:')) {
         const p = this.passers.find((q) => q.id === id.slice(5))
