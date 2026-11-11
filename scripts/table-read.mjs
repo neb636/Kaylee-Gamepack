@@ -1,5 +1,5 @@
-// Table read: hear a toy's whole script, in play order and in the real voices, before any line is final. Dad listens
-// (about 3 minutes, on his phone) instead of reading lines.ts. Studios do the same before recording: a scene that reads
+// Table read: hear a toy's whole script, in play order and in the real voices, before any line is final. The user listens
+// (about 3 minutes, on their phone) instead of reading lines.ts. Studios do the same before recording: a scene that reads
 // fine can sound wrong out loud.
 //
 //   node scripts/table-read.mjs <place> <group>...       e.g. thailand mall.barber   canada taffy
@@ -14,7 +14,7 @@
 //   <place>-<group>.html  the script sheet: who says what, when it plays (the comment above it in lines.ts), how long,
 //                         tap a line to hear just that line, and the flags below
 //   <place>-<group>.json  the same as data (review.mjs builds the review page from it)
-// Flags, also printed here so the agent fixes the easy ones before Dad listens:
+// Flags, also printed here so the agent fixes the easy ones before the user listens:
 //   not recorded   no clip yet (node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs)
 //   long           over 3 s (she's five: keep lines short)
 //   name           says "Kaylee" (rule 4: save her name for big moments; the sheet counts them)

@@ -114,7 +114,7 @@ jobs:
           BASE_PATH: /${{ github.event.repository.name }}/pr-preview/pr-${{ github.event.number }}/
           # Previews are public too: Thailand opens only with the family code (scripts/vite-lock.ts).
           LOCK_CODE: ${{ secrets.THAILAND_CODE }}
-      # The review page Dad opens from the PR (scripts/review.mjs), at <preview>/review/: what the agent published for
+      # The review page the user opens from the PR (scripts/review.mjs), at <preview>/review/: what the agent published for
       # this branch to the review-pages branch (reels, table reads, questions), plus the script sheet of every group of
       # spoken lines this PR changes. A failure here never blocks the preview.
       # It can never hold up the preview (or main's deploys, which share the gh-pages lane): every command is timed out.

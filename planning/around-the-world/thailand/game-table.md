@@ -4,7 +4,7 @@ All three greyboxes built: Unicorn Dice, Candy Land, Chutes and Ladders · Toy i
 
 A little game table stands on the right side of Kaylee's room upstairs, past the couch, with a pink unicorn bag sitting beside it. She taps the table, sits down, picks a game from three big pictures and a cousin from three faces (BB is ready by default), and that cousin really comes and sits across from her. Then they play: **Kaylee's Unicorn Dice Game** (her own rules), **Candy Land** and **Chutes and Ladders**, on boards made for this house, taking turns until someone wins and it's “Again!”.
 
-**Next:** Dad plays the three greyboxes on the iPad (PRs #348, #349 and greybox 3's), with BB, Gan and Ken: is rolling fun, does drawing feel different, are the ladders and slides the highlight, is the turn rhythm right (the feel lab has every number)? His notes go into each game. Then the look gate: the table, the bag, the boards, the pieces and the picker's pictures made pretty.
+**Next:** The user plays the three greyboxes on the iPad (PRs #348, #349 and greybox 3's), with BB, Gan and Ken: is rolling fun, does drawing feel different, are the ladders and slides the highlight, is the turn rhythm right (the feel lab has every number)? His notes go into each game. Then the look gate: the table, the bag, the boards, the pieces and the picker's pictures made pretty.
 
 - games: Unicorn Dice, Candy Land, Chutes and Ladders: 3
 - the cousin across the table (BB first): BB, Gan, Ken
@@ -16,7 +16,7 @@ Related: [← Thailand plan](../thailand.md), [Her wardrobe (the other toy in he
 
 ## 💡 The idea
 
-Written 2026-11-06, from a talk with Kaylee and Dad. She asked for a game table upstairs on the right side of her room, Candy Land and Chutes and Ladders, a new unicorn dice game, and a unicorn bag sitting in the room. She plays against one cousin: BB, Gan or Ken. **She picked BB**, so BB is ready when the table opens.
+Written 2026-11-06, from a talk with Kaylee and the user. She asked for a game table upstairs on the right side of her room, Candy Land and Chutes and Ladders, a new unicorn dice game, and a unicorn bag sitting in the room. She plays against one cousin: BB, Gan or Ken. **She picked BB**, so BB is ready when the table opens.
 
 > **🏠 A toy in the house, not an activity**
 >
@@ -24,7 +24,7 @@ Written 2026-11-06, from a talk with Kaylee and Dad. She asked for a game table 
 
 > **🐾 Not in this plan**
 >
-> She also loves Paw Patrol and Mighty Pups, but we didn't agree on a game or its rules. Not here; a later plan if Dad wants one.
+> She also loves Paw Patrol and Mighty Pups, but we didn't agree on a game or its rules. Not here; a later plan if the user wants one.
 
 ## 👆 The toy
 
@@ -127,7 +127,7 @@ Example: Kaylee is on 7 and rolls a 4. She stays on 7. BB rolls. Then it's Kayle
 
 - 🎲 **The die**: A big chunky pink die with white dots, the size of her hand next to the board. Tap: it hops up, tumbles across the table, bounces twice and settles on its number (a click and a sparkle on the top face). The number shows as dots, never digits.
 - 🦄 **The unicorn pieces**: Four little unicorn figures (pink, lavender, mint, sunny yellow). Before the first game she taps the one she wants; the cousin takes a different one (BB likes pink, so she takes lavender if pink is taken). The pick is kept for next time.
-- 🌈 **The rainbow path**: 25 round stepping stones in rainbow order winding across the board, each with its number in big friendly digits (for Dad; she counts the hops). The castle stands past 25, with a gate that opens.
+- 🌈 **The rainbow path**: 25 round stepping stones in rainbow order winding across the board, each with its number in big friendly digits (for the user; she counts the hops). The castle stands past 25, with a gate that opens.
 - 😴 **A 4: rest**: Four dots, and the piece yawns, lies down on its stone, a little zzz and a soft lullaby note, about a second. Then the turn passes. Gentle, never an “oops”.
 - 🏰 **The castle**: The winner's piece hops through the gate, the towers light up and sparkle, a fanfare, confetti over the table, and the winner hops on their stool. Two seconds, then “Again!” is right there.
 
@@ -211,7 +211,7 @@ The cousin's turn: 🧒 Their face glows (they look at the die) → ⏳ A little
 
 - **Brisk:** a whole turn is 2-3 seconds; a game is about 40-60 seconds.
 - **One thing at a time:** the roll, the hops, the ladder or slide and the win all finish before the next turn starts. Only the player whose turn it is can roll, and only once.
-- **Fair:** the die and the deck are really random; the rules on the board decide who wins. Nobody is helped in secret (Dad's wish). Kaylee always goes first, which gives her a small edge (53-58 games in 100).
+- **Fair:** the die and the deck are really random; the rules on the board decide who wins. Nobody is helped in secret (the user's wish). Kaylee always goes first, which gives her a small edge (53-58 games in 100).
 - **Losing is short and kind:** the cousin says “I won! Again?”, gives her a high-five hop, and the big 🔁 is already bouncing. No sad sounds.
 - **Sharing a space:** two pieces on one space stand side by side, both easy to see.
 - **Quiet:** short spoken how-to the first time each game opens (Sparkle), the 🔊 to hear it again, and the cousin speaks at the big moments only (sitting down, a ladder or slide now and then, the win). No line after every move, and her name only when she wins.
@@ -236,16 +236,16 @@ The cousin's turn: 🧒 Their face glows (they look at the die) → ⏳ A little
 - 🔁 **Replay**: Three games, three cousins, four unicorns, and every game turns out differently.
 - ⚠️ **The honest risk**: These are luck games: she will lose about 4 in 10, and between turns she watches rather than plays. The answer is short games, a fast cousin, and the next roll always seconds away.
 
-## 🧔 For Dad to decide
+## 🧔 For the user to decide
 
 - **Who is the opponent?** **BB, Gan or Ken**, one at a time, played by the game (no second iPad). **BB first**: Kaylee picked her (2026-11-06).
 - **The Unicorn Dice Game's rules?** **As written above**, approved by Kaylee (2026-11-06): 25 spaces, a 4 means rest this turn only, reach or pass 25.
 - **The unicorn bag?** **An ordinary decorative bag** sitting in her room by the table (2026-11-06): a tap reaction is fine, it never moves or does magic.
 - **A Paw Patrol game too?** **Not now** (2026-11-06): no game or rules agreed. Maybe a later plan.
-- **Kaylee will lose about 4 games in 10, because the rules decide and nobody helps her in secret. Is that OK, or should she get a help she can **see** (for example: she always goes first, which is already in; or a lucky extra roll she knows about)?** **Fair dice** (Dad, 2026-11-06): no secret help; she goes first, losses are short and kind, Again is right there.
-- **The table, stools and bag in her room from greybox 1 (she can sit there, but no game opens until a game is finished), or hidden until the first game is ready for her?** **In her room now, as furniture** (Dad, 2026-11-06): she can sit at it; the games open only from the board-game links until each passes its full loop. Built in greybox 1.
-- **Is it OK to call them “Candy Land” and “Chutes and Ladders” (for Dad, in labels and links), with our own boards, colors and pieces and nothing copied from the real games?** **Yes** (Dad, 2026-11-06): the names as labels for Dad, our own boards, colors and pieces.
-- **Should her unicorn piece choice be kept for next time, and should the pawns in the other two games have the players' own faces?** **Yes to both** (Dad, 2026-11-06): her unicorn pick is kept; the pawns in Candy Land and Chutes and Ladders get the players' faces.
+- **Kaylee will lose about 4 games in 10, because the rules decide and nobody helps her in secret. Is that OK, or should she get a help she can **see** (for example: she always goes first, which is already in; or a lucky extra roll she knows about)?** **Fair dice** (user feedback, 2026-11-06): no secret help; she goes first, losses are short and kind, Again is right there.
+- **The table, stools and bag in her room from greybox 1 (she can sit there, but no game opens until a game is finished), or hidden until the first game is ready for her?** **In her room now, as furniture** (user feedback, 2026-11-06): she can sit at it; the games open only from the board-game links until each passes its full loop. Built in greybox 1.
+- **Is it OK to call them “Candy Land” and “Chutes and Ladders” (for the user, in labels and links), with our own boards, colors and pieces and nothing copied from the real games?** **Yes** (user feedback, 2026-11-06): the names as labels for the user, our own boards, colors and pieces.
+- **Should her unicorn piece choice be kept for next time, and should the pawns in the other two games have the players' own faces?** **Yes to both** (user feedback, 2026-11-06): her unicorn pick is kept; the pawns in Candy Land and Chutes and Ladders get the players' faces.
 
 ## 🔗 Sections: tap to play
 
@@ -276,14 +276,14 @@ Greybox 1 built the table and the Unicorn game; Candy Land and Chutes and Ladder
 
 ## 🧱 Build plan
 
-One PR each; stop for Dad after each. A game is only on for Kaylee (open from the table in her normal house) once Dad has played its full loop.
+One PR each; stop for the user after each. A game is only on for Kaylee (open from the table in her normal house) once the user has played its full loop.
 
 0. **This plan** [done] · 2026-11-06 · PR #347
    The table and the bag in her room, sitting down with a cousin, all three games' rules, the turns, the links, the tests and the gates.
 1. **Greybox 1: the table, a cousin, and the Unicorn Dice Game** [done] · 2026-11-06 · PR #348
    The table, two stools and the unicorn bag in her room with their walk grid, tap targets and use spot. Tap the table: she sits; from a board-game link the picker opens (three cards, three cousins, BB picked, four unicorns, ▶); the real cousin sits across from her and goes back after. The table's camera. The turn engine, the die, the unicorn pieces and the rainbow path, the rest on a 4, the castle win, 🔁 / 🎲 / 👋. Sections `table` and `unicorn` with the handy cases. Rules tests. Knobs for the feel. No voices, no art.
    
-   **Stop: Dad plays it on the iPad. Is rolling fun? Is the turn rhythm right?**
+   **Stop: the user plays it on the iPad. Is rolling fun? Is the turn rhythm right?**
 2. **Greybox 2: Candy Land** [done] · 2026-11-06 · PR #349
    The candy path (36 spaces, six colors with their shapes), the deck that flips a card and the trail to where it's going, the pawns, the finish. Section `candy` and its cases. Rules tests (single, double, past the end, the deck running out).
 3. **Greybox 3: Chutes and Ladders** [done] · 2026-11-06 · PR #350
@@ -291,11 +291,11 @@ One PR each; stop for Dad after each. A game is only on for Kaylee (open from th
 4. **The look** [next]
    The table, stools and unicorn bag made pretty; the three boards, the castle, the cupcake house, the pieces and pawns, the die and the cards; the picker's three picture cards (hand-drawn SVG, like the game shelf) and the cousins' faces from their real 3D selves; the cousin's walk over; the small win party. Can split into one PR per game if it's big.
 5. **Full loop: voices, reactions, QA, and on for Kaylee** [todo]
-   Sparkle's how-to lines and the 🔊, the cousins' lines in their own voices, reactions on rests, ladders, slides and wins, the QA screens, motion and pacing runs, both QA agents. Then each game Dad approves is switched on for Kaylee (`ready`), one at a time.
+   Sparkle's how-to lines and the 🔊, the cousins' lines in their own voices, reactions on rests, ladders, slides and wins, the QA screens, motion and pacing runs, both QA agents. Then each game the user approves is switched on for Kaylee (`ready`), one at a time.
 
 > **📋 The prompt for gate 4: the look**
 >
-> Work in neb636/Kaylee-Gamepack. Read AGENTS.md, then `planning/around-the-world/thailand/game-table.md` (`node scripts/plan.mjs md planning/around-the-world/thailand/game-table.md`), including its builder sections, the three greybox logs, their known small things and Dad's notes from playing them. Build **gate 4 only: the look**: the table, stools and unicorn bag made pretty (the bag gets a little jingle and a twinkle on its horn); the three boards (a sparkly unicorn castle, the candy world and cupcake house, the ladders and slides) and their pieces and pawns at a size that reads from the table camera; the picker's three game cards as hand-drawn SVG in the game shelf's style (`src/world/shelf/STYLE.md`) and the cousins' faces as pictures of their real 3D selves (`snapPhoto`, like the wardrobe's door); the cousin walking or hopping over to the stool; the small win party at the table. Keep every game `ready: false`. No voices yet (gate 5). Run full QA for the table sections (both QA agents, `--only=ipad-portrait,ipad-landscape,iphone-landscape`), `npm run verify`, update this plan (build step 4, a log entry), and open the PR with the `open-pr` skill. Stop for Dad.
+> Work in neb636/Kaylee-Gamepack. Read AGENTS.md, then `planning/around-the-world/thailand/game-table.md` (`node scripts/plan.mjs md planning/around-the-world/thailand/game-table.md`), including its builder sections, the three greybox logs, their known small things and the user's notes from playing them. Build **gate 4 only: the look**: the table, stools and unicorn bag made pretty (the bag gets a little jingle and a twinkle on its horn); the three boards (a sparkly unicorn castle, the candy world and cupcake house, the ladders and slides) and their pieces and pawns at a size that reads from the table camera; the picker's three game cards as hand-drawn SVG in the game shelf's style (`src/world/shelf/STYLE.md`) and the cousins' faces as pictures of their real 3D selves (`snapPhoto`, like the wardrobe's door); the cousin walking or hopping over to the stool; the small win party at the table. Keep every game `ready: false`. No voices yet (gate 5). Run full QA for the table sections (both QA agents, `--only=ipad-portrait,ipad-landscape,iphone-landscape`), `npm run verify`, update this plan (build step 4, a log entry), and open the PR with the `open-pr` skill. Stop for the user.
 
 ### Greybox 1: the table, a cousin, and the Unicorn Dice Game ([done] · 2026-11-06 · PR #348)
 

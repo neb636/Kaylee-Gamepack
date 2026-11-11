@@ -1,6 +1,6 @@
 ---
 name: kaylee-week
-description: Turn Kaylee's play diary (PostHog events from the main site) into a one-screen digest of her week - her favorites, where she quits, what she never opens - and what to build, fix or retire next. Use on Sundays, before pitching a new toy, or when Dad asks what she's been playing.
+description: Turn Kaylee's play diary (PostHog events from the main site) into a one-screen digest of her week - her favorites, where she quits, what she never opens - and what to build, fix or retire next. Use on Sundays, before pitching a new toy, or when the user asks what she's been playing.
 ---
 
 # Kaylee's week
@@ -40,7 +40,7 @@ with HogQL in `query.json` (`{"query": {"kind": "HogQLQuery", "query": "..."}}`)
   but a few are scripted (one plays right after she boards the boat), so compare a section with itself over weeks.
 - **Never opened:** activities in the countries' `meta.ts` with no `world_activity_started` this week (and last).
 
-## Tell Dad (one screen, no tables he has to read)
+## Tell the user (one screen, no tables they have to read)
 
 Three lines and a short list: her top three toys (time, replays), the one place she keeps quitting or getting stuck
 (with the section link), what she hasn't opened in three weeks. Then your proposal: the next fix, the next pitch's

@@ -86,7 +86,7 @@ Code paths are under `src/world/places/thailand/`.
 - [ ] **The kids in the frame climb by hopping straight up the nets** (they follow their loops, not the walk grid).
   - Code: `activities/mall-trip/harborland/frame.ts` (the kids' loops), `hall/hall.ts` (the hall's frame kid).
 
-## The mall trip: found while building, not checked by QA (Dad skipped it, 2026-10-21)
+## The mall trip: found while building, not checked by QA (the user skipped it, 2026-10-21)
 
 - [ ] **Nine slots on the sock band** cover the hall's "Muay Thai" sign on an iPhone, and on iPhone landscape a mini
   game's 🛝 (back to the hall, at the end) sits over the sock band.

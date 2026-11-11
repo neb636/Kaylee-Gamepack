@@ -4,7 +4,7 @@ Built: all five activities and the finale are in the game · New place (3D + 2D)
 
 Sparkle's balloon flies to the top of the world and the bottom. Up north, **Pola the polar bear cub** lives on ice floating on the sea; down south, **Pebble the penguin chick** lives on a giant land made of ice. They are pen pals who can never meet, because polar bears only live in the north and penguins only live in the south. Kaylee hops floes, belly-slides, huddles in a blizzard and cracks icebergs off a glacier, and learns the difference by playing in both. At the very end, Sparkle's **Polar Quiz** checks what she learned, and she answers by doing: dragging Pola to his pole, spinning the globe to the bottom.
 
-**Next:** Dad plays the whole Poles on the iPad: [the globe](#/world/poles), spin to a pole and tap a picture; then listen to the friends' voices (Pola, Mama Bear, Pebble, Papa, Terry) and say what to change. Handy links: [Ice Floe Hop](#/world/poles/floe/story), [Penguin Slide](#/world/poles/slide/story), [Iceberg Maker](#/world/poles/iceberg/pick), [Snow Coats](#/world/poles/coats/fox), [Emperor Huddle](#/world/poles/huddle/small), [the finale](#/world/poles/party/fly?stamps=all). Still open: the friends' names (recorded as Pola, Pebble and Terry, so a new name means re-recording), one map pin or two, Santa or not, an Inuktitut hello.
+**Next:** The user plays the whole Poles on the iPad: [the globe](#/world/poles), spin to a pole and tap a picture; then listen to the friends' voices (Pola, Mama Bear, Pebble, Papa, Terry) and say what to change. Handy links: [Ice Floe Hop](#/world/poles/floe/story), [Penguin Slide](#/world/poles/slide/story), [Iceberg Maker](#/world/poles/iceberg/pick), [Snow Coats](#/world/poles/coats/fox), [Emperor Huddle](#/world/poles/huddle/small), [the finale](#/world/poles/party/fly?stamps=all). Still open: the friends' names (recorded as Pola, Pebble and Terry, so a new name means re-recording), one map pin or two, Santa or not, an Inuktitut hello.
 
 - one place, a globe that flips: 2 poles
 - 2 north · 2 south · 1 both: 5 + finale
@@ -65,7 +65,7 @@ A hybrid: the globe and the icy sea in 3D like Thailand, two activities flat lik
 
 - 🌍 **The globe hub**: A real ball she spins with her finger. The sun she drags is the light, so day and night draw themselves, and tilting the Earth makes the opposite seasons real instead of faked.
 - 🐻‍❄️ **Ice Floe Hop**: Floes that dip under Pola's weight, tip at the edge and drift on a real sea, with more than one path across. The water already exists (Thailand's boat trip), and “dip under the ice” is just a camera move.
-- 🐧 **Penguin Slide**: The Nan drive's steering (Dad tuned it in the feel lab, PR #209) on an icy slope, then the same steering underwater. Bumps, two runs and the dive come straight from the drive and the boat race.
+- 🐧 **Penguin Slide**: The Nan drive's steering (the user tuned it in the feel lab, PR #209) on an icy slope, then the same steering underwater. Bumps, two runs and the dive come straight from the drive and the boat race.
 - 🧊 **Iceberg Maker**: Shares the floes' sea and bobbing. A berg that rolls over, and the camera sinking under the waterline to show the hidden 9 parts out of 10, read best in 3D. **The one that could go either way:** if we want a cheaper activity, this one goes 2D.
 - 🐦 **Pole to Pole (finale)**: **Changed:** Terry flies down over the same globe while it turns underneath, past the pins of the countries she has visited. “Opposite ends of the world” becomes something she sees, and nobody has to draw Italy, Egypt and Peru again for a side-scroller.
 - ❓ **Polar Quiz**: Already on the hub's globe: she drops Pola on the top, spins the bottom to face her, taps a pole to dip under the ice.
@@ -81,12 +81,12 @@ A hybrid: the globe and the icy sea in 3D like Thailand, two activities flat lik
 
 > **🦄 Kaylee herself stays out**
 >
-> She doesn't walk around the ice as the unicorn: these activities are about the animals, and her model and wardrobe would have to leave Thailand's locked folder too. Easy to add later if Dad wants it.
+> She doesn't walk around the ice as the unicorn: these activities are about the animals, and her model and wardrobe would have to leave Thailand's locked folder too. Easy to add later if the user wants it.
 
 ## 🐾 The friends
 
-- 🐻‍❄️ **Pola, the polar bear cub (north)** (name: Dad picks): Fluffy, a bit clumsy, a great swimmer. Lives with Mama Bear on the sea ice. Wants to know what a penguin is: she's never seen one.
-- 🐧 **Pebble, the emperor penguin chick (south)** (name: Dad picks): Grey fluff, black-and-white face, waddles everywhere. Lives in the big emperor colony. Has never seen a polar bear.
+- 🐻‍❄️ **Pola, the polar bear cub (north)** (name: the user picks): Fluffy, a bit clumsy, a great swimmer. Lives with Mama Bear on the sea ice. Wants to know what a penguin is: she's never seen one.
+- 🐧 **Pebble, the emperor penguin chick (south)** (name: the user picks): Grey fluff, black-and-white face, waddles everywhere. Lives in the big emperor colony. Has never seen a polar bear.
 - 🐦 **Terry the Arctic tern (the go-between)** (real fact): The only friend who visits both: Arctic terns fly from the north to the south and back every year, the longest trip of any animal. Carries Pola's and Pebble's postcards. Stars in the finale.
 
 > **💌 The story hook**
@@ -202,7 +202,7 @@ Arctic animals change color with the seasons, and many live on land up north.
 - Camouflage: white animals hide in the snow; she sees them vanish.
 - Seasons up north: long dark winter, short summer when the snow melts and flowers grow.
 - The Arctic has land animals around the frozen sea (Antarctica doesn't).
-- Tap-to-hear: Inuit people have lived in the Arctic for thousands of years (check the wording with Dad).
+- Tap-to-hear: Inuit people have lived in the Arctic for thousands of years (check the wording with the user).
 
 **Payoff:** a winter scene where she can only find the animals by their eyes and noses blinking. **Replay:** different animals in a different order. **Numbers:** ~25-40 rubs, 2 min, 1 line before the first touch.
 
@@ -359,7 +359,7 @@ Where icebergs come from, why most of one is hidden, and how north and south ber
 
 ## ❓ The Polar Quiz (the very end) · 3D
 
-Dad's ask (2026-10-26): a quiz at the end to check what she learned. She can't read, so every question is spoken, and she answers by moving things on the globe, not by picking word cards.
+The user's ask (2026-10-26): a quiz at the end to check what she learned. She can't read, so every question is spoken, and she answers by moving things on the globe, not by picking word cards.
 
 > **How it plays**
 >
@@ -385,7 +385,7 @@ Dad's ask (2026-10-26): a quiz at the end to check what she learned. She can't r
 
 ### Rules (from AGENTS.md)
 
-- Every question is spoken, short (under ~3 s), with a 🔊 button and a short text line for Dad.
+- Every question is spoken, short (under ~3 s), with a 🔊 button and a short text line for the user.
 - No failing, no score shown as a number, no timer: a miss gets a silly reaction, then the right place glows and she does it herself. The star still fills.
 - Use her name: “Wow, Kaylee, you know your poles!”
 - It sits **after** all five stamps and the tern flight, so it never blocks an activity. Replays pick 6 new questions from the pool.
@@ -473,7 +473,7 @@ For pokeables, stickers, coloring pages and puzzles.
 ### Theater videos (in `meta.videos`, 2026-10-27)
 
 - 🐻‍❄️ [Polar bear cubs slip on the Arctic ice](https://www.youtube.com/watch?v=mIGpzhADMC4) (BBC Earth, 2 min), after Ice Floe Hop
-- 🦊 [Animals that change colour when it snows](https://www.youtube.com/watch?v=5FnJ70WwCXw) (BBC, Life in Colour, 2.5 min), after Snow Coats. Dad: preview it; the other animals in it aren't checked
+- 🦊 [Animals that change colour when it snows](https://www.youtube.com/watch?v=5FnJ70WwCXw) (BBC, Life in Colour, 2.5 min), after Snow Coats. The user: preview it; the other animals in it aren't checked
 - 🐧 [Emperor penguins speed-launch out of the water](https://www.youtube.com/watch?v=A9mbCNs47FI) (National Geographic, 3 min), after Penguin Slide
 - 🥚 [Emperor penguins huddle for warmth](https://www.youtube.com/watch?v=OL7O5O7U4Gs) (Nature on PBS, 3 min), after Emperor Huddle
 - 🧊 [A huge iceberg breaks off a Greenland glacier](https://www.youtube.com/watch?v=00_-JlbIftg) (National Geographic, 1 min), after Iceberg Maker
@@ -491,9 +491,9 @@ For pokeables, stickers, coloring pages and puzzles.
 - Coloring: Pola on a floe, Pebble and dad, a narwhal, the iceberg with its underwater half
 - Puzzles: the emperor colony, the northern lights over the floes, a tabletop iceberg with penguins
 
-## ❓ Open questions for Dad
+## ❓ Open questions for the user
 
-- **A quiz at the end?** **Yes** (Dad, 2026-10-26): where polar bears live, is south on top or bottom, and so on. Added as the Polar Quiz after the tern flight, answered by doing on the globe.
+- **A quiz at the end?** **Yes** (user feedback, 2026-10-26): where polar bears live, is south on top or bottom, and so on. Added as the Polar Quiz after the tern flight, answered by doing on the globe.
 - **One place, or two pins on the map?** OPEN: My pick: **one place, “The Poles”**, with the globe hub that flips, so the comparison is the toy. Its pin sits on Antarctica (the white strip at the bottom of the map), with a second small pin in the sea at the top that opens the same place on the north side (`?side=north`). Two separate places would mean two friends' worlds that never show the difference.
 - **The friends' names?** OPEN: Placeholders: Pola (polar bear cub), Pebble (emperor chick), Terry (Arctic tern).
 - **Santa at the North Pole?** OPEN: It's almost Christmas season and she's five. A wink could be fun (a tiny cabin with a red door far off on the ice in the hub, a sleigh bell when tapped) but it mixes make-believe into a real-facts place. Leave it out unless you want it.
@@ -504,7 +504,7 @@ For pokeables, stickers, coloring pages and puzzles.
 ## 🧱 Build plan
 
 0. **This plan** [next]
-   Dad reads it and answers the open questions.
+   the user reads it and answers the open questions.
 1. **Move the 3D engine out of Thailand** [done] · 2026-10-27 · PR #216
    Its own PR, before any Poles code: the engine and the generic chibi rig to a shared folder, so the Poles open without the family code. Thailand plays the same.
 2. **Greybox: the globe hub** [done] · 2026-10-27 · PR #219
@@ -554,14 +554,14 @@ The Poles are a place now (a pin on Antarctica, nothing to stamp yet). Its home 
 - **Sections:** `hub/globe?side=middle|north|south` and `hub/sun?side=...&summer=middle|north|south`; the address bar follows her. The five activities and the finale each have one `soon` section (a “coming soon” card) until their greybox.
 - **Feel knobs** (`?feel=1`): the globe's grip, coast, top flick speed, flick smoothing and reach, the pole view's tilt, settle speed, the rubber band past the pole, the idle spin; the sun's tilt, smoothing and how fast the seasons follow. The graph shows her finger, the tilt, the spin and the sun.
 - **Files:** `places/poles/globe/` (`globe.ts` the world, `earth.ts` the painted map in the world map's colors and `ll()` for lat/lon, `material.ts` the day-and-night toon shader), `activities/hub/` (`Hub.tsx`, `sections.ts`), `Soon.tsx`, `meta.ts`, `lines.ts`. A `poles` emblem in `kit/Flag.tsx` stands in for a flag (the poles have none). Nothing imports from Thailand.
-- **Voices:** only the passport line, its four facts and the five sticker facts are recorded (the place needs them); the globe itself is silent until the full loop. Short text lines at the bottom say what's on screen, for Dad.
+- **Voices:** only the passport line, its four facts and the five sticker facts are recorded (the place needs them); the globe itself is silent until the full loop. Short text lines at the bottom say what's on screen, for the user.
 
 > **Changed from the plan**
 >
 > - A pole view tips the globe 28° toward her (a knob), not straight down on the pole, so Pola and Pebble stand up on the horizon instead of being seen from above.
 > - Antarctica's view rolls the whole world half a turn once she lets go, so the south comes up to the top of the screen like the Arctic does, instead of Pebble hanging upside down under the globe. Flicking back up rolls it the right way round again.
 > - Summer shows as the floes melting back and the snow line climbing; the tundra flowers come with the art.
-> - One map pin, on Antarctica; the second pin at the top waits for Dad's answer.
+> - One map pin, on Antarctica; the second pin at the top waits for the user's answer.
 > - The lost penguin (the hub's third step) isn't in this greybox.
 
 ### Greybox 2: Ice Floe Hop ([done] · 2026-10-27 · PR #225)
@@ -583,7 +583,7 @@ Pola on grey floes on a blue sea, in the toon look: grab him, pull back and let 
 > - Pola looks at her finger while she pulls (so she sees his face), then turns and leaps.
 > - The full pull is never more than 30% of the screen's short side, so an iPhone held sideways has room to pull back under him.
 > - No pokeable animals yet (the seal, the narwhal, the walrus...) and no dip under the ice: they come with the art.
-> - About 20 rows from Pola to Mama, so about 20 flings plus misses, a little under the plan's 25-35: Dad's play will say if it wants more.
+> - About 20 rows from Pola to Mama, so about 20 flings plus misses, a little under the plan's 25-35: the user's play will say if it wants more.
 
 ### Greybox 3: Penguin Slide ([done] · 2026-10-27 · PR #229)
 
@@ -596,7 +596,7 @@ Pebble's papa on his belly down an icy valley, in the toon look: her finger stee
 - **Under the sea (`dive`):** the ice ends at a cliff: off he goes, splash, and the camera follows him under (blue fog, the bright surface above, rocks below). The same wheel steers him through 16 pink krill swarms (later ones drift); a near one drifts into his beak (gulp, a rising note, his tummy grows and the 🦐 tummy in the corner fills pink). A leopard seal loops round him; bump it and you both spin. At the end he rockets up onto the colony's ice.
 - **Feeding Pebble (`home`):** he slides in on his tummy, stands up, and feeds her one beakful at a time (at least 4, so she's never hungry); her tummy grows, then everyone hops, fanfare, confetti. 🔁 slides again from the top.
 - **Sections:** `slide/top`, `slide/bumps?run=left|right` (the run he starts toward), `slide/dive`, `slide/home?krill=N`. The address bar follows him, with his krill.
-- **Feel knobs** (`?feel=1`): *Steering*: Dad's Nan numbers to start (slide speed, wheel size, dead middle, gentle small pushes, smoothing, aim ahead, aim closer when far off), plus sharpest swerve and back to the middle. *The slide*: top speed, gentle slope share, speeding up, gravity in the air, up the snowbank, stuck in the snow, when the Adélies hop aside. *Under the sea*: swim speed, slide speed, krill come to him, leap out. The graph shows her push, the steer, where she's steering to, where he is and his height in the air.
+- **Feel knobs** (`?feel=1`): *Steering*: the user's Nan numbers to start (slide speed, wheel size, dead middle, gentle small pushes, smoothing, aim ahead, aim closer when far off), plus sharpest swerve and back to the middle. *The slide*: top speed, gentle slope share, speeding up, gravity in the air, up the snowbank, stuck in the snow, when the Adélies hop aside. *Under the sea*: swim speed, slide speed, krill come to him, leap out. The graph shows her push, the steer, where she's steering to, where he is and his height in the air.
 - **Files:** `places/poles/activities/slide/`: `slide.ts` (the world), `course.ts` (the course), `penguin.ts` (Papa, Pebble, the Adélies and the seal as greybox shapes), `PenguinSlide.tsx`, `sections.ts`. Still under `inTheWorks`. No voices (greybox). QA: the screens, a motion scenario (`poles-slide-steer`) and pacing.
 
 > **🔀 Changed from the plan**

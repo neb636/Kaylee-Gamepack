@@ -1,8 +1,8 @@
 # QA: what the robots check, and what only Kaylee can
 
-The robots make sure Dad and Kaylee never meet a broken, confusing or talky build, so nobody spends their few minutes
+The robots make sure the user and Kaylee never meet a broken, confusing or talky build, so nobody spends their few minutes
 on something a script could have caught. **Passing QA means it works, not that it's fun.** Fun is Kaylee's playtest
-(check-in 3 in `AGENTS.md`). Lip sync and sound can't be heard by automated browsers either: Dad hears them on the iPad.
+(check-in 3 in `AGENTS.md`). Lip sync and sound can't be heard by automated browsers either: the user hears them on the iPad.
 
 ## Every change, however small
 
@@ -21,7 +21,7 @@ on something a script could have caught. **Passing QA means it works, not that i
 
 ## A toy, before each check-in
 
-Run the robots on the toy's own routes, read their numbers, and fix what they find before Dad sees anything:
+Run the robots on the toy's own routes, read their numbers, and fix what they find before the user sees anything:
 
 After `npm run build`; WebKit, because the iPad runs Safari (`npx playwright install webkit` once):
 - `node scripts/qa-screens.mjs`: every screen at 4 iPad + 3 iPhone sizes with touch emulation (`qa-output/webkit-*/`).
@@ -41,7 +41,7 @@ After `npm run build`; WebKit, because the iPad runs Safari (`npx playwright ins
 Then, before check-ins 3 (Kaylee plays it) and 4 (ship), the **`fresh-eyes` agent** reviews it: it hasn't seen the work
 being made, so it doesn't grade its own homework. It looks at the reel's frames, the contact sheets, the pacing numbers
 and the table read's flags against `docs/play-design.md` and the design rules, and writes at most ten ranked findings to
-`qa-output/fresh-eyes.md`. Fix the blockers. Anything Dad must know goes on the review page as one line; small things go
+`qa-output/fresh-eyes.md`. Fix the blockers. Anything the user must know goes on the review page as one line; small things go
 in the country's `known-issues.md`.
 
 ## Time budget (a session should take about an hour, not ten)

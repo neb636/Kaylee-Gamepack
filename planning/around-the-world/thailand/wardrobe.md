@@ -4,7 +4,7 @@ The full loop built · Toy in Agong's house · updated 2026-10-31
 
 Kaylee loves the avatar maker in Roblox, so she gets one in Thailand. In her room at Agong's she opens her wardrobe and dresses her unicorn herself: she drags a crown, heart sunglasses, fairy wings or light-up shoes onto herself and they pop on, and she drops paint on her dress, her hair or her fur to change its color. What she picks is saved on the iPad, and she wears it **everywhere in Thailand**: the house, every trip, every mini game and the photos on Agong's wall. When a game needs its own hat (the chef's hat, the vet's cap), the game's hat wins for that game and hers comes back afterwards.
 
-**Next:** Dad checks the restored original wardrobe on the iPad: all six drawers, everyday clothes, paint, the wand and mirror photos. Her saved everyday look and photo door are back, including on Halloween.
+**Next:** The user checks the restored original wardrobe on the iPad: all six drawers, everyday clothes, paint, the wand and mirror photos. Her saved everyday look and photo door are back, including on Halloween.
 
 - drawers: hats, glasses, wings, outfits, shoes, paint: 6
 - things to wear (10 hats), plus 3 colors to paint: 25
@@ -16,7 +16,7 @@ Related: [← Thailand plan](../thailand.md), [3D characters](../../../docs/3d-c
 
 ## 💡 The idea
 
-Written 2026-10-26, from Dad: “In Roblox Kaylee really likes the avatar customizer. Can we make something similar for the 3D Thailand game, easy to go back to, saved on the iPad, so her avatar shows up everywhere?” Plus: work out every place where her own hat (or anything else) would clash with a game's costume, and solve all of them.
+Written 2026-10-26, from the user: “In Roblox Kaylee really likes the avatar customizer. Can we make something similar for the 3D Thailand game, easy to go back to, saved on the iPad, so her avatar shows up everywhere?” Plus: work out every place where her own hat (or anything else) would clash with a game's costume, and solve all of them.
 
 > **🧸 A toy, not a menu**
 >
@@ -77,13 +77,13 @@ One verb: put it on her.
 
 ## 🚪 Easy to come back to
 
-- 🗄️ **The wardrobe in her room**: A real wardrobe (pastel wood, a long mirror on one door) next to her suitcase upstairs. Tap it and the doors open. There's no wardrobe in the house yet; Dad's plan of her room had one.
+- 🗄️ **The wardrobe in her room**: A real wardrobe (pastel wood, a long mirror on one door) next to her suitcase upstairs. Tap it and the doors open. There's no wardrobe in the house yet; the user's plan of her room had one.
 - 🪞 **The mirror button**: A round hand-mirror button in the house's top bar, on every floor and the street. Tap it: a sparkle, and she's standing at her wardrobe. No walking up the stairs to change a hat.
 - 🧳 **Before a trip**: Mommy asks about a trip in her room, right next to the wardrobe, so dressing up for the trip is a natural first stop. The suitcase stays the suitcase (the packing lesson doesn't change).
 
 > **💾 Saved on the iPad**
 >
-> Every change is saved straight away (no save button), and the same look is there the next time she opens the app. The look also fits in a link (`?look=crown,hearts,wings,dress-mint`) so Dad and the tests can open any scene in any look.
+> Every change is saved straight away (no save button), and the same look is there the next time she opens the app. The look also fits in a link (`?look=crown,hearts,wings,dress-mint`) so the user and the tests can open any scene in any look.
 
 ## 🎀 What she can wear
 
@@ -120,7 +120,7 @@ Built from code in the house's look, fitted to her vinyl-toy shape. Everything l
   - Sparkly party shoes
   - Pink rain boots
   - Sandals
-- 🎨 **Paint**: Dad said yes to hair and fur (greybox 1).
+- 🎨 **Paint**: the user said yes to hair and fur (greybox 1).
   - Dress: pink (hers), lavender, mint, sky, butter, peach
   - Hair: brown (hers), pink, lavender, gold, rainbow tips
   - Fur: lilac (hers), pink, mint, sky, cream, peach
@@ -143,7 +143,7 @@ Every scene in Thailand builds Kaylee the same way, so her saved look goes on in
 - 🛝 **Mall day**: HarborLand, the frame, every mini game, the race slide, Sky Pod, Pizza Co.
 - 🏔️ **Nan**: the Pajero, mushrooms, rice, salt
 - 🖼️ **Agong's wall**: new photos show her in that day's look
-- 🔬 **The character lab**: for Dad: any look, any pose
+- 🔬 **The character lab**: for the user: any look, any pose
 
 > **👀 The payoff: being seen**
 >
@@ -183,7 +183,7 @@ Every clash in the code today, and the one rule (plus a few small ones) that sol
 - 👟 **4. Shoes off in the house**: Like a real Thai home: at Agong's door her shoes hop onto the shoe rack (it's already by the door) and back on when she goes out to the street. A real culture fact she does with her feet. In the wardrobe she can still try them on, on the rug.
 - ✋ **5. Her hands stay free**: No things to hold in the wardrobe (for now). Every game puts things in her hands (the stethoscope, the sickle, the key fob, the boxing gloves, the photo for Agong, the trophy), and none of them will ever fight with her look.
 - 🖼️ **6. Photos remember**: A photo on Agong's wall shows what she wore that day. Changing her look later doesn't change old photos.
-- 🙏 **7. Respect**: For a wai (the spirit house, the altar, the little shrine, the village's mosque dome, the wai kru in Muay Thai) her hat comes off into her hooves and goes back on after. Dad's call (see below). Sacred things still never wobble.
+- 🙏 **7. Respect**: For a wai (the spirit house, the altar, the little shrine, the village's mosque dome, the wai kru in Muay Thai) her hat comes off into her hooves and goes back on after. The user's call (see below). Sacred things still never wobble.
 - 👨‍👩‍👧 **8. Everyone still knows her**: She's always a unicorn and her face never changes, so the family (and Kaylee) always know who she is. A bare start (no saved look) is exactly today's Kaylee.
 
 **Every clash in the code, one by one (for checking)**
@@ -206,17 +206,17 @@ Every clash in the code today, and the one rule (plus a few small ones) that sol
 | Plane screen view, family-photo turntable, rice threshing close-up | cameras very close to her head | horn rule keeps hats inside the frame |
 | Mall and Nan wall photos | drawn with her fixed colors (lilac and pink) | drawn with her colors that day |
 | Walking | wide wings past her 0.22 m walking circle | folded wings stay inside it |
-| Spirit house, altar, shrine, mosque dome, wai kru | a hat during a wai | hat off for the wai (Dad's call) |
+| Spirit house, altar, shrine, mosque dome, wai kru | a hat during a wai | hat off for the wai (the user's call) |
 
-## 🧔 For Dad to decide
+## 🧔 For the user to decide
 
-- **Can she paint her **fur** another color?** **Yes** (Dad, 2026-10-26): every pot works on her fur, lilac by default. Built in greybox 1.
-- **Can she paint her **hair**? (Her real hair is brown, and her toy looks a bit like her.)** **Yes** (Dad, 2026-10-26): brown stays the default; the brown pot brings it back. Built in greybox 1.
-- **Shoes off in Agong's house, onto the shoe rack?** **Yes** (Dad, 2026-10-26): shoes hop onto the rack at Agong's door. Greybox 2.
-- **Hat off for a wai (spirit house, altar, wai kru)?** **Yes** (Dad, 2026-10-26): a quick hat-off for the wai and back on. Greybox 2.
-- **Both ways in: the wardrobe in her room **and** the mirror button in the house's top bar?** **Both** (Dad, 2026-10-26): the wardrobe in her room (greybox 1) and the mirror button in the top bar (gate 3).
-- **Anything Kaylee especially wants? (her favorite Roblox things)** **The plan's list** (Dad, 2026-10-26). Greybox 1 has 2-3 of them per drawer.
-- **Later: show her look outside Thailand too (a picture of her in Sparkle's balloon on the world map, on the trophy screen)?** OPEN: Possible as a saved picture of her (no 3D on those screens). A later step, if Dad wants it.
+- **Can she paint her **fur** another color?** **Yes** (user feedback, 2026-10-26): every pot works on her fur, lilac by default. Built in greybox 1.
+- **Can she paint her **hair**? (Her real hair is brown, and her toy looks a bit like her.)** **Yes** (user feedback, 2026-10-26): brown stays the default; the brown pot brings it back. Built in greybox 1.
+- **Shoes off in Agong's house, onto the shoe rack?** **Yes** (user feedback, 2026-10-26): shoes hop onto the rack at Agong's door. Greybox 2.
+- **Hat off for a wai (spirit house, altar, wai kru)?** **Yes** (user feedback, 2026-10-26): a quick hat-off for the wai and back on. Greybox 2.
+- **Both ways in: the wardrobe in her room **and** the mirror button in the house's top bar?** **Both** (user feedback, 2026-10-26): the wardrobe in her room (greybox 1) and the mirror button in the top bar (gate 3).
+- **Anything Kaylee especially wants? (her favorite Roblox things)** **The plan's list** (user feedback, 2026-10-26). Greybox 1 has 2-3 of them per drawer.
+- **Later: show her look outside Thailand too (a picture of her in Sparkle's balloon on the world map, on the trophy screen)?** OPEN: Possible as a saved picture of her (no 3D on those screens). A later step, if the user wants it.
 
 ## 🔗 Sections: tap to play
 
@@ -256,20 +256,20 @@ Every clash in the code today, and the one rule (plus a few small ones) that sol
 
 ## 🧱 Build plan
 
-One PR each; stop for Dad after each.
+One PR each; stop for the user after each.
 
 0. **This plan** [done] · 2026-10-26 · PR #203
 1. **Greybox 1: the wardrobe toy** [done] · 2026-10-26
    In her room: the wardrobe (simple shapes in the toon look), the rug, drawers, drag on, tap on, tap off, spin her, the paint pots (fur, hair, dress), 2-3 simple things per drawer. Saved on the iPad and worn in the house. The `wardrobe` section and the `look` link. The paint is the riskiest bit (her colors are painted into the model's picture), so it's prototyped first. No voices.
    
-   **Stop: Dad plays it on the iPad. Is dressing her up fun?**
+   **Stop: the user plays it on the iPad. Is dressing her up fun?**
 2. **Greybox 2: everywhere, and every clash solved** [done] · 2026-10-26 · PR #205
-   Her look in every scene (one place), the costume layer, sun smarts, wings folding, shoes at the door, hat off for a wai, the ngob, the race slide's Kaylee, wall photos in her colors. Clash links in the PR for Dad to check.
+   Her look in every scene (one place), the costume layer, sun smarts, wings folding, shoes at the door, hat off for a wai, the ngob, the race slide's Kaylee, wall photos in her colors. Clash links in the PR for the user to check.
 3. **The look: every thing made for her** [done] · 2026-10-26 · PR #210
    All ~30 things fitted to her shape (like the scrubs and the mongkhon), the wardrobe made pretty, each thing's pose, the mirror button.
 4. **Full loop: voices, looks on the door, the family notices** [done] · 2026-10-26 · PR #212
    Sparkle's lines, each thing's name the first time she touches it, the family's “Ooh, a crown!”, Mommy's “Good hat, Kaylee!”, the mirror photos (4 looks), the wand surprise, the silly moments, full QA.
-5. **Later, if Dad wants: her look outside Thailand** [next]
+5. **Later, if the user wants: her look outside Thailand** [next]
    A saved picture of her, on the world map's balloon and the trophy screen.
 
 ### Greybox 1: the wardrobe toy ([done] · 2026-10-26)
@@ -281,7 +281,7 @@ The wardrobe in her room: doors, six drawers, 12 things and 8 pots of paint; dra
 - **The things:** `characters/closet/` (one file per drawer): crown, big bow, cap (backwards, shady); heart, star and round glasses; fairy wings, princess cape; tutu, princess gown; light-up sneakers, rain boots. Every hat tops out under her horn (crown 0.552 < 0.56; a dev warning if not).
 - **The wardrobe:** `activities/hub/wardrobe/` (furniture + a house plugin): against the left wall of her room, a round rug beside it. Tap it: she walks onto the rug, faces you, the doors swing open. Drawers are colored with a little picture of what’s inside. The ✓ (or the doors, or tapping another thing in the house) closes it; a stray tap on the floor doesn’t.
 - **Worn in the house:** the house dresses her in `currentLook()` on every floor. Other scenes don’t yet (greybox 2).
-- **Dad’s answers** applied: fur and hair paint are in; shoes off at the door, hat off for a wai and the mirror button are recorded for greybox 2 and gate 3.
+- **the user’s answers** applied: fur and hair paint are in; shoes off at the door, hat off for a wai and the mirror button are recorded for greybox 2 and gate 3.
 
 > **Changed from the plan**
 >
@@ -455,4 +455,4 @@ src/world/kit/sections.ts                  `look` is sticky (like `debug`, `cam`
 
 > **🙏 Found while planning (not part of this plan)**
 >
-> AGENTS.md rule 7 says no Buddhas or temples. The house's divider has *the gold Garuda between two little golden Buddhas* (`hub/build/divider.ts:5, 147`), Golden Mountain has a fact calling the Golden Mount a temple (`lines.ts:854`), and Little Land's chedi has “A chedi is a Thai temple tower!” (`lines.ts:677`). They were built before the rule. Flagged to Dad, not changed here.
+> AGENTS.md rule 7 says no Buddhas or temples. The house's divider has *the gold Garuda between two little golden Buddhas* (`hub/build/divider.ts:5, 147`), Golden Mountain has a fact calling the Golden Mount a temple (`lines.ts:854`), and Little Land's chedi has “A chedi is a Thai temple tower!” (`lines.ts:677`). They were built before the rule. Flagged to the user, not changed here.

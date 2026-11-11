@@ -1,7 +1,7 @@
 # Toy notes template
 
-The builder's notes for one toy (an activity, a stop on a trip, a rebuild), written by the agent after Dad picks its
-pitch card (the `pitch` skill). **Dad doesn't read these:** he sees the pitch card, the table read and the reel. The
+The builder's notes for one toy (an activity, a stop on a trip, a rebuild), written by the agent after the user picks its
+pitch card (the `pitch` skill). **The user doesn't read these:** they see the pitch card, the table read and the reel. The
 notes are for you and the next agent, in `planning/around-the-world/<country>/<toy>.md`. Read `docs/play-design.md`
 first. If a field is hard to fill in, the toy isn't ready to build yet. Keep it short: notes that read like a story can
 hide play that is thin, so the **verbs** and **numbers** matter more than the prose.
@@ -55,7 +55,7 @@ the toppings, how many she caught) as a URL param with a default. See "Screens, 
 
 ## How it gets built
 
-The toy loop in `AGENTS.md`: Dad picks the pitch, hears the table read, watches Kaylee play it, and ships it after the
+The toy loop in `AGENTS.md`: the user picks the pitch, hears the table read, watches Kaylee play it, and ships it after the
 reel. Between those check-ins you build, robot-play and fix on your own, on one branch with one PR. Log what you built
 and what changed from these notes at the bottom of this file as you go (date, what, why), so the next agent can pick
 it up.

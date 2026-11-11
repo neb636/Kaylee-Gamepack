@@ -1,9 +1,9 @@
 ---
 name: reel
-description: Film the game being played (a robot finger with a pink dot, title cards per moment) as an mp4 and a GIF for the PR, so Dad watches a minute instead of playing grey boxes. Use for every toy check-in, for before-and-after clips in the fix lane, and whenever you need to see your own change moving.
+description: Film the game being played (a robot finger with a pink dot, title cards per moment) as an mp4 and a GIF for the PR, so the user watches a minute instead of playing grey boxes. Use for every toy check-in, for before-and-after clips in the fix lane, and whenever you need to see your own change moving.
 ---
 
-# Reels: Dad watches, he doesn't play grey boxes
+# Reels: show the toy in motion
 
 Studios review work as dailies: the shot moving, every time. A reel is that for a toy. It is also how you check your
 own work: watch the frames before you call something done.
@@ -22,7 +22,7 @@ node scripts/reel.mjs <name> <moment>... [--chromium] [--viewport=ipad-landscape
 - Output: `review/reel/<name>.mp4` (about 30 fps, 960 wide), `<name>.gif` (its first 12 s, under 4 MB, for the PR
   body) and `<name>.json` (each moment and how it went).
 - Look at it: `ffmpeg -i review/reel/<name>.mp4 -vf "fps=1/2,scale=480:-2,tile=3x3" -frames:v 1 sheet.jpg`, then open
-  the sheet. Fix what looks wrong before Dad sees it.
+  the sheet. Fix what looks wrong before the user sees it.
 
 ## Where to film
 

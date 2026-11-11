@@ -4,7 +4,7 @@ Built: direct pins on the 3D map · New place (3D + 2D) · updated 2026-10-30
 
 Sparkle's balloon lands in snowy **Quebec City**, where **Maple the beaver** wants to see all of Canada and gather a hockey team on the way. Kaylee chooses activity pins on a 3D map of the country in four places: **Quebec City** (maple taffy on snow, rolling carnival snowmen), **Mont-Sainte-Anne** (biking down the mountain, a campfire night with a flashlight), **Banff** (a red canoe on Moraine Lake, the animal bridge over the highway) and **British Columbia** (whales and sea otters off Tofino, salmon and the white spirit bear). Every stop has one 3D and one 2D activity, and about 40 animals to meet and collect in Maple's book. The finale is a pond hockey game on Ottawa's frozen canal.
 
-**Next:** Dad tries the [3D map](#/world/canada/hub/map) on the iPad: tap any activity pin to open it immediately, return to choose another, and check earned stamps on the pins. The finale still opens after all eight stamps. Say whether choosing activities feels clearer.
+**Next:** The user tries the [3D map](#/world/canada/hub/map) on the iPad: tap any activity pin to open it immediately, return to choose another, and check earned stamps on the pins. The finale still opens after all eight stamps. Say whether choosing activities feels clearer.
 
 - Quebec City · Mont-Sainte-Anne · Banff · BC: 4 destinations
 - two per stop, then hockey in Ottawa: 8 + finale
@@ -56,7 +56,7 @@ The same rule as the Poles.
 
 - 🚂 **Canada’s 3D map (hub)**: A relief map of Canada like a toy table: she pushes the train along the track, the Rockies rise out of it, and the camera follows. Mountains you can see from the side only work in 3D.
 - ⛄ **Carnival Snowballs**: A snowball that really rolls and grows, leaving a green trail in the snow. Rolling a ball is a 3D toy.
-- 🚵 **Mountain Bike**: Steering down a slope: the Nan drive's finger control (Dad tuned it in the feel lab, PR #209), the same one the Poles' Penguin Slide uses.
+- 🚵 **Mountain Bike**: Steering down a slope: the Nan drive's finger control (the user tuned it in the feel lab, PR #209), the same one the Poles' Penguin Slide uses.
 - 🛶 **Red Canoe**: On the shared `engine3d/water.ts`, with the mountains standing around the lake and reflected in it.
 - 🐋 **Whale Watch**: Steering a boat on the sea, the camera dipping under to see the whales and the kelp. Close to Thailand's boat trip.
 - 🏒 **Finale: Animal Homes + Pond Hockey**: The quiz is on the hub's map. Hockey is a sliding puck on an ice plane, seen from a low camera, with the team skating around.
@@ -74,7 +74,7 @@ The same rule as the Poles.
 
 ## 🐾 The friends
 
-- 🦫 **Maple the beaver (the friend who travels with her)** (name: Dad picks): Canada's national animal. Busy, proud of her big orange teeth, slaps her tail on the water when she's excited. Says “Bonjour!” in Quebec and “Hello!” everywhere else, with a light Québécois accent. She's never seen the west of Canada and wants to go all the way to the Pacific.
+- 🦫 **Maple the beaver (the friend who travels with her)** (name: the user picks): Canada's national animal. Busy, proud of her big orange teeth, slaps her tail on the water when she's excited. Says “Bonjour!” in Quebec and “Hello!” everywhere else, with a light Québécois accent. She's never seen the west of Canada and wants to go all the way to the Pacific.
 - 🫎 **Moose (the gentle giant)**: Turns up at every stop (a pond on the bike trail, the lake in Banff, the edge of the campsite), always chewing. On her hockey team, he's the goalie.
 - 🐻 **The animal of each stop**: Snowy owl (Quebec's bird), raccoon (the campsite bandit), loon (Banff's lake), sea otters and orcas (Tofino), the white spirit bear (the rainforest). Each one is a sticker, and joins her hockey team.
 
@@ -107,7 +107,7 @@ The whole 3D country stays in view. Tap an activity pin and play immediately.
 >
 > Every animal she pokes in any activity goes into Maple's book the first time: Sparkle names it, says one short fact, and its picture pops into a page for that stop (grey shapes show the ones still to find). She can open the book on the map and tap any animal to hear its fact again. It never blocks anything; it's the collection she fills by poking. About 40 animals, listed in [Every animal](#animals).
 
-**Earlier train design (replaced at Dad’s request, 2026-10-30)**
+**Earlier train design (replaced at the user’s request, 2026-10-30)**
 
 > **Core verb: push the train**
 >
@@ -518,7 +518,7 @@ In winter, Ottawa's canal freezes into the world's biggest natural skating rink.
 
 > **Part 1: Animal Homes (the quiz, ~1 min)**
 >
-> Like the Poles' quiz, which Dad asked for: on the hub's map, Sparkle asks one short question at a time (with a 🔊), and Kaylee answers by dragging. “Where does the orca live?” She drags the orca to the west coast. “Who lives in the Rockies?” She drags the elk there. **6 questions** from a pool, so replays differ. Each right one jumps on the train to Ottawa: the train fills with her team. A wrong place gets a silly reaction (the orca flops on the prairie, blinks at a bison) and the right place glows.
+> Like the Poles' quiz, which the user asked for: on the hub's map, Sparkle asks one short question at a time (with a 🔊), and Kaylee answers by dragging. “Where does the orca live?” She drags the orca to the west coast. “Who lives in the Rockies?” She drags the elk there. **6 questions** from a pool, so replays differ. Each right one jumps on the train to Ottawa: the train fills with her team. A wrong place gets a silly reaction (the orca flops on the prairie, blinks at a bison) and the right place glows.
 
 > **Part 2: Pond Hockey (core verb: flick the puck, ~2 min)**
 >
@@ -539,9 +539,9 @@ In winter, Ottawa's canal freezes into the world's biggest natural skating rink.
 
 ### Rules (from AGENTS.md)
 
-- Every question is spoken, short, with a 🔊 and a text line for Dad. No score as a number, no timer, no failing: a miss gets a laugh and the right place glows.
+- Every question is spoken, short, with a 🔊 and a text line for the user. No score as a number, no timer, no failing: a miss gets a laugh and the right place glows.
 - Hockey has no losing: the geese never score and every goal counts. Three goals and it's over.
-- Her name at the big moment only (the last goal and the trophy), not after every goal (Dad, 2026-10-27).
+- Her name at the big moment only (the last goal and the trophy), not after every goal (user feedback, 2026-10-27).
 - It sits after all eight stamps; replays pick 6 new questions.
 
 **Teaches:** where each animal lives, by placing it; Ottawa is Canada's capital; hockey is Canada's winter sport; the Rideau Canal freezes into a giant rink. **Numbers:** quiz ~8-12 touches + hockey ~20-30 touches, 3 min in all.
@@ -564,7 +564,7 @@ In winter, Ottawa's canal freezes into the world's biggest natural skating rink.
 
 ## 🐾 Every animal, by stop
 
-For pokeables, Maple's book, stickers and coloring pages. Dad asked for lots of animals: this is the list.
+For pokeables, Maple's book, stickers and coloring pages. The user asked for lots of animals: this is the list.
 
 - 🏰 **Quebec City**: 
   - Snowy owl (Quebec's bird)
@@ -648,7 +648,7 @@ For pokeables, Maple's book, stickers and coloring pages. Dad asked for lots of 
 - 🏰 **A castle hotel**: In Quebec City there's a hotel that looks like a castle.
 - 🏒 **Hockey**: Hockey is Canada's favorite winter sport.
 - 🌉 **Animal bridges**: In Banff, animals cross the highway on their own bridges.
-- 🪶 **First peoples**: First Nations, Inuit and Métis people have lived in Canada for thousands of years. (Wording to check with Dad.)
+- 🪶 **First peoples**: First Nations, Inuit and Métis people have lived in Canada for thousands of years. (Wording to check with the user.)
 
 ### Theater videos (to find in the build, `meta.videos`)
 
@@ -678,7 +678,7 @@ My picks are marked. The rest can wait for a second visit, or never.
 - 🐻‍❄️ **Churchill's polar bears** (link to the Poles): Manitoba's polar bear town. The Poles already teach polar bears, so the train map's far-north polar bear opens the Poles instead.
 - 🐕 **Yukon dog sled** (later): Huskies under the northern lights. Fun, but it's a fifth stop.
 - 🦞 **Prince Edward Island** (later): Red sand beaches and lobsters.
-- 🚡 **Whistler, Victoria, the Okanagan** (Dad: which BC places?): The other BC places you might mean. Tell me which ones you went to and I'll swap them in.
+- 🚡 **Whistler, Victoria, the Okanagan** (User feedback: which BC places?): The other BC places you might mean. Tell me which ones you went to and I'll swap them in.
 
 > **⛪ Left out on purpose (rule 7, in spirit)**
 >
@@ -686,28 +686,28 @@ My picks are marked. The rest can wait for a second visit, or never.
 > - **Indigenous sacred things:** no totem poles, masks or inukshuks as props to poke or stack. They belong to First Nations and Inuit, and building one as a toy could offend. One respectful tap-to-hear fact instead, if you want it.
 > - **The carnival's own mascot:** our snowmen wear a red hat and a woven sash like the carnival's, but they're our own snowmen, not a copy of the real mascot.
 
-## ❓ Open questions for Dad
+## ❓ Open questions for the user
 
-- **Is this the family's own trip?** **Friend-led** (Dad, 2026-10-28): Maple the beaver rides, paddles and skates; Kaylee and the family don't appear, so Canada needs no family code.
-- **Which season for Quebec City?** **Winter** (Dad, 2026-10-28): the carnival, the snowballs and the taffy on snow. Mont-Sainte-Anne stays in the fall (its red maples are built), the west is summer, and the finale is winter again on the frozen canal.
+- **Is this the family's own trip?** **Friend-led** (user feedback, 2026-10-28): Maple the beaver rides, paddles and skates; Kaylee and the family don't appear, so Canada needs no family code.
+- **Which season for Quebec City?** **Winter** (user feedback, 2026-10-28): the carnival, the snowballs and the taffy on snow. Mont-Sainte-Anne stays in the fall (its red maples are built), the west is summer, and the finale is winter again on the frozen canal.
 - **Which places in British Columbia?** OPEN: **My picks:** Vancouver as the arrival (the train ends there, and a floatplane flies on), **Tofino** for the whales and otters, and the **Great Bear Rainforest** for the salmon and the spirit bear. Tell me if you meant Whistler, Victoria, Vancouver itself (Stanley Park, the suspension bridge) or somewhere else.
-- **Lake Louise or Moraine Lake?** **Moraine Lake** (Dad, 2026-10-28): the Valley of the Ten Peaks, the rock pile with the pikas and marmot, no castle hotel.
-- **The friend and the names?** **Maple the beaver** (Dad, 2026-10-28), a girl with a light Québécois accent, a pink scarf and big orange teeth.
+- **Lake Louise or Moraine Lake?** **Moraine Lake** (user feedback, 2026-10-28): the Valley of the Ten Peaks, the rock pile with the pikas and marmot, no castle hotel.
+- **The friend and the names?** **Maple the beaver** (user feedback, 2026-10-28), a girl with a light Québécois accent, a pink scarf and big orange teeth.
 - **Maple's animal book?** **Built** (2026-10-28): 45 animals, the 📒 button on the train map; the first poke anywhere pops a card and Sparkle names it.
 - **A quiz at the end, like the Poles?** **Built** (2026-10-28): Animal Homes, six animals dragged to their homes on the toy map, then pond hockey.
-- **The trophy's title?** **Canada Champion** (Dad, 2026-10-28).
+- **The trophy's title?** **Canada Champion** (user feedback, 2026-10-28).
 - **Which extras?** OPEN: Built: Ottawa for the finale, Montmorency Falls as a poke on the train map. The Bay of Fundy tides are still a possible ninth activity.
 
 ## 🧱 Build plan
 
 0. **This plan** [done]
-   Dad reads it and answers the open questions.
+   the user reads it and answers the open questions.
 1. **Move the drive control out of Thailand** [done] · 2026-10-27 · PR #223
    `thailand/trip/drive.ts` (pure math, no three.js) is now `src/world/engine3d/drive.ts`, so Canada's bike and boat (and the Poles' Penguin Slide) can use it without the family code. Thailand imports it from there and plays the same.
 2. **Greybox: the place and the train map** [done] · 2026-10-27 · PR #227
    Place folder, the map pin, Canada's flag, the 3D train map: push the train across the country, the stops light up and show their two activities, animals on the track. Activities listed under `inTheWorks` (a “coming soon” card each).
 3. **Greybox: Mountain Bike** [done] · 2026-10-27 · PR #238
-   First, because it's the feel to get right (steering on a slope) and Dad named it. The gondola up, then the trail down to the waterfall in four stretches, with the shared drive control and finger wheel; steering, lean and bounce are feel-lab knobs.
+   First, because it's the feel to get right (steering on a slope) and the user named it. The gondola up, then the trail down to the waterfall in four stretches, with the shared drive control and finger wheel; steering, lean and bounce are feel-lab knobs.
 4. **Greybox: Sugar Snow** [done] · 2026-10-27 · PR #242
    Second: the cheapest 2D toy, quick to try on the iPad. Tip the pot over a tray of snow (a little tilt pours a thin line, more gushes, standing still makes a puddle), it steams and sets, then the stick rolls it up; lines, shapes, orders by size, everyone crunches. The pour, the setting and the roll are feel-lab knobs, and two ways to tip the pot (`?tip=hold`, `?tip=lead`).
 5. **Greybox: Campfire Night** [done] · 2026-10-27 · PR #244
@@ -725,10 +725,10 @@ My picks are marked. The rest can wait for a second visit, or never.
 11. **Art + characters** [done] · 2026-10-28
    Maple, the moose and the raccoon on the chibi rig (new beaver, moose and raccoon species), Maple as a 2D puppet in the same colors; painted scenes for the four 2D activities; real toon scenery and animals in the 3D ones; 45 animal pictures, stickers, covers, coloring pages and puzzles.
 12. **Full loop: story, voices, facts, the animal book** [done] · 2026-10-28
-   Every activity: Maple's story (a `story` section first), Sparkle's instructions and hints, the friends' own voices, Maple's animal book, the stamp. All eight are in `activities`. Dad said to finish it all in one go, skipping the iPad gates (2026-10-28).
+   Every activity: Maple's story (a `story` section first), Sparkle's instructions and hints, the friends' own voices, Maple's animal book, the stamp. All eight are in `activities`. The user said to finish it all in one go, skipping the iPad gates (2026-10-28).
 13. **Finale: Animal Homes + Pond Hockey** [done] · 2026-10-28
    Animal Homes on the toy map, then pond hockey on the Rideau Canal with the team her stamps brought, then the trophy.
-14. **Dad plays it all on the iPad** [next]
+14. **The user plays it all on the iPad** [next]
    The gates were skipped, so this is the first time anyone plays it by hand: tune the feel (`?feel=1`), fix what feels thin, listen to the voices.
 15. **Replace train navigation with direct activity pins** [done] · 2026-10-30
    Keep the 3D relief map and touchable scenery. Show every activity pin at once, open it with one tap, show earned stamps, and keep the hockey finale gated by all eight stamps.
@@ -752,7 +752,7 @@ A toy-table map of Canada in the toon look, and the red Maple Leaf Train she pus
 - **Somebody's on the track:** a moose north of Lake Huron, a goose family by Winnipeg, a bison on the prairies. The train slows by itself and stops short; the animal glows; a tap and it ambles off with a snort (or honks). It comes back about 40 s later, once the train is far away.
 - **Pokes:** the CN Tower's elevator zips up, a rainbow over Niagara Falls, a polar bear hops by Hudson Bay, an orca jumps off the Pacific coast, a ferry toots across the St. Lawrence, a V of geese flies over every 20-30 s (tap: honk, flap faster), snow puffs off any mountain she taps, a tree rustles, the sea splashes.
 - **The first look:** a bare link to Canada shows the whole country for two seconds, then glides down to the train in Quebec City. Section links (`?at=`) start at the train.
-- A line at the bottom says where the train is (for Dad).
+- A line at the bottom says where the train is (for the user).
 
 > **Changed from the plan**
 >
@@ -788,7 +788,7 @@ Mont-Sainte-Anne in the fall: the gondola carries Maple and her bike up, and Kay
 
 ### Greybox 3: Sugar Snow ([done] · 2026-10-27 · PR #242)
 
-Maple taffy on snow, seen from above like a kitchen toy: a wooden tray of snow in the middle, the stove with the pot and a jar of sticks on one side, the maple tree with its sap bucket and the sugar shack's roof on the other, and the animals peeking over the far edge of the tray. Placeholder shapes, no voices yet; a short line at the bottom says what's on screen, for Dad.
+Maple taffy on snow, seen from above like a kitchen toy: a wooden tray of snow in the middle, the stove with the pot and a jar of sticks on one side, the maple tree with its sap bucket and the sugar shack's roof on the other, and the animals peeking over the far edge of the tray. Placeholder shapes, no voices yet; a short line at the bottom says what's on screen, for the user.
 
 - **The pour:** her finger takes the pot (or touches the snow and the pot comes to it) and the spout follows her finger. It tips over while she holds it: a little tilt dribbles a thin line, full tilt gushes. Each point of the line is as wide as the syrup that fell there, so moving fast draws thin and moving slowly draws fat; standing still pools a puddle that grows until it's huge. Drawn with perfect-freehand (per-point width as pressure) and wobbly blobs for the puddles, over a pale melt mark in the snow. Off the tray it stops pouring. Two ways to tip it, to try side by side: `?tip=hold` (the default: it tips further the longer she holds it, and rights itself when she lets go) and `?tip=lead` (the pot trails her finger and tips by how far she pulls ahead; held still it stays a little tipped).
 - **Steams and sets:** hot syrup is dark and glossy and steams; over about 2 s it turns light gold, with a tiny ding. A stick on hot syrup only hisses and puffs steam.
@@ -816,7 +816,7 @@ Maple taffy on snow, seen from above like a kitchen toy: a wooden tray of snow i
 
 ### Greybox 4: Campfire Night ([done] · 2026-10-27 · PR #244)
 
-A dark campsite at the foot of Mont-Sainte-Anne, seen from the side like a stage at night: the moon and the mountain behind a row of spruces, the clearing with the fire in the middle, Maple on her log holding the flashlight, the pink tent, the lake with lily pads, the hollow log, the moose at the edge of the camp. Everything is dark except the circle of light that follows her finger (the kit's Torchlight). Placeholder shapes, no voices yet; a short line at the bottom says what's on screen, for Dad.
+A dark campsite at the foot of Mont-Sainte-Anne, seen from the side like a stage at night: the moon and the mountain behind a row of spruces, the clearing with the fire in the middle, Maple on her log holding the flashlight, the pink tent, the lake with lily pads, the hollow log, the moose at the edge of the camp. Everything is dark except the circle of light that follows her finger (the kit's Torchlight). Placeholder shapes, no voices yet; a short line at the bottom says what's on screen, for the user.
 
 - **The light:** her finger anywhere moves the flashlight there (it lands a little above her fingertip, so her finger doesn't cover what she finds) and it follows smoothly; let go and it stays put. A faint beam runs to it from Maple's flashlight. What shines by itself stays over the dark: the moon, the fire and its warm glow, Maple, the stars that came out, fireflies, glowing eyes, and every animal she has met (they glow softly where she found them). A row of chips at the top right counts the 8 night animals she has met (Maple's book comes later).
 - **Find the eyes** (`eyes`): an owl, a raccoon, a deer and a frog hide in the dark with only their eyes shining (each blinks now and then; every run picks new hiding places, from 3 per animal). Rest the light on them for a moment, or tap the eyes, and the animal comes out with a hop and says hi (the raccoon steps out from behind its bush, the deer steps forward). After 15 s without a find the eyes grow bigger and brighter. All four: on to the sounds.
@@ -844,7 +844,7 @@ A dark campsite at the foot of Mont-Sainte-Anne, seen from the side like a stage
 
 ### Greybox 5: Red Canoe ([done] · 2026-10-27 · PR #245)
 
-A glacier lake in Banff, about 100 m long, bright turquoise among snowy peaks, seen from just behind the canoe: the dock at the south end, the glacier coming down to the water at the north end, the glacier stream tumbling into the north-west corner. The water is the shared `engine3d/water.ts`, now see-through, over a mirror image of the shore and the mountains, so the lake reflects them. Maple sits in the stern of the red canoe in a pink life jacket, holding the paddle; a backpack rides in the bow. Placeholder shapes in the toon look, no voices yet; a short line at the bottom says what's on screen, for Dad.
+A glacier lake in Banff, about 100 m long, bright turquoise among snowy peaks, seen from just behind the canoe: the dock at the south end, the glacier coming down to the water at the north end, the glacier stream tumbling into the north-west corner. The water is the shared `engine3d/water.ts`, now see-through, over a mirror image of the shore and the mountains, so the lake reflects them. Maple sits in the stern of the red canoe in a pink life jacket, holding the paddle; a backpack rides in the bow. Placeholder shapes in the toon look, no voices yet; a short line at the bottom says what's on screen, for the user.
 
 - **Two ways to paddle, side by side** (a switch at the top right swaps them from the same part of the lake; the address bar keeps `paddle`):
 - **Stroke** (`?paddle=stroke`, the default): her finger is the paddle's blade, and Maple's paws follow the shaft.
@@ -878,7 +878,7 @@ A glacier lake in Banff, about 100 m long, bright turquoise among snowy peaks, s
 
 ### Greybox 6: Animal Bridge ([done] · 2026-10-27 · PR #246)
 
-Banff's green animal bridge over the Trans-Canada Highway, seen straight down the road like a theater stage: the Rockies at the back (a mountain goat on a ledge, a bald eagle circling, Banff town in the valley with an elk on its street), the highway coming toward us in its fenced cut, the bridge across it with the wildlife camera on its post, the forest bank on the left with a pile of boulders by the fence, the meadow on the right. Placeholder shapes, no voices yet; a short line at the bottom says what's on screen, for Dad.
+Banff's green animal bridge over the Trans-Canada Highway, seen straight down the road like a theater stage: the Rockies at the back (a mountain goat on a ledge, a bald eagle circling, Banff town in the valley with an elk on its street), the highway coming toward us in its fenced cut, the bridge across it with the wildlife camera on its post, the forest bank on the left with a pile of boulders by the fence, the meadow on the right. Placeholder shapes, no voices yet; a short line at the bottom says what's on screen, for the user.
 
 - **The lead:** her finger on any animal picks its family and leads mama (or the big ram); a finger anywhere else on the ground leads the family she led last. Mama walks after her finger (her body just above the fingertip) and stops where it stops; the rest follow in a wobbly line, each walking where mama walked a moment ago, so the line bends round the fence and up over the bridge. Nobody ever steps into the highway: dragged toward it, mama slides along the fence, stops, shakes her head (a huff, the fence rattles).
 - **The elk family** (`elk`): mama elk and her three spotted calves wait at the front of the forest. Up the bank, over the bridge (it humps up in the middle; cars and trucks zoom out from under it both ways) and into the meadow: they munch, confetti, and the next family hops (“my turn”).
@@ -905,7 +905,7 @@ Banff's green animal bridge over the Trans-Canada Highway, seen straight down th
 
 ### Greybox 7: Whale Watch ([done] · 2026-10-27 · PR #251)
 
-The sea off Tofino, seen from just behind the boat: the little town on the south shore with its dock and two fishing boats, the lighthouse point and the eagle's point either side of the harbour, the sea lions' flat rock, the kelp bed with the otters' raft, the puffins' stack, a big wooded island with the surf breaking on its beach, and the open Pacific to the north with Vancouver Island's misty mountains all round. The sea is the shared `engine3d/water.ts`; the boat drives on the shared `engine3d/drive.ts`. Maple stands at the wheel of a little pink-tubed whale-watching boat in her pink life jacket, binoculars round her neck; the yellow underwater microphone sits on its reel at the stern. Placeholder shapes, no voices yet; a short line at the bottom says what's on screen, for Dad.
+The sea off Tofino, seen from just behind the boat: the little town on the south shore with its dock and two fishing boats, the lighthouse point and the eagle's point either side of the harbour, the sea lions' flat rock, the kelp bed with the otters' raft, the puffins' stack, a big wooded island with the surf breaking on its beach, and the open Pacific to the north with Vancouver Island's misty mountains all round. The sea is the shared `engine3d/water.ts`; the boat drives on the shared `engine3d/drive.ts`. Maple stands at the wheel of a little pink-tubed whale-watching boat in her pink life jacket, binoculars round her neck; the yellow underwater microphone sits on its reel at the stern. Placeholder shapes, no voices yet; a short line at the bottom says what's on screen, for the user.
 
 - **Steer** (`?steer=finger`, the default): her finger holds the water where the boat should go and it follows, like the Thai bay: far ahead is fast, near is a crawl, to one side it keeps turning, behind it is a U-turn; a pink ring shows where. A tap on the water drives it there and stops. A finger on an animal pokes it with a tap, and steers once it's held or moves.
 - **The wheel** (`?steer=wheel`): the Mountain Bike's finger wheel. A finger down anywhere goes, pushing it left or right turns, letting go coasts. The 👆/🎡 switch at the top right swaps between the two from the same part of the sea.
@@ -920,7 +920,7 @@ The sea off Tofino, seen from just behind the boat: the little town on the south
 
 > **Changed from the plan**
 >
-> - Two ways to steer side by side, like Red Canoe: the plan's finger on the water (the Thai bay's) and the bike's finger wheel, so Dad can pick on the iPad.
+> - Two ways to steer side by side, like Red Canoe: the plan's finger on the water (the Thai bay's) and the bike's finger wheel, so the user can pick on the iPad.
 > - The otters are a job, not only a stop: a sleepy otter has drifted from the raft and she tows her home gently, so “go gently” is something she does (and that's why otters hold hands). The silly dive with seaweed on their heads stays for zooming past.
 > - The orcas' payoff waits for jumps and copied turns (8 and 2, knobs), so she plays with them a while before the big family jump.
 > - Listening is a side verb: the microphone works anywhere, the `listen` link opens it out at sea with the humpback and the orcas, and the address bar goes to `listen` while it's down and back when it comes up. The humpback always comes to sing, even in the harbour.
@@ -936,7 +936,7 @@ The sea off Tofino, seen from just behind the boat: the little town on the south
 
 ### Greybox 8: Salmon Leap ([done] · 2026-10-27 · PR #254)
 
-A rainforest river in BC seen from the side like a theater stage: the water steps down from right to left in pools, each spilling over a rock lip into the one below; the salmon come in from the sea at the bottom left and go home to the stream off the top right. On the far bank: the giant cedar (it goes off the top of the screen) with a raven on a branch, spruces, a banana slug on a mossy log, berry bushes and Maple the beaver sitting above the top pool. Placeholder shapes, no voices yet; a short line at the bottom says what's on screen, for Dad.
+A rainforest river in BC seen from the side like a theater stage: the water steps down from right to left in pools, each spilling over a rock lip into the one below; the salmon come in from the sea at the bottom left and go home to the stream off the top right. On the far bank: the giant cedar (it goes off the top of the screen) with a raven on a branch, spruces, a banana slug on a mossy log, berry bushes and Maple the beaver sitting above the top pool. Placeholder shapes, no voices yet; a short line at the bottom says what's on screen, for the user.
 
 - **The flick:** her finger lands on a salmon (it wiggles in her hand) and flicks it: it flies with her finger's speed in an arc, splashes into the pool it comes down in, and wiggles happily if that's higher up. Lifting it out of the water flicks it too (at least a little hop), and a tap without moving makes it hop straight up and splash back. A big flick can skip pools, or fly over the whole falls into **Maple's lap** (she giggles, wiggles and drops it in the stream). Into the rock face under a lip: **bonk**, stars, it slides back down. Nothing is ever lost, nothing gets stuck.
 - **The aim help:** a flick roughly up the river is quietly bent toward a clean landing in the next pool up (or the higher pool it was going to reach anyway); after each flick that doesn't get up, the help gets stronger, and it's back to normal after one that does. A robot flicking the same small flick every time gets the bears' falls done in about 15 flicks on a wide iPad and 26 in portrait (whose steps are taller).
@@ -963,7 +963,7 @@ A rainforest river in BC seen from the side like a theater stage: the water step
 
 ### Greybox 9: Carnival Snowballs ([done] · 2026-10-28 · PR #259)
 
-A snowy park below Quebec City's old wall, the castle hotel up on the cliff behind it (its windows light up), the parade path with red and white flags along the back, the toboggan slide down the hill on the right, the ice moose in the corner, spruces with snow on them and snow falling all the time. Maple the beaver stands by in a pink tuque and scarf. Placeholder shapes, no voices yet; a short line at the bottom says what's on screen, for Dad.
+A snowy park below Quebec City's old wall, the castle hotel up on the cliff behind it (its windows light up), the parade path with red and white flags along the back, the toboggan slide down the hill on the right, the ice moose in the corner, spruces with snow on them and snow falling all the time. Maple the beaver stands by in a pink tuque and scarf. Placeholder shapes, no voices yet; a short line at the bottom says what's on screen, for the user.
 
 - **The push:** her finger lands on a snowball (a generous reach around it) and it rolls after her finger, turning as it goes, growing with every meter and leaving a green stripe of grass behind; let go and it rolls on a little. Big balls roll slower and squish down. A drag that starts on bare snow pats a new little ball together under her finger (up to four lying around; after that it grabs the nearest). Bump a tree and its snow falls on the ball (a bit bigger); a ball rolling at Maple makes her hop out of the way.
 - **Roll one** (`roll`): one little ball by Maple's feet; once it's big (about 8 m of rolling), on to stacking.
@@ -988,7 +988,7 @@ A snowy park below Quebec City's old wall, the castle hotel up on the cliff behi
 
 ### Finished: art, characters, the full loop and the finale ([done] · 2026-10-28)
 
-Dad said to finish everything in one session. A shared base first (Maple, the moose and the raccoon on the rig, her puppet, the cast, Maple's animal book, the stamp plumbing), then ten agents side by side, one per activity plus the train map and the finale, merged into one branch; every line recorded at the end.
+The user said to finish everything in one session. A shared base first (Maple, the moose and the raccoon on the rig, her puppet, the cast, Maple's animal book, the stamp plumbing), then ten agents side by side, one per activity plus the train map and the finale, merged into one branch; every line recorded at the end.
 
 - **The base:** the chibi rig gets beaver, moose and raccoon species (`engine3d/characters/animal.ts`); `canada/characters/looks.ts` (Maple, her cousin, the moose, the raccoon, in the character lab under Canada); `puppets/Maple.tsx` (hop, wave, cheer, wiggle, chomp, tail slap); `cast.json` (maple, cousin, moose, raccoon, owl, chipmunk, otter, bear, elk, snowman, captain); `book/` (45 animals, `meet(id)`, the card, the book on `hub/book`); `activities/props.ts` (`onDone` → stamp, sticker, video, train; the finale's `onDone` is the trophy).
 - **Train map:** a red steam engine with Maple's car, the five stations, the Mountie, the bison rolling in the dust, Montmorency Falls, the polar bear on James Bay, a beluga; Maple's story on the first visit; the hockey team (one friend per stamp) skates on Ottawa's canal (`?team=`).
@@ -1005,7 +1005,7 @@ Dad said to finish everything in one session. A shared base first (Maple, the mo
 
 > **Known small things**
 >
-> - Nobody has played any of it by hand yet: the feel knobs are the greyboxes' (tuned by Dad where he tuned them).
+> - Nobody has played any of it by hand yet: the feel knobs are the greyboxes' (tuned by the user where they tuned them).
 > - A few short cheers (“Youpi!”, “Hee hee!”) were flagged by the transcription check; listen on the iPad.
 > - Whale Watch: the baby orca copying her turns may take a while for a gentle wanderer.
 > - Finale: on iPad portrait the toy map sits small; the geese use the tern rig; three goals can come quickly (raise `hockeyGoalie.save`).
@@ -1013,9 +1013,9 @@ Dad said to finish everything in one session. A shared base first (Maple, the mo
 
 ### Direct pins replace the train ([done] · 2026-10-30)
 
-Dad found the train mechanics underwhelming. The hub now works as a normal activity map while keeping the rendered 3D country.
+The user found the train mechanics underwhelming. The hub now works as a normal activity map while keeping the rendered 3D country.
 
-Removed train pushing, coasting, travel and roadblock gates. Kept map animals, landmarks, Maple’s book and the skating team. The previous train design remains above as history. Next: Dad tests choosing and returning from pins on the iPad.
+Removed train pushing, coasting, travel and roadblock gates. Kept map animals, landmarks, Maple’s book and the skating team. The previous train design remains above as history. Next: the user tests choosing and returning from pins on the iPad.
 
 ## 🔗 Sections: tap to play
 
@@ -1188,7 +1188,7 @@ src/world/places/canada/
 
 ### Rules to keep
 
-- Canada isn't locked (unless Dad brings the family): nothing from `places/thailand/` may be imported. Anything shared moves to `engine3d/` first.
+- Canada isn't locked (unless the user brings the family): nothing from `places/thailand/` may be imported. Anything shared moves to `engine3d/` first.
 - three, phaser and perfect-freehand only inside `places/canada/` and `engine3d/`, never from `meta.ts`, `sections.ts` or `puppets/index.ts`.
 - Each activity's `sections.ts` with its params from the start (inTheWorks activities need one too: Poles lesson).
 - Feel numbers are knobs with a `?feel=1` link in each greybox PR.

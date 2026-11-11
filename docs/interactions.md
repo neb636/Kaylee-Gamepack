@@ -90,7 +90,7 @@ New sounds: `sounds.pickup()`, `sounds.place()`, `sounds.snap()`.
 ## Tuning the feel: knobs and the feel lab
 
 A mechanic that works can still feel wrong, and a robot finger can't tell. Declare the numbers that decide the feel
-as knobs, read them every frame, and watch the input against the result. Then Dad tunes them on his own devices in
+as knobs, read them every frame, and watch the input against the result. Then the user tunes them on their own devices in
 the feel lab (`?feel=1` on the section link) and sends back a "Copy for agent" note:
 
 ```ts
@@ -112,7 +112,7 @@ Steering we learned the hard way on the Nan mountain road (2026-10-26):
 - **Don't aim too close ahead.** A chase point a few meters ahead makes the nose swing past and back: the
   back-and-forth correcting. Keep it roughly 10 m or more ahead at driving speed.
 - **Too much of both feels dead.** 0.3 s of smoothing with a slow slide was sluggish. Put the numbers on knobs and
-  let Dad find the middle.
+  let the user find the middle.
 - **A camera that turns with the car** amplifies every wobble. Let it follow the road more than the nose.
 
 ## Pitfalls we've hit

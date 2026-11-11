@@ -6,11 +6,11 @@ Written 2026-10-25. This replaces the toy of **Stop Time Cafe** (`rice`) in `nan
 ## Why a new toy
 
 The first greybox (PR #168, branch `neb636/nan-rice-greybox`, **not merged**) had Kaylee's finger pour water down 13
-curved terraces, draw seedlings in, then carry rain clouds. Dad played it and didn't like it. **Keep from it:** the
+curved terraces, draw seedlings in, then carry rain clouds. The user played it and didn't like it. **Keep from it:** the
 sky road that leads there (its end card's 🌾) and **the café deck** (pink milk, Daddy's coffee, Mommy's photo).
 **Throw away:** the curved terraces, the pouring, the finger-drawn planting and the rain clouds.
 
-Dad's picture references (Animal Crossing rice farms, not in the repo) and what we take from them:
+The user's picture references (Animal Crossing rice farms, not in the repo) and what we take from them:
 1. Long raised paddies with thick grassy banks that have a sandy-orange cut edge, a wooden boardwalk along the front,
    a wooden stair up to a higher level, a character in a wide palm-leaf hat **standing in the field**, a banana plant.
 2. **Four square paddies in a 2 x 2**, neat rows of rice hills in shiny blue water, a dirt path between them, a
@@ -21,7 +21,7 @@ Dad's picture references (Animal Crossing rice farms, not in the repo) and what 
 So: a small, tidy, cozy farm Kaylee **walks around in**, not a far valley she pours on. Chunky rectangular shapes are
 also much easier to build well than curved terraces.
 
-**And a video at the end** (Dad, 2026-10-25): [Rice Farming Explained in 60 Seconds!](https://www.youtube.com/watch?v=qwAxh1ii-No)
+**And a video at the end** (user feedback, 2026-10-25): [Rice Farming Explained in 60 Seconds!](https://www.youtube.com/watch?v=qwAxh1ii-No)
 (MindQuest, 60 s, 16:9): seeds in a nursery bed, planting, growing, harvest, the rice on your plate. The game follows
 the same steps in the same order, so the video replays what her hands just did.
 
@@ -82,7 +82,7 @@ chime), the farm hut's chime.
 "lung" = uncle), who needs a helper, the way Chef Fu needs one in China's dumpling house. Lung: "Sawasdee krap! I need a
 helper!" Sparkle: "Walk through the water to plant!" (about 5 s together). The first paddy is already flooded, so her
 first touch plants at once. (Until 2026-10-27 the farm had no farmer and Sparkle opened with "Let's plant rice,
-Kaylee!": nobody needed anything, so Dad asked for a reason to help.)
+Kaylee!": nobody needed anything, so the user asked for a reason to help.)
 Each round, Lung says what it's for and Sparkle what to do:
 - she plants in a dry paddy for the first time: Sparkle "Rice likes water! Open the gate." (and the gate glows)
 - round 2 begins: Lung "Oh no! Birds in my rice!", Sparkle "Shoo them away!"
@@ -231,7 +231,7 @@ the next bundle; deck: the kratip, then Mommy.
 - `VideoBreak`'s skip button shows ⏭ 🗺️ (it goes back to the map elsewhere). Add an optional `next` prop for the second
   icon (default `'🗺️'`) and pass `'☕'` here. That's the only kit change.
 - Pause the 3D loop while the video is up (the world is under it), and resume after.
-- The `deck` section link plays the deck and then offers the video, so Dad can test it straight away.
+- The `deck` section link plays the deck and then offers the video, so the user can test it straight away.
 - **Not yet in `meta.videos`:** a Thailand entry there adds a Theater button to Thailand's top bar, which would let
   Kaylee find it before the trip is in the game. Add it at the trip's "into the game" step (with no `after`: `after`
   fires on an activity's stamp, and the stamp is the whole trip's).
@@ -302,12 +302,12 @@ Delete `valley.ts` (after moving `buildDeck`) and the terrace layout.
 **Riskiest piece, build it first:** leading Kaylee with a held finger + the planting stripe in paddy A. Get it feeling
 good (speed, the 0.5 m brush, the plip sound, the splashes) before the birds, the harvest and the thresh.
 
-## Build plan (stop for Dad after each)
+## Build plan (stop for the user after each)
 
 1. **Greybox A: the farm and the core verb** (`plant`, `grow`, `harvest`). The farm in shapes, leading Kaylee, the
    gates and flooding, planting with droopy-then-straight seedlings, the birds, the harvest and bundles, the pokes
    and silly moments, the hints, QA state, `qa-*` entries. The `thresh` and `deck` links can show placeholders
-   ("bundles on the rack", #168's deck as it was). PR links: each round. Dad plays it. If leading Kaylee isn't fun,
+   ("bundles on the rack", #168's deck as it was). PR links: each round. The user plays it. If leading Kaylee isn't fun,
    change the toy (speed, brush, how she follows) before B.
 2. **Greybox B: thresh, the deck and the video.** Threshing, the kratip on the deck, `VideoBreak` with `next`, the end
    card. One clip (the video line).
@@ -368,7 +368,7 @@ version (3D activities don't need one).
   goes straight to the end card. One Sparkle clip, `L.nan.rice.video`.
 - qa: `qa-motion` `nan-thresh` (a tap every 0.7 s on the basket), `qa-pacing` `nan-rice-thresh`.
 
-Dad played greybox B (2026-10-25): threshing feels good (ten bangs, the swing heavy enough). On to the look and voices.
+The user played greybox B (2026-10-25): threshing feels good (ten bangs, the swing heavy enough). On to the look and voices.
 
 **The look and the voices (2026-10-25, the trip plan's steps 8 and 9 for this stop):**
 - Sapan's rice steps (`farm.ts` `terraces`, `TERRACES` in `layout.ts`): two round hills on the valley's sides with
@@ -390,7 +390,7 @@ Dad played greybox B (2026-10-25): threshing feels good (ten bangs, the swing he
   says one of three lines when tapped. Mommy says hello on the deck and "Smile, Kaylee!" before the photo. Facts:
   the first ball of sticky rice ("In Nan, people eat sticky rice with their fingers!") and a tap on the view ("The steps
   on the hill keep the water for the rice!"). Family reactions are dropped while Sparkle talks rather than heard late.
-- Sparkle sits in the corner (`trip/legs/Guide.tsx`) with the words for Dad; hidden under the video and the end card.
+- Sparkle sits in the corner (`trip/legs/Guide.tsx`) with the words for the user; hidden under the video and the end card.
 
 - After full QA (layout-qa, then playtest-qa: plant, harvest and thresh fun, grow and the deck OK): Sparkle's stuck hints
   count quiet time from 3 s after a round's line, not from her last touch, so they don't follow the round's own line
@@ -401,7 +401,7 @@ Dad played greybox B (2026-10-25): threshing feels good (ten bangs, the swing he
 - Left for later (`known-issues.md`): the terraces don't show on the farm cameras (only the deck and very wide
   screens); grow has short stretches where only the clock moves; Daddy stands still while she threshes.
 
-**Lung Kham, the farmer who needs help (2026-10-27, Dad: "the farmers need help", after China's dumpling house):**
+**Lung Kham, the farmer who needs help (2026-10-27, the user: "the farmers need help", after China's dumpling house):**
 - Lung Kham, an old monkey farmer (white moustache, the indigo mor hom shirt, a scarf, his own ngob with a mint band),
   stands on the boardwalk's right end (`LUNG_AT`; while she threshes, on the bank at her left, where the camera sees
   him). He watches her, hops when a paddy's done, waves when a round starts, and talks in his own voice (`cast.json`
@@ -424,7 +424,7 @@ Dad played greybox B (2026-10-25): threshing feels good (ten bangs, the swing he
   line then Sparkle's, back to back, play in that order on every trip leg (before, Sparkle cut the friend off when
   their clip hadn't started yet).
 
-**Next:** Dad listens on the iPad: Lung's voice and accent (the Thai numbers especially), and whether Lung + Daddy +
+**Next:** The user listens on the iPad: Lung's voice and accent (the Thai numbers especially), and whether Lung + Daddy +
 Sparkle is too much talk. Then the next stop: Bo Kluea salt (step 4).
 
 ## Fun check

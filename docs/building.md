@@ -24,7 +24,7 @@ review/                  # (not in git) review pages the tools build; published 
 ## Dependencies
 
 Installed and pre-approved for hands-on play that plain React can't do well (see `docs/interactions.md`):
-- **three** (0.180): 3D, for a country Dad wants in 3D (Thailand). Keep the flat look: toon bands, ink outlines, blob
+- **three** (0.180): 3D, for a country the user wants in 3D (Thailand). Keep the flat look: toon bands, ink outlines, blob
   shadows, no post-processing (see `src/world/engine3d/`). React draws the buttons and the tap targets
   over the canvas.
 - **phaser** (v4): real-time arcade or physics play (bouncing, stacking, many moving sprites). Canvas, so keep
@@ -36,7 +36,7 @@ shared 3D engine (`src/world/engine3d/`, which only countries import), and never
 a `meta.ts`, a `*sections.ts` or a `puppets/index.ts`. Then only that country
 downloads them. `npm run verify` enforces this (`scripts/check-heavy-imports.mjs`).
 
-If you believe another package would greatly improve the experience for the task at hand, ask Dad before installing
+If you believe another package would greatly improve the experience for the task at hand, ask the user before installing
 it. Explain what it enables that the SDK can't, and what it costs (bundle size, and whether puppets, voices and the
 smoke test still work). Don't add packages when the SDK or a pre-approved library already covers the job.
 
@@ -126,7 +126,7 @@ or follows is part of the art (paint the trail into the mountain), not lines dra
 objects in a scene (fine in UI chips), and code-drawn props use the same flat 5-unit-outline style. Two different things
 must not look alike (snow piles that look like clouds).
 
-**Deep links: every section has a URL.** Dad tests each PR on the preview, and nobody should have to replay three
+**Deep links: every section has a URL.** The user tests each PR on the preview, and nobody should have to replay three
 pizzas to check the fourth. Every activity (and finale) is split into named **sections** that open straight from a link,
 with any state they need carried in the URL: `#/world/<place>/<activity>/<section>?<state>`, e.g.
 `#/world/thailand/mall-trip/vet?patient=pony` or `#/world/italy/pizzeria/own?at=oven&sauce=pink`. How (details in

@@ -4,7 +4,7 @@ Built and on for Kaylee: the third Thailand trip, from Mommy's card to Agong's w
 
 The plane lands in the green valley and the big Pajero is waiting on the Nan map. Mommy drives and Kaylee steers it round the bends of the mountains into the clouds. At each stop she makes something the mountains make: she mists mushrooms until pink ones pop out, fills the rice steps with water, and boils salt from a well. On the way home the road draws a giant **3**.
 
-**Next:** The Nan roads look like Nan now: play them on the iPad and check it stays smooth. The steering is Dad's now (tuned in the [feel lab](#/world/thailand/nan-trip/drive?road=valley&weather=sun&feel=1)). Next, **the whole trip** from [Mommy's card](#/world/thailand/nan-trip/invite) (🏔️🚙). Still open: are Baan Huanam's mushrooms really pink, and is the farmer a buffalo?
+**Next:** The Nan roads look like Nan now: play them on the iPad and check it stays smooth. The steering is the user's now (tuned in the [feel lab](#/world/thailand/nan-trip/drive?road=valley&weather=sun&feel=1)). Next, **the whole trip** from [Mommy's card](#/world/thailand/nan-trip/invite) (🏔️🚙). Still open: are Baan Huanam's mushrooms really pink, and is the farmer a buffalo?
 
 - a full trip, all three stops: 10-17 min
 - touches: 150-225
@@ -29,7 +29,7 @@ Written 2026-10-24. Thailand's third family trip, and the first that is mostly a
 - 🧂 **Bo Kluea salt wells** ([done] · `salt`): Dip the bucket, pour the brine, feed the fire, scrape the salt.
 - 3️⃣ **The “number 3” road** (`three`): Down the hairpins, then the road draws a giant 3 from above.
 
-## 🧔 Dad's picks and answers
+## 🧔 the user's picks and answers
 
 2026-10-24
 
@@ -37,14 +37,14 @@ Written 2026-10-24. Thailand's third family trip, and the first that is mostly a
 - **Who comes?** Just Mommy, Daddy and Kaylee.
 - **Getting there?** They fly Bangkok → Nan with the trip kit and rent a **silver Pajero Sport** at Nan airport.
 - **Who drives?** Mommy drives, and Kaylee steers it like a sled: her finger goes down anywhere, a steering wheel appears under it, and turning it left or right slides the Pajero that way (let go and Mommy eases it back into the left lane). Silly driving is part of the toy: onto the grass, and over the edge (it tumbles and drops back on the road).
-- **The stops?** Baan Huanam Mushroom Farm (not in the photos, Dad's must-have), the rice-terrace café deck (Stop Time Cafe, above Sapan village), Bo Kluea's salt wells, and the S-curve “number 3” road. Wat Phumin was on this list and was dropped on 2026-10-25: no temples or Buddhas in the game (AGENTS.md).
+- **The stops?** Baan Huanam Mushroom Farm (not in the photos, the user's must-have), the rice-terrace café deck (Stop Time Cafe, above Sapan village), Bo Kluea's salt wells, and the S-curve “number 3” road. Wat Phumin was on this list and was dropped on 2026-10-25: no temples or Buddhas in the game (AGENTS.md).
 - **What did they eat?** The mushroom pizza at Baan Huanam.
 - **A gift for Agong?** No gift this time: they come home and the trip's photo goes on his wall.
 - **How educational?** Somewhat, not only a trip recreation: each stop teaches one real thing by doing it.
 - **The Pajero's color?** Silver.
 - **The sticker?** Left to the builder: a pink mushroom.
 
-## 📸 What Dad's photos show
+## 📸 What the user's photos show
 
 `KayleeGamepack-planning-assets/photos/nan/`, five photos, kept out of this repo. They have no GPS left in them.
 
@@ -233,9 +233,9 @@ Through Nan town is a short city road (`?road=city`): tuk-tuks, the river bridge
 
 > **🔁 Rebuilt (2026-10-25): see the rice plan**
 >
-> The first greybox (PR #168: pour water down curved terraces, draw the seedlings in, carry rain clouds) didn't work for Dad. The new toy is planned in [`nan-rice.md`](nan-rice.md).
+> The first greybox (PR #168: pour water down curved terraces, draw the seedlings in, carry rain clouds) didn't work for the user. The new toy is planned in [`nan-rice.md`](nan-rice.md).
 
-Kaylee's little rice farm below the café, in the cozy look of Dad's Animal Crossing references: four square paddies she **walks around in, led by her finger**, and whatever she walks through changes behind her.
+Kaylee's little rice farm below the café, in the cozy look of the user's Animal Crossing references: four square paddies she **walks around in, led by her finger**, and whatever she walks through changes behind her.
 
 1. **Plant** (`?round=plant`)
    Seedlings plip in behind her.
@@ -268,7 +268,7 @@ Kaylee's little rice farm below the café, in the cozy look of Dad's Animal Cros
 > The bucket hangs on a rope from a ring that slides along a bamboo beam over the well and the pan, so her finger can take it anywhere in the hut (a pole that only tips couldn't reach the pan). The fire is a drag too (a log from the woodpile into the fire's mouth), and round 3 looks down into the pan. One verb in her hands all the way: grab a thing and move it (the bucket, a log, the paddle).
 
 - 🤔 **Her choices**: When to pour, how big the fire.
-- 👉 **Pokeables**: The salt aunty (laughs), a cat sleeping warm by the fire, the drying baskets, a rooster, the mural of the Tai Lue couple on the house across the road (from Dad's video).
+- 👉 **Pokeables**: The salt aunty (laughs), a cat sleeping warm by the fire, the drying baskets, a rooster, the mural of the Tai Lue couple on the house across the road (from the user's video).
 - 😝 **Silly**: She licks a finger: a big salty face (her unicorn's mouth puckers, eyes squeeze); pour brine on Daddy's foot and he hops.
 - 🎓 **Teaches**: There's salt in the mountains, far from the sea, because a sea was here long, long ago; boiling the water away leaves the salt behind. Facts: people in Bo Kluea have made salt this way for hundreds of years.
 - 🎉 **Payoff**: A heaped basket of white salt she made, and a shelf of full bags.
@@ -276,12 +276,12 @@ Kaylee's little rice farm below the café, in the cozy look of Dad's Animal Cros
 
 ## 3️⃣ The “3” road and home
 
-- 3️⃣ **The “3” road** ([done] · `three`; counting): The last drive (`drive?road=three`), and then the viewpoint: the Pajero stops at a lay-by, the camera lifts up and over the hill, and the road below is a big swoopy **3**. Its bends pop one by one (one, two, three; nothing to draw, Dad took the crayon out 2026-10-26), the family photo is taken with the 3 behind them, and Sparkle says “Three! Kaylee drove the 3!”. Then the road goes on to the airport and the plane home.
-- 🏠 **Home** ([done] · `home`): The home flight (`trip/legs/home-flight.ts`), the van, Agong's door. No gift this time (Dad): the family hops in, Agong waves hello, and the photo she picks (the café balcony, the 3, the mushroom pizza, the salt pan) goes on his wall. Tap it and Mommy says “Our trip to Nan!”.
+- 3️⃣ **The “3” road** ([done] · `three`; counting): The last drive (`drive?road=three`), and then the viewpoint: the Pajero stops at a lay-by, the camera lifts up and over the hill, and the road below is a big swoopy **3**. Its bends pop one by one (one, two, three; nothing to draw, the user took the crayon out 2026-10-26), the family photo is taken with the 3 behind them, and Sparkle says “Three! Kaylee drove the 3!”. Then the road goes on to the airport and the plane home.
+- 🏠 **Home** ([done] · `home`): The home flight (`trip/legs/home-flight.ts`), the van, Agong's door. No gift this time (the user): the family hops in, Agong waves hello, and the photo she picks (the café balcony, the 3, the mushroom pizza, the salt pan) goes on his wall. Tap it and Mommy says “Our trip to Nan!”.
 
 > **🚫 Wat Phumin was dropped**
 >
-> It was planned as a stop (Dad, 2026-10-25): temples are very sacred to many people in Thailand, and a game can easily get something wrong, so there are no temples or Buddhas in the game (AGENTS.md). Its greybox (PR #187) was closed unmerged, and the city road now ends at Nan's market.
+> It was planned as a stop (user feedback, 2026-10-25): temples are very sacred to many people in Thailand, and a game can easily get something wrong, so there are no temples or Buddhas in the game (AGENTS.md). Its greybox (PR #187) was closed unmerged, and the city road now ends at Nan's market.
 
 ## 🔗 Sections: tap to play
 
@@ -345,7 +345,7 @@ Activity `nan-trip`: `activities/nan-trip/sections.ts`. Every param has a defaul
 
 ## 🧱 Build plan
 
-One PR each; stop for Dad after each.
+One PR each; stop for the user after each.
 
 0. **This plan** [done] · 2026-10-24 · PR #154
 1. **Greybox: the mountain road** [done] · 2026-10-24 · PR #158
@@ -355,9 +355,9 @@ One PR each; stop for Dad after each.
 3. **Greybox: Stop Time Cafe** [done] · 2026-10-25 · PR #179 · PR #180 · PR #181
    `rice`. First try PR #168 (not merged); rebuilt per [`nan-rice.md`](nan-rice.md) in two greyboxes (A: the farm and the core verb; B: thresh, the deck and the video). Its look (step 8) and voices (step 9) done ahead of the rest.
 4. **Greybox: Bo Kluea salt** [done] · 2026-10-25 · PR #186
-   `salt`. Dad plays it next.
+   `salt`. The user plays it next.
 5. **Greybox: Wat Phumin** [dropped] · 2026-10-25 · PR #187
-   `temple`: dropped (Dad: no temples or Buddhas in the game, AGENTS.md). Its greybox was closed unmerged, and the city road now ends at Nan's market.
+   `temple`: dropped (User feedback: no temples or Buddhas in the game, AGENTS.md). Its greybox was closed unmerged, and the city road now ends at Nan's market.
 6. **Greybox: the Nan map and the rental desk** [done] · 2026-10-25 · PR #190
    `map`, `rental`, and the `three` viewpoint. The trip is joined up from the rental desk on.
 7. **The trip loop** [done] · 2026-10-25
@@ -473,11 +473,11 @@ The whole trip joined up: Mommy's card, packing for the mountains, the plane nor
 - **The boarding pass** between the kit's legs (🧳 ✈️ 🔑 🍄 🌾 🧂 🏠, the stops punched as she does them), and **resume and replays** (`useSaved('thailand-nan-trip')`): saying yes again offers 🧳 a new trip, keep going, or after a whole trip 🗺️ straight to the Nan map. A bare `nan-trip` link now opens Mommy's card.
 - **Voices:** 11 new clips (`L.nan.trip`: the cool hint, the umbrella, landing, the 3's photo, the wall, six facts).
 - **QA:** `qa-screens` (`nan-invite`, `nan-pack`, `nan-goodbye`, `nan-airport`, `nan-fly`, `nan-land`, `nan-home`, `nan-loop-flat`). A robot in WebKit (iPad landscape) picked 🏔️🚙, packed the raincoat, boots and teddy, closed the suitcase (the umbrella went in) and reached the goodbye; watched the landing play out to the rental desk; and at home picked the 3's photo, gave it to Agong and saw everyone gather at the wall. No console errors.
-- **No flat fallbacks any more** (Dad, 2026-10-25: we always have WebGL): every Thailand screen is WebGL2 only. The picture books (`Flat.tsx`, `LoopFlat.tsx`), the `?gl=off` switch and their tests and QA screens are gone; a lost GPU context still offers “Tap to wake”.
+- **No flat fallbacks any more** (user feedback, 2026-10-25: we always have WebGL): every Thailand screen is WebGL2 only. The picture books (`Flat.tsx`, `LoopFlat.tsx`), the `?gl=off` switch and their tests and QA screens are gone; a lost GPU context still offers “Tap to wake”.
 
 ### Steps 8-10, the look, the voices and into the game ([done] · 2026-10-25)
 
-Dad: “finish it up in this session, no more gates”. Every leg got its finished look and its voices, full QA ran, and the trip is in Thailand's `activities`: Mommy's card offers 🏔️🚙 everywhere, the passport has its slot, and it earns the pink mushroom sticker.
+The user: “finish it up in this session, no more gates”. Every leg got its finished look and its voices, full QA ran, and the trip is in Thailand's `activities`: Mommy's card offers 🏔️🚙 everywhere, the passport has its slot, and it earns the pink mushroom sticker.
 
 - **The Pajero** (`trip/vehicles/pajero.ts`): a chunky silver Pajero Sport in code (black grille with chrome bars, slim lights, black arches and steps, roof rails, six-spoke wheels, shine strips on the silver); same API, so the rental desk and the map use it unchanged. The family rides inside; a pink elephant toy nods on the back shelf; front and rear wipers.
 - **The roads** (`drive/`, `trip/road/`): rain, sun or cloud rolled each drive (`weather` pins it), wet shiny roads with puddles that splash, low cloud on the hills, a sea of clouds above the sky road, the landmarks rebuilt, traffic and animals that change each drive. New pokes: Daddy (tap lines), the elephant toy, the wipers (faster). Voices `L.nan.drive`: Mommy's road lines, Daddy's reactions (at least 8 s apart), Sparkle's new things and stuck hints.
@@ -508,45 +508,45 @@ The ring under her finger is now a steering wheel that turns as she pushes; the 
 
 ### Calmer steering, a tyre squeal, no crayon ([done] · 2026-10-26)
 
-Dad found the wheel far too twitchy on an iPhone and a trackpad (the Pajero pivoted and kept correcting back and forth). Now it slides slower, small pushes are gentle, quick flicks are smoothed out, and a hard yank squeals the tyres. The 3 from above has nothing to draw any more.
+The user found the wheel far too twitchy on an iPhone and a trackpad (the Pajero pivoted and kept correcting back and forth). Now it slides slower, small pushes are gentle, quick flicks are smoothed out, and a hard yank squeals the tyres. The 3 from above has nothing to draw any more.
 
 - **Calmer wheel** (`mountain.ts`): `SLIDE` 7.5 → 4.2 m/s; a push curve (`STICK_CURVE` 1.6: a small push barely moves it, a full push still goes all the way); the push is smoothed (`STICK_EASE` 0.3 s, so jitters and quick back-and-forth twitches average out); the aim point never comes closer than 13 m (was 6 m, which swung the nose round and back); the camera follows the car's heading less (0.3, was 0.5).
 - **Still goes off on purpose:** a held full push reaches the grass in ~2.7 s and goes over in ~4-5 s (the steer target can run 3 m past the grass now, was 1.5 m). A jittery finger moves it about 1 m.
 - **Tyre squeal** (`screech`, `roadSfx.screech`): a quick, hard flick of the wheel (`SCREECH_FLICK` 5/s, at least 0.45 over, moving) squeals “eeeee”, puffs smoke off the back wheels and rocks the body; at most one every 0.7 s. A slow push never squeals. QA key `screeches`.
 - **No crayon** (`updateView`): from the viewpoint the camera lifts over the hill and the bends pop 1, 2, 3 by themselves (from 1.8 s, 0.75 s apart, sparkles on each), then the fanfare and “Three! Kaylee drove the three!”. The crayon, its line, tracing, the tap-to-draw-on, the 👆 along the road and “Draw the three with your finger!” are gone; Mommy's photo shows a grey road for the 3. `qa-motion` `nan-trace` is now `nan-three-view` (it just watches).
 
-### The feel lab: Dad tunes the steering by hand ([done] · 2026-10-26)
+### The feel lab: the user tunes the steering by hand ([done] · 2026-10-26)
 
-Round 2 overshot: the steering felt sluggish. Instead of guessing a third time, the steering's numbers are now knobs that Dad slides himself while he drives (`?feel=1`), with a live graph of his finger against the car.
+Round 2 overshot: the steering felt sluggish. Instead of guessing a third time, the steering's numbers are now knobs that the user adjusts while driving (`?feel=1`), with a live graph of their finger against the car.
 
 - **Defaults moved to the middle** (`mountain.ts` `STEER`): slide 5.5 m/s (round 1: 7.5, round 2: 4.2), push curve 1.3 (1.6), smoothing 0.15 s (0.3), aim at least 10 m ahead (13). Also knobs: wheel size, dead middle, how much it aims closer when far off, turn rate, grip, top speed, back to her lane, how much the camera turns with the car, and the squeal's flick speed.
 - **The feel lab** (`lab/feel/FeelLab.tsx`, shared registry `kit/knobs.ts`): sliders with − and + steps over the real game, which stays full size and playable; changed knobs turn pink with ↺ back to the default; a graph of the last 6 s (her push, the steer, where she's steering to, the car, the nose turning); Reset, Link and “For agent”, which lists the changed numbers and the file to bake them into. What changed stays in the address bar (`feel.steer.slide=7`).
 - For the next games: AGENTS.md (“The feel lab”, and the greybox gate) and `docs/interactions.md` (“Tuning the feel”, with the steering lessons) say to declare feel numbers as knobs and link `?feel=1` in the PR.
 
-### Dad's steering, baked in ([done] · 2026-10-27)
+### the user's steering, baked in ([done] · 2026-10-27)
 
-Dad tried five setups in the feel lab (snappy, quick but steady, floaty, Kaylee-proof, finger is the wheel), liked the snappy, forgiving and direct ones, and settled on a blend. His numbers are now the defaults; the knobs stay in.
+The user tried five setups in the feel lab (snappy, quick but steady, floaty, Kaylee-proof, finger is the wheel), liked the snappy, forgiving and direct ones, and settled on a blend. His numbers are now the defaults; the knobs stay in.
 
 - **Steering** (`mountain.ts` `STEER`): slide 6.5 m/s (was 5.5), wheel size 1.2× (1), dead middle 0.15 (0.12), smoothing 0.08 s (0.15), turn rate 2.1 rad/s (1.84), grip 13 (7), top speed 23 m/s (15.2), back to her lane 1.2 s (1.4). Unchanged: push curve 1.3, aim 10 m, pull 1.2, camera 0.3, squeal 5/s.
 - What his three favourites shared: a planted car (grip) and the camera turning a little with it; the two he liked less made it drifty or turned the camera less.
 
 ### Straight from the plane to the Nan map ([done] · 2026-10-27)
 
-Dad: skip the rental car. The rental desk (`rental/`, its section, the clerk's voice and lines) is gone; after landing the boarding pass slides up and the Nan map opens with the Pajero waiting at the airport.
+The user: skip the rental car. The rental desk (`rental/`, its section, the clerk's voice and lines) is gone; after landing the boarding pass slides up and the Nan map opens with the Pajero waiting at the airport.
 
 - `plane.ts` ends the Nan landing with `done('map')`; `NAN_TRIP.arrive` is `map`; the 🔑 leg is off the boarding pass.
 - A trip saved at the old rental desk keeps going on the map.
 
 ### The roads look like Nan ([done] · 2026-10-28)
 
-From Dad's photos of Route 1081, 1256 and a hill village: forest canopy on every hill, layered blue ridges in the mist, real road markings, villages, and the road runs on past each stop instead of stopping dead.
+From the user's photos of Route 1081, 1256 and a hill village: forest canopy on every hill, layered blue ridges in the mist, real road markings, villages, and the road runs on past each stop instead of stopping dead.
 
 - **Forest** (`trip/road/forest.ts`): lumpy broadleaf crowns in many greens packed like broccoli, tall trees through the canopy, bamboo clumps, banana plants, bushes and tall grass by the road, palms in the paddies; a few pink (Chomphu Phu Kha) and gold (ratchaphruek) trees. Instanced per 160 m tile so tiles off screen aren't drawn; outlines only within 40 m of the road. Near the road the big trees stay low enough for the chase camera.
 - **Far away** (`trip/road/far.ts`): four rings of ridges, each bluer and paler into the haze; a sky dome deeper overhead and pale at the horizon; mist banks in the valleys and on the hills (thicker in cloud and rain).
 - **The road** (`build.ts`, `look.jungle`): dark asphalt, solid yellow middle on the mountain roads (dashed in town and the valley), concrete edge, grass shoulder; W-beam rails with amber reflectors; power poles with sagging wires (none round hairpins); white kilometer stones with red caps; cleared fields on far slopes; paddies cut into fields with green bunds.
 - **Villages** (`trip/road/village.ts`): stilt houses with pink, blue, red and teal tin roofs; Nan town's two-storey shophouses with awnings along the city road.
 - **The road runs on** about 150 m past both ends, bending away (the 3 road's ends bend sharply so the 3 stays a 3), and the spot the camera stands in to look round at each stop is kept clear of trees.
-- The Cup's tracks keep their own look (no `jungle` flag): next, if Dad wants it there too.
+- The Cup's tracks keep their own look (no `jungle` flag): next, if the user wants it there too.
 - Cost: the sky road draws about 1.2M triangles in 250 calls (was about 200k): fine on a desktop GPU at 60 fps; needs a look on the iPad.
 
 > **⏳ Not yet (later steps)**
@@ -575,7 +575,7 @@ Filled in at planning time, to be re-checked on the iPad.
 
 ## ❓ Still open
 
-Dad decides these.
+The user decides these.
 
 - **Does Baan Huanam grow pink mushrooms?** OPEN: If not, they stay as our one made-up touch.
 - **Is the farmer aunty a buffalo, or another animal?** OPEN: A buffalo is the placeholder pick, like the airport officer's. (The salt aunty is a placeholder pony.)
@@ -591,7 +591,7 @@ Dad decides these.
 
 ## 🎨 The look in 3D (for the builder)
 
-The house's toon look, cooler and greener for the mountains: soft grey-lavender skies, low clouds, rain sometimes, deep greens with lavender shadows, wet roads that shine. Wood everywhere (the deck, the salt huts, the mushroom house). The Pajero: a big chunky toon SUV in **silver** (Dad), a little shine on its bands. The Tai Lue couple on the house in Bo Kluea is drawn by us in our flat style, the same couple as the mural in Dad's video.
+The house's toon look, cooler and greener for the mountains: soft grey-lavender skies, low clouds, rain sometimes, deep greens with lavender shadows, wet roads that shine. Wood everywhere (the deck, the salt huts, the mushroom house). The Pajero: a big chunky toon SUV in **silver** (the user), a little shine on its bands. The Tai Lue couple on the house in Bo Kluea is drawn by us in our flat style, the same couple as the mural in the user's video.
 
 ## 🗣️ Characters, voices and facts (for the builder)
 
@@ -621,7 +621,7 @@ The house's toon look, cooler and greener for the mountains: soft grey-lavender 
 - `trip/legs/Ask.tsx` `TRIP_CHOICES`: a third choice (🏔️🚙). `activities/mall-trip/Loop.tsx` hard-codes a two-way choice (`t === 'boat-trip' ? … : …`): make them open whichever trip she picked.
 - `trip/wall.ts`: `WALL_SLOTS['nan-trip']` and a wall line. `trip/facts.ts`: `NAN_FACTS`.
 - `engine/View3D.tsx`: a `'__thaiNanQA'` QA key.
-- `meta.ts`: the activity in `inTheWorks` until step 10. Its sticker: **a pink mushroom** 🍄 (Dad left it to the builder: the mushroom farm was his must-have, and pink is Kaylee's color).
+- `meta.ts`: the activity in `inTheWorks` until step 10. Its sticker: **a pink mushroom** 🍄 (the user left it to the builder: the mushroom farm was their must-have, and pink is Kaylee's color).
 
 **New** (all inside `src/world/places/thailand/`):
 

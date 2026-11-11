@@ -36,9 +36,9 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
   `window.__thaiHouseQA()` is read-only state for tests (no jump hooks: tests open section links).
 - **The camera lab:** `?cam=1` on any 3D section link opens it (`src/world/labs/camera/`): the real game in an iPad
   or iPhone frame, a panel that nudges the game's camera or locks one of your own (`CameraRig.setOverride`, so no game code
-  changes), freeze, orbit by hand, guides (the fit box, the top bar, tap-target sizes), and a Cinema switch. When Dad sends a lab link or a
+  changes), freeze, orbit by hand, guides (the fit box, the top bar, tap-target sizes), and a Cinema switch. When the user sends a lab link or a
   "Copy for agent" note, bake it into that world's `shot()` for that round and screen shape (tall or wide) and its
-  `rig.fov`. Leave the other branches alone unless he says otherwise, and check the targets stay at 64 px or more.
+  `rig.fov`. Leave the other branches alone unless they say otherwise, and check the targets stay at 64 px or more.
 - **The cinema camera (cutscenes):** `engine3d/cinema.ts` films a moment like a game's cinematic: a `Director` cuts
   between authored, eased camera moves round a moving subject (crane, chase, low hero shot, a fixed camera it drives
   past, a two-shot), `rig.setCine()` takes the camera and hands back smoothly (the lens too), its `Letterbox` draws the bars in the frame.
@@ -46,15 +46,15 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
   instead of scripting camera paths by hand, and keep a `playable` shot for when her finger is down.
 - **The feel lab:** `?feel=1` on any section link (2D or 3D, `src/world/labs/feel/`) puts sliders over the real, playable game
   for every number the scene declares with `knobs()` (`src/world/kit/knobs.ts`), and a live graph of whatever it
-  `watch()`es (her finger against what the car does). Playwright can check that a mechanic *works*; only Dad's finger
+  `watch()`es (her finger against what the car does). Playwright can check that a mechanic *works*; only the user's finger
   can say it *feels* right, and we got steering wrong twice in a row by guessing. So whenever a core verb has numbers
   that decide its feel (steering, dragging, throwing, a hop, a swing, smoothing, dead zones), declare them as knobs
   in the first playable (the code's `value`s are the defaults; read them every frame, never copy them into a const),
-  watch the input and the result, and put a `?feel=1` link in the review page's links. When Dad sends a "Copy for agent" note, bake the
+  watch the input and the result, and put a `?feel=1` link in the review page's links. When the user sends a "Copy for agent" note, bake the
   changed numbers into the knobs' `value`s and leave the knobs in.
 - **Gotchas:** never name a shader variable `patch` or `sample` (reserved in WebGL2; the shader silently fails). Dispose
   what you create (`engine3d/dispose.ts`). Keep three.js out of `meta.ts` and `sections.ts`.
-- **Dad decides the family:** who each person is, which animal, who comes on a trip. Ask, don't invent family facts.
+- **The user decides the family:** who each person is, which animal, who comes on a trip. Ask, don't invent family facts.
   Photos of Kaylee stay out of this public repo; describe them in words in the plan.
 
 ## Thailand is locked (the family code)

@@ -39,9 +39,9 @@ temples, shrines or Buddhas on any map, sign or road (the island's temple and sh
 
 Pictures: `review/pitch/` (mock-ups drawn over real screenshots of the island, published to the review-pages branch).
 
-## Dad's pick
+## the user's pick
 
-**B, Follow the Beach Puppy.** Dad asked for a guiding wind too, then dropped it as too much like Ghost of Tsushima:
+**B, Follow the Beach Puppy.** The user asked for a guiding wind too, then dropped it as too much like Ghost of Tsushima:
 the world doesn't point the way, the puppy does.
 
 ## What's built (card B)
