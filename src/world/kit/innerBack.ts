@@ -34,8 +34,9 @@ export function useInnerBack(away: boolean, onBack: () => void) {
 
   useEffect(() => {
     if (away && !pushed.current) {
-      // The hub's entry stays behind this one (its link is in the bar right now).
-      history.pushState({ ...(history.state ?? {}), [MARK]: true }, '', location.hash)
+      // The hub's entry stays behind this one (its link is in the bar right now). After a reload on an away section,
+      // this entry is already the extra one: reuse it instead of stacking another.
+      if (!history.state?.[MARK]) history.pushState({ ...(history.state ?? {}), [MARK]: true }, '', location.hash)
       pushed.current = true
     } else if (!away && pushed.current) {
       pushed.current = false
