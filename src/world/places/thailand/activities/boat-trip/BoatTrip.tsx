@@ -26,7 +26,8 @@
 //                           there (endTrip): her best photo goes on Agong's wall by itself, then the stamp, and the
 //                           plane flies home on the map. The first trip of a session packs, then straight down the
 //                           stairs to the window seat (the goodbye and the x-ray belt are out of the way); later ones
-//                           open at `land?quick=1`: straight to Krabi airport, where Daddy asks 🐘 or 🚤.
+//                           open at `land?quick=1`: straight to Krabi airport (the plane world starts on the ground,
+//                           no cabin), where Daddy asks 🐘 or 🚤.
 //   home                    (only its links now) Agong's house again (the plugin's `home` leg): the flight home, Aunty Sri's van at the door,
 //                           the photo she picks (PhotoFan.tsx) goes on Agong's wall (saved on the iPad, trip/wall-photos.ts),
 //                           the cousins look up from their phones, and the stamp (onDone)
@@ -152,7 +153,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   // the boarding pass, at the pier and on a replay.
   const [open] = useState(changOpen)
   const legs = open ? PASS : PASS.filter((p) => p.id !== 'chang')
-  // From the Thailand map's short flight: off the plane and straight to Krabi airport (read once).
+  // From the Thailand map: no flight, the trip opens at Krabi airport (read once).
   const [quick] = useState(() => flag('quick') === '1')
   const [stored, setSaved] = useSaved<Progress>('thailand-boat-trip', { at: null, packed: DEFAULT_PACKED })
   // A trip saved before a leg was cut (Aunty Sri's car ride) starts over.
@@ -521,18 +522,6 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     if (prep.current && prepWant.current && photos.length >= prepWant.current) finish('home', null)
   }, [photos])
 
-  // The Thailand map's short flight was the flight: once the plane is built, straight off it to Krabi airport.
-  useEffect(() => {
-    if (!quick || mount.key !== 0 || mount.world !== 'plane') return
-    const id = setInterval(() => {
-      const w = worldRef.current
-      if (!(w instanceof PlaneRide) || w.stats.fps <= 0) return
-      clearInterval(id)
-      w.skip()
-    }, 100)
-    return () => clearInterval(id)
-  }, [mount.key])
-
   const leg: LegEvents & { flash(): void; asking(on: boolean): void } = {
     say,
     section: (s) => moveTo(s as BoatSection),
@@ -568,7 +557,10 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       // Krabi's signpost: she picks while neither place is done; otherwise the songthaew goes to the one left.
       const b = state.current.been
       const fork: KrabiFork = !open || b.includes('chang') ? 'pier' : b.includes('bay') ? 'chang' : 'ask'
-      w = new PlaneRide(renderer, leg, s as FlySection, items, FLIGHT, replay ? (BOAT_TRIP.caps.replayFly ?? BOAT_TRIP.caps.fly) : BOAT_TRIP.caps.fly, fork)
+      // From the Thailand map (`land?quick=1`): no flight at all, the world starts at Krabi airport. (It used to build
+      // the cabin and skip out of it once it drew, which flashed the plane ride first.)
+      const ashore = quick && s === 'land'
+      w = new PlaneRide(renderer, leg, s as FlySection, items, FLIGHT, replay ? (BOAT_TRIP.caps.replayFly ?? BOAT_TRIP.caps.fly) : BOAT_TRIP.caps.fly, fork, 'krabi', ashore)
     } else if (world === 'chang') {
       setOnward(false)
       w = new Chang(

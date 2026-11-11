@@ -23,7 +23,7 @@ const BOAT_SECTIONS = defineSections('thailand', 'boat-trip', {
     fed: { default: '0', doc: 'Baan Chang: how many foods the elephants have had already (their bellies are that round)' },
     straw: { default: 'pink', values: ['pink', 'purple', 'yellow'], doc: 'Baan Chang: the straw she put in her chocolate milk at the cafe (it rides along to the yard, on the rail post)' },
     lap: { default: '1', values: ['1', '2', '3'], doc: 'the boat race: the lap it starts on (3 = straight to the last lap and the finish)' },
-    quick: { default: '', values: ['', '1'], doc: "1 = from the Thailand map's short flight: the landing goes straight to Krabi airport (Daddy asks 🐘 or 🚤)" },
+    quick: { default: '', values: ['', '1'], doc: "1 = from the Thailand map: no plane at all, the trip opens at Krabi airport (Daddy asks 🐘 or 🚤)" },
     replay: { default: '', doc: "1 = she has done the whole trip before (as after her first trip): yes to Mommy offers 🧳 the whole trip or 🚤 straight to the pier, and the flight is shorter" },
   },
   sections: [
@@ -33,7 +33,7 @@ const BOAT_SECTIONS = defineSections('thailand', 'boat-trip', {
     { id: 'airport', name: 'The x-ray belt', params: ['packed', 'replay'], group: 'Getting there' },
     { id: 'takeoff', name: 'Window seat: seatbelt and takeoff', params: ['packed', 'replay'], group: 'Getting there' },
     { id: 'fly', name: 'Window seat: tray, snacks, the elephant below', params: ['packed', 'replay'], group: 'Getting there' },
-    { id: 'land', name: "Landing in Krabi (and the signpost: 🐘 or 🚤)", params: ['packed', 'replay', 'been', 'quick'], group: 'Getting there', links: [{ label: 'Landing in Krabi (and the signpost: 🐘 or 🚤)', also: [{ label: "after the map's short flight: straight to the signpost", params: { quick: '1' } }] }] },
+    { id: 'land', name: "Landing in Krabi (and the signpost: 🐘 or 🚤)", params: ['packed', 'replay', 'been', 'quick'], group: 'Getting there', links: [{ label: 'Landing in Krabi (and the signpost: 🐘 or 🚤)', also: [{ label: "from the Thailand map: straight to Krabi airport, no plane", params: { quick: '1' } }] }] },
     { id: 'chang', name: 'Baan Chang: the songthaew to the elephant cafe', params: ['packed', 'been'], group: 'Baan Chang' },
     { id: 'sign', name: 'Baan Chang: the bamboo sign wall and a photo', params: ['packed', 'been', 'photos', 'found'], group: 'Baan Chang' },
     { id: 'drinks', name: 'Baan Chang: the cafe, her chocolate milk (and an iced coffee for Daddy)', params: ['packed', 'straw', 'been'], group: 'Baan Chang' },

@@ -181,7 +181,7 @@ export class PlaneRide extends Stage {
   /** Landed in Nan and off to the Nan map. */
   private off = false
 
-  constructor(renderer: WebGLRenderer, protected events: Ev, start: FlySection, private packed: string[], private route: { from: LonLat; to: LonLat } = { from: PLACES.bangkok, to: PLACES.krabi }, cap = FLIGHT_S, private fork: KrabiFork = 'pier', private landing: Landing = 'krabi') {
+  constructor(renderer: WebGLRenderer, protected events: Ev, start: FlySection, private packed: string[], private route: { from: LonLat; to: LonLat } = { from: PLACES.bangkok, to: PLACES.krabi }, cap = FLIGHT_S, private fork: KrabiFork = 'pier', private landing: Landing = 'krabi', ashore = false) {
     super(renderer, events)
     this.pace = FLIGHT_S / cap
     const { scene, bag } = this
@@ -223,6 +223,16 @@ export class PlaneRide extends Stage {
       this.parts.belt.visible = true
     }
     this.place()
+    // Already off the plane (Krabi from the Thailand map): the first frame is the arrivals arch and the songthaew, with
+    // no cabin, no flash and no landing line before it.
+    if (ashore && this.landing === 'krabi') {
+      this.sec = 'land'
+      this.alt = 2.2
+      this.touchdown = 99
+      this.cheered = true
+      this.toKrabi(false)
+      return
+    }
     setTimeout(() => this.events.say(start === 'land' ? L.trip.plane.land : start === 'fly' ? L.trip.plane.tray : L.trip.plane.belt), 400)
   }
 
@@ -1087,14 +1097,14 @@ export class PlaneRide extends Stage {
 
   /** Off the plane: the family on the songthaew's bench at the arrivals arch, the suitcase across from them. (In Nan
    *  the trip goes on to the Nan map.) */
-  private toKrabi() {
+  private toKrabi(flash = true) {
     if (this.landing === 'nan') {
       if (!this.off) this.events.done('map')
       this.off = true
       return
     }
     this.drive = 0
-    this.events.flash?.()
+    if (flash) this.events.flash?.()
     const st = this.arrival.songthaew
     for (const id of WHO) {
       const c = this.riders[id]
