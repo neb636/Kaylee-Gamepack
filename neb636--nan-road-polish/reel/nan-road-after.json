@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "nan-road-after",
+  "title": "Nan road after",
+  "video": "nan-road-after.mp4",
+  "gif": "nan-road-after.gif",
+  "seconds": 51,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Thailand nan trip drive",
+      "where": "#/world/thailand/nan-trip/drive?road=city&weather=sun",
+      "seconds": 14,
+      "fps": 59.5,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand nan trip drive",
+      "where": "#/world/thailand/nan-trip/drive?road=sky&weather=cloud",
+      "seconds": 34,
+      "fps": 63.7,
+      "status": "ok"
+    }
+  ]
+}
