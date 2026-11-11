@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Racing slide</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0f2ff"/><stop offset="1" stop-color="#b3dbff"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <path id="lane" d="M22 40C30 40 33 56 41 56C48 56 50 49 56 49C63 49 66 67 74 67C80 67 82 62 87 62C93 62 96 74 100 82"/>
+    <clipPath id="flag"><path d="M32 17C36 15 40 19 44 17.5C47 16.5 49 15.5 50 16V27C48 26 46 27.5 43 28.5C39 30 36 26 32 28Z"/></clipPath>
+    <g id="bp"><circle r="5" fill="#e7699c"/><circle cx="-0.8" cy="-0.8" r="4.2" fill="#ff8fb8"/><circle cx="-1.9" cy="-1.9" r="1.3" fill="#ffc4da"/></g>
+    <g id="bb"><circle r="5" fill="#ecc95c"/><circle cx="-0.8" cy="-0.8" r="4.2" fill="#fbea9a"/><circle cx="-1.9" cy="-1.9" r="1.3" fill="#fff6cc"/></g>
+    <g id="bl"><circle r="5" fill="#937ee0"/><circle cx="-0.8" cy="-0.8" r="4.2" fill="#b9a6f5"/><circle cx="-1.9" cy="-1.9" r="1.3" fill="#ddd2ff"/></g>
+    <g id="bm"><circle r="5" fill="#5cc6a6"/><circle cx="-0.8" cy="-0.8" r="4.2" fill="#8fe3c8"/><circle cx="-1.9" cy="-1.9" r="1.3" fill="#c7f3e4"/></g>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+  <ellipse cx="62" cy="103" rx="46" ry="5" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- the start tower and its legs -->
+  <rect x="14" y="38" width="5" height="64" rx="2" fill="#937ee0"/>
+  <rect x="28" y="38" width="5" height="64" rx="2" fill="#7b68cc"/>
+  <path d="M16.5 52H30.5M16.5 66H30.5M16.5 80H30.5" stroke="#b9a6f5" stroke-width="3" stroke-linecap="round"/>
+  <path d="M55 60V100M83 76V100" stroke="#b9a6f5" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- the slide: three wavy lanes, blue at the back, pink at the front, a lavender side -->
+  <use href="#lane" transform="translate(0 8)" fill="none" stroke="#937ee0" stroke-width="8"/>
+  <use href="#lane" transform="translate(0 -14)" fill="none" stroke="#5fb0ea" stroke-width="8"/>
+  <use href="#lane" transform="translate(0 -7)" fill="none" stroke="#ffc83d" stroke-width="8"/>
+  <use href="#lane" fill="none" stroke="#ff8fb8" stroke-width="8"/>
+  <use href="#lane" transform="translate(0 -17)" fill="none" stroke="#8ccfff" stroke-width="2"/>
+  <use href="#lane" transform="translate(0 -10.5)" fill="none" stroke="#fff" stroke-width="1.8"/>
+  <use href="#lane" transform="translate(0 -3.5)" fill="none" stroke="#fff" stroke-width="1.8"/>
+  <use href="#lane" transform="translate(0 4.5)" fill="none" stroke="#ffc4da" stroke-width="2.2"/>
+
+  <!-- the start deck on top of the tower, with a checkered flag -->
+  <rect x="11" y="30" width="25" height="9" rx="3" fill="#b9a6f5"/>
+  <rect x="11" y="35" width="25" height="4" rx="2" fill="#937ee0"/>
+  <path d="M14 32H30" stroke="#ddd2ff" stroke-width="2" stroke-linecap="round"/>
+  <path d="M32 31V14" stroke="#fff7f0" stroke-width="2.4" stroke-linecap="round"/>
+  <g clip-path="url(#flag)">
+    <rect x="30" y="12" width="22" height="20" fill="#fff"/>
+    <path d="M32 12h6v6h-6zM44 12h6v6h-6zM38 18h6v6h-6zM32 24h6v6h-6zM44 24h6v6h-6z" fill="#3d3350"/>
+  </g>
+
+  <!-- the ball pit at the bottom -->
+  <use href="#bm" x="80" y="86"/><use href="#bp" x="89" y="84"/><use href="#bb" x="98" y="85"/><use href="#bl" x="106" y="87"/>
+  <use href="#bl" x="84" y="80"/><use href="#bb" x="104" y="79.5"/>
+  <rect x="74" y="86" width="38" height="16" rx="5" fill="#ff8fb8"/>
+  <rect x="74" y="97" width="38" height="5" rx="2.5" fill="#e7699c"/>
+  <path d="M78 89.5H92" stroke="#ffc4da" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- a whoosh and a sparkle -->
+  <path d="M60 30h10M64 36h8" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M96 40v5M93.5 42.5h5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+</svg>
