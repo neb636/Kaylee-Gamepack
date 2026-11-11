@@ -27,20 +27,20 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
 <header>
 <h1>Table read: Canada › Trophy Win</h1>
 <p class="intro">The shell's trophy ceremony and the trophy room speak these.</p>
-<p class="sum">1 lines · 0.0 min of talk · <b>1 not recorded</b> · her name 0× · 1 flagged</p>
+<p class="sum">1 lines · 0.1 min of talk · her name 0× · 1 flagged</p>
 <ul class="cast"><li style="--h:330"><b>Sparkle</b> 1 lines <small>coral voice</small></li></ul>
 </header>
-<div class="player"><p class="sum">No audio yet (no recorded lines, or no ffmpeg).</p></div>
+<div class="player"><audio controls preload="metadata" src="canada-trophyWin.mp3"></audio></div>
 <main>
-<h2>Lines</h2><button class="line silent" data-i="0" style="--h:330">
+<h2>Lines</h2><button class="line" data-i="0" style="--h:330">
   <span class="who">Sparkle</span>
   <span class="text">You did it! You won the Canada Champion trophy!</span>
   <span class="when">The shell's trophy ceremony and the trophy room speak these.</span>
-  <span class="meta"><b class="flag not-recorded">not recorded</b></span>
+  <span class="meta">4.2 s<b class="flag long">long</b></span>
 </button>
 </main>
 <script>
-const spans=[null];const a=document.querySelector('audio');let stop=null,cur=null
+const spans=[[0,4.15]];const a=document.querySelector('audio');let stop=null,cur=null
 const mark=(el)=>{cur?.classList.remove('playing');cur=el;el?.classList.add('playing')}
 document.querySelectorAll('.line').forEach(el=>el.addEventListener('click',()=>{const s=spans[+el.dataset.i];if(!a||!s)return;a.currentTime=s[0];stop=s[1];mark(el);a.play()}))
 a?.addEventListener('timeupdate',()=>{if(stop!==null&&a.currentTime>=stop){a.pause();stop=null}

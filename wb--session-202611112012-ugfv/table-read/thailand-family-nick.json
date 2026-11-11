@@ -7,15 +7,15 @@
   "page": "thailand-family-nick.html",
   "audio": "thailand-family-nick.mp3",
   "lines": 3,
-  "seconds": 2,
-  "missing": 1,
+  "seconds": 5,
+  "missing": 0,
   "names": 0,
   "flags": [
     {
       "key": "family.nick.hi",
       "text": "Hi! Welcome to Agong's house!",
       "flags": [
-        "not recorded"
+        "long"
       ]
     }
   ],
@@ -31,11 +31,14 @@
       "key": "family.nick.hi",
       "part": "family › nick",
       "when": "",
-      "ms": 0,
+      "ms": 3360,
       "flags": [
-        "not recorded"
+        "long"
       ],
-      "span": null
+      "span": [
+        0,
+        3.3
+      ]
     },
     {
       "path": [
@@ -52,8 +55,8 @@
       "ms": 883,
       "flags": [],
       "span": [
-        0,
-        0.88
+        4.92,
+        5.8
       ]
     },
     {
@@ -71,8 +74,8 @@
       "ms": 1208,
       "flags": [],
       "span": [
-        1.23,
-        2.44
+        6.15,
+        7.36
       ]
     }
   ]

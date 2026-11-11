@@ -5,17 +5,17 @@
   "title": "Canada › Trophy Win",
   "intro": "The shell's trophy ceremony and the trophy room speak these.",
   "page": "canada-trophyWin.html",
-  "audio": null,
+  "audio": "canada-trophyWin.mp3",
   "lines": 1,
-  "seconds": 0,
-  "missing": 1,
+  "seconds": 4,
+  "missing": 0,
   "names": 0,
   "flags": [
     {
       "key": "trophyWin",
       "text": "You did it! You won the Canada Champion trophy!",
       "flags": [
-        "not recorded"
+        "long"
       ]
     }
   ],
@@ -29,9 +29,13 @@
       "key": "trophyWin",
       "part": "",
       "when": "The shell's trophy ceremony and the trophy room speak these.",
-      "ms": 0,
+      "ms": 4224,
       "flags": [
-        "not recorded"
+        "long"
+      ],
+      "span": [
+        0,
+        4.15
       ]
     }
   ]

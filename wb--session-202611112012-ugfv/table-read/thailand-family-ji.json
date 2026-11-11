@@ -7,18 +7,10 @@
   "page": "thailand-family-ji.html",
   "audio": "thailand-family-ji.mp3",
   "lines": 3,
-  "seconds": 4,
-  "missing": 1,
+  "seconds": 5,
+  "missing": 0,
   "names": 0,
-  "flags": [
-    {
-      "key": "family.ji.again.1",
-      "text": "I love you!",
-      "flags": [
-        "not recorded"
-      ]
-    }
-  ],
+  "flags": [],
   "script": [
     {
       "path": [
@@ -69,11 +61,12 @@
       "key": "family.ji.again.1",
       "part": "family › ji › again",
       "when": "Mommy's and Daddy's normal greetings refer to the room or going inside.",
-      "ms": 0,
-      "flags": [
-        "not recorded"
-      ],
-      "span": null
+      "ms": 1056,
+      "flags": [],
+      "span": [
+        6.25,
+        7.24
+      ]
     }
   ]
 }

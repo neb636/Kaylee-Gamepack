@@ -27,16 +27,16 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
 <header>
 <h1>Table read: Thailand › Family › Nick</h1>
 
-<p class="sum">3 lines · 0.0 min of talk · <b>1 not recorded</b> · her name 0× · 1 flagged</p>
+<p class="sum">3 lines · 0.1 min of talk · her name 0× · 1 flagged</p>
 <ul class="cast"><li style="--h:330"><b>Nick</b> 3 lines <small>echo voice</small></li></ul>
 </header>
 <div class="player"><audio controls preload="metadata" src="thailand-family-nick.mp3"></audio></div>
 <main>
-<h2>family › nick</h2><button class="line silent" data-i="0" style="--h:330">
+<h2>family › nick</h2><button class="line" data-i="0" style="--h:330">
   <span class="who">Nick</span>
   <span class="text">Hi! Welcome to Agong's house!</span>
   
-  <span class="meta"><b class="flag not-recorded">not recorded</b></span>
+  <span class="meta">3.4 s<b class="flag long">long</b></span>
 </button>
 <h2>family › nick › again</h2><button class="line" data-i="1" style="--h:330">
   <span class="who">Nick</span>
@@ -52,7 +52,7 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
 </button>
 </main>
 <script>
-const spans=[null,[0,0.88],[1.23,2.44]];const a=document.querySelector('audio');let stop=null,cur=null
+const spans=[[0,3.3],[4.92,5.8],[6.15,7.36]];const a=document.querySelector('audio');let stop=null,cur=null
 const mark=(el)=>{cur?.classList.remove('playing');cur=el;el?.classList.add('playing')}
 document.querySelectorAll('.line').forEach(el=>el.addEventListener('click',()=>{const s=spans[+el.dataset.i];if(!a||!s)return;a.currentTime=s[0];stop=s[1];mark(el);a.play()}))
 a?.addEventListener('timeupdate',()=>{if(stop!==null&&a.currentTime>=stop){a.pause();stop=null}

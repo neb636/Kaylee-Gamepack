@@ -27,26 +27,26 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
 <header>
 <h1>Table read: World › First Hello</h1>
 
-<p class="sum">2 lines · 0.0 min of talk · <b>2 not recorded</b> · her name 0× · 2 flagged</p>
+<p class="sum">2 lines · 0.2 min of talk · her name 0× · 2 flagged</p>
 <ul class="cast"><li style="--h:330"><b>Sparkle</b> 2 lines <small>coral voice</small></li></ul>
 </header>
-<div class="player"><p class="sum">No audio yet (no recorded lines, or no ffmpeg).</p></div>
+<div class="player"><audio controls preload="metadata" src="world-firstHello.mp3"></audio></div>
 <main>
-<h2>first Hello</h2><button class="line silent" data-i="0" style="--h:330">
+<h2>first Hello</h2><button class="line" data-i="0" style="--h:330">
   <span class="who">Sparkle</span>
   <span class="text">Let's fly around the world! Tap the sparkly pin.</span>
   
-  <span class="meta"><b class="flag not-recorded">not recorded</b></span>
+  <span class="meta">4.5 s<b class="flag long">long</b></span>
 </button>
-<button class="line silent" data-i="1" style="--h:330">
+<button class="line" data-i="1" style="--h:330">
   <span class="who">Sparkle</span>
   <span class="text">Let's fly around the world! Click the sparkly pin.</span>
   
-  <span class="meta"><b class="flag not-recorded">not recorded</b></span>
+  <span class="meta">5.4 s<b class="flag long">long</b></span>
 </button>
 </main>
 <script>
-const spans=[null,null];const a=document.querySelector('audio');let stop=null,cur=null
+const spans=[[0,4.4],[4.75,10.08]];const a=document.querySelector('audio');let stop=null,cur=null
 const mark=(el)=>{cur?.classList.remove('playing');cur=el;el?.classList.add('playing')}
 document.querySelectorAll('.line').forEach(el=>el.addEventListener('click',()=>{const s=spans[+el.dataset.i];if(!a||!s)return;a.currentTime=s[0];stop=s[1];mark(el);a.play()}))
 a?.addEventListener('timeupdate',()=>{if(stop!==null&&a.currentTime>=stop){a.pause();stop=null}
