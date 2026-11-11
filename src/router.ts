@@ -37,6 +37,10 @@ let keepUntil = 0
 export function keepRoute() {
   keepUntil = performance.now() + 500
 }
+/** The traversal that called `keepRoute` is over (it changed no hash, so nothing consumed the guard): disarm it. */
+export function releaseRoute() {
+  keepUntil = 0
+}
 const subscribe = (cb: () => void) => {
   const on = () => {
     if (performance.now() < keepUntil) {
