@@ -79,18 +79,19 @@ export const L = {
     howto: {
       unicorn: onDevice('Tap the die! Race to the castle!', 'Click the die! Race to the castle!'),
       candy: onDevice('Tap the cards! Hop to that color!', 'Click the cards! Hop to that color!'),
-      chutes: onDevice('Tap the die! Ladders go up, slides go down!', 'Click the die! Ladders go up, slides go down!'),
+      chutes: onDevice('Tap the die! Ladders up, slides down!', 'Click the die! Ladders up, slides down!'),
     },
     // The first time a unicorn rolls a 4 and naps (once a visit).
     nap: 'A four! Time for a little nap.',
     // Her first win in a visit says her name; after that, one of the others in turn.
     won: `You won, ${NAME}!`,
     wonAgain: ['You won!', 'Yay! You did it!', 'Winner winner!'],
-    // The cousin, in turn (cousin.ts).
+    // The cousin across the table: sitting down; before a roll now and then (in turn); their own nap, ladder and slide;
+    // their win; losing to her; getting up.
     cousins: {
-      bb: cousin('bbplay', { sit: "Yay, let's play!", roll: ['My turn!', 'Come on, six!'], nap: 'Nap time! Yawn!', ladder: 'Up I go!', slide: 'Wheee!', win: 'I won! Again?', lose: 'You won! Good game!', bye: 'Fun game!' }),
+      bb: cousin('bbplay', { sit: "Yay, let's play!", roll: ['My turn!', 'Come on, six!'], nap: 'Nap time!', ladder: 'Up I go!', slide: 'Wheee!', win: 'I won! Again?', lose: 'You won! Good game!', bye: 'Fun game!' }),
       gan: cousin('ganplay', { sit: "Okay, I'm in!", roll: ['Here goes!', 'Big number!'], nap: 'Aw, sleepy!', ladder: 'Ladder! Yes!', slide: 'Nooo! Wheee!', win: 'I won! One more?', lose: 'Nice one, you won!', bye: 'Good game!' }),
-      ken: cousin('kenplay', { sit: "Let's play!", roll: ['My go!', 'Lucky roll!'], nap: 'Snooze time!', ladder: 'Up, up, up!', slide: 'Whoa! Wheee!', win: 'I won! Again?', lose: 'You got me! Good game!', bye: 'See you!' }),
+      ken: cousin('kenplay', { sit: "Let's play!", roll: ['My go!', 'Lucky roll!'], nap: 'Snooze time!', ladder: 'Up, up, up!', slide: 'Whoa! Wheee!', win: 'Ha! I won!', lose: 'You got me! Good game!', bye: 'See you!' }),
     },
   },
 
