@@ -1,0 +1,38 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "trophyWin",
+  "title": "Canada › Trophy Win",
+  "intro": "The shell's trophy ceremony and the trophy room speak these.",
+  "page": "canada-trophyWin.html",
+  "audio": null,
+  "lines": 1,
+  "seconds": 0,
+  "missing": 1,
+  "names": 0,
+  "flags": [
+    {
+      "key": "trophyWin",
+      "text": "You did it! You won the Canada Champion trophy!",
+      "flags": [
+        "not recorded"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "trophyWin"
+      ],
+      "text": "You did it! You won the Canada Champion trophy!",
+      "voice": "sparkle",
+      "key": "trophyWin",
+      "part": "",
+      "when": "The shell's trophy ceremony and the trophy room speak these.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    }
+  ]
+}

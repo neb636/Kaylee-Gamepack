@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "name-before",
+  "title": "Name before",
+  "video": "name-before.mp4",
+  "gif": "name-before.gif",
+  "seconds": 11,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "# world",
+      "where": "#/world?view=map",
+      "seconds": 4,
+      "fps": 20.4,
+      "status": "ok"
+    },
+    {
+      "name": "# playground",
+      "where": "#/playground",
+      "seconds": 4,
+      "fps": 47.3,
+      "status": "ok"
+    }
+  ]
+}

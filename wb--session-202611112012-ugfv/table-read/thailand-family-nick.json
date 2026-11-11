@@ -1,0 +1,79 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "family.nick",
+  "title": "Thailand › Family › Nick",
+  "intro": "",
+  "page": "thailand-family-nick.html",
+  "audio": "thailand-family-nick.mp3",
+  "lines": 3,
+  "seconds": 2,
+  "missing": 1,
+  "names": 0,
+  "flags": [
+    {
+      "key": "family.nick.hi",
+      "text": "Hi! Welcome to Agong's house!",
+      "flags": [
+        "not recorded"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "family",
+        "nick",
+        "hi"
+      ],
+      "text": "Hi! Welcome to Agong's house!",
+      "voice": "nick",
+      "key": "family.nick.hi",
+      "part": "family › nick",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ],
+      "span": null
+    },
+    {
+      "path": [
+        "family",
+        "nick",
+        "again",
+        "0"
+      ],
+      "text": "High five!",
+      "voice": "nick",
+      "key": "family.nick.again.0",
+      "part": "family › nick › again",
+      "when": "Mommy's and Daddy's normal greetings refer to the room or going inside.",
+      "ms": 883,
+      "flags": [],
+      "span": [
+        0,
+        0.88
+      ]
+    },
+    {
+      "path": [
+        "family",
+        "nick",
+        "again",
+        "1"
+      ],
+      "text": "Let's go inside!",
+      "voice": "nick",
+      "key": "family.nick.again.1",
+      "part": "family › nick › again",
+      "when": "",
+      "ms": 1208,
+      "flags": [],
+      "span": [
+        1.23,
+        2.44
+      ]
+    }
+  ]
+}

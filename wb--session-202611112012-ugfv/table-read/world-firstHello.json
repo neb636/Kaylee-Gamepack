@@ -1,0 +1,61 @@
+{
+  "kind": "table-read",
+  "place": "world",
+  "group": "firstHello",
+  "title": "World › First Hello",
+  "intro": "",
+  "page": "world-firstHello.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 0,
+  "missing": 2,
+  "names": 0,
+  "flags": [
+    {
+      "key": "firstHello.touch",
+      "text": "Let's fly around the world! Tap the sparkly pin.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "firstHello.mouse",
+      "text": "Let's fly around the world! Click the sparkly pin.",
+      "flags": [
+        "not recorded"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "firstHello",
+        "touch"
+      ],
+      "text": "Let's fly around the world! Tap the sparkly pin.",
+      "voice": "sparkle",
+      "key": "firstHello.touch",
+      "part": "firstHello",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "firstHello",
+        "mouse"
+      ],
+      "text": "Let's fly around the world! Click the sparkly pin.",
+      "voice": "sparkle",
+      "key": "firstHello.mouse",
+      "part": "firstHello",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    }
+  ]
+}

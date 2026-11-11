@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "name-after",
+  "title": "Name after",
+  "video": "name-after.mp4",
+  "gif": "name-after.gif",
+  "seconds": 17,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "# world",
+      "where": "#/world?view=map",
+      "seconds": 4,
+      "fps": 23.5,
+      "status": "ok"
+    },
+    {
+      "name": "# playground",
+      "where": "#/playground",
+      "seconds": 4,
+      "fps": 59.3,
+      "status": "ok"
+    },
+    {
+      "name": "australia-trophy-ceremony",
+      "where": "australia-trophy-ceremony",
+      "seconds": 4,
+      "fps": 38.2,
+      "status": "ok"
+    }
+  ]
+}
