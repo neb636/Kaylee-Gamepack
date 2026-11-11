@@ -1,7 +1,7 @@
 [
   "Egypt",
   {
-    "text": "Ahlan, Kaylee! I'm Miu the kitten!",
+    "text": "Ahlan! I'm Miu the kitten!",
     "voice": "miu"
   },
   {
@@ -17,7 +17,7 @@
     "voice": "miu"
   },
   {
-    "text": "Where to next, Kaylee?",
+    "text": "Where to next?",
     "voice": "miu"
   },
   {
@@ -32,8 +32,8 @@
     "text": "Get all the stamps to start the light show!",
     "voice": "miu"
   },
-  "Kaylee, you did it! You won the Egypt Explorer trophy!",
-  "Kaylee, Egypt Explorer! From Egypt.",
+  "You did it! You won the Egypt Explorer trophy!",
+  "Egypt Explorer! From Egypt.",
   {
     "text": "Purr! That tickles!",
     "voice": "miu"
@@ -113,7 +113,7 @@
   "The treasure room! Click the golden box!",
   "This gold mask was made for a boy king called Tut!",
   {
-    "text": "Yawn! Ahlan, Kaylee! I'm Tutu!",
+    "text": "Yawn! Ahlan! I'm Tutu!",
     "voice": "tutu"
   },
   {
@@ -169,7 +169,7 @@
     "voice": "miu"
   },
   {
-    "text": "Thank you, Kaylee! Hmm, have you seen my nose?",
+    "text": "Thank you! Hmm, have you seen my nose?",
     "voice": "sphinx"
   },
   {
@@ -272,7 +272,7 @@
   "Pull the rope to raise Egypt's flag!",
   "Egypt's flag is red, white and black, with a golden eagle!",
   {
-    "text": "Shukran, Kaylee! You're a true Egypt explorer!",
+    "text": "Shukran! You're a true Egypt explorer!",
     "voice": "miu"
   },
   "Camel sticker! Camels store fat in their humps for long trips!",

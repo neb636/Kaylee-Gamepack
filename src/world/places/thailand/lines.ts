@@ -1,11 +1,10 @@
 // Every phrase that can be spoken in Thailand. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
-// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.)
+// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing.)
 // Thailand's friends are Kaylee's own family, as animal characters (planning/around-the-world/thailand.md). Sparkle
 // guides (plain strings); the family say hello in their own voices (cast.json), with the Thai hello: Sawasdee, ending
 // in "ka" from the women and "krub" from the men. Straight apostrophes only: curly ones failed the transcription check
 // in PR #63.
 import { onDevice } from '../../../sdk/device.ts'
-const NAME = 'Kaylee'
 
 type Line = string | { text: string; voice: string }
 const by = (voice: string) => (text: string) => ({ text, voice })
@@ -23,8 +22,8 @@ const hello = (voice: string, hi: string, again: string[]) => ({ hi: by(voice)(h
 
 export const L = {
   // The shell's trophy ceremony and the trophy room speak these.
-  trophyWin: `${NAME}, you did it! You won the Thailand Explorer trophy!`,
-  trophyRoom: `${NAME}, Thailand Explorer! From Thailand.`,
+  trophyWin: `You did it! You won the Thailand Explorer trophy!`,
+  trophyRoom: `Thailand Explorer! From Thailand.`,
   passport: onDevice('This is Thailand! Tap a picture to explore.', 'This is Thailand! Click a picture to explore.'),
   facts: {
     hello: 'In Thailand, we say Sawasdee to say hello!',
@@ -38,7 +37,7 @@ export const L = {
   // Sparkle, at Agong's house: at most two lines before her hands are busy, then only when something is new or she
   // seems stuck.
   house: {
-    arrive: `We're at Agong's house in Thailand, ${NAME}!`,
+    arrive: `We're at Agong's house in Thailand!`,
     door: onDevice('Tap the door to go inside!', 'Click the door to go inside!'),
     inside: onDevice('Tap your family to say hello!', 'Click your family to say hello!'),
     // The first time she rattles the closed bathroom door.
@@ -79,35 +78,35 @@ export const L = {
   },
 
   family: {
-    agong: hello('agong', `Sawasdee krub, ${NAME}! Welcome home!`, ['Come, sit with Agong.', 'Ho ho! My little unicorn!']),
-    ji: hello('ji', 'Hi sweetie! This is our room!', ['Bounce on the mattress!', `I love you, ${NAME}!`]),
-    nick: hello('nick', "Hi Kaylee! Welcome to Agong's house!", ['High five!', "Let's go inside!"]),
-    jum: hello('jum', `Sawasdee ka, ${NAME}! Are you hungry?`, ['The rice is almost ready!', `So big now, ${NAME}!`]),
-    joy: hello('joy', `Sawasdee ka, ${NAME}! Look at Agong's treasures!`, ['The lucky cat says hi!', 'Hee hee! Hi again!']),
-    bird: hello('bird', `Sawasdee krub, ${NAME}!`, ['Want to sit on my motorbike?', 'Beep beep!']),
-    gan: hello('gan', 'Mm-hmm. Hi Kaylee.', ["One sec, I'm winning!", 'Uh-huh...']),
-    ken: hello('ken', 'Oh. Hi, Kaylee.', ['Look, a funny video!', 'Mm-hmm...']),
-    bb: hello('bb', 'Hi Kaylee... one second.', ['So cute, Kaylee.', 'Uh-huh!']),
-    ja: hello('ja', `Sawasdee ka, ${NAME}!`, ['Big smile for the photo!']),
-    sri: hello('sri', `Sawasdee ka, ${NAME}!`, ['Say cheese!']),
-    putto: hello('putto', `${NAME}! Sawasdee krub!`, ["Let's play!"]),
-    putter: hello('putter', 'Hi Kaylee! Hee hee!', ['Peep peep!']),
+    agong: hello('agong', `Sawasdee krub! Welcome home!`, ['Come, sit with Agong.', 'Ho ho! My little unicorn!']),
+    ji: hello('ji', 'Hi sweetie! This is our room!', ['Bounce on the mattress!', `I love you!`]),
+    nick: hello('nick', "Hi! Welcome to Agong's house!", ['High five!', "Let's go inside!"]),
+    jum: hello('jum', `Sawasdee ka! Are you hungry?`, ['The rice is almost ready!', `So big now!`]),
+    joy: hello('joy', `Sawasdee ka! Look at Agong's treasures!`, ['The lucky cat says hi!', 'Hee hee! Hi again!']),
+    bird: hello('bird', `Sawasdee krub!`, ['Want to sit on my motorbike?', 'Beep beep!']),
+    gan: hello('gan', 'Mm-hmm. Hi.', ["One sec, I'm winning!", 'Uh-huh...']),
+    ken: hello('ken', 'Oh. Hi.', ['Look, a funny video!', 'Mm-hmm...']),
+    bb: hello('bb', 'Hi... one second.', ['So cute.', 'Uh-huh!']),
+    ja: hello('ja', `Sawasdee ka!`, ['Big smile for the photo!']),
+    sri: hello('sri', `Sawasdee ka!`, ['Say cheese!']),
+    putto: hello('putto', `Sawasdee krub!`, ["Let's play!"]),
+    putter: hello('putter', 'Hi! Hee hee!', ['Peep peep!']),
   } as Record<string, { hi: Line; again: Line[] }>,
 
   // Mommy's and Daddy's normal greetings refer to the room or going inside.
-  familyPhoto: { ji: ji(`I love you, ${NAME}!`), nick: nick('High five!') },
+  familyPhoto: { ji: ji(`I love you!`), nick: nick('High five!') },
 
   // Kaylee's wardrobe in her room (activities/hub/wardrobe/, plan: thailand/wardrobe.md). Sparkle says what to do the
   // first time and the name of each thing the first time she touches it; the family notice her new look in their own
   // voices (activities/hub/notice.ts).
   wardrobe: {
-    open: `Your wardrobe! Dress up, ${NAME}!`,
+    open: `Your wardrobe! Dress up!`,
     // The first drawer she pulls out (the paint drawer says its own).
-    drawer: `Drag it onto you, ${NAME}!`,
+    drawer: `Drag it onto you!`,
     paint: 'Hair, dress or fur!',
     // The mirror takes a picture of her look and pins it to the door; a picture dropped on her puts the whole look on.
-    photo: `Click! A picture of your look, ${NAME}!`,
-    look: `Your whole look! Wow, ${NAME}!`,
+    photo: `Click! A picture of your look!`,
+    look: `Your whole look! Wow!`,
     // Sparkle's wand: a surprise look, a different one each tap (in turn).
     wand: ['Ta da! Magic!', 'Sparkle magic!', 'Ooh, a surprise!', 'Whoosh! A new look!'],
     // Silly, never wrong.
@@ -151,28 +150,28 @@ export const L = {
     // The family notice her look the first time she walks up to them in it (hat, glasses, wings, outfit, shoes, paint),
     // once per change. Mommy: a crown has its own line; Daddy: so do wings.
     notice: {
-      ji: notice(ji, [`Ooh, what a pretty hat, ${NAME}!`, `Ooh, fancy glasses, ${NAME}!`, `Ooh, so pretty, ${NAME}!`, `Ooh, what a pretty outfit, ${NAME}!`, `Ooh, nice shoes, ${NAME}!`, `Ooh, new colors, ${NAME}!`]),
-      nick: notice(nick, ['Wow, cool hat!', 'Cool shades, Kaylee!', 'Whoa, cool, Kaylee!', 'Whoa, what an outfit!', 'Cool shoes, Kaylee!', 'Whoa, new colors!']),
-      agong: notice(by('agong'), ['Ho ho! So pretty!', 'Ho ho! So fancy!', 'Ho ho! So pretty!', 'Ho ho! So pretty, Kaylee!', 'Ho ho! Nice shoes!', 'Ho ho! New colors!']),
-      jum: notice(by('jum'), [`Oh! What a pretty hat, ${NAME}!`, 'Oh! So fancy, Kaylee!', 'Oh! So pretty, Kaylee!', 'Oh! What a pretty outfit!', 'Oh! Nice shoes, Kaylee!', 'Oh! I love the colors!']),
-      joy: notice(by('joy'), ['Wow! I love your hat!', 'Wow! Fancy glasses!', 'Wow! So cute, Kaylee!', 'Wow! What an outfit!', 'Wow! Cute shoes!', 'Wow! New colors!']),
-      bird: notice(by('bird'), ['Nice hat, Kaylee!', 'Nice glasses, Kaylee!', 'Ho ho! Nice, Kaylee!', 'Nice outfit, Kaylee!', 'Nice shoes, Kaylee!', 'Ho ho! New colors!']),
+      ji: notice(ji, [`Ooh, what a pretty hat!`, `Ooh, fancy glasses!`, `Ooh, so pretty!`, `Ooh, what a pretty outfit!`, `Ooh, nice shoes!`, `Ooh, new colors!`]),
+      nick: notice(nick, ['Wow, cool hat!', 'Cool shades!', 'Whoa, cool!', 'Whoa, what an outfit!', 'Cool shoes!', 'Whoa, new colors!']),
+      agong: notice(by('agong'), ['Ho ho! So pretty!', 'Ho ho! So fancy!', 'Ho ho! So pretty!', 'Ho ho! So pretty!', 'Ho ho! Nice shoes!', 'Ho ho! New colors!']),
+      jum: notice(by('jum'), [`Oh! What a pretty hat!`, 'Oh! So fancy!', 'Oh! So pretty!', 'Oh! What a pretty outfit!', 'Oh! Nice shoes!', 'Oh! I love the colors!']),
+      joy: notice(by('joy'), ['Wow! I love your hat!', 'Wow! Fancy glasses!', 'Wow! So cute!', 'Wow! What an outfit!', 'Wow! Cute shoes!', 'Wow! New colors!']),
+      bird: notice(by('bird'), ['Nice hat!', 'Nice glasses!', 'Ho ho! Nice!', 'Nice outfit!', 'Nice shoes!', 'Ho ho! New colors!']),
       gan: notice(by('gan'), ['Nice hat... one sec.', 'Cool glasses... uh-huh.', 'Cool... uh-huh.', 'Nice outfit... uh-huh.', 'Nice shoes... one sec.', 'New colors... cool.']),
       ken: notice(by('ken'), ['Oh. Nice hat.', 'Oh. Cool glasses.', 'Oh. Nice.', 'Oh. Nice outfit.', 'Oh. Nice shoes.', 'Oh. New colors.']),
-      bb: notice(by('bb'), ['So cute, Kaylee... one sec.', 'Cute glasses... uh-huh.', 'So cute... one sec.', 'Cute outfit... uh-huh.', 'Nice shoes... one sec.', 'Cute colors... uh-huh.']),
-      ja: notice(by('ja'), ['So pretty, Kaylee!', 'So fancy, Kaylee!', 'So pretty, Kaylee!', 'What a pretty outfit!', 'What cute shoes!', 'So pretty, new colors!']),
+      bb: notice(by('bb'), ['So cute... one sec.', 'Cute glasses... uh-huh.', 'So cute... one sec.', 'Cute outfit... uh-huh.', 'Nice shoes... one sec.', 'Cute colors... uh-huh.']),
+      ja: notice(by('ja'), ['So pretty!', 'So fancy!', 'So pretty!', 'What a pretty outfit!', 'What cute shoes!', 'So pretty, new colors!']),
       sri: notice(by('sri'), ['Lovely hat! Say cheese!', 'Lovely glasses! Say cheese!', 'Lovely! Say cheese!', 'Lovely outfit! Say cheese!', 'Lovely shoes! Say cheese!', 'Lovely colors! Say cheese!']),
       putto: notice(by('putto'), ['Cool hat!', 'Cool glasses!', 'Cool!', 'Cool outfit!', 'Cool shoes!', 'Cool colors!']),
       putter: notice(by('putter'), ['Look, a hat!', 'Look, glasses!', 'Look, so cute!', 'Look, new clothes!', 'Look, new shoes!', 'Look, new colors!']),
     } as Record<string, Record<string, Line>>,
     noticeItem: {
       ji: {
-        crown: ji(`Ooh, a crown, ${NAME}!`),
-        fairy: ji(`Ooh, ${NAME}, you can fly!`),
-        wings: ji(`Ooh, ${NAME}, you can fly!`),
-        cape: ji(`Ooh, a princess cape, ${NAME}!`),
-        backpack: ji(`Ooh, a bunny backpack, ${NAME}!`),
-        overalls: ji(`Ooh, cute overalls, ${NAME}!`),
+        crown: ji(`Ooh, a crown!`),
+        fairy: ji(`Ooh, you can fly!`),
+        wings: ji(`Ooh, you can fly!`),
+        cape: ji(`Ooh, a princess cape!`),
+        backpack: ji(`Ooh, a bunny backpack!`),
+        overalls: ji(`Ooh, cute overalls!`),
       },
       nick: { fairy: nick('Cool wings!'), wings: nick('Cool wings!') },
     } as Record<string, Record<string, Line>>,
@@ -183,20 +182,20 @@ export const L = {
   // are background figures with a line or two each. Kaylee never talks: she giggles.
   trip: {
     ask: {
-      question: ji('Kaylee, are you ready to go on a trip?'),
+      question: ji('Are you ready to go on a trip?'),
       later: ji('OK! Tell me when!'),
       // The house only offers the mall now (the other trips start on the Thailand map).
       mall: ji('Shall we go to the mall?'),
       // Daddy on the street, when she taps him (the hub's quick way to a trip).
       daddy: {
-        question: nick(`Ready for a trip, ${NAME}?`),
-        where: nick(`Where do you want to go, ${NAME}?`),
+        question: nick(`Ready for a trip?`),
+        where: nick(`Where do you want to go?`),
         later: onDevice(nick('OK! Just tap me!'), nick('OK! Just click me!')),
         mall: nick('Want to go to the mall?'),
       },
     },
     pack: {
-      start: onDevice(ji('Tap your things to pack them, Kaylee!'), ji('Click your things to pack them, Kaylee!')),
+      start: onDevice(ji('Tap your things to pack them!'), ji('Click your things to pack them!')),
       close: onDevice(ji('All packed? Tap the suitcase!'), ji('All packed? Click the suitcase!')),
       hint: ji("It's hot and sunny at the sea!"),
       hungry: ji('Pack some more!'),
@@ -207,7 +206,7 @@ export const L = {
       sunscreen: ji('Mommy always packs sunscreen!'),
       hat: ji("Here's Mommy's spare sun hat!"),
       // Her own shady hat (the cap, the cowboy hat...) is a good sun hat: no spare.
-      goodHat: ji('Good hat, Kaylee!'),
+      goodHat: ji('Good hat!'),
     },
     goodbye: {
       agong: by('agong')('Bring Agong a photo of the Nail Island!'),
@@ -227,10 +226,10 @@ export const L = {
       plane: onDevice(nick('Our plane! Tap the door!'), nick('Our plane! Click the door!')),
     },
     plane: {
-      belt: ji('Seatbelt on, Kaylee!'),
+      belt: ji('Seatbelt on!'),
       wheee: ji('Whee! Up we go!'),
       tray: ji('Tray down, then press the button!'),
-      snack: by('attendant')('Snacks for Kaylee!'),
+      snack: by('attendant')('Snacks for you!'),
       more: by('attendant')('More snacks?!'),
       share: ji('Want some of mine?'),
       snore: ji('Night night!'),
@@ -254,14 +253,14 @@ export const L = {
     // Daddy.
     ribbons: nick('Our longtail boat! Tie on ribbons for good luck!'),
     pai: nick('Pai!'),
-    whereTo: nick('Where to, Captain Kaylee?'),
+    whereTo: nick('Where to, Captain?'),
     horn: nick('My horn!'),
     mango: nick('Hey! My mango!'),
     banana: nick('Hey! My banana!'),
     sunglasses: nick('My sunglasses!'),
     pose: nick('Everybody, pose!'),
     cheese: nick('One, two, three, cheese!'),
-    backIn: nick('Back in the boat, Kaylee!'),
+    backIn: nick('Back in the boat!'),
     // Mommy.
     whoa: ji('Whoa!'),
     hat: ji('My hat!'),
@@ -270,8 +269,8 @@ export const L = {
     sunset: ji('Look! The sky is turning pink!'),
     // The village kids.
     goal: kids('Goal!'),
-    thanks: kids('Khob khun ka, Kaylee!'),
-    ball: kids('The ball, Kaylee!'),
+    thanks: kids('Khob khun ka!'),
+    ball: kids('The ball!'),
     // Sparkle: what to do (only when something is new, or after a while with nothing done).
     hint: {
       ribbon: onDevice('Tap a ribbon to tie it on!', 'Click a ribbon to tie it on!'),
@@ -321,22 +320,22 @@ export const L = {
     count: ['Three!', 'Two!', 'One!', 'Go!'],
     lap2: 'Lap two!',
     final: 'Last lap!',
-    win: `${NAME} wins! First place!`,
-    trophy: `A trophy for ${NAME}, the boat race champion!`,
+    win: `You win! First place!`,
+    trophy: `A trophy for you, the boat race champion!`,
     back: onDevice('Tap the boat to go back to the bay!', 'Click the boat to go back to the bay!'),
     // The trophy room speaks this when she taps her race trophy (it's saved there).
-    trophyRoom: `${NAME}, Boat Race Champion! From Thailand.`,
+    trophyRoom: `Boat Race Champion! From Thailand.`,
     // Daddy and Mommy, in the boat with her.
-    go: nick('Go, Kaylee, go!'),
+    go: nick('Go, go, go!'),
     banana: nick('Whoa! A banana!'),
     almost: nick('Almost there!'),
     won: nick('We won!'),
     wheee: ji('Wheee!'),
     proud: ji('You did it, sweetie!'),
     // The village kids, racing her in their blue longtail.
-    raceYou: kids('Race you, Kaylee!'),
+    raceYou: kids('Race you!'),
     catchUs: kids("You can't catch us!"),
-    goodRace: kids('Good race, Kaylee!'),
+    goodRace: kids('Good race!'),
   },
 
   // Baan Chang Cafe in Krabi (activities/boat-trip/chang/, plan: thailand/baan-chang.md): the sign, the chocolate milk,
@@ -345,11 +344,11 @@ export const L = {
   // "Where to, Captain Kaylee?", "Everybody, pose!", "One, two, three, cheese!" and "Pai!" are the bay's.
   chang: {
     // Daddy.
-    bananas: nick('Bananas for the elephants, Kaylee!'),
+    bananas: nick('Bananas for the elephants!'),
     likes: nick('He likes you!'),
-    coffee: nick('Ahh! Thank you, Kaylee!'),
+    coffee: nick('Ahh! Thank you!'),
     // Mommy.
-    look: ji('Look, Kaylee! Elephants!'),
+    look: ji('Look! Elephants!'),
     hiLamyai: ji('Hi, Lamyai!'),
     milk: ji("Hey! That's your chocolate milk!"),
     full: ji('Whoa! Too full!'),
@@ -390,12 +389,12 @@ export const L = {
   // The way home (the boat trip's `home`): Aunty Sri's van brings them back to Agong's house, she picks the photo for
   // Agong's wall, and even the big cousins look up from their phones. Then, in the house, the photo on the wall.
   home: {
-    sri: by('sri')("We're home, Kaylee!"),
+    sri: by('sri')("We're home!"),
     agong: by('agong')('Did you bring my photo?'),
-    thanks: by('agong')('Beautiful! Thank you, Kaylee!'),
+    thanks: by('agong')('Beautiful! Thank you!'),
     gan: by('gan')('Whoa! Cool!'),
     ken: by('ken')('Whoa!'),
-    bb: by('bb')('So cool, Kaylee!'),
+    bb: by('bb')('So cool!'),
     jum: by('jum')('So pretty!'),
     // The frame on the wall, tapped in the house.
     wall: ji('Our boat trip!'),
@@ -462,21 +461,21 @@ export const L = {
       flop: nick('Ha! Into the straw!'),
       rain: nick('Rain! The rice loves it!'),
       fat: nick('That bird ate too much!'),
-      where: nick('Kaylee? Where did you go?'),
+      where: nick('Where did you go?'),
       lots: nick('Look at all that rice!'),
       coffee: nick('Mmm, coffee.'),
       // Tap Daddy on the farm (in turn).
-      tap: [nick('Go, farmer Kaylee!'), nick('Splish, splash!'), nick('Daddy is watching!')],
+      tap: [nick('Go, farmer!'), nick('Splish, splash!'), nick('Daddy is watching!')],
       // Mommy on the deck.
       hi: ji('You grew this sticky rice!'),
       aroi: ji('Aroi mak! That means so yummy!'),
-      smile: ji(`Smile, ${NAME}!`),
+      smile: ji(`Smile!`),
       // The rice farm's video, after Mommy's photo on the deck (rice/video.ts).
       video: 'Want to see real farmers grow rice?',
     },
     // The Nan map (map/): Sparkle's first line, her hint, and Mommy after two stops and after all three.
     map: {
-      first: `Where shall we go first, ${NAME}?`,
+      first: `Where shall we go first?`,
       hint: onDevice('Tap a place to drive there!', 'Click a place to drive there!'),
       more: ji('Home, or one more?'),
       home: ji('Time to fly home!'),
@@ -484,14 +483,14 @@ export const L = {
     },
     // The mountain roads (drive/): Mommy drives and says the road lines, Daddy reacts, Sparkle says what's new.
     drive: {
-      steer: onDevice(`Steer the car with your finger, ${NAME}!`, `Click and drag to steer the car, ${NAME}!`),
+      steer: onDevice(`Steer the car with your finger!`, `Click and drag to steer the car!`),
       cloud: "We're driving into a cloud!",
       count: "Let's count the bends!",
       one: 'One!',
       two: 'Two!',
       three: 'Three!',
-      drew: `Three! ${NAME} drove the three!`,
-      go: ji(`Steer for me, ${NAME}!`),
+      drew: `Three! You drove the three!`,
+      go: ji(`Steer for me!`),
       left: ji('Keep left!'),
       buffalo: ji("A buffalo! Let's wait."),
       bend: ji('Slow round the bend.'),
@@ -512,14 +511,14 @@ export const L = {
       // grass, wiggling all over the road.
       over: [ji('Oh no!'), nick('Whoaaa! We can fly!'), ji('Oh no, not again!'), nick('Wheee! Here we go!')],
       back: [nick("We're back!"), ji('Phew!'), nick('Again! Again!'), ji('Back on the road!')],
-      grass: [ji('Oh no, the grass!'), nick('Bumpy bumpy bumpy!'), ji('Back on the road, Kaylee!'), nick("Moo! We're a cow!")],
-      wiggle: [nick('Wibbly wobbly!'), ji('Silly driving, Kaylee!'), nick('My tummy!')],
+      grass: [ji('Oh no, the grass!'), nick('Bumpy bumpy bumpy!'), ji('Back on the road!'), nick("Moo! We're a cow!")],
+      wiggle: [nick('Wibbly wobbly!'), ji('Silly driving!'), nick('My tummy!')],
       // Tap Daddy in the car (in turn).
-      tap: [nick('Great driving, Kaylee!'), nick('Wheee! Bumpy!'), nick('Are we there yet?')],
+      tap: [nick('Great driving!'), nick('Wheee! Bumpy!'), nick('Are we there yet?')],
     },
     // Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.
     mushrooms: {
-      mist: `Spray the bags, ${NAME}!`,
+      mist: `Spray the bags!`,
       pick: 'Pull the mushrooms off!',
       colors: 'More bags to spray!',
       pizza: 'Put your mushrooms on the pizza!',
@@ -544,7 +543,7 @@ export const L = {
     },
     // Bo Kluea's salt wells (salt/): the salt aunty (a pony) and Daddy react, Sparkle says what's new.
     salt: {
-      dip: `Dip the bucket in the well, ${NAME}!`,
+      dip: `Dip the bucket in the well!`,
       fire: 'Put a log on the fire!',
       scrape: 'Scrape up the salt!',
       hint: {
@@ -618,8 +617,8 @@ export const L = {
       },
       silver: ji('Next race, sweetie!'),
       // The Cup: Sparkle when it flies over to her, then everyone when she lifts it.
-      cup: onDevice(`The Nan Mountain Cup! Tap it, ${NAME}!`, `The Nan Mountain Cup! Click it, ${NAME}!`),
-      champion: `${NAME} is the Nan Mountain Cup champion!`,
+      cup: onDevice(`The Nan Mountain Cup! Tap it!`, `The Nan Mountain Cup! Click it!`),
+      champion: `You are the Nan Mountain Cup champion!`,
       lift: [nick('Champion!'), ji('Smile, champion!')],
     },
     // The trip around the stops (activities/nan-trip/Loop.tsx, the trip kit): packing for the mountains, landing in Nan,
@@ -804,7 +803,7 @@ export const L = {
         macaque: 'Look by the road over the hill!',
       },
       // The book full (a fanfare and a gold star).
-      full: `${NAME}, your animal book is full!`,
+      full: `Your animal book is full!`,
     },
     // The jet ski at Hat Sai Kaew (jetski/): ride, waves, race the jet ski man.
     jetski: {
@@ -823,7 +822,7 @@ export const L = {
       lost: by('otter')('Ha! Just a nose!'),
       // Sparkle, when he wins by a nose (straight into the next race), and Daddy at her win.
       close: 'So close! Again!',
-      champ: nick(`${NAME} wins!`),
+      champ: nick(`You win!`),
       // Daddy on the jet ski (each list in turn): a jump, a spin in the air, the loop (and the heart), dizzy circles,
       // Mommy soaked, onto the sand.
       jump: [nick('Wheee!'), nick('We can fly!'), nick('Yee-haw!')],
@@ -963,7 +962,7 @@ export const L = {
       wrongWay: by('nick')('Hmm... not here!'),
       giveUp: by('nick')('Where is she? I give up!'),
       win: by('nick')('You win! Super hider!'),
-      first: `${NAME} wins hide and seek!`,
+      first: `You win hide and seek!`,
       spotted: [by('nick')('Found you!'), by('nick')('Peekaboo! I see you!')],
       boo: by('nick')('Waah! You scared me!'),
       hint: {
@@ -1011,7 +1010,7 @@ export const L = {
         },
         giant: 'Now one giant circle!',
         ring: by('gecko')('Ring of fire!'),
-        wow: `${NAME}, what a show!`,
+        wow: `What a show!`,
         home: ji('Time to go home!'),
         // Tap a dancer, Mommy, Daddy (each in turn).
         dancer: [by('gecko')('Sawasdee!'), by('gecko')('Tukkae! Tukkae!'), by('gecko')('Hot, hot fire!')],
@@ -1031,26 +1030,26 @@ export const L = {
     // HarborLand's hall (hall/).
     hall: {
       // Sparkle, the first time she comes in (not coming back out of a mini game).
-      welcome: onDevice(`Welcome to HarborLand, ${NAME}! Tap a place to play!`, `Welcome to HarborLand, ${NAME}! Click a place to play!`),
+      welcome: onDevice(`Welcome to HarborLand! Tap a place to play!`, `Welcome to HarborLand! Click a place to play!`),
       // The staff (a buffalo and a penguin), the first two times she comes near one, and when she taps them (in turn).
-      staff: [by('staff')(`Sawasdee ka, ${NAME}!`), by('staff')('Have fun!')],
+      staff: [by('staff')(`Sawasdee ka!`), by('staff')('Have fun!')],
       // Mommy on her bench and Daddy following her round, when she taps them (in turn).
-      ji: [ji('Hi, sweetie!'), ji(`Have fun, ${NAME}!`), ji('Mommy is right here!')],
-      nick: [nick('Where to next, Kaylee?'), nick('Daddy is coming too!'), nick('Ho ho! Go play!')],
+      ji: [ji('Hi, sweetie!'), ji(`Have fun!`), ji('Mommy is right here!')],
+      nick: [nick('Where to next?'), nick('Daddy is coming too!'), nick('Ho ho! Go play!')],
       // Daddy's tummy rumbles (and again if she taps him while it does), then Mommy's card, and her answer to More play.
       tummy: nick('My tummy is rumbling!'),
-      pizza: ji('Hungry, Kaylee? Pizza time?'),
+      pizza: ji('Hungry? Pizza time?'),
       more: ji('OK! A little more!'),
       // Sparkle, when the finger shows after a while with nothing touched; or, with every new game off the screen, when
       // the map button bounces silently. And as the map opens.
       hint: onDevice('Tap a door to play!', 'Click a door to play!'),
-      map: `Where shall we play, ${NAME}?`,
+      map: `Where shall we play?`,
     },
 
     // The Vet Clinic (games/vet/). Daddy welcomes Doctor Kaylee; Sparkle says who's coming in. The patients only bark,
     // whinny and trumpet; Daddy hams it up when the tools land on him (at most one line every 12 s).
     vet: {
-      open: nick(`Doctor ${NAME} is here!`),
+      open: nick(`The doctor is here!`),
       // Sparkle, as each patient hops in.
       patient: {
         puppy: 'A puppy with a sore paw! Grab a tool!',
@@ -1066,7 +1065,7 @@ export const L = {
         elephant: nick('Bye bye, little elephant!'),
       } as Record<string, Line>,
       // Sparkle, when all three are better.
-      allDone: `Everyone is better! Thank you, Doctor ${NAME}!`,
+      allDone: `Everyone is better! Thank you, Doctor!`,
       // Daddy, when a tool lands on him.
       daddy: {
         heart: [nick('Ba-boom! Ba-boom!'), nick('My heart is so big!')],
@@ -1101,7 +1100,7 @@ export const L = {
     // The Barber Salon (games/barber/). Daddy wants a new look; Sparkle says what's new each round; the kids in round 3
     // ask for a picture and say "close enough!" whatever she makes; Mommy takes the photo at every reveal.
     barber: {
-      open: nick(`I want a new look, ${NAME}!`),
+      open: nick(`I want a new look!`),
       start: 'Grab a tool and do his hair!',
       // Round 2's new tools, round 3's kids.
       colors: 'Now colors and the hair dryer!',
@@ -1118,7 +1117,7 @@ export const L = {
       love: [nick('Whoa! I love it!'), nick('So handsome! I love it!')],
       enough: [by('kid')('Close enough!'), by('kid')('Close enough! So pretty!'), by('kid')('Close enough! Yay!')],
       cheese: ji('Say cheese!'),
-      allDone: `Great haircuts, ${NAME}!`,
+      allDone: `Great haircuts!`,
       // The silly bits, in Daddy's and Mommy's voices.
       horn: nick('Hey! My horn!'),
       brows: nick('My eyebrows!'),
@@ -1141,7 +1140,7 @@ export const L = {
     // their own voices (one line per drink); Daddy's brain freeze and the ceiling splat get a laugh.
     cafe: {
       open: 'Drop fruit in the blender!',
-      thirsty: nick(`I'm thirsty, ${NAME}!`),
+      thirsty: nick(`I'm thirsty!`),
       // The first time in a round: the button, then the pour.
       button: 'Press the pink button!',
       pour: 'Lift the jar and pour it in the cup!',
@@ -1153,7 +1152,7 @@ export const L = {
       chaYen: nick('Cha yen, please!'),
       // They drink it: a yum for a match (or for anything in round 1), a happy surprise for anything else.
       yum: {
-        nick: [nick(`Yum! Thank you, ${NAME}!`), nick('Mmm! Just right!')],
+        nick: [nick(`Yum! Thank you!`), nick('Mmm! Just right!')],
         ji: [ji('Delicious, sweetie!'), ji('Mmm! Yummy!')],
       } as Record<string, Line[]>,
       funny: {
@@ -1166,7 +1165,7 @@ export const L = {
       // The pokeables, now and then.
       coffee: nick('My coffee! Thank you!'),
       teaCup: ji('Khob khun ka, sweetie!'),
-      allDone: `Best cafe ever, ${NAME}!`,
+      allDone: `Best cafe ever!`,
       // Sparkle, when the 👆 shows: the next thing to do.
       hint: {
         straw: 'Put a straw in the cup!',
@@ -1184,8 +1183,8 @@ export const L = {
     // The Racing Slide (games/race/). Sparkle says what's new each race and counts down; Daddy races her and dives
     // into the balls head first; she always wins.
     race: {
-      open: onDevice(`A slide race, ${NAME}! Tap the steps to climb!`, `A slide race, ${NAME}! Click the steps to climb!`),
-      raceYou: nick(`Race you, ${NAME}!`),
+      open: onDevice(`A slide race! Tap the steps to climb!`, `A slide race! Click the steps to climb!`),
+      raceYou: nick(`Race you!`),
       count: ['Three!', 'Two!', 'One!', 'Go!'],
       // The first time something new comes: tap to scoot, tap at a bump, the rubber rings.
       scoot: onDevice('Tap, tap, tap to go fast!', 'Click, click, click to go fast!'),
@@ -1193,10 +1192,10 @@ export const L = {
       now: onDevice('Tap now!', 'Click now!'),
       rings: onDevice('Rubber rings! Tap to spin!', 'Rubber rings! Click to spin!'),
       // She wins (in turn); Daddy lands head first; a kid cheers.
-      win: [`${NAME} wins!`, `${NAME} wins again!`, `First place, ${NAME}!`],
+      win: [`You win!`, `You win again!`, `First place!`],
       dive: [nick('Head first! Whee!'), nick("I'm OK! Ha ha!")],
-      goodRace: by('kid')(`Good race, ${NAME}!`),
-      allDone: `Three ribbons for ${NAME}!`,
+      goodRace: by('kid')(`Good race!`),
+      allDone: `Three ribbons for you!`,
       // Sparkle, when the 👆 shows.
       hint: {
         climb: onDevice('Tap the steps to climb!', 'Click the steps to climb!'),
@@ -1207,7 +1206,7 @@ export const L = {
     // Little Land's foam blocks (games/blocks/).
     blocks: {
       // The opening: Daddy's bet, then Sparkle.
-      higher: nick(`Can you build higher than me, ${NAME}?`),
+      higher: nick(`Can you build higher than me?`),
       grab: 'Grab a brick!',
       // Something new: the stack glows (round 1), the picture cards (round 2), Daddy steps up (round 3).
       push: 'Push it over!',
@@ -1221,7 +1220,7 @@ export const L = {
       trunk: nick('Wow! An elephant!'),
       // Round 3: his sneeze at every tall tower, then (the first time) he gives in.
       sneeze: nick('Ah... ah... choo!'),
-      beat: nick(`Taller than me, ${NAME}!`),
+      beat: nick(`Taller than me!`),
       // Sparkle, when the finger shows after a while with nothing touched.
       hint: {
         box: 'Grab a brick from the box!',
@@ -1235,17 +1234,17 @@ export const L = {
     // The Golden Mountain (games/mountain/).
     mountain: {
       // The opening (Sparkle).
-      climb: `Climb the Golden Mountain, ${NAME}! Count the holds!`,
+      climb: `Climb the Golden Mountain! Count the holds!`,
       // The count, one number as each hold pops (up to round 3's seven).
       count: ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!'],
       // Something new: on top the first time, round 2's pink holds, round 3's race.
-      top: `You made it, ${NAME}!`,
+      top: `You made it!`,
       pink: 'Only the pink ones!',
       race: 'Race Daddy to the top!',
       // Daddy's race: the start, puffing up behind her, flopping over the rail, his head-first landing.
       win: nick("I'm going to win!"),
       huff: nick('Huff... puff...'),
-      beat: nick(`You beat me, ${NAME}!`),
+      beat: nick(`You beat me!`),
       whoa: nick('Whoa-oa-oa!'),
       // Sparkle, when the finger shows after a while with nothing touched.
       hint: {
@@ -1262,12 +1261,12 @@ export const L = {
     // Muay Thai (games/boxing/).
     boxing: {
       // The opening, the wai kru: the coach, then Sparkle.
-      hello: by('coach')(`Sawasdee krap, ${NAME}! First we say thank you.`),
+      hello: by('coach')(`Sawasdee krap! First we say thank you.`),
       bow: onDevice('Tap your gloves to bow!', 'Click your gloves to bow!'),
       // The coach: after the three bows, after rounds 1 and 2, with the gold belt.
       dance: by('coach')('Now dance with me!'),
       again: by('coach')('Yes! Again!'),
-      champion: by('coach')(`Champion ${NAME}!`),
+      champion: by('coach')(`Champion!`),
       // Sparkle: something new (the drum, round 2's gold ring, Daddy's pad, the kick).
       drum: 'Punch to the drum!',
       gold: "Punch when it's gold!",
@@ -1275,7 +1274,7 @@ export const L = {
       kick: 'Big kick!',
       // Daddy, now and then: a hook or a big POW, the pad going low, into the ropes, up with the pad again.
       strong: nick('Ooh, strong!'),
-      oof: nick(`Oof! Good one, ${NAME}!`),
+      oof: nick(`Oof! Good one!`),
       upDown: nick('Up high! Down low!'),
       ropes: nick('Whoa-oa-oa!'),
       hit: nick('Hit the pad!'),
@@ -1293,7 +1292,7 @@ export const L = {
     // The Sky Pod (games/skypod/).
     skypod: {
       // The opening: Daddy, then Sparkle.
-      fast: nick(`How fast are you, ${NAME}?`),
+      fast: nick(`How fast are you?`),
       slap: 'Slap the lights!',
       // The count as her score climbs (rounds 1 and 3).
       count: ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!', 'Eight!', 'Nine!', 'Ten!'],
@@ -1301,13 +1300,13 @@ export const L = {
       listen: 'Listen!',
       play: 'Now you play it!',
       // Round 3, Daddy: the race, she took his light, a miss, a rest, she wins.
-      race: nick(`Race you, ${NAME}!`),
+      race: nick(`Race you!`),
       mine: nick("Hey! That one's mine!"),
       ow: nick('Ow, ow!'),
       rest: nick('Daddy needs a rest!'),
-      win: nick(`You win, ${NAME}!`),
+      win: nick(`You win!`),
       // The finale: the score at a hundred.
-      hundred: `A hundred! Super star, ${NAME}!`,
+      hundred: `A hundred! Super star!`,
       // Sparkle, when the finger shows after a while with nothing touched.
       hint: {
         lit: 'Slap the glowing one!',
@@ -1327,13 +1326,13 @@ export const L = {
         dragon: nick('Whoa! Here come the dragons!'),
         roller: ji('Rattle rattle! Wheee!'),
         donut: nick('Round and round!'),
-        zip: ji('Zoom! Go, Kaylee!'),
+        zip: ji('Zoom! Go!'),
       },
       // Daddy in the ball pit and the cannon: the first two bonks (in turn), then his big flop.
       bonk: [nick('Bonk! Hey!'), nick('Hey! Not my horn!')],
       flop: nick('Whoa! Splash!'),
       // Daddy tapped in the balls (in turn); Mommy tapped says her hall lines.
-      nick: [nick('Ho ho! Hi, Kaylee!'), nick('Bonk me with the cannon!')],
+      nick: [nick('Ho ho! Hi!'), nick('Bonk me with the cannon!')],
       // Sparkle's fact, the first time she pokes the giant mask or a Phi Ta Khon on the roller's posts.
       phiTaKhon: 'Phi Ta Khon is a festival with big funny masks!',
       // Sparkle, when the finger shows after a while with nothing touched.
@@ -1343,17 +1342,17 @@ export const L = {
     // The Pizza Company (pizza/).
     pizza: {
       // Sparkle at the menu; the server sets the pizza down; Sparkle's one instruction.
-      menu: `Pick a pizza, ${NAME}!`,
+      menu: `Pick a pizza!`,
       served: by('server')('Pizza time!'),
       start: 'Pull a slice!',
       // Sparkle counting round the table, as each plate gets its first and second slice.
       count: {
         ji: ['One for Mommy!', 'Two for Mommy!'],
         nick: ['One for Daddy!', 'Two for Daddy!'],
-        kaylee: [`One for ${NAME}!`, `Two for ${NAME}!`],
+        kaylee: [`One for you!`, `Two for you!`],
       } as Record<string, string[]>,
       // Daddy with more than anyone (in turn), the cheese tug on his nose.
-      ham: [nick("Kaylee, Mommy's hungry too!"), nick('Ho ho! More for Daddy!')],
+      ham: [nick("Mommy's hungry too!"), nick('Ho ho! More for Daddy!')],
       nose: nick('My nose!'),
       // Two each: the last two go in Agong's box; the lid closes; then Sparkle's fact once it's all shared.
       agong: ji('Those are for Agong!'),
@@ -1375,13 +1374,13 @@ export const L = {
     // The trip around it: Mommy's question, the goodbye, the Veloz, ICONSIAM, the counter, home.
     trip: {
       // Mommy's card in the house, once there are two trips (🚤 or 🛝🍕).
-      where: ji(`${NAME}, where shall we go?`),
+      where: ji(`Where shall we go?`),
       // The goodbye and home, at Agong's house (TripHouse reads them from the TripDef: activities/mall-trip/words.ts).
       wish: by('agong')('Bring Agong something yummy!'),
-      ready: nick(`Mommy is driving! Hop in, ${NAME}!`),
+      ready: nick(`Mommy is driving! Hop in!`),
       home: ji("We're home!"),
-      agong: by('agong')(`Ho ho! What is that, ${NAME}?`),
-      thanks: by('agong')(`Pizza! Thank you, ${NAME}!`),
+      agong: by('agong')(`Ho ho! What is that?`),
+      thanks: by('agong')(`Pizza! Thank you!`),
       pizza: { gan: by('gan')('Pizza?!'), ken: by('ken')('Pizza?!'), bb: by('bb')('Pizza?!') },
       hair: by('agong')("Ho ho ho! Look at Daddy's hair!"),
       give: onDevice('Tap Agong to give him the box!', 'Click Agong to give him the box!'),

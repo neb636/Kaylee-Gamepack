@@ -20,7 +20,7 @@
 // - The rivals keep it close the whole way (rubber banding round a story of the race: they lead at the start, she
 //   catches the macaque, the kids and she swap places, and on the last lap the kids are right beside her) and can't
 //   cross the line first: she wins by a nose at the end. Slow motion, fireworks, the crowd jumps.
-// - The podium: she stands on 1 and lifts the gold trophy with KAYLEE on it, the kids on 2, the macaque on 3; a photo
+// - The podium: she stands on 1 and lifts the gold trophy with the trophy title on it, the kids on 2, the macaque on 3; a photo
 //   for the trip album, and the trophy goes in her Trophy Room (RaceLayer.tsx) and rides home in the boat.
 // The race shows its state to the screen (onHud: the countdown, lap, place, coins); the minimap's dots and the
 // tap targets are written here every frame.
@@ -88,7 +88,7 @@ export interface RaceEvents {
 
 export const RACE_ANCHORS: AnchorInfo[] = [
   { id: 'boat', label: 'Boat', kind: 'thing' },
-  { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
+  { id: 'family:kaylee', label: 'You', kind: 'family' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'rival:kids', label: 'The village kids', kind: 'thing' },

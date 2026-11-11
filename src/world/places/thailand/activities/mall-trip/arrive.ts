@@ -56,7 +56,7 @@ export const ARRIVE_ANCHORS: AnchorInfo[] = [
   { id: 'bell', label: 'The counter bell', kind: 'thing' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
-  { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
+  { id: 'family:kaylee', label: 'You', kind: 'family' },
 ]
 
 type Phase = 'glimpse' | 'lift' | 'up' | 'open' | 'counter' | 'in'

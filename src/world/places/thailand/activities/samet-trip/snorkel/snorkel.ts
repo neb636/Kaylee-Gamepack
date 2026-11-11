@@ -150,7 +150,7 @@ const URCHINS = OBSTACLES.map((o, i) => ({ o, i })).filter((x) => x.o.kind === '
 const CORALS = OBSTACLES.map((o, i) => ({ o, i })).filter((x) => x.o.kind === 'coral')
 
 export const SNORKEL_ANCHORS: AnchorInfo[] = [
-  { id: 'kaylee', label: 'Kaylee', kind: 'thing' },
+  { id: 'kaylee', label: 'You', kind: 'thing' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'captain', label: 'The boat captain', kind: 'thing' },
   { id: 'parrot', label: 'The parrotfish', kind: 'thing' },

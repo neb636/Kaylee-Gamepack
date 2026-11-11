@@ -52,7 +52,7 @@ export interface BoxingStart {
 }
 
 export const BOXING_ANCHORS: AnchorInfo[] = [
-  { id: 'gloves', label: "Kaylee's gloves", kind: 'thing' },
+  { id: 'gloves', label: "Your gloves", kind: 'thing' },
   { id: 'bag', label: 'The punching bag', kind: 'thing' },
   { id: 'pad', label: "Daddy's pad", kind: 'thing' },
   { id: 'bag2', label: 'The small bag', kind: 'thing' },
@@ -62,7 +62,7 @@ export const BOXING_ANCHORS: AnchorInfo[] = [
   { id: 'bottle', label: 'Water bottle', kind: 'thing' },
   { id: 'board', label: 'Star board', kind: 'thing' },
   { id: 'coach', label: 'The coach', kind: 'thing' },
-  { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
+  { id: 'family:kaylee', label: 'You', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
 ]
 

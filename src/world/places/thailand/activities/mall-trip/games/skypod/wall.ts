@@ -53,7 +53,7 @@ export const SKYPOD_ANCHORS: AnchorInfo[] = [
   { id: 'speaker', label: 'The speaker', kind: 'thing' },
   { id: 'rocket', label: 'The rocket', kind: 'thing' },
   { id: 'moon', label: 'The moon', kind: 'thing' },
-  { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
+  { id: 'family:kaylee', label: 'You', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
 ]
 

@@ -31,7 +31,7 @@ const MALL_SECTIONS = defineSections('thailand', 'mall-trip', {
     card: { default: 'chedi', values: ['chedi', 'elephant'], doc: "Little Land's picture card in round 2: the chedi, then the elephant" },
     pizza: { default: 'cheese', values: PIZZAS, doc: 'the pizza she picked at The Pizza Company: Hawaiian, Seafood or Double Cheese (the longest stretch)' },
     at: { default: 'in', values: AT, doc: "where she is in the Big Frame: in (just through the tunnel), pit (in the balls with Daddy), l1, l2, top (the levels) or out (on the mats in front)" },
-    shared: { default: '0', values: ['0', '1', '2', '3', '4', '5', '6', '7', '8'], doc: "slices handed out so far, round the table (Mommy, Daddy, Kaylee) then into Agong's box: 6 starts at the last two, for Agong" },
+    shared: { default: '0', values: ['0', '1', '2', '3', '4', '5', '6', '7', '8'], doc: "slices handed out so far, round the table (Mommy, Daddy, your unicorn) then into Agong's box: 6 starts at the last two, for Agong" },
     photos: { default: 'dragon', doc: "the photos from the day, a comma list of dragon (on the dragon slide) and cheese (Daddy's cheese nose at the pizza table): the first one goes on Agong's wall" },
     replay: { default: '', doc: '1 = she has done the whole mall day before: picking 🛝🍕 offers 🚗 the whole day, 🛝 straight to HarborLand (her socks from last time) or 🍕 straight to the table' },
   },

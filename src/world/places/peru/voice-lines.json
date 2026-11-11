@@ -1,9 +1,9 @@
 [
   "Peru",
-  "Kaylee, you did it! You won the Peru Explorer trophy!",
-  "Kaylee, Peru Explorer! From Peru.",
+  "You did it! You won the Peru Explorer trophy!",
+  "Peru Explorer! From Peru.",
   {
-    "text": "Hola, Kaylee! I'm Luna!",
+    "text": "Hola! I'm Luna!",
     "voice": "luna"
   },
   {
@@ -13,7 +13,7 @@
   "Tap a picture to explore Peru!",
   "Click a picture to explore Peru!",
   {
-    "text": "Another discovery, Kaylee!",
+    "text": "Another discovery!",
     "voice": "luna"
   },
   "This place opens soon!",
@@ -49,7 +49,7 @@
     "text": "My fleece is so long, I can't see!",
     "voice": "luna"
   },
-  "Brush Luna's fleece, Kaylee!",
+  "Brush Luna's fleece!",
   {
     "text": "Ouch! Prickly!",
     "voice": "luna"
@@ -71,7 +71,7 @@
     "voice": "luna"
   },
   {
-    "text": "I can see you, Kaylee!",
+    "text": "I can see you!",
     "voice": "luna"
   },
   "Alpacas hum when they are happy!",
@@ -172,7 +172,7 @@
     "text": "Oh no! Our grass steps fell down!",
     "voice": "tika"
   },
-  "Fit the stones back in, Kaylee!",
+  "Fit the stones back in!",
   {
     "text": "Clonk!",
     "voice": "tika"
@@ -230,7 +230,7 @@
     "voice": "tika"
   },
   "The last wall! Up in the clouds!",
-  "Kaylee, look! Machu Picchu!",
+  "Look! Machu Picchu!",
   "Tap the camera for Luna's journal!",
   "Click the camera for Luna's journal!",
   {
@@ -346,7 +346,7 @@
     "voice": "lobo"
   },
   {
-    "text": "Hola, Kaylee!",
+    "text": "Hola!",
     "voice": "lobo"
   },
   "Catch fish for the chicks!",
@@ -375,7 +375,7 @@
   "Two!",
   "Three!",
   {
-    "text": "Feed my chicks, Kaylee!",
+    "text": "Feed my chicks!",
     "voice": "pepa"
   },
   {
@@ -390,7 +390,7 @@
     "text": "Gracias!",
     "voice": "pepa"
   },
-  "Kaylee, look! The egg is wiggling!",
+  "Look! The egg is wiggling!",
   {
     "text": "A new baby!",
     "voice": "pepa"
@@ -401,13 +401,9 @@
     "text": "Their very first swim!",
     "voice": "pepa"
   },
-  {
-    "text": "Gracias, Kaylee!",
-    "voice": "pepa"
-  },
   "Click! A picture for Luna's journal!",
   {
-    "text": "Hola, Kaylee!",
+    "text": "Hola!",
     "voice": "pepa"
   },
   {
@@ -493,14 +489,14 @@
     "text": "I can fly by myself!",
     "voice": "pluma"
   },
-  "Now you fly Pluma, Kaylee!",
+  "Now you fly Pluma!",
   "Fly Pluma into the big swirl!",
   {
-    "text": "Look at me, Kaylee!",
+    "text": "Look at me!",
     "voice": "pluma"
   },
   {
-    "text": "My Pluma can fly! Gracias, Kaylee!",
+    "text": "My Pluma can fly! Gracias!",
     "voice": "coco"
   },
   {
@@ -582,7 +578,7 @@
   "Flap, flap, macaw!",
   "Bye-bye, cloud! Hello, sun!",
   {
-    "text": "A rainbow! Gracias, Kaylee!",
+    "text": "A rainbow! Gracias!",
     "voice": "rosa"
   },
   "Click! A picture for Luna!",

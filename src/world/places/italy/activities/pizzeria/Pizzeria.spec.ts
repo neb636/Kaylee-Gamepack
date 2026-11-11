@@ -69,7 +69,7 @@ test('each introduction plays automatically and can be skipped independently', a
   const spoken = await page.evaluate(() => window.__kayleeSpeech?.map((line) => line.text))
   expect(spoken).toEqual(expect.arrayContaining([
     'Welcome to Naples! Pizza was born here!',
-    'Benvenuta, Chef Kaylee!',
+    'Benvenuta, Chef!',
     'Long ago, a queen named Margherita came to Naples.',
     'For the Queen, I will make a special pizza!',
   ]))

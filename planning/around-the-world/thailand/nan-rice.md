@@ -224,7 +224,7 @@ the next bundle; deck: the kratip, then Mommy.
 ## The video at the end
 
 - `rice/video.ts`: `export const RICE_VIDEO: PlaceVideo = { id: 'rice', youtubeId: 'qwAxh1ii-No', icon: '🌾', title:
-  'How rice grows', say: L.nan.rice.video }`. Sparkle's line: "Want to see real rice grow, Kaylee?"
+  'How rice grows', say: L.nan.rice.video }`. Sparkle's line: "Want to see real rice grow?"
 - After Mommy's photo (a 1.5 s pause so the print can be seen), `Rice.tsx` shows the kit's `VideoBreak`
   (`src/world/kit/Theater.tsx`) over the deck. Skip or the video's end → the end card. Offline it goes straight to the
   end card (`VideoBreak` already does this).
@@ -383,11 +383,11 @@ The user played greybox B (2026-10-25): threshing feels good (ten bangs, the swi
 - Soft patches of lighter and darker grass round the farm, so the flat ground isn't one green.
 - The café's roof is warm light wood with its rafters showing, and a row of little pastel lights along the front eave.
 - Voices (`lines.ts` `L.nan.rice`, 32 new clips): Sparkle's line as each round begins (the first one before her first
-  touch: "Let's plant rice, Kaylee! Walk in the water."), "Rice likes water! Open the gate." the first time she plants
+  touch: "Let's plant rice! Walk in the water."), "Rice likes water! Open the gate." the first time she plants
   dry, and after ~8 s with nothing done what to do now (at most 3 a round, 20 s apart). Daddy reacts once to each thing
   on the farm (a planted paddy, the whole farm, splashed, the straw hat, the muddy unicorn, the straw pile, the rain, a
-  fat bird, "Kaylee? Where did you go?" in the tall rice, all the rice, a good bang, the sticky rice, his coffee) and
-  says one of three lines when tapped. Mommy says hello on the deck and "Smile, Kaylee!" before the photo. Facts:
+  fat bird, "Where did you go?" in the tall rice, all the rice, a good bang, the sticky rice, his coffee) and
+  says one of three lines when tapped. Mommy says hello on the deck and "Smile!" before the photo. Facts:
   the first ball of sticky rice ("In Nan, people eat sticky rice with their fingers!") and a tap on the view ("The steps
   on the hill keep the water for the rice!"). Family reactions are dropped while Sparkle talks rather than heard late.
 - Sparkle sits in the corner (`trip/legs/Guide.tsx`) with the words for the user; hidden under the video and the end card.
@@ -416,8 +416,7 @@ The user played greybox B (2026-10-25): threshing feels good (ten bangs, the swi
   Sparkle's sticky-rice fact moved to the second.
 - New tap-to-hear facts (Sparkle, first poke): the buffalo ("Buffalo helped farmers get the mud ready!") and a duck
   ("Ducks eat the bugs in the rice!"). Lung's "Hey! My scarecrow!" the first time she spins it.
-- Kaylee's name is gone from "Look at those rows!" and the video's "Want to see real farmers grow rice?" (name only at
-  the photo and in Daddy's "Kaylee? Where did you go?" joke).
+- Kaylee's name is gone from "Look at those rows!" and the video's "Want to see real farmers grow rice?" (the photo and Daddy’s “Where did you go?” joke are also name-free; the landing page and Egypt/China name-writing activities are the only exceptions).
 - Far-off farm life: every 5-10 s, when nobody's talking, a quiet frog, bird, duck, chime or buffalo
   (`riceSfx.far`), so the farm is never silent between touches.
 - Sparkle waits her turn behind Lung: `TripGuide` now counts a line that's still loading as talking, so a friend's

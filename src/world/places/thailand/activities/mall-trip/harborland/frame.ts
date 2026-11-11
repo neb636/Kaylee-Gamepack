@@ -56,7 +56,7 @@ export interface FrameStart {
 }
 
 export const FRAME_ANCHORS: AnchorInfo[] = [
-  { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
+  { id: 'family:kaylee', label: 'You', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'pool', label: 'Ball pit', kind: 'thing' },

@@ -66,7 +66,7 @@ export interface LunchEvents {
 const T_ = L.samet.lunch
 
 export const LUNCH_ANCHORS: AnchorInfo[] = [
-  { id: 'kaylee', label: 'Kaylee', kind: 'thing' },
+  { id: 'kaylee', label: 'You', kind: 'thing' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'basket', label: 'The bread basket', kind: 'thing' },

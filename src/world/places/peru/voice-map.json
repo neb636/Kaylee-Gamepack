@@ -7,25 +7,25 @@
     "file": "07e04325fe70.mp3"
   },
   {
-    "text": "Kaylee, you did it! You won the Peru Explorer trophy!",
+    "text": "You did it! You won the Peru Explorer trophy!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4751,
-    "file": "9ceadef5975f.mp3"
+    "ms": 4368,
+    "file": "fa24da81ade8.mp3"
   },
   {
-    "text": "Kaylee, Peru Explorer! From Peru.",
+    "text": "Peru Explorer! From Peru.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4574,
-    "file": "46b37a8b8b1e.mp3"
+    "ms": 3216,
+    "file": "812518d7f3f7.mp3"
   },
   {
-    "text": "Hola, Kaylee! I'm Luna!",
+    "text": "Hola! I'm Luna!",
     "voice": "luna",
     "sig": "8c4095048f",
-    "ms": 2048,
-    "file": "480495cdd2a4.mp3"
+    "ms": 1824,
+    "file": "f28688d8a06c.mp3"
   },
   {
     "text": "Let's fill my explorer journal!",
@@ -49,11 +49,11 @@
     "file": "b1ee318b93aa.mp3"
   },
   {
-    "text": "Another discovery, Kaylee!",
+    "text": "Another discovery!",
     "voice": "luna",
     "sig": "8c4095048f",
-    "ms": 2114,
-    "file": "bef51fccef7f.mp3"
+    "ms": 1272,
+    "file": "b36ed0abd3d2.mp3"
   },
   {
     "text": "This place opens soon!",
@@ -140,11 +140,11 @@
     "file": "c5d1c4a2be37.mp3"
   },
   {
-    "text": "Brush Luna's fleece, Kaylee!",
+    "text": "Brush Luna's fleece!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3013,
-    "file": "dc5c9420a7d9.mp3"
+    "ms": 2616,
+    "file": "8121c425f4d2.mp3"
   },
   {
     "text": "Ouch! Prickly!",
@@ -182,11 +182,11 @@
     "file": "5ed174fb2d51.mp3"
   },
   {
-    "text": "I can see you, Kaylee!",
+    "text": "I can see you!",
     "voice": "luna",
     "sig": "8c4095048f",
-    "ms": 1972,
-    "file": "937c72fb8d5c.mp3"
+    "ms": 1224,
+    "file": "3844a6257044.mp3"
   },
   {
     "text": "Alpacas hum when they are happy!",
@@ -455,11 +455,11 @@
     "file": "4d1a1131f7b0.mp3"
   },
   {
-    "text": "Fit the stones back in, Kaylee!",
+    "text": "Fit the stones back in!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2550,
-    "file": "b83727bb6371.mp3"
+    "ms": 1944,
+    "file": "52bb06bd7569.mp3"
   },
   {
     "text": "Clonk!",
@@ -588,11 +588,11 @@
     "file": "436d66d412f3.mp3"
   },
   {
-    "text": "Kaylee, look! Machu Picchu!",
+    "text": "Look! Machu Picchu!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2712,
-    "file": "883fb9d49e0c.mp3"
+    "ms": 2472,
+    "file": "cacf44c6afd6.mp3"
   },
   {
     "text": "Tap the camera for Luna's journal!",
@@ -868,11 +868,11 @@
     "file": "0a7de1e550ba.mp3"
   },
   {
-    "text": "Hola, Kaylee!",
+    "text": "Hola!",
     "voice": "lobo",
     "sig": "1ae02eaef4",
-    "ms": 1860,
-    "file": "c85435da8d16.mp3"
+    "ms": 888,
+    "file": "8c4d1c3881fd.mp3"
   },
   {
     "text": "Catch fish for the chicks!",
@@ -945,11 +945,11 @@
     "file": "b98340c9d88a.mp3"
   },
   {
-    "text": "Feed my chicks, Kaylee!",
+    "text": "Feed my chicks!",
     "voice": "pepa",
     "sig": "5bda623ab7",
-    "ms": 1617,
-    "file": "bda8367837fd.mp3"
+    "ms": 1272,
+    "file": "e9dbae6914d2.mp3"
   },
   {
     "text": "Yummy!",
@@ -973,11 +973,11 @@
     "file": "748b0882b170.mp3"
   },
   {
-    "text": "Kaylee, look! The egg is wiggling!",
+    "text": "Look! The egg is wiggling!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3334,
-    "file": "3a4d330c3a0e.mp3"
+    "ms": 2736,
+    "file": "9355f71c8332.mp3"
   },
   {
     "text": "A new baby!",
@@ -1008,13 +1008,6 @@
     "file": "1d22f0a5fcfa.mp3"
   },
   {
-    "text": "Gracias, Kaylee!",
-    "voice": "pepa",
-    "sig": "5bda623ab7",
-    "ms": 1080,
-    "file": "e5df440efe89.mp3"
-  },
-  {
     "text": "Click! A picture for Luna's journal!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1022,11 +1015,11 @@
     "file": "73df44cc1cba.mp3"
   },
   {
-    "text": "Hola, Kaylee!",
+    "text": "Hola!",
     "voice": "pepa",
     "sig": "5bda623ab7",
-    "ms": 1437,
-    "file": "054456522459.mp3"
+    "ms": 576,
+    "file": "1f4b1b814ce4.mp3"
   },
   {
     "text": "My babies love fish!",
@@ -1253,11 +1246,11 @@
     "file": "bd247b542184.mp3"
   },
   {
-    "text": "Now you fly Pluma, Kaylee!",
+    "text": "Now you fly Pluma!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3171,
-    "file": "a1c7849b7744.mp3"
+    "ms": 3192,
+    "file": "49b26894b799.mp3"
   },
   {
     "text": "Fly Pluma into the big swirl!",
@@ -1267,18 +1260,18 @@
     "file": "417db67935b0.mp3"
   },
   {
-    "text": "Look at me, Kaylee!",
+    "text": "Look at me!",
     "voice": "pluma",
     "sig": "666bb7638e",
-    "ms": 1498,
-    "file": "bf95d8cafcd4.mp3"
+    "ms": 1200,
+    "file": "bef06aef7b99.mp3"
   },
   {
-    "text": "My Pluma can fly! Gracias, Kaylee!",
+    "text": "My Pluma can fly! Gracias!",
     "voice": "coco",
     "sig": "794c66c94c",
-    "ms": 3885,
-    "file": "d27c4b7b43d2.mp3"
+    "ms": 3600,
+    "file": "69b5d4787a58.mp3"
   },
   {
     "text": "Hi, Dad!",
@@ -1512,11 +1505,11 @@
     "file": "031864b9dce7.mp3"
   },
   {
-    "text": "A rainbow! Gracias, Kaylee!",
+    "text": "A rainbow! Gracias!",
     "voice": "rosa",
     "sig": "795618f009",
-    "ms": 2567,
-    "file": "d01670fb5b82.mp3"
+    "ms": 2712,
+    "file": "f824c9207fac.mp3"
   },
   {
     "text": "Click! A picture for Luna!",

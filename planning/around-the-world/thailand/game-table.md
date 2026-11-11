@@ -214,7 +214,7 @@ The cousin's turn: 🧒 Their face glows (they look at the die) → ⏳ A little
 - **Fair:** the die and the deck are really random; the rules on the board decide who wins. Nobody is helped in secret (the user's wish). Kaylee always goes first, which gives her a small edge (53-58 games in 100).
 - **Losing is short and kind:** the cousin says “I won! Again?”, gives her a high-five hop, and the big 🔁 is already bouncing. No sad sounds.
 - **Sharing a space:** two pieces on one space stand side by side, both easy to see.
-- **Quiet:** short spoken how-to the first time each game opens (Sparkle), the 🔊 to hear it again, and the cousin speaks at the big moments only (sitting down, a ladder or slide now and then, the win). No line after every move, and her name only when she wins.
+- **Quiet:** short spoken how-to the first time each game opens (Sparkle), the 🔊 to hear it again, and the cousin speaks at the big moments only (sitting down, a ladder or slide now and then, the win). No line after every move, and no player name in the win or any other line.
 
 ## 📊 Numbers
 
@@ -470,7 +470,7 @@ tests/thailand-board-games.spec.ts   rules tests (pure, no page)
 
 **Voice lines to record at gate 5 (a first list; every phrase goes in lines.ts as L.games)**
 
-**Sparkle:** “Tap the die! A four means rest.” / “Tap the cards! Go to that color.” / “Roll! Ladders go up, slides go down.” / “You won, Kaylee!” (once a visit) / “The castle! You won!”
+**Sparkle:** “Tap the die! A four means rest.” / “Tap the cards! Go to that color.” / “Roll! Ladders go up, slides go down.” / “You won!” (once a visit) / “The castle! You won!”
 
 **Each cousin (BB, Gan, Ken, in their own voices):** sitting down (BB “Yay, let's play!”, Gan “Okay, I'm in!”, Ken “Let's play!”); two roll lines (“Come on, six!”, “Here goes!”); a rest (“Nap time!”); a ladder (“Up I go!”); a slide (“Wheee!”); a win (“I won! Again?”); losing (“You won! Good game!”); bye (“Fun game!”). Finite, short, never after every move.
 

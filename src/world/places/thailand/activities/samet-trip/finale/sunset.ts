@@ -92,7 +92,7 @@ const SPOTS = { kaylee: { u: TREE.u + 2.6, v: TREE.v + 5.2 }, ji: { u: TREE.u + 
 
 export const SUNSET_ANCHORS: AnchorInfo[] = [
   { id: 'sun', label: 'The sun', kind: 'thing' },
-  { id: 'kaylee', label: 'Kaylee', kind: 'thing' },
+  { id: 'kaylee', label: 'You', kind: 'thing' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'tree', label: 'The driftwood tree', kind: 'thing' },

@@ -50,7 +50,7 @@ export interface PlaceMeta {
   mapPos: { x: number; y: number }
   /** The friend Sparkle meets there. */
   friend: { name: string; img: string }
-  /** Engraved under KAYLEE on the trophy she gets for collecting every stamp. */
+  /** Engraved on the plaque on the trophy she gets for collecting every stamp. */
   trophyTitle: string
   activities: ActivityInfo[]
   /** Activities still being built. They open from their own links (#/world/sections, a PR's test links), and the tests

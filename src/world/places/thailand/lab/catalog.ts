@@ -22,7 +22,7 @@ import { OFFICER } from '../trip/legs/airport'
 
 export type CastGroup = 'family' | 'trip' | 'mall' | 'nan' | 'samet' | 'critters' | 'poles' | 'canada'
 export const GROUPS: { id: CastGroup; name: string }[] = [
-  { id: 'family', name: 'Kaylee & family' },
+  { id: 'family', name: 'You & family' },
   { id: 'trip', name: 'Boat trip' },
   { id: 'mall', name: 'Mall day' },
   { id: 'nan', name: 'Nan trip' },
@@ -63,8 +63,8 @@ export interface CastEntry {
 }
 
 const family: CastEntry[] = [
-  { id: 'kaylee', name: 'Kaylee', who: 'Her, a lilac unicorn (the vinyl toy, modelled in Tripo3D)', group: 'family', kind: 'kaylee', look: LOOKS.kaylee, src: 'characters/model.ts', color: '#C9B6F0', model: true },
-  { id: 'kaylee-code', name: 'Kaylee (code-built)', who: 'The code-built unicorn she used to be (kept to compare)', group: 'family', kind: 'kaylee', look: LOOKS.kaylee, src: 'characters/looks.ts', color: LOOKS.kaylee.fur },
+  { id: 'kaylee', name: 'Your unicorn', who: 'Her, a lilac unicorn (the vinyl toy, modelled in Tripo3D)', group: 'family', kind: 'kaylee', look: LOOKS.kaylee, src: 'characters/model.ts', color: '#C9B6F0', model: true },
+  { id: 'kaylee-code', name: 'Your unicorn (code-built)', who: 'The code-built unicorn she used to be (kept to compare)', group: 'family', kind: 'kaylee', look: LOOKS.kaylee, src: 'characters/looks.ts', color: LOOKS.kaylee.fur },
   ...FAMILY.map((m): CastEntry => ({ id: m.id, name: m.name, who: m.who, group: 'family', kind: 'member', look: LOOKS[m.id], voice: m.id, src: 'characters/looks.ts', color: LOOKS[m.id].fur })),
 ]
 
@@ -124,7 +124,7 @@ const CRITTER_INFO: Record<CritterId, { name: string; color: string }> = {
 const critters: CastEntry[] = CRITTERS.map((id) => ({ id, name: CRITTER_INFO[id].name, who: 'Phang Nga Bay sticker', group: 'critters', kind: 'critter', critter: id, src: 'activities/boat-trip/bay/critters.ts', color: CRITTER_INFO[id].color }))
 
 const canada: CastEntry[] = [
-  person('maple', 'Maple', 'Canada: the beaver who travels ocean to ocean with Kaylee', 'canada', CANADA_LOOKS.maple, '../canada/characters/looks.ts', undefined, 'beavers'),
+  person('maple', 'Maple', 'Canada: the beaver who travels ocean to ocean with your unicorn', 'canada', CANADA_LOOKS.maple, '../canada/characters/looks.ts', undefined, 'beavers'),
   person('cousin', 'Maple\'s cousin', 'Canada: a little beaver at the sugar shack', 'canada', CANADA_LOOKS.cousin, '../canada/characters/looks.ts', undefined, 'beavers'),
   person('moose', 'Moose', 'Canada: the gentle giant at every stop (the goalie)', 'canada', CANADA_LOOKS.moose, '../canada/characters/looks.ts'),
   person('raccoon', 'Raccoon', 'Canada: the marshmallow bandit of the campsite', 'canada', CANADA_LOOKS.raccoon, '../canada/characters/looks.ts'),

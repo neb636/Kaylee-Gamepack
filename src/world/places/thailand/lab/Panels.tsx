@@ -637,7 +637,7 @@ export function LineBar({ lab }: { lab: LabApi }) {
   const voice = voiceLabel(entry.voice)
   const mute = !lines.length
   const play = () => chosen && lab.studio.current?.speak(lineText(chosen))
-  const placeholder = entry.kind === 'kaylee' ? "Kaylee doesn't talk (she giggles)" : !entry.voice ? `${entry.name} has no voice` : mute ? `No lines for ${entry.name} yet` : `Pick a line for ${entry.name} to say...`
+  const placeholder = entry.kind === 'kaylee' ? "Your unicorn doesn't talk (she giggles)" : !entry.voice ? `${entry.name} has no voice` : mute ? `No lines for ${entry.name} yet` : `Pick a line for ${entry.name} to say...`
   return (
     <div className="cl-card cl-linebar">
       <div className="cl-linebar-text">

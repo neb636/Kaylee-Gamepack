@@ -1,6 +1,6 @@
 {
-  "name": "Kaylee's Gamepack",
-  "short_name": "Kaylee",
+  "name": "Gamepack",
+  "short_name": "Gamepack",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

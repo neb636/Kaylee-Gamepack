@@ -8,7 +8,7 @@
 //   Payoff: Cesare bows and brings his Roman horn to Lupa's band (tap it for a silly fanfare).
 import { animate, AnimatePresence, motion, useMotionValue, useTransform } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { bigCelebration, BigButton, Buddy, burst, KID_NAME, pick, say, SparklePuppet, sounds, useAlive, useElementSize, useLandscape, usePointerDrag, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { bigCelebration, BigButton, Buddy, burst, pick, say, SparklePuppet, sounds, useAlive, useElementSize, useLandscape, usePointerDrag, wait, type Line, type PuppetHandle } from '../../../../../sdk'
 import { PromptBubble } from '../../../../kit/Stage'
 import { art } from '../../art'
 import { L } from '../../lines'
@@ -493,7 +493,7 @@ export function Arena({
             {banner && (
               <motion.div initial={{ scale: 0, rotate: -12 }} animate={{ scale: 1, rotate: -3 }} exit={{ scale: 0, opacity: 0 }} transition={{ type: 'spring', bounce: 0.5 }} style={{ position: 'absolute', left: bw / 2, top: lay.rows[0] * bh, translate: '-50% -50%', zIndex: 500, background: '#FFE27A', border: `6px solid ${INK}`, borderRadius: 24, padding: '6px 28px', boxShadow: 'var(--shadow)', textAlign: 'center', whiteSpace: 'nowrap' }}>
                 <div style={{ fontSize: Math.max(30, bh * 0.07), fontWeight: 700, color: INK, lineHeight: 1.1 }}>
-                  {KID_NAME} = <span style={{ fontFamily: 'Georgia, "Times New Roman", serif', color: '#E8574F' }}>V</span>
+                  You = <span style={{ fontFamily: 'Georgia, "Times New Roman", serif', color: '#E8574F' }}>V</span>
                 </div>
                 <div style={{ fontSize: Math.max(18, bh * 0.028), color: '#8A6A5A' }}>V = 5 🎂</div>
               </motion.div>

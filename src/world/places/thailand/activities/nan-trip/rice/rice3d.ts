@@ -131,7 +131,7 @@ export const RICE_ANCHORS: AnchorInfo[] = [
   { id: 'cup', label: "Daddy's coffee", kind: 'thing' },
   { id: 'chime', label: 'Wind chime', kind: 'thing' },
   { id: 'view', label: 'The rice farm', kind: 'thing' },
-  { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
+  { id: 'family:kaylee', label: 'You', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'family:lung', label: 'Lung Kham, the farmer', kind: 'family' },

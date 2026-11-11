@@ -25,7 +25,7 @@ export function buildClosetItem(id: string, bag: Bag, armTilt: number): Worn | n
   if (item.slot === 'head') {
     const hat = buildHat(id, bag)
     // The horn rule, checked while building (npm run dev): a hat taller than her horn would poke through the roofs.
-    if (import.meta.env.DEV && hatTop(hat) > HORN_TIP) console.warn(`closet: the ${id} is taller than Kaylee's horn (${hatTop(hat).toFixed(3)} > ${HORN_TIP})`)
+    if (import.meta.env.DEV && hatTop(hat) > HORN_TIP) console.warn(`closet: the ${id} is taller than Your horn (${hatTop(hat).toFixed(3)} > ${HORN_TIP})`)
     return { ...none(), head: hat }
   }
   if (item.slot === 'face') return { ...none(), head: buildFace(id, bag) }

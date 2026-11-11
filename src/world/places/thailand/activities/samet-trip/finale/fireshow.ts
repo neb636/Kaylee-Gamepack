@@ -188,7 +188,7 @@ const flameUp = (d = 0) => {
 }
 
 export const FIRE_ANCHORS: AnchorInfo[] = [
-  { id: 'kaylee', label: 'Kaylee', kind: 'thing' },
+  { id: 'kaylee', label: 'You', kind: 'thing' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'dancer:0', label: 'A fire dancer', kind: 'thing' },

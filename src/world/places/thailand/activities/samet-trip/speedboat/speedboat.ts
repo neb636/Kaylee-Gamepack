@@ -134,7 +134,7 @@ export interface BoatEvents {
 const B = L.samet.trip.boat
 
 export const BOAT_ANCHORS: AnchorInfo[] = [
-  { id: 'kaylee', label: 'Kaylee', kind: 'thing' },
+  { id: 'kaylee', label: 'You', kind: 'thing' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'captain', label: 'The captain', kind: 'thing' },

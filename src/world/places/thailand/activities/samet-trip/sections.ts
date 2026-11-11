@@ -49,7 +49,7 @@ export const FLAGS = ['jetski', 'sandcastle', 'snorkel', 'hideseek'] as const
 export const TIMES = ['morning', 'noon', 'afternoon', 'golden', 'night'] as const
 
 const SAMET_SECTIONS = defineSections('thailand', 'samet-trip', {
-  note: "The Thailand map's 🏝️ pin opens it. Add ?feel=1 to tune how Kaylee walks and swims, the camera, Mommy's phone, the taxi, the jet ski, the sand, the snorkel, lunch and hide and seek; ?fps=1 or ?debug=1 shows the frame rate.",
+  note: "The Thailand map's 🏝️ pin opens it. Add ?feel=1 to tune how your unicorn walks and swims, the camera, Mommy's phone, the taxi, the jet ski, the sand, the snorkel, lunch and hide and seek; ?fps=1 or ?debug=1 shows the frame rate.",
   params: {
     packed: { default: SAMET_PACKED, doc: `what's in her suitcase, a comma list of ${ITEMS.map((i) => i.id).join(', ')} (Mommy always tucks in the sunscreen; her sun hat and sunglasses go on). A link without it opens what the iPad saved` },
     at: { default: 'nadan', values: SPOTS, doc: 'where she stands on the island: nadan (the pier, where the speedboat lands), saikaew (the jet ski beach), hinkhok (the sandcastle beach), phai, wongduan (the snorkel boat), prao (the sunset beach and the driftwood tree), deck (the resort deck above Ao Prao), aonoina (the quiet north beach)' },
@@ -57,7 +57,7 @@ const SAMET_SECTIONS = defineSections('thailand', 'samet-trip', {
     time: { default: '', values: ['', ...TIMES], doc: 'the light, overriding the flags: morning, noon, afternoon, golden or night (the beach bars and lanterns glow, the stars come out)' },
     book: { default: '', doc: `the animals already in her book (snapped with Mommy's phone), a comma list of ${ANIMAL_IDS.join(', ')} (or all)` },
     phone: { default: '', values: ['', '1'], doc: "1: Mommy's phone is out from the start (every tap is a photo)" },
-    round: { default: 'ride', values: [...JET_ROUNDS, ...SAND_ROUNDS, ...SNORKEL_ROUNDS, ...HIDE_ROUNDS, ...FIRE_ROUNDS], doc: 'the round of a stop (or of the fire show). The fire show: twirl (her finger draws in the air and her glowing poi follow it, ribbons of pink and gold light; the fire dancers copy her speed and size, a big circle and they swing a ring of fire), shapes (the dancers draw a circle, a star, a heart in fire over the sea; she draws over the dots and it lifts into the sky like a lantern of light) or finish (each pink flag adds something, one per loop she draws: the jet ski man rides by with lights, her sandcastle glows with candles, the parrotfish and cuttlefish light up in the waves, Daddy dances; then one huge circle lights a ring of fire round the beach, and fireworks). Hide and seek: 1 (easy hides: Kaylee covers her eyes by the driftwood tree and counts, then finds Daddy behind the tree, behind the tipped-over pink umbrella with his feet showing, behind the stack of red chairs; tap his hiding place, or walk right up), 2 (trickier: in the roots, under the towel that breathes, in the sea with only his cap floating, up the pandanus tree; stuck a while and he gives himself away) or hide (her turn: Daddy counts at the tree, she leads Kaylee to a glowing hiding place, he searches the wrong places and gives up, Kaylee wins). The snorkel: float (splash in off the boat\'s ladder and lead Kaylee over the coral, the damselfish crowd parting round her; bump a coral head and a little fish pops out, the urchins boing her off), follow (the parrotfish swims ahead and waits: through the gap between the rocks, over the sand with the giant clam, into the garden) or cuttle (the cuttlefish in the garden changes color as she comes close, rainbow, stripes, pink; Mommy\'s camera snaps the fish for her book). The sandcastle: dig (dig holes and moats with her finger, the sand piling up beside them; a ghost crab pops out of a deep hole), towers (the moulds arrive: drag one, tap it and it flips to leave a tower; shells to push into the walls) or tide (the tide creeps in: dig a channel and the sea fills the moat, a hermit crab moves in, the big wave). The jet ski: ride (the calm bay inside the buoy rope: the life jacket first, then carve, spray, splash the swimmers, close a loop of wake for the jumping fish), waves (bigger waves roll in from the open sea: steer into them to jump, a spin on the biggest) or race (out round the big orange buoy and back to the flags against the jet ski man; the winner rings the bell)' },
+    round: { default: 'ride', values: [...JET_ROUNDS, ...SAND_ROUNDS, ...SNORKEL_ROUNDS, ...HIDE_ROUNDS, ...FIRE_ROUNDS], doc: 'the round of a stop (or of the fire show). The fire show: twirl (her finger draws in the air and her glowing poi follow it, ribbons of pink and gold light; the fire dancers copy her speed and size, a big circle and they swing a ring of fire), shapes (the dancers draw a circle, a star, a heart in fire over the sea; she draws over the dots and it lifts into the sky like a lantern of light) or finish (each pink flag adds something, one per loop she draws: the jet ski man rides by with lights, her sandcastle glows with candles, the parrotfish and cuttlefish light up in the waves, Daddy dances; then one huge circle lights a ring of fire round the beach, and fireworks). Hide and seek: 1 (easy hides: your unicorn covers her eyes by the driftwood tree and counts, then finds Daddy behind the tree, behind the tipped-over pink umbrella with his feet showing, behind the stack of red chairs; tap his hiding place, or walk right up), 2 (trickier: in the roots, under the towel that breathes, in the sea with only his cap floating, up the pandanus tree; stuck a while and he gives himself away) or hide (her turn: Daddy counts at the tree, she leads your unicorn to a glowing hiding place, he searches the wrong places and gives up, your unicorn wins). The snorkel: float (splash in off the boat\'s ladder and lead your unicorn over the coral, the damselfish crowd parting round her; bump a coral head and a little fish pops out, the urchins boing her off), follow (the parrotfish swims ahead and waits: through the gap between the rocks, over the sand with the giant clam, into the garden) or cuttle (the cuttlefish in the garden changes color as she comes close, rainbow, stripes, pink; Mommy\'s camera snaps the fish for her book). The sandcastle: dig (dig holes and moats with her finger, the sand piling up beside them; a ghost crab pops out of a deep hole), towers (the moulds arrive: drag one, tap it and it flips to leave a tower; shells to push into the walls) or tide (the tide creeps in: dig a channel and the sea fills the moat, a hermit crab moves in, the big wave). The jet ski: ride (the calm bay inside the buoy rope: the life jacket first, then carve, spray, splash the swimmers, close a loop of wake for the jumping fish), waves (bigger waves roll in from the open sea: steer into them to jump, a spin on the biggest) or race (out round the big orange buoy and back to the flags against the jet ski man; the winner rings the bell)' },
   },
   sections: [
     { id: 'pack', name: 'Pack for the island (greybox): the swimsuit, the sun hat, the floaties, the bucket', params: ['packed'], group: 'Getting there (greybox)' },
@@ -70,7 +70,7 @@ const SAMET_SECTIONS = defineSections('thailand', 'samet-trip', {
     },
     {
       id: 'island',
-      name: 'The island to roam (greybox): lead Kaylee round Koh Samet',
+      name: 'The island to roam (greybox): lead your unicorn round Koh Samet',
       params: ['at', 'flags', 'time', 'book', 'phone', 'packed'],
       group: 'The island (greybox)',
       links: [
@@ -88,7 +88,7 @@ const SAMET_SECTIONS = defineSections('thailand', 'samet-trip', {
     },
     {
       id: 'book',
-      name: "Kaylee's animal book (greybox): the animals she snapped with Mommy's phone",
+      name: "Your animal book (greybox): the animals she snapped with Mommy's phone",
       params: ['at', 'flags', 'book'],
       group: "Mommy's phone and the animal book (greybox)",
       links: [
@@ -99,7 +99,7 @@ const SAMET_SECTIONS = defineSections('thailand', 'samet-trip', {
     },
     {
       id: 'jetski',
-      name: 'The jet ski at Hat Sai Kaew (greybox): Kaylee steers, Daddy behind her',
+      name: 'The jet ski at Hat Sai Kaew (greybox): your unicorn steers, Daddy behind her',
       params: ['round'],
       group: 'The jet ski at Sai Kaew (greybox)',
       links: [
@@ -121,7 +121,7 @@ const SAMET_SECTIONS = defineSections('thailand', 'samet-trip', {
     },
     {
       id: 'snorkel',
-      name: 'Snorkeling at Ko Kudi (greybox): lead Kaylee over the reef, half under the water',
+      name: 'Snorkeling at Ko Kudi (greybox): lead your unicorn over the reef, half under the water',
       params: ['round', 'flags', 'book'],
       group: 'Snorkeling at Ko Kudi (greybox)',
       links: [

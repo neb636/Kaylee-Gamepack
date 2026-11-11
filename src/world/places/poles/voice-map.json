@@ -1,17 +1,17 @@
 [
   {
-    "text": "Kaylee, you did it! You won the Polar Explorer trophy!",
+    "text": "You did it! You won the Polar Explorer trophy!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 5398,
-    "file": "801a80e65ce3.mp3"
+    "ms": 4656,
+    "file": "fea61157b12d.mp3"
   },
   {
-    "text": "Kaylee, Polar Explorer! From The Poles.",
+    "text": "Polar Explorer! From The Poles.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3890,
-    "file": "045a038371ab.mp3"
+    "ms": 3384,
+    "file": "edf69819dcaf.mp3"
   },
   {
     "text": "These are the Poles! The top and the bottom of the world.",
@@ -539,11 +539,11 @@
     "file": "d49517138498.mp3"
   },
   {
-    "text": "Kaylee, you got Pola home!",
+    "text": "You got Pola home!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2587,
-    "file": "26a6fa0a76af.mp3"
+    "ms": 2016,
+    "file": "aebd61e74e6d.mp3"
   },
   {
     "text": "Brr, winter is coming! Rub snow on the fox.",
@@ -959,11 +959,11 @@
     "file": "c46f7d2947dc.mp3"
   },
   {
-    "text": "You kept them all warm, Kaylee!",
+    "text": "You kept them all warm!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3006,
-    "file": "dc1b58ebba7f.mp3"
+    "ms": 2256,
+    "file": "09fdeff2376f.mp3"
   },
   {
     "text": "Emperor dads keep the egg warm on their feet!",

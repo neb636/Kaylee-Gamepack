@@ -75,7 +75,7 @@ test('@behavior Mommy greets the camera from the family photo', async ({ page })
   await open(page, 'hub/family?who=ji')
   await page.locator('[data-anchor="family:ji"]').click()
   const spoken = await page.evaluate(() => (window.__kayleeSpeech ?? []).filter((s) => s.voice === 'ji').map((s) => s.text))
-  expect(spoken).toEqual(['I love you, Kaylee!'])
+  expect(spoken).toEqual(['I love you!'])
 })
 
 test('@behavior a new wardrobe drawer keeps its own instruction for replay', async ({ page }) => {

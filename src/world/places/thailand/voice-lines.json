@@ -1,6 +1,6 @@
 [
-  "Kaylee, you did it! You won the Thailand Explorer trophy!",
-  "Kaylee, Thailand Explorer! From Thailand.",
+  "You did it! You won the Thailand Explorer trophy!",
+  "Thailand Explorer! From Thailand.",
   "This is Thailand! Tap a picture to explore.",
   "This is Thailand! Click a picture to explore.",
   "In Thailand, we say Sawasdee to say hello!",
@@ -8,7 +8,7 @@
   "In Thai, chang means elephant!",
   "Thailand's flag is red, white and blue!",
   "Thai cars drive on the left!",
-  "We're at Agong's house in Thailand, Kaylee!",
+  "We're at Agong's house in Thailand!",
   "Tap the door to go inside!",
   "Click the door to go inside!",
   "Tap your family to say hello!",
@@ -34,7 +34,7 @@
   "A longtail boat! Its motor has a long tail!",
   "Coconuts grow on palm trees by the sea!",
   {
-    "text": "Sawasdee krub, Kaylee! Welcome home!",
+    "text": "Sawasdee krub! Welcome home!",
     "voice": "agong"
   },
   {
@@ -54,11 +54,11 @@
     "voice": "ji"
   },
   {
-    "text": "I love you, Kaylee!",
+    "text": "I love you!",
     "voice": "ji"
   },
   {
-    "text": "Hi Kaylee! Welcome to Agong's house!",
+    "text": "Hi! Welcome to Agong's house!",
     "voice": "nick"
   },
   {
@@ -70,7 +70,7 @@
     "voice": "nick"
   },
   {
-    "text": "Sawasdee ka, Kaylee! Are you hungry?",
+    "text": "Sawasdee ka! Are you hungry?",
     "voice": "jum"
   },
   {
@@ -78,11 +78,11 @@
     "voice": "jum"
   },
   {
-    "text": "So big now, Kaylee!",
+    "text": "So big now!",
     "voice": "jum"
   },
   {
-    "text": "Sawasdee ka, Kaylee! Look at Agong's treasures!",
+    "text": "Sawasdee ka! Look at Agong's treasures!",
     "voice": "joy"
   },
   {
@@ -94,7 +94,7 @@
     "voice": "joy"
   },
   {
-    "text": "Sawasdee krub, Kaylee!",
+    "text": "Sawasdee krub!",
     "voice": "bird"
   },
   {
@@ -106,7 +106,7 @@
     "voice": "bird"
   },
   {
-    "text": "Mm-hmm. Hi Kaylee.",
+    "text": "Mm-hmm. Hi.",
     "voice": "gan"
   },
   {
@@ -118,7 +118,7 @@
     "voice": "gan"
   },
   {
-    "text": "Oh. Hi, Kaylee.",
+    "text": "Oh. Hi.",
     "voice": "ken"
   },
   {
@@ -130,11 +130,11 @@
     "voice": "ken"
   },
   {
-    "text": "Hi Kaylee... one second.",
+    "text": "Hi... one second.",
     "voice": "bb"
   },
   {
-    "text": "So cute, Kaylee.",
+    "text": "So cute.",
     "voice": "bb"
   },
   {
@@ -142,7 +142,7 @@
     "voice": "bb"
   },
   {
-    "text": "Sawasdee ka, Kaylee!",
+    "text": "Sawasdee ka!",
     "voice": "ja"
   },
   {
@@ -150,7 +150,7 @@
     "voice": "ja"
   },
   {
-    "text": "Sawasdee ka, Kaylee!",
+    "text": "Sawasdee ka!",
     "voice": "sri"
   },
   {
@@ -158,7 +158,7 @@
     "voice": "sri"
   },
   {
-    "text": "Kaylee! Sawasdee krub!",
+    "text": "Sawasdee krub!",
     "voice": "putto"
   },
   {
@@ -166,18 +166,18 @@
     "voice": "putto"
   },
   {
-    "text": "Hi Kaylee! Hee hee!",
+    "text": "Hi! Hee hee!",
     "voice": "putter"
   },
   {
     "text": "Peep peep!",
     "voice": "putter"
   },
-  "Your wardrobe! Dress up, Kaylee!",
-  "Drag it onto you, Kaylee!",
+  "Your wardrobe! Dress up!",
+  "Drag it onto you!",
   "Hair, dress or fur!",
-  "Click! A picture of your look, Kaylee!",
-  "Your whole look! Wow, Kaylee!",
+  "Click! A picture of your look!",
+  "Your whole look! Wow!",
   "Ta da! Magic!",
   "Sparkle magic!",
   "Ooh, a surprise!",
@@ -219,27 +219,27 @@
   "Brown paint!",
   "Cream paint!",
   {
-    "text": "Ooh, what a pretty hat, Kaylee!",
+    "text": "Ooh, what a pretty hat!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, fancy glasses, Kaylee!",
+    "text": "Ooh, fancy glasses!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, so pretty, Kaylee!",
+    "text": "Ooh, so pretty!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, what a pretty outfit, Kaylee!",
+    "text": "Ooh, what a pretty outfit!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, nice shoes, Kaylee!",
+    "text": "Ooh, nice shoes!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, new colors, Kaylee!",
+    "text": "Ooh, new colors!",
     "voice": "ji"
   },
   {
@@ -247,11 +247,11 @@
     "voice": "nick"
   },
   {
-    "text": "Cool shades, Kaylee!",
+    "text": "Cool shades!",
     "voice": "nick"
   },
   {
-    "text": "Whoa, cool, Kaylee!",
+    "text": "Whoa, cool!",
     "voice": "nick"
   },
   {
@@ -259,7 +259,7 @@
     "voice": "nick"
   },
   {
-    "text": "Cool shoes, Kaylee!",
+    "text": "Cool shoes!",
     "voice": "nick"
   },
   {
@@ -275,10 +275,6 @@
     "voice": "agong"
   },
   {
-    "text": "Ho ho! So pretty, Kaylee!",
-    "voice": "agong"
-  },
-  {
     "text": "Ho ho! Nice shoes!",
     "voice": "agong"
   },
@@ -287,15 +283,15 @@
     "voice": "agong"
   },
   {
-    "text": "Oh! What a pretty hat, Kaylee!",
+    "text": "Oh! What a pretty hat!",
     "voice": "jum"
   },
   {
-    "text": "Oh! So fancy, Kaylee!",
+    "text": "Oh! So fancy!",
     "voice": "jum"
   },
   {
-    "text": "Oh! So pretty, Kaylee!",
+    "text": "Oh! So pretty!",
     "voice": "jum"
   },
   {
@@ -303,7 +299,7 @@
     "voice": "jum"
   },
   {
-    "text": "Oh! Nice shoes, Kaylee!",
+    "text": "Oh! Nice shoes!",
     "voice": "jum"
   },
   {
@@ -319,7 +315,7 @@
     "voice": "joy"
   },
   {
-    "text": "Wow! So cute, Kaylee!",
+    "text": "Wow! So cute!",
     "voice": "joy"
   },
   {
@@ -335,23 +331,23 @@
     "voice": "joy"
   },
   {
-    "text": "Nice hat, Kaylee!",
+    "text": "Nice hat!",
     "voice": "bird"
   },
   {
-    "text": "Nice glasses, Kaylee!",
+    "text": "Nice glasses!",
     "voice": "bird"
   },
   {
-    "text": "Ho ho! Nice, Kaylee!",
+    "text": "Ho ho! Nice!",
     "voice": "bird"
   },
   {
-    "text": "Nice outfit, Kaylee!",
+    "text": "Nice outfit!",
     "voice": "bird"
   },
   {
-    "text": "Nice shoes, Kaylee!",
+    "text": "Nice shoes!",
     "voice": "bird"
   },
   {
@@ -407,15 +403,11 @@
     "voice": "ken"
   },
   {
-    "text": "So cute, Kaylee... one sec.",
+    "text": "So cute... one sec.",
     "voice": "bb"
   },
   {
     "text": "Cute glasses... uh-huh.",
-    "voice": "bb"
-  },
-  {
-    "text": "So cute... one sec.",
     "voice": "bb"
   },
   {
@@ -431,11 +423,11 @@
     "voice": "bb"
   },
   {
-    "text": "So pretty, Kaylee!",
+    "text": "So pretty!",
     "voice": "ja"
   },
   {
-    "text": "So fancy, Kaylee!",
+    "text": "So fancy!",
     "voice": "ja"
   },
   {
@@ -523,23 +515,23 @@
     "voice": "putter"
   },
   {
-    "text": "Ooh, a crown, Kaylee!",
+    "text": "Ooh, a crown!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, Kaylee, you can fly!",
+    "text": "Ooh, you can fly!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, a princess cape, Kaylee!",
+    "text": "Ooh, a princess cape!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, a bunny backpack, Kaylee!",
+    "text": "Ooh, a bunny backpack!",
     "voice": "ji"
   },
   {
-    "text": "Ooh, cute overalls, Kaylee!",
+    "text": "Ooh, cute overalls!",
     "voice": "ji"
   },
   {
@@ -547,7 +539,7 @@
     "voice": "nick"
   },
   {
-    "text": "Kaylee, are you ready to go on a trip?",
+    "text": "Are you ready to go on a trip?",
     "voice": "ji"
   },
   {
@@ -559,11 +551,11 @@
     "voice": "ji"
   },
   {
-    "text": "Ready for a trip, Kaylee?",
+    "text": "Ready for a trip?",
     "voice": "nick"
   },
   {
-    "text": "Where do you want to go, Kaylee?",
+    "text": "Where do you want to go?",
     "voice": "nick"
   },
   {
@@ -579,11 +571,11 @@
     "voice": "nick"
   },
   {
-    "text": "Tap your things to pack them, Kaylee!",
+    "text": "Tap your things to pack them!",
     "voice": "ji"
   },
   {
-    "text": "Click your things to pack them, Kaylee!",
+    "text": "Click your things to pack them!",
     "voice": "ji"
   },
   {
@@ -627,7 +619,7 @@
     "voice": "ji"
   },
   {
-    "text": "Good hat, Kaylee!",
+    "text": "Good hat!",
     "voice": "ji"
   },
   {
@@ -683,7 +675,7 @@
     "voice": "nick"
   },
   {
-    "text": "Seatbelt on, Kaylee!",
+    "text": "Seatbelt on!",
     "voice": "ji"
   },
   {
@@ -695,7 +687,7 @@
     "voice": "ji"
   },
   {
-    "text": "Snacks for Kaylee!",
+    "text": "Snacks for you!",
     "voice": "attendant"
   },
   {
@@ -738,7 +730,7 @@
     "voice": "nick"
   },
   {
-    "text": "Where to, Captain Kaylee?",
+    "text": "Where to, Captain?",
     "voice": "nick"
   },
   {
@@ -766,7 +758,7 @@
     "voice": "nick"
   },
   {
-    "text": "Back in the boat, Kaylee!",
+    "text": "Back in the boat!",
     "voice": "nick"
   },
   {
@@ -794,11 +786,11 @@
     "voice": "kids"
   },
   {
-    "text": "Khob khun ka, Kaylee!",
+    "text": "Khob khun ka!",
     "voice": "kids"
   },
   {
-    "text": "The ball, Kaylee!",
+    "text": "The ball!",
     "voice": "kids"
   },
   "Tap a ribbon to tie it on!",
@@ -842,13 +834,13 @@
   "Go!",
   "Lap two!",
   "Last lap!",
-  "Kaylee wins! First place!",
-  "A trophy for Kaylee, the boat race champion!",
+  "You win! First place!",
+  "A trophy for you, the boat race champion!",
   "Tap the boat to go back to the bay!",
   "Click the boat to go back to the bay!",
-  "Kaylee, Boat Race Champion! From Thailand.",
+  "Boat Race Champion! From Thailand.",
   {
-    "text": "Go, Kaylee, go!",
+    "text": "Go, go, go!",
     "voice": "nick"
   },
   {
@@ -872,7 +864,7 @@
     "voice": "ji"
   },
   {
-    "text": "Race you, Kaylee!",
+    "text": "Race you!",
     "voice": "kids"
   },
   {
@@ -880,11 +872,11 @@
     "voice": "kids"
   },
   {
-    "text": "Good race, Kaylee!",
+    "text": "Good race!",
     "voice": "kids"
   },
   {
-    "text": "Bananas for the elephants, Kaylee!",
+    "text": "Bananas for the elephants!",
     "voice": "nick"
   },
   {
@@ -892,11 +884,11 @@
     "voice": "nick"
   },
   {
-    "text": "Ahh! Thank you, Kaylee!",
+    "text": "Ahh! Thank you!",
     "voice": "nick"
   },
   {
-    "text": "Look, Kaylee! Elephants!",
+    "text": "Look! Elephants!",
     "voice": "ji"
   },
   {
@@ -945,7 +937,7 @@
   "Elephants eat almost all day long!",
   "In Thailand, everyone has a fun nickname!",
   {
-    "text": "We're home, Kaylee!",
+    "text": "We're home!",
     "voice": "sri"
   },
   {
@@ -953,7 +945,7 @@
     "voice": "agong"
   },
   {
-    "text": "Beautiful! Thank you, Kaylee!",
+    "text": "Beautiful! Thank you!",
     "voice": "agong"
   },
   {
@@ -965,7 +957,7 @@
     "voice": "ken"
   },
   {
-    "text": "So cool, Kaylee!",
+    "text": "So cool!",
     "voice": "bb"
   },
   {
@@ -1098,7 +1090,7 @@
     "voice": "nick"
   },
   {
-    "text": "Kaylee? Where did you go?",
+    "text": "Where did you go?",
     "voice": "nick"
   },
   {
@@ -1110,7 +1102,7 @@
     "voice": "nick"
   },
   {
-    "text": "Go, farmer Kaylee!",
+    "text": "Go, farmer!",
     "voice": "nick"
   },
   {
@@ -1130,11 +1122,11 @@
     "voice": "ji"
   },
   {
-    "text": "Smile, Kaylee!",
+    "text": "Smile!",
     "voice": "ji"
   },
   "Want to see real farmers grow rice?",
-  "Where shall we go first, Kaylee?",
+  "Where shall we go first?",
   "Tap a place to drive there!",
   "Click a place to drive there!",
   {
@@ -1146,13 +1138,13 @@
     "voice": "ji"
   },
   "Over there is Laos, another country!",
-  "Steer the car with your finger, Kaylee!",
-  "Click and drag to steer the car, Kaylee!",
+  "Steer the car with your finger!",
+  "Click and drag to steer the car!",
   "We're driving into a cloud!",
   "Let's count the bends!",
-  "Three! Kaylee drove the three!",
+  "Three! You drove the three!",
   {
-    "text": "Steer for me, Kaylee!",
+    "text": "Steer for me!",
     "voice": "ji"
   },
   {
@@ -1252,10 +1244,6 @@
     "voice": "nick"
   },
   {
-    "text": "Back on the road, Kaylee!",
-    "voice": "ji"
-  },
-  {
     "text": "Moo! We're a cow!",
     "voice": "nick"
   },
@@ -1264,7 +1252,7 @@
     "voice": "nick"
   },
   {
-    "text": "Silly driving, Kaylee!",
+    "text": "Silly driving!",
     "voice": "ji"
   },
   {
@@ -1272,7 +1260,7 @@
     "voice": "nick"
   },
   {
-    "text": "Great driving, Kaylee!",
+    "text": "Great driving!",
     "voice": "nick"
   },
   {
@@ -1283,7 +1271,7 @@
     "text": "Are we there yet?",
     "voice": "nick"
   },
-  "Spray the bags, Kaylee!",
+  "Spray the bags!",
   "Pull the mushrooms off!",
   "More bags to spray!",
   "Put your mushrooms on the pizza!",
@@ -1348,7 +1336,7 @@
     "text": "A slice for everyone!",
     "voice": "ji"
   },
-  "Dip the bucket in the well, Kaylee!",
+  "Dip the bucket in the well!",
   "Put a log on the fire!",
   "Scrape up the salt!",
   "Pull the bucket down into the well!",
@@ -1520,9 +1508,9 @@
     "text": "Next race, sweetie!",
     "voice": "ji"
   },
-  "The Nan Mountain Cup! Tap it, Kaylee!",
-  "The Nan Mountain Cup! Click it, Kaylee!",
-  "Kaylee is the Nan Mountain Cup champion!",
+  "The Nan Mountain Cup! Tap it!",
+  "The Nan Mountain Cup! Click it!",
+  "You are the Nan Mountain Cup champion!",
   {
     "text": "Champion!",
     "voice": "nick"
@@ -1778,7 +1766,7 @@
   "Look up in the trees at Ao Prao!",
   "Look up the palm trees!",
   "Look by the road over the hill!",
-  "Kaylee, your animal book is full!",
+  "Your animal book is full!",
   {
     "text": "Sawasdee krap! Life jacket first!",
     "voice": "otter"
@@ -1809,7 +1797,7 @@
   },
   "So close! Again!",
   {
-    "text": "Kaylee wins!",
+    "text": "You win!",
     "voice": "nick"
   },
   {
@@ -2045,10 +2033,6 @@
     "voice": "nick"
   },
   {
-    "text": "Smile!",
-    "voice": "ji"
-  },
-  {
     "text": "Cheese!",
     "voice": "ji"
   },
@@ -2206,7 +2190,7 @@
     "text": "You win! Super hider!",
     "voice": "nick"
   },
-  "Kaylee wins hide and seek!",
+  "You win hide and seek!",
   {
     "text": "Found you!",
     "voice": "nick"
@@ -2312,7 +2296,7 @@
     "text": "Ring of fire!",
     "voice": "gecko"
   },
-  "Kaylee, what a show!",
+  "What a show!",
   {
     "text": "Time to go home!",
     "voice": "ji"
@@ -2357,10 +2341,10 @@
   "Draw one giant circle!",
   "Tap the sky for fireworks!",
   "Click the sky for fireworks!",
-  "Welcome to HarborLand, Kaylee! Tap a place to play!",
-  "Welcome to HarborLand, Kaylee! Click a place to play!",
+  "Welcome to HarborLand! Tap a place to play!",
+  "Welcome to HarborLand! Click a place to play!",
   {
-    "text": "Sawasdee ka, Kaylee!",
+    "text": "Sawasdee ka!",
     "voice": "staff"
   },
   {
@@ -2372,7 +2356,7 @@
     "voice": "ji"
   },
   {
-    "text": "Have fun, Kaylee!",
+    "text": "Have fun!",
     "voice": "ji"
   },
   {
@@ -2380,7 +2364,7 @@
     "voice": "ji"
   },
   {
-    "text": "Where to next, Kaylee?",
+    "text": "Where to next?",
     "voice": "nick"
   },
   {
@@ -2396,7 +2380,7 @@
     "voice": "nick"
   },
   {
-    "text": "Hungry, Kaylee? Pizza time?",
+    "text": "Hungry? Pizza time?",
     "voice": "ji"
   },
   {
@@ -2405,9 +2389,9 @@
   },
   "Tap a door to play!",
   "Click a door to play!",
-  "Where shall we play, Kaylee?",
+  "Where shall we play?",
   {
-    "text": "Doctor Kaylee is here!",
+    "text": "The doctor is here!",
     "voice": "nick"
   },
   "A puppy with a sore paw! Grab a tool!",
@@ -2429,7 +2413,7 @@
     "text": "Bye bye, little elephant!",
     "voice": "nick"
   },
-  "Everyone is better! Thank you, Doctor Kaylee!",
+  "Everyone is better! Thank you, Doctor!",
   {
     "text": "Ba-boom! Ba-boom!",
     "voice": "nick"
@@ -2475,7 +2459,7 @@
   "The elephant is Thailand's animal!",
   "An x-ray shows the bones inside!",
   {
-    "text": "I want a new look, Kaylee!",
+    "text": "I want a new look!",
     "voice": "nick"
   },
   "Grab a tool and do his hair!",
@@ -2519,7 +2503,7 @@
     "text": "Say cheese!",
     "voice": "ji"
   },
-  "Great haircuts, Kaylee!",
+  "Great haircuts!",
   {
     "text": "Hey! My horn!",
     "voice": "nick"
@@ -2542,7 +2526,7 @@
   "A spinning pole means haircuts here!",
   "Drop fruit in the blender!",
   {
-    "text": "I'm thirsty, Kaylee!",
+    "text": "I'm thirsty!",
     "voice": "nick"
   },
   "Press the pink button!",
@@ -2562,7 +2546,7 @@
     "voice": "nick"
   },
   {
-    "text": "Yum! Thank you, Kaylee!",
+    "text": "Yum! Thank you!",
     "voice": "nick"
   },
   {
@@ -2601,7 +2585,7 @@
     "text": "Khob khun ka, sweetie!",
     "voice": "ji"
   },
-  "Best cafe ever, Kaylee!",
+  "Best cafe ever!",
   "Put a straw in the cup!",
   "Pour the milk on top!",
   "Lift the jar and pour!",
@@ -2609,10 +2593,10 @@
   "Drop in the fruit from the bubble!",
   "Put in the Thai tea!",
   "Cha yen is Thai iced tea! It's orange!",
-  "A slide race, Kaylee! Tap the steps to climb!",
-  "A slide race, Kaylee! Click the steps to climb!",
+  "A slide race! Tap the steps to climb!",
+  "A slide race! Click the steps to climb!",
   {
-    "text": "Race you, Kaylee!",
+    "text": "Race you!",
     "voice": "nick"
   },
   "Tap, tap, tap to go fast!",
@@ -2623,9 +2607,8 @@
   "Click now!",
   "Rubber rings! Tap to spin!",
   "Rubber rings! Click to spin!",
-  "Kaylee wins!",
-  "Kaylee wins again!",
-  "First place, Kaylee!",
+  "You win!",
+  "You win again!",
   {
     "text": "Head first! Whee!",
     "voice": "nick"
@@ -2635,16 +2618,16 @@
     "voice": "nick"
   },
   {
-    "text": "Good race, Kaylee!",
+    "text": "Good race!",
     "voice": "kid"
   },
-  "Three ribbons for Kaylee!",
+  "Three ribbons for you!",
   "Tap the steps to climb!",
   "Click the steps to climb!",
   "Tap to scoot faster!",
   "Click to scoot faster!",
   {
-    "text": "Can you build higher than me, Kaylee?",
+    "text": "Can you build higher than me?",
     "voice": "nick"
   },
   "Grab a brick!",
@@ -2676,7 +2659,7 @@
     "voice": "nick"
   },
   {
-    "text": "Taller than me, Kaylee!",
+    "text": "Taller than me!",
     "voice": "nick"
   },
   "Grab a brick from the box!",
@@ -2684,8 +2667,8 @@
   "Tap the tower to push it!",
   "Click the tower to push it!",
   "A chedi is a Thai temple tower!",
-  "Climb the Golden Mountain, Kaylee! Count the holds!",
-  "You made it, Kaylee!",
+  "Climb the Golden Mountain! Count the holds!",
+  "You made it!",
   "Only the pink ones!",
   "Race Daddy to the top!",
   {
@@ -2697,7 +2680,7 @@
     "voice": "nick"
   },
   {
-    "text": "You beat me, Kaylee!",
+    "text": "You beat me!",
     "voice": "nick"
   },
   {
@@ -2711,7 +2694,7 @@
   "In Bangkok, the Golden Mount has over 300 steps!",
   "In Lopburi, monkeys live all over town!",
   {
-    "text": "Sawasdee krap, Kaylee! First we say thank you.",
+    "text": "Sawasdee krap! First we say thank you.",
     "voice": "coach"
   },
   "Tap your gloves to bow!",
@@ -2725,7 +2708,7 @@
     "voice": "coach"
   },
   {
-    "text": "Champion Kaylee!",
+    "text": "Champion!",
     "voice": "coach"
   },
   "Punch to the drum!",
@@ -2737,7 +2720,7 @@
     "voice": "nick"
   },
   {
-    "text": "Oof! Good one, Kaylee!",
+    "text": "Oof! Good one!",
     "voice": "nick"
   },
   {
@@ -2758,7 +2741,7 @@
   },
   "Muay Thai is Thailand's own sport!",
   {
-    "text": "How fast are you, Kaylee?",
+    "text": "How fast are you?",
     "voice": "nick"
   },
   "Slap the lights!",
@@ -2776,11 +2759,7 @@
     "text": "Daddy needs a rest!",
     "voice": "nick"
   },
-  {
-    "text": "You win, Kaylee!",
-    "voice": "nick"
-  },
-  "A hundred! Super star, Kaylee!",
+  "A hundred! Super star!",
   "Slap the glowing one!",
   "This one next!",
   "In Thai, one, two, three is nueng, song, saam!",
@@ -2802,7 +2781,7 @@
     "voice": "nick"
   },
   {
-    "text": "Zoom! Go, Kaylee!",
+    "text": "Zoom! Go!",
     "voice": "ji"
   },
   {
@@ -2818,7 +2797,7 @@
     "voice": "nick"
   },
   {
-    "text": "Ho ho! Hi, Kaylee!",
+    "text": "Ho ho! Hi!",
     "voice": "nick"
   },
   {
@@ -2828,7 +2807,7 @@
   "Phi Ta Khon is a festival with big funny masks!",
   "Tap a slide to ride it!",
   "Click a slide to ride it!",
-  "Pick a pizza, Kaylee!",
+  "Pick a pizza!",
   {
     "text": "Pizza time!",
     "voice": "server"
@@ -2838,10 +2817,10 @@
   "Two for Mommy!",
   "One for Daddy!",
   "Two for Daddy!",
-  "One for Kaylee!",
-  "Two for Kaylee!",
+  "One for you!",
+  "Two for you!",
   {
-    "text": "Kaylee, Mommy's hungry too!",
+    "text": "Mommy's hungry too!",
     "voice": "nick"
   },
   {
@@ -2890,7 +2869,7 @@
   "Pull a slice to a plate!",
   "Put one in Agong's box!",
   {
-    "text": "Kaylee, where shall we go?",
+    "text": "Where shall we go?",
     "voice": "ji"
   },
   {
@@ -2898,7 +2877,7 @@
     "voice": "agong"
   },
   {
-    "text": "Mommy is driving! Hop in, Kaylee!",
+    "text": "Mommy is driving! Hop in!",
     "voice": "nick"
   },
   {
@@ -2906,11 +2885,11 @@
     "voice": "ji"
   },
   {
-    "text": "Ho ho! What is that, Kaylee?",
+    "text": "Ho ho! What is that?",
     "voice": "agong"
   },
   {
-    "text": "Pizza! Thank you, Kaylee!",
+    "text": "Pizza! Thank you!",
     "voice": "agong"
   },
   {

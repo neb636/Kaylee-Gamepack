@@ -1,9 +1,8 @@
 // Every phrase that can be spoken in Australia. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
-// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.)
+// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing.)
 // Plain strings are Sparkle, the guide: she gives the instructions. Friends say their own story and reaction lines in
 // their own voices (see cast.json), and their puppets move their mouths while they talk.
 import { onDevice } from '../../../sdk/device.ts'
-const NAME = 'Kaylee'
 const as = (voice: string) => (text: string) => ({ text, voice })
 const pip = as('pip')
 const mama = as('mama')
@@ -13,13 +12,13 @@ const COUNT = ['one', 'two', 'three', 'four', 'five']
 
 export const L = {
   name: 'Australia',
-  intro: [pip(`G'day, ${NAME}! I'm Pip the kangaroo!`), pip("G'day means hello! Help with my party?")],
+  intro: [pip(`G'day! I'm Pip the kangaroo!`), pip("G'day means hello! Help with my party?")],
   hubFirst: onDevice(pip('Tap a spot on the map!'), pip('Click a spot on the map!')),
-  hubNext: pip(`Where should we go next, ${NAME}?`),
+  hubNext: pip(`Where should we go next?`),
   hubParty: onDevice(pip('Everyone is here! Tap the party!'), pip('Everyone is here! Click the party!')),
   partyLocked: pip('Get all the stamps to start the party!'),
-  trophyWin: `${NAME}, you did it! You won the Australia Explorer trophy!`,
-  trophyRoom: `${NAME}, Australia Explorer! From Australia.`,
+  trophyWin: `You did it! You won the Australia Explorer trophy!`,
+  trophyRoom: `Australia Explorer! From Australia.`,
   tickle: {
     pip: [pip('Hee hee! That tickles!'), pip("Boing! I love hopping!")],
     koko: [koko('Hehe! Cuddles!'), koko('Mmm, I love gum leaves.')],
@@ -108,14 +107,14 @@ export const L = {
   party: {
     story: pip('Party time at the Sydney Opera House!'),
     tap: onDevice('Tap each friend to make them dance!', 'Click each friend to make them dance!'),
-    mama: mama(`G'day, ${NAME}! Thanks for helping Pip!`),
+    mama: mama(`G'day! Thanks for helping Pip!`),
     koko: koko('Yum! Thanks for the gum leaves!'),
     shelly: as('shelly')('Hello from the reef!'),
     kooky: as('kooky')('Ha ha ha! Kookaburras love to laugh!'),
     pat: as('pat')("I'm Pat the platypus! Hooray!"),
     chompy: chompy('Snap snap! My babies say hi!'),
     fireworks: 'Sydney has some of the biggest fireworks in the world!',
-    thanks: pip(`Thank you, ${NAME}! You're a true Aussie mate!`),
+    thanks: pip(`Thank you! You're a true Aussie mate!`),
   },
   stickers: {
     kangaroo: 'Kangaroo sticker! Kangaroos can only hop forward, never backward!',
