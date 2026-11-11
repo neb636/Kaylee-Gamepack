@@ -1,6 +1,6 @@
 [
-  "Kaylee, you did it! You won the Canada Champion trophy!",
-  "Kaylee, Canada Champion! From Canada.",
+  "You did it! You won the Canada Champion trophy!",
+  "Canada Champion! From Canada.",
   "This is Canada! It goes all the way from one ocean to the other.",
   "Canada's flag is red and white, with a red maple leaf in the middle.",
   "People in Canada speak English and French. In Quebec, hello is Bonjour!",
@@ -313,7 +313,7 @@
     "voice": "maple"
   },
   {
-    "text": "Merci, Kaylee! Best taffy ever!",
+    "text": "Merci! Best taffy ever!",
     "voice": "maple"
   },
   {
@@ -403,7 +403,7 @@
     "voice": "snowman"
   },
   {
-    "text": "Kaylee, you made a whole parade!",
+    "text": "You made a whole parade!",
     "voice": "maple"
   },
   {
@@ -489,7 +489,7 @@
     "voice": "maple"
   },
   {
-    "text": "Thank you, Kaylee! What a ride!",
+    "text": "Thank you! What a ride!",
     "voice": "maple"
   },
   {
@@ -739,7 +739,7 @@
     "text": "Look! Photos of everyone!",
     "voice": "maple"
   },
-  "You helped them all cross, Kaylee!",
+  "You helped them all cross!",
   {
     "text": "I've never seen a whale!",
     "voice": "maple"
@@ -832,7 +832,7 @@
     "voice": "maple"
   },
   {
-    "text": "They all jumped together! Merci, Kaylee!",
+    "text": "They all jumped together! Merci!",
     "voice": "maple"
   },
   {
@@ -902,7 +902,7 @@
     "voice": "maple"
   },
   {
-    "text": "Kaylee, you brought the salmon home!",
+    "text": "You brought the salmon home!",
     "voice": "maple"
   },
   {

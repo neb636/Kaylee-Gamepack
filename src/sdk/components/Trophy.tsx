@@ -1,8 +1,7 @@
 import { motion } from 'motion/react'
 import trophyImg from '../../assets/trophy/trophy.webp'
-import { KID_NAME } from '../helpers'
 
-/** A gold trophy with KAYLEE engraved on the plaque, plus the trophy title. */
+/** A gold trophy with the trophy title on its plaque. */
 export function Trophy({ title, size = 260, count, shine = true }: { title: string; size?: number; count?: number; shine?: boolean }) {
   // The plaque sits at 23%-77% across and 66%-90% down the trophy image.
   return (
@@ -38,7 +37,6 @@ export function Trophy({ title, size = 260, count, shine = true }: { title: stri
           color: 'var(--ink)',
         }}
       >
-        <div style={{ fontWeight: 700, fontSize: size * 0.105, letterSpacing: size * 0.006, color: 'var(--hotpink)' }}>{KID_NAME.toUpperCase()}</div>
         <div style={{ fontWeight: 600, fontSize: size * 0.058, marginTop: size * 0.012 }}>{title}</div>
       </div>
       {count && count > 1 && (

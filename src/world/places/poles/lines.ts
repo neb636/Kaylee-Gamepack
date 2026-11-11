@@ -1,11 +1,10 @@
 // Every phrase that can be spoken at the Poles. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
-// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.) Plain strings are Sparkle, the guide:
+// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing.) Plain strings are Sparkle, the guide:
 // she says what to do. The friends say their own story and reaction lines in their own voices (cast.json): Pola the
 // polar bear cub and Mama Bear up north, Pebble the emperor chick and Papa down south, Terry the Arctic tern who visits
 // both. Each activity has its own block below (one per PR, so they don't collide). Keep lines under ~3 seconds, and the
 // name for the big moments only. Straight apostrophes only: curly ones failed the transcription check in PR #63.
 import { onDevice } from '../../../sdk/device.ts'
-const NAME = 'Kaylee'
 
 // A friend speaking: pola("Hi!") is { text: "Hi!", voice: "pola" }. (Exported, so a block that has no lines yet compiles.)
 const by = (voice: string) => (text: string) => ({ text, voice })
@@ -17,8 +16,8 @@ export const terry = by('terry')
 
 export const L = {
   // The shell's trophy ceremony and the trophy room speak these.
-  trophyWin: `${NAME}, you did it! You won the Polar Explorer trophy!`,
-  trophyRoom: `${NAME}, Polar Explorer! From The Poles.`,
+  trophyWin: `You did it! You won the Polar Explorer trophy!`,
+  trophyRoom: `Polar Explorer! From The Poles.`,
   passport: 'These are the Poles! The top and the bottom of the world.',
   // The passport's tap-to-hear facts (planning/around-the-world/poles.md, "Passport facts").
   facts: {
@@ -106,7 +105,7 @@ export const L = {
     waterFact: 'The North Pole is a frozen sea. There is water under the ice!',
     // Home with Mama.
     home: [mama('My brave little cub! You made it!'), pola('Mama! I hopped all the way home!')],
-    homeCheer: `${NAME}, you got Pola home!`,
+    homeCheer: `You got Pola home!`,
   },
 
   // ---- Snow Coats (activities/coats/) ----
@@ -184,7 +183,7 @@ export const L = {
     hatched: 'Tuck Pebble back under Papa!',
     blown: 'Whoosh! Carry Pebble back to Papa.',
     sunrise: 'Look! The sun is coming back!',
-    done: 'You kept them all warm, Kaylee!',
+    done: 'You kept them all warm!',
     facts: {
       egg: 'Emperor dads keep the egg warm on their feet!',
       coldest: 'Antarctica is the coldest, windiest place on Earth.',

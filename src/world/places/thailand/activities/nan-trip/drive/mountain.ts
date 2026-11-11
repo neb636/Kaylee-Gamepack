@@ -98,12 +98,12 @@ const STEER = knobs('steer', 'Steering', 'src/world/places/thailand/activities/n
   top: { value: 23, min: 5, max: 25, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'Mommy\'s foot on the straights' },
   back: { value: 1.2, min: 0.3, max: 4, step: 0.1, label: 'Back to her lane', unit: 's', note: 'how slowly Mommy eases back after she lets go' },
   camera: { value: 0.3, min: 0, max: 1, step: 0.05, label: 'Camera follows the nose', note: '0 = the camera looks down the road; 1 = it turns with the car' },
-  screech: { value: 5, min: 2, max: 15, step: 0.5, label: 'Squeal at a flick of', unit: '/s', note: 'how fast a yank must be to squeal the tyres' },
+  screech: { value: 9, min: 2, max: 15, step: 0.5, label: 'Squeal at a flick of', unit: '/s', note: 'how fast a yank must be to squeal the tyres' },
 })
 /** A quick, hard flick of the wheel (faster than `STEER.screech`, with the push at least this far over): the tyres
  *  squeal, a puff of smoke off the back wheels, and the body rocks. No more than one squeal in this long (s). */
-const SCREECH_PUSH = 0.45
-const SCREECH_COOL = 0.7
+const SCREECH_PUSH = 0.7
+const SCREECH_COOL = 3
 /** How far past the edge of the road she can bump along the grass (m; the trees start a little further out), and how
  *  much slower it goes there. */
 const GRASS = 4.6
@@ -884,7 +884,7 @@ export class NanDrive implements World3D {
   private screech(was: number, dt: number) {
     const rate = (this.stick - was) / Math.max(dt, 1 / 120)
     this.flick += (rate - this.flick) * (1 - Math.exp(-dt / 0.06))
-    if (Math.abs(this.flick) < STEER.screech || Math.abs(this.stick) < SCREECH_PUSH || this.d.speed < 3) return
+    if (Math.abs(this.flick) < STEER.screech || Math.abs(this.stick) < SCREECH_PUSH || this.d.speed < 6) return
     if (this.time - this.screechT < SCREECH_COOL) return
     this.screechT = this.time
     this.counts.screeches++

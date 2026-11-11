@@ -117,7 +117,7 @@ export const CHANG_ANCHORS: AnchorInfo[] = [
   { id: 'walk:end', label: 'Walk down to the elephants', kind: 'thing' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
-  { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
+  { id: 'family:kaylee', label: 'You', kind: 'family' },
 ]
 
 type Mode = 'idle' | 'carry' | 'munch' | 'catch' | 'sneak' | 'sip' | 'spray' | 'walk'

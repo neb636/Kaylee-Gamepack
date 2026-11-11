@@ -16,6 +16,7 @@ world feel alive and helps a child who can't read know who is talking:
 - In code `say({ text: 'Yum!', voice: 'koko' })` (the SDK type is `Line`). The character's mouth moves automatically
   when their voice plays.
 - Keep spoken lines short (under ~3 seconds); she's five.
+- **Player name:** Her name appears only on the landing page and in Egypt’s cartouche and China’s brush name-writing activities. All other spoken and written app text is name-free, including trophies, finales, stamps, labels and accessibility text. Prefer natural omission or context-specific wording; preserve internal IDs and factual references to the playtester.
 - **Say "click" on the Mac (AGENTS.md design rule 2).** She also plays on the MacBook, where "tap" and "your finger" mean
   nothing. A line that names a gesture is `onDevice(touch, mouse)` from `src/sdk/device.ts`:
   `door: onDevice('Tap the door!', 'Click the door!')`, or with a speaker `onDevice(ji('Tap me!'), ji('Click me!'))`.
@@ -40,6 +41,6 @@ world feel alive and helps a child who can't read know who is talking:
 `node scripts/table-read.mjs <place> <group>` stitches a group's recorded lines, in the order `lines.ts` lists them,
 into one mp3 with a script sheet beside it: who says what, when it plays (the comment above it in `lines.ts`), how long,
 tap a line to hear it. `--changed` makes one for every group this branch changed and marks new and reworded lines (the
-old words shown). It flags lines that aren't recorded, run over 3 s, say her name, use temple or Buddha words, or have
+old words shown). It flags lines that aren't recorded, run over 3 s, say her name outside the approved writing exceptions, use temple or Buddha words, or have
 curly quotes. Fix the easy flags before the user listens. Write `lines.ts` in play order, with a comment above each line or
 list saying when it plays: the table read is only as good as that order and those comments.

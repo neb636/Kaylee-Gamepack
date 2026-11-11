@@ -190,7 +190,7 @@ Through Nan town is a short city road (`?road=city`): tuk-tuks, the river bridge
 - 〰️ **Wiggle all over the road**: The car rocks (Daddy: “Wibbly wobbly!”).
 - 🎶 **Drive onto the right side**: The songthaew driver waves and honks a tune.
 
-- 💬 **Story frame**: Mommy: “Let's drive to the mushroom farm! Steer for me, Kaylee!” (first drive only). Sparkle speaks when something new appears: the first cloud (“We're driving into a cloud!”), the hairpins (“Let's count the bends!”), or after 8 s with the finger off and nothing touched (“Steer the car with your finger!”).
+- 💬 **Story frame**: Mommy: “Let's drive to the mushroom farm! Steer for me!” (first drive only). Sparkle speaks when something new appears: the first cloud (“We're driving into a cloud!”), the hairpins (“Let's count the bends!”), or after 8 s with the finger off and nothing touched (“Steer the car with your finger!”).
 - 🎓 **What it teaches, by doing**: Keep left (the songthaew on the other side), go slow on bends (the Pajero slows itself before each chevron sign and leans), clouds sit on mountains (she drives into one), count to three (the hairpins). Tap-to-hear facts: the Pajero is made in Thailand; in Thailand cars drive on the left; the big round mirrors show cars coming round the bend.
 - 🎉 **Payoff and replay**: The stop at the end of the road (the Pajero pulls in and everyone hops out), and on the way home, the 3. On a replay the roads are the same, the traffic and animals are random; the weather (rain, sun, cloud) changes.
 - 🔢 **Numbers**: Each drive about 45-75 s with 15-30 touches (holding and steering counts as continuous play, plus the pokeables). About 4-5 drives in a full trip.
@@ -276,7 +276,7 @@ Kaylee's little rice farm below the café, in the cozy look of the user's Animal
 
 ## 3️⃣ The “3” road and home
 
-- 3️⃣ **The “3” road** ([done] · `three`; counting): The last drive (`drive?road=three`), and then the viewpoint: the Pajero stops at a lay-by, the camera lifts up and over the hill, and the road below is a big swoopy **3**. Its bends pop one by one (one, two, three; nothing to draw, the user took the crayon out 2026-10-26), the family photo is taken with the 3 behind them, and Sparkle says “Three! Kaylee drove the 3!”. Then the road goes on to the airport and the plane home.
+- 3️⃣ **The “3” road** ([done] · `three`; counting): The last drive (`drive?road=three`), and then the viewpoint: the Pajero stops at a lay-by, the camera lifts up and over the hill, and the road below is a big swoopy **3**. Its bends pop one by one (one, two, three; nothing to draw, the user took the crayon out 2026-10-26), the family photo is taken with the 3 behind them, and Sparkle says “Three! You drove the 3!”. Then the road goes on to the airport and the plane home.
 - 🏠 **Home** ([done] · `home`): The home flight (`trip/legs/home-flight.ts`), the van, Agong's door. No gift this time (the user): the family hops in, Agong waves hello, and the photo she picks (the café balcony, the 3, the mushroom pizza, the salt pan) goes on his wall. Tap it and Mommy says “Our trip to Nan!”.
 
 > **🚫 Wat Phumin was dropped**
@@ -513,7 +513,7 @@ The user found the wheel far too twitchy on an iPhone and a trackpad (the Pajero
 - **Calmer wheel** (`mountain.ts`): `SLIDE` 7.5 → 4.2 m/s; a push curve (`STICK_CURVE` 1.6: a small push barely moves it, a full push still goes all the way); the push is smoothed (`STICK_EASE` 0.3 s, so jitters and quick back-and-forth twitches average out); the aim point never comes closer than 13 m (was 6 m, which swung the nose round and back); the camera follows the car's heading less (0.3, was 0.5).
 - **Still goes off on purpose:** a held full push reaches the grass in ~2.7 s and goes over in ~4-5 s (the steer target can run 3 m past the grass now, was 1.5 m). A jittery finger moves it about 1 m.
 - **Tyre squeal** (`screech`, `roadSfx.screech`): a quick, hard flick of the wheel (`SCREECH_FLICK` 5/s, at least 0.45 over, moving) squeals “eeeee”, puffs smoke off the back wheels and rocks the body; at most one every 0.7 s. A slow push never squeals. QA key `screeches`.
-- **No crayon** (`updateView`): from the viewpoint the camera lifts over the hill and the bends pop 1, 2, 3 by themselves (from 1.8 s, 0.75 s apart, sparkles on each), then the fanfare and “Three! Kaylee drove the three!”. The crayon, its line, tracing, the tap-to-draw-on, the 👆 along the road and “Draw the three with your finger!” are gone; Mommy's photo shows a grey road for the 3. `qa-motion` `nan-trace` is now `nan-three-view` (it just watches).
+- **No crayon** (`updateView`): from the viewpoint the camera lifts over the hill and the bends pop 1, 2, 3 by themselves (from 1.8 s, 0.75 s apart, sparkles on each), then the fanfare and “Three! You drove the three!”. The crayon, its line, tracing, the tap-to-draw-on, the 👆 along the road and “Draw the three with your finger!” are gone; Mommy's photo shows a grey road for the 3. `qa-motion` `nan-trace` is now `nan-three-view` (it just watches).
 
 ### The feel lab: the user tunes the steering by hand ([done] · 2026-10-26)
 

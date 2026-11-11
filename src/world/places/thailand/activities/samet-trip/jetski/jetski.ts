@@ -64,7 +64,7 @@ const HELM = knobs('jetHelm', 'Steering the jet ski', FILE, {
   lean: { value: 0.34, min: 0, max: 0.7, step: 0.01, label: 'Lean into turns', unit: 'rad', note: 'how far it tips into a turn at full speed' },
   lift: { value: 0.07, min: 0, max: 0.25, step: 0.005, label: 'Nose lifts', unit: 'rad', note: 'how far the nose comes up as it speeds up' },
   camera: { value: 0.45, min: 0, max: 1, step: 0.05, label: 'Camera turns with it', note: '0 = slow and steady, 1 = right behind it all the time' },
-  pitch: { value: 29, min: 10, max: 60, step: 1, label: 'Camera height', unit: '°', note: 'how far down the chase camera looks (higher shows Kaylee past Daddy)' },
+  pitch: { value: 29, min: 10, max: 60, step: 1, label: 'Camera height', unit: '°', note: 'how far down the chase camera looks (higher shows your unicorn past Daddy)' },
   side: { value: 16, min: -40, max: 40, step: 1, label: 'Camera to the side', unit: '°', note: 'how far round to one side of the jet ski the chase camera sits' },
   ahead: { value: 4, min: 0, max: 12, step: 0.25, label: 'Camera looks ahead', unit: 'm', note: 'how far ahead of the jet ski the camera looks at full speed' },
 })
@@ -168,7 +168,7 @@ const MAN_LOOK = JETSKI_MAN
 
 export const JET_ANCHORS: AnchorInfo[] = [
   { id: 'jacket', label: 'The life jacket', kind: 'thing' },
-  { id: 'kaylee', label: 'Kaylee on the jet ski', kind: 'thing' },
+  { id: 'kaylee', label: 'your unicorn on the jet ski', kind: 'thing' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'man', label: 'The jet ski man', kind: 'thing' },

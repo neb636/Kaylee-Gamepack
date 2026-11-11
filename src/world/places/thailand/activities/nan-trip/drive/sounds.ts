@@ -38,9 +38,9 @@ const synth = {
   screech: (k = 1) => {
     const d = 0.3 + 0.3 * k
     const f = 1150 + Math.random() * 300
-    tone(f, f * 0.8, d, 0.04 + 0.03 * k, 'triangle')
-    tone(f * 1.48, f * 1.25, d * 0.85, 0.012 + 0.012 * k, 'square', 0.02)
-    noise(d, 0.05 + 0.05 * k, 'bandpass', 2700, 1600, 0, 5)
+    tone(f, f * 0.8, d, 0.02 + 0.015 * k, 'triangle')
+    tone(f * 1.48, f * 1.25, d * 0.85, 0.006 + 0.006 * k, 'square', 0.02)
+    noise(d, 0.025 + 0.025 * k, 'bandpass', 2700, 1600, 0, 5)
   },
   /** A wiper's sweep across the glass (a dry one squeaks). */
   wiper: (dry = false) => {
@@ -86,7 +86,7 @@ export const roadSfx = {
   patter: held(nanClip('drive-rain-roof'), synth.patter, () => ({ vol: 0.5 }), { linger: 1, fade: 1 }),
   cloudIn: clip(nanClip('drive-cloud-in'), synth.cloudIn, { vol: 0.6 }),
   screech: (k = 1) => {
-    if (!playClip(nanClip('drive-screech'), { vol: 0.25 + 0.35 * k, rate: 0.95 + Math.random() * 0.15 })) synth.screech(k)
+    if (!playClip(nanClip('drive-screech'), { vol: 0.125 + 0.175 * k, rate: 0.95 + Math.random() * 0.15 })) synth.screech(k)
   },
   wiper: (dry = false) => {
     if (!playClip(nanClip(dry ? 'drive-wiper-dry' : 'drive-wiper'), { vol: 0.45 })) synth.wiper(dry)

@@ -254,7 +254,7 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 
 ### Story, teaching, payoff
 
-- **Story frame:** the jet ski man: “Life jacket on!” (she taps the jacket: click, it's on). Daddy: “You steer, Kaylee!” Then her hands are busy. Sparkle only when something is new (“Big waves! Jump them!”, “Race to the buoy!”) or after ~8 s with no finger down (“Touch the water to go!”).
+- **Story frame:** the jet ski man: “Life jacket on!” (she taps the jacket: click, it's on). Daddy: “You steer!” Then her hands are busy. Sparkle only when something is new (“Big waves! Jump them!”, “Race to the buoy!”) or after ~8 s with no finger down (“Touch the water to go!”).
 - **Teaches by doing:** **life jacket first**, every time (it waits for the click); stay **inside the buoys** where it's safe (the rope boings her back); waves come in from the open sea. Tap-to-hear: Sai Kaew means crystal sand; the jet ski pushes water out the back to go.
 - **Payoff:** the wake art she drew, the race win and the bell, the pink flag on Sai Kaew, the jet ski hers.
 - **Replay:** the free ride round the island, a heart to draw, the race again (a little faster).
@@ -327,7 +327,7 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 2. **Trickier hides** (?round=2)
    In the tangle of roots, under a beach towel (it breathes), in the sea with only his cap floating, up in the pandanus tree. Something always gives him away (a sneeze, a giggle, a crab pinching his toe) if she's stuck for ~8 s, and the spot glows after that.
 3. **Her turn to hide** (?round=hide)
-   Daddy covers his eyes. She leads Kaylee to any hiding place she likes (they all glow softly), and Daddy searches **all the wrong places** first (under a coconut, in the ice cream cart, behind Mommy) while she watches and giggles, then: “Found you!” She **wins** when she hides well: he gives up and she pops out (“Kaylee wins!”).
+   Daddy covers his eyes. She leads Kaylee to any hiding place she likes (they all glow softly), and Daddy searches **all the wrong places** first (under a coconut, in the ice cream cart, behind Mommy) while she watches and giggles, then: “Found you!” She **wins** when she hides well: he gives up and she pops out (“You win!”).
 
 - **Lunch on the deck first (a place, not a stop):** the resort deck above the cove is on the island all day (`deck`): climb the steps, sit, and it's photo 2. Daddy passes the bread basket (tap: a roll), a fresh coconut with a straw arrives (sip), mango sticky rice. A monitor lizard strolls by under the deck, a squirrel in the pandanus, the cream umbrellas flap. 45-90 s, 8-15 touches, no stamp.
 - **Silly:** hide in a ridiculous place (in the sea in the floatie, behind a thin palm) and Daddy still can't find her, because he looks the wrong way. Tap Daddy while he counts and he peeks (“No peeking!”).
@@ -623,7 +623,7 @@ Two pieces on the island’s real Ao Prao. Lunch on the resort deck (a place, no
 - **Walk and look** (the island’s verb): hold a finger and she trots after it, gallops when it’s far; tap the sand and she walks there; tap a hiding place and she walks up and peeks behind it. A high camera looking out to sea follows her and leans toward the beach’s middle (and fits Daddy in while he searches).
 - **Round 1** (`?round=1`): the photo for a moment (Kaylee’s hooves over her eyes in front of the tree, Daddy leaning on it), then a lavender blind with 1… 2… 3 while he runs off (tap to peek through it: he’s still running). Behind the tree (his head pokes out), behind the umbrella (crouched, feet showing), behind the chairs. Close by, his place wiggles and giggles every 1.5 s; a wrong place gets a silly little reaction and a giggle from the right one. Tap it, tap him or walk right up: “Found you!”, he jumps out beside her, she twirls, confetti.
 - **Round 2** (`?round=2`): lying in the roots, under the towel (the lump breathes, his toes stick out), in the sea with only his cap floating (bubbles), up in the pandanus. Still for 8 s: he gives himself away (a sneeze, a giggle, a splash; the place shakes hard); after 16 s it glows and the finger points.
-- **Her turn** (`?round=hide`): Daddy covers his eyes at the tree and counts to five (tap him: he peeks, “No peeking!”). The hiding places glow; standing still in one, she crouches in it (under the towel she’s a little lump). Daddy searches the places furthest from her first, then the one right beside her looking the wrong way, and gives up: “Kaylee wins!”. In the open he spots her the first time (never twice in a row); wandering out while he’s close gets her spotted too; tap her while he searches: “Boo!”, he jumps and she wins. The first win puts up the flag (🙈 🏆 and the way back); it keeps going round after that.
+- **Her turn** (`?round=hide`): Daddy covers his eyes at the tree and counts to five (tap him: he peeks, “No peeking!”). The hiding places glow; standing still in one, she crouches in it (under the towel she’s a little lump). Daddy searches the places furthest from her first, then the one right beside her looking the wrong way, and gives up: “You win!”. In the open he spots her the first time (never twice in a row); wandering out while he’s close gets her spotted too; tap her while he searches: “Boo!”, he jumps and she wins. The first win puts up the flag (🙈 🏆 and the way back); it keeps going round after that.
 - **Lunch** (`hideseek/lunch.ts`, `deck`): Kaylee and Daddy across the table on rattan chairs, Mommy at the end of the deck with her phone (tap: the photo flash), cream umbrellas by the rail. Tap the basket (or Daddy): he passes a roll; tap Kaylee (or the roll): a bite, three to a roll. The coconut arrives after 5 s (or her first roll): hold a finger on it to sip, it tips toward her as it empties, the last drops are a big slurp. The rice arrives at 14 s (or the coconut half gone): five bites fly to her. A monitor lizard strolls the sand below (tap: tongue out, it hurries), a squirrel on the pandanus (tap: it runs up), the sea splashes. Done: 🍽️ with 🙈 (straight down to hide and seek) and 🏝️.
 - **Knobs** (`?feel=1`): walking (trot, gallop, from, stop), finding Daddy (her count, how near the wiggle starts and how often, the walk-up distance, the give-away and glow times, his jump), her turn (his count, how close counts as hidden, his search speed, how many wrong places, how long at each, how close he spots her), the beach camera, and lunch (sip rate, bites, the toss, when the coconut and the rice come, its camera). The graph: how far she is from Daddy, and her speed.
 
@@ -636,7 +636,7 @@ Two pieces on the island’s real Ao Prao. Lunch on the resort deck (a place, no
 
 > **Known small things**
 >
-> - No voices yet (greybox): the counting, “Found you!” and “Kaylee wins!” show in a bubble for the user.
+> - No voices yet (greybox): the counting, “Found you!” and “You win!” show in a bubble for the user.
 > - Daddy walks straight through things while her eyes are shut (nobody sees), and round the front of them while he searches.
 > - Hooves over the eyes (hers and his) are rough arm poses on top of the rig; the look gate can make them nicer.
 > - Mommy’s photo of the two of them at the tree isn’t in the book yet.
@@ -739,7 +739,7 @@ With all four flags up the driftwood tree opens the sunset at Ao Prao; then the 
 
 The whole trip talks (Sparkle in the corner, the family and the islanders in their own voices), the stuck hints, the stamp screen’s facts and the pink mermaid sticker; out of the works and onto the Thailand map and the game shelf.
 
-- **Every line** in `lines.ts` `L.samet` (trip, island, book, jetski, sandcastle, snorkel, lunch, hideseek, finale): about 260 new lines. Each world has a `say` event its screen sends to the trip kit’s `TripGuide` (Sparkle bottom left, one bubble with who is talking); the greybox bubbles over the beach are gone. Kaylee never talks: her old bubbles (“Not here!”, “Boo!”, “Kaylee wins!”) are Daddy’s or Sparkle’s now, her name only at the big moments (her race win, her first hide and seek win, the full book, the fire show).
+- **Every line** in `lines.ts` `L.samet` (trip, island, book, jetski, sandcastle, snorkel, lunch, hideseek, finale): about 260 new lines. Each world has a `say` event its screen sends to the trip kit’s `TripGuide` (Sparkle bottom left, one bubble with who is talking); the greybox bubbles over the beach are gone. Kaylee never talks: her old bubbles (“Not here!”, “Boo!”, “You win!”) are Daddy’s or Sparkle’s now, no player name in spoken or written app text (updated 2026-11-11).
 - **The islanders’ voices** (`cast.json`): the jet ski man `otter`, the captain `pelican` (both boats, “Sawasdee ka!”), the taxi driver `sunbear`, the fire dancers `gecko` (one voice for the two). Their faces open their mouths with their voice (`FaceLife`).
 - **Hints** through `spendHint` (shown first, said at most twice a visit) in the stops and the finale; the island and the book stay quiet (they glow).
 - **The book’s words** moved from `book/animals.ts` to `L.samet.book` and got shorter: Sparkle says the name the first time it’s snapped (on the island and on the dive), the fact plays on a tap of its photo, the where on a silhouette.
@@ -894,7 +894,7 @@ The house's flat pastel 3D (toon bands with lavender shadows, ink outlines, blob
 
 ## 🗣️ Voices and lines (for the builder)
 
-Every phrase goes in `lines.ts` under `L.samet` (tagged by speaker) and is recorded with `scripts/generate-voice.mjs`. **Sparkle** gives the instructions from her corner (`trip/legs/Guide.tsx`); Mommy, Daddy and the new characters say their own story and reaction lines in their voices. New speakers go in Thailand's `cast.json`: the jet ski man (cheerful, Thai English, quick), the boat captain (warm, slow), the fire dancer (big showman voice). Short lines, under ~3 s, Kaylee's name only at big moments (the jet ski race win, the finale). Stuck hints through `spendHint()`; the island speaks no idle hints (it glows).
+Every phrase goes in `lines.ts` under `L.samet` (tagged by speaker) and is recorded with `scripts/generate-voice.mjs`. **Sparkle** gives the instructions from her corner (`trip/legs/Guide.tsx`); Mommy, Daddy and the new characters say their own story and reaction lines in their voices. New speakers go in Thailand's `cast.json`: the jet ski man (cheerful, Thai English, quick), the boat captain (warm, slow), the fire dancer (big showman voice). Short lines, under ~3 s, no player name outside the landing page and the Egypt/China name-writing activities. Stuck hints through `spendHint()`; the island speaks no idle hints (it glows).
 
 | Who | When | Line |
 |---|---|---|
@@ -904,11 +904,11 @@ Every phrase goes in `lines.ts` under `L.samet` (tagged by speaker) and is recor
 | Daddy | jet ski start | “You steer!” |
 | Sparkle | waves round | “Big waves! Jump them!” |
 | Jet ski man | race | “Race you to the big buoy!” |
-| Daddy | race won | “Kaylee wins!” |
+| Daddy | race won | “You win!” |
 | Daddy | sandcastle | “Let's build a sandcastle!” |
 | Captain | snorkel | “Masks on! Jump in!” |
 | Sparkle | sea urchin bump | “Prickly! Look, don't touch!” |
-| Daddy | hide and seek | “Close your eyes and count!” / “Found you!” / “Where's Kaylee?” |
+| Daddy | hide and seek | “Close your eyes and count!” / “Found you!” / “Where did you go?” |
 | Mommy | finale | “Look! Fire dancers!” |
 | Sparkle | a new animal | “A hornbill!” (one per animal) |
 

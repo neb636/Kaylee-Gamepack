@@ -111,7 +111,7 @@ export const SALT_ANCHORS: AnchorInfo[] = [
   { id: 'hen', label: 'Hen and chicks', kind: 'thing' },
   { id: 'baskets', label: 'Baskets', kind: 'thing' },
   { id: 'mural', label: 'Painted couple', kind: 'thing' },
-  ...(['kaylee', 'nick', 'ji'] as const).map((e): AnchorInfo => ({ id: `family:${e}`, label: { kaylee: 'Kaylee', nick: 'Daddy', ji: 'Mommy' }[e], kind: 'family' })),
+  ...(['kaylee', 'nick', 'ji'] as const).map((e): AnchorInfo => ({ id: `family:${e}`, label: { kaylee: 'You', nick: 'Daddy', ji: 'Mommy' }[e], kind: 'family' })),
 ]
 
 /** Taps on these are pokes: a finger on them doesn't pull the bucket or the paddle. */

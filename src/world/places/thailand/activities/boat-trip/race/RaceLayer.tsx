@@ -8,7 +8,7 @@
 //   rocking like a wheel shows how to steer during the countdown. (The space bar is the pedal on a computer, with ← →
 //   to steer.)
 // - Banners sweeping across: lap 2, the last lap, 1st!
-// - The podium: the trophy with KAYLEE on it (the SDK's own, as in her Trophy Room), then 🔁 race again or 🚤 back to the
+// - The podium: the trophy with the trophy title on it (the SDK's own, as in her Trophy Room), then 🔁 race again or 🚤 back to the
 //   bay.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
@@ -24,7 +24,7 @@ export { RaceFlag } from '../../../trip/race/RaceHud'
 export const RACE_TROPHY = 'Boat Race Champion'
 
 const FACES: Record<RacerId, Face> = {
-  kaylee: { icon: '🦄', color: 'var(--hotpink)', label: 'Kaylee' },
+  kaylee: { icon: '🦄', color: 'var(--hotpink)', label: 'You' },
   kids: { icon: '🐃', color: '#7FB2E8', label: 'The village kids' },
   monkey: { icon: '🐒', color: '#F2C24C', label: 'The macaque' },
 }

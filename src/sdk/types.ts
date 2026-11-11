@@ -21,7 +21,7 @@ export interface GameMeta {
   source: { issue?: number; pages: string[] }
   /** YYYY-MM-DD. Newest game is shown first. */
   createdAt: string
-  /** Engraved on the trophy under KAYLEE, e.g. "Counting Champion". */
+  /** Engraved on the trophy on the plaque, e.g. "Counting Champion". */
   trophyTitle: string
 }
 

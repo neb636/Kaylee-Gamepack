@@ -1,19 +1,19 @@
 [
   "China",
-  "Nee how, Kaylee!",
+  "Nee how!",
   "Nee how means hello in China!",
   "Tap the glowing lantern!",
   "Click the glowing lantern!",
-  "Where should we go next, Kaylee?",
+  "Where should we go next?",
   "Tap the dragon parade!",
   "Click the dragon parade!",
   "This lantern opens soon!",
   "Light up the lanterns to start the parade!",
   "The dragon parade is coming soon!",
-  "Kaylee, you did it! You won the China Explorer trophy!",
-  "Kaylee, China Explorer! From China.",
+  "You did it! You won the China Explorer trophy!",
+  "China Explorer! From China.",
   {
-    "text": "Nong how, Kaylee!",
+    "text": "Nong how!",
     "voice": "doudou"
   },
   {
@@ -194,11 +194,11 @@
   "Great cooking! Ready for the next customers?",
   "Everyone is clapping for you!",
   {
-    "text": "Shyeh shyeh, Chef Kaylee! A chef hat for you!",
+    "text": "Shyeh shyeh, Chef! A chef hat for you!",
     "voice": "cheffu"
   },
   {
-    "text": "Achoo! Thank you, Kaylee!",
+    "text": "Achoo! Thank you!",
     "voice": "lulu"
   },
   {
@@ -337,7 +337,7 @@
   "One more! What comes next?",
   "Try the glowing brick!",
   {
-    "text": "Yay! Thank you, Kaylee!",
+    "text": "Yay! Thank you!",
     "voice": "houhou"
   },
   {
@@ -361,7 +361,7 @@
     "voice": "houhou"
   },
   {
-    "text": "Hotpot time, Kaylee! Everybody cooks together!",
+    "text": "Hotpot time! Everybody cooks together!",
     "voice": "nainai"
   },
   "Bao Bao wants noodles!",
@@ -489,7 +489,7 @@
   },
   "Tap the red stamp!",
   "Click the red stamp!",
-  "Your name, stamped with a red seal, Kaylee!",
+  "Your name, stamped with a red seal!",
   "Chinese isn't written with letters. Some characters started as pictures!",
   {
     "text": "What a beautiful painting!",
@@ -578,14 +578,14 @@
   "Yes! Tiger came right after Ox!",
   "Everybody won a place! Hooray!",
   "There are twelve zodiac animals, one for every year!",
-  "Kaylee, you were born in the Year of the Ox!",
-  "Kaylee, you were born in the Year of the Rat!",
+  "You were born in the Year of the Ox!",
+  "You were born in the Year of the Rat!",
   {
-    "text": "Moo-hoo! Hooray, Kaylee!",
+    "text": "Moo-hoo! Hooray!",
     "voice": "ox"
   },
   {
-    "text": "Squeak! Hooray, Kaylee!",
+    "text": "Squeak! Hooray!",
     "voice": "mouse"
   },
   "This year, 2026, is the Year of the Horse!",
@@ -724,11 +724,11 @@
     "voice": "yak"
   },
   {
-    "text": "What a trip! Thank you, Kaylee!",
+    "text": "What a trip! Thank you!",
     "voice": "baobao"
   },
   {
-    "text": "I'm Long Long! Let's dance, Kaylee!",
+    "text": "I'm Long Long! Let's dance!",
     "voice": "longlong"
   },
   "Drag Long Long around the lanterns!",
@@ -762,7 +762,7 @@
     "voice": "cheffu"
   },
   {
-    "text": "Wheee! What a dance, Kaylee!",
+    "text": "Wheee! What a dance!",
     "voice": "longlong"
   },
   "Tap the drum! Make the dragon dance!",
@@ -771,7 +771,7 @@
     "text": "Boom boom! I love it!",
     "voice": "longlong"
   },
-  "Great drumming, Kaylee!",
+  "Great drumming!",
   "Tap the sky to make fireworks!",
   "Click the sky to make fireworks!",
   "Fireworks were invented in China!",
@@ -782,7 +782,7 @@
   "Bao Bao has a red envelope! Click to open it!",
   "A red envelope is called a hong bao!",
   {
-    "text": "Sheen nyen kwy luh, Kaylee! Happy New Year!",
+    "text": "Sheen nyen kwy luh! Happy New Year!",
     "voice": "baobao"
   },
   "Let's see real baby pandas!",

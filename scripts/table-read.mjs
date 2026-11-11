@@ -1,3 +1,4 @@
+import { hasPlayerName, permitsPlayerName } from './player-name-policy.mjs'
 // Table read: hear a toy's whole script, in play order and in the real voices, before any line is final. The user listens
 // (about 3 minutes, on their phone) instead of reading lines.ts. Studios do the same before recording: a scene that reads
 // fine can sound wrong out loud.
@@ -17,7 +18,7 @@
 // Flags, also printed here so the agent fixes the easy ones before the user listens:
 //   not recorded   no clip yet (node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs)
 //   long           over 3 s (she's five: keep lines short)
-//   name           says "Kaylee" (rule 4: save her name for big moments; the sheet counts them)
+//   name           says her name outside the two approved name-writing activities (rule 5)
 //   twice          the same words in two places in this group
 //   rule 8         temple / Buddha / monk words (AGENTS.md design rule 8)
 //   touch only     a gesture word (tap, finger, swipe...) with no Mac version: onDevice() (AGENTS.md design rule 2)
@@ -157,7 +158,7 @@ export async function scriptOf(place, group, { before } = {}) {
     const flags = []
     if (!audio) flags.push('not recorded')
     if ((m?.ms ?? 0) > LONG_MS || (!m?.ms && l.text.split(/\s+/).length > 9)) flags.push('long')
-    if (l.text.includes(KID)) flags.push('name')
+    if (hasPlayerName(l.text) && !permitsPlayerName(place, l.path)) flags.push('name')
     if (counts.get(l.text) > 1) flags.push('twice')
     if (RULE7.test(l.text)) flags.push('rule 8')
     if (TOUCH.test(l.text) && !['touch', 'mouse'].includes(l.path.at(-1))) flags.push('touch only')
@@ -230,9 +231,9 @@ const HUES = [330, 265, 190, 25, 140, 45, 300, 210, 0, 95]
 export function sheet({ title, intro, lines, people, audio, total }) {
   const who = [...new Set(lines.map((l) => l.voice))]
   const hue = Object.fromEntries(who.map((v, i) => [v, HUES[i % HUES.length]]))
-  const names = lines.filter((l) => l.flags.includes('name')).length
+  const names = lines.filter((l) => hasPlayerName(l.text)).length
   const missing = lines.filter((l) => !l.audio).length
-  const flagged = lines.filter((l) => l.flags.some((f) => f !== 'name')).length
+  const flagged = lines.filter((l) => l.flags.length > 0).length
   let lastPart = null
   let lastWhen = null
   const rows = lines
@@ -283,7 +284,7 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
 .text{font-size:17px}.text s{display:block;color:var(--soft);font-size:14px}
 .when,.meta{grid-column:2;font-size:13px;color:var(--soft)}
 .flag{display:inline-block;font-weight:600;font-size:11.5px;padding:1px 7px;border-radius:99px;margin-left:6px;background:#ffe2a8;color:#5a3d00}
-.flag.name{background:#e9dcff;color:#3d2470}.flag.new,.flag.changed{background:#c9f3dd;color:#0d4a2c}.flag.not-recorded,.flag.rule-8,.flag.touch-only{background:#ffd0d6;color:#6b0717}
+.flag.name{background:#e9dcff;color:#3d2470}.flag.new,.flag.changed{background:#c9f3dd;color:#0d4a2c}.flag.name,.flag.not-recorded,.flag.rule-8,.flag.touch-only{background:#ffd0d6;color:#6b0717}
 </style></head><body>
 <header>
 <h1>Table read: ${esc(title)}</h1>
@@ -325,8 +326,8 @@ export async function tableRead(place, group, { out = path.join(root, 'review/ta
   writeFileSync(path.join(out, `${slug}.html`), sheet({ place, group, title, intro, lines, people, audio, total }))
   const summary = {
     kind: 'table-read', place, group, title, intro, page: `${slug}.html`, audio, lines: lines.length, seconds: Math.round(total),
-    missing: lines.filter((l) => !l.audio).length, names: lines.filter((l) => l.flags.includes('name')).length,
-    flags: lines.filter((l) => l.flags.some((f) => f !== 'name')).map((l) => ({ key: l.key, text: l.text, flags: l.flags, was: l.was })),
+    missing: lines.filter((l) => !l.audio).length, names: lines.filter((l) => hasPlayerName(l.text)).length,
+    flags: lines.filter((l) => l.flags.length > 0).map((l) => ({ key: l.key, text: l.text, flags: l.flags, was: l.was })),
   }
   writeFileSync(path.join(out, `${slug}.json`), JSON.stringify({ ...summary, script: lines.map(({ audio, ...l }) => l) }, null, 2))
   return summary
@@ -385,7 +386,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
     for (const j of jobs) {
       const s = await tableRead(j.place, j.group, { out, before: j.before })
       console.log(`${s.title}: ${s.lines} lines, ${s.seconds} s of talk, her name ${s.names}×${s.missing ? `, ${s.missing} NOT RECORDED` : ''} → ${path.relative(process.cwd(), path.join(out, s.page))}`)
-      for (const f of s.flags) console.log(`  [${f.flags.filter((x) => x !== 'name').join(', ')}] ${f.key}: ${f.text}${f.was ? `  (was: ${f.was})` : ''}`)
+      for (const f of s.flags) console.log(`  [${f.flags.join(', ')}] ${f.key}: ${f.text}${f.was ? `  (was: ${f.was})` : ''}`)
     }
   }
 }

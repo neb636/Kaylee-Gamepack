@@ -158,7 +158,7 @@ function BookPages(p: Props) {
   const [hint, setHint] = useState<AnimalId | null>(null)
   const pg = PAGES[page]
   return (
-    <motion.div key="book" role="dialog" aria-label="Kaylee's animal book" className="sb-veil" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={p.onClose}>
+    <motion.div key="book" role="dialog" aria-label="Your animal book" className="sb-veil" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={p.onClose}>
       <motion.div className="sb-bookcard" initial={{ scale: 0.6, rotate: -4 }} animate={{ scale: 1, rotate: 0 }} exit={{ scale: 0.7 }} transition={{ type: 'spring', stiffness: 260, damping: 20 }} onClick={(e) => e.stopPropagation()}>
         <div className="sb-tabs" role="tablist">
           {PAGES.map((q, i) => {

@@ -112,8 +112,8 @@ for (const id of gameIds) {
 
     // Jump to the end through the test hook and check the trophy ceremony.
     await page.evaluate(() => window.__kaylee?.win())
-    await expect(page.getByRole('heading', { name: /you did it, kaylee/i })).toBeVisible()
-    await expect(page.getByText('KAYLEE').first()).toBeVisible()
+    await expect(page.getByRole('heading', { name: /you did it!/i })).toBeVisible()
+    await expect(page.getByText('KAYLEE', { exact: true })).toHaveCount(0)
     expect(errors).toEqual([])
   })
 }
@@ -187,8 +187,8 @@ for (const id of placeIds) {
     await expect(page.getByRole('button', { name: 'Back to the map' })).toBeVisible()
 
     await page.evaluate(() => window.__kaylee?.win())
-    await expect(page.getByRole('heading', { name: /you did it, kaylee/i })).toBeVisible()
-    await expect(page.getByText('KAYLEE').first()).toBeVisible()
+    await expect(page.getByRole('heading', { name: /you did it!/i })).toBeVisible()
+    await expect(page.getByText('KAYLEE', { exact: true })).toHaveCount(0)
     expect(errors).toEqual([])
   })
 }

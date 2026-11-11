@@ -90,6 +90,16 @@ export const pacing = [
 /** Filmed moments (scripts/qa-motion.mjs): the core verbs, driven the way a child would. */
 export const motion = [
   {
+    // Shared shell ceremony, kept here to film text and trophy changes against the same country.
+    name: 'australia-trophy-ceremony',
+    seconds: 4,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/australia`)
+      await page.waitForFunction(() => typeof window.__kaylee?.win === 'function')
+    },
+    act: async (page) => { await page.evaluate(() => window.__kaylee.win()) },
+  },
+  {
     name: 'outback-hop',
     seconds: 1.3,
     setup: async (page, base) => {

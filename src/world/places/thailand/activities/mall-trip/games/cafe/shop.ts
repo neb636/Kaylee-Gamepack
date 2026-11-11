@@ -64,7 +64,7 @@ export const CAFE_ANCHORS: AnchorInfo[] = [
   { id: 'bread', label: 'Bread baskets', kind: 'thing' },
   { id: 'cake', label: 'Cake stand', kind: 'thing' },
   { id: 'tea', label: 'Tea set', kind: 'thing' },
-  { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
+  { id: 'family:kaylee', label: 'You', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
 ]

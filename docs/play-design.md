@@ -1,5 +1,7 @@
 # Play design: make a toy first, then the game
 
+**Player name:** Only the landing page and Egypt’s cartouche / China’s brush name-writing activities may say or show her name. All other dialogue, labels, stamps, finales and trophies use natural name-free wording (2026-11-11).
+
 Read this before planning or building any Around the World activity.
 `AGENTS.md` has the hard rules; this file says what makes an activity *fun*, with examples of what went wrong.
 

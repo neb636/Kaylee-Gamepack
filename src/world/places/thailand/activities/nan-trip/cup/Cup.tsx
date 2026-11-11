@@ -19,7 +19,7 @@ import { RIVALS, type RacerId, type Result, type RivalId } from './rivals'
 import { Track, type TrackId } from './track'
 
 const FACES: Record<RacerId, Face> = {
-  kaylee: { icon: '🦄', color: 'var(--hotpink)', label: 'Kaylee' },
+  kaylee: { icon: '🦄', color: 'var(--hotpink)', label: 'You' },
   taeng: { icon: RIVALS.taeng.icon, color: RIVALS.taeng.color, label: RIVALS.taeng.label },
   pao: { icon: RIVALS.pao.icon, color: RIVALS.pao.color, label: RIVALS.pao.label },
   moon: { icon: RIVALS.moon.icon, color: RIVALS.moon.color, label: RIVALS.moon.label },

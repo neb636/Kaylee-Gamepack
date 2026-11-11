@@ -841,7 +841,11 @@ export class TablePlugin implements HousePlugin {
     this.cards.update(dt, t)
     this.cards.setGlow(this.phase === 'awaiting')
     this.board?.update(dt, t)
-    this.pieces?.forEach((p) => p.update(dt, t))
+    // Read live so the feel lab's Piece size slider shows at once on the pieces already out.
+    this.pieces?.forEach((p) => {
+      p.root.scale.setScalar(FEEL.pieceSize)
+      p.update(dt, t)
+    })
     this.sparkle.update(dt)
     // The cousin's arm swings forward to roll.
     const m = this.seated ? this.house.family.get(this.seated) : undefined

@@ -98,7 +98,7 @@ export function page({ nav, body }) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Kaylee's Gamepack: jump to a game section</title>
+<title>Gamepack: jump to a game section</title>
 <style>${STYLE}</style>
 </head>
 <body>

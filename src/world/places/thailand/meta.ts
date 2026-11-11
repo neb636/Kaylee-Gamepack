@@ -22,7 +22,7 @@ const meta: PlaceMeta = {
   // The Thailand map; the house's back button goes there.
   hubHome: 'map',
   activities: [
-    { id: 'boat-trip', name: "Captain Kaylee's Boat Trip", icon: '🚤', pos: { x: 27, y: 81 }, sticker: { name: 'Fiddler crab', img: art.crab, fact: L.home.sticker } },
+    { id: 'boat-trip', name: "The Captain's Boat Trip", icon: '🚤', pos: { x: 27, y: 81 }, sticker: { name: 'Fiddler crab', img: art.crab, fact: L.home.sticker } },
     { id: 'mall-trip', name: 'Mall Day at ICONSIAM', icon: '🛝', pos: { x: 43, y: 45 }, sticker: { name: 'Pizza slice', img: art.pizza, fact: L.mall.trip.sticker } },
     { id: 'nan-trip', name: 'Road Trip to Nan', icon: '🚙', pos: { x: 45, y: 14 }, sticker: { name: 'Pink mushroom', img: art.mushroom, fact: L.nan.trip.sticker } },
     { id: 'samet-trip', name: 'Koh Samet Island', icon: '🏝️', pos: { x: 52, y: 62 }, sticker: { name: 'Pink mermaid', img: art.mermaid, fact: L.samet.trip.sticker } },

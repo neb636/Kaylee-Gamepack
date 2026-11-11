@@ -58,7 +58,7 @@ export const BARBER_ANCHORS: AnchorInfo[] = [
   { id: 'pump', label: 'The chair pump', kind: 'thing' },
   { id: 'pole', label: "Barber's pole", kind: 'thing' },
   { id: 'jar', label: 'Comb jar', kind: 'thing' },
-  { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
+  { id: 'family:kaylee', label: 'You', kind: 'family' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
 ]

@@ -58,7 +58,7 @@ export const BLOCKS_ANCHORS: AnchorInfo[] = [
   { id: 'wall', label: 'Foam wall', kind: 'thing' },
   { id: 'ball', label: 'Foam ball', kind: 'thing' },
   { id: 'rocker', label: 'Rocking elephant', kind: 'thing' },
-  { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
+  { id: 'family:kaylee', label: 'You', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
 ]
 

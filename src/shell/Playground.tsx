@@ -37,7 +37,7 @@ export function Playground() {
           <Mascot pose="wave" size={140} />
           <Mascot pose="cheer" size={140} />
           <Mascot pose="think" size={140} />
-          <SayButton text={onDevice('Hi Kaylee! Tap me to hear it again.', 'Hi Kaylee! Click me to hear it again.')} />
+          <SayButton text={onDevice('Hi! Tap me to hear it again.', 'Hi! Click me to hear it again.')} />
           <StarProgress done={2} total={5} />
         </div>
       </Demo>

@@ -135,7 +135,7 @@ const tmp2 = new Vector3()
 export const ANCHORS: AnchorInfo[] = [
   ...PICKABLES.map((p) => ({ id: p.id, label: p.label, kind: 'thing' as const })),
   ...FAMILY.map((m) => ({ id: `family:${m.id}`, label: m.name, name: m.name, thai: m.thai, kind: 'family' as const })),
-  { id: 'family:kaylee', label: 'Kaylee', name: 'Kaylee', kind: 'family' },
+  { id: 'family:kaylee', label: 'You', name: 'You', kind: 'family' },
 ]
 
 export class House implements World3D {

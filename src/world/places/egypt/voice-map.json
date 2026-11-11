@@ -7,11 +7,11 @@
     "file": "1332551271fb.mp3"
   },
   {
-    "text": "Ahlan, Kaylee! I'm Miu the kitten!",
+    "text": "Ahlan! I'm Miu the kitten!",
     "voice": "miu",
     "sig": "e1570748b7",
-    "ms": 2677,
-    "file": "f0a9264e46ee.mp3"
+    "ms": 2136,
+    "file": "91a28525a803.mp3"
   },
   {
     "text": "Ahlan means hello! Come explore Egypt with me!",
@@ -35,11 +35,11 @@
     "file": "64353a809ebd.mp3"
   },
   {
-    "text": "Where to next, Kaylee?",
+    "text": "Where to next?",
     "voice": "miu",
     "sig": "e1570748b7",
-    "ms": 1498,
-    "file": "cf52a8b209a1.mp3"
+    "ms": 1128,
+    "file": "b9196d2abec3.mp3"
   },
   {
     "text": "Everyone is here! Tap the light show!",
@@ -63,18 +63,18 @@
     "file": "2cff34c8d3a4.mp3"
   },
   {
-    "text": "Kaylee, you did it! You won the Egypt Explorer trophy!",
+    "text": "You did it! You won the Egypt Explorer trophy!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4954,
-    "file": "ea76ebc434eb.mp3"
+    "ms": 3840,
+    "file": "0c48eff7927e.mp3"
   },
   {
-    "text": "Kaylee, Egypt Explorer! From Egypt.",
+    "text": "Egypt Explorer! From Egypt.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4015,
-    "file": "37f0cd741f29.mp3"
+    "ms": 3528,
+    "file": "aa5fa16f1946.mp3"
   },
   {
     "text": "Purr! That tickles!",
@@ -287,11 +287,11 @@
     "file": "78f5b4a2e47c.mp3"
   },
   {
-    "text": "Yawn! Ahlan, Kaylee! I'm Tutu!",
+    "text": "Yawn! Ahlan! I'm Tutu!",
     "voice": "tutu",
     "sig": "84ef0f00ed",
-    "ms": 3583,
-    "file": "c74766902e52.mp3"
+    "ms": 3336,
+    "file": "6259ae33bee7.mp3"
   },
   {
     "text": "I napped for thousands of years! Hee hee!",
@@ -448,11 +448,11 @@
     "file": "3b28ca137fdb.mp3"
   },
   {
-    "text": "Thank you, Kaylee! Hmm, have you seen my nose?",
+    "text": "Thank you! Hmm, have you seen my nose?",
     "voice": "sphinx",
     "sig": "10ab3a11c9",
-    "ms": 4314,
-    "file": "dad5355122c9.mp3"
+    "ms": 5016,
+    "file": "ef0fbd4ee8df.mp3"
   },
   {
     "text": "Hee hee! His nose fell off a long, long time ago!",
@@ -749,11 +749,11 @@
     "file": "801f03c4f7f0.mp3"
   },
   {
-    "text": "Shukran, Kaylee! You're a true Egypt explorer!",
+    "text": "Shukran! You're a true Egypt explorer!",
     "voice": "miu",
     "sig": "e1570748b7",
-    "ms": 3580,
-    "file": "b011408ae19f.mp3"
+    "ms": 2880,
+    "file": "4b885c192e56.mp3"
   },
   {
     "text": "Camel sticker! Camels store fat in their humps for long trips!",

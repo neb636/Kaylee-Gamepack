@@ -1,7 +1,7 @@
 [
   "Australia",
   {
-    "text": "G'day, Kaylee! I'm Pip the kangaroo!",
+    "text": "G'day! I'm Pip the kangaroo!",
     "voice": "pip"
   },
   {
@@ -17,7 +17,7 @@
     "voice": "pip"
   },
   {
-    "text": "Where should we go next, Kaylee?",
+    "text": "Where should we go next?",
     "voice": "pip"
   },
   {
@@ -32,8 +32,8 @@
     "text": "Get all the stamps to start the party!",
     "voice": "pip"
   },
-  "Kaylee, you did it! You won the Australia Explorer trophy!",
-  "Kaylee, Australia Explorer! From Australia.",
+  "You did it! You won the Australia Explorer trophy!",
+  "Australia Explorer! From Australia.",
   {
     "text": "Hee hee! That tickles!",
     "voice": "pip"
@@ -232,7 +232,7 @@
   "Tap each friend to make them dance!",
   "Click each friend to make them dance!",
   {
-    "text": "G'day, Kaylee! Thanks for helping Pip!",
+    "text": "G'day! Thanks for helping Pip!",
     "voice": "mama"
   },
   {
@@ -257,7 +257,7 @@
   },
   "Sydney has some of the biggest fireworks in the world!",
   {
-    "text": "Thank you, Kaylee! You're a true Aussie mate!",
+    "text": "Thank you! You're a true Aussie mate!",
     "voice": "pip"
   },
   "Kangaroo sticker! Kangaroos can only hop forward, never backward!",

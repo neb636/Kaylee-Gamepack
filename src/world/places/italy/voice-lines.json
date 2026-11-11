@@ -1,16 +1,16 @@
 [
   "Italy",
-  "Kaylee, you did it! You won the Italy Explorer trophy!",
-  "Kaylee, Italy Explorer! From Italy.",
+  "You did it! You won the Italy Explorer trophy!",
+  "Italy Explorer! From Italy.",
   {
-    "text": "Ciao, Kaylee! I'm Lupa!",
+    "text": "Ciao! I'm Lupa!",
     "voice": "lupa"
   },
   {
     "text": "Help me get ready to sing at the opera?",
     "voice": "lupa"
   },
-  "Where should we go next, Kaylee?",
+  "Where should we go next?",
   "This spot opens soon!",
   "Italy is shaped like a boot! Kick!",
   "Lupa's opera night is coming soon!",
@@ -124,7 +124,7 @@
     "voice": "lupa"
   },
   {
-    "text": "Benvenuta, Chef Kaylee!",
+    "text": "Benvenuta, Chef!",
     "voice": "bruno"
   },
   {
@@ -251,7 +251,7 @@
   },
   "When someone says grazie, you say prego!",
   {
-    "text": "Now make a pizza just for YOU, Chef Kaylee!",
+    "text": "Now make a pizza just for YOU, Chef!",
     "voice": "bruno"
   },
   "Red sauce or pink sauce?",
@@ -272,7 +272,7 @@
   "Click the check when you like it!",
   "Cut it any way you like!",
   {
-    "text": "Buonissima, Kaylee!",
+    "text": "Buonissima!",
     "voice": "lupa"
   },
   "Mozzarella!",
@@ -281,7 +281,7 @@
   "Mushroom!",
   "Peperoni! In Italy, that means peppers!",
   "Tomato!",
-  "Great job, Chef Kaylee!",
+  "Great job, Chef!",
   {
     "text": "Everybody loves your pizza!",
     "voice": "bruno"
@@ -291,7 +291,7 @@
     "voice": "bruno"
   },
   {
-    "text": "Grazie, Chef Kaylee! A chef hat for you!",
+    "text": "Grazie, Chef! A chef hat for you!",
     "voice": "bruno"
   },
   {
@@ -303,7 +303,7 @@
     "voice": "lupa"
   },
   {
-    "text": "Ciao, Kaylee! The olives are ready!",
+    "text": "Ciao! The olives are ready!",
     "voice": "spina"
   },
   {
@@ -329,7 +329,7 @@
     "voice": "spina"
   },
   "Olives in the net!",
-  "Great combing, Kaylee!",
+  "Great combing!",
   "The net is full!",
   "Olive trees love hot, dry summers!",
   {
@@ -345,7 +345,7 @@
   "Green goes in the one sun bowl!",
   "Purple goes in the two sun bowl!",
   "Black goes in the three sun bowl!",
-  "Green, purple, black! Well done, Kaylee!",
+  "Green, purple, black! Well done!",
   {
     "text": "Mmm! Let me try one!",
     "voice": "spina"
@@ -429,7 +429,7 @@
     "voice": "lupa"
   },
   "Long ago, a girl helped the Romans find water.",
-  "Today, that girl is YOU, Kaylee!",
+  "Today, that girl is YOU!",
   "Build a water bridge to Rome!",
   "Drag the arch that fits each gap!",
   {
@@ -441,7 +441,7 @@
     "voice": "lupa"
   },
   {
-    "text": "Brava, Kaylee!",
+    "text": "Brava!",
     "voice": "lupa"
   },
   "Water only flows downhill!",
@@ -470,7 +470,7 @@
   "Swipe up on the coin!",
   "Drag the coin up!",
   "One more coin!",
-  "Now you will come back to Rome one day, Kaylee!",
+  "Now you will come back to Rome one day!",
   {
     "text": "My turn!",
     "voice": "lupa"
@@ -569,7 +569,7 @@
     "text": "Now the big doors: four and five!",
     "voice": "cesare"
   },
-  "V is five! Just like you, Kaylee!",
+  "V is five! Just like you!",
   {
     "text": "Everybody, up!",
     "voice": "cesare"
@@ -583,7 +583,7 @@
   },
   "The Colosseum is almost 2,000 years old!",
   {
-    "text": "Grazie, Kaylee. I bow to you.",
+    "text": "Grazie. I bow to you.",
     "voice": "cesare"
   },
   {
@@ -597,7 +597,7 @@
     "voice": "lupa"
   },
   {
-    "text": "Ciao, Kaylee! In Venice, the streets are water!",
+    "text": "Ciao! In Venice, the streets are water!",
     "voice": "gino"
   },
   {
@@ -772,19 +772,19 @@
     "voice": "civetta"
   },
   {
-    "text": "Grazie, Kaylee!",
+    "text": "Grazie!",
     "voice": "lupa"
   },
   {
-    "text": "Grazie, Kaylee!",
+    "text": "Grazie!",
     "voice": "spina"
   },
   {
-    "text": "Grazie, Kaylee.",
+    "text": "Grazie.",
     "voice": "cesare"
   },
   {
-    "text": "Grazie, Kaylee!",
+    "text": "Grazie!",
     "voice": "civetta"
   },
   {

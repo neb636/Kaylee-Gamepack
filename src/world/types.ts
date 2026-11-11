@@ -50,7 +50,7 @@ export interface PlaceMeta {
   mapPos: { x: number; y: number }
   /** The friend Sparkle meets there. */
   friend: { name: string; img: string }
-  /** Engraved under KAYLEE on the trophy she gets for collecting every stamp. */
+  /** Engraved on the plaque on the trophy she gets for collecting every stamp. */
   trophyTitle: string
   activities: ActivityInfo[]
   /** Activities still being built. They open from their own links (#/world/sections, a PR's test links), and the tests
@@ -71,6 +71,9 @@ export interface PlaceMeta {
   /** Spoken on the passport page: "This is Australia!" */
   passportLine: Line
   createdAt: string
+  /** Not ready to play: off the world map and the game shelf (`listed` in registry.ts). Its links still work, and
+   *  `?all=1` puts it back on the map and shelf to try. Remove the line (or set false) to show it again. */
+  hidden?: boolean
 }
 
 export interface PlaceProps {

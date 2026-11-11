@@ -4,7 +4,6 @@
 // next leg's icon to keep going, 🚤 straight to the boat.
 import { motion } from 'motion/react'
 import { useEffect } from 'react'
-import { KID_NAME } from '../../../../../sdk'
 import { sfx } from '../../sfx'
 
 export interface PassLeg {
@@ -60,7 +59,7 @@ export function BoardingPass({ legs, done, punch, choices, title = 'BOARDING PAS
           <span>{badge}</span>
         </div>
         <div style={{ padding: '12px 20px 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, color: 'var(--ink)' }}>
-          <span style={{ fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 700, letterSpacing: 1 }}>{KID_NAME.toUpperCase()}</span>
+          <span style={{ fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 700, letterSpacing: 1 }}>{'EXPLORER'}</span>
           <span style={{ fontSize: 'clamp(16px, 3vw, 24px)', fontWeight: 600 }}>{route}</span>
         </div>
         <div style={{ borderTop: '3px dashed var(--lavender-dark)', margin: '10px 0 0' }} />

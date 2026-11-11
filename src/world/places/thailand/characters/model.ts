@@ -52,7 +52,7 @@ let ready: Promise<GLTF | null> | null = null
 /** Resolves once she's loaded, or with null if she couldn't be (never rejects: the code-built Kaylee stands in). */
 export function kayleeReady(): Promise<GLTF | null> {
   ready ??= loadKayleeModel().catch((e) => {
-    console.warn('kaylee.glb could not be loaded, using the code-built Kaylee.', e)
+    console.warn('kaylee.glb could not be loaded, using the code-built unicorn.', e)
     return null
   })
   return ready

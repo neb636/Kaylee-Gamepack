@@ -1,5 +1,7 @@
 # Toy notes template
 
+**Player name:** Only the landing page and Egypt’s cartouche / China’s brush name-writing activities may say or show her name. All other dialogue, labels, stamps, finales and trophies use natural name-free wording (2026-11-11).
+
 The builder's notes for one toy (an activity, a stop on a trip, a rebuild), written by the agent after the user picks its
 pitch card (the `pitch` skill). **The user doesn't read these:** they see the pitch card, the table read and the reel. The
 notes are for you and the next agent, in `planning/around-the-world/<country>/<toy>.md`. Read `docs/play-design.md`

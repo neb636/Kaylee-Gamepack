@@ -1,9 +1,8 @@
 // Every phrase that can be spoken in Peru. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
-// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.)
+// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing.)
 // Plain strings are Sparkle, the guide: she gives the instructions. Friends say their own story and reaction lines in
 // their own voices (see cast.json). Straight apostrophes only: curly ones failed the transcription check in PR #63.
 import { onDevice } from '../../../sdk/device.ts'
-const NAME = 'Kaylee'
 const as = (voice: string) => (text: string) => ({ text, voice })
 const luna = as('luna')
 const paco = as('paco')
@@ -21,13 +20,13 @@ const monkey = as('monkey')
 
 export const L = {
   name: 'Peru',
-  trophyWin: `${NAME}, you did it! You won the Peru Explorer trophy!`,
-  trophyRoom: `${NAME}, Peru Explorer! From Peru.`,
+  trophyWin: `You did it! You won the Peru Explorer trophy!`,
+  trophyRoom: `Peru Explorer! From Peru.`,
 
   // ---- Hub: Luna's map of Peru ----
-  intro: [luna(`Hola, ${NAME}! I'm Luna!`), luna("Let's fill my explorer journal!")],
+  intro: [luna(`Hola! I'm Luna!`), luna("Let's fill my explorer journal!")],
   hub: onDevice('Tap a picture to explore Peru!', 'Click a picture to explore Peru!'),
-  hubNext: luna(`Another discovery, ${NAME}!`),
+  hubNext: luna(`Another discovery!`),
   soon: 'This place opens soon!',
   balloonSoon: 'Our balloon trip comes soon!',
   tickle: [luna('Hee hee!'), luna('I love exploring with you!')],
@@ -45,7 +44,7 @@ export const L = {
   // ---- 1. Luna's Fluffy Day (the alpaca salon) ----
   fluffy: {
     story: [luna("My fleece is so long, I can't see!")],
-    brush: `Brush Luna's fleece, ${NAME}!`,
+    brush: `Brush Luna's fleece!`,
     found: {
       burr: luna('Ouch! Prickly!'),
       twig: luna('A twig!'),
@@ -53,7 +52,7 @@ export const L = {
       bird: luna('A baby bird!'),
       beetle: luna('Bye-bye, beetle!'),
     },
-    see: luna(`I can see you, ${NAME}!`),
+    see: luna(`I can see you!`),
     hum: 'Alpacas hum when they are happy!',
     clippers: 'Now the clippers! Snip snip!',
     pond: onDevice('Done? Tap the pond to show Luna!', 'Done? Click the pond to show Luna!'),
@@ -86,7 +85,7 @@ export const L = {
   // ---- 5. Tika's Mountain Terraces (Machu Picchu: fit the stones, build the terraces) ----
   terraces: {
     story: [tika('Oh no! Our grass steps fell down!')],
-    go: `Fit the stones back in, ${NAME}!`,
+    go: `Fit the stones back in!`,
     clonk: [tika('Clonk!'), tika('It fits!'), tika('Like a puzzle!'), tika('Perfect!')],
     glow: 'Look for the glowing spot!',
     wallDone: [tika('Our terrace is back!'), tika('Yum! Fresh grass!'), tika('Another step!'), tika('We made it to the top!')],
@@ -97,7 +96,7 @@ export const L = {
     corners: 'This stone has so many corners!',
     clouds: tika("So many clouds! I can't see!"),
     top: 'The last wall! Up in the clouds!',
-    reveal: `${NAME}, look! Machu Picchu!`,
+    reveal: `Look! Machu Picchu!`,
     photo: onDevice("Tap the camera for Luna's journal!", "Click the camera for Luna's journal!"),
     bomb: [tika('Me too!'), tika('Cheese!'), tika('My best side!'), tika('Say llama!'), tika('One more!')],
     journal: tika("A picture for Luna's journal!"),
@@ -122,22 +121,22 @@ export const L = {
     blip: pingo('A teeny splash!'),
     sock: pingo('I found a sock!'),
     lobo: [lobo('Hey! You splashed me!'), lobo('Do it again!'), lobo('Ha ha! Seaweed hat!')],
-    loboTap: [lobo('Arf arf!'), lobo('I love splashes!'), lobo('Hola, Kaylee!')],
+    loboTap: [lobo('Arf arf!'), lobo('I love splashes!'), lobo('Hola!')],
     fishGo: 'Catch fish for the chicks!',
     aim: 'Land in the gold circle!',
     got: [pingo('Got one!'), pingo('A fish!')],
     orders: [pepa('One fish, please!'), pepa('Two fish, please!'), pepa('Three fish, please!')],
     count: ['One!', 'Two!', 'Three!'],
-    feed: pepa(`Feed my chicks, ${NAME}!`),
+    feed: pepa(`Feed my chicks!`),
     yum: [pepa('Yummy!'), pepa('So round and fluffy!'), pepa('Gracias!')],
-    egg: `${NAME}, look! The egg is wiggling!`,
+    egg: `Look! The egg is wiggling!`,
     hatch: pepa('A new baby!'),
     pelican: 'A pelican wants fish too!',
     swimGo: 'The chicks are ready to swim! Pull them back!',
     firstSwim: pepa('Their very first swim!'),
-    thanks: pepa(`Gracias, ${NAME}!`),
+    thanks: pepa(`Gracias!`),
     photo: "Click! A picture for Luna's journal!",
-    pepaTap: [pepa(`Hola, ${NAME}!`), pepa('My babies love fish!')],
+    pepaTap: [pepa(`Hola!`), pepa('My babies love fish!')],
     tern: 'These birds have white mustaches!',
     facts: ['Peru has penguins!', 'The ocean here is cold and full of fish!', 'Penguins fly underwater with their wings!'],
     idle: {
@@ -171,10 +170,10 @@ export const L = {
     sunMoved: 'The sun moved! Find the new warm air!',
     top: 'Fly to the very top!',
     alone: pluma('I can fly by myself!'),
-    solo: `Now you fly Pluma, ${NAME}!`,
+    solo: `Now you fly Pluma!`,
     bigSwirl: 'Fly Pluma into the big swirl!',
-    lookMe: pluma(`Look at me, ${NAME}!`),
-    proud: coco(`My Pluma can fly! Gracias, ${NAME}!`),
+    lookMe: pluma(`Look at me!`),
+    proud: coco(`My Pluma can fly! Gracias!`),
     photo: "Click! A picture for Luna's journal!",
     nestTap: pluma('Hi, Dad!'),
     idle: {
@@ -208,7 +207,7 @@ export const L = {
     pads: 'Lily pads! Help the friends hop on!',
     hop: { frog: 'Hop, frog!', monkey: monkey('Wheee!'), capy: capy('Comfy!'), macaw: 'Flap, flap, macaw!' },
     sun: 'Bye-bye, cloud! Hello, sun!',
-    rainbow: rosa(`A rainbow! Gracias, ${NAME}!`),
+    rainbow: rosa(`A rainbow! Gracias!`),
     photo: 'Click! A picture for Luna!',
     spout: [rosa('Hee hee!'), rosa('Pfff! Bubbles!'), rosa('Splashy!')],
     rosaTap: rosa('I live in a river, not the sea!'),

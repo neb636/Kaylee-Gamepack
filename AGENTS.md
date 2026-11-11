@@ -10,7 +10,7 @@ the family loves become day trips (the boat trip in Phang Nga Bay, the mall day 
 is `docs/thailand-3d.md`. Australia, Italy, China, Egypt and Peru are 2D countries; Australia is the 2D reference.
 Canada (a 3D toy-table map) and the Poles (a 3D globe) mix 3D and 2D activities.
 
-Kaylee loves **unicorns, the color pink, winning, and trophies with her name on them.** She **cannot read yet**.
+Kaylee loves **unicorns, the color pink, winning, and trophies.** She **cannot read yet**.
 
 ## How we address the user
 
@@ -78,8 +78,8 @@ were handed plan pages, grey boxes and up to 40 PRs a day, they ended up merging
 ## What Kaylee told us (follow it everywhere)
 
 - **Any order.** Every activity is open from the start and earns a passport stamp + animal sticker right away.
-  Collecting every stamp unlocks a short finale, then `onWin()` shows the shell's trophy ceremony (gold trophy engraved
-  **KAYLEE** + the country's `trophyTitle`). Don't build your own trophy screen.
+  Collecting every stamp unlocks a short finale, then `onWin()` shows the shell's trophy ceremony (gold trophy displaying
+  the country's `trophyTitle`). Don't build your own trophy screen.
 - **Talk short, play long.** What bored her was listening and forced easy rounds, never touching. At most 1-2 short
   spoken lines before her hands are busy, then keep them busy: about 1.5-3 minutes and 20-40 touches per activity,
   nearly all of them *playing* (steering, pouring, building), not answering. Sparkle speaks when something new appears
@@ -123,8 +123,7 @@ were handed plan pages, grey boxes and up to 40 PRs a day, they ended up merging
    or the trophy never waits on winning one round.
 4. **Big touch targets** (≥ 88px on iPad, ≥ 64px on iPhone and for 3D tap targets), one clear thing to do at a time,
    lots of juicy feedback: `sounds.*`, `sfx`, bounces, `burst()` confetti for mini-wins.
-5. **Go easy on her name.** Hearing "Kaylee" in line after line gets annoying: save it for the big moments (a stamp,
-   the finale, the trophy), not every cheer or instruction. `KID_NAME` is exported.
+5. **Her name only in three places.** Her name appears only on the landing page and in Egypt’s cartouche and China’s brush name-writing activities. All other spoken and written app text is name-free, including trophies, finales, stamps, labels and accessibility text. Prefer natural omission or context-specific wording; preserve internal IDs and factual references to the playtester. `KID_NAME` is for the landing greeting only.
 6. Kind, gentle, girly-cute tone. Pink/lavender/pastels. Unicorns welcome (Sparkle is the guide; in Thailand Kaylee
    herself is a lilac unicorn).
 7. **Characters feel alive** (see Characters, below). Never just slide or bob a flat picture around.
