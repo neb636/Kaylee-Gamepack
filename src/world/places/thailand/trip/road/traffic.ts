@@ -3,10 +3,11 @@
 // chickens that flap off it, a monkey on the guard rail). They keep to THEIR left (her right, lat < 0), and they never
 // crash into her: if she drifts onto their side, they pull onto the verge, stop and toot a tune until she's past.
 // Every one of them reacts to a tap. Pure behavior plus toy models; the drive (activities/nan-trip/drive/) says when.
-import { Euler, Group, MeshBasicMaterial, Quaternion, Vector3, Mesh, type BufferGeometry, type ColorRepresentation } from 'three'
+import { Euler, Group, MeshBasicMaterial, Quaternion, Vector3, type BufferGeometry, type ColorRepresentation } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
 import { blobShadow, merge, P, solid, type V3 } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
+import { buildMiniCar, buildScooter, buildTuktuk, type Local } from '../vehicles/locals'
 import { buildSongthaew } from '../vehicles/songthaew'
 import type { HeightField } from './build'
 import type { Road } from './road'
@@ -61,6 +62,8 @@ interface Mover {
   body: Group
   wheels: Group[]
   lamps: MeshBasicMaterial | null
+  /** Who's aboard a scooter, tuk-tuk or car (they wave). */
+  local: Local | null
   s: number
   lat: number
   v: number
@@ -227,6 +230,7 @@ export class Traffic {
         m.replied = true
         this.counts.replies++
         m.hop = 1
+        if (m.local) m.local.wave = 2
         window.setTimeout(() => ev.beepBack(), 380)
         heard = true
       }
@@ -248,6 +252,7 @@ export class Traffic {
     if (kind === 'mover') {
       const m = this.movers[i]
       m.hop = 1
+      if (m.local) m.local.wave = 2.2
       ev.toot(m.plan.kind, true)
     } else if (kind === 'buffalo') {
       const b = this.buffalo[i]
@@ -340,6 +345,8 @@ export class Traffic {
     if (!m.passed && m.v > 1 && gap < 14) {
       m.passed = true
       ev.pass?.(m.plan.kind)
+      // Everyone aboard waves as they go by.
+      if (m.local) m.local.wave = Math.max(m.local.wave, 1.8)
     }
     // The blind car beeps first if she hasn't, as it comes round (friendly: no failing).
     if (m.plan.blind !== undefined && !m.replied && gap < 22) {
@@ -362,6 +369,7 @@ export class Traffic {
       if (m.plan.kind === 'songthaew') w.rotation.z -= roll
       else w.rotation.x += roll
     }
+    m.local?.update(dt, t)
     if (m.lamps) m.lamps.color.set(m.replied && Math.sin(t * 18) > 0 ? '#FFFFFF' : '#FFF1B8')
   }
 
@@ -371,71 +379,26 @@ export class Traffic {
     root.add(body)
     let wheels: Group[] = []
     let lamps: MeshBasicMaterial | null = null
+    let local: Local | null = null
     if (plan.kind === 'songthaew') {
       const st = buildSongthaew(bag)
       // (It faces +x: turned to face +z like the others.)
       st.root.rotation.y = -Math.PI / 2
       body.add(st.root)
       wheels = st.wheels
-    } else if (plan.kind === 'scooter') {
-      const c = [PAL.mint, PAL.sky, PAL.peach, PAL.butter][i % 4]
-      body.add(solid(merge([
-        P.rbox(0.5, 0.45, 1.5, 0.15, c, { at: [0, 0.55, 0] }),
-        P.rbox(0.45, 0.12, 0.7, 0.05, PAL.ink, { at: [0, 0.82, -0.2] }),
-        P.cyl(0.04, 0.04, 0.6, '#D9DCE8', { at: [0, 1.05, 0.6], rot: [0.3, 0, 0] }),
-        P.box(0.7, 0.05, 0.05, '#D9DCE8', { at: [0, 1.32, 0.68] }),
-        // The rider and a little one behind (helmets on), waving.
-        P.capsule(0.22, 0.35, PAL.lavender, { at: [0, 1.25, 0.05] }),
-        P.sphere(0.24, PAL.hotpink, { at: [0, 1.82, 0.1] }),
-        P.capsule(0.17, 0.2, PAL.pink, { at: [0, 1.15, -0.45] }),
-        P.sphere(0.19, PAL.butter, { at: [0, 1.6, -0.45] }),
-      ]), bag, 2))
-      wheels = [0.55, -0.55].map((z) => {
-        const w = new Group()
-        w.position.set(0, 0.28, z)
-        w.add(solid(P.torus(0.2, 0.08, PAL.ink, { rot: [0, Math.PI / 2, 0] }), bag, 2))
-        body.add(w)
-        return w
-      })
-    } else if (plan.kind === 'tuktuk') {
-      const c = [PAL.sky, PAL.hotpink][i % 2]
-      body.add(solid(merge([
-        P.rbox(1.3, 0.55, 2.4, 0.15, c, { at: [0, 0.6, -0.1] }),
-        P.rbox(0.8, 0.5, 0.7, 0.15, c, { at: [0, 1.05, 0.85] }),
-        P.box(0.7, 0.35, 0.04, '#CDEBFF', { at: [0, 1.4, 1.05], rot: [-0.3, 0, 0] }),
-        P.rbox(1.45, 0.12, 2.5, 0.05, PAL.butter, { at: [0, 2.05, -0.1] }),
-        ...[-1, 1].flatMap((s) => [1.0, -1.15].map((z) => P.cyl(0.04, 0.04, 1.1, '#F4EFF8', { at: [s * 0.62, 1.5, z] }))),
-        P.rbox(1.1, 0.12, 0.6, 0.04, PAL.lavender, { at: [0, 0.98, -0.6] }),
-      ]), bag, 2))
-      wheels = [[0, 1.0], [-0.6, -0.9], [0.6, -0.9]].map(([x, z]) => {
-        const w = new Group()
-        w.position.set(x, 0.26, z)
-        w.add(solid(P.torus(0.18, 0.08, PAL.ink, { rot: [0, Math.PI / 2, 0] }), bag, 2))
-        body.add(w)
-        return w
-      })
     } else {
-      // A round little toy car (the one behind the blind bend): butter yellow, with headlights that flash hello.
-      body.add(solid(merge([
-        P.rbox(1.7, 0.6, 3.4, 0.25, PAL.butter, { at: [0, 0.6, 0] }),
-        P.rbox(1.45, 0.55, 1.8, 0.25, PAL.butter, { at: [0, 1.15, -0.2] }),
-        P.box(1.3, 0.38, 0.04, '#CDEBFF', { at: [0, 1.18, 0.72], rot: [-0.35, 0, 0] }),
-        ...[-1, 1].map((s) => P.box(0.04, 0.34, 1.4, '#CDEBFF', { at: [s * 0.73, 1.17, -0.2] })),
-      ]), bag, 2))
-      lamps = bag.add(new MeshBasicMaterial({ color: '#FFF1B8' }))
-      for (const s of [-1, 1]) body.add(new Mesh(bag.add(P.sphere(0.15, '#ffffff', { at: [s * 0.55, 0.68, 1.68], scale: [1, 1, 0.5] })), lamps))
-      wheels = [[-0.8, 1.05], [0.8, 1.05], [-0.8, -1.05], [0.8, -1.05]].map(([x, z]) => {
-        const w = new Group()
-        w.position.set(x, 0.34, z)
-        w.add(solid(P.torus(0.24, 0.1, PAL.ink, { rot: [0, Math.PI / 2, 0] }), bag, 2))
-        body.add(w)
-        return w
-      })
+      // The scooters, tuk-tuks and the little car, with Nan folk aboard (vehicles/locals.ts).
+      const build = plan.kind === 'scooter' ? buildScooter : plan.kind === 'tuktuk' ? buildTuktuk : buildMiniCar
+      local = build(i, bag)
+      body.add(local.root)
+      wheels = local.wheels
+      // (Only the blind bend's car flashes its lamps.)
+      if (plan.kind === 'car') lamps = local.lamps
     }
     root.add(blobShadow(plan.kind === 'scooter' ? 0.9 : 1.9, bag))
     root.visible = false
     this.root.add(root)
-    return { plan, root, body, wheels, lamps, s: plan.from, lat: 0, v: 0, state: 'wait', yielded: false, replied: false, passed: false, hop: 0, i }
+    return { plan, root, body, wheels, lamps, local, s: plan.from, lat: 0, v: 0, state: 'wait', yielded: false, replied: false, passed: false, hop: 0, i }
   }
 
   // ---------------------------------------------------------------- the animals

@@ -24,6 +24,9 @@ import { useEffect, useRef, useState } from 'react'
 import { sounds, useSaved } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { flag } from '../../../../engine3d/flags'
+import { useInnerBack } from '../../../../kit/innerBack'
+import { useTopLeft } from '../../../../kit/topLeft'
+import { MapIcon } from '../../../../HomeIcons'
 import { BoardingPass, type PassChoice } from '../../trip/legs/BoardingPass'
 import { formatPacked, parsePacked } from '../../trip/packing'
 import { Drive } from './drive/Drive'
@@ -166,6 +169,29 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
     }
     return { section: 'map' }
   })
+  // Away from the Nan map (on a road, at a stop, at the Cup, at the viewpoint): the browser's Back and the top-left map
+  // button both go back to the Nan map, not off to the Thailand map. (Before the enter effect below: the map's entry
+  // is kept behind the first away section's.)
+  const away = !isLoop(at.section) && at.section !== 'map'
+  // (From the Cup's ground with the Cup won, its stamp lands on Nan town on the way.)
+  const toMap = () => (CUP_SECTIONS.includes(state.current.at.section) ? leaveCup() : setAt({ section: 'map' }))
+  useInnerBack(away, toMap)
+  useTopLeft(
+    away
+      ? {
+          icon: (
+            <span style={{ width: '58%', height: '58%' }}>
+              <MapIcon color="var(--lavender-dark)" />
+            </span>
+          ),
+          label: 'Back to the Nan map',
+          onBack: () => {
+            sounds.pop()
+            toMap()
+          },
+        }
+      : null,
+  )
   useEffect(() => {
     const p = formatPacked(packed)
     // (What's in her suitcase rides along in every link: home reads it.)

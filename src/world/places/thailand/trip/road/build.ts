@@ -333,10 +333,25 @@ export function buildMirror(road: Road, field: HeightField, s: number, side: num
   root.position.set(p.x, y, p.z)
   // Facing back down the road toward her (and a little in toward the road).
   root.rotation.y = Math.atan2(-t.tx - side * t.lx * 0.4, -t.tz - side * t.lz * 0.4)
-  root.add(solid(merge([P.cyl(0.07, 0.08, 3.1, '#FF8A3C', { at: [0, 1.55, 0] }), P.torus(0.55, 0.09, '#FF8A3C', { at: [0, 3.2, 0.02] }), P.cyl(0.5, 0.5, 0.06, '#D9DCE8', { at: [0, 3.2, -0.04], rot: [Math.PI / 2, 0, 0] })]), bag, 2))
+  // The pole (orange and white bands) rises behind the mirror to a bracket on its back, so it never shows through the
+  // round face; the mirror sits in a thick orange rim with a hood over its top, a domed back behind it.
+  const C = 3.2
+  const ORANGE = '#FF8A3C'
+  const bands: BufferGeometry[] = []
+  for (let k = 0; k < 6; k++) bands.push(P.cyl(0.07, 0.07, 0.45, k % 2 ? '#FFF7F0' : ORANGE, { at: [0, 0.225 + k * 0.45, -0.32] }, 10))
+  root.add(solid(merge([
+    ...bands,
+    P.cyl(0.07, 0.07, C - 2.7, ORANGE, { at: [0, 2.7 + (C - 2.7) / 2, -0.32] }, 10),
+    P.box(0.2, 0.34, 0.16, '#5E5468', { at: [0, C, -0.3] }),
+    P.sphere(0.6, ORANGE, { at: [0, C, -0.15], scale: [1, 1, 0.28] }, 20),
+    P.torus(0.56, 0.08, ORANGE, { at: [0, C, 0.05] }),
+    P.torus(0.62, 0.07, ORANGE, { at: [0, C, 0.14], scale: [1, 1, 3] }, Math.PI),
+  ]), bag, 2))
   const face = bag.add(new MeshBasicMaterial({ color: '#CFE8FF' }))
-  const disc = new Mesh(bag.add(P.cyl(0.47, 0.47, 0.02, '#ffffff', { at: [0, 3.2, 0.03], rot: [Math.PI / 2, 0, 0] })), face)
+  // The convex glass bulging out of the rim, and a shine across it.
+  const disc = new Mesh(bag.add(P.sphere(0.52, '#ffffff', { at: [0, C, 0.03], scale: [1, 1, 0.16] }, 22)), face)
   root.add(disc)
+  root.add(solid(P.sphere(0.13, '#FFFFFF', { at: [-0.2, C + 0.2, 0.11], scale: [1.4, 0.55, 0.2], rot: [0, 0, 0.6] }, 10), bag, 0))
   return { root, face, s, at: new Vector3(p.x, y + 3.2, p.z) }
 }
 

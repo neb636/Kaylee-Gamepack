@@ -30,8 +30,19 @@ function parseRoute(hash: string): Route {
 }
 
 let current = parse(location.hash)
+// An activity that handles the browser's Back inside itself (kit/innerBack.ts) keeps the route as it is: the hash it
+// pops back to is one of its own sections, so the activity mustn't start again from that link.
+let keepUntil = 0
+/** The next hashchange (within half a second) leaves the route alone. */
+export function keepRoute() {
+  keepUntil = performance.now() + 500
+}
 const subscribe = (cb: () => void) => {
   const on = () => {
+    if (performance.now() < keepUntil) {
+      keepUntil = 0
+      return
+    }
     current = parse(location.hash)
     cb()
   }
