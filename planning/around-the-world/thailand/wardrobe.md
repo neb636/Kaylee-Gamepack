@@ -24,7 +24,7 @@ Written 2026-10-26, from the user: “In Roblox Kaylee really likes the avatar c
 
 > **🏠 Not an activity**
 >
-> It's a toy in Agong's house, like the mattress or the fan: no passport stamp, no finale, no trophy. Its payoff is seeing herself in her own look everywhere, and the family noticing it (“Ooh, a crown, Kaylee!”).
+> It's a toy in Agong's house, like the mattress or the fan: no passport stamp, no finale, no trophy. Its payoff is seeing herself in her own look everywhere, and the family noticing it (“Ooh, a crown!”).
 
 ## 👆 The toy
 
@@ -70,7 +70,7 @@ One verb: put it on her.
 
 |  | A visit |
 |---|---|
-| Talk before her first touch | 1 line (Sparkle, the first time only: “Your wardrobe! Dress up, Kaylee!”) |
+| Talk before her first touch | 1 line (Sparkle, the first time only: “Your wardrobe! Dress up!”) |
 | Touches | 15-40, nearly all putting things on, painting and spinning |
 | Time | 1-3 min (she leaves whenever she likes: the ✓ or the doors) |
 | Sparkle talks | the first time she opens a drawer, and after ~8 s with nothing touched (a thing on the shelf glints) |
@@ -147,7 +147,7 @@ Every scene in Thailand builds Kaylee the same way, so her saved look goes on in
 
 > **👀 The payoff: being seen**
 >
-> The first time she walks up to someone in a new look, they notice: Mommy “Ooh, a crown, Kaylee!”, Daddy “Cool wings!”, Agong “So pretty!”. One line per kind of thing, said once per change, never a lecture.
+> The first time she walks up to someone in a new look, they notice: Mommy “Ooh, a crown!”, Daddy “Cool wings!”, Agong “So pretty!”. One line per kind of thing, said once per change, never a lecture.
 
 ## ⚖️ When her look clashes with a game
 
@@ -177,7 +177,7 @@ Every clash in the code today, and the one rule (plus a few small ones) that sol
 
 ### The small rules
 
-- ☀️ **1. Sun smarts**: On a sunny trip her own hat **counts if it's shady** (cap, cowboy hat, bucket hat, sun hat): she keeps it, no spare hat, and Mommy says “Good hat, Kaylee!”. A crown isn't shady, so the packed sun hat (or Mommy's spare) goes on and the crown waits in her pocket. Heart and star sunglasses count as sunglasses. The packing lesson stays exactly the same, and now her own choice can be the right one.
+- ☀️ **1. Sun smarts**: On a sunny trip her own hat **counts if it's shady** (cap, cowboy hat, bucket hat, sun hat): she keeps it, no spare hat, and Mommy says “Good hat!”. A crown isn't shady, so the packed sun hat (or Mommy's spare) goes on and the crown waits in her pocket. Heart and star sunglasses count as sunglasses. The packing lesson stays exactly the same, and now her own choice can be the right one.
 - 🦄 **2. Nothing taller than her horn**: Every roof in the game was made to clear her horn: the tuk-tuk, the van, the Veloz, the Pajero, the plane's bins, the sea cave's tunnel. So every hat stays under the tip of her horn, and none of those need changing. Her tap targets and the cameras, which use her height, don't change either.
 - 🪑 **3. Wings fold when she sits**: In a car seat, on a stool, a couch, a booster seat, a slide or the donut ring, wings fold flat and the cape drapes; lying down (pillows, the canoe in the cave, the straw pile) they tuck away. Folded, they stay inside the circle she walks in, so she never snags on furniture. They spread when she stands still, and flap when she hops.
 - 👟 **4. Shoes off in the house**: Like a real Thai home: at Agong's door her shoes hop onto the shoe rack (it's already by the door) and back on when she goes out to the street. A real culture fact she does with her feet. In the wardrobe she can still try them on, on the rug.
@@ -268,7 +268,7 @@ One PR each; stop for the user after each.
 3. **The look: every thing made for her** [done] · 2026-10-26 · PR #210
    All ~30 things fitted to her shape (like the scrubs and the mongkhon), the wardrobe made pretty, each thing's pose, the mirror button.
 4. **Full loop: voices, looks on the door, the family notices** [done] · 2026-10-26 · PR #212
-   Sparkle's lines, each thing's name the first time she touches it, the family's “Ooh, a crown!”, Mommy's “Good hat, Kaylee!”, the mirror photos (4 looks), the wand surprise, the silly moments, full QA.
+   Sparkle's lines, each thing's name the first time she touches it, the family's “Ooh, a crown!”, Mommy's “Good hat!”, the mirror photos (4 looks), the wand surprise, the silly moments, full QA.
 5. **Later, if the user wants: her look outside Thailand** [next]
    A saved picture of her, on the world map's balloon and the trophy screen.
 
@@ -320,7 +320,7 @@ Her look in every scene from one place, a costume layer that takes only the spot
 
 **Known small things**
 
-- No new voices (greybox): Mommy's “Good hat, Kaylee!” and the family noticing her look are gate 4. With her cap on, Mommy now just says nothing at the suitcase.
+- No new voices (greybox): Mommy's “Good hat!” and the family noticing her look are gate 4. With her cap on, Mommy now just says nothing at the suitcase.
 - The pocket is a shrink toward her hip with no sparkle particles yet (gate 3).
 - Her shoes sit on top of the family's slippers on the rack (greybox placement).
 - The shoes don't hop off when she's carried in (the tuk-tuk, a trip's van): only when she walks through the door.
@@ -357,11 +357,11 @@ All 25 things in the plan's list built and fitted to her shape, each with its ow
 
 ### Full loop: voices, looks on the door, the family notices ([done] · 2026-10-26 · PR #212)
 
-Sparkle's lines and each thing's name, the family noticing her look, Mommy's “Good hat, Kaylee!”, four pictures of looks on the door, Sparkle's wand, the silly moments, and full QA.
+Sparkle's lines and each thing's name, the family noticing her look, Mommy's “Good hat!”, four pictures of looks on the door, Sparkle's wand, the silly moments, and full QA.
 
-- **Sparkle** (`lines.ts` `L.wardrobe`, said through the Hub's Guide): “Your wardrobe! Dress up, Kaylee!” when the doors open; the first drawer she pulls says how (“Drag it onto you!”, the paint drawer “Drop the paint on your hair, dress or fur!”); **each thing's name** the first time she touches it, once per visit (25 things and 8 paints; chut thai adds that Thai kids wear it at festivals); after ~8 s with nothing touched a hint and the thing glints (a drawer, then a thing on the shelf, then the mirror; at most 3 a visit).
+- **Sparkle** (`lines.ts` `L.wardrobe`, said through the Hub's Guide): “Your wardrobe! Dress up!” when the doors open; the first drawer she pulls says how (“Drag it onto you!”, the paint drawer “Drop the paint on your hair, dress or fur!”); **each thing's name** the first time she touches it, once per visit (25 things and 8 paints; chut thai adds that Thai kids wear it at festivals); after ~8 s with nothing touched a hint and the thing glints (a drawer, then a thing on the shelf, then the mirror; at most 3 a visit).
 - **The family notice** (`activities/hub/notice.ts`): the first time she taps someone in a new look they say so in their own voice instead of the hello (hat, glasses, wings, outfit, shoes or paint; all 13 have 6 lines, Mommy has a crown line and Daddy a “Cool wings!”), once per change; the hello comes on the next tap. When she closes the doors Mommy hops and says hers across the room. What's newest comes from the wardrobe (`markNew`); a look from a link or a saved one is noticed too (the first thing she wears).
-- **Mommy's “Good hat, Kaylee!”** at the suitcase when her own shady hat (cap, cowboy, bucket, sun hat) is the sun hat, so no spare hat.
+- **Mommy's “Good hat!”** at the suitcase when her own shady hat (cap, cowboy, bucket, sun hat) is the sun hat, so no spare hat.
 - **Pictures on the door** (`wardrobe/door.ts`, `plugin.ts`): tap the mirror inside the right door and, once she's in her pose, a click and a picture of her look (a small portrait from `engine/photo.ts`, taken from the wardrobe camera's side) flies onto the left door's inside: 4 places, the oldest goes when a fifth comes; the same look again just hops its picture. Tap a picture, or drop it on her, and she wears the whole look (twirl, sparkles). Saved on the iPad (`thailand-door`, oldest first) with the photos; a link's `door=crown,hearts;bow,fairy` (up to 4, `;` between) develops its own photos by dressing her in each look for a moment.
 - **Sparkle's wand**: a star wand floats by the rug while the doors are open; tap it for a surprise look (2-5 random things and sometimes a color, never the look she has). **Her own look is pinned to the door as a picture first**, so it's one tap away (a wand look isn't pinned again). Sparkle says “Ta da! Magic!” on the first two taps and now and then (four lines in turn).
 - **Silly, never wrong**: a shoe dropped on her head sits on her horn while she wobbles and giggles, then hops to her foot; glasses dropped on her tail sit there, the tail wiggles, then they hop up to her face; paint dropped on the mirror splats, drips and slides off (Sparkle: “Splat on the mirror! Hee hee!”); a second hat boings the first back to its shelf (already there); and on the mattress the **top bounce** flips her hat into the air to land back on her head.

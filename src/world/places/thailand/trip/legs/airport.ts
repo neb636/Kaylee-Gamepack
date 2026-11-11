@@ -36,7 +36,7 @@ export const AIRPORT_ANCHORS: AnchorInfo[] = [
   { id: 'flag', label: 'Thai flag', kind: 'thing' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
-  { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
+  { id: 'family:kaylee', label: 'You', kind: 'family' },
 ]
 
 /** A friendly officer (a background figure: sounds and animation, no voice): a lavender elephant in a navy shirt. */

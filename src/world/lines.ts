@@ -1,12 +1,11 @@
 // Every phrase Sparkle can say on the world map, passport and coloring book.
 // `node scripts/world-voice-lines.mjs` copies every string here into voice-lines.json.
-// (Plain strings only: this file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.)
+// (Plain strings only: this file is also read by Node, so it imports only sdk/device.ts, which imports nothing.)
 import { onDevice } from '../sdk/device.ts'
-const NAME = 'Kaylee'
 
 export const WORLD_LINES = {
   title: 'Around the World!',
-  firstHello: onDevice(`Let's fly around the world, ${NAME}! Tap the sparkly pin.`, `Let's fly around the world, ${NAME}! Click the sparkly pin.`),
+  firstHello: onDevice(`Let's fly around the world! Tap the sparkly pin.`, `Let's fly around the world! Click the sparkly pin.`),
   hello: 'Where should we fly?',
   takeoff: 'Up, up and away!',
   continents: {
@@ -23,23 +22,23 @@ export const WORLD_LINES = {
     china: "We'll fly to China soon! It has pandas!",
     thailand: "We'll fly to Thailand soon! It has elephants!",
   },
-  passport: `This is your passport, ${NAME}! Every stamp is a place you helped.`,
+  passport: `This is your passport! Every stamp is a place you helped.`,
   passportMore: 'Fly to more places to fill your passport!',
-  puzzlePick: 'Pick a picture, Kaylee!',
+  puzzlePick: 'Pick a picture!',
   puzzlePieces: onDevice('How many pieces? Tap to choose!', 'How many pieces? Click to choose!'),
   puzzleHow: 'Drag each piece to its spot!',
   puzzleHint: onDevice('Tap a piece to light up its spot!', 'Click a piece to light up its spot!'),
   puzzleMiss: 'Look for the glowing spot!',
-  puzzleDone: 'You made the picture, Kaylee!',
+  puzzleDone: 'You made the picture!',
   puzzleCounts: ['Four pieces!', 'Six pieces!', 'Nine pieces!', 'Twelve pieces!'],
   coloringPick: 'Pick a page to color!',
   coloringHow: onDevice('Pick a color, then tap to paint!', 'Pick a color, then click to paint!'),
   theaterName: "Sparkle's Theater!",
   theaterPick: 'Pick a video to watch!',
-  videoEnd: `The end! Great watching, ${NAME}!`,
+  videoEnd: `The end! Great watching!`,
   videoOffline: "Oh no, the video can't play right now.",
   numbers: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'],
-  praise: [`Great job, ${NAME}!`, 'Yay!', 'You did it!', `Amazing, ${NAME}!`, 'Super!', 'Hooray!'],
+  praise: [`Great job!`, 'Yay!', 'You did it!', `Amazing!`, 'Super!', 'Hooray!'],
   tryAgain: "Hmm, let's try again!",
   // The game shelf (the list view beside the world map, Shelf.tsx): every game as a picture card.
   shelf: {

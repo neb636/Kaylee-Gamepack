@@ -62,7 +62,7 @@ export const MOUNTAIN_ANCHORS: AnchorInfo[] = [
   { id: 'band', label: 'The golden patterns', kind: 'thing' },
   ...[0, 1, 2].map((i): AnchorInfo => ({ id: `monkey:${i}`, label: 'A monkey', kind: 'thing' })),
   ...[0, 1].map((i): AnchorInfo => ({ id: `ele:${i}`, label: 'A painted elephant', kind: 'thing' })),
-  { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
+  { id: 'family:kaylee', label: 'You', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
 ]
 

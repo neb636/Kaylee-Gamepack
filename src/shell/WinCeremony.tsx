@@ -1,9 +1,9 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef } from 'react'
 import posthog, { isPostHogEnabled } from '../posthog'
-import { awardTrophy, bigCelebration, BigButton, KID_NAME, Mascot, say, sounds, Trophy, type GameMeta } from './sdk-internal'
+import { awardTrophy, bigCelebration, BigButton, Mascot, say, sounds, Trophy, type GameMeta } from './sdk-internal'
 
-/** The same big, happy ending for every game: confetti + a trophy with her name on it. */
+/** The same big, happy ending for every game: confetti + a trophy with its title. */
 export function WinCeremony({ meta, onPlayAgain, onHome }: { meta: GameMeta; onPlayAgain: () => void; onHome: () => void }) {
   const awarded = useRef(false)
   useEffect(() => {
@@ -12,7 +12,7 @@ export function WinCeremony({ meta, onPlayAgain, onHome }: { meta: GameMeta; onP
     awardTrophy({ gameId: meta.id, gameTitle: meta.title, trophyTitle: meta.trophyTitle, emoji: meta.emoji })
     sounds.fanfare()
     bigCelebration()
-    void say(`${KID_NAME}, you did it! You won the ${meta.trophyTitle} trophy!`)
+    void say(`You did it! You won the ${meta.trophyTitle} trophy!`)
   }, [meta])
 
   return (
@@ -28,7 +28,7 @@ export function WinCeremony({ meta, onPlayAgain, onHome }: { meta: GameMeta; onP
         transition={{ type: 'spring', bounce: 0.6 }}
         style={{ fontSize: 'clamp(48px, 9vw, 88px)', fontWeight: 700, color: 'var(--hotpink)', textAlign: 'center', textShadow: '0 5px 0 #fff' }}
       >
-        You did it, {KID_NAME}!
+        You did it!
       </motion.h1>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8 }}>
         <Mascot pose="cheer" size={Math.min(220, window.innerWidth * 0.25)} />

@@ -51,7 +51,7 @@ Countries also use `src/world/kit/` (see "Reusable pieces" under A country's fol
 | `sounds.pop / correct / oops / sparkle / whoosh / fanfare / note(step)` | Synthesized SFX. `note(0..10)` climbs a happy scale, great for counting. |
 | `sounds.pickup / place / snap` | Pick-up, put-down and click-into-place sounds. |
 | `burst()` / `bigCelebration()` | Confetti. |
-| `praise()`, `KID_NAME`, `numberWord(3)`, `wait(ms)`, `randomInt`, `pick`, `shuffle`, `sample` | Helpers. |
+| `praise()`, `KID_NAME`, `numberWord(3)`, `wait(ms)`, `randomInt`, `pick`, `shuffle`, `sample` | Helpers. `KID_NAME` is for the landing greeting only; writing activities keep their explicit name content. |
 | `useAlive()` | `const alive = useAlive(); await say('..'); if (!alive()) return` in async scripts. |
 | `useSayOnMount(text)` | Speak when a screen appears. |
 | `<SparklePuppet ref pose? height>` | Live Sparkle: `play('wave' \| 'cheer' \| 'hop' \| 'nod' \| 'think' \| 'dance' \| 'wiggle')`. Prefer it over `<Mascot>`. |

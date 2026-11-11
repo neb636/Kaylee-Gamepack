@@ -598,7 +598,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
         onWin: () => {
           raced.current++
           setStops((x) => (x.includes('race') ? x : [...x, 'race']))
-          // Her race trophy goes in the Trophy Room (the same as a game's: KAYLEE on it, ×2 after a rematch).
+          // Her race trophy goes in the Trophy Room (the same as a game's: the trophy title on it, ×2 after a rematch).
           awardTrophy({ gameId: 'world-thailand-boat-race', gameTitle: 'Thailand', trophyTitle: RACE_TROPHY, emoji: '🚤' })
         },
         onPhoto: (src) => {

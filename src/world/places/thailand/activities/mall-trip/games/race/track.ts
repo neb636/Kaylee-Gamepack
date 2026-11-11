@@ -37,10 +37,10 @@ export interface RaceEvents extends LegEvents {
 
 const OTHERS = ['nick', 'ji', 'kidA', 'kidB'] as const
 type Other = (typeof OTHERS)[number]
-const NAMES: Record<RacerId, string> = { kaylee: 'Kaylee', nick: 'Daddy', ji: 'Mommy', kidA: 'A kid in blue', kidB: 'A kid in yellow' }
+const NAMES: Record<RacerId, string> = { kaylee: 'You', nick: 'Daddy', ji: 'Mommy', kidA: 'A kid in blue', kidB: 'A kid in yellow' }
 
 export const RACE_ANCHORS: AnchorInfo[] = [
-  { id: 'kaylee', label: 'Kaylee', kind: 'family' },
+  { id: 'kaylee', label: 'You', kind: 'family' },
   { id: 'steps', label: 'The steps', kind: 'thing' },
   { id: 'rail', label: 'The rail', kind: 'thing' },
   { id: 'balls', label: 'The balls', kind: 'thing' },

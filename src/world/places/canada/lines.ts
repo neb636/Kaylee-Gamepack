@@ -1,10 +1,9 @@
 // Every phrase that can be spoken in Canada. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
-// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.) Plain strings are Sparkle, the guide;
+// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing.) Plain strings are Sparkle, the guide;
 // the friends (Maple the beaver, the moose, the raccoon...) talk in their own voices from cast.json. Each activity has
 // its own block below (one per folder in activities/), so activities can be worked on side by side.
 // Straight apostrophes only: curly ones failed the transcription check in PR #63.
 import { onDevice } from '../../../sdk/device.ts'
-const NAME = 'Kaylee'
 
 type Line = string | { text: string; voice: string }
 const by = (voice: string) => (text: string): Line => ({ text, voice })
@@ -12,8 +11,8 @@ const maple = by('maple')
 
 export const L = {
   // The shell's trophy ceremony and the trophy room speak these.
-  trophyWin: `${NAME}, you did it! You won the Canada Champion trophy!`,
-  trophyRoom: `${NAME}, Canada Champion! From Canada.`,
+  trophyWin: `You did it! You won the Canada Champion trophy!`,
+  trophyRoom: `Canada Champion! From Canada.`,
   passport: 'This is Canada! It goes all the way from one ocean to the other.',
   // The passport's tap-to-hear facts (planning/around-the-world/canada.md, "Passport facts").
   facts: {
@@ -106,7 +105,7 @@ export const L = {
     'polar-bear': 'A polar bear! It lives up north.',
   },
   // ---- One block per activity (activities/<id>/). Story lines, Sparkle's instructions and hints, the friends'
-  // reactions. Keep each line under ~3 seconds; say Kaylee's name only at the big moments. ----
+  // reactions. Keep each line under ~3 seconds; no player name outside the landing page and the two name-writing activities. ----
   hub: {
     // The first visit: Maple on Quebec City's platform tells the story, then Sparkle says what to do.
     story: [maple("Bonjour! Let's find a hockey team, all across Canada!")],
@@ -201,7 +200,7 @@ export const L = {
     mooseHi: by('moose')('Hello, little one.'),
     // Everyone crunches (the stamp moment: her name once).
     share: maple('Everybody, crunch!'),
-    thanks: maple(`Merci, ${NAME}! Best taffy ever!`),
+    thanks: maple(`Merci! Best taffy ever!`),
   },
   snowman: {
     // The story (Maple, in the park below the castle), then Sparkle's one instruction per part.
@@ -236,7 +235,7 @@ export const L = {
     tickle: by('snowman')('Hee hee, that tickles!'),
     bye: by('snowman')('Merci! Bye bye!'),
     // The payoff (the stamp comes next).
-    done: maple(`${NAME}, you made a whole parade!`),
+    done: maple(`You made a whole parade!`),
   },
   bike: {
     // The story, in the gondola at the bottom (Maple, then up they go).
@@ -260,7 +259,7 @@ export const L = {
     blue: maple('The blue way! Hold on!'),
     jump: maple('Up, up and away!'),
     falls: maple('We made it! The waterfall!'),
-    thanks: maple('Thank you, Kaylee! What a ride!'),
+    thanks: maple('Thank you! What a ride!'),
     // The animals, in their own voices.
     moose: [by('moose')('Mmm. Bonjour.'), by('moose')('Munch, munch.')],
     chipmunk: by('chipmunk')('Seeds! Seeds!'),
@@ -365,7 +364,7 @@ export const L = {
     },
     giggle: maple('Hee hee! That tickles!'),
     album: maple('Look! Photos of everyone!'),
-    done: 'You helped them all cross, Kaylee!',
+    done: 'You helped them all cross!',
   },
   whales: {
     // The story, at the dock (Maple at the wheel of the little boat).
@@ -406,7 +405,7 @@ export const L = {
     grandma: maple('The grandma leads the family!'),
     babyCopy: maple('The baby copies you!'),
     // The big finish, and Maple's taps on the boat.
-    finale: maple(`They all jumped together! Merci, ${NAME}!`),
+    finale: maple(`They all jumped together! Merci!`),
     toot: maple('Toot toot!'),
     song: maple('The humpback is singing!'),
   },
@@ -429,7 +428,7 @@ export const L = {
     poke: [maple('Allez, salmon!'), maple('Jump, jump!')],
     berries: maple('The bears went to eat berries!'),
     sea: maple('Bye, little salmon! Swim to the sea!'),
-    win: maple('Kaylee, you brought the salmon home!'),
+    win: maple('You brought the salmon home!'),
     // The bears (the same gentle bear voice for both).
     achoo: by('bear')('Ah... choo!'),
     spirit: by('bear')("I'm a spirit bear!"),

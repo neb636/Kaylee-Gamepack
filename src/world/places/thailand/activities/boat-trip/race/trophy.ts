@@ -1,8 +1,7 @@
-// The boat race's payoff (race.ts): a big gold trophy with KAYLEE on its plaque, and the floating podium she stands on
+// The boat race's payoff (race.ts): a big gold trophy with the trophy title on its plaque, and the floating podium she stands on
 // to lift it (1 in the middle and highest, the kids on 2, the macaque on 3), under a rainbow balloon arch. The trophy
 // rides home in the longtail afterwards (bay/race-gate.ts puts it in the boat).
 import { CanvasTexture, Group, LatheGeometry, Mesh, MeshBasicMaterial, PlaneGeometry, Vector2, Vector3, type BufferGeometry } from 'three'
-import { KID_NAME } from '../../../../../../sdk'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../engine3d/geo'
 import { makeHull } from '../../../../../engine3d/outline'
@@ -29,7 +28,7 @@ function label(bag: Bag, text: string, w: number, h: number, color: string, bg: 
 }
 
 /** The trophy, `size` meters tall: a cup with two handles on a stem and a base, a star on top, a pink bow, and a
- *  plaque with her name. Its origin is at the bottom of the base. */
+ *  plaque with CHAMPION. Its origin is at the bottom of the base. */
 export function buildTrophy(bag: Bag, size = 0.8): Group {
   const g = new Group()
   const k = size / 0.8
@@ -63,8 +62,8 @@ export function buildTrophy(bag: Bag, size = 0.8): Group {
     P.sphere(0.035 * k, PAL.hotpink, { at: [0, 0.5 * k, 0.22 * k] }, 8),
   ]
   g.add(solid(merge(parts), bag, 2))
-  // The plaque on the base's front: KAYLEE.
-  const plaque = new Mesh(bag.add(new PlaneGeometry(0.3 * k, 0.075 * k)), bag.add(new MeshBasicMaterial({ map: label(bag, KID_NAME.toUpperCase(), 256, 64, PAL.hotpink, '#FFF4C8') })))
+  // The plaque on the base's front: CHAMPION.
+  const plaque = new Mesh(bag.add(new PlaneGeometry(0.3 * k, 0.075 * k)), bag.add(new MeshBasicMaterial({ map: label(bag, 'CHAMPION', 256, 64, PAL.hotpink, '#FFF4C8') })))
   plaque.position.set(0, 0.05 * k, 0.212 * k)
   g.add(plaque)
   return g

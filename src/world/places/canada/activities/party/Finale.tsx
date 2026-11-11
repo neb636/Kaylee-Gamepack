@@ -1,5 +1,5 @@
 // Canada's finale in Ottawa: Animal Homes on the toy map (homes.ts), then Pond Hockey on the frozen Rideau Canal
-// (rink.ts), then the big win and the shell's trophy (Place.tsx turns onDone into it: gold, KAYLEE, Canada Champion).
+// (rink.ts), then the big win and the shell's trophy (Place.tsx turns onDone into it: gold, Canada Champion).
 // The address bar follows her (sections.ts): the story, each animal she's taking home, each goal of the game. Sparkle
 // asks and gives the instructions; Maple, the moose and the team react in their own voices (lines.ts, L.party). A short
 // line at the bottom says what's on screen (for Dad) with a button to hear it again.

@@ -56,7 +56,7 @@ const DIG = knobs('sandDig', 'Digging the sand', FILE, {
   patFrom: { value: 0.07, min: 0.02, max: 0.3, step: 0.01, label: 'Pats from', unit: 'm', note: 'a finger starting on sand this much above the beach pats instead of digging' },
   dry: { value: 0.8, min: 0.2, max: 3, step: 0.05, label: 'Dry sand stands', unit: 'rise/run', note: 'the steepest dry sand stays (lower = it runs flatter)' },
   wet: { value: 2.6, min: 0.5, max: 6, step: 0.05, label: 'Wet sand stands', unit: 'rise/run', note: 'the steepest wet sand stays (dug sand is wet)' },
-  kaylee: { value: 0.85, min: 0.3, max: 2, step: 0.05, label: 'Kaylee sits from her finger', unit: 'm' },
+  kaylee: { value: 0.85, min: 0.3, max: 2, step: 0.05, label: 'your unicorn sits from her finger', unit: 'm' },
 })
 /** The water and the tide. */
 const TIDE = knobs('sandTide', 'The tide and the water', FILE, {
@@ -84,7 +84,7 @@ const PLAY = knobs('sandPlay', 'Rounds, towers and Daddy', FILE, {
   bury: { value: 1.6, min: 0.3, max: 8, step: 0.1, label: 'Burying Daddy', unit: '/s', note: 'how fast rubbing over him heaps the sand (1 = one part covered)' },
   wiggleOut: { value: 3.2, min: 0.5, max: 15, step: 0.1, label: 'Buried Daddy sneezes himself out after', unit: 's' },
   crab: { value: 0.32, min: 0.1, max: 0.6, step: 0.01, label: 'A crab pops out at', unit: 'm deep' },
-  pitch: { value: 44, min: 25, max: 75, step: 1, label: 'Camera looks down', unit: '°', note: 'steeper shows more sand, lower shows more of Kaylee and the sea' },
+  pitch: { value: 44, min: 25, max: 75, step: 1, label: 'Camera looks down', unit: '°', note: 'steeper shows more sand, lower shows more of your unicorn and the sea' },
   tallPitch: { value: 12, min: 0, max: 30, step: 1, label: '…more on a tall screen', unit: '°' },
 })
 
@@ -146,7 +146,7 @@ const giggle = () => [0, 0.1, 0.2].forEach((d, i) => tone(700 + i * 90, 900 + i 
 const toot = () => [0, 0.2].forEach((d) => tone(330, 340, 0.16, 0.07, 'square', d))
 
 export const SAND_ANCHORS: AnchorInfo[] = [
-  { id: 'kaylee', label: 'Kaylee', kind: 'thing' },
+  { id: 'kaylee', label: 'You', kind: 'thing' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'toes', label: "Daddy's toes", kind: 'thing' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },

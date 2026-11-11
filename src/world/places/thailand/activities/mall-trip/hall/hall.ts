@@ -75,7 +75,7 @@ export const LABELS = [
 ]
 
 export const HALL_ANCHORS: AnchorInfo[] = [
-  { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
+  { id: 'family:kaylee', label: 'You', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'door:vet', label: 'The Vet Clinic', kind: 'thing' },

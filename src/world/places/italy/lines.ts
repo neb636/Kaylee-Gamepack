@@ -1,10 +1,9 @@
 // Every phrase that can be spoken in Italy. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
-// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.)
+// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing.)
 // Plain strings are Sparkle, the guide: she gives the instructions. Friends say their own story and reaction lines in
 // their own voices (see cast.json). Italian words are written the real way (the voices speak with an Italian accent),
 // and a WordCard shows the word and what it means (see WordCard.tsx).
 import { onDevice } from '../../../sdk/device.ts'
-const NAME = 'Kaylee'
 const as = (voice: string) => (text: string) => ({ text, voice })
 const lupa = as('lupa')
 const bruno = as('bruno')
@@ -23,10 +22,10 @@ const COUNT = ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!', 'Ei
 
 export const L = {
   name: 'Italy',
-  trophyWin: `${NAME}, you did it! You won the Italy Explorer trophy!`,
-  trophyRoom: `${NAME}, Italy Explorer! From Italy.`,
-  intro: [lupa(`Ciao, ${NAME}! I'm Lupa!`), lupa('Help me get ready to sing at the opera?')],
-  hubNext: `Where should we go next, ${NAME}?`,
+  trophyWin: `You did it! You won the Italy Explorer trophy!`,
+  trophyRoom: `Italy Explorer! From Italy.`,
+  intro: [lupa(`Ciao! I'm Lupa!`), lupa('Help me get ready to sing at the opera?')],
+  hubNext: `Where should we go next?`,
   soon: 'This spot opens soon!',
   boot: 'Italy is shaped like a boot! Kick!',
   bandSoon: 'Lupa\'s opera night is coming soon!',
@@ -50,7 +49,7 @@ export const L = {
   pizza: {
     // Arrival in Naples.
     arrive: [lupa('Welcome to Naples! Pizza was born here!'), lupa('Zio Bruno needs a helper chef!')],
-    hello: bruno(`Benvenuta, Chef ${NAME}!`),
+    hello: bruno(`Benvenuta, Chef!`),
     storyIntro: bruno('Let me tell you the story of the most famous pizza!'),
 
     // Service 1: the storybook, 1889.
@@ -107,7 +106,7 @@ export const L = {
     prego: 'When someone says grazie, you say prego!',
 
     // Service 3: her own pizza.
-    own: bruno(`Now make a pizza just for YOU, Chef ${NAME}!`),
+    own: bruno(`Now make a pizza just for YOU, Chef!`),
     pickSauce: 'Red sauce or pink sauce?',
     redSauce: 'Red tomato sauce!',
     pinkSauce: 'Pink beet sauce! Yum!',
@@ -117,7 +116,7 @@ export const L = {
     cesareSorry: cesare('Oh. Sorry. Here you go.'),
     doneButton: onDevice('Tap the check when you like it!', 'Click the check when you like it!'),
     cutOwn: 'Cut it any way you like!',
-    lupaYum: lupa(`Buonissima, ${NAME}!`),
+    lupaYum: lupa(`Buonissima!`),
 
     // Toppings say their names when she picks them up.
     toppings: {
@@ -129,18 +128,18 @@ export const L = {
       tomato: 'Tomato!',
     },
 
-    serviceDone: `Great job, Chef ${NAME}!`,
+    serviceDone: `Great job, Chef!`,
     // Payoff.
     clap: bruno('Everybody loves your pizza!'),
     spin: bruno('Now watch me spin!'),
-    hat: bruno(`Grazie, Chef ${NAME}! A chef hat for you!`),
+    hat: bruno(`Grazie, Chef! A chef hat for you!`),
     mandolin: bruno('And my mandolin, for Lupa\'s band!'),
     band: lupa('Yay! Our first friend for the band!'),
   },
 
   // 🫒 The Olive Grove (activities/olives). Every spoken line of the activity goes in here.
   olives: {
-    arrive: [spina(`Ciao, ${NAME}! The olives are ready!`), spina('Help me pick them for olive oil!')],
+    arrive: [spina(`Ciao! The olives are ready!`), spina('Help me pick them for olive oil!')],
 
     // Comb the branches.
     comb: 'Drag the rake along the glowing branch!',
@@ -151,7 +150,7 @@ export const L = {
     bonkAgain: spina('Oops! Again!'),
     tapSpina: onDevice('Tap Spina to shake them off!', 'Click Spina to shake them off!'),
     shook: spina('Hee hee! Into the basket!'),
-    branchDone: ['Olives in the net!', `Great combing, ${NAME}!`, 'The net is full!'],
+    branchDone: ['Olives in the net!', `Great combing!`, 'The net is full!'],
     sun: 'Olive trees love hot, dry summers!',
     toBasket: spina('Into the basket! Grazie!'),
 
@@ -163,7 +162,7 @@ export const L = {
     hintGreen: 'Green goes in the one sun bowl!',
     hintPurple: 'Purple goes in the two sun bowl!',
     hintBlack: 'Black goes in the three sun bowl!',
-    sortDone: `Green, purple, black! Well done, ${NAME}!`,
+    sortDone: `Green, purple, black! Well done!`,
     tryOne: spina('Mmm! Let me try one!'),
     bitter: spina('Bleh! Bitter!'),
     bitterWhy: ['Fresh olives are too bitter!', 'They have to soak first.'],
@@ -208,11 +207,11 @@ export const L = {
     tapRocks: onDevice('Tap the rocks!', 'Click the rocks!'),
     found: lupa('Acqua! You found water!'),
     girl1: 'Long ago, a girl helped the Romans find water.',
-    girl2: `Today, that girl is YOU, ${NAME}!`,
+    girl2: `Today, that girl is YOU!`,
     // 2. Build the aqueduct (a water bridge) over the valley.
     bridge: 'Build a water bridge to Rome!',
     drag: 'Drag the arch that fits each gap!',
-    fits: [lupa('It fits!'), lupa('Perfetto!'), lupa(`Brava, ${NAME}!`)],
+    fits: [lupa('It fits!'), lupa('Perfetto!'), lupa(`Brava!`)],
     downhill: 'Water only flows downhill!',
     glowing: 'Try the glowing arch!',
     pickArch: onDevice('Now tap an arch!', 'Now click an arch!'),
@@ -233,7 +232,7 @@ export const L = {
     one: 'One!',
     oneMore: 'One more coin!',
     two: 'Two!',
-    comeBack: `Now you will come back to Rome one day, ${NAME}!`,
+    comeBack: `Now you will come back to Rome one day!`,
     lupaTurn: lupa('My turn!'),
     wish: lupa('I wish I could sing!'),
     star: 'A wishing star!',
@@ -273,7 +272,7 @@ export const L = {
     },
     slowBow: 'A very, very slow bow!',
     round2: cesare('Now the big doors: four and five!'),
-    youAreFive: `V is five! Just like you, ${NAME}!`,
+    youAreFive: `V is five! Just like you!`,
     // 3. Grand finale: every door opens, the crowd does a wave.
     allDoors: cesare('Everybody, up!'),
     wave: onDevice('Swipe across the crowd to make a wave!', 'Drag across the crowd to make a wave!'),
@@ -281,7 +280,7 @@ export const L = {
     bravo: cesare('Bravissimi! What a show!'),
     old: 'The Colosseum is almost 2,000 years old!',
     // Payoff.
-    bow: cesare(`Grazie, ${NAME}. I bow to you.`),
+    bow: cesare(`Grazie. I bow to you.`),
     horn: cesare("My Roman horn, for Lupa's band!"),
     tapHorn: onDevice('Tap the horn!', 'Click the horn!'),
     band: lupa('Yay! A horn for the band!'),
@@ -289,7 +288,7 @@ export const L = {
 
   // 🛶 Venice: Gino's Water Taxi. Gino tells the story; Sparkle only speaks when something new happens (or she's stuck).
   venice: {
-    arrive: [gino(`Ciao, ${NAME}! In Venice, the streets are water!`)],
+    arrive: [gino(`Ciao! In Venice, the streets are water!`)],
     grab: gino('Grab my gondola!'),
     pickBoat: 'Pick a boat!',
     boat: {
@@ -316,7 +315,7 @@ export const L = {
       civetta: { pink: civetta('To the pink house, please!'), butter: civetta('To the yellow house, please!'), sky: civetta('To the blue house, please!'), mint: civetta('To the green house, please!'), coral: civetta('To the red house, please!'), lavender: civetta('To the purple house, please!'), peach: civetta('To the orange house, please!') },
     },
     otherWay: { lupa: lupa('Other way! Hee hee!'), spina: spina('Other way! Hee hee!'), cesare: cesare('Other way, please.'), civetta: civetta('Hoo! Other way!') },
-    thanks: { lupa: lupa(`Grazie, ${NAME}!`), spina: spina(`Grazie, ${NAME}!`), cesare: cesare(`Grazie, ${NAME}.`), civetta: civetta(`Grazie, ${NAME}!`) },
+    thanks: { lupa: lupa(`Grazie!`), spina: spina(`Grazie!`), cesare: cesare(`Grazie.`), civetta: civetta(`Grazie!`) },
     hello: { lupa: lupa('Ciao! Can I ride?'), spina: spina('Ciao! Me too!'), cesare: cesare('A ride, please.'), civetta: civetta('Hoo! A ride?') },
     lantern: 'A lantern for the canal!',
     maskTrip: gino('Now take me to the mask shop!'),

@@ -46,7 +46,7 @@ import { beachChair, cap, chairStack, pandanus, shieldUmbrella, thinPalm, towel 
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/hideseek/hideseek.ts'
 /** Leading Kaylee round the beach. */
-const WALK = knobs('hideWalk', 'Leading Kaylee round Ao Prao', FILE, {
+const WALK = knobs('hideWalk', 'Leading your unicorn round Ao Prao', FILE, {
   trot: { value: 2.0, min: 0.8, max: 5, step: 0.1, label: 'Trot', unit: 'm/s', note: 'her finger a little way ahead' },
   gallop: { value: 4.0, min: 2, max: 9, step: 0.1, label: 'Gallop', unit: 'm/s', note: 'her finger far ahead' },
   gallopFrom: { value: 5, min: 2, max: 14, step: 0.25, label: 'Gallop from', unit: 'm', note: 'her finger this far ahead = full gallop' },
@@ -56,18 +56,18 @@ const WALK = knobs('hideWalk', 'Leading Kaylee round Ao Prao', FILE, {
 const SEEK = knobs('hideSeek', 'Finding Daddy', FILE, {
   count: { value: 3, min: 1, max: 10, step: 1, label: 'She counts to' },
   gap: { value: 0.85, min: 0.3, max: 2, step: 0.05, label: '…a number every', unit: 's' },
-  near: { value: 3.4, min: 1, max: 8, step: 0.1, label: 'His place wiggles within', unit: 'm', note: 'Kaylee this close to where Daddy hides: it wiggles and giggles' },
+  near: { value: 3.4, min: 1, max: 8, step: 0.1, label: 'His place wiggles within', unit: 'm', note: 'your unicorn this close to where Daddy hides: it wiggles and giggles' },
   wiggle: { value: 1.5, min: 0.4, max: 5, step: 0.1, label: '…every', unit: 's' },
   find: { value: 1.25, min: 0.5, max: 3, step: 0.05, label: 'Walking up finds him at', unit: 'm', note: 'she finds him by walking this close, without a tap' },
   giveaway: { value: 8, min: 3, max: 30, step: 0.5, label: 'Help 1: he peeks out after', unit: 's', note: 'stuck this long: a rustle, he pops his head up (a giggle, a splash), then a little rustle now and then' },
   glow: { value: 16, min: 5, max: 60, step: 1, label: 'Help 2: his place glows after', unit: 's', note: 'a big sneeze, and the finger points at it' },
   popOut: { value: 26, min: 8, max: 90, step: 1, label: 'Help 3: he pops out after', unit: 's', note: 'he jumps out and waves ("Here I am!"): a tap on him finds him' },
   runOver: { value: 6, min: 2, max: 30, step: 0.5, label: '…then runs to her after', unit: 's', note: 'still not found: he runs over ("Peekaboo!") and it counts' },
-  busyHelp: { value: 0.5, min: 0, max: 1, step: 0.05, label: 'Help clock while she wanders', unit: '×', note: 'the help clock runs this fast while she leads Kaylee about (1 when she stops)' },
+  busyHelp: { value: 0.5, min: 0, max: 1, step: 0.05, label: 'Help clock while she wanders', unit: '×', note: 'the help clock runs this fast while she leads your unicorn about (1 when she stops)' },
   hop: { value: 0.55, min: 0.2, max: 1.5, step: 0.05, label: 'He jumps out in', unit: 's' },
 })
 /** Her turn to hide (round hide). */
-const DAD = knobs('hideDad', "Kaylee hides, Daddy seeks", FILE, {
+const DAD = knobs('hideDad', "your unicorn hides, Daddy seeks", FILE, {
   count: { value: 5, min: 2, max: 12, step: 1, label: 'Daddy counts to' },
   gap: { value: 1.0, min: 0.4, max: 2, step: 0.05, label: '…a number every', unit: 's' },
   hideR: { value: 1.4, min: 0.6, max: 3, step: 0.05, label: 'A hiding place counts within', unit: 'm' },
@@ -176,7 +176,7 @@ const shutter = () => {
 }
 
 export const HIDE_ANCHORS: AnchorInfo[] = [
-  { id: 'kaylee', label: 'Kaylee', kind: 'thing' },
+  { id: 'kaylee', label: 'You', kind: 'thing' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   ...SPOTS.filter((s) => s.id !== 'mommy').map((s) => ({ id: `hide:${s.id}`, label: s.label, kind: 'thing' as const })),
@@ -401,7 +401,7 @@ export class HideSeek implements World3D {
     this.startRound(this.round, true)
 
     this.unwatch = watch('hideseek', () => ({
-      'Kaylee to Daddy (m)': [this.dadDist(), 12],
+      'your unicorn to Daddy (m)': [this.dadDist(), 12],
       'her speed (m/s)': [this.speed, 5],
     }))
   }

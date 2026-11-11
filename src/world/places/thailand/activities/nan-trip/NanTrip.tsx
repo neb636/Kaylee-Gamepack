@@ -301,7 +301,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
   const raced = (track: TrackId, result: Result) => {
     const place: Place = result === 'lose' ? 2 : 1
     const next = addRace(cup, track, place)
-    // The Cup won: it goes in her Trophy Room (KAYLEE on it, ×2 on another trip's Cup).
+    // The Cup won: it goes in her Trophy Room (the trophy title on it, ×2 on another trip's Cup).
     if (!cupDone(cup) && cupDone(next)) awardTrophy({ gameId: 'world-thailand-nan-cup', gameTitle: 'Thailand', trophyTitle: CUP_TROPHY, emoji: '🏆' })
     setCup(next)
     saveCup(next, lose)

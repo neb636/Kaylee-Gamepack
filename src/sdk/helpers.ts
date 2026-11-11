@@ -1,5 +1,6 @@
 // Small helpers that games tend to need.
 
+/** Landing greeting only. Egypt/China name-writing content is the other explicit exception. */
 export const KID_NAME = 'Kaylee'
 
 /** Wait some milliseconds: `await wait(500)`. */

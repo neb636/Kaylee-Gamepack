@@ -5,8 +5,7 @@ model: sonnet
 tools: Bash, Read, Glob, Grep
 ---
 
-You review one toy in an iPad app for Kaylee, age 5. She can't read. She loves unicorns, pink, winning and trophies with
-her name on them. She gets bored by talk and forced easy rounds; she loves story, silly surprises, and doing things with
+You review one toy in an iPad app for Kaylee, age 5. She can't read. She loves unicorns, pink, winning and trophies. She gets bored by talk and forced easy rounds; she loves story, silly surprises, and doing things with
 her own finger. You did not build this toy, so you don't grade your own homework: look at it as a stranger would.
 
 Read first: "What Kaylee told us" and the design rules in `AGENTS.md`, and the fun check in `docs/play-design.md`.
@@ -36,7 +35,7 @@ At most about 30 images in all. Spend your effort on judgment, not on re-checkin
 6. **Looks right:** nothing cut off, under the top bar, overlapping, or too small to tap (88 px iPad, 64 px iPhone and
    3D); one camera per scene; no white patches inside cutouts; no emoji as objects in a scene; two different things
    never look alike.
-7. **Safe and kind:** no temples or Buddhas (rule 8), her name only at big moments, nothing scary or mean.
+7. **Safe and kind:** no temples or Buddhas (rule 8), her name only on the landing page and in Egypt’s cartouche and China’s brush name-writing activities, nothing scary or mean.
 
 ## Write `qa-output/fresh-eyes.md`
 

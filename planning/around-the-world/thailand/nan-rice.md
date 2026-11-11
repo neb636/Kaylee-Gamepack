@@ -416,8 +416,7 @@ The user played greybox B (2026-10-25): threshing feels good (ten bangs, the swi
   Sparkle's sticky-rice fact moved to the second.
 - New tap-to-hear facts (Sparkle, first poke): the buffalo ("Buffalo helped farmers get the mud ready!") and a duck
   ("Ducks eat the bugs in the rice!"). Lung's "Hey! My scarecrow!" the first time she spins it.
-- Kaylee's name is gone from "Look at those rows!" and the video's "Want to see real farmers grow rice?" (name only at
-  the photo and in Daddy's "Kaylee? Where did you go?" joke).
+- Kaylee's name is gone from "Look at those rows!" and the video's "Want to see real farmers grow rice?" (the photo and Daddy’s “Where did you go?” joke are also name-free; the landing page and Egypt/China name-writing activities are the only exceptions).
 - Far-off farm life: every 5-10 s, when nobody's talking, a quiet frog, bird, duck, chime or buffalo
   (`riceSfx.far`), so the farm is never silent between touches.
 - Sparkle waits her turn behind Lung: `TripGuide` now counts a line that's still loading as talking, so a friend's

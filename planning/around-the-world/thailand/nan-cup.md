@@ -2,7 +2,7 @@
 
 Full loop built, on for Kaylee · Nan trip stop · updated 2026-11-09
 
-At the end of the city road, Nan town's market square becomes the race ground for the **Nan Mountain Cup**. Kaylee drives her own pink kart against three mountain racers on three tracks, each one different: a misty mushroom forest, the rice steps and the climb into the clouds. She wins two races and loses one. Which one she loses is rolled fresh every time she plays. Winning two makes her the champion, so the Cup with KAYLEE on it is hers.
+At the end of the city road, Nan town's market square becomes the race ground for the **Nan Mountain Cup**. Kaylee drives her own pink kart against three mountain racers on three tracks, each one different: a misty mushroom forest, the rice steps and the climb into the clouds. She wins two races and loses one. Which one she loses is rolled fresh every time she plays. Winning two makes her the champion, so the Cup with CHAMPION on it is hers.
 
 **Next:** Kaylee plays it (check-in 3): [the board](#/world/thailand/nan-trip/cup) is the way in, or the city road from the Nan map. The user hears the rivals' voices first (the table read on the review page). The kart still has its first-guess feel numbers ([the feel lab](#/world/thailand/nan-trip/race?track=steps&feel=1)); her playtest says whether they need tuning.
 
@@ -37,7 +37,7 @@ The Cup (any order): 🍄 Mushroom Forest (Moon's home track) → 🌾 Rice Step
 
 After each race: 🥇 Podium: gold, or silver + a gift → 📋 Back to the board (the next track, or 🗺️ the map)
 
-After the third: 🏆 The Cup ceremony (KAYLEE on the Cup) → 📸 Photo for the album → 💗 Stamp on the map
+After the third: 🏆 The Cup ceremony (CHAMPION on the Cup) → 📸 Photo for the album → 💗 Stamp on the map
 
 > **Which race she loses**
 >
@@ -131,7 +131,7 @@ Three Nan locals built on the chibi rig, each with a kart that suits them, a way
 - **The grid:** Sparkle counts the start in Thai, “Sam! Song! Neung! Go!”, so she learns 3-2-1 in Thai. A finger down at Go is a rocket start.
 - **A win:** in slow motion over the line by a nose, then fireworks and the crowd jumping. On the podium she's on 1 with a gold medal, the home rival on 2.
 - **The loss:** the home rival edges ahead on the last stretch, a photo finish in slow motion, and they win by a nose. “So close!” On the podium she's on 2 with a silver medal. She taps the winner to give a high five, and they give her their gift. Sparkle: “Second place! Next race!”
-- **The Cup:** after the third race, the scoreboard counts 2 wins and Kaylee is champion. She lifts the big gold **Nan Mountain Cup** with KAYLEE on it, with all three rivals cheering and the gifts from the lost race on her kart. A photo for the trip album, then the Cup goes in her Trophy Room. Then the stamp drops on Nan town on the map.
+- **The Cup:** after the third race, the scoreboard counts 2 wins and Kaylee is champion. She lifts the big gold **Nan Mountain Cup** with CHAMPION on it, with all three rivals cheering and the gifts from the lost race on her kart. A photo for the trip album, then the Cup goes in her Trophy Room. Then the stamp drops on Nan town on the map.
 
 ### What it teaches (by doing)
 
@@ -286,7 +286,7 @@ The Cup as a whole, behind a flag: the race ground at the end of the city road, 
 - **The race ground** (`cup/ground3d.ts`, one 3D world on the trip kit's `Stage`, `cup/Ground.tsx` over it): the board with the three tracks as tiles (a little picture of each: pines and a pink mushroom, the terraces, the cloudy peak), the rivals sitting in their karts under their home tracks (Grandma Taeng napping, her three old cups on top of the board), a medal hanging under each track raced (the newest drops in), the Cup on a pink stand, her kart with Kaylee by it, Moon's honey stall with a bee, a hen, balloons on the board, the grandstand with Mommy and Daddy and the scoreboard (a slot per race). Tap a track: Kaylee hops into her kart, off to the race. 🗺️ back to the map.
 - **The podium**: the race hands over to it when everyone's over the line (`Cup.tsx` `onFinish`; the race's end card is gone). Gold: Kaylee on 1 with a gold medal dropping onto her, the home rival on 2, another rival on 3, the last one clapping, fanfare and confetti, then ➡️. Silver: the home rival on 1 (glowing), Kaylee on 2 with silver; she taps the winner for a high five (a raised hoof, a clap, sparkles), the winner hops down to her kart, puts their gift on it and hops back, then ➡️. After the last race the ➡️ is 🏆.
 - **The gifts** (`cup/gifts.ts`): Grandma Taeng's pink ribbon tied on the seat's back, Pao's orange feather stuck up behind the seat, Moon's honey-pot sticker on the side. They stay on her kart on the board and in the next races, flutter as she drives, and wiggle when she taps her kart.
-- **The Cup ceremony**: Kaylee on top, the rival who beat her on 2; the scoreboard lights up race by race (gold, silver, gold), fanfare, and the Cup (gold, a pink ribbon, KAYLEE on a plate on its base, code-drawn text) flies over from its stand and floats beside her, glowing. A tap and she lifts it over her head: fireworks, confetti, everyone cheering. Then Mommy's photo (`photo.ts` `cup`: Kaylee on the podium holding up the Cup, Mommy and Daddy cheering; it's one to pick for Agong's wall) and 🗺️: back to the map, where the gold stamp lands on Nan town.
+- **The Cup ceremony**: Kaylee on top, the rival who beat her on 2; the scoreboard lights up race by race (gold, silver, gold), fanfare, and the Cup (gold, a pink ribbon, CHAMPION on a plate on its base, code-drawn text) flies over from its stand and floats beside her, glowing. A tap and she lifts it over her head: fireworks, confetti, everyone cheering. Then Mommy's photo (`photo.ts` `cup`: Kaylee on the podium holding up the Cup, Mommy and Daddy cheering; it's one to pick for Agong's wall) and 🗺️: back to the map, where the gold stamp lands on Nan town.
 - **Links**: the address bar writes the record as `cup=forest%3A1,steps%3A2` (the shared `router.ts` encodes colons); links typed with plain colons work the same.
 - **QA:** `nan-cup-board`, `nan-cup-gold`, `nan-cup-silver`, `nan-cup-win` and `nan-cup-map` in qa-screens, `nan-high-five` and `nan-cup-lift` in qa-motion, `nan-cup-podium` and `nan-cup-win` in qa-pacing; `window.__thaiNanQA()` on the race ground has `mode`, `record`, `winner`, `highFive`, `gifts`, `cupHere`, `lifted`, `scored`, `ui` and screen points (`points.tracks`, `points.next`, `points.cup`).
 

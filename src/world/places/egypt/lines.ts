@@ -1,5 +1,5 @@
 // Every phrase that can be spoken in Egypt. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
-// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.)
+// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing.)
 // Plain strings are Sparkle, the guide: she gives the instructions. Friends say their own story and reaction lines in
 // their own voices (see cast.json), and their puppets move their mouths while they talk.
 import { onDevice } from '../../../sdk/device.ts'
@@ -16,13 +16,13 @@ const COUNT = ['One!', 'Two!', 'Three!', 'Four!', 'Five!']
 
 export const L = {
   name: 'Egypt',
-  intro: [miu(`Ahlan, ${NAME}! I'm Miu the kitten!`), miu('Ahlan means hello! Come explore Egypt with me!')],
+  intro: [miu(`Ahlan! I'm Miu the kitten!`), miu('Ahlan means hello! Come explore Egypt with me!')],
   hubFirst: onDevice(miu('Tap a spot on the map!'), miu('Click a spot on the map!')),
-  hubNext: miu(`Where to next, ${NAME}?`),
+  hubNext: miu(`Where to next?`),
   hubParty: onDevice(miu('Everyone is here! Tap the light show!'), miu('Everyone is here! Click the light show!')),
   partyLocked: miu('Get all the stamps to start the light show!'),
-  trophyWin: `${NAME}, you did it! You won the Egypt Explorer trophy!`,
-  trophyRoom: `${NAME}, Egypt Explorer! From Egypt.`,
+  trophyWin: `You did it! You won the Egypt Explorer trophy!`,
+  trophyRoom: `Egypt Explorer! From Egypt.`,
   tickle: {
     miu: [miu('Purr! That tickles!'), miu('Meow! Hee hee!')],
     jamal: [jamal('Harrumph! Hello, little one.'), jamal('Mmm, I love sweet dates!')],
@@ -55,7 +55,7 @@ export const L = {
     wall: miu('Not this way! Hee hee.'),
     treasure: onDevice('The treasure room! Tap the golden box!', 'The treasure room! Click the golden box!'),
     mask: 'This gold mask was made for a boy king called Tut!',
-    tutu: tutu(`Yawn! Ahlan, ${NAME}! I'm Tutu!`),
+    tutu: tutu(`Yawn! Ahlan! I'm Tutu!`),
     nap: tutu('I napped for thousands of years! Hee hee!'),
   },
   nile: {
@@ -80,7 +80,7 @@ export const L = {
     lion: "The Sphinx has a lion's body and a person's head!",
     pieces: 'You found pieces of an old pot! Put it back together!',
     potDone: miu('Good as new!'),
-    nose: sphinx(`Thank you, ${NAME}! Hmm, have you seen my nose?`),
+    nose: sphinx(`Thank you! Hmm, have you seen my nose?`),
     noseAns: miu('Hee hee! His nose fell off a long, long time ago!'),
   },
   scribe: {
@@ -128,7 +128,7 @@ export const L = {
     fennec: fennec('Yum! Thank you for the koshari!'),
     rope: "Pull the rope to raise Egypt's flag!",
     flag: "Egypt's flag is red, white and black, with a golden eagle!",
-    thanks: miu(`Shukran, ${NAME}! You're a true Egypt explorer!`),
+    thanks: miu(`Shukran! You're a true Egypt explorer!`),
   },
   stickers: {
     camel: 'Camel sticker! Camels store fat in their humps for long trips!',

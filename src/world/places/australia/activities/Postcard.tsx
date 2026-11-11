@@ -1,7 +1,7 @@
 // Beach Postcard: free coloring (no wrong colors!), then send it home with "G'day, mate!".
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
-import { Buddy, burst, KID_NAME, say, sounds, useAlive, wait } from '../../../../sdk'
+import { Buddy, burst, say, sounds, useAlive, wait } from '../../../../sdk'
 import { ColoringPage } from '../../../kit/ColoringPage'
 import { Stage } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
@@ -82,7 +82,7 @@ export function Postcard({ onDone, setProgress }: ActivityProps) {
           >
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 12, fontSize: 'clamp(26px, 5vw, 52px)', fontWeight: 700, color: 'var(--hotpink)', lineHeight: 1.1 }}>
               <span>G'day, mate!</span>
-              <span style={{ fontSize: '60%', color: 'var(--ink)' }}>Love, {KID_NAME} 💖</span>
+              <span style={{ fontSize: '60%', color: 'var(--ink)' }}>With love 💖</span>
             </div>
             <div style={{ width: 2, background: 'var(--lavender-dark)' }} />
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'space-between' }}>

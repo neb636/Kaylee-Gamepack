@@ -58,7 +58,7 @@ const PROMPTS: Record<Stage, string> = {
   star: onDevice('The wishing star! Tap it!', 'The wishing star! Click it!'),
   lupa: 'Lupa is singing! Swing bigger and she gets braver!',
   high: 'Lift the wand up high!',
-  roses: 'Brava, Kaylee! Brava, Lupa! Catch the roses!',
+  roses: 'Brava! Brava, Lupa! Catch the roses!',
   sky: 'Sweep the wand across the sky!',
   picnic: 'Picnic time! Give Lupa a hug!',
 }
@@ -589,7 +589,7 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
     st.done = true
     sounds.fanfare()
     burst()
-    setPrompt('Grazie, Kaylee! Ciao for now!')
+    setPrompt('Grazie! Ciao for now!')
     later(1500, onDone)
   }
 

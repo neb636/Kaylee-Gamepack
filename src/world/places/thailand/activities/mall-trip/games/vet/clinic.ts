@@ -55,7 +55,7 @@ export const VET_ANCHORS: AnchorInfo[] = [
   { id: 'cat', label: 'Cat carrier', kind: 'thing' },
   { id: 'jar', label: 'Treat jar', kind: 'thing' },
   { id: 'scale', label: 'Scale', kind: 'thing' },
-  { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
+  { id: 'family:kaylee', label: 'You', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
 ]
 

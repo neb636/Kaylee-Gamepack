@@ -30,7 +30,7 @@ node scripts/table-read.mjs --changed                   # every group this branc
 It prints the flags. Fix these before the user listens; don't ask them about them:
 - **not recorded**: record it.
 - **long** (over 3 s): shorten it, unless its slowness is the joke (a sleepy moose). Kaylee is five.
-- **name**: her name in more than two or three lines of one toy is too many (rule 5). Keep it for the big moments.
+- **name**: any mention outside the landing page and Egypt’s cartouche / China’s brush name-writing lines violates rule 5. Remove it, including trophy and finale lines; the two writing activities are explicit exceptions.
 - **rule 8**: temple or Buddha words. Take them out and tell the user.
 - **touch only**: a gesture word (tap, finger, swipe, flick, rub) with no Mac version. If it's an instruction, wrap it in
   `onDevice(touch, mouse)` (design rule 2); a fact or a sound ("tap tap tap!") can stay.

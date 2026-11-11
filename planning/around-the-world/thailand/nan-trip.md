@@ -190,7 +190,7 @@ Through Nan town is a short city road (`?road=city`): tuk-tuks, the river bridge
 - 〰️ **Wiggle all over the road**: The car rocks (Daddy: “Wibbly wobbly!”).
 - 🎶 **Drive onto the right side**: The songthaew driver waves and honks a tune.
 
-- 💬 **Story frame**: Mommy: “Let's drive to the mushroom farm! Steer for me, Kaylee!” (first drive only). Sparkle speaks when something new appears: the first cloud (“We're driving into a cloud!”), the hairpins (“Let's count the bends!”), or after 8 s with the finger off and nothing touched (“Steer the car with your finger!”).
+- 💬 **Story frame**: Mommy: “Let's drive to the mushroom farm! Steer for me!” (first drive only). Sparkle speaks when something new appears: the first cloud (“We're driving into a cloud!”), the hairpins (“Let's count the bends!”), or after 8 s with the finger off and nothing touched (“Steer the car with your finger!”).
 - 🎓 **What it teaches, by doing**: Keep left (the songthaew on the other side), go slow on bends (the Pajero slows itself before each chevron sign and leans), clouds sit on mountains (she drives into one), count to three (the hairpins). Tap-to-hear facts: the Pajero is made in Thailand; in Thailand cars drive on the left; the big round mirrors show cars coming round the bend.
 - 🎉 **Payoff and replay**: The stop at the end of the road (the Pajero pulls in and everyone hops out), and on the way home, the 3. On a replay the roads are the same, the traffic and animals are random; the weather (rain, sun, cloud) changes.
 - 🔢 **Numbers**: Each drive about 45-75 s with 15-30 touches (holding and steering counts as continuous play, plus the pokeables). About 4-5 drives in a full trip.

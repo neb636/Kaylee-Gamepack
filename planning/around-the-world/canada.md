@@ -541,7 +541,7 @@ In winter, Ottawa's canal freezes into the world's biggest natural skating rink.
 
 - Every question is spoken, short, with a 🔊 and a text line for the user. No score as a number, no timer, no failing: a miss gets a laugh and the right place glows.
 - Hockey has no losing: the geese never score and every goal counts. Three goals and it's over.
-- Her name at the big moment only (the last goal and the trophy), not after every goal (user feedback, 2026-10-27).
+- No player name in dialogue or trophies (user feedback, 2026-11-11). The landing page and Egypt/China name-writing activities are the only exceptions.
 - It sits after all eight stamps; replays pick 6 new questions.
 
 **Teaches:** where each animal lives, by placing it; Ottawa is Canada's capital; hockey is Canada's winter sport; the Rideau Canal freezes into a giant rink. **Numbers:** quiz ~8-12 touches + hockey ~20-30 touches, 3 min in all.

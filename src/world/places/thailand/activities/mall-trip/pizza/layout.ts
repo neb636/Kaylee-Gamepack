@@ -35,7 +35,7 @@ export const SEATS: Record<EaterId, { x: number; seat: number }> = {
   nick: { x: 0.9, seat: 0.46 },
 }
 export const SEAT_Z = -0.86
-export const EATER_NAMES: Record<EaterId, string> = { ji: 'Mommy', kaylee: 'Kaylee', nick: 'Daddy' }
+export const EATER_NAMES: Record<EaterId, string> = { ji: 'Mommy', kaylee: 'You', nick: 'Daddy' }
 
 /** Agong's take-away box, at the right end. Its lid stands open until two slices are in. */
 export const BOX = { x: 1.3, z: -0.16, w: 0.4, h: 0.1 }

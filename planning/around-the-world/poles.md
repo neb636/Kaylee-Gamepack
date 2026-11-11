@@ -387,7 +387,7 @@ The user's ask (2026-10-26): a quiz at the end to check what she learned. She ca
 
 - Every question is spoken, short (under ~3 s), with a 🔊 button and a short text line for the user.
 - No failing, no score shown as a number, no timer: a miss gets a silly reaction, then the right place glows and she does it herself. The star still fills.
-- Use her name: “Wow, Kaylee, you know your poles!”
+- Keep it name-free: “Wow, you know your poles!”
 - It sits **after** all five stamps and the tern flight, so it never blocks an activity. Replays pick 6 new questions from the pool.
 - It's a short end piece (~1-1.5 min), not the play: the activities stay toys, as `docs/play-design.md` asks.
 
@@ -760,7 +760,7 @@ Everything the activities need to go into the game, before any of them does: the
 Pola calls out to Mama across the sea ice, and Sparkle, in the corner, says what to do at each stretch (and again when she's stuck). Pola and Mama react in their own voices to the belly-flops, the tippy slides, the new ice and her taps. Home with Mama they cheer, then the stamp and the polar bear sticker. Ice Floe Hop has its spot on the globe's north side now.
 
 - `activities/floe/FloeHop.tsx`: one Pola line, then Sparkle's instruction (5.1 s of talk before the first touch). Sparkle's corner (`kit/Guide`) has a hint for each stretch (steady, drift, melt) and replaces the greybox's text pill. The friends' reactions take turns from a list, at least 5 s apart. A fact the first time she pokes the ice (“This ice is floating on the sea!”) and the open water.
-- Home: Mama's and Pola's lines, then “Kaylee, you got Pola home!”, then `onDone` (the stamp, the sticker, the video), after the lines or 9 s at most. 🔁 still plays again.
+- Home: Mama's and Pola's lines, then “You got Pola home!”, then `onDone` (the stamp, the sticker, the video), after the lines or 9 s at most. 🔁 still plays again.
 - `floe.ts`: new events `flop`, `slide`, `poke(pola | mama | floe | water)`.
 - `L.floe` in `lines.ts`: 24 lines (13 Pola, 5 Mama, 6 Sparkle). Pola's lines use the name, not he or she.
 - `info.ts`: `READY = true`. `qa.mjs`: the hug and the stamp as two screens.
@@ -804,7 +804,7 @@ Sparkle sits in a corner of the globe and says what to do: spin it, drag the sun
 
 ### Step 10: Pole to Pole and the Polar Quiz talk ([done] · 2026-10-28)
 
-Terry is the toy tern now, flying flat with his wings out and folding them to stand when he lands. He talks on the way: setting off with Pola's postcard, the warm middle, the windy south, a cheer every six fish and hello to each country she's been to. He hands Pebble the card (“From Pola! Look, a polar bear!”), then Sparkle asks each quiz question, with a 🔊 to hear it again. A miss gets something silly, then “Look for the sparkle!”; the badge gets “Wow, Kaylee, you know your poles!”
+Terry is the toy tern now, flying flat with his wings out and folding them to stand when he lands. He talks on the way: setting off with Pola's postcard, the warm middle, the windy south, a cheer every six fish and hello to each country she's been to. He hands Pebble the card (“From Pola! Look, a polar bear!”), then Sparkle asks each quiz question, with a 🔊 to hear it again. A miss gets something silly, then “Look for the sparkle!”; the badge gets “Wow, you know your poles!”
 
 - `party.ts`: `ternRig` with the `FLAT`/`UPRIGHT` poses, `flapWings` and Terry's `FaceLife` (`TERN_H` 0.07). The colony is four emperors with Papa's look, spread out so Pebble shows. The quiz's tern is the rig too.
 - `Finale.tsx`: `kit/Guide` with a hint for each section, quiet during the postcard and the badge; a `SayButton` by the stars; only the country-name pill stays. Pola's and Pebble's misses are said by the friend (`FRIEND_MISS`). Sparkle's “Steer Terry with your finger!” comes before Terry's first line.
@@ -837,7 +837,7 @@ The huddle's grey ovals are live penguins now: emperor dads that shiver, go blue
 - `puppets/Emperor.tsx`: the emperor dad, side view facing right, matched to the 3D `papa` look (black back and head, white tummy with a gold blush, gold patches, a slim beak with a peach stripe, shiny eyes). He breathes, blinks, watches her finger and opens his beak with Papa's voice; hop, sing, flap, waddle, shake. `cold` (bluer, droopy eyes), `snow` (lumps on his head and back), `egg` (cream, or Pebble's pink one that wobbles and cracks). In the puppet lab as `papa` and `papa-cold` ([#/world/puppets](#/world/puppets)).
 - `embed` mode on `Emperor` and `Pebble`: drawn inside the huddle's own SVG. The huddle still moves them (position, squash, hop, lift, backs to the wind) and writes cold, snow, lift, flipper, beak and egg into each one every frame. The dad whose beak moves is the one talking.
 - **The painted night** (`assets/bg-huddle-night.webp`, Codex), pinned to the stage's horizon and scaled to cover any screen. The moon, the southern lights, the stars, the blowing snow and the sun stay code-drawn on top; the dawn is a tint.
-- **The full loop:** `kit/Guide` replaces the text pill. The cold dad says “Brrr! So cold!” first (about 5.5 s of talk before her hands are needed; she can grab a penguin from the first frame). Thank-yous in turn; the wind-turned line only the first two times (then the whoosh says it). Papa and Pebble talk at the egg, the hatch, each gust and tuck, and the sunrise; Sparkle: “You kept them all warm, Kaylee!”, then `onDone` 5 s after the sunrise cheer. Facts once each: the egg on the feet, coldest and windiest, no sun for months.
+- **The full loop:** `kit/Guide` replaces the text pill. The cold dad says “Brrr! So cold!” first (about 5.5 s of talk before her hands are needed; she can grab a penguin from the first frame). Thank-yous in turn; the wind-turned line only the first two times (then the whoosh says it). Papa and Pebble talk at the egg, the hatch, each gust and tuck, and the sunrise; Sparkle: “You kept them all warm!”, then `onDone` 5 s after the sunrise cheer. Facts once each: the egg on the feet, coldest and windiest, no sun for months.
 - `L.huddle`: 23 lines (13 Sparkle, 9 Papa, 4 Pebble). `huddle.ts` keeps only the stages, the starting huddles and the hit areas; the knobs and the packing didn't change. `info.ts`: `READY = true`.
 - **Known small things:** in portrait the huddle and Pebble are small on the tall stage (the greybox's scale). The dawn tint washes the far ridges pale. The egg fact can play while she's dragging. Pebble's “Whoa! Papa, help!” transcribes as “wow”: listen. The puppet wasn't compared with a screenshot of the 3D Papa. Not checked on iPhone.
 
@@ -846,7 +846,7 @@ The huddle's grey ovals are live penguins now: emperor dads that shiver, go blue
 The first full QA of the Poles at all seven screen sizes, then the playtest. No blockers, no console errors, and no stamp waits on winning. The globe, Snow Coats, Penguin Slide and the huddle came out fun; Ice Floe Hop, Iceberg Maker and the finale OK. Fixed here: Sparkle nagging while a finger is playing, cheers cut off by the stamp, an early instruction in the huddle, and the finale's top row on iPhone.
 
 - `kit/Guide`: a held, moving finger counts as playing and a friend talking counts as talk, so the stuck hint never repeats while she steers and never cuts a friend off. `afterTalk()` waits for the talking to stop: Ice Floe Hop's and the huddle's stamps wait for the cheers.
-- The huddle's hatch no longer says “tuck Pebble back” before the gust. Penguin Slide says the instruction before the fact. The badge line drops her name (the trophy's line says it right after).
+- The huddle's hatch no longer says “tuck Pebble back” before the gust. Penguin Slide says the instruction before the fact. The badge line drops her name (the trophy’s line is also name-free).
 - The finale: the stars and the 🔊 sit below the top bar on iPhone landscape; the 🏆 button sits under the badge, clear of Sparkle's line.
 - `scripts/qa-lib.mjs`: a leftover preview server from another checkout held the QA port, so the first sweep screenshotted another build. `serve()` now checks the page is our own build and moves to a free port.
 - **Next from the playtest:** Ice Floe Hop and Iceberg Maker still have the greybox look (the floes, and a cliff that reads as a building): their look comes next, one PR each.

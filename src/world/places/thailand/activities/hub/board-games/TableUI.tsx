@@ -12,7 +12,7 @@ import type { TablePlugin, TableView } from './plugin'
 
 /** Placeholder faces for the greybox (the look gate takes pictures of their real 3D selves). */
 export const FACES: Record<CousinId | 'kaylee', { emoji: string; extra: string; ring: string; name: string }> = {
-  kaylee: { emoji: '🦄', extra: '', ring: '#C9B3FF', name: 'Kaylee' },
+  kaylee: { emoji: '🦄', extra: '', ring: '#C9B3FF', name: 'You' },
   bb: { emoji: '🐃', extra: '🎀', ring: '#FF8FB8', name: 'BB' },
   gan: { emoji: '🦊', extra: '🧢', ring: '#FFC2A8', name: 'Gan' },
   ken: { emoji: '🦊', extra: '👓', ring: '#8FE3C8', name: 'Ken' },

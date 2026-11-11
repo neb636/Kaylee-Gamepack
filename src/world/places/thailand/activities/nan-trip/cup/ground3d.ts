@@ -11,7 +11,7 @@
 //   five (being a good sport), and they hop down to her kart and put their gift on it (gifts.ts). Then ➡️ back to the
 //   board (or, after the last race, the Cup).
 // - The Cup (section `cup-win`): the scoreboard over the grandstand lights up race by race (gold, silver, gold), the
-//   big gold Nan Mountain Cup with KAYLEE on it flies over from its stand and floats in front of her; she taps it and
+//   big gold Nan Mountain Cup with the trophy title on it flies over from its stand and floats in front of her; she taps it and
 //   lifts it over her head: fireworks, confetti, everyone cheering. Mommy's photo, then 🗺️ and the stamp on Nan town.
 // Dressed for the Cup (the look step): big pennant flags flying on tall poles, a fruit stall and a drinks stall beside
 // Moon's honey stall, round paper lanterns hanging along the grandstand's roof, hay bales and cones round the edge, and
@@ -24,7 +24,7 @@
 // first time), the home rival is a good sport on gold and the winner gives her their gift on silver, Mommy and Daddy
 // cheer. After a while with nothing done Sparkle says what to do (spendHint: glow first, then twice a visit at most).
 import { CanvasTexture, Color, Group, Mesh, MeshBasicMaterial, PlaneGeometry, Vector3, type BufferGeometry, type Object3D, type WebGLRenderer } from 'three'
-import { bell, clamp, firstTime, KID_NAME, sounds, spendHint, type Line } from '../../../../../../sdk'
+import { bell, clamp, firstTime, sounds, spendHint, type Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import type { Avatar } from '../../../characters/avatar'
 import type { Member } from '../../../characters/member'
@@ -81,7 +81,7 @@ export const GROUND_ANCHORS: AnchorInfo[] = [
   { id: 'cup', label: 'The Nan Mountain Cup', kind: 'thing' },
   { id: 'medal', label: 'Her medal', kind: 'thing' },
   { id: 'kart', label: 'Her kart', kind: 'thing' },
-  { id: 'kaylee', label: 'Kaylee', kind: 'family' },
+  { id: 'kaylee', label: 'You', kind: 'family' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'crowd', label: 'The crowd', kind: 'thing' },
@@ -1196,10 +1196,10 @@ function buildTrophy(bag: Bag): Group {
     x.fillStyle = '#FFE07A'
     x.fillRect(0, 0, 256, 64)
     x.fillStyle = '#7A4FB8'
-    x.font = 'bold 44px Fredoka, sans-serif'
+    x.font = 'bold 32px Fredoka, sans-serif'
     x.textAlign = 'center'
     x.textBaseline = 'middle'
-    x.fillText(KID_NAME.toUpperCase(), 128, 34)
+    x.fillText('CHAMPION', 128, 34)
   }
   const plate = new Mesh(bag.add(new PlaneGeometry(0.5, 0.125)), bag.add(new MeshBasicMaterial({ map: bag.add(new CanvasTexture(c)) })))
   plate.position.set(0, 0.11, 0.315)

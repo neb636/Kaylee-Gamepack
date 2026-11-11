@@ -1,5 +1,5 @@
 // Every phrase that can be spoken in China. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
-// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing. NAME matches KID_NAME.)
+// (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing.)
 // Plain strings are Sparkle, the guide: she gives the instructions. Friends say their own story and reaction lines in
 // their own voices (see cast.json). Mandarin and Shanghainese words are spelled the way they sound, so the voices say
 // them right ("Nong how" = 侬好 nóng hǎo); the screen shows the real words on a WordCard (see words.ts).
@@ -29,19 +29,19 @@ const COUNT = ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!']
 
 export const L = {
   name: 'China',
-  intro: [`Nee how, ${NAME}!`, 'Nee how means hello in China!'],
+  intro: [`Nee how!`, 'Nee how means hello in China!'],
   hubFirst: onDevice('Tap the glowing lantern!', 'Click the glowing lantern!'),
-  hubNext: `Where should we go next, ${NAME}?`,
+  hubNext: `Where should we go next?`,
   hubParty: onDevice('Tap the dragon parade!', 'Click the dragon parade!'),
   soon: 'This lantern opens soon!',
   partyLocked: 'Light up the lanterns to start the parade!',
   paradeSoon: 'The dragon parade is coming soon!',
-  trophyWin: `${NAME}, you did it! You won the China Explorer trophy!`,
-  trophyRoom: `${NAME}, China Explorer! From China.`,
+  trophyWin: `You did it! You won the China Explorer trophy!`,
+  trophyRoom: `China Explorer! From China.`,
 
   dumplings: {
     // Arrival on the Bund, then a walk through the old town.
-    arrive: [doudou(`Nong how, ${NAME}!`), doudou('Chef Fu needs our help!')],
+    arrive: [doudou(`Nong how!`), doudou('Chef Fu needs our help!')],
     bridge: onDevice('Tap the zig-zag bridge!', 'Click the zig-zag bridge!'),
     zigzag: 'Zig-zag bridges keep bad luck away!',
     door: onDevice('Tap the dumpling house door!', 'Click the dumpling house door!'),
@@ -118,8 +118,8 @@ export const L = {
     // Between services, and the payoff.
     serviceDone: 'Great cooking! Ready for the next customers?',
     clap: 'Everyone is clapping for you!',
-    hat: cheffu(`Shyeh shyeh, Chef ${NAME}! A chef hat for you!`),
-    lulu: lulu(`Achoo! Thank you, ${NAME}!`),
+    hat: cheffu(`Shyeh shyeh, Chef! A chef hat for you!`),
+    lulu: lulu(`Achoo! Thank you!`),
     doudouBye: doudou('Take some dumplings to the New Year parade!'),
 
     // Things she can tap for fun in the dining room.
@@ -186,7 +186,7 @@ export const L = {
     ],
     pattern3b: 'One more! What comes next?',
     hint: 'Try the glowing brick!',
-    fixed: [houhou('Yay! Thank you, Kaylee!'), houhou('Hee hee! The wall is getting strong!'), houhou('Hooray! The whole wall is fixed!')],
+    fixed: [houhou('Yay! Thank you!'), houhou('Hee hee! The wall is getting strong!'), houhou('Hooray! The whole wall is fixed!')],
     beacon: onDevice('Tap the tower to light the signal fire!', 'Click the tower to light the signal fire!'),
     signal: 'Soldiers sent smoke signals tower to tower!',
     signalEnd: 'The message zoomed along the wall!',
@@ -195,7 +195,7 @@ export const L = {
 
   // 🍲 Hotpot Night (activities/hotpot). Owner: the hotpot build.
   hotpot: {
-    story: [nainai(`Hotpot time, ${NAME}! Everybody cooks together!`)],
+    story: [nainai(`Hotpot time! Everybody cooks together!`)],
     ask: ['Bao Bao wants noodles!', 'Hong wants something green from the mild side!', 'Nai Nai wants two dumplings!'],
     dropTip: onDevice('Tap a food, then tap the soup!', 'Click a food, then click the soup!'),
     dropTipNoodles: onDevice('Tap the noodles, then tap the soup!', 'Click the noodles, then click the soup!'),
@@ -237,7 +237,7 @@ export const L = {
     nameIntro: `Now paint your name, ${NAME}! In Chinese!`,
     nameSay: crane('Ky lee!'),
     stamp: onDevice('Tap the red stamp!', 'Click the red stamp!'),
-    stamped: `Your name, stamped with a red seal, ${NAME}!`,
+    stamped: `Your name, stamped with a red seal!`,
     fact: "Chinese isn't written with letters. Some characters started as pictures!",
     end: crane('What a beautiful painting!'),
     tapCrane: [crane('Oh my!'), crane('Hee hee!')],
@@ -293,11 +293,11 @@ export const L = {
     // The zodiac wheel
     wheel: 'There are twelve zodiac animals, one for every year!',
     reveal: {
-      ox: 'Kaylee, you were born in the Year of the Ox!',
-      mouse: 'Kaylee, you were born in the Year of the Rat!',
+      ox: 'You were born in the Year of the Ox!',
+      mouse: 'You were born in the Year of the Rat!',
     },
-    revealOx: ox('Moo-hoo! Hooray, Kaylee!'),
-    revealMouse: mouse('Squeak! Hooray, Kaylee!'),
+    revealOx: ox('Moo-hoo! Hooray!'),
+    revealMouse: mouse('Squeak! Hooray!'),
     year: 'This year, 2026, is the Year of the Horse!',
     catAsk: onDevice('Shh! Someone is sleeping. Tap the cat!', 'Shh! Someone is sleeping. Click the cat!'),
     catFact: 'The cat overslept and missed the race! That is why there is no Year of the Cat!',
@@ -356,11 +356,11 @@ export const L = {
     hello: { camel: camel('Hello, little panda!'), yak: yak('Hello up here!') },
     tap: [baobao('Hee hee!'), baobao('Tickles!')],
     animalTap: { tiger: tiger('Rrr, hello!'), camel: camel('Two humps, no hurry.'), yak: yak('Hello, friend!') },
-    end: baobao('What a trip! Thank you, Kaylee!'),
+    end: baobao('What a trip! Thank you!'),
   },
   // 🐉 The Dragon Parade finale (activities/parade). Owner: the parade build.
   parade: {
-    arrive: longlong(`I'm Long Long! Let's dance, ${NAME}!`),
+    arrive: longlong(`I'm Long Long! Let's dance!`),
     drive: 'Drag Long Long around the lanterns!',
     hint: 'Follow the glowing lanterns!',
     thanks: {
@@ -372,17 +372,17 @@ export const L = {
       train: tiger('Shyeh shyeh for the train ride!'),
       dumplings: cheffu('Shyeh shyeh for the dumplings!'),
     },
-    lap: longlong(`Wheee! What a dance, ${NAME}!`),
+    lap: longlong(`Wheee! What a dance!`),
     drum: onDevice('Tap the drum! Make the dragon dance!', 'Click the drum! Make the dragon dance!'),
     drumMid: longlong('Boom boom! I love it!'),
-    drumDone: `Great drumming, ${NAME}!`,
+    drumDone: `Great drumming!`,
     sky: onDevice('Tap the sky to make fireworks!', 'Click the sky to make fireworks!'),
     skyFact: 'Fireworks were invented in China!',
     flag: onDevice('Tap the flag to raise it!', 'Click the flag to raise it!'),
     flagFact: "China's flag is red, with one big gold star and four little stars!",
     envelope: onDevice("Bao Bao has a red envelope! Tap to open it!", "Bao Bao has a red envelope! Click to open it!"),
     hongbao: 'A red envelope is called a hong bao!',
-    greet: baobao(`Sheen nyen kwy luh, ${NAME}! Happy New Year!`),
+    greet: baobao(`Sheen nyen kwy luh! Happy New Year!`),
   },
   // Real-world videos (meta.videos); spoken when one is offered or picked.
   videos: {

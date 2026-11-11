@@ -72,7 +72,7 @@ import { FireDancers } from './dancers'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/island/island.ts'
 /** Leading Kaylee (and the floatie). */
-const WALK = knobs('sametWalk', 'Leading Kaylee round the island', FILE, {
+const WALK = knobs('sametWalk', 'Leading your unicorn round the island', FILE, {
   trot: { value: 2.3, min: 0.8, max: 5, step: 0.1, label: 'Trot', unit: 'm/s', note: 'her speed with the finger a little way ahead' },
   gallop: { value: 4.6, min: 2, max: 9, step: 0.1, label: 'Gallop', unit: 'm/s', note: 'her speed with the finger far ahead' },
   gallopFrom: { value: 5.5, min: 2, max: 14, step: 0.25, label: 'Gallop from', unit: 'm', note: 'her finger this far ahead of her = full gallop' },
@@ -98,8 +98,8 @@ const PHONE = knobs('sametPhone', "Mommy's phone", FILE, {
   zoom: { value: 0.72, min: 0.4, max: 1, step: 0.02, label: 'Camera comes in to', note: 'with the phone out, how much of the ground shows (× the walking view)' },
   focus: { value: 0.35, min: 0, max: 0.8, step: 0.05, label: 'Leans toward an animal', note: 'the view slides this much of the way toward the nearest animal' },
   aim: { value: 0.7, min: 0, max: 1, step: 0.05, label: 'The photo turns to it', note: 'how much of the way the photo turns toward the animal she tapped' },
-  lens: { value: 1.25, min: 1, max: 2.5, step: 0.05, label: 'Photo zoom', unit: '×', note: 'the least it zooms (Kaylee far from the animal)' },
-  close: { value: 8, min: 3, max: 20, step: 0.5, label: 'Zooms in from', unit: 'm', note: 'Kaylee closer than this to the animal: the photo zooms in more (up to 3.2×), so getting close makes it big' },
+  lens: { value: 1.25, min: 1, max: 2.5, step: 0.05, label: 'Photo zoom', unit: '×', note: 'the least it zooms (your unicorn far from the animal)' },
+  close: { value: 8, min: 3, max: 20, step: 0.5, label: 'Zooms in from', unit: 'm', note: 'your unicorn closer than this to the animal: the photo zooms in more (up to 3.2×), so getting close makes it big' },
   gold: { value: 0.2, min: 0.05, max: 0.6, step: 0.01, label: 'Gold from', note: 'the animal this tall on the photo (of its height) earns a gold frame' },
   middle: { value: 0.45, min: 0.1, max: 1, step: 0.05, label: 'Near the middle', note: 'and its middle at most this far from the photo\'s middle (1 = the edge)' },
   reach: { value: 140, min: 60, max: 300, step: 10, label: 'Tap finds an animal within', unit: 'px' },
@@ -253,7 +253,7 @@ interface SnapTarget {
 const LABELS: Record<string, string> = { palm: 'A coconut palm', samet: 'A samet tree', umbrella: 'A beach umbrella', chair: 'A beach chair', ball: 'The beach ball', icecream: 'The ice cream cart', beads: "The bead seller's tray", crab: 'A crab hole', bush: 'Pink flowers', longtail: 'A longtail boat', speedboat: 'The speedboat', hammock: 'The hammock', telescope: 'The telescope', tamarind: 'The tamarind tree', deckbrella: 'An umbrella on the deck', lantern: 'A lantern', lifeguard: 'The lifeguard tower', stall: 'The coconut stall', rocks: 'The balancing rocks' }
 
 export const ISLAND_ANCHORS: AnchorInfo[] = [
-  { id: 'kaylee', label: 'Kaylee', kind: 'thing' },
+  { id: 'kaylee', label: 'You', kind: 'thing' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'taxi', label: 'The green taxi', kind: 'thing' },
