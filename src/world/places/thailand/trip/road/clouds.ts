@@ -46,8 +46,12 @@ export function buildPuffs(at: [number, number, number][], size: number, seed: n
   return solid(merge(parts), bag, 2)
 }
 
+/** How high the sea's lumps rise above its floor (meters): the biggest lump's top. */
+export const SEA_LUMPS = 14
+
 /** The sea of clouds seen from above: a white floor of cloud at height `y` out to the horizon (it fades into the haze),
- *  with soft lumps rolling on it. Two meshes. Only shown once she's up above the cloud layer. */
+ *  with soft lumps rolling on it. Two meshes. Only shown once the camera is above its lumps (`seaShows`): a camera
+ *  inside a lump sees the back of its ink outline, a black screen. */
 export function buildCloudSea(box: { x0: number; x1: number; z0: number; z1: number }, y: number, seed: number, bag: Bag) {
   const rand = rng(seed * 13 + 1)
   const g = new Group()
@@ -61,9 +65,12 @@ export function buildCloudSea(box: { x0: number; x1: number; z0: number; z1: num
   for (let i = 0; i < 170; i++) {
     const a = rand() * Math.PI * 2
     const d = 10 + rand() * rand() * (R + 600)
-    const r = 8 + rand() * 20
+    const r = 8 + rand() * (SEA_LUMPS * 2 - 8)
     lumps.push(P.sphere(r, rand() < 0.3 ? '#F3F0FF' : '#FFFFFF', { at: [cx + Math.cos(a) * d, y + r * 0.02, cz + Math.sin(a) * d], scale: [1.5, 0.5, 1.2] }, 10))
   }
   g.add(solid(merge(lumps), bag, 2))
   return g
 }
+
+/** The sea of clouds at `seaY` shows once the camera is clear above its lumps. */
+export const seaShows = (cameraY: number, seaY: number) => cameraY > seaY + SEA_LUMPS + 1

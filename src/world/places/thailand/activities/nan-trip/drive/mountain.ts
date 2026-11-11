@@ -47,7 +47,7 @@ import type { World3D } from '../../../../../engine3d/View3D'
 import { Driver, type Feel } from '../../../../../engine3d/drive'
 import { put } from '../../../trip/legs/stage'
 import { buildMirror, buildRoadScene, buildWet, rng, type ClearSpot, type Mirror, type Puddle, type RoadScene } from '../../../trip/road/build'
-import { buildCloudLayer, buildCloudSea, buildPuffs } from '../../../trip/road/clouds'
+import { buildCloudLayer, buildCloudSea, buildPuffs, seaShows } from '../../../trip/road/clouds'
 import { buildMist, buildSky } from '../../../trip/road/far'
 import { Traffic, type Her, type TrafficEvents, type TrafficPlan } from '../../../trip/road/traffic'
 import { buildPajero, type Pajero } from '../../../trip/vehicles/pajero'
@@ -270,6 +270,7 @@ export class NanDrive implements World3D {
   private hissT = 0
   private sea: Group | null = null
   private lowCloud: Group | null = null
+  private seaY = 0
   // ---- Talk: lines said once, Sparkle's hints, Daddy's tap lines in turn, cool-downs ----
   private told = new Set<string>()
   private cool = new Map<string, number>()
@@ -369,7 +370,9 @@ export class NanDrive implements World3D {
     if (r.cloud) {
       scene.add(buildCloudLayer(b, r.cloud.y0, r.cloud.y1, 300, r.look.seed, bag, 0.45))
       // From above it: a sea of clouds out to the horizon (only once she's up there).
-      this.sea = buildCloudSea(b, r.cloud.y0 + (r.cloud.y1 - r.cloud.y0) * 0.62, r.look.seed, bag)
+      // (Low in the layer, so its lumps are below the road by the time the camera is up where the sea shows.)
+      this.seaY = r.cloud.y0 + (r.cloud.y1 - r.cloud.y0) * 0.3
+      this.sea = buildCloudSea(b, this.seaY, r.look.seed, bag)
       this.sea.visible = false
       scene.add(this.sea)
     } else {
@@ -617,6 +620,7 @@ export class NanDrive implements World3D {
       const p = this.landmark.localToWorld(tmp.set(...steam))
       this.dust.emit(p.x + (Math.random() - 0.5) * 2.4, p.y, p.z + (Math.random() - 0.5) * 1.6, (Math.random() - 0.5) * 0.4, 2.5 + Math.random() * 1.5, (Math.random() - 0.5) * 0.4, 1.6, 0.35)
     }
+    if (this.falls && Math.abs(this.r.falls! - this.loc.s) < 160) this.falls.userData.update(t)
     if (this.falls && Math.abs(this.r.falls! - this.loc.s) < 90 && Math.random() < dt * 20) {
       const p = this.falls.position
       this.dust.emit(p.x + (Math.random() - 0.5) * 3, p.y + 0.5, p.z + (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, 2 + Math.random() * 2, (Math.random() - 0.5) * 2, 0.8, 0.3)
@@ -1036,7 +1040,7 @@ export class NanDrive implements World3D {
     this.inCloudT = inside ? this.inCloudT + dt : 0
     // (Daddy only after Sparkle has said they're driving into a cloud.)
     if (this.inCloudT > 3.5 && heard.has('cloud')) this.once('foggy', L.nan.drive.foggy, true)
-    if (this.sea) this.sea.visible = y > r.cloud!.y1 - 4
+    if (this.sea) this.sea.visible = seaShows(this.rig.camera.position.y, this.seaY)
     if (above && !this.wasAbove) {
       sfx.cloudOut()
       const p = this.car.root.position

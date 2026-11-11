@@ -10,11 +10,11 @@
 // waterfall down the mountain beside the sky road, and, with the Nan Mountain Cup on (cup/rules.ts), the market square
 // dressed as its race ground (a balloon arch over the way in, the board with its three tracks, the grandstand, the Cup
 // on its stand, bunting). Each faces +z (the road).
-import { Group, type BufferGeometry } from 'three'
+import { CanvasTexture, DoubleSide, Group, Mesh, MeshBasicMaterial, PlaneGeometry, RepeatWrapping, TorusGeometry, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid, solidMix } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
-import type { HeightField } from '../../../trip/road/build'
+import { rng, type HeightField } from '../../../trip/road/build'
 import type { Road } from '../../../trip/road/road'
 import type { LandmarkKind } from './roads'
 
@@ -252,28 +252,131 @@ export function buildMarket(road: Road, field: HeightField, from: number, to: nu
   return solid(merge(parts), bag, 2)
 }
 
-/** The three-step waterfall pouring down the hillside next to the road into a pool, with boulders and ferns round it
- *  (its spray comes from the drive's particles). */
+/** The falling water's texture: soft white streaks running down a pale blue sheet (it scrolls down: `update`). */
+function fallTexture(bag: Bag) {
+  const c = document.createElement('canvas')
+  c.width = 64
+  c.height = 256
+  const x = c.getContext('2d')!
+  x.fillStyle = '#BFE6FF'
+  x.fillRect(0, 0, 64, 256)
+  const rand = rng(11)
+  for (let i = 0; i < 40; i++) {
+    const w = 2 + rand() * 6
+    const px = rand() * 64
+    const py = rand() * 256
+    const len = 40 + rand() * 90
+    x.fillStyle = i % 4 ? 'rgba(255,255,255,0.75)' : 'rgba(140,200,240,0.8)'
+    for (const dy of [-256, 0, 256]) {
+      x.beginPath()
+      x.ellipse(px, py + dy, w / 2, len / 2, 0, 0, Math.PI * 2)
+      x.fill()
+    }
+  }
+  const tex = bag.add(new CanvasTexture(c))
+  tex.wrapS = tex.wrapT = RepeatWrapping
+  return tex
+}
+
+/** A sheet of falling water `w` wide and `h` tall, its top `out` meters forward (it arcs over the lip, then drops). */
+function fallSheet(w: number, h: number, out: number) {
+  const g = new PlaneGeometry(w, h, 1, 10)
+  const pos = g.attributes.position
+  for (let i = 0; i < pos.count; i++) {
+    const k = (pos.getY(i) + h / 2) / h // 0 at the foot, 1 at the lip
+    pos.setZ(i, out * Math.pow(k, 3) * 1.0 + 0.12 * Math.sin(k * Math.PI))
+    // A little wider at the foot, where it spreads.
+    pos.setX(i, pos.getX(i) * (1.15 - 0.25 * k))
+  }
+  g.computeVertexNormals()
+  return g
+}
+
+/** The three-step waterfall pouring down the hillside next to the road into a pool: three ledges of round mossy rock,
+ *  the water arcing over each lip and streaming down (its streaks run), white foam boiling at each foot, ripples
+ *  spreading across the pool, ferns, flowers and bushes round it (its spray comes from the drive's particles). Call
+ *  `userData.update(t)` every frame. */
 export function buildFalls(height: number, bag: Bag) {
   const g = new Group()
   const h = height
   const step = h / 3
-  const rock = '#9C93AE'
-  const parts: BufferGeometry[] = [
-    // The cliff in three steps, each a bit further back.
-    ...[0, 1, 2].map((i) => P.rbox(7.4 - i * 0.8, step + 0.6, 2.2, 0.7, i % 2 ? '#8F86A3' : rock, { at: [0, step * i + (step + 0.6) / 2, -1.4 - i * 0.9] })),
-    // The water falling down each step (a pale sheet with a white rope down its middle), white foam at each foot.
-    ...[0, 1, 2].flatMap((i) => [
-      P.box(2.4 - i * 0.3, step, 0.24, '#EAF6FF', { at: [0, step * i + step / 2, -0.25 - i * 0.9] }),
-      P.box(0.9, step, 0.26, '#FFFFFF', { at: [0.3, step * i + step / 2, -0.24 - i * 0.9] }),
-      P.sphere(1.1 - i * 0.15, '#FFFFFF', { at: [0, step * i + 0.1, 0.05 - i * 0.9], scale: [1.4, 0.4, 0.8] }, 10),
-    ]),
-    // The pool, the boulders round it and a few ferns.
-    P.cyl(2.8, 2.8, 0.3, '#A8DCFF', { at: [0, 0.1, 1.6] }, 20),
-    P.cyl(2.2, 2.2, 0.32, '#C9EBFF', { at: [0.2, 0.11, 1.4] }, 20),
-    ...[[-3, 1.2, 0.9], [2.9, 0.8, 1.1], [-2.2, 3.4, 0.7], [2.4, 3.2, 0.6], [-3.6, -0.6, 1.2], [3.7, -0.5, 1]].map(([x, z, r]) => P.sphere(r, rock, { at: [x, r * 0.4, z], scale: [1.2, 0.8, 1] }, 10)),
-    ...[[-3.8, 2.2], [3.8, 2.4], [-4.2, 0.4], [4.1, 0.6]].flatMap(([x, z]) => [-0.5, 0, 0.5].map((a) => P.cone(0.18, 1.3, '#5FAE7E', { at: [x + a * 0.5, 0.6, z], rot: [0, 0, a] }, 6))),
-  ]
-  g.add(solid(merge(parts), bag, 2))
+  const ROCK = ['#9C93AE', '#8F86A3', '#A99FBC']
+  const MOSS = ['#7CC47A', '#5FAE6E', '#93D483']
+  const rand = rng(Math.round(h * 10))
+  const rock: BufferGeometry[] = []
+  const green: BufferGeometry[] = []
+  const tiers: { y: number; z: number; w: number }[] = []
+  for (let i = 0; i < 3; i++) {
+    const w = 7.6 - i * 0.9
+    const z = -1.4 - i * 1.0
+    const y0 = step * i
+    tiers.push({ y: y0, z, w })
+    // The ledge's face behind the water, then round boulders along it that break up its edges.
+    rock.push(P.rbox(w, step + 0.8, 2.4, 0.9, ROCK[i % 3], { at: [0, y0 + (step + 0.8) / 2, z] }))
+    for (const sx of [-1, 1])
+      for (let k = 0; k < 3; k++) {
+        const r = 0.9 + rand() * 0.7
+        const x = sx * (1.6 + k * (w / 2 - 1.4) * 0.5 + rand() * 0.4)
+        const y = y0 + step * (0.35 + rand() * 0.6)
+        rock.push(P.sphere(r, ROCK[(k + i) % 3], { at: [x, y, z + 0.9 + rand() * 0.3], scale: [1.15, 0.85, 0.8] }, 9))
+        // Moss on top of the boulders, and on the ledge's top.
+        green.push(P.sphere(r * 0.8, MOSS[(k + i) % 3], { at: [x, y + r * 0.62, z + 0.95], scale: [1.1, 0.35, 0.8] }, 9))
+      }
+    // Moss in soft lumps along the ledge's top either side of the water.
+    for (const sx of [-1, 1]) for (let k = 0; k < 2; k++) green.push(P.sphere(0.9, MOSS[(i + k) % 3], { at: [sx * (1.7 + k * 1.3), y0 + step + 0.75, z + 0.2 - k * 0.3], scale: [1.2, 0.32, 0.9] }, 9))
+  }
+  // Big boulders round the pool, ferns, bushes and a few pink flowers.
+  for (const [x, z, r] of [[-3.2, 1.2, 1.0], [3.1, 0.9, 1.2], [-2.3, 3.5, 0.7], [2.5, 3.3, 0.65], [-3.9, -0.6, 1.3], [4.0, -0.4, 1.1]])
+    rock.push(P.sphere(r, ROCK[Math.round(x + z) & 1], { at: [x, r * 0.45, z], scale: [1.2, 0.8, 1] }, 10))
+  for (const [x, z] of [[-4.2, 2.3], [4.1, 2.4], [-4.6, 0.5], [4.5, 0.6], [-1.8, 4.1], [1.9, 4.0]])
+    for (let k = 0; k < 5; k++) {
+      const a = (k - 2) * 0.45
+      green.push(P.cone(0.16, 1.4, MOSS[k % 3], { at: [x + Math.sin(a) * 0.4, 0.62, z], rot: [0.3 * Math.cos(k), 0, a] }, 5))
+    }
+  for (const [x, y, z, r] of [[-3.7, 0.9, 3.0, 0.7], [3.8, 0.9, -1.4, 0.8], [-3.3, step + 0.6, -0.2, 0.6], [3.2, step * 2 + 0.5, -1.2, 0.55]]) green.push(P.sphere(r, MOSS[1], { at: [x, y, z], scale: [1.2, 0.85, 1] }, 9))
+  const flowers: BufferGeometry[] = []
+  for (const [x, y, z] of [[-3.5, 1.5, 3.1], [-3.9, 1.2, 2.8], [3.9, 1.6, -1.2], [3.5, 1.4, -1.0], [-3.1, step + 1.1, -0.1], [3.0, step * 2 + 0.95, -1.1]])
+    flowers.push(P.sphere(0.16, PAL.hotpink, { at: [x, y, z] }, 8), P.sphere(0.07, PAL.gold, { at: [x, y + 0.1, z + 0.08] }, 6))
+  g.add(solid(merge(rock), bag, 2), solid(merge(green), bag, 2), solid(merge(flowers), bag, 1))
+
+  // The pool: deep blue at the edge, paler in the middle.
+  g.add(solid(merge([P.cyl(3.0, 3.0, 0.3, '#8CCBF0', { at: [0, 0.1, 1.6] }, 24), P.cyl(2.3, 2.3, 0.32, '#B5E2FF', { at: [0.2, 0.11, 1.5] }, 24)]), bag, 2))
+
+  // The falling water: one sheet over each lip, its streaks running down.
+  const tex = fallTexture(bag)
+  const water = bag.add(new MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.92, depthWrite: false, side: DoubleSide }))
+  tiers.forEach((t, i) => {
+    const w = 2.3 - i * 0.3
+    const sheet = new Mesh(bag.add(fallSheet(w, step + 0.8, 0.5)), water)
+    sheet.position.set(0, t.y + (step + 0.8) / 2, t.z + 1.25)
+    sheet.renderOrder = 2
+    g.add(sheet)
+  })
+  // Foam boiling at each foot (it puffs up and down), and the ripples spreading over the pool.
+  const foam: Group[] = tiers.map((t, i) => {
+    const f = solid(merge([-0.7, 0, 0.7].map((x, k) => P.sphere(0.65 - i * 0.08, '#FFFFFF', { at: [x * (1 - i * 0.12), 0, k === 1 ? 0.15 : 0], scale: [1.1, 0.5, 0.8] }, 10))), bag, 2)
+    f.position.set(0, i === 0 ? 0.3 : t.y + 1.0, i === 0 ? 1.3 : t.z + 1.45)
+    g.add(f)
+    return f
+  })
+  const ripples = [0, 1, 2].map(() => {
+    const m = bag.add(new MeshBasicMaterial({ color: '#FFFFFF', transparent: true, opacity: 0.8, depthWrite: false }))
+    const r = new Mesh(bag.add(new TorusGeometry(1, 0.05, 4, 32).rotateX(Math.PI / 2)), m)
+    r.position.set(0, 0.29, 1.5)
+    g.add(r)
+    return { r, m }
+  })
+  g.userData.update = (t: number) => {
+    tex.offset.y = (t * 0.9) % 1
+    foam.forEach((f, i) => {
+      const k = 1 + Math.sin(t * 7 + i * 2) * 0.08
+      f.scale.set(k, 2 - k, k)
+    })
+    ripples.forEach(({ r, m }, i) => {
+      const k = (t * 0.45 + i / 3) % 1
+      r.scale.setScalar(0.8 + k * 1.9)
+      m.opacity = 0.75 * (1 - k)
+    })
+  }
   return g
 }

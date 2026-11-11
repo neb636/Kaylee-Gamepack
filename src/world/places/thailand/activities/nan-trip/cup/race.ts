@@ -53,7 +53,7 @@ import type { RaceHud, RacePhase } from '../../../trip/race/RaceHud'
 import { herLimit, rivalPace, scripted, type Script } from '../../../trip/race/rubber'
 import type { SteerMode, Tilt } from '../../../trip/race/tilt'
 import { buildMirror, buildRoadScene, rng, type RoadScene } from '../../../trip/road/build'
-import { buildCloudLayer, buildCloudSea } from '../../../trip/road/clouds'
+import { buildCloudLayer, buildCloudSea, seaShows } from '../../../trip/road/clouds'
 import { buildKart, type Kart } from '../../../trip/vehicles/kart'
 import { dressKart, type KartDress } from './karts'
 import { buildRider, type Rider } from './riders'
@@ -217,6 +217,7 @@ export class KartRace implements World3D {
   private fall: { g: Group; at: Vector3; water: CanvasTexture[]; splash: number } | null = null
   /** The cloud (the climb): the sea of clouds seen from above, how deep in she is (0..1), the lanterns. */
   private sea: Group | null = null
+  private seaY = 0
   private fog: Fog
   private cloudK = 0
   private wasIn = false
@@ -599,7 +600,8 @@ export class KartRace implements World3D {
     const { y0, y1 } = this.track.def.cloud!
     const b = this.track.road.bounds(120)
     this.scene.add(buildCloudLayer(b, y0, y1, 260, this.track.def.look.seed, this.bag, 0.45))
-    this.sea = buildCloudSea(b, y0 + (y1 - y0) * 0.62, this.track.def.look.seed, this.bag)
+    this.seaY = y0 + (y1 - y0) * 0.3
+    this.sea = buildCloudSea(b, this.seaY, this.track.def.look.seed, this.bag)
     this.sea.visible = false
     this.scene.add(this.sea)
     // The lanterns: warm paper lanterns floating over the road (they glow through the white: no fog on them).
@@ -945,7 +947,7 @@ export class KartRace implements World3D {
       sfx.cloudIn()
       if (this.phase === 'race' && firstTime('nan-cup-cloud')) this.say(C.cloud)
     }
-    if (this.sea) this.sea.visible = y > y1 - 4
+    if (this.sea) this.sea.visible = seaShows(this.rig.camera.position.y, this.seaY)
     if (above && !this.wasAbove && this.phase === 'race') {
       sfx.cloudOut()
       this.sparkle.burst(this.k.d.x, y + 3, this.k.d.z, 40, 5, 6, 0.26)
