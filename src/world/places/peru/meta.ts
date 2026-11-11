@@ -9,7 +9,6 @@ const meta: PlaceMeta = {
   name: 'Peru',
   emoji: '🦙',
   flag: 'peru',
-  mapPos: { x: 25.5, y: 61 },
   friend: { name: 'Luna the alpaca', img: art.luna },
   trophyTitle: 'Peru Explorer',
   activities: [

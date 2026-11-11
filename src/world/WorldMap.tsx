@@ -1,86 +1,34 @@
-// The world map, and the app's home screen: tap continents to hear their names, tap a country pin to fly there,
-// The two buttons in the top bar swap the map for the game shelf (Shelf.tsx: a card
+// The world map, and the app's home screen: a toy board of the whole world in 3D (board/): her countries stand up out
+// of it in their real shapes with an animal riding a pin over each; tap one and Sparkle's balloon flies there. Tap a
+// continent to hear its name. The two buttons in the top bar swap the map for the game shelf (Shelf.tsx: a card
 // per place with every game as an icon, straight in, filling the screen with the dock floating over it); she keeps
 // whichever she used last (#/world?view=list or map opens one).
 // No title and no trophy room here (Dad, 2026-10-29): the map is the picture, the dock beside it is the way in.
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useState, type ReactNode } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from 'react'
 import { go } from '../router'
 import { firstTime as firstTimeHere, lineText, Mascot, say, sounds, useOnline, useSaved } from '../sdk'
-import balloon from './assets/balloon.webp'
-import mapArt from './assets/bg-world-map.webp'
+import type { ContinentId } from './board/geo'
 import { DOCK, MapIcon, ShelfIcon } from './HomeIcons'
-import { FitBox } from './kit/Chrome'
 import { WORLD_LINES } from './lines'
-import { places, type PlaceEntry } from './registry'
+import { needsCode } from './lock'
+import { places } from './registry'
 import { FROM_SHELF, Shelf } from './Shelf'
 import { totalStamps, usePassport } from './stamps'
 import { useHalloween } from '../shell/season'
 import { HalloweenArt } from '../shell/Halloween'
-import { Travel } from './Travel'
 
-// Hotspots in % of the map picture (x, y = centre; w, h = size).
-const CONTINENTS: { key: keyof typeof WORLD_LINES.continents; x: number; y: number; w: number; h: number }[] = [
-  { key: 'northAmerica', x: 17, y: 26, w: 26, h: 30 },
-  { key: 'southAmerica', x: 25, y: 64, w: 15, h: 30 },
-  { key: 'europe', x: 50, y: 24, w: 16, h: 16 },
-  { key: 'africa', x: 49, y: 56, w: 18, h: 32 },
-  { key: 'asia', x: 76, y: 27, w: 34, h: 30 },
-  { key: 'australia', x: 85, y: 71, w: 16, h: 18 },
-  { key: 'antarctica', x: 50, y: 95, w: 80, h: 10 },
-]
+// The board brings three.js, so it loads after the home screen is up (the sky shows meanwhile).
+const BoardView = lazy(() => import('./board/BoardView'))
 
-const COMING_SOON: { id: keyof typeof WORLD_LINES.soon; emoji: string; x: number; y: number }[] = [
-  { id: 'egypt', emoji: '🐪', x: 53, y: 42 },
-  { id: 'thailand', emoji: '🐘', x: 74, y: 49 },
-]
-const HOME = { x: 19, y: 33 }
-
-function Pin({ x, y, children, label, onTap, glow, dim }: { x: number; y: number; children: ReactNode; label: string; onTap: () => void; glow?: boolean; dim?: boolean }) {
-  return (
-    <motion.button
-      aria-label={label}
-      whileTap={{ scale: 0.85 }}
-      animate={glow ? { y: [0, -8, 0] } : {}}
-      transition={{ repeat: Infinity, duration: 1.4 }}
-      onClick={(e) => {
-        e.stopPropagation()
-        onTap()
-      }}
-      style={{
-        // The button is the tap target and keeps its full size; the circle drawn inside it is smaller (82%,
-        // 2026-10-27), so the map looks less crowded without making the pins harder to hit.
-        position: 'absolute',
-        left: `${x}%`,
-        top: `${y}%`,
-        translate: '-50% -50%',
-        width: 'clamp(56px, 11cqw, var(--target))',
-        aspectRatio: '1',
-        borderRadius: '50%',
-        display: 'grid',
-        placeItems: 'center',
-        fontSize: 'clamp(23px, 4.5cqw, 40px)',
-        zIndex: 3,
-      }}
-    >
-      <span
-        className={glow ? 'world-glow' : undefined}
-        style={{
-          position: 'relative',
-          width: '82%',
-          aspectRatio: '1',
-          borderRadius: '50%',
-          background: dim ? 'rgba(255,255,255,0.75)' : '#fff',
-          border: `4px solid ${glow ? 'var(--gold)' : '#fff'}`,
-          boxShadow: 'var(--shadow)',
-          display: 'grid',
-          placeItems: 'center',
-        }}
-      >
-        {children}
-      </span>
-    </motion.button>
-  )
+/** Where Sparkle's balloon waits: over the place she last flew to (this session). */
+const BALLOON = 'world:balloon'
+const balloonAt = () => {
+  try {
+    return sessionStorage.getItem(BALLOON)
+  } catch {
+    return null
+  }
 }
 
 type View = 'map' | 'list'
@@ -89,8 +37,10 @@ export function WorldMap({ view: linked }: { view?: string }) {
   const halloween = useHalloween()
   const passport = usePassport()
   const online = useOnline() // the Theater needs the internet
-  const [label, setLabel] = useState<{ text: string; x: number; y: number } | null>(null)
-  const [travelTo, setTravelTo] = useState<PlaceEntry | null>(null)
+  // The pill that names what she tapped (a continent, at her finger; a country, along the bottom), for Dad.
+  const [label, setLabel] = useState<{ text: string; x?: number; y?: number } | null>(null)
+  const labelTimer = useRef(0)
+  const [startAt] = useState(balloonAt)
   const [saved, setView] = useSaved<View>('world:view', 'map')
   // A link's ?view= wins until she taps the other button.
   const [fromLink, setFromLink] = useState<View | undefined>(linked === 'list' || linked === 'map' ? linked : undefined)
@@ -121,11 +71,36 @@ export function WorldMap({ view: linked }: { view?: string }) {
     void say(next === 'list' ? WORLD_LINES.shelf.showList : WORLD_LINES.shelf.showMap)
   }
 
-  const show = (text: string, x: number, y: number) => {
-    sounds.pop()
+  const show = (text: string, x?: number, y?: number) => {
     setLabel({ text, x, y })
-    void say(text)
+    clearTimeout(labelTimer.current)
+    if (x !== undefined) labelTimer.current = window.setTimeout(() => setLabel(null), 2600)
   }
+  useEffect(() => () => clearTimeout(labelTimer.current), [])
+
+  /** She picked a country: Sparkle names it while the balloon flies there, and its code starts downloading. */
+  const fly = (id: string) => {
+    const entry = places.find((p) => p.meta.id === id)
+    if (!entry) return
+    sounds.sparkle()
+    setTimeout(() => sounds.whoosh(), 250)
+    void say(WORLD_LINES.fly[id as keyof typeof WORLD_LINES.fly] ?? WORLD_LINES.takeoff)
+    show(`${entry.meta.name}!`)
+    if (!needsCode(id)) void entry.load() // (a locked one can't yet)
+    try {
+      sessionStorage.setItem(BALLOON, id)
+    } catch {
+      // No session storage: the balloon starts from home next time.
+    }
+  }
+  const tapContinent = (id: ContinentId, x: number, y: number) => {
+    sounds.pop()
+    const text = WORLD_LINES.continents[id]
+    void say(text)
+    show(`${text.split('!')[0]}!`, x, y)
+  }
+  const names = Object.fromEntries(places.map((p) => [p.meta.id, p.meta.name]))
+  const finished = places.filter(({ meta }) => meta.activities.length > 0 && meta.activities.every((a) => passport.stamps[meta.id]?.includes(a.id))).map((p) => p.meta.id)
 
   const dock = (
     <>
@@ -156,99 +131,48 @@ export function WorldMap({ view: linked }: { view?: string }) {
   }
 
   return (
-    <div className={`screen decorated world-map${halloween ? ' halloween' : ''}`} style={{ overflow: 'hidden' }}>
+    <div className={`screen world-map${halloween ? ' halloween' : ''}`} style={{ padding: 0, overflow: 'hidden', background: 'linear-gradient(#BFE6FF, #E4DCFF 55%, #FFD9EC)' }}>
+      <Suspense fallback={null}>
+        <BoardView names={names} done={finished} balloonAt={startAt} onPick={fly} onArrive={(id) => go.world(id)} onContinent={tapContinent} onTouch={() => label?.x !== undefined && setLabel(null)} />
+      </Suspense>
       {toggle}
 
-      <div className="world-split" style={{ flex: 1, minHeight: 0, gap: 'min(16px, 2vh)', alignItems: 'center' }}>
-        <FitBox ratio={1.5}>
-          <div style={{ position: 'absolute', inset: 0, borderRadius: 28, overflow: 'hidden', boxShadow: 'var(--shadow)', border: '5px solid #fff', background: `url(${mapArt}) center / cover` }} onClick={() => setLabel(null)}>
-            {CONTINENTS.map((c) => (
-              <button
-                key={c.key}
-                aria-label={c.key}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  show(WORLD_LINES.continents[c.key], c.x, c.y)
-                }}
-                style={{ position: 'absolute', left: `${c.x - c.w / 2}%`, top: `${c.y - c.h / 2}%`, width: `${c.w}%`, height: `${c.h}%`, borderRadius: '50%' }}
-              />
-            ))}
-          </div>
+      <AnimatePresence>
+        {label && (
+          <motion.div
+            key={label.text}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            style={{
+              position: 'absolute',
+              ...(label.x === undefined
+                ? { left: '50%', bottom: 'calc(var(--safe-bottom) + var(--dock-h) + 5vh)', translate: '-50% 0', fontSize: 'clamp(26px, 5vw, 48px)', padding: '10px 30px' }
+                : { left: `clamp(110px, ${label.x}px, calc(100% - 110px))`, top: Math.max(70, (label.y ?? 0) - 64), translate: '-50% -50%', fontSize: 'clamp(16px, 2.6vw, 28px)', padding: '8px 20px' }),
+              background: '#fff',
+              borderRadius: 999,
+              fontWeight: 700,
+              color: 'var(--hotpink)',
+              boxShadow: 'var(--shadow)',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none',
+              zIndex: 45,
+            }}
+          >
+            {label.text}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          {/* Sparkle's balloon */}
-          <motion.img
-            src={balloon}
-            alt=""
-            animate={{ y: [0, -10, 0], rotate: [-3, 3, -3] }}
-            transition={{ repeat: Infinity, duration: 3 }}
-            style={{ position: 'absolute', left: `${HOME.x + 5}%`, top: `${HOME.y - 26}%`, width: '9%', zIndex: 2 }}
-          />
-
-          {places.map(({ meta }) => (
-            <Pin
-              key={meta.id}
-              x={meta.mapPos.x}
-              y={meta.mapPos.y}
-              label={meta.name}
-              glow
-              onTap={() => {
-                sounds.sparkle()
-                setTravelTo(places.find((p) => p.meta.id === meta.id) ?? null)
-              }}
-            >
-              {meta.emoji}
-            </Pin>
-          ))}
-          {COMING_SOON.filter((c) => !places.some((p) => p.meta.id === c.id)).map((c) => (
-            <Pin key={c.id} x={c.x} y={c.y} label={`${c.id} coming soon`} dim onTap={() => show(WORLD_LINES.soon[c.id], c.x, c.y)}>
-              <span style={{ opacity: 0.55 }}>{c.emoji}</span>
-              <span style={{ position: 'absolute', right: '-14%', bottom: '-14%', fontSize: '55%' }}>☁️</span>
-            </Pin>
-          ))}
-
-          <AnimatePresence>
-            {label && (
-              <motion.div
-                key={label.text}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0, opacity: 0 }}
-                style={{
-                  position: 'absolute',
-                  left: `${Math.min(80, Math.max(20, label.x))}%`,
-                  top: `${label.y > 50 ? label.y - 14 : label.y + 12}%`,
-                  translate: '-50% -50%',
-                  background: '#fff',
-                  borderRadius: 999,
-                  padding: '8px 20px',
-                  fontSize: 'clamp(16px, 3cqw, 30px)',
-                  fontWeight: 700,
-                  color: 'var(--hotpink)',
-                  boxShadow: 'var(--shadow)',
-                  whiteSpace: 'nowrap',
-                  pointerEvents: 'none',
-                  zIndex: 4,
-                }}
-              >
-                {label.text.split('!')[0]}!
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </FitBox>
-
-        <div className="world-side" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'min(20px, 3vw)', flexShrink: 0 }}>
-          <div className={`world-side-mascot${halloween ? ' halloween-map-friends' : ''}`}>
-            {halloween && <span aria-hidden="true"><HalloweenArt kind="pumpkin" /></span>}
-            <Mascot pose="wave" size={Math.min(170, window.innerHeight * 0.12)} />
-            {halloween && <span aria-hidden="true"><HalloweenArt kind="ghost" /></span>}
-          </div>
-        </div>
+      {/* Sparkle waves from the corner (the board's own Sparkle is up in her balloon). */}
+      <div className={`world-board-mascot${halloween ? ' halloween-map-friends' : ''}`}>
+        {halloween && <span aria-hidden="true"><HalloweenArt kind="pumpkin" /></span>}
+        <Mascot pose="wave" size={Math.min(150, window.innerHeight * 0.13)} />
+        {halloween && <span aria-hidden="true"><HalloweenArt kind="ghost" /></span>}
       </div>
 
       {/* The same floating dock as the game list. */}
       <div className="shelf-dock">{dock}</div>
-
-      {travelTo && <Travel entry={travelTo} onDone={() => go.world(travelTo.meta.id)} />}
     </div>
   )
 }

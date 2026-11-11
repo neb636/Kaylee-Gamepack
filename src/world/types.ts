@@ -46,8 +46,6 @@ export interface PlaceMeta {
   name: string
   emoji: string
   flag: FlagId
-  /** Pin position on the world map, in % of the map picture. */
-  mapPos: { x: number; y: number }
   /** The friend Sparkle meets there. */
   friend: { name: string; img: string }
   /** Engraved under KAYLEE on the trophy she gets for collecting every stamp. */

@@ -13,7 +13,6 @@ const meta: PlaceMeta = {
   name: 'Italy',
   emoji: '🍕',
   flag: 'italy',
-  mapPos: { x: 48.5, y: 31 },
   friend: { name: 'Lupa the wolf cub', img: art.lupa },
   trophyTitle: 'Italy Explorer',
   activities: [

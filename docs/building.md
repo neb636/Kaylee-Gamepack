@@ -9,6 +9,7 @@ Kaylee needs; this file is the reference you read when you build. Thailand's 3D 
 ```
 src/world/places/<id>/   # one country per folder, found automatically (Thailand, Australia, Italy, ...)
 src/world/kit/           # shared country pieces: Stage, StoryBeat, StampEarned, sections, sfx, Flag, ...
+src/world/board/         # the world map (#/world): a 3D toy board of the whole world, real coasts from Natural Earth
 src/world/engine3d/      # the shared 3D engine (toon look, camera, View3D, water) and the chibi rig in characters/
 src/world/labs/          # the camera lab (?cam=1) and the feel lab (?feel=1), for any country
 src/sdk/                 # shared building blocks: say, sounds, puppets, drag and drop, ... (see "SDK")
@@ -81,7 +82,7 @@ Fredoka. Animations: `motion` (`import { motion, AnimatePresence } from 'motion/
 
 ```
 src/world/places/<id>/
-  meta.ts          # PlaceMeta: name, emoji, flag, mapPos (% on the world map), friend, activities[], inTheWorks[], facts[], coloringPages[]
+  meta.ts          # PlaceMeta: name, emoji, flag, friend, activities[], inTheWorks[], facts[], coloringPages[]
   Place.tsx        # default export: the country's hub + its activities + the finale (gets PlaceProps)
   lines.ts         # EVERY phrase that can be spoken, tagged by speaker; voice-lines.json is generated from it
   cast.json        # the friends' voices (Sparkle comes from src/sdk/cast.json)
@@ -99,7 +100,9 @@ so the friend talks), `StampEarned`, `sfx` (boing, thump, splash, pop, fwip), `C
 offers one, skippable, right after that activity's stamp); a country with videos gets a Theater button in its top bar,
 and the world map's Theater shows every country's videos.
 
-Adding a country: make the folder, add its pin in `meta.ts` (and remove it from `COMING_SOON` in `WorldMap.tsx`),
+Adding a country: make the folder, give it a line in `src/world/board/places.ts` (its country code, where its pin
+points, which toy animal rides the pin: `animals.ts`) and run `node scripts/world-board-land.mjs` so its real shape
+stands up on the world board,
 write its plan in `planning/around-the-world/`, draw its shelf banner and an icon per activity (`src/world/shelf/STYLE.md`),
 generate backgrounds, props and character reference pictures with Codex
 (`codex exec -m gpt-6.1-sol -c model_reasoning_effort="medium" ...`, style rules from `art/STYLE.md`; tell Codex never

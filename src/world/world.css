@@ -588,3 +588,17 @@
     flex-direction: row;
   }
 }
+
+/* The world board (WorldMap.tsx): Sparkle waves from the bottom left corner, clear of the dock. */
+.world .world-board-mascot {
+  position: absolute;
+  left: max(14px, env(safe-area-inset-left, 0px));
+  bottom: calc(var(--safe-bottom) + var(--dock-h) + 10px);
+  z-index: 30;
+  pointer-events: none;
+}
+@media (max-height: 560px), (max-width: 480px) {
+  .world .world-board-mascot {
+    display: none;
+  }
+}

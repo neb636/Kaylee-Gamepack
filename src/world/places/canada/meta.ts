@@ -27,7 +27,6 @@ const meta: PlaceMeta = {
   emoji: '🍁',
   flag: 'canada',
   // East of the bear on the world map, toward Quebec.
-  mapPos: { x: 27, y: 25 },
   friend: { name: 'Maple the beaver', img: maple },
   trophyTitle: 'Canada Champion',
   // In play order along the track, east to west (`pos` is unused: the hub is the 3D map, map/track.ts places the stops).

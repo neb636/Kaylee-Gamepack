@@ -8,7 +8,6 @@ const meta: PlaceMeta = {
   name: 'China',
   emoji: '🐼',
   flag: 'china',
-  mapPos: { x: 77, y: 36 },
   friend: { name: 'Dou Dou the puppy', img: art.doudou },
   trophyTitle: 'China Explorer',
   activities: [
