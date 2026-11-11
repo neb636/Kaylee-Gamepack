@@ -19,6 +19,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
+      - name: Check PostHog capture without sending production data
+        run: node scripts/qa-posthog.mjs
       - run: npm run check
 
   # Step-by-step walkthrough specs (tagged @behavior) break whenever the UI is tweaked, so they run nightly and on demand
