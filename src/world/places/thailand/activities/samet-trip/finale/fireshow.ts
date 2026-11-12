@@ -1,5 +1,13 @@
-// The fire show on Hat Sai Kaew at night (plan: planning/around-the-world/thailand/samet-trip.md, step 9, the finale),
-// on the island's real beach (island/layout.ts BAY) by the lanterns, after the sunset at Ao Prao (sunset.ts).
+// The fire show on Hat Sai Kaew at night (planning/around-the-world/thailand/samet-story.md: the story's payoff; the
+// first plan: samet-trip.md, step 9), on the island's real beach (island/layout.ts BAY) by the lanterns, after the
+// sunset at Ao Prao (sunset.ts).
+//
+// The story (story.ts): the gecko fire dancers Tuk and Kae lost the four fireflies that light their show, and she
+// found them. `round=story` is the way-in film (the poi dark, the fireflies flying in, each one lighting a poi in its
+// own color, Kae's lights for her), then the show; after the fireworks `round=thanks` is the dancers' bow and the
+// fireflies' heart of light, then the way home. In between the fireflies are in the show: they chase her lights,
+// swirl up on a big circle, and each leads its own surprise in at the finish. A poi burns only if its firefly was
+// found (with all four: pink and gold for Tuk, blue and green for Kae).
 //
 // The toy (core verb): twirl the glowing poi. Kaylee stands on the sand behind the rope with a pair of light-up poi;
 // her finger draws in the air in front of her and the poi follow it, the second one chasing the first, leaving ribbons
@@ -16,17 +24,22 @@
 //           dancers light a ring of fire round the whole beach, then fireworks (tap the sky for more).
 // Fire is for grown-ups: the dancers stay behind the rope, her poi are lights.
 //
-// Talk (lines.ts L.samet.finale.fire): Mom as it opens, then Sparkle's one instruction a round; the gecko dancers (one
-// voice, their mouths move with it) cheer her loops and shapes; each flag's surprise gets its friend's line; after a while
-// with nothing done Sparkle says what to do (spendHint). The screen's TripGuide speaks them and shows the words for Dad. Every number that decides the feel is a knob (?feel=1), with a graph of her spin against theirs.
+// Talk (lines.ts L.samet.finale.fire, and L.samet.story.show for the films): after the way-in film only Sparkle's one
+// instruction (a link straight to the twirl gets Mom's hello first), then one a round; the gecko dancers cheer her
+// loops and shapes (the shared voice `gecko`; in the films Tuk and Kae talk in their own, and their mouths move with
+// all three); each firefly's surprise gets its friend's line; after a while with nothing done Sparkle says what to do
+// (spendHint). The screen's TripGuide speaks them and shows the words for grown-ups; FilmOverlay shows a film's. Every
+// number that decides the feel is a knob (?feel=1), with a graph of her spin against theirs.
 import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, CylinderGeometry, Fog, Group, InstancedMesh, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, Object3D, Plane, Quaternion, Raycaster, Scene, SphereGeometry, TorusGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
-import { clamp, spendHint, type Line } from '../../../../../../sdk'
+import { clamp, speechLevel, spendHint, type Line } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
 import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
 import { FaceLife } from '../../../../../engine3d/characters/face'
+import { Letterbox } from '../../../../../engine3d/cinema'
 import { Bag } from '../../../../../engine3d/dispose'
+import { FilmPlayer, type FilmState } from '../../../../../engine3d/film'
 import { blobShadow, merge, P, solid } from '../../../../../engine3d/geo'
 import { setOutlineResolution } from '../../../../../engine3d/outline'
 import { Particles } from '../../../../../engine3d/particles'
@@ -37,13 +50,16 @@ import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
 import { L as LINES } from '../../../lines'
 import { fireSfx as sfx, nightBed } from './sounds'
-import { FIRE_DANCERS, JETSKI_MAN } from '../cast'
+import { JETSKI_MAN } from '../cast'
 import { BAY, bay, SEAWARD, type StopId } from '../island/layout'
 import { buildProps, type Props } from '../island/props'
 import { buildIsland, DAY, glowMaterial, type Island, type Key } from '../island/scenery'
+import { FIREFLIES, FIREFLY_IDS, fireflySfx } from '../story/firefly'
+import { makeGeckos, type Islander } from '../story/islander'
 import { Flames, Glows } from './flame'
 import { Ribbon } from './ribbon'
 import { LoopTracker, SHAPE_IDS, shapePoints, type Pt, type ShapeId } from './shapes'
+import { FireStory, POI_FLY, POI_LOOK } from './story'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/finale/fireshow.ts'
 const S = LINES.samet.finale.fire
@@ -94,8 +110,11 @@ const CAM = knobs('fireCam', 'The fire show camera', FILE, {
   tallBox: { value: 4.6, min: 2, max: 10, step: 0.1, label: '…on a tall screen', unit: 'm' },
 })
 
-export type FireRound = 'twirl' | 'shapes' | 'finish'
-export const FIRE_ROUND_IDS: FireRound[] = ['twirl', 'shapes', 'finish']
+/** The rounds she plays, and with the two films either side of them (sections.ts FIRE_ROUNDS): `story` is the way in,
+ *  `thanks` the dancers' bow and the fireflies' heart after the fireworks. */
+export type FirePlayRound = 'twirl' | 'shapes' | 'finish'
+export type FireRound = 'story' | FirePlayRound | 'thanks'
+export const FIRE_ROUND_IDS: FirePlayRound[] = ['twirl', 'shapes', 'finish']
 /** What each pink flag adds to the big finish, in the order they come. */
 export const GIFT_ORDER: StopId[] = ['jetski', 'sandcastle', 'snorkel', 'hideseek']
 export interface FireStart {
@@ -115,9 +134,14 @@ export interface FireEvents {
   done(photo: string): void
   /** Someone says a line (the screen's TripGuide speaks it). */
   say?(l: Line): void
+  /** A film is on (which beat), or over (null); and the words being said in it (the screen's FilmOverlay). */
+  film?(s: FilmState | null): void
+  filmLine?(l: Line | null): void
 }
 
-type Phase = 'intro' | 'twirl' | 'show' | 'trace' | 'lift' | 'gifts' | 'big' | 'ring' | 'fireworks'
+type Phase = 'film' | 'intro' | 'twirl' | 'show' | 'trace' | 'lift' | 'gifts' | 'big' | 'ring' | 'fireworks'
+/** The fireworks go this long before the dancers' thank you. */
+const THANKS_AT = 6.5
 
 /** Where things stand on Sai Kaew (u along the beach, v out to sea; the water's edge is v = 0). */
 const KAY = { u: -5.5, v: -6 }
@@ -125,6 +149,8 @@ const DANCE: [number, number][] = [
   [-9.8, -2.4],
   [-1.2, -2.4],
 ]
+/** They face the sea, turned a little in toward the middle (where the camera looks in from). */
+const DANCE_TURN = 0.3
 const ROPE_V = -4.2
 const DRUM = { u: 1.4, v: -5.4 }
 const SEATS = { ji: { u: -7.6, v: -7.4 }, nick: { u: -3.4, v: -7.4 } }
@@ -183,7 +209,18 @@ export const FIRE_ANCHORS: AnchorInfo[] = [
 ]
 
 interface Dancer {
+  /** Tuk or Kae (story/islander.ts): the same two as in the films. */
+  who: Islander
   rig: Rig
+  shadow: Mesh
+  /** In a film (each 0..1, eased toward its goal): arms up holding the poi high, a bow, a wai. */
+  up: number
+  bow: number
+  wai: number
+  pose: { up: number; bow: number; wai: number }
+  /** Their mouth for the shared voice `gecko` (the show's cheers; their own voices move it too). */
+  talk: number
+  hands: Vector3[]
   spin: number
   theta: number
   r: number
@@ -224,6 +261,31 @@ export class FireShow implements World3D {
   private phase: Phase = 'intro'
   private phaseT = 0
   private flags: StopId[]
+
+  // ---- The story (story.ts): its films, the bars, the fireflies.
+  private films: FilmPlayer
+  private bars = new Letterbox()
+  private story: FireStory
+  /** The dancers are acting in a film (false: dancing at their spots), and their poi are out. */
+  private staged = false
+  private poiShown = true
+  /** Each poi (Tuk's two, then Kae's): lit by its firefly, and how far its flame has caught (0..1). */
+  private lit = [false, false, false, false]
+  private litK = [0, 0, 0, 0]
+  private poiFire: Flames[] = []
+  private glitter: Particles
+  /** Her lights are in her hooves (not before Kae gives them to her), or on their way to her over the rope. */
+  private hasLights = true
+  private give: { from: Vector3[]; t: number } | null = null
+  /** Her lights swing low while a film is on (0..1). */
+  private idleLow = 0
+  private kShadow: Mesh
+  /** Things to do later, on the show's clock. */
+  private timers: { at: number; f: () => void }[] = []
+  /** The fireworks' photo; the thank you is over (the way home is up), and since when. */
+  private photo: string | null = null
+  private thanked = false
+  private homeAt = 0
 
   // ---- The drawing plane in front of her: its middle, right and the way it faces (toward the camera).
   private O: Vector3
@@ -364,7 +426,7 @@ export class FireShow implements World3D {
     const k0 = this.L(KAY.u, KAY.v)
     this.kaylee.place(k0.x, k0.y, k0.z, SEAWARD * DEG)
     scene.add(this.kaylee.root)
-    const ks = blobShadow(0.42, bag)
+    const ks = (this.kShadow = blobShadow(0.42, bag))
     ks.position.set(k0.x, k0.y + 0.02, k0.z)
     scene.add(ks)
     this.ribA = new Ribbon(bag, { head: '#FF4FB8', tail: '#9A5BFF', life: POI.life, width: POI.width })
@@ -401,22 +463,24 @@ export class FireShow implements World3D {
       scene.add(m.root)
     }
 
-    // ---- The fire dancers.
+    // ---- The fire dancers: Tuk (blue, the big brother) and Kae (mint, his little sister), the same two as in the
+    // films. Each poi burns in the color of the firefly that lit it (story.ts POI_LOOK), if she found it.
     const wickGeo = bag.add(new SphereGeometry(0.075, 10, 8))
     const wickMat = bag.add(new MeshBasicMaterial({ color: '#4A3230' }))
-    FIRE_DANCERS.forEach((look, i) => {
-      const rig = buildAnimal(look, bag)
+    const geckos = makeGeckos(bag)
+    ;[geckos.tuk, geckos.kae].forEach((who, i) => {
+      const rig = who.m.rig
       const p = this.L(DANCE[i][0], DANCE[i][1])
-      rig.root.position.copy(p)
-      rig.root.rotation.y = SEAWARD + (i ? 0.45 : -0.45)
+      who.place(p.x, p.y, p.z, (SEAWARD + (i ? -DANCE_TURN : DANCE_TURN)) * DEG)
       scene.add(rig.root)
-      const sh = blobShadow(0.45, bag)
-      sh.position.set(p.x, p.y + 0.02, p.z)
-      scene.add(sh)
+      const shadow = blobShadow(0.45, bag)
+      shadow.position.set(p.x, p.y + 0.02, p.z)
+      scene.add(shadow)
       const trails: Ribbon[] = []
       const balls: Mesh[] = []
       for (let k = 0; k < 2; k++) {
-        const tr = new Ribbon(bag, { n: 40, head: '#FFB347', tail: '#FF3A10', life: 0.35, width: 0.12 })
+        const look = POI_LOOK[POI_FLY[i * 2 + k]]
+        const tr = new Ribbon(bag, { n: 40, head: look.head, tail: look.tail, life: 0.35, width: 0.12 })
         scene.add(tr.mesh)
         trails.push(tr)
         // The wick: a dark ball on its chain, the flame drawn round it (flame.ts).
@@ -424,9 +488,11 @@ export class FireShow implements World3D {
         ball.renderOrder = 5
         scene.add(ball)
         balls.push(ball)
+        const fire = new Flames(bag, 1, look)
+        scene.add(fire.mesh)
+        this.poiFire.push(fire)
       }
-      this.faces.push(new FaceLife(rig, 'gecko'))
-      this.dancers.push({ rig, spin: COPY.min, theta: i * 1.3, r: 0.42, ring: 0, ringR: 1, ringT: 0, hop: 0, trails, balls, prev: [new Vector3(), new Vector3()] })
+      this.dancers.push({ who, rig, shadow, up: 0, bow: 0, wai: 0, pose: { up: 0, bow: 0, wai: 0 }, talk: 0, hands: [new Vector3(), new Vector3()], spin: COPY.min, theta: i * 1.3, r: 0.42, ring: 0, ringR: 1, ringT: 0, hop: 0, trails, balls, prev: [new Vector3(), new Vector3()] })
     })
     // Their chains: little steel links from the hand to the wick, catching the firelight.
     this.chains = new InstancedMesh(bag.add(new TorusGeometry(0.02, 0.0065, 4, 8)), bag.add(new MeshBasicMaterial({ color: '#E6CFAE' })), this.dancers.length * 2 * LINKS)
@@ -463,7 +529,57 @@ export class FireShow implements World3D {
     this.sparkle = new Particles({ kind: 'spray', count: 320, colors: ['#FFFFFF', '#FFF6B8', PAL.gold, PAL.pink, PAL.hotpink], gravity: -0.4 }, bag)
     this.fireworks = new Particles({ kind: 'spray', count: 900, colors: ['#FF7ACB', '#FFD86E', '#B99BFF', '#7FF0C8', '#FFFFFF', '#FF6A5A'], gravity: 1.6 }, bag)
     this.embers = new Particles({ kind: 'spray', count: 240, colors: ['#FFB347', '#FFE08A', '#FF6A2E'], gravity: -1.2 }, bag)
-    scene.add(this.sparkle.mesh, this.fireworks.mesh, this.embers.mesh)
+    // (Glitter in the fireflies' own colors, in their order: a poi catching, the heart.)
+    this.glitter = new Particles({ kind: 'spray', count: 200, colors: [...FIREFLY_IDS.map((id) => FIREFLIES[id].color), '#FFFFFF'], gravity: -0.3 }, bag)
+    scene.add(this.sparkle.mesh, this.fireworks.mesh, this.embers.mesh, this.glitter.mesh)
+
+    // ---- The story: the fireflies she found, the films.
+    this.films = new FilmPlayer({ line: (l) => this.events.filmLine?.(l), state: (st) => this.events.film?.(st) })
+    for (let i = 0; i < 4; i++) {
+      this.lit[i] = this.flags.includes(POI_FLY[i])
+      this.litK[i] = this.lit[i] ? 1 : 0
+    }
+    this.story = new FireStory(
+      {
+        scene,
+        bag,
+        camera: this.rig.camera,
+        kaylee: this.kaylee,
+        ji: this.ji,
+        nick: this.nick,
+        tuk: geckos.tuk,
+        kae: geckos.kae,
+        sparkle: this.sparkle,
+        glitter: this.glitter,
+        kay: KAY,
+        seats: SEATS,
+        drawing: () => !!this.finger?.drawing || this.time - this.lastDraw < 0.6,
+        tall: () => this.tall,
+        toCamera: this.fwd.clone().negate(),
+        at: (u, v, y = 0) => {
+          const p = this.L(u, v)
+          p.y += y
+          return p
+        },
+        ground: (x, z) => Math.max(0, this.isl.ground.heightAt(x, z)),
+        plane: (a, b, out) => this.planePoint(a, b, out),
+        trail: (lag, out) => this.trailAt(lag, out),
+        wick: (i, out) => out.copy(this.dancers[i >> 1].balls[i & 1].position),
+        hand: (who, side, out = new Vector3()) => out.copy(this.dancers[who].hands[side]),
+        stage: (on, poi) => this.setStage(on, poi),
+        pose: (who, p) => Object.assign(this.dancers[who].pose, p),
+        light: (i, on, show) => this.lightPoi(i, on, show),
+        lights: (on, from) => this.setLights(on, from),
+        drum: () => {
+          this.drumHit = 1
+          this.beatT = 0
+          sfx.drum(true)
+          sfx.whoomp()
+        },
+        after: (s, f) => this.after(s, f),
+      },
+      this.flags,
+    )
 
     this.startRound(this.round, true)
     this.unwatch = watch('fireshow', () => ({
@@ -519,7 +635,7 @@ export class FireShow implements World3D {
     return false
   }
 
-  /** Dad's round chips (?feel=1) and the rounds moving on by themselves. */
+  /** The round chips (?feel=1) and the rounds moving on by themselves. */
   setRound(r: FireRound) {
     if (r === this.round) return
     this.startRound(r)
@@ -529,10 +645,21 @@ export class FireShow implements World3D {
     if (!first) this.events.round(r)
     this.guide.count = 0
     this.showBall.visible = false
-    if (r === 'twirl') {
+    if (r === 'story') {
+      // The way-in film (the beach as it opens while the screen comes up), then the twirl.
+      this.setPhase('film')
+      this.story.openIntro()
+      this.after(0.3, () => this.films.play(this.story.intro(), () => this.startRound('twirl')))
+    } else if (r === 'thanks') {
+      // The thank you, after the fireworks (a link straight here: the ring lit, every surprise in, fireworks going),
+      // then the way home.
+      if (first) this.toFireworks()
+      this.after(first ? 0.8 : 0, () => this.films.play(this.story.thanks(), () => this.goHome(), first ? undefined : this.rig.camera))
+    } else if (r === 'twirl') {
       this.loops = 0
       this.setPhase(first ? 'intro' : 'twirl')
-      // Mom, then Sparkle's one instruction (she waits her turn behind her).
+      // Sparkle's one instruction. (A link straight here hasn't had the film: Mom's hello first, and Sparkle waits
+      // her turn behind her.)
       if (first) this.say(S.look)
       this.say(S.twirl)
     } else if (r === 'shapes') {
@@ -557,22 +684,40 @@ export class FireShow implements World3D {
     this.phase = p
     this.phaseT = 0
   }
+  /** Later, on the show's clock (nothing fires once the show is gone). */
+  private after(s: number, f: () => void) {
+    this.timers.push({ at: this.time + s, f })
+  }
+  /** The screen's hold-to-skip: the film jumps to its end. */
+  skipFilm() {
+    this.films.skip()
+  }
 
   update(dt: number) {
     const t = (this.time += dt)
     this.phaseT += dt
+    for (let i = this.timers.length - 1; i >= 0; i--) if (this.timers[i].at <= t) this.timers.splice(i, 1)[0].f()
+    // A film takes the camera (and the world takes no taps, shows no hints).
+    const cine = this.films.update(dt, this.w / this.h)
+    if (this.films.on) {
+      this.lastTouch = t
+      this.finger = null
+    }
     if (LOOK.dark !== this.darkNow) this.applyDark()
     this.fire.begin(t)
+    for (const f of this.poiFire) f.begin(t)
     this.pools.begin()
     this.halos.begin()
     this.play(dt, t)
     this.drive(dt, t)
     this.dance(dt, t)
     this.life(dt, t)
+    this.story.update(dt, t)
     this.fire.commit()
+    for (const f of this.poiFire) f.commit()
     this.pools.commit()
     this.halos.commit()
-    for (const p of [this.sparkle, this.fireworks, this.embers]) p.update(dt)
+    for (const p of [this.sparkle, this.fireworks, this.embers, this.glitter]) p.update(dt)
 
     const c = this.L(KAY.u, KAY.v + 2)
     this.isl.lagoon.update(t, c.x, c.z)
@@ -581,8 +726,78 @@ export class FireShow implements World3D {
     this.props.setLamps(this.isl.lamps, t)
     this.isl.update(dt, t, this.rig.camera.position.x, this.rig.camera.position.z, this.lights)
     this.rig.setShot(this.shot())
+    this.rig.setCine(cine)
     this.rig.update(dt)
+    this.bars.update(dt, this.films.on)
     this.drawHint(t)
+  }
+
+  // ---------------------------------------------------------------- the story's switches (story.ts drives them)
+
+  /** The dancers act in a film (the story places them; their poi hang from their hands, or are put away), or dance:
+   *  back at their spots, spinning. */
+  private setStage(on: boolean, poi = true) {
+    if (on === this.staged && poi === this.poiShown) return
+    this.staged = on
+    this.poiShown = poi
+    this.dancers.forEach((d, i) => {
+      for (const tr of d.trails) tr.clear()
+      for (const p of d.prev) p.set(0, 0, 0)
+      for (const b of d.balls) b.visible = poi
+      d.ring = 0
+      d.hop = 0
+      d.rig.body.position.y = 0
+      d.rig.body.rotation.z = 0
+      if (on) return
+      const p = this.L(DANCE[i][0], DANCE[i][1])
+      d.who.place(p.x, p.y, p.z, (SEAWARD + (i ? -DANCE_TURN : DANCE_TURN)) * DEG)
+      d.who.m.lookAway()
+      d.pose.up = d.pose.bow = d.pose.wai = 0
+    })
+  }
+  /** A poi is lit or dark. `show`: it catches now, in its firefly's color, with its chime. */
+  private lightPoi(i: number, on: boolean, show = false) {
+    const was = this.lit[i]
+    this.lit[i] = on
+    if (!on) this.litK[i] = 0
+    else if (!show && !was) this.litK[i] = 1
+    if (!on || !show || was) return
+    this.litK[i] = 0.001
+    const p = this.dancers[i >> 1].balls[i & 1].position
+    this.glitter.burst(p.x, p.y, p.z, 22, 2.2, 1.6, 0.13, i)
+    this.embers.burst(p.x, p.y + 0.1, p.z, 8, 1.2, 1.8, 0.08)
+    fireflySfx.chime(POI_FLY[i], 0.07)
+    sfx.whoomp()
+  }
+  /** Her lights: none, in her hooves, or thrown to her from these two points (they land in her hooves). */
+  private setLights(on: boolean, from?: Vector3[]) {
+    this.hasLights = on
+    this.give = on && from ? { from: from.map((p) => p.clone()), t: 0 } : null
+    if (!on || from) {
+      this.ribA.clear()
+      this.ribB.clear()
+    }
+  }
+  /** Where her first light was `lag` seconds ago (the fireflies chase it). */
+  private trailAt(lag: number, out: Vector3) {
+    const want = this.time - lag
+    for (let i = this.hist.length - 1; i >= 0; i--) if (this.hist[i].t <= want) return out.copy(this.hist[i].p)
+    return out.copy(this.hist.length ? this.hist[0].p : this.poiA)
+  }
+  /** Straight to the end of the show (a link to the thank you): every surprise in, the ring of fire lit, fireworks. */
+  private toFireworks() {
+    for (const id of this.flags) this.addGift(id, true)
+    for (let i = 0; i < RING.n; i++) this.flameK[i] = 1
+    this.setPhase('fireworks')
+    this.nextPop = this.time + 0.3
+  }
+  /** The thank you is over: the 🔥 🏆 and the way home (with the fireworks' photo; none yet on a link straight to the
+   *  thank you: it's taken as the bars open). */
+  private goHome() {
+    this.thanked = true
+    this.homeAt = this.time
+    if (this.photo) this.events.done(this.photo)
+    else this.snapPending = true
   }
 
   // ---------------------------------------------------------------- the show
@@ -590,7 +805,8 @@ export class FireShow implements World3D {
   private play(dt: number, t: number) {
     switch (this.phase) {
       case 'intro':
-        // Mom's line, the dancers already spinning; her poi swing by themselves until she touches.
+        // (A link straight to the twirl.) Mom's line, the dancers already spinning; her poi swing by themselves until
+        // she touches.
         if (this.phaseT > 2.2 || this.counts.draws > 0) this.setPhase('twirl')
         break
       case 'twirl':
@@ -669,13 +885,15 @@ export class FireShow implements World3D {
         break
       }
       case 'fireworks':
-        if (!this.talk.home && this.phaseT > 9) {
+        // After the volley, the dancers' thank you (a film); then Mom, and the way home.
+        if (!this.thanked && !this.films.on && this.round !== 'thanks' && this.phaseT > THANKS_AT) this.startRound('thanks')
+        if (this.thanked && !this.talk.home && t - this.homeAt > 1.4) {
           this.talk.home = true
           this.say(S.home)
         }
         // A volley at first, then one now and then (and one wherever she taps the sky).
-        if (t >= this.nextPop && (this.pops < 10 || this.phaseT < 30)) {
-          this.nextPop = t + (this.pops < 8 ? BIG.pop : BIG.pop * 3)
+        if (t >= this.nextPop && (this.pops < 10 || this.phaseT < 40)) {
+          this.nextPop = t + (this.pops < 8 && !this.films.on ? BIG.pop : BIG.pop * 3)
           const a = this.L(-5.5 + (Math.random() - 0.5) * 18, -15 - Math.random() * 4)
           this.rocket(a.setY(7.5 + Math.random() * 4))
         }
@@ -850,25 +1068,33 @@ export class FireShow implements World3D {
     this.addGift(id)
     if (!this.giftQueue.length) {
       // Then the big ring waits round her.
-      window.setTimeout(() => {
+      this.after(1.4, () => {
         if (this.phase === 'gifts') {
           this.setPhase('big')
           this.showBigRing()
           sfx.chime()
           this.say(S.giant)
         }
-      }, 1400)
+      })
     }
   }
-  private addGift(id: StopId) {
+  /** A firefly's surprise arrives, and that firefly flies off to lead it in (then comes back to her lights).
+   *  `quiet`: it's just there (a link to the end of the show). */
+  private addGift(id: StopId, quiet = false) {
     const { bag } = this
     const root = new Group()
     this.scene.add(root)
-    this.gifts.push({ id, root, t: 0 })
+    // (The castle pops up a moment later, under its firefly.)
+    this.gifts.push({ id, root, t: quiet || id !== 'sandcastle' ? 0 : -0.4 })
     this.counts.gifts++
-    sfx.fanfare()
-    this.ji.react('wave')
+    if (!quiet) {
+      sfx.fanfare()
+      this.ji.react('wave')
+    }
     let at: Vector3
+    /** Where its firefly leads it from, and for how long. */
+    let lead: (() => Vector3) | null = null
+    let leadS = 5
     if (id === 'jetski') {
       // The jet ski man rides by with lights on.
       const rider = buildAnimal(JETSKI_MAN, bag)
@@ -895,6 +1121,9 @@ export class FireShow implements World3D {
       this.scene.add(wake.mesh)
       this.ski = { root, rider, wake, s: 0 }
       at = this.L(-30, 2.2)
+      // Zoom at its nose, like a pink headlight.
+      lead = () => tmp.set(Math.sin(root.rotation.y) * 1.5, 1.05, Math.cos(root.rotation.y) * 1.5).add(root.position)
+      leadS = 8
     } else if (id === 'sandcastle') {
       // Her sandcastle by the drum, candles flickering on its towers.
       const sand = '#EBD3A2'
@@ -916,6 +1145,10 @@ export class FireShow implements World3D {
       at = this.L(CASTLE.u, CASTLE.v)
       root.position.copy(at)
       root.rotation.y = SEAWARD + Math.PI
+      if (!quiet) root.scale.setScalar(0.001)
+      // Sandy on its top tower.
+      const top = at.clone().setY(at.y + 1.42)
+      lead = () => top
     } else if (id === 'snorkel') {
       // The parrotfish and the cuttlefish light up in the waves.
       for (const [c, glow, r, speed] of [
@@ -934,14 +1167,22 @@ export class FireShow implements World3D {
       }
       at = this.L(-5.5, 1.2)
       root.position.copy(at).setY(0)
+      // Bubbles swims along over the first fish.
+      const first = this.fish[this.fish.length - 3].root
+      lead = () => first.getWorldPosition(tmp).setY(Math.max(0.55, tmp.y + 0.5))
     } else {
       // Dad gets up and dances.
       const p = this.L(SEATS.nick.u, SEATS.nick.v)
       this.nick.place(p.x, p.y, p.z, SEAWARD * DEG, 'stand')
       this.dancing = true
-      sfx.boing()
+      if (!quiet) sfx.boing()
       at = p
+      // Peekaboo round his head.
+      const head = p.clone().setY(p.y + this.nick.height * 1.12)
+      lead = () => tmp.set(Math.sin(this.time * 4) * 0.5, Math.sin(this.time * 7) * 0.08, Math.cos(this.time * 4) * 0.5).add(head)
     }
+    if (quiet) return
+    if (lead) this.story.lead(id, lead, leadS)
     this.sparkle.burst(at.x, at.y + 1, at.z, 40, 2.4, 3, 0.16)
     this.say(S.gift[id])
     this.events.gift?.(id)
@@ -957,6 +1198,7 @@ export class FireShow implements World3D {
     this.counts.rings++
     sfx.ring()
     this.say(S.ring)
+    this.story.swirlUp(BIG.flames)
     this.dancers.forEach((d) => {
       d.ring = 1
       d.ringR = 1.6
@@ -967,15 +1209,26 @@ export class FireShow implements World3D {
   // ---------------------------------------------------------------- her poi
 
   private drive(dt: number, t: number) {
+    // Before Kae gives them to her (the way in), she has no lights.
+    const mine = [this.ballA, this.ballB, this.tether, this.ribA.mesh, this.ribB.mesh]
+    if (!this.hasLights) {
+      for (const m of mine) m.visible = false
+      this.tracker.idle(dt)
+      return
+    }
+    for (const m of mine) m.visible = !this.give || m === this.ballA || m === this.ballB
     const f = this.finger
     const drawing = !!f && f.drawing
     if (drawing && f) {
       const p = this.fingerPlane(f.x, f.y)
       if (p) this.aim.copy(p)
     } else {
-      // Finger up: the poi keep swinging round in a small circle in front of her.
+      // Finger up: the poi keep swinging round in a small circle in front of her (in a film, low by her hooves: a
+      // close shot would have them over her face).
       this.idleA += dt * POI.idle
-      this.planePoint(Math.sin(this.idleA) * 0.38, -0.15 + Math.cos(this.idleA) * 0.38, this.aim)
+      this.idleLow += ((this.films.on ? 1 : 0) - this.idleLow) * ease(dt, 4)
+      const ir = 0.38 - 0.24 * this.idleLow
+      this.planePoint(Math.sin(this.idleA) * ir, -0.15 - 1.0 * this.idleLow + Math.cos(this.idleA) * ir, this.aim)
     }
     this.poiA.lerp(this.aim, ease(dt, POI.follow))
     this.hist.push({ p: this.poiA.clone(), t })
@@ -1003,8 +1256,10 @@ export class FireShow implements World3D {
     this.ribB.push(this.poiB, t)
     // (The camera looks out to sea: the ribbons lie flat to it.)
     tmp.copy(this.fwd).negate()
-    this.ribA.update(t, tmp, drawing ? 1 : 0.75)
-    this.ribB.update(t, tmp, drawing ? 1 : 0.75)
+    // (Dimmer with her finger up; in a film, swinging low and small, dimmer still: close up they'd glare.)
+    const ribK = drawing ? 1 : 0.75 - 0.4 * this.idleLow
+    this.ribA.update(t, tmp, ribK)
+    this.ribB.update(t, tmp, ribK)
 
     // Her poi's light on the sand round her.
     const kp = this.kaylee.root.position
@@ -1029,11 +1284,34 @@ export class FireShow implements World3D {
     pos.setXYZ(2, hoofR.x, hoofR.y, hoofR.z)
     pos.setXYZ(3, this.poiA.x, this.poiA.y, this.poiA.z)
     pos.needsUpdate = true
+
+    // Thrown to her over the rope (the way in): each in an arc from Kae's hands, landing in her hooves.
+    const g = this.give
+    if (g) {
+      g.t += dt
+      let landed = true
+      ;[this.ballA, this.ballB].forEach((ball, n) => {
+        const k0 = clamp((g.t - n * 0.22) / 0.85, 0, 1)
+        const e = k0 * k0 * (3 - 2 * k0)
+        ball.position.lerpVectors(g.from[n], n ? this.poiB : this.poiA, e)
+        ball.position.y += Math.sin(Math.PI * k0) * 1.3
+        if (k0 < 1) landed = false
+      })
+      if (landed) {
+        this.give = null
+        this.ribA.clear()
+        this.ribB.clear()
+        sfx.jingle()
+        this.sparkle.burst(this.poiA.x, this.poiA.y, this.poiA.z, 14, 1.6, 1.4, 0.1)
+      }
+    }
   }
   private onLoop(r: number) {
     this.loops++
     this.counts.loops++
     sfx.whoosh(0.5)
+    // The fireflies on her lights: one twinkles; a big circle and they all swirl up.
+    this.story.loop(r >= COPY.bigR)
     if (r >= COPY.bigR) {
       // A big circle: the dancers answer with a ring of fire.
       this.dancers.forEach((d) => {
@@ -1057,10 +1335,11 @@ export class FireShow implements World3D {
   // ---------------------------------------------------------------- the dancers and the beach
 
   private dance(dt: number, t: number) {
-    // The drum keeps time; on her loops it booms.
+    const staged = this.staged
+    // The drum keeps time while they dance; on her loops it booms.
     this.beatT += dt
     const beat = 60 / COPY.bpm
-    if (this.beatT >= beat) {
+    if (this.beatT >= beat && !staged) {
       this.beatT -= beat
       this.beats++
       sfx.drum(this.beats % 4 === 0)
@@ -1083,55 +1362,91 @@ export class FireShow implements World3D {
       }
       const rig = d.rig
       const p = rig.root.position
-      // A sway to the beat, a hop when they cheer.
-      const s = t * 5 + i * 1.7
+      const ringK = staged ? 0 : d.ring
       let hy = 0
-      if (d.hop > 0) {
-        d.hop += dt / 0.55
-        hy = Math.sin(Math.PI * Math.min(1, d.hop)) * 0.35
-        if (d.hop >= 1) d.hop = 0
+      d.up += (d.pose.up - d.up) * ease(dt, 7)
+      d.bow += (d.pose.bow - d.bow) * ease(dt, 7)
+      d.wai += (d.pose.wai - d.wai) * ease(dt, 7)
+      if (staged) {
+        // In a film they act (story.ts): arms as the story asks (up holding the poi high, out for a bow, together
+        // for a wai), then the Islander's own life on top (its droop, faces, hops, a wave).
+        const up = d.up * (1 - d.wai)
+        rig.armL.rotation.set(-0.3 * up - 1.75 * d.wai, 0, -1.9 * up - 0.9 * d.bow + 0.5 * d.wai)
+        rig.armR.rotation.set(-0.3 * up - 1.75 * d.wai, 0, 1.9 * up + 0.9 * d.bow - 0.5 * d.wai)
+        d.who.update(dt, t)
+        // (They pivot at the feet, so a small lean is plenty.)
+        rig.body.rotation.x += d.bow * 0.36 + d.wai * 0.13
+        rig.head.rotation.x += d.bow * 0.3 + d.wai * 0.2
+      } else {
+        // Dancing: their own blinks and mouths, then the dance on top. A sway to the beat, a hop when they cheer.
+        d.who.update(dt, t)
+        const s = t * 5 + i * 1.7
+        if (d.hop > 0) {
+          d.hop += dt / 0.55
+          hy = Math.sin(Math.PI * Math.min(1, d.hop)) * 0.35
+          if (d.hop >= 1) d.hop = 0
+        }
+        rig.body.rotation.z = Math.sin(s * 0.5) * 0.12
+        rig.body.position.y = Math.abs(Math.sin(s * 0.5)) * 0.04 + hy
+        rig.head.rotation.y = Math.sin(s * 0.25) * 0.3
+        // Their poi on chains: a circle round each hand (a butterfly), or one big ring over their head (the ring of fire).
+        rig.armL.rotation.set(-1.25 - ringK * 1.0 + Math.sin(d.theta) * 0.25 * (1 - ringK), 0, -0.45)
+        rig.armR.rotation.set(-1.25 - ringK * 1.0 - Math.sin(d.theta) * 0.25 * (1 - ringK), 0, 0.45)
       }
-      rig.body.rotation.z = Math.sin(s * 0.5) * 0.12
-      rig.body.position.y = Math.abs(Math.sin(s * 0.5)) * 0.04 + hy
-      rig.head.rotation.y = Math.sin(s * 0.25) * 0.3
-      // Their poi on chains: a circle round each hand (a butterfly), or one big ring over their head (the ring of fire).
-      const ringK = d.ring
-      rig.armL.rotation.set(-1.25 - ringK * 1.0 + Math.sin(d.theta) * 0.25 * (1 - ringK), 0, -0.45)
-      rig.armR.rotation.set(-1.25 - ringK * 1.0 - Math.sin(d.theta) * 0.25 * (1 - ringK), 0, 0.45)
+      // The show's cheers are in the voice the two share: both their mouths move with it.
+      const loud = speechLevel('gecko')
+      d.talk += (loud - d.talk) * ease(dt, loud > d.talk ? 30 : 14)
+      if (d.talk > 0.03) rig.mouth.scale.set(1 + 0.15 * d.talk, 1 + 0.9 * d.talk, 1)
+      d.shadow.position.set(p.x, d.shadow.position.y, p.z)
       rig.root.updateMatrixWorld(true)
       const c = tmp2.copy(p).addScaledVector(UP, 0.78 * rig.height + hy).addScaledVector(this.fwd, -0.35)
-      // The firelight round their feet, brighter with the ring.
       const fl0 = 0.85 + Math.sin(t * 11 + i * 2) * 0.08 + Math.sin(t * 27 + i) * 0.07
-      this.pools.add(tmp3.copy(p).setY(p.y + 0.04), 5 + ringK * 2, '#FF8A3A', (0.5 + ringK * 0.25) * LOOK.firelight * fl0)
       d.balls.forEach((ball, k) => {
+        const pi = i * 2 + k
+        const look = POI_LOOK[POI_FLY[pi]]
         const sign = k ? -1 : 1
         const arm = k ? rig.armR : rig.armL
-        const hand = arm.localToWorld(tmp3.set((k ? 1 : -1) * HAND.x * rig.height, HAND.y * rig.height, HAND.z * rig.height))
-        const a = d.theta * sign + (k ? Math.PI : 0)
-        // Butterfly: round the hand.
-        const bx = Math.sin(a) * d.r
-        const by = Math.cos(a) * d.r
-        // The ring: one big circle over the head.
-        const ra = d.theta * 1.3 + k * Math.PI
-        tmp.copy(c).addScaledVector(this.right, Math.sin(ra) * d.ringR).addScaledVector(UP, 0.35 + Math.cos(ra) * d.ringR)
-        ball.position.copy(hand).addScaledVector(this.right, bx).addScaledVector(UP, by).lerp(tmp, ringK)
-        this.fireball(ball.position, d.prev[k], dt, 1 + ringK * 0.3)
-        d.prev[k].copy(ball.position)
-        this.chain((i * 2 + k) * LINKS, hand, ball.position)
+        const hand = d.hands[k].copy(arm.localToWorld(tmp3.set((k ? 1 : -1) * HAND.x * rig.height, HAND.y * rig.height, HAND.z * rig.height)))
+        if (staged) {
+          // Hanging from the hand on its chain, swaying a little.
+          ball.position.copy(hand).addScaledVector(this.right, Math.sin(t * 2.1 + pi * 1.3) * 0.035 + (k ? 0.05 : -0.05))
+          ball.position.y -= 0.3
+        } else {
+          const a = d.theta * sign + (k ? Math.PI : 0)
+          // Butterfly: round the hand.
+          const bx = Math.sin(a) * d.r
+          const by = Math.cos(a) * d.r
+          // The ring: one big circle over the head.
+          const ra = d.theta * 1.3 + k * Math.PI
+          tmp.copy(c).addScaledVector(this.right, Math.sin(ra) * d.ringR).addScaledVector(UP, 0.35 + Math.cos(ra) * d.ringR)
+          ball.position.copy(hand).addScaledVector(this.right, bx).addScaledVector(UP, by).lerp(tmp, ringK)
+        }
+        this.chain(pi * LINKS, hand, ball.position)
+        // Its fire, in the color of the firefly that lit it (dark until one has): the flame catching with a little
+        // leap, its ribbon, its glow, its light on the sand round their feet (brighter with the ring).
+        if (this.lit[pi] && this.litK[pi] < 1) this.litK[pi] = Math.min(1, this.litK[pi] + dt / 0.5)
+        const lk = this.poiShown ? this.litK[pi] : 0
         const tr = d.trails[k]
-        tr.life = 0.3 + ringK * 0.7
-        tr.width = 0.1 + ringK * 0.05
-        tr.push(ball.position, t, 0.02)
+        if (lk > 0) {
+          const pop = lk < 1 ? lk * (1.5 - 0.5 * lk) * (1 + 0.5 * Math.sin(Math.PI * lk)) : 1
+          this.fireball(ball.position, d.prev[k], dt, (1 + ringK * 0.3) * pop, this.poiFire[pi])
+          this.halos.add(ball.position, 1.25, look.pool, 0.3 * lk)
+          this.pools.add(tmp3.copy(p).setY(p.y + 0.04), 5 + ringK * 2, look.pool, (0.3 + ringK * 0.15) * LOOK.firelight * fl0 * lk)
+          tr.life = 0.3 + ringK * 0.7
+          tr.width = 0.1 + ringK * 0.05
+          if (!staged) tr.push(ball.position, t, 0.02)
+          if (Math.random() < (staged ? 0.05 : 0.12 + ringK * 0.3)) this.embers.emit(ball.position.x, ball.position.y + 0.1, ball.position.z, (Math.random() - 0.5) * 0.4, 0.5, (Math.random() - 0.5) * 0.4, 0.6, 0.06)
+        }
+        d.prev[k].copy(ball.position)
         tr.update(t, n)
-        if (Math.random() < 0.12 + ringK * 0.3) this.embers.emit(ball.position.x, ball.position.y + 0.1, ball.position.z, (Math.random() - 0.5) * 0.4, 0.5, (Math.random() - 0.5) * 0.4, 0.6, 0.06)
       })
     })
-    this.chains.count = LOOK.chain ? this.dancers.length * 2 * LINKS : 0
+    this.chains.count = LOOK.chain && this.poiShown ? this.dancers.length * 2 * LINKS : 0
     this.chains.instanceMatrix.needsUpdate = true
   }
 
   /** A ball of fire at `p` (it was at `prev` a frame ago): its flame streams back from where it's going and up. */
-  private fireball(p: Vector3, prev: Vector3, dt: number, size: number) {
+  private fireball(p: Vector3, prev: Vector3, dt: number, size: number, fire = this.fire) {
     const F = LOOK.flame * size
     // (Its own vector: `p` may be the shared tmp.)
     const v = this.fireV.subVectors(p, prev).divideScalar(Math.max(dt, 1 / 120))
@@ -1143,7 +1458,7 @@ export class FireShow implements World3D {
     const dy = -vy * 0.14 + 1
     const lean = Math.atan2(-dx, dy)
     const w = 0.42 * F
-    this.fire.add(p, w, w * (1.1 + Math.min(1.4, speed * 0.16)), lean, (p.x * 3.1 + p.z * 1.7) % 1)
+    fire.add(p, w, w * (1.1 + Math.min(1.4, speed * 0.16)), lean, (p.x * 3.1 + p.z * 1.7) % 1)
   }
 
   /** The links of a chain from `a` (the hand) to `b` (the wick), each turned 90° to the last. */
@@ -1157,7 +1472,8 @@ export class FireShow implements World3D {
       m.position.copy(a).addScaledVector(tmp, ((j + 0.5) / LINKS) * len)
       m.quaternion.copy(tmpQ)
       m.rotateY(j % 2 ? Math.PI / 2 : 0)
-      m.scale.set(1, Math.max(1, len / LINKS / 0.04), 1)
+      // (A long chain, in the ring of fire, shows gaps between its links: stretched to fill it they made a white bar.)
+      m.scale.set(1, clamp(len / LINKS / 0.04, 1, 1.5), 1)
       m.updateMatrix()
       this.chains.setMatrixAt(i0 + j, m.matrix)
     }
@@ -1203,11 +1519,19 @@ export class FireShow implements World3D {
   private lanternObj = new Object3D()
 
   private life(dt: number, t: number) {
-    // Kaylee turns a little toward her poi and holds her hooves up.
-    const a = this.poiA
+    // Kaylee turns a little toward her poi and holds her hooves up. (Before she has them, in the way in, the three of
+    // them watch the dancers.)
+    const lit = this.hasLights && !this.give
+    const a = lit ? this.poiA : tmp.copy(this.dancers[0].rig.root.position).lerp(this.dancers[1].rig.root.position, 0.5).setY(this.O.y - 0.5)
     this.kaylee.lookAt(a.x, a.y, a.z)
     this.kaylee.update(dt, t)
-    if (!this.kaylee.showingOff) {
+    const kp = this.kaylee.root.position
+    this.kShadow.position.set(kp.x, this.kShadow.position.y, kp.z)
+    if (!lit) {
+      const r = this.kaylee.rig
+      r.armR.rotation.set(0, 0, 0)
+      r.armL.rotation.set(0, 0, 0)
+    } else if (!this.kaylee.showingOff) {
       const r = this.kaylee.rig
       const la = this.planeLocal(this.poiA)
       const lb = this.planeLocal(this.poiB)
@@ -1231,8 +1555,8 @@ export class FireShow implements World3D {
     // The finish's surprises.
     for (const g of this.gifts) {
       g.t += dt
-      const pop = Math.min(1, g.t / 0.5)
-      if (g.id === 'sandcastle') g.root.scale.setScalar(pop < 1 ? pop * (1.25 - 0.25 * pop) : 1)
+      const pop = clamp(g.t / 0.5, 0, 1)
+      if (g.id === 'sandcastle') g.root.scale.setScalar(pop < 1 ? Math.max(0.001, pop * (1.25 - 0.25 * pop)) : 1)
     }
     this.castleCandles.forEach((c, i) => {
       // A candle flame on each tower, and its little pool of light.
@@ -1305,7 +1629,7 @@ export class FireShow implements World3D {
       this.guide.instanceMatrix.needsUpdate = true
     }
     for (const f of this.faces) f.update(dt)
-    this.stuck()
+    if (!this.films.on) this.stuck()
   }
 
   // ---------------------------------------------------------------- her finger
@@ -1334,6 +1658,7 @@ export class FireShow implements World3D {
   }
 
   pointerDown(x: number, y: number, id?: string) {
+    if (this.films.on || !this.hasLights) return
     this.lastTouch = this.time
     // On the open sky or the sand she draws at once; on a thing (a dancer, Mom) only once she moves.
     this.finger = { x, y, id, moved: false, drawing: !id, downX: x, downY: y }
@@ -1363,6 +1688,7 @@ export class FireShow implements World3D {
   }
 
   tap(x: number, y: number, id?: string) {
+    if (this.films.on || !this.hasLights) return
     this.lastTouch = this.time
     this.counts.taps++
     if (id) return this.poke(id)
@@ -1446,14 +1772,15 @@ export class FireShow implements World3D {
   }
 
   render() {
-    this.renderer.render(this.scene, this.rig.camera)
+    this.bars.render(this.renderer, this.scene, this.rig.camera, this.w, this.h)
     this.stats.calls = this.renderer.info.render.calls
     this.stats.tris = this.renderer.info.render.triangles
-    if (this.snapPending && this.phaseT > 1.6) {
-      // The photo of the fireworks (for Agong's wall, if there's no sunset photo), then the show's done.
+    if (this.snapPending && this.phaseT > 1.6 && !this.films.on && this.bars.amount < 0.01) {
+      // The photo of the fireworks (for Agong's wall, if there's no sunset photo). The way home comes after the
+      // dancers' thank you (goHome).
       this.snapPending = false
-      const src = this.renderer.domElement.toDataURL('image/jpeg', 0.8)
-      this.events.done(src)
+      this.photo = this.renderer.domElement.toDataURL('image/jpeg', 0.8)
+      if (this.thanked) this.events.done(this.photo)
     }
   }
 
@@ -1463,7 +1790,8 @@ export class FireShow implements World3D {
     if (!el) return
     let at: Vector3 | null = null
     const idle = !this.finger && t - this.lastTouch > HINT_S
-    if ((this.phase === 'twirl' || this.phase === 'intro' || this.phase === 'gifts') && (idle || this.counts.draws === 0) && this.phaseT > 1.5) {
+    if (this.films.on || this.phase === 'film') at = null
+    else if ((this.phase === 'twirl' || this.phase === 'intro' || this.phase === 'gifts') && (idle || this.counts.draws === 0) && this.phaseT > 1.5) {
       const a = t * 3
       at = this.planePoint(Math.sin(a) * 0.7, Math.cos(a) * 0.7)
     } else if ((this.phase === 'trace' && (idle || t - this.lastHit > SHAPE.stuck * 0.7)) || (this.phase === 'big' && idle)) {
@@ -1501,8 +1829,11 @@ export class FireShow implements World3D {
       if (el.style.display !== want) el.style.display = want
     }
     const v = new Vector3()
+    // (During a film the world takes no taps: its tap targets are away.)
+    const off = this.films.on || this.phase === 'film'
     for (const [id, el] of this.anchorEls) {
-      if (id === 'kaylee') place(el, this.kaylee.root.getWorldPosition(v), this.kaylee.height * 0.8, 0.8)
+      if (off) place(el, null, 0)
+      else if (id === 'kaylee') place(el, this.kaylee.root.getWorldPosition(v), this.kaylee.height * 0.8, 0.8)
       else if (id === 'family:nick') place(el, this.nick.root.getWorldPosition(v), this.nick.height * (this.dancing ? 0.9 : 0.6), 0.9)
       else if (id === 'family:ji') place(el, this.ji.root.getWorldPosition(v), this.ji.height * 0.6, 0.9)
       else if (id.startsWith('dancer:')) {
@@ -1523,6 +1854,15 @@ export class FireShow implements World3D {
       section: 'fireshow',
       round: this.round,
       phase: this.phase,
+      // The film and beat on screen, and the films played to the end or skipped.
+      film: this.films.now,
+      films: { done: this.films.done, skipped: this.films.skipped },
+      // The story: which poi burn (Tuk's two, then Kae's), her lights, what each firefly is doing, the heart (0..1).
+      poiLit: this.lit,
+      lights: this.hasLights && !this.give,
+      staged: this.staged,
+      home: this.thanked,
+      ...this.story.qa(),
       roundLoops: this.loops,
       shape: this.phase === 'show' || this.phase === 'trace' ? this.shapeId : null,
       lit: this.hit.filter(Boolean).length,

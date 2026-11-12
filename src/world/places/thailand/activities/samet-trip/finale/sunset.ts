@@ -1,8 +1,10 @@
-// The sunset at the driftwood tree on Ao Prao (plan: planning/around-the-world/thailand/samet-trip.md, step 9, the
-// finale's first beat), on the island's real sunset beach (island/layout.ts FRAMES.prao) after all four pink flags.
+// The sunset at the driftwood tree on Ao Prao (planning/around-the-world/thailand/samet-story.md; the first plan:
+// samet-trip.md, step 9, the finale's first beat), on the island's real sunset beach (island/layout.ts FRAMES.prao)
+// once all four fireflies are found.
 //
-// Kaylee, Mom and Dad stand by the big driftwood tree watching the sun go down over the sea. Two things to do, in
-// any order (and everything pokes):
+// Kaylee, Mom and Dad stand by the big driftwood tree watching the sun go down over the sea, the fireflies she found
+// circling her horn (story/firefly.ts; they glow brighter as it gets dark, and line up over the three heads for Mom's
+// photo, so they are in the picture that goes on Agong's wall). Two things to do, in any order (and everything pokes):
 //   - the sun: she grabs it and pulls it down to the sea. The sky goes gold, then pink, then purple as it sinks; when
 //     it touches the water it plops in with a glint, the night falls by itself, the stars come out and the lanterns
 //     light up. Then Dad calls everyone to the fire show (the 🔥 button).
@@ -34,6 +36,7 @@ import { at as atFrame, FRAMES, STOPS, type StopId } from '../island/layout'
 import { buildProps, type Props } from '../island/props'
 import { buildIsland, DAY, glowMaterial, type Island } from '../island/scenery'
 import { makeSeeThrough, SEE } from '../island/seethrough'
+import { FIREFLY_IDS, fireflySfx, Swarm } from '../story/firefly'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/finale/sunset.ts'
 const S = LINES.samet.finale.sunset
@@ -79,6 +82,8 @@ const HALO_GOLD = new Color('#FFB07A')
 const HALO_PINK = new Color('#FF5F9E')
 const tmp = new Vector3()
 const tmp2 = new Vector3()
+const horn = new Vector3()
+const spot = new Vector3()
 const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 
 /** The driftwood tree in Ao Prao's frame (u along the beach, v out to sea). */
@@ -126,6 +131,8 @@ export class Sunset implements World3D {
   /** Turned round for the photo (0 = watching the sunset, 1 = facing the phone). */
   private turn = 0
   private posing = -1
+  /** The fireflies she found, round her horn (story/firefly.ts). */
+  private flies: Swarm
   private photoPending = false
   private photos = 0
   private treeShake = 0
@@ -221,6 +228,11 @@ export class Sunset implements World3D {
     this.sun.add(this.halo)
     scene.add(this.sun)
     this.elev = this.goal = SUN.start / DEG
+
+    // ---- The fireflies she found, round her horn.
+    this.flies = new Swarm(bag, scene, FIREFLY_IDS.filter((id) => start.flags.includes(id)), 1)
+    this.flies.radius = 0.62
+    this.flies.flies.forEach((f, i) => f.pos.copy(this.flies.slot(i, this.flies.flies.length, 0, horn.set(k.x, k.y + this.kaylee.height * 1.1, k.z))))
 
     this.sparkle = new Particles({ kind: 'spray', count: 200, colors: ['#FFFFFF', '#FFF6B8', PAL.gold, PAL.pink], gravity: -0.4 }, bag)
     this.glint = new Particles({ kind: 'spray', count: 120, colors: ['#FFE08A', '#FFB07A', '#FFFFFF'], gravity: 4 }, bag)
@@ -333,6 +345,21 @@ export class Sunset implements World3D {
       this.kaylee.lookAt(cam.x, ph.y + 1.2, cam.z)
       this.kaylee.rig.armL.rotation.set(-0.3 * this.turn, 0, -2.1 * this.turn)
     }
+    // The fireflies: circling her horn; for the photo they line up in a little arch over the three heads, faces to
+    // the phone. They glow brighter as the sky goes dark.
+    const kp = this.kaylee.root.position
+    horn.set(kp.x, kp.y + this.kaylee.height * 1.1, kp.z)
+    const lined = this.turn > 0.5
+    const nf = this.flies.flies.length
+    this.flies.flies.forEach((f, i) => {
+      // (Soft by day, so their colors read against the bright sky; glowing once it's dark.)
+      f.glowGoal = 0.3 + this.dark * 0.8
+      if (!lined) return
+      const a = i - (nf - 1) / 2
+      f.fly(spot.set(horn.x + F.t.x * a * 0.6, horn.y + 0.5 - a * a * 0.07, horn.z + F.t.z * a * 0.6), dt, 6)
+      f.faceToward(this.rig.camera.position.x, this.rig.camera.position.z, dt)
+    })
+    this.flies.update(dt, t, horn, () => !lined)
     if (this.treeShake > 0) {
       this.treeShake = Math.max(0, this.treeShake - dt * 1.5)
       this.props.stops.hideseek.rotation.z = Math.sin(t * 30) * 0.03 * this.treeShake
@@ -480,6 +507,7 @@ export class Sunset implements World3D {
     this.posing = 0
     this.ji.react('wave')
     sfx.giggle()
+    this.flies.flies.forEach((f, i) => window.setTimeout(() => (f.flash(), fireflySfx.chime(f.id, 0.03)), 500 + i * 110))
     this.say(S.photo)
   }
 
@@ -585,6 +613,8 @@ export class Sunset implements World3D {
     return {
       section: 'sunset',
       phase: this.phase,
+      // The fireflies she found, round her horn (and where each is on screen).
+      flies: this.flies.flies.map((f) => ({ id: f.id, ...sc(f.pos) })),
       // Seconds since it opened (the scene's own clock, for timing the sunset when nobody touches it).
       time: +this.time.toFixed(1),
       sunElev: +(this.elev * DEG).toFixed(1),
