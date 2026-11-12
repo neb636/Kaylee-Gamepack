@@ -30,11 +30,12 @@ import { Floaters } from '../mushrooms/fx'
 import type { Birds, BirdHost } from './birds'
 import { lungNgob, sheaf, type Farm } from './farm'
 import { buildNest, Chicks, Jip } from './jip'
-import { BOARDWALK, HIGH_TABLE, KAYLEE_AT, LUNG_AT, RACK, RISE, SCARECROW } from './layout'
+import { BOARDWALK, KAYLEE_AT, LUNG_AT, RACK, RAIL_Z, RISE, SCARECROW } from './layout'
 import { memoryBed, riceSfx as sfx, storyMusic } from './sounds'
 
 const S = L.nan.rice.story
 const tmp = new Vector3()
+const tmp2 = new Vector3()
 
 /** What the story needs from the farm (rice3d.ts builds it). */
 export interface StoryHost {
@@ -76,8 +77,9 @@ export interface StoryHost {
 
 /** Where things are in the story (meters). */
 const LUNG_TALK: FV3 = [-0.4, BOARDWALK.y, 4.05]
-const LUNG_TALK_FACE = -68
-const KAYLEE_TALK_FACE = 62
+/** Turned toward each other, and cheated toward the camera (chibi heads in profile read as the backs of heads). */
+const LUNG_TALK_FACE = -32
+const KAYLEE_TALK_FACE = 14
 /** Last year: Lung dozing standing up, his back against the scarecrow's pole. */
 const NAP: FV3 = [SCARECROW[0], 0, SCARECROW[2] + 0.3]
 /** The nest, in the bamboo (bamboo-local, so it sways with it). */
@@ -85,9 +87,11 @@ const NEST_LOCAL: FV3 = [-0.12, 1.25, 0.24]
 /** Where Kaylee and Lung stand to look up at the nest. */
 const NEST_KAYLEE: FV3 = [4.42, RISE, -3.7]
 const NEST_LUNG: FV3 = [4.78, RISE, -2.98]
-/** The bundles shared with the birds land here, on the bank by the threshing corner. */
-const SHARE: FV3 = [4.36, 0, 2.3]
+/** The bundles shared with the birds land here, on the grass in front of the boardwalk (the front of the threshing shot). */
+const SHARE: FV3 = [3.75, 0, 4.62]
 const SHARE_N = 3
+/** Deck-local: the chicks' row on the railing's top, to her left. */
+const RAIL_SEAT: FV3 = [-0.78, 1.0, RAIL_Z]
 
 /** The Zs of a snore: a little flat Z. */
 function zGeo(): BufferGeometry {
@@ -179,9 +183,12 @@ export class RiceStory {
   /** Jip back home on the scarecrow's hat (`now`: at once). */
   goHome(now = false) {
     const to = this.homeAt().clone()
+    this.homing = !now
     if (now) this.jip.place(to, 0)
-    else this.jip.flyTo(to, { face: 0, arc: 0.6 })
+    else this.jip.flyTo(to, { face: 0, arc: 0.6, done: () => (this.homing = false) })
   }
+  /** Jip is on his way home (left to land by himself when a film ends). */
+  private homing = false
   /** Jip on the nest's rim, feeding the chicks. */
   goNest(now = false) {
     const to = this.nestRim()
@@ -189,7 +196,7 @@ export class RiceStory {
     else this.jip.flyTo(() => this.nestRim(), { face: -0.6 })
   }
   private nestRim(out = new Vector3()) {
-    return this.nest.localToWorld(out.set(0.26, 0.16, 0.05))
+    return this.nest.localToWorld(out.set(0.3, 0.16, 0.16))
   }
 
   /** A tap on Jip: jip jip, and a hop up and down where he sits (he's never shooed). */
@@ -215,20 +222,25 @@ export class RiceStory {
     const h = this.h
     const { lung, kaylee, nick } = h
     const lungHead = (y = 0) => () => lung.rig.head.localToWorld(tmp.set(0, lung.rig.face.headY + y, 0))
-    const two: FV3 = [-0.86, 0.78, 4.02]
+    const two: FV3 = [-0.86, 0.9, 4.02]
+    /** Lung talks out front (toward the camera, a little toward her), the way actors do on a stage: a chibi head turned
+     *  to the side shows only an ear. */
+    const out = () => tmp.set(-1.05, 1.05, 7.2)
+    /** She looks his way, but not all the way round (her face stays in the shot). */
+    const toLung = () => lungHead()().lerp(tmp2.set(-1.2, 1.0, 7), 0.45)
     const memFrom = new Vector3(4.9, 4.6, -1.2)
     return {
       id: 'intro',
       beats: [
         {
           id: 'hello',
-          shot: { eye: [-2.4, 7.2, 13.5], look: [0, 0.6, 0.6], fov: 34, to: { eye: [-0.95, 1.55, 7.4], look: two, fov: 32 }, move: 4.6, sway: 0.02, tall: { eye: [-2.4, 8.5, 15.5], to: { eye: [-0.95, 1.7, 8.2], look: two } } },
+          shot: { eye: [-2.4, 7.2, 13.5], look: [0, 0.6, 0.6], fov: 34, to: { eye: [-0.85, 1.42, 7.5], look: two, fov: 32 }, move: 4.6, sway: 0.02, tall: { eye: [-2.4, 8.5, 15.5], to: { eye: [-0.85, 1.5, 8.2], look: two } } },
           start: () => {
             this.stopMusic = storyMusic('intro')
             h.unhop(lung)
             h.put(lung, ...LUNG_TALK, 'stand', LUNG_TALK_FACE)
             h.put(kaylee, KAYLEE_AT[0], 0, KAYLEE_AT[2], 'stand', KAYLEE_TALK_FACE)
-            this.looks = { kaylee: lungHead(), lung: () => kaylee.rig.head.getWorldPosition(tmp), nick: () => kaylee.rig.head.getWorldPosition(tmp) }
+            this.looks = { kaylee: toLung, lung: out, nick: () => kaylee.rig.head.getWorldPosition(tmp) }
             this.lungPose = 'stand'
           },
           say: S.hello,
@@ -242,7 +254,7 @@ export class RiceStory {
         },
         {
           id: 'jip-heard',
-          shot: { eye: [-0.95, 1.4, 6.5], look: two, fov: 32, to: { eye: [-0.8, 1.35, 6.2] }, sway: 0.03 },
+          shot: { eye: [-0.85, 1.38, 7.2], look: two, fov: 32, to: { eye: [-0.8, 1.34, 6.9] }, sway: 0.03 },
           start: () => {
             this.kayleePose = 'stand'
             // Jip is somewhere off to the right: a chirp, and Lung grabs his hat with both hands.
@@ -256,7 +268,7 @@ export class RiceStory {
             }],
             [1.2, () => {
               this.jip.sing(2)
-              this.looks = { kaylee: lungHead(), lung: () => kaylee.rig.head.getWorldPosition(tmp), nick: () => tmp.set(4, 1.5, 1) }
+              this.looks = { kaylee: toLung, lung: out, nick: () => tmp.set(4, 1.5, 1) }
             }],
           ],
           say: S.uhoh,
@@ -265,8 +277,12 @@ export class RiceStory {
         },
         {
           id: 'tell',
-          shot: { eye: [0.05, 1.2, 5.75], look: lungHead(-0.15), fov: 30, to: { eye: [-0.12, 1.16, 5.35] }, sway: 0.015, tall: { eye: [0.05, 1.3, 6.4], to: { eye: [-0.1, 1.25, 6.0] } } },
-          start: () => (this.lungPose = 'lean'),
+          shot: { eye: [-0.55, 1.15, 6.35], look: lungHead(-0.12), fov: 33, to: { eye: [-0.58, 1.12, 6.0] }, sway: 0.015, tall: { eye: [-0.55, 1.2, 6.6], to: { eye: [-0.58, 1.18, 6.2] } } },
+          start: () => {
+            this.lungPose = 'lean'
+            // He tells it to us.
+            this.looks = { ...this.looks, lung: () => tmp.set(-0.55, 1.1, 6) }
+          },
           say: S.tell,
           sayAt: 0.3,
           dur: 2.6,
@@ -304,7 +320,7 @@ export class RiceStory {
         {
           id: 'along',
           memory: true,
-          shot: { eye: [2.55, 1.7, 2.35], look: lungHead(0.12), fov: 28, sway: 0.015, tall: { eye: [2.6, 1.9, 2.9] } },
+          shot: { eye: [2.45, 1.25, 3.05], look: lungHead(0.25), fov: 32, sway: 0.015, tall: { eye: [2.5, 1.4, 3.6] } },
           start: () => {
             this.jip.place(new Vector3(4.2, 2.6, 2.0))
             this.jip.flyTo(() => this.oldHat.localToWorld(tmp.set(0.12, 0.17, 0.05)), { dur: 1.3, arc: 0.4, face: -0.6 })
@@ -323,7 +339,7 @@ export class RiceStory {
         {
           id: 'took',
           memory: true,
-          shot: { eye: [3.7, 1.75, 3.0], look: [2.3, 1.55, 0.1], fov: 38, to: { look: [3.0, 1.9, -0.6] }, sway: 0.02, tall: { eye: [3.7, 2.1, 3.9] } },
+          shot: { eye: [3.5, 1.5, 3.1], look: () => this.jip.pos.clone().lerp(tmp.set(1.75, 1.2, 0.3), 0.35), fov: 40, sway: 0.02, tall: { eye: [3.5, 1.8, 4.0] } },
           start: () => {
             this.jip.lookAt(null)
             // He grips the hat and pulls (it lifts, Lung's head comes with it a little), then off with it to the bamboo.
@@ -345,7 +361,7 @@ export class RiceStory {
         {
           id: 'gave',
           memory: true,
-          shot: { eye: [3.15, 2.1, 2.55], look: [1.75, 1.45, 0.08], fov: 34, sway: 0.015, tall: { eye: [3.2, 2.4, 3.3] } },
+          shot: { eye: [2.95, 1.5, 2.75], look: [1.75, 1.35, 0.1], fov: 36, sway: 0.015, tall: { eye: [3.0, 1.7, 3.5] } },
           start: () => {
             this.oldHat.visible = false
             this.jip.carry(null)
@@ -395,7 +411,7 @@ export class RiceStory {
         {
           id: 'woke',
           memory: true,
-          shot: { eye: [2.5, 1.55, 2.4], look: lungHead(0.0), fov: 30, sway: 0.02, tall: { eye: [2.6, 1.8, 3.1] } },
+          shot: { eye: [2.4, 1.12, 3.0], look: lungHead(0.0), fov: 34, sway: 0.02, tall: { eye: [2.5, 1.25, 3.6] } },
           start: () => {
             h.birds.away()
             sfx.flutter()
@@ -413,14 +429,14 @@ export class RiceStory {
         {
           id: 'page-out',
           turn: true,
-          shot: { eye: [-0.95, 1.42, 6.6], look: two, fov: 32, to: { eye: [-0.85, 1.36, 6.25] }, sway: 0.025 },
+          shot: { eye: [-0.85, 1.38, 7.2], look: two, fov: 32, to: { eye: [-0.82, 1.34, 6.85] }, sway: 0.025 },
           start: () => {
             sfx.page(true)
             this.backToNow()
             h.put(lung, ...LUNG_TALK, 'stand', LUNG_TALK_FACE)
             h.put(kaylee, KAYLEE_AT[0], 0, KAYLEE_AT[2], 'stand', KAYLEE_TALK_FACE)
             this.lungPose = 'holdHat'
-            this.looks = { kaylee: lungHead(), lung: () => kaylee.rig.head.getWorldPosition(tmp), nick: () => lung.rig.head.getWorldPosition(tmp) }
+            this.looks = { kaylee: toLung, lung: out, nick: () => lung.rig.head.getWorldPosition(tmp) }
           },
           dur: 1.4,
         },
@@ -462,7 +478,7 @@ export class RiceStory {
         this.lungPose = 'stand'
         this.kayleePose = 'stand'
         this.looks = null
-        if (!this.jip.busy) this.goHome(true)
+        if (!this.homing) this.goHome(true)
       },
     }
   }
@@ -489,7 +505,7 @@ export class RiceStory {
     this.jip.carry(null)
     this.nest.visible = true
     this.floppyHome()
-    if (!this.jip.busy) this.goHome(true)
+    if (!this.homing) this.goHome(true)
   }
 
   /** Lung's old hat (the memory's) on his head, or his new one. */
@@ -606,7 +622,7 @@ export class RiceStory {
         },
         {
           id: 'nest',
-          shot: { eye: () => nestAt().add(new Vector3(-0.85, 0.35, 1.45)), look: () => nestAt().add(new Vector3(0, 0.15, 0)), fov: 30, sway: 0.012 },
+          shot: { eye: () => nestAt().add(new Vector3(0.35, 0.45, 1.7)), look: () => nestAt().add(new Vector3(0.08, 0.12, 0)), fov: 32, sway: 0.012 },
           start: () => {
             // (Kaylee and Lung come over to look, out of this shot.)
             h.unhop(lung)
@@ -630,7 +646,7 @@ export class RiceStory {
         },
         {
           id: 'old-hat',
-          shot: { eye: [3.05, 1.55, -1.0], look: () => both().lerp(nestAt(), 0.35), fov: 38, to: { eye: [3.25, 1.5, -1.35] }, sway: 0.02, tall: { eye: [2.6, 1.9, 0.2] } },
+          shot: { eye: [3.35, 2.55, -0.55], look: () => both().lerp(nestAt(), 0.35), fov: 38, to: { eye: [3.5, 2.45, -0.85] }, sway: 0.02, tall: { eye: [3.0, 2.9, 0.4] } },
           start: () => {
             lung.react('hop')
             sfx.chuckle()
@@ -641,7 +657,7 @@ export class RiceStory {
         },
         {
           id: 'hungry',
-          shot: { eye: () => nestAt().add(new Vector3(-0.6, 0.15, 1.1)), look: () => nestAt().add(new Vector3(0, 0.18, 0)), fov: 28, sway: 0.01 },
+          shot: { eye: () => nestAt().add(new Vector3(0.3, 0.3, 1.3)), look: () => nestAt().add(new Vector3(0.02, 0.14, 0)), fov: 28, sway: 0.01 },
           start: () => {
             this.chicks.hungry = 1
             sfx.peep()
@@ -652,7 +668,7 @@ export class RiceStory {
         },
         {
           id: 'share',
-          shot: { eye: [3.0, 1.45, -1.25], look: both, fov: 36, sway: 0.02, tall: { eye: [2.5, 1.8, 0.0] } },
+          shot: { eye: [3.45, 2.4, -0.75], look: both, fov: 36, sway: 0.02, tall: { eye: [3.1, 2.8, 0.2] } },
           start: () => {
             this.looks = { kaylee: lungHead, lung: () => kaylee.rig.head.getWorldPosition(new Vector3()), nick: nestAt }
           },
@@ -682,7 +698,7 @@ export class RiceStory {
         this.looks = null
         this.chicks.hungry = 0.6
         if (near.i >= 0) h.pluck(near.i)
-        this.goNest(!this.jip.busy)
+        this.goNest(true)
       },
     }
   }
@@ -758,11 +774,12 @@ export class RiceStory {
     this.sharing = false
     deck.updateMatrixWorld(true)
     this.chicks.home()
+    // On the railing beside her, in a row (they're in Mommy's photo).
     for (const [i, c] of this.chicks.list.entries()) {
       deck.attach(c.root)
-      c.root.position.set(HIGH_TABLE[0] + 0.32 + i * 0.12, HIGH_TABLE[1] + 0.02, HIGH_TABLE[2] + (i % 2) * 0.08)
-      c.root.rotation.set(0, Math.PI * 0.9, 0)
-      c.root.scale.setScalar(1.1)
+      c.root.position.set(RAIL_SEAT[0] - i * 0.17, RAIL_SEAT[1], RAIL_SEAT[2])
+      c.root.rotation.set(0, 0, 0)
+      c.root.scale.setScalar(1.15)
     }
     this.chicks.hungry = 0.3
     this.jip.place(this.kayleeHatTop(), 0)

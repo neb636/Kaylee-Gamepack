@@ -44,6 +44,8 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
   past, a two-shot), `rig.setCine()` takes the camera and hands back smoothly (the lens too), its `Letterbox` draws the bars in the frame.
   `?cine=1` (sticky) turns it on; the speedboat to Koh Samet is the reference. Reuse it for any ride or cutscene
   instead of scripting camera paths by hand, and keep a `playable` shot for when her finger is down.
+- **Films (stories, scripted cutscenes):** `engine3d/film.ts` plays a storyboard of beats (a shot, a line, what happens),
+  with a storybook look for memories and a hold-to-skip ⏭ (`engine3d/FilmOverlay.tsx`). How to write one: `docs/films.md`.
 - **The feel lab:** `?feel=1` on any section link (2D or 3D, `src/world/labs/feel/`) puts sliders over the real, playable game
   for every number the scene declares with `knobs()` (`src/world/kit/knobs.ts`), and a live graph of whatever it
   `watch()`es (her finger against what the car does). Playwright can check that a mechanic *works*; only the user's finger

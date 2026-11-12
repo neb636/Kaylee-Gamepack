@@ -147,6 +147,8 @@ export class FilmPlayer {
   private ended: (() => void) | null = null
   /** A page-turning beat's shot and start, waiting for the cover. */
   private turning: Beat | null = null
+  /** When the words being said come off the screen (beat seconds; -1: none up). */
+  private lineUntil = -1
   /** Seconds into the beat its shot began (a page turn's starts under the cover). */
   private t0 = 0
 
@@ -227,6 +229,7 @@ export class FilmPlayer {
     this.len = beatSeconds(b)
     this.cues = [...(b.cues ?? [])].sort((a, c) => a[0] - c[0])
     this.said = false
+    this.lineUntil = -1
     this.saidEnd = b.say ? -1 : 0
     this.hooks.state({ film: f.id, beat: b.id, memory: !!b.memory, turn: !!b.turn })
     if (!b.say) this.hooks.line(null)
@@ -256,13 +259,19 @@ export class FilmPlayer {
       this.said = true
       const line = b.say
       this.hooks.line(line)
+      // The words stay up as long as the line takes (its clip's length), even where the audio is skipped (a test
+      // browser filming a reel).
+      this.lineUntil = this.t + lineSeconds(line)
       const mine = this.film
       const beat = this.i
       void say(line).then(() => {
         if (this.film !== mine || this.i !== beat) return
         this.saidEnd = this.t
-        this.hooks.line(null)
       })
+    }
+    if (this.lineUntil >= 0 && this.saidEnd >= 0 && this.t >= this.lineUntil) {
+      this.lineUntil = -1
+      this.hooks.line(null)
     }
     b.tick?.(Math.min(1, this.t / this.len), this.t, dt)
     if (!this.film) return null

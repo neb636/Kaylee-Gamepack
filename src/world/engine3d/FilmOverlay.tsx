@@ -54,9 +54,10 @@ export function FilmOverlay({ state, line, speaker, onSkip }: Props) {
     >
       {/* The storybook look: a warm wash and soft edges, opened by a round wipe from the middle. */}
       <div aria-hidden style={{ ...FILL, pointerEvents: 'none', clipPath: memory ? 'circle(150% at 50% 50%)' : 'circle(0% at 50% 50%)', transition: 'clip-path 1.1s cubic-bezier(.6,0,.3,1)' }}>
-        <div style={{ ...FILL, background: 'radial-gradient(ellipse at 50% 45%, #FFF1D6 0%, #FBD9AE 70%, #E9B888 100%)', mixBlendMode: 'multiply', opacity: 0.85 }} />
-        <div style={{ ...FILL, background: 'radial-gradient(ellipse at 50% 50%, rgba(255,250,240,0) 55%, rgba(255,244,226,.55) 82%, rgba(255,240,220,.92) 100%)' }} />
-        <div style={{ ...FILL, inset: 'max(10px, 1.6vmin)', borderRadius: 'clamp(18px, 4vmin, 40px)', boxShadow: '0 0 0 100vmax rgba(255,243,224,.9), inset 0 0 0 3px rgba(214,170,120,.55)' }} />
+        {/* (A plain warm wash: a blend mode under the wipe's clip-path doesn't reach the canvas in Safari.) */}
+        <div style={{ ...FILL, background: 'rgba(255, 196, 120, 0.13)' }} />
+        <div style={{ ...FILL, background: 'radial-gradient(ellipse at 50% 50%, rgba(255,246,230,0) 62%, rgba(255,238,214,.38) 86%, rgba(250,226,196,.75) 100%)' }} />
+        <div style={{ ...FILL, inset: 'max(8px, 1.4vmin)', borderRadius: 'clamp(16px, 3.4vmin, 36px)', boxShadow: '0 0 0 100vmax rgba(255,242,222,.96), inset 0 0 0 3px rgba(214,170,120,.6), inset 0 0 26px 6px rgba(255,236,206,.55)' }} />
       </div>
       {/* A page turning (into a memory or out of it): a round wipe of paper covers the screen while the world changes
           under it, then fades away. */}

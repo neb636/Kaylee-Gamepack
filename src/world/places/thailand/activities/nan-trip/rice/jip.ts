@@ -139,7 +139,7 @@ export class Jip {
     body.add(solid(merge([-1, 1].map((s) => P.cyl(0.008, 0.008, 0.05, '#C99A86', { at: [s * 0.035, 0.015, 0.01] }, 5))), bag, 0))
     this.claws.position.set(0, -0.02, 0.02)
     root.add(body, this.claws)
-    root.scale.setScalar(1.9)
+    root.scale.setScalar(1.3)
   }
 
   get pos() {
@@ -316,8 +316,8 @@ export class Chicks {
         return w
       }) as [Group, Group]
       root.add(body)
-      root.scale.setScalar(1.9)
-      const home = new Vector3((i - 1) * 0.11, 0.0, (i % 2) * 0.03)
+      root.scale.setScalar(1.25)
+      const home = new Vector3((i - 1) * 0.12, 0.0, (i % 2) * 0.04)
       root.position.copy(home)
       root.rotation.y = (i - 1) * 0.35
       this.root.add(root)

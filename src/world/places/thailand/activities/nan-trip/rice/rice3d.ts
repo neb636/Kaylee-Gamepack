@@ -636,6 +636,8 @@ export class RiceFarm extends Stage {
   }
   /** The way in is over (or skipped): Sparkle says how to plant. */
   private afterIntro() {
+    this.round = 'plant'
+    this.ev.round('plant')
     this.told.add('ask-plant')
     this.quietFrom = this.time + 3
     this.roundAt = this.time
@@ -679,6 +681,8 @@ export class RiceFarm extends Stage {
     this.lastYear = on
     this.carrier.visible = !on
     this.nick.root.visible = !on
+    // A warm late-afternoon sky for last year (the overlay adds the storybook edges).
+    ;(this.scene.background as Color).set(on ? '#FBE2C2' : SKY)
     if (on) {
       this.saved = { growth: this.growth, lvl: this.paddies.map((s) => [s.lvl, s.lvlGoal]), hills: this.hills.map((h) => [h.planted, h.pop, h.wet, h.spring, h.cut, h.eaten]) }
       this.growth = 1
@@ -2245,6 +2249,7 @@ export class RiceFarm extends Stage {
       films: { done: this.films.done, skipped: this.films.skipped },
       story: this.story.qa(),
       lastYear: this.lastYear,
+      faces: [this.kaylee, this.lung].map((c) => Math.round((c.root.rotation.y * 180) / Math.PI)),
       round: this.round,
       planted: this.paddies.map((s) => s.planted),
       flooded: this.paddies.map((s) => Math.round(s.lvl * 100) / 100),

@@ -3,6 +3,9 @@
 //
 //   [{ "id": "drive-moo", "prompt": "...", "seconds": 1.5, "loop": false, "influence": 0.5 }, ...]
 //
+// An entry with "music": true is a piece of music instead (a film's score: ElevenLabs music, instrumental), made at
+// its length and levelled like a bed.
+//
 // Each clip is saved as <folder>/<id>.mp3: mono, 64 kbps, normalized to just under full scale (the game sets each
 // clip's level in code), leading silence trimmed off one-shots. The raw take is kept in art/source/sfx/ (gitignored).
 // Existing clips are skipped, so re-running only makes what's new.
@@ -68,6 +71,16 @@ const analyse = (file, filter) => spawnSync('ffmpeg', ['-hide_banner', '-i', fil
 const duration = (file) => Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', file]).toString()) || 0
 
 async function fetchTake(s) {
+  if (s.music) {
+    const res = await fetch('https://api.elevenlabs.io/v1/music?output_format=mp3_44100_128', {
+      method: 'POST',
+      headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: s.prompt, music_length_ms: Math.round(s.seconds * 1000), model_id: 'music_v1', force_instrumental: true }),
+    })
+    if (!res.ok) throw new Error(`${res.status} ${(await res.text()).slice(0, 300)}`)
+    writeFileSync(join(raw, `${s.id}.mp3`), Buffer.from(await res.arrayBuffer()))
+    return
+  }
   const res = await fetch('https://api.elevenlabs.io/v1/sound-generation?output_format=mp3_44100_128', {
     method: 'POST',
     headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json' },
@@ -89,6 +102,8 @@ function processTake(s) {
   const take = join(raw, `${s.id}.mp3`)
   const out = join(dir, `${s.id}.mp3`)
   const enc = ['-ac', '1', '-b:a', '64k', '-ar', '44100', out]
+  // Music: a little more bitrate (it's heard as a whole, not as a blip), levelled like a bed.
+  if (s.music) return ffmpeg('-i', take, '-af', 'loudnorm=I=-20:TP=-1.5:LRA=11', '-ac', '1', '-b:a', '96k', '-ar', '44100', out)
   if (s.loop) return ffmpeg('-i', take, '-af', 'loudnorm=I=-20:TP=-1.5:LRA=11', ...enc)
   const tmp = join(raw, `${s.id}.tmp.wav`)
   ffmpeg('-i', take, '-ac', '1', '-af', 'silenceremove=start_periods=1:start_threshold=-55dB:start_silence=0.01', tmp)

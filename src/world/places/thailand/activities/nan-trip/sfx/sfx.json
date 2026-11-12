@@ -471,5 +471,80 @@
   "id": "cup-bridge",
   "prompt": "Karts rolling over a bamboo bridge, bamboo creaking and knocking. Clean close recording, no music, no voices.",
   "seconds": 0.8
+ },
+ {
+  "id": "rice-jip",
+  "label": "Jip: jip jip!",
+  "prompt": "A cheeky little sparrow chirping twice, cute and bright but soft and warm, a small happy bird. Clean close recording, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "rice-peep",
+  "label": "The chicks, hungry",
+  "prompt": "Three tiny baby birds peeping softly in a nest, hungry little cheeps, cute and gentle, not shrill. Clean close recording, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "rice-snore",
+  "label": "Lung napping: a snore",
+  "prompt": "One soft, gentle, funny cartoon snore, a slow breath in with a low rumble and a little whistle out, cozy and warm. Clean close recording, no music, no voices.",
+  "seconds": 2.2
+ },
+ {
+  "id": "rice-plop",
+  "label": "A straw hat lands on a head",
+  "prompt": "A light straw sun hat dropping onto a head, a soft papery plop with a little straw rustle. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "rice-flock",
+  "label": "Little birds fly in",
+  "prompt": "A small flock of little birds flying in and landing, many soft fluttering wings, light and airy, gentle. Clean close recording, no music, no voices.",
+  "seconds": 1.6
+ },
+ {
+  "id": "rice-pecking",
+  "label": "Birds pecking up the rice",
+  "prompt": "Several small birds quickly pecking at dry rice grains, soft little taps and tiny crunches, busy and cute. Clean close recording, no music, no voices.",
+  "seconds": 2.0
+ },
+ {
+  "id": "rice-pluck",
+  "label": "A grain plucked",
+  "prompt": "A tiny soft pluck of a single grain pulled off a rice stalk, a little pop. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "rice-page-in",
+  "label": "The page turns into the memory",
+  "prompt": "A storybook page turning softly, paper whoosh, followed by a warm gentle low harp shimmer going up, dreamy and mellow, no high pitched sparkles. Clean close recording, no voices.",
+  "seconds": 1.8
+ },
+ {
+  "id": "rice-page-out",
+  "label": "The page turns back to now",
+  "prompt": "A storybook page turning back softly, paper whoosh, with a warm gentle low harp shimmer going down, mellow and soft. Clean close recording, no voices.",
+  "seconds": 1.6
+ },
+ {
+  "id": "rice-memory",
+  "label": "Last year's afternoon (bed)",
+  "prompt": "A warm sleepy late afternoon in golden rice fields in northern Thailand, soft distant cicadas, a light breeze rustling dry rice, a few far-off birds, calm and dreamy. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "rice-story-music",
+  "label": "Lung's story (music)",
+  "prompt": "Gentle, playful, warm storybook music for a cartoon for five-year-olds, a grandpa telling a funny story: soft plucked Thai khim hammered dulcimer and a mellow wooden flute, light hand drums, a cheeky bouncy middle part, cozy and sleepy in places, ends softly. Instrumental, no vocals.",
+  "seconds": 62,
+  "music": true
+ },
+ {
+  "id": "rice-nest-music",
+  "label": "The nest (music)",
+  "prompt": "Tender, sweet, curious music for a cartoon for five-year-olds discovering baby birds in a nest: soft plucked Thai khim hammered dulcimer and a warm wooden flute, slow, gentle, a little wonder, ends warmly. Instrumental, no vocals.",
+  "seconds": 26,
+  "music": true
  }
 ]
