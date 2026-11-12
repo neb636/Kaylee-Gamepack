@@ -24,6 +24,7 @@ below. Never paste fifteen links or a page of prose at them.
    - `questions`: **at most three**, each about taste, family or Kaylee, answerable in a word. Anything you could
      check yourself is not a question. No questions is fine.
    - `tableReads`, `reels`, `links` (a `?feel=1` link when there are feel knobs), `pitches` at check-in 1.
+   - `listens` for recorded sound effects: made by `scripts/sfx-listens.mjs` (`sfx` skill), with each sound's times.
 2. `npm run build && node scripts/review.mjs --reels` (`--chromium` where WebKit isn't installed; film 3D on the Mac,
    `reel` skill). Then open `review/index.html` at phone width and look at it: does it make sense in ten seconds?
 3. `node scripts/review.mjs --publish` (to the `review-pages` branch, never into main), **then** push your branch.

@@ -20,8 +20,11 @@
 //     "tableReads": [["thailand", "mall.barber"]],
 //     "reels": [{ "name": "barber", "moments": ["barber"] }],      // reel.mjs names: qa.mjs motion runs or #/links~s
 //     "links": [{ "label": "Play it", "hash": "#/world/thailand/mall-trip/barber" }],
-//     "listens": [{ "title": "The salt hut", "audio": "sfx/salt.mp3", "items": ["the bucket down the well", "..."] }],
-//                                                   // sound effects: one track each, the items numbered in play order
+//     "listens": [{ "title": "The salt hut", "audio": "sfx/salt.mp3",   // sound effects: one track per stage (made by
+//                   "items": [{ "text": "bucket: the bucket down the well", "at": 0, "end": 1.4 }, "..."] }],
+//                                                   // scripts/sfx-listens.mjs), the items numbered in play order. With
+//                                                   // `at`/`end` (seconds) each shows its times, lights up while it
+//                                                   // plays, and a tap plays from there; a plain string has no times
 //     "pitches": [{                                                 // check-in 1 only: three cards, the user picks one
 //       "title": "Snow Cones with Pip", "image": "pitch/snow-cones.png",   // a picture, relative to review/
 //       "finger": "Tilt the syrup bottle and paint the ice.",
@@ -130,10 +133,18 @@ ${r.audio ? `<audio controls preload="metadata" src="table-read/${esc(r.audio)}"
 <p><a href="table-read/${esc(r.page)}">Read along: who says what, and when</a></p></div>`
     })
     .join('\n')
+  const clock = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`
+  const cue = (i) => {
+    if (typeof i === 'string') return `<li>${esc(i)}</li>`
+    const timed = Number.isFinite(i.at)
+    if (!timed) return `<li>${esc(i.text)}</li>`
+    const end = Number.isFinite(i.end) ? i.end : i.at
+    return `<li><button class="cue" data-at="${i.at}" data-end="${end}"><span class="t">${clock(i.at)}–${clock(end)}</span> ${esc(i.text)}</button></li>`
+  }
   const listenHtml = (brief.listens ?? [])
-    .map((l) => `<div class="card"><h3>${esc(l.title)}</h3>
+    .map((l) => `<div class="card listen"><h3>${esc(l.title)}</h3>
 <audio controls preload="metadata" src="${esc(l.audio)}"></audio>
-<ol class="meta">${(l.items ?? []).map((i) => `<li>${esc(i)}</li>`).join('')}</ol></div>`)
+<ol class="meta">${(l.items ?? []).map(cue).join('')}</ol></div>`)
     .join('\n')
   const qs = (brief.questions ?? []).slice(0, 3)
   const qHtml = qs
@@ -157,6 +168,11 @@ figure{margin:0 0 14px}video{width:100%;border-radius:16px;background:#000;displ
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:0 0 12px}
 .card audio{width:100%;margin:8px 0 0}.meta{font-size:14px;color:var(--soft);margin:0}.warn{color:var(--warn)}
 #answers{display:none;margin-top:8px}
+.listen ol{margin-top:8px}.listen li::marker{font-variant-numeric:tabular-nums}
+.cue{all:unset;box-sizing:border-box;display:block;width:100%;cursor:pointer;border-radius:10px;padding:5px 8px;margin:1px 0;color:var(--soft)}
+.cue:hover{background:var(--lav)}.cue:focus-visible{outline:3px solid var(--ink);outline-offset:1px}
+.cue .t{font-variant-numeric:tabular-nums;font-size:13px;opacity:.8;margin-right:4px}
+.cue.on{background:var(--lav);color:var(--ink);font-weight:700;box-shadow:inset 3px 0 0 var(--pink)}
 ol{padding-left:22px}li p{margin:0 0 6px;font-weight:600}textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--card);color:inherit}
 button,.pill{font:inherit;font-weight:700;border:0;border-radius:99px;padding:10px 18px;background:var(--pink);color:var(--bg);text-decoration:none;display:inline-block;margin:4px 6px 4px 0;cursor:pointer}
 button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
@@ -183,6 +199,14 @@ ${links ? `<h2>Play it yourself (optional)</h2><p>${links}</p>` : ''}
 const qs=${JSON.stringify(qs)},titles=${JSON.stringify(pitches.map((p) => p.title))}
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p]
   try{await navigator.clipboard.writeText(t);document.getElementById('picked').textContent='Copied \u201c'+t+'\u201d. Paste it on the PR, or just say it in chat.'}catch{document.getElementById('picked').textContent=t+': say it on the PR or in chat.'}}))
+document.querySelectorAll('.listen').forEach(card=>{const a=card.querySelector('audio'),cues=[...card.querySelectorAll('.cue')]
+  if(!a||!cues.length)return
+  const mark=()=>{const t=a.currentTime,on=t>0||!a.paused?cues.filter(c=>+c.dataset.at<=t+0.05).pop():null;cues.forEach(c=>c.classList.toggle('on',c===on))}
+  const seek=(t)=>{a.currentTime=t;mark()}
+  cues.forEach(c=>c.addEventListener('click',()=>{const t=+c.dataset.at;a.play().catch(()=>{});if(a.readyState>=1)seek(t);else a.addEventListener('loadedmetadata',()=>seek(t),{once:true})}))
+  a.addEventListener('play',()=>document.querySelectorAll('.listen audio').forEach(o=>o!==a&&o.pause()))
+  let raf=0;const loop=()=>{mark();if(!a.paused)raf=requestAnimationFrame(loop)}
+  a.addEventListener('play',()=>{cancelAnimationFrame(raf);loop()});a.addEventListener('seeked',mark);a.addEventListener('pause',mark)})
 document.getElementById('copy')?.addEventListener('click',async()=>{
   const a=[...document.querySelectorAll('textarea')].map((t,i)=>(i+1)+'. '+qs[i]+'\\n   '+(t.value.trim()||'(no answer)')).join('\\n')
   try{await navigator.clipboard.writeText(a);document.getElementById('done').textContent='Copied. Paste it as a comment on the PR.'}
