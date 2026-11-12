@@ -1,0 +1,191 @@
+{
+ "title": "Koh Samet: real sounds",
+ "checkIn": "fix",
+ "kaylee": "The whole Samet trip sounds real now: the speedboat and jet ski roar and splash, sand scrunches when she digs, the reef bubbles, the fire poi whooshes, and every beach has waves.",
+ "questions": [
+  "Name any sounds to redo (like \"jetski 2\" or \"finale 5\"), or \"none\".",
+  "Snorkeling has bubbles but no breathing through the tube (it can sound spooky). Add a soft breath: yes or no?"
+ ],
+ "listens": [
+  {
+   "title": "Every stage (shared)",
+   "audio": "sfx/shared.mp3",
+   "items": [
+    "splash: small playful splash in calm sea water",
+    "boing: Cartoon spring boing",
+    "thump: soft muffled thud of something landing on dry beach sand",
+    "pop: cute cartoon bubble pop",
+    "fwip: quick light swish of fabric",
+    "shutter: smartphone camera shutter click",
+    "munch: small animal happily munching crunchy food",
+    "whoosh: soft airy whoosh passing by",
+    "beach: Gentle small waves lapping on a tropical sandy beach (loop)"
+   ]
+  },
+  {
+   "title": "The speedboat over",
+   "audio": "sfx/speedboat.mp3",
+   "items": [
+    "sea: Out on the open sea on a sunny breezy day (loop)",
+    "start: Two outboard boat motors starting at a pier",
+    "throttle: speedboat's outboard motors revving up smoothly as it pulls away from ",
+    "engine: small speedboat's outboard motors running steadily at speed (loop)",
+    "hoof: hand trailing in the sea beside a moving boat (loop)",
+    "bump: speedboat hull bouncing up over a wave crest",
+    "horn: small motorboat's friendly two-note horn",
+    "pass-ferry: big wooden passenger ferry chugging past on the sea",
+    "ferry-horn: passenger ferry's horn",
+    "pass-longtail: Thai longtail boat going past on the sea",
+    "pass-ski: jet ski zipping quickly across in front of a boat",
+    "pass-speed: Another speedboat roaring past on the sea",
+    "dock: boat gently bumping against a wooden pier's rubber fenders"
+   ]
+  },
+  {
+   "title": "The jet ski",
+   "audio": "sfx/jetski.mp3",
+   "items": [
+    "buckle: plastic life jacket buckle snapping shut",
+    "engine: personal watercraft jet ski engine running steadily at cruising speed (loop)",
+    "spray: Steady rushing hiss of white spray and foamy water churning behind a f (loop)",
+    "horn: small jet ski's friendly little horn",
+    "rope: thick floating rope stretched tight and springing back",
+    "skid: small plastic boat hull sliding fast up onto wet beach sand",
+    "tern: small seabird tern giving one short bright chirpy call",
+    "fish: small fish flicks out of calm sea water and plops back in",
+    "rev: jet ski engine revving up high and whiny as it leaps off a wave into t",
+    "land: jet ski landing flat on the sea after a small jump",
+    "bonk: Bumping into a big inflatable orange buoy"
+   ]
+  },
+  {
+   "title": "Walking the island",
+   "audio": "sfx/island.mp3",
+   "items": [
+    "step-sand: small soft hoof step on dry beach sand",
+    "step-wood: small light hoof step on a wooden beach deck plank",
+    "paddle: small child paddling once in calm shallow sea water",
+    "taxi-engine: small old pickup truck taxi engine idling and putt-putting along a san (loop)",
+    "taxi-horn: small friendly truck horn",
+    "woof: happy little puppy yip",
+    "rustle: Palm fronds and leaves rustling when a tree is gently shaken",
+    "bonk: cartoon coconut bonking on a head",
+    "chair: wooden folding beach chair snapping shut",
+    "crab: tiny crab clicking its little claws",
+    "slide: child sliding down a smooth sand slide (loop)",
+    "forest: sunny tropical island forest by day (loop)"
+   ]
+  },
+  {
+   "title": "The animal book and beach clean",
+   "audio": "sfx/book.mp3",
+   "items": [
+    "monitor: small lizard's soft quick hiss",
+    "mousedeer: tiny shy forest animal's high little squeak",
+    "macaque: little monkey chattering",
+    "squirrel: small squirrel's quick chittering chatter from a tree",
+    "hornbill: hornbill bird's two honking kok-kok calls",
+    "flap: big bird's wings flapping a few times as it takes off",
+    "heron: heron's single low raspy croak",
+    "flyingfox: fruit bat's few tiny high squeaks and chirps",
+    "bloop: soft bubbly underwater bloop",
+    "plonk: plastic bottle dropped into an empty plastic bin",
+    "lid: plastic bin lid flapping open and shut once"
+   ]
+  },
+  {
+   "title": "The sandcastle",
+   "audio": "sfx/sandcastle.mp3",
+   "items": [
+    "scrape: child's hand steadily scooping and scraping through damp beach sand (loop)",
+    "pat: soft pat of a small hand on firm wet sand",
+    "crab: tiny crab scuttling quickly over sand",
+    "ball: light inflatable beach ball bouncing once on soft sand",
+    "pour: Dry beach sand trickling and pouring from a small hand in a soft stead (loop)",
+    "slam: small plastic sand bucket turned upside down and plonked firmly onto w",
+    "shell: small seashell tapped lightly",
+    "slump: small wet sandcastle tower gently slumping and sliding into a soft hea",
+    "swash: small gentle wave washing up a sandy beach and fizzing back down",
+    "crumble: Wet sand crumbling softly into shallow water",
+    "rush: Sea water rushing happily along a little channel dug in the sand and g"
+   ]
+  },
+  {
+   "title": "Snorkeling",
+   "audio": "sfx/snorkel.mp3",
+   "items": [
+    "under: Calm underwater ambience heard while snorkeling near the surface (loop)",
+    "jump: child hopping off a boat ladder into calm sea",
+    "swim: Swimming slowly with a snorkel mask on (loop)",
+    "kick: gentle swim flipper kick in water",
+    "bubbles: small cute burst of bubbles underwater",
+    "bump: soft gentle bump against something underwater",
+    "clam: giant clam softly closing its shell underwater",
+    "squish: soft funny squishy squelch",
+    "jet: little underwater whoosh as a small sea creature jets away quickly"
+   ]
+  },
+  {
+   "title": "Hide and seek, and lunch",
+   "audio": "sfx/hideseek.mp3",
+   "items": [
+    "steps: Light little hooves trotting on soft dry beach sand (loop)",
+    "wade: Small hooves splashing playfully through ankle-deep calm sea water (loop)",
+    "rustle: bushy tropical tree's long leaves rustling and shaking",
+    "clatter: stack of light plastic beach chairs knocking and clattering together",
+    "boo: cute cartoon surprise pop-out",
+    "sip: Gentle sipping through a straw from a fresh coconut (loop)",
+    "slurp: last drops slurped loudly through a straw at the bottom of a coconut",
+    "knock: Two light knocks on an empty hollow coconut shell",
+    "lizard: small lizard's quick scurry across sand"
+   ]
+  },
+  {
+   "title": "The sunset and the fire show",
+   "audio": "sfx/finale.mp3",
+   "items": [
+    "pull: warm soft magical hum with a gentle airy shimmer (loop)",
+    "creak: old driftwood tree creaking gently as it is shaken",
+    "plop: big warm ball dropping into the calm sea",
+    "night: calm tropical beach at night (loop)",
+    "drum: soft low hand drum hit",
+    "poi: Fire poi spinning round and round (loop)",
+    "whoomp: ball of fire swung in a big circle",
+    "ring: ring of small flames lighting up one after another around a beach",
+    "launch: small firework rising into the night sky",
+    "firework: small pretty firework opening far away",
+    "clap: small friendly crowd on a beach clapping happily"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "label": "Speedboat",
+   "hash": "#/world/thailand/samet-trip/speedboat"
+  },
+  {
+   "label": "Jet ski",
+   "hash": "#/world/thailand/samet-trip/jetski?round=ride"
+  },
+  {
+   "label": "Island",
+   "hash": "#/world/thailand/samet-trip/island?at=saikaew"
+  },
+  {
+   "label": "Sandcastle",
+   "hash": "#/world/thailand/samet-trip/sandcastle?round=dig"
+  },
+  {
+   "label": "Snorkel",
+   "hash": "#/world/thailand/samet-trip/snorkel?round=float"
+  },
+  {
+   "label": "Hide and seek",
+   "hash": "#/world/thailand/samet-trip/hideseek?round=1"
+  },
+  {
+   "label": "Fire show",
+   "hash": "#/world/thailand/samet-trip/fireshow?round=twirl&flags=all"
+  }
+ ]
+}
