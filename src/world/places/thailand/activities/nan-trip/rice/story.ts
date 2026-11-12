@@ -30,7 +30,7 @@ import { Floaters } from '../mushrooms/fx'
 import type { Birds, BirdHost } from './birds'
 import { lungNgob, sheaf, type Farm } from './farm'
 import { buildNest, Chicks, Jip } from './jip'
-import { BOARDWALK, KAYLEE_AT, LUNG_AT, RACK, RAIL_Z, RISE, SCARECROW } from './layout'
+import { BOARDWALK, KAYLEE_AT, LUNG_AT, NICK_AT, RACK, RAIL_Z, RISE, SCARECROW } from './layout'
 import { memoryBed, riceSfx as sfx, storyMusic } from './sounds'
 
 const S = L.nan.rice.story
@@ -76,10 +76,16 @@ export interface StoryHost {
 }
 
 /** Where things are in the story (meters). */
-const LUNG_TALK: FV3 = [-0.4, BOARDWALK.y, 4.05]
-/** Turned toward each other, and cheated toward the camera (chibi heads in profile read as the backs of heads). */
-const LUNG_TALK_FACE = -32
-const KAYLEE_TALK_FACE = 14
+/** The way in: Kaylee and Daddy have just come along the boardwalk, and Lung, a couple of steps along, turns to greet
+ *  them (close enough to talk, far enough apart that they read as newcomers, not farmhands). */
+const LUNG_TALK: FV3 = [0.7, BOARDWALK.y, 4.05]
+/** Daddy just behind her, on her left (her side of the boardwalk, away from Lung). */
+const NICK_TALK: FV3 = [-2.2, BOARDWALK.y, 3.64]
+/** Turned toward each other, and cheated toward the camera (chibi heads in profile read as the backs of heads): Lung
+ *  turns well round to her, she only partly (her face stays in the shot). */
+const LUNG_TALK_FACE = -52
+const KAYLEE_TALK_FACE = 32
+const NICK_TALK_FACE = 40
 /** Last year: Lung dozing standing up, his back against the scarecrow's pole. */
 const NAP: FV3 = [SCARECROW[0], 0, SCARECROW[2] + 0.3]
 /** The nest, in the bamboo (bamboo-local, so it sways with it). */
@@ -222,25 +228,29 @@ export class RiceStory {
     const h = this.h
     const { lung, kaylee, nick } = h
     const lungHead = (y = 0) => () => lung.rig.head.localToWorld(tmp.set(0, lung.rig.face.headY + y, 0))
-    const two: FV3 = [-0.86, 0.9, 4.02]
-    /** Lung talks out front (toward the camera, a little toward her), the way actors do on a stage: a chibi head turned
-     *  to the side shows only an ear. */
-    const out = () => tmp.set(-1.05, 1.05, 7.2)
+    /** The three of them, a little wider than the two-shot used to be: they've just arrived. */
+    const three: FV3 = [-0.75, 0.85, 4.0]
+    /** On a tall screen: a touch right and up (Lung stays in, less boardwalk underfoot). */
+    const threeTall: FV3 = [-0.5, 1.0, 4.0]
+    /** Lung talks to her, cheated a little toward the camera (a chibi head turned all the way to the side shows only an
+     *  ear), the way actors do on a stage. */
+    const toHer = () => kaylee.rig.head.getWorldPosition(tmp2).lerp(tmp.set(-0.6, 1.0, 8.6), 0.3).clone()
     /** She looks his way, but not all the way round (her face stays in the shot). */
-    const toLung = () => lungHead()().lerp(tmp2.set(-1.2, 1.0, 7), 0.45)
+    const toLung = () => lungHead()().lerp(tmp2.set(-1.0, 1.0, 8.6), 0.4)
     const memFrom = new Vector3(4.9, 4.6, -1.2)
     return {
       id: 'intro',
       beats: [
         {
           id: 'hello',
-          shot: { eye: [-2.4, 7.2, 13.5], look: [0, 0.6, 0.6], fov: 34, to: { eye: [-0.85, 1.42, 7.5], look: two, fov: 32 }, move: 4.6, sway: 0.02, tall: { eye: [-2.4, 8.5, 15.5], to: { eye: [-0.85, 1.5, 8.2], look: two } } },
+          shot: { eye: [-2.4, 7.2, 13.5], look: [0, 0.6, 0.6], fov: 34, to: { eye: [-0.8, 2.15, 9.9], look: three, fov: 34 }, move: 4.6, sway: 0.02, tall: { eye: [-2.4, 8.5, 15.5], to: { eye: [-0.45, 2.3, 14.6], look: threeTall } } },
           start: () => {
             this.stopMusic = storyMusic('intro')
             h.unhop(lung)
             h.put(lung, ...LUNG_TALK, 'stand', LUNG_TALK_FACE)
             h.put(kaylee, KAYLEE_AT[0], 0, KAYLEE_AT[2], 'stand', KAYLEE_TALK_FACE)
-            this.looks = { kaylee: toLung, lung: out, nick: () => kaylee.rig.head.getWorldPosition(tmp) }
+            h.put(nick, ...NICK_TALK, 'stand', NICK_TALK_FACE)
+            this.looks = { kaylee: toLung, lung: toHer, nick: () => lung.rig.head.getWorldPosition(tmp) }
             this.lungPose = 'stand'
           },
           say: S.hello,
@@ -254,7 +264,7 @@ export class RiceStory {
         },
         {
           id: 'jip-heard',
-          shot: { eye: [-0.85, 1.38, 7.2], look: two, fov: 32, to: { eye: [-0.8, 1.34, 6.9] }, sway: 0.03 },
+          shot: { eye: [-0.8, 2.15, 9.9], look: three, fov: 34, to: { eye: [-0.75, 2.05, 9.5] }, sway: 0.03, tall: { eye: [-0.45, 2.3, 14.6], look: threeTall, to: { eye: [-0.43, 2.25, 14.1] } } },
           start: () => {
             this.kayleePose = 'stand'
             // Jip is somewhere off to the right: a chirp, and Lung grabs his hat with both hands.
@@ -268,7 +278,7 @@ export class RiceStory {
             }],
             [1.2, () => {
               this.jip.sing(2)
-              this.looks = { kaylee: toLung, lung: out, nick: () => tmp.set(4, 1.5, 1) }
+              this.looks = { kaylee: toLung, lung: toHer, nick: () => tmp.set(4, 1.5, 1) }
             }],
           ],
           say: S.uhoh,
@@ -277,11 +287,11 @@ export class RiceStory {
         },
         {
           id: 'tell',
-          shot: { eye: [-0.55, 1.15, 6.35], look: lungHead(-0.12), fov: 33, to: { eye: [-0.58, 1.12, 6.0] }, sway: 0.015, tall: { eye: [-0.55, 1.2, 6.6], to: { eye: [-0.58, 1.18, 6.2] } } },
+          shot: { eye: [-1.7, 1.3, 7.0], look: () => lungHead(-0.12)().lerp(tmp2.set(-1.3, 0.85, 4.0), 0.3), fov: 36, to: { eye: [-1.6, 1.25, 6.6] }, sway: 0.015, tall: { eye: [-1.7, 1.45, 8.2], to: { eye: [-1.6, 1.4, 7.8] } } },
           start: () => {
             this.lungPose = 'lean'
-            // He tells it to us.
-            this.looks = { ...this.looks, lung: () => tmp.set(-0.55, 1.1, 6) }
+            // He leans in and tells it to her (over her shoulder, so his face is ours too).
+            this.looks = { ...this.looks, lung: () => kaylee.rig.head.getWorldPosition(tmp2).lerp(tmp.set(-1.7, 1.3, 7.0), 0.2).clone() }
           },
           say: S.tell,
           sayAt: 0.3,
@@ -429,14 +439,15 @@ export class RiceStory {
         {
           id: 'page-out',
           turn: true,
-          shot: { eye: [-0.85, 1.38, 7.2], look: two, fov: 32, to: { eye: [-0.82, 1.34, 6.85] }, sway: 0.025 },
+          shot: { eye: [-0.8, 2.15, 9.9], look: three, fov: 34, to: { eye: [-0.78, 2.1, 9.6] }, sway: 0.025, tall: { eye: [-0.45, 2.3, 14.6], look: threeTall, to: { eye: [-0.44, 2.28, 14.2] } } },
           start: () => {
             sfx.page(true)
             this.backToNow()
             h.put(lung, ...LUNG_TALK, 'stand', LUNG_TALK_FACE)
             h.put(kaylee, KAYLEE_AT[0], 0, KAYLEE_AT[2], 'stand', KAYLEE_TALK_FACE)
+            h.put(nick, ...NICK_TALK, 'stand', NICK_TALK_FACE)
             this.lungPose = 'holdHat'
-            this.looks = { kaylee: toLung, lung: out, nick: () => lung.rig.head.getWorldPosition(tmp) }
+            this.looks = { kaylee: toLung, lung: toHer, nick: () => lung.rig.head.getWorldPosition(tmp) }
           },
           dur: 1.4,
         },
@@ -475,6 +486,7 @@ export class RiceStory {
         h.unhop(lung)
         h.put(lung, ...LUNG_AT, 'stand', 25)
         h.put(kaylee, KAYLEE_AT[0], 0, KAYLEE_AT[2], 'stand', 15)
+        h.put(nick, ...NICK_AT, 'stand', -25)
         this.lungPose = 'stand'
         this.kayleePose = 'stand'
         this.looks = null
