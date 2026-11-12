@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "nan-map-after",
+  "title": "Nan map after",
+  "video": "nan-map-after.mp4",
+  "gif": "nan-map-after.gif",
+  "seconds": 20,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Thailand nan trip map",
+      "where": "#/world/thailand/nan-trip/map",
+      "seconds": 8,
+      "fps": 41,
+      "status": "ok"
+    },
+    {
+      "name": "nan-map-drag",
+      "where": "nan-map-drag",
+      "seconds": 9,
+      "fps": 35.6,
+      "status": "ok"
+    }
+  ]
+}
