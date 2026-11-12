@@ -145,6 +145,9 @@ export const NICK_AT: V3 = [-4.35, BOARDWALK.y, 4.05]
 /** Lung Kham, the farmer, on the boardwalk's right end (beside the threshing corner, so he's there to count). */
 export const LUNG_AT: V3 = [3.6, BOARDWALK.y, 4.1]
 export const SCARECROW: V3 = [1.75, 0, -0.02]
+/** Lung's bench, on the path just left of the scarecrow (where he napped last year, story.ts): its middle on the
+ *  ground, its length along x, and the top of its seat. */
+export const BENCH = { x: 0.78, z: 0.16, len: 0.92, seat: 0.36 }
 export const NURSERY = { x: -5.35, z: 2.3, w: 1.0, d: 1.7 }
 export const BANANA: V3 = [-5.55, 0, 0.0]
 export const HUT: V3 = [-5.45, RISE, -2.35]
@@ -174,6 +177,8 @@ export const inTerrace = (x: number, z: number, pad = 0) => TERRACES.some((t) =>
 /** Things she slides round (x, z, radius). */
 export const BLOCKERS: [number, number, number][] = [
   [SCARECROW[0], SCARECROW[2], 0.32],
+  [BENCH.x - 0.22, BENCH.z, 0.28],
+  [BENCH.x + 0.22, BENCH.z, 0.28],
   [HUT[0], HUT[2], 0.95],
   [BANANA[0], BANANA[2], 0.4],
   [BAMBOO[0], BAMBOO[2], 0.5],

@@ -30,6 +30,7 @@ import {
   RACK,
   RISE,
   RISER_Z,
+  BENCH,
   SCARECROW,
   STAIRS,
   STRAW_PILE,
@@ -92,6 +93,8 @@ export interface Farm {
   stream: Mesh
   gates: Gate[]
   scarecrow: { root: Group; hat: Group; perches: V3[] }
+  /** Lung's bench, beside the scarecrow (his nap, last year). */
+  bench: Group
   hut: { root: Group; chime: Group; perch: V3 }
   banana: Group
   nursery: Group
@@ -360,6 +363,32 @@ export function buildFarm(bag: Bag): Farm {
   scare.add(blobShadow(0.35, bag))
   root.add(scare)
 
+  // ---- Lung's bench, just left of the scarecrow: two worn planks on stubby legs, a plank back, a water bottle ----
+  const bench = new Group()
+  bench.position.set(BENCH.x, 0, BENCH.z)
+  bench.userData.pick = 'bench'
+  const bl = BENCH.len
+  const by = BENCH.seat
+  bench.add(
+    solid(
+      merge([
+        ...[-0.075, 0.075].map((z, k) => P.rbox(bl, 0.05, 0.14, 0.018, k ? WOOD_LIGHT : WOOD, { at: [0, by - 0.025, z] })),
+        ...[-1, 1].flatMap((s) => [
+          P.rbox(0.07, by - 0.05, 0.07, 0.015, WOOD_DARK, { at: [s * (bl / 2 - 0.1), (by - 0.05) / 2, 0.1] }),
+          P.rbox(0.07, by + 0.3, 0.07, 0.015, WOOD_DARK, { at: [s * (bl / 2 - 0.1), (by + 0.3) / 2, -0.12] }),
+          P.box(0.04, 0.04, 0.2, WOOD_DARK, { at: [s * (bl / 2 - 0.1), 0.1, -0.01] }),
+        ]),
+        P.rbox(bl - 0.04, 0.12, 0.04, 0.015, WOOD, { at: [0, by + 0.2, -0.13], rot: [-0.12, 0, 0] }),
+        P.cyl(0.035, 0.035, 0.16, '#8FD3E8', { at: [bl / 2 - 0.08, 0.08, 0.26] }, 10),
+        P.cyl(0.02, 0.02, 0.03, '#4FA3C4', { at: [bl / 2 - 0.08, 0.175, 0.26] }, 8),
+      ]),
+      bag,
+      2,
+    ),
+  )
+  bench.add(blobShadow(0.42, bag))
+  root.add(bench)
+
   // ---- The farm hut: posts, a raised floor, a thatched roof, rice sacks, a ladder, a chime ----
   const hut = new Group()
   hut.position.set(...HUT)
@@ -544,7 +573,7 @@ export function buildFarm(bag: Bag): Farm {
   const mist = lowClouds(bag)
   for (const m of mist) root.add(m)
   const cafeAt: V3 = [DECK.x, DECK.y + 1.4, DECK.z]
-  return { root, water, paddyWater, channel, fall, stream, gates, scarecrow: { root: scare, hat, perches: [[-0.5, 1.22, 0], [0.5, 1.22, 0], [0, 1.72, 0]] }, hut: { root: hut, chime, perch: [0, 2.32, 0] }, banana, nursery, rack: { root: rack, bundles, perch: [0, RACK.y + 0.06, 0] }, basket: { root: basketRoot, heap, board }, straw, buffalo, ducks, frog, bamboo, cafeAt, mist }
+  return { root, water, paddyWater, channel, fall, stream, gates, scarecrow: { root: scare, hat, perches: [[-0.5, 1.22, 0], [0.5, 1.22, 0], [0, 1.72, 0]] }, bench, hut: { root: hut, chime, perch: [0, 2.32, 0] }, banana, nursery, rack: { root: rack, bundles, perch: [0, RACK.y + 0.06, 0] }, basket: { root: basketRoot, heap, board }, straw, buffalo, ducks, frog, bamboo, cafeAt, mist }
 }
 
 // ---------------------------------------------------------------- the hill and the far mountains
@@ -817,9 +846,10 @@ function buildDuck(bag: Bag) {
   return root
 }
 
-/** Lung Kham, the farmer (not family: the farm's uncle, like the mushroom aunty): an old monkey with a white moustache,
- *  in the indigo mor hom shirt northern farmers wear and a scarf. */
-export const LUNG: Look = { species: 'monkey', height: 1.22, chub: 1.08, fur: '#A88466', light: '#F4E4D0', dark: '#6E5646', ear: '#F2B8A8', outfit: { kind: 'shirt', color: '#43549E' }, extras: ['moustache', 'scarf'], open: true }
+/** Lung Kham, the farmer (not family: the farm's uncle, like the mushroom aunty): an old monkey, a little grey, with
+ *  kind heavy eyelids, in the indigo mor hom shirt
+ *  and trousers northern farmers wear and a red checked pakama tied round his waist. */
+export const LUNG: Look = { species: 'monkey', height: 1.22, chub: 1.08, fur: '#9A8070', light: '#EED8BF', dark: '#6E5646', ear: '#EDB2A2', outfit: { kind: 'shirt', color: '#43549E', shorts: '#2E3A72' }, extras: ['lids', 'pakama'] }
 
 /** Lung's ngob: plain, with a coloured band (Kaylee's has a pink band and a flower), sitting straight on his head.
  *  His new one has a sunny yellow band; his old one (the mint band) is Jip's nest now (story.ts). */

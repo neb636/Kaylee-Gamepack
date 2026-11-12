@@ -14,7 +14,9 @@ export const WEARABLES: readonly Wearable[] = ['sunhat', 'spare-hat', 'sunglasse
 /** `mailbag`: a postman's satchel on a strap across the chest (Pao, the Nan Mountain Cup). `bun`: a little white bun
  *  of hair on top, with a pink pin (Grandma Taeng). */
 /** `eye-ring`: a penguin's face stays dark, with a white ring round each eye (an Adélie). */
-export type Extra = 'cane' | 'mailbag' | 'bun' | 'glasses' | 'moustache' | 'cap' | 'officer-cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone' | 'eye-ring' | Exclude<Wearable, 'ngob'>
+/** `lids`: heavy kind old eyelids and smile creases (Lung Kham, the rice farmer). `pakama`: the checked cloth a farmer
+ *  ties round his waist. */
+export type Extra = 'lids' | 'pakama' | 'cane' | 'mailbag' | 'bun' | 'glasses' | 'moustache' | 'cap' | 'officer-cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone' | 'eye-ring' | Exclude<Wearable, 'ngob'>
 
 export interface Look {
   species: Species
