@@ -1,5 +1,6 @@
 // What the game table shows over the house: the picker (three big picture cards drawn like the game shelf's icons, the
-// three cousins' faces with BB picked, the Unicorn game's four unicorns, a big ▶), and while they play: the two faces
+// three cousins' faces with BB picked, a big ▶; in the Unicorn game ▶ then opens a second step, her unicorn's color:
+// pictures of the four real pieces and another ▶), and while they play: the two faces
 // at the sides (whoever's turn it is grows and glows), 🎲 back to the games and 👋 to get up, and a big 🔁 when someone
 // has won. The faces are pictures of their real 3D selves (faces.ts; an emoji until the picture is taken). No words to
 // read: pictures, faces and big targets (var(--target): 96 px on iPad, 72 px on a short iPhone).
@@ -7,6 +8,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useMemo, type CSSProperties, type MutableRefObject } from 'react'
 import { sounds, useLandscape } from '../../../../../../sdk'
 import { faceCanvas } from './deck'
+import { PIECE_BG } from './faces'
 import { UNICORN_HEX } from './pieces'
 import { COUSINS, GAMES, UNICORNS, type CousinId, type GameId } from './list'
 import candyCard from './cards/candy.svg?no-inline'
@@ -53,7 +55,7 @@ export function TableUI({ view, table }: { view: TableView; table: MutableRefObj
     <>
       {/* Top right: back to the games, and get up from the table. */}
       <div style={{ position: 'absolute', top: 'calc(var(--safe-top) + 10px)', right: 'calc(var(--safe-right, 0px) + 14px)', display: 'flex', gap: 12, zIndex: 50 }}>
-        {!view.picking && (
+        {(!view.picking || view.step === 'color') && (
           <motion.button aria-label="Games" whileTap={{ scale: 0.85 }} onClick={tap(() => t()?.games())} style={iconBtn('var(--butter)')}>
             🎲
           </motion.button>
@@ -64,7 +66,7 @@ export function TableUI({ view, table }: { view: TableView; table: MutableRefObj
       </div>
 
       {view.picking ? (
-        <Picker view={view} table={table} />
+        view.step === 'color' ? <ColorPicker view={view} table={table} /> : <Picker view={view} table={table} />
       ) : (
         <>
           {/* Whose turn: her face on her side (left), the cousin's on theirs (right). */}
@@ -108,7 +110,6 @@ function Picker({ view, table }: { view: TableView; table: MutableRefObject<Tabl
   const wide = useLandscape()
   const card = wide ? 'calc(var(--target) * 1.1)' : 'calc(var(--target) * 1.3)'
   const face = wide ? 'calc(var(--target) * .78)' : 'calc(var(--target) * .9)'
-  const sw = 'calc(var(--target) * .66)'
   const place: CSSProperties = wide ? { right: 'calc(var(--safe-right, 0px) + 12px)', bottom: 'calc(var(--safe-bottom) + 12px)' } : { left: '50%', bottom: 'calc(var(--safe-bottom) + 12px)', translate: '-50% 0' }
   return (
     <motion.div
@@ -150,34 +151,60 @@ function Picker({ view, table }: { view: TableView; table: MutableRefObject<Tabl
           </button>
         ))}
       </div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 'clamp(2px, 1vmin, 8px)', alignItems: 'center' }}>
-        {/* Her unicorn (the Unicorn game): the cousin takes another. A full-size tap target round each smaller circle. */}
-        {view.game === 'unicorn' &&
-          UNICORNS.map((c) => (
+      <PlayButton on={view.offered.includes(view.game)} table={table} />
+    </motion.div>
+  )
+}
+
+function PlayButton({ on, table }: { on: boolean; table: MutableRefObject<TablePlugin | null> }) {
+  return (
+    <motion.button
+      aria-label="Play"
+      disabled={!on}
+      animate={{ scale: [1, 1.07, 1] }}
+      transition={{ repeat: Infinity, duration: 1.3 }}
+      whileTap={{ scale: 0.85 }}
+      onClick={() => (sounds.pop(), table.current?.play())}
+      style={{ ...round('var(--target)', 'var(--mint)', '#fff'), fontSize: 'calc(var(--target) * .5)' }}
+    >
+      ▶
+    </motion.button>
+  )
+}
+
+/** The Unicorn game's second step: which unicorn is hers. Pictures of the four real pieces (a colored 🦄 until each is
+ *  taken), the picked one big with a pink ring, and ▶ to sit down and play. The cousin takes another color. */
+function ColorPicker({ view, table }: { view: TableView; table: MutableRefObject<TablePlugin | null> }) {
+  const wide = useLandscape()
+  const pic = wide ? 'calc(var(--target) * 1.05)' : 'calc(var(--target) * 1.2)'
+  const place: CSSProperties = wide ? { right: 'calc(var(--safe-right, 0px) + 12px)', bottom: 'calc(var(--safe-bottom) + 12px)' } : { left: '50%', bottom: 'calc(var(--safe-bottom) + 12px)', translate: '-50% 0' }
+  return (
+    <motion.div
+      key="colors"
+      initial={{ y: 60, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      style={{ position: 'absolute', ...place, zIndex: 30, background: 'rgba(255,247,240,.92)', borderRadius: 28, boxShadow: 'var(--shadow)', padding: 'clamp(10px, 2vmin, 18px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(10px, 2vmin, 16px)', maxWidth: 'calc(100vw - 24px)', boxSizing: 'border-box' }}
+    >
+      <div style={{ display: 'grid', gridTemplateColumns: wide ? 'repeat(2, auto)' : 'repeat(4, auto)', gap: 'clamp(8px, 1.8vmin, 16px)' }}>
+        {UNICORNS.map((c) => {
+          const picked = view.piece === c
+          const photo = view.pieceFaces[c]
+          return (
             <motion.button
               key={c}
               aria-label={`${c} unicorn`}
-              aria-pressed={view.piece === c}
-              animate={{ scale: view.piece === c ? 1.15 : 1 }}
-              whileTap={{ scale: 0.85 }}
-              onClick={() => (sounds.pop(), t()?.choosePiece(c))}
-              style={{ width: 'var(--target)', height: 'var(--target)', border: 'none', background: 'none', padding: 0, display: 'grid', placeItems: 'center', flex: 'none' }}
+              aria-pressed={picked}
+              animate={{ scale: picked ? 1.1 : 1 }}
+              whileTap={{ scale: 0.88 }}
+              onClick={() => (sounds.pop(), table.current?.choosePiece(c))}
+              style={{ ...round(pic, photo ? PIECE_BG[c] : UNICORN_HEX[c].body, picked ? 'var(--hotpink)' : '#fff'), borderWidth: 6, overflow: 'hidden', fontSize: `calc(${pic} * .5)`, cursor: 'pointer' }}
             >
-              <span style={{ ...round(sw, UNICORN_HEX[c].body, view.piece === c ? 'var(--hotpink)' : '#fff'), fontSize: `calc(${sw} * .5)` }}>🦄</span>
+              {photo ? <img src={photo} alt="" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /> : <span>🦄</span>}
             </motion.button>
-          ))}
-        <motion.button
-          aria-label="Play"
-          disabled={!view.offered.includes(view.game)}
-          animate={{ scale: [1, 1.07, 1] }}
-          transition={{ repeat: Infinity, duration: 1.3 }}
-          whileTap={{ scale: 0.85 }}
-          onClick={() => (sounds.pop(), t()?.play())}
-          style={{ ...round('var(--target)', 'var(--mint)', '#fff'), fontSize: 'calc(var(--target) * .5)', marginLeft: 6 }}
-        >
-          ▶
-        </motion.button>
+          )
+        })}
       </div>
+      <PlayButton on table={table} />
     </motion.div>
   )
 }

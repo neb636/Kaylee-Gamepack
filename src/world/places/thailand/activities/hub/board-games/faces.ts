@@ -4,13 +4,15 @@
 // so her picture shows today's look from the wardrobe. Call these from the plugin's update (the next
 // frame draws over the photo, like the wardrobe's mirror). Pictures stay on the iPad.
 import { Color, Scene, Vector3 } from 'three'
+import { merge, solid } from '../../../../../engine3d/geo'
 import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
 import { Bag } from '../../../../../engine3d/dispose'
 import { photoCamera } from '../../../../../engine3d/photo'
 import { makeLights } from '../../../../../engine3d/toon'
 import { LOOKS } from '../../../characters/looks'
 import type { House } from '../house'
-import type { CousinId } from './list'
+import type { CousinId, UnicornColor } from './list'
+import { unicornParts } from './pieces'
 
 const SIZE = { w: 200, h: 200 }
 /** Each face's background, matching its ring on the buttons. */
@@ -67,5 +69,29 @@ export function kayleeFace(house: House): string {
   root.rotation.copy(rot)
   parent?.add(root)
   root.updateMatrixWorld(true)
+  return img
+}
+
+/** Each unicorn piece's background on the color picker (a soft tint of its own color). */
+export const PIECE_BG: Record<UnicornColor, string> = { pink: '#FFE1EE', lavender: '#EFE6FF', mint: '#DDF7EE', sunny: '#FFF6D6' }
+
+/** A Unicorn-game piece, the very one that hops on the board, seen from the front and a little above (for the color
+ *  picker's buttons), built just for the picture and thrown away. */
+export function pieceFace(house: House, c: UnicornColor): string {
+  const bag = new Bag()
+  const scene = new Scene()
+  scene.background = new Color(PIECE_BG[c])
+  const lights = makeLights(scene)
+  const piece = solid(merge(unicornParts(c)), bag, 1.5)
+  // It faces +x on the board; turn it three-quarters toward the camera (on +z) so the face and horn show.
+  // Ten times its size (about 90 cm), so the photo camera's near plane is well clear of it.
+  piece.rotation.y = -0.9
+  piece.scale.setScalar(10)
+  scene.add(piece)
+  piece.updateMatrixWorld(true)
+  lights.follow(0, 0.5, 0)
+  const img = house.snap(photoCamera(30, 0, 0.8, 2.3, 0, 0.5, 0), SIZE, scene)
+  scene.remove(piece)
+  bag.dispose()
   return img
 }

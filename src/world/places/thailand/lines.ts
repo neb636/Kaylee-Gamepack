@@ -74,6 +74,8 @@ export const L = {
   games: {
     // The picker opens (once a visit).
     pick: 'Pick a game and a cousin!',
+    // After ▶ in the Unicorn game: the four unicorn pieces (once a visit).
+    color: 'What color do you want your unicorn to be?',
     // A game starts (once a visit each); also Sparkle's hint when she waits on her turn.
     howto: {
       unicorn: onDevice('Tap the die! Race to the castle!', 'Click the die! Race to the castle!'),

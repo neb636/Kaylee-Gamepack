@@ -265,6 +265,7 @@ export const STARTS = {
   wardrobe: { floor: 1 as const, x: DIM.wardrobe.rug.x, z: DIM.wardrobe.rug.z, face: 52 },
   /** The game table's sections: at its use spot (the Hub starts her seated on her stool, `at=game-table`). */
   table: { floor: 1 as const, x: 1.15, z: DIM.gameTable.z, face: 90 },
+  colors: { floor: 1 as const, x: 1.15, z: DIM.gameTable.z, face: 90 },
   unicorn: { floor: 1 as const, x: 1.15, z: DIM.gameTable.z, face: 90 },
   candy: { floor: 1 as const, x: 1.15, z: DIM.gameTable.z, face: 90 },
   chutes: { floor: 1 as const, x: 1.15, z: DIM.gameTable.z, face: 90 },

@@ -69,7 +69,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       ? {
           section: initial.section,
           vs: param('vs') as CousinId,
-          game: (initial.section === 'table' ? param('game') : initial.section) as GameId,
+          game: (initial.section === 'table' ? param('game') : initial.section === 'colors' ? 'unicorn' : initial.section) as GameId,
           piece: param('piece') as UnicornColor,
           me: clampPos(param('me'), 99),
           them: clampPos(param('them'), 99),
@@ -119,7 +119,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   /** The address bar follows the table: the picker, or the game with the pieces where they are now. */
   const tableState = (v: TableView | undefined | null): Record<string, string> => {
     if (!v) return tableStart ? { vs: tableStart.vs } : {}
-    if (v.picking) return { vs: v.vs, game: v.game }
+    if (v.picking) return v.step === 'color' ? { vs: v.vs, piece: v.piece } : { vs: v.vs, game: v.game }
     return { vs: v.vs, ...(v.game === 'unicorn' ? { piece: v.piece } : {}), me: String(v.pos[0]), them: String(v.pos[1]), turn: v.turn === 0 ? 'kaylee' : 'cousin', ...(v.rolls.length ? { rolls: v.rolls.join(',') } : {}), ...(v.deck.length ? { deck: v.deck.join(',') } : {}) }
   }
   const onTable = (v: TableView) => {
@@ -131,7 +131,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
         setAsking(false)
       }
       if (v.phase === 'picking' || v.phase === 'awaiting' || v.phase === 'cousin' || v.phase === 'finished') {
-        const id = v.picking ? 'table' : v.game
+        const id = v.picking ? (v.step === 'color' ? 'colors' : 'table') : v.game
         // (A game whose greybox isn't built has no section yet.)
         if (HUB_SECTIONS.sections.some((x) => x.id === id)) enter(id as HubSection, tableState(v))
       }
