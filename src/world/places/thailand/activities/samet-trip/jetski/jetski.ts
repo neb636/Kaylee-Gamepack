@@ -19,7 +19,7 @@
 // it back; spin tight circles and Dad goes dizzy; splash Mom on the shore; push into the rope and it stretches
 // like a rubber band and turns her along it; wedge it on the rocks and it pops free. Life jacket first: the bare link waits for her tap on the jacket.
 // Getting off: a pink ring on the water in front of the hut (the island's stop rings look the same). Drive into it any
-// time (not mid-race) and the jet ski man catches the handlebars, she and Daddy hop off onto the sand, and it's back
+// time (not mid-race) and the jet ski man catches the handlebars, she and Dad hop off onto the sand, and it's back
 // to the island. Sparkle says so once, a little way into the ride.
 //
 // Talk (lines.ts L.samet.jetski): the jet ski man says the life jacket goes on, Sparkle says what each round is for and
@@ -1071,7 +1071,7 @@ export class JetSki implements World3D {
     S.skid()
     this.talk('bye', J.bye, 0)
   }
-  /** Parked: it glides in nose first to where it waits, he holds it, she and Daddy hop off onto the sand. */
+  /** Parked: it glides in nose first to where it waits, he holds it, she and Dad hop off onto the sand. */
   private parking(dt: number) {
     const d = this.d
     const t = (this.parkT += dt)
