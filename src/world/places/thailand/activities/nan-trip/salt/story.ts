@@ -33,6 +33,7 @@ import { buildDinner, lightLantern, type Dinner } from './dinner'
 import { SALT_AUNTY } from './hut'
 import {
   AUNTY_AT,
+  AUNTY_TALK,
   COOKS_IN,
   COOKS_WAIT,
   COOK_DX,
@@ -334,18 +335,18 @@ export class SaltStory {
       beats: [
         {
           id: 'hello',
-          shot: { eye: [0.3, 2.6, 7.6], look: [0.5, 0.9, 0], fov: 34, to: { eye: [2.9, 1.45, 3.9], look: [2.25, 1.0, -0.3] }, move: 4.2, tall: { eye: [0.3, 3.0, 9.0], to: { eye: [1.9, 1.6, 4.6] } } },
+          shot: { eye: [0.3, 2.6, 7.6], look: [0.5, 0.9, 0], fov: 34, to: { eye: [2.5, 1.4, 4.1], look: [1.95, 1.0, 0.45] }, move: 4.2, tall: { eye: [0.3, 3.0, 9.0], to: { eye: [1.9, 1.6, 4.6] } } },
           start: () => {
             this.stopMusic = saltStoryMusic()
             h.put(kaylee, -1.15, 0, 1.05, 'stand', 40)
             h.put(h.nick, ...NICK_AT, 'stand', 20)
             h.put(h.ji, ...JI_AT, 'stand', 30)
-            h.aunty.position.set(...AUNTY_AT)
-            h.aunty.rotation.y = -0.6
+            h.aunty.position.set(...AUNTY_TALK)
+            h.aunty.rotation.y = -0.5
             for (const c of this.cooks) c.root.visible = false
             this.lidOff = 0
             this.jarTip = 0
-            kaylee.lookAt(AUNTY_AT[0], 1.1, AUNTY_AT[2])
+            kaylee.lookAt(AUNTY_TALK[0], 1.1, AUNTY_TALK[2])
           },
           say: S.hello,
           sayAt: 3.0,
@@ -407,9 +408,9 @@ export class SaltStory {
         },
         {
           id: 'empty',
-          shot: { eye: [2.0, 1.35, 2.7], look: [SALT_JAR[0] - 0.15, 0.75, SALT_JAR[2] + 0.1], fov: 36 },
+          shot: { eye: [3.0, 1.3, 3.1], look: [SALT_JAR[0] - 0.3, 0.7, SALT_JAR[2] + 0.1], fov: 36 },
           start: () => {
-            h.aunty.rotation.y = 0.5
+            h.aunty.rotation.y = 1.1
             this.lidOff = 0.001
           },
           cues: [

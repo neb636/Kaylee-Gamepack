@@ -126,10 +126,10 @@ export const COOKS_IN: V3[] = [
   [0.5, 0, 1.15],
   [1.25, 0, 1.0],
 ]
-/** Pa Kluea's big salt jar (empty: the trouble), on the floor by the shelf. */
-export const SALT_JAR: V3 = [1.55, 0, -0.9]
+/** Pa Kluea's big salt jar (empty: the trouble), on the floor right of the pan. */
+export const SALT_JAR: V3 = [2.65, 0, 0.2]
 /** Where Pa Kluea stands to talk in the films (by her pan, toward the front). */
-export const AUNTY_TALK: V3 = [1.85, 0, 0.15]
+export const AUNTY_TALK: V3 = [1.95, 0, 0.5]
 
 /** The village dinner: a set of its own along the same road, far enough right that the hut's shots never see it. Three
  *  stalls in a row facing the camera, their cooks behind them, lanterns over each, string lights along the road. */
