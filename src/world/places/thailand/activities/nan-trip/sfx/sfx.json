@@ -27,15 +27,15 @@
  },
  {
   "id": "drive-honk",
-  "prompt": "One single honk of a real pickup truck horn, deep and full, about half a second. Recorded outdoors on a street, realistic, no music, no voices.",
+  "prompt": "One friendly honk of a pickup truck horn heard from across a quiet street, deep, warm and round, about half a second, mellow and soft-edged. Outdoors, realistic, no music, no voices.",
   "seconds": 1,
-  "influence": 0.7
+  "influence": 0.6
  },
  {
   "id": "drive-honk-tune",
-  "prompt": "Three short rhythmic taps on a real pickup truck horn, beep beep beeep, deep and full. Recorded outdoors on a street, realistic, no music, no voices.",
+  "prompt": "Three short friendly taps on a pickup truck horn, beep beep beeep, heard from across a quiet street, deep, warm and mellow, soft-edged. Outdoors, realistic, no music, no voices.",
   "seconds": 1.5,
-  "influence": 0.7
+  "influence": 0.6
  },
  {
   "id": "drive-moo",
@@ -150,9 +150,10 @@
  },
  {
   "id": "shroom-mist",
-  "prompt": "A garden hose misting nozzle spraying a fine soft mist, steady gentle hiss. Seamless loop, no music, no voices.",
+  "prompt": "A gentle garden mister spraying fine soft mist, a quiet, low, breathy whisper, warm and muffled, steady. Seamless loop, no music, no voices.",
   "seconds": 4,
-  "loop": true
+  "loop": true,
+  "influence": 0.6
  },
  {
   "id": "shroom-pop",
@@ -307,8 +308,9 @@
  },
  {
   "id": "rice-chime",
-  "prompt": "A small bamboo and metal wind chime tinkling softly in the breeze. Clean close recording, no music, no voices.",
-  "seconds": 2
+  "prompt": "A small wooden bamboo wind chime clonking softly in a breeze, hollow, low, warm wooden tones, mellow and gentle. No music, no voices.",
+  "seconds": 2,
+  "influence": 0.6
  },
  {
   "id": "rice-spin",
@@ -337,8 +339,9 @@
  },
  {
   "id": "rice-steam",
-  "prompt": "Soft steam hissing from a bamboo basket of sticky rice. Clean close recording, no music, no voices.",
-  "seconds": 1.5
+  "prompt": "A soft, low puff of warm steam rising from a bamboo basket of sticky rice, breathy and muffled, a gentle airy whoosh, warm and mellow. No music, no voices.",
+  "seconds": 1.5,
+  "influence": 0.6
  },
  {
   "id": "rice-wet",
@@ -399,8 +402,9 @@
  },
  {
   "id": "salt-sizzle",
-  "prompt": "Water splashed onto a hot fire, big hiss and sizzle of steam. Clean close recording, no music, no voices.",
-  "seconds": 1.2
+  "prompt": "A splash of water on hot embers, a soft, low, rumbly sizzle of steam that fades quickly, warm and muffled, gentle. No music, no voices.",
+  "seconds": 1.2,
+  "influence": 0.6
  },
  {
   "id": "salt-scrape",
@@ -457,9 +461,9 @@
  },
  {
   "id": "cup-honk",
-  "prompt": "Two quick beeps of a real motor scooter horn on a street in Asia, meep meep. Recorded outdoors on a street, realistic, no music, no voices.",
+  "prompt": "Two quick friendly toots of a little motor scooter horn heard from a few meters away, meep meep, soft, round and mellow, low and gentle. Outdoors, no music, no voices.",
   "seconds": 1,
-  "influence": 0.7
+  "influence": 0.6
  },
  {
   "id": "cup-grass",

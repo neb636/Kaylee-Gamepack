@@ -24,6 +24,12 @@ Credits cost money: about 20-40 per second of sound. Say how many seconds you ma
    move or live but make no sound (traffic going by, animals, water, fire). Each stage gets an ambient bed.
 2. **Prompts:** short, toy-like, soft, kid-friendly. No voices, words or music; nothing scary (no screams, harsh
    alarms, loud bangs). 0.5-2 s for one-shots, 3-6 s loops for held sounds, 15 s seamless loops for beds.
+   ElevenLabs takes come out bright and sharp by default, and you hear it most on horns, beeps, sizzles, steam and
+   chimes. Describe the tone you want: *warm, mellow, soft-edged, round, low, muffled, gentle, breathy*. Set the sound
+   a little away from the listener (*heard from across a quiet street*, *from a few meters away*), not "close
+   recording" (close-miked means crisp and bright). Pick soft materials where the story allows (a wooden bamboo chime,
+   not metal). Avoid *crisp, sparkly, tinkling, piercing, realistic street recording*. Make two takes of a sound that
+   matters and let the user pick (`sfx-listens` track: now, A, B).
 3. **Wire** with `src/world/kit/clips.ts`, keeping the synth sound as the fallback (tests, slow downloads):
    `clip(url, synth.x)` for one-shots, `playClip(url, { rate })` when a parameter climbs (pitch = rate), `held()` for
    sounds the game calls every beat (an engine's pitch follows `rate`), `bed()` for ambience (add its stop to the
