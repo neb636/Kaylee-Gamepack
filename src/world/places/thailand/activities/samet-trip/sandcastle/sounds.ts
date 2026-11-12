@@ -1,10 +1,10 @@
 // The sandcastle's sounds at Hin Khok: the scrape of the sand under her finger while she digs (a loop that runs while
-// she digs, brighter the deeper she goes), the pat of a wall or a mould patted firm, dry sand trickling over Daddy,
+// she digs, brighter the deeper she goes), the pat of a wall or a mould patted firm, dry sand trickling over Dad,
 // the bucket slammed down on the castle, a tower slumping, the ghost crab's skitter and a shell's clink, the beach
 // ball, each wave of the tide washing up the beach, the sand crumbling as the sea breaks through and the water rushing
 // into the moat, and the beach itself (waves, a breeze, gulls far off: the shared beach bed). Recorded clips (sfx/,
 // ElevenLabs) with the synthesized ones as their fallbacks. The moat's climbing ring notes, the twinkles, the fanfare,
-// the moulds' arriving whoop, the sad slide, the flag's and Mommy's dings, Daddy's sneeze and Kaylee's giggle stay
+// the moulds' arriving whoop, the sad slide, the flag's and Mom's dings, Dad's sneeze and Kaylee's giggle stay
 // synthesized (in tune, or a voice).
 import { clip, held, playClip } from '../../../../../kit/clips'
 import { noise as hiss, tone } from '../../../../../kit/sfx'
@@ -16,7 +16,7 @@ export const synth = {
   scrape: (k: number) => hiss(0.09, 0.05 + k * 0.05, 'bandpass', 700 + k * 900, 500 + k * 500, 0, 1.4),
   /** Sand patted firm. */
   pat: () => hiss(0.06, 0.12, 'lowpass', 600, 300),
-  /** Sand rubbed over Daddy. */
+  /** Sand rubbed over Dad. */
   pour: () => hiss(0.12, 0.08, 'lowpass', 900, 500),
   /** The sea rushing along her channel into the moat. */
   rush: () => {
@@ -39,13 +39,13 @@ export const synth = {
   arrive: () => tone(880, 1320, 0.25, 0.06, 'triangle'),
   /** A bit of the moat dug round the castle: a note higher each time. */
   ring: (f: number) => tone(f, f * 1.25, 0.12, 0.045, 'sine'),
-  /** A part of Daddy all covered: a note higher each part. */
+  /** A part of Dad all covered: a note higher each part. */
   buried: (i: number) => tone(600 + i * 120, 650 + i * 120, 0.12, 0.05, 'triangle'),
   /** A shell tapped. */
   shell: () => tone(1400, 1800, 0.1, 0.05, 'sine'),
   /** A tower's flag popped up or down. */
   flag: () => tone(900, 1300, 0.12, 0.05, 'triangle'),
-  /** Mommy waves. */
+  /** Mom waves. */
   mommy: () => tone(880, 1100, 0.15, 0.05, 'triangle'),
   /** (The tide's waves and the beach ball had no sound of their own; their fallbacks are quiet ones.) */
   swash: () => hiss(0.9, 0.03, 'lowpass', 900, 500, 0, 0.7),
@@ -57,7 +57,7 @@ export const sandSfx = {
   /** Called every 0.11 s while she digs: the scrape loops, brighter and louder the deeper (k 0..1). */
   scrape: held(c('sand-scrape'), synth.scrape, (k: number) => ({ rate: 0.9 + k * 0.25, vol: 0.45 + k * 0.35 }), { linger: 0.25, fade: 0.15 }),
   pat: clip(c('sand-pat'), synth.pat, { vol: 0.6, jitter: 0.12 }),
-  /** Called every 0.14 s while she rubs sand over Daddy. */
+  /** Called every 0.14 s while she rubs sand over Dad. */
   pour: held(c('sand-pour'), synth.pour, () => ({ vol: 0.5 }), { linger: 0.3, fade: 0.2 }),
   crumble: clip(c('sand-crumble'), synth.crumble, { vol: 0.6 }),
   rush: clip(c('sand-rush'), synth.rush, { vol: 0.9 }),

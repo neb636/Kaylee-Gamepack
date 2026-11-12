@@ -35,7 +35,7 @@ const synth = {
   rev: () => tone(260, 520, 0.4, 0.04, 'sawtooth'),
   /** Up onto the sand: the hull skids. */
   skid: () => hiss(0.6, 0.18, 'bandpass', 900, 300),
-  /** Daddy's cap blows off. */
+  /** Dad's cap blows off. */
   cap: () => hiss(0.4, 0.08, 'bandpass', 1500, 600),
   /** A fish plips back into the water. */
   plip: () => tone(1400, 700, 0.08, 0.03, 'sine'),
@@ -60,7 +60,7 @@ export const jetSfx = {
   banana: held<[number]>(c('speedboat-engine'), none, (d: number) => ({ rate: 0.92, vol: 0.4 * near(d, 70) })),
   /** Her rooster tail of spray hissing behind her (k: speed). Silent before. */
   spray: held<[number]>(c('jetski-spray'), none, (k: number) => ({ vol: 0.15 + 0.35 * Math.min(1, k), rate: 0.9 + 0.2 * Math.min(1, k) })),
-  /** Landing off a jump, or soaking Mommy (k: how hard, 0..1). */
+  /** Landing off a jump, or soaking Mom (k: how hard, 0..1). */
   splashBig: (k: number) => {
     if (!playClip(land, { vol: 0.45 + 0.55 * k, rate: 1.12 - 0.2 * k + (Math.random() - 0.5) * 0.06 })) synth.splashBig(k)
   },

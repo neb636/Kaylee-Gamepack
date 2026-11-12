@@ -9,8 +9,8 @@
 //   L3   4.5 ═ bridge ═ top deck, all the way across ......... HARBOR⛵AND ........ roller ═══╗ (the Ta-Khon roller
 //   L2   3.0  [B0]  ((( net tunnel )))  [B3]  ~rope course~  [zip] ─╮              LITTLE THAILAND  over the racing
 //   L1   1.5  [B0]  ≈≈ net bridge ≈≈   [B3 donut lip]   ╲      │  zip line           lanes, into their balls)
-//   G    0    ▓ red wall   ball pit, Daddy   tunnel 💥  ╲_donut_╱                     ╲
-//           🐉 the twin-dragon spiral (behind Mommy's bench)            the nose slide (from the mask, to a mat)
+//   G    0    ▓ red wall   ball pit, Dad   tunnel 💥  ╲_donut_╱                     ╲
+//           🐉 the twin-dragon spiral (behind Mom's bench)            the nose slide (from the mask, to a mat)
 //
 // x runs left (-) to right (+), z toward the camera (+). The hall's back wall is at z = -4.6.
 import { BACK_Z, BENCH, BLOCKED, CIRCLES, FRAME, FRAME_DOOR, HALL, LANES, MASK, NOSE, NOSE_MAT, PIT as RACE_PIT, TOWN } from '../hall/layout'
@@ -56,7 +56,7 @@ export const NET_TUNNEL = { x0: bx(1), x1: bx(3), z: -2.6, r: 0.66, y: LV.l2 + 0
 /** The red climbing wall on B0's front, from the mats to L1. */
 export const WALL = { x0: bx(0) + 0.06, x1: bx(1) - 0.06, top: LV.l1, z: ZF }
 
-/** The ball pit on the ground floor (B1-B2): a padded rim, a lot of balls, Daddy sitting in them (the cannon's
+/** The ball pit on the ground floor (B1-B2): a padded rim, a lot of balls, Dad sitting in them (the cannon's
  *  target). The cannon stands on the mats in B3, beside the tunnel's end, aimed at him. */
 export const PIT = { rect: [bx(1) + 0.04, bx(3) - 0.04, ZB + 0.05, ZF - 0.05] as Rect, inner: [bx(1) + 0.16, bx(3) - 0.16, ZB + 0.15, ZF - 0.17] as Rect, rim: 0.5, front: 0.42, balls: 0.42 }
 export const DADDY = { at: [-0.75, -1.85] as XZ, face: 40 }
@@ -75,7 +75,7 @@ export const DONUT = { x: 3.2, bottom: 0.15, r: 1.45, z: -2.15, width: 1.1, from
 export const ZIP = { a: [4.3, 4.18, -0.62] as V3, b: [-0.55, 1.55, -0.62] as V3, sag: 0.26, hang: 1.3, mat: [-0.25, -0.3] as XZ, post: [bx(2), -0.62] as XZ }
 export const ZIP_DECK: Rect = [bx(5) + 0.3, bx(6), ZF, ZF + 0.55]
 
-/** The twin-dragon spiral tower, in the gap between Harbor Town and the frame (behind Mommy's bench): its mouth right
+/** The twin-dragon spiral tower, in the gap between Harbor Town and the frame (behind Mom's bench): its mouth right
  *  at L3's left edge, the slide winding round the post nearly twice, out through B0's side into the ball pit. */
 export const TOWER = { x: -4.72, z: -2.72, r: 0.52, post: 0.13, turns: 1.75, top: LV.l3, bottom: 0.62, trough: 0.25 }
 
@@ -190,7 +190,7 @@ export const KID_LOOP_UP: V3[] = [
   NOSE_STEP,
 ]
 
-/** Mommy on the parents' bench (the hall's), watching. */
+/** Mom on the parents' bench (the hall's), watching. */
 export const MOMMY = { at: [BENCH.at[0] - 0.3, BENCH.at[1]] as XZ, face: BENCH.face }
 
 /** The mats outside, for her walk grid: the hall's floor near the frame, round the hall's own things and the frame's.

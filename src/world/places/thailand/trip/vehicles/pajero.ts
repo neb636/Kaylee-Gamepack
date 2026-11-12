@@ -6,8 +6,8 @@
 // roof rails, big six-spoke alloys, and at the back its tall tail lamps running down the corners either side of the
 // tailgate. A little shine on the silver: pale highlight strips along the hood, the shoulders and the roof edge.
 //
-// It's hollow, so the family shows inside through see-through windows: seats (Mommy at the wheel on the right, Daddy
-// beside her, Kaylee behind Mommy), the back door on Kaylee's side that swings open, the tailgate that lifts for the
+// It's hollow, so the family shows inside through see-through windows: seats (Mom at the wheel on the right, Dad
+// beside her, Kaylee behind Mom), the back door on Kaylee's side that swings open, the tailgate that lifts for the
 // bags, and wing mirrors that fold out when the key fob beeps. A little pink elephant toy nods on top of the back seat
 // (it faces back, so she sees it through the tailgate's window), and the wipers (two on the windshield, one on the
 // tailgate) swish when the drive says so. Faces +z. Right-hand drive: local -x is the car's right, the driver's side.
@@ -41,10 +41,10 @@ export interface Pajero {
   tails: MeshBasicMaterial
   /** Soft beams of light ahead, for the cloud. */
   beams: Mesh
-  /** Seats (local to `body`, at the cushion's top): Mommy at the wheel on the right, Daddy beside her, Kaylee behind
-   *  Mommy, and the spare back seat. */
+  /** Seats (local to `body`, at the cushion's top): Mom at the wheel on the right, Dad beside her, Kaylee behind
+   *  Mom, and the spare back seat. */
   seats: { driver: Group; nick: Group; kaylee: Group; spare: Group }
-  /** Kaylee's back door (right side, behind Mommy's), pivoting at its front edge: setDoor(1) is wide open. */
+  /** Kaylee's back door (right side, behind Mom's), pivoting at its front edge: setDoor(1) is wide open. */
   door: Group
   setDoor(k: number): void
   /** The tailgate, hinged at the roof: setTailgate(1) is up. */
@@ -110,7 +110,7 @@ export function buildPajero(bag: Bag): Pajero {
     [0.9, BELT], [0.9, SILL], ...arch(WHEEL.front, WHEEL.front - ARCH.r, WHEEL.front + ARCH.r), [2.12, 0.38], [2.3, 0.34], [FRONT - 0.03, 0.48], [FRONT, 0.8],
     [FRONT - 0.01, 1.16], [FRONT - 0.07, 1.31], [2.1, 1.38], [FRONT_PILLAR + 0.02, BELT],
   ]
-  // ---- The sides below the windows: Daddy's side all one panel (his doors stay shut), Mommy's front door and the
+  // ---- The sides below the windows: Dad's side all one panel (his doors stay shut), Mom's front door and the
   // back quarter behind Kaylee's door (her door is its own group) ----
   const rearArch = (from: number) => arch(WHEEL.rear, from, WHEEL.rear - ARCH.r)
   const fullSide: Pt[] = [[0.9, BELT], [0.9, SILL], [WHEEL.rear + ARCH.r, SILL], ...rearArch(WHEEL.rear + ARCH.r), [BACK - 0.02, SILL + 0.02], [BACK - 0.02, BELT]]

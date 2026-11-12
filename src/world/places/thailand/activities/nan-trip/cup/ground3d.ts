@@ -6,22 +6,22 @@
 //   board), a medal hanging under each track she has raced, the big gold Cup on its stand beside it. Tap a track and
 //   Kaylee hops into her pink kart and they're off (Ground.tsx hands over to the race). After the Cup every track races
 //   again, for fun.
-// - The podium (section `podium`), in front of the grandstand where Mommy and Daddy cheer: gold, Kaylee on 1 and the
+// - The podium (section `podium`), in front of the grandstand where Mom and Dad cheer: gold, Kaylee on 1 and the
 //   home rival on 2; or silver, the home rival on 1 and Kaylee on 2. On silver the winner glows: she taps them for a high
 //   five (being a good sport), and they hop down to her kart and put their gift on it (gifts.ts). Then ➡️ back to the
 //   board (or, after the last race, the Cup).
 // - The Cup (section `cup-win`): the scoreboard over the grandstand lights up race by race (gold, silver, gold), the
 //   big gold Nan Mountain Cup with the trophy title on it flies over from its stand and floats in front of her; she taps it and
-//   lifts it over her head: fireworks, confetti, everyone cheering. Mommy's photo, then 🗺️ and the stamp on Nan town.
+//   lifts it over her head: fireworks, confetti, everyone cheering. Mom's photo, then 🗺️ and the stamp on Nan town.
 // Dressed for the Cup (the look step): big pennant flags flying on tall poles, a fruit stall and a drinks stall beside
 // Moon's honey stall, round paper lanterns hanging along the grandstand's roof, hay bales and cones round the edge, and
 // Nan folk come to watch, who cheer with everyone (and jump when she taps them).
-// Things to poke: the rivals (hop; Grandma Taeng wakes up), Kaylee, her kart (beep beep, the gifts wiggle), Mommy and
-// Daddy, the crowd (they cheer), the balloons on the board (one floats off), Moon's honey stall (the bee buzzes round),
+// Things to poke: the rivals (hop; Grandma Taeng wakes up), Kaylee, her kart (beep beep, the gifts wiggle), Mom and
+// Dad, the crowd (they cheer), the balloons on the board (one floats off), Moon's honey stall (the bee buzzes round),
 // a hen (flaps), the Cup on its stand (a twinkle).
 // Talk (lines.ts L.nan.cup): Sparkle says "Tap a track to race!" the first time at the board, asks for the high five
 // on silver, and says the Cup's lines; the rivals say their lines in turn when tapped (Sparkle's fact about each the
-// first time), the home rival is a good sport on gold and the winner gives her their gift on silver, Mommy and Daddy
+// first time), the home rival is a good sport on gold and the winner gives her their gift on silver, Mom and Dad
 // cheer. After a while with nothing done Sparkle says what to do (spendHint: glow first, then twice a visit at most).
 import { CanvasTexture, Color, Group, Mesh, MeshBasicMaterial, PlaneGeometry, Vector3, type BufferGeometry, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, firstTime, sounds, spendHint, type Line } from '../../../../../../sdk'
@@ -54,7 +54,7 @@ export type GroundStart =
   | { mode: 'podium'; record: CupRecord; packed: string[]; track: TrackId; place: Place }
   | { mode: 'cup'; record: CupRecord; packed: string[] }
 
-/** What the DOM over the world shows: the board's 🗺️, the podium's ➡️, Mommy's photo and the ceremony's 🗺️. */
+/** What the DOM over the world shows: the board's 🗺️, the podium's ➡️, Mom's photo and the ceremony's 🗺️. */
 export interface GroundUi {
   map: boolean
   next: boolean
@@ -82,8 +82,8 @@ export const GROUND_ANCHORS: AnchorInfo[] = [
   { id: 'medal', label: 'Her medal', kind: 'thing' },
   { id: 'kart', label: 'Her kart', kind: 'thing' },
   { id: 'kaylee', label: 'You', kind: 'family' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
   { id: 'crowd', label: 'The crowd', kind: 'thing' },
   { id: 'balloons', label: 'Balloons', kind: 'thing' },
   { id: 'stall', label: "Moon's honey stall", kind: 'thing' },
@@ -285,7 +285,7 @@ export class CupGround extends Stage {
       g.add(rider.root)
       this.holders.set(id, { id, g, rider, kart, move: null })
     }
-    // ---- The family: Kaylee, Mommy and Daddy in the grandstand ----
+    // ---- The family: Kaylee, Mom and Dad in the grandstand ----
     const { kaylee, members } = this.makeFamily(['ji', 'nick'])
     this.kaylee = kaylee
     this.ji = members.get('ji')!
@@ -432,7 +432,7 @@ export class CupGround extends Stage {
       sounds.fanfare()
       this.after(0.3, () => this.cheerAll())
       this.after(0.4, () => this.confettiBurst(STEP[1].x, 6))
-      // Mommy or Daddy cheers (in turn, race by race), then the home rival is a good sport.
+      // Mom or Dad cheers (in turn, race by race), then the home rival is a good sport.
       this.after(0.9, () => this.ev.say(C.gold[this.record.length % 2]))
       this.after(2.4, () => {
         this.holders.get(who.second as RivalId)!.rider.react('wave', 1.6)
@@ -484,7 +484,7 @@ export class CupGround extends Stage {
     })
   }
 
-  /** Everyone cheers: the rivals hop and wave, Mommy and Daddy hop. */
+  /** Everyone cheers: the rivals hop and wave, Mom and Dad hop. */
   private cheerAll() {
     sfx.cheer()
     let d = 0
@@ -663,7 +663,7 @@ export class CupGround extends Stage {
     sfx.boing()
   }
 
-  /** She lifts the Cup over her head: fireworks, confetti, everyone cheering; then Mommy's photo and 🗺️. */
+  /** She lifts the Cup over her head: fireworks, confetti, everyone cheering; then Mom's photo and 🗺️. */
   private lift() {
     this.lifted = 0
     this.kaylee.showOff('cheer')
@@ -671,7 +671,7 @@ export class CupGround extends Stage {
     this.cheerAll()
     this.confettiBurst(STEP[1].x, 8)
     for (let i = 0; i < 7; i++) this.after(0.2 + i * 0.45, () => this.fireworksBurst())
-    // Sparkle says it, Daddy cheers, and Mommy takes the photo.
+    // Sparkle says it, Dad cheers, and Mom takes the photo.
     this.ev.say(C.champion)
     this.after(0.4, () => this.ev.say(C.lift[0]))
     this.after(3.6, () => this.ev.say(C.lift[1]))
@@ -729,7 +729,7 @@ export class CupGround extends Stage {
       rig.head.rotation.y = on ? 0 : Math.sin(t * 0.45 + i * 2) * 0.35
       rig.body.scale.y = 1 + Math.sin(t * 2.6 + i) * 0.015
     })
-    // ---- Kaylee, Mommy and Daddy ----
+    // ---- Kaylee, Mom and Dad ----
     for (const c of [this.kaylee, this.ji, this.nick]) c.update(dt, t)
     if (this.lifted >= 0 && Math.floor((this.lifted + dt) / 1.3) > Math.floor(this.lifted / 1.3)) this.kaylee.showOff('cheer')
     // ---- Her kart: the horn, the gifts ----

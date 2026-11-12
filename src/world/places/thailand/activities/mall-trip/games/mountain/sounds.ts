@@ -1,6 +1,6 @@
 // The Golden Mountain's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise): the count up the
-// scale is the SDK's sounds.note(step); Daddy's huffing, the monkeys' chatter, the bell. The words (Sparkle's count,
-// Daddy's race lines) are voices (lines.ts `L.mall.mountain`).
+// scale is the SDK's sounds.note(step); Dad's huffing, the monkeys' chatter, the bell. The words (Sparkle's count,
+// Dad's race lines) are voices (lines.ts `L.mall.mountain`).
 import { noise, tone } from '../../../../../../kit/sfx'
 import { sfx } from '../../../../sfx'
 
@@ -44,7 +44,7 @@ export const mountainSfx = {
     tone(320, 220, 0.18, 0.04, 'sawtooth')
     noise(0.1, 0.04, 'lowpass', 900, 300)
   },
-  /** Daddy out of breath: huff... puff. */
+  /** Dad out of breath: huff... puff. */
   huff: () => [0, 0.32].forEach((d, i) => noise(0.22, 0.09, 'bandpass', i ? 700 : 900, i ? 450 : 600, d, 1.2)),
   /** The steel slide: a shine running down it. */
   ting: () => [0, 0.09, 0.18].forEach((d, i) => tone(2093 - i * 260, 2090 - i * 260, 0.3, 0.035, 'sine', d)),

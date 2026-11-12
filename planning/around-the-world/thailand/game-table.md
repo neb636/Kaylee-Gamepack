@@ -71,7 +71,7 @@ Child-sized, on the right side of her room, just past the couch.
 - 🪑 **The table**: A small low table (about 0.6 by 0.8 m, its top at knee height for Kaylee) along the right wall, between the couch and the bathroom door. Pastel wood, round corners, a scalloped edge. On it: the board of the game being played; when nobody plays, a folded board, a die and a few pieces, so it looks like a board-game table from across the room.
 - 🪑 **Two stools**: Hers on the room side (pink, a heart on the seat), the cousin's against the wall (lavender), facing each other across the table. They're the only seats: one cousin at a time.
 - 🎒 **The unicorn bag**: A plush pink bag on the floor by the wall, between the couch and the cousin's stool: a unicorn face with a gold horn, ears, a pastel mane and two straps. An ordinary bag: tap it and it wobbles and jingles, but it never moves, talks or does magic.
-- 🚶 **Still room to walk**: The glass doors, the couch, the way to the bathroom door, the wardrobe and its rug, the mattress, the fan and Mommy all stay where they are, and she can still walk round the fan on both sides.
+- 🚶 **Still room to walk**: The glass doors, the couch, the way to the bathroom door, the wardrobe and its rug, the mattress, the fan and Mom all stay where they are, and she can still walk round the fan on both sides.
 
 ### Where it goes (meters, from layout.ts DIM.gameTable; checked against screenshots, greybox 1)
 
@@ -97,7 +97,7 @@ Child-sized, on the right side of her room, just past the couch.
 
 > **One of each**
 >
-> The cousin at the table is the **real** BB (or Gan, or Ken), moved from their usual spot, never a copy: nobody is in two places. While a game is on, Mommy doesn't pop up to ask about the mall, the mirror button and the party button hide, and Sparkle stays quiet. All of it comes back when she leaves.
+> The cousin at the table is the **real** BB (or Gan, or Ken), moved from their usual spot, never a copy: nobody is in two places. While a game is on, Mom doesn't pop up to ask about the mall, the mirror button and the party button hide, and Sparkle stays quiet. All of it comes back when she leaves.
 
 ### The buttons while playing (no words: pictures, big targets)
 
@@ -303,7 +303,7 @@ The table, stools and unicorn bag in her room; sitting down with BB, Gan or Ken 
 - **The plugin** (`board-games/plugin.ts`, `TablePlugin`, added with `bothPlugins(wardrobe, table, wall)`): seats the cousin with `placeFamily(id, GAME_SEAT)` and `putPhoneDown()`, puts them back with `placeFamily(id, null)` and the new `Member.pickPhoneUp()`; owns the camera while she sits (which turns the Roblox stick off), takes every tap, hides the house's targets (not the bag); phases `picking → awaiting → rolling → moving → special → passing → cousin → finished`; a match token, frame-driven `later`/`until`, so Again, Games, a new cousin and Leave cancel cleanly; `qa()` adds `table` to `__thaiHouseQA()`.
 - **The rules** (`rules/turns.ts`, `rules/unicorn.ts`): pure; a roll returns the new state at once and the steps to show (`roll`, `move`, `rest`, `win`, `pass`). `makeDie(rolls)` plays a link's `rolls=` first, then fair rolls.
 - **The show**: the die (`die.ts`: pink with white dots, tumbles, bounces twice, settles on the number, breathes on her turn, wiggles when tapped off-turn); unicorn pieces (`pieces.ts`: four colors, hop space by space with a counting note, lie down for a 4 with a little puff, dance at the castle, side by side when they share a space); the board (`boards/unicorn.ts`: 25 numbered rainbow stones painted on a canvas texture, the start cloud, a 3D castle at the back that bounces and sparkles); a glowing ring under whoever's turn it is; confetti and the fanfare at the win; the cousin swings an arm to roll.
-- **Over the house** (`TableUI.tsx`): the picker (bottom right on wide screens, along the bottom on tall ones), the two turn faces at the sides, 🎲 and 👋 top right, 🔁 when someone has won. The Hub's `playing` state keeps Mommy's question, the mirror, the party button and Sparkle away.
+- **Over the house** (`TableUI.tsx`): the picker (bottom right on wide screens, along the bottom on tall ones), the two turn faces at the sides, 🎲 and 👋 top right, 🔁 when someone has won. The Hub's `playing` state keeps Mom's question, the mirror, the party button and Sparkle away.
 - **Links** (`sections.ts`): sections `table` and `unicorn`, params `vs`, `game`, `piece`, `me`, `them`, `turn`, `rolls`; the address bar follows each turn.
 - **Tests** (`tests/thailand-board-games.spec.ts`): a 4 rests without skipping a later turn, 1-6 moves, overshoot clamps and one winner, scripted rolls; on the page, five quick taps roll once, Games and Play during the cousin's turn start clean, and leaving mid-roll puts Gan back and her on her feet.
 - **Knobs** (`?feel=1`, “Game table”): roll time, hop time and height, the cousin's wait, the pass pause, the rest, and the table camera's pitch, yaw and fit. **QA**: screens for the table sections and motion scenarios `table-roll`, `table-rest`, `table-castle` in `thailand/qa.mjs`.
@@ -480,7 +480,7 @@ tests/thailand-board-games.spec.ts   rules tests (pure, no page)
 
 - The plugin's `shot()` returns the table camera while seated, which already turns the Roblox stick and the camera drag off (`House.roam()` returns null when a plugin owns the shot).
 - `tap()` takes every touch while seated: its own targets do their thing, everything else is ignored (no walking off by accident). `hides()` hides the house's targets while seated (the couch, the fan, family members other than the seated cousin, the wardrobe), and the seated cousin's tap is the plugin's (a giggle).
-- The Hub's `playing` state (like `dressing`): no Mommy question (`clearTimeout(askTimer)`, `setAsking(false)`), the mirror and party buttons hidden, the Guide quiet except the game's own lines. On leave Mommy may ask again later, as usual.
+- The Hub's `playing` state (like `dressing`): no Mom question (`clearTimeout(askTimer)`, `setAsking(false)`), the mirror and party buttons hidden, the Guide quiet except the game's own lines. On leave Mom may ask again later, as usual.
 - With the wardrobe open, a tap on the table first closes the wardrobe (it returns false for taps outside it), then the table takes it.
 
 ### Seating the cousin

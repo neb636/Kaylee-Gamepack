@@ -12,11 +12,11 @@
 //           lantern of light. Stuck a while: the dots count from further away and the finger draws it for her.
 //   finish  each pink flag adds something, one per loop she draws: the jet ski man rides by with lights (jetski), her
 //           sandcastle glows with candles (sandcastle), the parrotfish and the cuttlefish light up in the waves
-//           (snorkel), Daddy gets up and dances (hideseek). Then a big ring waits round her: one huge circle and the
+//           (snorkel), Dad gets up and dances (hideseek). Then a big ring waits round her: one huge circle and the
 //           dancers light a ring of fire round the whole beach, then fireworks (tap the sky for more).
 // Fire is for grown-ups: the dancers stay behind the rope, her poi are lights.
 //
-// Talk (lines.ts L.samet.finale.fire): Mommy as it opens, then Sparkle's one instruction a round; the gecko dancers (one
+// Talk (lines.ts L.samet.finale.fire): Mom as it opens, then Sparkle's one instruction a round; the gecko dancers (one
 // voice, their mouths move with it) cheer her loops and shapes; each flag's surprise gets its friend's line; after a while
 // with nothing done Sparkle says what to do (spendHint). The screen's TripGuide speaks them and shows the words for Dad. Every number that decides the feel is a knob (?feel=1), with a graph of her spin against theirs.
 import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, CylinderGeometry, Fog, Group, InstancedMesh, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, Object3D, Plane, Quaternion, Raycaster, Scene, SphereGeometry, TorusGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
@@ -175,8 +175,8 @@ const UP = new Vector3(0, 1, 0)
 
 export const FIRE_ANCHORS: AnchorInfo[] = [
   { id: 'kaylee', label: 'You', kind: 'thing' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
   { id: 'dancer:0', label: 'A fire dancer', kind: 'thing' },
   { id: 'dancer:1', label: 'A fire dancer', kind: 'thing' },
   { id: 'drum', label: 'The drum', kind: 'thing' },
@@ -388,7 +388,7 @@ export class FireShow implements World3D {
     this.poiA.copy(this.O)
     this.poiB.copy(this.O)
 
-    // ---- Mommy and Daddy on the sand beside her.
+    // ---- Mom and Dad on the sand beside her.
     const fam = (id: string) => new Member({ ...FAMILY.find((m) => m.id === id)!, spot: null }, bag)
     this.ji = fam('ji')
     this.nick = fam('nick')
@@ -532,7 +532,7 @@ export class FireShow implements World3D {
     if (r === 'twirl') {
       this.loops = 0
       this.setPhase(first ? 'intro' : 'twirl')
-      // Mommy, then Sparkle's one instruction (she waits her turn behind her).
+      // Mom, then Sparkle's one instruction (she waits her turn behind her).
       if (first) this.say(S.look)
       this.say(S.twirl)
     } else if (r === 'shapes') {
@@ -590,7 +590,7 @@ export class FireShow implements World3D {
   private play(dt: number, t: number) {
     switch (this.phase) {
       case 'intro':
-        // Mommy's line, the dancers already spinning; her poi swing by themselves until she touches.
+        // Mom's line, the dancers already spinning; her poi swing by themselves until she touches.
         if (this.phaseT > 2.2 || this.counts.draws > 0) this.setPhase('twirl')
         break
       case 'twirl':
@@ -747,7 +747,7 @@ export class FireShow implements World3D {
   private guideSize = 1
   private guideId: ShapeId | 'ring' = 'circle'
   /** The shape's dots up in the sky above the family's heads, as big as fits between them and the top bar (QA
-   *  2026-11-08: at 1.1 m in front of her they were 55-65 px across and sat on Mommy, Daddy and her). */
+   *  2026-11-08: at 1.1 m in front of her they were 55-65 px across and sat on Mom, Dad and her). */
   private fitGuide() {
     this.rig.camera.updateMatrixWorld()
     // The lowest the shape may come: above everyone's heads (her horn too).
@@ -935,7 +935,7 @@ export class FireShow implements World3D {
       at = this.L(-5.5, 1.2)
       root.position.copy(at).setY(0)
     } else {
-      // Daddy gets up and dances.
+      // Dad gets up and dances.
       const p = this.L(SEATS.nick.u, SEATS.nick.v)
       this.nick.place(p.x, p.y, p.z, SEAWARD * DEG, 'stand')
       this.dancing = true
@@ -1215,7 +1215,7 @@ export class FireShow implements World3D {
       r.armR.rotation.set(-0.25 - clamp(la.x, 0, 2) * 0.25, 0, up(la.y))
       r.armL.rotation.set(-0.25 - clamp(-lb.x, 0, 2) * 0.25, 0, -up(lb.y))
     }
-    // Mommy and Daddy watch the dancers (and her ribbons); Daddy dances once his flag's surprise comes.
+    // Mom and Dad watch the dancers (and her ribbons); Dad dances once his flag's surprise comes.
     this.ji.lookAt(a.x, a.y, a.z)
     this.nick.lookAt(a.x, a.y, a.z)
     this.ji.update(dt, t)
@@ -1335,7 +1335,7 @@ export class FireShow implements World3D {
 
   pointerDown(x: number, y: number, id?: string) {
     this.lastTouch = this.time
-    // On the open sky or the sand she draws at once; on a thing (a dancer, Mommy) only once she moves.
+    // On the open sky or the sand she draws at once; on a thing (a dancer, Mom) only once she moves.
     this.finger = { x, y, id, moved: false, drawing: !id, downX: x, downY: y }
     if (!id) this.startDraw()
   }

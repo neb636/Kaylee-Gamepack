@@ -8,7 +8,7 @@ import { merge, P, solid } from '../../../../../../engine3d/geo'
 import { PAL } from '../../../../../../engine3d/toon'
 import { boardSpot, matX, moonSpot, podSpots, rocketSpot, speakerSpot, wallSize, BEZEL_R, KAYLEE_Z } from './layout'
 
-/** The springy mat's top (Kaylee and Daddy stand on it). */
+/** The springy mat's top (Kaylee and Dad stand on it). */
 export const MAT_Y = 0.12
 const NIGHT = '#3B3466'
 const NIGHT_EDGE = '#B9A6F5'

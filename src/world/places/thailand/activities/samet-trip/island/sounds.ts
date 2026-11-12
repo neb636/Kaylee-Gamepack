@@ -1,7 +1,7 @@
 // The open island's sounds (island.ts, puppy.ts): her hooves on the sand and the decks, her paddling, the beach's
 // waves all round and the insects and birds in the forest on the roads inland, the sun bear's songthaew putt-putting
 // by with its friendly horn, the boats' toots, her jet ski's engine, the palms and trees rustling when she pokes them,
-// the coconut bonking Daddy's head, the deck chairs clacking, the crabs' claws, the terns, the beach puppy's woofs,
+// the coconut bonking Dad's head, the deck chairs clacking, the crabs' claws, the terns, the beach puppy's woofs,
 // the sand slide's shhh, and the fire dancers' poi whooming round after dark. Recorded clips (../sfx, ElevenLabs)
 // with the synthesized ones (the world kit's tone/noise) as their fallbacks; the shared ones (splash, boing, thump,
 // pop, fwip, the shutter) come from ../sfx/common. The tunes and bells stay synthesized (the taxi's lap tune, the
@@ -26,7 +26,7 @@ const synth = {
   flute: () => [0, 0.25, 0.5, 0.75, 1.05].forEach((d, i) => tone([784, 880, 988, 1175, 988][i], [790, 885, 992, 1180, 990][i], 0.3, 0.05, 'sine', d)),
   ding: () => [0, 0.3].forEach((d) => tone(1568, 1566, 0.6, 0.06, 'sine', d)),
   jingle: () => [0, 0.06, 0.12, 0.18, 0.26].forEach((d, i) => tone(2000 + i * 260, 2100 + i * 260, 0.12, 0.03, 'sine', d)),
-  /** A coconut on Daddy's head; the jet ski bumping the beach. */
+  /** A coconut on Dad's head; the jet ski bumping the beach. */
   bonk: () => {
     tone(300, 150, 0.18, 0.1)
     tone(1200, 1190, 0.4, 0.03, 'sine', 0.03)
@@ -60,7 +60,7 @@ const synth = {
     tone(1046, 1568, 0.18, 0.05, 'triangle')
     tone(1568, 1046, 0.18, 0.05, 'triangle', 0.2)
   },
-  /** The driftwood tree once every flag's up (the sunset), and Daddy popping out from behind it. */
+  /** The driftwood tree once every flag's up (the sunset), and Dad popping out from behind it. */
   treeSunset: () => tone(660, 990, 0.3, 0.05, 'triangle'),
   treePeek: () => tone(700, 1200, 0.2, 0.06, 'triangle'),
   /** One woof from the beach puppy: a quick falling square tone with a puff of breath (a small dog: high). */

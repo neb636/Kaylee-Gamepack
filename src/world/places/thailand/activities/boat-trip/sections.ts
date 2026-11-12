@@ -1,13 +1,13 @@
 // Captain Kaylee's boat trip (plan: planning/around-the-world/thailand/boat-trip.md), as deep-linkable sections:
 // #/world/thailand/boat-trip/<section>?packed=<what's in the suitcase>&ribbons=...&stops=...&photos=...&found=...
-// The trip there (step 4): Mommy asks if she's ready, packing, the goodbye and Aunty Sri's van, the airport and the
+// The trip there (step 4): Mom asks if she's ready, packing, the goodbye and Aunty Sri's van, the airport and the
 // window seat; then Phang Nga Bay (step 3): the pier and its ribbons, open water, the village, the cave and the hong, the
 // boat race through the rainbow gate (its own lagoon: three laps, then the podium and the trophy), the Nail Island's
 // photo and the sunset ride back; Baan Chang Cafe in Krabi (thailand/baan-chang.md, greybox: the songthaew to the
 // entrance, the photo at the bamboo sign, her chocolate milk at the cafe, down the boardwalk, then the elephants' yard:
 // feeding, favorites, Lamyai and the splash; she picks it or the pier at Krabi's signpost, in any order, once
 // chang/open.ts opens it, and until then only its links reach it); then home (step 5): the flight home,
-// Aunty Sri's van at Agong's door, the photo she picks for Agong's wall, and the stamp. `replay=1` plays it as a trip she has done before (Mommy's yes
+// Aunty Sri's van at Agong's door, the photo she picks for Agong's wall, and the stamp. `replay=1` plays it as a trip she has done before (Mom's yes
 // offers 🧳 or 🚤, and the flight is shorter). Loaded at startup: keep three.js out of this file.
 import { defineSections } from '../../../../kit/sections'
 import { DEFAULT_PACKED, ITEMS } from '../../trip/packing'
@@ -23,11 +23,11 @@ const BOAT_SECTIONS = defineSections('thailand', 'boat-trip', {
     fed: { default: '0', doc: 'Baan Chang: how many foods the elephants have had already (their bellies are that round)' },
     straw: { default: 'pink', values: ['pink', 'purple', 'yellow'], doc: 'Baan Chang: the straw she put in her chocolate milk at the cafe (it rides along to the yard, on the rail post)' },
     lap: { default: '1', values: ['1', '2', '3'], doc: 'the boat race: the lap it starts on (3 = straight to the last lap and the finish)' },
-    quick: { default: '', values: ['', '1'], doc: "1 = from the Thailand map: no plane at all, the trip opens at Krabi airport (Daddy asks 🐘 or 🚤)" },
-    replay: { default: '', doc: "1 = she has done the whole trip before (as after her first trip): yes to Mommy offers 🧳 the whole trip or 🚤 straight to the pier, and the flight is shorter" },
+    quick: { default: '', values: ['', '1'], doc: "1 = from the Thailand map: no plane at all, the trip opens at Krabi airport (Dad asks 🐘 or 🚤)" },
+    replay: { default: '', doc: "1 = she has done the whole trip before (as after her first trip): yes to Mom offers 🧳 the whole trip or 🚤 straight to the pier, and the flight is shorter" },
   },
   sections: [
-    { id: 'invite', name: 'Mommy asks: ready for a trip?', params: ['replay'], group: 'Getting there' },
+    { id: 'invite', name: 'Mom asks: ready for a trip?', params: ['replay'], group: 'Getting there' },
     { id: 'pack', name: 'Pack the suitcase', params: ['packed', 'replay'], group: 'Getting there' },
     { id: 'goodbye', name: "Goodbye at Agong's house, into Aunty Sri's van", params: ['packed', 'replay'], group: 'Getting there' },
     { id: 'airport', name: 'The x-ray belt', params: ['packed', 'replay'], group: 'Getting there' },
@@ -36,7 +36,7 @@ const BOAT_SECTIONS = defineSections('thailand', 'boat-trip', {
     { id: 'land', name: "Landing in Krabi (and the signpost: 🐘 or 🚤)", params: ['packed', 'replay', 'been', 'quick'], group: 'Getting there', links: [{ label: 'Landing in Krabi (and the signpost: 🐘 or 🚤)', also: [{ label: "from the Thailand map: straight to Krabi airport, no plane", params: { quick: '1' } }] }] },
     { id: 'chang', name: 'Baan Chang: the songthaew to the elephant cafe', params: ['packed', 'been'], group: 'Baan Chang' },
     { id: 'sign', name: 'Baan Chang: the bamboo sign wall and a photo', params: ['packed', 'been', 'photos', 'found'], group: 'Baan Chang' },
-    { id: 'drinks', name: 'Baan Chang: the cafe, her chocolate milk (and an iced coffee for Daddy)', params: ['packed', 'straw', 'been'], group: 'Baan Chang' },
+    { id: 'drinks', name: 'Baan Chang: the cafe, her chocolate milk (and an iced coffee for Dad)', params: ['packed', 'straw', 'been'], group: 'Baan Chang' },
     { id: 'boardwalk', name: 'Baan Chang: down the boardwalk through the palms', params: ['packed', 'straw', 'been'], group: 'Baan Chang' },
     { id: 'feed', name: 'Baan Chang: bananas and sugarcane for Mali and Khanom', params: ['packed', 'straw', 'fed', 'been'], group: 'Baan Chang' },
     { id: 'favorites', name: "Baan Chang: everyone's favorite food", params: ['packed', 'straw', 'fed', 'been'], group: 'Baan Chang' },

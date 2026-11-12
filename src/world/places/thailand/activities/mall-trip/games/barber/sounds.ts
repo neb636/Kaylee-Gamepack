@@ -1,4 +1,4 @@
-// The barber's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet: Daddy
+// The barber's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet: Dad
 // laughs and goes "ooh", the kids giggle.
 import { noise, tone } from '../../../../../../kit/sfx'
 import { sfx } from '../../../../sfx'
@@ -32,7 +32,7 @@ export const barberSfx = {
   hiss: () => noise(0.5, 0.05, 'highpass', 1800, 900, 0, 0.7),
   /** The chair spinning round. */
   spin: () => [0, 0.12, 0.24, 0.36].forEach((d, i) => tone(500 + i * 120, 600 + i * 120, 0.08, 0.04, 'triangle', d)),
-  /** Daddy sees himself: ooh! */
+  /** Dad sees himself: ooh! */
   ooh: () => tone(300, 520, 0.5, 0.09, 'triangle'),
   /** The comb jar's bubbles. */
   blub: () => [0, 0.08, 0.17].forEach((d) => tone(380 + Math.random() * 300, 700 + Math.random() * 300, 0.07, 0.05, 'sine', d)),

@@ -3,7 +3,7 @@ import { motion } from 'motion/react'
 import { BLUE, PINK } from './layout'
 
 /** What the board shows: her score in big pink numbers and a star for each round done; in the race, hers and
- *  Daddy's side by side (pink and blue). Sizes are in em: the wall sets the font size to the board's height. */
+ *  Dad's side by side (pink and blue). Sizes are in em: the wall sets the font size to the board's height. */
 export function ScoreBoard({ score, daddy, stars, race }: { score: number; daddy: number; stars: number; race: boolean }) {
   const glow = (c: string) => `0 0 0.12em ${c}, 0 0 0.3em ${c}`
   return (

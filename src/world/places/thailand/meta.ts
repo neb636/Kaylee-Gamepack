@@ -6,7 +6,7 @@ import { MALL_FACTS, NAN_FACTS, SAMET_FACTS, TRIP_FACTS } from './trip/facts'
 // Thailand is Kaylee's family's country, built in 3D (plan: planning/around-the-world/thailand.md). She lands on the
 // Thailand map (thailand/thailand-map.md) and taps Agong's shophouse in Bangkok, where she walks
 // around, or Krabi or Nan; the places the family loves become activities, one per PR. The first is
-// the boat trip (thailand/boat-trip.md), the whole loop from Mommy's question to her photo on Agong's wall: it earns
+// the boat trip (thailand/boat-trip.md), the whole loop from Mom's question to her photo on Agong's wall: it earns
 // the fiddler crab sticker, and its tap-to-hear facts are on the stamp screen and the passport. The second is the mall
 // day at ICONSIAM (thailand/mall-trip.md): it earns the pizza slice sticker. The third is the Nan road trip
 // (thailand/nan-trip.md), the pink mushroom sticker. The fourth is the Koh Samet island trip (thailand/samet-trip.md),

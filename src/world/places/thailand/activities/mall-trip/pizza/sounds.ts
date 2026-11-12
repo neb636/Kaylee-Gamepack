@@ -32,7 +32,7 @@ export const pizzaSfx = {
     noise(0.4, 0.16, 'bandpass', 1600, 500, 0, 0.8)
     tone(420, 180, 0.25, 0.08, 'sawtooth')
   },
-  /** Daddy hamming it up: a big wobbly "ho ho". */
+  /** Dad hamming it up: a big wobbly "ho ho". */
   hoho: () => [0, 0.22, 0.44].forEach((d, i) => tone(200 - i * 15, 150 - i * 10, 0.18, 0.09, 'triangle', d)),
   water: () => noise(0.5, 0.05, 'bandpass', 2400, 1600, 0, 0.6),
   napkins: () => [0, 0.05, 0.1, 0.16, 0.22].forEach((d) => noise(0.07, 0.05, 'highpass', 3000, 4200, d, 0.7)),

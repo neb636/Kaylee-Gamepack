@@ -1,7 +1,7 @@
 // The yard's greybox props beyond the basket:
 // - WantBubble: a picture bubble over an elephant's head (`favorites`): the food it wants, and up to three pips that
 //   fill in gold as she feeds it ("One! Two! Three!"). No words, so she can read it. It always faces the camera.
-// - Milk: her chocolate milk from the cafe (`drinks`, drink.ts), with the straw she picked. Mommy holds it while she
+// - Milk: her chocolate milk from the cafe (`drinks`, drink.ts), with the straw she picked. Mom holds it while she
 //   feeds (no cup on the rail); it's on the rail post only in `lamyai`, and goes down a little with each of Khanom's
 //   sneaky sips.
 // - Splash: the water the elephants spray up over the family (`splash`), and the rainbow that arcs over the yard.

@@ -1,19 +1,19 @@
 // The start of a trip, in Agong's own house (activities/hub/house.ts, mounted with this plugin, not copied):
 //
-// - invite: in Kaylee's room, Mommy asks if she's ready to go on a trip (the screen shows the 👍 / ✋ card, Ask.tsx).
+// - invite: in Kaylee's room, Mom asks if she's ready to go on a trip (the screen shows the 👍 / ✋ card, Ask.tsx).
 //   Yes: the suitcase hops out into the room and springs open, and the camera drops to it.
 // - pack (the toy): tap anything in her room and it hops into the suitcase in a big arc (or drag it there); tap
 //   something inside and it hops back out. Nothing is wrong: the pillow, the fan, a mango, even Gan asleep on the
 //   mattress ("Five more minutes..."). So she always knows what to do: the things she can pack hop now and then, a
-//   finger points at one (then, once a few are in, at the suitcase), the screen counts what's in it, and Mommy says when
-//   to close it. After a little while Mommy's one hint makes the sun things glint. To close it, tap the suitcase (or
+//   finger points at one (then, once a few are in, at the suitcase), the screen counts what's in it, and Mom says when
+//   to close it. After a little while Mom's one hint makes the sun things glint. To close it, tap the suitcase (or
 //   the screen's ✅ button): once it holds a few things Kaylee hops on top and sits on it (squash, click); past five
-//   things it's too full and takes three hops. Mommy tucks in sunscreen whatever she packed. Click! Her sun hat drops
-//   onto her head (or Mommy's spare one, if she packed none), her sunglasses slide on, her floaties pop on: she wears
+//   things it's too full and takes three hops. Mom tucks in sunscreen whatever she packed. Click! Her sun hat drops
+//   onto her head (or Mom's spare one, if she packed none), her sunglasses slide on, her floaties pop on: she wears
 //   them for the rest of the trip. Then she walks down the stairs with the suitcase bonking on every step. A trip to
-//   the mountains (`pack.hint: 'cool'`, the Nan road trip) puts her raincoat, rain boots and Mommy's umbrella in the
-//   room too: Mommy's hint makes those glint, she tucks in the umbrella, and there's no spare sun hat.
-// - goodbye: just Mommy, Daddy and Kaylee wait on the sidewalk by the open shutter (Dad, 2026-10-20: the rest of the
+//   the mountains (`pack.hint: 'cool'`, the Nan road trip) puts her raincoat, rain boots and Mom's umbrella in the
+//   room too: Mom's hint makes those glint, she tucks in the umbrella, and there's no spare sun hat.
+// - goodbye: just Mom, Dad and Kaylee wait on the sidewalk by the open shutter (Dad, 2026-10-20: the rest of the
 //   family stay in). Aunty Sri's white electric van hums up quickly; tap it (or wait a moment), the side door slides
 //   open, they hop in, and it glides off.
 // - home: the flight home is a 4-second picture (their plane over a pink sunset, home-flight.ts; a tap skips it), then
@@ -24,7 +24,7 @@
 //   their phones down for the first time: "Whoa! Cool!" Then the screen gives her the stamp.
 //
 // What it does comes from the trip (trip/types.ts, TripDef): packing or not, who waits at the shutter, the vehicle at
-// the curb (Aunty Sri's van, or Mommy's grey Veloz: she drives, Daddy beside her, Kaylee in the back), the section
+// the curb (Aunty Sri's van, or Mom's grey Veloz: she drives, Dad beside her, Kaylee in the back), the section
 // after the goodbye, how they come home (the flight home first, or straight up to the door by car), what she gives
 // Agong (a photo she picks, or a take-away box: he opens it, the cousins drop their phones, "Pizza?!", and a photo of
 // the day goes on the wall), the trip's frame on the wall and the lines. The mall day (activities/mall-trip/) has no
@@ -66,11 +66,11 @@ export const TRIP_HOUSE_ANCHORS: AnchorInfo[] = [
   { id: 'trip:suitcase', label: 'Suitcase', kind: 'thing' },
   ...ITEMS.filter((i) => i.id !== 'gan').map((i) => ({ id: `trip:item:${i.id}`, label: i.label, kind: 'thing' as const })),
   { id: 'trip:van', label: "Aunty Sri's van", kind: 'thing' },
-  { id: 'trip:car', label: "Mommy's car", kind: 'thing' },
+  { id: 'trip:car', label: "Mom's car", kind: 'thing' },
   { id: 'trip:box', label: "Agong's pizza box", kind: 'thing' },
 ]
 
-/** What the house needs from the car at the curb: seats (the driver's, and Kaylee's, Mommy's and Daddy's when
+/** What the house needs from the car at the curb: seats (the driver's, and Kaylee's, Mom's and Dad's when
  *  someone else drives), the doors they get in by, where its tap target is (a world offset from it). */
 interface Car {
   kind: 'van' | 'veloz'
@@ -101,7 +101,7 @@ function vanCar(v: Van): Car {
   }
 }
 function velozCar(v: Veloz): Car {
-  // (Nobody else drives Mommy's car, so her own seat is the driver's.)
+  // (Nobody else drives Mom's car, so her own seat is the driver's.)
   return { kind: 'veloz', root: v.root, body: v.body, wheels: v.wheels, seats: { driver: v.seats.driver, kaylee: v.seats.kaylee, ji: v.seats.driver, nick: v.seats.nick }, doors: v.setDoors, trunk: v.trunk, tapAt: new Vector3(-0.2, 1.2, 0.2) }
 }
 
@@ -133,7 +133,7 @@ const ROOM = {
     umbrella: [-0.25, 0, -17.75],
   } as Record<string, [number, number, number]>,
 }
-/** Where Kaylee stands while Mommy asks (between her and the suitcase by the wall). */
+/** Where Kaylee stands while Mom asks (between her and the suitcase by the wall). */
 const INVITE = { x: 0.9, z: -19.5 }
 /** The sidewalk at the goodbye (street floor, +z toward the road). */
 const STREET = {
@@ -152,7 +152,7 @@ const STREET = {
  *  table, below his wall), and where everyone gathers round to look at it. */
 const HOME = {
   insideZ: -1.0,
-  // Out of the van: Mommy and Daddy either side, so nobody stands in front of Agong.
+  // Out of the van: Mom and Dad either side, so nobody stands in front of Agong.
   out: { kaylee: { x: 0.25, z: 1.85, face: 0 }, ji: { x: -0.85, z: 1.55, face: 15 }, nick: { x: 2.75, z: 1.6, face: -20 } } as Record<string, { x: number; z: number; face: number }>,
   agong: { x: -1.85, z: -0.8, face: -90 },
   kaylee: { x: -1.2, z: -0.5 },
@@ -184,7 +184,7 @@ interface Thing {
   tween: { from: Vector3; to: Vector3; t: number; dur: number; arc: number; done?: () => void } | null
   /** 0 = just landed (squash), 1 = settled. */
   land: number
-  /** Seconds of glint left (Mommy's hint). */
+  /** Seconds of glint left (Mom's hint). */
   glint: number
   dragged: boolean
 }
@@ -227,7 +227,7 @@ export class TripHouse implements HousePlugin {
   private carTotal = 0
   private told = new Set<string>()
   private counts = { packs: 0, unpacks: 0, drags: 0, hugs: 0 }
-  /** Mommy's yawn (the pillow): her arms stretch up. */
+  /** Mom's yawn (the pillow): her arms stretch up. */
   private yawn = 1
   /** Coming home: the flight picture, the photo she picked (in its frame), and the one already on the wall. */
   private flight: HomeFlight | null = null
@@ -287,7 +287,7 @@ export class TripHouse implements HousePlugin {
   private get weather() {
     return this.trip.pack?.hint ?? 'sun'
   }
-  /** Aunty Sri drives the van (she waits at the wheel); in Mommy's car, Mommy does. */
+  /** Aunty Sri drives the van (she waits at the wheel); in Mom's car, Mom does. */
   private get sriDrives() {
     return this.car.kind === 'van'
   }
@@ -354,7 +354,7 @@ export class TripHouse implements HousePlugin {
     this.follow = false
     if (leg === 'goodbye') return this.setUpGoodbye()
     if (leg === 'home') return this.setUpHome()
-    // Her room: Mommy beside the suitcase spot, Gan asleep on the far side of the mattress.
+    // Her room: Mom beside the suitcase spot, Gan asleep on the far side of the mattress.
     h.placeFamily('ji', ROOM.ji)
     h.placeFamily('gan', ROOM.gan)
     this.ganPacked = false
@@ -367,7 +367,7 @@ export class TripHouse implements HousePlugin {
       if (!th.packed) th.g.position.copy(th.home)
     }
     if (leg === 'invite') {
-      // Kaylee by Mommy, who asks (the screen's card); her suitcase waits shut by the wall (a day out needs none: the
+      // Kaylee by Mom, who asks (the screen's card); her suitcase waits shut by the wall (a day out needs none: the
       // house's own little one stays where it is).
       h.teleport('upstairs', INVITE.x, INVITE.z, 0)
       h.kaylee.faceToward(ROOM.ji.x, ROOM.ji.z)
@@ -513,7 +513,7 @@ export class TripHouse implements HousePlugin {
   tap(x: number, y: number, id?: string) {
     const ph = this.phase
     if (ph === 'invite') {
-      // Mommy's card is the thing to answer, so Kaylee stays put; but whatever she taps still answers: Mommy waves,
+      // Mom's card is the thing to answer, so Kaylee stays put; but whatever she taps still answers: Mom waves,
       // Kaylee hops, someone else hops, a thing wobbles with its sound.
       if (id === 'family:ji') this.house.family.get('ji')?.react('wave')
       else if (id === 'kaylee' || id === 'family:kaylee') this.house.kaylee.react('hop')
@@ -676,7 +676,7 @@ export class TripHouse implements HousePlugin {
 
   private changed() {
     this.events.packed([...this.order])
-    // Mommy's one hint, once a couple of things are in; at three, how to close it.
+    // Mom's one hint, once a couple of things are in; at three, how to close it.
     if (!this.hinted && this.count >= 2) this.hint()
 
   }
@@ -804,8 +804,8 @@ export class TripHouse implements HousePlugin {
     if (left <= 0) this.close()
   }
 
-  /** Click! Mommy tucks in what the trip needs (sunscreen, or the umbrella for the mountains), then it's shut, and Kaylee puts on her hat, sunglasses and
-   *  floaties (or Mommy pops her spare sun hat on her head). */
+  /** Click! Mom tucks in what the trip needs (sunscreen, or the umbrella for the mountains), then it's shut, and Kaylee puts on her hat, sunglasses and
+   *  floaties (or Mom pops her spare sun hat on her head). */
   private close() {
     const before = [...this.order]
     const after = mommyTucksIn(before.filter((x) => x !== 'gan'), this.weather)
@@ -819,8 +819,8 @@ export class TripHouse implements HousePlugin {
       if (ji) th.g.position.copy(ji.root.position).setY(U + 1.0)
       this.flyTo(th, this.slotWorld(this.order.length - 1, this.order.length), undefined, 0.4)
     }
-    // Sun smarts: a shady hat of her own (the cap) counts, so Mommy's spare stays in her bag (Avatar's costume layer
-    // leaves it off) and Mommy says it's a good one.
+    // Sun smarts: a shady hat of her own (the cap) counts, so Mom's spare stays in her bag (Avatar's costume layer
+    // leaves it off) and Mom says it's a good one.
     const shady = !!itemById(this.house.kaylee.myLook.on.head ?? '')?.shade
     const sunny = !this.order.includes('sunhat') && this.weather === 'sun'
     const spare = sunny && !shady
@@ -880,7 +880,7 @@ export class TripHouse implements HousePlugin {
   private setUpGoodbye() {
     const h = this.house
     this.setPhase('goodbye')
-    // Aunty Sri's van hums up; Mommy's car is already parked at the curb.
+    // Aunty Sri's van hums up; Mom's car is already parked at the curb.
     this.carT = this.sriDrives ? -1 : 1
     this.carX = this.sriDrives ? -18 : STREET.carStop
     this.carWait = 0
@@ -967,8 +967,8 @@ export class TripHouse implements HousePlugin {
     setTimeout(() => this.hugging?.id === id && (this.hugging = null), 4000)
   }
 
-  /** The doors open, Daddy loads the suitcase, everyone hops in, the doors shut and off they go. In Mommy's car she
-   *  hops round the front to the driver's door (on the right, the road side); Daddy gets in beside her and Kaylee in
+  /** The doors open, Dad loads the suitcase, everyone hops in, the doors shut and off they go. In Mom's car she
+   *  hops round the front to the driver's door (on the right, the road side); Dad gets in beside her and Kaylee in
    *  the back. */
   private board() {
     if (this.phase !== 'goodbye') return
@@ -1162,7 +1162,7 @@ export class TripHouse implements HousePlugin {
       setTimeout(() => {
         if (this.phase !== 'arrive') return
         const agong = h.family.get('agong')
-        // Daddy's new hairdo (the mall's barber): Agong laughs first.
+        // Dad's new hairdo (the mall's barber): Agong laughs first.
         const laugh = !!this.trip.lines.hair && this.daddyHair
         if (laugh) {
           agong?.react('hop')
@@ -1216,7 +1216,7 @@ export class TripHouse implements HousePlugin {
     return WALL_SLOTS[this.trip.id] ?? WALL_SLOTS['boat-trip']
   }
 
-  /** Daddy is wearing the hairdo she gave him at the mall's barber (Agong laughs at it). */
+  /** Dad is wearing the hairdo she gave him at the mall's barber (Agong laughs at it). */
   daddyHair = false
   /** The photo of the day that goes on the wall after the gift (a box trip; a data URL). */
   private photoSrc: string | null = null
@@ -1575,16 +1575,16 @@ export class TripHouse implements HousePlugin {
     g.lid.rotation.x = -2.0 * g.open
   }
 
-  // ---------------------------------------------------------------- Mommy's yawn
+  // ---------------------------------------------------------------- Mom's yawn
 
-  /** The pillow makes Mommy sleepy: a big yawn and a stretch. */
+  /** The pillow makes Mom sleepy: a big yawn and a stretch. */
   private mommyYawns() {
     this.yawn = 0
     this.events.say(L.trip.pack.pillow)
   }
 
   private updateToys(dt: number) {
-    // Mommy's yawn: both arms up in a big stretch, her head back.
+    // Mom's yawn: both arms up in a big stretch, her head back.
     if (this.yawn < 1) {
       this.yawn = Math.min(1, this.yawn + dt / 1.6)
       const ji = this.house.family.get('ji')
@@ -1619,7 +1619,7 @@ export class TripHouse implements HousePlugin {
     const fan = this.things.get('fan')
     const blades = fan?.g.getObjectByName('blades')
     if (blades) blades.rotation.z -= dt * (fan!.packed ? 30 : 4)
-    // Mommy's hint after a while with nothing packed.
+    // Mom's hint after a while with nothing packed.
     if (this.phase === 'pack' && !this.hinted && this.phaseT > 9) this.hint()
     // Once a few things are in and she's stopped packing for a while: how to close it (once).
     if (this.phase === 'pack' && this.count >= 3 && this.t - this.lastTouch > 6 && !this.told.has('close')) {
@@ -1715,7 +1715,7 @@ export class TripHouse implements HousePlugin {
   private updateVan(dt: number) {
     const van = this.car
     if (this.phase === 'goodbye') {
-      // It hums up quickly, beeps, and waits a moment; then everyone gets in anyway. (Mommy's car is parked already.)
+      // It hums up quickly, beeps, and waits a moment; then everyone gets in anyway. (Mom's car is parked already.)
       if (this.carT < 0 && this.phaseT > (this.quick ? 1.2 : 2.0)) {
         this.carT = 0
         sfx.drive()
@@ -1735,7 +1735,7 @@ export class TripHouse implements HousePlugin {
         this.carWait += dt
         this.carTotal += dt
         const crowd = this.trip.goodbye === 'family'
-        // Mommy's car: once she has stopped hugging for a bit, Daddy says hop in.
+        // Mom's car: once she has stopped hugging for a bit, Dad says hop in.
         if (!this.sriDrives && !this.told.has('ready') && this.carWait > 6 && !this.hugging) {
           this.told.add('ready')
           this.events.say(this.trip.lines.ready)
@@ -1762,7 +1762,7 @@ export class TripHouse implements HousePlugin {
     let at: Vector3 | null = null
     if (this.phase === 'pack') {
       if (this.count < 3 && idle > 2.5) {
-        // A sun thing once Mommy has hinted, else whatever is nearest the suitcase.
+        // A sun thing once Mom has hinted, else whatever is nearest the suitcase.
         const left = [...this.things.values()].filter((th) => !th.packed && !th.tween)
         const sun = this.hinted ? left.filter((th) => ITEMS.find((i) => i.id === th.id)?.[this.weather === 'cool' ? 'cool' : 'sun']) : []
         const s = this.suitcase.root.position
@@ -1801,7 +1801,7 @@ export class TripHouse implements HousePlugin {
     const ph = this.phase
     const tall = this.house.rig.camera.aspect < 0.9
     if (ph === 'invite') {
-      // Kaylee and Mommy up top, the card with the two buttons below them (on a short phone screen the card is most of
+      // Kaylee and Mom up top, the card with the two buttons below them (on a short phone screen the card is most of
       // it, so the camera looks lower and they sit higher).
       const short = this.house.size.h < 500
       return { center: new Vector3(0.65, U + (short ? -0.05 : 0.35), -19.7), half: tall ? new Vector3(1.3, 1.6, 0.8) : new Vector3(1.6, short ? 1.65 : 1.25, 0.8), yaw: 14, pitch: 14, minDist: 2.5 }

@@ -12,7 +12,7 @@
 // one's piece. Only one tap rolls: the phase leaves `awaiting` in the same call.
 //
 // While she sits here the table owns the input (its camera, which turns the Roblox stick off; every tap), the house's
-// tap targets hide, and the Hub keeps Mommy's question, the mirror and the party button away.
+// tap targets hide, and the Hub keeps Mom's question, the mirror and the party button away.
 import { Group, Vector3, type Object3D } from 'three'
 import type { Shot } from '../../../../../engine3d/camera'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'

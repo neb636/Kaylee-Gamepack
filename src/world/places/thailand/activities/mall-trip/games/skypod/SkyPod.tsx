@@ -100,7 +100,7 @@ export function SkyPod({ round, socks, onRound, onSticker, onPlay }: Props) {
           </>
         )}
       />
-      {/* "+1" floating up from each light she (or Daddy) gets. */}
+      {/* "+1" floating up from each light she (or Dad) gets. */}
       <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 30 }}>
         <AnimatePresence>
           {pluses.map((p) => (

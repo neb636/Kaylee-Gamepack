@@ -1,7 +1,7 @@
 // Home from the trip: her photos fan out at the bottom of the screen like a hand of cards, and she picks the one for
 // Agong's wall. The picked one lifts up and flies off into her hands (the house shows it there, in a pink frame); the
 // others slide away. Up to six: the places first (the village, the hong, the race, the Nail Island, Baan Chang's splash
-// and its sign), then her newest pose photos, Mommy's selfies last. Nothing to read. (The Nan road trip fans out its
+// and its sign), then her newest pose photos, Mom's selfies last. Nothing to read. (The Nan road trip fans out its
 // own: the places she went, in the order she did them.)
 import { AnimatePresence, motion } from 'motion/react'
 import { useMemo, useState } from 'react'

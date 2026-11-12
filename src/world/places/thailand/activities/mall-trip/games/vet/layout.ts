@@ -4,7 +4,7 @@
 // Seen straight on (the camera looks toward -z), left to right:
 //
 //   back wall:   [x-ray box]                [table]      [ waiting room window: healed patients wag ]
-//   floor:   parrot  Daddy   Kaylee      patient on the       cabinet (treat jar, cat carrier)
+//   floor:   parrot  Dad   Kaylee      patient on the       cabinet (treat jar, cat carrier)
 //                            (scrubs)       exam table            scale
 //   front:              ═══════ the tool tray along the bottom ═══════
 import type { PatientId } from '../../sections'
@@ -17,13 +17,13 @@ export const TABLE = { x: 0, z: 0, top: 0.5, w: 1.3, d: 0.75 }
 export const PATIENT_AT: V3 = [0, TABLE.top, 0.02]
 export const KAYLEE_AT = { x: -0.85, z: 0.5, face: 55 }
 export const DADDY_AT = { x: -1.5, z: -1.05, face: 35 }
-/** On a tall screen Daddy stands closer, behind her. */
+/** On a tall screen Dad stands closer, behind her. */
 export const DADDY_TALL = { x: -1.2, z: -0.9, face: 30 }
 /** The waiting room behind the window in the back wall: healed patients sit on its bench, smaller (farther away). */
 export const WINDOW = { x0: 0.5, x1: 1.85, y0: 1.12, y1: 2.0 }
 export const BENCH = { z: -2.0, y: 1.12, spots: [0.8, 1.18, 1.56], scale: 0.5 }
 export const XRAY = { x: -0.72, y: 1.66, w: 0.84, h: 0.6 }
-/** The parrot swings on a hoop hanging from the ceiling, over Daddy's shoulder. */
+/** The parrot swings on a hoop hanging from the ceiling, over Dad's shoulder. */
 export const PARROT = { x: -1.72, z: -1.15, perch: 1.98 }
 export const CABINET = { x0: 0.72, x1: 1.78, z: -1.2, d: 0.5, top: 0.72 }
 export const JAR: V3 = [0.95, CABINET.top, -1.12]

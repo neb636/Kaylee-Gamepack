@@ -36,9 +36,9 @@ export const raceSfx = {
     noise(0.35 * big, 0.1 * big, 'bandpass', 1800, 900, 0, 0.9)
     for (let i = 0; i < 4 + big * 3; i++) tone(500 + Math.random() * 500, 200, 0.06, 0.04, 'sine', 0.05 + i * 0.06)
   },
-  /** Daddy upside down in the balls: a muffled "mmf-mmf". */
+  /** Dad upside down in the balls: a muffled "mmf-mmf". */
   mmf: () => [0, 0.2].forEach((d) => tone(150, 120, 0.16, 0.09, 'sawtooth', d)),
-  /** Daddy pops out: bloop! */
+  /** Dad pops out: bloop! */
   bloop: () => tone(260, 900, 0.16, 0.1, 'sine'),
   /** The winner's ribbon. */
   ribbon: () => [0, 0.09, 0.18, 0.3].forEach((d, i) => tone(784 * [1, 1.26, 1.5, 2][i], 784 * [1, 1.26, 1.5, 2][i], 0.24, 0.06, 'triangle', d)),

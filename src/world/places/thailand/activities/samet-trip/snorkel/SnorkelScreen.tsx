@@ -1,9 +1,9 @@
 // Snorkeling at Ko Kudi, on screen (snorkel.ts is the world): the reef with its tap targets, the waterline drawn where
-// the two views meet, the pressing finger after a while with nothing touched, Mommy's waterproof camera (📷) once the
+// the two views meet, the pressing finger after a while with nothing touched, Mom's waterproof camera (📷) once the
 // cuttlefish round begins, and once the cuttlefish has turned pink a 🐠 badge with the way back to the island (the stop's
 // pink flag up). With ?feel=1 Dad also gets round chips (float, follow, cuttle).
-// Sparkle sits in the corner (trip/legs/Guide.tsx) and plays everyone's lines (lines.ts L.samet.snorkel); Mommy's
-// camera sits above her (on a phone on its side, on the right: Daddy swims on her left).
+// Sparkle sits in the corner (trip/legs/Guide.tsx) and plays everyone's lines (lines.ts L.samet.snorkel); Mom's
+// camera sits above her (on a phone on its side, on the right: Dad swims on her left).
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
@@ -75,7 +75,7 @@ export function SnorkelScreen({ round: first, onRound, onSnap, onIsland }: Props
     const fresh = got.filter((a) => !snapped.includes(a))
     if (!fresh.length) return
     setSnapped((s) => [...s, ...fresh.filter((a) => !s.includes(a))])
-    // Sparkle says its name, the first time it's snapped on this dive (like Mommy's phone on the island).
+    // Sparkle says its name, the first time it's snapped on this dive (like Mom's phone on the island).
     guideRef.current?.speak(ANIMALS[fresh[0]].name)
     onSnap?.(fresh)
   }
@@ -159,7 +159,7 @@ const CSS = `
 @keyframes reef-press { 0%, 100% { transform: scale(1); } 45% { transform: scale(0.82) translateY(6px); } }
 .reef-flash { position: absolute; inset: 0; background: #fff; pointer-events: none; z-index: 15; }
 .reef-cam { position: absolute; left: 16px; bottom: calc(var(--safe-bottom, 0px) + min(140px, 19vh, 28vw) + 18px); z-index: 12; display: flex; gap: 10px; align-items: center; }
-/* A phone on its side: Daddy swims on her left, where the camera would cover him; it goes to the right. */
+/* A phone on its side: Dad swims on her left, where the camera would cover him; it goes to the right. */
 @media (orientation: landscape) and (max-height: 500px) { .reef-cam { left: auto; right: 16px; flex-direction: row-reverse; } }
 .reef-snaps { display: flex; gap: 6px; font-size: clamp(26px, 4.5vmin, 38px); }
 .reef-snaps span { display: inline-block; background: rgba(255,255,255,.88); border-radius: 14px; padding: 4px 8px; box-shadow: var(--shadow); }

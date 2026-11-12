@@ -1,15 +1,15 @@
 // The Sky Pod at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "8. The Sky Pod"), greybox shapes
-// with voices (lines.ts `L.mall.skypod`: Daddy's race lines, Sparkle's count and few lines, said through
+// with voices (lines.ts `L.mall.skypod`: Dad's race lines, Sparkle's count and few lines, said through
 // blocks/talk.ts). A wall of nine light-up pods painted as a night sky, a scoreboard, Kaylee in her grip socks on the
-// springy mat in front, Daddy watching from the side (and racing her in round 3).
+// springy mat in front, Dad watching from the side (and racing her in round 3).
 //
 // The toy: slap a pod. It reacts the moment her finger lands: it squashes into the wall, flashes, plays its own note
 // (left to right they climb a scale, so the wall is an instrument), and sparks fly. Kaylee bounces over to it on the
 // mat and slaps it too: a jump for the high ones, her arm reaching up. A finger sliding across the pods plays them all.
-// The rules (which pods are lit, the score, the pattern, Daddy's race) are game.ts.
-// Nothing fails: lights wait for her, a wrong pod is a funny note, Daddy never wins.
-// Pokeables: the scoreboard (its numbers wave), the speaker (a beat to play along to: the pods and Daddy bob), the
-// rocket on top (it rumbles and hops), the moon (it rocks, the painted stars twinkle), Kaylee, Daddy, the mat (she
+// The rules (which pods are lit, the score, the pattern, Dad's race) are game.ts.
+// Nothing fails: lights wait for her, a wrong pod is a funny note, Dad never wins.
+// Pokeables: the scoreboard (its numbers wave), the speaker (a beat to play along to: the pods and Dad bob), the
+// rocket on top (it rumbles and hops), the moon (it rocks, the painted stars twinkle), Kaylee, Dad, the mat (she
 // bounces there). A pod slapped five times fast pops out on its spring.
 import { Color, IcosahedronGeometry, OctahedronGeometry, Plane, Raycaster, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, sounds, span, wobble } from '../../../../../../../sdk'
@@ -31,7 +31,7 @@ import { podSfx as sfx } from './sounds'
 export interface SkyEvents extends LegEvents {
   /** The round on now (the address bar follows). */
   round(n: Round): void
-  /** The scoreboard: hers, and Daddy's (round 3). */
+  /** The scoreboard: hers, and Dad's (round 3). */
   score(kaylee: number, daddy: number): void
   stars(n: number): void
   phase(p: Phase): void
@@ -54,7 +54,7 @@ export const SKYPOD_ANCHORS: AnchorInfo[] = [
   { id: 'rocket', label: 'The rocket', kind: 'thing' },
   { id: 'moon', label: 'The moon', kind: 'thing' },
   { id: 'family:kaylee', label: 'You', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
 ]
 
 const V = (x: number, y: number, z: number) => new Vector3(x, y, z)
@@ -101,7 +101,7 @@ export class SkyPodWall extends Stage {
   private flash = new Array(PODS).fill(0)
   private glow = new Array(PODS).fill(0)
   private recent: number[][] = Array.from({ length: PODS }, () => [])
-  // ---- Kaylee's and Daddy's jumps ----
+  // ---- Kaylee's and Dad's jumps ----
   private kj: Reach | null = null
   private kq = -1
   private dj: Reach | null = null
@@ -140,7 +140,7 @@ export class SkyPodWall extends Stage {
     scene.add(this.built.root)
     this.pods = new Pods(bag)
     scene.add(this.pods.root)
-    // ---- Kaylee in her grip socks on the mat; Daddy watching from the side ----
+    // ---- Kaylee in her grip socks on the mat; Dad watching from the side ----
     this.kaylee = new Racer('kaylee', bag)
     // On the climbing wall: her wings stay folded flat so her hooves show.
     this.kaylee.tuck = true
@@ -186,7 +186,7 @@ export class SkyPodWall extends Stage {
     this.nick.place(d[0], MAT_Y, d[2], -0.5)
   }
 
-  /** Where Daddy stands between slaps: at the side of the wall, out of the way of the pods. */
+  /** Where Dad stands between slaps: at the side of the wall, out of the way of the pods. */
   private daddySpot(): V3 {
     const h = daddyHome(this.tall)
     return [h[0], MAT_Y, h[2]]
@@ -283,7 +283,7 @@ export class SkyPodWall extends Stage {
       win: () => {
         sfx.cheer()
         this.kaylee.hop()
-        // Daddy hurries back to the side (out of the way of the board and the pods) and flops down, cheering.
+        // Dad hurries back to the side (out of the way of the board and the pods) and flops down, cheering.
         this.nick.stop()
         this.dj = null
         this.dGoing = -1
@@ -320,8 +320,8 @@ export class SkyPodWall extends Stage {
     })
   }
 
-  /** What's said when a round starts: the opening (Daddy, then "Slap the lights!"), "Listen!" before the wall plays,
-   *  Daddy's "Race you!". The first one waits a moment for the screen to settle. */
+  /** What's said when a round starts: the opening (Dad, then "Slap the lights!"), "Listen!" before the wall plays,
+   *  Dad's "Race you!". The first one waits a moment for the screen to settle. */
   private roundLine(n: Round) {
     const first = this.rounds++ === 0
     const go = () => {
@@ -334,7 +334,7 @@ export class SkyPodWall extends Stage {
     else go()
   }
 
-  /** Someone got a light: the big sparks, the "+1", Daddy cheering her now and then. */
+  /** Someone got a light: the big sparks, the "+1", Dad cheering her now and then. */
   private got(i: number, who: 'kaylee' | 'daddy') {
     // Sparkle counts her score as it climbs in rounds 1 and 3 (not over anyone talking).
     const g = this.game
@@ -436,7 +436,7 @@ export class SkyPodWall extends Stage {
     }
   }
 
-  /** Daddy walks over to his blue light (the far side of it from her) and slaps it, or (`miss`) the wall beside it. */
+  /** Dad walks over to his blue light (the far side of it from her) and slaps it, or (`miss`) the wall beside it. */
   private daddyGo(i: number, miss: boolean) {
     const d = this.nick
     const [px] = this.spots[i]
@@ -603,7 +603,7 @@ export class SkyPodWall extends Stage {
       this.reachArm(k, j, p)
     }
 
-    // ---- Daddy: cheering, dawdling, walking over to his lights, reaching up ----
+    // ---- Dad: cheering, dawdling, walking over to his lights, reaching up ----
     if (this.dCheer > 0) {
       this.dCheer -= dt
       if (this.dCheer <= 0) d.arms = 'down'
@@ -795,9 +795,9 @@ export class SkyPodWall extends Stage {
   // ---------------------------------------------------------------- camera, anchors, the board
 
   protected shot(): Shot {
-    // Tall: the three-by-three, the board on top, Kaylee and Daddy at the bottom.
+    // Tall: the three-by-three, the board on top, Kaylee and Dad at the bottom.
     if (this.tall) return { center: V(0, 2.3, 0.3), half: V(2.2, 2.3, 0.15), yaw: 0, pitch: 5, minDist: 5 }
-    // Wide: the whole arch, the speaker on the left, Daddy on the right.
+    // Wide: the whole arch, the speaker on the left, Dad on the right.
     return { center: V(0, 1.6, 0.3), half: V(4.0, 1.6, 0.15), yaw: 0, pitch: 5, minDist: 5 }
   }
 

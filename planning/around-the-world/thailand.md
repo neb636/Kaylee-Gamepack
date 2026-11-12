@@ -67,7 +67,7 @@ and its ceiling cut away. Inside it frames a box around Kaylee (`thailand/tune.t
 straight-on.
 
 - **Street:** a row of five pastel shophouses, Agong's in the middle with a roll-up shutter, a sign board, a balcony
-  with an air-conditioner box, and wires with birds. On the sidewalk: Uncle Bird at his motorbike, Daddy, flower
+  with an air-conditioner box, and wires with birds. On the sidewalk: Uncle Bird at his motorbike, Dad, flower
   pots, a spirit house on its pillar, a sleepy cat, and the tuk-tuk that brought her.
 The plan (user feedback, 2026-10-17, from a photo of the real stairs): the house is 5 m wide and 17 m deep.
 
@@ -83,7 +83,7 @@ The plan (user feedback, 2026-10-17, from a photo of the real stairs): the house
   house is open two floors high, and the hallway looks down into the shop over a balcony railing. Glass
   sliding doors lead back into **Kaylee's room**, at the back of the house: mattresses on the floor along the left
   wall, all the way to the end of the room; the couch on the right (BB sits there); her suitcase, a wardrobe, a fan,
-  a window and her drawings on the wall. Mommy and Gan (asleep on the mattress) are here.
+  a window and her drawings on the wall. Mom and Gan (asleep on the mattress) are here.
 
 **The toy (core verb): walk Kaylee around.** Tap the floor and she hop-trots there around the furniture, running on
 long trips. Hold and drag and she follows your finger. Tap a thing and it reacts at once, then she walks over and uses
@@ -92,10 +92,10 @@ her bounce higher with each tap until she flops down. Tap someone in the family 
 and they hop together. Sacred things (the altar, the shrines, the spirit house) never wobble: their candles glow, a
 curl of incense rises, a soft bell rings, and she does a wai.
 
-**The Thailand map (built 2026-10-27, greybox).** Thailand has outgrown starting every trip in the house: Kaylee lands on a map of Thailand and taps Bangkok (the house), Krabi or Nan (since 2026-10-28 a plain tap map like Australia's: the user found flying the toy plane confusing), and the boat and Nan trips end back on the map. Only the mall day still starts in the house, so Mommy and Daddy only ask about the mall now. Plan: `thailand/thailand-map.md`.
+**The Thailand map (built 2026-10-27, greybox).** Thailand has outgrown starting every trip in the house: Kaylee lands on a map of Thailand and taps Bangkok (the house), Krabi or Nan (since 2026-10-28 a plain tap map like Australia's: the user found flying the toy plane confusing), and the boat and Nan trips end back on the map. Only the mall day still starts in the house, so Mom and Dad only ask about the mall now. Plan: `thailand/thailand-map.md`.
 
-**Trips from the house.** Mommy asks in Kaylee's room (on her own the first time she comes up, then whenever she's
-tapped). Daddy asks on the street too (user feedback, 2026-10-25): tap him where the tuk-tuk drops her off and he says "Where do
+**Trips from the house.** Mom asks in Kaylee's room (on her own the first time she comes up, then whenever she's
+tapped). Dad asks on the street too (user feedback, 2026-10-25): tap him where the tuk-tuk drops her off and he says "Where do
 you want to go, Kaylee?" with the same picture buttons (`trip/legs/Ask.tsx`, `who="nick"`), so a trip doesn't need the
 walk upstairs.
 
@@ -126,10 +126,10 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
    market food. The longtail boat became the first family trip (2026-10-18): (plan since removed), with a reusable
    trip kit (pack, Aunty Sri's car, airport, a window seat on the plane) for later trips. Its greybox 1, the boat toy in
    Phang Nga Bay, is built (2026-10-18, PR #99, `#/world/thailand/boat-trip/bay`). Greybox 2, the trip kit, is built
-   too (2026-10-18): Mommy asks in her room if Kaylee is ready for a trip (👍 / ✋, the user's change 2026-10-19 in place of
+   too (2026-10-18): Mom asks in her room if Kaylee is ready for a trip (👍 / ✋, the user's change 2026-10-19 in place of
    the elephant map), then packing, the goodbye and Aunty Sri's white electric van (no car ride: it pulls away and
    they're at the airport), the airport and the window seat, each a section (`boat-trip/invite` ... `boat-trip/land`).
-   The second family trip (user feedback, 2026-10-20) is a mall day at ICONSIAM: Mommy drives the grey rental Veloz, Kaylee
+   The second family trip (user feedback, 2026-10-20) is a mall day at ICONSIAM: Mom drives the grey rental Veloz, Kaylee
    plays in HarborLand's "Little Thailand" and shares a pizza at The Pizza Company, and the leftovers go home to Agong
    (plan since removed). Its first greybox, a small climbing toy, is built
    (PR #120), and rebuilt as the Big Frame at real scale (`#/world/thailand/mall-trip/frame`). The user's photos (2026-10-21) turned
@@ -138,12 +138,12 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
    picks 🐘 the elephants or 🚤 the pier, feeds Mali, Khanom and Lamyai bananas and sugarcane, and they splash everyone
    under a rainbow (plan since removed, from the user's photos; PR #86's 2D greybox is the starting point).
    The third family trip (user feedback, 2026-10-24) is a road trip in Nan, from the family's real trip in June 2024: they fly
-   north, Mommy drives a silver rental Pajero Sport over the mountain roads (Kaylee steers), and they stop at
+   north, Mom drives a silver rental Pajero Sport over the mountain roads (Kaylee steers), and they stop at
    Baan Huanam Mushroom Farm, Stop Time Cafe above Sapan's rice terraces and Bo Kluea's salt wells,
    coming home by the "number 3" road (`thailand/nan-trip.md`; built and in the game 2026-10-25).
    The fourth family trip (user feedback, 2026-11-04) is Koh Samet, the family's island vacation off Rayong, and the first
    **open world**: one island she roams freely (five real beaches at their real map positions, shrunk to 1:10), with
-   Mommy's phone to snap the island's animals for a book, the jet ski at Sai Kaew, a sandcastle at Ao Hin Khok,
+   Mom's phone to snap the island's animals for a book, the jet ski at Sai Kaew, a sandcastle at Ao Hin Khok,
    snorkeling at Ko Kudi, hide and seek at Ao Prao's driftwood tree, and a fire show finale
    (`thailand/samet-trip.md`; planned, greybox 1 is the jet ski).
 

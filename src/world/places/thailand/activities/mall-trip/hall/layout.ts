@@ -6,7 +6,7 @@
 //
 //          ┌ Harbor Town sign ┐                ┌ the mask, the lit sign ┐
 //   │ 🩺 vet │ ☕ cafe │ 💈 barber │  bench   ║ the Big Frame ║ ╲ racing lanes ╲ pit   ⛰ Golden   ▦ foam    🥊 bags
-//   │  door  │  door   │  door    │  Mommy   ║  (way in)     ║   steps          balls  Mountain   blocks   Sky Pod
+//   │  door  │  door   │  door    │  Mom   ║  (way in)     ║   steps          balls  Mountain   blocks   Sky Pod
 //   └─────────────────────────────────────────────── flower mats ─────────────────────────────────────────────────┘
 //
 // x runs left (-) to right (+), z toward the camera (+). The back wall is at z = -4.6.
@@ -31,7 +31,7 @@ export const SHOP_W = 3.0
 /** A shop's doorway: its size, and how deep it goes in (she steps in there, out of sight). */
 export const DOOR = { w: 1.1, h: 2.05, recess: 0.7 }
 
-/** The parents' bench between the town and the frame (the dragon spiral behind it), Mommy on it. */
+/** The parents' bench between the town and the frame (the dragon spiral behind it), Mom on it. */
 export const BENCH = { at: [-4.7, -0.55] as XZ, face: 0 }
 
 /** The Big Frame: white padded pipes and black nets, four levels, the giant mask with its pink nose slide on top, the
@@ -116,7 +116,7 @@ export const GAMES: { id: GameDoor; icon: string; name: string; color: string }[
 ]
 export const GAME_ICON = Object.fromEntries(GAMES.map((g) => [g.id, g.icon])) as Record<GameDoor, string>
 
-/** Where she stands when she first comes in: in front of Mommy's bench, between the town and the frame. */
+/** Where she stands when she first comes in: in front of Mom's bench, between the town and the frame. */
 export const START: { at: XZ; face: number } = { at: [-3.4, 1.0], face: 0 }
 
 /** What blocks the floor (the shops, the frame, the rides' feet), as rectangles and circles. */

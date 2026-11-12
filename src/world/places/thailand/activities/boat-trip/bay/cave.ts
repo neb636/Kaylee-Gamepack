@@ -1,12 +1,12 @@
 // The cave and the hong (sections `cave` and `hong`). The longtail is too big for the cave, so at the raft by its mouth
 // the family climbs into a little yellow sea canoe (real: Phang Nga's hidden lagoons are reached by canoe through low
-// caves, lying flat). Kaylee steers from the back, Daddy paddles in front.
+// caves, lying flat). Kaylee steers from the back, Dad paddles in front.
 // - In the tunnel it's dark and dripping: bats hang from the roof (tap: they squeak and swirl), stalactites drip
 //   (tap: plink, and the cave answers with an echo). The roof comes lower and lower: tap the family to lie them back
-//   in the canoe. If she doesn't, Daddy's horn bonks the roof first (he's the tallest): boink! "My horn!"
+//   in the canoe. If she doesn't, Dad's horn bonks the roof first (he's the tallest): boink! "My horn!"
 // - Then light, and they slide out into the hong ("room" in Thai): a lagoon open to the sky inside the island, ringed by
 //   cliffs and mangroves on their roots. Fiddler crabs wave their big claw (tap: they wave back), mudskippers hop on
-//   the mud, a monitor lizard swims past like a little crocodile, a kingfisher flashes blue. Daddy snaps a photo.
+//   the mud, a monitor lizard swims past like a little crocodile, a kingfisher flashes blue. Dad snaps a photo.
 // - Paddle back out and everyone hops back into the longtail.
 import { Group, Mesh, MeshBasicMaterial, PlaneGeometry, Vector3, type BufferGeometry, type PerspectiveCamera } from 'three'
 import { bell, clamp } from '../../../../../../sdk'
@@ -705,7 +705,7 @@ export class CaveStop implements BayPart {
       canoe.d.place(HONG.x - 1, HONG.z + 3, Math.PI * 0.85)
       bay.seatAll(canoe)
     }
-    // Daddy holds the camera out ahead and to the side: all three faces in a row (kept inside the lagoon), the cliffs
+    // Dad holds the camera out ahead and to the side: all three faces in a row (kept inside the lagoon), the cliffs
     // and mangroves behind.
     const d = canoe.d
     let cx = d.x + Math.sin(d.heading) * 4.5 + Math.cos(d.heading) * 3

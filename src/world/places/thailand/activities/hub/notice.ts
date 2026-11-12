@@ -38,7 +38,7 @@ export function noticeLine(who: string, style: Style, shoesVisible: boolean): Li
   // Save the compliment for when the shoes are actually on her feet.
   if (!k || (k.kind === 'feet' && !shoesVisible)) return null
   seen.set(who, sig)
-  // (Wings are Daddy's "Cool wings!"; a crown is Mommy's own line.)
+  // (Wings are Dad's "Cool wings!"; a crown is Mom's own line.)
   return (k.item && itemById(k.item) ? L.wardrobe.noticeItem[who]?.[k.item] : undefined) ?? lines[k.kind]
 }
 

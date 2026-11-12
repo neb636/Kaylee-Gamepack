@@ -22,7 +22,7 @@ Nan rice farm, **Jip and the hat mix-up** (`src/world/places/thailand/activities
    round starts ("It's Jip and friends!"), or a short film at a turning point (the nest film when the rice is golden).
 3. **A payoff she does herself**: the last bundles are hers to share with the birds, a tap each. Then the friend says
    what it meant ("Friends now!").
-4. **It carries into the ending**: Jip rides on her head on the deck, and the chicks sit in Mommy's photo.
+4. **It carries into the ending**: Jip rides on her head on the deck, and the chicks sit in Mom's photo.
 
 The story uses the toy's own verb wherever it can (she walks, she taps the rack). A film never replaces play: it gives
 play a reason. The lesson stays something she does.

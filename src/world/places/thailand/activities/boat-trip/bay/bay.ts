@@ -9,7 +9,7 @@
 //   turns the bow at a crawl); a finger on the water no longer drives, but taps still poke things and a glow still takes her there.
 // - Tap the boat: VROOM. Bump a rock: boing (it slides round, never stuck). Cross the tour boat's wake fast: a jump.
 // The verb deepens three ways: open water (rocks, wakes, critters to drive up to), tight places (the village's lane,
-// where boats go slowly; the canoe through the low cave, where the family must lie down or Daddy's horn bonks the
+// where boats go slowly; the canoe through the low cave, where the family must lie down or Dad's horn bonks the
 // roof) and the Nail Island (the buoys bump her back; land on the beach and pose for the photo). Then the sunset ride
 // home to the pier.
 //
@@ -100,8 +100,8 @@ const CORE_ANCHORS: AnchorInfo[] = [
   { id: 'boat', label: 'Boat', kind: 'thing' },
   { id: 'engine', label: 'Engine', kind: 'thing' },
   { id: 'family:kaylee', label: 'You', kind: 'family' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
   { id: 'glow:village', label: 'The village', kind: 'thing' },
   { id: 'glow:cave', label: 'The cave', kind: 'thing' },
   { id: 'glow:beach', label: 'The Nail Island beach', kind: 'thing' },
@@ -147,7 +147,7 @@ const tmp = new Vector3()
 const tmp2 = new Vector3()
 const grip = new Vector3()
 const STUCK_EVERY = 22
-/** How long Daddy's "where to?" look over the bay lasts (any touch ends it). */
+/** How long Dad's "where to?" look over the bay lasts (any touch ends it). */
 const WHERE_S = 3.4
 
 export class Bay implements World3D {
@@ -209,8 +209,8 @@ export class Bay implements World3D {
   private spin = 0
   private dizzyT = 0
   private dizzySaid = -99
-  /** Daddy's "where to?" look over the bay (seconds left). */
-  /** Until when (performance.now(), ms) Daddy's look over the bay lasts: on the clock, whatever the frame rate. */
+  /** Dad's "where to?" look over the bay (seconds left). */
+  /** Until when (performance.now(), ms) Dad's look over the bay lasts: on the clock, whatever the frame rate. */
   private whereUntil = 0
   private paiSaid = false
   private told = new Set<string>()
@@ -224,7 +224,7 @@ export class Bay implements World3D {
   private counts = { bonks: 0, buoys: 0, jumps: 0, vrooms: 0, photos: 0, dizzy: 0, roof: { kaylee: 0, ji: 0, nick: 0 } as Record<RiderId, number> }
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
   private quiet = true
-  /** Daddy asks "where to?" as soon as her finger lifts. */
+  /** Dad asks "where to?" as soon as her finger lifts. */
   private whereSoon = false
 
   constructor(
@@ -263,7 +263,7 @@ export class Bay implements World3D {
       r.v.root.userData.pick = 'boat'
       scene.add(r.v.root)
     }
-    // She wears what she packed (her sun hat or Mommy's spare, her sunglasses, her floaties).
+    // She wears what she packed (her sun hat or Mom's spare, her sunglasses, her floaties).
     const kaylee = new Avatar(bag)
     kaylee.wear(wearing(start.packed))
     const member = (id: 'ji' | 'nick') => new Member(FAMILY.find((m) => m.id === id)!, bag)
@@ -291,7 +291,7 @@ export class Bay implements World3D {
   get ride() {
     return this.rides[this.using]
   }
-  /** Daddy's "where to?" look over the bay is on. */
+  /** Dad's "where to?" look over the bay is on. */
   get looking() {
     return performance.now() < this.whereUntil
   }
@@ -462,7 +462,7 @@ export class Bay implements World3D {
   countPhoto() {
     this.counts.photos++
   }
-  /** "Where to, captain?": Daddy points at the glows, and the camera looks out over the bay for a moment. */
+  /** "Where to, captain?": Dad points at the glows, and the camera looks out over the bay for a moment. */
   whereTo() {
     this.told.add('whereTo')
     this.whereUntil = performance.now() + WHERE_S * 1000
@@ -724,7 +724,7 @@ export class Bay implements World3D {
   private vroom() {
     const r = this.ride
     if (this.using === 'canoe') {
-      // Daddy digs in hard with the paddle.
+      // Dad digs in hard with the paddle.
       r.d.vroom(1.1)
       sfx.paddle()
       setTimeout(sfx.paddle, 160)
@@ -742,7 +742,7 @@ export class Bay implements World3D {
   }
 
   /** Tapping someone in the boat: in the canoe they lie back (or sit up); in the longtail Kaylee giggles and dances,
-   *  Mommy takes a selfie, Daddy points at something. */
+   *  Mom takes a selfie, Dad points at something. */
   private poke(r: Rider) {
     if (this.using === 'canoe') return this.cave.lieDown(r)
     if (r.id === 'kaylee') {
@@ -1014,7 +1014,7 @@ export class Bay implements World3D {
     this.dizzyT = Math.max(0, this.dizzyT - dt)
   }
 
-  /** Round and round (doughnuts): everyone gets dizzy, and Mommy says so (now and then). */
+  /** Round and round (doughnuts): everyone gets dizzy, and Mom says so (now and then). */
   private dizzy(dt: number) {
     const d = this.rides.longtail.d
     this.spin = this.spin * Math.exp(-dt / 2.5) + (Math.abs(d.speed) > 2.5 ? Math.abs(d.yawRate) * dt : 0)
@@ -1115,7 +1115,7 @@ export class Bay implements World3D {
     for (const p of this.parts) p.bonked?.(x, z, hit)
   }
 
-  /** Crossing the tour boat's wake fast: the longtail hops off it like a ramp (a really high one blows Mommy's hat off). */
+  /** Crossing the tour boat's wake fast: the longtail hops off it like a ramp (a really high one blows Mom's hat off). */
   private wakeJumps() {
     const d = this.rides.longtail.d
     if (this.jumpCool > 0 || d.airborne) return
@@ -1246,7 +1246,7 @@ export class Bay implements World3D {
     }
   }
 
-  /** The camera's goal: a part's own (the tunnel, the hong, the beach, the pier at sunset), Daddy's look over the bay,
+  /** The camera's goal: a part's own (the tunnel, the hong, the beach, the pier at sunset), Dad's look over the bay,
    *  or behind the boat on open water. */
   private shot(): Shot {
     const d = this.ride.d
@@ -1362,7 +1362,7 @@ export class Bay implements World3D {
     }
   }
 
-  /** Mommy's selfie: from her phone, held up in front of the boat, looking back at the three of them. */
+  /** Mom's selfie: from her phone, held up in front of the boat, looking back at the three of them. */
   private selfieCamera() {
     const d = this.rides.longtail.d
     const sx = Math.sin(d.heading)
@@ -1399,7 +1399,7 @@ export class Bay implements World3D {
       stops: [...this.stops],
       found: [...this.foundSet],
       sunset: this.sunset.active,
-      /** Daddy's "where to?" look over the bay is on (the camera is up high). */
+      /** Dad's "where to?" look over the bay is on (the camera is up high). */
       looking: this.looking,
       steer: { mode: this.steer, gas: this.gasDown, tilt: r2(this.tilt?.value ?? 0), live: this.tilt?.live ?? false, waiting: this.waiting },
       ...this.pier.qa(),

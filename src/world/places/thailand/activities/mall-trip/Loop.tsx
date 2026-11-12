@@ -2,8 +2,8 @@
 // two 3D worlds in one shared view.
 //
 //   invite, goodbye, home   Agong's own house (activities/hub/house.ts) with the trip kit's plugin
-//                           (trip/legs/house-plugin.ts, told by MALL_TRIP what the mall day is): Mommy asks where to
-//                           (Ask.tsx with 🚤 / 🛝🍕); the goodbye at the shutter and Mommy's grey Veloz; coming home,
+//                           (trip/legs/house-plugin.ts, told by MALL_TRIP what the mall day is): Mom asks where to
+//                           (Ask.tsx with 🚤 / 🛝🍕); the goodbye at the shutter and Mom's grey Veloz; coming home,
 //                           the pizza box for Agong, the cousins' phones down, the photo of the day on his wall
 //   arrive                  ICONSIAM (arrive.ts): the glimpse, the lift (its floor number big, here), the counter
 //
@@ -49,7 +49,7 @@ interface Props {
   replay: boolean
   /** The day pass is over the screen (between legs): the cards and the guide wait. */
   covered: boolean
-  /** Mommy's card: the mall (🛝🍕), not yet (✋). */
+  /** Mom's card: the mall (🛝🍕), not yet (✋). */
   onMall(): void
   /** Another trip on the card (its activity id). */
   onTrip(id: string): void
@@ -116,7 +116,7 @@ export function MallLoop({ section, socks, hair, pizza, photos, replay, covered,
     trip.setHintElement(() => hintRef.current)
     const walls = newestByTrip(st.wallPhotos)
     // Coming home: last time's photo of the day is still on the wall until the new one goes up (the boat trip's
-    // beside it), the box she filled at the table, and Daddy's hairdo from the barber.
+    // beside it), the box she filled at the table, and Dad's hairdo from the barber.
     trip.setWall(walls.get(MALL_TRIP.id)?.src ?? null)
     trip.setOtherWalls(new Map([...walls].map(([t, p]) => [t, p.src])))
     trip.setPhoto(drawPhoto(photoId))
@@ -145,7 +145,7 @@ export function MallLoop({ section, socks, hair, pizza, photos, replay, covered,
     }
   }, [phase, section])
 
-  // She already picked the mall on Mommy's card in the house: don't ask "where shall we go?" a second time.
+  // She already picked the mall on Mom's card in the house: don't ask "where shall we go?" a second time.
   const fromHouse = useRef(justSaidYes('mall-trip'))
   useEffect(() => {
     if (section !== 'invite') fromHouse.current = false

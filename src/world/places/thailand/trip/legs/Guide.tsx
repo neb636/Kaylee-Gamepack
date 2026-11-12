@@ -13,8 +13,8 @@ export interface TripGuideHandle {
 
 /** Who each voice is (the bubble's chip, and a film's words: FilmOverlay). */
 export const WHO: Record<string, { name: string; icon: string; color: string }> = {
-  ji: { name: 'Mommy', icon: '🦄', color: '#FF8FB8' },
-  nick: { name: 'Daddy', icon: '🦄', color: '#7FD1B9' },
+  ji: { name: 'Mom', icon: '🦄', color: '#FF8FB8' },
+  nick: { name: 'Dad', icon: '🦄', color: '#7FD1B9' },
   agong: { name: 'Agong', icon: '🐼', color: '#B9A6F5' },
   jum: { name: 'Jum', icon: '🐘', color: '#FFB3CF' },
   gan: { name: 'Gan', icon: '🦊', color: '#7CC4F2' },
@@ -78,7 +78,7 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
       // while Sparkle talks wait their turn, so a fact is never cut off.
       // (A line still loading counts too, so a friend's line then Sparkle's, back to back, play in that order.)
       // A Sparkle line still waiting its turn counts too: a reaction then queues behind it instead of cancelling it
-      // (playtest QA 2026-11-05: her first instruction was dropped when she poked Daddy at once).
+      // (playtest QA 2026-11-05: her first instruction was dropped when she poked Dad at once).
       const now = speakingVoice() ?? asked.current?.voice
       const interrupt = waiting.current === 0 && (!now || (voice !== 'sparkle' && now !== 'sparkle'))
       const mine = { voice }

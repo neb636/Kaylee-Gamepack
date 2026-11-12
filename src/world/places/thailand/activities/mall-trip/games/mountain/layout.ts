@@ -1,16 +1,16 @@
 // The Golden Mountain at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "5. The Golden Mountain"),
 // in meters: the yellow cone, its climbing holds for each round, the bell on top, the steel slide down the front, the
-// mat it lands on, where Daddy and the monkeys are. Pure data (no three.js), shared by the 3D world and the flat
+// mat it lands on, where Dad and the monkeys are. Pure data (no three.js), shared by the 3D world and the flat
 // version.
 //
 // Seen straight on (the camera looks toward -z), the cone's front faces us. Angles go round the cone: 0 faces the
 // camera, negative is to the left. Kaylee climbs the front-left, the slide comes down the front a little right of the
-// middle, Daddy climbs the right flank in round 3.
+// middle, Dad climbs the right flank in round 3.
 //
 //              🔔  ┌red rail┐ 🐒
 //               ╱ ● ● ●  ║   ● ╲          painted wall: kids riding elephants
 //         🐒  ╱ ●  ●   ● ║  ●    ╲ 🐒
-//            ╱  ● ●  ●   ║ ●      ╲   Daddy (rounds 1-2 watching; round 3 up the right)
+//            ╱  ● ●  ●   ║ ●      ╲   Dad (rounds 1-2 watching; round 3 up the right)
 //   ────────╱─Kaylee──────╲═══ steel slide ══▶ mat ─────────────
 export type Round = 1 | 2 | 3
 
@@ -59,7 +59,7 @@ const ROWS: Record<Round, { y0: number; dy: number; rows: [number, HoldColor][][
       [[-0.85, 'mint'], [-0.4, 'pink'], [0.05, 'pink']],
     ],
   },
-  // 3. Race Daddy: seven rows, two or three in reach, any color.
+  // 3. Race Dad: seven rows, two or three in reach, any color.
   3: {
     y0: 0.75,
     dy: 0.335,
@@ -91,13 +91,13 @@ export function inReach(h: Hold, a: number, row: number) {
   return h.row === row + 1 && Math.abs(h.a - a) * rAt(h.y) <= REACH + 1e-6
 }
 
-/** Round 3: Daddy's holds up the right flank, one a row (a zigzag), the same rows as hers. */
+/** Round 3: Dad's holds up the right flank, one a row (a zigzag), the same rows as hers. */
 export function daddyHolds(): Hold[] {
   const r = ROWS[3]
   return r.rows.map((_, ri) => ({ i: ri, a: ri % 2 ? 0.98 : 0.84, y: r.y0 + r.dy * ri, row: ri, color: RAINBOW[(ri + 2) % 5] }))
 }
 export const DADDY_FOOT_A = 0.9
-/** Daddy watching from the floor at the right in rounds 1 and 2. */
+/** Dad watching from the floor at the right in rounds 1 and 2. */
 export const DADDY_WATCH = { a: 1.0, out: 1.0 }
 
 /** The slide comes down the front here (angle), and runs out onto the mat. */

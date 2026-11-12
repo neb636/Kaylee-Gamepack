@@ -1,4 +1,4 @@
-// Mommy's phone: a photo of what Kaylee sees, turned a little toward the animal she tapped (the phone finds it, the way
+// Mom's phone: a photo of what Kaylee sees, turned a little toward the animal she tapped (the phone finds it, the way
 // a real one focuses), and how good it is: the animal big in the frame and near its middle earns a gold frame. And the
 // book's portraits: each animal drawn once on its own, cut out, for its silhouette (before she finds it) and its sticker.
 import { BufferGeometry, Color, Mesh, PerspectiveCamera, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'

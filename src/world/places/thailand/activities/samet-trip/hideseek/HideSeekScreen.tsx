@@ -1,6 +1,6 @@
 // Hide and seek at Ao Prao, on screen (hideseek.ts is the world): the beach with its tap targets, a lavender blind
 // with the numbers while Kaylee counts with her eyes shut (a tap peeks through it), Sparkle in the corner and everyone's
-// voices (trip/legs/Guide.tsx: the words show by her, for Dad), the pressing finger when she needs it, Mommy's
+// voices (trip/legs/Guide.tsx: the words show by her, for Dad), the pressing finger when she needs it, Mom's
 // photo flash, and once she has won her turn a 🙈 badge with the way back to the island (the stop's pink flag up).
 // With ?feel=1 Dad also gets round chips (1, 2, hide).
 import { useEffect, useRef, useState } from 'react'

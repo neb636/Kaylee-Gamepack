@@ -630,7 +630,7 @@ export class House implements World3D {
     const s = m && this.spotOf(m)
     if (!m || !s || !who || !this.familyVisible(`family:${id}`)) return
     who.react('wave')
-    // A new look first (notice.ts): "Ooh, a crown, Kaylee!" instead of the hello, which waits for the next tap. Daddy
+    // A new look first (notice.ts): "Ooh, a crown, Kaylee!" instead of the hello, which waits for the next tap. Dad
     // notices before he asks about a trip (the Hub holds his question back while he talks).
     const note = noticeLine(m.id, this.kaylee.myLook, this.mode === 'street' || this.trying)
     const handled = this.events.onGreet?.(id, !!note)
@@ -651,7 +651,7 @@ export class House implements World3D {
     })
   }
 
-  /** Someone who can see her says what they think of her new look (Mommy, when she steps away from her wardrobe). True
+  /** Someone who can see her says what they think of her new look (Mom, when she steps away from her wardrobe). True
    *  if they did: they hop and say it, once per look. */
   notice(id: string): boolean {
     const who = this.family.get(id)

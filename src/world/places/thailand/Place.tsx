@@ -3,9 +3,9 @@
 // is Agong's shophouse (activities/hub/), where she walks around, meets her family and pokes everything. The places the family
 // loves become activities, one per PR: the first is the boat trip (activities/boat-trip/), which ends with her photo on
 // Agong's wall and the stamp (the fiddler crab sticker, and the trip's facts to tap); the second is the mall day
-// (activities/mall-trip/, greyboxes so far, still in the works: Mommy's question, the Veloz, ICONSIAM, HarborLand's
+// (activities/mall-trip/, greyboxes so far, still in the works: Mom's question, the Veloz, ICONSIAM, HarborLand's
 // hall of mini games, the pizza table, and home with the pizza box for Agong, then its stamp and the pizza slice
-// sticker); the third is the Nan road trip (activities/nan-trip/, in the works: greyboxes from Mommy's question to the
+// sticker); the third is the Nan road trip (activities/nan-trip/, in the works: greyboxes from Mom's question to the
 // photo on Agong's wall, then its stamp); the fourth is the Koh Samet island trip (activities/samet-trip/: the
 // speedboat, the island to roam, four stops and the fire show, the pink mermaid sticker). The finale (route `party`) is the family party, coming soon.
 import { use, useState } from 'react'
@@ -60,7 +60,7 @@ export default function Place(props: PlaceProps) {
         />
       </div>
     ) : null
-  // Another trip picked on Mommy's card inside a trip: it opens straight on its first leg.
+  // Another trip picked on Mom's card inside a trip: it opens straight on its first leg.
   const otherTrip = (id: string) => {
     saidYes.at = performance.now()
     saidYes.trip = id
@@ -86,7 +86,7 @@ export default function Place(props: PlaceProps) {
     )
   }
   // The Koh Samet trip, from the map's 🏝️ pin. Home from
-  // the island (Mommy's photo on Agong's wall), the stamp, then the map: the stamp lands on the 🏝️ pin. The speedboat
+  // the island (Mom's photo on Agong's wall), the stamp, then the map: the stamp lands on the 🏝️ pin. The speedboat
   // home before the island is done (its home picture at Na Dan pier) goes back to the map, the trip kept.
   if (activity === 'samet-trip' && info) {
     if (window.__kayleeWorld) window.__kayleeWorld.finish = finish

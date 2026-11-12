@@ -1,23 +1,23 @@
 // Muay Thai at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "7. Muay Thai bags"), greybox
-// shapes with voices (lines.ts `L.mall.boxing`: the coach's wai kru, Sparkle's few lines, Daddy's oofs, said through
-// blocks/talk.ts). A blue ring mat with its ropes, the big red bag on its bracket with Daddy holding it from
+// shapes with voices (lines.ts `L.mall.boxing`: the coach's wai kru, Sparkle's few lines, Dad's oofs, said through
+// blocks/talk.ts). A blue ring mat with its ropes, the big red bag on its bracket with Dad holding it from
 // behind, the coach (the boxer kid from the Big Frame, a little monkey) and his drum, Kaylee in her pink gloves, red
 // headband and grip socks.
 //
 // The toy: punch. A finger going down on the bag (or the pad) and Kaylee punches it right there, at once: the gloves
 // take turns, she lunges in and bounces back on her toes, and the arm aims at the height her finger hit. The bag swings
-// on its chain and squashes, gold stars and a POW pop out, and Daddy staggers. A swipe across it is a hook.
+// on its chain and squashes, gold stars and a POW pop out, and Dad staggers. A swipe across it is a hook.
 //   The warm-up, the wai kru: tap her gloves and she presses them together and bows (three bows, lower each time); the
 //     coach bows back. Then three dance steps (the ram muay), each with a drum beat; the coach copies her. Then he
 //     cheers and goes to his drum: ding ding.
 //   1. Free punching: after three punches the drum joins in. Eight punches: a star.
 //   2. On the beat: a slow drum (beat.ts), a ring closing on the bag, gold just before the beat: a punch then is a huge
 //      POW. Six of those (or 16 punches anyway): a star. Off-beat ones are normal punches; the window grows if she's off.
-//   3. Daddy's pad: he holds it up, left high, left low, right high, right low, the middle; she follows it. Then it
-//      glows at kick height: her big unicorn kick sends the pad flying and Daddy into the ropes, which boing him back
+//   3. Dad's pad: he holds it up, left high, left low, right high, right low, the middle; she follows it. Then it
+//      glows at kick height: her big unicorn kick sends the pad flying and Dad into the ropes, which boing him back
 //      onto his bottom. The coach holds her glove up and the gold belt goes round her waist. A star.
-// Then it stays a toy: the drum keeps going, Daddy gets up with the pad, and every few hits it glows for another kick.
-// Nothing fails: every punch is a fun punch, the window grows, round 2 ends anyway, a hit while Daddy hops still lands.
+// Then it stays a toy: the drum keeps going, Dad gets up with the pad, and every few hits it glows for another kick.
+// Nothing fails: every punch is a fun punch, the window grows, round 2 ends anyway, a hit while Dad hops still lands.
 import { Color, Group, IcosahedronGeometry, OctahedronGeometry, Plane, Raycaster, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, sounds, span, wobble } from '../../../../../../../sdk'
 import type { Avatar } from '../../../../characters/avatar'
@@ -54,7 +54,7 @@ export interface BoxingStart {
 export const BOXING_ANCHORS: AnchorInfo[] = [
   { id: 'gloves', label: "Your gloves", kind: 'thing' },
   { id: 'bag', label: 'The punching bag', kind: 'thing' },
-  { id: 'pad', label: "Daddy's pad", kind: 'thing' },
+  { id: 'pad', label: "Dad's pad", kind: 'thing' },
   { id: 'bag2', label: 'The small bag', kind: 'thing' },
   { id: 'drum', label: 'The drum', kind: 'thing' },
   { id: 'bell', label: 'The ring bell', kind: 'thing' },
@@ -63,7 +63,7 @@ export const BOXING_ANCHORS: AnchorInfo[] = [
   { id: 'board', label: 'Star board', kind: 'thing' },
   { id: 'coach', label: 'The coach', kind: 'thing' },
   { id: 'family:kaylee', label: 'You', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
 ]
 
 type Phase = 'wai' | 'play' | 'between' | 'kick' | 'finale' | 'free'
@@ -170,7 +170,7 @@ export class MuayThai extends Stage {
     this.rig.fov = 30
     this.built = buildGym(bag)
     scene.add(this.built.root)
-    // ---- Kaylee in her gloves, headband and grip socks; Daddy holding the bag; the coach ----
+    // ---- Kaylee in her gloves, headband and grip socks; Dad holding the bag; the coach ----
     const { kaylee, members } = this.makeFamily(['nick'])
     this.kaylee = kaylee
     this.nick = members.get('nick')!
@@ -211,7 +211,7 @@ export class MuayThai extends Stage {
     this.later.push({ t: this.time + s, f })
   }
 
-  /** Sparkle, when a round's new thing shows: the gold ring on the bag, Daddy's pad. */
+  /** Sparkle, when a round's new thing shows: the gold ring on the bag, Dad's pad. */
   private roundLine(n: Round) {
     if (n === 2) this.talk.say(T.gold)
     if (n === 3) this.talk.say(T.pad)
@@ -487,24 +487,24 @@ export class MuayThai extends Stage {
     this.popPow(at, p.big ? 'POW!' : p.kind === 'hook' ? 'WHAM!' : p.what === 'pad' ? 'PAP!' : JABS[this.touches % JABS.length], p.big || p.kind === 'hook')
   }
 
-  /** Daddy takes a big one: now and then he says so (a big POW on the beat: "Oof! Good one!"), else just oof. */
+  /** Dad takes a big one: now and then he says so (a big POW on the beat: "Oof! Good one!"), else just oof. */
   private oof(big: boolean) {
     if (!this.talk.react(this.time, big ? T.oof : T.strong)) sfx.oof()
   }
 
-  // ---------------------------------------------------------------- Daddy's pad, the kick
+  // ---------------------------------------------------------------- Dad's pad, the kick
 
   private padSpot() {
     const step = PAD_STEPS[Math.min(this.padStep, PAD_STEPS.length - 1)]
     return { ...this.side(step.side), y: PAD_Y[step.y] }
   }
-  /** Where Daddy stands on that side, facing her. */
+  /** Where Dad stands on that side, facing her. */
   private side(id: 'left' | 'right') {
     const s = PAD_SIDES[id]
     return { x: s.x, z: s.z, face: Math.atan2(this.kBase.x - s.x, this.kBase.z - s.z) / deg }
   }
 
-  /** Round 3: Daddy lets go of the bag and the pad pops onto his hands, then he hops to its first place. */
+  /** Round 3: Dad lets go of the bag and the pad pops onto his hands, then he hops to its first place. */
   private padUp(now: boolean) {
     this.daddy = 'pad'
     this.hooked = true
@@ -524,7 +524,7 @@ export class MuayThai extends Stage {
   private padNext() {
     if (this.phase !== 'play' || this.round !== 3) return
     this.padStep++
-    // The pad's first move down low: Daddy calls it.
+    // The pad's first move down low: Dad calls it.
     if (this.padStep === 1) this.talk.once('upDown', T.upDown)
     const s = this.padSpot()
     if (s.x === this.dSpot.x && s.z === this.dSpot.z) this.padYGoal = s.y
@@ -555,7 +555,7 @@ export class MuayThai extends Stage {
     if (!this.talk.once('kick', T.kick)) this.talk.react(this.time, T.kick)
   }
 
-  /** Her unicorn kick: she turns her back to Daddy and bucks with both back hooves. */
+  /** Her unicorn kick: she turns her back to Dad and bucks with both back hooves. */
   private kick() {
     if (this.phase !== 'kick' || this.dHop) return
     this.phase = 'finale'
@@ -574,7 +574,7 @@ export class MuayThai extends Stage {
     this.after(0.05, () => sfx.pow())
     this.starsFx.burst(at, 24, 2.6, 2.4, 0.8, 0.1)
     this.popPow(at, 'KA-POW!', true)
-    // The pad flies off spinning, Daddy flies into the ropes.
+    // The pad flies off spinning, Dad flies into the ropes.
     this.padFly = { p: at.clone(), v: V(1.4, 3.4, 0.5), r: V(0, 0, 0), spin: V(4, 2, 9), down: false }
     this.fly = { t: 0, from: this.nick.root.position.clone() }
     this.daddy = 'fly'
@@ -613,7 +613,7 @@ export class MuayThai extends Stage {
     this.after(4.6, () => this.daddyUp())
   }
 
-  /** Daddy gets up, the pad hops back into his hands, and he holds it up again. */
+  /** Dad gets up, the pad hops back into his hands, and he holds it up again. */
   private daddyUp() {
     this.daddy = 'pad'
     this.padFly = null
@@ -775,12 +775,12 @@ export class MuayThai extends Stage {
     } else if (tick === 'off') sfx.ching()
     this.coach.drumPhase = this.beat.on ? 1 - this.beat.ring(t) : 0
 
-    // ---- The bags: pendulums (stiffer while Daddy holds the big one), the squash where it was hit ----
+    // ---- The bags: pendulums (stiffer while Dad holds the big one), the squash where it was hit ----
     const held = this.daddy === 'bag'
     const sw = this.swing
     sw.v += (-(held ? 18 : 9) * sw.a - (held ? 3.2 : 1.3) * sw.v) * dt
     sw.a = clamp(sw.a + sw.v * dt, -0.6, 0.6)
-    // (Round 3: Daddy has swung it back onto its hook, out of the pad's way.)
+    // (Round 3: Dad has swung it back onto its hook, out of the pad's way.)
     const hook = this.hooked ? BAG_HOOK : 0
     sw.vx += (-12 * (sw.x - hook) - (this.hooked ? 4 : 2) * sw.vx) * dt
     sw.x += sw.vx * dt
@@ -792,7 +792,7 @@ export class MuayThai extends Stage {
     s2.v += (-9 * s2.a - 1.4 * s2.v) * dt
     s2.a += s2.v * dt
     this.built.bag2.pivot.rotation.z = -s2.a
-    // A big swing into Daddy's face: dizzy stars round his head.
+    // A big swing into Dad's face: dizzy stars round his head.
     if (held && sw.a > 0.24 && this.dizzy < 0) {
       this.dizzy = 0
       this.nick.react('wiggle')
@@ -1002,7 +1002,7 @@ export class MuayThai extends Stage {
     r.armR.rotation.set(aR[0], 0, aR[1])
   }
 
-  /** Daddy: holding the bag from behind (staggering when it swings into him), then holding the pad up where it should
+  /** Dad: holding the bag from behind (staggering when it swings into him), then holding the pad up where it should
    *  be, flying into the ropes, sitting on the mat laughing. (After Member.update: his blinks, breath and hops.) */
   private daddyFrame(dt: number, t: number) {
     const n = this.nick
@@ -1153,7 +1153,7 @@ export class MuayThai extends Stage {
     return null
   }
 
-  /** After a while with nothing touched: her gloves (the wai kru), the bag, or Daddy's pad. */
+  /** After a while with nothing touched: her gloves (the wai kru), the bag, or Dad's pad. */
   protected hintAt() {
     if (this.phase === 'wai') return this.glovesAt()
     if (this.phase === 'kick' || (this.round === 3 && this.phase === 'play')) return this.built.pad.visible && !this.dHop ? this.padWorld() : null

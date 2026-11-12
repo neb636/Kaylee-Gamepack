@@ -2,7 +2,7 @@
 
 The full loop built: on the Thailand map (its voice clips still to record) · Family trip: an open island · updated 2026-11-05
 
-Mommy, Daddy and Kaylee take the speedboat to **Koh Samet**, a little island of white sand off Rayong. The whole island is **one world she roams by herself** (in the spirit of cozy island games like Alba): sandy paths, five real beaches, the green taxi, the sea all round, and real island animals to snap with Mommy's phone for her animal book. On the beaches she **rides the jet ski** with Daddy, builds a sandcastle the waves fill, snorkels with the fish at Ko Kudi and plays hide and seek by the big driftwood tree. At night the fire dancers light up the beach for her. Every word is spoken.
+Mom, Dad and Kaylee take the speedboat to **Koh Samet**, a little island of white sand off Rayong. The whole island is **one world she roams by herself** (in the spirit of cozy island games like Alba): sandy paths, five real beaches, the green taxi, the sea all round, and real island animals to snap with Mom's phone for her animal book. On the beaches she **rides the jet ski** with Dad, builds a sandcastle the waves fill, snorkels with the fish at Ko Kudi and plays hide and seek by the big driftwood tree. At night the fire dancers light up the beach for her. Every word is spoken.
 
 **Next:** The user plays the whole trip on the iPad from **[the Thailand map](#/world/thailand/hub/map)**: tap the 🏝️ pin, pack, **[the speedboat](#/world/thailand/samet-trip/speedboat)**, **[the island](#/world/thailand/samet-trip/island?at=nadan)**, the four stops in any order, **[the sunset](#/world/thailand/samet-trip/sunset?flags=all)** and **[the fire show](#/world/thailand/samet-trip/fireshow?round=twirl&flags=all)**, home and the pink mermaid stamp. Every line is written and wired; **the 264 new clips need a working OpenAI key** (the one in the main checkout’s `.env` returns 401), then `node scripts/generate-voice.mjs` and listen on the iPad.
 
@@ -25,10 +25,10 @@ Written 2026-11-04. Thailand's fourth family trip, and the first **open world**:
 
 ### The stops (any order)
 
-- 🛥️ **The jet ski at Sai Kaew** (jetski): the user's must-have. She steers, Daddy holds on behind her: carve and spray, jump the waves, race the jet ski man to the far buoy. After it, the jet ski is hers to ride round the coast.
-- 🏰 **Sandcastle at Ao Hin Khok** (sandcastle): Dig a moat, flip bucket towers, then dig a channel and the waves fill the moat. A crab moves in. Daddy gets buried.
+- 🛥️ **The jet ski at Sai Kaew** (jetski): the user's must-have. She steers, Dad holds on behind her: carve and spray, jump the waves, race the jet ski man to the far buoy. After it, the jet ski is hers to ride round the coast.
+- 🏰 **Sandcastle at Ao Hin Khok** (sandcastle): Dig a moat, flip bucket towers, then dig a channel and the waves fill the moat. A crab moves in. Dad gets buried.
 - 🐠 **Snorkel at Ko Kudi** (snorkel): The snorkel boat to the little island, mask on, float and follow the parrotfish over the coral to a cuttlefish that changes color.
-- 🙈 **Hide and seek at Ao Prao** (hideseek): From the user's photo: she covers her eyes by the giant driftwood tree, Daddy hides, she finds him. Then her turn to hide.
+- 🙈 **Hide and seek at Ao Prao** (hideseek): From the user's photo: she covers her eyes by the giant driftwood tree, Dad hides, she finds him. Then her turn to hide.
 - 🔥 **The fire show (the finale)** (fireshow): After all four stamps: the sunset at the driftwood tree, night on Sai Kaew, fire dancers, and Kaylee twirling glowing poi of her own.
 
 ## 🧔 the user's picks and answers
@@ -37,7 +37,7 @@ Written 2026-11-04. Thailand's fourth family trip, and the first **open world**:
 
 - **Where?** **Koh Samet** (เกาะเสม็ด) in Rayong, from the family's real vacation. (the user typed “koh somae”; the folder is `photos/koh samae/`.)
 - **What kind of game?** An **open-world island** in the style of cozy island games (Alba), very fun and very good looking.
-- **Who comes?** Just **Mommy, Daddy and Kaylee**.
+- **Who comes?** Just **Mom, Dad and Kaylee**.
 - **What did we do?** The **jet ski** (User feedback: be sure she does it), the **resort lunch** on a deck above a cove, the **sunset beach** with the big driftwood tree, the **boat over** to the island, **sandcastles and swimming**, the **fire show** at night, **snorkeling** on a boat trip.
 - **Words?** **Spoken**: every line is recorded in each character's voice (Sparkle gives the instructions), short text only for the user.
 - **Real places?** Use the photos' GPS for the real locations. **The photos have no GPS left** (see below), so the places come from the real map instead (OpenStreetMap), and the user answered “plan from answers now” rather than export originals.
@@ -47,8 +47,8 @@ Written 2026-11-04. Thailand's fourth family trip, and the first **open world**:
 `KayleeGamepack-planning-assets/photos/koh samae/`, three photos, kept out of this repo (Kaylee is in them).
 
 - 🛥️ **1. The jet ski**: Kaylee sits up front on a big white jet ski with red and yellow stripes, in a pink-and-white life jacket, in knee-deep green-turquoise water. The jet ski man (orange life vest) pushes it off by the handlebars. Other jet skis bob further out, swimmers near a low green headland with rocks, a grey-white sky, a rope of buoys across the water. **This is Sai Kaew.**
-- 🍽️ **2. Lunch on the deck**: Daddy (cap, sunglasses, pink t-shirt) hands Kaylee bread from a wicker basket at a table on a wooden deck: rattan chairs with green and lime cushions, cream umbrellas, a dark wooden railing, palms and pandanus trees with stilt roots, and below it a cove of turquoise water and a strip of beach. Blue sky with fluffy cloud. **Most likely Ao Prao Resort or Le Vimarn** (the only resorts on a west-facing cove).
-- 🌅 **3. The driftwood tree**: Sunset: a peach-gold sky, the sun low over the sea, blue mountains of the mainland on the horizon, gentle waves on pale sand. Kaylee (pink t-shirt, denim shorts, pink clogs) **covers her eyes** next to a huge grey driftwood tree with a tangle of roots, Daddy leaning on it behind her. Pink umbrellas and red beach chairs further up the beach. **A west-facing beach: Ao Prao.**
+- 🍽️ **2. Lunch on the deck**: Dad (cap, sunglasses, pink t-shirt) hands Kaylee bread from a wicker basket at a table on a wooden deck: rattan chairs with green and lime cushions, cream umbrellas, a dark wooden railing, palms and pandanus trees with stilt roots, and below it a cove of turquoise water and a strip of beach. Blue sky with fluffy cloud. **Most likely Ao Prao Resort or Le Vimarn** (the only resorts on a west-facing cove).
+- 🌅 **3. The driftwood tree**: Sunset: a peach-gold sky, the sun low over the sea, blue mountains of the mainland on the horizon, gentle waves on pale sand. Kaylee (pink t-shirt, denim shorts, pink clogs) **covers her eyes** next to a huge grey driftwood tree with a tangle of roots, Dad leaning on it behind her. Pink umbrellas and red beach chairs further up the beach. **A west-facing beach: Ao Prao.**
 
 > **📍 No GPS in any of them**
 >
@@ -111,7 +111,7 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 
 > **🔀 Any order, as Kaylee asked**
 >
-> All four stops are open from the moment she lands. Each one earns a little **pink flag** that pops up on that beach (she sees her progress in the world itself, not on a menu), and a sticker page in the animal book. The day moves on with the flags: morning when she lands, bright noon, a warm afternoon, a golden sky with the fourth. Then Daddy calls everyone to the driftwood tree for the sunset, night falls and the fire show starts. The trip's passport stamp lands at `home`, like the other trips.
+> All four stops are open from the moment she lands. Each one earns a little **pink flag** that pops up on that beach (she sees her progress in the world itself, not on a menu), and a sticker page in the animal book. The day moves on with the flags: morning when she lands, bright noon, a warm afternoon, a golden sky with the fourth. Then Dad calls everyone to the driftwood tree for the sunset, night falls and the fire show starts. The trip's passport stamp lands at `home`, like the other trips.
 
 ### Leaving and coming back
 
@@ -132,7 +132,7 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 - **Sand is soft:** her hooves leave prints, she sinks a little and kicks up puffs; on the wet sand by the water she leaves shiny prints the waves wipe away.
 - **The sea is bouncy:** in the floatie each wave lifts her and drops her (a little *whee* the first times), a big one tips her into a spin. She paddles where her finger is, slower than walking.
 - **Paths over the rocks:** between the beaches a sandy path climbs over the round granite boulders through the trees, with steps; the camera swings round so the next beach shows ahead.
-- **Mommy and Daddy come along:** they follow at a little distance (Daddy's “keep up” from the HarborLand hall, generalized) and stop to do their own thing at each beach: Mommy takes photos, Daddy lies on a beach chair (tap him: he jumps up).
+- **Mom and Dad come along:** they follow at a little distance (Dad's “keep up” from the HarborLand hall, generalized) and stop to do their own thing at each beach: Mom takes photos, Dad lies on a beach chair (tap him: he jumps up).
 
 ### How it deepens (it's a toy, so the island opens up as she plays)
 
@@ -150,7 +150,7 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 - 🥥 **Coconut palms**: bonk, a coconut drops and rolls
 - 🌳 **Samet trees**: papery bark peels off and flutters
 - ⛱️ **Pink umbrellas**: spin, one flies off down the beach
-- 🪑 **Beach chairs**: fold up with Daddy in them
+- 🪑 **Beach chairs**: fold up with Dad in them
 - 🧜 **The mermaid statue**: a magic-flute tune, the mermaid's tail splashes
 - 🚕 **Green taxi**: honk honk
 - 🍌 **Banana boat**: whooshes past full of squealing people
@@ -163,7 +163,7 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 ### Silly moments
 
 - 🌊 **Walk into a big wave**: it rolls her over in the floatie, she pops up giggling with seaweed on her horn
-- 🥥 **Stand under the palm and poke it**: a coconut bonks Daddy
+- 🥥 **Stand under the palm and poke it**: a coconut bonks Dad
 - ⛱️ **Poke the umbrella three times**: it takes off like a kite with Kaylee holding on, floats a little, lands
 - 🚕 **Ride the taxi round and round**: the driver waves every lap and the songthaew toots a tune
 
@@ -178,19 +178,19 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 >
 > Like every hub: no idle hints spoken. After ~8 s with nothing touched, the nearest stop glows and a little pink flag-shaped arrow points to it from the edge of the screen. Sparkle only talks when something is new (the first time she reaches each beach, the jet ski becoming hers, a new animal).
 
-## 📷 Mommy's phone and the animal book
+## 📷 Mom's phone and the animal book
 
 `book`; the thread that makes her look closely at the whole island.
 
 > **📱 Snap the animals**
 >
-> Mommy lends Kaylee her phone (a big pink button in the corner). Tap it and the screen becomes the phone's camera, still following Kaylee. **Tap an animal** and it's a photo: flash, click, the animal does something cute for the camera, and the photo flies into her **animal book**, filling its silhouette. A good photo (the animal big and in the middle) gets a gold frame. Sparkle says its name once (“A hornbill!”); tap the photo to hear one fact.
+> Mom lends Kaylee her phone (a big pink button in the corner). Tap it and the screen becomes the phone's camera, still following Kaylee. **Tap an animal** and it's a photo: flash, click, the animal does something cute for the camera, and the photo flies into her **animal book**, filling its silhouette. A good photo (the animal big and in the middle) gets a gold frame. Sparkle says its name once (“A hornbill!”); tap the photo to hear one fact.
 
 ### The animals (real Samet animals; where to find them)
 
 - 🦎 **Monitor lizard**: Waddles across the paths and under the resort deck. Flicks its tongue at the camera.
 - 🐿️ **Variable squirrel**: Runs up the palms, chatters.
-- 🐒 **Long-tailed macaque**: In the trees on the hill road; tries to grab Daddy's sunglasses.
+- 🐒 **Long-tailed macaque**: In the trees on the hill road; tries to grab Dad's sunglasses.
 - 🦌 **Mouse-deer**: The tiny deer, shy, only in the forest by the path to Ao Prao. Very rare to snap: a sparkly gold page.
 - 🐦 **Oriental pied hornbill**: In the tamarind tree at Ao Wong Duan (a real sighting there). Big yellow beak.
 - 🦇 **Flying fox**: The big fruit bat, only in the golden afternoon sky and at night.
@@ -216,7 +216,7 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 
 > **👆 Core verb: steer the jet ski with her finger**
 >
-> **Finger down anywhere on the water and the jet ski heads for it**; the longer and further she holds, the faster it goes (it never needs a button). Let go and it glides, slows and bobs. Daddy sits behind her with his hands over hers (“Whee!”), and the jet ski man pushes them off the sand, like in the photo.
+> **Finger down anywhere on the water and the jet ski heads for it**; the longer and further she holds, the faster it goes (it never needs a button). Let go and it glides, slows and bobs. Dad sits behind her with his hands over hers (“Whee!”), and the jet ski man pushes them off the sand, like in the photo.
 
 ### How it feels
 
@@ -243,18 +243,18 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 - 🏊 **Swimmers**: wave, splash back
 - 🐟 **Jumping fish**: follow them
 - 🕊️ **Terns**: dive
-- 🧔 **Daddy**: his cap blows off, he catches it
+- 🧔 **Dad**: his cap blows off, he catches it
 
 ### Silly moments (instead of failure)
 
 - 🏖️ **Drive up onto the beach**: it skids up the sand, everyone tumbles off laughing, the jet ski man pushes it back
-- 🌀 **Spin in tight circles**: Daddy goes dizzy (“Wooo-ooo!”), spirals over his head
-- 💦 **Splash Mommy on the shore**: she's soaked, then laughs
+- 🌀 **Spin in tight circles**: Dad goes dizzy (“Wooo-ooo!”), spirals over his head
+- 💦 **Splash Mom on the shore**: she's soaked, then laughs
 - 🚧 **Push through the buoy rope**: the rope stretches like a rubber band and boings her softly back
 
 ### Story, teaching, payoff
 
-- **Story frame:** the jet ski man: “Life jacket on!” (she taps the jacket: click, it's on). Daddy: “You steer!” Then her hands are busy. Sparkle only when something is new (“Big waves! Jump them!”, “Race to the buoy!”) or after ~8 s with no finger down (“Touch the water to go!”).
+- **Story frame:** the jet ski man: “Life jacket on!” (she taps the jacket: click, it's on). Dad: “You steer!” Then her hands are busy. Sparkle only when something is new (“Big waves! Jump them!”, “Race to the buoy!”) or after ~8 s with no finger down (“Touch the water to go!”).
 - **Teaches by doing:** **life jacket first**, every time (it waits for the click); stay **inside the buoys** where it's safe (the rope boings her back); waves come in from the open sea. Tap-to-hear: Sai Kaew means crystal sand; the jet ski pushes water out the back to go.
 - **Payoff:** the wake art she drew, the race win and the bell, the pink flag on Sai Kaew, the jet ski hers.
 - **Replay:** the free ride round the island, a heart to draw, the race again (a little faster).
@@ -279,14 +279,14 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
    Her pink bucket (if she packed it; the beach shop lends one if not): drag it onto the sand and tap it, and it flips and lifts to leave a tower. Different moulds: round tower, square tower, a **unicorn** mould. Push shells and coral bits into the walls.
 3. **The tide comes in** (?round=tide)
    The waves creep up the beach. **Dig a channel** from her moat to the sea and the water rushes in and fills it (the best moment). A hermit crab moves into a tower door. A wave too big washes one tower half away: “Oh no! Build it again!”
-🧔. **Side verb: bury Daddy**
-   Daddy lies down next to the castle: drag sand over him until only his head and toes stick out. Wiggle his toes (tap). He sneezes and the sand flies off.
+🧔. **Side verb: bury Dad**
+   Dad lies down next to the castle: drag sand over him until only his head and toes stick out. Wiggle his toes (tap). He sneezes and the sand flies off.
 
 - **Her choices:** where to dig, how big, which moulds, where the shells go, where the channel runs.
-- **Pokeables:** the hermit crab, a ghost crab running sideways, the beach ball, Mommy reading under the umbrella (she peeks over her book), the ice cream cart, a boat going by, the foam.
+- **Pokeables:** the hermit crab, a ghost crab running sideways, the beach ball, Mom reading under the umbrella (she peeks over her book), the ice cream cart, a boat going by, the foam.
 - **Teaches:** the **tide** comes up the beach and goes down again; wet sand sticks, dry sand runs. Tap-to-hear: crabs dig holes to hide from the sun.
-- **Payoff:** her castle, which stays on the beach (saved), with water in the moat and a crab living in it. Mommy's photo of it goes in the book.
-- **Numbers:** 2-3 min, 30-45 touches, 1 line before her hands are busy (Daddy: “Let's build a sandcastle!”).
+- **Payoff:** her castle, which stays on the beach (saved), with water in the moat and a crab living in it. Mom's photo of it goes in the book.
+- **Numbers:** 2-3 min, 30-45 touches, 1 line before her hands are busy (Dad: “Let's build a sandcastle!”).
 
 ## 🐠 Snorkel at Ko Kudi
 
@@ -303,9 +303,9 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 2. **Follow the parrotfish** (?round=follow)
    A big rainbow parrotfish swims past and waits for her to follow: through a gap between the rocks, over a sandy patch, to a hidden garden of soft coral where more fish live. It goes a little ahead and waits; never too fast.
 3. **The cuttlefish** (?round=cuttle)
-   In the garden a cuttlefish hovers. Swim close and it flashes colors, swim closer and it changes again: a rainbow, stripes, pink (for her). Mommy's waterproof camera: snap the fish for the book (the parrotfish, the damselfish, the cuttlefish, a sea urchin, the coral).
+   In the garden a cuttlefish hovers. Swim close and it flashes colors, swim closer and it changes again: a rainbow, stripes, pink (for her). Mom's waterproof camera: snap the fish for the book (the parrotfish, the damselfish, the cuttlefish, a sea urchin, the coral).
 
-- **Silly (instead of failure):** swim into a sea urchin: she boings back off it like a bouncy ball (“Prickly! Look, don't touch!”), never hurt. Swim into the coral: she bumps off softly and a little fish tells her off with bubbles. Swim up to Daddy: he blows a bubble ring.
+- **Silly (instead of failure):** swim into a sea urchin: she boings back off it like a bouncy ball (“Prickly! Look, don't touch!”), never hurt. Swim into the coral: she bumps off softly and a little fish tells her off with bubbles. Swim up to Dad: he blows a bubble ring.
 - **Her choices:** where to swim, which fish to follow, what to photograph.
 - **Pokeables:** a sea cucumber that wiggles, a giant clam that closes, the boat's ladder, the captain, a fish that hides in the coral, the anchor rope, the sunbeams.
 - **Teaches:** coral is **alive**: look, don't touch; sea urchins are prickly; fish live in the coral like people in a town. Tap-to-hear: the cuttlefish changes color to talk and to hide.
@@ -318,7 +318,7 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 
 > **👆 Core verb: walk and look (the island's verb)**
 >
-> Kaylee covers her eyes by the big driftwood tree (just like the photo) and counts with Sparkle, “one… two… three!”. Then **she leads Kaylee round the beach to find Daddy**, peeking behind things; when she's close the hiding place wiggles. Tap it: “Found you!”, Daddy jumps out and spins her round.
+> Kaylee covers her eyes by the big driftwood tree (just like the photo) and counts with Sparkle, “one… two… three!”. Then **she leads Kaylee round the beach to find Dad**, peeking behind things; when she's close the hiding place wiggles. Tap it: “Found you!”, Dad jumps out and spins her round.
 
 ### How it deepens
 
@@ -327,19 +327,19 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 2. **Trickier hides** (?round=2)
    In the tangle of roots, under a beach towel (it breathes), in the sea with only his cap floating, up in the pandanus tree. Something always gives him away (a sneeze, a giggle, a crab pinching his toe) if she's stuck for ~8 s, and the spot glows after that.
 3. **Her turn to hide** (?round=hide)
-   Daddy covers his eyes. She leads Kaylee to any hiding place she likes (they all glow softly), and Daddy searches **all the wrong places** first (under a coconut, in the ice cream cart, behind Mommy) while she watches and giggles, then: “Found you!” She **wins** when she hides well: he gives up and she pops out (“You win!”).
+   Dad covers his eyes. She leads Kaylee to any hiding place she likes (they all glow softly), and Dad searches **all the wrong places** first (under a coconut, in the ice cream cart, behind Mom) while she watches and giggles, then: “Found you!” She **wins** when she hides well: he gives up and she pops out (“You win!”).
 
-- **Lunch on the deck first (a place, not a stop):** the resort deck above the cove is on the island all day (`deck`): climb the steps, sit, and it's photo 2. Daddy passes the bread basket (tap: a roll), a fresh coconut with a straw arrives (sip), mango sticky rice. A monitor lizard strolls by under the deck, a squirrel in the pandanus, the cream umbrellas flap. 45-90 s, 8-15 touches, no stamp.
-- **Silly:** hide in a ridiculous place (in the sea in the floatie, behind a thin palm) and Daddy still can't find her, because he looks the wrong way. Tap Daddy while he counts and he peeks (“No peeking!”).
+- **Lunch on the deck first (a place, not a stop):** the resort deck above the cove is on the island all day (`deck`): climb the steps, sit, and it's photo 2. Dad passes the bread basket (tap: a roll), a fresh coconut with a straw arrives (sip), mango sticky rice. A monitor lizard strolls by under the deck, a squirrel in the pandanus, the cream umbrellas flap. 45-90 s, 8-15 touches, no stamp.
+- **Silly:** hide in a ridiculous place (in the sea in the floatie, behind a thin palm) and Dad still can't find her, because he looks the wrong way. Tap Dad while he counts and he peeks (“No peeking!”).
 - **Teaches:** a game kids everywhere play, and the **sunset is in the west**: this is the island's sunset beach, the sun goes down over the sea and the mainland's hills.
-- **Payoff:** Daddy found three times, then she beats him. Mommy's photo of the two of them at the tree (the real photo, as unicorns) goes in the book.
-- **Numbers:** 2-3 min, 25-40 touches, 1 line before (Daddy: “Close your eyes and count!”).
+- **Payoff:** Dad found three times, then she beats him. Mom's photo of the two of them at the tree (the real photo, as unicorns) goes in the book.
+- **Numbers:** 2-3 min, 25-40 touches, 1 line before (Dad: “Close your eyes and count!”).
 
 ## 🔥 The finale: sunset and the fire show
 
 `sunset`, `fireshow`; after all four pink flags. Its own PR.
 
-🌅 Sunset at the driftwood tree (Mommy's photo of the three of them) → 🌙 Night falls (the beach bars light up, the stars come out) → 🔥 The fire show at Sai Kaew (Kaylee twirls glowing poi) → 🎆 The big finish (everything she did comes back) → 🖼️ Home (the photo for Agong's wall, the stamp)
+🌅 Sunset at the driftwood tree (Mom's photo of the three of them) → 🌙 Night falls (the beach bars light up, the stars come out) → 🔥 The fire show at Sai Kaew (Kaylee twirls glowing poi) → 🎆 The big finish (everything she did comes back) → 🖼️ Home (the photo for Agong's wall, the stamp)
 
 > **👆 Core verb: twirl the glowing poi**
 >
@@ -352,11 +352,11 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 2. **Shapes in the sky**
    The dancers draw a shape in fire (a circle, a star, a heart) and she draws it too; when hers is close it sparkles and lifts up into the sky like a lantern of light.
 3. **The big finish**
-   Each pink flag adds something: the jet ski man rides by with lights, her sandcastle glows with candles, the parrotfish and cuttlefish light up in the waves, Daddy dances. A last huge circle from her and the fire dancers make a ring of fire round the whole beach, then fireworks.
+   Each pink flag adds something: the jet ski man rides by with lights, her sandcastle glows with candles, the parrotfish and cuttlefish light up in the waves, Dad dances. A last huge circle from her and the fire dancers make a ring of fire round the whole beach, then fireworks.
 
 - **Teaches:** **fire is for grown-ups**: the dancers stay behind the rope and she watches from behind it; her poi are lights. Tap-to-hear: fire shows happen on Sai Kaew every night.
 - **Payoff:** the photo, the trophy-style moment of the trip (the beach cheering for her), then `home`: back at Agong's house she picks a photo for his wall and the stamp lands on the 🏝️ pin.
-- **Numbers:** 2-3 min, 30-50 touches, 1 line before (Mommy: “Look! Fire dancers!”).
+- **Numbers:** 2-3 min, 30-50 touches, 1 line before (Mom: “Look! Fire dancers!”).
 
 ## 📊 The numbers
 
@@ -381,7 +381,7 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 | Island | `island` | at once | 40-80 | 1 line (first landing) | walk, gallop, swim, poke, ride the taxi |
 | Animal book | `book` | at once | (in the island) | 0 | snap animals |
 | **Jet ski** | `jetski` | ~4 s | 40-60 | 2 short lines | steer, jump, race |
-| **Sandcastle** | `sandcastle` | ~3 s | 30-45 | 1 line | dig, flip towers, dig the channel, bury Daddy |
+| **Sandcastle** | `sandcastle` | ~3 s | 30-45 | 1 line | dig, flip towers, dig the channel, bury Dad |
 | **Snorkel** | `snorkel` | ~5 s | 30-45 | 1 line | lead her through the reef, follow, snap |
 | Lunch | `deck` | ~3 s | 8-15 | 0-1 line | bread, coconut, pokes |
 | **Hide and seek** | `hideseek` | ~5 s | 25-40 | 1 line | walk and look, then hide |
@@ -402,7 +402,7 @@ Built so far: getting there, the island, the book, the four stops and lunch. The
 7. `#/world/thailand/samet-trip/snorkel?round=float` Snorkel: float and look
 8. `#/world/thailand/samet-trip/deck` Lunch on the deck at Ao Prao
 9. `#/world/thailand/samet-trip/hideseek?round=1` Hide and seek: easy hides
-10. `#/world/thailand/samet-trip/sunset?flags=all` Finale: the sunset at the driftwood tree (pull the sun down into the sea, Mommy’s photo, night falls)
+10. `#/world/thailand/samet-trip/sunset?flags=all` Finale: the sunset at the driftwood tree (pull the sun down into the sea, Mom’s photo, night falls)
 11. `#/world/thailand/samet-trip/fireshow?round=twirl&flags=all` Finale: the fire show (twirl the glowing poi; round=shapes, round=finish)
 12. `#/world/thailand/samet-trip/island?at=nadan&flags=all` All four flags: the speedboat at Na Dan pier takes them to the sunset (the finale); the fire show’s 🏠 takes them home
 
@@ -424,26 +424,26 @@ Built so far: getting there, the island, the book, the four stops and lunch. The
 14. `#/world/thailand/samet-trip/snorkel?round=float&feel=1` Snorkel: tune the swimming, the fish and the half-under camera
 15. `#/world/thailand/samet-trip/hideseek?round=hide` Hide and seek: her turn to hide
 16. `#/world/thailand/samet-trip/hideseek?round=2` Hide and seek: the trickier hides (roots, towel, sea, pandanus)
-17. `#/world/thailand/samet-trip/hideseek?round=1&feel=1` Hide and seek: tune the walking, the hides, Daddy’s search
+17. `#/world/thailand/samet-trip/hideseek?round=1&feel=1` Hide and seek: tune the walking, the hides, Dad’s search
 18. `#/world/thailand/samet-trip/deck?feel=1` Lunch: tune the sipping, the bites, the camera
 19. `#/world/thailand/samet-trip/book?book=monitor,squirrel,macaque,hornbill,heron,tern,crab,parrotfish,damselfish,cuttlefish,urchin,coral` The animal book, nearly full
-20. `#/world/thailand/samet-trip/island?at=wongduan&phone=1` Mommy’s phone out at Ao Wong Duan (the hornbill, the fish, the cuttlefish)
-21. `#/world/thailand/samet-trip/island?at=prao&phone=1&time=golden` Mommy’s phone at Ao Prao at dusk (the flying fox flying)
+20. `#/world/thailand/samet-trip/island?at=wongduan&phone=1` Mom’s phone out at Ao Wong Duan (the hornbill, the fish, the cuttlefish)
+21. `#/world/thailand/samet-trip/island?at=prao&phone=1&time=golden` Mom’s phone at Ao Prao at dusk (the flying fox flying)
 22. `#/world/thailand/samet-trip/island?at=hinkhok&phone=1` Hin Khok and the mermaid: the heron, the urchins, the coral; the beach clean
-23. `#/world/thailand/samet-trip/island?at=prao&phone=1&feel=1` Tune Mommy’s phone
+23. `#/world/thailand/samet-trip/island?at=prao&phone=1&feel=1` Tune Mom’s phone
 24. `#/world/thailand/samet-trip/book?at=saikaew&flags=all&book=all` The book, all fourteen (the gold star)
 
 ## ✅ The fun check
 
 |  | Jet ski | Sandcastle | Snorkel | Hide and seek | Fire show | Island |
 |---|---|---|---|---|---|---|
-| Core verb, fun with no goal? | steer + spray: yes | dig: yes | swim with fish: yes | find Daddy: yes | draw with light: yes | roam + poke: yes |
+| Core verb, fun with no goal? | steer + spray: yes | dig: yes | swim with fish: yes | find Dad: yes | draw with light: yes | roam + poke: yes |
 | Deepens 3 times | ride · waves · race | dig · towers · tide | float · follow · cuttlefish | easy · tricky · her turn | twirl · shapes · finish | opens up: paths, taxi, jet ski |
 | Her choices | where, how wild | what to build | where, which fish | where to look, where to hide | what to draw | where to go, what to snap |
 | Pokeables ≥ 5 | 7 | 7 | 7 | 6 | 6 | dozens |
-| Surprise | the wake heart | the moat fills, Daddy buried | the rainbow cuttlefish | Daddy can't find her | the ring of fire | the umbrella kite |
+| Surprise | the wake heart | the moat fills, Dad buried | the rainbow cuttlefish | Dad can't find her | the ring of fire | the umbrella kite |
 | Learning by doing | life jacket, buoys | the tide | coral is alive | sunset in the west | fire is for grown-ups | an island, bays, a national park |
-| Can she lose? | the race, rarely, by a nose | no | no | no (Daddy gives up) | no | no |
+| Can she lose? | the race, rarely, by a nose | no | no | no (Dad gives up) | no | no |
 
 ## 🧱 Build plan
 
@@ -452,23 +452,23 @@ One PR per step; the user plays each greybox on the iPad before the next. Until 
 0. **This plan** [done] · 2026-11-04 · PR #312
    the user reads it and answers the open questions.
 1. **Greybox 1: the jet ski** [done] · 2026-11-04 · PR #322
-   Sai Kaew bay in the toon look with placeholder shapes: the beach strip, the hut, the buoy rope, the box jet ski with Kaylee and Daddy on it. The three rounds (`ride`, `waves`, `race`), the wake loop, silly beaching. **Feel on knobs** (`?feel=1`). Built in the island's real coordinates from day one (`island/layout.ts`) so it drops straight into step 2. The riskiest-for-fun piece, and the user's must-have, so it goes first.
+   Sai Kaew bay in the toon look with placeholder shapes: the beach strip, the hut, the buoy rope, the box jet ski with Kaylee and Dad on it. The three rounds (`ride`, `waves`, `race`), the wake loop, silly beaching. **Feel on knobs** (`?feel=1`). Built in the island's real coordinates from day one (`island/layout.ts`) so it drops straight into step 2. The riskiest-for-fun piece, and the user's must-have, so it goes first.
 2. **Greybox 2: the island to roam** [done] · 2026-11-04 · PR #326
-   The open world itself, in blocks: the coastline and hills at 1:10, the five beaches, the paths over the rocks, the green taxi, Na Dan pier. Lead-to-walk, gallop, the floatie swim, Mommy and Daddy following, the day's light moving with `flags`, 20+ pokes, the pink flags. **The riskiest tech:** a world ~10× the house's size at 60 fps on the iPad (see the tech plan).
-3. **Greybox 3: Mommy's phone and the animal book** [done] · 2026-11-04
+   The open world itself, in blocks: the coastline and hills at 1:10, the five beaches, the paths over the rocks, the green taxi, Na Dan pier. Lead-to-walk, gallop, the floatie swim, Mom and Dad following, the day's light moving with `flags`, 20+ pokes, the pink flags. **The riskiest tech:** a world ~10× the house's size at 60 fps on the iPad (see the tech plan).
+3. **Greybox 3: Mom's phone and the animal book** [done] · 2026-11-04
    The camera mode, the 14 animals with simple behaviors (wander, flee, perch, swim), the book pages, the beach clean.
 4. **Greybox 4: the sandcastle** [done] · 2026-11-04
-   The diggable sand patch (a deforming height field), bucket towers, the tide and the channel, burying Daddy.
+   The diggable sand patch (a deforming height field), bucket towers, the tide and the channel, burying Dad.
 5. **Greybox 5: the snorkel** [done] · 2026-11-05
    The snorkel boat ride, Ko Kudi's reef (its own scene), the half-underwater camera, the fish crowd, the parrotfish to follow, the cuttlefish.
 6. **Greybox 6: lunch and hide and seek** [done] · 2026-11-05
-   The resort deck at Ao Prao, the driftwood tree, Daddy's hides and his silly search.
+   The resort deck at Ao Prao, the driftwood tree, Dad's hides and his silly search.
 7. **Greybox 7: getting there and the trip frame** [done] · 2026-11-05
-   The 🏝️ pin on the Thailand map (with `?samet=1` while it’s in the works), packing in Kaylee’s room, the speedboat from Ban Phe with her hoof in the spray, the island saved on the iPad, and home: the speedboat at Na Dan, Mommy’s photo on Agong’s wall, the stamp on the pin.
+   The 🏝️ pin on the Thailand map (with `?samet=1` while it’s in the works), packing in Kaylee’s room, the speedboat from Ban Phe with her hoof in the spray, the island saved on the iPad, and home: the speedboat at Na Dan, Mom’s photo on Agong’s wall, the stamp on the pin.
 8. **The look** [done] · 2026-11-05
    The island made beautiful: the real sand and water colors, palms, samet trees, pandanus, boulders, the umbrellas, the deck, the sky through the day, the reef. The characters (the jet ski man, the boat captain, the fire dancers). See “The look”.
 9. **The finale: sunset and the fire show** [done] · 2026-11-05 · PR #343 · PR #344
-   Greybox, then its look. The greybox is built (2026-11-05): the sunset at the driftwood tree and the fire show’s three rounds, the feel on knobs. Its look (2026-11-05, after the user’s iPad notes): a darker beach, real flame shapes, Mommy’s phone, the fire poi on chains, the lanterns as soft paper-lantern glow.
+   Greybox, then its look. The greybox is built (2026-11-05): the sunset at the driftwood tree and the fire show’s three rounds, the feel on knobs. Its look (2026-11-05, after the user’s iPad notes): a darker beach, real flame shapes, Mom’s phone, the fire poi on chains, the lanterns as soft paper-lantern glow.
 10. **The full loop** [doing] · 2026-11-05 · PR #345
    Every line in `lines.ts`, the new voices in `cast.json`, clips generated, hints, the facts, the sticker, full QA (layout-qa + playtest-qa) on the trip's sections, then out of `inTheWorks` and onto the Thailand map. Built (2026-11-05): every line, the voices, hints, the facts, the pink mermaid sticker, the shelf row, onto the map. Waiting: recording the clips (the OpenAI key) and the user’s iPad play.
 
@@ -476,18 +476,18 @@ One PR per step; the user plays each greybox on the iPad before the next. Until 
 
 ### Greybox 1: the jet ski at Hat Sai Kaew ([done] · 2026-11-04 · PR #322)
 
-Kaylee steers the jet ski with her finger, Daddy behind her, in the island's real coordinates: the calm bay, the waves, the race, the wake loop and the silly beaching, its feel on knobs.
+Kaylee steers the jet ski with her finger, Dad behind her, in the island's real coordinates: the calm bay, the waves, the race, the wake loop and the silly beaching, its feel on knobs.
 
 - **The island from the real map:** `island/layout.ts` holds OSM's real coastline of Ko Samet (way 26609854, 394 points at 1:10) and every beach's sand outline (OSM `natural=beach`), the plan's places from their lat/lon, and the bay laid out in the beach's own frame (`bay(u, v)`: along the sand, out to sea). `island/ground.ts` turns it into ground: wide crystal sand on the beaches, granite boulders and a quick rise elsewhere, a green spine of hills, shallows that slope away gently off the sand.
 - **New in the engine, opt-in so the bay and Canada don't change:** `engine3d/terrain.ts` (a height field from data, toon vertex colors, `heightAt`/`shoreAt`, and a sea texture of depth and shore distance) and `engine3d/lagoon.ts` (tropical water: see-through mint shallows to turquoise, teal and blue in soft bands, a swash line sliding up the sand, rolling waves in the vertex shader that the jet ski rides exactly, lighter crests and white water on big ones, sun glints).
 - **The look, pushed past a greybox (User feedback: “make it visually impressive, best graphics in game so far”):** a gradient sky with the sun's glow, fat toon clouds with lavender bellies, Ko Kudi and its neighbors on the eastern horizon, the mainland's blue hills to the north, coconut palms leaning out over the sand, samet trees and forest up the hill, the pink umbrellas and red chairs, the thatched jet ski hut with its bell, and the mermaid on her rocks. All code-built shapes, no generated art.
-- **The jet ski** (`jetski/ski.ts`): white with red and yellow stripes and a black seat like the photo, Kaylee up front, Daddy behind with his hands forward, both in life jackets; the jet ski man's has blue stripes.
+- **The jet ski** (`jetski/ski.ts`): white with red and yellow stripes and a black seat like the photo, Kaylee up front, Dad behind with his hands forward, both in life jackets; the jet ski man's has blue stripes.
 - **The toy** (`jetski/jetski.ts`): finger on the water and it heads there (the shared `engine3d/drive.ts`), a rooster tail of spray, side spray on hard turns, a lean, a slide, the nose lifting, a white wake that stays ~20 s (`jetski/wake.ts`).
 - **Ride** (`?round=ride`): the life jacket floats by the jet ski and waits for her tap, then the jet ski man pushes them off. The buoy rope stretches like a rubber band where she pushes and boings her back. **The loop secret:** close a loop of wake and it sparkles and fills with jumping fish (a rough heart test makes the sparkles pink).
 - **Waves** (`?round=waves`): bigger waves roll in from the open sea; a wave lifting it fast then dropping away throws it in the air, a hard throw spins it, a big landing sprays the camera. Terns dive beside her.
 - **Race** (`?round=race`): 3, 2, 1, 🏁, out round the big orange buoy and back between the pink flags against the jet ski man. He eases off while he's ahead, catches up when she's far ahead, and if she stops he still only wins by a nose; he goes a little slower after each race she loses. The winner rings the bell; 🏆 🔁 after a win, “So close! 🔁” and straight into the next race after a loss.
-- **Silly, never failing:** fast onto the sand and it skids, Kaylee and Daddy tumble off and lie giggling, the jet ski man walks over and pushes it back out; doughnuts make Daddy dizzy (stars round his head); zooming past Mommy at the water's edge soaks her (she hops, twice); swimmers squeal and wave as she zooms past.
-- **Pokes:** the bell, the big buoy, the banana boat (everyone falls off and climbs back on), the four swimmers, the three terns, the eight umbrellas (they spin), Daddy (his cap blows off and he catches it), Mommy, the jet ski man, Kaylee (toot toot).
+- **Silly, never failing:** fast onto the sand and it skids, Kaylee and Dad tumble off and lie giggling, the jet ski man walks over and pushes it back out; doughnuts make Dad dizzy (stars round his head); zooming past Mom at the water's edge soaks her (she hops, twice); swimmers squeal and wave as she zooms past.
+- **Pokes:** the bell, the big buoy, the banana boat (everyone falls off and climbs back on), the four swimmers, the three terns, the eight umbrellas (they spin), Dad (his cap blows off and he catches it), Mom, the jet ski man, Kaylee (toot toot).
 - **Feel on knobs** (`?feel=1`): steering (top speed, speeding up, gliding, turn rate, grip, crawl/full-speed distances, the straight-ahead zone, lean, nose lift, camera turn, height, side and look-ahead), the waves and jumps (heights per round, crest spacing, speed, jump threshold and strength, spin, squash, jumps before the race), the rope, the sand and the silly things, and the race's rubber band. The lab graphs her finger against the jet ski. Round chips (🛥️ 🌊 🏁) show at the top right with `?feel=1`.
 
 > **Changed from the plan**
@@ -506,18 +506,18 @@ Kaylee steers the jet ski with her finger, Daddy behind her, in the island's rea
 
 ### Greybox 2: the island to roam ([done] · 2026-11-04 · PR #326)
 
-Kaylee roams the north half of Koh Samet by herself: she follows her finger along the sand, gallops, swims in her floatie, rides the green taxi round the road and the jet ski round the coast, and pokes everything; Mommy and Daddy follow, the pink flags stand on their beaches and the day moves with them.
+Kaylee roams the north half of Koh Samet by herself: she follows her finger along the sand, gallops, swims in her floatie, rides the green taxi round the road and the jet ski round the coast, and pokes everything; Mom and Dad follow, the pink flags stand on their beaches and the day moves with them.
 
 - **The island to roam** (`island/island.ts`, `?at=` one of nadan, saikaew, hinkhok, phai, wongduan, prao, deck, aonoina): the north half of Koh Samet at 1:10 as one world. **Lead-to-walk:** hold a finger and Kaylee trots after it, hold it far ahead and she gallops (sand puffs, hoofprints that the swash wipes off the wet sand), tap a spot and she walks there; she steers round loungers, palms and the forest's edge instead of stopping. Tap something far away (the taxi, a jet ski, a stop) and she walks to it, then uses it.
 - **The floatie swim:** walk into the sea and she's in her pink-and-white floatie (her arm floaties pop on too), bobbing on the swell, paddling slower than she walks, out to 26 m from the shore. A big wave lifts her and spins the floatie round (“whee”).
 - **The ways** (`island/layout.ts` WAYS, smoothed and sampled every 2 m): the concrete road from Na Dan pier down to Sai Kaew, over the spine to Ao Prao and down the middle to Ao Wong Duan, and sandy paths over the rocks between the east coast's beaches, along the north shore to Ao Noi Na and out to the sunset viewpoint. `ground.ts` cuts each way into the hill as a steady climb and paints it (concrete, sand); the forest grows only where she can't walk, so it hems in the paths.
 - **The green taxi** (`island/taxi.ts`): Krabi's songthaew painted island green (`SAMET_GREEN`), driving the road round Na Dan, Sai Kaew, Ao Prao and Ao Wong Duan, bouncing along, its driver waving each lap. It waits while she's near and glows: tap it (or walk up and tap) and the family climb in the back; at the next stop she taps anywhere to hop off, or rides on round (a toot of a tune each lap).
-- **The jet ski is hers** (`?flags=jetski`): a jet ski waits at the water's edge on six beaches; tap one up close and she and Daddy ride it with the jet ski's finger steering (`engine3d/drive.ts`), round the coast to any beach. Nose slowly onto a beach and they hop off (the jet ski stays there); the rocks bounce it off. Before the flag, the Sai Kaew jet ski opens the jet ski section, and after a race she wins its 🏝️ button brings her back to the island with the flag up.
-- **Mommy and Daddy follow** on her trail at a little distance, hopping along; they wait at the water's edge when she swims, catch up off screen after a ride, and when she stops on a beach Daddy lies down on the sand (tap him: he jumps up).
-- **The stops and the pink flags:** a soft pink ring at each stop (the jet ski at Sai Kaew, the sandcastle mound at Ao Hin Khok, the snorkel boat at Ao Wong Duan's jetty, the driftwood tree at Ao Prao). Only the jet ski opens a section yet; the others give a little show for now (bucket towers pop up round the mound, the boat toots, Daddy pops out from behind the tree). `?flags=` puts up each stop's pink flag on its beach. Quiet hub: after 8 s with nothing touched, a pink flag arrow points at the nearest stop without a flag (at the screen's edge when it's off screen). No idle lines.
+- **The jet ski is hers** (`?flags=jetski`): a jet ski waits at the water's edge on six beaches; tap one up close and she and Dad ride it with the jet ski's finger steering (`engine3d/drive.ts`), round the coast to any beach. Nose slowly onto a beach and they hop off (the jet ski stays there); the rocks bounce it off. Before the flag, the Sai Kaew jet ski opens the jet ski section, and after a race she wins its 🏝️ button brings her back to the island with the flag up.
+- **Mom and Dad follow** on her trail at a little distance, hopping along; they wait at the water's edge when she swims, catch up off screen after a ride, and when she stops on a beach Dad lies down on the sand (tap him: he jumps up).
+- **The stops and the pink flags:** a soft pink ring at each stop (the jet ski at Sai Kaew, the sandcastle mound at Ao Hin Khok, the snorkel boat at Ao Wong Duan's jetty, the driftwood tree at Ao Prao). Only the jet ski opens a section yet; the others give a little show for now (bucket towers pop up round the mound, the boat toots, Dad pops out from behind the tree). `?flags=` puts up each stop's pink flag on its beach. Quiet hub: after 8 s with nothing touched, a pink flag arrow points at the nearest stop without a flag (at the screen's edge when it's off screen). No idle lines.
 - **The day moves with the flags** (`scenery.ts` DAY): morning, noon, afternoon, then golden with all four; `?time=night` for the fire show's night (the stars, a crescent moon, fairy lights and lanterns glowing). The sky, the light, the haze, the clouds' bellies, the water's bands and the horizon all follow.
-- **30+ things to poke** (`props.ts`, `layout.ts` POKES): coconut palms (a coconut drops; on Daddy's head if he's under it, with stars), samet trees (the papery bark flutters off), pink umbrellas (spin; three quick pokes and one takes off like a kite with Kaylee holding on), red chairs (fold flat), the beach ball (she kicks it by running into it; it floats back from the sea), the coconut ice cream cart (a cone in her hand), the bead seller's tray (jingles), crab holes (a crab pops out and scuttles), pink bougainvillea (petals burst), longtails and the speedboat (bob and toot), the hammock at Ao Noi Na, the telescope at the viewpoint, the tamarind tree, the deck's cream umbrellas, the mermaid (a magic-flute tune, her tail splashes), the jet ski hut's bell, the banana boat, swimmers, terns, the flags, the taxi (honk), the family.
-- **Places:** Na Dan pier on posts with a blue rail and a shelter (she lands at its end), the little shops by the pier, a beach bar on Sai Kaew, Ao Phai, Ao Wong Duan and Ao Prao with fairy lights, lanterns between the palms at Sai Kaew (where the fire show will be), the resort deck on stilts above Ao Prao with tables and rattan chairs (walk up its steps), the snorkel jetty at Ao Wong Duan, the big silver driftwood tree. Mommy's phone, the animal book and the animals are greybox 3.
+- **30+ things to poke** (`props.ts`, `layout.ts` POKES): coconut palms (a coconut drops; on Dad's head if he's under it, with stars), samet trees (the papery bark flutters off), pink umbrellas (spin; three quick pokes and one takes off like a kite with Kaylee holding on), red chairs (fold flat), the beach ball (she kicks it by running into it; it floats back from the sea), the coconut ice cream cart (a cone in her hand), the bead seller's tray (jingles), crab holes (a crab pops out and scuttles), pink bougainvillea (petals burst), longtails and the speedboat (bob and toot), the hammock at Ao Noi Na, the telescope at the viewpoint, the tamarind tree, the deck's cream umbrellas, the mermaid (a magic-flute tune, her tail splashes), the jet ski hut's bell, the banana boat, swimmers, terns, the flags, the taxi (honk), the family.
+- **Places:** Na Dan pier on posts with a blue rail and a shelter (she lands at its end), the little shops by the pier, a beach bar on Sai Kaew, Ao Phai, Ao Wong Duan and Ao Prao with fairy lights, lanterns between the palms at Sai Kaew (where the fire show will be), the resort deck on stilts above Ao Prao with tables and rattan chairs (walk up its steps), the snorkel jetty at Ao Wong Duan, the big silver driftwood tree. Mom's phone, the animal book and the animals are greybox 3.
 - **The look** (User feedback: make it the best-looking place in Thailand): the ground as a fine grid where she walks and a coarse one beyond; coconut palms leaning over every beach, samet trees with pale papery bark, pandanus on stilt roots, round granite boulders on the rocky shores, pink bougainvillea and flowers along the paths, tufts of beach grass; leaves and grass sway in the breeze, soft cloud shadows drift across the island, the crystal sand twinkles, light ripples over the sand in the shallows, hoofprints. **See-through:** whatever stands between the camera and Kaylee dissolves in an even screen-door dither (`island/seethrough.ts`), so the trees never hide her.
 - **The camera:** on a beach, three-quarters along the sand from over the water's edge (the sea down one side of the screen, the hill and its palms up the other), framed a little out to sea; on the roads and paths it rises over the trees and looks along the way she's going; the taxi and the jet ski get their own. Turns are eased, never with her finger.
 - **Feel on knobs** (`?feel=1`): her trot, gallop and the distance it starts from, where she stops, the swim speed, how deep before she swims, how far out, the swell and when it spins her; the camera's angle on the beach and in the forest, how much it shows, looks ahead, turns and follows, how far it draws plants; the taxi's speed, how close she hops on, the jet ski's steering and how slowly it must land. The lab graphs her finger against her speed.
@@ -534,21 +534,21 @@ Kaylee roams the north half of Koh Samet by herself: she follows her finger alon
 > - No voices yet (greybox): no spoken lines, Sparkle's “Let's explore the island!” and each new beach come with the full loop.
 > - **Frame rate, measure on the iPad:** WebKit on a Mac draws 115-170 calls and 290-490k triangles per frame (about 60 calls are the three characters). Plants and props are drawn in 40 m tiles and dropped past 95 m (knob `sametCam.far`); the ground is in 64 m chunks. Open any island link with `?fps=1` or `?debug=1` on the iPad.
 > - The taxi driver is a stand-in puppy in a green shirt (the user hasn't picked who drives).
-> - Mommy and Daddy hop along rather than walk (the code-built family toys have no legs).
+> - Mom and Dad hop along rather than walk (the code-built family toys have no legs).
 > - `time=night` is a first pass (the fire show's PR gives the night its look).
 
-### Greybox 3: Mommy’s phone and the animal book ([done] · 2026-11-04)
+### Greybox 3: Mom’s phone and the animal book ([done] · 2026-11-04)
 
-Mommy’s phone turns the island into a camera: tap an animal and it does something cute for the photo, which flies into Kaylee’s animal book. Fourteen real Samet animals live on the island with their own ways (wander, flee, perch, swim), and the beach clean is the side verb.
+Mom’s phone turns the island into a camera: tap an animal and it does something cute for the photo, which flies into Kaylee’s animal book. Fourteen real Samet animals live on the island with their own ways (wander, flee, perch, swim), and the beach clean is the side verb.
 
 - **The phone** (`book/Book.tsx`, `?phone=1`): a big pink phone button bottom right. Out, the screen gets a pink phone frame and focus corners, the camera comes in closer and leans toward the nearest animal, and Kaylee holds the phone up. **Every tap is a photo:** tap an animal (or near one) and it turns and poses, the flash, the shutter, and the photo flies into the book with its name (“A hornbill!”, a ✨ when it’s new). Tap anything else and it’s a photo of the island (into the phone). Dragging still leads her.
 - **Gold photos:** the photo turns toward the animal and zooms in more the closer Kaylee is to it (`book/photo.ts`); the animal tall in the frame and near its middle earns a gold frame (about 3.5 m or closer). A gold photo is never replaced by a plain one.
-- **The animals** (`book/models.ts` built from code in the toy look, `book/creatures.ts` alive): monitor lizards waddling in an S and flicking their tongues (Ao Prao, the Sai Kaew bar); squirrels that run up their palm when she comes close and peek round the trunk at her (Sai Kaew, Hin Khok, Ao Prao); a macaque mother and baby on the hill road (the mother reaches for Daddy’s sunglasses as he passes); the shy **mouse-deer** at the forest’s edge on the road into Ao Prao that bounds into the trees if she gallops (walk slowly!); the **hornbill** hopping on its tamarind branch at Ao Wong Duan and flying between its perches; the **flying fox** asleep upside down in a samet tree at Ao Prao, stretching its wings, flapping round the sky at dusk; the reef heron fishing on the mermaid’s rocks (it flies to the next rock); hermit crabs on the wet sand that pop into their shells; the parrotfish nosing round the coral, two crowds of blue damselfish that part round her when she swims, the cuttlefish whose colors change as she comes near (pink up close); urchins (she boings off them, never hurt) and coral in the shallows. The terns and the crab holes’ ghost crabs snap too.
+- **The animals** (`book/models.ts` built from code in the toy look, `book/creatures.ts` alive): monitor lizards waddling in an S and flicking their tongues (Ao Prao, the Sai Kaew bar); squirrels that run up their palm when she comes close and peek round the trunk at her (Sai Kaew, Hin Khok, Ao Prao); a macaque mother and baby on the hill road (the mother reaches for Dad’s sunglasses as he passes); the shy **mouse-deer** at the forest’s edge on the road into Ao Prao that bounds into the trees if she gallops (walk slowly!); the **hornbill** hopping on its tamarind branch at Ao Wong Duan and flying between its perches; the **flying fox** asleep upside down in a samet tree at Ao Prao, stretching its wings, flapping round the sky at dusk; the reef heron fishing on the mermaid’s rocks (it flies to the next rock); hermit crabs on the wet sand that pop into their shells; the parrotfish nosing round the coral, two crowds of blue damselfish that part round her when she swims, the cuttlefish whose colors change as she comes near (pink up close); urchins (she boings off them, never hurt) and coral in the shallows. The terns and the crab holes’ ghost crabs snap too.
 - **Rare ones** (the mouse-deer, the hornbill, the flying fox) sparkle when she’s near and haven’t been snapped; their book slots are sparkly gold.
 - **The book** (`book/animals.ts`, `#/world/thailand/samet-trip/book?book=...`): a page per beach (Sai Kaew, Hin Khok and the mermaid’s rocks, Ao Wong Duan, Ao Prao, the forest road) with tabs and dots for what’s found. A lavender silhouette for each animal still to find (tap: where to look), her photo once she has it (tap: its fact), the stop’s sticker in the page’s corner once its flag is up, a gold star and a fanfare when all fourteen are in. Silhouettes and stickers are portraits of the 3D models, drawn once when the island opens.
 - **The beach clean** (`book/clean.ts`): a bottle, a plastic bag and a flip-flop wash up on the wet sand (four out at a time on nine spots). Tap one: she walks over and lifts it over her head, and a hermit crab climbs out of the bottle (or from under the flip-flop), a fish jumps where the bag was. Walk up to the beach’s green bin (all seven beaches have one, they glow while she carries): plonk, the lid flaps, sparkles. Another bit washes up 25 s later. Never required.
 - **Quiet hints:** an animal she hasn’t snapped close by and the phone away: the phone button glows. No lines.
-- **Feel on knobs** (`?feel=1`, “Mommy’s phone”): how far the camera comes in, how much it leans to an animal, how much the photo turns to it, the zoom and the distance it zooms in from, what counts as gold, how far from her finger a tap finds an animal, how far the animals live from the camera.
+- **Feel on knobs** (`?feel=1`, “Mom’s phone”): how far the camera comes in, how much it leans to an animal, how much the photo turns to it, the zoom and the distance it zooms in from, what counts as gold, how far from her finger a tap finds an animal, how far the animals live from the camera.
 
 > **Changed from the plan**
 >
@@ -565,16 +565,16 @@ Mommy’s phone turns the island into a camera: tap an animal and it does someth
 
 ### Greybox 4: the sandcastle at Ao Hin Khok ([done] · 2026-11-04)
 
-Her finger moves the real sand on Ao Hin Khok’s beach: dig moats and holes (the sand piles up beside them), pat walls taller, flip three moulds into towers, push shells into them, dig a channel and watch the tide fill the moat, and bury Daddy. Opened from the sandcastle stop on the island; back to the island with its pink flag once the moat has filled.
+Her finger moves the real sand on Ao Hin Khok’s beach: dig moats and holes (the sand piles up beside them), pat walls taller, flip three moulds into towers, push shells into them, dig a channel and watch the tide fill the moat, and bury Dad. Opened from the sandcastle stop on the island; back to the island with its pink flag once the moat has filled.
 
 - **The sand** (`sandcastle/sand.ts`): a 12 × 13 m height field (12.5 cm cells) laid over the island’s real beach, matching its colors and heights exactly (the island’s ground under it is sunk out of sight). Dragging digs a trench under her finger (a quick swipe still digs a trench, not dots) and the dug sand lands beside it, wet and dark, so a moat dug round leaves a wall on each side; dug sand never lands back in a hole, so a channel across the moat doesn’t dam it. Starting on a pile pats it up into a wall. **Dry sand runs, wet sand sticks:** steep slopes slide down a little every frame, gently for dug (wet) sand, more for dry; the wet sand dries back slowly.
 - **The water** (`sand.ts` `flow`): a little water simulation on the same grid. Every point the beach has under the tide is the open sea, held at the sea’s level (the tide plus a surge every few seconds); water flows downhill from there, up any channel she digs and into the moat in under a second, and a pool cut off from the sea slowly soaks away. The lagoon got two opt-in pieces (`engine3d/lagoon.ts`): `tide` lifts the whole sea (its shallows creep up the beach) and `setCut()` leaves the patch’s inland part to the patch’s own water.
 - **Dig** (`?round=dig`): the bare beach. Kaylee walks over and sits on the sea side of her finger (facing the camera) and digs along, sand flying. A ghost crab pops up out of a deep hole and scuttles off sideways (tap it: it waves its claws). After 30 s of digging the moulds bounce in.
 - **Towers** (`?round=towers`, starts with a moat dug): her pink bucket, a square lavender mould and a mint unicorn mould. Tap one and it hops onto the castle and flips (up, over, slam, pat pat, lift off) to leave a tower: round with battlements, square, or a unicorn head with a horn and ears. Drag one anywhere first and tap it there. Six shells and coral bits wash up by the water: drag one onto a tower and it sticks in its side, onto the sand and it lies there. Tap a tower: a little pink flag pops up on it. Dig under a tower and it slumps into a heap. After 4 towers (or 80 s) the tide comes in.
-- **Tide** (`?round=tide`, starts with the moat and four towers): the sea rises 20 cm over 30 s, wave after wave up the beach. Dig a channel from the moat to the water and the sea rushes in and fills it: a rush of water, sparkles, a fanfare, Daddy wiggles, Mommy waves, Kaylee hops, and a hermit crab walks up out of the sea and moves into a tower’s door (its eyes peek out; tap the tower). One big wave washes the tower nearest the sea half away. When the tide is in and the moat still dry, the pressing finger traces the way a channel would go. The 🏰 badge and a 🏝️ button back to the island (with the sandcastle’s pink flag) appear once the moat has filled.
-- **Bury Daddy** (any round): he lies beside the castle. Rub sand over him and it heaps up, one mound each for his shins, knees, tummy and chest, until only his head and toes stick out (a giggle and sparkles). Tap his toes: they wiggle. Tap his head: he sneezes and the sand flies off.
-- **Pokes:** Kaylee (hop), Daddy, his toes, Mommy under her pink umbrella (she waves), the umbrella (it spins), the beach ball (it bounces), the ghost crab, the hermit crab, a longtail going by out on the bay (toot), every mould, shell and tower, the sea (a splash).
-- **Feel on knobs** (`?feel=1`, “Digging the sand”, “The tide and the water”, “Rounds, towers and Daddy”): the finger’s width, how fast it digs, how deep, where the sand lands and how much, patting, the tallest wall, how steep dry and wet sand stand, where Kaylee sits; the high tide, how long it takes, each wave, the big wave, how fast water runs and soaks away, what counts as filled; how long each round lasts, how far under a tower makes it slump, how fast Daddy gets buried, how deep a hole for the crab, the camera’s angle. The lab graphs her finger’s speed against how deep it dug, the sea and the water in the moat. Round chips (🖐️ 🪣 🌊) at the top right with `?feel=1`.
+- **Tide** (`?round=tide`, starts with the moat and four towers): the sea rises 20 cm over 30 s, wave after wave up the beach. Dig a channel from the moat to the water and the sea rushes in and fills it: a rush of water, sparkles, a fanfare, Dad wiggles, Mom waves, Kaylee hops, and a hermit crab walks up out of the sea and moves into a tower’s door (its eyes peek out; tap the tower). One big wave washes the tower nearest the sea half away. When the tide is in and the moat still dry, the pressing finger traces the way a channel would go. The 🏰 badge and a 🏝️ button back to the island (with the sandcastle’s pink flag) appear once the moat has filled.
+- **Bury Dad** (any round): he lies beside the castle. Rub sand over him and it heaps up, one mound each for his shins, knees, tummy and chest, until only his head and toes stick out (a giggle and sparkles). Tap his toes: they wiggle. Tap his head: he sneezes and the sand flies off.
+- **Pokes:** Kaylee (hop), Dad, his toes, Mom under her pink umbrella (she waves), the umbrella (it spins), the beach ball (it bounces), the ghost crab, the hermit crab, a longtail going by out on the bay (toot), every mould, shell and tower, the sea (a splash).
+- **Feel on knobs** (`?feel=1`, “Digging the sand”, “The tide and the water”, “Rounds, towers and Dad”): the finger’s width, how fast it digs, how deep, where the sand lands and how much, patting, the tallest wall, how steep dry and wet sand stand, where Kaylee sits; the high tide, how long it takes, each wave, the big wave, how fast water runs and soaks away, what counts as filled; how long each round lasts, how far under a tower makes it slump, how fast Dad gets buried, how deep a hole for the crab, the camera’s angle. The lab graphs her finger’s speed against how deep it dug, the sea and the water in the moat. Round chips (🖐️ 🪣 🌊) at the top right with `?feel=1`.
 
 > **Changed from the plan**
 >
@@ -585,9 +585,9 @@ Her finger moves the real sand on Ao Hin Khok’s beach: dig moats and holes (th
 
 > **Known small things**
 >
-> - No voices yet (greybox): Daddy’s “Let’s build a sandcastle!” and the crab fact come with the full loop.
+> - No voices yet (greybox): Dad’s “Let’s build a sandcastle!” and the crab fact come with the full loop.
 > - The walls are a little spiky where a ring of strokes piles up; the look gate smooths them.
-> - Daddy’s blanket is four soft mounds, not real sand on the height field.
+> - Dad’s blanket is four soft mounds, not real sand on the height field.
 > - Automated browsers run at 30 fps: measure the water’s rush on the iPad with `?fps=1`.
 
 ### Greybox 5: snorkeling at Ko Kudi ([done] · 2026-11-05)
@@ -598,8 +598,8 @@ Her finger leads Kaylee over Ko Kudi’s reef, face down on the surface in a pin
 - **The swim** (the island’s verb): hold a finger and she swims after it, slow when it’s near her, a fast kick when it’s far ahead (a dead zone round her); tap a spot and she swims there; let go and she glides to a stop. Her finger is read on the screen (an offset from her, up the screen counting for more because the camera is low). Kaylee is the modelled toy tipped face down, its walk kicking her legs; a mask and snorkel on her head, pink flippers on her feet.
 - **Float** (`?round=float`): the captain toots, she hops off the ladder and splashes in (any touch skips it). 90 blue damselfish swirl round her, part where she swims and close behind. Coral patches and swaying soft corals over the sand; coral heads come up to just under the surface: bump one and a little orange fish pops out with cross bubbles; the prickly ones with urchins boing her off like a bouncy ball (she spins). After 28 m of swimming and 25 s (or 60 s) the parrotfish comes.
 - **Follow** (`?round=follow`): the big rainbow parrotfish swims up to say hello, then leads from the first spot ahead of her: past the coral heads, through the gap between two rocks out of the water, over the sandy patch (a giant clam that shuts as she passes, a sea cucumber that wiggles), to the garden. It swims on only while she’s close, waits facing her with a come-on wiggle, and comes back for her if she wanders off.
-- **The cuttlefish** (`?round=cuttle`): it hovers sand-colored in the middle of the garden (little yellow, orange and pink fish round it). Closer: rainbow flashes, closer: purple and yellow stripes, closest: pink, with sparkles; then the 🐠 badge and the way back. Mommy’s camera (📷) snaps whatever is in view under the water (the parrotfish, the damselfish, the cuttlefish, urchins, coral) into her book.
-- **Daddy** swims along behind her and catches up off screen if she leaves him far behind; swim up to him (or tap him) and he ducks under and blows a bubble ring her way. Pokes: Kaylee (a twirl and bubbles), the captain (toot and a wave), the parrotfish, the cuttlefish (a rainbow flash), the clam, the sea cucumber, the urchins, the coral heads.
+- **The cuttlefish** (`?round=cuttle`): it hovers sand-colored in the middle of the garden (little yellow, orange and pink fish round it). Closer: rainbow flashes, closer: purple and yellow stripes, closest: pink, with sparkles; then the 🐠 badge and the way back. Mom’s camera (📷) snaps whatever is in view under the water (the parrotfish, the damselfish, the cuttlefish, urchins, coral) into her book.
+- **Dad** swims along behind her and catches up off screen if she leaves him far behind; swim up to him (or tap him) and he ducks under and blows a bubble ring her way. Pokes: Kaylee (a twirl and bubbles), the captain (toot and a wave), the parrotfish, the cuttlefish (a rainbow flash), the clam, the sea cucumber, the urchins, the coral heads.
 - **Knobs** (`?feel=1`): swimming (speeds, dead zone, full speed distance, up-the-screen gain, getting going, glide, turn, kick rate, bump size, boing, bounce, float height), the fish (how far and fast the crowd parts, swirl, size, how closely it follows; the parrotfish’s speed, how close she must be, when it comes back; the cuttlefish’s three distances) and the rounds and camera (distance, height over the water, pitch, how far ahead, how far she sees under water). The graph: her finger’s lead against her speed and how far ahead the parrotfish is.
 
 > **Changed from the plan**
@@ -611,25 +611,25 @@ Her finger leads Kaylee over Ko Kudi’s reef, face down on the surface in a pin
 > **Known small things**
 >
 > - No voices yet (greybox): the captain’s “Masks on! Jump in!” and the cuttlefish fact come with the full loop.
-> - What Mommy’s camera snaps reaches the book when she goes back to the island (not on the reef).
+> - What Mom’s camera snaps reaches the book when she goes back to the island (not on the reef).
 > - Face down, mostly her hair and back show from behind; the look gate may swing the camera a little to her side.
 > - Automated browsers run at 30 fps: check the frame rate on the iPad (two passes a frame, the air pass skips the reef).
 
 ### Greybox 6: lunch on the deck and hide and seek at Ao Prao ([done] · 2026-11-05)
 
-Two pieces on the island’s real Ao Prao. Lunch on the resort deck (a place, no stamp): rolls from Daddy, a coconut to sip, mango sticky rice, the cove below. Hide and seek by the driftwood tree (the stop): she counts, leads Kaylee round the beach to find Daddy in seven hiding places over two rounds, then hides herself while Daddy searches all the wrong places. Lunch opens from the deck’s table on the island (a new tap target), hide and seek from the tree; back to the island with the pink flag up once she has won her turn to hide.
+Two pieces on the island’s real Ao Prao. Lunch on the resort deck (a place, no stamp): rolls from Dad, a coconut to sip, mango sticky rice, the cove below. Hide and seek by the driftwood tree (the stop): she counts, leads Kaylee round the beach to find Dad in seven hiding places over two rounds, then hides herself while Dad searches all the wrong places. Lunch opens from the deck’s table on the island (a new tap target), hide and seek from the tree; back to the island with the pink flag up once she has won her turn to hide.
 
-- **The beach** (`hideseek/hideseek.ts`): the island itself (`buildIsland`) framed on Ao Prao, the driftwood tree shared with the island (`island/props.ts` `driftwoodGeo`; the island’s deck is `resortDeck` now too), and the hiding places in `hideseek/props.ts`: a pink umbrella tipped over like a shield, a stack of red chairs, a striped towel, a pandanus on stilt roots, two thin palms by the water, Mommy in her red chair.
-- **Walk and look** (the island’s verb): hold a finger and she trots after it, gallops when it’s far; tap the sand and she walks there; tap a hiding place and she walks up and peeks behind it. A high camera looking out to sea follows her and leans toward the beach’s middle (and fits Daddy in while he searches).
-- **Round 1** (`?round=1`): the photo for a moment (Kaylee’s hooves over her eyes in front of the tree, Daddy leaning on it), then a lavender blind with 1… 2… 3 while he runs off (tap to peek through it: he’s still running). Behind the tree (his head pokes out), behind the umbrella (crouched, feet showing), behind the chairs. Close by, his place wiggles and giggles every 1.5 s; a wrong place gets a silly little reaction and a giggle from the right one. Tap it, tap him or walk right up: “Found you!”, he jumps out beside her, she twirls, confetti.
+- **The beach** (`hideseek/hideseek.ts`): the island itself (`buildIsland`) framed on Ao Prao, the driftwood tree shared with the island (`island/props.ts` `driftwoodGeo`; the island’s deck is `resortDeck` now too), and the hiding places in `hideseek/props.ts`: a pink umbrella tipped over like a shield, a stack of red chairs, a striped towel, a pandanus on stilt roots, two thin palms by the water, Mom in her red chair.
+- **Walk and look** (the island’s verb): hold a finger and she trots after it, gallops when it’s far; tap the sand and she walks there; tap a hiding place and she walks up and peeks behind it. A high camera looking out to sea follows her and leans toward the beach’s middle (and fits Dad in while he searches).
+- **Round 1** (`?round=1`): the photo for a moment (Kaylee’s hooves over her eyes in front of the tree, Dad leaning on it), then a lavender blind with 1… 2… 3 while he runs off (tap to peek through it: he’s still running). Behind the tree (his head pokes out), behind the umbrella (crouched, feet showing), behind the chairs. Close by, his place wiggles and giggles every 1.5 s; a wrong place gets a silly little reaction and a giggle from the right one. Tap it, tap him or walk right up: “Found you!”, he jumps out beside her, she twirls, confetti.
 - **Round 2** (`?round=2`): lying in the roots, under the towel (the lump breathes, his toes stick out), in the sea with only his cap floating (bubbles), up in the pandanus. Still for 8 s: he gives himself away (a sneeze, a giggle, a splash; the place shakes hard); after 16 s it glows and the finger points.
-- **Her turn** (`?round=hide`): Daddy covers his eyes at the tree and counts to five (tap him: he peeks, “No peeking!”). The hiding places glow; standing still in one, she crouches in it (under the towel she’s a little lump). Daddy searches the places furthest from her first, then the one right beside her looking the wrong way, and gives up: “You win!”. In the open he spots her the first time (never twice in a row); wandering out while he’s close gets her spotted too; tap her while he searches: “Boo!”, he jumps and she wins. The first win puts up the flag (🙈 🏆 and the way back); it keeps going round after that.
-- **Lunch** (`hideseek/lunch.ts`, `deck`): Kaylee and Daddy across the table on rattan chairs, Mommy at the end of the deck with her phone (tap: the photo flash), cream umbrellas by the rail. Tap the basket (or Daddy): he passes a roll; tap Kaylee (or the roll): a bite, three to a roll. The coconut arrives after 5 s (or her first roll): hold a finger on it to sip, it tips toward her as it empties, the last drops are a big slurp. The rice arrives at 14 s (or the coconut half gone): five bites fly to her. A monitor lizard strolls the sand below (tap: tongue out, it hurries), a squirrel on the pandanus (tap: it runs up), the sea splashes. Done: 🍽️ with 🙈 (straight down to hide and seek) and 🏝️.
-- **Knobs** (`?feel=1`): walking (trot, gallop, from, stop), finding Daddy (her count, how near the wiggle starts and how often, the walk-up distance, the give-away and glow times, his jump), her turn (his count, how close counts as hidden, his search speed, how many wrong places, how long at each, how close he spots her), the beach camera, and lunch (sip rate, bites, the toss, when the coconut and the rice come, its camera). The graph: how far she is from Daddy, and her speed.
+- **Her turn** (`?round=hide`): Dad covers his eyes at the tree and counts to five (tap him: he peeks, “No peeking!”). The hiding places glow; standing still in one, she crouches in it (under the towel she’s a little lump). Dad searches the places furthest from her first, then the one right beside her looking the wrong way, and gives up: “You win!”. In the open he spots her the first time (never twice in a row); wandering out while he’s close gets her spotted too; tap her while he searches: “Boo!”, he jumps and she wins. The first win puts up the flag (🙈 🏆 and the way back); it keeps going round after that.
+- **Lunch** (`hideseek/lunch.ts`, `deck`): Kaylee and Dad across the table on rattan chairs, Mom at the end of the deck with her phone (tap: the photo flash), cream umbrellas by the rail. Tap the basket (or Dad): he passes a roll; tap Kaylee (or the roll): a bite, three to a roll. The coconut arrives after 5 s (or her first roll): hold a finger on it to sip, it tips toward her as it empties, the last drops are a big slurp. The rice arrives at 14 s (or the coconut half gone): five bites fly to her. A monitor lizard strolls the sand below (tap: tongue out, it hurries), a squirrel on the pandanus (tap: it runs up), the sea splashes. Done: 🍽️ with 🙈 (straight down to hide and seek) and 🏝️.
+- **Knobs** (`?feel=1`): walking (trot, gallop, from, stop), finding Dad (her count, how near the wiggle starts and how often, the walk-up distance, the give-away and glow times, his jump), her turn (his count, how close counts as hidden, his search speed, how many wrong places, how long at each, how close he spots her), the beach camera, and lunch (sip rate, bites, the toss, when the coconut and the rice come, its camera). The graph: how far she is from Dad, and her speed.
 
 > **Changed from the plan**
 >
-> - Daddy doesn’t hide in the ice cream cart (there isn’t one at Ao Prao); his wrong places are the other hiding places, Mommy and the thin palms.
+> - Dad doesn’t hide in the ice cream cart (there isn’t one at Ao Prao); his wrong places are the other hiding places, Mom and the thin palms.
 > - Lunch opens from a tap target on the deck’s table on the island (she walks up the steps to it), rather than by walking onto the deck.
 > - In her turn she wins whenever she’s hidden; only the open sand gets her found, and only once in a row.
 > - One umbrella on Ao Prao’s sand stood inside the driftwood tree on the island: moved along the beach.
@@ -637,30 +637,30 @@ Two pieces on the island’s real Ao Prao. Lunch on the resort deck (a place, no
 > **Known small things**
 >
 > - No voices yet (greybox): the counting, “Found you!” and “You win!” show in a bubble for the user.
-> - Daddy walks straight through things while her eyes are shut (nobody sees), and round the front of them while he searches.
+> - Dad walks straight through things while her eyes are shut (nobody sees), and round the front of them while he searches.
 > - Hooves over the eyes (hers and his) are rough arm poses on top of the rig; the look gate can make them nicer.
-> - Mommy’s photo of the two of them at the tree isn’t in the book yet.
+> - Mom’s photo of the two of them at the tree isn’t in the book yet.
 
 ### Greybox 7: getting there and the trip frame ([done] · 2026-11-05)
 
-The way onto the island and home again. The Thailand map gets a 🏝️ pin; the first trip of a session packs in Kaylee’s room and walks down the stairs onto the speedboat at Ban Phe; the speedboat crosses the real sea to Na Dan pier in about a minute while her hoof trails in the spray; the island is saved on the iPad as she plays; and with all four flags up the speedboat at Na Dan takes them home, Mommy’s photo goes on Agong’s wall and the stamp lands on the pin.
+The way onto the island and home again. The Thailand map gets a 🏝️ pin; the first trip of a session packs in Kaylee’s room and walks down the stairs onto the speedboat at Ban Phe; the speedboat crosses the real sea to Na Dan pier in about a minute while her hoof trails in the spray; the island is saved on the iPad as she plays; and with all four flags up the speedboat at Na Dan takes them home, Mom’s photo goes on Agong’s wall and the stamp lands on the pin.
 
 - **The 🏝️ pin** (`activities/hub/map/geo.ts` `PINS`, `ISLANDS`; `ThaiMap.tsx`): a butter-yellow pin just below Koh Samet off Rayong, and the island itself drawn in the Gulf. While the trip is in the works it shows only once a link has `?samet=1` (or its stamp lands), for the session. Tap it: the first trip of a session goes to `pack`; later ones go straight back to the island where she left it (saved), or to the speedboat for a new trip.
-- **Packing** (`PackScreen.tsx`, the trip kit’s `trip/legs/house-plugin.ts` told by `trip.ts` `SAMET_TRIP`): Kaylee’s room, the suitcase open, Mommy’s sunny hint (already recorded), the pack card; sit on it, click, her sun hat and sunglasses go on, and down the stairs with the suitcase, bonk, bonk. New in the trip kit: `TripDef.afterPack` (where packing goes next; the flying trips keep `takeoff`).
-- **The speedboat** (`speedboat/speedboat.ts`, `SpeedboatScreen.tsx`, section `speedboat`): the real island and Na Dan pier (`buildIsland`, `buildProps`) and a little Ban Phe on the mainland (a strip of shore, sweet shophouses, palms, the pier with a ticket hut, two longtails; no temples or shrines). The route is the real 570 m at 1:10, about a minute at 12 m/s, easing out of the pier and slowing in to tie up beside Na Dan pier, where they hop off onto it and the island takes over. The family’s speedboat: white with a pink stripe, pink cushions, two outboards, a small blue sun top over the console (forward, so the camera sees the family), the captain (a stand-in puppy in a white shirt and cap) at the wheel, Mommy and Daddy on the back bench, Kaylee on the side bench.
+- **Packing** (`PackScreen.tsx`, the trip kit’s `trip/legs/house-plugin.ts` told by `trip.ts` `SAMET_TRIP`): Kaylee’s room, the suitcase open, Mom’s sunny hint (already recorded), the pack card; sit on it, click, her sun hat and sunglasses go on, and down the stairs with the suitcase, bonk, bonk. New in the trip kit: `TripDef.afterPack` (where packing goes next; the flying trips keep `takeoff`).
+- **The speedboat** (`speedboat/speedboat.ts`, `SpeedboatScreen.tsx`, section `speedboat`): the real island and Na Dan pier (`buildIsland`, `buildProps`) and a little Ban Phe on the mainland (a strip of shore, sweet shophouses, palms, the pier with a ticket hut, two longtails; no temples or shrines). The route is the real 570 m at 1:10, about a minute at 12 m/s, easing out of the pier and slowing in to tie up beside Na Dan pier, where they hop off onto it and the island takes over. The family’s speedboat: white with a pink stripe, pink cushions, two outboards, a small blue sun top over the console (forward, so the camera sees the family), the captain (a stand-in puppy in a white shirt and cap) at the wheel, Mom and Dad on the back bench, Kaylee on the side bench.
 - **The toy, her hoof in the spray:** hold a finger on the water beside the boat and Kaylee slides along the side bench to that side, leans over the rail and trails her hoof in the sea where her finger is: a fan of spray flies up and back along the hull, more the faster the boat goes, double for a fast drag. At speed a rainbow shows in the spray and a flying fish skips out of it every ~3 s (tap one: it flips and sparkles). A quick tap on the water: one splash.
-- **The boats coming the other way:** the big ferry, a longtail, a jet ski cutting across her way, another speedboat (mint stripe). Tap one: it toots and its people bounce and wave, Kaylee waves back. Their wakes bounce the boat into the air; landing splashes everyone, and a bump while her hoof is in the water sends a wave over Mommy (she wiggles and holds her hat).
-- **Pokes:** Kaylee (hop, whee), Daddy (his cap blows off and he catches it), Mommy (holds her sun hat), the captain (the horn, and the boat wiggles an S on the water), the pink flag at the stern, the life ring (spins). ⏩ after 12 s skips to the turquoise water by the pier. Quiet: no idle lines; after 8 s with no hoof in the water a finger presses on the water beside her.
-- **Now a cutscene (the user, 2026-11-12):** the hoof in the spray and its finger hint are gone; the ride is filmed with the cinema camera and cut down to about 17 s (a third of the old ~50 s): a crane up leaving Ban Phe, the ferry going by in a two-shot (everyone waves, its wake bumps them up), the low hero shot with flying fish on the open sea, and a crane up slowing in to Na Dan. Under each cut the boat jumps on along the route (`SCENES` in `speedboat.ts`); each scene’s length is a knob. The pokes still work, ⏩ shows after 1.5 s and skips to the last shot. Sparkle’s “Put your hoof in the water!”, its hint and Mommy’s soaked lines are dropped. (The bullets above and below describe the first version.)
+- **The boats coming the other way:** the big ferry, a longtail, a jet ski cutting across her way, another speedboat (mint stripe). Tap one: it toots and its people bounce and wave, Kaylee waves back. Their wakes bounce the boat into the air; landing splashes everyone, and a bump while her hoof is in the water sends a wave over Mom (she wiggles and holds her hat).
+- **Pokes:** Kaylee (hop, whee), Dad (his cap blows off and he catches it), Mom (holds her sun hat), the captain (the horn, and the boat wiggles an S on the water), the pink flag at the stern, the life ring (spins). ⏩ after 12 s skips to the turquoise water by the pier. Quiet: no idle lines; after 8 s with no hoof in the water a finger presses on the water beside her.
+- **Now a cutscene (the user, 2026-11-12):** the hoof in the spray and its finger hint are gone; the ride is filmed with the cinema camera and cut down to about 17 s (a third of the old ~50 s): a crane up leaving Ban Phe, the ferry going by in a two-shot (everyone waves, its wake bumps them up), the low hero shot with flying fish on the open sea, and a crane up slowing in to Na Dan. Under each cut the boat jumps on along the route (`SCENES` in `speedboat.ts`); each scene’s length is a knob. The pokes still work, ⏩ shows after 1.5 s and skips to the last shot. Sparkle’s “Put your hoof in the water!”, its hint and Mom’s soaked lines are dropped. (The bullets above and below describe the first version.)
 - **Saving and coming back** (`trip.ts` `SametProgress`, `useSaved('thailand-samet-trip')`): where she was, the pink flags, the animals in her book and what she packed, saved each time she reaches a beach, earns a flag or snaps an animal. A link’s own params win over it (`at`, `flags`, `book`, `packed`), so a bare section link opens where the iPad left off. Her photos stay for the visit only (they’re big).
-- **Home** (`island/island.ts` `HOME_BOAT`): with all four flags up, the pink flag arrow points at the speedboat at Na Dan pier after a while. Tap it: she walks to the end of the pier and waves, Mommy takes the photo (a flash), it goes on Agong’s wall by itself (`trip/wall.ts`, a slot beside Nan’s), the trip starts afresh next time (her book stays), then the stamp and the map, where the stamp lands on the 🏝️ pin (`hub/map?stamp=samet-trip`).
+- **Home** (`island/island.ts` `HOME_BOAT`): with all four flags up, the pink flag arrow points at the speedboat at Na Dan pier after a while. Tap it: she walks to the end of the pier and waves, Mom takes the photo (a flash), it goes on Agong’s wall by itself (`trip/wall.ts`, a slot beside Nan’s), the trip starts afresh next time (her book stays), then the stamp and the map, where the stamp lands on the 🏝️ pin (`hub/map?stamp=samet-trip`).
 - **Knobs** (`?feel=1`): the ride (top speed, speeding up, slowing in, the waves, the wake bump, the bow lifting, when ⏩ shows), her hoof in the spray (drops a second, height, size, the fast drag, how far along the side, the lean, the flying fish, the rainbow) and the camera (looks down, in portrait, how much round the boat, ahead, from the side, how far plants draw). The graph: her finger’s speed, the spray and the boat’s speed.
 
 > **Changed from the plan**
 >
-> - **No `home` section in the house:** the trips end on the Thailand map now (user feedback, 2026-10-27), and Mommy’s photo goes on Agong’s wall by itself. See it at [the house’s photo wall](#/world/thailand/hub/downstairs?at=photos). The sections list’s home link is the island with all four flags.
+> - **No `home` section in the house:** the trips end on the Thailand map now (user feedback, 2026-10-27), and Mom’s photo goes on Agong’s wall by itself. See it at [the house’s photo wall](#/world/thailand/hub/downstairs?at=photos). The sections list’s home link is the island with all four flags.
 > - **The way home is the speedboat at Na Dan** for now: the finale (the sunset and the fire show, step 9) will come between the fourth flag and the boat home.
-> - **No car ride to Ban Phe:** Mommy drives (the trip’s `car` leg), but like every trip from the map, packing goes straight to the first ride; the speedboat starts at Ban Phe pier.
+> - **No car ride to Ban Phe:** Mom drives (the trip’s `car` leg), but like every trip from the map, packing goes straight to the first ride; the speedboat starts at Ban Phe pier.
 > - **A replay starts afresh** (the flags down, her book kept); “the jet ski always hers” on a replay and the 🌙 night start wait for the full loop.
 
 > **Known small things**
@@ -705,13 +705,13 @@ The sand, the water and the reef in Koh Samet’s real colors, and the islanders
 
 ### The finale’s look: fire that glows in the dark ([done] · 2026-11-05)
 
-After the user’s iPad notes on the finale greybox: the beach goes dark for the fire show so the ribbons and the flames glow, the flames get real shapes, Mommy holds her phone for the sunset selfie, the dancers’ fire poi hang on chains, and her shapes float up as soft paper lanterns.
+After the user’s iPad notes on the finale greybox: the beach goes dark for the fire show so the ribbons and the flames glow, the flames get real shapes, Mom holds her phone for the sunset selfie, the dancers’ fire poi hang on chains, and her shapes float up as soft paper lanterns.
 
 - **A darker night** (`SHOW_NIGHT` in `finale/fireshow.ts`): a deep indigo sky, darker sea and much less moonlight than the island’s usual night (`island/scenery.ts` `setTime` now takes a scene’s own `Key`). The bars’ lamps stay lit. Pools of firelight lie on the sand round each dancer, each flame of the ring and (pink) round Kaylee’s poi.
 - **Real flames** (`finale/flame.ts`, `Flames`): cartoon flames in three flat bands (a red-orange edge, an orange middle, a pale gold core) with a licking, flickering tip and a little tongue breaking off, all in one draw, additive so they glow. The dancers’ fireballs stream back from where they go (longer the faster they spin); the ball that draws the shapes, the castle’s candles and the ring of fire round the beach use them too.
 - **Fire poi on chains:** a dark wick ball on a chain of little steel links from each hand, circling round the hand (the butterfly) or swung into the big ring over the head.
 - **Paper lanterns:** when she finishes a shape, each dot becomes a little paper lantern (gold, pink, then lilac) with a soft halo and the light of its flame at the bottom (`Glows`), bobbing and loosening a little as they drift up and away.
-- **Mommy’s phone** (`finale/sunset.ts`): a lavender phone in her right hand, down at her side while they watch; for the selfie her arm goes out and up at arm’s length and the phone turns upright, its screen to the three of them.
+- **Mom’s phone** (`finale/sunset.ts`): a lavender phone in her right hand, down at her side while they watch; for the selfie her arm goes out and up at arm’s length and the phone turns upright, its screen to the three of them.
 - **Knobs** (`?feel=1`, “The night of the fire show”): how dark, the firelight on the sand, the flame size, chains on or off.
 
 ### Step 9, the finale greybox: the sunset and the fire show ([done] · 2026-11-05)
@@ -719,10 +719,10 @@ After the user’s iPad notes on the finale greybox: the beach goes dark for the
 With all four flags up the driftwood tree opens the sunset at Ao Prao; then the fire show on Sai Kaew at night, where Kaylee twirls glowing poi with her finger and the gecko fire dancers copy her. Its 🏠 takes them home (the sunset photo on Agong’s wall, the stamp).
 
 - **The way in** (`island/island.ts`): with all four flags, the idle hint points at the driftwood tree instead of the pier, and tapping the tree up close opens `sunset` (`events.open('sunset')`). The speedboat at Na Dan takes them to the sunset too (it used to go straight home and skip the finale; fixed in PR #358).
-- **The sunset** (`finale/sunset.ts`, `#/world/thailand/samet-trip/sunset?flags=all`): the three of them on the sand by the driftwood tree, the sun low over the sea. She grabs the sun (a generous 150 px grab, knob) and pulls it down; the sky mixes golden to night as it sinks (`isl.setTime({from, to, k})`), it plops in with a glint, night falls by itself in 3 s, the stars and lanterns come on, Daddy: “Fire show time!” and the 🔥 button. Tap Mommy: they turn round and squeeze in for her phone (countdown, flash), the photo lands in the corner as a polaroid and is the one for Agong’s wall; with no photo, Mommy snaps one as the sun touches the sea. Pokes: the tree creaks, the family hop, the sea splashes, sky taps twinkle (a shooting star every fourth after dark).
-- **The fire show** (`finale/fireshow.ts`, `#/world/thailand/samet-trip/fireshow?round=twirl|shapes|finish&flags=...`): the camera looks in from the shallows at her face, behind a pink rope, the two gecko dancers either side, Mommy and Daddy and the lit beach bar behind her. Her finger draws on a plane in front of her; poi A follows it (`follow` knob), poi B chases its path `lag` seconds behind, each leaving a ribbon of light (`finale/ribbon.ts`, three vertices across, additive). Finger up: they keep swinging round gently. A loop is a full turn of the stroke’s direction (`finale/shapes.ts` LoopTracker), so any circle counts from its first point; its size is length/2π. The dancers’ spin and circle size catch up with hers; a loop of 0.85 m or more and they swing one big ring of fire. The drum beats at 104 bpm (tap it: a boom, the dancers hop).
+- **The sunset** (`finale/sunset.ts`, `#/world/thailand/samet-trip/sunset?flags=all`): the three of them on the sand by the driftwood tree, the sun low over the sea. She grabs the sun (a generous 150 px grab, knob) and pulls it down; the sky mixes golden to night as it sinks (`isl.setTime({from, to, k})`), it plops in with a glint, night falls by itself in 3 s, the stars and lanterns come on, Dad: “Fire show time!” and the 🔥 button. Tap Mom: they turn round and squeeze in for her phone (countdown, flash), the photo lands in the corner as a polaroid and is the one for Agong’s wall; with no photo, Mom snaps one as the sun touches the sea. Pokes: the tree creaks, the family hop, the sea splashes, sky taps twinkle (a shooting star every fourth after dark).
+- **The fire show** (`finale/fireshow.ts`, `#/world/thailand/samet-trip/fireshow?round=twirl|shapes|finish&flags=...`): the camera looks in from the shallows at her face, behind a pink rope, the two gecko dancers either side, Mom and Dad and the lit beach bar behind her. Her finger draws on a plane in front of her; poi A follows it (`follow` knob), poi B chases its path `lag` seconds behind, each leaving a ribbon of light (`finale/ribbon.ts`, three vertices across, additive). Finger up: they keep swinging round gently. A loop is a full turn of the stroke’s direction (`finale/shapes.ts` LoopTracker), so any circle counts from its first point; its size is length/2π. The dancers’ spin and circle size catch up with hers; a loop of 0.85 m or more and they swing one big ring of fire. The drum beats at 104 bpm (tap it: a boom, the dancers hop).
 - **Shapes** (`round=shapes`): a ball of fire draws a circle, a star, then a heart above the bar; 40 dots wait in her plane; any poi passing within 0.3 m lights a dot (a rising note); 75% lit and it lifts into the sky as a lantern of light that stays. Stuck 7 s: the dots count from 30% further (up to 2×) and the finger walks round the unlit ones.
-- **The finish** (`round=finish`): one gift per loop for each flag she has, in order: the otter jet ski man rides by in the shallows with lights and a wake (jetski), her sandcastle with flickering candles (sandcastle), glowing parrotfish and a cuttlefish leaping in the waves (snorkel), Daddy gets up and dances to the drum (hideseek). Then a big ring of dots (1.7 m): a loop at least 55% that size lights 44 flames in a ring round the beach, both ways from the water, then fireworks over the bar (tap for more), cheers, the 🔥 🏆 badge and 🏠.
+- **The finish** (`round=finish`): one gift per loop for each flag she has, in order: the otter jet ski man rides by in the shallows with lights and a wake (jetski), her sandcastle with flickering candles (sandcastle), glowing parrotfish and a cuttlefish leaping in the waves (snorkel), Dad gets up and dances to the drum (hideseek). Then a big ring of dots (1.7 m): a loop at least 55% that size lights 44 flames in a ring round the beach, both ways from the water, then fireworks over the bar (tap for more), cheers, the 🔥 🏆 badge and 🏠.
 
 > **Changed from the plan**
 >
@@ -732,15 +732,15 @@ With all four flags up the driftwood tree opens the sunset at Ao Prao; then the 
 
 > **Known small things**
 >
-> - No voices yet (the words show in a bubble): Mommy’s “Look! Fire dancers!”, “Sunset photo!”, Daddy’s “Fire show time!” come with the full loop.
+> - No voices yet (the words show in a bubble): Mom’s “Look! Fire dancers!”, “Sunset photo!”, Dad’s “Fire show time!” come with the full loop.
 > - The night sand is the island’s pale lavender, so the glows are a little washed out; the finale’s look should darken the beach under the show and give the flames a proper shape.
-> - Mommy’s phone isn’t in her hand yet for the selfie (her arm goes up).
+> - Mom’s phone isn’t in her hand yet for the selfie (her arm goes up).
 
 ### Step 10, the full loop: every line, the islanders’ voices, the mermaid, onto the map ([doing] · 2026-11-05 · PR #345)
 
 The whole trip talks (Sparkle in the corner, the family and the islanders in their own voices), the stuck hints, the stamp screen’s facts and the pink mermaid sticker; out of the works and onto the Thailand map and the game shelf.
 
-- **Every line** in `lines.ts` `L.samet` (trip, island, book, jetski, sandcastle, snorkel, lunch, hideseek, finale): about 260 new lines. Each world has a `say` event its screen sends to the trip kit’s `TripGuide` (Sparkle bottom left, one bubble with who is talking); the greybox bubbles over the beach are gone. Kaylee never talks: her old bubbles (“Not here!”, “Boo!”, “You win!”) are Daddy’s or Sparkle’s now, no player name in spoken or written app text (updated 2026-11-11).
+- **Every line** in `lines.ts` `L.samet` (trip, island, book, jetski, sandcastle, snorkel, lunch, hideseek, finale): about 260 new lines. Each world has a `say` event its screen sends to the trip kit’s `TripGuide` (Sparkle bottom left, one bubble with who is talking); the greybox bubbles over the beach are gone. Kaylee never talks: her old bubbles (“Not here!”, “Boo!”, “You win!”) are Dad’s or Sparkle’s now, no player name in spoken or written app text (updated 2026-11-11).
 - **The islanders’ voices** (`cast.json`): the jet ski man `otter`, the captain `pelican` (both boats, “Sawasdee ka!”), the taxi driver `sunbear`, the fire dancers `gecko` (one voice for the two). Their faces open their mouths with their voice (`FaceLife`).
 - **Hints** through `spendHint` (shown first, said at most twice a visit) in the stops and the finale; the island and the book stay quiet (they glow).
 - **The book’s words** moved from `book/animals.ts` to `L.samet.book` and got shorter: Sparkle says the name the first time it’s snapped (on the island and on the dive), the fact plays on a tap of its photo, the where on a silhouette.
@@ -751,7 +751,7 @@ The whole trip talks (Sparkle in the corner, the family and the islanders in the
 >
 > - **No clips yet:** the OpenAI key returns 401, so the 264 new lines play silent (their bubbles show). Record them with a working key: `node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`.
 > - “The jet ski always hers” on a replay and the 🌙 night start are still to do.
-> - Sparkle counting with her in hide and seek can trail the numbers on the blind by about half a second after Daddy’s line: check on the iPad.
+> - Sparkle counting with her in hide and seek can trail the numbers on the blind by about half a second after Dad’s line: check on the iPad.
 > - Book facts and where-lines play through the plain `say`, so they cut off whatever is talking.
 
 ### Fix: the four ways to get stuck (#357) ([done] · 2026-11-09 · PR #358)
@@ -770,20 +770,20 @@ The whole trip talks (Sparkle in the corner, the family and the islanders in the
 - The ground's walkable surface now matches its color: the green behind the sand (to the sand's edge + 5 m) and the
   green verges of the paths and roads are grass, not forest. The open-looking strip between the viewpoint path and
   Wong Duan's sand was all invisible wall (`ground.ts surfaceAt`).
-- Mommy and Daddy keep the decks' rules too (`deckOk`, their own `on` deck): single file on and by a deck or the jetty
+- Mom and Dad keep the decks' rules too (`deckOk`, their own `on` deck): single file on and by a deck or the jetty
   (its side would be in the sea), and when a straight line would cut through a deck's side they follow her own
   footsteps. `qa()` reports their positions (`family`).
 - Robot (Chromium + SwiftShader): deck steps down and back up from the deck and up from the beach; across the grass by
   the viewpoint path 4/4 (main: 0/4); the jetty out and back 0/8 clips or jams (main: 3/4). Na Dan pier still steps off.
-- Seen once in 8 jetty runs: with them single file at the jetty's foot, her finger held ahead can land on Daddy's tap
+- Seen once in 8 jetty runs: with them single file at the jetty's foot, her finger held ahead can land on Dad's tap
   target and she stands still (the family's targets swallow the walk, like Ao Prao's umbrellas in #357).
 
 ## ❓ Open questions for the user
 
 My picks are in brackets; the plan uses them until the user says otherwise.
 
-- **Who drove the jet ski?** OPEN: [Kaylee steers, Daddy sits behind her with his hands over hers, the jet ski man pushes them off.] Or did the jet ski man drive her?
-- **How did you get to Ban Phe, and over to the island?** OPEN: [Mommy drives the car from Bangkok (a short drive leg, or none: the trip opens at Ban Phe pier), then a **speedboat** to Na Dan pier.] Or Aunty Sri's van, the ferry, a speedboat straight onto a beach?
+- **Who drove the jet ski?** OPEN: [Kaylee steers, Dad sits behind her with his hands over hers, the jet ski man pushes them off.] Or did the jet ski man drive her?
+- **How did you get to Ban Phe, and over to the island?** OPEN: [Mom drives the car from Bangkok (a short drive leg, or none: the trip opens at Ban Phe pier), then a **speedboat** to Na Dan pier.] Or Aunty Sri's van, the ferry, a speedboat straight onto a beach?
 - **Where were the lunch deck and the driftwood tree?** OPEN: [Both at **Ao Prao**: Ao Prao Resort's deck above the cove, the driftwood tree on Ao Prao beach.] The photos have no GPS, and Ao Prao is the only west-facing cove with resorts. If it was Le Vimarn or another beach, the deck moves.
 - **Where did you stay?** OPEN: [Not in the game.] If you stayed in a bungalow, it could be where she lands each visit and where the day ends.
 - **Which snorkel trip?** OPEN: [A snorkel boat from Ao Wong Duan to **Ko Kudi**.] Or Ko Kham, Bat Island, a longtail?
@@ -798,7 +798,7 @@ My picks are in brackets; the plan uses them until the user says otherwise.
 - **Activity** `samet-trip` in `src/world/places/thailand/activities/samet-trip/` with `sections.ts` (`defineSections('thailand', 'samet-trip', …)`, loaded at startup: no three.js), `trip.ts` (a `TripDef`: `who: ['ji', 'nick']`, `pack: { hint: 'sun' }`, `arrive: 'speedboat'`, `gift: 'photo'`), and a folder per piece: `island/`, `jetski/`, `book/`, `sandcastle/`, `snorkel/`, `hideseek/`, `finale/`.
 - **meta.ts:** in `inTheWorks` until step 10, then `activities` with its sticker. **Place.tsx:** the facts branch and the stamp's `onClose` → `hub/map?stamp=samet-trip`. **hub/sections.ts:** add `samet-trip` to the `stamp` values.
 - **The Thailand map** (`activities/hub/map/geo.ts`): a `PinId` `'samet'` and a `PINS` entry at about lon 101.455, lat 12.565 (east of Pattaya in the Gulf), Samet added to `ISLANDS` (only Samui and Phuket are drawn today), and a branch in `ThaiMap.tsx` `tapPin` (`!kitDone` → `samet-trip/pack`, else `samet-trip/island` at the saved beach). A `PLACES` entry in `trip/outline.ts`, a slot in `wall.ts` `WALL_SLOTS`.
-- **Getting there:** if Mommy drives to Ban Phe, `TripDef.legs` gets a `car` leg (`veloz`, `driver: 'ji'`, already supported). The speedboat is a new short leg built on `trip/vehicles/longtail.ts` (a fast `Feel`, Kaylee holding the rail, not steering) on the shared `Water`.
+- **Getting there:** if Mom drives to Ban Phe, `TripDef.legs` gets a `car` leg (`veloz`, `driver: 'ji'`, already supported). The speedboat is a new short leg built on `trip/vehicles/longtail.ts` (a fast `Feel`, Kaylee holding the rail, not steering) on the shared `Water`.
 - **Locked:** Samet's code lives in `places/thailand/` and is encrypted with the rest; `sections.ts`, `lines.ts` and `meta.ts` stay readable (nothing about the family's home in them, and there's none to put).
 
 ## 🛠️ Tech plan: an open world on an iPad (for the builder)
@@ -889,28 +889,28 @@ The house's flat pastel 3D (toon bands with lavender shadows, ink outlines, blob
 ### Characters
 
 - **Kaylee** (the modelled vinyl-toy unicorn, wearing her saved look from the wardrobe) with the trip's costumes on top: a pink-and-white life jacket (photo 1), a snorkel mask, a pink floatie ring, a sun hat.
-- **Mommy** (Ji) and **Daddy** (Nick), the unicorns from `characters/looks.ts`; Daddy in a cap and sunglasses like the photos.
+- **Mom** (Ji) and **Dad** (Nick), the unicorns from `characters/looks.ts`; Dad in a cap and sunglasses like the photos.
 - **The jet ski man**, **the snorkel boat captain** and **the fire dancers**: new characters on the shared chibi rig (`engine3d/characters/animal.ts`), animals as the user picks, added to the character lab's `lab/catalog.ts`.
 - **The animals** for the book: simple chibi critters in the same look, each with one behavior and one reaction to the camera.
 
 ## 🗣️ Voices and lines (for the builder)
 
-Every phrase goes in `lines.ts` under `L.samet` (tagged by speaker) and is recorded with `scripts/generate-voice.mjs`. **Sparkle** gives the instructions from her corner (`trip/legs/Guide.tsx`); Mommy, Daddy and the new characters say their own story and reaction lines in their voices. New speakers go in Thailand's `cast.json`: the jet ski man (cheerful, Thai English, quick), the boat captain (warm, slow), the fire dancer (big showman voice). Short lines, under ~3 s, no player name outside the landing page and the Egypt/China name-writing activities. Stuck hints through `spendHint()`; the island speaks no idle hints (it glows).
+Every phrase goes in `lines.ts` under `L.samet` (tagged by speaker) and is recorded with `scripts/generate-voice.mjs`. **Sparkle** gives the instructions from her corner (`trip/legs/Guide.tsx`); Mom, Dad and the new characters say their own story and reaction lines in their voices. New speakers go in Thailand's `cast.json`: the jet ski man (cheerful, Thai English, quick), the boat captain (warm, slow), the fire dancer (big showman voice). Short lines, under ~3 s, no player name outside the landing page and the Egypt/China name-writing activities. Stuck hints through `spendHint()`; the island speaks no idle hints (it glows).
 
 | Who | When | Line |
 |---|---|---|
 | Sparkle | first landing | “Let's explore the island!” |
 | Sparkle | first time on each beach | “Crystal Sand Beach!” / “Coconut Bay!” / “Crescent Moon Bay!” |
 | Jet ski man | jet ski start | “Life jacket on!” |
-| Daddy | jet ski start | “You steer!” |
+| Dad | jet ski start | “You steer!” |
 | Sparkle | waves round | “Big waves! Jump them!” |
 | Jet ski man | race | “Race you to the big buoy!” |
-| Daddy | race won | “You win!” |
-| Daddy | sandcastle | “Let's build a sandcastle!” |
+| Dad | race won | “You win!” |
+| Dad | sandcastle | “Let's build a sandcastle!” |
 | Captain | snorkel | “Masks on! Jump in!” |
 | Sparkle | sea urchin bump | “Prickly! Look, don't touch!” |
-| Daddy | hide and seek | “Close your eyes and count!” / “Found you!” / “Where did you go?” |
-| Mommy | finale | “Look! Fire dancers!” |
+| Dad | hide and seek | “Close your eyes and count!” / “Found you!” / “Where did you go?” |
+| Mom | finale | “Look! Fire dancers!” |
 | Sparkle | a new animal | “A hornbill!” (one per animal) |
 
 ## 📚 Sources (for the builder)
@@ -935,29 +935,29 @@ Every phrase goes in `lines.ts` under `L.samet` (tagged by speaker) and is recor
 ## The sandcastle, fixed (issue #357 sandcastle batch, 2026-11-09)
 
 - **The tide's channel (the major one):** both directions worked for the robot; what failed was a channel started on the moat's *rim*: it left a dam of sand between the moat and the channel, the water stopped there, and the channel's own water counted as "the moat filled" (`pooled()` counted any water inland). Now the moat counts as filled only when water stands in the deep part of her biggest hollow (`Sand.hollow()`, `wetArea`). When her channel's water stops within `TIDE.help` (1.25 m) of the moat and her finger is up `helpAfter` (1.2 s), the sand between glints and gives way (`breach`, `Sand.carve`); further off, the pressing finger traces the gap still to dig (`Sand.gap`). A stroke that starts on a wall right beside a hole and runs away from it digs through the wall instead of patting it up.
-- **The dig round shows progress:** each sixteenth of the way round the castle she digs twinkles a note higher, the moulds bounce in one by one (a quarter, half, three quarters), and a moat dug `PLAY.ring` (0.85) of the way round gets a fanfare, everyone cheers and Daddy says "Great castle!", then the towers. 30 s of digging still moves on by itself.
+- **The dig round shows progress:** each sixteenth of the way round the castle she digs twinkles a note higher, the moulds bounce in one by one (a quarter, half, three quarters), and a moat dug `PLAY.ring` (0.85) of the way round gets a fanfare, everyone cheers and Dad says "Great castle!", then the towers. 30 s of digging still moves on by itself.
 - **The towers round is the core verb:** a mould has to be full of sand before a tap flips it. Drag it through the sand and it scoops (a trench behind it), or dig beside it (within `fillNear`) and the sand arcs in. A full one heaps over and hops now and then. Each tower of the round needs more sand (`fill` 0.08 m³, `fillMore` ×0.5 each); 6 towers (or 150 s) bring the tide. Tapping an empty one wobbles it and Sparkle says "Dig next to a bucket to fill it!". Lines: `towers` reworded, `hint.fill` new (the voices job records them).
 - **Every screen digs:** the patch reaches 15 m up the beach (`PATCH.v0`, `DIGGABLE.v0` −13.9); a phone in portrait shows sand down to about −13.3, which didn't dig below −7.6.
-- **Daddy:** moved in to `a` 2.45 so he's whole on an iPhone in portrait (his right edge at 343 of 390 px). Rubbing heaps the sand on the parts near her finger, not just the one under it; about 6 rubs bury him (`bury` 1.6). Fully buried, he lies still, wiggles his toes and sneezes himself out after `wiggleOut` (3.2 s, paused while she's still rubbing).
+- **Dad:** moved in to `a` 2.45 so he's whole on an iPhone in portrait (his right edge at 343 of 390 px). Rubbing heaps the sand on the parts near her finger, not just the one under it; about 6 rubs bury him (`bury` 1.6). Fully buried, he lies still, wiggles his toes and sneezes himself out after `wiggleOut` (3.2 s, paused while she's still rubbing).
 - **The dark box at the channel's mouth:** the sand only got wet inside the box where she had dug. Now `Sand.soak()` wets and dries the whole patch a few times a second, fading over a few cells.
 - **Robot runs:** `thailand-samet-sand-{moat,bucket,bury,out}`. `qa()` adds `moat` (core/wet m²), `ring`, `digK`, `fills`, `helped`, and `moatIn`, `moatRim`, `seaEdge` screen points.
 - **Known:** the walls beside a channel still stand in spikes where it meets the sea; a mould dragged off the castle flips where it is.
 
 ## Snorkel and hide and seek, fixed (issue #357 batch, 2026-11-09)
 
-- **Daddy always on screen while she seeks** (`hideseek.ts seekBox`): from her count to "Found you!" the camera keeps her, his hiding place and Daddy himself in the shot, on every screen shape (`hideCam.margin`). The trickier round's far hides moved in a little (towel u -5.5, pandanus u -6.5, the sea v 5) so a phone held upright doesn't zoom right out.
+- **Dad always on screen while she seeks** (`hideseek.ts seekBox`): from her count to "Found you!" the camera keeps her, his hiding place and Dad himself in the shot, on every screen shape (`hideCam.margin`). The trickier round's far hides moved in a little (towel u -5.5, pandanus u -6.5, the sea v 5) so a phone held upright doesn't zoom right out.
 - **The palms in front of the camera** melt away in hide and seek too (the same see-through), so a wider shot never looks through a crown.
 - **Help that rises when she's stuck** (rule 3; `hideSeek` knobs): 8 s he peeks out (a rustle, he pops up, "Hee hee hee!"), 16 s a big sneeze and his place glows with the finger, 26 s he jumps out in front of it and waves ("Here I am!": a tap on him finds him), 6 s later he runs over ("Peekaboo! You found me!") and it counts. Little wordless rustles between. The clock runs at half speed (`busyHelp`) while she leads Kaylee about, so a wanderer gets help too. The old repeating sneeze is gone.
-- **Her turn to hide:** the roots send her behind the tree's trunk (they aren't a place of their own); in the sea she ducks down to her head; in the pandanus she climbs up into its leaves like Daddy (its spot was inside its trunk, so she never got there); behind a thin palm or in the sea Mommy giggles ("Hee hee! I can see your tail!" / "Shh! Daddy won't look!") and Daddy still looks the wrong way right beside her. The umbrella, the chairs, the towel, the tree and Mommy's chair hide her.
-- **Lunch:** Mommy stands nearer the table's end (`MOMMY` in `lunch.ts`) and the shot leans toward her, so she's whole on every screen shape. The island's plants now melt into the trip's see-through dither (`island/seethrough.ts`, as on the island and at the sunset) where they'd stand between the camera and the table, so the leaves on the slope no longer cover the lunch or what the hint points at.
+- **Her turn to hide:** the roots send her behind the tree's trunk (they aren't a place of their own); in the sea she ducks down to her head; in the pandanus she climbs up into its leaves like Dad (its spot was inside its trunk, so she never got there); behind a thin palm or in the sea Mom giggles ("Hee hee! I can see your tail!" / "Shh! Dad won't look!") and Dad still looks the wrong way right beside her. The umbrella, the chairs, the towel, the tree and Mom's chair hide her.
+- **Lunch:** Mom stands nearer the table's end (`MOMMY` in `lunch.ts`) and the shot leans toward her, so she's whole on every screen shape. The island's plants now melt into the trip's see-through dither (`island/seethrough.ts`, as on the island and at the sunset) where they'd stand between the camera and the table, so the leaves on the slope no longer cover the lunch or what the hint points at.
 - **The cuttlefish round is a chase** (`snorkel.ts cuttlefish`): she reaches it three times. The first two it bursts into a new color (rainbow, then stripes) and jets off with a whoosh to hide sand-colored further on ("Whoosh! Find it again!", "Where did it go?"); the last time it backs away slowly (`snorkelFish.shy`, slower than her paddle) before it turns pink. Stuck: it glints after 14 s, swims to her after 24 s (`glint`, `comes`).
 - **The boat's hull** is one capsule the length of the boat, kept `snorkelSwim.reach` (0.85 m) from her middle so her arms and floaties stay outside it (the three circles left gaps she swam through).
-- **iPhone on its side:** Mommy's camera button goes to the right (Daddy swims on her left).
+- **iPhone on its side:** Mom's camera button goes to the right (Dad swims on her left).
 - Robot: `window.__thaiSametQA()` in hide and seek gives `helpLvl`, `helpT`, `popped`, `onScreen`, `popOuts`, `cameOver`, `sillyHides`; the snorkel's `cuttleBest` counts how many times she reached it, `glints` the stuck glints. Runs `thailand-samet-fix-*` film it.
 
 ## The finale, fixed (issue #357 batch, 2026-11-09)
 
-- **The fire show's shapes** (`finale/fireshow.ts` `fitGuide`): the dots no longer sit 1.1 m in front of her on the family. They go up in the sky above everyone's heads (Kaylee's horn, Mommy, Daddy), as big as fits between the heads and the top bar, centered over her. Shape width on screen, before → after: iPhone portrait 73 → 310 px, iPhone landscape 81 → 129 px, iPad portrait 141 → 456 px, iPad landscape 136 → 279 px; no family or Kaylee tap target inside the shape's box on any of them. It refits when the screen turns. The tolerance and the dots grow with the shape (`tol` is at the smallest size), her poi can always reach the dots, the lanterns rise from where she drew it and end the same size in the sky as before.
+- **The fire show's shapes** (`finale/fireshow.ts` `fitGuide`): the dots no longer sit 1.1 m in front of her on the family. They go up in the sky above everyone's heads (Kaylee's horn, Mom, Dad), as big as fits between the heads and the top bar, centered over her. Shape width on screen, before → after: iPhone portrait 73 → 310 px, iPhone landscape 81 → 129 px, iPad portrait 141 → 456 px, iPad landscape 136 → 279 px; no family or Kaylee tap target inside the shape's box on any of them. It refits when the screen turns. The tolerance and the dots grow with the shape (`tol` is at the smallest size), her poi can always reach the dots, the lanterns rise from where she drew it and end the same size in the sky as before.
 - Knobs (`fireShape`): `fill` (half the shape's width × the screen's narrow side, 0.4), `gap` (px clear of the heads, 22), `size` (the smallest, 1.1 m), `dot` (1.3×).
 - **The finish badge**: `TripGuide corner={OVER_CORNER}` once the badge shows, so Sparkle's bubble stops short of it or goes above it on a narrow phone; the badge comes in 0.45 s after the photo so the bubble on screen then has moved. iPhone portrait samples (every 0.1 s for 12 s) with the bubble over the badge: 19/19 → 0.
 - **The sunset left alone**: it used to sink 0.12°/s (75 s, then 3 s of dusk). Now `sunsetSun.alone` (22 s) sets it by itself, the pressing finger shows the pull from `sunsetSun.hint` (2.5 s) until she has grabbed it once, and Sparkle says it after 8 s still (was 9). Robot, nobody touching: finger at 2.6 s, Sparkle 16.1 s, the sun in the sea at 22.1 s, night 25.1 s (before: finger 6.2 s, still day at 110 s of a slow headless clock).

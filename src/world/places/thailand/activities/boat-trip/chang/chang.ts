@@ -1,32 +1,32 @@
 // Baan Chang Cafe, the elephants in Krabi (plan: thailand/baan-chang.md), a world of its own inside the boat trip.
-// The yard's toy: she pulls a banana or a stick of sugarcane out of Daddy's basket and holds it up over the rail. Every
+// The yard's toy: she pulls a banana or a stick of sugarcane out of Dad's basket and holds it up over the rail. Every
 // trunk in reach snakes after her finger, lagging and bending along its length; the first tip to touch the food curls
 // round it (her finger lets go by itself), swings it up to the mouth, and the elephant munches, its ears flap and its
 // belly gets a little rounder. Held high, the trunks stretch up; held low, they reach down over the boulders. A tap on
 // a food (no drag) floats it to the hungriest trunk, and food let go far from every trunk falls on the gravel and gets
-// snuffled up (or Daddy pops it back in the basket). Mali is big and slow and reaches further; Khanom is small, quick
+// snuffled up (or Dad pops it back in the basket). Mali is big and slow and reaches further; Khanom is small, quick
 // and always hungry. Three bites in a row and Mali burps. Taps: an elephant trumpets, the family hop.
 //
 // The way in (greybox 4): the songthaew drives up to the entrance (`chang`, entrance.ts) and the family hop down onto
 // the plank deck in front of the curved bamboo sign wall; "Everybody, pose!" (`sign`): the bay's four pose buttons,
-// Kaylee strikes one, Mommy and Daddy copy her, "One, two, three, cheese!", the flash, and the photo drops into the trip
+// Kaylee strikes one, Mom and Dad copy her, "One, two, three, cheese!", the flash, and the photo drops into the trip
 // album (as many as she likes; after the first a big 🥤 takes them up to the cafe). At the top of the boardwalk, the
 // cafe (`drinks`, cafe.ts, greybox 3): she pours her chocolate milk, squeezes in the chocolate, stirs and picks a straw
-// (and maybe makes Daddy an iced coffee); the 🐘 button takes them out onto the boardwalk (`boardwalk`, walkway.ts):
-// tap the planks or hold a finger and she walks there, Mommy and Daddy tagging along, a gecko on a post and a palm to
+// (and maybe makes Dad an iced coffee); the 🐘 button takes them out onto the boardwalk (`boardwalk`, walkway.ts):
+// tap the planks or hold a finger and she walks there, Mom and Dad tagging along, a gecko on a post and a palm to
 // shake on the way, down the steps and over to the rail. Her glass stands on a rail post there. Then the same verb
 // deepens, one section after another (greybox 2):
 //   feed       any food to any elephant; after a few, they start asking
 //   favorites  a picture bubble over each head: what it wants and how many (Mali's three pips, "One! Two! Three!").
 //              The wrong snack gets sniffed and passed through the air to whoever wanted it. Two rounds.
-//   lamyai     Lamyai wanders over from the sala (her footsteps make the basket hop) and Daddy sits down on the bench:
+//   lamyai     Lamyai wanders over from the sala (her footsteps make the basket hop) and Dad sits down on the bench:
 //              three trunks at the rail, a new wish whenever one comes true. When her hands are still, Khanom's trunk
 //              sneaks across to her chocolate milk on the rail post; a food held out turns him back, and a sip gives him
 //              the hiccups and a chocolate moustache. After a dozen more, they're full.
 //   splash     full and happy, they dip their trunks in the trough and spray it up over the family, under a rainbow.
-//              A tap on an elephant: another spray. Daddy's photo of it drops into the album, then Khanom's sticker
+//              A tap on an elephant: another spray. Dad's photo of it drops into the album, then Khanom's sticker
 //              flies in, and the way on shows (BoatTrip: 🚤 to the pier if she hasn't been, else ✈️🏠).
-// Talk (lines.ts L.chang): Daddy and Mommy react in their own voices, Sparkle says each elephant's name and nickname
+// Talk (lines.ts L.chang): Dad and Mom react in their own voices, Sparkle says each elephant's name and nickname
 // the first time it eats, what's new (the wishes, Lamyai, the splash), counts a wish of three, and after ~8 s with
 // nothing done says what to do next (stuckLine).
 import { Color, Vector3, type Object3D, type PerspectiveCamera, type WebGLRenderer } from 'three'
@@ -57,14 +57,14 @@ export type ChangSection = 'chang' | 'sign' | 'drinks' | 'boardwalk' | 'feed' | 
 /** Where she is: the entrance (the songthaew and the sign), the cafe, or the yard (the boardwalk runs down into it). */
 type Area = 'entry' | 'cafe' | 'yard'
 const AREA_OF: Record<ChangSection, Area> = { chang: 'entry', sign: 'entry', drinks: 'cafe', boardwalk: 'yard', feed: 'yard', favorites: 'yard', lamyai: 'yard', splash: 'yard' }
-/** The photos taken here: the pose photo at the sign wall, and Daddy's photo of the splash. */
+/** The photos taken here: the pose photo at the sign wall, and Dad's photo of the splash. */
 export type ChangPhoto = 'sign' | 'chang'
 
 /** A link into a later section starts as if she had fed them this many already (rounder bellies). */
 const FED_BEFORE: Record<ChangSection, number> = { chang: 0, sign: 0, drinks: 0, boardwalk: 0, feed: 0, favorites: 8, lamyai: 18, splash: 30 }
 /** The songthaew's drive in to the entrance (s). */
 const ARRIVE_S = 3.0
-/** The splash's moments (s into it): Daddy's photo, Khanom's sticker, then the way on. */
+/** The splash's moments (s into it): Dad's photo, Khanom's sticker, then the way on. */
 const SPLASH_PHOTO = 2.6
 const SPLASH_STICKER = 4.8
 const SPLASH_ONWARD = 6.6
@@ -101,7 +101,7 @@ const TOOL_LABELS: Record<string, string> = { milk: 'Milk jug', choc: 'Chocolate
 export const CHANG_ANCHORS: AnchorInfo[] = [
   ...TOOLS_WIDE.map((id): AnchorInfo => ({ id: `tool:${id}`, label: TOOL_LABELS[id] ?? `${id.slice(6)} straw`, kind: 'thing' })),
   { id: 'glass:her', label: 'Her glass', kind: 'thing' },
-  { id: 'glass:dad', label: "Daddy's glass", kind: 'thing' },
+  { id: 'glass:dad', label: "Dad's glass", kind: 'thing' },
   { id: 'bell', label: 'Bell', kind: 'thing' },
   { id: 'food:banana', label: 'Banana', kind: 'thing' },
   { id: 'food:cane', label: 'Sugarcane', kind: 'thing' },
@@ -115,8 +115,8 @@ export const CHANG_ANCHORS: AnchorInfo[] = [
   { id: 'gecko', label: 'Gecko', kind: 'thing' },
   { id: 'palm', label: 'Palm tree', kind: 'thing' },
   { id: 'walk:end', label: 'Walk down to the elephants', kind: 'thing' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
   { id: 'family:kaylee', label: 'You', kind: 'family' },
 ]
 
@@ -206,7 +206,7 @@ export class Chang extends Stage {
   private area: Area = 'yard'
   private entrance: Entrance
   private walkway: Walkway
-  /** Mommy and Daddy tagging along on the boardwalk and over to the rail (null once they're there). */
+  /** Mom and Dad tagging along on the boardwalk and over to the rail (null once they're there). */
   private tags: { ji: Tagalong; nick: Tagalong } | null = null
   /** Walking over from the foot of the boardwalk's steps to the rail (feed has begun). */
   private walkIn = false
@@ -396,7 +396,7 @@ export class Chang extends Stage {
     else if (s === 'feed' && was === 'boardwalk' && !first) this.walkOver()
     else if (AREA_OF[s] === 'yard' && !first && AREA_OF[was] !== 'yard') this.atRail()
     if (s === 'feed') {
-      // Daddy holds out the basket (Sparkle's "Hold it up to a trunk!" comes only if nothing is touched: stuckLine).
+      // Dad holds out the basket (Sparkle's "Hold it up to a trunk!" comes only if nothing is touched: stuckLine).
       this.later(was === 'boardwalk' && !first ? 1400 : 700, () => this.at === 'feed' && this.once('bananas', L.chang.bananas))
     } else if (s === 'favorites') {
       this.round = 1
@@ -482,7 +482,7 @@ export class Chang extends Stage {
     }
   }
 
-  /** The bay's pose buttons (BoatTrip shows them at the sign): Kaylee strikes the pose, Mommy and Daddy copy her, the
+  /** The bay's pose buttons (BoatTrip shows them at the sign): Kaylee strikes the pose, Mom and Dad copy her, the
    *  countdown and the flash, and the photo drops into the album. After the first, the way on (🥤) shows. */
   pose(kind: PoseKind) {
     if (this.at !== 'sign' || this.posing || this.hopping) return
@@ -514,7 +514,7 @@ export class Chang extends Stage {
     })
   }
 
-  /** `boardwalk`: out of the cafe at the top of the walkway, Mommy and Daddy just behind her. */
+  /** `boardwalk`: out of the cafe at the top of the walkway, Mom and Dad just behind her. */
   private ontoBoardwalk() {
     const k = this.riders.kaylee
     this.put(k, WALK.x1 - 0.4, WALK.y, WALK.z, 'stand', -90)
@@ -555,7 +555,7 @@ export class Chang extends Stage {
     this.walkIn = true
   }
 
-  /** The boardwalk's frame: Kaylee on the planks and the steps, Mommy and Daddy keeping up. */
+  /** The boardwalk's frame: Kaylee on the planks and the steps, Mom and Dad keeping up. */
   private stepWalk(dt: number) {
     const k = this.riders.kaylee
     const p = k.root.position
@@ -689,7 +689,7 @@ export class Chang extends Stage {
   }
 
   private photoCam(kind: ChangPhoto): PerspectiveCamera {
-    // The sign: straight on and low, the letters across the top. The splash: from Daddy's bench, the family and the
+    // The sign: straight on and low, the letters across the top. The splash: from Dad's bench, the family and the
     // spray and the rainbow.
     if (kind === 'sign') return photoCamera(30, 0, 1.6, ENTRY.z + 9.8, 0, 1.75, ENTRY.z - 0.2)
     return photoCamera(46, 5.4, 2.2, 6.2, 0.4, 2.0, -1.4)
@@ -951,7 +951,7 @@ export class Chang extends Stage {
           sfx.thump()
         }
       } else if (f.state === 'ground' && f.t > F.ground && !this.eaters.some((x) => x.chasing && this.targetOf(x) === f)) {
-        // Out of everyone's reach: Daddy pops it back in.
+        // Out of everyone's reach: Dad pops it back in.
         this.basket.putBack(f)
         sfx.pop()
       } else if (f.state === 'eaten' && f.t > 1.2) {
@@ -980,7 +980,7 @@ export class Chang extends Stage {
       this.stacheUntil = 0
       this.eater('khanom').e.chocolate(false)
     }
-    // Mali's big burp (Daddy laughs).
+    // Mali's big burp (Dad laughs).
     if (this.burpAt > 0 && this.time > this.burpAt) {
       this.burpAt = -1
       this.maliBites = []
@@ -1006,7 +1006,7 @@ export class Chang extends Stage {
     }
   }
 
-  /** The splash's moments: Daddy's photo of it, Khanom's sticker flying into the album, then the way on. */
+  /** The splash's moments: Dad's photo of it, Khanom's sticker flying into the album, then the way on. */
   private stepSplash(dt: number) {
     const was = this.splashT
     this.splashT += dt
@@ -1218,7 +1218,7 @@ export class Chang extends Stage {
         if (x.e.id === 'khanom') sfx.squeal()
         else sfx.trumpet()
         x.e.flap = 1
-        // The water comes down on the family: Kaylee squeals and bounces, Mommy wiggles.
+        // The water comes down on the family: Kaylee squeals and bounces, Mom wiggles.
         this.later(900, () => {
           sfx.giggle()
           this.riders.kaylee.react('hop')
@@ -1289,7 +1289,7 @@ export class Chang extends Stage {
     this.fed++
     this.stepFed++
     this.events.fed(this.fed)
-    // Each one's name and nickname the first time it eats (Lamyai's comes as she walks over); Daddy on Khanom's second.
+    // Each one's name and nickname the first time it eats (Lamyai's comes as she walks over); Dad on Khanom's second.
     const firstBite = !this.told.has(`bite:${x.e.id}`)
     this.told.add(`bite:${x.e.id}`)
     if (firstBite && x.e.id !== 'lamyai') this.later(700, () => this.once(x.e.id, L.chang[x.e.id as 'mali' | 'khanom']))

@@ -1,5 +1,5 @@
 // HarborLand's hall on screen: the 3D hall (hall.ts) with its tap targets, the 👆 after a while with nothing touched
-// and Mommy's "Pizza time?" card once Daddy's tummy rumbles (she says it).
+// and Mom's "Pizza time?" card once Dad's tummy rumbles (she says it).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
@@ -17,13 +17,13 @@ const LABEL_COLORS: Record<string, string> = { little: '#3FAF8E', muay: '#E04848
 
 interface Props {
   socks: string
-  /** Daddy's hairdo from the barber. */
+  /** Dad's hairdo from the barber. */
   hair: string
   done: GameDoor[]
   from: DoorId | 'in'
-  /** Daddy's tummy rumbles soon after she comes out. */
+  /** Dad's tummy rumbles soon after she comes out. */
   hungry: boolean
-  /** Mommy's card is up. */
+  /** Mom's card is up. */
   asking: boolean
   /** The map is open (a `map=1` link opens it). */
   map: boolean
@@ -48,13 +48,13 @@ export function HallScreen({ socks, hair, done, from, hungry, asking, map, back,
   const signRef = useRef<HTMLDivElement>(null)
   const cb = useRef({ onEnter, onHungry })
   cb.current = { onEnter, onHungry }
-  // No hint from Sparkle over Mommy's question or the map. (The map's 🦄: the stop nearest her.)
+  // No hint from Sparkle over Mom's question or the map. (The map's 🦄: the stop nearest her.)
   useEffect(() => worldRef.current?.setAsking(asking || map), [asking, map])
   useEffect(() => {
     if (map) setHere(worldRef.current?.nearest() ?? null)
   }, [map])
   // Back out of a mini game with more still to play: once she's stepped out, the map comes up (where next?). Not when
-  // Daddy's about to ask about pizza.
+  // Dad's about to ask about pizza.
   const fresh = back && from !== 'in' ? from : null
   useEffect(() => {
     if (!fresh || hungry || asking || done.length >= GAMES.length) return

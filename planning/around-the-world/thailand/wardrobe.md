@@ -79,7 +79,7 @@ One verb: put it on her.
 
 - 🗄️ **The wardrobe in her room**: A real wardrobe (pastel wood, a long mirror on one door) next to her suitcase upstairs. Tap it and the doors open. There's no wardrobe in the house yet; the user's plan of her room had one.
 - 🪞 **The mirror button**: A round hand-mirror button in the house's top bar, on every floor and the street. Tap it: a sparkle, and she's standing at her wardrobe. No walking up the stairs to change a hat.
-- 🧳 **Before a trip**: Mommy asks about a trip in her room, right next to the wardrobe, so dressing up for the trip is a natural first stop. The suitcase stays the suitcase (the packing lesson doesn't change).
+- 🧳 **Before a trip**: Mom asks about a trip in her room, right next to the wardrobe, so dressing up for the trip is a natural first stop. The suitcase stays the suitcase (the packing lesson doesn't change).
 
 > **💾 Saved on the iPad**
 >
@@ -147,7 +147,7 @@ Every scene in Thailand builds Kaylee the same way, so her saved look goes on in
 
 > **👀 The payoff: being seen**
 >
-> The first time she walks up to someone in a new look, they notice: Mommy “Ooh, a crown!”, Daddy “Cool wings!”, Agong “So pretty!”. One line per kind of thing, said once per change, never a lecture.
+> The first time she walks up to someone in a new look, they notice: Mom “Ooh, a crown!”, Dad “Cool wings!”, Agong “So pretty!”. One line per kind of thing, said once per change, never a lecture.
 
 ## ⚖️ When her look clashes with a game
 
@@ -177,7 +177,7 @@ Every clash in the code today, and the one rule (plus a few small ones) that sol
 
 ### The small rules
 
-- ☀️ **1. Sun smarts**: On a sunny trip her own hat **counts if it's shady** (cap, cowboy hat, bucket hat, sun hat): she keeps it, no spare hat, and Mommy says “Good hat!”. A crown isn't shady, so the packed sun hat (or Mommy's spare) goes on and the crown waits in her pocket. Heart and star sunglasses count as sunglasses. The packing lesson stays exactly the same, and now her own choice can be the right one.
+- ☀️ **1. Sun smarts**: On a sunny trip her own hat **counts if it's shady** (cap, cowboy hat, bucket hat, sun hat): she keeps it, no spare hat, and Mom says “Good hat!”. A crown isn't shady, so the packed sun hat (or Mom's spare) goes on and the crown waits in her pocket. Heart and star sunglasses count as sunglasses. The packing lesson stays exactly the same, and now her own choice can be the right one.
 - 🦄 **2. Nothing taller than her horn**: Every roof in the game was made to clear her horn: the tuk-tuk, the van, the Veloz, the Pajero, the plane's bins, the sea cave's tunnel. So every hat stays under the tip of her horn, and none of those need changing. Her tap targets and the cameras, which use her height, don't change either.
 - 🪑 **3. Wings fold when she sits**: In a car seat, on a stool, a couch, a booster seat, a slide or the donut ring, wings fold flat and the cape drapes; lying down (pillows, the canoe in the cave, the straw pile) they tuck away. Folded, they stay inside the circle she walks in, so she never snags on furniture. They spread when she stands still, and flap when she hops.
 - 👟 **4. Shoes off in the house**: Like a real Thai home: at Agong's door her shoes hop onto the shoe rack (it's already by the door) and back on when she goes out to the street. A real culture fact she does with her feet. In the wardrobe she can still try them on, on the rug.
@@ -194,7 +194,7 @@ Every clash in the code today, and the one rule (plus a few small ones) that sol
 | Rice farm | the ngob is stuck straight onto her head, on top of whatever hat she has | the ngob becomes a costume (head) |
 | Vet stethoscope | ear tips on her head, Y-piece on her chest | the vet costume takes head and body |
 | Muay Thai belt | the gold belt fitted round her dress at the waist; a tutu or gown is wider | Muay Thai takes body |
-| Sunny trips (airport, plane, bay, race, Baan Chang, home) | `wearing(packed)` puts on the sun hat or Mommy's spare and takes the rest off | sun smarts + the costume layer |
+| Sunny trips (airport, plane, bay, race, Baan Chang, home) | `wearing(packed)` puts on the sun hat or Mom's spare and takes the rest off | sun smarts + the costume layer |
 | Plane and airport | her sunglasses go up onto her hair indoors | works for whatever glasses are on her face |
 | HarborLand | grip socks on her feet; her shoes go in the cubby | socks take feet; the shoes she's really wearing go in the cubby |
 | Tuk-tuk, van, Veloz, Pajero (with booster), plane (bins at 2.02 m), songthaew | a tall hat through the roof; wings into the seat back and the seatbelt | no taller than her horn; wings fold when she sits |
@@ -242,7 +242,7 @@ Every clash in the code today, and the one rule (plus a few small ones) that sol
 7. `#/world/thailand/mall-trip/skypod?look=bow,fairy,hair-pink` Sky Pod: her look on the climbing wall, wings folded
 8. `#/world/thailand/mall-trip/mountain?look=cape,crown` Golden Mountain: wings folded flat while she climbs
 9. `#/world/thailand/boat-trip/fly?look=cap,fairy&packed=sunglasses` Window seat: her cap counts (no spare hat), wings folded in the seat
-10. `#/world/thailand/boat-trip/bay?look=crown,stars&packed=floaties` Sunny boat trip in a crown: Mommy's spare hat on, the crown in her pocket
+10. `#/world/thailand/boat-trip/bay?look=crown,stars&packed=floaties` Sunny boat trip in a crown: Mom's spare hat on, the crown in her pocket
 11. `#/world/thailand/boat-trip/airport?look=stars&packed=sunhat,sunglasses` Airport: her own star sunglasses count, pushed up indoors
 12. `#/world/thailand/boat-trip/pack?look=cap` Packing with her cap on: no spare hat when the suitcase shuts
 13. `#/world/thailand/hub/street?look=sneakers,crown` Shoes on outside; walk in and they hop onto the rack
@@ -268,7 +268,7 @@ One PR each; stop for the user after each.
 3. **The look: every thing made for her** [done] · 2026-10-26 · PR #210
    All ~30 things fitted to her shape (like the scrubs and the mongkhon), the wardrobe made pretty, each thing's pose, the mirror button.
 4. **Full loop: voices, looks on the door, the family notices** [done] · 2026-10-26 · PR #212
-   Sparkle's lines, each thing's name the first time she touches it, the family's “Ooh, a crown!”, Mommy's “Good hat!”, the mirror photos (4 looks), the wand surprise, the silly moments, full QA.
+   Sparkle's lines, each thing's name the first time she touches it, the family's “Ooh, a crown!”, Mom's “Good hat!”, the mirror photos (4 looks), the wand surprise, the silly moments, full QA.
 5. **Later, if the user wants: her look outside Thailand** [next]
    A saved picture of her, on the world map's balloon and the trophy screen.
 
@@ -304,11 +304,11 @@ Her look in every scene from one place, a costume layer that takes only the spot
 - **One place:** `characters/avatar.ts` has a `Dress` (her look + the game's costume on one rig). `Avatar` and the race's `Racer` both dress through it, and both constructors read `currentLook()`, so the 6 `new Avatar(...)` (house, trip-kit stage, bay, race, mountain road, lab) and the race slide and Sky Pod show her look with no scene changes. The house no longer dresses her itself.
 - **The costume layer:** `wear(ids)` keeps its meaning (the game's costume, exactly these) but no longer takes everything off. `looks.ts` `SPOTS_OF` says which spots each costume takes (scrubs outfit, scrub cap head, apron outfit, chef's hat head, smock outfit + back, gloves hands, mongkhon head + face, sun hats head, sunglasses face, floaties arms, ngob head). `claim(key, spots)` is for things a game puts on her itself: the grip socks (`socks.ts`: feet), the shoe rack (feet), Muay Thai's belt (outfit).
 - **Her pocket:** a thing of hers that loses its spot shrinks toward her right hip and disappears, and pops back (the wardrobe's pop) when the spot is free. QA: `__thaiHouseQA()` has `costume`, `pocket` and `shoesOnRack` next to `look`.
-- **Sun smarts:** a shady hat of hers (the cap) drops Mommy's spare hat, and the packing leg skips Mommy's spare-hat line; tinted glasses (heart, star) drop the packed sunglasses. `glassesUp` pushes up whatever is on her face.
+- **Sun smarts:** a shady hat of hers (the cap) drops Mom's spare hat, and the packing leg skips Mom's spare-hat line; tinted glasses (heart, star) drop the packed sunglasses. `glassesUp` pushes up whatever is on her face.
 - **Wings fold** when she sits, lies, walks or climbs (`tuck` on Golden Mountain and Sky Pod's wall), inside her walking circle, spread when she stands still and flutter on a hop or a mattress bounce; the cape drapes shorter when she sits.
 - **Hat off for a wai:** in the `wai` pose (the altar, the little shrine, the spirit house) her hat, or a costume hat (sun hat, spare hat, scrub cap, chef's hat, ngob), comes down into her hooves in front of her chest and goes back on after. The mongkhon never does.
 - **Shoes at the door:** `activities/hub/shoes.ts`: stepping in from the street her shoes hop onto the shoe rack (one, two), and back onto her feet when she goes out. On the rack while she's inside on either floor; with the wardrobe open they're on her (she can try them on). A deep link inside starts with them on the rack. No shoes on (her hooves): nothing hops.
-- **HarborLand's cubby:** the shoes that hop in are her real ones (the sneakers, the rain boots), not pink placeholders; in her hooves only Daddy's hop.
+- **HarborLand's cubby:** the shoes that hop in are her real ones (the sneakers, the rain boots), not pink placeholders; in her hooves only Dad's hop.
 - **The ngob:** the rice farm builds it and hands it to `Avatar.attach('ngob', ...)`, then puts it on with `wear(['ngob'])` (off on the café's deck), so her own hat waits in her pocket.
 - **Photos in her colors:** `style.ts` `photoColors()`; the mall and Nan photos are drawn with her fur, hair and dress colors when they're taken (saved as a picture, so old wall photos keep that day's colors).
 
@@ -320,7 +320,7 @@ Her look in every scene from one place, a costume layer that takes only the spot
 
 **Known small things**
 
-- No new voices (greybox): Mommy's “Good hat!” and the family noticing her look are gate 4. With her cap on, Mommy now just says nothing at the suitcase.
+- No new voices (greybox): Mom's “Good hat!” and the family noticing her look are gate 4. With her cap on, Mom now just says nothing at the suitcase.
 - The pocket is a shrink toward her hip with no sparkle particles yet (gate 3).
 - Her shoes sit on top of the family's slippers on the rack (greybox placement).
 - The shoes don't hop off when she's carried in (the tuk-tuk, a trip's van): only when she walks through the door.
@@ -334,7 +334,7 @@ All 25 things in the plan's list built and fitted to her shape, each with its ow
 - **Fitted to her:** hats follow her measured hair (the mongkhon's `BAND_R`, `onHair()`), the cap, bucket and cowboy hats are domes over her hair like the scrub cap (her horn and ears poke out), outfits are lathed shells over her dress with parts on her arms and legs, the cat ears sit right over her own. Every hat tops out under her horn (the cowboy hat's dome is the tallest, ~0.545 < 0.56).
 - **Each thing's pose:** `style.ts` `Item.pose`; `Avatar.showOff(pose)` eases her arms, head and legs into it on top of her usual life (12 poses, 0.9-1.4 s). The wardrobe calls it when a thing goes on. On the modelled rig an arm's `z` raises it in front and `x` swings it out.
 - **The wardrobe made pretty** (`wardrobe/furniture.ts`): a crown-shaped top with a heart and gold balls, hearts on the doors, a long mirror inside the right door (tap it: she strikes a pose), a polka-dot back, scalloped shelf edges, gold heart knobs, a rug with a ring of hearts. Three rows of shelves (`shelfRoom`/`shelfSlot`: up to 4 a row, filled top first, set a little right so the open left door doesn't hide them); the doors open wider (2.95 rad). The tiara and orchid crown stand tipped up on the shelf so she sees the ring.
-- **The mirror button:** a round 🪞 at the right of the house's top bar on every floor and the street (hidden during the tuk-tuk, the family photo, Mommy's question and while dressing). Tap: a sparkle flash and she's on the rug with the doors open (`WardrobePlugin.openHere()`: `house.teleport` + open).
+- **The mirror button:** a round 🪞 at the right of the house's top bar on every floor and the street (hidden during the tuk-tuk, the family photo, Mom's question and while dressing). Tap: a sparkle flash and she's on the rug with the doors open (`WardrobePlugin.openHere()`: `house.teleport` + open).
 - **The pocket sparkle:** a thing going into her pocket leaves a trail of sparkles and bursts at her hip; coming back out it pops out of a burst (particles riding on her root, `Dress`).
 - **Light-up sneakers** blink while she walks (`userData.blink` lights, `DressPose.walk`), steady when she stands.
 - **Sun smarts:** the closet's sun hat is shady, like the cap, cowboy and bucket hats.
@@ -357,22 +357,22 @@ All 25 things in the plan's list built and fitted to her shape, each with its ow
 
 ### Full loop: voices, looks on the door, the family notices ([done] · 2026-10-26 · PR #212)
 
-Sparkle's lines and each thing's name, the family noticing her look, Mommy's “Good hat!”, four pictures of looks on the door, Sparkle's wand, the silly moments, and full QA.
+Sparkle's lines and each thing's name, the family noticing her look, Mom's “Good hat!”, four pictures of looks on the door, Sparkle's wand, the silly moments, and full QA.
 
 - **Sparkle** (`lines.ts` `L.wardrobe`, said through the Hub's Guide): “Your wardrobe! Dress up!” when the doors open; the first drawer she pulls says how (“Drag it onto you!”, the paint drawer “Drop the paint on your hair, dress or fur!”); **each thing's name** the first time she touches it, once per visit (25 things and 8 paints; chut thai adds that Thai kids wear it at festivals); after ~8 s with nothing touched a hint and the thing glints (a drawer, then a thing on the shelf, then the mirror; at most 3 a visit).
-- **The family notice** (`activities/hub/notice.ts`): the first time she taps someone in a new look they say so in their own voice instead of the hello (hat, glasses, wings, outfit, shoes or paint; all 13 have 6 lines, Mommy has a crown line and Daddy a “Cool wings!”), once per change; the hello comes on the next tap. When she closes the doors Mommy hops and says hers across the room. What's newest comes from the wardrobe (`markNew`); a look from a link or a saved one is noticed too (the first thing she wears).
-- **Mommy's “Good hat!”** at the suitcase when her own shady hat (cap, cowboy, bucket, sun hat) is the sun hat, so no spare hat.
+- **The family notice** (`activities/hub/notice.ts`): the first time she taps someone in a new look they say so in their own voice instead of the hello (hat, glasses, wings, outfit, shoes or paint; all 13 have 6 lines, Mom has a crown line and Dad a “Cool wings!”), once per change; the hello comes on the next tap. When she closes the doors Mom hops and says hers across the room. What's newest comes from the wardrobe (`markNew`); a look from a link or a saved one is noticed too (the first thing she wears).
+- **Mom's “Good hat!”** at the suitcase when her own shady hat (cap, cowboy, bucket, sun hat) is the sun hat, so no spare hat.
 - **Pictures on the door** (`wardrobe/door.ts`, `plugin.ts`): tap the mirror inside the right door and, once she's in her pose, a click and a picture of her look (a small portrait from `engine/photo.ts`, taken from the wardrobe camera's side) flies onto the left door's inside: 4 places, the oldest goes when a fifth comes; the same look again just hops its picture. Tap a picture, or drop it on her, and she wears the whole look (twirl, sparkles). Saved on the iPad (`thailand-door`, oldest first) with the photos; a link's `door=crown,hearts;bow,fairy` (up to 4, `;` between) develops its own photos by dressing her in each look for a moment.
 - **Sparkle's wand**: a star wand floats by the rug while the doors are open; tap it for a surprise look (2-5 random things and sometimes a color, never the look she has). **Her own look is pinned to the door as a picture first**, so it's one tap away (a wand look isn't pinned again). Sparkle says “Ta da! Magic!” on the first two taps and now and then (four lines in turn).
 - **Silly, never wrong**: a shoe dropped on her head sits on her horn while she wobbles and giggles, then hops to her foot; glasses dropped on her tail sit there, the tail wiggles, then they hop up to her face; paint dropped on the mirror splats, drips and slides off (Sparkle: “Splat on the mirror! Hee hee!”); a second hat boings the first back to its shelf (already there); and on the mattress the **top bounce** flips her hat into the air to land back on her head.
 - **QA:** wardrobe screens (with the door's four pictures) added to `qa-screens.mjs`; motion scenarios `wardrobe-dress`, `-mirror`, `-wand`, `-door`, `-shoe-on-head`, `-paint-mirror` in `qa-motion.mjs`; a wardrobe run in `qa-pacing.mjs`. `__thaiHouseQA()` shows `door` (the looks on it) and `hints`.
-- **Fixes from the QA agents:** the wardrobe's iPad-portrait camera is wider so the open left door and its pictures are in frame; a tap on the left door (or on the bed, pillows or Gan while she dresses) no longer shuts the wardrobe; Mommy's closing notice waits for whatever was just said; first-touch names are just names; the cape, backpack and overalls have their own Mommy lines and the other back/outfit lines are neutral; glasses dropped near her tail on the screen count as the tail; the perched shoe is smaller and sits at her horn; the wand no longer keeps the frame rate at 60.
+- **Fixes from the QA agents:** the wardrobe's iPad-portrait camera is wider so the open left door and its pictures are in frame; a tap on the left door (or on the bed, pillows or Gan while she dresses) no longer shuts the wardrobe; Mom's closing notice waits for whatever was just said; first-touch names are just names; the cape, backpack and overalls have their own Mom lines and the other back/outfit lines are neutral; glasses dropped near her tail on the screen count as the tail; the perched shoe is smaller and sits at her horn; the wand no longer keeps the frame rate at 60.
 
 > **Changed from the plan**
 >
 > - No separate drawer line for each drawer: the first pull says how, and each thing says its own name.
 > - Sparkle's wand floats by the rug instead of standing in the room (it's part of the wardrobe visit, so it only shows while the doors are open).
-> - The notice comes when she taps someone (and Mommy on closing), not when she walks past; the plan's “once per change” holds.
+> - The notice comes when she taps someone (and Mom on closing), not when she walks past; the plan's “once per change” holds.
 
 #### Known small things
 
@@ -420,7 +420,7 @@ src/world/kit/sections.ts                  `look` is sticky (like `debug`, `cam`
 
 - `wear(ids)` keeps its meaning for every caller (the game's costume, exactly these) but no longer clears her look. What shows = the costume + her look on every spot the costume doesn't take.
 - A table in `looks.ts`: each `Wearable` → the spots it takes. `scrubs` body, `scrub-cap` head, `apron` body, `chef-hat` head, `smock` body + back, `gloves` hands, `mongkhon` head (+ face: nothing near it), `sunhat`/`spare-hat` head, `sunglasses` face, `floaties` arms (nothing in the closet uses arms), new `ngob` head.
-- Sun smarts in the resolver: if the costume has `spare-hat` and her hat is `shade`, drop the spare hat; if the costume has `sunglasses` and her glasses are `tinted`, keep hers. (`house-plugin.ts` then skips Mommy's spare-hat line and says the good-hat one.)
+- Sun smarts in the resolver: if the costume has `spare-hat` and her hat is `shade`, drop the spare hat; if the costume has `sunglasses` and her glasses are `tinted`, keep hers. (`house-plugin.ts` then skips Mom's spare-hat line and says the good-hat one.)
 - Pocket: a spot that changes hands plays a sparkle (shrink to a point at her hip, pop back). `putOn` keeps its drop-on show for the costume.
 - `glassesUp()` acts on whatever is in the face spot.
 - `wearing` (QA) stays the costume list, so `qa-screens.mjs` (`wearing.length >= 3`) and the house's QA don't change. Add `look` next to it in `__thaiHouseQA`.
@@ -451,7 +451,7 @@ src/world/kit/sections.ts                  `look` is sticky (like `debug`, `cam`
 - **Memory.** Items are built the first time they're worn and go in the scene's `Bag` (disposed with it). The wardrobe builds the shelf items lazily per drawer.
 - **The code-built Kaylee** (if the GLB can't load): colors map to `Look.fur` / `mane` / `outfit.color`; items fall back to `animal.ts`'s frames (`buildWorn`), or simply don't show.
 - **Tests stay deterministic.** Test browsers start with nothing saved, so it's today's Kaylee. `tap-around` and `sections.spec.ts` find the new `wardrobe` section by themselves. No bespoke spec.
-- **Voices** (gate 4): Sparkle's few lines, a name per thing (finite, ~30 short clips), and one notice line per kind of thing for Mommy, Daddy, Agong and Jum. All in `lines.ts`.
+- **Voices** (gate 4): Sparkle's few lines, a name per thing (finite, ~30 short clips), and one notice line per kind of thing for Mom, Dad, Agong and Jum. All in `lines.ts`.
 
 > **🙏 Found while planning (not part of this plan)**
 >

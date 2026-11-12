@@ -73,7 +73,7 @@ class Tube {
   }
 }
 
-/** Where a strand starts and ends (both move: the slice in her hand, Daddy's hand in the tug). */
+/** Where a strand starts and ends (both move: the slice in her hand, Dad's hand in the tug). */
 export interface Ends {
   a: Vector3
   b: Vector3

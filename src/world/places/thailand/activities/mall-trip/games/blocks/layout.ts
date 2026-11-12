@@ -1,11 +1,11 @@
 // Little Land at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "6. Little Land"), in meters: the
-// mat she builds on, the brick box, the easel with the picture card, where Kaylee and Daddy stand, the toys around.
+// mat she builds on, the brick box, the easel with the picture card, where Kaylee and Dad stand, the toys around.
 // Pure data (no three.js).
 //
 // Seen straight on (the camera looks toward -z), left to right:
 //
 //   back:   [easel: the card, three stars]   ▦▦▦▦▦ the low foam wall ▦▦▦▦▦▦       [rocking elephant]
-//   mat:          Kaylee   ┊ the build: 8 half-brick columns, up to 6 rows ┊   Daddy
+//   mat:          Kaylee   ┊ the build: 8 half-brick columns, up to 6 rows ┊   Dad
 //   front:  [brick box]    ┊   (his ribbon across it in round 3)           ┊          (foam ball)
 import { BLOCKS } from '../../hall/layout'
 
@@ -28,15 +28,15 @@ export const HOLD_Z = 0.4
 /** Pixels: the brick hangs this far above her finger, so her finger doesn't hide it. */
 export const LIFT_PX = 40
 
-/** Kaylee stands at the build's left, Daddy at its right: a step back watching in rounds 1 and 2, then (round 3) right
+/** Kaylee stands at the build's left, Dad at its right: a step back watching in rounds 1 and 2, then (round 3) right
  *  beside the stack. */
 export const KAYLEE_AT = { x: -2.3, z: 0.3, face: 50 }
 export const DADDY_BACK = { x: 2.75, z: -0.55, face: -35 }
 export const DADDY_STAND = { x: 2.35, z: 0.1, face: -55 }
-/** On a tall screen the camera comes in closer (so the columns aren't too thin for a finger): Daddy stands nearer. */
+/** On a tall screen the camera comes in closer (so the columns aren't too thin for a finger): Dad stands nearer. */
 export const DADDY_BACK_TALL = { x: 2.15, z: -0.75, face: -30 }
 export const DADDY_STAND_TALL = { x: 2.1, z: 0.2, face: -55 }
-/** Round 3's ribbon at Daddy's horn: a tower whose top passes it is taller than Daddy (four rows do it). */
+/** Round 3's ribbon at Dad's horn: a tower whose top passes it is taller than Dad (four rows do it). */
 export const MARK_Y = 1.74
 
 /** The brick box: a big open foam bin, bricks come out of its mouth and hop back in. */

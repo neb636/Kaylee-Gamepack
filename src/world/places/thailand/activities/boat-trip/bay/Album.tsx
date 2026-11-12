@@ -1,6 +1,6 @@
 // The trip album (the payoff that builds while she plays): a book button in the bottom-right corner that bounces when
 // something lands in it. Photos drop in with a thwap (the village with the kids cheering, the hong, her Nail Island
-// poses, Mommy's selfies; at Baan Chang, the sign wall and the splash), and an animal sticker flies in for every
+// poses, Mom's selfies; at Baan Chang, the sign wall and the splash), and an animal sticker flies in for every
 // critter she drives up to (and Khanom, the baby elephant, after the splash). Open it and the photos fill one page and
 // the ten stickers the other; tap any of them to hear Sparkle's fact. Nothing to read.
 import { AnimatePresence, motion } from 'motion/react'

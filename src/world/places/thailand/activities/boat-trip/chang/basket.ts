@@ -1,6 +1,6 @@
-// Daddy's woven bamboo basket on a tree stump, and the foods in it: four bananas on the left, four sticks of
+// Dad's woven bamboo basket on a tree stump, and the foods in it: four bananas on the left, four sticks of
 // sugarcane on the right. The same eight foods go round and round: she pulls one out, a trunk takes it, it's eaten, and a
-// moment later it's back in the basket (Daddy brought plenty), so the toy never runs out.
+// moment later it's back in the basket (Dad brought plenty), so the toy never runs out.
 import { BufferGeometry, Color, Float32BufferAttribute, Group, Vector3, type Object3D } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../engine3d/geo'
@@ -161,7 +161,7 @@ export class Basket {
     return out.set(BASKET.x, BASKET.y + 0.05, BASKET.z + 0.05)
   }
 
-  /** Back in its place (Daddy pops it in), with a little wobble of the basket. */
+  /** Back in its place (Dad pops it in), with a little wobble of the basket. */
   putBack(f: Food) {
     f.state = 'basket'
     f.t = 0

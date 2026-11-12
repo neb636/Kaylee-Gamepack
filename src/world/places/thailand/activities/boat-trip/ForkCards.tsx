@@ -1,4 +1,4 @@
-// Krabi's fork on Daddy's "Where to?" card (trip/legs/WhereTo.tsx): a postcard for each place, a generated picture with
+// Krabi's fork on Dad's "Where to?" card (trip/legs/WhereTo.tsx): a postcard for each place, a generated picture with
 // no words (art/source/world/thailand/cover-fork-*.png): Baan Chang's elephant under the palms with a banana in her
 // trunk, and the longtail with its ribbons among Phang Nga Bay's rock towers. Another place at the fork is one more
 // entry here.

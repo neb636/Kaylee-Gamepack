@@ -732,11 +732,11 @@
     "voice": "ji"
   },
   {
-    "text": "Mommy always packs sunscreen!",
+    "text": "Mom always packs sunscreen!",
     "voice": "ji"
   },
   {
-    "text": "Here's Mommy's spare sun hat!",
+    "text": "Here's Mom's spare sun hat!",
     "voice": "ji"
   },
   {
@@ -1254,8 +1254,8 @@
   "Walk through the golden rice!",
   "Tap the sticky rice!",
   "Click the sticky rice!",
-  "Tap Mommy for a photo!",
-  "Click Mommy for a photo!",
+  "Tap Mom for a photo!",
+  "Click Mom for a photo!",
   {
     "text": "Look at those rows!",
     "voice": "nick"
@@ -1305,7 +1305,7 @@
     "voice": "nick"
   },
   {
-    "text": "Daddy is watching!",
+    "text": "Dad is watching!",
     "voice": "nick"
   },
   {
@@ -1714,7 +1714,7 @@
     "voice": "ji"
   },
   {
-    "text": "Mommy always packs an umbrella!",
+    "text": "Mom always packs an umbrella!",
     "voice": "ji"
   },
   {
@@ -1875,7 +1875,7 @@
     "voice": "ji"
   },
   {
-    "text": "Mommy loves you!",
+    "text": "Mom loves you!",
     "voice": "ji"
   },
   {
@@ -1996,7 +1996,7 @@
     "voice": "nick"
   },
   {
-    "text": "A heart! For Mommy!",
+    "text": "A heart! For Mom!",
     "voice": "nick"
   },
   {
@@ -2044,7 +2044,7 @@
     "voice": "ji"
   },
   {
-    "text": "Wave to Mommy!",
+    "text": "Wave to Mom!",
     "voice": "ji"
   },
   {
@@ -2292,8 +2292,8 @@
     "text": "Twelve!",
     "voice": "nick"
   },
-  "Find Daddy!",
-  "Daddy hides better now!",
+  "Find Dad!",
+  "Dad hides better now!",
   "Not here!",
   "Hmm, not there!",
   {
@@ -2346,7 +2346,7 @@
     "voice": "nick"
   },
   {
-    "text": "Behind Mommy?",
+    "text": "Behind Mom?",
     "voice": "nick"
   },
   {
@@ -2354,7 +2354,7 @@
     "voice": "ji"
   },
   {
-    "text": "Shh! Daddy won't look!",
+    "text": "Shh! Dad won't look!",
     "voice": "ji"
   },
   {
@@ -2382,7 +2382,7 @@
     "text": "Waah! You scared me!",
     "voice": "nick"
   },
-  "Where is Daddy? Listen!",
+  "Where is Dad? Listen!",
   "Walk to a hiding place!",
   {
     "text": "Look! The sun is going to sleep!",
@@ -2467,7 +2467,7 @@
     "voice": "nick"
   },
   {
-    "text": "Daddy can dance too!",
+    "text": "Dad can dance too!",
     "voice": "nick"
   },
   "Now one giant circle!",
@@ -2539,7 +2539,7 @@
     "voice": "ji"
   },
   {
-    "text": "Mommy is right here!",
+    "text": "Mom is right here!",
     "voice": "ji"
   },
   {
@@ -2547,7 +2547,7 @@
     "voice": "nick"
   },
   {
-    "text": "Daddy is coming too!",
+    "text": "Dad is coming too!",
     "voice": "nick"
   },
   {
@@ -2812,7 +2812,7 @@
   "Grab a brick!",
   "Push it over!",
   "Now an elephant!",
-  "Taller than Daddy!",
+  "Taller than Dad!",
   {
     "text": "Whoa! Careful!",
     "voice": "nick"
@@ -2849,7 +2849,7 @@
   "Climb the Golden Mountain! Count the holds!",
   "You made it!",
   "Only the pink ones!",
-  "Race Daddy to the top!",
+  "Race Dad to the top!",
   {
     "text": "I'm going to win!",
     "voice": "nick"
@@ -2892,7 +2892,7 @@
   },
   "Punch to the drum!",
   "Punch when it's gold!",
-  "Follow Daddy's pad!",
+  "Follow Dad's pad!",
   "Big kick!",
   {
     "text": "Ooh, strong!",
@@ -2913,7 +2913,7 @@
   "Tap your gloves!",
   "Click your gloves!",
   "Punch the bag!",
-  "Punch Daddy's pad!",
+  "Punch Dad's pad!",
   {
     "text": "The wai kru dance says thank you to your teacher!",
     "voice": "coach"
@@ -2935,7 +2935,7 @@
     "voice": "nick"
   },
   {
-    "text": "Daddy needs a rest!",
+    "text": "Dad needs a rest!",
     "voice": "nick"
   },
   "A hundred! Super star!",
@@ -2992,18 +2992,18 @@
     "voice": "server"
   },
   "Pull a slice!",
-  "One for Mommy!",
-  "Two for Mommy!",
-  "One for Daddy!",
-  "Two for Daddy!",
+  "One for Mom!",
+  "Two for Mom!",
+  "One for Dad!",
+  "Two for Dad!",
   "One for you!",
   "Two for you!",
   {
-    "text": "Mommy's hungry too!",
+    "text": "Mom's hungry too!",
     "voice": "nick"
   },
   {
-    "text": "Ho ho! More for Daddy!",
+    "text": "Ho ho! More for Dad!",
     "voice": "nick"
   },
   {
@@ -3056,7 +3056,7 @@
     "voice": "agong"
   },
   {
-    "text": "Mommy is driving! Hop in!",
+    "text": "Mom is driving! Hop in!",
     "voice": "nick"
   },
   {
@@ -3084,7 +3084,7 @@
     "voice": "bb"
   },
   {
-    "text": "Ho ho ho! Look at Daddy's hair!",
+    "text": "Ho ho ho! Look at Dad's hair!",
     "voice": "agong"
   },
   "Tap Agong to give him the box!",

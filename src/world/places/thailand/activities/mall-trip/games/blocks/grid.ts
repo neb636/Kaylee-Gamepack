@@ -139,7 +139,7 @@ export class Grid {
   }
 
   /** Where a tap on the box sends the next brick: a little pyramid in the middle (round 1), the card's next place
-   *  (round 2), straight up the middle (round 3: it gets taller than Daddy fastest). Never half over an edge. */
+   *  (round 2), straight up the middle (round 3: it gets taller than Dad fastest). Never half over an edge. */
   tapSpot(round: Round, card: CardId): Cell | null {
     if (round === 2) return this.ghostSpots(card)[0] ?? null
     const mid = (COLS - 2) / 2

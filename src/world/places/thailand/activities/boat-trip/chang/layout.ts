@@ -1,6 +1,6 @@
 // Baan Chang's feeding yard in meters, pure data (plan: thailand/baan-chang.md). The steel pipe rail runs along x at
 // z = 0; the elephants stand behind it (z < 0) facing the family (+z), a row of mossy boulders sits just in front of it,
-// and the family stand on the near side with Daddy's basket. Food she holds rides the plane z = HOLD.z, in front of the
+// and the family stand on the near side with Dad's basket. Food she holds rides the plane z = HOLD.z, in front of the
 // boulders. The build (yard.ts), the elephants, the trunks' floor and the camera all read this.
 
 export type ElephantId = 'mali' | 'khanom' | 'lamyai'
@@ -50,14 +50,14 @@ export const BOULDERS: [number, number, number, number, number][] = [
 /** Where held food rides (its z), how low and high it may go and how far to the sides. */
 export const HOLD = { z: 0.9, y0: 0.8, y1: 3.4, x0: -3.2, x1: 3.4, ground: 0.07 }
 
-/** Daddy's basket on its tree stump (the middle of its rim), and the family's spots (x, z, facing in degrees). */
+/** Dad's basket on its tree stump (the middle of its rim), and the family's spots (x, z, facing in degrees). */
 export const BASKET = { x: 0.1, y: 0.78, z: 1.75, r: 0.5 }
 export const FAMILY = {
   kaylee: [-0.95, 1.4, 175],
   nick: [2.55, 1.75, 205],
   ji: [-2.55, 1.6, 160],
 } as const
-/** The blue bench's seat: Daddy sits down there when Lamyai comes over (out of her way). */
+/** The blue bench's seat: Dad sits down there when Lamyai comes over (out of her way). */
 export const BENCH = { x: 4.7, y: 0.5, z: 2.7 }
 
 /** How high a trunk must stay over the rail and the boulders (so it reaches over them, never through). */
@@ -86,7 +86,7 @@ export const SHOT = {
 // she's there). Seen straight on (the camera looks toward -z), left to right:
 //
 //   back:      the deck's rail, and the oil palms below it
-//   counter:   the bell  Kaylee  [her glass]   [Daddy's glass]  Daddy  Mommy
+//   counter:   the bell  Kaylee  [her glass]   [Dad's glass]  Dad  Mom
 //   front:     ═══ the tray: milk, chocolate, spoon, three straws, ice, coffee (two rows on a tall screen) ═══
 
 export type StrawColor = 'pink' | 'purple' | 'yellow'
@@ -96,15 +96,15 @@ export const isStraw = (s: string | null | undefined): s is StrawColor => !!s &&
 export const CAFE = { z: 40 }
 /** The counter she makes her drink at (its top at Kaylee's tummy). */
 export const COUNTER = { x0: -1.55, x1: 1.55, z: CAFE.z, d: 0.56, top: 0.55 }
-/** A tall glass (hers, and Daddy's for his iced coffee). */
+/** A tall glass (hers, and Dad's for his iced coffee). */
 export const GLASS = { r0: 0.088, r1: 0.118, h: 0.36 }
 export const HER_GLASS: V3 = [0.02, COUNTER.top, CAFE.z + 0.05]
 export const DAD_GLASS: V3 = [0.85, COUNTER.top, CAFE.z + 0.05]
-/** Where Daddy's glass goes when he takes it (the end of the counter, in front of him). */
+/** Where Dad's glass goes when he takes it (the end of the counter, in front of him). */
 export const DAD_SIP: V3 = [1.32, COUNTER.top, CAFE.z + 0.12]
 /** The little bell on the counter (a poke: ding!). */
 export const BELL: V3 = [-1.3, COUNTER.top, CAFE.z + 0.08]
-/** Kaylee behind the counter; Daddy and Mommy at its end (closer in on a tall screen). x, z, facing (degrees). */
+/** Kaylee behind the counter; Dad and Mom at its end (closer in on a tall screen). x, z, facing (degrees). */
 export const CAFE_FAMILY = {
   kaylee: [-0.62, CAFE.z - 0.55, 14],
   nick: [1.55, CAFE.z - 0.55, -18],

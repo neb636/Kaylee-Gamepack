@@ -14,7 +14,7 @@ interface Props {
   section: 'menu' | 'share'
   pizza: PizzaId
   shared: number
-  /** Daddy's hairdo from the barber. */
+  /** Dad's hairdo from the barber. */
   hair: string
   onPizza: (id: PizzaId) => void
   onServed: () => void

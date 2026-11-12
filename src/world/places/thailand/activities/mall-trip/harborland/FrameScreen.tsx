@@ -14,7 +14,7 @@ import { mallVoice } from '../voice'
 interface Props {
   at: At
   socks: string
-  /** Daddy's hairdo from the barber. */
+  /** Dad's hairdo from the barber. */
   hair: string
   onAt(at: At): void
   onRide(id: RideId): void

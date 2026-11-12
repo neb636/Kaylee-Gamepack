@@ -1,5 +1,5 @@
 // The four pose buttons on the Nail Island beach (UI chips at the bottom edge): wave, cheer, heart, silly. Kaylee
-// strikes the one she taps, Mommy and Daddy copy her, and the photo is taken (nail.ts).
+// strikes the one she taps, Mom and Dad copy her, and the photo is taken (nail.ts).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import type { PoseKind } from './part'

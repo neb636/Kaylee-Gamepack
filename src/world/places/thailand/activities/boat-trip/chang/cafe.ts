@@ -1,13 +1,13 @@
 // The cafe at Baan Chang (`drinks`, plan: thailand/baan-chang.md, "Side verb"): her chocolate milk, poured the mall
 // cafe's way (mall-trip/games/cafe/shop.ts). Kaylee stands behind the counter of the open sala at the top of the
 // boardwalk; the tray along the front holds the milk jug, the chocolate, a long spoon, three straws, a bowl of ice and
-// Daddy's coffee pot.
+// Dad's coffee pot.
 //   - Pour: drag the milk jug to her glass. It's pulled in and tips as it gets there (the nearer, the more), and pours
 //     in a stream. Too much and the milk fountains up out of the glass (silly, never wrong).
 //   - Squeeze: hold the chocolate over the glass; it turns upside down and squirts brown ribbons into the milk.
 //   - Stir: put the spoon in and go round and round; the ribbons swirl and melt into chocolate milk (clink, clink).
 //   - A straw: pink, purple or yellow, dropped in (another one swaps it). It rides along to the yard (`straw`).
-// A tap on any of them does it for her. Daddy's iced coffee is the optional second glass: ice cubes and the coffee pot,
+// A tap on any of them does it for her. Dad's iced coffee is the optional second glass: ice cubes and the coffee pot,
 // then he takes it ("Ahh! Thank you, Kaylee!", and brrr with ice). Anything goes in either glass. Once hers has milk, chocolate, a stir and
 // a straw, she has a sip and the 🐘 button (BoatTrip.tsx) takes them down to the elephants. Pokes: the glasses ring
 // like a xylophone, the bell on the counter dings.
@@ -40,7 +40,7 @@ interface GlassState extends Drink {
   id: Who
   g: Glass
   straw: StrawColor | null
-  /** Poured past full (a fountain at enough), seconds since anything went in, Daddy has it, a little hop. */
+  /** Poured past full (a fountain at enough), seconds since anything went in, Dad has it, a little hop. */
   over: number
   quiet: number
   served: boolean
@@ -77,14 +77,14 @@ export interface CafeHost {
   camera(): PerspectiveCamera
   size(): { w: number; h: number }
   ndc(x: number, y: number): Vector2
-  /** Kaylee and Mommy and Daddy (they're the yard's too). */
+  /** Kaylee and Mom and Dad (they're the yard's too). */
   riders: Record<'kaylee' | 'ji' | 'nick', { root: Object3D; react(k: 'hop' | 'wiggle' | 'wave'): void }>
   put(id: 'kaylee' | 'ji' | 'nick', x: number, z: number, face: number): void
   later(ms: number, fn: () => void): void
   /** Her drink is ready (the 🐘 shows), and she picked a straw. */
   ready(): void
   straw(c: StrawColor): void
-  /** Someone says something (Mommy's "Whoa! Too full!", Daddy's thank you). */
+  /** Someone says something (Mom's "Whoa! Too full!", Dad's thank you). */
   say(l: Line): void
 }
 
@@ -297,7 +297,7 @@ export class Cafe {
     const open = (g: GlassState) => !g.served
     if (id.startsWith('straw-')) {
       const c = id.slice(6) as StrawColor
-      // Into her glass (or, if it's hers already, Daddy's).
+      // Into her glass (or, if it's hers already, Dad's).
       const to = her.straw === c && open(dad) ? dad : her
       return this.putStraw(to, c, true)
     }
@@ -310,7 +310,7 @@ export class Cafe {
       sfx.fwip()
       return this.iceIn(to, cube)
     }
-    // The coffee goes to Daddy's glass (while he hasn't had it); everything else to hers.
+    // The coffee goes to Dad's glass (while he hasn't had it); everything else to hers.
     const glass = id === 'coffee' && open(dad) ? dad : her
     const s = this.toPx(this.tools.get(id)!.position, 0)
     this.auto = { what: id, t: 0, glass, from: new Vector2(s?.x ?? 0, (s?.y ?? 0) + LIFT) }
@@ -432,7 +432,7 @@ export class Cafe {
       g.rotation.x = g.rotation.y = 0
     }
     for (const k of ['milk', 'coffee', 'choc'] as const) if (what !== k) this.tilt[k] *= Math.exp(-dt * 10)
-    // Flights: a straw to a glass, an ice cube, things going home, Daddy's glass to him.
+    // Flights: a straw to a glass, an ice cube, things going home, Dad's glass to him.
     for (const f of [...this.flights]) {
       f.t += dt / f.dur
       const k = Math.min(1, f.t)
@@ -443,7 +443,7 @@ export class Cafe {
         f.done?.()
       }
     }
-    // The glasses: what's in them, a hop when something lands, Daddy taking his.
+    // The glasses: what's in them, a hop when something lands, Dad taking his.
     for (const gs of this.glasses) {
       gs.quiet += dt
       gs.hop = Math.min(1, gs.hop + dt / 0.35)
@@ -461,7 +461,7 @@ export class Cafe {
     this.sparkles.update(dt)
   }
 
-  /** Daddy takes his glass, sips, "ahh" (and brrr, with ice). */
+  /** Dad takes his glass, sips, "ahh" (and brrr, with ice). */
   private daddyDrinks() {
     const dad = this.dad
     dad.served = true

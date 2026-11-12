@@ -1,8 +1,8 @@
 // The pier (section `pier`), the side verb: tie the ribbons. The longtail waits at the pier, bobbing; a basket of ribbon
 // rolls in six colors and a jasmine garland sit on the boards by its bow. Tap a color and the ribbon flutters through
 // the air onto the prow (three of them; a fourth takes the place of the oldest); tap the garland and it hangs on the
-// prow too. Real Thai boats wear them for the boat's spirit (Mae Ya Nang) and good luck. Then Daddy steps in (the boat
-// tips: whoa-oa-oa), Mommy, and Kaylee hops to the tiller. The first time she drives off, Daddy says "Pai!" (bay.ts).
+// prow too. Real Thai boats wear them for the boat's spirit (Mae Ya Nang) and good luck. Then Dad steps in (the boat
+// tips: whoa-oa-oa), Mom, and Kaylee hops to the tiller. The first time she drives off, Dad says "Pai!" (bay.ts).
 import { Group, Vector3 } from 'three'
 import { bell, firstTime, spendHint } from '../../../../../../sdk'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
@@ -193,7 +193,7 @@ export class PierStop implements BayPart {
     if (this.boarding >= 0) this.board(dt)
   }
 
-  /** Daddy first (the boat tips: whoa!), then Mommy, then Kaylee hops to the tiller, then off she goes. */
+  /** Dad first (the boat tips: whoa!), then Mom, then Kaylee hops to the tiller, then off she goes. */
   private board(dt: number) {
     const bay = this.bay
     const lt = this.lt

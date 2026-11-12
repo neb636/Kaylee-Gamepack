@@ -1,6 +1,6 @@
 // A racer on the slide: one of the family's toy animals (or a placeholder kid) driven by the race instead of the house.
 // It walks, hops up steps, sits in its lane, pumps its arms to scoot, throws them up (whee!), flips head first into the
-// balls (Daddy), cheers by the pit, and spins in a rubber ring. Its pivots: `root` (where it is and which way it faces),
+// balls (Dad), cheers by the pit, and spins in a rubber ring. Its pivots: `root` (where it is and which way it faces),
 // a `flipper` at the hips (so a head-first dive turns round the middle, not the feet), then the chibi rig.
 import { Group, Vector3 } from 'three'
 import { bell, clamp, span, wobble } from '../../../../../../../sdk'
@@ -45,7 +45,7 @@ export class Racer {
   /** Which way it faces (radians, 0 = toward the camera), and an extra spin on top (the rubber ring). */
   yaw = 0
   spin = 0
-  /** Head over heels (radians, round the hips): Daddy's dive. */
+  /** Head over heels (radians, round the hips): Dad's dive. */
   flip = 0
   /** Height off the lane this frame (a flight off a bump). */
   lift = 0

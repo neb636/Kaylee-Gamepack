@@ -1,5 +1,5 @@
 // The rice farm's screen: the 3D farm and Stop Time Cafe's deck (rice3d.ts) with its tap targets, the 👆 after a while
-// with nothing touched, the photo Mommy takes on the deck (a flash, then it pops up like a print), the video of real rice
+// with nothing touched, the photo Mom takes on the deck (a flash, then it pops up like a print), the video of real rice
 // growing (skippable: ⏭ ☕ back to the deck; the 3D world holds still under it), and the end card: 🔁 the farm again, or
 // 🗺️ back to the Nan map (its stamp lands there). Sparkle sits in the corner (trip/legs/Guide.tsx) and everyone talks
 // out loud in their own voice.

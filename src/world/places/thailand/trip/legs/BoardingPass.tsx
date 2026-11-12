@@ -1,5 +1,5 @@
 // Between the legs of a trip a boarding pass slides up, a hole is punched for the leg she just finished (ka-chunk),
-// and it slides away: 1.5 s, and it hides the next scene being built. When she says yes to Mommy with a trip half done,
+// and it slides away: 1.5 s, and it hides the next scene being built. When she says yes to Mom with a trip half done,
 // or after her first whole trip, it asks where to start with big icons (no words needed): 🧳 the whole trip again, the
 // next leg's icon to keep going, 🚤 straight to the boat.
 import { motion } from 'motion/react'

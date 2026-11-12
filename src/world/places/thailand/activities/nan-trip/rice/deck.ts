@@ -1,5 +1,5 @@
 // Stop Time Cafe's deck up on the hill behind the farm (#168's): a wooden deck on stilts, its railing of crossed
-// branches, the peaked roof, two tall stools, a high table with the pink milk, Daddy's coffee and the kratip of sticky
+// branches, the peaked roof, two tall stools, a high table with the pink milk, Dad's coffee and the kratip of sticky
 // rice she threshed, and the wind chime. Built deck-local (its railing toward -z), placed and turned on the hill by DECK.
 import { Group, Mesh, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
@@ -109,7 +109,7 @@ export function buildDeck(bag: Bag): Deck {
   chime.userData.pick = 'chime'
   chime.add(solid(merge([P.cyl(0.005, 0.005, 0.6, PAL.ink, { at: [0, 0.3, 0] }, 4), P.torus(0.09, 0.012, WOOD_DARK, { rot: [Math.PI / 2, 0, 0] }), ...Array.from({ length: 5 }, (_, k) => P.cyl(0.014, 0.014, 0.16 + (k % 3) * 0.05, ['#BFE6FA', '#FFC2D8', '#FFE27A', '#C9F0DC', '#E2D6FF'][k], { at: [Math.cos((k / 5) * Math.PI * 2) * 0.07, -0.12 - (k % 3) * 0.025, Math.sin((k / 5) * Math.PI * 2) * 0.07] }, 6))]), bag, 1))
   root.add(chime)
-  // ---- The pink milk (nom yen) in a tall glass, and Daddy's coffee ----
+  // ---- The pink milk (nom yen) in a tall glass, and Dad's coffee ----
   const glassRoot = new Group()
   glassRoot.position.set(HIGH_TABLE[0] - 0.12, HIGH_TABLE[1], HIGH_TABLE[2] + 0.02)
   glassRoot.userData.pick = 'glass'

@@ -29,7 +29,7 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
   (the stamp lands on its pin, the trip's photo goes on Agong's wall by itself). Tapping a pin goes straight
   to the trip's landing spot: the map no longer packs or rides the window seat (2026-11-10; the pack, goodbye, airport
   and window-seat sections are still in each trip, for a place-picker inside the house to start later). The mall day, in Bangkok,
-  still starts in the house (Mommy or Daddy asks) and ends there.
+  still starts in the house (Mom or Dad asks) and ends there.
 - **A trip's own map** looks like the Thailand map: the board floats in the same sky and tray and opens with the same
   camera entrance behind the loading cover (`trip/sky.ts`: `skyTexture`, `puffCloud`, `trayParts`, `mapCamKnobs`,
   `Entrance`; `trip/MapCover.tsx`). The Nan map (`nan-trip/map/`) uses them; a new trip's map should too.

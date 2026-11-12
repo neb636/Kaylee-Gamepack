@@ -1,4 +1,4 @@
-// The Barber Salon's screen: the 3D salon (salon.ts) and its tap targets, the kid's picture card in round 3, Mommy's
+// The Barber Salon's screen: the 3D salon (salon.ts) and its tap targets, the kid's picture card in round 3, Mom's
 // camera flash and the 👆 after a while with nothing touched. When all three kids are done, a big 🛝 takes her back to the hall (the playground).
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
@@ -104,7 +104,7 @@ export function Barber({ round, hair, onRound, onHair, onRevealed, onPlay }: Pro
           💈 Tap to wake the salon
         </button>
       )}
-      {/* Mommy's camera flash. */}
+      {/* Mom's camera flash. */}
       <AnimatePresence>{flash > 0 && <motion.div key={flash} initial={{ opacity: 0.95 }} animate={{ opacity: 0 }} transition={{ duration: 0.6 }} style={{ position: 'absolute', inset: 0, background: '#fff', pointerEvents: 'none', zIndex: 55 }} />}</AnimatePresence>
       <AnimatePresence>
         {allDone && (

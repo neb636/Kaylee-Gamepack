@@ -5,23 +5,23 @@
 // ahead), tap a spot and she walks there; tap a hiding place and she walks up and peeks behind it. The verb deepens
 // three times (`round`), moving on by itself:
 //   1     easy hides. Kaylee covers her eyes by the driftwood tree (the photo) and counts, "one… two… three!" (tap to
-//         peek through her hooves: Daddy's still running). Then she finds him: behind the tree with his head poking
+//         peek through her hooves: Dad's still running). Then she finds him: behind the tree with his head poking
 //         out, crouched behind a pink umbrella tipped over like a shield (his feet show), behind the stack of red
 //         chairs. Close by, his hiding place wiggles and giggles; tap it (or walk right up): "Found you!", he jumps
 //         out and spins her round.
 //   2     trickier hides: lying in the tangle of the tree's roots, under a beach towel (the lump breathes, his toes stick
 //         out), in the sea with only his cap floating (bubbles), up in the pandanus tree. Stuck for a while: something
 //         gives him away (a sneeze, a giggle, a splash), and later the place glows and the finger points.
-//   hide  her turn to hide. Daddy covers his eyes at the tree and counts to five (tap him: he peeks). Every hiding
-//         place glows: she leads Kaylee to one and she crouches in it. Daddy searches all the wrong places first
-//         (behind Mommy, the thin palm, the chairs) while she watches and giggles, then gives up: "Kaylee wins!". In the
+//   hide  her turn to hide. Dad covers his eyes at the tree and counts to five (tap him: he peeks). Every hiding
+//         place glows: she leads Kaylee to one and she crouches in it. Dad searches all the wrong places first
+//         (behind Mom, the thin palm, the chairs) while she watches and giggles, then gives up: "Kaylee wins!". In the
 //         open the first time he spots her ("Found you!"), never twice in a row; wander out while he's close and he
 //         spots her too. Tap Kaylee while he searches: "Boo!", he jumps, and she wins.
 // The pink flag: the first time she wins her turn (the way back to the island shows).
 //
-// Talk (lines.ts L.samet.hideseek): Daddy plays it up in his own voice, Sparkle counts with her and says what to do
+// Talk (lines.ts L.samet.hideseek): Dad plays it up in his own voice, Sparkle counts with her and says what to do
 // once a round (and, through spendHint, when she's stuck); the screen's TripGuide plays each line and shows its words. Every number that decides the feel is a knob
-// (?feel=1), with a graph of how far she is from Daddy.
+// (?feel=1), with a graph of how far she is from Dad.
 import { Fog, Group, Mesh, MeshBasicMaterial, Raycaster, RingGeometry, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { clamp, lineText, spendHint, type Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
@@ -52,11 +52,11 @@ const WALK = knobs('hideWalk', 'Leading your unicorn round Ao Prao', FILE, {
   gallopFrom: { value: 5, min: 2, max: 14, step: 0.25, label: 'Gallop from', unit: 'm', note: 'her finger this far ahead = full gallop' },
   stopNear: { value: 0.45, min: 0.1, max: 2, step: 0.05, label: 'Stop this close', unit: 'm' },
 })
-/** Finding Daddy (rounds 1 and 2). */
-const SEEK = knobs('hideSeek', 'Finding Daddy', FILE, {
+/** Finding Dad (rounds 1 and 2). */
+const SEEK = knobs('hideSeek', 'Finding Dad', FILE, {
   count: { value: 3, min: 1, max: 10, step: 1, label: 'She counts to' },
   gap: { value: 0.85, min: 0.3, max: 2, step: 0.05, label: '…a number every', unit: 's' },
-  near: { value: 3.4, min: 1, max: 8, step: 0.1, label: 'His place wiggles within', unit: 'm', note: 'your unicorn this close to where Daddy hides: it wiggles and giggles' },
+  near: { value: 3.4, min: 1, max: 8, step: 0.1, label: 'His place wiggles within', unit: 'm', note: 'your unicorn this close to where Dad hides: it wiggles and giggles' },
   wiggle: { value: 1.5, min: 0.4, max: 5, step: 0.1, label: '…every', unit: 's' },
   find: { value: 1.25, min: 0.5, max: 3, step: 0.05, label: 'Walking up finds him at', unit: 'm', note: 'she finds him by walking this close, without a tap' },
   giveaway: { value: 8, min: 3, max: 30, step: 0.5, label: 'Help 1: he peeks out after', unit: 's', note: 'stuck this long: a rustle, he pops his head up (a giggle, a splash), then a little rustle now and then' },
@@ -67,8 +67,8 @@ const SEEK = knobs('hideSeek', 'Finding Daddy', FILE, {
   hop: { value: 0.55, min: 0.2, max: 1.5, step: 0.05, label: 'He jumps out in', unit: 's' },
 })
 /** Her turn to hide (round hide). */
-const DAD = knobs('hideDad', "your unicorn hides, Daddy seeks", FILE, {
-  count: { value: 5, min: 2, max: 12, step: 1, label: 'Daddy counts to' },
+const DAD = knobs('hideDad', "your unicorn hides, Dad seeks", FILE, {
+  count: { value: 5, min: 2, max: 12, step: 1, label: 'Dad counts to' },
   gap: { value: 1.0, min: 0.4, max: 2, step: 0.05, label: '…a number every', unit: 's' },
   hideR: { value: 1.4, min: 0.6, max: 3, step: 0.05, label: 'A hiding place counts within', unit: 'm' },
   walk: { value: 2.8, min: 0.6, max: 5, step: 0.1, label: 'He searches at', unit: 'm/s' },
@@ -97,7 +97,7 @@ export interface HideEvents {
   count(n: number): void
   /** She peeked through her hooves while counting. */
   peek(): void
-  /** Mommy took a photo (the screen flashes). */
+  /** Mom took a photo (the screen flashes). */
   photo(): void
   /** She won her turn to hide (the first time: the stop's flag). */
   won(first: boolean): void
@@ -115,11 +115,11 @@ interface SpotDef {
   /** Where it is on Ao Prao (u along the beach, v toward the sea). */
   u: number
   v: number
-  /** Daddy hiding there (offset from the thing, his pose, height, hidden under it). */
+  /** Dad hiding there (offset from the thing, his pose, height, hidden under it). */
   dad: { du: number; dv: number; pose: DadPose; y?: number; hidden?: boolean }
   /** Where Kaylee crouches when she hides there. */
   kay: { du: number; dv: number }
-  /** Daddy can hide here in round 1 or 2. */
+  /** Dad can hide here in round 1 or 2. */
   round?: '1' | '2'
 }
 /** The driftwood tree, where the island has it (island/props.ts), in Ao Prao's frame. */
@@ -136,11 +136,11 @@ const SPOTS: SpotDef[] = [
   { id: 'towel', label: 'A beach towel', u: -5.5, v: -1.8, dad: { du: 0, dv: 0, pose: 'lie', hidden: true }, kay: { du: 0, dv: 0 }, round: '2' },
   { id: 'sea', label: 'The sea', u: 1.5, v: 5, dad: { du: 0, dv: 0, pose: 'stand', hidden: true }, kay: { du: 0, dv: -2.2 }, round: '2' },
   { id: 'pandanus', label: 'The pandanus tree', u: -6.5, v: -9, dad: { du: 0.3, dv: 0.05, pose: 'sit', y: 1.75 }, kay: { du: 0, dv: 0.95 }, round: '2' },
-  { id: 'mommy', label: 'Mommy', u: 8.5, v: -4, dad: { du: 0, dv: 0.9, pose: 'sit' }, kay: { du: 0, dv: 0.85 } },
+  { id: 'mommy', label: 'Mom', u: 8.5, v: -4, dad: { du: 0, dv: 0.9, pose: 'sit' }, kay: { du: 0, dv: 0.85 } },
   { id: 'palmL', label: 'A thin palm', u: -2.5, v: -1.6, dad: { du: 0, dv: 0.5, pose: 'stand' }, kay: { du: 0, dv: 0.45 } },
   { id: 'palmR', label: 'A thin palm', u: 10.5, v: -1.8, dad: { du: 0, dv: 0.5, pose: 'stand' }, kay: { du: 0, dv: 0.45 } },
 ]
-/** Mommy faces along the beach toward the tree (side-on to the camera, watching the game). */
+/** Mom faces along the beach toward the tree (side-on to the camera, watching the game). */
 const MOMMY_FACE = Math.atan2(-FRAMES.prao.t.x, -FRAMES.prao.t.z) + 0.35
 const BYID = Object.fromEntries(SPOTS.map((s) => [s.id, s])) as Record<SpotId, SpotDef>
 const ROUND_HIDES: Record<'1' | '2', SpotId[]> = { '1': ['tree', 'umbrella', 'chairs'], '2': ['roots', 'towel', 'sea', 'pandanus'] }
@@ -162,8 +162,8 @@ const angleTo = (from: number, to: number) => Math.atan2(Math.sin(to - from), Ma
 
 export const HIDE_ANCHORS: AnchorInfo[] = [
   { id: 'kaylee', label: 'You', kind: 'thing' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
   ...SPOTS.filter((s) => s.id !== 'mommy').map((s) => ({ id: `hide:${s.id}`, label: s.label, kind: 'thing' as const })),
 ]
 
@@ -229,7 +229,7 @@ export class HideSeek implements World3D {
   private hiddenAt: SpotId | null = null
   private stuckT = 0
 
-  // ---- Daddy and Mommy.
+  // ---- Dad and Mom.
   private nick: Member
   private nShadow: Mesh
   private ji: Member
@@ -359,7 +359,7 @@ export class HideSeek implements World3D {
     this.cap.visible = false
     scene.add(this.cap)
 
-    // ---- Kaylee, Daddy and Mommy.
+    // ---- Kaylee, Dad and Mom.
     this.kaylee = new Avatar(bag)
     scene.add(this.kaylee.root)
     this.kShadow = blobShadow(0.42, bag)
@@ -378,7 +378,7 @@ export class HideSeek implements World3D {
     this.bubbles = new Particles({ kind: 'spray', count: 80, colors: ['#FFFFFF', '#DDF6FF'], gravity: -2 }, bag)
     scene.add(this.puffs.mesh, this.sparkle.mesh, this.spray.mesh, this.bubbles.mesh)
 
-    // ---- Where the link starts: at the tree (the photo: Kaylee covering her eyes in front, Daddy leaning on it).
+    // ---- Where the link starts: at the tree (the photo: Kaylee covering her eyes in front, Dad leaning on it).
     const k0 = this.round === 'hide' ? this.L(TREE.u - 2.4, TREE.v - 3.2) : this.L(TREE.u - 0.6, TREE.v - 2.1)
     this.kaylee.place(k0.x, k0.y, k0.z, (this.seaYaw + Math.PI) * DEG)
     this.kY = k0.y
@@ -388,7 +388,7 @@ export class HideSeek implements World3D {
     this.startRound(this.round, true)
 
     this.unwatch = watch('hideseek', () => ({
-      'your unicorn to Daddy (m)': [this.dadDist(), 12],
+      'your unicorn to Dad (m)': [this.dadDist(), 12],
       'her speed (m/s)': [this.speed, 5],
     }))
   }
@@ -521,11 +521,11 @@ export class HideSeek implements World3D {
     const k = this.kaylee.root.position
     switch (this.phase) {
       case 'intro':
-        // The photo for a moment: Kaylee covering her eyes in front of the tree, Daddy leaning on it behind her.
+        // The photo for a moment: Kaylee covering her eyes in front of the tree, Dad leaning on it behind her.
         if (this.phaseT > 1.4) this.toCount()
         break
       case 'count': {
-        // Eyes shut, counting; Daddy runs off to hide (she can peek through her hooves).
+        // Eyes shut, counting; Dad runs off to hide (she can peek through her hooves).
         const n = Math.floor((this.phaseT - 0.3) / SEEK.gap) + 1
         if (n > this.lastNum && n <= SEEK.count) {
           this.lastNum = n
@@ -593,7 +593,7 @@ export class HideSeek implements World3D {
         }
         break
       case 'dadcount': {
-        // Daddy at the tree, eyes covered, counting; she runs off and hides.
+        // Dad at the tree, eyes covered, counting; she runs off and hides.
         const atTree = !this.dad.path.length && !this.dad.hop
         if (!atTree) {
           this.phaseT = 0
@@ -668,7 +668,7 @@ export class HideSeek implements World3D {
     this.walkTo = null
     this.kaylee.steer(0, 0, 0, this.free)
     this.glowing = false
-    // Daddy runs off to his hiding place while she counts.
+    // Dad runs off to his hiding place while she counts.
     const def = BYID[this.hide]
     const to = this.dadPoint(def)
     this.dad.hidden = false
@@ -681,7 +681,7 @@ export class HideSeek implements World3D {
     return { x: p.x, z: p.z }
   }
 
-  /** Daddy in his hiding place, posed (the count is over: wherever he got to, he's there now). */
+  /** Dad in his hiding place, posed (the count is over: wherever he got to, he's there now). */
   private placeDadHidden() {
     const def = BYID[this.hide]
     const p = this.dadPoint(def)
@@ -785,7 +785,7 @@ export class HideSeek implements World3D {
     }, (SEEK.hop + 0.1) * 1000)
   }
 
-  /** She peeked behind the wrong place: a silly little something there, and Daddy giggles from his real one. */
+  /** She peeked behind the wrong place: a silly little something there, and Dad giggles from his real one. */
   private wrongPeek(id: SpotId) {
     this.counts.wrong++
     const t = this.things.get(id)!
@@ -857,7 +857,7 @@ export class HideSeek implements World3D {
     }
     return best
   }
-  /** While Daddy counts or searches: standing still in a hiding place, she crouches in it. */
+  /** While Dad counts or searches: standing still in a hiding place, she crouches in it. */
   private settleHiding() {
     const where = this.whereIsShe()
     if (this.hiddenAt && where !== this.hiddenAt) {
@@ -871,7 +871,7 @@ export class HideSeek implements World3D {
     this.counts.hides++
     sfx.giggle()
     if (where === 'sea' || where === 'palmL' || where === 'palmR') {
-      // A silly place (a palm thinner than her, the open sea): Mommy giggles, and Daddy still won't find her (he looks
+      // A silly place (a palm thinner than her, the open sea): Mom giggles, and Dad still won't find her (he looks
       // the wrong way right beside her).
       this.counts.sillyHides++
       this.ji.react('wave')
@@ -885,7 +885,7 @@ export class HideSeek implements World3D {
       this.kaylee.face(this.seaYaw + Math.PI)
       this.kaylee.setPose('sit')
       if (where === 'pandanus') {
-        // Up into its leaves (where Daddy hid): underfoot() lifts her.
+        // Up into its leaves (where Dad hid): underfoot() lifts her.
         const d = this.dadPoint(BYID.pandanus)
         this.kaylee.root.position.x = d.x
         this.kaylee.root.position.z = d.z
@@ -1004,7 +1004,7 @@ export class HideSeek implements World3D {
     }, 500)
   }
 
-  // ---------------------------------------------------------------- Daddy moving
+  // ---------------------------------------------------------------- Dad moving
 
   private setDad(x: number, z: number, yaw: number, pose: DadPose) {
     this.dad.x = x
@@ -1176,7 +1176,7 @@ export class HideSeek implements World3D {
     const g = this.groundY(k.x, k.z)
     const wet = g < 0
     this.kY += (g - this.kY) * ease(dt, 16)
-    // (Hiding: down in the sea to her head, or up in the pandanus's leaves like Daddy.)
+    // (Hiding: down in the sea to her head, or up in the pandanus's leaves like Dad.)
     const duck = this.hiddenAt === 'sea' ? 0.5 : this.hiddenAt === 'pandanus' && !this.kaylee.walking ? -1.55 : 0
     this.duck += (duck - this.duck) * ease(dt, 6)
     k.y = this.kY - this.duck
@@ -1293,7 +1293,7 @@ export class HideSeek implements World3D {
     this.walkTo = null
   }
 
-  /** While she counts: a peek through her hooves (Daddy's still running). */
+  /** While she counts: a peek through her hooves (Dad's still running). */
   private peek() {
     this.counts.peeks++
     this.peekT = 0.75
@@ -1330,7 +1330,7 @@ export class HideSeek implements World3D {
     }
     if (id === 'family:ji') {
       if (this.phase === 'dadcount' || (this.phase === 'search' && !this.hiddenAt)) {
-        // Off to hide behind Mommy.
+        // Off to hide behind Mom.
         this.target = this.kayPoint(BYID.mommy)
         this.walkTo = null
         this.ji.react('wave')
@@ -1424,7 +1424,7 @@ export class HideSeek implements World3D {
       }
     }
     this.towelParts.flat.rotation.z *= 1 - ease(dt, 4)
-    // The glow rings: Daddy's place once she's been stuck a long time; every hiding place while he counts.
+    // The glow rings: Dad's place once she's been stuck a long time; every hiding place while he counts.
     const hideRound = this.phase === 'dadcount' || (this.phase === 'search' && !this.hiddenAt)
     for (const th of this.things.values()) {
       const on = (this.glowing && this.phase === 'seek' && th.def.id === this.hide) || (hideRound && th.def.id !== 'roots' && th.def.id !== 'sea')
@@ -1435,7 +1435,7 @@ export class HideSeek implements World3D {
         th.glow.scale.setScalar(1 + 0.08 * Math.sin(t * 4))
       }
     }
-    // Mommy watches; Daddy looks at Kaylee when he isn't hiding or counting.
+    // Mom watches; Dad looks at Kaylee when he isn't hiding or counting.
     const k = this.kaylee.root.position
     this.ji.lookAt(k.x, k.y + 0.6, k.z)
     if (this.phase !== 'dadcount' && this.phase !== 'search') this.nick.lookAt(k.x, k.y + 0.6, k.z)
@@ -1450,7 +1450,7 @@ export class HideSeek implements World3D {
 
   // ---------------------------------------------------------------- camera
 
-  /** While she counts and seeks (rounds 1 and 2): the box round her and Daddy's hiding place (and Daddy, out of it), in
+  /** While she counts and seeks (rounds 1 and 2): the box round her and Dad's hiding place (and Dad, out of it), in
    *  Ao Prao's u (across the screen) and v (into it), so wherever he hides it's on screen, on every screen shape. */
   private seekBox() {
     if (this.round === 'hide' || !(this.phase === 'intro' || this.phase === 'count' || this.phase === 'seek' || this.phase === 'found')) return null

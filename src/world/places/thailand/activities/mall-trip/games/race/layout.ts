@@ -5,7 +5,7 @@
 //
 //        top deck  [flags]  ─ lamps
 //   steps ║ lane 1   lane 2   lane 3   lane 4 ║
-//   (rail)║ Kaylee   Daddy    Mommy    a kid  ║   each lane: down, up over a bump, down... four bumps
+//   (rail)║ Kaylee   Dad    Mom    a kid  ║   each lane: down, up over a bump, down... four bumps
 //         ║   ~        ~        ~        ~    ║
 //   ──────╚═══════ the pit of pink and white balls ═══════╝   ribbon board · the kid waiting a turn
 //                               (camera)
@@ -92,7 +92,7 @@ export const KID_LANE = 3
 export const kidFor = (n: number): 'kidA' | 'kidB' => (n % 2 ? 'kidA' : 'kidB')
 
 /** How each one races beside her: how far ahead they get mid-race, and how far behind they finish (both as a share of
- *  the slide). She always wins, Daddy by a nose. */
+ *  the slide). She always wins, Dad by a nose. */
 export const RIVALS: Record<Exclude<RacerId, 'kaylee'>, { lead: number; nose: number; pitch: number }> = {
   nick: { lead: 0.075, nose: 0.028, pitch: 120 },
   ji: { lead: 0.05, nose: 0.06, pitch: 300 },

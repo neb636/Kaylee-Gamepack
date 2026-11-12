@@ -1,22 +1,22 @@
 // The mountain road (section `drive`, plan: thailand/nan-trip.md, "The mountain road"; built: steps 1, 8 and 9, the
-// road, its look and its voices). Mommy drives the big silver Pajero and Kaylee steers it: it always rolls forward
-// (Mommy's foot), and she steers it like a sled: her finger goes down anywhere, a steering wheel appears under it, and
+// road, its look and its voices). Mom drives the big silver Pajero and Kaylee steers it: it always rolls forward
+// (Mom's foot), and she steers it like a sled: her finger goes down anywhere, a steering wheel appears under it, and
 // pushing it left or right turns the wheel and slides the Pajero that way across the road (further = faster). Let go and
-// Mommy eases it back into the left lane by herself (Thailand keeps left). Mommy slows for the bends (the body leans out)
+// Mom eases it back into the left lane by herself (Thailand keeps left). Mom slows for the bends (the body leans out)
 // and stops for a buffalo crossing (the body squats). Silly driving is a toy too, never a crash: off the side of the road
-// she bumps along the grass (slower, shaking, Mommy: "Oh no, the grass!") until the hillside boings her back; steered
+// she bumps along the grass (slower, shaking, Mom: "Oh no, the grass!") until the hillside boings her back; steered
 // over the guard rail (or off the bridge), the Pajero hops it and tumbles down the cliff, cartoon style ("Oh no!"),
 // vanishes in a poof, and drops back onto the road where it left ("We're back!"). Wiggling all over the road gets a
-// "Wibbly wobbly!". Mommy never drives off by herself: only her finger takes it over the edge.
+// "Wibbly wobbly!". Mom never drives off by herself: only her finger takes it over the edge.
 //
-// The family rides inside, seen through the windows: Mommy at the wheel on the right, Daddy beside her (tap him: he
-// hops and says something, in turn), Kaylee behind Mommy, and the pink elephant toy nodding on the back seat (tap it:
+// The family rides inside, seen through the windows: Mom at the wheel on the right, Dad beside her (tap him: he
+// hops and says something, in turn), Kaylee behind Mom, and the pink elephant toy nodding on the back seat (tap it:
 // it nods like mad and squeaks). The wipers swish by themselves in the rain; tap them and they go faster.
 //
 // Every drive rolls its weather (rain, sun or cloud; a link can say which) and who's on the road (roads.ts rollDrive).
 // The mountains' look: soft grey-lavender skies and low cloud on the hills when it's grey, a wet road that shines with
 // puddles that splash when it rains, sunshine when it's sunny. On the way: oncoming songthaews, scooters and tuk-tuks
-// that pull over and toot a tune if she drifts onto their side (Mommy: "Keep left!"); chickens that flap off the road;
+// that pull over and toot a tune if she drifts onto their side (Mom: "Keep left!"); chickens that flap off the road;
 // on the sky road, round mirrors on the blind bends (one flashes when a car is coming round, and it beeps hello), a
 // waterfall, a monkey on the rail, then the cloud (white all round, headlights on) and out above it into the sunshine
 // over a sea of clouds; on the 3 road, the bends she counts with Sparkle, and from the viewpoint the road below is a
@@ -24,7 +24,7 @@
 // to draw: Dad took the crayon out, 2026-10-26), then the fanfare. Each road ends at its stop
 // (the mushroom farm, the café, the market, the viewpoint): the Pajero pulls in and the camera turns to look.
 //
-// Talk (lines.ts L.nan.drive): at most one line before her hands are busy (Mommy's "Steer for me!" on the first drive,
+// Talk (lines.ts L.nan.drive): at most one line before her hands are busy (Mom's "Steer for me!" on the first drive,
 // Sparkle's "Let's count the bends!" on the 3 road); Sparkle says what's new (the first cloud, the numbers) and, after
 // ~8 s with nothing touched, how to steer; the family react (each thing once, nothing stacked: a reaction is dropped
 // while someone's talking), and to silly driving every time, in turn.
@@ -95,8 +95,8 @@ const STEER = knobs('steer', 'Steering', 'src/world/places/thailand/activities/n
   pull: { value: 1.2, min: 0, max: 4, step: 0.1, label: 'Aim closer when far off', note: 'per meter she is from where she steers: a full push swerves more' },
   turn: { value: 2.1, min: 0.5, max: 4, step: 0.05, label: 'Turn rate', unit: 'rad/s', note: 'how fast the Pajero can swing its nose' },
   grip: { value: 13, min: 1, max: 15, step: 0.5, label: 'Grip', note: 'how quickly a sideways slide dies out (low = drifty)' },
-  top: { value: 23, min: 5, max: 25, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'Mommy\'s foot on the straights' },
-  back: { value: 1.2, min: 0.3, max: 4, step: 0.1, label: 'Back to her lane', unit: 's', note: 'how slowly Mommy eases back after she lets go' },
+  top: { value: 23, min: 5, max: 25, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'Mom\'s foot on the straights' },
+  back: { value: 1.2, min: 0.3, max: 4, step: 0.1, label: 'Back to her lane', unit: 's', note: 'how slowly Mom eases back after she lets go' },
   camera: { value: 0.3, min: 0, max: 1, step: 0.05, label: 'Camera follows the nose', note: '0 = the camera looks down the road; 1 = it turns with the car' },
   screech: { value: 9, min: 2, max: 15, step: 0.5, label: 'Squeal at a flick of', unit: '/s', note: 'how fast a yank must be to squeal the tyres' },
 })
@@ -121,14 +121,14 @@ const DROP_H = 9
 const VIEW_POP = 1.8
 const VIEW_GAP = 0.75
 
-/** The road's tap targets: the Pajero (Daddy in it, the elephant toy, the wipers), then whoever is on the road this
+/** The road's tap targets: the Pajero (Dad in it, the elephant toy, the wipers), then whoever is on the road this
  *  drive (`traffic`: its roll). */
 export function driveAnchors(id: RoadId, traffic?: TrafficPlan, to = '', cup = false): AnchorInfo[] {
   const r = nanRoad(id)
   const t = traffic ?? r.traffic
   return [
     { id: 'car', label: 'The Pajero', kind: 'thing' },
-    { id: 'family:nick', label: 'Daddy', kind: 'family' },
+    { id: 'family:nick', label: 'Dad', kind: 'family' },
     { id: 'elephant', label: 'The elephant toy', kind: 'thing' },
     { id: 'wipers', label: 'The wipers', kind: 'thing' },
     ...t.movers.map((m, i): AnchorInfo => ({ id: `mover:${i}`, label: m.kind === 'car' ? 'Car' : m.kind === 'tuktuk' ? 'Tuk-tuk' : m.kind === 'scooter' ? 'Scooter' : 'Songthaew', kind: 'thing' })),
@@ -174,7 +174,7 @@ const HINT_MAX = 2
 const GAP_S = 8
 /** What Sparkle has already shown her this visit (the first mirror, the first cloud): said once, not every drive. */
 const heard = new Set<string>()
-/** Mommy's "Steer for me!" is for the first drive only. */
+/** Mom's "Steer for me!" is for the first drive only. */
 let drives = 0
 
 export class NanDrive implements World3D {
@@ -271,7 +271,7 @@ export class NanDrive implements World3D {
   private sea: Group | null = null
   private lowCloud: Group | null = null
   private seaY = 0
-  // ---- Talk: lines said once, Sparkle's hints, Daddy's tap lines in turn, cool-downs ----
+  // ---- Talk: lines said once, Sparkle's hints, Dad's tap lines in turn, cool-downs ----
   private told = new Set<string>()
   private cool = new Map<string, number>()
   private lastLine = -99
@@ -411,7 +411,7 @@ export class NanDrive implements World3D {
     this.car = buildPajero(bag)
     this.car.root.userData.pick = 'car'
     scene.add(this.car.root)
-    // The family inside: Mommy at the wheel, Daddy beside her, Kaylee behind Mommy.
+    // The family inside: Mom at the wheel, Dad beside her, Kaylee behind Mom.
     this.kaylee = new Avatar(bag)
     const member = (id: string) => new Member({ ...FAMILY.find((f) => f.id === id)!, spot: null }, bag)
     this.nick = member('nick')
@@ -508,7 +508,7 @@ export class NanDrive implements World3D {
     this.counts.pokes++
     if (id === 'car') return this.bounce()
     if (id === 'family:nick') {
-      // Daddy hops in his seat and says something (in turn); not over Sparkle.
+      // Dad hops in his seat and says something (in turn); not over Sparkle.
       this.nick.react('hop')
       if (speakingVoice() === 'sparkle') return
       return this.every('nick-tap', 2.5, () => this.speak(L.nan.drive.tap[this.nickTap++ % L.nan.drive.tap.length]))
@@ -647,7 +647,7 @@ export class NanDrive implements World3D {
     this.emitHud()
   }
 
-  /** Mommy's foot and Kaylee's finger: where across the road it goes, and how fast. */
+  /** Mom's foot and Kaylee's finger: where across the road it goes, and how fast. */
   private drive(dt: number) {
     const { road } = this.r
     const d = this.d
@@ -676,7 +676,7 @@ export class NanDrive implements World3D {
       }
       this.wiggling()
     } else {
-      // Let go: Mommy eases it back into the left lane.
+      // Let go: Mom eases it back into the left lane.
       this.steerK = 0
       this.steerLat += (LANE_LAT - this.steerLat) * (1 - Math.exp(-dt / STEER.back))
     }
@@ -684,7 +684,7 @@ export class NanDrive implements World3D {
     // Steering hard (far from where the car is now): it aims a little closer ahead, so it gets there, but never so
     // close that the nose swings round and has to swing back.
     ds = Math.max(STEER.aim, ds - Math.abs(lat - this.loc.lat) * STEER.pull)
-    // Keep left: someone coming the other way and she's over the middle: Mommy eases her back toward her lane.
+    // Keep left: someone coming the other way and she's over the middle: Mom eases her back toward her lane.
     const her = this.her()
     const oncoming = this.traffic.movers.some((m) => m.state === 'go' && m.s - s > -2 && m.s - s < 34)
     if (this.phase === 'drive' && oncoming && her.lat < 1.3) {
@@ -705,7 +705,7 @@ export class NanDrive implements World3D {
       const T = L.nan.drive.to
       const line = { city: T.market, valley: T.mushrooms, sky: this.to === 'salt' ? T.salt : T.rice, three: T.view }[this.r.id]
       this.told.add('arrive')
-      // (At the Cup's race ground, Daddy: "Look! A race!")
+      // (At the Cup's race ground, Dad: "Look! A race!")
       this.speak(this.r.id === 'city' && this.cup ? L.nan.cup.arrive : line)
       this.ji.react('wave')
     }
@@ -772,7 +772,7 @@ export class NanDrive implements World3D {
       this.squash = 1
       sfx.rail()
       this.kaylee.react('wiggle')
-      // (Daddy's "Whoa!" when she steered into it.)
+      // (Dad's "Whoa!" when she steered into it.)
       if (this.finger?.steering) this.silly('whoa', [L.nan.drive.whoa], 7)
       const at = road.spotAt(loc.s, side * (lim + 0.9))
       this.sparkle.burst(at.x, this.y + 0.7, at.z, 12, 2.5, 3, 0.18)
@@ -1035,10 +1035,10 @@ export class NanDrive implements World3D {
     const inside = c > 0.6
     const above = !!r.cloud && y > r.cloud.y1 + 1
     if (inside && !this.wasIn) sfx.cloudIn()
-    // Into the cloud: Sparkle says so the first time (as it begins to close in), Daddy can't see a thing; out above it,
+    // Into the cloud: Sparkle says so the first time (as it begins to close in), Dad can't see a thing; out above it,
     // the sea of clouds and the sunshine.
     this.inCloudT = inside ? this.inCloudT + dt : 0
-    // (Daddy only after Sparkle has said they're driving into a cloud.)
+    // (Dad only after Sparkle has said they're driving into a cloud.)
     if (this.inCloudT > 3.5 && heard.has('cloud')) this.once('foggy', L.nan.drive.foggy, true)
     if (this.sea) this.sea.visible = seaShows(this.rig.camera.position.y, this.seaY)
     if (above && !this.wasAbove) {
@@ -1253,21 +1253,21 @@ export class NanDrive implements World3D {
     if (this.phase === 'drive') {
       // Sparkle's first-time line (once a visit, in a quiet moment while it still fits): driving into the cloud.
       if (r.cloud && this.cloudK > 0.25 && !this.wasAbove) this.teach('cloud', D.cloud)
-      // Out above the cloud: Daddy's sunshine (within a few seconds of popping out).
+      // Out above the cloud: Dad's sunshine (within a few seconds of popping out).
       if (this.wasAbove && this.time - this.aboveAt < 8) this.once('sun', D.sun, true)
       // Someone pulled over for her (she steered onto their side): keep left!
       if (this.traffic.counts.yields > this.yieldsSeen) {
         this.yieldsSeen = this.traffic.counts.yields
         if (t - this.lastSteer < 3) this.every('left', 12, () => this.family(D.left))
       }
-      // A buffalo crossing: Mommy stops for it.
+      // A buffalo crossing: Mom stops for it.
       if (this.traffic.blockAhead(her) < 40) this.once('buffalo', D.buffalo, true)
       // The first sharp bend (not on the 3 road, where Sparkle counts them).
       if (r.id !== 'three' && t > 6 && Math.abs(r.road.bendAhead(her.s, 22)) > 0.8 && this.d.speed > 3) this.once('bend', D.bend, true)
       // Things to see: the monkey on the rail, the waterfall.
       if (this.traffic.monkeys.some((m) => m.s - her.s < 24 && m.s - her.s > 2)) this.once('monkey', D.monkey, true)
       if (r.falls !== undefined && r.falls - her.s < 40 && r.falls - her.s > 0) this.once('waterfall', D.waterfall, true)
-      // The rain: Daddy loves the wipers.
+      // The rain: Dad loves the wipers.
       if (this.weather === 'rain' && !this.wasAbove && t > 7) this.once('rain', D.rain, true)
     }
     // ---- Stuck: after ~8 s with nothing touched, Sparkle says what to do (twice a drive at most) ----
@@ -1455,10 +1455,10 @@ export class NanDrive implements World3D {
       at.y += 1.3
       return { at, r: 1.6, prio: 2, max: 150 }
     }
-    // In the car (while it's on the road, and parked by the stop): Daddy, the elephant toy, the tailgate's wiper.
+    // In the car (while it's on the road, and parked by the stop): Dad, the elephant toy, the tailgate's wiper.
     if (id === 'family:nick' || id === 'elephant' || id === 'wipers') {
       if (this.r.id === 'three' && this.phase !== 'drive' && this.phase !== 'arrive') return null
-      // (Kept apart on screen: Daddy up by the roof's front, the elephant's head, the wiper low on the tailgate.)
+      // (Kept apart on screen: Dad up by the roof's front, the elephant's head, the wiper low on the tailgate.)
       if (id === 'family:nick') return { at: this.nick.root.getWorldPosition(new Vector3()).add(tmp2.set(0, this.nick.height * 0.85, 0)), r: 0.3, prio: 3, max: 80 }
       if (id === 'elephant') return { at: this.car.elephant.root.getWorldPosition(new Vector3()).add(tmp2.set(0, 0.32, 0)), r: 0.2, prio: 4, max: 72 }
       return { at: this.car.body.localToWorld(new Vector3(...this.car.rearWiper).add(tmp2.set(0, -0.22, 0))), r: 0.28, prio: 4, max: 72 }

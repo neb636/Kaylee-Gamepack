@@ -130,7 +130,7 @@ export function buildRoom(bag: Bag): Room {
   ]), bag, 1.5))
   root.add(soda)
 
-  // ---- The onion rings in a basket (Mommy wears one as a bracelet) ----
+  // ---- The onion rings in a basket (Mom wears one as a bracelet) ----
   const ringsRoot = new Group()
   ringsRoot.position.set(...RINGS)
   ringsRoot.userData.pick = 'rings'

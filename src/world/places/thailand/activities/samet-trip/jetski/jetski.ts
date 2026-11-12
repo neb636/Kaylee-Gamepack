@@ -1,5 +1,5 @@
 // The jet ski at Hat Sai Kaew (plan: planning/around-the-world/thailand/samet-trip.md, greybox 1): Kaylee steers,
-// Daddy sits behind her, in the island's real coordinates (island/layout.ts), so the bay drops straight into the island
+// Dad sits behind her, in the island's real coordinates (island/layout.ts), so the bay drops straight into the island
 // of greybox 2.
 //
 // The toy (core verb): steer the jet ski with her finger. Finger down anywhere on the water and it heads there; the
@@ -16,11 +16,11 @@
 //          slows behind her, takes a wide turn), and when he wins it's by a nose; after a loss he waits for her at the
 //          line (design rule 3), and a pink arrow points the way when she's stuck. The winner rings the bell on the hut.
 // Silly, never failing: drive up onto the sand and it skids, everyone tumbles off laughing and the jet ski man pushes
-// it back; spin tight circles and Daddy goes dizzy; splash Mommy on the shore; push into the rope and it stretches
+// it back; spin tight circles and Dad goes dizzy; splash Mom on the shore; push into the rope and it stretches
 // like a rubber band and turns her along it; wedge it on the rocks and it pops free. Life jacket first: the bare link waits for her tap on the jacket.
 //
 // Talk (lines.ts L.samet.jetski): the jet ski man says the life jacket goes on, Sparkle says what each round is for and
-// counts the race in, Daddy whoops now and then (never after every jump), the jet ski man teases and is a good sport.
+// counts the race in, Dad whoops now and then (never after every jump), the jet ski man teases and is a good sport.
 // After a while with nothing done a finger shows, and Sparkle says what to do (spendHint). Every number that decides
 // the feel is a knob (?feel=1), with a graph of her finger against what the jet ski does.
 import { DynamicDrawUsage, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, Object3D, Plane, Raycaster, RingGeometry, Scene, SphereGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
@@ -65,7 +65,7 @@ const HELM = knobs('jetHelm', 'Steering the jet ski', FILE, {
   lean: { value: 0.34, min: 0, max: 0.7, step: 0.01, label: 'Lean into turns', unit: 'rad', note: 'how far it tips into a turn at full speed' },
   lift: { value: 0.07, min: 0, max: 0.25, step: 0.005, label: 'Nose lifts', unit: 'rad', note: 'how far the nose comes up as it speeds up' },
   camera: { value: 0.45, min: 0, max: 1, step: 0.05, label: 'Camera turns with it', note: '0 = slow and steady, 1 = right behind it all the time' },
-  pitch: { value: 29, min: 10, max: 60, step: 1, label: 'Camera height', unit: '°', note: 'how far down the chase camera looks (higher shows your unicorn past Daddy)' },
+  pitch: { value: 29, min: 10, max: 60, step: 1, label: 'Camera height', unit: '°', note: 'how far down the chase camera looks (higher shows your unicorn past Dad)' },
   side: { value: 16, min: -40, max: 40, step: 1, label: 'Camera to the side', unit: '°', note: 'how far round to one side of the jet ski the chase camera sits' },
   ahead: { value: 4, min: 0, max: 12, step: 0.25, label: 'Camera looks ahead', unit: 'm', note: 'how far ahead of the jet ski the camera looks at full speed' },
 })
@@ -89,8 +89,8 @@ const SILLY = knobs('jetSilly', 'The rope, the sand, the silly things', FILE, {
   rope: { value: 7, min: 1, max: 20, step: 0.25, label: 'Rope springiness', unit: '/s²', note: 'how hard the stretched rope pulls her back' },
   give: { value: 3.5, min: 0.5, max: 8, step: 0.25, label: 'Rope stretches', unit: 'm', note: 'how far the rope stretches before it boings her back for sure' },
   beach: { value: 2.2, min: 0.5, max: 8, step: 0.1, label: 'Skids up the sand from', unit: 'm/s', note: 'slower than this and the sand just stops it gently' },
-  dizzy: { value: 1.25, min: 0.5, max: 6, step: 0.25, label: 'Dizzy after', unit: 'turns', note: 'full turns round and round one way before Daddy goes dizzy' },
-  splash: { value: 5, min: 2, max: 10, step: 0.25, label: 'Splashes Mommy within', unit: 'm' },
+  dizzy: { value: 1.25, min: 0.5, max: 6, step: 0.25, label: 'Dizzy after', unit: 'turns', note: 'full turns round and round one way before Dad goes dizzy' },
+  splash: { value: 5, min: 2, max: 10, step: 0.25, label: 'Splashes Mom within', unit: 'm' },
   ride: { value: 70, min: 10, max: 200, step: 5, label: 'Ride round lasts', unit: 's', note: 'seconds of riding before the waves come (sooner after a loop)' },
   margin: { value: 3, min: 0.5, max: 10, step: 0.25, label: 'Stays inside the rope by', unit: 'm', note: 'a finger past the rope steers her along it, this far inside' },
   rocks: { value: 8, min: -20, max: 30, step: 1, label: 'Keeps off the rocks by', unit: 'm', note: 'past the sand at each end of the beach, a finger on the rocks steers her this far out from the waterline' },
@@ -149,8 +149,8 @@ const MAN_LOOK = JETSKI_MAN
 export const JET_ANCHORS: AnchorInfo[] = [
   { id: 'jacket', label: 'The life jacket', kind: 'thing' },
   { id: 'kaylee', label: 'your unicorn on the jet ski', kind: 'thing' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
   { id: 'man', label: 'The jet ski man', kind: 'thing' },
   { id: 'bell', label: 'The bell on the hut', kind: 'thing' },
   { id: 'buoy', label: 'The big orange buoy', kind: 'thing' },
@@ -196,7 +196,7 @@ export class JetSki implements World3D {
   private round: RoundId
   private phase: Phase
 
-  // ---- Her jet ski, Kaylee and Daddy.
+  // ---- Her jet ski, Kaylee and Dad.
   private d: Driver
   private feel: Feel
   private ski: Ski
@@ -326,7 +326,7 @@ export class JetSki implements World3D {
     this.s.lagoon.waves.dir = WAVE_DIR
     this.s.lagoon.waves.height = this.waveGoal()
 
-    // ---- Her jet ski with Kaylee and Daddy.
+    // ---- Her jet ski with Kaylee and Dad.
     this.feel = { top: 0, boost: 1.4, accel: 0, coast: 0, turn: 0, grip: 0, near: 0, far: 0, dead: 0, lean: 0, gain: 3 }
     this.readFeel()
     this.d = new Driver(this.feel)
@@ -342,7 +342,7 @@ export class JetSki implements World3D {
     this.ski.front.add(this.kaylee.root)
     this.ski.back.add(this.nick.root)
     this.seat()
-    // Life jackets (on the body, so they lie down with them): Kaylee's pink and white (it waits for her tap on the bare link), Daddy's orange.
+    // Life jackets (on the body, so they lie down with them): Kaylee's pink and white (it waits for her tap on the bare link), Dad's orange.
     this.jacket = lifeJacket(bag, 0.22, 0.4, 0.3, PAL.hotpink)
     this.kaylee.rig.body.add(this.jacket)
     this.jacketFloat = loneVest(bag, PAL.hotpink)
@@ -351,14 +351,14 @@ export class JetSki implements World3D {
     this.nick.rig.body.add(this.nickJacket)
     this.jacket.visible = this.phase !== 'jacket'
     this.jacketFloat.visible = this.phase === 'jacket'
-    // Daddy's cap (it blows off when she pokes him).
+    // Dad's cap (it blows off when she pokes him).
     const f = this.nick.rig.face
     this.cap = new Group()
     this.cap.add(capMesh(bag, f.R))
     this.cap.position.set(0, f.headY + f.R * 0.72, -f.R * 0.05)
     this.nick.rig.head.add(this.cap)
 
-    // Mommy on the sand at the water's edge, the jet ski man by his hut (or on his own jet ski in the race).
+    // Mom on the sand at the water's edge, the jet ski man by his hut (or on his own jet ski in the race).
     this.ji.place(MOMMY.x, this.groundY(MOMMY.x, MOMMY.z), MOMMY.z, SEAWARD * DEG, 'stand')
     this.man = new Member({ id: 'jetski-man', name: 'The jet ski man', who: 'runs the jet skis on Sai Kaew', height: MAN_LOOK.height, spot: null, pitch: 300 }, bag, MAN_LOOK, 'otter')
     scene.add(this.ji.root, this.man.root)
@@ -474,7 +474,7 @@ export class JetSki implements World3D {
   private water(x: number, z: number) {
     return this.s.lagoon.heightAt(x, z, this.time, this.s.terrain.shoreAt(x, z))
   }
-  /** Kaylee and Daddy in their seats. */
+  /** Kaylee and Dad in their seats. */
   private seat() {
     for (const [c, seat] of [[this.kaylee, this.ski.front], [this.nick, this.ski.back]] as const) {
       if (c.root.parent !== seat) seat.add(c.root)
@@ -1204,7 +1204,7 @@ export class JetSki implements World3D {
       this.nick.react('hop')
       this.ji.react('hop')
       this.sparkle.burst(this.d.x, 1.5, this.d.z, 40, 3, 4, 0.3)
-      // Daddy says her name at her first win only; after that the jet ski man's good-sport lines.
+      // Dad says her name at her first win only; after that the jet ski man's good-sport lines.
       if (this.counts.wins === 1) {
         this.events.say(J.champ)
         this.after(1.8, () => this.talk('won', J.won, 0))
@@ -1242,7 +1242,7 @@ export class JetSki implements World3D {
         this.counts.squeals++
       }
     })
-    // Mommy: zoom past her at the water's edge and she gets soaked (then laughs).
+    // Mom: zoom past her at the water's edge and she gets soaked (then laughs).
     this.mommyCool -= dt
     const md = Math.hypot(d.x - MOMMY.x, d.z - MOMMY.z)
     if (this.mommyCool <= 0 && Math.abs(d.speed) > 4 && md < SILLY.splash && !d.airborne) {
@@ -1331,7 +1331,7 @@ export class JetSki implements World3D {
       this.umbrellaSpin[i] *= Math.exp(-dt * 0.8)
       u.rotation.y += this.umbrellaSpin[i] * dt
     })
-    // Daddy's cap blowing off and back.
+    // Dad's cap blowing off and back.
     if (this.capT >= 0) {
       this.capT += dt / 1.4
       const k = this.capT
@@ -1346,7 +1346,7 @@ export class JetSki implements World3D {
         this.cap.rotation.set(0, 0, 0)
       }
     }
-    // Dizzy Daddy: stars round his head, a wobble.
+    // Dizzy Dad: stars round his head, a wobble.
     if (this.dizzyT >= 0) {
       this.dizzyT += dt
       const hp = this.nick.root.getWorldPosition(tmp3)
@@ -1360,7 +1360,7 @@ export class JetSki implements World3D {
     }
     this.kaylee.update(dt, t)
     this.nick.update(dt, t)
-    // Daddy's hands over hers on the handlebars (when nothing else is moving his arms).
+    // Dad's hands over hers on the handlebars (when nothing else is moving his arms).
     if (this.nick.root.parent === this.ski.back && this.nick.pose === 'sit') {
       const { armL, armR } = this.nick.rig
       armL.rotation.set(-1.25, 0, 0.35)
@@ -1675,7 +1675,7 @@ export class JetSki implements World3D {
     return {
       center: new Vector3(d.x + sx * ahead, 0.9 + d.y * 0.6, d.z + sz * ahead),
       half,
-      // (A little to one side and from higher up, so Kaylee in front shows past Daddy behind her.)
+      // (A little to one side and from higher up, so Kaylee in front shows past Dad behind her.)
       yaw: chase + HELM.side,
       pitch: HELM.pitch + d.y * 3,
       follow: true,

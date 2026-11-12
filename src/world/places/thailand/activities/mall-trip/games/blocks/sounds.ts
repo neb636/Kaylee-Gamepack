@@ -1,5 +1,5 @@
-// Little Land's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise): Daddy's laugh, Kaylee's
-// giggle, the CHOO's blast of air. Daddy's words (his sneeze too) are voices (lines.ts `L.mall.blocks`).
+// Little Land's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise): Dad's laugh, Kaylee's
+// giggle, the CHOO's blast of air. Dad's words (his sneeze too) are voices (lines.ts `L.mall.blocks`).
 import { noise, tone } from '../../../../../../kit/sfx'
 import { sfx } from '../../../../sfx'
 
@@ -57,14 +57,14 @@ export const blocksSfx = {
   flap: () => [0, 0.14, 0.28].forEach((d) => noise(0.07, 0.06, 'bandpass', 900, 1500, d, 1.5)),
   /** A star onto the easel. */
   star: () => [0, 0.08, 0.16, 0.26].forEach((d, i) => tone(note(4 + i * 2), note(4 + i * 2), 0.22, 0.05, 'triangle', d)),
-  /** Daddy's sneeze: ah... ah... */
+  /** Dad's sneeze: ah... ah... */
   ahh: () => [0, 0.4].forEach((d, i) => tone(300 + i * 90, 380 + i * 120, 0.32, 0.07, 'triangle', d)),
   /** ...CHOO! */
   choo: () => {
     noise(0.45, 0.18, 'bandpass', 1600, 500, 0, 0.8)
     tone(420, 180, 0.25, 0.08, 'sawtooth')
   },
-  /** Daddy impressed: "ooh!" */
+  /** Dad impressed: "ooh!" */
   ooh: () => tone(260, 420, 0.4, 0.07, 'triangle'),
   /** The wall's brick: a note. */
   wallNote: (k: number) => {

@@ -1,17 +1,17 @@
 // The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.md), Thailand's third trip (meta.ts
 // `activities`), with its look and voices. The whole trip:
-//   the way there and home (Loop.tsx, the trip kit's legs): Mommy asks where to (invite, 🏔️🚙), packing for the
+//   the way there and home (Loop.tsx, the trip kit's legs): Mom asks where to (invite, 🏔️🚙), packing for the
 //   mountains (pack), the goodbye and Aunty Sri's van (goodbye), the x-ray belt (airport), the window seat north to Nan
 //   (takeoff, fly, land), then off the plane straight to
 //   the Nan map (map/, section map), the trip's hub: tap a place (or drag the little Pajero there) and it drives there
 //   on the diorama, then the mountain road (drive/, section drive) to it: the valley road to Baan Huanam Mushroom Farm
 //   (mushrooms/), the sky road to Kaylee's rice farm under Stop Time Cafe (rice/) or to Bo Kluea's salt wells (salt/),
 //   the city road through Nan town and back. Each stop's end card goes back to the map, where its stamp lands. After
-//   two stops the airport opens: the 3 road, and at its viewpoint the 3 from above (section three), Mommy takes their
+//   two stops the airport opens: the 3 road, and at its viewpoint the 3 from above (section three), Mom takes their
 //   photo and ✈️🏠 ends the trip (endTrip): the 3's photo goes on Agong's wall by itself, then the stamp, and the plane
 //   flies home on the Thailand map (Dad, 2026-10-27; section home, the flight home and picking a photo for Agong, is
 //   only reached by its link now). The lookout on the 3's top bend (map place `lookout`, open from the start, never a
-//   stop) drives the same 3 road to the same viewpoint (`three?to=lookout`): Mommy's photo, then 🔁 or 🗺️ back to the
+//   stop) drives the same 3 road to the same viewpoint (`three?to=lookout`): Mom's photo, then 🔁 or 🗺️ back to the
 //   map, no ✈️🏠. The trips start on the Thailand map: the first of a session packs and goes down
 //   the stairs straight to the window seat; later ones open straight on the Nan map.
 //   The Nan Mountain Cup (cup/, plan: thailand/nan-cup.md; on since the full loop, CUP_OPEN in cup/rules.ts): the
@@ -99,9 +99,9 @@ function doneBefore(next: NanSection, stops: Stop[], punch: string | null) {
 }
 
 interface Props {
-  /** ✋ Not yet on Mommy's card. */
+  /** ✋ Not yet on Mom's card. */
   onExit?: () => void
-  /** Another trip on Mommy's card (🚤, 🛝🍕): that one instead. */
+  /** Another trip on Mom's card (🚤, 🛝🍕): that one instead. */
   onTrip?: (id: string) => void
   /** Home, the photo on the wall: the stamp. */
   onDone?: () => void
@@ -117,7 +117,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
   // She has done the whole trip before (or the link says so).
   const [replay] = useState(() => param('replay') === '1' || (saved.trips ?? 0) > 0)
   // What's in the suitcase comes from the link (its default when it has none), so a link opens the same trip on any
-  // iPad; a new packing starts empty. (Keeping going from Mommy's card reads what she saved: `choose`.)
+  // iPad; a new packing starts empty. (Keeping going from Mom's card reads what she saved: `choose`.)
   const [packed, setPacked] = useState<string[]>(() => parsePacked(flag('packed') ?? (first === 'invite' || first === 'pack' ? '' : DEFAULT_PACKED)))
   // (Read once: the address changes as she plays.)
   const [stops, setStops] = useState<Stop[]>(() => parseStops(param('stops'), cupOn))
@@ -139,7 +139,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
     return isTrack(l) ? l : rollLose()
   })
   const [racedHere, setRacedHere] = useState(0)
-  // The photos from the trip: a link's, or one for each stop done and the 3 once Mommy took it.
+  // The photos from the trip: a link's, or one for each stop done and the 3 once Mom took it.
   const [linkPhotos] = useState(() => parsePhotos(param('photos')))
   const [saw3, setSaw3] = useState(false)
   // Where she last drove to from the map: the little Pajero waits there when she's back (Nan town after the city road).
@@ -245,7 +245,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
   /** The legs of the trip kit end in one of these. */
   const onLeg = (next: string) => go(isLoop(next) ? { section: next } : { section: 'map' })
 
-  /** 🏔️🚙 on Mommy's card: straight to packing; or, with a trip half done or after her first whole trip, where to start
+  /** 🏔️🚙 on Mom's card: straight to packing; or, with a trip half done or after her first whole trip, where to start
    *  (🧳 a new trip, the next leg's icon to keep going, 🗺️ straight to the Nan map). */
   const yes = () => {
     if (moving.current) return

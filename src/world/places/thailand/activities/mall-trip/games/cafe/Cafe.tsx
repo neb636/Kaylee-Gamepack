@@ -1,4 +1,4 @@
-// Cafe & Cake's screen: the 3D kitchen (shop.ts), its tap targets, Daddy's and Mommy's thought bubbles (what they
+// Cafe & Cake's screen: the 3D kitchen (shop.ts), its tap targets, Dad's and Mom's thought bubbles (what they
 // ordered: the fruit and the color it makes) and the 👆 after a while with nothing touched. When all three rounds are done, a big 🛝 takes her back to the playground.
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
@@ -63,7 +63,7 @@ export function Cafe({ round, onRound, onDrink, onPlay }: Props) {
         anchors={(input, els) => (
           <>
             <Anchors list={CAFE_ANCHORS} els={els} {...input} />
-            {/* What Daddy and Mommy ordered, in a thought bubble over each one's head. */}
+            {/* What Dad and Mom ordered, in a thought bubble over each one's head. */}
             {(['nick', 'ji'] as const).map((who) => (
               <div
                 key={who}

@@ -4,7 +4,7 @@
 // Seen straight on (the camera looks toward -z), left to right:
 //
 //   back wall:   [ the window onto the waterfall ]          [ the green sign ]
-//   booth:            Mommy         Kaylee         Daddy
+//   booth:            Mom         Kaylee         Dad
 //   table:  napkins  [plate]       [plate]        [plate]     [Agong's box]
 //   front:      soda   onion rings  (the pizza on its stand)  chili
 //   the server waits by the end of the booth.
@@ -17,7 +17,7 @@ export const PIZZA_ICONS: Record<PizzaId, string> = { hawaiian: '🍍', seafood:
 export const PIZZA_NAMES: Record<PizzaId, string> = { hawaiian: 'Hawaiian', seafood: 'Seafood', cheese: 'Double Cheese' }
 /** How long the cheese stretches before it snaps (meters): Double Cheese stretches longest. */
 export const SNAP: Record<PizzaId, number> = { hawaiian: 0.42, seafood: 0.5, cheese: 0.95 }
-/** The cheese tug: Daddy holds the other end, and it stretches right across the table before it snaps onto his nose. */
+/** The cheese tug: Dad holds the other end, and it stretches right across the table before it snaps onto his nose. */
 export const TUG_SNAP = 1.3
 
 export const SLICES = 8
@@ -35,7 +35,7 @@ export const SEATS: Record<EaterId, { x: number; seat: number }> = {
   nick: { x: 0.9, seat: 0.46 },
 }
 export const SEAT_Z = -0.86
-export const EATER_NAMES: Record<EaterId, string> = { ji: 'Mommy', kaylee: 'You', nick: 'Daddy' }
+export const EATER_NAMES: Record<EaterId, string> = { ji: 'Mom', kaylee: 'You', nick: 'Dad' }
 
 /** Agong's take-away box, at the right end. Its lid stands open until two slices are in. */
 export const BOX = { x: 1.3, z: -0.16, w: 0.4, h: 0.1 }

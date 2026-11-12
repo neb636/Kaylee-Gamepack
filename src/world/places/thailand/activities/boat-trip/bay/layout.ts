@@ -32,12 +32,12 @@ export const TUNNEL = {
   z1: HONG.z + 15,
 }
 /** The roof over the canoe along the tunnel (meters above the water): low enough in the middle that everyone has to
- *  lie down (Daddy's horn bonks first, he's the tallest). */
+ *  lie down (Dad's horn bonks first, he's the tallest). */
 export function tunnelRoof(z: number) {
   const s = (TUNNEL.z0 - z) / (TUNNEL.z0 - TUNNEL.z1)
   if (s <= 0) return 3.4
   if (s >= 1) return 3.2
-  // Down slowly (about a canoe length between Daddy's bonk, Mommy's and Kaylee's), low for a while, then up to the
+  // Down slowly (about a canoe length between Dad's bonk, Mom's and Kaylee's), low for a while, then up to the
   // light.
   if (s < 0.45) return 3.4 - (3.4 - 1.15) * (s / 0.45)
   if (s < 0.8) return 1.15

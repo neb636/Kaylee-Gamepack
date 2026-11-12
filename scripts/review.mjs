@@ -15,7 +15,7 @@
 //   {
 //     "title": "The Barber Salon: new tools",
 //     "checkIn": "2 of 4: hear the script",                      // pick | hear | watch Kaylee | ship, or "fix"
-//     "kaylee": "Daddy wants a new look: she snips, combs and sprays his hair, then the mirror reveal.",
+//     "kaylee": "Dad wants a new look: she snips, combs and sprays his hair, then the mirror reveal.",
 //     "questions": ["Is the kids' 'Close enough!' funny or mean?", "..."],   // at most three, each answerable in a tap
 //     "tableReads": [["thailand", "mall.barber"]],
 //     "reels": [{ "name": "barber", "moments": ["barber"] }],      // reel.mjs names: qa.mjs motion runs or #/links~s

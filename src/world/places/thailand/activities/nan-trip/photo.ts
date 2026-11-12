@@ -1,9 +1,9 @@
 // The Nan road trip's photos, one for each place she went (plan: "Home"): drawn in code for the greybox, in the flat
 // outlined look (no words in them), 4:3 like the other trips' photos. Coming home, they fan out and she picks the one
-// for Agong's wall. `deck`: Mommy's photo on Stop Time Cafe's deck over the rice steps, a cloud on the ridge; `three`:
+// for Agong's wall. `deck`: Mom's photo on Stop Time Cafe's deck over the rice steps, a cloud on the ridge; `three`:
 // the family at the viewpoint with the giant 3 of the road behind them; `pizza`: the mushroom pizza with her pink
 // mushrooms; `salt`: the big pan in Bo Kluea, steaming, with her heap of white salt; `cup`: Kaylee on top of the
-// podium holding up the Nan Mountain Cup, with Mommy and Daddy cheering. (The look step may take real snapshots
+// podium holding up the Nan Mountain Cup, with Mom and Dad cheering. (The look step may take real snapshots
 // instead.) No three.js.
 import { photoColors } from '../../characters/style'
 import { blob, INK, unicorn } from '../../trip/postcard'
@@ -190,7 +190,7 @@ function salt(g: CanvasRenderingContext2D) {
 
 function cup(g: CanvasRenderingContext2D) {
   // The race ground: a blue sky with bunting, the podium in the middle, Kaylee on top holding the big gold Cup up,
-  // Mommy and Daddy cheering either side.
+  // Mom and Dad cheering either side.
   g.fillStyle = '#BFE3F2'
   g.fillRect(0, 0, W, H)
   for (const [x, y] of [[80, 70], [400, 54]]) blob(g, x, y, 50, 16, '#FFFFFF', 0)

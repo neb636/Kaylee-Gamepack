@@ -12,21 +12,21 @@
 //   2. Pick: grown clumps wiggle. Grab one and pull: it stretches and twists, then pops off and follows her finger; let
 //      go and it flies into her basket (a tap picks one too). Mist a bag she picked and it grows again. Keep spraying a
 //      grown one and it swells enormous and bouncy (a tap boings it). Six in the basket and they all go to lunch: the
-//      camera glides out to the table, Kaylee and Daddy hop onto their stools.
+//      camera glides out to the table, Kaylee and Dad hop onto their stools.
 //   pizza (the side verb): her basket sits by the pizza. Drag a mushroom onto the pizza and it stays where she puts it
 //      (a tap on the basket or the pizza puts the next one on for her). Basket empty: the oven glows; tap it and the
 //      aunty slides the pizza in, the fire roars, ding, out it comes golden. Tap the pizza and a slice (with the
 //      mushrooms she put on it) hops to the next plate, round the table; tap a plate and they munch. All six shared:
 //      the end card.
-// Silly instead of wrong: mist Daddy and a mushroom grows on his head (it gets bigger the more she sprays); mist the
+// Silly instead of wrong: mist Dad and a mushroom grows on his head (it gets bigger the more she sprays); mist the
 // dog and she wakes and shakes; the giant mushroom. Things to poke: the aunty, the gecko, the dog, the drip, the sign,
-// the basket, the view, Kaylee and Daddy (and Mommy at the table).
+// the basket, the view, Kaylee and Dad (and Mom at the table).
 // Ambient life: the gecko scuttles now and then, the dog snores a bubble, the roof drips, two moths circle the bulb,
 // the low cloud drifts along the valley, the flower on the table nods.
 // Talk (lines.ts L.nan.mushrooms): the farmer aunty says hello as she arrives, then Sparkle says each round's one line
 // as it begins and, after ~8 s with nothing done (counted from 3 s after the round's start), what to do; the aunty,
-// Daddy and Mommy react, each thing once (a reaction is dropped while Sparkle talks rather than heard late); tapping
-// the aunty or Daddy says their lines in turn; the sign tells a fact.
+// Dad and Mom react, each thing once (a reaction is dropped while Sparkle talks rather than heard late); tapping
+// the aunty or Dad says their lines in turn; the sign tells a fact.
 import { CatmullRomCurve3, Color, Group, IcosahedronGeometry, Mesh, MeshBasicMaterial, OctahedronGeometry, Plane, TubeGeometry, Vector3, type BufferGeometry, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, speakingVoice, spendHint, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
@@ -271,7 +271,7 @@ export class MushroomFarm extends Stage {
   private drips: { o: Group; at: Vector3; t: number; period: number }[] = []
   private geckoNext = 6
   private snore = 0
-  // ---- Talk: lines said once, Sparkle's hints this round, the aunty's and Daddy's tap lines in turn ----
+  // ---- Talk: lines said once, Sparkle's hints this round, the aunty's and Dad's tap lines in turn ----
   private told = new Set<string>()
   private lastSay = -99
   /** Sparkle's hints count quiet time from here (a round's start and its line), not from her last touch. */
@@ -293,14 +293,14 @@ export class MushroomFarm extends Stage {
     this.table = buildTable(bag)
     scene.add(this.table.root)
     this.farmerLife = new FaceLife(this.house.farmer)
-    // ---- The family: Kaylee and Daddy in the house, Mommy waiting at the table ----
+    // ---- The family: Kaylee and Dad in the house, Mom waiting at the table ----
     const { kaylee, members } = this.makeFamily(['ji', 'nick'])
     this.kaylee = kaylee
     this.nick = members.get('nick')!
     this.ji = members.get('ji')!
     for (const c of [kaylee, this.nick, this.ji]) scene.add(c.root)
     this.put(this.ji, SEATS.ji.x, SEATS.ji.seat, SEAT_Z, 'sit', 0)
-    // Daddy's mushroom hat (it grows when she mists him).
+    // Dad's mushroom hat (it grows when she mists him).
     this.hat = this.kit.one('grey')
     const r = this.nick.rig
     this.hat.position.set(0, r.face.headY + r.face.R * 0.78, 0)
@@ -500,7 +500,7 @@ export class MushroomFarm extends Stage {
     }
   }
 
-  /** Kaylee and Daddy on their stools (Mommy is there already). */
+  /** Kaylee and Dad on their stools (Mom is there already). */
   private seatAll(now: boolean) {
     const seat = (c: Avatar | Member, e: EaterId, delay: number) => {
       if (now) this.put(c, SEATS[e].x, SEATS[e].seat, SEAT_Z, 'sit', 0)
@@ -650,7 +650,7 @@ export class MushroomFarm extends Stage {
     }
   }
 
-  /** Off to lunch: the camera glides out to the table, Kaylee and Daddy hop onto their stools. */
+  /** Off to lunch: the camera glides out to the table, Kaylee and Dad hop onto their stools. */
   private toTable() {
     sfx.allGrown()
     this.round = 'pizza'
@@ -1252,7 +1252,7 @@ export class MushroomFarm extends Stage {
     f.root.position.y = fh * 0.18
     f.root.scale.set(1 + 0.06 * fh, 1 - 0.04 * fh, 1 + 0.06 * fh)
     this.farmerLife.update(dt)
-    // ---- Daddy's mushroom hat ----
+    // ---- Dad's mushroom hat ----
     this.hatShown += (this.hatK - this.hatShown) * Math.min(1, dt * 6)
     this.hat.visible = this.hatShown > 0.02
     this.hat.scale.setScalar(Math.max(0.001, this.hatShown * 2.4 * (1 + 0.06 * Math.sin(t * 5))))
@@ -1440,7 +1440,7 @@ export class MushroomFarm extends Stage {
     }
   }
 
-  /** Mist on Daddy grows a mushroom on his head; on the dog, she wakes and shakes; on the aunty, she laughs. */
+  /** Mist on Dad grows a mushroom on his head; on the dog, she wakes and shakes; on the aunty, she laughs. */
   private sillySpray(dt: number) {
     const near = (w: Vector3, px: number) => {
       const s = this.screen(w)

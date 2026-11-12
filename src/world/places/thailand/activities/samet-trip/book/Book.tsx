@@ -1,4 +1,4 @@
-// Mommy's phone and Kaylee's animal book, on screen (greybox 3 of samet-trip.md). Two big buttons in the bottom-right
+// Mom's phone and Kaylee's animal book, on screen (greybox 3 of samet-trip.md). Two big buttons in the bottom-right
 // corner: the pink phone (tap: the screen becomes the phone's camera, a pink frame round it; tap again to put it away)
 // and the book. A photo flashes, then flies into the book (or, with no animal in it, into the phone); a new animal's
 // name pops up over it ("A hornbill!") and a good photo (the animal big in the middle) gets a gold frame. The book has a
@@ -106,7 +106,7 @@ export function PhoneAndBook(p: Props) {
           {full && <span className="sb-star">{'⭐'}</span>}
         </motion.button>
         <motion.button
-          aria-label={p.phone ? "Put Mommy's phone away" : "Mommy's phone"}
+          aria-label={p.phone ? "Put Mom's phone away" : "Mom's phone"}
           aria-pressed={p.phone}
           data-anchor="phone"
           className={`sb-btn sb-phone${p.phone ? ' on' : ''}${p.glow && !p.phone ? ' glow' : ''}`}

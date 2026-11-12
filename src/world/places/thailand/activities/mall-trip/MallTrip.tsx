@@ -1,14 +1,14 @@
 // The mall day at ICONSIAM (plan: planning/around-the-world/thailand/mall-trip.md). So far, in shapes and without
 // voices: HarborLand's hall (hall/, sections hall and hungry), where she walks between the ways in; the mini games
-// behind them: the Vet Clinic (games/vet/, section vet), the Barber Salon (games/barber/, section barber: Daddy keeps
+// behind them: the Vet Clinic (games/vet/, section vet), the Barber Salon (games/barber/, section barber: Dad keeps
 // the hairdo she gives him, `hair`, in the hall and at the pizza table), Cafe & Cake (games/cafe/, section cafe), the
 // Racing Slide (games/race/, section race), Little Land (games/blocks/, section blocks), the Golden Mountain
 // (games/mountain/, section mountain), Muay Thai (games/boxing/, section boxing), the Sky Pod (games/skypod/,
 // section skypod) and the Big Frame (harborland/, section frame: `at` follows the level she's
 // on); and the pizza toy at The Pizza Company (pizza/, sections menu and
 // share). Each mini game is a sticker on her sock band in the corner (`games`), and a big ↩️ takes her back out to the
-// hall. After every sticker (or fifteen minutes) Daddy's tummy rumbles and Mommy asks about pizza. The trip around it
-// (Loop.tsx): Mommy asks where to (invite), the goodbye and Mommy's grey Veloz (goodbye), ICONSIAM, the lift and
+// hall. After every sticker (or fifteen minutes) Dad's tummy rumbles and Mom asks about pizza. The trip around it
+// (Loop.tsx): Mom asks where to (invite), the goodbye and Mom's grey Veloz (goodbye), ICONSIAM, the lift and
 // the counter where she picks her socks (arrive), and home once Agong's box is shut at the table (home: the box for
 // Agong, the photo on his wall, then the stamp, onDone). A day pass covers the change between legs. The trip saves
 // after each leg; saying yes to the mall again offers to keep going, and after a whole day 🛝 or 🍕 straight there.
@@ -55,7 +55,7 @@ const BAND: { id: GameDoor; icon: string }[] = (['vet', 'cafe', 'barber', 'race'
 const bandOf = (games: GameId[]): GameDoor[] => BAND.map((b) => b.id).filter((id) => games.includes(id))
 /** The way in each section is behind (where she comes back out). */
 const DOOR_OF: Partial<Record<MallSection, DoorId>> = { vet: 'vet', cafe: 'cafe', race: 'race', barber: 'barber', frame: 'frame', blocks: 'blocks', mountain: 'mountain', boxing: 'boxing', skypod: 'skypod' }
-/** Daddy gets hungry once every sticker is on her band (so no mini game gets missed), or after this long in HarborLand. */
+/** Dad gets hungry once every sticker is on her band (so no mini game gets missed), or after this long in HarborLand. */
 const HUNGRY_MS = 15 * 60_000
 /** The trip's legs around HarborLand (Loop.tsx). */
 const LOOP: MallSection[] = ['invite', 'goodbye', 'arrive', 'home']
@@ -66,14 +66,14 @@ interface Progress {
   socks: string
   games: string
   hair: string
-  /** Whole days done, Mommy's question to the photo on Agong's wall (after the first: 🛝 or 🍕 straight there). */
+  /** Whole days done, Mom's question to the photo on Agong's wall (after the first: 🛝 or 🍕 straight there). */
   trips?: number
 }
 
 interface Props {
-  /** ✋ Not yet on Mommy's card. */
+  /** ✋ Not yet on Mom's card. */
   onExit?: () => void
-  /** Another trip on Mommy's card (🚤 the boat trip): that one instead. */
+  /** Another trip on Mom's card (🚤 the boat trip): that one instead. */
   onTrip?: (id: string) => void
   /** Home, the photo on the wall: the stamp. */
   onDone?: () => void
@@ -113,9 +113,9 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
   const [pizza, setPizza] = useState(() => param('pizza') as PizzaId)
   const [at, setAt] = useState<At>(() => (legacy === 'dragon' ? 'top' : (param('at') as At)))
   const [shared, setShared] = useState(() => Number(param('shared')))
-  // Daddy's hairdo from the barber: he keeps it for the rest of the trip.
+  // Dad's hairdo from the barber: he keeps it for the rest of the trip.
   const [hair, setHair] = useState(() => param('hair'))
-  // Daddy's tummy: how many times she's gone into a mini game, and when "More play" said not yet.
+  // Dad's tummy: how many times she's gone into a mini game, and when "More play" said not yet.
   const since = useRef(performance.now())
   const [visits, setVisits] = useState(0)
   const [notYet, setNotYet] = useState(-1)
@@ -195,7 +195,7 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
       moving.current = false
     }, 2300)
   }
-  /** 🛝🍕 on Mommy's card: straight to the goodbye; or, with a day half done or after her first whole day, where to
+  /** 🛝🍕 on Mom's card: straight to the goodbye; or, with a day half done or after her first whole day, where to
    *  start (🚗 the whole day, the next leg's icon to keep going, 🛝 straight to HarborLand, 🍕 straight to the table). */
   const yes = () => {
     if (moving.current) return
@@ -209,7 +209,7 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
   const choose = (next: MallSection, resume: boolean) => {
     sounds.pop()
     setPass(null)
-    // Her socks from last time; and, keeping going, her stickers and Daddy's hairdo too.
+    // Her socks from last time; and, keeping going, her stickers and Dad's hairdo too.
     if (next !== 'goodbye') setSocks(saved.socks || 'pink')
     if (resume) {
       setGames(list(saved.games))
@@ -217,7 +217,7 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
     }
     setTimeout(() => go(next), 50)
   }
-  // A yes in the house (Mommy's card there, 🛝🍕): no asking again.
+  // A yes in the house (Mom's card there, 🛝🍕): no asking again.
   useEffect(() => {
     if (section !== 'invite' || !justSaidYes('mall-trip')) return
     saidYes.at = 0
@@ -234,7 +234,7 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
   /** In through a way in. */
   const goIn = (door: GameDoor) => {
     setVisits((v) => v + 1)
-    // (The barber starts with Daddy in the chair, whatever round another mini game was on.)
+    // (The barber starts with Dad in the chair, whatever round another mini game was on.)
     if (door === 'barber') setRound(1)
     if (door === 'frame') setAt('in')
     setSection(door)

@@ -1,5 +1,5 @@
-// The window seat (plan: thailand/boat-trip.md, "The window seat"): Kaylee rides by the window, Mommy in the middle,
-// Daddy on the aisle (asleep, mouth open). The pilot flies; she plays with the cabin, Toca style. The camera stands in
+// The window seat (plan: thailand/boat-trip.md, "The window seat"): Kaylee rides by the window, Mom in the middle,
+// Dad on the aisle (asleep, mouth open). The pilot flies; she plays with the cabin, Toca style. The camera stands in
 // the aisle in front of their row, so all three faces show and the round windows run along the wall beside them; the
 // cabin is a whole little toy cabin (rows of seats, the overhead bins, the galley curtain at the back), and what's
 // outside the windows is a real little world: the airport and the runway, fat toon clouds, Sparkle's balloon floating
@@ -10,11 +10,11 @@
 // - fly: fold the tray down and press the call button (ding: the flight attendant rolls her trolley up and hands over
 //   juice and a cookie; again and again, they pile up), the shade, the reading light ("Night night!", and Kaylee
 //   pretends to snore), the air vent (it blows her mane), the seat-back screen (the little plane going down the
-//   elephant's trunk; again: cartoons), Daddy (snorts awake), Mommy (shares her snack). Then the clouds part and the
+//   elephant's trunk; again: cartoons), Dad (snorts awake), Mom (shares her snack). Then the clouds part and the
 //   camera leans out: all of Thailand below, an elephant's head with a long trunk, Kaylee's crayon ear and eye on it.
 // - land: seatbelts on, the sea and the first rock islands come up, bump bump roll, and everyone claps. Then a white
 //   flash and Krabi: the Thai-roofed arrivals arch and the songthaew, which drives them off to the pier (3 seconds).
-//   On the boat trip with Baan Chang open (`fork`), it stops at the signpost down the road instead and Daddy asks
+//   On the boat trip with Baan Chang open (`fork`), it stops at the signpost down the road instead and Dad asks
 //   "Where to?" (`events.asking`: the trip shows his card of postcards, WhereTo.tsx): the elephants turn it up the
 //   side road (to Baan Chang), the longtail drives on to the pier (`choose`).
 //   The Nan road trip lands in the mountains instead (`landing: 'nan'`): a green valley with rice fields and a ring of
@@ -55,8 +55,8 @@ export const PLANE_ANCHORS: AnchorInfo[] = [
   { id: 'screen', label: 'Seat-back screen', kind: 'thing' },
   { id: 'teddy', label: 'Teddy', kind: 'thing' },
   { id: 'attendant', label: 'Flight attendant', kind: 'thing' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
   { id: 'family:kaylee', label: 'You', kind: 'family' },
   { id: 'balloon', label: "Sparkle's balloon", kind: 'thing' },
   { id: 'songthaew', label: 'Songthaew', kind: 'thing' },
@@ -113,7 +113,7 @@ const MAX_SNACKS = 14
 
 type Ev = LegEvents & {
   flash?(): void
-  /** At the signpost: Daddy asks "Where to?" (true) until she picks (false). */
+  /** At the signpost: Dad asks "Where to?" (true) until she picks (false). */
   asking?(on: boolean): void
 }
 type Who = 'kaylee' | 'ji' | 'nick'
@@ -142,7 +142,7 @@ export class PlaneRide extends Stage {
   private teddy: Group | null = null
   private snacks: Group[] = []
   private attendant: { rig: Rig; life: FaceLife; root: Group; x: number; queue: number; wait: number; hand: number; served: number }
-  /** Little Zs floating up from whoever is asleep (Daddy; Kaylee pretending). */
+  /** Little Zs floating up from whoever is asleep (Dad; Kaylee pretending). */
   private zs: { g: Group; t: number; who: Who }[] = []
   private zMesh: Group | null = null
   private sec: FlySection
@@ -295,7 +295,7 @@ export class PlaneRide extends Stage {
     wallMesh.position.z = WALL_Z - 0.14
     cabin.add(wallMesh)
     // Seats: chubby lavender airline seats with pink-edged headrest covers and armrests. Theirs tilt (pressing back
-    // at takeoff, Daddy dozing); the others are scenery.
+    // at takeoff, Dad dozing); the others are scenery.
     const seat = (x: number, z: number, c = '#B9A6F5') => [
       P.rbox(0.62, 0.18, 0.58, 0.07, c, { at: [x, 0.39, z] }),
       P.rbox(0.18, 1.02, 0.6, 0.07, c, { at: [x + 0.34, 0.86, z], rot: [0, 0, -0.12] }),
@@ -667,7 +667,7 @@ export class PlaneRide extends Stage {
         } else this.riders.nick.react('wave')
         return
       case 'family:ji':
-        // Mommy shares her snack.
+        // Mom shares her snack.
         this.riders.ji.react('hop')
         if (this.trayOpen && this.snacks.length < MAX_SNACKS) {
           this.addSnack('cookie', this.seats.ji.getWorldPosition(new Vector3()).setY(1.2))
@@ -788,7 +788,7 @@ export class PlaneRide extends Stage {
     let tilt = 0
     let lean = 0
     if (sec === 'takeoff') {
-      // Waits for her seatbelt (or Mommy clicks it), then rolls faster and faster, and up.
+      // Waits for her seatbelt (or Mom clicks it), then rolls faster and faster, and up.
       if (this.roll < 0) {
         this.beltT += dt
         if (this.belt && this.beltT > 0.8) this.roll = 0
@@ -965,7 +965,7 @@ export class PlaneRide extends Stage {
     this.stepFaces(dt, t)
   }
 
-  /** On top of the usual life: Daddy asleep with his mouth open (and Kaylee pretending), the Zs, the claps at Krabi. */
+  /** On top of the usual life: Dad asleep with his mouth open (and Kaylee pretending), the Zs, the claps at Krabi. */
   private stepFaces(dt: number, t: number) {
     const dad = this.riders.nick.rig
     const dozing = this.dad.asleep && this.drive < 0
@@ -1089,7 +1089,7 @@ export class PlaneRide extends Stage {
         this.events.done('pier')
         return
       }
-      // (It waits at the signpost for her pick: ⏩ only gets it there, and Daddy asks again.)
+      // (It waits at the signpost for her pick: ⏩ only gets it there, and Dad asks again.)
       const go = this.forkGo ?? (this.fork === 'chang' ? 'chang' : null)
       if (go) {
         this.forkGo = go
@@ -1222,7 +1222,7 @@ export class PlaneRide extends Stage {
     this.riders.ji.setWind(wind)
   }
 
-  /** She picked a postcard on Daddy's card: it turns that way. */
+  /** She picked a postcard on Dad's card: it turns that way. */
   choose(go: 'chang' | 'pier') {
     if (this.fork !== 'ask' || this.forkGo) return
     this.events.asking?.(false)
@@ -1253,7 +1253,7 @@ export class PlaneRide extends Stage {
       // (At the fork: the songthaew and the signpost, the side road between them.)
       if (this.fork !== 'pier') {
         const cx = ARRIVAL_AT.x + (tall ? Math.min(x, this.arrival.forkX) + 1.3 : Math.min(x, this.arrival.forkX) * 0.75 + 1.0)
-        // (While Daddy asks, the road in front goes in too, so his card of postcards doesn't cover the family.)
+        // (While Dad asks, the road in front goes in too, so his card of postcards doesn't cover the family.)
         const ask = this.fork === 'ask' && this.forkWait >= 0 && !this.forkGo ? 1 : 0
         return { center: new Vector3(cx, (tall ? 2.0 : 1.8) - ask * (tall ? 0.9 : 1.2), ARRIVAL_AT.z - 0.6), half: new Vector3(tall ? 2.9 : 4.6, (tall ? 2.4 : 2.0) + ask * (tall ? 0.9 : 1.2), 1.8), yaw: 4, pitch: 9, minDist: 5 }
       }

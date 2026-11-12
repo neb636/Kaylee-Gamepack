@@ -1,17 +1,17 @@
 // The sunset at the driftwood tree on Ao Prao (plan: planning/around-the-world/thailand/samet-trip.md, step 9, the
 // finale's first beat), on the island's real sunset beach (island/layout.ts FRAMES.prao) after all four pink flags.
 //
-// Kaylee, Mommy and Daddy stand by the big driftwood tree watching the sun go down over the sea. Two things to do, in
+// Kaylee, Mom and Dad stand by the big driftwood tree watching the sun go down over the sea. Two things to do, in
 // any order (and everything pokes):
 //   - the sun: she grabs it and pulls it down to the sea. The sky goes gold, then pink, then purple as it sinks; when
 //     it touches the water it plops in with a glint, the night falls by itself, the stars come out and the lanterns
-//     light up. Then Daddy calls everyone to the fire show (the 🔥 button).
-//   - Mommy's photo: tap Mommy and the three of them turn round, squeeze together and smile for her phone, the sunset
-//     behind them (the photo for Agong's wall; if she never takes it, Mommy snaps one as the sun touches the sea).
+//     light up. Then Dad calls everyone to the fire show (the 🔥 button).
+//   - Mom's photo: tap Mom and the three of them turn round, squeeze together and smile for her phone, the sunset
+//     behind them (the photo for Agong's wall; if she never takes it, Mom snaps one as the sun touches the sea).
 // After dark, a tap on the sky makes a star twinkle (now and then a shooting star).
 //
-// Talk (lines.ts L.samet.finale.sunset): Daddy as it opens, then Sparkle's one instruction; the fact the first time she
-// taps the sun; Mommy's photo; after a while with nothing done Sparkle says what to do (spendHint). The screen's
+// Talk (lines.ts L.samet.finale.sunset): Dad as it opens, then Sparkle's one instruction; the fact the first time she
+// taps the sun; Mom's photo; after a while with nothing done Sparkle says what to do (spendHint). The screen's
 // TripGuide speaks them and shows the words for Dad. The feel numbers are knobs (?feel=1).
 import { CircleGeometry, Color, Euler, Fog, Group, Mesh, MeshBasicMaterial, Quaternion, Raycaster, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { clamp, spendHint, type Line } from '../../../../../../sdk'
@@ -56,7 +56,7 @@ export interface SunsetStart {
   flags: StopId[]
 }
 export interface SunsetEvents {
-  /** The shutter clicked (the screen flashes); `src` is Mommy's photo of the three of them. */
+  /** The shutter clicked (the screen flashes); `src` is Mom's photo of the three of them. */
   photo(src: string): void
   /** The night has fallen: the way to the fire show. */
   night(): void
@@ -87,14 +87,14 @@ const TREE = (() => {
   const a = STOPS.hideseek.at
   return { u: (a.x - F.x) * F.t.x + (a.z - F.z) * F.t.z, v: (a.x - F.x) * F.n.x + (a.z - F.z) * F.n.z }
 })()
-/** The three of them beside it, toward the sea (Kaylee in the middle, Mommy with her phone, Daddy). */
+/** The three of them beside it, toward the sea (Kaylee in the middle, Mom with her phone, Dad). */
 const SPOTS = { kaylee: { u: TREE.u + 2.6, v: TREE.v + 5.2 }, ji: { u: TREE.u + 1.4, v: TREE.v + 4.9 }, nick: { u: TREE.u + 3.9, v: TREE.v + 4.8 } }
 
 export const SUNSET_ANCHORS: AnchorInfo[] = [
   { id: 'sun', label: 'The sun', kind: 'thing' },
   { id: 'kaylee', label: 'You', kind: 'thing' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
   { id: 'tree', label: 'The driftwood tree', kind: 'thing' },
 ]
 
@@ -121,7 +121,7 @@ export class Sunset implements World3D {
   private kaylee: Avatar
   private ji: Member
   private nick: Member
-  /** Mommy's phone, in her right hand: down at her side while they watch, up at arm's length for the selfie. */
+  /** Mom's phone, in her right hand: down at her side while they watch, up at arm's length for the selfie. */
   private phone: Group
   /** Turned round for the photo (0 = watching the sunset, 1 = facing the phone). */
   private turn = 0
@@ -187,7 +187,7 @@ export class Sunset implements World3D {
     const n = this.L(SPOTS.nick.u, SPOTS.nick.v)
     this.nick.place(n.x, n.y, n.z, this.seaYaw * DEG)
     scene.add(this.kaylee.root, this.ji.root, this.nick.root)
-    // Mommy's phone in her hand (a lavender case, the camera on the back, the screen toward her).
+    // Mom's phone in her hand (a lavender case, the camera on the back, the screen toward her).
     const H = this.ji.height
     this.phone = solid(
       merge([
@@ -287,7 +287,7 @@ export class Sunset implements World3D {
     ;(this.sun.material as MeshBasicMaterial).color.set(SUN_GOLD).lerp(SUN_PINK, up)
     ;(this.halo.material as MeshBasicMaterial).color.set(HALO_GOLD).lerp(HALO_PINK, up)
 
-    // ---- The photo pose: turned round to Mommy's phone for a moment, then back to the sunset.
+    // ---- The photo pose: turned round to Mom's phone for a moment, then back to the sunset.
     if (this.posing >= 0) {
       this.posing += dt
       const p = this.posing
@@ -316,7 +316,7 @@ export class Sunset implements World3D {
       m.update(dt, t)
     }
     if (this.turn > 0.05) {
-      // Mommy's phone up at arm's length; everyone smiles at it.
+      // Mom's phone up at arm's length; everyone smiles at it.
       const r = this.ji.rig
       // Out to the side and up, at arm's length, so the phone clears her (and their heads fit in its picture).
       r.armR.rotation.set(-1.75 * this.turn, 0, 0.85 * this.turn)
@@ -356,7 +356,7 @@ export class Sunset implements World3D {
     this.sun.lookAt(this.rig.camera.position)
     this.sun.scale.setScalar(SUN.size)
     if (!this.greeted && t > 0.6) {
-      // Daddy, then Sparkle's one instruction (she waits her turn behind him).
+      // Dad, then Sparkle's one instruction (she waits her turn behind him).
       this.greeted = true
       this.say(S.look)
       this.say(S.pull)
@@ -375,7 +375,7 @@ export class Sunset implements World3D {
     const near = this.rig.camera.position.clone().lerp(s, 0.25)
     this.glint.burst(near.x, 0.2, near.z, 40, 6, 5, 0.6)
     this.kaylee.react('hop')
-    // No photo yet: Mommy snaps one as the sun touches the sea.
+    // No photo yet: Mom snaps one as the sun touches the sea.
     if (!this.photos) {
       this.photoPending = true
       this.say(S.photo)

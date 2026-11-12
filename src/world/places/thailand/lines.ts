@@ -132,7 +132,7 @@ export const L = {
     putter: hello('putter', 'Hi! Hee hee!', ['Peep peep!']),
   } as Record<string, { hi: Line; again: Line[] }>,
 
-  // Mommy's and Daddy's normal greetings refer to the room or going inside.
+  // Mom's and Dad's normal greetings refer to the room or going inside.
   familyPhoto: { ji: ji(`I love you!`), nick: nick('High five!') },
 
   // Kaylee's wardrobe in her room (activities/hub/wardrobe/, plan: thailand/wardrobe.md). Sparkle says what to do the
@@ -187,7 +187,7 @@ export const L = {
       'pot-cream': 'Cream paint!',
     } as Record<string, string>,
     // The family notice her look the first time she walks up to them in it (hat, glasses, wings, outfit, shoes, paint),
-    // once per change. Mommy: a crown has its own line; Daddy: so do wings.
+    // once per change. Mom: a crown has its own line; Dad: so do wings.
     notice: {
       ji: notice(ji, [`Ooh, what a pretty hat!`, `Ooh, fancy glasses!`, `Ooh, so pretty!`, `Ooh, what a pretty outfit!`, `Ooh, nice shoes!`, `Ooh, new colors!`]),
       nick: notice(nick, ['Wow, cool hat!', 'Cool shades!', 'Whoa, cool!', 'Whoa, what an outfit!', 'Cool shoes!', 'Whoa, new colors!']),
@@ -216,7 +216,7 @@ export const L = {
     } as Record<string, Record<string, Line>>,
   },
 
-  // The boat trip's way there (trip/legs/): Mommy asks, packing, the goodbye, the airport, the window seat. Each line
+  // The boat trip's way there (trip/legs/): Mom asks, packing, the goodbye, the airport, the window seat. Each line
   // is said once, for something new (or a hint after a while with nothing done). The officer and the flight attendant
   // are background figures with a line or two each. Kaylee never talks: she giggles.
   trip: {
@@ -225,7 +225,7 @@ export const L = {
       later: ji('OK! Tell me when!'),
       // The house only offers the mall now (the other trips start on the Thailand map).
       mall: ji('Shall we go to the mall?'),
-      // Daddy on the street, when she taps him (the hub's quick way to a trip).
+      // Dad on the street, when she taps him (the hub's quick way to a trip).
       daddy: {
         question: nick(`Ready for a trip?`),
         where: nick(`Where do you want to go?`),
@@ -242,8 +242,8 @@ export const L = {
       gan: by('gan')('Five more minutes...'),
       pillow: ji('Yawn... so sleepy!'),
       fan: ji('The fan blew it open!'),
-      sunscreen: ji('Mommy always packs sunscreen!'),
-      hat: ji("Here's Mommy's spare sun hat!"),
+      sunscreen: ji('Mom always packs sunscreen!'),
+      hat: ji("Here's Mom's spare sun hat!"),
       // Her own shady hat (the cap, the cowboy hat...) is a good sun hat: no spare.
       goodHat: ji('Good hat!'),
     },
@@ -285,11 +285,11 @@ export const L = {
     },
   },
 
-  // The boat trip in Phang Nga Bay (activities/boat-trip/bay/). Daddy and Mommy react in their own voices, short; the
+  // The boat trip in Phang Nga Bay (activities/boat-trip/bay/). Dad and Mom react in their own voices, short; the
   // village kids share one kid voice; Sparkle gives the few instructions and the facts (each fact also plays when she
   // taps its photo or sticker in the trip album). Kaylee never talks: she giggles.
   bay: {
-    // Daddy.
+    // Dad.
     ribbons: nick('Our longtail boat! Tie on ribbons for good luck!'),
     pai: nick('Pai!'),
     whereTo: nick('Where to, Captain?'),
@@ -300,7 +300,7 @@ export const L = {
     pose: nick('Everybody, pose!'),
     cheese: nick('One, two, three, cheese!'),
     backIn: nick('Back in the boat!'),
-    // Mommy.
+    // Mom.
     whoa: ji('Whoa!'),
     hat: ji('My hat!'),
     dizzy: ji('So dizzy!'),
@@ -351,7 +351,7 @@ export const L = {
   },
 
   // The boat race (activities/boat-trip/race/): through the rainbow gate in the bay, three laps round a lagoon against
-  // the village kids and a cheeky macaque. Sparkle gives the few instructions and the countdown; Mommy and Daddy cheer
+  // the village kids and a cheeky macaque. Sparkle gives the few instructions and the countdown; Mom and Dad cheer
   // in their own voices; the kids tease and cheer; the macaque only chatters. She always wins, and the trophy says so.
   race: {
     gate: 'A boat race! Drive through the rainbow gate!',
@@ -364,7 +364,7 @@ export const L = {
     back: onDevice('Tap the boat to go back to the bay!', 'Click the boat to go back to the bay!'),
     // The trophy room speaks this when she taps her race trophy (it's saved there).
     trophyRoom: `Boat Race Champion! From Thailand.`,
-    // Daddy and Mommy, in the boat with her.
+    // Dad and Mom, in the boat with her.
     go: nick('Go, go, go!'),
     banana: nick('Whoa! A banana!'),
     almost: nick('Almost there!'),
@@ -378,15 +378,15 @@ export const L = {
   },
 
   // Baan Chang Cafe in Krabi (activities/boat-trip/chang/, plan: thailand/baan-chang.md): the sign, the chocolate milk,
-  // the boardwalk and the elephants. The elephants don't talk (rumbles, trumpets, squeals); Daddy and Mommy react in
-  // their own voices, and Sparkle says the names, what's new, and what to do after a while with nothing done. Daddy's
+  // the boardwalk and the elephants. The elephants don't talk (rumbles, trumpets, squeals); Dad and Mom react in
+  // their own voices, and Sparkle says the names, what's new, and what to do after a while with nothing done. Dad's
   // "Where to, Captain Kaylee?", "Everybody, pose!", "One, two, three, cheese!" and "Pai!" are the bay's.
   chang: {
-    // Daddy.
+    // Dad.
     bananas: nick('Bananas for the elephants!'),
     likes: nick('He likes you!'),
     coffee: nick('Ahh! Thank you!'),
-    // Mommy.
+    // Mom.
     look: ji('Look! Elephants!'),
     hiLamyai: ji('Hi, Lamyai!'),
     milk: ji("Hey! That's your chocolate milk!"),
@@ -452,7 +452,7 @@ export const L = {
   nan: {
     // The rice farm under Stop Time Cafe (activities/nan-trip/rice/, plan: thailand/nan-rice.md). Lung Kham, the farmer
     // (a monkey: "lung" is uncle), needs a helper: he says what each round is for, Sparkle then says what to do and, after
-    // a while with nothing done, says it again; Lung and Daddy (on the farm) and Mommy (on the deck) react in their own
+    // a while with nothing done, says it again; Lung and Dad (on the farm) and Mom (on the deck) react in their own
     // voices. Kaylee never talks: she giggles.
     rice: {
       // Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.
@@ -518,9 +518,9 @@ export const L = {
         thresh: onDevice('Tap to bang the rice!', 'Click to bang the rice!'),
         share: onDevice('Tap the rice to share it!', 'Click the rice to share it!'),
         eat: onDevice('Tap the sticky rice!', 'Click the sticky rice!'),
-        photo: onDevice('Tap Mommy for a photo!', 'Click Mommy for a photo!'),
+        photo: onDevice('Tap Mom for a photo!', 'Click Mom for a photo!'),
       },
-      // Daddy on the farm.
+      // Dad on the farm.
       planted: nick('Look at those rows!'),
       wet: nick("Hey! I'm all wet!"),
       hat: nick('A straw hat! Thank you!'),
@@ -531,16 +531,16 @@ export const L = {
       where: nick('Where did you go?'),
       lots: nick('Look at all that rice!'),
       coffee: nick('Mmm, coffee.'),
-      // Tap Daddy on the farm (in turn).
-      tap: [nick('Go, farmer!'), nick('Splish, splash!'), nick('Daddy is watching!')],
-      // Mommy on the deck.
+      // Tap Dad on the farm (in turn).
+      tap: [nick('Go, farmer!'), nick('Splish, splash!'), nick('Dad is watching!')],
+      // Mom on the deck.
       hi: ji('You grew this sticky rice!'),
       aroi: ji('Aroi mak!'),
       smile: ji(`Smile!`),
-      // The rice farm's video, after Mommy's photo on the deck (rice/video.ts).
+      // The rice farm's video, after Mom's photo on the deck (rice/video.ts).
       video: 'Want to see real farmers grow rice?',
     },
-    // The Nan map (map/): Sparkle's first line, her hint, and Mommy after two stops and after all three.
+    // The Nan map (map/): Sparkle's first line, her hint, and Mom after two stops and after all three.
     map: {
       first: `Where shall we go first?`,
       hint: onDevice('Tap a place to drive there!', 'Click a place to drive there!'),
@@ -548,7 +548,7 @@ export const L = {
       home: ji('Time to fly home!'),
       laos: 'Over there is Laos, another country!',
     },
-    // The mountain roads (drive/): Mommy drives and says the road lines, Daddy reacts, Sparkle says what's new.
+    // The mountain roads (drive/): Mom drives and says the road lines, Dad reacts, Sparkle says what's new.
     drive: {
       steer: onDevice(`Steer the car with your finger!`, `Click and drag to steer the car!`),
       cloud: "We're driving into a cloud!",
@@ -580,10 +580,10 @@ export const L = {
       back: [nick("We're back!"), ji('Phew!'), nick('Again! Again!'), ji('Back on the road!')],
       grass: [ji('Oh no, the grass!'), nick('Bumpy bumpy bumpy!'), ji('Back on the road!'), nick("Moo! We're a cow!")],
       wiggle: [nick('Wibbly wobbly!'), ji('Silly driving!'), nick('My tummy!')],
-      // Tap Daddy in the car (in turn).
+      // Tap Dad in the car (in turn).
       tap: [nick('Great driving!'), nick('Wheee! Bumpy!'), nick('Are we there yet?')],
     },
-    // Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.
+    // Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Dad react, Sparkle says what's new.
     mushrooms: {
       mist: `Spray the bags!`,
       pick: 'Pull the mushrooms off!',
@@ -606,7 +606,7 @@ export const L = {
       dad: [nick('Spray me again!'), nick('So many mushrooms!')],
       share: ji('A slice for everyone!'),
     },
-    // Bo Kluea's salt wells (salt/): the salt aunty (a pony) and Daddy react, Sparkle says what's new.
+    // Bo Kluea's salt wells (salt/): the salt aunty (a pony) and Dad react, Sparkle says what's new.
     salt: {
       dip: `Dip the bucket in the well!`,
       fire: 'Put a log on the fire!',
@@ -630,9 +630,9 @@ export const L = {
     // The Nan Mountain Cup (activities/nan-trip/cup/, plan: thailand/nan-cup.md): a kart race on three mountain tracks
     // against three Nan locals (cast.json): Grandma Taeng the tortoise, Pao the hornbill postman and Moon the sun bear
     // honey seller. Sparkle says what's new and counts down in Thai; the rivals tease, bump and are good sports in their
-    // own voices; Mommy and Daddy cheer from the grandstand. Kaylee never talks: she giggles.
+    // own voices; Mom and Dad cheer from the grandstand. Kaylee never talks: she giggles.
     cup: {
-      // Daddy, as the city road pulls in at the race ground.
+      // Dad, as the city road pulls in at the race ground.
       arrive: nick('Look! A race!'),
       // Sparkle at the board, the first time this visit (and the stuck hint, glow first).
       board: onDevice('Tap a track to race!', 'Click a track to race!'),
@@ -666,7 +666,7 @@ export const L = {
       final: 'Nearly there!',
       win: 'First place!',
       close: 'So close! Second place!',
-      // The podium. Gold: Mommy and Daddy cheer, the home rival is a good sport.
+      // The podium. Gold: Mom and Dad cheer, the home rival is a good sport.
       gold: [nick('Gold! Woo hoo!'), ji('You won, sweetie!')],
       good: {
         taeng: by('taeng')('Oh my! So fast, dear!'),
@@ -691,7 +691,7 @@ export const L = {
     // trip's (L.trip, L.home).
     trip: {
       cool: ji("It's cool and rainy in the mountains!"),
-      umbrella: ji('Mommy always packs an umbrella!'),
+      umbrella: ji('Mom always packs an umbrella!'),
       landed: nick("Yay! We're in Nan!"),
       three: ji('Everybody, smile!'),
       // The frame on the wall, tapped in the house.
@@ -727,7 +727,7 @@ export const L = {
         hi: by('pelican')('Sawasdee ka! Hold on tight!'),
         fish: 'Flying fish!',
         jump: nick('Whoa! We flew!'),
-        // Tap the captain, Daddy (his cap blows off), Mommy (her sun hat flies up) (each in turn).
+        // Tap the captain, Dad (his cap blows off), Mom (her sun hat flies up) (each in turn).
         captain: [by('pelican')('Beep beep!'), by('pelican')('Wiggle wiggle! Ha ha!'), by('pelican')('Hold on to your hats!')],
         nick: [nick('My cap!'), nick('So windy!')],
         ji: [ji('My sun hat!'), ji('Whee! So fast!')],
@@ -763,10 +763,10 @@ export const L = {
         prao: 'Ao Prao! The big driftwood tree!',
         aonoina: 'Ao Noi Na! Look at the boats!',
       },
-      // The jet ski is hers (once a visit, with its flag up); all four flags: Daddy calls everyone to the tree.
+      // The jet ski is hers (once a visit, with its flag up); all four flags: Dad calls everyone to the tree.
       hers: 'The jet ski is yours now! Hop on!',
       sunset: nick('Sunset time! To the big tree!'),
-      // Mommy's phone out for the first time this visit; the first rubbish in the bin.
+      // Mom's phone out for the first time this visit; the first rubbish in the bin.
       phone: onDevice('Tap an animal to take its photo!', 'Click an animal to take its photo!'),
       clean: ji('Thank you for cleaning the beach!'),
       // The green taxi's driver (a sun bear): the first ride, then each ride in turn.
@@ -785,14 +785,14 @@ export const L = {
       slide: nick('Wheee! A sand slide!'),
       // At the end of Na Dan pier by the speedboat, before the whole island is done: the home picture comes up.
       leave: ji('Time to go home?'),
-      // Tap Daddy (in turn; asleep on the sand he wakes up), tap Mommy (in turn).
+      // Tap Dad (in turn; asleep on the sand he wakes up), tap Mom (in turn).
       nick: [nick('Hi, sweetie!'), nick('I love this beach!'), nick('Race you to the sea!')],
       wake: nick('Huh? I was sleeping!'),
-      ji: [ji('So pretty here!'), ji('Sunscreen on, sweetie!'), ji('Mommy loves you!')],
-      // A coconut on Daddy's head, the umbrella kite.
+      ji: [ji('So pretty here!'), ji('Sunscreen on, sweetie!'), ji('Mom loves you!')],
+      // A coconut on Dad's head, the umbrella kite.
       bonk: nick('Ow! A coconut!'),
       kite: ji('Whoa! Hold on tight!'),
-      // On Na Dan pier going home: Mommy's photo.
+      // On Na Dan pier going home: Mom's photo.
       home: ji('Smile! Bye bye, Koh Samet!'),
     },
     // The beach puppy who shows her the way (island/puppy.ts, #357 way-finding). His voice is barks; Sparkle says who he
@@ -810,7 +810,7 @@ export const L = {
         aonoina: 'Ao Noi Na!',
       },
     },
-    // Mommy's phone and the animal book (book/): Sparkle says the name once when it's snapped; a tap on its photo plays
+    // Mom's phone and the animal book (book/): Sparkle says the name once when it's snapped; a tap on its photo plays
     // the fact.
     book: {
       // Sparkle says its name when it's snapped for the first time; a tap on its photo in the book plays the fact, a tap on
@@ -881,24 +881,24 @@ export const L = {
       tease: by('otter')('Catch me if you can!'),
       won: [by('otter')('Wow! You are fast!'), by('otter')('You win again! Ha ha!')],
       lost: by('otter')('Ha! Just a nose!'),
-      // Sparkle, when he wins by a nose (straight into the next race), and Daddy at her win.
+      // Sparkle, when he wins by a nose (straight into the next race), and Dad at her win.
       close: 'So close! Again!',
       champ: nick(`You win!`),
-      // Daddy on the jet ski (each list in turn): a jump, a spin in the air, the loop (and the heart), dizzy circles,
-      // Mommy soaked, onto the sand.
+      // Dad on the jet ski (each list in turn): a jump, a spin in the air, the loop (and the heart), dizzy circles,
+      // Mom soaked, onto the sand.
       jump: [nick('Wheee!'), nick('We can fly!'), nick('Yee-haw!')],
       spin: nick('A spin! Whoa!'),
       loop: nick('Look! The fish!'),
-      heart: nick('A heart! For Mommy!'),
+      heart: nick('A heart! For Mom!'),
       dizzy: nick("Round and round! I'm dizzy!"),
       soaked: ji("Hey! I'm all wet!"),
       beached: [nick('Oops! Sandy jet ski!'), nick('Whoa! Not the beach!'), nick('Ha ha! Again?')],
-      // Daddy, when it's wedged on the rocks and pops free.
+      // Dad, when it's wedged on the rocks and pops free.
       rocks: [nick('Boing! Silly rocks!'), nick('Bonk! Off we go!')],
       push: [by('otter')('Back in the water!'), by('otter')('Ha ha! Boats go in the sea!')],
-      // Pokes, in turn: Daddy (his cap blows off), Mommy on the sand, the jet ski man.
+      // Pokes, in turn: Dad (his cap blows off), Mom on the sand, the jet ski man.
       cap: [nick('My cap!'), nick('Not again!')],
-      mommy: [ji('Go, go, go!'), ji('Wave to Mommy!')],
+      mommy: [ji('Go, go, go!'), ji('Wave to Mom!')],
       man: [by('otter')('Sawasdee krap!'), by('otter')('Zoom zoom!'), by('otter')('Nice driving!')],
       // Sparkle's facts, the first time she pokes them: the buoy rope, the life jacket.
       rope: 'The rope keeps the swimmers safe!',
@@ -913,7 +913,7 @@ export const L = {
     },
     // The sandcastle at Ao Hin Khok (sandcastle/): dig, towers, the tide.
     sandcastle: {
-      // Daddy as it opens, then Sparkle's line for each round (dig at once; the moulds and the tide move on by
+      // Dad as it opens, then Sparkle's line for each round (dig at once; the moulds and the tide move on by
       // themselves).
       hi: nick("Let's build a sandcastle!"),
       dig: onDevice('Dig the sand with your finger!', 'Click and drag to dig the sand!'),
@@ -926,11 +926,11 @@ export const L = {
       washed: nick('Oh no! Build it again!'),
       crab: 'A ghost crab! It runs sideways!',
       hermit: 'A hermit crab moved in!',
-      // Burying Daddy (the first time he's all covered), his sneeze, his toes (in turn).
+      // Burying Dad (the first time he's all covered), his sneeze, his toes (in turn).
       buried: nick("Help! I'm a sandcastle!"),
       sneeze: nick('Ah... ah... choo!'),
       toes: [nick('Hee hee! That tickles!'), nick('My toes!')],
-      // Pokes, in turn: Daddy, Mommy on the blanket.
+      // Pokes, in turn: Dad, Mom on the blanket.
       dad: [nick('Bury me in sand!'), nick('Great castle!')],
       mommy: [ji('So pretty!'), ji('A princess castle!')],
       // Sparkle, after a while with nothing done.
@@ -946,7 +946,7 @@ export const L = {
     snorkel: {
       // The captain (the pelican) toots and sends her in; Sparkle says what each round is for (the first two before
       // her first touch), the facts the first time (coral when she first bumps or pokes one, the cuttlefish when it
-      // first flashes), and after a while with nothing done what to do. Daddy blows bubble rings.
+      // first flashes), and after a while with nothing done what to do. Dad blows bubble rings.
       jump: by('pelican')('Masks on! Jump in!'),
       float: onDevice('Hold your finger in the water to swim!', 'Click and hold in the water to swim!'),
       follow: 'Follow the parrotfish!',
@@ -959,7 +959,7 @@ export const L = {
       colors: 'Cuttlefish change color to talk!',
       urchin: by('nick')('Boing! Prickly!'),
       ring: by('nick')('A bubble ring for you!'),
-      // Tap Daddy (after his first ring), tap the captain (each list in turn).
+      // Tap Dad (after his first ring), tap the captain (each list in turn).
       dad: [by('nick')('Blub blub!'), by('nick')('Look at all the fish!'), by('nick')('Swim, swim, swim!')],
       captain: [by('pelican')('Toot toot! Ha ha!'), by('pelican')('Good swimming, little one!'), by('pelican')('My boat waits for you, ka!')],
       // Sparkle, after a while with nothing done.
@@ -971,18 +971,18 @@ export const L = {
     },
     // Lunch on the deck at Ao Prao (hideseek/lunch.ts).
     lunch: {
-      // Daddy passes the rolls, Mommy brings the coconut and the mango sticky rice; Sparkle's one line, and what to do
+      // Dad passes the rolls, Mom brings the coconut and the mango sticky rice; Sparkle's one line, and what to do
       // after a while with nothing done.
       hi: by('nick')('Lunch time! Who wants bread?'),
       start: onDevice('Tap the bread basket!', 'Click the bread basket!'),
-      // Daddy passing a roll (in turn), then the coconut, the rice, the last slurp and the last bite.
+      // Dad passing a roll (in turn), then the coconut, the rice, the last slurp and the last bite.
       pass: [by('nick')('Here you go!'), by('nick')('Catch!'), by('nick')('Another one? Ha ha!')],
       coconut: ji('A coconut! Sip it!'),
       slurp: by('nick')('What a big slurp!'),
       rice: ji('Mango sticky rice!'),
       aroi: ji('Aroi mak! So yummy!'),
       full: by('nick')('Full tummy! Hide and seek?'),
-      // Tap Mommy (her photo, in turn); the lizard and the squirrel below, the first time.
+      // Tap Mom (her photo, in turn); the lizard and the squirrel below, the first time.
       photo: [ji('Smile!'), ji('Cheese!'), ji('So cute!')],
       lizard: by('nick')('A big lizard! Hello!'),
       squirrel: ji('A squirrel! Up it goes!'),
@@ -995,31 +995,31 @@ export const L = {
     },
     // Hide and seek by the driftwood tree (hideseek/).
     hideseek: {
-      // Daddy says what's happening and plays it up in his own voice; Sparkle counts with Kaylee (her eyes shut), says
+      // Dad says what's happening and plays it up in his own voice; Sparkle counts with Kaylee (her eyes shut), says
       // what to do once a round, and after a while with nothing done; Kaylee never talks (she giggles).
       close: by('nick')('Close your eyes and count!'),
-      // Sparkle counting with her (round 1 and 2), Daddy counting in her turn (up to his count knob's most).
+      // Sparkle counting with her (round 1 and 2), Dad counting in her turn (up to his count knob's most).
       count: ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!', 'Eight!', 'Nine!', 'Ten!'],
       dadCount: ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!', 'Eight!', 'Nine!', 'Ten!', 'Eleven!', 'Twelve!'].map(by('nick')),
-      find: 'Find Daddy!',
-      tricky: 'Daddy hides better now!',
+      find: 'Find Dad!',
+      tricky: 'Dad hides better now!',
       notHere: ['Not here!', 'Hmm, not there!'],
-      // Daddy found (in turn), giving himself away (a sneeze, a giggle).
+      // Dad found (in turn), giving himself away (a sneeze, a giggle).
       found: [by('nick')('You found me!'), by('nick')('Ha ha! Found!'), by('nick')('Good finding!')],
       achoo: by('nick')('Ah... ah... choo!'),
       hehe: by('nick')('Hee hee hee!'),
       // Stuck a long time: he jumps out and waves; then he runs over to her (it counts as found).
       here: by('nick')('Here I am!'),
       peekaboo: by('nick')('Peekaboo! You found me!'),
-      // Her turn: Daddy counts at the tree (tap him: he peeks), searches the wrong places, gives up.
+      // Her turn: Dad counts at the tree (tap him: he peeks), searches the wrong places, gives up.
       myTurn: by('nick')('My turn to count! Go hide!'),
       hide: 'Hide in a glowing spot!',
       peek: by('nick')('Oops! No peeking!'),
       ready: by('nick')('Ready or not!'),
       look: [by('nick')('Is she here?'), by('nick')('Not here!'), by('nick')('Hmm, where is she?')],
-      mommy: by('nick')('Behind Mommy?'),
-      // Mommy, when she hides somewhere silly (a thin palm, the sea), in turn.
-      silly: [ji('Hee hee! I can see your tail!'), ji("Shh! Daddy won't look!")],
+      mommy: by('nick')('Behind Mom?'),
+      // Mom, when she hides somewhere silly (a thin palm, the sea), in turn.
+      silly: [ji('Hee hee! I can see your tail!'), ji("Shh! Dad won't look!")],
       wrongWay: by('nick')('Hmm... not here!'),
       giveUp: by('nick')('Where is she? I give up!'),
       win: by('nick')('You win! Super hider!'),
@@ -1027,14 +1027,14 @@ export const L = {
       spotted: [by('nick')('Found you!'), by('nick')('Peekaboo! I see you!')],
       boo: by('nick')('Waah! You scared me!'),
       hint: {
-        seek: 'Where is Daddy? Listen!',
+        seek: 'Where is Dad? Listen!',
         hide: 'Walk to a hiding place!',
       },
     },
     // The finale (finale/): the sunset at the driftwood tree, then the fire show on Sai Kaew.
     finale: {
-      // The sunset (finale/sunset.ts): Daddy as it opens, Sparkle's one instruction, the fact the first time she taps
-      // the sun, Mommy's photo (when she taps Mommy, or by herself as the sun touches the sea), the plop, the night.
+      // The sunset (finale/sunset.ts): Dad as it opens, Sparkle's one instruction, the fact the first time she taps
+      // the sun, Mom's photo (when she taps Mom, or by herself as the sun touches the sea), the plop, the night.
       sunset: {
         look: nick('Look! The sun is going to sleep!'),
         pull: 'Pull the sun down into the sea!',
@@ -1042,12 +1042,12 @@ export const L = {
         photo: ji('Sunset photo! Smile!'),
         plop: nick('Plop! Into the sea!'),
         night: nick('Fire show time!'),
-        // Tap Daddy (in turn).
+        // Tap Dad (in turn).
         tap: [nick('So pretty!'), nick('Bye bye, sun!'), nick('Ooh, the stars!')],
         // Sparkle, after a while with nothing done (spendHint).
         hint: { pull: 'Pull the sun down into the sea!', fire: onDevice('Tap the fire for the show!', 'Click the fire for the show!') },
       },
-      // The fire show (finale/fireshow.ts): Mommy as it opens, then Sparkle; the gecko fire dancers (one voice) cheer and
+      // The fire show (finale/fireshow.ts): Mom as it opens, then Sparkle; the gecko fire dancers (one voice) cheer and
       // show off; each pink flag's surprise in the finish gets its friend's line; the big finish is a big moment.
       fire: {
         look: ji('Look! Fire dancers!'),
@@ -1067,13 +1067,13 @@ export const L = {
           jetski: by('otter')('Woo hoo! Lights on!'),
           sandcastle: ji('Your sandcastle is glowing!'),
           snorkel: nick('The fish are glowing!'),
-          hideseek: nick('Daddy can dance too!'),
+          hideseek: nick('Dad can dance too!'),
         },
         giant: 'Now one giant circle!',
         ring: by('gecko')('Ring of fire!'),
         wow: `What a show!`,
         home: ji('Time to go home!'),
-        // Tap a dancer, Mommy, Daddy (each in turn).
+        // Tap a dancer, Mom, Dad (each in turn).
         dancer: [by('gecko')('Sawasdee!'), by('gecko')('Tukkae! Tukkae!'), by('gecko')('Hot, hot fire!')],
         jiTap: [ji('So beautiful!'), ji('My little fire dancer!')],
         nickTap: [nick('Twirl, twirl!'), nick('Wow!'), nick('Do a big one!')],
@@ -1094,10 +1094,10 @@ export const L = {
       welcome: onDevice(`Welcome to HarborLand! Tap a place to play!`, `Welcome to HarborLand! Click a place to play!`),
       // The staff (a buffalo and a penguin), the first two times she comes near one, and when she taps them (in turn).
       staff: [by('staff')(`Sawasdee ka!`), by('staff')('Have fun!')],
-      // Mommy on her bench and Daddy following her round, when she taps them (in turn).
-      ji: [ji('Hi, sweetie!'), ji(`Have fun!`), ji('Mommy is right here!')],
-      nick: [nick('Where to next?'), nick('Daddy is coming too!'), nick('Ho ho! Go play!')],
-      // Daddy's tummy rumbles (and again if she taps him while it does), then Mommy's card, and her answer to More play.
+      // Mom on her bench and Dad following her round, when she taps them (in turn).
+      ji: [ji('Hi, sweetie!'), ji(`Have fun!`), ji('Mom is right here!')],
+      nick: [nick('Where to next?'), nick('Dad is coming too!'), nick('Ho ho! Go play!')],
+      // Dad's tummy rumbles (and again if she taps him while it does), then Mom's card, and her answer to More play.
       tummy: nick('My tummy is rumbling!'),
       pizza: ji('Hungry? Pizza time?'),
       more: ji('OK! A little more!'),
@@ -1107,8 +1107,8 @@ export const L = {
       map: `Where shall we play?`,
     },
 
-    // The Vet Clinic (games/vet/). Daddy welcomes Doctor Kaylee; Sparkle says who's coming in. The patients only bark,
-    // whinny and trumpet; Daddy hams it up when the tools land on him (at most one line every 12 s).
+    // The Vet Clinic (games/vet/). Dad welcomes Doctor Kaylee; Sparkle says who's coming in. The patients only bark,
+    // whinny and trumpet; Dad hams it up when the tools land on him (at most one line every 12 s).
     vet: {
       open: nick(`The doctor is here!`),
       // Sparkle, as each patient hops in.
@@ -1119,7 +1119,7 @@ export const L = {
       } as Record<string, string>,
       // The elephant's big sneeze.
       bless: nick('Bless you!'),
-      // Daddy, as each patient is all better.
+      // Dad, as each patient is all better.
       healed: {
         puppy: nick("Look! He's wagging!"),
         pony: nick('So shiny and pretty!'),
@@ -1127,7 +1127,7 @@ export const L = {
       } as Record<string, Line>,
       // Sparkle, when all three are better.
       allDone: `Everyone is better! Thank you, Doctor!`,
-      // Daddy, when a tool lands on him.
+      // Dad, when a tool lands on him.
       daddy: {
         heart: [nick('Ba-boom! Ba-boom!'), nick('My heart is so big!')],
         hot: nick('Am I hot? Ha ha!'),
@@ -1158,8 +1158,8 @@ export const L = {
       },
     },
 
-    // The Barber Salon (games/barber/). Daddy wants a new look; Sparkle says what's new each round; the kids in round 3
-    // ask for a picture and say "close enough!" whatever she makes; Mommy takes the photo at every reveal.
+    // The Barber Salon (games/barber/). Dad wants a new look; Sparkle says what's new each round; the kids in round 3
+    // ask for a picture and say "close enough!" whatever she makes; Mom takes the photo at every reveal.
     barber: {
       open: nick(`I want a new look!`),
       start: 'Grab a tool and do his hair!',
@@ -1174,12 +1174,12 @@ export const L = {
       } as Record<string, Line>,
       // The mirror glows: time for the reveal.
       mirror: onDevice('Tap the mirror!', 'Click the mirror!'),
-      // The reveal: Daddy poses (in turn), the kids giggle, Mommy takes the photo.
+      // The reveal: Dad poses (in turn), the kids giggle, Mom takes the photo.
       love: [nick('Whoa! I love it!'), nick('So handsome! I love it!')],
       enough: [by('kid')('Close enough!'), by('kid')('Close enough! So pretty!'), by('kid')('Close enough! Yay!')],
       cheese: ji('Say cheese!'),
       allDone: `Great haircuts!`,
-      // The silly bits, in Daddy's and Mommy's voices.
+      // The silly bits, in Dad's and Mom's voices.
       horn: nick('Hey! My horn!'),
       brows: nick('My eyebrows!'),
       windy: ji('Whoa! My hair!'),
@@ -1197,8 +1197,8 @@ export const L = {
       pole: 'A spinning pole means haircuts here!',
     },
 
-    // Cafe & Cake (games/cafe/). Sparkle says what to do when something new comes; Daddy and Mommy order and drink in
-    // their own voices (one line per drink); Daddy's brain freeze and the ceiling splat get a laugh.
+    // Cafe & Cake (games/cafe/). Sparkle says what to do when something new comes; Dad and Mom order and drink in
+    // their own voices (one line per drink); Dad's brain freeze and the ceiling splat get a laugh.
     cafe: {
       open: 'Drop fruit in the blender!',
       thirsty: nick(`I'm thirsty!`),
@@ -1241,7 +1241,7 @@ export const L = {
       chaYenFact: "Cha yen is Thai iced tea! It's orange!",
     },
 
-    // The Racing Slide (games/race/). Sparkle says what's new each race and counts down; Daddy races her and dives
+    // The Racing Slide (games/race/). Sparkle says what's new each race and counts down; Dad races her and dives
     // into the balls head first; she always wins.
     race: {
       open: onDevice(`A slide race! Tap the steps to climb!`, `A slide race! Click the steps to climb!`),
@@ -1252,7 +1252,7 @@ export const L = {
       bumps: onDevice('Now tap at each bump to fly!', 'Now click at each bump to fly!'),
       now: onDevice('Tap now!', 'Click now!'),
       rings: onDevice('Rubber rings! Tap to spin!', 'Rubber rings! Click to spin!'),
-      // She wins (in turn); Daddy lands head first; a kid cheers.
+      // She wins (in turn); Dad lands head first; a kid cheers.
       win: [`You win!`, `You win again!`, `First place!`],
       dive: [nick('Head first! Whee!'), nick("I'm OK! Ha ha!")],
       goodRace: by('kid')(`Good race!`),
@@ -1266,15 +1266,15 @@ export const L = {
 
     // Little Land's foam blocks (games/blocks/).
     blocks: {
-      // The opening: Daddy's bet, then Sparkle.
+      // The opening: Dad's bet, then Sparkle.
       higher: nick(`Can you build higher than me?`),
       grab: 'Grab a brick!',
-      // Something new: the stack glows (round 1), the picture cards (round 2), Daddy steps up (round 3).
+      // Something new: the stack glows (round 1), the picture cards (round 2), Dad steps up (round 3).
       push: 'Push it over!',
       copy: 'Copy the picture!',
       elephant: 'Now an elephant!',
-      taller: 'Taller than Daddy!',
-      // Daddy, now and then: a brick half over the edge, a brick hat, a knock-down, the elephant coming alive.
+      taller: 'Taller than Dad!',
+      // Dad, now and then: a brick half over the edge, a brick hat, a knock-down, the elephant coming alive.
       whoa: nick('Whoa! Careful!'),
       hat: nick('A brick hat? Ha ha!'),
       crash: [nick('Crash!'), nick('Ha ha! Again!'), nick('Boom!')],
@@ -1301,8 +1301,8 @@ export const L = {
       // Something new: on top the first time, round 2's pink holds, round 3's race.
       top: `You made it!`,
       pink: 'Only the pink ones!',
-      race: 'Race Daddy to the top!',
-      // Daddy's race: the start, puffing up behind her, flopping over the rail, his head-first landing.
+      race: 'Race Dad to the top!',
+      // Dad's race: the start, puffing up behind her, flopping over the rail, his head-first landing.
       win: nick("I'm going to win!"),
       huff: nick('Huff... puff...'),
       beat: nick(`You beat me!`),
@@ -1328,12 +1328,12 @@ export const L = {
       dance: by('coach')('Now dance with me!'),
       again: by('coach')('Yes! Again!'),
       champion: by('coach')(`Champion!`),
-      // Sparkle: something new (the drum, round 2's gold ring, Daddy's pad, the kick).
+      // Sparkle: something new (the drum, round 2's gold ring, Dad's pad, the kick).
       drum: 'Punch to the drum!',
       gold: "Punch when it's gold!",
-      pad: "Follow Daddy's pad!",
+      pad: "Follow Dad's pad!",
       kick: 'Big kick!',
-      // Daddy, now and then: a hook or a big POW, the pad going low, into the ropes, up with the pad again.
+      // Dad, now and then: a hook or a big POW, the pad going low, into the ropes, up with the pad again.
       strong: nick('Ooh, strong!'),
       oof: nick(`Oof! Good one!`),
       upDown: nick('Up high! Down low!'),
@@ -1343,7 +1343,7 @@ export const L = {
       hint: {
         gloves: onDevice('Tap your gloves!', 'Click your gloves!'),
         bag: 'Punch the bag!',
-        pad: "Punch Daddy's pad!",
+        pad: "Punch Dad's pad!",
       },
       // The facts: the first time she pokes the coach, and the star board.
       waiKru: by('coach')('The wai kru dance says thank you to your teacher!'),
@@ -1352,7 +1352,7 @@ export const L = {
 
     // The Sky Pod (games/skypod/).
     skypod: {
-      // The opening: Daddy, then Sparkle.
+      // The opening: Dad, then Sparkle.
       fast: nick(`How fast are you?`),
       slap: 'Slap the lights!',
       // The count as her score climbs (rounds 1 and 3).
@@ -1360,11 +1360,11 @@ export const L = {
       // Round 2: before the wall plays, then her turn (the first time).
       listen: 'Listen!',
       play: 'Now you play it!',
-      // Round 3, Daddy: the race, she took his light, a miss, a rest, she wins.
+      // Round 3, Dad: the race, she took his light, a miss, a rest, she wins.
       race: nick(`Race you!`),
       mine: nick("Hey! That one's mine!"),
       ow: nick('Ow, ow!'),
-      rest: nick('Daddy needs a rest!'),
+      rest: nick('Dad needs a rest!'),
       win: nick(`You win!`),
       // The finale: the score at a hundred.
       hundred: `A hundred! Super star!`,
@@ -1381,7 +1381,7 @@ export const L = {
     frame: {
       // Sparkle, as she comes in.
       start: 'Climb up high, then slide down!',
-      // Mommy and Daddy, the first time she rides each big slide.
+      // Mom and Dad, the first time she rides each big slide.
       ride: {
         nose: ji('Wheee! Down the nose!'),
         dragon: nick('Whoa! Here come the dragons!'),
@@ -1389,10 +1389,10 @@ export const L = {
         donut: nick('Round and round!'),
         zip: ji('Zoom! Go!'),
       },
-      // Daddy in the ball pit and the cannon: the first two bonks (in turn), then his big flop.
+      // Dad in the ball pit and the cannon: the first two bonks (in turn), then his big flop.
       bonk: [nick('Bonk! Hey!'), nick('Hey! Not my horn!')],
       flop: nick('Whoa! Splash!'),
-      // Daddy tapped in the balls (in turn); Mommy tapped says her hall lines.
+      // Dad tapped in the balls (in turn); Mom tapped says her hall lines.
       nick: [nick('Ho ho! Hi!'), nick('Bonk me with the cannon!')],
       // Sparkle's fact, the first time she pokes the giant mask or a Phi Ta Khon on the roller's posts.
       phiTaKhon: 'Phi Ta Khon is a festival with big funny masks!',
@@ -1408,18 +1408,18 @@ export const L = {
       start: 'Pull a slice!',
       // Sparkle counting round the table, as each plate gets its first and second slice.
       count: {
-        ji: ['One for Mommy!', 'Two for Mommy!'],
-        nick: ['One for Daddy!', 'Two for Daddy!'],
+        ji: ['One for Mom!', 'Two for Mom!'],
+        nick: ['One for Dad!', 'Two for Dad!'],
         kaylee: [`One for you!`, `Two for you!`],
       } as Record<string, string[]>,
-      // Daddy with more than anyone (in turn), the cheese tug on his nose.
-      ham: [nick("Mommy's hungry too!"), nick('Ho ho! More for Daddy!')],
+      // Dad with more than anyone (in turn), the cheese tug on his nose.
+      ham: [nick("Mom's hungry too!"), nick('Ho ho! More for Dad!')],
       nose: nick('My nose!'),
       // Two each: the last two go in Agong's box; the lid closes; then Sparkle's fact once it's all shared.
       agong: ji('Those are for Agong!'),
       closed: nick('Yay! Pizza for Agong!'),
       fair: 'Sharing fairly means everyone gets the same!',
-      // The pokes: the server's bow, Daddy's chili sneeze, Mommy's onion-ring bracelets (three in turn, then she eats one).
+      // The pokes: the server's bow, Dad's chili sneeze, Mom's onion-ring bracelets (three in turn, then she eats one).
       thanks: by('server')('Khob khun ka!'),
       spicy: nick('So spicy!'),
       rings: [ji('Look! A bracelet!'), ji('So fancy!'), ji('Three bracelets!')],
@@ -1432,18 +1432,18 @@ export const L = {
       },
     },
 
-    // The trip around it: Mommy's question, the goodbye, the Veloz, ICONSIAM, the counter, home.
+    // The trip around it: Mom's question, the goodbye, the Veloz, ICONSIAM, the counter, home.
     trip: {
-      // Mommy's card in the house, once there are two trips (🚤 or 🛝🍕).
+      // Mom's card in the house, once there are two trips (🚤 or 🛝🍕).
       where: ji(`Where shall we go?`),
       // The goodbye and home, at Agong's house (TripHouse reads them from the TripDef: activities/mall-trip/words.ts).
       wish: by('agong')('Bring Agong something yummy!'),
-      ready: nick(`Mommy is driving! Hop in!`),
+      ready: nick(`Mom is driving! Hop in!`),
       home: ji("We're home!"),
       agong: by('agong')(`Ho ho! What is that?`),
       thanks: by('agong')(`Pizza! Thank you!`),
       pizza: { gan: by('gan')('Pizza?!'), ken: by('ken')('Pizza?!'), bb: by('bb')('Pizza?!') },
-      hair: by('agong')("Ho ho ho! Look at Daddy's hair!"),
+      hair: by('agong')("Ho ho ho! Look at Dad's hair!"),
       give: onDevice('Tap Agong to give him the box!', 'Click Agong to give him the box!'),
       wall: ji('Our mall day!'),
       // ICONSIAM: the glimpse, the lift and the HarborLand counter (arrive.ts).

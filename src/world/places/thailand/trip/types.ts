@@ -20,12 +20,12 @@ export interface TripLines {
   thanks: Line
   /** The big cousins putting their phones down, for the first time. */
   cousins: Record<'gan' | 'ken' | 'bb', Line>
-  /** Agong laughing at Daddy's new hairdo (the mall's barber). */
+  /** Agong laughing at Dad's new hairdo (the mall's barber). */
   hair?: Line
   /** Sparkle, after a while with nothing done: pick the photo, give Agong his gift. */
   pick?: Line
   give: Line
-  /** The new photo on Agong's wall, tapped (the mall day: Mommy's "Our mall day!"). */
+  /** The new photo on Agong's wall, tapped (the mall day: Mom's "Our mall day!"). */
   wall?: Line
 }
 
@@ -33,11 +33,11 @@ export interface TripDef {
   id: string
   /** Who comes along with Kaylee (cast ids). */
   who: ('ji' | 'nick')[]
-  /** What Mommy hints at (the sea's sun, or the mountains' cool and rain), and how many things fit before she has to
+  /** What Mom hints at (the sea's sun, or the mountains' cool and rain), and how many things fit before she has to
    *  sit on the suitcase. No packing on a day out. */
   pack?: { hint: Weather; fits: number }
   /** How she gets there: Aunty Sri's van picks them up at the goodbye (no ride: it pulls away and they're at the
-   *  airport), the pilot flies (she rides and plays); or Mommy drives the family's rental car (it pulls away and
+   *  airport), the pilot flies (she rides and plays); or Mom drives the family's rental car (it pulls away and
    *  they're there). */
   legs: ({ kind: 'van'; driver: 'sri' } | { kind: 'car'; driver: 'ji'; car: 'veloz' } | { kind: 'airport' } | { kind: 'fly'; from: LonLat; to: LonLat; seat: 'window' })[]
   /** Seconds each ride takes, whatever she does (the hard caps), and the flight's on a replay. */
@@ -47,7 +47,7 @@ export interface TripDef {
   /** Where packing goes next (she walks down the stairs with the suitcase): the window seat (`takeoff`, the trips
    *  that fly) unless the trip says otherwise (Koh Samet: straight to the speedboat at Ban Phe). */
   afterPack?: string
-  /** Who sees them off at the shutter: just Mommy, Daddy and Kaylee wait there (the boat trip), or the whole family
+  /** Who sees them off at the shutter: just Mom, Dad and Kaylee wait there (the boat trip), or the whole family
    *  who live here gather to wave goodbye (the mall day). */
   goodbye: 'parents' | 'family'
   /** What she brings Agong: a photo she picks (it goes on his wall), or a take-away box (and a photo of the day goes

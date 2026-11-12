@@ -1,7 +1,7 @@
 // Muay Thai at HarborLand, built from simple shapes in the house's toon look (greybox: no generated art). The flower
 // mats and a blue ring mat, the ring's posts and ropes (red, white, blue; each rope two pieces that bow in the middle),
 // the big red bag and the small blue one on their brackets, the coach's drum (a klong on a stand), the ring bell, the
-// water bottle on its stool, the board with three stars and the lamps that fill each round, Daddy's pink pad, and the
+// water bottle on its stool, the board with three stars and the lamps that fill each round, Dad's pink pad, and the
 // gold champion's belt. Pure shapes: the world (ring.ts) moves them.
 import { Group, Mesh, SphereGeometry, Vector3, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../../engine3d/dispose'
@@ -287,7 +287,7 @@ export function buildGym(bag: Bag): Built {
     return m
   })
 
-  // ---- Daddy's pad: a fat pink kick pad with a white target on the front and handles at the back ----
+  // ---- Dad's pad: a fat pink kick pad with a white target on the front and handles at the back ----
   const pad = solid(
     merge([
       P.rbox(PAD.w, PAD.h, PAD.d, 0.07, '#FF8FB8', {}),

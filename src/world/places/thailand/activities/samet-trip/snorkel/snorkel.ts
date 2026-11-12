@@ -15,12 +15,12 @@
 //           two rocks, over the sandy patch (a giant clam, a sea cucumber), into a hidden garden of soft corals. It goes
 //           a little ahead and waits; never too fast, and it comes back for her if she wanders off.
 //   cuttle  in the garden a cuttlefish hovers, sand-colored. Swim close and it flashes rainbow colors, closer and it
-//           goes stripy, closest and it turns pink (for her). Mommy's waterproof camera (the 📷 button) snaps the fish for
+//           goes stripy, closest and it turns pink (for her). Mom's waterproof camera (the 📷 button) snaps the fish for
 //           her book.
-// Daddy swims along behind her; swim up to him and he ducks under and blows her a bubble ring.
+// Dad swims along behind her; swim up to him and he ducks under and blows her a bubble ring.
 //
 // Talk (lines.ts L.samet.snorkel): the captain sends her in, Sparkle says what each round is for, the facts the first
-// time and (spendHint) what to do when she's stuck; Daddy and the captain react. The screen's TripGuide plays them. Every number that decides the feel is a knob (?feel=1), with a graph of her finger against her swimming.
+// time and (spendHint) what to do when she's stuck; Dad and the captain react. The screen's TripGuide plays them. Every number that decides the feel is a knob (?feel=1), with a graph of her finger against her swimming.
 import { Color, Fog, Group, InstancedMesh, Matrix4, Mesh, Object3D, Quaternion, Scene, Vector3, type WebGLRenderer } from 'three'
 import { clamp, spendHint, type Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
@@ -134,7 +134,7 @@ const CORALS = OBSTACLES.map((o, i) => ({ o, i })).filter((x) => x.o.kind === 'c
 
 export const SNORKEL_ANCHORS: AnchorInfo[] = [
   { id: 'kaylee', label: 'You', kind: 'thing' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
   { id: 'captain', label: 'The boat captain', kind: 'thing' },
   { id: 'parrot', label: 'The parrotfish', kind: 'thing' },
   { id: 'cuttle', label: 'The cuttlefish', kind: 'thing' },
@@ -338,7 +338,7 @@ export class Snorkel implements World3D {
     rigK.head.add(mask(bag, rigK.face.R, rigK.face.headY))
     for (const leg of [rigK.legL, rigK.legR]) if (leg) leg.add(flipper(bag, this.kaylee.height * 0.24))
 
-    // ---- Daddy, treading water behind her.
+    // ---- Dad, treading water behind her.
     this.nick = new Member({ ...FAMILY.find((m) => m.id === 'nick')!, spot: null }, bag)
     scene.add(this.nick.root)
     this.ring = bubbleRing(bag)
@@ -728,7 +728,7 @@ export class Snorkel implements World3D {
     if (p.z > b.z1) v.z -= (p.z - b.z1) * 4 * dt
   }
 
-  // ---------------------------------------------------------------- Daddy
+  // ---------------------------------------------------------------- Dad
 
   private daddy(dt: number, t: number) {
     const d = this.dad
@@ -1099,7 +1099,7 @@ export class Snorkel implements World3D {
     for (let i = 0; i < n; i++) this.sparkle.emit(p.x + (Math.random() - 0.5) * 1.2, p.y + (Math.random() - 0.5) * 0.8, p.z + (Math.random() - 0.5) * 1.2, (Math.random() - 0.5) * 0.8, 0.4 + Math.random() * 0.8, (Math.random() - 0.5) * 0.8, 1.6, 0.06)
   }
 
-  // ---------------------------------------------------------------- Mommy's waterproof camera
+  // ---------------------------------------------------------------- Mom's waterproof camera
 
   /** Snaps what's in view under the water; the animals newly in her book. */
   snap(): AnimalId[] {

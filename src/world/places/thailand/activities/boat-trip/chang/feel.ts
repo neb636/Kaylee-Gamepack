@@ -19,7 +19,7 @@ export const CHANG_FEEL = {
   lift: 40,
   /** A tapped food glides to its trunk at this rate (per second). */
   glide: 5,
-  /** Seconds food lies on the gravel out of reach before Daddy pops it back in the basket. */
+  /** Seconds food lies on the gravel out of reach before Dad pops it back in the basket. */
   ground: 1.6,
   /** Foods in `feed` before the elephants start asking for favorites, and in `lamyai` before they're full (the splash). */
   toFavorites: 8,

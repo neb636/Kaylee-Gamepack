@@ -33,7 +33,7 @@ export const RIBBON_COLORS: Record<string, string> = {
   hotpink: PAL.hotpink,
 }
 
-/** Where things ride in the boat (local to its body): the bow floor, beside Daddy, by Kaylee's feet, Mommy's lap, and
+/** Where things ride in the boat (local to its body): the bow floor, beside Dad, by Kaylee's feet, Mom's lap, and
  *  the boat race's trophy up front. */
 export const CARGO = {
   football: [0.12, 0.62, 2.05],

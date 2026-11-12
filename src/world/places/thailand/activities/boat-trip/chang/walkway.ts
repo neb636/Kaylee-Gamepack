@@ -2,7 +2,7 @@
 // steel posts and handrails, mesh panels along the far side (the near side has only its rails, so she shows through),
 // planks over the sandy ground, five steps down to the gravel by the blue bench, and rows of oil palms behind it. Two pokes on
 // the way: a gecko on a post of the near rail ("to-kay!", it scurries up and back), and a palm that shakes when she taps
-// it, so a frond floats down. Mommy and Daddy tag along behind her (Tagalong).
+// it, so a frond floats down. Mom and Dad tag along behind her (Tagalong).
 import { Group, Vector3 } from 'three'
 import type { Member } from '../../../characters/member'
 import type { Bag } from '../../../../../engine3d/dispose'
@@ -26,7 +26,7 @@ export interface Walkway {
 export function buildWalkway(bag: Bag): Walkway {
   const root = new Group()
   const { z, w, y, x0, xs, x1 } = WALK
-  // (The planks run on past x1, toward the cafe, so Mommy and Daddy behind her have planks under them.)
+  // (The planks run on past x1, toward the cafe, so Mom and Dad behind her have planks under them.)
   const xe = x1 + 2.6
   const len = xe - xs
   const mid = (xe + xs) / 2
@@ -110,7 +110,7 @@ export function buildWalkway(bag: Bag): Walkway {
   return { root, gecko, palm, crown, frond }
 }
 
-/** Someone who tags along behind Kaylee (Mommy, Daddy): toward a goal (or a list of them) at a walk, with a little bob
+/** Someone who tags along behind Kaylee (Mom, Dad): toward a goal (or a list of them) at a walk, with a little bob
  *  in each step and a lean into it, turning the way they go; standing, they face `rest`. */
 export class Tagalong {
   private goals: [number, number][] = []

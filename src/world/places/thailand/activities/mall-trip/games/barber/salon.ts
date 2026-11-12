@@ -1,6 +1,6 @@
 // The Barber Salon in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md, "★ 2. The Barber Salon"),
-// greybox: shapes and sounds, with the voices (lines.ts L.mall.barber). Daddy sits in the big chair facing her, a cape
-// round him; Kaylee stands on her step stool beside him; Mommy waits on the bench with her phone.
+// greybox: shapes and sounds, with the voices (lines.ts L.mall.barber). Dad sits in the big chair facing her, a cape
+// round him; Kaylee stands on her step stool beside him; Mom waits on the bench with her phone.
 //
 // The toy: grab a tool from the trolley and work it on his mane (mane.ts: strands, each with its own length and
 // color). The tool's working end sits just above her finger, and it works on the strands under it on screen:
@@ -13,7 +13,7 @@
 //   - bows and a clip: put them in the hair
 // Rounds: (1) grow and snip, (2) colors, the dryer, bows, (3) kids come in with a picture card (spiky, pigtails,
 // curly): whatever she makes, "close enough!". After a dozen or so touches of hair work the mirror glows: a tap and
-// the chair spins round to it, Daddy poses and Mommy takes a photo. Daddy keeps the hairdo (the `hair` param).
+// the chair spins round to it, Dad poses and Mom takes a photo. Dad keeps the hairdo (the `hair` param).
 // A tap on a tool does a short go with it, so dragging is never a must. Nothing fails.
 import { CapsuleGeometry, Color, IcosahedronGeometry, OctahedronGeometry, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, spendHint, wobble, type Line } from '../../../../../../../sdk'
@@ -38,13 +38,13 @@ import { buildTool, type Tool } from './tools'
 export interface BarberEvents extends LegEvents {
   /** The round now (the address bar follows). */
   round(n: Round): void
-  /** Daddy's hairdo changed (the `hair` param). */
+  /** Dad's hairdo changed (the `hair` param). */
   hair(code: string): void
   /** The mirror's reveal is done (the sock band's barber sticker comes with the first). */
   revealed(n: Round): void
   /** The picture card the kid in the chair holds up (round 3), or null. */
   card(c: Card | null): void
-  /** Mommy's camera flashes. */
+  /** Mom's camera flashes. */
   flash(): void
   /** All three kids are done. */
   allDone(): void
@@ -59,8 +59,8 @@ export const BARBER_ANCHORS: AnchorInfo[] = [
   { id: 'pole', label: "Barber's pole", kind: 'thing' },
   { id: 'jar', label: 'Comb jar', kind: 'thing' },
   { id: 'family:kaylee', label: 'You', kind: 'family' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
 ]
 
 /** Tools are toy-sized, bigger than life so they're easy to see and grab. */
@@ -125,7 +125,7 @@ export class Salon extends Stage {
   private headR = 60
   private cardEl: HTMLElement | null = null
   // The voices: when someone last said something silly, which idle spell the hint was said for, whose mirror glow
-  // Sparkle has pointed out, Daddy's pose line next, the fact said.
+  // Sparkle has pointed out, Dad's pose line next, the fact said.
   private sillySaid = -99
   private hintFor = -1
   private glowSaid = ''
@@ -140,7 +140,7 @@ export class Salon extends Stage {
     this.round = start.round
     this.room = buildRoom(bag)
     scene.add(this.room.root)
-    // ---- Daddy in the chair (a cape round him), Kaylee on her stool in her smock, Mommy with her phone ----
+    // ---- Dad in the chair (a cape round him), Kaylee on her stool in her smock, Mom with her phone ----
     const { kaylee, members } = this.makeFamily(['nick', 'ji'])
     this.kaylee = kaylee
     this.nick = members.get('nick')!
@@ -173,12 +173,12 @@ export class Salon extends Stage {
     this.sparkles = new Floaters(new OctahedronGeometry(0.5), [PAL.gold, PAL.hotpink, '#FFFFFF', PAL.mint], 80, bag, 1.2, 1.2)
     this.mist = new Floaters(new IcosahedronGeometry(0.5, 1), [...RAINBOW.map((c) => HAIR_COLORS[c as keyof typeof HAIR_COLORS]), '#FFFFFF', '#E9DDFF'], 120, bag, -0.2, 2.2)
     for (const f of [this.falls, this.sparkles, this.mist]) scene.add(f.mesh)
-    // A round-3 link: Daddy's done (on the bench with his new look), the first kid's in the chair.
+    // A round-3 link: Dad's done (on the bench with his new look), the first kid's in the chair.
     if (this.round === 3) {
       this.benchDaddy(true)
       this.after(0.3, () => this.nextKid())
     } else {
-      // Daddy wants a new look; Sparkle says what to do (round 2's link: the new tools).
+      // Dad wants a new look; Sparkle says what to do (round 2's link: the new tools).
       this.after(0.3, () => {
         this.bev.say(B.open)
         this.bev.say(this.round === 1 ? B.start : B.colors)
@@ -189,7 +189,7 @@ export class Salon extends Stage {
 
   // ---------------------------------------------------------------- who's in the chair
 
-  /** The mane being styled now (Daddy's, or the kid's in round 3). */
+  /** The mane being styled now (Dad's, or the kid's in round 3). */
   private get client(): Mane | null {
     if (this.round === 3) return this.kid?.mane ?? null
     return this.mane
@@ -202,7 +202,7 @@ export class Salon extends Stage {
     return this.round === 3 ? (this.kid?.r.rig ?? null) : this.nick.rig
   }
 
-  /** Daddy hops out of the chair onto the waiting bench (with his new look). */
+  /** Dad hops out of the chair onto the waiting bench (with his new look). */
   private benchDaddy(now = false) {
     this.dadOnBench = true
     this.takeOffCape(!now)
@@ -676,7 +676,7 @@ export class Salon extends Stage {
     }
   }
 
-  /** The dryer on full: everyone's mane blows, Daddy laughs, Kaylee hops. */
+  /** The dryer on full: everyone's mane blows, Dad laughs, Kaylee hops. */
   private blowEveryone() {
     this.kaylee.setWind(1)
     this.ji.setWind(1)
@@ -706,7 +706,7 @@ export class Salon extends Stage {
 
   // ---------------------------------------------------------------- the mirror
 
-  /** The chair spins round to the mirror, back again, a pose and Mommy's photo; then the next round (or kid). */
+  /** The chair spins round to the mirror, back again, a pose and Mom's photo; then the next round (or kid). */
   private reveal() {
     this.phase = 'reveal'
     if (this.held) {
@@ -721,7 +721,7 @@ export class Salon extends Stage {
       sfx.ooh()
       this.sparkles.burst(new Vector3(MIRROR.x, (MIRROR.y0 + MIRROR.y1) / 2, MIRROR.z + 0.3), 18, 1.6, 1, 1, 0.06)
     })
-    // Daddy loves it (or the kid: close enough!), then Mommy: say cheese! (and the flash).
+    // Dad loves it (or the kid: close enough!), then Mom: say cheese! (and the flash).
     this.after(1.0, () => this.bev.say(kid ? B.enough[kid.i % B.enough.length] : B.love[this.loveN++ % B.love.length]))
     this.after(2.5, () => this.bev.say(B.cheese))
     this.after(1.5, () => {
@@ -793,7 +793,7 @@ export class Salon extends Stage {
     this.spinT = 0
   }
 
-  /** Mommy's photo: her phone up, a flash. */
+  /** Mom's photo: her phone up, a flash. */
   private photo() {
     this.photoK = 0
     this.bev.flash()
@@ -888,7 +888,7 @@ export class Salon extends Stage {
     this.kaylee.update(dt, t)
     this.ji.update(dt, t)
     this.nick.update(dt, t)
-    // Kaylee reaches out while she holds a tool; Mommy holds up her phone for a photo.
+    // Kaylee reaches out while she holds a tool; Mom holds up her phone for a photo.
     this.reach += ((tool ? 1 : 0) - this.reach) * (1 - Math.exp(-dt * 8))
     this.kaylee.rig.armR.rotation.x = -1.1 * this.reach
     if (this.photoK < 1) {
@@ -960,7 +960,7 @@ export class Salon extends Stage {
 
   protected shot(): Shot {
     // His head (and long hair down to his shoulders), the mirror round it, the trolley along the bottom; Kaylee on her
-    // stool and Mommy at the sides. On a tall screen, two rows of tools and more ceiling and floor.
+    // stool and Mom at the sides. On a tall screen, two rows of tools and more ceiling and floor.
     // (The kids in round 3 are smaller: a little closer, a little lower.)
     const kid = this.round === 3 ? 0.88 : 1
     const low = this.round === 3 ? 0.16 : 0

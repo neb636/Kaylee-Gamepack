@@ -1,6 +1,6 @@
 // The sandcastle's things, built from code in the toy look (greybox: simple shapes, already toon-shaded and outlined):
 // the three moulds (her pink bucket, a square one, a unicorn), the towers they leave, shells and coral bits to push
-// into the walls, the ghost crab, a longtail going by, the beach ball, Mommy's umbrella and Daddy's blanket of sand.
+// into the walls, the ghost crab, a longtail going by, the beach ball, Mom's umbrella and Dad's blanket of sand.
 import { Group } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../engine3d/geo'
@@ -171,7 +171,7 @@ export function beachBall(bag: Bag) {
   return { root, ball }
 }
 
-/** Mommy's umbrella: a pole and a canopy that spins. */
+/** Mom's umbrella: a pole and a canopy that spins. */
 export function umbrella(bag: Bag) {
   const root = new Group()
   root.add(solid(P.cyl(0.05, 0.05, 2.3, '#F4EEE6', { at: [0, 1.15, 0] }, 6), bag, 2))
@@ -182,7 +182,7 @@ export function umbrella(bag: Bag) {
   return { root, can }
 }
 
-/** Sand heaped on Daddy: one soft mound per part of him (shins, knees, tummy, chest), each grown as she buries it. */
+/** Sand heaped on Dad: one soft mound per part of him (shins, knees, tummy, chest), each grown as she buries it. */
 export function blanket(bag: Bag, length: number, width: number) {
   const root = new Group()
   const AT = [0.17, 0.33, 0.5, 0.66]

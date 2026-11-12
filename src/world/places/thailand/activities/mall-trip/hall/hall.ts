@@ -9,11 +9,11 @@
 //     walks up, punches the first one (it swings), and in she goes. And the Sky Pod: she walks up to its wall, the
 //     pods light up in a rainbow, and in she goes.
 //   - Life everywhere: kids climb the frame and go down the mask's nose, race down the lanes and slide off the
-//     mountain; the staff wave; Mommy sits on the bench; Daddy follows her round (with the hairdo she gave him at the
+//     mountain; the staff wave; Mom sits on the bench; Dad follows her round (with the hairdo she gave him at the
 //     barber's, `hair`); a plush crocodile snaps.
-//   - When she's played enough, Daddy's tummy rumbles (`hungry`): the screen around asks about pizza.
+//   - When she's played enough, Dad's tummy rumbles (`hungry`): the screen around asks about pizza.
 // Voices (lines.ts `L.mall.hall`): Sparkle's welcome the first time she comes in, the staff's hello the first two times
-// she comes near them, Mommy's and Daddy's lines when she taps them (in turn), Daddy's tummy, and Sparkle's hint when
+// she comes near them, Mom's and Dad's lines when she taps them (in turn), Dad's tummy, and Sparkle's hint when
 // the finger shows. Nothing when she walks up to a way in (the mini game's own first line comes right after).
 import { Color, Raycaster, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { clamp, sounds, spendHint, wobble, type Line } from '../../../../../../sdk'
@@ -49,7 +49,7 @@ export interface HallEvents extends LegEvents {
   going(door: GameDoor): void
   /** She went in: that mini game opens. */
   enter(door: GameDoor): void
-  /** Daddy's tummy rumbled: the screen around asks "Pizza time?". */
+  /** Dad's tummy rumbled: the screen around asks "Pizza time?". */
   hungry(): void
   /** She's stuck and every way in she hasn't been through is off the screen: the map button bounces (or stops). */
   nudge(on: boolean): void
@@ -60,11 +60,11 @@ export interface HallStart {
   done: GameDoor[]
   /** The door she comes out of ('' = she just came in). */
   from: DoorId | ''
-  /** Daddy's tummy rumbles soon after she comes out. */
+  /** Dad's tummy rumbles soon after she comes out. */
   hungry: boolean
-  /** Daddy's hairdo from the barber ('' his own mane). */
+  /** Dad's hairdo from the barber ('' his own mane). */
   hair?: string
-  /** Mommy's card is up already (a `hungry` link): Daddy's tummy rumbles without his line. */
+  /** Mom's card is up already (a `hungry` link): Dad's tummy rumbles without his line. */
   asking?: boolean
 }
 
@@ -76,8 +76,8 @@ export const LABELS = [
 
 export const HALL_ANCHORS: AnchorInfo[] = [
   { id: 'family:kaylee', label: 'You', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
   { id: 'door:vet', label: 'The Vet Clinic', kind: 'thing' },
   { id: 'door:cafe', label: 'Cafe & Cake', kind: 'thing' },
   { id: 'door:barber', label: 'The Barber Salon', kind: 'thing' },
@@ -130,7 +130,7 @@ export class Hall extends Stage {
   private entering: { door: DoorId; t: number; game: boolean } | null = null
   /** Each shop door: how open it is now, and how open it wants to be. */
   private doorOpen = Object.fromEntries(SHOP_IDS.map((id) => [id, { k: 0, goal: 0 }])) as Record<ShopId, { k: number; goal: number }>
-  /** Timed happenings (the door shutting behind her, Daddy's tummy, the bricks hopping home). */
+  /** Timed happenings (the door shutting behind her, Dad's tummy, the bricks hopping home). */
   private timers: { at: number; run: () => void }[] = []
   private poleSpin = 0
   private chase = 0
@@ -150,7 +150,7 @@ export class Hall extends Stage {
   private hintedAt = -1
   /** The staff have said hello this time round the hall. */
   private staffHi = false
-  /** Mommy's card is up (no hint over her question). */
+  /** Mom's card is up (no hint over her question). */
   private asking = false
   /** The map button is bouncing (stuck, the new ways in all off the screen). */
   private nudging = false
@@ -170,7 +170,7 @@ export class Hall extends Stage {
     this.built = buildHall(bag)
     scene.add(this.built.root)
 
-    // ---- The family: Kaylee in her grip socks, Mommy on the bench, Daddy following her round ----
+    // ---- The family: Kaylee in her grip socks, Mom on the bench, Dad following her round ----
     const { kaylee, members } = this.makeFamily(['ji'])
     this.kaylee = kaylee
     this.ji = members.get('ji')!
@@ -280,7 +280,7 @@ export class Hall extends Stage {
     this.talk(who, list[heard[who]++ % list.length])
   }
 
-  /** Mommy's card is up, or gone again (More play). */
+  /** Mom's card is up, or gone again (More play). */
   setAsking(on: boolean) {
     this.asking = on
     if (!on) this.lastTouch = this.time
@@ -290,7 +290,7 @@ export class Hall extends Stage {
     this.timers.push({ at: this.time + s, run })
   }
 
-  /** Daddy's tummy: a rumble, a wobble, and he pats it; again; then the question. */
+  /** Dad's tummy: a rumble, a wobble, and he pats it; again; then the question. */
   private tummy() {
     if (this.hungry !== 'soon' || this.entering) return
     this.hungry = 'asked'
@@ -304,7 +304,7 @@ export class Hall extends Stage {
       d.wiggle()
       sfx.haha()
     })
-    // (After Daddy's line, so Mommy doesn't cut him off.)
+    // (After Dad's line, so Mom doesn't cut him off.)
     this.after(2.1, () => {
       this.asking = true
       this.hev.hungry()
@@ -324,7 +324,7 @@ export class Hall extends Stage {
   }
 
   /** Picked on the map: near, she walks there; far, she's there at once (the camera glides along the hall after her,
-   *  Daddy with her) and goes straight in. */
+   *  Dad with her) and goes straight in. */
   travel(door: GameDoor) {
     if (this.entering) return
     this.lastTouch = this.time
@@ -566,7 +566,7 @@ export class Hall extends Stage {
     if (this.entering) this.entering.t += dt
     const kp = k.position
 
-    // ---- Daddy keeps up with her: beside her and a step further back (so he faces us when he looks at her) ----
+    // ---- Dad keeps up with her: beside her and a step further back (so he faces us when he looks at her) ----
     const d = this.daddy
     if (!this.entering) {
       const side = this.vel.x > 0.2 ? -1 : this.vel.x < -0.2 ? 1 : Math.sign(d.pos.x - kp.x) || 1

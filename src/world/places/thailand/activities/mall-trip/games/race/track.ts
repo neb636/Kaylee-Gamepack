@@ -1,6 +1,6 @@
 // The Racing Slide at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "★ 3. The Racing Slide"),
 // greybox: shapes and sounds, with the voices (lines.ts L.mall.race). Four wavy orange lanes seen from the bottom, ending in a pit of pink and white
-// balls; Kaylee in lane 1, Daddy, Mommy and a kid beside her (the other kid waits a turn by the pit).
+// balls; Kaylee in lane 1, Dad, Mom and a kid beside her (the other kid waits a turn by the pit).
 //
 // The toy: climb the steps (tap, tap: two steps a tap), sit at the top, 3-2-1, then every tap is a scoot: her hands
 // push the slide and she goes faster over each bump. Whee into the balls with a splash.
@@ -8,8 +8,8 @@
 //   2. A tap just as she reaches a bump's crest makes her fly high (time slows near each crest, a ring closes on her
 //      and she glows: tap now). A missed bump is still a bouncy little hop.
 //   3. Rubber rings that spin: each scoot spins her ring too, and a flight twirls it.
-// She always wins, Daddy by a nose (the others race her pace: ahead mid-race, just behind at the end). Each race puts a
-// winner's ribbon on the board, and Daddy lands in the balls head first, legs kicking. The camera frames the steps and
+// She always wins, Dad by a nose (the others race her pace: ahead mid-race, just behind at the end). Each race puts a
+// winner's ribbon on the board, and Dad lands in the balls head first, legs kicking. The camera frames the steps and
 // the top, follows her down, then the pit. Then round again (after the third, the 🛝 shows and she can keep racing).
 import { Color, IcosahedronGeometry, OctahedronGeometry, Vector3, type Group, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, spendHint, wobble } from '../../../../../../../sdk'
@@ -37,7 +37,7 @@ export interface RaceEvents extends LegEvents {
 
 const OTHERS = ['nick', 'ji', 'kidA', 'kidB'] as const
 type Other = (typeof OTHERS)[number]
-const NAMES: Record<RacerId, string> = { kaylee: 'You', nick: 'Daddy', ji: 'Mommy', kidA: 'A kid in blue', kidB: 'A kid in yellow' }
+const NAMES: Record<RacerId, string> = { kaylee: 'You', nick: 'Dad', ji: 'Mom', kidA: 'A kid in blue', kidB: 'A kid in yellow' }
 
 export const RACE_ANCHORS: AnchorInfo[] = [
   { id: 'kaylee', label: 'You', kind: 'family' },
@@ -105,7 +105,7 @@ export class RaceSlide extends Stage {
   private ringEl: HTMLElement | null = null
   private teach: Vector3 | null = null
   private countN: 3 | 2 | 1 | 0 | null = null
-  // The voices: which idle spell the hint was said for, the first-time lines said, the next win line, Daddy's last.
+  // The voices: which idle spell the hint was said for, the first-time lines said, the next win line, Dad's last.
   private hintFor = -1
   private told = new Set<string>()
   private winN = 0
@@ -361,7 +361,7 @@ export class RaceSlide extends Stage {
         h.boost *= Math.exp(-SPEED.decay * sdt)
         run.u += (h.v * sdt) / SLIDE_LEN
       } else if (!h.landed && !mine.out) {
-        // Racing her pace: a little ahead mid-race, just behind at the end (Daddy by a nose).
+        // Racing her pace: a little ahead mid-race, just behind at the end (Dad by a nose).
         const p = mine.u
         const rv = RIVALS[run.r.id as Other]
         const goal = clamp(p + rv.lead * Math.sin(Math.PI * p) - rv.nose * p ** 3 + 0.012 * Math.sin(this.time * 1.9 + run.lane * 2), 0, 0.995)
@@ -435,7 +435,7 @@ export class RaceSlide extends Stage {
     })
   }
 
-  /** Daddy into the balls head first: over he goes, legs kicking in the air, then BLOOP, out he pops. */
+  /** Dad into the balls head first: over he goes, legs kicking in the air, then BLOOP, out he pops. */
   private dive(r: Racer, land: Vector3, fromSlide: boolean) {
     const H = r.height
     const under = new Vector3(land.x, PIT.surface - 0.62 * H, land.z)
@@ -518,7 +518,7 @@ export class RaceSlide extends Stage {
 
   /** Round again: out of the balls, back to the steps. The others go round the back and up; the kids swap turns. */
   private next() {
-    // (Wait for everyone to be in the balls, and Daddy to pop out.)
+    // (Wait for everyone to be in the balls, and Dad to pop out.)
     if (this.runs.some((r) => !r.out) || (this.daddyDive && ++this.waits < 8)) return this.after(0.4, () => this.next())
     this.waits = 0
     this.diveN++
@@ -638,7 +638,7 @@ export class RaceSlide extends Stage {
   }
 
   private pokeRacer(r: Racer) {
-    // Daddy in the balls: he does it again, head first.
+    // Dad in the balls: he does it again, head first.
     if (r.id === 'nick' && this.inPit(r) && !r.busy && !this.daddyDive) {
       sfx.babble(RIVALS.nick.pitch)
       return this.dive(r, r.pos.clone(), false)
@@ -694,7 +694,7 @@ export class RaceSlide extends Stage {
         }
       }
     }
-    // ---- Daddy's dive: over he goes (and back up) ----
+    // ---- Dad's dive: over he goes (and back up) ----
     const dad = this.other('nick')
     if (this.daddyDive) {
       const d = this.daddyDive

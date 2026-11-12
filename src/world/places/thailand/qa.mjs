@@ -59,7 +59,7 @@ export const screens = [
   { name: 'thailand-family', hash: '#/world/thailand/hub/family', reset: true, wait: 1800 },
   ...['kaylee', 'agong', 'ja', 'sri'].map((who) => ({ name: `thailand-family-${who}`, hash: `#/world/thailand/hub/family?who=${who}`, reset: true, wait: 1500 })),
   { name: 'thailand-party-soon', hash: '#/world/thailand/party/soon', stampAll: 'thailand', wait: 800 },
-  // The mall day's trip loop (greybox): Mommy's card (🚤 / 🛝🍕), the day pass's choices on a replay, the goodbye with
+  // The mall day's trip loop (greybox): Mom's card (🚤 / 🛝🍕), the day pass's choices on a replay, the goodbye with
   // the whole family and the Veloz (then everyone in it), ICONSIAM's glimpse, the lift going up, the counter with her
   // socks on, home (the car at Agong's door; the box given, the photo on the wall).
   { name: 'mall-loop-invite', hash: '#/world/thailand/mall-trip/invite', reset: true, wait: 4000 },
@@ -95,8 +95,8 @@ export const screens = [
     await p.waitForFunction(() => window.__thaiMallQA?.().held === 'wall', null, { timeout: 60000 }).catch(() => {})
     await p.waitForTimeout(1200)
   } },
-  // HarborLand's hall (greybox): just in by Mommy's bench, out of the vet's door (Harbor Town), out of the racing
-  // slide (the lanes, the crocodile), going in at the cafe (the door open, the camera in close), Mommy's "Pizza time?"
+  // HarborLand's hall (greybox): just in by Mom's bench, out of the vet's door (Harbor Town), out of the racing
+  // slide (the lanes, the crocodile), going in at the cafe (the door open, the camera in close), Mom's "Pizza time?"
   // card once every sticker is on her band, and the 🗺️ map of every mini game.
   { name: 'mall-hall', hash: '#/world/thailand/mall-trip/hall', reset: true, wait: 3500 },
   { name: 'mall-hall-map', hash: '#/world/thailand/mall-trip/hall?map=1&games=vet,cafe,race', reset: true, wait: 3500 },
@@ -152,7 +152,7 @@ export const screens = [
       await p.waitForTimeout(4500)
     },
   },
-  // The Barber Salon (greybox): each round (round 3: a kid with a picture card, Daddy on the bench with his new look), a
+  // The Barber Salon (greybox): each round (round 3: a kid with a picture card, Dad on the bench with his new look), a
   // long rainbow hairdo from a link, the grow tonic and the scissors at work, the 👆 after a while.
   ...[1, 2, 3].map((n) => ({ name: `barber-${n}`, hash: `#/world/thailand/mall-trip/barber?round=${n}&hair=k.roygbvproygbvproygbvproyg.s.1p5Y`, reset: true, wait: n === 3 ? 5200 : 3200 })),
   { name: 'barber-hint', hash: '#/world/thailand/mall-trip/barber', reset: true, wait: 9500 },
@@ -213,7 +213,7 @@ export const screens = [
   },
   // The Racing Slide (greybox): each round at the bottom of the steps (the others sitting at the top), the 👆 on the
   // steps after a while, the countdown, a race at a bump (round 2: the ring closing on her, gold), the spinning rings
-  // (round 3), the pit after a win (the ribbon, Daddy head first).
+  // (round 3), the pit after a win (the ribbon, Dad head first).
   ...[1, 2, 3].map((n) => ({ name: `mall-race-${n}`, hash: `#/world/thailand/mall-trip/race?round=${n}`, reset: true, wait: 3000 })),
   { name: 'mall-race-hint', hash: '#/world/thailand/mall-trip/race', reset: true, wait: 9500 },
   { name: 'mall-race-count', hash: '#/world/thailand/mall-trip/race', reset: true, wait: 2500, act: (p) => slideTo(p, (q) => q.count === 2) },
@@ -222,7 +222,7 @@ export const screens = [
   { name: 'mall-race-pit', hash: '#/world/thailand/mall-trip/race', reset: true, wait: 2500, act: (p) => slideTo(p, (q) => q.ribbons >= 1, 3, 1500) },
   // Little Land (greybox): each round at the start (round 2: the chedi's outlines; the elephant's), the 👆 on the box
   // after a while, a brick in her hand over the stack (the outline where it will land), the stack glowing after six,
-  // a tower past Daddy's ribbon (ah... ah...).
+  // a tower past Dad's ribbon (ah... ah...).
   ...[1, 2, 3].map((n) => ({ name: `blocks-${n}`, hash: `#/world/thailand/mall-trip/blocks?round=${n}`, reset: true, wait: 3000 })),
   { name: 'blocks-elephant', hash: '#/world/thailand/mall-trip/blocks?round=2&card=elephant', reset: true, wait: 3000 },
   { name: 'blocks-hint', hash: '#/world/thailand/mall-trip/blocks', reset: true, wait: 9500 },
@@ -258,7 +258,7 @@ export const screens = [
     },
   })),
   // Muay Thai (greybox): each round at the start (1: the wai kru beside the coach; 2: the drum and the ring on the bag;
-  // 3: Daddy's pad, the bag hooked back), the 👆 on her gloves after a while, a bow, a punch on the beat (the gold POW),
+  // 3: Dad's pad, the bag hooked back), the 👆 on her gloves after a while, a bow, a punch on the beat (the gold POW),
   // the big kick.
   ...[1, 2, 3].map((n) => ({ name: `boxing-${n}`, hash: `#/world/thailand/mall-trip/boxing?round=${n}`, reset: true, wait: 3000 })),
   { name: 'boxing-hint', hash: '#/world/thailand/mall-trip/boxing', reset: true, wait: 9500 },
@@ -299,7 +299,7 @@ export const screens = [
       await p.waitForTimeout(500)
     },
   },
-  // The Golden Mountain (greybox): each round at the foot (round 2: the pinks glow among the silly ones; round 3: Daddy
+  // The Golden Mountain (greybox): each round at the foot (round 2: the pinks glow among the silly ones; round 3: Dad
   // at his foot), the 👆 on the next hold after a while, a pull held halfway by her finger, the top (the bell and the
   // slide's mouth glowing), the race halfway up. Where things are comes from window.__thaiMallQA.
   ...[1, 2, 3].map((n) => ({ name: `mountain-${n}`, hash: `#/world/thailand/mall-trip/mountain?round=${n}`, reset: true, wait: 3000 })),
@@ -336,7 +336,7 @@ export const screens = [
       await p.waitForTimeout(900)
     },
   })),
-  // The Sky Pod (greybox): each round at the start (round 2: the wall playing the pattern; round 3: Daddy's blue light
+  // The Sky Pod (greybox): each round at the start (round 2: the wall playing the pattern; round 3: Dad's blue light
   // beside hers), a slap on a high pod (Kaylee in the air, her arm up), the finale's rainbow and the 🛝, the 👆 after a
   // while.
   ...[1, 2, 3].map((n) => ({ name: `skypod-${n}`, hash: `#/world/thailand/mall-trip/skypod?round=${n}`, reset: true, wait: n === 2 ? 1400 : 3000 })),
@@ -371,7 +371,7 @@ export const screens = [
   },
   { name: 'skypod-hint', hash: '#/world/thailand/mall-trip/skypod', reset: true, wait: 9500 },
   // The Pizza Company (greybox): the menu, the table at the start, a slice pulled out with the cheese stretching (held
-  // over Daddy's plate), the last two for Agong's box, the box closed.
+  // over Dad's plate), the last two for Agong's box, the box closed.
   { name: 'pizza-menu', hash: '#/world/thailand/mall-trip/menu', reset: true, wait: 3500 },
   { name: 'pizza-share', hash: '#/world/thailand/mall-trip/share?pizza=cheese', reset: true, wait: 3500 },
   {
@@ -423,7 +423,7 @@ export const screens = [
   { name: 'nan-map', hash: '#/world/thailand/nan-trip/map', reset: true, wait: 3500 },
   { name: 'nan-map-stops', hash: '#/world/thailand/nan-trip/map?stops=mushrooms,rice', reset: true, wait: 3500 },
   { name: 'nan-three', hash: '#/world/thailand/nan-trip/three', reset: true, wait: 4000 },
-  // The Nan trip's loop (the trip kit's legs): Mommy's card with 🏔️🚙, packing with the mountain things, the goodbye,
+  // The Nan trip's loop (the trip kit's legs): Mom's card with 🏔️🚙, packing with the mountain things, the goodbye,
   // the x-ray, the window seat, landing in Nan's green valley (it plays out to the Nan map), and coming home (the
   // flight, then Agong asks for his photo and the Nan photos fan out).
   ...['invite', 'pack', 'goodbye', 'airport', 'fly'].map((to) => ({ name: `nan-${to}`, hash: `#/world/thailand/nan-trip/${to}`, reset: true, wait: to === 'invite' ? 3800 : 2600 })),
@@ -530,7 +530,7 @@ export const screens = [
       await p.waitForTimeout(3400)
     },
   },
-  // Mommy asks on her own a few seconds after Kaylee comes upstairs; Aunty Sri's van once it has pulled up.
+  // Mom asks on her own a few seconds after Kaylee comes upstairs; Aunty Sri's van once it has pulled up.
   { name: 'thailand-mommy-asks', hash: '#/world/thailand/hub/upstairs', reset: true, wait: 6500 },
   { name: 'boat-trip-van', hash: '#/world/thailand/boat-trip/goodbye', reset: true, wait: 5000 },
   { name: 'boat-trip-pack-full', hash: '#/world/thailand/boat-trip/pack?packed=sunhat,sunglasses,floaties,duck,teddy,gan', reset: true, wait: 2200 },
@@ -782,7 +782,7 @@ export const pacing = [
   // Home (step 5): a home link builds the bay first for its photos, then the flight home, the van, the photo for Agong.
   { name: 'thailand trip: home, the photo for agong', id: 'trip-home', hash: '#/world/thailand/boat-trip/home?photos=village,hong,nail&found=crab,eagle', reset: true },
   { name: 'thailand trip: a replay (🧳 or 🚤)', id: 'trip-replay', hash: '#/world/thailand/boat-trip/invite?replay=1', reset: true },
-  // The mall day's trip loop (greybox, no voices yet: the words show in bubbles). Mommy's card, the goodbye (hugs, the
+  // The mall day's trip loop (greybox, no voices yet: the words show in bubbles). Mom's card, the goodbye (hugs, the
   // Veloz), ICONSIAM (the lift, the counter's toys, the gate), and home (the box for Agong, the photo on the wall).
   { name: 'thailand mall: mommy asks where to', id: 'mall-invite', hash: '#/world/thailand/mall-trip/invite', reset: true },
   { name: 'thailand mall: goodbye and the veloz', id: 'mall-goodbye', hash: '#/world/thailand/mall-trip/goodbye', reset: true },
@@ -816,7 +816,7 @@ export const pacing = [
   // The Pizza Company (greybox, no voices): a tap on the pizza serves a slice (with its stretch) to the plate that's
   // behind, so the auto-player can share all eight and fill Agong's box.
   { name: 'thailand mall: pizza share', id: 'mall-pizza', hash: '#/world/thailand/mall-trip/share', reset: true },
-  // The Nan road trip's mountain road (greybox, no voices): Mommy drives by herself to the end of the road, so the
+  // The Nan road trip's mountain road (greybox, no voices): Mom drives by herself to the end of the road, so the
   // auto-player's taps are pokes and steering; one run per road that deepens the verb.
   { name: 'thailand nan: the valley road', id: 'nan-valley', hash: '#/world/thailand/nan-trip/drive', reset: true },
   { name: 'thailand nan: the sky road', id: 'nan-sky', hash: '#/world/thailand/nan-trip/drive?road=sky', reset: true },
@@ -829,7 +829,7 @@ export const pacing = [
   // she walks through), a tap on a gate floods its paddy. The auto-player can't hold a finger down, so it only gets
   // partway; the robot run that drags through every round is qa-motion's nan-plant and nan-shoo.
   { name: 'thailand nan: the rice farm', id: 'nan-rice', hash: '#/world/thailand/nan-trip/rice', reset: true },
-  // Its threshing and the deck (greybox B): any tap bangs the next bundle, then the kratip on the deck and Mommy's photo.
+  // Its threshing and the deck (greybox B): any tap bangs the next bundle, then the kratip on the deck and Mom's photo.
   { name: 'thailand nan: threshing the rice', id: 'nan-rice-thresh', hash: '#/world/thailand/nan-trip/rice?round=thresh', reset: true },
   // Bo Kluea's salt wells: a tap on the pan (or the bucket) dips a bucketful and pours it, a tap on the woodpile throws a
   // log on, a tap on the pan in round 3 scrapes a stripe, so the auto-player can play it through to the bags.
@@ -1019,7 +1019,7 @@ motion.push({
 
 // Thailand's boat trip (3D greybox): a finger held on the water ahead of the longtail (it surges after it, then turns
 // when the finger moves right, the wake and spray streaming), a VROOM tap, a finger held far to one side (doughnuts),
-// and the canoe paddling under the low cave roof (Daddy's horn bonks first, then Mommy's, then Kaylee's).
+// and the canoe paddling under the low cave roof (Dad's horn bonks first, then Mom's, then Kaylee's).
 const thaiBoat = (name, seconds, section, steps) => ({
   name,
   seconds,
@@ -1051,7 +1051,7 @@ motion.push(
   thaiBoat('boat-cave-roof', 8, 'cave', [['down', 0, 0.25, 7800]]),
 )
 
-// Baan Chang's feeding yard (3D greybox): a banana pulled out of Daddy's basket and held up on Mali's side (her trunk
+// Baan Chang's feeding yard (3D greybox): a banana pulled out of Dad's basket and held up on Mali's side (her trunk
 // snakes after it, curls round it and swings it to her mouth), then a stick of sugarcane held high on the right (the
 // trunks stretch up after it) and brought down to Khanom.
 motion.push({
@@ -1138,8 +1138,8 @@ motion.push(
     await page.waitForTimeout(4200)
     await page.mouse.up()
   }),
-  // The way in: the sign photo (Kaylee strikes the pose, Mommy and Daddy copy her, the flash), and the boardwalk (a
-  // finger held ahead of her: she walks after it, Mommy and Daddy tag along, down the steps toward the rail).
+  // The way in: the sign photo (Kaylee strikes the pose, Mom and Dad copy her, the flash), and the boardwalk (a
+  // finger held ahead of her: she walks after it, Mom and Dad tag along, down the steps toward the rail).
   changMoment('chang-pose', 5, 'sign', async (page) => {
     await page.getByRole('button', { name: 'Cheer pose' }).click({ force: true })
     await page.waitForTimeout(4500)
@@ -1163,8 +1163,8 @@ motion.push(
 
 // The bay's stops, one scenario per verb: ribbons fluttering through the air onto the prow (then the garland, and the
 // family stepping in), the bumper-boat football (the boat pushes the ball back to the floating field: the kick, GOAL),
-// lying the family down in the canoe before the low roof, and the Nail Island pose (Kaylee strikes it, Mommy and
-// Daddy copy her, the flash).
+// lying the family down in the canoe before the low roof, and the Nail Island pose (Kaylee strikes it, Mom and
+// Dad copy her, the flash).
 const bayMoment = (name, seconds, section, setup, act) => ({
   name,
   seconds,
@@ -1307,7 +1307,7 @@ motion.push(
 // HarborLand (the mall trip): the hall's ways in, and the Big Frame's climbs and rides: up the red wall, through the
 // tunnel, the Boomerang Donut swinging, down the twin-dragon spiral into the balls (after walking to the top's left
 // end), the Ta-Khon roller over the racing lanes, the zip line along the front, the mask's nose slide, and the cannon
-// at Daddy (bonk, the ball on his horn, his flop). Taps go through the tap targets, or a point on the screen.
+// at Dad (bonk, the ball on his horn, his flop). Taps go through the tap targets, or a point on the screen.
 const thaiMall = (name, seconds, section, steps) => ({
   name,
   seconds,
@@ -1327,7 +1327,7 @@ const thaiMall = (name, seconds, section, steps) => ({
 })
 motion.push(
   // The hall: walking to the cafe's door and going in (the door swings, the camera moves in), going in at the barber's
-  // (Daddy following with his new look), and Little Land's bricks tumbling and hopping home.
+  // (Dad following with his new look), and Little Land's bricks tumbling and hopping home.
   thaiMall('hall-go-in', 5, 'hall?from=vet', [['door:cafe', 4800]]),
   thaiMall('hall-barber', 3, 'hall?from=barber&hair=k.roygbvproygbvproygbvproyg.s', [['door:barber', 2800]]),
   thaiMall('hall-bricks', 14, 'hall?from=race', [['point', 3500, 0.97, 0.88], ['point', 3500, 0.97, 0.88], ['blocks', 6500]]),
@@ -1380,9 +1380,9 @@ motion.push(
   thaiVet('vet-sneeze', 7, 'elephant', [['soap', 'belly', 'rub'], ['soap', 'head', 'rub', 2600]]),
 )
 
-// The Barber Salon (mall trip, greybox): tools on Daddy's mane, the core verb. Her finger drags the grow tonic round
+// The Barber Salon (mall trip, greybox): tools on Dad's mane, the core verb. Her finger drags the grow tonic round
 // his head (the strands grow long and wild), the scissors across (the tufts fall), the comb up (spikes) and the color
-// spray across (rainbow stripes); then the mirror: the chair spins round to it, he poses, Mommy's flash. Where things
+// spray across (rainbow stripes); then the mirror: the chair spins round to it, he poses, Mom's flash. Where things
 // are comes from window.__thaiMallQA (his head and the tools, in screen pixels).
 const thaiBarber = (name, seconds, round, strokes, mirror = false) => ({
   name,
@@ -1452,7 +1452,7 @@ motion.push({
 
 // The Racing Slide (mall trip, greybox): the core verb, scooting down a lane. Setup climbs the steps (taps on the
 // steps' tap target) and waits for the 3-2-1; the act taps Kaylee: steadily (`every` ms, round 1's scoots) or just as a
-// bump's ring closes on her (round 2's flights; round 3 in the spinning rings), until she's in the balls (Daddy head
+// bump's ring closes on her (round 2's flights; round 3 in the spinning rings), until she's in the balls (Dad head
 // first). Where she is comes from window.__thaiMallQA (screen pixels).
 const thaiSlide = (name, seconds, round, every) => ({
   name,
@@ -1484,8 +1484,8 @@ const thaiSlide = (name, seconds, round, every) => ({
 motion.push(thaiSlide('mall-race-scoot', 8, 1, 330), thaiSlide('mall-race-bump', 9, 2, 0), thaiSlide('mall-race-rings', 9, 3, 0))
 
 // The mall day's HarborLand counter (the trip loop, greybox): its tiny toys. Setup rides the lift up (the big button);
-// the act taps a pair of grip socks (they hop onto her feet, and Daddy's stretch up to his knees), the shoe rack (her
-// shoes hop into a cubby, Daddy squashes his big ones in) and the height chart (her horn counts, Daddy's goes off the
+// the act taps a pair of grip socks (they hop onto her feet, and Dad's stretch up to his knees), the shoe rack (her
+// shoes hop into a cubby, Dad squashes his big ones in) and the height chart (her horn counts, Dad's goes off the
 // top).
 motion.push({
   name: 'mall-counter-toys',
@@ -1510,7 +1510,7 @@ motion.push({
 
 // Little Land (mall trip, greybox): the core verb, a brick from the box put on the stack. Her finger drags bricks onto
 // the spots (each drops in, squashes, and the stack sways; the second goes half over the edge: a big wobble), then a
-// swipe through the stack knocks it over and the bricks bounce. In round 3 the tower passes Daddy's ribbon and he
+// swipe through the stack knocks it over and the bricks bounce. In round 3 the tower passes Dad's ribbon and he
 // sneezes it down. Where things are comes from window.__thaiMallQA (the box and the spots, in screen pixels).
 const thaiBlocks = (name, seconds, round, targets, end) => ({
   name,
@@ -1548,8 +1548,8 @@ const thaiBlocks = (name, seconds, round, targets, end) => ({
 motion.push(thaiBlocks('blocks-stack-crash', 7, 1, [[3, 0], [4, 1], [1, 0], [2, 1]], 'swipe'), thaiBlocks('blocks-sneeze', 8, 3, [[3, 0], [3, 1], [3, 2], [3, 3]], 'wait'))
 
 // Muay Thai (mall trip, greybox): the core verb, a punch. Round 1: her finger goes down on the bag, high then low, and
-// a swipe across it (a hook): the glove goes out where she touched, the bag swings and squashes, Daddy staggers, POW.
-// Round 2: punches on the drum's beat (when the ring is gold): the big gold POW. Round 3: Daddy's pad as it moves, then
+// a swipe across it (a hook): the glove goes out where she touched, the bag swings and squashes, Dad staggers, POW.
+// Round 2: punches on the drum's beat (when the ring is gold): the big gold POW. Round 3: Dad's pad as it moves, then
 // the big kick. Where things are comes from window.__thaiMallQA (screen pixels).
 const thaiBoxing = (name, seconds, round, mode) => ({
   name,
@@ -1594,7 +1594,7 @@ const thaiBoxing = (name, seconds, round, mode) => ({
 motion.push(thaiBoxing('boxing-punch', 5, 1, 'bag'), thaiBoxing('boxing-beat', 6, 2, 'beat'), thaiBoxing('boxing-pad-kick', 9, 3, 'pad'))
 // The Golden Mountain (mall trip, greybox): the core verb, pulling up hold by hold. Her finger goes down on a glowing
 // hold and pulls down (she reaches, rises, lands with a squash, the number pops); at the top the bell and the slide.
-// In round 3 Daddy climbs the other side, puffing, a hold behind. Where things are comes from window.__thaiMallQA.
+// In round 3 Dad climbs the other side, puffing, a hold behind. Where things are comes from window.__thaiMallQA.
 const thaiMountain = (name, seconds, round, steps) => ({
   name,
   seconds,
@@ -1660,7 +1660,7 @@ motion.push(thaiSkyPod('skypod-slap', 7, [0, 4, 8, 3, 1]), thaiSkyPod('skypod-gl
 
 // The Pizza Company (mall trip, greybox): her finger pulls a slice out of the pan and the cheese stretches, wobbles as
 // she swings it, and snaps; she lets go over a plate. Hawaiian snaps early, Double Cheese stretches longest, and in the
-// tug (after one each) Daddy grabs the other end. Where things are comes from window.__thaiMallQA (screen pixels).
+// tug (after one each) Dad grabs the other end. Where things are comes from window.__thaiMallQA (screen pixels).
 const thaiPizza = (name, seconds, link, to, opts = {}) => ({
   name,
   seconds,
@@ -1694,7 +1694,7 @@ motion.push(
 // The Nan road trip's mountain road: her finger steering the Pajero, the core verb. On the valley road she puts her
 // finger down (the steering wheel appears), turns it right and holds it: the Pajero swerves off onto the grass (bumping,
 // tufts flying, "Oh no, the grass!"), on past it (it hops off and tumbles, "Oh no!", poof), and drops back onto the road
-// ("We're back!"); she lets go and Mommy takes it back to the left lane, then she taps the Pajero (it hops, boing).
+// ("We're back!"); she lets go and Mom takes it back to the left lane, then she taps the Pajero (it hops, boing).
 motion.push({
   name: 'nan-steer',
   seconds: 11,

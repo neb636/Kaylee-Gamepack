@@ -5,7 +5,7 @@
 // - The golden dome stands behind the houses. Like the house's sacred things it never wobbles: a soft bell.
 // - The ball rolled off the floating field into the sea: she pushes it back with the boat (bumper-boat football), the
 //   kids kick it in: GOAL! "Khob khun ka!", and they toss her a football to keep (it rides in the boat from then on).
-//   Daddy snaps a photo with the kids cheering behind (it drops into the album).
+//   Dad snaps a photo with the kids cheering behind (it drops into the album).
 // - Drive straight at a house and a grandma comes out on her porch, waving her broom.
 import { Group, Vector3, type BufferGeometry, type PerspectiveCamera } from 'three'
 import { bell, clamp } from '../../../../../../sdk'
@@ -589,7 +589,7 @@ export class VillageStop implements BayPart {
         this.goal = 'done'
         this.goalT = 0
         this.playT = 0
-        // Daddy snaps the photo with the kids cheering behind.
+        // Dad snaps the photo with the kids cheering behind.
         setTimeout(() => {
           sfx.shutter()
           bay.flash()

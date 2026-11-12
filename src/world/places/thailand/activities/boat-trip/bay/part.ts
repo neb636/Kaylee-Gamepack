@@ -18,10 +18,10 @@ export type Pose3 = 'sit' | 'stand' | 'lie'
 export type Phase = 'board' | 'drive' | 'swap' | 'beach' | 'docked'
 /** The stops she can visit (the `stops` param; `race` = she has won the boat race, the trophy rides in the boat). */
 export type Stop = 'village' | 'cave' | 'race'
-/** The photos that drop into the album by themselves (the `photos` param), and Mommy's selfies; Baan Chang's pose photo
- *  at the sign wall (`sign`) and Daddy's photo of the splash (`chang`). */
+/** The photos that drop into the album by themselves (the `photos` param), and Mom's selfies; Baan Chang's pose photo
+ *  at the sign wall (`sign`) and Dad's photo of the splash (`chang`). */
 export type PhotoKind = 'village' | 'hong' | 'nail' | 'selfie' | 'race' | 'sign' | 'chang'
-/** Poses for the Nail Island photo (and Kaylee's tiller, Daddy pointing, Mommy's selfie arm). */
+/** Poses for the Nail Island photo (and Kaylee's tiller, Dad pointing, Mom's selfie arm). */
 export type PoseKind = 'wave' | 'cheer' | 'heart' | 'silly' | 'tiller' | 'point' | 'selfie' | 'broom'
 
 export interface Rider {

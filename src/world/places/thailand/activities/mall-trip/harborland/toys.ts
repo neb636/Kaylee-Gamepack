@@ -1,5 +1,5 @@
 // Everything in the Big Frame that reacts to her besides the rides:
-//   the cannon     tap it and a ball flies at Daddy (sitting in the ball pit): bonk, he tips back into the balls and pops
+//   the cannon     tap it and a ball flies at Dad (sitting in the ball pit): bonk, he tips back into the balls and pops
 //                  up with the ball stuck on his horn; the third hit, he stands up and flops back in, a huge splash
 //   the bridge     the net bridge sags under her and bounces when tapped
 //   the rope       the rope course's logs swing and knock as she crosses (or when tapped)
@@ -22,12 +22,12 @@ import { frameSfx as sfx } from './sounds'
 
 const v = (x: number, y: number, z: number) => new Vector3(x, y, z)
 const tmp = new Vector3()
-/** Daddy sits on a padded bump in the pit, the balls up to his tummy. */
+/** Dad sits on a padded bump in the pit, the balls up to his tummy. */
 const SEAT = 0.26
 const w = new Vector3()
 
 export class FrameToys {
-  /** Daddy in the ball pit (his toy animal inside, so he can tip back and flop). */
+  /** Dad in the ball pit (his toy animal inside, so he can tip back and flop). */
   readonly daddy = new Group()
   /** Times the cannon has hit him (the third: he flops back in himself). */
   hits = 0
@@ -36,7 +36,7 @@ export class FrameToys {
   /** Balls in the air (a few at once: she can tap as fast as she likes). */
   private balls: Group[] = []
   private flights: { ball: Group; from: Vector3; t: number }[] = []
-  /** When the cannon last fired (the camera keeps Daddy in view for a while). */
+  /** When the cannon last fired (the camera keeps Dad in view for a while). */
   firedAt = -99
   private recoil = 1
   private time = 0
@@ -57,9 +57,9 @@ export class FrameToys {
     private nick: Member,
     scene: Object3D,
     bag: Bag,
-    private fx: { giggle(): void; /** A ball bonked Daddy (`big`: the third, his big flop). */ bonk(big: boolean): void },
+    private fx: { giggle(): void; /** A ball bonked Dad (`big`: the third, his big flop). */ bonk(big: boolean): void },
   ) {
-    // Daddy, sitting in the balls, turned toward the cannon a little.
+    // Dad, sitting in the balls, turned toward the cannon a little.
     this.daddy.position.set(DADDY.at[0], SEAT, DADDY.at[1])
     this.daddy.rotation.order = 'YXZ'
     this.daddy.rotation.y = (DADDY.face * Math.PI) / 180
@@ -91,14 +91,14 @@ export class FrameToys {
   get daddyHead() {
     return this.nick.rig.head.getWorldPosition(new Vector3())
   }
-  /** Daddy is part of the show (a ball on its way): the camera keeps him in view. */
+  /** Dad is part of the show (a ball on its way): the camera keeps him in view. */
   get daddyShow() {
     return this.time - this.firedAt < 3.5
   }
 
   // ---------------------------------------------------------------- pokes
 
-  /** The cannon: a ball at Daddy (up to four in the air at once). */
+  /** The cannon: a ball at Dad (up to four in the air at once). */
   fire() {
     const ball = this.balls.find((b) => !b.visible)
     if (!ball) return false
