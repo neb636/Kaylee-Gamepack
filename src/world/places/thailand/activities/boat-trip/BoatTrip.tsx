@@ -2,7 +2,7 @@
 // each its own 3D world in the shared view:
 //
 //   invite, pack, goodbye   Agong's own house (activities/hub/house.ts) with the trip's plugin (trip/legs/house-plugin.ts):
-//                           Mommy asks (Ask.tsx) by the elephant map, packing (with the suitcase card and ✅ here),
+//                           Mom asks (Ask.tsx) by the elephant map, packing (with the suitcase card and ✅ here),
 //                           the goodbye at the shutter and Aunty Sri's van
 //   airport                 the van pulls away and they're at the airport: the x-ray belt (trip/legs/airport.ts)
 //   takeoff, fly, land      the window seat (trip/legs/plane.ts), then Krabi's arrivals arch and the songthaew (with
@@ -14,7 +14,7 @@
 //                           songthaew to the entrance and a pose photo at the bamboo sign (🥤 after it), the cafe,
 //                           where she makes her chocolate milk (chang/cafe.ts; a big 🐘 when it's ready), down the
 //                           boardwalk to the elephants' yard, where she holds bananas and sugarcane out to the trunks;
-//                           then their favorites, Lamyai and Khanom's sneaky sips, and the rainbow splash (Daddy's photo
+//                           then their favorites, Lamyai and Khanom's sneaky sips, and the rainbow splash (Dad's photo
 //                           and Khanom's sticker, then 🚤 to the pier or, with the boat done, ✈️🏠, after a video of
 //                           real elephants, chang/video.ts). `been` says which of
 //                           Krabi's two places are done: the pier at sunset offers 🐘 until Baan Chang is
@@ -27,7 +27,7 @@
 //                           plane flies home on the map. The first trip of a session packs, then straight down the
 //                           stairs to the window seat (the goodbye and the x-ray belt are out of the way); later ones
 //                           open at `land?quick=1`: straight to Krabi airport (the plane world starts on the ground,
-//                           no cabin), where Daddy asks 🐘 or 🚤.
+//                           no cabin), where Dad asks 🐘 or 🚤.
 //   home                    (only its links now) Agong's house again (the plugin's `home` leg): the flight home, Aunty Sri's van at the door,
 //                           the photo she picks (PhotoFan.tsx) goes on Agong's wall (saved on the iPad, trip/wall-photos.ts),
 //                           the cousins look up from their phones, and the stamp (onDone)
@@ -36,7 +36,7 @@
 // Sparkle in the corner). Between legs the boarding pass slides up and hides the next world being built. From the
 // moment the suitcase clicks shut Kaylee wears what she packed, in every leg and in the bay. What she packs (`packed`) rides along the whole
 // trip (the URL param, then what she saved); in the bay her ribbons, the stops she visited, her photos and the stickers
-// she found ride along in the URL too. The trip saves after each leg (useSaved), and saying yes to Mommy again offers to
+// she found ride along in the URL too. The trip saves after each leg (useSaved), and saying yes to Mom again offers to
 // keep going from there; after her first whole trip it offers 🧳 the whole trip again or 🚤 straight to the boat with what
 // she packed last time, and the flight is shorter (`replay=1` in a link plays it that way). A `home` link without
 // photos from the bay builds the bay behind the boarding pass first and takes a fresh Nail Island photo.
@@ -90,7 +90,7 @@ import { BEEN, BOAT_TRIP, LEG_OF_BEEN, PASS, PUNCH, WORLD_OF, type Been, type Tr
 interface Progress {
   at: BoatSection | null
   packed: string
-  /** Whole trips done, Mommy's question to the photo on Agong's wall (after the first, replays are shorter). */
+  /** Whole trips done, Mom's question to the photo on Agong's wall (after the first, replays are shorter). */
   trips?: number
   /** Krabi's places done on this trip (the pier, then 🐘 still to come; cleared at home). */
   been?: Been[]
@@ -186,7 +186,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     return () => clearTimeout(t)
   }, [phase])
   const [flash, setFlash] = useState(0)
-  /** Krabi's fork: Daddy is asking "Where to?" (his card of postcards is up). */
+  /** Krabi's fork: Dad is asking "Where to?" (his card of postcards is up). */
   const [whereTo, setWhereTo] = useState(false)
   useEffect(() => setWhereTo(false), [mount.key])
   // The bay: her ribbons, the stops she's been to, the album's photos and stickers.
@@ -353,7 +353,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     }, 900)
   }
 
-  /** She said yes to Mommy: straight to packing; or, with a trip half done or after her first whole trip, where to
+  /** She said yes to Mom: straight to packing; or, with a trip half done or after her first whole trip, where to
    *  start (🧳 a new trip, the next leg's icon to keep going, 🚤 straight to the boat). */
   const yes = () => {
     if (state.current.busy) return
@@ -370,7 +370,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     setPass({ punch: null, done: half ? doneBefore(legs, half, null, state.current.saved.been ?? []) : [], choices })
     if (choices.length > 1 && choices.at(-1)!.icon === '🚤') setTimeout(() => say(L.home.again), 600)
   }
-  // Mommy asks in her room (the trip's first section); a yes back in the house goes straight on to packing.
+  // Mom asks in her room (the trip's first section); a yes back in the house goes straight on to packing.
   const asking = mode === 'webgl' && section === 'invite' && phase === 'invite' && !pass
   useEffect(() => {
     if (phase !== 'invite' || !justSaidYes()) return
@@ -724,7 +724,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
         </button>
       )}
       {mount.world === 'plane' && mode === 'webgl' && (
-        <WhereTo open={whereTo && !pass} who="Daddy" whoColor="#A9EBD6" line={L.bay.whereTo} cards={FORK_CARDS} onPick={(id) => (worldRef.current as PlaneRide | null)?.choose(id as 'chang' | 'pier')} />
+        <WhereTo open={whereTo && !pass} who="Dad" whoColor="#A9EBD6" line={L.bay.whereTo} cards={FORK_CARDS} onPick={(id) => (worldRef.current as PlaneRide | null)?.choose(id as 'chang' | 'pier')} />
       )}
       {mount.world === 'chang' && mode === 'webgl' && <PoseButtons show={section === 'sign' && !pass && !albumOpen} onPose={(p) => (worldRef.current as Chang | null)?.pose(p)} />}
       {/* (At Baan Chang the album shows where photos are taken: the sign and the splash.) */}

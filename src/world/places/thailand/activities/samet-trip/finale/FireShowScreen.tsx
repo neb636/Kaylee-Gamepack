@@ -1,7 +1,7 @@
 // The fire show, on screen (fireshow.ts is the world): Sai Kaew at night with its tap targets, the pressing finger
 // (drawing a circle before she starts, round the dots she still needs when she's stuck), Sparkle in the corner speaking
 // everyone's lines (trip/legs/Guide.tsx, the words for Dad too), and once the fireworks go up a 🔥 🏆 badge with
-// the way home (Mommy's photo goes on Agong's wall, the stamp). With ?feel=1 Dad also gets round chips.
+// the way home (Mom's photo goes on Agong's wall, the stamp). With ?feel=1 Dad also gets round chips.
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
@@ -21,7 +21,7 @@ interface Props {
   flags: StopId[]
   /** The round on screen changed (the address bar follows). */
   onRound(r: FireRound): void
-  /** The show is over and she tapped 🏠: `photo` is the fireworks (the trip uses Mommy's sunset photo if it has one). */
+  /** The show is over and she tapped 🏠: `photo` is the fireworks (the trip uses Mom's sunset photo if it has one). */
   onHome?(photo: string): void
 }
 

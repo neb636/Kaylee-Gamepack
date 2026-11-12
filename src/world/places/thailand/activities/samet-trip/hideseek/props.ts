@@ -1,6 +1,6 @@
 // Ao Prao's things for hide and seek and for lunch on the deck (greybox 6), built from code in the toon look: the
 // hiding places (a pink umbrella tipped over as a shield, a stack of red folding chairs, a beach towel that breathes,
-// a pandanus tree on its stilt roots, thin palms, Mommy's red chair), Daddy's cap, and on the deck the bread basket and
+// a pandanus tree on its stilt roots, thin palms, Mom's red chair), Dad's cap, and on the deck the bread basket and
 // a roll, a fresh coconut with a straw (its milk goes down as she sips), a plate of mango sticky rice (a bite at a
 // time) and the cream umbrellas that flap. The driftwood tree and the deck itself are the island's (island/props.ts).
 // Each moving part is its own group, so a tap can spin, shake or squash it.
@@ -14,7 +14,7 @@ const RED = '#E8475C'
 const RED2 = '#F0596B'
 const POLE = '#F4EEE6'
 
-/** A pink beach umbrella tipped over on its side like a shield (its canopy facing up the beach), Daddy behind it. */
+/** A pink beach umbrella tipped over on its side like a shield (its canopy facing up the beach), Dad behind it. */
 export function shieldUmbrella(bag: Bag) {
   const root = new Group()
   const can = new Group()
@@ -41,7 +41,7 @@ export function chairStack(bag: Bag) {
   return { root, pile }
 }
 
-/** A striped beach towel spread on the sand, and the lump under it (Daddy) that breathes; his toes stick out. */
+/** A striped beach towel spread on the sand, and the lump under it (Dad) that breathes; his toes stick out. */
 export function towel(bag: Bag) {
   const root = new Group()
   const flat = new Group()
@@ -95,14 +95,14 @@ export function thinPalm(bag: Bag, seed: number) {
   return { root }
 }
 
-/** Mommy's red folding beach chair (Ao Prao's, from the sunset photo). */
+/** Mom's red folding beach chair (Ao Prao's, from the sunset photo). */
 export function beachChair(bag: Bag) {
   const root = new Group()
   root.add(solid(merge([P.rbox(0.62, 0.1, 0.9, 0.04, RED, { at: [0, 0.36, 0.1] }), P.rbox(0.62, 0.75, 0.08, 0.04, RED2, { at: [0, 0.68, -0.38], rot: [-0.35, 0, 0] }), ...[[-0.26, 0.45], [0.26, 0.45], [-0.26, -0.3], [0.26, -0.3]].map(([x, z]) => P.box(0.05, 0.36, 0.05, '#C9C2B8', { at: [x, 0.18, z] }))]), bag, 2))
   return { root }
 }
 
-/** Daddy's cap (it floats when he hides in the sea, his head just under). */
+/** Dad's cap (it floats when he hides in the sea, his head just under). */
 export function cap(bag: Bag) {
   const root = new Group()
   root.add(solid(merge([P.sphere(0.2, '#3D6FB8', { scale: [1, 0.55, 1] }, 12), P.cyl(0.2, 0.2, 0.03, '#2E5A99', { at: [0, -0.01, 0.17], scale: [1, 1, 0.7] }, 12), P.sphere(0.03, '#FFFFFF', { at: [0, 0.11, 0] }, 6)]), bag, 2))

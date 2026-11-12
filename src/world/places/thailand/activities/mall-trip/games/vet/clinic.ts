@@ -1,11 +1,11 @@
 // The Vet Clinic in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md, "★ 1. The Vet Clinic"),
 // greybox 1: shapes and sounds, with the voices (lines.ts L.mall.vet). Dr. Kaylee in blue scrubs and a cap stands by
-// the exam table; Daddy watches.
+// the exam table; Dad watches.
 //
 // The toy: grab a tool from the tray and use it on the patient, right where she holds it. The tool's tip sits just
 // above her finger; each frame the patient's zones (head, mouth, chest, paw, tail...) are projected onto the screen and
 // the nearest one under the tip is what the tool touches (zoneAt), so it lands the same on an iPad or an iPhone.
-//   - stethoscope: thump-thump hearts float up, loudest over the chest (on Daddy: BA-BOOM)
+//   - stethoscope: thump-thump hearts float up, loudest over the chest (on Dad: BA-BOOM)
 //   - thermometer: the red line climbs and the cheeks glow, then cool (in the pony's ear: boing!)
 //   - tweezers: pinch the thorn in the puppy's paw and pull it out; cream: rub it in; bandage: wind it round the paw
 //   - soap: suds where she rubs (the pony's mud comes off); shower: rinses them; towel: dries; brush: fluffs; bow
@@ -13,7 +13,7 @@
 // Three patients, each a step deeper: the puppy's check-up and sore paw, the muddy pony's bath, the sniffly baby
 // elephant (its sneeze blows the suds everywhere, then it gives her a trunk shower). Each hops off the table, through
 // the window, onto the waiting room's bench. A tap on a tool uses it for her (a short go), so dragging is never a must.
-// Nothing fails: a tool anywhere does something (a giggle, a yip, Daddy hamming it up).
+// Nothing fails: a tool anywhere does something (a giggle, a yip, Dad hamming it up).
 import { BackSide, Color, Group, IcosahedronGeometry, OctahedronGeometry, Raycaster, Vector2, Vector3, type Mesh, type Object3D, type WebGLRenderer } from 'three'
 import { bell, spendHint, wobble, type Line } from '../../../../../../../sdk'
 import type { Avatar } from '../../../../characters/avatar'
@@ -56,7 +56,7 @@ export const VET_ANCHORS: AnchorInfo[] = [
   { id: 'jar', label: 'Treat jar', kind: 'thing' },
   { id: 'scale', label: 'Scale', kind: 'thing' },
   { id: 'family:kaylee', label: 'You', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
 ]
 
 /** Where a tap sends each tool (its "aim": that zone also pulls a held tool in a little). */
@@ -73,7 +73,7 @@ interface Hit {
 }
 type Phase = 'enter' | 'exam' | 'healed' | 'leave' | 'done'
 
-/** Daddy's reactions: at most one line this often (seconds), so talk stays short and play long. */
+/** Dad's reactions: at most one line this often (seconds), so talk stays short and play long. */
 const DADDY_GAP = 12
 const V = L.mall.vet
 
@@ -130,7 +130,7 @@ export class VetClinic extends Stage {
   private kayleeHop = 0
   /** The stethoscope's ear tips and tubes on Kaylee while she holds its chest piece. */
   private steth: Stethoscope
-  // The voices: when Daddy last spoke, which idle spell the hint was said for, the facts said, his heart line next.
+  // The voices: when Dad last spoke, which idle spell the hint was said for, the facts said, his heart line next.
   private daddySaid = -99
   private hintFor = -1
   private told = new Set<string>()
@@ -143,7 +143,7 @@ export class VetClinic extends Stage {
     this.rig.fov = 30
     this.room = buildRoom(bag)
     scene.add(this.room.root)
-    // ---- Kaylee in her scrubs and cap, Daddy watching ----
+    // ---- Kaylee in her scrubs and cap, Dad watching ----
     const { kaylee, members } = this.makeFamily(['nick'])
     this.kaylee = kaylee
     this.nick = members.get('nick')!
@@ -179,7 +179,7 @@ export class VetClinic extends Stage {
       else p.root.visible = false
     })
     this.layout()
-    // Daddy welcomes her; Sparkle says who's coming in (begin).
+    // Dad welcomes her; Sparkle says who's coming in (begin).
     this.after(0.3, () => this.vev.say(V.open))
     this.begin(start.patient)
   }
@@ -342,7 +342,7 @@ export class VetClinic extends Stage {
     const items = [...this.tools.values()].filter((t) => t.root.visible).map((t) => t.item)
     const n = items.length
     for (const b of this.boards.values()) b.visible = false
-    // Kaylee and Daddy stand closer in on a tall screen.
+    // Kaylee and Dad stand closer in on a tall screen.
     const d = this.tall ? DADDY_TALL : DADDY_AT
     this.nick.place(d.x, 0, d.z, d.face)
     if (!n) return
@@ -430,7 +430,7 @@ export class VetClinic extends Stage {
     const h = this.held
     this.held = null
     if (!h?.moved) return
-    // Let go over Daddy's head with a bow: he wears it.
+    // Let go over Dad's head with a bow: he wears it.
     if (this.hit?.who === 'daddy' && h.tool.item.tool === 'bow' && h.tool.item.color) this.daddyBow(h.tool.item.color)
     this.leave()
     this.sendHome(h.tool)
@@ -1019,7 +1019,7 @@ export class VetClinic extends Stage {
     this.last = f
     f()
   }
-  /** Daddy says it, unless he spoke a moment ago. */
+  /** Dad says it, unless he spoke a moment ago. */
   private daddySays(l: Line) {
     if (this.time - this.daddySaid < DADDY_GAP) return false
     this.daddySaid = this.time
@@ -1123,7 +1123,7 @@ export class VetClinic extends Stage {
       this.needIcon = icon
       this.vev.need(icon)
     }
-    // ---- Kaylee and Daddy watch the tool (Kaylee reaches out while she holds one) ----
+    // ---- Kaylee and Dad watch the tool (Kaylee reaches out while she holds one) ----
     this.kaylee.lookAt(look.x, look.y, look.z)
     this.nick.lookAt(look.x, look.y, look.z)
     this.kaylee.update(dt, t)
@@ -1179,7 +1179,7 @@ export class VetClinic extends Stage {
   }
 
   protected shot(): Shot {
-    // The table, the tray, Kaylee and Daddy; on a tall screen two rows of tools and more ceiling and floor.
+    // The table, the tray, Kaylee and Dad; on a tall screen two rows of tools and more ceiling and floor.
     if (this.w < this.h) return { center: new Vector3(0.12, 1.0, 0.65), half: new Vector3(1.12, 1.15, 0.5), yaw: 0, pitch: 13, minDist: 4 }
     return { center: new Vector3(0.05, 1.12, 0.35), half: new Vector3(1.8, 1.02, 0.45), yaw: 0, pitch: 11, minDist: 4 }
   }

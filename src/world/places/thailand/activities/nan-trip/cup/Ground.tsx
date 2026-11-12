@@ -1,7 +1,7 @@
 // The Nan Mountain Cup's race ground screen (sections `cup`, `podium`, `cup-win`; greybox 3): the 3D race ground
 // (ground.ts) with its tap targets and the 👆 after a while, and over it the few buttons there are, in big pictures:
 // 🗺️ back to the Nan map from the board, ➡️ on the podium (back to the board, or 🏆 to the Cup after the last race), and
-// after the Cup Mommy's photo and 🗺️ (the stamp lands on Nan town). The world stays up between the board, the podium
+// after the Cup Mom's photo and 🗺️ (the stamp lands on Nan town). The world stays up between the board, the podium
 // and the Cup (the camera glides); the race is its own screen (Cup.tsx).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'

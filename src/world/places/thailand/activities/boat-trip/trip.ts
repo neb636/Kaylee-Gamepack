@@ -1,4 +1,4 @@
-// The boat trip as a trip (trip/types.ts): Mommy, Daddy and Kaylee, Aunty Sri's van to the airport, a window seat to Krabi, then the longtail at the pier. Pure data.
+// The boat trip as a trip (trip/types.ts): Mom, Dad and Kaylee, Aunty Sri's van to the airport, a window seat to Krabi, then the longtail at the pier. Pure data.
 import { L } from '../../lines'
 import { PLACES } from '../../trip/outline'
 import type { TripDef } from '../../trip/types'

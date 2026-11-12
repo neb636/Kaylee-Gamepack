@@ -15,7 +15,7 @@ export const vetSfx = {
   },
   /** The stethoscope: thump-thump (louder over the chest). */
   heartbeat: (loud = 1) => [0, 0.16].forEach((d, i) => tone(i ? 62 : 74, 44, 0.13, 0.16 * loud, 'sine', d)),
-  /** Daddy's heart: BA-BOOM. */
+  /** Dad's heart: BA-BOOM. */
   baboom: () => {
     ;[0, 0.22].forEach((d, i) => tone(i ? 58 : 70, 34, 0.24, 0.3, 'sine', d))
     noise(0.3, 0.1, 'lowpass', 300, 90, 0.22)

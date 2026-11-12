@@ -1,6 +1,6 @@
 // The cafe's little effects, each one instanced mesh (one draw call however many). Copied from the vet's (games/vet/
 // fx.ts) and given a color per particle, since a drink can be any color she blends:
-//   - Floaters fly free and fade: drops off the stream, steam, hearts, sparkles, frost round Daddy's head.
+//   - Floaters fly free and fade: drops off the stream, steam, hearts, sparkles, frost round Dad's head.
 //   - Splats stick where they land (the ceiling beam, the wall) and slowly shrink away.
 import { Color, DynamicDrawUsage, Euler, IcosahedronGeometry, InstancedMesh, Matrix4, MeshBasicMaterial, Quaternion, Vector3, type BufferGeometry, type ColorRepresentation } from 'three'
 import type { Bag } from '../../../../../../engine3d/dispose'

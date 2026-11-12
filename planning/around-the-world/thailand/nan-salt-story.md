@@ -12,7 +12,7 @@ a reason and adds one moment to the verb she already has.
 
 1. **Grandma's Lost Bracelet** (a mystery). Memory film: little Pa Kluea, a filly, drops her grandma's silver bracelet
    down the well. Grandma: "The well keeps what it loves. One day it gives it back." Now: some buckets bring up silly
-   finds (Daddy's sunglasses, a sandal, a grumpy frog) that pop out onto the floor; in the fire round something glints
+   finds (Dad's sunglasses, a sandal, a grumpy frog) that pop out onto the floor; in the fire round something glints
    under the boiling brine; while scraping, her paddle goes *clink* and the bracelet sparkles in the salt. Payoff: she
    gives it back; Pa Kluea wears it in the trip photo. Teaches: boiling the water away leaves what was in it.
 2. **The Sea Under the Mountain** (a wonder tale; she loves *Little Lost Dolphin*). Grandma's tale as a memory film:
@@ -47,7 +47,7 @@ in `salt/layout.ts`, wired into `salt3d.ts` like the rice farm's films (`docs/fi
   screen (`SPOT_R`, `SALT_RATE`). The soup pot (1 spot), Pa Kai's jar (1 spot, then 4 eggs hop in), Yai Nak's three fish
   (3 spots, a drag across them). Each done: the cook tastes, a yum face, their line, the lantern lights. A new press on
   a done food: a pucker face and a "too salty" line. A quick tap is a pinch (about a second of salt).
-- **The party (`party`):** the string lights pop on one by one, Pa Kluea's thanks, Daddy's "Mmm! Just right!", a cheer.
+- **The party (`party`):** the string lights pop on one by one, Pa Kluea's thanks, Dad's "Mmm! Just right!", a cheer.
 - **New:** a `hen` species in the shared rig (comb, wattle, tail fan); voices `kwai` (onyx), `kai` (shimmer),
   `nak` (fable) in `cast.json`. The fish grandma is an otter (no goose rig yet).
 - **Scratch:** the films borrow the rice farm's story music and memory bed; no ElevenLabs sounds of its own yet.

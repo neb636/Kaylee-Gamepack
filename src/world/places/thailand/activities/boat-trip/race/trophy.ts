@@ -108,7 +108,7 @@ export function buildPodium(bag: Bag): Podium {
     const a = (i / 22) * Math.PI
     parts.push(P.sphere(0.42, RAINBOW[i % RAINBOW.length], { at: [-0.4, 0.6 + Math.sin(a) * 5.2, Math.cos(a) * 4.6] }, 10))
   }
-  // Flower pots at the back corners (Mommy and Daddy stand at the front ends).
+  // Flower pots at the back corners (Mom and Dad stand at the front ends).
   for (const s of [-1, 1]) parts.push(P.cyl(0.4, 0.3, 0.6, '#FFC2A8', { at: [-4.6, 0.85, s * 5.2] }, 10), ...[0, 1, 2].map((k) => P.sphere(0.26, [PAL.hotpink, PAL.butter, PAL.lavenderDark][k], { at: [-4.6 + (k - 1) * 0.2, 1.3 + (k % 2) * 0.12, s * 5.2 + (k - 1) * 0.18] }, 8)))
   root.add(solid(merge(parts), bag, 2))
   // The numbers on the steps' fronts.

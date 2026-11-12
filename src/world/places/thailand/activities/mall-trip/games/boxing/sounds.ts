@@ -1,5 +1,5 @@
 // Muay Thai's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise): the punches, the POW, the
-// coach's drum (the klong) and the little cymbal (the ching), the ring bell, the ropes; Daddy's oof and laugh,
+// coach's drum (the klong) and the little cymbal (the ching), the ring bell, the ropes; Dad's oof and laugh,
 // Kaylee's giggle, the coach's babble between his words. The words are voices (lines.ts `L.mall.boxing`).
 import { noise, tone } from '../../../../../../kit/sfx'
 import { sfx } from '../../../../sfx'
@@ -63,7 +63,7 @@ export const boxingSfx = {
     tone(196, 150, 0.45, 0.07, 'sawtooth')
     tone(392, 300, 0.3, 0.025, 'triangle', 0.01)
   },
-  /** Daddy staggering: oof. */
+  /** Dad staggering: oof. */
   oof: () => tone(280, 150, 0.2, 0.08, 'triangle'),
   /** The water bottle: a squirt, then drips. */
   squirt: () => {

@@ -1,5 +1,5 @@
 // The Sky Pod at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "8. The Sky Pod"), in meters: the
-// wall of light-up pods, the scoreboard, the springy mat she bounces on, where Kaylee and Daddy stand, the toys around.
+// wall of light-up pods, the scoreboard, the springy mat she bounces on, where Kaylee and Dad stand, the toys around.
 // Pure data (no three.js).
 //
 // Seen straight on (the camera looks toward -z at the wall). On a wide screen the nine pods make an arch, like a
@@ -7,9 +7,9 @@
 //
 //   wide:            ● ● ●                          tall:     [ 0 0 ]   the board
 //              ●   [ 0 0 ]   ●      🚀                        ● ● ●     row 3 (the highest notes)
-//    🔊      ●                 ●     Daddy                    ● ● ●     row 2
+//    🔊      ●                 ●     Dad                    ● ● ●     row 2
 //           ●                    ●                          ● ● ●     row 1 (the lowest notes)
-//   ═══════ the springy mat, Kaylee on it ═══════          🔊 Kaylee  Daddy
+//   ═══════ the springy mat, Kaylee on it ═══════          🔊 Kaylee  Dad
 //
 // Each pod is a note: left to right (and up the rows) they climb a major scale, C D E F G A B C D, so she can play
 // tunes on the wall.
@@ -35,7 +35,7 @@ export function podSpots(tall: boolean): V3[] {
 
 /** Each pod's own color (unlit it's a dark version of it), round the rainbow with the notes. */
 export const POD_COLORS = ['#FF5C8A', '#FF9A4D', '#FFD23D', '#7FE07A', '#4FD6C8', '#5FB4FF', '#8F86FF', '#D77BFF', '#FF6FD0']
-/** Round 3: her lights and Daddy's. */
+/** Round 3: her lights and Dad's. */
 export const PINK = '#FF4F9A'
 export const BLUE = '#3FA8FF'
 /** The pattern's lights while the wall plays it (round 2), and the soft "this one next" glow. */
@@ -56,7 +56,7 @@ export const KAYLEE_Z = 0.42
 export const REACH = 0.98
 /** She stands this far to the side of the pod she slaps (so she doesn't hide it, and we see her face). */
 export const BESIDE = 0.3
-/** Daddy watches from the side (rounds 1 and 2), then plays on the same wall (round 3). He reaches this high. */
+/** Dad watches from the side (rounds 1 and 2), then plays on the same wall (round 3). He reaches this high. */
 export const DADDY_Z = 0.5
 export const DADDY_REACH = 1.95
 export function daddyHome(tall: boolean): V3 {

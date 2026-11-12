@@ -1,5 +1,5 @@
 // The yellow sea canoe, greybox: the hidden lagoons are only reached by little boats through low caves (Phang Nga Bay's
-// real canoe trips). Low and drifty. Daddy paddles in front; Kaylee steers from the back, like a canoe's captain.
+// real canoe trips). Low and drifty. Dad paddles in front; Kaylee steers from the back, like a canoe's captain.
 import { Group } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../engine3d/geo'
@@ -29,7 +29,7 @@ export function buildCanoe(bag: Bag): Vehicle {
       2,
     ),
   )
-  // Daddy's paddle: a stick with a blade at each end, dipping left and right.
+  // Dad's paddle: a stick with a blade at each end, dipping left and right.
   const paddle = new Group()
   paddle.position.set(0, 1.0, 1.15)
   paddle.add(solid(merge([P.cyl(0.03, 0.03, 2.2, '#8C6A55', { rot: [0, 0, Math.PI / 2] }), ...[-1, 1].map((s) => P.rbox(0.42, 0.04, 0.2, 0.02, PAL.mint, { at: [s * 1.1, 0, 0] }))]), bag, 1.5))

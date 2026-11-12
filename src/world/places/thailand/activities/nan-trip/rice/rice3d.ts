@@ -21,8 +21,8 @@
 //            the grains spray into the big basket and its heap rises. Two bangs empty a bundle and she tosses the straw
 //            onto the pile (it grows). Five bundles heap the basket: it shakes, the chaff blows away, the grains turn
 //            white, and a steaming kratip of sticky rice pops up out of it. Then the deck.
-//   deck:    #168's: Kaylee and Daddy on the tall stools, her pink milk (tap to sip), the kratip (tap: she eats a ball of
-//            sticky rice, a grain stuck on her cheek), Mommy's photo, then the video and the end card (Rice.tsx).
+//   deck:    #168's: Kaylee and Dad on the tall stools, her pink milk (tap to sip), the kratip (tap: she eats a ball of
+//            sticky rice, a grain stuck on her cheek), Mom's photo, then the video and the end card (Rice.tsx).
 // Lung Kham, the farmer (an old monkey in his ngob, on the boardwalk's right end), needs a helper: he says what each
 // round is for, hops when a paddy's done, counts the bundles in Thai as she threshes, and gives her the sticky rice.
 // His story (story.ts, the films): last year Jip, a cheeky little bird, took his hat and the birds ate all his rice. The
@@ -30,12 +30,12 @@
 // when it's golden a film (round `nest`) follows Jip to his chicks in Lung's old hat; and after the threshing the last
 // bundles are for the birds (round `share`). Films take the camera (engine3d/film.ts, the letterbox bars) and the
 // screen draws their words and the memory's storybook look (FilmOverlay); nothing in the farm takes a tap meanwhile.
-// Silly instead of wrong: wade into Daddy and he shakes like a dog (in the harvest she drops straw on his head); walk
+// Silly instead of wrong: wade into Dad and he shakes like a dog (in the harvest she drops straw on his head); walk
 // into the buffalo's wallow and you both get muddy (the water washes it off); flop into the straw pile; round birds.
 // Things to poke: the gates, the scarecrow (it spins, its hat flies), Lung's bench (it bounces), the buffalo, the ducks, the frog, the nursery bed,
-// the straw pile, the hut's chime, the banana plant, the bamboo, the café up the hill, Daddy, Lung.
+// the straw pile, the hut's chime, the banana plant, the bamboo, the café up the hill, Dad, Lung.
 // Talk (lines.ts L.nan.rice): Lung says what the round is for, then Sparkle (queued behind him) what to do, and after
-// ~8 s with nothing done she says it again (stuckLine); Lung and Daddy react on the farm and Mommy on the deck, each
+// ~8 s with nothing done she says it again (stuckLine); Lung and Dad react on the farm and Mom on the deck, each
 // thing once; a first tap on the buffalo, a duck, the view or the kratip tells a fact. Now and then, when nobody's
 // talking, far-off farm life: a frog, a bird, a duck, a chime, the buffalo.
 import { Color, Group, IcosahedronGeometry, Matrix4, MeshBasicMaterial, OctahedronGeometry, Vector3, type Object3D, type WebGLRenderer } from 'three'
@@ -113,7 +113,7 @@ import { FarmWater } from './water'
 export interface RiceEvents extends LegEvents {
   /** A new round began (the address bar follows). */
   round(r: Round): void
-  /** Mommy took the photo on the deck. */
+  /** Mom took the photo on the deck. */
   photo(src: string): void
   /** The photo's taken: the end card. */
   allDone(): void
@@ -141,12 +141,12 @@ export const RICE_ANCHORS: AnchorInfo[] = [
   { id: 'rack', label: 'Rice bundles', kind: 'thing' },
   { id: 'kratip', label: 'Sticky rice', kind: 'thing' },
   { id: 'glass', label: 'Pink milk', kind: 'thing' },
-  { id: 'cup', label: "Daddy's coffee", kind: 'thing' },
+  { id: 'cup', label: "Dad's coffee", kind: 'thing' },
   { id: 'chime', label: 'Wind chime', kind: 'thing' },
   { id: 'view', label: 'The rice farm', kind: 'thing' },
   { id: 'family:kaylee', label: 'You', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
   { id: 'family:lung', label: 'Lung Kham, the farmer', kind: 'family' },
   { id: 'jip', label: 'Jip, the little bird', kind: 'thing' },
   { id: 'chicks', label: "Jip's chicks in their nest", kind: 'thing' },
@@ -367,7 +367,7 @@ export class RiceFarm extends Stage {
   private photoWanted = false
   private phone: Group
   private doneSaid = false
-  // ---- Talk: lines said once, Sparkle's hints this round, Daddy's tap lines in turn ----
+  // ---- Talk: lines said once, Sparkle's hints this round, Dad's tap lines in turn ----
   private told = new Set<string>()
   private lastSay = -99
   /** Sparkle's hints count quiet time from here (a round's start and its line), not from her last touch. */
@@ -400,7 +400,7 @@ export class RiceFarm extends Stage {
     this.deck = buildDeck(bag)
     this.deck.kratip.root.visible = false // until she's threshed it
     scene.add(this.deck.root)
-    // ---- The family: Kaylee and Daddy on the boardwalk, Mommy waiting up on the café's deck ----
+    // ---- The family: Kaylee and Dad on the boardwalk, Mom waiting up on the café's deck ----
     const { kaylee, members } = this.makeFamily(['ji', 'nick'])
     this.kaylee = kaylee
     this.nick = members.get('nick')!
@@ -444,7 +444,7 @@ export class RiceFarm extends Stage {
     this.mud = solid(merge(spots.map(([x, y, z], k) => P.sphere(0.04 + (k % 2) * 0.015, '#8A6A4F', { at: [x, y, z], scale: [1, 0.8, 0.5] }, 8))), bag, 0)
     this.mud.visible = false
     kaylee.rig.body.add(this.mud)
-    // Straw on Daddy's head (the harvest's silly moment).
+    // Straw on Dad's head (the harvest's silly moment).
     this.nickHat = solid(merge([P.sphere(0.2, STRAW, { scale: [1.2, 0.45, 1.1] }, 12), ...Array.from({ length: 8 }, (_, k) => P.cone(0.025, 0.24, k % 2 ? '#D9AE52' : STRAW, { at: [Math.cos(k) * 0.16, 0.02, Math.sin(k) * 0.14], rot: [Math.sin(k * 1.7) * 1.2, 0, Math.cos(k * 1.7) * 1.2] }, 4))]), bag, 1.5)
     this.nickHat.position.set(0, this.nick.rig.face.headY + this.nick.rig.face.R * 0.95, 0)
     this.nickHat.visible = false
@@ -624,7 +624,7 @@ export class RiceFarm extends Stage {
     this.quietFrom = 6
   }
 
-  /** A round begins: Lung says what it's for, then Sparkle what to do (Mommy's hello on the deck). */
+  /** A round begins: Lung says what it's for, then Sparkle what to do (Mom's hello on the deck). */
   private roundLine(r: Round) {
     if (r === 'deck') return this.after(0.6, () => this.once('hi', R.hi))
     if (r === 'harvest') return this.once(r, R[r]) // (Lung said it's golden as it ripened.)
@@ -813,7 +813,7 @@ export class RiceFarm extends Stage {
       this.carrier.position.y = this.lift.y = 0
       this.hop(this.kaylee, this.carrier, to, { face: 90, dur: 0.6, arc: 0.5 })
     }
-    // Daddy watches from the far side of the basket (not between her and the camera).
+    // Dad watches from the far side of the basket (not between her and the camera).
     this.nick.root.position.set(BASKET[0] + 1.35, 0, BASKET[2] + 0.15)
     this.nick.root.rotation.y = Math.atan2(to.x - BASKET[0] - 1.35, to.z - BASKET[2] - 0.15)
     // Lung steps onto the bank at her left, to count (on the boardwalk he'd stand between her and the camera).
@@ -1202,7 +1202,7 @@ export class RiceFarm extends Stage {
     this.setRound('deck')
   }
 
-  /** Kaylee and Daddy on the tall stools at the railing, Mommy across the deck with her phone. */
+  /** Kaylee and Dad on the tall stools at the railing, Mom across the deck with her phone. */
   private seatOnDeck(now: boolean) {
     const d = this.deck.root
     d.add(this.kaylee.root)
@@ -1240,7 +1240,7 @@ export class RiceFarm extends Stage {
       })
   }
 
-  /** A ball of sticky rice from the kratip, with her fingers: nom. (Empty: tap again and Mommy fills it up.) */
+  /** A ball of sticky rice from the kratip, with her fingers: nom. (Empty: tap again and Mom fills it up.) */
   private eat() {
     if (this.ballK < 1) return
     const kr = this.deck.kratip
@@ -1503,7 +1503,7 @@ export class RiceFarm extends Stage {
         this.after(0.8, () => this.once('hat', R.hat, true))
         this.bits.burst(this.nick.rig.head.getWorldPosition(new Vector3()).add(new Vector3(0, 0.4, 0)), 10, 0.8, 1.2, 0.7, 0.04)
       } else if (this.time < this.wetUntil) {
-        // Dripping wet unicorn: splash! Daddy shakes like a dog.
+        // Dripping wet unicorn: splash! Dad shakes like a dog.
         this.nickShake = 0
         sfx.wet()
         this.splash.burst(this.nick.root.position.clone().add(new Vector3(0, 0.7, 0)), 14, 1.2, 1.6, 0.6, 0.05)
@@ -1774,7 +1774,7 @@ export class RiceFarm extends Stage {
     f.nursery.scale.set(1, 1 + Math.sin(this.nurseryWob * Math.PI * 4) * 0.12 * (1 - this.nurseryWob), 1)
     this.strawPuff = Math.min(1, this.strawPuff + dt / 0.7)
     f.straw.scale.set(1 + bell(this.strawPuff) * 0.15, 1 - bell(this.strawPuff) * 0.25, 1 + bell(this.strawPuff) * 0.15).multiplyScalar(this.strawSize)
-    // ---- Daddy: a shake like a dog; the straw on his head comes off after a while ----
+    // ---- Dad: a shake like a dog; the straw on his head comes off after a while ----
     this.nickShake = Math.min(1, this.nickShake + dt / 0.8)
     this.nick.root.rotation.z = Math.sin(t * 30) * 0.08 * bell(this.nickShake)
     if (this.nickHat.visible && this.time > this.nickHatUntil) {

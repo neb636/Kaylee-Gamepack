@@ -2,18 +2,18 @@
 // the resort deck above the cove (island/layout.ts DECK, the island's own deck from island/props.ts resortDeck). A place,
 // not a stop: no stamp, 45-90 s, 8-15 touches.
 //
-// Kaylee sits at the table across from Daddy, the cove of turquoise water and the strip of beach below the rail:
-//   - The bread basket: tap it (or Daddy) and he passes her a roll; tap her (or the roll) and she takes a bite: three
+// Kaylee sits at the table across from Dad, the cove of turquoise water and the strip of beach below the rail:
+//   - The bread basket: tap it (or Dad) and he passes her a roll; tap her (or the roll) and she takes a bite: three
 //     bites, crumbs everywhere, and the basket's always got another.
 //   - A fresh coconut with a pink straw arrives: hold a finger on it and she sips (slurp, slurp), let go and she stops;
 //     it tips toward her as it empties, and the last drops are a big SLURP.
 //   - Mango sticky rice arrives: tap the plate, a bite flies to her; five bites and the plate shines.
 //   - Pokes: the cream umbrellas flap, a monitor lizard strolls along the sand below (tap: tongue out, it hurries), a
-//     squirrel in the pandanus (tap: it runs up), Mommy takes the photo (flash), the sea splashes where she taps it.
+//     squirrel in the pandanus (tap: it runs up), Mom takes the photo (flash), the sea splashes where she taps it.
 // When she has had a roll, the coconut and the rice: a 🍽️ badge, the way back to the island and a way down to hide
 // and seek at the driftwood tree.
 //
-// Talk (lines.ts L.samet.lunch): Daddy and Mommy in their own voices, Sparkle's one line and the stuck hints
+// Talk (lines.ts L.samet.lunch): Dad and Mom in their own voices, Sparkle's one line and the stuck hints
 // (spendHint), played by the screen's TripGuide. Every number that decides the feel is a knob (?feel=1).
 import { Fog, Group, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { spendHint, type Line } from '../../../../../../sdk'
@@ -55,7 +55,7 @@ export interface LunchStart {
   time?: TimeOfDay
 }
 export interface LunchEvents {
-  /** Mommy took the photo (the screen flashes). */
+  /** Mom took the photo (the screen flashes). */
   photo(): void
   /** She had a roll, the coconut and the rice. */
   done(): void
@@ -67,8 +67,8 @@ const T_ = L.samet.lunch
 
 export const LUNCH_ANCHORS: AnchorInfo[] = [
   { id: 'kaylee', label: 'You', kind: 'thing' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
   { id: 'basket', label: 'The bread basket', kind: 'thing' },
   { id: 'roll', label: 'A bread roll', kind: 'thing' },
   { id: 'coconut', label: 'A coconut to drink', kind: 'thing' },
@@ -87,7 +87,7 @@ const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 /** The table she sits at (deck-local u, v), and the table top's height above the deck. */
 const T = { u: -2.5, v: 0.8 }
 const TOP = 0.78
-/** Mommy at the end of the table, by the rail. */
+/** Mom at the end of the table, by the rail. */
 const MOMMY = { u: T.u - 1.45, v: T.v + 0.95 }
 
 // (Sounds: sounds.ts, recorded with the synth fallbacks.)
@@ -194,7 +194,7 @@ export class Lunch implements World3D {
     this.pand.root.position.copy(pp)
     scene.add(this.pand.root)
 
-    // ---- The family: Kaylee and Daddy across the table, Mommy at the end of the deck with her phone.
+    // ---- The family: Kaylee and Dad across the table, Mom at the end of the deck with her phone.
     this.kaylee = new Avatar(bag)
     scene.add(this.kaylee.root)
     const ks = this.D(T.u - 0.85, T.v, 0.6)
@@ -212,7 +212,7 @@ export class Lunch implements World3D {
     const mt = this.D(T.u, T.v)
     this.ji.place(ms.x, ms.y, ms.z, Math.atan2(mt.x - ms.x, mt.z - ms.z) * DEG, 'stand')
 
-    // ---- On the table: the basket by Daddy; the coconut and the plate arrive in front of her.
+    // ---- On the table: the basket by Dad; the coconut and the plate arrive in front of her.
     this.basket = breadBasket(bag)
     this.basket.root.position.copy(this.D(T.u + 0.28, T.v + 0.2, TOP))
     scene.add(this.basket.root)
@@ -317,7 +317,7 @@ export class Lunch implements World3D {
       sfx.ding()
       this.once('rice', T_.rice)
     }
-    // (Daddy's "hide and seek?" waits for Mommy's "aroi" to finish.)
+    // (Dad's "hide and seek?" waits for Mom's "aroi" to finish.)
     if (this.fullAt > 0 && t > this.fullAt) {
       this.fullAt = -1
       this.events.say(T_.full)
@@ -370,7 +370,7 @@ export class Lunch implements World3D {
       this.held.position.copy(this.mouth())
       this.held.position.y -= 0.12
     }
-    // Daddy's arm reaching over with a roll.
+    // Dad's arm reaching over with a roll.
     if (this.reachT >= 0) {
       this.reachT += dt / 0.6
       const k = Math.sin(Math.PI * Math.min(1, this.reachT))
@@ -508,7 +508,7 @@ export class Lunch implements World3D {
     this.squirrel.root.position.set(base.x + top.x * S.k + 0.12, base.y + 0.9 + (top.y - 0.9) * S.k, base.z + top.z * S.k)
     this.squirrel.root.rotation.set(0, this.seaYaw + Math.PI, 0)
     if (S.chit > 0) S.chit -= dt
-    // Everyone looks at her (Mommy at her phone between).
+    // Everyone looks at her (Mom at her phone between).
     const k = this.kaylee.root.position
     this.nick.lookAt(k.x, k.y + 0.5, k.z)
     this.ji.lookAt(k.x, k.y + 0.5, k.z)
@@ -629,7 +629,7 @@ export class Lunch implements World3D {
   // ---------------------------------------------------------------- camera
 
   private shot(): Shot {
-    // (Leaning a little toward Mommy, so all three of them and the table are on screen.)
+    // (Leaning a little toward Mom, so all three of them and the table are on screen.)
     const center = this.D(T.u - 0.3, T.v + 0.35, TOP)
     const b = this.tall ? LUNCH.tallBox : LUNCH.box
     const half = this.tall ? new Vector3(b, 0.7, b * 1.1) : new Vector3(b, 0.7, b * 0.55)

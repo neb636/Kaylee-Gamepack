@@ -3,7 +3,7 @@
 // back to the end card; the 3D world holds still under it), then the end card: 🔁 the salt hut again, or 🗺️ back to the
 // Nan map (its stamp lands there). Pa Kluea's story (story.ts) plays its films over it: FilmOverlay draws their words,
 // the memory's storybook look and the hold-to-skip ⏭. Sparkle sits in the corner (trip/legs/Guide.tsx, hidden under the end card) and
-// everyone talks out loud in their own voice: the salt aunty, Daddy, Sparkle.
+// everyone talks out loud in their own voice: the salt aunty, Dad, Sparkle.
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'

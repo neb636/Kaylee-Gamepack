@@ -1,5 +1,5 @@
 // The Golden Mountain at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "5. The Golden Mountain"),
-// greybox shapes with voices (lines.ts `L.mall.mountain`: Sparkle's opening and count, Daddy's race lines, the Golden
+// greybox shapes with voices (lines.ts `L.mall.mountain`: Sparkle's opening and count, Dad's race lines, the Golden
 // Mount fact, said through blocks/talk.ts). A big yellow cone with climbing holds and Thai pattern bands, a red rail
 // and a bell on top, a shiny steel slide down the front, kids riding elephants painted on the wall, and three Lopburi
 // monkeys.
@@ -12,7 +12,7 @@
 //   1. Holds in a line: five straight up.
 //   2. Only the pink ones: the pinks in reach glow; a yellow hold honks, a blue one giggles, a mint one hides a monkey
 //      who leaps out and blows a raspberry. She stays put; nothing is wrong.
-//   3. Race Daddy up the other side: he climbs when she does, puffing, always a hold behind; he flops over the rail as
+//   3. Race Dad up the other side: he climbs when she does, puffing, always a hold behind; he flops over the rail as
 //      she gets there, then follows her down the slide and lands head first on the mat, legs kicking.
 // A flag on the rail for each round. After the third she can race him again as often as she likes.
 import { Color, Group, IcosahedronGeometry, OctahedronGeometry, Vector3, type Mesh, type MeshBasicMaterial, type Object3D, type WebGLRenderer } from 'three'
@@ -42,13 +42,13 @@ export interface MountainEvents extends LegEvents {
   round(n: Round): void
   /** She's on top (the sock band's ⛰️ comes the first time). */
   top(): void
-  /** All three rounds done (the 🛝 back to the hall shows; she can race Daddy again). */
+  /** All three rounds done (the 🛝 back to the hall shows; she can race Dad again). */
   allDone(): void
 }
 export interface MountainStart {
   round: Round
   socks: string
-  /** Daddy's hairdo from the barber ('' his own mane). */
+  /** Dad's hairdo from the barber ('' his own mane). */
   hair: string
 }
 
@@ -63,7 +63,7 @@ export const MOUNTAIN_ANCHORS: AnchorInfo[] = [
   ...[0, 1, 2].map((i): AnchorInfo => ({ id: `monkey:${i}`, label: 'A monkey', kind: 'thing' })),
   ...[0, 1].map((i): AnchorInfo => ({ id: `ele:${i}`, label: 'A painted elephant', kind: 'thing' })),
   { id: 'family:kaylee', label: 'You', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
 ]
 
 type KState = 'floor' | 'pull' | 'hang' | 'over' | 'top' | 'walk' | 'ring' | 'slide' | 'out' | 'home'
@@ -112,7 +112,7 @@ export class Golden extends Stage {
   private swing = { a: 0, v: 0 }
   private over: { from: Vector3; to: Vector3; t: number } | null = null
   private cheerT = -1
-  // ---- Daddy ----
+  // ---- Dad ----
   private d: { state: DState; a: number; y: number; row: number; t: number; u: number; v: number } = { state: 'watch', a: DADDY_WATCH.a, y: 0, row: -1, t: 0, u: 0, v: 0 }
   private dPull: { from: { a: number; y: number }; to: Hold; t: number; dur: number } | null = null
   private dFrom = new Vector3()
@@ -150,7 +150,7 @@ export class Golden extends Stage {
     this.rig.fov = 30
     this.built = buildGolden(bag)
     scene.add(this.built.root)
-    // ---- Kaylee in her grip socks, Daddy (with the hairdo she gave him at the barber's), the monkeys ----
+    // ---- Kaylee in her grip socks, Dad (with the hairdo she gave him at the barber's), the monkeys ----
     const { kaylee } = this.makeFamily([])
     this.kaylee = kaylee
     // Climbing all the way (the camera looks at her back): her wings stay folded flat so her hooves show.
@@ -168,7 +168,7 @@ export class Golden extends Stage {
       scene.add(mk.root)
       return mk
     })
-    // ---- Every round's holds (only the round on now shows), Daddy's, the halos round the ones she can reach ----
+    // ---- Every round's holds (only the round on now shows), Dad's, the halos round the ones she can reach ----
     for (const r of [1, 2, 3] as Round[]) {
       this.holdG.set(
         r,
@@ -203,11 +203,11 @@ export class Golden extends Stage {
     this.after(0.5, () => (start.round > 1 ? this.roundLine(start.round) : this.talk.say(T.climb)))
   }
 
-  /** When a round's new thing shows: the pink holds, Daddy at the foot of his side ready to race. */
+  /** When a round's new thing shows: the pink holds, Dad at the foot of his side ready to race. */
   private roundLine(n: Round) {
     if (n === 2) this.talk.say(T.pink)
     if (n !== 3) return
-    // The first race: Sparkle says what's on, then Daddy; after that, just Daddy.
+    // The first race: Sparkle says what's on, then Dad; after that, just Dad.
     if (this.races++) return this.talk.say(T.win)
     this.talk.say(T.race)
     this.after(2.0, () => this.talk.say(T.win))
@@ -253,7 +253,7 @@ export class Golden extends Stage {
       this.k = { state: 'floor', a: FOOT_A[n], y: FOOT_Y, row: -1, t: 0 }
       this.placeOnWall(FOOT_A[n], FOOT_Y)
     }
-    // Daddy: watching from the floor, or (round 3) at the foot of his side, ready to race.
+    // Dad: watching from the floor, or (round 3) at the foot of his side, ready to race.
     const d = this.daddy
     if (n === 3) {
       const foot = V(...onCone(DADDY_FOOT_A, 0, 0.42))
@@ -359,7 +359,7 @@ export class Golden extends Stage {
     this.puffs.burst(at.clone().setY(h.y - 0.75), 4, 0.6, 0.2, 0.4, 0.06)
     this.sparkles.burst(at, 6, 0.8, 0.9, 0.6, 0.04)
     this.showCount(this.count, at.clone().add(V(0, 0.32, 0.25)))
-    // Round 3: Daddy comes up behind her.
+    // Round 3: Dad comes up behind her.
     if (this.round === 3) this.daddyFollow()
     if (h.row === rowsIn(this.round) - 1) {
       this.queued = null
@@ -455,12 +455,12 @@ export class Golden extends Stage {
       this.flagPop[i] = 0
       this.after(0.3, () => sfx.flag())
     }
-    // Daddy cheers (in round 3 he follows her down: daddyFrame).
+    // Dad cheers (in round 3 he follows her down: daddyFrame).
     if (this.d.state === 'watch') {
       this.daddy.arms = 'cheer'
       this.after(1.2, () => (this.daddy.arms = 'down'))
     }
-    // Then back to the foot for the next round (after the third: race Daddy again).
+    // Then back to the foot for the next round (after the third: race Dad again).
     this.after(0.9, () => {
       const next = (this.round < 3 ? this.round + 1 : 3) as Round
       if (this.round === 3 && !this.allDoneSent) {
@@ -478,9 +478,9 @@ export class Golden extends Stage {
     })
   }
 
-  // ---------------------------------------------------------------- Daddy's race
+  // ---------------------------------------------------------------- Dad's race
 
-  /** Daddy goes up to one hold behind her (or over the top, once she's there). */
+  /** Dad goes up to one hold behind her (or over the top, once she's there). */
   private daddyGoal() {
     const s = this.k.state
     if (s === 'floor') return -1
@@ -848,7 +848,7 @@ export class Golden extends Stage {
     K.update(dt, t)
     this.rides.update(dt, t)
     this.kayleePose(dt, t)
-    // ---- Daddy, the monkeys ----
+    // ---- Dad, the monkeys ----
     this.daddyFrame(dt)
     const kp = K.position.clone().setY(K.position.y + 0.6)
     for (const m of this.monkeys) {
@@ -1057,7 +1057,7 @@ export class Golden extends Stage {
     if (s === 'slide' || s === 'out' || s === 'home') return { center: V(0.5, 1.7, CONE.z + 1.8), half: tall ? V(2.6, 2.6, 2.2) : V(3.6, 2.0, 2.2), yaw: 0, pitch: 12, minDist: 5 }
     // On top: the platform, the bell and the slide's mouth.
     if (s === 'over' || s === 'top' || s === 'walk' || s === 'ring') return { center: V(this.round === 3 ? 0.3 : 0, CONE.top + 0.55, CONE.z + 0.6), half: tall ? V(1.7, 1.7, 1.0) : V(2.3, 1.35, 1.0), yaw: 0, pitch: 12, minDist: 5 }
-    // On the wall (and at the foot): following her up, the next holds over her head; Daddy too in the race.
+    // On the wall (and at the foot): following her up, the next holds over her head; Dad too in the race.
     const handY = s === 'floor' ? 0.9 : this.pull ? this.pull.from.y + (this.pull.to.y - this.pull.from.y) * span(this.pull.t, REACH_T, RISE_T) : this.k.y
     const y = clamp(handY + 0.05, 1.25, CONE.top - 0.15)
     const race = this.round === 3

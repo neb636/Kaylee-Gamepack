@@ -1,13 +1,13 @@
 // The open water between the stops (sections `bay` and `sunset`): just the toy, plus things to drive up to and poke.
 // - Needlefish skip across the water now and then, near the boat. The sea eagle circles and swoops down for a fish.
-// - A coconut floats: bump it along fast, or come up to it slowly and Mommy scoops it into the boat.
+// - A coconut floats: bump it along fast, or come up to it slowly and Mom scoops it into the boat.
 // - Macaques sit on a ledge of a rock tower (tap: they chatter, one somersaults). Drive close and one jumps into the
-//   boat and steals Daddy's mango (his banana if she didn't pack one): "Hey! My mango!"
+//   boat and steals Dad's mango (his banana if she didn't pack one): "Hey! My mango!"
 // - A fisherman pulls up his net (tap: he waves, and up it comes with fish flopping).
 // - Bonk a rock tower: a little crab scuttles out of the notch the sea nibbled round its bottom.
-// - Silly moments: a big bonk sends Daddy's sunglasses flying (drive over them and they're back on his face, upside
-//   down); a high jump off a wake blows Mommy's hat off (drive over it to scoop it back).
-// - What she packed rides along: the duck on its string behind the boat, the teddy on Mommy's lap, her bucket.
+// - Silly moments: a big bonk sends Dad's sunglasses flying (drive over them and they're back on his face, upside
+//   down); a high jump off a wake blows Mom's hat off (drive over it to scoop it back).
+// - What she packed rides along: the duck on its string behind the boat, the teddy on Mom's lap, her bucket.
 import { BufferGeometry, Float32BufferAttribute, Group, Line, LineBasicMaterial, Vector3 } from 'three'
 import { bell, clamp } from '../../../../../../sdk'
 import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
@@ -32,8 +32,8 @@ export const OPEN_ANCHORS: AnchorInfo[] = [
   { id: 'macaque', label: 'Macaques', kind: 'thing' },
   { id: 'fisher', label: 'Fisherman', kind: 'thing' },
   { id: 'notch-crab', label: 'Crab', kind: 'thing' },
-  { id: 'sunglasses', label: "Daddy's sunglasses", kind: 'thing' },
-  { id: 'hat', label: "Mommy's hat", kind: 'thing' },
+  { id: 'sunglasses', label: "Dad's sunglasses", kind: 'thing' },
+  { id: 'hat', label: "Mom's hat", kind: 'thing' },
   { id: 'duck', label: 'Rubber duck', kind: 'thing' },
 ]
 
@@ -46,7 +46,7 @@ const ROPE = 3
 /** Where the duck's string is tied: the stern's left corner (so it bobs beside the wake, not in the camera's way). */
 const TIE: [number, number, number] = [-0.55, 0.55, -2.9]
 
-/** Something floating that went overboard (Daddy's sunglasses, Mommy's hat). */
+/** Something floating that went overboard (Dad's sunglasses, Mom's hat). */
 interface Floater {
   g: Group
   /** Flying off (0..1), then floating. */
@@ -137,7 +137,7 @@ export class OpenWater implements BayPart {
       scene.add(m.root)
       return m
     })
-    // ---- Daddy's snack (her mango, or his banana) ----
+    // ---- Dad's snack (her mango, or his banana) ----
     const mango = bay.packed.includes('mango')
     this.snack = mango ? buildItem('mango', bag) : this.banana()
     this.snack.scale.setScalar(1.6)
@@ -166,7 +166,7 @@ export class OpenWater implements BayPart {
     this.crab.root.scale.setScalar(2.2)
     this.crab.root.visible = false
     scene.add(this.crab.root)
-    // ---- Daddy's sunglasses and Mommy's sun hat, on their heads ----
+    // ---- Dad's sunglasses and Mom's sun hat, on their heads ----
     const nick = bay.rider('nick').char
     const R = 0.24 * nick.height
     this.shades = new Group()
@@ -303,7 +303,7 @@ export class OpenWater implements BayPart {
     const bay = this.bay
     if (bay.using !== 'longtail') return
     // A rock tower: the crab in its notch comes out to see.
-    // A big bonk: Daddy's sunglasses fly off (first, so his "My sunglasses!" isn't kept waiting behind a fact).
+    // A big bonk: Dad's sunglasses fly off (first, so his "My sunglasses!" isn't kept waiting behind a fact).
     if (hit > 3.2 && !this.floaters.has('sunglasses') && this.shades.parent && bay.phase === 'drive') this.overboard('sunglasses')
     const rock = ROCKS.find((r) => Math.abs(Math.hypot(x - r.x, z - r.z) - r.r) < 2.5)
     if (rock && this.crabT < 0) {
@@ -316,7 +316,7 @@ export class OpenWater implements BayPart {
     }
   }
 
-  /** A jump off the tour boat's wake: a really high one blows Mommy's hat off. */
+  /** A jump off the tour boat's wake: a really high one blows Mom's hat off. */
   jumped(vy: number) {
     if (vy > 4.3 && !this.floaters.has('hat') && this.hat.parent) this.overboard('hat')
   }
@@ -348,7 +348,7 @@ export class OpenWater implements BayPart {
     sfx.whoosh(0.5)
   }
 
-  /** Something nice for Daddy to point at: an animal she hasn't found yet, nearby. */
+  /** Something nice for Dad to point at: an animal she hasn't found yet, nearby. */
   somethingToSee(): Vector3 | null {
     const d = this.lt.d
     const opts: [string, Vector3][] = [
@@ -374,7 +374,7 @@ export class OpenWater implements BayPart {
   update(dt: number, t: number) {
     const bay = this.bay
     const d = this.lt.d
-    // Far away, the ledge's monkeys and the fisherman aren't drawn (fewer draw calls); in the canoe Mommy tucks her hat
+    // Far away, the ledge's monkeys and the fisherman aren't drawn (fewer draw calls); in the canoe Mom tucks her hat
     // away (it would block the view under the low roof).
     const cam = bay.rig.camera.position
     const seeLedge = Math.hypot(cam.x - LEDGE.x, cam.z - LEDGE.z) < 160
@@ -507,7 +507,7 @@ export class OpenWater implements BayPart {
     const n = this.nut
     const c = this.coconut
     if (this.scoop) {
-      // Up into the boat, into Mommy's arms, then down by the bow.
+      // Up into the boat, into Mom's arms, then down by the bow.
       this.scoop.t += dt / 0.6
       const k = Math.min(1, this.scoop.t)
       const to = this.lt.v.body.localToWorld(tmp.set(...CARGO.coconut))
@@ -524,7 +524,7 @@ export class OpenWater implements BayPart {
       return
     }
     if (n.in) return
-    // It drifts, slows in the water and bobs; the boat bumps it along, or (slowly) Mommy scoops it up.
+    // It drifts, slows in the water and bobs; the boat bumps it along, or (slowly) Mom scoops it up.
     n.x += n.vx * dt
     n.z += n.vz * dt
     n.vx *= Math.exp(-dt * 0.8)
@@ -586,7 +586,7 @@ export class OpenWater implements BayPart {
         }
       }
     })
-    // The mango heist: drive close and the big one jumps into the boat, grabs Daddy's snack and jumps back.
+    // The mango heist: drive close and the big one jumps into the boat, grabs Dad's snack and jumps back.
     const near = Math.hypot(d.x - LEDGE.x, d.z - LEDGE.z) < 22
     if (!this.heist && !this.snackGone && near && bay.using === 'longtail' && bay.phase === 'drive') {
       this.heist = { t: 0, phase: 'out', from: this.monkeys[1].root.position.clone() }
@@ -716,7 +716,7 @@ export class OpenWater implements BayPart {
       sfx.scoop()
       sfx.giggle()
       if (which === 'sunglasses') {
-        // Back on Daddy's face: upside down (and the next time, the right way up again).
+        // Back on Dad's face: upside down (and the next time, the right way up again).
         this.shadesUp = !this.shadesUp
         this.shades.rotation.z = this.shadesUp ? 0 : Math.PI
         bay.rider('nick').char.rig.head.add(this.shades)

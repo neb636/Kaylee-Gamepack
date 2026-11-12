@@ -7,7 +7,7 @@ Written 2026-10-25. This replaces the toy of **Stop Time Cafe** (`rice`) in `nan
 
 The first greybox (PR #168, branch `neb636/nan-rice-greybox`, **not merged**) had Kaylee's finger pour water down 13
 curved terraces, draw seedlings in, then carry rain clouds. The user played it and didn't like it. **Keep from it:** the
-sky road that leads there (its end card's 🌾) and **the café deck** (pink milk, Daddy's coffee, Mommy's photo).
+sky road that leads there (its end card's 🌾) and **the café deck** (pink milk, Dad's coffee, Mom's photo).
 **Throw away:** the curved terraces, the pouring, the finger-drawn planting and the rain clouds.
 
 The user's picture references (Animal Crossing rice farms, not in the repo) and what we take from them:
@@ -64,7 +64,7 @@ chase, where to cut first.
 
 **Pokeables (5+):** the four gates (lift, gush), the scarecrow (spins, its hat flips; the birds land *on* it, they
 aren't scared of it), the water buffalo in its mud wallow (moo, rolls, splashes), ducks in the channel (quack, paddle
-off), a frog (hops paddy to paddy, croaks), Daddy on the boardwalk (waves, hops; splashed, he shakes like a dog), the
+off), a frog (hops paddy to paddy, croaks), Dad on the boardwalk (waves, hops; splashed, he shakes like a dog), the
 straw pile (Kaylee flops into it, straw puffs up), the nursery bed (seedlings wave), the café up on the hill (its wind
 chime), the farm hut's chime.
 
@@ -72,7 +72,7 @@ chime), the farm hut's chime.
 - Planting in a **dry** paddy: the seedlings go in **droopy and yellow** and the gate wiggles. When she opens the gate,
   the water rushes in and they all spring up straight and green with a sparkle wave. (This *is* the lesson: rice
   needs water. Nothing is lost.)
-- Walk into Daddy: a big splash, he shakes like a dog. In round 3 she drops the armful of straw on his head (a straw
+- Walk into Dad: a big splash, he shakes like a dog. In round 3 she drops the armful of straw on his head (a straw
   hat).
 - Walk into the buffalo's wallow: both of them get mud spots, the buffalo moos happily.
 - Leave birds pecking: they get **rounder** (a fat-bird joke). A fat bird she shoos waddle-hops away before it flies.
@@ -104,7 +104,7 @@ in water." "The steps on the hill keep the water for the rice." New: "In Nan, pe
 fingers."
 
 **Payoff (visible, builds up):** brown dry squares → shiny water → neat green rows → tall green → golden → stubble and
-a row of bundles on the drying rack → a heaped basket of grains → the steaming kratip on the deck, then Mommy's photo
+a row of bundles on the drying rack → a heaped basket of grains → the steaming kratip on the deck, then Mom's photo
 and the video.
 
 **Replay:** the patterns she plants stay her own; birds come from random sides; which paddy is the extra-tall one
@@ -118,7 +118,7 @@ changes; ducks and the frog start in different places.
 | grow | 35-45 s | 15-25 | 3 waves of birds (2, 3, then 5 from two sides); growth never stops, birds only slow it |
 | harvest | 30-45 s | 10-15 | ~3 strokes a paddy; over 75% cut, the rest falls by itself; 8 bundles |
 | thresh | 20-30 s | 8-10 | 5 bundles x 2 bangs fills the basket |
-| deck | 20-30 s | 3-6 | sticky rice, pink milk, Mommy's photo (as #168) |
+| deck | 20-30 s | 3-6 | sticky rice, pink milk, Mom's photo (as #168) |
 | video | 60 s, skippable | 0-1 | |
 | **Total** | **~2.5-3.5 min** + the video | **~50-70** | 1 line before the first touch |
 
@@ -139,7 +139,7 @@ glides up at the end; keep #168's `buildDeck` and where it sits, move the farm t
    │ paddy A  │  ║  │ paddy B  │   scarecrow between A and B's back corners
    └──────────┘  ║  └──────────┘
  nursery bed ▓  ═══ plank boardwalk + bridge over the channel ═══   drying rack ╳═╳, basket + board, straw pile
-   Daddy stands here; Kaylee starts here                              buffalo wallow (right)
+   Dad stands here; Kaylee starts here                              buffalo wallow (right)
  front (the camera)
 ```
 
@@ -155,7 +155,7 @@ glides up at the end; keep #168's `buildDeck` and where it sits, move the farm t
   Paddy A starts flooded with its gate up.
 - **The step:** the back pair sits 0.45 m higher (Sapan's terraces in miniature, ref 1). A short wooden stair in the
   middle of the path; Kaylee hops up and down it anywhere along the edge (one `hopTo`).
-- **Around:** the boardwalk along the front (Daddy stands on it), the nursery bed (a small bright green patch of
+- **Around:** the boardwalk along the front (Dad stands on it), the nursery bed (a small bright green patch of
   seedlings, front left), the drying rack (two crossed-pole A-frames and a pole, front right), the threshing corner (a
   big round woven basket with a slatted board leaning in it) and the straw pile beside the rack, the farm hut (four
   posts, a palm-thatch roof, a chime) at the back left, a banana plant, bamboo, the buffalo's mud wallow on the right,
@@ -167,7 +167,7 @@ glides up at the end; keep #168's `buildDeck` and where it sits, move the farm t
 ## How each round works (for the builder)
 
 **Leading Kaylee (all rounds):** pointerdown on the canvas: first `pickAt` for pokes (gates, scarecrow, buffalo,
-Daddy, ducks, frog, straw pile, chime); otherwise raycast an invisible pick mesh of the farm's ground (the paddies at
+Dad, ducks, frog, straw pile, chime); otherwise raycast an invisible pick mesh of the farm's ground (the paddies at
 their two heights, the banks, the boardwalk) for the target. While the finger is held, the target follows it; Kaylee
 walks toward it every frame (`Avatar.walk([target])` refreshed at ~10 Hz is enough, or a small `Avatar.steer(x, z)`
 if that's smoother; check `characters/avatar.ts`). Let go: she stops where she is. **Birds are not tap targets**:
@@ -213,19 +213,19 @@ the rack). A short auto beat: the basket shakes, a little puff of chaff blows aw
 steaming kratip of sticky rice. The camera glides up to the deck.
 
 **deck:** #168's deck, unchanged, plus the **kratip on the high table** next to the pink milk: tap it and Kaylee takes a
-ball of sticky rice and eats it ("nom", a grain stuck on her cheek for a moment). Mommy glows after Kaylee has eaten
+ball of sticky rice and eats it ("nom", a grain stuck on her cheek for a moment). Mom glows after Kaylee has eaten
 or sipped; tap her for the photo (as #168). Then **the video** (below), then the end card (🔁 the farm again, 🚙 the 3
 road home).
 
 **Stuck hints (👆 after 5 s with nothing touched, as the mushroom farm):** plant: the nearest unplanted spot in a
 flooded paddy (or a dry paddy's gate); grow: the bird that has sat longest; harvest: the nearest uncut gold; thresh:
-the next bundle; deck: the kratip, then Mommy.
+the next bundle; deck: the kratip, then Mom.
 
 ## The video at the end
 
 - `rice/video.ts`: `export const RICE_VIDEO: PlaceVideo = { id: 'rice', youtubeId: 'qwAxh1ii-No', icon: '🌾', title:
   'How rice grows', say: L.nan.rice.video }`. Sparkle's line: "Want to see real rice grow?"
-- After Mommy's photo (a 1.5 s pause so the print can be seen), `Rice.tsx` shows the kit's `VideoBreak`
+- After Mom's photo (a 1.5 s pause so the print can be seen), `Rice.tsx` shows the kit's `VideoBreak`
   (`src/world/kit/Theater.tsx`) over the deck. Skip or the video's end → the end card. Offline it goes straight to the
   end card (`VideoBreak` already does this).
 - `VideoBreak`'s skip button shows ⏭ 🗺️ (it goes back to the map elsewhere). Add an optional `next` prop for the second
@@ -257,7 +257,7 @@ per round, in play order).
   On a tall screen, the 2 x 2 fits better than on a wide one: no layout change needed, check it.
 - **Thresh:** a closer, lower front view of the basket, the board and the rack.
 - **Deck:** #168's.
-- Keep clear of the 🏠 and the top bar; tap targets (gates, scarecrow, buffalo, Daddy, straw pile, kratip, Mommy)
+- Keep clear of the 🏠 and the top bar; tap targets (gates, scarecrow, buffalo, Dad, straw pile, kratip, Mom)
   ≥ 64 px on screen (`Anchors`). The paddies have no DOM targets on them (they'd catch the drag); the canvas takes the
   finger there.
 
@@ -342,7 +342,7 @@ version (3D activities don't need one).
   on the scarecrow's arms, the hut roof and the rack, come back. A little rain cloud at ~50%. Gold: drain, harvest.
 - harvest: sickle and armful; a bundle every 17 hills cut (8 in all) pops onto the nearest bank; 75% cuts the rest;
   one random back paddy grows 1.45x tall and two birds burst out of it; all cut: the bundles hop onto the rack.
-- Silly: wet Kaylee into Daddy (he shakes), her armful on his head in the harvest, the wallow (mud spots, washed off in
+- Silly: wet Kaylee into Dad (he shakes), her armful on his head in the harvest, the wallow (mud spots, washed off in
   the water), flopping in the straw pile, the scarecrow's spin and hat flip, the buffalo's roll.
 - thresh is a placeholder (each tap on the basket bangs a bundle's grains in; 5 bangs, then the deck); the deck is
   #168's. No voices, no Sparkle lines yet (greybox).
@@ -358,12 +358,12 @@ version (3D activities don't need one).
   the basket shakes, the chaff blows off, the heap turns white and an open, steaming kratip pops up out of it, then
   the deck. The 👆 points at the rack (hands empty) or the basket.
 - Moved for the thresh camera: the straw pile now sits beside the basket (`STRAW_PILE`), so the tossed straw lands in
-  view; Daddy watches from the far side of the basket (he stood between her and the camera); the board stands up out
+  view; Dad watches from the far side of the basket (he stood between her and the camera); the board stands up out
   of the basket's rim (it was hidden inside).
 - deck (`deck.ts` `buildKratip`): the kratip on the high table, open, steaming; tap it and a ball of sticky rice goes to
-  her mouth (nom, a grain on her cheek for a moment); 4 balls, then a tap fills it again. Mommy glows after she has
+  her mouth (nom, a grain on her cheek for a moment); 4 balls, then a tap fills it again. Mom glows after she has
   eaten or sipped; the 👆 starts on the kratip.
-- The video (`rice/video.ts`, `Rice.tsx`): 1.6 s after Mommy's photo, the kit's `VideoBreak` with the new `next` prop
+- The video (`rice/video.ts`, `Rice.tsx`): 1.6 s after Mom's photo, the kit's `VideoBreak` with the new `next` prop
   (⏭ ☕); the 3D world holds still under it (View3D's new `paused` prop). Skip or its end: the end card. Offline it
   goes straight to the end card. One Sparkle clip, `L.nan.rice.video`.
 - qa: `qa-motion` `nan-thresh` (a tap every 0.7 s on the basket), `qa-pacing` `nan-rice-thresh`.
@@ -384,22 +384,22 @@ The user played greybox B (2026-10-25): threshing feels good (ten bangs, the swi
 - The café's roof is warm light wood with its rafters showing, and a row of little pastel lights along the front eave.
 - Voices (`lines.ts` `L.nan.rice`, 32 new clips): Sparkle's line as each round begins (the first one before her first
   touch: "Let's plant rice! Walk in the water."), "Rice likes water! Open the gate." the first time she plants
-  dry, and after ~8 s with nothing done what to do now (at most 3 a round, 20 s apart). Daddy reacts once to each thing
+  dry, and after ~8 s with nothing done what to do now (at most 3 a round, 20 s apart). Dad reacts once to each thing
   on the farm (a planted paddy, the whole farm, splashed, the straw hat, the muddy unicorn, the straw pile, the rain, a
   fat bird, "Where did you go?" in the tall rice, all the rice, a good bang, the sticky rice, his coffee) and
-  says one of three lines when tapped. Mommy says hello on the deck and "Smile!" before the photo. Facts:
+  says one of three lines when tapped. Mom says hello on the deck and "Smile!" before the photo. Facts:
   the first ball of sticky rice ("In Nan, people eat sticky rice with their fingers!") and a tap on the view ("The steps
   on the hill keep the water for the rice!"). Family reactions are dropped while Sparkle talks rather than heard late.
 - Sparkle sits in the corner (`trip/legs/Guide.tsx`) with the words for the user; hidden under the video and the end card.
 
 - After full QA (layout-qa, then playtest-qa: plant, harvest and thresh fun, grow and the deck OK): Sparkle's stuck hints
   count quiet time from 3 s after a round's line, not from her last touch, so they don't follow the round's own line
-  straight away; Daddy's "Sticky rice! Yum!" is gone (sticky rice was said four times in 10 s); Daddy's tap lines and
+  straight away; Dad's "Sticky rice! Yum!" is gone (sticky rice was said four times in 10 s); Dad's tap lines and
   "Whack!" (now with a hop) are dropped while Sparkle talks; the deck's roof went up 0.6 m so the terraces show in
   portrait too; Kaylee's ngob has a pink band and flower and sits back on her head, and the scarecrow wears blue, so
   they don't look alike.
 - Left for later (`known-issues.md`): the terraces don't show on the farm cameras (only the deck and very wide
-  screens); grow has short stretches where only the clock moves; Daddy stands still while she threshes.
+  screens); grow has short stretches where only the clock moves; Dad stands still while she threshes.
 
 **Lung Kham, the farmer who needs help (2026-10-27, the user: "the farmers need help", after China's dumpling house):**
 - Lung Kham, an old monkey farmer (white moustache, the indigo mor hom shirt, a scarf, his own ngob with a mint band),
@@ -408,22 +408,22 @@ The user played greybox B (2026-10-25): threshing feels good (ten bangs, the swi
   `lung`: cedar, a northern Thai accent). Tap him for his lines in turn. He's in the character lab's new "Nan trip"
   group.
 - The story in his voice: the opening ("Sawasdee krap! I need a helper!"), the first gate ("Ahh! Water for my rice!"), all
-  planted ("All planted! Khob khun krap!", which replaced Daddy's "Our very own rice farm!"), the birds, the rice
+  planted ("All planted! Khob khun krap!", which replaced Dad's "Our very own rice farm!"), the birds, the rice
   growing tall (fills a quiet stretch of the grow round), ripe, and the sticky rice ("Sticky rice, for my helper!").
 - Thai by doing, like the dumpling house's "Ee, are, san": Lung counts the five bundles as she threshes them ("Neung!
-  Song! Sahm! See! Hah!", then "That's one to five in Thai!"). Daddy's "Whack! Good one!" is gone (it would have cut
-  into the count); Daddy still hops. Mommy says "Aroi mak! That means so yummy!" at the first ball of sticky rice;
+  Song! Sahm! See! Hah!", then "That's one to five in Thai!"). Dad's "Whack! Good one!" is gone (it would have cut
+  into the count); Dad still hops. Mom says "Aroi mak! That means so yummy!" at the first ball of sticky rice;
   Sparkle's sticky-rice fact moved to the second.
 - New tap-to-hear facts (Sparkle, first poke): the buffalo ("Buffalo helped farmers get the mud ready!") and a duck
   ("Ducks eat the bugs in the rice!"). Lung's "Hey! My scarecrow!" the first time she spins it.
-- Kaylee's name is gone from "Look at those rows!" and the video's "Want to see real farmers grow rice?" (the photo and Daddy’s “Where did you go?” joke are also name-free; the landing page and Egypt/China name-writing activities are the only exceptions).
+- Kaylee's name is gone from "Look at those rows!" and the video's "Want to see real farmers grow rice?" (the photo and Dad’s “Where did you go?” joke are also name-free; the landing page and Egypt/China name-writing activities are the only exceptions).
 - Far-off farm life: every 5-10 s, when nobody's talking, a quiet frog, bird, duck, chime or buffalo
   (`riceSfx.far`), so the farm is never silent between touches.
 - Sparkle waits her turn behind Lung: `TripGuide` now counts a line that's still loading as talking, so a friend's
   line then Sparkle's, back to back, play in that order on every trip leg (before, Sparkle cut the friend off when
   their clip hadn't started yet).
 
-**Next:** The user listens on the iPad: Lung's voice and accent (the Thai numbers especially), and whether Lung + Daddy +
+**Next:** The user listens on the iPad: Lung's voice and accent (the Thai numbers especially), and whether Lung + Dad +
 Sparkle is too much talk. Then the next stop: Bo Kluea salt (step 4).
 
 ## Fun check
@@ -431,10 +431,10 @@ Sparkle is too much talk. Then the next stop: Bo Kluea salt (step 4).
 - **Core verb:** lead Kaylee; it deepens: plant behind her, shoo birds, cut the gold. One side verb: bang the bundles.
 - **Hands busy:** one line, and paddy A is wet so the first touch plants. No waiting longer than the 2 s beats.
 - **Choices:** order of paddies and gates, the planting pattern, which birds, where to cut.
-- **Pokeables:** gates, scarecrow, buffalo, ducks, frog, Daddy, Lung, straw pile, nursery, chimes.
+- **Pokeables:** gates, scarecrow, buffalo, ducks, frog, Dad, Lung, straw pile, nursery, chimes.
 - **Grows:** brown → water → green rows → gold → bundles → grains → sticky rice.
 - **Surprise:** droopy seedlings jumping up when the water arrives; fat birds; only her horn showing in the tall rice;
-  flopping into the straw pile; straw on Daddy's head.
+  flopping into the straw pile; straw on Dad's head.
 - **Learning by doing:** rice in water, seedlings in rows, birds and scarecrows, gold means ready, drain, cut, thresh,
   sticky rice. The video shows the same steps with real farmers.
 - **Replay:** her patterns, random birds, the tall paddy moves.
@@ -459,7 +459,7 @@ them!" After the threshing, the last three bundles are the birds'.
 your hat!"), `grow` ("It's Jip and friends!"; Jip sits on the scarecrow's hat), `nest` (the film when it's golden, then
 the harvest), `harvest`, `thresh`, `share` (tap the rack: each bundle hops onto the grass, the chicks flutter-hop over
 and peck, rounder each time, and Jip lands on her head: "Friends now!"), `deck` (Jip on her head, the chicks on the
-railing, in Mommy's photo). From the map the farm starts at `story`; 🔁 starts at `plant`.
+railing, in Mom's photo). From the map the farm starts at `story`; 🔁 starts at `plant`.
 
 **Files.** `rice/story.ts` (the films' beats, Jip's moments, the share), `rice/jip.ts` (Jip, the chicks, the nest),
 `engine3d/film.ts` and `engine3d/FilmOverlay.tsx` (shared). The scarecrow now wears a floppy straw sun hat (so a hat
@@ -469,7 +469,7 @@ swap reads at a glance) and Lung's new ngob has a yellow band (the mint one is t
 turning in and out, last year's afternoon (a bed), and two music cues (`rice-story-music`, 62 s; `rice-nest-music`,
 26 s; the generator's new `"music": true`).
 
-**Lines.** 19 new ones in `L.nan.rice.story` (Lung), Sparkle's share line, Lung's grow line reworded, and Mommy's
+**Lines.** 19 new ones in `L.nan.rice.story` (Lung), Sparkle's share line, Lung's grow line reworded, and Mom's
 "Aroi mak!" without "That means so yummy!" (Kaylee speaks Thai). Recorded by the PR's voices job (no working OpenAI
 key locally).
 

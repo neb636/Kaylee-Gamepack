@@ -106,7 +106,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     const line = WALL_LINES[trip]
     if (line) void say(line)
   }
-  // Mommy and Daddy only offer the mall: the other trips start on the Thailand map (Dad, 2026-10-27).
+  // Mom and Dad only offer the mall: the other trips start on the Thailand map (Dad, 2026-10-27).
   const trips = TRIP_CHOICES.filter((t) => t.id === 'mall-trip' && meta.activities.some((a) => a.id === t.id))
 
   useEffect(() => {
@@ -171,7 +171,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       enter('wardrobe', wardrobeState())
     } else {
       enter('upstairs')
-      // Mommy sees her new look from across the room, once the doors are shut.
+      // Mom sees her new look from across the room, once the doors are shut.
       houseRef.current?.notice('ji')
     }
   }

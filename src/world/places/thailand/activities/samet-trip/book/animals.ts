@@ -1,5 +1,5 @@
-// Kaylee's animal book (plan: samet-trip.md, "Mommy's phone and the animal book"): the fourteen real Koh Samet
-// animals she can snap with Mommy's phone, and the book's pages. Plain data, no three.js: the sections file, the book
+// Kaylee's animal book (plan: samet-trip.md, "Mom's phone and the animal book"): the fourteen real Koh Samet
+// animals she can snap with Mom's phone, and the book's pages. Plain data, no three.js: the sections file, the book
 // screen and the QA scripts read it.
 //
 // The words are lines.ts L.samet.book (recorded in Sparkle's voice): she says the name once when it's first snapped, a

@@ -3,7 +3,7 @@
 // recorded ones swapped in under the same names, plus a few new names where one synth sound meant two things.
 //
 // - The house (house-plugin.ts): things landing in the suitcase, its latches, footsteps on the stairs, the fan, the
-//   cousins' phones, the van (its horn, its sliding door, driving off) and Mommy's car's doors. The boings as things
+//   cousins' phones, the van (its horn, its sliding door, driving off) and Mom's car's doors. The boings as things
 //   fly, the pops and the giggles stay synthesized (toy sounds).
 // - The airport (airport.ts): the terminal's hall, the suitcase on the x-ray belt, the belt rolling, the stamp.
 import { bed, clip } from '../../../../kit/clips'

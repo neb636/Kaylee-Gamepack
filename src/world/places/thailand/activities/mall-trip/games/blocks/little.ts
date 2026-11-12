@@ -1,6 +1,6 @@
 // Little Land at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "6. Little Land"), greybox shapes
-// with voices (lines.ts `L.mall.blocks`: Daddy's bet and his sneeze, Sparkle's few lines, said through talk.ts). Giant
-// foam bricks on the flower mats; Kaylee in her grip socks by the brick box, Daddy watching from the other side.
+// with voices (lines.ts `L.mall.blocks`: Dad's bet and his sneeze, Sparkle's few lines, said through talk.ts). Giant
+// foam bricks on the flower mats; Kaylee in her grip socks by the brick box, Dad watching from the other side.
 //
 // The toy: grab a brick (out of the box, or off the top of the stack) and put it down. It hangs just above her finger;
 // every frame the spots it could go are projected to the screen and the nearest wins, with a pull and an outline where
@@ -12,9 +12,9 @@
 //   2. The picture card: a chedi, then an elephant. Outlines show the next row; a brick near them goes to the nearest.
 //      The chedi gets its gold spire and a temple bell; the elephant its face, ears and trunk, trumpets, and shakes
 //      itself apart.
-//   3. Taller than Daddy: he stands by the stack with a ribbon at his horn. Past it: ah... ah... CHOO, and it's down.
+//   3. Taller than Dad: he stands by the stack with a ribbon at his horn. Past it: ah... ah... CHOO, and it's down.
 // A star on the easel for each round. Taps alone play it: a tap on the box hops the next brick to a good spot.
-// Nothing fails: a brick let go over Daddy's head is a hat, over the box goes back in, over the ball bounces off.
+// Nothing fails: a brick let go over Dad's head is a hat, over the box goes back in, over the ball bounces off.
 import { Color, IcosahedronGeometry, OctahedronGeometry, Plane, Raycaster, Vector3, type Group, type Mesh, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, sounds, span, wobble } from '../../../../../../../sdk'
 import type { Avatar } from '../../../../characters/avatar'
@@ -59,7 +59,7 @@ export const BLOCKS_ANCHORS: AnchorInfo[] = [
   { id: 'ball', label: 'Foam ball', kind: 'thing' },
   { id: 'rocker', label: 'Rocking elephant', kind: 'thing' },
   { id: 'family:kaylee', label: 'You', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
 ]
 
 /** Bricks there are (in the box when not out). */
@@ -95,7 +95,7 @@ interface Brick {
   still: number
 }
 type Phase = 'build' | 'push' | 'payoff' | 'away'
-/** A special place to let go: Daddy's head, the box, the ball. */
+/** A special place to let go: Dad's head, the box, the ball. */
 type Special = 'hat' | 'box' | 'ball'
 
 const tmp = new Vector3()
@@ -164,7 +164,7 @@ export class LittleLand extends Stage {
     this.rig.fov = 30
     this.built = buildLittleLand(bag)
     scene.add(this.built.root)
-    // ---- Kaylee in her grip socks by the box, Daddy on his foam seat ----
+    // ---- Kaylee in her grip socks by the box, Dad on his foam seat ----
     const { kaylee, members } = this.makeFamily(['nick'])
     this.kaylee = kaylee
     this.nick = members.get('nick')!
@@ -198,7 +198,7 @@ export class LittleLand extends Stage {
     this.stars = start.round - 1
     this.built.stars.forEach((s, i) => (s.visible = i < this.stars))
     this.setRound(start.round, start.card, true)
-    // What's said first: Daddy's bet, then "Grab a brick!" (a link to a later round: that round's line).
+    // What's said first: Dad's bet, then "Grab a brick!" (a link to a later round: that round's line).
     this.after(0.5, () => {
       if (start.round > 1) return this.roundLine(start.round, start.card)
       this.talk.say(T.higher)
@@ -210,7 +210,7 @@ export class LittleLand extends Stage {
     this.later.push({ t: this.time + s, f })
   }
 
-  /** Sparkle, when a round's new thing shows: the picture card, the elephant, Daddy beside the stack. */
+  /** Sparkle, when a round's new thing shows: the picture card, the elephant, Dad beside the stack. */
   private roundLine(n: Round, card: CardId) {
     if (n === 2) this.talk.say(card === 'chedi' ? T.copy : T.elephant)
     if (n === 3) this.talk.say(T.taller)
@@ -227,7 +227,7 @@ export class LittleLand extends Stage {
     this.showPicture(n === 1 ? 'free' : n === 2 ? card : 'tall', now)
     if (!now) this.after(0.4, () => this.roundLine(n, card))
     this.built.ribbon.visible = n === 3
-    // Daddy: a step back watching, then (round 3) right beside the stack, his horn at the ribbon.
+    // Dad: a step back watching, then (round 3) right beside the stack, his horn at the ribbon.
     const near = n === 3
     if (near === this.daddyNear && !now) return
     this.daddyNear = near
@@ -346,7 +346,7 @@ export class LittleLand extends Stage {
     if (this.round === 3 && this.phase === 'build' && this.grid.top() * BH > MARK_Y && this.sneeze.t < 0) this.achoo()
   }
 
-  /** Let go: over Daddy's head it's a hat, over the box it goes back in, over the ball it bounces off; anywhere else
+  /** Let go: over Dad's head it's a hat, over the box it goes back in, over the ball it bounces off; anywhere else
    *  onto the spot it was pulled to. */
   private release(b: Brick) {
     const sp = this.special
@@ -369,7 +369,7 @@ export class LittleLand extends Stage {
     this.dropTo(b, c, 0.13, 0.04)
   }
 
-  /** Daddy wears it, wobbles, and it slides off. */
+  /** Dad wears it, wobbles, and it slides off. */
   private hat(b: Brick) {
     b.state = 'hat'
     b.t = 0
@@ -454,7 +454,7 @@ export class LittleLand extends Stage {
     this.after(0.5, () => {
       sfx.giggle()
       if (why !== 'sneeze') this.nick.react('hop')
-      // Daddy, now and then, when she knocks it over herself.
+      // Dad, now and then, when she knocks it over herself.
       if (why === 'push' || why === 'swipe') this.talk.react(this.time, T.crash)
     })
     // What it finishes.
@@ -490,7 +490,7 @@ export class LittleLand extends Stage {
     this.trumpet = -1
   }
 
-  // ---------------------------------------------------------------- the cards and Daddy's sneeze
+  // ---------------------------------------------------------------- the cards and Dad's sneeze
 
   private brickAt(c: Cell) {
     for (const [id, at] of this.grid.at) if (at.s === c.s && at.r === c.r) return this.bricks[id]
@@ -557,7 +557,7 @@ export class LittleLand extends Stage {
     })
   }
 
-  /** Daddy looks up at the tower: ooh. Ah... ah... CHOO! Down it goes, away from him. */
+  /** Dad looks up at the tower: ooh. Ah... ah... CHOO! Down it goes, away from him. */
   private achoo() {
     this.sneeze.t = 0
     sfx.ooh()
@@ -798,7 +798,7 @@ export class LittleLand extends Stage {
     return r.head.localToWorld(tmp2.set(0, r.face.headY + r.face.R * 0.9, 0)).clone()
   }
 
-  /** Over Daddy's head, the box or the ball? (Screen pixels, the held brick's middle.) */
+  /** Over Dad's head, the box or the ball? (Screen pixels, the held brick's middle.) */
   private specialAt(x: number, y: number): Special | null {
     const near = (w: Vector3, r: number, min: number) => {
       const s = this.toScreenPx(w, r)
@@ -810,7 +810,7 @@ export class LittleLand extends Stage {
     return null
   }
 
-  /** Where the brick in her hand would go now: a special place (Daddy's head, the box, the ball) or a spot. */
+  /** Where the brick in her hand would go now: a special place (Dad's head, the box, the ball) or a spot. */
   private aim() {
     const h = this.held
     if (!h) return
@@ -1040,7 +1040,7 @@ export class LittleLand extends Stage {
     rk.a += rk.v * dt
     this.built.rocker.rotation.z = clamp(rk.a, -0.4, 0.4) * 0.6
 
-    // ---- Kaylee and Daddy: they watch the brick in her hand, the top of the stack, each other ----
+    // ---- Kaylee and Dad: they watch the brick in her hand, the top of the stack, each other ----
     const k = this.kaylee
     const nick = this.nick
     const held = this.held?.moved ? this.held.b : null
@@ -1107,7 +1107,7 @@ export class LittleLand extends Stage {
     b.g.position.copy(b.pos)
     b.g.rotation.set(b.rot.x, b.rot.y, b.rot.z)
     b.g.scale.set(1, 1, 1)
-    // A brick on its own (off Daddy's head, off the ball) goes home once it lies still (in a knock-down, once the rest
+    // A brick on its own (off Dad's head, off the ball) goes home once it lies still (in a knock-down, once the rest
     // have been called home).
     if (b.state === 'fly' && (this.phase !== 'away' || this.time > this.homeAt)) {
       b.still = b.vel.lengthSq() < 0.05 ? b.still + dt : 0
@@ -1123,7 +1123,7 @@ export class LittleLand extends Stage {
   // ---------------------------------------------------------------- camera, anchors, the finger
 
   protected shot(): Shot {
-    // On a tall screen: closer in on the build (Kaylee and Daddy at its edges), from a little higher, the box in front.
+    // On a tall screen: closer in on the build (Kaylee and Dad at its edges), from a little higher, the box in front.
     if (this.w < this.h) return { center: V(0, 1.15, 0.9), half: V(2.45, 1.6, 1.3), yaw: 0, pitch: 20, minDist: 5 }
     // On a wide one, the whole mat: the box on the left, the ball on the right, up to six rows of bricks.
     return { center: V(-0.1, 1.3, 0.2), half: V(3.3, 1.4, 0.9), yaw: 0, pitch: 12, minDist: 5 }

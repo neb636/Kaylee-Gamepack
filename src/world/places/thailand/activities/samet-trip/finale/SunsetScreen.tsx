@@ -1,6 +1,6 @@
 // The sunset at the driftwood tree, on screen (sunset.ts is the world): Ao Prao with its tap targets, the pressing
 // finger on the sun, Sparkle in the corner speaking everyone's lines (trip/legs/Guide.tsx, the words for Dad too),
-// Mommy's photo flashing and landing in the corner, and once night has fallen the 🔥 button to the fire show.
+// Mom's photo flashing and landing in the corner, and once night has fallen the 🔥 button to the fire show.
 import { useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
@@ -14,7 +14,7 @@ import { Sunset as World, SUNSET_ANCHORS } from './sunset'
 
 interface Props {
   flags: StopId[]
-  /** Mommy's photo of the three of them (for Agong's wall). */
+  /** Mom's photo of the three of them (for Agong's wall). */
   onPhoto(src: string): void
   /** On to the fire show. */
   onFireShow(): void
@@ -72,7 +72,7 @@ export function SunsetScreen({ flags, onPhoto, onFireShow }: Props) {
           <motion.img
             key={`p${photo.n}`}
             src={photo.src}
-            alt="Mommy's photo of the sunset"
+            alt="Mom's photo of the sunset"
             className="fin-photo"
             initial={{ scale: 1.6, rotate: 0, x: '-30vw', y: '20vh', opacity: 0 }}
             animate={{ scale: 1, rotate: -6, x: 0, y: 0, opacity: 1 }}

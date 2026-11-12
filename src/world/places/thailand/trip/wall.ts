@@ -2,7 +2,7 @@
 // the old family photos, toward the door (the boat trip first; later trips hang beside it). The photo is the one she
 // picked for Agong at the end of the trip (trip/wall-photos.ts, saved on the iPad). The trip's `home` leg hangs it
 // (trip/legs/house-plugin.ts); in the house (the hub) WallPlugin hangs what's saved and makes the frames tappable: tap
-// one and it comes close (the screen shows it big) and Mommy says "Our boat trip!" (each trip has its own line). The
+// one and it comes close (the screen shows it big) and Mom says "Our boat trip!" (each trip has its own line). The
 // mall day's frame hangs next to the boat trip's, toward the door. A link with `at=photos` (where the
 // trip's stamp lands) starts with the camera on the wall, the old photos and hers, until she taps anything else.
 import { Group, Mesh, MeshBasicMaterial, PlaneGeometry, SRGBColorSpace, TextureLoader, Vector3, type Object3D, type Texture } from 'three'
@@ -26,7 +26,7 @@ export const WALL_SLOTS: Record<string, V3> = {
   // Koh Samet beside it, toward the door.
   'samet-trip': [DIM.left + 0.04, 3.05, -0.43],
 }
-/** What Mommy says when Kaylee taps a trip's photo on the wall. */
+/** What Mom says when Kaylee taps a trip's photo on the wall. */
 export const WALL_LINES: Record<string, Line> = {
   'boat-trip': L.home.wall,
   'mall-trip': L.mall.trip.wall,

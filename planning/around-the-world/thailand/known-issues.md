@@ -17,9 +17,9 @@ Code paths are under `src/world/places/thailand/`.
   rock.
   - Check: `#/world/thailand/boat-trip/cave`, paddle in.
   - Code: `activities/boat-trip/bay/cave.ts` (the tunnel), `trip/vehicles/` (the canoe's paddling).
-- [ ] **Mommy and Daddy lie down in one frame.** Tap them in the canoe and they jump from sitting to flat on their
+- [ ] **Mom and Dad lie down in one frame.** Tap them in the canoe and they jump from sitting to flat on their
   backs, with no movement in between.
-  - Check: `#/world/thailand/boat-trip/cave`, tap Daddy, then Mommy.
+  - Check: `#/world/thailand/boat-trip/cave`, tap Dad, then Mom.
   - Code: `activities/boat-trip/bay/cave.ts` (`lieDown`), `bay/poses.ts`.
   - Fix: ease into it (lean back, settle) like the hops do.
 - [x] **Some of Sparkle's album facts are long (4–5 s).** She's five: keep them under about 3 s. *(Step 5: shortened, now
@@ -48,12 +48,12 @@ Code paths are under `src/world/places/thailand/`.
   talking. The house itself keeps them.)*
   - Check: `#/world/thailand/boat-trip/goodbye`.
   - Code: `activities/boat-trip/BoatTrip.tsx` (`ANCHORS_OF.house`).
-- [ ] **In the cabin Kaylee sits toward the left edge.** Mommy is the middle of the shot, and Daddy has to stay in frame
+- [ ] **In the cabin Kaylee sits toward the left edge.** Mom is the middle of the shot, and Dad has to stay in frame
   because tapping him is a toy.
   - Check: `#/world/thailand/boat-trip/fly` on the iPad held upright and sideways.
   - Code: `trip/legs/plane.ts` (`shot`, the cabin's camera in the aisle).
-  - Ideas: aim the shot between Kaylee and Mommy and let Daddy's shoulder and face sit at the edge.
-- [x] **While Mommy asks, only Mommy and Kaylee react to taps.** *(Step 5: everyone else in her room hops, and things
+  - Ideas: aim the shot between Kaylee and Mom and let Dad's shoulder and face sit at the edge.
+- [x] **While Mom asks, only Mom and Kaylee react to taps.** *(Step 5: everyone else in her room hops, and things
   wobble with their sound; Kaylee still stays put until she answers.)*
   - Check: `#/world/thailand/boat-trip/invite`, tap Gan, the fan, the mattress.
   - Code: `trip/legs/house-plugin.ts` (`tap`, the `invite` phase).
@@ -92,7 +92,7 @@ Code paths are under `src/world/places/thailand/`.
   game's 🛝 (back to the hall, at the end) sits over the sock band.
   - Check: `#/world/thailand/mall-trip/hall?from=boxing` and `skypod?round=3` at iPhone landscape size.
   - Code: `activities/mall-trip/MallTrip.tsx` (`SockBand`), each game's 🛝 button.
-- [ ] **Muay Thai, round 3:** when Daddy holds the pad on her left, he hides the coach and the drum.
+- [ ] **Muay Thai, round 3:** when Dad holds the pad on her left, he hides the coach and the drum.
   - Check: `#/world/thailand/mall-trip/boxing?round=3`.
 - [ ] **The pizza box only closes with two slices in it.** If she hands out all eight onto plates, nothing tells her to
   move two into the box, so the trip doesn't go home until she does. Make the box glow when the pan is empty.
@@ -109,10 +109,10 @@ Code paths are under `src/world/places/thailand/`.
   - Check: `#/world/thailand/nan-trip/rice?round=plant` in iPad landscape.
 - [ ] **Grow has short stretches where only the clock moves.** Shorter rests for the first wave of birds would help.
   - Check: `#/world/thailand/nan-trip/rice?round=grow`.
-- [ ] **Daddy stands still while she threshes,** apart from a hop on the third bang (Lung counts the bundles now).
+- [ ] **Dad stands still while she threshes,** apart from a hop on the third bang (Lung counts the bundles now).
   - Check: `#/world/thailand/nan-trip/rice?round=thresh`.
 - [ ] **The 🏠 sits on the hut's roof corner** at the top left of the farm (the hut is scenery, not a target).
-- [ ] **Listen to the rice farm's voices**: is Daddy too chatty (8-10 one-time lines a run)? The player-name pronunciation concern was superseded by the name-free dialogue update (2026-11-11). Since 2026-10-27 Lung Kham talks too: listen to
+- [ ] **Listen to the rice farm's voices**: is Dad too chatty (8-10 one-time lines a run)? The player-name pronunciation concern was superseded by the name-free dialogue update (2026-11-11). Since 2026-10-27 Lung Kham talks too: listen to
   his Thai numbers and "Khob khun krap!".
 - [ ] **The mushroom aunty's mouth may not move when she talks:** her `FaceLife` is made without her voice
   (`activities/nan-trip/mushrooms/farm3d.ts`, `new FaceLife(this.house.farmer)`; it needs `'farmer'`).
@@ -124,7 +124,7 @@ stop after the city road) are fixed.
   - Check: `#/world/thailand/nan-trip/drive?road=valley`. Code: `trip/vehicles/pajero.ts` (the tailgate and rear lamps).
 - [ ] **The sea of clouds is hard to see** from the chase camera, which mostly looks at the hillside.
   - Check: `#/world/thailand/nan-trip/drive?road=sky`, past the cloud. Code: `drive/mountain.ts`, `trip/road/clouds.ts`.
-- [ ] **Daddy, the elephant toy and the wipers' tap targets overlap a little** on the small car (each keeps an area of
+- [ ] **Dad, the elephant toy and the wipers' tap targets overlap a little** on the small car (each keeps an area of
   its own). Code: `drive/mountain.ts` (the anchors).
 - [ ] **On the grass the Pajero drives straight through the chevron signs** and the round mirrors (they stand 1.7 m
   past the edge; it can go 4.6 m out). A wobble or a boing off them would be sillier.
@@ -138,7 +138,7 @@ stop after the city road) are fixed.
   2026-10-27). Watch where she drifts; idea: ✈️🏠 after one stop on a first trip.
 - [ ] **Kaylee is mostly seen from behind** at the mushroom rack (she faces the bags).
 - [ ] **The map's crayons and cloth are clipped** at the board's edge in some sizes (nothing she plays with).
-- [ ] **Listen:** the clerk, the mushroom aunty, the salt aunty (new voices, northern Thai accent), Daddy's "Whoa! Beep
+- [ ] **Listen:** the clerk, the mushroom aunty, the salt aunty (new voices, northern Thai accent), Dad's "Whoa! Beep
   beep!" (heard as Chinese by the transcription check), "Wheee! Bumpy!", and whether the sky road talks too much.
 
 ## Koh Samet: the look (step 8, PR #342)
@@ -146,7 +146,7 @@ stop after the city road) are fixed.
 Found by layout QA (WebKit, iPad and iPhone landscape). None of these block play.
 
 - [ ] **The pelican captain is hard to see on both boats.** On the snorkel boat she stands at the motor (`snorkel/reef.ts`,
-  z = 3), past the right edge of the float camera. On the speedboat the canopy post and Mommy's sun hat hide most of her.
+  z = 3), past the right edge of the float camera. On the speedboat the canopy post and Mom's sun hat hide most of her.
   - Check: `#/world/thailand/samet-trip/snorkel?round=float`, `#/world/thailand/samet-trip/speedboat`
 - [ ] **The green taxi waits off screen at Sai Kaew.** Its stop sits past the right edge on the iPad and above the top on
   the iPhone, so the sun bear driver never shows on landing (framing from greybox 2).
@@ -156,12 +156,12 @@ Found by layout QA (WebKit, iPad and iPhone landscape). None of these block play
 
 ## Listen on the iPad (automated checks can't hear)
 - [ ] **The mall trip's new voices** (2026-10-21): the transcription check flagged Thai words written back in Thai
-  ("Sawasdee ka", "Khob khun ka"), Daddy's "Ooh, strong!" heard in Japanese, the coach's
+  ("Sawasdee ka", "Khob khun ka"), Dad's "Ooh, strong!" heard in Japanese, the coach's
   "wai kru" heard as "Y crew", and "Phi Ta Khon" as "Fi ta'kan". Listen in the vet, the barber, the hall's staff, the
   Muay Thai warm-up and the Big Frame's mask.
 
 - [x] **The village kids’ player-name pronunciation issue was superseded** (2026-11-11): their lines are now "The ball!" and "Khob khun ka!", with no player name. The PR recording job supplies the replacement clips.
-- [ ] **Daddy's "Pai!"** The transcription check heard it as Chinese (派). Listen for whether it sounds like the Thai word.
+- [ ] **Dad's "Pai!"** The transcription check heard it as Chinese (派). Listen for whether it sounds like the Thai word.
   - Check: `#/world/thailand/boat-trip/pier`, tie three ribbons and the garland, then drive off.
 - [ ] **Lip sync and sound in the bay overall.** The engine putt-putt to RRRAAAH, the echoes in the cave, the
   porpoise's blow.

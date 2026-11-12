@@ -12,16 +12,16 @@
 //      the concrete road, over the spine to Ao Prao and back;
 //   3. the jet ski is hers: with the jet ski's flag, a jet ski waits on every beach, and she steers it round the coast
 //      (engine3d/drive.ts, the jet ski's feel) and hops off on any beach.
-// Mommy and Daddy follow at a little distance, stop at the water's edge when she swims, and do their own thing when she
-// stops (Daddy lies down on the sand: tap him and he jumps up). The stops (any order) are the jet ski at Sai Kaew
+// Mom and Dad follow at a little distance, stop at the water's edge when she swims, and do their own thing when she
+// stops (Dad lies down on the sand: tap him and he jumps up). The stops (any order) are the jet ski at Sai Kaew
 // (opens its section), the sandcastle at Ao Hin Khok, the snorkel boat at Ao Wong Duan and the driftwood tree at Ao
 // Prao (each opens its own world: the driftwood tree opens hide and seek, the deck's table lunch). Each stop's pink flag (`flags`) stands on its
 // beach, and the day moves on with them: morning, noon, afternoon, golden (and `time=night` for the fire show's
-// night). Things to poke everywhere (props.ts): palms drop coconuts (on Daddy's head, if he's under one), samet bark
+// night). Things to poke everywhere (props.ts): palms drop coconuts (on Dad's head, if he's under one), samet bark
 // peels, umbrellas spin (three pokes and one takes off like a kite with Kaylee holding on), chairs fold, the beach
 // ball rolls where she kicks it, crabs pop out of their holes, the ice cream cart dings, the bead tray jingles, the
 // hammock swings, boats bob and toot, the taxi honks, the mermaid's tail splashes.
-// Mommy's phone and the animal book (greybox 3, ../book/): with the phone out the camera comes in closer and a tap is a
+// Mom's phone and the animal book (greybox 3, ../book/): with the phone out the camera comes in closer and a tap is a
 // photo. Tap an animal and it turns and does something cute for the camera (the photo is taken at its best moment);
 // the phone turns a little toward it, the way a real one focuses, and an animal big in the middle of the frame earns a
 // gold frame. The animals live on the island (../book/creatures.ts: wander, flee, perch, swim) and react to a tap
@@ -96,7 +96,7 @@ const CAM = knobs('sametCam', 'The island camera', FILE, {
   far: { value: 95, min: 40, max: 400, step: 5, label: 'Draws plants out to', unit: 'm', note: 'further trees are left to the haze (fewer triangles on the iPad)' },
   forest: { value: 54, min: 25, max: 80, step: 1, label: 'Looks down in the forest', unit: '°', note: 'on the roads and paths through the trees the camera rises over them' },
 })
-const PHONE = knobs('sametPhone', "Mommy's phone", FILE, {
+const PHONE = knobs('sametPhone', "Mom's phone", FILE, {
   zoom: { value: 0.72, min: 0.4, max: 1, step: 0.02, label: 'Camera comes in to', note: 'with the phone out, how much of the ground shows (× the walking view)' },
   focus: { value: 0.35, min: 0, max: 0.8, step: 0.05, label: 'Leans toward an animal', note: 'the view slides this much of the way toward the nearest animal' },
   aim: { value: 0.7, min: 0, max: 1, step: 0.05, label: 'The photo turns to it', note: 'how much of the way the photo turns toward the animal she tapped' },
@@ -138,12 +138,12 @@ export interface IslandStart {
   time: TimeOfDay | null
   /** The animals already in her book. */
   book?: AnimalId[]
-  /** Mommy's phone out from the start. */
+  /** Mom's phone out from the start. */
   phone?: boolean
   /** What she packed for the trip (her sun hat and sunglasses go on). */
   packed?: string[]
 }
-/** A photo from Mommy's phone. */
+/** A photo from Mom's phone. */
 export interface Snap {
   /** The animal in it (null: a photo of the island). */
   animal: AnimalId | null
@@ -167,7 +167,7 @@ export interface IslandEvents {
   near?(on: boolean): void
   /** Something went in a bin (the beach clean's count). */
   cleaned?(n: number): void
-  /** All four pink flags up and she tapped the speedboat at Na Dan pier: Mommy's photo of the island (for Agong's
+  /** All four pink flags up and she tapped the speedboat at Na Dan pier: Mom's photo of the island (for Agong's
    *  wall), and home. */
   home?(photo: string): void
   /** Someone says something (lines.ts L.samet.island): the screen's TripGuide speaks it. */
@@ -188,7 +188,7 @@ const tmp2 = new Vector3()
 const leashV = new Vector3()
 /** The speedboat at Na Dan pier (layout.ts POKES): once all four flags are up, it takes them to the sunset (the finale). */
 const HOME_BOAT = 'speedboat:0'
-/** Where she stands on the pier for Mommy's photo before they go (beside the speedboat). */
+/** Where she stands on the pier for Mom's photo before they go (beside the speedboat). */
 const HOME_PIER = atFrame(FRAMES.nadan, -4, 22)
 /** Between the two fire dancers on Sai Kaew (dancers.ts SPOTS), for their poi's whoom. */
 const FIRE_AT = bay(-6, -2)
@@ -201,7 +201,7 @@ const smooth = (a: number, b: number, x: number) => {
 
 // ---- Sounds: sounds.ts (recorded, with the synth ones as fallbacks).
 
-/** Mommy, Daddy, whoever follows her: their own walk (the code-built toys have no legs: they hop along). */
+/** Mom, Dad, whoever follows her: their own walk (the code-built toys have no legs: they hop along). */
 interface Follower {
   m: Member
   /** Meters behind her along her trail, and to the side. */
@@ -244,8 +244,8 @@ const LABELS: Record<string, string> = { palm: 'A coconut palm', samet: 'A samet
 
 export const ISLAND_ANCHORS: AnchorInfo[] = [
   { id: 'kaylee', label: 'You', kind: 'thing' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
   { id: 'taxi', label: 'The green taxi', kind: 'thing' },
   { id: 'puppy', label: 'The beach puppy', kind: 'thing' },
   { id: 'mermaid', label: 'The mermaid statue', kind: 'thing' },
@@ -287,7 +287,7 @@ export class SametIsland implements World3D {
   private dancers: FireDancers
   private spot: SpotId
 
-  // ---- Kaylee, Mommy, Daddy.
+  // ---- Kaylee, Mom, Dad.
   private kaylee: Avatar
   private kShadow: Mesh
   private ring: Group
@@ -298,7 +298,7 @@ export class SametIsland implements World3D {
   private nick: Follower
   private ji: Follower
   private trail: XZ[] = []
-  /** The last dry place she stood: where Mommy and Daddy wait when she swims or rides out to sea. */
+  /** The last dry place she stood: where Mom and Dad wait when she swims or rides out to sea. */
   private edge: XZ = { x: 0, z: 0 }
   /** The family's first moment on the island: they start in their places, not walking there. */
   private familySettling = true
@@ -370,7 +370,7 @@ export class SametIsland implements World3D {
   private coneT = -1
   private bellSwing = 0
   private tailT = -1
-  // ---- Mommy's phone, the animals and the beach clean.
+  // ---- Mom's phone, the animals and the beach clean.
   private wild: Wildlife
   private clean: BeachClean
   private fish: Fish
@@ -620,7 +620,7 @@ export class SametIsland implements World3D {
     scene.add(this.clean.root)
     this.fish = new Fish(bag, 6)
     scene.add(this.fish.root)
-    // Mommy's phone in her hand: pink, with a little camera lens.
+    // Mom's phone in her hand: pink, with a little camera lens.
     this.phoneProp = solid(merge([P.rbox(0.2, 0.32, 0.035, 0.03, PAL.hotpink, {}), P.rbox(0.17, 0.27, 0.01, 0.02, '#2B2330', { at: [0, 0.01, 0.018] }), P.cyl(0.022, 0.022, 0.02, '#FFFFFF', { at: [0.05, 0.1, -0.025], rot: [Math.PI / 2, 0, 0] }, 8)]), bag, 1.5)
     this.phoneProp.visible = false
     scene.add(this.phoneProp)
@@ -983,7 +983,7 @@ export class SametIsland implements World3D {
     this.lastPos.copy(k)
   }
 
-  /** Once a visit: Sparkle's hello on the island, the jet ski hers (its flag up), Daddy calling everyone to the
+  /** Once a visit: Sparkle's hello on the island, the jet ski hers (its flag up), Dad calling everyone to the
    *  driftwood tree (all four flags). */
   private greet() {
     this.greeted = true
@@ -1119,7 +1119,7 @@ export class SametIsland implements World3D {
     this.prints.instanceMatrix.needsUpdate = true
   }
 
-  // ---------------------------------------------------------------- Mommy and Daddy
+  // ---------------------------------------------------------------- Mom and Dad
 
   private trailPoint(back: number, side: number): XZ {
     let left = back
@@ -1142,7 +1142,7 @@ export class SametIsland implements World3D {
     return p
   }
 
-  /** Somewhere Mommy and Daddy can wait for her: a deck's top or steps, or dry ground they could walk to. */
+  /** Somewhere Mom and Dad can wait for her: a deck's top or steps, or dry ground they could walk to. */
   private standable(x: number, z: number) {
     if (this.deckAt(x, z) >= 0) return true
     for (let i = 0; i < this.props.decks.length; i++) if (this.inDeckTop(i, x, z)) return false
@@ -1251,7 +1251,7 @@ export class SametIsland implements World3D {
       }
       if (!waiting) away(k, FAMILY_GAP)
       if (placed) away(placed, FAMILY_GAP)
-      // Standing still, one right behind the other from the camera: Mommy would be hidden behind Daddy. She takes a
+      // Standing still, one right behind the other from the camera: Mom would be hidden behind Dad. She takes a
       // place beside him, or on her other side.
       if (placed && !waiting && this.lastSpeed < 1.5 && this.deckOn < 0) {
         const p = placed as XZ
@@ -1337,7 +1337,7 @@ export class SametIsland implements World3D {
       m.setGround(g + hop)
       r.rotation.z = f.speed > 0.2 ? Math.sin(f.phase) * 0.06 : r.rotation.z * 0.9
       f.shadow.position.set(r.position.x, g + 0.03, r.position.z)
-      // When she stops for a while on a beach: Daddy lies down on the sand, Mommy watches her.
+      // When she stops for a while on a beach: Dad lies down on the sand, Mom watches her.
       const beach = this.surface === 'sand' || this.surface === 'wet'
       f.lie += ((f === this.nick && idle && beach && d < 1 ? 1 : 0) - f.lie) * ease(dt, 1.5)
       if (f === this.nick) {
@@ -1822,7 +1822,7 @@ export class SametIsland implements World3D {
     }
     // The pokes playing out.
     for (const [id, p] of this.props.pokes) this.pokeStep(id, p, dt, t)
-    // Coconuts falling, bouncing (on Daddy's head, if he's under it), rolling.
+    // Coconuts falling, bouncing (on Dad's head, if he's under it), rolling.
     for (let i = this.coconuts.length - 1; i >= 0; i--) {
       const c = this.coconuts[i]
       c.t += dt
@@ -2124,7 +2124,7 @@ export class SametIsland implements World3D {
     if (id === HOME_BOAT && this.goingHome !== null) {
       // The whole island done: the speedboat at Na Dan pier takes them round to Ao Prao for the sunset (the finale),
       // never straight home: the fire show's 🏠 at the end of the finale is the way home. She walks to the end of the
-      // pier, Daddy calls the sunset, and off they go.
+      // pier, Dad calls the sunset, and off they go.
       if (this.goingHome || this.mode !== 'walk') return
       if (!near(HOME_PIER.x, HOME_PIER.z, 2.5)) return this.goTo(id, HOME_PIER.x, HOME_PIER.z, 1)
       this.goingHome = true
@@ -2151,7 +2151,7 @@ export class SametIsland implements World3D {
       return
     }
     if (id === HOME_BOAT && this.goingHome === null && this.events.leaveAsk) {
-      // Before the whole island is done, the speedboat is the way home: she walks to the end of the pier, Mommy asks
+      // Before the whole island is done, the speedboat is the way home: she walks to the end of the pier, Mom asks
       // and the home picture comes up (a tap on it and off they go). Nothing else leaves Koh Samet.
       this.kick(id, 3)
       sfx.toot()
@@ -2291,9 +2291,9 @@ export class SametIsland implements World3D {
     if (p) this.pokeThing(p)
   }
 
-  // ---------------------------------------------------------------- Mommy's phone
+  // ---------------------------------------------------------------- Mom's phone
 
-  /** Mommy's phone out (or away): the camera comes in closer and every tap is a photo. */
+  /** Mom's phone out (or away): the camera comes in closer and every tap is a photo. */
   setPhone(on: boolean) {
     this.phone = on
     this.lastTouch = this.time
@@ -2457,7 +2457,7 @@ export class SametIsland implements World3D {
       }
       this.target = null
     }
-    // Mommy's phone in her hand (held up in front of her).
+    // Mom's phone in her hand (held up in front of her).
     this.phoneProp.visible = this.phone && (this.mode === 'walk' || this.mode === 'kite')
     if (this.phoneProp.visible) {
       const hand = this.kaylee.rig.hands?.[1] ?? this.kaylee.rig.armR
@@ -2526,7 +2526,7 @@ export class SametIsland implements World3D {
       sfx.treeSunset()
       return this.events.open('sunset')
     } else if (id === 'hideseek') {
-      // The driftwood tree rustles, and Daddy pops out from behind it.
+      // The driftwood tree rustles, and Dad pops out from behind it.
       this.kick('stop:hideseek', 5)
       const n = this.nick.m
       const p = g.position
@@ -2547,7 +2547,7 @@ export class SametIsland implements World3D {
         if (p.top && this.coconuts.length < 8) {
           const g = this.coconutGeo.clone()
           g.position.copy(p.top).add(tmp.set((Math.random() - 0.5) * 0.4, -0.3, (Math.random() - 0.5) * 0.4))
-          // If Daddy's near the palm, the coconut finds his head (the silly one).
+          // If Dad's near the palm, the coconut finds his head (the silly one).
           const n = this.nick.m.root.position
           const dn = Math.hypot(n.x - p.at.x, n.z - p.at.z)
           const vx = dn < 2.6 ? (n.x - g.position.x) / 0.9 : (Math.random() - 0.5) * 1.5
@@ -3283,7 +3283,7 @@ export class SametIsland implements World3D {
       // On a pier or jetty: the screen points 3 m to either side of her, square across it (a finger straight at the rail).
       rails: this.deckOn >= 0 ? (({ t, y }) => [1, -1].map((s) => sc(new Vector3(k.x + t.x * s * 3, y, k.z + t.z * s * 3))))(this.props.decks[this.deckOn]) : null,
       kaylee: sc(k.clone().setY(k.y + 0.6)),
-      // Mommy (ji) and Daddy (nick): where they are, how high (and the ground there), the deck under them (-1: none) and
+      // Mom (ji) and Dad (nick): where they are, how high (and the ground there), the deck under them (-1: none) and
       // where they are on screen.
       family: Object.fromEntries((['nick', 'ji'] as const).map((id) => [id, (({ x, y, z }) => ({ x: +x.toFixed(2), z: +z.toFixed(2), y: +y.toFixed(2), ground: +this.heightAt(x, z).toFixed(2), deck: this.deckAt(x, z), screen: sc(new Vector3(x, y + 0.7, z)) }))(this[id].m.root.position)])),
       speed: +this.lastSpeed.toFixed(2),

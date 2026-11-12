@@ -71,7 +71,7 @@ test('@behavior house reminders highlight a visible target and only speak when a
   expect(['Tap the stairs to go up to your room!', 'Tap your family to say hello!']).toContain(last)
 })
 
-test('@behavior Mommy greets the camera from the family photo', async ({ page }) => {
+test('@behavior Mom greets the camera from the family photo', async ({ page }) => {
   await open(page, 'hub/family?who=ji')
   await page.locator('[data-anchor="family:ji"]').click()
   const spoken = await page.evaluate(() => (window.__kayleeSpeech ?? []).filter((s) => s.voice === 'ji').map((s) => s.text))

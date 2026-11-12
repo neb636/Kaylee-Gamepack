@@ -1,7 +1,7 @@
 // The cafe's kitchen, modeled in code in the house's toon look (engine3d/geo.ts parts): white tiles behind, the front
 // counter Kaylee works at, the back counter and the shelf where finished drinks line up, the ceiling beam the blender
 // splats, and the things to poke: the fridge (its door swings, the bottles clink), the coffee machine (it steams),
-// the bread baskets (the pretzels bounce), the cake stand (it spins) and the tea set (she pours Mommy a cup).
+// the bread baskets (the pretzels bounce), the cake stand (it spins) and the tea set (she pours Mom a cup).
 import { Group, Mesh, MeshBasicMaterial, type ShaderMaterial } from 'three'
 import type { Bag } from '../../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../../engine3d/geo'
@@ -105,7 +105,7 @@ export function buildKitchen(bag: Bag): Kitchen {
   fridge.add(door)
   root.add(fridge)
 
-  // ---- The coffee machine on the back counter: a little cup under its spout (Daddy's coffee) ----
+  // ---- The coffee machine on the back counter: a little cup under its spout (Dad's coffee) ----
   const coffee = new Group()
   coffee.position.set(...COFFEE)
   coffee.userData.pick = 'coffee'
@@ -164,7 +164,7 @@ export function buildKitchen(bag: Bag): Kitchen {
   })
   root.add(bread)
 
-  // ---- The tea set: a teapot on a tray and a teacup for Mommy ----
+  // ---- The tea set: a teapot on a tray and a teacup for Mom ----
   const tea = new Group()
   tea.position.set(...TEA)
   tea.userData.pick = 'tea'

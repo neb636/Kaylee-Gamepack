@@ -1,4 +1,4 @@
-// The Nan road trip as a trip (trip/types.ts): Mommy, Daddy and Kaylee pack for the mountains, Aunty Sri's van to the
+// The Nan road trip as a trip (trip/types.ts): Mom, Dad and Kaylee pack for the mountains, Aunty Sri's van to the
 // airport, a window seat north to Nan, then straight to the Nan map and the Pajero. Coming home, the photo she picks
 // goes on Agong's wall (no gift this time, Dad). Pure data.
 import { L } from '../../lines'

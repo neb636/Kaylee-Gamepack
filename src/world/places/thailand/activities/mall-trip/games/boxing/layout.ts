@@ -1,17 +1,17 @@
 // Muay Thai at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "7. Muay Thai bags"), in meters:
-// the blue mat, the ropes, the bags on their beam, the coach's drum, where Kaylee, Daddy and the coach stand, the
+// the blue mat, the ropes, the bags on their beam, the coach's drum, where Kaylee, Dad and the coach stand, the
 // pokeables, and the numbers each round needs. Pure data (no three.js).
 //
 // Seen straight on (the camera looks toward -z), left to right:
 //
 //   back:   ║ ropes ══════ [board: 3 stars, the lamps] ═══════════ beam ════ ║
 //           ║  coach                                    │                     ║ ropes down
-//   mat:    ║  [drum]   (small bag)        Kaylee →  [ BAG ]  Daddy           ║ the right side
+//   mat:    ║  [drum]   (small bag)        Kaylee →  [ BAG ]  Dad           ║ the right side
 //   front:  [bottle on its stool]                                            [post + bell]
 export type V3 = [number, number, number]
 export type Round = 1 | 2 | 3
 
-/** Kaylee stands in the middle, facing the bag on her right (and turning to Daddy's pad in round 3). The bag is a little
+/** Kaylee stands in the middle, facing the bag on her right (and turning to Dad's pad in round 3). The bag is a little
  *  nearer the camera than she is, so she punches it three-quarters on (her face shows). */
 export const KAYLEE = { x: 0, z: 0.05 }
 /** The big bag: hanging on its chain from the beam, its body from `y0` to `y1`. Swings about the beam. */
@@ -20,9 +20,9 @@ export const BAG = { x: 0.62, z: 0.42, pivot: 2.05, y0: 0.32, y1: 1.24, r: 0.24 
 export const BAG2 = { x: -0.95, z: -0.85, pivot: 2.05, y0: 0.62, y1: 1.3, r: 0.17 }
 /** The beam the bags hang from, across the back. */
 export const BEAM = { x0: -1.3, x1: 1.15, y: 2.3, z: -0.32 }
-/** Daddy holding the bag from behind it (rounds 1 and 2), facing it (and her). */
+/** Dad holding the bag from behind it (rounds 1 and 2), facing it (and her). */
 export const DADDY_BAG = { x: 1.32, z: 0.2, face: -74 }
-/** Round 3: where Daddy holds the pad, on her left and on her right (where the bag was: he swings it back onto its
+/** Round 3: where Dad holds the pad, on her left and on her right (where the bag was: he swings it back onto its
  *  hook first), and the pad's heights. He always faces her. */
 export const PAD_SIDES = { left: { x: -0.86, z: 0.3 }, right: { x: 1.08, z: 0.42 } }
 /** The big bag hooked back out of the way in round 3 (radians, swung back toward the wall). */
@@ -37,7 +37,7 @@ export const PAD_STEPS: { side: 'left' | 'right'; y: keyof typeof PAD_Y }[] = [
   { side: 'left', y: 'mid' },
   { side: 'right', y: 'mid' },
 ]
-/** How far in front of Daddy the pad is held. */
+/** How far in front of Dad the pad is held. */
 export const PAD_OUT = 0.5
 export const PAD = { w: 0.42, h: 0.52, d: 0.16 }
 
@@ -50,7 +50,7 @@ export const TALL_SHIFT = 0.42
 export const COACH_DRUM = { dz: -0.44 }
 
 /** The ring: posts at the back corners and the front right, three ropes (red, white, blue) along the back and down the
- *  right side. Daddy bounces into the right side. */
+ *  right side. Dad bounces into the right side. */
 export const POSTS: [number, number][] = [
   [-2.3, -1.25],
   [1.95, -1.25],

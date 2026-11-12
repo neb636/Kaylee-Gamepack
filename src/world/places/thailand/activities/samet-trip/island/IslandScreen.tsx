@@ -1,7 +1,7 @@
 // The island to roam, on screen (island.ts is the world): the 3D island with its tap targets, the beach puppy's
 // thought bubble (a picture of the beach he's taking her to, #357 way-finding), the puppy button in the top-right corner
 // that calls him (the top-left is the shell's map button again, like the rest of Thailand), the home picture at the end
-// of Na Dan pier (the speedboat home, for the finale's photo), and Mommy's phone and the animal book (../book/). Sparkle sits in the corner (trip/legs/Guide.tsx): she says
+// of Na Dan pier (the speedboat home, for the finale's photo), and Mom's phone and the animal book (../book/). Sparkle sits in the corner (trip/legs/Guide.tsx): she says
 // what's new (lines.ts L.samet.island, L.samet.puppy, L.samet.book), the family and the taxi driver react in their own
 // voices. A hub: no idle hints spoken (the puppy comes to fetch her).
 import { useRef, useState } from 'react'
@@ -30,9 +30,9 @@ interface Props {
   /** Her photos so far this visit (kept by the trip, so a trip to the jet ski doesn't lose them). */
   photos?: Partial<Record<AnimalId, BookPhoto>>
   onPhotos?(p: Partial<Record<AnimalId, BookPhoto>>): void
-  /** Mommy's phone out or away (the address bar follows). */
+  /** Mom's phone out or away (the address bar follows). */
   onPhone?(on: boolean): void
-  /** All four flags up and the speedboat home tapped: Mommy's photo of the island (for Agong's wall). */
+  /** All four flags up and the speedboat home tapped: Mom's photo of the island (for Agong's wall). */
   onHome?(photo: string): void
   /** The home picture tapped at the end of Na Dan pier: off home on the speedboat (the trip is kept for next time). */
   onLeave?(): void

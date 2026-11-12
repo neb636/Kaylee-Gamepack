@@ -89,8 +89,8 @@ export interface RaceEvents {
 export const RACE_ANCHORS: AnchorInfo[] = [
   { id: 'boat', label: 'Boat', kind: 'thing' },
   { id: 'family:kaylee', label: 'You', kind: 'family' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
   { id: 'rival:kids', label: 'The village kids', kind: 'thing' },
   { id: 'rival:monkey', label: 'The macaque', kind: 'thing' },
   { id: 'stand', label: 'The fans', kind: 'thing' },
@@ -321,7 +321,7 @@ export class Race implements World3D {
     this.racers[1].lane = 3.2
     this.racers[2].lane = -3.2
 
-    // ---- The family in her longtail: Kaylee at the tiller in what she packed, Mommy and Daddy on the benches ----
+    // ---- The family in her longtail: Kaylee at the tiller in what she packed, Mom and Dad on the benches ----
     const avatar = new Avatar(bag)
     avatar.wear(wearing(start.packed))
     const member = (id: 'ji' | 'nick') => new Member(FAMILY.find((m) => m.id === id)!, bag)
@@ -821,7 +821,7 @@ export class Race implements World3D {
       if (r === this.k) {
         this.counts.jumps++
         sfx.vroom()
-        // Slow motion while she's up (longer off the big jump, with a cheer from the stands and Mommy).
+        // Slow motion while she's up (longer off the big jump, with a cheer from the stands and Mom).
         this.slow = Math.max(this.slow, on.ramp.big ? 1.5 : 0.5)
         if (on.ramp.big) {
           this.counts.bigJumps++
@@ -900,7 +900,7 @@ export class Race implements World3D {
     }
   }
 
-  /** The pink dolphins come alongside (once a lap): a chirp, and Mommy and Kaylee wave to them. */
+  /** The pink dolphins come alongside (once a lap): a chirp, and Mom and Kaylee wave to them. */
   private meetDolphins() {
     const k = this.k
     if (this.phase !== 'race' || k.done >= 0 || this.dolphinLap === k.laps || !this.dolphins.alongside(k.s)) return
@@ -983,7 +983,7 @@ export class Race implements World3D {
   private places() {
     const place = this.order().indexOf('kaylee') + 1
     if (this.phase === 'race' && place < this.lastPlace && this.phaseT > 3) {
-      // She passed someone: Daddy cheers (now and then), and whoever she passed looks back.
+      // She passed someone: Dad cheers (now and then), and whoever she passed looks back.
       this.line('go', L.race.go, 12)
       this.scenery.cheer(0.4)
       this.strike(this.riders[2], 'cheer', 1.2)
@@ -1175,7 +1175,7 @@ export class Race implements World3D {
     }
   }
 
-  /** The family's life: Kaylee's hands on the tiller (or a cheer), Mommy and Daddy's poses, the wind in their manes. */
+  /** The family's life: Kaylee's hands on the tiller (or a cheer), Mom and Dad's poses, the wind in their manes. */
   private updateRiders(dt: number, t: number) {
     const lt = this.k.v as Longtail
     const onStage = this.phase === 'podium'
@@ -1285,7 +1285,7 @@ export class Race implements World3D {
       r.spin = r.star = 0
       r.aura.update(0, false)
     })
-    // Kaylee on top, Mommy and Daddy behind her on the deck, the kids on 2, the macaque on 3.
+    // Kaylee on top, Mom and Dad behind her on the deck, the kids on 2, the macaque on 3.
     const stand = (o: Group, x: number, y: number, z: number, scale = 1) => {
       root.add(o)
       o.position.set(x, y, z)
@@ -1303,7 +1303,7 @@ export class Race implements World3D {
     ;(kaylee.char as Avatar).place(P.steps[0].x, P.steps[0].y, P.steps[0].z, 90)
     ;(kaylee.char as Avatar).setPose('stand')
     kaylee.char.root.scale.setScalar(1.5)
-    // Mommy and Daddy at the ends of the stage, cheering her on.
+    // Mom and Dad at the ends of the stage, cheering her on.
     for (const [r, z] of [[ji, 3.9], [nick, -3.9]] as const) {
       root.add(r.char.root)
       ;(r.char as Member).place(0.6, 0.53, z, 90, 'stand')

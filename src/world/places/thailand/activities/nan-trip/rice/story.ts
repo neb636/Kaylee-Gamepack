@@ -65,7 +65,7 @@ export interface StoryHost {
   say(l: Line): void
   /** The ground's top there (m). */
   groundAt(x: number, z: number): number
-  /** Last year (the memory): golden rice everywhere, the paddies drained, Kaylee and Daddy not there. Or back to now. */
+  /** Last year (the memory): golden rice everywhere, the paddies drained, Kaylee and Dad not there. Or back to now. */
   lastYear(on: boolean): void
   /** The rice heads vanish (pecked), a wave out from `from` over `s` seconds (the memory's montage). */
   eatAll(from: Vector3, s: number): void
@@ -76,10 +76,10 @@ export interface StoryHost {
 }
 
 /** Where things are in the story (meters). */
-/** The way in: Kaylee and Daddy have just come along the boardwalk, and Lung, a couple of steps along, turns to greet
+/** The way in: Kaylee and Dad have just come along the boardwalk, and Lung, a couple of steps along, turns to greet
  *  them (close enough to talk, far enough apart that they read as newcomers, not farmhands). */
 const LUNG_TALK: FV3 = [0.7, BOARDWALK.y, 4.05]
-/** Daddy just behind her, on her left (her side of the boardwalk, away from Lung). */
+/** Dad just behind her, on her left (her side of the boardwalk, away from Lung). */
 const NICK_TALK: FV3 = [-2.2, BOARDWALK.y, 3.64]
 /** Turned toward each other, and cheated toward the camera (chibi heads in profile read as the backs of heads): Lung
  *  turns well round to her, she only partly (her face stays in the shot). */
@@ -788,7 +788,7 @@ export class RiceStory {
     this.sharing = false
     deck.updateMatrixWorld(true)
     this.chicks.home()
-    // On the railing beside her, in a row (they're in Mommy's photo).
+    // On the railing beside her, in a row (they're in Mom's photo).
     for (const [i, c] of this.chicks.list.entries()) {
       deck.attach(c.root)
       c.root.position.set(RAIL_SEAT[0] - i * 0.17, RAIL_SEAT[1], RAIL_SEAT[2])

@@ -65,7 +65,7 @@ the world doesn't point the way, the puppy does.
 - **Arriving**: he barks the beach's name (a woof a syllable, `BEATS`) and Sparkle says it (`L.samet.puppy.name`;
   the first visit's longer beach line instead; not again within 45 s).
 - **Shortcut**: `path-west` over the low west hills from Ao Prao's south end to Ao Wong Duan, ending in the sand slide
-  (`SLIDE`): walk onto its top heading down and she sits and whooshes down (`slide` s); Daddy: "Wheee! A sand slide!"
+  (`SLIDE`): walk onto its top heading down and she sits and whooshes down (`slide` s); Dad: "Wheee! A sand slide!"
   the first time. Landmarks on the long road: the coconut stall where it tops the spine, the balancing rocks halfway
   to Wong Duan (both poke).
 - **The taxi** (`taxi.ts`): drives straight between any two stops (`roadBetween`). For a far beach (a walk over
@@ -76,7 +76,7 @@ the world doesn't point the way, the puppy does.
   Ao Noi Na) or by taxi.
 - **The top-left button** calls the puppy (`kit/topLeft.ts`, a small shared hook PlaceFrame reads). Inside a stop it
   goes back to that beach (no flag). Packing and the speedboat ride keep the map button.
-- **Home**: tap the speedboat at Na Dan pier: she walks to the pier's end, Mommy: "Time to go home?", the home picture
+- **Home**: tap the speedboat at Na Dan pier: she walks to the pier's end, Mom: "Time to go home?", the home picture
   comes up; tap it and they go (back to the Thailand map, the trip saved). The Thailand map's 🏝️ pin puts a trip half
   done straight back on the beach she left (no packing, no boat ride). All four flags: the speedboat still opens the
   sunset.

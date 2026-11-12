@@ -1,6 +1,6 @@
 // The photo of the mall day that goes on Agong's wall (plan: "Home"): drawn in code for the greybox, in the flat
 // outlined look (no words in it), 4:3 like the boat trip's photos. `dragon`: Kaylee whooshing down the twin-dragon
-// spiral in the Big Frame with her arms up, Mommy and Daddy cheering at the bottom; `cheese`: Daddy at the pizza table
+// spiral in the Big Frame with her arms up, Mom and Dad cheering at the bottom; `cheese`: Dad at the pizza table
 // with the cheese stretched to his nose. (The art gate may take a real snapshot in the frame instead.) No three.js.
 
 import { BARE, photoColors } from '../../characters/style'
@@ -90,7 +90,7 @@ function dragon(g: CanvasRenderingContext2D) {
   blob(g, 186, 212, 13, 9, '#FF8FB8')
   blob(g, 224, 212, 13, 9, '#FF8FB8')
   unicorn(g, 205, 140, 34, me.fur, me.mane)
-  // Mommy and Daddy at the bottom, cheering.
+  // Mom and Dad at the bottom, cheering.
   unicorn(g, 80, 262, 30, '#FFF0F6', '#FF8FB8')
   unicorn(g, 140, 270, 34, '#F4F1FF', '#7FD1B9')
   // Sparkles.
@@ -108,7 +108,7 @@ function dragon(g: CanvasRenderingContext2D) {
 }
 
 function cheese(g: CanvasRenderingContext2D) {
-  // The green booth, the table, the pizza, Daddy with the cheese stretched to his nose and Kaylee laughing.
+  // The green booth, the table, the pizza, Dad with the cheese stretched to his nose and Kaylee laughing.
   g.fillStyle = '#4DB57A'
   g.fillRect(0, 0, W, H)
   g.fillStyle = '#7FD6A3'
@@ -123,7 +123,7 @@ function cheese(g: CanvasRenderingContext2D) {
   blob(g, 240, 280, 120, 34, '#E7A94B')
   blob(g, 240, 276, 104, 26, '#FFD86B', 0)
   for (const [x, y] of [[200, 272], [250, 284], [290, 270], [222, 290]]) blob(g, x, y, 10, 6, '#E8434F', 3)
-  // The stretchy cheese, from the pan up to Daddy's nose.
+  // The stretchy cheese, from the pan up to Dad's nose.
   g.beginPath()
   g.moveTo(280, 268)
   g.bezierCurveTo(300, 230, 310, 200, 330, 178)

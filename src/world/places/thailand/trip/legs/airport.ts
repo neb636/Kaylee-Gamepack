@@ -34,8 +34,8 @@ export const AIRPORT_ANCHORS: AnchorInfo[] = [
   { id: 'plane', label: 'Plane', kind: 'thing' },
   { id: 'pass', label: 'Boarding pass', kind: 'thing' },
   { id: 'flag', label: 'Thai flag', kind: 'thing' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
   { id: 'family:kaylee', label: 'You', kind: 'family' },
 ]
 
@@ -412,7 +412,7 @@ export class Airport extends Stage {
         this.phaseT = 0
         sfx.fwip()
         this.events.say(L.trip.airport.plane)
-        // Daddy takes the suitcase, and they all hop over to the glass doors to look at the plane.
+        // Dad takes the suitcase, and they all hop over to the glass doors to look at the plane.
         s.visible = false
         this.riders.nick.react('wave')
         const order: ('kaylee' | 'ji' | 'nick')[] = ['kaylee', 'ji', 'nick']

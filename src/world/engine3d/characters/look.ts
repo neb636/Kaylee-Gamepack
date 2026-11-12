@@ -4,7 +4,7 @@
 
 export type Species = 'unicorn' | 'panda' | 'elephant' | 'fox' | 'buffalo' | 'penguin' | 'hornbill' | 'puppy' | 'pony' | 'monkey' | 'tortoise' | 'bear' | 'polarbear' | 'tern' | 'beaver' | 'moose' | 'raccoon' | 'otter' | 'pelican' | 'gecko' | 'hen'
 export type Outfit = 'tee' | 'dress' | 'polo' | 'blouse' | 'shirt'
-/** What Kaylee can wear on a trip, from her suitcase (or Mommy's spare sun hat if she packed none), or at HarborLand
+/** What Kaylee can wear on a trip, from her suitcase (or Mom's spare sun hat if she packed none), or at HarborLand
  *  (the vet's blue scrubs and cap, the cafe's apron and chef's hat, the barber's smock, Muay Thai's boxing gloves and red
  *  headband, the mongkhon): Avatar.wear. */
 export type Wearable = 'sunhat' | 'spare-hat' | 'sunglasses' | 'floaties' | 'scrubs' | 'scrub-cap' | 'apron' | 'chef-hat' | 'smock' | 'gloves' | 'mongkhon' | 'ngob'
@@ -22,7 +22,7 @@ export interface Look {
   species: Species
   /** Meters, to the top of the head (ears and horns stick up past it). Kaylee is 1.0. */
   height: number
-  /** How round the body is (1 = the usual chibi build; Mommy 1.15, Jum 1.25). */
+  /** How round the body is (1 = the usual chibi build; Mom 1.15, Jum 1.25). */
   chub?: number
   /** Main fur, feathers or skin. */
   fur: string
@@ -37,7 +37,7 @@ export interface Look {
   cap?: string
   /** Unicorn (or pony) mane and tail, in order. */
   mane?: string[]
-  /** Unicorn mane length: short (Daddy), to the shoulders, or long and flowing (Mommy). */
+  /** Unicorn mane length: short (Dad), to the shoulders, or long and flowing (Mom). */
   hair?: 'short' | 'medium' | 'long'
   outfit?: {
     kind: Outfit

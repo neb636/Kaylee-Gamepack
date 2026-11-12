@@ -313,7 +313,7 @@ export function koKudi(bag: Bag) {
   return root
 }
 
-/** A bubble ring (Daddy blows one). */
+/** A bubble ring (Dad blows one). */
 export function bubbleRing(bag: Bag) {
   const m = new Mesh(bag.add(P.torus(0.3, 0.06, '#FFFFFF')), bag.add(new MeshBasicMaterial({ color: '#F2FFFF', transparent: true, opacity: 0.75, depthWrite: false })))
   m.visible = false

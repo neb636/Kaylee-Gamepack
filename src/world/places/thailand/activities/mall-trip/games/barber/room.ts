@@ -13,7 +13,7 @@ const LEATHER = '#FF8FB8'
 
 export interface Room {
   root: Group
-  /** The chair: `lift` goes up and down (the pump), `spin` turns (Daddy sits on it). */
+  /** The chair: `lift` goes up and down (the pump), `spin` turns (Dad sits on it). */
   chair: { root: Group; lift: Group; spin: Group }
   /** The mirror's glass (it shines for the reveal) and its bulbs. */
   mirror: { glass: Group; shine: Group; bulbs: Group }

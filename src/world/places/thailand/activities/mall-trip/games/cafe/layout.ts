@@ -6,7 +6,7 @@
 //
 //   ceiling beam:  ═══════════════ (forget the lid and the blender splats it) ═══════════════
 //   back wall:  [fridge]   white tiles, the shelf where finished drinks line up    [coffee] [cake stand]
-//   counter:     bread  tea set   Kaylee  lid [BLENDER] cup cup                        Mommy  Daddy
+//   counter:     bread  tea set   Kaylee  lid [BLENDER] cup cup                        Mom  Dad
 //                                 (apron, chef's hat)   (the big pink button)       (the customers)
 //   front:            ═══════ the tray of fruit along the bottom (two rows on a tall screen) ═══════
 

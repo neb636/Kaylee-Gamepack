@@ -1,4 +1,4 @@
-// A mane of strands (the barber's toy, and Daddy's hairdo for the rest of the trip): every strand is a chain of
+// A mane of strands (the barber's toy, and Dad's hairdo for the rest of the trip): every strand is a chain of
 // SEG chunky tapered segments, all of them ONE instanced mesh plus one instanced ink outline (two draw calls for the
 // whole head), so each strand has its own length, color, stiffness and curl. Strands grow in tufts (hair.ts's TUFTS)
 // from the scalp (the top, sides and back of the head) and live in the head's own space, so they move
@@ -520,7 +520,7 @@ function bowGeometry(bow: BowId, R: number) {
   return merge([...[-1, 1].map((s) => P.cone(0.13 * k, 0.2 * k, c, { at: [s * 0.11 * k, 0, 0], rot: [0, 0, s * Math.PI / 2], scale: [1, 1, 0.55] })), P.sphere(0.065 * k, c)])
 }
 
-/** Daddy keeps his hairdo for the rest of the trip: strands for a `hair` code on any toy (nothing for his own mane). */
+/** Dad keeps his hairdo for the rest of the trip: strands for a `hair` code on any toy (nothing for his own mane). */
 export function wearHair(rig: Rig, look: Look, code: string, bag: Bag): Mane | null {
   if (!code) return null
   const mane = new Mane(rig, look, bag, code)

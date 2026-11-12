@@ -1,6 +1,6 @@
 // The Sky Pod's rules (plan: planning/around-the-world/thailand/mall-trip.md, "8. The Sky Pod"), with no three.js and
-// no drawing: which pods are lit, the score, the pattern she copies, Daddy's race. The 3D wall (wall.ts) plays it: it
-// passes every slap in (`slap`), tells it when Daddy's hand lands (`daddySlap`),
+// no drawing: which pods are lit, the score, the pattern she copies, Dad's race. The 3D wall (wall.ts) plays it: it
+// passes every slap in (`slap`), tells it when Dad's hand lands (`daddySlap`),
 // and shows what it says (GameView).
 //
 //   1. Pop the lights: a pod lights up (low ones first), she slaps it, the score climbs, the next one pops on
@@ -8,18 +8,18 @@
 //   2. Copy the tune: the wall plays a little pattern (two notes, then three, then four: the start of "Twinkle,
 //      Twinkle"), and she plays it back. A wrong pod is just its own funny note: the wall shows the pattern again and
 //      the next pod glows softly. After the third, the wall plays the whole line of the song.
-//   3. Race Daddy: her lights are pink and his are blue, on the same wall. He walks over to his (slowly, and he
+//   3. Race Dad: her lights are pink and his are blue, on the same wall. He walks over to his (slowly, and he
 //      misses some, and stops to dance or tie his shoe whenever he's caught up), she can steal his, and she always
 //      gets to ten first. Then the finale: the wall goes rainbow and the score rolls up to a hundred.
 // After that it stays open: a light at a time, and the score keeps counting. Lights never go out by themselves, and
 // nothing is ever wrong: an unlit pod just plays its note.
 import { PODS, type Round } from './layout'
 
-/** What a pod shows: off, one of hers (lit), Daddy's (blue), a note of the pattern the wall plays (show), or the soft
+/** What a pod shows: off, one of hers (lit), Dad's (blue), a note of the pattern the wall plays (show), or the soft
  *  "this one next" glow (help). */
 export type Light = 'off' | 'lit' | 'blue' | 'show' | 'help'
 export type Phase = 'play' | 'show' | 'copy' | 'cheer' | 'finale' | 'free'
-/** What a slap did: a lit pod (hit), one of Daddy's (steal), not the pattern's next (wrong), or just a note. */
+/** What a slap did: a lit pod (hit), one of Dad's (steal), not the pattern's next (wrong), or just a note. */
 export type SlapResult = 'hit' | 'steal' | 'wrong' | 'note'
 
 export interface GameView {
@@ -38,17 +38,17 @@ export interface GameView {
   stars(n: number): void
   /** The first round is done: the 💡 sticker on her sock band. */
   sticker(): void
-  /** Daddy steps up to the wall (round 3), or back to watch. */
+  /** Dad steps up to the wall (round 3), or back to watch. */
   daddyIn(on: boolean): void
-  /** Daddy heads for his blue light (`miss`: he'll slap beside it, oops). Call daddySlap when his hand lands. */
+  /** Dad heads for his blue light (`miss`: he'll slap beside it, oops). Call daddySlap when his hand lands. */
   daddyGo(i: number, miss: boolean): void
-  /** Daddy's caught up with her: he dances, ties his shoe, waves... (`kind` picks one). */
+  /** Dad's caught up with her: he dances, ties his shoe, waves... (`kind` picks one). */
   daddyDawdle(kind: number): void
   /** She took the blue light he was going for: "hey!" (then he laughs). */
   daddyHey(): void
   /** A pattern played back right (round 2): the wall plays it again, quick. */
   copied(): void
-  /** She got to ten before Daddy. */
+  /** She got to ten before Dad. */
   win(): void
   /** All three rounds done: the rainbow, the score rolling up, the fanfare. */
   finale(): void
@@ -93,7 +93,7 @@ export class SkyGame {
   private first: Round
 
   /** `heights`: each pod's height now (the wall's shape follows the screen), so the first lights are low ones she
-   *  reaches without a big jump, and Daddy's are high ones. Nothing happens until `begin`. */
+   *  reaches without a big jump, and Dad's are high ones. Nothing happens until `begin`. */
   constructor(
     private v: GameView,
     round: Round,
@@ -182,7 +182,7 @@ export class SkyGame {
     if (have + 1 < want) this.after(0.35, () => this.spawn())
   }
 
-  /** Daddy's light (round 3): he's tall, so mostly a high one. */
+  /** Dad's light (round 3): he's tall, so mostly a high one. */
   private spawnBlue() {
     if (this.round !== 3 || this.phase !== 'play' || this.lights.includes('blue')) return
     const i = this.pickFree(Math.random() < 0.7 ? this.byHeight.slice(4) : this.byHeight)
@@ -282,7 +282,7 @@ export class SkyGame {
     })
   }
 
-  // ---------------------------------------------------------------- her slaps, Daddy's
+  // ---------------------------------------------------------------- her slaps, Dad's
 
   /** Every slap on a pod (the view has already played its note and squash). */
   slap(i: number): SlapResult {
@@ -301,7 +301,7 @@ export class SkyGame {
         return 'hit'
       }
       if (l === 'blue') {
-        // One of Daddy's: hers now.
+        // One of Dad's: hers now.
         this.lights[i] = 'off'
         this.last = i
         this.score++
@@ -343,7 +343,7 @@ export class SkyGame {
     return 'note'
   }
 
-  /** Daddy's hand landed on pod `i` (or, `missed`, beside it). */
+  /** Dad's hand landed on pod `i` (or, `missed`, beside it). */
   daddySlap(i: number, missed: boolean) {
     if (this.dad !== 'going' || i !== this.dadTarget) return
     this.dad = 'rest'
@@ -356,7 +356,7 @@ export class SkyGame {
     this.after(0.9, () => this.spawnBlue())
   }
 
-  /** Is Daddy on his way to a light? (The view stops him if she took it.) */
+  /** Is Dad on his way to a light? (The view stops him if she took it.) */
   get daddyTarget() {
     return this.dad === 'going' ? this.dadTarget : -1
   }
@@ -379,7 +379,7 @@ export class SkyGame {
       this.idle += dt
       if (this.idle > HELP_S && !this.lights.includes('help')) this.help()
     }
-    // Daddy's race: he goes for his light only while he's behind her (so she always wins); caught up, he dawdles.
+    // Dad's race: he goes for his light only while he's behind her (so she always wins); caught up, he dawdles.
     if (this.round === 3 && this.phase === 'play' && this.dad === 'idle') {
       const blue = this.lights.indexOf('blue')
       if (blue < 0) return

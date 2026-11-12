@@ -1,5 +1,5 @@
 // The jet ski from Dad's photo, built from code: a big white sit-down jet ski with red and yellow stripes and a black
-// seat (no logos), Kaylee up front at the handlebars and Daddy behind her. The jet ski man's has blue stripes.
+// seat (no logos), Kaylee up front at the handlebars and Dad behind her. The jet ski man's has blue stripes.
 //
 // root (where it is, which way it faces) > tilt (pitch on the waves, roll into turns, a spin in the air) > body (the
 // squash on landing). The riders sit on their own seat groups, so they can tumble off (a beaching) and hop back on.
@@ -27,7 +27,7 @@ export interface Ski {
   root: Group
   tilt: Group
   body: Group
-  /** Kaylee's seat (front) and the one behind (Daddy, or the jet ski man alone). */
+  /** Kaylee's seat (front) and the one behind (Dad, or the jet ski man alone). */
   front: Group
   back: Group
   bars: Group
@@ -48,7 +48,7 @@ export function buildSki(bag: Bag, c: SkiColors = HERS): Ski {
     // The cowl in front of the handlebars, and its windscreen.
     P.rbox(0.86, 0.34, 0.86, 0.16, c.hull, { at: [0, 0.68, 0.9], rot: [-0.25, 0, 0] }),
     P.rbox(0.62, 0.05, 0.32, 0.03, '#6FC4E6', { at: [0, 0.9, 1.02], rot: [-0.75, 0, 0] }),
-    // The black seat (Kaylee in front, Daddy behind).
+    // The black seat (Kaylee in front, Dad behind).
     P.capsule(0.19, 1.15, '#3A3140', { at: [0, 0.74, -0.35], rot: [Math.PI / 2, 0, 0], scale: [1.35, 1, 0.8] }),
     // The stripes down both sides, and a rub rail.
     ...[-1, 1].flatMap((s) => [

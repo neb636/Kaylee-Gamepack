@@ -16,7 +16,7 @@ export interface Seat {
 export interface Vehicle {
   root: Group
   body: Group
-  /** Who sits where, in order: Kaylee, Mommy, Daddy. */
+  /** Who sits where, in order: Kaylee, Mom, Dad. */
   seats: { kaylee: Seat; ji: Seat; nick: Seat }
   /** Along its length (local z), the centers of the circles that bump into things, and their radius. */
   hull: { at: number[]; r: number }

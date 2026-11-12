@@ -2,7 +2,7 @@
 // (hall/build.ts) and for the frame she plays in (frame.ts): the same model in both, so they always match.
 //   - The frame: white padded pipes with round joints, golden padded beams along the decks, black nets round it, cream
 //     cargo nets up the back where she climbs.
-//   - Inside: the red climbing wall, the ball pit (Daddy in it) and the cannon, the tunnel in from the hall, the net
+//   - Inside: the red climbing wall, the ball pit (Dad in it) and the cannon, the tunnel in from the hall, the net
 //     bridge, the net tunnel, the rope course over the Boomerang Donut's bowl, the zip line's platform.
 //   - Round it: the twin-dragon spiral (two nagas are its rails), the Ta-Khon roller slide over the racing lanes (Phi Ta
 //     Khon masks on its posts), the zip line along the front.
@@ -509,7 +509,7 @@ export function buildBigFrame(bag: Bag, still = false): FrameBuilt {
     )
   }
 
-  // ---- The cannon: a fat barrel on two wheels, on the mats in B3, aimed at Daddy in the balls ----
+  // ---- The cannon: a fat barrel on two wheels, on the mats in B3, aimed at Dad in the balls ----
   const cannon = new Group()
   cannon.position.set(CANNON.at[0], 0, CANNON.at[1])
   const barrel = new Group()

@@ -1,11 +1,11 @@
 // The finale's sounds. The sunset at Ao Prao sounds like the beach (the common bed): a warm hum while she pulls the sun
-// down, its fizzy plop into the sea, the driftwood tree creaking, splashes, a shooting star's whoosh and Mommy's phone.
+// down, its fizzy plop into the sea, the driftwood tree creaking, splashes, a shooting star's whoosh and Mom's phone.
 // The fire show on Sai Kaew is a night beach (its own bed: waves in the dark, a crackling fire, crickets): her poi's
 // whoosh-roar while she twirls them fast (the core verb), the hand drum keeping time, the fire dancers' whoomps, the
 // ring of fire rushing round the beach, a glowing fish jumping, the jet ski man puttering by, and at the end the
 // fireworks (a soft fizz up, a pretty crackle-sparkle pop, never a bang) and the beach clapping. Recorded clips (sfx/,
 // ElevenLabs) with the synthesized ones as their fallbacks; the jingle of her poi, the dots' climbing notes, the
-// lanterns' lift, the fanfares, the chimes, the countdown, the gecko's "tukkae", Daddy's laugh and the giggles stay
+// lanterns' lift, the fanfares, the chimes, the countdown, the gecko's "tukkae", Dad's laugh and the giggles stay
 // synthesized (in tune, or the characters' own voices).
 import { bed, clip, held, playClip } from '../../../../../kit/clips'
 import { tone } from '../../../../../kit/sfx'

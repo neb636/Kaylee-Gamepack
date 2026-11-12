@@ -3,8 +3,8 @@
 // ring of red-and-white buoys keeps boats back: they bump her softly away ("Boats stay back so the Nail Island keeps
 // standing!", the real reason: it's protected). She drives onto the glowing beach and the family hops off.
 //
-// The photo: Daddy holds up the camera with Ko Tapu behind them: "Everybody, pose!" Four big pose buttons (BoatTrip
-// shows them); Kaylee strikes the one she taps and Mommy and Daddy copy her. "One, two, three, cheese!", the flash,
+// The photo: Dad holds up the camera with Ko Tapu behind them: "Everybody, pose!" Four big pose buttons (BoatTrip
+// shows them); Kaylee strikes the one she taps and Mom and Dad copy her. "One, two, three, cheese!", the flash,
 // and a real render of the scene drops into her trip album. As many as she likes. If she packed her bucket, Kaylee's
 // sandcastle goes up beside her on the sand.
 import { Group, Vector3, type BufferGeometry, type PerspectiveCamera } from 'three'
@@ -171,7 +171,7 @@ export class NailStop implements BayPart {
     this.ashore = true
     sfx.splash(0.6)
     bay.glide(r, { x, z, h }, 0.9, () => {
-      // Kaylee in front, Mommy and Daddy behind her, the boat behind them (the camera stands nearer the cliffs).
+      // Kaylee in front, Mom and Dad behind her, the boat behind them (the camera stands nearer the cliffs).
       const spots: [RiderId, Vector3][] = [
         ['kaylee', this.spot(0, 0.3)],
         ['ji', this.spot(-1.25, 1.3)],
@@ -237,7 +237,7 @@ export class NailStop implements BayPart {
           bay.setPhase('drive')
           this.armed = false
           if (this.photos > 0) this.done = true
-          // Somewhere still to go: Daddy asks again.
+          // Somewhere still to go: Dad asks again.
           if (!bay.stops.has('village') || !bay.stops.has('cave')) bay.whereTo()
         })
       })
@@ -246,7 +246,7 @@ export class NailStop implements BayPart {
 
   // ---------------------------------------------------------------- the photo
 
-  /** She tapped a pose button: Kaylee strikes it, Mommy and Daddy copy her, then the countdown and the flash. */
+  /** She tapped a pose button: Kaylee strikes it, Mom and Dad copy her, then the countdown and the flash. */
   pose(kind: PoseKind) {
     const bay = this.bay
     if (bay.phase !== 'beach' || this.busy) return

@@ -1,14 +1,14 @@
 // Arriving at ICONSIAM (plan: thailand/mall-trip.md, "Arrive at ICONSIAM"), a Stage like the airport (trip/legs/
 // airport.ts): one 3D world with three sets far apart, and the camera cuts between them behind a white flash.
 //
-// 1. The glimpse (about 3 s, a tap skips it): Mommy's grey Veloz pulls up at the drop-off in front of the zig-zag
+// 1. The glimpse (about 3 s, a tap skips it): Mom's grey Veloz pulls up at the drop-off in front of the zig-zag
 //    glass front (folded panels, like baisri) with the river beside it; they hop out and head for the doors.
 // 2. The lift: she taps the big button and it dings up 1 to 6 (the screen shows the floor number big, in HTML), and the
 //    doors open onto HarborLand's colors.
-// 3. The HarborLand counter, tiny toys (any order): tap the rack and Kaylee's shoes hop into a cubby (Daddy's big ones
+// 3. The HarborLand counter, tiny toys (any order): tap the rack and Kaylee's shoes hop into a cubby (Dad's big ones
 //    don't fit: he squashes them in); tap a pair of grip socks (pink, lavender, mint) and she wears them (her pick is
-//    `socks`; tap another pair to swap), and Daddy's pair stretches up to his knees; tap the height chart and she
-//    stands against it: her horn counts ("Wow, so tall!"), then Daddy's horn goes off the top. A HarborLand staff
+//    `socks`; tap another pair to swap), and Dad's pair stretches up to his knees; tap the height chart and she
+//    stands against it: her horn counts ("Wow, so tall!"), then Dad's horn goes off the top. A HarborLand staff
 //    member (the hall's buffalo in a red polo) stands behind the counter. Once her socks are on, the gate into the hall
 //    glows: tap it and in they go (`hall?from=in`).
 // No voices yet: the lines (words.ts) show in the guide's bubble.
@@ -45,7 +45,7 @@ export const SOCK_IDS = ['pink', 'lavender', 'mint'] as const
 export type SockId = (typeof SOCK_IDS)[number]
 
 export const ARRIVE_ANCHORS: AnchorInfo[] = [
-  { id: 'veloz', label: "Mommy's car", kind: 'thing' },
+  { id: 'veloz', label: "Mom's car", kind: 'thing' },
   { id: 'mall', label: 'ICONSIAM', kind: 'thing' },
   { id: 'lift-button', label: 'The lift button', kind: 'thing' },
   { id: 'rack', label: 'The shoe rack', kind: 'thing' },
@@ -54,8 +54,8 @@ export const ARRIVE_ANCHORS: AnchorInfo[] = [
   { id: 'gate', label: 'Into HarborLand', kind: 'thing' },
   { id: 'staff', label: 'HarborLand staff', kind: 'thing' },
   { id: 'bell', label: 'The counter bell', kind: 'thing' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
   { id: 'family:kaylee', label: 'You', kind: 'family' },
 ]
 
@@ -117,7 +117,7 @@ export class Arrive extends Stage {
   private sockPairs: Record<SockId, Group>
   private sockHop: { id: SockId; t: number } | null = null
   private worn: { id: SockId; kaylee: Group[]; nick: Group; stretch: number } | null = null
-  /** Kaylee's shoes and Daddy's: at their feet, flying, or in the rack (Daddy's squashed in). */
+  /** Kaylee's shoes and Dad's: at their feet, flying, or in the rack (Dad's squashed in). */
   private shoes: { g: Group; owner: Who; from: Vector3; to: Vector3; t: number; state: 'feet' | 'fly' | 'in' | 'stuck' }[] = []
   private squash = 1
   private done = { shoes: false, socks: false, chart: false }
@@ -308,7 +308,7 @@ export class Arrive extends Stage {
     this.riders = { kaylee, ji: members.get('ji')!, nick: members.get('nick')! }
     for (const id of ['kaylee', 'ji', 'nick'] as const) scene.add(this.riders[id].root)
     // Their shoes, on their feet until the rack: the ones Kaylee is really wearing (her look's: the sneakers, the rain
-    // boots; with none on, she's in her hooves and only Daddy's big blue ones hop), and Daddy's.
+    // boots; with none on, she's in her hooves and only Dad's big blue ones hop), and Dad's.
     const mine = kaylee.dressable ? kaylee.myLook.on.feet : undefined
     if (mine) {
       // Hers ride with the scene from here (so they can hop into the cubby), not on her legs.
@@ -472,7 +472,7 @@ export class Arrive extends Stage {
     if (ph === 'lift' || ph === 'up') sfx.boop()
   }
 
-  /** Shoes off: Kaylee's hop into a cubby, one, two; Daddy's big ones don't fit, so he squashes them in. */
+  /** Shoes off: Kaylee's hop into a cubby, one, two; Dad's big ones don't fit, so he squashes them in. */
   private shoesOff() {
     if (this.phase !== 'counter') return
     this.rackK = 0
@@ -499,7 +499,7 @@ export class Arrive extends Stage {
     }, 1900)
   }
 
-  /** Her pick: the pair hops onto her feet; Daddy's pair (the same color, much too small) stretches to his knees. */
+  /** Her pick: the pair hops onto her feet; Dad's pair (the same color, much too small) stretches to his knees. */
   private pickSocks(id: SockId) {
     if (this.phase !== 'counter' || this.sockHop || this.worn?.id === id) {
       if (this.worn?.id === id) this.kaylee.react('wiggle')
@@ -520,7 +520,7 @@ export class Arrive extends Stage {
       this.sockPairs[this.worn.id].visible = true
     }
     const kg = wearSocks(k, SOCK_COLORS[id], this.bag)
-    // Daddy's: up to his knees (they stretch up from his feet).
+    // Dad's: up to his knees (they stretch up from his feet).
     const H = n.height
     const ng = solid(merge([-1, 1].flatMap((s) => [P.sphere(0.075 * H, SOCK_COLORS[id], { at: [s * 0.085 * H, 0.03 * H, 0.02 * H], scale: [1, 0.66, 1.32] }), P.cyl(0.066 * H, 0.07 * H, 0.26 * H, '#FFFFFF', { at: [s * 0.085 * H, 0.13 * H, 0] }), P.cyl(0.069 * H, 0.069 * H, 0.03 * H, SOCK_COLORS[id], { at: [s * 0.085 * H, 0.25 * H, 0] })])), this.bag, 1.5)
     n.rig.body.add(ng)
@@ -536,7 +536,7 @@ export class Arrive extends Stage {
     }
   }
 
-  /** The height chart: Kaylee stands against it and the marker comes down to her horn ("Wow, so tall!"); then Daddy,
+  /** The height chart: Kaylee stands against it and the marker comes down to her horn ("Wow, so tall!"); then Dad,
    *  and his horn sends it off the top. */
   private measure() {
     if (this.phase !== 'counter' || this.chartBusy) {
@@ -682,7 +682,7 @@ export class Arrive extends Stage {
       if (s.t >= 1) {
         s.g.rotation.x = 0
         sfx.thump()
-        // Daddy's are too big: they stick out of the cubby until he squashes them in.
+        // Dad's are too big: they stick out of the cubby until he squashes them in.
         s.state = s.owner === 'nick' ? 'stuck' : 'in'
         if (s.owner === 'nick' && this.shoes.every((x) => x.owner !== 'nick' || x.state === 'stuck')) {
           this.riders.nick.react('hop')
@@ -704,7 +704,7 @@ export class Arrive extends Stage {
       s.g.scale.set(stuck ? 1 : 0.8, stuck ? 1 : 0.62 + wobble(this.squash, 3) * 0.2, stuck ? 1 : 0.7)
       s.g.position.z = s.to.z + (stuck ? 0.22 + Math.sin(t * 9) * 0.02 : 0)
     }
-    // Socks: the pair hops from the counter to her feet, then they're on (and Daddy's stretch up to his knees).
+    // Socks: the pair hops from the counter to her feet, then they're on (and Dad's stretch up to his knees).
     const sh = this.sockHop
     if (sh) {
       sh.t = Math.min(1, sh.t + dt / 0.55)

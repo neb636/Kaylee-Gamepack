@@ -163,7 +163,7 @@ export const sfx = {
   chime: () => [0, 0.08, 0.16].forEach((d, i) => tone(1318 * [1, 1.25, 1.5][i], 1320 * [1, 1.25, 1.5][i], 0.25, 0.05, 'sine', d)),
   /** The countdown before the photo: beep, beep, bip! */
   countdown: () => [0, 0.32, 0.64].forEach((d, i) => tone(i === 2 ? 1400 : 980, i === 2 ? 1400 : 980, 0.09, 0.06, 'sine', d)),
-  /** The boat tipping as Daddy steps in: whoa-oa-oa (the wood creaks). */
+  /** The boat tipping as Dad steps in: whoa-oa-oa (the wood creaks). */
   creak: () => [0, 0.18].forEach((d) => tone(240, 170, 0.22, 0.05, 'sawtooth', d)),
   /** A fish flipping out of a net or the water. */
   flop: () => [0, 0.14].forEach((d) => noise(0.05, 0.08, 'bandpass', 2000, 1200, d, 2)),

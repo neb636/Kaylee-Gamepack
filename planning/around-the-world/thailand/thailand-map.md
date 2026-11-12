@@ -2,7 +2,7 @@
 
 Built: a 3D toy map · Country hub (3D) · updated 2026-11-10
 
-Thailand has grown past one house. Now when Sparkle's balloon lands in Thailand, Kaylee sees a big **map of Thailand** with a pin for each place, like Australia's map. She taps **Bangkok** (Agong's house), **Krabi** (the boat and the elephants) or **Nan** (the mountains) and that place opens; the animals and boats on the map hop when she taps them. Trips end back on the map, where their stamp lands on the pin. The mall day still starts at the house: Mommy or Daddy asks if she wants to go to the mall.
+Thailand has grown past one house. Now when Sparkle's balloon lands in Thailand, Kaylee sees a big **map of Thailand** with a pin for each place, like Australia's map. She taps **Bangkok** (Agong's house), **Krabi** (the boat and the elephants) or **Nan** (the mountains) and that place opens; the animals and boats on the map hop when she taps them. Trips end back on the map, where their stamp lands on the pin. The mall day still starts at the house: Mom or Dad asks if she wants to go to the mall.
 
 **Next:** The user taps around [the map](#/world/thailand) on the iPad, opens Krabi and Nan, and plays a trip to its end. The **[open questions](#questions)** went with my picks for now (they're easy to change). Next: **the look**, the painted map in layers with the pokes as sprites.
 
@@ -16,9 +16,9 @@ Related: [← Thailand plan](../thailand.md), [🏔️ The Nan road trip](nan-tr
 
 ## 💡 Why a map
 
-Every Krabi or Nan trip starts upstairs in Agong's house today: walk up, find Mommy, pick a trip, pack, say goodbye, the x-ray belt, the window seat. With three trips (and more coming) that's a long walk to the fun, and the house doesn't show *where* in Thailand the places are. A map does both: it's the quickest way in, and it teaches that Krabi is down by the sea and Nan is up in the mountains.
+Every Krabi or Nan trip starts upstairs in Agong's house today: walk up, find Mom, pick a trip, pack, say goodbye, the x-ray belt, the window seat. With three trips (and more coming) that's a long walk to the fun, and the house doesn't show *where* in Thailand the places are. A map does both: it's the quickest way in, and it teaches that Krabi is down by the sea and Nan is up in the mountains.
 
-Now: 🌍 World map → 🛺 Agong's house → 👩 Mommy upstairs (🚤 🛝🍕 🏔️🚙) → 🧳 Pack, goodbye, x-ray, window seat → 🌴 The trip → 🖼️ Agong's wall
+Now: 🌍 World map → 🛺 Agong's house → 👩 Mom upstairs (🚤 🛝🍕 🏔️🚙) → 🧳 Pack, goodbye, x-ray, window seat → 🌴 The trip → 🖼️ Agong's wall
 
 New: 🌍 World map → 🗺️ Thailand map (fly the plane) → 📍 Land on a pin → 🌴 The trip → 🗺️ Back on the map (the stamp lands on the pin)
 
@@ -31,7 +31,7 @@ New: 🌍 World map → 🗺️ Thailand map (fly the plane) → 📍 Land on a 
 - **How does she get around?** **The family's little toy plane**, the way they really fly to Krabi and Nan.
 - **Packing, the goodbye, the x-ray, the window seat?** **Packing and the window seat, once per session** (the first trip after the app opens). Every trip after that: the plane flies across the map for a moment and lands her straight at the landing spot (Krabi) or the other map (Nan's). The goodbye at Agong's door and the x-ray belt drop out of the path. *(Since 2026-10-28 there's no flight on the map: a later trip opens straight at its landing spot.)*
 - **Where does a trip end?** **Back on the Thailand map**, where the stamp lands on that place's pin.
-- **The mall?** **Still starts at the house**: Mommy (upstairs) or Daddy (on the street) asks only if she wants to go to the mall, 👍 or ✋.
+- **The mall?** **Still starts at the house**: Mom (upstairs) or Dad (on the street) asks only if she wants to go to the mall, 👍 or ✋.
 - **2D or 3D, again (2026-11-10):** “The thailand map looks super lame. Since Thailand is full 3d I think the map should be as well.” He sent three pictures of 3D diorama maps: great, but too realistic; ours keeps the app's fun, kid-game look. **The map is 3D now** (see What's built).
 - **The toy plane? (2026-10-28)** **Too confusing. Make it a normal map to tap, like Australia's.** The plane, its flights and its feel knobs are gone: tap a pin and that place opens.
 
@@ -71,8 +71,8 @@ New: 🌍 World map → 🗺️ Thailand map (fly the plane) → 📍 Land on a 
 
 ## 📍 The pins
 
-- 🏠 **Bangkok: Agong's house**: The plane's home. Landing here opens the house (the tuk-tuk ride, `hub/arrive`). The **mall day** starts inside: Mommy or Daddy asks. The mall's stamp shows on this pin.
-- 🚤 **Krabi: the boat and the elephants**: Lands at Krabi airport, where Daddy's postcards ask 🐘 the elephants or 🚤 the boat (the fork that's already built). The boat trip's stamp lands here.
+- 🏠 **Bangkok: Agong's house**: The plane's home. Landing here opens the house (the tuk-tuk ride, `hub/arrive`). The **mall day** starts inside: Mom or Dad asks. The mall's stamp shows on this pin.
+- 🚤 **Krabi: the boat and the elephants**: Lands at Krabi airport, where Dad's postcards ask 🐘 the elephants or 🚤 the boat (the fork that's already built). The boat trip's stamp lands here.
 - 🏔️ **Nan: the mountains**: Lands straight on the **Nan map**, the Pajero waiting at the airport (PR #228 already skips the rental desk). The Nan trip's stamp lands here.
 
 **What floats over each place (user feedback, 2026-11-10):** a friend she'll meet there, bobbing and waving like a pin (`map/pins.ts`): Agong in Bangkok, the baby elephant in Krabi, Moon the sun bear in Nan, the jet ski otter on Koh Samet. The boats' and the turtle's loops (`geo.ts`) are measured to stay out at sea.
@@ -87,7 +87,7 @@ Every trip after: 📍 Tap Krabi or Nan → ⚡ Straight there → 🛬 Krabi's 
 
 The end: 🌅 The last stop (Krabi's sunset, Nan's 3 road) → 🏅 The stamp and the sticker → 📍 Back on the map: the stamp lands on the pin
 
-The mall (from the house): 🏠 Bangkok pin → the house → 👩 Mommy or Daddy: “Shall we go to the mall?” (👍 or ✋) → 🚗 The Veloz to ICONSIAM → 🍕 HarborLand, the pizza, home to Agong
+The mall (from the house): 🏠 Bangkok pin → the house → 👩 Mom or Dad: “Shall we go to the mall?” (👍 or ✋) → 🚗 The Veloz to ICONSIAM → 🍕 HarborLand, the pizza, home to Agong
 
 > **🔁 “Once per session”**
 >
@@ -95,7 +95,7 @@ The mall (from the house): 🏠 Bangkok pin → the house → 👩 Mommy or Dadd
 
 ### What leaves the path (the links still work for now)
 
-- Mommy's trip card upstairs and Daddy's on the street stop offering 🚤 and 🏔️🚙: they ask only about the mall.
+- Mom's trip card upstairs and Dad's on the street stop offering 🚤 and 🏔️🚙: they ask only about the mall.
 - The goodbye at Agong's door and Aunty Sri's van, and the x-ray belt (`goodbye`, `airport`).
 - The flight home and the photo for Agong's wall (`home`) on the boat and Nan trips (see the open questions).
 - The boat trip's `replay` shortcut: the once-per-session rule replaces it.
@@ -118,7 +118,7 @@ The mall (from the house): 🏠 Bangkok pin → the house → 👩 Mommy or Dadd
 2. `#/world/thailand/boat-trip/pack` The first trip of the session: pack, then down the stairs to the window seat
 3. `#/world/thailand/boat-trip/sunset?been=chang` ✈️🏠 at the pier ends the trip: the stamp, then the map
 4. `#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt` ✈️🏠 at the 3 ends the Nan trip: the stamp, then the map
-5. `#/world/thailand/hub/upstairs` Mommy asks: shall we go to the mall?
+5. `#/world/thailand/hub/upstairs` Mom asks: shall we go to the mall?
 
 ## 🛠️ Build plan
 
@@ -126,7 +126,7 @@ The mall (from the house): 🏠 Bangkok pin → the house → 👩 Mommy or Dadd
 2. **Greybox 1: the map toy** [done] · 2026-10-27 · PR #230
    A code-drawn Thailand (a soft SVG outline, pastel sea, the neighbours in lavender), the plane under her finger with knobs on `?feel=1`, the three pins (glow, wheels down, land, or tap to fly there). Thailand opens on the map (not the tuk-tuk). Bangkok opens the house; Krabi and Nan play the short flight into their landing spot. No art, no voices.
 3. **Greybox 2: trips start and end on the map** [done] · 2026-10-27 · PR #230
-   The first trip per session: pack, the plane takes off on the map, the window seat, landing. Trips end on the map with the stamp landing on the pin. Mommy's and Daddy's cards in the house ask only about the mall. AGENTS.md and the Thailand plan updated (“trips start from the house” isn't true any more).
+   The first trip per session: pack, the plane takes off on the map, the window seat, landing. Trips end on the map with the stamp landing on the pin. Mom's and Dad's cards in the house ask only about the mall. AGENTS.md and the Thailand plan updated (“trips start from the house” isn't true any more).
 4. **Greybox 3: a tap map, no plane** [done] · 2026-10-28
    the user found flying the plane confusing: the map is a normal tap map like Australia's. The plane, its flights, its knobs and the `plane`/`fly` params are gone.
 5. **The look** [done] · 2026-11-10 · in 3D (see What's built)
@@ -175,7 +175,7 @@ The user said “build it out”: the plan and both greyboxes in one PR.
 - **The plane:** pink with lavender wings, a gold horn on the nose and a blurring propeller. Grab it and it follows her finger, banks into turns (its wings foreshorten), buzzes and puffs a trail; let go and it glides into a lazy circle; tap the map and it flies there. Its feel is on 10 knobs (`?feel=1`), with her finger, the plane, its speed and bank on the graph.
 - **Pins:** Bangkok (🏠, the mall's stamp), Krabi (🚤, the boat trip's) and Nan (🏔️). Let go over one (it grows and the plane's wheels drop) or tap it, and the plane lands with a bump and that place opens. Bangkok: the house (the tuk-tuk the first time a session, then where she left off).
 - **The trips:** the first Krabi or Nan trip a session packs, then straight down the stairs to the window seat (the goodbye and the x-ray belt are out of the way). After that Krabi opens at `boat-trip/land?quick=1` (straight to the airport's signpost) and Nan on the Nan map. ✈️🏠 at the pier, after the splash or at the 3 ends the trip: the photo goes on Agong's wall by itself, the stamp, then back on the map, where the plane flies home and the stamp lands on the pin.
-- **The house:** Mommy upstairs and Daddy on the street only ask “Shall we go to the mall?” (👍 with 🛝🍕, or ✋). The top bar's back button in the house goes to the map (`PlaceMeta.hubHome`).
+- **The house:** Mom upstairs and Dad on the street only ask “Shall we go to the mall?” (👍 with 🛝🍕, or ✋). The top bar's back button in the house goes to the map (`PlaceMeta.hubHome`).
 - **Pokes:** the elephant, the rain cloud, the gibbon, the buffalo, the hornbill, the tuk-tuk, the dolphins, the longtail and the palm, tapped or flown low over: a hop and a sound, and Sparkle's fact the first time (voiced, `L.map`). Sparkle welcomes her once a session and hints after ~8 s with nothing touched.
 - QA: `qa-screens` (`thailand-map*`), a `qa-motion` scenario (`thailand-plane`) and `qa-pacing` cover it.
 
@@ -207,5 +207,5 @@ The user said “build it out”: the plan and both greyboxes in one PR.
 - **Later trips** open at each trip's landing spot: the boat trip's `land` section with `quick=1` (straight to the signpost), the Nan trip's `map` section.
 - **The first-trip path:** the trip's `pack`, then down the stairs to the window seat (`takeoff`/`fly`/`land`). `trip/legs/plane.ts` ends the Nan landing on the Nan map (PR #228).
 - **Endings:** the boat trip's `sunset`/`splash` ✈️🏠 and the Nan trip's `three` call `onDone` (the stamp screen, `Place.tsx`) and its close goes to `hub/map?stamp=<trip>` instead of `hub/downstairs?at=photos`. The mall keeps its `home` ending at Agong's.
-- **The house:** `trip/legs/Ask.tsx`'s `tripChoices` offers only the mall; the house's Mommy and Daddy use the single-trip 👍/✋ card with a new line (“Shall we go to the mall?”). Boat and Nan `invite` sections go (their links redirect to the map).
+- **The house:** `trip/legs/Ask.tsx`'s `tripChoices` offers only the mall; the house's Mom and Dad use the single-trip 👍/✋ card with a new line (“Shall we go to the mall?”). Boat and Nan `invite` sections go (their links redirect to the map).
 - **Startup:** the map's layout data goes in a pure file (no three.js) if `sections.ts` reads it. Nothing that describes the house goes outside `places/thailand/` (the lock).

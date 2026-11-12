@@ -9,7 +9,7 @@
 // shine in the eyes have no outline.
 //
 // Sizes are fractions of the character's height H, so the same recipe makes Agong and little Putter; `chub` makes the
-// body rounder (Mommy, and Jum the elephant).
+// body rounder (Mom, and Jum the elephant).
 import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry } from 'three'
 import type { Bag } from '../dispose'
 import { blobShadow, P, solidMix, type PartOpts, type V3 } from '../geo'
@@ -24,7 +24,7 @@ export interface Rig {
   /** The mouth at rest (a smile, or a big open grin), and the open talking mouth that grows with their voice. */
   mouth: Group
   talk: Group
-  /** Their resting mouth is already open (Daddy, Ja, Putto): it stretches when they talk instead. */
+  /** Their resting mouth is already open (Dad, Ja, Putto): it stretches when they talk instead. */
   open: boolean
   armL: Group
   armR: Group
@@ -166,7 +166,7 @@ function wornParts(id: Wearable, f: Frame, look: Look): WornParts {
       P.sphere(0.6 * R, straw, { at: [0, brimY + 0.27 * R, cz], scale: [1, 0.42, 1] }, 24),
       P.cyl(0.675 * R, 0.69 * R, 0.14 * R, band, { at: [0, brimY + 0.1 * R, cz] }, 24),
     )
-    // A bow on the band (hers), or a little daisy (Mommy's spare).
+    // A bow on the band (hers), or a little daisy (Mom's spare).
     const side: V3 = [0.46 * R, brimY + 0.12 * R, cz + 0.5 * R]
     if (mine) {
       for (const s of [-1, 1]) out.head.push(P.sphere(0.13 * R, band, { at: [side[0] + s * 0.13 * R, side[1], side[2]], rot: [0, 0.75, s * 0.5], scale: [1.2, 0.75, 0.45] }))

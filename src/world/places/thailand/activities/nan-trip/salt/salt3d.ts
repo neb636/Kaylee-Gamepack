@@ -5,7 +5,7 @@
 //
 // The toy, the bucket: her finger held anywhere pulls the bucket there (it swings on its rope, heavy when it's full).
 // Down into the well and it fills (splash, glug); carried over the pan and lowered, it tips and the brine pours in.
-// Lowered anywhere else it pours there too (on the floor, on Daddy's foot, on the cat). Kaylee walks along under it.
+// Lowered anywhere else it pours there too (on the floor, on Dad's foot, on the cat). Kaylee walks along under it.
 // A tap on the well dips it for her, a tap on the pan (or the bucket) carries a bucketful over and pours it.
 //   1. Dip and pour: six buckets fill the pan. A run of bells, the aunty lights the fire.
 //   2. The fire: grab a log from the woodpile and throw it in the fire's mouth (a tap on the pile throws one too); a
@@ -16,14 +16,14 @@
 //      blade through the salt, which heaps up on it; let go (or it's full) and it tips into her basket. A tap on the
 //      pan scrapes a stripe there. Most of it scraped: the aunty sweeps up the rest, fills the bags, and they hop onto
 //      the shelf one by one. The end card.
-// Silly instead of wrong: brine on Daddy's foot (he hops), on the cat (she jumps and shakes), on the fire (a big hiss and
+// Silly instead of wrong: brine on Dad's foot (he hops), on the cat (she jumps and shakes), on the fire (a big hiss and
 // a cloud of steam); tap Kaylee once she has touched the brine and she licks her finger: a big salty face. Things to
 // poke: the aunty, the cat, the rooster, the baskets, the painted couple across the road, the well (an echo), the
 // steam, the family.
 // Talk (lines.ts L.nan.salt): the salt aunty says hello as they arrive, then Sparkle says each round's one line as it
 // begins (dip, fire, scrape) and, after ~8 s with nothing done (counted from 3 s after the round's line), what to do
-// (stuckLine); the aunty says when the fire's lit, the salt shows and the bags fill; Daddy reacts to the brine on his
-// foot and Kaylee's salty face; tapped, the aunty and Daddy say their lines in turn (not while Sparkle talks); the first
+// (stuckLine); the aunty says when the fire's lit, the salt shows and the bags fill; Dad reacts to the brine on his
+// foot and Kaylee's salty face; tapped, the aunty and Dad say their lines in turn (not while Sparkle talks); the first
 // poke at the steam (or the boiling pan) tells the fact. Ambient life: drips off the eaves, rings on the road's
 // puddles, low cloud drifting on the mountains, steam, the cat, the rooster, a scooter now and then.
 import { Color, IcosahedronGeometry, Matrix4, Mesh, MeshBasicMaterial, OctahedronGeometry, Plane, Quaternion, Vector3, type Object3D, type WebGLRenderer } from 'three'
@@ -129,7 +129,7 @@ export const SALT_ANCHORS: AnchorInfo[] = [
   { id: 'food0', label: 'Noodle soup', kind: 'thing' },
   { id: 'food1', label: 'Egg jar', kind: 'thing' },
   { id: 'food2', label: 'Grilled fish', kind: 'thing' },
-  ...(['kaylee', 'nick', 'ji'] as const).map((e): AnchorInfo => ({ id: `family:${e}`, label: { kaylee: 'You', nick: 'Daddy', ji: 'Mommy' }[e], kind: 'family' })),
+  ...(['kaylee', 'nick', 'ji'] as const).map((e): AnchorInfo => ({ id: `family:${e}`, label: { kaylee: 'You', nick: 'Dad', ji: 'Mom' }[e], kind: 'family' })),
 ]
 
 /** Taps on these are pokes: a finger on them doesn't pull the bucket or the paddle. */
@@ -334,7 +334,7 @@ export class SaltHut extends Stage {
     this.told.add(key)
     this.ev.say(l)
   }
-  /** A story line from the aunty or Daddy that shouldn't be lost: it waits (a little) until nobody is talking. */
+  /** A story line from the aunty or Dad that shouldn't be lost: it waits (a little) until nobody is talking. */
   private soon(key: string, l: Line, tries = 6) {
     if (this.told.has(key)) return
     if (speakingVoice() && tries > 0) return this.after(0.7, () => this.soon(key, l, tries - 1))
@@ -481,7 +481,7 @@ export class SaltHut extends Stage {
       if (b.fill <= 0.001) this.bucketDone()
       return
     }
-    // On the floor (a splash), and the silly ones: Daddy's foot, the cat, the fire's mouth.
+    // On the floor (a splash), and the silly ones: Dad's foot, the cat, the fire's mouth.
     if (Math.random() < dt * 12) this.drops.burst(tmp.set(x, 0.04, 0), 2, 0.6, 0.9, 0.5, 0.025)
     if (b.fill <= 0.001) this.bucketDone()
     const nick = this.nick.root.position

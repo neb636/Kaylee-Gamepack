@@ -1,18 +1,18 @@
 // MEGA HarborLand's Big Frame (plan: planning/around-the-world/thailand/mall-trip.md, "The Big Frame"), greybox: the
 // frame she walked up to in the hall, at its real size, as a toy with no goal. Climb up, slide down:
 //   - It stands in the hall itself (hall/build.ts builds the hall round it, with the same frame model), so she plays in
-//     the very frame she saw from the mats: Mommy on her bench, the racing slide next door.
+//     the very frame she saw from the mats: Mom on her bench, the racing slide next door.
 //   - She walks the way she does in Agong's house: tap a spot and she goes, hold a finger and she follows it. A tap on
 //     another level finds the way there (trip/walk.ts): she climbs the red wall or a cargo net by herself, crawls the
 //     tunnel, and takes a slide down whenever there is one.
-//   - Inside: the ball pit with Daddy in it and the cannon (the side game: bonk, the ball on his horn, his big flop),
+//   - Inside: the ball pit with Dad in it and the cannon (the side game: bonk, the ball on his horn, his big flop),
 //     the net bridge (it sags), the net tunnel, the rope course (its logs swing) over the Boomerang Donut's bowl.
 //   - The slides: the giant mask's pink nose, the twin-dragon spiral (its rails are two nagas) into the ball pit, the
 //     Ta-Khon roller slide over the racing lanes into their balls, the Boomerang Donut, the zip line along the front.
 //   - On top: the gold spires and the boxer boy, who watch her; the lit sign on the front (it fades while she climbs
 //     behind it).
 // Any big ride fills the frame's sticker on her sock band. Voices (lines.ts `L.mall.frame`): Sparkle's one line as she
-// comes in, Mommy's or Daddy's "Wheee!" the first time she rides each big slide, Daddy's bonks from the cannon, the
+// comes in, Mom's or Dad's "Wheee!" the first time she rides each big slide, Dad's bonks from the cannon, the
 // Phi Ta Khon fact the first time she pokes a mask, and Sparkle's hint when the finger shows. The camera is a dollhouse view
 // from the front, a little above, following her up and down; on a tall screen it shows more of the tower.
 import { Color, Raycaster, Vector3, type Object3D, type WebGLRenderer } from 'three'
@@ -51,14 +51,14 @@ export interface FrameStart {
   /** Where she starts (STARTS). */
   at: At
   socks: string
-  /** Daddy's hairdo from the barber ('' his own mane). */
+  /** Dad's hairdo from the barber ('' his own mane). */
   hair?: string
 }
 
 export const FRAME_ANCHORS: AnchorInfo[] = [
   { id: 'family:kaylee', label: 'You', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
   { id: 'pool', label: 'Ball pit', kind: 'thing' },
   { id: 'cannon', label: 'Ball cannon', kind: 'thing' },
   { id: 'climb:wall', label: 'Red climbing wall', kind: 'thing' },
@@ -173,14 +173,14 @@ export class BigFrame extends Stage {
     this.racePit = new BallPool(RACE_PIT, 0.3, () => false, bag, { layer: false })
     scene.add(this.racePit.root)
 
-    // ---- The family: Kaylee in her grip socks, Daddy in the ball pit (the cannon's target), Mommy on her bench ----
+    // ---- The family: Kaylee in her grip socks, Dad in the ball pit (the cannon's target), Mom on her bench ----
     const { kaylee, members } = this.makeFamily(['ji', 'nick'])
     this.kaylee = kaylee
     this.ji = members.get('ji')!
     this.nick = members.get('nick')!
     scene.add(kaylee.root, this.ji.root)
     wearSocks(kaylee, SOCK_COLORS[start.socks] ?? SOCK_COLORS.pink, bag)
-    // Daddy keeps the hairdo she gave him at the barber's.
+    // Dad keeps the hairdo she gave him at the barber's.
     wearHair(this.nick.rig, LOOKS.nick, start.hair ?? '', bag)
     this.put(this.ji, MOMMY.at[0], 0.5, MOMMY.at[1], 'sit', MOMMY.face)
     this.toys = new FrameToys(this.f, this.pool, this.nick, scene, bag, { giggle: () => sfx.giggle(), bonk: (big) => this.bonk(big) })
@@ -387,7 +387,7 @@ export class BigFrame extends Stage {
           }),
       },
     }
-    // Setting off down a big slide the first time, Mommy or Daddy cheers.
+    // Setting off down a big slide the first time, Mom or Dad cheers.
     for (const id of RIDES) {
       const run = links[id].run
       links[id].run = (back, done) => {
@@ -411,13 +411,13 @@ export class BigFrame extends Stage {
     if (this.time - (this.spoke.get(who) ?? -99) < every) return
     this.talk(who, list[heard[who]++ % list.length], every)
   }
-  /** Setting off down a big slide the first time: Mommy's or Daddy's "Wheee!". */
+  /** Setting off down a big slide the first time: Mom's or Dad's "Wheee!". */
   private wheee(id: RideId) {
     if (heard.rides.has(id)) return
     heard.rides.add(id)
     this.talk(`ride:${id}`, L.mall.frame.ride[id])
   }
-  /** A ball from the cannon bonked Daddy: his reaction (not every bonk: he gets his breath back first). */
+  /** A ball from the cannon bonked Dad: his reaction (not every bonk: he gets his breath back first). */
   private bonk(big: boolean) {
     if (big) this.talk('flop', L.mall.frame.flop, 1)
     else this.inTurn('bonk', L.mall.frame.bonk, 3)
@@ -627,12 +627,12 @@ export class BigFrame extends Stage {
     let yaw = 24 * this.peek
     if (this.walker.riding?.id === 'dragon' && this.rides.kind === 'slide' && k.y > 0.8) yaw = clamp(Math.sin(Math.atan2(k.x - TOWER.x, k.z - TOWER.z)) * 22, -22, 22)
     let ahead = clamp(this.vel.x * 0.35, -1.4, 1.4)
-    // The cannon: Daddy comes into the picture too.
+    // The cannon: Dad comes into the picture too.
     if (this.toys.daddyShow && this.walker.floor.id === 'in' && !this.walker.riding) ahead = (this.toys.daddy.position.x - k.x) / 2
     const x = k.x + ahead
     // A little above her on the mats, flatter as she climbs (so the camera stays under the hall's dark ceiling).
     const up = clamp(k.y / LV.l3)
-    // (Inside on the ground floor it looks in level, under L1, to see her and Daddy in the balls.)
+    // (Inside on the ground floor it looks in level, under L1, to see her and Dad in the balls.)
     const low = !this.walker.riding && (fl === 'in' || fl === 'pit') ? 1 : 0
     this.low += (low - this.low) * 0.06
     const pitch = 18 - 8 * up - 9 * this.low

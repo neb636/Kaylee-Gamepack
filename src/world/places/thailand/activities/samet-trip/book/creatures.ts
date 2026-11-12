@@ -1,7 +1,7 @@
 // The island's animals, alive (greybox 3 of samet-trip.md): where each lives and what it does when Kaylee comes by.
 // Four simple ways of living, each with its own character on top:
 //   wander: the monitor lizards waddle round Ao Prao flicking their tongues, the macaques mooch along the hill road
-//           (the mother reaches for Daddy as he passes), hermit crabs potter on the wet sand;
+//           (the mother reaches for Dad as he passes), hermit crabs potter on the wet sand;
 //   flee:   the squirrels run up their palm when she comes close and peek round the trunk at her, the mouse-deer bounds
 //           into the forest if she gallops (walk slowly!) and tiptoes back, the reef heron flies to the next rock;
 //   perch:  the hornbill hops along its branch in the tamarind and flies between its perches, the flying fox hangs
@@ -9,7 +9,7 @@
 //   swim:   the parrotfish noses round the coral, the damselfish swirl in a crowd that parts round her, the cuttlefish
 //           hovers and changes color as she comes near;
 //   still:  the urchins (prickly: she boings off them) and the coral.
-// Every one does something cute for Mommy's phone (`pose`), and reacts to a tap without it (`poke`). The terns and the
+// Every one does something cute for Mom's phone (`pose`), and reacts to a tap without it (`poke`). The terns and the
 // crab holes' ghost crabs are the island's own (island.ts, props.ts); the phone snaps them too.
 import { Group, Matrix4, Quaternion, Vector3, type InstancedMesh, type MeshToonMaterial } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
@@ -57,7 +57,7 @@ export interface WildFx {
   splash(x: number, y: number, z: number, n: number): void
   bubbles(x: number, y: number, z: number, n: number): void
   puff(x: number, y: number, z: number, n: number): void
-  /** Daddy reacts (a macaque reaches for him). */
+  /** Dad reacts (a macaque reaches for him). */
   daddy(kind: 'wiggle' | 'hop'): void
 }
 
@@ -329,7 +329,7 @@ class MouseDeer extends Walker {
   }
 }
 
-/** A long-tailed macaque: mooches along the hill road, sits and scratches, and the mother reaches for Daddy. */
+/** A long-tailed macaque: mooches along the hill road, sits and scratches, and the mother reaches for Dad. */
 class Macaque extends Walker {
   private m: Model
   private scratch = -1
@@ -366,7 +366,7 @@ class Macaque extends Walker {
     body.rotation.x += (moving * 0.75 - body.rotation.x) * ease(dt, 6)
     body.position.y = Math.abs(Math.sin(this.phase)) * 0.04 * moving
     tail.rotation.y = Math.sin(this.phase * 0.4) * 0.3
-    // Daddy walks past: the mother reaches for his sunglasses (he wiggles).
+    // Dad walks past: the mother reaches for his sunglasses (he wiggles).
     this.reachCool -= dt
     const dd = Math.hypot(c.daddy.x - this.x, c.daddy.z - this.z)
     if (!this.isBaby && dd < 3.2 && this.reachCool <= 0 && moving < 0.3) {

@@ -5,7 +5,7 @@
 // The open-sided salt hut, seen from the front (the camera looks toward -z, a little from above, straight on):
 //
 //   across the road:          the wooden house with the Tai Lue couple painted on it
-//   the hut's back:   (the rooster) Mommy    [the shelf for the salt bags]  Daddy               the salt aunty
+//   the hut's back:   (the rooster) Mom    [the shelf for the salt bags]  Dad               the salt aunty
 //   the beam:       ===========================================================  (the bucket's rope slides along it)
 //   the plane z=0:      ( the well )        the bucket           [ the big pan on its mud stove ]   the woodpile
 //   the front:     baskets      Kaylee walks along under the bucket    her salt basket   (the fire's mouth)   cat

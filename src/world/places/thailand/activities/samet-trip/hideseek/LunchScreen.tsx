@@ -1,5 +1,5 @@
 // Lunch on the deck at Ao Prao, on screen (lunch.ts is the world): the table with its tap targets, the pressing finger
-// when she's been still a while, Mommy's photo flash, and once she has had a roll, the coconut and the rice a 🍽️ badge
+// when she's been still a while, Mom's photo flash, and once she has had a roll, the coconut and the rice a 🍽️ badge
 // with the ways on: back to the island, or down the steps to hide and seek at the driftwood tree.
 // Sparkle sits in the corner (trip/legs/Guide.tsx) and plays everyone's lines (lines.ts L.samet.lunch).
 import { useRef, useState } from 'react'

@@ -1,6 +1,6 @@
 // The sounds every Samet stage shares, recorded (sfx.json, ElevenLabs) over the synthesized kit and Thailand sounds,
 // which stay as their fallbacks: the sea's splash, a cartoon boing, a soft thud on the sand, a pop, a cloth fwip,
-// Mommy's phone shutter, munching, a whoosh, and the beach's waves. A stage imports `sametSfx as sfx` in place of the
+// Mom's phone shutter, munching, a whoosh, and the beach's waves. A stage imports `sametSfx as sfx` in place of the
 // kit's or Thailand's `sfx`, so every call it already makes gets the recorded sound. Tuned chimes, the countdown and
 // Kaylee's giggle stay synthesized (in tune, and she has no voice clip).
 import { bed, clip } from '../../../../../kit/clips'

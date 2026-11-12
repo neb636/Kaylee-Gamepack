@@ -1,5 +1,5 @@
 // Muay Thai's screen: the 3D ring (ring.ts), its tap targets, the POWs popping off each punch, the ring that closes on
-// the bag (round 2) or Daddy's pad (round 3) before each beat and the 👆 after a while with nothing touched. After the third round (the belt) a big 🛝 takes her back to the hall.
+// the bag (round 2) or Dad's pad (round 3) before each beat and the 👆 after a while with nothing touched. After the third round (the belt) a big 🛝 takes her back to the hall.
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'

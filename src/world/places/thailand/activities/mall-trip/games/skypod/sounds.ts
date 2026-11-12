@@ -1,6 +1,6 @@
 // The Sky Pod's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). The wall is an
-// instrument: each pod plays its own note of a major scale (layout.ts SCALE). Daddy's laugh and "hey!", Kaylee's
-// giggle; the words (the count, Daddy's race lines) are voices (lines.ts `L.mall.skypod`).
+// instrument: each pod plays its own note of a major scale (layout.ts SCALE). Dad's laugh and "hey!", Kaylee's
+// giggle; the words (the count, Dad's race lines) are voices (lines.ts `L.mall.skypod`).
 import { noise, tone } from '../../../../../../kit/sfx'
 import { sfx } from '../../../../sfx'
 import { SCALE } from './layout'
@@ -27,7 +27,7 @@ export const podSfx = {
   },
   /** A pod lighting up: a little blip up. */
   pop: (i = 4) => tone(f(i) * 1.5, f(i) * 2, 0.08, 0.035, 'sine'),
-  /** Daddy's blue light popping on: a lower blip. */
+  /** Dad's blue light popping on: a lower blip. */
   popBlue: () => tone(392, 520, 0.09, 0.035, 'sine'),
   /** The springy mat: a boing, higher the higher she goes. */
   spring: (k = 0) => tone(180 + k * 120, 420 + k * 260, 0.18, 0.05, 'triangle'),
@@ -42,7 +42,7 @@ export const podSfx = {
   star: () => [0, 0.08, 0.16, 0.26].forEach((d, i) => tone(f(2 + i * 2) * 1.5, f(2 + i * 2) * 1.5, 0.24, 0.05, 'triangle', d)),
   /** The finale's roll-up: a tick climbing as the number does. */
   tick: (k: number) => tone(800 + k * 14, 820 + k * 14, 0.03, 0.025, 'square'),
-  /** Daddy's hand misses: a slap on the wall, and "ow-ow". */
+  /** Dad's hand misses: a slap on the wall, and "ow-ow". */
   oops: () => {
     noise(0.07, 0.1, 'lowpass', 900, 300)
     ;[0.12, 0.3].forEach((d) => tone(520, 330, 0.14, 0.06, 'triangle', d))

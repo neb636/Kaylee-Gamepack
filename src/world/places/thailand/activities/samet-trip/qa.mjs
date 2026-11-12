@@ -1,15 +1,15 @@
 // The Koh Samet trip's QA scenarios. Greybox 1, the jet ski at Sai Kaew: the life jacket, the waves round mid-ride and
-// the race's start; filmed: carving doughnuts in the calm bay (the wake loop, Daddy dizzy), and steering into the waves
+// the race's start; filmed: carving doughnuts in the calm bay (the wake loop, Dad dizzy), and steering into the waves
 // to jump. Greybox 2, the island to roam: landing at Na Dan pier, Sai Kaew with the jet ski hers, Ao Prao in the
 // afternoon, the night; filmed: leading Kaylee down the beach into the sea (the gallop, the floatie), and the umbrella
-// kite. Greybox 3, Mommy's phone and the animal book: the phone out at Ao Wong Duan and Ao Prao, the book nearly full;
+// kite. Greybox 3, Mom's phone and the animal book: the phone out at Ao Wong Duan and Ao Prao, the book nearly full;
 // filmed: snapping the animals at Ao Prao with the phone, and the beach clean (lift the bottle, the hermit crab, the bin).
 // Greybox 4, the sandcastle at Ao Hin Khok: the bare beach, the towers round with its moat, the tide with a channel dug
-// to the sea (the moat fills); filmed: digging a moat round and a channel to the sea, and burying Daddy.
+// to the sea (the moat fills); filmed: digging a moat round and a channel to the sea, and burying Dad.
 // Greybox 5, snorkeling at Ko Kudi: the splash in, the parrotfish arriving, the garden; filmed: leading Kaylee over the
 // reef (the damselfish parting round her) and following the parrotfish toward the gap.
 // Greybox 6, lunch and hide and seek at Ao Prao: the deck with a roll eaten and the coconut sipped, hide and seek's
-// count, a seek, the trickier round and her turn hiding; filmed: finding Daddy behind the tree, and Daddy searching
+// count, a seek, the trickier round and her turn hiding; filmed: finding Dad behind the tree, and Dad searching
 // the wrong places while she hides behind the chairs.
 // Greybox 7, getting there and the trip frame: packing in Kaylee's room, the speedboat's cutscene (leaving Ban Phe,
 // the ferry going by), the island with every flag up (the way home); filmed: the whole ride to Na Dan pier.
@@ -47,7 +47,7 @@ async function leadAlong(page, route, ms) {
     const x = Math.max(10, Math.min(vp.width - 10, c.k.x + (across / len) * 150))
     const y = Math.max(110, Math.min(vp.height - 20, c.k.y + ((up * 0.7) / len) * 150))
     if (!down) {
-      // (Pressed on Mommy, Daddy or a prop it would tap them instead of leading her.)
+      // (Pressed on Mom, Dad or a prop it would tap them instead of leading her.)
       await page.mouse.move(c.k.x, Math.max(120, c.k.y - 150))
       await page.mouse.down()
       down = true
@@ -491,7 +491,7 @@ export const motion = [
       await ready(page)
     },
     act: async (page) => {
-      // A moat round the castle (the walls pile up on both sides, Kaylee digs along), twice round, then bury Daddy.
+      // A moat round the castle (the walls pile up on both sides, Kaylee digs along), twice round, then bury Dad.
       const q = await page.evaluate(() => window.__thaiSametQA?.())
       const c = q.castle
       const pm = Math.abs(q.sea0.y - c.y) / 5.3
@@ -590,7 +590,7 @@ export const motion = [
       await page.waitForTimeout(1500)
     },
   },
-  // Burying Daddy: a few rubs over him, then he wiggles his toes and sneezes himself out.
+  // Burying Dad: a few rubs over him, then he wiggles his toes and sneezes himself out.
   {
     name: 'thailand-samet-sand-bury',
     seconds: 10,
@@ -665,7 +665,7 @@ export const motion = [
       await page.goto(`${base}#/world/thailand/samet-trip/island?at=saikaew`)
       await ready(page)
     },
-    // Up the slope behind Sai Kaew and along the inland road: Mommy and Daddy climb it with her.
+    // Up the slope behind Sai Kaew and along the inland road: Mom and Dad climb it with her.
     act: (page) => leadAlong(page, [[-6, -22], [-6, -17], [-11, -27], [-14, -40]], 13000),
   },
   {
@@ -675,7 +675,7 @@ export const motion = [
       await page.goto(`${base}#/world/thailand/samet-trip/island?at=wongduan`)
       await ready(page)
     },
-    // Out to sea for half a minute: Mommy and Daddy wait at the water's edge, and they're there when she swims back.
+    // Out to sea for half a minute: Mom and Dad wait at the water's edge, and they're there when she swims back.
     act: async (page) => {
       await leadAlong(page, [[-138, 134], [-130, 175]], 23000)
       await leadAlong(page, [[-140, 140], [-152, 133]], 21000)
@@ -743,7 +743,7 @@ export const motion = [
     },
     act: async (page) => {
       const vp = page.viewportSize()
-      // Straight out, then hold far to one side: doughnuts (the wake closes into a loop, Daddy goes dizzy).
+      // Straight out, then hold far to one side: doughnuts (the wake closes into a loop, Dad goes dizzy).
       await page.mouse.move(vp.width / 2, vp.height * 0.3)
       await page.mouse.down()
       await page.waitForTimeout(2500)
@@ -885,9 +885,9 @@ export const motion = [
       await page.waitForTimeout(6000)
     },
   },
-  // Snorkel and hide and seek, fixed (#357 batch): Daddy's hiding place on screen and the help rising when she's stuck
+  // Snorkel and hide and seek, fixed (#357 batch): Dad's hiding place on screen and the help rising when she's stuck
   // (he peeks out, his place glows, he pops out and waves, he runs over), every hide of the trickier round found, a
-  // silly hide behind a thin palm (Mommy giggles, Daddy looks the wrong way), the cuttlefish jetting off twice before it
+  // silly hide behind a thin palm (Mom giggles, Dad looks the wrong way), the cuttlefish jetting off twice before it
   // turns pink, and her floaties keeping off the boat's hull.
   {
     name: 'thailand-samet-fix-hideseek-help',
@@ -1167,7 +1167,7 @@ export const motion = [
       await ready(page)
       await page.waitForTimeout(1500)
     },
-    // Tap the speedboat at the end of Na Dan pier: she walks to it, Mommy asks, the home picture comes up.
+    // Tap the speedboat at the end of Na Dan pier: she walks to it, Mom asks, the home picture comes up.
     act: async (page) => {
       await page.locator('[data-anchor="speedboat:0"]').click({ force: true }).catch(() => {})
       await page.waitForTimeout(8000)

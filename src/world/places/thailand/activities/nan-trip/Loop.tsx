@@ -2,9 +2,9 @@
 // 3D worlds in one shared view:
 //
 //   invite, pack, goodbye, home   Agong's own house (activities/hub/house.ts) with the trip kit's plugin
-//                                 (trip/legs/house-plugin.ts, told by NAN_TRIP what the trip is): Mommy asks where to
+//                                 (trip/legs/house-plugin.ts, told by NAN_TRIP what the trip is): Mom asks where to
 //                                 (Ask.tsx: 🚤, 🛝🍕 or 🏔️🚙); packing for the mountains (her raincoat, her rain boots,
-//                                 Mommy tucks in the umbrella); the goodbye at the shutter and Aunty Sri's van; coming
+//                                 Mom tucks in the umbrella); the goodbye at the shutter and Aunty Sri's van; coming
 //                                 home, the flight, Agong asks for his photo, she picks one (PhotoFan) and it goes on
 //                                 his wall, in the Nan trip's own frame
 //   airport                       the x-ray belt (trip/legs/airport.ts)
@@ -52,7 +52,7 @@ interface Props {
   replay: boolean
   /** The boarding pass is over the screen (between legs): the cards and the guide wait. */
   covered: boolean
-  /** Mommy's card: the mountains (🏔️🚙), another trip (its id), not yet (✋). */
+  /** Mom's card: the mountains (🏔️🚙), another trip (its id), not yet (✋). */
   onYes(): void
   onTrip(id: string): void
   onNotYet(): void
@@ -128,7 +128,7 @@ export const NanLoop = forwardRef<NanLoopHandle, Props>(function NanLoop({ secti
     return w
   }
 
-  // Mommy asks in her room. A yes in the house (Mommy's card there, 🏔️🚙) goes straight on to packing.
+  // Mom asks in her room. A yes in the house (Mom's card there, 🏔️🚙) goes straight on to packing.
   const fromHouse = useRef(justSaidYes('nan-trip'))
   useEffect(() => {
     if (phase !== 'invite' || !fromHouse.current) return

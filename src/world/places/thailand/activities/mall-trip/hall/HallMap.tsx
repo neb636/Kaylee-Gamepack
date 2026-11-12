@@ -24,7 +24,7 @@ interface Props {
   fresh: DoorId | null
   /** She's stuck with every new game off the screen: the button bounces with a finger. */
   nudge: boolean
-  /** Hidden while Mommy's card is up or she's going in somewhere. */
+  /** Hidden while Mom's card is up or she's going in somewhere. */
   hidden: boolean
   onOpen(open: boolean): void
   onPick(door: GameDoor): void

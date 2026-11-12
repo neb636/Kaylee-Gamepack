@@ -1,6 +1,6 @@
 // The reef's sounds at Ko Kudi: the captain's friendly boat horn, her big splash in off the ladder, the swish of her
 // flippers and the bubbly rush of water past her mask while she swims (a loop that runs while she moves, quicker the
-// faster she kicks), bubbles (out of her snorkel, Daddy's bubble ring, a little fish telling her off), a soft bump on
+// faster she kicks), bubbles (out of her snorkel, Dad's bubble ring, a little fish telling her off), a soft bump on
 // the coral, the rocks and the hull, the giant clam closing, the sea cucumber's squish, the cuttlefish jetting off,
 // the waterproof camera's click, and the sea all round her (muffled, bubbly, a far-off swell: the stage's own bed).
 // Recorded clips (sfx/, ElevenLabs) with the synthesized ones as their fallbacks. The urchins' prickly plinks, the
@@ -23,7 +23,7 @@ export const synth = {
   /** The captain's toot. */
   toot: () => [0, 0.22].forEach((d) => tone(330, 340, 0.18, 0.07, 'square', d)),
   twinkle: (n = 5) => Array.from({ length: n }, (_, i) => tone(1000 * (1 + i * 0.25), 1150 * (1 + i * 0.25), 0.14, 0.045, 'sine', i * 0.09)),
-  /** Mommy's waterproof camera. */
+  /** Mom's waterproof camera. */
   shutter: () => {
     hiss(0.06, 0.12, 'highpass', 3000, 2000)
     tone(1800, 1800, 0.03, 0.05, 'square', 0.07)
@@ -59,7 +59,7 @@ export const reefSfx = {
   blub: (d = 0) => {
     if (!playClip(c('snorkel-bubbles'), { vol: 0.55, delay: d, rate: 0.92 + Math.random() * 0.16 })) synth.blub(d)
   },
-  /** Daddy's bubble ring: the bubbles bigger and slower. */
+  /** Dad's bubble ring: the bubbles bigger and slower. */
   ring: () => {
     if (!playClip(c('snorkel-bubbles'), { vol: 0.7, rate: 0.78 })) synth.blub()
   },

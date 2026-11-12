@@ -1,10 +1,10 @@
 # 🏔️ The Nan Road Trip
 
-Built and on for Kaylee: the third Thailand trip, from Mommy's card to Agong's wall · Family trip · updated 2026-10-28
+Built and on for Kaylee: the third Thailand trip, from Mom's card to Agong's wall · Family trip · updated 2026-10-28
 
-The plane lands in the green valley and the big Pajero is waiting on the Nan map. Mommy drives and Kaylee steers it round the bends of the mountains into the clouds. At each stop she makes something the mountains make: she mists mushrooms until pink ones pop out, fills the rice steps with water, and boils salt from a well. On the way home the road draws a giant **3**.
+The plane lands in the green valley and the big Pajero is waiting on the Nan map. Mom drives and Kaylee steers it round the bends of the mountains into the clouds. At each stop she makes something the mountains make: she mists mushrooms until pink ones pop out, fills the rice steps with water, and boils salt from a well. On the way home the road draws a giant **3**.
 
-**Next:** The Nan roads look like Nan now: play them on the iPad and check it stays smooth. The steering is the user's now (tuned in the [feel lab](#/world/thailand/nan-trip/drive?road=valley&weather=sun&feel=1)). Next, **the whole trip** from [Mommy's card](#/world/thailand/nan-trip/invite) (🏔️🚙). Still open: are Baan Huanam's mushrooms really pink, and is the farmer a buffalo?
+**Next:** The Nan roads look like Nan now: play them on the iPad and check it stays smooth. The steering is the user's now (tuned in the [feel lab](#/world/thailand/nan-trip/drive?road=valley&weather=sun&feel=1)). Next, **the whole trip** from [Mom's card](#/world/thailand/nan-trip/invite) (🏔️🚙). Still open: are Baan Huanam's mushrooms really pink, and is the farmer a buffalo?
 
 - a full trip, all three stops: 10-17 min
 - touches: 150-225
@@ -16,7 +16,7 @@ Related: [← Thailand plan](../thailand.md), [🏁 The Nan Mountain Cup (plan)]
 
 ## 💡 The idea
 
-Written 2026-10-24. Thailand's third family trip, and the first that is mostly about **learning about a place**. Mommy, Daddy and Kaylee fly north to Nan, pick up a silver rental **Mitsubishi Pajero Sport** at the airport and drive the swoopy mountain roads between three real places: a mushroom farm, a café over the rice terraces and a village that makes salt from a well. It's built in 3D in the house's look (toon bands, ink outlines, blob shadows) and reuses the trip kit.
+Written 2026-10-24. Thailand's third family trip, and the first that is mostly about **learning about a place**. Mom, Dad and Kaylee fly north to Nan, pick up a silver rental **Mitsubishi Pajero Sport** at the airport and drive the swoopy mountain roads between three real places: a mushroom farm, a café over the rice terraces and a village that makes salt from a well. It's built in 3D in the house's look (toon bands, ink outlines, blob shadows) and reuses the trip kit.
 
 > **⛰️ One idea holds it together: the mountains make things**
 >
@@ -34,9 +34,9 @@ Written 2026-10-24. Thailand's third family trip, and the first that is mostly a
 2026-10-24
 
 - **Where?** **Nan**, from the family's real trip (June 2024, the rainy season).
-- **Who comes?** Just Mommy, Daddy and Kaylee.
+- **Who comes?** Just Mom, Dad and Kaylee.
 - **Getting there?** They fly Bangkok → Nan with the trip kit and rent a **silver Pajero Sport** at Nan airport.
-- **Who drives?** Mommy drives, and Kaylee steers it like a sled: her finger goes down anywhere, a steering wheel appears under it, and turning it left or right slides the Pajero that way (let go and Mommy eases it back into the left lane). Silly driving is part of the toy: onto the grass, and over the edge (it tumbles and drops back on the road).
+- **Who drives?** Mom drives, and Kaylee steers it like a sled: her finger goes down anywhere, a steering wheel appears under it, and turning it left or right slides the Pajero that way (let go and Mom eases it back into the left lane). Silly driving is part of the toy: onto the grass, and over the edge (it tumbles and drops back on the road).
 - **The stops?** Baan Huanam Mushroom Farm (not in the photos, the user's must-have), the rice-terrace café deck (Stop Time Cafe, above Sapan village), Bo Kluea's salt wells, and the S-curve “number 3” road. Wat Phumin was on this list and was dropped on 2026-10-25: no temples or Buddhas in the game (AGENTS.md).
 - **What did they eat?** The mushroom pizza at Baan Huanam.
 - **A gift for Agong?** No gift this time: they come home and the trip's photo goes on his wall.
@@ -48,11 +48,11 @@ Written 2026-10-24. Thailand's third family trip, and the first that is mostly a
 
 `KayleeGamepack-planning-assets/photos/nan/`, five photos, kept out of this repo. They have no GPS left in them.
 
-- 🛣️ **1. The swoopy road**: Daddy on the swoopy mountain road: an S-bend going up a green hill, white-and-black chevron signs on the bends, steel guard rails, an orange cone, low grey sky.
+- 🛣️ **1. The swoopy road**: Dad on the swoopy mountain road: an S-bend going up a green hill, white-and-black chevron signs on the bends, steel guard rails, an orange cone, low grey sky.
 - 🌾 **2. The rice valley**: A valley of terraced rice fields, flooded and shiny, freshly planted, with green mountains and cloud sitting on the tops.
-- 🪵 **3. The café deck**: A wooden café deck on stilts over that valley: wet dark-wood floor, rustic railings of crossed branches, long benches and stools, a peaked wooden roof. Mommy at the railing taking a picture, cloud rolling over the ridge.
+- 🪵 **3. The café deck**: A wooden café deck on stilts over that valley: wet dark-wood floor, rustic railings of crossed branches, long benches and stools, a peaked wooden roof. Mom at the railing taking a picture, cloud rolling over the ridge.
 - ☁️ **4. The corner**: The same deck from the corner, cloud filling the far valley.
-- 🪑 **5. Daddy and Kaylee**: Side by side on tall stools at the deck railing, Kaylee in a blue top, white leggings and sandals, the terraced valley and a little village behind them.
+- 🪑 **5. Dad and Kaylee**: Side by side on tall stools at the deck railing, Kaylee in a blue top, white leggings and sandals, the terraced valley and a little village behind them.
 
 > **📍 One video still has its GPS**
 >
@@ -72,13 +72,13 @@ So the game feels like the place.
 
 ## 🗺️ The shape of it
 
-🏠 Mommy asks (where to? 🚤 🛝🍕 🏔️🚙) → ✈️ The way there (pack, goodbye, van, airport, window seat: Bangkok → Nan) → 🗺️ The Nan map ⇄ drive ⇄ a stop (mushrooms · rice · salt, any order) → 3️⃣ The “3” road (to the airport) → 🖼️ Fly home (the photo on Agong's wall)
+🏠 Mom asks (where to? 🚤 🛝🍕 🏔️🚙) → ✈️ The way there (pack, goodbye, van, airport, window seat: Bangkok → Nan) → 🗺️ The Nan map ⇄ drive ⇄ a stop (mushrooms · rice · salt, any order) → 3️⃣ The “3” road (to the airport) → 🖼️ Fly home (the photo on Agong's wall)
 
 ### Each leg
 
 |  | Touches |
 |---|---|
-| Mommy asks | 1 |
+| Mom asks | 1 |
 | The Nan map | 1-3 |
 | **The mountain road** | 15-30 |
 | **Mushroom farm** | 25-40 |
@@ -91,7 +91,7 @@ So the game feels like the place.
 
 | Leg | Sections | First play | Touches | Talk before 1st touch | Her hands do |
 |---|---|---|---|---|---|
-| Mommy asks | `invite` | ~5 s | 1 | 1 line | picks 🏔️🚙 |
+| Mom asks | `invite` | ~5 s | 1 | 1 line | picks 🏔️🚙 |
 | Pack, goodbye, airport, plane | `pack` … `land` | as the boat trip | as the boat trip | 1 line each | the trip kit |
 | The Nan map | `map` | ~3 s | 1-3 | 1 line (first time) | tap where to go next |
 | **The mountain road** | `drive` (`?road=…`) | **at once** | **15-30 per drive** | 0-1 line | steer, honk, wipers |
@@ -104,13 +104,13 @@ So the game feels like the place.
 
 > **🔀 Any order, as Kaylee asked**
 >
-> Every stop is open on the map from the start, and each one gets a stamp on the map. After two stops Mommy asks “Home, or one more?” (🏠 / 🚙) each time she's back at the map; after three the only road left is home, by the “3” road. The trip's passport stamp comes at `home`, like the other trips.
+> Every stop is open on the map from the start, and each one gets a stamp on the map. After two stops Mom asks “Home, or one more?” (🏠 / 🚙) each time she's back at the map; after three the only road left is home, by the “3” road. The trip's passport stamp comes at `home`, like the other trips.
 
 **Resume and replays,** as in the other trips: the trip saves after each stop (`useSaved('thailand-nan-trip')`). After the first full trip the card offers 🗺️ (straight to the map, the Pajero ready, stops cleared) for replays.
 
 ### What it borrows
 
-- **The trip kit** (`trip/`), unchanged in shape: Mommy's invite card, packing (Mommy hints “it's cool and rainy in the mountains”: a raincoat and a jumper), the goodbye at the shutter, Aunty Sri's van to the airport, the x-ray belt and the window seat. The plane flies north this time, and the crayon line ends in the mountains.
+- **The trip kit** (`trip/`), unchanged in shape: Mom's invite card, packing (Mom hints “it's cool and rainy in the mountains”: a raincoat and a jumper), the goodbye at the shutter, Aunty Sri's van to the airport, the x-ray belt and the window seat. The plane flies north this time, and the crayon line ends in the mountains.
 - **The finger steering** (`trip/drive.ts` `Driver`) and the boat race's way of using it (`activities/boat-trip/race/`): the vehicle always moves forward along a course, and her finger only picks where across it to go.
 - **The course math** of the race (`race/track.ts`), opened up: a road is an **open** curve with **height**.
 - **The Veloz** (`trip/vehicles/veloz.ts`) is the template for the Pajero (doors, body bounce, wheels, seats, right-hand drive). `songthaew.ts` is ready for oncoming traffic.
@@ -118,15 +118,15 @@ So the game feels like the place.
 
 ## 🔑 Getting there: the invite and the plane
 
-- 🏔️ **Mommy asks where to** ([done] · `invite`): The invite card gets a third picture button: 🏔️🚙 “the mountains”. Mommy's line stays the same (“Where shall we go?”). Packing is on (`pack: { hint: 'cool' }`): her raincoat, a jumper and her boots fit; Mommy tucks in the umbrella. The goodbye is the boat trip's (Mommy, Daddy and Kaylee at the shutter) and Aunty Sri's van takes them to the airport.
+- 🏔️ **Mom asks where to** ([done] · `invite`): The invite card gets a third picture button: 🏔️🚙 “the mountains”. Mom's line stays the same (“Where shall we go?”). Packing is on (`pack: { hint: 'cool' }`): her raincoat, a jumper and her boots fit; Mom tucks in the umbrella. The goodbye is the boat trip's (Mom, Dad and Kaylee at the shutter) and Aunty Sri's van takes them to the airport.
 - ✈️ **The window seat, Bangkok → Nan** ([done] · `takeoff` `fly` `land`): The same toy (clouds to wipe, the seatback screen), but the crayon line on the map goes up and right to the elephant's ear, and green bumps (mountains) pass under the plane. Landing at a small airport in a green valley, with mountains all around.
 
 ### The rental desk (`rental`, cut 2026-10-27: the plane lands straight on the Nan map)
 
 - 🔑 **One short beat, not a full activity** ([dropped] · 30-45 s, 6-10 touches): 
   - A small arrivals hall, a rental counter with a smiling **clerk**. The clerk slides a big key across the counter.
-  - **The toy:** the key fob is in her hand. Press it and the big Pajero outside beeps and flashes its lights. Press again and again: beep-beep, the lights wink, the mirrors fold out, Daddy jumps.
-  - **Then:** drag the suitcase into the boot (it thumps in and the car squats on its springs). Kaylee hops into her seat behind Mommy; tap the seatbelt and it **clicks**. Mommy at the wheel on the right: “Ready? Let's go!”
+  - **The toy:** the key fob is in her hand. Press it and the big Pajero outside beeps and flashes its lights. Press again and again: beep-beep, the lights wink, the mirrors fold out, Dad jumps.
+  - **Then:** drag the suitcase into the boot (it thumps in and the car squats on its springs). Kaylee hops into her seat behind Mom; tap the seatbelt and it **clicks**. Mom at the wheel on the right: “Ready? Let's go!”
   - **Pokeables:** the clerk's bell, a rack of maps, a pot of orchids, a poster of a mountain that rains when tapped.
   - **Teaches by doing:** buckle up before the car goes (it waits for the click); the wheel is on the right because cars in Thailand keep to the left.
 
@@ -158,11 +158,11 @@ side so the long side runs up it.
 
 ## 🚙 The mountain road
 
-`drive`; keep left, slow on bends, clouds, counting. Mommy drives the big Pajero through the mountains; Kaylee steers it round the bends, drives off the edge for fun, waves at the blind corners and drives right up into the clouds.
+`drive`; keep left, slow on bends, clouds, counting. Mom drives the big Pajero through the mountains; Kaylee steers it round the bends, drives off the edge for fun, waves at the blind corners and drives right up into the clouds.
 
 > **👆 Core verb: steer the Pajero with her finger**
 >
-> It always rolls forward (Mommy's foot); her finger, anywhere on the road ahead, picks where across the road it goes. Let go and Mommy keeps it in the lane by herself.
+> It always rolls forward (Mom's foot); her finger, anywhere on the road ahead, picks where across the road it goes. Let go and Mom keeps it in the lane by herself.
 
 - 🪨 **How it feels**: Heavy and bouncy. The big body leans out on the bends and squats when it brakes. The wipers swish, the tyres hiss in puddles, and the road climbs and dips so the view swings.
 - ✨ **Why it's fun with no goal**: Driving a big car round curves is fun on its own, and every bend reveals something new. Greybox test: a box car on a ribbon road over grey hills, three road shapes, the horn.
@@ -170,7 +170,7 @@ side so the long side runs up it.
 ### How it deepens (three roads, same verb)
 
 1. **The valley road** (`?road=valley`)
-   To the mushroom farm, in Pua: a gentle road through rice fields. Buffalo graze, chickens cross, a **songthaew passes on the other side**: steer onto the right side and Mommy says “Keep left!” and eases back. A buffalo steps onto the road and the Pajero slows by itself until it ambles across.
+   To the mushroom farm, in Pua: a gentle road through rice fields. Buffalo graze, chickens cross, a **songthaew passes on the other side**: steer onto the right side and Mom says “Keep left!” and eases back. A buffalo steps onto the road and the Pajero slows by itself until it ambles across.
 2. **The sky road** (`?road=sky`)
    To Sapan and Bo Kluea, over Doi Phu Kha (the café and the salt wells): steep S-bends climbing into the cloud. The cloud gets thicker until it's white all round (the headlights come on), then the Pajero pops out above it into sunshine. At **blind bends** a round mirror flashes when a car is coming round, and it beeps hello. The cloud is misty, not a white wall: the road shows ahead.
 3. **The “3” road** (`?road=three`)
@@ -194,12 +194,12 @@ Through Nan town is a short city road (`?road=city`): tuk-tuks, the river bridge
 
 ### Silly moments (instead of failure)
 
-- 🌿 **Steer onto the grass**: Bumpy bumpy: the car shakes and slows, tufts fly (Mommy: “Oh no, the grass!”).
+- 🌿 **Steer onto the grass**: Bumpy bumpy: the car shakes and slows, tufts fly (Mom: “Oh no, the grass!”).
 - 🤸 **Push on past it**: The Pajero hops off (or over the guard rail) and tumbles, cartoon style (“Oh no!”), poof, and drops back onto the road where it left (“We're back!”). No waiting, no losing.
-- 〰️ **Wiggle all over the road**: The car rocks (Daddy: “Wibbly wobbly!”).
+- 〰️ **Wiggle all over the road**: The car rocks (Dad: “Wibbly wobbly!”).
 - 🎶 **Drive onto the right side**: The songthaew driver waves and honks a tune.
 
-- 💬 **Story frame**: Mommy: “Let's drive to the mushroom farm! Steer for me!” (first drive only). Sparkle speaks when something new appears: the first cloud (“We're driving into a cloud!”), the hairpins (“Let's count the bends!”), or after 8 s with the finger off and nothing touched (“Steer the car with your finger!”).
+- 💬 **Story frame**: Mom: “Let's drive to the mushroom farm! Steer for me!” (first drive only). Sparkle speaks when something new appears: the first cloud (“We're driving into a cloud!”), the hairpins (“Let's count the bends!”), or after 8 s with the finger off and nothing touched (“Steer the car with your finger!”).
 - 🎓 **What it teaches, by doing**: Keep left (the songthaew on the other side), go slow on bends (the Pajero slows itself before each chevron sign and leans), clouds sit on mountains (she drives into one), count to three (the hairpins). Tap-to-hear facts: the Pajero is made in Thailand; in Thailand cars drive on the left; the big round mirrors show cars coming round the bend.
 - 🎉 **Payoff and replay**: The stop at the end of the road (the Pajero pulls in and everyone hops out), and on the way home, the 3. On a replay the roads are the same, the traffic and animals are random; the weather (rain, sun, cloud) changes.
 - 🔢 **Numbers**: Each drive about 45-75 s with 15-30 touches (holding and steering counts as continuous play, plus the pokeables). About 4-5 drives in a full trip.
@@ -231,7 +231,7 @@ Through Nan town is a short city road (`?road=city`): tuk-tuks, the river bridge
 
 - 🤔 **Her choices**: Which bags to mist, which mushrooms (and colors) to pick, where they go on the pizza.
 - 👉 **Pokeables**: The farmer (cast: a farmer aunty) who laughs, a gecko on the wall, a sleepy dog, the drip from the roof, the little sign of a mushroom drawing (a mushroom with a smiley face).
-- 🤪 **Silly**: Spray Daddy and he gets a mushroom hat; the giant mushroom she bounces on.
+- 🤪 **Silly**: Spray Dad and he gets a mushroom hat; the giant mushroom she bounces on.
 - 🎓 **Teaches**: Mushrooms don't grow from seeds in soil like plants: they grow from sawdust in a dark, damp house, and they love the rainy season. Facts: mushrooms aren't plants; Baan Huanam grows its own mushrooms; pink oyster mushrooms are real.
 - 🎉 **Payoff**: The full basket, then the pizza with her mushrooms on it.
 - 🎥 **Camera and state**: Inside the mushroom house, a low side view along the rows of bags; the pizza straight on at the table. `basket` (e.g. `pink2,grey5,gold1`) goes to the pizza.
@@ -255,7 +255,7 @@ Kaylee's little rice farm below the café, in the cozy look of the user's Animal
 4. **Thresh** (`?round=thresh`)
    She bangs the grains out.
 5. **The deck** (`?round=deck`)
-   Sticky rice on the café deck (kept from #168, with the pink milk and Mommy's photo), and a 60-second video shows real rice farming, the same steps her hands just did.
+   Sticky rice on the café deck (kept from #168, with the pink milk and Mom's photo), and a 60-second video shows real rice farming, the same steps her hands just did.
 
 ## 🧂 Bo Kluea salt wells
 
@@ -278,7 +278,7 @@ Kaylee's little rice farm below the café, in the cozy look of the user's Animal
 
 - 🤔 **Her choices**: When to pour, how big the fire.
 - 👉 **Pokeables**: The salt aunty (laughs), a cat sleeping warm by the fire, the drying baskets, a rooster, the mural of the Tai Lue couple on the house across the road (from the user's video).
-- 😝 **Silly**: She licks a finger: a big salty face (her unicorn's mouth puckers, eyes squeeze); pour brine on Daddy's foot and he hops.
+- 😝 **Silly**: She licks a finger: a big salty face (her unicorn's mouth puckers, eyes squeeze); pour brine on Dad's foot and he hops.
 - 🎓 **Teaches**: There's salt in the mountains, far from the sea, because a sea was here long, long ago; boiling the water away leaves the salt behind. Facts: people in Bo Kluea have made salt this way for hundreds of years.
 - 🎉 **Payoff**: A heaped basket of white salt she made, and a shelf of full bags.
 - 🎥 **Camera**: Inside the open-sided salt hut, side view: the well on the left, the pan and fire on the right.
@@ -287,8 +287,8 @@ Kaylee's little rice farm below the café, in the cozy look of the user's Animal
 ## 3️⃣ The “3” road and home
 
 - 3️⃣ **The “3” road** ([done] · `three`; counting): The last drive (`drive?road=three`), and then the viewpoint: the Pajero stops at a lay-by, the camera lifts up and over the hill, and the road below is a big swoopy **3**. Its bends pop one by one (one, two, three; nothing to draw, the user took the crayon out 2026-10-26), the family photo is taken with the 3 behind them, and Sparkle says “Three! You drove the 3!”. Then the road goes on to the airport and the plane home.
-- 🔭 **The 3 lookout** ([done] · 2026-11-12 · map place `lookout`, `drive?road=three&to=lookout`, `three?to=lookout`): you asked for the 3 road without two stops first. A wooden deck with a pink telescope and a pennant on the 3's top bend (its stepping stones lead up from the bend), open from the start and never a stop: she drives the 3 road, the bends pop, Mommy takes the photo, then 🔁 or 🗺️ back to the map (no ✈️🏠). The airport is still the way home after two stops. No new lines. Next, if she loves it: something to do on the deck (the telescope).
-- 🏠 **Home** ([done] · `home`): The home flight (`trip/legs/home-flight.ts`), the van, Agong's door. No gift this time (the user): the family hops in, Agong waves hello, and the photo she picks (the café balcony, the 3, the mushroom pizza, the salt pan) goes on his wall. Tap it and Mommy says “Our trip to Nan!”.
+- 🔭 **The 3 lookout** ([done] · 2026-11-12 · map place `lookout`, `drive?road=three&to=lookout`, `three?to=lookout`): you asked for the 3 road without two stops first. A wooden deck with a pink telescope and a pennant on the 3's top bend (its stepping stones lead up from the bend), open from the start and never a stop: she drives the 3 road, the bends pop, Mom takes the photo, then 🔁 or 🗺️ back to the map (no ✈️🏠). The airport is still the way home after two stops. No new lines. Next, if she loves it: something to do on the deck (the telescope).
+- 🏠 **Home** ([done] · `home`): The home flight (`trip/legs/home-flight.ts`), the van, Agong's door. No gift this time (the user): the family hops in, Agong waves hello, and the photo she picks (the café balcony, the 3, the mushroom pizza, the salt pan) goes on his wall. Tap it and Mom says “Our trip to Nan!”.
 
 > **🚫 Wat Phumin was dropped**
 >
@@ -298,7 +298,7 @@ Kaylee's little rice farm below the café, in the cozy look of the user's Animal
 
 Activity `nan-trip`: `activities/nan-trip/sections.ts`. Every param has a default, so a bare link always works. Only the built ones open.
 
-1. `#/world/thailand/nan-trip/invite` Mommy asks: where shall we go?
+1. `#/world/thailand/nan-trip/invite` Mom asks: where shall we go?
 2. `#/world/thailand/nan-trip/pack` Pack for the mountains (reads packed)
 3. `#/world/thailand/nan-trip/goodbye` Goodbye at Agong's house (reads packed)
 4. `#/world/thailand/nan-trip/airport` The airport (reads packed)
@@ -315,8 +315,8 @@ Activity `nan-trip`: `activities/nan-trip/sections.ts`. Every param has a defaul
 
 ### Every round that's built
 
-🏔️. `#/world/thailand/nan-trip/invite` Mommy's card with 🏔️🚙 the mountains
-🧥. `#/world/thailand/nan-trip/pack` Pack the raincoat and rain boots (Mommy tucks in the umbrella)
+🏔️. `#/world/thailand/nan-trip/invite` Mom's card with 🏔️🚙 the mountains
+🧥. `#/world/thailand/nan-trip/pack` Pack the raincoat and rain boots (Mom tucks in the umbrella)
 🛬. `#/world/thailand/nan-trip/land` Land in Nan's green valley, then the Nan map
 🏙️. `#/world/thailand/nan-trip/drive?road=city` Through Nan town to the market
 🌾. `#/world/thailand/nan-trip/drive?road=valley` The rice fields to the mushroom farm
@@ -330,7 +330,7 @@ Activity `nan-trip`: `activities/nan-trip/sections.ts`. Every param has a defaul
 🐦. `#/world/thailand/nan-trip/rice?round=grow` Shoo the birds while the rice grows golden
 🌾. `#/world/thailand/nan-trip/rice?round=harvest` Cut the golden rice into bundles
 🪵. `#/world/thailand/nan-trip/rice?round=thresh` Bang the grains into the basket, then the sticky rice
-☕. `#/world/thailand/nan-trip/rice?round=deck` Sticky rice, pink milk, Mommy's photo, the rice video
+☕. `#/world/thailand/nan-trip/rice?round=deck` Sticky rice, pink milk, Mom's photo, the rice video
 🪣. `#/world/thailand/nan-trip/salt?round=1` Dip the bucket, pour the brine into the pan
 🔥. `#/world/thailand/nan-trip/salt?round=2` Feed the fire till the brine boils down
 🧂. `#/world/thailand/nan-trip/salt?round=3` Scrape the salt into the basket
@@ -393,9 +393,9 @@ The road kit, the box Pajero, finger steering, four roads with traffic, blind be
 - **The road kit** (`trip/road/`, reusable for any later drive): `road.ts` (an open centripetal Catmull-Rom road through `[x, z, y]` points, 1 m samples, `spotAt`/`locate`/`bendAhead`, pure), `build.ts` (one height field for the hills: the road's own heights spread over the land plus noise hills that grow away from it, so the ground always meets the road; the ribbon with white edges, a dashed yellow middle and dirt verges; guard rails wherever the ground drops beside it; chevron signs on the outside of sharp bends; round convex mirrors; trees; far mountains; a river and bridge), `traffic.ts` (oncoming songthaews, scooters, tuk-tuks and the blind bend's car, a buffalo that ambles across, chickens that flap off, a monkey on the rail), `clouds.ts` (a cloud layer and puffs).
 - **The box Pajero** (`trip/vehicles/pajero.ts`): silver, tall, big wheels, headlights and soft beams for the cloud; root > tilt (the slope) > body (leans out on bends, squats when it brakes, bounces, squashes on a boing).
 - **The drive** (`activities/nan-trip/drive/`): `roads.ts` (the four roads as data), `mountain.ts` (the world), `Drive.tsx` (the screen), `landmarks.ts`, `sounds.ts`.
-  - Steering: her finger anywhere on the road ahead picks where across it the Pajero goes. It reads the road as it looks on screen (the stretch of road under her finger, then how far across), not a flat plane, so it works while the road climbs and turns. Let go and Mommy keeps the left lane. A little past the edge is allowed: the edge boings the car back like a pinball bumper (sparkles, a wobble). It always rolls forward; it can't leave the road. *(2026-10-26: it can leave the road now, onto the grass and over the edge; see the last log entry.)*
-  - Mommy's foot: slower into the bends, slower in the cloud, a stop for the buffalo, easing into the stop at the end.
-  - Keep left: an oncoming driver with her over the middle line pulls onto the verge, stops and toots a tune, and Mommy eases her back to the left.
+  - Steering: her finger anywhere on the road ahead picks where across it the Pajero goes. It reads the road as it looks on screen (the stretch of road under her finger, then how far across), not a flat plane, so it works while the road climbs and turns. Let go and Mom keeps the left lane. A little past the edge is allowed: the edge boings the car back like a pinball bumper (sparkles, a wobble). It always rolls forward; it can't leave the road. *(2026-10-26: it can leave the road now, onto the grass and over the edge; see the last log entry.)*
+  - Mom's foot: slower into the bends, slower in the cloud, a stop for the buffalo, easing into the stop at the end.
+  - Keep left: an oncoming driver with her over the middle line pulls onto the verge, stops and toots a tune, and Mom eases her back to the left.
   - The steering wheel (bottom right) turns with the car; the whole wheel is the horn (the Pajero is too). A beep gets answers: the blind bend's car beeps back (its mirror flashes pink and the wheel pulses until she beeps; if she doesn't, it beeps first), the buffalo moos and hurries, chickens scatter. *(2026-10-26: the corner wheel and the horn are gone; see the last log entry.)*
   - `city` 272 m (tuk-tuks, the bridge over the Nan River, the market; it ended at Wat Phumin until 2026-10-25, now at the market square), `valley` 533 m (paddies, chickens, a songthaew, a scooter, the buffalo crossing, the mushroom house), `sky` ~590 m (switchbacks climbing 92 m: rain, blind bends with mirrors, a waterfall, a monkey, into the cloud at 38 m with the headlights on, out above it at 62 m into blue sky, Stop Time Cafe's deck at the top), `three` 471 m (downhill hairpins drawn as a 3: a giant 1, 2, 3 as she rounds each bend; at the lay-by the camera lifts over the hill and its bends pop one, two, three by themselves, `updateView`).
   - At the end of each road the Pajero pulls in by its stop, the camera turns to look (or lifts, for the 3), and the end card offers 🔁 this road again or the other three (there's no map yet).
@@ -408,13 +408,13 @@ Mist 12 sawdust bags, pick by drag or tap, pink and gold in round 3, then top, b
 
 [`#/world/thailand/nan-trip/mushrooms?round=1|2|3|pizza&basket=…`](#/world/thailand/nan-trip/mushrooms) (`activities/nan-trip/mushrooms/`, self-contained). Shapes in the toon look, no voices, no art. One 3D world with two places: the mushroom house and, 8 m along, the farm's table outside (the camera glides out for lunch).
 
-- **The house** (`farm.ts`): a dim plank shed with a roof, a rack of 12 sawdust bags lying down with their mouths to the aisle (4 x 3, each a collar ring and dark sawdust in the mouth), the bright door, the sign (a pink mushroom with a smiley face, no words), a gecko on the wall, a drip from the beam into a puddle, the sleepy dog, her basket, and the farmer aunty (a buffalo in a sun hat and apron, `FARMER` look) by the door. Kaylee holds the hose (a green tube from the side wall to her hand to the wand); Daddy watches. On a tall screen the aisle closes in (`TALL` in `layout.ts`): Kaylee and the basket beside the rack, Daddy peeking from behind its far end.
+- **The house** (`farm.ts`): a dim plank shed with a roof, a rack of 12 sawdust bags lying down with their mouths to the aisle (4 x 3, each a collar ring and dark sawdust in the mouth), the bright door, the sign (a pink mushroom with a smiley face, no words), a gecko on the wall, a drip from the beam into a puddle, the sleepy dog, her basket, and the farmer aunty (a buffalo in a sun hat and apron, `FARMER` look) by the door. Kaylee holds the hose (a green tube from the side wall to her hand to the wand); Dad watches. On a tall screen the aisle closes in (`TALL` in `layout.ts`): Kaylee and the basket beside the rack, Dad peeking from behind its far end.
 - **The toy, misting** (`farm3d.ts`): her finger held anywhere on the rack sprays there (the wand points at it, mist puffs fly, a little rainbow shows, a soft hiss). Every bag within 0.3 m drinks; at a little water a pin pops out of the mouth (bloop, a note higher each time, sparkles), and it swells into a clump of five oyster fans (`shroom.ts`) as it drinks to full (a whoomp). Wet bags drip. A tap is a 0.9 s puff, so taps alone grow them too.
   - **Round 1:** mist the 12 bags until all are grown; the last thirsty ones glow once 8 are up. A run of bells, the aunty hops.
-  - **Round 2:** grown clumps wiggle. Grab one and pull: it leans toward her finger and twists, creaking higher, and at 62 px pops off into her hand; let go anywhere and it flies into the basket (a note that climbs with how full it is). A tap picks one too. Picked bags grow again when misted. A finger held still on a grown one for 0.45 s turns into misting: keep spraying and it swells giant (2.35x, a deep boing, Daddy laughs); a tap on the giant one boings it. 6 picks end the round.
-  - **Round 3:** the aunty swaps the bags: the clumps puff away and new collars pop on, 4 pink and 3 gold (`ROUND3_KINDS`); those grow pink and golden oyster mushrooms. 6 more picks and they go to lunch: Kaylee and Daddy hop to their stools.
-  - **Silly:** mist Daddy's face and a grey mushroom grows on his head (bigger the more she sprays, he hops and laughs); mist the dog and she wakes and shakes; mist the aunty and she laughs. **Pokes:** the aunty, the gecko (scurries, tukkae), the dog (lifts her head, snores, wags), the drip, the sign (spins, ding), the basket, Kaylee, Daddy.
-- **The pizza** (`round=pizza`): a wooden deck over the rice steps and the hills (a painted far ridge with cloud on the tops, a drifting cloud), the table with three stools and plates (Mommy, Kaylee, Daddy), the pizza board, the clay oven with the aunty beside it, and her basket. Drag a mushroom from the basket onto the pizza and it stays where she drops it (on the wedge under it); drop it off the pizza and it hops back; drag one on the pizza to move it. A tap on the basket (or on the pizza, near where she tapped) puts the next one on. Basket empty: the oven's mouth glows; tap it (or the pizza) and the pizza flies in, the fire crackles and roars (steam from the chimney), it comes out golden, ding, the family cheers. Then each tap on the pizza sends a slice (with the mushrooms on it) to the next plate, Kaylee, Mommy, Daddy, twice round; a tap on a plate or a face munches it (crumbs). All six shared: the end card (🔁 the farm again, 🚙 back on the road: the sky road, up to the café).
+  - **Round 2:** grown clumps wiggle. Grab one and pull: it leans toward her finger and twists, creaking higher, and at 62 px pops off into her hand; let go anywhere and it flies into the basket (a note that climbs with how full it is). A tap picks one too. Picked bags grow again when misted. A finger held still on a grown one for 0.45 s turns into misting: keep spraying and it swells giant (2.35x, a deep boing, Dad laughs); a tap on the giant one boings it. 6 picks end the round.
+  - **Round 3:** the aunty swaps the bags: the clumps puff away and new collars pop on, 4 pink and 3 gold (`ROUND3_KINDS`); those grow pink and golden oyster mushrooms. 6 more picks and they go to lunch: Kaylee and Dad hop to their stools.
+  - **Silly:** mist Dad's face and a grey mushroom grows on his head (bigger the more she sprays, he hops and laughs); mist the dog and she wakes and shakes; mist the aunty and she laughs. **Pokes:** the aunty, the gecko (scurries, tukkae), the dog (lifts her head, snores, wags), the drip, the sign (spins, ding), the basket, Kaylee, Dad.
+- **The pizza** (`round=pizza`): a wooden deck over the rice steps and the hills (a painted far ridge with cloud on the tops, a drifting cloud), the table with three stools and plates (Mom, Kaylee, Dad), the pizza board, the clay oven with the aunty beside it, and her basket. Drag a mushroom from the basket onto the pizza and it stays where she drops it (on the wedge under it); drop it off the pizza and it hops back; drag one on the pizza to move it. A tap on the basket (or on the pizza, near where she tapped) puts the next one on. Basket empty: the oven's mouth glows; tap it (or the pizza) and the pizza flies in, the fire crackles and roars (steam from the chimney), it comes out golden, ding, the family cheers. Then each tap on the pizza sends a slice (with the mushrooms on it) to the next plate, Kaylee, Mom, Dad, twice round; a tap on a plate or a face munches it (crumbs). All six shared: the end card (🔁 the farm again, 🚙 back on the road: the sky road, up to the café).
 - **The road leads here:** the valley road's end card has a big 🍄 that opens the farm.
 - **QA:** `qa-screens` (`nan-mushrooms-1|2|3|pizza`), `qa-motion` (`nan-mist`, `nan-pick`), `qa-pacing` (`nan-mushrooms`, `nan-mushroom-pizza`). Played in headless Chromium with software WebGL (WebKit couldn't be downloaded in this session): misting the rack grew all 12, round 2 picked by drag and by tap, round 3 grew pink and gold and went to the table, the pizza took 9 mushrooms, baked and shared all 6 slices, with no errors. 110-140 draw calls, 150-215k triangles.
 
@@ -430,12 +430,12 @@ The bucket on a rope along a beam, six buckets into the pan, logs on the fire, t
 
 [`#/world/thailand/nan-trip/salt?round=1|2|3`](#/world/thailand/nan-trip/salt), in `salt/` (`layout.ts` the hut in meters, `hut.ts` the shapes, `salt3d.ts` the world, `Salt.tsx` the screen, `sounds.ts`). Shapes in the toon look, no voices, no art. The sky road's end card now has a 🧂 beside the 🌾 (the sky road comes down between the café and the salt wells; `STOP_AT` takes a list and `onStop` gets the stop's id); the salt's end card takes the 3 road, which starts at Bo Kluea.
 
-- **The hut:** an open-sided hut on an earth floor; the well's round wall of stones on the left; the big shallow pan on its mud stove on the right, with the fire's mouth in front and a chimney behind; a bamboo beam on two posts over both, with the bucket on a rope from a little ring that slides along it; the shelf for the salt bags at the back, Kaylee's pink-rimmed salt basket, the woodpile, a stack of drying baskets, the cat by the fire, the rooster behind; across the wet road a wooden house with the Tai Lue couple painted on it (drawn on a canvas in our flat style, he whispering in her ear), trees and hills, and a scooter that putters past now and then. Mommy and Daddy watch; the salt aunty (a pony in a sun hat and an apron, a placeholder pick like the mushroom farm's buffalo) stands by the pan.
-- **The toy, the bucket:** a held finger anywhere pulls the bucket there (it follows a little behind, heavier when full, and swings on its rope). Down into the well: a deep splash, glug glug, full, a creak. Lowered over the pan it tips and pours (a stream, sloshes climbing as the pan fills); lowered anywhere else it pours there (a splash on the floor, Daddy's foot: he hops and laughs; the cat: she jumps and shakes). It can't go through the well's rim or the pan's side. Kaylee trots along the front a little to the left of it, her arm up. A tap on the well dips it for her, a tap on the pan or the bucket fetches a bucketful and pours it.
+- **The hut:** an open-sided hut on an earth floor; the well's round wall of stones on the left; the big shallow pan on its mud stove on the right, with the fire's mouth in front and a chimney behind; a bamboo beam on two posts over both, with the bucket on a rope from a little ring that slides along it; the shelf for the salt bags at the back, Kaylee's pink-rimmed salt basket, the woodpile, a stack of drying baskets, the cat by the fire, the rooster behind; across the wet road a wooden house with the Tai Lue couple painted on it (drawn on a canvas in our flat style, he whispering in her ear), trees and hills, and a scooter that putters past now and then. Mom and Dad watch; the salt aunty (a pony in a sun hat and an apron, a placeholder pick like the mushroom farm's buffalo) stands by the pan.
+- **The toy, the bucket:** a held finger anywhere pulls the bucket there (it follows a little behind, heavier when full, and swings on its rope). Down into the well: a deep splash, glug glug, full, a creak. Lowered over the pan it tips and pours (a stream, sloshes climbing as the pan fills); lowered anywhere else it pours there (a splash on the floor, Dad's foot: he hops and laughs; the cat: she jumps and shakes). It can't go through the well's rim or the pan's side. Kaylee trots along the front a little to the left of it, her arm up. A tap on the well dips it for her, a tap on the pan or the bucket fetches a bucketful and pours it.
   - **Round 1:** six buckets fill the pan (a run of bells, the aunty hops and lights the fire).
   - **Round 2, the fire:** drag a log from the woodpile (or tap the pile) and it flies into the fire's mouth (flames up, sparks, crackles, smoke from the chimney); a finger held on the fire blows on it. It dies down slowly. The bigger it is, the more the brine bubbles and steams and the faster it boils down; the brine turns white and salt grows in from the pan's edges (a shimmer when the first shows). Brine poured in now raises it again. No log for 9 s with a low fire and the aunty throws one on. Kaylee stands beside the fire's mouth. Tap a puff of steam: pop.
   - **Round 3, salt:** the camera looks down into the pan (the roof and the beam hide), full of 66 little heaps of salt. Kaylee holds the long paddle (its handle runs from the blade to her hands); the blade jumps to her finger and scrapes up the salt it passes over, heaping it on the blade; let go and it finishes its stroke and tips into her basket (it tips by itself when it holds 8). A tap on the pan sweeps a stripe there. At 85% the aunty sweeps up the rest, the basket heaps up and sparkles, four bags hop onto the shelf one by one, everyone cheers, the end card.
-- **Silly and pokes:** tap Kaylee once she has touched the brine and she licks her finger (eyes squeeze, mouth puckers, head shakes, “blehh”, Daddy laughs); the aunty laughs, the cat stretches (mrrp), the rooster crows, the baskets wobble, the painted couple sparkles (a chime), the well echoes, the woodpile clunks, Mommy waves.
+- **Silly and pokes:** tap Kaylee once she has touched the brine and she licks her finger (eyes squeeze, mouth puckers, head shakes, “blehh”, Dad laughs); the aunty laughs, the cat stretches (mrrp), the rooster crows, the baskets wobble, the painted couple sparkles (a chime), the well echoes, the woodpile clunks, Mom waves.
 - **Hints:** the 👆 points at the well (or the pan with a full bucket), the woodpile (or the fire when it's big), and the thickest salt left; that tap target glows after 5 s.
 - **QA:** `qa-screens` (`nan-salt-1|2|3`), `qa-motion` (`nan-bucket`, `nan-scrape`), `qa-pacing` (`nan-salt`, taps only: it doesn't get through, a bucket takes 3 s). A robot in WebKit (iPad landscape and portrait) dragged six buckets, fed the fire and scraped the pan through to the bags and the end card with no errors, about 35 touches (a child will take more), about a minute of robot play.
 
@@ -445,11 +445,11 @@ Press the key fob, the bags into the boot, click the seatbelt; the map where she
 
 Shapes in the toon look, no voices, no art. The trip is joined up from the rental desk on: rental → map → a drive → its stop → back to the map (its stamp lands) → … → the airport → the 3 road → drawing the 3. New params: `stops` (the stops done, in order: the stamps, where the Pajero waits, whether the airport is open) on every section, and `to` on `drive` (picked on the map: its stop opens by itself at the end of the road, no end card; `map` for the city road). A bare `nan-trip` link now opens the rental desk.
 
-- **The Pajero** (`trip/vehicles/pajero.ts`) is hollow now: see-through windows, the seats (Mommy at the wheel on the right, Daddy beside her, Kaylee behind Mommy), Kaylee's back door that swings open, a tailgate that lifts, folding wing mirrors, slots for three bags in the boot and Kaylee's seatbelt anchor and buckle. Still a box (the look is step 8).
+- **The Pajero** (`trip/vehicles/pajero.ts`) is hollow now: see-through windows, the seats (Mom at the wheel on the right, Dad beside her, Kaylee behind Mom), Kaylee's back door that swings open, a tailgate that lifts, folding wing mirrors, slots for three bags in the boot and Kaylee's seatbelt anchor and buckle. Still a box (the look is step 8).
 - **The rental desk** (`rental/`, [`rental?round=key|boot|belt`](#/world/thailand/nan-trip/rental)): the arrivals hall's counter under a lavender canopy, the car park beside it, Nan's green hills behind. The clerk (a puppy in a blue shirt and a scarf, a placeholder pick like the farm aunties) slides the key fob across the counter and it hops into Kaylee's hoof.
-  - **`key`:** every press (the fob, or the car) makes the Pajero chirp and wink its lights; press 1 folds its mirrors out, press 2 makes Daddy jump, press 3 pops the tailgate and everyone heads out.
-  - **`boot`:** her pink suitcase, Mommy's bag and Daddy's backpack: drag one to the boot (or tap it) and it thumps in, the car squats on its springs; let go elsewhere and it hops back. All in, the tailgate shuts.
-  - **`belt`:** her door swings open, she hops into her seat, Mommy and Daddy hop into theirs; the seatbelt glows: tap, click, the door shuts, vroom, and the Pajero drives out of the car park to the map.
+  - **`key`:** every press (the fob, or the car) makes the Pajero chirp and wink its lights; press 1 folds its mirrors out, press 2 makes Dad jump, press 3 pops the tailgate and everyone heads out.
+  - **`boot`:** her pink suitcase, Mom's bag and Dad's backpack: drag one to the boot (or tap it) and it thumps in, the car squats on its springs; let go elsewhere and it hops back. All in, the tailgate shuts.
+  - **`belt`:** her door swings open, she hops into her seat, Mom and Dad hop into theirs; the seatbelt glows: tap, click, the door shuts, vroom, and the Pajero drives out of the car park to the map.
   - **Pokes:** the clerk, the bell, the orchids, the rack of maps (one flaps out), the mountain poster (it rains), the family.
 - **The Nan map** (`map/`, [`map?stops=…`](#/world/thailand/nan-trip/map)): a diorama on a table, north up the screen, Laos past a row of border posts on the right (with its flag; Thailand's flies in Nan town). Doi Phu Kha in the middle with a cloud on it, the Nan River winding down with two bridges, cream roads in a loop (town → Pua's mushroom farm → over the mountain to Stop Time Cafe's rice steps → Bo Kluea's salt hut → down a little 3 of hairpins to Santi Suk → town) and the airport road.
   - **The toy is the little Pajero** (the real one at 7%): tap a place and it drives there along the roads (`net.ts`: the roads as one network of points 5 cm apart, the shortest way along them); or grab it and it follows her finger along the roads, never across the hills. Let go at a place, or hold it still at a stop 0.8 s, and it goes (holding still in town or at the airport doesn't: the roads to the stops run through town). Let go while it's still catching up and it goes on to the place at the end of its path.
@@ -465,7 +465,7 @@ Shapes in the toon look, no voices, no art. The trip is joined up from the renta
 > - The map's toy is **dragging the little Pajero** along the roads, as well as tapping a place (the plan only had the tap).
 > - At the viewpoint her finger **draws** the 3 (the step 1 greybox drew it by itself).
 > - The Nan town road is a little drive from the map and back, not part of the way in.
-> - Not yet: Mommy's “Home, or one more?” after two stops (a voice line, step 9).
+> - Not yet: Mom's “Home, or one more?” after two stops (a voice line, step 9).
 
 > **Known small things**
 >
@@ -473,29 +473,29 @@ Shapes in the toon look, no voices, no art. The trip is joined up from the renta
 
 ### Step 7, the trip loop ([done] · 2026-10-25)
 
-The whole trip joined up: Mommy's card, packing for the mountains, the plane north, the stops, the 3's photo, home to Agong's wall and the stamp.
+The whole trip joined up: Mom's card, packing for the mountains, the plane north, the stops, the 3's photo, home to Agong's wall and the stamp.
 
-- **Mommy's card** (`trip/legs/Ask.tsx`) has a third picture button, 🏔️🚙 the mountains. It shows only on Nan's own card (`tripChoices`): the house and the mall day still offer only the trips in the game, so Kaylee can't get in until step 10. The mall day's card now opens whichever trip she picks (`onTrip`), not only the boat.
+- **Mom's card** (`trip/legs/Ask.tsx`) has a third picture button, 🏔️🚙 the mountains. It shows only on Nan's own card (`tripChoices`): the house and the mall day still offer only the trips in the game, so Kaylee can't get in until step 10. The mall day's card now opens whichever trip she picks (`onTrip`), not only the boat.
 - **`NAN_TRIP`** (`activities/nan-trip/trip.ts`): packing with `pack.hint: 'cool'`, Aunty Sri's van, the x-ray belt, the window seat Bangkok → Nan (`PLACES.nan`, the seat-back map flies north), the goodbye with just the three of them, and coming home with the photo she picks (`gift: 'photo'`, the boat trip's way: Agong asks for his photo).
-- **Packing for the mountains** (`trip/packing.ts`, `trip/props.ts`): three new toy things only in her room on a cool trip, a pink raincoat, lavender rain boots and Mommy's mint umbrella; Mommy's hint (“It's cool and rainy in the mountains!”) makes them glint, and she tucks in the umbrella (“Mommy always packs an umbrella!”). No spare sun hat on this trip.
-- **Landing in Nan** (`trip/legs/plane.ts`, `landing: 'nan'`): rice fields and round green mountains with cloud on their tops rise past the window, Daddy cheers “Yay! We're in Nan!”, and the trip goes on to the rental desk (⏩ skips there).
-- **The 3's photo:** once she has drawn the 3 on the trip, Mommy says “Everybody say three!”, a flash and the print drops in, and the end card adds a big ✈️🏠.
+- **Packing for the mountains** (`trip/packing.ts`, `trip/props.ts`): three new toy things only in her room on a cool trip, a pink raincoat, lavender rain boots and Mom's mint umbrella; Mom's hint (“It's cool and rainy in the mountains!”) makes them glint, and she tucks in the umbrella (“Mom always packs an umbrella!”). No spare sun hat on this trip.
+- **Landing in Nan** (`trip/legs/plane.ts`, `landing: 'nan'`): rice fields and round green mountains with cloud on their tops rise past the window, Dad cheers “Yay! We're in Nan!”, and the trip goes on to the rental desk (⏩ skips there).
+- **The 3's photo:** once she has drawn the 3 on the trip, Mom says “Everybody say three!”, a flash and the print drops in, and the end card adds a big ✈️🏠.
 - **Home** (`activities/nan-trip/Loop.tsx`): the flight home, Aunty Sri's van at Agong's door, and her photos fan out: one per stop she did (`deck`, `pizza`, `salt`) and the 3, drawn in code for now (`photo.ts`, helpers shared with the mall day in `trip/postcard.ts`). The one she gives Agong hangs in the Nan trip's own frame, above the boat and mall photos, and tapping it says “Our trip to Nan!”. Then the stamp, with the trip's facts (`NAN_FACTS`).
-- **The boarding pass** between the kit's legs (🧳 ✈️ 🔑 🍄 🌾 🧂 🏠, the stops punched as she does them), and **resume and replays** (`useSaved('thailand-nan-trip')`): saying yes again offers 🧳 a new trip, keep going, or after a whole trip 🗺️ straight to the Nan map. A bare `nan-trip` link now opens Mommy's card.
+- **The boarding pass** between the kit's legs (🧳 ✈️ 🔑 🍄 🌾 🧂 🏠, the stops punched as she does them), and **resume and replays** (`useSaved('thailand-nan-trip')`): saying yes again offers 🧳 a new trip, keep going, or after a whole trip 🗺️ straight to the Nan map. A bare `nan-trip` link now opens Mom's card.
 - **Voices:** 11 new clips (`L.nan.trip`: the cool hint, the umbrella, landing, the 3's photo, the wall, six facts).
 - **QA:** `qa-screens` (`nan-invite`, `nan-pack`, `nan-goodbye`, `nan-airport`, `nan-fly`, `nan-land`, `nan-home`, `nan-loop-flat`). A robot in WebKit (iPad landscape) picked 🏔️🚙, packed the raincoat, boots and teddy, closed the suitcase (the umbrella went in) and reached the goodbye; watched the landing play out to the rental desk; and at home picked the 3's photo, gave it to Agong and saw everyone gather at the wall. No console errors.
 - **No flat fallbacks any more** (user feedback, 2026-10-25: we always have WebGL): every Thailand screen is WebGL2 only. The picture books (`Flat.tsx`, `LoopFlat.tsx`), the `?gl=off` switch and their tests and QA screens are gone; a lost GPU context still offers “Tap to wake”.
 
 ### Steps 8-10, the look, the voices and into the game ([done] · 2026-10-25)
 
-The user: “finish it up in this session, no more gates”. Every leg got its finished look and its voices, full QA ran, and the trip is in Thailand's `activities`: Mommy's card offers 🏔️🚙 everywhere, the passport has its slot, and it earns the pink mushroom sticker.
+The user: “finish it up in this session, no more gates”. Every leg got its finished look and its voices, full QA ran, and the trip is in Thailand's `activities`: Mom's card offers 🏔️🚙 everywhere, the passport has its slot, and it earns the pink mushroom sticker.
 
 - **The Pajero** (`trip/vehicles/pajero.ts`): a chunky silver Pajero Sport in code (black grille with chrome bars, slim lights, black arches and steps, roof rails, six-spoke wheels, shine strips on the silver); same API, so the rental desk and the map use it unchanged. The family rides inside; a pink elephant toy nods on the back shelf; front and rear wipers.
-- **The roads** (`drive/`, `trip/road/`): rain, sun or cloud rolled each drive (`weather` pins it), wet shiny roads with puddles that splash, low cloud on the hills, a sea of clouds above the sky road, the landmarks rebuilt, traffic and animals that change each drive. New pokes: Daddy (tap lines), the elephant toy, the wipers (faster). Voices `L.nan.drive`: Mommy's road lines, Daddy's reactions (at least 8 s apart), Sparkle's new things and stuck hints.
-- **The rental desk** (`rental/`): a painted sky and ridges, the hall (windows, garland, clock, bench, palm, the pink rental sign), the car park. The clerk (a puppy, new voice `clerk`) hands over the key; Sparkle says each beat; Daddy jumps; Mommy “Ready? Let's go!”. Kaylee looks out of her door at the belt.
-- **The Nan map** (`map/`): a wooden frame on a pink cloth, bigger landmarks, round trees, more paddies; in portrait the camera looks from the west so the board fills the screen. **Mommy's “Home, or one more?”** after two stops (🏠 / 🚙), “Time to fly home!” after three. The car waits in town after the city road.
-- **The mushroom farm** (`mushrooms/`): plank walls with daylight through the gaps, a dripping roof, plump sawdust bags with collars, frilly oyster clumps in grey, pink and gold, moss, a bulb with moths, the snoring dog; outside, the table with the mountain view, the stone oven. The aunty (a buffalo, new voice `farmer`) and Daddy talk; a giant mushroom picks on the third tap.
-- **The salt wells** (`salt/`, new `village.ts`): the hut with a cut-away tin roof, a mossy well, the mud stove and its chimney, the woodpile; across the wet street the wooden house with the painted Tai Lue couple, waving. A scooter in the drizzle, a hen and chicks. The aunty (a pony, new voice `saltaunty`) and Daddy talk.
+- **The roads** (`drive/`, `trip/road/`): rain, sun or cloud rolled each drive (`weather` pins it), wet shiny roads with puddles that splash, low cloud on the hills, a sea of clouds above the sky road, the landmarks rebuilt, traffic and animals that change each drive. New pokes: Dad (tap lines), the elephant toy, the wipers (faster). Voices `L.nan.drive`: Mom's road lines, Dad's reactions (at least 8 s apart), Sparkle's new things and stuck hints.
+- **The rental desk** (`rental/`): a painted sky and ridges, the hall (windows, garland, clock, bench, palm, the pink rental sign), the car park. The clerk (a puppy, new voice `clerk`) hands over the key; Sparkle says each beat; Dad jumps; Mom “Ready? Let's go!”. Kaylee looks out of her door at the belt.
+- **The Nan map** (`map/`): a wooden frame on a pink cloth, bigger landmarks, round trees, more paddies; in portrait the camera looks from the west so the board fills the screen. **Mom's “Home, or one more?”** after two stops (🏠 / 🚙), “Time to fly home!” after three. The car waits in town after the city road.
+- **The mushroom farm** (`mushrooms/`): plank walls with daylight through the gaps, a dripping roof, plump sawdust bags with collars, frilly oyster clumps in grey, pink and gold, moss, a bulb with moths, the snoring dog; outside, the table with the mountain view, the stone oven. The aunty (a buffalo, new voice `farmer`) and Dad talk; a giant mushroom picks on the third tap.
+- **The salt wells** (`salt/`, new `village.ts`): the hut with a cut-away tin roof, a mossy well, the mud stove and its chimney, the woodpile; across the wet street the wooden house with the painted Tai Lue couple, waving. A scooter in the drizzle, a hen and chicks. The aunty (a pony, new voice `saltaunty`) and Dad talk.
 - **Into the game** (`meta.ts`): from `inTheWorks` to `activities`, the pink mushroom sticker (`assets/pink-mushroom.webp`), the trip's facts on the passport, the README without “in the works”.
 - **QA:** layout-qa at iPad portrait, iPad landscape and iPhone landscape, then playtest-qa (mushrooms and the drives fun; salt, the map and the rental desk OK; nothing blocking). Fixed from it: portrait framing at the mushroom farm, the rental desk and the salt wells; heads under the top bar on iPhone; Kaylee in front of the pan; talk before the first touch (the aunties' hellos are shorter); finishing the rental desk saves the trip.
 
@@ -511,7 +511,7 @@ The ring under her finger is now a steering wheel that turns as she pushes; the 
 
 - **The wheel** (`Drive.tsx` `Stick`): a lavender steering wheel with a pink heart in the middle, centred where her finger went down, turned up to ±110° by how far she pushes sideways (`mountain.ts` `writeStick`). The corner wheel, the horn and the mirror's “Beep before the bend!” are gone (the blind car still beeps hello by itself; `traffic.honk` is unused now). A tap on the Pajero makes it hop with a boing.
 - **Steering harder turns sharper:** the point the Pajero aims at comes closer the further she steers from where it is (`ds`), so a full push swerves instead of drifting.
-- **The grass** (`GRASS` 4.6 m past the edge, `GRASS_CAP` 0.6 speed): the car sits on the hillside's own height and slope (`poseCar`), bounces more, thumps, throws green tufts (`grassy`), and Mommy and Daddy take turns (`L.nan.drive.grass`).
+- **The grass** (`GRASS` 4.6 m past the edge, `GRASS_CAP` 0.6 speed): the car sits on the hillside's own height and slope (`poseCar`), bounces more, thumps, throws green tufts (`grassy`), and Mom and Dad take turns (`L.nan.drive.grass`).
 - **Over the edge** (`edges`, `goOver`, `tumble`, `respawn`, `dropping`): only her finger pushing out takes it over: at a guard rail or the bridge, where the grass drops away (the 3 road), or past the grass's far side anywhere. It hops out, rolls, and vanishes in a poof (a splash in the river) when it meets the ground or after 2.2 s; 0.7 s later it drops from 9 m onto the road where it left, in her lane, with a boing. The camera follows halfway. Lines in turn: `over` (“Oh no!”, “Whoaaa! We can fly!”), `back` (“We're back!”, “Phew!”). Without her finger the rail still boings like a pinball bumper.
 - **Wiggling** (her push swapping sides 4 times in 3 s): the car rocks, `wiggle` (“Wibbly wobbly!”).
 - **The cloud** (`clouds.ts` `buildCloudLayer` `opacity`, 0.45 on the sky road; `AIR.inside` fog 10-85 m instead of 3-30 m): misty, and the road shows well ahead.
@@ -524,7 +524,7 @@ The user found the wheel far too twitchy on an iPhone and a trackpad (the Pajero
 - **Calmer wheel** (`mountain.ts`): `SLIDE` 7.5 → 4.2 m/s; a push curve (`STICK_CURVE` 1.6: a small push barely moves it, a full push still goes all the way); the push is smoothed (`STICK_EASE` 0.3 s, so jitters and quick back-and-forth twitches average out); the aim point never comes closer than 13 m (was 6 m, which swung the nose round and back); the camera follows the car's heading less (0.3, was 0.5).
 - **Still goes off on purpose:** a held full push reaches the grass in ~2.7 s and goes over in ~4-5 s (the steer target can run 3 m past the grass now, was 1.5 m). A jittery finger moves it about 1 m.
 - **Tyre squeal** (`screech`, `roadSfx.screech`): a quick, hard flick of the wheel (`SCREECH_FLICK` 5/s, at least 0.45 over, moving) squeals “eeeee”, puffs smoke off the back wheels and rocks the body; at most one every 0.7 s. A slow push never squeals. QA key `screeches`.
-- **No crayon** (`updateView`): from the viewpoint the camera lifts over the hill and the bends pop 1, 2, 3 by themselves (from 1.8 s, 0.75 s apart, sparkles on each), then the fanfare and “Three! You drove the three!”. The crayon, its line, tracing, the tap-to-draw-on, the 👆 along the road and “Draw the three with your finger!” are gone; Mommy's photo shows a grey road for the 3. `qa-motion` `nan-trace` is now `nan-three-view` (it just watches).
+- **No crayon** (`updateView`): from the viewpoint the camera lifts over the hill and the bends pop 1, 2, 3 by themselves (from 1.8 s, 0.75 s apart, sparkles on each), then the fanfare and “Three! You drove the three!”. The crayon, its line, tracing, the tap-to-draw-on, the 👆 along the road and “Draw the three with your finger!” are gone; Mom's photo shows a grey road for the 3. `qa-motion` `nan-trace` is now `nan-three-view` (it just watches).
 
 ### The feel lab: the user tunes the steering by hand ([done] · 2026-10-26)
 
@@ -562,7 +562,7 @@ From the user's photos of Route 1081, 1256 and a hill village: forest canopy on 
 
 > **⏳ Not yet (later steps)**
 >
-> The family in the car (Daddy's “Whoa!”, Mommy's lines, Sparkle's), the wipers, the dashboard elephant, random weather and traffic per replay, a sea-of-clouds look from above, the real Pajero, Mommy's “Home, or one more?” on the map (a voice line, step 9).
+> The family in the car (Dad's “Whoa!”, Mom's lines, Sparkle's), the wipers, the dashboard elephant, random weather and traffic per replay, a sea-of-clouds look from above, the real Pajero, Mom's “Home, or one more?” on the map (a voice line, step 9).
 
 > **Step 7: changed from the plan**
 >
@@ -580,7 +580,7 @@ Filled in at planning time, to be re-checked on the iPad.
 - 🤔 **Choices**: Which trip, what to pack, which stop next, where on the road, how silly to drive, which mushrooms, where to plant, the photo for Agong's wall.
 - 👉 **Pokeables**: At least five at every stop and on every road.
 - 🌱 **Grows**: The map's stamps; the basket fills; the valley turns from brown to shiny to green; the pan turns to salt.
-- 🎉 **Surprise**: Popping out above the cloud; the giant bouncy mushroom; Daddy in a mushroom hat; the salty face; the road drawing a 3.
+- 🎉 **Surprise**: Popping out above the cloud; the giant bouncy mushroom; Dad in a mushroom hat; the salty face; the road drawing a 3.
 - 🎓 **Learning by doing**: Keep left, buckle up; mushrooms grow in dark and wet; rice grows in water on steps; salt from a well and a fire; counting three; Nan on the map of Thailand.
 - 🔁 **Replay**: Stops in any order, other mushrooms, other weather and traffic, other photos.
 
@@ -606,7 +606,7 @@ The house's toon look, cooler and greener for the mountains: soft grey-lavender 
 
 ## 🗣️ Characters, voices and facts (for the builder)
 
-- **Mommy, Daddy and Kaylee:** their characters and voices exist (`ji`, `nick`). Mommy drives and says the road lines; Daddy reacts (and gets the mushroom hat, the brine on his foot).
+- **Mom, Dad and Kaylee:** their characters and voices exist (`ji`, `nick`). Mom drives and says the road lines; Dad reacts (and gets the mushroom hat, the brine on his foot).
 - **Sparkle** guides from the corner (`trip/legs/Guide.tsx`).
 - **Agong** at home (hello, and the photo).
 - **New speakers**, cast like the airport officer: the rental **clerk**, the mushroom **farmer** aunty, the **salt** aunty (a northern accent, kind and funny). Animals don't talk: moos, clucks, croaks.

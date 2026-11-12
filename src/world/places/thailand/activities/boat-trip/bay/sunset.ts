@@ -1,5 +1,5 @@
 // The sunset ride (section `sunset`), the payoff on the way home: once she has been to both stops, has her Nail Island
-// photo and drives away from the beach, the sky turns pink and gold and the rock towers glow (Mommy: "Look! The sky is
+// photo and drives away from the beach, the sky turns pink and gold and the rock towers glow (Mom: "Look! The sky is
 // turning pink!").
 // Out here, only at sunset, a finless porpoise surfaces beside the boat (a real, rare visitor to the bay: the secret
 // sighting, the ninth sticker). A glow waits at the pier; she drives in, the family hops out onto the boards, and the

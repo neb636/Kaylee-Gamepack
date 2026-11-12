@@ -9,8 +9,8 @@
 //   3. the open sea: the low hero shot skimming the water, flying fish leaping beside the boat;
 //   4. slowing in to Na Dan: a crane up, the pier and the beach behind; they tie up and hop off onto the pier (the
 //      game's camera again).
-// Things still poke while it plays (every tap gets a reaction): Kaylee (hooves up, whee), Mommy (her sun hat flies
-// up, she catches it), Daddy (his cap blows off and he catches it), the captain (the horn, and the boat wiggles), the
+// Things still poke while it plays (every tap gets a reaction): Kaylee (hooves up, whee), Mom (her sun hat flies
+// up, she catches it), Dad (his cap blows off and he catches it), the captain (the horn, and the boat wiggles), the
 // pink flag at the stern, the life ring, the ferry (it toots, they wave), the flying fish (they flip). ⏩ skips on to
 // the pier.
 //
@@ -140,8 +140,8 @@ const B = L.samet.trip.boat
 
 export const BOAT_ANCHORS: AnchorInfo[] = [
   { id: 'kaylee', label: 'You', kind: 'thing' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
   { id: 'captain', label: 'The captain', kind: 'thing' },
   { id: 'flag', label: 'The pink flag', kind: 'thing' },
   { id: 'ring', label: 'The life ring', kind: 'thing' },
@@ -210,7 +210,7 @@ function buildBoat(bag: Bag, stripe: string = PAL.hotpink) {
     P.rbox(1.0, 0.95, 0.8, 0.14, '#F6F3FA', { at: [0.45, FLOOR + 0.47, 1.3] }),
     P.rbox(1.1, 0.42, 0.07, 0.03, '#9FD5F2', { at: [0.45, FLOOR + 1.12, 1.66], rot: [-0.45, 0, 0] }),
     P.torus(0.17, 0.035, '#5C5468', { at: [0.45, FLOOR + 1.05, 0.88], rot: [0.9, 0, 0] }),
-    // The back bench (Mommy and Daddy) and the side benches (Kaylee).
+    // The back bench (Mom and Dad) and the side benches (Kaylee).
     P.rbox(2.0, 0.42, 0.62, 0.1, cushion, { at: [0, BENCH - 0.2, -2.55] }),
     P.rbox(2.0, 0.55, 0.14, 0.06, cushion, { at: [0, BENCH + 0.16, -2.9] }),
     ...[-1, 1].map((s) => P.rbox(0.5, 0.38, 2.6, 0.08, cushion, { at: [s * 0.8, BENCH - 0.2, -0.45] })),
@@ -223,7 +223,7 @@ function buildBoat(bag: Bag, stripe: string = PAL.hotpink) {
   ]
   body.add(solid(merge(parts), bag, 2.5))
   // The pink flag at the stern (it flutters). Its pole stands in a socket on the back corner of the left gunwale, out
-  // past the end of the back bench, so it clears Mommy's head and reaches all the way down to the boat.
+  // past the end of the back bench, so it clears Mom's head and reaches all the way down to the boat.
   const flag = new Group()
   flag.position.set(-(HALF_W - 0.07), FLOOR + 0.42, STERN_Z + 0.12)
   flag.add(solid(merge([P.cyl(0.07, 0.08, 0.14, '#D8DEEA', { at: [0, 0.07, 0] }, 8), P.cyl(0.03, 0.03, 2.3, '#D8DEEA', { at: [0, 1.15, 0] }, 6)]), bag, 2))
@@ -409,7 +409,7 @@ export class SametSpeedboat implements World3D {
     this.route = new CatmullRomCurve3([P0, new Vector3(P0.x + 1, 0, P0.z + 30), new Vector3(P0.x + 18, 0, P0.z + 90), new Vector3(mid.x, 0, mid.z), new Vector3(a2.x, 0, a2.z), new Vector3(a1.x, 0, a1.z), new Vector3(dock.x, 0, dock.z)], false, 'centripetal')
     this.len = this.route.getLength()
 
-    // ---- The boat, the captain at the wheel, Mommy and Daddy on the back bench, Kaylee on the side bench.
+    // ---- The boat, the captain at the wheel, Mom and Dad on the back bench, Kaylee on the side bench.
     this.boat = buildBoat(bag)
     scene.add(this.boat.root)
     this.shadow = blobShadow(1.5, bag)
@@ -430,7 +430,7 @@ export class SametSpeedboat implements World3D {
     this.boat.body.add(this.kaylee.root)
     this.kaylee.place(0.8, BENCH, -0.4, 0)
     this.kaylee.setPose('sit')
-    // Daddy's cap (blows off when she pokes him): his face's top.
+    // Dad's cap (blows off when she pokes him): his face's top.
     const nf = this.nick.rig.face
     this.nickCap = new Group()
     this.nickCap.add(solid(merge([P.sphere(nf.R * 0.98, '#3F6FB8', { scale: [1, 0.55, 1] }, 14), P.box(nf.R * 1.1, 0.03, nf.R * 0.9, '#3F6FB8', { at: [0, -nf.R * 0.2, nf.R * 0.85] })]), bag, 2))
@@ -605,7 +605,7 @@ export class SametSpeedboat implements World3D {
         if (this.v > 1) S.engine(this.v)
       }
     } else if (this.phase === 'dock') {
-      // Tied up: Kaylee hops onto the pier, Mommy and Daddy after her.
+      // Tied up: Kaylee hops onto the pier, Mom and Dad after her.
       if (this.phaseT > 0.8 && this.kaylee.root.parent !== this.scene) this.hopOff()
       if (this.phaseT > 2.6) {
         this.setPhase('off')
@@ -841,7 +841,7 @@ export class SametSpeedboat implements World3D {
     this.kaylee.setWind(wind)
     this.nick.setWind(wind)
     this.ji.setWind(wind)
-    // Daddy's cap blows off and he catches it.
+    // Dad's cap blows off and he catches it.
     if (this.nickCap && this.capT >= 0) {
       this.capT += dt
       const k = this.capT / 1.1
@@ -855,7 +855,7 @@ export class SametSpeedboat implements World3D {
         S.pop()
       }
     }
-    // Mommy holds her sun hat on (it lifts in the wind, she grabs it).
+    // Mom holds her sun hat on (it lifts in the wind, she grabs it).
     if (this.hatT >= 0) {
       this.hatT += dt
       const k = clamp(this.hatT / 1, 0, 1)

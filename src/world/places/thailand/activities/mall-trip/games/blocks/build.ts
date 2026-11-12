@@ -1,6 +1,6 @@
 // Little Land, built from simple shapes in the house's toon look (greybox: no generated art). The flower mats, a low
 // foam wall along the back (paler than the bricks she plays with), the brick box, the easel with the picture card and
-// its three stars, the foam ball and the foam rocking elephant, round 3's ribbon at Daddy's height, the chedi's gold
+// its three stars, the foam ball and the foam rocking elephant, round 3's ribbon at Dad's height, the chedi's gold
 // spire and the elephant's face. The bricks are the hall's (hall/build.ts): the same rounded box in the same colors.
 import { Color, Group, Mesh, MeshBasicMaterial, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../../engine3d/dispose'
@@ -28,7 +28,7 @@ export interface Built {
   wall: Group
   /** Each wall brick's middle and color (a tap pops the nearest out). */
   wallBricks: { at: [number, number, number]; color: string }[]
-  /** Round 3's ribbon across the build at Daddy's height, with its flag. */
+  /** Round 3's ribbon across the build at Dad's height, with its flag. */
   ribbon: Group
   /** The chedi's gold spire, and the elephant's face (its ears flap, its trunk swings). */
   spire: Group
@@ -204,7 +204,7 @@ export function buildLittleLand(bag: Bag): Built {
   rocker.rotation.y = -0.5
   add(rocker, 'rocker')
 
-  // ---- Round 3's ribbon: a dashed pink line across the build at Daddy's height, a flag at his end ----
+  // ---- Round 3's ribbon: a dashed pink line across the build at Dad's height, a flag at his end ----
   const ribbon = add(
     solid(
       merge([

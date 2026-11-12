@@ -208,7 +208,7 @@ export function behind(counts: Record<EaterId, number>): EaterId[] {
   return min === max ? [] : EATERS.filter((e) => counts[e] === min)
 }
 
-/** Round the table, one each in turn (Mommy, Daddy, Kaylee), as the `shared` link sets it up. */
+/** Round the table, one each in turn (Mom, Dad, Kaylee), as the `shared` link sets it up. */
 export const ROUND: EaterId[] = ['ji', 'nick', 'kaylee']
 
 export const turnY = (a: number) => new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), a)

@@ -104,7 +104,7 @@ const synth = {
   spin: () => noise(0.35, 0.05, 'bandpass', 900, 2600, 0, 1.5),
   /** The glass filled up again. */
   pourMilk: () => noise(0.6, 0.04, 'lowpass', 1200, 700, 0, 0.8),
-  /** A happy "ahh" after Daddy's coffee. */
+  /** A happy "ahh" after Dad's coffee. */
   ahh: () => tone(330, 260, 0.45, 0.06, 'triangle'),
   /** A bundle banged down on the threshing board: THWACK, and the grains rattling into the basket. */
   thwack: (k = 0) => {
@@ -163,7 +163,7 @@ const synth = {
     const f = 523 * Math.pow(2, (back ? 9 - i * 1.5 : i * 2) / 12)
     tone(f, f, 0.35, 0.03, 'sine', i * 0.05)
   }),
-  /** Splash! Daddy got wet. */
+  /** Splash! Dad got wet. */
   wet: () => {
     noise(0.3, 0.07, 'bandpass', 1400, 600, 0, 1)
     tone(500, 260, 0.2, 0.04, 'sine', 0.04)

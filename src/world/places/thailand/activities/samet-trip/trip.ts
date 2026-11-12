@@ -1,5 +1,5 @@
-// The Koh Samet trip as a trip (trip/types.ts): Mommy, Daddy and Kaylee pack for the sea (the swimsuit, the sun hat,
-// the floaties, the bucket), Mommy drives them to Ban Phe pier in her Veloz, and the speedboat takes them over to Na
+// The Koh Samet trip as a trip (trip/types.ts): Mom, Dad and Kaylee pack for the sea (the swimsuit, the sun hat,
+// the floaties, the bucket), Mom drives them to Ban Phe pier in her Veloz, and the speedboat takes them over to Na
 // Dan pier. Coming home, a photo of the island goes on Agong's wall by itself (the trips end on the Thailand map). Pure
 // data, and what the trip saves (no three.js: sections.ts and the map read it).
 import { savedKey } from '../../../../../sdk/hooks'
@@ -10,7 +10,7 @@ export const SAMET_TRIP: TripDef = {
   id: 'samet-trip',
   who: ['ji', 'nick'],
   pack: { hint: 'sun', fits: 5 },
-  // (Mommy drives to Ban Phe: no ride, the car pulls away and they're at the pier, like the mall day.)
+  // (Mom drives to Ban Phe: no ride, the car pulls away and they're at the pier, like the mall day.)
   legs: [{ kind: 'car', driver: 'ji', car: 'veloz' }],
   caps: { fly: 0 },
   arrive: 'speedboat',

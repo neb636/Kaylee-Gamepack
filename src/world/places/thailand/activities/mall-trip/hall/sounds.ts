@@ -9,7 +9,7 @@ export const hallSfx = {
   ...sfx,
   /** A shop's door: the little bell over it. */
   shopBell: () => [0, 0.12].forEach((d, i) => tone(i ? 2350 : 1870, i ? 2340 : 1860, 0.5, 0.05, 'sine', d)),
-  /** Daddy's tummy: a long low grumble. */
+  /** Dad's tummy: a long low grumble. */
   rumble: () => {
     tone(70, 52, 0.7, 0.16, 'sawtooth')
     tone(95, 60, 0.5, 0.08, 'triangle', 0.35)

@@ -1,5 +1,5 @@
 // Cafe & Cake in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md, "4. Cafe & Cake"), greybox:
-// shapes and sounds, with the voices (lines.ts L.mall.cafe). Kaylee in her apron and chef's hat stands at the counter; Daddy and Mommy are the
+// shapes and sounds, with the voices (lines.ts L.mall.cafe). Kaylee in her apron and chef's hat stands at the counter; Dad and Mom are the
 // customers at its end.
 //
 // The toy is the blender:
@@ -10,7 +10,7 @@
 //     the cup; a cup can overflow (it drips). Each cup has a pull round it, so the stream finds it on an iPhone too.
 //     A tap on the jar pours for her.
 //   - Whipped cream and a straw on top: the straw is "done", and the cup goes to whoever ordered it. They drink it,
-//     happily, whatever it is; a drink that matches the order gets an extra yum. Ice in it: Daddy gets brain freeze.
+//     happily, whatever it is; a drink that matches the order gets an extra yum. Ice in it: Dad gets brain freeze.
 // Three rounds, a step deeper each: (1) blend anything, every color is right; (2) orders in picture bubbles (pink:
 // strawberry and banana); (3) Thai drinks, two cups at once: cha yen (orange tea poured over ice, milk on top from the
 // milk jug, poured the same way) and a coconut shake. Each finished drink lines up on the shelf.
@@ -65,8 +65,8 @@ export const CAFE_ANCHORS: AnchorInfo[] = [
   { id: 'cake', label: 'Cake stand', kind: 'thing' },
   { id: 'tea', label: 'Tea set', kind: 'thing' },
   { id: 'family:kaylee', label: 'You', kind: 'family' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
 ]
 
 /** Pixels: what she holds sits this far above her finger (so the finger doesn't hide it). */
@@ -221,7 +221,7 @@ export class CafeStage extends Stage {
     this.round = start.round
     this.kitchen = buildKitchen(bag)
     scene.add(this.kitchen.root)
-    // ---- Kaylee in her apron and chef's hat; Daddy and Mommy are the customers ----
+    // ---- Kaylee in her apron and chef's hat; Dad and Mom are the customers ----
     const { kaylee, members } = this.makeFamily(['nick', 'ji'])
     this.kaylee = kaylee
     kaylee.wear(['apron', 'chef-hat'])
@@ -290,7 +290,7 @@ export class CafeStage extends Stage {
     if (announce) this.cev.round(r)
     this.setTray(ROUNDS[r].tray)
     const def = ROUNDS[r]
-    // Sparkle says what's new this round (and Daddy says what he'd like).
+    // Sparkle says what's new this round (and Dad says what he'd like).
     this.after(0.3, () => {
       if (r === 1) {
         this.cev.say(C.open)
@@ -360,7 +360,7 @@ export class CafeStage extends Stage {
     g.drinking = null
     const c = d.c
     const head = this.headOf(g)
-    // A yum in their own voice (a match, or anything in round 1), a happy surprise, or Daddy's brain freeze.
+    // A yum in their own voice (a match, or anything in round 1), a happy surprise, or Dad's brain freeze.
     const yum = C.yum[g.id]
     this.cev.say(d.ice && g.id === 'nick' ? C.freeze : d.match ? yum[this.yumN[g.id]++ % yum.length] : C.funny[g.id])
     if (d.match && c.order.want.length) {

@@ -1,11 +1,11 @@
-// Mommy's rental car for the mall day (Dad, 2026-10-20; grey since 2026-10-22): a grey Toyota Veloz, a 7-seat MPV. A
+// Mom's rental car for the mall day (Dad, 2026-10-20; grey since 2026-10-22): a grey Toyota Veloz, a 7-seat MPV. A
 // toy model in the house's look that still reads as the real car: the Veloz's face (slim swept headlights joined by a
 // piano-black bar with the Toyota badge, the big trapezoid lower grille, black corner intakes, a silver skid plate),
 // its "floating" roof (black pillars all round, the rear quarter window kicking up into a black D-pillar), round wheel
 // arches over big two-tone alloys, roof rails and a shark-fin aerial, and at the back the full-width light bar across
 // the tailgate with the tail lamps wrapping round the corners. Four hinged doors. Right-hand drive, as in every Thai
-// car: Mommy drives on the right, Daddy sits in front beside her and Kaylee in the back by the window. Big see-through
-// windows, so whoever is inside shows. Faces +z. The roof is high enough for Daddy's horn with everyone sitting up (a
+// car: Mom drives on the right, Dad sits in front beside her and Kaylee in the back by the window. Big see-through
+// windows, so whoever is inside shows. Faces +z. The roof is high enough for Dad's horn with everyone sitting up (a
 // toy's proportions, not the real 1.7 m).
 import { Group, Mesh, MeshBasicMaterial } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
@@ -28,7 +28,7 @@ export interface Veloz {
   root: Group
   /** Bounces on the road. */
   body: Group
-  /** Seat groups (local to `body`): Mommy at the wheel on the right, Daddy beside her, Kaylee in the back by the
+  /** Seat groups (local to `body`): Mom at the wheel on the right, Dad beside her, Kaylee in the back by the
    *  window, and a spare back seat. */
   seats: { driver: Group; nick: Group; kaylee: Group; spare: Group }
   /** The four hinged doors, each pivoting at its front edge (rotation.y). */

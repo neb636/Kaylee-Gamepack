@@ -135,7 +135,7 @@ export function buildTool(item: TrayItem, bag: Bag): Tool {
   return tool
 }
 
-/** A bow (for the tray, for a patient's head, for Daddy): two loops and a knot, about 0.2 m across × `k`. */
+/** A bow (for the tray, for a patient's head, for Dad): two loops and a knot, about 0.2 m across × `k`. */
 export function buildBowGeometry(color: string, k: number) {
   return merge([...[-1, 1].map((s) => P.cone(0.075 * k, 0.12 * k, color, { at: [s * 0.065 * k, 0, 0], rot: [0, 0, s * Math.PI / 2], scale: [1, 1, 0.55] })), P.sphere(0.04 * k, color, {})])
 }

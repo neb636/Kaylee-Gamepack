@@ -2,10 +2,10 @@
 // meters: where everything stands, the tools on the trolley each round, and the kids who come in round 3. Pure data
 // (no three.js).
 //
-// Seen straight on (the camera looks toward -z, at Daddy's head), left to right:
+// Seen straight on (the camera looks toward -z, at Dad's head), left to right:
 //
-//   back wall:   [pole]   [jar shelf]      [   the big mirror   ]        [waiting bench: Mommy, her phone]
-//   floor:          Kaylee on her           Daddy in the big chair
+//   back wall:   [pole]   [jar shelf]      [   the big mirror   ]        [waiting bench: Mom, her phone]
+//   floor:          Kaylee on her           Dad in the big chair
 //                   step stool                (a cape round him)
 //   front:                  ═══════ the tool trolley along the bottom ═══════
 //   (checkered floor)
@@ -15,15 +15,15 @@ export type V3 = [number, number, number]
 export type Round = 1 | 2 | 3
 
 export const ROOM = { x0: -2.6, x1: 2.8, back: -1.5, front: 2.4, height: 3.2 }
-/** The big chair: Daddy (or a kid on a booster) sits in it facing her; it spins round to the mirror for the reveal. */
+/** The big chair: Dad (or a kid on a booster) sits in it facing her; it spins round to the mirror for the reveal. */
 export const CHAIR = { x: 0, z: 0, seat: 0.62, booster: 0.3 }
 export const MIRROR = { x: 0, y0: 0.95, y1: 2.85, w: 1.7, z: ROOM.back + 0.04 }
 /** Kaylee stands on a step stool beside the chair, so she can reach his head. */
 export const STOOL = { x: -0.92, z: -0.1, top: 0.32 }
 export const KAYLEE_FACE = 58
-/** Mommy waits on the bench, her phone ready for the photo. */
+/** Mom waits on the bench, her phone ready for the photo. */
 export const MOMMY = { x: 2.25, z: -1.0, face: -20 }
-/** The waiting bench at the back on the right: Mommy waits here, and Daddy sits beside her in round 3. */
+/** The waiting bench at the back on the right: Mom waits here, and Dad sits beside her in round 3. */
 export const BENCH = { x: 1.75, z: -1.0, seat: 0.45, /** Root height of someone sitting: the seat's top, plus the sit pose's 0.1 sink, so they rest on it. */ sit: 0.58, spots: [1.65, 1.95, 2.25] }
 export const POLE = { x: -2.05, y: 1.6, z: -1.2 }
 /** The shelf beside the mirror with a jar of blue comb water (it bubbles) and a spray of flowers. */
@@ -59,7 +59,7 @@ export const ALL_ITEMS = ROUND2
 
 export const TOOL_ICONS: Record<ToolId, string> = { tonic: '🧴', scissors: '✂️', comb: '🪮', spray: '🌈', dryer: '💨', bow: '🎀', clip: '⭐' }
 
-/** Strokes of hair work (a drag through it, a tap's go) before the mirror glows: on Daddy each round, on each kid. */
+/** Strokes of hair work (a drag through it, a tap's go) before the mirror glows: on Dad each round, on each kid. */
 export const ENOUGH = 8
 export const ENOUGH_KID = 5
 

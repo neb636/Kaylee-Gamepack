@@ -1,9 +1,9 @@
 // Her chocolate milk and the cafe's things, as greybox toys in the house's look:
-//   - The glass (hers, and Daddy's for his iced coffee): the drink inside is the mall cafe's liquid (mall-trip/games/
+//   - The glass (hers, and Dad's for his iced coffee): the drink inside is the mall cafe's liquid (mall-trip/games/
 //     cafe/liquid.ts), stripes of milk and chocolate that melt into one as she stirs. Up to three ice cubes, and a
 //     slot where a straw stands. The same glass stands on the rail post in the yard, where Khanom sneaks sips.
 //   - On the tray: the milk jug (the mall cafe's), the chocolate squeeze bottle, a long spoon, three straws (pink,
-//     purple, yellow), a bowl of ice and Daddy's coffee pot. The jug, the bottle and the pot are built round their
+//     purple, yellow), a bowl of ice and Dad's coffee pot. The jug, the bottle and the pot are built round their
 //     middles, so they tip round her finger; the spoon stands on its bowl, a straw on its bottom end.
 import { Color, Group, Mesh, Vector3, type ShaderMaterial } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
@@ -155,7 +155,7 @@ export const iceCube = (bag: Bag) => {
   return g
 }
 
-/** Daddy's coffee pot: a glass carafe of dark coffee with a black lid, its spout on the right and handle on the left
+/** Dad's coffee pot: a glass carafe of dark coffee with a black lid, its spout on the right and handle on the left
  *  (built round its middle, like the milk jug). */
 export function coffeePot(bag: Bag) {
   const g = new Group()

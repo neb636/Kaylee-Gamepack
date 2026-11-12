@@ -1,5 +1,5 @@
 // The Nan map's screen: the 3D diorama (map3d.ts) with its tap targets, the 👆 after a while with nothing touched,
-// Sparkle in the corner (trip/legs/Guide.tsx; Mommy talks there too), and Mommy's "Home, or one more?" after two stops:
+// Sparkle in the corner (trip/legs/Guide.tsx; Mom talks there too), and Mom's "Home, or one more?" after two stops:
 // 🏠 drives the little Pajero to the airport (home, down the 3 road), 🚙 lets her pick another stop.
 // A place picked (the little Pajero got there): `onGo` opens its drive.
 import { AnimatePresence, motion } from 'motion/react'
@@ -99,7 +99,7 @@ export function NanMap({ stops, from, cup = false, onGo }: Props) {
         </button>
       )}
       {mode === 'webgl' && <TripGuide ref={guideRef} />}
-      {/* Mommy's "Home, or one more?": 🏠 home (the airport), 🚙 one more stop. */}
+      {/* Mom's "Home, or one more?": 🏠 home (the airport), 🚙 one more stop. */}
       <AnimatePresence>
         {ask && mode === 'webgl' && (
           <motion.div key="ask" style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 18px)', bottom: 'calc(var(--safe-bottom) + 18px)', display: 'flex', gap: 'clamp(14px, 3vmin, 24px)', zIndex: 34 }}>

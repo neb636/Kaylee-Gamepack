@@ -183,7 +183,7 @@ export const SEAWARD = Math.atan2(BAY.n.x, BAY.n.z)
 export const HUT = bay(-3, -9)
 /** Where the jet ski waits at the water's edge, nose to the sea. */
 export const LAUNCH = bay(0, 1.2)
-/** Mommy watching at the water's edge (she gets splashed). */
+/** Mom watching at the water's edge (she gets splashed). */
 export const MOMMY = bay(-9, -1.2)
 /** The rope square, per round, in the beach's frame: u from `w` to `e` along the sand, out to `out` meters. Its beach
  *  side is the sand, so the rope only shows where it's in the water. Bigger waves need more room; the race opens it

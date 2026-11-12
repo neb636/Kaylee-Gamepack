@@ -1,6 +1,6 @@
-// Daddy's tummy rumbled: Mommy asks "Hungry? Pizza time?" with two big picture buttons that need no reading, 🍕 to go
-// and eat or 🛝 to play some more (nothing lost: she asks again after another mini game). Styled like Mommy's trip
-// card (trip/legs/Ask.tsx). Mommy says it as the card comes up (lines.ts `L.mall.hall.pizza`), and "OK! A little more!"
+// Dad's tummy rumbled: Mom asks "Hungry? Pizza time?" with two big picture buttons that need no reading, 🍕 to go
+// and eat or 🛝 to play some more (nothing lost: she asks again after another mini game). Styled like Mom's trip
+// card (trip/legs/Ask.tsx). Mom says it as the card comes up (lines.ts `L.mall.hall.pizza`), and "OK! A little more!"
 // to More play; the card shows the words for Dad.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect } from 'react'
@@ -40,11 +40,11 @@ export function Hungry({ open, onPizza, onPlay }: Props) {
           style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom, 0px) + 16px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, padding: '0 16px', zIndex: 50, pointerEvents: 'none' }}
         >
           <motion.div initial={{ scale: 0.85 }} animate={{ scale: 1 }} style={{ display: 'flex', alignItems: 'center', gap: 12, maxWidth: 'min(620px, 100%)', background: 'rgba(255,255,255,0.97)', borderRadius: 'var(--radius)', padding: '10px 20px 10px 10px', boxShadow: 'var(--shadow)' }}>
-            <motion.span animate={{ rotate: [0, -12, 10, 0] }} transition={{ repeat: Infinity, duration: 1.8, repeatDelay: 1 }} style={{ flexShrink: 0, display: 'grid', placeItems: 'center', width: 64, height: 64, borderRadius: 32, background: '#FF8FB8', fontSize: 34, border: '3px solid #fff' }} title="Mommy">
+            <motion.span animate={{ rotate: [0, -12, 10, 0] }} transition={{ repeat: Infinity, duration: 1.8, repeatDelay: 1 }} style={{ flexShrink: 0, display: 'grid', placeItems: 'center', width: 64, height: 64, borderRadius: 32, background: '#FF8FB8', fontSize: 34, border: '3px solid #fff' }} title="Mom">
               🦄
             </motion.span>
             <span style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15 }}>
-              <small style={{ fontWeight: 700, opacity: 0.6, fontSize: 14 }}>Mommy</small>
+              <small style={{ fontWeight: 700, opacity: 0.6, fontSize: 14 }}>Mom</small>
               <span style={{ fontWeight: 700, fontSize: 'clamp(20px, min(3.4vw, 3.6vh), 30px)' }}>{lineText(L.mall.hall.pizza)}</span>
             </span>
           </motion.div>

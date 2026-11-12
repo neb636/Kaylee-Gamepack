@@ -18,7 +18,10 @@ Address the user directly as "you" and "your" in chat, PR titles and description
 other generated material. Don't call the user "Dad" or narrate their role in the third person (for example,
 "Dad says" or "Dad needs to pick"). Write "Your feedback" or "Choose one" instead. In internal guidance,
 "the user" means the person directing the work; "you" means the agent. Family roles and character names in the
-game, such as Daddy, stay as written.
+game stay as written.
+
+**In the game, her parents are "Dad" and "Mom", never "Daddy" or "Mommy"**: in spoken lines, name tags, labels,
+buttons, aria text and sections. (The user asked for this 2026-11-12.)
 
 ## How we work (read this first)
 

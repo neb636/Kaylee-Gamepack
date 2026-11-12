@@ -1,7 +1,7 @@
 // Poses held on top of a character's usual life (breathing, blinking, hops): written onto their rig after their own
 // update each frame (assigned, never added: a family member's update doesn't reset what it doesn't move). The Nail
-// Island photo's four (wave, cheer, heart, silly: Kaylee picks one, Mommy and Daddy copy her), Kaylee's hands on the
-// longtail's tiller, Daddy pointing, Mommy holding up her phone for a selfie.
+// Island photo's four (wave, cheer, heart, silly: Kaylee picks one, Mom and Dad copy her), Kaylee's hands on the
+// longtail's tiller, Dad pointing, Mom holding up her phone for a selfie.
 // Arm pivots: rotation.x < 0 swings an arm forward; rotation.z > 0 lifts the right arm out and up (the left arm < 0).
 import type { Rig } from '../../../../../engine3d/characters/animal'
 import type { PoseKind } from './part'

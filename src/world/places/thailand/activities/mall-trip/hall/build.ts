@@ -170,7 +170,7 @@ export function buildHall(bag: Bag, playFrame = false): HallBuilt {
     bulbs[k].push(m)
   }
 
-  // ---- Mommy's bench ----
+  // ---- Mom's bench ----
   const [bx, bz] = BENCH.at
   add(solid(merge([P.rbox(1.5, 0.12, 0.5, 0.05, HL.pad5, { at: [bx, 0.42, bz] }), P.rbox(1.5, 0.5, 0.1, 0.05, HL.pad5, { at: [bx, 0.7, bz - 0.24] }), ...[-0.62, 0.62].map((x) => P.box(0.08, 0.4, 0.4, '#D8D2E6', { at: [bx + x, 0.2, bz] }))]), bag, 2))
 

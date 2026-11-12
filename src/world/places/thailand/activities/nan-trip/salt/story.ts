@@ -12,7 +12,7 @@
 //     dark. She holds her finger over the food and salt sprinkles from her hand where it points: the soup pot, Pa Kai's
 //     jar of water (then her eggs hop in, one by one: salty water makes salty eggs), and each of Yai Nak's three fish.
 //     Each cook tastes ("Aroi mak!"), the lantern over their stall lights up. Keep sprinkling and they pucker up.
-//   the party (film `party`): the string lights come on one by one, Pa Kluea says thank you, Daddy has a slurp, everyone
+//   the party (film `party`): the string lights come on one by one, Pa Kluea says thank you, Dad has a slurp, everyone
 //     cheers. Then the real salt video and the end card.
 //
 // The hut (salt3d.ts) owns the salt game; this file owns the cooks, the memory's grandma and little Pa Kluea, the salt

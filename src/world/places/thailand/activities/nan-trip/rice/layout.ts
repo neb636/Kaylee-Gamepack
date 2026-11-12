@@ -12,7 +12,7 @@
 //   banana┌──────────┐  ║  ┌──────────┐   the straw pile
 // nursery │ paddy A  ├G ║ G┤ paddy B  │   the drying rack
 //         └──────────┘  ║  └──────────┘
-//   ══════════ the plank boardwalk (Kaylee and Daddy start here), its bridge over the channel ══════   the basket
+//   ══════════ the plank boardwalk (Kaylee and Dad start here), its bridge over the channel ══════   the basket
 
 export type V3 = [number, number, number]
 
@@ -198,7 +198,7 @@ export const RAIL_Z = -1.35
 export const STOOLS = { kaylee: [-0.36, 0.74, -0.95] as V3, nick: [0.38, 0.62, -0.95] as V3 }
 export const HIGH_TABLE: V3 = [0, 0.84, -0.42]
 export const MOMMY_AT: V3 = [1.3, 0, -0.95]
-/** Where Mommy's photo is taken from (in front of them, the farm behind). */
+/** Where Mom's photo is taken from (in front of them, the farm behind). */
 export const PHOTO_FROM: V3 = [0.25, 1.2, 1.5]
 export const CHIME: V3 = [-1.5, 2.6, -1.2]
 /** Sips in a glass of pink milk. */

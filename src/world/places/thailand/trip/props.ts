@@ -173,7 +173,7 @@ export function buildItem(id: string, bag: Bag): Group {
       break
     }
     case 'camera': {
-      // Daddy's chunky camera: a purple body with a viewfinder hump, a big lens (gold rings, blue glass, a shine), a
+      // Dad's chunky camera: a purple body with a viewfinder hump, a big lens (gold rings, blue glass, a shine), a
       // flash, a pink button and loops for the strap.
       add(
         P.rbox(0.26, 0.16, 0.12, 0.035, '#6B5BA8', { at: [0, 0.08, 0] }),
@@ -259,7 +259,7 @@ export function buildItem(id: string, bag: Bag): Group {
       break
     }
     case 'umbrella': {
-      // Mommy's mint umbrella, rolled up and lying down: the furled canopy with a pink strap, the pointy tip and a
+      // Mom's mint umbrella, rolled up and lying down: the furled canopy with a pink strap, the pointy tip and a
       // curly butter handle.
       add(
         P.cone(0.05, 0.36, PAL.mint, { at: [0.03, 0.05, 0], rot: [0, 0, -Math.PI / 2], scale: [1, 1, 0.9] }, 14),

@@ -1,5 +1,5 @@
-// The cafe's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet: Daddy and
-// Mommy slurp, aah and laugh.
+// The cafe's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet: Dad and
+// Mom slurp, aah and laugh.
 import { noise, tone } from '../../../../../../kit/sfx'
 import { sfx } from '../../../../sfx'
 

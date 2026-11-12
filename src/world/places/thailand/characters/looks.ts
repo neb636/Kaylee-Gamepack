@@ -1,5 +1,5 @@
 // How each of Kaylee's family looks as a toy animal: Dad's picks from the lineup (2026-10-17: column A, so kids share
-// their parent's animal, and Kaylee's lilac unicorn); later Dad made Jum a chubby pink elephant and Mommy a bit rounder,
+// their parent's animal, and Kaylee's lilac unicorn); later Dad made Jum a chubby pink elephant and Mom a bit rounder,
 // and gave the big cousins (Gan, Ken, BB) phones they never look up from. The concepts are in planning/around-the-world/thailand/lineup.webp;
 // engine3d/characters/animal.ts builds them in 3D. The vet's patients at HarborLand (a puppy, a pony, a baby elephant) are toy
 // animals too (PATIENT_LOOKS). Pure data (no three.js).

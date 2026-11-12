@@ -1,6 +1,6 @@
 // The Koh Samet trip (plan: planning/around-the-world/thailand/samet-trip.md). In the works: greybox 2 is the island
 // to roam (island/), the hub a bare link opens; greybox 1 is the jet ski at Hat Sai Kaew (jetski/), opened from its
-// stop on the island (and back to the island, its flag up, after a race she wins); greybox 3 is Mommy's phone and the
+// stop on the island (and back to the island, its flag up, after a race she wins); greybox 3 is Mom's phone and the
 // animal book (book/, on the island; the `book` section opens it); greybox 4 is the sandcastle at Ao Hin Khok
 // (sandcastle/, opened from its stop, and back to the island with its flag up once the moat has filled); greybox 5 is
 // snorkeling at Ko Kudi (snorkel/, opened from the snorkel boat at Ao Wong Duan, and back there with its flag up and the
@@ -9,9 +9,9 @@
 // the island with its flag up once she has won her turn to hide). Greybox 7 is the trip frame: packing in Kaylee's room
 // (pack, the first trip of a session from the Thailand map's 🏝️ pin), the speedboat from Ban Phe to Na Dan pier
 // (speedboat/), the island saved on the iPad as she plays (where she was, the flags, her book, what she packed: a link's
-// params win over it), and home: with all four flags up the speedboat at Na Dan takes them home, Mommy's photo goes on
+// params win over it), and home: with all four flags up the speedboat at Na Dan takes them home, Mom's photo goes on
 // Agong's wall and the stamp lands on the 🏝️ pin. Step 9 is the finale (finale/): with all four flags up the
-// driftwood tree opens the sunset at Ao Prao (Mommy's photo of the three of them), then the fire show on Sai Kaew at
+// driftwood tree opens the sunset at Ao Prao (Mom's photo of the three of them), then the fire show on Sai Kaew at
 // night, and its 🏠 takes them home (the sunset photo on Agong's wall, the stamp). Finding her way (#357, card B): on
 // the island the top-left button is the map button (like the rest of Thailand) and the puppy has his own button in the
 // top-right; inside a stop the top-left goes back to the beach. The next visit lands her on the beach she left.
@@ -46,7 +46,7 @@ import SAMET_SECTIONS, { FIRE_ROUNDS, FLAGS, HIDE_ROUNDS, SAND_ROUNDS, SNORKEL_R
 const readFlags = (s: string): StopId[] => (s === 'all' ? [...FLAGS] : (s.split(',').filter((f) => (FLAGS as readonly string[]).includes(f)) as StopId[]))
 
 interface Props {
-  /** Home: Mommy's photo is on Agong's wall: the stamp. */
+  /** Home: Mom's photo is on Agong's wall: the stamp. */
   onDone?: () => void
   /** Home on the speedboat before the island is done (the home picture at Na Dan pier): back to the Thailand map. */
   onExit?: () => void
@@ -69,7 +69,7 @@ export function SametTrip({ onDone, onExit }: Props = {}) {
   const [sec, setSec] = useState(() => ({ id: start ?? 'island', n: 0, at: (SPOTS as readonly string[]).includes(first.at) ? (first.at as SpotId) : 'nadan', flags: readFlags(first.flags), round: param('round') as RoundId | SandRound | SnorkelRound | HideRound | FireRound }))
   const time = (param('time') || null) as TimeOfDay | null
   const reefRound = useRef<SnorkelRound>('float')
-  /** Mommy's photo of the three of them at sunset (for Agong's wall). */
+  /** Mom's photo of the three of them at sunset (for Agong's wall). */
   const sunsetPhoto = useRef<string | null>(null)
   const flagParam = (f: StopId[]) => (f.length === FLAGS.length ? 'all' : f.join(',') || undefined)
   const [packed, setPacked] = useState<string[]>(first.packed)
@@ -97,7 +97,7 @@ export function SametTrip({ onDone, onExit }: Props = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sec.n])
 
-  // Home: Mommy's photo of the island goes on Agong's wall by itself, the trip starts afresh next time (her book stays),
+  // Home: Mom's photo of the island goes on Agong's wall by itself, the trip starts afresh next time (her book stays),
   // then the stamp.
   const [, setWallPhotos] = useWallPhotos()
   const ended = useRef(false)

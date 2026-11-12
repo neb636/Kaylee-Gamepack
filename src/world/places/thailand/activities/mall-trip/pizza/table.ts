@@ -1,8 +1,8 @@
 // The Pizza Company (plan: planning/around-the-world/thailand/mall-trip.md, "The Pizza Company"), greybox: shapes and
 // sounds, with voices (lines.ts `L.mall.pizza`): Sparkle's "Pick a pizza!" and "Pull a slice!", the server's "Pizza
-// time!" and "Khob khun ka!", Sparkle counting each plate's first and second slice round the table, Daddy hamming it
-// up and his cheesy nose, Mommy's "Those are for Agong!", the cheer as the lid closes, the fact once it's all shared,
-// the pokes' reactions (the chili, the onion rings), and Sparkle's hint when the finger shows. The camera looks across the table straight on; Mommy, Kaylee (on her booster) and Daddy sit in the
+// time!" and "Khob khun ka!", Sparkle counting each plate's first and second slice round the table, Dad hamming it
+// up and his cheesy nose, Mom's "Those are for Agong!", the cheer as the lid closes, the fact once it's all shared,
+// the pokes' reactions (the chili, the onion rings), and Sparkle's hint when the finger shows. The camera looks across the table straight on; Mom, Kaylee (on her booster) and Dad sit in the
 // green booth on the far side with their plates, and Agong's take-away box waits open at the right end.
 //
 // `menu`: she picks a pizza (the screen's three picture buttons); the server carries it over on its stand, sets it down
@@ -13,10 +13,10 @@
 // pink before she lets go, so she always sees where it will land. Tap a slice on a plate and that person munches it,
 // chomp, cheese on their chin. A tap on the pizza serves a slice for her (with its stretch), so taps alone can share it.
 //   1. The first pull: the stretch is the wow.
-//   2. Sharing fairly: 8 slices, 3 plates. The plate that's behind glows gold. Give Daddy more than anyone else (his
-//      second while someone has one, a third) and he hams it up (points at Mommy's plate, ho ho). With 2 each, Agong's box glows: the last two go in, and the
+//   2. Sharing fairly: 8 slices, 3 plates. The plate that's behind glows gold. Give Dad more than anyone else (his
+//      second while someone has one, a third) and he hams it up (points at Mom's plate, ho ho). With 2 each, Agong's box glows: the last two go in, and the
 //      lid closes, flup.
-//   3. The cheese tug (the first pull after one each): Daddy grabs the other end, it stretches right across the table,
+//   3. The cheese tug (the first pull after one each): Dad grabs the other end, it stretches right across the table,
 //      and snaps onto his nose.
 // Nothing is wrong: any plate is fine, the box takes a slice any time, and slices on plates can be moved again.
 import { Color, Euler, IcosahedronGeometry, OctahedronGeometry, PlaneGeometry, Quaternion, Vector2, Vector3, type Group, type Mesh, type MeshBasicMaterial, type Object3D, type WebGLRenderer } from 'three'
@@ -124,7 +124,7 @@ export class PizzaTable extends Stage {
   private box: Box
   private boxShut = false
   private band: CheeseBand
-  /** The slice the cheese hangs from (and where it comes from: the pan, or Daddy's hand in the tug). */
+  /** The slice the cheese hangs from (and where it comes from: the pan, or Dad's hand in the tug). */
   private banded: Slice | null = null
   private held: { s: Slice; x: number; y: number; x0: number; y0: number; moved: boolean } | null = null
   private home = new Map<Slice, Home>()
@@ -142,7 +142,7 @@ export class PizzaTable extends Stage {
   private sharedNow = 0
   private tug: 'wait' | 'on' | 'done' = 'wait'
   private tugK = 0
-  /** How long the cheese was when Daddy got hold of it (it snaps a good pull past that). */
+  /** How long the cheese was when Dad got hold of it (it snaps a good pull past that). */
   private tugFrom = 0
   private nose: Group | null = null
   private noseT = 0
@@ -170,10 +170,10 @@ export class PizzaTable extends Stage {
   private worn = 0
   private bracelets: Group[] = []
   private chins = new Set<EaterId>()
-  /** When each speaker last talked (a quick run of taps gets one line), and whose turn it is in Daddy's list. */
+  /** When each speaker last talked (a quick run of taps gets one line), and whose turn it is in Dad's list. */
   private spoke = new Map<string, number>()
   private hams = 0
-  /** Mommy has said the last two are for Agong; Sparkle has said the fact. */
+  /** Mom has said the last two are for Agong; Sparkle has said the fact. */
   private agongSaid = false
   private fairSaid = false
   /** The touch the last hint was for (one hint each time she's stuck). */
@@ -192,7 +192,7 @@ export class PizzaTable extends Stage {
     this.kaylee = kaylee
     this.ji = members.get('ji')!
     this.nick = members.get('nick')!
-    // Daddy keeps the hairdo she gave him at the barber's.
+    // Dad keeps the hairdo she gave him at the barber's.
     wearHair(this.nick.rig, LOOKS.nick, start.hair ?? '', bag)
     this.people = { ji: this.ji, kaylee, nick: this.nick }
     kaylee.root.userData.pick = 'family:kaylee'
@@ -612,7 +612,7 @@ export class PizzaTable extends Stage {
       const ahead = c[t] > Math.max(...EATERS.filter((e) => e !== t).map((e) => c[e]))
       if (t === 'nick' && ahead && c[t] >= 2) {
         this.hamItUp()
-        // "Kaylee, Mommy's hungry too!", in turn with his ho ho (the turn moves on only when he says one).
+        // "Kaylee, Mom's hungry too!", in turn with his ho ho (the turn moves on only when he says one).
         const ham = L.mall.pizza.ham
         if (this.time - (this.spoke.get('nick') ?? -99) >= 2.5) this.talk('nick', ham[this.hams++ % ham.length])
       } else {
@@ -722,7 +722,7 @@ export class PizzaTable extends Stage {
   private tipOf(s: Slice, out = new Vector3()) {
     return s.root.localToWorld(out.copy(s.tip))
   }
-  /** Daddy's hand (the tug). */
+  /** Dad's hand (the tug). */
   private hand(out = new Vector3()) {
     const r = this.nick.rig
     return r.armR.localToWorld(out.set(0.05 * r.height, -0.14 * r.height, 0.02 * r.height))
@@ -743,7 +743,7 @@ export class PizzaTable extends Stage {
     if (this.tug === 'on') this.tugSnap()
   }
 
-  /** The tug ends with the cheese on Daddy's nose. */
+  /** The tug ends with the cheese on Dad's nose. */
   private tugSnap() {
     if (this.tug !== 'on') return
     this.tug = 'done'
@@ -769,14 +769,14 @@ export class PizzaTable extends Stage {
     this.after(0.5, () => sfx.giggle())
   }
 
-  /** How long the cheese gets before it snaps: the pizza's own stretch, or in the tug a good pull past where Daddy
+  /** How long the cheese gets before it snaps: the pizza's own stretch, or in the tug a good pull past where Dad
    *  took hold (never before he has it). */
   private get snapAt() {
     if (this.tug !== 'on') return SNAP[this.pizza]
     return this.tugK < 1 ? Infinity : Math.max(TUG_SNAP, this.tugFrom + 0.5)
   }
 
-  // ---------------------------------------------------------------- Daddy and Mommy
+  // ---------------------------------------------------------------- Dad and Mom
 
   private hamItUp() {
     this.ham = 0
@@ -792,7 +792,7 @@ export class PizzaTable extends Stage {
     this.sneeze.t = 0
   }
 
-  /** An onion ring flies onto Mommy's wrist (three, then she eats one). */
+  /** An onion ring flies onto Mom's wrist (three, then she eats one). */
   private bracelet() {
     const rings = this.room.rings.rings
     if (this.worn >= rings.length) {
@@ -965,7 +965,7 @@ export class PizzaTable extends Stage {
     for (const f of [this.sparkles, this.crumbs, this.bubbles, this.flakes, this.papers]) f.update(dt)
   }
 
-  /** Daddy's own moves on top of his life: reaching for the cheese, hamming it up, the sneeze, his cheesy nose. */
+  /** Dad's own moves on top of his life: reaching for the cheese, hamming it up, the sneeze, his cheesy nose. */
   private daddyFrame(dt: number, t: number) {
     const r = this.nick.rig
     // The tug: his right arm reaches out across the table for the cheese.
@@ -973,7 +973,7 @@ export class PizzaTable extends Stage {
     r.armR.rotation.x = -1.45 * reach
     r.armR.rotation.y = -0.4 * reach
     r.body.rotation.x = 0.25 * reach
-    // Hamming it up: he points at Mommy's plate and shakes his head.
+    // Hamming it up: he points at Mom's plate and shakes his head.
     this.ham = Math.min(1, this.ham + dt / 1.6)
     const hk = bell(this.ham)
     r.armL.rotation.z = -1.35 * Math.min(1, hk * 2.2)

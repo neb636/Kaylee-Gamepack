@@ -20,8 +20,8 @@
 //
 // Talk (lines.ts L.nan.map): the first time, Sparkle asks where to go first; after ~8 s with nothing done (counted from
 // 3 s after the opening line) she says "Tap a place to drive there!" (at most three times). After two stops, each time
-// she's back, Mommy asks "Home, or one more?" (NanMap.tsx shows 🏠 and 🚙: 🏠 drives to the airport, 🚙 lets her pick);
-// after all three, Mommy says it's time to fly home and the airport glows. Laos's flag: Sparkle says it's another
+// she's back, Mom asks "Home, or one more?" (NanMap.tsx shows 🏠 and 🚙: 🏠 drives to the airport, 🚙 lets her pick);
+// after all three, Mom says it's time to fly home and the airport glows. Laos's flag: Sparkle says it's another
 // country.
 import { Group, IcosahedronGeometry, Mesh, OctahedronGeometry, Vector3, type WebGLRenderer } from 'three'
 import { bell, clamp, firstTime, speakingVoice, spendHint } from '../../../../../../sdk'
@@ -41,7 +41,7 @@ import { mapBed, mapSfx as sfx } from './sounds'
 export interface MapEvents extends LegEvents {
   /** The little Pajero got to the place she picked: drive there for real. */
   go(place: PlaceId): void
-  /** Mommy's "Home, or one more?": show the 🏠 and 🚙 buttons (or hide them: she's off somewhere). */
+  /** Mom's "Home, or one more?": show the 🏠 and 🚙 buttons (or hide them: she's off somewhere). */
   ask(on: boolean): void
   /** The camera has been moving behind the loading cover long enough: it can fade (NAN_CAM.cover). */
   revealed(): void
@@ -114,7 +114,7 @@ export class NanMap extends Stage {
   private lastSay = -99
   private quietFrom = 3
   private sayN = 0
-  /** Mommy's question is up (the 🏠 and 🚙 buttons). */
+  /** Mom's question is up (the 🏠 and 🚙 buttons). */
   private asking = false
 
   constructor(renderer: WebGLRenderer, private ev: MapEvents, start: { stops: Stop[]; from?: PlaceId | null; cup?: boolean }) {
@@ -150,14 +150,14 @@ export class NanMap extends Stage {
     for (const s of STOPS) this.d.stamps[s].visible = this.done.has(s) && s !== this.fresh
     if (this.fresh) this.onShow.push([0.7, () => this.landStamp()])
     this.placeCar(0)
-    // ---- The opening line: Sparkle the first time, Mommy once two stops are done ----
+    // ---- The opening line: Sparkle the first time, Mom once two stops are done ----
     const count = this.done.size
     const t0 = this.fresh ? 1.6 : 0.6
     if (count === 0) this.onShow.push([t0, () => this.say('first', M.first)])
     else if (count >= this.stops.length) this.onShow.push([t0, () => this.say('home', M.home)])
     else if (count >= HOME_AFTER)
       this.onShow.push([t0, () => {
-        // (Mommy asks out loud once a visit; coming back to the map after that, her question just shows.)
+        // (Mom asks out loud once a visit; coming back to the map after that, her question just shows.)
         if (firstTime('nan.map.more')) this.say('more', M.more)
         this.setAsking(true)
       }])
@@ -165,7 +165,7 @@ export class NanMap extends Stage {
     this.quietFrom = t0 + 3 + NAN_CAM.cover + NAN_CAM.fade
   }
 
-  // ---------------------------------------------------------------- talk, Mommy's question
+  // ---------------------------------------------------------------- talk, Mom's question
 
   private say(key: string, l: Parameters<MapEvents['say']>[0]) {
     if (this.told.has(key)) return
@@ -177,13 +177,13 @@ export class NanMap extends Stage {
     this.asking = on
     this.ev.ask(on)
   }
-  /** 🏠 on Mommy's question: off to the airport (home, down the 3 road). */
+  /** 🏠 on Mom's question: off to the airport (home, down the 3 road). */
   home() {
     this.setAsking(false)
     this.lastTouch = this.time
     if (!this.arrived) this.goTo('airport')
   }
-  /** 🚙 on Mommy's question: one more stop (she picks it). */
+  /** 🚙 on Mom's question: one more stop (she picks it). */
   more() {
     this.setAsking(false)
     this.lastTouch = this.time

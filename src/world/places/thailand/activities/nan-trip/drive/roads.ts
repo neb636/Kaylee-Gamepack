@@ -2,7 +2,7 @@
 // (steer the Pajero), and each one deepens it:
 // - city: through Nan town to its market, short and flat, over the Nan River bridge; tuk-tuks and scooters.
 // - valley: through the rice fields of Pua to the mushroom farm; chickens on the road, a songthaew coming the other
-//   way (keep left!), a buffalo that ambles across (Mommy stops for it).
+//   way (keep left!), a buffalo that ambles across (Mom stops for it).
 // - sky: up Doi Phu Kha in steep S-bends, into the cloud (white all round, the headlights on) and out above it into the
 //   sunshine, with round mirrors on the blind bends (beep before the bend, and the car coming beeps back), a waterfall
 //   and a monkey on the rail.

@@ -9,14 +9,14 @@
 //           is) and tap it: it flips, slams down and lifts off to leave a tower. Shells and coral bits to push into the
 //           walls and the towers. Dig under a tower and it slumps into a heap.
 //   tide    the tide comes in: the sea creeps up the beach, wave after wave. Dig a channel from the moat to the sea and
-//           the water rushes along it and fills the moat (the best moment): sparkles, Daddy cheers, and a hermit crab
+//           the water rushes along it and fills the moat (the best moment): sparkles, Dad cheers, and a hermit crab
 //           walks up out of the sea and moves into a tower's door. One big wave washes the tower nearest the sea half
 //           away (build it again!).
-// The side verb, any time: bury Daddy. He lies beside the castle; rub sand over him and it heaps up, shins to chest,
+// The side verb, any time: bury Dad. He lies beside the castle; rub sand over him and it heaps up, shins to chest,
 // until only his head and toes stick out. Tap his toes: they wiggle. Tap his head: he sneezes and the sand flies off.
 //
-// Talk (lines.ts L.samet.sandcastle): Daddy's "Let's build a sandcastle!", Sparkle's one line as each round begins,
-// Daddy's and Mommy's reactions, Sparkle's tide fact once the moat fills; after a while with nothing done the finger
+// Talk (lines.ts L.samet.sandcastle): Dad's "Let's build a sandcastle!", Sparkle's one line as each round begins,
+// Dad's and Mom's reactions, Sparkle's tide fact once the moat fills; after a while with nothing done the finger
 // shows and Sparkle says what to do (spendHint). Every number that decides the feel is a knob (?feel=1), with a graph
 // of her finger against the sand.
 import { Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, RingGeometry, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
@@ -72,8 +72,8 @@ const TIDE = knobs('sandTide', 'The tide and the water', FILE, {
   help: { value: 1.25, min: 0, max: 3, step: 0.05, label: 'A channel this close breaks through', unit: 'm', note: 'when the water stops this short of the moat, the sand between gives way by itself (0 = never)' },
   helpAfter: { value: 1.2, min: 0, max: 8, step: 0.1, label: '…after her finger is up for', unit: 's' },
 })
-/** How the rounds move on, the towers, burying Daddy. */
-const PLAY = knobs('sandPlay', 'Rounds, towers and Daddy', FILE, {
+/** How the rounds move on, the towers, burying Dad. */
+const PLAY = knobs('sandPlay', 'Rounds, towers and Dad', FILE, {
   dig: { value: 30, min: 5, max: 120, step: 1, label: 'Digging before the moulds', unit: 's', note: 'seconds of digging, then the moulds arrive (a moat dug all round is sooner)' },
   ring: { value: 0.85, min: 0.3, max: 1, step: 0.05, label: 'A moat is done at', unit: '× round', note: 'how much of the way round the castle she must dig for the moat to count' },
   towers: { value: 6, min: 1, max: 12, step: 1, label: 'Towers before the tide', note: 'the tide comes in after this many towers' },
@@ -82,8 +82,8 @@ const PLAY = knobs('sandPlay', 'Rounds, towers and Daddy', FILE, {
   fillMore: { value: 0.5, min: 0, max: 2, step: 0.05, label: '…more each tower', unit: '×', note: 'each next tower this round needs this much more sand (it gets harder)' },
   fillNear: { value: 1.2, min: 0.5, max: 4, step: 0.1, label: 'Digging this near a mould fills it', unit: 'm' },
   sink: { value: 0.12, min: 0.04, max: 0.4, step: 0.01, label: 'A tower slumps when dug under', unit: 'm' },
-  bury: { value: 1.6, min: 0.3, max: 8, step: 0.1, label: 'Burying Daddy', unit: '/s', note: 'how fast rubbing over him heaps the sand (1 = one part covered)' },
-  wiggleOut: { value: 3.2, min: 0.5, max: 15, step: 0.1, label: 'Buried Daddy sneezes himself out after', unit: 's' },
+  bury: { value: 1.6, min: 0.3, max: 8, step: 0.1, label: 'Burying Dad', unit: '/s', note: 'how fast rubbing over him heaps the sand (1 = one part covered)' },
+  wiggleOut: { value: 3.2, min: 0.5, max: 15, step: 0.1, label: 'Buried Dad sneezes himself out after', unit: 's' },
   crab: { value: 0.32, min: 0.1, max: 0.6, step: 0.01, label: 'A crab pops out at', unit: 'm deep' },
   pitch: { value: 44, min: 25, max: 75, step: 1, label: 'Camera looks down', unit: '°', note: 'steeper shows more sand, lower shows more of your unicorn and the sea' },
   tallPitch: { value: 12, min: 0, max: 30, step: 1, label: '…more on a tall screen', unit: '°' },
@@ -134,9 +134,9 @@ const { twinkle, fanfare, sadSlide, sneeze, giggle, toot } = sfx
 
 export const SAND_ANCHORS: AnchorInfo[] = [
   { id: 'kaylee', label: 'You', kind: 'thing' },
-  { id: 'family:nick', label: 'Daddy', kind: 'family' },
-  { id: 'toes', label: "Daddy's toes", kind: 'thing' },
-  { id: 'family:ji', label: 'Mommy', kind: 'family' },
+  { id: 'family:nick', label: 'Dad', kind: 'family' },
+  { id: 'toes', label: "Dad's toes", kind: 'thing' },
+  { id: 'family:ji', label: 'Mom', kind: 'family' },
   { id: 'umbrella', label: 'The umbrella', kind: 'thing' },
   { id: 'ball', label: 'The beach ball', kind: 'thing' },
   { id: 'crab', label: 'A ghost crab', kind: 'thing' },
@@ -320,7 +320,7 @@ export class Sandcastle implements World3D {
     this.feel = { radius: 0, rate: 0, swipe: 0, deep: 0, spread: 0, keep: 0, pat: 0, tall: 0, dry: 0, wet: 0, flow: 0, seep: 0 }
     this.readFeel()
 
-    // ---- Kaylee (in a holder that rides the sand's height), Daddy lying beside the castle, Mommy under her umbrella.
+    // ---- Kaylee (in a holder that rides the sand's height), Dad lying beside the castle, Mom under her umbrella.
     this.kaylee = new Avatar(bag)
     this.kHold.add(this.kaylee.root)
     scene.add(this.kHold)
@@ -519,7 +519,7 @@ export class Sandcastle implements World3D {
       this.later = this.later.filter((l) => l.at > t)
       for (const l of due) l.fn()
     }
-    // The opening, a beat after it appears: Daddy, then Sparkle (she waits her turn) with the round's line.
+    // The opening, a beat after it appears: Dad, then Sparkle (she waits her turn) with the round's line.
     if (t - dt < 0.6 && t >= 0.6) {
       if (this.round === 'dig') this.events.say(S.hi)
       this.events.say(S[this.round])
@@ -731,7 +731,7 @@ export class Sandcastle implements World3D {
       const p = this.at(d.a + (Math.random() - 0.5) * 2.4, d.v + (Math.random() - 0.5) * 2.2, 0.1)
       this.sparkle.emit(p.x, p.y, p.z, (Math.random() - 0.5) * 0.6, 1 + Math.random() * 1.4, (Math.random() - 0.5) * 0.6, 1.4, 0.07)
     }
-    // Daddy cheers (if he isn't buried) and Mommy waves; a hermit crab walks up out of the sea to move in.
+    // Dad cheers (if he isn't buried) and Mom waves; a hermit crab walks up out of the sea to move in.
     if (this.dad.buried.every((b) => b < 0.5)) this.nick.react('wiggle')
     this.ji.react('wave')
     this.kaylee.react('hop')
@@ -774,7 +774,7 @@ export class Sandcastle implements World3D {
     if (!p) return null
     return { ...this.sand.local(p.x, p.z), x: p.x, z: p.z }
   }
-  /** Is this point on Daddy (the part of him that can be buried: below his head)? Which mound. */
+  /** Is this point on Dad (the part of him that can be buried: below his head)? Which mound. */
   private onDad(a: number, v: number) {
     const d = this.dad
     const along = (d.feet - v) / d.len
@@ -987,7 +987,7 @@ export class Sandcastle implements World3D {
   /** Kaylee comes and sits by her finger. */
   private goDig(a: number, v: number) {
     const goal = { a: clamp(a + 0.3, DIGGABLE.a0 - 0.4, DIGGABLE.a1 + 0.4), v: clamp(v + DIG.kaylee, DIGGABLE.v0 + 0.5, -0.2) }
-    // (Not on top of Daddy: the other side of her finger.)
+    // (Not on top of Dad: the other side of her finger.)
     if (Math.abs(goal.a - this.dad.a) < this.dad.width * 1.4 && goal.v < this.dad.feet + 0.3) goal.v = this.dad.feet + 0.6
     const k = this.kaylee.root.position
     const here = this.sand.local(k.x, k.z)
@@ -1011,7 +1011,7 @@ export class Sandcastle implements World3D {
     if (!this.kaylee.walking) this.kaylee.faceToward(p.x, p.z)
   }
 
-  /** Sand heaped over Daddy where her finger rubs: most on the part under it, some on the parts either side. */
+  /** Sand heaped over Dad where her finger rubs: most on the part under it, some on the parts either side. */
   private buryAt(v: number, k: number) {
     const d = this.dad
     const along = (d.feet - v) / d.len
@@ -1215,7 +1215,7 @@ export class Sandcastle implements World3D {
       this.talk('fill', S.hint.fill, 6)
       return
     }
-    // Tapped where it waits (or over Daddy, or the sea): it hops onto the castle first, to a free spot.
+    // Tapped where it waits (or over Dad, or the sea): it hops onto the castle first, to a free spot.
     if (m.state === 'home' || this.onDad(m.a, m.v) >= 0 || m.v > 0) {
       const spot = this.freeSpot()
       m.from = { a: m.a, v: m.v }
@@ -1307,7 +1307,7 @@ export class Sandcastle implements World3D {
     if (!tw) return
     this.counts.washed++
     this.slump(tw, true)
-    // (Not once the moat has filled: that's the payoff, and Daddy's cheer shouldn't turn into an oh no.)
+    // (Not once the moat has filled: that's the payoff, and Dad's cheer shouldn't turn into an oh no.)
     if (!this.counts.filled) this.talk('washed', S.washed, 10)
     sadSlide()
     const p = tw.m.root.position
@@ -1351,7 +1351,7 @@ export class Sandcastle implements World3D {
     this.nick.update(dt, t)
     this.ji.update(dt, t)
 
-    // Daddy's blanket of sand: each mound eases to how buried that part is; a sneeze blows them all off. All buried,
+    // Dad's blanket of sand: each mound eases to how buried that part is; a sneeze blows them all off. All buried,
     // he lies still a moment, wiggles his toes, then sneezes himself out (and she can bury him again).
     const d = this.dad
     if (d.outT >= 0 && d.sneezeT < 0 && this.finger?.mode !== 'bury') {
@@ -1602,7 +1602,7 @@ export class Sandcastle implements World3D {
   }
 
   private placeThings(_dt: number) {
-    // (Daddy and the blanket ride the sand, which never moves under him.)
+    // (Dad and the blanket ride the sand, which never moves under him.)
     void _dt
     const d = this.dad
     const fp = this.sand.world(d.a, d.feet + 0.08)

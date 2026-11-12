@@ -5,13 +5,13 @@
 // The mushroom house, seen from the aisle (the camera looks toward -z, low, straight on):
 //
 //   back wall:  [the sign]   [ the rack: 4 x 3 sawdust bags lying down, mouths to us ]   [the door, light]  gecko
-//   aisle:       Kaylee with the hose      (the drip from the beam)                Daddy       the farmer aunty
+//   aisle:       Kaylee with the hose      (the drip from the beam)                Dad       the farmer aunty
 //   front:            her basket                                                     the sleepy dog
 //
 // The farm's table, 8 m along (outside, on a wooden deck over the green hills):
 //
 //   the hills and the rice steps far away, the deck's railing
-//   the clay oven   Mommy   Kaylee   Daddy        (on stools, on the far side of the table)
+//   the clay oven   Mom   Kaylee   Dad        (on stools, on the far side of the table)
 //   the farmer        [plate]  [plate]  [plate]
 //                       (the pizza on its board)      her basket
 
@@ -85,7 +85,7 @@ export const BASKET_R = 0.2
 export const KAYLEE_AT: V3 = [-1.5, 0, 0.42]
 export const NICK_AT: V3 = [1.38, 0, 0.3]
 export const FARMER_AT: V3 = [2.3, 0, -0.18]
-/** On a tall screen the aisle closes in round the rack, so everyone fits: Kaylee and her basket beside it, Daddy peeking
+/** On a tall screen the aisle closes in round the rack, so everyone fits: Kaylee and her basket beside it, Dad peeking
  *  out from behind its far end. */
 export const TALL = { kaylee: [-1.1, 0, 0.78] as V3, basket: [-0.6, 0, 0.98] as V3, nick: [1.22, 0, 0.12] as V3, dog: [0.45, 0, 1.12] as V3, farmer: [1.72, 0, -0.3] as V3 }
 
@@ -107,10 +107,10 @@ export const SEATS: Record<EaterId, { x: number; seat: number }> = {
 export const SEAT_Z = -0.98
 export const PLATE_Z = -0.48
 export const PLATE_R = 0.13
-export const EATER_NAMES: Record<EaterId, string> = { kaylee: 'You', ji: 'Mommy', nick: 'Daddy' }
+export const EATER_NAMES: Record<EaterId, string> = { kaylee: 'You', ji: 'Mom', nick: 'Dad' }
 export const OVEN: V3 = [TX - 1.6, 0, -0.35]
 export const OVEN_MOUTH: V3 = [TX - 1.6, 0.78, -0.03]
 export const FARMER_TABLE: V3 = [TX - 2.25, 0, -0.85]
-/** On a tall screen the aunty waits at the table between the oven and Mommy, so she's in the picture. */
+/** On a tall screen the aunty waits at the table between the oven and Mom, so she's in the picture. */
 export const FARMER_TABLE_TALL: V3 = [TX - 1.2, 0, -1.3]
 export const RAIL_Z = -1.7

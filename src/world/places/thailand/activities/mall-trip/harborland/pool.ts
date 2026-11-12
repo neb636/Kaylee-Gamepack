@@ -1,6 +1,6 @@
 // The ball pit's balls: a layer of hundreds of pastel balls (one instanced mesh) that parts round whoever wades in it
-// (Kaylee, Daddy, a kid), and a few dozen flying balls (another) for splashes: hopping in, a slide landing, a toss,
-// Daddy's flop. Flying balls arc up and drop back into the layer (and bounce off a deck over the pit). No physics
+// (Kaylee, Dad, a kid), and a few dozen flying balls (another) for splashes: hopping in, a slide landing, a toss,
+// Dad's flop. Flying balls arc up and drop back into the layer (and bounce off a deck over the pit). No physics
 // engine: simple arcs and pushes. A pit that already has its balls (the racing slide's) can take just the splashes.
 import { Color, DynamicDrawUsage, Group, InstancedMesh, Matrix4, Quaternion, SphereGeometry, Vector3 } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'

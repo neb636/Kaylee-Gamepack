@@ -38,7 +38,7 @@ async function open(page: Page, section: string, query = '') {
 async function ready(page: Page) {
   await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
   await expect(page.locator('[data-anchor="boat"]')).toBeVisible()
-  // A bay link opens on Daddy's "where to?" look over the bay (the camera up high): let it come back down first.
+  // A bay link opens on Dad's "where to?" look over the bay (the camera up high): let it come back down first.
   await expect.poll(field(page, 'looking'), { timeout: 10_000 }).toBeFalsy()
 }
 
