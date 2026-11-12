@@ -839,9 +839,12 @@ export const L = {
         looking: otter('Sawasdee krap! Looking for a pink light?'),
         zoom: otter('She zoomed round my buoys all night!'),
         fast: otter('She only stops for someone fast!'),
+        // As the film ends: the life jacket (he has already said hello).
+        first: otter('Life jacket first!'),
         // Sparkle, the first time Zoom flies ahead of the jet ski.
         chase: 'There she is! After her!',
-        // Found (after the race): she lands on your unicorn's horn.
+        // Found (a race finished, won or lost by a nose, or parked after a decent ride): she lands on your unicorn's
+        // horn.
         likes: otter('Ha ha! She likes you!'),
         found: 'You found Zoom!',
         dad: nick('Fast like a firefly!'),

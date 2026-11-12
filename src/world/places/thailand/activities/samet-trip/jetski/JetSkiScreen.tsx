@@ -2,7 +2,11 @@
 // after a while with nothing touched, the race's countdown (big 3, 2, 1, go), the race's end (🏆 and 🔁 when she wins;
 // "So close!" and straight into the next race when he wins by a nose), and spray on the camera after a big landing.
 // Sparkle sits in the corner (trip/legs/Guide.tsx) and everyone talks in their own voice (lines.ts L.samet.jetski).
-// With ?feel=1 Dad also gets round chips (ride, waves, race) to jump between rounds while he tunes the knobs.
+// Zoom's story (story.ts) plays its two films over it: FilmOverlay draws their words and the hold-to-skip ⏭, and
+// Sparkle's corner, the countdown and the race's end card wait until the film is over. While Zoom is still to be found
+// a finished race has no "again" or island buttons: she comes down to your unicorn by herself.
+// With ?feel=1 the user also gets round chips (ride, waves, race; the two film rounds are links, not chips) to jump
+// between rounds while tuning the knobs.
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
@@ -10,31 +14,43 @@ import { BigButton, burst } from '../../../../../../sdk'
 import { isFeelParam } from '../../../../../kit/knobs'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
-import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
-import type { RoundId } from '../island/layout'
-import { JET_ANCHORS, JetSki as World, type JetEvents } from './jetski'
+import type { FilmState } from '../../../../../engine3d/film'
+import { FilmOverlay } from '../../../../../engine3d/FilmOverlay'
+import type { Line } from '../../../../../../sdk'
+import { TripGuide, WHO, type TripGuideHandle } from '../../../trip/legs/Guide'
+import { JET_ANCHORS, JetSki as World, type JetEvents, type JetRound } from './jetski'
 
 const feelOn = () => [...new URLSearchParams(location.hash.split('?')[1] ?? '').keys()].some(isFeelParam)
 
 interface Props {
-  round: RoundId
+  /** A play round (ride, waves, race) or one of the films: story (the way in, then the ride) or found (Zoom lands on
+   *  the horn, then `onIsland`). */
+  round: JetRound
   /** The fireflies she has found so far (the trip's flags: jetski, sandcastle, snorkel, hideseek). */
   flags?: string[]
   /** The round on screen changed (the address bar follows). */
-  onRound(r: RoundId): void
-  /** Back to the island (parked in the pink ring by the hut, or after a race she won), the jet ski hers. */
+  onRound(r: JetRound): void
+  /** Back to the island with Zoom found: after her found film (a race finished, or parked in the pink ring after a
+   *  decent ride), or straight away once she's found already. */
   onIsland?(): void
 }
 
-export function JetSkiScreen({ round: first, onRound, onIsland }: Props) {
-  const [run, setRun] = useState({ round: first, n: 0 })
+export function JetSkiScreen({ round: first, flags, onRound, onIsland }: Props) {
+  const [run, setRun] = useState<{ round: JetRound; n: number }>({ round: first, n: 0 })
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [count, setCount] = useState(-1)
   const [over, setOver] = useState<'won' | 'lost' | null>(null)
   const [stars, setStars] = useState({ n: 0, of: 0 })
   const [ready, setReady] = useState(false)
-  const [round, setRound] = useState<RoundId>(first)
+  const [round, setRound] = useState<JetRound>(first)
   const [feel] = useState(feelOn)
+  // Zoom's story: a film on screen (its beat) and the words being said.
+  const [film, setFilm] = useState<FilmState | null>(null)
+  const [filmLine, setFilmLine] = useState<Line | null>(null)
+  // Zoom is hers already: a race she wins ends with the "again" and island buttons, as it always did.
+  const zoomFound = !!flags?.includes('jetski')
+  const flagsRef = useRef(flags)
+  flagsRef.current = flags
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const sprayRef = useRef<HTMLDivElement>(null)
@@ -62,6 +78,15 @@ export function JetSkiScreen({ round: first, onRound, onIsland }: Props) {
     stars: (n, of) => setStars({ n, of }),
     ready: () => setReady(true),
     leave: () => onIslandRef.current?.(),
+    film: (st) => {
+      setFilm(st)
+      if (st) {
+        setOver(null)
+        setCount(-1)
+      }
+    },
+    filmLine: setFilmLine,
+    found: () => burst(),
     spray: (k) => {
       const el = sprayRef.current
       if (!el) return
@@ -74,13 +99,15 @@ export function JetSkiScreen({ round: first, onRound, onIsland }: Props) {
   })
 
   const make = (renderer: WebGLRenderer) => {
-    const w = new World(renderer, { round: run.round }, events.current)
+    const w = new World(renderer, { round: run.round, flags: flagsRef.current }, events.current)
     w.setHintElement(hintRef.current)
     return w
   }
-  const jump = (r: RoundId) => {
+  const jump = (r: JetRound) => {
     setOver(null)
     setCount(-1)
+    setFilm(null)
+    setFilmLine(null)
     setRound(r)
     setRun((v) => ({ round: r, n: v.n + 1 }))
   }
@@ -131,26 +158,30 @@ export function JetSkiScreen({ round: first, onRound, onIsland }: Props) {
       <AnimatePresence>
         {over && (
           <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }} className="jet-over">
-            {over === 'won' ? (
+            {over === 'won' && zoomFound ? (
               <>
                 <div className="jet-badge">🏆 🔔</div>
                 <BigButton onClick={() => { setOver(null); worldRef.current?.raceAgain() }} ariaLabel="Race again">
                   🔁 🏁
                 </BigButton>
                 {onIsland && (
-                  <BigButton color="mint" onClick={onIsland} ariaLabel="Back to the island">
+                  <BigButton color="mint" onClick={() => worldRef.current?.toIsland()} ariaLabel="Back to the island">
                     🏝️
                   </BigButton>
                 )}
               </>
+            ) : over === 'won' ? (
+              // (Zoom is on her way down: no buttons, the found film is next.)
+              <div className="jet-badge">🏆 🔔</div>
             ) : (
-              <div className="jet-badge">So close! 🔁</div>
+              <div className="jet-badge">{zoomFound ? 'So close! 🔁' : 'So close!'}</div>
             )}
           </motion.div>
         )}
       </AnimatePresence>
       {/* (While the bottom-corner buttons are up, her bubble goes above them.) */}
-      {mode === 'webgl' && <TripGuide ref={guideRef} corner={over === 'won' ? { width: '380px', height: '200px' } : undefined} />}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!film} corner={over === 'won' && zoomFound ? { width: '380px', height: '200px' } : undefined} />}
+      {mode === 'webgl' && <FilmOverlay state={film} line={filmLine} speaker={(v) => WHO[v]} onSkip={() => worldRef.current?.skipFilm()} />}
       {feel && (
         <div className="jet-chips">
           {(['ride', 'waves', 'race'] as const).map((r) => (
