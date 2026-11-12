@@ -55,15 +55,13 @@ function sectionsFileFor(file) {
 }
 
 const link = (hash) => `${base}${hash}`
-const games = new Set()
 const places = new Set()
 const activities = new Map()
 let shell = false
 let puppets = false
 for (const file of changed) {
   let m
-  if ((m = file.match(/^src\/games\/([^/]+)\//))) games.add(m[1])
-  else if (/^src\/world\/places\/[^/]+\/puppets\//.test(file)) puppets = true
+  if (/^src\/world\/places\/[^/]+\/puppets\//.test(file)) puppets = true
   else if ((m = file.match(/^src\/world\/places\/([^/]+)\//))) {
     const sf = sectionsFileFor(file)
     const def = sf && readSections(sf)
@@ -73,7 +71,6 @@ for (const file of changed) {
 }
 
 const out = ['## 🔗 Test this', '', `Preview: ${base}`, '']
-for (const g of games) out.push(`- 🎮 Game **${g}**: ${link(`#/game/${g}`)}`)
 for (const def of activities.values()) {
   const hash = (s, p = '') => `#/world/${def.place}/${def.activity}${s ? `/${s}` : ''}${p}`
   out.push(`- **${def.place} / ${def.activity}** from the start: ${link(hash())}`)

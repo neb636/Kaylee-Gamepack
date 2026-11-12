@@ -7,7 +7,7 @@ import { readdirSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 
 const HEAVY = ['phaser', 'perfect-freehand', 'three']
-const lazyFolder = /^src\/((games|world\/places)\/[^/]+|world\/engine3d|world\/labs)\//
+const lazyFolder = /^src\/(world\/places\/[^/]+|world\/engine3d|world\/labs)\//
 /** Files inside a game or country folder that are still loaded at startup. */
 const eagerInFolder = /\/(meta\.ts|[^/]*sections\.ts|puppets\/index\.ts)$/
 // The package itself or any subpath (three/examples/jsm/...).
@@ -30,7 +30,7 @@ const bad = files('src').filter((f) => {
 if (bad.length) {
   console.error(`These files import ${HEAVY.join(' / ')}, which would load it for every game at startup:`)
   for (const f of bad) console.error(`  ${f}`)
-  console.error('Import it only from inside src/games/<id>/, src/world/places/<id>/ (not meta.ts, sections files or puppets/index.ts), src/world/engine3d/ or src/world/labs/. See docs/interactions.md.')
+  console.error('Import it only from inside src/world/places/<id>/ (not meta.ts, sections files or puppets/index.ts), src/world/engine3d/ or src/world/labs/. See docs/interactions.md.')
   process.exit(1)
 }
 console.log(`Heavy libraries (${HEAVY.join(', ')}) are only imported from lazy game/country/engine folders.`)
