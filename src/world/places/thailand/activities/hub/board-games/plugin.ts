@@ -1,8 +1,10 @@
 // The game table in Kaylee's room (planning/around-the-world/thailand/game-table.md): a house plugin, like her
-// wardrobe. Tap the table and she walks over and sits on her stool; when a game is on for her (or the house was opened
-// from a board-game link, for Dad) the picker opens: a game, a cousin (BB first), Play. The real cousin (never a copy)
-// puts their phone away and sits on the stool across from her, the board goes out on the table, and they take turns:
-// she taps the die, it tumbles and settles, her piece hops space by space; then the cousin rolls by themselves.
+// wardrobe. Tap the table and she walks over and sits on her stool; then the screen fades and the game is out on a
+// floating board (stage.ts): a little island in a pastel sky, no characters in sight. The picker opens over it (a game,
+// a cousin with BB first, Play; the island shows the picked game's board and props as she picks). On Play the cousin
+// sits down across the table back in the room (unseen: their face shows at the side of the screen) and they take
+// turns: she taps the die, it tumbles and settles, her piece hops space by space; then the cousin rolls by themselves.
+// 👋 fades back to the room, where she hops off her stool.
 //
 // How a turn runs: the rules (rules/*.ts, pure) return the new state at once and the steps to show; this plays the
 // steps back one after another (the roll, the hops, a rest, the win, the pass). Every match has a token: Again, another
@@ -11,11 +13,10 @@
 //
 // While she sits here the table owns the input (its camera, which turns the Roblox stick off; every tap), the house's
 // tap targets hide, and the Hub keeps Mommy's question, the mirror and the party button away.
-import { Color, Group, Mesh, MeshBasicMaterial, RingGeometry, Vector3, type Object3D } from 'three'
+import { Group, Vector3, type Object3D } from 'three'
 import type { Shot } from '../../../../../engine3d/camera'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { Particles } from '../../../../../engine3d/particles'
-import { PAL } from '../../../../../engine3d/toon'
 import { knobs } from '../../../../../kit/knobs'
 import { burst, sounds, type Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
@@ -30,6 +31,7 @@ import { Die } from './die'
 import { cousinFace, kayleeFace, pieceFace } from './faces'
 import { COUSINS, cousinUnicorn, GAMES, UNICORNS, type CousinId, type GameId, type UnicornColor } from './list'
 import { pawnParts, Piece, unicornParts } from './pieces'
+import { FloatingStage, onStage, STAGE_LAYER } from './stage'
 import { CANDY_FINISH, candyDraw, cardToken, newDeck, type Card, type Deck } from './rules/candy'
 import { chutesRoll } from './rules/chutes'
 import { makeDie, other, startTurns, type Step, type Turns, type Who } from './rules/turns'
@@ -47,9 +49,11 @@ const FEEL = knobs('gameTable', 'Game table', FILE, {
   cousinWait: { value: 0.6, min: 0, max: 2, step: 0.05, label: "Cousin's wait", unit: 's', note: 'a little anticipation before the cousin rolls' },
   passPause: { value: 0.45, min: 0, max: 1.5, step: 0.05, label: 'Pass pause', unit: 's', note: 'between one turn and the next' },
   restTime: { value: 1.05, min: 0.4, max: 2.5, step: 0.05, label: 'Rest on a 4', unit: 's', note: 'how long the unicorn naps' },
-  camPitch: { value: 30, min: 30, max: 85, step: 1, label: 'Camera pitch', unit: '°', note: 'how steeply it looks down at the board' },
-  camYaw: { value: 9, min: -30, max: 45, step: 1, label: 'Camera yaw', unit: '°', note: 'from the front (0) round to the right' },
-  camFit: { value: 0.8, min: 0.6, max: 1.6, step: 0.05, label: 'Camera fit', note: 'below 1: closer' },
+  camPitch: { value: 40, min: 20, max: 85, step: 1, label: 'Camera pitch', unit: '°', note: 'how steeply it looks down at the floating board' },
+  camYaw: { value: 16, min: -45, max: 45, step: 1, label: 'Camera yaw', unit: '°', note: 'from the front (0) round to the right' },
+  camFit: { value: 1, min: 0.6, max: 1.6, step: 0.05, label: 'Camera fit', note: 'below 1: closer' },
+  fadeTime: { value: 0.45, min: 0.15, max: 1.2, step: 0.05, label: 'Fade', unit: 's', note: 'the fade between her room and the floating board, each way' },
+  swoopTime: { value: 1.8, min: 0, max: 4, step: 0.1, label: 'Swoop in', unit: 's', note: 'the camera gliding down onto the floating board as it fades in' },
   flipTime: { value: 0.75, min: 0.3, max: 1.6, step: 0.05, label: 'Card flip', unit: 's', note: 'Candy Land: from the deck to face up on the pile' },
   cardShow: { value: 0.6, min: 0.2, max: 1.6, step: 0.05, label: 'Card shown', unit: 's', note: 'Candy Land: how long the card and the glowing space show before the piece goes' },
   climbTime: { value: 1.1, min: 0.4, max: 3, step: 0.05, label: 'Ladder climb', unit: 's', note: 'Chutes and Ladders: rung by rung to the top' },
@@ -64,6 +68,12 @@ export type Phase = 'off' | 'picking' | 'awaiting' | 'rolling' | 'moving' | 'spe
 export interface TableView {
   /** She's at the table with its picker or a game open. */
   open: boolean
+  /** The floating board is showing (not the room). */
+  stage: boolean
+  /** The fade between the room and the floating board is covering the screen. */
+  curtain: boolean
+  /** Seconds the fade takes each way. */
+  fade: number
   picking: boolean
   /** While picking: the games and cousins (`game`), or, after ▶ in the Unicorn game, her unicorn's color (`color`). */
   step: PickStep
@@ -165,15 +175,20 @@ export class TablePlugin implements HousePlugin {
   private board: Board | null = null
   private pieces: [Piece, Piece] | null = null
   private sparkle!: Particles
-  private rings: Mesh[] = []
   private later: { t: number; f: () => void }[] = []
   private waits: { cond: () => boolean; f: () => void }[] = []
-  /** The cousin's throwing arm (0..1 of the swing). */
-  private toss = -1
+  /** The fades' own timers (a new match or Leave never cancels a fade halfway). */
+  private fx: { t: number; f: () => void }[] = []
   /** The cousin's turns this match (their roll lines are only now and then). */
   private cousinTurns = 0
-  /** The cousin hopping over to the stool: from where, how far along (-1: not hopping). */
-  private comeIn: { from: Vector3; t: number; seatY: number } | null = null
+  /** The cousin just sat down for this match (they say they're in). */
+  private justSat = false
+  private floating!: FloatingStage
+  /** The floating board is showing. */
+  private stage = false
+  private curtain = false
+  /** Seconds since the floating board faded in (the camera swoops down for the first few; -1: no swoop). */
+  private arriveT = -1
   private faces: Partial<Record<CousinId | 'kaylee', string>> = {}
   private pieceFaces: Partial<Record<UnicornColor, string>> = {}
 
@@ -207,32 +222,34 @@ export class TablePlugin implements HousePlugin {
     this.top.add(this.cards.root)
     this.sparkle = new Particles({ kind: 'spray', count: 120, colors: SPARKLE, gravity: 2.5 }, bag)
     house.scene.add(this.sparkle.mesh)
-    // A glowing ring on the floor round the stool of whoever's turn it is.
+    // The sparkles show in the room (the unicorn bag) and on the floating board.
+    this.sparkle.mesh.layers.enable(STAGE_LAYER)
+    // The floating board's island (under the table top) and its sky (round it).
     const t = DIM.gameTable
-    for (const x of [t.me.x, t.them.x]) {
-      const ring = new Mesh(bag.add(new RingGeometry(0.24, 0.3, 40)), bag.add(new MeshBasicMaterial({ color: PAL.hotpink, transparent: true, opacity: 0, depthWrite: false })))
-      ring.rotation.x = -Math.PI / 2
-      ring.position.set(x, DIM.g0 + 0.012, t.z)
-      ring.visible = false
-      house.scene.add(ring)
-      this.rings.push(ring)
-    }
+    this.floating = new FloatingStage(bag, this.top, new Vector3(t.x, DIM.g0 + t.h, t.z))
+    house.scene.add(this.floating.sky)
+    onStage(this.die.root)
+    onStage(this.cards.root)
     const s = this.opts.start
     if (s) {
-      // (The Hub started her already sitting on her stool: at=game-table.)
+      // (The Hub started her already sitting on her stool: at=game-table. A link goes straight to the floating board.)
       this.open = true
+      this.toStage(true)
       if (s.section === 'table') {
         this.picking = true
         this.phase = 'picking'
+        this.preview()
         this.tell('pick', L.games.pick, 0.8)
       } else if (s.section === 'colors') {
         this.picking = true
         this.phase = 'picking'
         this.game = 'unicorn'
         this.step = 'color'
+        this.preview()
         this.tell('color', L.games.color, 0.8)
       } else {
-        this.seat(s.vs, true)
+        this.seat(s.vs)
+        this.justSat = false
         this.begin({ me: s.me, them: s.them, turn: s.turn, rolls: s.rolls, deck: s.deck })
       }
       house.snapCamera()
@@ -240,21 +257,72 @@ export class TablePlugin implements HousePlugin {
     }
   }
 
+  // ---------------------------------------------------------------- the fade to the floating board and back
+
+  /** Onto the floating board: the house camera (and its taps) switch to the stage's layer, the sky comes up. `now`:
+   *  at once (a link); otherwise the camera swoops down onto it as the fade lifts. */
+  private toStage(now: boolean) {
+    this.stage = true
+    this.floating.show(true, this.house.scene)
+    this.floating.setGame(this.game)
+    this.house.showLayer(STAGE_LAYER)
+    this.arriveT = now || FEEL.swoopTime <= 0 ? -1 : 0
+    this.house.snapCamera()
+  }
+  /** Back in the room. */
+  private toRoom() {
+    this.stage = false
+    this.arriveT = -1
+    this.floating.show(false, this.house.scene)
+    this.house.showLayer(null)
+    this.house.snapCamera()
+  }
+  /** The fade: the curtain comes down, `swap` happens under it, and it lifts. */
+  private fade(swap: () => void) {
+    this.curtain = true
+    this.emit()
+    sfx.whoosh(FEEL.fadeTime * 1.6)
+    this.fxAfter(FEEL.fadeTime, () => {
+      swap()
+      // A moment fully covered (the new view's first frame drawn), then it lifts.
+      this.fxAfter(0.08, () => {
+        this.curtain = false
+        this.emit()
+      })
+    })
+  }
+  private fxAfter(sec: number, f: () => void) {
+    this.fx.push({ t: sec, f })
+  }
+
+  /** While picking: the picked game's board out on the island with the pieces at the start, so she sees what she's
+   *  picking. */
+  private preview() {
+    this.cancel()
+    this.state = startTurns(0, 0, 0)
+    this.showBoard(true)
+    this.layout(true)
+    this.die.place(CORNER[0])
+  }
+
   // ---------------------------------------------------------------- what the Hub's buttons do
 
   chooseGame(g: GameId) {
     if (!this.picking || this.step !== 'game' || !this.offered.includes(g)) return
     this.game = g
+    if (this.stage) this.preview()
     this.emit()
   }
   chooseCousin(c: CousinId) {
     if (!this.picking || this.step !== 'game' || !COUSINS.includes(c)) return
     this.vs = c
+    if (this.stage) this.preview()
     this.emit()
   }
   choosePiece(c: UnicornColor) {
     if (!this.picking || this.step !== 'color') return
     this.piece = c
+    if (this.stage) this.preview()
     this.emit()
   }
   /** Play: in the Unicorn game, first her unicorn's color (a second step, with its own ▶); then the chosen cousin comes
@@ -269,7 +337,7 @@ export class TablePlugin implements HousePlugin {
     }
     this.picking = false
     this.step = 'game'
-    this.seat(this.vs, false)
+    this.seat(this.vs)
     this.begin({ me: 0, them: 0, turn: 0, rolls: [], deck: [] })
     this.house.snapCamera()
     this.emit()
@@ -288,54 +356,45 @@ export class TablePlugin implements HousePlugin {
     this.step = 'game'
     this.picking = true
     this.phase = 'picking'
-    this.showBoard(false)
+    this.preview()
     this.emit()
   }
   /** Fold the board and get up; the cousin goes back to exactly where they were. */
   leave() {
-    if (!this.open) return
+    if (!this.open || this.curtain) return
     this.cancel()
     const was = this.seated
-    this.open = false
-    this.picking = false
-    this.step = 'game'
-    this.phase = 'off'
-    this.showBoard(false)
-    this.unseat()
-    if (was) this.events.say(L.games.cousins[was].bye)
-    for (const r of this.rings) r.visible = false
-    // She hops off her stool to the floor beside it.
-    this.house.walkTo([1.15, DIM.gameTable.z], undefined, false)
-    this.emit()
+    // The fade back to her room; there she hops off her stool to the floor beside it.
+    this.fade(() => {
+      this.open = false
+      this.picking = false
+      this.step = 'game'
+      this.phase = 'off'
+      this.showBoard(false)
+      this.unseat()
+      this.toRoom()
+      if (was) this.events.say(L.games.cousins[was].bye)
+      this.house.walkTo([1.15, DIM.gameTable.z], undefined, false)
+    })
   }
 
   // ---------------------------------------------------------------- seating
 
-  private seat(c: CousinId, now: boolean) {
+  /** The cousin sits on the stool across the table in her room (so they're there when she fades back), phone away. */
+  private seat(c: CousinId) {
     if (this.seated === c) return
     this.unseat()
     this.seated = c
+    this.justSat = true
     this.house.placeFamily(c, GAME_SEAT)
-    const m = this.house.family.get(c)
-    m?.putPhoneDown()
-    if (now) return
-    // They hop over from beside the table onto their stool, and say they're in.
-    if (m) {
-      const seatY = m.root.position.y
-      this.comeIn = { from: new Vector3(GAME_SEAT.x - 0.15, DIM.g0, GAME_SEAT.z + 0.6), t: 0, seatY }
-      m.place(this.comeIn.from.x, DIM.g0, this.comeIn.from.z, GAME_SEAT.face + 30, 'stand')
-    }
+    this.house.family.get(c)?.putPhoneDown()
   }
   private unseat() {
     const c = this.seated
     if (!c) return
     this.seated = null
-    this.toss = -1
-    this.comeIn = null
-    const m = this.house.family.get(c)
-    if (m) m.rig.armR.rotation.x = 0
     this.house.placeFamily(c, null)
-    m?.pickPhoneUp()
+    this.house.family.get(c)?.pickPhoneUp()
   }
 
   // ---------------------------------------------------------------- a match
@@ -356,14 +415,16 @@ export class TablePlugin implements HousePlugin {
     this.layout(true)
     this.die.place(CORNER[s.turn])
     this.cousinTurns = 0
-    // The cousin who just hopped over says they're in.
-    if (this.comeIn && this.lines) {
+    // The cousin who just sat down says they're in.
+    const sat = this.justSat
+    this.justSat = false
+    if (sat && this.lines) {
       const sit = this.lines.sit
       this.after(0.55, () => this.events.say(sit))
     }
     this.startTurn()
     // How to play, the first time she opens this game in a visit (after the cousin says they're in).
-    this.tell(`howto:${this.game}`, L.games.howto[this.game], this.seated && this.comeIn ? 1.9 : 0.6)
+    this.tell(`howto:${this.game}`, L.games.howto[this.game], sat ? 1.9 : 0.6)
   }
 
   /** Sparkle's line, once per visit (`key`), after `wait` seconds. If the match changes first it's dropped, and it
@@ -408,8 +469,17 @@ export class TablePlugin implements HousePlugin {
         b = this.game === 'candy' ? new CandyBoard(bag) : this.game === 'chutes' ? new ChutesBoard(bag) : new UnicornBoard(bag)
         this.boards.set(this.game, b)
         this.top.add(b.root)
+        onStage(b.root)
+      }
+      // Another game: its board pops in with a sparkle, and the island dresses for it.
+      if (this.board !== b && this.stage) {
+        this.floating.pop(b.root)
+        const at = this.top.localToWorld(new Vector3(0, 0.05, 0))
+        this.sparkle.burst(at.x, at.y, at.z, 30, 0.9, 1.1, 0.022)
+        sfx.chime()
       }
       this.board = b
+      this.floating.setGame(this.game)
     }
     for (const b of this.boards.values()) b.root.visible = on && b === this.board
     // Her unicorn and the cousin's in the Unicorn game; pawns with their faces in the others.
@@ -422,6 +492,7 @@ export class TablePlugin implements HousePlugin {
       for (const p of this.pieces) {
         p.root.scale.setScalar(FEEL.pieceSize)
         this.top.add(p.root)
+        onStage(p.root)
       }
     }
     for (const p of this.pieces ?? []) p.root.visible = on
@@ -483,8 +554,8 @@ export class TablePlugin implements HousePlugin {
     if (this.cousinTurns++ % ROLL_EVERY === 1 && this.lines) this.events.say(this.lines.roll[rollLine++ % this.lines.roll.length])
     await this.sleep(FEEL.cousinWait)
     if (token !== this.token) return
-    // A swing of the arm, and the die goes.
-    this.toss = 0
+    // The die wiggles in their corner, and goes.
+    if (!this.usesDeck) this.die.wiggle()
     await this.sleep(0.25)
     if (token !== this.token) return
     this.phase = 'rolling'
@@ -577,14 +648,13 @@ export class TablePlugin implements HousePlugin {
         const p = pieces[s.who]
         const climb = s.kind === 'ladder'
         const pts = climb ? b.ladderPath(s.from, s.to) : b.slidePath(s.from)
-        const m = this.seated ? this.house.family.get(this.seated) : undefined
         if (s.who === 1 && this.lines) this.events.say(climb ? this.lines.ladder : this.lines.slide)
         if (climb) {
           pts.forEach((_, i) => this.after((FEEL.climbTime * i) / pts.length, () => sounds.note(Math.min(10, i))))
           sfx.chime()
         } else {
           sfx.whoosh(FEEL.slideTime)
-          this.after(0.15, () => (sfx.giggle(), m?.react('hop')))
+          this.after(0.15, () => sfx.giggle())
         }
         let done = false
         p.glide(pts, climb ? FEEL.climbTime : FEEL.slideTime, climb ? 'climb' : 'slide', () => {
@@ -595,11 +665,8 @@ export class TablePlugin implements HousePlugin {
         if (token !== this.token) return
         const at = this.top.localToWorld(b.spot(s.to, s.who, false))
         this.sparkle.burst(at.x, at.y + 0.03, at.z, climb ? 24 : 12, 0.7, 1, 0.018)
-        if (climb) {
-          sfx.boing()
-          if (s.who === 1) m?.react('hop')
-          else this.house.kaylee.react('wave')
-        } else sfx.haha()
+        if (climb) sfx.boing()
+        else sfx.haha()
         this.layout(false)
         await this.sleep(0.3)
         return
@@ -630,17 +697,13 @@ export class TablePlugin implements HousePlugin {
         this.sparkle.burst(at.x, at.y, at.z, 60, 1.2, 1.4, 0.03)
         sounds.fanfare()
         burst(s.who === 0 ? 0.35 : 0.65, 0.5)
-        const m = this.seated ? this.house.family.get(this.seated) : undefined
         if (s.who === 0) {
-          this.house.kaylee.react('wave')
-          m?.react('wave')
           // Her first win of the visit: Sparkle. After that the cousin says well done (or, without a cousin, Sparkle in
           // turn).
           if (wins++ === 0) this.events.say(L.games.won)
           else if (this.lines) this.events.say(this.lines.lose)
           else this.events.say(L.games.wonAgain[(wins - 2) % L.games.wonAgain.length])
         } else {
-          m?.react('hop')
           sfx.cheer()
           if (this.lines) this.events.say(this.lines.win)
         }
@@ -671,7 +734,6 @@ export class TablePlugin implements HousePlugin {
     this.token++
     this.later = []
     this.waits = []
-    this.toss = -1
     this.die?.stop()
     this.cards?.stop()
     this.board?.markSpace(null)
@@ -680,8 +742,6 @@ export class TablePlugin implements HousePlugin {
       p.stop()
       p.active = false
     })
-    const m = this.seated ? this.house?.family.get(this.seated) : undefined
-    if (m) m.rig.armR.rotation.x = 0
     if (this.board) this.layout(true)
   }
 
@@ -699,12 +759,14 @@ export class TablePlugin implements HousePlugin {
     this.events.onView(this.view())
   }
   view(): TableView {
-    return { open: this.open, picking: this.picking, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, turn: this.shown, winner: this.state.winner, pos: [this.state.pos[0], this.state.pos[1]], card: this.card, rolls: this.roll.left(), deck: this.scriptedDeck ? this.deck.draw.map(cardToken) : [], offered: this.offered, preview: this.opts.preview, faces: this.faces, pieceFaces: this.pieceFaces, step: this.step }
+    return { open: this.open, stage: this.stage, curtain: this.curtain, fade: FEEL.fadeTime, picking: this.picking, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, turn: this.shown, winner: this.state.winner, pos: [this.state.pos[0], this.state.pos[1]], card: this.card, rolls: this.roll.left(), deck: this.scriptedDeck ? this.deck.draw.map(cardToken) : [], offered: this.offered, preview: this.opts.preview, faces: this.faces, pieceFaces: this.pieceFaces, step: this.step }
   }
 
   // ---------------------------------------------------------------- the house's hooks
 
   tap(_x: number, _y: number, id?: string) {
+    // Under the fade, taps wait.
+    if (this.curtain) return true
     if (!this.open) {
       // Over to her stool (the house walks her there and sits her down); with a game to play, the picker opens.
       if (id === 'game-table' && this.offered.length) this.wantPicker = true
@@ -725,13 +787,14 @@ export class TablePlugin implements HousePlugin {
       const at = this.top.localToWorld(this.board!.castleTop())
       this.sparkle.burst(at.x, at.y, at.z, 16, 0.7, 1, 0.02)
       sfx.chime()
-    } else if (id === `family:${this.seated}`) {
-      this.house.family.get(this.seated!)?.react('hop')
-      sfx.giggle()
-    } else if (id === 'kaylee' || id === 'family:kaylee') {
-      this.house.kaylee.react('wiggle')
-      sfx.giggle()
-    } else if (id === 'unicorn-bag') this.pokeBag()
+    } else if (id?.startsWith('trip:table:prop:')) {
+      // The island's props (and the balloons): a wobble, its sound, a twinkle.
+      const p = this.floating.poke(id)
+      if (p) {
+        sfx[p.sound === 'pop' ? 'plink' : p.sound]()
+        this.sparkle.burst(p.at.x, p.at.y, p.at.z, 10, 0.5, 0.7, 0.014)
+      }
+    }
     return true
   }
 
@@ -763,9 +826,9 @@ export class TablePlugin implements HousePlugin {
     return this.open
   }
 
-  hides(id: string) {
-    // While she plays, the house's own targets wait (the table's would sit over the board), except the unicorn bag.
-    return this.open && id !== 'unicorn-bag'
+  hides(_id: string) {
+    // At the table (on the floating board, or fading to it), the house's own targets wait.
+    return this.open || this.curtain || this.stage
   }
 
   anchor(id: string) {
@@ -776,57 +839,76 @@ export class TablePlugin implements HousePlugin {
   }
 
   get roots(): Object3D[] {
-    if (!this.open || this.picking) return []
-    return [this.usesDeck ? this.cards.stack : this.die.root, ...(this.pieces?.map((p) => p.root) ?? []), ...(this.board ? [this.board.root] : [])]
+    if (!this.stage) return []
+    const props = this.floating.roots
+    if (!this.open || this.picking) return props
+    return [this.usesDeck ? this.cards.stack : this.die.root, ...(this.pieces?.map((p) => p.root) ?? []), ...(this.board ? [this.board.root] : []), ...props]
   }
 
   shot(): Shot | null {
-    if (!this.open) return null
+    if (!this.stage) return null
     const t = DIM.gameTable
     const { w, h } = this.house.size
     const tall = w < h
     const fit = FEEL.camFit
+    const c = new Vector3(t.x, DIM.g0 + t.h, t.z)
+    let shot: Shot
     if (this.picking) {
-      // The table, both stools and the bag, kept clear of the picker: on its left on a wide screen, above it on a tall one.
-      return {
-        center: new Vector3(t.x + (tall ? 0 : 0.55), DIM.g0 + 0.45, t.z + (tall ? 0.55 : 0.2)),
-        half: tall ? new Vector3(0.8, 0.6, 1.1) : new Vector3(1.25, 0.55, 0.75),
-        yaw: 8,
-        pitch: 48,
-        minDist: 1.2,
+      // The island, kept clear of the picker: on its left on a wide screen, above it on a tall one.
+      shot = tall
+        ? { center: c.clone().add(new Vector3(0, 0.05, 0.4)), half: new Vector3(0.56, 0.16, 1.0), yaw: FEEL.camYaw, pitch: FEEL.camPitch + 4, minDist: 0.4 }
+        : { center: c.clone().add(new Vector3(0.42, 0.05, 0.1)), half: new Vector3(1.02, 0.16, 0.66), yaw: FEEL.camYaw, pitch: FEEL.camPitch + 4, minDist: 0.4 }
+    } else {
+      // Playing: the board and the dice tray in front, the faces at the sides (the fit trims the sides, never the
+      // board's length, so the die or the cards always show).
+      shot = {
+        center: c.clone().add(new Vector3(0, 0.04, 0.08)),
+        half: tall ? new Vector3(0.4 * fit, 0.1, 0.5) : new Vector3(0.6 * fit, 0.1, 0.48),
+        yaw: FEEL.camYaw,
+        pitch: FEEL.camPitch,
+        minDist: 0.4,
       }
     }
-    // Playing: the board close up, both players at the sides (the fit trims the sides, never the board's length, so
-    // the die or the cards in front always show).
-    const half = tall ? new Vector3(0.42 * fit, 0.5, 0.52) : new Vector3(0.78 * fit, 0.42, 0.52)
-    return {
-      center: new Vector3(t.x, DIM.g0 + t.h + (tall ? 0.05 : 0.12), t.z + 0.06),
-      half,
-      yaw: FEEL.camYaw,
-      pitch: FEEL.camPitch,
-      minDist: 1.2,
+    // Just faded in: the camera swoops down and round onto it from high up and further out.
+    if (this.arriveT >= 0 && this.arriveT < FEEL.swoopTime) {
+      const k = 1 - Math.pow(1 - this.arriveT / FEEL.swoopTime, 3)
+      const u = 1 - k
+      shot = { ...shot, yaw: shot.yaw + 55 * u, pitch: Math.min(84, shot.pitch + 30 * u), half: shot.half.clone().multiplyScalar(1 + 0.7 * u) }
     }
+    return shot
   }
 
   get busy() {
-    return this.later.length > 0 || this.waits.length > 0 || this.die.busy || this.cards.busy || this.sparkle.busy || !!this.board?.busy || !!this.pieces?.some((p) => p.busy) || this.wantPicker || this.open || !!this.comeIn
+    return this.later.length > 0 || this.waits.length > 0 || this.fx.length > 0 || this.die.busy || this.cards.busy || this.sparkle.busy || !!this.board?.busy || !!this.pieces?.some((p) => p.busy) || this.wantPicker || this.open || this.stage || this.curtain
   }
 
   update(dt: number, t: number) {
-    // She's sitting down after a tap on the table: once she's on her stool, the picker opens.
-    if (this.wantPicker) {
+    // She's sitting down after a tap on the table: once she's on her stool, the fade to the floating board and its
+    // picker.
+    if (this.wantPicker && !this.curtain) {
       const k = this.house.kaylee
       const p = k.position
       const t0 = DIM.gameTable
       if (k.pose === 'sit' && !k.walking && Math.hypot(p.x - t0.me.x, p.z - t0.z) < 0.1) {
         this.wantPicker = false
-        this.open = true
-        this.picking = true
-        this.phase = 'picking'
-        sounds.pop()
-        this.emit()
-        this.tell('pick', L.games.pick, 0.3)
+        this.fade(() => {
+          this.open = true
+          this.picking = true
+          this.step = 'game'
+          this.phase = 'picking'
+          this.toStage(false)
+          this.preview()
+          sounds.pop()
+          this.tell('pick', L.games.pick, 0.3 + FEEL.swoopTime * 0.5)
+        })
       } else if (!k.walking && k.pose !== 'sit') this.wantPicker = false
+    }
+    // The fades' timers.
+    if (this.fx.length) {
+      for (const l of this.fx) l.t -= dt
+      const due = this.fx.filter((l) => l.t <= 0)
+      this.fx = this.fx.filter((l) => l.t > 0)
+      for (const l of due) l.f()
     }
     // The faces for the buttons: one picture a frame, once she's at the table.
     if (this.open) {
@@ -843,20 +925,6 @@ export class TablePlugin implements HousePlugin {
         }
       }
     }
-    // The cousin hopping over to their stool (three little hops, then up onto it).
-    const mc = this.seated ? this.house.family.get(this.seated) : undefined
-    if (this.comeIn && mc) {
-      const c = this.comeIn
-      c.t = Math.min(1, c.t + dt / 0.8)
-      mc.root.position.x = c.from.x + (GAME_SEAT.x - c.from.x) * c.t
-      mc.root.position.z = c.from.z + (GAME_SEAT.z - c.from.z) * c.t
-      mc.setGround(DIM.g0 + Math.abs(Math.sin(c.t * Math.PI * 3)) * 0.12 + (c.seatY - DIM.g0) * Math.max(0, c.t * 3 - 2))
-      if (c.t >= 1) {
-        mc.place(GAME_SEAT.x, c.seatY, GAME_SEAT.z, GAME_SEAT.face, 'sit')
-        this.comeIn = null
-        sfx.boing()
-      }
-    }
     // Timers and waits (frame-driven: they stop with the house).
     if (this.later.length) {
       for (const l of this.later) l.t -= dt
@@ -869,6 +937,11 @@ export class TablePlugin implements HousePlugin {
       this.waits = this.waits.filter((w) => !due.includes(w))
       for (const w of due) w.f()
     }
+    if (this.arriveT >= 0) {
+      this.arriveT += dt
+      if (this.arriveT >= FEEL.swoopTime) this.arriveT = -1
+    }
+    this.floating.update(dt, this.house.rig.camera.position)
     this.die.update(dt, t)
     this.die.setGlow(this.phase === 'awaiting')
     this.cards.update(dt, t)
@@ -880,34 +953,11 @@ export class TablePlugin implements HousePlugin {
       p.update(dt, t)
     })
     this.sparkle.update(dt)
-    // The cousin's arm swings forward to roll.
-    const m = this.seated ? this.house.family.get(this.seated) : undefined
-    if (m && this.toss >= 0) {
-      this.toss = Math.min(1, this.toss + dt / 0.55)
-      m.rig.armR.rotation.x = -Math.sin(this.toss * Math.PI) * 1.1
-      if (this.toss >= 1) {
-        this.toss = -1
-        m.rig.armR.rotation.x = 0
-      }
-    }
-    // The ring under whoever's turn it is.
-    const playing = this.open && !this.picking && this.phase !== 'finished'
-    this.rings.forEach((r, i) => {
-      const on = playing && this.shown === i
-      r.visible = on
-      if (on) {
-        ;(r.material as MeshBasicMaterial).opacity = 0.45 + Math.sin(t * 4) * 0.2
-        ;(r.material as MeshBasicMaterial).color = i === 0 ? RING_ME : RING_THEM
-      }
-    })
   }
 
   qa() {
     return {
-      table: { open: this.open, picking: this.picking, step: this.step, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, me: this.state.pos[0], them: this.state.pos[1], turn: this.shown === 0 ? 'kaylee' : 'cousin', winner: this.state.winner === null ? null : this.state.winner === 0 ? 'kaylee' : 'cousin', token: this.token, die: this.die.value, card: this.card, deck: this.deck.draw.length, discard: this.deck.discard.length },
+      table: { open: this.open, stage: this.stage, curtain: this.curtain, picking: this.picking, step: this.step, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, me: this.state.pos[0], them: this.state.pos[1], turn: this.shown === 0 ? 'kaylee' : 'cousin', winner: this.state.winner === null ? null : this.state.winner === 0 ? 'kaylee' : 'cousin', token: this.token, die: this.die.value, card: this.card, deck: this.deck.draw.length, discard: this.deck.discard.length },
     }
   }
 }
-
-const RING_ME = new Color(PAL.hotpink)
-const RING_THEM = new Color(PAL.lavenderDark)

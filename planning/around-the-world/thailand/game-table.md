@@ -89,11 +89,11 @@ Child-sized, on the right side of her room, just past the couch.
 
 ## 🧒 Sitting down to play
 
-- **Tap the table:** it wobbles, Kaylee walks over and hops onto her stool (from anywhere in her room; downstairs she walks up first, like any other thing).
+- **Tap the table:** it wobbles, Kaylee walks over and hops onto her stool (from anywhere in her room; downstairs she walks up first, like any other thing). Then the screen fades (a pink glow, twinkles, a spinning die) and the camera swoops down onto the **floating board**: the game out on a little island in a pastel sky, nobody in sight (see "The floating board" below). Everything after this happens there.
 - **Pick a game:** three big picture cards slide up: a unicorn castle on a rainbow path, a candy path, a ladder and a slide. Tap one: it bounces and stays picked.
 - **Pick a cousin:** three round faces of BB, Gan and Ken, pictures of their real 3D selves, BB already glowing. Tap another and they swap.
-- **Play:** a big green ▶. The cousin comes over (BB hops off the couch next door; Gan gets up off the mattress; Ken comes in from the hallway), puts their phone away, sits on the stool across from her and hops. The board unfolds on the table.
-- **Leaving:** the 👋 button (or tapping the table again when nobody's mid-turn): the board folds, she hops off her stool to the floor beside it, and the cousin goes back to exactly where they were, phone in hand again.
+- **Play:** a big green ▶. The cousin says they're in (their face shows at the side of the screen) and, back in the room, sits on the stool across from her with their phone put away, so they're there when she fades back.
+- **Leaving:** the 👋 button: the fade back to her room, she hops off her stool to the floor beside it, and the cousin goes back to exactly where they were, phone in hand again.
 
 > **One of each**
 >
@@ -378,6 +378,22 @@ Built in one go on one branch (the new studio loop: no greybox for you to play f
 
 - The boards themselves are still the greybox shapes (bright, readable); fancier board art waits on her playtest.
 - On a phone in landscape the board is small but every space reads.
+
+### The floating board ([done] · 2026-11-11)
+
+You found the table in the room "kinda bad" (you couldn't see much of it past Kaylee and the cousin) and asked for sitting down, a fade, then a floating 3D board with no characters, from four reference pictures (board-game dioramas: a square island board floating over water, boards on grass with houses and trees round them).
+
+- **The fade** (`TableUI.tsx` `Curtain`, the plugin's `fade()`): she sits, a pink-to-lilac glow comes down with twinkles popping and a die spinning in the middle (taps wait under it), the view changes, it lifts, and the camera swoops down and round onto the island (knobs `fadeTime` 0.45 s, `swoopTime` 1.8 s). 👋 fades back the same way.
+- **The island** (`board-games/stage.ts`): the board on a grass top with a cream path round it and a pink dice tray in front, the grass dripping over a peach soil band, a chunky pink rock edge, then strata rock (pink, lilac, lavender) tapering to a point with crystals hanging off it. A pond in the front corner pours a waterfall off the front edge that fades far below. It bobs and sways gently (the board and pieces ride along).
+- **Each game dresses it** (all tappable: a jelly wobble, a sound, a twinkle): the Unicorn game a rainbow in clouds, cotton-candy trees, star wands, a cottage and a big lavender unicorn statue on a cloud; Candy Land lollipops, candy canes, ice-cream trees, cupcakes and gumdrops; Chutes and Ladders a playground (a slide with its ladder, swings, a sandbox, a seesaw) with trees and a cottage. While she picks, the island shows the picked game's board, its props and the pieces, and a new pick pops in with a sparkle.
+- **The sky**: a blue-lilac-pink gradient, a sea of clouds below, clouds drifting round, five little far-off islands bobbing, two striped hot-air balloons rising (tap one: it wobbles), twinkles in the air, a pink haze that starts just past the island however far a narrow screen backs the camera off.
+- **How it's drawn**: in the house's own scene, on its own camera layer (`STAGE_LAYER`), exactly where the table top is. `House.showLayer(n)` switches the camera and the taps to that layer, so the house and the family vanish and only the plugin's tap targets show; the board, pieces and die keep the table top's space, so the rules, the steps and the sparkles didn't change. The stage brings its own lights, background and fog and puts the house's back on the way out.
+- **Gone**: the floor rings round the stools, the cousin's hop over and their throwing arm (nobody sees them now). The turn faces (top corners on a tall screen, so they stay off the board) show whose turn it is.
+- **Camera knobs**: pitch 40, yaw 16, fit 1 (new values: your 30/9/0.8 were for the table in the room, seen past both players).
+
+#### Known small things
+
+- The swoop is judged in headless screenshots; on the iPad it may want a shorter `swoopTime`.
 
 ## 🔌 Where it plugs in (for the builder)
 

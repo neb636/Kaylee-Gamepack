@@ -940,9 +940,10 @@ motion.push(
   // The game table (game-table.md, greybox 1): she taps the die, it tumbles and settles, her unicorn hops five spaces,
   // then BB rolls; a 4 (her unicorn naps, Ken rolls); and the last roll into the castle.
   // The look and voices (2026-11-11): from the couch in her room she taps the table, sits, the picker opens with the faces; Play,
-  // and BB hops over to her stool and says she's in; then the first roll.
+  // and BB says she's in; then the first roll. Since the floating board (2026-11-11) the sit fades to it and the camera
+  // swoops in, so the picker waits a little longer.
   // Since 2026-11-12, Play in the Unicorn game first opens the color step: she picks the lavender unicorn, then Play.
-  thaiHouse('table-sit', 17, 'upstairs?at=couch', [['game-table', 4500], ['button:Play', 2200], ['button:lavender unicorn', 1000], ['button:Play', 3800], ['trip:table:die', 5500]]),
+  thaiHouse('table-sit', 18, 'upstairs?at=couch', [['game-table', 6000], ['button:Play', 2200], ['button:lavender unicorn', 1000], ['button:Play', 3800], ['trip:table:die', 5500]]),
   // A kind loss: BB rolls into the castle, says she won, and the Again button comes up.
   thaiHouse('table-kind-loss', 6, 'unicorn?me=20&them=23&turn=cousin&rolls=2', [['trip:table:die', 5500]]),
   thaiHouse('table-roll', 7, 'unicorn?rolls=5,3', [['trip:table:die', 6500]]),
