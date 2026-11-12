@@ -26,6 +26,9 @@ export interface Rig {
   talk: Group
   /** Their resting mouth is already open (Dad, Ja, Putto): it stretches when they talk instead. */
   open: boolean
+  /** A bird whose beak opens to talk (the pelican): the top and bottom bill, each on a hinge at the bill's root.
+   *  `open(k)` opens it (0 shut .. 1 wide); the talking mouth stays hidden. */
+  beak?: { top: Group; bottom: Group; open(k: number): void; k: number }
   armL: Group
   armR: Group
   tail: Group | null
@@ -324,6 +327,11 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const locks: Parts = []
   /** Where the mouth is (head-local): the resting mouth and the talking one are built around it. */
   let mouthAt: V3 = [0, 0, 0]
+  /** A beak's two halves and where they hinge (head-local): they swing apart when they talk. */
+  const beakTop: Parts = []
+  const jaw: Parts = []
+  const jawPlain: Parts = []
+  let jawAt: V3 | null = null
   const arm: { L: Parts; R: Parts } = { L: [], R: [] }
   const tail: Parts = []
   /** Where the tail pivots (body-local): it wags from its root. */
@@ -859,9 +867,20 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
         const a = 0.75
         const dir: V3 = [0, -Math.sin(a), Math.cos(a)]
         const at = (d: number, up = 0): V3 => [0, headY - 0.32 * R + dir[1] * d + up, 0.86 * R + dir[2] * d]
-        head.push(P.capsule(0.15 * R, 1.25 * R, look.dark, { at: at(0.78 * R), rot: [Math.PI / 2 + a, 0, 0], scale: [1.3, 1, 0.5] }))
-        head.push(P.sphere(0.12 * R, '#FF9A3C', { at: at(1.5 * R, 0.02 * R), scale: [1.3, 1, 1] }))
-        head.push(P.sphere(0.36 * R, look.ear ?? '#FFB45C', { at: at(0.7 * R, -0.2 * R), rot: [a, 0, 0], scale: [0.7, 0.6, 1.6] }))
+        // She talks with her beak: the top bill lifts and the pouch with the lower bill drops, each on a hinge at
+        // the bill's root, showing the inside of her mouth (pink, a tongue) between them. Shut, the bill hides it.
+        beakTop.push(P.capsule(0.15 * R, 1.25 * R, look.dark, { at: at(0.78 * R), rot: [Math.PI / 2 + a, 0, 0], scale: [1.3, 1, 0.5] }))
+        beakTop.push(P.sphere(0.12 * R, '#FF9A3C', { at: at(1.5 * R, 0.02 * R), scale: [1.3, 1, 1] }))
+        jawAt = at(0.05 * R, -0.04 * R)
+        // (Across the bill: `up` out of its top side, so the inside sits just over the pouch, under the top bill.)
+        const up = (d: number, u: number, x = 0): V3 => {
+          const p = at(d)
+          return [x, p[1] + Math.cos(a) * u, p[2] + Math.sin(a) * u]
+        }
+        jaw.push(P.sphere(0.36 * R, look.ear ?? '#FFB45C', { at: at(0.7 * R, -0.33 * R), rot: [a, 0, 0], scale: [0.7, 0.6, 1.6] }))
+        for (const sx of [-1, 1]) jaw.push(P.capsule(0.035 * R, 1.05 * R, look.dark, { at: up(0.74 * R, -0.01 * R, sx * 0.17 * R), rot: [Math.PI / 2 + a, 0, 0] }))
+        jawPlain.push(P.capsule(0.15 * R, 1.0 * R, MOUTH, { at: up(0.72 * R, -0.005 * R), rot: [Math.PI / 2 + a, 0, 0], scale: [1.15, 1, 0.12] }))
+        jawPlain.push(P.sphere(0.12 * R, TONGUE, { at: up(0.5 * R, 0.01 * R), rot: [a, 0, 0], scale: [1, 0.18, 1.9] }))
       }
       mouthAt = [0, headY - 0.3 * R, 0.92 * R]
       tailRoot = [0, 0.24 * H, -0.15 * H]
@@ -1033,6 +1052,25 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   talk.scale.setScalar(0.001)
   talk.visible = false
   headPivot.add(eyeGroup, mouthGroup, talk)
+  let beak: Rig['beak']
+  if (jawAt) {
+    const top = pivoted(beakTop, jawAt, bag, px)
+    const bottom = new Group()
+    bottom.position.set(...jawAt)
+    for (const p of [...jaw, ...jawPlain]) p.translate(-jawAt[0], -jawAt[1], -jawAt[2])
+    bottom.add(solidMix(jaw, jawPlain, bag, px))
+    headPivot.add(top, bottom)
+    beak = {
+      top,
+      bottom,
+      k: 0,
+      open(k) {
+        this.k = k
+        top.rotation.x = -0.28 * k
+        bottom.rotation.x = 0.5 * k
+      },
+    }
+  }
   // A unicorn's locks swing from the top of the back of the head (the wind blows them back), its tail from its root. A
   // pony's mane grows from the top of its head (a brush fluffs it up).
   let maneGroup: Group | null = null
@@ -1047,7 +1085,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     tailGroup = pivoted(tail, look.species === 'unicorn' ? [0, 0.29 * H, -0.15 * H] : tailRoot, bag, px)
     body.add(tailGroup)
   }
-  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, open: (!!look.open || look.smile === 'teeth') && rest.length > 0, armL, armR, tail: tailGroup, mane: maneGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
+  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, open: (!!look.open || look.smile === 'teeth') && rest.length > 0, beak, armL, armR, tail: tailGroup, mane: maneGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
 }
 
 /** A five-petal flower (with two leaves behind it) printed on a surface at `at`, turned by `rot` to face out. */

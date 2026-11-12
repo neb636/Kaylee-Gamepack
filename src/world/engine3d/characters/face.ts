@@ -37,7 +37,9 @@ export class FaceLife {
     // Opens fast, closes a little slower (reads as syllables, not flicker).
     this.level += (target - this.level) * (1 - Math.exp(-dt * (target > this.level ? 30 : 14)))
     const k = this.level
-    if (open) mouth.scale.set(1 + 0.15 * k, 1 + 0.9 * k, 1)
+    // A beak opens on its hinge instead (the pelican): no mouth pops up on her face.
+    if (this.rig.beak) this.rig.beak.open(k)
+    else if (open) mouth.scale.set(1 + 0.15 * k, 1 + 0.9 * k, 1)
     else {
       const talking = k > 0.04
       talk.visible = talking

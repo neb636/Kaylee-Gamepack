@@ -116,6 +116,8 @@ export class Islander {
         // Eyes wide, the mouth a round O, the head back.
         r.eyes.scale.y = 1 + k * 0.28
         r.mouth.scale.set(1 - k * 0.3, 1 + k * 0.7, 1)
+        // (A beak drops open in a gasp: the pelican has no mouth on her face.)
+        if (r.beak) r.beak.open(Math.max(r.beak.k, k * 0.6))
         nod -= k * 0.16
       } else {
         // Happy: eyes squeezed into smiles, the mouth big, a little sway.

@@ -41,8 +41,9 @@ export function applyPose(rig: Rig, kind: PoseKind, t: number, k: number) {
       body.rotation.z = 0.26 * ease
       head.rotation.z = -0.35 * ease
       eyes.scale.y = 1 - 0.65 * ease
-      // Tongue out.
-      if (!rig.open) {
+      // Tongue out (a beak just opens).
+      if (rig.beak) rig.beak.open(0.8 * ease)
+      else if (!rig.open) {
         rig.talk.visible = true
         rig.mouth.visible = false
         rig.talk.scale.set(0.9, 0.75, 1)
@@ -73,4 +74,5 @@ export function clearPose(rig: Rig) {
   rig.body.rotation.z = 0
   rig.head.rotation.z = 0
   rig.mouth.scale.set(1, 1, 1)
+  rig.beak?.open(0)
 }
