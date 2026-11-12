@@ -48,7 +48,7 @@ import { drawPhoto, parsePhotos, PHOTO_OF, type PhotoId } from './photo'
 import { addWallPhoto, shrinkPhoto, today, useWallPhotos } from '../../trip/wall-photos'
 import { ROUNDS as RICE_ROUNDS, type Round as RiceRound } from './rice/layout'
 import { Rice } from './rice/Rice'
-import type { Round as SaltRound } from './salt/layout'
+import { ROUNDS as SALT_ROUNDS, type Round as SaltRound } from './salt/layout'
 import { Salt } from './salt/Salt'
 import NAN_SECTIONS, { type NanSection } from './sections'
 import { isLoop, legOf, passFor, RESUME, RESUME_AT, type LoopSection } from './trip'
@@ -154,7 +154,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
       const r = ((FARM_ROUNDS as readonly string[]).includes(round) ? round : '1') as Round
       return { section: 'mushrooms', round: r, basket: param('basket') || BASKET_SEED[r] }
     }
-    if (first === 'salt') return { section: 'salt', round: (['1', '2', '3'].includes(round) ? round : '1') as SaltRound }
+    if (first === 'salt') return { section: 'salt', round: (SALT_ROUNDS as readonly string[]).includes(round) ? (round as SaltRound) : '1' }
     if (first === 'rice') return { section: 'rice', round: ((RICE_ROUNDS as readonly string[]).includes(round) ? round : 'plant') as RiceRound }
     if (first === 'drive') return { section: 'drive', road: param('road') as RoadId, to: param('to') }
     if (first === 'race') {
@@ -421,7 +421,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
         onRoad={(road) => setAt({ section: 'drive', road, to: road === 'three' && lookout ? 'lookout' : '' })}
         onStop={(road, stop) => {
           const s = (stop ?? (road === 'sky' ? 'rice' : 'mushrooms')) as Stop
-          setAt(s === 'cup' ? { section: 'cup' } : s === 'salt' ? { section: 'salt', round: '1' } : s === 'rice' ? { section: 'rice', round: 'story' } : { section: 'mushrooms', round: '1', basket: '' })
+          setAt(s === 'cup' ? { section: 'cup' } : s === 'salt' ? { section: 'salt', round: 'story' } : s === 'rice' ? { section: 'rice', round: 'story' } : { section: 'mushrooms', round: '1', basket: '' })
         }}
         onMap={() => setAt({ section: 'map' })}
         onView={() => setAt({ section: 'three', to: lookout ? 'lookout' : '' })}

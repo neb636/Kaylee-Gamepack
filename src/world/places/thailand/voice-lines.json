@@ -1579,6 +1579,122 @@
     "voice": "nick"
   },
   {
+    "text": "Sawasdee ka! I'm Pa Kluea. I make the salt!",
+    "voice": "saltaunty"
+  },
+  {
+    "text": "Pa Kluea! Pa Kluea!",
+    "voice": "kwai"
+  },
+  {
+    "text": "Blehh! My soup tastes like puddle water!",
+    "voice": "kwai"
+  },
+  {
+    "text": "Bawk! My salty eggs aren't salty!",
+    "voice": "kai"
+  },
+  {
+    "text": "And my fish is so... plain.",
+    "voice": "nak"
+  },
+  {
+    "text": "Oh no! My salt jar is empty!",
+    "voice": "saltaunty"
+  },
+  {
+    "text": "And the village dinner is tonight!",
+    "voice": "kwai"
+  },
+  {
+    "text": "When I was little, my grandma made the salt.",
+    "voice": "saltaunty"
+  },
+  {
+    "text": "And I carried it to every pot!",
+    "voice": "saltaunty"
+  },
+  {
+    "text": "Will you be my salt carrier?",
+    "voice": "saltaunty"
+  },
+  {
+    "text": "Is it salt yet?",
+    "voice": "kwai"
+  },
+  {
+    "text": "Not yet! Keep going!",
+    "voice": "saltaunty"
+  },
+  {
+    "text": "Ooh! Salt!",
+    "voice": "kai"
+  },
+  {
+    "text": "It's dinner time! Quick, salt carrier!",
+    "voice": "saltaunty"
+  },
+  "Sprinkle the salt on the food!",
+  {
+    "text": "Aroi mak! Just right!",
+    "voice": "kwai"
+  },
+  {
+    "text": "Now my eggs will be salty!",
+    "voice": "kai"
+  },
+  {
+    "text": "Yummy fish! Thank you!",
+    "voice": "nak"
+  },
+  {
+    "text": "Too salty! Water, please!",
+    "voice": "kwai"
+  },
+  {
+    "text": "Bawk! So salty!",
+    "voice": "kai"
+  },
+  {
+    "text": "Ooh! My whiskers!",
+    "voice": "nak"
+  },
+  {
+    "text": "My poor soup!",
+    "voice": "kwai"
+  },
+  {
+    "text": "Cluck cluck! No salt!",
+    "voice": "kai"
+  },
+  {
+    "text": "I'm so hungry, dear.",
+    "voice": "nak"
+  },
+  {
+    "text": "Slurp! Yum!",
+    "voice": "kwai"
+  },
+  {
+    "text": "Bawk bawk!",
+    "voice": "kai"
+  },
+  {
+    "text": "So yummy, dear!",
+    "voice": "nak"
+  },
+  {
+    "text": "Thank you, salt carrier! The best dinner ever!",
+    "voice": "saltaunty"
+  },
+  {
+    "text": "Mmm! Just right!",
+    "voice": "nick"
+  },
+  "Hold your finger over the food!",
+  "Click and hold over the food!",
+  "Salt keeps eggs and fish yummy!",
+  {
     "text": "Look! A race!",
     "voice": "nick"
   },
@@ -2726,10 +2842,6 @@
   },
   {
     "text": "Yum! Thank you!",
-    "voice": "nick"
-  },
-  {
-    "text": "Mmm! Just right!",
     "voice": "nick"
   },
   {

@@ -626,6 +626,39 @@ export const L = {
       foot: nick('Ow! A salty foot!'),
       salty: nick('Too salty? Ha ha!'),
       dad: [nick('Look at that steam!'), nick('Salt from a well!')],
+      // Pa Kluea's story (salt/story.ts, plan: thailand/nan-salt-story.md): the village dinner is tonight and nobody
+      // has any salt. The cooks: Lung Kwai the buffalo (noodle soup), Pa Kai the hen (salty eggs), Yai Nak the otter
+      // grandma (grilled fish).
+      story: {
+        // The way in.
+        hello: by('saltaunty')("Sawasdee ka! I'm Pa Kluea. I make the salt!"),
+        calling: by('kwai')('Pa Kluea! Pa Kluea!'),
+        puddle: by('kwai')('Blehh! My soup tastes like puddle water!'),
+        eggs: by('kai')("Bawk! My salty eggs aren't salty!"),
+        fish: by('nak')('And my fish is so... plain.'),
+        empty: by('saltaunty')('Oh no! My salt jar is empty!'),
+        tonight: by('kwai')('And the village dinner is tonight!'),
+        // The memory, in the storybook look.
+        little: by('saltaunty')('When I was little, my grandma made the salt.'),
+        carry: by('saltaunty')('And I carried it to every pot!'),
+        ask: by('saltaunty')('Will you be my salt carrier?'),
+        // While she makes it: the cooks wait across the road.
+        yet: by('kwai')('Is it salt yet?'),
+        notYet: by('saltaunty')('Not yet! Keep going!'),
+        ooh: by('kai')('Ooh! Salt!'),
+        // The dinner, at dusk.
+        dusk: by('saltaunty')("It's dinner time! Quick, salt carrier!"),
+        sprinkle: 'Sprinkle the salt on the food!',
+        salted: [by('kwai')('Aroi mak! Just right!'), by('kai')("Now my eggs will be salty!"), by('nak')('Yummy fish! Thank you!')],
+        tooSalty: [by('kwai')('Too salty! Water, please!'), by('kai')('Bawk! So salty!'), by('nak')('Ooh! My whiskers!')],
+        waiting: [by('kwai')('My poor soup!'), by('kai')('Cluck cluck! No salt!'), by('nak')("I'm so hungry, dear.")],
+        happy: [by('kwai')('Slurp! Yum!'), by('kai')('Bawk bawk!'), by('nak')('So yummy, dear!')],
+        // The party.
+        thanks: by('saltaunty')('Thank you, salt carrier! The best dinner ever!'),
+        yum: nick('Mmm! Just right!'),
+        hint: onDevice('Hold your finger over the food!', 'Click and hold over the food!'),
+        fact: 'Salt keeps eggs and fish yummy!',
+      },
     },
     // The Nan Mountain Cup (activities/nan-trip/cup/, plan: thailand/nan-cup.md): a kart race on three mountain tracks
     // against three Nan locals (cast.json): Grandma Taeng the tortoise, Pao the hornbill postman and Moon the sun bear

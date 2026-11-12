@@ -2,7 +2,7 @@
 // boiling, the paddle's scrape, the basket, the pokes' answers, the scooter going by and the village around her.
 // Recorded clips (sfx/, ElevenLabs) with the synthesized ones (the world kit's tone/noise) as their fallbacks; the
 // climbing notes and the bell runs stay synthesized (they're in tune), played over the clips.
-import { bed, clip, held, playClip } from '../../../../../kit/clips'
+import { bed, clip, cue, held, playClip } from '../../../../../kit/clips'
 import { noise, tone } from '../../../../../kit/sfx'
 import { sfx } from '../../../sfx'
 import { nanClip } from '../sfx'
@@ -134,3 +134,8 @@ export const saltSfx = {
 
 /** The village around the hut: drizzle, birds, a far-off rooster, until stop(). */
 export const villageBed = () => bed(nanClip('salt-village'), 0.3)
+
+/** Pa Kluea's story (story.ts): for now it borrows the rice farm's story music and its memory bed (scratch: the salt
+ *  wells get their own cues once the story is picked and heard). Each stops, fading, when its film ends or is skipped. */
+export const saltStoryMusic = () => cue(nanClip('rice-story-music'), 0.38)
+export const saltMemoryBed = () => bed(nanClip('rice-memory'), 0.3, { fadeIn: 1.2, fadeOut: 1.2 })
