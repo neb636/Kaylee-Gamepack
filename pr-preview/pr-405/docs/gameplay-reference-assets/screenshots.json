@@ -1,0 +1,144 @@
+{
+  "captured": "2026-10-30",
+  "screenshots": [
+    {
+      "id": "barber",
+      "route": "world/thailand/mall-trip/barber",
+      "actual": {
+        "section": {
+          "place": "thailand",
+          "activity": "mall-trip",
+          "id": "barber",
+          "params": {}
+        },
+        "url": "#/world/thailand/mall-trip/barber"
+      },
+      "viewport": "1180×820",
+      "capture": "Desktop Chromium with touch emulation; not a physical iPad capture",
+      "source": "local main checkout b64d641905bf17df2964e0e05f6eb4cba97137a2"
+    },
+    {
+      "id": "canoe",
+      "route": "world/canada/canoe/glide",
+      "actual": {
+        "section": {
+          "place": "canada",
+          "activity": "canoe",
+          "id": "glide",
+          "params": {}
+        },
+        "url": "#/world/canada/canoe/glide"
+      },
+      "viewport": "1180×820",
+      "capture": "Desktop Chromium with touch emulation; not a physical iPad capture",
+      "source": "local main checkout b64d641905bf17df2964e0e05f6eb4cba97137a2"
+    },
+    {
+      "id": "salmon",
+      "route": "world/canada/salmon/falls",
+      "actual": {
+        "section": {
+          "place": "canada",
+          "activity": "salmon",
+          "id": "falls",
+          "params": {}
+        },
+        "url": "#/world/canada/salmon/falls"
+      },
+      "viewport": "1180×820",
+      "capture": "Desktop Chromium with touch emulation; not a physical iPad capture",
+      "source": "local main checkout b64d641905bf17df2964e0e05f6eb4cba97137a2"
+    },
+    {
+      "id": "pizzeria",
+      "route": "world/italy/pizzeria/own?at=toppings",
+      "actual": {
+        "section": {
+          "place": "italy",
+          "activity": "pizzeria",
+          "id": "own",
+          "params": {
+            "at": "toppings"
+          }
+        },
+        "url": "#/world/italy/pizzeria/own?at=toppings"
+      },
+      "viewport": "1180×820",
+      "capture": "Desktop Chromium with touch emulation; not a physical iPad capture",
+      "source": "local main checkout b64d641905bf17df2964e0e05f6eb4cba97137a2"
+    },
+    {
+      "id": "fluffy",
+      "route": "world/peru/alpaca/brush",
+      "actual": {
+        "section": {
+          "place": "peru",
+          "activity": "alpaca",
+          "id": "brush",
+          "params": {
+            "yarn": "cream",
+            "hats": "none,none,none"
+          }
+        },
+        "url": "#/world/peru/alpaca/brush?yarn=cream&hats=none,none,none"
+      },
+      "viewport": "1180×820",
+      "capture": "Desktop Chromium with touch emulation; not a physical iPad capture",
+      "source": "local main checkout b64d641905bf17df2964e0e05f6eb4cba97137a2"
+    },
+    {
+      "id": "penguins",
+      "route": "world/peru/penguins/splash",
+      "actual": {
+        "section": {
+          "place": "peru",
+          "activity": "penguins",
+          "id": "splash",
+          "params": {
+            "chicks": "2",
+            "fed": "0,0,0",
+            "order": "0",
+            "filled": "0"
+          }
+        },
+        "url": "#/world/peru/penguins/splash?chicks=2&fed=0,0,0&order=0&filled=0"
+      },
+      "viewport": "1180×820",
+      "capture": "Desktop Chromium with touch emulation; not a physical iPad capture",
+      "source": "local main checkout b64d641905bf17df2964e0e05f6eb4cba97137a2"
+    },
+    {
+      "id": "reef",
+      "route": "world/australia/reef/turtle",
+      "actual": {
+        "section": {
+          "place": "australia",
+          "activity": "reef",
+          "id": "turtle",
+          "params": {}
+        },
+        "url": "#/world/australia/reef/turtle"
+      },
+      "viewport": "1180×820",
+      "capture": "Desktop Chromium with touch emulation; not a physical iPad capture",
+      "source": "local main checkout b64d641905bf17df2964e0e05f6eb4cba97137a2"
+    },
+    {
+      "id": "slide",
+      "route": "world/poles/slide/bumps",
+      "actual": {
+        "section": {
+          "place": "poles",
+          "activity": "slide",
+          "id": "bumps",
+          "params": {}
+        },
+        "url": "#/world/poles/slide/bumps"
+      },
+      "viewport": "1180×820",
+      "capture": "Desktop Chromium with touch emulation; not a physical iPad capture",
+      "source": "local main checkout b64d641905bf17df2964e0e05f6eb4cba97137a2"
+    }
+  ],
+  "errors": []
+}
