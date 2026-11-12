@@ -1,7 +1,7 @@
 // Snorkeling at Ko Kudi: the QA scenarios of Bubbles' story (story.ts). Screens: each shot of the way-in film (the bow
 // two-shot, the captain close, the bubble sinking in the garden, "Can you find her?"), the moment after it (on the
 // ladder, the captain on the bow), the blue glow in view on the way to the garden, the cuttlefish hugging the bubble,
-// and each shot of the found film. Filmed: the way-in film to its end and her splash in, the film skipped half way
+// the glow where it hides after jetting off, and each shot of the found film. Filmed: the way-in film to its end and her splash in, the film skipped half way
 // (⏭ held), the glow coming into view behind the parrotfish, the cuttlefish reached three times and the found film
 // after it, the found film from its link to the island, and the found film skipped.
 // The trip's other snorkel runs (float, follow, cuttle) are in ../qa.mjs.
@@ -64,11 +64,13 @@ export const screens = [
   { name: 'thailand-samet-snorkel-glow', hash: `${LINK}?round=follow`, reset: true, wait: 3000, act: async (page) => { await lead(page, 'parrotAt', 60000, (q) => q.seen); await page.waitForTimeout(900) } },
   // The garden: the cuttlefish hugging her bubble, a few meters off.
   { name: 'thailand-samet-snorkel-hug', hash: `${LINK}?round=cuttle`, reset: true, wait: 2500, act: async (page) => { await lead(page, 'bubbleAt', 4000, (q) => q.cuttleStage > 0); await page.waitForTimeout(300) } },
+  // It has jetted off to hide (sand-colored again): the blue glow gives it away.
+  { name: 'thailand-samet-snorkel-hide', hash: `${LINK}?round=cuttle`, reset: true, wait: 2500, act: async (page) => { await lead(page, 'cuttleAt', 30000, (q) => q.cuttleBest > 0); await page.waitForTimeout(3200) } },
   { name: 'thailand-samet-snorkel-found-rise', hash: `${LINK}?round=found`, reset: true, wait: 300, act: beat('rise', 1500) },
   { name: 'thailand-samet-snorkel-found-pop', hash: `${LINK}?round=found`, reset: true, wait: 300, act: beat('pop', 1150) },
   { name: 'thailand-samet-snorkel-found-loops', hash: `${LINK}?round=found`, reset: true, wait: 300, act: beat('pop', 2200) },
-  { name: 'thailand-samet-snorkel-found-saved', hash: `${LINK}?round=found`, reset: true, wait: 300, act: beat('saved', 1300) },
-  { name: 'thailand-samet-snorkel-found', hash: `${LINK}?round=found`, reset: true, wait: 300, act: beat('found', 1800) },
+  { name: 'thailand-samet-snorkel-found-saved', hash: `${LINK}?round=found`, reset: true, wait: 300, act: beat('saved', 900) },
+  { name: 'thailand-samet-snorkel-found', hash: `${LINK}?round=found`, reset: true, wait: 300, act: beat('found', 2050) },
 ]
 
 const open = (round) => async (page, base) => {

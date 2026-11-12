@@ -443,10 +443,10 @@ export function foundFilm(s: Stage): Film {
           cap.head(capHead)
           // (From the swimmers' side, clear of the boat's prow; Bubbles loops over her cap, never across her face.)
           capEye.set(B.x + 3.6 - capHead.x, 0, B.z + 1 - capHead.z).setLength(2.6).add(capHead).setY(capHead.y + 0.08)
-          capLoop.lerpVectors(capHead, capEye, 0.1).setY(capHead.y + 0.52)
+          capLoop.lerpVectors(capHead, capEye, 0.1).setY(capHead.y + 0.5)
           bub.fly.place(capLoop.x - 0.4, capLoop.y, capLoop.z)
           capHead.x += 0.2
-          capHead.y += 0.26
+          capHead.y += 0.12
           cap.pull('happy')
           cap.m.react('wave')
         },
@@ -465,15 +465,15 @@ export function foundFilm(s: Stage): Film {
           pop()
           // (Framed on her head, wherever her look puts it; Bubbles goes round her horn, never across her face.)
           s.head(kLook)
-          horn.copy(kLook).setY(kLook.y + 0.6)
-          kEye.set(kLook.x + 0.35, kLook.y + 0.3, kLook.z + 2.6)
+          horn.copy(kLook).setY(kLook.y + 0.56)
+          kEye.set(kLook.x + 0.35, kLook.y + 0.24, kLook.z + 2.7)
           kLook.x += 0.12
-          kLook.y += 0.16
+          kLook.y += 0.08
           bub.fly.place(horn.x + 0.5, horn.y, horn.z + 0.3)
           s.kaylee.lookAt(kEye.x, kEye.y, kEye.z)
         },
         tick: (_k, t, dt) => {
-          if (t < 1.25) loop(horn, 0.5, t + 0.3, dt, 8)
+          if (t < 1.25) loop(horn, 0.46, t + 0.3, dt, 8)
           else {
             // ...and down beside her cheek, turned to the camera.
             bub.fly.fly(tmp.set(horn.x + 0.62, horn.y - 0.52, horn.z + 0.4), dt, 6)

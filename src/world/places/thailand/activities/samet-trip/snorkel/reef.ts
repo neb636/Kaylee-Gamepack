@@ -20,9 +20,12 @@ export const BED = -2.6
 export const START: XZ = { x: 0, z: 1.5 }
 export const BOAT: XZ = { x: 3.3, z: 3.2 }
 /** The boat's deck (m over the water), and where on it the captain stands (boat-local: x to starboard, z to the
- *  stern): out on the bow in the open, where the swimmer and the camera can see her face. */
+ *  stern): out on the bow in the open, where the swimmer and the camera can see her face. `BOW_PLAY` while she
+ *  swims (the port side, inside the swimmer's camera however far she is from the boat); `BOW` in a film (starboard,
+ *  with room beside her for who she talks to). */
 export const DECK_Y = 0.55
 export const BOW = { x: 0.4, z: -2.95 }
+export const BOW_PLAY = { x: -0.38, z: -3.05 }
 /** The bubble Bubbles is in: its size (m), and where the cuttlefish holds it (the cuttlefish's own space: in front of
  *  its arms). */
 export const BUBBLE_R = 0.38

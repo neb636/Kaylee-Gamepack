@@ -52,7 +52,7 @@ import { cuttlefishModel, damselSchool, parrotfishModel, type Model } from '../b
 import { CAPTAIN } from '../cast'
 import { fireflySfx } from '../story/firefly'
 import { Islander } from '../story/islander'
-import { bed, bedHeight, BOAT, boat, bommie, BOUNDS, BOW, BUBBLE_R, bubbleRing, clam, CLAM, coralPatch, cucumber, CUCUMBER, DADDY, DECK_Y, flipper, GARDEN, hideFish, HUG, hugArms, koKudi, mask, OBSTACLES, rock, ROUTE, SANDY, seaTop, seaUnder, softCoral, START, sunbeams, type XZ } from './reef'
+import { bed, bedHeight, BOAT, boat, bommie, BOUNDS, BOW_PLAY, BUBBLE_R, bubbleRing, clam, CLAM, coralPatch, cucumber, CUCUMBER, DADDY, DECK_Y, flipper, GARDEN, hideFish, HUG, hugArms, koKudi, mask, OBSTACLES, rock, ROUTE, SANDY, seaTop, seaUnder, softCoral, START, sunbeams, type XZ } from './reef'
 import { reefBed, reefSfx as sfx } from './sounds'
 import { Bubbles, CUTTLE_SIZE, foundFilm, HOLD_M, introFilm, type Stage } from './story'
 
@@ -395,7 +395,7 @@ export class Snorkel implements World3D {
     scene.add(this.boat.root)
     // (She rides the boat: out on the bow, where the swimmer and the camera see her face.)
     this.captain = new Islander('captain', 'The captain', CAPTAIN, bag, 'pelican')
-    this.captain.place(BOW.x, DECK_Y, BOW.z, CAP_FACE)
+    this.captain.place(BOW_PLAY.x, DECK_Y, BOW_PLAY.z, CAP_FACE)
     this.boat.root.add(this.captain.root)
 
     // ---- Kaylee, face down in her mask and flippers.
@@ -464,7 +464,7 @@ export class Snorkel implements World3D {
     if (this.round === 'story' || this.round === 'float') {
       // On the ladder, about to splash in (the story: after its way-in film).
       this.toLadder()
-      if (this.round === 'story') this.after(0.3, () => this.films.play(introFilm(this.filmStage), () => this.afterIntro()))
+      if (this.round === 'story') this.after(0.15, () => this.films.play(introFilm(this.filmStage), () => this.afterIntro()))
     } else if (this.round === 'follow') {
       this.pos.set(0.4, 0, -3)
       this.swam = PLAY.float
@@ -1310,7 +1310,7 @@ export class Snorkel implements World3D {
       cheer: () => this.events.cheer(),
       toLadder: () => {
         this.toLadder()
-        this.captain.place(BOW.x, DECK_Y, BOW.z, CAP_FACE)
+        this.captain.place(BOW_PLAY.x, DECK_Y, BOW_PLAY.z, CAP_FACE)
       },
       free: () => {
         this.hold.free = true
