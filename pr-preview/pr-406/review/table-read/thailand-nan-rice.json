@@ -1,0 +1,1496 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "nan.rice",
+  "title": "Thailand › Nan › Rice",
+  "intro": "The rice farm under Stop Time Cafe (activities/nan-trip/rice/, plan: thailand/nan-rice.md). Lung Kham, the farmer (a monkey: \"lung\" is uncle), needs a helper: he says what each round is for, Sparkle then says what to do and, after a while with nothing done, says it again; Lung and Daddy (on the farm) and Mommy (on the deck) react in their own voices. Kaylee never talks: she giggles.",
+  "page": "thailand-nan-rice.html",
+  "audio": null,
+  "lines": 77,
+  "seconds": 161,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "nan.rice.story.hello",
+      "text": "Sawasdee krap! Welcome to my farm!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.uhoh",
+      "text": "Uh-oh. That's Jip!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.tell",
+      "text": "Let me tell you what Jip did last year.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.nap",
+      "text": "My rice was all golden. So I had a little nap...",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.along",
+      "text": "Then along came Jip!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.took",
+      "text": "He took my hat!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.gave",
+      "text": "And gave me the scarecrow's!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.thought",
+      "text": "The birds thought I was the scarecrow!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.ateAll",
+      "text": "They ate ALL my rice!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.help",
+      "text": "This year, I need a helper. Will you help me?",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.holdHat",
+      "text": "Hold on to your hat!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.whereTo",
+      "text": "Hey! Where's Jip going?",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.oldHat",
+      "text": "My old hat! Jip made a nest!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.hungry",
+      "text": "Oh... Jip's babies are hungry.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.share",
+      "text": "Let's share our rice with them!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.some",
+      "text": "Now, some for Jip!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.oneEach",
+      "text": "One for you, one for me!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.story.friends",
+      "text": "Friends now!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.ask.grow",
+      "text": "Oh no! It's Jip and friends!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Oh no! Birds in my rice!"
+    },
+    {
+      "key": "nan.rice.plant",
+      "text": "Walk through the water to plant!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "nan.rice.dry",
+      "text": "Rice likes water! Open the gate.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.rice.thresh.touch",
+      "text": "Tap to bang the rice!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "nan.rice.thresh.mouse",
+      "text": "Click to bang the rice!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "nan.rice.shareIt.touch",
+      "text": "Tap the rice to share it!",
+      "flags": [
+        "twice",
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.shareIt.mouse",
+      "text": "Click the rice to share it!",
+      "flags": [
+        "twice",
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.sticky",
+      "text": "In Nan, people eat sticky rice with their fingers!",
+      "flags": [
+        "long",
+        "touch only"
+      ]
+    },
+    {
+      "key": "nan.rice.steps",
+      "text": "The steps on the hill keep the water for the rice!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.rice.buffalo",
+      "text": "Buffalo helped farmers get the mud ready!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.rice.hint.plant",
+      "text": "Walk through the water to plant!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "nan.rice.hint.harvest",
+      "text": "Walk through the golden rice!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.rice.hint.thresh.touch",
+      "text": "Tap to bang the rice!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "nan.rice.hint.thresh.mouse",
+      "text": "Click to bang the rice!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "nan.rice.hint.share.touch",
+      "text": "Tap the rice to share it!",
+      "flags": [
+        "twice",
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.hint.share.mouse",
+      "text": "Click the rice to share it!",
+      "flags": [
+        "twice",
+        "new"
+      ]
+    },
+    {
+      "key": "nan.rice.aroi",
+      "text": "Aroi mak!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Aroi mak! That means so yummy!"
+    },
+    {
+      "key": "nan.rice.video",
+      "text": "Want to see real farmers grow rice?",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "hello"
+      ],
+      "text": "Sawasdee krap! Welcome to my farm!",
+      "voice": "lung",
+      "key": "nan.rice.story.hello",
+      "part": "nan › rice › story",
+      "when": "The way in: Lung says hello, hears Jip, and tells what Jip did last year (the memory, in the storybook look).",
+      "ms": 3096,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "uhoh"
+      ],
+      "text": "Uh-oh. That's Jip!",
+      "voice": "lung",
+      "key": "nan.rice.story.uhoh",
+      "part": "nan › rice › story",
+      "when": "Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.",
+      "ms": 1800,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "tell"
+      ],
+      "text": "Let me tell you what Jip did last year.",
+      "voice": "lung",
+      "key": "nan.rice.story.tell",
+      "part": "nan › rice › story",
+      "when": "Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.",
+      "ms": 2040,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "nap"
+      ],
+      "text": "My rice was all golden. So I had a little nap...",
+      "voice": "lung",
+      "key": "nan.rice.story.nap",
+      "part": "nan › rice › story",
+      "when": "Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.",
+      "ms": 3984,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "along"
+      ],
+      "text": "Then along came Jip!",
+      "voice": "lung",
+      "key": "nan.rice.story.along",
+      "part": "nan › rice › story",
+      "when": "Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.",
+      "ms": 1896,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "took"
+      ],
+      "text": "He took my hat!",
+      "voice": "lung",
+      "key": "nan.rice.story.took",
+      "part": "nan › rice › story",
+      "when": "Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.",
+      "ms": 1056,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "gave"
+      ],
+      "text": "And gave me the scarecrow's!",
+      "voice": "lung",
+      "key": "nan.rice.story.gave",
+      "part": "nan › rice › story",
+      "when": "Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.",
+      "ms": 2472,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "thought"
+      ],
+      "text": "The birds thought I was the scarecrow!",
+      "voice": "lung",
+      "key": "nan.rice.story.thought",
+      "part": "nan › rice › story",
+      "when": "Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.",
+      "ms": 2232,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "ateAll"
+      ],
+      "text": "They ate ALL my rice!",
+      "voice": "lung",
+      "key": "nan.rice.story.ateAll",
+      "part": "nan › rice › story",
+      "when": "Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.",
+      "ms": 2040,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "help"
+      ],
+      "text": "This year, I need a helper. Will you help me?",
+      "voice": "lung",
+      "key": "nan.rice.story.help",
+      "part": "nan › rice › story",
+      "when": "Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.",
+      "ms": 2856,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "holdHat"
+      ],
+      "text": "Hold on to your hat!",
+      "voice": "lung",
+      "key": "nan.rice.story.holdHat",
+      "part": "nan › rice › story",
+      "when": "Planting: Jip lands on her hat and tugs at it.",
+      "ms": 1536,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "whereTo"
+      ],
+      "text": "Hey! Where's Jip going?",
+      "voice": "lung",
+      "key": "nan.rice.story.whereTo",
+      "part": "nan › rice › story",
+      "when": "The rice is golden: Jip flies off with a grain, and Lung finds out why.",
+      "ms": 1920,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "oldHat"
+      ],
+      "text": "My old hat! Jip made a nest!",
+      "voice": "lung",
+      "key": "nan.rice.story.oldHat",
+      "part": "nan › rice › story",
+      "when": "Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.",
+      "ms": 2544,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "hungry"
+      ],
+      "text": "Oh... Jip's babies are hungry.",
+      "voice": "lung",
+      "key": "nan.rice.story.hungry",
+      "part": "nan › rice › story",
+      "when": "Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.",
+      "ms": 2400,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "share"
+      ],
+      "text": "Let's share our rice with them!",
+      "voice": "lung",
+      "key": "nan.rice.story.share",
+      "part": "nan › rice › story",
+      "when": "Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.",
+      "ms": 1968,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "some"
+      ],
+      "text": "Now, some for Jip!",
+      "voice": "lung",
+      "key": "nan.rice.story.some",
+      "part": "nan › rice › story",
+      "when": "Threshing done: the last bundles are for the birds.",
+      "ms": 2016,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "oneEach"
+      ],
+      "text": "One for you, one for me!",
+      "voice": "lung",
+      "key": "nan.rice.story.oneEach",
+      "part": "nan › rice › story",
+      "when": "Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.",
+      "ms": 2520,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "friends"
+      ],
+      "text": "Friends now!",
+      "voice": "lung",
+      "key": "nan.rice.story.friends",
+      "part": "nan › rice › story",
+      "when": "Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.",
+      "ms": 1392,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "ask",
+        "plant"
+      ],
+      "text": "Sawasdee krap! I need a helper!",
+      "voice": "lung",
+      "key": "nan.rice.ask.plant",
+      "part": "nan › rice › ask",
+      "when": "Lung, as each round begins, then Sparkle's line (the first two before her first touch). (After the story, Lung has already asked for a helper: the planting starts with Sparkle's line.)",
+      "ms": 2364,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "ask",
+        "grow"
+      ],
+      "text": "Oh no! It's Jip and friends!",
+      "voice": "lung",
+      "key": "nan.rice.ask.grow",
+      "part": "nan › rice › ask",
+      "when": "Lung, as each round begins, then Sparkle's line (the first two before her first touch). (After the story, Lung has already asked for a helper: the planting starts with Sparkle's line.)",
+      "ms": 2256,
+      "flags": [
+        "changed"
+      ],
+      "was": "Oh no! Birds in my rice!"
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "ask",
+        "thresh"
+      ],
+      "text": "Now we bang the grains out!",
+      "voice": "lung",
+      "key": "nan.rice.ask.thresh",
+      "part": "nan › rice › ask",
+      "when": "Lung, as each round begins, then Sparkle's line (the first two before her first touch). (After the story, Lung has already asked for a helper: the planting starts with Sparkle's line.)",
+      "ms": 1860,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "plant"
+      ],
+      "text": "Walk through the water to plant!",
+      "voice": "sparkle",
+      "key": "nan.rice.plant",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 2705,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "dry"
+      ],
+      "text": "Rice likes water! Open the gate.",
+      "voice": "sparkle",
+      "key": "nan.rice.dry",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 3405,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "grow"
+      ],
+      "text": "Shoo them away!",
+      "voice": "sparkle",
+      "key": "nan.rice.grow",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 1193,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "harvest"
+      ],
+      "text": "Walk through the rice to cut it!",
+      "voice": "sparkle",
+      "key": "nan.rice.harvest",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 1699,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "thresh",
+        "touch"
+      ],
+      "text": "Tap to bang the rice!",
+      "voice": "sparkle",
+      "key": "nan.rice.thresh.touch",
+      "part": "nan › rice › thresh",
+      "when": "",
+      "ms": 2224,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "thresh",
+        "mouse"
+      ],
+      "text": "Click to bang the rice!",
+      "voice": "sparkle",
+      "key": "nan.rice.thresh.mouse",
+      "part": "nan › rice › thresh",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 2112,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "shareIt",
+        "touch"
+      ],
+      "text": "Tap the rice to share it!",
+      "voice": "sparkle",
+      "key": "nan.rice.shareIt.touch",
+      "part": "nan › rice › shareIt",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 1824,
+      "flags": [
+        "twice",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "shareIt",
+        "mouse"
+      ],
+      "text": "Click the rice to share it!",
+      "voice": "sparkle",
+      "key": "nan.rice.shareIt.mouse",
+      "part": "nan › rice › shareIt",
+      "when": "",
+      "ms": 2136,
+      "flags": [
+        "twice",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "sticky"
+      ],
+      "text": "In Nan, people eat sticky rice with their fingers!",
+      "voice": "sparkle",
+      "key": "nan.rice.sticky",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 4829,
+      "flags": [
+        "long",
+        "touch only"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "steps"
+      ],
+      "text": "The steps on the hill keep the water for the rice!",
+      "voice": "sparkle",
+      "key": "nan.rice.steps",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 3704,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "buffalo"
+      ],
+      "text": "Buffalo helped farmers get the mud ready!",
+      "voice": "sparkle",
+      "key": "nan.rice.buffalo",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 3271,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "duck"
+      ],
+      "text": "Ducks eat the bugs in the rice!",
+      "voice": "sparkle",
+      "key": "nan.rice.duck",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 2961,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "water"
+      ],
+      "text": "Ahh! Water for my rice!",
+      "voice": "lung",
+      "key": "nan.rice.water",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 2455,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "thanks"
+      ],
+      "text": "All planted! Khob khun krap!",
+      "voice": "lung",
+      "key": "nan.rice.thanks",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 2162,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "tall"
+      ],
+      "text": "Look how tall it grows!",
+      "voice": "lung",
+      "key": "nan.rice.tall",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 1540,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "ripe"
+      ],
+      "text": "Golden! My rice is ready!",
+      "voice": "lung",
+      "key": "nan.rice.ripe",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 2445,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "count",
+        "0"
+      ],
+      "text": "Neung!",
+      "voice": "lung",
+      "key": "nan.rice.count.0",
+      "part": "nan › rice › count",
+      "when": "The Nan Mountain Cup (activities/nan-trip/cup/, plan: thailand/nan-cup.md): a kart race on three mountain tracks against three Nan locals (cast.json): Grandma Taeng the tortoise, Pao the hornbill postman and Moon the sun bear honey seller. Sparkle says what's new and counts down in Thai; the rivals tease, bump and are good sports in their own voices; Mommy and Daddy cheer from the grandstand. Kaylee never talks: she giggles.",
+      "ms": 554,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "count",
+        "1"
+      ],
+      "text": "Song!",
+      "voice": "lung",
+      "key": "nan.rice.count.1",
+      "part": "nan › rice › count",
+      "when": "",
+      "ms": 795,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "count",
+        "2"
+      ],
+      "text": "Sahm!",
+      "voice": "lung",
+      "key": "nan.rice.count.2",
+      "part": "nan › rice › count",
+      "when": "",
+      "ms": 815,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "count",
+        "3"
+      ],
+      "text": "See!",
+      "voice": "lung",
+      "key": "nan.rice.count.3",
+      "part": "nan › rice › count",
+      "when": "",
+      "ms": 606,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "count",
+        "4"
+      ],
+      "text": "Hah!",
+      "voice": "lung",
+      "key": "nan.rice.count.4",
+      "part": "nan › rice › count",
+      "when": "",
+      "ms": 363,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "helper"
+      ],
+      "text": "Sticky rice, for my helper!",
+      "voice": "lung",
+      "key": "nan.rice.helper",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 2128,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "scarecrow"
+      ],
+      "text": "Hey! My scarecrow!",
+      "voice": "lung",
+      "key": "nan.rice.scarecrow",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 1687,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "lungTap",
+        "0"
+      ],
+      "text": "Hee hee! Sawasdee krap!",
+      "voice": "lung",
+      "key": "nan.rice.lungTap.0",
+      "part": "nan › rice › lungTap",
+      "when": "",
+      "ms": 1869,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "lungTap",
+        "1"
+      ],
+      "text": "Mud is good for rice!",
+      "voice": "lung",
+      "key": "nan.rice.lungTap.1",
+      "part": "nan › rice › lungTap",
+      "when": "",
+      "ms": 1819,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "lungTap",
+        "2"
+      ],
+      "text": "My back says thank you!",
+      "voice": "lung",
+      "key": "nan.rice.lungTap.2",
+      "part": "nan › rice › lungTap",
+      "when": "",
+      "ms": 2082,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "hint",
+        "plant"
+      ],
+      "text": "Walk through the water to plant!",
+      "voice": "sparkle",
+      "key": "nan.rice.hint.plant",
+      "part": "nan › rice › hint",
+      "when": "",
+      "ms": 2705,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "hint",
+        "gate",
+        "touch"
+      ],
+      "text": "Tap the gate to let the water in!",
+      "voice": "sparkle",
+      "key": "nan.rice.hint.gate.touch",
+      "part": "nan › rice › hint › gate",
+      "when": "",
+      "ms": 2912,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "hint",
+        "gate",
+        "mouse"
+      ],
+      "text": "Click the gate to let the water in!",
+      "voice": "sparkle",
+      "key": "nan.rice.hint.gate.mouse",
+      "part": "nan › rice › hint › gate",
+      "when": "",
+      "ms": 2664,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "hint",
+        "grow"
+      ],
+      "text": "Walk to the birds!",
+      "voice": "sparkle",
+      "key": "nan.rice.hint.grow",
+      "part": "nan › rice › hint",
+      "when": "",
+      "ms": 1459,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "hint",
+        "harvest"
+      ],
+      "text": "Walk through the golden rice!",
+      "voice": "sparkle",
+      "key": "nan.rice.hint.harvest",
+      "part": "nan › rice › hint",
+      "when": "",
+      "ms": 3746,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "hint",
+        "thresh",
+        "touch"
+      ],
+      "text": "Tap to bang the rice!",
+      "voice": "sparkle",
+      "key": "nan.rice.hint.thresh.touch",
+      "part": "nan › rice › hint › thresh",
+      "when": "",
+      "ms": 2224,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "hint",
+        "thresh",
+        "mouse"
+      ],
+      "text": "Click to bang the rice!",
+      "voice": "sparkle",
+      "key": "nan.rice.hint.thresh.mouse",
+      "part": "nan › rice › hint › thresh",
+      "when": "",
+      "ms": 2112,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "hint",
+        "share",
+        "touch"
+      ],
+      "text": "Tap the rice to share it!",
+      "voice": "sparkle",
+      "key": "nan.rice.hint.share.touch",
+      "part": "nan › rice › hint › share",
+      "when": "",
+      "ms": 1824,
+      "flags": [
+        "twice",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "hint",
+        "share",
+        "mouse"
+      ],
+      "text": "Click the rice to share it!",
+      "voice": "sparkle",
+      "key": "nan.rice.hint.share.mouse",
+      "part": "nan › rice › hint › share",
+      "when": "",
+      "ms": 2136,
+      "flags": [
+        "twice",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "hint",
+        "eat",
+        "touch"
+      ],
+      "text": "Tap the sticky rice!",
+      "voice": "sparkle",
+      "key": "nan.rice.hint.eat.touch",
+      "part": "nan › rice › hint › eat",
+      "when": "",
+      "ms": 2055,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "hint",
+        "eat",
+        "mouse"
+      ],
+      "text": "Click the sticky rice!",
+      "voice": "sparkle",
+      "key": "nan.rice.hint.eat.mouse",
+      "part": "nan › rice › hint › eat",
+      "when": "",
+      "ms": 1992,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "hint",
+        "photo",
+        "touch"
+      ],
+      "text": "Tap Mommy for a photo!",
+      "voice": "sparkle",
+      "key": "nan.rice.hint.photo.touch",
+      "part": "nan › rice › hint › photo",
+      "when": "",
+      "ms": 2104,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "hint",
+        "photo",
+        "mouse"
+      ],
+      "text": "Click Mommy for a photo!",
+      "voice": "sparkle",
+      "key": "nan.rice.hint.photo.mouse",
+      "part": "nan › rice › hint › photo",
+      "when": "",
+      "ms": 1728,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "planted"
+      ],
+      "text": "Look at those rows!",
+      "voice": "nick",
+      "key": "nan.rice.planted",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 1857,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "wet"
+      ],
+      "text": "Hey! I'm all wet!",
+      "voice": "nick",
+      "key": "nan.rice.wet",
+      "part": "nan › rice",
+      "when": "A bump with her hoof in the water soaks Mommy (in turn).",
+      "ms": 2145,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "hat"
+      ],
+      "text": "A straw hat! Thank you!",
+      "voice": "nick",
+      "key": "nan.rice.hat",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 1907,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "muddy"
+      ],
+      "text": "A muddy unicorn!",
+      "voice": "nick",
+      "key": "nan.rice.muddy",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 1567,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "flop"
+      ],
+      "text": "Ha! Into the straw!",
+      "voice": "nick",
+      "key": "nan.rice.flop",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 2567,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "rain"
+      ],
+      "text": "Rain! The rice loves it!",
+      "voice": "nick",
+      "key": "nan.rice.rain",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 2345,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "fat"
+      ],
+      "text": "That bird ate too much!",
+      "voice": "nick",
+      "key": "nan.rice.fat",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 2221,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "where"
+      ],
+      "text": "Where did you go?",
+      "voice": "nick",
+      "key": "nan.rice.where",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 1272,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "lots"
+      ],
+      "text": "Look at all that rice!",
+      "voice": "nick",
+      "key": "nan.rice.lots",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 1307,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "coffee"
+      ],
+      "text": "Mmm, coffee.",
+      "voice": "nick",
+      "key": "nan.rice.coffee",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 1726,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "tap",
+        "0"
+      ],
+      "text": "Go, farmer!",
+      "voice": "nick",
+      "key": "nan.rice.tap.0",
+      "part": "nan › rice › tap",
+      "when": "",
+      "ms": 1824,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "tap",
+        "1"
+      ],
+      "text": "Splish, splash!",
+      "voice": "nick",
+      "key": "nan.rice.tap.1",
+      "part": "nan › rice › tap",
+      "when": "",
+      "ms": 1706,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "tap",
+        "2"
+      ],
+      "text": "Daddy is watching!",
+      "voice": "nick",
+      "key": "nan.rice.tap.2",
+      "part": "nan › rice › tap",
+      "when": "",
+      "ms": 1305,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "hi"
+      ],
+      "text": "You grew this sticky rice!",
+      "voice": "ji",
+      "key": "nan.rice.hi",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 2251,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "aroi"
+      ],
+      "text": "Aroi mak!",
+      "voice": "ji",
+      "key": "nan.rice.aroi",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 1416,
+      "flags": [
+        "changed"
+      ],
+      "was": "Aroi mak! That means so yummy!"
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "smile"
+      ],
+      "text": "Smile!",
+      "voice": "ji",
+      "key": "nan.rice.smile",
+      "part": "nan › rice",
+      "when": "Tap Mommy (her photo, in turn); the lizard and the squirrel below, the first time.",
+      "ms": 1032,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "video"
+      ],
+      "text": "Want to see real farmers grow rice?",
+      "voice": "sparkle",
+      "key": "nan.rice.video",
+      "part": "nan › rice",
+      "when": "",
+      "ms": 3146,
+      "flags": [
+        "long"
+      ]
+    }
+  ]
+}
