@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Toss a coin in the Trevi Fountain</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe1ee"/><stop offset="1" stop-color="#ffbcd8"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="pool" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fe3ea"/><stop offset="1" stop-color="#4fcad6"/></linearGradient>
+    <!-- a column standing on 0,0: shaft shaded on the right, capital, base -->
+    <g id="col">
+      <rect x="-3" y="-40" width="6" height="40" fill="#fdeedd"/>
+      <rect x="1" y="-40" width="2" height="40" fill="#e9c6b4"/>
+      <rect x="-4.5" y="-43" width="9" height="3.5" rx="1" fill="#fff3e6"/>
+      <rect x="-4.5" y="-2" width="9" height="3" rx="1" fill="#e9c6b4"/>
+    </g>
+    <path id="rockP" d="M14 96C14 88 19 83 25 84C28 79 35 78 40 81C44 78 50 79 52 83H68C70 79 76 78 80 81C85 78 92 79 95 84C101 83 106 88 106 96Z"/>
+    <clipPath id="rock"><use href="#rockP"/></clipPath>
+    <path id="shellP" d="M60 66L46.5 64A3.2 3.2 0 0 1 48 58A3.2 3.2 0 0 1 51.5 53.5A3.2 3.2 0 0 1 57 51A3.2 3.2 0 0 1 63 51A3.2 3.2 0 0 1 68.5 53.5A3.2 3.2 0 0 1 72 58A3.2 3.2 0 0 1 73.5 64Z"/>
+    <clipPath id="shell"><use href="#shellP"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+
+  <!-- the palace front: attic, cornice, wall -->
+  <rect x="34" y="22" width="52" height="4" rx="2" fill="#fff3e6"/>
+  <rect x="37" y="25" width="46" height="11" fill="#f8dcc0"/>
+  <rect x="50" y="28" width="20" height="5" rx="1.5" fill="#ecccbf"/>
+  <rect x="15" y="41" width="90" height="50" fill="#f8dcc0"/>
+  <rect x="11" y="34" width="98" height="6" rx="2" fill="#fff3e6"/>
+  <rect x="13" y="39.5" width="94" height="2.5" fill="#dcb5aa"/>
+
+  <!-- arched windows between the columns -->
+  <path d="M26 66V55.5A3.5 3.5 0 0 1 33 55.5V66ZM87 66V55.5A3.5 3.5 0 0 1 94 55.5V66Z" fill="#cf9f9b"/>
+  <rect x="25" y="66" width="9" height="2.5" rx="1" fill="#fff3e6"/>
+  <rect x="86" y="66" width="9" height="2.5" rx="1" fill="#fff3e6"/>
+
+  <!-- the big central arch, its frame and keystone -->
+  <path d="M44 90V62A16 16 0 0 1 76 62V90Z" fill="#cf9f9b"/>
+  <path d="M44 62A16 16 0 0 1 49 50.5V90H44Z" fill="#bf8f97"/>
+  <path d="M42.5 62A17.5 17.5 0 0 1 77.5 62" fill="none" stroke="#fff3e6" stroke-width="3.5"/>
+  <rect x="57.5" y="41" width="5" height="6" rx="1" fill="#fff3e6"/>
+
+  <!-- the columns -->
+  <use href="#col" transform="translate(21 88)"/>
+  <use href="#col" transform="translate(38 88)"/>
+  <use href="#col" transform="translate(82 88)"/>
+  <use href="#col" transform="translate(99 88)"/>
+
+  <!-- the big shell in the arch, shaded on the right -->
+  <g clip-path="url(#shell)">
+    <rect x="44" y="47" width="32" height="20" fill="#f3d6c6"/>
+    <use href="#shellP" fill="#fff3e6" transform="translate(-3 -1.5)"/>
+  </g>
+  <path d="M60 64.5L48 58M60 64.5L51.5 53.5M60 64.5L57 51M60 64.5L63 51M60 64.5L68.5 53.5M60 64.5L72 58" stroke="#efcdbb" stroke-width="2" stroke-linecap="round"/>
+  <path d="M55 65H65L63 68.5H57Z" fill="#efcdbb"/>
+
+  <!-- the rocks the water tumbles over -->
+  <g clip-path="url(#rock)">
+    <rect x="12" y="76" width="96" height="22" fill="#9790ba"/>
+    <use href="#rockP" fill="#bcb6d6" transform="translate(-2.5 -2)"/>
+    <path d="M19 87C20 84 22 82.5 25 82.5M31 81C34 79 37 78.5 40 79.5M74 81C76 79 79 78.5 81 79M89 80.5C91 80 93 80.5 95 82" fill="none" stroke="#dedaf0" stroke-width="2.4" stroke-linecap="round"/>
+  </g>
+
+  <!-- the pool -->
+  <rect x="-2" y="92" width="124" height="20" fill="url(#pool)"/>
+
+  <!-- water spouting out under the shell and cascading down into the pool -->
+  <path d="M50 70C44 68 40 72 38 78M70 70C76 68 80 72 82 78" fill="none" stroke="#8fe3ea" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M53 68H67C67 73 68 78 70 83H50C52 78 53 73 53 68Z" fill="#8fe3ea"/>
+  <path d="M57 70V81M63 70V81" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  <path d="M48 82H72C75 87 79 92 84 97H36C41 92 45 87 48 82Z" fill="#8fe3ea"/>
+  <path d="M53 84C51 88 48 92 45 96M60 84V96M67 84C69 88 72 92 75 96" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M24 86H32C33 90 34 93 36 97H20C22 93 23 90 24 86ZM88 86H96C97 90 98 93 100 97H84C86 93 87 90 88 86Z" fill="#8fe3ea"/>
+  <path d="M28 88V96M92 88V96" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  <g fill="#fff">
+    <circle cx="38" cy="97" r="3"/><circle cx="46" cy="98" r="3.5"/><circle cx="54" cy="98.5" r="3.5"/><circle cx="62" cy="98.5" r="3.8"/><circle cx="70" cy="98" r="3.5"/><circle cx="78" cy="97" r="3"/>
+    <circle cx="22" cy="97" r="2.6"/><circle cx="30" cy="97.5" r="2.6"/><circle cx="90" cy="97.5" r="2.6"/><circle cx="98" cy="97" r="2.6"/>
+  </g>
+  <g fill="#fff" opacity="0.6"><rect x="6" y="101" width="12" height="2.4" rx="1.2"/><rect x="102" y="101" width="12" height="2.4" rx="1.2"/></g>
+
+  <!-- the basin's curved stone rim -->
+  <path d="M-2 99Q60 112 122 99V104Q60 117-2 104Z" fill="#fff3e6"/>
+  <path d="M-2 104Q60 117 122 104V122H-2Z" fill="#f8dcc0"/>
+  <path d="M-2 112Q60 125 122 112V122H-2Z" fill="#dcb5aa"/>
+
+  <!-- a gold coin flipping in the air -->
+  <path d="M80 24C80 18 84 13 90 12M104 18C104 24 100 29 94 30" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+  <ellipse cx="92.8" cy="22" rx="8.5" ry="5.6" fill="#eba123" transform="rotate(-28 92.8 22)"/>
+  <ellipse cx="92" cy="21" rx="8.5" ry="5.6" fill="#ffc83d" transform="rotate(-28 92 21)"/>
+  <ellipse cx="92" cy="21" rx="5.2" ry="3.2" fill="none" stroke="#eba123" stroke-width="2" transform="rotate(-28 92 21)"/>
+  <path d="M86 20C87 17.5 89.5 15.5 92.5 15" fill="none" stroke="#ffe189" stroke-width="2" stroke-linecap="round"/>
+  <path d="M106 34v5M103.5 36.5h5M16 22v4M14 24h4" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+</svg>
