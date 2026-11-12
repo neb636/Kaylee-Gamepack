@@ -70,9 +70,6 @@ export function buildLand(field: Field, bag: Bag) {
 /** A cheap wobble (about -1..1) so painted edges aren't ruler-straight. */
 const wobble = (lon: number, lat: number) => 0.5 * Math.sin(lon * 7.3 + lat * 3.1) + 0.3 * Math.sin(lon * 3.7 - lat * 5.9) + 0.2 * Math.sin(lon * 13.1 + lat * 11.3)
 
-/** Where the compass rose is painted (on Laos, top right). */
-const COMPASS: LonLat = [105.0, 19.55]
-
 /** The trails between the places (lon, lat): stepping-stone dots she can follow with her eyes. */
 const TRAILS: LonLat[][] = [
   [PINS[1].at, [100.45, 15.3], [100.2, 16.4], [100.3, 17.5], [100.6, 18.3], PINS[0].at],
@@ -172,7 +169,7 @@ function paint(field: Field) {
   for (let i = 0; i < 260; i++) {
     const lon = BOARD.lon0 + drnd() * (BOARD.lon1 - BOARD.lon0)
     const lat = BOARD.lat0 + drnd() * (BOARD.lat1 - BOARD.lat0)
-    if (field.land(lon, lat) < 0.3 || field.thai(lon, lat) > -0.35 || Math.hypot(lon - COMPASS[0], lat - COMPASS[1]) < 1.1) continue
+    if (field.land(lon, lat) < 0.3 || field.thai(lon, lat) > -0.35) continue
     const [x, y] = px([lon, lat])
     const r = TEX * (0.1 + drnd() * 0.06)
     g.beginPath()
@@ -181,37 +178,6 @@ function paint(field: Field) {
     g.beginPath()
     g.arc(x + r * 1.25, y + r * 0.15, r * 0.7, Math.PI * 1.15, Math.PI * 1.85)
     g.stroke()
-  }
-  // A compass rose in her colors, its long pink point to the north.
-  {
-    const [x, y] = px(COMPASS)
-    const R = TEX * 0.62
-    g.fillStyle = '#FFFFFF'
-    g.beginPath()
-    g.arc(x, y, R * 0.8, 0, Math.PI * 2)
-    g.fill()
-    g.strokeStyle = '#D9CCFF'
-    g.lineWidth = TEX * 0.05
-    g.stroke()
-    const point = (a: number, len: number, light: string, dark: string) => {
-      const tip: [number, number] = [x + Math.sin(a) * len, y - Math.cos(a) * len]
-      for (const [k, c] of [[-1, light], [1, dark]] as const) {
-        g.fillStyle = c
-        g.beginPath()
-        g.moveTo(x, y)
-        g.lineTo(x + Math.sin(a + k * 0.78) * R * 0.2, y - Math.cos(a + k * 0.78) * R * 0.2)
-        g.lineTo(...tip)
-        g.closePath()
-        g.fill()
-      }
-    }
-    for (let i = 0; i < 4; i++) point(Math.PI / 4 + (i * Math.PI) / 2, R * 0.62, '#E9E0FF', '#CDBBF7')
-    for (let i = 1; i < 4; i++) point((i * Math.PI) / 2, R * 0.95, '#BFE3FF', '#8FC7F2')
-    point(0, R * 1.2, '#FFB3CF', '#FF6FA8')
-    g.fillStyle = '#FFC83D'
-    g.beginPath()
-    g.arc(x, y, R * 0.1, 0, Math.PI * 2)
-    g.fill()
   }
   g.restore()
 
