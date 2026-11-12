@@ -141,18 +141,17 @@ stop after the city road) are fixed.
 - [ ] **Listen:** the clerk, the mushroom aunty, the salt aunty (new voices, northern Thai accent), Dad's "Whoa! Beep
   beep!" (heard as Chinese by the transcription check), "Wheee! Bumpy!", and whether the sky road talks too much.
 
-## Koh Samet: the look (step 8, PR #342)
+## Koh Samet (The Lost Fireflies, 2026-11-12)
 
-Found by layout QA (WebKit, iPad and iPhone landscape). None of these block play.
+Notes: `samet-story.md`. Fixed in the salvage: the taxi waiting off screen at Sai Kaew (it no longer drives; the
+pictures move her), the night screen shooting before the fire dancers fade in (`qa.mjs` waits 7 s).
 
-- [ ] **The pelican captain is hard to see on both boats.** On the snorkel boat she stands at the motor (`snorkel/reef.ts`,
-  z = 3), past the right edge of the float camera. On the speedboat the canopy post and Mom's sun hat hide most of her.
-  - Check: `#/world/thailand/samet-trip/snorkel?round=float`, `#/world/thailand/samet-trip/speedboat`
-- [ ] **The green taxi waits off screen at Sai Kaew.** Its stop sits past the right edge on the iPad and above the top on
-  the iPhone, so the sun bear driver never shows on landing (framing from greybox 2).
-  - Check: `#/world/thailand/samet-trip/island?at=saikaew`
-- [ ] **QA's night screen shoots too soon.** The fire dancers take 3-6 s to fade in, and the night screen waits 2.5 s.
-  Raise its `wait` in `samet-trip/qa.mjs` to about 7 s.
+- [ ] **Listen to the new voices.** Tuk (`tuk`) and Kae (`kae`) are new speakers, and every film line is new. Check the
+  two geckos sound like a worrying big brother and a giggly little sister, and that "Khob khun ka" is said the Thai way.
+  - Check: `#/world/thailand/samet-trip/island?at=nadan&story=intro`, `#/world/thailand/samet-trip/fireshow?round=story&flags=all`
+- [ ] **The pelican captain on the speedboat** is still half hidden by the canopy post and Mom's sun hat.
+  - Check: `#/world/thailand/samet-trip/speedboat`
+- [ ] **The films' music.** The island's films have no music cue of their own yet (the rice farm's has one).
 
 ## Listen on the iPad (automated checks can't hear)
 - [ ] **The mall trip's new voices** (2026-10-21): the transcription check flagged Thai words written back in Thai

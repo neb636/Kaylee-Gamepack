@@ -82,15 +82,18 @@ export function SametTrip({ onDone, onExit }: Props = {}) {
     const flags = readFlags(first.flags)
     const found = param('found') as StopId
     const story = param('story')
+    // A plain link to the island (the Thailand map's pin coming back to a trip half done, the shelf's card): she is
+    // never dropped there with nothing to go on. No fireflies yet: the story from the start. Some: the pictures.
+    const plain = (start ?? 'island') === 'island' && ['at', 'story', 'found', 'board', 'time'].every((k) => flag(k) == null)
     return {
       id: start ?? 'island',
       n: 0,
-      at: (SPOTS as readonly string[]).includes(first.at) ? (first.at as SpotId) : 'nadan',
+      at: plain && !flags.length ? 'nadan' : (SPOTS as readonly string[]).includes(first.at) ? (first.at as SpotId) : 'nadan',
       flags,
       round: param('round'),
-      story: story === 'intro' || story === 'all' ? story : null,
+      story: story === 'intro' || story === 'all' ? story : plain && !flags.length ? 'intro' : null,
       found: (FLAGS as readonly string[]).includes(found) && flags.includes(found) ? found : null,
-      board: param('board') === '1',
+      board: param('board') === '1' || (plain && flags.length > 0),
     }
   })
   const time = (param('time') || null) as TimeOfDay | null

@@ -2,13 +2,12 @@
 // little blush): the monitor lizard, the squirrel, the macaques, the mouse-deer, the hornbill, the flying fox, the reef
 // heron, a hermit crab, the parrotfish, the blue damselfish, the cuttlefish, a sea urchin and the coral. Each model faces
 // +z with its feet on y = 0 and hands back the parts that move (on their own pivots), so creatures.ts can bring it to
-// life and the book can draw its portrait (photo.ts). A few draw calls each: whatever doesn't move is merged.
-import { Color, Group, InstancedMesh, Mesh, MeshToonMaterial, type BufferGeometry } from 'three'
+// life. A few draw calls each: whatever doesn't move is merged.
+import { Group, InstancedMesh, Mesh, MeshToonMaterial, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { makeHull } from '../../../../../engine3d/outline'
 import { merge, P, solid, solidMix } from '../../../../../engine3d/geo'
 import { PAL, toon, toonGradient } from '../../../../../engine3d/toon'
-import type { AnimalId } from './animals'
 
 const INK = PAL.ink
 const BLUSH = '#FF9DB8'
@@ -496,75 +495,4 @@ export function damselSchool(bag: Bag, n: number): InstancedMesh {
   const m = bag.add(new InstancedMesh(bag.add(damselGeometry()), mat, n))
   m.frustumCulled = false
   return m
-}
-
-/** The book's portrait of each animal: a model to draw (its pose for the photo), from models above. */
-export function portraitModel(bag: Bag, id: AnimalId): Model | null {
-  switch (id) {
-    case 'monitor':
-      return monitorModel(bag)
-    case 'squirrel':
-      return squirrelModel(bag)
-    case 'macaque':
-      return macaqueModel(bag)
-    case 'mousedeer':
-      return mouseDeerModel(bag)
-    case 'hornbill':
-      return hornbillModel(bag)
-    case 'flyingfox': {
-      const m = flyingFoxModel(bag)
-      for (const [w, s] of [[m.parts.wl, -1], [m.parts.wr, 1]] as const) {
-        w.rotation.order = 'YXZ'
-        w.rotation.set(-HALF, s * 0.45, 0)
-      }
-      return m
-    }
-    case 'heron':
-      return heronModel(bag)
-    case 'crab':
-      return hermitModel(bag)
-    case 'parrotfish':
-      return parrotfishModel(bag)
-    case 'cuttlefish': {
-      const m = cuttlefishModel(bag)
-      m.mat.color = new Color('#FF9AD0')
-      return m
-    }
-    case 'urchin':
-      return urchinModel(bag)
-    case 'coral':
-      return coralModel(bag, 3)
-    case 'damselfish': {
-      const root = new Group()
-      const fish = solid(damselGeometry(), bag, 1.5)
-      for (const [x, y, z, r] of [[0, 0.2, 0, 0], [0.22, 0.3, -0.1, 0.3], [-0.2, 0.12, 0.08, -0.2], [0.05, 0.4, 0.15, 0.1], [-0.12, 0.36, -0.15, -0.4]] as const) {
-        const f = fish.clone()
-        f.position.set(x, y, z)
-        f.rotation.y = HALF + r
-        f.scale.setScalar(1.8)
-        root.add(f)
-      }
-      return { root, parts: {}, h: 0.5 }
-    }
-    case 'tern': {
-      const root = new Group()
-      const wl = pivot([0.05, 0.26, 0])
-      const wr = pivot([-0.05, 0.26, 0])
-      root.add(
-        solid(
-          merge([P.capsule(0.13, 0.42, '#FFFFFF', { at: [0, 0.26, 0], rot: [HALF, 0, 0] }), P.sphere(0.13, '#2B2330', { at: [0, 0.32, 0.3] }, 8), P.cone(0.05, 0.22, '#FF8A3D', { at: [0, 0.29, 0.47], rot: [HALF, 0, 0] }, 6), P.prism([[0, 0], [0.18, -0.32], [-0.18, -0.32]], 0.02, '#E4E6F0', { at: [0, 0.26, -0.42], rot: [HALF, 0, 0] })]),
-          bag,
-          1.5,
-        ),
-      )
-      wl.add(solid(wing(1, 0.8, 0.3, '#C9CCDD', null), bag, 1.5))
-      wr.add(solid(wing(-1, 0.8, 0.3, '#C9CCDD', null), bag, 1.5))
-      wl.rotation.z = 0.35
-      wr.rotation.z = -0.35
-      root.add(wl, wr)
-      return { root, parts: {}, h: 0.5 }
-    }
-    default:
-      return null
-  }
 }

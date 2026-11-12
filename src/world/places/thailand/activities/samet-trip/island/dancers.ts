@@ -73,6 +73,18 @@ export class FireDancers {
     })
   }
 
+  /** Steps them closer together (k < 1) or back to their places (1): a film's memory wants both in one picture. */
+  gather(k: number) {
+    this.rigs.forEach((rig, i) => {
+      const [u, v] = SPOTS[i]
+      const p = bay(-6 + (u + 6) * k, v)
+      rig.root.position.x = p.x
+      rig.root.position.z = p.z
+    })
+    // (Shown at once: the memory is night, and its page turn hides the change.)
+    if (k < 1) this.level = 1
+  }
+
   /** `lamps`: how lit the beach is (0 by day, 1 at night): they come out at night only. */
   update(dt: number, t: number, lamps: number) {
     const want = lamps > 0.7 ? 1 : 0

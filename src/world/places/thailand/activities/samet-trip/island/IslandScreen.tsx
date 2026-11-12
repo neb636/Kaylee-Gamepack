@@ -106,7 +106,7 @@ export function IslandScreen({ start, onAt, onOpen, onHome, onLeave }: Props) {
     islandSfx.taxiToot()
     speak(lines[rides.current++ % lines.length])
     setRide({ to, n: rides.current })
-    later(RIDE_MOVE_S * 1000, () => worldRef.current?.travel(to))
+    later(RIDE_MOVE_S * 1000, () => worldRef.current?.travel(to, id === 'sunset' ? 'hideseek' : id))
     later(RIDE_S * 1000, () => {
       setRide(null)
       // The driver names the beach as they pull in (never before they set off).

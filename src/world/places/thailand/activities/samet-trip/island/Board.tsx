@@ -92,18 +92,31 @@ export function Board({ pics, found, here, onPick, onClose }: Props) {
 
 /** A firefly's little picture: a round face with wings and a glow in its color (grey, no glow, until it's found). */
 export function FireflyIcon({ id, lit, size = 40 }: { id: FireflyId; lit: boolean; size?: number }) {
-  const c = lit ? FIREFLIES[id].color : '#C9C3D1'
+  const c = FIREFLIES[id].color
+  // Not found yet: a pale ghost of itself in its own color (no face, a question mark), so the pink one is still pink.
+  if (!lit)
+    return (
+      <svg viewBox="0 0 48 48" width={size} height={size} aria-hidden style={{ display: 'block', overflow: 'visible' }}>
+        <ellipse cx="14" cy="15" rx="7" ry="10" fill="#FFFFFF" stroke={c} strokeWidth="1.6" strokeDasharray="3 2.5" transform="rotate(-28 14 15)" opacity="0.8" />
+        <ellipse cx="34" cy="15" rx="7" ry="10" fill="#FFFFFF" stroke={c} strokeWidth="1.6" strokeDasharray="3 2.5" transform="rotate(28 34 15)" opacity="0.8" />
+        <circle cx="24" cy="28" r="12" fill={c} opacity="0.22" />
+        <circle cx="24" cy="28" r="12" fill="none" stroke={c} strokeWidth="2" strokeDasharray="4 3" />
+        <text x="24" y="34" textAnchor="middle" fontSize="17" fontWeight="800" fill={c}>
+          ?
+        </text>
+      </svg>
+    )
   return (
     <svg viewBox="0 0 48 48" width={size} height={size} aria-hidden style={{ display: 'block', overflow: 'visible' }}>
-      {lit && <circle cx="24" cy="27" r="22" fill={c} opacity="0.28" />}
-      {lit && <circle cx="24" cy="27" r="16" fill={c} opacity="0.35" />}
-      <ellipse cx="14" cy="15" rx="7" ry="10" fill="#FFFFFF" stroke="#2B2330" strokeWidth="1.6" transform="rotate(-28 14 15)" opacity={lit ? 1 : 0.7} />
-      <ellipse cx="34" cy="15" rx="7" ry="10" fill="#FFFFFF" stroke="#2B2330" strokeWidth="1.6" transform="rotate(28 34 15)" opacity={lit ? 1 : 0.7} />
+      <circle cx="24" cy="27" r="22" fill={c} opacity="0.28" />
+      <circle cx="24" cy="27" r="16" fill={c} opacity="0.35" />
+      <ellipse cx="14" cy="15" rx="7" ry="10" fill="#FFFFFF" stroke="#2B2330" strokeWidth="1.6" transform="rotate(-28 14 15)" />
+      <ellipse cx="34" cy="15" rx="7" ry="10" fill="#FFFFFF" stroke="#2B2330" strokeWidth="1.6" transform="rotate(28 34 15)" />
       <circle cx="24" cy="28" r="12" fill={c} stroke="#2B2330" strokeWidth="2" />
-      <circle cx="24" cy="25" r="8" fill="#FFFFFF" opacity={lit ? 0.55 : 0.3} />
+      <circle cx="24" cy="25" r="8" fill="#FFFFFF" opacity="0.55" />
       <circle cx="20" cy="26" r="1.9" fill="#2B2330" />
       <circle cx="28" cy="26" r="1.9" fill="#2B2330" />
-      {lit ? <path d="M20.5 30.5 Q24 33.5 27.5 30.5" stroke="#2B2330" strokeWidth="1.6" fill="none" strokeLinecap="round" /> : <text x="24" y="38.5" textAnchor="middle" fontSize="9" fontWeight="700" fill="#2B2330" opacity="0.55">?</text>}
+      <path d="M20.5 30.5 Q24 33.5 27.5 30.5" stroke="#2B2330" strokeWidth="1.6" fill="none" strokeLinecap="round" />
     </svg>
   )
 }
@@ -164,7 +177,7 @@ export const BOARD_CSS = `
 .isle-sticker { position: absolute; left: -2%; top: calc(var(--card) * .7); width: calc(var(--card) * .32); height: calc(var(--card) * .32); border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgba(43,35,48,.25); display: grid; place-items: center; font-size: calc(var(--card) * .19); line-height: 1; }
 .isle-badge { position: absolute; right: -4%; top: -5%; width: calc(var(--card) * .36); height: calc(var(--card) * .36); border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgba(43,35,48,.25); display: grid; place-items: center; }
 .isle-badge svg { width: 78%; height: 78%; }
-.isle-badge-wait { background: #F4F1F7; }
+.isle-badge-wait { background: #fff; }
 .isle-here { position: absolute; left: 50%; top: calc(var(--card) * -.11); width: calc(var(--card) * .16); height: calc(var(--card) * .16); margin-left: calc(var(--card) * -.08); background: var(--hotpink); border: 3px solid #fff; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 3px 6px rgba(43,35,48,.3); }
 .isle-label { font-size: clamp(12px, 1.7vmin, 17px); font-weight: 700; color: var(--ink); background: rgba(255,255,255,.88); border-radius: 999px; padding: 2px 12px; white-space: nowrap; }
 .isle-card-sunset { --card: min(52vw, 46vh, 360px); }
@@ -183,11 +196,11 @@ export const BOARD_CSS = `
 .isle-ride-road { position: absolute; left: 0; right: 0; bottom: 12%; height: 15%; background: #E9D9B8; border-top: 5px solid #D9C49A; }
 .isle-ride-road::after { content: ''; position: absolute; left: 0; right: 0; top: 46%; height: 8%; background: repeating-linear-gradient(90deg, #fff 0 44px, transparent 44px 96px); animation: isle-road .5s linear infinite; }
 @keyframes isle-road { to { transform: translateX(-96px); } }
-.isle-ride-palm { position: absolute; bottom: 27%; font-size: clamp(60px, 15vmin, 150px); line-height: 1; animation: isle-palm 1.5s linear infinite; }
+.isle-ride-palm { position: absolute; bottom: 26%; font-size: clamp(80px, 22vmin, 220px); line-height: 1; animation: isle-palm 1.5s linear infinite; }
 @keyframes isle-palm { from { transform: translateX(110vw); } to { transform: translateX(-30vw); } }
-.isle-ride-taxi { position: absolute; left: 0; bottom: 15%; width: clamp(200px, 38vmin, 420px); animation: isle-taxi 1.75s cubic-bezier(.3,.1,.6,1) both; }
+.isle-ride-taxi { position: absolute; left: 0; bottom: 14%; width: clamp(260px, 54vmin, 600px); animation: isle-taxi 1.75s cubic-bezier(.3,.1,.6,1) both; }
 .isle-ride-taxi > div { animation: isle-bump .28s ease-in-out infinite; }
-@keyframes isle-taxi { from { transform: translateX(-45vmin); } to { transform: translateX(105vw); } }
+@keyframes isle-taxi { from { transform: translateX(-60vmin); } to { transform: translateX(105vw); } }
 @keyframes isle-bump { 0%, 100% { transform: translateY(0) rotate(-.6deg); } 50% { transform: translateY(-5px) rotate(.6deg); } }
 .isle-wheel { animation: isle-spin .45s linear infinite; }
 @keyframes isle-spin { to { transform: rotate(360deg); } }

@@ -1,24 +1,26 @@
-// The Koh Samet trip's QA scenarios. Greybox 1, the jet ski at Sai Kaew: the life jacket, the waves round mid-ride and
-// the race's start; filmed: carving doughnuts in the calm bay (the wake loop, Dad dizzy), and steering into the waves
-// to jump. Greybox 2, the island to roam: landing at Na Dan pier, Sai Kaew with the jet ski hers, Ao Prao in the
-// afternoon, the night; filmed: leading Kaylee down the beach into the sea (the gallop, the floatie), and the umbrella
-// kite. Greybox 3, Mom's phone and the animal book: the phone out at Ao Wong Duan and Ao Prao, the book nearly full;
-// filmed: snapping the animals at Ao Prao with the phone, and the beach clean (lift the bottle, the hermit crab, the bin).
-// Greybox 4, the sandcastle at Ao Hin Khok: the bare beach, the towers round with its moat, the tide with a channel dug
-// to the sea (the moat fills); filmed: digging a moat round and a channel to the sea, and burying Dad.
-// Greybox 5, snorkeling at Ko Kudi: the splash in, the parrotfish arriving, the garden; filmed: leading Kaylee over the
-// reef (the damselfish parting round her) and following the parrotfish toward the gap.
-// Greybox 6, lunch and hide and seek at Ao Prao: the deck with a roll eaten and the coconut sipped, hide and seek's
-// count, a seek, the trickier round and her turn hiding; filmed: finding Dad behind the tree, and Dad searching
-// the wrong places while she hides behind the chairs.
-// Greybox 7, getting there and the trip frame: packing in Kaylee's room, the speedboat's cutscene (leaving Ban Phe,
-// the ferry going by), the island with every flag up (the way home); filmed: the whole ride to Na Dan pier.
-// Step 9, the finale: the sunset at the driftwood tree, the sun pulled down into the sea (night), the fire show's
-// twirl, a shape to draw over and the big finish (the ring of fire, fireworks); filmed: twirling the glowing poi in
-// circles (the ribbons, the dancers copying her), and drawing the big ring for the ring of fire.
+// The Koh Samet trip's QA scenarios (notes: planning/around-the-world/thailand/samet-story.md). Here: getting there
+// (packing, the speedboat's cutscene), the island between the stops and its story (the way-in film at Na Dan pier
+// watched to the end and skipped, the pictures of the beaches, a ride by the pictures, a firefly flying in, all four),
+// and each stop's play rounds (the jet ski, the sandcastle, the snorkel, lunch, hide and seek, the sunset and the fire
+// show). Each stop's own films (its way in, its firefly found) are in its folder's qa.mjs.
 // Not part of the app: Node runs it, Vite never sees it.
 
 const ready = (page) => page.waitForFunction(() => window.__thaiSametQA?.().phase, null, { timeout: 20000 })
+/** Waits for a beat of the film that's playing (then `ms` more, into the beat). */
+const beat = async (page, id, ms = 0) => {
+  await page.waitForFunction((id) => window.__thaiSametQA?.().film?.beat === id, id, { timeout: 90000 })
+  await page.waitForTimeout(ms)
+}
+/** Waits until a film has played to its end (or `skipped`: been skipped) and the game is back. */
+const filmOver = (page, id, skipped = false) => page.waitForFunction(({ id, skipped }) => { const q = window.__thaiSametQA?.(); return q && !q.film && (skipped ? q.films.skipped : q.films.done).includes(id) }, { id, skipped }, { timeout: 120000 })
+/** Holds the film's ⏭ until it skips. */
+const holdSkip = async (page) => {
+  const b = await page.getByRole('button', { name: 'Hold to skip the story' }).boundingBox()
+  await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2)
+  await page.mouse.down()
+  await page.waitForTimeout(900)
+  await page.mouse.up()
+}
 
 /** A finger held ~150 px ahead of Kaylee, toward each point of a route on the island in turn, for `ms`. */
 async function leadAlong(page, route, ms) {
@@ -59,72 +61,29 @@ async function leadAlong(page, route, ms) {
 }
 
 /** Screenshots (scripts/qa-screens.mjs). */
-/** A finger held ~150 px from Kaylee toward the beach puppy (where there is one: #357 way-finding), else along a
- *  route, until `done(q)` or `ms` run out. In the taxi the finger lifts (it drives); with the puppy waiting in the
- *  taxi, toward the taxi. */
-async function followPuppy(page, route, done, ms) {
-  const vp = page.viewportSize()
-  const t0 = Date.now()
-  let i = 0
-  let down = false
-  while (Date.now() - t0 < ms) {
-    const q = await page.evaluate(() => window.__thaiSametQA?.())
-    if (!q || !q.kaylee || done(q)) break
-    let x = null
-    let y = null
-    if (q.phase === 'taxi') {
-      if (down) await page.mouse.up()
-      down = false
-      await page.waitForTimeout(300)
-      continue
-    }
-    const aim = q.puppy ? (q.puppy.state === 'aboard' ? { x: q.taxi.x, y: q.taxi.y } : q.puppy.onScreen ? q.puppy.screen : null) : null
-    if (aim) {
-      const dx = aim.x - q.kaylee.x
-      const dy = aim.y - q.kaylee.y
-      const l = Math.hypot(dx, dy) || 1
-      x = q.kaylee.x + (dx / l) * Math.min(150, l)
-      y = q.kaylee.y + (dy / l) * Math.min(150, l)
-    } else {
-      const goal = q.puppy ? [q.puppy.x, q.puppy.z] : route[i]
-      while (!q.puppy && i < route.length && Math.hypot(route[i][0] - q.x, route[i][1] - q.z) < 3) i++
-      if (!goal || (!q.puppy && i >= route.length)) break
-      const th = (q.cameraYaw * Math.PI) / 180
-      const dx = goal[0] - q.x
-      const dz = goal[1] - q.z
-      const n = Math.hypot(dx, dz) || 1
-      const across = (dx * -Math.cos(th) + dz * Math.sin(th)) / n
-      const up = -(dx * Math.sin(th) + dz * Math.cos(th)) / n
-      const len = Math.hypot(across, up * 0.7) || 1
-      x = q.kaylee.x + (across / len) * 150
-      y = q.kaylee.y + ((up * 0.7) / len) * 150
-    }
-    x = Math.max(10, Math.min(vp.width - 10, x))
-    y = Math.max(120, Math.min(vp.height - 20, y))
-    if (!down) {
-      await page.mouse.move(q.kaylee.x, Math.max(130, q.kaylee.y - 150))
-      await page.mouse.down()
-      down = true
-    }
-    await page.mouse.move(x, y)
-    await page.waitForTimeout(200)
-  }
-  if (down) await page.mouse.up()
-}
-
 export const screens = [
   { name: 'thailand-samet-pack', hash: '#/world/thailand/samet-trip/pack', reset: true, wait: 3500 },
   { name: 'thailand-samet-speedboat-pier', hash: '#/world/thailand/samet-trip/speedboat', reset: true, wait: 2500 },
   { name: 'thailand-samet-speedboat-ferry', hash: '#/world/thailand/samet-trip/speedboat', reset: true, wait: 6200 },
   { name: 'thailand-samet-speedboat-sea', hash: '#/world/thailand/samet-trip/speedboat', reset: true, wait: 9500 },
+  // The story on the island: the way-in film (the geckos by their lantern; their memory of last night, in the
+  // storybook look), the pictures of the beaches, a firefly just found, all four (Mom's line), and the island itself.
+  { name: 'thailand-samet-story-geckos', hash: '#/world/thailand/samet-trip/island?at=nadan&story=intro', reset: true, act: (page) => beat(page, 'gone', 900) },
+  { name: 'thailand-samet-story-memory', hash: '#/world/thailand/samet-trip/island?at=nadan&story=intro', reset: true, act: (page) => beat(page, 'every', 2600) },
+  { name: 'thailand-samet-story-ask', hash: '#/world/thailand/samet-trip/island?at=nadan&story=intro', reset: true, act: (page) => beat(page, 'ask', 1200) },
+  { name: 'thailand-samet-board', hash: '#/world/thailand/samet-trip/island?at=nadan&board=1', reset: true, wait: 5000 },
+  { name: 'thailand-samet-board-two', hash: '#/world/thailand/samet-trip/island?at=hinkhok&flags=jetski,sandcastle&board=1', reset: true, wait: 5000 },
+  { name: 'thailand-samet-found', hash: '#/world/thailand/samet-trip/island?at=saikaew&flags=jetski&found=jetski', reset: true, wait: 5200 },
+  { name: 'thailand-samet-all', hash: '#/world/thailand/samet-trip/island?at=prao&flags=all&story=all', reset: true, act: (page) => beat(page, 'four', 1200) },
+  { name: 'thailand-samet-board-sunset', hash: '#/world/thailand/samet-trip/island?at=prao&flags=all&board=1', reset: true, wait: 5000 },
   { name: 'thailand-samet-island-home', hash: '#/world/thailand/samet-trip/island?at=nadan&flags=all', reset: true, wait: 2500 },
   { name: 'thailand-samet-island-nadan', hash: '#/world/thailand/samet-trip/island?at=nadan', reset: true, wait: 2500 },
   { name: 'thailand-samet-island-saikaew', hash: '#/world/thailand/samet-trip/island?at=saikaew&flags=jetski', reset: true, wait: 2500 },
+  { name: 'thailand-samet-island-hinkhok', hash: '#/world/thailand/samet-trip/island?at=hinkhok', reset: true, wait: 4500 },
+  { name: 'thailand-samet-island-wongduan', hash: '#/world/thailand/samet-trip/island?at=wongduan&flags=jetski,sandcastle', reset: true, wait: 2500 },
   { name: 'thailand-samet-island-prao', hash: '#/world/thailand/samet-trip/island?at=prao&flags=jetski,sandcastle,snorkel', reset: true, wait: 2500 },
-  { name: 'thailand-samet-island-night', hash: '#/world/thailand/samet-trip/island?at=saikaew&flags=all&time=night', reset: true, wait: 2500 },
-  { name: 'thailand-samet-phone-wongduan', hash: '#/world/thailand/samet-trip/island?at=wongduan&phone=1', reset: true, wait: 2500 },
-  { name: 'thailand-samet-phone-prao', hash: '#/world/thailand/samet-trip/island?at=prao&phone=1', reset: true, wait: 2500 },
-  { name: 'thailand-samet-book', hash: '#/world/thailand/samet-trip/book?at=saikaew&flags=jetski,sandcastle,snorkel&book=monitor,squirrel,macaque,hornbill,heron,tern,crab,parrotfish,damselfish,cuttlefish,urchin,coral', reset: true, wait: 3000 },
+  // (The fire dancers take a few seconds to fade in after dark.)
+  { name: 'thailand-samet-island-night', hash: '#/world/thailand/samet-trip/island?at=saikaew&flags=all&time=night', reset: true, wait: 7000 },
   { name: 'thailand-samet-jetski-jacket', hash: '#/world/thailand/samet-trip/jetski?round=ride', reset: true, wait: 3500 },
   {
     name: 'thailand-samet-jetski-waves',
@@ -847,26 +806,6 @@ export const motion = [
     },
   },
   {
-    name: 'thailand-samet-phone-snap',
-    seconds: 8,
-    setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/samet-trip/island?at=prao&phone=1`)
-      await ready(page)
-      await page.waitForTimeout(1500)
-    },
-    act: async (page) => {
-      // Snap whatever animals are on screen (each poses, the flash, the photo flies into the book).
-      const vp = page.viewportSize()
-      const s = await page.evaluate(() => window.__thaiSametQA?.())
-      const on = Object.values(s?.animals ?? {}).filter((a) => a.x > 40 && a.x < vp.width - 40 && a.y > 90 && a.y < vp.height - 40)
-      for (const a of on.slice(0, 3)) {
-        await page.mouse.click(a.x, a.y)
-        await page.waitForTimeout(2200)
-      }
-      await page.waitForTimeout(1500)
-    },
-  },
-  {
     name: 'thailand-samet-beach-clean',
     seconds: 12,
     setup: async (page, base) => {
@@ -1091,76 +1030,123 @@ export const motion = [
     // Nobody touching it: the cutscene plays on to Na Dan pier.
     act: (page) => page.waitForTimeout(14000),
   },
-  // #357 way-finding, card B: the beach puppy. The same moments film on main (no puppy: the old way) for before/after.
+  // The Lost Fireflies on the island (island/story.ts, Board.tsx).
   {
-    name: 'thailand-samet-wayfind-idle',
-    seconds: 14,
+    // The way-in film watched to the end: the pier, Tofu, the geckos and the empty lantern, last night's wind (the
+    // storybook look), the ask; then the pictures of the four beaches come up.
+    name: 'thailand-samet-story-intro',
+    seconds: 46,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/samet-trip/island?at=phai`)
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=nadan&story=intro`)
       await ready(page)
     },
-    // Nobody touching at Ao Phai: the puppy runs ahead toward the sandcastle (his bubble a picture of it), sits and
-    // looks back, and after ~8 s comes back to fetch her (main: a small flag badge on the phone button).
+    act: async (page) => {
+      await filmOver(page, 'intro')
+      await page.locator('[data-board="beaches"]').waitFor({ timeout: 8000 })
+      await page.waitForTimeout(1500)
+    },
+  },
+  {
+    // ⏭ held in the middle of the memory (night on Sai Kaew): day again at the pier, the geckos by their lantern,
+    // the pictures up.
+    name: 'thailand-samet-story-intro-skip',
+    seconds: 8,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=nadan&story=intro`)
+      await ready(page)
+      await beat(page, 'wind', 800)
+    },
+    act: async (page) => {
+      await holdSkip(page)
+      await filmOver(page, 'intro', true)
+      await page.waitForFunction(() => { const q = window.__thaiSametQA(); return q.time !== 'night' && q.story.geckos && q.at === 'nadan' }, null, { timeout: 5000 })
+      await page.locator('[data-board="beaches"]').waitFor({ timeout: 8000 })
+      await page.waitForTimeout(2500)
+    },
+  },
+  {
+    // The pictures: tap the sandcastle, the green taxi drives across, and she's at Ao Hin Khok a few steps from its
+    // ring, Tofu running to it. Then she walks into the ring (the stop opens).
+    name: 'thailand-samet-story-ride',
+    seconds: 14,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=nadan&board=1`)
+      await ready(page)
+      await page.locator('[data-pick="sandcastle"]').waitFor({ timeout: 10000 })
+      await page.waitForTimeout(1500)
+    },
+    act: async (page) => {
+      await page.locator('[data-pick="sandcastle"]').click()
+      await page.waitForFunction(() => { const q = window.__thaiSametQA(); return q.at === 'hinkhok' && !document.querySelector('.isle-ride') }, null, { timeout: 8000 })
+      await page.waitForFunction(() => window.__thaiSametQA().puppy.goal === 'sandcastle', null, { timeout: 8000 })
+      await page.waitForTimeout(2500)
+      const q = await page.evaluate(() => window.__thaiSametQA())
+      await page.mouse.click(q.stops.sandcastle.x, q.stops.sandcastle.y)
+      await page.waitForFunction(() => window.__kayleeSection?.id === 'sandcastle', null, { timeout: 10000 })
+      await page.waitForTimeout(1500)
+    },
+  },
+  {
+    // Back from the jet ski with Zoom: she swoops in to circle your unicorn's horn, Sparkle counts, the pictures come up
+    // (Zoom's badge lit, the other three still ghosts).
+    name: 'thailand-samet-story-found',
+    seconds: 9,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=saikaew&flags=jetski&found=jetski`)
+      await ready(page)
+    },
+    act: async (page) => {
+      await page.locator('[data-board="beaches"]').waitFor({ timeout: 12000 })
+      await page.waitForFunction(() => window.__thaiSametQA().story.found.includes('jetski'), null, { timeout: 2000 })
+      await page.waitForTimeout(2000)
+    },
+  },
+  {
+    // All four: the fireflies swirl, Mom, Dad calls the sunset; the one picture left is the sunset. Tap it: the taxi to
+    // Ao Prao, a few steps from the driftwood tree.
+    name: 'thailand-samet-story-all',
+    seconds: 20,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=saikaew&flags=all&story=all`)
+      await ready(page)
+    },
+    act: async (page) => {
+      await filmOver(page, 'all')
+      await page.locator('[data-board="sunset"] button').click({ timeout: 8000 })
+      await page.waitForFunction(() => { const q = window.__thaiSametQA(); return q.at === 'prao' && !document.querySelector('.isle-ride') }, null, { timeout: 8000 })
+      await page.waitForTimeout(3000)
+    },
+  },
+  {
+    // Nobody touching at Ao Hin Khok: Tofu runs ahead to the sandcastle's ring (his bubble a picture of it), sits and
+    // looks back, and after ~8 s comes back to fetch her.
+    name: 'thailand-samet-tofu-idle',
+    seconds: 14,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=hinkhok`)
+      await ready(page)
+    },
     act: (page) => page.waitForTimeout(14000),
   },
   {
-    name: 'thailand-samet-wayfind-prao',
-    seconds: 50,
+    // A beach with nothing left to find (Sai Kaew, Zoom found): Tofu trots beside her, and after a while with nothing
+    // touched the top-right button glows. A tap on the taxi brings the pictures up.
+    name: 'thailand-samet-nudge',
+    seconds: 16,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/samet-trip/island?at=prao&flags=hideseek`)
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=saikaew&flags=jetski`)
       await ready(page)
+    },
+    act: async (page) => {
+      await page.waitForFunction(() => window.__thaiSametQA().nudged, null, { timeout: 16000 })
+      await page.waitForTimeout(1500)
+      await page.getByRole('button', { name: /Where to/ }).click()
+      await page.locator('[data-board="beaches"]').waitFor({ timeout: 4000 })
       await page.waitForTimeout(1500)
     },
-    // Ao Prao to Ao Wong Duan following the puppy: his shortcut over the west hills and the sand slide (main: the road
-    // round by the spine, ~75 s).
-    act: (page) => followPuppy(page, [[-160, -40], [-153, -37], [-134, -40], [-110, -44], [-85, -46], [-95, -20], [-104, 10], [-111, 40], [-121, 70], [-134, 100], [-146, 121], [-150, 135]], (q) => q.at === 'wongduan', 50000),
   },
   {
-    name: 'thailand-samet-wayfind-taxi',
-    seconds: 40,
-    setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/samet-trip/island?at=nadan&flags=jetski,sandcastle,hideseek`)
-      await ready(page)
-      await page.waitForTimeout(1500)
-    },
-    // Only the snorkel left, from Na Dan pier: the puppy runs to the taxi and jumps in, she follows him in, it drives
-    // straight to Ao Wong Duan and names it there (main: no puppy, she walks to the taxi and taps it).
-    act: async (page) => {
-      await followPuppy(page, [[-11, -80], [-14, -74]], (q) => q.phase === 'taxi', 16000)
-      const q = await page.evaluate(() => window.__thaiSametQA())
-      if (q.phase !== 'taxi') await page.mouse.click(q.taxi.x, q.taxi.y)
-      await page.waitForTimeout(24000)
-    },
-  },
-  {
-    name: 'thailand-samet-wayfind-beside',
-    seconds: 14,
-    setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/samet-trip/island?at=saikaew`)
-      await ready(page)
-    },
-    // Up the sand to the waiting taxi and stand beside it: it stays, and the camera takes it in.
-    act: async (page) => {
-      await leadAlong(page, [[-4, -10], [-4, -14]], 8000)
-      await page.waitForTimeout(6000)
-    },
-  },
-  {
-    name: 'thailand-samet-wayfind-topleft',
-    seconds: 8,
-    setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/samet-trip/island?at=saikaew`)
-      await ready(page)
-      await page.waitForTimeout(1500)
-    },
-    // The puppy button (top-right; the top-left is the map button): the puppy comes running and woofs.
-    act: async (page) => {
-      await page.getByRole('button', { name: /Call the puppy/ }).first().click()
-      await page.waitForTimeout(6000)
-    },
-  },
-  {
-    name: 'thailand-samet-wayfind-home',
+    name: 'thailand-samet-home',
     seconds: 16,
     setup: async (page, base) => {
       await page.goto(`${base}#/world/thailand/samet-trip/island?at=nadan&flags=jetski`)
@@ -1173,22 +1159,6 @@ export const motion = [
       await page.waitForTimeout(8000)
       await page.locator('[data-anchor="speedboat:0"]').click({ force: true }).catch(() => {})
       await page.waitForTimeout(6000)
-    },
-  },
-  {
-    name: 'thailand-samet-wayfind-walkoff',
-    seconds: 22,
-    setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/samet-trip/island?at=nadan&flags=jetski,sandcastle,hideseek`)
-      await ready(page)
-      await page.waitForTimeout(1500)
-    },
-    // The puppy jumps in the taxi, but she walks back up the pier instead: after a moment he hops out and runs after
-    // her (#369 Codex: he used to wait in the taxi forever, and the taxi with him).
-    act: async (page) => {
-      await followPuppy(page, [], (q) => q.puppy?.state === 'aboard', 14000)
-      await leadAlong(page, [[-10, -88], [-10, -97]], 6000)
-      await page.waitForTimeout(10000)
     },
   },
 ]

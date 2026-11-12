@@ -143,6 +143,18 @@ export class Taxi {
     this.next = i
     if (this.state === 'wait') this.go()
   }
+  /** Parked at stop `i` at once (she rode there by the pictures: the island moves it under the ride card). */
+  park(i: number, ground?: (x: number, z: number) => number) {
+    this.stop = i
+    this.next = -1
+    this.state = 'wait'
+    this.speed = 0
+    this.s = 0
+    this.arrived = false
+    this.leg = [TAXI_STOPS[i].at]
+    this.place(this.leg, 0, 0)
+    if (ground) this.root.position.y = ground(this.root.position.x, this.root.position.z)
+  }
   honk() {
     this.bounceV += 1.6
   }

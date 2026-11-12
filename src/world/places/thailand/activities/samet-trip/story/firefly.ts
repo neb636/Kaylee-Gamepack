@@ -74,14 +74,18 @@ export class Firefly {
     bag: Bag,
   ) {
     const color = new Color(FIREFLIES[id].color)
-    const pale = color.clone().lerp(new Color('#FFFFFF'), 0.55)
+    const pale = color.clone().lerp(new Color('#FFFFFF'), 0.38)
     const body = new Mesh(bag.add(new SphereGeometry(0.085, 14, 10)), bag.add(new MeshBasicMaterial({ color: pale, fog: false })))
     // Its lantern: the tail end glows in its own color.
     const tail = new Mesh(bag.add(new SphereGeometry(0.075, 12, 8)), bag.add(new MeshBasicMaterial({ color, fog: false })))
     tail.position.set(0, -0.03, -0.08)
-    const glowMat = (opacity: number) => bag.add(new MeshBasicMaterial({ color, transparent: true, opacity, blending: AdditiveBlending, depthWrite: false, fog: false }))
-    this.halo = new Mesh(bag.add(new SphereGeometry(0.2, 14, 10)), glowMat(0.5))
-    this.halo2 = new Mesh(bag.add(new SphereGeometry(0.34, 14, 10)), glowMat(0.22))
+    // Two halos: a see-through ball of its own color (so it reads as pink, gold, blue or green on bright sand in the
+    // daytime, where an additive glow washes out to white) inside a wider additive glow (which shines at night and
+    // under the sea).
+    const inner = bag.add(new MeshBasicMaterial({ color, transparent: true, opacity: 0.4, depthWrite: false, fog: false }))
+    const outer = bag.add(new MeshBasicMaterial({ color, transparent: true, opacity: 0.2, blending: AdditiveBlending, depthWrite: false, fog: false }))
+    this.halo = new Mesh(bag.add(new SphereGeometry(0.17, 14, 10)), inner)
+    this.halo2 = new Mesh(bag.add(new SphereGeometry(0.29, 14, 10)), outer)
     this.halo.position.copy(tail.position)
     this.halo2.position.copy(tail.position)
     this.halo.renderOrder = 6
@@ -174,11 +178,11 @@ export class Firefly {
     for (const e of this.eyes) e.scale.y = shut ? 0.15 : 1
     const pulse = 0.82 + Math.sin(t * 4.2 + s) * 0.18
     const g = this.glow * pulse + this.flashK * 0.9
-    ;(this.halo.material as MeshBasicMaterial).opacity = 0.5 * g
-    ;(this.halo2.material as MeshBasicMaterial).opacity = 0.24 * g
-    this.halo.scale.setScalar(1 + this.flashK * 1.4)
-    this.halo2.scale.setScalar(1 + this.flashK * 2.2 + (pulse - 0.82) * 0.5)
-    this.root.scale.setScalar(this.size * (1 + this.flashK * 0.25))
+    ;(this.halo.material as MeshBasicMaterial).opacity = Math.min(0.6, 0.4 * g)
+    ;(this.halo2.material as MeshBasicMaterial).opacity = Math.min(0.5, 0.22 * g)
+    this.halo.scale.setScalar(1 + this.flashK * 0.5)
+    this.halo2.scale.setScalar(1 + this.flashK * 0.9 + (pulse - 0.82) * 0.5)
+    this.root.scale.setScalar(this.size * (1 + this.flashK * 0.2))
   }
 }
 
