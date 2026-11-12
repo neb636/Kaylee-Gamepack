@@ -1,0 +1,438 @@
+{
+ "title": "The boat trip: real sounds",
+ "checkIn": "fix",
+ "kaylee": "The whole boat trip sounds real: the suitcase snaps shut and the van door slides, the airport hums, the longtail chugs and splashes over the sea, macaques chatter, the village cheers a goal, the cave drips, dolphins click in the race, and at Baan Chang the elephants trumpet, munch and spray while the jungle sings.",
+ "questions": [
+  "Name any sounds to redo (like \"bay 4\" or \"chang 9\"), or \"none\".",
+  "The elephants' burp: keep it (it's silly), or drop it?"
+ ],
+ "links": [
+  {
+   "label": "The bay",
+   "hash": "#/world/thailand/boat-trip/bay"
+  },
+  {
+   "label": "Baan Chang: feeding",
+   "hash": "#/world/thailand/boat-trip/feed"
+  },
+  {
+   "label": "The cafe",
+   "hash": "#/world/thailand/boat-trip/drinks"
+  }
+ ],
+ "listens": [
+  {
+   "title": "Agong's house and the van",
+   "audio": "sfx/house.mp3",
+   "items": [
+    {
+     "text": "a toy lands in the suitcase",
+     "at": 0,
+     "end": 0.68
+    },
+    {
+     "text": "the suitcase snaps shut",
+     "at": 1.38,
+     "end": 2.5
+    },
+    {
+     "text": "a step on the stairs",
+     "at": 3.2,
+     "end": 3.68
+    },
+    {
+     "text": "the little fan",
+     "at": 4.38,
+     "end": 5.86
+    },
+    {
+     "text": "thumbs on a phone",
+     "at": 6.56,
+     "end": 7.56
+    },
+    {
+     "text": "the van's horn",
+     "at": 8.26,
+     "end": 9.26
+    },
+    {
+     "text": "the van door slides open",
+     "at": 9.96,
+     "end": 11.44
+    },
+    {
+     "text": "the van door slides shut",
+     "at": 12.14,
+     "end": 13.34
+    },
+    {
+     "text": "a car door opens",
+     "at": 14.04,
+     "end": 15.04
+    },
+    {
+     "text": "a car door shuts",
+     "at": 15.74,
+     "end": 16.54
+    },
+    {
+     "text": "the van drives off",
+     "at": 17.24,
+     "end": 20.24
+    }
+   ]
+  },
+  {
+   "title": "The airport",
+   "audio": "sfx/airport.mp3",
+   "items": [
+    {
+     "text": "the airport hall (loop)",
+     "at": 0,
+     "end": 6
+    },
+    {
+     "text": "the x-ray belt rolls",
+     "at": 6.7,
+     "end": 9.18
+    },
+    {
+     "text": "the suitcase goes on the belt",
+     "at": 9.88,
+     "end": 10.56
+    },
+    {
+     "text": "the passport stamp",
+     "at": 11.26,
+     "end": 11.94
+    }
+   ]
+  },
+  {
+   "title": "Phang Nga Bay",
+   "audio": "sfx/bay.mp3",
+   "items": [
+    {
+     "text": "the open sea (loop)",
+     "at": 0,
+     "end": 6
+    },
+    {
+     "text": "the longtail's engine (loop)",
+     "at": 6.7,
+     "end": 10.7
+    },
+    {
+     "text": "the longtail revs and zooms",
+     "at": 11.4,
+     "end": 13.4
+    },
+    {
+     "text": "a splash",
+     "at": 14.1,
+     "end": 15.58
+    },
+    {
+     "text": "a paddle dips in",
+     "at": 16.28,
+     "end": 17.08
+    },
+    {
+     "text": "the tour boat's horn",
+     "at": 17.78,
+     "end": 19.78
+    },
+    {
+     "text": "a little boat's horn",
+     "at": 20.48,
+     "end": 21.48
+    },
+    {
+     "text": "the boat creaks",
+     "at": 22.18,
+     "end": 23.66
+    },
+    {
+     "text": "ribbons flutter",
+     "at": 24.36,
+     "end": 25.26
+    },
+    {
+     "text": "the camera clicks",
+     "at": 25.96,
+     "end": 26.38
+    },
+    {
+     "text": "a gust of wind",
+     "at": 27.08,
+     "end": 28.08
+    },
+    {
+     "text": "a thump on the boat",
+     "at": 28.78,
+     "end": 29.38
+    },
+    {
+     "text": "a buoy bonks the boat",
+     "at": 30.08,
+     "end": 30.88
+    },
+    {
+     "text": "the sea eagle",
+     "at": 31.58,
+     "end": 33.06
+    },
+    {
+     "text": "the macaques chatter",
+     "at": 33.76,
+     "end": 35.24
+    },
+    {
+     "text": "the crab's claws",
+     "at": 35.94,
+     "end": 36.62
+    },
+    {
+     "text": "the rubber duck",
+     "at": 37.32,
+     "end": 38.12
+    },
+    {
+     "text": "the net scoops",
+     "at": 38.82,
+     "end": 39.82
+    },
+    {
+     "text": "a monkey munches",
+     "at": 40.52,
+     "end": 41.52
+    },
+    {
+     "text": "a fish flops",
+     "at": 42.22,
+     "end": 43.02
+    },
+    {
+     "text": "a plop into the water",
+     "at": 43.72,
+     "end": 44.32
+    }
+   ]
+  },
+  {
+   "title": "Koh Panyee village",
+   "audio": "sfx/village.mp3",
+   "items": [
+    {
+     "text": "the stilt village (loop)",
+     "at": 0,
+     "end": 6
+    },
+    {
+     "text": "a football kick",
+     "at": 6.7,
+     "end": 7.3
+    },
+    {
+     "text": "the referee's whistle",
+     "at": 8,
+     "end": 8.8
+    },
+    {
+     "text": "everyone cheers",
+     "at": 9.5,
+     "end": 11.5
+    },
+    {
+     "text": "the village cat",
+     "at": 12.2,
+     "end": 13.19
+    },
+    {
+     "text": "a broom sweeps",
+     "at": 13.89,
+     "end": 14.89
+    }
+   ]
+  },
+  {
+   "title": "The cave, the Nail Island, the sunset",
+   "audio": "sfx/cave.mp3",
+   "items": [
+    {
+     "text": "inside the sea cave (loop)",
+     "at": 0,
+     "end": 6
+    },
+    {
+     "text": "a drip echoes",
+     "at": 6.7,
+     "end": 8.18
+    },
+    {
+     "text": "the bats",
+     "at": 8.88,
+     "end": 10.36
+    },
+    {
+     "text": "the kingfisher",
+     "at": 11.06,
+     "end": 12.06
+    },
+    {
+     "text": "a bird flies off",
+     "at": 12.76,
+     "end": 13.76
+    },
+    {
+     "text": "sand pats",
+     "at": 14.46,
+     "end": 15.18
+    },
+    {
+     "text": "the porpoise breathes",
+     "at": 15.88,
+     "end": 16.88
+    }
+   ]
+  },
+  {
+   "title": "The boat race",
+   "audio": "sfx/race.mp3",
+   "items": [
+    {
+     "text": "a speed boost",
+     "at": 0,
+     "end": 1
+    },
+    {
+     "text": "the dolphins",
+     "at": 1.7,
+     "end": 3.18
+    }
+   ]
+  },
+  {
+   "title": "Baan Chang's elephants",
+   "audio": "sfx/chang.mp3",
+   "items": [
+    {
+     "text": "Baan Chang's jungle (loop)",
+     "at": 0,
+     "end": 6
+    },
+    {
+     "text": "an elephant trumpets",
+     "at": 6.7,
+     "end": 8.18
+    },
+    {
+     "text": "the baby elephant squeals",
+     "at": 8.88,
+     "end": 10.36
+    },
+    {
+     "text": "an elephant rumbles",
+     "at": 11.06,
+     "end": 12.54
+    },
+    {
+     "text": "an elephant eats bananas",
+     "at": 13.24,
+     "end": 14.72
+    },
+    {
+     "text": "an elephant crunches sugarcane",
+     "at": 15.42,
+     "end": 16.9
+    },
+    {
+     "text": "a trunk sniffs",
+     "at": 17.6,
+     "end": 18.5
+    },
+    {
+     "text": "a trunk slurps",
+     "at": 19.2,
+     "end": 20.2
+    },
+    {
+     "text": "an elephant burps",
+     "at": 20.9,
+     "end": 21.9
+    },
+    {
+     "text": "a trunk sprays water",
+     "at": 22.6,
+     "end": 24.08
+    },
+    {
+     "text": "an elephant's step",
+     "at": 24.78,
+     "end": 25.38
+    },
+    {
+     "text": "the tokay gecko",
+     "at": 26.08,
+     "end": 28.08
+    },
+    {
+     "text": "palm fronds rustle",
+     "at": 28.78,
+     "end": 29.78
+    },
+    {
+     "text": "old wood creaks",
+     "at": 30.48,
+     "end": 31.48
+    },
+    {
+     "text": "a little bird peeps",
+     "at": 32.18,
+     "end": 32.98
+    },
+    {
+     "text": "a bamboo knock",
+     "at": 33.68,
+     "end": 34.28
+    }
+   ]
+  },
+  {
+   "title": "The cafe",
+   "audio": "sfx/cafe.mp3",
+   "items": [
+    {
+     "text": "the cafe (loop)",
+     "at": 0,
+     "end": 6
+    },
+    {
+     "text": "ice into the glass",
+     "at": 6.7,
+     "end": 7.7
+    },
+    {
+     "text": "a spoon stirs",
+     "at": 8.4,
+     "end": 9.4
+    },
+    {
+     "text": "milk pours (loop)",
+     "at": 10.1,
+     "end": 13.1
+    },
+    {
+     "text": "the syrup squeezes (loop)",
+     "at": 13.8,
+     "end": 16.05
+    },
+    {
+     "text": "a slurp through the straw",
+     "at": 16.75,
+     "end": 18.23
+    }
+   ]
+  }
+ ]
+}
