@@ -1,11 +1,31 @@
 {
   "title": "Thailand map: no compass, and it arrives",
   "checkIn": "fix",
-  "kaylee": "The map no longer just sits there when she lands: it opens turned a little and drifts down and in, without the compass rose.",
+  "kaylee": "The map no longer just sits there when she lands: it holds a beat, then drifts down and in from a slightly turned view, without the compass rose. Coming in from the world map is smooth now too.",
   "questions": [],
-  "reels": [{ "name": "thailand-map-entrance", "moments": ["#/world/thailand~5"] }],
+  "reels": [
+    {
+      "name": "thailand-map-entrance",
+      "moments": [
+        "#/world/thailand~5"
+      ]
+    },
+    {
+      "name": "thailand-map-from-world",
+      "moments": [
+        "#/world~3",
+        "#/world/thailand~6"
+      ]
+    }
+  ],
   "links": [
-    { "label": "Open the map", "hash": "#/world/thailand" },
-    { "label": "Tune the camera (feel lab)", "hash": "#/world/thailand?feel=1" }
+    {
+      "label": "Open the map",
+      "hash": "#/world/thailand"
+    },
+    {
+      "label": "Tune the camera (feel lab)",
+      "hash": "#/world/thailand?feel=1"
+    }
   ]
 }
