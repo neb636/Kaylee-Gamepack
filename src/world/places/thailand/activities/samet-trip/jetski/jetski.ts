@@ -1169,6 +1169,8 @@ export class JetSki implements World3D {
   }
   /** Again (her tap on 🔁, or at once after a loss). */
   raceAgain() {
+    // (Parked and hopping off: they're on their way back to the island, not racing an empty jet ski.)
+    if (this.phase === 'park') return
     if (this.round !== 'race') this.round = 'race'
     this.startRace(false)
   }
