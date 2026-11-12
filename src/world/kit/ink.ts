@@ -14,11 +14,18 @@ export const INK = '#3F2A26'
 /** Outline width outside the fills (viewBox units). */
 export const LINE = 3.2
 
-/** Props for the <g> that holds the ink copy of a group. */
-export const inkPass = (width = LINE, color = INK) => ({ fill: color, stroke: color, strokeWidth: width * 2, strokeLinejoin: 'round' as const, strokeLinecap: 'round' as const })
+/** A country's line style: its ink color, outline width and how thin detail lines are (a fraction of the outline).
+ *  `const { inkPass, line } = inkStyle('#6E3B24', 5, 0.7)` in a country's own puppets/ink.ts. */
+export function inkStyle(ink: string, width: number, detail = 0.8) {
+  return {
+    /** Props for the <g> that holds the ink copy of a group. */
+    inkPass: (w = width, color = ink) => ({ fill: color, stroke: color, strokeWidth: w * 2, strokeLinejoin: 'round' as const, strokeLinecap: 'round' as const }),
+    /** A thin ink line for details drawn on top (creases, toes, the edge of a paw over the belly). */
+    line: (w = width * detail, color = ink) => ({ fill: 'none', stroke: color, strokeWidth: w, strokeLinejoin: 'round' as const, strokeLinecap: 'round' as const }),
+  }
+}
 
-/** A thin ink line for details drawn on top (creases, toes, the edge of a paw over the belly). */
-export const line = (width = LINE * 0.8, color = INK) => ({ fill: 'none', stroke: color, strokeWidth: width, strokeLinejoin: 'round' as const, strokeLinecap: 'round' as const })
+export const { inkPass, line } = inkStyle(INK, LINE, 0.8)
 
 export function useInk<P extends string>() {
   const twins = useRef(new Map<P, SVGElement>())
