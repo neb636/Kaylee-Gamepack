@@ -3007,26 +3007,39 @@ export class SametIsland implements World3D {
     el.style.setProperty('--ty', `${clamp(sc.y - y, 0, size * 1.4).toFixed(0)}px`)
   }
 
-  /** The pictures for his bubble: each beach's landmark, drawn from the island itself (once, when it's first drawn). */
-  private renderPics() {
-    const cam = new PerspectiveCamera(42, PHOTO_SIZE.w / PHOTO_SIZE.h, 0.3, 500)
-    const out: Partial<Record<SpotId, string>> = {}
-    for (const id of Object.keys(LANDMARKS) as (keyof typeof LANDMARKS)[]) {
-      const m = LANDMARKS[id]
-      const y = Math.max(0, this.heightAt(m.at.x, m.at.z)) + m.y
-      cam.position.set(m.at.x + m.from.x * m.dist, y + m.dist * 0.42, m.at.z + m.from.z * m.dist)
-      cam.lookAt(m.at.x, y, m.at.z)
-      cam.updateMatrixWorld()
-      this.isl.cull(cam.position.x, cam.position.z, CAM.far)
-      this.lights.follow(m.at.x, 0, m.at.z)
-      SEE.uEye.value.copy(cam.position)
-      SEE.uFocus.value.set(m.at.x, y - 3, m.at.z)
-      out[id] = snap(this.renderer, this.scene, cam)
-    }
-    out.deck = out.prao
+  /** The pictures for his bubble: each beach's landmark, drawn from the island itself (once, when it's first drawn).
+   *  One a frame: all of them in one frame (a full render, a read back from the GPU and a JPEG each) was a hitch. */
+  private picsLeft: (keyof typeof LANDMARKS)[] | null = null
+  private picCam: PerspectiveCamera | null = null
+  private renderPic() {
+    const id = this.picsLeft?.shift()
+    if (!id) return
+    const cam = (this.picCam ??= new PerspectiveCamera(42, PHOTO_SIZE.w / PHOTO_SIZE.h, 0.3, 500))
+    const m = LANDMARKS[id]
+    const y = Math.max(0, this.heightAt(m.at.x, m.at.z)) + m.y
+    cam.position.set(m.at.x + m.from.x * m.dist, y + m.dist * 0.42, m.at.z + m.from.z * m.dist)
+    cam.lookAt(m.at.x, y, m.at.z)
+    cam.updateMatrixWorld()
+    // (The frame's own sun, see-through and culling go back after the picture.)
+    const sun = this.lights.sun.target.position
+    const [sx, sy, sz] = [sun.x, sun.y, sun.z]
+    const eye = SEE.uEye.value.clone()
+    const focus = SEE.uFocus.value.clone()
+    this.isl.cull(cam.position.x, cam.position.z, CAM.far)
+    this.lights.follow(m.at.x, 0, m.at.z)
+    SEE.uEye.value.copy(cam.position)
+    SEE.uFocus.value.set(m.at.x, y - 3, m.at.z)
+    this.pics[id] = snap(this.renderer, this.scene, cam)
+    if (id === 'prao') this.pics.deck = this.pics.prao
+    this.lights.follow(sx, sy, sz)
+    SEE.uEye.value.copy(eye)
+    SEE.uFocus.value.copy(focus)
     const c = this.rig.camera.position
     this.isl.cull(c.x, c.z, CAM.far)
-    return out
+    if (!this.picsLeft?.length) {
+      this.picsLeft = null
+      this.events.pictures?.(this.pics)
+    }
   }
 
   // ---------------------------------------------------------------- the sand slide and the way home
@@ -3090,10 +3103,8 @@ export class SametIsland implements World3D {
 
   render() {
     // The puppy's pictures of each beach, once the island has drawn a few times (its shaders warm).
-    if (++this.frames === 4) {
-      this.pics = this.renderPics()
-      this.events.pictures?.(this.pics)
-    }
+    if (++this.frames === 4) this.picsLeft = Object.keys(LANDMARKS) as (keyof typeof LANDMARKS)[]
+    this.renderPic()
     if (this.wantPortraits) {
       const cb = this.wantPortraits
       this.wantPortraits = null

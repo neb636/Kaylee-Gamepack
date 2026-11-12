@@ -31,6 +31,9 @@ const C = {
   peak: [92, 180, 132],
 } satisfies Record<string, [number, number, number]>
 
+// The painted top, once a visit per field (about a million lookups; the field is the same every visit, field.ts).
+const painted = new WeakMap<Field, HTMLCanvasElement>()
+
 /** The land: one mesh shaped by the field, with its painted top. */
 export function buildLand(field: Field, bag: Bag) {
   const nx = Math.round((BOARD.lon1 - BOARD.lon0) * MESH)
@@ -61,7 +64,9 @@ export function buildLand(field: Field, bag: Bag) {
   geo.setAttribute('uv', new BufferAttribute(uv, 2))
   geo.setIndex(new BufferAttribute(index, 1))
   geo.computeVertexNormals()
-  const tex = bag.add(new CanvasTexture(paint(field)))
+  let top = painted.get(field)
+  if (!top) painted.set(field, (top = paint(field)))
+  const tex = bag.add(new CanvasTexture(top))
   tex.colorSpace = SRGBColorSpace
   tex.anisotropy = 4
   const mat = bag.add(new MeshToonMaterial({ map: tex, gradientMap: toonGradient() }))

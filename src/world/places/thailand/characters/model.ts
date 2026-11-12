@@ -242,6 +242,21 @@ function smoothHull(geometry: BufferGeometry, rounds = 6, lift = 0) {
   return g
 }
 
+// The smoothed hulls, worked out once per piece of the model: the house builds her on every section link, and the
+// smoothing (a neighbour set per vertex, then 12 to 36 passes) is the slow part. Clones of the model share its
+// geometries, so the piece's own geometry is the key. Kept for the session (never in a world's bag: the next world
+// draws the same ones).
+const hulls = new WeakMap<BufferGeometry, BufferGeometry>()
+function hullOf(geometry: BufferGeometry, face: boolean) {
+  let h = hulls.get(geometry)
+  if (!h) {
+    // The face gets extra rounds and stands off: the sculpted mouth's dimples otherwise poke ink ticks through.
+    h = face ? smoothHull(geometry, 18, HULL_LIFT) : smoothHull(geometry)
+    hulls.set(geometry, h)
+  }
+  return h
+}
+
 /** A rig like buildAnimal's, from the model. */
 export function buildModelRig(gltf: GLTF, bag: Bag): Rig {
   const scene = gltf.scene.clone(true)
@@ -265,9 +280,7 @@ export function buildModelRig(gltf: GLTF, bag: Bag): Rig {
       // The hair's line is drawn a little nearer, so the bangs keep their line where they rest on the forehead (only
       // the hair: on the face it would bring ink up through the creases around the nose and eyes).
       const bias = m.name.startsWith('hair') ? HULL_BIAS : 0
-      // The face gets extra rounds and stands off: the sculpted mouth's dimples otherwise poke ink ticks through.
-      const shape = m.name.startsWith('face') ? smoothHull(m.geometry, 18, HULL_LIFT) : smoothHull(m.geometry)
-      const hull = new Mesh(bag.add(shape), outlineMaterial(PX, undefined, bias))
+      const hull = new Mesh(hullOf(m.geometry, m.name.startsWith('face')), outlineMaterial(PX, undefined, bias))
       hull.userData.hull = PX
       hull.userData.hullBias = bias
       m.add(hull)
