@@ -646,7 +646,7 @@ export class RiceStory {
         },
         {
           id: 'old-hat',
-          shot: { eye: [3.35, 2.55, -0.55], look: () => both().lerp(nestAt(), 0.35), fov: 38, to: { eye: [3.5, 2.45, -0.85] }, sway: 0.02, tall: { eye: [3.0, 2.9, 0.4] } },
+          shot: { eye: [6.45, 2.65, -1.25], look: () => both().lerp(nestAt(), 0.3), fov: 36, to: { eye: [6.3, 2.6, -1.5] }, sway: 0.015, tall: { eye: [6.8, 2.9, -0.6] } },
           start: () => {
             lung.react('hop')
             sfx.chuckle()
@@ -668,9 +668,9 @@ export class RiceStory {
         },
         {
           id: 'share',
-          shot: { eye: [3.45, 2.4, -0.75], look: both, fov: 36, sway: 0.02, tall: { eye: [3.1, 2.8, 0.2] } },
+          shot: { eye: [6.3, 2.5, -1.45], look: both, fov: 34, sway: 0.015, tall: { eye: [6.7, 2.8, -0.8] } },
           start: () => {
-            this.looks = { kaylee: lungHead, lung: () => kaylee.rig.head.getWorldPosition(new Vector3()), nick: nestAt }
+            this.looks = { kaylee: lungHead, lung: () => tmp.set(6.0, 2.2, -1.6), nick: nestAt }
           },
           cues: [
             [0.3, () => lung.react('wave')],
