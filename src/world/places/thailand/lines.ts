@@ -896,6 +896,10 @@ export const L = {
       // Daddy, when it's wedged on the rocks and pops free.
       rocks: [nick('Boing! Silly rocks!'), nick('Bonk! Off we go!')],
       push: [by('otter')('Back in the water!'), by('otter')('Ha ha! Boats go in the sea!')],
+      // Getting off: Sparkle once, a little way into the ride (the pink ring by the hut), and the jet ski man as she
+      // parks in it.
+      off: 'To get off, drive into the pink ring!',
+      bye: by('otter')('Park it here! Bye bye!'),
       // Pokes, in turn: Daddy (his cap blows off), Mommy on the sand, the jet ski man.
       cap: [nick('My cap!'), nick('Not again!')],
       mommy: [ji('Go, go, go!'), ji('Wave to Mommy!')],
