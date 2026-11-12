@@ -5,10 +5,9 @@
 // Whale Watch (whales/, 3D), Salmon Leap (salmon/, 2D), and the finale in Ottawa (party/). Every activity gets
 // CanadaActivityProps (activities/props.ts): `onDone` at its payoff shows the stamp and the sticker, then the video,
 // then the map. Maple's animal book (book/) is over everything: meet(id) pops its card up from any activity.
-import { lazy, Suspense, useState, type ComponentType, type LazyExoticComponent } from 'react'
-import { StampEarned } from '../../kit/StampEarned'
-import { VideoBreak } from '../../kit/Theater'
-import type { PlaceProps, PlaceVideo } from '../../types'
+import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from 'react'
+import { useStampFlow } from '../../kit/stampFlow'
+import type { PlaceProps } from '../../types'
 import { MountainBike } from './activities/bike/MountainBike'
 import { Hub } from './activities/hub/Hub'
 import type { CanadaActivityProps } from './activities/props'
@@ -31,9 +30,8 @@ const ACTIVITIES: Record<string, { C: Lazy | ComponentType<CanadaActivityProps>;
 }
 
 export default function Place(props: PlaceProps) {
-  const { meta, activity, stamps, backToMap, earnStamp, setProgress, onWin } = props
-  const [justEarned, setJustEarned] = useState<string | null>(null)
-  const [videoAfter, setVideoAfter] = useState<PlaceVideo | null>(null)
+  const { meta, activity, stamps, backToMap, setProgress, onWin } = props
+  const stamp = useStampFlow(props, { closeIcon: '🚂 ▶' })
   const entry = activity ? ACTIVITIES[activity] : undefined
   if (!entry) {
     return (
@@ -43,46 +41,19 @@ export default function Place(props: PlaceProps) {
       </>
     )
   }
-  const info = [...meta.activities, ...(meta.inTheWorks ?? [])].find((a) => a.id === activity)
-  const onDone = () => {
-    // The finale's payoff is the trophy.
-    if (activity === 'party') return onWin()
-    if (!info) return backToMap()
-    earnStamp(info.id)
-    setJustEarned(info.id)
-  }
+  const all = [...meta.activities, ...(meta.inTheWorks ?? [])]
+  const info = all.find((a) => a.id === activity)
+  // The finale's payoff is the trophy.
+  const onDone = activity === 'party' ? onWin : info ? stamp.finishFor(info) : backToMap
   if (window.__kayleeWorld) window.__kayleeWorld.finish = onDone
   const { C, bg } = entry
   return (
     <>
       <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: bg }} />}>
-        <C key={activity} onDone={onDone} setProgress={setProgress} onBack={backToMap} stamps={stamps} activities={[...meta.activities, ...(meta.inTheWorks ?? [])]} />
+        <C key={activity} onDone={onDone} setProgress={setProgress} onBack={backToMap} stamps={stamps} activities={all} />
       </Suspense>
       <MetCard />
-      {info && justEarned === info.id && (
-        <StampEarned
-          activity={info}
-          closeIcon="🚂 ▶"
-          onClose={() => {
-            setJustEarned(null)
-            // A real-world video about what she just played comes next (skippable), then the map.
-            const video = meta.videos?.find((v) => v.after === info.id)
-            if (video) {
-              setProgress(0, 0)
-              setVideoAfter(video)
-            } else backToMap()
-          }}
-        />
-      )}
-      {videoAfter && (
-        <VideoBreak
-          video={videoAfter}
-          onDone={() => {
-            setVideoAfter(null)
-            backToMap()
-          }}
-        />
-      )}
+      {stamp.overlay}
     </>
   )
 }

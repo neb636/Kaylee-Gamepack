@@ -5,10 +5,9 @@ import { useEffect, useRef, useState, type ComponentType, type ReactNode } from 
 import { BigButton, firstTime, say, SparklePuppet, sounds, type PuppetHandle } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
 import { sfx } from '../../kit/sfx'
-import { StampEarned } from '../../kit/StampEarned'
+import { useStampFlow, type ActivityProps } from '../../kit/stampFlow'
 import { StoryBeat } from '../../kit/StoryBeat'
-import { VideoBreak } from '../../kit/Theater'
-import type { PlaceProps, PlaceVideo } from '../../types'
+import type { PlaceProps } from '../../types'
 import { Colosseum } from './activities/colosseum/Colosseum'
 import { Etna } from './activities/etna/Etna'
 import { OliveGrove } from './activities/olives/OliveGrove'
@@ -21,10 +20,7 @@ import { L } from './lines'
 import { INK } from './puppets/ink'
 import { Lupa } from './puppets/Lupa'
 
-export interface ActivityProps {
-  onDone: () => void
-  setProgress: (done: number, total: number) => void
-}
+export type { ActivityProps } from '../../kit/stampFlow'
 
 /** The opera finale is a greybox (gate 1) that Dad plays on the PR preview, so it opens without all six stamps for now.
  *  Gate 3 sets this back to true: the opera waits until the band is full. */
@@ -44,9 +40,8 @@ const SPOTS = [
 ]
 
 export default function Place(props: PlaceProps) {
-  const { meta, activity, stamps, earnStamp, setProgress, backToMap, onWin } = props
-  const [justEarned, setJustEarned] = useState<string | null>(null)
-  const [videoAfter, setVideoAfter] = useState<PlaceVideo | null>(null)
+  const { meta, activity, stamps, setProgress, backToMap, onWin } = props
+  const stamp = useStampFlow(props)
 
   if (activity === 'party') {
     const ready = meta.activities.every((a) => stamps.includes(a.id))
@@ -56,41 +51,13 @@ export default function Place(props: PlaceProps) {
 
   const Activity = activity ? ACTIVITIES[activity] : undefined
   const info = meta.activities.find((a) => a.id === activity)
-  if (Activity && info) {
-    const finish = () => {
-      earnStamp(info.id)
-      setJustEarned(info.id)
-    }
-    if (window.__kayleeWorld) window.__kayleeWorld.finish = finish
+  if (Activity && info)
     return (
       <>
-        <Activity key={activity} setProgress={setProgress} onDone={finish} />
-        {justEarned === info.id && (
-          <StampEarned
-            activity={info}
-            onClose={() => {
-              setJustEarned(null)
-              // A real-world video about what she just played comes next (skippable), then the map.
-              const video = meta.videos?.find((v) => v.after === info.id)
-              if (video) {
-                setProgress(0, 0)
-                setVideoAfter(video)
-              } else backToMap()
-            }}
-          />
-        )}
-        {videoAfter && (
-          <VideoBreak
-            video={videoAfter}
-            onDone={() => {
-              setVideoAfter(null)
-              backToMap()
-            }}
-          />
-        )}
+        <Activity key={activity} setProgress={setProgress} onDone={stamp.finishFor(info)} />
+        {stamp.overlay}
       </>
     )
-  }
   return <Hub {...props} />
 }
 

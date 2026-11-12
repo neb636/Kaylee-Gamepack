@@ -8,8 +8,8 @@
 // sticker); the third is the Nan road trip (activities/nan-trip/, in the works: greyboxes from Mom's question to the
 // photo on Agong's wall, then its stamp); the fourth is the Koh Samet island trip (activities/samet-trip/: the
 // speedboat, the island to roam, four stops and the fire show, the pink mermaid sticker). The finale (route `party`) is the family party, coming soon.
-import { use, useState } from 'react'
-import { StampEarned } from '../../kit/StampEarned'
+import { use } from 'react'
+import { useStampFlow } from '../../kit/stampFlow'
 import { worldLink } from '../../../router'
 import { useSections } from '../../kit/sections'
 import type { PlaceProps } from '../../types'
@@ -26,40 +26,25 @@ import { saidYes } from './trip/legs/Ask'
 import { MALL_FACTS, NAN_FACTS, SAMET_FACTS, TRIP_FACTS } from './trip/facts'
 
 export default function Place(props: PlaceProps) {
-  const { meta, activity, earnStamp, backToMap, openActivity } = props
+  const { meta, activity, backToMap, openActivity } = props
   // Kaylee is the modelled vinyl toy: her GLB loads before any scene builds (PlaceFrame's Suspense shows Sparkle
   // thinking meanwhile), so every Avatar is her from the first frame.
   use(kayleeReady())
-  const [justEarned, setJustEarned] = useState<string | null>(null)
-  if (activity === 'party') return <PartySoon backToMap={backToMap} />
   // The boat and Nan trips end on the Thailand map: the stamp, then the plane flies home and the stamp lands on the
   // pin. The mall day ends on Agong's wall: the stamp, then back in the house downstairs, by her photo.
+  const stamps = useStampFlow(props, {
+    closeIcon: '🏠 ▶',
+    layer: true,
+    facts: (info) => (info.id === 'boat-trip' ? TRIP_FACTS : info.id === 'nan-trip' ? NAN_FACTS : info.id === 'samet-trip' ? SAMET_FACTS : MALL_FACTS),
+    after: (info) => {
+      location.hash = info.id === 'mall-trip' ? worldLink(meta.id, 'hub', 'downstairs', { at: 'photos' }) : worldLink(meta.id, 'hub', 'map', { stamp: info.id })
+    },
+  })
+  if (activity === 'party') return <PartySoon backToMap={backToMap} />
   const info = meta.activities.find((a) => a.id === activity) ?? meta.inTheWorks?.find((a) => a.id === activity)
-  const live = !!info && meta.activities.includes(info)
-  const finish = () => {
-    if (!info) return
-    earnStamp(info.id)
-    setJustEarned(info.id)
-  }
-  const stamp =
-    info && justEarned === info.id ? (
-      <div style={{ position: 'absolute', inset: 0, zIndex: 100 }}>
-        <StampEarned
-          activity={info}
-          facts={info.id === 'boat-trip' ? TRIP_FACTS : info.id === 'nan-trip' ? NAN_FACTS : info.id === 'samet-trip' ? SAMET_FACTS : MALL_FACTS}
-          // (An activity still in the works has no recorded sticker line.)
-          quiet={!live}
-          closeIcon="🏠 ▶"
-          onClose={() => {
-            setJustEarned(null)
-            location.hash =
-              info.id === 'mall-trip'
-                ? worldLink(meta.id, 'hub', 'downstairs', { at: 'photos' })
-                : worldLink(meta.id, 'hub', 'map', { stamp: info.id })
-          }}
-        />
-      </div>
-    ) : null
+  // (An activity still in the works has no recorded sticker line.)
+  const finish = info ? stamps.finishFor(info, { live: meta.activities.includes(info) }) : () => {}
+  const stamp = stamps.overlay
   // Another trip picked on Mom's card inside a trip: it opens straight on its first leg.
   const otherTrip = (id: string) => {
     saidYes.at = performance.now()
@@ -67,7 +52,6 @@ export default function Place(props: PlaceProps) {
     openActivity(id)
   }
   if (activity === 'mall-trip' && info) {
-    if (window.__kayleeWorld) window.__kayleeWorld.finish = finish
     return (
       <>
         <MallTrip onExit={backToMap} onTrip={otherTrip} onDone={finish} />
@@ -77,7 +61,6 @@ export default function Place(props: PlaceProps) {
   }
   // The Nan road trip: greyboxes joined up into the whole trip, still in the works (only its links open it).
   if (activity === 'nan-trip' && info) {
-    if (window.__kayleeWorld) window.__kayleeWorld.finish = finish
     return (
       <>
         <NanTrip onExit={backToMap} onTrip={otherTrip} onDone={finish} />
@@ -89,7 +72,6 @@ export default function Place(props: PlaceProps) {
   // the island (Mom's photo on Agong's wall), the stamp, then the map: the stamp lands on the 🏝️ pin. The speedboat
   // home before the island is done (its home picture at Na Dan pier) goes back to the map, the trip kept.
   if (activity === 'samet-trip' && info) {
-    if (window.__kayleeWorld) window.__kayleeWorld.finish = finish
     return (
       <>
         <SametTrip onDone={finish} onExit={backToMap} />
@@ -98,7 +80,6 @@ export default function Place(props: PlaceProps) {
     )
   }
   if (activity === 'boat-trip' && info) {
-    if (window.__kayleeWorld) window.__kayleeWorld.finish = finish
     return (
       <>
         <BoatTrip onExit={backToMap} onDone={finish} />
