@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Candy game</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff5d1"/><stop offset="1" stop-color="#ffe08f"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <clipPath id="pop"><circle cx="36" cy="46" r="20"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+  <ellipse cx="60" cy="104" rx="42" ry="5" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- the path of colored spaces -->
+  <g>
+    <rect x="12" y="92" width="14" height="10" rx="4" fill="#ff6b6b"/>
+    <rect x="28" y="92" width="14" height="10" rx="4" fill="#ffc83d"/>
+    <rect x="44" y="92" width="14" height="10" rx="4" fill="#73cf86"/>
+    <rect x="60" y="92" width="14" height="10" rx="4" fill="#8ccfff"/>
+    <rect x="76" y="92" width="14" height="10" rx="4" fill="#b9a6f5"/>
+    <rect x="92" y="92" width="14" height="10" rx="4" fill="#ff8fb8"/>
+  </g>
+
+  <!-- the cupcake house at the finish -->
+  <path d="M66 62H104L99 90H71Z" fill="#ffc2a8"/>
+  <path d="M94 62H104L99 90H92Z" fill="#f09d80"/>
+  <path d="M71 66V88M78 66V88M85 66V88M92 66V88" stroke="#ffe2d4" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M80 90V78Q85 72 90 78V90Z" fill="#c99266"/>
+  <path d="M62 63Q62 50 72 49Q74 38 85 38Q96 38 98 49Q108 50 108 63Z" fill="#ff8fb8"/>
+  <path d="M98 49Q108 50 108 63H96Q99 56 98 49Z" fill="#e7699c"/>
+  <path d="M70 53Q74 46 80 44" fill="none" stroke="#ffc4da" stroke-width="2.6" stroke-linecap="round"/>
+  <g stroke-width="2.4" stroke-linecap="round"><path d="M76 56L79 54" stroke="#8fe3c8"/><path d="M88 50L91 52" stroke="#ffc83d"/><path d="M95 58L98 56" stroke="#8ccfff"/><path d="M82 60L84 62" stroke="#fff"/></g>
+  <circle cx="85" cy="34" r="5" fill="#ff4f9a"/>
+  <path d="M85 29Q87 24 91 23" fill="none" stroke="#48a96c" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- the big lollipop -->
+  <rect x="34" y="62" width="4.5" height="30" rx="2" fill="#fff7f0"/>
+  <g clip-path="url(#pop)">
+    <circle cx="36" cy="46" r="20" fill="#ff8fb8"/>
+    <path d="M36 46m-14 0a14 14 0 1 1 14 14a9 9 0 1 1 -9 -9a5 5 0 1 1 5 5" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M44 30A20 20 0 0 1 56 46H48Z" fill="#e7699c" opacity="0.5"/>
+  </g>
+  <path d="M24 38Q27 31 33 29" fill="none" stroke="#ffc4da" stroke-width="2.6" stroke-linecap="round"/>
+
+  <!-- sparkles -->
+  <path d="M60 22L61.8 27L67 28.8L61.8 30.6L60 36L58.2 30.6L53 28.8L58.2 27Z" fill="#fff"/>
+</svg>
