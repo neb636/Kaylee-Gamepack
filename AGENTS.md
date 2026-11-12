@@ -152,15 +152,16 @@ and `docs/3d-characters.md`.
 
 | When you're... | Read |
 |---|---|
+| Finding where something lives | `docs/code-map.md` (generated: every country and activity, its code, sections, QA and notes) |
 | Designing a toy | `docs/play-design.md` (the eight principles and the fun check), `planning/around-the-world/ACTIVITY-TEMPLATE.md` |
-| Building anything | `docs/building.md` (where things live, packages, the SDK, deep links, screens, offline, commands) |
+| Building anything | `docs/building.md` (where things live, packages, the SDK, adding an activity end to end, deep links, screens, offline, commands) |
 | Picking an interaction | `docs/interactions.md` |
 | Working in 3D or Thailand | `docs/thailand-3d.md` (engine, camera, cinema, labs, the family code) |
 | Telling a story or a cutscene | `docs/films.md` (films: beats, shots, memories, skipping; Jip and the hat mix-up is the first) |
 | Writing or recording lines | `docs/voices.md` (the cast, `lines.ts`, recording, the table read) |
 | Making art | `docs/art.md` (style, one camera per scene, white patches) |
 | Checking your work | `docs/qa.md` (robots, the fresh-eyes agent, the time budget) |
-| Continuing a country or trip | its notes in `planning/around-the-world/` and `known-issues.md` |
+| Continuing a country or trip | its notes: `planning/around-the-world/<country>.md`, or `<country>/<trip>.md` and `<country>/known-issues.md` (Thailand). Australia, Egypt, Italy, China and Peru are finished and have none: read their code |
 
 **Skills** (in `.agents/skills/`, shared by Claude Code and Codex): `pitch` (three pitch cards), `table-read` (hear a
 script), `reel` (film the game), `ship` (the review page and the PR, fixes too), `playtest` (a recording of Kaylee into
@@ -168,12 +169,17 @@ fixes), `kaylee-week` (the play diary), `sfx` (first-pass ElevenLabs sound effec
 
 ## Rules the checks enforce
 
-- `npm run verify` must pass before every PR: voice clips for every line, heavy libraries (three, phaser) only inside
-  a country or game folder, no file names that differ only in case, the game-sections page (`docs/game-sections.html`, generated: run `npm run sections-readme`), typecheck, build.
+- `npm run verify` must pass before every PR. It checks: the player-name rule (rule 5) and its own tests, every
+  `voice-lines.json` matches its `lines.ts`, a voice clip for every line, heavy libraries (three, phaser) only inside a
+  country folder or the 3D engine, no file names that differ only in case, the generated `docs/game-sections.html` and
+  `docs/code-map.md` (run `npm run sections-readme`), typecheck, build. This list is the one source; other docs link here.
   Changed lines? Push them: the PR records them for you: its preview workflow's voices job uses the `OPENAI_API_KEY` repository secret, commits the clips to your branch and re-runs CI. `git pull` to get the clips. With a key of your own you can record
   them first (`node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`); you don't need one.
 - Every section of every activity opens from a link, with its state in the URL (`tests/sections.spec.ts`).
 - Ask the user before adding a package (`docs/building.md`, Dependencies).
+- **Reuse before you write.** Number helpers are `src/sdk/math.ts`, the sound context is `audio()` (`src/sdk/sounds.ts`),
+  the stamp → video → map flow is `useStampFlow` (`src/world/kit/stampFlow.tsx`), and 3D has `engine3d/` (outlines,
+  water, floaters). A private copy at the top of a file drifts from the original; import the shared one.
 - Don't run `npm run test` or `npm run check` locally; CI runs the specs on the PR.
 
 ## Before you finish

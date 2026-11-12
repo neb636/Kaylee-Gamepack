@@ -983,7 +983,7 @@ Every phrase goes in `lines.ts` under `L.samet` (tagged by speaker) and is recor
 
 ## Finding her way: the beach puppy (issue #357 way-finding batch, card B, 2026-11-10, PR #369)
 
-- the user picked card B. The whole toy's notes are `samet-wayfinding.md`; in short: a beach puppy (`island/puppy.ts`) runs
+- the user picked card B. The whole toy's notes are `planning/archive/samet-wayfinding.md`; in short: a beach puppy (`island/puppy.ts`) runs
   ahead to a stop she hasn't played, waits on her screen, fetches her when she's idle 8 s, barks the beach's name on
   arrival (Sparkle says it), and his thought bubble is a picture of the beach (drawn from the island). The flag badge
   is gone.

@@ -1,9 +1,8 @@
 # Interactions cookbook: what to reach for
 
 Most moments in an activity are plain React + `motion`: tap a thing, it bounces, a puppet reacts. For harder
-hands-on play, use the kit in `src/sdk/interact/` (exported from `../../sdk`). You can try every piece at
-`#/playground` (source: `src/shell/InteractionDemos.tsx`). Nothing here replaces the older pieces; the tea
-party keeps working as it is.
+hands-on play, use the kit in `src/sdk/interact/` (exported from `../../sdk`). Real uses to copy: `JigsawPuzzle` in
+`src/world/PuzzleBook.tsx`, `StickerBoard` in Italy's pizzeria, `PlayArea` in Italy's and China's activities.
 
 ## Pick the tool
 
@@ -11,10 +10,10 @@ party keeps working as it is.
 |---|---|---|
 | Tap the right answer | `ChoiceCards`, `motion.button` | Keep it a small part of the activity. |
 | Drag something to one of a few places | `PlayArea` + `Piece` + `Target` | Hover glow, magnetic snap, a hint pulse, and it's safe for many quick drags. Prefer it over `Draggable` in new code. |
-| Sort into baskets | `SortIntoBins` (simple) or `PlayArea` (custom look) | |
+| Sort into baskets | `PlayArea` with a `Target` per basket | |
 | Put pieces into exact spots (jigsaw, shape puzzle, build a castle) | `JigsawPuzzle`, or `PlayArea` with `snapTo` | `JigsawPuzzle` cuts any scene picture into tab-and-blank pieces. |
-| Place things anywhere (pizza, cake, sundae, sticker scene, decorate a tree) | `StickerBoard` + `countByKind` | Unlimited stamps from a tray; move them again; drag off to remove. |
-| Build a look (avatar, dress-up, decorate a room) | `DressUpStudio`, `OptionPicker`, `Swatch` + `useSaved` | Draw the character as layered SVG whose colors are fills. |
+| Place things anywhere (pizza, cake, sundae, sticker scene, decorate a tree) | `StickerBoard` | Unlimited stamps from a tray; move them again; drag off to remove. |
+| Build a look (avatar, dress-up, decorate a room) | Big option buttons + `useSaved` (Thailand's wardrobe, Peru's hats) | Draw the character as layered SVG whose colors are fills. |
 | Follow a path or trace a letter, draw | `usePointerDrag` + `perfect-freehand` (pre-approved) | Smooth, finger-width strokes as SVG paths. |
 | Scratch or paint to reveal | Canvas + `usePointerDrag` | See `ColoringPage` in `src/world/kit/` for canvas pixel mapping. |
 | Something moving by itself (catch falling stars, steer a boat) | `useGameLoop` + refs | A few moving things. Write to `el.style`, not state. |
@@ -68,20 +67,10 @@ const [items, setItems] = useState<Placed[]>([])
 <StickerBoard surface={<img src={pizza} style={{ width: '100%' }} />} shape="circle" max={20}
   stickers={[{ kind: 'basil', content: <img src={basil} style={{ width: '100%' }} />, size: 0.14, say: 'Basil!' }]}
   items={items} onChange={setItems} onPlace={() => chef.current?.play('nod')} />
-countByKind(items).basil // e.g. an order: "3 basil leaves, please!"
+items.filter((i) => i.kind === 'basil').length // e.g. an order: "3 basil leaves, please!"
 ```
 Positions are fractions of the surface, so the pizza looks the same after the iPad rotates. Pair it with an
 order to fill (count, colors, patterns) so it teaches something, and let free decorating be the reward.
-
-### `DressUpStudio` + `useSaved`
-```tsx
-const [look, setLook] = useSaved(`${meta.id}:look`, { hair: 'long', hairColor: 'brown' })
-<DressUpStudio slots={SLOTS} values={look} onChange={setLook} character={<Avatar look={look} />} />
-```
-Each slot has an `icon` (she can't read) and big options (`thumb` = small drawing or `<Swatch color>`).
-Draw the character once as layered SVG: back hair, body, outfit, head, face, front hair, accessory. Colors are
-just fills. Build it as a puppet (`usePuppet`) if it should blink and talk. See `Avatar` in
-`src/shell/InteractionDemos.tsx`.
 
 ### Hooks
 `useLandscape()`, `useElementSize(ref)`, `useGameLoop((dt) => ..., running)`, `useSaved(key, initial)`.
@@ -123,8 +112,7 @@ Steering we learned the hard way on the Nan mountain road (2026-10-26):
 - **Store positions as fractions** (0..1 of a box), never px, so rotating the iPad doesn't scramble her work.
 - **Targets at least 88px**, and a tap alternative for every drag (tap shows the spot, or places it for her).
 - `touch-action: none` goes on draggable things only (the kit does this), or the page can't scroll.
-- Test drags in WebKit: `npx playwright test` drives them with the mouse (see the interaction test in
-  `tests/smoke.spec.ts`).
+- Test drags in WebKit with a robot finger (`scripts/qa-motion.mjs`, the country's `qa.mjs`); the specs run in CI.
 
 ## Phaser recipe (real-time or physics games only)
 
@@ -162,7 +150,7 @@ export function Arcade({ onCaught }: { onCaught: (n: number) => void }) {
 - Load art with `this.load.image('star', starUrl)` using the imported `.webp` URLs.
 - Gentle speeds, nothing to lose, and spoken instructions, same as every activity.
 - The smoke test still needs at least 2 real `<button>`s on screen (the overlay has them).
-- Never import `phaser` from `src/sdk`, the shell or a `meta.ts`. `npm run check` fails if you do
+- Never import `phaser` from `src/sdk`, the shell or a `meta.ts`. `npm run verify` fails if you do
   (`scripts/check-heavy-imports.mjs`).
 
 ## Adding a library

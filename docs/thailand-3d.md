@@ -13,7 +13,7 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
   the 2D art, blob shadows, no post-processing (`engine3d/toon.ts`, `engine3d/outline.ts`).
 - **The engine** (`src/world/engine3d/`, outside the locked folder) is shared by every 3D country: one shared
   renderer (we make the WebGL2 context ourselves, so no console error without one), the frame loop (60 fps cap; 30
-  when nothing moves; slower in test browsers), a box-fitting follow camera, a walk grid with A*, the tap marker, the finger drive control for vehicles (`drive.ts`), water and particles. `View3D.tsx` mounts any 3D world with its DOM tap
+  when nothing moves; slower in test browsers), a box-fitting follow camera, a walk grid with A*, the tap marker, the finger drive control for vehicles (`drive.ts`), water (`water.ts`, `lagoon.ts`, running water `flow.ts`), particles and floaters (`floaters.ts`: sparkles, puffs, crumbs, one draw call), and the instanced ink line (`instancedOutlineMaterial`). Use these before writing your own: a copy drifts (two hand-made outline shaders drew lines a third too thick). Number helpers (`clamp`, `damp`, `wrapAngle`, `DEG`) are `src/sdk/math.ts`. `View3D.tsx` mounts any 3D world with its DOM tap
   targets (`Anchors.tsx`): real buttons, at least 64 px, placed over the 3D things every frame, so VoiceOver and
   QA can find them. Overlapping targets must not steal each other's taps.
 - **Layouts are data in meters** (`activities/hub/layout.ts`): the build, the walk grids and the tap targets all
@@ -32,7 +32,7 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
   still starts in the house (Mom or Dad asks) and ends there.
 - **A trip's own map** looks like the Thailand map: the board floats in the same sky and tray and opens with the same
   camera entrance behind the loading cover (`trip/sky.ts`: `skyTexture`, `puffCloud`, `trayParts`, `mapCamKnobs`,
-  `Entrance`; `trip/MapCover.tsx`). The Nan map (`nan-trip/map/`) uses them; a new trip's map should too.
+  `Entrance`; `trip/MapCover.tsx`). The Nan map (`activities/nan-trip/map/`) uses them; a new trip's map should too.
 - **The trip kit** (`trip/`): packing, the goodbye, the vehicles, the airport, the window seat, the photo wall. Reuse it
   for a new trip instead of building travel again.
 - **Debugging:** `?debug=1` shows a tuning panel (camera, light bands, outlines, walk), `?fps=N` overrides the frame cap,

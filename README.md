@@ -94,9 +94,10 @@ Fixes go faster: you ask, the AI fixes it with a short before-and-after clip, yo
   mouths, and act things out.
 - `src/world/`: **Around the World**, a map Kaylee explores in Sparkle's balloon, with a passport, a coloring book,
   and one folder per country in `src/world/places/<id>/`. Thailand is 3D (three.js); the others are 2D.
-- `src/sdk/`: shared building blocks: speech (`say`), sounds, confetti, puppets, drag and drop, puzzles and more.
-  Try them at `#/playground`.
-- `src/shell/`: the app wrapper (splash, trophy ceremony); the world map is the home screen.
+- `src/sdk/`: shared building blocks: speech (`say`), sounds, confetti, puppets, drag and drop, puzzles, math helpers.
+- `src/shell/`: the app wrapper (splash, trophy ceremony, the Halloween theme in `seasonal/`); the world map is the
+  home screen.
+- `docs/code-map.md` (generated): where every country's and activity's code, sections, QA and notes live.
 - `planning/around-the-world/`: the builder's notes per country and trip (`thailand.md`, `thailand/nan-trip.md`, ...)
   and `ACTIVITY-TEMPLATE.md` for a new toy's notes. They're for the agents; you see pitch cards, table reads and reels.
 - `AGENTS.md`: how we work and the rules AI agents follow (read this to change how toys are made).
@@ -106,7 +107,7 @@ Fixes go faster: you ask, the AI fixes it with a short before-and-after clip, yo
 - `art/STYLE.md`: the art style prompt. `art/source/`: full-size art (per-country originals are git-ignored scratch;
   the app uses small webp copies).
 - `.github/workflows/`:
-  - `ci.yml`: typecheck, build, smoke tests
+  - `ci.yml`: `npm run check` (verify + every Playwright spec), the analytics check, and the nightly `@behavior` run
   - `preview.yml`: PR previews, with the review page at `<preview>/review/`
   - `deploy.yml`: main → Pages
 
@@ -114,9 +115,9 @@ Fixes go faster: you ask, the AI fixes it with a short before-and-after clip, yo
 
 ```bash
 npm install
-npm run dev                  # http://localhost:5173 (#/world, #/world/sections, #/world/characters, #/playground)
-npm run verify               # voice clips + heavy imports + typecheck + build
-npm run check                # verify + Playwright smoke tests
+npm run dev                  # http://localhost:5173 (#/world, #/world/sections, #/world/characters, #/world/puppets)
+npm run verify               # every check before a PR (the list is in AGENTS.md), typecheck, build
+                             # (npm run check = verify + the Playwright specs; CI runs it, agents don't locally)
 node scripts/generate-voice.mjs --check  # verify that every listed line has audio
 node scripts/generate-voice.mjs          # record missing/changed lines (OPENAI_API_KEY in .env, needs ffmpeg)
 node scripts/voice-audition.mjs pip nova coral  # hear a character in a few voices

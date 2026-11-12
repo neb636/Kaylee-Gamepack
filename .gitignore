@@ -13,3 +13,6 @@ art/source/sfx/
 qa-output/
 # Review pages (scripts/review.mjs): media goes to the review-pages branch, never into main's history
 review/
+# Claude Code: personal settings and session worktrees
+.claude/settings.local.json
+.claude/worktrees/

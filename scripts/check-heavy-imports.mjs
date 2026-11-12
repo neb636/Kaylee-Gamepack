@@ -1,8 +1,8 @@
-// Keeps big libraries lazy: they may only be imported from a game or country folder, the shared 3D engine
+// Keeps big libraries lazy: they may only be imported from a country folder, the shared 3D engine
 // (src/world/engine3d/, only countries import it) or the labs (src/world/labs/, loaded on demand), never from the SDK,
 // the shell, the world kit or a file that loads at startup (a meta.ts, a sections file, a country's puppets/index.ts:
 // the registry and the puppet lab glob those eagerly).
-// Usage: node scripts/check-heavy-imports.mjs   (part of `npm run check`)
+// Usage: node scripts/check-heavy-imports.mjs   (part of `npm run verify`)
 import { readdirSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 

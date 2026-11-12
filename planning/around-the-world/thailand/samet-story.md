@@ -4,7 +4,7 @@ The first build (`samet-trip.md`) was an open island to roam with an animal phot
 place in the game and played the worst: long walks between beaches, nothing to say where to go or why, a puppy guide
 that didn't help, a photo book nobody wanted. The user asked for a salvage with full authority to change anything:
 easier to get around, a plot and characters like the Nan rice farm and the salt hut, films and back stories, and what
-doesn't make sense removed. This file is what the trip is now. `samet-trip.md` and `samet-wayfinding.md` are history.
+doesn't make sense removed. This file is what the trip is now. `samet-trip.md` and `../../archive/samet-wayfinding.md` are history.
 
 ## The story
 

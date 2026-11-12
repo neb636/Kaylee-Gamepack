@@ -44,5 +44,5 @@ Look at the page at phone width before the user does. If a card needs a scroll a
 ## 4. After they pick
 
 Write the toy notes from `planning/around-the-world/ACTIVITY-TEMPLATE.md` (for agents; they won't read them) in
-`planning/around-the-world/<country>/<toy>.md`, with their pick and anything they said, and start building on the same
+`planning/around-the-world/<country>/<toy>.md` (or the country's `<country>.md` when it has no folder), with their pick and anything they said, and start building on the same
 branch. Family facts in a pitch (who comes, which animal) are the user's: ask, don't invent. No temples or Buddhas (rule 8).
