@@ -4,7 +4,8 @@
 // glints drift, and it spills over the edge), cream roads between the places, and the places standing up like toys:
 // the mushroom farm's cottage with a giant spotty mushroom behind it, the rice steps with Stop Time Cafe on top, Bo
 // Kluea's thatched hut with its steaming salt pan, the well and the salt piles, Nan town's pastel houses round the
-// market umbrellas and the Thai flag, and the airport with its pink roof, control tower and runway lights. Past the
+// market umbrellas and the Thai flag, the airport with its pink roof, control tower and runway lights, and the lookout
+// on the 3 road's top bend (a wooden deck on stilts, a pink telescope and a pennant, looking down the hairpins). Past the
 // border, on the paper: Laos, a row of little border posts and its flag. Clouds sit on the peaks, a buffalo grazes the
 // paddies by the river, a fish waits in it, and the little silver Pajero (the drive's, scaled down) sits on the roads.
 // The landmarks are big chunky toys (PLACE_SCALE).
@@ -313,12 +314,47 @@ export function buildDiorama(bag: Bag, net: Net): Diorama {
     P.cone(0.016, 0.06, '#FF8A4D', { at: [ax - 0.19, ag + 0.12, az + 0.04], rot: [0, 0, Math.PI / 2 + 0.25] }, 8),
     ...runway,
   ]
+  // The lookout on the 3 road's top bend: a wooden deck on stilts over the hillside, railed along the front and sides,
+  // a pink telescope at the rail looking down the hairpins (south, toward us), a bench, and a pink pennant on a pole.
+  const [lx, lz] = at('lookout')
+  const lg = y(lx, lz)
+  const deck = lg + 0.085
+  const lookout = [
+    ...[[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([a, b]) => P.cyl(0.009, 0.011, 0.09, WOOD_DARK, { at: [lx + a * 0.1, lg + 0.045, lz + b * 0.065] }, 6)),
+    P.rbox(0.25, 0.018, 0.17, 0.006, WOOD, { at: [lx, deck, lz] }),
+    // The railing: posts along the front and the sides, a rail on top.
+    ...[-0.115, -0.06, 0, 0.06, 0.115].map((dx) => P.cyl(0.004, 0.004, 0.05, WOOD_DARK, { at: [lx + dx, deck + 0.033, lz + 0.078] }, 5)),
+    ...[-1, 1].flatMap((k) => [-0.02, 0.03].map((dz) => P.cyl(0.004, 0.004, 0.05, WOOD_DARK, { at: [lx + k * 0.115, deck + 0.033, lz + dz] }, 5))),
+    P.box(0.24, 0.008, 0.01, WOOD_DARK, { at: [lx, deck + 0.058, lz + 0.078] }),
+    ...[-1, 1].map((k) => P.box(0.01, 0.008, 0.15, WOOD_DARK, { at: [lx + k * 0.115, deck + 0.058, lz] })),
+    // The telescope on its post, tipped down toward the 3.
+    P.cyl(0.006, 0.008, 0.06, '#EDEAF2', { at: [lx + 0.05, deck + 0.039, lz + 0.045] }, 6),
+    P.capsule(0.014, 0.045, PAL.hotpink, { at: [lx + 0.05, deck + 0.075, lz + 0.05], rot: [Math.PI / 2 + 0.35, 0, 0] }),
+    P.cyl(0.011, 0.011, 0.006, '#BFE2FA', { at: [lx + 0.05, deck + 0.066, lz + 0.078], rot: [Math.PI / 2 + 0.35, 0, 0] }, 10),
+    // A bench at the back.
+    P.rbox(0.09, 0.012, 0.03, 0.004, '#FFF4E6', { at: [lx - 0.04, deck + 0.03, lz - 0.05] }),
+    ...[-1, 1].map((k) => P.box(0.008, 0.022, 0.024, WOOD_DARK, { at: [lx - 0.04 + k * 0.035, deck + 0.014, lz - 0.05] })),
+    // The pennant on its pole at the back corner.
+    P.cyl(0.004, 0.004, 0.2, '#EDEAF2', { at: [lx - 0.105, deck + 0.1, lz - 0.065] }, 5),
+    P.sphere(0.008, PAL.gold, { at: [lx - 0.105, deck + 0.203, lz - 0.065] }, 6),
+    P.prism([[0, 0], [0, 0.05], [0.08, 0.025]], 0.006, PAL.pink, { at: [lx - 0.103, deck + 0.145, lz - 0.065] }),
+  ]
+  // Stepping stones from the bend where the Pajero parks up to the deck (in board scale: the group scales its parts).
+  const [bx, bz] = PLACES.lookout.at
+  for (let k = 0; k < 6; k++) {
+    const f = 0.06 + k * 0.12
+    const sx2 = bx + (lx - bx) * f
+    const sz2 = bz + (lz - bz) * f + Math.sin(k * 2.1) * 0.012
+    // (Around the group's origin, so PLACE_SCALE doesn't push them off the line.)
+    lookout.push(P.cyl(0.018, 0.02, 0.008, '#F3E3C8', { at: [lx + (sx2 - lx) / PLACE_SCALE, y(sx2, sz2) + 0.004 - (y(sx2, sz2) - lg) * (1 - 1 / PLACE_SCALE), lz + (sz2 - lz) / PLACE_SCALE] }, 10))
+  }
   const places = {
     mushrooms: placeGroup('mushrooms', shroom),
     rice: placeGroup('rice', rice),
     salt: placeGroup('salt', salt),
     town: placeGroup('town', town, 1.5),
     airport: placeGroup('airport', airport),
+    lookout: placeGroup('lookout', lookout),
   } as Record<PlaceId, Group>
 
   // ---- The tiny plane, waiting at the end of the runway ----

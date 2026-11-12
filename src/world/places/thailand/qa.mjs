@@ -1717,6 +1717,25 @@ motion.push({
   },
 })
 
+// The Nan map's lookout on the 3 road's top bend, open from the start: on a fresh map (no stops yet) she taps it and the
+// little Pajero drives there, then the camera dives into the 3 road. (nan-airport-closed: before the lookout, the
+// airport was the only way to the 3 road, and with no stops it's closed: a tap just flies the tiny plane round.)
+for (const [name, place] of [['nan-lookout', 'lookout'], ['nan-airport-closed', 'airport']])
+  motion.push({
+    name,
+    seconds: 9,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/nan-trip/map`)
+      await page.waitForFunction(() => window.__thaiNanQA?.().game === 'map', null, { timeout: 30000 })
+      await page.waitForTimeout(5500)
+    },
+    act: async (page) => {
+      const [x, y] = await page.evaluate((p) => window.__thaiNanQA().points.places[p], place)
+      await page.mouse.click(x, y)
+      await page.waitForTimeout(7500)
+    },
+  })
+
 // The Nan Mountain Cup (greybox 1): the kart toy. After GO her finger holds the road just ahead of the kart (where QA's
 // `aim` says it is) and swings from side to side across it, over coins and pads; then (nan-bounce) the forest's trick:
 // racing on by itself up to the first bouncy mushroom, and boing, up in the air.

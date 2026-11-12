@@ -10,7 +10,9 @@
 //   two stops the airport opens: the 3 road, and at its viewpoint the 3 from above (section three), Mommy takes their
 //   photo and ✈️🏠 ends the trip (endTrip): the 3's photo goes on Agong's wall by itself, then the stamp, and the plane
 //   flies home on the Thailand map (Dad, 2026-10-27; section home, the flight home and picking a photo for Agong, is
-//   only reached by its link now). The trips start on the Thailand map: the first of a session packs and goes down
+//   only reached by its link now). The lookout on the 3's top bend (map place `lookout`, open from the start, never a
+//   stop) drives the same 3 road to the same viewpoint (`three?to=lookout`): Mommy's photo, then 🔁 or 🗺️ back to the
+//   map, no ✈️🏠. The trips start on the Thailand map: the first of a session packs and goes down
 //   the stairs straight to the window seat; later ones open straight on the Nan map.
 //   The Nan Mountain Cup (cup/, plan: thailand/nan-cup.md; on since the full loop, CUP_OPEN in cup/rules.ts): the
 //   city road ends at its race ground (section cup: the board), a kart race on each of three tracks (race), a podium
@@ -55,7 +57,8 @@ type At =
   | { section: LoopSection }
   | { section: 'map' }
   | { section: 'drive'; road: RoadId; to: string }
-  | { section: 'three' }
+  /** The 3 from the viewpoint; `to: 'lookout'` when she drove there from the lookout (back to the map, not home). */
+  | { section: 'three'; to?: string }
   | { section: 'mushrooms'; round: Round; basket: string }
   | { section: 'rice'; round: RiceRound }
   | { section: 'salt'; round: SaltRound }
@@ -84,8 +87,8 @@ const DEFAULT_PACKED = NAN_SECTIONS.params.packed.default
 
 /** Where a place on the map leads: the road there, and where that road's end goes. */
 function driveTo(place: PlaceId, cup: boolean): At {
-  // (The airport is home, down the 3 road: it ends at the viewpoint. Nan town is a drive through and back, or, with the
-  // Cup on, to its race ground.)
+  // (The airport is home, down the 3 road: it ends at the viewpoint. The lookout drives the 3 road too, back to the map
+  // from its viewpoint. Nan town is a drive through and back, or, with the Cup on, to its race ground.)
   return { section: 'drive', road: PLACES[place].road, to: place === 'airport' ? '' : place === 'town' ? (cup ? 'cup' : 'map') : place }
 }
 
@@ -159,7 +162,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
       const result = param('result') as Result
       return { section: 'race', track: TRACK_IDS.includes(track) ? track : 'forest', result: RESULTS.includes(result) ? result : 'win' }
     }
-    if (first === 'three') return { section: 'three' }
+    if (first === 'three') return { section: 'three', to: param('to') === 'lookout' ? 'lookout' : '' }
     if (first === 'cup') return { section: 'cup' }
     if (first === 'cup-win') return { section: 'cup-win' }
     if (linkPodium) {
@@ -202,7 +205,8 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
     else if (at.section === 'home') enter('home', { packed: p, photos: homePhotos.join(',') })
     else if (isLoop(at.section)) enter(at.section, { packed: p, ...(at.section === 'goodbye' || at.section === 'takeoff' || at.section === 'fly' ? { replay: replay ? '1' : '' } : {}) })
     else if (at.section === 'drive') enter('drive', { road: at.road, ...(at.to ? { to: at.to } : {}), ...s })
-    else if (at.section === 'map' || at.section === 'three') enter(at.section, s)
+    else if (at.section === 'three') enter('three', { ...(at.to ? { to: at.to } : {}), ...s })
+    else if (at.section === 'map') enter('map', s)
     else if (at.section === 'mushrooms') enter('mushrooms', { round: at.round, basket: at.basket, ...s })
     else if (at.section === 'race') enter('race', { track: at.track, result: at.result, ...s })
     else if (at.section === 'cup') enter('cup', s)
@@ -406,21 +410,23 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
     // The 3 from above is the 3 road's world, parked at the viewpoint (the same Drive, so it doesn't rebuild when the
     // road gets there).
     const three = at.section === 'three'
+    // From the lookout (not the airport): the 3 road and its viewpoint, then back to the map, not home.
+    const lookout = (at.section === 'three' || at.section === 'drive') && at.to === 'lookout'
     return (
       <Drive
         key="drive"
         road={three ? 'three' : at.section === 'drive' ? at.road : 'valley'}
         view={three}
         to={three || at.section !== 'drive' ? '' : at.to}
-        onRoad={(road) => setAt({ section: 'drive', road, to: '' })}
+        onRoad={(road) => setAt({ section: 'drive', road, to: road === 'three' && lookout ? 'lookout' : '' })}
         onStop={(road, stop) => {
           const s = (stop ?? (road === 'sky' ? 'rice' : 'mushrooms')) as Stop
           setAt(s === 'cup' ? { section: 'cup' } : s === 'salt' ? { section: 'salt', round: '1' } : s === 'rice' ? { section: 'rice', round: 'story' } : { section: 'mushrooms', round: '1', basket: '' })
         }}
         onMap={() => setAt({ section: 'map' })}
-        onView={() => setAt({ section: 'three' })}
+        onView={() => setAt({ section: 'three', to: lookout ? 'lookout' : '' })}
         onPhoto={() => setSaw3(true)}
-        onHome={endTrip}
+        onHome={lookout ? undefined : endTrip}
         cup={cupOn}
       />
     )

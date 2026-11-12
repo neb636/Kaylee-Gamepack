@@ -85,26 +85,34 @@ export const RIVER_W = 0.13
  *  cup/rules.ts) is a stop in Nan town: the city road ends at its race ground, and its stamp lands on Nan town. */
 export const STOPS = ['mushrooms', 'rice', 'salt', 'cup'] as const
 export type Stop = (typeof STOPS)[number]
-export type PlaceId = 'mushrooms' | 'rice' | 'salt' | 'airport' | 'town'
+export type PlaceId = 'mushrooms' | 'rice' | 'salt' | 'airport' | 'town' | 'lookout'
 /** Where each stop is on the map. */
 export const STOP_PLACE: Record<Stop, PlaceId> = { mushrooms: 'mushrooms', rice: 'rice', salt: 'salt', cup: 'town' }
 /** The stops on this trip: the Cup only when it's open. */
 export const liveStops = (cup: boolean): readonly Stop[] => (cup ? STOPS : STOPS.filter((s) => s !== 'cup'))
 
-/** Where each place stands, and the road that drives there (the 3 road is the way home). */
-export const PLACES: Record<PlaceId, { at: XZ; road: 'city' | 'valley' | 'sky' | 'three'; label: string }> = {
+/** Where each place stands, and the road that drives there (the 3 road is the way home from the airport; the lookout, on
+ *  the 3's top bend, drives it any time and comes back to the map). */
+export const PLACES: Record<PlaceId, { at: XZ; road: 'city' | 'valley' | 'sky' | 'three'; label: string; model?: XZ }> = {
   airport: { at: [-1.6, 1.35], road: 'three', label: 'The airport' },
   town: { at: [-0.22, 0.95], road: 'city', label: 'Nan town' },
   mushrooms: { at: [-1.4, -1.15], road: 'valley', label: 'The mushroom farm' },
   rice: { at: [1.12, -1.55], road: 'sky', label: 'Stop Time Cafe' },
   salt: { at: [1.62, -0.55], road: 'sky', label: 'Bo Kluea salt wells' },
+  // (Its deck stands up the hillside to the west of the bend, not behind it: clear of the salt hut, so their tap targets
+  // don't overlap on an iPhone.)
+  lookout: { at: [0.95, -0.22], road: 'three', label: 'The 3 lookout', model: [-0.42, -0.05] },
 }
 /** Each place's toy stands a little behind where the Pajero parks for it (north, up the screen), so the car shows in
- *  front of it. */
+ *  front of it (or where its `model` offset says). */
 export const MODEL_BACK = 0.24
-export const modelAt = (id: PlaceId): XZ => [PLACES[id].at[0], PLACES[id].at[1] - MODEL_BACK]
+export const modelAt = (id: PlaceId): XZ => {
+  const [dx, dz] = PLACES[id].model ?? [0, -MODEL_BACK]
+  return [PLACES[id].at[0] + dx, PLACES[id].at[1] + dz]
+}
 export const PLACE_IDS = Object.keys(PLACES) as PlaceId[]
-/** After this many stops the airport (the way home) opens too; after all three it's the only way left. */
+/** After this many stops the airport (the way home) opens too; after all three it's the only way left (with the lookout,
+ *  which is never a stop: open from the start, as often as she likes). */
 export const HOME_AFTER = 2
 
 /** The roads on the board, between the places (a loop: town, Pua, over Doi Phu Kha to Sapan, Bo Kluea, down the 3 road
@@ -114,8 +122,9 @@ export const ROADS: { from: PlaceId; to: PlaceId; via: XZ[] }[] = [
   { from: 'town', to: 'mushrooms', via: [[-0.2, 0.35], [-0.35, -0.3], [-0.68, -0.5], [-1.05, -0.8]] },
   { from: 'mushrooms', to: 'rice', via: [[-0.95, -1.55], [-0.4, -1.75], [0.2, -1.95], [0.7, -1.82]] },
   { from: 'rice', to: 'salt', via: [[1.42, -1.25], [1.55, -0.9]] },
-  // Down the "number 3" road (a little 3 of hairpins), to Santi Suk and back into town.
-  { from: 'salt', to: 'town', via: [[1.32, -0.32], [0.95, -0.22], [1.25, 0.0], [0.9, 0.15], [1.2, 0.38], [0.85, 0.62], [0.35, 0.92]] },
+  // Down the "number 3" road (a little 3 of hairpins), past the lookout on its top bend, to Santi Suk and back into town.
+  { from: 'salt', to: 'lookout', via: [[1.32, -0.32]] },
+  { from: 'lookout', to: 'town', via: [[1.25, 0.0], [0.9, 0.15], [1.2, 0.38], [0.85, 0.62], [0.35, 0.92]] },
 ]
 /** Where the stamps float over the stops, and the plane's runway. */
 export const STAMP_Y = 0.75
