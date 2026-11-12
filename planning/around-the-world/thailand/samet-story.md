@@ -78,15 +78,35 @@ swim, poke things, ride the jet ski once it's hers. Walking between neighbouring
 
 ## Built (2026-11-12)
 
-See the PR for the reel. Per stage:
-
-- **Shared** (`story/`): `firefly.ts` (Firefly, Swarm, their chimes), `islander.ts` (a talking islander with a walk
-  and faces; `makeGeckos`).
-- **The island** (`island/`): `story.ts` (the `intro` and `all` films, the geckos and their lantern, the fireflies
-  waiting at each stop and circling her), the pictures (`Board.tsx`), travel by taxi card (`travel()`), Tofu.
-- **Each stop**: see its file header.
+- **Shared** (`story/`): `firefly.ts` (Firefly, Swarm, their chimes; the glow is back-faced so it never covers a
+  firefly's face up close), `islander.ts` (a talking islander with a walk and faces; `makeGeckos`), `sounds.ts` (film
+  music borrowed from the rice farm, the beach-at-night bed for memories).
+- **The island** (`island/`): `story.ts` (films `intro`, about 40 s, and `all`, about 9 s; the geckos and their
+  lantern at Na Dan; the fireflies waiting at each stop and circling her horn; a found one swooping in), `Board.tsx`
+  (the pictures and the taxi's ride card), `travel()` in `island.ts` (puts everyone a few steps from the picked
+  stop), Tofu leading only on her own beach, the top-right button glowing after a quiet while.
+- **The jet ski** (`jetski/story.ts`): way in at the hut (the otter, Zoom zipping round the buoys, her close-up);
+  Zoom loops over the bay in every round and darts ahead when she's fast; parking in the ring after a decent ride, or
+  finishing a race (won or lost), plays the found film (she lands on the horn).
+- **The sandcastle** (`sandcastle/story.ts`): the gold glow in the sand, Sandy popping out of her hole; she peeks from
+  holes and towers while the castle grows; when the moat fills she moves into the tallest tower (found film).
+- **The snorkel** (`snorkel/story.ts`): the captain (now on camera) saw a blue light fall in the sea; Bubbles in a
+  bubble down on the reef, the cuttlefish hugging it; when it turns pink it lets go, the bubble rises and pops. Mom's
+  camera stays in the cuttlefish round as play only.
+- **Hide and seek** (`hideseek/peekaboo.ts`): Peekaboo peeks round the tree; in her seeking rounds she twinkles near
+  Dad (folded into the stop's own help); she hides with her on her turn; found film: she lands on Dad's nose. A later
+  visit (Peekaboo already found) skips the found film and keeps the stop's own 🏝️ button.
+- **The finale** (`finale/story.ts`): the fire show's way in (Tuk and Kae in the dark, the fireflies light each poi in
+  their colors, lights for her too) and `thanks` (the bow, the fireflies' heart in the sky); the fireflies ride her
+  ribbons and lead each flag's surprise; they circle her at the sunset and are in Mom's photo.
+- **QA**: each stop's `qa.mjs` has its films watched to the end and skipped, and a whole-stop play-through; the
+  island's runs are in `samet-trip/qa.mjs` (`thailand-samet-story-*`).
 
 ## Next
 
 Kaylee plays it. Watch for: does she follow the story (does she say "firefly"?), does she tap a picture without
 help, which firefly she goes for first, and whether the films run long for her (the ⏭ count in her diary).
+
+Small things left: the 66 new lines are recorded by the PR's voices job (listen for Tuk and Kae); the films borrow
+the rice farm's music (Koh Samet's own cue with the `sfx` skill); Sparkle's film lines show no speaker chip (`WHO` in
+`trip/legs/Guide.tsx` has no Sparkle entry, on purpose: it would add a chip to every Sparkle bubble).
