@@ -5,8 +5,8 @@ import { unlockSpeech } from '../sdk/speech'
 import { unlockSounds } from '../sdk/sounds'
 import { Balloon, Cloud, HiKaylee, Pill, Rainbow, Sky, Wave } from './Sky'
 
-import { useHalloween } from './season'
-import { HalloweenGuest } from './Halloween'
+import { useHalloween } from './seasonal/season'
+import { HalloweenGuest } from './seasonal/Halloween'
 const TRICKS: SparkleAction[] = ['hop', 'dance', 'wiggle', 'cheer']
 
 /** First screen: Sparkle on a cloud under a rainbow. Its big button is the tap iPad needs before we can play sounds and talk. */

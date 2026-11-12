@@ -8,7 +8,7 @@ import { Buddy, burst, DragArea, Draggable, DropZone, pick, say, shuffle, sounds
 import { sfx } from '../../../kit/sfx'
 import { Stage, WIGGLE } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
-import { useLandscape } from '../../../kit/useLandscape'
+import { useLandscape } from '../../../../sdk'
 import { useSections } from '../../../kit/sections'
 import SECTIONS from './Market.sections'
 import { art } from '../art'

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import type { Route } from '../router'
-import { useSaved } from '../sdk/hooks'
+import type { Route } from '../../router'
+import { useSaved } from '../../sdk/hooks'
 import { HalloweenScore } from './halloween-music'
 import { useHalloween } from './season'
 
@@ -15,7 +15,7 @@ export function HalloweenMusic({ started, route }: { started: boolean; route: Ro
     return () => window.removeEventListener('kaylee:video-open', changed)
   }, [])
   // Movies and the trips with their own race score keep their own soundtrack.
-  const ownAudio = route.name === 'playground' || (route.name === 'world' && (
+  const ownAudio = (route.name === 'world' && (
     route.place === 'theater' || route.activity === 'theater' ||
     route.place === 'characters' || route.place === 'puppets' ||
     route.activity === 'boat-trip' || route.activity === 'nan-trip' ||

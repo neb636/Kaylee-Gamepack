@@ -8,7 +8,7 @@ import { Buddy, burst, say, sample, shuffle, sounds, useAlive, wait, type Puppet
 import { sfx } from '../../../kit/sfx'
 import { Stage, WIGGLE } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
-import { useLandscape } from '../../../kit/useLandscape'
+import { useLandscape } from '../../../../sdk'
 import { useSections } from '../../../kit/sections'
 import SECTIONS from './Scribe.sections'
 import { art } from '../art'

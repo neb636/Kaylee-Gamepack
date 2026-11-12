@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type RefObject } from 'react'
+import { useCallback, useEffect, useRef, useState, type RefObject, useSyncExternalStore } from 'react'
 import { firstTime } from './hints'
 import { lineText, say, type Line } from './speech'
 
@@ -26,18 +26,17 @@ export function useSayOnMount(text: Line, opts: { once?: boolean } = {}) {
   }, [text])
 }
 
+const landscapeQuery = typeof matchMedia === 'undefined' ? undefined : matchMedia('(orientation: landscape)')
+
 /** True when the screen is wider than it is tall. Re-renders when the iPad rotates. */
 export function useLandscape() {
-  const query = '(orientation: landscape)'
-  const [landscape, setLandscape] = useState(() => typeof matchMedia !== 'undefined' && matchMedia(query).matches)
-  useEffect(() => {
-    const m = matchMedia(query)
-    const update = () => setLandscape(m.matches)
-    update()
-    m.addEventListener('change', update)
-    return () => m.removeEventListener('change', update)
-  }, [])
-  return landscape
+  return useSyncExternalStore(
+    (cb) => {
+      landscapeQuery?.addEventListener('change', cb)
+      return () => landscapeQuery?.removeEventListener('change', cb)
+    },
+    () => !!landscapeQuery?.matches,
+  )
 }
 
 /** The live size of an element in px (0×0 until it's measured). */

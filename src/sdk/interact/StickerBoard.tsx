@@ -8,7 +8,6 @@
 //     stickers={[{ kind: 'pepperoni', content: <img src={pepperoni} />, say: 'Pepperoni!' }]}
 //     items={items} onChange={setItems}
 //   />
-//   countByKind(items).pepperoni   // "Put 3 pepperoni on the pizza!"
 //
 // Positions are fractions of the surface (0..1), so a finished pizza looks the same after the iPad rotates.
 import { motion } from 'motion/react'
@@ -56,12 +55,6 @@ export interface StickerBoardProps {
   style?: CSSProperties
 }
 
-/** How many of each kind are on the surface: `countByKind(items).mushroom`. */
-export function countByKind(items: Placed[]): Record<string, number> {
-  const counts: Record<string, number> = {}
-  for (const it of items) counts[it.kind] = (counts[it.kind] ?? 0) + 1
-  return counts
-}
 
 let nextId = 0
 

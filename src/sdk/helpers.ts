@@ -6,9 +6,6 @@ export const KID_NAME = 'Kaylee'
 /** Wait some milliseconds: `await wait(500)`. */
 export const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms))
 
-/** Random whole number from min to max (both included). */
-export const randomInt = (min: number, max: number) => min + Math.floor(Math.random() * (max - min + 1))
-
 /** A random item from a list. */
 export const pick = <T,>(items: readonly T[]): T => items[Math.floor(Math.random() * items.length)]
 
@@ -24,11 +21,6 @@ export function shuffle<T>(items: readonly T[]): T[] {
 
 /** `count` different items from a list. */
 export const sample = <T,>(items: readonly T[], count: number): T[] => shuffle(items).slice(0, count)
-
-const PRAISE = ['Great job', 'You did it', 'Amazing', 'Super', 'Wonderful', 'Hooray', 'Fantastic', 'Awesome', 'Yay', 'Brilliant']
-
-/** Something nice to say: "Amazing!" (no name: hearing it on every cheer gets old). */
-export const praise = () => `${pick(PRAISE)}!`
 
 const NUMBER_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']
 

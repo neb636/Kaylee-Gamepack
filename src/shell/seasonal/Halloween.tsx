@@ -1,6 +1,6 @@
 import { useState, type CSSProperties } from 'react'
-import { sounds } from './sdk-internal'
-import { unlockSounds } from '../sdk/sounds'
+import { sounds } from '../sdk-internal'
+import { unlockSounds } from '../../sdk/sounds'
 import './halloween.css'
 
 /** Flat, friendly party cutouts; no scary faces, flashing lights, or extra instructions. */

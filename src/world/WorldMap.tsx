@@ -15,8 +15,8 @@ import { WORLD_LINES } from './lines'
 import { listed, places, type PlaceEntry } from './registry'
 import { FROM_SHELF, Shelf } from './Shelf'
 import { totalStamps, usePassport } from './stamps'
-import { useHalloween } from '../shell/season'
-import { HalloweenArt } from '../shell/Halloween'
+import { useHalloween } from '../shell/seasonal/season'
+import { HalloweenArt } from '../shell/seasonal/Halloween'
 import { Travel } from './Travel'
 
 // Hotspots in % of the map picture (x, y = centre; w, h = size).
