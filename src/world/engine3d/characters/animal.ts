@@ -927,26 +927,6 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       head.push(P.capsule(0.035 * R, 0.62 * R, '#FF6FAE', { at: [0.05 * R, headY + 1.12 * R, -0.3 * R], rot: [0, 0, 1.25] }))
       headPlain.push(P.sphere(0.08 * R, '#FF9CC8', { at: [0.4 * R, headY + 1.23 * R, -0.3 * R] }))
     }
-    if (e === 'brows') {
-      // Big bushy white eyebrows, drooping at the outer ends (a kind old man).
-      for (const s of [-1, 1]) for (const [k, dx, dy, r] of [[0, 0.07, 0.31, 0.058], [1, 0.17, 0.3, 0.062], [2, 0.27, 0.24, 0.055]] as const) {
-        const x = s * (eyeX - 0.12 * R + dx * R)
-        head.push(P.sphere(r * R, '#F7F4F8', { at: on(x, eyeY + dy * R, lift + 0.03 * R), rot: [0, turnTo(x)[1], s * (k - 1) * -0.4], scale: [1.5, 0.7, 0.5] }))
-      }
-    }
-    if (e === 'goatee') head.push(P.cone(0.12 * R, 0.28 * R, '#F7F4F8', { at: [0, headY - 0.86 * R, 0.84 * R], rot: [Math.PI - 0.45, 0, 0] }, 10))
-    if (e === 'temples') {
-      // Wisps of white hair round the sides, above the ears (under a hat's brim they still show).
-      for (const s of [-1, 1]) for (const [dy, dz] of [[0.36, 0.1], [0.32, -0.08], [0.33, -0.26], [0.38, -0.44]] as const) {
-        const x = Math.sqrt(Math.max(0, 1 - dy * dy - dz * dz)) * 0.94 * R
-        head.push(P.sphere(0.13 * R, '#F7F4F8', { at: [s * x, headY + dy * R, dz * R], rot: [0, s * Math.atan2(x, dz * R), 0], scale: [1, 0.75, 0.5] }))
-      }
-    }
-    if (e === 'droop-moustache') for (const s of [-1, 1]) {
-      // A thick white moustache over the mouth that droops past its corners.
-      head.push(P.capsule(0.085 * R, 0.2 * R, '#F7F4F8', { at: [s * 0.16 * R, headY - 0.4 * R, 1.0 * R], rot: [0.2, 0, s * 1.2] }))
-      head.push(P.capsule(0.065 * R, 0.12 * R, '#F7F4F8', { at: [s * 0.33 * R, headY - 0.52 * R, 0.9 * R], rot: [0.2, s * 0.4, s * 0.35] }))
-    }
     if (e === 'pakama') {
       // The pakama, the checked cotton cloth northern farmers tie round their waist: a flat band of small checks in two
       // reds, a thin cream line through it, and a knot at the front with its two ends hanging.

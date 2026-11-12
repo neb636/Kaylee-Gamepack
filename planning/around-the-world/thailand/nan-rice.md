@@ -479,5 +479,5 @@ the user will use this as the pattern for every story and cutscene (`docs/films.
 **Lung's bench and look (2026-11-12, fix).** Last year's nap is now on a plank bench just left of the scarecrow
 (`layout.ts` `BENCH`, built in `farm.ts`, pokeable: it bounces); the memory's shots look from over the channel, where
 no rice stands between the camera and him. Lung's look (`farm.ts` `LUNG`): a smooth capsule tail (every monkey's, in
-`engine3d/characters/animal.ts`), new old-man extras `lids`, `brows`, `droop-moustache`, `goatee`, `temples`, indigo
-trousers and a red checked `pakama` at the waist in place of the pink scarf.
+`engine3d/characters/animal.ts`), kind heavy `lids`, indigo
+trousers and a red checked `pakama` at the waist in place of the pink scarf. (White brows, moustache, goatee and hair were tried; the user preferred him without them, 2026-11-12.)

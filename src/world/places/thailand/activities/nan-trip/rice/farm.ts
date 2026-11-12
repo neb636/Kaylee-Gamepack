@@ -847,9 +847,9 @@ function buildDuck(bag: Bag) {
 }
 
 /** Lung Kham, the farmer (not family: the farm's uncle, like the mushroom aunty): an old monkey, a little grey, with
- *  bushy white brows, kind heavy eyelids, a droopy white moustache and a wisp of a goatee, in the indigo mor hom shirt
+ *  kind heavy eyelids, in the indigo mor hom shirt
  *  and trousers northern farmers wear and a red checked pakama tied round his waist. */
-export const LUNG: Look = { species: 'monkey', height: 1.22, chub: 1.08, fur: '#9A8070', light: '#EED8BF', dark: '#6E5646', ear: '#EDB2A2', outfit: { kind: 'shirt', color: '#43549E', shorts: '#2E3A72' }, extras: ['lids', 'brows', 'droop-moustache', 'goatee', 'temples', 'pakama'] }
+export const LUNG: Look = { species: 'monkey', height: 1.22, chub: 1.08, fur: '#9A8070', light: '#EED8BF', dark: '#6E5646', ear: '#EDB2A2', outfit: { kind: 'shirt', color: '#43549E', shorts: '#2E3A72' }, extras: ['lids', 'pakama'] }
 
 /** Lung's ngob: plain, with a coloured band (Kaylee's has a pink band and a flower), sitting straight on his head.
  *  His new one has a sunny yellow band; his old one (the mint band) is Jip's nest now (story.ts). */
