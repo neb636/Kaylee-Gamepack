@@ -79,8 +79,13 @@ export function hullGeometry(geometry: BufferGeometry) {
 export function makeHull(geometry: BufferGeometry, px: number) {
   const hull = new Mesh(hullGeometry(geometry), outlineMaterial(px))
   hull.userData.hull = px
+  // A tap ray that hits the hull hits the shape too (same corners, pushed out on screen only): testing both doubled the
+  // triangles every tap went through.
+  hull.raycast = noRaycast
   return hull
 }
+
+const noRaycast = () => {}
 
 /** Hot-pink outline while the mouse hovers something tappable (desktop), back to ink after. */
 export function setHullHighlight(hull: Mesh, on: boolean) {
