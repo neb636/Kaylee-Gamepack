@@ -8,7 +8,7 @@ import { merge, P, solid } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
 import { bell } from '../../../../../../sdk'
 import { sfx } from '../../../sfx'
-import { CANDY_HEX, CANDY_SHAPE, candyShape } from './boards/candy'
+import { CANDY_HEX, CANDY_SHAPE, candyShape, landmarkPicture } from './boards/candy'
 import { parseCard } from './rules/candy'
 
 const CW = 0.1
@@ -196,6 +196,12 @@ export function faceCanvas(token: string) {
   g.fillStyle = '#FFFFFF'
   g.strokeStyle = PAL.ink
   g.lineWidth = 6
+  if (card.landmark) {
+    g.fillStyle = '#FFF6E3'
+    g.beginPath(); g.ellipse(150, 100, 83, 76, 0, 0, Math.PI * 2); g.fill()
+    g.save(); g.translate(150, 103); landmarkPicture(g, card.landmark); g.restore()
+    return c
+  }
   for (const x of card.double ? [90, 210] : [150]) {
     candyShape(g, CANDY_SHAPE[card.color], x, 100, 52)
     g.fill()

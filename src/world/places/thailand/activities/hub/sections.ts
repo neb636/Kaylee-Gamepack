@@ -25,7 +25,7 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
     them: { default: '0', doc: "the game table: where the cousin's piece starts (0 = before space 1)" },
     turn: { default: 'kaylee', values: ['kaylee', 'cousin'], doc: 'the game table: whose turn comes first from this state' },
     rolls: { default: '', doc: 'the game table: the next die results in order (e.g. 4,3,2), then random' },
-    deck: { default: '', doc: 'Candy Land: the draw pile exactly, top first (green, blue2: a 2 is a double), then the discards reshuffled' },
+    deck: { default: '', doc: 'Candy Land: the draw pile exactly, top first (green, blue2: a 2 is a double), picture cards: gumdrop, lollipop, icecream, chocolate; then the discards reshuffled' },
     who: {
       default: '',
       doc: 'the family photo with one person alone, turning slowly: kaylee, agong, ji, nick, jum, joy, bird, ja, sri, gan, ken, bb, putto, putter',
@@ -65,6 +65,8 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
         { label: 'A double blue card: to the second blue space', params: { me: '10', them: '8', deck: 'blue2' } },
         { label: 'A double orange near the end with one orange left: to the cupcake house, she wins', params: { me: '31', them: '28', deck: 'orange2' } },
         { label: 'A two-card deck runs out: the third draw reshuffles the discards', params: { me: '4', them: '4', deck: 'pink,yellow' } },
+        { label: 'A picture card sends her forward to Ice Cream Peaks', params: { me: '4', them: '8', deck: 'icecream,green' } },
+        { label: 'A picture card sends her back to the Gumdrop Garden', params: { me: '20', them: '17', deck: 'gumdrop,blue' } },
         { label: 'Midgame with Ken', params: { vs: 'ken', me: '14', them: '17' } },
       ],
     },

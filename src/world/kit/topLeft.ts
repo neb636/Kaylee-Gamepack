@@ -1,6 +1,6 @@
 // The top bar's big top-left button belongs to the shell (PlaceFrame: back to the map). An activity can take it over
-// while it's open, when leaving with one tap would be wrong: on Koh Samet's island it calls the beach puppy, and the
-// way home is the speedboat (#357). `useTopLeft(null)` (or unmounting) gives it back.
+// while it's open, when leaving with one tap would be wrong: inside a Koh Samet stop it goes back to the beach.
+// `useTopLeft(null)` (or unmounting) gives it back.
 import { useEffect, useRef, useSyncExternalStore, type ReactNode } from 'react'
 
 export interface TopLeft {

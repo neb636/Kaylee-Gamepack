@@ -79,14 +79,30 @@ test.describe("Kaylee's Unicorn Dice Game rules", () => {
 })
 
 test.describe('Candy Land rules', () => {
-  test('the path repeats six colors in order, and the deck has 24 cards: 3 singles and 1 double of each', () => {
+  test('the path repeats six colors in order, and the deck has 28 cards: 24 color cards and four pictures', () => {
     expect([1, 2, 3, 4, 5, 6, 7, 36].map(colorOf)).toEqual(['pink', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'purple'])
     const deck = fullDeck()
-    expect(deck).toHaveLength(24)
+    expect(deck).toHaveLength(28)
     for (const c of ['pink', 'orange', 'yellow', 'green', 'blue', 'purple']) {
-      expect(deck.filter((d) => d.color === c && !d.double)).toHaveLength(3)
+      expect(deck.filter((d) => d.color === c && !d.double && !d.landmark)).toHaveLength(3)
       expect(deck.filter((d) => d.color === c && d.double)).toHaveLength(1)
     }
+  })
+
+  test('picture cards move both ways, stay at their own landmark, and survive reshuffling', () => {
+    for (const [token, target] of [['gumdrop', 6], ['lollipop', 23], ['icecream', 30], ['chocolate', 14]] as const) {
+      const card = parseDeck(token)[0]
+      expect(destination(0, card)).toBe(target)
+      expect(destination(36, card)).toBe(target)
+      expect(destination(target, card)).toBe(target)
+      const r = candyDraw(startTurns(36, 0), newDeck([card]))
+      expect(r.steps).toContainEqual({ kind: 'move', who: 0, from: 36, to: target })
+      expect(r.state.winner).toBeNull()
+      const next = candyDraw(r.state, r.deck)
+      expect(next.card).toEqual(card)
+      expect(next.state.pos).toEqual([target, target])
+    }
+    expect(parseDeck('gumdrop,invalid,icecream').map(c => c.landmark)).toEqual(['gumdrop', 'icecream'])
   })
 
   test('one color goes to the next space of it, two to the second, from the start too', () => {
@@ -130,7 +146,7 @@ test.describe('Candy Land rules', () => {
         const m = candyDraw(s, deck)
         s = m.state
         deck = m.deck
-        expect(deck.draw.length + deck.discard.length).toBe(24)
+        expect(deck.draw.length + deck.discard.length).toBe(28)
       }
       expect(s.winner).not.toBeNull()
     }

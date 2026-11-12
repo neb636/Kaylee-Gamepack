@@ -1134,9 +1134,9 @@ export const motion = [
       await ready(page)
       await page.waitForTimeout(1500)
     },
-    // The big top-left button: the puppy comes running and woofs (main: it leaves Koh Samet for the map).
+    // The puppy button (top-right; the top-left is the map button): the puppy comes running and woofs.
     act: async (page) => {
-      await page.getByRole('button', { name: /Back to the map|Call the puppy/ }).first().click()
+      await page.getByRole('button', { name: /Call the puppy/ }).first().click()
       await page.waitForTimeout(6000)
     },
   },

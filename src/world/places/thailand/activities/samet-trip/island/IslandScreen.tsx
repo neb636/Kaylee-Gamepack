@@ -1,7 +1,7 @@
 // The island to roam, on screen (island.ts is the world): the 3D island with its tap targets, the beach puppy's
-// thought bubble (a picture of the beach he's taking her to, #357 way-finding), the top-left button that calls him
-// (kit/topLeft.ts: it no longer leaves Koh Samet), the home picture at the end of Na Dan pier (the speedboat is the way
-// home), and Mommy's phone and the animal book (../book/). Sparkle sits in the corner (trip/legs/Guide.tsx): she says
+// thought bubble (a picture of the beach he's taking her to, #357 way-finding), the puppy button in the top-right corner
+// that calls him (the top-left is the shell's map button again, like the rest of Thailand), the home picture at the end
+// of Na Dan pier (the speedboat home, for the finale's photo), and Mommy's phone and the animal book (../book/). Sparkle sits in the corner (trip/legs/Guide.tsx): she says
 // what's new (lines.ts L.samet.island, L.samet.puppy, L.samet.book), the family and the taxi driver react in their own
 // voices. A hub: no idle hints spoken (the puppy comes to fetch her).
 import { useRef, useState } from 'react'
@@ -12,7 +12,6 @@ import { firstTime, type Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import { sametSfx as sfx } from '../sfx/common'
 import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
-import { useTopLeft } from '../../../../../kit/topLeft'
 import { ANIMAL_IDS, type AnimalId } from '../book/animals'
 import { DOCK_CORNER, PhoneAndBook, type BookPhoto, type Flyer } from '../book/Book'
 import { ISLAND_ANCHORS, SametIsland as World, type IslandStart } from './island'
@@ -45,8 +44,6 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
   const worldRef = useRef<World | null>(null)
   const bubbleRef = useRef<HTMLDivElement>(null)
   const [leave, setLeave] = useState(false)
-  // The top-left button calls the beach puppy (it used to leave Koh Samet with one tap).
-  useTopLeft({ icon: <PuppyFace />, label: 'Call the puppy', onBack: () => worldRef.current?.callPuppy() })
   const guideRef = useRef<TripGuideHandle>(null)
   const speak = (l: Line) => guideRef.current?.speak(l)
   const [phone, setPhone] = useState(!!start.phone)
@@ -156,6 +153,16 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
         flyer={flyer}
         cleaned={cleaned}
       />
+      <button
+        className="isle-pup"
+        aria-label="Call the puppy"
+        onClick={() => {
+          sfx.pop()
+          worldRef.current?.callPuppy()
+        }}
+      >
+        <PuppyFace />
+      </button>
       {mode === 'webgl' && <TripGuide ref={guideRef} hidden={open} corner={DOCK_CORNER} />}
       {leave && (
         <button
@@ -179,7 +186,7 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
   )
 }
 
-/** The top-left button's picture: the beach puppy's face (cream, brown floppy ears, his tongue out). */
+/** The puppy button's picture (top-right): the beach puppy's face (cream, brown floppy ears, his tongue out). */
 function PuppyFace() {
   return (
     <svg viewBox="0 0 64 64" style={{ width: '78%', height: '78%' }} aria-hidden>
@@ -217,6 +224,8 @@ const CSS = `
 .pup-dot { position: absolute; border-radius: 50%; background: #fff; box-shadow: 0 0 0 2px var(--hotpink); }
 .pup-dot-1 { width: 16px; height: 16px; left: calc(var(--tx) * 0.62 - 8px); top: calc(var(--ty) * 0.62 - 8px); }
 .pup-dot-2 { width: 10px; height: 10px; left: calc(var(--tx) * 0.82 - 5px); top: calc(var(--ty) * 0.82 - 5px); }
+.isle-pup { position: absolute; top: calc(var(--safe-top, 0px) + 12px); right: calc(var(--safe-right, 0px) + 16px); width: var(--btn); height: var(--btn); border-radius: 50%; border: none; background: #fff; box-shadow: var(--shadow); display: grid; place-items: center; z-index: 50; cursor: pointer; transition: transform .12s; }
+.isle-pup:active { transform: scale(.85); }
 .isle-home { position: absolute; left: 50%; bottom: calc(var(--safe-bottom, 0px) + 22%); width: 132px; height: 132px; margin-left: -66px; border-radius: 50%; border: 6px solid #fff; background: #FFE3F0; box-shadow: 0 0 0 4px var(--hotpink), 0 8px 18px rgba(43,35,48,.3); display: grid; place-items: center; z-index: 40; animation: isle-home-in .5s cubic-bezier(.3,1.6,.5,1) both, isle-home-bob 1.4s ease-in-out .5s infinite; }
 @keyframes isle-home-in { from { transform: scale(0); } to { transform: scale(1); } }
 @keyframes isle-home-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
