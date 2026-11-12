@@ -1,0 +1,51 @@
+[
+ {
+  "id": "samet-splash",
+  "prompt": "A small playful splash in calm sea water, like a ball dropped in. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "samet-boing",
+  "prompt": "Cartoon spring boing, bouncy and cute, short. Clean close recording, no music, no voices.",
+  "seconds": 0.7,
+  "influence": 0.7
+ },
+ {
+  "id": "samet-thump",
+  "prompt": "A soft muffled thud of something landing on dry beach sand. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "samet-pop",
+  "prompt": "One cute cartoon bubble pop, bright and short. Clean close recording, no music, no voices.",
+  "seconds": 0.5,
+  "influence": 0.7
+ },
+ {
+  "id": "samet-fwip",
+  "prompt": "A quick light swish of fabric, like a towel flicked once. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "samet-shutter",
+  "prompt": "A smartphone camera shutter click, crisp and short. Clean close recording, no music, no voices.",
+  "seconds": 0.5,
+  "influence": 0.7
+ },
+ {
+  "id": "samet-munch",
+  "prompt": "A small animal happily munching crunchy food, three quick crunchy bites. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "samet-whoosh",
+  "prompt": "A soft airy whoosh passing by, gentle and smooth. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "samet-beach",
+  "prompt": "Gentle small waves lapping on a tropical sandy beach, soft breeze in palm leaves, a seabird calling far away now and then. Calm and sunny. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ }
+]
