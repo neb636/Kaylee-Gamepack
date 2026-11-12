@@ -483,6 +483,16 @@ export class FloatingStage {
   }
   private water: Texture | null = null
 
+  private hitGeo: SphereGeometry | null = null
+  private hitMat: MeshBasicMaterial | null = null
+  private hitBall(): Mesh {
+    this.hitGeo ??= this.bag.add(new SphereGeometry(0.1, 10, 8))
+    this.hitMat ??= this.bag.add(new MeshBasicMaterial({ colorWrite: false, depthWrite: false }))
+    const m = new Mesh(this.hitGeo, this.hitMat)
+    m.position.y = 0.06
+    return m
+  }
+
   /** One of a game's props, its own little group so it can wobble. */
   private prop(theme: Group, parts: BufferGeometry[], at: [number, number], sound: Prop['sound'], px = 1.5) {
     // Each prop is built round its own foot, so it wobbles from the ground up.
@@ -490,6 +500,9 @@ export class FloatingStage {
     g.translate(-at[0], 0, -at[1])
     const root = new Group()
     root.add(solid(g, this.bag, px))
+    // An invisible ball round it for her finger: 0.2 m across is at least 64 px even on a portrait iPhone, where the
+    // whole island is about the screen's width (the props sit 0.1-0.25 m apart off the board, so the nearest wins).
+    root.add(this.hitBall())
     root.position.set(at[0], 0, at[1])
     root.userData.pick = `trip:table:prop:${this.props.length}`
     theme.add(root)
