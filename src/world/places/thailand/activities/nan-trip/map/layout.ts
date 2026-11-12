@@ -1,5 +1,5 @@
-// The Nan map (plan: planning/around-the-world/thailand/nan-trip.md, "The Nan map"), in meters: a toy diorama of Nan on
-// a table, where everything stands, the roads between the places and which drive each one plays. Pure data (no
+// The Nan map (plan: planning/around-the-world/thailand/nan-trip.md, "The Nan map"), in meters: a toy diorama of Nan in
+// the sky, where everything stands, the roads between the places and which drive each one plays. Pure data (no
 // three.js): sections.ts can read it at startup.
 //
 // Seen from above at a slant, north up the screen (-z), Laos along the right edge (+x):
@@ -31,8 +31,31 @@ export const HILLS: [number, number, number, number][] = [
   [2.7, 0.55, 0.45, 0.3],
   [1.65, -1.95, 0.55, 0.4],
 ]
-/** The ground's height at a point (smooth bumps; the river valley stays flat). */
-export function heightAt(x: number, z: number) {
+/** The paper round Nan (the rest of Thailand, and Laos past the border) lies this far below Nan's top: Nan stands up out
+ *  of it like a slice of cake, the way Thailand does on the Thailand map. */
+export const PAPER_Y = -0.2
+/** Nan's land ends this far in from the board's west, north and south edges. */
+const INSET = { w: 0.2, n: 0.17, s: 0.07 }
+/** How wide the cut edge is (the cake's side, from the top down to the paper). */
+export const CLIFF_W = 0.045
+/** A cheap wobble (about -1..1) so the edges aren't ruler-straight. */
+export const wobble = (x: number, z: number) => 0.5 * Math.sin(x * 7.3 + z * 3.1) + 0.3 * Math.sin(x * 3.7 - z * 5.9) + 0.2 * Math.sin(x * 13.1 + z * 11.3)
+/** How far inside Nan a point is (meters; below 0 it's out on the paper). */
+export function inNan(x: number, z: number) {
+  const n = wobble(x * 1.6, z * 1.6) * 0.035
+  const west = x - (BOARD.x0 + INSET.w)
+  const east = LAOS_X + Math.sin(z * 2.3) * 0.03 - x
+  const north = z - (BOARD.z0 + INSET.n)
+  const south = BOARD.z1 - INSET.s - z
+  // (A rounded corner where two edges meet.)
+  const r = 0.22
+  const ax = Math.min(west, east)
+  const az = Math.min(north, south)
+  const d = ax < r && az < r ? r - Math.hypot(r - Math.min(ax, r), r - Math.min(az, r)) : Math.min(ax, az)
+  return d + n
+}
+/** The hills alone (smooth bumps; the river valley stays flat). */
+function hills(x: number, z: number) {
   let h = 0
   for (const [cx, cz, r, top] of HILLS) {
     const d = Math.hypot(x - cx, z - cz)
@@ -40,6 +63,17 @@ export function heightAt(x: number, z: number) {
   }
   return h
 }
+/** The ground's height at a point: Nan's hills, its cut edge, the flat paper round it. */
+export function heightAt(x: number, z: number) {
+  const d = inNan(x, z)
+  if (d >= 0) return hills(x, z)
+  if (d <= -CLIFF_W) return PAPER_Y
+  // The cut edge: nearly straight down, a soft lip at the top.
+  const k = 1 + d / CLIFF_W
+  return PAPER_Y + (hills(x, z) - PAPER_Y) * k * k * (3 - 2 * k)
+}
+/** How high Nan's own ground is (the hills, ignoring the cut edge): for the painted bands. */
+export const hillAt = hills
 
 /** The Nan River, north to south down the middle. */
 export const RIVER: XZ[] = [[-1.35, -2.2], [-0.95, -1.55], [-0.6, -0.85], [-0.72, -0.15], [-0.55, 0.55], [-0.72, 1.3], [-0.5, 2.2]]
@@ -92,7 +126,7 @@ export const RUNWAY = { at: [-1.85, 1.75] as XZ, len: 1.1, w: 0.2, yaw: 0.35 }
 /** The clouds sitting on the peaks (tap: a little rain). */
 export const CLOUDS: [number, number, number][] = [
   [0.35, 1.05, -1.05],
-  [1.95, 0.85, -0.05],
+  [2.12, 0.82, 0.12],
   [-2.25, 0.8, -1.3],
   [2.75, 0.8, -1.45],
   [-2.35, 0.68, 0.55],

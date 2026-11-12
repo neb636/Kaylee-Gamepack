@@ -12,7 +12,7 @@
 // after ~8 s with nothing touched.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { Mascot, sounds } from '../../../../../../sdk'
+import { sounds } from '../../../../../../sdk'
 import { onDevice } from '../../../../../../sdk/device'
 import { worldLink } from '../../../../../../router'
 import { Anchors } from '../../../../../engine3d/Anchors'
@@ -21,6 +21,7 @@ import { sfx } from '../../../../../kit/sfx'
 import { useSections } from '../../../../../kit/sections'
 import type { PlaceProps } from '../../../../../types'
 import { L } from '../../../lines'
+import { MapCover } from '../../../trip/MapCover'
 import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { tripSession } from '../../../trip/session'
 import { readSametSave } from '../../samet-trip/trip'
@@ -179,20 +180,7 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
         )}
       />
       {/* The same screen as the place's loading screen (PlaceFrame), so the cut from it is invisible. */}
-      <AnimatePresence>
-        {!revealed && mode !== 'lost' && (
-          <motion.div
-            key="cover"
-            aria-hidden
-            initial={false}
-            exit={{ opacity: 0 }}
-            transition={{ duration: MAP_CAM.fade, ease: 'easeOut' }}
-            style={{ position: 'absolute', inset: 0, zIndex: 34, pointerEvents: 'none', display: 'grid', placeItems: 'center', background: 'var(--lavender)' }}
-          >
-            <Mascot pose="think" appear={false} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <MapCover show={!revealed && mode !== 'lost'} fade={MAP_CAM.fade} />
       {mode === 'lost' && (
         <button
           onClick={() => {

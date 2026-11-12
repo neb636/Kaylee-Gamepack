@@ -30,6 +30,9 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
   to the trip's landing spot: the map no longer packs or rides the window seat (2026-11-10; the pack, goodbye, airport
   and window-seat sections are still in each trip, for a place-picker inside the house to start later). The mall day, in Bangkok,
   still starts in the house (Mommy or Daddy asks) and ends there.
+- **A trip's own map** looks like the Thailand map: the board floats in the same sky and tray and opens with the same
+  camera entrance behind the loading cover (`trip/sky.ts`: `skyTexture`, `puffCloud`, `trayParts`, `mapCamKnobs`,
+  `Entrance`; `trip/MapCover.tsx`). The Nan map (`nan-trip/map/`) uses them; a new trip's map should too.
 - **The trip kit** (`trip/`): packing, the goodbye, the vehicles, the airport, the window seat, the photo wall. Reuse it
   for a new trip instead of building travel again.
 - **Debugging:** `?debug=1` shows a tuning panel (camera, light bands, outlines, walk), `?fps=N` overrides the frame cap,

@@ -7,6 +7,7 @@ import type { Bag } from '../../../../../engine3d/dispose'
 import { blobShadow, merge, P, solid, type V3 } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
 import type { Field } from './field'
+import { puffCloud } from '../../../trip/sky'
 import { KARSTS, PINS, POKES, SWELLS, toX, toZ } from './geo'
 
 const INK = '#2B2330'
@@ -27,7 +28,7 @@ const cheek = (x: number, y: number, z: number, r = 0.03) => P.sphere(r, '#FF9EC
 // ------------------------------------------------------------------------------------------------ still scenery
 
 /** A round leafy tree. */
-function treeParts(x: number, y: number, z: number, s: number, k: number): BufferGeometry[] {
+export function treeParts(x: number, y: number, z: number, s: number, k: number): BufferGeometry[] {
   return [
     P.cyl(0.025 * s, 0.035 * s, 0.14 * s, TRUNK, { at: [x, y + 0.07 * s, z] }, 6),
     P.sphere(0.11 * s, LEAF[k % 3], { at: [x, y + 0.2 * s, z], scale: [1, 0.92, 1] }, 9),
@@ -62,7 +63,7 @@ export function palmParts(x: number, y: number, z: number, s: number, turn: numb
 export const coconutParts = (): BufferGeometry[] => [P.sphere(0.06, '#A9764F', {}, 9), P.sphere(0.02, '#8A5A44', { at: [0, 0.05, 0] }, 6)]
 
 /** A mountain: a chunky green cone with a rounded top and a paler cap. */
-function mountainParts(x: number, y: number, z: number, r: number, h: number, k: number): BufferGeometry[] {
+export function mountainParts(x: number, y: number, z: number, r: number, h: number, k: number): BufferGeometry[] {
   const body = ['#7FCB92', '#73C28B', '#8AD29A'][k % 3]
   const cap = '#D3F4C2'
   return [
@@ -507,20 +508,7 @@ export function turtle(bag: Bag): Turtle {
 }
 
 /** A puffy cloud (`rain`: a little greyer, the rain cloud over Nan). */
-export function cloud(bag: Bag, s = 1, rain = false): Group {
-  const c = rain ? '#EEF0FF' : '#FFFFFF'
-  return piece(
-    [
-      P.sphere(0.26 * s, c, { at: [0, 0, 0], scale: [1, 0.72, 0.9] }, 12),
-      P.sphere(0.2 * s, c, { at: [-0.27 * s, -0.04 * s, 0.02 * s], scale: [1, 0.72, 0.9] }, 11),
-      P.sphere(0.22 * s, c, { at: [0.28 * s, -0.03 * s, 0], scale: [1, 0.72, 0.9] }, 11),
-      P.sphere(0.16 * s, c, { at: [0.1 * s, 0.12 * s, -0.02 * s] }, 10),
-      P.sphere(0.13 * s, c, { at: [-0.48 * s, -0.07 * s, 0], scale: [1, 0.7, 0.9] }, 9),
-    ],
-    bag,
-    1.5,
-  )
-}
+export const cloud = puffCloud
 
 export interface Balloon {
   root: Group

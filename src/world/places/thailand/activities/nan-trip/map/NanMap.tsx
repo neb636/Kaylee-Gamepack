@@ -3,14 +3,16 @@
 // 🏠 drives the little Pajero to the airport (home, down the 3 road), 🚙 lets her pick another stop.
 // A place picked (the little Pajero got there): `onGo` opens its drive.
 import { AnimatePresence, motion } from 'motion/react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { sounds } from '../../../../../../sdk'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
 import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
+import { MapCover } from '../../../trip/MapCover'
+import { SKY_TOP } from '../../../trip/sky'
 import type { PlaceId, Stop } from './layout'
-import { MAP_ANCHORS, NanMap as MapWorld } from './map3d'
+import { MAP_ANCHORS, NAN_CAM, NanMap as MapWorld } from './map3d'
 
 interface Props {
   /** The stops done so far, in the order she did them (the newest one's stamp lands). */
@@ -26,6 +28,13 @@ export function NanMap({ stops, from, cup = false, onGo }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [ask, setAsk] = useState(false)
+  // The loading screen stays over the board while the camera already starts moving, then fades into it (trip/sky.ts).
+  const [revealed, setRevealed] = useState(false)
+  useEffect(() => {
+    // (If the board never draws, say the camera lab froze it, the cover still goes.)
+    const safety = setTimeout(() => setRevealed(true), 6000)
+    return () => clearTimeout(safety)
+  }, [])
   const worldRef = useRef<MapWorld | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const guideRef = useRef<TripGuideHandle>(null)
@@ -33,7 +42,7 @@ export function NanMap({ stops, from, cup = false, onGo }: Props) {
   go.current = onGo
 
   const make = (renderer: WebGLRenderer) => {
-    const w = new MapWorld(renderer, { say: (l) => guideRef.current?.speak(l), section: () => {}, done: () => {}, go: (p) => go.current(p), ask: setAsk }, { stops, from, cup })
+    const w = new MapWorld(renderer, { say: (l) => guideRef.current?.speak(l), section: () => {}, done: () => {}, go: (p) => go.current(p), ask: setAsk, revealed: () => setRevealed(true) }, { stops, from, cup })
     w.setHintElement(hintRef.current)
     return w
   }
@@ -57,7 +66,7 @@ export function NanMap({ stops, from, cup = false, onGo }: Props) {
   )
 
   return (
-    <div style={{ position: 'absolute', inset: 0, background: '#E4DDF4', overflow: 'clip' }}>
+    <div style={{ position: 'absolute', inset: 0, background: SKY_TOP, overflow: 'clip' }}>
       <View3D
         key={key}
         name="The Nan map"
@@ -77,6 +86,7 @@ export function NanMap({ stops, from, cup = false, onGo }: Props) {
           </>
         )}
       />
+      <MapCover show={!revealed && mode !== 'lost'} fade={NAN_CAM.fade} />
       {mode === 'lost' && (
         <button
           onClick={() => {
