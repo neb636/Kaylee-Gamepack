@@ -1,0 +1,10 @@
+{
+  "title": "Mushroom farm: one batch, then lunch",
+  "checkIn": "fix",
+  "kaylee": "Before: after lunch started, Sparkle said \"More bags to spray!\". Now: she sprays the bags, picks six, and goes straight to the pizza.",
+  "questions": [],
+  "links": [
+    { "label": "Pick the mushrooms (six, then lunch)", "hash": "#/world/thailand/nan-trip/mushrooms?round=2" },
+    { "label": "The whole mushroom farm", "hash": "#/world/thailand/nan-trip/mushrooms" }
+  ]
+}
