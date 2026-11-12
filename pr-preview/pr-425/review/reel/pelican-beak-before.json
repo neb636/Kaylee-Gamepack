@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "pelican-beak-before",
+  "title": "Pelican beak before",
+  "video": "pelican-beak-before.mp4",
+  "gif": "pelican-beak-before.gif",
+  "seconds": 12,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Thailand samet trip snorkel",
+      "where": "#/world/thailand/samet-trip/snorkel?round=story",
+      "seconds": 10,
+      "fps": 30.8,
+      "status": "ok"
+    }
+  ]
+}
