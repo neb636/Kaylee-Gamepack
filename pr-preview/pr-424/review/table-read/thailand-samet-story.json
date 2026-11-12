@@ -1,0 +1,1631 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "samet.story",
+  "title": "Thailand › Samet › Story",
+  "intro": "The story, \"The Lost Fireflies\" (story/, plan: thailand/samet-story.md), in play order: the way in at Na Dan pier, the island between the stops, each stop's way in and its firefly found, all four, and the fire show.",
+  "page": "thailand-samet-story.html",
+  "audio": null,
+  "lines": 65,
+  "seconds": 168,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "samet.story.intro.here",
+      "text": "What a pretty island!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.intro.puppy",
+      "text": "Hello, puppy! What's wrong?",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.intro.ohno",
+      "text": "Oh no, oh no, oh no!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.intro.gone",
+      "text": "Our fireflies are gone!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.intro.every",
+      "text": "Every night, four fireflies light up our fire show.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.intro.wind",
+      "text": "But last night, a big wind came. Whoosh!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.intro.away",
+      "text": "It blew them all over the island!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.intro.noshow",
+      "text": "No fireflies, no show tonight!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.intro.tofu",
+      "text": "But Tofu saw where they went!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.intro.ask",
+      "text": "Will you help us find them?",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.intro.go.touch",
+      "text": "Four fireflies to find! Tap a picture!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.intro.go.mouse",
+      "text": "Four fireflies to find! Click a picture!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.island.ride.0",
+      "text": "Hop in! Beep beep!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.island.ride.1",
+      "text": "Off we go!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.island.ride.2",
+      "text": "Hold on tight!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.island.hinkhok",
+      "text": "Ao Hin Khok!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.island.near.jetski",
+      "text": "Look! A pink light on the water!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.island.near.sandcastle",
+      "text": "Something is glowing in the sand!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.island.near.snorkel",
+      "text": "A blue light, far out at sea!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.island.near.hideseek",
+      "text": "A green light in the big tree!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.island.count.0",
+      "text": "One firefly! Three more to find!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.island.count.1",
+      "text": "Two fireflies! Two more to find!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.island.count.2",
+      "text": "Three fireflies! Just one more!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.island.tofu",
+      "text": "Tofu the beach puppy! He saw it all!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.jetski.looking",
+      "text": "Sawasdee krap! Looking for a pink light?",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.jetski.zoom",
+      "text": "She zoomed round my buoys all night!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.jetski.fast",
+      "text": "She only stops for someone fast!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.jetski.first",
+      "text": "Life jacket first!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.jetski.chase",
+      "text": "There she is! After her!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.jetski.likes",
+      "text": "Ha ha! She likes you!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.jetski.found",
+      "text": "You found Zoom!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.jetski.dad",
+      "text": "Fast like a firefly!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.sandcastle.glow",
+      "text": "Look! Something's glowing in the sand!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.sandcastle.shy",
+      "text": "A little gold firefly! She is shy.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.sandcastle.castle",
+      "text": "Let's build her a castle!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.sandcastle.peek",
+      "text": "She is peeking! Keep building!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.sandcastle.home",
+      "text": "She loves her castle!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.sandcastle.found",
+      "text": "You found Sandy!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.sandcastle.dad",
+      "text": "A castle fit for a firefly!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.snorkel.fell",
+      "text": "A little blue light fell in the sea!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.snorkel.bubble",
+      "text": "She can't swim! She is in a bubble.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.snorkel.down",
+      "text": "Down by the coral. Can you find her?",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.snorkel.see",
+      "text": "A blue glow! Swim to it!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.snorkel.hug",
+      "text": "The cuttlefish is hugging her bubble!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.snorkel.pop",
+      "text": "Pop! Out she comes!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.snorkel.saved",
+      "text": "You saved her, ka!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.snorkel.found",
+      "text": "You found Bubbles!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.hideseek.saw",
+      "text": "Did you see that? A green light!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.hideseek.playing",
+      "text": "She is playing hide and seek!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.hideseek.too",
+      "text": "Then let's play too!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.hideseek.knows",
+      "text": "The green light knows where Dad is!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.hideseek.shh",
+      "text": "Shh! She is hiding with you!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.hideseek.nose",
+      "text": "Hey! That tickles my nose!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.hideseek.found",
+      "text": "You found Peekaboo!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.all.four",
+      "text": "All four fireflies! You did it!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.all.go.touch",
+      "text": "Tap the sunset picture!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.all.go.mouse",
+      "text": "Click the sunset picture!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.show.dark",
+      "text": "It's so dark. No show tonight.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.show.wait",
+      "text": "Wait! Look, look!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.show.back",
+      "text": "Our fireflies! You found them!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.show.light",
+      "text": "Light us up, fireflies!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.show.yours",
+      "text": "And these lights are for you!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.show.start",
+      "text": "Now the show can start!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.show.best",
+      "text": "Best fire show ever!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "samet.story.show.thanks",
+      "text": "Khob khun ka! Come back soon!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "samet",
+        "story",
+        "intro",
+        "here"
+      ],
+      "text": "What a pretty island!",
+      "voice": "ji",
+      "key": "samet.story.intro.here",
+      "part": "samet › story › intro",
+      "when": "The way in (island/story.ts, film `intro`), at the foot of Na Dan pier as she lands: Mom, Dad (Tofu the beach puppy runs up barking), then the two gecko fire dancers with their empty lantern.",
+      "ms": 1752,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "intro",
+        "puppy"
+      ],
+      "text": "Hello, puppy! What's wrong?",
+      "voice": "nick",
+      "key": "samet.story.intro.puppy",
+      "part": "samet › story › intro",
+      "when": "The way in (island/story.ts, film `intro`), at the foot of Na Dan pier as she lands: Mom, Dad (Tofu the beach puppy runs up barking), then the two gecko fire dancers with their empty lantern.",
+      "ms": 2160,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "intro",
+        "ohno"
+      ],
+      "text": "Oh no, oh no, oh no!",
+      "voice": "tuk",
+      "key": "samet.story.intro.ohno",
+      "part": "samet › story › intro",
+      "when": "The way in (island/story.ts, film `intro`), at the foot of Na Dan pier as she lands: Mom, Dad (Tofu the beach puppy runs up barking), then the two gecko fire dancers with their empty lantern.",
+      "ms": 2352,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "intro",
+        "gone"
+      ],
+      "text": "Our fireflies are gone!",
+      "voice": "kae",
+      "key": "samet.story.intro.gone",
+      "part": "samet › story › intro",
+      "when": "The way in (island/story.ts, film `intro`), at the foot of Na Dan pier as she lands: Mom, Dad (Tofu the beach puppy runs up barking), then the two gecko fire dancers with their empty lantern.",
+      "ms": 1944,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "intro",
+        "every"
+      ],
+      "text": "Every night, four fireflies light up our fire show.",
+      "voice": "tuk",
+      "key": "samet.story.intro.every",
+      "part": "samet › story › intro",
+      "when": "Their memory (the storybook look): last night on Sai Kaew, the show, then the big wind.",
+      "ms": 3936,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "intro",
+        "wind"
+      ],
+      "text": "But last night, a big wind came. Whoosh!",
+      "voice": "kae",
+      "key": "samet.story.intro.wind",
+      "part": "samet › story › intro",
+      "when": "The way in (island/story.ts, film `intro`), at the foot of Na Dan pier as she lands: Mom, Dad (Tofu the beach puppy runs up barking), then the two gecko fire dancers with their empty lantern.",
+      "ms": 3792,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "intro",
+        "away"
+      ],
+      "text": "It blew them all over the island!",
+      "voice": "kae",
+      "key": "samet.story.intro.away",
+      "part": "samet › story › intro",
+      "when": "The way in (island/story.ts, film `intro`), at the foot of Na Dan pier as she lands: Mom, Dad (Tofu the beach puppy runs up barking), then the two gecko fire dancers with their empty lantern.",
+      "ms": 2424,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "intro",
+        "noshow"
+      ],
+      "text": "No fireflies, no show tonight!",
+      "voice": "tuk",
+      "key": "samet.story.intro.noshow",
+      "part": "samet › story › intro",
+      "when": "Back at the pier: the droop, then Tofu barks and wags.",
+      "ms": 3456,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "intro",
+        "tofu"
+      ],
+      "text": "But Tofu saw where they went!",
+      "voice": "kae",
+      "key": "samet.story.intro.tofu",
+      "part": "samet › story › intro",
+      "when": "The way in (island/story.ts, film `intro`), at the foot of Na Dan pier as she lands: Mom, Dad (Tofu the beach puppy runs up barking), then the two gecko fire dancers with their empty lantern.",
+      "ms": 2016,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "intro",
+        "ask"
+      ],
+      "text": "Will you help us find them?",
+      "voice": "tuk",
+      "key": "samet.story.intro.ask",
+      "part": "samet › story › intro",
+      "when": "The way in (island/story.ts, film `intro`), at the foot of Na Dan pier as she lands: Mom, Dad (Tofu the beach puppy runs up barking), then the two gecko fire dancers with their empty lantern.",
+      "ms": 1704,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "intro",
+        "go",
+        "touch"
+      ],
+      "text": "Four fireflies to find! Tap a picture!",
+      "voice": "sparkle",
+      "key": "samet.story.intro.go.touch",
+      "part": "samet › story › intro › go",
+      "when": "Sparkle, as the film ends and the pictures of the four beaches come up.",
+      "ms": 3264,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "intro",
+        "go",
+        "mouse"
+      ],
+      "text": "Four fireflies to find! Click a picture!",
+      "voice": "sparkle",
+      "key": "samet.story.intro.go.mouse",
+      "part": "samet › story › intro › go",
+      "when": "",
+      "ms": 3720,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "island",
+        "ride",
+        "0"
+      ],
+      "text": "Hop in! Beep beep!",
+      "voice": "sunbear",
+      "key": "samet.story.island.ride.0",
+      "part": "samet › story › island › ride",
+      "when": "The taxi driver as she picks a beach (in turn), and at a beach the taxi has no stop at.",
+      "ms": 2112,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "island",
+        "ride",
+        "1"
+      ],
+      "text": "Off we go!",
+      "voice": "sunbear",
+      "key": "samet.story.island.ride.1",
+      "part": "samet › story › island › ride",
+      "when": "",
+      "ms": 1128,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "island",
+        "ride",
+        "2"
+      ],
+      "text": "Hold on tight!",
+      "voice": "sunbear",
+      "key": "samet.story.island.ride.2",
+      "part": "samet › story › island › ride",
+      "when": "",
+      "ms": 1824,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "island",
+        "hinkhok"
+      ],
+      "text": "Ao Hin Khok!",
+      "voice": "sunbear",
+      "key": "samet.story.island.hinkhok",
+      "part": "samet › story › island",
+      "when": "On the island between the stops (island/): the pictures, the ride, the fireflies she has found.",
+      "ms": 1608,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "island",
+        "near",
+        "jetski"
+      ],
+      "text": "Look! A pink light on the water!",
+      "voice": "sparkle",
+      "key": "samet.story.island.near.jetski",
+      "part": "samet › story › island › near",
+      "when": "Sparkle, the first time she comes near a firefly still waiting at its beach.",
+      "ms": 3144,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "island",
+        "near",
+        "sandcastle"
+      ],
+      "text": "Something is glowing in the sand!",
+      "voice": "sparkle",
+      "key": "samet.story.island.near.sandcastle",
+      "part": "samet › story › island › near",
+      "when": "Sparkle, the first time she comes near a firefly still waiting at its beach.",
+      "ms": 3240,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "island",
+        "near",
+        "snorkel"
+      ],
+      "text": "A blue light, far out at sea!",
+      "voice": "sparkle",
+      "key": "samet.story.island.near.snorkel",
+      "part": "samet › story › island › near",
+      "when": "Sparkle, the first time she comes near a firefly still waiting at its beach.",
+      "ms": 2880,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "island",
+        "near",
+        "hideseek"
+      ],
+      "text": "A green light in the big tree!",
+      "voice": "sparkle",
+      "key": "samet.story.island.near.hideseek",
+      "part": "samet › story › island › near",
+      "when": "Sparkle, the first time she comes near a firefly still waiting at its beach.",
+      "ms": 2544,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "island",
+        "count",
+        "0"
+      ],
+      "text": "One firefly! Three more to find!",
+      "voice": "sparkle",
+      "key": "samet.story.island.count.0",
+      "part": "samet › story › island › count",
+      "when": "Back from a stop with a firefly (the first, second and third), then the pictures come up again.",
+      "ms": 3432,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "island",
+        "count",
+        "1"
+      ],
+      "text": "Two fireflies! Two more to find!",
+      "voice": "sparkle",
+      "key": "samet.story.island.count.1",
+      "part": "samet › story › island › count",
+      "when": "",
+      "ms": 3096,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "island",
+        "count",
+        "2"
+      ],
+      "text": "Three fireflies! Just one more!",
+      "voice": "sparkle",
+      "key": "samet.story.island.count.2",
+      "part": "samet › story › island › count",
+      "when": "",
+      "ms": 3000,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "island",
+        "tofu"
+      ],
+      "text": "Tofu the beach puppy! He saw it all!",
+      "voice": "sparkle",
+      "key": "samet.story.island.tofu",
+      "part": "samet › story › island",
+      "when": "Tap Tofu the first time.",
+      "ms": 4008,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "jetski",
+        "looking"
+      ],
+      "text": "Sawasdee krap! Looking for a pink light?",
+      "voice": "otter",
+      "key": "samet.story.jetski.looking",
+      "part": "samet › story › jetski",
+      "when": "The jet ski's firefly, Zoom (jetski/): the jet ski man's way in at his hut, the chase, found. @samet-story-jetski",
+      "ms": 3288,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "jetski",
+        "zoom"
+      ],
+      "text": "She zoomed round my buoys all night!",
+      "voice": "otter",
+      "key": "samet.story.jetski.zoom",
+      "part": "samet › story › jetski",
+      "when": "The jet ski's firefly, Zoom (jetski/): the jet ski man's way in at his hut, the chase, found. @samet-story-jetski",
+      "ms": 3432,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "jetski",
+        "fast"
+      ],
+      "text": "She only stops for someone fast!",
+      "voice": "otter",
+      "key": "samet.story.jetski.fast",
+      "part": "samet › story › jetski",
+      "when": "The jet ski's firefly, Zoom (jetski/): the jet ski man's way in at his hut, the chase, found. @samet-story-jetski",
+      "ms": 2568,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "jetski",
+        "first"
+      ],
+      "text": "Life jacket first!",
+      "voice": "otter",
+      "key": "samet.story.jetski.first",
+      "part": "samet › story › jetski",
+      "when": "As the film ends: the life jacket (he has already said hello).",
+      "ms": 1608,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "jetski",
+        "chase"
+      ],
+      "text": "There she is! After her!",
+      "voice": "sparkle",
+      "key": "samet.story.jetski.chase",
+      "part": "samet › story › jetski",
+      "when": "Sparkle, the first time Zoom flies ahead of the jet ski.",
+      "ms": 2256,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "jetski",
+        "likes"
+      ],
+      "text": "Ha ha! She likes you!",
+      "voice": "otter",
+      "key": "samet.story.jetski.likes",
+      "part": "samet › story › jetski",
+      "when": "Found (a race finished, won or lost by a nose, or parked after a decent ride): she lands on your unicorn's horn.",
+      "ms": 2064,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "jetski",
+        "found"
+      ],
+      "text": "You found Zoom!",
+      "voice": "sparkle",
+      "key": "samet.story.jetski.found",
+      "part": "samet › story › jetski",
+      "when": "The jet ski's firefly, Zoom (jetski/): the jet ski man's way in at his hut, the chase, found. @samet-story-jetski",
+      "ms": 2352,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "jetski",
+        "dad"
+      ],
+      "text": "Fast like a firefly!",
+      "voice": "nick",
+      "key": "samet.story.jetski.dad",
+      "part": "samet › story › jetski",
+      "when": "The jet ski's firefly, Zoom (jetski/): the jet ski man's way in at his hut, the chase, found. @samet-story-jetski",
+      "ms": 1872,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "sandcastle",
+        "glow"
+      ],
+      "text": "Look! Something's glowing in the sand!",
+      "voice": "nick",
+      "key": "samet.story.sandcastle.glow",
+      "part": "samet › story › sandcastle",
+      "when": "The sandcastle's firefly, Sandy (sandcastle/): a glow in the sand, a castle to tempt her out, found. @samet-story-sandcastle",
+      "ms": 2736,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "sandcastle",
+        "shy"
+      ],
+      "text": "A little gold firefly! She is shy.",
+      "voice": "ji",
+      "key": "samet.story.sandcastle.shy",
+      "part": "samet › story › sandcastle",
+      "when": "The sandcastle's firefly, Sandy (sandcastle/): a glow in the sand, a castle to tempt her out, found. @samet-story-sandcastle",
+      "ms": 3144,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "sandcastle",
+        "castle"
+      ],
+      "text": "Let's build her a castle!",
+      "voice": "nick",
+      "key": "samet.story.sandcastle.castle",
+      "part": "samet › story › sandcastle",
+      "when": "The sandcastle's firefly, Sandy (sandcastle/): a glow in the sand, a castle to tempt her out, found. @samet-story-sandcastle",
+      "ms": 1800,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "sandcastle",
+        "peek"
+      ],
+      "text": "She is peeking! Keep building!",
+      "voice": "sparkle",
+      "key": "samet.story.sandcastle.peek",
+      "part": "samet › story › sandcastle",
+      "when": "Sparkle, the first time she peeks out while the castle grows.",
+      "ms": 2760,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "sandcastle",
+        "home"
+      ],
+      "text": "She loves her castle!",
+      "voice": "ji",
+      "key": "samet.story.sandcastle.home",
+      "part": "samet › story › sandcastle",
+      "when": "Found (the moat full): she flies out and sits on the tallest tower.",
+      "ms": 1920,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "sandcastle",
+        "found"
+      ],
+      "text": "You found Sandy!",
+      "voice": "sparkle",
+      "key": "samet.story.sandcastle.found",
+      "part": "samet › story › sandcastle",
+      "when": "The sandcastle's firefly, Sandy (sandcastle/): a glow in the sand, a castle to tempt her out, found. @samet-story-sandcastle",
+      "ms": 1632,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "sandcastle",
+        "dad"
+      ],
+      "text": "A castle fit for a firefly!",
+      "voice": "nick",
+      "key": "samet.story.sandcastle.dad",
+      "part": "samet › story › sandcastle",
+      "when": "The sandcastle's firefly, Sandy (sandcastle/): a glow in the sand, a castle to tempt her out, found. @samet-story-sandcastle",
+      "ms": 2424,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "snorkel",
+        "fell"
+      ],
+      "text": "A little blue light fell in the sea!",
+      "voice": "pelican",
+      "key": "samet.story.snorkel.fell",
+      "part": "samet › story › snorkel",
+      "when": "The snorkel's firefly, Bubbles (snorkel/): the captain's way in on her boat, the glow down on the reef, found. @samet-story-snorkel",
+      "ms": 2256,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "snorkel",
+        "bubble"
+      ],
+      "text": "She can't swim! She is in a bubble.",
+      "voice": "pelican",
+      "key": "samet.story.snorkel.bubble",
+      "part": "samet › story › snorkel",
+      "when": "The snorkel's firefly, Bubbles (snorkel/): the captain's way in on her boat, the glow down on the reef, found. @samet-story-snorkel",
+      "ms": 3120,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "snorkel",
+        "down"
+      ],
+      "text": "Down by the coral. Can you find her?",
+      "voice": "pelican",
+      "key": "samet.story.snorkel.down",
+      "part": "samet › story › snorkel",
+      "when": "The snorkel's firefly, Bubbles (snorkel/): the captain's way in on her boat, the glow down on the reef, found. @samet-story-snorkel",
+      "ms": 2712,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "snorkel",
+        "see"
+      ],
+      "text": "A blue glow! Swim to it!",
+      "voice": "sparkle",
+      "key": "samet.story.snorkel.see",
+      "part": "samet › story › snorkel",
+      "when": "Sparkle: the first sight of the glow, and the cuttlefish cuddling the bubble.",
+      "ms": 3408,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "snorkel",
+        "hug"
+      ],
+      "text": "The cuttlefish is hugging her bubble!",
+      "voice": "sparkle",
+      "key": "samet.story.snorkel.hug",
+      "part": "samet › story › snorkel",
+      "when": "The snorkel's firefly, Bubbles (snorkel/): the captain's way in on her boat, the glow down on the reef, found. @samet-story-snorkel",
+      "ms": 2808,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "snorkel",
+        "pop"
+      ],
+      "text": "Pop! Out she comes!",
+      "voice": "nick",
+      "key": "samet.story.snorkel.pop",
+      "part": "samet › story › snorkel",
+      "when": "Found: the bubble floats up and pops.",
+      "ms": 2064,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "snorkel",
+        "saved"
+      ],
+      "text": "You saved her, ka!",
+      "voice": "pelican",
+      "key": "samet.story.snorkel.saved",
+      "part": "samet › story › snorkel",
+      "when": "The snorkel's firefly, Bubbles (snorkel/): the captain's way in on her boat, the glow down on the reef, found. @samet-story-snorkel",
+      "ms": 1968,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "snorkel",
+        "found"
+      ],
+      "text": "You found Bubbles!",
+      "voice": "sparkle",
+      "key": "samet.story.snorkel.found",
+      "part": "samet › story › snorkel",
+      "when": "The snorkel's firefly, Bubbles (snorkel/): the captain's way in on her boat, the glow down on the reef, found. @samet-story-snorkel",
+      "ms": 2064,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "hideseek",
+        "saw"
+      ],
+      "text": "Did you see that? A green light!",
+      "voice": "nick",
+      "key": "samet.story.hideseek.saw",
+      "part": "samet › story › hideseek",
+      "when": "Hide and seek's firefly, Peekaboo (hideseek/): a green light peeking round the driftwood tree, found. @samet-story-hideseek",
+      "ms": 2400,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "hideseek",
+        "playing"
+      ],
+      "text": "She is playing hide and seek!",
+      "voice": "ji",
+      "key": "samet.story.hideseek.playing",
+      "part": "samet › story › hideseek",
+      "when": "Hide and seek's firefly, Peekaboo (hideseek/): a green light peeking round the driftwood tree, found. @samet-story-hideseek",
+      "ms": 3024,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "hideseek",
+        "too"
+      ],
+      "text": "Then let's play too!",
+      "voice": "nick",
+      "key": "samet.story.hideseek.too",
+      "part": "samet › story › hideseek",
+      "when": "Hide and seek's firefly, Peekaboo (hideseek/): a green light peeking round the driftwood tree, found. @samet-story-hideseek",
+      "ms": 1872,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "hideseek",
+        "knows"
+      ],
+      "text": "The green light knows where Dad is!",
+      "voice": "sparkle",
+      "key": "samet.story.hideseek.knows",
+      "part": "samet › story › hideseek",
+      "when": "Sparkle: Peekaboo twinkling near where Dad hides; hiding beside your unicorn on her turn.",
+      "ms": 3192,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "hideseek",
+        "shh"
+      ],
+      "text": "Shh! She is hiding with you!",
+      "voice": "sparkle",
+      "key": "samet.story.hideseek.shh",
+      "part": "samet › story › hideseek",
+      "when": "Hide and seek's firefly, Peekaboo (hideseek/): a green light peeking round the driftwood tree, found. @samet-story-hideseek",
+      "ms": 3336,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "hideseek",
+        "nose"
+      ],
+      "text": "Hey! That tickles my nose!",
+      "voice": "nick",
+      "key": "samet.story.hideseek.nose",
+      "part": "samet › story › hideseek",
+      "when": "Found (she wins her turn to hide): Peekaboo lands on Dad's nose.",
+      "ms": 2208,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "hideseek",
+        "found"
+      ],
+      "text": "You found Peekaboo!",
+      "voice": "sparkle",
+      "key": "samet.story.hideseek.found",
+      "part": "samet › story › hideseek",
+      "when": "Hide and seek's firefly, Peekaboo (hideseek/): a green light peeking round the driftwood tree, found. @samet-story-hideseek",
+      "ms": 1752,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "all",
+        "four"
+      ],
+      "text": "All four fireflies! You did it!",
+      "voice": "ji",
+      "key": "samet.story.all.four",
+      "part": "samet › story › all",
+      "when": "All four found (island/story.ts, film `all`): the fireflies swirl, then Dad calls the sunset (island.sunset).",
+      "ms": 2904,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "all",
+        "go",
+        "touch"
+      ],
+      "text": "Tap the sunset picture!",
+      "voice": "sparkle",
+      "key": "samet.story.all.go.touch",
+      "part": "samet › story › all › go",
+      "when": "All four found (island/story.ts, film `all`): the fireflies swirl, then Dad calls the sunset (island.sunset).",
+      "ms": 1872,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "all",
+        "go",
+        "mouse"
+      ],
+      "text": "Click the sunset picture!",
+      "voice": "sparkle",
+      "key": "samet.story.all.go.mouse",
+      "part": "samet › story › all › go",
+      "when": "",
+      "ms": 6672,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "show",
+        "dark"
+      ],
+      "text": "It's so dark. No show tonight.",
+      "voice": "tuk",
+      "key": "samet.story.show.dark",
+      "part": "samet › story › show",
+      "when": "The fire show (finale/): the way in on Sai Kaew at night, and the thank you at the end. @samet-story-show",
+      "ms": 3240,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "show",
+        "wait"
+      ],
+      "text": "Wait! Look, look!",
+      "voice": "kae",
+      "key": "samet.story.show.wait",
+      "part": "samet › story › show",
+      "when": "The fire show (finale/): the way in on Sai Kaew at night, and the thank you at the end. @samet-story-show",
+      "ms": 2424,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "show",
+        "back"
+      ],
+      "text": "Our fireflies! You found them!",
+      "voice": "tuk",
+      "key": "samet.story.show.back",
+      "part": "samet › story › show",
+      "when": "The fire show (finale/): the way in on Sai Kaew at night, and the thank you at the end. @samet-story-show",
+      "ms": 2856,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "show",
+        "light"
+      ],
+      "text": "Light us up, fireflies!",
+      "voice": "kae",
+      "key": "samet.story.show.light",
+      "part": "samet › story › show",
+      "when": "The fire show (finale/): the way in on Sai Kaew at night, and the thank you at the end. @samet-story-show",
+      "ms": 1944,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "show",
+        "yours"
+      ],
+      "text": "And these lights are for you!",
+      "voice": "kae",
+      "key": "samet.story.show.yours",
+      "part": "samet › story › show",
+      "when": "The fire show (finale/): the way in on Sai Kaew at night, and the thank you at the end. @samet-story-show",
+      "ms": 1968,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "show",
+        "start"
+      ],
+      "text": "Now the show can start!",
+      "voice": "tuk",
+      "key": "samet.story.show.start",
+      "part": "samet › story › show",
+      "when": "The fire show (finale/): the way in on Sai Kaew at night, and the thank you at the end. @samet-story-show",
+      "ms": 1728,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "show",
+        "best"
+      ],
+      "text": "Best fire show ever!",
+      "voice": "tuk",
+      "key": "samet.story.show.best",
+      "part": "samet › story › show",
+      "when": "The end, after the fireworks: a bow, the fireflies make a heart.",
+      "ms": 1704,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "story",
+        "show",
+        "thanks"
+      ],
+      "text": "Khob khun ka! Come back soon!",
+      "voice": "kae",
+      "key": "samet.story.show.thanks",
+      "part": "samet › story › show",
+      "when": "The fire show (finale/): the way in on Sai Kaew at night, and the thank you at the end. @samet-story-show",
+      "ms": 2520,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

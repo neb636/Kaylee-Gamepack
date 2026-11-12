@@ -1,0 +1,68 @@
+{
+  "kind": "reel",
+  "name": "samet-fireflies",
+  "title": "Samet fireflies",
+  "video": "samet-fireflies.mp4",
+  "gif": "samet-fireflies.gif",
+  "seconds": 132,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Thailand samet trip island",
+      "where": "#/world/thailand/samet-trip/island?at=nadan&story=intro",
+      "seconds": 26,
+      "fps": 62.3,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-story-ride",
+      "where": "thailand-samet-story-ride",
+      "seconds": 14,
+      "fps": 67,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand samet trip jetski",
+      "where": "#/world/thailand/samet-trip/jetski?round=story",
+      "seconds": 15,
+      "fps": 74,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand samet trip sandcastle",
+      "where": "#/world/thailand/samet-trip/sandcastle?round=found",
+      "seconds": 11,
+      "fps": 62.9,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand samet trip snorkel",
+      "where": "#/world/thailand/samet-trip/snorkel?round=found",
+      "seconds": 11,
+      "fps": 67.1,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand samet trip hideseek",
+      "where": "#/world/thailand/samet-trip/hideseek?round=found",
+      "seconds": 11,
+      "fps": 73,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-story-found",
+      "where": "thailand-samet-story-found",
+      "seconds": 9,
+      "fps": 42.9,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand samet trip fireshow",
+      "where": "#/world/thailand/samet-trip/fireshow?round=story&flags=all",
+      "seconds": 24,
+      "fps": 82.5,
+      "status": "ok"
+    }
+  ]
+}
