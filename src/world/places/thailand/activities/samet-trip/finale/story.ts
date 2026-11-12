@@ -2,16 +2,23 @@
 // work): the story's payoff. The gecko fire dancers Tuk and Kae lost the four fireflies that light their show; she
 // found them, so the show she twirls in is the one she saved.
 //
-//   the way in (film `intro`, fireshow?round=story): Sai Kaew at night, the dancers' poi dark. Tuk droops ("No show
-//     tonight."); behind him little lights come along the sand: your unicorn, the fireflies she found round her horn.
-//     Kae spots them, they fly over, and one by one each dives into a poi, which catches in that firefly's own color
-//     with its chime. Kae throws her a pair of little lights of her own, and the show starts.
-//   in the show: the fireflies chase her lights like the tail of a comet (each a little further back along the path
-//     her finger drew), swirl up in a spiral when she draws a big circle, and in the finish each one flies off to lead
-//     its own surprise in (Zoom at the jet ski's nose, Sandy on the castle's top tower, Bubbles with the glowing fish,
-//     Peekaboo round Dad's head), then comes back to her.
-//   the thank you (film `thanks`, fireshow?round=thanks), after the fireworks: Tuk and Kae bow, the fireflies draw a
-//     heart of light in the sky (each a part of it, in its own color), Kae says thank you with a wai. Then the way home.
+//   the way in (film `intro`, fireshow?round=story, about 25 s): Sai Kaew at night, the dancers' poi dark. Tuk droops
+//     ("No show tonight."). Kae looks round: lights, coming along the beach! Your unicorn trots in with Mom and Dad, the
+//     fireflies she found round her horn. They fly over the rope, and one by one each dives into a poi, which catches
+//     in that firefly's own color with its chime (Tuk's two, then Kae's). Kae throws her a pair of little lights of
+//     her own, and the show starts.
+//   in the show: while she draws, the fireflies chase her lights like the tail of a comet (each a little further back
+//     along the path her finger drew); with her finger up they wait round her horn. They swirl up in a spiral when she
+//     draws a big circle, and in the finish each one flies off to lead its own surprise in (Zoom at the jet ski's
+//     nose, Sandy on the castle's top tower, Bubbles with the glowing fish, Peekaboo round Dad's head), then comes
+//     back to her.
+//   the thank you (film `thanks`, fireshow?round=thanks, about 13 s), after the fireworks: Tuk and Kae bow, the
+//     fireflies draw a heart of light in the sky (each a part of it, in its own color), Kae says thank you with a wai.
+//     Then the way home, the heart still up there.
+//
+// Staging (docs/films.md): faces to the camera; the two geckos stand far enough apart that Mom and Dad show between
+// them and her; a phone held upright gets its own shots (one gecko at a time). The thank you's close shots are taken
+// from inside the ring of fire, so no flame stands between the camera and a face.
 //
 // The show (fireshow.ts) owns the dancers' spinning, her poi and the finish; this file owns the fireflies, the heart
 // and the films' beats. Everything a film does that the show needs afterwards is also done by its finish(), so

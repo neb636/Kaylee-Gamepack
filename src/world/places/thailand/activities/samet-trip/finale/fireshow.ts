@@ -1256,8 +1256,10 @@ export class FireShow implements World3D {
     this.ribB.push(this.poiB, t)
     // (The camera looks out to sea: the ribbons lie flat to it.)
     tmp.copy(this.fwd).negate()
-    this.ribA.update(t, tmp, drawing ? 1 : 0.75)
-    this.ribB.update(t, tmp, drawing ? 1 : 0.75)
+    // (Dimmer with her finger up; in a film, swinging low and small, dimmer still: close up they'd glare.)
+    const ribK = drawing ? 1 : 0.75 - 0.4 * this.idleLow
+    this.ribA.update(t, tmp, ribK)
+    this.ribB.update(t, tmp, ribK)
 
     // Her poi's light on the sand round her.
     const kp = this.kaylee.root.position
