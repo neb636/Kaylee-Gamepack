@@ -4431,27 +4431,6 @@
     "file": "12867535f582.mp3"
   },
   {
-    "text": "Put your hoof in the water!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2064,
-    "file": "0ffe9f6adc06.mp3"
-  },
-  {
-    "text": "Touch the water by the boat!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2496,
-    "file": "9f5325c47760.mp3"
-  },
-  {
-    "text": "Click the water by the boat!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2184,
-    "file": "c9ec12e40ee7.mp3"
-  },
-  {
     "text": "Flying fish!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -4464,27 +4443,6 @@
     "sig": "a2881bb105",
     "ms": 2280,
     "file": "e3212c8db1f3.mp3"
-  },
-  {
-    "text": "Hey! I'm all wet!",
-    "voice": "ji",
-    "sig": "ba2e98c34e",
-    "ms": 2184,
-    "file": "c1d0fc33509d.mp3"
-  },
-  {
-    "text": "Splash! Ha ha!",
-    "voice": "ji",
-    "sig": "ba2e98c34e",
-    "ms": 1656,
-    "file": "1c8956801183.mp3"
-  },
-  {
-    "text": "Not again!",
-    "voice": "ji",
-    "sig": "ba2e98c34e",
-    "ms": 1056,
-    "file": "23dbe9c656e5.mp3"
   },
   {
     "text": "Beep beep!",
@@ -5332,6 +5290,13 @@
     "sig": "a2881bb105",
     "ms": 2424,
     "file": "c0428f63bae2.mp3"
+  },
+  {
+    "text": "Hey! I'm all wet!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2184,
+    "file": "c1d0fc33509d.mp3"
   },
   {
     "text": "Oops! Sandy jet ski!",

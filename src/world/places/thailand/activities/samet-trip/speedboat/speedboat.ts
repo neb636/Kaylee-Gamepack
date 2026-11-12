@@ -1,39 +1,31 @@
 // The speedboat from Ban Phe to Koh Samet (plan: planning/around-the-world/thailand/samet-trip.md, greybox 7): the
-// way onto the island. A ride, so Kaylee doesn't steer: the captain drives the family's hired speedboat from Ban Phe
-// pier on the mainland across the real 5.7 km (570 game meters at the island's 1:10) to Na Dan pier, about a minute,
-// while the island grows ahead. It's the real island (island/scenery.ts buildIsland and props.ts), so the boat ties up
-// right where she lands.
+// way onto the island. A cutscene now (the user, 2026-11-12: drop the hoof in the water, show the ride with the cinema
+// camera, a third of the time): the captain drives the family's hired speedboat from Ban Phe pier on the mainland to
+// Na Dan pier on the real island (island/scenery.ts buildIsland and props.ts), so the boat ties up right where she
+// lands. It doesn't show the whole 570 m: under each cut the boat jumps on along the route (SCENES below), so the ride
+// is about 17 s instead of 50:
+//   1. leaving Ban Phe: a crane up off the pier as the motors start and the captain says hello;
+//   2. the ferry coming the other way: a two-shot past the family, everyone waves, its wake bumps them into the air;
+//   3. the open sea: the low hero shot skimming the water, flying fish leaping beside the boat;
+//   4. slowing in to Na Dan: a crane up, the pier and the beach behind; they tie up and hop off onto the pier (the
+//      game's camera again).
+// Things still poke while it plays (every tap gets a reaction): Kaylee (hooves up, whee), Mommy (her sun hat flies
+// up, she catches it), Daddy (his cap blows off and he catches it), the captain (the horn, and the boat wiggles), the
+// pink flag at the stern, the life ring, the ferry (it toots, they wave), the flying fish (they flip). ⏩ skips on to
+// the pier.
 //
-// The toy (core verb): her hand in the spray. Hold a finger on the water beside the boat and Kaylee leans over the
-// rail and trails her hoof in the sea there: a fan of spray flies up where her finger is, back along the hull; drag
-// along the side and her hoof follows it, fast drags splash bigger. It deepens as the ride goes on, by itself:
-//   1. leaving the pier, slowly: little splashes, the boat swinging out past the moored longtails;
-//   2. the open sea at full speed: a big curtain of spray with a rainbow in it, and flying fish skipping out of her
-//      spray (tap one: it flips);
-//   3. the boats coming the other way (the ferry, a longtail, a jet ski cutting across, another speedboat): tap them
-//      and they toot and wave; their wakes bounce the boat into the air, and a bump while her hoof is in the water
-//      soaks Mommy. Then the turquoise shallows, slowing in to Na Dan pier: the rope, and they hop onto the pier.
-// Things to poke: Kaylee (hooves up, whee), Mommy (her sun hat flies up, she catches it), Daddy (his cap blows off and
-// he catches it), the captain (the horn, and the boat wiggles), the pink flag at the stern, the life ring.
-//
-// Talk (lines.ts L.samet.trip.boat): the captain (the pelican from cast.ts, her mouth with her own voice) says hello and
-// Sparkle the one instruction; then only reactions (the first flying fish, the first jump, Mommy soaked, the pokes), and
-// after a while with no hoof in the water the finger, then (spendHint) Sparkle's hint. Its feel numbers are knobs (?feel=1).
-//
-// ?cine=1 films the ride like a game's cutscene instead (engine3d/cinema.ts, the camera lab's "Cinema camera" switch):
-// a crane up off Ban Phe pier, then cuts between a chase, a low hero shot skimming the water, over her shoulder at the
-// rail, a fixed camera the boat roars past and a high wide one; a two-shot with each boat coming the other way, a crane
-// up as they slow in to Na Dan, and back to the game's camera on the pier. Her finger still plays: a touch cuts to a
-// shot that shows her hoof and holds it while she splashes.
+// Talk (lines.ts L.samet.trip.boat): the captain (the pelican from cast.ts, her mouth with her own voice) says hello,
+// then only reactions (the jump off the ferry's wake, the first flying fish, the pokes) and her "here we are".
+// Its timing numbers are knobs (?feel=1).
 import { CAPTAIN } from '../cast'
-import { Color, Fog, Group, Mesh, MeshBasicMaterial, CatmullRomCurve3, Plane, Raycaster, Scene, TorusGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
-import { clamp, spendHint, type Line } from '../../../../../../sdk'
+import { Fog, Group, Mesh, CatmullRomCurve3, Plane, Raycaster, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
+import { clamp, type Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import { FaceLife } from '../../../../../engine3d/characters/face'
 import { knobs, watch } from '../../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
-import { cinemaOn, Director, Letterbox, type CineMove } from '../../../../../engine3d/cinema'
+import { Director, Letterbox, type CineMove } from '../../../../../engine3d/cinema'
 import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
 import { Bag } from '../../../../../engine3d/dispose'
 import { blobShadow, merge, P, solid } from '../../../../../engine3d/geo'
@@ -53,27 +45,16 @@ import { boatSfx as S, seaBed } from './sounds'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/speedboat/speedboat.ts'
 const BOAT = knobs('sametBoat', 'The speedboat ride', FILE, {
-  top: { value: 17, min: 4, max: 25, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'Ban Phe to Na Dan is 570 m: at 17 m/s the ride takes about 45 s (#357: at 12 it was a minute with little to do)' },
+  top: { value: 17, min: 4, max: 25, step: 0.5, label: 'Top speed', unit: 'm/s' },
   accel: { value: 2.8, min: 0.4, max: 6, step: 0.1, label: 'Speeds up', unit: 'm/s²' },
-  brake: { value: 1.1, min: 0.3, max: 4, step: 0.05, label: 'Slows in to the pier', unit: 'm/s²' },
+  brake: { value: 2.4, min: 0.3, max: 6, step: 0.05, label: 'Slows in to the pier', unit: 'm/s²' },
   waves: { value: 0.38, min: 0, max: 1.2, step: 0.02, label: 'Waves out at sea', unit: 'm' },
   bump: { value: 2.6, min: 0, max: 6, step: 0.1, label: 'A wake bumps it up', unit: 'm/s' },
   plane: { value: 0.07, min: 0, max: 0.25, step: 0.01, label: 'Bow lifts at speed', unit: 'rad' },
-  skip: { value: 12, min: 3, max: 40, step: 1, label: 'Skip button after', unit: 's' },
-  hint: { value: 3, min: 0, max: 10, step: 0.5, label: 'The finger shows her after', unit: 's', note: 'until her hoof has been in the water once (then after 8 s with nothing touched)' },
+  skip: { value: 1.5, min: 0, max: 10, step: 0.5, label: 'Skip button after', unit: 's' },
+  fish: { value: 1.1, min: 0.4, max: 6, step: 0.1, label: 'A flying fish every', unit: 's', note: 'out on the open sea, beside the boat: something to tap (it flips)' },
 })
-const SPRAY = knobs('sametSpray', 'Her hoof in the spray', FILE, {
-  rate: { value: 120, min: 10, max: 300, step: 5, label: 'Drops a second', note: 'at full speed (fewer when slow)' },
-  up: { value: 4.6, min: 0.5, max: 10, step: 0.1, label: 'Spray height', unit: 'm/s' },
-  size: { value: 0.28, min: 0.06, max: 0.6, step: 0.01, label: 'Drop size', unit: 'm' },
-  drag: { value: 700, min: 100, max: 2000, step: 50, label: 'Big splash at', unit: 'px/s', note: 'dragging her finger this fast along the side doubles the spray' },
-  along: { value: 2.4, min: 0.5, max: 3.2, step: 0.1, label: 'Hoof reaches along', unit: 'm', note: 'how far forward and back along the side her hoof can go' },
-  lean: { value: 0.32, min: 0, max: 0.8, step: 0.02, label: 'Leans over', unit: 'rad' },
-  fish: { value: 3.2, min: 0.8, max: 12, step: 0.1, label: 'A flying fish every', unit: 's', note: 'while her hoof is in the water at speed' },
-  wild: { value: 5, min: 1.5, max: 20, step: 0.5, label: 'A flying fish by itself every', unit: 's', note: 'at speed, beside the boat even with her hoof out of the water: something to tap (it flips)' },
-  rainbow: { value: 0.55, min: 0, max: 1, step: 0.05, label: 'Rainbow', note: 'how bright the rainbow in the spray is' },
-})
-const CAM = knobs('sametBoatCam', 'The speedboat camera', FILE, {
+const CAM = knobs('sametBoatCam', 'The speedboat camera (on the pier)', FILE, {
   pitch: { value: 15, min: 5, max: 60, step: 1, label: 'Looks down', unit: '°' },
   tallPitch: { value: 13, min: 5, max: 70, step: 1, label: 'Looks down (portrait)', unit: '°' },
   box: { value: 3, min: 1.5, max: 12, step: 0.1, label: 'Shows round the boat', unit: 'm' },
@@ -81,23 +62,24 @@ const CAM = knobs('sametBoatCam', 'The speedboat camera', FILE, {
   side: { value: 16, min: -60, max: 60, step: 1, label: 'From the side', unit: '°', note: 'how far round from behind the boat (her side of it)' },
   far: { value: 110, min: 60, max: 400, step: 10, label: 'Draws plants out to', unit: 'm', note: 'further trees are left to the haze (fewer draw calls on the iPad)' },
 })
-
-const CINE = knobs('sametBoatCine', 'The speedboat cinema camera (?cine=1)', FILE, {
-  pace: { value: 1, min: 0.4, max: 2.5, step: 0.05, label: 'Shot length ×', note: 'how long each shot runs before the next cut' },
+const CINE = knobs('sametBoatCine', 'The speedboat cutscene', FILE, {
+  open: { value: 4, min: 2, max: 10, step: 0.25, label: 'Leaving Ban Phe', unit: 's', note: 'from the motors starting' },
+  ferry: { value: 4, min: 2, max: 10, step: 0.25, label: 'The ferry goes by', unit: 's' },
+  sea: { value: 3, min: 1.5, max: 10, step: 0.25, label: 'The open sea', unit: 's' },
+  arrive: { value: 24, min: 10, max: 120, step: 1, label: 'Slowing in from', unit: 'm', note: 'how far from Na Dan pier the last shot starts (it runs until they tie up)' },
 })
 
-/** The cinema camera's shots (?cine=1), in the boat's frame: x to its right, y up from the water, z toward the bow
- *  (the boat is 7.2 m, stern at -3.3; Kaylee sits on the side bench at about x 0.8, z -0.4). In the rotation in this
- *  order; `event` ones are cut to when something happens. */
+/** The cutscene's shots, in the boat's frame: x to its right, y up from the water, z toward the bow (the boat is
+ *  7.2 m, stern at -3.3; Kaylee sits on the side bench at about x 0.8, z -0.4). SCENES picks them, in order. */
 const MOVES: CineMove[] = [
   // Leaving Ban Phe: a crane up and round, the sea opening out ahead.
   { id: 'open', event: true, dur: 6, from: { eye: [10, 2.2, 14], look: [0, 1.2, 0], fov: 36 }, to: { eye: [18, 9, 2], look: [0, 1.2, 3], fov: 42 } },
   // A chase from behind and above: both sides of the boat, the island ahead.
-  { id: 'chase', playable: true, dur: 7, from: { eye: [-2, 2.6, -11], look: [0, 1.4, 3], fov: 50 }, to: { eye: [1.5, 3.2, -10], look: [0, 1.2, 4], fov: 48 } },
+  { id: 'chase', dur: 7, from: { eye: [-2, 2.6, -11], look: [0, 1.4, 3], fov: 50 }, to: { eye: [1.5, 3.2, -10], look: [0, 1.2, 4], fov: 48 } },
   // The hero shot: low over the water ahead of the bow, the boat bearing down on the lens.
   { id: 'skim', dur: 5, from: { eye: [4, 1, 16], look: [0, 1.3, 0], fov: 34 }, to: { eye: [2.6, 0.9, 11], look: [0, 1.4, 0], fov: 36 }, sway: 0.08 },
   // Over her shoulder at the rail: her hoof, the spray, the sea going by.
-  { id: 'rail', playable: true, mirror: true, dur: 6, from: { eye: [3.6, 2.4, -4.5], look: [1, 0.8, 1.8], fov: 52 }, to: { eye: [3.2, 2.1, -3.2], look: [1, 0.7, 2.2], fov: 50 } },
+  { id: 'rail', mirror: true, dur: 6, from: { eye: [3.6, 2.4, -4.5], look: [1, 0.8, 1.8], fov: 52 }, to: { eye: [3.2, 2.1, -3.2], look: [1, 0.7, 2.2], fov: 50 } },
   // A camera set down on the water ahead: the boat roars past it and away.
   { id: 'flyby', anchor: 'fixed', mirror: true, dur: 5.5, from: { eye: [6, 1.4, 34], look: [0, 1.3, 0], fov: 40 }, sway: 0.03 },
   // High and wide, drifting across: the whole crossing, the island growing ahead.
@@ -105,7 +87,28 @@ const MOVES: CineMove[] = [
   // A boat coming the other way: from the far side of hers, looking past the family at it.
   { id: 'pass', event: true, mirror: true, twoShot: 0.5, dur: 5.5, from: { eye: [-2.5, 2.2, -9], look: [0, 1.4, 4], fov: 48 }, to: { eye: [-2, 2.5, -7], look: [0, 1.4, 4], fov: 46 } },
   // Slowing in to Na Dan: a crane up from the front quarter, the pier and the beach behind.
-  { id: 'arrive', event: true, dur: 9, from: { eye: [8, 1.8, 10], look: [0, 1, 0], fov: 40 }, to: { eye: [12, 7, 3], look: [0, 1, -1], fov: 42 } },
+  { id: 'arrive', event: true, dur: 8, from: { eye: [8, 1.8, 10], look: [0, 1, 0], fov: 40 }, to: { eye: [12, 7, 3], look: [0, 1, -1], fov: 42 } },
+]
+
+/** The ride, cut down: each scene starts the boat at `at` along the route (0..1; `fromEnd`: that many meters short of
+ *  Na Dan pier) at `v` (top speed if left out; the pier scene starts still), films it with `move` for `dur` seconds,
+ *  and maybe brings a boat the other way (`pass`, alongside about `meetIn` seconds in) or flying fish (`fish`). */
+interface Beat {
+  id: 'open' | 'ferry' | 'sea' | 'arrive'
+  move: string
+  at?: number
+  fromEnd?: () => number
+  still?: boolean
+  dur: () => number
+  pass?: PassId
+  meetIn?: number
+  fish?: boolean
+}
+const SCENES: Beat[] = [
+  { id: 'open', move: 'open', at: 0, still: true, dur: () => CINE.open },
+  { id: 'ferry', move: 'pass', at: 0.3, dur: () => CINE.ferry, pass: 'ferry', meetIn: 1.6 },
+  { id: 'sea', move: 'skim', at: 0.62, dur: () => CINE.sea, fish: true },
+  { id: 'arrive', move: 'arrive', fromEnd: () => CINE.arrive, dur: () => Infinity },
 ]
 
 /** The captain: a pelican in a navy captain's cap (cast.ts). */
@@ -180,11 +183,9 @@ interface FlyFish {
 }
 
 const DEG = 180 / Math.PI
-const HINT_S = 8
 const tmp = new Vector3()
 const tmp2 = new Vector3()
 const tmp3 = new Vector3()
-const ease = (dt: number, k: number) => 1 - Math.exp(-dt * k)
 
 /** The family's speedboat: white with a pink stripe, a blue sun canopy over the back, a console up front. */
 function buildBoat(bag: Bag, stripe: string = PAL.hotpink) {
@@ -312,21 +313,6 @@ function buildFlyFish(bag: Bag) {
   return root
 }
 
-/** A rainbow: five thin pastel arcs (see-through), shown in the spray. */
-function buildRainbow(bag: Bag) {
-  const g = new Group()
-  const cols = ['#FF8FA8', '#FFC36B', '#FFF08A', '#9EE6A8', '#9CC8FF', '#C7A8F0']
-  const mats: MeshBasicMaterial[] = []
-  cols.forEach((c, i) => {
-    const m = bag.add(new MeshBasicMaterial({ color: new Color(c), transparent: true, opacity: 0, depthWrite: false, fog: false }))
-    mats.push(m)
-    const arc = new Mesh(bag.add(new TorusGeometry(1.5 - i * 0.09, 0.045, 6, 32, Math.PI)), m)
-    g.add(arc)
-  })
-  g.visible = false
-  return { g, mats }
-}
-
 export class SametSpeedboat implements World3D {
   readonly scene = new Scene()
   readonly rig = new CameraRig()
@@ -335,7 +321,6 @@ export class SametSpeedboat implements World3D {
   private lights = makeLights(this.scene)
   private isl: Island
   private anchorEls = new Map<string, HTMLElement>()
-  private hintEl: HTMLElement | null = null
   private raycaster = new Raycaster()
   private water0 = new Plane(new Vector3(0, 1, 0), 0)
   private unwatch: () => void
@@ -371,32 +356,22 @@ export class SametSpeedboat implements World3D {
   private capT = -1
   private hatT = -1
 
-  // ---- Her hoof in the spray.
-  private finger: { x: number; y: number; t: number; speed: number } | null = null
+  // ---- Kaylee's side of the boat (the mirrored shots film from it), the flying fish.
   private side = 1
-  private along = -0.4
-  private dip = 0
-  private sprayAcc = 0
-  private fishT = 0
   private wildT = 0
   private hissT = 0
-  private lastTouch = 0
   private captainLife: FaceLife
-  private talk = { captain: 0, nick: 0, ji: 0, soak: 0, hello: false, fish: false, jump: false, hinted: false }
-  private spray: Particles
+  private talk = { captain: 0, nick: 0, ji: 0, hello: false, fish: false, jump: false }
   private splash: Particles
   private sparkle: Particles
-  private rainbow: ReturnType<typeof buildRainbow>
   private fish: FlyFish[] = []
   private passers: Passer[] = []
-  // ---- The cinema camera (?cine=1).
+  // ---- The cutscene.
   private dir = new Director(MOVES, 'open')
   private bars = new Letterbox()
-  private filmed = new Set<PassId>()
-  private filming: PassId | null = null
-  private arrived = false
-  private counts = { sprays: 0, splashes: 0, fish: 0, fishTaps: 0, waves: 0, bumps: 0, soaks: 0, pokes: 0, skips: 0 }
-  private skipped = false
+  private beat = -1
+  private beatT = 0
+  private counts = { fish: 0, fishTaps: 0, waves: 0, bumps: 0, pokes: 0, skips: 0 }
 
   constructor(
     private renderer: WebGLRenderer,
@@ -462,7 +437,7 @@ export class SametSpeedboat implements World3D {
 
     // ---- The others on the water: they meet her on the way.
     const defs: [PassId, number, number, number, number][] = [
-      ['ferry', 0.26, 1, 32, 5],
+      ['ferry', 0.26, 1, 18, 5],
       ['longtail', 0.44, -1, 20, 6],
       ['ski', 0.6, 1, 0, 11],
       ['speed', 0.76, -1, 26, 10],
@@ -478,21 +453,16 @@ export class SametSpeedboat implements World3D {
       scene.add(root)
       this.fish.push({ root, t: 0, p: new Vector3(), v: new Vector3(), flip: -1, live: false })
     }
-    this.rainbow = buildRainbow(bag)
-    scene.add(this.rainbow.g)
 
-    this.spray = new Particles({ kind: 'spray', count: 420, colors: ['#FFFFFF', '#EAFBFF', '#C9F6EC', '#DFF4FF'], gravity: 9 }, bag)
     this.splash = new Particles({ kind: 'spray', count: 260, colors: ['#FFFFFF', '#EAFBFF', '#BFEFFF'], gravity: 9 }, bag)
     this.sparkle = new Particles({ kind: 'spray', count: 120, colors: ['#FFFFFF', '#FFF6B8', PAL.gold, PAL.pink], gravity: -0.6 }, bag)
-    scene.add(this.spray.mesh, this.splash.mesh, this.sparkle.mesh)
+    scene.add(this.splash.mesh, this.sparkle.mesh)
 
     this.isl.lagoon.waves.height = BOAT.waves
     this.isl.lagoon.waves.dir = { x: 0.5, z: 0.86 }
     this.isl.lagoon.waves.length = 18
-    this.placeBoat(0)
+    this.startBeat(0)
     this.unwatch = watch('speedboat', () => ({
-      'her finger (px/s)': [this.finger?.speed ?? 0, SPRAY.drag * 1.5],
-      'spray (0..1)': [this.dip, 1.2],
       'boat speed (m/s)': [this.v, BOAT.top * 1.2],
     }))
   }
@@ -510,9 +480,6 @@ export class SametSpeedboat implements World3D {
   setAnchorElements(els: Map<string, HTMLElement>) {
     this.anchorEls = els
   }
-  setHintElement(el: HTMLElement | null) {
-    this.hintEl = el
-  }
   get calm() {
     return false
   }
@@ -521,38 +488,67 @@ export class SametSpeedboat implements World3D {
     return this.s / this.len
   }
   get canSkip() {
-    return this.phase === 'ride' && this.time > BOAT.skip && this.s < this.len - 110 && !this.skipped
+    return (this.phase === 'pier' || this.phase === 'ride') && this.time > BOAT.skip && this.beat < SCENES.length - 1
   }
-  /** ⏩: on to the turquoise water by the pier. */
+  /** ⏩: on to the last shot, slowing in to Na Dan pier. */
   skip() {
     if (!this.canSkip) return
-    this.skipped = true
     this.counts.skips++
-    this.s = this.len - 110
-    this.v = Math.min(this.v, BOAT.top * 0.8)
+    if (this.phase === 'pier') {
+      this.setPhase('ride')
+      S.throttle()
+    }
+    this.startBeat(SCENES.length - 1)
+  }
+
+  /** Under a cut: the boat on to where the scene starts, its boat the other way on the water, the camera's shot. */
+  private startBeat(i: number) {
+    const sc = SCENES[i]
+    this.beat = i
+    this.beatT = 0
+    this.s = sc.fromEnd ? Math.max(0, this.len - sc.fromEnd()) : (sc.at ?? 0) * this.len
+    const left = this.len - this.s
+    this.v = sc.still ? 0 : Math.min(BOAT.top, Math.sqrt(2 * BOAT.brake * left) + 0.4)
+    this.lift = this.liftV = 0
     for (const p of this.passers) {
       p.root.visible = false
       p.s = -2
+      p.across = 0
+      p.bumped = p.heard = false
+      p.wave = -1
     }
+    for (const f of this.fish) {
+      f.live = false
+      f.root.visible = false
+    }
+    const p = sc.pass && this.passers.find((q) => q.id === sc.pass)
+    if (p) {
+      // Coming the other way, to be alongside `meetIn` seconds from now.
+      p.s = Math.min(this.len - 5, this.s + (this.v + p.speed) * (sc.meetIn ?? 1.5))
+      p.root.visible = true
+    }
+    this.wildT = sc.fish ? BOAT.fish * 0.7 : 0
     this.placeBoat(0)
-    this.rig.setShot(this.shot(), true)
-    this.dir.cut('skim')
+    const m = MOVES.find((x) => x.id === sc.move)!
+    const dur = sc.dur()
+    // The shot runs for the scene (the last one holds its end pose until they're off the boat).
+    m.dur = Number.isFinite(dur) ? dur + 0.5 : m.dur
+    this.dir.cut(sc.move, p ? p.side : this.side)
   }
 
   update(dt: number) {
     const t = (this.time += dt)
     this.phaseT += dt
     this.drive(dt, t)
-    this.hoof(dt)
+    this.flyingFish(dt)
     this.others(dt, t)
     this.people(dt, t)
     this.captainLife.update(dt)
-    for (const p of [this.spray, this.splash, this.sparkle]) p.update(dt)
-    // The captain's hello as the motors start, then Sparkle's one instruction (she waits her turn).
+    for (const p of [this.splash, this.sparkle]) p.update(dt)
+    // The captain's hello as the motors start.
     if (!this.talk.hello && t > 0.4) {
       this.talk.hello = true
       this.events.say?.(B.hi)
-      this.events.say?.(B.go)
     }
 
     const c = this.pos
@@ -568,7 +564,6 @@ export class SametSpeedboat implements World3D {
     this.film(dt)
     this.rig.update(dt)
     this.bars.update(dt, this.rig.cinema)
-    this.drawHint(t)
   }
 
   // ---------------------------------------------------------------- the ride
@@ -610,7 +605,7 @@ export class SametSpeedboat implements World3D {
     } else if (this.phase === 'dock') {
       // Tied up: Kaylee hops onto the pier, Mommy and Daddy after her.
       if (this.phaseT > 0.8 && this.kaylee.root.parent !== this.scene) this.hopOff()
-      if (this.phaseT > 3.2) {
+      if (this.phaseT > 2.6) {
         this.setPhase('off')
         this.events.done()
       }
@@ -654,7 +649,7 @@ export class SametSpeedboat implements World3D {
     b.root.rotation.y = this.heading
     const speedK = this.v / BOAT.top
     b.tilt.rotation.x = -Math.atan2(hb - hs, 6) - BOAT.plane * speedK - (this.lift > 0 ? 0.06 : 0)
-    b.tilt.rotation.z = Math.atan2(hr - hl, 2.4) * 0.8 + wig * 0.5 + (this.dip > 0 ? -this.side * 0.025 : 0)
+    b.tilt.rotation.z = Math.atan2(hr - hl, 2.4) * 0.8 + wig * 0.5
     // The flag streams back faster the faster it goes.
     b.cloth.rotation.y = Math.sin(t * (6 + speedK * 14)) * (0.15 + speedK * 0.2)
     b.ring.rotation.x *= 0.96
@@ -679,16 +674,6 @@ export class SametSpeedboat implements World3D {
     this.kaylee.react('hop')
     this.nick.react('hop')
     this.ji.react('hop')
-    // Her hoof in the water as it lands: a big wave of spray right over Mommy.
-    if (this.dip > 0.2 && hard > 1.2) {
-      this.counts.soaks++
-      const m = this.ji.root.getWorldPosition(tmp)
-      this.splash.burst(m.x, m.y + 1.6, m.z, 26, 1.2, 0.5, 0.18)
-      this.ji.react('wiggle')
-      this.events.say?.(B.soak[this.talk.soak++ % B.soak.length])
-      this.hatT = 0
-      window.setTimeout(() => S.boing(), 300)
-    }
   }
 
   private hopOff() {
@@ -710,85 +695,13 @@ export class SametSpeedboat implements World3D {
     }
   }
 
-  // ---------------------------------------------------------------- her hoof in the spray
+  // ---------------------------------------------------------------- the flying fish
 
-  private hoof(dt: number) {
-    const k = this.kaylee
-    const out = this.finger && this.phase !== 'dock' && this.phase !== 'off'
-    if (out && this.finger) {
-      // Where her finger is on the water, beside the boat: that side, and that far along it.
-      const g = this.pick(this.finger.x, this.finger.y, tmp)
-      if (g) {
-        const dx = g.x - this.pos.x
-        const dz = g.z - this.pos.z
-        const lx = dx * this.xAxis.x + dz * this.xAxis.z
-        const lz = dx * this.fwd.x + dz * this.fwd.z
-        const want = lx >= 0 ? 1 : -1
-        if (want !== this.side) this.side = want
-        this.along += (clamp(lz, -SPRAY.along, SPRAY.along * 0.55) - this.along) * ease(dt, 10)
-      }
-      const drag = clamp((this.finger.speed ?? 0) / SPRAY.drag, 0, 1)
-      this.dip += (0.6 + 0.4 * drag - this.dip) * ease(dt, 8)
-      this.finger.speed *= Math.exp(-dt * 6)
-    } else this.dip += (0 - this.dip) * ease(dt, 6)
-    if (this.dip < 0.01) this.dip = 0
-    const lean = this.dip > 0.05 ? 1 : 0
-
-    // Kaylee slides along the side bench to her finger's side and leans out over the rail.
-    if (k.root.parent === this.boat.body) {
-      const kx = this.side * 0.8
-      const kz = clamp(this.along, -1.5, 0.7)
-      k.root.position.x += (kx - k.root.position.x) * ease(dt, 6)
-      k.root.position.z += (kz - k.root.position.z) * ease(dt, 6)
-      k.root.position.y = BENCH
-      k.root.rotation.y += (this.side * 0.6 * lean - k.root.rotation.y) * ease(dt, 6)
-      k.root.rotation.z += (-this.side * SPRAY.lean * lean - k.root.rotation.z) * ease(dt, 6)
-      const arm = this.side > 0 ? k.rig.armL : k.rig.armR
-      const other = this.side > 0 ? k.rig.armR : k.rig.armL
-      arm.rotation.x += (-1.3 * lean - arm.rotation.x) * ease(dt, 8)
-      arm.rotation.z += ((this.side > 0 ? -0.3 : 0.3) * lean - arm.rotation.z) * ease(dt, 8)
-      other.rotation.x += (0 - other.rotation.x) * ease(dt, 8)
-      other.rotation.z += (0 - other.rotation.z) * ease(dt, 8)
-    }
-
-    // The spray where her hoof is in the water: a fan up and back along the hull, more the faster the boat goes.
-    if (this.dip > 0.05) {
-      const hand = this.handPoint(tmp2)
-      const speedK = clamp(this.v / BOAT.top, 0.15, 1)
-      this.sprayAcc += SPRAY.rate * this.dip * speedK * dt * (this.finger && this.finger.speed > SPRAY.drag ? 2 : 1)
-      while (this.sprayAcc >= 1) {
-        this.sprayAcc -= 1
-        const r = Math.random()
-        const up = SPRAY.up * (0.5 + 0.6 * Math.random()) * (0.5 + this.dip * 0.6) * (0.4 + speedK * 0.6)
-        const o = this.side * (0.6 + Math.random() * 1.4)
-        this.spray.emit(hand.x, hand.y + 0.05, hand.z, this.fwd.x * this.v * 0.55 + this.xAxis.x * o, up, this.fwd.z * this.v * 0.55 + this.xAxis.z * o, 0.7 + r * 0.5, SPRAY.size * (0.6 + Math.random() * 0.8))
-      }
-      if ((this.hissT -= dt * 0.5) <= 0) {
-        this.hissT = 0.3
-        S.hoof(this.dip)
-      }
-      // The rainbow in the spray (the sun's behind her).
-      const rb = this.rainbow
-      rb.g.visible = SPRAY.rainbow > 0 && speedK > 0.5
-      if (rb.g.visible) {
-        rb.g.position.set(hand.x + this.xAxis.x * this.side * 1.4 - this.fwd.x * 1.6, hand.y + 0.2, hand.z + this.xAxis.z * this.side * 1.4 - this.fwd.z * 1.6)
-        rb.g.lookAt(this.rig.camera.position)
-        const op = SPRAY.rainbow * clamp((this.dip - 0.3) * 2, 0, 1) * clamp((speedK - 0.5) * 3, 0, 1)
-        for (const m of rb.mats) m.opacity = op
-      }
-      // A flying fish skips out of her spray now and then, at speed.
-      if (speedK > 0.6 && (this.fishT += dt) > SPRAY.fish) {
-        this.fishT = 0
-        this.launchFish(hand)
-      }
-    } else {
-      this.rainbow.g.visible = false
-      this.fishT = Math.min(this.fishT, SPRAY.fish * 0.6)
-    }
-    // Now and then one leaps out by itself beside the boat, on whichever side she's sitting: hers to tap.
-    if (this.phase === 'ride' && this.v > BOAT.top * 0.6 && (this.wildT += dt) > SPRAY.wild) {
+  private flyingFish(dt: number) {
+    // Out on the open sea they leap beside the boat, on her side of it: hers to tap.
+    if (this.phase === 'ride' && SCENES[this.beat]?.fish && (this.wildT += dt) > BOAT.fish) {
       this.wildT = 0
-      this.launchFish(this.handPoint(tmp3))
+      this.launchFish(this.besideHer(tmp3))
     }
 
     // The flying fish glide along beside the boat and dive back in.
@@ -815,9 +728,9 @@ export class SametSpeedboat implements World3D {
     }
   }
 
-  /** Where her hoof is in the water: beside the hull at her side, where she leans out. */
-  private handPoint(out: Vector3) {
-    const lz = clamp(this.along, -1.5, 0.7) + 0.2
+  /** The water beside the hull at her seat. */
+  private besideHer(out: Vector3) {
+    const lz = -0.2
     const lx = this.side * (HALF_W + 0.35)
     out.set(this.pos.x + this.xAxis.x * lx + this.fwd.x * lz, 0, this.pos.z + this.xAxis.z * lx + this.fwd.z * lz)
     out.y = this.waterAt(out.x, out.z)
@@ -846,18 +759,10 @@ export class SametSpeedboat implements World3D {
   // ---------------------------------------------------------------- the boats coming the other way
 
   private others(dt: number, t: number) {
-    const u = this.s / this.len
     for (const p of this.passers) {
       if (p.s === -2) continue
-      if (p.s === -1) {
-        // On its way when she's a little before where they meet.
-        const lead = p.id === 'ski' ? 0.05 : 0.11
-        if (this.phase === 'ride' && u > p.meet - lead) {
-          p.s = p.id === 'ski' ? p.meet * this.len : Math.min(this.len - 20, this.s + 170)
-          p.across = -46
-          p.root.visible = true
-        } else continue
-      }
+      // (Only the scene's boat is on the water: startBeat puts it there.)
+      if (p.s < 0) continue
       let x: number
       let z: number
       let yaw: number
@@ -981,37 +886,17 @@ export class SametSpeedboat implements World3D {
     return this.raycaster.ray.intersectPlane(this.water0, out)
   }
 
-  pointerDown(x: number, y: number, id?: string) {
-    this.lastTouch = this.time
-    if (id) return
-    this.finger = { x, y, t: performance.now(), speed: 0 }
-    this.counts.sprays++
-    S.splash()
-  }
-  pointerMove(x: number, y: number) {
-    if (!this.finger) return
-    const now = performance.now()
-    const dtm = Math.max(1, now - this.finger.t) / 1000
-    const sp = Math.hypot(x - this.finger.x, y - this.finger.y) / dtm
-    this.finger.speed = Math.max(this.finger.speed * 0.7, sp)
-    if (sp > SPRAY.drag && this.dip > 0.3 && Math.random() < 0.15) {
-      this.counts.splashes++
-      S.splash()
-    }
-    this.finger.x = x
-    this.finger.y = y
-    this.finger.t = now
-    this.lastTouch = this.time
-  }
-  pointerUp() {
-    this.finger = null
-  }
+  pointerDown() {}
+  pointerMove() {}
+  pointerUp() {}
   tap(x: number, y: number, id?: string) {
-    this.lastTouch = this.time
     if (!id) {
-      // A quick tap on the water: one splash there, by her hoof.
+      // A tap on the sea: a splash there.
       const g = this.pick(x, y, tmp)
-      if (g) this.splash.burst(this.handPoint(tmp2).x, tmp2.y + 0.1, tmp2.z, 10, 1.6, 2.4, 0.16)
+      if (g && g.distanceTo(this.pos) < 40) {
+        this.splash.burst(g.x, this.waterAt(g.x, g.z) + 0.1, g.z, 10, 1.6, 2.4, 0.16)
+        S.splash()
+      }
       return
     }
     this.counts.pokes++
@@ -1059,33 +944,23 @@ export class SametSpeedboat implements World3D {
 
   // ---------------------------------------------------------------- the camera
 
-  /** The cinema camera (?cine=1): cut on what happens, hold a shot that shows her hoof while she plays. Off the boat
+  /** The cutscene: each scene for its time, then the cut to the next (the boat jumps on under it). Off the boat
    *  (Kaylee hops onto the pier) the game's camera takes over again. */
   private film(dt: number) {
-    const on = cinemaOn() && (this.phase === 'pier' || this.phase === 'ride' || (this.phase === 'dock' && this.kaylee.root.parent === this.boat.body))
+    const on = this.phase === 'pier' || this.phase === 'ride' || (this.phase === 'dock' && this.kaylee.root.parent === this.boat.body)
     if (!on) {
       this.rig.setCine(null)
       return
     }
+    this.beatT += dt
+    const sc = SCENES[this.beat]
+    if (this.phase === 'ride' && this.beat < SCENES.length - 1 && this.beatT >= sc.dur()) this.startBeat(this.beat + 1)
     const d = this.dir
     d.side = this.side
-    d.play(!!this.finger)
-    if (!this.finger) {
-      // A boat coming the other way: the two-shot (once each).
-      const p = this.passers.find((q) => q.root.visible && !this.filmed.has(q.id) && q.root.position.distanceTo(this.pos) < 55)
-      if (p) {
-        this.filmed.add(p.id)
-        this.filming = p.id
-        d.cut('pass', p.side)
-      }
-      if (!this.arrived && this.phase === 'ride' && this.len - this.s < 45) {
-        this.arrived = true
-        d.cut('arrive')
-      }
-    }
     d.aspect = this.w / Math.max(1, this.h)
-    const near = d.move.id === 'pass' ? this.passers.find((q) => q.id === this.filming && q.root.visible) : undefined
-    this.rig.setCine(d.update(dt / CINE.pace, { pos: this.pos, fwd: this.fwd }, near ? tmp3.copy(near.root.position).setY(near.h + 1) : null))
+    const cur = SCENES[this.beat]
+    const near = cur.pass ? this.passers.find((q) => q.id === cur.pass && q.root.visible) : undefined
+    this.rig.setCine(d.update(dt, { pos: this.pos, fwd: this.fwd }, near ? tmp3.copy(near.root.position).setY(near.h + 1) : null))
   }
 
   private shot(): Shot {
@@ -1107,25 +982,6 @@ export class SametSpeedboat implements World3D {
     this.bars.render(this.renderer, this.scene, this.rig.camera, this.w, this.h)
     this.stats.calls = this.renderer.info.render.calls
     this.stats.tris = this.renderer.info.render.triangles
-  }
-
-  /** After a while with no hoof in the water: a finger pressing on the water beside her. */
-  private drawHint(t: number) {
-    const el = this.hintEl
-    if (!el) return
-    // (Until her hoof has been in the water once, the finger shows her almost at once.)
-    const idle = !this.finger && (t - this.lastTouch > HINT_S || (!this.counts.sprays && t > BOAT.hint)) && this.phase === 'ride'
-    const want = idle ? '' : 'none'
-    if (el.style.display !== want) el.style.display = want
-    // Each time the finger comes up: Sparkle's hint (shown the first time, then said at most twice a visit).
-    if (idle && !this.talk.hinted) {
-      this.talk.hinted = true
-      this.events.say?.(B.hint, !spendHint(B.hint))
-    }
-    if (!idle) this.talk.hinted = false
-    if (!idle) return
-    const s = this.toScreen(this.handPoint(tmp).add(tmp2.copy(this.xAxis).multiplyScalar(this.side * 0.8)))
-    el.style.transform = `translate3d(${s.x.toFixed(1)}px, ${s.y.toFixed(1)}px, 0)`
   }
 
   // ---------------------------------------------------------------- tap targets
@@ -1177,16 +1033,15 @@ export class SametSpeedboat implements World3D {
       // Seconds since it opened (the scene's clock: a slow robot browser runs it slower than the wall clock).
       time: +this.time.toFixed(1),
       cine: this.rig.cinema ? this.dir.move.id : null,
+      scene: SCENES[this.beat]?.id ?? null,
       cuts: this.dir.cuts,
       along: +(this.s / this.len).toFixed(3),
       routeM: Math.round(this.len),
       speed: +this.v.toFixed(1),
       side: this.side,
-      spray: +this.dip.toFixed(2),
       canSkip: this.canSkip,
       passers: this.passers.filter((p) => p.root.visible).map((p) => p.id),
       kaylee: sc(this.kaylee.root.getWorldPosition(new Vector3())),
-      water: sc(this.handPoint(new Vector3()).add(new Vector3().copy(this.xAxis).multiplyScalar(this.side * 1.2))),
       ...this.counts,
     }
   }

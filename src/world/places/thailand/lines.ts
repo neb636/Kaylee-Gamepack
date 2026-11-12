@@ -721,16 +721,12 @@ export const L = {
   samet: {
     // Getting there and home (PackScreen, speedboat/, the trip frame), the sticker and the stamp screen's facts.
     trip: {
-      // The speedboat from Ban Phe (speedboat/): the captain (a pelican) says hello, Sparkle the one instruction, then
-      // only reactions to what happens; the stuck hint once the finger has shown.
+      // The speedboat from Ban Phe (speedboat/, a cutscene): the captain (a pelican) says hello, then only reactions to
+      // what happens (the ferry's wake, the flying fish, the pokes).
       boat: {
         hi: by('pelican')('Sawasdee ka! Hold on tight!'),
-        go: 'Put your hoof in the water!',
-        hint: onDevice('Touch the water by the boat!', 'Click the water by the boat!'),
         fish: 'Flying fish!',
         jump: nick('Whoa! We flew!'),
-        // A bump with her hoof in the water soaks Mommy (in turn).
-        soak: [ji("Hey! I'm all wet!"), ji('Splash! Ha ha!'), ji('Not again!')],
         // Tap the captain, Daddy (his cap blows off), Mommy (her sun hat flies up) (each in turn).
         captain: [by('pelican')('Beep beep!'), by('pelican')('Wiggle wiggle! Ha ha!'), by('pelican')('Hold on to your hats!')],
         nick: [nick('My cap!'), nick('So windy!')],

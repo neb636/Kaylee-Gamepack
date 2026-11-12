@@ -1742,25 +1742,10 @@
     "text": "Sawasdee ka! Hold on tight!",
     "voice": "pelican"
   },
-  "Put your hoof in the water!",
-  "Touch the water by the boat!",
-  "Click the water by the boat!",
   "Flying fish!",
   {
     "text": "Whoa! We flew!",
     "voice": "nick"
-  },
-  {
-    "text": "Hey! I'm all wet!",
-    "voice": "ji"
-  },
-  {
-    "text": "Splash! Ha ha!",
-    "voice": "ji"
-  },
-  {
-    "text": "Not again!",
-    "voice": "ji"
   },
   {
     "text": "Beep beep!",
@@ -2017,6 +2002,10 @@
   {
     "text": "Round and round! I'm dizzy!",
     "voice": "nick"
+  },
+  {
+    "text": "Hey! I'm all wet!",
+    "voice": "ji"
   },
   {
     "text": "Oops! Sandy jet ski!",
