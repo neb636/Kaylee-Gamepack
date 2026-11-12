@@ -1,0 +1,729 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "nan.salt.story",
+  "title": "Thailand › Nan › Salt › Story",
+  "intro": "Pa Kluea's story (salt/story.ts, plan: thailand/nan-salt-story.md): the village dinner is tonight and nobody has any salt. The cooks: Lung Kwai the buffalo (noodle soup), Pa Kai the hen (salty eggs), Yai Nak the otter grandma (grilled fish).",
+  "page": "thailand-nan-salt-story.html",
+  "audio": "thailand-nan-salt-story.mp3",
+  "lines": 32,
+  "seconds": 84,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "nan.salt.story.hello",
+      "text": "Sawasdee ka! I'm Pa Kluea. I make the salt!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.salt.story.puddle",
+      "text": "Blehh! My soup tastes like puddle water!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.salt.story.eggs",
+      "text": "Bawk! My salty eggs aren't salty!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.salt.story.fish",
+      "text": "And my fish is so... plain.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.salt.story.empty",
+      "text": "Oh no! My salt jar is empty!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.salt.story.little",
+      "text": "When I was little, my grandma made the salt.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.salt.story.dusk",
+      "text": "It's dinner time! Quick, salt carrier!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.salt.story.thanks",
+      "text": "Thank you, salt carrier! The best dinner ever!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.salt.story.hint.touch",
+      "text": "Hold your finger over the food!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.salt.story.fact",
+      "text": "Salt keeps eggs and fish yummy!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "hello"
+      ],
+      "text": "Sawasdee ka! I'm Pa Kluea. I make the salt!",
+      "voice": "saltaunty",
+      "key": "nan.salt.story.hello",
+      "part": "nan › salt › story",
+      "when": "The way in.",
+      "ms": 4992,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        0,
+        4.94
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "calling"
+      ],
+      "text": "Pa Kluea! Pa Kluea!",
+      "voice": "kwai",
+      "key": "nan.salt.story.calling",
+      "part": "nan › salt › story",
+      "when": "",
+      "ms": 2784,
+      "flags": [],
+      "span": [
+        5.29,
+        8.02
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "puddle"
+      ],
+      "text": "Blehh! My soup tastes like puddle water!",
+      "voice": "kwai",
+      "key": "nan.salt.story.puddle",
+      "part": "nan › salt › story",
+      "when": "",
+      "ms": 5568,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        8.37,
+        13.87
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "eggs"
+      ],
+      "text": "Bawk! My salty eggs aren't salty!",
+      "voice": "kai",
+      "key": "nan.salt.story.eggs",
+      "part": "nan › salt › story",
+      "when": "",
+      "ms": 3528,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        14.22,
+        17.69
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "fish"
+      ],
+      "text": "And my fish is so... plain.",
+      "voice": "nak",
+      "key": "nan.salt.story.fish",
+      "part": "nan › salt › story",
+      "when": "",
+      "ms": 3384,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        18.04,
+        21.37
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "empty"
+      ],
+      "text": "Oh no! My salt jar is empty!",
+      "voice": "saltaunty",
+      "key": "nan.salt.story.empty",
+      "part": "nan › salt › story",
+      "when": "",
+      "ms": 3384,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        21.72,
+        25.04
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "tonight"
+      ],
+      "text": "And the village dinner is tonight!",
+      "voice": "kwai",
+      "key": "nan.salt.story.tonight",
+      "part": "nan › salt › story",
+      "when": "",
+      "ms": 2208,
+      "flags": [],
+      "span": [
+        25.39,
+        27.54
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "little"
+      ],
+      "text": "When I was little, my grandma made the salt.",
+      "voice": "saltaunty",
+      "key": "nan.salt.story.little",
+      "part": "nan › salt › story",
+      "when": "The memory, in the storybook look.",
+      "ms": 3216,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        27.89,
+        31.05
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "carry"
+      ],
+      "text": "And I carried it to every pot!",
+      "voice": "saltaunty",
+      "key": "nan.salt.story.carry",
+      "part": "nan › salt › story",
+      "when": "",
+      "ms": 2808,
+      "flags": [],
+      "span": [
+        31.4,
+        34.14
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "ask"
+      ],
+      "text": "Will you be my salt carrier?",
+      "voice": "saltaunty",
+      "key": "nan.salt.story.ask",
+      "part": "nan › salt › story",
+      "when": "",
+      "ms": 2016,
+      "flags": [],
+      "span": [
+        34.49,
+        36.44
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "yet"
+      ],
+      "text": "Is it salt yet?",
+      "voice": "kwai",
+      "key": "nan.salt.story.yet",
+      "part": "nan › salt › story",
+      "when": "While she makes it: the cooks wait across the road.",
+      "ms": 1392,
+      "flags": [],
+      "span": [
+        36.79,
+        38.12
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "notYet"
+      ],
+      "text": "Not yet! Keep going!",
+      "voice": "saltaunty",
+      "key": "nan.salt.story.notYet",
+      "part": "nan › salt › story",
+      "when": "",
+      "ms": 1920,
+      "flags": [],
+      "span": [
+        38.47,
+        40.32
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "ooh"
+      ],
+      "text": "Ooh! Salt!",
+      "voice": "kai",
+      "key": "nan.salt.story.ooh",
+      "part": "nan › salt › story",
+      "when": "",
+      "ms": 360,
+      "flags": [],
+      "span": [
+        40.67,
+        40.96
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "dusk"
+      ],
+      "text": "It's dinner time! Quick, salt carrier!",
+      "voice": "saltaunty",
+      "key": "nan.salt.story.dusk",
+      "part": "nan › salt › story",
+      "when": "The dinner, at dusk.",
+      "ms": 3192,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        41.31,
+        44.45
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "sprinkle"
+      ],
+      "text": "Sprinkle the salt on the food!",
+      "voice": "sparkle",
+      "key": "nan.salt.story.sprinkle",
+      "part": "nan › salt › story",
+      "when": "",
+      "ms": 2976,
+      "flags": [],
+      "span": [
+        44.8,
+        47.71
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "salted",
+        "0"
+      ],
+      "text": "Aroi mak! Just right!",
+      "voice": "kwai",
+      "key": "nan.salt.story.salted.0",
+      "part": "nan › salt › story › salted",
+      "when": "",
+      "ms": 2424,
+      "flags": [],
+      "span": [
+        49.33,
+        51.7
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "salted",
+        "1"
+      ],
+      "text": "Now my eggs will be salty!",
+      "voice": "kai",
+      "key": "nan.salt.story.salted.1",
+      "part": "nan › salt › story › salted",
+      "when": "",
+      "ms": 2088,
+      "flags": [],
+      "span": [
+        52.05,
+        54.07
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "salted",
+        "2"
+      ],
+      "text": "Yummy fish! Thank you!",
+      "voice": "nak",
+      "key": "nan.salt.story.salted.2",
+      "part": "nan › salt › story › salted",
+      "when": "",
+      "ms": 2088,
+      "flags": [],
+      "span": [
+        54.42,
+        56.45
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "tooSalty",
+        "0"
+      ],
+      "text": "Too salty! Water, please!",
+      "voice": "kwai",
+      "key": "nan.salt.story.tooSalty.0",
+      "part": "nan › salt › story › tooSalty",
+      "when": "",
+      "ms": 2832,
+      "flags": [],
+      "span": [
+        58.07,
+        60.85
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "tooSalty",
+        "1"
+      ],
+      "text": "Bawk! So salty!",
+      "voice": "kai",
+      "key": "nan.salt.story.tooSalty.1",
+      "part": "nan › salt › story › tooSalty",
+      "when": "",
+      "ms": 2088,
+      "flags": [],
+      "span": [
+        61.2,
+        63.22
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "tooSalty",
+        "2"
+      ],
+      "text": "Ooh! My whiskers!",
+      "voice": "nak",
+      "key": "nan.salt.story.tooSalty.2",
+      "part": "nan › salt › story › tooSalty",
+      "when": "",
+      "ms": 2184,
+      "flags": [],
+      "span": [
+        63.57,
+        65.71
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "waiting",
+        "0"
+      ],
+      "text": "My poor soup!",
+      "voice": "kwai",
+      "key": "nan.salt.story.waiting.0",
+      "part": "nan › salt › story › waiting",
+      "when": "",
+      "ms": 1200,
+      "flags": [],
+      "span": [
+        67.33,
+        68.48
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "waiting",
+        "1"
+      ],
+      "text": "Cluck cluck! No salt!",
+      "voice": "kai",
+      "key": "nan.salt.story.waiting.1",
+      "part": "nan › salt › story › waiting",
+      "when": "",
+      "ms": 1872,
+      "flags": [],
+      "span": [
+        68.83,
+        70.64
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "waiting",
+        "2"
+      ],
+      "text": "I'm so hungry, dear.",
+      "voice": "nak",
+      "key": "nan.salt.story.waiting.2",
+      "part": "nan › salt › story › waiting",
+      "when": "",
+      "ms": 1728,
+      "flags": [],
+      "span": [
+        70.99,
+        72.65
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "happy",
+        "0"
+      ],
+      "text": "Slurp! Yum!",
+      "voice": "kwai",
+      "key": "nan.salt.story.happy.0",
+      "part": "nan › salt › story › happy",
+      "when": "",
+      "ms": 1944,
+      "flags": [],
+      "span": [
+        74.27,
+        76.17
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "happy",
+        "1"
+      ],
+      "text": "Bawk bawk!",
+      "voice": "kai",
+      "key": "nan.salt.story.happy.1",
+      "part": "nan › salt › story › happy",
+      "when": "",
+      "ms": 936,
+      "flags": [],
+      "span": [
+        76.52,
+        77.38
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "happy",
+        "2"
+      ],
+      "text": "So yummy, dear!",
+      "voice": "nak",
+      "key": "nan.salt.story.happy.2",
+      "part": "nan › salt › story › happy",
+      "when": "",
+      "ms": 1680,
+      "flags": [],
+      "span": [
+        77.73,
+        79.36
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "thanks"
+      ],
+      "text": "Thank you, salt carrier! The best dinner ever!",
+      "voice": "saltaunty",
+      "key": "nan.salt.story.thanks",
+      "part": "nan › salt › story",
+      "when": "The party.",
+      "ms": 4680,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        80.98,
+        85.6
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "yum"
+      ],
+      "text": "Mmm! Just right!",
+      "voice": "nick",
+      "key": "nan.salt.story.yum",
+      "part": "nan › salt › story",
+      "when": "",
+      "ms": 2324,
+      "flags": [],
+      "span": [
+        85.95,
+        88.27
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "hint",
+        "touch"
+      ],
+      "text": "Hold your finger over the food!",
+      "voice": "sparkle",
+      "key": "nan.salt.story.hint.touch",
+      "part": "nan › salt › story › hint",
+      "when": "",
+      "ms": 4080,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        89.89,
+        93.92
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "hint",
+        "mouse"
+      ],
+      "text": "Click and hold over the food!",
+      "voice": "sparkle",
+      "key": "nan.salt.story.hint.mouse",
+      "part": "nan › salt › story › hint",
+      "when": "",
+      "ms": 2400,
+      "flags": [],
+      "span": [
+        94.27,
+        96.61
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "salt",
+        "story",
+        "fact"
+      ],
+      "text": "Salt keeps eggs and fish yummy!",
+      "voice": "sparkle",
+      "key": "nan.salt.story.fact",
+      "part": "nan › salt › story",
+      "when": "",
+      "ms": 3840,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        98.23,
+        102
+      ]
+    }
+  ]
+}
