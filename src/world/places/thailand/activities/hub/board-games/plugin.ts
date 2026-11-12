@@ -32,7 +32,7 @@ import { cousinFace, kayleeFace, pieceFace } from './faces'
 import { COUSINS, cousinUnicorn, GAMES, UNICORNS, type CousinId, type GameId, type UnicornColor } from './list'
 import { pawnParts, Piece, unicornParts } from './pieces'
 import { FloatingStage, onStage, STAGE_LAYER } from './stage'
-import { CANDY_FINISH, candyDraw, cardToken, newDeck, type Card, type Deck } from './rules/candy'
+import { CANDY_FINISH, candyDraw, cardToken, newDeck, parseCard, type Card, type Deck } from './rules/candy'
 import { chutesRoll } from './rules/chutes'
 import { makeDie, other, startTurns, type Step, type Turns, type Who } from './rules/turns'
 import { unicornRoll, UNICORN_END } from './rules/unicorn'
@@ -598,6 +598,7 @@ export class TablePlugin implements HousePlugin {
         if (token !== this.token) return
         // The card shows big over the table (the Hub), the space it means glows.
         this.card = s.card
+        if (parseCard(s.card)?.landmark) this.tell('candy:picture', L.games.picture)
         this.emit()
         sfx.plink()
         return

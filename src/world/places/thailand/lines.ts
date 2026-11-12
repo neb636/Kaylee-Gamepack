@@ -82,6 +82,8 @@ export const L = {
       candy: onDevice('Tap the cards! Hop to that color!', 'Click the cards! Hop to that color!'),
       chutes: onDevice('Tap the die! Ladders up, slides down!', 'Click the die! Ladders up, slides down!'),
     },
+    // When the first picture card is revealed (once a visit), while its matching space glows.
+    picture: 'Go to the matching sweet—even backwards!',
     // The first time a unicorn rolls a 4 and naps (once a visit).
     nap: 'A four! Time for a little nap.',
     // Her first win in a visit; after that the cousin says well done (without a cousin, Sparkle's others in turn).
