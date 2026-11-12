@@ -4,6 +4,7 @@ import { GameFrame } from './shell/GameFrame'
 import { Playground } from './shell/Playground'
 import { Splash } from './shell/Splash'
 import { World } from './world/World'
+import { ErrorCard } from './shell/ErrorCard'
 import { HalloweenMusic } from './shell/HalloweenMusic'
 
 export default function App() {
@@ -13,7 +14,7 @@ export default function App() {
 
   return <>
     <HalloweenMusic started={started} route={route} />
-    {started ? <StartedApp route={route} /> : <Splash onStart={() => setStarted(true)} />}
+    {started ? <ErrorCard><StartedApp route={route} /></ErrorCard> : <Splash onStart={() => setStarted(true)} />}
   </>
 }
 
