@@ -40,6 +40,7 @@ import { ELEPHANT, flat, PHUKET, PLACES, THAILAND, type LonLat } from '../outlin
 import { wearing } from '../packing'
 import { buildItem, buildSuitcase } from '../props'
 import { buildArrival, type Arrival } from './krabi'
+import { cabinBed, krabiBed, planeSfx } from './plane-sounds'
 import { Stage, type AnchorSpot, type LegEvents } from './stage'
 
 export type FlySection = 'takeoff' | 'fly' | 'land'
@@ -180,6 +181,8 @@ export class PlaneRide extends Stage {
   private pace = 1
   /** Landed in Nan and off to the Nan map. */
   private off = false
+  /** Stops the cabin's hum (off the plane). */
+  private stopCabin: () => void = () => {}
 
   constructor(renderer: WebGLRenderer, protected events: Ev, start: FlySection, private packed: string[], private route: { from: LonLat; to: LonLat } = { from: PLACES.bangkok, to: PLACES.krabi }, cap = FLIGHT_S, private fork: KrabiFork = 'pier', private landing: Landing = 'krabi', ashore = false) {
     super(renderer, events)
@@ -223,6 +226,9 @@ export class PlaneRide extends Stage {
       this.parts.belt.visible = true
     }
     this.place()
+    // The cabin's hum, the whole flight (off the plane it stops, and Krabi's roadside starts: toKrabi).
+    this.bag.add({ dispose: () => this.stopCabin() })
+    if (!ashore || this.landing !== 'krabi') this.stopCabin = cabinBed()
     // Already off the plane (Krabi from the Thailand map): the first frame is the arrivals arch and the songthaew, with
     // no cabin, no flash and no landing line before it.
     if (ashore && this.landing === 'krabi') {
@@ -610,12 +616,12 @@ export class PlaneRide extends Stage {
       case 'window':
         this.shade.down = !this.shade.down
         this.counts.shades++
-        sfx.fwip()
+        planeSfx.shade()
         this.checkNap()
         return
       case 'tray':
         this.trayOpen = !this.trayOpen
-        sfx.thump()
+        planeSfx.tray()
         return
       case 'call':
         this.call()
@@ -623,14 +629,14 @@ export class PlaneRide extends Stage {
       case 'light':
         this.lightOn = !this.lightOn
         this.counts.lights++
-        sfx.pop()
+        planeSfx.light()
         this.checkNap()
         return
       case 'vent':
         // Whoosh: the air blows her mane back.
         this.ventT = 0
         this.counts.vents++
-        sfx.whir()
+        planeSfx.vent()
         k.react('wiggle')
         return
       case 'screen':
@@ -681,7 +687,7 @@ export class PlaneRide extends Stage {
         k.react('wave')
         return
       case 'songthaew':
-        sfx.toot()
+        planeSfx.horn()
         return
     }
   }
@@ -690,17 +696,17 @@ export class PlaneRide extends Stage {
     this.belt = on
     this.parts.belt.visible = on
     this.counts.belts++
-    sfx.latch()
+    planeSfx.buckle()
     this.riders.kaylee.react('wiggle')
   }
 
   /** Ding: the flight attendant rolls her trolley up the aisle with juice and a cookie (more and more). */
   private call() {
     this.callGlow = 0
-    sfx.callDing()
+    planeSfx.call()
     if (!this.trayOpen) {
       this.trayOpen = true
-      sfx.thump()
+      planeSfx.tray()
     }
     this.attendant.queue++
   }
@@ -853,12 +859,16 @@ export class PlaneRide extends Stage {
       this.alt = CRUISE - (CRUISE - 2.2) * (1 - (1 - c) ** 2)
       tilt = 0.06 * bell(c)
       this.runwayDashes.position.x = 0
+      // The landing gear comes down halfway there.
+      if (this.secT >= DESCEND_S * 0.55 && this.secT - fdt < DESCEND_S * 0.55) planeSfx.gear()
       if (c >= 1 && this.touchdown < 0) this.touchdown = 0
       if (this.touchdown >= 0) {
         this.touchdown += fdt
         const b = this.touchdown
         if ((b < 0.05 || Math.abs(b - 0.45) < fdt) && b < 0.5) {
-          sfx.thump()
+          // The wheels touch down (squeak, bump), then the second bump and the rollout along the runway.
+          if (b < 0.05) planeSfx.touchdown()
+          else planeSfx.rollout()
           this.turb = 0.6
         }
         lean = 0.1 * clamp(1 - b / 2.5)
@@ -866,6 +876,7 @@ export class PlaneRide extends Stage {
           this.cheered = true
           sounds.sparkle()
           this.clap = 0
+          planeSfx.clap()
           for (const id of WHO) this.riders[id].react('hop')
           this.events.say(this.landing === 'nan' ? L.nan.trip.landed : L.trip.plane.krabi)
         }
@@ -997,7 +1008,6 @@ export class PlaneRide extends Stage {
         r.armL.rotation.set(-1.15, 0, -0.25 - 0.35 * k)
         r.armR.rotation.set(-1.15, 0, 0.25 + 0.35 * k)
       }
-      if (on && Math.floor((this.clap * 14) / Math.PI) !== Math.floor(((this.clap - dt) * 14) / Math.PI)) sounds.pop()
       if (!on) this.clap = -1
     }
   }
@@ -1062,6 +1072,7 @@ export class PlaneRide extends Stage {
     this.secT = 0
     this.events.section(s)
     if (s === 'land') {
+      planeSfx.chime()
       this.events.say(L.trip.plane.land)
       if (this.view !== 'cabin') this.setView('cabin')
     }
@@ -1098,6 +1109,8 @@ export class PlaneRide extends Stage {
   /** Off the plane: the family on the songthaew's bench at the arrivals arch, the suitcase across from them. (In Nan
    *  the trip goes on to the Nan map.) */
   private toKrabi(flash = true) {
+    this.stopCabin()
+    this.stopCabin = () => {}
     if (this.landing === 'nan') {
       if (!this.off) this.events.done('map')
       this.off = true
@@ -1105,6 +1118,7 @@ export class PlaneRide extends Stage {
     }
     this.drive = 0
     if (flash) this.events.flash?.()
+    this.bag.add({ dispose: krabiBed() })
     const st = this.arrival.songthaew
     for (const id of WHO) {
       const c = this.riders[id]
@@ -1136,9 +1150,10 @@ export class PlaneRide extends Stage {
     st.root.position.x = this.arrival.curbX + go * go * 1.6
     for (const w of st.wheels) w.rotation.z = (-go * go * 1.6) / 0.3
     st.body.position.y = go > 0 ? Math.abs(Math.sin(go * 9)) * 0.03 : 0
+    planeSfx.engine(go > 0)
     if (d > 0.7 && d - dt <= 0.7) {
-      sfx.toot()
-      sfx.putt()
+      planeSfx.horn()
+      planeSfx.pullaway()
       this.riders.nick.react('wave')
       this.riders.kaylee.react('wave')
     }
@@ -1154,8 +1169,8 @@ export class PlaneRide extends Stage {
     const a = this.arrival
     const d = this.drive
     if (d > 0.7 && d - dt <= 0.7) {
-      sfx.toot()
-      sfx.putt()
+      planeSfx.horn()
+      planeSfx.pullaway()
       this.riders.kaylee.react('wave')
     }
     // Down the road, slowing to a stop where the side road turns off.
@@ -1198,6 +1213,7 @@ export class PlaneRide extends Stage {
     }
     for (const w of st.wheels) w.rotation.z = -rolled / 0.3
     const going = moving || (this.forkGo !== null && this.forkT > 0)
+    planeSfx.engine(going)
     st.body.position.y = going ? Math.abs(Math.sin(d * 9)) * 0.03 : 0
     const wind = going ? 0.8 : 0
     this.riders.kaylee.setWind(wind)
@@ -1210,7 +1226,7 @@ export class PlaneRide extends Stage {
     this.events.asking?.(false)
     this.forkGo = go
     this.forkT = 0
-    sfx.toot()
+    planeSfx.horn()
     this.riders.kaylee.react('hop')
     this.riders.nick.react('wave')
     this.events.say(L.bay.pai)

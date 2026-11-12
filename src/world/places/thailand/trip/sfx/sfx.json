@@ -1,0 +1,18 @@
+[
+ { "id": "land-cabin", "label": "the cabin hum (loop)", "prompt": "Inside a passenger airplane cabin during a calm flight: soft steady jet engine hum and gentle air hiss, smooth and cosy. Seamless loop, no music, no voices, no announcements.", "seconds": 15, "loop": true },
+ { "id": "land-chime", "label": "the seatbelt sign chime", "prompt": "A single soft airplane cabin seatbelt sign chime, gentle two-tone bing-bong. Clean, no music, no voices.", "seconds": 1.5, "influence": 0.7 },
+ { "id": "land-buckle", "label": "the seatbelt buckle", "prompt": "An airplane seatbelt metal buckle clicking shut, one crisp click. Close up, clean, no music, no voices.", "seconds": 0.8, "influence": 0.7 },
+ { "id": "land-gear", "label": "the landing gear comes down", "prompt": "Airplane landing gear lowering heard from inside the cabin: a soft hydraulic whir then a gentle deep clunk. No music, no voices.", "seconds": 2.5 },
+ { "id": "land-touchdown", "label": "the wheels touch down", "prompt": "Airplane wheels touching down on the runway heard from inside the cabin: a quick tyre squeak and a soft bump. Gentle, not scary, no music, no voices.", "seconds": 1.5 },
+ { "id": "land-rollout", "label": "rolling down the runway", "prompt": "Airplane slowing down on the runway after landing, heard from inside the cabin: engines whooshing softly then easing down, wheels rumbling. Gentle, no music, no voices.", "seconds": 3.5 },
+ { "id": "land-clap", "label": "everyone claps", "prompt": "A small group of happy airplane passengers clapping their hands together for a couple of seconds. Clapping only, no cheering, no voices, no music.", "seconds": 2.5 },
+ { "id": "land-shade", "label": "the window shade", "prompt": "A plastic airplane window shade sliding smoothly, a short soft fwip slide ending with a tiny click. Close up, no music, no voices.", "seconds": 1 },
+ { "id": "land-tray", "label": "the tray table", "prompt": "An airplane tray table folding down and clacking gently into place, one soft plastic clack. Close up, no music, no voices.", "seconds": 0.8, "influence": 0.7 },
+ { "id": "land-light", "label": "the reading light", "prompt": "An airplane overhead reading light button pressed, one small soft plastic click. Close up, no music, no voices.", "seconds": 0.5, "influence": 0.7 },
+ { "id": "land-vent", "label": "the air vent", "prompt": "An airplane overhead air vent twisted open, a soft cool whoosh of air blowing out then fading. No music, no voices.", "seconds": 2 },
+ { "id": "land-call", "label": "the call button", "prompt": "An airplane flight attendant call button, one soft clear high ding. Clean, no music, no voices.", "seconds": 1, "influence": 0.7 },
+ { "id": "krabi-street", "label": "Krabi's street (loop)", "prompt": "A sunny tropical roadside in southern Thailand outside a small airport: tropical birds chirping, soft cicadas, a warm breeze in palm leaves, a scooter far away now and then. Calm and happy. Seamless loop, no music, no voices.", "seconds": 15, "loop": true },
+ { "id": "krabi-horn", "label": "the songthaew's horn", "prompt": "Two short friendly beeps of a small pickup truck taxi horn, beep beep. Recorded outdoors, realistic, cheerful, no music, no voices.", "seconds": 1, "influence": 0.7 },
+ { "id": "krabi-pullaway", "label": "the songthaew pulls away", "prompt": "A small diesel pickup truck taxi pulling away from the curb, engine revving up softly and driving off down the road. Clean close recording, no music, no voices.", "seconds": 3.5 },
+ { "id": "krabi-engine", "label": "the songthaew's engine (loop)", "prompt": "A small diesel pickup truck engine idling steadily, gentle chugging rumble, heard from the back bench. Seamless loop, no music, no voices.", "seconds": 4, "loop": true }
+]
