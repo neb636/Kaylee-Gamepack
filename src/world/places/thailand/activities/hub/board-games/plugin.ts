@@ -647,6 +647,7 @@ export class TablePlugin implements HousePlugin {
         this.phase = 'special'
         this.emit()
         const b = board as ChutesBoard
+        b.highlight(s.from, s.to)
         const p = pieces[s.who]
         const climb = s.kind === 'ladder'
         const pts = climb ? b.ladderPath(s.from, s.to) : b.slidePath(s.from)
@@ -667,6 +668,7 @@ export class TablePlugin implements HousePlugin {
         if (token !== this.token) return
         const at = this.top.localToWorld(b.spot(s.to, s.who, false))
         this.sparkle.burst(at.x, at.y + 0.03, at.z, climb ? 24 : 12, 0.7, 1, 0.018)
+        b.markSpace(null)
         if (climb) sfx.boing()
         else sfx.haha()
         this.layout(false)
@@ -789,6 +791,9 @@ export class TablePlugin implements HousePlugin {
       const at = this.top.localToWorld(this.board!.castleTop())
       this.sparkle.burst(at.x, at.y, at.z, 16, 0.7, 1, 0.02)
       sfx.chime()
+    } else if (id?.startsWith('trip:table:chutes:') && this.board instanceof ChutesBoard) {
+      this.board.poke(id)
+      sfx.boing()
     } else if (id?.startsWith('trip:table:candy:') && this.board instanceof CandyBoard) {
       this.board.poke(id)
       sfx.boing()

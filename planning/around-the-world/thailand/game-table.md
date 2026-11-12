@@ -515,3 +515,14 @@ Built: a larger strawberry-and-vanilla cake base, winding raised candy tiles wit
 Review: before/after reel, special-card forward/backward demos and the existing win ceremony. Deep links for both directions are in hub sections. Next: your visual feedback and Kaylee's playtest; Chutes and Ladders can get its own distinct rebuild after this one.
 
 Validation: `npm run verify` passes with the recorded picture line (2.7 s). Real deck clicks resolve forward/backward/same-landmark/win on iPad Safari and desktop. Safari portrait/landscape layouts on iPad and iPhone have no overflow or console errors; deck targets are 82–170 px. Fresh-eyes obstruction fix lowers chocolate falls without hiding a trail tile. Review includes the before/after reel and the game-table table read with the new line marked. The existing ffmpeg setup now has a bounded download and Ubuntu fallback after the static host failed on the recording runner.
+
+
+### Chutes and Ladders playground rebuild — 2026-11-12
+
+Your direction: give Chutes and Ladders the same depth and visual rebuild as Candy Land, on its own PR. Built from current main after Candy Land merged.
+
+Built: six rising playground balconies with cream edging, round numbered pads, direction chevrons and little connecting stairs; golden raised ladders; pink and lavender open slide channels; a star lookout at 36. Ladders and chutes use the same 3D paths for their geometry and travelling pawns. Both ends pulse during a ride; poking a ladder or chute highlights its connected pads. Cancellation clears those highlights. The 36-space rules and all recorded lines stay unchanged. No new packages.
+
+QA: each of the three ladders and three slides has a direct section link and robot motion scenario. Before/after reel includes the first climb and purple slide, plus the final star. Next: your visual feedback and Kaylee's playtest of the raised playground.
+
+Validation completed: all six equipment routes plus the finish pass real die clicks on iPad Safari and desktop. Sampled paths meet their exact numbered-pad endpoints and stay above each terrace and pad. Both phone orientations and both iPad orientations remain readable, with a visible large die target. The final polish moves 27 away from the purple slide. No spoken lines changed.

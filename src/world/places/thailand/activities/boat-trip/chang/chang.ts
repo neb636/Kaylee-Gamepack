@@ -37,7 +37,7 @@ import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import type { Shot } from '../../../../../engine3d/camera'
 import { photoCamera, snapPhoto } from '../../../../../engine3d/photo'
 import { L } from '../../../lines'
-import { sfx } from '../../../sfx'
+import { cafeLife, changSfx as sfx, jungleBed } from '../sounds'
 import { wearing } from '../../../trip/packing'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
 import type { PoseKind } from '../bay/part'
@@ -250,6 +250,8 @@ export class Chang extends Stage {
   ) {
     super(renderer, events)
     const { scene, bag } = this
+    // The jungle's birds and cicadas, everywhere at Baan Chang.
+    bag.add({ dispose: jungleBed() })
     scene.background = new Color('#BFE6FF')
     this.rig.fov = 32
     this.at = section
@@ -864,7 +866,7 @@ export class Chang extends Stage {
     if (id === 'milk') {
       // Kaylee has a sip herself.
       this.milk.poke()
-      sfx.slurp()
+      sfx.sip()
       this.riders.kaylee.react('wiggle')
       return
     }
@@ -910,6 +912,7 @@ export class Chang extends Stage {
     this.stuck()
     if (this.area === 'entry') return this.stepEntry(dt, t)
     if (this.at === 'drinks') {
+      cafeLife()
       this.cafe.step(dt)
       const watch = this.cafe.watch(tmp)
       for (const c of Object.values(this.riders)) {

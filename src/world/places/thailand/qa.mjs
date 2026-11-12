@@ -44,9 +44,16 @@ export const screens = [
     name: `thailand-${to.replace(/[?=&,;]/g, '-')}`.slice(0, 60),
     hash: `#/world/thailand/hub/${to}`,
     reset: true,
-    wait: to.includes('rolls=6') || to.includes('rolls=5') || to.includes('deck=') ? 1500 : to.includes('rolls=2') ? 6500 : 1800,
+    wait: to.startsWith('chutes') ? 3200 : to.includes('rolls=6') || to.includes('rolls=5') || to.includes('deck=') ? 1500 : to.includes('rolls=2') ? 6500 : 1800,
     ...(to.includes('rolls=6') || to.includes('rolls=5') ? { act: async (page) => (await page.locator('[data-anchor="trip:table:die"]').click({ force: true }), await page.waitForTimeout(5000)) } : {}),
     ...(to.includes('deck=') ? { act: async (page) => (await page.locator('[data-anchor="trip:table:deck"]').click({ force: true }), await page.waitForTimeout(6000)) } : {}),
+    ...(to.startsWith('chutes') ? { act: async (page) => {
+      await settleChutes(page)
+      if (to.includes('rolls=5')) {
+        await page.locator('[data-anchor="trip:table:die"]').click()
+        await page.waitForFunction(() => window.__thaiHouseQA?.().table?.phase === 'finished')
+      }
+    } } : {}),
   })),
   // The family photo (everyone, then a few alone on the turntable, in the three-quarter view it rests on first).
   { name: 'thailand-family', hash: '#/world/thailand/hub/family', reset: true, wait: 1800 },
@@ -887,6 +894,18 @@ motion.push(
 // Agong's house (Thailand, 3D): Kaylee's hop-trot across the floor, hopping up the stairs (the camera follows her to
 // the other floor), and the mattress bounce getting higher until she flops down. Taps go through the house's tap
 // targets ([data-anchor]), like a finger.
+// Wait for the board transition, then enough rendered frames for the arrival camera to settle.
+// A wall-clock delay alone can photograph empty sky on a busy GPU.
+async function settleChutes(page) {
+  await page.locator('[data-anchor="trip:table:die"]').waitFor({ state: 'visible', timeout: 30000 })
+  await page.waitForFunction(() => window.__thaiHouseQA?.().table?.stage && !window.__thaiHouseQA?.().table?.curtain)
+  await page.evaluate(() => new Promise(resolve => {
+    let frames = 0
+    function next() { if (++frames === 90) resolve(); else requestAnimationFrame(next) }
+    next()
+  }))
+}
+
 const thaiHouse = (name, seconds, section, taps) => ({
   name,
   seconds,
@@ -895,6 +914,7 @@ const thaiHouse = (name, seconds, section, taps) => ({
     await page.waitForTimeout(600)
     await page.waitForFunction(() => window.__thaiHouseQA?.().mode, null, { timeout: 20000 })
     await page.waitForTimeout(800)
+    if (section.startsWith('chutes')) await settleChutes(page)
   },
   act: async (page) => {
     for (const [what, wait] of taps) {
@@ -960,6 +980,11 @@ motion.push(
   thaiHouse('candy-finish', 6, 'candy?me=31&them=28&deck=orange2', [['trip:table:deck', 5500]]),
   thaiHouse('table-candy', 7, 'candy?me=10&them=8&deck=blue2,green', [['trip:table:deck', 6500]]),
   // Chutes and Ladders (greybox 3): up the ladder from 2 to 14, and whee, down the slide from 33 to 22.
+  thaiHouse('chutes-ladder-middle', 7, 'chutes?me=6&them=4&rolls=2,1', [['trip:table:die', 6500]]),
+  thaiHouse('chutes-ladder-high', 7, 'chutes?me=16&them=10&rolls=2,1', [['trip:table:die', 6500]]),
+  thaiHouse('chutes-slide-low', 7, 'chutes?me=13&them=10&rolls=2,1', [['trip:table:die', 6500]]),
+  thaiHouse('chutes-slide-long', 7, 'chutes?me=33&them=25&rolls=2,1', [['trip:table:die', 6500]]),
+  thaiHouse('chutes-win', 6, 'chutes?me=33&them=30&rolls=5', [['trip:table:die', 5500]]),
   thaiHouse('table-ladder', 6, 'chutes?rolls=2,1', [['trip:table:die', 5500]]),
   thaiHouse('table-slide', 6, 'chutes?me=31&them=25&rolls=2,1', [['trip:table:die', 5500]]),
 )

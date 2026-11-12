@@ -21,7 +21,7 @@ import { merge, P, solid } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
 import { L } from '../../../lines'
 import { Floaters } from '../../mall-trip/games/cafe/fx'
-import { cafeSfx as sfx } from '../../mall-trip/games/cafe/sounds'
+import { changCafeSfx as sfx } from '../sounds'
 import { buildGlass, buildStraw, CHOC, chocBottle, coffeePot, COFFEE, counterBell, fillOf, iceBowl, iceCube, MILK_WHITE, milkJug, NOZZLE, pourInto, spoon, SPOON_KNOB, SPOUT, type Drink, type Glass } from './drink'
 import { BELL, CAFE_FAMILY, CAFE_FAMILY_TALL, CAFE_HOLD_Z, CAFE_SHOT, DAD_GLASS, DAD_SIP, GLASS, HER_GLASS, STRAW_COLORS, TOOLS_TALL, TOOLS_WIDE, TRAY, type StrawColor, type ToolId } from './layout'
 import { buildCafe } from './yard'
@@ -368,7 +368,6 @@ export class Cafe {
       cube.removeFromParent()
       gs.hop = 0
       sfx.plunk()
-      sfx.clink()
       if (gs.ice < 3) gs.ice++
       else this.drops.burst(gs.g.root.position.clone().add(tmp.set(0, GLASS.h, 0)), 6, 0.4, 1.2, 0.5, 0.025, ['#DDF3FF'])
     })
