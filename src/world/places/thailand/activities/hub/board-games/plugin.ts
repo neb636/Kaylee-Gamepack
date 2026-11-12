@@ -27,8 +27,8 @@ import { ChutesBoard } from './boards/chutes'
 import { UnicornBoard } from './boards/unicorn'
 import { CardDeck } from './deck'
 import { Die } from './die'
-import { cousinFace, kayleeFace } from './faces'
-import { COUSINS, cousinUnicorn, GAMES, type CousinId, type GameId, type UnicornColor } from './list'
+import { cousinFace, kayleeFace, pieceFace } from './faces'
+import { COUSINS, cousinUnicorn, GAMES, UNICORNS, type CousinId, type GameId, type UnicornColor } from './list'
 import { pawnParts, Piece, unicornParts } from './pieces'
 import { CANDY_FINISH, candyDraw, cardToken, newDeck, type Card, type Deck } from './rules/candy'
 import { chutesRoll } from './rules/chutes'
@@ -65,6 +65,8 @@ export interface TableView {
   /** She's at the table with its picker or a game open. */
   open: boolean
   picking: boolean
+  /** While picking: the games and cousins (`game`), or, after ▶ in the Unicorn game, her unicorn's color (`color`). */
+  step: PickStep
   phase: Phase
   game: GameId
   vs: CousinId
@@ -86,7 +88,11 @@ export interface TableView {
   preview: boolean
   /** Pictures of their real 3D faces (JPEG data URLs), once they've been taken. */
   faces: Partial<Record<CousinId | 'kaylee', string>>
+  /** Pictures of the four unicorn pieces (the color step's buttons), once they've been taken. */
+  pieceFaces: Partial<Record<UnicornColor, string>>
 }
+
+export type PickStep = 'game' | 'color'
 
 export interface TableEvents {
   onView(v: TableView): void
@@ -103,8 +109,9 @@ let rollLine = 0
 let wins = 0
 
 export interface TableStart {
-  /** Open from a board-game link: the picker (`table`) or a game, with the link's state. */
-  section: 'table' | GameId
+  /** Open from a board-game link: the picker (`table`), the Unicorn game's color step (`colors`) or a game, with the
+   *  link's state. */
+  section: 'table' | 'colors' | GameId
   vs: CousinId
   game: GameId
   piece: UnicornColor
@@ -136,6 +143,7 @@ export class TablePlugin implements HousePlugin {
   private idle: Object3D | undefined
   private open = false
   private picking = false
+  private step: PickStep = 'game'
   private wantPicker = false
   private phase: Phase = 'off'
   private game: GameId
@@ -167,6 +175,7 @@ export class TablePlugin implements HousePlugin {
   /** The cousin hopping over to the stool: from where, how far along (-1: not hopping). */
   private comeIn: { from: Vector3; t: number; seatY: number } | null = null
   private faces: Partial<Record<CousinId | 'kaylee', string>> = {}
+  private pieceFaces: Partial<Record<UnicornColor, string>> = {}
 
   constructor(
     private events: TableEvents,
@@ -216,6 +225,12 @@ export class TablePlugin implements HousePlugin {
         this.picking = true
         this.phase = 'picking'
         this.tell('pick', L.games.pick, 0.8)
+      } else if (s.section === 'colors') {
+        this.picking = true
+        this.phase = 'picking'
+        this.game = 'unicorn'
+        this.step = 'color'
+        this.tell('color', L.games.color, 0.8)
       } else {
         this.seat(s.vs, true)
         this.begin({ me: s.me, them: s.them, turn: s.turn, rolls: s.rolls, deck: s.deck })
@@ -228,24 +243,32 @@ export class TablePlugin implements HousePlugin {
   // ---------------------------------------------------------------- what the Hub's buttons do
 
   chooseGame(g: GameId) {
-    if (!this.picking || !this.offered.includes(g)) return
+    if (!this.picking || this.step !== 'game' || !this.offered.includes(g)) return
     this.game = g
     this.emit()
   }
   chooseCousin(c: CousinId) {
-    if (!this.picking || !COUSINS.includes(c)) return
+    if (!this.picking || this.step !== 'game' || !COUSINS.includes(c)) return
     this.vs = c
     this.emit()
   }
   choosePiece(c: UnicornColor) {
-    if (!this.picking) return
+    if (!this.picking || this.step !== 'color') return
     this.piece = c
     this.emit()
   }
-  /** Play: the chosen cousin comes and sits, the board goes out, Kaylee's turn. */
+  /** Play: in the Unicorn game, first her unicorn's color (a second step, with its own ▶); then the chosen cousin comes
+   *  and sits, the board goes out, Kaylee's turn. */
   play() {
     if (!this.picking || !this.offered.includes(this.game)) return
+    if (this.game === 'unicorn' && this.step === 'game') {
+      this.step = 'color'
+      this.emit()
+      this.tell('color', L.games.color, 0.3)
+      return
+    }
     this.picking = false
+    this.step = 'game'
     this.seat(this.vs, false)
     this.begin({ me: 0, them: 0, turn: 0, rolls: [], deck: [] })
     this.house.snapCamera()
@@ -257,10 +280,12 @@ export class TablePlugin implements HousePlugin {
     this.begin({ me: 0, them: 0, turn: 0, rolls: [], deck: [] })
     this.emit()
   }
-  /** Back to the picture cards (another game or cousin). The cousin stays seated until Play. */
+  /** Back to the picture cards (another game or cousin), from a game or from the color step. The cousin stays seated
+   *  until Play. */
   games() {
     if (!this.open) return
     this.cancel()
+    this.step = 'game'
     this.picking = true
     this.phase = 'picking'
     this.showBoard(false)
@@ -273,6 +298,7 @@ export class TablePlugin implements HousePlugin {
     const was = this.seated
     this.open = false
     this.picking = false
+    this.step = 'game'
     this.phase = 'off'
     this.showBoard(false)
     this.unseat()
@@ -673,7 +699,7 @@ export class TablePlugin implements HousePlugin {
     this.events.onView(this.view())
   }
   view(): TableView {
-    return { open: this.open, picking: this.picking, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, turn: this.shown, winner: this.state.winner, pos: [this.state.pos[0], this.state.pos[1]], card: this.card, rolls: this.roll.left(), deck: this.scriptedDeck ? this.deck.draw.map(cardToken) : [], offered: this.offered, preview: this.opts.preview, faces: this.faces }
+    return { open: this.open, picking: this.picking, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, turn: this.shown, winner: this.state.winner, pos: [this.state.pos[0], this.state.pos[1]], card: this.card, rolls: this.roll.left(), deck: this.scriptedDeck ? this.deck.draw.map(cardToken) : [], offered: this.offered, preview: this.opts.preview, faces: this.faces, pieceFaces: this.pieceFaces, step: this.step }
   }
 
   // ---------------------------------------------------------------- the house's hooks
@@ -808,6 +834,13 @@ export class TablePlugin implements HousePlugin {
       if (next) {
         this.faces = { ...this.faces, [next]: next === 'kaylee' ? kayleeFace(this.house) : cousinFace(this.house, next) }
         this.emit()
+      } else {
+        // Then the unicorn pieces for the color step, also one a frame.
+        const c = UNICORNS.find((u) => !this.pieceFaces[u])
+        if (c) {
+          this.pieceFaces = { ...this.pieceFaces, [c]: pieceFace(this.house, c) }
+          this.emit()
+        }
       }
     }
     // The cousin hopping over to their stool (three little hops, then up onto it).
@@ -871,7 +904,7 @@ export class TablePlugin implements HousePlugin {
 
   qa() {
     return {
-      table: { open: this.open, picking: this.picking, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, me: this.state.pos[0], them: this.state.pos[1], turn: this.shown === 0 ? 'kaylee' : 'cousin', winner: this.state.winner === null ? null : this.state.winner === 0 ? 'kaylee' : 'cousin', token: this.token, die: this.die.value, card: this.card, deck: this.deck.draw.length, discard: this.deck.discard.length },
+      table: { open: this.open, picking: this.picking, step: this.step, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, me: this.state.pos[0], them: this.state.pos[1], turn: this.shown === 0 ? 'kaylee' : 'cousin', winner: this.state.winner === null ? null : this.state.winner === 0 ? 'kaylee' : 'cousin', token: this.token, die: this.die.value, card: this.card, deck: this.deck.draw.length, discard: this.deck.discard.length },
     }
   }
 }

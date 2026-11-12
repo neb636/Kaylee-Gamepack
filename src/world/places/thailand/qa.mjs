@@ -40,7 +40,7 @@ export const screens = [
   })),
   // The game table (game-table.md): the table and the unicorn bag in her room, the picker, the Unicorn Dice Game from
   // the start, midgame (Gan), sharing a space, finished (her win, and a kind loss with Again), Candy Land, and Chutes and Ladders.
-  ...['upstairs?at=game-table', 'table', 'table?vs=gan', 'unicorn', 'unicorn?vs=gan&me=12&them=14', 'unicorn?vs=ken&me=9&them=9', 'unicorn?me=22&them=20&rolls=6', 'unicorn?me=20&them=23&turn=cousin&rolls=2', 'candy', 'candy?vs=ken&me=14&them=17', 'candy?me=31&them=28&deck=orange2', 'chutes', 'chutes?vs=gan&me=13&them=17', 'chutes?me=33&them=30&rolls=5'].map((to) => ({
+  ...['upstairs?at=game-table', 'table', 'table?vs=gan', 'colors', 'colors?vs=gan&piece=lavender', 'unicorn', 'unicorn?vs=gan&me=12&them=14', 'unicorn?vs=ken&me=9&them=9', 'unicorn?me=22&them=20&rolls=6', 'unicorn?me=20&them=23&turn=cousin&rolls=2', 'candy', 'candy?vs=ken&me=14&them=17', 'candy?me=31&them=28&deck=orange2', 'chutes', 'chutes?vs=gan&me=13&them=17', 'chutes?me=33&them=30&rolls=5'].map((to) => ({
     name: `thailand-${to.replace(/[?=&,;]/g, '-')}`.slice(0, 60),
     hash: `#/world/thailand/hub/${to}`,
     reset: true,
@@ -941,7 +941,8 @@ motion.push(
   // then BB rolls; a 4 (her unicorn naps, Ken rolls); and the last roll into the castle.
   // The look and voices (2026-11-11): from the couch in her room she taps the table, sits, the picker opens with the faces; Play,
   // and BB hops over to her stool and says she's in; then the first roll.
-  thaiHouse('table-sit', 14, 'upstairs?at=couch', [['game-table', 4500], ['button:Play', 3800], ['trip:table:die', 5500]]),
+  // Since 2026-11-12, Play in the Unicorn game first opens the color step: she picks the lavender unicorn, then Play.
+  thaiHouse('table-sit', 17, 'upstairs?at=couch', [['game-table', 4500], ['button:Play', 2200], ['button:lavender unicorn', 1000], ['button:Play', 3800], ['trip:table:die', 5500]]),
   // A kind loss: BB rolls into the castle, says she won, and the Again button comes up.
   thaiHouse('table-kind-loss', 6, 'unicorn?me=20&them=23&turn=cousin&rolls=2', [['trip:table:die', 5500]]),
   thaiHouse('table-roll', 7, 'unicorn?rolls=5,3', [['trip:table:die', 6500]]),

@@ -36,7 +36,8 @@ export function cousinUnicorn(vs: CousinId, mine: UnicornColor): UnicornColor {
   return UNICORNS.find((c) => c !== mine && c !== FAVORITE[vs]) ?? 'lavender'
 }
 
-/** The hub sections that are the table (a house opened from one shows every built game). */
-export const TABLE_SECTIONS = ['table', 'unicorn', 'candy', 'chutes'] as const
+/** The hub sections that are the table (a house opened from one shows every built game). `colors`: the Unicorn game's
+ *  second picker step, her unicorn's color. */
+export const TABLE_SECTIONS = ['table', 'colors', 'unicorn', 'candy', 'chutes'] as const
 export type TableSection = (typeof TABLE_SECTIONS)[number]
 export const isTableSection = (s: string): s is TableSection => (TABLE_SECTIONS as readonly string[]).includes(s)
