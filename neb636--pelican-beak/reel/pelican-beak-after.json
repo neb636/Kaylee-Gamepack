@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "pelican-beak-after",
+  "title": "Pelican beak after",
+  "video": "pelican-beak-after.mp4",
+  "gif": "pelican-beak-after.gif",
+  "seconds": 12,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Thailand samet trip snorkel",
+      "where": "#/world/thailand/samet-trip/snorkel?round=story",
+      "seconds": 10,
+      "fps": 40.2,
+      "status": "ok"
+    }
+  ]
+}
