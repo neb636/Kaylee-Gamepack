@@ -18,7 +18,7 @@ import { photoCamera } from '../../../../../engine3d/photo'
 import { PAL } from '../../../../../engine3d/toon'
 import { swell } from '../../../../../engine3d/water'
 import { L } from '../../../lines'
-import { sfx } from '../../../sfx'
+import { villageLife, villageSfx as sfx } from '../sounds'
 import { CARGO } from '../../../trip/vehicles/longtail'
 import type { BoatSection } from '../sections'
 import type { Bay } from './bay'
@@ -245,6 +245,8 @@ export class VillageStop implements BayPart {
     const was = this.here
     const d = this.bay.rides.longtail.d
     this.here = Math.hypot(d.x - (FIELD.x - 8), d.z - FIELD.z) < 52
+    // The stilt village's water under the boards and its wind chime, while she's near it.
+    if (this.here) villageLife()
     if (this.here && !was) {
       this.bay.visit('village')
       this.bay.once('village', L.bay.facts.village)

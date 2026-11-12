@@ -35,7 +35,7 @@ import { applyBands, makeLights, PAL } from '../../../../../engine3d/toon'
 import type { World3D } from '../../../../../engine3d/View3D'
 import { swell, Water } from '../../../../../engine3d/water'
 import { L } from '../../../lines'
-import { sfx } from '../../../sfx'
+import { baySfx as sfx, seaBed } from '../sounds'
 import { Driver } from '../../../../../engine3d/drive'
 import { buildCanoe } from '../../../trip/vehicles/canoe'
 import { buildLongtail, type Longtail } from '../../../trip/vehicles/longtail'
@@ -233,6 +233,8 @@ export class Bay implements World3D {
     private events: BayEvents,
   ) {
     const { scene, bag } = this
+    // The sea all round, the whole time in the bay.
+    bag.add({ dispose: seaBed() })
     const haze = '#DCEFFB'
     scene.background = new Color(PAL.sky)
     scene.fog = new Fog(haze, 150, 560)

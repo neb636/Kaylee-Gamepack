@@ -1,0 +1,367 @@
+[
+ {
+  "id": "bay-sea",
+  "label": "the open sea (loop)",
+  "prompt": "Calm tropical sea around a small wooden boat: gentle waves lapping the hull, a soft breeze, a seagull far away now and then. Peaceful. Seamless loop. No music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "bay-engine",
+  "label": "the longtail's engine (loop)",
+  "prompt": "A small Thai longtail boat engine puttering steadily on calm water, a friendly rattly chug. Seamless loop. No music, no voices.",
+  "seconds": 5,
+  "loop": true
+ },
+ {
+  "id": "bay-rev",
+  "label": "the longtail revs and zooms",
+  "prompt": "A small longtail boat engine revving up quickly and the boat speeding off with water rushing. Fun, not too loud. No music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "bay-splash",
+  "label": "a splash",
+  "prompt": "A wooden boat smacking down on the water with a big friendly splash. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "bay-paddle",
+  "label": "a paddle dips in",
+  "prompt": "A wooden paddle dipping into calm water and pulling, one soft splashy stroke. Close up. No music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "bay-horn",
+  "label": "the tour boat's horn",
+  "prompt": "A big tour boat horn giving two friendly deep toots across the water, soft and warm. No music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "bay-toot",
+  "label": "a little boat's horn",
+  "prompt": "A small fishing boat horn, one short friendly toot. Recorded on the water. No music, no voices.",
+  "seconds": 1,
+  "influence": 0.7
+ },
+ {
+  "id": "bay-creak",
+  "label": "the boat creaks",
+  "prompt": "A wooden boat creaking and rocking as people climb in, soft wood groans and water slaps. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "bay-flutter",
+  "label": "ribbons flutter",
+  "prompt": "Cloth ribbons and little flags fluttering and flapping in a sea breeze. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "bay-shutter",
+  "label": "the camera clicks",
+  "prompt": "A camera shutter click, one crisp clean click. Close up. No music, no voices.",
+  "seconds": 0.5,
+  "influence": 0.7
+ },
+ {
+  "id": "bay-whoosh",
+  "label": "a gust of wind",
+  "prompt": "A short soft gust of sea wind whooshing past. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "bay-thump",
+  "label": "a thump on the boat",
+  "prompt": "A soft thud of something landing on a wooden boat deck. Close up. No music, no voices.",
+  "seconds": 0.6,
+  "influence": 0.6
+ },
+ {
+  "id": "bay-buoy",
+  "label": "a buoy bonks the boat",
+  "prompt": "A floating plastic buoy bumping against a boat, one hollow soft bonk and a little slosh. No music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "bay-eagle",
+  "label": "the sea eagle",
+  "prompt": "A sea eagle's cry far above the water, a clear high gentle call. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "bay-monkey",
+  "label": "the macaques chatter",
+  "prompt": "A little macaque monkey chattering and squeaking playfully. Cute, not aggressive. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "bay-crab",
+  "label": "the crab's claws",
+  "prompt": "A small crab clicking its claws together, tiny clacks. Close up. No music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "bay-duck",
+  "label": "the rubber duck",
+  "prompt": "A rubber duck toy squeaked twice, squeak squeak. Close up. No music, no voices.",
+  "seconds": 0.8,
+  "influence": 0.7
+ },
+ {
+  "id": "bay-scoop",
+  "label": "the net scoops",
+  "prompt": "A fishing net scooping through water and lifting out, splashy swish and drips. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "bay-munch",
+  "label": "a monkey munches",
+  "prompt": "A small monkey munching and crunching a piece of fruit, quick little bites. Close up. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "bay-flop",
+  "label": "a fish flops",
+  "prompt": "A small fish flopping on a wet wooden plank, two wet slaps. No music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "bay-plop",
+  "label": "a plop into the water",
+  "prompt": "A small object plopping into calm water, one round plop. No music, no voices.",
+  "seconds": 0.6,
+  "influence": 0.6
+ },
+ {
+  "id": "village-life",
+  "label": "the stilt village (loop)",
+  "prompt": "A fishing village on stilts over the sea: water lapping under wooden boards, a wind chime, birds, children playing far away with no words. Peaceful. Seamless loop. No music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "village-kick",
+  "label": "a football kick",
+  "prompt": "A foot kicking a football, one solid bouncy thump. No music, no voices.",
+  "seconds": 0.6,
+  "influence": 0.7
+ },
+ {
+  "id": "village-whistle",
+  "label": "the referee's whistle",
+  "prompt": "A referee's whistle, one short cheerful blow, not shrill. No music, no voices.",
+  "seconds": 0.8,
+  "influence": 0.7
+ },
+ {
+  "id": "village-cheer",
+  "label": "everyone cheers",
+  "prompt": "A happy little crowd clapping and cheering hooray for a goal, wordless, joyful. No music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "village-cat",
+  "label": "the village cat",
+  "prompt": "A friendly cat giving a short soft meow. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "village-broom",
+  "label": "a broom sweeps",
+  "prompt": "A straw broom sweeping across wooden floor boards, two strokes. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "cave-inside",
+  "label": "inside the sea cave (loop)",
+  "prompt": "Inside a quiet sea cave: water drips echoing, soft water lapping on rock, gentle and calm, not spooky. Seamless loop. No music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "cave-drip",
+  "label": "a drip echoes",
+  "prompt": "One water drop falling into a pool inside a cave, a clear plink with a soft echo. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "cave-bats",
+  "label": "the bats",
+  "prompt": "A few tiny bats squeaking and fluttering their wings. Cute, not scary. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "cave-kingfisher",
+  "label": "the kingfisher",
+  "prompt": "A kingfisher bird's bright little call, a short trill. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "cave-wings",
+  "label": "a bird flies off",
+  "prompt": "A small bird flapping its wings and flying off from the mangroves. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "nail-sand",
+  "label": "sand pats",
+  "prompt": "Hands patting and scooping wet sand, soft sandy pats. Close up. No music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "sunset-blow",
+  "label": "the porpoise breathes",
+  "prompt": "A porpoise surfacing and puffing air out of its blowhole, one soft whoosh with spray. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "race-zoom",
+  "label": "a speed boost",
+  "prompt": "A quick whooshing zoom of a boat speeding past, fun. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "race-dolphin",
+  "label": "the dolphins",
+  "prompt": "A dolphin clicking and chirping happily above the water. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "chang-yard",
+  "label": "Baan Chang's jungle (loop)",
+  "prompt": "An elephant park in a Thai jungle: tropical birds, soft cicadas, palm leaves rustling in a breeze, a trickle of water. Warm and happy. Seamless loop. No music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "chang-trumpet",
+  "label": "an elephant trumpets",
+  "prompt": "A friendly elephant giving a short happy trumpet, not too loud. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "chang-squeal",
+  "label": "the baby elephant squeals",
+  "prompt": "A baby elephant giving a happy little squeaky squeal. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "chang-rumble",
+  "label": "an elephant rumbles",
+  "prompt": "An elephant's low soft contented rumble. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "chang-munch",
+  "label": "an elephant eats bananas",
+  "prompt": "An elephant munching soft bananas, big chewy squishy chomps. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "chang-crunch",
+  "label": "an elephant crunches sugarcane",
+  "prompt": "An elephant crunching and chewing sugarcane, big woody crunches. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "chang-sniff",
+  "label": "a trunk sniffs",
+  "prompt": "An elephant's trunk sniffing curiously, a few breathy snuffles. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "chang-slurp",
+  "label": "a trunk slurps",
+  "prompt": "An elephant slurping water up its trunk, a long wet slurp. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "chang-burp",
+  "label": "an elephant burps",
+  "prompt": "A big soft funny elephant burp. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "chang-spray",
+  "label": "a trunk sprays water",
+  "prompt": "An elephant spraying water from its trunk, a splashy whoosh shower. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "chang-step",
+  "label": "an elephant's step",
+  "prompt": "One heavy soft elephant footstep thud on dirt. No music, no voices.",
+  "seconds": 0.6,
+  "influence": 0.6
+ },
+ {
+  "id": "chang-gecko",
+  "label": "the tokay gecko",
+  "prompt": "A tokay gecko calling tuk-kae tuk-kae tuk-kae in the jungle. No music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "chang-rustle",
+  "label": "palm fronds rustle",
+  "prompt": "A palm tree's fronds shaking and rustling. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "chang-creak",
+  "label": "old wood creaks",
+  "prompt": "An old wooden roof beam creaking softly. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "chang-bird",
+  "label": "a little bird peeps",
+  "prompt": "A small tropical bird chirping a short cheerful peep. No music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "chang-knock",
+  "label": "a bamboo knock",
+  "prompt": "Knocking on a hollow bamboo post, one woody tock. No music, no voices.",
+  "seconds": 0.6,
+  "influence": 0.7
+ },
+ {
+  "id": "cafe-life",
+  "label": "the cafe (loop)",
+  "prompt": "A small open-air cafe in the countryside: soft cup and glass clinks, a coffee machine hissing far off, birds outside, no talking. Cosy. Seamless loop. No music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "cafe-ice",
+  "label": "ice into the glass",
+  "prompt": "An ice cube dropping into a glass of milk, a plunk and a clink. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "cafe-stir",
+  "label": "a spoon stirs",
+  "prompt": "A metal spoon stirring in a glass, little clinks against the side. Close up. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "cafe-pour",
+  "label": "milk pours (loop)",
+  "prompt": "Milk pouring steadily into a glass, smooth liquid stream. Seamless loop. No music, no voices.",
+  "seconds": 3,
+  "loop": true
+ },
+ {
+  "id": "cafe-squeeze",
+  "label": "the syrup squeezes (loop)",
+  "prompt": "A plastic squeeze bottle of chocolate syrup being squeezed, a thick squelchy squirt. Seamless loop. No music, no voices.",
+  "seconds": 2,
+  "loop": true
+ },
+ {
+  "id": "cafe-slurp",
+  "label": "a slurp through the straw",
+  "prompt": "Slurping a drink through a straw, a happy long slurp at the end of the glass. No music, no voices.",
+  "seconds": 1.5
+ }
+]

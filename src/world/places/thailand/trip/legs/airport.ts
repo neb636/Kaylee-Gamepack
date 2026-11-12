@@ -14,7 +14,7 @@ import type { AnchorInfo } from '../../../../engine3d/Anchors'
 import type { Roam, Shot } from '../../../../engine3d/camera'
 import { merge, P, solid } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
-import { sfx } from '../../sfx'
+import { airportBed, airportSfx as sfx } from './trip-sounds'
 import { drawXray } from '../drawings'
 import { wearing } from '../packing'
 import { buildSuitcase, type Suitcase } from '../props'
@@ -85,6 +85,8 @@ export class Airport extends Stage {
   constructor(renderer: WebGLRenderer, events: LegEvents, private packed: string[]) {
     super(renderer, events)
     const { scene, bag } = this
+    // The terminal's hall hums along under everything.
+    bag.add({ dispose: airportBed() })
     scene.background = new Color('#BFE6FF')
     this.rig.fov = 34
     // ---- The hall: floor, back wall, the belt and the x-ray, the screen on its stand ----

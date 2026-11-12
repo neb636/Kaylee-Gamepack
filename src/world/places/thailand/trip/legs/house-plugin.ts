@@ -36,7 +36,7 @@ import type { AnchorInfo } from '../../../../engine3d/Anchors'
 import type { Shot } from '../../../../engine3d/camera'
 import { DIM } from '../../activities/hub/layout'
 import type { House, HousePlugin } from '../../activities/hub/house'
-import { sfx } from '../../sfx'
+import { houseSfx as sfx } from './trip-sounds'
 import { ITEMS, itemsFor, mommyTucksIn, wearing } from '../packing'
 import { buildItem, buildSuitcase, type Suitcase } from '../props'
 import { L } from '../../lines'
@@ -643,7 +643,7 @@ export class TripHouse implements HousePlugin {
       this.lid.flap = 0
       this.squash = 0
       sfx.thump()
-      if (th.id === 'fan') sfx.whir()
+      if (th.id === 'fan') sfx.fan()
       if (th.id === 'pillow') this.mommyYawns()
     })
     this.changed()
@@ -795,7 +795,7 @@ export class TripHouse implements HousePlugin {
       this.hopsNeeded++
       this.lid.goal = -0.7
       this.lid.flap = 0
-      sfx.whir()
+      sfx.fan()
       this.events.say(L.trip.pack.fan)
       return
     }
@@ -859,7 +859,7 @@ export class TripHouse implements HousePlugin {
     k.hopTo(new Vector3(s.x + 0.7, U, s.z + 0.3), 0.35, 0.3, () => {
       // Bonk, bonk, bonk: the suitcase on every stair.
       this.house.climb(false, () => this.leave(), (i) => {
-        sfx.thump()
+        sfx.step()
         if (i % 2 === 0) sfx.boop()
         this.bump = 0
       })
@@ -977,8 +977,8 @@ export class TripHouse implements HousePlugin {
     const van = this.car
     this.hugging = null
     this.door.goal = 1
-    if (van.kind === 'van') sfx.whoosh(0.5)
-    else sfx.creak()
+    if (van.kind === 'van') sfx.vanOpen()
+    else sfx.carOpen()
     if (this.trip.pack) {
       const s = this.suitcase.root
       const trunk = van.body.localToWorld(new Vector3(...van.trunk))
@@ -1010,16 +1010,15 @@ export class TripHouse implements HousePlugin {
    *  next leg (the airport, or wherever the car is going). */
   private driveOff() {
     this.door.goal = 0
-    if (this.car.kind === 'van') sfx.latch()
+    if (this.car.kind === 'van') sfx.vanShut()
     else {
-      sfx.thump()
-      setTimeout(() => sfx.thump(), 260)
+      sfx.carShut()
+      setTimeout(() => sfx.carShut(), 260)
     }
     setTimeout(() => {
       if (this.phase !== 'boarding') return
       sfx.beep()
-      if (this.car.kind === 'van') sfx.whir()
-      else sfx.vroom()
+      sfx.drive()
       // The family who came out to wave them off wave again (the cousins still without looking up).
       if (this.trip.goodbye === 'family') for (const [id] of STREET.row) this.house.family.get(id)?.phoneWave()
       this.house.kaylee.react('wave')
@@ -1103,7 +1102,7 @@ export class TripHouse implements HousePlugin {
       // By car: it pulls up to Agong's door at once.
       this.setPhase('arrive')
       this.carT = 0
-      sfx.vroom()
+      sfx.drive()
     }
     h.snapCamera()
   }
@@ -1115,7 +1114,7 @@ export class TripHouse implements HousePlugin {
     if (this.flight) this.flight.root.visible = false
     this.setPhase('arrive')
     this.carT = 0
-    sfx.whir()
+    sfx.drive()
     this.house.snapCamera()
   }
 
@@ -1123,8 +1122,8 @@ export class TripHouse implements HousePlugin {
   private hopOut() {
     const h = this.house
     this.door.goal = 1
-    if (this.car.kind === 'van') sfx.whoosh(0.5)
-    else sfx.creak()
+    if (this.car.kind === 'van') sfx.vanOpen()
+    else sfx.carOpen()
     sfx.beep()
     this.events.say(this.trip.lines.home)
     h.family.get(this.sriDrives ? 'sri' : 'ji')?.react('wave')
@@ -1719,7 +1718,7 @@ export class TripHouse implements HousePlugin {
       // It hums up quickly, beeps, and waits a moment; then everyone gets in anyway. (Mommy's car is parked already.)
       if (this.carT < 0 && this.phaseT > (this.quick ? 1.2 : 2.0)) {
         this.carT = 0
-        sfx.whir()
+        sfx.drive()
       }
       if (this.carT >= 0 && this.carT < 1) {
         this.carT = Math.min(1, this.carT + dt / 2.0)
