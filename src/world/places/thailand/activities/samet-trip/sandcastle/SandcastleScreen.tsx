@@ -1,49 +1,67 @@
-// The sandcastle at Ao Hin Khok, on screen (sandcastle.ts is the world): the 3D beach with its tap targets, the
-// pressing finger after a while with nothing touched, and once the moat has filled from the sea a little 🏰 badge with
-// the way back to the island (the stop's pink flag up). With ?feel=1 Dad also gets round chips (dig, towers, tide).
-// Sparkle sits in the corner (trip/legs/Guide.tsx) and everyone talks in their own voice (lines.ts L.samet.sandcastle).
+// The sandcastle at Ao Hin Khok, on screen (sandcastle.ts is the world): the 3D beach with its tap targets and the
+// pressing finger after a while with nothing touched. Sandy's story (story.ts) plays its films over it: FilmOverlay
+// draws their words and the hold-to-skip ⏭. When the found film is over the stop is done: back to the island with
+// Sandy (onIsland). On a visit after she is found there are no films: once the moat has filled a little 🏰 badge
+// shows, with the way back to the island. With ?feel=1 there are round chips too (dig, towers, tide).
+// Sparkle sits in the corner (trip/legs/Guide.tsx, hidden during a film) and everyone talks in their own voice
+// (lines.ts L.samet.sandcastle and L.samet.story.sandcastle).
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst } from '../../../../../../sdk'
+import { BigButton, burst, type Line } from '../../../../../../sdk'
 import { isFeelParam } from '../../../../../kit/knobs'
 import { Anchors } from '../../../../../engine3d/Anchors'
+import type { FilmState } from '../../../../../engine3d/film'
+import { FilmOverlay } from '../../../../../engine3d/FilmOverlay'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
-import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
+import { TripGuide, WHO, type TripGuideHandle } from '../../../trip/legs/Guide'
 import type { TimeOfDay } from '../island/scenery'
-import { SAND_ANCHORS, SAND_ROUND_IDS, Sandcastle as World, type SandEvents, type SandRound } from './sandcastle'
+import { SAND_ANCHORS, SAND_ROUND_IDS, Sandcastle as World, type SandEvents, type SandPlayRound, type SandRound } from './sandcastle'
 
 const feelOn = () => [...new URLSearchParams(location.hash.split('?')[1] ?? '').keys()].some(isFeelParam)
-const CHIP: Record<SandRound, string> = { dig: '🖐️ dig', towers: '🪣 towers', tide: '🌊 tide' }
+const CHIP: Record<SandPlayRound, string> = { dig: '🖐️ dig', towers: '🪣 towers', tide: '🌊 tide' }
 
 interface Props {
+  /** Where it opens: `story` (the way-in film, then the digging), a play round, or `found` (the found film on a
+   *  castle built for it, then the island). */
   round: SandRound
-  /** The fireflies she has found so far (the trip's flags: jetski, sandcastle, snorkel, hideseek). */
+  /** The fireflies she has found so far (the trip's flags: jetski, sandcastle, snorkel, hideseek). With `sandcastle`
+   *  in it Sandy is found already: no films, she rides along. */
   flags?: string[]
   time?: TimeOfDay
   /** The round on screen changed (the address bar follows). */
   onRound(r: SandRound): void
-  /** Back to the island, the sandcastle's flag up. */
+  /** Back to the island with Sandy found (the trip raises her flag and she flies in there). */
   onIsland?(): void
 }
 
-export function SandcastleScreen({ round: first, time, onRound, onIsland }: Props) {
+export function SandcastleScreen({ round: first, flags, time, onRound, onIsland }: Props) {
   const [run, setRun] = useState({ round: first, n: 0 })
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [round, setRound] = useState<SandRound>(first)
   const [filled, setFilled] = useState(false)
+  // Sandy's story: a film on screen (its beat) and the words being said.
+  const [film, setFilm] = useState<FilmState | null>(null)
+  const [filmLine, setFilmLine] = useState<Line | null>(null)
   const [feel] = useState(feelOn)
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const guideRef = useRef<TripGuideHandle>(null)
   const onRoundRef = useRef(onRound)
   onRoundRef.current = onRound
+  const onIslandRef = useRef(onIsland)
+  onIslandRef.current = onIsland
+  // Found on an earlier visit (as this one opened: finding her now doesn't change the visit she is found in).
+  const [found] = useState(() => !!flags?.includes('sandcastle'))
+  // A rebuilt world (a lost GPU context) starts where she is now, not where the link was.
+  const now = useRef(first)
 
   useEffect(() => onRoundRef.current(run.round), [run])
 
   const events = useRef<SandEvents>({
     say: (l, mute) => guideRef.current?.speak(l, mute),
     round: (r) => {
+      now.current = r
       setRound(r)
       onRoundRef.current(r)
     },
@@ -51,16 +69,27 @@ export function SandcastleScreen({ round: first, time, onRound, onIsland }: Prop
       setFilled(true)
       burst()
     },
+    found: () => {
+      burst()
+      // (Standing alone, with no island to go back to: the badge.)
+      if (onIslandRef.current) onIslandRef.current()
+      else setFilled(true)
+    },
+    film: setFilm,
+    filmLine: setFilmLine,
   })
 
   const make = (renderer: WebGLRenderer) => {
-    const w = new World(renderer, { round: run.round, time }, events.current)
+    const w = new World(renderer, { round: run.round, time, found: found && run.round !== 'story' && run.round !== 'found' }, events.current)
     w.setHintElement(hintRef.current)
     return w
   }
   const jump = (r: SandRound) => {
+    now.current = r
     setRound(r)
     setFilled(false)
+    setFilm(null)
+    setFilmLine(null)
     setRun((v) => ({ round: r, n: v.n + 1 }))
   }
 
@@ -84,7 +113,7 @@ export function SandcastleScreen({ round: first, time, onRound, onIsland }: Prop
         )}
       />
       <AnimatePresence>
-        {filled && (
+        {filled && !film && (
           <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }} className="sand-over">
             <div className="sand-badge">🏰 💧 🦀</div>
             {onIsland && (
@@ -95,8 +124,9 @@ export function SandcastleScreen({ round: first, time, onRound, onIsland }: Prop
           </motion.div>
         )}
       </AnimatePresence>
-      {mode === 'webgl' && <TripGuide ref={guideRef} />}
-      {feel && (
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!film} />}
+      {mode === 'webgl' && <FilmOverlay state={film} line={filmLine} speaker={(v) => WHO[v]} onSkip={() => worldRef.current?.skipFilm()} />}
+      {feel && !film && (
         <div className="sand-chips">
           {SAND_ROUND_IDS.map((r) => (
             <button key={r} onClick={() => jump(r)} className={r === round ? 'on' : ''} aria-label={`Sandcastle round: ${r}`}>
@@ -106,7 +136,7 @@ export function SandcastleScreen({ round: first, time, onRound, onIsland }: Prop
         </div>
       )}
       {mode === 'lost' && (
-        <button onClick={() => { setMode('webgl'); jump(round) }} style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(213,238,250,.9)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: 'var(--ink)' }}>
+        <button onClick={() => { setMode('webgl'); jump(now.current) }} style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(213,238,250,.9)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: 'var(--ink)' }}>
           🏰 Tap to wake the beach
         </button>
       )}
