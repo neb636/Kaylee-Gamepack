@@ -1,0 +1,11 @@
+{
+  "title": "Koh Samet: the speedboat ride as a cutscene",
+  "checkIn": "fix",
+  "kaylee": "The boat to Koh Samet is a short film now (about 17 s, was 50): leaving Ban Phe, the ferry going by and its wake making them fly, flying fish, then Na Dan pier. No hoof in the water.",
+  "questions": [],
+  "reels": [],
+  "links": [
+    { "label": "Watch the ride", "hash": "#/world/thailand/samet-trip/speedboat" },
+    { "label": "Tune each shot's length", "hash": "#/world/thailand/samet-trip/speedboat?feel=1" }
+  ]
+}
