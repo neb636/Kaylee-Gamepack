@@ -747,7 +747,7 @@ export class SaltStory {
         },
         {
           id: 'yum',
-          shot: { eye: [DINNER_NICK[0] + 0.5, 1.25, 2.5], look: [DINNER_NICK[0], 0.95, DINNER_NICK[2]], fov: 36 },
+          shot: { eye: [DINNER_NICK[0] + 1.7, 1.35, 2.3], look: [DINNER_NICK[0] - 0.1, 0.95, DINNER_NICK[2]], fov: 36 },
           start: () => h.nick.react('hop'),
           say: S.yum,
           sayAt: 0.4,
