@@ -99,6 +99,8 @@ interface Beat {
   at?: number
   fromEnd?: () => number
   still?: boolean
+  /** Its speed, × top speed (default 1). */
+  speed?: number
   dur: () => number
   pass?: PassId
   meetIn?: number
@@ -106,7 +108,7 @@ interface Beat {
 }
 const SCENES: Beat[] = [
   { id: 'open', move: 'open', at: 0, still: true, dur: () => CINE.open },
-  { id: 'ferry', move: 'pass', at: 0.3, dur: () => CINE.ferry, pass: 'ferry', meetIn: 1.6 },
+  { id: 'ferry', move: 'pass', at: 0.3, speed: 0.55, dur: () => CINE.ferry, pass: 'ferry', meetIn: 2.4 },
   { id: 'sea', move: 'skim', at: 0.62, dur: () => CINE.sea, fish: true },
   { id: 'arrive', move: 'arrive', fromEnd: () => CINE.arrive, dur: () => Infinity },
 ]
@@ -508,7 +510,7 @@ export class SametSpeedboat implements World3D {
     this.beatT = 0
     this.s = sc.fromEnd ? Math.max(0, this.len - sc.fromEnd()) : (sc.at ?? 0) * this.len
     const left = this.len - this.s
-    this.v = sc.still ? 0 : Math.min(BOAT.top, Math.sqrt(2 * BOAT.brake * left) + 0.4)
+    this.v = sc.still ? 0 : Math.min(BOAT.top * (sc.speed ?? 1), Math.sqrt(2 * BOAT.brake * left) + 0.4)
     this.lift = this.liftV = 0
     for (const p of this.passers) {
       p.root.visible = false
