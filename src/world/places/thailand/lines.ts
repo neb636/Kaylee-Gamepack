@@ -801,7 +801,7 @@ export const L = {
       // The way in (island/story.ts, film `intro`), at the foot of Na Dan pier as she lands: Mom, Dad (Tofu the beach
       // puppy runs up barking), then the two gecko fire dancers with their empty lantern.
       intro: {
-        here: ji("We're here! Koh Samet!"),
+        here: ji('What a pretty island!'),
         puppy: nick("Hello, puppy! What's wrong?"),
         ohno: tuk('Oh no, oh no, oh no!'),
         gone: kae('Our fireflies are gone!'),
