@@ -1,7 +1,9 @@
 // #/world/puppets: every puppet with buttons for its actions and lines, for building and QA-ing characters.
 // Each country lists its puppets in places/<id>/puppets/index.ts. QA can drive them: window.__puppets[id].play('hop').
+// #/world/puppets/mascot shows only Sparkle's three resting <Mascot> poses (menus use them; tests/sparkle.spec.ts and
+// scripts/qa-sparkle.mjs --export-reference read them).
 import { useEffect, useRef, useState } from 'react'
-import { lineText, say, sounds, type Line, type PuppetHandle } from '../sdk'
+import { lineText, Mascot, say, sounds, type Line, type MascotPose, type PuppetHandle } from '../sdk'
 import type { PuppetEntry } from './types'
 
 const modules = import.meta.glob<{ PUPPETS: PuppetEntry[] }>(['./places/*/puppets/index.ts', './kit/puppets.ts'], { eager: true })
@@ -16,6 +18,7 @@ declare global {
 export function PuppetLab({ only }: { only?: string }) {
   const [bg, setBg] = useState(0)
   const list = only ? ALL.filter((p) => p.id === only) : ALL
+  const poses = !only || only === 'mascot'
   const backgrounds = ['#FFF7F0', '#FFE9A8', '#A8DCFF', '#2d2a4a']
   return (
     <div style={{ position: 'absolute', inset: 0, overflow: 'auto', background: backgrounds[bg], padding: 'calc(var(--safe-top) + 100px) 16px 40px' }}>
@@ -23,6 +26,7 @@ export function PuppetLab({ only }: { only?: string }) {
         🎨 background
       </button>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, justifyContent: 'center' }}>
+        {poses && <MascotPoses />}
         {list.map((p) => (
           <Card key={p.id} entry={p} big={!!only} />
         ))}
@@ -65,6 +69,22 @@ function Card({ entry, big }: { entry: PuppetEntry; big: boolean }) {
             🗣️ talk
           </button>
         ) : null}
+      </div>
+    </div>
+  )
+}
+
+const POSES: MascotPose[] = ['wave', 'cheer', 'think']
+
+/** The menus' square Sparkle in each of her resting poses, in this order. */
+function MascotPoses() {
+  return (
+    <div data-puppet="mascot" style={{ background: 'rgba(255,255,255,0.6)', borderRadius: 28, padding: 16, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+      <b style={{ fontSize: 24 }}>Mascot poses</b>
+      <div style={{ display: 'flex', gap: 12 }}>
+        {POSES.map((pose) => (
+          <Mascot key={pose} pose={pose} size={200} bounce={false} appear={false} />
+        ))}
       </div>
     </div>
   )

@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test'
 
-// Menus and older games must share the country puppet, including its three resting expressions.
-test('all legacy Mascot poses use the shared Sparkle and unique mouth clips', async ({ page }) => {
-  await page.goto('./#/playground')
+// Menus must share the country puppet, including its three resting expressions.
+test('all Mascot poses use the shared Sparkle and unique mouth clips', async ({ page }) => {
+  await page.goto('./#/world/puppets/mascot')
   await page.getByRole('button', { name: /let's play/i }).click()
   const mascots = page.locator('[data-sparkle="puppet"]')
   expect(await mascots.count()).toBeGreaterThanOrEqual(3)

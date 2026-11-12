@@ -60,7 +60,7 @@ try {
       await page.locator('[data-sparkle="puppet"]').evaluate((svg) => { svg.style.transform = 'scaleX(-1)' })
       await page.screenshot({ path: `${output}/mirrored.png` })
       if (process.argv.includes('--export-reference')) {
-        await page.goto(`${base}#/playground`)
+        await page.goto(`${base}#/world/puppets/mascot`)
         await page.waitForTimeout(300)
         const drawings = await page.locator('[data-sparkle="puppet"]').evaluateAll((svgs) => svgs.slice(0, 3).map((svg) => {
           const copy = svg.cloneNode(true)

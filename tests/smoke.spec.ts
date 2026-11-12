@@ -1,11 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 import { existsSync, readdirSync } from 'node:fs'
 
-// Every folder in src/games with a meta.ts + Game.tsx is a game.
-const gameIds = (existsSync('src/games') ? readdirSync('src/games', { withFileTypes: true }) : [])
-  .filter((d) => d.isDirectory() && existsSync(`src/games/${d.name}/meta.ts`) && existsSync(`src/games/${d.name}/Game.tsx`))
-  .map((d) => d.name)
-
 function trackErrors(page: Page) {
   const errors: string[] = []
   // The Theater's YouTube embed (loaded ahead of the tap) reports its own noise; only our errors count.
@@ -49,74 +44,6 @@ test('first tap plays a generated Sparkle voice clip', async ({ page }) => {
   await expect.poll(() => page.evaluate(() => (window as unknown as { __voiceStarts: number }).__voiceStarts)).toBeGreaterThan(0)
   expect(errors).toEqual([])
 })
-
-test('SDK playground renders', async ({ page }) => {
-  const errors = trackErrors(page)
-  await start(page, '#/playground')
-  await expect(page.getByRole('heading', { name: 'SDK playground' })).toBeVisible()
-  expect(errors).toEqual([])
-})
-
-/** Drag with small steps like a finger (pointer events), from one element's center to another's. */
-async function dragTo(page: Page, from: ReturnType<Page['locator']>, to: ReturnType<Page['locator']>) {
-  const a = (await from.boundingBox())!
-  const b = (await to.boundingBox())!
-  await page.mouse.move(a.x + a.width / 2, a.y + a.height / 2)
-  await page.mouse.down()
-  await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2, { steps: 12 })
-  await page.mouse.up()
-}
-
-test('interaction kit: jigsaw snaps, toppings land, avatar changes', async ({ page }) => {
-  const errors = trackErrors(page)
-  await start(page, '#/playground')
-
-  // Jigsaw: a wrong spot floats the piece back; its own spot clicks it in.
-  const piece = page.getByRole('img', { name: 'Puzzle piece 1', exact: true })
-  await piece.scrollIntoViewIfNeeded()
-  await dragTo(page, piece, page.locator('[data-target="slot-1"]'))
-  await expect(page.getByRole('img', { name: 'Puzzle piece 1', exact: true })).toBeVisible()
-  await page.waitForTimeout(500)
-  await dragTo(page, piece, page.locator('[data-target="slot-0"]'))
-  await expect(page.getByRole('img', { name: 'Puzzle piece 1 (in place)' })).toBeVisible()
-
-  // Pizza: drag a topping from the tray onto the pizza, then move it, then drag it off.
-  const tomato = page.getByRole('img', { name: 'tomato in the tray' })
-  await tomato.scrollIntoViewIfNeeded()
-  await dragTo(page, tomato, page.locator('[data-target="surface"]'))
-  await expect(page.getByTestId('pizza-count')).toContainText('1 toppings')
-  await expect(page.getByTestId('pizza-count')).toContainText('tomato ×1')
-  for (let i = 0; i < 5; i++) await dragTo(page, tomato, page.locator('[data-target="surface"]'))
-  await expect(page.getByTestId('pizza-count')).toContainText('6 toppings')
-
-  // Avatar: pick a hair color; it's remembered.
-  await page.getByTestId('avatar-demo').scrollIntoViewIfNeeded()
-  await page.getByRole('tab', { name: 'Hair color' }).click()
-  await page.getByRole('button', { name: 'pink hair color' }).click()
-  await expect(page.getByTestId('avatar-demo')).toHaveAttribute('data-look', /"hairColor":"pink"/)
-  await page.reload()
-  await page.getByRole('button', { name: /let's play/i }).click()
-  await expect(page.getByTestId('avatar-demo')).toHaveAttribute('data-look', /"hairColor":"pink"/)
-  expect(errors).toEqual([])
-})
-
-for (const id of gameIds) {
-  test(`game "${id}" loads, plays, and awards a trophy`, async ({ page }) => {
-    const errors = trackErrors(page)
-    await start(page, `#/game/${id}`)
-    await expect(page.getByRole('button', { name: 'Home' })).toBeVisible()
-    // Let the game render and settle, then make sure it shows something tappable.
-    await page.waitForTimeout(1500)
-    expect(await page.locator('button').count()).toBeGreaterThan(1)
-    expect(errors).toEqual([])
-
-    // Jump to the end through the test hook and check the trophy ceremony.
-    await page.evaluate(() => window.__kaylee?.win())
-    await expect(page.getByRole('heading', { name: /you did it!/i })).toBeVisible()
-    await expect(page.getByText('KAYLEE', { exact: true })).toHaveCount(0)
-    expect(errors).toEqual([])
-  })
-}
 
 // Around the World: every folder in src/world/places with a meta.ts + Place.tsx is a country.
 const placeIds = readdirSync('src/world/places', { withFileTypes: true })
