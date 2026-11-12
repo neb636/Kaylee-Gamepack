@@ -1,71 +1,44 @@
 {
-  "title": "The salt wells: Pa Kluea's story",
-  "checkIn": "1 of 4: pick a story",
-  "kaylee": "The salt hut gets a story like Lung's rice farm: a way-in film, the story coming back between rounds, and a payoff she does herself. Choose one of three.",
+  "title": "The salt wells: No Salt for the Soup!",
+  "checkIn": "2 of 4: hear the story",
+  "kaylee": "The village dinner is tonight and nobody has any salt! Pa Kluea remembers carrying her grandma's salt to every pot, so Kaylee becomes her salt carrier. She makes the salt, then at dusk she sprinkles it from her hand onto Lung Kwai's soup, Pa Kai's eggs and Yai Nak's fish. Every lantern lights up, and then the party starts.",
   "questions": [
-    "Which story: Bracelet, Sea or Soup?",
-    "Is Pa Kluea (Auntie Salt, the pony) a good name, or do you want another?"
+    "The three cooks (Lung Kwai, Pa Kai, Yai Nak): funny, or too much?",
+    "The way in is about 45 seconds: keep it all, or cut the empty jar or the memory?",
+    "Keep the name Pa Kluea (Auntie Salt)?"
   ],
-  "links": [{ "label": "The salt hut as it is now", "hash": "#/world/thailand/nan-trip/salt" }],
-  "pitches": [
+  "tableReads": [
+    [
+      "thailand",
+      "nan.salt.story"
+    ]
+  ],
+  "reels": [
     {
-      "title": "Grandma's Lost Bracelet",
-      "image": "pitch/bracelet.jpg",
-      "finger": "Dip the bucket and see what comes up; scrape the salt to find what the well kept.",
-      "grows": [
-        ["🪣", "silly finds in the bucket"],
-        ["🔥", "something glints under the brine"],
-        ["✨", "the paddle goes clink!"]
-      ],
-      "learns": "Boil the water away and what was in it stays: the salt, and the bracelet.",
-      "silly": "The bucket brings up Daddy's sunglasses, a sandal, a grumpy frog.",
-      "why": "A mystery she solves herself, and a sparkly treasure at the end.",
-      "minutes": "3-4",
-      "touches": "30-40",
-      "also": [
-        ["📖", "Memory film: little Pa Kluea drops Grandma's bracelet down the well. Plop!"],
-        ["👵", "\"The well keeps what it loves. One day it gives it back.\""],
-        ["📸", "Pa Kluea wears it in the trip photo"]
+      "name": "salt-story",
+      "moments": [
+        "nan-salt-story"
       ]
     },
     {
-      "title": "The Sea Under the Mountain",
-      "image": "pitch/sea.jpg",
-      "finger": "Every bucket brings up a bit of the old sea; the steam draws sea friends she pops.",
-      "grows": [
-        ["🌊", "each bucket sparkles blue"],
-        ["🐟", "steam fish, crabs to pop"],
-        ["🐢", "Grandma Turtle swims by"]
-      ],
-      "learns": "The real fact: long, long ago a sea was here, and it left its salt in the mountain.",
-      "silly": "Blow on the fire too hard and the steam makes a giant octopus that sneezes.",
-      "why": "She loves Little Lost Dolphin: a gentle sea friend, and a wonder moment.",
-      "minutes": "3-4",
-      "touches": "30-40",
-      "also": [
-        ["📖", "Memory film: the valley under a blue sea, the big old turtle swimming over the hills"],
-        ["🫙", "Her payoff: a jar of salt for Grandma Turtle. For a moment the hut fills with sea"]
+      "name": "salt-dinner",
+      "moments": [
+        "nan-salt-dinner"
       ]
+    }
+  ],
+  "links": [
+    {
+      "label": "Pa Kluea's story, then the dipping",
+      "hash": "#/world/thailand/nan-trip/salt?round=story"
     },
     {
-      "title": "No Salt for the Soup!",
-      "image": "pitch/soup.jpg",
-      "finger": "Make the salt in a hurry, then carry it down the street and sprinkle it into every pot.",
-      "grows": [
-        ["😝", "bland faces: blehh!"],
-        ["🧂", "make it, fast"],
-        ["🏮", "sprinkle each stall: Aroi!"]
-      ],
-      "learns": "Salt makes food yummy, and keeps eggs and fish good for a long time.",
-      "silly": "Sprinkle too much and the buffalo uncle's face puckers up tight.",
-      "why": "A comedy mix-up like Peck's Trail Mix, and she gets to save the party.",
-      "minutes": "3-4",
-      "touches": "35-40",
-      "also": [
-        ["📖", "Opening film: the village dinner tonight, and every cook's salt jar is empty"],
-        ["🐃", "New street scene: buffalo noodle uncle, hen egg auntie, goose fish grandma"],
-        ["🏮", "Lanterns light up stall by stall; the party starts"]
-      ]
+      "label": "The village dinner at dusk",
+      "hash": "#/world/thailand/nan-trip/salt?round=dinner"
+    },
+    {
+      "label": "The Mac's words",
+      "hash": "#/world/thailand/nan-trip/salt?round=dinner&device=mouse"
     }
   ]
 }
