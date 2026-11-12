@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "rice-story",
+  "title": "Rice story",
+  "video": "rice-story.mp4",
+  "gif": "rice-story.gif",
+  "seconds": 86,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "nan-story",
+      "where": "nan-story",
+      "seconds": 75,
+      "fps": 36.4,
+      "status": "ok"
+    },
+    {
+      "name": "nan-story-skip",
+      "where": "nan-story-skip",
+      "seconds": 8,
+      "fps": 60.8,
+      "status": "ok"
+    }
+  ]
+}

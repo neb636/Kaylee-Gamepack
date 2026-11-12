@@ -1,0 +1,377 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "nan.rice.story",
+  "title": "Thailand › Nan › Rice › Story",
+  "intro": "Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.",
+  "page": "thailand-nan-rice-story.html",
+  "audio": "thailand-nan-rice-story.mp3",
+  "lines": 18,
+  "seconds": 40,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "nan.rice.story.hello",
+      "text": "Sawasdee krap! Welcome to my farm!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.rice.story.nap",
+      "text": "My rice was all golden. So I had a little nap...",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "hello"
+      ],
+      "text": "Sawasdee krap! Welcome to my farm!",
+      "voice": "lung",
+      "key": "nan.rice.story.hello",
+      "part": "nan › rice › story",
+      "when": "The way in: Lung says hello, hears Jip, and tells what Jip did last year (the memory, in the storybook look).",
+      "ms": 3096,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        0,
+        3.05
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "uhoh"
+      ],
+      "text": "Uh-oh. That's Jip!",
+      "voice": "lung",
+      "key": "nan.rice.story.uhoh",
+      "part": "nan › rice › story",
+      "when": "",
+      "ms": 1800,
+      "flags": [],
+      "span": [
+        3.4,
+        5.13
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "tell"
+      ],
+      "text": "Let me tell you what Jip did last year.",
+      "voice": "lung",
+      "key": "nan.rice.story.tell",
+      "part": "nan › rice › story",
+      "when": "",
+      "ms": 2040,
+      "flags": [],
+      "span": [
+        5.48,
+        7.46
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "nap"
+      ],
+      "text": "My rice was all golden. So I had a little nap...",
+      "voice": "lung",
+      "key": "nan.rice.story.nap",
+      "part": "nan › rice › story",
+      "when": "",
+      "ms": 3984,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        7.81,
+        11.72
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "along"
+      ],
+      "text": "Then along came Jip!",
+      "voice": "lung",
+      "key": "nan.rice.story.along",
+      "part": "nan › rice › story",
+      "when": "",
+      "ms": 1896,
+      "flags": [],
+      "span": [
+        12.07,
+        13.91
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "took"
+      ],
+      "text": "He took my hat!",
+      "voice": "lung",
+      "key": "nan.rice.story.took",
+      "part": "nan › rice › story",
+      "when": "",
+      "ms": 1056,
+      "flags": [],
+      "span": [
+        14.26,
+        15.26
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "gave"
+      ],
+      "text": "And gave me the scarecrow's!",
+      "voice": "lung",
+      "key": "nan.rice.story.gave",
+      "part": "nan › rice › story",
+      "when": "",
+      "ms": 2472,
+      "flags": [],
+      "span": [
+        15.61,
+        18.02
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "thought"
+      ],
+      "text": "The birds thought I was the scarecrow!",
+      "voice": "lung",
+      "key": "nan.rice.story.thought",
+      "part": "nan › rice › story",
+      "when": "",
+      "ms": 2232,
+      "flags": [],
+      "span": [
+        18.37,
+        20.55
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "ateAll"
+      ],
+      "text": "They ate ALL my rice!",
+      "voice": "lung",
+      "key": "nan.rice.story.ateAll",
+      "part": "nan › rice › story",
+      "when": "",
+      "ms": 2040,
+      "flags": [],
+      "span": [
+        20.9,
+        22.88
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "help"
+      ],
+      "text": "This year, I need a helper. Will you help me?",
+      "voice": "lung",
+      "key": "nan.rice.story.help",
+      "part": "nan › rice › story",
+      "when": "",
+      "ms": 2856,
+      "flags": [],
+      "span": [
+        23.23,
+        26.03
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "holdHat"
+      ],
+      "text": "Hold on to your hat!",
+      "voice": "lung",
+      "key": "nan.rice.story.holdHat",
+      "part": "nan › rice › story",
+      "when": "Planting: Jip lands on her hat and tugs at it.",
+      "ms": 1536,
+      "flags": [],
+      "span": [
+        26.38,
+        27.85
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "whereTo"
+      ],
+      "text": "Hey! Where's Jip going?",
+      "voice": "lung",
+      "key": "nan.rice.story.whereTo",
+      "part": "nan › rice › story",
+      "when": "The rice is golden: Jip flies off with a grain, and Lung finds out why.",
+      "ms": 1920,
+      "flags": [],
+      "span": [
+        28.2,
+        30.05
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "oldHat"
+      ],
+      "text": "My old hat! Jip made a nest!",
+      "voice": "lung",
+      "key": "nan.rice.story.oldHat",
+      "part": "nan › rice › story",
+      "when": "",
+      "ms": 2544,
+      "flags": [],
+      "span": [
+        30.4,
+        32.87
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "hungry"
+      ],
+      "text": "Oh... Jip's babies are hungry.",
+      "voice": "lung",
+      "key": "nan.rice.story.hungry",
+      "part": "nan › rice › story",
+      "when": "",
+      "ms": 2400,
+      "flags": [],
+      "span": [
+        33.22,
+        35.57
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "share"
+      ],
+      "text": "Let's share our rice with them!",
+      "voice": "lung",
+      "key": "nan.rice.story.share",
+      "part": "nan › rice › story",
+      "when": "",
+      "ms": 1968,
+      "flags": [],
+      "span": [
+        35.92,
+        37.82
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "some"
+      ],
+      "text": "Now, some for Jip!",
+      "voice": "lung",
+      "key": "nan.rice.story.some",
+      "part": "nan › rice › story",
+      "when": "Threshing done: the last bundles are for the birds.",
+      "ms": 2016,
+      "flags": [],
+      "span": [
+        38.17,
+        40.13
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "oneEach"
+      ],
+      "text": "One for you, one for me!",
+      "voice": "lung",
+      "key": "nan.rice.story.oneEach",
+      "part": "nan › rice › story",
+      "when": "",
+      "ms": 2520,
+      "flags": [],
+      "span": [
+        40.48,
+        42.94
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "rice",
+        "story",
+        "friends"
+      ],
+      "text": "Friends now!",
+      "voice": "lung",
+      "key": "nan.rice.story.friends",
+      "part": "nan › rice › story",
+      "when": "",
+      "ms": 1392,
+      "flags": [],
+      "span": [
+        43.29,
+        44.63
+      ]
+    }
+  ]
+}
