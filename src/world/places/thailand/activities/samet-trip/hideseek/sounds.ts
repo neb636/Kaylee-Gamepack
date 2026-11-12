@@ -1,7 +1,7 @@
 // Hide and seek at Ao Prao and lunch on the deck above it. Hide and seek sounds like the sunset beach (the common beach
 // bed): her hooves trotting in the sand and wading in the shallows, the pandanus and the driftwood tree's leaves
 // rustling, the red plastic chairs clattering, the sea splashing where Dad hides, the towel's fwip, Kaylee's "boo!"
-// pop-out and Mom's phone. Lunch: munching a roll, sipping the coconut through its straw (and the last big slurp), a
+// pop-out and Mom's camera click. Lunch: munching a roll, sipping the coconut through its straw (and the last big slurp), a
 // knock on the empty shell, the monitor lizard scurrying off, the squirrel chittering up the pandanus, a fish jumping
 // where she taps the sea, under the same beach bed. Recorded clips (sfx/, ElevenLabs) with the synthesized ones as
 // their fallbacks; the counting notes, the ready beeps, the fanfares, the arrival dings and the little "found you"

@@ -1,21 +1,25 @@
 // Hide and seek at Ao Prao, on screen (hideseek.ts is the world): the beach with its tap targets, a lavender blind
-// with the numbers while Kaylee counts with her eyes shut (a tap peeks through it), Sparkle in the corner and everyone's
-// voices (trip/legs/Guide.tsx: the words show by her, for Dad), the pressing finger when she needs it, Mom's
-// photo flash, and once she has won her turn a 🙈 badge with the way back to the island (the stop's pink flag up).
-// With ?feel=1 Dad also gets round chips (1, 2, hide).
+// with the numbers while your unicorn counts with her eyes shut (a tap peeks through it), Sparkle in the corner and
+// everyone's voices (trip/legs/Guide.tsx: the words show by her, for the grown-ups), the pressing finger when she
+// needs it and Mom's photo flash. Peekaboo's two films (the way in, and found) play over it: FilmOverlay draws their
+// words and the hold-to-skip ⏭, and Sparkle's corner hides. The found film ends the stop: back to the island with
+// Peekaboo. On a later visit (Peekaboo found already) a win shows a 🙈 badge with the way back instead.
+// With ?feel=1 there are round chips too (1, 2, hide).
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, bigCelebration, burst } from '../../../../../../sdk'
+import { BigButton, bigCelebration, burst, type Line } from '../../../../../../sdk'
 import { isFeelParam } from '../../../../../kit/knobs'
 import { Anchors } from '../../../../../engine3d/Anchors'
+import type { FilmState } from '../../../../../engine3d/film'
+import { FilmOverlay } from '../../../../../engine3d/FilmOverlay'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
-import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
+import { TripGuide, WHO, type TripGuideHandle } from '../../../trip/legs/Guide'
 import type { TimeOfDay } from '../island/scenery'
-import { HIDE_ANCHORS, HIDE_ROUND_IDS, HideSeek as World, type HideEvents, type HideRound } from './hideseek'
+import { HIDE_ANCHORS, HIDE_ROUND_IDS, HideSeek as World, type HideEvents, type HidePlayRound, type HideRound } from './hideseek'
 
 const feelOn = () => [...new URLSearchParams(location.hash.split('?')[1] ?? '').keys()].some(isFeelParam)
-const CHIP: Record<HideRound, string> = { '1': '🌳 easy', '2': '🏖️ tricky', hide: '🙈 her turn' }
+const CHIP: Record<HidePlayRound, string> = { '1': '🌳 easy', '2': '🏖️ tricky', hide: '🙈 her turn' }
 
 interface Props {
   round: HideRound
@@ -24,11 +28,13 @@ interface Props {
   time?: TimeOfDay
   /** The round on screen changed (the address bar follows). */
   onRound(r: HideRound): void
-  /** Back to the island, the hide and seek flag up. */
+  /** Back to the island with Peekaboo (the found film has played, or she was found on an earlier visit). */
   onIsland?(): void
 }
 
-export function HideSeekScreen({ round: first, time, onRound, onIsland }: Props) {
+export function HideSeekScreen({ round: first, flags, time, onRound, onIsland }: Props) {
+  // Peekaboo found already (a later visit): no found film, a win shows the way back.
+  const had = !!flags?.includes('hideseek')
   const [run, setRun] = useState({ round: first, n: 0 })
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [round, setRound] = useState<HideRound>(first)
@@ -36,12 +42,17 @@ export function HideSeekScreen({ round: first, time, onRound, onIsland }: Props)
   const [peek, setPeek] = useState(0)
   const [flash, setFlash] = useState(0)
   const [won, setWon] = useState(false)
+  // Peekaboo's films: the one on screen (its beat) and the words being said.
+  const [film, setFilm] = useState<FilmState | null>(null)
+  const [filmLine, setFilmLine] = useState<Line | null>(null)
   const [feel] = useState(feelOn)
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const guideRef = useRef<TripGuideHandle>(null)
   const onRoundRef = useRef(onRound)
   onRoundRef.current = onRound
+  const onIslandRef = useRef(onIsland)
+  onIslandRef.current = onIsland
 
   useEffect(() => onRoundRef.current(run.round), [run])
 
@@ -54,17 +65,19 @@ export function HideSeekScreen({ round: first, time, onRound, onIsland }: Props)
     peek: () => setPeek((p) => p + 1),
     photo: () => setFlash((f) => f + 1),
     say: (l, mute) => guideRef.current?.speak(l, mute),
-    won: (firstWin) => {
+    won: (firstWin, badge) => {
       burst()
-      if (firstWin) {
-        bigCelebration()
-        setWon(true)
-      }
+      if (firstWin) bigCelebration()
+      if (firstWin && badge) setWon(true)
     },
+    film: setFilm,
+    filmLine: setFilmLine,
+    // The found film is over: the island, with Peekaboo. (Nowhere to go: the way back shows, her turn goes on.)
+    island: () => (onIslandRef.current ? onIslandRef.current() : setWon(true)),
   })
 
   const make = (renderer: WebGLRenderer) => {
-    const w = new World(renderer, { round: run.round, time }, events.current)
+    const w = new World(renderer, { round: run.round, time, found: had }, events.current)
     w.setHintElement(hintRef.current)
     return w
   }
@@ -72,6 +85,8 @@ export function HideSeekScreen({ round: first, time, onRound, onIsland }: Props)
     setRound(r)
     setCount(0)
     setWon(false)
+    setFilm(null)
+    setFilmLine(null)
     setRun((v) => ({ round: r, n: v.n + 1 }))
   }
 
@@ -106,12 +121,13 @@ export function HideSeekScreen({ round: first, time, onRound, onIsland }: Props)
           </motion.div>
         )}
       </AnimatePresence>
-      {mode === 'webgl' && <TripGuide ref={guideRef} />}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!film} />}
+      {mode === 'webgl' && <FilmOverlay state={film} line={filmLine} speaker={(v) => WHO[v]} onSkip={() => worldRef.current?.skipFilm()} />}
       <AnimatePresence>
         {flash > 0 && <motion.div key={flash} className="hs-flash" initial={{ opacity: 0.85 }} animate={{ opacity: 0 }} transition={{ duration: 0.45 }} />}
       </AnimatePresence>
       <AnimatePresence>
-        {won && (
+        {won && !film && (
           <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }} className="hs-over">
             <div className="hs-badge">🙈 🏆</div>
             {onIsland && (
@@ -125,7 +141,7 @@ export function HideSeekScreen({ round: first, time, onRound, onIsland }: Props)
       {feel && (
         <div className="hs-chips">
           {HIDE_ROUND_IDS.map((r) => (
-            <button key={r} onClick={() => jump(r)} className={r === round ? 'on' : ''} aria-label={`Hide and seek round: ${r}`}>
+            <button key={r} onClick={() => jump(r)} className={r === round || (r === '1' && round === 'story') || (r === 'hide' && round === 'found') ? 'on' : ''} aria-label={`Hide and seek round: ${r}`}>
               {CHIP[r]}
             </button>
           ))}

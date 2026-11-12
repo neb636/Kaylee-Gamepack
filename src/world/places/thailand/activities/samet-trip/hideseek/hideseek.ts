@@ -1,26 +1,40 @@
-// Hide and seek at Ao Prao (plan: planning/around-the-world/thailand/samet-trip.md, greybox 6), on the island's real
-// sunset beach (island/layout.ts FRAMES.prao) by the big driftwood tree from Dad's photo.
+// Hide and seek at Ao Prao (notes: planning/around-the-world/thailand/samet-story.md; the first plan: samet-trip.md),
+// on the island's real sunset beach (island/layout.ts FRAMES.prao) by the big driftwood tree from Dad's photo.
 //
-// The toy (core verb): walk and look, the island's verb. Hold a finger and Kaylee trots after it (gallops when it's far
-// ahead), tap a spot and she walks there; tap a hiding place and she walks up and peeks behind it. The verb deepens
-// three times (`round`), moving on by itself:
-//   1     easy hides. Kaylee covers her eyes by the driftwood tree (the photo) and counts, "one… two… three!" (tap to
-//         peek through her hooves: Dad's still running). Then she finds him: behind the tree with his head poking
-//         out, crouched behind a pink umbrella tipped over like a shield (his feet show), behind the stack of red
-//         chairs. Close by, his hiding place wiggles and giggles; tap it (or walk right up): "Found you!", he jumps
-//         out and spins her round.
+// Its firefly is Peekaboo, the green one, who loves to hide (story/firefly.ts, peekaboo.ts). She is in both films and
+// in the play of every round:
+//   story the way in (a film, about 15 s, hold ⏭ to skip): a green light peeks round the driftwood tree, giggles, ducks
+//         behind it and peeks out the other side. Dad saw it, Mom knows the game, "Then let's play too!". Then round 1.
+//   found she wins her turn to hide (a film, about 9 s): she pops out and Peekaboo pops out with her, lands on Dad's
+//         nose (he goes cross-eyed), then flies to your unicorn's horn: found. Then back to the island with her.
+//
+// The toy (core verb): walk and look, the island's verb. Hold a finger and your unicorn trots after it (gallops when
+// it's far ahead), tap a spot and she walks there; tap a hiding place and she walks up and peeks behind it. The verb
+// deepens three times (`round`), moving on by itself:
+//   1     easy hides. She covers her eyes by the driftwood tree (the photo) and counts, "one… two… three!" (tap to
+//         peek through her hooves: Dad's still running, the green light trailing after him). Then she finds him:
+//         behind the tree with his head poking out, crouched behind a pink umbrella tipped over like a shield (his feet
+//         show), behind the stack of red chairs. Close by, his hiding place wiggles and giggles; tap it (or walk right
+//         up): "Found you!", he jumps out and spins her round.
 //   2     trickier hides: lying in the tangle of the tree's roots, under a beach towel (the lump breathes, his toes stick
-//         out), in the sea with only his cap floating (bubbles), up in the pandanus tree. Stuck for a while: something
-//         gives him away (a sneeze, a giggle, a splash), and later the place glows and the finger points.
+//         out), in the sea with only his cap floating (bubbles), up in the pandanus tree.
+//         The help, in both rounds, is one ladder: Peekaboo is tucked in beside Dad as a tiny glow and peeks out of his
+//         hiding place now and then; stuck a while and he gives himself away (a giggle, a splash) while she comes out
+//         and twinkles over him for good ("The green light knows where Dad is!"); later a sneeze, his place glows and
+//         the finger points; then he jumps out and waves; then he runs over.
 //   hide  her turn to hide. Dad covers his eyes at the tree and counts to five (tap him: he peeks). Every hiding
-//         place glows: she leads Kaylee to one and she crouches in it. Dad searches all the wrong places first
-//         (behind Mom, the thin palm, the chairs) while she watches and giggles, then gives up: "Kaylee wins!". In the
-//         open the first time he spots her ("Found you!"), never twice in a row; wander out while he's close and he
-//         spots her too. Tap Kaylee while he searches: "Boo!", he jumps, and she wins.
-// The pink flag: the first time she wins her turn (the way back to the island shows).
+//         place glows: she leads your unicorn to one and she crouches in it, Peekaboo tucked in beside her, dimmed to a
+//         tiny glow ("Shh! She is hiding with you!"). Dad searches all the wrong places first (behind Mom, the thin
+//         palm, the chairs) while she watches and giggles, then gives up: she wins. In the open the first time he spots
+//         her ("Found you!"), never twice in a row; wander out while he's close and he spots her too. Tap your unicorn
+//         while he searches: "Boo!", he jumps, and she wins.
+// Winning her turn is the end of the stop: the found film, then the island with Peekaboo (the screen's `island`). Once
+// Peekaboo is found (`found` in the start: a later visit) there is no film: a win cheers, the way back shows, and she
+// can hide again and again.
 //
-// Talk (lines.ts L.samet.hideseek): Dad plays it up in his own voice, Sparkle counts with her and says what to do
-// once a round (and, through spendHint, when she's stuck); the screen's TripGuide plays each line and shows its words. Every number that decides the feel is a knob
+// Talk (lines.ts L.samet.hideseek, and L.samet.story.hideseek for Peekaboo): Dad plays it up in his own voice, Sparkle
+// counts with her and says what to do once a round (and, through spendHint, when she's stuck); the screen's TripGuide
+// plays each line and shows its words, and FilmOverlay the films' lines. Every number that decides the feel is a knob
 // (?feel=1), with a graph of how far she is from Dad.
 import { Fog, Group, Mesh, MeshBasicMaterial, Raycaster, RingGeometry, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { clamp, lineText, spendHint, type Line } from '../../../../../../sdk'
@@ -29,6 +43,8 @@ import { knobs, watch } from '../../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
 import { Bag } from '../../../../../engine3d/dispose'
+import { Letterbox } from '../../../../../engine3d/cinema'
+import { FilmPlayer, type Film, type FilmState, type V3 as FV3 } from '../../../../../engine3d/film'
 import { blobShadow, solid } from '../../../../../engine3d/geo'
 import { setOutlineResolution } from '../../../../../engine3d/outline'
 import { Particles } from '../../../../../engine3d/particles'
@@ -41,6 +57,8 @@ import { at as atFrame, FRAMES, STOPS, type XZ } from '../island/layout'
 import { driftwoodGeo } from '../island/props'
 import { buildIsland, DAY, type Island, type TimeOfDay } from '../island/scenery'
 import { makeSeeThrough, SEE } from '../island/seethrough'
+import { fireflySfx } from '../story/firefly'
+import { crossEyes, Peekaboo } from './peekaboo'
 import { beachBed, hideSfx as sfx } from './sounds'
 import { beachChair, cap, chairStack, pandanus, shieldUmbrella, thinPalm, towel } from './props'
 
@@ -84,11 +102,25 @@ const CAM = knobs('hideCam', 'The beach camera', FILE, {
   margin: { value: 1.5, min: 0, max: 5, step: 0.1, label: 'While she seeks, room round the hiding places', unit: 'm', note: 'the camera keeps her and every hiding place of the round on screen' },
 })
 
-export type HideRound = '1' | '2' | 'hide'
-export const HIDE_ROUND_IDS: HideRound[] = ['1', '2', 'hide']
+/** Peekaboo, the green firefly, in play. */
+const PEEKA = knobs('hidePeekaboo', 'Peekaboo, the green firefly', FILE, {
+  size: { value: 2.6, min: 0.8, max: 5, step: 0.1, label: 'Her size in play', unit: '×', note: '1 = a 30 cm glow; the beach camera is a long way off' },
+  tiny: { value: 0.16, min: 0.04, max: 0.6, step: 0.01, label: 'Her tiny glow in a hiding place', note: '1 = as bright as out in the open' },
+  first: { value: 3.5, min: 0.5, max: 15, step: 0.5, label: 'She first peeks out of Dad’s place after', unit: 's' },
+  every: { value: 4.5, min: 1.5, max: 15, step: 0.5, label: '…then every', unit: 's' },
+  out: { value: 1.3, min: 0.4, max: 4, step: 0.1, label: '…staying out for', unit: 's', note: 'from help 1 on she stays out, twinkling over him' },
+})
+
+/** The rounds she plays. */
+export type HidePlayRound = '1' | '2' | 'hide'
+/** …and the two films beside them: `story` (the way in, then round 1) and `found` (Peekaboo found, then the island). */
+export type HideRound = HidePlayRound | 'story' | 'found'
+export const HIDE_ROUND_IDS: HidePlayRound[] = ['1', '2', 'hide']
 export interface HideStart {
   round: HideRound
   time?: TimeOfDay
+  /** Peekaboo is found already (a later visit): she still plays along, but a win is just a win (no found film). */
+  found?: boolean
 }
 export interface HideEvents {
   /** A new round began (the address bar follows). */
@@ -99,13 +131,22 @@ export interface HideEvents {
   peek(): void
   /** Mom took a photo (the screen flashes). */
   photo(): void
-  /** She won her turn to hide (the first time: the stop's flag). */
-  won(first: boolean): void
+  /** She won her turn to hide (`first`: the first time this visit; `badge`: the way back shows, no film takes her). */
+  won(first: boolean, badge: boolean): void
   /** Someone talks (`mute`: a stuck hint shown without its voice). */
   say(line: Line, mute?: boolean): void
+  /** A film is on (its beat), or over (null); and the line being said in it. */
+  film(s: FilmState | null): void
+  filmLine(l: Line | null): void
+  /** The found film is over: back to the island with Peekaboo. */
+  island(): void
 }
 
 const H = L.samet.hideseek
+const S = L.samet.story.hideseek
+/** Peekaboo in the films' shots, whose cameras come much closer than the beach camera: her size, how bright her halo
+ *  is, and how strong the green cloud behind her. */
+const FILM = { size: 1.1, glow: 0.85, cloud: 0.55 }
 
 type SpotId = 'tree' | 'umbrella' | 'chairs' | 'roots' | 'towel' | 'sea' | 'pandanus' | 'mommy' | 'palmL' | 'palmR'
 type DadPose = 'stand' | 'sit' | 'lie'
@@ -140,6 +181,8 @@ const SPOTS: SpotDef[] = [
   { id: 'palmL', label: 'A thin palm', u: -2.5, v: -1.6, dad: { du: 0, dv: 0.5, pose: 'stand' }, kay: { du: 0, dv: 0.45 } },
   { id: 'palmR', label: 'A thin palm', u: 10.5, v: -1.8, dad: { du: 0, dv: 0.5, pose: 'stand' }, kay: { du: 0, dv: 0.45 } },
 ]
+/** How high over Dad's hiding place Peekaboo twinkles when she peeks out of it (meters over the ground, the sea). */
+const TWINKLE_Y: Record<SpotId, number> = { tree: 3.0, umbrella: 1.5, chairs: 2.25, roots: 1.15, towel: 0.95, sea: 0.75, pandanus: 3.2, mommy: 1.6, palmL: 2, palmR: 2 }
 /** Mom faces along the beach toward the tree (side-on to the camera, watching the game). */
 const MOMMY_FACE = Math.atan2(-FRAMES.prao.t.x, -FRAMES.prao.t.z) + 0.35
 const BYID = Object.fromEntries(SPOTS.map((s) => [s.id, s])) as Record<SpotId, SpotDef>
@@ -181,7 +224,7 @@ interface Thing {
   /** Blocker radius (she walks round it). */
   r: number
 }
-type Phase = 'intro' | 'count' | 'seek' | 'found' | 'dadcount' | 'search' | 'giveup' | 'win' | 'caught'
+type Phase = 'film' | 'intro' | 'count' | 'seek' | 'found' | 'dadcount' | 'search' | 'giveup' | 'win' | 'caught'
 interface Look {
   x: number
   z: number
@@ -269,6 +312,24 @@ export class HideSeek implements World3D {
   private notHereAt = -99
   private hintOn = false
   private counts = { leads: 0, taps: 0, pokes: 0, peeks: 0, wrong: 0, finds: 0, giveaways: 0, popOuts: 0, cameOver: 0, hides: 0, sillyHides: 0, wins: 0, caught: 0, boos: 0, photos: 0 }
+
+  // ---- Peekaboo and the films.
+  private films: FilmPlayer
+  private bars = new Letterbox()
+  private peeka: Peekaboo
+  private cross: ReturnType<typeof crossEyes>
+  /** Peekaboo is found already (a later visit): no found film. */
+  private had: boolean
+  /** Peekaboo in play: seconds until she next peeks out of Dad's hiding place and seconds she stays out; tucked in
+   *  beside your unicorn; what Sparkle has said about her; twinkles and tucks counted (QA). */
+  private pk = { nextT: 0, outT: 0, tucked: false, knew: false, shushed: false, twinkles: 0, tucks: 0 }
+  /** A film's own looks and moves, every frame it's on. */
+  private filmPose: (() => void) | null = null
+  /** Dad's arm up, pointing at the tree (0..1), and where it's going. */
+  private point = 0
+  private pointGoal = 0
+  /** Things to do in a moment (world seconds, so they wait while the beach is paused). */
+  private later: { at: number; f: () => void }[] = []
 
   constructor(
     private renderer: WebGLRenderer,
@@ -378,14 +439,26 @@ export class HideSeek implements World3D {
     this.bubbles = new Particles({ kind: 'spray', count: 80, colors: ['#FFFFFF', '#DDF6FF'], gravity: -2 }, bag)
     scene.add(this.puffs.mesh, this.sparkle.mesh, this.spray.mesh, this.bubbles.mesh)
 
-    // ---- Where the link starts: at the tree (the photo: Kaylee covering her eyes in front, Dad leaning on it).
-    const k0 = this.round === 'hide' ? this.L(TREE.u - 2.4, TREE.v - 3.2) : this.L(TREE.u - 0.6, TREE.v - 2.1)
+    // ---- Peekaboo and the films.
+    this.films = new FilmPlayer({ line: (l) => this.events.filmLine(l), state: (st) => this.events.film(st) })
+    this.peeka = new Peekaboo(bag, scene)
+    this.cross = crossEyes(this.nick.rig, bag)
+    this.had = !!start.found
+
+    // ---- Where the link starts: at the tree (the photo: your unicorn covering her eyes in front, Dad leaning on it).
+    const r = start.round
+    const k0 = r === 'hide' ? this.L(TREE.u - 2.4, TREE.v - 3.2) : this.kStart()
     this.kaylee.place(k0.x, k0.y, k0.z, (this.seaYaw + Math.PI) * DEG)
     this.kY = k0.y
     this.lastPos.copy(k0)
-    const d0 = this.L(TREE.u + 0.9, TREE.v - 1.4)
+    const d0 = this.dStart()
     this.setDad(d0.x, d0.z, this.seaYaw + Math.PI, 'stand')
-    this.startRound(this.round, true)
+    // (Peekaboo waits where the way-in film leaves her: peeking round the trunk, over their heads.)
+    this.peeka.place(this.trunkSide(-1, 1, 1.9))
+    this.peeka.snap(PEEKA.size)
+    if (r === 'story') this.stageStory()
+    else if (r === 'found') this.stageFound()
+    else this.startRound(r, true)
 
     this.unwatch = watch('hideseek', () => ({
       'your unicorn to Dad (m)': [this.dadDist(), 12],
@@ -428,6 +501,43 @@ export class HideSeek implements World3D {
     const k = this.kaylee.root.position
     return Math.hypot(this.dad.x - k.x, this.dad.z - k.z)
   }
+  /** Where round 1 starts (the photo): your unicorn in front of the driftwood tree, Dad by it behind her. */
+  private kStart() {
+    return this.L(TREE.u - 0.6, TREE.v - 2.1)
+  }
+  private dStart() {
+    return this.L(TREE.u + 0.9, TREE.v - 1.4)
+  }
+  /** A point by the driftwood tree's trunk, `y` meters up it: out to one side (`s` -1 or 1 along the beach, `out` 1),
+   *  or tucked behind it on the sea side (`out` 0), where the trunk hides her from the beach. */
+  private trunkSide(s: number, out: number, y = 2.05, to = new Vector3()) {
+    const f = FRAMES.prao
+    const tr = this.tree.position
+    // (The trunk leans: island/props.ts driftwoodGeo.)
+    const cx = tr.x + 0.25 * (y - 0.2)
+    const cz = tr.z + 0.125 * (y - 0.2)
+    const a = 0.98 * s * out
+    const b = 0.85 * (1 - out)
+    return to.set(cx + f.t.x * a + f.n.x * b, tr.y + y, cz + f.t.z * a + f.n.z * b)
+  }
+  /** The middle of someone's head (world). */
+  private headOf(who: Avatar | Member, to = new Vector3()) {
+    const rig = who.rig
+    return rig.head.localToWorld(to.set(0, rig.face.headY, 0))
+  }
+  /** The tip of Dad's nose (world). */
+  private dadNose(to = new Vector3()) {
+    const { head, face } = this.nick.rig
+    return head.localToWorld(to.set(0, face.headY - face.R * 0.12, face.R * 1.12))
+  }
+  /** Just over the tip of your unicorn's horn (world). */
+  private horn(to = new Vector3()) {
+    const rig = this.kaylee.rig
+    return rig.head.localToWorld(to.set(0, rig.face.headY + rig.face.R * 1.55, rig.face.R * 0.2))
+  }
+  private after(s: number, f: () => void) {
+    this.later.push({ at: this.time + s, f })
+  }
 
   /** Can she stand here? (On the beach, out of the things, into the shallows.) */
   private free = (x: number, z: number) => {
@@ -463,12 +573,13 @@ export class HideSeek implements World3D {
     return false
   }
 
-  /** Dad's round chips (?feel=1) and the rounds moving on by themselves. */
-  setRound(r: HideRound) {
-    if (r === this.round) return
+  /** The round chips (?feel=1) and the rounds moving on by themselves. */
+  setRound(r: HidePlayRound) {
+    if (r === this.round || this.films.on) return
     this.startRound(r)
   }
-  private startRound(r: HideRound, first = false) {
+  /** `photo`: the round opens on the photo for a moment (her eyes covered in front of the tree) before the count. */
+  private startRound(r: HidePlayRound, first = false, photo = first) {
     const was = this.round
     this.round = r
     this.hideIdx = 0
@@ -480,9 +591,13 @@ export class HideSeek implements World3D {
     } else {
       this.say(H.close)
       this.hide = ROUND_HIDES[r][0]
-      if (first) this.setPhase('intro')
+      if (photo) this.setPhase('intro')
       else this.toCount()
     }
+  }
+  /** Skips the film that's on (the screen's hold-to-skip ⏭). */
+  skipFilm() {
+    this.films.skip()
   }
   private setPhase(p: Phase) {
     this.phase = p
@@ -493,6 +608,9 @@ export class HideSeek implements World3D {
   update(dt: number) {
     const t = (this.time += dt)
     this.phaseT += dt
+    const cine = this.films.update(dt, this.w / this.h)
+    if (this.films.on) this.lastTouch = t
+    for (let i = this.later.length - 1; i >= 0; i--) if (this.later[i].at <= t) this.later.splice(i, 1)[0].f()
     this.play(dt, t)
     this.lead(dt)
     this.underfoot(dt)
@@ -510,6 +628,8 @@ export class HideSeek implements World3D {
     this.isl.update(dt, t, this.rig.camera.position.x, this.rig.camera.position.z, this.lights)
     this.rig.setShot(this.shot())
     this.rig.update(dt)
+    this.rig.setCine(cine)
+    this.bars.update(dt, this.films.on)
     SEE.uEye.value.copy(this.rig.camera.position)
     SEE.uFocus.value.copy(c)
     this.drawHint(t)
@@ -520,6 +640,9 @@ export class HideSeek implements World3D {
   private play(dt: number, t: number) {
     const k = this.kaylee.root.position
     switch (this.phase) {
+      case 'film':
+        // (A film has the beach: its beats move everyone.)
+        break
       case 'intro':
         // The photo for a moment: Kaylee covering her eyes in front of the tree, Dad leaning on it behind her.
         if (this.phaseT > 1.4) this.toCount()
@@ -545,6 +668,8 @@ export class HideSeek implements World3D {
           this.rustleT = 0
           this.poppedT = -1
           this.glowing = false
+          this.pk.nextT = PEEKA.first
+          this.pk.outT = 0
         }
         break
       }
@@ -558,6 +683,7 @@ export class HideSeek implements World3D {
           this.wiggleT = 0
           this.shake(this.hide, 0.6)
           sfx.giggle()
+          this.twinkle()
         }
         // The help rises while she's stuck (rule 3): he peeks out, his place glows, he pops out, he runs over. The clock
         // runs slower while she's busy leading Kaylee about (she may be looking), never stops.
@@ -571,6 +697,7 @@ export class HideSeek implements World3D {
           this.rustleT = 0
           this.shake(this.hide, 0.9)
           sfx.giggle()
+          this.peeka.wiggle()
         }
         if (popped && !this.dad.hop && (this.poppedT += dt) > SEEK.runOver && !busy) {
           // Still not found: he runs over to her, and that counts.
@@ -585,7 +712,7 @@ export class HideSeek implements World3D {
       }
       case 'found':
         if (this.phaseT > 2.6) {
-          const list = ROUND_HIDES[this.round as '1' | '2']
+          const list = ROUND_HIDES[this.round === '2' ? '2' : '1']
           this.hideIdx++
           if (this.hideIdx >= list.length) return this.startRound(this.round === '1' ? '2' : 'hide')
           this.hide = list[this.hideIdx]
@@ -659,6 +786,7 @@ export class HideSeek implements World3D {
     if (this.dad.peekT >= 0) this.dad.peekT -= dt
     const dadCounting = this.phase === 'dadcount' && !this.dad.path.length && this.dad.peekT < 0
     this.dad.cover += ((dadCounting ? 1 : 0) - this.dad.cover) * ease(dt, 8)
+    this.point += (this.pointGoal - this.point) * ease(dt, 9)
     void t
   }
 
@@ -723,6 +851,11 @@ export class HideSeek implements World3D {
     this.glowing = false
     this.say(came ? H.peekaboo : H.found[this.turn.found++ % H.found.length])
     sfx.found()
+    // (Peekaboo, who knew all along: a flash and a giggle.)
+    this.peeka.flash()
+    this.peeka.sparkle(18)
+    this.peeka.wiggle()
+    fireflySfx.giggle('hideseek')
     window.setTimeout(() => sfx.fanfare(), 350)
     this.kaylee.faceToward(to.x, to.z)
     window.setTimeout(() => {
@@ -754,9 +887,22 @@ export class HideSeek implements World3D {
         sfx.splash()
       } else sfx.giggle()
       this.say(H.hehe)
+      // Peekaboo comes out of his hiding place and stays out, twinkling over him: the hint she can see from anywhere
+      // on the beach. Sparkle says what it means the first time.
+      this.peeka.flash()
+      this.peeka.sparkle(22)
+      fireflySfx.chime('hideseek')
+      if (!this.pk.knew) {
+        this.pk.knew = true
+        this.say(S.knows)
+      }
     } else {
       this.glowing = true
       this.say(H.achoo)
+      this.peeka.flash()
+      this.peeka.sparkle(22)
+      this.peeka.wiggle(0.9)
+      fireflySfx.chime('hideseek')
     }
   }
   /** Help 3: he jumps out of his hiding place, in front of it, and waves (a tap on him finds him at once). */
@@ -810,6 +956,7 @@ export class HideSeek implements World3D {
       if (this.phase !== 'seek') return
       this.shake(this.hide, 0.7)
       sfx.giggle()
+      this.twinkle()
     }, 900)
   }
 
@@ -818,6 +965,7 @@ export class HideSeek implements World3D {
   private toDadCount() {
     this.setPhase('dadcount')
     this.looks = []
+    this.pk.tucked = false
     this.hiddenAt = null
     this.kWhere = 'open'
     this.towelParts.lump.visible = false
@@ -973,8 +1121,12 @@ export class HideSeek implements World3D {
     this.wins++
     this.counts.wins++
     this.openFinds = 0
+    // The end of the stop: Peekaboo is found (a film), then the island. Once she's found, a win is just a win.
+    if (!this.had) return this.playFound()
     this.setPhase('win')
     this.looks = []
+    this.peeka.flash()
+    fireflySfx.giggle('hideseek')
     const k = this.kaylee.root.position
     // She pops out: the towel flies, she hops and twirls, everyone cheers.
     if (this.hiddenAt === 'towel') this.towelLift = 0
@@ -983,14 +1135,14 @@ export class HideSeek implements World3D {
     this.kaylee.setPose('stand')
     this.kaylee.twirl()
     this.say(H.win)
-    // (Her name only for the big one: the first win puts up the flag.)
+    // (Sparkle's cheer only for the first win of a visit.)
     if (this.wins === 1) this.say(H.first)
     sfx.fanfare()
     this.sparkle.burst(k.x, k.y + 0.9, k.z, 60, 2.8, 2.8, 0.14)
     this.dad.yaw = Math.atan2(k.x - this.dad.x, k.z - this.dad.z)
     this.nick.react('wave')
     this.ji.react('wave')
-    this.events.won(this.wins === 1)
+    this.events.won(this.wins === 1, true)
   }
 
   private boo() {
@@ -1002,6 +1154,464 @@ export class HideSeek implements World3D {
     window.setTimeout(() => {
       if (this.phase === 'search' || this.phase === 'giveup') this.win()
     }, 500)
+  }
+
+  // ---------------------------------------------------------------- Peekaboo in play
+
+  /** Peekaboo pops out of Dad's hiding place for a moment: a twinkle she can spot from across the beach. */
+  private twinkle() {
+    if (this.pk.outT <= 0) this.pk.twinkles++
+    this.pk.outT = PEEKA.out
+    this.pk.nextT = PEEKA.every
+    this.peeka.flash()
+    this.peeka.sparkle()
+  }
+
+  /** Every frame of play: where Peekaboo is and how bright. Rounds 1 and 2: she trails Dad as he runs off, tucks in
+   *  beside him as a tiny glow and peeks out of his hiding place now and then; from help 1 on she stays out, twinkling
+   *  over him. Her turn: she keeps by your unicorn's shoulder, and tucks in beside her in a hiding place. */
+  private peekabooPlay(dt: number) {
+    const pk = this.pk
+    const p = this.peeka
+    const k = this.kaylee.root.position
+    const f = FRAMES.prao
+    const size = PEEKA.size
+    const overDad = () => tmp.set(this.dad.x, Math.max(this.dadY(), this.groundY(this.dad.x, this.dad.z) - 0.4) + this.nick.height + 0.95, this.dad.z)
+    switch (this.phase) {
+      case 'intro':
+        // (Where the way-in film leaves her: peeking round the trunk.)
+        p.go(this.trunkSide(-1, 1, 1.9, tmp), 4)
+        p.show(size)
+        break
+      case 'count':
+      case 'found':
+        p.go(overDad(), this.phase === 'found' ? 6 : 3.5)
+        p.show(size)
+        break
+      case 'seek': {
+        if (this.poppedT !== -1) {
+          // He's out and waving: she's over his head.
+          p.go(overDad(), 6)
+          p.show(size)
+          break
+        }
+        const def = BYID[this.hide]
+        const at = this.dadPoint(def)
+        const top = (def.id === 'sea' ? this.water(at.x, at.z) : at.y) + TWINKLE_Y[def.id]
+        const stay = this.helpLvl >= 1
+        if (!stay) {
+          pk.outT -= dt
+          if ((pk.nextT -= dt) <= 0) this.twinkle()
+        }
+        const out = stay || pk.outT > 0
+        // Out: over his hiding place (a slow circle once she's out for good). In: down beside him, a tiny glow.
+        const a = this.time * 2.2
+        if (out) tmp.set(at.x + (stay ? Math.sin(a) * 0.3 : 0), top + (stay ? Math.sin(a * 2) * 0.1 : 0), at.z + (stay ? Math.cos(a) * 0.3 : 0))
+        else tmp.set(at.x + f.n.x * 0.15, top - 0.7, at.z + f.n.z * 0.15)
+        p.go(tmp, out ? 7 : 5)
+        if (stay && Math.random() < dt * 1.6) p.sparkle(3)
+        p.show(out ? size : size * 0.55, out ? 1 : PEEKA.tiny)
+        break
+      }
+      default: {
+        // Her turn: by your unicorn's shoulder; tucked in beside her (a tiny glow) once she's in a hiding place.
+        const hid = !!this.hiddenAt && this.phase !== 'win' && this.phase !== 'caught'
+        if (hid && !pk.tucked) {
+          pk.tucks++
+          fireflySfx.chime('hideseek', 0.025)
+          if (!pk.shushed) {
+            pk.shushed = true
+            this.say(S.shh)
+          }
+        }
+        pk.tucked = hid
+        if (hid) tmp.set(k.x + f.t.x * 0.5, k.y + (this.hiddenAt === 'sea' ? 0.95 : 0.38), k.z + f.t.z * 0.5)
+        else tmp.set(k.x + f.t.x * 0.42, k.y + this.kaylee.height + 0.5, k.z + f.t.z * 0.42)
+        p.go(tmp, hid ? 6 : 4)
+        p.show(hid ? size * 0.55 : size, hid ? PEEKA.tiny : 1)
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------- the films (docs/films.md)
+
+  /** A point `back` meters up the beach from `p` (the films' cameras look out to sea, like the game's), `up` meters
+   *  higher and `along` meters along the beach. */
+  private upBeach(p: Vector3, back: number, up = 0, along = 0): FV3 {
+    const f = FRAMES.prao
+    return [p.x - f.n.x * back + f.t.x * along, p.y + up, p.z - f.n.z * back + f.t.z * along]
+  }
+  /** The way to face the films' camera, turned a little toward someone else (cheated to the camera: a chibi head in
+   *  profile reads as the back of a head). */
+  private cheat(from: Vector3, other: Vector3) {
+    const f = FRAMES.prao
+    const s = Math.sign((other.x - from.x) * f.t.x + (other.z - from.z) * f.t.z)
+    return Math.atan2(-f.n.x * 3 + f.t.x * s * 0.95, -f.n.z * 3 + f.t.z * s * 0.95)
+  }
+
+  /** `round=story`: the way in. They're watching the driftwood tree (their backs to the beach) when the light shows. */
+  private stageStory() {
+    this.hide = 'tree'
+    this.setPhase('film')
+    const k = this.kStart()
+    const d = this.dStart()
+    this.kaylee.place(k.x, k.y, k.z, this.seaYaw * DEG)
+    this.setDad(d.x, d.z, this.seaYaw, 'stand')
+    this.peeka.place(this.trunkSide(1, 0))
+    this.peeka.snap(FILM.size, FILM.glow, FILM.cloud)
+    this.after(0.3, () => this.films.play(this.storyFilm(), () => this.startRound('1', false, true)))
+  }
+
+  /** The way-in film: a green light peeks round the trunk, giggles, ducks behind it and peeks out the other side (a
+   *  close shot, no words); Dad saw it, Mom knows the game, "Then let's play too!". It leaves the beach as round 1
+   *  starts: the photo (your unicorn in front of the tree, Dad by it), Peekaboo peeking over their heads. */
+  private storyFilm(): Film {
+    const p = this.peeka
+    const k0 = this.kStart()
+    const d0 = this.dStart()
+    const mid = k0.clone().lerp(d0, 0.5)
+    const A = this.trunkSide(1, 0.84)
+    const hidA = this.trunkSide(1, 0)
+    const B = this.trunkSide(-1, 0.84)
+    const hidB = this.trunkSide(-1, 0)
+    const low = this.trunkSide(-1, 0.86, 1.9)
+    const hidLow = this.trunkSide(-1, 0, 1.9)
+    const wide = this.trunkSide(1, 0.4, 1.45)
+    // (The two-shots sit a little along the beach, so the root in front of Dad is out of his way.)
+    const twoEye = this.upBeach(mid, 4.7, 1.3, 1.1)
+    const twoLook: FV3 = [mid.x, mid.y + 1.05, mid.z]
+    const mom = this.ji.root.position
+    const momEye: FV3 = [mom.x + Math.sin(MOMMY_FACE - 0.3) * 3.7, mom.y + 1.3, mom.z + Math.cos(MOMMY_FACE - 0.3) * 3.7]
+    const watchHer = () => {
+      const q = p.pos
+      this.kaylee.lookAt(q.x, q.y, q.z)
+      this.nick.lookAt(q.x, q.y, q.z)
+      this.ji.lookAt(q.x, q.y, q.z)
+    }
+    // Talking out front: Dad to a point just in front of your unicorn, she to the camera, Mom to hers.
+    const talk = () => {
+      this.kaylee.lookAt(...twoEye)
+      this.nick.lookAt(k0.x - FRAMES.prao.n.x * 2.2, k0.y + 1, k0.z - FRAMES.prao.n.z * 2.2)
+      this.ji.lookAt(...momEye)
+    }
+    return {
+      id: 'story',
+      beats: [
+        {
+          id: 'peek',
+          dur: 3.0,
+          // The two of them at the tree, from behind and a little along the beach (so Dad isn't between the camera and
+          // the light): something green at the trunk.
+          shot: { eye: this.upBeach(wide, 8.4, 1.9, 3.0), look: [wide.x, wide.y + 0.1, wide.z], fov: 32, to: { eye: this.upBeach(wide, 7.6, 1.8, 2.8) }, ease: 'out' },
+          start: () => {
+            p.place(hidA)
+            p.snap(FILM.size * 1.5, 1, 0.8)
+            this.filmPose = watchHer
+          },
+          cues: [
+            [0.55, () => (p.go(A, 7), p.flash(), p.sparkle(), fireflySfx.chime('hideseek'))],
+            [1.25, () => (p.wiggle(), fireflySfx.giggle('hideseek'))],
+            [2.2, () => p.go(hidA, 8)],
+          ],
+        },
+        {
+          // The other side, close: her face and her glow.
+          id: 'other',
+          dur: 3.3,
+          shot: { eye: this.upBeach(B, 2.5, 0.1, -0.22), look: [B.x, B.y, B.z], fov: 30, to: { eye: this.upBeach(B, 2.1, 0.08, -0.22) }, ease: 'out' },
+          start: () => {
+            p.place(hidB)
+            p.snap(FILM.size * 1.15, FILM.glow, FILM.cloud)
+          },
+          cues: [
+            [0.5, () => (p.go(B, 6), p.sparkle(10))],
+            [1.3, () => (p.wiggle(0.7), fireflySfx.giggle('hideseek'))],
+            [2.5, () => p.wiggle(0.4)],
+          ],
+        },
+        {
+          id: 'saw',
+          say: S.saw,
+          sayAt: 0.55,
+          shot: { eye: twoEye, look: twoLook, fov: 32 },
+          start: () => {
+            // (Under the cut they've turned round to the beach; Peekaboo peeks over their heads.)
+            this.kaylee.place(k0.x, k0.y, k0.z, this.cheat(k0, d0) * DEG)
+            this.setDad(d0.x, d0.z, this.cheat(d0, k0), 'stand')
+            p.place(hidLow)
+            p.snap(FILM.size, FILM.glow, FILM.cloud)
+            p.go(low, 5)
+            this.pointGoal = 1
+            this.nick.react('hop')
+            this.filmPose = talk
+          },
+          cues: [[1.7, () => this.kaylee.react('hop')]],
+        },
+        {
+          id: 'playing',
+          say: S.playing,
+          sayAt: 0.4,
+          shot: { eye: momEye, look: () => this.headOf(this.ji, tmp), fov: 28, sway: 0.015 },
+          start: () => {
+            this.pointGoal = 0
+            this.ji.react('wave')
+          },
+        },
+        {
+          id: 'too',
+          say: S.too,
+          sayAt: 0.35,
+          hold: 0.75,
+          shot: { eye: this.upBeach(mid, 4.1, 1.25, 1.0), look: twoLook, fov: 32 },
+          start: () => this.nick.react('hop'),
+          cues: [
+            [0.9, () => this.kaylee.showOff('cheer')],
+            [1.3, () => (p.wiggle(), p.sparkle(), fireflySfx.giggle('hideseek'))],
+          ],
+        },
+      ],
+      finish: () => {
+        const inl = this.seaYaw + Math.PI
+        this.filmPose = null
+        this.pointGoal = 0
+        // (She never leaves her mark in this film: she only turns back to the beach, the way the photo has her.)
+        this.kaylee.face(inl)
+        this.dad.path = []
+        this.dad.hop = null
+        this.onArrive = null
+        this.setDad(d0.x, d0.z, inl, 'stand')
+        p.go(low, 5)
+        p.show(PEEKA.size)
+      },
+    }
+  }
+
+  /** `round=found`: where the stop ends. She's crouched behind the driftwood tree with Peekaboo; Dad has given up. */
+  private stageFound() {
+    this.setPhase('film')
+    this.hiddenAt = 'tree'
+    const kp = this.kayPoint(BYID.tree)
+    this.kaylee.place(kp.x, kp.y, kp.z, (this.seaYaw + Math.PI) * DEG)
+    this.kaylee.setPose('sit')
+    this.kY = kp.y
+    this.lastPos.copy(kp)
+    const d = this.L(TREE.u - 3.6, TREE.v - 3)
+    this.setDad(d.x, d.z, this.seaYaw + Math.PI, 'stand')
+    this.pk.tucked = true
+    this.peeka.place(tmp.set(kp.x + FRAMES.prao.t.x * 0.5, kp.y + 0.38, kp.z + FRAMES.prao.t.z * 0.5))
+    this.peeka.snap(PEEKA.size * 0.55, PEEKA.tiny)
+    this.after(0.4, () => this.playFound())
+  }
+
+  /** She has won her turn to hide: the found film, then the island with Peekaboo. */
+  private playFound() {
+    if (this.round !== 'found') {
+      this.round = 'found'
+      this.events.round('found')
+    }
+    this.setPhase('film')
+    this.finger = null
+    this.target = null
+    this.walkTo = null
+    this.kaylee.steer(0, 0, 0, this.free)
+    this.looks = []
+    this.dad.path = []
+    this.onArrive = null
+    this.films.play(this.foundFilm(), () => this.events.island(), this.rig.camera)
+  }
+
+  /** Where the found film plays: your unicorn's mark, just out of wherever she hid (in front of it, up the beach; beside
+   *  it for the places at the back of the beach, so the camera stays on the sand), and Dad's beside her on the side
+   *  with room (`s`: which way along the beach). */
+  private foundMarks() {
+    const k = this.kaylee.root.position
+    const me = this.local(k.x, k.z)
+    let u = me.u
+    let v = Math.min(me.v, 0.4)
+    const hid = this.hiddenAt
+    if (hid && hid !== 'sea') {
+      const def = BYID[hid]
+      const r = this.things.get(hid)!.r
+      if (hid === 'tree') {
+        // (Round the trunk, not through it.)
+        u = def.u - 1.9
+        v = def.v - 2.3
+      } else if (def.v < -8) {
+        u = def.u + (def.u < 2 ? 1 : -1) * (r + 1.15)
+        v = def.v + 0.35
+      } else {
+        u = def.u + def.kay.du
+        v = def.v - (r + 1.05) - (hid === 'towel' ? 0.55 : 0)
+      }
+    }
+    u = clamp(u, BOUNDS.u0 + 2.5, BOUNDS.u1 - 2.5)
+    v = clamp(v, BOUNDS.v0 + 1, 0.4)
+    const clear = (uu: number, vv: number) => {
+      const q = atFrame(FRAMES.prao, uu, vv)
+      for (const t of this.things.values()) if (t.r > 0 && Math.hypot(q.x - t.x, q.z - t.z) < t.r + 0.6) return false
+      return true
+    }
+    // (Toward the middle of the beach first.)
+    const first = u < 2 ? 1 : -1
+    const s = clear(u + first * 1.35, v + 0.1) ? first : clear(u - first * 1.35, v + 0.1) ? -first : first
+    return { k: this.L(u, v), d: this.L(u + s * 1.35, v + 0.1), s }
+  }
+
+  /** She pops out of wherever she hid (the towel flies off) and leaps to her mark, turning to the beach. */
+  private leapOut(to: Vector3, yaw: number) {
+    if (this.hiddenAt === 'towel') this.towelLift = 0
+    this.hiddenAt = null
+    this.kWhere = 'open'
+    this.pk.tucked = false
+    this.kaylee.stop()
+    this.kaylee.root.visible = true
+    this.kaylee.setPose('stand')
+    this.kaylee.hopTo(to, 0.6, 1.2, () => {
+      this.kaylee.face(yaw)
+      this.kaylee.twirl()
+    })
+    this.kaylee.face(yaw)
+  }
+
+  /** The found film: she pops out and Peekaboo pops out with her ("You win!"), Peekaboo lands on Dad's nose and he goes
+   *  cross-eyed (a close shot), then she flies to your unicorn's horn: found. It leaves them side by side on the sand,
+   *  Peekaboo out and bright; then the island (`events.island`). */
+  private foundFilm(): Film {
+    const f = FRAMES.prao
+    const p = this.peeka
+    const m = this.foundMarks()
+    const yawK = this.cheat(m.k, m.d)
+    const yawD = this.cheat(m.d, m.k)
+    const mid = m.k.clone().lerp(m.d, 0.5)
+    const front = this.upBeach(mid, 4, 1.3)
+    // Dad's face on his mark (he stands still there once he's hopped over): his head and the tip of his nose.
+    const headH = this.headOf(this.nick).y - this.nick.root.position.y
+    const R = this.nick.rig.face.R
+    const head = new Vector3(m.d.x, m.d.y + headH, m.d.z)
+    const nose: FV3 = [head.x + Math.sin(yawD) * R, head.y - R * 0.1, head.z + Math.cos(yawD) * R]
+    const noseEye = this.upBeach(head, 2.9, 0.06, -m.s * 0.2)
+    const lookOut = () => {
+      const k = this.kaylee.root.position
+      this.kaylee.lookAt(...front)
+      this.nick.lookAt(...front)
+      this.ji.lookAt(k.x, k.y + 0.6, k.z)
+    }
+    return {
+      id: 'found',
+      beats: [
+        {
+          id: 'pop',
+          say: H.win,
+          sayAt: 0.75,
+          dur: 2.7,
+          shot: { eye: this.upBeach(m.k, 5.0, 1.9, m.s * 0.8), look: [m.k.x + f.t.x * m.s * 0.6, m.k.y + 0.85, m.k.z + f.t.z * m.s * 0.6], fov: 36, blend: 0.7, to: { eye: this.upBeach(m.k, 4.2, 1.6, m.s * 0.8) } },
+          start: () => {
+            this.leapOut(m.k, yawK)
+            // Dad jumps over to her in surprise.
+            const from = new Vector3(this.dad.x, this.dadY(), this.dad.z)
+            this.dad.pose = 'stand'
+            this.dad.hidden = false
+            this.dad.yaw = yawD
+            this.dad.hop = { from, to: m.d.clone(), t: 0, dur: 0.6 }
+            // Peekaboo pops out with her, on her far side from Dad.
+            this.filmPose = () => {
+              const k = this.kaylee.root.position
+              lookOut()
+              p.go(tmp.set(k.x - f.t.x * m.s * 0.5, k.y + this.kaylee.height + 0.35, k.z - f.t.z * m.s * 0.5), 8)
+            }
+            p.show(FILM.size, FILM.glow, FILM.cloud)
+            p.sparkle(16)
+            fireflySfx.giggle('hideseek')
+            sfx.fanfare()
+            this.ji.react('wave')
+          },
+          cues: [
+            [
+              0.65,
+              () => {
+                this.sparkle.burst(m.k.x, m.k.y + 0.9, m.k.z, 50, 2.6, 2.6, 0.13)
+                this.nick.react('hop')
+              },
+            ],
+          ],
+        },
+        {
+          // Close on Dad: she lands on his nose and he goes cross-eyed.
+          id: 'nose',
+          say: S.nose,
+          sayAt: 1.0,
+          dur: 3.3,
+          shot: { eye: noseEye, look: [nose[0], nose[1] + R * 0.12, nose[2]], fov: 28, to: { eye: this.upBeach(head, 2.55, 0.05, -m.s * 0.2) }, sway: 0.012 },
+          start: () => {
+            // (On his nose she's small and her glow nearly out, so his face and his crossed eyes show.)
+            p.show(0.72, 0.1, 0.2)
+            this.filmPose = () => {
+              this.nick.lookAt(...noseEye)
+              this.kaylee.lookAt(...nose)
+              p.go(this.dadNose(tmp), 9)
+            }
+          },
+          cues: [
+            [0.5, () => (this.cross.on(true), p.sparkle(8), fireflySfx.chime('hideseek'), this.nick.react('wiggle'), sfx.boing())],
+            [2.3, () => (this.nick.react('wiggle'), p.wiggle(0.5))],
+          ],
+        },
+        {
+          // Off his nose and over to your unicorn's horn: found.
+          id: 'found',
+          say: S.found,
+          sayAt: 0.85,
+          hold: 0.8,
+          dur: 3.2,
+          shot: { eye: this.upBeach(mid, 4.5, 1.35), look: [mid.x, mid.y + 0.95, mid.z], fov: 32, to: { eye: this.upBeach(mid, 3.9, 1.3) } },
+          start: () => {
+            p.show(FILM.size * 0.95, FILM.glow, FILM.cloud)
+            // (She circles over the tip of the horn, clear of your unicorn's face.)
+            this.filmPose = () => {
+              const h = this.horn(tmp2)
+              const a = this.time * 3.2
+              lookOut()
+              p.go(tmp.set(h.x + Math.sin(a) * 0.3, h.y + 0.22 + Math.sin(a * 2) * 0.05, h.z + Math.cos(a) * 0.3), 6)
+            }
+          },
+          cues: [
+            [0.45, () => this.cross.on(false)],
+            [0.7, () => (p.sparkle(20), fireflySfx.found('hideseek'))],
+            [
+              1.0,
+              () => {
+                const k = this.kaylee.root.position
+                this.sparkle.burst(k.x, k.y + 1, k.z, 60, 2.8, 2.8, 0.14)
+                this.kaylee.showOff('cheer')
+                this.nick.react('wave')
+                this.ji.react('wave')
+                this.events.won(true, false)
+              },
+            ],
+          ],
+        },
+      ],
+      finish: () => {
+        this.filmPose = null
+        this.cross.on(false)
+        this.hiddenAt = null
+        this.kWhere = 'open'
+        this.pk.tucked = false
+        this.kaylee.root.visible = true
+        this.kaylee.setPose('stand')
+        this.kaylee.place(m.k.x, m.k.y, m.k.z, yawK * DEG)
+        this.kY = m.k.y
+        this.lastPos.copy(m.k)
+        this.dad.path = []
+        this.dad.hop = null
+        this.onArrive = null
+        this.setDad(m.d.x, m.d.z, yawD, 'stand')
+        p.show(PEEKA.size)
+        // (If nothing takes her to the island, her turn goes on: Dad counts again in a moment.)
+        this.round = 'hide'
+        this.setPhase('win')
+      },
+    }
   }
 
   // ---------------------------------------------------------------- Dad moving
@@ -1092,7 +1702,7 @@ export class HideSeek implements World3D {
   // ---------------------------------------------------------------- Kaylee
 
   private frozen() {
-    return this.phase === 'intro' || this.phase === 'count'
+    return this.phase === 'film' || this.phase === 'intro' || this.phase === 'count'
   }
   private lead(dt: number) {
     const k = this.kaylee.root.position
@@ -1213,6 +1823,16 @@ export class HideSeek implements World3D {
       n.armR.rotation.set(0, 0, 0)
       n.head.rotation.x = 0
     }
+    // Dad pointing back at the tree (the way-in film): one arm up and out at it, the other thrown up too.
+    const p = this.point
+    if (p > 0.001) {
+      n.armR.rotation.set(0, 0, 2.15 * p)
+      n.armL.rotation.set(0, 0, -1.7 * p)
+    } else if (p !== 0) {
+      this.point = 0
+      n.armR.rotation.set(0, 0, 0)
+      n.armL.rotation.set(0, 0, 0)
+    }
   }
 
   // ---------------------------------------------------------------- her finger
@@ -1246,6 +1866,8 @@ export class HideSeek implements World3D {
   }
 
   pointerDown(x: number, y: number, id?: string) {
+    // (A film is on: the beach takes no taps; the screen's FilmOverlay sparkles where she touched.)
+    if (this.phase === 'film') return
     this.lastTouch = this.time
     this.finger = { x, y, id, moved: false, lead: !id }
     if (!id) this.counts.leads++
@@ -1275,6 +1897,7 @@ export class HideSeek implements World3D {
   }
 
   tap(x: number, y: number, id?: string) {
+    if (this.phase === 'film') return
     this.lastTouch = this.time
     this.counts.taps++
     if (this.frozen()) return this.peek()
@@ -1435,15 +2058,20 @@ export class HideSeek implements World3D {
         th.glow.scale.setScalar(1 + 0.08 * Math.sin(t * 4))
       }
     }
-    // Mom watches; Dad looks at Kaylee when he isn't hiding or counting.
+    // Mom watches; Dad looks at your unicorn when he isn't hiding or counting. (A film sets its own looks.)
     const k = this.kaylee.root.position
-    this.ji.lookAt(k.x, k.y + 0.6, k.z)
-    if (this.phase !== 'dadcount' && this.phase !== 'search') this.nick.lookAt(k.x, k.y + 0.6, k.z)
-    else this.nick.lookAway()
-    this.kaylee.lookAt(this.dad.x, this.dadY() + 0.8, this.dad.z)
+    if (this.phase === 'film') this.filmPose?.()
+    else {
+      this.ji.lookAt(k.x, k.y + 0.6, k.z)
+      if (this.phase !== 'dadcount' && this.phase !== 'search') this.nick.lookAt(k.x, k.y + 0.6, k.z)
+      else this.nick.lookAway()
+      this.kaylee.lookAt(this.dad.x, this.dadY() + 0.8, this.dad.z)
+      this.peekabooPlay(dt)
+    }
     this.kaylee.update(dt, t)
     this.nick.update(dt, t)
     this.ji.update(dt, t)
+    this.peeka.update(dt, t, this.rig.camera)
     this.poseCover()
     if (this.bubble && this.time > this.bubble.until) this.bubble = null
   }
@@ -1453,7 +2081,7 @@ export class HideSeek implements World3D {
   /** While she counts and seeks (rounds 1 and 2): the box round her and Dad's hiding place (and Dad, out of it), in
    *  Ao Prao's u (across the screen) and v (into it), so wherever he hides it's on screen, on every screen shape. */
   private seekBox() {
-    if (this.round === 'hide' || !(this.phase === 'intro' || this.phase === 'count' || this.phase === 'seek' || this.phase === 'found')) return null
+    if (!(this.phase === 'intro' || this.phase === 'count' || this.phase === 'seek' || this.phase === 'found')) return null
     const k = this.kaylee.root.position
     const me = this.local(k.x, k.z)
     let u0 = me.u
@@ -1499,7 +2127,7 @@ export class HideSeek implements World3D {
   }
 
   render() {
-    this.renderer.render(this.scene, this.rig.camera)
+    this.bars.render(this.renderer, this.scene, this.rig.camera, this.w, this.h)
     this.stats.calls = this.renderer.info.render.calls
     this.stats.tris = this.renderer.info.render.triangles
   }
@@ -1509,7 +2137,8 @@ export class HideSeek implements World3D {
     if (!el) return
     let at: Vector3 | null = null
     const idle = !this.finger && t - this.lastTouch > HINT_S
-    if (this.phase === 'seek' && this.glowing) at = this.dadPoint(BYID[this.hide])
+    if (this.phase === 'film') at = null
+    else if (this.phase === 'seek' && this.glowing) at = this.dadPoint(BYID[this.hide])
     else if (this.phase === 'dadcount' && idle && !this.hiddenAt) {
       // The nearest hiding place.
       const k = this.kaylee.root.position
@@ -1559,7 +2188,9 @@ export class HideSeek implements World3D {
     const v = new Vector3()
     const hidingNow = this.phase === 'seek'
     for (const [id, el] of this.anchorEls) {
-      if (id === 'kaylee') place(el, this.kaylee.root.visible ? this.kaylee.root.getWorldPosition(v) : null, this.kaylee.height, 0.8)
+      // (A film is on: nothing to tap.)
+      if (this.phase === 'film') place(el, null, 0)
+      else if (id === 'kaylee') place(el, this.kaylee.root.visible ? this.kaylee.root.getWorldPosition(v) : null, this.kaylee.height, 0.8)
       else if (id === 'family:nick') place(el, this.nick.root.visible && this.nick.root.position.y > -0.6 ? this.nick.root.getWorldPosition(v) : null, this.nick.height * (this.dad.pose === 'lie' ? 0.5 : 0.9), 0.8)
       else if (id === 'family:ji') place(el, this.ji.root.getWorldPosition(v), this.ji.height * 0.8, 0.9)
       else if (id.startsWith('hide:')) {
@@ -1582,14 +2213,18 @@ export class HideSeek implements World3D {
       section: 'hideseek',
       round: this.round,
       phase: this.phase,
-      hide: this.round === 'hide' ? null : this.hide,
+      hide: this.round === '1' || this.round === '2' ? this.hide : null,
+      film: this.films.now,
+      films: { done: this.films.done, skipped: this.films.skipped },
+      peekaboo: { ...sc(this.peeka.pos), glow: +this.peeka.glow.toFixed(2), tucked: this.pk.tucked, twinkles: this.pk.twinkles, tucks: this.pk.tucks, knew: this.pk.knew, shushed: this.pk.shushed, crossEyed: this.cross.crossed },
+      tree: { u: +TREE.u.toFixed(2), v: +TREE.v.toFixed(2) },
       helpLvl: this.helpLvl,
       helpT: +this.helpT.toFixed(1),
       popped: this.poppedT !== -1,
       poppedT: +this.poppedT.toFixed(1),
       speed: +this.speed.toFixed(2),
       dadPath: this.dad.path.length,
-      onScreen: this.round === 'hide' ? null : ROUND_HIDES[this.round].map((id) => (({ x, y }) => x >= 0 && x <= this.w && y >= 0 && y <= this.h)(this.toScreen(this.dadPoint(BYID[id]).setY(this.dadPoint(BYID[id]).y + 0.5)))).every(Boolean),
+      onScreen: this.round !== '1' && this.round !== '2' ? null : ROUND_HIDES[this.round].map((id) => (({ x, y }) => x >= 0 && x <= this.w && y >= 0 && y <= this.h)(this.toScreen(this.dadPoint(BYID[id]).setY(this.dadPoint(BYID[id]).y + 0.5)))).every(Boolean),
       hidingIn: this.hiddenAt,
       openFinds: this.openFinds,
       looksLeft: this.looks.length,
@@ -1606,6 +2241,7 @@ export class HideSeek implements World3D {
     return { ...this.renderer.info.memory }
   }
   dispose() {
+    this.later = []
     this.unwatch()
     this.scene.clear()
     this.bag.dispose()
