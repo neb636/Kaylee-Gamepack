@@ -35,9 +35,9 @@ const SKY = '#94D3FB'
 const SOIL = '#8A5C3C'
 /** The far riverbank's mud behind the water. */
 const BANK = '#C49A70'
-/** Seconds of steady rain right over the river (or the lagoon) to fill it. */
-const RIVER_SECONDS = 22
-const LAGOON_SECONDS = 7
+/** Seconds of steady rain right over the river (or the lagoon) to fill it (50% faster than the original 22 s / 7 s). */
+const RIVER_SECONDS = 22 / 1.5
+const LAGOON_SECONDS = 7 / 1.5
 /** River fill shares where Rosa can reach each friend. */
 const STEPS = [0.3, 0.58, 1] as const
 const FRIENDS = ['capy', 'sloth', 'monkey'] as const
