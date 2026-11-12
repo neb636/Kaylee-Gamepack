@@ -176,7 +176,9 @@ function PlayButton({ on, table }: { on: boolean; table: MutableRefObject<TableP
  *  taken), the picked one big with a pink ring, and ▶ to sit down and play. The cousin takes another color. */
 function ColorPicker({ view, table }: { view: TableView; table: MutableRefObject<TablePlugin | null> }) {
   const wide = useLandscape()
-  const pic = wide ? 'calc(var(--target) * 1.05)' : 'calc(var(--target) * 1.2)'
+  // Tall: a row of four, as big as fits the screen's width (the panel's 12px margins, its padding and the three gaps at
+  // their largest: 96px), so a portrait iPhone (390 wide) still gets ~73px buttons, never clipped at the edges.
+  const pic = wide ? 'calc(var(--target) * 1.05)' : 'min(calc(var(--target) * 1.2), calc((100vw - 96px) / 4))'
   const place: CSSProperties = wide ? { right: 'calc(var(--safe-right, 0px) + 12px)', bottom: 'calc(var(--safe-bottom) + 12px)' } : { left: '50%', bottom: 'calc(var(--safe-bottom) + 12px)', translate: '-50% 0' }
   return (
     <motion.div
