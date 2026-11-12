@@ -2151,6 +2151,11 @@
     "text": "Ha ha! Boats go in the sea!",
     "voice": "otter"
   },
+  "To get off, drive into the pink ring!",
+  {
+    "text": "Park it here! Bye bye!",
+    "voice": "otter"
+  },
   {
     "text": "Not again!",
     "voice": "nick"

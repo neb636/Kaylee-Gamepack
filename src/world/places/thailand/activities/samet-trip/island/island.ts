@@ -78,6 +78,7 @@ const WALK = knobs('sametWalk', 'Leading your unicorn round the island', FILE, {
   gallop: { value: 4.6, min: 2, max: 9, step: 0.1, label: 'Gallop', unit: 'm/s', note: 'her speed with the finger far ahead' },
   gallopFrom: { value: 5.5, min: 2, max: 14, step: 0.25, label: 'Gallop from', unit: 'm', note: 'her finger this far ahead of her = full gallop' },
   stopNear: { value: 0.45, min: 0.1, max: 2, step: 0.05, label: 'Stop this close', unit: 'm', note: 'she stops when the finger is this close' },
+  giveUp: { value: 1.5, min: 0.5, max: 5, step: 0.1, label: 'Gives up on a tap after', unit: 's', note: 'walking to a tapped spot and getting no closer for this long, she stops (no pacing back and forth by a rail)' },
   swim: { value: 1.5, min: 0.5, max: 4, step: 0.1, label: 'Swim', unit: 'm/s', note: 'paddling in the floatie (slower than walking)' },
   deep: { value: 0.5, min: 0.2, max: 1.2, step: 0.05, label: 'Swims from', unit: 'm deep', note: 'shallower than this she wades' },
   far: { value: 26, min: 8, max: 60, step: 1, label: 'Swim out to', unit: 'm', note: 'how far from the shore she can paddle' },
@@ -312,6 +313,8 @@ export class SametIsland implements World3D {
   private stepDist = 0
   private lastPos = new Vector3()
   private stuckT = 0
+  /** Walking to a tapped spot: the closest she has got to it, and how long since she last got closer. */
+  private gain = { x: 0, z: 0, best: Infinity, t: 0 }
 
   // ---- Her finger.
   private finger: { x: number; y: number; id?: string; leading: boolean; moved: boolean; at: number } | null = null
@@ -951,11 +954,24 @@ export class SametIsland implements World3D {
     const moved = Math.hypot(k.x - this.lastPos.x, k.z - this.lastPos.z)
     this.lastSpeed = dt > 0 ? moved / dt : 0
     this.stuckT = goal && moved < dt * 0.3 ? this.stuckT + dt : 0
-    if (this.stuckT > 0.7 && !this.finger) {
+    // Walking to a tapped spot she can't reach (the sea beside the pier, round a rail): sliding along the rail and
+    // back again is still moving, so `stuckT` never fires. Getting no closer for a while gives up just the same.
+    let noCloser = false
+    if (goal && !this.finger && this.target) {
+      const g = this.gain
+      if (Math.hypot(g.x - goal.x, g.z - goal.z) > 0.3) Object.assign(g, { x: goal.x, z: goal.z, best: Infinity, t: 0 })
+      if (this.aimDist < g.best - 0.25) {
+        g.best = this.aimDist
+        g.t = 0
+      } else g.t += dt
+      noCloser = g.t > WALK.giveUp
+    } else this.gain.best = Infinity
+    if ((this.stuckT > 0.7 || noCloser) && !this.finger) {
       this.target = null
       this.walkTo = null
       this.kaylee.steer(0, 0, 0, this.free)
       this.stuckT = 0
+      this.gain.best = Infinity
     }
     if (moved > 0.01) {
       const last = this.trail[0]

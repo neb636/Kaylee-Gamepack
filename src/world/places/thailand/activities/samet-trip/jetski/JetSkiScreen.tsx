@@ -20,7 +20,7 @@ interface Props {
   round: RoundId
   /** The round on screen changed (the address bar follows). */
   onRound(r: RoundId): void
-  /** Back to the island (after a race she won), the jet ski hers. */
+  /** Back to the island (parked in the pink ring by the hut, or after a race she won), the jet ski hers. */
   onIsland?(): void
 }
 
@@ -39,6 +39,8 @@ export function JetSkiScreen({ round: first, onRound, onIsland }: Props) {
   const guideRef = useRef<TripGuideHandle>(null)
   const onRoundRef = useRef(onRound)
   onRoundRef.current = onRound
+  const onIslandRef = useRef(onIsland)
+  onIslandRef.current = onIsland
 
   useEffect(() => onRoundRef.current(run.round), [run])
 
@@ -57,6 +59,7 @@ export function JetSkiScreen({ round: first, onRound, onIsland }: Props) {
     count: (n) => setCount(n),
     stars: (n, of) => setStars({ n, of }),
     ready: () => setReady(true),
+    leave: () => onIslandRef.current?.(),
     spray: (k) => {
       const el = sprayRef.current
       if (!el) return

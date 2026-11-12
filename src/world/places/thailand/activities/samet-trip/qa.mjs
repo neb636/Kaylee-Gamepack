@@ -698,6 +698,40 @@ export const motion = [
     },
   },
   {
+    // Getting off: out to sea, round, and back into the pink ring by the hut (she hops off; back on the island).
+    name: 'thailand-samet-jetski-park',
+    seconds: 22,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/jetski?round=ride`)
+      await ready(page)
+      await page.locator('[data-anchor="jacket"]').waitFor({ state: 'visible', timeout: 15000 })
+      await page.locator('[data-anchor="jacket"]').click({ force: true })
+      await page.waitForFunction(() => window.__thaiSametQA?.().phase === 'ride', null, { timeout: 8000 })
+    },
+    act: async (page) => {
+      const q = () => page.evaluate(() => window.__thaiSametQA?.() ?? {})
+      let s = await q()
+      await page.mouse.move(s.ski.x, Math.max(130, s.ski.y - 300))
+      await page.mouse.down()
+      for (let i = 0; i < 22; i++) {
+        s = await q()
+        await page.mouse.move(s.ski.x, Math.max(130, s.ski.y - 300))
+        await page.waitForTimeout(120)
+      }
+      // Round and back: the ring's middle is 3 m out from the waterline in front of the hut (layout.ts bay(0, 3)).
+      for (let i = 0; i < 160; i++) {
+        s = await q()
+        if (s.section !== 'jetski' || s.phase !== 'ride') break
+        const want = (Math.atan2(8.93 - s.x, -1.45 - s.z) * 180) / Math.PI
+        const off = ((want - s.heading + 540) % 360) - 180
+        await page.mouse.move(Math.max(5, Math.min(1175, s.ski.x + (Math.abs(off) > 80 ? -450 : -Math.max(-400, Math.min(400, off * 6))))), Math.max(130, s.ski.y - 200))
+        await page.waitForTimeout(120)
+      }
+      await page.mouse.up()
+      await page.waitForTimeout(4500)
+    },
+  },
+  {
     name: 'thailand-samet-jetski-carve',
     seconds: 10,
     setup: async (page, base) => {
