@@ -220,6 +220,11 @@ test.describe('the game table', () => {
     await open(page, '#/world/thailand/hub/unicorn?vs=gan&me=3&them=4&turn=cousin&rolls=6,6,6')
     await page.getByRole('button', { name: 'Games' }).click()
     await page.getByRole('button', { name: 'Play', exact: true }).click({ force: true })
+    // The Unicorn game asks her unicorn's color first (its own step, with its own Play).
+    await expect.poll(() => table(page)).toMatchObject({ picking: true, step: 'color' })
+    await page.getByRole('button', { name: 'lavender unicorn' }).click({ force: true })
+    await expect.poll(() => table(page)).toMatchObject({ piece: 'lavender' })
+    await page.getByRole('button', { name: 'Play', exact: true }).click({ force: true })
     // The old cousin turn can't move anything in the new game.
     await page.waitForTimeout(3000)
     expect(await table(page)).toMatchObject({ phase: 'awaiting', me: 0, them: 0, turn: 'kaylee', seated: 'gan' })
