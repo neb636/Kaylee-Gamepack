@@ -2,7 +2,7 @@ import { useSections } from '../../../../kit/sections'
 import SECTIONS from './sections'
 import { numberParam, listParam } from '../../sectionState'
 // 🐧 Pepa's Penguin Cliff (the desert coast at Paracas: Peru has penguins! a cold ocean full of fish). Plan:
-// planning/around-the-world/peru.md § 2.
+// planning/around-the-world/peru.md (retired; in git history) § 2.
 // The toy (one core verb): pull a penguin back on the launch rock and let go. It leaps in an arc (a dotted line shows
 // where it will splash), belly-flops in, "flies" underwater, porpoises home and hops back up the cliff. Small pull, small
 // hop; big pull, big splash and a deep dive. The same verb deepens three times:

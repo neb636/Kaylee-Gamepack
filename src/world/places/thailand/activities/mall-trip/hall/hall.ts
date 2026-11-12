@@ -1,4 +1,4 @@
-// MEGA HarborLand's hall (plan: planning/around-the-world/thailand/mall-trip.md, "The hall"), greybox: the place she
+// MEGA HarborLand's hall (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "The hall"), greybox: the place she
 // walks around between the mini games. One long side view that scrolls with her:
 //   - She walks the way she does in Agong's house: tap the mats and she goes, hold a finger and she follows it.
 //   - Tap a way in (the vet's, the cafe's or the barber's door, the Big Frame's tunnel, the racing slide's steps) and

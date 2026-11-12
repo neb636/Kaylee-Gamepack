@@ -1,4 +1,4 @@
-// The airport, one moment worth having (plan: thailand/boat-trip.md, "Airport"): no check-in, no gate. Her suitcase goes
+// The airport, one moment worth having (plan: thailand/boat-trip.md (retired; in git history), "Airport"): no check-in, no gate. Her suitcase goes
 // on the belt (tap it, or drag it there) and slides into the x-ray, and the screen beside it shows what's inside as
 // glowing blue outlines: everything she packed, even Gan asleep or the spinning fan. The officer laughs and stamps her
 // boarding pass on the counter (ka-chunk, a pink stamp on it). The glass doors slide open onto the plane; tap its door

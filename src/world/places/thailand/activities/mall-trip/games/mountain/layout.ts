@@ -1,4 +1,4 @@
-// The Golden Mountain at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "5. The Golden Mountain"),
+// The Golden Mountain at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "5. The Golden Mountain"),
 // in meters: the yellow cone, its climbing holds for each round, the bell on top, the steel slide down the front, the
 // mat it lands on, where Dad and the monkeys are. Pure data (no three.js), shared by the 3D world and the flat
 // version.

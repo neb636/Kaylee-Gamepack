@@ -1,4 +1,4 @@
-// 🎭 Opera Night at the Arena, Italy's finale (plan: planning/around-the-world/italy.md, "Finale"). GATE 1: THE GREYBOX.
+// 🎭 Opera Night at the Arena, Italy's finale (plan: planning/around-the-world/italy.md (retired; in git history), "Finale"). GATE 1: THE GREYBOX.
 // Only placeholder shapes, no art, no puppets, no voices (the prompts are text for Dad): Kaylee grabs the conductor's
 // wand and every swing is one beat of a synthesized tarantella (band.ts), so her hand is the tempo; big swings play
 // forte, little swings piano, and the band freezes when she stops. The loop: candles light up the arena as she plays,

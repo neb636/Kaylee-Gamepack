@@ -1,4 +1,4 @@
-// Little Land at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "6. Little Land"), in meters: the
+// Little Land at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "6. Little Land"), in meters: the
 // mat she builds on, the brick box, the easel with the picture card, where Kaylee and Dad stand, the toys around.
 // Pure data (no three.js).
 //

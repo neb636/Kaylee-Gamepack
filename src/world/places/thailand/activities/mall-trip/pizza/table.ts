@@ -1,4 +1,4 @@
-// The Pizza Company (plan: planning/around-the-world/thailand/mall-trip.md, "The Pizza Company"), greybox: shapes and
+// The Pizza Company (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "The Pizza Company"), greybox: shapes and
 // sounds, with voices (lines.ts `L.mall.pizza`): Sparkle's "Pick a pizza!" and "Pull a slice!", the server's "Pizza
 // time!" and "Khob khun ka!", Sparkle counting each plate's first and second slice round the table, Dad hamming it
 // up and his cheesy nose, Mom's "Those are for Agong!", the cheer as the lid closes, the fact once it's all shared,

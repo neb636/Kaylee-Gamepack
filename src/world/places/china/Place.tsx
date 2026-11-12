@@ -1,4 +1,4 @@
-// China: "Bao Bao's Dragon Parade" (plan: planning/around-the-world/china.md). Built in stages: the scroll map and the
+// China: "Bao Bao's Dragon Parade" (plan: planning/around-the-world/china.md (retired; in git history)). Built in stages: the scroll map and the
 // Shanghai Dumpling House came first, then the Bamboo Forest and the Great Wall, then Hotpot Night, the Magic Brush, the Great Race,
 // the Bullet Train and the Dragon Parade finale. Every lantern is open from the start; each stamp brings a friend to the parade.
 import { motion } from 'motion/react'

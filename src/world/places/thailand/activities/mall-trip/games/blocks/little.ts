@@ -1,4 +1,4 @@
-// Little Land at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "6. Little Land"), greybox shapes
+// Little Land at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "6. Little Land"), greybox shapes
 // with voices (lines.ts `L.mall.blocks`: Dad's bet and his sneeze, Sparkle's few lines, said through talk.ts). Giant
 // foam bricks on the flower mats; Kaylee in her grip socks by the brick box, Dad watching from the other side.
 //

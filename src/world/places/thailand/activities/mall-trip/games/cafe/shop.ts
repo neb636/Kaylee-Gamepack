@@ -1,4 +1,4 @@
-// Cafe & Cake in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md, "4. Cafe & Cake"), greybox:
+// Cafe & Cake in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "4. Cafe & Cake"), greybox:
 // shapes and sounds, with the voices (lines.ts L.mall.cafe). Kaylee in her apron and chef's hat stands at the counter; Dad and Mom are the
 // customers at its end.
 //

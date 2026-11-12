@@ -1,4 +1,4 @@
-// Phang Nga Bay by longtail boat (plan: planning/around-the-world/thailand/boat-trip.md, "The bay"): the main event.
+// Phang Nga Bay by longtail boat (plan: planning/around-the-world/thailand/boat-trip.md (retired; in git history), "The bay"): the main event.
 //
 // The toy (core verb): drive the longtail with one finger.
 // - Finger on the water (or on the boat, then drag): the boat goes after it. Far ahead = fast, near = slow, held to one

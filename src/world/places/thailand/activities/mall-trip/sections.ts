@@ -1,4 +1,4 @@
-// The mall day at ICONSIAM (plan: planning/around-the-world/thailand/mall-trip.md), as deep-linkable sections:
+// The mall day at ICONSIAM (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history)), as deep-linkable sections:
 // #/world/thailand/mall-trip/<section>?socks=<color>&games=<stickers so far>. The trip loop: Mom asks where to
 // (invite: 🚤 or 🛝🍕), the goodbye at Agong's house and Mom's grey Veloz (goodbye), ICONSIAM, the lift and the
 // HarborLand counter (arrive), and home (home?photos=<the photos from the day>: the pizza box for Agong, the photo on

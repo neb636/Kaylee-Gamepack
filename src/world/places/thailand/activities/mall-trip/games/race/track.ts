@@ -1,4 +1,4 @@
-// The Racing Slide at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "★ 3. The Racing Slide"),
+// The Racing Slide at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "★ 3. The Racing Slide"),
 // greybox: shapes and sounds, with the voices (lines.ts L.mall.race). Four wavy orange lanes seen from the bottom, ending in a pit of pink and white
 // balls; Kaylee in lane 1, Dad, Mom and a kid beside her (the other kid waits a turn by the pit).
 //

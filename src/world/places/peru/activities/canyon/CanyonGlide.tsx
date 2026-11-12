@@ -1,7 +1,7 @@
 import { useSections } from '../../../../kit/sections'
 import SECTIONS from './sections'
 import { numberParam } from '../../sectionState'
-// 🦅 Coco's Canyon Glide (Colca Canyon: Andean condors soar on warm air). Plan: planning/around-the-world/peru.md § 3.
+// 🦅 Coco's Canyon Glide (Colca Canyon: Andean condors soar on warm air). Plan: planning/around-the-world/peru.md (retired; in git history) § 3.
 // The toy (one core verb): steer Coco through the canyon. He follows her finger with big slow turns, wings wide, and
 // hardly flaps: in plain air he slowly glides down; in warm air (swirls of shimmer rising off sunny rocks) he circles
 // up fast. Pull him up without warm air and he gives a few heavy flaps that barely help. The verb deepens three times:

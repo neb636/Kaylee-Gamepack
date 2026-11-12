@@ -1,4 +1,4 @@
-// The Vet Clinic in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md, "★ 1. The Vet Clinic"),
+// The Vet Clinic in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "★ 1. The Vet Clinic"),
 // greybox 1: shapes and sounds, with the voices (lines.ts L.mall.vet). Dr. Kaylee in blue scrubs and a cap stands by
 // the exam table; Dad watches.
 //

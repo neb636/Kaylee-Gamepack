@@ -1,4 +1,4 @@
-// Italy: "Lupa Sings at the Opera" (plan: planning/around-the-world/italy.md). Built in stages: the boot map and the
+// Italy: "Lupa Sings at the Opera" (plan: planning/around-the-world/italy.md (retired; in git history)). Built in stages: the boot map and the
 // Pizzeria in Naples came first; arches whose activities aren't built yet say "coming soon".
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react'

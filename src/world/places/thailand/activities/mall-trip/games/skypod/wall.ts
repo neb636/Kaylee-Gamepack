@@ -1,4 +1,4 @@
-// The Sky Pod at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "8. The Sky Pod"), greybox shapes
+// The Sky Pod at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "8. The Sky Pod"), greybox shapes
 // with voices (lines.ts `L.mall.skypod`: Dad's race lines, Sparkle's count and few lines, said through
 // blocks/talk.ts). A wall of nine light-up pods painted as a night sky, a scoreboard, Kaylee in her grip socks on the
 // springy mat in front, Dad watching from the side (and racing her in round 3).

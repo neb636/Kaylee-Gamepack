@@ -1,4 +1,4 @@
-// The Golden Mountain at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "5. The Golden Mountain"),
+// The Golden Mountain at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "5. The Golden Mountain"),
 // greybox shapes with voices (lines.ts `L.mall.mountain`: Sparkle's opening and count, Dad's race lines, the Golden
 // Mount fact, said through blocks/talk.ts). A big yellow cone with climbing holds and Thai pattern bands, a red rail
 // and a bell on top, a shiny steel slide down the front, kids riding elephants painted on the wall, and three Lopburi

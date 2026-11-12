@@ -1,4 +1,4 @@
-// MEGA HarborLand's Big Frame (plan: planning/around-the-world/thailand/mall-trip.md, "The Big Frame"), in meters: the
+// MEGA HarborLand's Big Frame (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "The Big Frame"), in meters: the
 // one source of truth for its build, the walk grids, the links between levels and the tap targets. It stands in the
 // hall where the hall puts it (hall/layout.ts FRAME, in the hall's own meters), so the frame she plays in is the frame
 // she walked up to. Pure data (no three.js).

@@ -1,4 +1,4 @@
-// The Sky Pod at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "8. The Sky Pod"), in meters: the
+// The Sky Pod at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "8. The Sky Pod"), in meters: the
 // wall of light-up pods, the scoreboard, the springy mat she bounces on, where Kaylee and Dad stand, the toys around.
 // Pure data (no three.js).
 //

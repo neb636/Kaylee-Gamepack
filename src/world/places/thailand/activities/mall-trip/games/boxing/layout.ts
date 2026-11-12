@@ -1,4 +1,4 @@
-// Muay Thai at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "7. Muay Thai bags"), in meters:
+// Muay Thai at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "7. Muay Thai bags"), in meters:
 // the blue mat, the ropes, the bags on their beam, the coach's drum, where Kaylee, Dad and the coach stand, the
 // pokeables, and the numbers each round needs. Pure data (no three.js).
 //

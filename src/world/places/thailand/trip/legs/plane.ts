@@ -1,4 +1,4 @@
-// The window seat (plan: thailand/boat-trip.md, "The window seat"): Kaylee rides by the window, Mom in the middle,
+// The window seat (plan: thailand/boat-trip.md (retired; in git history), "The window seat"): Kaylee rides by the window, Mom in the middle,
 // Dad on the aisle (asleep, mouth open). The pilot flies; she plays with the cabin, Toca style. The camera stands in
 // the aisle in front of their row, so all three faces show and the round windows run along the wall beside them; the
 // cabin is a whole little toy cabin (rows of seats, the overhead bins, the galley curtain at the back), and what's

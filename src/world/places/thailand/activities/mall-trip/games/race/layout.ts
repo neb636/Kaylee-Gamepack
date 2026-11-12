@@ -1,4 +1,4 @@
-// The Racing Slide at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "★ 3. The Racing Slide"), in
+// The Racing Slide at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "★ 3. The Racing Slide"), in
 // meters: the four wavy lanes, the steps up, the ball pit at the bottom, and who races where. Pure data (no three.js).
 //
 // Seen from the bottom (the camera stands past the ball pit and looks up the lanes, toward -z):

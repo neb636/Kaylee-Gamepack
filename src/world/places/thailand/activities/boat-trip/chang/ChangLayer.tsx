@@ -1,4 +1,4 @@
-// Baan Chang's way on (plan: thailand/baan-chang.md): one big pulsing button top right once the place she's at is done,
+// Baan Chang's way on (plan: thailand/baan-chang.md (retired; in git history)): one big pulsing button top right once the place she's at is done,
 // never forced (she can keep playing): 🥤 after a photo at the sign wall (up to the cafe), 🐘 once her chocolate milk is
 // ready (out onto the boardwalk), and after the splash 🚤 to the pier if she hasn't been on the boat yet, else ✈️🏠 (the
 // real elephants' video plays first, chang/video.ts).

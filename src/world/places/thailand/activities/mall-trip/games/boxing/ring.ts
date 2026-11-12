@@ -1,4 +1,4 @@
-// Muay Thai at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "7. Muay Thai bags"), greybox
+// Muay Thai at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "7. Muay Thai bags"), greybox
 // shapes with voices (lines.ts `L.mall.boxing`: the coach's wai kru, Sparkle's few lines, Dad's oofs, said through
 // blocks/talk.ts). A blue ring mat with its ropes, the big red bag on its bracket with Dad holding it from
 // behind, the coach (the boxer kid from the Big Frame, a little monkey) and his drum, Kaylee in her pink gloves, red

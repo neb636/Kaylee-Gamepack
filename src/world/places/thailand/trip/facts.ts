@@ -16,7 +16,7 @@ export const TRIP_FACTS = [
   { icon: '🚐', label: 'Drive on the left', say: L.facts.left },
 ]
 
-// The mall day's tap-to-hear facts (plan: thailand/mall-trip.md, "Facts"), for its stamp screen and the passport.
+// The mall day's tap-to-hear facts (plan: thailand/mall-trip.md (retired; in git history), "Facts"), for its stamp screen and the passport.
 export const MALL_FACTS = [
   { icon: '🏬', label: 'ICONSIAM', say: L.mall.trip.facts.iconsiam },
   { icon: '🧦', label: 'Grip socks', say: L.mall.trip.facts.socks },

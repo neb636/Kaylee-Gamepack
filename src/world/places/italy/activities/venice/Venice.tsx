@@ -1,4 +1,4 @@
-// 🛶 Venice: Gino's Water Taxi (plan: planning/around-the-world/italy.md § 6).
+// 🛶 Venice: Gino's Water Taxi (plan: planning/around-the-world/italy.md (retired; in git history) § 6).
 // The toy (one core verb): put a finger on the boat and drive it along a canal that loops both ways. It chases the
 // finger with a little water lag, coasts and slows when let go, bobs and tilts, spins round happily when it turns, rides
 // in two lanes, boings off posts and leaves a wake. The same verb deepens three times:

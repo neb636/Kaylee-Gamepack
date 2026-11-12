@@ -1,4 +1,4 @@
-// MEGA HarborLand's Big Frame (plan: planning/around-the-world/thailand/mall-trip.md, "The Big Frame"), greybox: the
+// MEGA HarborLand's Big Frame (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "The Big Frame"), greybox: the
 // frame she walked up to in the hall, at its real size, as a toy with no goal. Climb up, slide down:
 //   - It stands in the hall itself (hall/build.ts builds the hall round it, with the same frame model), so she plays in
 //     the very frame she saw from the mats: Mom on her bench, the racing slide next door.

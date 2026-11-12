@@ -1,6 +1,6 @@
 import { useSections } from '../../kit/sections'
 import BALLOON_SECTIONS from './activities/BalloonSoon.sections'
-// Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md). Built one activity per PR: Luna's
+// Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md (retired; in git history)). Built one activity per PR: Luna's
 // Fluffy Day, Coco's Canyon Glide and Rosa's Rainy River so far. The other places on Luna's map say "coming soon" until they're built, and the balloon finale
 // (route `party`) waits until all five exist.
 import { motion } from 'motion/react'
