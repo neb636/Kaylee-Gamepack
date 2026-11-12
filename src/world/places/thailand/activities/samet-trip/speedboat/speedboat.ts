@@ -588,7 +588,7 @@ export class SametSpeedboat implements World3D {
       }
     } else if (this.phase === 'ride') {
       const left = this.len - this.s
-      const want = Math.min(BOAT.top, Math.sqrt(2 * BOAT.brake * Math.max(0, left)) + 0.4)
+      const want = Math.min(BOAT.top * (SCENES[this.beat]?.speed ?? 1), Math.sqrt(2 * BOAT.brake * Math.max(0, left)) + 0.4)
       if (this.v < want) this.v = Math.min(want, this.v + BOAT.accel * dt)
       else this.v = Math.max(want, this.v - BOAT.brake * 2 * dt)
       this.s = Math.min(this.len, this.s + this.v * dt)
