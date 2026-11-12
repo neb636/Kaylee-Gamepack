@@ -1,5 +1,6 @@
-// Snorkeling at Ko Kudi (plan: planning/around-the-world/thailand/samet-trip.md, greybox 5), its own little world
-// out at the reef the snorkel boat goes to from Ao Wong Duan.
+// Snorkeling at Ko Kudi (the trip's story: planning/around-the-world/thailand/samet-story.md), its own little world
+// out at the reef the snorkel boat goes to from Ao Wong Duan. Bubbles the blue firefly is here: last night's wind
+// dropped her in the sea, and she is in an air bubble down on the reef, the cuttlefish hugging it (story.ts).
 //
 // The toy (core verb): her finger leads Kaylee through the water, the island's verb again. She floats face down on the
 // surface in her pink mask, flippers kicking; hold the finger near her and she paddles, hold it far ahead and she kicks
@@ -7,28 +8,38 @@
 // just over the surface, drawn twice (render()): above the waterline the sky, the boat, Ko Kudi on the horizon and the
 // sea's top; below it the same view with the sea's top taken away and the water's blue fog, sunbeams slanting down,
 // the reef. The line between them is where the surface is at her distance, so it runs right through her.
-// The verb deepens three times (`round`), moving on by itself:
+// The rounds (`round`), moving on by themselves:
+//   story   the way-in film on the boat's bow (story.ts): the captain tells her a little blue light fell in the sea.
 //   float   the captain toots, she splashes in off the ladder. A crowd of blue damselfish swirls round her, parting where
 //           she swims and closing behind. Coral sways; coral heads come up near the surface (bump one: a little fish
 //           pops out and tells her off with bubbles; the prickly ones with urchins boing her off like a bouncy ball).
+//           Far along the reef, a faint blue glow.
 //   follow  a big rainbow parrotfish swims up and waits for her to follow: past the coral heads, through the gap between
 //           two rocks, over the sandy patch (a giant clam, a sea cucumber), into a hidden garden of soft corals. It goes
-//           a little ahead and waits; never too fast, and it comes back for her if she wanders off.
-//   cuttle  in the garden a cuttlefish hovers, sand-colored. Swim close and it flashes rainbow colors, closer and it
-//           goes stripy, closest and it turns pink (for her). Mom's waterproof camera (the 📷 button) snaps the fish for
-//           her book.
+//           a little ahead and waits; never too fast, and it comes back for her if she wanders off. The blue glow grows.
+//   cuttle  in the garden the cuttlefish hovers, sand-colored, hugging Bubbles' bubble. Swim close and it flashes
+//           rainbow colors and jets off with the bubble, closer the next time and it goes stripy, and the third time
+//           it turns pink (for her) and lets the bubble go. Mom's waterproof camera (the 📷 button) snaps the fish:
+//           Sparkle says what each one is.
+//   found   the found film (story.ts): the bubble floats up and pops, Bubbles flies loops; then back to the island.
 // Dad swims along behind her; swim up to him and he ducks under and blows her a bubble ring.
 //
-// Talk (lines.ts L.samet.snorkel): the captain sends her in, Sparkle says what each round is for, the facts the first
-// time and (spendHint) what to do when she's stuck; Dad and the captain react. The screen's TripGuide plays them. Every number that decides the feel is a knob (?feel=1), with a graph of her finger against her swimming.
+// A film (engine3d/film.ts) takes the camera for plain shots: all above the water, or all under it (render() draws
+// only that half, inside the letterbox bars); while one is on, the reef takes no taps and hides its tap targets.
+//
+// Talk (lines.ts L.samet.snorkel, and the story's L.samet.story.snorkel): the captain sends her in, Sparkle says what
+// each round is for, the facts when she pokes something and (spendHint) what to do when she's stuck; Dad and the
+// captain react. The screen's TripGuide plays them. Every number that decides the feel is a knob (?feel=1), with a
+// graph of her finger against her swimming.
 import { Color, Fog, Group, InstancedMesh, Matrix4, Mesh, Object3D, Quaternion, Scene, Vector3, type WebGLRenderer } from 'three'
 import { clamp, spendHint, type Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
-import { FaceLife } from '../../../../../engine3d/characters/face'
 import { knobs, watch } from '../../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
+import { Letterbox } from '../../../../../engine3d/cinema'
 import { Bag } from '../../../../../engine3d/dispose'
+import { FilmPlayer, type FilmState } from '../../../../../engine3d/film'
 import { setOutlineResolution } from '../../../../../engine3d/outline'
 import { Particles } from '../../../../../engine3d/particles'
 import { applyBands, makeLights, PAL } from '../../../../../engine3d/toon'
@@ -38,8 +49,12 @@ import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
 import type { AnimalId } from '../book/animals'
 import { cuttlefishModel, damselSchool, parrotfishModel, type Model } from '../book/models'
-import { bed, bedHeight, BOAT, boat, bommie, BOUNDS, bubbleRing, clam, CLAM, coralPatch, cucumber, CUCUMBER, DADDY, flipper, GARDEN, hideFish, koKudi, mask, OBSTACLES, rock, ROUTE, SANDY, seaTop, softCoral, START, sunbeams, type XZ } from './reef'
+import { CAPTAIN } from '../cast'
+import { fireflySfx } from '../story/firefly'
+import { Islander } from '../story/islander'
+import { bed, bedHeight, BOAT, boat, bommie, BOUNDS, BOW, BUBBLE_R, bubbleRing, clam, CLAM, coralPatch, cucumber, CUCUMBER, DADDY, DECK_Y, flipper, GARDEN, hideFish, HUG, hugArms, koKudi, mask, OBSTACLES, rock, ROUTE, SANDY, seaTop, seaUnder, softCoral, START, sunbeams, type XZ } from './reef'
 import { reefBed, reefSfx as sfx } from './sounds'
+import { Bubbles, CUTTLE_SIZE, foundFilm, HOLD_M, introFilm, type Stage } from './story'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/snorkel/snorkel.ts'
 /** Her swimming. */
@@ -95,28 +110,53 @@ const PLAY = knobs('snorkelPlay', 'Rounds and the half-under camera', FILE, {
   fog: { value: 17, min: 6, max: 60, step: 1, label: 'See this far under water', unit: 'm' },
 })
 
-export type SnorkelRound = 'float' | 'follow' | 'cuttle'
-export const SNORKEL_ROUND_IDS: SnorkelRound[] = ['float', 'follow', 'cuttle']
+/** The rounds she plays, and the two films round them (`story` before the first, `found` after the last). */
+export type SnorkelPlayRound = 'float' | 'follow' | 'cuttle'
+export type SnorkelRound = 'story' | SnorkelPlayRound | 'found'
+export const SNORKEL_ROUND_IDS: SnorkelPlayRound[] = ['float', 'follow', 'cuttle']
 export interface SnorkelStart {
   round: SnorkelRound
 }
 export interface SnorkelEvents {
   /** A new round began (the address bar follows). */
   round(r: SnorkelRound): void
-  /** The cuttlefish turned pink for her (the stop is done: the way back shows). */
-  done(): void
+  /** Bubbles is found (the found film is over): back to the island with her. */
+  island(): void
   /** Someone talks (`mute`: a stuck hint shown without its voice). */
   say(line: Line, mute?: boolean): void
+  /** A film is on (which beat), or over (null); and the words being said in it. */
+  film(s: FilmState | null): void
+  filmLine(l: Line | null): void
+  /** Confetti (the bubble popped). */
+  cheer(): void
 }
 
 const S = L.samet.snorkel
+/** Bubbles' story. */
+const X = L.samet.story.snorkel
+/** The id of her firefly (story/firefly.ts). */
+const BUB = 'snorkel' as const
+/** The letterbox bars' color (engine3d/cinema.ts draws its own the same). */
+const BAR = new Color('#1B1622')
+/** The captain on the bow in play: turned between the swimmer and the camera (degrees). */
+const CAP_FACE = -48
+/** Seconds from the cuttlefish turning pink to the found film (her "just for you!" is said first). */
+const LET_GO_S = 2.6
+/** Bubbles' glow is "in view" from this far (m: just through the gap between the rocks): Sparkle points it out. */
+const SEE_M = 15
 
 const HINT_S = 8
+/** While a film is on, the garden's fish keep this low (m), and the damselfish crowd this far off down the reef. */
+const BED_FISH = -2.25
+/** The cuttlefish holds the bubble this far round to the side of the way she comes at it (radians). */
+const HUG_SIDE = 0.8
+const CROWD_OFF = 5
 const DEG = 180 / Math.PI
 const CROWD = 90
 const GARDEN_FISH = 26
 const tmp = new Vector3()
 const tmp2 = new Vector3()
+const prevColor = new Color()
 const up = new Vector3(0, 1, 0)
 const fwd = new Vector3(0, 0, 1)
 const m4 = new Matrix4()
@@ -138,6 +178,7 @@ export const SNORKEL_ANCHORS: AnchorInfo[] = [
   { id: 'captain', label: 'The boat captain', kind: 'thing' },
   { id: 'parrot', label: 'The parrotfish', kind: 'thing' },
   { id: 'cuttle', label: 'The cuttlefish', kind: 'thing' },
+  { id: 'bubble', label: 'The firefly in her bubble', kind: 'thing' },
   { id: 'clam', label: 'A giant clam', kind: 'thing' },
   { id: 'cucumber', label: 'A sea cucumber', kind: 'thing' },
   ...URCHINS.map((_, k) => ({ id: `urchin:${k}`, label: 'Sea urchins', kind: 'thing' as const })),
@@ -199,7 +240,10 @@ export class Snorkel implements World3D {
   private dad = { x: DADDY.x, z: DADDY.z, dip: -1, cool: 0, ring: null as null | { t: number; x: number; z: number; dx: number; dz: number } }
   private ring: Mesh
   private boat: ReturnType<typeof boat>
-  private wave = -1
+  /** The captain (the pelican) on the boat's bow: a talking islander. Her wing points out over the water (a film). */
+  private captain: Islander
+  private pointK = 0
+  private pointing = false
   private parrot: Model
   private pState: 'away' | 'arrive' | 'lead' | 'home' = 'away'
   private pi = 0
@@ -219,9 +263,34 @@ export class Snorkel implements World3D {
   private glintT = 0
   private jet: { from: Vector3; to: Vector3; t: number; wait: number } | null = null
   private flashT = -1
-  private doneAt = -1
-  /** The captain's face (her beak opens with her voice). */
-  private capFace: FaceLife
+  /** When the cuttlefish turned pink and let the bubble go (the found film follows), -1 before. */
+  private letGo = -1
+
+  // ---- Bubbles' story (story.ts): its films, the bars, Bubbles in her bubble and who holds it.
+  private films: FilmPlayer
+  private bars = new Letterbox()
+  private bub: Bubbles
+  private arms: ReturnType<typeof hugArms>
+  private hugK = 1
+  /** How the cuttlefish holds the bubble: the way it faces (a film's, radians; null: its own), its arms round it (1)
+   *  or open (0), and how far over its arms the bubble floats (a film's). `free`: it has let go for good. */
+  private hold = { yaw: null as number | null, hug: 1, lift: 0, sway: 0, free: false }
+  /** Bubbles is out of her bubble and stays with her (after the found film). */
+  private bubFree = false
+  private winkT = 4
+  /** The garden's fish keep low (0..1) while a film is on. */
+  private lowK = 0
+  /** Kaylee stands upright where `pos` says (a film: on the deck, treading water), her mask up on her forehead. */
+  private stand = false
+  private maskUp: (k: number) => void = () => {}
+  /** Which way Dad faces when a film has placed him (degrees; null: he swims along and looks at her). */
+  private dadFace: number | null = null
+  /** Things to do later, on the world's own clock (it stops when the world does). */
+  private timers: { at: number; f: () => void }[] = []
+  /** A film just ended: the camera cuts back to the game's shot (no glide through the boat). */
+  private cutBack = false
+  private filmStage: Stage
+
   private said = new Set<string>()
   private turn = { dad: 0, captain: 0 }
   private hintOn = false
@@ -248,7 +317,7 @@ export class Snorkel implements World3D {
   private spray: Particles
   private sparkle: Particles
   private patches: { root: Group; at: Vector3 }[] = []
-  private counts = { leads: 0, taps: 0, pokes: 0, kicks: 0, bumps: 0, boings: 0, rings: 0, peeks: 0, snaps: 0, stages: 0, glints: 0 }
+  private counts = { leads: 0, taps: 0, pokes: 0, kicks: 0, bumps: 0, boings: 0, rings: 0, peeks: 0, snaps: 0, stages: 0, glints: 0, sees: 0 }
 
   constructor(
     private renderer: WebGLRenderer,
@@ -267,7 +336,7 @@ export class Snorkel implements World3D {
     // ---- The sea, the bed, Ko Kudi on the horizon, sunbeams.
     this.sea = seaTop(bag)
     scene.add(this.sea, koKudi(bag), this.under)
-    this.under.add(bed(bag))
+    this.under.add(bed(bag), seaUnder(bag))
     this.beams = sunbeams(bag)
     this.under.add(this.beams.root)
 
@@ -324,6 +393,10 @@ export class Snorkel implements World3D {
     this.boat = boat(bag)
     this.boat.root.position.set(BOAT.x, 0, BOAT.z)
     scene.add(this.boat.root)
+    // (She rides the boat: out on the bow, where the swimmer and the camera see her face.)
+    this.captain = new Islander('captain', 'The captain', CAPTAIN, bag, 'pelican')
+    this.captain.place(BOW.x, DECK_Y, BOW.z, CAP_FACE)
+    this.boat.root.add(this.captain.root)
 
     // ---- Kaylee, face down in her mask and flippers.
     this.kaylee = new Avatar(bag)
@@ -335,7 +408,9 @@ export class Snorkel implements World3D {
     this.tilt.add(shift)
     this.holder.add(this.tilt)
     scene.add(this.holder)
-    rigK.head.add(mask(bag, rigK.face.R, rigK.face.headY))
+    const herMask = mask(bag, rigK.face.R, rigK.face.headY)
+    rigK.head.add(herMask.root)
+    this.maskUp = herMask.lift
     for (const leg of [rigK.legL, rigK.legR]) if (leg) leg.add(flipper(bag, this.kaylee.height * 0.24))
 
     // ---- Dad, treading water behind her.
@@ -367,22 +442,29 @@ export class Snorkel implements World3D {
     this.parrot.root.visible = false
     this.under.add(this.parrot.root)
     this.cuttle = cuttlefishModel(bag)
-    this.cuttle.root.scale.setScalar(3)
+    this.cuttle.root.scale.setScalar(CUTTLE_SIZE)
     this.under.add(this.cuttle.root)
+    // Its two long arms, round Bubbles' bubble; and Bubbles (she ends up over the water, so she isn't in `under`).
+    this.arms = hugArms(bag, this.cuttle.mat)
+    this.cuttle.root.add(this.arms.root)
+    this.bub = new Bubbles(bag, scene)
 
     this.bubbles = new Particles({ kind: 'spray', count: 260, colors: ['#FFFFFF', '#E6FBFF', '#BDF1FF'], gravity: -2.2 }, bag)
     this.foam = new Particles({ kind: 'foam', count: 140, opacity: 0.9 }, bag)
     this.spray = new Particles({ kind: 'spray', count: 160, colors: ['#FFFFFF', '#EAFBFF', '#C9F6EC'], gravity: 9 }, bag)
     this.sparkle = new Particles({ kind: 'spray', count: 200, colors: ['#FFFFFF', '#FFF6B8', '#C9F4FF', PAL.gold, PAL.pink, PAL.hotpink], gravity: -0.5 }, bag)
-    this.under.add(this.bubbles.mesh, this.sparkle.mesh)
-    scene.add(this.foam.mesh, this.spray.mesh)
+    this.under.add(this.bubbles.mesh)
+    // (The sparkles fly over the water too: Bubbles' loops.)
+    scene.add(this.foam.mesh, this.spray.mesh, this.sparkle.mesh)
+
+    this.films = new FilmPlayer({ line: (l) => this.events.filmLine(l), state: (st) => this.events.film(st) })
+    this.filmStage = this.makeStage()
 
     // ---- Where the link starts: as if she had played to here.
-    if (this.round === 'float') {
-      this.intro = 0
-      this.tiltK = 0
-      this.pos.set(BOAT.x - 1.1, 0.62 + this.kaylee.height * 0.42, BOAT.z - 0.4)
-      this.heading = -Math.PI / 2
+    if (this.round === 'story' || this.round === 'float') {
+      // On the ladder, about to splash in (the story: after its way-in film).
+      this.toLadder()
+      if (this.round === 'story') this.after(0.3, () => this.films.play(introFilm(this.filmStage), () => this.afterIntro()))
     } else if (this.round === 'follow') {
       this.pos.set(0.4, 0, -3)
       this.swam = PLAY.float
@@ -392,22 +474,30 @@ export class Snorkel implements World3D {
       this.pState = 'home'
       this.pPos.set(GARDEN.x + 1, -0.9, GARDEN.z + 2.5)
       this.parrot.root.visible = true
+      if (this.round === 'found') {
+        // The end of the stop: she has reached the cuttlefish in its last hiding place, it is pink and has let go.
+        const at = CUTTLE_SPOTS[CUTTLE_SPOTS.length - 1]
+        this.cPos.set(at.x, -1.15, at.z)
+        this.pos.set(at.x - 0.6, 0, at.z + 2.6)
+        this.best = 3
+        this.letGo = 0
+        this.bub.cheer(true)
+        this.after(0.4, () => this.playFound())
+      }
     }
     this.dad.x = this.pos.x - 2.4
     this.dad.z = this.pos.z + 2
-    if (this.round === 'float') {
+    if (this.intro >= 0) {
       this.dad.x = DADDY.x
       this.dad.z = DADDY.z
     }
-    this.crowdC.set(this.pos.x, -1.1, this.pos.z)
+    this.crowdC.set(this.pos.x - (this.letGo >= 0 ? CROWD_OFF * 0.6 : 0), -1.1, this.pos.z - (this.letGo >= 0 ? CROWD_OFF : 0))
     for (let i = 0; i < CROWD; i++) {
       const h = this.cHome[i]
       const a = h.ph
       this.cPts.set([this.crowdC.x + Math.cos(a) * h.r * FISH.size, -1.1 + h.y, this.crowdC.z + Math.sin(a) * h.r * FISH.size], i * 3)
     }
     this.placeKaylee(0)
-
-    this.capFace = new FaceLife(this.boat.rig, 'pelican')
 
     this.unwatch = watch('snorkel', () => ({
       'her finger is ahead (m)': [this.lead, 15],
@@ -444,9 +534,60 @@ export class Snorkel implements World3D {
     this.round = r
     this.roundT = 0
     this.events.round(r)
-    this.once(r, S[r])
+    this.roundLine(r)
     if (r === 'follow') this.startFollow()
     if (r === 'cuttle') twinkle(4)
+  }
+  /** What Sparkle says as a round she plays begins (once a visit). */
+  private roundLine(r: SnorkelRound) {
+    if (r === 'story' || r === 'found') return
+    // In the garden: what she sees (the cuttlefish hugging the bubble). She has been swimming to the glow since
+    // Sparkle pointed it out; only a link straight to the garden needs telling what to do.
+    if (r === 'cuttle') {
+      this.once('hug', X.hug)
+      if (this.said.has('see')) return
+    }
+    this.once(r, S[r])
+  }
+  /** Later, on the world's clock. */
+  private after(s: number, f: () => void) {
+    this.timers.push({ at: this.time + s, f })
+  }
+  /** On the boat's ladder, upright, about to splash in. */
+  private toLadder() {
+    this.stand = false
+    this.intro = 0
+    this.tiltK = 0
+    this.vel.set(0, 0, 0)
+    this.goal = null
+    this.pos.set(BOAT.x - 1.1, 0.62 + this.kaylee.height * 0.42, BOAT.z - 0.4)
+    this.heading = -Math.PI / 2
+  }
+  /** The way-in film is over (played or skipped; its finish() put her on the ladder): the captain sends her in. */
+  private afterIntro() {
+    this.round = 'float'
+    this.roundT = 0
+    this.cutBack = true
+    this.events.round('float')
+  }
+  /** The found film (the cuttlefish has let the bubble go), then the island. */
+  private playFound() {
+    if (this.films.on || this.bubFree) return
+    this.finger = null
+    this.goal = null
+    if (this.round !== 'found') {
+      this.round = 'found'
+      this.roundT = 0
+      this.events.round('found')
+    }
+    this.films.play(foundFilm(this.filmStage), () => {
+      this.cutBack = true
+      this.events.island()
+    })
+  }
+  /** The screen's hold-to-skip: the film jumps to its end. */
+  skipFilm() {
+    this.films.skip()
   }
   private startFollow() {
     if (this.pState !== 'away') return
@@ -468,13 +609,25 @@ export class Snorkel implements World3D {
   update(dt: number) {
     const t = (this.time += dt)
     this.roundT += dt
-    // Her first moment here: the captain sends her in (off the ladder), then what this round is for.
-    if (this.time > 0.3 && !this.said.has('hi')) {
-      this.said.add('hi')
-      if (this.round === 'float') this.events.say(S.jump)
-      this.once(this.round, S[this.round])
+    if (this.timers.length) {
+      const due = this.timers.filter((x) => x.at <= t)
+      this.timers = this.timers.filter((x) => x.at > t)
+      for (const x of due) x.f()
     }
-    this.progress()
+    // A film has the camera (and moves people about) before anything else this frame.
+    const cine = this.films.update(dt, this.w / this.h)
+    const film = this.films.on
+    if (film) this.lastTouch = t
+    // Her first moment in a round she plays: the captain sends her in (off the ladder), then what the round is for.
+    if (!film && t > 0.3 && !this.said.has('hi') && this.round !== 'story' && this.round !== 'found') {
+      this.said.add('hi')
+      if (this.round === 'float') {
+        this.events.say(S.jump)
+        this.captain.m.react('wave')
+      }
+      this.roundLine(this.round)
+    }
+    if (!film) this.progress()
     this.swim(dt)
     this.daddy(dt, t)
     this.fish(dt, t)
@@ -482,8 +635,15 @@ export class Snorkel implements World3D {
     for (const p of [this.bubbles, this.foam, this.spray, this.sparkle]) p.update(dt)
     this.lights.follow(this.pos.x, 0, this.pos.z)
     this.rig.setShot(this.shot())
+    this.rig.setCine(cine)
+    if (!cine && this.cutBack) {
+      this.cutBack = false
+      this.rig.setShot(this.shot(), true)
+    }
     this.rig.update(dt)
     this.rig.camera.updateMatrixWorld()
+    this.bars.update(dt, film)
+    this.firefly(dt, t)
     this.waterline(t)
     this.drawHint(t)
   }
@@ -491,10 +651,8 @@ export class Snorkel implements World3D {
   private progress() {
     if (this.round === 'float' && this.intro < 0 && ((this.swam >= PLAY.float && this.roundT >= PLAY.floatMin) || this.roundT >= PLAY.floatFor)) this.setRound('follow')
     else if (this.round === 'follow' && this.pState === 'home') this.setRound('cuttle')
-    if (this.best >= 3 && this.doneAt < 0) {
-      this.doneAt = this.time
-      window.setTimeout(() => this.events.done(), 1800)
-    }
+    // The cuttlefish has turned pink and let the bubble go: the found film (once her "just for you!" is said).
+    if (this.round === 'cuttle' && this.letGo >= 0 && this.time - this.letGo > LET_GO_S) this.playFound()
   }
 
   // ---------------------------------------------------------------- her swimming
@@ -535,6 +693,13 @@ export class Snorkel implements World3D {
 
   private swim(dt: number) {
     const k = this.kaylee
+    // In a film she stands where it put her (the deck, treading water); the splash in waits for the way-in film.
+    if (this.films.on || this.stand || this.round === 'story') {
+      k.steer(0, 0, 0, () => true)
+      this.vel.set(0, 0, 0)
+      this.placeKaylee(dt)
+      return
+    }
     // The splash in off the ladder.
     if (this.intro >= 0) {
       const i = (this.intro += dt)
@@ -553,6 +718,8 @@ export class Snorkel implements World3D {
       return
     }
 
+    // (Back on her front, if a film had her upright.)
+    if (this.tiltK < 1) this.tiltK = Math.min(1, this.tiltK + dt / 0.5)
     // What her finger asks: a way to go and how hard.
     let want = 0
     let wx = 0
@@ -625,7 +792,12 @@ export class Snorkel implements World3D {
       spin = Math.PI * 2 * (this.spin * this.spin * (3 - 2 * this.spin))
       if (this.spin >= 1) this.spin = -1
     }
-    this.holder.position.set(this.pos.x, this.intro >= 0 ? this.pos.y : SWIM.float + Math.sin(t * 1.6) * 0.03, this.pos.z)
+    const bob = Math.sin(t * 1.6) * 0.03
+    // (Upright: on the ladder or the deck, or treading water where a film put her.)
+    const y = this.stand ? this.pos.y + (this.pos.y < 0.3 ? bob : 0) : this.intro >= 0 ? this.pos.y : SWIM.float + bob
+    this.holder.position.set(this.pos.x, y, this.pos.z)
+    // Her mask is up on her forehead until she tips over into the water.
+    this.maskUp(1 - this.tiltK)
     this.holder.rotation.set(0, this.heading, 0)
     this.tilt.rotation.z = this.roll + spin
     k.update(dt, t)
@@ -733,8 +905,10 @@ export class Snorkel implements World3D {
   private daddy(dt: number, t: number) {
     const d = this.dad
     const n = this.nick
-    // He swims along beside her, a little behind (not in front of the camera), slower than her.
-    if (this.intro < 0) {
+    // He swims along beside her, a little behind (not in front of the camera), slower than her. (A film puts him
+    // where it wants him.)
+    const film = this.films.on
+    if (this.intro < 0 && !film && this.dadFace === null) {
       const tx = this.pos.x - 2.8
       const tz = this.pos.z + 0.6
       const dx = tx - d.x
@@ -753,7 +927,7 @@ export class Snorkel implements World3D {
     // Swim up to him: he ducks under and blows a bubble ring her way.
     d.cool = Math.max(0, d.cool - dt)
     const near = Math.hypot(this.pos.x - d.x, this.pos.z - d.z)
-    if (near < 1.5 && d.cool <= 0 && this.intro < 0 && d.dip < 0) this.blowRing()
+    if (near < 1.5 && d.cool <= 0 && this.intro < 0 && d.dip < 0 && !film && this.dadFace === null) this.blowRing()
     let dip = 0
     if (d.dip >= 0) {
       d.dip += dt
@@ -767,8 +941,8 @@ export class Snorkel implements World3D {
       }
       if (d.dip > 1.4) d.dip = -1
     }
-    n.place(d.x, -n.height * 0.66 - dip * 0.75 + Math.sin(t * 1.3) * 0.05, d.z, Math.atan2(this.pos.x - d.x, this.pos.z - d.z) * DEG)
-    n.lookAt(this.pos.x, 0, this.pos.z)
+    n.place(d.x, -n.height * 0.66 - dip * 0.75 + Math.sin(t * 1.3) * 0.05, d.z, this.dadFace ?? Math.atan2(this.pos.x - d.x, this.pos.z - d.z) * DEG)
+    if (this.dadFace === null) n.lookAt(this.pos.x, 0, this.pos.z)
     n.update(dt, t)
     const r = d.ring
     if (r) {
@@ -801,9 +975,11 @@ export class Snorkel implements World3D {
     // ---- The damselfish crowd: it trails her, swirling round, parting round her body and closing behind.
     const c = this.crowdC
     const fw = this.forward()
-    c.x += (this.pos.x + fw.x * 0.6 - c.x) * ease(dt, FISH.keep)
-    c.z += (this.pos.z + fw.z * 0.6 - c.z) * ease(dt, FISH.keep)
-    c.y = -1.15
+    // (Once the cuttlefish has let the bubble go, the crowd swims off down the reef: the bubble's way up is clear.)
+    const off = this.letGo >= 0 ? CROWD_OFF : 0
+    c.x += (this.pos.x + fw.x * 0.6 - off * 0.6 - c.x) * ease(dt, FISH.keep)
+    c.z += (this.pos.z + fw.z * 0.6 - off - c.z) * ease(dt, FISH.keep)
+    c.y = -1.15 - (off ? 0.7 : 0)
     const her = tmp.set(this.pos.x, -0.35, this.pos.z)
     const P = this.cPts
     const V = this.cVel
@@ -849,13 +1025,16 @@ export class Snorkel implements World3D {
     }
     this.crowd.instanceMatrix.needsUpdate = true
 
-    // ---- The garden's little fish, round and round the soft corals.
+    // ---- The garden's little fish, round and round the soft corals (down by the sand while a film is on, so none
+    // swims across its lens).
+    const film = this.films.on
+    this.lowK += ((film ? 1 : 0) - this.lowK) * (film ? 1 : ease(dt, 1.5))
     for (let i = 0; i < GARDEN_FISH; i++) {
       const g = this.gHome[i]
       const a = g.ph + t * g.s
       const x = GARDEN.x + Math.cos(a) * g.r
       const z = GARDEN.z + Math.sin(a) * g.r
-      const y = g.y + Math.sin(t * 1.3 + g.ph) * 0.12
+      const y = Math.max(BED_FISH, g.y - this.lowK * 0.9) + Math.sin(t * 1.3 + g.ph) * 0.12
       m4.compose(tmp.set(x, y, z), q.setFromAxisAngle(up, -a + (g.s > 0 ? 0 : Math.PI)), tmp2.setScalar(1.6))
       this.garden.setMatrixAt(i, m4)
     }
@@ -960,6 +1139,8 @@ export class Snorkel implements World3D {
         this.jet = null
         this.lapT = 0
         this.glintT = 0
+        // (A quiet moment, the first time it has hidden: Mom's camera.)
+        if (this.best === 1) this.once('camera', S.camera)
       }
     } else if (on) {
       this.lapT += dt
@@ -993,18 +1174,20 @@ export class Snorkel implements World3D {
     const d = Math.hypot(this.pos.x - c.x, this.pos.z - c.z)
     const near = on && !this.jet && d < FISH.flash
     // (Its color: sand far off, the time's own color near; showing it off before a jet, rainbow while it jets.)
-    const stage = this.round !== 'cuttle' ? 0 : this.best >= 3 ? 3 : this.jet ? (this.jet.wait > 0 ? this.best : 1) : near ? this.best + 1 : 0
+    const stage = this.best >= 3 ? 3 : this.round !== 'cuttle' ? 0 : this.jet ? (this.jet.wait > 0 ? this.best : 1) : near ? this.best + 1 : 0
     if (stage > this.stage) sfx.color(stage)
-    if (near && stage === 1) this.once('colors', S.colors)
     if (on && !this.jet && d < FISH.pink) {
-      // She reached it: its new color bursts out; the first two times it jets off to hide again.
+      // She reached it: its new color bursts out, and Bubbles twinkles (she saw her). The first two times it jets off
+      // to hide again, the bubble in its arms; the third it turns pink and lets the bubble go (the found film).
       this.best++
       this.counts.stages++
       this.burstAt(c, this.best === 3 ? 40 : 22)
+      this.bub.twinkle()
       if (this.best === 3) {
         twinkle(6)
         this.once('pink', S.pink)
-        this.once('camera', S.camera)
+        this.letGo = this.time
+        this.bub.cheer(true)
       } else {
         twinkle(4)
         this.jet = { from: c.clone(), to: new Vector3(CUTTLE_SPOTS[this.best].x, -1.15, CUTTLE_SPOTS[this.best].z), t: 0, wait: 0.8 }
@@ -1021,12 +1204,119 @@ export class Snorkel implements World3D {
     else if (stage === 2) col.set(Math.sin(t * 22) > 0 ? '#8A63E8' : '#FFE15C')
     else col.set('#FF6FB5').offsetHSL(0, 0, Math.sin(t * 4) * 0.05)
     // Hovering, fins rippling, turned to her when she's near.
-    const want = this.jet ? Math.atan2(this.jet.from.x - this.jet.to.x, this.jet.from.z - this.jet.to.z) : d < 9 ? Math.atan2(this.pos.x - c.x, this.pos.z - c.z) : t * 0.2
+    // (Turned a little off her way in: she swims straight at it with the camera behind her, and would hide a bubble
+    // held straight out at her. This way it shows beside her.)
+    const want = this.jet ? Math.atan2(this.jet.from.x - this.jet.to.x, this.jet.from.z - this.jet.to.z) : d < 9 ? Math.atan2(this.pos.x - c.x, this.pos.z - c.z) + HUG_SIDE : t * 0.2
     const r = this.cuttle.root
-    r.rotation.y += angleTo(r.rotation.y, want) * ease(dt, 2)
+    const h = this.hold
+    // (A film turns it to its camera at once, under a cut.)
+    if (h.yaw !== null) r.rotation.y = h.yaw
+    else r.rotation.y += angleTo(r.rotation.y, want) * ease(dt, 2)
     r.position.set(c.x + Math.sin(t * 0.5) * 0.3, c.y + Math.sin(t * 1.3) * 0.08, c.z + Math.cos(t * 0.4) * 0.2)
     const fin = 1 + Math.sin(t * 9) * 0.05
     this.cuttle.parts.body.scale.set(fin, 1, 1 + Math.sin(t * 9 + 1) * 0.03)
+    // Its long arms round Bubbles' bubble, and the bubble in them: it goes where the cuttlefish goes. Once it has
+    // turned pink the arms open and the bubble starts to float up.
+    const gone = this.letGo >= 0
+    const hug = h.free || gone ? 0 : h.hug
+    this.hugK = this.films.on ? hug : this.hugK + (hug - this.hugK) * ease(dt, 5)
+    this.arms.hug(this.hugK + Math.sin(t * 2.2) * 0.03)
+    if (!h.free) {
+      const yaw = r.rotation.y
+      const up = gone && !this.films.on ? Math.min(0.5, (this.time - this.letGo) * 0.22) : 0
+      this.bub.pos.set(r.position.x + Math.sin(yaw) * HOLD_M + h.sway, r.position.y + HUG.y * CUTTLE_SIZE + h.lift + up, r.position.z + Math.cos(yaw) * HOLD_M)
+    }
+  }
+
+  // ---------------------------------------------------------------- Bubbles the firefly
+
+  /** Bubbles in her bubble: her glow from far along the reef, Sparkle the first time it's clearly in view, a wink
+   *  now and then; and once she's out, flying along over her swimmer. (After the camera: her bubble faces it.) */
+  private firefly(dt: number, t: number) {
+    const b = this.bub
+    const cam = this.rig.camera
+    const film = this.films.on
+    // Out of her bubble: she flies round over her swimmer.
+    if (this.bubFree && !film) b.fly.fly(tmp.set(this.pos.x + Math.sin(t * 1.7) * 0.6, 0.62 + Math.sin(t * 2.3) * 0.12, this.pos.z + Math.cos(t * 1.7) * 0.6), dt, 4)
+    b.farK += ((film ? 0 : 1) - b.farK) * (film ? 1 : ease(dt, 2))
+    b.update(dt, t, cam, Math.hypot(this.pos.x - cam.position.x, this.pos.z - cam.position.z))
+    if (film || !b.inBubble || this.intro >= 0) return
+    const d = Math.hypot(b.pos.x - this.pos.x, b.pos.z - this.pos.z)
+    const glow = b.glowAt
+    if (!this.said.has('see') && (this.round === 'float' || this.round === 'follow') && glow && d < SEE_M) {
+      const s = this.toScreen(glow)
+      if (s.z < 1 && s.x > this.w * 0.08 && s.x < this.w * 0.92 && s.y > this.split && s.y < this.h - 40) {
+        this.once('see', X.see)
+        b.twinkle()
+        this.counts.sees++
+      }
+    }
+    if (d < 12 && (this.winkT -= dt) <= 0) {
+      this.winkT = 5 + Math.random() * 4
+      b.twinkle(false)
+    }
+  }
+
+  /** What a film needs from the reef (story.ts). */
+  private makeStage(): Stage {
+    return {
+      bub: this.bub,
+      captain: this.captain,
+      kaylee: this.kaylee,
+      nick: this.nick,
+      cuttleAt: () => this.cuttle.root.position,
+      stand: (x, y, z, face) => {
+        this.stand = true
+        this.intro = -1
+        this.tiltK = 0
+        this.roll = 0
+        this.spin = -1
+        this.vel.set(0, 0, 0)
+        this.goal = null
+        this.finger = null
+        this.pos.set(x, y + this.kaylee.height * 0.42, z)
+        this.heading = face / DEG
+      },
+      head: (out = new Vector3()) => {
+        const r = this.kaylee.rig
+        return r.head.localToWorld(out.set(0, r.face.headY, 0))
+      },
+      dad: (x, z, face) => {
+        const d = this.dad
+        d.x = x
+        d.z = z
+        d.dip = -1
+        d.ring = null
+        this.ring.visible = false
+        this.dadFace = face
+      },
+      boat: (x, z, yaw) => {
+        this.boat.root.position.set(x, 0, z)
+        this.boat.root.rotation.y = yaw / DEG
+      },
+      point: (k) => (this.pointK = k),
+      hold: (yaw, hug, lift = 0, sway = 0) => void Object.assign(this.hold, { yaw, hug, lift, sway }),
+      release: () => (this.hold.free = true),
+      splash: (x, z) => {
+        this.foam.burst(x, 0.02, z, 14, 1.5, 0, 0.3)
+        this.spray.burst(x, 0.3, z, 22, 1.9, 2.8, 0.07)
+      },
+      fizz: (p, n) => {
+        for (let i = 0; i < n; i++) this.bubbles.emit(p.x + (Math.random() - 0.5) * 0.4, p.y, p.z + (Math.random() - 0.5) * 0.4, 0, 0.5, 0, 1.1, 0.04 + Math.random() * 0.03)
+      },
+      drops: (p, n) => this.spray.burst(p.x, p.y, p.z, n, 1.3, 1.2, 0.045),
+      sparkle: (p, n) => this.burstAt(p, n),
+      sfx: { blub: () => blub(), pop: () => sfx.pop(), toot: () => toot(), twinkle: (n) => void twinkle(n) },
+      cheer: () => this.events.cheer(),
+      toLadder: () => {
+        this.toLadder()
+        this.captain.place(BOW.x, DECK_Y, BOW.z, CAP_FACE)
+      },
+      free: () => {
+        this.hold.free = true
+        this.bubFree = true
+      },
+    }
   }
 
   // ---------------------------------------------------------------- the reef's life
@@ -1069,15 +1359,23 @@ export class Snorkel implements World3D {
       this.cuc.body.scale.set(1 + Math.sin(k * 18) * 0.1 * (1 - k), 1 - Math.sin(k * 18) * 0.12 * (1 - k), 1 + Math.sin(k * 18) * 0.15 * (1 - k))
       if (k >= 1) this.cucT = -1
     }
-    // The boat rocks; the captain waves.
+    // The boat rocks; the captain on its bow watches her swim (a film points her where it likes).
     const b = this.boat
-    this.capFace.update(dt)
     b.body.rotation.z = Math.sin(t * 1.1) * 0.03
     b.root.position.y = Math.sin(t * 1.4) * 0.05
-    if (this.wave >= 0) {
-      this.wave += dt / 1.4
-      b.arm.rotation.z = bellK(this.wave) * (2.4 + Math.sin(this.wave * 30) * 0.3)
-      if (this.wave >= 1) this.wave = -1
+    const cap = this.captain
+    if (!this.films.on) cap.m.lookAt(this.pos.x, 0.3, this.pos.z)
+    // (An islander's faces add to her head's tilt and her body's sway each frame: both start from rest.)
+    cap.m.rig.head.rotation.x = 0
+    cap.m.rig.body.rotation.z = 0
+    cap.update(dt, t)
+    // Her wing out over the water (a film's pointing), on top of her own life.
+    if (this.pointK > 0.01) {
+      this.pointing = true
+      cap.m.rig.armR.rotation.set(-0.3 * this.pointK, 0, 1.3 * this.pointK)
+    } else if (this.pointing) {
+      this.pointing = false
+      cap.m.rig.armR.rotation.set(0, 0, 0)
     }
     // Sunbeams breathe.
     this.beams.root.position.set(this.pos.x, 0, this.pos.z - 4)
@@ -1101,7 +1399,7 @@ export class Snorkel implements World3D {
 
   // ---------------------------------------------------------------- Mom's waterproof camera
 
-  /** Snaps what's in view under the water; the animals newly in her book. */
+  /** Snaps what's in view under the water: which animals are in the picture. */
   snap(): AnimalId[] {
     shutter()
     this.counts.snaps++
@@ -1122,9 +1420,20 @@ export class Snorkel implements World3D {
 
   // ---------------------------------------------------------------- her finger
 
+  /** The reef takes her finger (not during a film, or before the way-in film has begun). */
+  private get playing() {
+    return !this.films.on && this.round !== 'story'
+  }
   pointerDown(x: number, y: number, id?: string) {
+    if (!this.playing) return
     this.lastTouch = this.time
     if (this.intro >= 0) this.skipIntro()
+    if (this.stand) {
+      // (After a film that left her upright: back to swimming.)
+      this.stand = false
+      this.dadFace = null
+      this.pos.y = 0
+    }
     // On a poke's tap target it waits to see if it's a tap; anywhere else (or Kaylee herself), she follows at once.
     this.finger = { x, y, id, moved: false, lead: !id }
     if (!id) {
@@ -1134,7 +1443,7 @@ export class Snorkel implements World3D {
   }
   pointerMove(x: number, y: number, downX: number, downY: number, held: boolean) {
     const f = this.finger
-    if (!held || !f) return
+    if (!held || !f || !this.playing) return
     this.lastTouch = this.time
     f.x = x
     f.y = y
@@ -1151,6 +1460,7 @@ export class Snorkel implements World3D {
     this.finger = null
   }
   tap(x: number, y: number, id?: string) {
+    if (!this.playing) return
     this.lastTouch = this.time
     this.counts.taps++
     if (id) return this.poke(id)
@@ -1180,7 +1490,7 @@ export class Snorkel implements World3D {
       this.blowRing()
     } else if (id === 'captain') {
       toot()
-      this.wave = 0
+      this.captain.m.react('wave')
       this.events.say(S.captain[this.turn.captain++ % S.captain.length])
     } else if (id === 'parrot') {
       this.pWiggle = 1
@@ -1190,6 +1500,15 @@ export class Snorkel implements World3D {
       this.flashT = 0
       twinkle(4)
       this.burstAt(this.cuttle.root.position, 14)
+      // (The fact, the first time she pokes it.)
+      this.once('colors', S.colors)
+    } else if (id === 'bubble') {
+      // Bubbles twinkles back, her bubble wobbling.
+      const b = this.bub
+      b.twinkle(false)
+      b.wobble()
+      fireflySfx.giggle(BUB)
+      this.bubbles.burst(b.pos.x, b.pos.y + BUBBLE_R, b.pos.z, 6, 0.4, 0.6, 0.05)
     } else if (id === 'clam') {
       if (this.clamT >= 0) return
       this.clamT = 0
@@ -1222,6 +1541,14 @@ export class Snorkel implements World3D {
   /** Where the surface is on screen at her distance (the line between the two views), and the DOM line drawn on it. */
   private waterline(t: number) {
     const cam = this.rig.camera
+    const line = this.lineEl
+    if (this.films.on) {
+      // A film's shots are plain: all above the water, or all under it. No line.
+      this.split = cam.position.y > 0 ? this.h : 0
+      if (line && line.style.display !== 'none') line.style.display = 'none'
+      return
+    }
+    if (line && line.style.display === 'none') line.style.display = ''
     let split = this.h
     if (cam.position.y > 0.01) {
       // The surface right under her, as far off as she is (straight ahead of the camera).
@@ -1244,26 +1571,41 @@ export class Snorkel implements World3D {
     const top = Math.round(this.split)
     let calls = 0
     let tris = 0
+    // A film's letterbox bars (the same as engine3d/cinema.ts's Letterbox.render, round this view's two halves):
+    // the picture is drawn between them.
+    const bar = Math.round(this.bars.amount * Math.min(this.h * 0.09, 96))
+    if (bar >= 1) {
+      r.getClearColor(prevColor)
+      const prevAlpha = r.getClearAlpha()
+      r.setScissorTest(false)
+      r.setClearColor(BAR, 1)
+      r.clear(true, true, false)
+      r.setClearColor(prevColor, prevAlpha)
+    }
+    const y0 = bar
+    const y1 = this.h - bar
     r.setScissorTest(true)
     // Above the water: the sky, the sea's top out to the horizon, the boat, Ko Kudi.
-    if (top > 0) {
+    const airTo = Math.min(top, y1)
+    if (airTo > y0) {
       scene.fog = this.airFog
       scene.background = this.sky
       this.sea.visible = true
       this.under.visible = false
-      r.setScissor(0, this.h - top, this.w, top)
+      r.setScissor(0, this.h - airTo, this.w, airTo - y0)
       r.render(scene, this.rig.camera)
       calls += r.info.render.calls
       tris += r.info.render.triangles
     }
     // Under it: the same view without the sea's top, in the water's blue.
-    if (top < this.h) {
+    const waterFrom = Math.max(top, y0)
+    if (waterFrom < y1) {
       this.waterFog.far = PLAY.fog
       scene.fog = this.waterFog
       scene.background = this.deep
       this.sea.visible = false
       this.under.visible = true
-      r.setScissor(0, 0, this.w, this.h - top)
+      r.setScissor(0, this.h - y1, this.w, y1 - waterFrom)
       r.render(scene, this.rig.camera)
       calls += r.info.render.calls
       tris += r.info.render.triangles
@@ -1277,7 +1619,7 @@ export class Snorkel implements World3D {
     const el = this.hintEl
     if (!el) return
     let at: Vector3 | null = null
-    const idle = !this.finger && !this.goal && this.intro < 0 && t - this.lastTouch > HINT_S
+    const idle = this.playing && !this.stand && !this.finger && !this.goal && this.intro < 0 && t - this.lastTouch > HINT_S
     if (idle) {
       if (this.round === 'float') {
         // Out ahead of her, along the reef.
@@ -1289,7 +1631,8 @@ export class Snorkel implements World3D {
     if (!!at !== this.hintOn) {
       this.hintOn = !!at
       // The finger has just come up: the hint, spoken only if the budget allows (spendHint).
-      const l = at ? S.hint[this.round] : null
+      const r = this.round
+      const l = at && r !== 'story' && r !== 'found' ? S.hint[r] : null
       if (l) this.events.say(l, !spendHint(l))
     }
     const want = at ? '' : 'none'
@@ -1324,10 +1667,14 @@ export class Snorkel implements World3D {
       if (el.style.display !== want) el.style.display = want
     }
     const v = new Vector3()
+    // (A film takes no taps: nothing to tap.)
+    const off = !this.playing
     for (const [id, el] of this.anchorEls) {
-      if (id === 'kaylee') place(el, v.set(this.pos.x, -0.35, this.pos.z), 0.6, 0.9)
+      if (off) place(el, null, 0)
+      else if (id === 'kaylee') place(el, this.stand ? null : v.set(this.pos.x, -0.35, this.pos.z), 0.6, 0.9)
       else if (id === 'family:nick') place(el, this.nick.root.getWorldPosition(v).setY(-0.4), 0.9, 1, true)
-      else if (id === 'captain') place(el, this.boat.captain.getWorldPosition(v), 1.5, 1, false)
+      else if (id === 'captain') place(el, this.captain.root.getWorldPosition(v), 1.5, 1, false)
+      else if (id === 'bubble') place(el, this.bub.inBubble ? v.copy(this.bub.pos).setY(this.bub.pos.y - BUBBLE_R) : null, BUBBLE_R * 2, 1.2)
       else if (id === 'parrot') place(el, this.pState === 'away' ? null : v.copy(this.pPos).setY(this.pPos.y - 0.4), 0.8, 1.4)
       else if (id === 'cuttle') place(el, v.copy(this.cuttle.root.position).setY(this.cuttle.root.position.y - 0.3), 0.6, 1.6)
       else if (id === 'clam') place(el, v.copy(this.clam.root.position), 0.6, 1.6)
@@ -1339,7 +1686,7 @@ export class Snorkel implements World3D {
         const c = CORALS[+id.slice(6)]
         place(el, c ? v.set(c.o.x, c.o.top - 0.7, c.o.z) : null, 0.6, 1.6)
       }
-      el.style.zIndex = id === 'kaylee' ? '1' : id === 'parrot' || id === 'cuttle' ? '3' : '2'
+      el.style.zIndex = id === 'kaylee' ? '1' : id === 'bubble' ? '4' : id === 'parrot' || id === 'cuttle' ? '3' : '2'
     }
   }
 
@@ -1349,8 +1696,10 @@ export class Snorkel implements World3D {
     const sc = (p: Vector3) => (({ x, y }) => ({ x: Math.round(x), y: Math.round(y) }))(this.toScreen(p))
     return {
       section: 'snorkel',
-      phase: this.intro >= 0 ? 'intro' : this.round,
+      phase: this.films.on ? 'film' : this.intro >= 0 ? 'intro' : this.round,
       round: this.round,
+      film: this.films.now,
+      films: { done: this.films.done, skipped: this.films.skipped },
       at: { x: +this.pos.x.toFixed(2), z: +this.pos.z.toFixed(2) },
       speed: +this.vel.length().toFixed(2),
       swam: +this.swam.toFixed(1),
@@ -1359,10 +1708,14 @@ export class Snorkel implements World3D {
       waypoint: this.pi,
       cuttleStage: this.stage,
       cuttleBest: this.best,
-      done: this.doneAt >= 0,
+      done: this.letGo >= 0,
+      bubbles: this.bubFree ? 'free' : this.bub.inBubble ? (this.letGo >= 0 ? 'let go' : 'held') : 'out',
+      seen: this.said.has('see'),
       kaylee: sc(tmp2.set(this.pos.x, 0, this.pos.z)),
       parrotAt: sc(this.pPos),
       cuttleAt: sc(this.cuttle.root.position),
+      bubbleAt: sc(this.bub.pos),
+      captain: sc(this.captain.head(tmp2)),
       daddy: sc(tmp2.set(this.dad.x, -0.3, this.dad.z)),
       ...this.counts,
     }
