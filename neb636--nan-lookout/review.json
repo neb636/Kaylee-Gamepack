@@ -1,0 +1,11 @@
+{
+  "title": "Nan: the 3 lookout",
+  "checkIn": "fix",
+  "kaylee": "A lookout on the 3 road's top bend is open from the moment she lands in Nan: drive the 3, the bends pop, Mommy's photo, then back to the map.",
+  "questions": [],
+  "reels": [],
+  "links": [
+    { "label": "The Nan map with the lookout (no stops yet)", "hash": "#/world/thailand/nan-trip/map" },
+    { "label": "The 3 from the lookout's viewpoint", "hash": "#/world/thailand/nan-trip/three?to=lookout" }
+  ]
+}
