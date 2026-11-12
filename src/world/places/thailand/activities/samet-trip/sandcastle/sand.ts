@@ -631,6 +631,10 @@ export class Sand {
       this.wet[k] = 1
     })
   }
+  /** Stands water in these cells up to `level` (a link that opens with her moat already full). */
+  flood(cells: number[], level: number) {
+    for (const k of cells) this.W[k] = Math.max(this.W[k], level - this.h[k], 0)
+  }
   /** How much sand she has moved in all (m³), for QA. */
   moved() {
     let s = 0

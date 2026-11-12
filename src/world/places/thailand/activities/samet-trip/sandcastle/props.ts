@@ -1,4 +1,4 @@
-// The sandcastle's things, built from code in the toy look (greybox: simple shapes, already toon-shaded and outlined):
+// The sandcastle's things, built from code in the toy look (simple shapes, toon-shaded and outlined):
 // the three moulds (her pink bucket, a square one, a unicorn), the towers they leave, shells and coral bits to push
 // into the walls, the ghost crab, a longtail going by, the beach ball, Mom's umbrella and Dad's blanket of sand.
 import { Group } from 'three'

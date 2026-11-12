@@ -1,23 +1,30 @@
 // The fire show, on screen (fireshow.ts is the world): Sai Kaew at night with its tap targets, the pressing finger
 // (drawing a circle before she starts, round the dots she still needs when she's stuck), Sparkle in the corner speaking
-// everyone's lines (trip/legs/Guide.tsx, the words for Dad too), and once the fireworks go up a 🔥 🏆 badge with
-// the way home (Mom's photo goes on Agong's wall, the stamp). With ?feel=1 Dad also gets round chips.
+// everyone's lines (trip/legs/Guide.tsx, the words for grown-ups too), and after the fireworks and the dancers' thank
+// you a 🔥 🏆 badge with the way home (Mom's photo goes on Agong's wall, the stamp). The story's two films (story.ts:
+// the way in, the thank you) play over it: FilmOverlay draws their words, who says them and the hold-to-skip ⏭, and
+// Sparkle's corner is away while one is on. With ?feel=1 there are round chips too (the play rounds, not the films).
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, bigCelebration, burst } from '../../../../../../sdk'
+import { BigButton, bigCelebration, burst, type Line } from '../../../../../../sdk'
 import { isFeelParam } from '../../../../../kit/knobs'
 import { Anchors } from '../../../../../engine3d/Anchors'
+import type { FilmState } from '../../../../../engine3d/film'
+import { FilmOverlay } from '../../../../../engine3d/FilmOverlay'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
-import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
+import { TripGuide, WHO, type TripGuideHandle } from '../../../trip/legs/Guide'
 import type { StopId } from '../island/layout'
-import { FIRE_ANCHORS, FIRE_ROUND_IDS, FireShow as World, type FireEvents, type FireRound } from './fireshow'
+import { FIRE_ANCHORS, FIRE_ROUND_IDS, FireShow as World, type FireEvents, type FirePlayRound, type FireRound } from './fireshow'
 
 const feelOn = () => [...new URLSearchParams(location.hash.split('?')[1] ?? '').keys()].some(isFeelParam)
-const CHIP: Record<FireRound, string> = { twirl: '🌀 twirl', shapes: '⭐ shapes', finish: '🎆 finish' }
+const CHIP: Record<FirePlayRound, string> = { twirl: '🌀 twirl', shapes: '⭐ shapes', finish: '🎆 finish' }
 
 interface Props {
+  /** Where it opens: `story` (the way-in film, then the twirl), a play round, or `thanks` (the film after the
+   *  fireworks, then the way home). */
   round: FireRound
+  /** The fireflies she found (each lights a poi, chases her lights and adds its surprise to the finish). */
   flags: StopId[]
   /** The round on screen changed (the address bar follows). */
   onRound(r: FireRound): void
@@ -30,6 +37,9 @@ export function FireShowScreen({ round: first, flags, onRound, onHome }: Props) 
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [round, setRound] = useState<FireRound>(first)
   const [done, setDone] = useState<string | null>(null)
+  // The story's films: the one on screen (its beat) and the words being said.
+  const [film, setFilm] = useState<FilmState | null>(null)
+  const [filmLine, setFilmLine] = useState<Line | null>(null)
   const [feel] = useState(feelOn)
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
@@ -51,6 +61,8 @@ export function FireShowScreen({ round: first, flags, onRound, onHome }: Props) 
       bigCelebration()
       setDone(photo)
     },
+    film: setFilm,
+    filmLine: setFilmLine,
   })
 
   const make = (renderer: WebGLRenderer) => {
@@ -61,6 +73,8 @@ export function FireShowScreen({ round: first, flags, onRound, onHome }: Props) 
   const jump = (r: FireRound) => {
     setRound(r)
     setDone(null)
+    setFilm(null)
+    setFilmLine(null)
     setRun((v) => ({ round: r, n: v.n + 1 }))
   }
 
@@ -83,7 +97,8 @@ export function FireShowScreen({ round: first, flags, onRound, onHome }: Props) 
           </>
         )}
       />
-      {mode === 'webgl' && <TripGuide ref={guideRef} corner={done !== null ? OVER_CORNER : undefined} />}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!film} corner={done !== null ? OVER_CORNER : undefined} />}
+      {mode === 'webgl' && <FilmOverlay state={film} line={filmLine} speaker={(v) => WHO[v]} onSkip={() => worldRef.current?.skipFilm()} />}
       <AnimatePresence>
         {done !== null && (
           // (A moment after the fireworks' photo, once the bubble showing then has moved up out of its way.)

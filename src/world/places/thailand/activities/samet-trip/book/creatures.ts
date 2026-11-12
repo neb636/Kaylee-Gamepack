@@ -9,8 +9,8 @@
 //   swim:   the parrotfish noses round the coral, the damselfish swirl in a crowd that parts round her, the cuttlefish
 //           hovers and changes color as she comes near;
 //   still:  the urchins (prickly: she boings off them) and the coral.
-// Every one does something cute for Mom's phone (`pose`), and reacts to a tap without it (`poke`). The terns and the
-// crab holes' ghost crabs are the island's own (island.ts, props.ts); the phone snaps them too.
+// Every one reacts to a tap (`poke`; `pose`, a cute look at the camera, was for the photo book, which is gone). The
+// terns and the crab holes' ghost crabs are the island's own (island.ts, props.ts).
 import { Group, Matrix4, Quaternion, Vector3, type InstancedMesh, type MeshToonMaterial } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../engine3d/geo'

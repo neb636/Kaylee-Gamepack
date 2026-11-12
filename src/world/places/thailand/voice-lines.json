@@ -1907,8 +1907,201 @@
   "Koh Samet is a national park, a home for animals!",
   "Always wear a life jacket on the water!",
   "The sun sets in the west, over Ao Prao!",
-  "Take a photo of an animal, then let it be!",
-  "Koh Samet! Let's explore the island!",
+  "Fireflies glow to say hello to each other!",
+  {
+    "text": "What a pretty island!",
+    "voice": "ji"
+  },
+  {
+    "text": "Hello, puppy! What's wrong?",
+    "voice": "nick"
+  },
+  {
+    "text": "Oh no, oh no, oh no!",
+    "voice": "tuk"
+  },
+  {
+    "text": "Our fireflies are gone!",
+    "voice": "kae"
+  },
+  {
+    "text": "Every night, four fireflies light up our fire show.",
+    "voice": "tuk"
+  },
+  {
+    "text": "But last night, a big wind came. Whoosh!",
+    "voice": "kae"
+  },
+  {
+    "text": "It blew them all over the island!",
+    "voice": "kae"
+  },
+  {
+    "text": "No fireflies, no show tonight!",
+    "voice": "tuk"
+  },
+  {
+    "text": "But Tofu saw where they went!",
+    "voice": "kae"
+  },
+  {
+    "text": "Will you help us find them?",
+    "voice": "tuk"
+  },
+  "Four fireflies to find! Tap a picture!",
+  "Four fireflies to find! Click a picture!",
+  {
+    "text": "Hop in! Beep beep!",
+    "voice": "sunbear"
+  },
+  {
+    "text": "Off we go!",
+    "voice": "sunbear"
+  },
+  {
+    "text": "Hold on tight!",
+    "voice": "sunbear"
+  },
+  {
+    "text": "Ao Hin Khok!",
+    "voice": "sunbear"
+  },
+  "Look! A pink light on the water!",
+  "Something is glowing in the sand!",
+  "A blue light, far out at sea!",
+  "A green light in the big tree!",
+  "One firefly! Three more to find!",
+  "Two fireflies! Two more to find!",
+  "Three fireflies! Just one more!",
+  "Tofu the beach puppy! He saw it all!",
+  {
+    "text": "Sawasdee krap! Looking for a pink light?",
+    "voice": "otter"
+  },
+  {
+    "text": "She zoomed round my buoys all night!",
+    "voice": "otter"
+  },
+  {
+    "text": "She only stops for someone fast!",
+    "voice": "otter"
+  },
+  {
+    "text": "Life jacket first!",
+    "voice": "otter"
+  },
+  "There she is! After her!",
+  {
+    "text": "Ha ha! She likes you!",
+    "voice": "otter"
+  },
+  "You found Zoom!",
+  {
+    "text": "Fast like a firefly!",
+    "voice": "nick"
+  },
+  {
+    "text": "Look! Something's glowing in the sand!",
+    "voice": "nick"
+  },
+  {
+    "text": "A little gold firefly! She is shy.",
+    "voice": "ji"
+  },
+  {
+    "text": "Let's build her a castle!",
+    "voice": "nick"
+  },
+  "She is peeking! Keep building!",
+  {
+    "text": "She loves her castle!",
+    "voice": "ji"
+  },
+  "You found Sandy!",
+  {
+    "text": "A castle fit for a firefly!",
+    "voice": "nick"
+  },
+  {
+    "text": "A little blue light fell in the sea!",
+    "voice": "pelican"
+  },
+  {
+    "text": "She can't swim! She is in a bubble.",
+    "voice": "pelican"
+  },
+  {
+    "text": "Down by the coral. Can you find her?",
+    "voice": "pelican"
+  },
+  "A blue glow! Swim to it!",
+  "The cuttlefish is hugging her bubble!",
+  {
+    "text": "Pop! Out she comes!",
+    "voice": "nick"
+  },
+  {
+    "text": "You saved her, ka!",
+    "voice": "pelican"
+  },
+  "You found Bubbles!",
+  {
+    "text": "Did you see that? A green light!",
+    "voice": "nick"
+  },
+  {
+    "text": "She is playing hide and seek!",
+    "voice": "ji"
+  },
+  {
+    "text": "Then let's play too!",
+    "voice": "nick"
+  },
+  "The green light knows where Dad is!",
+  "Shh! She is hiding with you!",
+  {
+    "text": "Hey! That tickles my nose!",
+    "voice": "nick"
+  },
+  "You found Peekaboo!",
+  {
+    "text": "All four fireflies! You did it!",
+    "voice": "ji"
+  },
+  "Tap the sunset picture!",
+  "Click the sunset picture!",
+  {
+    "text": "It's so dark. No show tonight.",
+    "voice": "tuk"
+  },
+  {
+    "text": "Wait! Look, look!",
+    "voice": "kae"
+  },
+  {
+    "text": "Our fireflies! You found them!",
+    "voice": "tuk"
+  },
+  {
+    "text": "Light us up, fireflies!",
+    "voice": "kae"
+  },
+  {
+    "text": "And these lights are for you!",
+    "voice": "kae"
+  },
+  {
+    "text": "Now the show can start!",
+    "voice": "tuk"
+  },
+  {
+    "text": "Best fire show ever!",
+    "voice": "tuk"
+  },
+  {
+    "text": "Khob khun ka! Come back soon!",
+    "voice": "kae"
+  },
   "Hat Sai Kaew! The jet ski beach!",
   "Ao Hin Khok! Build a sandcastle!",
   "Ao Phai! A quiet little bay!",
@@ -1920,8 +2113,6 @@
     "text": "Sunset time! To the big tree!",
     "voice": "nick"
   },
-  "Tap an animal to take its photo!",
-  "Click an animal to take its photo!",
   {
     "text": "Thank you for cleaning the beach!",
     "voice": "ji"
@@ -2006,7 +2197,6 @@
     "text": "Smile! Bye bye, Koh Samet!",
     "voice": "ji"
   },
-  "A beach puppy! He knows the way. Follow him!",
   "The puppy wants you to come!",
   "Na Dan pier!",
   "Hat Sai Kaew!",
@@ -2029,35 +2219,6 @@
   "A flying fox!",
   "A squirrel!",
   "A monkey!",
-  "Terns dive into the sea to catch fish!",
-  "Ghost crabs dig holes to hide from the sun!",
-  "The reef heron stands still, then grabs a fish!",
-  "Sea urchins are prickly. Look, but don't touch!",
-  "Coral looks like rock, but it's alive!",
-  "The hornbill has a giant yellow beak!",
-  "Parrotfish nibble coral, and it turns into sand!",
-  "Damselfish swim in a big crowd to stay safe!",
-  "A cuttlefish can change color in a blink!",
-  "Monitor lizards smell with their tongue!",
-  "The mouse-deer is as small as a cat!",
-  "A flying fox is a big bat that eats fruit!",
-  "Squirrels run up the palm trees!",
-  "Monkeys! Hold on to your sunglasses!",
-  "Look up over the sea at Sai Kaew!",
-  "Look for little holes in the sand!",
-  "Look on the rocks by the mermaid!",
-  "Look in the water by the rocks!",
-  "Look under the water at Hin Khok!",
-  "Look up in the big tree at Wong Duan!",
-  "Look in the water at Wong Duan!",
-  "Look for a crowd of little blue fish!",
-  "Look by the snorkel boat!",
-  "Look on the sand at Ao Prao!",
-  "By the forest at Ao Prao. Walk slowly!",
-  "Look up in the trees at Ao Prao!",
-  "Look up the palm trees!",
-  "Look by the road over the hill!",
-  "Your animal book is full!",
   {
     "text": "Sawasdee krap! Life jacket first!",
     "voice": "otter"

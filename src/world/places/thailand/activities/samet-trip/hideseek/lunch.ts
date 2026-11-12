@@ -1,4 +1,5 @@
-// Lunch on the deck at Ao Prao (plan: planning/around-the-world/thailand/samet-trip.md, greybox 6): Dad's photo 2, on
+// Lunch on the deck at Ao Prao (notes: planning/around-the-world/thailand/samet-story.md; the first plan:
+// samet-trip.md): Dad's photo 2, on
 // the resort deck above the cove (island/layout.ts DECK, the island's own deck from island/props.ts resortDeck). A place,
 // not a stop: no stamp, 45-90 s, 8-15 touches.
 //
@@ -194,7 +195,7 @@ export class Lunch implements World3D {
     this.pand.root.position.copy(pp)
     scene.add(this.pand.root)
 
-    // ---- The family: Kaylee and Dad across the table, Mom at the end of the deck with her phone.
+    // ---- The family: Kaylee and Dad across the table, Mom at the end of the deck.
     this.kaylee = new Avatar(bag)
     scene.add(this.kaylee.root)
     const ks = this.D(T.u - 0.85, T.v, 0.6)
@@ -508,7 +509,7 @@ export class Lunch implements World3D {
     this.squirrel.root.position.set(base.x + top.x * S.k + 0.12, base.y + 0.9 + (top.y - 0.9) * S.k, base.z + top.z * S.k)
     this.squirrel.root.rotation.set(0, this.seaYaw + Math.PI, 0)
     if (S.chit > 0) S.chit -= dt
-    // Everyone looks at her (Mom at her phone between).
+    // Everyone looks at her.
     const k = this.kaylee.root.position
     this.nick.lookAt(k.x, k.y + 0.5, k.z)
     this.ji.lookAt(k.x, k.y + 0.5, k.z)

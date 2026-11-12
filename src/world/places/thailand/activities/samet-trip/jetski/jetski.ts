@@ -1,6 +1,12 @@
-// The jet ski at Hat Sai Kaew (plan: planning/around-the-world/thailand/samet-trip.md, greybox 1): Kaylee steers,
-// Dad sits behind her, in the island's real coordinates (island/layout.ts), so the bay drops straight into the island
-// of greybox 2.
+// The jet ski at Hat Sai Kaew (the trip's story: planning/around-the-world/thailand/samet-story.md; the first plan:
+// samet-trip.md): Kaylee steers, Dad sits behind her, in the island's real coordinates (island/layout.ts), so the bay
+// is the island's own bay.
+//
+// The story: Zoom, the pink firefly, is somewhere out here. She zoomed round the jet ski man's buoys all night and only
+// stops for someone fast (story.ts: Zoom in play, and the two films). `round=story` plays the way in at the hut, then
+// the life jacket and the ride; `round=found` plays her landing on your unicorn's horn, then it's back to the island
+// with her. She is found by finishing a race (won, or lost by a nose) or by parking in the pink ring after a decent
+// ride: never only by winning.
 //
 // The toy (core verb): steer the jet ski with her finger. Finger down anywhere on the water and it heads there; the
 // further she holds, the faster it goes (engine3d/drive.ts, the bay's and the whale boat's control, with a zippy feel).
@@ -20,7 +26,8 @@
 // like a rubber band and turns her along it; wedge it on the rocks and it pops free. Life jacket first: the bare link waits for her tap on the jacket.
 // Getting off: a pink ring on the water in front of the hut (the island's stop rings look the same). Drive into it any
 // time (not mid-race) and the jet ski man catches the handlebars, she and Dad hop off onto the sand, and it's back
-// to the island. Sparkle says so once, a little way into the ride.
+// to the island. Sparkle says so once, a little way into the ride. While Zoom is still to be found the ring opens once
+// she has had a decent ride, and driving into it plays the found film instead of the hop off.
 //
 // Talk (lines.ts L.samet.jetski): the jet ski man says the life jacket goes on, Sparkle says what each round is for and
 // counts the race in, Dad whoops now and then (never after every jump), the jet ski man teases and is a good sport.
@@ -31,6 +38,8 @@ import { clamp, spendHint, type Line } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
+import { Letterbox } from '../../../../../engine3d/cinema'
+import { FilmPlayer, type FilmState } from '../../../../../engine3d/film'
 import { Bag } from '../../../../../engine3d/dispose'
 import { Driver, type Feel } from '../../../../../engine3d/drive'
 import { bake, blobShadow, merge, P, solid } from '../../../../../engine3d/geo'
@@ -50,6 +59,7 @@ import { buildSki, HIS, lifeJacket, loneVest, STERN, type Ski } from './ski'
 import { Wake, type Loop } from './wake'
 import { beachBed } from '../sfx/common'
 import { jetSfx as S } from './sounds'
+import { isFilmRound, ZoomStory, type JetRound } from './story'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/jetski/jetski.ts'
 /** Steering: the drive control's feel (engine3d/drive.ts), zippier than the boats. */
@@ -97,6 +107,7 @@ const SILLY = knobs('jetSilly', 'The rope, the sand, the silly things', FILE, {
   ride: { value: 70, min: 10, max: 200, step: 5, label: 'Ride round lasts', unit: 's', note: 'seconds of riding before the waves come (sooner after a loop)' },
   margin: { value: 3, min: 0.5, max: 10, step: 0.25, label: 'Stays inside the rope by', unit: 'm', note: 'a finger past the rope steers her along it, this far inside' },
   rocks: { value: 8, min: -20, max: 30, step: 1, label: 'Keeps off the rocks by', unit: 'm', note: 'past the sand at each end of the beach, a finger on the rocks steers her this far out from the waterline' },
+  decent: { value: 10, min: 0, max: 60, step: 1, label: 'A decent ride', unit: 's', note: 'while Zoom is still to be found, the pink ring opens after this much riding, once Zoom has come alongside (she does when the jet ski is fast, or after a few seconds of riding anyway)' },
   wedge: { value: 0.7, min: 0.2, max: 3, step: 0.05, label: 'Pops off the rocks after', unit: 's', note: 'stuck against the rocks or sand this long and it bounces free' },
   pop: { value: 8, min: 3, max: 14, step: 0.25, label: 'Pops off at', unit: 'm/s', note: 'how hard it bounces free' },
 })
@@ -113,8 +124,14 @@ const RACEK = knobs('jetRace', 'Racing the jet ski man', FILE, {
 })
 
 export type JetSection = 'jetski'
+export type { JetRound } from './story'
 export interface JetStart {
-  round: RoundId
+  /** A play round, or one of the films: story (the way in, then the ride) or found (Zoom lands on the horn, then back
+   *  to the island). */
+  round: JetRound
+  /** The fireflies she has found (the trip's flags). With `jetski` among them Zoom rides along, and getting off needs
+   *  no film. */
+  flags?: readonly string[]
 }
 export interface JetEvents {
   /** A new round began (the address bar follows). */
@@ -131,11 +148,19 @@ export interface JetEvents {
   stars(n: number, of: number): void
   /** The first frame is on screen. */
   ready(): void
-  /** She parked it in the pink ring by the hut and hopped off: back to the island. */
+  /** Back to the island: she parked it in the pink ring by the hut and hopped off, or Zoom has just been found. */
   leave(): void
+  /** A film is on (which beat), or off (null); and the line being said in it. */
+  film(s: FilmState | null): void
+  filmLine(l: Line | null): void
+  /** Zoom is found: confetti. */
+  found(): void
 }
 
 const J = LINES.samet.jetski
+const ZS = LINES.samet.story.jetski
+/** Seconds after the race's end before Zoom comes down to her (the bell, the cheer). */
+const FOUND_AFTER = 2.2
 
 const DEG = 180 / Math.PI
 const HINT_S = 8
@@ -165,7 +190,7 @@ export const JET_ANCHORS: AnchorInfo[] = [
   ...[0, 1, 2, 3, 4, 5, 6, 7].map((i) => ({ id: `umbrella:${i}`, label: 'A beach umbrella', kind: 'thing' as const })),
 ]
 
-type Phase = 'jacket' | 'suit' | 'push' | 'ride' | 'beached' | 'park' | 'countdown' | 'racing' | 'raceEnd'
+type Phase = 'film' | 'jacket' | 'suit' | 'push' | 'ride' | 'beached' | 'park' | 'countdown' | 'racing' | 'raceEnd'
 /** The pink ring by the hut where she parks the jet ski to get off (a little out from where it waits), and its size. */
 const DOCK = bay(0, 3)
 const DOCK_R = 3.4
@@ -257,6 +282,8 @@ export class JetSki implements World3D {
   private goalGlow: Mesh
   /** The pink ring she drives into to get off; armed once she has been away from it. */
   private dock: Mesh
+  /** Where the ride was on the last frame the ring was open (for the ring's check). */
+  private dockLast: { x: number; z: number } | null = null
   private dockArmed = false
   private parkT = -1
   private dockShowUntil = -1
@@ -316,6 +343,16 @@ export class JetSki implements World3D {
   private told = new Set<string>()
 
   private rideT = 0
+  /** Seconds she has ridden this visit, in any round (a decent ride opens the pink ring while Zoom is to be found). */
+  private rodeT = 0
+
+  // ---- Zoom's story: its films, the bars, Zoom herself (story.ts).
+  private films: FilmPlayer
+  private bars = new Letterbox()
+  private story: ZoomStory
+  /** The film round the link asked for, until its film is over. */
+  private filmRound: 'story' | 'found' | null
+  private jumpedNow = false
   private counts = { steers: 0, taps: 0, pokes: 0, jumps: 0, spins: 0, loops: 0, hearts: 0, beachings: 0, dizzy: 0, soaked: 0, boings: 0, races: 0, wins: 0, losses: 0, bells: 0, bonks: 0, squeals: 0, tips: 0, wedged: 0, stars: 0 }
 
   constructor(
@@ -329,8 +366,10 @@ export class JetSki implements World3D {
     this.rig.fov = 52
     this.rig.lag = 0.3
     this.rig.camera.far = 3200
-    this.round = start.round
-    this.phase = start.round === 'ride' ? 'jacket' : start.round === 'race' ? 'countdown' : 'ride'
+    // A film round plays its film over the calm bay: the way in goes on into the ride.
+    this.filmRound = isFilmRound(start.round) ? start.round : null
+    this.round = isFilmRound(start.round) ? 'ride' : start.round
+    this.phase = this.filmRound ? 'film' : this.round === 'ride' ? 'jacket' : this.round === 'race' ? 'countdown' : 'ride'
     this.ropeNow = { ...ROPE[this.round] }
     // Sai Kaew's waves and breeze under everything (recorded; it fades out when the stage goes).
     bag.add({ dispose: beachBed() })
@@ -363,7 +402,8 @@ export class JetSki implements World3D {
     scene.add(this.jacketFloat)
     this.nickJacket = lifeJacket(bag, this.nick.rig.radius * 1.12, this.nick.height * 0.3, this.nick.height * 0.2, '#FF8A2E', '#FFE07A')
     this.nick.rig.body.add(this.nickJacket)
-    this.jacket.visible = this.phase !== 'jacket'
+    // (The way-in film ends at the life jacket: it isn't on yet.)
+    this.jacket.visible = this.phase !== 'jacket' && this.filmRound !== 'story'
     this.jacketFloat.visible = this.phase === 'jacket'
     // Dad's cap (it blows off when she pokes him).
     const f = this.nick.rig.face
@@ -450,8 +490,45 @@ export class JetSki implements World3D {
     this.stars = new Particles({ kind: 'spray', count: 60, colors: [PAL.gold, '#FFFFFF', PAL.pink], gravity: 0 }, bag)
     scene.add(this.spray.mesh, this.foam.mesh, this.sparkle.mesh, this.stars.mesh)
 
+    // ---- Zoom, the pink firefly (and the ones found before her, round the horn).
+    const flags = start.flags ?? []
+    this.films = new FilmPlayer({ line: (l) => this.events.filmLine(l), state: (st) => this.events.film(st) })
+    this.story = new ZoomStory(
+      {
+        scene,
+        bag,
+        kaylee: this.kaylee,
+        nick: this.nick,
+        man: this.man,
+        d: this.d,
+        water: (x, z) => this.water(x, z),
+        groundY: (x, z) => this.groundY(x, z),
+        insideRope: (x, z) => this.insideRope(x, z),
+        seat: () => this.seat(),
+        manHome: () => this.parkRival(),
+        manRides: (x, z, heading) => {
+          this.rival.place(x, z, heading)
+          this.rivalSki.back.attach(this.man.root)
+          this.man.place(0, -0.1 * this.man.height, 0.35, 0, 'sit')
+          this.man.root.rotation.set(0, 0, 0)
+          this.manWalk = null
+        },
+        say: (l) => this.events.say(l),
+        sparkles: (x, y, z, n) => this.sparkle.burst(x, y, z, n, 1.1, 1.7, 0.07),
+        cheer: () => {
+          this.events.found()
+          // (Mom on the sand saw it too.)
+          this.ji.react('hop')
+        },
+        camera: () => this.rig.camera.position,
+        tall: () => this.tall,
+      },
+      flags,
+      flags.includes('jetski') && !this.filmRound,
+    )
+
     // ---- Where the link starts.
-    if (this.phase === 'jacket') this.d.place(LAUNCH.x, LAUNCH.z, SEAWARD)
+    if (this.phase === 'jacket' || this.phase === 'film') this.d.place(LAUNCH.x, LAUNCH.z, SEAWARD)
     else if (this.round === 'race') this.startRace(true, 1.4)
     else {
       const p = bay(0, 8)
@@ -485,6 +562,8 @@ export class JetSki implements World3D {
     if (this.rival) Object.assign(this.rival.feel, f, { top: f.top * RACEK.rival * (1 - RACEK.ease) ** this.losses, grip: f.grip * 1.4, gain: 3 })
   }
   private waveGoal() {
+    // (A film is played on a calm sea.)
+    if (this.phase === 'film') return WAVES.ride
     return this.round === 'waves' ? WAVES.waves : this.round === 'race' ? WAVES.race : WAVES.ride
   }
   private groundY(x: number, z: number) {
@@ -561,6 +640,8 @@ export class JetSki implements World3D {
   /** On to a round (her play moved it on, or Dad's chip). */
   setRound(r: RoundId, snap = false) {
     if (r === this.round && !snap) return
+    // (Zoom's film is on: the bay is on its way back to the island, not into a new round.)
+    if (this.phase === 'film') return
     this.round = r
     this.events.round(r)
     if (r === 'waves') this.events.say(J.waves)
@@ -583,7 +664,12 @@ export class JetSki implements World3D {
       this.shown = true
       this.events.ready()
       this.resetStars()
+      // A film round: its film starts with the first frame.
+      if (this.filmRound === 'story') this.films.play(this.story.intro(), () => this.afterIntro())
+      else if (this.filmRound === 'found') this.playFound()
     }
+    const cine = this.films.update(dt, this.w / this.h)
+    if (this.films.on) this.lastTouch = t
     this.readFeel()
     if (this.later.length) {
       const due = this.later.filter((l) => l.at <= t)
@@ -622,8 +708,50 @@ export class JetSki implements World3D {
     this.s.update(dt, t, this.rig.camera.position.x, this.rig.camera.position.z, this.lights)
     this.camYaw += wrap(this.d.heading - this.camYaw) * ease(dt, 0.3 + HELM.camera * 4) * (this.beachT >= 0 ? 0.2 : 1)
     this.rig.setShot(this.shot())
+    this.rig.setCine(cine)
     this.rig.update(dt)
+    this.bars.update(dt, this.films.on)
     this.drawHint(t)
+  }
+
+  // ---------------------------------------------------------------- Zoom's films
+
+  /** The way in is over (or skipped): the life jacket, as the ride begins. */
+  private afterIntro() {
+    this.filmRound = null
+    this.phase = 'jacket'
+    this.d.place(LAUNCH.x, LAUNCH.z, SEAWARD)
+    this.jacket.visible = false
+    this.jacketFloat.visible = true
+    this.lastTouch = this.time
+    this.events.round('ride')
+    this.events.say(ZS.first)
+  }
+  /** Zoom is still out on the bay: getting off goes through her found film. */
+  private get zoomWild() {
+    return this.story.mode !== 'horn'
+  }
+  /** Found: Zoom lands on the horn, then it's back to the island with her. */
+  private playFound() {
+    if (this.films.on) return
+    this.phase = 'film'
+    this.finger = null
+    this.d.stop()
+    this.events.count(-1)
+    this.arrow.visible = this.goalGlow.visible = this.dock.visible = this.marker.visible = false
+    this.manWalk = null
+    this.films.play(this.story.found(), () => this.events.leave())
+  }
+  /** The screen's hold-to-skip: the film jumps to its end. */
+  skipFilm() {
+    this.films.skip()
+  }
+  /** The screen's island button after a race she won: back to the island (through Zoom's found film, if she's still
+   *  to be found). */
+  toIsland() {
+    if (this.films.on || this.phase === 'park') return
+    if (this.zoomWild) this.playFound()
+    else this.events.leave()
   }
 
   // ---------------------------------------------------------------- her finger: steering
@@ -697,6 +825,9 @@ export class JetSki implements World3D {
 
   private drive(dt: number) {
     const d = this.d
+    this.jumpedNow = false
+    // (A film puts the jet ski where it wants it.)
+    if (this.phase === 'film') return
     if (this.phase === 'jacket' || this.phase === 'suit') {
       d.place(LAUNCH.x, LAUNCH.z, SEAWARD)
       return
@@ -798,6 +929,7 @@ export class JetSki implements World3D {
   private takeOff(vy: number) {
     const d = this.d
     d.jump(vy)
+    this.jumpedNow = true
     this.counts.jumps++
     if (vy > WAVES.spin) {
       this.spinT = 0
@@ -1040,13 +1172,28 @@ export class JetSki implements World3D {
 
   private dockStep(t: number) {
     const d = this.d
-    const open = this.phase === 'ride' || (this.phase === 'raceEnd' && this.winner === 'her')
+    // While Zoom is still to be found the ring waits for a decent ride: she has ridden a while, and Zoom has come
+    // alongside for a look at her (story.ts: at once when she's fast, after a few seconds anyway).
+    const decent = !this.zoomWild || this.round !== 'ride' || (this.rodeT >= SILLY.decent && this.story.chased)
+    const open = (this.phase === 'ride' && decent) || (this.phase === 'raceEnd' && this.winner === 'her')
     this.dock.visible = open
-    if (!open) return
+    if (!open) {
+      this.dockLast = null
+      return
+    }
     // (Above the swell all round: flat on the water it dips under the waves.)
     this.dock.position.set(DOCK.x, this.water(DOCK.x, DOCK.z) + 0.3, DOCK.z)
     this.dock.scale.setScalar(1 + Math.sin(t * 3) * 0.06)
-    const dist = Math.hypot(d.x - DOCK.x, d.z - DOCK.z)
+    // (How close the ride came to the ring's middle since the last frame, not just where it is now: a fast pass on a
+    // slow frame would otherwise skip clean over it and run up the sand.)
+    const px = this.dockLast?.x ?? d.x
+    const pz = this.dockLast?.z ?? d.z
+    this.dockLast = { x: d.x, z: d.z }
+    const sx = d.x - px
+    const sz = d.z - pz
+    const sl = sx * sx + sz * sz
+    const k = sl > 1e-6 ? Math.max(0, Math.min(1, ((DOCK.x - px) * sx + (DOCK.z - pz) * sz) / sl)) : 1
+    const dist = Math.hypot(px + sx * k - DOCK.x, pz + sz * k - DOCK.z)
     if (dist > DOCK_R + 5) this.dockArmed = true
     // A little way into the ride, Sparkle says how to get off (once a visit).
     if (this.dockArmed && this.phase === 'ride' && this.round === 'ride' && this.rideT > 25 && !this.told.has('off')) {
@@ -1067,8 +1214,10 @@ export class JetSki implements World3D {
     d.vx = d.vz = 0
     d.yawRate = 0
     this.events.count(-1)
-    this.walkMan(bay(1.6, 0.2).x, bay(1.6, 0.2).z)
     S.skid()
+    // Zoom is still out there: she comes to her now (the found film), and that's the way back to the island.
+    if (this.zoomWild) return this.playFound()
+    this.walkMan(bay(1.6, 0.2).x, bay(1.6, 0.2).z)
     this.talk('bye', J.bye, 0)
   }
   /** Parked: it glides in nose first to where it waits, he holds it, she and Dad hop off onto the sand. */
@@ -1169,8 +1318,8 @@ export class JetSki implements World3D {
   }
   /** Again (her tap on 🔁, or at once after a loss). */
   raceAgain() {
-    // (Parked and hopping off: they're on their way back to the island, not racing an empty jet ski.)
-    if (this.phase === 'park') return
+    // (Parked and hopping off, or Zoom's film: they're on their way back to the island, not racing an empty jet ski.)
+    if (this.phase === 'park' || this.phase === 'film') return
     if (this.round !== 'race') this.round = 'race'
     this.startRace(false)
   }
@@ -1267,6 +1416,8 @@ export class JetSki implements World3D {
       else if (this.leg[1] === 1 && home(r.x, r.z) && this.losses < RACEK.mercy) this.finish('him')
     } else {
       this.endT += dt
+      // She finished a race, won or lost by a nose: that's fast enough for Zoom, who comes down to her.
+      if (this.zoomWild && this.endT > FOUND_AFTER) return this.playFound()
       if (this.winner === 'him' && this.endT > 2.6) this.startRace(false)
     }
     // His spray.
@@ -1297,7 +1448,7 @@ export class JetSki implements World3D {
       this.nick.react('hop')
       this.ji.react('hop')
       this.sparkle.burst(this.d.x, 1.5, this.d.z, 40, 3, 4, 0.3)
-      // Dad says her name at her first win only; after that the jet ski man's good-sport lines.
+      // Dad at her first win; after that the jet ski man's good-sport lines.
       if (this.counts.wins === 1) {
         this.events.say(J.champ)
         this.after(1.8, () => this.talk('won', J.won, 0))
@@ -1308,7 +1459,8 @@ export class JetSki implements World3D {
       this.ringBell()
       this.man.react('wave')
       this.events.say(J.lost)
-      this.events.say(J.close)
+      // (Straight into the next race, unless Zoom is about to come down to her.)
+      if (!this.zoomWild) this.events.say(J.close)
     }
     this.events.raceOver(who === 'her')
   }
@@ -1357,7 +1509,7 @@ export class JetSki implements World3D {
     this.ji.lookAt(d.x, 1, d.z)
     this.ji.update(dt, t)
     this.man.update(dt, t)
-    if (this.phase !== 'racing' && this.phase !== 'raceEnd' && this.phase !== 'countdown' && this.man.root.parent === this.scene) this.man.lookAt(d.x, 1, d.z)
+    if (!this.films.on && this.phase !== 'racing' && this.phase !== 'raceEnd' && this.phase !== 'countdown' && this.man.root.parent === this.scene) this.man.lookAt(d.x, 1, d.z)
     // Terns: wheeling; in the waves round they dive near her now and then.
     this.ternT -= dt
     if (this.ternT <= 0) {
@@ -1453,6 +1605,19 @@ export class JetSki implements World3D {
     }
     this.kaylee.update(dt, t)
     this.nick.update(dt, t)
+    // Zoom (and the fireflies found before her, round the horn).
+    const ph = this.phase
+    this.story.update(dt, t, {
+      round: this.round,
+      doing: ph === 'ride' ? 'ride' : ph === 'countdown' ? 'count' : ph === 'racing' ? 'race' : ph === 'raceEnd' ? 'end' : ph === 'beached' || ph === 'park' ? 'off' : 'jacket',
+      fast: clamp(Math.abs(d.speed) / Math.max(0.1, HELM.top), 0, 1.3),
+      air: d.airborne,
+      jumped: this.jumpedNow,
+      leg: this.leg[0],
+      surf: this.surf,
+      y: d.y,
+      rode: this.rodeT,
+    })
     // Dad's hands over hers on the handlebars (when nothing else is moving his arms).
     if (this.nick.root.parent === this.ski.back && this.nick.pose === 'sit') {
       const { armL, armR } = this.nick.rig
@@ -1608,6 +1773,7 @@ export class JetSki implements World3D {
 
   /** Rounds move on with her play: the calm ride, then the waves, then the race. */
   private progress(dt: number) {
+    if ((this.phase === 'ride' || this.phase === 'racing') && (this.finger?.steering || Math.abs(this.d.speed) > 1)) this.rodeT += dt
     if (this.phase !== 'ride') return
     if (this.round === 'ride') {
       if (this.finger?.steering || Math.abs(this.d.speed) > 1) this.rideT += dt
@@ -1744,7 +1910,7 @@ export class JetSki implements World3D {
   private shot(): Shot {
     const d = this.d
     const tall = this.tall
-    if (this.phase === 'jacket' || this.phase === 'suit' || this.phase === 'push') {
+    if (this.phase === 'jacket' || this.phase === 'suit' || this.phase === 'push' || this.phase === 'film') {
       // Close on Kaylee and the jacket, from the sea side and a little to the right: the hut and the beach behind.
       const yaw = d.heading * DEG + 32
       return { center: new Vector3(d.x - Math.sin(d.heading) * 0.6, 1.25, d.z - Math.cos(d.heading) * 0.6), half: tall ? new Vector3(2.4, 1.6, 2.4) : new Vector3(3.6, 1.4, 2.2), yaw, pitch: 15, minDist: 4, maxDist: 30 }
@@ -1779,7 +1945,7 @@ export class JetSki implements World3D {
   }
 
   render() {
-    this.renderer.render(this.scene, this.rig.camera)
+    this.bars.render(this.renderer, this.scene, this.rig.camera, this.w, this.h)
     this.stats.calls = this.renderer.info.render.calls
     this.stats.tris = this.renderer.info.render.triangles
   }
@@ -1795,6 +1961,8 @@ export class JetSki implements World3D {
     return this.raycaster.ray.intersectPlane(this.plane, out)
   }
   pointerDown(x: number, y: number, id?: string) {
+    // (A film takes no taps: the screen sparkles where her finger was.)
+    if (this.films.on || this.phase === 'film') return
     this.lastTouch = this.time
     // On a tap target, wait: a tap pokes it, a held or dragged finger steers.
     this.finger = { x, y, steering: false, t: this.time, id }
@@ -1814,6 +1982,7 @@ export class JetSki implements World3D {
   }
 
   tap(x: number, y: number, id?: string) {
+    if (this.films.on || this.phase === 'film') return
     this.lastTouch = this.time
     this.counts.taps++
     if (id) this.counts.pokes++
@@ -1946,6 +2115,11 @@ export class JetSki implements World3D {
     const cam = this.rig.camera.position
     const close = (o: Object3D, dist: number) => (o.getWorldPosition(tmp3).distanceTo(cam) < dist ? o : null)
     const jacket = this.phase === 'jacket'
+    // (No tap targets while a film is on.)
+    if (this.phase === 'film') {
+      for (const el of this.anchorEls.values()) if (el.style.display !== 'none') el.style.display = 'none'
+      return
+    }
     for (const [id, el] of this.anchorEls) {
       if (id === 'jacket') place(el, jacket ? this.jacketFloat : null, 0.5, 2.4, -0.25)
       else if (id === 'kaylee') place(el, jacket ? null : this.kaylee.root, this.kaylee.height, 0.9)
@@ -1970,8 +2144,14 @@ export class JetSki implements World3D {
     const b = toBay(d.x, d.z)
     return {
       section: 'jetski',
-      round: this.round,
+      // (A film round until its film is over, then the play round.)
+      round: this.filmRound ?? this.round,
       phase: this.phase,
+      film: this.films.now,
+      films: { done: this.films.done, skipped: this.films.skipped },
+      zoom: { mode: this.story.mode, state: this.story.state, chased: this.story.chased, shown: this.story.zoom.root.visible, at: sc(this.story.zoom.pos), y: +this.story.zoom.pos.y.toFixed(2) },
+      rode: +this.rodeT.toFixed(1),
+      fps: this.stats.fps,
       x: +d.x.toFixed(2),
       z: +d.z.toFixed(2),
       u: +b.u.toFixed(1),

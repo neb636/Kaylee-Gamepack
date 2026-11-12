@@ -1,44 +1,46 @@
-// The island to roam, on screen (island.ts is the world): the 3D island with its tap targets, the beach puppy's
-// thought bubble (a picture of the beach he's taking her to, #357 way-finding), the puppy button in the top-right corner
-// that calls him (the top-left is the shell's map button again, like the rest of Thailand), the home picture at the end
-// of Na Dan pier (the speedboat home, for the finale's photo), and Mom's phone and the animal book (../book/). Sparkle sits in the corner (trip/legs/Guide.tsx): she says
-// what's new (lines.ts L.samet.island, L.samet.puppy, L.samet.book), the family and the taxi driver react in their own
-// voices. A hub: no idle hints spoken (the puppy comes to fetch her).
-import { useRef, useState } from 'react'
+// The island between the stops, on screen (island.ts is the world; samet-story.md is the story): the 3D island with
+// its tap targets; the story's films over it (FilmOverlay: their words, the memory's storybook look, the hold-to-skip
+// ⏭); the pictures of the beaches (Board.tsx) that come up after the way-in film, after each firefly found, from the
+// top-right button and from a tap on the green taxi; the taxi's ride card (it drives across the screen while the
+// island moves her to the beach she picked); Tofu's thought bubble (a picture of the stop he's running to); and the
+// home picture at the end of Na Dan pier. Sparkle sits in the corner (trip/legs/Guide.tsx): she says what's new
+// (lines.ts L.samet.story, L.samet.island), the family and the islanders talk in their own voices. A hub: no idle
+// hints spoken (the top-right button glows instead).
+import { AnimatePresence } from 'motion/react'
+import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../../../engine3d/Anchors'
+import type { FilmState } from '../../../../../engine3d/film'
+import { FilmOverlay } from '../../../../../engine3d/FilmOverlay'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
-import { firstTime, type Line } from '../../../../../../sdk'
+import type { Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import { sametSfx as sfx } from '../sfx/common'
-import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
-import { ANIMAL_IDS, type AnimalId } from '../book/animals'
-import { DOCK_CORNER, PhoneAndBook, type BookPhoto, type Flyer } from '../book/Book'
+import { TripGuide, WHO, type TripGuideHandle } from '../../../trip/legs/Guide'
+import { FIREFLY_IDS } from '../story/firefly'
+import { Board, BOARD_CSS, FireflyIcon, STOP_SPOT, TaxiPicture, type BoardPick } from './Board'
 import { ISLAND_ANCHORS, SametIsland as World, type IslandStart } from './island'
 import type { SpotId, StopId } from './layout'
+import { islandSfx } from './sounds'
 
 interface Props {
   start: IslandStart
-  /** The book open from the start (the `book` section). */
-  bookOpen?: boolean
   /** She reached another beach (the address bar follows). */
   onAt(at: SpotId): void
   /** She opened a stop. */
   onOpen(stop: StopId | 'lunch' | 'sunset'): void
-  /** The animals in her book changed (the address bar follows), or the book opened or closed. */
-  onBook?(found: AnimalId[], open: boolean): void
-  /** Her photos so far this visit (kept by the trip, so a trip to the jet ski doesn't lose them). */
-  photos?: Partial<Record<AnimalId, BookPhoto>>
-  onPhotos?(p: Partial<Record<AnimalId, BookPhoto>>): void
-  /** Mom's phone out or away (the address bar follows). */
-  onPhone?(on: boolean): void
-  /** All four flags up and the speedboat home tapped: Mom's photo of the island (for Agong's wall). */
+  /** All four fireflies and the speedboat home tapped: Mom's photo of the island (for Agong's wall). */
   onHome?(photo: string): void
   /** The home picture tapped at the end of Na Dan pier: off home on the speedboat (the trip is kept for next time). */
   onLeave?(): void
 }
 
-export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, photos: kept, onPhotos, onPhone, onHome, onLeave }: Props) {
+const S = L.samet.story
+/** Seconds the taxi takes to cross the screen; the island moves her under it this long in. */
+const RIDE_S = 1.75
+const RIDE_MOVE_S = 0.55
+
+export function IslandScreen({ start, onAt, onOpen, onHome, onLeave }: Props) {
   const [n, setN] = useState(0)
   const [mode, setMode] = useState<RenderMode>('webgl')
   const worldRef = useRef<World | null>(null)
@@ -46,67 +48,78 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
   const [leave, setLeave] = useState(false)
   const guideRef = useRef<TripGuideHandle>(null)
   const speak = (l: Line) => guideRef.current?.speak(l)
-  const [phone, setPhone] = useState(!!start.phone)
-  const [open, setOpen] = useState(bookOpen)
-  const [found, setFound] = useState<AnimalId[]>(start.book ?? [])
-  const [photos, setPhotos] = useState<Partial<Record<AnimalId, BookPhoto>>>(kept ?? {})
-  const [portraits, setPortraits] = useState<Partial<Record<AnimalId, string>> | null>(null)
-  const [flash, setFlash] = useState(0)
-  const [flyer, setFlyer] = useState<Flyer | null>(null)
-  const [glow, setGlow] = useState(false)
-  const [cleaned, setCleaned] = useState(0)
-  const foundRef = useRef(found)
-  foundRef.current = found
-  const openRef = useRef(open)
-  openRef.current = open
-  const cb = useRef({ onAt, onOpen, onBook, onPhotos, onHome })
-  cb.current = { onAt, onOpen, onBook, onPhotos, onHome }
+  // The story's films: which beat is on (the memory's look) and the words being said.
+  const [film, setFilm] = useState<FilmState | null>(null)
+  const [filmLine, setFilmLine] = useState<Line | null>(null)
+  // The pictures of the beaches: up or down, and the pictures themselves (the island draws them once it's warm).
+  const [board, setBoard] = useState(false)
+  const [pics, setPics] = useState<Partial<Record<SpotId, string>>>({})
+  const [nudge, setNudge] = useState(false)
+  // The taxi driving across the screen (the island moves her to `to` under it).
+  const [ride, setRide] = useState<{ to: SpotId; n: number } | null>(null)
+  const rides = useRef(0)
+  const here = useRef<SpotId>(start.at)
+  const timers = useRef<number[]>([])
+  const later = (ms: number, f: () => void) => timers.current.push(window.setTimeout(f, ms))
+  useEffect(() => () => timers.current.forEach((t) => clearTimeout(t)), [])
+  const cb = useRef({ onAt, onOpen, onHome })
+  cb.current = { onAt, onOpen, onHome }
+  const all = start.flags.length === FIREFLY_IDS.length
+
   const make = (renderer: WebGLRenderer) => {
     const w = new World(renderer, start, {
-      at: (a) => cb.current.onAt(a),
+      at: (a) => {
+        here.current = a
+        cb.current.onAt(a)
+      },
       open: (s) => cb.current.onOpen(s),
-      shutter: () => {
-        sfx.shutter()
-        setFlash((f) => f + 1)
-      },
-      snap: (s) => {
-        const isNew = !!s.animal && !foundRef.current.includes(s.animal)
-        setFlyer((f) => ({ n: (f?.n ?? 0) + 1, src: s.src, animal: s.animal, gold: s.gold, isNew }))
-        if (s.animal) {
-          const a = s.animal
-          // A gold photo always stays; otherwise the newest one.
-          setPhotos((ph) => {
-            const next = ph[a]?.gold && !s.gold ? ph : { ...ph, [a]: { src: s.src, gold: s.gold } }
-            cb.current.onPhotos?.(next)
-            return next
-          })
-          if (isNew) {
-            const next = [...foundRef.current, a]
-            setFound(next)
-            cb.current.onBook?.(next, openRef.current)
-            setTimeout(() => sfx.giggle(), 300)
-            // Sparkle says its name (once: it's new), and when the book is full, that too.
-            setTimeout(() => speak(L.samet.book.name[a]), 500)
-            if (next.length === ANIMAL_IDS.length) setTimeout(() => speak(L.samet.book.full), 1700)
-          }
-        }
-      },
-      near: setGlow,
       cleaned: (c) => {
-        setCleaned(c)
-        if (c > 0 && firstTime('samet-clean')) speak(L.samet.island.clean)
+        if (c === 1) speak(L.samet.island.clean)
       },
       say: speak,
       home: onHome ? (src) => cb.current.onHome?.(src) : undefined,
       leaveAsk: onLeave ? setLeave : undefined,
+      film: setFilm,
+      filmLine: setFilmLine,
+      pictures: setPics,
+      board: (on) => {
+        setBoard(on)
+        if (on) setNudge(false)
+      },
+      nudge: setNudge,
     })
     w.setBubbleElement(bubbleRef.current)
-    w.requestPortraits(setPortraits)
     return w
   }
+
+  /** A picture tapped: the beach she's on closes the pictures (Tofu runs to its stop); another, and the taxi takes
+   *  her there. */
+  const pick = (id: BoardPick) => {
+    const w = worldRef.current
+    if (!w || ride) return
+    const to: SpotId = id === 'sunset' ? 'prao' : STOP_SPOT[id]
+    sfx.pop()
+    setBoard(false)
+    setNudge(false)
+    if (here.current === to || (to === 'prao' && here.current === 'deck')) return w.showStop(id === 'sunset' ? 'hideseek' : id)
+    const lines = S.island.ride
+    islandSfx.taxiToot()
+    speak(lines[rides.current++ % lines.length])
+    setRide({ to, n: rides.current })
+    later(RIDE_MOVE_S * 1000, () => worldRef.current?.travel(to, id === 'sunset' ? 'hideseek' : id))
+    later(RIDE_S * 1000, () => {
+      setRide(null)
+      // The driver names the beach as they pull in (never before they set off).
+      const name = to === 'hinkhok' ? S.island.hinkhok : L.samet.island.taxi.stop[to as keyof typeof L.samet.island.taxi.stop]
+      if (name) speak(name)
+      worldRef.current?.arrived()
+    })
+  }
+  const busy = !!film || !!ride
+
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#D5EEFA', overflow: 'clip' }}>
-      <style>{CSS}</style>
+      <style>{CSS + BOARD_CSS}</style>
       <View3D
         key={n}
         name="Koh Samet"
@@ -127,44 +140,47 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
           </>
         )}
       />
-      <PhoneAndBook
-        phone={phone}
-        onPhone={(on) => {
-          setPhone(on)
-          worldRef.current?.setPhone(on)
-          if (on && firstTime('samet-phone')) speak(L.samet.island.phone)
-          onPhone?.(on)
-        }}
-        glow={glow}
-        open={open}
-        onOpen={() => {
-          setOpen(true)
-          cb.current.onBook?.(foundRef.current, true)
-        }}
-        onClose={() => {
-          setOpen(false)
-          cb.current.onBook?.(foundRef.current, false)
-        }}
-        found={found}
-        photos={photos}
-        portraits={portraits}
-        flags={start.flags}
-        flash={flash}
-        flyer={flyer}
-        cleaned={cleaned}
-      />
-      <button
-        className="isle-pup"
-        aria-label="Call the puppy"
-        onClick={() => {
-          sfx.pop()
-          worldRef.current?.callPuppy()
-        }}
-      >
-        <PuppyFace />
-      </button>
-      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={open} corner={DOCK_CORNER} />}
-      {leave && (
+      <AnimatePresence>{board && !busy && <Board key="board" pics={pics} found={start.flags} here={here.current} onPick={pick} onClose={() => setBoard(false)} />}</AnimatePresence>
+      {!busy && (
+        <button
+          className={`isle-go${nudge && !board ? ' isle-go-nudge' : ''}`}
+          aria-label={board ? 'Close the pictures' : 'Where to? The pictures of the beaches'}
+          onClick={() => {
+            sfx.pop()
+            setNudge(false)
+            worldRef.current?.touched()
+            setBoard((b) => !b)
+          }}
+        >
+          <span className="isle-go-taxi">
+            <TaxiPicture size="100%" />
+          </span>
+          <span className="isle-go-flies">
+            {FIREFLY_IDS.map((id) => (
+              <FireflyIcon key={id} id={id} lit={start.flags.includes(id)} size={22} />
+            ))}
+          </span>
+        </button>
+      )}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!film} />}
+      {mode === 'webgl' && <FilmOverlay state={film} line={filmLine} speaker={(v) => WHO[v]} onSkip={() => worldRef.current?.skipFilm()} />}
+      {ride && (
+        <div className="isle-ride" key={ride.n} data-ride={ride.to} aria-hidden>
+          <span className="isle-ride-palm" style={{ animationDelay: '-.2s' }}>
+            🌴
+          </span>
+          <span className="isle-ride-palm" style={{ animationDelay: '-.95s', fontSize: 'clamp(44px, 11vmin, 110px)' }}>
+            🌴
+          </span>
+          <div className="isle-ride-road" />
+          <div className="isle-ride-taxi">
+            <div>
+              <TaxiPicture size="100%" />
+            </div>
+          </div>
+        </div>
+      )}
+      {leave && !busy && !board && !all && (
         <button
           className="isle-home"
           aria-label="Go home"
@@ -178,29 +194,11 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
         </button>
       )}
       {mode === 'lost' && (
-        <button onClick={() => { setMode('webgl'); setN((v) => v + 1) }} style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(213,238,250,.9)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: 'var(--ink)' }}>
+        <button onClick={() => { setMode('webgl'); setN((v) => v + 1) }} style={{ position: 'absolute', inset: 0, zIndex: 70, background: 'rgba(213,238,250,.9)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: 'var(--ink)' }}>
           🏝️ Tap to wake the island
         </button>
       )}
     </div>
-  )
-}
-
-/** The puppy button's picture (top-right): the beach puppy's face (cream, brown floppy ears, his tongue out). */
-function PuppyFace() {
-  return (
-    <svg viewBox="0 0 64 64" style={{ width: '78%', height: '78%' }} aria-hidden>
-      <ellipse cx="14" cy="30" rx="9" ry="16" fill="#C98A55" transform="rotate(14 14 30)" />
-      <ellipse cx="50" cy="30" rx="9" ry="16" fill="#C98A55" transform="rotate(-14 50 30)" />
-      <circle cx="32" cy="32" r="20" fill="#FFF1DC" stroke="#2B2330" strokeWidth="2.5" />
-      <ellipse cx="32" cy="40" rx="10" ry="7" fill="#FFFFFF" />
-      <circle cx="24" cy="29" r="3" fill="#2B2330" />
-      <circle cx="40" cy="29" r="3" fill="#2B2330" />
-      <ellipse cx="32" cy="36" rx="4" ry="3" fill="#3B2A26" />
-      <path d="M28 41 Q32 45 36 41" stroke="#2B2330" strokeWidth="2" fill="none" strokeLinecap="round" />
-      <path d="M30 43 Q32 50 34 43 Z" fill="#FF7FB0" />
-      <path d="M20 50 L32 46 L44 50 L32 56 Z" fill="#FF8FB8" />
-    </svg>
   )
 }
 
@@ -224,8 +222,6 @@ const CSS = `
 .pup-dot { position: absolute; border-radius: 50%; background: #fff; box-shadow: 0 0 0 2px var(--hotpink); }
 .pup-dot-1 { width: 16px; height: 16px; left: calc(var(--tx) * 0.62 - 8px); top: calc(var(--ty) * 0.62 - 8px); }
 .pup-dot-2 { width: 10px; height: 10px; left: calc(var(--tx) * 0.82 - 5px); top: calc(var(--ty) * 0.82 - 5px); }
-.isle-pup { position: absolute; top: calc(var(--safe-top, 0px) + 12px); right: calc(var(--safe-right, 0px) + 16px); width: var(--btn); height: var(--btn); border-radius: 50%; border: none; background: #fff; box-shadow: var(--shadow); display: grid; place-items: center; z-index: 50; cursor: pointer; transition: transform .12s; }
-.isle-pup:active { transform: scale(.85); }
 .isle-home { position: absolute; left: 50%; bottom: calc(var(--safe-bottom, 0px) + 22%); width: 132px; height: 132px; margin-left: -66px; border-radius: 50%; border: 6px solid #fff; background: #FFE3F0; box-shadow: 0 0 0 4px var(--hotpink), 0 8px 18px rgba(43,35,48,.3); display: grid; place-items: center; z-index: 40; animation: isle-home-in .5s cubic-bezier(.3,1.6,.5,1) both, isle-home-bob 1.4s ease-in-out .5s infinite; }
 @keyframes isle-home-in { from { transform: scale(0); } to { transform: scale(1); } }
 @keyframes isle-home-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }

@@ -1,14 +1,13 @@
-// Ko Kudi's reef (plan: samet-trip.md, "Snorkel at Ko Kudi"): the layout in meters and the props, built from code in
-// the island's toy look. The sea's surface is y = 0; the sandy bed lies about 2.6 m down. x runs across the screen,
+// Ko Kudi's reef (the trip: planning/around-the-world/thailand/samet-story.md): the layout in meters and the props,
+// built from code in the island's toy look. The sea's surface is y = 0; the sandy bed lies about 2.6 m down. x runs across the screen,
 // and the reef runs away from the camera toward −z: the snorkel boat at the start, the coral heads, the two big rocks
 // with the gap between them, the sandy patch (the clam, the sea cucumber), and the hidden garden of soft corals where
-// the cuttlefish lives. Ko Kudi itself (a green hump with a white beach and palms) sits on the horizon ahead.
-import { AdditiveBlending, BufferAttribute, DoubleSide, Group, Mesh, MeshBasicMaterial, PlaneGeometry, Vector3, type BufferGeometry } from 'three'
+// the cuttlefish lives, hugging the bubble Bubbles the firefly is in (story.ts). Ko Kudi itself (a green hump with a
+// white beach and palms) sits on the horizon ahead.
+import { AdditiveBlending, BufferAttribute, CatmullRomCurve3, CircleGeometry, DoubleSide, Group, Mesh, MeshBasicMaterial, PlaneGeometry, RingGeometry, TubeGeometry, Vector3, type BufferGeometry, type Material } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
-import { merge, P, solid, solidMix } from '../../../../../engine3d/geo'
+import { bake, merge, P, solid, solidMix } from '../../../../../engine3d/geo'
 import { PAL, toon } from '../../../../../engine3d/toon'
-import { buildAnimal } from '../../../../../engine3d/characters/animal'
-import { CAPTAIN } from '../cast'
 import { coralModel, urchinModel, type Model } from '../book/models'
 import { palmGeo, rng } from '../island/scenery'
 
@@ -20,6 +19,17 @@ export const BED = -2.6
 /** Where she splashes in, beside the boat. */
 export const START: XZ = { x: 0, z: 1.5 }
 export const BOAT: XZ = { x: 3.3, z: 3.2 }
+/** The boat's deck (m over the water), and where on it the captain stands (boat-local: x to starboard, z to the
+ *  stern): out on the bow in the open, where the swimmer and the camera can see her face. `BOW_PLAY` while she
+ *  swims (the port side, inside the swimmer's camera however far she is from the boat); `BOW` in a film (starboard,
+ *  with room beside her for who she talks to). */
+export const DECK_Y = 0.55
+export const BOW = { x: 0.4, z: -2.95 }
+export const BOW_PLAY = { x: -0.38, z: -3.05 }
+/** The bubble Bubbles is in: its size (m), and where the cuttlefish holds it (the cuttlefish's own space: in front of
+ *  its arms). */
+export const BUBBLE_R = 0.38
+export const HUG = { y: -0.03, z: 0.5, mouth: 0.36 }
 export const DADDY: XZ = { x: -2.2, z: -0.5 }
 /** The hidden garden (the cuttlefish hovers in its middle). */
 export const GARDEN: XZ = { x: -2, z: -35 }
@@ -104,6 +114,14 @@ export function seaTop(bag: Bag) {
   const m = new Mesh(bag.add(g), bag.add(new MeshBasicMaterial({ color: '#45C4D6' })))
   m.renderOrder = -1
   return m
+}
+
+/** The same surface from underneath (only a camera under the water sees it: a film's shot on the reef): a bright
+ *  ceiling, so the light is up there and nothing over the water shows through. */
+export function seaUnder(bag: Bag) {
+  const g = new PlaneGeometry(900, 900, 1, 1)
+  g.rotateX(Math.PI / 2)
+  return new Mesh(bag.add(g), bag.add(new MeshBasicMaterial({ color: '#A9F0F2' })))
 }
 
 /** Sunbeams slanting down through the water (only drawn under it): a few soft additive sheets. */
@@ -249,15 +267,8 @@ export function boat(bag: Bag) {
   // The anchor rope from the bow down to the sand.
   const ropeLen = 0.4 - BED + 0.2
   root.add(solid(merge([P.cyl(0.025, 0.025, ropeLen, '#E8D8A8', { at: [0, 0.4 - ropeLen / 2, -4.6], rot: [-0.35, 0, 0] }, 5), P.torus(0.16, 0.04, '#7A7A82', { at: [0, BED + 0.2, -5.6], rot: [0, 0, 0] })]), bag, 1.5))
-  // The captain at the motor: the pelican in her navy cap (cast.ts), facing forward (−z) over the boat.
-  const rig = buildAnimal(CAPTAIN, bag)
-  rig.root.position.set(0, 0.55, 3.0)
-  rig.root.rotation.y = Math.PI
-  rig.armL.rotation.x = -0.9
-  const captain = rig.root
-  const arm = rig.armR
-  root.add(captain)
-  return { root, body, ladder, captain, arm, rig }
+  // (The captain stands on the bow, BOW: snorkel.ts puts her there, a talking islander.)
+  return { root, body, ladder }
 }
 
 /** The giant clam: two wavy shells with a blue-purple mantle; the top shell closes. */
@@ -320,7 +331,62 @@ export function bubbleRing(bag: Bag) {
   return m
 }
 
-/** Her mask and snorkel, for her head (head-local: `R` the head's radius, `y` its center's height). */
+/** The bubble Bubbles the firefly is in, drawn the toy way: a white ring, a faint fill and a shine. Turn `root` to
+ *  face the camera every frame (it is flat); the firefly sits at its middle, between the fill and the ring. */
+export function bubble(bag: Bag) {
+  const root = new Group()
+  const R = BUBBLE_R
+  const flat = (color: string, opacity: number) => bag.add(new MeshBasicMaterial({ color, transparent: true, opacity, depthWrite: false, fog: false, side: DoubleSide }))
+  const fill = new Mesh(bag.add(new CircleGeometry(R, 32)), flat('#CDF3FF', 0.2))
+  fill.position.z = -0.14
+  const soft = new Mesh(bag.add(new RingGeometry(R * 0.8, R * 0.94, 40)), flat('#DFF8FF', 0.28))
+  const rim = new Mesh(bag.add(new RingGeometry(R * 0.93, R, 40)), flat('#FFFFFF', 0.92))
+  const shineMat = flat('#FFFFFF', 0.92)
+  const shine = new Mesh(bag.add(new CircleGeometry(R * 0.17, 14)), shineMat)
+  shine.position.set(-R * 0.48, R * 0.5, 0.16)
+  shine.scale.set(1.5, 0.75, 1)
+  shine.rotation.z = 0.75
+  const dot = new Mesh(bag.add(new CircleGeometry(R * 0.06, 10)), shineMat)
+  dot.position.set(-R * 0.7, R * 0.2, 0.16)
+  const low = new Mesh(bag.add(new RingGeometry(R * 0.7, R * 0.78, 20, 1, Math.PI * 1.55, Math.PI * 0.4)), flat('#FFFFFF', 0.5))
+  low.position.z = 0.16
+  for (const m of [fill, soft, rim, shine, dot, low]) m.renderOrder = 7
+  root.add(fill, soft, rim, shine, dot, low)
+  return { root }
+}
+
+/** The cuttlefish's two long arms round the bubble (in its own space and its own material, so they change color
+ *  with it): they dip from its mouth and cradle the bubble from underneath, so whoever is in it can be seen. Each
+ *  swings on a pivot at its mouth: `hug(1)` wraps them round the bubble, `hug(0)` lets go. */
+export function hugArms(bag: Bag, mat: Material) {
+  const root = new Group()
+  const r = HUG.z - HUG.mouth
+  const pivots = ([1, -1] as const).map((s) => {
+    const pts: Vector3[] = []
+    for (let i = 0; i <= 10; i++) {
+      const u = -Math.PI / 2 + (i / 10) * Math.PI * 0.94
+      // (Down under the bubble's middle within the first third of the way round, a smaller ring there.)
+      const low = Math.min(1, i / 3.2)
+      const ring = r * (1 - 0.2 * low)
+      pts.push(new Vector3(s * ring * Math.cos(u), -0.085 * low * (2 - low), r + ring * Math.sin(u)))
+    }
+    const tip = pts[pts.length - 1]
+    const geo = bag.add(merge([bake(new TubeGeometry(new CatmullRomCurve3(pts), 20, 0.017, 7), '#F2E6DA', {}, true), P.sphere(0.024, '#FFFFFF', { at: [tip.x, tip.y, tip.z] }, 8)]))
+    const pivot = new Group()
+    pivot.position.set(0, HUG.y, HUG.mouth)
+    pivot.add(new Mesh(geo, mat))
+    root.add(pivot)
+    return { pivot, s }
+  })
+  const hug = (k: number) => {
+    for (const p of pivots) p.pivot.rotation.set(0, p.s * (1 - k) * 1.15, p.s * (1 - k) * -0.5)
+  }
+  hug(1)
+  return { root, hug }
+}
+
+/** Her mask and snorkel, for her head (head-local: `R` the head's radius, `y` its center's height). `lift(1)` pushes
+ *  it up onto her forehead (out of the water, so her eyes show); `lift(0)` is over her eyes. */
 export function mask(bag: Bag, R: number, y: number) {
   const g = new Group()
   g.add(
@@ -333,7 +399,12 @@ export function mask(bag: Bag, R: number, y: number) {
   )
   // The snorkel: up the side of her head and out the back (to the sky, when she's face down).
   g.add(solid(merge([P.cyl(R * 0.07, R * 0.07, R * 1.9, PAL.lavenderDark, { at: [R * 0.8, y + R * 0.1, -R * 0.1], rot: [Math.PI / 2, 0, 0] }), P.cyl(R * 0.09, R * 0.09, R * 0.18, PAL.butter, { at: [R * 0.8, y + R * 0.1, -R * 1.1], rot: [Math.PI / 2, 0, 0] })]), bag, 1.5))
-  return g
+  // (It turns about the middle of her head, sliding up over her forehead.)
+  g.position.y = -y
+  const root = new Group()
+  root.position.y = y
+  root.add(g)
+  return { root, lift: (k: number) => void (root.rotation.x = -k * 0.62) }
 }
 
 /** Pink flippers for her feet (foot-local: the leg's pivot is at the hip, the foot `len` below it). */

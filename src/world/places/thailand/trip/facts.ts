@@ -52,5 +52,5 @@ export const SAMET_FACTS = [
   { icon: '🐒', label: 'National park', say: L.samet.trip.facts.park },
   { icon: '🦺', label: 'Life jacket', say: L.samet.trip.facts.jacket },
   { icon: '🌅', label: 'Sunset', say: L.samet.trip.facts.sunset },
-  { icon: '📷', label: 'Look, then let it be', say: L.samet.trip.facts.look },
+  { icon: '🌟', label: 'Fireflies', say: L.samet.trip.facts.fireflies },
 ]

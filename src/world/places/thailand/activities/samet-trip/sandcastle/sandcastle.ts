@@ -1,5 +1,12 @@
-// The sandcastle at Ao Hin Khok (plan: planning/around-the-world/thailand/samet-trip.md, greybox 4), on the island's
-// real beach (island/layout.ts FRAMES.hinkhok), close and steep over the sand with the sea at the top of the screen.
+// The sandcastle at Ao Hin Khok (the trip's story: planning/around-the-world/thailand/samet-story.md; the stop's first
+// plan: samet-trip.md), on the island's real beach (island/layout.ts FRAMES.hinkhok), close and steep over the sand
+// with the sea at the top of the screen.
+//
+// The story (story.ts): Sandy, the shy gold firefly, is hiding down a crab hole in the sand, and a castle of her own
+// tempts her out. `round=story` plays the way-in film on the bare beach and goes on into the digging; she is there in
+// every round (a gold glow under the sand, peeking out of a hole or round a tower, hovering over the moat); when the
+// moat fills, the found film (`round=found`) plays and the stop is over: back to the island with her. On a visit after
+// she is found there are no films: she rides along by the unicorn's horn, and the way back is the 🏝️ by the badge.
 //
 // The toy (core verb): dig the sand with her finger. Drag through it and a trench opens under her finger, the sand
 // piling up wet and dark beside it (sand.ts); start on a pile and dragging pats it up into a wall. Kaylee sits by the
@@ -15,16 +22,19 @@
 // The side verb, any time: bury Dad. He lies beside the castle; rub sand over him and it heaps up, shins to chest,
 // until only his head and toes stick out. Tap his toes: they wiggle. Tap his head: he sneezes and the sand flies off.
 //
-// Talk (lines.ts L.samet.sandcastle): Dad's "Let's build a sandcastle!", Sparkle's one line as each round begins,
-// Dad's and Mom's reactions, Sparkle's tide fact once the moat fills; after a while with nothing done the finger
-// shows and Sparkle says what to do (spendHint). Every number that decides the feel is a knob (?feel=1), with a graph
-// of her finger against the sand.
+// Talk (lines.ts L.samet.sandcastle, and L.samet.story.sandcastle for Sandy's): Dad's "Let's build a sandcastle!"
+// (not after the way-in film, where he has just said "Let's build her a castle!"), Sparkle's one line as each round
+// begins, Dad's and Mom's reactions, Sparkle's tide fact the first time she pokes the sea; after a while with nothing
+// done the finger shows and Sparkle says what to do (spendHint). Every number that decides the feel is a knob
+// (?feel=1), with a graph of her finger against the sand.
 import { Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, RingGeometry, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { clamp, spendHint, type Line } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
+import { Letterbox } from '../../../../../engine3d/cinema'
 import { Bag } from '../../../../../engine3d/dispose'
+import { FilmPlayer, type FilmState } from '../../../../../engine3d/film'
 import { blobShadow } from '../../../../../engine3d/geo'
 import { setOutlineResolution } from '../../../../../engine3d/outline'
 import { Particles } from '../../../../../engine3d/particles'
@@ -41,6 +51,7 @@ import { buildIsland, DAY, type Island, type TimeOfDay } from '../island/scenery
 import { beachBall, blanket, ghostCrab, longtail, MOULDS, mouldModel, SHELLS, shellModel, towerModel, umbrella, type MouldKind, type TowerModel } from './props'
 import { CUT_V, DIGGABLE, PATCH, Sand, sinkGround, type SandFeel } from './sand'
 import { sandSfx as sfx } from './sounds'
+import { SandyStory } from './story'
 import { beachBed } from '../sfx/common'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/sandcastle/sandcastle.ts'
@@ -89,19 +100,29 @@ const PLAY = knobs('sandPlay', 'Rounds, towers and Dad', FILE, {
   tallPitch: { value: 12, min: 0, max: 30, step: 1, label: '…more on a tall screen', unit: '°' },
 })
 
-export type SandRound = 'dig' | 'towers' | 'tide'
-export const SAND_ROUND_IDS: SandRound[] = ['dig', 'towers', 'tide']
+/** The rounds she plays, and the two films round them: `story` (the way in, then the digging) and `found` (the moat
+ *  is full: Sandy moves in, then the island). */
+export type SandPlayRound = 'dig' | 'towers' | 'tide'
+export type SandRound = SandPlayRound | 'story' | 'found'
+export const SAND_ROUND_IDS: SandPlayRound[] = ['dig', 'towers', 'tide']
 export interface SandStart {
   round: SandRound
   time?: TimeOfDay
+  /** Sandy has been found already (an earlier visit): no films, she rides along by the unicorn's horn. */
+  found?: boolean
 }
 export interface SandEvents {
   /** A new round began (the address bar follows). */
   round(r: SandRound): void
-  /** The moat filled from the sea (the stop's flag). */
+  /** The moat filled from the sea on a visit after Sandy was found (the badge, and the way back to the island). */
   filled(): void
+  /** Sandy is found (the found film is over, or was skipped): back to the island with her. */
+  found(): void
   /** Someone says a line (lines.ts L.samet.sandcastle; `mute`: a hint's first time, only its bubble shows). */
   say(l: Line, mute?: boolean): void
+  /** A film is on (which beat), or off (null); the line it is saying now (the words go under the picture). */
+  film(s: FilmState | null): void
+  filmLine(l: Line | null): void
 }
 
 const S = LINES.samet.sandcastle
@@ -120,6 +141,9 @@ const SHELL_HOMES = [
   { a: 3.5, v: -1.6 },
   { a: 1.0, v: -0.5 },
 ]
+/** Where the unicorn waits as the stop opens, and where Mom sits under her umbrella. */
+const KAYLEE_AT = { a: 0.6, v: -2.9 }
+const MOM_AT = { a: -5.3, v: -4.7 }
 const DEG = 180 / Math.PI
 const HINT_S = 8
 const MAX_TOWERS = 8
@@ -213,7 +237,11 @@ export class Sandcastle implements World3D {
   private h = 1
   private tall = false
   private time = 0
-  private round: SandRound
+  private round: SandPlayRound
+  /** A film waiting to start a moment after the world appears (a link to `story` or `found`). */
+  private pending: 'intro' | 'found' | null = null
+  /** The way-in film hasn't finished yet (the address bar says `story`), or the found film has begun (`found`). */
+  private phase: 'story' | 'play' | 'found' = 'play'
   private roundT = 0
   private digT = 0
   /** The dig round: which sixteenths of the way round the castle she has dug (the moat), and when it closed. */
@@ -247,6 +275,13 @@ export class Sandcastle implements World3D {
   private nick: Member
   private ji: Member
   private dad: { a: number; feet: number; len: number; width: number; buried: number[]; sneezeT: number; toesT: number; outT: number; root: Group; mounds: Group[]; at: number[]; toes: Group }
+
+  // ---- Sandy's story: its films, the bars.
+  private films: FilmPlayer
+  private bars = new Letterbox()
+  private story: SandyStory
+  /** Sandy was found on an earlier visit. */
+  private sandyFound: boolean
 
   // ---- Her finger.
   private finger: { x: number; y: number; mode: 'none' | 'dig' | 'pat' | 'bury' | 'grab'; id?: string; moved: boolean; a: number; v: number; pa: number; pv: number; t: number; sa: number; sv: number; trav: number } | null = null
@@ -299,7 +334,8 @@ export class Sandcastle implements World3D {
     this.rig.fov = 42
     this.rig.lag = 0.35
     this.rig.camera.far = 3200
-    this.round = start.round
+    this.round = start.round === 'story' ? 'dig' : start.round === 'found' ? 'tide' : start.round
+    this.sandyFound = !!start.found
     bag.add({ dispose: beachBed() })
 
     // ---- The island, Hin Khok's beach, and the sand patch laid over it.
@@ -326,8 +362,6 @@ export class Sandcastle implements World3D {
     scene.add(this.kHold)
     this.kShadow = blobShadow(0.42, bag)
     scene.add(this.kShadow)
-    const k0 = this.sand.world(0.6, -2.9)
-    this.kaylee.place(k0.x, 0, k0.z, (this.seaYaw + Math.PI) * DEG)
     const fam = (id: string) => new Member({ ...FAMILY.find((m) => m.id === id)!, spot: null }, bag)
     this.nick = fam('nick')
     this.ji = fam('ji')
@@ -337,7 +371,6 @@ export class Sandcastle implements World3D {
     const dA = 2.45
     const feet = -7.45 + len * 0.98
     const fp = this.sand.world(dA, feet)
-    this.nick.place(fp.x, this.sand.heightAt(dA, feet), fp.z, this.seaYaw * DEG, 'lie')
     const width = this.nick.rig.radius * 1.55
     const bl = blanket(bag, len, width)
     bl.root.position.set(fp.x, this.sand.heightAt(dA, feet) + this.nick.rig.radius * 0.95, fp.z)
@@ -352,9 +385,7 @@ export class Sandcastle implements World3D {
     const up = this.sand.world(-6.0, -3.2)
     this.umb.root.position.set(up.x, this.sand.heightAt(-6.0, -3.2) - 0.05, up.z)
     scene.add(this.umb.root)
-    const mp = this.sand.world(-5.3, -4.7)
-    const toC = this.sand.world(this.C.a, this.C.v)
-    this.ji.place(mp.x, this.sand.heightAt(-5.3, -4.7), mp.z, Math.atan2(toC.x - mp.x, toC.z - mp.z) * DEG, 'sit')
+    this.seat()
 
     // ---- The moulds, the shells, the crabs, the ball, the boat.
     MOULDS.forEach((kind, i) => {
@@ -395,6 +426,38 @@ export class Sandcastle implements World3D {
     this.splash = new Particles({ kind: 'foam', count: 160, opacity: 0.9 }, bag)
     scene.add(this.puffs.mesh, this.spray.mesh, this.sparkle.mesh, this.splash.mesh)
 
+    // ---- Sandy's story (story.ts): the firefly, her films.
+    this.films = new FilmPlayer({ line: (l) => this.events.filmLine(l), state: (st) => this.events.film(st) })
+    this.story = new SandyStory(
+      {
+        scene,
+        bag,
+        sand: this.sand,
+        C: this.C,
+        kaylee: this.kaylee,
+        nick: this.nick,
+        ji: this.ji,
+        sparkle: this.sparkle,
+        puffs: this.puffs,
+        at: (a, v, up, out) => this.at(a, v, up, out),
+        finger: () => (this.finger && this.finger.mode !== 'none' && this.finger.mode !== 'grab' ? this.finger : null),
+        towers: () => this.towers,
+        onDad: (a, v) => this.onDad(a, v) >= 0,
+        say: (l) => this.say(l),
+        horn: (out) => this.kaylee.root.getWorldPosition(out).setY(this.kHold.position.y + this.kaylee.height * (this.sitting ? 0.8 : 1.05)),
+        seat: () => this.seat(),
+        stand: (who, a, v, turn) => this.stand(who, a, v, turn),
+        gameShot: () => this.gameShot(),
+        eye: () => this.rig.camera.position,
+        moat: () => this.moatNow(),
+        tall: () => this.tall,
+        tidy: () => {
+          for (const m of this.moulds) m.state = 'away'
+        },
+      },
+      this.sandyFound,
+    )
+
     // ---- Where the link starts: as if she had played to here.
     if (this.round !== 'dig') this.digMoat()
     if (this.round === 'tide') {
@@ -402,6 +465,24 @@ export class Sandcastle implements World3D {
       this.addTower('square', this.C.a + 0.4, this.C.v - 0.2, true)
       this.addTower('unicorn', this.C.a, this.C.v + 0.35, true)
       this.addTower('round', this.C.a + 1.1, this.C.v + 2.2, true)
+    }
+    if (start.round === 'story') {
+      // The way in: the film on the bare beach, then the digging.
+      this.phase = 'story'
+      this.pending = 'intro'
+    } else if (start.round === 'found') {
+      // The found film needs a castle to look at: the tide in, a channel down to the sea, her moat full, flags up.
+      this.phase = 'found'
+      this.pending = 'found'
+      this.tideK = 1
+      this.bigDone = true
+      this.filledAt = 0
+      this.sea = TIDE.high
+      this.sand.sea = this.sea
+      for (let v = this.C.v + 0.9; v < -0.6; v += 0.12) this.sand.carve(this.C.a + 0.7, v, 0.3, this.sea - 0.22)
+      for (let i = 0; i < 30; i++) this.sand.settle(0.05, this.feel)
+      this.sand.flood(this.sand.hollow().cells, this.sea)
+      for (const tw of this.towers) tw.m.flag.visible = true
     }
     this.placeThings(0)
 
@@ -427,6 +508,76 @@ export class Sandcastle implements World3D {
     f.wet = DIG.wet
     f.flow = TIDE.flow
     f.seep = TIDE.seep
+  }
+
+  /** Everyone where the game has them: Dad flat out beside the castle, Mom sitting under her umbrella, the unicorn up
+   *  the beach by the water. (As the stop opens, and where the way-in film leaves them.) */
+  private seat() {
+    const d = this.dad
+    const fp = this.sand.world(d.a, d.feet)
+    this.nick.place(fp.x, this.sand.heightAt(d.a, d.feet), fp.z, this.seaYaw * DEG, 'lie')
+    this.nick.lookAway()
+    const mp = this.sand.world(MOM_AT.a, MOM_AT.v)
+    const toC = this.sand.world(this.C.a, this.C.v)
+    this.ji.place(mp.x, this.sand.heightAt(MOM_AT.a, MOM_AT.v), mp.z, Math.atan2(toC.x - mp.x, toC.z - mp.z) * DEG, 'sit')
+    const k0 = this.sand.world(KAYLEE_AT.a, KAYLEE_AT.v)
+    this.kaylee.stop()
+    this.kaylee.setPose('stand')
+    this.kaylee.place(k0.x, 0, k0.z, (this.seaYaw + Math.PI) * DEG)
+    this.sitting = false
+    this.kGoal = null
+  }
+  /** Stands someone on the sand for a film, facing up the beach to the game's camera (`turn`: degrees round from
+   *  there, toward +a). Dad gets up out of his sand. */
+  private stand(who: 'kaylee' | 'nick' | 'ji', a: number, v: number, turn: number) {
+    const p = this.sand.world(a, v)
+    const ax = this.sand.axes
+    const s = Math.sin(turn / DEG)
+    const c = -Math.cos(turn / DEG)
+    const face = Math.atan2(ax.a.x * s + ax.v.x * c, ax.a.z * s + ax.v.z * c) * DEG
+    if (who === 'kaylee') {
+      this.kaylee.stop()
+      this.kaylee.setPose('stand')
+      this.kaylee.place(p.x, 0, p.z, face)
+      this.sitting = false
+      this.kGoal = null
+      return
+    }
+    if (who === 'nick') {
+      const d = this.dad
+      d.buried.fill(0)
+      d.outT = d.sneezeT = d.toesT = -1
+      for (const m of d.mounds) {
+        m.scale.setScalar(0.001)
+        m.visible = false
+      }
+    }
+    ;(who === 'nick' ? this.nick : this.ji).place(p.x, this.sand.heightAt(a, v), p.z, face, 'stand')
+  }
+  /** The game's camera as it is now: where it is, a point it looks at, its lens. */
+  private gameShot() {
+    const c = this.rig.camera
+    const eye = c.position
+    const look = c.getWorldDirection(tmp).multiplyScalar(12).add(eye)
+    return { eye: [eye.x, eye.y, eye.z] as [number, number, number], look: [look.x, look.y, look.z] as [number, number, number], fov: c.fov }
+  }
+  /** The middle of her moat (the castle's middle until she has dug one), and how near the sea's water has come to it:
+   *  0 far off, 1 running in. */
+  private moatNow() {
+    const core = this.moat.core
+    let a = this.C.a
+    let v = this.C.v
+    if (core.length > 12) {
+      a = v = 0
+      for (const k of core) {
+        a += PATCH.a0 + (k % this.sand.nx) * PATCH.cell
+        v += PATCH.v0 + Math.floor(k / this.sand.nx) * PATCH.cell
+      }
+      a /= core.length
+      v /= core.length
+    }
+    const near = this.breach || this.filledAt >= 0 ? 1 : this.way ? clamp(1 - this.way.d / 3.5, 0, 1) : 0
+    return { a, v, near }
   }
 
   /** The moat a towers or tide link starts with: a ring dug round the castle's middle (and its walls). */
@@ -469,6 +620,11 @@ export class Sandcastle implements World3D {
     return false
   }
 
+  /** Someone says a line in play. Not while a film is on: a film says its own lines, one at a time. */
+  private say(l: Line, mute?: boolean) {
+    if (this.films.on || this.pending) return
+    this.events.say(l, mute)
+  }
   /** Says `l` (a list: the next one in turn), unless this key talked less than `cool` seconds ago. */
   private talk(key: string, l: Line | readonly Line[], cool = 4) {
     const last = this.talkAt.get(key)
@@ -477,24 +633,60 @@ export class Sandcastle implements World3D {
     if (Array.isArray(l)) {
       const n = this.turn.get(key) ?? 0
       this.turn.set(key, n + 1)
-      this.events.say(l[n % l.length])
-    } else this.events.say(l as Line)
+      this.say(l[n % l.length])
+    } else this.say(l as Line)
   }
   /** Once per visit to the sandcastle. */
   private once(key: string, l: Line) {
-    if (this.told.has(key)) return
+    if (this.told.has(key) || this.films.on) return
     this.told.add(key)
-    this.events.say(l)
+    this.say(l)
   }
 
-  setRound(r: SandRound) {
+  // ---------------------------------------------------------------- Sandy's films
+
+  /** The screen's hold-to-skip: the film jumps to its end. */
+  skipFilm() {
+    this.films.skip()
+  }
+  /** Her finger lets go of whatever it was doing (a film is starting). */
+  private letGo() {
+    if (this.grab && this.finger?.moved) this.drop()
+    this.grab = null
+    this.finger = null
+    this.marker.visible = false
+  }
+  /** The way in, then the digging: Sparkle's line and her hands are busy. */
+  private playIntro() {
+    this.letGo()
+    this.films.play(this.story.intro(), () => {
+      this.phase = 'play'
+      this.roundT = 0
+      this.lastTouch = this.time
+      this.events.round('dig')
+      // (Dad has just said "Let's build her a castle!": only Sparkle's line now.)
+      this.say(S.dig)
+    })
+  }
+  /** Sandy found: the film, then the island with her. */
+  private playFound() {
+    if (this.films.on) return
+    this.letGo()
+    if (this.phase !== 'found') {
+      this.phase = 'found'
+      this.events.round('found')
+    }
+    this.films.play(this.story.foundFilm(), () => this.events.found())
+  }
+
+  setRound(r: SandPlayRound) {
     if (r === this.round) return
     const was = this.round
     this.round = r
     this.roundT = 0
     this.towersThisRound = 0
     this.events.round(r)
-    if (r !== 'dig') this.events.say(S[r])
+    if (r !== 'dig') this.say(S[r])
     if (r !== 'dig' && was === 'dig') {
       // The moulds bounce in from the side.
       this.moulds.forEach((m, i) => {
@@ -514,15 +706,25 @@ export class Sandcastle implements World3D {
   update(dt: number) {
     const t = (this.time += dt)
     this.readFeel()
+    // A film has the camera (null: the game's own). While one is on nothing counts as "nothing touched".
+    const cine = this.films.update(dt, this.w / this.h)
+    if (this.films.on || this.pending) this.lastTouch = t
+    if (this.pending && t >= 0.3) {
+      const film = this.pending
+      this.pending = null
+      if (film === 'intro') this.playIntro()
+      else this.playFound()
+    }
     if (this.later.length) {
       const due = this.later.filter((l) => l.at <= t)
       this.later = this.later.filter((l) => l.at > t)
       for (const l of due) l.fn()
     }
-    // The opening, a beat after it appears: Dad, then Sparkle (she waits her turn) with the round's line.
-    if (t - dt < 0.6 && t >= 0.6) {
-      if (this.round === 'dig') this.events.say(S.hi)
-      this.events.say(S[this.round])
+    // The opening, a beat after it appears: Dad, then Sparkle (she waits her turn) with the round's line. (After the
+    // way-in film Sparkle's line comes as it ends.)
+    if (t - dt < 0.6 && t >= 0.6 && this.phase === 'play') {
+      if (this.round === 'dig') this.say(S.hi)
+      this.say(S[this.round])
     }
     this.roundT += dt
     this.progress(dt)
@@ -533,6 +735,7 @@ export class Sandcastle implements World3D {
     this.sand.soak(dt)
     this.sand.draw(t)
     this.life(dt, t)
+    this.story.update(dt, t, this.round, this.films.on)
     this.placeThings(dt)
     for (const p of [this.puffs, this.spray, this.sparkle, this.splash]) p.update(dt)
 
@@ -541,7 +744,9 @@ export class Sandcastle implements World3D {
     this.lights.follow(c.x, 0, c.z)
     this.isl.update(dt, t, this.rig.camera.position.x, this.rig.camera.position.z, this.lights)
     this.rig.setShot(this.shot())
+    this.rig.setCine(cine)
     this.rig.update(dt)
+    this.bars.update(dt, this.films.on)
     this.drawHint(t)
   }
 
@@ -553,6 +758,7 @@ export class Sandcastle implements World3D {
     return clamp(Math.max(ring / PLAY.ring, this.digT / PLAY.dig), 0, 1)
   }
   private progress(dt: number) {
+    if (this.films.on || this.phase !== 'play') return
     if (this.round === 'dig') this.digProgress(dt)
     if (this.round === 'dig' && this.digT >= PLAY.dig) this.setRound('towers')
     else if (this.round === 'towers' && (this.towersThisRound >= PLAY.towers || this.roundT > PLAY.towersFor)) this.setRound('tide')
@@ -614,7 +820,7 @@ export class Sandcastle implements World3D {
       this.kaylee.react('hop')
       if (this.dad.buried.every((b) => b < 0.5)) this.nick.react('wiggle')
       this.ji.react('wave')
-      this.events.say(S.dad[1])
+      this.say(S.dad[1])
       this.later.push({ at: this.time + 1.8, fn: () => this.round === 'dig' && this.setRound('towers') })
     }
   }
@@ -674,7 +880,7 @@ export class Sandcastle implements World3D {
     const ph = (t / TIDE.every) % 1
     const surge = TIDE.surge * (1 + this.tideK * 0.4) * (ph < 0.3 ? Math.sin((ph / 0.3) * Math.PI * 0.5) : Math.cos(((ph - 0.3) / 0.7) * Math.PI * 0.5) ** 2)
     // The big wave, once, when the tide is well in.
-    if (this.round === 'tide' && !this.bigDone && this.tideK > 0.65 && ph < 0.05) {
+    if (this.round === 'tide' && !this.bigDone && this.filledAt < 0 && this.tideK > 0.65 && ph < 0.05) {
       this.bigDone = true
       this.bigT = 0
       sfx.swash(true)
@@ -736,9 +942,16 @@ export class Sandcastle implements World3D {
     this.ji.react('wave')
     this.kaylee.react('hop')
     this.sendHermit()
-    this.events.filled()
-    this.events.say(S.filled)
-    this.later.push({ at: this.time + 2.6, fn: () => this.once('tideFact', S.tideFact) })
+    this.say(S.filled)
+    if (this.sandyFound) {
+      // A visit after she was found: no film. She sits on the tallest tower, the castle glows, and the badge has the
+      // way back to the island.
+      this.story.perch()
+      this.events.filled()
+      return
+    }
+    // Sandy's castle is ready: a moment to see the water run in, then the found film (and the island).
+    this.later.push({ at: this.time + 2.4, fn: () => this.playFound() })
   }
 
   private sendHermit() {
@@ -784,7 +997,12 @@ export class Sandcastle implements World3D {
     return best
   }
 
+  /** A film is on (or about to be): the world takes no taps. */
+  private get filming() {
+    return this.films.on || !!this.pending
+  }
   pointerDown(x: number, y: number, id?: string) {
+    if (this.filming) return
     this.lastTouch = this.time
     const g = this.groundPoint(x, y)
     const f = (this.finger = { x, y, mode: 'none' as const, id, moved: false, a: g?.a ?? 0, v: g?.v ?? 0, pa: g?.a ?? 0, pv: g?.v ?? 0, t: this.time, sa: 0, sv: 0, trav: 0 }) as NonNullable<Sandcastle['finger']>
@@ -812,7 +1030,7 @@ export class Sandcastle implements World3D {
   }
   pointerMove(x: number, y: number, downX: number, downY: number, held: boolean) {
     const f = this.finger
-    if (!held || !f) return
+    if (!held || !f || this.filming) return
     this.lastTouch = this.time
     f.x = x
     f.y = y
@@ -905,6 +1123,7 @@ export class Sandcastle implements World3D {
       took += this.sand.dig(g.a, g.v, da, dv, dt, this.feel)
       this.lastDug = this.sand.restAt(g.a, g.v) - this.sand.heightAt(g.a, g.v)
       if (took > 0) {
+        if (this.lastDug > 0.16) this.story.dug(g.a, g.v)
         this.digT += dt
         this.counts.dug += took
         this.fillMoulds(g.a, g.v, took)
@@ -1107,6 +1326,7 @@ export class Sandcastle implements World3D {
   }
 
   tap(x: number, y: number, id?: string) {
+    if (this.filming) return
     this.lastTouch = this.time
     this.counts.taps++
     if (id) this.counts.pokes++
@@ -1181,6 +1401,7 @@ export class Sandcastle implements World3D {
       const p = this.at(g.a, g.v)
       this.spray.burst(p.x, this.sea + 0.05, p.z, 14, 1.2, 2, 0.06)
       sfx.splash()
+      this.once('tideFact', S.tideFact)
     }
   }
 
@@ -1345,9 +1566,12 @@ export class Sandcastle implements World3D {
     if (this.sitting && this.finger && this.finger.mode !== 'none' && this.finger.mode !== 'grab') this.kaylee.rig.body.rotation.x += 0.16 * Math.sin(t * 15)
     this.kShadow.position.set(k.x, this.kHold.position.y + 0.02, k.z)
     // Everyone glances at her finger, or at her.
-    const look = this.finger ? this.at(this.finger.a, this.finger.v) : this.kaylee.root.getWorldPosition(tmp2).setY(this.kHold.position.y + 0.6)
-    this.ji.lookAt(look.x, look.y, look.z)
-    this.nick.lookAt(look.x, look.y + 1, look.z)
+    if (!this.films.on) {
+      const look = this.finger ? this.at(this.finger.a, this.finger.v) : this.kaylee.root.getWorldPosition(tmp2).setY(this.kHold.position.y + 0.6)
+      this.ji.lookAt(look.x, look.y, look.z)
+      this.nick.lookAt(look.x, look.y + 1, look.z)
+      this.kaylee.lookAway()
+    }
     this.nick.update(dt, t)
     this.ji.update(dt, t)
 
@@ -1444,6 +1668,7 @@ export class Sandcastle implements World3D {
           // The tower is there under it now.
           const tw = this.addTower(m.kind, m.a, m.v)
           tw.grow = 0.98
+          this.story.newTower(tw)
           twinkle()
           const p = this.at(m.a, m.v, 0.5)
           for (let i = 0; i < 12; i++) this.sparkle.emit(p.x, p.y, p.z, (Math.random() - 0.5) * 1.2, 0.6 + Math.random(), (Math.random() - 0.5) * 1.2, 1, 0.06)
@@ -1622,7 +1847,7 @@ export class Sandcastle implements World3D {
   }
 
   render() {
-    this.renderer.render(this.scene, this.rig.camera)
+    this.bars.render(this.renderer, this.scene, this.rig.camera, this.w, this.h)
     this.stats.calls = this.renderer.info.render.calls
     this.stats.tris = this.renderer.info.render.triangles
   }
@@ -1632,7 +1857,7 @@ export class Sandcastle implements World3D {
     if (!el) return
     let at: { a: number; v: number } | null = null
     let hintLine: Line = S.hint[this.round]
-    const idle = !this.finger && t - this.lastTouch > HINT_S
+    const idle = !this.finger && !this.filming && this.phase === 'play' && t - this.lastTouch > HINT_S
     if (idle) {
       if (this.round === 'dig') at = { a: this.C.a + Math.cos(t * 1.6) * 1.1, v: this.C.v + Math.sin(t * 1.6) * 0.9 }
       else if (this.round === 'towers') {
@@ -1658,7 +1883,7 @@ export class Sandcastle implements World3D {
     // Once each time she goes quiet: Sparkle's hint (only shown the first time, then said at most twice a visit).
     if (at && !this.hinted) {
       this.hinted = true
-      this.events.say(hintLine, !spendHint(hintLine))
+      this.say(hintLine, !spendHint(hintLine))
     } else if (!idle) this.hinted = false
     const want = at ? '' : 'none'
     if (el.style.display !== want) el.style.display = want
@@ -1689,6 +1914,10 @@ export class Sandcastle implements World3D {
       if (el.style.display !== want) el.style.display = want
     }
     const d = this.dad
+    if (this.filming) {
+      for (const el of this.anchorEls.values()) if (el.style.display !== 'none') el.style.display = 'none'
+      return
+    }
     for (const [id, el] of this.anchorEls) {
       if (id === 'kaylee') place(el, this.kaylee.root, this.kaylee.height, 0.8)
       else if (id === 'family:nick') place(el, this.at(d.a, d.feet - d.len * 0.86, 0.2), 0.5, 1.2)
@@ -1720,8 +1949,13 @@ export class Sandcastle implements World3D {
     const d = this.dad
     return {
       section: 'sandcastle',
+      // `round` is what the address bar says: story until the way-in film is over, found once the found film begins.
       phase: this.round,
-      round: this.round,
+      round: this.phase === 'play' ? this.round : this.phase,
+      film: this.films.now,
+      films: { done: this.films.done, skipped: this.films.skipped },
+      // Sandy: what she is doing, whether she is out where she can be seen, how often she has peeked, where on screen.
+      sandy: { mode: this.story.mode, out: this.story.out, peeks: this.story.peeks, ...sc(this.story.pos) },
       tide: +this.tideK.toFixed(2),
       sea: +this.sea.toFixed(3),
       pooled: +this.sand.pooled().toFixed(2),

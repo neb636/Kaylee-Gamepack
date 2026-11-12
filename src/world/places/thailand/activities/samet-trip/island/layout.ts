@@ -389,7 +389,8 @@ export const TAXI_STOPS: { id: SpotId; at: XZ }[] = [
 /** Jet skis waiting at the water's edge on every beach once the jet ski is hers. */
 export const PARKED: { id: SpotId; at: XZ; face: number }[] = (['saikaew', 'hinkhok', 'phai', 'wongduan', 'prao', 'nadan'] as const).map((id) => {
   const f = FRAMES[id]
-  const p = id === 'saikaew' ? bay(-3, 1.4) : at(f, id === 'nadan' ? 6 : 4, id === 'nadan' ? 3 : 1.2)
+  // (Ao Wong Duan's waits well along the sand from the snorkel boat: its glow isn't on top of the boat's ring.)
+  const p = id === 'saikaew' ? bay(-3, 1.4) : at(f, id === 'nadan' ? 6 : id === 'wongduan' ? 10 : 4, id === 'nadan' ? 3 : 1.2)
   return { id, at: p, face: Math.atan2(f.n.x, f.n.z) }
 })
 
@@ -436,7 +437,8 @@ export const POKES: Poke[] = pokes
  *  (a unit vector from the thing toward the camera, roughly out to sea). */
 export const LANDMARKS: Record<Exclude<SpotId, 'deck'>, { at: XZ; y: number; from: XZ; dist: number }> = {
   nadan: { at: at(FRAMES.nadan, -4, 16), y: 1.4, from: FRAMES.nadan.t, dist: 15 },
-  saikaew: { at: PLACES.mermaid, y: 1.6, from: BAY.n, dist: 9 },
+  // (The jet ski and its hut, not the mermaid: the picture is what she does there.)
+  saikaew: { at: bay(-1.5, 0.4), y: 0.7, from: { x: BAY.n.x * 0.92 + BAY.t.x * 0.4, z: BAY.n.z * 0.92 + BAY.t.z * 0.4 }, dist: 8.5 },
   hinkhok: { at: STOPS.sandcastle.at, y: 0.6, from: FRAMES.hinkhok.n, dist: 8 },
   phai: { at: at(FRAMES.phai, 5, -4.5), y: 1.8, from: FRAMES.phai.n, dist: 9 },
   wongduan: { at: SNORKEL_BOAT, y: 1, from: { x: -FRAMES.wongduan.n.z, z: FRAMES.wongduan.n.x }, dist: 10 },

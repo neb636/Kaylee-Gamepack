@@ -2,7 +2,8 @@
 // flippers and the bubbly rush of water past her mask while she swims (a loop that runs while she moves, quicker the
 // faster she kicks), bubbles (out of her snorkel, Dad's bubble ring, a little fish telling her off), a soft bump on
 // the coral, the rocks and the hull, the giant clam closing, the sea cucumber's squish, the cuttlefish jetting off,
-// the waterproof camera's click, and the sea all round her (muffled, bubbly, a far-off swell: the stage's own bed).
+// the waterproof camera's click, the pop of Bubbles the firefly's bubble at the surface, and the sea all round her
+// (muffled, bubbly, a far-off swell: the stage's own bed).
 // Recorded clips (sfx/, ElevenLabs) with the synthesized ones as their fallbacks. The urchins' prickly plinks, the
 // twinkles, the cuttlefish's climbing color notes and the fish's little dings stay synthesized (in tune).
 import { bed, clip, held, playClip } from '../../../../../kit/clips'
@@ -49,6 +50,12 @@ export const synth = {
   peek: () => tone(900, 1300, 0.12, 0.05, 'triangle'),
   /** The cuttlefish's color climbing a stage. */
   color: (stage: number) => tone(700 + stage * 200, 1000 + stage * 260, 0.2, 0.05, 'sine'),
+  /** Bubbles' bubble pops at the surface: a bright little pop and a sprinkle of drops. */
+  pop: () => {
+    tone(1300, 2600, 0.06, 0.07, 'sine')
+    hiss(0.18, 0.07, 'highpass', 3500, 1800, 0.02)
+    ;[0.1, 0.17, 0.25].forEach((d, i) => tone(1900 + i * 260, 2100 + i * 260, 0.05, 0.03, 'triangle', d))
+  },
   /** (Swimming had only the kicks; while the clip loads it stays that way.) */
   swim: (_speed: number) => {},
 }

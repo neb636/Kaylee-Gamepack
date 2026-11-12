@@ -1,61 +1,73 @@
 // Snorkeling at Ko Kudi, on screen (snorkel.ts is the world): the reef with its tap targets, the waterline drawn where
-// the two views meet, the pressing finger after a while with nothing touched, Mom's waterproof camera (📷) once the
-// cuttlefish round begins, and once the cuttlefish has turned pink a 🐠 badge with the way back to the island (the stop's
-// pink flag up). With ?feel=1 Dad also gets round chips (float, follow, cuttle).
+// the two views meet, the pressing finger after a while with nothing touched, and Mom's waterproof camera (📷) once
+// the cuttlefish round begins: a snap flashes, and Sparkle says what each animal is the first time it's in a picture.
+// Bubbles' story (story.ts) plays its films over it: FilmOverlay draws their words and the hold-to-skip ⏭. The stop
+// ends with the found film (the bubble pops, Bubbles is out), then the island by itself: no button to find.
+// With ?feel=1 you also get round chips (float, follow, cuttle).
 // Sparkle sits in the corner (trip/legs/Guide.tsx) and plays everyone's lines (lines.ts L.samet.snorkel); Mom's
 // camera sits above her (on a phone on its side, on the right: Dad swims on her left).
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst } from '../../../../../../sdk'
+import { BigButton, burst, type Line } from '../../../../../../sdk'
 import { isFeelParam } from '../../../../../kit/knobs'
 import { Anchors } from '../../../../../engine3d/Anchors'
+import type { FilmState } from '../../../../../engine3d/film'
+import { FilmOverlay } from '../../../../../engine3d/FilmOverlay'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
-import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
+import { TripGuide, WHO, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { ANIMALS, type AnimalId } from '../book/animals'
-import { Snorkel as World, SNORKEL_ANCHORS, SNORKEL_ROUND_IDS, type SnorkelEvents, type SnorkelRound } from './snorkel'
+import { Snorkel as World, SNORKEL_ANCHORS, SNORKEL_ROUND_IDS, type SnorkelEvents, type SnorkelPlayRound, type SnorkelRound } from './snorkel'
 
 const feelOn = () => [...new URLSearchParams(location.hash.split('?')[1] ?? '').keys()].some(isFeelParam)
-const CHIP: Record<SnorkelRound, string> = { float: '🤿 float', follow: '🐟 follow', cuttle: '🦑 cuttle' }
+const CHIP: Record<SnorkelPlayRound, string> = { float: '🤿 float', follow: '🐟 follow', cuttle: '🦑 cuttle' }
 const ICON: Partial<Record<AnimalId, string>> = { parrotfish: '🐟', damselfish: '🐠', cuttlefish: '🦑', urchin: '🟣', coral: '🪸' }
 
 interface Props {
+  /** `story`: the way-in film, then the swim. `found`: the found film, then the island. */
   round: SnorkelRound
+  /** The fireflies she has found so far (the trip's flags: jetski, sandcastle, snorkel, hideseek). */
+  flags?: string[]
   /** The round on screen changed (the address bar follows). */
   onRound(r: SnorkelRound): void
-  /** She snapped animals new to this visit (her book takes them at once; the address bar follows). */
-  onSnap?(animals: AnimalId[]): void
-  /** Back to the island, the snorkel's flag up, with the animals she snapped for her book. */
-  onIsland?(snapped: AnimalId[]): void
+  /** Bubbles is found (the found film has played): back to the island with her. */
+  onIsland(): void
 }
 
-export function SnorkelScreen({ round: first, onRound, onSnap, onIsland }: Props) {
+export function SnorkelScreen({ round: first, onRound, onIsland }: Props) {
   const [run, setRun] = useState({ round: first, n: 0 })
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [round, setRound] = useState<SnorkelRound>(first)
-  const [done, setDone] = useState(false)
   const [snapped, setSnapped] = useState<AnimalId[]>([])
   const [flash, setFlash] = useState(0)
   const [feel] = useState(feelOn)
+  // Bubbles' story: a film on screen (its beat) and the words being said.
+  const [film, setFilm] = useState<FilmState | null>(null)
+  const [filmLine, setFilmLine] = useState<Line | null>(null)
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const lineRef = useRef<HTMLDivElement>(null)
   const guideRef = useRef<TripGuideHandle>(null)
   const onRoundRef = useRef(onRound)
   onRoundRef.current = onRound
+  const onIslandRef = useRef(onIsland)
+  onIslandRef.current = onIsland
+  // A rebuilt world (a lost GPU context) starts where she is now, not where the link was.
+  const now = useRef(first)
 
   useEffect(() => onRoundRef.current(run.round), [run])
 
   const events = useRef<SnorkelEvents>({
     round: (r) => {
+      now.current = r
       setRound(r)
       onRoundRef.current(r)
     },
-    done: () => {
-      setDone(true)
-      burst()
-    },
+    island: () => onIslandRef.current(),
     say: (l, mute) => guideRef.current?.speak(l, mute),
+    film: setFilm,
+    filmLine: setFilmLine,
+    cheer: () => burst(),
   })
 
   const make = (renderer: WebGLRenderer) => {
@@ -65,8 +77,10 @@ export function SnorkelScreen({ round: first, onRound, onSnap, onIsland }: Props
     return w
   }
   const jump = (r: SnorkelRound) => {
+    now.current = r
     setRound(r)
-    setDone(false)
+    setFilm(null)
+    setFilmLine(null)
     setRun((v) => ({ round: r, n: v.n + 1 }))
   }
   const snap = () => {
@@ -75,9 +89,8 @@ export function SnorkelScreen({ round: first, onRound, onSnap, onIsland }: Props
     const fresh = got.filter((a) => !snapped.includes(a))
     if (!fresh.length) return
     setSnapped((s) => [...s, ...fresh.filter((a) => !s.includes(a))])
-    // Sparkle says its name, the first time it's snapped on this dive (like Mom's phone on the island).
+    // Sparkle says its name, the first time it's in a picture on this dive.
     guideRef.current?.speak(ANIMALS[fresh[0]].name)
-    onSnap?.(fresh)
   }
 
   return (
@@ -100,11 +113,12 @@ export function SnorkelScreen({ round: first, onRound, onSnap, onIsland }: Props
           </>
         )}
       />
-      {mode === 'webgl' && <TripGuide ref={guideRef} />}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!film} />}
+      {mode === 'webgl' && <FilmOverlay state={film} line={filmLine} speaker={(v) => WHO[v]} onSkip={() => worldRef.current?.skipFilm()} />}
       <AnimatePresence>
         {flash > 0 && <motion.div key={flash} className="reef-flash" initial={{ opacity: 0.85 }} animate={{ opacity: 0 }} transition={{ duration: 0.45 }} />}
       </AnimatePresence>
-      {(round === 'cuttle' || done) && (
+      {round === 'cuttle' && !film && (
         <div className="reef-cam">
           <BigButton color="pink" onClick={snap} ariaLabel="Take a photo">
             📷
@@ -118,18 +132,6 @@ export function SnorkelScreen({ round: first, onRound, onSnap, onIsland }: Props
           </div>
         </div>
       )}
-      <AnimatePresence>
-        {done && (
-          <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }} className="reef-over">
-            <div className="reef-badge">🐠 🦑 💗</div>
-            {onIsland && (
-              <BigButton color="mint" onClick={() => onIsland(snapped)} ariaLabel="Back to the island">
-                🏝️
-              </BigButton>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
       {feel && (
         <div className="reef-chips">
           {SNORKEL_ROUND_IDS.map((r) => (
@@ -140,7 +142,7 @@ export function SnorkelScreen({ round: first, onRound, onSnap, onIsland }: Props
         </div>
       )}
       {mode === 'lost' && (
-        <button onClick={() => { setMode('webgl'); jump(round) }} style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(31,142,165,.9)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: '#fff' }}>
+        <button onClick={() => { setMode('webgl'); jump(now.current) }} style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(31,142,165,.9)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: '#fff' }}>
           🐠 Tap to wake the reef
         </button>
       )}
@@ -163,9 +165,6 @@ const CSS = `
 @media (orientation: landscape) and (max-height: 500px) { .reef-cam { left: auto; right: 16px; flex-direction: row-reverse; } }
 .reef-snaps { display: flex; gap: 6px; font-size: clamp(26px, 4.5vmin, 38px); }
 .reef-snaps span { display: inline-block; background: rgba(255,255,255,.88); border-radius: 14px; padding: 4px 8px; box-shadow: var(--shadow); }
-.reef-over { position: absolute; right: 16px; bottom: calc(var(--safe-bottom, 0px) + 18px); z-index: 12; display: flex; gap: 14px; align-items: center; pointer-events: none; }
-.reef-over > * { pointer-events: auto; }
-.reef-badge { padding: 12px 22px; border-radius: 999px; background: rgba(255,255,255,.92); box-shadow: var(--shadow); font-size: clamp(24px, 4.5vmin, 40px); font-weight: 700; color: var(--ink); }
 .reef-chips { position: absolute; right: 12px; top: calc(var(--top-clear) + 6px); z-index: 20; display: flex; gap: 6px; }
 .reef-chips button { min-height: 48px; padding: 6px 14px; border-radius: 999px; border: none; background: rgba(255,255,255,.85); box-shadow: var(--shadow); font: inherit; font-size: 16px; font-weight: 600; color: var(--ink); }
 .reef-chips button.on { background: var(--hotpink); color: #fff; }

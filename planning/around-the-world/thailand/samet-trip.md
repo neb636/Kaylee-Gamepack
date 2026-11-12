@@ -1,5 +1,10 @@
 # 🏝️ Koh Samet: Kaylee's island
 
+> **Salvaged 2026-11-12: read [samet-story.md](samet-story.md) first.** The trip now runs on one story, "The Lost
+> Fireflies": a way-in film, pictures that take her straight to each beach, a firefly per stop, films in every stop.
+> Mom's phone, the animal book, the puppy as a way-finder across the island and the taxi as a ride are gone. This file
+> is the first plan and its build log, kept for the real-island research, the layout and the stops' own notes.
+
 The full loop built: on the Thailand map (its voice clips still to record) · Family trip: an open island · updated 2026-11-05
 
 Mom, Dad and Kaylee take the speedboat to **Koh Samet**, a little island of white sand off Rayong. The whole island is **one world she roams by herself** (in the spirit of cozy island games like Alba): sandy paths, five real beaches, the green taxi, the sea all round, and real island animals to snap with Mom's phone for her animal book. On the beaches she **rides the jet ski** with Dad, builds a sandcastle the waves fill, snorkels with the fish at Ko Kudi and plays hide and seek by the big driftwood tree. At night the fire dancers light up the beach for her. Every word is spoken.

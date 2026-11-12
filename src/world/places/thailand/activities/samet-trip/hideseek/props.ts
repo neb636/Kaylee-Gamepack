@@ -1,4 +1,4 @@
-// Ao Prao's things for hide and seek and for lunch on the deck (greybox 6), built from code in the toon look: the
+// Ao Prao's things for hide and seek and for lunch on the deck, built from code in the toon look: the
 // hiding places (a pink umbrella tipped over as a shield, a stack of red folding chairs, a beach towel that breathes,
 // a pandanus tree on its stilt roots, thin palms, Mom's red chair), Dad's cap, and on the deck the bread basket and
 // a roll, a fresh coconut with a straw (its milk goes down as she sips), a plate of mango sticky rice (a bite at a
