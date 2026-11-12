@@ -415,7 +415,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
         onRoad={(road) => setAt({ section: 'drive', road, to: '' })}
         onStop={(road, stop) => {
           const s = (stop ?? (road === 'sky' ? 'rice' : 'mushrooms')) as Stop
-          setAt(s === 'cup' ? { section: 'cup' } : s === 'salt' ? { section: 'salt', round: '1' } : s === 'rice' ? { section: 'rice', round: 'plant' } : { section: 'mushrooms', round: '1', basket: '' })
+          setAt(s === 'cup' ? { section: 'cup' } : s === 'salt' ? { section: 'salt', round: '1' } : s === 'rice' ? { section: 'rice', round: 'story' } : { section: 'mushrooms', round: '1', basket: '' })
         }}
         onMap={() => setAt({ section: 'map' })}
         onView={() => setAt({ section: 'three' })}

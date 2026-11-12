@@ -441,3 +441,37 @@ Sparkle is too much talk. Then the next stop: Bo Kluea salt (step 4).
 
 Sources: [the video](https://www.youtube.com/watch?v=qwAxh1ii-No); threshing by beating sheaves and sticky rice as the
 north's everyday rice: check against a second source before they become spoken facts (as `nan-trip.md` asks).
+
+## Lung Kham's story: Jip and the hat mix-up (2026-11-12)
+
+The user asked for a story instead of landing on the farm and working, because Kaylee loves stories she can follow
+(*Little Lost Dolphin*, *Peck's Trail Mix Mix-up*). From three pitched stories (a lost duckling, this one, a tall tale
+of giant rice) they picked this one, said the films may be longer if the story is good, and asked for a way to skip.
+Built on branch `neb636/rice-story` with the reusable film system (`docs/films.md`).
+
+**The story.** Last year Lung's rice was golden and he dozed off against the scarecrow. Jip, a cheeky munia, took his
+hat (the mint band) and dropped the scarecrow's floppy hat on his head, so the birds thought Lung was the scarecrow:
+they sat on him and ate all his rice. This year he needs a helper. When the rice is golden, Jip flies off with a grain
+and the camera follows him: his three hungry chicks live in a nest made of Lung's old hat. "Let's share our rice with
+them!" After the threshing, the last three bundles are the birds'.
+
+**Rounds** (all links): `story` (the way-in film, then the planting), `plant` (Jip tugs at her hat once: "Hold on to
+your hat!"), `grow` ("It's Jip and friends!"; Jip sits on the scarecrow's hat), `nest` (the film when it's golden, then
+the harvest), `harvest`, `thresh`, `share` (tap the rack: each bundle hops onto the grass, the chicks flutter-hop over
+and peck, rounder each time, and Jip lands on her head: "Friends now!"), `deck` (Jip on her head, the chicks on the
+railing, in Mommy's photo). From the map the farm starts at `story`; 🔁 starts at `plant`.
+
+**Files.** `rice/story.ts` (the films' beats, Jip's moments, the share), `rice/jip.ts` (Jip, the chicks, the nest),
+`engine3d/film.ts` and `engine3d/FilmOverlay.tsx` (shared). The scarecrow now wears a floppy straw sun hat (so a hat
+swap reads at a glance) and Lung's new ngob has a yellow band (the mint one is the nest).
+
+**Sounds.** ElevenLabs: Jip's chirp, the chicks, Lung's snore, a hat's plop, the flock, the pecking, a pluck, the page
+turning in and out, last year's afternoon (a bed), and two music cues (`rice-story-music`, 62 s; `rice-nest-music`,
+26 s; the generator's new `"music": true`).
+
+**Lines.** 19 new ones in `L.nan.rice.story` (Lung), Sparkle's share line, Lung's grow line reworded, and Mommy's
+"Aroi mak!" without "That means so yummy!" (Kaylee speaks Thai). Recorded by the PR's voices job (no working OpenAI
+key locally).
+
+**Next.** The user listens to the table read and watches the films; then Kaylee plays it (check-in 3). If she likes it,
+the user will use this as the pattern for every story and cutscene (`docs/films.md`).

@@ -2870,6 +2870,132 @@
     "file": "84fa172ff8f5.mp3"
   },
   {
+    "text": "Sawasdee krap! Welcome to my farm!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 3096,
+    "file": "80901389aea0.mp3"
+  },
+  {
+    "text": "Uh-oh. That's Jip!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1800,
+    "file": "bf1906d36226.mp3"
+  },
+  {
+    "text": "Let me tell you what Jip did last year.",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2040,
+    "file": "c627e7c823ae.mp3"
+  },
+  {
+    "text": "My rice was all golden. So I had a little nap...",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 3984,
+    "file": "2ff1ace56960.mp3"
+  },
+  {
+    "text": "Then along came Jip!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1896,
+    "file": "95dfe852bac2.mp3"
+  },
+  {
+    "text": "He took my hat!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1056,
+    "file": "97c709889709.mp3"
+  },
+  {
+    "text": "And gave me the scarecrow's!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2472,
+    "file": "debadf56254e.mp3"
+  },
+  {
+    "text": "The birds thought I was the scarecrow!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2232,
+    "file": "d9090fe4528a.mp3"
+  },
+  {
+    "text": "They ate ALL my rice!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2040,
+    "file": "c9b3e6c3bf1e.mp3"
+  },
+  {
+    "text": "This year, I need a helper. Will you help me?",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2856,
+    "file": "235874abd38c.mp3"
+  },
+  {
+    "text": "Hold on to your hat!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1536,
+    "file": "6f29b5e36906.mp3"
+  },
+  {
+    "text": "Hey! Where's Jip going?",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1920,
+    "file": "7f0b692d355b.mp3"
+  },
+  {
+    "text": "My old hat! Jip made a nest!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2544,
+    "file": "f6c4d7843276.mp3"
+  },
+  {
+    "text": "Oh... Jip's babies are hungry.",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2400,
+    "file": "49f4c1b5dd27.mp3"
+  },
+  {
+    "text": "Let's share our rice with them!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1968,
+    "file": "a75f60324088.mp3"
+  },
+  {
+    "text": "Now, some for Jip!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2016,
+    "file": "40dc7c162029.mp3"
+  },
+  {
+    "text": "One for you, one for me!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2520,
+    "file": "27e08d6b41cf.mp3"
+  },
+  {
+    "text": "Friends now!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1392,
+    "file": "ee6aa9f1bc35.mp3"
+  },
+  {
     "text": "Sawasdee krap! I need a helper!",
     "voice": "lung",
     "sig": "a47a4251da",
@@ -2877,11 +3003,11 @@
     "file": "141aa5054dc6.mp3"
   },
   {
-    "text": "Oh no! Birds in my rice!",
+    "text": "Oh no! It's Jip and friends!",
     "voice": "lung",
     "sig": "a47a4251da",
-    "ms": 2111,
-    "file": "8b1c34db5e6b.mp3"
+    "ms": 2256,
+    "file": "8c94a66a7364.mp3"
   },
   {
     "text": "Now we bang the grains out!",
@@ -2931,6 +3057,20 @@
     "sig": "ed7dbdac3d",
     "ms": 2112,
     "file": "549803306ac9.mp3"
+  },
+  {
+    "text": "Tap the rice to share it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1824,
+    "file": "81f1bc074ee0.mp3"
+  },
+  {
+    "text": "Click the rice to share it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2136,
+    "file": "13349e66b45f.mp3"
   },
   {
     "text": "In Nan, people eat sticky rice with their fingers!",
@@ -3213,11 +3353,11 @@
     "file": "d644a8095092.mp3"
   },
   {
-    "text": "Aroi mak! That means so yummy!",
+    "text": "Aroi mak!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 3846,
-    "file": "c39e6ddb39a0.mp3"
+    "ms": 1416,
+    "file": "7263f1ee6331.mp3"
   },
   {
     "text": "Smile!",

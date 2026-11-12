@@ -153,6 +153,7 @@ and `docs/3d-characters.md`.
 | Building anything | `docs/building.md` (where things live, packages, the SDK, deep links, screens, offline, commands) |
 | Picking an interaction | `docs/interactions.md` |
 | Working in 3D or Thailand | `docs/thailand-3d.md` (engine, camera, cinema, labs, the family code) |
+| Telling a story or a cutscene | `docs/films.md` (films: beats, shots, memories, skipping; Jip and the hat mix-up is the first) |
 | Writing or recording lines | `docs/voices.md` (the cast, `lines.ts`, recording, the table read) |
 | Making art | `docs/art.md` (style, one camera per scene, white patches) |
 | Checking your work | `docs/qa.md` (robots, the fresh-eyes agent, the time budget) |

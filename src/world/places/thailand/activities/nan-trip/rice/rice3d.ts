@@ -25,6 +25,11 @@
 //            sticky rice, a grain stuck on her cheek), Mommy's photo, then the video and the end card (Rice.tsx).
 // Lung Kham, the farmer (an old monkey in his ngob, on the boardwalk's right end), needs a helper: he says what each
 // round is for, hops when a paddy's done, counts the bundles in Thai as she threshes, and gives her the sticky rice.
+// His story (story.ts, the films): last year Jip, a cheeky little bird, took his hat and the birds ate all his rice. The
+// way in (round `story`) is a film of it; Jip tugs at her hat while she plants and leads the birds while it grows;
+// when it's golden a film (round `nest`) follows Jip to his chicks in Lung's old hat; and after the threshing the last
+// bundles are for the birds (round `share`). Films take the camera (engine3d/film.ts, the letterbox bars) and the
+// screen draws their words and the memory's storybook look (FilmOverlay); nothing in the farm takes a tap meanwhile.
 // Silly instead of wrong: wade into Daddy and he shakes like a dog (in the harvest she drops straw on his head); walk
 // into the buffalo's wallow and you both get muddy (the water washes it off); flop into the straw pile; round birds.
 // Things to poke: the gates, the scarecrow (it spins, its hat flies), the buffalo, the ducks, the frog, the nursery bed,
@@ -40,6 +45,8 @@ import { Member } from '../../../characters/member'
 import { L } from '../../../lines'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import type { Shot } from '../../../../../engine3d/camera'
+import { Letterbox } from '../../../../../engine3d/cinema'
+import { FilmPlayer, type FilmState } from '../../../../../engine3d/film'
 import { merge, P, solid } from '../../../../../engine3d/geo'
 import { photoCamera, snapPhoto } from '../../../../../engine3d/photo'
 import { PAL } from '../../../../../engine3d/toon'
@@ -100,6 +107,7 @@ import {
   type V3,
 } from './layout'
 import { fieldBed, riceSfx as sfx } from './sounds'
+import { RiceStory } from './story'
 import { FarmWater } from './water'
 
 export interface RiceEvents extends LegEvents {
@@ -109,6 +117,10 @@ export interface RiceEvents extends LegEvents {
   photo(src: string): void
   /** The photo's taken: the end card. */
   allDone(): void
+  /** A film is on (which beat, memory or not), or off. */
+  film(s: FilmState | null): void
+  /** The words being said in a film now (or none). */
+  filmLine(l: Line | null): void
 }
 
 export const RICE_ANCHORS: AnchorInfo[] = [
@@ -135,6 +147,8 @@ export const RICE_ANCHORS: AnchorInfo[] = [
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'family:lung', label: 'Lung Kham, the farmer', kind: 'family' },
+  { id: 'jip', label: 'Jip, the little bird', kind: 'thing' },
+  { id: 'chicks', label: "Jip's chicks in their nest", kind: 'thing' },
 ]
 
 type Phase = 'farm' | 'thresh' | 'deck'
@@ -165,6 +179,9 @@ interface Hill {
   turn: number
   shade: number
   droop: number
+  /** Its grain pecked away (the memory's birds, Jip's grain): 0 whole .. 1 gone; `eatIn` seconds until it goes. */
+  eaten: number
+  eatIn: number
 }
 
 interface PaddyState {
@@ -196,6 +213,8 @@ interface Sheaf {
 }
 
 const STUCK_S = 5
+/** Somewhere far off the farm (the memory's birds have no Kaylee to fly up from). */
+const FAR = new Vector3(0, 0, 99)
 /** Nothing done for this long: Sparkle says what to do (again after SAY_EVERY, at most SAY_MAX times a round). */
 const SAY_S = 8
 const SAY_EVERY = 20
@@ -356,6 +375,15 @@ export class RiceFarm extends Stage {
   /** Seconds to the next far-off farm sound. */
   private farT = 6
   private hintNow: { at: Vector3; id?: string } | null = null
+  // ---- The story: its films, the bars, Jip and the chicks, Lung's hat, last year ----
+  private films: FilmPlayer
+  private bars = new Letterbox()
+  private story: RiceStory
+  private lungHat: Group
+  private hatBase = 0
+  /** Last year (a memory): golden rice everywhere. */
+  private lastYear = false
+  private roundAt = 0
 
   constructor(renderer: WebGLRenderer, private ev: RiceEvents, start: { round: Round }) {
     super(renderer, ev)
@@ -390,6 +418,7 @@ export class RiceFarm extends Stage {
     // Pushed back on her head, so her horn and fringe show in front of it.
     this.kit.ngob.position.set(0, 0.2 + 0.62 * R, -0.13)
     this.kit.ngob.rotation.x = -0.5
+    this.hatBase = this.kit.ngob.position.y
     // A costume (looks.ts SPOTS_OF: her head): it goes on instead of her own hat, which waits in her pocket.
     kaylee.attach('ngob', [[this.kit.ngob, kaylee.rig.head]])
     // In her hooves: `at` is from the code-built arm's pivot; a rig with its own hands (the vinyl toy) holds them there,
@@ -423,11 +452,12 @@ export class RiceFarm extends Stage {
     ngob.position.set(0, this.lung.rig.face.headY + this.lung.rig.face.R * 0.82, -0.02)
     ngob.rotation.x = -0.12
     this.lung.rig.head.add(ngob)
+    this.lungHat = ngob
     scene.add(this.lung.root)
     this.put(this.lung, ...LUNG_AT, 'stand', 25)
 
     // ---- The rice: every hill, and the three instanced shapes ----
-    this.hills = HILLS.map((h, i) => ({ i, ...h, planted: false, pop: 0, wait: 0, wet: 1, spring: 1, lx: 0, lz: 0, vx: 0, vz: 0, twitch: 1, cut: false, cutK: 1, phase: Math.random() * 6, turn: Math.random() * 6, shade: Math.random() * 2 - 1, droop: Math.random() * Math.PI * 2 }))
+    this.hills = HILLS.map((h, i) => ({ i, ...h, planted: false, pop: 0, wait: 0, wet: 1, spring: 1, lx: 0, lz: 0, vx: 0, vz: 0, twitch: 1, cut: false, cutK: 1, phase: Math.random() * 6, turn: Math.random() * 6, shade: Math.random() * 2 - 1, droop: Math.random() * Math.PI * 2, eaten: 0, eatIn: -1 }))
     this.blades = new Instanced(bladesGeometry(), this.hills.length, 1, bag)
     this.heads = new Instanced(headsGeometry(), this.hills.length, 0.8, bag)
     this.stubble = new Instanced(stubbleGeometry(), this.hills.length, 1, bag)
@@ -460,6 +490,55 @@ export class RiceFarm extends Stage {
     for (const f of [this.splash, this.sparkles, this.bits, this.feathers, this.mudBits, this.rain, this.grains, this.steam]) scene.add(f.mesh)
     this.life = new FarmLife(bag)
     scene.add(this.life.root)
+    // ---- The story ----
+    this.films = new FilmPlayer({ line: (l) => this.ev.filmLine(l), state: (st) => this.ev.film(st) })
+    this.story = new RiceStory({
+      scene,
+      bag,
+      farm: this.farm,
+      kaylee,
+      carrier: this.carrier,
+      nick: this.nick,
+      lung: this.lung,
+      lungHat: this.lungHat,
+      kayleeHat: this.kit.ngob,
+      birds: this.birds,
+      rice: this.birdHost,
+      sparkles: this.sparkles,
+      bits: this.bits,
+      grains: this.grains,
+      feathers: this.feathers,
+      put: (c, x, y, z, pose, face) => {
+        if (c === this.kaylee) {
+          // She rides on the carrier: it takes the ground's height there, so she doesn't hop up to it.
+          this.finger.target = null
+          this.kaylee.stop()
+          this.put(c, x, 0, z, pose, face)
+          this.lift.y = this.groundAt(x, z).y
+          this.lift.hop = -1
+          this.carrier.position.y = this.lift.y
+          this.lastPos.set(x, 0, z)
+        } else this.put(c, x, y, z, pose, face)
+      },
+      hop: (c, parent, to, o) => this.hop(c, parent, to, o),
+      unhop: (c) => this.unhop(c),
+      say: (l) => this.ev.say(l),
+      groundAt: (x, z) => this.groundAt(x, z).y,
+      lastYear: (on) => this.setLastYear(on),
+      eatAll: (from, secs) => {
+        const far = Math.max(...this.hills.map((h) => Math.hypot(h.x - from.x, h.z - from.z)))
+        for (const h of this.hills) if (h.eaten < 1) h.eatIn = (Math.hypot(h.x - from.x, h.z - from.z) / far) * secs * (0.8 + Math.random() * 0.2)
+      },
+      hillNear: (p) => {
+        const ok = this.hills.filter((h) => h.planted && !h.cut && h.eaten < 1)
+        const h = ok.sort((a, b) => Math.hypot(a.x - p.x, a.z - p.z) - Math.hypot(b.x - p.x, b.z - p.z))[0]
+        return h ? { i: h.i, at: new Vector3(h.x, h.floor + this.hillHeight(h), h.z) } : null
+      },
+      pluck: (i) => {
+        const h = this.hills[i]
+        if (h) h.eaten = 1
+      },
+    })
 
     // ---- The threshing: the bundle she swings (its stalks at her hands, the heads at the far end), the straw she
     // tosses, the heap turned white, and the kratip that pops out of the basket ----
@@ -494,8 +573,11 @@ export class RiceFarm extends Stage {
     kaylee.rig.head.add(this.cheekGrain)
 
     // ---- Where the link starts ----
-    this.round = start.round
-    const r = start.round
+    // (The story's rounds start like the round they lead into: the way in like the planting, the nest like the
+    // harvest, the share like the threshing with the basket heaped.)
+    const r0 = start.round
+    const r: Round = r0 === 'story' ? 'plant' : r0 === 'nest' ? 'harvest' : r0 === 'share' ? 'thresh' : r0
+    this.round = r0
     this.phase = r === 'thresh' ? 'thresh' : r === 'deck' ? 'deck' : 'farm'
     if (r === 'plant') this.flood(this.paddies[0], true)
     else for (const s of this.paddies) this.flood(s, true)
@@ -522,8 +604,19 @@ export class RiceFarm extends Stage {
     this.kitFor(r)
     if (r === 'thresh') this.atThresh(true)
     if (r === 'deck') this.seatOnDeck(true)
+    if (r0 === 'share') {
+      this.threshed = THRESHED
+      this.banged = BANGS
+      for (let k = 0; k < THRESHED; k++) this.farm.rack.bundles[BUNDLES - 1 - k].visible = false
+      this.farm.basket.heap.visible = false
+      this.whiteHeap.visible = true
+    }
+    if (r === 'harvest' || r === 'thresh') this.story.goNest(true)
     this.placeCritters(0)
-    this.after(r === 'plant' ? 0.4 : 0.8, () => this.roundLine(r))
+    if (r0 === 'story') this.after(0.3, () => this.films.play(this.story.intro(), () => this.afterIntro()))
+    else if (r0 === 'nest') this.after(0.6, () => this.playNest())
+    else if (r0 === 'share') this.after(0.8, () => this.startShare())
+    else this.after(r === 'plant' ? 0.4 : 0.8, () => this.roundLine(r))
     // Sparkle's hints count quiet time from after the opening (Lung's line and hers), so she doesn't say it twice.
     this.quietFrom = 6
   }
@@ -532,6 +625,8 @@ export class RiceFarm extends Stage {
   private roundLine(r: Round) {
     if (r === 'deck') return this.after(0.6, () => this.once('hi', R.hi))
     if (r === 'harvest') return this.once(r, R[r]) // (Lung said it's golden as it ripened.)
+    // (The story's rounds are films, or the share: they say their own lines.)
+    if (r !== 'plant' && r !== 'grow' && r !== 'thresh') return
     // (Into the growing, after his thank-you for the planting.) Sparkle waits her turn behind him (TripGuide queues her).
     this.after(r === 'grow' ? 1.0 : 0, () => {
       this.once(`ask-${r}`, R.ask[r])
@@ -539,6 +634,82 @@ export class RiceFarm extends Stage {
       this.once(r, R[r])
     })
   }
+  /** The way in is over (or skipped): Sparkle says how to plant. */
+  private afterIntro() {
+    this.round = 'plant'
+    this.ev.round('plant')
+    this.told.add('ask-plant')
+    this.quietFrom = this.time + 3
+    this.roundAt = this.time
+    this.once('plant', R.plant)
+  }
+
+  /** The rice is golden: the nest film, then the harvest. */
+  private playNest() {
+    this.round = 'nest'
+    this.ev.round('nest')
+    this.birds.away()
+    this.finger.target = null
+    this.kaylee.stop()
+    this.films.play(this.story.nestFilm(), () => this.setRound('harvest'), this.rig.camera)
+  }
+
+  /** The basket's heaped: the last bundles on the rack are for the birds. */
+  private startShare() {
+    this.round = 'share'
+    this.ev.round('share')
+    this.sayN = 0
+    this.lastSay = -99
+    this.quietFrom = this.time + 4
+    this.story.shareBegin(() => this.kratipOut())
+  }
+
+  /** A tap while sharing: the next bundle on the rack hops off to the birds. */
+  private shareTap() {
+    const k = BUNDLES - 1 - this.threshed - this.story.shared
+    const b = this.farm.rack.bundles[k]
+    if (!b || !b.visible) return
+    const from = b.getWorldPosition(new Vector3())
+    if (!this.story.toss(k, from)) return
+    b.visible = false
+    this.kaylee.react('hop')
+  }
+
+  /** Last year (Lung's memory) or now: golden rice in every paddy, drained, nobody else here; or the farm as it is. */
+  private setLastYear(on: boolean) {
+    if (on === this.lastYear) return
+    this.lastYear = on
+    this.carrier.visible = !on
+    this.nick.root.visible = !on
+    // A warm late-afternoon sky for last year (the overlay adds the storybook edges).
+    ;(this.scene.background as Color).set(on ? '#FBE2C2' : SKY)
+    if (on) {
+      this.saved = { growth: this.growth, lvl: this.paddies.map((s) => [s.lvl, s.lvlGoal]), hills: this.hills.map((h) => [h.planted, h.pop, h.wet, h.spring, h.cut, h.eaten]) }
+      this.growth = 1
+      for (const s of this.paddies) s.lvl = s.lvlGoal = 0.12
+      for (const h of this.hills) {
+        h.planted = true
+        h.pop = 1
+        h.wait = 0
+        h.wet = 1
+        h.spring = 1
+        h.cut = false
+        h.eaten = 0
+        h.eatIn = -1
+      }
+    } else if (this.saved) {
+      const sv = this.saved
+      this.growth = sv.growth
+      this.paddies.forEach((s, i) => ([s.lvl, s.lvlGoal] = sv.lvl[i]))
+      this.hills.forEach((h, i) => {
+        const [planted, pop, wet, spring, cut, eaten] = sv.hills[i]
+        Object.assign(h, { planted, pop, wet, spring, cut, eaten, eatIn: -1 })
+      })
+      this.saved = null
+    }
+  }
+  private saved: { growth: number; lvl: number[][]; hills: [boolean, number, number, number, boolean, number][] } | null = null
+
   /** Says it the first time only. A family reaction (`now`) is dropped while Sparkle talks, rather than heard late. */
   private once(key: string, l: Line, now = false) {
     if (this.told.has(key)) return
@@ -559,6 +730,7 @@ export class RiceFarm extends Stage {
 
   private setRound(r: Round) {
     this.round = r
+    this.roundAt = this.time
     this.kitFor(r)
     this.ev.round(r)
     this.sayN = 0
@@ -588,12 +760,12 @@ export class RiceFarm extends Stage {
     this.cheer()
     this.after(0.3, () => this.once('ripe', R.ripe))
     for (const s of this.paddies) this.after(0.2 + Math.random() * 0.6, () => this.sparkles.burst(tmp.set(...s.p.mid).setY(s.p.mid[1] + 0.8), 10, 1.2, 1.2, 1, 0.08, 0))
-    // The water is let out before the cutting.
+    // The water is let out before the cutting. Then Jip flies off with a grain (the nest film), then the harvest.
     this.after(1.4, () => {
       sfx.drain()
       for (const s of this.paddies) this.drain(s, false)
     })
-    this.after(3.6, () => this.setRound('harvest'))
+    this.after(3.4, () => this.playNest())
   }
 
   private allCut() {
@@ -648,7 +820,7 @@ export class RiceFarm extends Stage {
 
   /** A tap while threshing: take the next bundle if her hands are empty, then swing it and bang it on the board. */
   private thresh() {
-    if (this.phase !== 'thresh' || this.threshed >= THRESHED || this.hopping) return
+    if (this.phase !== 'thresh' || this.threshed >= THRESHED || this.hopping || this.round === 'share') return
     // Mid-swing (or the bundle still flying to her): the tap waits for the next swing, so quick taps all count.
     if (this.swing >= 0 || this.take < 1) return void (this.queued = true)
     if (!this.holding) {
@@ -725,17 +897,22 @@ export class RiceFarm extends Stage {
       this.sparkles.burst(mid, 14, 1.2, 1.2, 0.9, 0.05)
       sfx.chime()
     })
-    this.after(3.0, () => {
-      this.kratipK = 0
-      this.kratip.root.visible = true
-      sfx.boing()
-      sfx.steam()
-    })
-    this.after(3.4, () => {
+    // The last bundles on the rack are for Jip and his chicks (story.ts), then the sticky rice.
+    this.after(3.2, () => this.startShare())
+  }
+
+  /** All shared: out pops the steaming kratip, Lung's line, then the deck. */
+  private kratipOut() {
+    this.round = 'thresh'
+    this.kratipK = 0
+    this.kratip.root.visible = true
+    sfx.boing()
+    sfx.steam()
+    this.after(0.4, () => {
       this.once('helper', R.helper)
       this.lung.react('wave')
     })
-    this.after(6.0, () => this.toDeck())
+    this.after(3.2, () => this.toDeck())
   }
 
   private stepThresh(dt: number) {
@@ -1009,7 +1186,7 @@ export class RiceFarm extends Stage {
     const f = this.farm
     const w = (o: Object3D, p: V3) => o.localToWorld(new Vector3(...p))
     f.root.updateMatrixWorld(true)
-    this.birdHost.perches = [...f.scarecrow.perches.map((p) => w(f.scarecrow.root, p)), w(f.hut.root, f.hut.perch).add(new Vector3(-0.5, 0, 0)), w(f.hut.root, f.hut.perch).add(new Vector3(0.45, 0, 0)), w(f.rack.root, f.rack.perch).add(new Vector3(-0.85, 0, 0)), w(f.rack.root, f.rack.perch).add(new Vector3(0.85, 0, 0))]
+    this.birdHost.perches = [...f.scarecrow.perches.slice(0, 2).map((p) => w(f.scarecrow.root, p)), w(f.hut.root, f.hut.perch).add(new Vector3(-0.5, 0, 0)), w(f.hut.root, f.hut.perch).add(new Vector3(0.45, 0, 0)), w(f.rack.root, f.rack.perch).add(new Vector3(-0.85, 0, 0)), w(f.rack.root, f.rack.perch).add(new Vector3(0.85, 0, 0))]
   }
 
   // ---------------------------------------------------------------- the deck (#168's)
@@ -1031,6 +1208,7 @@ export class RiceFarm extends Stage {
     this.mud.visible = false
     this.deck.kratip.root.visible = true
     this.put(this.kaylee, STOOLS.kaylee[0], STOOLS.kaylee[1], STOOLS.kaylee[2], 'sit', 0)
+    this.story.toDeck(d)
     this.put(this.nick, STOOLS.nick[0], STOOLS.nick[1], STOOLS.nick[2], 'sit', 0)
     const face = (Math.atan2(-MOMMY_AT[0], -0.95 - MOMMY_AT[2]) * 180) / Math.PI
     this.put(this.ji, MOMMY_AT[0], MOMMY_AT[1], MOMMY_AT[2], 'stand', face)
@@ -1147,7 +1325,15 @@ export class RiceFarm extends Stage {
       this.photoWanted = false
       this.takePhoto()
     }
-    super.render()
+    const r = this.renderer
+    this.bars.render(r, this.scene, this.rig.camera, this.w, this.h)
+    this.stats.calls = r.info.render.calls
+    this.stats.tris = r.info.render.triangles
+  }
+
+  /** The screen's hold-to-skip: the film jumps to its end. */
+  skipFilm() {
+    this.films.skip()
   }
 
   // ---------------------------------------------------------------- leading Kaylee
@@ -1378,6 +1564,7 @@ export class RiceFarm extends Stage {
 
   pointerDown(x?: number, y?: number, id?: string) {
     super.pointerDown()
+    if (this.films.on) return
     if (x === undefined || y === undefined || id || this.phase !== 'farm') return
     this.finger.held = true
     this.aim(x, y)
@@ -1395,8 +1582,11 @@ export class RiceFarm extends Stage {
   }
 
   protected onTap(id: string | null) {
+    if (this.films.on) return
+    if (id === 'jip') return this.story.poke()
+    if (id === 'chicks') return this.story.pokeChicks()
     if (this.phase === 'deck') return this.tapDeck(id)
-    if (this.phase === 'thresh') return this.thresh()
+    if (this.phase === 'thresh') return this.story.sharing ? this.shareTap() : this.thresh()
     if (!id) return
     if (id.startsWith('gate:')) {
       const s = this.paddies[Number(id.slice(5))]
@@ -1560,9 +1750,12 @@ export class RiceFarm extends Stage {
     this.scareSpin = Math.min(1, this.scareSpin + dt / 0.9)
     f.scarecrow.root.rotation.y = this.scareSpin < 1 ? (1 - (1 - this.scareSpin) ** 2) * Math.PI * 2 : Math.sin(t * 0.8) * 0.04
     this.hatFlip = Math.min(1, this.hatFlip + dt / 1.0)
-    f.scarecrow.hat.position.y = 1.56 + bell(this.hatFlip) * 0.75
-    f.scarecrow.hat.rotation.x = this.hatFlip < 1 ? this.hatFlip * Math.PI * 2 : 0
-    if (this.hatFlip < 1 && this.hatFlip + dt / 1.0 >= 1) sfx.thump()
+    // (Not while it's on someone else's head: Lung's, in his story.)
+    if (f.scarecrow.hat.parent === f.scarecrow.root) {
+      f.scarecrow.hat.position.y = 1.56 + bell(this.hatFlip) * 0.75
+      f.scarecrow.hat.rotation.x = this.hatFlip < 1 ? this.hatFlip * Math.PI * 2 : 0
+      if (this.hatFlip < 1 && this.hatFlip + dt / 1.0 >= 1) sfx.thump()
+    }
     this.chimeSwing = Math.min(1, this.chimeSwing + dt / 2.4)
     f.hut.chime.rotation.z = Math.sin(t * 6) * 0.35 * (1 - this.chimeSwing) + Math.sin(t * 1.3) * 0.05
     this.bananaWob = Math.min(1, this.bananaWob + dt / 1.2)
@@ -1586,6 +1779,9 @@ export class RiceFarm extends Stage {
   // ---------------------------------------------------------------- the frame
 
   protected step(dt: number, t: number) {
+    // A film is on: it has the camera (set at the end of the frame), and nothing waits for her finger meanwhile.
+    const cine = this.films.update(dt, this.w / this.h)
+    if (this.films.on) this.lastTouch = this.time
     for (const l of this.later.filter((x) => x.t <= this.time)) {
       this.later.splice(this.later.indexOf(l), 1)
       if (!this.disposed) l.f()
@@ -1611,7 +1807,10 @@ export class RiceFarm extends Stage {
       if (this.growth >= 0.78) this.once('tall', R.tall, true)
       if (this.growth >= 1) this.ripe()
     }
-    this.birds.update(dt, t, this.birdHost, this.kaylee.root.position, this.round === 'grow')
+    if (this.lastYear) this.birds.update(dt, t, this.story.memHost, FAR, true)
+    else this.birds.update(dt, t, this.birdHost, this.kaylee.root.position, this.round === 'grow')
+    // Jip comes for her hat once while she plants (after her first paddy, or after a while).
+    if (this.round === 'plant' && !this.films.on && !this.story.tugged && !this.hopping && this.phase === 'farm' && this.time - this.roundAt > 6 && (this.paddies.some((s) => s.done) || this.time - this.roundAt > 20)) this.story.tugHat()
     this.stepCloud(dt)
     // ---- The paddies: water rising (or draining), gates lifting, droopy seedlings springing up as the water reaches ----
     for (const s of this.paddies) {
@@ -1673,7 +1872,7 @@ export class RiceFarm extends Stage {
       const k = this.deckAt(0, 1.0, -0.95)
       this.ji.lookAt(k.x, k.y, k.z)
       this.lung.lookAt(k.x, k.y, k.z)
-    } else {
+    } else if (!this.films.on) {
       const k = this.kaylee.root.position
       const bird = this.birds.longest()
       const look = this.finger.target ?? bird
@@ -1699,6 +1898,8 @@ export class RiceFarm extends Stage {
       if (!speakingVoice()) sfx.far[Math.floor(Math.random() * sfx.far.length)]()
     }
     this.threshArms()
+    this.story.update(dt, t)
+    this.kit.ngob.position.y = this.hatBase + ((this.kit.ngob.userData.lift as number | undefined) ?? 0)
     this.stepSticky(dt)
     for (const f of [this.splash, this.sparkles, this.bits, this.feathers, this.mudBits, this.rain, this.grains, this.steam]) f.update(dt)
     this.farm.water.update(t)
@@ -1709,10 +1910,13 @@ export class RiceFarm extends Stage {
     this.stuck()
     const map = (this.farm.fall.material as MeshBasicMaterial).map
     if (map) map.offset.y = t * 1.6
+    this.rig.setCine(cine)
+    this.bars.update(dt, this.films.on)
   }
 
   /** After a while with nothing done, Sparkle says what to do (a few times a round at most). */
   private stuck() {
+    if (this.films.on) return
     if (this.finger.held || this.hopping || this.kaylee.walking || this.snapAt > 0) return
     if (this.time - Math.max(this.lastTouch, this.quietFrom) < SAY_S || this.time - this.lastSay < SAY_EVERY || this.sayN >= SAY_MAX) return
     const l = this.stuckLine()
@@ -1723,7 +1927,7 @@ export class RiceFarm extends Stage {
   }
   private stuckLine(): Line | null {
     if (this.phase === 'deck') return this.photos ? null : !this.eaten && !this.sips ? R.hint.eat : R.hint.photo
-    if (this.phase === 'thresh') return this.threshed < THRESHED ? R.hint.thresh : null
+    if (this.phase === 'thresh') return this.story.sharing ? R.hint.share : this.threshed < THRESHED ? R.hint.thresh : null
     switch (this.round) {
       case 'plant':
         return this.paddies.some((s) => !s.open && (s.planted > 0 || this.paddies.every((x) => x.done || !x.open))) ? R.hint.gate : R.hint.plant
@@ -1801,6 +2005,16 @@ export class RiceFarm extends Stage {
         h.wet = h.spring
       }
       h.twitch = Math.min(1, h.twitch + dt / 0.25)
+      // Pecked away (the memory's montage): the head shrinks off with a puff of gold.
+      if (h.eatIn >= 0) {
+        h.eatIn -= dt
+        if (h.eatIn < 0) {
+          h.eaten = Math.max(h.eaten, 0.001)
+          h.twitch = 0
+          if (Math.random() < 0.35) this.grains.burst(tmp.set(h.x, h.floor + this.hillHeight(h), h.z), 3, 0.5, 0.8, 0.4, 0.03)
+        }
+      }
+      if (h.eaten > 0 && h.eaten < 1) h.eaten = Math.min(1, h.eaten + dt / 0.3)
       // ---- Leaning away from her as she wades past, springing back after ----
       let fx = 0
       let fz = 0
@@ -1845,7 +2059,8 @@ export class RiceFarm extends Stage {
       col.copy(SEEDLING).lerp(DRY, 1 - h.wet).lerp(GROWN, green).lerp(LEAF_GOLD, gold).offsetHSL(0, 0, h.shade * 0.035)
       this.blades.set(h.i, hillMatrix(m4, h.x, h.floor, h.z, width, height, lx, lz, h.turn), col)
       c2.copy(HEAD_GREEN).lerp(GOLD, smooth(0.62, 0.95, g))
-      this.heads.set(h.i, hillMatrix(m4, h.x, h.floor, h.z, width * hk, height * (0.94 + 0.06 * hk), lx, lz, h.turn), c2)
+      const ate = 1 - h.eaten
+      this.heads.set(h.i, hillMatrix(m4, h.x, h.floor, h.z, width * hk * ate, height * (0.94 + 0.06 * hk) * (0.7 + 0.3 * ate), lx, lz, h.turn), c2)
     }
     this.blades.done()
     this.heads.done()
@@ -1934,6 +2149,10 @@ export class RiceFarm extends Stage {
       return null
     }
     if (this.phase === 'thresh') {
+      if (this.story.sharing) {
+        const b = this.farm.rack.bundles[BUNDLES - 1 - this.threshed - this.story.shared]
+        return b?.visible ? { at: b.getWorldPosition(new Vector3()), id: 'rack' } : null
+      }
       if (this.threshed >= THRESHED) return null
       if (this.holding) return { at: new Vector3(BASKET[0], 0.6, BASKET[2]), id: 'basket' }
       return { at: this.farm.rack.bundles[BUNDLES - 1 - this.threshed].getWorldPosition(new Vector3()), id: 'rack' }
@@ -1948,6 +2167,9 @@ export class RiceFarm extends Stage {
   }
 
   protected anchorAt(id: string): AnchorSpot | null {
+    if (this.films.on) return null
+    if (id === 'jip') return this.story.jip.root.visible ? { at: this.story.jip.headAt(), r: 0.22, prio: 3, max: 96 } : null
+    if (id === 'chicks') return this.phase === 'farm' && this.story.nest.visible ? { at: this.story.nest.getWorldPosition(new Vector3()).add(new Vector3(0, 0.2, 0)), r: 0.35, prio: 2, max: 110 } : null
     const idle = this.time - this.lastTouch > STUCK_S
     const hinted = idle && this.hintNow?.id === id
     const f = this.farm
@@ -1982,7 +2204,7 @@ export class RiceFarm extends Stage {
     if (this.phase === 'thresh') {
       const left = this.threshed < THRESHED
       if (id === 'basket') return { at: new Vector3(BASKET[0], 0.45, BASKET[2]), r: 0.55, prio: 3, max: 220, glow: left && this.holding && hinted }
-      if (id === 'rack') return { at: new Vector3(RACK.x, RACK.y - 0.2, RACK.z), r: 0.8, prio: 2, max: 200, glow: left && !this.holding && (hinted || this.banged === 0) }
+      if (id === 'rack') return { at: new Vector3(RACK.x, RACK.y - 0.2, RACK.z), r: 0.8, prio: 2, max: 200, glow: this.story.sharing || (left && !this.holding && (hinted || this.banged === 0)) }
       return null
     }
     if (id.startsWith('gate:')) {
@@ -2023,6 +2245,11 @@ export class RiceFarm extends Stage {
     return {
       game: 'rice',
       phase: this.phase,
+      film: this.films.now,
+      films: { done: this.films.done, skipped: this.films.skipped },
+      story: this.story.qa(),
+      lastYear: this.lastYear,
+      faces: [this.kaylee, this.lung].map((c) => Math.round((c.root.rotation.y * 180) / Math.PI)),
       round: this.round,
       planted: this.paddies.map((s) => s.planted),
       flooded: this.paddies.map((s) => Math.round(s.lvl * 100) / 100),
@@ -2055,6 +2282,8 @@ export class RiceFarm extends Stage {
         nick: pt(this.nick.rig.head.getWorldPosition(new Vector3())),
         basket: pt(new Vector3(BASKET[0], 0.45, BASKET[2])),
         rack: pt(new Vector3(RACK.x, RACK.y, RACK.z)),
+        jip: pt(this.story.jip.headAt()),
+        chicks: this.story.nest.visible ? pt(this.story.nest.getWorldPosition(new Vector3())) : null,
         glass: this.phase === 'deck' ? pt(this.deck.glass.root.getWorldPosition(new Vector3())) : null,
         kratip: this.phase === 'deck' ? pt(this.deck.kratip.root.getWorldPosition(new Vector3())) : null,
         mommy: this.phase === 'deck' ? pt(this.ji.rig.head.localToWorld(new Vector3(0, this.ji.rig.face.headY, 0))) : null,
@@ -2063,6 +2292,7 @@ export class RiceFarm extends Stage {
   }
 
   dispose() {
+    this.story.dispose()
     for (const x of [this.blades, this.heads, this.stubble]) x.dispose()
     super.dispose()
   }

@@ -165,6 +165,10 @@ export abstract class Stage implements World3D {
   protected get hopping() {
     return this.hopper.busy
   }
+  /** Calls off someone's hop (a skipped film puts them where they were going). */
+  protected unhop(c: Rider) {
+    this.hopper.cancel(c)
+  }
 
   // ---------------------------------------------------------------- World3D
 
@@ -317,6 +321,10 @@ export class Hopper {
   }
   get busy() {
     return this.hops.length > 0
+  }
+  /** Calls off this one's hop, wherever they are. */
+  cancel(c: Rider) {
+    this.hops = this.hops.filter((h) => h.c !== c)
   }
   /** Is this one hopping (or waiting to)? */
   has(c: Rider) {

@@ -134,6 +134,12 @@ export function say(line: Line, { interrupt = true }: SayOptions = {}): Promise<
   return result
 }
 
+/** How long a line's recorded clip is (ms from the voice map; 0 if it has no clip yet). Films time their beats by it, so
+ *  a cutscene keeps its pace in test browsers too, where the audio is skipped. */
+export function lineMs(line: Line): number {
+  return clips.get(keyOf(lineVoice(line), lineText(line)))?.ms ?? 0
+}
+
 export function stopSpeaking() {
   generation++
   current?.stop()

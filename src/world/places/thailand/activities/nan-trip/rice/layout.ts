@@ -18,7 +18,9 @@ export type V3 = [number, number, number]
 
 // ---------------------------------------------------------------- the rounds
 
-export const ROUNDS = ['plant', 'grow', 'harvest', 'thresh', 'deck'] as const
+/** In play order. `story` is the way in (Lung's film, then the planting), `nest` the film when the rice is golden (then
+ *  the harvest), `share` the last bundles for the birds after the threshing (then the sticky rice). */
+export const ROUNDS = ['story', 'plant', 'grow', 'nest', 'harvest', 'thresh', 'share', 'deck'] as const
 export type Round = (typeof ROUNDS)[number]
 
 // ---------------------------------------------------------------- the ground

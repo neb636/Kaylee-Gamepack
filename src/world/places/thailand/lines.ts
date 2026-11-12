@@ -455,10 +455,36 @@ export const L = {
     // a while with nothing done, says it again; Lung and Daddy (on the farm) and Mommy (on the deck) react in their own
     // voices. Kaylee never talks: she giggles.
     rice: {
-      // Lung, as each round begins, then Sparkle's line (the first two before her first touch).
+      // Lung Kham's story (rice/story.ts): Jip and the hat mix-up. The films, beat by beat, in play order.
+      story: {
+        // The way in: Lung says hello, hears Jip, and tells what Jip did last year (the memory, in the storybook look).
+        hello: lung('Sawasdee krap! Welcome to my farm!'),
+        uhoh: lung("Uh-oh. That's Jip!"),
+        tell: lung('Let me tell you what Jip did last year.'),
+        nap: lung('My rice was all golden. So I had a little nap...'),
+        along: lung('Then along came Jip!'),
+        took: lung('He took my hat!'),
+        gave: lung("And gave me the scarecrow's!"),
+        thought: lung('The birds thought I was the scarecrow!'),
+        ateAll: lung('They ate ALL my rice!'),
+        help: lung('This year, I need a helper. Will you help me?'),
+        // Planting: Jip lands on her hat and tugs at it.
+        holdHat: lung('Hold on to your hat!'),
+        // The rice is golden: Jip flies off with a grain, and Lung finds out why.
+        whereTo: lung("Hey! Where's Jip going?"),
+        oldHat: lung('My old hat! Jip made a nest!'),
+        hungry: lung("Oh... Jip's babies are hungry."),
+        share: lung("Let's share our rice with them!"),
+        // Threshing done: the last bundles are for the birds.
+        some: lung('Now, some for Jip!'),
+        oneEach: lung('One for you, one for me!'),
+        friends: lung('Friends now!'),
+      },
+      // Lung, as each round begins, then Sparkle's line (the first two before her first touch). (After the story, Lung
+      // has already asked for a helper: the planting starts with Sparkle's line.)
       ask: {
         plant: lung('Sawasdee krap! I need a helper!'),
-        grow: lung('Oh no! Birds in my rice!'),
+        grow: lung("Oh no! It's Jip and friends!"),
         thresh: lung('Now we bang the grains out!'),
       },
       plant: 'Walk through the water to plant!',
@@ -466,6 +492,7 @@ export const L = {
       grow: 'Shoo them away!',
       harvest: 'Walk through the rice to cut it!',
       thresh: onDevice('Tap to bang the rice!', 'Click to bang the rice!'),
+      shareIt: onDevice('Tap the rice to share it!', 'Click the rice to share it!'),
       // The first time she pokes the kratip, the view from the deck, the buffalo and a duck (tap-to-hear facts).
       sticky: 'In Nan, people eat sticky rice with their fingers!',
       steps: 'The steps on the hill keep the water for the rice!',
@@ -489,6 +516,7 @@ export const L = {
         grow: 'Walk to the birds!',
         harvest: 'Walk through the golden rice!',
         thresh: onDevice('Tap to bang the rice!', 'Click to bang the rice!'),
+        share: onDevice('Tap the rice to share it!', 'Click the rice to share it!'),
         eat: onDevice('Tap the sticky rice!', 'Click the sticky rice!'),
         photo: onDevice('Tap Mommy for a photo!', 'Click Mommy for a photo!'),
       },
@@ -507,7 +535,7 @@ export const L = {
       tap: [nick('Go, farmer!'), nick('Splish, splash!'), nick('Daddy is watching!')],
       // Mommy on the deck.
       hi: ji('You grew this sticky rice!'),
-      aroi: ji('Aroi mak! That means so yummy!'),
+      aroi: ji('Aroi mak!'),
       smile: ji(`Smile!`),
       // The rice farm's video, after Mommy's photo on the deck (rice/video.ts).
       video: 'Want to see real farmers grow rice?',

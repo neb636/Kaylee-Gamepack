@@ -433,6 +433,11 @@ export const screens = [
   // Kaylee's rice farm (greybox A): paddy A flooded and three dry, the planted rows growing (birds coming in), the golden
   // rice drained for the harvest, the bundles on the rack by the threshing basket, and the café's deck.
   ...['plant', 'grow', 'harvest', 'thresh', 'deck'].map((round) => ({ name: `nan-rice-${round}`, hash: `#/world/thailand/nan-trip/rice?round=${round}`, reset: true, wait: round === 'grow' ? 6000 : 3500 })),
+  // Lung Kham's story (rice/story.ts): the way in two-shot, the memory's storybook look, the nest, the share.
+  { name: 'nan-rice-story', hash: '#/world/thailand/nan-trip/rice?round=story', reset: true, wait: 9000 },
+  { name: 'nan-rice-memory', hash: '#/world/thailand/nan-trip/rice?round=story', reset: true, wait: 26000 },
+  { name: 'nan-rice-nest', hash: '#/world/thailand/nan-trip/rice?round=nest', reset: true, wait: 11000 },
+  { name: 'nan-rice-share', hash: '#/world/thailand/nan-trip/rice?round=share', reset: true, wait: 4000 },
   // The boat trip: every section (the trip kit's legs, then the bay), a full suitcase, the x-ray showing what she
   // packed, the seat-back screen, the boarding pass between legs, and the beach after landing (the photo).
   // (The house's shaders compile on the first one: it waits a little longer.)
@@ -1984,6 +1989,49 @@ motion.push(
         if (p) await page.mouse.click(...p)
         await page.waitForTimeout(700)
       }
+    },
+  },
+)
+
+// Lung Kham's story (rice/story.ts): the films play by themselves (the way in, then the nest); the share is three taps
+// on the rack's last bundles (they hop off to Jip and his chicks); and holding ⏭ in the memory skips the way in, leaving
+// the farm as it is now (the planting next, Jip home on the scarecrow's hat).
+const filmDone = (id) => async (page) => {
+  await page.waitForFunction((f) => window.__thaiNanQA?.().films.done.includes(f) || window.__thaiNanQA?.().films.skipped.includes(f), id, { timeout: 180000 })
+}
+motion.push(
+  { name: 'nan-story', seconds: 75, setup: (page, base) => riceReady(page, base, 'story'), act: filmDone('intro') },
+  { name: 'nan-nest', seconds: 30, setup: (page, base) => riceReady(page, base, 'nest'), act: filmDone('nest') },
+  {
+    name: 'nan-share',
+    seconds: 14,
+    setup: async (page, base) => {
+      await riceReady(page, base, 'share')
+      await page.waitForTimeout(2500)
+    },
+    act: async (page) => {
+      for (let k = 0; k < 3; k++) {
+        const p = (await page.evaluate(() => window.__thaiNanQA())).points.rack
+        if (p) await page.mouse.click(...p)
+        await page.waitForTimeout(1600)
+      }
+      await page.waitForTimeout(3000)
+    },
+  },
+  {
+    name: 'nan-story-skip',
+    seconds: 8,
+    setup: async (page, base) => {
+      await riceReady(page, base, 'story')
+      await page.waitForFunction(() => window.__thaiNanQA?.().lastYear, null, { timeout: 90000 })
+    },
+    act: async (page) => {
+      const b = await page.getByRole('button', { name: 'Hold to skip the story' }).boundingBox()
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2)
+      await page.mouse.down()
+      await page.waitForTimeout(900)
+      await page.mouse.up()
+      await page.waitForFunction(() => { const q = window.__thaiNanQA(); return !q.film && !q.lastYear && q.round === 'plant' }, null, { timeout: 5000 })
     },
   },
 )

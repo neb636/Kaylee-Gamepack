@@ -1097,11 +1097,83 @@
   "Click the plane to fly home!",
   "Pack again, or go straight to the boat?",
   {
+    "text": "Sawasdee krap! Welcome to my farm!",
+    "voice": "lung"
+  },
+  {
+    "text": "Uh-oh. That's Jip!",
+    "voice": "lung"
+  },
+  {
+    "text": "Let me tell you what Jip did last year.",
+    "voice": "lung"
+  },
+  {
+    "text": "My rice was all golden. So I had a little nap...",
+    "voice": "lung"
+  },
+  {
+    "text": "Then along came Jip!",
+    "voice": "lung"
+  },
+  {
+    "text": "He took my hat!",
+    "voice": "lung"
+  },
+  {
+    "text": "And gave me the scarecrow's!",
+    "voice": "lung"
+  },
+  {
+    "text": "The birds thought I was the scarecrow!",
+    "voice": "lung"
+  },
+  {
+    "text": "They ate ALL my rice!",
+    "voice": "lung"
+  },
+  {
+    "text": "This year, I need a helper. Will you help me?",
+    "voice": "lung"
+  },
+  {
+    "text": "Hold on to your hat!",
+    "voice": "lung"
+  },
+  {
+    "text": "Hey! Where's Jip going?",
+    "voice": "lung"
+  },
+  {
+    "text": "My old hat! Jip made a nest!",
+    "voice": "lung"
+  },
+  {
+    "text": "Oh... Jip's babies are hungry.",
+    "voice": "lung"
+  },
+  {
+    "text": "Let's share our rice with them!",
+    "voice": "lung"
+  },
+  {
+    "text": "Now, some for Jip!",
+    "voice": "lung"
+  },
+  {
+    "text": "One for you, one for me!",
+    "voice": "lung"
+  },
+  {
+    "text": "Friends now!",
+    "voice": "lung"
+  },
+  {
     "text": "Sawasdee krap! I need a helper!",
     "voice": "lung"
   },
   {
-    "text": "Oh no! Birds in my rice!",
+    "text": "Oh no! It's Jip and friends!",
     "voice": "lung"
   },
   {
@@ -1114,6 +1186,8 @@
   "Walk through the rice to cut it!",
   "Tap to bang the rice!",
   "Click to bang the rice!",
+  "Tap the rice to share it!",
+  "Click the rice to share it!",
   "In Nan, people eat sticky rice with their fingers!",
   "The steps on the hill keep the water for the rice!",
   "Buffalo helped farmers get the mud ready!",
@@ -1239,7 +1313,7 @@
     "voice": "ji"
   },
   {
-    "text": "Aroi mak! That means so yummy!",
+    "text": "Aroi mak!",
     "voice": "ji"
   },
   {

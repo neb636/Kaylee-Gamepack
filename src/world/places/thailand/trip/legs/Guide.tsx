@@ -11,7 +11,8 @@ export interface TripGuideHandle {
   speak(line: Line, mute?: boolean): void
 }
 
-const WHO: Record<string, { name: string; icon: string; color: string }> = {
+/** Who each voice is (the bubble's chip, and a film's words: FilmOverlay). */
+export const WHO: Record<string, { name: string; icon: string; color: string }> = {
   ji: { name: 'Mommy', icon: '🦄', color: '#FF8FB8' },
   nick: { name: 'Daddy', icon: '🦄', color: '#7FD1B9' },
   agong: { name: 'Agong', icon: '🐼', color: '#B9A6F5' },

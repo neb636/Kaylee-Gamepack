@@ -3,7 +3,7 @@
 
 export type { GameMeta, GameProps } from './types'
 export { DEVICE, IS_MOUSE, onDevice, type Device } from './device'
-export { say, stopSpeaking, lineText, lineVoice, speechLevel, speakingVoice, type Line, type SayOptions } from './speech'
+export { say, stopSpeaking, lineMs, lineText, lineVoice, speechLevel, speakingVoice, type Line, type SayOptions } from './speech'
 export { sounds } from './sounds'
 export { burst, bigCelebration } from './confetti'
 export { KID_NAME, wait, randomInt, pick, shuffle, sample, praise, numberWord } from './helpers'
