@@ -1,0 +1,118 @@
+{
+ "title": "Review pages: find each sound",
+ "checkIn": "fix",
+ "kaylee": "Nothing changes for Kaylee. On review pages, each sound now shows its start and end time, the one playing lights up, and tapping a sound plays it. Try it on the Nan road below.",
+ "listens": [
+  {
+   "title": "Nan: the mountain road",
+   "audio": "sfx/drive.mp3",
+   "items": [
+    {
+     "text": "engine: Steady engine hum of a small SUV heard from inside the cabin (loop)",
+     "at": 0,
+     "end": 4
+    },
+    {
+     "text": "scooter: small motor scooter putters past on a quiet country road",
+     "at": 4.7,
+     "end": 8.7
+    },
+    {
+     "text": "tuktuk: Thai tuk-tuk three-wheeler drives past",
+     "at": 9.4,
+     "end": 13.4
+    },
+    {
+     "text": "songthaew: small pickup truck taxi drives past on a country road",
+     "at": 14.1,
+     "end": 18.1
+    },
+    {
+     "text": "car: small car drives past on a country road",
+     "at": 18.8,
+     "end": 22.28
+    },
+    {
+     "text": "honk: single honk of a real pickup truck horn",
+     "at": 22.98,
+     "end": 23.98
+    },
+    {
+     "text": "honk-tune: Three short rhythmic taps on a real pickup truck horn",
+     "at": 24.68,
+     "end": 26.16
+    },
+    {
+     "text": "moo: water buffalo gives one long",
+     "at": 26.86,
+     "end": 28.86
+    },
+    {
+     "text": "cluck: few chickens clucking",
+     "at": 29.56,
+     "end": 30.76
+    },
+    {
+     "text": "monkey: small monkey chattering playfully",
+     "at": 31.46,
+     "end": 32.66
+    },
+    {
+     "text": "rail: Cartoon rubber bumper boing",
+     "at": 33.36,
+     "end": 34.16
+    },
+    {
+     "text": "rain-roof: Gentle rain pattering on a car roof heard from inside the car (loop)",
+     "at": 34.86,
+     "end": 38.86
+    },
+    {
+     "text": "wet-tyres: Car tyres hissing on a wet road (loop)",
+     "at": 39.56,
+     "end": 43.56
+    },
+    {
+     "text": "cloud-in: Soft airy whoosh of driving into a thick cloud of fog",
+     "at": 44.26,
+     "end": 45.82
+    },
+    {
+     "text": "screech: Cartoon tyre squeal as a small car swerves round a corner",
+     "at": 46.52,
+     "end": 47.32
+    },
+    {
+     "text": "wiper: windscreen wiper sweeping once across a wet windshield",
+     "at": 48.02,
+     "end": 48.62
+    },
+    {
+     "text": "wiper-dry: windscreen wiper squeaking once across a dry windshield",
+     "at": 49.32,
+     "end": 49.92
+    },
+    {
+     "text": "puddle: car driving through a big puddle",
+     "at": 50.62,
+     "end": 51.82
+    },
+    {
+     "text": "squeak: squeaky rubber toy elephant squeezed",
+     "at": 52.52,
+     "end": 53.32
+    },
+    {
+     "text": "country: Peaceful countryside in the green hills of northern Thailand (loop)",
+     "at": 54.02,
+     "end": 60.02
+    },
+    {
+     "text": "town: calm small-town street in northern Thailand (loop)",
+     "at": 60.72,
+     "end": 66.72
+    }
+   ]
+  }
+ ]
+}

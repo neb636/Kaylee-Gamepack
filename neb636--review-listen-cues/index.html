@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Review pages: find each sound</title>
+<style>
+:root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a;--lav:#efe6ff;--warn:#b0124f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}}
+:root[data-theme="dark"]{--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;font:17px/1.45 ui-rounded,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink)}
+main{max-width:720px;margin:0 auto;padding-block:16px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}h1{font-size:24px;line-height:1.2;margin:4px 0 6px}
+h2{font-size:14px;letter-spacing:.05em;text-transform:uppercase;color:var(--soft);margin:28px 0 8px}h3{margin:0 0 4px;font-size:17px}
+.chip{display:inline-block;background:var(--lav);border-radius:99px;padding:2px 12px;font-size:14px;font-weight:600}
+.kaylee{font-size:19px;margin:10px 0 0}
+figure{margin:0 0 14px}video{width:100%;border-radius:16px;background:#000;display:block}figcaption{font-size:14px;color:var(--soft);margin-top:6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:0 0 12px}
+.card audio{width:100%;margin:8px 0 0}.meta{font-size:14px;color:var(--soft);margin:0}.warn{color:var(--warn)}
+#answers{display:none;margin-top:8px}
+.listen ol{margin-top:8px}.listen li::marker{font-variant-numeric:tabular-nums}
+.cue{all:unset;box-sizing:border-box;display:block;width:100%;cursor:pointer;border-radius:10px;padding:5px 8px;margin:1px 0;color:var(--soft)}
+.cue:hover{background:var(--lav)}.cue:focus-visible{outline:3px solid var(--ink);outline-offset:1px}
+.cue .t{font-variant-numeric:tabular-nums;font-size:13px;opacity:.8;margin-right:4px}
+.cue.on{background:var(--lav);color:var(--ink);font-weight:700;box-shadow:inset 3px 0 0 var(--pink)}
+ol{padding-left:22px}li p{margin:0 0 6px;font-weight:600}textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--card);color:inherit}
+button,.pill{font:inherit;font-weight:700;border:0;border-radius:99px;padding:10px 18px;background:var(--pink);color:var(--bg);text-decoration:none;display:inline-block;margin:4px 6px 4px 0;cursor:pointer}
+button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.pill{background:var(--lav);color:var(--ink)}a{color:var(--pink)}
+.pitch{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin:0 0 16px}
+.pitch img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--lav)}.pbody{padding:14px 16px}
+.pitch h3{font-size:20px}.finger{font-size:18px;font-weight:600;margin:6px 0}.pitch p{margin:6px 0}
+.grows{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;counter-reset:g}
+.grows li{background:var(--lav);border-radius:12px;padding:8px;font-size:14px;text-align:center}.grows span{display:block;font-size:28px}
+.also{font-size:15px;color:var(--soft)}.also span{font-size:18px}
+@media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}}
+</style></head><body><main>
+<span class="chip">Check-in fix</span>
+<h1>Review pages: find each sound</h1>
+<p class="kaylee">Nothing changes for Kaylee. On review pages, each sound now shows its start and end time, the one playing lights up, and tapping a sound plays it. Try it on the Nan road below.</p>
+
+
+
+<h2>Listen</h2><div class="card listen"><h3>Nan: the mountain road</h3>
+<audio controls preload="metadata" src="sfx/drive.mp3"></audio>
+<ol class="meta"><li><button class="cue" data-at="0" data-end="4"><span class="t">0:00–0:04</span> engine: Steady engine hum of a small SUV heard from inside the cabin (loop)</button></li><li><button class="cue" data-at="4.7" data-end="8.7"><span class="t">0:04–0:08</span> scooter: small motor scooter putters past on a quiet country road</button></li><li><button class="cue" data-at="9.4" data-end="13.4"><span class="t">0:09–0:13</span> tuktuk: Thai tuk-tuk three-wheeler drives past</button></li><li><button class="cue" data-at="14.1" data-end="18.1"><span class="t">0:14–0:18</span> songthaew: small pickup truck taxi drives past on a country road</button></li><li><button class="cue" data-at="18.8" data-end="22.28"><span class="t">0:18–0:22</span> car: small car drives past on a country road</button></li><li><button class="cue" data-at="22.98" data-end="23.98"><span class="t">0:22–0:23</span> honk: single honk of a real pickup truck horn</button></li><li><button class="cue" data-at="24.68" data-end="26.16"><span class="t">0:24–0:26</span> honk-tune: Three short rhythmic taps on a real pickup truck horn</button></li><li><button class="cue" data-at="26.86" data-end="28.86"><span class="t">0:26–0:28</span> moo: water buffalo gives one long</button></li><li><button class="cue" data-at="29.56" data-end="30.76"><span class="t">0:29–0:30</span> cluck: few chickens clucking</button></li><li><button class="cue" data-at="31.46" data-end="32.66"><span class="t">0:31–0:32</span> monkey: small monkey chattering playfully</button></li><li><button class="cue" data-at="33.36" data-end="34.16"><span class="t">0:33–0:34</span> rail: Cartoon rubber bumper boing</button></li><li><button class="cue" data-at="34.86" data-end="38.86"><span class="t">0:34–0:38</span> rain-roof: Gentle rain pattering on a car roof heard from inside the car (loop)</button></li><li><button class="cue" data-at="39.56" data-end="43.56"><span class="t">0:39–0:43</span> wet-tyres: Car tyres hissing on a wet road (loop)</button></li><li><button class="cue" data-at="44.26" data-end="45.82"><span class="t">0:44–0:45</span> cloud-in: Soft airy whoosh of driving into a thick cloud of fog</button></li><li><button class="cue" data-at="46.52" data-end="47.32"><span class="t">0:46–0:47</span> screech: Cartoon tyre squeal as a small car swerves round a corner</button></li><li><button class="cue" data-at="48.02" data-end="48.62"><span class="t">0:48–0:48</span> wiper: windscreen wiper sweeping once across a wet windshield</button></li><li><button class="cue" data-at="49.32" data-end="49.92"><span class="t">0:49–0:49</span> wiper-dry: windscreen wiper squeaking once across a dry windshield</button></li><li><button class="cue" data-at="50.62" data-end="51.82"><span class="t">0:50–0:51</span> puddle: car driving through a big puddle</button></li><li><button class="cue" data-at="52.52" data-end="53.32"><span class="t">0:52–0:53</span> squeak: squeaky rubber toy elephant squeezed</button></li><li><button class="cue" data-at="54.02" data-end="60.02"><span class="t">0:54–1:00</span> country: Peaceful countryside in the green hills of northern Thailand (loop)</button></li><li><button class="cue" data-at="60.72" data-end="66.72"><span class="t">1:00–1:06</span> town: calm small-town street in northern Thailand (loop)</button></li></ol></div>
+
+
+</main>
+<script>
+const qs=[],titles=[]
+document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p]
+  try{await navigator.clipboard.writeText(t);document.getElementById('picked').textContent='Copied “'+t+'”. Paste it on the PR, or just say it in chat.'}catch{document.getElementById('picked').textContent=t+': say it on the PR or in chat.'}}))
+document.querySelectorAll('.listen').forEach(card=>{const a=card.querySelector('audio'),cues=[...card.querySelectorAll('.cue')]
+  if(!a||!cues.length)return
+  const mark=()=>{const t=a.currentTime,on=t>0||!a.paused?cues.filter(c=>+c.dataset.at<=t+0.05).pop():null;cues.forEach(c=>c.classList.toggle('on',c===on))}
+  const seek=(t)=>{a.currentTime=t;a.play();mark()}
+  cues.forEach(c=>c.addEventListener('click',()=>{const t=+c.dataset.at;if(a.readyState>=1)seek(t);else{a.addEventListener('loadedmetadata',()=>seek(t),{once:true});a.load()}}))
+  a.addEventListener('play',()=>document.querySelectorAll('.listen audio').forEach(o=>o!==a&&o.pause()))
+  let raf=0;const loop=()=>{mark();if(!a.paused)raf=requestAnimationFrame(loop)}
+  a.addEventListener('play',()=>{cancelAnimationFrame(raf);loop()});a.addEventListener('seeked',mark);a.addEventListener('pause',mark)})
+document.getElementById('copy')?.addEventListener('click',async()=>{
+  const a=[...document.querySelectorAll('textarea')].map((t,i)=>(i+1)+'. '+qs[i]+'\n   '+(t.value.trim()||'(no answer)')).join('\n')
+  try{await navigator.clipboard.writeText(a);document.getElementById('done').textContent='Copied. Paste it as a comment on the PR.'}
+  catch{const t=document.getElementById('answers');t.value=a;t.style.display='block';t.select();document.getElementById('done').textContent='Copy the text below, then paste it on the PR.'}})
+</script></body></html>
