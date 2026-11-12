@@ -12,7 +12,7 @@
 // after ~8 s with nothing touched.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { sounds } from '../../../../../../sdk'
+import { Mascot, sounds } from '../../../../../../sdk'
 import { onDevice } from '../../../../../../sdk/device'
 import { worldLink } from '../../../../../../router'
 import { Anchors } from '../../../../../engine3d/Anchors'
@@ -26,7 +26,7 @@ import { tripSession } from '../../../trip/session'
 import { readSametSave } from '../../samet-trip/trip'
 import HUB_SECTIONS from '../sections'
 import { PINS, type Pin, type PinId, type ToyId } from './geo'
-import { MAP_ANCHORS, ThaiMapWorld, type MapEvents } from './world'
+import { MAP_ANCHORS, MAP_CAM, ThaiMapWorld, type MapEvents } from './world'
 
 // Once a session: Sparkle's welcome, and each thing's fact.
 let welcomed = false
@@ -46,6 +46,9 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
   const lastTouch = useRef(performance.now() + 3000)
   // The stamp that lands: hidden on its pin until it drops in.
   const [landed, setLanded] = useState(!arriving)
+  // The loading screen stays over the board for its first second while the camera already moves (the first frames
+  // hitch while the board's textures go up), then fades into it.
+  const [revealed, setRevealed] = useState(false)
 
   const live = (pin: Pin) => pin.id === 'bangkok' || meta.activities.some((a) => a.id === pin.activity)
   const stamped = (pin: Pin) => stamps.includes(pin.activity) && (landed || pin.activity !== arriving)
@@ -56,16 +59,28 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
 
   useEffect(() => {
     enter('map', {})
-    if (!welcomed && !arriving) {
-      welcomed = true
-      setTimeout(() => guide.current?.speak(L.map.hello), 600)
-    }
+    // (If the board never draws, say the camera lab froze it, the cover still goes.)
+    const safety = setTimeout(() => setRevealed(true), 6000)
+    return () => clearTimeout(safety)
+  }, [])
+
+  // Once she can see the board: the welcome, or the stamp from the trip landing on its pin.
+  useEffect(() => {
+    if (!revealed) return
+    lastTouch.current = Math.max(lastTouch.current, performance.now() + 3000)
+    const hello =
+      !welcomed && !arriving
+        ? setTimeout(() => {
+            welcomed = true
+            guide.current?.speak(L.map.hello)
+          }, 400)
+        : undefined
     const land = arriving
       ? setTimeout(() => {
           setLanded(true)
           sfx.thump()
           setTimeout(() => sounds.sparkle(), 250)
-        }, 900)
+        }, 700)
       : undefined
     // After ~8 s with nothing touched the pins glow. No voice: it's a toy map, and she just heard the welcome.
     const idle = setInterval(() => {
@@ -73,10 +88,11 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
       setHint(true)
     }, 1000)
     return () => {
+      clearTimeout(hello)
       clearTimeout(land)
       clearInterval(idle)
     }
-  }, [])
+  }, [revealed])
 
   // The 3D pins show what the page knows: which places are stamped, and when Sparkle is hinting.
   useEffect(() => worldRef.current?.setPins(pins.map((p) => p.id), done, hint), [doneKey, hint, engine])
@@ -99,6 +115,7 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
 
   const events = useRef<MapEvents>(null!)
   events.current = {
+    revealed: () => setRevealed(true),
     touched: () => {
       lastTouch.current = performance.now()
       setHint(false)
@@ -130,7 +147,7 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
         worldRef={worldRef}
         onMode={setMode}
         make={(renderer) => {
-          const world = new ThaiMapWorld(renderer, { pin: (id) => events.current.pin(id), poked: (id) => events.current.poked(id), touched: () => events.current.touched() })
+          const world = new ThaiMapWorld(renderer, { pin: (id) => events.current.pin(id), poked: (id) => events.current.poked(id), touched: () => events.current.touched(), revealed: () => events.current.revealed() })
           world.setPins(pins.map((p) => p.id), done, false)
           return world
         }}
@@ -161,6 +178,21 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
           </>
         )}
       />
+      {/* The same screen as the place's loading screen (PlaceFrame), so the cut from it is invisible. */}
+      <AnimatePresence>
+        {!revealed && mode !== 'lost' && (
+          <motion.div
+            key="cover"
+            aria-hidden
+            initial={false}
+            exit={{ opacity: 0 }}
+            transition={{ duration: MAP_CAM.fade, ease: 'easeOut' }}
+            style={{ position: 'absolute', inset: 0, zIndex: 34, display: 'grid', placeItems: 'center', background: 'var(--lavender)' }}
+          >
+            <Mascot pose="think" appear={false} />
+          </motion.div>
+        )}
+      </AnimatePresence>
       {mode === 'lost' && (
         <button
           onClick={() => {

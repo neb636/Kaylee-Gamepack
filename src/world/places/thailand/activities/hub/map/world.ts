@@ -30,6 +30,8 @@ export interface MapEvents {
   poked(id: ToyId): void
   /** Any touch at all (the hint waits again). */
   touched(): void
+  /** The camera has been moving behind the loading cover long enough: it can fade (MAP_CAM.cover). */
+  revealed(): void
 }
 
 export const MAP_ANCHORS: AnchorInfo[] = POKES.map((p) => ({ id: `poke:${p.id}`, label: p.label, kind: 'thing' }))
@@ -86,8 +88,10 @@ export const MAP_CAM = knobs('thai-map-cam', 'Thailand map camera', 'src/world/p
   yaw: { value: 8, min: -40, max: 40, step: 1, label: 'Turn', unit: '°', note: 'added to the board view, side to side (it does not animate)' },
   pitch: { value: -12, min: -30, max: 20, step: 1, label: 'Settle tilt', unit: '°', note: 'where the entrance ends: below 0 looks from lower down' },
   zoom: { value: 0.87, min: 0.6, max: 1.2, step: 0.01, label: 'Settle zoom', unit: '×', note: 'where the entrance ends: below 1 is closer' },
-  intro: { value: 2.6, min: 0, max: 6, step: 0.1, label: 'Entrance', unit: 's', note: 'how long the camera takes to settle after she lands' },
-  hold: { value: 0.35, min: 0, max: 1.5, step: 0.05, label: 'Entrance wait', unit: 's', note: 'a still beat after the map appears before the camera starts moving' },
+  intro: { value: 3.4, min: 0, max: 6, step: 0.1, label: 'Entrance', unit: 's', note: 'how long the camera takes to settle, counted from the first frame (behind the cover)' },
+  hold: { value: 0, min: 0, max: 1.5, step: 0.05, label: 'Entrance wait', unit: 's', note: 'a still beat before the camera starts moving' },
+  cover: { value: 1, min: 0, max: 2.5, step: 0.05, label: 'Cover', unit: 's', note: 'how long the camera moves behind the loading screen (first frames hitch) before it fades' },
+  fade: { value: 0.3, min: 0.05, max: 1.2, step: 0.05, label: 'Cover fade', unit: 's', note: 'how fast the loading screen fades into the moving map' },
 })
 /** Starts from rest and lands at rest: no jolt on the cut from the loading screen. */
 const easeInOut = (p: number) => 0.5 - 0.5 * Math.cos(Math.PI * p)
@@ -117,6 +121,7 @@ export class ThaiMapWorld implements World3D {
   private base = { yaw: -6, pitch: 47, half: new Vector3(4.5, 0.5, 7.3) }
   /** Seconds into the entrance (it runs once, when the board opens). */
   private introT = 0
+  private revealed = false
 
   private places: Place[] = []
   private toys = new Map<ToyId, Toy>()
@@ -362,6 +367,10 @@ export class ThaiMapWorld implements World3D {
     const entering = !this.picked && this.introT < end
     if (this.picked) this.introT = end
     else if (entering) this.introT += Math.min(dt, 1 / 30)
+    if (!this.revealed && (this.introT >= MAP_CAM.cover || !entering)) {
+      this.revealed = true
+      this.events.revealed()
+    }
     this.frameOverview()
     this.rig.setShot(this.picked ? this.close : this.overview, entering)
     this.rig.update(dt)
