@@ -3,7 +3,8 @@
 // Positions are in the table top's space (x across, z toward the front of the house, y up from the top).
 import { Group, Vector3, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
-import { merge, P, solid } from '../../../../../engine3d/geo'
+import { P } from '../../../../../engine3d/geo'
+import { shadows, toy } from './look'
 import { PAL } from '../../../../../engine3d/toon'
 import { bell } from '../../../../../../sdk'
 import type { CousinId, UnicornColor } from './list'
@@ -35,9 +36,14 @@ export function unicornParts(c: UnicornColor): BufferGeometry[] {
 /** Candy Land and Chutes and Ladders: a pawn topped with its player's face (so she knows whose is whose): her lilac
  *  unicorn head with its gold horn, BB's buffalo calf with a pink bow, Gan's fox in a cap, Ken's fox in green glasses. */
 export function pawnParts(who: 'kaylee' | CousinId): BufferGeometry[] {
+  // Built facing +x, then turned three-quarters toward the front, so the camera (front right) sees the face.
+  return pawnFacingX(who).map((p) => p.rotateY(-0.95))
+}
+function pawnFacingX(who: 'kaylee' | CousinId): BufferGeometry[] {
   const base = [P.cyl(0.024, 0.028, 0.01, '#FFFFFF', { at: [0, 0.005, 0] }, 14)]
   const head = (c: string) => P.sphere(0.024, c, { at: [0, 0.07, 0] }, 14)
-  const eyes = [-1, 1].map((s) => P.sphere(0.004, PAL.ink, { at: [0.021, 0.074, s * 0.009] }, 6))
+  // Big dark eyes with a glint each, and rosy cheeks.
+  const eyes = [-1, 1].flatMap((s) => [P.sphere(0.0048, PAL.ink, { at: [0.0205, 0.074, s * 0.0095] }, 8), P.sphere(0.0017, '#FFFFFF', { at: [0.0243, 0.0762, s * 0.0085] }, 5), P.sphere(0.0048, '#FF9CC4', { at: [0.0185, 0.0655, s * 0.0155], scale: [0.5, 0.7, 1] }, 6)])
   const body = (c: string) => P.cone(0.022, 0.06, c, { at: [0, 0.035, 0] }, 14)
   if (who === 'kaylee')
     return [...base, body('#FF9CC4'), head('#D9C2FF'), ...eyes, P.sphere(0.01, '#F2E6FF', { at: [0.02, 0.064, 0] }, 8), P.cone(0.006, 0.03, PAL.gold, { at: [0.008, 0.103, 0], rot: [0, 0, -0.3] }, 8), P.sphere(0.012, '#8A5A3C', { at: [-0.014, 0.08, 0] }, 8), ...[-1, 1].map((s) => P.cone(0.007, 0.016, '#D9C2FF', { at: [-0.004, 0.095, s * 0.014] }, 6))]
@@ -81,8 +87,10 @@ export class Piece {
     parts: BufferGeometry[],
     id: string,
   ) {
-    this.body.add(solid(merge(parts), bag, 1.5))
+    this.body.add(toy((parts), bag, 1.5))
     this.root.add(this.body)
+    // Its shade stays on the ground while it hops.
+    this.root.add(shadows(bag, [[0, 0, 0.026, 0.05]]))
     this.root.userData.pick = id
   }
 

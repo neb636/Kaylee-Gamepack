@@ -75,14 +75,15 @@ const serial = (n: number) => {
 
 /**
  * A finished toy shape: the merged parts with the shared vertex-color toon material, plus an ink outline `px` CSS
- * pixels wide (0 = none). Returns a Group so callers can move/squash it as one thing.
+ * pixels wide (0 = none), in ink unless `line` says another color. Returns a Group so callers can move/squash it as one
+ * thing.
  */
-export function solid(geometry: BufferGeometry, bag: Bag, px = 2): Group {
+export function solid(geometry: BufferGeometry, bag: Bag, px = 2, line?: string): Group {
   const g = new Group()
   const mesh = new Mesh(bag.add(geometry), toon('#ffffff', true))
   g.add(mesh)
   if (px > 0) {
-    const hull = makeHull(geometry, px)
+    const hull = makeHull(geometry, px, line)
     bag.add(hull.geometry)
     g.add(hull)
   }

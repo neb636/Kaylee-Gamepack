@@ -391,8 +391,21 @@ You found the table in the room "kinda bad" (you couldn't see much of it past Ka
 - **Gone**: the floor rings round the stools, the cousin's hop over and their throwing arm (nobody sees them now). The turn faces (top corners on a tall screen, so they stay off the board) show whose turn it is.
 - **Camera knobs**: pitch 40, yaw 16, fit 1 (new values: your 30/9/0.8 were for the table in the room, seen past both players).
 
+### The polish pass ([done] · 2026-11-12)
+
+You asked to "really polish the game scenes", with two references (a busy toy-park map, a board game as a little square of land with stone sides, a castle and a waterfall). The composition and density came across; the look stays the pastel toy one.
+
+- **One finish for everything** (`board-games/look.ts`): a soft plum line instead of ink (`toy()`; `solid()` and `makeHull()` in the engine now take a line color), painted soft shadows under everything that stands on something (`shadows()`: one mesh per group; the die's follows it and shrinks as it's thrown, a piece's stays on the ground while it hops), and painted tops that take the scene's light (`paintedMaterial()`). The sun sits higher, so tops show their full color.
+- **The island**: a painted lawn (mown stripes, tufts, clover), a side of two courses of pink stone blocks with vines hanging down it, two smaller rocks hanging by the big one, more crystals, daisies with petals. The dice tray is a cream rim with gold studs round pink felt, moved forward to z 0.468 so the bigger boards don't cover it. The pond is bigger with a sandy rim, lily pads that bob, reeds and a foamy lip; the waterfall is wider. The cream path round the board is gone (every board now reaches the grass).
+- **The Unicorn board is 3D** (`boards/unicorn.ts`, 0.8 by 0.86 m, was a 0.6 by 0.72 painted card): 25 chunky stones standing on a painted meadow (the ribbon between them, hearts, stars, each stone's shade), white numbers on the stones, a cloud to start on, tiny cotton-candy bushes, crystals and toadstools along the edges, and a castle of five towers on a bank of cloud. The rules and the 5-by-5 serpentine are the same.
+- **Candy Land**: the cake's top is iced (swirls, sprinkles, sugar, the trail's shade), the pools have pale shores. **Chutes and Ladders**: a lavender base instead of grey-blue.
+- **Pawns** face the camera (they faced the cousin: you saw the back of a head), with bigger eyes, a glint and rosy cheeks.
+- **The sky**: the far islands are little places (a cottage with a smoking chimney, a windmill that turns, pines by a pool, a blossom tree with a bench, a tower with a flag) and wobble when tapped; the balloons have skirts, baskets with rims and keep clear of the islands; four butterflies loop over the grass; a soft sun glows far off.
+- **Not touched**: rules, lines, sounds, camera knobs, the picker.
+
 #### Known small things
 
+- Chutes and Ladders got the least of this pass (its terraces and pads are as they were): the next look pass could paint its pads and give its numbers the white style of the Unicorn stones.
 - The swoop is judged in headless screenshots; on the iPad it may want a shorter `swoopTime`.
 
 ## 🔌 Where it plugs in (for the builder)

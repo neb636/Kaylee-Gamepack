@@ -76,9 +76,11 @@ export function hullGeometry(geometry: BufferGeometry) {
 }
 
 /** An outline mesh for `geometry`, to add next to (or inside) the mesh it outlines. */
-export function makeHull(geometry: BufferGeometry, px: number) {
-  const hull = new Mesh(hullGeometry(geometry), outlineMaterial(px))
+export function makeHull(geometry: BufferGeometry, px: number, color: string = PAL.ink) {
+  const hull = new Mesh(hullGeometry(geometry), outlineMaterial(px, color))
   hull.userData.hull = px
+  // (A softer line than ink, on a toy that wants one: the game table's floating board. Hovering gives it back.)
+  if (color !== PAL.ink) hull.userData.hullColor = color
   // A tap ray that hits the hull hits the shape too (same corners, pushed out on screen only): testing both doubled the
   // triangles every tap went through.
   hull.raycast = noRaycast
@@ -90,7 +92,7 @@ const noRaycast = () => {}
 /** Hot-pink outline while the mouse hovers something tappable (desktop), back to ink after. */
 export function setHullHighlight(hull: Mesh, on: boolean) {
   const px = hull.userData.hull as number | undefined
-  if (px !== undefined) hull.material = outlineMaterial(px, on ? PAL.hotpink : PAL.ink, hull.userData.hullBias ?? 0)
+  if (px !== undefined) hull.material = outlineMaterial(px, on ? PAL.hotpink : (hull.userData.hullColor ?? PAL.ink), hull.userData.hullBias ?? 0)
 }
 
 // The same line for an InstancedMesh (a forest of one tree shape): each copy's hull moved by its instance matrix.

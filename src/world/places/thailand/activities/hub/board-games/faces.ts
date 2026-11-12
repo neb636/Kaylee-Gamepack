@@ -4,7 +4,7 @@
 // so her picture shows today's look from the wardrobe. Call these from the plugin's update (the next
 // frame draws over the photo, like the wardrobe's mirror). Pictures stay on the iPad.
 import { Color, Scene, Vector3 } from 'three'
-import { merge, solid } from '../../../../../engine3d/geo'
+import { toy } from './look'
 import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
 import { Bag } from '../../../../../engine3d/dispose'
 import { photoCamera } from '../../../../../engine3d/photo'
@@ -82,7 +82,7 @@ export function pieceFace(house: House, c: UnicornColor): string {
   const scene = new Scene()
   scene.background = new Color(PIECE_BG[c])
   const lights = makeLights(scene)
-  const piece = solid(merge(unicornParts(c)), bag, 1.5)
+  const piece = toy((unicornParts(c)), bag, 1.5)
   // It faces +x on the board; turn it three-quarters toward the camera (on +z) so the face and horn show.
   // Ten times its size (about 90 cm), so the photo camera's near plane is well clear of it.
   piece.rotation.y = -0.9

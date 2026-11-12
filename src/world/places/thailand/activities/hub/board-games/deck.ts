@@ -4,7 +4,8 @@
 // Positions are in the table top's space (x across, z toward the front, y up from the top).
 import { CanvasTexture, Group, Mesh, MeshBasicMaterial, PlaneGeometry, SRGBColorSpace, Vector3, type Texture } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
-import { merge, P, solid } from '../../../../../engine3d/geo'
+import { P } from '../../../../../engine3d/geo'
+import { toy } from './look'
 import { PAL } from '../../../../../engine3d/toon'
 import { bell } from '../../../../../../sdk'
 import { sfx } from '../../../sfx'
@@ -38,7 +39,7 @@ export class CardDeck {
     this.back = bag.add(new CanvasTexture(backCanvas()))
     this.back.colorSpace = SRGBColorSpace
     const parts = Array.from({ length: STACK }, (_, i) => P.rbox(CW, CT, CD, 0.002, i % 2 ? '#FFFFFF' : '#F4EEFF', { at: [((i * 37) % 5) * 0.0015 - 0.003, CT / 2 + i * CT, 0], rot: [0, (((i * 53) % 7) - 3) * 0.015, 0] }))
-    this.stack.add(solid(merge(parts), bag, 1.5))
+    this.stack.add(toy((parts), bag, 1.5))
     const top = new Mesh(bag.add(new PlaneGeometry(CW - 0.008, CD - 0.008)), bag.add(new MeshBasicMaterial({ map: this.back })))
     top.rotation.x = -Math.PI / 2
     top.position.y = STACK * CT + 0.0006
@@ -54,7 +55,7 @@ export class CardDeck {
     this.root.add(this.pile)
     // The card that flies from the stack to the pile: its back up, its face underneath until it flips.
     this.flyer = new Group()
-    this.flyer.add(solid(merge([P.box(CW, CT, CD, '#FFFFFF')]), bag, 1.5))
+    this.flyer.add(toy(([P.box(CW, CT, CD, '#FFFFFF')]), bag, 1.5))
     const flyBack = new Mesh(bag.add(new PlaneGeometry(CW - 0.006, CD - 0.006)), bag.add(new MeshBasicMaterial({ map: this.back })))
     flyBack.rotation.x = -Math.PI / 2
     flyBack.position.y = CT / 2 + 0.0005
