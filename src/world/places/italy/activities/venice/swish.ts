@@ -1,5 +1,6 @@
 // A soft, endless water swish under the boat: filtered noise whose loudness and brightness follow the boat's speed.
 // Started on her first touch (iPad Safari only plays sound after a tap), stopped when the activity closes.
+import { audio } from '../../../../kit/sfx'
 
 let ctx: AudioContext | undefined
 let gain: GainNode | undefined
@@ -7,9 +8,8 @@ let filter: BiquadFilterNode | undefined
 let source: AudioBufferSourceNode | undefined
 
 export function startSwish() {
-  if (typeof AudioContext === 'undefined') return
-  ctx ??= new AudioContext()
-  if (ctx.state === 'suspended') void ctx.resume()
+  ctx = audio()
+  if (!ctx) return
   if (source) return
   const buffer = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate)
   const data = buffer.getChannelData(0)

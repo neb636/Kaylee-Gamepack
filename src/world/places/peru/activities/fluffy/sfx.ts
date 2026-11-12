@@ -1,11 +1,6 @@
 // The salon's own sound effects (synthesized, like ../../../../kit/sfx.ts): the clippers' buzzy snip, a brush swish,
 // a happy alpaca hum, the cold mountain wind, Abuela's snore and the camera click.
-let ctx: AudioContext | undefined
-function audio() {
-  if (!ctx && typeof AudioContext !== 'undefined') ctx = new AudioContext()
-  if (ctx?.state === 'suspended') void ctx.resume()
-  return ctx
-}
+import { audio } from '../../../../kit/sfx'
 
 function tone(freq: number, to: number, dur: number, vol: number, type: OscillatorType = 'sine', delay = 0, vibrato = 0) {
   const a = audio()

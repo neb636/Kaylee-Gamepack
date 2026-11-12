@@ -1,11 +1,6 @@
 // Snow on a Volcano's own sound effects (synthesized, like ../../../../kit/sfx.ts): a steam vent's
 // hiss, the volcano's friendly rumble, a crunchy snow "pomf", a lemon squish, a crab's click and a gull's squawk.
-let ctx: AudioContext | undefined
-function audio() {
-  if (!ctx && typeof AudioContext !== 'undefined') ctx = new AudioContext()
-  if (ctx?.state === 'suspended') void ctx.resume()
-  return ctx
-}
+import { audio } from '../../../../kit/sfx'
 
 function tone(freq: number, to: number, dur: number, vol: number, type: OscillatorType = 'sine', delay = 0) {
   const a = audio()
