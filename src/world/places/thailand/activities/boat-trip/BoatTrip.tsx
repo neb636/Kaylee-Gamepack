@@ -5,8 +5,8 @@
 //                           Mom asks (Ask.tsx) by the elephant map, packing (with the suitcase card and ✅ here),
 //                           the goodbye at the shutter and Aunty Sri's van
 //   airport                 the van pulls away and they're at the airport: the x-ray belt (trip/legs/airport.ts)
-//   takeoff, fly, land      the window seat (trip/legs/plane.ts), then Krabi's arrivals arch and the songthaew (with
-//                           Baan Chang open, chang/open.ts: it stops at the signpost, 🐘 or 🚤, either first)
+//   takeoff, fly, land      the window seat (trip/legs/plane.ts), then Krabi's arrivals arch and the songthaew (it
+//                           stops at the signpost to Baan Chang, 🐘 or 🚤, either first)
 //   pier ... sunset         Phang Nga Bay by longtail boat (bay/bay.ts and its parts): the ribbons, open water, the
 //                           village, the cave and the hong, the Nail Island photo, the sunset ride back; at the pier her
 //                           album opens and a big 🏠 takes them home
@@ -72,7 +72,6 @@ import { PoseButtons } from './bay/PoseButtons'
 import { Chang, CHANG_ANCHORS, type ChangSection } from './chang/chang'
 import { ChangDebug } from './chang/ChangDebug'
 import { ChangLayer } from './chang/ChangLayer'
-import { changOpen } from './chang/open'
 import { CHANG_VIDEO } from './chang/video'
 import { isStraw, type StrawColor } from './chang/layout'
 import { Debug } from './Debug'
@@ -149,10 +148,7 @@ const ANCHORS_OF: Record<TripWorld, typeof BAY_ANCHORS> = {
 
 export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () => void }) {
   const { start, enter } = useSections(BOAT_SECTIONS)
-  // Baan Chang on the trip (chang/open.ts; read once: the address bar drops `chang=1`): the signpost at Krabi, 🐘 on
-  // the boarding pass, at the pier and on a replay.
-  const [open] = useState(changOpen)
-  const legs = open ? PASS : PASS.filter((p) => p.id !== 'chang')
+  const legs = PASS
   // From the Thailand map: no flight, the trip opens at Krabi airport (read once).
   const [quick] = useState(() => flag('quick') === '1')
   const [stored, setSaved] = useSaved<Progress>('thailand-boat-trip', { at: null, packed: DEFAULT_PACKED })
@@ -366,7 +362,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     const choices: PassChoice[] = [{ label: 'A new trip', icon: '🧳', on: () => choose('again') }]
     if (half && half !== 'pier') choices.push({ label: 'Keep going', icon: legs.find((p) => p.id === legOf(half))?.icon ?? '🧳', on: () => choose('resume') })
     if (replay || half === 'pier') choices.push({ label: 'Straight to the boat', icon: '🚤', on: () => choose('boat') })
-    if (open && replay && half !== 'chang') choices.push({ label: 'Straight to the elephants', icon: '🐘', on: () => choose('chang') })
+    if (replay && half !== 'chang') choices.push({ label: 'Straight to the elephants', icon: '🐘', on: () => choose('chang') })
     setPass({ punch: null, done: half ? doneBefore(legs, half, null, state.current.saved.been ?? []) : [], choices })
     if (choices.length > 1 && choices.at(-1)!.icon === '🚤') setTimeout(() => say(L.home.again), 600)
   }
@@ -422,7 +418,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   }
 
   /** Baan Chang is still to do (the pier offers 🐘). */
-  const changNext = open && !been.includes('chang')
+  const changNext = !been.includes('chang')
   // At the pier, nothing done for ~8 s: Sparkle points her home (the ✈️🏠 is the only cue there, no finger on the boat),
   // or to the elephants while Baan Chang is still to do.
   // Twice at most; a finger held down (driving back out for more sunset) counts as playing.
@@ -556,7 +552,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     else if (world === 'plane') {
       // Krabi's signpost: she picks while neither place is done; otherwise the songthaew goes to the one left.
       const b = state.current.been
-      const fork: KrabiFork = !open || b.includes('chang') ? 'pier' : b.includes('bay') ? 'chang' : 'ask'
+      const fork: KrabiFork = b.includes('chang') ? 'pier' : b.includes('bay') ? 'chang' : 'ask'
       // From the Thailand map (`land?quick=1`): no flight at all, the world starts at Krabi airport. (It used to build
       // the cabin and skip out of it once it drew, which flashed the plane ride first.)
       const ashore = quick && s === 'land'

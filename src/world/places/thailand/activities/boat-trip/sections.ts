@@ -5,8 +5,8 @@
 // boat race through the rainbow gate (its own lagoon: three laps, then the podium and the trophy), the Nail Island's
 // photo and the sunset ride back; Baan Chang Cafe in Krabi (thailand/baan-chang.md, greybox: the songthaew to the
 // entrance, the photo at the bamboo sign, her chocolate milk at the cafe, down the boardwalk, then the elephants' yard:
-// feeding, favorites, Lamyai and the splash; she picks it or the pier at Krabi's signpost, in any order, once
-// chang/open.ts opens it, and until then only its links reach it); then home (step 5): the flight home,
+// feeding, favorites, Lamyai and the splash; she picks it or the pier at Krabi's signpost, in any order);
+// then home (step 5): the flight home,
 // Aunty Sri's van at Agong's door, the photo she picks for Agong's wall, and the stamp. `replay=1` plays it as a trip she has done before (Mom's yes
 // offers 🧳 or 🚤, and the flight is shorter). Loaded at startup: keep three.js out of this file.
 import { defineSections } from '../../../../kit/sections'

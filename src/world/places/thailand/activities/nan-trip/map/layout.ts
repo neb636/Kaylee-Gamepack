@@ -88,8 +88,6 @@ export type Stop = (typeof STOPS)[number]
 export type PlaceId = 'mushrooms' | 'rice' | 'salt' | 'airport' | 'town' | 'lookout'
 /** Where each stop is on the map. */
 export const STOP_PLACE: Record<Stop, PlaceId> = { mushrooms: 'mushrooms', rice: 'rice', salt: 'salt', cup: 'town' }
-/** The stops on this trip: the Cup only when it's open. */
-export const liveStops = (cup: boolean): readonly Stop[] => (cup ? STOPS : STOPS.filter((s) => s !== 'cup'))
 
 /** Where each place stands, and the road that drives there (the 3 road is the way home from the airport; the lookout, on
  *  the 3's top bend, drives it any time and comes back to the map). */

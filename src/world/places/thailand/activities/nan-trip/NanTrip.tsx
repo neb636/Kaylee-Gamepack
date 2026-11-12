@@ -14,7 +14,7 @@
 //   stop) drives the same 3 road to the same viewpoint (`three?to=lookout`): Mom's photo, then 🔁 or 🗺️ back to the
 //   map, no ✈️🏠. The trips start on the Thailand map: the first of a session packs and goes down
 //   the stairs straight to the window seat; later ones open straight on the Nan map.
-//   The Nan Mountain Cup (cup/, plan: thailand/nan-cup.md; on since the full loop, CUP_OPEN in cup/rules.ts): the
+//   The Nan Mountain Cup (cup/, plan: thailand/nan-cup.md; rules in cup/rules.ts): the
 //   city road ends at its race ground (section cup: the board), a kart race on each of three tracks (race), a podium
 //   after each (podium), the Cup ceremony after the third (cup-win), and its stamp on Nan town (stop `cup`). The Cup's
 //   record and the rolled loss ride along in the link (`cup`, `lose`) and are saved with the trip.
@@ -34,13 +34,13 @@ import { formatPacked, parsePacked } from '../../trip/packing'
 import { Drive } from './drive/Drive'
 import type { RoadId } from './drive/roads'
 import { NanLoop, type NanLoopHandle } from './Loop'
-import { liveStops, PLACES, type PlaceId, type Stop } from './map/layout'
+import { PLACES, STOPS, type PlaceId, type Stop } from './map/layout'
 import { NanMap } from './map/NanMap'
 import { BASKET_SEED, ROUNDS as FARM_ROUNDS, type Round } from './mushrooms/layout'
 import { Mushrooms } from './mushrooms/Mushrooms'
 import { awardTrophy } from '../../../../../sdk/trophies'
 import { Cup } from './cup/Cup'
-import { addRace, CUP_TROPHY, cupDone, cupOpen, formatCup, FULL_CUP, giftsOf, isTrack, parseCup, resultFor, rollLose, type CupRecord, type Place } from './cup/rules'
+import { addRace, CUP_TROPHY, cupDone, formatCup, FULL_CUP, giftsOf, isTrack, parseCup, resultFor, rollLose, type CupRecord, type Place } from './cup/rules'
 import { Ground } from './cup/Ground'
 import { RESULTS, type Result } from './cup/rivals'
 import { TRACK_IDS, type TrackId } from './cup/track'
@@ -51,7 +51,7 @@ import { Rice } from './rice/Rice'
 import { ROUNDS as SALT_ROUNDS, type Round as SaltRound } from './salt/layout'
 import { Salt } from './salt/Salt'
 import NAN_SECTIONS, { type NanSection } from './sections'
-import { isLoop, legOf, passFor, RESUME, RESUME_AT, type LoopSection } from './trip'
+import { isLoop, legOf, PASS, RESUME, RESUME_AT, type LoopSection } from './trip'
 
 type At =
   | { section: LoopSection }
@@ -81,15 +81,15 @@ interface Progress {
   lose?: string
 }
 
-/** The `stops` param: the stops done so far, in order (anything else, and the Cup when it's off, dropped). */
-const parseStops = (s: string, cup: boolean) => [...new Set(s.split(',').filter((x): x is Stop => (liveStops(cup) as readonly string[]).includes(x)))]
+/** The `stops` param: the stops done so far, in order (anything else dropped). */
+const parseStops = (s: string) => [...new Set(s.split(',').filter((x): x is Stop => (STOPS as readonly string[]).includes(x)))]
 const DEFAULT_PACKED = NAN_SECTIONS.params.packed.default
 
 /** Where a place on the map leads: the road there, and where that road's end goes. */
-function driveTo(place: PlaceId, cup: boolean): At {
+function driveTo(place: PlaceId): At {
   // (The airport is home, down the 3 road: it ends at the viewpoint. The lookout drives the 3 road too, back to the map
-  // from its viewpoint. Nan town is a drive through and back, or, with the Cup on, to its race ground.)
-  return { section: 'drive', road: PLACES[place].road, to: place === 'airport' ? '' : place === 'town' ? (cup ? 'cup' : 'map') : place }
+  // from its viewpoint. Nan town's road ends at the Cup's race ground.)
+  return { section: 'drive', road: PLACES[place].road, to: place === 'airport' ? '' : place === 'town' ? 'cup' : place }
 }
 
 /** The legs punched on the boarding pass before `next`'s: the way there up to it, and the stops done. */
@@ -110,9 +110,7 @@ interface Props {
 export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
   const { start, param, enter } = useSections(NAN_SECTIONS)
   const first: NanSection = start ?? 'invite'
-  // The Cup is on (its flag, `?cup=1`, or a link that starts in one of its sections).
-  const [cupOn] = useState(() => cupOpen() || CUP_SECTIONS.includes(first))
-  const legs = passFor(cupOn)
+  const legs = PASS
   const [saved, setSaved] = useSaved<Progress>('thailand-nan-trip', { at: null, packed: DEFAULT_PACKED, stops: '' })
   // She has done the whole trip before (or the link says so).
   const [replay] = useState(() => param('replay') === '1' || (saved.trips ?? 0) > 0)
@@ -120,7 +118,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
   // iPad; a new packing starts empty. (Keeping going from Mom's card reads what she saved: `choose`.)
   const [packed, setPacked] = useState<string[]>(() => parsePacked(flag('packed') ?? (first === 'invite' || first === 'pack' ? '' : DEFAULT_PACKED)))
   // (Read once: the address changes as she plays.)
-  const [stops, setStops] = useState<Stop[]>(() => parseStops(param('stops'), cupOn))
+  const [stops, setStops] = useState<Stop[]>(() => parseStops(param('stops')))
   // The Cup: the races done (the ceremony's link with none: the whole Cup), and the track she'll lose (the link's, or
   // rolled; saved with the trip, rolled again for a new trip).
   // (A podium link's race is in its record, at the link's place, unless the record already has that track: then it's a
@@ -198,9 +196,9 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
   useEffect(() => {
     const p = formatPacked(packed)
     // (What's in her suitcase rides along in every link: home reads it.)
-    // (With the Cup on, its record, or `1` before any race, and the rolled loss ride along on the trip's other sections
-    // too, so a link keeps the Cup on and reproduces its medals and gifts.)
-    const s = { stops: stops.join(','), packed: p, ...(cupOn ? { cup: formatCup(cup) || '1', lose } : {}) }
+    // (The Cup's record, or `1` before any race, and the rolled loss ride along on the trip's other sections too, so a
+    // link reproduces its medals and gifts.)
+    const s = { stops: stops.join(','), packed: p, cup: formatCup(cup) || '1', lose }
     if (at.section === 'invite') enter('invite', replay ? { replay: '1' } : {})
     else if (at.section === 'home') enter('home', { packed: p, photos: homePhotos.join(',') })
     else if (isLoop(at.section)) enter(at.section, { packed: p, ...(at.section === 'goodbye' || at.section === 'takeoff' || at.section === 'fly' ? { replay: replay ? '1' : '' } : {}) })
@@ -254,7 +252,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
     const choices: PassChoice[] = [{ label: 'A new trip', icon: '🧳', on: () => choose('again') }]
     if (half && half !== 'map') choices.push({ label: 'Keep going', icon: legs.find((p) => p.id === legOf(half))?.icon ?? '🧳', on: () => choose('resume') })
     if (replay || half === 'map') choices.push({ label: 'Straight to the Nan map', icon: '🗺️', on: () => choose('map') })
-    setPass({ punch: null, done: half ? doneBefore(half, parseStops(saved.stops, cupOn), null) : [], choices })
+    setPass({ punch: null, done: half ? doneBefore(half, parseStops(saved.stops), null) : [], choices })
   }
   const choose = (how: 'again' | 'resume' | 'map') => {
     sounds.pop()
@@ -271,7 +269,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
     // last time (the stops cleared on a replay, kept when the trip was saved there).
     const keep = how === 'resume' || saved.at === 'map'
     const ids = parsePacked(saved.packed || DEFAULT_PACKED)
-    const st = keep ? parseStops(saved.stops, cupOn) : []
+    const st = keep ? parseStops(saved.stops) : []
     const c = keep ? parseCup(saved.cup ?? '') : []
     const l = keep && isTrack(saved.lose) ? saved.lose : rollLose()
     setPacked(ids)
@@ -366,9 +364,8 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
           from={from}
           onGo={(place) => {
             setFrom(place)
-            setAt(driveTo(place, cupOn))
+            setAt(driveTo(place))
           }}
-          cup={cupOn}
         />
       )
     if (at.section === 'mushrooms')
@@ -427,7 +424,6 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
         onView={() => setAt({ section: 'three', to: lookout ? 'lookout' : '' })}
         onPhoto={() => setSaw3(true)}
         onHome={lookout ? undefined : endTrip}
-        cup={cupOn}
       />
     )
   }

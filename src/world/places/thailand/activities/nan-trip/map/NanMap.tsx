@@ -19,12 +19,10 @@ interface Props {
   stops: Stop[]
   /** Where she last drove to from the map (the little Pajero waits there; none: at the last stop, or the airport). */
   from?: PlaceId | null
-  /** The Nan Mountain Cup is on the trip (cup/rules.ts): a stop in Nan town. */
-  cup?: boolean
   onGo: (place: PlaceId) => void
 }
 
-export function NanMap({ stops, from, cup = false, onGo }: Props) {
+export function NanMap({ stops, from, onGo }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [ask, setAsk] = useState(false)
@@ -42,7 +40,7 @@ export function NanMap({ stops, from, cup = false, onGo }: Props) {
   go.current = onGo
 
   const make = (renderer: WebGLRenderer) => {
-    const w = new MapWorld(renderer, { say: (l) => guideRef.current?.speak(l), section: () => {}, done: () => {}, go: (p) => go.current(p), ask: setAsk, revealed: () => setRevealed(true) }, { stops, from, cup })
+    const w = new MapWorld(renderer, { say: (l) => guideRef.current?.speak(l), section: () => {}, done: () => {}, go: (p) => go.current(p), ask: setAsk, revealed: () => setRevealed(true) }, { stops, from })
     w.setHintElement(hintRef.current)
     return w
   }
