@@ -42,7 +42,7 @@
 import { execFileSync, spawnSync } from 'node:child_process'
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
-import { changedGroups, tableRead } from './table-read.mjs'
+import { changedGroups, scriptOf, tableRead } from './table-read.mjs'
 
 const root = path.resolve(import.meta.dirname, '..')
 const args = process.argv.slice(2)
@@ -80,12 +80,24 @@ if (opt('changed')) {
     else jobs.push(c)
   }
 }
-// --keep (CI): a table read the agent already published, with its audio, is kept as it is unless this PR changed its
-// lines. CI may have no ffmpeg, and remaking it there would drop the audio. Locally every table read is remade.
+// --keep (CI): keep published audio when its script still matches the current recorded lines.
+// CI may have no ffmpeg, and remaking it there would drop the audio. Locally every table read is remade.
 const reads = []
 for (const j of jobs) {
   const made = path.join(out, 'table-read', `${j.place}-${(j.group || 'all').replace(/\./g, '-')}.json`)
-  if (opt('keep') && !j.before && existsSync(made)) reads.push(JSON.parse(readFileSync(made, 'utf8')))
+  let published = null
+  if (opt('keep') && existsSync(made)) {
+    const saved = JSON.parse(readFileSync(made, 'utf8'))
+    const { script } = await scriptOf(j.place, j.group, { before: j.before })
+    // A PR's lines differ from main even after their final audio has been published.
+    // Keep that recording only when every current line and recorded duration matches it.
+    const same = saved.script?.length === script.length && script.every((line, i) => {
+      const old = saved.script[i]
+      return line.audio && ['key', 'text', 'voice', 'ms'].every((key) => old[key] === line[key])
+    })
+    if (same && saved.audio && existsSync(path.join(out, 'table-read', saved.audio))) published = saved
+  }
+  if (published) reads.push(published)
   else reads.push(await tableRead(j.place, j.group, { out: path.join(out, 'table-read'), before: j.before }))
 }
 

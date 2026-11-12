@@ -950,6 +950,9 @@ motion.push(
   thaiHouse('table-rest', 6, 'unicorn?vs=ken&me=7&them=9&rolls=4,3', [['trip:table:die', 5500]]),
   thaiHouse('table-castle', 5, 'unicorn?me=22&them=20&rolls=6', [['trip:table:die', 4500]]),
   // Candy Land (greybox 2): a double card flips up big, the space glows, her pawn hops along the lit trail.
+  thaiHouse('candy-forward', 9, 'candy?me=4&them=8&deck=icecream,green', [['trip:table:deck', 8500]]),
+  thaiHouse('candy-backward', 8, 'candy?me=20&them=17&deck=gumdrop,blue', [['trip:table:deck', 7500]]),
+  thaiHouse('candy-finish', 6, 'candy?me=31&them=28&deck=orange2', [['trip:table:deck', 5500]]),
   thaiHouse('table-candy', 7, 'candy?me=10&them=8&deck=blue2,green', [['trip:table:deck', 6500]]),
   // Chutes and Ladders (greybox 3): up the ladder from 2 to 14, and whee, down the slide from 33 to 22.
   thaiHouse('table-ladder', 6, 'chutes?rolls=2,1', [['trip:table:die', 5500]]),

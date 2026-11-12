@@ -32,7 +32,7 @@ import { cousinFace, kayleeFace, pieceFace } from './faces'
 import { COUSINS, cousinUnicorn, GAMES, UNICORNS, type CousinId, type GameId, type UnicornColor } from './list'
 import { pawnParts, Piece, unicornParts } from './pieces'
 import { FloatingStage, onStage, STAGE_LAYER } from './stage'
-import { CANDY_FINISH, candyDraw, cardToken, newDeck, type Card, type Deck } from './rules/candy'
+import { CANDY_FINISH, candyDraw, cardToken, newDeck, parseCard, type Card, type Deck } from './rules/candy'
 import { chutesRoll } from './rules/chutes'
 import { makeDie, other, startTurns, type Step, type Turns, type Who } from './rules/turns'
 import { unicornRoll, UNICORN_END } from './rules/unicorn'
@@ -143,8 +143,8 @@ export const TABLE_ANCHORS: AnchorInfo[] = [
 const NEAR = 0.405
 const CORNER: Record<Who, Vector3> = { 0: new Vector3(-0.13, 0, NEAR), 1: new Vector3(0.13, 0, NEAR) }
 /** Candy Land's deck and its discard pile, in the same strip. */
-const DECK_AT = new Vector3(-0.09, 0, NEAR)
-const PILE_AT = new Vector3(0.07, 0, NEAR)
+const DECK_AT = new Vector3(-0.09, 0, 0.48)
+const PILE_AT = new Vector3(0.07, 0, 0.48)
 const SPARKLE = ['#FF4F9A', '#FFC83D', '#8FE3C8', '#A8DCFF', '#B9A6F5', '#FFFFFF']
 
 export class TablePlugin implements HousePlugin {
@@ -598,6 +598,7 @@ export class TablePlugin implements HousePlugin {
         if (token !== this.token) return
         // The card shows big over the table (the Hub), the space it means glows.
         this.card = s.card
+        if (parseCard(s.card)?.landmark) this.tell('candy:picture', L.games.picture)
         this.emit()
         sfx.plink()
         return
@@ -618,8 +619,9 @@ export class TablePlugin implements HousePlugin {
         }
         this.emit()
         const hop = this.usesDeck ? FEEL.candyHop : FEEL.hopTime
-        for (let i = s.from + 1; i <= s.to; i++) {
-          const step = i - s.from
+        const direction = s.to >= s.from ? 1 : -1
+        for (let i = s.from + direction; direction > 0 ? i <= s.to : i >= s.to; i += direction) {
+          const step = Math.abs(i - s.from)
           const sharing = o.at === i
           p.hop(board.spot(i, s.who, sharing), hop, FEEL.hopArc, () => {
             p.at = i
@@ -787,6 +789,9 @@ export class TablePlugin implements HousePlugin {
       const at = this.top.localToWorld(this.board!.castleTop())
       this.sparkle.burst(at.x, at.y, at.z, 16, 0.7, 1, 0.02)
       sfx.chime()
+    } else if (id?.startsWith('trip:table:candy:') && this.board instanceof CandyBoard) {
+      this.board.poke(id)
+      sfx.boing()
     } else if (id?.startsWith('trip:table:prop:')) {
       // The island's props (and the balloons): a wobble, its sound, a twinkle.
       const p = this.floating.poke(id)

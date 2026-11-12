@@ -39,12 +39,21 @@ jobs:
           # voice-lines.json is written from each lines.ts, so an agent that forgot to run this is covered too.
           node scripts/world-voice-lines.mjs
           if node scripts/generate-voice.mjs --check; then echo "missing=false" >> "$GITHUB_OUTPUT"; else echo "missing=true" >> "$GITHUB_OUTPUT"; fi
-      - name: ffmpeg, a static build (apt took 12 minutes)
+      - name: Ensure ffmpeg (static build with package-mirror fallback)
         if: steps.need.outputs.missing == 'true'
         run: |
+          if command -v ffmpeg >/dev/null; then exit 0; fi
           mkdir -p "$RUNNER_TEMP/ffmpeg"
-          curl -sSfL https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz | tar -xJ -C "$RUNNER_TEMP/ffmpeg" --strip-components=1
-          echo "$RUNNER_TEMP/ffmpeg" >> "$GITHUB_PATH"
+          if curl -sSfL --connect-timeout 15 --max-time 90 \
+            https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz \
+            -o "$RUNNER_TEMP/ffmpeg.tar.xz" && \
+            tar -xJf "$RUNNER_TEMP/ffmpeg.tar.xz" -C "$RUNNER_TEMP/ffmpeg" --strip-components=1; then
+            echo "$RUNNER_TEMP/ffmpeg" >> "$GITHUB_PATH"
+          else
+            # The static host is sometimes unreachable from GitHub runners. Same tool, via Ubuntu's mirror.
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends ffmpeg
+          fi
       - name: Record the missing clips
         id: record
         if: steps.need.outputs.missing == 'true'
