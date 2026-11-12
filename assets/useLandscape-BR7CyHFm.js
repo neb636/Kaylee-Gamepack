@@ -1,3 +1,0 @@
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{};e._posthogReleaseId=e._posthogReleaseId||"01a1cd9b-a66f-0000-676a-ea0bc68bd9f1";var n=(new e.Error).stack;n&&(e._posthogChunkIds=e._posthogChunkIds||{},e._posthogChunkIds[n]="4297dcfa-98f9-5708-b796-261e2d631b40")}catch(e){}}();
-import{l as e,o as t}from"./knobs-B33yE2fu.js";var n=e(t(),1),r=typeof matchMedia>`u`?void 0:matchMedia(`(orientation: landscape)`);function i(){return(0,n.useSyncExternalStore)(e=>(r?.addEventListener(`change`,e),()=>r?.removeEventListener(`change`,e)),()=>!!r?.matches)}export{i as t};
-//# chunkId=4297dcfa-98f9-5708-b796-261e2d631b40
