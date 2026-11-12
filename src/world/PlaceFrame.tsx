@@ -74,7 +74,7 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
   const [progress, setProgressState] = useState({ done: 0, total: 0 })
 
   const setProgress = useCallback((done: number, total: number) => setProgressState({ done, total }), [])
-  // An activity can take over the top-left button while it's open (kit/topLeft.ts: Koh Samet's beach puppy).
+  // An activity can take over the top-left button while it's open (kit/topLeft.ts: a Koh Samet stop's way back to the beach).
   const topLeft = useTopLeftOverride()
   const backToMap = useCallback(() => go.world(meta.id), [meta.id])
   // Opened from the game shelf (Shelf.tsx): the top bar's back button goes back to the shelf, not the country map.

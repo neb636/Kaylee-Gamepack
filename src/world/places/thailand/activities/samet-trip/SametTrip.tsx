@@ -13,8 +13,8 @@
 // Agong's wall and the stamp lands on the 🏝️ pin. Step 9 is the finale (finale/): with all four flags up the
 // driftwood tree opens the sunset at Ao Prao (Mommy's photo of the three of them), then the fire show on Sai Kaew at
 // night, and its 🏠 takes them home (the sunset photo on Agong's wall, the stamp). Finding her way (#357, card B): on
-// the island the top-left button calls the beach puppy, and inside a stop it goes back to the beach; she leaves Koh
-// Samet only by the speedboat at Na Dan pier (its home picture), and the next visit lands her on the beach she left.
+// the island the top-left button is the map button (like the rest of Thailand) and the puppy has his own button in the
+// top-right; inside a stop the top-left goes back to the beach. The next visit lands her on the beach she left.
 import { useEffect, useRef, useState } from 'react'
 import { useSaved } from '../../../../../sdk'
 import { flag } from '../../../../engine3d/flags'
@@ -110,8 +110,8 @@ export function SametTrip({ onDone, onExit }: Props = {}) {
   }
 
   // Inside a stop (the jet ski, the sandcastle, the snorkel, lunch, hide and seek, the finale), the top-left button goes
-  // back to its beach (no flag), never off Koh Samet. The island's own is the puppy's (IslandScreen); packing and the
-  // speedboat keep the shell's map button.
+  // back to its beach (no flag), never off Koh Samet. The island, packing and the speedboat keep the shell's map
+  // button (the puppy has his own button on the island: IslandScreen).
   const inStop = sec.id !== 'pack' && sec.id !== 'speedboat' && sec.id !== 'island' && sec.id !== 'book'
   useTopLeft(
     inStop
