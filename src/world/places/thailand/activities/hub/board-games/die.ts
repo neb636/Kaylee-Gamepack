@@ -1,9 +1,10 @@
 // The die on the game table: a chunky pink die with white dots (numbers as dots, never digits). Tap it on her turn and
 // it hops up, tumbles across the near edge of the table, bounces twice and settles with the rolled number on top.
 // Positions are in the table top's space (x across the table, z toward the front of the house, y up from the top).
-import { Group, Quaternion, Vector3, type BufferGeometry } from 'three'
+import { Group, Quaternion, Vector3, type BufferGeometry, type Mesh } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
-import { merge, P, solid } from '../../../../../engine3d/geo'
+import { P } from '../../../../../engine3d/geo'
+import { shadows, toy } from './look'
 import { PAL } from '../../../../../engine3d/toon'
 import { bell } from '../../../../../../sdk'
 import { sfx } from '../../../sfx'
@@ -80,6 +81,8 @@ interface Roll {
 
 export class Die {
   readonly root = new Group()
+  /** Its shade on the tray (the table adds it beside the die: it stays flat while the die tumbles). */
+  readonly shadow: Mesh
   /** The number on top now. */
   value = 1
   private roll: Roll | null = null
@@ -99,8 +102,9 @@ export class Die {
         parts.push(P.sphere(DIE_SIZE * 0.085, '#FFFFFF', { at: [x * out, y * out, z * out], scale }, 8))
       }
     }
-    this.root.add(solid(merge(parts), bag, 1.5))
+    this.root.add(toy((parts), bag, 1.5))
     this.root.userData.pick = 'trip:table:die'
+    this.shadow = shadows(bag, [[0, 0, 0.04, 0.035]])
   }
 
   get busy() {
@@ -155,6 +159,15 @@ export class Die {
   }
 
   update(dt: number, t: number) {
+    this.step(dt, t)
+    // The shade follows underneath, smaller and fainter-looking the higher the die is.
+    const p = this.root.position
+    this.shadow.visible = this.root.visible
+    this.shadow.position.set(p.x, 0.004, p.z)
+    this.shadow.scale.setScalar(Math.max(0.55, 1 - (p.y - H) * 3))
+  }
+
+  private step(dt: number, t: number) {
     const r = this.roll
     if (r) {
       r.t = Math.min(1, r.t + dt / r.dur)

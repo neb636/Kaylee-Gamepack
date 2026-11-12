@@ -1,6 +1,5 @@
-// The speedboat to Koh Samet, on screen (speedboat.ts is the world): the boat with its tap targets, a finger pressing
-// on the water beside Kaylee when she's had no hoof in it for a while, and ⏩ to skip ahead to the pier once the ride
-// has gone on a bit. Sparkle sits in the corner (trip/legs/Guide.tsx) and everyone talks through her bubble.
+// The speedboat to Koh Samet, on screen (speedboat.ts is the world): the ride as a cutscene, the boat and everyone on
+// it still tap targets, and ⏩ to skip on to Na Dan pier. Sparkle sits in the corner (trip/legs/Guide.tsx) and everyone talks through her bubble.
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
@@ -23,16 +22,11 @@ export function SpeedboatScreen({ time, packed, onIsland }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [skip, setSkip] = useState(false)
   const worldRef = useRef<World | null>(null)
-  const hintRef = useRef<HTMLDivElement>(null)
   const guideRef = useRef<TripGuideHandle>(null)
   const cb = useRef(onIsland)
   cb.current = onIsland
-  const make = (renderer: WebGLRenderer) => {
-    const w = new World(renderer, { time, packed }, { done: () => cb.current(), say: (l, mute) => guideRef.current?.speak(l, mute) })
-    w.setHintElement(hintRef.current)
-    return w
-  }
-  // ⏩ once the ride has gone on a while (and not once it's slowing in to the pier).
+  const make = (renderer: WebGLRenderer) => new World(renderer, { time, packed }, { done: () => cb.current(), say: (l, mute) => guideRef.current?.speak(l, mute) })
+  // ⏩ once the motors have started (and not once it's slowing in to the pier).
   useEffect(() => {
     const id = setInterval(() => setSkip(!!worldRef.current?.canSkip), 500)
     return () => clearInterval(id)
@@ -48,14 +42,7 @@ export function SpeedboatScreen({ time, packed, onIsland }: Props) {
         worldRef={worldRef}
         onMode={setMode}
         make={make}
-        anchors={(input, els) => (
-          <>
-            <Anchors list={BOAT_ANCHORS} els={els} {...input} />
-            <div ref={hintRef} className="sb-hint" style={{ display: 'none' }}>
-              <span>👆</span>
-            </div>
-          </>
-        )}
+        anchors={(input, els) => <Anchors list={BOAT_ANCHORS} els={els} {...input} />}
       />
       {skip && mode === 'webgl' && (
         <motion.button
@@ -90,8 +77,5 @@ export function SpeedboatScreen({ time, packed, onIsland }: Props) {
 }
 
 const CSS = `
-.sb-hint { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: 4; }
-.sb-hint span { position: absolute; left: -26px; top: -10px; font-size: 52px; line-height: 1; filter: drop-shadow(0 3px 4px rgba(43,35,48,.3)); animation: sb-press 1.4s ease-in-out infinite; }
-@keyframes sb-press { 0%, 100% { transform: scale(1); } 45% { transform: scale(0.82) translateY(6px); } }
 .sb-skip { position: absolute; right: calc(var(--safe-right, 0px) + 18px); bottom: calc(var(--safe-bottom, 0px) + 18px); width: clamp(88px, 12vmin, 104px); height: clamp(88px, 12vmin, 104px); border-radius: 50%; border: 5px solid #fff; background: var(--lavender); font-size: clamp(36px, 6vmin, 48px); box-shadow: var(--shadow); z-index: 12; padding: 0; }
 `

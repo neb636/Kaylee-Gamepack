@@ -3,9 +3,9 @@
 //   pack    greybox 7, packing for the island in Kaylee's room (pack?packed=...): the trip kit's packing, Mommy's hint
 //           for the sun; down the stairs with the suitcase, straight onto the speedboat (the first trip of a session
 //           from the Thailand map's 🏝️ pin packs; later ones go straight to the island, or the speedboat for a new trip).
-//   speedboat  greybox 7, the speedboat from Ban Phe pier to Na Dan pier (about a minute across the real sea): her hoof
-//           in the spray beside the boat, the flying fish, the boats coming the other way; it ties up where she lands.
-//           ?cine=1 films it like a cutscene (engine3d/cinema.ts).
+//   speedboat  greybox 7, the speedboat from Ban Phe pier to Na Dan pier, a cutscene of about 17 s (engine3d/cinema.ts):
+//           leaving the pier, the ferry going by, flying fish on the open sea, slowing in to Na Dan; it ties up where
+//           she lands. Everyone on the boat still pokes.
 //   island  greybox 2, the island to roam (island?at=nadan|saikaew|hinkhok|phai|wongduan|prao|deck|aonoina): lead
 //           Kaylee with a finger round the north half of Koh Samet, swim in the floatie, ride the green taxi round the
 //           road, poke everything; `flags` puts up the pink flags (and moves the day on), `time` sets the light.
@@ -63,10 +63,10 @@ const SAMET_SECTIONS = defineSections('thailand', 'samet-trip', {
     { id: 'pack', name: 'Pack for the island (greybox): the swimsuit, the sun hat, the floaties, the bucket', params: ['packed'], group: 'Getting there (greybox)' },
     {
       id: 'speedboat',
-      name: 'The speedboat from Ban Phe to Na Dan pier (greybox): her hoof in the spray',
+      name: 'The speedboat from Ban Phe to Na Dan pier (greybox): the ride as a cutscene',
       params: ['packed', 'time'],
       group: 'Getting there (greybox)',
-      links: [{ label: 'The speedboat from Ban Phe: her hoof in the spray, the flying fish, the boats coming the other way, then Na Dan pier', also: [{ label: 'tune the feel', flags: { feel: '1' } }, { label: 'the cinema camera: cutscene shots, letterbox', flags: { cine: '1' } }] }],
+      links: [{ label: 'The speedboat from Ban Phe: leaving the pier, the ferry going by, flying fish, then Na Dan pier', also: [{ label: 'tune the timing', flags: { feel: '1' } }] }],
     },
     {
       id: 'island',
