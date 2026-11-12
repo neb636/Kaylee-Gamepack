@@ -20,7 +20,7 @@ function Retry() {
           ✨
         </button>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center', color: '#fff', fontSize: 28, fontWeight: 700 }}>
-          <span>{typeof line === 'string' ? line : line.text}</span>
+          <span>{line}</span>
           <SayButton text={line} />
         </div>
       </div>
