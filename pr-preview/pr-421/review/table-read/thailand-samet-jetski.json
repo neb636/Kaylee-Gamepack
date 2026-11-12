@@ -6,8 +6,8 @@
   "intro": "The jet ski at Hat Sai Kaew (jetski/): ride, waves, race the jet ski man.",
   "page": "thailand-samet-jetski.html",
   "audio": null,
-  "lines": 45,
-  "seconds": 86,
+  "lines": 47,
+  "seconds": 91,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -32,6 +32,13 @@
         "changed"
       ],
       "was": "A heart! For Mommy!"
+    },
+    {
+      "key": "samet.jetski.off",
+      "text": "To get off, drive into the pink ring!",
+      "flags": [
+        "long"
+      ]
     },
     {
       "key": "samet.jetski.mommy.1",
@@ -500,6 +507,36 @@
       "part": "samet › jetski › push",
       "when": "",
       "ms": 2688,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "off"
+      ],
+      "text": "To get off, drive into the pink ring!",
+      "voice": "sparkle",
+      "key": "samet.jetski.off",
+      "part": "samet › jetski",
+      "when": "",
+      "ms": 3264,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "jetski",
+        "bye"
+      ],
+      "text": "Park it here! Bye bye!",
+      "voice": "otter",
+      "key": "samet.jetski.bye",
+      "part": "samet › jetski",
+      "when": "",
+      "ms": 2232,
       "flags": []
     },
     {
