@@ -286,6 +286,7 @@ Kaylee's little rice farm below the café, in the cozy look of the user's Animal
 ## 3️⃣ The “3” road and home
 
 - 3️⃣ **The “3” road** ([done] · `three`; counting): The last drive (`drive?road=three`), and then the viewpoint: the Pajero stops at a lay-by, the camera lifts up and over the hill, and the road below is a big swoopy **3**. Its bends pop one by one (one, two, three; nothing to draw, the user took the crayon out 2026-10-26), the family photo is taken with the 3 behind them, and Sparkle says “Three! You drove the 3!”. Then the road goes on to the airport and the plane home.
+- 🔭 **The 3 lookout** ([done] · 2026-11-12 · map place `lookout`, `drive?road=three&to=lookout`, `three?to=lookout`): you asked for the 3 road without two stops first. A wooden deck with a pink telescope and a pennant on the 3's top bend (its stepping stones lead up from the bend), open from the start and never a stop: she drives the 3 road, the bends pop, Mommy takes the photo, then 🔁 or 🗺️ back to the map (no ✈️🏠). The airport is still the way home after two stops. No new lines. Next, if she loves it: something to do on the deck (the telescope).
 - 🏠 **Home** ([done] · `home`): The home flight (`trip/legs/home-flight.ts`), the van, Agong's door. No gift this time (the user): the family hops in, Agong waves hello, and the photo she picks (the café balcony, the 3, the mushroom pizza, the salt pan) goes on his wall. Tap it and Mommy says “Our trip to Nan!”.
 
 > **🚫 Wat Phumin was dropped**

@@ -4,7 +4,8 @@
 // (trip/legs/Guide.tsx: she and the family talk out loud in their own voices), and at the end of the road its stop
 // (when she picked one on the Nan map, it opens by itself) or the end card: the stop, 🔁 this road again, 🗺️ back to
 // the map. The 3 road ends at the viewpoint (section `three`), where the bends pop one, two, three; on the trip, Mommy takes the
-// family's photo with the 3 behind them and the end card offers ✈️🏠 home. Every drive (and every 🔁) rolls its own
+// family's photo with the 3 behind them and the end card offers ✈️🏠 home (from the airport; from the lookout, 🔁 and 🗺️
+// back to the map). Every drive (and every 🔁) rolls its own
 // weather and traffic (roads.ts rollDrive); a link's `weather` holds for the drive it opens.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -42,8 +43,9 @@ interface Props {
   onMap?: () => void
   /** The 3 road reached its viewpoint (section `three`). */
   onView?: () => void
-  /** On the trip: the bends have popped and Mommy took the photo (it's one to pick for Agong's wall), and ✈️🏠 goes home. */
+  /** On the trip: the bends have popped and Mommy took the photo (it's one to pick for Agong's wall). */
   onPhoto?: () => void
+  /** ✈️🏠 on the end card at the viewpoint (from the airport: the trip's way home; not from the lookout). */
   onHome?: () => void
   /** The Nan Mountain Cup is on (cup/rules.ts): the city road ends at its race ground. */
   cup?: boolean
@@ -75,8 +77,8 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
     else onStop?.(road, to)
   }, [going, hud.phase])
 
-  // The 3 from above on the trip: Mommy's photo of them with the 3 behind.
-  const photo = view && hud.phase === 'end' && !!onHome
+  // The 3 from above on the trip (from the airport or the lookout): Mommy's photo of them with the 3 behind.
+  const photo = view && hud.phase === 'end' && !!(onHome || onPhoto)
   const threePhoto = useMemo(() => (photo ? drawPhoto('three') : ''), [photo])
   useEffect(() => {
     if (!photo) return

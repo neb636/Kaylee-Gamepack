@@ -11,7 +11,8 @@
 // pull it: it follows her finger along the roads (never across the hills), and let go at a place (or hold it still at a
 // stop a moment) to go. The stops she's done wear a pink stamp; the newest one lands with a ka-chunk when she comes back.
 // After two stops the airport opens too (home, down the "number 3" road); after all three it's the only way left, and
-// it glows. Nan town is a short drive through the market and back.
+// it glows. Nan town is a short drive through the market and back. The lookout on the 3 road's top bend is open from
+// the start and never a stop: it drives the 3 road down to the viewpoint and back to the map, as often as she likes.
 //
 // Things to poke: the clouds on the peaks (a little rain), the river (a fish jumps), the tiny plane (it takes off,
 // loops round and lands), the buffalo (moo), the flags of Thailand and Laos (they wave: Laos is just over the border),
@@ -63,8 +64,8 @@ export const MAP_ANCHORS: AnchorInfo[] = [
 
 /** Nothing touched for this long: the place to go next glows. */
 const STUCK_S = 5
-/** Held still at a stop this long while she holds the car: off it goes. (Not Nan town or the airport: the roads to the
- *  stops run through town, so only a tap or letting go there goes to them.) */
+/** Held still at a stop this long while she holds the car: off it goes. (Not Nan town, the airport or the lookout: the
+ *  roads to the stops run through them, so only a tap or letting go there goes to them.) */
 const DWELL_S = 0.8
 /** The camera dives into the road this long before the drive opens. */
 const DIVE_S = 1.15
@@ -203,8 +204,9 @@ export class NanMap extends Stage {
   // ---------------------------------------------------------------- which places are open
 
   /** Can she go there now? The stops she hasn't done; Nan town until all of them are done (with the Cup on, its race
-   *  ground: she can go back to race for fun after the Cup too); the airport after two. */
+   *  ground: she can go back to race for fun after the Cup too); the airport after two; the lookout always. */
   private open(id: PlaceId) {
+    if (id === 'lookout') return true
     if (id === 'airport') return this.done.size >= HOME_AFTER
     // (With the Cup on, Nan town stays open: back to the race ground to race for fun, even after every stop.)
     if (id === 'town') return this.done.size < this.stops.length || this.stops.includes('cup')
@@ -300,7 +302,7 @@ export class NanMap extends Stage {
     }
     // ---- Held still at a place she can go to: off it goes ----
     const here = this.placeHere()
-    if (this.held && here && here !== 'town' && here !== 'airport' && c.path.length <= 1) {
+    if (this.held && here && here !== 'town' && here !== 'airport' && here !== 'lookout' && c.path.length <= 1) {
       this.dwell += dt
       if (this.dwell > DWELL_S) this.arrive(here)
     } else this.dwell = 0
