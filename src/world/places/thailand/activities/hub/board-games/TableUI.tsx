@@ -1,32 +1,36 @@
-// What the game table shows over the house (greybox): the picker (three big game cards, the three cousins' faces with
-// BB picked, the Unicorn game's four unicorns, a big ▶), and while they play: the two faces at the sides (whoever's
-// turn it is grows and glows), 🎲 back to the games and 👋 to get up, and a big 🔁 when someone has won. No words to
+// What the game table shows over the house: the picker (three big picture cards drawn like the game shelf's icons, the
+// three cousins' faces with BB picked, the Unicorn game's four unicorns, a big ▶), and while they play: the two faces
+// at the sides (whoever's turn it is grows and glows), 🎲 back to the games and 👋 to get up, and a big 🔁 when someone
+// has won. The faces are pictures of their real 3D selves (faces.ts; an emoji until the picture is taken). No words to
 // read: pictures, faces and big targets (var(--target): 96 px on iPad, 72 px on a short iPhone).
 import { AnimatePresence, motion } from 'motion/react'
 import { useMemo, type CSSProperties, type MutableRefObject } from 'react'
 import { sounds, useLandscape } from '../../../../../../sdk'
 import { faceCanvas } from './deck'
 import { UNICORN_HEX } from './pieces'
-import { COUSINS, GAMES, UNICORNS, type CousinId } from './list'
+import { COUSINS, GAMES, UNICORNS, type CousinId, type GameId } from './list'
+import candyCard from './cards/candy.svg?no-inline'
+import chutesCard from './cards/chutes.svg?no-inline'
+import unicornCard from './cards/unicorn.svg?no-inline'
 import type { TablePlugin, TableView } from './plugin'
 
-/** Placeholder faces for the greybox (the look gate takes pictures of their real 3D selves). */
+/** Each face's ring, name, and the emoji it shows for the moment before its picture is taken. */
 export const FACES: Record<CousinId | 'kaylee', { emoji: string; extra: string; ring: string; name: string }> = {
-  kaylee: { emoji: '🦄', extra: '', ring: '#C9B3FF', name: 'You' },
+  kaylee: { emoji: '🦄', extra: '', ring: '#C9B3FF', name: 'Me' },
   bb: { emoji: '🐃', extra: '🎀', ring: '#FF8FB8', name: 'BB' },
   gan: { emoji: '🦊', extra: '🧢', ring: '#FFC2A8', name: 'Gan' },
   ken: { emoji: '🦊', extra: '👓', ring: '#8FE3C8', name: 'Ken' },
 }
-const GAME_BG: Record<string, string> = { unicorn: 'linear-gradient(160deg, #FFD6EA, #D9CCFF)', candy: 'linear-gradient(160deg, #FFE3C2, #FFC4DE)', chutes: 'linear-gradient(160deg, #CFF3E3, #BFE3FF)' }
+const CARD: Record<GameId, string> = { unicorn: unicornCard, candy: candyCard, chutes: chutesCard }
 
 const round = (size: string, bg: string, ring: string): CSSProperties => ({ width: size, height: size, borderRadius: '50%', background: bg, border: `5px solid ${ring}`, boxShadow: 'var(--shadow)', display: 'grid', placeItems: 'center', padding: 0, position: 'relative', flex: 'none' })
 
-export function Face({ who, size, active = false, crown = false }: { who: CousinId | 'kaylee'; size: string; active?: boolean; crown?: boolean }) {
+export function Face({ who, size, photo, active = false, crown = false }: { who: CousinId | 'kaylee'; size: string; photo?: string; active?: boolean; crown?: boolean }) {
   const f = FACES[who]
   return (
-    <motion.div animate={{ scale: active ? 1.18 : 1, boxShadow: active ? `0 0 0 8px ${f.ring}88, var(--shadow)` : 'var(--shadow)' }} transition={{ type: 'spring', stiffness: 300, damping: 18 }} style={{ ...round(size, '#fff', f.ring), fontSize: `calc(${size} * .5)` }}>
-      <span>{f.emoji}</span>
-      {f.extra && <span style={{ position: 'absolute', right: '-6%', top: '-6%', fontSize: `calc(${size} * .3)` }}>{f.extra}</span>}
+    <motion.div animate={{ scale: active ? 1.18 : 1, boxShadow: active ? `0 0 0 8px ${f.ring}88, var(--shadow)` : 'var(--shadow)' }} transition={{ type: 'spring', stiffness: 300, damping: 18 }} style={{ ...round(size, '#fff', f.ring), fontSize: `calc(${size} * .5)`, overflow: 'visible' }}>
+      {photo ? <img src={photo} alt="" draggable={false} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', display: 'block' }} /> : <span>{f.emoji}</span>}
+      {!photo && f.extra && <span style={{ position: 'absolute', right: '-6%', top: '-6%', fontSize: `calc(${size} * .3)` }}>{f.extra}</span>}
       {crown && (
         <motion.span initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} style={{ position: 'absolute', top: `calc(${size} * -.42)`, fontSize: `calc(${size} * .42)` }}>
           👑
@@ -65,11 +69,11 @@ export function TableUI({ view, table }: { view: TableView; table: MutableRefObj
         <>
           {/* Whose turn: her face on her side (left), the cousin's on theirs (right). */}
           <div style={{ ...side, left: 'calc(var(--safe-left, 0px) + 18px)' }}>
-            <Face who="kaylee" size={size} active={view.phase !== 'finished' && view.turn === 0} crown={view.winner === 0} />
+            <Face who="kaylee" size={size} photo={view.faces.kaylee} active={view.phase !== 'finished' && view.turn === 0} crown={view.winner === 0} />
           </div>
           {view.seated && (
             <div style={{ ...side, right: 'calc(var(--safe-right, 0px) + 18px)' }}>
-              <Face who={view.seated} size={size} active={view.phase !== 'finished' && view.turn === 1} crown={view.winner === 1} />
+              <Face who={view.seated} size={size} photo={view.faces[view.seated]} active={view.phase !== 'finished' && view.turn === 1} crown={view.winner === 1} />
             </div>
           )}
           {/* Candy Land: the card just drawn, big over the table, while its piece goes. */}
@@ -129,9 +133,9 @@ function Picker({ view, table }: { view: TableView; table: MutableRefObject<Tabl
                 sounds.pop()
                 t()?.chooseGame(g.id)
               }}
-              style={{ width: card, height: card, borderRadius: 22, border: `6px solid ${picked ? 'var(--hotpink)' : '#fff'}`, background: GAME_BG[g.id], fontSize: `calc(${card} * .5)`, boxShadow: 'var(--shadow)', opacity: on ? 1 : 0.4, position: 'relative', padding: 0 }}
+              style={{ width: card, height: card, borderRadius: 22, border: `6px solid ${picked ? 'var(--hotpink)' : '#fff'}`, background: '#fff', boxShadow: 'var(--shadow)', opacity: on ? 1 : 0.4, position: 'relative', padding: 0, overflow: 'hidden' }}
             >
-              {g.icon}
+              <img src={CARD[g.id]} alt="" draggable={false} style={{ width: '100%', height: '100%', display: 'block' }} />
               {!on && <span style={{ position: 'absolute', right: 4, bottom: 2, fontSize: `calc(${card} * .25)` }}>🚧</span>}
             </motion.button>
           )
@@ -141,7 +145,7 @@ function Picker({ view, table }: { view: TableView; table: MutableRefObject<Tabl
       <div style={{ display: 'flex', gap: 'clamp(10px, 2vmin, 18px)', alignItems: 'center' }}>
         {COUSINS.map((c) => (
           <button key={c} aria-label={FACES[c].name} aria-pressed={view.vs === c} onClick={() => (sounds.pop(), t()?.chooseCousin(c))} style={{ border: 'none', background: 'none', padding: 4, display: 'grid', justifyItems: 'center', alignContent: 'center', gap: 2, minWidth: 'var(--target)', minHeight: 'var(--target)' }}>
-            <Face who={c} size={face} active={view.vs === c} />
+            <Face who={c} size={face} photo={view.faces[c]} active={view.vs === c} />
             <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>{FACES[c].name}</span>
           </button>
         ))}

@@ -59,6 +59,8 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   // The game table (board-games/): what it shows over the house, and whether she's sitting at it with a game open.
   const table = useRef<TablePlugin | null>(null)
   const [tableView, setTableView] = useState<TableView | null>(null)
+  const tableRef = useRef<TableView | null>(null)
+  tableRef.current = tableView
   const playing = !!tableView?.open
   const playingRef = useRef(false)
   playingRef.current = playing
@@ -205,7 +207,14 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       { open: initial.section === 'wardrobe', drawer: startDrawer, door: startDoor },
     )
     wardrobe.current = w
-    const t = new TablePlugin({ onView: (v) => tableEvents.current.onTable(v) }, { preview: atTable, start: tableStart })
+    const t = new TablePlugin(
+      {
+        onView: (v) => tableEvents.current.onTable(v),
+        // Sparkle's lines in her corner; the cousin's in their own voice (their mouth moves with it).
+        say: (line) => (typeof line === 'string' ? sayRef.current(line) : void say(line, { interrupt: true })),
+      },
+      { preview: atTable, start: tableStart },
+    )
     table.current = t
     return onWall.size ? bothPlugins(w, t, new WallPlugin(onWall, look, initial.section === 'downstairs' && initial.at === 'photos')) : bothPlugins(w, t)
   }
@@ -223,6 +232,9 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     return true
   }
   const hint = (glow: boolean): Line | null => {
+    // At the game table: how to play (Sparkle's 🔊, and her hint when she waits a while on her turn).
+    const tv = tableRef.current
+    if (tv?.open) return tv.picking ? L.games.pick : L.games.howto[tv.game]
     if (dressing) {
       // A drawer's automatic instruction plays once. Sparkle can still explain it on demand after reopening it.
       const drawer = doorNow.current.drawer
@@ -373,7 +385,9 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           />
         )}
       </AnimatePresence>
-      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking || dressing || playing || !!looking} dressing={dressing && mode !== 'lost'} hint={hint} />}
+      {/* At the game table Sparkle stays quiet while the move plays, gives her hint when it's Kaylee's turn, and says
+          how to play again when tapped. */}
+      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking || dressing || (playing && !(tableView?.phase === 'awaiting' || tableView?.picking)) || !!looking} dressing={dressing && mode !== 'lost'} talk={playing} hint={hint} />}
       {tableView?.open && mode !== 'lost' && <TableUI view={tableView} table={table} />}
       {trips.length > 0 && <Ask open={asking && !arriving && mode !== 'lost'} who={asker} trips={trips} onYes={(t) => yes(t)} onNotYet={() => setAsking(false)} />}
       {debug && <Debug houseRef={houseRef} />}

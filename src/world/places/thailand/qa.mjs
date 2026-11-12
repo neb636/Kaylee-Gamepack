@@ -894,6 +894,8 @@ const thaiHouse = (name, seconds, section, taps) => ({
   act: async (page) => {
     for (const [what, wait] of taps) {
       if (what === 'floor') await page.mouse.click(vp.width * 0.42, vp.height * 0.38)
+      // A button over the house, by its label ('button:Play').
+      else if (what.startsWith('button:')) await page.getByRole('button', { name: what.slice(7), exact: true }).click({ force: true })
       else await page.locator(`[data-anchor="${what}"]`).click({ force: true })
       await page.waitForTimeout(wait)
     }
@@ -937,6 +939,11 @@ motion.push(
   thaiHouse('wardrobe-door', 4, 'wardrobe?door=crown,hearts,tutu;bow,fairy,dress-mint', [['trip:ward:thing:photo-1', 2500]]),
   // The game table (game-table.md, greybox 1): she taps the die, it tumbles and settles, her unicorn hops five spaces,
   // then BB rolls; a 4 (her unicorn naps, Ken rolls); and the last roll into the castle.
+  // The look and voices (2026-11-11): from the couch in her room she taps the table, sits, the picker opens with the faces; Play,
+  // and BB hops over to her stool and says she's in; then the first roll.
+  thaiHouse('table-sit', 14, 'upstairs?at=couch', [['game-table', 4500], ['button:Play', 3800], ['trip:table:die', 5500]]),
+  // A kind loss: BB rolls into the castle, says she won, and the Again button comes up.
+  thaiHouse('table-kind-loss', 6, 'unicorn?me=20&them=23&turn=cousin&rolls=2', [['trip:table:die', 5500]]),
   thaiHouse('table-roll', 7, 'unicorn?rolls=5,3', [['trip:table:die', 6500]]),
   thaiHouse('table-rest', 6, 'unicorn?vs=ken&me=7&them=9&rolls=4,3', [['trip:table:die', 5500]]),
   thaiHouse('table-castle', 5, 'unicorn?me=22&them=20&rolls=6', [['trip:table:die', 4500]]),

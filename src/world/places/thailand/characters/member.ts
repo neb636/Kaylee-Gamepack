@@ -13,6 +13,9 @@ import type { Character, Pose } from './types'
 const deg = Math.PI / 180
 const tmp = new Vector3()
 
+/** The family members who also have a game-table voice (`<id>play` in cast.json). */
+const PLAY_VOICES = new Set(['bb', 'gan', 'ken'])
+
 export class Member implements Character {
   readonly id: string
   readonly root: Group
@@ -42,7 +45,8 @@ export class Member implements Character {
     this.chibi = buildAnimal(look, bag)
     this.root = this.chibi.root
     this.height = this.chibi.height
-    this.life = new FaceLife(this.chibi, voice)
+    // (The big cousins also talk at the game table, in a cheerful voice of their own: cast.json's bbplay, ganplay, kenplay.)
+    this.life = new FaceLife(this.chibi, voice && PLAY_VOICES.has(voice) ? [voice, `${voice}play`] : voice)
     this.onPhone = !!look.extras?.includes('phone')
     if (this.onPhone) {
       this.chibi.armL.rotation.set(-1.2, 0, 0.75)

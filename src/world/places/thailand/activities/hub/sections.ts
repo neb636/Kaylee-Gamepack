@@ -42,11 +42,11 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
     { id: 'table', name: 'The game table: pick a game and a cousin', params: ['vs', 'game'], group: 'The game table (in the works: its games open from these links only)', links: [{ label: 'Sitting at the table: pick a game and a cousin (BB ready)' }, { label: 'The picker with Gan picked', params: { vs: 'gan' } }] },
     {
       id: 'unicorn',
-      name: "Your Unicorn Dice Game",
+      name: 'Unicorn Dice Game',
       params: ['vs', 'piece', 'me', 'them', 'turn', 'rolls'],
       group: 'The game table (in the works: its games open from these links only)',
       links: [
-        { label: "Your Unicorn Dice Game with BB, from the start", also: [{ label: 'Gan', params: { vs: 'gan' } }, { label: 'Ken', params: { vs: 'ken' } }] },
+        { label: 'Unicorn Dice Game with BB, from the start', also: [{ label: 'Gan', params: { vs: 'gan' } }, { label: 'Ken', params: { vs: 'ken' } }] },
         { label: 'She is on 7 and rolls a 4: a rest, Ken rolls, then her turn as usual', params: { vs: 'ken', me: '7', them: '9', rolls: '4,3,2' } },
         { label: 'Midgame with Gan', params: { vs: 'gan', me: '12', them: '14' } },
         { label: 'She is on 22 and rolls a 6: into the castle, she wins', params: { me: '22', them: '20', rolls: '6' } },

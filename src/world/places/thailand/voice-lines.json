@@ -24,6 +24,125 @@
   "The lucky cat waves for good luck!",
   "A gecko! It sings took-geh, took-geh!",
   "Lots of people in Thailand ride motorbikes!",
+  "Pick a game and a cousin!",
+  "Tap the die! Race to the castle!",
+  "Click the die! Race to the castle!",
+  "Tap the cards! Hop to that color!",
+  "Click the cards! Hop to that color!",
+  "Tap the die! Ladders up, slides down!",
+  "Click the die! Ladders up, slides down!",
+  "A four! Time for a little nap.",
+  "You won!",
+  "Yay! You did it!",
+  "Winner winner!",
+  {
+    "text": "Yay, let's play!",
+    "voice": "bbplay"
+  },
+  {
+    "text": "My turn!",
+    "voice": "bbplay"
+  },
+  {
+    "text": "Come on, six!",
+    "voice": "bbplay"
+  },
+  {
+    "text": "Nap time!",
+    "voice": "bbplay"
+  },
+  {
+    "text": "Up I go!",
+    "voice": "bbplay"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "bbplay"
+  },
+  {
+    "text": "I won! Again?",
+    "voice": "bbplay"
+  },
+  {
+    "text": "You won! Good game!",
+    "voice": "bbplay"
+  },
+  {
+    "text": "Fun game!",
+    "voice": "bbplay"
+  },
+  {
+    "text": "Okay, I'm in!",
+    "voice": "ganplay"
+  },
+  {
+    "text": "Here goes!",
+    "voice": "ganplay"
+  },
+  {
+    "text": "Big number!",
+    "voice": "ganplay"
+  },
+  {
+    "text": "Aw, sleepy!",
+    "voice": "ganplay"
+  },
+  {
+    "text": "Ladder! Yes!",
+    "voice": "ganplay"
+  },
+  {
+    "text": "Nooo! Wheee!",
+    "voice": "ganplay"
+  },
+  {
+    "text": "I won! One more?",
+    "voice": "ganplay"
+  },
+  {
+    "text": "Nice one, you won!",
+    "voice": "ganplay"
+  },
+  {
+    "text": "Good game!",
+    "voice": "ganplay"
+  },
+  {
+    "text": "Let's play!",
+    "voice": "kenplay"
+  },
+  {
+    "text": "My go!",
+    "voice": "kenplay"
+  },
+  {
+    "text": "Lucky roll!",
+    "voice": "kenplay"
+  },
+  {
+    "text": "Snooze time!",
+    "voice": "kenplay"
+  },
+  {
+    "text": "Up, up, up!",
+    "voice": "kenplay"
+  },
+  {
+    "text": "Whoa! Wheee!",
+    "voice": "kenplay"
+  },
+  {
+    "text": "Ha! I won!",
+    "voice": "kenplay"
+  },
+  {
+    "text": "You got me! Good game!",
+    "voice": "kenplay"
+  },
+  {
+    "text": "See you!",
+    "voice": "kenplay"
+  },
   "Elephants live in the north of Thailand!",
   "It rains a lot in Nan's mountains!",
   "Gibbons swing through the jungle! Whoop whoop!",

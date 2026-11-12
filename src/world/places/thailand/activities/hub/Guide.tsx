@@ -4,7 +4,7 @@
 // The house's family speak for themselves (house.ts).
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { lineText, say, stopSpeaking, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
+import { lineText, say, spendHint, stopSpeaking, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
 import { L } from '../../lines'
 import type { Spot } from './house'
 
@@ -25,7 +25,9 @@ const STUCK_S = 12
 const REMINDER_S = 60
 const MAX_REMINDERS = 3
 
-export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean; dressing: boolean; hint(glow: boolean): Line | null }>(function Guide({ spot, quiet, dressing, hint }, ref) {
+/** `talk`: say the stuck hint out loud too (the game table, where she can sit waiting on her turn). The house itself only
+ *  glows its hint, as hubs do (docs/voices.md). */
+export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean; dressing: boolean; talk?: boolean; hint(glow: boolean): Line | null }>(function Guide({ spot, quiet, dressing, talk = false, hint }, ref) {
   const sparkle = useRef<PuppetHandle>(null)
   const [line, setLine] = useState<Line | null>(null)
   const last = useRef<Line | null>(null)
@@ -38,6 +40,8 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean; dress
   const hide = useRef<ReturnType<typeof setTimeout>>(undefined)
   const hintRef = useRef(hint)
   hintRef.current = hint
+  const talkRef = useRef(talk)
+  talkRef.current = talk
 
   const speak = (l: Line, after = false) => {
     const spoken = ++speech.current
@@ -53,6 +57,8 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean; dress
       hide.current = setTimeout(() => setLine((cur) => (cur === l ? null : cur)), 2200)
     })
   }
+  const speakRef = useRef(speak)
+  speakRef.current = speak
   const clear = () => {
     // Invalidate queued audio and its completion callback before showing guidance for the next room.
     speech.current++
@@ -105,7 +111,9 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean; dress
       reminder.count++
       reminder.last = now
       lastTouch.current = now
-      hintRef.current(true)
+      const line = hintRef.current(true)
+      // (spendHint keeps it from nagging: at most twice a visit, spaced out.)
+      if (line && talkRef.current && spendHint(line)) speakRef.current(line)
     }, 1000)
     return () => {
       window.removeEventListener('pointerdown', touch, true)

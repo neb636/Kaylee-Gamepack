@@ -17,7 +17,8 @@ import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { Particles } from '../../../../../engine3d/particles'
 import { PAL } from '../../../../../engine3d/toon'
 import { knobs } from '../../../../../kit/knobs'
-import { burst, sounds } from '../../../../../../sdk'
+import { burst, sounds, type Line } from '../../../../../../sdk'
+import { L } from '../../../lines'
 import { sfx } from '../../../sfx'
 import type { House, HousePlugin } from '../house'
 import { DIM, GAME_SEAT } from '../layout'
@@ -26,6 +27,7 @@ import { ChutesBoard } from './boards/chutes'
 import { UnicornBoard } from './boards/unicorn'
 import { CardDeck } from './deck'
 import { Die } from './die'
+import { cousinFace, kayleeFace } from './faces'
 import { COUSINS, cousinUnicorn, GAMES, type CousinId, type GameId, type UnicornColor } from './list'
 import { pawnParts, Piece, unicornParts } from './pieces'
 import { CANDY_FINISH, candyDraw, cardToken, newDeck, type Card, type Deck } from './rules/candy'
@@ -44,14 +46,15 @@ const FEEL = knobs('gameTable', 'Game table', FILE, {
   hopArc: { value: 0.045, min: 0.01, max: 0.12, step: 0.005, label: 'Hop height', unit: 'm' },
   cousinWait: { value: 0.6, min: 0, max: 2, step: 0.05, label: "Cousin's wait", unit: 's', note: 'a little anticipation before the cousin rolls' },
   passPause: { value: 0.45, min: 0, max: 1.5, step: 0.05, label: 'Pass pause', unit: 's', note: 'between one turn and the next' },
-  restTime: { value: 1.0, min: 0.4, max: 2.5, step: 0.05, label: 'Rest on a 4', unit: 's', note: 'how long the unicorn naps' },
-  camPitch: { value: 64, min: 30, max: 85, step: 1, label: 'Camera pitch', unit: '°', note: 'how steeply it looks down at the board' },
-  camYaw: { value: 0, min: -30, max: 45, step: 1, label: 'Camera yaw', unit: '°', note: 'from the front (0) round to the right' },
-  camFit: { value: 1, min: 0.6, max: 1.6, step: 0.05, label: 'Camera fit', note: 'below 1: closer' },
-  flipTime: { value: 0.7, min: 0.3, max: 1.6, step: 0.05, label: 'Card flip', unit: 's', note: 'Candy Land: from the deck to face up on the pile' },
+  restTime: { value: 1.05, min: 0.4, max: 2.5, step: 0.05, label: 'Rest on a 4', unit: 's', note: 'how long the unicorn naps' },
+  camPitch: { value: 30, min: 30, max: 85, step: 1, label: 'Camera pitch', unit: '°', note: 'how steeply it looks down at the board' },
+  camYaw: { value: 9, min: -30, max: 45, step: 1, label: 'Camera yaw', unit: '°', note: 'from the front (0) round to the right' },
+  camFit: { value: 0.8, min: 0.6, max: 1.6, step: 0.05, label: 'Camera fit', note: 'below 1: closer' },
+  flipTime: { value: 0.75, min: 0.3, max: 1.6, step: 0.05, label: 'Card flip', unit: 's', note: 'Candy Land: from the deck to face up on the pile' },
   cardShow: { value: 0.6, min: 0.2, max: 1.6, step: 0.05, label: 'Card shown', unit: 's', note: 'Candy Land: how long the card and the glowing space show before the piece goes' },
   climbTime: { value: 1.1, min: 0.4, max: 3, step: 0.05, label: 'Ladder climb', unit: 's', note: 'Chutes and Ladders: rung by rung to the top' },
   slideTime: { value: 0.9, min: 0.3, max: 3, step: 0.05, label: 'Slide down', unit: 's', note: 'Chutes and Ladders: whee, down the slide' },
+  pieceSize: { value: 1.3, min: 0.8, max: 1.8, step: 0.05, label: 'Piece size', note: 'the unicorns and pawns (1: the greybox size)' },
   candyHop: { value: 0.17, min: 0.08, max: 0.5, step: 0.01, label: 'Candy hop per space', unit: 's', note: 'Candy Land moves further, so a bit quicker' },
 })
 
@@ -81,11 +84,23 @@ export interface TableView {
   offered: GameId[]
   /** Opened from Dad's link: the picker also shows the games still to build (dimmed). */
   preview: boolean
+  /** Pictures of their real 3D faces (JPEG data URLs), once they've been taken. */
+  faces: Partial<Record<CousinId | 'kaylee', string>>
 }
 
 export interface TableEvents {
   onView(v: TableView): void
+  /** A line to say: Sparkle's (a plain string, in her corner with its bubble) or the cousin's (in their own voice). */
+  say(line: Line): void
 }
+
+/** Per visit to the app: Sparkle says each game's how-to, the picker's line and the rule of the 4 once. */
+const told = new Set<string>()
+/** The cousins' roll lines go in turn, and only now and then (every ROLL_EVERY-th of their turns). */
+const ROLL_EVERY = 3
+let rollLine = 0
+/** Her wins this visit: Sparkle cheers the first one. */
+let wins = 0
 
 export interface TableStart {
   /** Open from a board-game link: the picker (`table`) or a game, with the link's state. */
@@ -147,6 +162,11 @@ export class TablePlugin implements HousePlugin {
   private waits: { cond: () => boolean; f: () => void }[] = []
   /** The cousin's throwing arm (0..1 of the swing). */
   private toss = -1
+  /** The cousin's turns this match (their roll lines are only now and then). */
+  private cousinTurns = 0
+  /** The cousin hopping over to the stool: from where, how far along (-1: not hopping). */
+  private comeIn: { from: Vector3; t: number; seatY: number } | null = null
+  private faces: Partial<Record<CousinId | 'kaylee', string>> = {}
 
   constructor(
     private events: TableEvents,
@@ -195,6 +215,7 @@ export class TablePlugin implements HousePlugin {
       if (s.section === 'table') {
         this.picking = true
         this.phase = 'picking'
+        this.tell('pick', L.games.pick, 0.8)
       } else {
         this.seat(s.vs, true)
         this.begin({ me: s.me, them: s.them, turn: s.turn, rolls: s.rolls, deck: s.deck })
@@ -249,11 +270,13 @@ export class TablePlugin implements HousePlugin {
   leave() {
     if (!this.open) return
     this.cancel()
+    const was = this.seated
     this.open = false
     this.picking = false
     this.phase = 'off'
     this.showBoard(false)
     this.unseat()
+    if (was) this.events.say(L.games.cousins[was].bye)
     for (const r of this.rings) r.visible = false
     // She hops off her stool to the floor beside it.
     this.house.walkTo([1.15, DIM.gameTable.z], undefined, false)
@@ -269,13 +292,20 @@ export class TablePlugin implements HousePlugin {
     this.house.placeFamily(c, GAME_SEAT)
     const m = this.house.family.get(c)
     m?.putPhoneDown()
-    if (!now) this.after(0.35, () => m?.react('hop'))
+    if (now) return
+    // They hop over from beside the table onto their stool, and say they're in.
+    if (m) {
+      const seatY = m.root.position.y
+      this.comeIn = { from: new Vector3(GAME_SEAT.x - 0.15, DIM.g0, GAME_SEAT.z + 0.6), t: 0, seatY }
+      m.place(this.comeIn.from.x, DIM.g0, this.comeIn.from.z, GAME_SEAT.face + 30, 'stand')
+    }
   }
   private unseat() {
     const c = this.seated
     if (!c) return
     this.seated = null
     this.toss = -1
+    this.comeIn = null
     const m = this.house.family.get(c)
     if (m) m.rig.armR.rotation.x = 0
     this.house.placeFamily(c, null)
@@ -299,7 +329,30 @@ export class TablePlugin implements HousePlugin {
     this.cards.reset()
     this.layout(true)
     this.die.place(CORNER[s.turn])
+    this.cousinTurns = 0
+    // The cousin who just hopped over says they're in.
+    if (this.comeIn && this.lines) {
+      const sit = this.lines.sit
+      this.after(0.55, () => this.events.say(sit))
+    }
     this.startTurn()
+    // How to play, the first time she opens this game in a visit (after the cousin says they're in).
+    this.tell(`howto:${this.game}`, L.games.howto[this.game], this.seated && this.comeIn ? 1.9 : 0.6)
+  }
+
+  /** Sparkle's line, once per visit (`key`), after `wait` seconds. If the match changes first it's dropped, and it
+   *  comes the next time instead (it only counts as said once it's said). */
+  private tell(key: string, line: Line, wait = 0) {
+    if (told.has(key)) return
+    this.after(wait, () => {
+      if (told.has(key)) return
+      told.add(key)
+      this.events.say(line)
+    })
+  }
+  /** The seated cousin's lines. */
+  private get lines() {
+    return this.seated ? L.games.cousins[this.seated] : null
   }
 
   /** The die games roll; Candy Land draws a card. */
@@ -340,7 +393,10 @@ export class TablePlugin implements HousePlugin {
       for (const p of this.pieces ?? []) this.top.remove(p.root)
       const parts = (i: number) => (this.game === 'unicorn' ? unicornParts(unicorns[i]) : pawnParts(i === 0 ? 'kaylee' : this.vs))
       this.pieces = [new Piece(bag, keys[0], parts(0), 'trip:table:piece0'), new Piece(bag, keys[1], parts(1), 'trip:table:piece1')]
-      for (const p of this.pieces) this.top.add(p.root)
+      for (const p of this.pieces) {
+        p.root.scale.setScalar(FEEL.pieceSize)
+        this.top.add(p.root)
+      }
     }
     for (const p of this.pieces ?? []) p.root.visible = on
     this.die.root.visible = on && !this.usesDeck
@@ -397,6 +453,8 @@ export class TablePlugin implements HousePlugin {
   }
 
   private async cousinTurn(token: number) {
+    // Now and then they say something before they roll (in turn, never every time).
+    if (this.cousinTurns++ % ROLL_EVERY === 1 && this.lines) this.events.say(this.lines.roll[rollLine++ % this.lines.roll.length])
     await this.sleep(FEEL.cousinWait)
     if (token !== this.token) return
     // A swing of the arm, and the die goes.
@@ -494,6 +552,7 @@ export class TablePlugin implements HousePlugin {
         const climb = s.kind === 'ladder'
         const pts = climb ? b.ladderPath(s.from, s.to) : b.slidePath(s.from)
         const m = this.seated ? this.house.family.get(this.seated) : undefined
+        if (s.who === 1 && this.lines) this.events.say(climb ? this.lines.ladder : this.lines.slide)
         if (climb) {
           pts.forEach((_, i) => this.after((FEEL.climbTime * i) / pts.length, () => sounds.note(Math.min(10, i))))
           sfx.chime()
@@ -524,6 +583,9 @@ export class TablePlugin implements HousePlugin {
         this.emit()
         pieces[s.who].rest(FEEL.restTime)
         sfx.flop()
+        // The first nap of the visit: Sparkle says the rule; after that the cousin yawns along on their own naps.
+        if (!told.has('nap')) this.tell('nap', L.games.nap)
+        else if (s.who === 1 && this.lines) this.events.say(this.lines.nap)
         const at = pieces[s.who].root.getWorldPosition(new Vector3())
         for (let i = 0; i < 3; i++) this.after(0.2 + i * 0.25, () => this.sparkle.emit(at.x, at.y + 0.06, at.z, 0.02, 0.18, 0, 0.9, 0.018, 5))
         await this.sleep(FEEL.restTime)
@@ -546,10 +608,17 @@ export class TablePlugin implements HousePlugin {
         if (s.who === 0) {
           this.house.kaylee.react('wave')
           m?.react('wave')
+          // Her first win of the visit: Sparkle. After that the cousin says well done (or, without a cousin, Sparkle in
+          // turn).
+          if (wins++ === 0) this.events.say(L.games.won)
+          else if (this.lines) this.events.say(this.lines.lose)
+          else this.events.say(L.games.wonAgain[(wins - 2) % L.games.wonAgain.length])
         } else {
           m?.react('hop')
           sfx.cheer()
+          if (this.lines) this.events.say(this.lines.win)
         }
+        this.party()
         await this.sleep(1.1)
         if (token !== this.token) return
         this.phase = 'finished'
@@ -604,7 +673,7 @@ export class TablePlugin implements HousePlugin {
     this.events.onView(this.view())
   }
   view(): TableView {
-    return { open: this.open, picking: this.picking, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, turn: this.shown, winner: this.state.winner, pos: [this.state.pos[0], this.state.pos[1]], card: this.card, rolls: this.roll.left(), deck: this.scriptedDeck ? this.deck.draw.map(cardToken) : [], offered: this.offered, preview: this.opts.preview }
+    return { open: this.open, picking: this.picking, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, turn: this.shown, winner: this.state.winner, pos: [this.state.pos[0], this.state.pos[1]], card: this.card, rolls: this.roll.left(), deck: this.scriptedDeck ? this.deck.draw.map(cardToken) : [], offered: this.offered, preview: this.opts.preview, faces: this.faces }
   }
 
   // ---------------------------------------------------------------- the house's hooks
@@ -614,6 +683,10 @@ export class TablePlugin implements HousePlugin {
       // Over to her stool (the house walks her there and sits her down); with a game to play, the picker opens.
       if (id === 'game-table' && this.offered.length) this.wantPicker = true
       else this.wantPicker = false
+      if (id === 'unicorn-bag') {
+        this.pokeBag()
+        return true
+      }
       return false
     }
     // At the table, every tap is the table's: nothing walks her off by accident.
@@ -632,8 +705,28 @@ export class TablePlugin implements HousePlugin {
     } else if (id === 'kaylee' || id === 'family:kaylee') {
       this.house.kaylee.react('wiggle')
       sfx.giggle()
-    } else if (id === 'unicorn-bag') this.house.pokeThing('unicorn-bag')
+    } else if (id === 'unicorn-bag') this.pokeBag()
     return true
+  }
+
+  /** The unicorn bag: a wobble, a jingle and a twinkle on its horn (in the room too, not only at the table). */
+  pokeBag() {
+    this.house.pokeThing('unicorn-bag')
+    sfx.chime()
+    const b = DIM.gameTable.bag
+    this.after(0.12, () => this.sparkle.burst(b.x, DIM.g0 + 0.42, b.z, 14, 0.5, 0.7, 0.014))
+  }
+
+  /** The small win party at the table: sparkles rain over the board for a moment and the bag joins in. */
+  private party() {
+    const t = DIM.gameTable
+    for (let i = 0; i < 6; i++)
+      this.after(0.15 + i * 0.22, () => {
+        const x = t.x + (Math.random() - 0.5) * t.w * 0.8
+        const z = t.z + (Math.random() - 0.5) * t.d * 0.8
+        this.sparkle.burst(x, DIM.g0 + t.h + 0.45, z, 14, 0.5, 0.6, 0.02)
+      })
+    this.after(0.5, () => this.house.pokeThing('unicorn-bag'))
   }
 
   /** While she plays, a finger that drags across the board is the table's too: it never walks her off her stool. */
@@ -677,11 +770,12 @@ export class TablePlugin implements HousePlugin {
         minDist: 1.2,
       }
     }
-    // Playing: the board close up, both players at the sides.
-    const half = tall ? new Vector3(0.42, 0.5, 0.52) : new Vector3(0.78, 0.42, 0.5)
+    // Playing: the board close up, both players at the sides (the fit trims the sides, never the board's length, so
+    // the die or the cards in front always show).
+    const half = tall ? new Vector3(0.42 * fit, 0.5, 0.52) : new Vector3(0.78 * fit, 0.42, 0.52)
     return {
-      center: new Vector3(t.x, DIM.g0 + t.h + (tall ? 0.05 : 0.12), t.z + 0.04),
-      half: half.multiplyScalar(fit),
+      center: new Vector3(t.x, DIM.g0 + t.h + (tall ? 0.05 : 0.12), t.z + 0.06),
+      half,
       yaw: FEEL.camYaw,
       pitch: FEEL.camPitch,
       minDist: 1.2,
@@ -689,7 +783,7 @@ export class TablePlugin implements HousePlugin {
   }
 
   get busy() {
-    return this.later.length > 0 || this.waits.length > 0 || this.die.busy || this.cards.busy || this.sparkle.busy || !!this.board?.busy || !!this.pieces?.some((p) => p.busy) || this.wantPicker || this.open
+    return this.later.length > 0 || this.waits.length > 0 || this.die.busy || this.cards.busy || this.sparkle.busy || !!this.board?.busy || !!this.pieces?.some((p) => p.busy) || this.wantPicker || this.open || !!this.comeIn
   }
 
   update(dt: number, t: number) {
@@ -705,7 +799,30 @@ export class TablePlugin implements HousePlugin {
         this.phase = 'picking'
         sounds.pop()
         this.emit()
+        this.tell('pick', L.games.pick, 0.3)
       } else if (!k.walking && k.pose !== 'sit') this.wantPicker = false
+    }
+    // The faces for the buttons: one picture a frame, once she's at the table.
+    if (this.open) {
+      const next = (['kaylee', ...COUSINS] as const).find((w) => !this.faces[w])
+      if (next) {
+        this.faces = { ...this.faces, [next]: next === 'kaylee' ? kayleeFace(this.house) : cousinFace(this.house, next) }
+        this.emit()
+      }
+    }
+    // The cousin hopping over to their stool (three little hops, then up onto it).
+    const mc = this.seated ? this.house.family.get(this.seated) : undefined
+    if (this.comeIn && mc) {
+      const c = this.comeIn
+      c.t = Math.min(1, c.t + dt / 0.8)
+      mc.root.position.x = c.from.x + (GAME_SEAT.x - c.from.x) * c.t
+      mc.root.position.z = c.from.z + (GAME_SEAT.z - c.from.z) * c.t
+      mc.setGround(DIM.g0 + Math.abs(Math.sin(c.t * Math.PI * 3)) * 0.12 + (c.seatY - DIM.g0) * Math.max(0, c.t * 3 - 2))
+      if (c.t >= 1) {
+        mc.place(GAME_SEAT.x, c.seatY, GAME_SEAT.z, GAME_SEAT.face, 'sit')
+        this.comeIn = null
+        sfx.boing()
+      }
     }
     // Timers and waits (frame-driven: they stop with the house).
     if (this.later.length) {
@@ -724,7 +841,11 @@ export class TablePlugin implements HousePlugin {
     this.cards.update(dt, t)
     this.cards.setGlow(this.phase === 'awaiting')
     this.board?.update(dt, t)
-    this.pieces?.forEach((p) => p.update(dt, t))
+    // Read live so the feel lab's Piece size slider shows at once on the pieces already out.
+    this.pieces?.forEach((p) => {
+      p.root.scale.setScalar(FEEL.pieceSize)
+      p.update(dt, t)
+    })
     this.sparkle.update(dt)
     // The cousin's arm swings forward to roll.
     const m = this.seated ? this.house.family.get(this.seated) : undefined
