@@ -78,6 +78,9 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
       links: [
         { label: 'Chutes and Ladders with BB, from the start', also: [{ label: 'Gan', params: { vs: 'gan' } }, { label: 'Ken', params: { vs: 'ken' } }] },
         { label: 'She rolls a 2 from the start: up the ladder from 2 to 14', params: { rolls: '2' } },
+        { label: 'The middle ladder: from 8 to 20', params: { me: '6', them: '4', rolls: '2' } },
+        { label: 'The little pink slide: from 15 to 3', params: { me: '13', them: '10', rolls: '2' } },
+        { label: 'The big pink slide: from 35 to 24', params: { me: '33', them: '25', rolls: '2' } },
         { label: 'She is on 31 and rolls a 2: whee, down the slide from 33 to 22', params: { me: '31', them: '25', rolls: '2' } },
         { label: "Ken's turn on 12: he rolls a 6, up the ladder from 18 to 30", params: { vs: 'ken', me: '10', them: '12', turn: 'cousin', rolls: '6' } },
         { label: 'She is on 33 and rolls a 5: to 36, she wins', params: { me: '33', them: '30', rolls: '5' } },
