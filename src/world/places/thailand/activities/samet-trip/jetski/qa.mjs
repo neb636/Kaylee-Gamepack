@@ -232,7 +232,7 @@ export const motion = [
   {
     // Getting off before any race: a decent ride, back into the pink ring, and Zoom comes down to her there.
     name: 'thailand-samet-jetski-park-found',
-    seconds: 34,
+    seconds: 60,
     setup: async (page, base) => {
       await page.goto(`${base}${LINK}?round=ride`)
       await ready(page)
@@ -241,7 +241,33 @@ export const motion = [
     act: async (page) => {
       // Out to sea for a few seconds, then round and back into the ring (island/layout.ts: its middle is bay(0, 3)).
       await steerTo(page, (s) => [s.x + Math.sin((s.heading * Math.PI) / 180) * 30, s.z + Math.cos((s.heading * Math.PI) / 180) * 30], (s) => s.rode > 8, 14000)
-      await steerTo(page, () => [8.93, -1.45], (s) => s.phase !== 'ride', 25000)
+      // Back in: a finger held on the pink ring, the way she'd do it (the jet ski heads for the finger). Up the sand
+      // instead, the jet ski man pushes it back and she tries again.
+      const t0 = Date.now()
+      let down = false
+      while (Date.now() - t0 < 40000) {
+        const s = await qa(page)
+        if (s.section !== 'jetski' || s.film?.film === 'found') break
+        if (s.phase !== 'ride' || !s.dock.shown) {
+          if (down) await page.mouse.up()
+          down = false
+          await page.waitForTimeout(300)
+          continue
+        }
+        const vp = page.viewportSize()
+        const on = s.dock.at.x > 20 && s.dock.at.x < vp.width - 20 && s.dock.at.y > 120 && s.dock.at.y < vp.height - 20
+        if (on) await page.mouse.move(s.dock.at.x, s.dock.at.y)
+        else {
+          // (Behind her: turn round toward it first, the way the pink arrow points.)
+          const want = (Math.atan2(8.93 - s.x, -1.45 - s.z) * 180) / Math.PI
+          const off = ((want - s.heading + 540) % 360) - 180
+          await page.mouse.move(Math.max(8, Math.min(vp.width - 8, s.ski.x - (Math.abs(off) > 80 ? Math.sign(off) * vp.width * 0.4 : off * 6))), Math.max(130, s.ski.y - vp.height * 0.4))
+        }
+        if (!down) await page.mouse.down()
+        down = true
+        await page.waitForTimeout(120)
+      }
+      if (down) await page.mouse.up()
       const q = await qa(page)
       if (q.section === 'jetski' && q.film?.film !== 'found') throw new Error(`parked without Zoom's film: ${JSON.stringify({ phase: q.phase, film: q.film, dock: q.dock, rode: q.rode, zoom: q.zoom })}`)
       await onIsland(page)

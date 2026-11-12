@@ -1140,7 +1140,8 @@ export const motion = [
     act: async (page) => {
       await page.waitForFunction(() => window.__thaiSametQA().nudged, null, { timeout: 16000 })
       await page.waitForTimeout(1500)
-      await page.getByRole('button', { name: /Where to/ }).click()
+      // (It pulses while it glows, so it never holds still for a robot's click: a finger doesn't wait.)
+      await page.getByRole('button', { name: /Where to/ }).click({ force: true })
       await page.locator('[data-board="beaches"]').waitFor({ timeout: 4000 })
       await page.waitForTimeout(1500)
     },

@@ -195,7 +195,8 @@ export const motion = [
       await filmDone('intro')(page)
       await page.waitForFunction(() => { const q = window.__thaiSametQA(); return q.round === 'twirl' && q.lights }, null, { timeout: 5000 })
       await page.waitForTimeout(1500)
-      for (let i = 0; i < 5 && (await qa(page)).round === 'twirl'; i++) await poiCircles(page, 0.8, 2, 30)
+      // (The twirl moves on after six loops.)
+      for (let i = 0; i < 10 && (await qa(page)).round === 'twirl'; i++) await poiCircles(page, 0.8, 2, 30)
       for (let s = 0; s < 3; s++) {
         await page.waitForFunction(() => window.__thaiSametQA().phase === 'trace', null, { timeout: 15000 })
         await page.waitForTimeout(500)

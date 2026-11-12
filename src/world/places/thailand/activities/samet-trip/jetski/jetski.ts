@@ -282,6 +282,8 @@ export class JetSki implements World3D {
   private goalGlow: Mesh
   /** The pink ring she drives into to get off; armed once she has been away from it. */
   private dock: Mesh
+  /** Where the ride was on the last frame the ring was open (for the ring's check). */
+  private dockLast: { x: number; z: number } | null = null
   private dockArmed = false
   private parkT = -1
   private dockShowUntil = -1
@@ -1175,11 +1177,23 @@ export class JetSki implements World3D {
     const decent = !this.zoomWild || this.round !== 'ride' || (this.rodeT >= SILLY.decent && this.story.chased)
     const open = (this.phase === 'ride' && decent) || (this.phase === 'raceEnd' && this.winner === 'her')
     this.dock.visible = open
-    if (!open) return
+    if (!open) {
+      this.dockLast = null
+      return
+    }
     // (Above the swell all round: flat on the water it dips under the waves.)
     this.dock.position.set(DOCK.x, this.water(DOCK.x, DOCK.z) + 0.3, DOCK.z)
     this.dock.scale.setScalar(1 + Math.sin(t * 3) * 0.06)
-    const dist = Math.hypot(d.x - DOCK.x, d.z - DOCK.z)
+    // (How close the ride came to the ring's middle since the last frame, not just where it is now: a fast pass on a
+    // slow frame would otherwise skip clean over it and run up the sand.)
+    const px = this.dockLast?.x ?? d.x
+    const pz = this.dockLast?.z ?? d.z
+    this.dockLast = { x: d.x, z: d.z }
+    const sx = d.x - px
+    const sz = d.z - pz
+    const sl = sx * sx + sz * sz
+    const k = sl > 1e-6 ? Math.max(0, Math.min(1, ((DOCK.x - px) * sx + (DOCK.z - pz) * sz) / sl)) : 1
+    const dist = Math.hypot(px + sx * k - DOCK.x, pz + sz * k - DOCK.z)
     if (dist > DOCK_R + 5) this.dockArmed = true
     // A little way into the ride, Sparkle says how to get off (once a visit).
     if (this.dockArmed && this.phase === 'ride' && this.round === 'ride' && this.rideT > 25 && !this.told.has('off')) {
