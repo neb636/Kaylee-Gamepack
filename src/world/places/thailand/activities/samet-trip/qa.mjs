@@ -11,9 +11,8 @@
 // Greybox 6, lunch and hide and seek at Ao Prao: the deck with a roll eaten and the coconut sipped, hide and seek's
 // count, a seek, the trickier round and her turn hiding; filmed: finding Daddy behind the tree, and Daddy searching
 // the wrong places while she hides behind the chairs.
-// Greybox 7, getting there and the trip frame: packing in Kaylee's room, the speedboat leaving Ban Phe and out at sea
-// (her hoof in the spray), the island with every flag up (the way home); filmed: her hoof in the spray out at sea,
-// dragging along the side.
+// Greybox 7, getting there and the trip frame: packing in Kaylee's room, the speedboat's cutscene (leaving Ban Phe,
+// the ferry going by), the island with every flag up (the way home); filmed: the whole ride to Na Dan pier.
 // Step 9, the finale: the sunset at the driftwood tree, the sun pulled down into the sea (night), the fire show's
 // twirl, a shape to draw over and the big finish (the ring of fire, fireworks); filmed: twirling the glowing poi in
 // circles (the ribbons, the dancers copying her), and drawing the big ring for the ring of fire.
@@ -116,7 +115,8 @@ async function followPuppy(page, route, done, ms) {
 export const screens = [
   { name: 'thailand-samet-pack', hash: '#/world/thailand/samet-trip/pack', reset: true, wait: 3500 },
   { name: 'thailand-samet-speedboat-pier', hash: '#/world/thailand/samet-trip/speedboat', reset: true, wait: 2500 },
-  { name: 'thailand-samet-speedboat-sea', hash: '#/world/thailand/samet-trip/speedboat', reset: true, wait: 9000, act: async (page) => boatSpray(page, 3000) },
+  { name: 'thailand-samet-speedboat-ferry', hash: '#/world/thailand/samet-trip/speedboat', reset: true, wait: 6200 },
+  { name: 'thailand-samet-speedboat-sea', hash: '#/world/thailand/samet-trip/speedboat', reset: true, wait: 9500 },
   { name: 'thailand-samet-island-home', hash: '#/world/thailand/samet-trip/island?at=nadan&flags=all', reset: true, wait: 2500 },
   { name: 'thailand-samet-island-nadan', hash: '#/world/thailand/samet-trip/island?at=nadan', reset: true, wait: 2500 },
   { name: 'thailand-samet-island-saikaew', hash: '#/world/thailand/samet-trip/island?at=saikaew&flags=jetski', reset: true, wait: 2500 },
@@ -249,21 +249,6 @@ async function sandChannel(page) {
     }
     await page.mouse.up()
   }
-}
-
-/** Holds a finger on the water beside the speedboat (QA's `water` point), dragging along the side and back. */
-async function boatSpray(page, ms) {
-  const vp = page.viewportSize()
-  const q = await page.evaluate(() => window.__thaiSametQA?.())
-  if (!q?.water) return
-  const at = (x, y) => [Math.max(5, Math.min(vp.width - 5, x)), Math.max(120, Math.min(vp.height - 5, y))]
-  await page.mouse.move(...at(q.water.x, q.water.y))
-  await page.mouse.down()
-  for (let t = 0; t < ms; t += 120) {
-    await page.mouse.move(...at(q.water.x + Math.sin(t / 400) * vp.width * 0.06, q.water.y + Math.sin(t / 300) * vp.height * 0.08))
-    await page.waitForTimeout(120)
-  }
-  await page.mouse.up()
 }
 
 /** Her finger drawing circles round the middle of the fire show's drawing plane (`r` meters, `loops` times). */
@@ -431,14 +416,14 @@ export const motion = [
     },
   },
   {
-    name: 'thailand-samet-speedboat-spray',
-    seconds: 10,
+    name: 'thailand-samet-speedboat-ride',
+    seconds: 19,
     setup: async (page, base) => {
       await page.goto(`${base}#/world/thailand/samet-trip/speedboat`)
       await ready(page)
-      await page.waitForTimeout(9000)
     },
-    act: async (page) => boatSpray(page, 9000),
+    // The cutscene, Ban Phe to Na Dan pier, untouched.
+    act: (page) => page.waitForTimeout(19000),
   },
   {
     name: 'thailand-samet-snorkel-lead',
@@ -1069,7 +1054,7 @@ export const motion = [
       await page.goto(`${base}#/world/thailand/samet-trip/speedboat`)
       await ready(page)
     },
-    // Nobody touching it: the finger shows her hoof's place in the spray at once, and flying fish leap by themselves.
+    // Nobody touching it: the cutscene plays on to Na Dan pier.
     act: (page) => page.waitForTimeout(14000),
   },
   // #357 way-finding, card B: the beach puppy. The same moments film on main (no puppy: the old way) for before/after.
