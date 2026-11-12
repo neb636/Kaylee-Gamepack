@@ -9,7 +9,10 @@ import type { WebGLRenderer } from 'three'
 import { VideoBreak } from '../../../../../kit/Theater'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
-import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
+import type { FilmState } from '../../../../../engine3d/film'
+import { FilmOverlay } from '../../../../../engine3d/FilmOverlay'
+import type { Line } from '../../../../../../sdk'
+import { TripGuide, WHO, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { FarmEnd } from '../mushrooms/Mushrooms'
 import { Snapshot } from '../Snapshot'
 import type { Round } from './layout'
@@ -29,6 +32,9 @@ export function Rice({ round, onRound, onMap }: Props) {
   const [done, setDone] = useState(false)
   const [video, setVideo] = useState(false)
   const [photo, setPhoto] = useState<{ src: string; n: number } | null>(null)
+  // Lung's story: a film on screen (its beat, the memory's look) and the words being said.
+  const [film, setFilm] = useState<FilmState | null>(null)
+  const [filmLine, setFilmLine] = useState<Line | null>(null)
   const worldRef = useRef<RiceFarm | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const guideRef = useRef<TripGuideHandle>(null)
@@ -51,6 +57,8 @@ export function Rice({ round, onRound, onMap }: Props) {
         photo: (src) => setPhoto((p) => ({ src, n: (p?.n ?? 0) + 1 })),
         // The photo's had its moment: the video, then the end card.
         allDone: () => setVideo(true),
+        film: setFilm,
+        filmLine: setFilmLine,
       },
       { round: now.current },
     )
@@ -62,6 +70,9 @@ export function Rice({ round, onRound, onMap }: Props) {
     setDone(false)
     setVideo(false)
     setPhoto(null)
+    setFilm(null)
+    setFilmLine(null)
+    // (Again: straight to the planting, she's heard the story.)
     now.current = 'plant'
     onRound('plant')
     setKey((k) => k + 1)
@@ -100,7 +111,8 @@ export function Rice({ round, onRound, onMap }: Props) {
           🌾 Tap to wake the rice farm
         </button>
       )}
-      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={video || done} />}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={video || done || !!film} />}
+      {mode === 'webgl' && <FilmOverlay state={film} line={filmLine} speaker={(v) => WHO[v]} onSkip={() => worldRef.current?.skipFilm()} />}
       <AnimatePresence>{photo && !video && <Snapshot key={photo.n} src={photo.src} />}</AnimatePresence>
       {video && (
         <VideoBreak

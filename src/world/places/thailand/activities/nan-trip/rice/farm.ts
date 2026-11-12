@@ -328,7 +328,7 @@ export function buildFarm(bag: Bag): Farm {
   }
   root.add(solid(merge(wood), bag, 2))
 
-  // ---- The scarecrow, in a blue shirt and a ngob ----
+  // ---- The scarecrow, in a blue shirt and its floppy straw hat ----
   const scare = new Group()
   scare.position.set(...SCARECROW)
   scare.userData.pick = 'scarecrow'
@@ -355,7 +355,7 @@ export function buildFarm(bag: Bag): Farm {
   )
   const hat = new Group()
   hat.position.set(0, 1.56, 0)
-  hat.add(solid(merge(ngobParts(0.32)), bag, 2))
+  hat.add(solid(merge(floppyHatParts()), bag, 2))
   scare.add(hat)
   scare.add(blobShadow(0.35, bag))
   root.add(scare)
@@ -821,9 +821,30 @@ function buildDuck(bag: Bag) {
  *  in the indigo mor hom shirt northern farmers wear and a scarf. */
 export const LUNG: Look = { species: 'monkey', height: 1.22, chub: 1.08, fur: '#A88466', light: '#F4E4D0', dark: '#6E5646', ear: '#F2B8A8', outfit: { kind: 'shirt', color: '#43549E' }, extras: ['moustache', 'scarf'], open: true }
 
-/** Lung's own ngob: plain, with a mint band (Kaylee's is pink, the scarecrow's bare), sitting straight on his head. */
-export function lungNgob(bag: Bag) {
-  return solid(merge([...ngobParts(0.34), P.torus(0.34 * 0.8, 0.34 * 0.05, '#7FD6B4', { at: [0, 0.34 * 0.42 * 0.2, 0], rot: [Math.PI / 2, 0, 0] })]), bag, 2)
+/** Lung's ngob: plain, with a coloured band (Kaylee's has a pink band and a flower), sitting straight on his head.
+ *  His new one has a sunny yellow band; his old one (the mint band) is Jip's nest now (story.ts). */
+export function lungNgob(bag: Bag, band = '#FFC94D') {
+  return solid(merge([...ngobParts(0.34), P.torus(0.34 * 0.8, 0.34 * 0.05, band, { at: [0, 0.34 * 0.42 * 0.2, 0], rot: [Math.PI / 2, 0, 0] })]), bag, 2)
+}
+
+/** The scarecrow's floppy straw sun hat, nothing like a farmer's ngob (so a five-year-old sees at once whose hat is
+ *  on whose head): a round crown, a wide brim drooping on one side, a faded lilac band and a pink patch, straw poking
+ *  out. Its middle is the bottom of the crown. */
+export function floppyHatParts(): BufferGeometry[] {
+  const HAT = '#EBCB72'
+  const EDGE = '#C9A04C'
+  return [
+    P.cyl(0.36, 0.37, 0.025, HAT, { at: [0, 0, 0], rot: [0.08, 0, 0.12] }, 22),
+    P.torus(0.36, 0.022, EDGE, { at: [0, -0.002, 0], rot: [Math.PI / 2 + 0.08, 0, 0.12] }, Math.PI * 2),
+    P.sphere(0.2, HAT, { at: [0.01, 0.075, 0], scale: [1, 0.82, 1] }, 18),
+    P.torus(0.195, 0.032, '#B9A6E8', { at: [0.01, 0.045, 0], rot: [Math.PI / 2, 0, 0] }, Math.PI * 2),
+    P.box(0.085, 0.075, 0.02, '#FF8FB1', { at: [0.07, 0.15, 0.15], rot: [-0.55, 0.35, 0.12] }),
+    ...[-0.022, 0.022].map((d) => P.box(0.07, 0.006, 0.006, '#C25D80', { at: [0.07, 0.15 + d, 0.162], rot: [-0.55, 0.35, 0.12 + d * 20] })),
+    ...Array.from({ length: 7 }, (_, k) => {
+      const a = -0.6 + k * 0.55
+      return P.cone(0.014, 0.11, k % 2 ? '#D9AE52' : STRAW, { at: [Math.cos(a) * 0.36, -0.01, Math.sin(a) * 0.36], rot: [Math.sin(a) * 1.3, 0, -Math.cos(a) * 1.3] }, 4)
+    }),
+  ]
 }
 
 /** Kaylee's things on the farm: the seedling bundle she plants from, the sickle, the armful of cut rice, her ngob. */

@@ -171,3 +171,49 @@ export function bed(url: string, vol = 0.35, { fadeIn = 2, fadeOut = 0.8 } = {})
     loop = undefined
   }
 }
+
+/**
+ * A piece that plays once from the start (a film's music): fades in, plays to its end, or fades out at stop(). If
+ * the clip is still downloading it starts when it arrives, that far into the piece, so it stays with the pictures.
+ * (Test browsers and a failed download: silence. There's no synth fallback for music.)
+ */
+export function cue(url: string, vol = 0.5, { fadeIn = 0.5, fadeOut = 1.4 } = {}): () => void {
+  const a = audio()
+  if (skip || !a || !url) return () => {}
+  const asked = a.currentTime
+  let src: AudioBufferSourceNode | undefined
+  let gain: GainNode | undefined
+  let stopped = false
+  let tries = 0
+  const go = () => {
+    if (stopped) return
+    const b = buffers.get(url)
+    if (!b) {
+      if (tries++ < 40) {
+        load(url)
+        setTimeout(go, 150)
+      }
+      return
+    }
+    const at = Math.max(0, a.currentTime - asked)
+    if (at >= b.duration - 0.2) return
+    src = a.createBufferSource()
+    src.buffer = b
+    gain = a.createGain()
+    gain.gain.setValueAtTime(0.0001, a.currentTime)
+    gain.gain.linearRampToValueAtTime(vol, a.currentTime + (at > 0.1 ? 0.3 : fadeIn))
+    src.connect(gain).connect(out(a))
+    src.start(a.currentTime, at)
+  }
+  go()
+  return () => {
+    stopped = true
+    if (!src || !gain) return
+    const t = a.currentTime
+    gain.gain.cancelScheduledValues(t)
+    gain.gain.setValueAtTime(gain.gain.value, t)
+    gain.gain.linearRampToValueAtTime(0.0001, t + fadeOut)
+    src.stop(t + fadeOut + 0.05)
+    src = undefined
+  }
+}

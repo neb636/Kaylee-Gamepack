@@ -5,7 +5,7 @@
 // milk on the deck, Lung Kham's chuckle, and the far-off farm life the farm plays quietly now and then. Recorded clips
 // (sfx/, ElevenLabs) with the synthesized ones as their fallbacks; the plips' scale, the bells and the chuckle stay
 // synthesized (in tune, and Lung Kham has his own voice).
-import { bed, clip, playClip } from '../../../../../kit/clips'
+import { bed, clip, cue, playClip } from '../../../../../kit/clips'
 import { noise, tone } from '../../../../../kit/sfx'
 import { sfx } from '../../../sfx'
 import { nanClip } from '../sfx'
@@ -133,6 +133,36 @@ const synth = {
     }),
     () => tone(140, 105, 0.9, 0.03, 'sawtooth'),
   ],
+  // ---- Lung Kham's story (story.ts) ----
+  /** Jip: jip jip! (a cheeky little double chirp). */
+  jip: () => [0, 0.12].forEach((d) => tone(3400 + Math.random() * 300, 4300, 0.06, 0.05, 'sine', d)),
+  /** The chicks, hungry: a run of tiny peeps. */
+  peep: () => [0, 0.09, 0.2, 0.28].forEach((d) => tone(5200 + Math.random() * 700, 4700, 0.04, 0.025, 'sine', d)),
+  /** Lung napping: a soft snore in, a whistle out. */
+  snore: () => {
+    noise(0.7, 0.035, 'lowpass', 380, 260, 0, 2)
+    tone(900, 1300, 0.4, 0.015, 'sine', 0.8)
+  },
+  /** A straw hat landing on a head: plop. */
+  plop: () => {
+    tone(420, 220, 0.1, 0.07, 'sine')
+    noise(0.12, 0.04, 'bandpass', 1800, 900, 0, 1.4)
+  },
+  /** A little flock flying in: lots of small wings. */
+  flock: () => {
+    for (let i = 0; i < 12; i++) noise(0.05, 0.03, 'bandpass', 1500 + Math.random() * 900, 2500, i * 0.07 + Math.random() * 0.03, 2)
+  },
+  /** Birds pecking up the rice: a quick patter of pecks. */
+  pecking: () => {
+    for (let i = 0; i < 10; i++) tone(2600 + Math.random() * 900, 2000, 0.02, 0.025, 'square', i * 0.08 + Math.random() * 0.03)
+  },
+  /** One grain plucked off the rice. */
+  pluck: () => tone(900, 1500, 0.06, 0.05, 'sine'),
+  /** The page turning into a memory (`back`: out of it). */
+  page: (back = false) => [0, 1, 2, 3, 4, 5].forEach((i) => {
+    const f = 523 * Math.pow(2, (back ? 9 - i * 1.5 : i * 2) / 12)
+    tone(f, f, 0.35, 0.03, 'sine', i * 0.05)
+  }),
   /** Splash! Daddy got wet. */
   wet: () => {
     noise(0.3, 0.07, 'bandpass', 1400, 600, 0, 1)
@@ -183,6 +213,16 @@ export const riceSfx = {
   toss: clip(c('rice-toss'), synth.toss, { vol: 0.6 }),
   steam: clip(c('rice-steam'), synth.steam, { vol: 0.45 }),
   wet: clip(c('rice-wet'), synth.wet, { vol: 0.7 }),
+  jip: clip(c('rice-jip'), synth.jip, { vol: 0.55, jitter: 0.08 }),
+  peep: clip(c('rice-peep'), synth.peep, { vol: 0.45, jitter: 0.1 }),
+  snore: clip(c('rice-snore'), synth.snore, { vol: 0.6, jitter: 0.03 }),
+  plop: clip(c('rice-plop'), synth.plop, { vol: 0.7 }),
+  flock: clip(c('rice-flock'), synth.flock, { vol: 0.6 }),
+  pecking: clip(c('rice-pecking'), synth.pecking, { vol: 0.55 }),
+  pluck: clip(c('rice-pluck'), synth.pluck, { vol: 0.6 }),
+  page: (back = false) => {
+    if (!playClip(c(back ? 'rice-page-out' : 'rice-page-in'), { vol: 0.55 })) synth.page(back)
+  },
   far: [
     far('rice-frog', 0.18, synth.far[0]),
     far('rice-cheep', 0.15, synth.far[1]),
@@ -194,3 +234,8 @@ export const riceSfx = {
 
 /** The fields around her: frogs, insects, birds, a breeze, until stop(). */
 export const fieldBed = () => bed(nanClip('rice-field'), 0.25)
+
+/** Last year's afternoon, in Lung's story: warm, sleepy, cicadas (it plays over the fields while he remembers). */
+export const memoryBed = () => bed(nanClip('rice-memory'), 0.3, { fadeIn: 1.2, fadeOut: 1.2 })
+/** The story's music: the way in (Lung's tale) and the nest. Each stops (fading) when its film ends or is skipped. */
+export const storyMusic = (which: 'intro' | 'nest') => cue(nanClip(which === 'intro' ? 'rice-story-music' : 'rice-nest-music'), 0.42)

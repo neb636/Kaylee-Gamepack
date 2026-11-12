@@ -166,6 +166,18 @@ export class Birds {
     }
   }
 
+  /** Every bird gone at once (a story's flashback is over). */
+  reset() {
+    this.taken.clear()
+    for (const b of this.list) {
+      b.state = 'off'
+      b.perch = -1
+      b.fat = 0
+      b.sat = 0
+      b.root.visible = b.shadow.visible = false
+    }
+  }
+
   /** Everyone flies away (the rice is ripe). */
   away() {
     for (const b of this.list) {
