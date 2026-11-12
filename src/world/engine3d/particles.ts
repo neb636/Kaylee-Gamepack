@@ -89,6 +89,11 @@ export class Particles {
   }
 
   update(dt: number) {
+    // Nothing alive now or last frame: nothing to send to the GPU, nothing to draw.
+    if (this.live === 0 && !this.pool.some((p) => p.age < p.life)) {
+      this.mesh.visible = false
+      return
+    }
     const foam = this.o.kind === 'foam'
     let n = 0
     for (const p of this.pool) {
@@ -118,7 +123,19 @@ export class Particles {
     }
     this.live = n
     this.mesh.count = n
-    this.mesh.instanceMatrix.needsUpdate = true
-    if (this.mesh.instanceColor) this.mesh.instanceColor.needsUpdate = true
+    this.mesh.visible = n > 0
+    // Only the live copies go up (the rest of the pool isn't drawn). (Never an empty range: WebGL2 reads a length of 0
+    // as "to the end of the buffer".)
+    if (n === 0) return
+    const im = this.mesh.instanceMatrix
+    im.clearUpdateRanges()
+    im.addUpdateRange(0, n * 16)
+    im.needsUpdate = true
+    const ic = this.mesh.instanceColor
+    if (ic) {
+      ic.clearUpdateRanges()
+      ic.addUpdateRange(0, n * 3)
+      ic.needsUpdate = true
+    }
   }
 }

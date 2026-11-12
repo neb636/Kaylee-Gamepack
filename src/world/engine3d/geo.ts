@@ -8,7 +8,7 @@
 //   ]), bag, 2)
 import { BoxGeometry, BufferAttribute, CanvasTexture, CapsuleGeometry, Color, ConeGeometry, CylinderGeometry, Euler, ExtrudeGeometry, Group, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Shape, SphereGeometry, TorusGeometry, Vector2, Vector3, type BufferGeometry, type ColorRepresentation } from 'three'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js'
-import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
+import { mergeGeometries, mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import type { Bag } from './dispose'
 import { makeHull } from './outline'
 import { toon } from './toon'
@@ -55,10 +55,18 @@ export const P = {
 }
 
 export function merge(parts: BufferGeometry[]): BufferGeometry {
-  const merged = mergeGeometries(parts, false)
-  for (const p of parts) p.dispose()
+  // A part that's already a merge (indexed) goes back to plain triangles, so every part matches.
+  const mixed = parts.some((p) => p.index) && parts.some((p) => !p.index)
+  const flat = mixed ? parts.map((p) => (p.index ? p.toNonIndexed() : p)) : parts
+  const merged = mergeGeometries(flat, false)
+  for (const p of new Set([...parts, ...flat])) p.dispose()
   if (!merged) throw new Error('merge: parts have different attributes')
-  return merged
+  // The parts are plain triangles (bake), so drawn as they are the GPU would shade every corner once per triangle
+  // that shares it (three times the vertex work). Welding only exact twins (same place, normal and color) draws the
+  // same picture with each corner shaded once.
+  const welded = mergeVertices(merged, 1e-6)
+  merged.dispose()
+  return welded
 }
 
 /**
@@ -83,10 +91,8 @@ export function solid(geometry: BufferGeometry, bag: Bag, px = 2): Group {
  */
 export function solidMix(outlined: BufferGeometry[], plain: BufferGeometry[], bag: Bag, px = 2): Group {
   const g = new Group()
-  const all = mergeGeometries([...outlined, ...plain], false)
-  const lined = px > 0 && outlined.length ? mergeGeometries(outlined, false) : null
-  for (const p of [...outlined, ...plain]) p.dispose()
-  if (!all) throw new Error('solidMix: parts have different attributes')
+  const lined = px > 0 && outlined.length ? merge(outlined.map((p) => p.clone())) : null
+  const all = merge([...outlined, ...plain])
   g.add(new Mesh(bag.add(all), toon('#ffffff', true)))
   if (lined) {
     const hull = makeHull(lined, px)
