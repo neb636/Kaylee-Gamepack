@@ -419,6 +419,10 @@ export const screens = [
   { name: 'nan-salt-1', hash: '#/world/thailand/nan-trip/salt', reset: true, wait: 3500 },
   { name: 'nan-salt-2', hash: '#/world/thailand/nan-trip/salt?round=2', reset: true, wait: 3500 },
   { name: 'nan-salt-3', hash: '#/world/thailand/nan-trip/salt?round=3', reset: true, wait: 3500 },
+  // Pa Kluea's story (salt/story.ts): the way in (mid-film: the cooks pulling faces, the memory), the dinner at dusk.
+  { name: 'nan-salt-story', hash: '#/world/thailand/nan-trip/salt?round=story', reset: true, wait: 9000 },
+  { name: 'nan-salt-memory', hash: '#/world/thailand/nan-trip/salt?round=story', reset: true, act: async (page) => page.waitForFunction(() => window.__thaiNanQA?.().film?.beat === 'carry', null, { timeout: 90000 }).then(() => page.waitForTimeout(1500)) },
+  { name: 'nan-salt-dinner', hash: '#/world/thailand/nan-trip/salt?round=dinner', reset: true, act: async (page) => page.waitForFunction(() => { const q = window.__thaiNanQA?.(); return q?.round === 'dinner' && q.films.done.includes('dusk') && !q.film }, null, { timeout: 30000 }).then(() => page.waitForTimeout(1500)) },
   // The Nan map (none done, then two stops done: the airport opens) and the 3 from above.
   { name: 'nan-map', hash: '#/world/thailand/nan-trip/map', reset: true, wait: 3500 },
   { name: 'nan-map-stops', hash: '#/world/thailand/nan-trip/map?stops=mushrooms,rice', reset: true, wait: 3500 },
@@ -2038,6 +2042,59 @@ motion.push(
 // Bo Kluea's salt wells (greybox): the bucket, the core verb. A held finger takes the bucket down into the well (splash,
 // glug), lifts it full (it swings on its rope), carries it over the pan and lowers it so it tips and pours; then in
 // round 3 the finger drags the paddle's blade through the salt toward her and lets go over the basket.
+// Pa Kluea's story (salt/story.ts): the way in plays to the end, a skip in the memory leaves the hut ready to dip, and at
+// the dinner a held finger drags across each food's spots (the soup, the egg jar, the three fish) until every lantern
+// is lit and the party film has played.
+const saltStoryReady = async (page, base, round) => {
+  await page.goto(`${base}#/world/thailand/nan-trip/salt?round=${round}`)
+  await page.waitForFunction(() => window.__thaiNanQA?.().game === 'salt', null, { timeout: 30000 })
+}
+motion.push(
+  { name: 'nan-salt-story', seconds: 70, setup: (page, base) => saltStoryReady(page, base, 'story'), act: filmDone('intro') },
+  {
+    name: 'nan-salt-story-skip',
+    seconds: 8,
+    setup: async (page, base) => {
+      await saltStoryReady(page, base, 'story')
+      await page.waitForFunction(() => window.__thaiNanQA?.().film?.beat === 'page-in', null, { timeout: 90000 })
+      await page.waitForTimeout(1500)
+    },
+    act: async (page) => {
+      const b = await page.getByRole('button', { name: 'Hold to skip the story' }).boundingBox()
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2)
+      await page.mouse.down()
+      await page.waitForTimeout(900)
+      await page.mouse.up()
+      await page.waitForFunction(() => { const q = window.__thaiNanQA(); return !q.film && q.round === '1' }, null, { timeout: 5000 })
+    },
+  },
+  {
+    name: 'nan-salt-dinner',
+    seconds: 40,
+    setup: async (page, base) => {
+      await saltStoryReady(page, base, 'dinner')
+      await page.waitForFunction(() => { const q = window.__thaiNanQA?.(); return q?.round === 'dinner' && q.films.done.includes('dusk') && !q.film }, null, { timeout: 30000 })
+      await page.waitForTimeout(800)
+    },
+    act: async (page) => {
+      for (let i = 0; i < 3; i++) {
+        const spots = (await page.evaluate(() => window.__thaiNanQA())).points.food[i].filter(Boolean)
+        await page.mouse.move(...spots[0])
+        await page.mouse.down()
+        for (let pass = 0; pass < (spots.length > 1 ? 9 : 4); pass++)
+          for (const p of pass % 2 ? [...spots].reverse() : spots) {
+            await page.mouse.move(p[0], p[1], { steps: 6 })
+            await page.waitForTimeout(spots.length > 1 ? 160 : 420)
+          }
+        await page.mouse.up()
+        await page.waitForFunction((k) => window.__thaiNanQA().story.done[k], i, { timeout: 8000 })
+        await page.waitForTimeout(i === 1 ? 3500 : 2200)
+      }
+      await page.waitForFunction(() => window.__thaiNanQA().films.done.includes('party'), null, { timeout: 40000 })
+    },
+  },
+)
+
 const saltReady = async (page, base, round) => {
   await page.goto(`${base}#/world/thailand/nan-trip/salt?round=${round}`)
   await page.waitForFunction(() => window.__thaiNanQA?.().game === 'salt', null, { timeout: 30000 })

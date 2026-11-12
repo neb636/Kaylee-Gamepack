@@ -1,7 +1,8 @@
 // Bo Kluea's salt hut's screen: the 3D hut and the village street (salt3d.ts) with its tap targets, the 👆 after a while
 // with nothing touched, and at the end (the bags on the shelf) the video of real salt being made (skippable: ⏭ 🧂
 // back to the end card; the 3D world holds still under it), then the end card: 🔁 the salt hut again, or 🗺️ back to the
-// Nan map (its stamp lands there). Sparkle sits in the corner (trip/legs/Guide.tsx, hidden under the end card) and
+// Nan map (its stamp lands there). Pa Kluea's story (story.ts) plays its films over it: FilmOverlay draws their words,
+// the memory's storybook look and the hold-to-skip ⏭. Sparkle sits in the corner (trip/legs/Guide.tsx, hidden under the end card) and
 // everyone talks out loud in their own voice: the salt aunty, Daddy, Sparkle.
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
@@ -9,7 +10,10 @@ import type { WebGLRenderer } from 'three'
 import { VideoBreak } from '../../../../../kit/Theater'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
-import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
+import type { FilmState } from '../../../../../engine3d/film'
+import { FilmOverlay } from '../../../../../engine3d/FilmOverlay'
+import type { Line } from '../../../../../../sdk'
+import { TripGuide, WHO, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { FarmEnd } from '../mushrooms/Mushrooms'
 import type { Round } from './layout'
 import { SALT_ANCHORS, SaltHut } from './salt3d'
@@ -27,6 +31,9 @@ export function Salt({ round, onRound, onMap }: Props) {
   const [key, setKey] = useState(0)
   const [done, setDone] = useState(false)
   const [video, setVideo] = useState(false)
+  // Pa Kluea's story: a film on screen (its beat, the memory's look) and the words being said.
+  const [film, setFilm] = useState<FilmState | null>(null)
+  const [filmLine, setFilmLine] = useState<Line | null>(null)
   const worldRef = useRef<SaltHut | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const guideRef = useRef<TripGuideHandle>(null)
@@ -47,6 +54,8 @@ export function Salt({ round, onRound, onMap }: Props) {
           cb.current(r)
         },
         allDone: () => setVideo(true),
+        film: setFilm,
+        filmLine: setFilmLine,
       },
       { round: now.current },
     )
@@ -57,6 +66,9 @@ export function Salt({ round, onRound, onMap }: Props) {
   const again = () => {
     setDone(false)
     setVideo(false)
+    setFilm(null)
+    setFilmLine(null)
+    // (Again: straight to the dipping, she's heard the story.)
     now.current = '1'
     onRound('1')
     setKey((k) => k + 1)
@@ -95,7 +107,8 @@ export function Salt({ round, onRound, onMap }: Props) {
           🧂 Tap to wake the salt hut
         </button>
       )}
-      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={video || done} />}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={video || done || !!film} />}
+      {mode === 'webgl' && <FilmOverlay state={film} line={filmLine} speaker={(v) => WHO[v]} onSkip={() => worldRef.current?.skipFilm()} />}
       {video && (
         <VideoBreak
           video={SALT_VIDEO}

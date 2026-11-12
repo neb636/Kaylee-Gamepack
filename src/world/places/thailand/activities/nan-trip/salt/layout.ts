@@ -14,8 +14,10 @@ export type V3 = [number, number, number]
 
 // ---------------------------------------------------------------- the rounds
 
-/** 1 dip and pour (fill the pan from the well), 2 the fire (logs in, it boils down), 3 scrape the salt into the basket. */
-export const ROUNDS = ['1', '2', '3'] as const
+/** `story` the way in (Pa Kluea's film: the cooks have no salt, the village dinner is tonight), 1 dip and pour (fill
+ *  the pan from the well), 2 the fire (logs in, it boils down), 3 scrape the salt into the basket, `dinner` the village
+ *  dinner at dusk (sprinkle the salt into each cook's food; the party film). */
+export const ROUNDS = ['story', '1', '2', '3', 'dinner'] as const
 export type Round = (typeof ROUNDS)[number]
 
 // ---------------------------------------------------------------- the well, the beam and the bucket
@@ -108,3 +110,51 @@ export const ROAD_Z = -2.6
 export const MURAL = { x: 0.7, y: 1.12, z: -4.15, w: 2.6, h: 1.55 }
 /** On a tall screen the edges come in a little, so everyone fits. */
 export const TALL = { ji: [-1.55, 0, -0.85] as V3, aunty: [1.7, 0, -0.75] as V3, wood: [1.95, 0, 0.75] as V3, baskets: [-1.95, 0, 0.62] as V3 }
+
+// ---------------------------------------------------------------- Pa Kluea's story (story.ts, dinner.ts)
+
+/** The three cooks wait across the road while she makes the salt (by the house with the painted couple), facing the
+ *  hut: Lung Kwai the buffalo (noodle soup), Pa Kai the hen (salty eggs), Yai Nak the otter (grilled fish). */
+export const COOKS_WAIT: V3[] = [
+  [-1.15, 0, -3.35],
+  [0.15, 0, -3.5],
+  [1.4, 0, -3.35],
+]
+/** In the way-in film they come into the hut from the left, along the front, and stand in a row facing Pa Kluea. */
+export const COOKS_IN: V3[] = [
+  [-0.3, 0, 1.0],
+  [0.5, 0, 1.15],
+  [1.25, 0, 1.0],
+]
+/** Pa Kluea's big salt jar (empty: the trouble), on the floor by the shelf. */
+export const SALT_JAR: V3 = [1.55, 0, -0.9]
+/** Where Pa Kluea stands to talk in the films (by her pan, toward the front). */
+export const AUNTY_TALK: V3 = [1.85, 0, 0.15]
+
+/** The village dinner: a set of its own along the same road, far enough right that the hut's shots never see it. Three
+ *  stalls in a row facing the camera, their cooks behind them, lanterns over each, string lights along the road. */
+export const DINNER = { x: 16, z: 0 }
+export const STALL_X = [-1.65, 0, 1.65].map((d) => DINNER.x + d)
+export const STALL_Z = -0.35
+/** The counter's top, where the food sits and the salt lands. */
+export const COUNTER_Y = 0.56
+/** Each food sits right of its counter's middle and its cook stands behind the left of it, so the food never hides
+ *  their face. */
+export const FOOD_X = [0.2, 0.16, 0.12]
+export const COOK_DX = -0.36
+/** Kaylee's line in front of the stalls, and where the family stand to watch. */
+export const DINNER_KAYLEE_Z = 0.55
+export const DINNER_NICK: V3 = [DINNER.x - 2.6, 0, -1.0]
+export const DINNER_JI: V3 = [DINNER.x - 3.05, 0, -0.75]
+export const DINNER_AUNTY: V3 = [DINNER.x + 2.95, 0, 0.35]
+/** The salt each food wants (the spots on it a sprinkle fills: the soup pot has one, the egg jar one, the grill one per
+ *  fish), how near a sprinkle must land (m), and how fast a held sprinkle fills a spot (per second). */
+export const FOOD_SPOTS: [x: number, z: number][][] = [
+  [[0, 0]],
+  [[0.12, 0]],
+  [[-0.3, 0.02], [0, 0.02], [0.3, 0.02]],
+]
+export const SPOT_R = 0.2
+export const SALT_RATE = 0.9
+/** Held on after it's just right, this much more and the cook gets a too-salty face (and it starts again). */
+export const TOO_SALTY = 0.9
