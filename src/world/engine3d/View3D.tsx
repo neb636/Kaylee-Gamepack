@@ -6,7 +6,7 @@
 // one-finger drag that swings the camera, a two-finger pinch that moves it in and out, and WASD / arrows / space on a
 // keyboard for Dad.
 import { useEffect, useRef, type MutableRefObject, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
-import type { Scene, WebGLRenderer } from 'three'
+import type { InstancedMesh, Mesh, Scene, WebGLRenderer } from 'three'
 import type { CameraRig } from './camera'
 import { camLab, type LabWorld } from './camLab'
 import { automated } from './flags'
@@ -161,6 +161,8 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
 
     // ---- Frame loop, frame-time stats and a gentle pixel-ratio drop on a slow device ----
     const times: number[] = []
+    const sorted: number[] = []
+    let nTimes = 0
     let slow = 0
     let stop = () => {}
     const begin = () => {
@@ -175,11 +177,18 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
           world.render()
           world.placeAnchors()
           pad.current?.show(world.roam?.() ?? null)
-          times.push(dt * 1000)
-          if (times.length > 120) times.shift()
-          const sorted = [...times].sort((a, b) => a - b)
-          world.stats.fps = Math.round(1000 / (times.reduce((a, b) => a + b, 0) / times.length))
-          world.stats.p95 = Math.round(sorted[Math.floor(sorted.length * 0.95)] ?? 0)
+          // The last 120 frame times in a ring; fps and p95 worked out every 30 frames (sorting every frame was garbage).
+          times[nTimes++ % 120] = dt * 1000
+          if (nTimes % 30 === 0) {
+            const n = Math.min(nTimes, 120)
+            let sum = 0
+            for (let i = 0; i < n; i++) sorted[i] = times[i]
+            sorted.length = n
+            sorted.sort((a, b) => a - b)
+            for (let i = 0; i < n; i++) sum += sorted[i]
+            world.stats.fps = Math.round(1000 / (sum / n))
+            world.stats.p95 = Math.round(sorted[Math.floor(n * 0.95)] ?? 0)
+          }
           // (Not in the Studio: its 30 fps cap would read as a slow device.)
           if (!automated && !world.calm) {
             slow = dt > 0.02 ? slow + 1 : Math.max(0, slow - 2)
@@ -367,7 +376,17 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
     }
     canvas.addEventListener('webglcontextlost', onLost)
 
-    window[qaKey] = () => ({ mode: 'webgl', ...world.qa(), stats: { ...world.stats, dpr }, memory: world.memory() })
+    // (programs: compiled shader programs so far; one that appears mid-play was a compile hitch, scripts/qa-perf.mjs.)
+    // (vertices: the corners the GPU shades for everything showing, before culling: an indexed shape shades each once.)
+    const vertices = () => {
+      let n = 0
+      world.scene.traverseVisible((o) => {
+        const g = (o as Mesh).geometry
+        if ((o as Mesh).isMesh && g?.attributes.position) n += g.attributes.position.count * ((o as InstancedMesh).isInstancedMesh ? (o as InstancedMesh).count : 1)
+      })
+      return n
+    }
+    window[qaKey] = () => ({ mode: 'webgl', ...world.qa(), stats: { ...world.stats, dpr, programs: renderer.info.programs?.length ?? 0, vertices: vertices() }, memory: world.memory() })
 
     return () => {
       stop()

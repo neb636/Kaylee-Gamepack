@@ -6,7 +6,7 @@
 //     P.rbox(0.9, 0.06, 1.9, 0.02, PAL.peach, { at: [0, 0.72, 0] }),
 //     ...legs.map((at) => P.cyl(0.04, 0.04, 0.7, PAL.ink, { at })),
 //   ]), bag, 2)
-import { BoxGeometry, BufferAttribute, CanvasTexture, CapsuleGeometry, Color, ConeGeometry, CylinderGeometry, Euler, ExtrudeGeometry, Group, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Shape, SphereGeometry, TorusGeometry, Vector2, Vector3, type BufferGeometry, type ColorRepresentation } from 'three'
+import { BoxGeometry, BufferAttribute, CanvasTexture, CapsuleGeometry, Color, ConeGeometry, CylinderGeometry, Euler, ExtrudeGeometry, Group, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Shape, SphereGeometry, TorusGeometry, Vector2, Vector3, BufferGeometry, type ColorRepresentation } from 'three'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import type { Bag } from './dispose'
@@ -22,8 +22,10 @@ export interface PartOpts {
 }
 
 const color = new Color()
-export function bake(g: BufferGeometry, c: ColorRepresentation, o: PartOpts = {}): BufferGeometry {
-  const geo = g.index ? g.toNonIndexed() : g
+/** A part with its color and place baked in. Plain triangles (no index), so a caller can paint it a triangle at a time;
+ *  `indexed` keeps the shape's own index instead (the primitives below: drawn the same, a third of the corners). */
+export function bake(g: BufferGeometry, c: ColorRepresentation, o: PartOpts = {}, indexed = false): BufferGeometry {
+  const geo = g.index && !indexed ? g.toNonIndexed() : g
   if (geo !== g) g.dispose()
   for (const name of Object.keys(geo.attributes)) if (name !== 'position' && name !== 'normal') geo.deleteAttribute(name)
   const m = new Matrix4().compose(new Vector3(...(o.at ?? [0, 0, 0])), new Quaternion().setFromEuler(new Euler(...(o.rot ?? [0, 0, 0]))), new Vector3(...(o.scale ?? [1, 1, 1])))
@@ -38,15 +40,15 @@ export function bake(g: BufferGeometry, c: ColorRepresentation, o: PartOpts = {}
 
 /** Primitive parts, each with a color and an optional place. Sizes in meters. */
 export const P = {
-  box: (w: number, h: number, d: number, c: ColorRepresentation, o?: PartOpts) => bake(new BoxGeometry(w, h, d), c, o),
+  box: (w: number, h: number, d: number, c: ColorRepresentation, o?: PartOpts) => bake(new BoxGeometry(w, h, d), c, o, true),
   /** A box with rounded edges: furniture and props look like toys. */
-  rbox: (w: number, h: number, d: number, r: number, c: ColorRepresentation, o?: PartOpts) => bake(new RoundedBoxGeometry(w, h, d, 2, Math.min(r, w / 2, h / 2, d / 2) * 0.999), c, o),
-  cyl: (top: number, bottom: number, h: number, c: ColorRepresentation, o?: PartOpts, seg = 16) => bake(new CylinderGeometry(top, bottom, h, seg), c, o),
-  cone: (r: number, h: number, c: ColorRepresentation, o?: PartOpts, seg = 16) => bake(new ConeGeometry(r, h, seg), c, o),
-  sphere: (r: number, c: ColorRepresentation, o?: PartOpts, seg = 18) => bake(new SphereGeometry(r, seg, Math.round(seg * 0.7)), c, o),
+  rbox: (w: number, h: number, d: number, r: number, c: ColorRepresentation, o?: PartOpts) => bake(new RoundedBoxGeometry(w, h, d, 2, Math.min(r, w / 2, h / 2, d / 2) * 0.999), c, o, true),
+  cyl: (top: number, bottom: number, h: number, c: ColorRepresentation, o?: PartOpts, seg = 16) => bake(new CylinderGeometry(top, bottom, h, seg), c, o, true),
+  cone: (r: number, h: number, c: ColorRepresentation, o?: PartOpts, seg = 16) => bake(new ConeGeometry(r, h, seg), c, o, true),
+  sphere: (r: number, c: ColorRepresentation, o?: PartOpts, seg = 18) => bake(new SphereGeometry(r, seg, Math.round(seg * 0.7)), c, o, true),
   /** Upright capsule: `len` is the straight middle part, total height len + 2r. */
-  capsule: (r: number, len: number, c: ColorRepresentation, o?: PartOpts) => bake(new CapsuleGeometry(r, len, 5, 14), c, o),
-  torus: (r: number, tube: number, c: ColorRepresentation, o?: PartOpts, arc = Math.PI * 2) => bake(new TorusGeometry(r, tube, 8, 24, arc), c, o),
+  capsule: (r: number, len: number, c: ColorRepresentation, o?: PartOpts) => bake(new CapsuleGeometry(r, len, 5, 14), c, o, true),
+  torus: (r: number, tube: number, c: ColorRepresentation, o?: PartOpts, arc = Math.PI * 2) => bake(new TorusGeometry(r, tube, 8, 24, arc), c, o, true),
   /** A flat outline [x, y][] pushed `depth` along z (centered): a gable's triangle, a sign, a roof's end. */
   prism: (pts: [number, number][], depth: number, c: ColorRepresentation, o?: PartOpts) => {
     const shape = new Shape(pts.map(([x, y]) => new Vector2(x, y)))
@@ -55,11 +57,21 @@ export const P = {
 }
 
 export function merge(parts: BufferGeometry[]): BufferGeometry {
+  // The primitives (P) come indexed: each corner shaded once, not once per triangle that shares it. A plain-triangle
+  // part (one baked by hand, an extrusion) gets the simple index that draws it the same, so every part matches.
+  if (parts.some((p) => p.index)) for (const p of parts) if (!p.index) p.setIndex(serial(p.attributes.position.count))
   const merged = mergeGeometries(parts, false)
   for (const p of parts) p.dispose()
   if (!merged) throw new Error('merge: parts have different attributes')
   return merged
 }
+
+const serial = (n: number) => {
+  const a = n > 65535 ? new Uint32Array(n) : new Uint16Array(n)
+  for (let i = 0; i < n; i++) a[i] = i
+  return new BufferAttribute(a, 1)
+}
+
 
 /**
  * A finished toy shape: the merged parts with the shared vertex-color toon material, plus an ink outline `px` CSS
@@ -83,10 +95,8 @@ export function solid(geometry: BufferGeometry, bag: Bag, px = 2): Group {
  */
 export function solidMix(outlined: BufferGeometry[], plain: BufferGeometry[], bag: Bag, px = 2): Group {
   const g = new Group()
-  const all = mergeGeometries([...outlined, ...plain], false)
-  const lined = px > 0 && outlined.length ? mergeGeometries(outlined, false) : null
-  for (const p of [...outlined, ...plain]) p.dispose()
-  if (!all) throw new Error('solidMix: parts have different attributes')
+  const lined = px > 0 && outlined.length ? merge(outlined.map((p) => p.clone())) : null
+  const all = merge([...outlined, ...plain])
   g.add(new Mesh(bag.add(all), toon('#ffffff', true)))
   if (lined) {
     const hull = makeHull(lined, px)

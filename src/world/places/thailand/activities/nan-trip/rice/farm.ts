@@ -670,7 +670,10 @@ function terraces(bag: Bag) {
     }
     // Built round, then pushed out of round so the steps follow the hill's lumps like real contour terraces.
     for (const [list, into] of [[sides, allSides], [flat, allFlat]] as const) {
-      const g = merge(list)
+      // (Plain triangles again: the normals below stay flat per face, as the toy look wants.)
+      const m = merge(list)
+      const g = m.toNonIndexed()
+      m.dispose()
       const pos = g.attributes.position
       for (let i = 0; i < pos.count; i++) {
         const dx = pos.getX(i) - t.x
