@@ -50,8 +50,8 @@ document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()
 document.querySelectorAll('.listen').forEach(card=>{const a=card.querySelector('audio'),cues=[...card.querySelectorAll('.cue')]
   if(!a||!cues.length)return
   const mark=()=>{const t=a.currentTime,on=t>0||!a.paused?cues.filter(c=>+c.dataset.at<=t+0.05).pop():null;cues.forEach(c=>c.classList.toggle('on',c===on))}
-  const seek=(t)=>{a.currentTime=t;a.play();mark()}
-  cues.forEach(c=>c.addEventListener('click',()=>{const t=+c.dataset.at;if(a.readyState>=1)seek(t);else{a.addEventListener('loadedmetadata',()=>seek(t),{once:true});a.load()}}))
+  const seek=(t)=>{a.currentTime=t;mark()}
+  cues.forEach(c=>c.addEventListener('click',()=>{const t=+c.dataset.at;a.play().catch(()=>{});if(a.readyState>=1)seek(t);else a.addEventListener('loadedmetadata',()=>seek(t),{once:true})}))
   a.addEventListener('play',()=>document.querySelectorAll('.listen audio').forEach(o=>o!==a&&o.pause()))
   let raf=0;const loop=()=>{mark();if(!a.paused)raf=requestAnimationFrame(loop)}
   a.addEventListener('play',()=>{cancelAnimationFrame(raf);loop()});a.addEventListener('seeked',mark);a.addEventListener('pause',mark)})
