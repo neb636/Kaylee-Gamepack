@@ -865,9 +865,11 @@ export class PlaneRide extends Stage {
       if (this.touchdown >= 0) {
         this.touchdown += fdt
         const b = this.touchdown
-        if ((b < 0.05 || Math.abs(b - 0.45) < fdt) && b < 0.5) {
-          // The wheels touch down (squeak, bump), then the second bump and the rollout along the runway.
-          if (b < 0.05) planeSfx.touchdown()
+        // The wheels touch down (squeak, bump), then the second bump and the rollout along the runway: each on the one
+        // frame it crosses its moment (the recordings would pile up on each other).
+        const down = b - fdt <= 0
+        if (down || (b >= 0.45 && b - fdt < 0.45)) {
+          if (down) planeSfx.touchdown()
           else planeSfx.rollout()
           this.turb = 0.6
         }
