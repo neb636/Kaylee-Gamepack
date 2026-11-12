@@ -1,7 +1,7 @@
 {
   "title": "Thailand map: no compass, and it arrives",
   "checkIn": "fix",
-  "kaylee": "The map no longer just sits there when she lands: it holds a beat, then drifts down and in from a slightly turned view, without the compass rose. Coming in from the world map is smooth now too.",
+  "kaylee": "The map no longer just sits there when she lands: the loading screen stays up while the board starts moving, then fades into it as it drifts down and in, without the compass rose.",
   "questions": [],
   "reels": [
     {
