@@ -3,8 +3,9 @@
 //
 //   [{ "id": "drive-moo", "prompt": "...", "seconds": 1.5, "loop": false, "influence": 0.5 }, ...]
 //
-// Each clip is saved as <folder>/<id>.mp3: mono, 64 kbps, normalized to just under full scale (the game sets each
-// clip's level in code), leading silence trimmed off one-shots. The raw take is kept in art/source/sfx/ (gitignored).
+// Each clip is saved as <folder>/<id>.mp3: mono, 128 kbps, its top end softened (TONE: ElevenLabs takes tend to come
+// out bright and fizzy up high), normalized to just under full scale (the game sets each clip's level in code), leading silence trimmed off one-shots. A clip with "bright": true in sfx.json keeps
+// its top end (a bell, a sparkle that should ring). The raw take is kept in art/source/sfx/ (gitignored).
 // Existing clips are skipped, so re-running only makes what's new.
 //
 //   node scripts/generate-sfx.mjs src/world/places/thailand/activities/nan-trip/sfx
@@ -83,18 +84,28 @@ async function fetchTake(s) {
   writeFileSync(join(raw, `${s.id}.mp3`), Buffer.from(await res.arrayBuffer()))
 }
 
+/** The softening: a gentle dip where 'sharp' lives (3-6 kHz), a shelf down above 7.5 kHz, and a soft roll-off over
+ *  12 kHz where the fizz and the codec swirl are. */
+const TONE = 'equalizer=f=4200:t=q:w=1.1:g=-3,highshelf=f=7500:t=q:w=0.7:g=-6,lowpass=f=12000:p=2'
+/** A one-shot is raised to peak at -1 dB, by up to this much. (Capping it lower doesn't clean a take up: the hiss and
+ *  the sound go up together, so a cap only made quiet takes quieter in the game, 3 to 23 dB for Nan's drip and splash
+ *  sounds, 2026-11-12.) */
+const MAX_BOOST = 30
+const BITRATE = '128k'
+
 // Mono, then: a loop (an engine, a bed) matched by loudness, so every bed sits at the same level; a one-shot with its
 // leading silence trimmed (unless that leaves nothing: a very quiet drip) and its peak at -1 dB.
 function processTake(s) {
   const take = join(raw, `${s.id}.mp3`)
   const out = join(dir, `${s.id}.mp3`)
-  const enc = ['-ac', '1', '-b:a', '64k', '-ar', '44100', out]
-  if (s.loop) return ffmpeg('-i', take, '-af', 'loudnorm=I=-20:TP=-1.5:LRA=11', ...enc)
+  const enc = ['-ac', '1', '-b:a', BITRATE, '-ar', '44100', out]
+  const tone = s.bright ? [] : [TONE]
+  if (s.loop) return ffmpeg('-i', take, '-af', [...tone, 'loudnorm=I=-20:TP=-1.5:LRA=11'].join(','), ...enc)
   const tmp = join(raw, `${s.id}.tmp.wav`)
-  ffmpeg('-i', take, '-ac', '1', '-af', 'silenceremove=start_periods=1:start_threshold=-55dB:start_silence=0.01', tmp)
-  if (duration(tmp) < 0.15) ffmpeg('-i', take, '-ac', '1', tmp)
+  ffmpeg('-i', take, '-ac', '1', '-af', [...tone, 'silenceremove=start_periods=1:start_threshold=-55dB:start_silence=0.01'].join(','), tmp)
+  if (duration(tmp) < 0.15) ffmpeg('-i', take, '-ac', '1', ...(tone.length ? ['-af', TONE] : []), tmp)
   const max = Number(analyse(tmp, 'volumedetect').match(/max_volume: (-?[\d.]+) dB/)?.[1] ?? 0)
-  ffmpeg('-i', tmp, '-af', `volume=${Math.min(30, -1 - max).toFixed(2)}dB`, ...enc)
+  ffmpeg('-i', tmp, '-af', `volume=${Math.min(MAX_BOOST, -1 - max).toFixed(2)}dB`, ...enc)
   rmSync(tmp, { force: true })
 }
 
