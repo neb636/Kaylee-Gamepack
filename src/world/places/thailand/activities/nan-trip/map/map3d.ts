@@ -23,7 +23,7 @@
 // she's back, Mommy asks "Home, or one more?" (NanMap.tsx shows 🏠 and 🚙: 🏠 drives to the airport, 🚙 lets her pick);
 // after all three, Mommy says it's time to fly home and the airport glows. Laos's flag: Sparkle says it's another
 // country.
-import { Group, IcosahedronGeometry, Mesh, OctahedronGeometry, Vector3, type WebGLRenderer } from 'three'
+import { Group, IcosahedronGeometry, Mesh, MeshBasicMaterial, OctahedronGeometry, Vector3, type WebGLRenderer } from 'three'
 import { bell, clamp, firstTime, speakingVoice, spendHint } from '../../../../../../sdk'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import type { Shot } from '../../../../../engine3d/camera'
@@ -452,6 +452,12 @@ export class NanMap extends Stage {
       // A glow-bounce on the place she should go to, when she's stuck.
       if (this.time - this.lastTouch > STUCK_S && this.hintPlace() === id) d.places[id].position.y = heightAt(...modelAt(id)) + Math.abs(Math.sin(t * 4)) * 0.04
       else d.places[id].position.y = heightAt(...modelAt(id))
+    }
+    // ---- The soft yellow rings fade in and out round the places she can go to ----
+    for (const id of PLACE_IDS) {
+      const ring = d.rings[id]
+      ring.visible = this.open(id)
+      ;(ring.material as MeshBasicMaterial).opacity = 0.3 + 0.3 * Math.sin(t * 2.2 + PLACE_IDS.indexOf(id) * 0.9)
     }
     for (const s of STOPS) {
       const g = d.stamps[s]

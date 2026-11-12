@@ -9,7 +9,7 @@
 // border, on the paper: Laos, a row of little border posts and its flag. Clouds sit on the peaks, a buffalo grazes the
 // paddies by the river, a fish waits in it, and the little silver Pajero (the drive's, scaled down) sits on the roads.
 // The landmarks are big chunky toys (PLACE_SCALE).
-import { Group, type BufferGeometry } from 'three'
+import { DoubleSide, Group, Mesh, MeshBasicMaterial, RingGeometry, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
@@ -51,6 +51,8 @@ export interface Diorama {
   root: Group
   /** Each place, to bounce when poked. */
   places: Record<PlaceId, Group>
+  /** A soft light-yellow ring round each place (fades in and out so she can see what's tappable). */
+  rings: Record<PlaceId, Mesh>
   /** The stamp floating over each stop once it's done. */
   stamps: Record<Stop, Group>
   plane: Group
@@ -443,5 +445,19 @@ export function buildDiorama(bag: Bag, net: Net): Diorama {
   car.root.scale.setScalar(CAR_SCALE)
   root.add(car.root)
 
-  return { root, places, stamps, plane, clouds, fish, buffalo, flags: { thai, laos }, car, steam: [sx, sg + 0.1, sz + 0.04], river, water: glints.update }
+  // ---- A soft yellow ring round each place, so it's plain which ones she can go to (map3d.ts fades them) ----
+  const rings = {} as Record<PlaceId, Mesh>
+  for (const id of ids) {
+    const r = id === 'town' ? 0.4 : 0.28
+    const mat = bag.add(new MeshBasicMaterial({ color: '#FFF3A8', transparent: true, opacity: 0, depthTest: false, depthWrite: false, side: DoubleSide }))
+    const ring = new Mesh(bag.add(new RingGeometry(r - 0.022, r, 48)), mat)
+    ring.rotation.x = -Math.PI / 2
+    ring.renderOrder = 5
+    const [x, z] = modelAt(id)
+    ring.position.set(x, y(x, z) + 0.02, z)
+    root.add(ring)
+    rings[id] = ring
+  }
+
+  return { root, places, rings, stamps, plane, clouds, fish, buffalo, flags: { thai, laos }, car, steam: [sx, sg + 0.1, sz + 0.04], river, water: glints.update }
 }
