@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "unicorn-color",
+  "title": "Unicorn color",
+  "video": "unicorn-color.mp4",
+  "gif": "unicorn-color.gif",
+  "seconds": 19,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "table-sit",
+      "where": "table-sit",
+      "seconds": 17,
+      "fps": 9,
+      "status": "ok"
+    }
+  ]
+}
