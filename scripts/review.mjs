@@ -191,6 +191,7 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 .pill{background:var(--lav);color:var(--ink)}a{color:var(--pink)}
 .pitch{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin:0 0 16px}
 .pitch img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--lav)}.pbody{padding:14px 16px}
+.pitch:has(.pick.on){outline:3px solid var(--pink)}.pick.on{background:var(--ink)}
 .pitch h3{font-size:20px}.finger{font-size:18px;font-weight:600;margin:6px 0}.pitch p{margin:6px 0}
 .grows{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;counter-reset:g}
 .grows li{background:var(--lav);border-radius:12px;padding:8px;font-size:14px;text-align:center}.grows span{display:block;font-size:28px}
@@ -209,7 +210,9 @@ ${links ? `<h2>Play it yourself (optional)</h2><p>${links}</p>` : ''}
 </main>
 <script>
 const qs=${JSON.stringify(qs)},titles=${JSON.stringify(pitches.map((p) => p.title))}
-document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p]
+let picked=''
+document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
+  document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'\u2713 Picked':'Pick this one'})
   try{await navigator.clipboard.writeText(t);document.getElementById('picked').textContent='Copied \u201c'+t+'\u201d. Paste it on the PR, or just say it in chat.'}catch{document.getElementById('picked').textContent=t+': say it on the PR or in chat.'}}))
 document.querySelectorAll('.listen').forEach(card=>{const a=card.querySelector('audio'),cues=[...card.querySelectorAll('.cue')]
   if(!a||!cues.length)return
@@ -220,7 +223,7 @@ document.querySelectorAll('.listen').forEach(card=>{const a=card.querySelector('
   let raf=0;const loop=()=>{mark();if(!a.paused)raf=requestAnimationFrame(loop)}
   a.addEventListener('play',()=>{cancelAnimationFrame(raf);loop()});a.addEventListener('seeked',mark);a.addEventListener('pause',mark)})
 document.getElementById('copy')?.addEventListener('click',async()=>{
-  const a=[...document.querySelectorAll('textarea')].map((t,i)=>(i+1)+'. '+qs[i]+'\\n   '+(t.value.trim()||'(no answer)')).join('\\n')
+  const a=(picked?picked+'\\n':'')+[...document.querySelectorAll('textarea[data-q]')].map((t,i)=>(i+1)+'. '+qs[i]+'\\n   '+(t.value.trim()||'(no answer)')).join('\\n')
   try{await navigator.clipboard.writeText(a);document.getElementById('done').textContent='Copied. Paste it as a comment on the PR.'}
   catch{const t=document.getElementById('answers');t.value=a;t.style.display='block';t.select();document.getElementById('done').textContent='Copy the text below, then paste it on the PR.'}})
 </script></body></html>
