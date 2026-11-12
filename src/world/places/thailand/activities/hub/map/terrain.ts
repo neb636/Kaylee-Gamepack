@@ -4,9 +4,10 @@
 // makes things move.
 import { BufferAttribute, BufferGeometry, CanvasTexture, Color, DataTexture, DataUtils, Group, HalfFloatType, LinearFilter, Mesh, MeshToonMaterial, PlaneGeometry, RedFormat, ShaderMaterial, SRGBColorSpace } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
-import { merge, P, solid } from '../../../../../engine3d/geo'
+import { merge, solid } from '../../../../../engine3d/geo'
 import { toonGradient } from '../../../../../engine3d/toon'
 import type { Field } from './field'
+import { trayParts } from '../../../trip/sky'
 import { BOARD, LEVEL, PINS, toX, toZ } from './geo'
 import { OTHERS, THAI, type LonLat } from './land'
 
@@ -347,14 +348,5 @@ export class Sea {
 export function buildTray(bag: Bag): Group {
   const w = toX(BOARD.lon1) - toX(BOARD.lon0)
   const d = toZ(BOARD.lat0) - toZ(BOARD.lat1)
-  const rim = 0.34
-  const top = LEVEL.paper + 0.1
-  const parts = []
-  for (const s of [-1, 1]) {
-    parts.push(P.rbox(rim, 0.8, d + rim * 2, 0.12, '#FFF7F0', { at: [s * (w / 2 + rim / 2 - 0.02), top - 0.4, 0] }))
-    parts.push(P.rbox(w + rim * 2, 0.8, rim, 0.12, '#FFF7F0', { at: [0, top - 0.4, s * (d / 2 + rim / 2 - 0.02)] }))
-  }
-  parts.push(P.rbox(w + rim * 2 + 0.3, 0.6, d + rim * 2 + 0.3, 0.2, '#FFA8C9', { at: [0, top - 0.8, 0] }))
-  parts.push(P.rbox(w + rim * 2 + 0.05, 0.6, d + rim * 2 + 0.05, 0.2, '#CDBBF7', { at: [0, top - 1.3, 0] }))
-  return solid(merge(parts), bag, 2)
+  return solid(merge(trayParts(w, d, LEVEL.paper + 0.1)), bag, 2)
 }

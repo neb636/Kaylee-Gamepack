@@ -3,7 +3,7 @@
 // boats and clouds that all do something when she pokes them. She can swing the board round with a drag and pinch it
 // closer, like her camera in Roblox. terrain.ts builds the still board, toys.ts the things on it; this file makes
 // them move and listens to her finger.
-import { CanvasTexture, Group, Raycaster, Scene, SRGBColorSpace, Vector2, Vector3, type Mesh, type Object3D, type WebGLRenderer } from 'three'
+import { Group, Raycaster, Scene, Vector2, Vector3, type Mesh, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, sounds } from '../../../../../../sdk'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
@@ -14,7 +14,6 @@ import { Particles } from '../../../../../engine3d/particles'
 import type { RoamState } from '../../../../../engine3d/roam'
 import { makeLights } from '../../../../../engine3d/toon'
 import type { World3D } from '../../../../../engine3d/View3D'
-import { knobs } from '../../../../../kit/knobs'
 import { noise, sfx, tone } from '../../../../../kit/sfx'
 import { buildField, type Field } from './field'
 import { BOARD, PINS, POKES, SPEEDBOAT_LOOP, toLat, toLon, toX, toZ, WATER_LOOPS, type PinId, type ToyId } from './geo'
@@ -22,6 +21,7 @@ import type { LonLat } from './land'
 import { buildPin, type PinToy } from './pins'
 import { buildLand, buildTray, Sea } from './terrain'
 import * as T from './toys'
+import { mapCamKnobs, skyTexture } from '../../../trip/sky'
 
 export interface MapEvents {
   /** She tapped a place: it opens. */
@@ -84,15 +84,7 @@ const TAU = Math.PI * 2
 
 /** The board's camera when she lands: turned a little, then it settles lower and closer so the map arrives instead
  *  of just sitting there (the feel lab, ?feel=1). */
-export const MAP_CAM = knobs('thai-map-cam', 'Thailand map camera', 'src/world/places/thailand/activities/hub/map/world.ts', {
-  yaw: { value: 8, min: -40, max: 40, step: 1, label: 'Turn', unit: '°', note: 'added to the board view, side to side (it does not animate)' },
-  pitch: { value: -12, min: -30, max: 20, step: 1, label: 'Settle tilt', unit: '°', note: 'where the entrance ends: below 0 looks from lower down' },
-  zoom: { value: 0.87, min: 0.6, max: 1.2, step: 0.01, label: 'Settle zoom', unit: '×', note: 'where the entrance ends: below 1 is closer' },
-  intro: { value: 3.4, min: 0, max: 6, step: 0.1, label: 'Entrance', unit: 's', note: 'how long the camera takes to settle, counted from the first frame (behind the cover)' },
-  hold: { value: 0, min: 0, max: 1.5, step: 0.05, label: 'Entrance wait', unit: 's', note: 'a still beat before the camera starts moving' },
-  cover: { value: 1, min: 0, max: 2.5, step: 0.05, label: 'Cover', unit: 's', note: 'how long the camera moves behind the loading screen (first frames hitch) before it fades' },
-  fade: { value: 0.3, min: 0.05, max: 1.2, step: 0.05, label: 'Cover fade', unit: 's', note: 'how fast the loading screen fades into the moving map' },
-})
+export const MAP_CAM = mapCamKnobs('thai-map-cam', 'Thailand map camera', 'src/world/places/thailand/activities/hub/map/world.ts')
 /** Starts from rest and lands at rest: no jolt on the cut from the loading screen. */
 const easeInOut = (p: number) => 0.5 - 0.5 * Math.cos(Math.PI * p)
 
@@ -156,7 +148,7 @@ export class ThaiMapWorld implements World3D {
     private events: MapEvents,
   ) {
     const began = performance.now()
-    this.scene.background = sky(this.bag)
+    this.scene.background = skyTexture(this.bag)
     this.rig.fov = 30
     this.rig.lag = 0.5
     this.field = buildField()
@@ -822,19 +814,3 @@ const SOUND: Record<ToyId, () => void> = {
   barge: () => (tone(220, 220, 0.5, 0.1, 'sawtooth'), tone(277, 277, 0.5, 0.05, 'triangle')),
 }
 
-/** The sky behind the board: soft blue up top, pink down low. */
-function sky(bag: Bag) {
-  const c = document.createElement('canvas')
-  c.width = 4
-  c.height = 256
-  const g = c.getContext('2d')!
-  const grad = g.createLinearGradient(0, 0, 0, 256)
-  grad.addColorStop(0, '#BFE6FF')
-  grad.addColorStop(0.55, '#E4DCFF')
-  grad.addColorStop(1, '#FFD9EC')
-  g.fillStyle = grad
-  g.fillRect(0, 0, 4, 256)
-  const tex = bag.add(new CanvasTexture(c))
-  tex.colorSpace = SRGBColorSpace
-  return tex
-}

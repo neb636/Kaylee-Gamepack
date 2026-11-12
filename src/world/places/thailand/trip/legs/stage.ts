@@ -131,6 +131,11 @@ export abstract class Stage implements World3D {
     return []
   }
 
+  /** The camera takes its shot exactly this frame (no lag): a map's entrance (trip/sky.ts). */
+  protected snap() {
+    return false
+  }
+
   /** The rides keep moving: the frame loop stays at full speed. */
   get calm() {
     return false
@@ -183,7 +188,7 @@ export abstract class Stage implements World3D {
     this.hopper.update(dt)
     this.steer()
     this.step(dt, this.time)
-    this.rig.setShot(this.shot())
+    this.rig.setShot(this.shot(), this.snap())
     this.rig.update(dt)
   }
 

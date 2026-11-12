@@ -1,5 +1,7 @@
-// The Nan map (section `map`, plan: thailand/nan-trip.md, "The Nan map"): the trip's hub, a toy diorama of Nan on a
-// table (diorama.ts), seen from above at a slant (north up the screen; on a tall screen the camera swings round to the
+// The Nan map (section `map`, plan: thailand/nan-trip.md, "The Nan map"): the trip's hub, a toy diorama of Nan
+// floating in the sky like the Thailand map (diorama.ts; the sky, the tray and the entrance are trip/sky.ts), seen from
+// above at a slant. It opens like the Thailand map too: the camera is already moving behind the loading cover, then
+// settles lower and closer (NAN_CAM, ?feel=1) (north up the screen; on a tall screen the camera swings round to the
 // west side, so the board's long side runs up the screen and Laos is at the top). The little silver Pajero sits on its
 // roads: where she last drove from (`from`: the stop she came back from, Nan town after the city road), else at the
 // last stop, else at the airport. Built: the toy (step 6), the look (step 8) and the voices (step 9).
@@ -20,16 +22,18 @@
 // she's back, Mommy asks "Home, or one more?" (NanMap.tsx shows 🏠 and 🚙: 🏠 drives to the airport, 🚙 lets her pick);
 // after all three, Mommy says it's time to fly home and the airport glows. Laos's flag: Sparkle says it's another
 // country.
-import { Color, IcosahedronGeometry, OctahedronGeometry, Vector3, type WebGLRenderer } from 'three'
+import { Group, IcosahedronGeometry, Mesh, OctahedronGeometry, Vector3, type WebGLRenderer } from 'three'
 import { bell, clamp, firstTime, speakingVoice, spendHint } from '../../../../../../sdk'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import type { Shot } from '../../../../../engine3d/camera'
+import { blobShadow } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
 import { L } from '../../../lines'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
+import { Entrance, mapCamKnobs, puffCloud, skyTexture } from '../../../trip/sky'
 import { Floaters } from '../mushrooms/fx'
 import { buildDiorama, PLACE_SCALE, type Diorama } from './diorama'
-import { BOARD, CAR_SPEED, CLOUDS, DRAG_SPEED, FISH, heightAt, HOME_AFTER, LAOS_FLAG, liveStops, modelAt, PLACE_IDS, PLACES, RUNWAY, STAMP_Y, STOP_PLACE, STOPS, THAI_FLAG, type PlaceId, type Stop } from './layout'
+import { BOARD, CAR_SPEED, CLOUDS, DRAG_SPEED, FISH, heightAt, HOME_AFTER, LAOS_FLAG, liveStops, modelAt, PAPER_Y, PLACE_IDS, PLACES, RUNWAY, STAMP_Y, STOP_PLACE, STOPS, THAI_FLAG, type PlaceId, type Stop } from './layout'
 import { buildNet, nearest, route, STEP } from './net'
 import { mapBed, mapSfx as sfx } from './sounds'
 
@@ -38,7 +42,13 @@ export interface MapEvents extends LegEvents {
   go(place: PlaceId): void
   /** Mommy's "Home, or one more?": show the 🏠 and 🚙 buttons (or hide them: she's off somewhere). */
   ask(on: boolean): void
+  /** The camera has been moving behind the loading cover long enough: it can fade (NAN_CAM.cover). */
+  revealed(): void
 }
+
+/** The board's camera when she lands, as on the Thailand map: turned a little, then it settles lower and closer
+ *  (the feel lab, ?feel=1). */
+export const NAN_CAM = mapCamKnobs('nan-map-cam', 'Nan map camera', 'src/world/places/thailand/activities/nan-trip/map/map3d.ts', { yaw: 8, pitch: -16, zoom: 0.88 })
 
 export const MAP_ANCHORS: AnchorInfo[] = [
   { id: 'car', label: 'The Pajero (beep beep!)', kind: 'thing' },
@@ -92,6 +102,12 @@ export class NanMap extends Stage {
   private sparkles: Floaters
   private drops: Floaters
   private steam: Floaters
+  // ---- The sky round the board ----
+  private entrance: Entrance
+  private drifters: { root: Group; shadow: Mesh; speed: number; y: number }[] = []
+  private under: Group[] = []
+  /** What waits for the cover to go (the opening line, the stamp landing): [seconds after, what]. */
+  private onShow: [number, () => void][] = []
   // ---- Talk ----
   private told = new Set<string>()
   private lastSay = -99
@@ -104,11 +120,17 @@ export class NanMap extends Stage {
     super(renderer, ev)
     this.bag.add({ dispose: mapBed() })
     const { scene, bag } = this
-    this.scene.background = new Color('#E4DDF4')
-    this.rig.fov = 34
+    this.scene.background = skyTexture(bag)
+    this.rig.fov = 30
     this.rig.lag = 0.5
+    this.entrance = new Entrance(NAN_CAM, () => {
+      ev.revealed()
+      this.lastTouch = this.time
+      for (const [t, f] of this.onShow.splice(0)) this.after(t, f)
+    })
     this.d = buildDiorama(bag, this.net)
     scene.add(this.d.root)
+    this.buildSky()
     this.sparkles = new Floaters(new OctahedronGeometry(0.5), [PAL.gold, PAL.hotpink, '#FFFFFF', PAL.mint], 140, bag, 0.6, 1.2)
     this.drops = new Floaters(new IcosahedronGeometry(0.5, 0), ['#A8DCFF', '#D6EEFF'], 80, bag, 2.2, 0.2)
     this.steam = new Floaters(new IcosahedronGeometry(0.5, 1), ['#FFFFFF', '#F1F4F8'], 40, bag, -0.15, 1.0, 0.7, 1.8)
@@ -125,20 +147,21 @@ export class NanMap extends Stage {
     const n = this.net.nbr[at][0]
     if (n !== undefined) this.car.heading = Math.atan2(this.net.pts[at][0] - this.net.pts[n][0], this.net.pts[at][1] - this.net.pts[n][1])
     for (const s of STOPS) this.d.stamps[s].visible = this.done.has(s) && s !== this.fresh
-    if (this.fresh) this.after(0.7, () => this.landStamp())
+    if (this.fresh) this.onShow.push([0.7, () => this.landStamp()])
     this.placeCar(0)
     // ---- The opening line: Sparkle the first time, Mommy once two stops are done ----
     const count = this.done.size
-    const t0 = this.fresh ? 1.6 : 0.8
-    if (count === 0) this.after(t0, () => this.say('first', M.first))
-    else if (count >= this.stops.length) this.after(t0, () => this.say('home', M.home))
+    const t0 = this.fresh ? 1.6 : 0.6
+    if (count === 0) this.onShow.push([t0, () => this.say('first', M.first)])
+    else if (count >= this.stops.length) this.onShow.push([t0, () => this.say('home', M.home)])
     else if (count >= HOME_AFTER)
-      this.after(t0, () => {
+      this.onShow.push([t0, () => {
         // (Mommy asks out loud once a visit; coming back to the map after that, her question just shows.)
         if (firstTime('nan.map.more')) this.say('more', M.more)
         this.setAsking(true)
-      })
-    this.quietFrom = t0 + 3
+      }])
+    // (Counted again from the reveal: the cover takes about NAN_CAM.cover + fade.)
+    this.quietFrom = t0 + 3 + NAN_CAM.cover + NAN_CAM.fade
   }
 
   // ---------------------------------------------------------------- talk, Mommy's question
@@ -408,6 +431,10 @@ export class NanMap extends Stage {
   // ---------------------------------------------------------------- the frame
 
   protected step(dt: number, t: number) {
+    if (this.arrived || this.going || this.held) this.entrance.finish()
+    this.entrance.step(dt)
+    this.stepSky(dt, t)
+    this.d.water(t)
     for (const l of this.later.filter((x) => x.t <= this.time)) {
       this.later.splice(this.later.indexOf(l), 1)
       if (!this.disposed) l.f()
@@ -613,10 +640,65 @@ export class NanMap extends Stage {
       const p = this.d.car.root.position
       return { center: p.clone().setY(p.y + 0.05), half: new Vector3(0.22, 0.1, 0.22), yaw: this.w < this.h ? -90 : 0, pitch: 30, minDist: 0.7 }
     }
+    // The entrance (as on the Thailand map): from the plain view, turned by NAN_CAM.yaw, down and in to where it settles.
+    const k = this.entrance.k
     const tall = this.w < this.h
+    const zoom = 1 + (NAN_CAM.zoom - 1) * k
     // Tall: from the west side, so the board's long side runs up the screen (Laos at the top).
-    if (tall) return { center: new Vector3(-0.2, 0.25, 0), half: new Vector3(2.95, 0.35, 2.2), yaw: -90, pitch: 66, minDist: 3 }
-    return { center: new Vector3(0, 0.25, 0.12), half: new Vector3(2.95, 0.35, 2.15), yaw: 0, pitch: 54, minDist: 3 }
+    // (A tall screen settles less low: the board is already small across it.)
+    if (tall) return { center: new Vector3(-0.45, 0, 0), half: new Vector3(3.0, 0.3, 2.3).multiplyScalar(zoom), yaw: -90 + NAN_CAM.yaw, pitch: 62 + NAN_CAM.pitch * k * 0.6, minDist: 3 }
+    return { center: new Vector3(-0.08, 0, 0.3), half: new Vector3(3.05, 0.3, 2.3).multiplyScalar(zoom), yaw: NAN_CAM.yaw, pitch: 54 + NAN_CAM.pitch * k, minDist: 3 }
+  }
+
+  /** The entrance rides the camera exactly (no lag). */
+  protected snap() {
+    return this.entrance.running && !this.arrived
+  }
+
+  // ---------------------------------------------------------------- the sky round the board
+
+  private buildSky() {
+    const { scene, bag } = this
+    // Clouds drifting high over the board, each with its shadow on the ground (clear of the peaks' own clouds).
+    for (const [x, y, z, s] of [[-1.6, 1.55, -0.35, 0.55], [0.9, 1.7, 0.55, 0.48], [2.3, 1.6, -0.9, 0.42]]) {
+      const root = puffCloud(bag, s)
+      root.position.set(x, y, z)
+      const shadow = blobShadow(0.3 * s, bag)
+      scene.add(root, shadow)
+      this.drifters.push({ root, shadow, speed: 0.04 + s * 0.03, y })
+    }
+    // Clouds below, round the tray: the board floats in the sky Sparkle's balloon flies through.
+    const low: [number, number, number, number][] = [
+      [-4.4, -1.0, -1.6, 1.7], [4.5, -1.2, -0.6, 1.9], [-4.6, -1.4, 1.9, 1.8], [4.2, -0.9, 2.4, 1.5],
+      [-1.4, -1.5, 3.6, 2.0], [2.2, -1.3, -3.5, 1.7], [-3.4, -1.7, -3.4, 1.5], [3.6, -1.8, 3.8, 1.7], [0.6, -1.9, -4.0, 1.4],
+    ]
+    for (const [x, y, z, s] of low) {
+      const c = puffCloud(bag, s)
+      c.position.set(x, y, z)
+      scene.add(c)
+      this.under.push(c)
+    }
+  }
+
+  private stepSky(dt: number, t: number) {
+    const x0 = BOARD.x0 - 0.9
+    const x1 = BOARD.x1 + 0.9
+    for (const c of this.drifters) {
+      const p = c.root.position
+      p.x += c.speed * dt
+      if (p.x > x1) p.x = x0
+      p.y = c.y + Math.sin(t * 0.7 + c.speed * 90) * 0.04
+      // (Only on Nan: a grey blot on the paper looks like a stain.)
+      const g = heightAt(clamp(p.x, BOARD.x0, BOARD.x1), clamp(p.z, BOARD.z0, BOARD.z1))
+      c.shadow.position.set(p.x, g + 0.015, p.z)
+      c.shadow.visible = g > PAPER_Y + 0.05 && p.x > BOARD.x0 && p.x < BOARD.x1
+      // (Side on to the camera, whichever side of the board it's on, like the clouds on the peaks.)
+      c.root.rotation.y = this.rig.yaw * DEG
+    }
+    this.under.forEach((c, i) => {
+      c.position.y += Math.cos(t * 0.4 + i * 1.9) * 0.04 * dt
+      c.rotation.y = this.rig.yaw * DEG
+    })
   }
 
   /** The place the hint points at: the nearest stop she hasn't done (or, all done, the airport). */

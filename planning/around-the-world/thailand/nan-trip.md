@@ -147,6 +147,15 @@ The little Pajero sits on the roads. **Tap a landmark** and the Pajero zooms alo
 
 **Teaches:** Nan is in the north of Thailand, in the mountains, next to another country (Laos, at the diorama's edge).
 
+**The look, since 2026-11-12:** the same toy as the Thailand map. No table, crayons or milk cup: the board floats in
+the sky in the Thailand map's tray (cream rim, pink edge, lavender base) with clouds round and under it, and opens with
+the same camera entrance behind the loading cover (`trip/sky.ts`, `trip/MapCover.tsx`; its own knobs `nan-map-cam`,
+`?feel=1`). Nan stands up out of cream paper like a slice of cake (`layout.ts` `inNan`/`heightAt`, `PAPER_Y`); Laos is
+the paper past the dashed border. The top is painted once (`ground.ts`: height bands, rice-field patches by the river,
+the river and roads, a soft shadow under every tree and toy) and the river's glints drift. Trees and mountains are the
+Thailand map's (`hub/map/toys.ts`). The board stays wide on a wide screen; a tall screen still swings round to the west
+side so the long side runs up it.
+
 ## 🚙 The mountain road
 
 `drive`; keep left, slow on bends, clouds, counting. Mommy drives the big Pajero through the mountains; Kaylee steers it round the bends, drives off the edge for fun, waves at the blind corners and drives right up into the clouds.
