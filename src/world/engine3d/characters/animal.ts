@@ -466,6 +466,12 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     eyes.push(P.sphere(eyeSize, INK, { at: on(x, eyeY, lift - 0.03 * R), rot: turnTo(x), scale: [0.78, 1, 0.42] }))
     eyesPlain.push(P.sphere(eyeSize * 0.3, WHITE, { at: on(x + s * 0.05 * R, eyeY + 0.08 * R, lift + 0.035 * R) }))
     eyesPlain.push(P.sphere(eyeSize * 0.14, WHITE, { at: on(x - s * 0.05 * R, eyeY - 0.07 * R, lift + 0.035 * R) }))
+    if (look.extras?.includes('lids')) {
+      // Heavy, kind old eyelids: the top of each eye under a lid in the face's color (in the eyes group, so they blink
+      // with them), and two little smile creases at the outer corner.
+      eyes.push(P.sphere(eyeSize * 1.08, look.light, { at: on(x, eyeY + 0.1 * R, lift - 0.005 * R), rot: [-0.15, turnTo(x)[1], s * -0.12], scale: [0.86, 0.62, 0.5] }))
+      for (const k of [-1, 1]) headPlain.push(P.capsule(0.011 * R, 0.08 * R, INK, { at: on(x + s * 0.24 * R, eyeY + k * 0.055 * R, lift + 0.005 * R), rot: [0, turnTo(x + s * 0.24 * R)[1], s * (Math.PI / 2 + k * 0.55)] }))
+    }
     if (look.extras?.includes('eye-ring')) headPlain.push(P.sphere(eyeSize * 1.55, WHITE, { at: on(x, eyeY, lift - 0.06 * R), rot: turnTo(x), scale: [0.9, 1.05, 0.3] }, 16))
     if (look.lashes) for (const k of [0, 1]) eyesPlain.push(P.capsule(0.012 * R, 0.07 * R, INK, { at: on(x + s * (0.16 + k * 0.05) * R, eyeY + (0.17 - k * 0.07) * R, lift + 0.01 * R), rot: [0, 0, s * (-0.9 - k * 0.5)] }))
     const blushY = look.species === 'unicorn' || look.species === 'pony' ? -0.08 * R : -0.2 * R
@@ -611,6 +617,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       // A long tail that curls up behind (it wags from its root).
       tailRoot = [0, 0.2 * H, -0.15 * H * round[2]]
       const curl: [number, number, number][] = [
+        [0.2, -0.13, 0.034],
         [0.17, -0.22, 0.032],
         [0.16, -0.3, 0.03],
         [0.2, -0.37, 0.029],
@@ -620,7 +627,13 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
         [0.44, -0.29, 0.026],
         [0.4, -0.26, 0.026],
       ]
-      for (const [y, z, r] of curl) tail.push(P.sphere(r * H, look.fur, { at: [0, y * H, z * H] }))
+      // One smooth tapering tube along the curl (capsules from point to point, so there are no beads), a tuft at the tip.
+      for (let i = 0; i < curl.length - 1; i++) {
+        const [y0, z0, r0] = curl[i]
+        const [y1, z1] = curl[i + 1]
+        const len = Math.hypot(y1 - y0, z1 - z0) * H
+        tail.push(P.capsule(r0 * H, len, look.fur, { at: [0, ((y0 + y1) / 2) * H, ((z0 + z1) / 2) * H], rot: [Math.atan2(z1 - z0, y1 - y0), 0, 0] }))
+      }
       break
     }
     case 'fox': {
@@ -913,6 +926,43 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       head.push(P.sphere(0.34 * R, w, { at: [0, headY + 1.08 * R, -0.3 * R] }, 18))
       head.push(P.capsule(0.035 * R, 0.62 * R, '#FF6FAE', { at: [0.05 * R, headY + 1.12 * R, -0.3 * R], rot: [0, 0, 1.25] }))
       headPlain.push(P.sphere(0.08 * R, '#FF9CC8', { at: [0.4 * R, headY + 1.23 * R, -0.3 * R] }))
+    }
+    if (e === 'brows') {
+      // Big bushy white eyebrows, drooping at the outer ends (a kind old man).
+      for (const s of [-1, 1]) for (const [k, dx, dy, r] of [[0, 0.07, 0.31, 0.058], [1, 0.17, 0.3, 0.062], [2, 0.27, 0.24, 0.055]] as const) {
+        const x = s * (eyeX - 0.12 * R + dx * R)
+        head.push(P.sphere(r * R, '#F7F4F8', { at: on(x, eyeY + dy * R, lift + 0.03 * R), rot: [0, turnTo(x)[1], s * (k - 1) * -0.4], scale: [1.5, 0.7, 0.5] }))
+      }
+    }
+    if (e === 'goatee') head.push(P.cone(0.12 * R, 0.28 * R, '#F7F4F8', { at: [0, headY - 0.86 * R, 0.84 * R], rot: [Math.PI - 0.45, 0, 0] }, 10))
+    if (e === 'temples') {
+      // Wisps of white hair round the sides, above the ears (under a hat's brim they still show).
+      for (const s of [-1, 1]) for (const [dy, dz] of [[0.36, 0.1], [0.32, -0.08], [0.33, -0.26], [0.38, -0.44]] as const) {
+        const x = Math.sqrt(Math.max(0, 1 - dy * dy - dz * dz)) * 0.94 * R
+        head.push(P.sphere(0.13 * R, '#F7F4F8', { at: [s * x, headY + dy * R, dz * R], rot: [0, s * Math.atan2(x, dz * R), 0], scale: [1, 0.75, 0.5] }))
+      }
+    }
+    if (e === 'droop-moustache') for (const s of [-1, 1]) {
+      // A thick white moustache over the mouth that droops past its corners.
+      head.push(P.capsule(0.085 * R, 0.2 * R, '#F7F4F8', { at: [s * 0.16 * R, headY - 0.4 * R, 1.0 * R], rot: [0.2, 0, s * 1.2] }))
+      head.push(P.capsule(0.065 * R, 0.12 * R, '#F7F4F8', { at: [s * 0.33 * R, headY - 0.52 * R, 0.9 * R], rot: [0.2, s * 0.4, s * 0.35] }))
+    }
+    if (e === 'pakama') {
+      // The pakama, the checked cotton cloth northern farmers tie round their waist: a flat band of small checks in two
+      // reds, a thin cream line through it, and a knot at the front with its two ends hanging.
+      const y = 0.255 * H
+      const rr = 0.166 * H * c
+      const n = 30
+      for (let k = 0; k < n; k++) torso.push(P.torus(rr, 0.026 * H, k % 2 ? '#B9404A' : '#E0645A', { at: [0, y, 0], rot: [Math.PI / 2, 0, (k / n) * Math.PI * 2], scale: [1, 1, 0.75] }, (Math.PI * 2) / n + 0.004))
+      torsoPlain.push(P.torus(rr + 0.02 * H, 0.005 * H, '#FFE3C8', { at: [0, y, 0], rot: [Math.PI / 2, 0, 0] }))
+      const kx = -0.07 * H * c
+      const kz = Math.sqrt(Math.max(0, rr * rr - kx * kx)) * round[2] + 0.02 * H
+      torso.push(P.sphere(0.038 * H, '#E0645A', { at: [kx, y, kz], scale: [1.2, 1, 0.8] }))
+      for (const [i, a] of [0.25, -0.2].entries()) {
+        const end: V3 = [kx + (i ? 0.035 : -0.03) * H, y - 0.075 * H, kz - 0.005 * H]
+        torso.push(P.rbox(0.05 * H, 0.11 * H, 0.016 * H, 0.008 * H, i ? '#B9404A' : '#E0645A', { at: end, rot: [-0.12, 0, a] }))
+        torsoPlain.push(P.box(0.052 * H, 0.012 * H, 0.004 * H, '#FFE3C8', { at: [end[0] + Math.sin(-a) * -0.02 * H, end[1] - 0.025 * H, end[2] + 0.01 * H], rot: [-0.12, 0, a] }))
+      }
     }
     if (e === 'moustache') for (const s of [-1, 1]) head.push(P.capsule(0.08 * R, 0.24 * R, '#F4EFF4', { at: [s * 0.18 * R, headY - 0.33 * R, 0.95 * R], rot: [0, 0, s * 1.15] }))
     if (e === 'cap') {

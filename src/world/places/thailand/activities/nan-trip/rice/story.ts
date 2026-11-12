@@ -30,7 +30,7 @@ import { Floaters } from '../mushrooms/fx'
 import type { Birds, BirdHost } from './birds'
 import { lungNgob, sheaf, type Farm } from './farm'
 import { buildNest, Chicks, Jip } from './jip'
-import { BOARDWALK, KAYLEE_AT, LUNG_AT, NICK_AT, RACK, RAIL_Z, RISE, SCARECROW } from './layout'
+import { BENCH, BOARDWALK, KAYLEE_AT, LUNG_AT, NICK_AT, RACK, RAIL_Z, RISE, SCARECROW } from './layout'
 import { memoryBed, riceSfx as sfx, storyMusic } from './sounds'
 
 const S = L.nan.rice.story
@@ -86,8 +86,10 @@ const NICK_TALK: FV3 = [-2.2, BOARDWALK.y, 3.64]
 const LUNG_TALK_FACE = -52
 const KAYLEE_TALK_FACE = 32
 const NICK_TALK_FACE = 40
-/** Last year: Lung dozing standing up, his back against the scarecrow's pole. */
-const NAP: FV3 = [SCARECROW[0], 0, SCARECROW[2] + 0.3]
+/** Last year: Lung dozing on his bench, just left of the scarecrow (its floppy hat drops onto him from there). */
+const NAP: FV3 = [BENCH.x - 0.06, BENCH.seat, BENCH.z + 0.13]
+/** Between him and the scarecrow's head: what the memory's wide shots look at. */
+const NAP_MID: FV3 = [(NAP[0] + SCARECROW[0]) / 2, 0.9, 0.1]
 /** The nest, in the bamboo (bamboo-local, so it sways with it). */
 const NEST_LOCAL: FV3 = [-0.12, 1.25, 0.24]
 /** Where Kaylee and Lung stand to look up at the nest. */
@@ -302,12 +304,12 @@ export class RiceStory {
           id: 'page-in',
           turn: true,
           memory: true,
-          shot: { eye: [4.7, 2.1, 4.5], look: [1.65, 0.9, 0.05], fov: 36, to: { eye: [4.1, 1.85, 3.7] }, move: 7, sway: 0.02, tall: { eye: [4.4, 2.8, 6.4], to: { eye: [3.9, 2.5, 5.6] } } },
+          shot: { eye: [0.3, 1.9, 4.7], look: NAP_MID, fov: 36, to: { eye: [0.35, 1.6, 3.7] }, move: 7, sway: 0.02, tall: { eye: [0.2, 2.6, 6.4], to: { eye: [0.25, 2.3, 5.4] } } },
           start: () => {
             h.lastYear(true)
             this.memoryOn(true)
             h.unhop(lung)
-            h.put(lung, ...NAP, 'stand', 0)
+            h.put(lung, ...NAP, 'sit', 0)
             this.lungPose = 'stand'
             this.looks = { lung: () => tmp.set(6, 1, 6) }
             // His old hat on his head, the new one away; Jip and the chicks aren't here yet (no nest last year).
@@ -330,7 +332,7 @@ export class RiceStory {
         {
           id: 'along',
           memory: true,
-          shot: { eye: [2.45, 1.25, 3.05], look: lungHead(0.25), fov: 32, sway: 0.015, tall: { eye: [2.5, 1.4, 3.6] } },
+          shot: { eye: [0.05, 1.25, 3.3], look: lungHead(0.25), fov: 32, sway: 0.015, tall: { eye: [0.0, 1.4, 3.9] } },
           start: () => {
             this.jip.place(new Vector3(4.2, 2.6, 2.0))
             this.jip.flyTo(() => this.oldHat.localToWorld(tmp.set(0.12, 0.17, 0.05)), { dur: 1.3, arc: 0.4, face: -0.6 })
@@ -349,7 +351,7 @@ export class RiceStory {
         {
           id: 'took',
           memory: true,
-          shot: { eye: [3.5, 1.5, 3.1], look: () => this.jip.pos.clone().lerp(tmp.set(1.75, 1.2, 0.3), 0.35), fov: 40, sway: 0.02, tall: { eye: [3.5, 1.8, 4.0] } },
+          shot: { eye: [0.4, 1.5, 3.2], look: () => this.jip.pos.clone().lerp(tmp.set(NAP[0], 1.1, 0.3), 0.35), fov: 40, sway: 0.02, tall: { eye: [0.35, 1.8, 4.1] } },
           start: () => {
             this.jip.lookAt(null)
             // He grips the hat and pulls (it lifts, Lung's head comes with it a little), then off with it to the bamboo.
@@ -358,7 +360,7 @@ export class RiceStory {
           cues: [
             [0.3, () => {
               this.jip.carry(this.oldHat)
-              this.jip.flyTo(new Vector3(2.0, 1.75, 0.35), { dur: 0.7, arc: 0.05, heavy: true })
+              this.jip.flyTo(new Vector3(NAP[0] + 0.25, 1.65, NAP[2] + 0.2), { dur: 0.7, arc: 0.05, heavy: true })
               sfx.flutter()
             }],
             [1.05, () => this.jip.flyTo(h.farm.bamboo.localToWorld(new Vector3(...NEST_LOCAL)).add(new Vector3(0, 0.4, 0)), { dur: 2.6, arc: 0.9, heavy: true })],
@@ -371,7 +373,7 @@ export class RiceStory {
         {
           id: 'gave',
           memory: true,
-          shot: { eye: [2.95, 1.5, 2.75], look: [1.75, 1.35, 0.1], fov: 36, sway: 0.015, tall: { eye: [3.0, 1.7, 3.5] } },
+          shot: { eye: [0.5, 1.55, 3.3], look: [1.1, 1.2, 0.05], fov: 38, sway: 0.015, tall: { eye: [0.45, 1.75, 4.0] } },
           start: () => {
             this.oldHat.visible = false
             this.jip.carry(null)
@@ -394,7 +396,7 @@ export class RiceStory {
         {
           id: 'thought',
           memory: true,
-          shot: { eye: [5.3, 3.0, 5.4], look: [1.6, 0.95, 0.2], fov: 38, to: { eye: [4.6, 2.5, 4.4] }, sway: 0.02, tall: { eye: [5.0, 3.6, 7.2], to: { eye: [4.5, 3.1, 6.2] } } },
+          shot: { eye: [0.4, 2.8, 5.4], look: NAP_MID, fov: 38, to: { eye: [0.45, 2.4, 4.6] }, sway: 0.02, tall: { eye: [0.3, 3.5, 7.2], to: { eye: [0.35, 3.1, 6.3] } } },
           start: () => {
             this.setMemPerches()
             sfx.flock()
@@ -421,7 +423,7 @@ export class RiceStory {
         {
           id: 'woke',
           memory: true,
-          shot: { eye: [2.4, 1.12, 3.0], look: lungHead(0.0), fov: 34, sway: 0.02, tall: { eye: [2.5, 1.25, 3.6] } },
+          shot: { eye: [0.1, 1.15, 3.2], look: lungHead(0.0), fov: 34, sway: 0.02, tall: { eye: [0.05, 1.3, 3.8] } },
           start: () => {
             h.birds.away()
             sfx.flutter()

@@ -32,7 +32,7 @@
 // screen draws their words and the memory's storybook look (FilmOverlay); nothing in the farm takes a tap meanwhile.
 // Silly instead of wrong: wade into Daddy and he shakes like a dog (in the harvest she drops straw on his head); walk
 // into the buffalo's wallow and you both get muddy (the water washes it off); flop into the straw pile; round birds.
-// Things to poke: the gates, the scarecrow (it spins, its hat flies), the buffalo, the ducks, the frog, the nursery bed,
+// Things to poke: the gates, the scarecrow (it spins, its hat flies), Lung's bench (it bounces), the buffalo, the ducks, the frog, the nursery bed,
 // the straw pile, the hut's chime, the banana plant, the bamboo, the café up the hill, Daddy, Lung.
 // Talk (lines.ts L.nan.rice): Lung says what the round is for, then Sparkle (queued behind him) what to do, and after
 // ~8 s with nothing done she says it again (stuckLine); Lung and Daddy react on the farm and Mommy on the deck, each
@@ -126,6 +126,7 @@ export interface RiceEvents extends LegEvents {
 export const RICE_ANCHORS: AnchorInfo[] = [
   ...PADDIES.map((p): AnchorInfo => ({ id: `gate:${p.i}`, label: `Gate of paddy ${p.name}`, kind: 'thing' })),
   { id: 'scarecrow', label: 'Scarecrow', kind: 'thing' },
+  { id: 'bench', label: "Lung's bench", kind: 'thing' },
   { id: 'buffalo', label: 'Water buffalo', kind: 'thing' },
   { id: 'duck:0', label: 'Duck', kind: 'thing' },
   { id: 'duck:1', label: 'Duck', kind: 'thing' },
@@ -336,6 +337,8 @@ export class RiceFarm extends Stage {
   // ---- Pokes ----
   private scareSpin = 1
   private hatFlip = 1
+  /** A tap on Lung's bench: it bounces (and creaks). */
+  private benchBounce = 1
   private buffaloRoll = 1
   private buffaloLook = 1
   private bananaWob = 1
@@ -1608,6 +1611,9 @@ export class RiceFarm extends Stage {
         this.hatFlip = 0
         this.after(0.4, () => this.once('scarecrow', R.scarecrow, true))
         return sfx.spin()
+      case 'bench':
+        this.benchBounce = 0
+        return sfx.thunk()
       case 'buffalo':
         this.buffaloLook = 0
         this.buffaloRoll = Math.min(this.buffaloRoll, 0.3)
@@ -1756,6 +1762,8 @@ export class RiceFarm extends Stage {
       f.scarecrow.hat.rotation.x = this.hatFlip < 1 ? this.hatFlip * Math.PI * 2 : 0
       if (this.hatFlip < 1 && this.hatFlip + dt / 1.0 >= 1) sfx.thump()
     }
+    this.benchBounce = Math.min(1, this.benchBounce + dt / 0.6)
+    f.bench.scale.set(1 + bell(this.benchBounce) * 0.06, 1 - Math.sin(this.benchBounce * Math.PI * 3) * 0.12 * (1 - this.benchBounce), 1)
     this.chimeSwing = Math.min(1, this.chimeSwing + dt / 2.4)
     f.hut.chime.rotation.z = Math.sin(t * 6) * 0.35 * (1 - this.chimeSwing) + Math.sin(t * 1.3) * 0.05
     this.bananaWob = Math.min(1, this.bananaWob + dt / 1.2)
@@ -2216,6 +2224,8 @@ export class RiceFarm extends Stage {
     switch (id) {
       case 'scarecrow':
         return { at: f.scarecrow.root.position.clone().add(new Vector3(0, 1.3, 0)), r: 0.4, prio: 2, max: 110 }
+      case 'bench':
+        return { at: f.bench.position.clone().add(new Vector3(0, 0.4, 0)), r: 0.4, prio: 1, max: 100 }
       case 'buffalo':
         return { at: f.buffalo.root.position.clone().add(new Vector3(0, 0.9, 0)), r: 0.7, prio: 1, max: 140 }
       case 'frog':
