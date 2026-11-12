@@ -1,41 +1,35 @@
 {
-  "title": "Candy Land: a little world made of sweets",
-  "checkIn": "Visual rebuild",
-  "kaylee": "Draw a card and travel a raised candy trail, over chocolate streams and past lollipops, to the candy castle.",
+  "title": "Chutes and Ladders: climb the playground",
+  "checkIn": "fix",
+  "kaylee": "Roll up six playground balconies, climb golden ladders, and swoosh down pink and purple slides to race for the star.",
   "questions": [],
   "reels": [
     {
-      "name": "candy-after",
+      "name": "chutes-after",
       "moments": [
-        "table-candy",
-        "candy-forward",
-        "candy-backward",
-        "candy-finish"
+        "table-ladder",
+        "table-slide",
+        "chutes-slide-long",
+        "chutes-win"
       ]
     }
   ],
   "links": [
     {
-      "label": "Play Candy Land",
-      "hash": "#/world/thailand/hub/candy"
+      "label": "Play Chutes and Ladders",
+      "hash": "#/world/thailand/hub/chutes"
     },
     {
-      "label": "Picture card: forward to the ice cream",
-      "hash": "#/world/thailand/hub/candy?me=4&them=8&deck=icecream,green"
+      "label": "Try the high ladder",
+      "hash": "#/world/thailand/hub/chutes?me=16&them=10&rolls=2,1"
     },
     {
-      "label": "Picture card: back to the gumdrops",
-      "hash": "#/world/thailand/hub/candy?me=20&them=17&deck=gumdrop,blue"
+      "label": "Try the big pink slide",
+      "hash": "#/world/thailand/hub/chutes?me=33&them=25&rolls=2,1"
     },
     {
-      "label": "Tune the card flip and hopping",
-      "hash": "#/world/thailand/hub/candy?feel=1"
+      "label": "Tune climbing and sliding",
+      "hash": "#/world/thailand/hub/chutes?feel=1"
     }
-  ],
-  "tableReads": [
-    [
-      "thailand",
-      "games"
-    ]
   ]
 }
