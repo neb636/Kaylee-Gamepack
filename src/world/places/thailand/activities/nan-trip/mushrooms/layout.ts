@@ -19,7 +19,7 @@ export type V3 = [number, number, number]
 
 // ---------------------------------------------------------------- the rounds and the basket
 
-export const ROUNDS = ['1', '2', '3', 'pizza'] as const
+export const ROUNDS = ['1', '2', 'pizza'] as const
 export type Round = (typeof ROUNDS)[number]
 
 export const COLORS = ['grey', 'pink', 'gold'] as const
@@ -42,12 +42,11 @@ export function formatBasket(b: Basket): string {
 }
 export const basketSize = (b: Basket) => b.grey + b.pink + b.gold
 
-/** What's in the basket when a link doesn't say: empty in rounds 1 and 2, round 2's grey ones in round 3, and a
- *  colorful basket at the pizza. */
-export const BASKET_SEED: Record<Round, string> = { '1': '', '2': '', '3': 'grey6', pizza: 'grey4,pink2' }
+/** What's in the basket when a link doesn't say: empty in rounds 1 and 2, round 2's six at the pizza. */
+export const BASKET_SEED: Record<Round, string> = { '1': '', '2': '', pizza: 'grey6' }
 
-/** Picks that end rounds 2 and 3. */
-export const PICKS = { '2': 6, '3': 6 } as const
+/** Picks that end round 2 (then it's off to lunch). */
+export const PICKS = { '2': 6 } as const
 
 // ---------------------------------------------------------------- the mushroom house
 
@@ -61,14 +60,10 @@ export const BAG_LEN = 0.42
 export const MOUTH_Z = 0.1
 export const BAGS = BAG_Y.flatMap((y) => BAG_X.map((x): V3 => [x, y, MOUTH_Z]))
 
-/** Round 3's new bags: a pink or gold collar grows pink or golden mushrooms; plain ones grow grey. */
-export type BagKind = 'plain' | 'pink' | 'gold'
-export const ROUND3_KINDS: BagKind[] = ['pink', 'plain', 'gold', 'pink', 'plain', 'pink', 'gold', 'plain', 'gold', 'plain', 'pink', 'plain']
-
 /** Misting: how far around the spray's center a bag drinks (m), and how fast (water per second, 1 = grown). */
 export const MIST_R = 0.3
 export const MIST_RATE = 1.25
-/** A pin pops out at this much water; grown (ready to pick) at 1; giant (round 2 and 3, keep spraying) at GIANT. */
+/** A pin pops out at this much water; grown (ready to pick) at 1; giant (round 2, keep spraying) at GIANT. */
 export const PIN_AT = 0.22
 export const GIANT = 3.2
 /** A tap (no hold) sprays for this long. */

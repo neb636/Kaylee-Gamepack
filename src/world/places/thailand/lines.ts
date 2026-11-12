@@ -587,7 +587,6 @@ export const L = {
     mushrooms: {
       mist: `Spray the bags!`,
       pick: 'Pull the mushrooms off!',
-      colors: 'More bags to spray!',
       pizza: 'Put your mushrooms on the pizza!',
       hint: {
         mist: onDevice('Hold your finger on the bags!', 'Click and hold on the bags!'),
@@ -599,7 +598,6 @@ export const L = {
       sawdust: 'Mushrooms grow from sawdust, not seeds!',
       hi: by('farmer')('My mushrooms are thirsty!'),
       grown: by('farmer')('Look at them grow!'),
-      colors2: by('farmer')('Pink ones and gold ones!'),
       oven: by('farmer')('Into the oven!'),
       tap: [by('farmer')('Ha ha ha!'), by('farmer')('Good spraying!'), by('farmer')('Yummy mushrooms!')],
       hat: nick('A mushroom hat?!'),

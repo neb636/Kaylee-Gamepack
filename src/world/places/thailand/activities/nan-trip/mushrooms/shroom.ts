@@ -9,14 +9,14 @@ import type { Bag } from '../../../../../engine3d/dispose'
 import { bake, merge, P, solid, type PartOpts, type V3 } from '../../../../../engine3d/geo'
 import { makeHull } from '../../../../../engine3d/outline'
 import { toon } from '../../../../../engine3d/toon'
-import { BAG_LEN, BAG_R, BASKET_R, type BagKind, type ShroomColor } from './layout'
+import { BAG_LEN, BAG_R, BASKET_R, type ShroomColor } from './layout'
 
 export const SHROOM: Record<ShroomColor, { cap: string; mid: string; gill: string; stem: string }> = {
   grey: { cap: '#C9C3DD', mid: '#968FB2', gill: '#F1EDF8', stem: '#F7F3FB' },
   pink: { cap: '#FFA8C8', mid: '#F0609A', gill: '#FFDCE9', stem: '#FFEFF5' },
   gold: { cap: '#FFD772', mid: '#F2A81C', gill: '#FFF2C2', stem: '#FFF8E2' },
 }
-export const COLLAR: Record<BagKind, string> = { plain: '#F7F4EE', pink: '#FF4F9A', gold: '#FFB21F' }
+export const COLLAR = '#F7F4EE'
 export const SAWDUST = '#E9D4AE'
 const SAWDUST_DARK = '#CDB083'
 export const BASKET_WOOD = '#C9965E'
@@ -154,9 +154,9 @@ export function bagsGeo(mouths: V3[]): BufferGeometry[] {
   return parts
 }
 
-/** A bag's collar ring at its mouth (its own toy, so round 3's new bags can show pink or gold ones). */
-export function collar(kind: BagKind, bag: Bag) {
-  return solid(P.torus(0.066, 0.026, COLLAR[kind], {}), bag, 1)
+/** A bag's collar ring at its mouth. */
+export function collar(bag: Bag) {
+  return solid(P.torus(0.066, 0.026, COLLAR, {}), bag, 1)
 }
 
 /** A woven basket with a handle, its rim at y = h (local), and where things heap inside it. */

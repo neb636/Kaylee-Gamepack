@@ -399,7 +399,6 @@ export const screens = [
   // and gold bags, and the pizza with a colorful basket.
   { name: 'nan-mushrooms-1', hash: '#/world/thailand/nan-trip/mushrooms', reset: true, wait: 3500 },
   { name: 'nan-mushrooms-2', hash: '#/world/thailand/nan-trip/mushrooms?round=2', reset: true, wait: 3500 },
-  { name: 'nan-mushrooms-3', hash: '#/world/thailand/nan-trip/mushrooms?round=3', reset: true, wait: 3500 },
   { name: 'nan-mushrooms-pizza', hash: '#/world/thailand/nan-trip/mushrooms?round=pizza&basket=grey5,pink3,gold2', reset: true, wait: 3500 },
   // The Nan Mountain Cup (greybox 1): the grid and the countdown, and racing a few seconds in (the race drives on by
   // itself, a bit slower, with no finger down).
