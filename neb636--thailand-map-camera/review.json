@@ -1,0 +1,11 @@
+{
+  "title": "Thailand map: no compass, and it arrives",
+  "checkIn": "fix",
+  "kaylee": "The map no longer just sits there when she lands: it opens turned a little and drifts down and in, without the compass rose.",
+  "questions": [],
+  "reels": [{ "name": "thailand-map-entrance", "moments": ["#/world/thailand~5"] }],
+  "links": [
+    { "label": "Open the map", "hash": "#/world/thailand" },
+    { "label": "Tune the camera (feel lab)", "hash": "#/world/thailand?feel=1" }
+  ]
+}
