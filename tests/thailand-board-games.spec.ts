@@ -237,7 +237,7 @@ test.describe('the game table', () => {
 
   test('from her room: she sits at the table, the screen fades, and the picker opens on the floating board', async ({ page }) => {
     test.setTimeout(90000)
-    await open(page, '#/world/thailand/hub/upstairs')
+    await open(page, '#/world/thailand/hub/upstairs?at=couch')
     expect(await table(page)).toMatchObject({ open: false, stage: false })
     // (The table's own tap target: Enter on it, like a keyboard tap.)
     await page.getByRole('button', { name: 'Game table', exact: true }).evaluate((el: HTMLElement) => el.click())

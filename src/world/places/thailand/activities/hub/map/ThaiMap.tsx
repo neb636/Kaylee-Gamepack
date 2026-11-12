@@ -187,7 +187,7 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
             initial={false}
             exit={{ opacity: 0 }}
             transition={{ duration: MAP_CAM.fade, ease: 'easeOut' }}
-            style={{ position: 'absolute', inset: 0, zIndex: 34, display: 'grid', placeItems: 'center', background: 'var(--lavender)' }}
+            style={{ position: 'absolute', inset: 0, zIndex: 34, pointerEvents: 'none', display: 'grid', placeItems: 'center', background: 'var(--lavender)' }}
           >
             <Mascot pose="think" appear={false} />
           </motion.div>
