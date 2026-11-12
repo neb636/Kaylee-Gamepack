@@ -269,6 +269,9 @@ function buildLandmark(key: Landmark, bag: Bag) {
     )
     for (const x of [-0.033, 0.033]) for (const y of [0.025, 0.063, 0.1]) parts.push(P.rbox(0.023, 0.026, 0.009, 0.003, '#784C40', { at: [x, y, 0.035] }))
   }
+  // Keep the chocolate cliff below the sightline to the trail behind it. Bake the height
+  // into its geometry so its tap animation can still use an unscaled root.
+  if (key === 'chocolate') for (const part of parts) part.scale(1, 0.62, 1)
   return solid(merge(parts), bag, 0.85)
 }
 
