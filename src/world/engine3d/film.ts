@@ -287,7 +287,7 @@ export class FilmPlayer {
   private frame(aspect: number): CineFrame | null {
     const s0 = this.shot
     if (!s0) return null
-    const s = aspect < 1 && s0.tall ? { ...s0, ...s0.tall, to: s0.tall.to ?? s0.to } : s0
+    const s = aspect < 1 && s0.tall ? { ...s0, ...defined(s0.tall), to: s0.tall.to ? { ...s0.to, ...defined(s0.tall.to) } : s0.to } : s0
     const st = Math.max(0, this.t - this.t0)
     const k = EASE[s.ease ?? 'inOut'](Math.min(1, st / Math.max(0.01, s.move ?? this.len - this.t0)))
     const o = this.out
@@ -323,4 +323,8 @@ export class FilmPlayer {
 }
 
 const tmpA = new Vector3()
+/** Only the keys that are set (a tall shot that gives just an eye keeps the wide shot's look). */
+function defined<T extends object>(o: T): Partial<T> {
+  return Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)) as Partial<T>
+}
 const lerp = (a: number, b: number, k: number) => a + (b - a) * k
