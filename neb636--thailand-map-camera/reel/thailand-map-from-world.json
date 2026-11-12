@@ -12,14 +12,14 @@
       "name": "# world",
       "where": "#/world",
       "seconds": 3,
-      "fps": 22.1,
+      "fps": 17,
       "status": "ok"
     },
     {
       "name": "Thailand",
       "where": "#/world/thailand",
       "seconds": 6,
-      "fps": 69.7,
+      "fps": 40.8,
       "status": "ok"
     }
   ]
