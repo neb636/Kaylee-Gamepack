@@ -49,7 +49,10 @@ export function TableUI({ view, table }: { view: TableView; table: MutableRefObj
     f()
   }
   const size = 'var(--target)'
-  const side: CSSProperties = { position: 'absolute', top: '50%', translate: '0 -50%', zIndex: 30, pointerEvents: 'none' }
+  // The faces at the sides: halfway down on a wide screen; on a tall one up in the sky above the floating board, so they
+  // never sit over its corners.
+  const wide = useLandscape()
+  const side: CSSProperties = { position: 'absolute', top: wide ? '50%' : 'calc(var(--safe-top) + 10px + var(--target) * 1.35)', translate: wide ? '0 -50%' : '0 0', zIndex: 30, pointerEvents: 'none' }
   const iconBtn = (bg: string): CSSProperties => ({ ...round(size, bg, '#fff'), fontSize: `calc(${size} * .45)`, cursor: 'pointer' })
   return (
     <>
@@ -100,6 +103,46 @@ export function TableUI({ view, table }: { view: TableView; table: MutableRefObj
         </>
       )}
     </>
+  )
+}
+
+/** The fade between her room and the floating board: a soft pink-to-lilac glow with twinkles popping and the die
+ *  spinning in the middle. It covers the screen (and takes taps) while the view changes under it. */
+export function Curtain({ on, fade }: { on: boolean; fade: number }) {
+  const stars = useMemo(() => Array.from({ length: 11 }, (_, i) => ({ x: 8 + ((i * 37) % 84), y: 10 + ((i * 53) % 78), s: 0.6 + ((i * 7) % 5) / 6, d: (i % 5) * 0.06 })), [])
+  return (
+    <AnimatePresence>
+      {on && (
+        <motion.div
+          key="curtain"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: fade, ease: 'easeInOut' }}
+          style={{ position: 'absolute', inset: 0, zIndex: 80, overflow: 'hidden', background: 'radial-gradient(circle at 50% 46%, #FFFFFF 0%, #FFE3F0 30%, #FBC7E0 62%, #D9CCFF 100%)' }}
+        >
+          {stars.map((st, i) => (
+            <motion.span
+              key={i}
+              initial={{ scale: 0, rotate: -40 }}
+              animate={{ scale: st.s, rotate: 0 }}
+              transition={{ delay: st.d, type: 'spring', stiffness: 260, damping: 12 }}
+              style={{ position: 'absolute', left: `${st.x}%`, top: `${st.y}%`, color: i % 3 ? '#FFFFFF' : '#FFD86B', fontSize: 'calc(var(--target) * .55)', textShadow: '0 0 18px rgba(255,255,255,.9)', lineHeight: 1 }}
+            >
+              ✦
+            </motion.span>
+          ))}
+          <motion.div
+            initial={{ scale: 0.3, rotate: -200, y: 30 }}
+            animate={{ scale: 1, rotate: 0, y: 0 }}
+            transition={{ type: 'spring', stiffness: 180, damping: 13 }}
+            style={{ position: 'absolute', left: '50%', top: '46%', translate: '-50% -50%', fontSize: 'calc(var(--target) * 1.1)', filter: 'drop-shadow(0 10px 18px rgba(185,166,245,.6))' }}
+          >
+            🎲
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }
 

@@ -778,6 +778,16 @@ export class House implements World3D {
     this.nav[1].setDynamic(rects)
   }
 
+  /** Only camera layer `n` shows and takes taps (a plugin's own little world drawn in the house's scene, like the game
+   *  table's floating board): the house and everyone in it vanish, and only the plugin's tap targets show. null: the
+   *  house again. */
+  showLayer(n: number | null) {
+    this.onlyLayer = n
+    this.rig.camera.layers.set(n ?? 0)
+    this.raycaster.layers.set(n ?? 0)
+  }
+  private onlyLayer: number | null = null
+
   /** Point the camera at its goal at once (after the plugin changed its shot). */
   snapCamera() {
     this.rig.setShot(this.shot(), true)
@@ -977,7 +987,9 @@ export class House implements World3D {
       let r = 0.5
       let show = false
       let glow = false
-      if (id.startsWith('trip:')) {
+      if (this.onlyLayer !== null && !id.startsWith('trip:')) {
+        // (A plugin's own world is showing: the house's targets are off.)
+      } else if (id.startsWith('trip:')) {
         const a = this.plugin?.anchor?.(id)
         if (a) {
           at = tmp.copy(a.at)

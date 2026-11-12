@@ -25,7 +25,7 @@ import { isTableSection, type CousinId, type GameId, type UnicornColor } from '.
 import { TABLE_ANCHORS, TablePlugin, type TableStart, type TableView } from './board-games/plugin'
 import { clampPos, parseRolls } from './board-games/rules/turns'
 import { parseDeck } from './board-games/rules/candy'
-import { TableUI } from './board-games/TableUI'
+import { Curtain, TableUI } from './board-games/TableUI'
 
 // Per visit to the app: the tuk-tuk brings her the first time; after that she's back where she left off.
 let arrivedThisVisit = false
@@ -389,6 +389,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           how to play again when tapped. */}
       {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking || dressing || (playing && !(tableView?.phase === 'awaiting' || tableView?.picking)) || !!looking} dressing={dressing && mode !== 'lost'} talk={playing} hint={hint} />}
       {tableView?.open && mode !== 'lost' && <TableUI view={tableView} table={table} />}
+      <Curtain on={!!tableView?.curtain} fade={tableView?.fade ?? 0.45} />
       {trips.length > 0 && <Ask open={asking && !arriving && mode !== 'lost'} who={asker} trips={trips} onYes={(t) => yes(t)} onNotYet={() => setAsking(false)} />}
       {debug && <Debug houseRef={houseRef} />}
     </div>

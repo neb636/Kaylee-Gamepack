@@ -231,7 +231,16 @@ test.describe('the game table', () => {
     await page.getByRole('button', { name: 'Die', exact: true }).click({ force: true })
     await page.waitForTimeout(500)
     await page.getByRole('button', { name: 'Leave the table' }).click()
-    await expect.poll(() => table(page)).toMatchObject({ open: false, seated: null, phase: 'off' })
+    await expect.poll(() => table(page)).toMatchObject({ open: false, seated: null, phase: 'off', stage: false, curtain: false })
     await expect(page).toHaveURL(/hub\/upstairs/)
+  })
+
+  test('from her room: she sits at the table, the screen fades, and the picker opens on the floating board', async ({ page }) => {
+    test.setTimeout(90000)
+    await open(page, '#/world/thailand/hub/upstairs')
+    expect(await table(page)).toMatchObject({ open: false, stage: false })
+    // (The table's own tap target: Enter on it, like a keyboard tap.)
+    await page.getByRole('button', { name: 'Game table', exact: true }).evaluate((el: HTMLElement) => el.click())
+    await expect.poll(() => table(page), { timeout: 60000 }).toMatchObject({ open: true, stage: true, curtain: false, picking: true })
   })
 })
