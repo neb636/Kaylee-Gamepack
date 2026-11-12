@@ -101,7 +101,7 @@ export function portraits(renderer: WebGLRenderer, screen: { w: number; h: numbe
       if (!(o instanceof Mesh) || o.userData.hull) return
       const p = (o.geometry as BufferGeometry).attributes.position
       const v = new Vector3()
-      for (let i = 0; i < p.count; i += 3) {
+      for (let i = 0; i < p.count; i++) {
         v.set(p.getX(i), p.getY(i), p.getZ(i)).applyMatrix4(o.matrixWorld)
         lo.min(v)
         hi.max(v)
