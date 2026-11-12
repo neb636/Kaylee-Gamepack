@@ -1471,13 +1471,13 @@ export function EmperorHuddle({ onDone }: ActivityProps) {
 
 
 const CSS = `
-.huddle-fly { animation: huddle-fly .7s smooth-out both; }
+.huddle-fly { animation: huddle-fly .7s ease-out both; }
 @keyframes huddle-fly { from { transform: translate(0,0) scale(1); opacity: 1 } to { transform: translate(var(--dx), var(--dy)) scale(.3); opacity: 0 } }
 .huddle-ball { animation: huddle-ball .9s cubic-bezier(.3,.4,.6,1) both; }
 @keyframes huddle-ball { 0% { transform: translate(0,0) } 40% { transform: translate(calc(var(--dx) * .5), calc(var(--dy) * -.25)) } 100% { transform: translate(var(--dx), var(--dy)); opacity: .2 } }
-.huddle-hint { animation: huddle-hint 1s smooth-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.huddle-hint { animation: huddle-hint 1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 @keyframes huddle-hint { 0%,100% { transform: scale(1) } 50% { transform: scale(1.15) } }
-.huddle-twinkle { animation: huddle-twinkle 2.4s smooth-in-out infinite; }
+.huddle-twinkle { animation: huddle-twinkle 2.4s ease-in-out infinite; }
 @keyframes huddle-twinkle { 0%,100% { opacity: 1 } 50% { opacity: .3 } }
 `
 

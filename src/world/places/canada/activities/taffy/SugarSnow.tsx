@@ -1936,17 +1936,17 @@ export function SugarSnow({ onDone, setProgress }: CanadaActivityProps) {
 const CSS = `
 .taffy-pop { animation: taffy-pop .45s cubic-bezier(.3,1.6,.5,1) both; transform-box: fill-box; transform-origin: center; }
 @keyframes taffy-pop { from { transform: scale(0.4) } to { transform: scale(1) } }
-.taffy-fly { animation: taffy-fly .7s smooth-out both; }
+.taffy-fly { animation: taffy-fly .7s ease-out both; }
 @keyframes taffy-fly { from { transform: translate(0,0) scale(1); opacity: 1 } to { transform: translate(var(--dx), var(--dy)) scale(.3); opacity: 0 } }
-.taffy-hint { animation: taffy-hint 1s smooth-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.taffy-hint { animation: taffy-hint 1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 @keyframes taffy-hint { 0%,100% { transform: scale(1) } 50% { transform: scale(1.15) } }
-.taffy-glow { animation: taffy-glow 1.2s smooth-in-out infinite; }
+.taffy-glow { animation: taffy-glow 1.2s ease-in-out infinite; }
 @keyframes taffy-glow { 0%,100% { stroke-opacity: .5 } 50% { stroke-opacity: 1 } }
-.taffy-flame { animation: taffy-flame 1.6s smooth-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.taffy-flame { animation: taffy-flame 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 @keyframes taffy-flame { 0%,100% { transform: scale(1) } 50% { transform: scale(1.06) } }
-.taffy-twinkle { animation: taffy-twinkle 2.6s smooth-in-out infinite; transform-box: fill-box; transform-origin: center; opacity: 0; }
+.taffy-twinkle { animation: taffy-twinkle 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; opacity: 0; }
 @keyframes taffy-twinkle { 0%,70%,100% { opacity: 0; transform: scale(.2) rotate(0deg) } 82% { opacity: 1; transform: scale(1) rotate(25deg) } }
-.taffy-bubble { animation: taffy-bubble 1.8s smooth-out infinite; transform-box: fill-box; transform-origin: center; opacity: 0; }
+.taffy-bubble { animation: taffy-bubble 1.8s ease-out infinite; transform-box: fill-box; transform-origin: center; opacity: 0; }
 @keyframes taffy-bubble { 0% { opacity: 0; transform: scale(.3) } 30% { opacity: .9 } 100% { opacity: 0; transform: scale(1.5) } }
 `
 

@@ -1775,14 +1775,14 @@ function useScene(st: StageDef, river: River, vb: { x: number; y: number; w: num
 const SVG_STYLE = { position: 'absolute' as const, inset: 0, width: '100%', height: '100%', display: 'block' }
 
 const CSS = `
-.salmon-hint { animation: salmon-hint 1s smooth-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.salmon-hint { animation: salmon-hint 1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 @keyframes salmon-hint { 0%,100% { transform: scale(1) } 50% { transform: scale(1.15) } }
 .salmon-fall { stroke-dasharray: 18 26; animation: salmon-fall 0.5s linear infinite; }
 .salmon-fall2 { animation-duration: 0.37s; }
 @keyframes salmon-fall { to { stroke-dashoffset: -44 } }
-.salmon-foam { animation: salmon-foam 0.9s smooth-in-out infinite; transform-box: fill-box; transform-origin: center bottom; }
+.salmon-foam { animation: salmon-foam 0.9s ease-in-out infinite; transform-box: fill-box; transform-origin: center bottom; }
 @keyframes salmon-foam { 0%,100% { transform: scale(1, 1) } 50% { transform: scale(1.06, 0.9) } }
-.salmon-shine { animation: salmon-shine 3.5s smooth-in-out infinite; }
+.salmon-shine { animation: salmon-shine 3.5s ease-in-out infinite; }
 @keyframes salmon-shine { 0%,100% { opacity: 0.15 } 50% { opacity: 0.8 } }
 `
 

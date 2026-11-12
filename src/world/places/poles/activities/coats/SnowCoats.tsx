@@ -1339,9 +1339,9 @@ function Backdrop({ scene, vb, g0, h, big }: { scene: Season; vb: { x: number; y
 const CSS = `
 .coats-pop { animation: coats-pop .45s cubic-bezier(.3,1.6,.5,1) both; transform-box: fill-box; transform-origin: 50% 100%; }
 @keyframes coats-pop { from { transform: scale(0) } to { transform: scale(1) } }
-.coats-fly { animation: coats-fly .7s smooth-out both; }
+.coats-fly { animation: coats-fly .7s ease-out both; }
 @keyframes coats-fly { from { transform: translate(0,0) scale(1); opacity: 1 } to { transform: translate(var(--dx), var(--dy)) scale(.3); opacity: 0 } }
-.coats-hint { animation: coats-hint 1s smooth-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.coats-hint { animation: coats-hint 1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 @keyframes coats-hint { 0%,100% { transform: scale(1) } 50% { transform: scale(1.15) } }
 `
 
