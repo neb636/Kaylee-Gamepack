@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "chutes-before",
+  "title": "Chutes before",
+  "video": "chutes-before.mp4",
+  "gif": "chutes-before.gif",
+  "seconds": 15,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "table-ladder",
+      "where": "table-ladder",
+      "seconds": 6,
+      "fps": 52.5,
+      "status": "ok"
+    },
+    {
+      "name": "table-slide",
+      "where": "table-slide",
+      "seconds": 6,
+      "fps": 55,
+      "status": "ok"
+    }
+  ]
+}

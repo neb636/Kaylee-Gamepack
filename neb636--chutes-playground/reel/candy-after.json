@@ -1,0 +1,40 @@
+{
+  "kind": "reel",
+  "name": "candy-after",
+  "title": "Candy after",
+  "video": "candy-after.mp4",
+  "gif": "candy-after.gif",
+  "seconds": 36,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "table-candy",
+      "where": "table-candy",
+      "seconds": 7,
+      "fps": 19.2,
+      "status": "ok"
+    },
+    {
+      "name": "candy-forward",
+      "where": "candy-forward",
+      "seconds": 9,
+      "fps": 16.3,
+      "status": "ok"
+    },
+    {
+      "name": "candy-backward",
+      "where": "candy-backward",
+      "seconds": 8,
+      "fps": 19.8,
+      "status": "ok"
+    },
+    {
+      "name": "candy-finish",
+      "where": "candy-finish",
+      "seconds": 6,
+      "fps": 19.7,
+      "status": "ok"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "kind": "reel",
+  "name": "chutes-after",
+  "title": "Chutes after",
+  "video": "chutes-after.mp4",
+  "gif": "chutes-after.gif",
+  "seconds": 31,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "table-ladder",
+      "where": "table-ladder",
+      "seconds": 6,
+      "fps": 9,
+      "status": "ok"
+    },
+    {
+      "name": "table-slide",
+      "where": "table-slide",
+      "seconds": 6,
+      "fps": 13.8,
+      "status": "ok"
+    },
+    {
+      "name": "chutes-slide-long",
+      "where": "chutes-slide-long",
+      "seconds": 7,
+      "fps": 20,
+      "status": "ok"
+    },
+    {
+      "name": "chutes-win",
+      "where": "chutes-win",
+      "seconds": 6,
+      "fps": 9,
+      "status": "ok"
+    }
+  ]
+}
