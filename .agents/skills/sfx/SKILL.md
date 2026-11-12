@@ -28,7 +28,12 @@ Credits cost money: about 20-40 per second of sound. Say how many seconds you ma
    `clip(url, synth.x)` for one-shots, `playClip(url, { rate })` when a parameter climbs (pitch = rate), `held()` for
    sounds the game calls every beat (an engine's pitch follows `rate`), `bed()` for ambience (add its stop to the
    stage's `bag`). Tuned note runs and bells stay synthesized; characters with voices keep their synth laughs.
-4. **Review:** one listen track per stage on the review page (`listens` in `review/review.json`), numbered, so the user
-   names the ones to redo ("salt 4"). Redo only those, with `--only`.
+4. **Review:** one listen track per stage on the review page, numbered, so the user names the ones to redo ("salt 4").
+   Make them with `node scripts/sfx-listens.mjs <folder> "salt=The salt hut=salt-" "rice=The rice farm=rice-"` (one
+   `name=title=id prefixes` per stage, clips in `sfx.json` order): it writes `review/sfx/<name>.mp3` and each sound's
+   start and end time into `listens` in `review/review.json`, so the page shows the times, lights up the sound that's
+   playing and plays from any sound the user taps. Give a clip a short `label` in `sfx.json` when its prompt reads badly as
+   a list item. Never hand-write `listens` without times. Redo only the named ones, with `--only <id> --force`, then
+   run `sfx-listens.mjs` again.
 
 Nan is the reference: `src/world/places/thailand/activities/nan-trip/sfx/`.
