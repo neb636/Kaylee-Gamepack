@@ -1,0 +1,11 @@
+{
+  "title": "Rice farm: you two arrive, Lung tells her",
+  "checkIn": "fix",
+  "kaylee": "In the story's opening, she and Daddy have just walked up the boardwalk, and Lung turns to her to tell what Jip did last year.",
+  "questions": [],
+  "reels": [
+    { "name": "rice-intro-before", "moments": ["#/world/thailand/nan-trip/rice?round=story~14"] },
+    { "name": "rice-intro-after", "moments": ["#/world/thailand/nan-trip/rice?round=story~14"] }
+  ],
+  "links": [{ "label": "Watch the story", "hash": "#/world/thailand/nan-trip/rice?round=story" }]
+}
