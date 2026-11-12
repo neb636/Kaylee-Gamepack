@@ -4788,18 +4788,466 @@
     "file": "e1ddc5b4b08a.mp3"
   },
   {
-    "text": "Take a photo of an animal, then let it be!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3672,
-    "file": "262a47aa802b.mp3"
-  },
-  {
-    "text": "Koh Samet! Let's explore the island!",
+    "text": "Fireflies glow to say hello to each other!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 3528,
-    "file": "c9cb2d380a0e.mp3"
+    "file": "e6d34be12e76.mp3"
+  },
+  {
+    "text": "What a pretty island!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1752,
+    "file": "a721dfcd8110.mp3"
+  },
+  {
+    "text": "Hello, puppy! What's wrong?",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2160,
+    "file": "4bee9c0a5d49.mp3"
+  },
+  {
+    "text": "Oh no, oh no, oh no!",
+    "voice": "tuk",
+    "sig": "2b33d85502",
+    "ms": 2352,
+    "file": "36917b56c669.mp3"
+  },
+  {
+    "text": "Our fireflies are gone!",
+    "voice": "kae",
+    "sig": "515df55c74",
+    "ms": 1944,
+    "file": "0a53229e32d9.mp3"
+  },
+  {
+    "text": "Every night, four fireflies light up our fire show.",
+    "voice": "tuk",
+    "sig": "2b33d85502",
+    "ms": 3936,
+    "file": "ff2b9f559d88.mp3"
+  },
+  {
+    "text": "But last night, a big wind came. Whoosh!",
+    "voice": "kae",
+    "sig": "515df55c74",
+    "ms": 3792,
+    "file": "6f8a32323db7.mp3"
+  },
+  {
+    "text": "It blew them all over the island!",
+    "voice": "kae",
+    "sig": "515df55c74",
+    "ms": 2424,
+    "file": "01bf24036036.mp3"
+  },
+  {
+    "text": "No fireflies, no show tonight!",
+    "voice": "tuk",
+    "sig": "2b33d85502",
+    "ms": 3456,
+    "file": "a651071013f8.mp3"
+  },
+  {
+    "text": "But Tofu saw where they went!",
+    "voice": "kae",
+    "sig": "515df55c74",
+    "ms": 2016,
+    "file": "140fb955217a.mp3"
+  },
+  {
+    "text": "Will you help us find them?",
+    "voice": "tuk",
+    "sig": "2b33d85502",
+    "ms": 1704,
+    "file": "bea2e9dc8217.mp3"
+  },
+  {
+    "text": "Four fireflies to find! Tap a picture!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3264,
+    "file": "75d5faf80b40.mp3"
+  },
+  {
+    "text": "Four fireflies to find! Click a picture!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3720,
+    "file": "544a87816829.mp3"
+  },
+  {
+    "text": "Hop in! Beep beep!",
+    "voice": "sunbear",
+    "sig": "b772c24652",
+    "ms": 2112,
+    "file": "76c05d759ce3.mp3"
+  },
+  {
+    "text": "Off we go!",
+    "voice": "sunbear",
+    "sig": "b772c24652",
+    "ms": 1128,
+    "file": "08d589bb71ee.mp3"
+  },
+  {
+    "text": "Hold on tight!",
+    "voice": "sunbear",
+    "sig": "b772c24652",
+    "ms": 1824,
+    "file": "60da20337f99.mp3"
+  },
+  {
+    "text": "Ao Hin Khok!",
+    "voice": "sunbear",
+    "sig": "b772c24652",
+    "ms": 1608,
+    "file": "41c96ea67562.mp3"
+  },
+  {
+    "text": "Look! A pink light on the water!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3144,
+    "file": "c39fef6cda3c.mp3"
+  },
+  {
+    "text": "Something is glowing in the sand!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3240,
+    "file": "3dfb35c66a6d.mp3"
+  },
+  {
+    "text": "A blue light, far out at sea!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2880,
+    "file": "ae06c82c317c.mp3"
+  },
+  {
+    "text": "A green light in the big tree!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2544,
+    "file": "d813ef82d04f.mp3"
+  },
+  {
+    "text": "One firefly! Three more to find!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3432,
+    "file": "f7a9a2a50933.mp3"
+  },
+  {
+    "text": "Two fireflies! Two more to find!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3096,
+    "file": "c3862f94cefe.mp3"
+  },
+  {
+    "text": "Three fireflies! Just one more!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3000,
+    "file": "77bed57fe20d.mp3"
+  },
+  {
+    "text": "Tofu the beach puppy! He saw it all!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4008,
+    "file": "05e0d83fe9cc.mp3"
+  },
+  {
+    "text": "Sawasdee krap! Looking for a pink light?",
+    "voice": "otter",
+    "sig": "1d5457faf8",
+    "ms": 3288,
+    "file": "6780337340fe.mp3"
+  },
+  {
+    "text": "She zoomed round my buoys all night!",
+    "voice": "otter",
+    "sig": "1d5457faf8",
+    "ms": 3432,
+    "file": "efefeb81d40f.mp3"
+  },
+  {
+    "text": "She only stops for someone fast!",
+    "voice": "otter",
+    "sig": "1d5457faf8",
+    "ms": 2568,
+    "file": "1dfb819c8364.mp3"
+  },
+  {
+    "text": "Life jacket first!",
+    "voice": "otter",
+    "sig": "1d5457faf8",
+    "ms": 1608,
+    "file": "9b465f97acc3.mp3"
+  },
+  {
+    "text": "There she is! After her!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2256,
+    "file": "46fc96a45743.mp3"
+  },
+  {
+    "text": "Ha ha! She likes you!",
+    "voice": "otter",
+    "sig": "1d5457faf8",
+    "ms": 2064,
+    "file": "bcd6cf853e58.mp3"
+  },
+  {
+    "text": "You found Zoom!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2352,
+    "file": "900981c9910b.mp3"
+  },
+  {
+    "text": "Fast like a firefly!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1872,
+    "file": "f2a1359e770e.mp3"
+  },
+  {
+    "text": "Look! Something's glowing in the sand!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2736,
+    "file": "1098bffd2bc8.mp3"
+  },
+  {
+    "text": "A little gold firefly! She is shy.",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 3144,
+    "file": "0b0de29027f0.mp3"
+  },
+  {
+    "text": "Let's build her a castle!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1800,
+    "file": "69b7b969262e.mp3"
+  },
+  {
+    "text": "She is peeking! Keep building!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2760,
+    "file": "9761c5e50b80.mp3"
+  },
+  {
+    "text": "She loves her castle!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1920,
+    "file": "10fc686bd355.mp3"
+  },
+  {
+    "text": "You found Sandy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1632,
+    "file": "a109355796a0.mp3"
+  },
+  {
+    "text": "A castle fit for a firefly!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2424,
+    "file": "b2065a725441.mp3"
+  },
+  {
+    "text": "A little blue light fell in the sea!",
+    "voice": "pelican",
+    "sig": "0f4843ebb3",
+    "ms": 2256,
+    "file": "ad42d98510c5.mp3"
+  },
+  {
+    "text": "She can't swim! She is in a bubble.",
+    "voice": "pelican",
+    "sig": "0f4843ebb3",
+    "ms": 3120,
+    "file": "3756b8a24346.mp3"
+  },
+  {
+    "text": "Down by the coral. Can you find her?",
+    "voice": "pelican",
+    "sig": "0f4843ebb3",
+    "ms": 2712,
+    "file": "7cbcef737afd.mp3"
+  },
+  {
+    "text": "A blue glow! Swim to it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3408,
+    "file": "5dc71a7f77a7.mp3"
+  },
+  {
+    "text": "The cuttlefish is hugging her bubble!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2808,
+    "file": "e13c187aad02.mp3"
+  },
+  {
+    "text": "Pop! Out she comes!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2064,
+    "file": "77921dd7a84d.mp3"
+  },
+  {
+    "text": "You saved her, ka!",
+    "voice": "pelican",
+    "sig": "0f4843ebb3",
+    "ms": 1968,
+    "file": "8fa55315565e.mp3"
+  },
+  {
+    "text": "You found Bubbles!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2064,
+    "file": "dc72f0643380.mp3"
+  },
+  {
+    "text": "Did you see that? A green light!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2400,
+    "file": "2418a2c54edd.mp3"
+  },
+  {
+    "text": "She is playing hide and seek!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 3024,
+    "file": "34b02063ab08.mp3"
+  },
+  {
+    "text": "Then let's play too!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1872,
+    "file": "cf4bb593a371.mp3"
+  },
+  {
+    "text": "The green light knows where Dad is!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3192,
+    "file": "08757bf89f4c.mp3"
+  },
+  {
+    "text": "Shh! She is hiding with you!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3336,
+    "file": "37d119e7504a.mp3"
+  },
+  {
+    "text": "Hey! That tickles my nose!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2208,
+    "file": "b7009098cf98.mp3"
+  },
+  {
+    "text": "You found Peekaboo!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1752,
+    "file": "ae3dbaaf37e6.mp3"
+  },
+  {
+    "text": "All four fireflies! You did it!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2904,
+    "file": "18236c9f2034.mp3"
+  },
+  {
+    "text": "Tap the sunset picture!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1872,
+    "file": "967a59fb3289.mp3"
+  },
+  {
+    "text": "Click the sunset picture!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 6672,
+    "file": "e4e2daf5b609.mp3"
+  },
+  {
+    "text": "It's so dark. No show tonight.",
+    "voice": "tuk",
+    "sig": "2b33d85502",
+    "ms": 3240,
+    "file": "6d15d2acb41c.mp3"
+  },
+  {
+    "text": "Wait! Look, look!",
+    "voice": "kae",
+    "sig": "515df55c74",
+    "ms": 2424,
+    "file": "3a318be60053.mp3"
+  },
+  {
+    "text": "Our fireflies! You found them!",
+    "voice": "tuk",
+    "sig": "2b33d85502",
+    "ms": 2856,
+    "file": "4be6fa802e45.mp3"
+  },
+  {
+    "text": "Light us up, fireflies!",
+    "voice": "kae",
+    "sig": "515df55c74",
+    "ms": 1944,
+    "file": "bb614b83dca5.mp3"
+  },
+  {
+    "text": "And these lights are for you!",
+    "voice": "kae",
+    "sig": "515df55c74",
+    "ms": 1968,
+    "file": "bedb428a5fd4.mp3"
+  },
+  {
+    "text": "Now the show can start!",
+    "voice": "tuk",
+    "sig": "2b33d85502",
+    "ms": 1728,
+    "file": "6db7496f955b.mp3"
+  },
+  {
+    "text": "Best fire show ever!",
+    "voice": "tuk",
+    "sig": "2b33d85502",
+    "ms": 1704,
+    "file": "ffbecaa1c0f9.mp3"
+  },
+  {
+    "text": "Khob khun ka! Come back soon!",
+    "voice": "kae",
+    "sig": "515df55c74",
+    "ms": 2520,
+    "file": "04fa5ee4e077.mp3"
   },
   {
     "text": "Hat Sai Kaew! The jet ski beach!",
@@ -4856,20 +5304,6 @@
     "sig": "a2881bb105",
     "ms": 3432,
     "file": "dc2c6edfcede.mp3"
-  },
-  {
-    "text": "Tap an animal to take its photo!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3120,
-    "file": "de2ff9ed11d9.mp3"
-  },
-  {
-    "text": "Click an animal to take its photo!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2616,
-    "file": "cebd390e992f.mp3"
   },
   {
     "text": "Thank you for cleaning the beach!",
@@ -5017,13 +5451,6 @@
     "sig": "ba2e98c34e",
     "ms": 2880,
     "file": "28aa128d19c9.mp3"
-  },
-  {
-    "text": "A beach puppy! He knows the way. Follow him!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4584,
-    "file": "16a31a006f39.mp3"
   },
   {
     "text": "The puppy wants you to come!",
@@ -5178,209 +5605,6 @@
     "sig": "ed7dbdac3d",
     "ms": 1296,
     "file": "8f30cfce6863.mp3"
-  },
-  {
-    "text": "Terns dive into the sea to catch fish!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3792,
-    "file": "780e8fb94389.mp3"
-  },
-  {
-    "text": "Ghost crabs dig holes to hide from the sun!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3816,
-    "file": "0e0e15d7b9c4.mp3"
-  },
-  {
-    "text": "The reef heron stands still, then grabs a fish!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4752,
-    "file": "231c2f897e5b.mp3"
-  },
-  {
-    "text": "Sea urchins are prickly. Look, but don't touch!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4512,
-    "file": "4e4fbbcb9436.mp3"
-  },
-  {
-    "text": "Coral looks like rock, but it's alive!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3624,
-    "file": "980a5b940b77.mp3"
-  },
-  {
-    "text": "The hornbill has a giant yellow beak!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3312,
-    "file": "c245d5d802bb.mp3"
-  },
-  {
-    "text": "Parrotfish nibble coral, and it turns into sand!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3768,
-    "file": "0c9e2dacae23.mp3"
-  },
-  {
-    "text": "Damselfish swim in a big crowd to stay safe!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4584,
-    "file": "b8658cee6cce.mp3"
-  },
-  {
-    "text": "A cuttlefish can change color in a blink!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3288,
-    "file": "d52f389bae79.mp3"
-  },
-  {
-    "text": "Monitor lizards smell with their tongue!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3768,
-    "file": "8dee79f6e6fa.mp3"
-  },
-  {
-    "text": "The mouse-deer is as small as a cat!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2760,
-    "file": "bf4891da983f.mp3"
-  },
-  {
-    "text": "A flying fox is a big bat that eats fruit!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4008,
-    "file": "4c7b0587242e.mp3"
-  },
-  {
-    "text": "Squirrels run up the palm trees!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3432,
-    "file": "5038db335c22.mp3"
-  },
-  {
-    "text": "Monkeys! Hold on to your sunglasses!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3168,
-    "file": "d23fe333de73.mp3"
-  },
-  {
-    "text": "Look up over the sea at Sai Kaew!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3408,
-    "file": "ce988c34e5d1.mp3"
-  },
-  {
-    "text": "Look for little holes in the sand!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2448,
-    "file": "3f4c5c293146.mp3"
-  },
-  {
-    "text": "Look on the rocks by the mermaid!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2688,
-    "file": "9cac5f3fb2dc.mp3"
-  },
-  {
-    "text": "Look in the water by the rocks!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2832,
-    "file": "ac3b26645c27.mp3"
-  },
-  {
-    "text": "Look under the water at Hin Khok!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2712,
-    "file": "4c71a8153bcf.mp3"
-  },
-  {
-    "text": "Look up in the big tree at Wong Duan!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3624,
-    "file": "b26838a90c13.mp3"
-  },
-  {
-    "text": "Look in the water at Wong Duan!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2952,
-    "file": "9a7a8644ce4a.mp3"
-  },
-  {
-    "text": "Look for a crowd of little blue fish!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2424,
-    "file": "599be4fb2e1f.mp3"
-  },
-  {
-    "text": "Look by the snorkel boat!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1800,
-    "file": "e55e8bddac1c.mp3"
-  },
-  {
-    "text": "Look on the sand at Ao Prao!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2664,
-    "file": "f7bbfb826f0d.mp3"
-  },
-  {
-    "text": "By the forest at Ao Prao. Walk slowly!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4728,
-    "file": "79070f91f519.mp3"
-  },
-  {
-    "text": "Look up in the trees at Ao Prao!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3360,
-    "file": "6ecf24e05416.mp3"
-  },
-  {
-    "text": "Look up the palm trees!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2952,
-    "file": "5a6285c1ab55.mp3"
-  },
-  {
-    "text": "Look by the road over the hill!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2424,
-    "file": "6e1e793ffb1d.mp3"
-  },
-  {
-    "text": "Your animal book is full!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3072,
-    "file": "d6af303977ec.mp3"
   },
   {
     "text": "Sawasdee krap! Life jacket first!",
