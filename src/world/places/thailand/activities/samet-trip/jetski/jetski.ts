@@ -18,6 +18,9 @@
 // Silly, never failing: drive up onto the sand and it skids, everyone tumbles off laughing and the jet ski man pushes
 // it back; spin tight circles and Daddy goes dizzy; splash Mommy on the shore; push into the rope and it stretches
 // like a rubber band and turns her along it; wedge it on the rocks and it pops free. Life jacket first: the bare link waits for her tap on the jacket.
+// Getting off: a pink ring on the water in front of the hut (the island's stop rings look the same). Drive into it any
+// time (not mid-race) and the jet ski man catches the handlebars, she and Daddy hop off onto the sand, and it's back
+// to the island. Sparkle says so once, a little way into the ride.
 //
 // Talk (lines.ts L.samet.jetski): the jet ski man says the life jacket goes on, Sparkle says what each round is for and
 // counts the race in, Daddy whoops now and then (never after every jump), the jet ski man teases and is a good sport.
@@ -128,6 +131,8 @@ export interface JetEvents {
   stars(n: number, of: number): void
   /** The first frame is on screen. */
   ready(): void
+  /** She parked it in the pink ring by the hut and hopped off: back to the island. */
+  leave(): void
 }
 
 const J = LINES.samet.jetski
@@ -160,7 +165,10 @@ export const JET_ANCHORS: AnchorInfo[] = [
   ...[0, 1, 2, 3, 4, 5, 6, 7].map((i) => ({ id: `umbrella:${i}`, label: 'A beach umbrella', kind: 'thing' as const })),
 ]
 
-type Phase = 'jacket' | 'suit' | 'push' | 'ride' | 'beached' | 'countdown' | 'racing' | 'raceEnd'
+type Phase = 'jacket' | 'suit' | 'push' | 'ride' | 'beached' | 'park' | 'countdown' | 'racing' | 'raceEnd'
+/** The pink ring by the hut where she parks the jet ski to get off (a little out from where it waits), and its size. */
+const DOCK = bay(0, 3)
+const DOCK_R = 3.4
 interface Spring {
   x: number
   v: number
@@ -247,6 +255,12 @@ export class JetSki implements World3D {
   private caught = 0
   private arrow: Group
   private goalGlow: Mesh
+  /** The pink ring she drives into to get off; armed once she has been away from it. */
+  private dock: Mesh
+  private dockArmed = false
+  private parkT = -1
+  private dockShowUntil = -1
+  private park = { from: new Vector3(), heading: 0 }
 
   // ---- Silly things.
   private beachT = -1
@@ -385,6 +399,11 @@ export class JetSki implements World3D {
     this.goalGlow.renderOrder = 3
     this.goalGlow.visible = false
     scene.add(this.goalGlow)
+    this.dock = new Mesh(bag.add(new RingGeometry(DOCK_R - 0.6, DOCK_R, 48)), bag.add(new MeshBasicMaterial({ color: PAL.hotpink, transparent: true, opacity: 0.75, depthWrite: false })))
+    this.dock.rotation.x = -Math.PI / 2
+    this.dock.renderOrder = 3
+    this.dock.visible = false
+    scene.add(this.dock)
     // The stars of the waves round (three at a time).
     const star = Array.from({ length: 10 }, (_, i): [number, number] => {
       const a = (i / 10) * Math.PI * 2
@@ -590,6 +609,7 @@ export class JetSki implements World3D {
     this.raceStep(dt)
     this.starStep(dt, t)
     this.pointWay(t)
+    this.dockStep(t)
     this.life(dt, t)
     this.placeSki(dt)
     this.placeRope(t)
@@ -700,6 +720,7 @@ export class JetSki implements World3D {
       return
     }
     if (this.phase === 'beached') return this.beached(dt)
+    if (this.phase === 'park') return this.parking(dt)
     if (this.phase === 'countdown') {
       const p = RACE.start[0]
       d.place(p.x, p.z, SEAWARD)
@@ -1015,6 +1036,76 @@ export class JetSki implements World3D {
     this.manWalk = { from: this.man.root.position.clone(), to: new Vector3(x, this.groundY(x, z), z), t: 0 }
   }
 
+  // ---------------------------------------------------------------- getting off: the pink ring by the hut
+
+  private dockStep(t: number) {
+    const d = this.d
+    const open = this.phase === 'ride' || (this.phase === 'raceEnd' && this.winner === 'her')
+    this.dock.visible = open
+    if (!open) return
+    // (Above the swell all round: flat on the water it dips under the waves.)
+    this.dock.position.set(DOCK.x, this.water(DOCK.x, DOCK.z) + 0.3, DOCK.z)
+    this.dock.scale.setScalar(1 + Math.sin(t * 3) * 0.06)
+    const dist = Math.hypot(d.x - DOCK.x, d.z - DOCK.z)
+    if (dist > DOCK_R + 5) this.dockArmed = true
+    // A little way into the ride, Sparkle says how to get off (once a visit).
+    if (this.dockArmed && this.phase === 'ride' && this.round === 'ride' && this.rideT > 25 && !this.told.has('off')) {
+      this.once('off', J.off)
+      // (Riding out, the beach is behind the camera: the pink arrow points the way back for a bit.)
+      this.dockShowUntil = t + 8
+    }
+    if (this.dockArmed && dist < DOCK_R - 0.4 && !d.airborne) this.startPark()
+  }
+  private startPark() {
+    const d = this.d
+    this.phase = 'park'
+    this.parkT = 0
+    this.dockArmed = false
+    this.park.from.set(d.x, 0, d.z)
+    this.park.heading = d.heading
+    d.stop()
+    d.vx = d.vz = 0
+    d.yawRate = 0
+    this.events.count(-1)
+    this.walkMan(bay(1.6, 0.2).x, bay(1.6, 0.2).z)
+    S.skid()
+    this.talk('bye', J.bye, 0)
+  }
+  /** Parked: it glides in nose first to where it waits, he holds it, she and Daddy hop off onto the sand. */
+  private parking(dt: number) {
+    const d = this.d
+    const t = (this.parkT += dt)
+    const P0 = this.park.from
+    const to = LAUNCH
+    const k = easeOut(t / 0.8)
+    d.x = P0.x + (to.x - P0.x) * k
+    d.z = P0.z + (to.z - P0.z) * k
+    d.heading = this.park.heading + wrap(SEAWARD + Math.PI - this.park.heading) * k
+    if (t >= 0.9 && t - dt < 0.9) {
+      for (const [c, side] of [[this.kaylee, 1], [this.nick, -1]] as const) {
+        this.scene.attach(c.root)
+        c.setPose('stand')
+        const p = bay(side * 1.3, -2.2)
+        c.root.userData.from = c.root.position.clone()
+        c.root.userData.to = new Vector3(p.x, this.groundY(p.x, p.z), p.z)
+      }
+      S.thump()
+      this.kaylee.react('wiggle')
+      this.nick.react('hop')
+      this.man.react('wave')
+    }
+    if (t >= 0.9) {
+      const h = clamp((t - 0.9) / 0.5, 0, 1)
+      for (const c of [this.kaylee, this.nick]) {
+        const a = c.root.userData.from as Vector3
+        const b = c.root.userData.to as Vector3
+        c.root.position.set(a.x + (b.x - a.x) * h, a.y + (b.y - a.y) * h + bellK(h) * 0.9, a.z + (b.z - a.z) * h)
+        c.root.rotation.set(0, SEAWARD + Math.PI, 0)
+      }
+    }
+    if (t >= 2.3 && t - dt < 2.3) this.events.leave()
+  }
+
   // ---------------------------------------------------------------- the loop secret
 
   private closed(loop: Loop) {
@@ -1078,6 +1169,8 @@ export class JetSki implements World3D {
   }
   /** Again (her tap on 🔁, or at once after a loss). */
   raceAgain() {
+    // (Parked and hopping off: they're on their way back to the island, not racing an empty jet ski.)
+    if (this.phase === 'park') return
     if (this.round !== 'race') this.round = 'race'
     this.startRace(false)
   }
@@ -1479,6 +1572,7 @@ export class JetSki implements World3D {
   /** What she's heading for right now: the buoy, then the flags, or the nearest star. */
   private wayGoal(): { x: number; z: number } | null {
     if (this.phase === 'racing') return this.leg[0] === 0 ? FAR_BUOY : bay(0, RACE.finish.v)
+    if (this.phase === 'ride' && this.time < this.dockShowUntil) return DOCK
     if (this.round !== 'waves' || this.phase !== 'ride') return null
     let best: { x: number; z: number } | null = null
     let dist = Infinity
@@ -1655,7 +1749,7 @@ export class JetSki implements World3D {
       const yaw = d.heading * DEG + 32
       return { center: new Vector3(d.x - Math.sin(d.heading) * 0.6, 1.25, d.z - Math.cos(d.heading) * 0.6), half: tall ? new Vector3(2.4, 1.6, 2.4) : new Vector3(3.6, 1.4, 2.2), yaw, pitch: 15, minDist: 4, maxDist: 30 }
     }
-    if (this.phase === 'beached') {
+    if (this.phase === 'beached' || this.phase === 'park') {
       // From the sea side (the jet ski faces up the beach: in front of it is the hill).
       const yaw = SEAWARD * DEG + 28
       return { center: new Vector3(d.x, 1.0, d.z), half: tall ? new Vector3(4, 2, 4) : new Vector3(6, 2, 3.5), yaw, pitch: 24, minDist: 6, maxDist: 40 }
@@ -1896,6 +1990,7 @@ export class JetSki implements World3D {
       rivalLeg: this.leg[1],
       rival: (({ u, v }) => ({ u: +u.toFixed(1), v: +v.toFixed(1), speed: +this.rival.speed.toFixed(1), cap: this.rival.cap }))(toBay(this.rival.x, this.rival.z)),
       winner: this.winner,
+      dock: { shown: this.dock.visible, armed: this.dockArmed, at: sc(tmp2.set(DOCK.x, 0.1, DOCK.z)) },
       ski: sc(tmp2.set(d.x, 0.6, d.z)),
       buoy: sc(tmp2.set(FAR_BUOY.x, 0.5, FAR_BUOY.z)),
       hut: sc(tmp2.set(HUT.x, 1, HUT.z)),
