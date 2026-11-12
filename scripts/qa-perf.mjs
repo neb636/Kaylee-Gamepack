@@ -5,6 +5,7 @@
 //   npm run build && node scripts/qa-perf.mjs            # every section below
 //   node scripts/qa-perf.mjs --only=samet,bike           # names containing either word
 //   node scripts/qa-perf.mjs --label=before              # saves qa-output/perf-before.json; --compare=before diffs against it
+//   openingMs: the longest frame in the 2.5 s after the world first answers (a build or picture hitch)
 //
 // Headless WebKit draws in software, so its frame times are only a relative signal; calls, triangles, vertices,
 // uploads, programs and build times are exact. Screenshots go to qa-output/perf/<label>/ for a side-by-side look.
@@ -121,8 +122,10 @@ try {
       continue
     }
     const readyMs = Date.now() - t0
-    // Let it settle (warm-up, first pictures), then measure 3 s.
+    // Let it settle (warm-up, first pictures), then measure 3 s. The longest frame while it settles is the opening hitch.
+    await page.evaluate(() => Object.assign(window.__perf, { frames: [], js: [], live: true }))
     await page.waitForTimeout(2500)
+    const openingMs = Math.round(await page.evaluate(() => Math.max(0, ...window.__perf.frames)))
     const programsSettled = (await page.evaluate(`(${qaOf})()`)).stats.programs
     await page.evaluate(() => {
       const P = window.__perf
@@ -158,6 +161,7 @@ try {
       uploadsPerFrame: +(m.uploads / n).toFixed(1),
       programs: programsSettled,
       lateprograms: after - programsSettled,
+      openingMs,
       maxFrameMs: Math.round(Math.max(0, ...m.frames)),
       jsMs: +(m.js.reduce((a, b) => a + b, 0) / Math.max(1, m.js.length)).toFixed(2),
       jsP95: +(sorted[Math.floor(sorted.length * 0.95)] ?? 0).toFixed(2),
@@ -173,7 +177,7 @@ try {
 }
 
 writeFileSync(path.join(out, `perf-${label}.json`), JSON.stringify(results, null, 2))
-const cols = ['calls', 'tris', 'vertices', 'vertsPerFrame', 'uploadKBPerFrame', 'programs', 'lateprograms', 'readyMs', 'jsMs', 'jsP95', 'maxFrameMs']
+const cols = ['calls', 'tris', 'vertices', 'vertsPerFrame', 'uploadKBPerFrame', 'programs', 'lateprograms', 'readyMs', 'openingMs', 'jsMs', 'jsP95', 'maxFrameMs']
 const old = compare && existsSync(path.join(out, `perf-${compare}.json`)) ? JSON.parse(readFileSync(path.join(out, `perf-${compare}.json`), 'utf8')) : null
 const cell = (name, c) => {
   const v = results[name]?.[c]
