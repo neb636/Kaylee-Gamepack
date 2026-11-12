@@ -31,5 +31,11 @@
       "label": "Tune the card flip and hopping",
       "hash": "#/world/thailand/hub/candy?feel=1"
     }
+  ],
+  "tableReads": [
+    [
+      "thailand",
+      "games"
+    ]
   ]
 }
