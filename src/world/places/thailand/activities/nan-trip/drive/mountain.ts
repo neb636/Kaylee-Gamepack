@@ -55,6 +55,7 @@ import { L } from '../../../lines'
 import { buildFalls, buildLandmark, buildMarket } from './landmarks'
 import { LANE_LAT, nanRoad, rollDrive, type DriveRoll, type NanRoad, type RoadId, type Weather } from './roads'
 import { roadBed, roadSfx as sfx } from './sounds'
+import { smoothstep, wrapAngle } from '../../../../../../sdk/math'
 
 export type DrivePhase = 'drive' | 'arrive' | 'view' | 'end'
 
@@ -142,12 +143,7 @@ export function driveAnchors(id: RoadId, traffic?: TrafficPlan, to = ''): Anchor
 }
 
 const deg = Math.PI / 180
-const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
 const wrapDeg = (a: number) => ((((a + 180) % 360) + 360) % 360) - 180
-const smooth = (a: number, b: number, x: number) => {
-  const t = clamp((x - a) / (b - a), 0, 1)
-  return t * t * (3 - 2 * t)
-}
 const tmp = new Vector3()
 const tmp2 = new Vector3()
 
@@ -626,8 +622,8 @@ export class NanDrive implements World3D {
 
     // ---- The camera: behind, looking ahead along the road (higher on hairpins) ----
     const head = Math.atan2(this.r.road.sampleAt(this.loc.s + 8).tx, this.r.road.sampleAt(this.loc.s + 8).tz)
-    const want = this.phase === 'drive' ? head + wrap(this.d.heading - head) * STEER.camera : this.d.heading
-    this.camHeading += wrap(want - this.camHeading) * (1 - Math.exp(-dt / 0.5))
+    const want = this.phase === 'drive' ? head + wrapAngle(this.d.heading - head) * STEER.camera : this.d.heading
+    this.camHeading += wrapAngle(want - this.camHeading) * (1 - Math.exp(-dt / 0.5))
     this.rig.setShot(this.shot())
     this.rig.update(dt)
     this.clearTerrain()
@@ -936,7 +932,7 @@ export class NanDrive implements World3D {
     this.flash = Math.max(0, this.flash - dt)
     // On the grass: the ground's own height and slope under it (eased in from the road's).
     const half = this.r.road.half
-    const off = smooth(half - 0.2, half + 1.2, Math.abs(this.loc.lat))
+    const off = smoothstep(half - 0.2, half + 1.2, Math.abs(this.loc.lat))
     this.offK += (off - this.offK) * (dt > 0 ? 1 - Math.exp(-dt * 8) : 1)
     const field = this.world.field
     const fx = Math.sin(d.heading)
@@ -1015,7 +1011,7 @@ export class NanDrive implements World3D {
     const r = this.r
     const y = this.carY()
     const base = r.cloud && y > r.cloud.y1 ? AIR.above : AIR[this.weather]
-    const k = r.cloud ? smooth(r.cloud.y0 - 3, r.cloud.y0 + 6, y) * (1 - smooth(r.cloud.y1 - 5, r.cloud.y1 + 3, y)) : 0
+    const k = r.cloud ? smoothstep(r.cloud.y0 - 3, r.cloud.y0 + 6, y) * (1 - smoothstep(r.cloud.y1 - 5, r.cloud.y1 + 3, y)) : 0
     this.cloudK += (k - this.cloudK) * (1 - Math.exp(-dt * 2))
     const c = this.cloudK
     this.air.set(base.bg).lerp(tmpColor.set(AIR.inside.bg), c)
@@ -1430,7 +1426,6 @@ export class NanDrive implements World3D {
     // (Mostly sideways on screen: only the left-right part of the push steers.)
     return clamp(dx * Math.sign(vx || 1) + dy * (vy / vl) * 0.3, -1, 1)
   }
-
 
   private toScreen(at: Vector3, r: number, max = 140) {
     const cam = this.rig.camera

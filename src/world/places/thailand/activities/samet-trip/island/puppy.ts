@@ -12,9 +12,9 @@ import { blobShadow } from '../../../../../engine3d/geo'
 import { PUPPY } from '../cast'
 import { pointAt, type Route } from './route'
 import { islandSfx } from './sounds'
+import { wrapAngle } from '../../../../../../sdk/math'
 
 export type Trick = 'spin' | 'roll' | 'hop'
-const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
 
 export class Puppy {
   readonly root = new Group()
@@ -90,7 +90,7 @@ export class Puppy {
       const step = Math.min(d, this.speed * dt)
       this.x += (dx / d) * step
       this.z += (dz / d) * step
-      this.yaw += wrap(Math.atan2(dx, dz) - this.yaw) * Math.min(1, dt * 9)
+      this.yaw += wrapAngle(Math.atan2(dx, dz) - this.yaw) * Math.min(1, dt * 9)
     }
     return Math.max(0, d - near)
   }
@@ -108,7 +108,7 @@ export class Puppy {
       return s
     }
     const ahead = pointAt(r, ns + Math.sign(ds || 1) * 1.2)
-    if (this.speed > 0.05) this.yaw += wrap(Math.atan2(ahead.x - this.x, ahead.z - this.z) - this.yaw) * Math.min(1, dt * 8)
+    if (this.speed > 0.05) this.yaw += wrapAngle(Math.atan2(ahead.x - this.x, ahead.z - this.z) - this.yaw) * Math.min(1, dt * 8)
     this.x = p.x
     this.z = p.z
     return ns
@@ -116,7 +116,7 @@ export class Puppy {
   /** Stands still, turning to face a point. */
   stay(dt: number, face?: { x: number; z: number }) {
     this.speed = Math.max(0, this.speed - 7 * dt)
-    if (face) this.yaw += wrap(Math.atan2(face.x - this.x, face.z - this.z) - this.yaw) * Math.min(1, dt * 4)
+    if (face) this.yaw += wrapAngle(Math.atan2(face.x - this.x, face.z - this.z) - this.yaw) * Math.min(1, dt * 4)
   }
 
   update(dt: number, t: number, groundY: number) {
@@ -155,7 +155,7 @@ export class Puppy {
     let hy = 0
     let hx = 0
     if (this.look) {
-      const a = wrap(Math.atan2(this.look.x - this.x, this.look.z - this.z) - this.yaw)
+      const a = wrapAngle(Math.atan2(this.look.x - this.x, this.look.z - this.z) - this.yaw)
       hy = Math.max(-1.75, Math.min(1.75, a))
       hx = -0.1
     }

@@ -40,6 +40,7 @@ import { DUCKS, EAGLE_Y, FAMILY, FLOUR, GLACIER, GLIDE_M, inward, keepOn, landY,
 import { Moose } from './moose'
 import type { CanoeSection, PaddleMode } from './sections'
 import { buildClouds, buildShore, buildSky, goatSpot, mirror, pileY, SKY, type Shore } from './shore'
+import { TO_DEG, damp, wrapAngle } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/canada/activities/canoe/paddle.ts'
 /** The stroke (?paddle=stroke): how her finger's paddle moves the canoe. */
@@ -112,7 +113,6 @@ const PITCH = { stroke: 19, pull: 25 }
 const TUNED_PITCH = 28
 /** Seconds after the payoff starts that the stamp comes (the celebration plays first). */
 export const DONE_S = 7
-const DEG = 180 / Math.PI
 const HINT_S = 8
 /** The lake's colors: before she finds the rock flour, and glowing turquoise at the end. */
 const DULL = { deep: new Color('#3B97B0'), shallow: new Color('#57B2C4') }
@@ -125,8 +125,6 @@ const LOON_FINDS = 3
 const tmp = new Vector3()
 const tmp2 = new Vector3()
 const tmp3 = new Vector3()
-const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
-const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 
 // ---- Sounds (synthesized; the voices come at the full-loop gate).
 const swish = () => noise(0.32, 0.07, 'bandpass', 900, 320, 0, 1.4)
@@ -604,7 +602,7 @@ export class RedCanoe implements World3D {
 
     // The lake's color glows toward where the story is.
     if (Math.abs(this.glowGoal - this.glow) > 0.001) {
-      this.glow += (this.glowGoal - this.glow) * ease(dt, 0.8)
+      this.glow += (this.glowGoal - this.glow) * damp(dt, 0.8)
       this.setGlow()
     }
     // The reflection shivers a little with the water.
@@ -628,7 +626,7 @@ export class RedCanoe implements World3D {
     // The clouds drift round the sky (their reflection with them).
     this.clouds.rotation.y = this.cloudsM.rotation.y = t * 0.004
     this.lights.follow(this.x, 0, this.z)
-    this.camYaw += wrap(this.head - this.camYaw) * ease(dt, 0.4 + BOAT.camera * 4)
+    this.camYaw += wrapAngle(this.head - this.camYaw) * damp(dt, 0.4 + BOAT.camera * 4)
     this.rig.lag = this.doneT >= 0 && this.doneT < 5 ? 0.9 : this.section === 'story' || (this.section === 'glide' && this.sectionT < 1.5) ? 1.1 : 0.35
     this.rig.setShot(this.shot())
     this.rig.update(dt)
@@ -682,7 +680,7 @@ export class RedCanoe implements World3D {
     this.thrust = 0
     if (!this.stroking || !this.finger || this.section === 'story' || (this.doneT >= 0 && this.doneT < 1)) {
       this.bladeIn = false
-      this.bladeV *= 1 - ease(dt, 10)
+      this.bladeV *= 1 - damp(dt, 10)
       return
     }
     const at = this.toCanoe(this.finger.x, this.finger.y, { along: 0, across: 0 })
@@ -698,8 +696,8 @@ export class RedCanoe implements World3D {
     }
     // (Measured on screen: the lower camera makes the same swipe cover more water, so it's scaled back to the feel the
     // knobs were set at.)
-    const v = dt > 0 ? ((mv.along / dt) * Math.sin(PITCH.stroke / DEG)) / Math.sin(TUNED_PITCH / DEG) : 0
-    this.bladeV += (v - this.bladeV) * ease(dt, 18)
+    const v = dt > 0 ? ((mv.along / dt) * Math.sin(PITCH.stroke / TO_DEG)) / Math.sin(TUNED_PITCH / TO_DEG) : 0
+    this.bladeV += (v - this.bladeV) * damp(dt, 18)
     // Moving forward (recovering), the blade lifts out; back or held still, it's in the water.
     const wasIn = this.bladeIn
     this.bladeIn = this.bladeV < STROKE.lift
@@ -782,9 +780,9 @@ export class RedCanoe implements World3D {
     const dx = this.target.x - this.x
     const dz = this.target.z - this.z
     const dist = Math.hypot(dx, dz)
-    const diff = wrap(Math.atan2(dx, dz) - this.head)
+    const diff = wrapAngle(Math.atan2(dx, dz) - this.head)
     const want = clamp(diff * 2, -PULL.turn, PULL.turn) * clamp(dist / 1.5)
-    this.spin += (want - this.spin) * ease(dt, 4)
+    this.spin += (want - this.spin) * damp(dt, 4)
     const k = clamp((dist - PULL.near) / Math.max(0.5, PULL.far - PULL.near)) * Math.max(0, Math.cos(diff))
     const f = this.fwd
     this.vx += f.x * PULL.pull * k * dt
@@ -834,7 +832,7 @@ export class RedCanoe implements World3D {
     if (k > 0.78) {
       const n = inward(this.x, this.z)
       const facing = f.x * n.x + f.z * n.z
-      if (facing < 0.3) this.spin += Math.sign(wrap(Math.atan2(n.x, n.z) - this.head) || 1) * (k - 0.78) * 6 * dt
+      if (facing < 0.3) this.spin += Math.sign(wrapAngle(Math.atan2(n.x, n.z) - this.head) || 1) * (k - 0.78) * 6 * dt
     }
     this.head += this.spin * dt
     const p = { x: this.x + this.vx * dt, z: this.z + this.vz * dt }
@@ -1009,7 +1007,7 @@ export class RedCanoe implements World3D {
       // She floats there, facing the canoe, laughing now and then, until the canoe comes close. Taking a long while,
       // she swims toward the canoe herself.
       const face = Math.atan2(this.x - who.root.position.x, this.z - who.root.position.z)
-      who.root.rotation.y += wrap(face - who.root.rotation.y) * ease(dt, 2)
+      who.root.rotation.y += wrapAngle(face - who.root.rotation.y) * damp(dt, 2)
       if (this.loonT > 22 && dist > reach) {
         const d = Math.max(1, dist)
         const v = Math.min(1.6, (this.loonT - 22) * 0.3)
@@ -1143,7 +1141,7 @@ export class RedCanoe implements World3D {
       if (d > 0.05) {
         dk.x += (dx / d) * v * dt
         dk.z += (dz / d) * v * dt
-        dk.h += wrap(Math.atan2(dx, dz) - dk.h) * ease(dt, 6)
+        dk.h += wrapAngle(Math.atan2(dx, dz) - dk.h) * damp(dt, 6)
       }
       dk.d.speed = v
       const p = { x: dk.x, z: dk.z }
@@ -1195,7 +1193,7 @@ export class RedCanoe implements World3D {
     // The bald eagle circles over the lake ahead of the canoe (its circle drifts along after it); poked, it dips.
     const f2 = this.fwd
     tmp.set(this.x + f2.x * 26, EAGLE_Y, this.z + f2.z * 26)
-    this.eagleC.lerp(tmp, ease(dt, 0.08))
+    this.eagleC.lerp(tmp, damp(dt, 0.08))
     this.eagleA += dt * 0.22
     this.eagleDip = Math.max(0, this.eagleDip - dt * 0.5)
     const er = 15
@@ -1303,7 +1301,7 @@ export class RedCanoe implements World3D {
     const tall = this.tall
     // The chase camera's yaw, kept continuous as the canoe turns round and round (camYaw is never wrapped: a yaw that
     // jumped from +180° to -180° would swing the rig a whole turn). Fixed shots pick their turn nearest to it.
-    const chase = (this.camYaw - Math.PI) * DEG
+    const chase = (this.camYaw - Math.PI) * TO_DEG
     const near = (deg: number) => deg + 360 * Math.round((chase - deg) / 360)
     if (this.section === 'story') {
       // Maple's question: from the bow, a three-quarter look at her face in the stern, the dock and the rock pile behind
@@ -1608,7 +1606,7 @@ export class RedCanoe implements World3D {
       paddle: this.mode,
       x: +this.x.toFixed(2),
       z: +this.z.toFixed(2),
-      heading: Math.round(wrap(this.head) * DEG),
+      heading: Math.round(wrapAngle(this.head) * TO_DEG),
       speed: +this.speed.toFixed(2),
       spin: +this.spin.toFixed(2),
       travel: +this.travel.toFixed(1),

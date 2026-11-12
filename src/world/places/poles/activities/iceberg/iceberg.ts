@@ -32,6 +32,7 @@ import { Bear } from '../floe/bear'
 import { Penguin, Seal } from '../slide/penguin'
 import { bitGeo, buildCliff, buildOrca, giantGeo, growlerGeo, rng, SHAPES, type PoleShape } from './ice'
 import type { IcebergSection, Pole } from './sections'
+import { DEG } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/poles/activities/iceberg/iceberg.ts'
 /** The cracking: how many taps a chunk takes and how it comes off (live in the feel lab: ?feel=1). */
@@ -115,7 +116,6 @@ const FLOATING: [number, number][] = [
   [-3.5, 9.5],
   [7, 9],
 ]
-const DEG = Math.PI / 180
 const ORDER: IcebergSection[] = ['pick', 'bits', 'giant', 'sail']
 
 type State = 'stuck' | 'fall' | 'float' | 'away'

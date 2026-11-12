@@ -32,6 +32,7 @@ import { FingerWheel } from '../../../../engine3d/wheel'
 import { ADELIES, base, bumps, CRACK, cx, dcx, depth, DIVE_END, EDGE, ground, half, HOME, inCrack, KICKER, KRILL, lane, ridge, RIDGE, SEAL, SHELF, SHELF_Y, TOP_END } from './course'
 import { Penguin, Seal } from './penguin'
 import type { SlideSection } from './sections'
+import { TO_DEG } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/poles/activities/slide/slide.ts'
 /** The finger wheel: Dad's numbers from the Nan drive's feel lab (2026-10-27), as the start for a penguin on ice. */
@@ -103,7 +104,6 @@ const CRACK_BLUE = new Color('#4F7FBF')
 const CLIFF_BLUE = new Color('#A9CDEE')
 /** No steering for this long: the 👆 shows how. */
 const HINT_S = 8
-const DEG = 180 / Math.PI
 const ORDER: SlideSection[] = ['top', 'bumps', 'dive', 'home']
 /** Little krill in each swarm. */
 const PER = 12
@@ -1093,7 +1093,7 @@ export class PenguinSlide implements World3D {
     if (m === 'swim') {
       const s = this.s + 5
       const c = new Vector3(cx(s) + this.lat * 0.6, depth(s) + 0.3, -s)
-      return { center: c, half: tall ? new Vector3(2.8, 1.2, 5) : new Vector3(4.2, 1.2, 4), yaw: -Math.atan(dcx(this.s)) * DEG * 0.6, pitch: 7, maxDist: 12 }
+      return { center: c, half: tall ? new Vector3(2.8, 1.2, 5) : new Vector3(4.2, 1.2, 4), yaw: -Math.atan(dcx(this.s)) * TO_DEG * 0.6, pitch: 7, maxDist: 12 }
     }
     // Down the slope behind him: further ahead the faster he goes, so what's coming shows.
     const ahead = (m === 'ready' ? 2.5 : 4.5) + this.v * this.rig.lag
@@ -1102,7 +1102,7 @@ export class PenguinSlide implements World3D {
     const gy = off ? Math.max(this.y, -1) : Math.max(base(Math.min(s, EDGE)) + 0.6, this.y - 1.5)
     const c = new Vector3(cx(s) + this.lat * (ridge(this.s + 6) > 0 ? 0.9 : 0.55), gy + (this.air && !off ? Math.max(0, this.y - ground(this.s, this.lat)) * 0.4 : 0), -s)
     const box = m === 'ready' ? new Vector3(2.4, 1, 2.6) : tall ? new Vector3(3.4, 1.2, 6.5) : new Vector3(5, 1.2, 4.5)
-    return { center: c, half: box, yaw: -Math.atan(dcx(this.s)) * DEG * 0.7, pitch: off ? 30 : 23 }
+    return { center: c, half: box, yaw: -Math.atan(dcx(this.s)) * TO_DEG * 0.7, pitch: off ? 30 : 23 }
   }
 
   render() {

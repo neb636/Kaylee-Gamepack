@@ -17,6 +17,7 @@ import { merge, P } from '../../../engine3d/geo'
 import { PAL } from '../../../engine3d/toon'
 import { ll } from './earth'
 import type { Critter } from './globe'
+import { DEG } from '../../../../sdk/math'
 
 /** How carrying the lost one feels (live in the feel lab: ?feel=1 on the hub's `lost` link). */
 export const CARRY = knobs('carry', 'Carry it home', 'src/world/places/poles/globe/extras.ts', {
@@ -52,7 +53,6 @@ export interface ExtrasHost {
   saved(kind: Lost, home: boolean): void
 }
 
-const DEG = Math.PI / 180
 const UP = new Vector3(0, 1, 0)
 const tmp = new Vector3()
 const tmp2 = new Vector3()

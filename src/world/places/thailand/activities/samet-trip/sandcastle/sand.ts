@@ -17,12 +17,7 @@ import type { Bag } from '../../../../../engine3d/dispose'
 import { toonGradient } from '../../../../../engine3d/toon'
 import type { Terrain } from '../../../../../engine3d/terrain'
 import type { Frame } from '../island/layout'
-
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
-const smooth = (a: number, b: number, x: number) => {
-  const t = clamp((x - a) / (b - a), 0, 1)
-  return t * t * (3 - 2 * t)
-}
+import { clamp, smoothstep } from '../../../../../../sdk/math'
 
 /** The patch's size in its frame (meters), and the part she can dig (the rest blends into the beach). It reaches far
  *  up the beach (v0) because a tall phone looks down over a long strip of sand below the castle: every bit of sand on
@@ -109,10 +104,10 @@ export class Sand {
         // (A hair above the island's ground where it's dry, so its edge never shows through; none by the water,
         // where a lip would stand out of the sea.)
         const g0 = ground(x, z)
-        const y = g0 + 0.012 * smooth(-0.02, 0.12, g0)
+        const y = g0 + 0.012 * smoothstep(-0.02, 0.12, g0)
         this.rest[k] = this.h[k] = y
         // Wet near the water, dry up the beach.
-        this.dryBase[k] = this.wet[k] = 1 - smooth(0.06, 0.22, y)
+        this.dryBase[k] = this.wet[k] = 1 - smoothstep(0.06, 0.22, y)
         tint.set(color(x, z))
         this.base.set([tint.r, tint.g, tint.b], k * 3)
         pos.set([x, y, z], k * 3)
@@ -213,7 +208,7 @@ export class Sand {
         const ia = PATCH.a0 + i * c
         const iv = PATCH.v0 + j * c
         // (Fades out toward the edge of the diggable part, so the beach round it never moves.)
-        const edge = smooth(0, 0.5, Math.min(ia - DIGGABLE.a0, DIGGABLE.a1 - ia, iv - DIGGABLE.v0, DIGGABLE.v1 - iv))
+        const edge = smoothstep(0, 0.5, Math.min(ia - DIGGABLE.a0, DIGGABLE.a1 - ia, iv - DIGGABLE.v0, DIGGABLE.v1 - iv))
         if (edge <= 0) continue
         fn(j * this.nx + i, (1 - d2) * (1 - d2) * edge)
       }
@@ -444,7 +439,7 @@ export class Sand {
         // Color: crystal sand dry, tan wet, a shade darker down a hole and on the steep sides (they read as dug).
         const down = clamp((this.rest[k] - this.h[k]) / 0.4, 0, 1)
         const slope = Math.hypot(ha, hv)
-        tint.setRGB(this.base[k * 3], this.base[k * 3 + 1], this.base[k * 3 + 2]).lerp(WET, Math.max(0, this.wet[k] - this.dryBase[k])).lerp(DEEP, down * 0.55).lerp(EDGE, smooth(0.5, 1.6, slope) * 0.4)
+        tint.setRGB(this.base[k * 3], this.base[k * 3 + 1], this.base[k * 3 + 2]).lerp(WET, Math.max(0, this.wet[k] - this.dryBase[k])).lerp(DEEP, down * 0.55).lerp(EDGE, smoothstep(0.5, 1.6, slope) * 0.4)
         col.setXYZ(k, tint.r, tint.g, tint.b)
       }
     pos.needsUpdate = nor.needsUpdate = col.needsUpdate = true
@@ -490,8 +485,8 @@ export class Sand {
         if (d > 0 || y > h[k] - 0.05) {
           // Shallow: foamy white at the very edge, mint, then turquoise deeper; a gentle shimmer.
           const sh = 0.04 * Math.sin(t * 2.2 + i * 0.7 + j * 0.45)
-          const foam = 1 - smooth(0.005, 0.035, d)
-          tint.copy(SHALLOW).lerp(DEEPW, smooth(0.03, 0.3, d) + sh).lerp(FOAM, foam * 0.75)
+          const foam = 1 - smoothstep(0.005, 0.035, d)
+          tint.copy(SHALLOW).lerp(DEEPW, smoothstep(0.03, 0.3, d) + sh).lerp(FOAM, foam * 0.75)
           col.setXYZ(k, tint.r, tint.g, tint.b)
         }
       }

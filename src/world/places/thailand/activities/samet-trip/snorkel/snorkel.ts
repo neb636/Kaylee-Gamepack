@@ -55,6 +55,7 @@ import { Islander } from '../story/islander'
 import { bed, bedHeight, BOAT, boat, bommie, BOUNDS, BOW_PLAY, BUBBLE_R, bubbleRing, clam, CLAM, coralPatch, cucumber, CUCUMBER, DADDY, DECK_Y, flipper, GARDEN, hideFish, HUG, hugArms, koKudi, mask, OBSTACLES, rock, ROUTE, SANDY, seaTop, seaUnder, softCoral, START, sunbeams, type XZ } from './reef'
 import { reefBed, reefSfx as sfx } from './sounds'
 import { Bubbles, CUTTLE_SIZE, foundFilm, HOLD_M, introFilm, type Stage } from './story'
+import { TO_DEG, damp } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/snorkel/snorkel.ts'
 /** Her swimming. */
@@ -151,7 +152,6 @@ const BED_FISH = -2.25
 /** The cuttlefish holds the bubble this far round to the side of the way she comes at it (radians). */
 const HUG_SIDE = 0.8
 const CROWD_OFF = 5
-const DEG = 180 / Math.PI
 const CROWD = 90
 const GARDEN_FISH = 26
 const tmp = new Vector3()
@@ -162,7 +162,6 @@ const fwd = new Vector3(0, 0, 1)
 const m4 = new Matrix4()
 const q = new Quaternion()
 const dummy = new Object3D()
-const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 const bellK = (k: number) => Math.sin(Math.PI * clamp(k, 0, 1))
 const angleTo = (from: number, to: number) => Math.atan2(Math.sin(to - from), Math.cos(to - from))
 
@@ -747,15 +746,15 @@ export class Snorkel implements World3D {
     }
     const v = this.vel
     if (want > 0) {
-      v.x += (wx * want - v.x) * ease(dt, SWIM.accel)
-      v.z += (wz * want - v.z) * ease(dt, SWIM.accel)
-    } else v.multiplyScalar(1 - ease(dt, SWIM.glide))
+      v.x += (wx * want - v.x) * damp(dt, SWIM.accel)
+      v.z += (wz * want - v.z) * damp(dt, SWIM.accel)
+    } else v.multiplyScalar(1 - damp(dt, SWIM.glide))
     this.pos.x += v.x * dt
     this.pos.z += v.z * dt
     this.collide(dt)
     const speed = v.length()
     this.swam += speed * dt
-    if (speed > 0.15) this.heading += angleTo(this.heading, Math.atan2(v.x, v.z)) * ease(dt, SWIM.turn)
+    if (speed > 0.15) this.heading += angleTo(this.heading, Math.atan2(v.x, v.z)) * damp(dt, SWIM.turn)
 
     // Kicking: her legs (the toy's walk) go with her speed; fast kicks stream bubbles and splash at her feet.
     k.steer(0, 1, clamp((speed / 1.8) * SWIM.kick, 0.12, 1), () => true)
@@ -785,7 +784,7 @@ export class Snorkel implements World3D {
     // Face down (tilted from standing, so the splash in turns her over), bobbing on the swell.
     this.tilt.rotation.x = (Math.PI / 2) * 0.86 * this.tiltK
     const speed = this.vel.length()
-    this.roll += (Math.sin(t * 5.5) * 0.08 * clamp(speed) - this.roll) * ease(dt, 6)
+    this.roll += (Math.sin(t * 5.5) * 0.08 * clamp(speed) - this.roll) * damp(dt, 6)
     let spin = 0
     if (this.spin >= 0) {
       this.spin += dt / 0.7
@@ -941,7 +940,7 @@ export class Snorkel implements World3D {
       }
       if (d.dip > 1.4) d.dip = -1
     }
-    n.place(d.x, -n.height * 0.66 - dip * 0.75 + Math.sin(t * 1.3) * 0.05, d.z, this.dadFace ?? Math.atan2(this.pos.x - d.x, this.pos.z - d.z) * DEG)
+    n.place(d.x, -n.height * 0.66 - dip * 0.75 + Math.sin(t * 1.3) * 0.05, d.z, this.dadFace ?? Math.atan2(this.pos.x - d.x, this.pos.z - d.z) * TO_DEG)
     if (this.dadFace === null) n.lookAt(this.pos.x, 0, this.pos.z)
     n.update(dt, t)
     const r = d.ring
@@ -977,8 +976,8 @@ export class Snorkel implements World3D {
     const fw = this.forward()
     // (Once the cuttlefish has let the bubble go, the crowd swims off down the reef: the bubble's way up is clear.)
     const off = this.letGo >= 0 ? CROWD_OFF : 0
-    c.x += (this.pos.x + fw.x * 0.6 - off * 0.6 - c.x) * ease(dt, FISH.keep)
-    c.z += (this.pos.z + fw.z * 0.6 - off - c.z) * ease(dt, FISH.keep)
+    c.x += (this.pos.x + fw.x * 0.6 - off * 0.6 - c.x) * damp(dt, FISH.keep)
+    c.z += (this.pos.z + fw.z * 0.6 - off - c.z) * damp(dt, FISH.keep)
     c.y = -1.15 - (off ? 0.7 : 0)
     const her = tmp.set(this.pos.x, -0.35, this.pos.z)
     const P = this.cPts
@@ -1009,7 +1008,7 @@ export class Snorkel implements World3D {
         wy += (ey / e) * k * 0.8
         wz += (ez / e) * k
       }
-      const a = ease(dt, 3.2)
+      const a = damp(dt, 3.2)
       V[o] += (wx - V[o]) * a
       V[o + 1] += (wy - V[o + 1]) * a
       V[o + 2] += (wz - V[o + 2]) * a
@@ -1028,7 +1027,7 @@ export class Snorkel implements World3D {
     // ---- The garden's little fish, round and round the soft corals (down by the sand while a film is on, so none
     // swims across its lens).
     const film = this.films.on
-    this.lowK += ((film ? 1 : 0) - this.lowK) * (film ? 1 : ease(dt, 1.5))
+    this.lowK += ((film ? 1 : 0) - this.lowK) * (film ? 1 : damp(dt, 1.5))
     for (let i = 0; i < GARDEN_FISH; i++) {
       const g = this.gHome[i]
       const a = g.ph + t * g.s
@@ -1097,7 +1096,7 @@ export class Snorkel implements World3D {
     const dx = tx - p.x
     const dz = tz - p.z
     const d = Math.hypot(dx, dz)
-    this.pSpeed += ((d > 0.3 ? go : 0) - this.pSpeed) * ease(dt, 2.5)
+    this.pSpeed += ((d > 0.3 ? go : 0) - this.pSpeed) * damp(dt, 2.5)
     if (d > 1e-3) {
       const s = Math.min(d, this.pSpeed * dt)
       p.x += (dx / d) * s
@@ -1106,7 +1105,7 @@ export class Snorkel implements World3D {
     // Facing where it swims, or back at her while it waits (a little wiggle: come on!).
     const waiting = this.pSpeed < 0.25 && this.pState === 'lead'
     const face = waiting ? Math.atan2(her.x - p.x, her.z - p.z) : d > 0.05 ? Math.atan2(dx, dz) : this.pYaw
-    this.pYaw += angleTo(this.pYaw, face) * ease(dt, 3)
+    this.pYaw += angleTo(this.pYaw, face) * damp(dt, 3)
     if (waiting && Math.sin(t * 1.5) > 0.97) this.pWiggle = Math.max(this.pWiggle, 0.6)
     this.pWiggle = Math.max(0, this.pWiggle - dt * 1.2)
     p.y = -0.95 + Math.sin(t * 1.1) * 0.1 - (this.pState === 'home' ? 0.3 : 0)
@@ -1211,7 +1210,7 @@ export class Snorkel implements World3D {
     const h = this.hold
     // (A film turns it to its camera at once, under a cut.)
     if (h.yaw !== null) r.rotation.y = h.yaw
-    else r.rotation.y += angleTo(r.rotation.y, want) * ease(dt, 2)
+    else r.rotation.y += angleTo(r.rotation.y, want) * damp(dt, 2)
     r.position.set(c.x + Math.sin(t * 0.5) * 0.3, c.y + Math.sin(t * 1.3) * 0.08, c.z + Math.cos(t * 0.4) * 0.2)
     const fin = 1 + Math.sin(t * 9) * 0.05
     this.cuttle.parts.body.scale.set(fin, 1, 1 + Math.sin(t * 9 + 1) * 0.03)
@@ -1219,7 +1218,7 @@ export class Snorkel implements World3D {
     // turned pink the arms open and the bubble starts to float up.
     const gone = this.letGo >= 0
     const hug = h.free || gone ? 0 : h.hug
-    this.hugK = this.films.on ? hug : this.hugK + (hug - this.hugK) * ease(dt, 5)
+    this.hugK = this.films.on ? hug : this.hugK + (hug - this.hugK) * damp(dt, 5)
     this.arms.hug(this.hugK + Math.sin(t * 2.2) * 0.03)
     if (!h.free) {
       const yaw = r.rotation.y
@@ -1238,7 +1237,7 @@ export class Snorkel implements World3D {
     const film = this.films.on
     // Out of her bubble: she flies round over her swimmer.
     if (this.bubFree && !film) b.fly.fly(tmp.set(this.pos.x + Math.sin(t * 1.7) * 0.6, 0.62 + Math.sin(t * 2.3) * 0.12, this.pos.z + Math.cos(t * 1.7) * 0.6), dt, 4)
-    b.farK += ((film ? 0 : 1) - b.farK) * (film ? 1 : ease(dt, 2))
+    b.farK += ((film ? 0 : 1) - b.farK) * (film ? 1 : damp(dt, 2))
     b.update(dt, t, cam, Math.hypot(this.pos.x - cam.position.x, this.pos.z - cam.position.z))
     if (film || !b.inBubble || this.intro >= 0) return
     const d = Math.hypot(b.pos.x - this.pos.x, b.pos.z - this.pos.z)
@@ -1275,7 +1274,7 @@ export class Snorkel implements World3D {
         this.goal = null
         this.finger = null
         this.pos.set(x, y + this.kaylee.height * 0.42, z)
-        this.heading = face / DEG
+        this.heading = face / TO_DEG
       },
       head: (out = new Vector3()) => {
         const r = this.kaylee.rig
@@ -1292,7 +1291,7 @@ export class Snorkel implements World3D {
       },
       boat: (x, z, yaw) => {
         this.boat.root.position.set(x, 0, z)
-        this.boat.root.rotation.y = yaw / DEG
+        this.boat.root.rotation.y = yaw / TO_DEG
       },
       point: (k) => (this.pointK = k),
       hold: (yaw, hug, lift = 0, sway = 0) => void Object.assign(this.hold, { yaw, hug, lift, sway }),
@@ -1533,7 +1532,7 @@ export class Snorkel implements World3D {
     const dist = this.tall ? PLAY.tallDist : PLAY.dist
     const pitch = PLAY.pitch + (this.tall ? PLAY.tallPitch : 0)
     // Behind her (looking along the reef, −z), low over the water: the camera's height fixes where the look-at sits.
-    const cy = PLAY.height - dist * Math.sin(pitch / DEG)
+    const cy = PLAY.height - dist * Math.sin(pitch / TO_DEG)
     const center = new Vector3(this.pos.x * 0.85, cy, this.pos.z - PLAY.ahead)
     return { center, half: new Vector3(0.5, 0.5, 0.5), yaw: 0, pitch, minDist: dist, maxDist: dist }
   }

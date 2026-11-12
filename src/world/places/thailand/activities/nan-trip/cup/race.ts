@@ -62,6 +62,7 @@ import { animateGifts, giveGifts, type Gift } from './gifts'
 import { GRID, HOME, RIVAL_IDS, RIVALS, scripts, type RacerId, type Result, type Rival, type RivalId } from './rivals'
 import { cupBed, cupSfx as sfx } from './sounds'
 import { SHOWER_LEN, STREAM_LEN, Track, type Mushroom, type TrackId } from './track'
+import { smoothstep, wrapAngle } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/nan-trip/cup/race.ts'
 /** Her kart: how it drives under her finger. */
@@ -175,7 +176,6 @@ interface Racer {
 }
 
 const deg = Math.PI / 180
-const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
 const wrapDeg = (a: number) => ((((a + 180) % 360) + 360) % 360) - 180
 const tmp = new Vector3()
 const tmp2 = new Vector3()
@@ -192,10 +192,6 @@ const AIR = {
   cloud: { bg: '#C9DCEF', fog: '#D9E3EF', near: 110, far: 420 },
   inside: { bg: '#F2F0FA', fog: '#F2F0FA', near: 6 },
   above: { bg: '#9FD6FF', fog: '#E6F5FF', near: 220, far: 760 },
-}
-const smooth = (a: number, b: number, x: number) => {
-  const t = clamp((x - a) / (b - a), 0, 1)
-  return t * t * (3 - 2 * t)
 }
 const tmpColor = new Color()
 const m4 = new Matrix4()
@@ -873,7 +869,7 @@ export class KartRace implements World3D {
 
     // ---- The camera ----
     const d = this.k.d
-    this.camHeading += wrap(d.heading - this.camHeading) * (1 - Math.exp(-dt / 0.45))
+    this.camHeading += wrapAngle(d.heading - this.camHeading) * (1 - Math.exp(-dt / 0.45))
     this.rig.setShot(this.shot())
     this.rig.update(rawDt)
     this.clearTerrain()
@@ -935,7 +931,7 @@ export class KartRace implements World3D {
     const y = this.k.y
     const above = y > y1 + 1
     const base = y > y1 ? AIR.above : AIR.cloud
-    const k = smooth(y0 - 3, y0 + 5, y) * (1 - smooth(y1 - 4, y1 + 2, y))
+    const k = smoothstep(y0 - 3, y0 + 5, y) * (1 - smoothstep(y1 - 4, y1 + 2, y))
     this.cloudK += (k - this.cloudK) * (1 - Math.exp(-dt * 2))
     const c = this.cloudK
     ;(this.scene.background as Color).set(base.bg).lerp(tmpColor.set(AIR.inside.bg), c)

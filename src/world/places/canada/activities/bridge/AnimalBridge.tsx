@@ -37,6 +37,7 @@ import { FOLLOW, Herd, LEAD, type Family, type Member } from './herd'
 import { noises } from './noises'
 import BRIDGE_SECTIONS, { type BridgeSection } from './sections'
 import { EMOJI, FAMILIES, FENCE_GAP, LOOKS, MEMBERS, TALL, WIDE, deckEnds, depth, halfCut, inMeadow, lift, mountainsBox, onBridge, onDeck, rng, type FamilyId, type Kind, type Pt, type StageDef } from './stage'
+import { clamp } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/canada/activities/bridge/AnimalBridge.tsx'
 const PLANT = knobs('bridgePlant', 'Planting the bridge (for the bears)', FILE, {
@@ -80,7 +81,6 @@ function sectionOf(lead: FamilyId | null, crossed: FamilyId[]): Part {
 }
 
 const N_CELLS = 12
-const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v)
 const bell = (p: number) => (p <= 0 || p >= 1 ? 0 : Math.sin(p * Math.PI))
 const dist = (ax: number, ay: number, bx: number, by: number) => Math.hypot(ax - bx, ay - by)
 

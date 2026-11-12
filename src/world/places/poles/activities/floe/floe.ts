@@ -26,6 +26,7 @@ import { swell, Water } from '../../../../engine3d/water'
 import { Bear } from './bear'
 import { layout, type FloeSpec, type Stage } from './layout'
 import type { FloeSection } from './sections'
+import { DEG } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/poles/activities/floe/floe.ts'
 /** The fling: how her pull turns into a leap (live in the feel lab: ?feel=1 on any of the activity's links). */
@@ -84,7 +85,6 @@ const THICK = 0.6
 const DRY = 0.14
 /** Where Pola floats while he swims. */
 const SWIM_Y = -0.42
-const DEG = Math.PI / 180
 /** No fling for this long: Pola glows and hops ("grab me"). */
 const HINT_S = 8
 const ORDER: FloeSection[] = ['story', 'steady', 'drift', 'melt', 'mama']

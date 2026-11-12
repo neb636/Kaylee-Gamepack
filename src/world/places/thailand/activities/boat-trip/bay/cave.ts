@@ -23,6 +23,7 @@ import { buildBird, buildCrab, buildLizard, buildMudskipper, type Bird, type Cra
 import { CANOE_START, CAVE_GLOW, EXIT_GLOW, HONG, LONGTAIL_PARK, RING, TUNNEL, tunnelRoof } from './layout'
 import type { BayPart, Box, Circle, PhotoKind, Rider, Spot } from './part'
 import { JUNGLE, JUNGLE_DARK, NOTCH, ROCK, tower } from './scenery'
+import { wrapAngle } from '../../../../../../sdk/math'
 
 export const CAVE_ANCHORS: AnchorInfo[] = [
   { id: 'bats', label: 'Bats', kind: 'thing' },
@@ -38,7 +39,6 @@ const CAVE = '#6A5F7C'
 /** Where a unicorn's horn tip is above their seat, sitting (a fraction of their height). */
 const HORN = 1.09
 const deg = Math.PI / 180
-const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
 const tmp = new Vector3()
 
 /** The mud bank in the hong, where the crabs and mudskippers live. */
@@ -291,7 +291,7 @@ export class CaveStop implements BayPart {
     const d = this.canoe.d
     const f = this.funnel()
     if (f === 'in') {
-      if (d.lock === null) d.lock = Math.abs(wrap(d.heading - Math.PI)) < Math.PI / 2 ? Math.PI : 0
+      if (d.lock === null) d.lock = Math.abs(wrapAngle(d.heading - Math.PI)) < Math.PI / 2 ? Math.PI : 0
       const lim = TUNNEL.half - 0.5
       const off = d.x - TUNNEL.x
       if (Math.abs(off) > lim) {
@@ -303,9 +303,9 @@ export class CaveStop implements BayPart {
       // Lined up with the tunnel when she paddles toward it.
       const k = Math.min(1, dt * 2.5)
       const wantIn = f === 'mouth' ? Math.PI : f === 'inner' ? 0 : null
-      if (wantIn !== null && Math.abs(wrap(d.heading - wantIn)) < 1.3) {
+      if (wantIn !== null && Math.abs(wrapAngle(d.heading - wantIn)) < 1.3) {
         d.x += (TUNNEL.x - d.x) * k
-        d.heading += wrap(wantIn - d.heading) * k
+        d.heading += wrapAngle(wantIn - d.heading) * k
       }
     }
     if (this.where() === 'open' && f !== 'mouth' && (d.z > TUNNEL.z0 + 7 || Math.abs(d.x - TUNNEL.x) > 7) && d.z > HONG.z) this.toLongtail()

@@ -11,6 +11,7 @@ import { buildMiniCar, buildScooter, buildTuktuk, type Local } from '../vehicles
 import { buildSongthaew } from '../vehicles/songthaew'
 import type { HeightField } from './build'
 import type { Road } from './road'
+import { wrapAngle } from '../../../../../sdk/math'
 
 export type MoverKind = 'songthaew' | 'scooter' | 'tuktuk' | 'car'
 
@@ -171,8 +172,6 @@ export function buildBuffaloToy(bag: Bag) {
   root.add(blobShadow(1.4, bag))
   return { root, head, legs }
 }
-
-const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
 
 export class Traffic {
   readonly root = new Group()
@@ -427,7 +426,7 @@ export class Traffic {
     // Facing the way it walks across (or along the road, grazing).
     const across = p.heading + (b.side > 0 ? -Math.PI / 2 : Math.PI / 2)
     const want = b.state === 'cross' ? across : b.state === 'graze' ? p.heading + b.side * 0.5 : across + Math.PI * 0.4
-    b.root.rotation.y += wrap(want - b.root.rotation.y) * (1 - Math.exp(-dt * 3))
+    b.root.rotation.y += wrapAngle(want - b.root.rotation.y) * (1 - Math.exp(-dt * 3))
     // Head down grazing, up walking; the legs swing.
     b.head.rotation.x = walking ? Math.sin(t * 5) * 0.08 : 0.5 + Math.sin(t * 1.3 + b.i) * 0.15
     b.legs.forEach((l, k) => (l.rotation.x = walking ? Math.sin(t * 6 * (1 + b.hurry * 0.5) + (k % 2) * Math.PI + (k > 1 ? Math.PI / 2 : 0)) * 0.4 : 0))

@@ -18,6 +18,7 @@ import { merge, P, solid, type V3 } from '../../../../engine3d/geo'
 import { PAL, toon } from '../../../../engine3d/toon'
 import { Water } from '../../../../engine3d/water'
 import { BRIDGE_HALF, CLIFF, Course, CREEK, CREEK_END, END, FALLS, GREEN_END, half, inCreek, island, JUMP, onKicker, POOL, RIB, ROCKS, ROOTS, SPLIT, START, STATION } from './trail'
+import { smooth } from '../../../../../sdk/math'
 
 export const SKY = '#E6EEFB'
 const SKY_TOP = '#8CC8F2'
@@ -27,7 +28,6 @@ export function rng(seed: number) {
   let s = seed >>> 0
   return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296)
 }
-const smooth = (k: number) => (k <= 0 ? 0 : k >= 1 ? 1 : k * k * (3 - 2 * k))
 const hash = (x: number, z: number) => {
   const v = Math.sin(x * 127.1 + z * 311.7) * 43758.5453
   return v - Math.floor(v)

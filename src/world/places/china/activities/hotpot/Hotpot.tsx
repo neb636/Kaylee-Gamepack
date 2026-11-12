@@ -18,10 +18,10 @@ import type { ActivityProps } from '../../Place'
 import { WordCard, type WordId } from '../../WordCard'
 import { Bubbles, Chopsticks, FoodIcon, Twinkles, type FoodKind } from './Parts'
 import SECTIONS from './sections'
+import { clamp } from '../../../../../sdk/math'
 
 const H = L.hotpot
 const COOK_MS = 3000
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 
 interface Round {
   /** Who asked: 0 Bao Bao (left), 1 Hong (right), 2 Nai Nai (top). */

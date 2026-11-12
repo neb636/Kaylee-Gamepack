@@ -5,6 +5,7 @@
 // that would is slid along the fence instead. How the lead and the follow feel are knobs (?feel=1). Plain TypeScript.
 import { knobs } from '../../../../kit/knobs'
 import { MEMBERS, onBridge, onRocks, walkable, type FamilyId, type Kind, type Pt, type StageDef } from './stage'
+import { clamp } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/canada/activities/bridge/herd.ts'
 /** Distances are stage units (the wide stage is 1600 x 1000; on an iPad a unit is about 0.7 px). */
@@ -62,8 +63,6 @@ export interface Family {
   /** The bears won't step on the bridge while this is set. */
   shy: boolean
 }
-
-const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v)
 
 export class Herd {
   fams = {} as Record<FamilyId, Family>

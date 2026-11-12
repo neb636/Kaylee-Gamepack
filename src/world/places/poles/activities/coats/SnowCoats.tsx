@@ -29,6 +29,7 @@ import { L } from '../../lines'
 import type { ActivityProps } from '../../Place'
 import { COAT_IDS, coatGrid, DARK, GROUPS, inShape, SHAPES, TALL, VOICE, WIDE, type CoatGrid, type CoatId, type Detail, type Group, type Part, type Shape, type StageDef } from './animals'
 import COATS_SECTIONS, { type CoatsSection } from './sections'
+import { smooth } from '../../../../../sdk/math'
 
 type Geo = { e: [number, number, number, number, number?] } | { p: number[] }
 
@@ -66,7 +67,6 @@ type Phase = 'play' | 'bear' | 'dusk' | 'end'
 const DONE_AFTER_S = 4.5
 
 type Mode = 'snow' | 'sun'
-const ease = (p: number) => (p < 0 ? 0 : p > 1 ? 1 : p * p * (3 - 2 * p))
 const lerpInk = (t: number) => `rgb(${INK.map((c, i) => Math.round(c + (PALE[i] - c) * t)).join(',')})`
 
 function outline(points: number[][], size: number, last: boolean): string {
@@ -755,11 +755,11 @@ class CoatsWorld {
       g.settleV += (target - g.settleV) * Math.min(1, dt * (this.coats[0]?.done ? 1.5 : 3))
       g.settle?.setAttribute('opacity', g.settleV.toFixed(3))
     }
-    if (g.finishT >= 0) g.finish?.setAttribute('opacity', ease((now - g.finishT) / 1.6).toFixed(3))
+    if (g.finishT >= 0) g.finish?.setAttribute('opacity', smooth((now - g.finishT) / 1.6).toFixed(3))
     // The far hills follow the ground: snowy as the snow settles, green as she melts it.
     const alt = this.els['hills-alt']
     if (alt) {
-      const melted = g.finishT >= 0 ? ease((now - g.finishT) / 1.6) : 0
+      const melted = g.finishT >= 0 ? smooth((now - g.finishT) / 1.6) : 0
       alt.setAttribute('opacity', (this.section === 'fox' ? g.settleV : Math.min(1, (g.snow / Math.max(1, g.total)) * 1.15) * (1 - melted)).toFixed(3))
     }
     for (const c of this.coats) this.tickCoat(c, dt)
@@ -814,7 +814,7 @@ class CoatsWorld {
         c.dir = c.x > this.stage.w / 2 ? -1 : 1
         x = c.x
       } else {
-        x = c.run.x0 + (c.run.x1 - c.run.x0) * ease(p)
+        x = c.run.x0 + (c.run.x1 - c.run.x0) * smooth(p)
         c.dir = c.run.x1 > c.run.x0 ? 1 : -1
         hopY = -Math.abs(Math.sin(p * Math.PI * 5)) * 26
       }
@@ -850,7 +850,7 @@ class CoatsWorld {
     c.els.body.setAttribute('transform', `translate(0 ${ty.toFixed(1)}) rotate(${rot.toFixed(2)}) scale(${sx.toFixed(3)} ${sy.toFixed(3)})`)
     // The rest of the coat puffs on when it finished itself.
     if (c.finishT >= 0) {
-      const p = ease((now - c.finishT) / 0.7)
+      const p = smooth((now - c.finishT) / 0.7)
       c.els.finish.setAttribute('opacity', p.toFixed(3))
       if (p >= 1) {
         c.els.strokes.replaceChildren()
@@ -860,7 +860,7 @@ class CoatsWorld {
     // Ink: in hide and seek a white coat fades into the snow; in the summer brown brings the outline back.
     const share = this.share(c)
     let inkT = 0
-    if (this.section === 'hide') inkT = c.done ? 1 : ease((share - 0.3) / Math.max(0.05, COAT.finish - 0.3)) * 0.55
+    if (this.section === 'hide') inkT = c.done ? 1 : smooth((share - 0.3) / Math.max(0.05, COAT.finish - 0.3)) * 0.55
     else if (this.section === 'summer') inkT = c.done ? 0 : 1 - Math.min(1, share * 3.5)
     c.ink += (inkT - c.ink) * Math.min(1, dt * 3)
     c.els.root.style.setProperty('--ci', lerpInk(c.ink))
@@ -1339,9 +1339,9 @@ function Backdrop({ scene, vb, g0, h, big }: { scene: Season; vb: { x: number; y
 const CSS = `
 .coats-pop { animation: coats-pop .45s cubic-bezier(.3,1.6,.5,1) both; transform-box: fill-box; transform-origin: 50% 100%; }
 @keyframes coats-pop { from { transform: scale(0) } to { transform: scale(1) } }
-.coats-fly { animation: coats-fly .7s ease-out both; }
+.coats-fly { animation: coats-fly .7s smooth-out both; }
 @keyframes coats-fly { from { transform: translate(0,0) scale(1); opacity: 1 } to { transform: translate(var(--dx), var(--dy)) scale(.3); opacity: 0 } }
-.coats-hint { animation: coats-hint 1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.coats-hint { animation: coats-hint 1s smooth-in-out infinite; transform-box: fill-box; transform-origin: center; }
 @keyframes coats-hint { 0%,100% { transform: scale(1) } 50% { transform: scale(1.15) } }
 `
 

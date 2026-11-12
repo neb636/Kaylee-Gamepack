@@ -37,9 +37,9 @@ import type { Islander } from '../story/islander'
 import { Ribbon } from './ribbon'
 import { shapePoints } from './shapes'
 import { fireSfx as sfx } from './sounds'
+import { TO_DEG } from '../../../../../../sdk/math'
 
 const S = L.samet.story.show
-const DEG = 180 / Math.PI
 
 /** Which firefly lights which poi (Tuk's left and right, then Kae's), and the fire it makes: a flame in three flat
  *  bands, the ribbon it leaves, its light on the sand. */
@@ -384,7 +384,7 @@ export class FireStory {
     h.lights(false)
     ;[tuk, kae].forEach((g, i) => {
       const p = h.at(TALK[i][0], TALK[i][1])
-      g.place(p.x, p.y, p.z, (SEAWARD + (i ? -0.5 : 0.5)) * DEG)
+      g.place(p.x, p.y, p.z, (SEAWARD + (i ? -0.5 : 0.5)) * TO_DEG)
       h.pose(i, { up: 0, bow: 0, wai: 0 })
     })
     tuk.pull('sad', true)
@@ -394,7 +394,7 @@ export class FireStory {
     kae.m.lookAt(th.x, th.y + 1, th.z)
     const k = h.at(h.kay.u + WALK_IN.u, h.kay.v + WALK_IN.v)
     kaylee.stop()
-    kaylee.place(k.x, k.y, k.z, (SEAWARD + Math.PI / 2) * DEG)
+    kaylee.place(k.x, k.y, k.z, (SEAWARD + Math.PI / 2) * TO_DEG)
     this.walkIn = true
     this.walking(0)
     this.walkIn = false
@@ -437,14 +437,14 @@ export class FireStory {
     const p = h.at(h.kay.u, h.kay.v)
     this.walkIn = false
     h.kaylee.stop()
-    if (Math.hypot(h.kaylee.root.position.x - p.x, h.kaylee.root.position.z - p.z) > 0.05) h.kaylee.place(p.x, p.y, p.z, SEAWARD * DEG)
+    if (Math.hypot(h.kaylee.root.position.x - p.x, h.kaylee.root.position.z - p.z) > 0.05) h.kaylee.place(p.x, p.y, p.z, SEAWARD * TO_DEG)
     h.kaylee.face(SEAWARD)
     for (const [m, seat] of [
       [h.ji, h.seats.ji],
       [h.nick, h.seats.nick],
     ] as const) {
       const s = h.at(seat.u, seat.v)
-      m.place(s.x, s.y, s.z, SEAWARD * DEG, 'stand')
+      m.place(s.x, s.y, s.z, SEAWARD * TO_DEG, 'stand')
     }
   }
 
@@ -649,7 +649,7 @@ export class FireStory {
             h.stage(true, false)
             ;[tuk, kae].forEach((g, i) => {
               const p = h.at(spots[i][0], spots[i][1])
-              g.place(p.x, p.y, p.z, (SEAWARD + (i ? -0.3 : 0.3)) * DEG)
+              g.place(p.x, p.y, p.z, (SEAWARD + (i ? -0.3 : 0.3)) * TO_DEG)
               g.cheer()
               g.m.lookAway()
               h.pose(i, { up: 0, bow: 0, wai: 0 })

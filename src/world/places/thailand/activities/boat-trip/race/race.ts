@@ -58,6 +58,7 @@ import { ahead, bendAhead, branchLat, ELEPHANTS, FORK, GRID, halfAt, HOOP, LAPS,
 import { buildPodium, buildTrophy, type Podium } from './trophy'
 import type { SteerMode, Tilt } from '../../../trip/race/tilt'
 import { Dolphins, Elephants, type Splasher } from './wildlife'
+import { wrapAngle } from '../../../../../../sdk/math'
 
 export type RaceSection = 'race' | 'podium'
 export type RacerId = 'kaylee' | 'kids' | 'monkey'
@@ -145,7 +146,6 @@ interface Rider {
 }
 
 const deg = Math.PI / 180
-const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
 const wrapDeg = (a: number) => ((((a + 180) % 360) + 360) % 360) - 180
 const tmp = new Vector3()
 const tmp2 = new Vector3()
@@ -577,7 +577,7 @@ export class Race implements World3D {
 
     // ---- The camera ----
     const d = this.k.d
-    this.camHeading += wrap(d.heading - this.camHeading) * (1 - Math.exp(-dt / 0.45))
+    this.camHeading += wrapAngle(d.heading - this.camHeading) * (1 - Math.exp(-dt / 0.45))
     this.rig.setShot(this.shot())
     this.rig.update(rawDt)
     this.unblockCamera()

@@ -8,6 +8,7 @@
 import { Box3, BufferAttribute, BufferGeometry, Sphere, Vector3, DataTexture, Group, LinearFilter, Mesh, PlaneGeometry, type Object3D, RGBAFormat, type ColorRepresentation, Color } from 'three'
 import type { Bag } from './dispose'
 import { toon } from './toon'
+import { clamp } from '../../sdk/math'
 
 export interface TerrainOpts {
   /** The grid's corners (meters) and its cell size. */
@@ -30,7 +31,6 @@ export interface TerrainOpts {
 
 const c = new Color()
 const tv = new Vector3()
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 
 export class Terrain {
   /** The land, as one mesh or (with `chunk`) a group of chunks. */

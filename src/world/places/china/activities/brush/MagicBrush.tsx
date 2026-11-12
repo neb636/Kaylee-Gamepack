@@ -19,10 +19,10 @@ import { CHARS, type Char } from './chars'
 import SECTIONS from './sections'
 import { Slab } from './Slab'
 import { Moon, Seal, Sun, ZH_FONT } from './Things'
+import { clamp } from '../../../../../sdk/math'
 
 const B = L.brush
 const TOTAL = CHARS.length + 1
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 
 type Phase = 'write' | 'morph' | 'name' | 'stamp' | 'end'
 type ThingId = 'person' | 'hills' | 'sun' | 'tree' | 'bird' | 'moon' | 'bao'

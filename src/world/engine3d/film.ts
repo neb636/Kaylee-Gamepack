@@ -21,6 +21,7 @@
 import { Vector3, type PerspectiveCamera } from 'three'
 import { lineMs, lineText, say, stopSpeaking, type Line } from '../../sdk'
 import type { CineFrame } from './cinema'
+import { lerp } from '../../sdk/math'
 
 export type V3 = [x: number, y: number, z: number]
 /** A point in the world: fixed, or worked out every frame (someone's head, a bird in flight). */
@@ -327,4 +328,3 @@ const tmpA = new Vector3()
 function defined<T extends object>(o: T): Partial<T> {
   return Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)) as Partial<T>
 }
-const lerp = (a: number, b: number, k: number) => a + (b - a) * k

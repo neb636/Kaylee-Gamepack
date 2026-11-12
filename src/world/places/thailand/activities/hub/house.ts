@@ -45,6 +45,7 @@ import { DIM, NAV, PHOTO, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STAR
 import type { HubSection } from './sections'
 import { ShoeRack } from './shoes'
 import { isTableSection } from './board-games/list'
+import { clamp } from '../../../../../sdk/math'
 
 /** How far she may turn the camera herself (Roblox-style drag and pinch, on top of the game's view). It's a cutaway
  *  dollhouse: inside, the camera stays on the open side (the right walls and the front come down for it, the left is
@@ -1149,7 +1150,6 @@ export class House implements World3D {
 
 type Mode = 'street' | 'inside0' | 'inside1'
 
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 /** Degrees: hold a three-quarter view (like the concept pictures) for 3 s, then turn 90° in 1 s and hold 1.2 s, four
  *  times (an 11.8 s loop). */
 function turntable(t: number) {

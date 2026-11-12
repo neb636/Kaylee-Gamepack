@@ -27,6 +27,7 @@ import { Chick, CHICK_VIEW, Condor, CONDOR_VIEW } from '../../puppets/Condor'
 import { CEILING, COCO_START, FEEL, floorAt, LEDGE_TOP, liftOf, LOOKOUT, maxX, minX, NEST, PLACES, RIVER_Y, STAGE, SWIRLS, WORLD, type PlaceId, type Swirl } from './canyon'
 import { ASPECT, Cloud, Critter, Ledges, Lookout, PlaceRing, River, SwirlArt, Wall, Waterfall, type Sun } from './Scenery'
 import { csfx, windLoop } from './sfx'
+import { clamp } from '../../../../../sdk/math'
 
 const C = L.canyon
 /** Stars: first ride, three places, the ridge, Pluma's own glide. */
@@ -76,7 +77,6 @@ const VISIBLE: Record<string, SwirlId[]> = {
   afternoon: ['falls', 'ledge', 'river'],
   solo: ['big'],
 }
-const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v))
 
 export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
   const { start, param, enter } = useSections(SECTIONS)

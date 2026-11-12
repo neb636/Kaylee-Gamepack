@@ -25,6 +25,7 @@ import { POLES_LOOKS } from '../characters/looks'
 import { earthTexture, ll } from './earth'
 import { CARRY, GlobeExtras, type Lost, type PokeId } from './extras'
 import { globeMaterials } from './material'
+import { DEG } from '../../../../sdk/math'
 
 const FILE = 'src/world/places/poles/globe/globe.ts'
 /** How the globe feels under her finger (live in the feel lab: ?feel=1 on the hub's links). */
@@ -86,7 +87,6 @@ export const GLOBE_ANCHORS: AnchorInfo[] = [
 ]
 const POKES = new Set<string>(['lost', 'marker', 'seal', 'station', 'whale'])
 
-const DEG = Math.PI / 180
 const UP = new Vector3(0, 1, 0)
 /** The sun's distance from the Earth's center (a little closer on a tall screen, so the globe can be bigger), and how
  *  far round toward her it sits (so most of what she sees is lit). */

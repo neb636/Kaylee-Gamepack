@@ -5,12 +5,8 @@
 // gently off the beaches (wide turquoise shallows) and steeply off the rocks.
 import { Color } from 'three'
 import { BEACHES, CLEARINGS, COAST, onLand, WAYS, type WayKind, type XZ } from './layout'
+import { clamp, smoothstep } from '../../../../../../sdk/math'
 
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
-const smooth = (a: number, b: number, x: number) => {
-  const t = clamp((x - a) / (b - a), 0, 1)
-  return t * t * (3 - 2 * t)
-}
 const mix = (a: number, b: number, k: number) => a + (b - a) * k
 const tint = new Color()
 const tint2 = new Color()
@@ -56,7 +52,7 @@ export function beachDistance(x: number, z: number) {
   return best
 }
 
-/** Rolling value noise for the hills (cheap, smooth enough at this scale). */
+/** Rolling value noise for the hills (cheap, smoothstep enough at this scale). */
 function hash(i: number, j: number) {
   const s = Math.sin(i * 127.1 + j * 311.7) * 43758.5453
   return s - Math.floor(s)
@@ -98,7 +94,7 @@ function nearestCoast(x: number, z: number): XZ {
  *  sandy all the way up to the back of its sand. */
 function sandiness(x: number, z: number) {
   const c = nearestCoast(x, z)
-  return 1 - smooth(2, 9, beachDistance(c.x, c.z))
+  return 1 - smoothstep(2, 9, beachDistance(c.x, c.z))
 }
 export const SAND_W = { beach: 15, rock: 3 }
 
@@ -118,14 +114,14 @@ function baseGround(x: number, z: number): GroundPoint {
   if (!land) {
     // Under the sea: wide shallows off the sand, a quick drop off the rocks.
     const slope = mix(0.2, 0.075, sand)
-    return { h: Math.max(-11.5, 0.05 - d * slope - smooth(25, 90, d) * 3), shore, sand }
+    return { h: Math.max(-11.5, 0.05 - d * slope - smoothstep(25, 90, d) * 3), shore, sand }
   }
   const W = mix(SAND_W.rock, SAND_W.beach, sand)
   if (d < W) return { h: 0.05 + d * mix(0.32, 0.05, sand), shore, sand }
   const hw = 0.05 + W * mix(0.32, 0.05, sand)
   const k = d - W
   // A steep first rise (the beach's back edge), then the hills' spine with lumps.
-  const hill = 3.2 * smooth(0, 8, k) + 16 * smooth(4, 55, k) * (0.55 + 0.6 * noise(x * 0.03, z * 0.03)) + 9 * smooth(30, 110, k) * noise(x * 0.012 + 5, z * 0.012)
+  const hill = 3.2 * smoothstep(0, 8, k) + 16 * smoothstep(4, 55, k) * (0.55 + 0.6 * noise(x * 0.03, z * 0.03)) + 9 * smoothstep(30, 110, k) * noise(x * 0.012 + 5, z * 0.012)
   return { h: hw + hill, shore, sand }
 }
 
@@ -180,7 +176,7 @@ export function groundAt(x: number, z: number): GroundPoint {
   if (g.shore >= 0) return g
   const w = wayAt(x, z)
   if (w.d > w.width / 2 + 5) return g
-  const k = 1 - smooth(w.width / 2, w.width / 2 + 5, w.d)
+  const k = 1 - smoothstep(w.width / 2, w.width / 2 + 5, w.d)
   return { ...g, h: mix(g.h, Math.max(w.h, 0.12) + 0.02, k) }
 }
 
@@ -214,14 +210,14 @@ export function groundColor(x: number, z: number, h: number, shore: number, slop
   if (d < W) {
     if (sand < 0.4) return slope > 0.25 ? '#BFB5AC' : '#D8CBB8'
     // Wet sand by the water, then the crystal sand (blended, so the grid's triangles don't show as a sawtooth).
-    return '#' + tint.set('#E6D9BF').lerp(tint2.set('#FFFCF5'), smooth(0.4, 2.8, d)).lerp(tint2.set('#F8F0DF'), smooth(W - 3, W, d)).getHexString()
+    return '#' + tint.set('#E6D9BF').lerp(tint2.set('#FFFCF5'), smoothstep(0.4, 2.8, d)).lerp(tint2.set('#F8F0DF'), smoothstep(W - 3, W, d)).getHexString()
   }
   const w = wayAt(x, z)
   if (w.d < w.width / 2 + 1.1) {
     if (w.kind === 'road') return w.d < w.width / 2 - 0.15 ? (Math.floor((x + z) * 0.25) % 7 === 0 ? '#DDD6C9' : '#E9E3D8') : '#C8BFAF'
     return w.d < w.width / 2 ? '#F8EDD6' : '#E8D7B4'
   }
-  if (d < W + 5 && sand > 0.4) return '#' + tint.set('#F8F0DF').lerp(tint2.set('#D3E3A2'), smooth(W + 1, W + 4.5, d)).getHexString()
+  if (d < W + 5 && sand > 0.4) return '#' + tint.set('#F8F0DF').lerp(tint2.set('#D3E3A2'), smoothstep(W + 1, W + 4.5, d)).getHexString()
   if (d < W + 2.5) return '#C9BFB4'
   if (w.d < w.width / 2 + 2.5) return '#A9DA86'
   for (const c of CLEARINGS) if (Math.hypot(x - c.x, z - c.z) < c.r) return '#A3D684'

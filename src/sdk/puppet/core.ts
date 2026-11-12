@@ -1,4 +1,5 @@
 // Puppets: characters drawn as layered SVG whose parts (ears, eyes, mouth, legs...) move on their own, every frame.
+import { clamp, lerp, smooth } from '../math'
 // This is what makes a character feel alive instead of a picture sliding around: anticipation and squash before a hop,
 // ears that lag behind and flop, blinking, eyes that follow her finger, a mouth that moves with the character's voice.
 //
@@ -197,13 +198,8 @@ export function usePuppet<P extends string>(ref: Ref<PuppetHandle> | undefined, 
 
 // --- Little helpers for frame functions ---------------------------------------------------------------------------
 
-export const clamp = (v: number, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v))
-export const lerp = (a: number, b: number, p: number) => a + (b - a) * p
-/** Smooth ease in-out, 0..1. */
-export const smooth = (p: number) => {
-  p = clamp(p)
-  return p * p * (3 - 2 * p)
-}
+// clamp, lerp and smooth live in ../math.ts (re-exported here, where puppets have always found them).
+export { clamp, lerp, smooth }
 /** 0 → 1 → 0 hump over p = 0..1. */
 export const bell = (p: number) => Math.sin(Math.PI * clamp(p))
 /** Progress of p within [a, b], 0..1. */

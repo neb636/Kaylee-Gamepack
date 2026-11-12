@@ -61,6 +61,7 @@ import { fireflySfx } from '../story/firefly'
 import { crossEyes, Peekaboo } from './peekaboo'
 import { beachBed, hideSfx as sfx } from './sounds'
 import { beachChair, cap, chairStack, pandanus, shieldUmbrella, thinPalm, towel } from './props'
+import { TO_DEG, damp } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/hideseek/hideseek.ts'
 /** Leading Kaylee round the beach. */
@@ -190,11 +191,9 @@ const ROUND_HIDES: Record<'1' | '2', SpotId[]> = { '1': ['tree', 'umbrella', 'ch
 /** The beach she may walk on (u, v). */
 const BOUNDS = { u0: -15, u1: 15, v0: -13, v1: 4.4 }
 
-const DEG = 180 / Math.PI
 const HINT_S = 8
 const tmp = new Vector3()
 const tmp2 = new Vector3()
-const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 const smoothK = (a: number, b: number, x: number) => {
   const k = clamp((x - a) / (b - a), 0, 1)
   return k * k * (3 - 2 * k)
@@ -431,7 +430,7 @@ export class HideSeek implements World3D {
     this.nShadow = blobShadow(0.5, bag)
     scene.add(this.nick.root, this.ji.root, this.nShadow)
     const mc = this.things.get('mommy')!
-    this.ji.place(mc.x, mc.y + 0.36 - 0.1 * this.ji.height, mc.z, MOMMY_FACE * DEG, 'sit')
+    this.ji.place(mc.x, mc.y + 0.36 - 0.1 * this.ji.height, mc.z, MOMMY_FACE * TO_DEG, 'sit')
 
     this.puffs = new Particles({ kind: 'spray', count: 200, colors: ['#FFF4DE', '#EBD5AA', '#E2C597'], gravity: 9 }, bag)
     this.sparkle = new Particles({ kind: 'spray', count: 260, colors: ['#FFFFFF', '#FFF6B8', PAL.gold, PAL.pink, PAL.hotpink], gravity: -0.6 }, bag)
@@ -448,7 +447,7 @@ export class HideSeek implements World3D {
     // ---- Where the link starts: at the tree (the photo: your unicorn covering her eyes in front, Dad leaning on it).
     const r = start.round
     const k0 = r === 'hide' ? this.L(TREE.u - 2.4, TREE.v - 3.2) : this.kStart()
-    this.kaylee.place(k0.x, k0.y, k0.z, (this.seaYaw + Math.PI) * DEG)
+    this.kaylee.place(k0.x, k0.y, k0.z, (this.seaYaw + Math.PI) * TO_DEG)
     this.kY = k0.y
     this.lastPos.copy(k0)
     const d0 = this.dStart()
@@ -782,11 +781,11 @@ export class HideSeek implements World3D {
     // Eyes: hers covered while she counts, his while he counts at the tree (a peek opens them for a moment).
     const counting = this.phase === 'intro' || this.phase === 'count'
     if (this.peekT >= 0) this.peekT -= dt
-    this.cover += ((counting && this.peekT < 0 ? 1 : 0) - this.cover) * ease(dt, 10)
+    this.cover += ((counting && this.peekT < 0 ? 1 : 0) - this.cover) * damp(dt, 10)
     if (this.dad.peekT >= 0) this.dad.peekT -= dt
     const dadCounting = this.phase === 'dadcount' && !this.dad.path.length && this.dad.peekT < 0
-    this.dad.cover += ((dadCounting ? 1 : 0) - this.dad.cover) * ease(dt, 8)
-    this.point += (this.pointGoal - this.point) * ease(dt, 9)
+    this.dad.cover += ((dadCounting ? 1 : 0) - this.dad.cover) * damp(dt, 8)
+    this.point += (this.pointGoal - this.point) * damp(dt, 9)
     void t
   }
 
@@ -1255,7 +1254,7 @@ export class HideSeek implements World3D {
     this.setPhase('film')
     const k = this.kStart()
     const d = this.dStart()
-    this.kaylee.place(k.x, k.y, k.z, this.seaYaw * DEG)
+    this.kaylee.place(k.x, k.y, k.z, this.seaYaw * TO_DEG)
     this.setDad(d.x, d.z, this.seaYaw, 'stand')
     this.peeka.place(this.trunkSide(1, 0))
     this.peeka.snap(FILM.size, FILM.glow, FILM.cloud)
@@ -1336,7 +1335,7 @@ export class HideSeek implements World3D {
           shot: { eye: twoEye, look: twoLook, fov: 32 },
           start: () => {
             // (Under the cut they've turned round to the beach; Peekaboo peeks over their heads.)
-            this.kaylee.place(k0.x, k0.y, k0.z, this.cheat(k0, d0) * DEG)
+            this.kaylee.place(k0.x, k0.y, k0.z, this.cheat(k0, d0) * TO_DEG)
             this.setDad(d0.x, d0.z, this.cheat(d0, k0), 'stand')
             p.place(hidLow)
             p.snap(FILM.size, FILM.glow, FILM.cloud)
@@ -1391,7 +1390,7 @@ export class HideSeek implements World3D {
     this.setPhase('film')
     this.hiddenAt = 'tree'
     const kp = this.kayPoint(BYID.tree)
-    this.kaylee.place(kp.x, kp.y, kp.z, (this.seaYaw + Math.PI) * DEG)
+    this.kaylee.place(kp.x, kp.y, kp.z, (this.seaYaw + Math.PI) * TO_DEG)
     this.kaylee.setPose('sit')
     this.kY = kp.y
     this.lastPos.copy(kp)
@@ -1599,7 +1598,7 @@ export class HideSeek implements World3D {
         this.pk.tucked = false
         this.kaylee.root.visible = true
         this.kaylee.setPose('stand')
-        this.kaylee.place(m.k.x, m.k.y, m.k.z, yawK * DEG)
+        this.kaylee.place(m.k.x, m.k.y, m.k.z, yawK * TO_DEG)
         this.kY = m.k.y
         this.lastPos.copy(m.k)
         this.dad.path = []
@@ -1652,7 +1651,7 @@ export class HideSeek implements World3D {
       d.z = d.hop.from.z + (d.hop.to.z - d.hop.from.z) * k
       const y = d.hop.from.y + (d.hop.to.y - d.hop.from.y) * k + Math.sin(Math.PI * k) * 0.7
       if (k >= 1) d.hop = null
-      this.nick.place(d.x, y, d.z, d.yaw * DEG, 'stand')
+      this.nick.place(d.x, y, d.z, d.yaw * TO_DEG, 'stand')
       this.nick.root.visible = true
       this.shadowAt(this.nShadow, d.x, d.z, 1 - Math.sin(Math.PI * k) * 0.4)
       return
@@ -1676,12 +1675,12 @@ export class HideSeek implements World3D {
         d.x += (dx / l) * step
         d.z += (dz / l) * step
         const want = Math.atan2(dx, dz)
-        d.yaw += angleTo(d.yaw, want) * ease(dt, 10)
+        d.yaw += angleTo(d.yaw, want) * damp(dt, 10)
         moving = true
       }
     }
     d.bob = moving ? Math.abs(Math.sin(t * 11)) * 0.07 : 0
-    this.nick.place(d.x, this.dadY() + d.bob, d.z, d.yaw * DEG, d.path.length ? 'stand' : d.pose)
+    this.nick.place(d.x, this.dadY() + d.bob, d.z, d.yaw * TO_DEG, d.path.length ? 'stand' : d.pose)
     this.nick.root.visible = !(d.hidden && !d.path.length)
     const y = this.dadY()
     this.shadowAt(this.nShadow, d.x, d.z, this.nick.root.visible && y > this.groundY(d.x, d.z) - 0.2 && y < this.groundY(d.x, d.z) + 0.6 ? 1 : 0)
@@ -1785,10 +1784,10 @@ export class HideSeek implements World3D {
     const k = this.kaylee.root.position
     const g = this.groundY(k.x, k.z)
     const wet = g < 0
-    this.kY += (g - this.kY) * ease(dt, 16)
+    this.kY += (g - this.kY) * damp(dt, 16)
     // (Hiding: down in the sea to her head, or up in the pandanus's leaves like Dad.)
     const duck = this.hiddenAt === 'sea' ? 0.5 : this.hiddenAt === 'pandanus' && !this.kaylee.walking ? -1.55 : 0
-    this.duck += (duck - this.duck) * ease(dt, 6)
+    this.duck += (duck - this.duck) * damp(dt, 6)
     k.y = this.kY - this.duck
     this.shadowAt(this.kShadow, k.x, k.z, this.kaylee.root.visible ? 1 : 0)
     // Her hooves: in the sand, or splashing through the shallows (silent hidden, or sitting in a hiding place).
@@ -2046,7 +2045,7 @@ export class HideSeek implements World3D {
         lump.rotation.x = 0
       }
     }
-    this.towelParts.flat.rotation.z *= 1 - ease(dt, 4)
+    this.towelParts.flat.rotation.z *= 1 - damp(dt, 4)
     // The glow rings: Dad's place once she's been stuck a long time; every hiding place while he counts.
     const hideRound = this.phase === 'dadcount' || (this.phase === 'search' && !this.hiddenAt)
     for (const th of this.things.values()) {
@@ -2123,7 +2122,7 @@ export class HideSeek implements World3D {
     const half = this.tall ? new Vector3(b, 0.6, b * 1.15) : new Vector3(b, 0.6, b * 0.6)
     const box = this.seekBox()
     if (box) half.set(Math.max(half.x, box.hu), 1.1, Math.max(half.z * 0.6, box.hv))
-    return { center, half, yaw: (this.seaYaw + Math.PI) * DEG, pitch: CAM.pitch, follow: true, minDist: 6, maxDist: 60 }
+    return { center, half, yaw: (this.seaYaw + Math.PI) * TO_DEG, pitch: CAM.pitch, follow: true, minDist: 6, maxDist: 60 }
   }
 
   render() {

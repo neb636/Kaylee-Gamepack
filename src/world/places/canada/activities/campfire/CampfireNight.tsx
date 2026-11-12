@@ -36,6 +36,7 @@ import { night } from './night'
 import { Raccoon } from './Raccoon'
 import CAMPFIRE_SECTIONS, { type CampSection } from './sections'
 import { BOOK, EMOJI, EYES, KIT_GAP, LOOKS, MOOSE_EYES, NAMES, ROSTER, SOUNDS, TALL, WIDE, rng, type CritterId, type Pt, type StageDef } from './stage'
+import { clamp } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/canada/activities/campfire/CampfireNight.tsx'
 const T = L.campfire
@@ -111,7 +112,6 @@ function foundParam(ids: CritterId[], section: CampSection) {
 }
 const INK = '#4A3B57'
 const MC = CANADA_COLORS
-const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v)
 const bell = (p: number) => (p <= 0 || p >= 1 ? 0 : Math.sin(p * Math.PI))
 const ease = (p: number) => (p < 0 ? 0 : p > 1 ? 1 : p * p * (3 - 2 * p))
 const dist = (ax: number, ay: number, bx: number, by: number) => Math.hypot(ax - bx, ay - by)

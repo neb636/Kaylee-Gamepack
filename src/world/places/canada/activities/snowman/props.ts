@@ -4,12 +4,13 @@
 // carnival's hat box and sash box, the parade drum, and what the snowmen wear. Maple is maple.ts, the other animals
 // critters.ts; park.ts says where everything stands.
 import { Color, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Vector3, type BufferGeometry } from 'three'
-import { bell, clamp, span, wobble } from '../../../../../sdk'
+import { bell, span, wobble } from '../../../../../sdk'
 import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
 import { buildOldTown, mulberry } from './castle'
 import { BOX_HALF, CLIFF_Y, DRUM, LAMP, LAMPS, MOOSE, PATH_Z, SLIDE, TREES_IN } from './park'
+import { smooth } from '../../../../../sdk/math'
 
 export const SKY = '#DCE6F6'
 const SNOW = '#FBFBFF'
@@ -307,17 +308,13 @@ export class Owl {
       this.spinT += dt
       // Right round one way, a pause, then back with a little overshoot.
       const p = this.spinT
-      this.head.rotation.y = p < 0.7 ? Math.PI * smoothstep(p / 0.7) : p < 1.2 ? Math.PI : Math.PI * (1 - smoothstep((p - 1.2) / 0.6)) + wobble(span(p, 1.8, 2.6), 2) * 0.2
+      this.head.rotation.y = p < 0.7 ? Math.PI * smooth(p / 0.7) : p < 1.2 ? Math.PI : Math.PI * (1 - smooth((p - 1.2) / 0.6)) + wobble(span(p, 1.8, 2.6), 2) * 0.2
       this.root.scale.y = 1 + bell(span(p, 0, 0.3)) * 0.12
       if (p > 2.6) this.spinT = -1
     } else this.head.rotation.y = Math.sin(t * 0.4) * 0.5
     if ((this.blinkT -= dt) < 0) this.blinkT = 2 + Math.random() * 3
     this.eyes.scale.y = this.blinkT < 0.12 ? 0.15 : 1
   }
-}
-const smoothstep = (p: number) => {
-  const k = clamp(p)
-  return k * k * (3 - 2 * k)
 }
 
 /** A toboggan (and its rider, a little bundled-up kid) that whooshes down the slide and out across the snow. */

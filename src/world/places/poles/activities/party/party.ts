@@ -29,6 +29,7 @@ import { buildNorth, buildSouth, Critter, domeR, makePebble, makePola, standOn, 
 import { globeMaterials } from '../../globe/material'
 import { COLONY, latOf, lonOf, PINS, point, Route } from './route'
 import { QUESTIONS, type PartySection, type Question } from './sections'
+import { DEG } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/poles/activities/party/party.ts'
 /** How flying Terry feels (live in the feel lab: ?feel=1 on the finale's `fly` link). */
@@ -80,7 +81,6 @@ export const PARTY_ANCHORS: AnchorInfo[] = [
   { id: 'opt2', label: 'Pick me', kind: 'thing' },
 ]
 
-const DEG = Math.PI / 180
 const UP = new Vector3(0, 1, 0)
 /** How big Terry is (the rig's standing height; flying flat it's his length), in the Earth's units. */
 const TERN_H = 0.07

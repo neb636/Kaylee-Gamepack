@@ -10,6 +10,7 @@
 // The world around it does the rest: soft walls call bounce(), and it reads x, z, heading, speed, roll and pitch.
 //
 // Heading 0 faces +z and turns toward +x (like the house's characters: atan2(dx, dz)).
+import { clamp, wrapAngle } from '../../sdk/math'
 
 export interface Feel {
   /** Cruising top speed (m/s). */
@@ -42,8 +43,6 @@ export interface StepEvents {
 }
 
 const G = 18
-const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 
 export class Driver {
   x = 0
@@ -127,7 +126,7 @@ export class Driver {
       const tz = nx
       const along = Math.sin(this.heading) * tx + Math.cos(this.heading) * tz
       const slide = Math.atan2(tx * Math.sign(along || 1), tz * Math.sign(along || 1))
-      this.heading += wrap(slide - this.heading) * 0.35
+      this.heading += wrapAngle(slide - this.heading) * 0.35
     }
     return -vn
   }
@@ -161,7 +160,7 @@ export class Driver {
       const dz = this.target.z - this.z
       const dist = Math.hypot(dx, dz)
       const ramp = clamp((dist - f.near) / (f.far - f.near), 0, 1)
-      err = wrap(Math.atan2(dx, dz) - (this.lock ?? this.heading))
+      err = wrapAngle(Math.atan2(dx, dz) - (this.lock ?? this.heading))
       if (this.mode === 'goto' && !this.passing && dist < f.near * 0.8) {
         this.mode = null
       } else if (this.lock !== null && Math.abs(err) > Math.PI / 2) {
@@ -191,7 +190,7 @@ export class Driver {
     else fwd *= Math.exp(-f.coast * dt)
     // Turning: limited, and better at speed (a boat barely turns standing still).
     if (this.lock !== null) {
-      this.heading += wrap(this.lock - this.heading) * Math.min(1, dt * 6)
+      this.heading += wrapAngle(this.lock - this.heading) * Math.min(1, dt * 6)
       this.yawRate = 0
     } else {
       const sp = clamp(Math.abs(fwd) / f.top, 0, 1)

@@ -37,6 +37,7 @@ import { buildDiorama, PLACE_SCALE, type Diorama } from './diorama'
 import { BOARD, CAR_SPEED, CLOUDS, DRAG_SPEED, FISH, heightAt, HOME_AFTER, LAOS_FLAG, modelAt, PAPER_Y, PLACE_IDS, PLACES, RUNWAY, STAMP_Y, STOP_PLACE, STOPS, THAI_FLAG, type PlaceId, type Stop } from './layout'
 import { buildNet, nearest, route, STEP } from './net'
 import { mapBed, mapSfx as sfx } from './sounds'
+import { DEG } from '../../../../../../sdk/math'
 
 export interface MapEvents extends LegEvents {
   /** The little Pajero got to the place she picked: drive there for real. */
@@ -75,7 +76,6 @@ const SAY_S = 8
 const SAY_EVERY = 20
 const SAY_MAX = 3
 const M = L.nan.map
-const DEG = Math.PI / 180
 
 const tmp = new Vector3()
 

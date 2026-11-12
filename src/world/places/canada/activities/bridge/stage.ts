@@ -3,6 +3,7 @@
 // theater stage: the Rockies at the back, the highway coming toward us in its fenced cut, the green animal bridge
 // across it, the forest on the left bank (where the families wait) and the meadow on the right (where they want to go).
 // The ground is a band from the treeline down to the front of the stage: lower on screen is nearer. Plain data, no React.
+import { lerp } from '../../../../../sdk/math'
 
 export type Pt = [number, number]
 
@@ -135,7 +136,6 @@ export const TALL: StageDef = {
 
 /** Animals keep this far from the cut's edge (the wildlife fence stands on it). */
 export const FENCE_GAP = 26
-const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 
 /** The cut's half width at depth y. */
 export function halfCut(st: StageDef, y: number) {

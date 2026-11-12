@@ -47,6 +47,7 @@ import { BOUNCE, FISH_R, FLICK, aim, launchTo, newFish, stepAir, type Bumper, ty
 import { noises } from './noises'
 import SALMON_SECTIONS, { type SalmonSection } from './sections'
 import { PHONE, TALL, WIDE, bearAt, bearsRiver, lip, poolAt, rng, type Pt, type River, type StageDef } from './stage'
+import { clamp, smooth } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/canada/activities/salmon/SalmonLeap.tsx'
 const HINT = knobs('salmonHint', 'The hint', FILE, {
@@ -78,8 +79,6 @@ const FRY_EACH = 3
 const N_DROPS = 40
 const N_RIPPLES = 6
 const N_SPRAY = 28
-const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v)
-const ease = (p: number) => (p <= 0 ? 0 : p >= 1 ? 1 : p * p * (3 - 2 * p))
 // Sockeye on their way home: a bright red body, an olive-green head, a darker red tail and fins.
 const SOCKEYE = { body: '#E8463F', head: '#6FA35A', fin: '#B8323C', belly: '#F2836E' }
 
@@ -867,7 +866,7 @@ class SalmonWorld {
         b.from = [b.x, b.y]
         b.ctl.walk = true
       } else if (b.state === 'wade') {
-        const p = ease(t / 2.8)
+        const p = smooth(t / 2.8)
         b.x = b.from[0] + (b.bush[0] - 70 - b.from[0]) * p
         b.y = b.from[1] + (b.bush[1] + 4 - b.from[1]) * p
         if (t > 2.8) {
@@ -1776,14 +1775,14 @@ function useScene(st: StageDef, river: River, vb: { x: number; y: number; w: num
 const SVG_STYLE = { position: 'absolute' as const, inset: 0, width: '100%', height: '100%', display: 'block' }
 
 const CSS = `
-.salmon-hint { animation: salmon-hint 1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.salmon-hint { animation: salmon-hint 1s smooth-in-out infinite; transform-box: fill-box; transform-origin: center; }
 @keyframes salmon-hint { 0%,100% { transform: scale(1) } 50% { transform: scale(1.15) } }
 .salmon-fall { stroke-dasharray: 18 26; animation: salmon-fall 0.5s linear infinite; }
 .salmon-fall2 { animation-duration: 0.37s; }
 @keyframes salmon-fall { to { stroke-dashoffset: -44 } }
-.salmon-foam { animation: salmon-foam 0.9s ease-in-out infinite; transform-box: fill-box; transform-origin: center bottom; }
+.salmon-foam { animation: salmon-foam 0.9s smooth-in-out infinite; transform-box: fill-box; transform-origin: center bottom; }
 @keyframes salmon-foam { 0%,100% { transform: scale(1, 1) } 50% { transform: scale(1.06, 0.9) } }
-.salmon-shine { animation: salmon-shine 3.5s ease-in-out infinite; }
+.salmon-shine { animation: salmon-shine 3.5s smooth-in-out infinite; }
 @keyframes salmon-shine { 0%,100% { opacity: 0.15 } 50% { opacity: 0.8 } }
 `
 

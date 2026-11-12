@@ -38,6 +38,7 @@ import { buildIsland, DAY, type Island, type TimeOfDay } from '../island/scenery
 import { makeSeeThrough, SEE } from '../island/seethrough'
 import { beachBed, hideSfx as sfx } from './sounds'
 import { breadBasket, coconut, deckUmbrella, pandanus, roll, stickyRice } from './props'
+import { TO_DEG, damp } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/hideseek/lunch.ts'
 const LUNCH = knobs('lunchDeck', 'Lunch on the deck', FILE, {
@@ -80,11 +81,9 @@ export const LUNCH_ANCHORS: AnchorInfo[] = [
   { id: 'squirrel', label: 'A squirrel', kind: 'thing' },
 ]
 
-const DEG = 180 / Math.PI
 const HINT_S = 8
 const tmp = new Vector3()
 const tmp2 = new Vector3()
-const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 /** The table she sits at (deck-local u, v), and the table top's height above the deck. */
 const T = { u: -2.5, v: 0.8 }
 const TOP = 0.78
@@ -200,18 +199,18 @@ export class Lunch implements World3D {
     scene.add(this.kaylee.root)
     const ks = this.D(T.u - 0.85, T.v, 0.6)
     const face = Math.atan2(DECK.t.x, DECK.t.z)
-    this.kaylee.place(ks.x, ks.y, ks.z, face * DEG)
+    this.kaylee.place(ks.x, ks.y, ks.z, face * TO_DEG)
     this.kaylee.setPose('sit')
     const fam = (id: string) => new Member({ ...FAMILY.find((m) => m.id === id)!, spot: null }, bag)
     this.nick = fam('nick')
     this.ji = fam('ji')
     scene.add(this.nick.root, this.ji.root)
     const ns = this.D(T.u + 0.85, T.v, 0.6)
-    this.nick.place(ns.x, ns.y - 0.1 * this.nick.height, ns.z, (face + Math.PI) * DEG, 'sit')
+    this.nick.place(ns.x, ns.y - 0.1 * this.nick.height, ns.z, (face + Math.PI) * TO_DEG, 'sit')
     // (Close enough to the table that she's whole on a phone held upright too.)
     const ms = this.D(MOMMY.u, MOMMY.v)
     const mt = this.D(T.u, T.v)
-    this.ji.place(ms.x, ms.y, ms.z, Math.atan2(mt.x - ms.x, mt.z - ms.z) * DEG, 'stand')
+    this.ji.place(ms.x, ms.y, ms.z, Math.atan2(mt.x - ms.x, mt.z - ms.z) * TO_DEG, 'stand')
 
     // ---- On the table: the basket by Dad; the coconut and the plate arrive in front of her.
     this.basket = breadBasket(bag)
@@ -349,7 +348,7 @@ export class Lunch implements World3D {
       }
     }
     // It tips toward her as it empties; a wobble on a knock or the last slurp; the straw bobs while she sips.
-    this.cocoWob *= 1 - ease(dt, 4)
+    this.cocoWob *= 1 - damp(dt, 4)
     this.coco.body.rotation.z = (1 - this.milk) * 0.45 + Math.sin(t * 22) * 0.08 * this.cocoWob
     this.coco.straw.rotation.x = this.sipping && this.milk > 0 ? Math.sin(t * 14) * 0.08 : 0
 
@@ -482,14 +481,14 @@ export class Lunch implements World3D {
   private life(dt: number, t: number) {
     // The umbrellas' skirts flap in the breeze (a lot after a tap).
     for (const u of this.umbrellas) {
-      u.flap *= 1 - ease(dt, 1.6)
+      u.flap *= 1 - damp(dt, 1.6)
       u.u.skirt.rotation.x = Math.sin(t * 7 + u.u.root.position.x) * (0.03 + u.flap * 0.18)
       u.u.skirt.scale.y = 1 + Math.sin(t * 9) * (0.05 + u.flap * 0.4)
       u.u.can.rotation.z = Math.sin(t * 5) * u.flap * 0.1
     }
     // The monitor lizard strolls back and forth along the sand below, tongue flicking.
     const L = this.liz
-    L.hurry *= 1 - ease(dt, 0.6)
+    L.hurry *= 1 - damp(dt, 0.6)
     L.s += L.dir * L.speed * (1 + L.hurry * 4) * dt
     if (L.s > 6 || L.s < -7) L.dir = -L.dir
     const lp = atFrame(DECK, L.s, 7.5)
@@ -503,7 +502,7 @@ export class Lunch implements World3D {
     // The squirrel runs up and down the pandanus trunk.
     const S = this.sq
     if (Math.random() < dt * 0.15) S.goal = 0.15 + Math.random() * 0.75
-    S.k += (S.goal - S.k) * ease(dt, 2.5)
+    S.k += (S.goal - S.k) * damp(dt, 2.5)
     const base = this.pand.root.position
     const top = this.pand.top
     this.squirrel.root.position.set(base.x + top.x * S.k + 0.12, base.y + 0.9 + (top.y - 0.9) * S.k, base.z + top.z * S.k)
@@ -634,7 +633,7 @@ export class Lunch implements World3D {
     const center = this.D(T.u - 0.3, T.v + 0.35, TOP)
     const b = this.tall ? LUNCH.tallBox : LUNCH.box
     const half = this.tall ? new Vector3(b, 0.7, b * 1.1) : new Vector3(b, 0.7, b * 0.55)
-    return { center, half, yaw: (this.seaYaw + Math.PI) * DEG, pitch: LUNCH.pitch, follow: true, minDist: 2.5, maxDist: 30 }
+    return { center, half, yaw: (this.seaYaw + Math.PI) * TO_DEG, pitch: LUNCH.pitch, follow: true, minDist: 2.5, maxDist: 30 }
   }
 
   render() {

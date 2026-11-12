@@ -102,7 +102,7 @@ const tmp = new Vector3()
 const tmp2 = new Vector3()
 const right = new Vector3()
 const V = (x: number, y: number, z: number) => new Vector3(x, y, z)
-const ease = (k: number) => k * k
+const easeIn = (k: number) => k * k
 
 export class LittleLand extends Stage {
   private built: Built
@@ -886,7 +886,7 @@ export class LittleLand extends Stage {
         case 'drop': {
           b.t += dt / b.dur
           const k = clamp(b.t)
-          g.position.lerpVectors(b.from, b.to, b.arc > 0.3 ? k : ease(k))
+          g.position.lerpVectors(b.from, b.to, b.arc > 0.3 ? k : easeIn(k))
           g.position.y += bell(k) * b.arc
           g.rotation.set(0, 0, b.rot.z * (1 - k))
           if (k >= 1) {

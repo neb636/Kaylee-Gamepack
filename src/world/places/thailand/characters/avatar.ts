@@ -59,7 +59,7 @@ interface Home {
   rot: Euler
 }
 const homeOf = (g: Group): Home => (g.userData.home ??= { pos: g.position.clone(), rot: g.rotation.clone() }) as Home
-const ease = (k: number) => k * k * (3 - 2 * k)
+const smoothUnclamped = (k: number) => k * k * (3 - 2 * k)
 /** The middle of a thing, from its group's origin, in its pivot's frame (measured once, at rest): a hat's middle is
  *  what lands in her hooves for a wai. */
 function midOf(g: Group): Vector3 {
@@ -77,7 +77,7 @@ function midOf(g: Group): Vector3 {
 const X_AXIS = new Vector3(1, 0, 0)
 /** Her hat in the air for the top bounce: up and a full somersault about its own middle. */
 function flipped(g: Group, rx: number, k: number, tmp: Vector3) {
-  const angle = ease(k) * Math.PI * 2
+  const angle = smoothUnclamped(k) * Math.PI * 2
   g.position.y += Math.sin(Math.PI * k) * 0.22
   g.rotation.x = rx + angle
   const m = midOf(g)
@@ -345,7 +345,7 @@ export class Dress {
     if (pose.flap) this.flapping = 1
     else this.flapping = Math.max(0, this.flapping - dt / 0.3)
     this.flapT += dt
-    const wai = ease(this.waiK)
+    const wai = smoothUnclamped(this.waiK)
     // ---- The costume: the little show putting each on, and hats off for a wai ----
     for (const [id, gs] of this.worn) {
       const e = this.entering.get(id)
@@ -427,7 +427,7 @@ export class Dress {
         if (slot === 'head' && this.flipK >= 0) flipped(g, g.rotation.x, this.flipK, v1)
         if (out !== undefined) {
           // Into her pocket: smaller and smaller, toward her hip, then gone.
-          const e = ease(out)
+          const e = smoothUnclamped(out)
           this.bodyPoint(g, POCKET, v1)
           g.position.lerp(v1, e)
           k *= Math.max(0.01, 1 - e)
@@ -846,7 +846,7 @@ export class Avatar implements Character {
     const dur = SHOW_SECS[sh.kind]
     sh.t += dt
     const k = Math.min(1, sh.t / dur)
-    const e = ease(span(k, 0, 0.18)) * (1 - ease(span(k, 0.78, 1)))
+    const e = smoothUnclamped(span(k, 0, 0.18)) * (1 - smoothUnclamped(span(k, 0.78, 1)))
     const t = sh.t
     const { armL, armR, head, body, legL, legR } = this.chibi
     /** Arms to these, weighted by the ease: z raises an arm up in front of her (the left's is negative), x swings it

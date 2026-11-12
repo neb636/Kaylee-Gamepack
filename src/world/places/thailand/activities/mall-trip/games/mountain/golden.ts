@@ -84,7 +84,7 @@ const REACH_T = 0.28
 const RISE_T = 0.85
 const PULL_S = 0.5
 const DADDY_PULL_S = 0.72
-const ease = (k: number) => (k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2)
+const easeInOut = (k: number) => (k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2)
 
 export class Golden extends Stage {
   private built: Built
@@ -334,7 +334,7 @@ export class Golden extends Stage {
       sfx.scrabble()
     }
     // Where she is: a little crouch (anticipation) while her hand reaches, then up.
-    const rise = ease(span(p.t, REACH_T, RISE_T))
+    const rise = easeInOut(span(p.t, REACH_T, RISE_T))
     const a = p.from.a + (p.to.a - p.from.a) * rise
     const y = p.from.y + (p.to.y - p.from.y) * rise - 0.05 * bell(span(p.t, 0, REACH_T))
     this.placeOnWall(a, y)
@@ -538,7 +538,7 @@ export class Golden extends Stage {
     if (d.state === 'pull' && this.dPull) {
       const p = this.dPull
       p.t = Math.min(1, p.t + dt / p.dur)
-      const rise = ease(span(p.t, 0.3, 0.9))
+      const rise = easeInOut(span(p.t, 0.3, 0.9))
       const a = p.from.a + (p.to.a - p.from.a) * rise
       const y = p.from.y + (p.to.y - p.from.y) * rise
       const at = this.daddyPos(a, y)

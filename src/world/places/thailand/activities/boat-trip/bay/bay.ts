@@ -59,6 +59,7 @@ import { SUNSET_ANCHORS, SunsetRide } from './sunset'
 import { TourBoat, WAKE_LIFE } from './tour'
 import { BAY_TUNE } from './tune'
 import { VILLAGE_ANCHORS, VillageStop } from './village'
+import { wrapAngle } from '../../../../../../sdk/math'
 
 /** Where a bay section starts, and what it carries (the URL's params, or what she did before). */
 export interface BayStart {
@@ -141,7 +142,6 @@ interface Glide {
 }
 
 const deg = Math.PI / 180
-const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
 const wrapDeg = (a: number) => ((((a + 180) % 360) + 360) % 360) - 180
 const tmp = new Vector3()
 const tmp2 = new Vector3()
@@ -823,7 +823,7 @@ export class Bay implements World3D {
     ride.d.stop()
     this.route = []
     this.glides = this.glides.filter((g) => g.ride !== ride)
-    this.glides.push({ ride, from: { x: ride.d.x, z: ride.d.z, h: ride.d.heading }, to: { ...to, h: ride.d.heading + wrap(to.h - ride.d.heading) }, t: 0, dur, done })
+    this.glides.push({ ride, from: { x: ride.d.x, z: ride.d.z, h: ride.d.heading }, to: { ...to, h: ride.d.heading + wrapAngle(to.h - ride.d.heading) }, t: 0, dur, done })
   }
   private gliding(ride: Ride) {
     return this.glides.some((g) => g.ride === ride)
@@ -973,7 +973,7 @@ export class Bay implements World3D {
 
     // ---- Where she is (the address bar), and the camera ----
     this.updateSection()
-    this.camHeading += wrap(d.heading - this.camHeading) * (1 - Math.exp(-dt / BAY_TUNE.camLag))
+    this.camHeading += wrapAngle(d.heading - this.camHeading) * (1 - Math.exp(-dt / BAY_TUNE.camLag))
     this.rig.setShot(this.shot())
     this.rig.lag = this.looking ? 0.7 : this.cave.camLag() ?? 0.35
     this.rig.update(dt)
@@ -1389,7 +1389,7 @@ export class Bay implements World3D {
       vehicle: this.using,
       where: this.cave.where(),
       pos: [r2(d.x), r2(d.z)],
-      heading: r2(wrap(d.heading)),
+      heading: r2(wrapAngle(d.heading)),
       speed: r2(d.speed),
       airborne: d.airborne,
       boost: d.boostT > 0,
