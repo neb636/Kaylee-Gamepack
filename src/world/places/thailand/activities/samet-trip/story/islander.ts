@@ -21,6 +21,7 @@ export class Islander {
   /** Drooping (0..1): head down, arms hanging, a slow sway. */
   private droop = 0
   private droopGoal = 0
+  private drooped = false
 
   /** `voice`: their speaker in cast.json (their mouth moves when that voice plays). */
   constructor(id: string, name: string, look: Look, bag: Bag, voice?: string) {
@@ -85,13 +86,23 @@ export class Islander {
         this.m.root.rotation.y = w.face * deg
       }
     }
+    // (The Member's own update leaves the head's nod, the body's lean and the arms alone, so these are set, never
+    // added to: a `+=` here would spin the head a little more every frame.)
     this.droop += (this.droopGoal - this.droop) * Math.min(1, dt * 4)
-    if (this.droop > 0.01) {
-      r.head.rotation.x += this.droop * 0.38
-      r.body.rotation.x = this.droop * 0.12
-      r.armL.rotation.set(0.15 * this.droop, 0, 0.12 * this.droop)
-      r.armR.rotation.set(0.15 * this.droop, 0, -0.12 * this.droop)
-      r.body.rotation.z += Math.sin(t * 1.3) * 0.03 * this.droop
+    const d = this.droop
+    let nod = d * 0.38
+    r.body.rotation.x = d * 0.12
+    if (d > 0.01) {
+      r.armL.rotation.set(0.15 * d, 0, 0.12 * d)
+      r.armR.rotation.set(0.15 * d, 0, -0.12 * d)
+      if (!w) r.body.rotation.z = Math.sin(t * 1.3) * 0.03 * d
+      this.drooped = true
+    } else if (this.drooped) {
+      // Back up: the arms are the film's (or nobody's) again.
+      this.drooped = false
+      r.armL.rotation.set(0, 0, 0)
+      r.armR.rotation.set(0, 0, 0)
+      if (!w) r.body.rotation.z = 0
     }
     const f = this.face
     if (f) {
@@ -105,7 +116,7 @@ export class Islander {
         // Eyes wide, the mouth a round O, the head back.
         r.eyes.scale.y = 1 + k * 0.28
         r.mouth.scale.set(1 - k * 0.3, 1 + k * 0.7, 1)
-        r.head.rotation.x -= k * 0.16
+        nod -= k * 0.16
       } else {
         // Happy: eyes squeezed into smiles, the mouth big, a little sway.
         r.eyes.scale.y = Math.max(0.2, 1 - k * 0.75)
@@ -118,6 +129,7 @@ export class Islander {
         r.head.rotation.z = 0
       }
     }
+    r.head.rotation.x = nod
   }
 }
 
