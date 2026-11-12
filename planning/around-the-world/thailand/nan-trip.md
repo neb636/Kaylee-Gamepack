@@ -282,6 +282,7 @@ Kaylee's little rice farm below the café, in the cozy look of the user's Animal
 - 🎓 **Teaches**: There's salt in the mountains, far from the sea, because a sea was here long, long ago; boiling the water away leaves the salt behind. Facts: people in Bo Kluea have made salt this way for hundreds of years.
 - 🎉 **Payoff**: A heaped basket of white salt she made, and a shelf of full bags.
 - 🎥 **Camera**: Inside the open-sided salt hut, side view: the well on the left, the pan and fire on the right.
+- 📖 **Story** (2026-11-12, pitched): three stories for the salt aunty, Pa Kluea, in `nan-salt-story.md`.
 
 ## 3️⃣ The “3” road and home
 

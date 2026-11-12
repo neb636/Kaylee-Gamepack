@@ -84,6 +84,8 @@ const BLUSH = '#FF9DB8'
 const MOUTH = '#7A2745'
 const TONGUE = '#FF8FA8'
 const WHITE = '#FFFFFF'
+/** A hen's comb and wattle. */
+const COMB = '#F2555F'
 /** The dark grey ends of a tern's wings. */
 const WING_TIP = '#7E88A0'
 
@@ -113,7 +115,7 @@ export interface Frame {
 function frameOf(look: Look): Frame {
   const H = look.height
   const penguin = look.species === 'penguin'
-  const bird = look.species === 'hornbill' || look.species === 'tern' || look.species === 'pelican'
+  const bird = look.species === 'hornbill' || look.species === 'tern' || look.species === 'pelican' || look.species === 'hen'
   const R = (penguin ? 0.27 : look.species === 'panda' || look.species === 'elephant' || look.species === 'bear' || look.species === 'polarbear' || look.species === 'beaver' || look.species === 'moose' ? 0.26 : bird ? 0.22 : look.species === 'puppy' || look.species === 'tortoise' ? 0.25 : 0.24) * H
   const c = look.chub ?? 1
   const headY = penguin ? 0.2 * H : R * 0.92
@@ -305,7 +307,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const { H, R, headY, shoulder, eyeX, eyeY, eyeSize, lift, on, turnTo } = f
   const px = H >= 1 ? 3 : 2.5
   const penguin = look.species === 'penguin'
-  const bird = look.species === 'hornbill' || look.species === 'tern' || look.species === 'pelican'
+  const bird = look.species === 'hornbill' || look.species === 'tern' || look.species === 'pelican' || look.species === 'hen'
   const tern = look.species === 'tern'
   const polar = look.species === 'polarbear'
   /** Paws and hooves in the dark color (a polar bear's are furry and light, like its fur). */
@@ -348,9 +350,12 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     for (const s of [-1, 1]) torso.push(P.sphere(0.09 * H, look.dark, { at: [s * 0.11 * H, 0.025 * H, 0.13 * H], scale: [1, 0.42, 1.45] }))
   } else if (bird) {
     // A tern is a pale grey back with a white chest that wraps right round the front, on short red legs.
-    torso.push(P.sphere(0.17 * H, look.fur, { at: [0, 0.36 * H, tern ? -0.015 * H : 0], scale: [1, 1.2, 1] }, 20))
+    // A hen is plump: a round body that sits low, its chest puffed out front.
+    const hen = look.species === 'hen'
+    if (hen) torso.push(P.sphere(0.2 * H, look.fur, { at: [0, 0.33 * H, -0.01 * H], scale: [c, 1.05, 1.1] }, 22))
+    else torso.push(P.sphere(0.17 * H, look.fur, { at: [0, 0.36 * H, tern ? -0.015 * H : 0], scale: [1, 1.2, 1] }, 20))
     torso.push(tern ? P.sphere(0.16 * H, look.light, { at: [0, 0.34 * H, 0.035 * H], scale: [1, 1.15, 0.9] }, 20) : P.sphere(0.13 * H, look.light, { at: [0, 0.3 * H, 0.07 * H], scale: [1, 1.15, 0.7] }))
-    const leg = tern ? look.dark : look.species === 'pelican' ? look.ear ?? '#FFB45C' : look.fur
+    const leg = tern ? look.dark : look.species === 'pelican' || hen ? look.ear ?? '#FFB45C' : look.fur
     for (const s of [-1, 1]) {
       const x = s * 0.07 * H
       torso.push(P.capsule(0.025 * H, 0.12 * H, leg, { at: [x, 0.1 * H, 0] }))
@@ -882,6 +887,18 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
         const t = i / 7
         tail.push(P.sphere((0.065 - t * 0.04) * H, i % 2 ? spot : look.fur, { at: [Math.sin(t * 2.2) * 0.12 * H, (0.1 + Math.sin(t * Math.PI) * 0.08 + t * 0.12) * H, (-0.2 - t * 0.32) * H * round[2]], scale: [1, 0.85, 1.2] }))
       }
+      break
+    }
+    case 'hen': {
+      // A hen: a round head with a red comb of three bumps on top, a short gold beak, a red wattle under it, and a fan
+      // of tail feathers standing up behind.
+      head.push(P.sphere(R, look.fur, { at: [0, headY, 0] }, 26))
+      head.push(...[-0.22, 0, 0.22].map((z, i) => P.sphere((i === 1 ? 0.26 : 0.21) * R, COMB, { at: [0, headY + (0.95 + (i === 1 ? 0.08 : 0)) * R, z * R + 0.12 * R], scale: [0.55, 1, 0.9] })))
+      head.push(P.cone(0.17 * R, 0.36 * R, look.dark, { at: [0, headY - 0.12 * R, 1.08 * R], rot: [Math.PI / 2, 0, 0], scale: [1.2, 1, 0.8] }))
+      head.push(...[-1, 1].map((s) => P.sphere(0.12 * R, COMB, { at: [s * 0.07 * R, headY - 0.42 * R, 0.9 * R], scale: [0.8, 1.3, 0.7] })))
+      mouthAt = [0, headY - 0.26 * R, 1.0 * R]
+      tailRoot = [0, 0.32 * H, -0.18 * H]
+      for (const [i, a] of [-0.6, -0.2, 0.2, 0.6].entries()) tail.push(P.sphere(0.075 * H, i % 2 ? look.fur : look.light, { at: [Math.sin(a) * 0.08 * H, 0.42 * H, -0.2 * H], rot: [-0.35, a, 0], scale: [0.45, 1.5, 0.35] }))
       break
     }
     case 'hornbill': {

@@ -27,6 +27,8 @@ const rnd = (i: number, j = 0) => {
 
 export interface Village {
   root: Group
+  /** The mountains and sky painted round about (the dinner tints it for dusk). */
+  sky: Mesh
   mural: Group
   scooter: Group
   /** The scooter's wheels (they spin) and its rider (bobs). */
@@ -236,7 +238,8 @@ export function buildVillage(bag: Bag): Village {
   ]
   root.add(solid(merge(green), bag, 2))
   // ---- The mountains, with low cloud lying on them ----
-  root.add(panorama(bag))
+  const sky = panorama(bag)
+  root.add(sky)
   const near = [
     // Two big green ridges just behind the village (in 3D, so they move a little against the ring).
     P.sphere(9, '#79B58E', { at: [-11, -3.6, -22], scale: [1.5, 0.75, 0.6] }, 20),
@@ -282,7 +285,7 @@ export function buildVillage(bag: Bag): Village {
   scooter.add(blobShadow(0.35, bag))
   scooter.position.set(-20, 0, ROAD_Z - 0.45)
   root.add(scooter)
-  return { root, mural, scooter, wheels, clouds, rings, puddles, hen: { root: hen, head: henHead }, chicks }
+  return { root, sky, mural, scooter, wheels, clouds, rings, puddles, hen: { root: hen, head: henHead }, chicks }
 }
 
 /** Each frame: the clouds drift, the drizzle rings spread on the puddles. */

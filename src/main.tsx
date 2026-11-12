@@ -6,6 +6,7 @@ import '@fontsource/fredoka/700.css'
 import './theme.css'
 import { reactErrorHandlers } from './react-errors'
 import './offline/register'
+import './chunk-recovery'
 import App from './App'
 
 createRoot(document.getElementById('root')!, reactErrorHandlers).render(
