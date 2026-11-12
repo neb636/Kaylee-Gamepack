@@ -11,9 +11,8 @@
 //      a run of bells, the farmer aunty hops.
 //   2. Pick: grown clumps wiggle. Grab one and pull: it stretches and twists, then pops off and follows her finger; let
 //      go and it flies into her basket (a tap picks one too). Mist a bag she picked and it grows again. Keep spraying a
-//      grown one and it swells enormous and bouncy (a tap boings it). Six in the basket ends the round.
-//   3. Pink and gold: the aunty swaps the bags; new ones with pink and gold collars grow pink and golden mushrooms. Six
-//      more and they all go to lunch: the camera glides out to the table, Kaylee and Daddy hop onto their stools.
+//      grown one and it swells enormous and bouncy (a tap boings it). Six in the basket and they all go to lunch: the
+//      camera glides out to the table, Kaylee and Daddy hop onto their stools.
 //   pizza (the side verb): her basket sits by the pizza. Drag a mushroom onto the pizza and it stays where she puts it
 //      (a tap on the basket or the pizza puts the next one on for her). Basket empty: the oven glows; tap it and the
 //      aunty slides the pizza in, the fire roars, ding, out it comes golden. Tap the pizza and a slice (with the
@@ -70,7 +69,6 @@ import {
   PIN_AT,
   PIZZA,
   PLATE_Z,
-  ROUND3_KINDS,
   SEAT_Z,
   SEATS,
   SIGN,
@@ -80,7 +78,6 @@ import {
   TALL,
   TX,
   basketSize,
-  type BagKind,
   type Basket,
   type EaterId,
   type Round,
@@ -119,7 +116,6 @@ type Phase = 'house' | 'walk' | 'table'
 interface BagState {
   i: number
   at: Vector3
-  kind: BagKind
   water: number
   /** pin: popped out; grown: ready to pick. */
   stage: 'none' | 'pin' | 'grown'
@@ -194,8 +190,6 @@ const tmp = new Vector3()
 const tmp2 = new Vector3()
 const right = new Vector3()
 const wallPlane = new Plane(new Vector3(0, 0, 1), -MOUTH_Z)
-
-const shroomOf = (k: BagKind): ShroomColor => (k === 'plain' ? 'grey' : k)
 
 /** A wedge [-A, A] around +z, flat, its middle at the origin (the tip toward -z). */
 function wedgeGeo(r: number, depth: number, y: number, color: string): BufferGeometry {
@@ -315,15 +309,13 @@ export class MushroomFarm extends Stage {
     r.head.add(this.hat)
     // ---- The bags and their clumps ----
     this.round = start.round
-    const kinds: BagKind[] = start.round === '3' ? ROUND3_KINDS : BAGS.map(() => 'plain')
     BAGS.forEach((m, i) => {
-      const kind = kinds[i]
-      const color = shroomOf(kind)
+      const color: ShroomColor = 'grey'
       const clump = this.newClump(i, color)
-      const ring = collar(kind, bag)
+      const ring = collar(bag)
       ring.position.set(m[0], m[1], m[2] + 0.004)
       scene.add(ring)
-      this.bags.push({ i, at: new Vector3(...m), kind, water: 0, stage: 'none', clump, color, size: 0, pop: 1, boing: 1, bounces: 0, giant: false, collar: ring, pull: 0 })
+      this.bags.push({ i, at: new Vector3(...m), water: 0, stage: 'none', clump, color, size: 0, pop: 1, boing: 1, bounces: 0, giant: false, collar: ring, pull: 0 })
     })
     // ---- Her basket, in the house and at the table ----
     this.houseBasket = buildBasket(bag)
@@ -395,7 +387,7 @@ export class MushroomFarm extends Stage {
     this.quietFrom = this.time + 3
     const d = arriving ? 0.5 : 0.3
     if (r === '1') this.after(0.4, () => this.once('hi', M.hi))
-    const l: Record<Round, Line> = { '1': M.mist, '2': M.pick, '3': M.colors, pizza: M.pizza }
+    const l: Record<Round, Line> = { '1': M.mist, '2': M.pick, pizza: M.pizza }
     this.after(r === '1' ? 0.6 : r === 'pizza' && !arriving ? 1.5 : d, () => this.once(r, l[r]))
   }
   /** Says it the first time only. A reaction (`now`) is dropped while Sparkle talks, rather than heard late. */
@@ -528,7 +520,7 @@ export class MushroomFarm extends Stage {
 
   // ---------------------------------------------------------------- the bags
 
-  /** Water into a bag: a pin pops out, it swells, it's grown; past that (rounds 2 and 3) it goes giant. */
+  /** Water into a bag: a pin pops out, it swells, it's grown; past that (round 2) it goes giant. */
   private grow(b: BagState, w: number, quiet = false) {
     const cap = this.round === '1' ? 1.15 : GIANT + 0.3
     const before = b.water
@@ -539,7 +531,6 @@ export class MushroomFarm extends Stage {
       b.clump.visible = true
       if (!quiet) {
         sfx.bloop(this.pops++ % 13)
-        if (b.color !== 'grey') this.after(0.5, () => this.once('colors2', M.colors2, true))
         this.sparkles.burst(tmp.copy(b.at).add(new Vector3(0, 0, 0.08)), 5, 0.6, 0.6, 0.6, 0.03)
       }
     }
@@ -590,40 +581,6 @@ export class MushroomFarm extends Stage {
         this.roundLine('2')
       })
     }
-  }
-
-  /** Round 3: the aunty swaps the bags. The old clumps puff away, the new collars pop on, pink and gold. */
-  private newBags() {
-    this.round = '3'
-    this.picks = 0
-    this.hopFarmer()
-    sfx.aunty()
-    this.bags.forEach((b, k) => {
-      this.after(0.1 + k * 0.08, () => {
-        if (b.stage !== 'none') this.steam.burst(tmp.copy(b.at).add(new Vector3(0, 0, 0.1)), 5, 0.4, 0.3, 0.7, 0.07)
-        b.water = 0
-        b.stage = 'none'
-        b.giant = false
-        b.bounces = 0
-        b.size = 0
-        b.clump.visible = false
-        b.kind = ROUND3_KINDS[k]
-        b.color = shroomOf(b.kind)
-        // A new clump in the new color (one in her hand stays there), and a new collar.
-        if (this.carried?.o !== b.clump) b.clump.removeFromParent()
-        b.clump = this.newClump(k, b.color)
-        b.collar.removeFromParent()
-        b.collar = collar(b.kind, this.bag)
-        b.collar.position.set(b.at.x, b.at.y, b.at.z + 0.004)
-        b.collar.scale.setScalar(0.01)
-        this.scene.add(b.collar)
-        b.pop = 0
-        sfx.plink()
-        if (b.kind !== 'plain') this.sparkles.burst(tmp.copy(b.at).add(new Vector3(0, 0, 0.1)), 6, 0.7, 0.7, 0.7, 0.035, b.kind === 'pink' ? 1 : 0)
-      })
-    })
-    this.ev.round('3', formatBasket(this.basket))
-    this.roundLine('3')
   }
 
   // ---------------------------------------------------------------- picking
@@ -687,10 +644,7 @@ export class MushroomFarm extends Stage {
   }
 
   private checkPicks() {
-    if (this.round === '2' && this.picks >= PICKS['2']) {
-      this.round = '3'
-      this.after(0.9, () => this.newBags())
-    } else if (this.round === '3' && this.picks >= PICKS['3'] && this.phase === 'house') {
+    if (this.round === '2' && this.picks >= PICKS['2'] && this.phase === 'house') {
       this.phase = 'walk'
       this.after(1.0, () => this.toTable())
     }

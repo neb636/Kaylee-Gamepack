@@ -70,7 +70,7 @@ function bagCrowd(x: number, z: number, n: number, seed: number): BufferGeometry
     parts.push(P.capsule(BAG_R, h - BAG_R * 2, SAWDUST, { at: [bx, h / 2 + 0.01, bz], scale: [1.05, 1, 1.05] }))
     for (let f = 0; f < 3; f++) parts.push(P.sphere(0.016, '#CDB083', { at: [bx + Math.cos(f * 2.1 + k) * BAG_R * 0.98, 0.1 + f * 0.08, bz + Math.sin(f * 2.1 + k) * BAG_R * 0.98], scale: [1, 1.5, 1] }, 6))
     parts.push(P.cyl(0.05, BAG_R * 0.8, 0.07, '#F1E2C6', { at: [bx, h + 0.03, bz] }, 12))
-    parts.push(P.torus(0.055, 0.022, COLLAR.plain, { at: [bx, h + 0.07, bz], rot: [Math.PI / 2, 0, 0] }))
+    parts.push(P.torus(0.055, 0.022, COLLAR, { at: [bx, h + 0.07, bz], rot: [Math.PI / 2, 0, 0] }))
     parts.push(P.sphere(0.04, '#FFFFFF', { at: [bx, h + 0.085, bz], scale: [1, 0.6, 1] }, 8))
   }
   return parts

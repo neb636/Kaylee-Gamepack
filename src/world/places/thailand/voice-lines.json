@@ -1468,7 +1468,6 @@
   },
   "Spray the bags!",
   "Pull the mushrooms off!",
-  "More bags to spray!",
   "Put your mushrooms on the pizza!",
   "Hold your finger on the bags!",
   "Click and hold on the bags!",
@@ -1485,10 +1484,6 @@
   },
   {
     "text": "Look at them grow!",
-    "voice": "farmer"
-  },
-  {
-    "text": "Pink ones and gold ones!",
     "voice": "farmer"
   },
   {
