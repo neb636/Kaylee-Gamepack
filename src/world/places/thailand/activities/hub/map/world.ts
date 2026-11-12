@@ -14,6 +14,7 @@ import { Particles } from '../../../../../engine3d/particles'
 import type { RoamState } from '../../../../../engine3d/roam'
 import { makeLights } from '../../../../../engine3d/toon'
 import type { World3D } from '../../../../../engine3d/View3D'
+import { knobs } from '../../../../../kit/knobs'
 import { noise, sfx, tone } from '../../../../../kit/sfx'
 import { buildField, type Field } from './field'
 import { BOARD, PINS, POKES, SPEEDBOAT_LOOP, toLat, toLon, toX, toZ, WATER_LOOPS, type PinId, type ToyId } from './geo'
@@ -29,6 +30,8 @@ export interface MapEvents {
   poked(id: ToyId): void
   /** Any touch at all (the hint waits again). */
   touched(): void
+  /** The camera has been moving behind the loading cover long enough: it can fade (MAP_CAM.cover). */
+  revealed(): void
 }
 
 export const MAP_ANCHORS: AnchorInfo[] = POKES.map((p) => ({ id: `poke:${p.id}`, label: p.label, kind: 'thing' }))
@@ -79,6 +82,20 @@ const tmp2 = new Vector3()
 const smoothstep = (p: number) => p * p * (3 - 2 * p)
 const TAU = Math.PI * 2
 
+/** The board's camera when she lands: turned a little, then it settles lower and closer so the map arrives instead
+ *  of just sitting there (the feel lab, ?feel=1). */
+export const MAP_CAM = knobs('thai-map-cam', 'Thailand map camera', 'src/world/places/thailand/activities/hub/map/world.ts', {
+  yaw: { value: 8, min: -40, max: 40, step: 1, label: 'Turn', unit: '°', note: 'added to the board view, side to side (it does not animate)' },
+  pitch: { value: -12, min: -30, max: 20, step: 1, label: 'Settle tilt', unit: '°', note: 'where the entrance ends: below 0 looks from lower down' },
+  zoom: { value: 0.87, min: 0.6, max: 1.2, step: 0.01, label: 'Settle zoom', unit: '×', note: 'where the entrance ends: below 1 is closer' },
+  intro: { value: 3.4, min: 0, max: 6, step: 0.1, label: 'Entrance', unit: 's', note: 'how long the camera takes to settle, counted from the first frame (behind the cover)' },
+  hold: { value: 0, min: 0, max: 1.5, step: 0.05, label: 'Entrance wait', unit: 's', note: 'a still beat before the camera starts moving' },
+  cover: { value: 1, min: 0, max: 2.5, step: 0.05, label: 'Cover', unit: 's', note: 'how long the camera moves behind the loading screen (first frames hitch) before it fades' },
+  fade: { value: 0.3, min: 0.05, max: 1.2, step: 0.05, label: 'Cover fade', unit: 's', note: 'how fast the loading screen fades into the moving map' },
+})
+/** Starts from rest and lands at rest: no jolt on the cut from the loading screen. */
+const easeInOut = (p: number) => 0.5 - 0.5 * Math.cos(Math.PI * p)
+
 export class ThaiMapWorld implements World3D {
   readonly scene = new Scene()
   readonly rig = new CameraRig()
@@ -100,6 +117,11 @@ export class ThaiMapWorld implements World3D {
   private close: Shot = { center: new Vector3(), half: new Vector3(1.7, 0.8, 1.7), yaw: -6, pitch: 46, maxDist: 200 }
   private picked: Place | null = null
   private hint = false
+  /** The overview before the entrance's change (set per screen shape in setSize). */
+  private base = { yaw: -6, pitch: 47, half: new Vector3(4.5, 0.5, 7.3) }
+  /** Seconds into the entrance (it runs once, when the board opens). */
+  private introT = 0
+  private revealed = false
 
   private places: Place[] = []
   private toys = new Map<ToyId, Toy>()
@@ -300,15 +322,24 @@ export class ThaiMapWorld implements World3D {
     setOutlineResolution(w, h)
     // A wide screen looks from a little lower and further round, so the tall country fills more of it.
     const wide = w > h * 1.15
-    this.overview.yaw = this.close.yaw = wide ? -26 : -6
-    this.overview.pitch = wide ? 42 : 47
-    this.overview.half.set(wide ? 3.6 : 4.5, 0.5, wide ? 6.0 : 7.3)
+    this.base.yaw = wide ? -26 : -6
+    this.base.pitch = wide ? 42 : 47
+    this.base.half.set(wide ? 3.6 : 4.5, 0.5, wide ? 6.0 : 7.3)
     this.overview.center.set(wide ? 0.5 : 0.2, 0.2, wide ? 1.3 : 0.6)
+    this.frameOverview()
     this.rig.setShot(this.picked ? this.close : this.overview, true)
   }
 
   setAnchorElements(els: Map<string, HTMLElement>) {
     this.anchorEls = els
+  }
+
+  /** The overview at this point of the entrance: from the plain view (turned by `yaw`) down and in to where it settles. */
+  private frameOverview() {
+    const k = MAP_CAM.intro > 0 ? easeInOut(clamp((this.introT - MAP_CAM.hold) / MAP_CAM.intro, 0, 1)) : 1
+    this.overview.yaw = this.close.yaw = this.base.yaw + MAP_CAM.yaw
+    this.overview.pitch = this.base.pitch + MAP_CAM.pitch * k
+    this.overview.half.copy(this.base.half).multiplyScalar(1 + (MAP_CAM.zoom - 1) * k)
   }
 
   /** She may swing the board round and pinch it closer (no walking, no jumping). */
@@ -317,7 +348,7 @@ export class ThaiMapWorld implements World3D {
   }
 
   get calm() {
-    return !this.rig.moving && !this.picked && !this.spray.busy && ![...this.toys.values()].some((t) => t.t >= 0)
+    return this.introT >= MAP_CAM.hold + MAP_CAM.intro && !this.rig.moving && !this.picked && !this.spray.busy && ![...this.toys.values()].some((t) => t.t >= 0)
   }
 
   update(dt: number) {
@@ -330,7 +361,18 @@ export class ThaiMapWorld implements World3D {
     this.foam.update(dt)
     const c = this.overview.center
     this.lights.follow(c.x, c.y, c.z)
-    this.rig.setShot(this.picked ? this.close : this.overview)
+    // The entrance: the camera rides it exactly (no lag), until she picks a place.
+    // (A slow frame, like the first ones uploading the board's textures, slows it a moment instead of skipping ahead.)
+    const end = MAP_CAM.hold + MAP_CAM.intro
+    const entering = !this.picked && this.introT < end
+    if (this.picked) this.introT = end
+    else if (entering) this.introT += Math.min(dt, 1 / 30)
+    if (!this.revealed && (this.introT >= MAP_CAM.cover || !entering)) {
+      this.revealed = true
+      this.events.revealed()
+    }
+    this.frameOverview()
+    this.rig.setShot(this.picked ? this.close : this.overview, entering)
     this.rig.update(dt)
   }
 

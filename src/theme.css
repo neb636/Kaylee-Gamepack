@@ -111,3 +111,9 @@ p {
     /* the sky */
     linear-gradient(180deg, #9fb1f5 0%, #b4b3fb 26%, #d2c3fb 52%, #f3cfee 76%, #fde3ef 100%);
 }
+
+/* Sparkle's bob (sdk/components/Mascot.tsx). */
+@keyframes mascot-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
