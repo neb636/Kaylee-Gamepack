@@ -1,0 +1,14 @@
+{
+  "title": "Refactor 1: less copy-paste, a map for agents",
+  "checkIn": "fix",
+  "kaylee": "Nothing changes in play, except the barber's hair and the Sky Pod's lights are outlined as thinly as everything else (before left, after right, pictures in the PR).",
+  "questions": [
+    "The barber's hair and the Sky Pod now have the same thin outline as the rest of the game. Keep it?",
+    "Italy's opera finale opens before all six stamps are collected (left that way since its greybox). Lock it like the other countries?"
+  ],
+  "links": [
+    { "label": "The barber (thinner hair lines)", "hash": "#/world/thailand/mall-trip/barber?round=2" },
+    { "label": "The Sky Pod", "hash": "#/world/thailand/mall-trip/skypod" },
+    { "label": "A stamp, its video, back to the map (China's wall)", "hash": "#/world/china/wall" }
+  ]
+}
