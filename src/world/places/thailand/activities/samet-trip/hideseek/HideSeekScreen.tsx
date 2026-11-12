@@ -19,6 +19,8 @@ const CHIP: Record<HideRound, string> = { '1': '🌳 easy', '2': '🏖️ tricky
 
 interface Props {
   round: HideRound
+  /** The fireflies she has found so far (the trip's flags: jetski, sandcastle, snorkel, hideseek). */
+  flags?: string[]
   time?: TimeOfDay
   /** The round on screen changed (the address bar follows). */
   onRound(r: HideRound): void

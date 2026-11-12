@@ -18,6 +18,8 @@ const feelOn = () => [...new URLSearchParams(location.hash.split('?')[1] ?? '').
 
 interface Props {
   round: RoundId
+  /** The fireflies she has found so far (the trip's flags: jetski, sandcastle, snorkel, hideseek). */
+  flags?: string[]
   /** The round on screen changed (the address bar follows). */
   onRound(r: RoundId): void
   /** Back to the island (parked in the pink ring by the hut, or after a race she won), the jet ski hers. */

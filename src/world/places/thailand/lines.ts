@@ -13,6 +13,13 @@ const nick = by('nick')
 const ji = by('ji')
 const lung = by('lung')
 const kids = by('kids')
+// Koh Samet's islanders (activities/samet-trip/cast.ts): the gecko fire dancers Tuk and Kae, the jet ski man (an
+// otter), the boat captain (a pelican) and the green taxi's driver (a sun bear).
+const tuk = by('tuk')
+const kae = by('kae')
+const otter = by('otter')
+const pelican = by('pelican')
+const sunbear = by('sunbear')
 
 /** One line for each thing a look can change, in order: hat, glasses, wings, outfit, shoes, paint. */
 const notice = (say: (text: string) => Line, texts: string[]) => Object.fromEntries(['head', 'face', 'back', 'outfit', 'feet', 'paint'].map((k, i) => [k, say(texts[i])]))
@@ -750,7 +757,12 @@ export const L = {
   // says what's new (the first time she reaches each beach, a new round) and, after a while with nothing done, what to
   // do (spendHint, so at most twice a visit); the family and the islanders react in their own voices (cast.json): the
   // jet ski man (an otter), the captain (a pelican, both boats), the taxi driver (a sun bear) and the fire dancers (two
-  // tokay geckos, one voice). Kaylee never talks: she giggles. The island and the book are a hub: no idle hints spoken.
+  // tokay geckos: Tuk and Kae in the story, one shared voice for their cheers in the show). Kaylee never talks: she
+  // giggles. The island is a hub: no idle hints spoken.
+  //
+  // One story holds it together, "The Lost Fireflies" (`story`, plan: thailand/samet-story.md): last night's wind blew
+  // the fire show's four fireflies all over the island, and Tofu the beach puppy saw where each one went. Each stop
+  // finds one (Zoom, Sandy, Bubbles, Peekaboo); with all four the fire show can start.
   samet: {
     // Getting there and home (PackScreen, speedboat/, the trip frame), the sticker and the stamp screen's facts.
     trip: {
@@ -780,13 +792,121 @@ export const L = {
         park: 'Koh Samet is a national park, a home for animals!',
         jacket: 'Always wear a life jacket on the water!',
         sunset: 'The sun sets in the west, over Ao Prao!',
-        look: 'Take a photo of an animal, then let it be!',
+        fireflies: 'Fireflies glow to say hello to each other!',
       },
     },
-    // The island to roam (island/): Sparkle's first line, each beach the first time, the taxi, the pokes, home.
+    // The story, "The Lost Fireflies" (story/, plan: thailand/samet-story.md), in play order: the way in at Na Dan
+    // pier, the island between the stops, each stop's way in and its firefly found, all four, and the fire show.
+    story: {
+      // The way in (island/story.ts, film `intro`), at the foot of Na Dan pier as she lands: Mom, Dad (Tofu the beach
+      // puppy runs up barking), then the two gecko fire dancers with their empty lantern.
+      intro: {
+        here: ji("We're here! Koh Samet!"),
+        puppy: nick("Hello, puppy! What's wrong?"),
+        ohno: tuk('Oh no, oh no, oh no!'),
+        gone: kae('Our fireflies are gone!'),
+        // Their memory (the storybook look): last night on Sai Kaew, the show, then the big wind.
+        every: tuk('Every night, four fireflies light up our fire show.'),
+        wind: kae('But last night, a big wind came. Whoosh!'),
+        away: kae('It blew them all over the island!'),
+        // Back at the pier: the droop, then Tofu barks and wags.
+        noshow: tuk('No fireflies, no show tonight!'),
+        tofu: kae('But Tofu saw where they went!'),
+        ask: tuk('Will you help us find them?'),
+        // Sparkle, as the film ends and the pictures of the four beaches come up.
+        go: onDevice('Four fireflies to find! Tap a picture!', 'Four fireflies to find! Click a picture!'),
+      },
+      // On the island between the stops (island/): the pictures, the ride, the fireflies she has found.
+      island: {
+        // The taxi driver as she picks a beach (in turn), and at a beach the taxi has no stop at.
+        ride: [sunbear('Hop in! Beep beep!'), sunbear('Off we go!'), sunbear('Hold on tight!')],
+        hinkhok: sunbear('Ao Hin Khok!'),
+        // Sparkle, the first time she comes near a firefly still waiting at its beach.
+        near: {
+          jetski: 'Look! A pink light on the water!',
+          sandcastle: 'Something is glowing in the sand!',
+          snorkel: 'A blue light, far out at sea!',
+          hideseek: 'A green light in the big tree!',
+        },
+        // Back from a stop with a firefly (the first, second and third), then the pictures come up again.
+        count: ['One firefly! Three more to find!', 'Two fireflies! Two more to find!', 'Three fireflies! Just one more!'],
+        // Tap Tofu the first time.
+        tofu: 'Tofu the beach puppy! He saw it all!',
+      },
+      // The jet ski's firefly, Zoom (jetski/): the jet ski man's way in at his hut, the chase, found.
+      // @samet-story-jetski
+      jetski: {
+        looking: otter('Sawasdee krap! Looking for a pink light?'),
+        zoom: otter('She zoomed round my buoys all night!'),
+        fast: otter('She only stops for someone fast!'),
+        // Sparkle, the first time Zoom flies ahead of the jet ski.
+        chase: 'There she is! After her!',
+        // Found (after the race): she lands on your unicorn's horn.
+        likes: otter('Ha ha! She likes you!'),
+        found: 'You found Zoom!',
+        dad: nick('Fast like a firefly!'),
+      },
+      // The sandcastle's firefly, Sandy (sandcastle/): a glow in the sand, a castle to tempt her out, found.
+      // @samet-story-sandcastle
+      sandcastle: {
+        glow: nick("Look! Something's glowing in the sand!"),
+        shy: ji('A little gold firefly! She is shy.'),
+        castle: nick("Let's build her a castle!"),
+        // Sparkle, the first time she peeks out while the castle grows.
+        peek: 'She is peeking! Keep building!',
+        // Found (the moat full): she flies out and sits on the tallest tower.
+        home: ji('She loves her castle!'),
+        found: 'You found Sandy!',
+        dad: nick('A castle fit for a firefly!'),
+      },
+      // The snorkel's firefly, Bubbles (snorkel/): the captain's way in on her boat, the glow down on the reef, found.
+      // @samet-story-snorkel
+      snorkel: {
+        fell: pelican('A little blue light fell in the sea!'),
+        bubble: pelican("She can't swim! She is in a bubble."),
+        down: pelican('Down by the coral. Can you find her?'),
+        // Sparkle: the first sight of the glow, and the cuttlefish cuddling the bubble.
+        see: 'A blue glow! Swim to it!',
+        hug: 'The cuttlefish is hugging her bubble!',
+        // Found: the bubble floats up and pops.
+        pop: nick('Pop! Out she comes!'),
+        saved: pelican('You saved her, ka!'),
+        found: 'You found Bubbles!',
+      },
+      // Hide and seek's firefly, Peekaboo (hideseek/): a green light peeking round the driftwood tree, found.
+      // @samet-story-hideseek
+      hideseek: {
+        saw: nick('Did you see that? A green light!'),
+        playing: ji('She is playing hide and seek!'),
+        too: nick("Then let's play too!"),
+        // Sparkle: Peekaboo twinkling near where Dad hides; hiding beside your unicorn on her turn.
+        knows: 'The green light knows where Dad is!',
+        shh: 'Shh! She is hiding with you!',
+        // Found (she wins her turn to hide): Peekaboo lands on Dad's nose.
+        nose: nick('Hey! That tickles my nose!'),
+        found: 'You found Peekaboo!',
+      },
+      // All four found (island/story.ts, film `all`): the fireflies swirl, then Dad calls the sunset (island.sunset).
+      all: {
+        four: ji('All four fireflies! You did it!'),
+        go: onDevice('Tap the sunset picture!', 'Click the sunset picture!'),
+      },
+      // The fire show (finale/): the way in on Sai Kaew at night, and the thank you at the end.
+      // @samet-story-show
+      show: {
+        dark: tuk("It's so dark. No show tonight."),
+        wait: kae('Wait! Look, look!'),
+        back: tuk('Our fireflies! You found them!'),
+        light: kae('Light us up, fireflies!'),
+        yours: kae('And these lights are for you!'),
+        start: tuk('Now the show can start!'),
+        // The end, after the fireworks: a bow, the fireflies make a heart.
+        best: tuk('Best fire show ever!'),
+        thanks: kae('Khob khun ka! Come back soon!'),
+      },
+    },
+    // The island between the stops (island/): each beach the first time, the taxi, the pokes, home.
     island: {
-      // Sparkle, the first time she lands on the island this visit.
-      hi: "Koh Samet! Let's explore the island!",
       // Sparkle, the first time she reaches each beach this visit.
       beach: {
         saikaew: 'Hat Sai Kaew! The jet ski beach!',
@@ -799,14 +919,12 @@ export const L = {
       // The jet ski is hers (once a visit, with its flag up); all four flags: Dad calls everyone to the tree.
       hers: 'The jet ski is yours now! Hop on!',
       sunset: nick('Sunset time! To the big tree!'),
-      // Mom's phone out for the first time this visit; the first rubbish in the bin.
-      phone: onDevice('Tap an animal to take its photo!', 'Click an animal to take its photo!'),
+      // The first rubbish in the bin.
       clean: ji('Thank you for cleaning the beach!'),
-      // The green taxi's driver (a sun bear): the first ride, then each ride in turn.
+      // The green taxi's driver (a sun bear): poked (in turn), and each beach's name as the taxi pulls in there.
       taxi: {
         hi: by('sunbear')('Sawasdee krap! Hop in!'),
         ride: [by('sunbear')('Beep beep!'), by('sunbear')('Hold on! Bumpy road!'), by('sunbear')('Next stop, the beach!')],
-        // Each stop's name, when the taxi pulls in there (never before it sets off).
         stop: {
           nadan: by('sunbear')('Na Dan pier!'),
           saikaew: by('sunbear')('Hat Sai Kaew!'),
@@ -828,10 +946,9 @@ export const L = {
       // On Na Dan pier going home: Mom's photo.
       home: ji('Smile! Bye bye, Koh Samet!'),
     },
-    // The beach puppy who shows her the way (island/puppy.ts, #357 way-finding). His voice is barks; Sparkle says who he
-    // is the first time, why he runs back the first time he fetches her, and each beach's name when he brings her there.
+    // Tofu the beach puppy (island/puppy.ts). His voice is barks; Sparkle says why he runs back the first time he
+    // fetches her, and each beach's name when she gets there.
     puppy: {
-      hi: 'A beach puppy! He knows the way. Follow him!',
       come: 'The puppy wants you to come!',
       name: {
         nadan: 'Na Dan pier!',
@@ -843,11 +960,9 @@ export const L = {
         aonoina: 'Ao Noi Na!',
       },
     },
-    // Mom's phone and the animal book (book/): Sparkle says the name once when it's snapped; a tap on its photo plays
-    // the fact.
+    // The island's animals (book/animals.ts): Sparkle says a reef animal's name the first time Mom's camera snaps it
+    // on the snorkel.
     book: {
-      // Sparkle says its name when it's snapped for the first time; a tap on its photo in the book plays the fact, a tap on
-      // its silhouette where to look.
       name: {
         tern: 'A tern!',
         crab: 'A crab!',
@@ -864,40 +979,6 @@ export const L = {
         squirrel: 'A squirrel!',
         macaque: 'A monkey!',
       },
-      fact: {
-        tern: 'Terns dive into the sea to catch fish!',
-        crab: 'Ghost crabs dig holes to hide from the sun!',
-        heron: 'The reef heron stands still, then grabs a fish!',
-        urchin: "Sea urchins are prickly. Look, but don't touch!",
-        coral: "Coral looks like rock, but it's alive!",
-        hornbill: 'The hornbill has a giant yellow beak!',
-        parrotfish: 'Parrotfish nibble coral, and it turns into sand!',
-        damselfish: 'Damselfish swim in a big crowd to stay safe!',
-        cuttlefish: 'A cuttlefish can change color in a blink!',
-        monitor: 'Monitor lizards smell with their tongue!',
-        mousedeer: 'The mouse-deer is as small as a cat!',
-        flyingfox: 'A flying fox is a big bat that eats fruit!',
-        squirrel: 'Squirrels run up the palm trees!',
-        macaque: 'Monkeys! Hold on to your sunglasses!',
-      },
-      where: {
-        tern: 'Look up over the sea at Sai Kaew!',
-        crab: 'Look for little holes in the sand!',
-        heron: 'Look on the rocks by the mermaid!',
-        urchin: 'Look in the water by the rocks!',
-        coral: 'Look under the water at Hin Khok!',
-        hornbill: 'Look up in the big tree at Wong Duan!',
-        parrotfish: 'Look in the water at Wong Duan!',
-        damselfish: 'Look for a crowd of little blue fish!',
-        cuttlefish: 'Look by the snorkel boat!',
-        monitor: 'Look on the sand at Ao Prao!',
-        mousedeer: 'By the forest at Ao Prao. Walk slowly!',
-        flyingfox: 'Look up in the trees at Ao Prao!',
-        squirrel: 'Look up the palm trees!',
-        macaque: 'Look by the road over the hill!',
-      },
-      // The book full (a fanfare and a gold star).
-      full: `Your animal book is full!`,
     },
     // The jet ski at Hat Sai Kaew (jetski/): ride, waves, race the jet ski man.
     jetski: {

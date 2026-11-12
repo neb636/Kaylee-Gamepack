@@ -21,12 +21,9 @@
 // peels, umbrellas spin (three pokes and one takes off like a kite with Kaylee holding on), chairs fold, the beach
 // ball rolls where she kicks it, crabs pop out of their holes, the ice cream cart dings, the bead tray jingles, the
 // hammock swings, boats bob and toot, the taxi honks, the mermaid's tail splashes.
-// Mom's phone and the animal book (greybox 3, ../book/): with the phone out the camera comes in closer and a tap is a
-// photo. Tap an animal and it turns and does something cute for the camera (the photo is taken at its best moment);
-// the phone turns a little toward it, the way a real one focuses, and an animal big in the middle of the frame earns a
-// gold frame. The animals live on the island (../book/creatures.ts: wander, flee, perch, swim) and react to a tap
-// without the phone too. The beach clean (../book/clean.ts) is the side verb: lift the rubbish on the wet sand (an
-// animal pops out where it was), carry it to the green bin, plonk.
+// The island's animals (../book/creatures.ts: wander, flee, perch, swim) react to a tap. The beach clean
+// (../book/clean.ts) is the side verb: lift the rubbish on the wet sand (an animal pops out where it was), carry it to
+// the green bin, plonk.
 // Quiet hub: no idle lines. The beach puppy shows the way (#357 way-finding, puppy.ts): he runs ahead to a stop she
 // hasn't played (by the shortest walk, his shortcut over the west hills and its sand slide too, or by the green taxi
 // for a far one: he jumps in and it drives straight to his beach), looks back and waits for her, comes to fetch her
@@ -52,15 +49,16 @@ import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
 import { wearing } from '../../../trip/packing'
 import { BananaBoat, Fish, Swimmer, Tern } from '../jetski/critters'
-import { ANIMALS, type AnimalId } from '../book/animals'
+import { ANIMALS } from '../book/animals'
 import { BeachClean, BIN_IDS, JUNK_IDS } from '../book/clean'
-import { WILD, Wildlife, type Creature, type PalmInfo, type WildCtx } from '../book/creatures'
-import { framing, phoneCamera, PHOTO_SIZE, portraits, snap } from '../book/photo'
+import { WILD, Wildlife, type PalmInfo, type WildCtx } from '../book/creatures'
+import { PHOTO_SIZE, snap } from '../book/photo'
 import { buildSki, type Ski } from '../jetski/ski'
 import { at as atFrame, bay, DECK, FRAMES, LANDMARKS, PARKED, POKES, RING, SLIDE, spotStart, STOP_IDS, STOPS, SWIMMERS, TAXI_STOPS, WAVE_DIR, WAYS, type SpotId, type StopId, type XZ } from './layout'
 import { FINE } from './scenery'
 import { BEATS, Puppy, type Trick } from './puppy'
 import { Planner, pointAt, project, type Route } from './route'
+import type { FilmState } from '../../../../../engine3d/film'
 import { buildProps, type PokeThing, type Props } from './props'
 import { buildIsland, DAY, TIMES, type Island, type TimeOfDay } from './scenery'
 import type { Surface } from './ground'
@@ -96,17 +94,6 @@ const CAM = knobs('sametCam', 'The island camera', FILE, {
   far: { value: 95, min: 40, max: 400, step: 5, label: 'Draws plants out to', unit: 'm', note: 'further trees are left to the haze (fewer triangles on the iPad)' },
   forest: { value: 54, min: 25, max: 80, step: 1, label: 'Looks down in the forest', unit: '°', note: 'on the roads and paths through the trees the camera rises over them' },
 })
-const PHONE = knobs('sametPhone', "Mom's phone", FILE, {
-  zoom: { value: 0.72, min: 0.4, max: 1, step: 0.02, label: 'Camera comes in to', note: 'with the phone out, how much of the ground shows (× the walking view)' },
-  focus: { value: 0.35, min: 0, max: 0.8, step: 0.05, label: 'Leans toward an animal', note: 'the view slides this much of the way toward the nearest animal' },
-  aim: { value: 0.7, min: 0, max: 1, step: 0.05, label: 'The photo turns to it', note: 'how much of the way the photo turns toward the animal she tapped' },
-  lens: { value: 1.25, min: 1, max: 2.5, step: 0.05, label: 'Photo zoom', unit: '×', note: 'the least it zooms (your unicorn far from the animal)' },
-  close: { value: 8, min: 3, max: 20, step: 0.5, label: 'Zooms in from', unit: 'm', note: 'your unicorn closer than this to the animal: the photo zooms in more (up to 3.2×), so getting close makes it big' },
-  gold: { value: 0.2, min: 0.05, max: 0.6, step: 0.01, label: 'Gold from', note: 'the animal this tall on the photo (of its height) earns a gold frame' },
-  middle: { value: 0.45, min: 0.1, max: 1, step: 0.05, label: 'Near the middle', note: 'and its middle at most this far from the photo\'s middle (1 = the edge)' },
-  reach: { value: 140, min: 60, max: 300, step: 10, label: 'Tap finds an animal within', unit: 'px' },
-  cull: { value: 70, min: 30, max: 200, step: 5, label: 'Animals live out to', unit: 'm', note: 'further than this from the camera they rest (frame rate)' },
-})
 const RIDE = knobs('sametRide', 'The green taxi and the jet ski', FILE, {
   taxi: { value: 6, min: 2, max: 14, step: 0.25, label: 'Taxi speed', unit: 'm/s' },
   near: { value: 7, min: 3, max: 15, step: 0.5, label: 'Hop on from', unit: 'm', note: 'she can hop on the taxi or a jet ski this close to it' },
@@ -136,19 +123,14 @@ export interface IslandStart {
   at: SpotId
   flags: StopId[]
   time: TimeOfDay | null
-  /** The animals already in her book. */
-  book?: AnimalId[]
-  /** Mom's phone out from the start. */
-  phone?: boolean
   /** What she packed for the trip (her sun hat and sunglasses go on). */
   packed?: string[]
-}
-/** A photo from Mom's phone. */
-export interface Snap {
-  /** The animal in it (null: a photo of the island). */
-  animal: AnimalId | null
-  src: string
-  gold: boolean
+  /** A film to open with (story.ts): the way in at Na Dan pier, or all four fireflies found. */
+  story?: 'intro' | 'all' | null
+  /** The firefly she has just come back with (one of `flags`): it flies in to join the others. */
+  found?: StopId | null
+  /** The pictures of the beaches up from the start. */
+  board?: boolean
 }
 export interface IslandEvents {
   /** She opened a stop (tapped its thing up close), or sat down for lunch at the deck's table, or (all four flags up)
@@ -156,15 +138,10 @@ export interface IslandEvents {
   open(stop: StopId | 'lunch' | 'sunset'): void
   /** She reached a new beach (the address bar follows `at`). */
   at(spot: SpotId): void
-  /** The shutter clicked (the screen flashes); the photo itself follows in `snap`. */
-  shutter?(): void
-  snap?(s: Snap): void
   /** The speedboat at Na Dan pier, before the whole island is done: the home picture comes up (on) or goes (off). */
   leaveAsk?(on: boolean): void
   /** The beach pictures for the puppy's thought bubble (rendered from the island once it's drawn). */
   pictures?(p: Partial<Record<SpotId, string>>): void
-  /** An animal she hasn't snapped is close by (the phone button glows). */
-  near?(on: boolean): void
   /** Something went in a bin (the beach clean's count). */
   cleaned?(n: number): void
   /** All four pink flags up and she tapped the speedboat at Na Dan pier: Mom's photo of the island (for Agong's
@@ -172,6 +149,13 @@ export interface IslandEvents {
   home?(photo: string): void
   /** Someone says something (lines.ts L.samet.island): the screen's TripGuide speaks it. */
   say?(line: Line): void
+  /** A film is on (which beat, memory or not), or off; and the words being said in it (FilmOverlay shows them). */
+  film?(s: FilmState | null): void
+  filmLine?(l: Line | null): void
+  /** The pictures of the beaches should come up (after a film, a firefly flying in, a tap on the taxi) or go. */
+  board?(on: boolean): void
+  /** Nothing touched for a while with a firefly still to find: the top-right button glows (or stops). */
+  nudge?(on: boolean): void
 }
 
 const I = L.samet.island
@@ -228,17 +212,6 @@ const FAMILY_GAP = 1.25
 const FAMILY_FRAME = { x: 0.8, top: 0.72, bottom: -0.6 }
 
 type Mode = 'walk' | 'taxi' | 'ski' | 'kite' | 'slide'
-
-/** Something the phone can snap: one of the book's animals (a creature, a tern, a crab from its hole). */
-interface SnapTarget {
-  kind: AnimalId
-  id: string
-  focus: Vector3
-  size: number
-  /** Seconds after the tap the shutter clicks (at the best moment of its pose). */
-  snapAt: number
-  pose(): void
-}
 
 const LABELS: Record<string, string> = { palm: 'A coconut palm', samet: 'A samet tree', umbrella: 'A beach umbrella', chair: 'A beach chair', ball: 'The beach ball', icecream: 'The ice cream cart', beads: "The bead seller's tray", crab: 'A crab hole', bush: 'Pink flowers', longtail: 'A longtail boat', speedboat: 'The speedboat', hammock: 'The hammock', telescope: 'The telescope', tamarind: 'The tamarind tree', deckbrella: 'An umbrella on the deck', lantern: 'A lantern', lifeguard: 'The lifeguard tower', stall: 'The coconut stall', rocks: 'The balancing rocks' }
 
@@ -370,22 +343,16 @@ export class SametIsland implements World3D {
   private coneT = -1
   private bellSwing = 0
   private tailT = -1
-  // ---- Mom's phone, the animals and the beach clean.
+  // ---- The animals and the beach clean.
   private wild: Wildlife
   private clean: BeachClean
   private fish: Fish
   private bubbles: Particles
-  private phone = false
-  private phoneProp: Group
-  private found: Set<AnimalId>
-  private pendingSnap: { c: SnapTarget | null; t: number } | null = null
   /** Off to the finale by speedboat: null before all four flags are up (or with no way on), false waiting, true on the way. */
   private goingHome: boolean | null = null
-  private wantPortraits: ((p: Record<AnimalId, string>) => void) | null = null
-  private nearAnimal = false
   private bumpV = { x: 0, z: 0, t: 0 }
   private wctx!: WildCtx
-  private counts = { snaps: 0, animalSnaps: 0, golds: 0, cleaned: 0, lifted: 0, boings: 0, taps: 0, pokes: 0, swims: 0, spins: 0, taxiRides: 0, skiRides: 0, kites: 0, coconuts: 0, bonks: 0, kicks: 0, gallops: 0, beaches: 0, ropes: 0, fetches: 0, named: 0, pupCalls: 0, slides: 0, pupPokes: 0, taxiStops: 0, leaveAsks: 0, taxiHops: 0 }
+  private counts = { cleaned: 0, lifted: 0, boings: 0, taps: 0, pokes: 0, swims: 0, spins: 0, taxiRides: 0, skiRides: 0, kites: 0, coconuts: 0, bonks: 0, kicks: 0, gallops: 0, beaches: 0, ropes: 0, fetches: 0, named: 0, pupCalls: 0, slides: 0, pupPokes: 0, taxiStops: 0, leaveAsks: 0, taxiHops: 0 }
   private seen = new Set<SpotId>()
   private greeted = false
 
@@ -613,18 +580,13 @@ export class SametIsland implements World3D {
     const palms = new Map<string, PalmInfo>()
     for (const [id, p] of this.props.pokes) if (p.kind === 'palm') palms.set(id, { at: p.at, y: p.y, top: p.top })
     this.wild = new Wildlife(bag, palms)
-    this.found = new Set(start.book ?? [])
-    this.wild.found = this.found
+    // (No photo book any more: nothing sparkles to be snapped.)
+    this.wild.found = new Set(Object.keys(ANIMALS) as (keyof typeof ANIMALS)[])
     scene.add(this.wild.root)
     this.clean = new BeachClean(bag, this.isl.ground, (x, z, r) => this.isl.blockers.add(x, z, r))
     scene.add(this.clean.root)
     this.fish = new Fish(bag, 6)
     scene.add(this.fish.root)
-    // Mom's phone in her hand: pink, with a little camera lens.
-    this.phoneProp = solid(merge([P.rbox(0.2, 0.32, 0.035, 0.03, PAL.hotpink, {}), P.rbox(0.17, 0.27, 0.01, 0.02, '#2B2330', { at: [0, 0.01, 0.018] }), P.cyl(0.022, 0.022, 0.02, '#FFFFFF', { at: [0.05, 0.1, -0.025], rot: [Math.PI / 2, 0, 0] }, 8)]), bag, 1.5)
-    this.phoneProp.visible = false
-    scene.add(this.phoneProp)
-    this.phone = !!start.phone
 
     // ---- Particles: spray, sand puffs, petals and bark flakes, dizzy stars; footprints in the sand.
     this.spray = new Particles({ kind: 'spray', count: 320, colors: ['#FFFFFF', '#EAFBFF', '#D6F6FF'], gravity: 13 }, bag)
@@ -988,17 +950,14 @@ export class SametIsland implements World3D {
   private greet() {
     this.greeted = true
     const say = (l: Line) => this.events.say?.(l)
-    if (firstTime('samet-island-hi')) say(I.hi)
     // (The beach she lands on counts as seen: its line would only repeat the hello.)
     firstTime(`samet-beach-${this.spot}`)
     if (this.flags.has('jetski') && firstTime('samet-ski-hers')) say(I.hers)
     if (this.flags.size === STOP_IDS.length && firstTime('samet-sunset-call')) say(I.sunset)
-    // The beach puppy, the first time: Sparkle says who he is.
-    if (firstTime('samet-puppy-hi')) say(PL.hi)
   }
 
   /** Walking into a stop's pink ring opens it, if the stop is still to do (or it's the driftwood tree with all four
-   *  flags up: the finale). Not with rubbish in her arms or the phone out: she's on her way somewhere else. */
+   *  flags up: the finale). Not with rubbish in her arms: she's on her way to the bin. */
   private walkIntoStops() {
     if (this.mode !== 'walk') return
     const k = this.kaylee.root.position
@@ -1010,7 +969,7 @@ export class SametIsland implements World3D {
       else if (d < R - 0.3 && this.ringArmed[id]) {
         this.ringArmed[id] = false
         const todo = !this.flags.has(id) || (id === 'hideseek' && this.flags.size === STOP_IDS.length)
-        if (!todo || this.clean.carrying || this.phone) continue
+        if (!todo || this.clean.carrying) continue
         this.target = null
         this.walkTo = null
         this.useStop(id)
@@ -1705,7 +1664,6 @@ export class SametIsland implements World3D {
   private inland = 0
   private cullT = 0
   private seaShift = { x: 0, z: 0 }
-  private leanV = { x: 0, z: 0 }
   private camera(dt: number) {
     const s = this.surface
     const wantIn = this.mode === 'walk' && !this.swimming && this.deckOn < 0 && (s === 'road' || s === 'path' || s === 'grass' || s === 'rock') && this.isl.ground.shoreAt(this.kaylee.root.position.x, this.kaylee.root.position.z) < -12 ? 1 : 0
@@ -1733,11 +1691,7 @@ export class SametIsland implements World3D {
     const run = clamp(this.lastSpeed / Math.max(0.1, WALK.gallop), 0, 1)
     const hx = Math.sin(this.kaylee.root.rotation.y)
     const hz = Math.cos(this.kaylee.root.rotation.y)
-    const b = CAM.box * (this.phone ? PHONE.zoom : 1)
-    // With the phone out, the view leans toward the nearest animal (so it's easy to get it in the middle).
-    const lean = this.phone && this.mode === 'walk' ? this.leanTo() : null
-    this.leanV.x += ((lean ? (lean.x - k.x) * PHONE.focus : 0) - this.leanV.x) * 0.06
-    this.leanV.z += ((lean ? (lean.z - k.z) * PHONE.focus : 0) - this.leanV.z) * 0.06
+    const b = CAM.box
     // On a beach the frame slides a little out to sea, so the water's edge and what's on it show beside her.
     const f = this.nearestFrame(k.x, k.z)
     const sea = (1 - this.inland) * (this.swimming ? 0 : 2.2)
@@ -1751,10 +1705,10 @@ export class SametIsland implements World3D {
     const grow = td * 0.3 * fk
     return {
       // (Flying under the umbrella, the camera stays down: she rises up the screen.)
-      center: new Vector3(k.x + hx * CAM.ahead * run + this.seaShift.x + this.leanV.x + (tp.x - k.x) * 0.45 * fk, Math.max(this.kite ? this.kite.from.y : k.y, 0) + 0.7, k.z + hz * CAM.ahead * run + this.seaShift.z + this.leanV.z + (tp.z - k.z) * 0.45 * fk),
+      center: new Vector3(k.x + hx * CAM.ahead * run + this.seaShift.x + (tp.x - k.x) * 0.45 * fk, Math.max(this.kite ? this.kite.from.y : k.y, 0) + 0.7, k.z + hz * CAM.ahead * run + this.seaShift.z + (tp.z - k.z) * 0.45 * fk),
       half: tall ? new Vector3(b * 0.62 + grow, 2, b * 0.9 + grow) : new Vector3(b + grow, 2, b * 0.62 + grow),
       yaw,
-      pitch: CAM.pitch + (tall ? 4 : 0) + (CAM.forest - CAM.pitch) * this.inland - (this.phone ? 3 : 0),
+      pitch: CAM.pitch + (tall ? 4 : 0) + (CAM.forest - CAM.pitch) * this.inland,
       follow: true,
       minDist: 6,
       maxDist: 60,
@@ -2087,13 +2041,6 @@ export class SametIsland implements World3D {
     this.ledOff = false
     if (led && id) return
     this.counts.taps++
-    // With the phone out, every tap is a photo: of the animal she tapped (or the one nearest her finger), or of the
-    // island. Other things still do their thing.
-    if (this.phone && (this.mode === 'walk' || this.mode === 'taxi' || this.mode === 'ski')) {
-      const target = (id && this.targetOf(id)) || this.targetNear(x, y)
-      this.shoot(target)
-      if (target || !id) return
-    }
     if (id) {
       this.counts.pokes++
       this.poke(id)
@@ -2291,119 +2238,9 @@ export class SametIsland implements World3D {
     if (p) this.pokeThing(p)
   }
 
-  // ---------------------------------------------------------------- Mom's phone
+  // ---------------------------------------------------------------- the animals and the beach clean
 
-  /** Mom's phone out (or away): the camera comes in closer and every tap is a photo. */
-  setPhone(on: boolean) {
-    this.phone = on
-    this.lastTouch = this.time
-    if (on) this.kaylee.react('hop')
-  }
-  /** The book's portraits (drawn once, on the next frame). */
-  requestPortraits(cb: (p: Record<AnimalId, string>) => void) {
-    this.wantPortraits = cb
-  }
-
-  /** The snap target for an anchor id: one of the animals, a tern, a crab hole's crab. */
-  private targetOf(id: string): SnapTarget | null {
-    if (id.startsWith('ani:')) {
-      const c = this.wild.byId.get(id.slice(4))
-      return c && !c.hidden ? this.creatureTarget(c) : null
-    }
-    if (id.startsWith('tern:')) {
-      const tn = this.terns[+id.slice(5)]
-      return { kind: 'tern', id, focus: tn.root.getWorldPosition(new Vector3()), size: 1.1, snapAt: 0.05, pose: () => {} }
-    }
-    if (id.startsWith('crab:')) {
-      const p = this.props.pokes.get(id)
-      if (!p?.part) return null
-      const part = p.part
-      return {
-        kind: 'crab',
-        id,
-        focus: part.getWorldPosition(new Vector3()).setY(p.y + 0.15),
-        size: 0.5,
-        snapAt: 0.4,
-        pose: () => {
-          if ((this.crabs.get(id) ?? -1) < 0) this.crabs.set(id, 0)
-        },
-      }
-    }
-    return null
-  }
-  private creatureTarget(c: Creature): SnapTarget {
-    return { kind: c.kind, id: `ani:${c.id}`, focus: c.focus, size: c.size, snapAt: c.snapAt, pose: () => c.pose() }
-  }
-  /** The animal nearest a screen point (within reach), for a tap that missed its tap target. */
-  private targetNear(x: number, y: number): SnapTarget | null {
-    let best: SnapTarget | null = null
-    let bd = PHONE.reach
-    const consider = (t: SnapTarget | null, p: Vector3) => {
-      if (!t) return
-      const sp = this.toScreen(p)
-      if (sp.z >= 1) return
-      const d = Math.hypot(sp.x - x, sp.y - y)
-      if (d < bd) {
-        bd = d
-        best = t
-      }
-    }
-    for (const c of this.wild.list) if (c.root.visible && !c.hidden) consider(this.creatureTarget(c), c.focus)
-    this.terns.forEach((tn, i) => consider(this.targetOf(`tern:${i}`), tn.root.position))
-    return best
-  }
-  /** Where the view leans with the phone out: the nearest animal she can see within 10 m. */
-  private leanTo(): Vector3 | null {
-    const k = this.kaylee.root.position
-    let best: Vector3 | null = null
-    let bd = 10
-    for (const c of this.wild.list) {
-      if (!c.root.visible || c.hidden) continue
-      const d = Math.hypot(c.focus.x - k.x, c.focus.z - k.z)
-      if (d < bd) {
-        bd = d
-        best = c.focus
-      }
-    }
-    return best
-  }
-  /** Click: the animal poses, and the shutter goes at its best moment. */
-  private shoot(target: SnapTarget | null) {
-    if (this.pendingSnap) return
-    target?.pose()
-    this.pendingSnap = { c: target, t: target ? target.snapAt : 0 }
-  }
-  /** Takes the photo (from render(), before the frame draws over the canvas). */
-  private takeSnap(target: SnapTarget | null) {
-    // The closer Kaylee is to it, the more the phone zooms in (getting close is how she gets a gold one).
-    const k = this.mode === 'ski' ? new Vector3(this.d.x, 0, this.d.z) : this.kaylee.root.position
-    const dk = target ? Math.max(0.5, Math.hypot(target.focus.x - k.x, target.focus.z - k.z)) : 99
-    const lens = clamp(PHONE.close / dk, PHONE.lens, 3.2)
-    const aim = PHONE.aim + (1 - PHONE.aim) * clamp(lens - PHONE.lens, 0, 1)
-    const cam = phoneCamera(this.rig.camera, target?.focus ?? null, aim, lens)
-    let gold = false
-    let animal: AnimalId | null = null
-    if (target) {
-      const f = framing(cam, target.focus, target.size)
-      if (f.inFrame) {
-        animal = target.kind
-        gold = f.h >= PHONE.gold && f.off <= PHONE.middle
-      }
-    }
-    this.scene.updateMatrixWorld()
-    const src = snap(this.renderer, this.scene, cam)
-    this.counts.snaps++
-    if (animal) {
-      this.counts.animalSnaps++
-      if (gold) this.counts.golds++
-      this.found.add(animal)
-    }
-    this.lastSnap = { animal, gold, h: target ? +framing(cam, target.focus, target.size).h.toFixed(2) : 0 }
-    this.events.snap?.({ animal, src, gold })
-  }
-  private lastSnap: { animal: AnimalId | null; gold: boolean; h: number } | null = null
-
-  /** Each frame: the animals live, the beach clean, the urchins' boing, the phone in her hand. */
+  /** Each frame: the animals live, the beach clean, the urchins' boing. */
   private animals(dt: number, t: number) {
     const k = this.kaylee.root.position
     const c = this.wctx
@@ -2415,11 +2252,9 @@ export class SametIsland implements World3D {
     c.daddy.copy(this.nick.m.root.getWorldPosition(tmp))
     c.dusk = this.timeKey === 'golden' || this.timeKey === 'night'
     c.eye.copy(this.rig.camera.position)
-    this.wild.update(dt, c, PHONE.cull)
+    this.wild.update(dt, c, 70)
     this.fish.update(dt, c.water)
     for (const pl of this.fish.plips) this.spray.burst(pl.x, c.water(pl.x, pl.z), pl.z, 6, 1, 1.6, 0.09)
-    // The phone's shutter: at the animal's best moment.
-    if (this.pendingSnap && this.pendingSnap.t > 0) this.pendingSnap.t -= dt
     // The beach clean: what she carries rides over her head; walk up to a bin and in it goes.
     const head = this.mode === 'ski' ? null : this.kaylee.root.getWorldPosition(tmp2).setY(tmp2.y + this.kaylee.height)
     if (this.clean.update(dt, t, head)) {
@@ -2456,28 +2291,6 @@ export class SametIsland implements World3D {
         k.z = nz
       }
       this.target = null
-    }
-    // Mom's phone in her hand (held up in front of her).
-    this.phoneProp.visible = this.phone && (this.mode === 'walk' || this.mode === 'kite')
-    if (this.phoneProp.visible) {
-      const hand = this.kaylee.rig.hands?.[1] ?? this.kaylee.rig.armR
-      hand.getWorldPosition(tmp)
-      this.phoneProp.position.set(tmp.x, tmp.y + 0.12, tmp.z)
-      this.phoneProp.rotation.set(0, this.kaylee.root.rotation.y, 0)
-    }
-    // A quiet nudge: an animal she hasn't snapped close by, the phone away: the phone button glows.
-    let near = false
-    if (!this.phone && this.mode === 'walk')
-      for (const a of this.wild.list) {
-        if (a.hidden || !a.root.visible || this.found.has(a.kind)) continue
-        if (Math.hypot(a.focus.x - k.x, a.focus.z - k.z) < 8 && this.onScreen(a.focus)) {
-          near = true
-          break
-        }
-      }
-    if (near !== this.nearAnimal) {
-      this.nearAnimal = near
-      this.events.near?.(near)
     }
   }
 
@@ -2924,7 +2737,7 @@ export class SametIsland implements World3D {
       this.fetchWait = PUP.idle
     }
     const idle = t - this.lastTouch
-    if (this.mode === 'walk' && !this.swimming && !this.phone && (this.pupState === 'lead' || this.pupState === 'taxi') && idle > this.fetchWait && dHer > 2.6) {
+    if (this.mode === 'walk' && !this.swimming && (this.pupState === 'lead' || this.pupState === 'taxi') && idle > this.fetchWait && dHer > 2.6) {
       this.fetchWait = idle + PUP.idle * PUP.again
       this.pupState = 'fetch'
       this.counts.fetches++
@@ -2966,6 +2779,15 @@ export class SametIsland implements World3D {
     this.pup.bark(BEATS[tx.stopId] ?? 2, 0.24)
   }
 
+  // (Phase-one stubs: the story's films, travel by the pictures. Filled in below.)
+  showStop(_id: StopId) {}
+  travel(_to: SpotId) {}
+  arrived() {}
+  touched() {
+    this.lastTouch = this.time
+  }
+  skipFilm() {}
+
   /** The top-left button: the puppy comes running to her (from just behind her, if he's far), woofs, and shows the way. */
   callPuppy() {
     this.counts.pupCalls++
@@ -3002,7 +2824,7 @@ export class SametIsland implements World3D {
     const src = spot ? this.pics[spot] : undefined
     const wp = P.root.getWorldPosition(tmp2)
     const sc = this.toScreen(tmp.set(wp.x, wp.y + P.height * 1.2, wp.z))
-    const show = !!src && (this.mode === 'walk' || this.mode === 'taxi') && this.pupState !== 'free' && !this.phone && sc.z < 1 && sc.x > -30 && sc.x < this.w + 30 && sc.y > 0 && sc.y < this.h
+    const show = !!src && (this.mode === 'walk' || this.mode === 'taxi') && this.pupState !== 'free' && sc.z < 1 && sc.x > -30 && sc.x < this.w + 30 && sc.y > 0 && sc.y < this.h
     this.bubbleK += ((show ? 1 : 0) - this.bubbleK) * ease(dt, 8)
     if (src && spot !== this.bubbleSpot) {
       this.bubbleSpot = spot
@@ -3121,17 +2943,6 @@ export class SametIsland implements World3D {
     // The puppy's pictures of each beach, once the island has drawn a few times (its shaders warm).
     if (++this.frames === 4) this.picsLeft = Object.keys(LANDMARKS) as (keyof typeof LANDMARKS)[]
     this.renderPic()
-    if (this.wantPortraits) {
-      const cb = this.wantPortraits
-      this.wantPortraits = null
-      cb(portraits(this.renderer, { w: this.w, h: this.h }))
-    }
-    if (this.pendingSnap && this.pendingSnap.t <= 0) {
-      const s = this.pendingSnap
-      this.pendingSnap = null
-      this.events.shutter?.()
-      this.takeSnap(s.c)
-    }
     for (const gr of this.grow) {
       gr.t = Math.min(1, gr.t + 0.06)
       gr.g.scale.setScalar(Math.max(0.01, gr.t < 0.7 ? (gr.t / 0.7) * 1.15 : 1.15 - (gr.t - 0.7) * 0.5))
@@ -3327,9 +3138,6 @@ export class SametIsland implements World3D {
       calls: this.stats.calls,
       tris: this.stats.tris,
       seen: [...this.seen],
-      phone: this.phone,
-      book: [...this.found],
-      lastSnap: this.lastSnap,
       carrying: this.clean.carrying?.kind ?? null,
       junk: Object.fromEntries(this.clean.junk.filter((j) => j.out && j !== this.clean.carrying).map((j) => [j.id, sc(j.g.position.clone().setY(j.g.position.y + 0.2))])),
       animals: Object.fromEntries(this.wild.list.filter((a) => a.root.visible && !a.hidden && Math.hypot(a.focus.x - k.x, a.focus.z - k.z) < 30).map((a) => [a.id, { kind: a.kind, ...sc(a.focus), d: +Math.hypot(a.focus.x - k.x, a.focus.z - k.z).toFixed(1) }])),

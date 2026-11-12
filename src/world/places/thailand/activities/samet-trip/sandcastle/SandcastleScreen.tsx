@@ -18,6 +18,8 @@ const CHIP: Record<SandRound, string> = { dig: '🖐️ dig', towers: '🪣 towe
 
 interface Props {
   round: SandRound
+  /** The fireflies she has found so far (the trip's flags: jetski, sandcastle, snorkel, hideseek). */
+  flags?: string[]
   time?: TimeOfDay
   /** The round on screen changed (the address bar follows). */
   onRound(r: SandRound): void

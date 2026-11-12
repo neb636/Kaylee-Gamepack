@@ -21,6 +21,8 @@ const ICON: Partial<Record<AnimalId, string>> = { parrotfish: '🐟', damselfish
 
 interface Props {
   round: SnorkelRound
+  /** The fireflies she has found so far (the trip's flags: jetski, sandcastle, snorkel, hideseek). */
+  flags?: string[]
   /** The round on screen changed (the address bar follows). */
   onRound(r: SnorkelRound): void
   /** She snapped animals new to this visit (her book takes them at once; the address bar follows). */

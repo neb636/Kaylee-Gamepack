@@ -34,19 +34,17 @@ export const SAMET_TRIP: TripDef = {
 /** What a packing for the island puts in the suitcase when a link starts later on (the `packed` param's default). */
 export const SAMET_PACKED = 'sunhat,floaties,swimsuit,bucket'
 
-/** What the iPad remembers between visits (useSaved 'thailand-samet-trip'): where she was on the island, the pink
- *  flags, the animals in her book, what she packed, and how many whole trips she has done. Her photos stay for the
- *  visit only (they're big). */
+/** What the iPad remembers between visits (useSaved 'thailand-samet-trip'): where she was on the island, the
+ *  fireflies she has found (`flags`, one per stop), what she packed, and how many whole trips she has done. */
 export interface SametProgress {
   /** Her last beach (the next visit lands her there), or null: a new trip, she lands at Na Dan pier. */
   at: string | null
   flags: string
-  book: string
   packed: string
   trips?: number
 }
 export const SAMET_SAVE_KEY = 'thailand-samet-trip'
-export const NEW_TRIP: SametProgress = { at: null, flags: '', book: '', packed: SAMET_PACKED }
+export const NEW_TRIP: SametProgress = { at: null, flags: '', packed: SAMET_PACKED }
 
 /** The saved trip, read outside React (the Thailand map's pin: a trip half done goes straight back to the island). */
 export function readSametSave(): SametProgress | null {
