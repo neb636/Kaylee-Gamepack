@@ -11,7 +11,7 @@ import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
 import { swell } from '../../../../../engine3d/water'
-import { sfx } from '../../../sfx'
+import { wildlifeSfx as sfx } from '../sounds'
 import { palm, RAINBOW } from './scenery'
 import { ahead, DOLPHIN_RUN, ELEPHANTS, halfAt, spotAt } from './track'
 

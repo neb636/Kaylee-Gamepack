@@ -39,7 +39,7 @@ import { applyBands, makeLights, PAL } from '../../../../../engine3d/toon'
 import type { World3D } from '../../../../../engine3d/View3D'
 import { swell, Water } from '../../../../../engine3d/water'
 import { L } from '../../../lines'
-import { sfx } from '../../../sfx'
+import { raceSfx as sfx, seaBed } from '../sounds'
 import { Driver, type Feel } from '../../../../../engine3d/drive'
 import { wearing } from '../../../trip/packing'
 import { buildLongtail, type Longtail } from '../../../trip/vehicles/longtail'
@@ -264,6 +264,8 @@ export class Race implements World3D {
     private events: RaceEvents,
   ) {
     const { scene, bag } = this
+    // The lagoon's sea, under the engines.
+    bag.add({ dispose: seaBed(0.2) })
     const haze = '#DCEFFB'
     scene.background = new Color(PAL.sky)
     scene.fog = new Fog(haze, 140, 430)

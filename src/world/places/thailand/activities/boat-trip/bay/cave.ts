@@ -16,7 +16,7 @@ import { merge, P, solid } from '../../../../../engine3d/geo'
 import { photoCamera } from '../../../../../engine3d/photo'
 import { swell } from '../../../../../engine3d/water'
 import { L } from '../../../lines'
-import { sfx } from '../../../sfx'
+import { caveInside, caveSfx as sfx } from '../sounds'
 import type { BoatSection } from '../sections'
 import type { Bay } from './bay'
 import { buildBird, buildCrab, buildLizard, buildMudskipper, type Bird, type Crab, type Fish, type Lizard } from './critters'
@@ -328,6 +328,8 @@ export class CaveStop implements BayPart {
     const ride = this.canoe
     const d = ride.d
     const inside = Math.abs(d.x - TUNNEL.x) < TUNNEL.half + 1.5
+    // Drips and the cave's echo, while the canoe is in the tunnel.
+    if (inside) caveInside()
     for (const r of bay.riders) {
       const seat = ride.v.seats[r.id]
       const z = d.z + Math.cos(d.heading) * seat.z
