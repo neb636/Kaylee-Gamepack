@@ -6,7 +6,7 @@
 // its films and its play) and the fire show (they light it).
 //
 // A firefly has no voice: it tinkles (`fireflySfx`), each on its own note, so she can tell them apart by ear.
-import { AdditiveBlending, CircleGeometry, Color, DoubleSide, Group, Mesh, MeshBasicMaterial, SphereGeometry, Vector3, type Object3D } from 'three'
+import { AdditiveBlending, BackSide, CircleGeometry, Color, DoubleSide, Group, Mesh, MeshBasicMaterial, SphereGeometry, Vector3, type Object3D } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { tone } from '../../../../../kit/sfx'
 
@@ -82,8 +82,9 @@ export class Firefly {
     // Two halos: a see-through ball of its own color (so it reads as pink, gold, blue or green on bright sand in the
     // daytime, where an additive glow washes out to white) inside a wider additive glow (which shines at night and
     // under the sea).
-    const inner = bag.add(new MeshBasicMaterial({ color, transparent: true, opacity: 0.4, depthWrite: false, fog: false }))
-    const outer = bag.add(new MeshBasicMaterial({ color, transparent: true, opacity: 0.2, blending: AdditiveBlending, depthWrite: false, fog: false }))
+    // (Their back faces only: the glow shows round the firefly, never over her own face in a close shot.)
+    const inner = bag.add(new MeshBasicMaterial({ color, transparent: true, opacity: 0.4, depthWrite: false, fog: false, side: BackSide }))
+    const outer = bag.add(new MeshBasicMaterial({ color, transparent: true, opacity: 0.2, blending: AdditiveBlending, depthWrite: false, fog: false, side: BackSide }))
     this.halo = new Mesh(bag.add(new SphereGeometry(0.17, 14, 10)), inner)
     this.halo2 = new Mesh(bag.add(new SphereGeometry(0.29, 14, 10)), outer)
     this.halo.position.copy(tail.position)
