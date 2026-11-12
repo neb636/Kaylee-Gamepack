@@ -1,6 +1,6 @@
 // The bay's life, in the toon look: swimmers bobbing in their rings by the sand (they squeal and wave when she zooms
 // past, splash back when she pokes them), terns wheeling overhead and diving, fish that jump, and the banana boat
-// towing its squealing riders round the outside of the rope. Greybox shapes: simple and cute, one mesh each.
+// towing its squealing riders round the outside of the rope. Simple, cute shapes: one mesh each.
 import { Group } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../engine3d/geo'
