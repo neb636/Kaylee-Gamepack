@@ -155,6 +155,8 @@ export class HomesWorld extends Base3D implements World3D {
   private water: Water
   private homes = new Map<HomeAnimal, Home>()
   private pieces: Piece[] = []
+  /** Animals built at the start for the questions still to come (hidden until theirs). */
+  private waiting = new Map<HomeAnimal, Actor>()
   private queue: HomeAnimal[]
   private cur: Piece | null = null
   private phase: Phase
@@ -246,6 +248,13 @@ export class HomesWorld extends Base3D implements World3D {
       this.settleHome(p)
     }
     this.queue = [start.q, ...pool].slice(0, HOMES_N - this.homeCount)
+    // Everyone still to be asked is built now, hidden at the dock: building one when its question came was a stutter.
+    for (const id of this.queue) {
+      const actor = makeActor(this.bag, ACTOR[id], { height: 1 })
+      actor.root.visible = false
+      this.scene.add(actor.root)
+      this.waiting.set(id, actor)
+    }
     this.phase = start.story ? 'story' : 'pop'
     this.storyLeft = start.story ? 4.2 : 0
     if (start.story) {
@@ -367,8 +376,11 @@ export class HomesWorld extends Base3D implements World3D {
   }
 
   private addPiece(id: HomeAnimal): Piece {
-    const actor = makeActor(this.bag, ACTOR[id], { height: 1 })
-    this.scene.add(actor.root)
+    const ready = this.waiting.get(id)
+    this.waiting.delete(id)
+    const actor = ready ?? makeActor(this.bag, ACTOR[id], { height: 1 })
+    actor.root.visible = true
+    if (!ready) this.scene.add(actor.root)
     const p: Piece = { id, actor, pos: DOCK.clone(), from: DOCK.clone(), to: DOCK.clone(), hopT: -1, hopS: 0.6, home: false, yaw: 0 }
     this.pieces.push(p)
     return p

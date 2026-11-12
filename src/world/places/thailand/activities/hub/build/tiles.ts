@@ -147,13 +147,30 @@ const UPSTAIRS: Floor = {
   },
 }
 
+// Each floor's chips are painted once a visit (seeded, so the same picture every time; tens of thousands of fills),
+// and every piece of that floor in one house shares one uploaded texture (clones share the image).
+const painted = new Map<Floor, HTMLCanvasElement>()
+const uploaded = new WeakMap<Kit, Map<Floor, CanvasTexture>>()
+function floorTexture(kit: Kit, f: Floor) {
+  let mine = uploaded.get(kit)
+  if (!mine) uploaded.set(kit, (mine = new Map()))
+  let base = mine.get(f)
+  if (!base) {
+    let canvas = painted.get(f)
+    if (!canvas) painted.set(f, (canvas = draw(f)))
+    base = kit.bag.add(new CanvasTexture(canvas))
+    base.colorSpace = SRGBColorSpace
+    base.wrapS = base.wrapT = RepeatWrapping
+    base.anisotropy = 8
+    mine.set(f, base)
+  }
+  return kit.bag.add(base.clone())
+}
+
 function floorMesh(kit: Kit, f: Floor, w: number, d: number, x: number, z: number, y: number, offset: [number, number] = [0, 0]) {
-  const tex = kit.bag.add(new CanvasTexture(draw(f)))
-  tex.colorSpace = SRGBColorSpace
-  tex.wrapS = tex.wrapT = RepeatWrapping
+  const tex = floorTexture(kit, f)
   tex.repeat.set(w / (f.w * f.scale), d / (f.d * f.scale))
   tex.offset.set(...offset)
-  tex.anisotropy = 8
   const mat = kit.bag.add(new MeshToonMaterial({ map: tex, gradientMap: toonGradient() }))
   const mesh = new Mesh(kit.bag.add(new PlaneGeometry(w, d)), mat)
   mesh.rotation.x = -Math.PI / 2

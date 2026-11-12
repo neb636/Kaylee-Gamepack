@@ -81,7 +81,13 @@ const smooth = (a: number, b: number, x: number) => {
   return t * t * (3 - 2 * t)
 }
 
+/** The field, worked out once a visit (it's the same every time: the map is built on every trip back to it). */
+let built: Field | null = null
 export function buildField(): Field {
+  return (built ??= makeField())
+}
+
+function makeField(): Field {
   const lon0 = BOARD.lon0 - PAD
   const lat1 = BOARD.lat1 + PAD
   const w = Math.ceil((BOARD.lon1 - BOARD.lon0 + PAD * 2) * RES)

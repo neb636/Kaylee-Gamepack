@@ -464,14 +464,19 @@ export function buildIsland(bag: Bag): Island {
       }
     }
   // The south half beyond the fine ground: bigger, fewer blobs (seen from the jet ski and from Wong Duan).
-  const south: BufferGeometry[] = []
+  // In 80 m pieces (one piece spanning the whole south was never left out, even behind the camera); kept out of cull()
+  // below, so how far they show doesn't change.
+  const south = new Map<string, BufferGeometry[]>()
   for (let gx = -270; gx < 100; gx += 10)
     for (let gz = FINE.z1; gz < 500; gz += 10) {
       const x = gx + (R() - 0.5) * 8
       const z = gz + (R() - 0.5) * 8
       const g = groundAt(x, z)
       if (g.shore > -6) continue
-      south.push(...forestGeo(R, x, g.h, z, 2.6 + R() * 1.6))
+      const key = `${Math.floor(x / 80)},${Math.floor(z / 80)}`
+      let piece = south.get(key)
+      if (!piece) south.set(key, (piece = []))
+      piece.push(...forestGeo(R, x, g.h, z, 2.6 + R() * 1.6))
     }
   // The plants sway in the breeze and catch the clouds' shadows (look.ts); the ground twinkles.
   const plantMat = lookMaterial(bag, { plants: true })
@@ -490,7 +495,7 @@ export function buildIsland(bag: Bag): Island {
       const [i, j] = k.split(',').map(Number)
       tileList.push({ g, x: (i + 0.5) * TILE, z: (j + 0.5) * TILE })
     }
-  if (south.length) root.add(sway(solid(merge(south), bag, 2)))
+  for (const piece of south.values()) root.add(sway(solid(merge(piece), bag, 2)))
   const groundMat = lookMaterial(bag, { ground: true })
   for (const m of [...fine.meshes, ...coarse.meshes]) m.material = groundMat
 
