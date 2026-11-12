@@ -7,8 +7,8 @@
   "page": "thailand-games.html",
   "audio": null,
   "lines": 40,
-  "seconds": 79,
-  "missing": 1,
+  "seconds": 82,
+  "missing": 0,
   "names": 0,
   "flags": [
     {
@@ -50,7 +50,7 @@
       "key": "games.picture",
       "text": "Go to the matching sweet—even backwards!",
       "flags": [
-        "not recorded",
+        "long",
         "new"
       ]
     }
@@ -192,9 +192,9 @@
       "key": "games.picture",
       "part": "games",
       "when": "When the first picture card is revealed (once a visit), while its matching space glows.",
-      "ms": 0,
+      "ms": 3384,
       "flags": [
-        "not recorded",
+        "long",
         "new"
       ]
     },
