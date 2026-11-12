@@ -87,8 +87,10 @@ export const MAP_CAM = knobs('thai-map-cam', 'Thailand map camera', 'src/world/p
   pitch: { value: -12, min: -30, max: 20, step: 1, label: 'Settle tilt', unit: '°', note: 'where the entrance ends: below 0 looks from lower down' },
   zoom: { value: 0.87, min: 0.6, max: 1.2, step: 0.01, label: 'Settle zoom', unit: '×', note: 'where the entrance ends: below 1 is closer' },
   intro: { value: 2.6, min: 0, max: 6, step: 0.1, label: 'Entrance', unit: 's', note: 'how long the camera takes to settle after she lands' },
+  hold: { value: 0.35, min: 0, max: 1.5, step: 0.05, label: 'Entrance wait', unit: 's', note: 'a still beat after the map appears before the camera starts moving' },
 })
-const easeOut = (p: number) => 1 - (1 - p) ** 3
+/** Starts from rest and lands at rest: no jolt on the cut from the loading screen. */
+const easeInOut = (p: number) => 0.5 - 0.5 * Math.cos(Math.PI * p)
 
 export class ThaiMapWorld implements World3D {
   readonly scene = new Scene()
@@ -329,7 +331,7 @@ export class ThaiMapWorld implements World3D {
 
   /** The overview at this point of the entrance: from the plain view (turned by `yaw`) down and in to where it settles. */
   private frameOverview() {
-    const k = MAP_CAM.intro > 0 ? easeOut(clamp(this.introT / MAP_CAM.intro, 0, 1)) : 1
+    const k = MAP_CAM.intro > 0 ? easeInOut(clamp((this.introT - MAP_CAM.hold) / MAP_CAM.intro, 0, 1)) : 1
     this.overview.yaw = this.close.yaw = this.base.yaw + MAP_CAM.yaw
     this.overview.pitch = this.base.pitch + MAP_CAM.pitch * k
     this.overview.half.copy(this.base.half).multiplyScalar(1 + (MAP_CAM.zoom - 1) * k)
@@ -341,7 +343,7 @@ export class ThaiMapWorld implements World3D {
   }
 
   get calm() {
-    return this.introT >= MAP_CAM.intro && !this.rig.moving && !this.picked && !this.spray.busy && ![...this.toys.values()].some((t) => t.t >= 0)
+    return this.introT >= MAP_CAM.hold + MAP_CAM.intro && !this.rig.moving && !this.picked && !this.spray.busy && ![...this.toys.values()].some((t) => t.t >= 0)
   }
 
   update(dt: number) {
@@ -355,9 +357,11 @@ export class ThaiMapWorld implements World3D {
     const c = this.overview.center
     this.lights.follow(c.x, c.y, c.z)
     // The entrance: the camera rides it exactly (no lag), until she picks a place.
-    const entering = !this.picked && this.introT < MAP_CAM.intro
-    if (this.picked) this.introT = MAP_CAM.intro
-    else if (entering) this.introT += dt
+    // (A slow frame, like the first ones uploading the board's textures, slows it a moment instead of skipping ahead.)
+    const end = MAP_CAM.hold + MAP_CAM.intro
+    const entering = !this.picked && this.introT < end
+    if (this.picked) this.introT = end
+    else if (entering) this.introT += Math.min(dt, 1 / 30)
     this.frameOverview()
     this.rig.setShot(this.picked ? this.close : this.overview, entering)
     this.rig.update(dt)
