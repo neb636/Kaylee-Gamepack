@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "thailand-map-from-world",
+  "title": "Thailand map from world",
+  "video": "thailand-map-from-world.mp4",
+  "gif": "thailand-map-from-world.gif",
+  "seconds": 12,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "# world",
+      "where": "#/world",
+      "seconds": 3,
+      "fps": 22.1,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand",
+      "where": "#/world/thailand",
+      "seconds": 6,
+      "fps": 69.7,
+      "status": "ok"
+    }
+  ]
+}
