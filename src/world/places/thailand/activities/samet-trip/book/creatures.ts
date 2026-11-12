@@ -14,12 +14,12 @@
 import { Group, Matrix4, Quaternion, Vector3, type InstancedMesh, type MeshToonMaterial } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../engine3d/geo'
-import { noise as hiss, tone } from '../../../../../kit/sfx'
 import type { Surface } from '../island/ground'
 import { groundAt } from '../island/ground'
 import { at, FRAMES, frameNear, PLACES, POKES, STOPS, type Frame, type XZ } from '../island/layout'
 import type { Ground } from '../island/scenery'
 import type { AnimalId } from './animals'
+import { wildSfx } from './sounds'
 import { coralModel, cuttlefishModel, damselSchool, flyingFoxModel, heronModel, hermitModel, hornbillModel, macaqueModel, monitorModel, mouseDeerModel, parrotfishModel, squirrelModel, urchinModel, type Model } from './models'
 
 const HALF = Math.PI / 2
@@ -29,19 +29,8 @@ const bell = (k: number) => Math.sin(Math.PI * Math.min(1, Math.max(0, k)))
 const rand = (a: number, b: number) => a + Math.random() * (b - a)
 const tmp = new Vector3()
 
-// ---- Sounds (synthesized; the voices come at the full loop).
-const SOUND = {
-  chatter: () => [0, 0.07, 0.14, 0.21].forEach((d) => tone(2400, 2900, 0.05, 0.03, 'square', d)),
-  squeak: () => tone(2600, 3400, 0.12, 0.03, 'triangle'),
-  flap: () => [0, 0.14, 0.28].forEach((d) => hiss(0.08, 0.05, 'bandpass', 700, 400, d)),
-  kok: () => [0, 0.18].forEach((d) => tone(520, 380, 0.12, 0.06, 'square', d)),
-  croak: () => tone(240, 160, 0.25, 0.06, 'sawtooth'),
-  hiss: () => hiss(0.35, 0.05, 'highpass', 3000, 2400),
-  monkey: () => [0, 0.09, 0.2].forEach((d, i) => tone(900 + i * 200, 1400 + i * 150, 0.08, 0.04, 'triangle', d)),
-  click: () => [0, 0.05, 0.1].forEach((d) => tone(3200, 3000, 0.03, 0.025, 'square', d)),
-  bloop: () => tone(300, 900, 0.18, 0.04, 'sine'),
-  boing: () => tone(260, 640, 0.2, 0.05, 'triangle'),
-} as const
+// ---- Sounds (sounds.ts: recorded, with the synth ones as fallbacks).
+const SOUND = wildSfx
 export type WildSound = keyof typeof SOUND
 
 /** What the animals know about the world each frame. */
@@ -692,7 +681,7 @@ class FlyingFox extends Creature {
   }
   poke() {
     this.stretch = 0
-    SOUND.squeak()
+    SOUND.batSqueak()
   }
   protected step(dt: number, c: WildCtx) {
     const { body, wl, wr } = this.m.parts

@@ -8,9 +8,9 @@ import { Group, Mesh, MeshBasicMaterial, RingGeometry, Vector3 } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
-import { tone } from '../../../../../kit/sfx'
 import { at, FRAMES, type XZ } from '../island/layout'
 import type { Ground } from '../island/scenery'
+import { cleanSfx } from './sounds'
 
 export type JunkKind = 'bottle' | 'bag' | 'flipflop'
 
@@ -36,11 +36,7 @@ const KINDS: JunkKind[] = ['bottle', 'bag', 'flipflop']
 export const JUNK_IDS = SPOTS.map((_, i) => `junk:${i}`)
 export const BIN_IDS = BINS.map((_, i) => `bin:${i}`)
 
-const plonk = () => {
-  tone(180, 90, 0.18, 0.12, 'sine')
-  tone(900, 1800, 0.25, 0.04, 'triangle', 0.08)
-}
-const lift = () => tone(500, 900, 0.15, 0.05, 'triangle')
+const { plonk, lift } = cleanSfx
 
 interface Junk {
   id: string

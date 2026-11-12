@@ -22,7 +22,6 @@
 import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, CylinderGeometry, Fog, Group, InstancedMesh, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, Object3D, Plane, Quaternion, Raycaster, Scene, SphereGeometry, TorusGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { clamp, spendHint, type Line } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
-import { tone } from '../../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
 import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
@@ -37,7 +36,7 @@ import { Avatar } from '../../../characters/avatar'
 import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
 import { L as LINES } from '../../../lines'
-import { sfx } from '../../../sfx'
+import { fireSfx as sfx, nightBed } from './sounds'
 import { FIRE_DANCERS, JETSKI_MAN } from '../cast'
 import { BAY, bay, SEAWARD, type StopId } from '../island/layout'
 import { buildProps, type Props } from '../island/props'
@@ -57,6 +56,7 @@ const POI = knobs('firePoi', 'Twirling the glowing poi', FILE, {
   reachH: { value: 2.4, min: 1, max: 4, step: 0.1, label: '…and up', unit: 'm', note: 'above her drawing middle' },
   idle: { value: 4.5, min: 0, max: 12, step: 0.25, label: 'Finger up: they swing round at', unit: 'rad/s' },
   loopR: { value: 0.3, min: 0.1, max: 1.2, step: 0.05, label: 'A loop counts from', unit: 'm', note: 'the smallest circle that counts as a loop (a whoosh, the dancers answer)' },
+  hum: { value: 1.2, min: 0, max: 6, step: 0.1, label: 'Their whoosh-roar from', unit: 'm/s', note: 'the poi moving faster than this: the held whoosh (louder and higher the faster)' },
 })
 const COPY = knobs('fireCopy', 'The dancers copy her', FILE, {
   speed: { value: 1, min: 0.2, max: 2.5, step: 0.05, label: 'They spin at her speed ×' },
@@ -171,21 +171,7 @@ const tmpQ = new Quaternion()
 const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 const UP = new Vector3(0, 1, 0)
 
-// ---- Sounds (synthesized; the voices come at the full-loop gate).
-const drum = (accent = false) => {
-  tone(accent ? 120 : 95, 48, 0.22, accent ? 0.2 : 0.12, 'sine')
-  if (accent) tone(240, 120, 0.08, 0.05, 'triangle')
-}
-const jingle = () => [0, 0.05].forEach((d, i) => tone(1760 + i * 220, 1900 + i * 220, 0.08, 0.035, 'triangle', d))
-const dotNote = (n: number) => {
-  const f = 523 * 2 ** (([0, 2, 4, 7, 9, 12, 14, 16][n % 8] + 12 * Math.floor(n / 8)) / 12)
-  tone(f, f, 0.12, 0.04, 'triangle')
-}
-const lift = () => [0, 0.1, 0.2, 0.3, 0.42].forEach((d, i) => tone(660 + i * 150, 700 + i * 170, 0.18, 0.05, 'sine', d))
-const fanfare = () => [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, f, 0.24, 0.07, 'triangle', i * 0.12))
-const flameUp = (d = 0) => {
-  tone(160, 90, 0.25, 0.05, 'sawtooth', d)
-}
+// ---- Sounds: sounds.ts (recorded, with the synth fallbacks).
 
 export const FIRE_ANCHORS: AnchorInfo[] = [
   { id: 'kaylee', label: 'You', kind: 'thing' },
@@ -335,6 +321,8 @@ export class FireShow implements World3D {
     this.rig.camera.far = 3200
     this.round = start.round
     this.flags = GIFT_ORDER.filter((f) => start.flags.includes(f))
+    // The night beach: waves in the dark, the fire crackling, crickets, until she leaves.
+    bag.add({ dispose: nightBed() })
 
     // ---- Sai Kaew at night: the island, its bars, lanterns and umbrellas.
     this.isl = buildIsland(bag)
@@ -664,7 +652,7 @@ export class FireShow implements World3D {
             this.flameK[i] = 0.001
             const p = this.ringPoint(i)
             this.embers.burst(p.x, p.y + 0.3, p.z, 6, 1.2, 2.2, 0.12)
-            if (i % 4 === 0) flameUp()
+            if (i % 4 === 0) sfx.flameUp()
           }
         }
         if (this.phaseT > BIG.flames + 0.6) {
@@ -672,7 +660,7 @@ export class FireShow implements World3D {
           this.nextPop = t
           this.snapPending = true
           sfx.cheer()
-          fanfare()
+          sfx.fanfare()
           this.kaylee.showOff('cheer')
           this.ji.react('wave')
           this.nick.react('hop')
@@ -719,7 +707,7 @@ export class FireShow implements World3D {
     this.scene.add(m)
     const v = to.clone().sub(from).divideScalar(1.1)
     this.rockets.push({ p: from.clone(), v, t: 0, m })
-    sfx.whoosh(0.8)
+    sfx.launch()
   }
 
   // ---- Shapes.
@@ -813,7 +801,7 @@ export class FireShow implements World3D {
         this.hit[i] = true
         lit++
         this.guide.setColorAt(i, new Color('#FFE68A'))
-        dotNote(this.counts.dots++)
+        sfx.dotNote(this.counts.dots++)
       }
     })
     if (!lit) return
@@ -838,7 +826,7 @@ export class FireShow implements World3D {
     this.lanterns.push({ pts, color: PAPER[this.shapeIdx % 3], t: 0, from, to, seed: Math.random() * 10, k: Math.sqrt(s / SHAPE.size), g: (2.4 * SHAPE.size) / s })
     this.guide.count = 0
     this.counts.shapes++
-    lift()
+    sfx.lift()
     this.dancers.forEach((d) => {
       d.hop = 0.001
       d.ring = 1
@@ -878,7 +866,7 @@ export class FireShow implements World3D {
     this.scene.add(root)
     this.gifts.push({ id, root, t: 0 })
     this.counts.gifts++
-    fanfare()
+    sfx.fanfare()
     this.ji.react('wave')
     let at: Vector3
     if (id === 'jetski') {
@@ -967,7 +955,7 @@ export class FireShow implements World3D {
     this.guide.count = 0
     this.setPhase('ring')
     this.counts.rings++
-    sfx.zoom()
+    sfx.ring()
     this.say(S.ring)
     this.dancers.forEach((d) => {
       d.ring = 1
@@ -991,6 +979,12 @@ export class FireShow implements World3D {
     }
     this.poiA.lerp(this.aim, ease(dt, POI.follow))
     this.hist.push({ p: this.poiA.clone(), t })
+    // The whoosh-roar of her poi while she whirls them (louder and higher the faster they go).
+    if (drawing && this.hist.length > 1 && dt > 0) {
+      const a = this.hist[this.hist.length - 1].p
+      const speed = a.distanceTo(this.hist[this.hist.length - 2].p) / dt
+      if (speed > POI.hum) sfx.poi(speed)
+    }
     while (this.hist.length > 2 && t - this.hist[1].t > 1) this.hist.shift()
     // The second poi: where the first one was a moment ago.
     const want = t - POI.lag
@@ -1048,7 +1042,7 @@ export class FireShow implements World3D {
         d.ringT = 0
       })
       this.counts.rings++
-      drum(true)
+      sfx.drum(true)
       if (this.phase === 'twirl') this.cheer()
     }
     if (this.phase === 'gifts') this.nextGift()
@@ -1069,7 +1063,7 @@ export class FireShow implements World3D {
     if (this.beatT >= beat) {
       this.beatT -= beat
       this.beats++
-      drum(this.beats % 4 === 0)
+      sfx.drum(this.beats % 4 === 0)
       this.drumHit = Math.max(this.drumHit, 0.5)
     }
     this.drumHit = Math.max(0, this.drumHit - dt * 3)
@@ -1260,6 +1254,8 @@ export class FireShow implements World3D {
       sk.root.rotation.z = Math.sin(t * 3) * 0.06
       sk.wake.push(sk.root.position.clone().setY(0.12), t, 0.05)
       sk.wake.update(t, UP)
+      // Its engine, louder as it passes in front of her.
+      sfx.jetski(clamp(1 - Math.abs(u - KAY.u) / 27, 0, 1))
     }
     for (const f of this.fish) {
       f.s += dt * f.speed
@@ -1346,7 +1342,7 @@ export class FireShow implements World3D {
   private startDraw() {
     this.counts.draws++
     this.tracker.reset()
-    jingle()
+    sfx.jingle()
   }
   pointerMove(x: number, y: number, downX: number, downY: number, held: boolean) {
     const f = this.finger
@@ -1379,7 +1375,7 @@ export class FireShow implements World3D {
       return
     }
     // A tap in the air: her poi jingle and sparkle.
-    jingle()
+    sfx.jingle()
     this.sparkle.burst(this.poiA.x, this.poiA.y, this.poiA.z, 10, 1.4, 1.4, 0.1)
   }
 
@@ -1403,12 +1399,12 @@ export class FireShow implements World3D {
       d.ringR = 1.3
       d.ringT = 0
       d.hop = 0.001
-      sfx.whoosh(0.7)
+      sfx.whoomp()
       sfx.tukkae()
       this.say(S.dancer[this.talk.dancer++ % S.dancer.length])
     } else if (id === 'drum') {
       this.drumHit = 1
-      drum(true)
+      sfx.drum(true)
       this.dancers.forEach((d) => (d.hop = 0.001))
     }
   }

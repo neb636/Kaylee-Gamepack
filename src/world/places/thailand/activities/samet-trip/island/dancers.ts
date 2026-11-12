@@ -27,7 +27,8 @@ export class FireDancers {
   readonly root = new Group()
   private rigs: Rig[] = []
   private pois: Poi[][] = []
-  private level = 0
+  /** How out they are (0 by day, 1 at night: their poi's whoom in island.ts follows it). */
+  level = 0
 
   constructor(bag: Bag, scene: Scene, groundY: (x: number, z: number) => number) {
     scene.add(this.root)

@@ -22,7 +22,6 @@
 import { Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, RingGeometry, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { clamp, spendHint, type Line } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
-import { noise as hiss, sfx, tone } from '../../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
 import { Bag } from '../../../../../engine3d/dispose'
@@ -41,6 +40,8 @@ import { FRAMES } from '../island/layout'
 import { buildIsland, DAY, type Island, type TimeOfDay } from '../island/scenery'
 import { beachBall, blanket, ghostCrab, longtail, MOULDS, mouldModel, SHELLS, shellModel, towerModel, umbrella, type MouldKind, type TowerModel } from './props'
 import { CUT_V, DIGGABLE, PATCH, Sand, sinkGround, type SandFeel } from './sand'
+import { sandSfx as sfx } from './sounds'
+import { beachBed } from '../sfx/common'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/sandcastle/sandcastle.ts'
 /** Her finger in the sand. */
@@ -128,22 +129,8 @@ const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 const span = (k: number, a: number, b: number) => clamp((k - a) / (b - a), 0, 1)
 const bellK = (k: number) => Math.sin(Math.PI * clamp(k, 0, 1))
 
-// ---- Sounds (synthesized; the voices come at the full-loop gate).
-const scrape = (k: number) => hiss(0.09, 0.05 + k * 0.05, 'bandpass', 700 + k * 900, 500 + k * 500, 0, 1.4)
-const patSnd = () => hiss(0.06, 0.12, 'lowpass', 600, 300)
-const rush = () => {
-  hiss(1.6, 0.14, 'lowpass', 500, 1600)
-  hiss(1.2, 0.05, 'highpass', 2400, 1200, 0.2)
-}
-const twinkle = () => [0, 0.09, 0.18, 0.27, 0.36].forEach((d, i) => tone(1000 * (1 + i * 0.25), 1150 * (1 + i * 0.25), 0.14, 0.045, 'sine', d))
-const fanfare = () => [523, 659, 784, 1047].forEach((f, i) => tone(f, f, 0.22, 0.07, 'triangle', i * 0.13))
-const sadSlide = () => tone(700, 300, 0.7, 0.05, 'triangle')
-const sneeze = () => {
-  tone(500, 900, 0.35, 0.05, 'triangle')
-  hiss(0.3, 0.25, 'bandpass', 1800, 900, 0.38, 0.8)
-}
-const giggle = () => [0, 0.1, 0.2].forEach((d, i) => tone(700 + i * 90, 900 + i * 90, 0.08, 0.05, 'triangle', d))
-const toot = () => [0, 0.2].forEach((d) => tone(330, 340, 0.16, 0.07, 'square', d))
+// ---- Sounds: sounds.ts (recorded, with the synthesized ones as fallbacks).
+const { twinkle, fanfare, sadSlide, sneeze, giggle, toot } = sfx
 
 export const SAND_ANCHORS: AnchorInfo[] = [
   { id: 'kaylee', label: 'You', kind: 'thing' },
@@ -237,6 +224,7 @@ export class Sandcastle implements World3D {
   private tideK = 0
   private sea = 0
   private bigT = -1
+  private wavePh = 0
   private bigDone = false
   private filledAt = -1
   private checkT = 0
@@ -312,6 +300,7 @@ export class Sandcastle implements World3D {
     this.rig.lag = 0.35
     this.rig.camera.far = 3200
     this.round = start.round
+    bag.add({ dispose: beachBed() })
 
     // ---- The island, Hin Khok's beach, and the sand patch laid over it.
     this.isl = buildIsland(bag)
@@ -514,7 +503,7 @@ export class Sandcastle implements World3D {
         m.t = -i * 0.25
         m.from = { a: m.home.a - 3, v: m.home.v }
       })
-      tone(880, 1320, 0.25, 0.06, 'triangle')
+      sfx.arrive()
     }
     if (r === 'dig') {
       this.tideK = 0
@@ -598,7 +587,7 @@ export class Sandcastle implements World3D {
         this.ring[s] = true
         const got = this.ring.filter(Boolean).length
         const f = 523 * 2 ** (got / n)
-        tone(f, f * 1.25, 0.12, 0.045, 'sine')
+        sfx.ring(f)
         const p = this.at(a, v, 0.1)
         for (let i = 0; i < 6; i++) this.sparkle.emit(p.x, p.y, p.z, (Math.random() - 0.5) * 0.6, 0.8 + Math.random(), (Math.random() - 0.5) * 0.6, 0.9, 0.06)
         break
@@ -611,7 +600,7 @@ export class Sandcastle implements World3D {
       m.state = 'arrive'
       m.t = 0
       m.from = { a: m.home.a - 3, v: m.home.v }
-      tone(880, 1320, 0.25, 0.06, 'triangle')
+      sfx.arrive()
     })
     // The moat dug all the way round: a cheer, then the towers.
     if (this.closedAt < 0 && this.ring.filter(Boolean).length / n >= PLAY.ring) {
@@ -659,7 +648,7 @@ export class Sandcastle implements World3D {
       }
       return
     }
-    if (was < 0.7) hiss(0.7, 0.12, 'lowpass', 420, 900)
+    if (was < 0.7) sfx.crumble()
     const k0 = span(was, 0.7, 1.4)
     const k1 = span(b.t, 0.7, 1.4)
     const floor = Math.min(this.sea, TIDE.high * this.tideK) - 0.22
@@ -688,6 +677,7 @@ export class Sandcastle implements World3D {
     if (this.round === 'tide' && !this.bigDone && this.tideK > 0.65 && ph < 0.05) {
       this.bigDone = true
       this.bigT = 0
+      sfx.swash(true)
     }
     let big = 0
     if (this.bigT >= 0) {
@@ -696,6 +686,9 @@ export class Sandcastle implements World3D {
       if (this.bigT > 1.3 && this.bigT - dt <= 1.3) this.washTower()
       if (this.bigT > 3) this.bigT = -1
     }
+    // Each wave of the tide washing up the beach (the beach bed has the sea's own sound the rest of the time).
+    if (this.round === 'tide' && ph < this.wavePh && this.bigT < 0) sfx.swash()
+    this.wavePh = ph
     this.sea = base + surge + big
     this.sand.sea = this.sea
     this.isl.lagoon.tide.level = this.sea
@@ -730,7 +723,7 @@ export class Sandcastle implements World3D {
   private fill() {
     this.filledAt = this.time
     this.counts.filled++
-    rush()
+    sfx.rush()
     window.setTimeout(fanfare, 900)
     // Sparkles over the water standing in the moat.
     const d = this.sand.deepest()
@@ -905,7 +898,7 @@ export class Sandcastle implements World3D {
       this.sand.pat(g.a, g.v, dt * (0.5 + Math.min(1.5, this.fingerSpeed)), this.feel)
       if ((this.scrapeT -= dt) <= 0) {
         this.scrapeT = 0.16
-        patSnd()
+        sfx.pat()
         this.counts.pats++
       }
     } else {
@@ -917,7 +910,7 @@ export class Sandcastle implements World3D {
         this.fillMoulds(g.a, g.v, took)
         if ((this.scrapeT -= dt) <= 0) {
           this.scrapeT = 0.11
-          scrape(clamp(this.lastDug / DIG.deep, 0, 1))
+          sfx.scrape(clamp(this.lastDug / DIG.deep, 0, 1))
         }
         // Sand flies off the finger, back toward Kaylee.
         if (Math.random() < dt * 40) {
@@ -970,7 +963,7 @@ export class Sandcastle implements World3D {
     m.fill = Math.min(1, m.fill + took / this.fillNeed())
     if ((this.scrapeT -= dt) <= 0) {
       this.scrapeT = 0.11
-      scrape(0.5)
+      sfx.scrape(0.5)
     }
     if (Math.random() < dt * 30) {
       const p = this.at(m.a, m.v, 0.05)
@@ -1024,7 +1017,7 @@ export class Sandcastle implements World3D {
     const along = (d.feet - v) / d.len
     if ((this.scrapeT -= 1 / 60) <= 0) {
       this.scrapeT = 0.14
-      hiss(0.12, 0.08, 'lowpass', 900, 500)
+      sfx.pour()
     }
     for (let i = 0; i < d.at.length; i++) {
       const w = clamp(1 - (Math.abs(along - d.at[i]) * d.len) / 0.6, 0, 1)
@@ -1041,7 +1034,7 @@ export class Sandcastle implements World3D {
     const p = m.getWorldPosition(tmp)
     if (Math.random() < 0.5) this.puffs.emit(p.x + (Math.random() - 0.5) * 0.4, p.y + 0.5, p.z + (Math.random() - 0.5) * 0.4, 0, -0.5, 0, 0.5, 0.06)
     if (was < 1 && d.buried[i] >= 1) {
-      tone(600 + i * 120, 650 + i * 120, 0.12, 0.05, 'triangle')
+      sfx.buried(i)
       if (d.buried.every((b) => b >= 1)) {
         this.counts.buried++
         // Then, a moment later, he wiggles his toes and sneezes himself out (unless she taps him first).
@@ -1109,7 +1102,7 @@ export class Sandcastle implements World3D {
       } else {
         s.g.rotation.set(0, s.g.rotation.y, 0)
       }
-      patSnd()
+      sfx.pat()
     }
   }
 
@@ -1124,7 +1117,7 @@ export class Sandcastle implements World3D {
     if (id?.startsWith('shell:')) {
       const s = this.shells[+id.slice(6)]
       s.wob = 1
-      tone(1400, 1800, 0.1, 0.05, 'sine')
+      sfx.shell()
       return pop(s.g.getWorldPosition(tmp), 5)
     }
     if (id?.startsWith('tower:')) {
@@ -1137,7 +1130,7 @@ export class Sandcastle implements World3D {
         sfx.chirp()
       } else {
         tw.m.flag.visible = !tw.m.flag.visible
-        tone(900, 1300, 0.12, 0.05, 'triangle')
+        sfx.flag()
       }
       return pop(tw.m.root.position.clone().setY(tw.y + 0.4), 6)
     }
@@ -1161,23 +1154,23 @@ export class Sandcastle implements World3D {
       case 'family:ji':
         this.ji.react('wave')
         this.talk('mommy', S.mommy, 3)
-        return tone(880, 1100, 0.15, 0.05, 'triangle')
+        return sfx.mommy()
       case 'umbrella':
         this.umbSpin += 9
         return sfx.fwip()
       case 'ball':
         this.ballT = 0
-        return sfx.boing()
+        return sfx.ball()
       case 'crab':
         if (this.crab.state === 'run' || this.crab.state === 'up') {
           this.crab.state = 'wave'
           this.crab.t = 0
-          sfx.chirp()
+          sfx.crab()
         }
         return
       case 'hermit':
         this.hermit.parts.legs.scale.setScalar(0.3)
-        return sfx.chirp()
+        return sfx.crab()
       case 'boat':
         this.boatBob = 1
         return toot()
@@ -1303,7 +1296,7 @@ export class Sandcastle implements World3D {
       this.counts.slumps++
       this.sand.add(tw.a, tw.v, 0.42, 0.045)
     }
-    sfx.thump()
+    sfx.slump()
     const p = tw.m.root.position
     this.puffs.burst(p.x, tw.y + 0.2, p.z, 14, 1.2, 1.4, 0.07)
   }
@@ -1332,7 +1325,7 @@ export class Sandcastle implements World3D {
     c.m.root.visible = true
     this.crabsPopped++
     this.counts.crabs++
-    sfx.chirp()
+    sfx.crab()
     this.once('crab', S.crab)
   }
 
@@ -1442,11 +1435,11 @@ export class Sandcastle implements World3D {
         if (tt > 0.42 && tt - dt <= 0.42) {
           // (The sand stays behind as the tower.)
           m.fill = 0
-          sfx.thump()
+          sfx.slam()
           const p = this.at(m.a, m.v)
           this.puffs.burst(p.x, p.y + 0.05, p.z, 12, 1.1, 1.0, 0.06)
         }
-        if ((tt > 0.55 && tt - dt <= 0.55) || (tt > 0.68 && tt - dt <= 0.68)) patSnd()
+        if ((tt > 0.55 && tt - dt <= 0.55) || (tt > 0.68 && tt - dt <= 0.68)) sfx.pat()
         if (tt > 0.75 && tt - dt <= 0.75) {
           // The tower is there under it now.
           const tw = this.addTower(m.kind, m.a, m.v)
@@ -1600,7 +1593,7 @@ export class Sandcastle implements World3D {
       const kk = this.ballT / 0.9
       this.ball.ball.position.y = 0.26 + bellK(kk) * 1.3 + (kk > 1 ? bellK((kk - 1) / 0.4) * 0.3 : 0)
       this.ball.ball.rotation.x += dt * 8
-      if (kk > 1 && kk - dt / 0.9 <= 1) sfx.boing()
+      if (kk > 1 && kk - dt / 0.9 <= 1) sfx.ball()
       if (kk > 1.4) this.ballT = -1
     }
     this.at(this.ballAt.a, this.ballAt.v, 0, this.ball.root.position)

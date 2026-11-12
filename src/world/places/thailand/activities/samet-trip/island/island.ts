@@ -38,7 +38,6 @@ import { Color, DynamicDrawUsage, Fog, Frustum, Object3D, Group, InstancedMesh, 
 import { clamp, firstTime, type Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import { knobs, watch } from '../../../../../kit/knobs'
-import { noise as hiss, sfx, tone } from '../../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
 import { Bag } from '../../../../../engine3d/dispose'
@@ -69,6 +68,8 @@ import { makeSeeThrough, SEE } from './seethrough'
 import { SwimRope } from './swimrope'
 import { roadLength, Taxi } from './taxi'
 import { FireDancers } from './dancers'
+import { beachBed, islandSfx as sfx } from './sounds'
+import { cleanSfx } from '../book/sounds'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/island/island.ts'
 /** Leading Kaylee (and the floatie). */
@@ -188,6 +189,8 @@ const leashV = new Vector3()
 const HOME_BOAT = 'speedboat:0'
 /** Where she stands on the pier for Mommy's photo before they go (beside the speedboat). */
 const HOME_PIER = atFrame(FRAMES.nadan, -4, 22)
+/** Between the two fire dancers on Sai Kaew (dancers.ts SPOTS), for their poi's whoom. */
+const FIRE_AT = bay(-6, -2)
 const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
 const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 const smooth = (a: number, b: number, x: number) => {
@@ -195,21 +198,7 @@ const smooth = (a: number, b: number, x: number) => {
   return t * t * (3 - 2 * t)
 }
 
-// ---- Sounds (synthesized; the voices come at the full-loop gate).
-const honk = () => [0, 0.22].forEach((d) => tone(420, 400, 0.16, 0.08, 'square', d))
-const tune = () => [0, 0.16, 0.32, 0.48, 0.7].forEach((d, i) => tone([523, 659, 784, 659, 1046][i], [523, 659, 784, 659, 1046][i], 0.18, 0.05, 'triangle', d))
-const flute = () => [0, 0.25, 0.5, 0.75, 1.05].forEach((d, i) => tone([784, 880, 988, 1175, 988][i], [790, 885, 992, 1180, 990][i], 0.3, 0.05, 'sine', d))
-const ding = () => [0, 0.3].forEach((d) => tone(1568, 1566, 0.6, 0.06, 'sine', d))
-const jingle = () => [0, 0.06, 0.12, 0.18, 0.26].forEach((d, i) => tone(2000 + i * 260, 2100 + i * 260, 0.12, 0.03, 'sine', d))
-const bonk = () => {
-  tone(300, 150, 0.18, 0.1)
-  tone(1200, 1190, 0.4, 0.03, 'sine', 0.03)
-}
-const whee = () => tone(500, 1100, 0.5, 0.05, 'triangle')
-const toot = () => [0, 0.18].forEach((d) => tone(620, 640, 0.14, 0.06, 'square', d))
-const engine = (k: number) => tone(95 + k * 120, 90 + k * 115, 0.07, 0.016 + k * 0.012, 'sawtooth')
-const pop = () => tone(700, 1400, 0.08, 0.06, 'sine')
-const clack = () => [0, 0.07].forEach((d) => hiss(0.05, 0.2, 'bandpass', 1800, 1500, d))
+// ---- Sounds: sounds.ts (recorded, with the synth ones as fallbacks).
 
 /** Mommy, Daddy, whoever follows her: their own walk (the code-built toys have no legs: they hop along). */
 interface Follower {
@@ -315,6 +304,8 @@ export class SametIsland implements World3D {
   private surface: Surface = 'sand'
   private swimming = false
   private deckOn = -1
+  /** Her steps (a hoof sound every other print). */
+  private stepN = 0
   private y = 0
   private spinT = -1
   private spinCool = 0
@@ -461,6 +452,8 @@ export class SametIsland implements World3D {
     makeSeeThrough(this.isl.root, bag, new Set([...this.isl.fine.meshes, ...this.isl.coarse.meshes]))
     this.setTime(this.timeKey)
     this.dancers = new FireDancers(bag, scene, (x, z) => this.heightAt(x, z))
+    // The waves all round (the forest's insects and birds come in on the roads inland: ambience(), below).
+    bag.add({ dispose: beachBed() })
 
     // ---- Kaylee and her floatie (a pink and white ring round her middle, only in the sea).
     this.kaylee = new Avatar(bag)
@@ -839,6 +832,7 @@ export class SametIsland implements World3D {
     this.isl.update(dt, t, this.rig.camera.position.x, this.rig.camera.position.z, this.lights)
     this.props.setLamps(this.isl.lamps, t)
     this.dancers.update(dt, t, this.isl.lamps)
+    this.ambience()
     for (const p of [this.spray, this.puffs, this.petals, this.stars, this.bubbles]) p.update(dt)
     this.camera(dt)
     this.rig.update(dt)
@@ -1055,7 +1049,7 @@ export class SametIsland implements World3D {
         this.spinT = 0
         this.spinCool = 5
         this.counts.spins++
-        whee()
+        sfx.whee()
         this.spray.burst(k.x, water + 0.2, k.z, 12, 1.6, 2.2, 0.14)
       }
     }
@@ -1070,10 +1064,11 @@ export class SametIsland implements World3D {
     if (deep && this.stepDist > 0.5) {
       this.stepDist = 0
       this.spray.burst(k.x, water, k.z, 3, 0.6, 0.8, 0.08)
-      if (Math.random() < 0.3) sfx.splash()
+      if (Math.random() < 0.3) sfx.paddle()
     }
     if (!deep && this.stepDist > 0.42) {
       this.stepDist = 0
+      if (this.mode === 'walk' && (this.stepN++ & 1) === 0) sfx.step(this.deckOn >= 0)
       if (s === 'sand' || s === 'wet') this.print(k.x, k.z, this.kaylee.root.rotation.y, s === 'wet')
       if (g < 0) this.spray.burst(k.x, Math.max(0, water), k.z, 4, 0.8, 1.4, 0.08)
     }
@@ -1367,11 +1362,16 @@ export class SametIsland implements World3D {
     const called = !this.aboard && !!this.pupTaxi && this.pupState === 'taxi' && tx.stop === this.pupTaxi.from
     tx.hold = tx.state === 'wait' && (near || seen || (this.pupAboard && !this.aboard) || called || (this.aboard && this.autoOffT >= 0))
     tx.update(dt, (x, z) => Math.max(0, this.isl.ground.heightAt(x, z)), RIDE.taxi)
+    // Its engine putt-putting while it drives: loud with her aboard, fading out as it drives away from her.
+    if (tx.moving) {
+      const v = this.aboard ? 0.55 : 0.5 * clamp(1 - d / 45, 0, 1)
+      if (v > 0.02) sfx.taxiEngine(clamp(tx.speed / RIDE.taxi, 0, 1), v)
+    }
     if (tx.arrived) {
       tx.arrived = false
       if (this.aboard) {
         // It names the stop now it's there (not before it sets off), then everyone hops off, the puppy first.
-        toot()
+        sfx.taxiToot()
         this.events.say?.(I.taxi.stop[tx.stopId as keyof typeof I.taxi.stop])
         this.namedAt.set(tx.stopId, this.time)
         this.autoOffT = 1.8
@@ -1384,7 +1384,7 @@ export class SametIsland implements World3D {
     }
     if (tx.laps !== this.taxiLaps) {
       this.taxiLaps = tx.laps
-      if (this.aboard) tune()
+      if (this.aboard) sfx.tune()
     }
     // The puppy in the back: walking right up to it is getting in.
     if (this.pupAboard && this.mode === 'walk' && tx.state === 'wait' && d < RIDE.near + 0.5) this.boardTaxi()
@@ -1535,7 +1535,7 @@ export class SametIsland implements World3D {
       d.x = before.x
       d.z = before.z
       if (d.bounce(gx / l, gz / l, 0.5) > 2) {
-        bonk()
+        sfx.bonk()
         this.spray.burst(d.x, 0.3, d.z, 14, 2, 2.5, 0.14)
       }
     }
@@ -1555,7 +1555,7 @@ export class SametIsland implements World3D {
       const n = Math.min(4, Math.round(sp * dt * 30))
       for (let i = 0; i < n; i++) this.spray.emit(d.x - hx * 1.5, 0.3, d.z - hz * 1.5, -hx * sp * 0.4 + (Math.random() - 0.5) * 1.2, 1.5 + sp * 0.25 * Math.random(), -hz * sp * 0.4 + (Math.random() - 0.5) * 1.2, 0.7, 0.16)
     }
-    if (Math.random() < dt * 8) engine(clamp(sp / RIDE.top, 0, 1))
+    sfx.skiEngine(clamp(sp / RIDE.top, 0, 1), dt)
     this.kShadow.visible = false
   }
 
@@ -1821,7 +1821,7 @@ export class SametIsland implements World3D {
         c.vy = 3.5
         c.vx = (Math.random() - 0.5) * 3
         c.vz = (Math.random() - 0.5) * 3
-        bonk()
+        sfx.bonk()
         this.counts.bonks++
         this.nick.m.react('wiggle')
         if (this.nick.m.pose === 'lie') this.nick.lie = 0
@@ -2116,7 +2116,7 @@ export class SametIsland implements World3D {
       this.kaylee.react('wave')
       this.nick.m.react('wave')
       this.events.say?.(I.sunset)
-      toot()
+      sfx.toot()
       window.setTimeout(() => this.events.open('sunset'), 1600)
       return
     }
@@ -2138,7 +2138,7 @@ export class SametIsland implements World3D {
       // Before the whole island is done, the speedboat is the way home: she walks to the end of the pier, Mommy asks
       // and the home picture comes up (a tap on it and off they go). Nothing else leaves Koh Samet.
       this.kick(id, 3)
-      toot()
+      sfx.toot()
       if (this.mode !== 'walk' || this.leaving) return
       if (!near(HOME_PIER.x, HOME_PIER.z, 2.5)) return this.goTo(id, HOME_PIER.x, HOME_PIER.z, 1)
       this.leaving = true
@@ -2150,7 +2150,7 @@ export class SametIsland implements World3D {
     if (id === 'kaylee') {
       if (this.mode === 'taxi') return void this.leaveTaxi()
       this.kaylee.react('hop')
-      toot()
+      sfx.herToot()
       return
     }
     if (id === 'family:nick') {
@@ -2177,7 +2177,7 @@ export class SametIsland implements World3D {
         if (near(tp.x, tp.z)) return void this.boardTaxi()
         this.goTo(id, tp.x, tp.z)
       }
-      honk()
+      sfx.honk()
       this.taxi.honk()
       return
     }
@@ -2211,7 +2211,7 @@ export class SametIsland implements World3D {
       return
     }
     if (id === 'mermaid') {
-      flute()
+      sfx.flute()
       this.tailT = 0
       if (firstTime('samet-fact-mermaid')) this.events.say?.(L.samet.trip.facts.mermaid)
       const m = this.props.saikaew.mermaid.position
@@ -2220,12 +2220,12 @@ export class SametIsland implements World3D {
     }
     if (id === 'bell') {
       this.bellSwing = 0.6
-      ding()
+      sfx.ding()
       return
     }
     if (id === 'banana') {
       this.banana.tip()
-      tone(900, 1500, 0.16, 0.05, 'triangle')
+      sfx.banana()
       return
     }
     if (id.startsWith('swimmer:')) {
@@ -2238,7 +2238,7 @@ export class SametIsland implements World3D {
     }
     if (id.startsWith('tern:')) {
       this.terns[+id.slice(5)].diveAt(k.x + 6, k.z + 6)
-      tone(1800, 2400, 0.1, 0.04, 'triangle')
+      sfx.tern()
       return
     }
     if (id.startsWith('umbrella-sk:')) {
@@ -2268,7 +2268,7 @@ export class SametIsland implements World3D {
         return this.goTo(id, b.at.x, b.at.z, 1.1)
       }
       b.flap = 0.6
-      tone(300, 200, 0.1, 0.06, 'square')
+      cleanSfx.lid()
       return
     }
     const p = this.props.pokes.get(id)
@@ -2502,12 +2502,12 @@ export class SametIsland implements World3D {
     // A little show, then the stop opens (the jet ski and the sandcastle open at once).
     if (id === 'sandcastle') return this.events.open('sandcastle')
     if (id === 'snorkel') {
-      toot()
+      sfx.toot()
       this.spray.burst(g.position.x, 0.3, g.position.z, 20, 2, 2.4, 0.16)
     } else if (id === 'hideseek' && this.flags.size === STOP_IDS.length) {
       // All four flags up: the driftwood tree is where they watch the sunset (the finale).
       this.kick('stop:hideseek', 5)
-      tone(660, 990, 0.3, 0.05, 'triangle')
+      sfx.treeSunset()
       return this.events.open('sunset')
     } else if (id === 'hideseek') {
       // The driftwood tree rustles, and Daddy pops out from behind it.
@@ -2516,7 +2516,7 @@ export class SametIsland implements World3D {
       const p = g.position
       n.root.position.set(p.x + 1.6, this.heightAt(p.x + 1.6, p.z - 1.2), p.z - 1.2)
       n.react('hop')
-      tone(700, 1200, 0.2, 0.06, 'triangle')
+      sfx.treePeek()
     }
     this.events.open(id)
   }
@@ -2527,7 +2527,7 @@ export class SametIsland implements World3D {
     switch (p.kind) {
       case 'palm': {
         this.kick(p.id, 6)
-        hiss(0.3, 0.06, 'bandpass', 900, 500)
+        sfx.palm()
         if (p.top && this.coconuts.length < 8) {
           const g = this.coconutGeo.clone()
           g.position.copy(p.top).add(tmp.set((Math.random() - 0.5) * 0.4, -0.3, (Math.random() - 0.5) * 0.4))
@@ -2544,19 +2544,19 @@ export class SametIsland implements World3D {
       }
       case 'samet': {
         this.kick(p.id, 5)
-        hiss(0.25, 0.05, 'highpass', 2200, 1200)
+        sfx.samet()
         if (firstTime('samet-fact-samet')) this.events.say?.(L.samet.trip.facts.samet)
         for (let i = 0; i < 12; i++) this.petals.emit(p.at.x + (Math.random() - 0.5) * 0.4, p.y + 0.8 + Math.random() * 1.5, p.at.z + (Math.random() - 0.5) * 0.4, (Math.random() - 0.5) * 1.5, 0.6 + Math.random(), (Math.random() - 0.5) * 1.5, 2.6, 0.1, 3)
         break
       }
       case 'tamarind':
         this.kick(p.id, 4)
-        hiss(0.35, 0.05, 'bandpass', 800, 400)
+        sfx.tamarind()
         for (let i = 0; i < 8; i++) this.petals.emit(p.at.x + (Math.random() - 0.5) * 3, p.y + 4, p.at.z + (Math.random() - 0.5) * 3, 0, -0.2, 0, 2.5, 0.12, 2)
         break
       case 'bush':
         this.kick(p.id, 5)
-        pop()
+        sfx.pop()
         for (let i = 0; i < 18; i++) this.petals.emit(p.at.x, p.y + 1, p.at.z, (Math.random() - 0.5) * 2.4, 1 + Math.random() * 1.5, (Math.random() - 0.5) * 2.4, 2.2, 0.1, Math.random() < 0.5 ? 0 : 1)
         break
       case 'umbrella': {
@@ -2578,7 +2578,7 @@ export class SametIsland implements World3D {
           this.kaylee.steer(0, 0, 0, this.free)
           this.target = null
           this.counts.kites++
-          whee()
+          sfx.whee()
           this.events.say?.(I.kite)
         }
         break
@@ -2586,7 +2586,7 @@ export class SametIsland implements World3D {
       case 'chair':
         if (this.folded.has(p.id)) this.folded.delete(p.id)
         else this.folded.add(p.id)
-        clack()
+        sfx.clack()
         break
       case 'ball': {
         const dx = p.g.position.x - k.x
@@ -2601,7 +2601,7 @@ export class SametIsland implements World3D {
       }
       case 'icecream':
         this.kick(p.id, 4)
-        ding()
+        sfx.ding()
         if (Math.hypot(k.x - p.at.x, k.z - p.at.z) < 6 && this.coneT < 0) {
           this.coneT = 0
           this.kaylee.react('hop')
@@ -2609,26 +2609,25 @@ export class SametIsland implements World3D {
         break
       case 'beads':
         this.kick(p.id, 4)
-        jingle()
+        sfx.jingle()
         for (let i = 0; i < 10; i++) this.stars.emit(p.at.x, p.y + 1.1, p.at.z, (Math.random() - 0.5) * 1.2, 0.8 + Math.random(), (Math.random() - 0.5) * 1.2, 0.9, 0.07)
         break
       case 'crab':
         if ((this.crabs.get(p.id) ?? -1) < 0) this.crabs.set(p.id, 0)
-        tone(1500, 1700, 0.06, 0.04, 'triangle')
-        tone(1500, 1700, 0.06, 0.04, 'triangle', 0.1)
+        sfx.crab()
         break
       case 'longtail':
       case 'speedboat':
         this.kick(p.id, 3)
-        toot()
+        sfx.toot()
         break
       case 'hammock':
         this.swing.set(p.id, 0.5)
-        hiss(0.4, 0.04, 'bandpass', 600, 300)
+        sfx.hammock()
         break
       case 'telescope':
         this.kick(p.id, 2)
-        tone(880, 1320, 0.25, 0.05, 'sine')
+        sfx.telescope()
         break
       case 'deckbrella':
         this.kick(p.id, 5)
@@ -2637,12 +2636,11 @@ export class SametIsland implements World3D {
       case 'lifeguard':
         this.kick(p.id, 3)
         if (p.part) this.spin.set(p.id, 10)
-        tone(1046, 1568, 0.18, 0.05, 'triangle')
-        tone(1568, 1046, 0.18, 0.05, 'triangle', 0.2)
+        sfx.lifeguard()
         break
       case 'stall': {
         this.kick(p.id, 4)
-        ding()
+        sfx.ding()
         // A green coconut rolls off the stand.
         if (this.coconuts.length < 8) {
           const c = this.coconutGeo.clone()
@@ -2654,8 +2652,7 @@ export class SametIsland implements World3D {
       }
       case 'rocks':
         this.kick(p.id, 7)
-        clack()
-        tone(300, 220, 0.12, 0.05, 'triangle', 0.12)
+        sfx.rocks()
         break
       default:
         break
@@ -2663,6 +2660,18 @@ export class SametIsland implements World3D {
   }
 
   // ---------------------------------------------------------------- the beach puppy (#357 way-finding)
+
+  /** The island's ambience each frame: the forest's insects and birds on the roads inland, the fire poi after dark. */
+  private ambience() {
+    const h = this.herXZ()
+    const inland = smooth(10, 32, -this.isl.ground.shoreAt(h.x, h.z))
+    if (inland > 0.02) sfx.forest(inland)
+    const lit = this.dancers.level
+    if (lit > 0.02) {
+      const v = lit * 0.6 * clamp(1 - Math.hypot(h.x - FIRE_AT.x, h.z - FIRE_AT.z) / 30, 0, 1)
+      if (v > 0.02) sfx.fire(v)
+    }
+  }
 
   /** Where she is in the world (in the taxi: the taxi; on the jet ski: the jet ski). */
   private herXZ(): XZ {
@@ -3040,7 +3049,7 @@ export class SametIsland implements World3D {
     this.kaylee.faceToward(SLIDE.foot.x, SLIDE.foot.z)
     this.kaylee.setPose('sit')
     this.counts.slides++
-    whee()
+    sfx.whee()
     if (firstTime('samet-slide')) this.events.say?.(I.slide)
   }
   private slideStep(dt: number) {
@@ -3051,6 +3060,7 @@ export class SametIsland implements World3D {
     k.x = SLIDE.top.x + (SLIDE.foot.x - SLIDE.top.x) * e
     k.z = SLIDE.top.z + (SLIDE.foot.z - SLIDE.top.z) * e
     if (Math.random() < dt * 14) this.puffs.burst(k.x, this.y + 0.05, k.z, 2, 1.2, 1.4, 0.1)
+    if (this.slideT < 1) sfx.slide(e)
     const last = this.trail[0]
     if (!last || Math.hypot(k.x - last.x, k.z - last.z) > 0.3) {
       this.trail.unshift({ x: k.x, z: k.z })
