@@ -14,7 +14,8 @@ import {
   Vector3,
 } from 'three'
 import type { Bag } from '../../../../../../engine3d/dispose'
-import { bake, merge, P, solid } from '../../../../../../engine3d/geo'
+import { bake, P } from '../../../../../../engine3d/geo'
+import { shadows, toy } from '../look'
 import { PAL } from '../../../../../../engine3d/toon'
 import { bell } from '../../../../../../../sdk'
 import { CHUTES, CHUTES_END, LADDERS, SIDE, square } from '../rules/chutes'
@@ -125,7 +126,7 @@ export class ChutesBoard {
   private pokeTime = -1
 
   constructor(bag: Bag) {
-    const terrain: BufferGeometry[] = [P.rbox(0.91, 0.035, 0.9, 0.025, '#9AB6C6', { at: [0, -0.012, -0.055] })]
+    const terrain: BufferGeometry[] = [P.rbox(0.91, 0.035, 0.9, 0.025, '#C9BBEE', { at: [0, -0.012, -0.055] })]
     for (let row = 0; row < SIDE; row++) {
       const z = FRONT - row * ROW,
         y = BASE + row * RISE
@@ -156,7 +157,7 @@ export class ChutesBoard {
       this.root.add(top)
     }
     terrain.push(P.cyl(0.044, 0.046, 0.02, '#FFF8DF', { at: [START.x, BASE - 0.01, START.z] }, 24))
-    this.root.add(solid(merge(terrain), bag, 0.7))
+    this.root.add(toy((terrain), bag, 0.7))
     // Golden ladder rails follow a genuine upward slope, with rungs above the terraces.
     for (const [from, to] of Object.entries(LADDERS)) {
       const curve = ladderCurve(+from, to),
@@ -175,15 +176,17 @@ export class ChutesBoard {
         const p = curve.getPointAt(i / count)
         parts.push(P.cyl(0.004, 0.004, 0.053, '#FFE398', { at: [p.x, p.y - 0.004, p.z], rot: [0, 0, Math.PI / 2] }, 8))
       }
-      const ladder = solid(merge(parts), bag, 0.9)
+      const ladder = toy((parts), bag, 0.9)
       ladder.userData.pick = `trip:table:chutes:ladder:${from}`
       this.root.add(ladder)
     }
     for (const from of Object.keys(CHUTES)) {
-      const slide = solid(merge(chuteParts(+from)), bag, 0.8)
+      const slide = toy((chuteParts(+from)), bag, 0.8)
       slide.userData.pick = `trip:table:chutes:slide:${from}`
       this.root.add(slide)
     }
+    // The playground's shade on the grass.
+    this.root.add(shadows(bag, [-0.2, 0.2].flatMap((x) => [-0.27, 0.15].map((z) => [x, z - 0.03, 0.37, 0.09] as [number, number, number, number]))))
     this.star = buildLookout(bag)
     const finish = chutesSpace(CHUTES_END)
     this.star.position.set(finish.x, finish.y, finish.z - 0.055)
@@ -275,7 +278,7 @@ function buildLookout(bag: Bag) {
     return [Math.sin(a) * r, 0.118 + Math.cos(a) * r]
   })
   parts.push(P.prism(star, 0.012, PAL.gold))
-  return solid(merge(parts), bag, 1)
+  return toy((parts), bag, 1)
 }
 
 function paintRow(row: number) {

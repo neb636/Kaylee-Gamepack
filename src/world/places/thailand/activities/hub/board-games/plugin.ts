@@ -216,7 +216,7 @@ export class TablePlugin implements HousePlugin {
     const bag = house.kit.bag
     this.die = new Die(bag)
     this.die.root.visible = false
-    this.top.add(this.die.root)
+    this.top.add(this.die.root, this.die.shadow)
     this.cards = new CardDeck(bag, DECK_AT, PILE_AT)
     this.cards.root.visible = false
     this.top.add(this.cards.root)
@@ -229,6 +229,7 @@ export class TablePlugin implements HousePlugin {
     this.floating = new FloatingStage(bag, this.top, new Vector3(t.x, DIM.g0 + t.h, t.z))
     house.scene.add(this.floating.sky)
     onStage(this.die.root)
+    onStage(this.die.shadow)
     onStage(this.cards.root)
     const s = this.opts.start
     if (s) {

@@ -2,7 +2,8 @@
 // Coordinates, heights, pawn landings and destination halos all share the same spline.
 import { CanvasTexture, CatmullRomCurve3, Group, Mesh, MeshBasicMaterial, PlaneGeometry, RingGeometry, SRGBColorSpace, Vector3, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../../engine3d/dispose'
-import { merge, P, solid } from '../../../../../../engine3d/geo'
+import { P } from '../../../../../../engine3d/geo'
+import { paintedMaterial, rng, shadows, toy } from '../look'
 import { bell } from '../../../../../../../sdk'
 import { CANDY_FINISH, LANDMARKS, colorOf, type CandyColor, type Landmark } from '../rules/candy'
 import type { Who } from '../rules/turns'
@@ -64,15 +65,28 @@ export class CandyBoard {
       ground.push(P.sphere(0.022, '#FFF6DF', { at: [x, 0.017, 0.395], scale: [1, 0.55, 0.7] }, 8))
       ground.push(P.sphere(0.022, '#FFF6DF', { at: [x, 0.017, -0.515], scale: [1, 0.55, 0.7] }, 8))
     }
-    this.root.add(solid(merge(ground), bag, 1))
+    this.root.add(toy((ground), bag, 1))
+    // The cake's top is iced: swirls of lighter icing, sprinkles, sugar, and the trail's shade.
+    const icing = new Mesh(bag.add(new PlaneGeometry(ICING.w, ICING.d)), paintedMaterial(bag, paintIcing()))
+    icing.rotation.x = -Math.PI / 2
+    icing.position.set(0, FLOOR + 0.0012, -0.06)
+    icing.raycast = () => {}
+    this.root.add(icing)
     // Pools occupy the spaces between bends, never a tile. A chocolate river passes under the raised bridge.
     this.root.add(
-      solid(
-        merge([
+      toy(
+        ([
+          // (Each pool has a paler shore round it and a shine on it.)
+          P.sphere(0.158, '#FFE3F0', { at: [-0.13, FLOOR - 0.0006, 0.21], scale: [1.5, 0.025, 0.42] }, 24),
           P.sphere(0.15, '#F7BDD9', { at: [-0.13, FLOOR, 0.21], scale: [1.5, 0.025, 0.42] }, 24),
+          P.sphere(0.05, '#FFD6E8', { at: [-0.2, FLOOR + 0.0034, 0.2], scale: [1.5, 0.02, 0.3] }, 14),
+          P.sphere(0.148, '#FFFFFF', { at: [-0.19, FLOOR - 0.0006, -0.25], scale: [1.4, 0.045, 0.6] }, 24),
           P.sphere(0.14, '#FFF0E9', { at: [-0.19, FLOOR, -0.25], scale: [1.4, 0.045, 0.6] }, 24),
+          P.sphere(0.138, '#FFFFFF', { at: [0.22, FLOOR - 0.0006, -0.32], scale: [1.1, 0.06, 0.8] }, 24),
           P.sphere(0.13, '#DDEBFF', { at: [0.22, FLOOR, -0.32], scale: [1.1, 0.06, 0.8] }, 24),
+          P.sphere(0.138, '#C18A6E', { at: [0.08, FLOOR - 0.0006, 0], scale: [1.1, 0.025, 0.62] }, 24),
           P.sphere(0.13, '#A56B53', { at: [0.08, FLOOR, 0], scale: [1.1, 0.025, 0.62] }, 24),
+          P.sphere(0.04, '#C18A6E', { at: [0.12, FLOOR + 0.003, -0.02], scale: [1.4, 0.02, 0.3] }, 12),
           ...Array.from({ length: 9 }, (_, i) => P.sphere(0.024, '#A56B53', { at: [0.055 + Math.sin(i * 0.7) * 0.014, FLOOR + 0.001, 0.03 + i * 0.019], scale: [1, 0.07, 1] }, 12)),
         ]),
         bag,
@@ -125,7 +139,7 @@ export class CandyBoard {
       icon.position.set(p.x, p.y + 0.001, p.z)
       this.root.add(icon)
     }
-    this.root.add(solid(merge(tiles), bag, 0.65))
+    this.root.add(toy((tiles), bag, 0.65))
     // Landmarks inside the bends, tall enough to read, placed behind their nearby trail.
     const places: [Landmark, number, number][] = [
       ['gumdrop', 0.18, 0.21],
@@ -148,7 +162,15 @@ export class CandyBoard {
       if (Array.from({ length: 38 }, (_, j) => candySpace(j)).some((p) => Math.hypot(p.x - x, p.z - z) < 0.065)) continue
       sweets.push(P.sphere(0.013, CANDY_HEX[colorOf(i + 1)], { at: [x, FLOOR + 0.009, z], scale: [1, 1.1, 1] }, 8))
     }
-    if (sweets.length) this.root.add(solid(merge(sweets), bag, 0.6))
+    if (sweets.length) this.root.add(toy((sweets), bag, 0.6))
+    // Shade: the cake's on the grass, and on the cake the landmarks' and the house's.
+    this.root.add(
+      shadows(bag, [
+        ...[-0.2, 0.2].flatMap((x) => [-0.28, 0.14].map((z) => [x, z - 0.02, 0.36, 0.04] as [number, number, number, number])),
+        ...places.map(([, x, z]) => [x, z, 0.06, 0.09, FLOOR] as [number, number, number, number, number]),
+        [HOUSE.x, HOUSE.z, 0.1, 0.1, FLOOR],
+      ]),
+    )
     this.house = buildHouse(bag)
     this.house.position.copy(HOUSE)
     this.house.userData.pick = 'trip:table:castle'
@@ -215,6 +237,71 @@ export class CandyBoard {
   }
 }
 
+/** The cake's iced top (inside its rounded corners). */
+const ICING = { w: 0.82, d: 0.88 }
+function paintIcing(): HTMLCanvasElement {
+  const PX = 1050
+  const c = document.createElement('canvas')
+  const W = (c.width = Math.round(ICING.w * PX))
+  const D = (c.height = Math.round(ICING.d * PX))
+  const g = c.getContext('2d')!
+  const at = (v: { x: number; z: number }) => [(ICING.w / 2 + v.x) * PX, (ICING.d / 2 + v.z + 0.06) * PX] as const
+  g.fillStyle = '#BCE9CD'
+  g.fillRect(0, 0, W, D)
+  const r = rng(77)
+  // Soft patches and long swirls of lighter icing.
+  for (let i = 0; i < 22; i++) {
+    const x = r() * W
+    const y = r() * D
+    const rad = 70 + r() * 130
+    const sg = g.createRadialGradient(x, y, 0, x, y, rad)
+    const col = i % 2 ? '226,250,232' : '168,224,196'
+    sg.addColorStop(0, `rgba(${col},.55)`)
+    sg.addColorStop(1, `rgba(${col},0)`)
+    g.fillStyle = sg
+    g.fillRect(x - rad, y - rad, rad * 2, rad * 2)
+  }
+  g.lineCap = 'round'
+  for (let i = 0; i < 9; i++) {
+    g.strokeStyle = 'rgba(240,255,244,.5)'
+    g.lineWidth = 10 + r() * 10
+    g.beginPath()
+    const y0 = (i + 0.5) * (D / 9)
+    for (let x = -20; x <= W + 20; x += 20) g.lineTo(x, y0 + Math.sin(x * 0.012 + i * 1.7) * 26)
+    g.stroke()
+  }
+  // The trail's shade (down and to the back left, like every shadow on the island).
+  for (let i = 0; i <= CANDY_FINISH; i++) {
+    const [x, y] = at(candySpace(i))
+    const rad = TILE * PX * 0.95
+    const sg = g.createRadialGradient(x - 12, y - 14, rad * 0.35, x - 12, y - 14, rad)
+    sg.addColorStop(0, 'rgba(70,120,110,.34)')
+    sg.addColorStop(1, 'rgba(70,120,110,0)')
+    g.fillStyle = sg
+    g.fillRect(x - rad * 1.3, y - rad * 1.3, rad * 2.6, rad * 2.6)
+  }
+  // Sprinkles and grains of sugar.
+  const colors = Object.values(CANDY_HEX)
+  for (let i = 0; i < 300; i++) {
+    const x = r() * W
+    const y = r() * D
+    const a = r() * Math.PI
+    g.strokeStyle = colors[i % colors.length]
+    g.lineWidth = 5
+    g.beginPath()
+    g.moveTo(x - Math.cos(a) * 6, y - Math.sin(a) * 6)
+    g.lineTo(x + Math.cos(a) * 6, y + Math.sin(a) * 6)
+    g.stroke()
+  }
+  g.fillStyle = 'rgba(255,255,255,.9)'
+  for (let i = 0; i < 220; i++) {
+    g.beginPath()
+    g.arc(r() * W, r() * D, 1.6 + r() * 1.8, 0, Math.PI * 2)
+    g.fill()
+  }
+  return c
+}
+
 function buildHouse(bag: Bag) {
   const parts: BufferGeometry[] = [P.rbox(0.15, 0.095, 0.085, 0.012, '#FFADC9', { at: [0, 0.05, 0] }), P.rbox(0.039, 0.055, 0.012, 0.017, '#9866B5', { at: [0, 0.03, 0.047] })]
   for (const x of [-0.085, 0, 0.085]) {
@@ -227,7 +314,7 @@ function buildHouse(bag: Bag) {
     for (let j = 0; j < 3; j++) parts.push(P.torus(0.03, 0.005, '#F6B7D0', { at: [x, 0.026 + j * 0.034, -0.015], rot: [Math.PI / 2, 0, 0] }))
   }
   for (const x of [-0.055, 0.055]) parts.push(P.sphere(0.012, '#A7DCF8', { at: [x, 0.07, 0.044], scale: [0.8, 1, 0.25] }, 10))
-  return solid(merge(parts), bag, 1)
+  return toy((parts), bag, 1)
 }
 
 function buildLandmark(key: Landmark, bag: Bag) {
@@ -272,7 +359,7 @@ function buildLandmark(key: Landmark, bag: Bag) {
   // Keep the chocolate cliff below the sightline to the trail behind it. Bake the height
   // into its geometry so its tap animation can still use an unscaled root.
   if (key === 'chocolate') for (const part of parts) part.scale(1, 0.62, 1)
-  return solid(merge(parts), bag, 0.85)
+  return toy((parts), bag, 0.85)
 }
 
 /** The same picture on a special card and its destination tile: no reading needed. */
