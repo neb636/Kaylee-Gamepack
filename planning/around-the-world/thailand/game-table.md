@@ -504,3 +504,12 @@ tests/thailand-board-games.spec.ts   rules tests (pure, no page)
 **Each cousin (BB, Gan, Ken, in their own voices):** sitting down (BB “Yay, let's play!”, Gan “Okay, I'm in!”, Ken “Let's play!”); two roll lines (“Come on, six!”, “Here goes!”); a rest (“Nap time!”); a ladder (“Up I go!”); a slide (“Wheee!”); a win (“I won! Again?”); losing (“You won! Good game!”); bye (“Fun game!”). Finite, short, never after every move.
 
 Run `node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`, commit the clips, never the iPad's own voice.
+
+
+### Candy Land landscape rebuild — 2026-11-12
+
+Your direction: replace the checkerboard with a miniature candy world, use more of the floating island, and add real picture-card journeys in both directions. This is an update to the existing Candy Land game; the other two games keep their rules and boards.
+
+Built: a larger strawberry-and-vanilla cake base, winding raised candy tiles with bridge piers, gumdrop garden, chocolate stream and falls, lollipop grove, ice-cream peaks and a three-tower candy castle. Picture cards and destination tiles use the same illustration; each landmark responds to a poke. The 28-card deck has the existing 24 color cards plus four picture cards (gumdrop 6, chocolate 14, lollipop 23, icecream 30). A picture always sends either player to that landmark, forward, backward or staying there. No skipped turns. Backward movement animates every space and preserves cancellation/turn guards. Existing voices and family choices are unchanged.
+
+Review: before/after reel, special-card forward/backward demos and the existing win ceremony. Deep links for both directions are in hub sections. Next: your visual feedback and Kaylee's playtest; Chutes and Ladders can get its own distinct rebuild after this one.

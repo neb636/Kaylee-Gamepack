@@ -4,9 +4,9 @@
 // - Kaylee starts, then turns alternate. Draw one card: one color goes to the next space of that color; two of a color
 //   go to the second one. If the path doesn't have that many of the color left, go all the way to the finish.
 // - First to the finish wins.
-// - The deck is 24 cards (each color 3 singles and 1 double), shuffled fresh for each game; drawn cards go on a discard
+// - The deck is 28 cards (each color 3 singles and 1 double, plus four pictures), shuffled fresh for each game; drawn cards go on a discard
 //   pile, and when the deck runs out the discards are shuffled into a new one.
-// - No lost turns, sticky spots or picture cards in this version.
+// - Four picture cards go to their candy landmark, forward or backward. No lost turns.
 import { other, type Step, type Turns } from './turns'
 
 export const CANDY_COLORS = ['pink', 'orange', 'yellow', 'green', 'blue', 'purple'] as const
@@ -15,9 +15,18 @@ export const CANDY_SPACES = 36
 /** The finish: one past the last space. */
 export const CANDY_FINISH = CANDY_SPACES + 1
 
+export const LANDMARKS = {
+  gumdrop: { space: 6, name: 'Gumdrop garden', color: 'green' },
+  lollipop: { space: 23, name: 'Lollipop grove', color: 'pink' },
+  icecream: { space: 30, name: 'Ice cream peaks', color: 'blue' },
+  chocolate: { space: 14, name: 'Chocolate falls', color: 'orange' },
+} as const
+export type Landmark = keyof typeof LANDMARKS
+
 export interface Card {
   color: CandyColor
   double: boolean
+  landmark?: Landmark
 }
 export interface Deck {
   /** Top of the deck first. */
@@ -29,9 +38,10 @@ export interface Deck {
 export const colorOf = (i: number): CandyColor => CANDY_COLORS[(i - 1) % CANDY_COLORS.length]
 
 /** A card as a link writes it: `green` (one) or `green2` (two). */
-export const cardToken = (c: Card) => `${c.color}${c.double ? '2' : ''}`
+export const cardToken = (c: Card) => c.landmark ?? `${c.color}${c.double ? '2' : ''}`
 export function parseCard(s: string): Card | null {
   const t = s.trim().toLowerCase()
+  if (Object.hasOwn(LANDMARKS, t)) return { color: LANDMARKS[t as Landmark].color, double: false, landmark: t as Landmark }
   const double = t.endsWith('2')
   const color = (double ? t.slice(0, -1) : t) as CandyColor
   return CANDY_COLORS.includes(color) ? { color, double } : null
@@ -53,18 +63,19 @@ export function shuffle<T>(list: readonly T[], random: () => number = Math.rando
   return a
 }
 
-/** The 24 cards: each color three times on its own and once as a double. */
+/** Six colors (three singles and a double each), plus four landmark pictures. */
 export function fullDeck(): Card[] {
-  return CANDY_COLORS.flatMap((color) => [...Array.from({ length: 3 }, () => ({ color, double: false })), { color, double: true }])
+  return [...CANDY_COLORS.flatMap((color) => [...Array.from({ length: 3 }, () => ({ color, double: false })), { color, double: true }]), ...Object.keys(LANDMARKS).map((key) => parseCard(key)!)]
 }
 
-/** A new game's deck: the link's cards exactly (then their discards), or all 24 shuffled. */
+/** A new game's deck: the link's cards exactly (then their discards), or all 28 shuffled. */
 export function newDeck(scripted: readonly Card[] = [], random: () => number = Math.random): Deck {
   return { draw: scripted.length ? scripted.slice() : shuffle(fullDeck(), random), discard: [] }
 }
 
 /** Where a card sends a piece standing on `from`: the next (or second) space of its color, else the finish. */
 export function destination(from: number, card: Card): number {
+  if (card.landmark) return LANDMARKS[card.landmark].space
   let need = card.double ? 2 : 1
   for (let i = from + 1; i <= CANDY_SPACES; i++) if (colorOf(i) === card.color && --need === 0) return i
   return CANDY_FINISH
