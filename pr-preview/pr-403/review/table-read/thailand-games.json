@@ -5,7 +5,7 @@
   "title": "Thailand › Games",
   "intro": "The game table in Kaylee's room (activities/hub/board-games/, plan: thailand/game-table.md). Sparkle says how to play the first time she opens each game in a visit (tap Sparkle to hear it again), and the rule of the 4 the first time a unicorn naps. The cousin across the table talks in their own voice, now cheerful and playing (cast.json's bbplay, ganplay, kenplay: the same voices, off their phones): sitting down, now and then before a roll, on a nap, a ladder or a slide, and when someone wins. Never after every move.",
   "page": "thailand-games.html",
-  "audio": null,
+  "audio": "thailand-games.mp3",
   "lines": 40,
   "seconds": 81,
   "missing": 0,
@@ -66,7 +66,11 @@
       "part": "games",
       "when": "The picker opens (once a visit).",
       "ms": 2136,
-      "flags": []
+      "flags": [],
+      "span": [
+        0,
+        2.07
+      ]
     },
     {
       "path": [
@@ -81,6 +85,10 @@
       "ms": 3696,
       "flags": [
         "long"
+      ],
+      "span": [
+        2.42,
+        6.05
       ]
     },
     {
@@ -96,7 +104,11 @@
       "part": "games › howto › unicorn",
       "when": "A game starts (once a visit each); also Sparkle's hint when she waits on her turn.",
       "ms": 2904,
-      "flags": []
+      "flags": [],
+      "span": [
+        7.67,
+        10.53
+      ]
     },
     {
       "path": [
@@ -113,6 +125,10 @@
       "ms": 4008,
       "flags": [
         "long"
+      ],
+      "span": [
+        10.88,
+        14.83
       ]
     },
     {
@@ -130,6 +146,10 @@
       "ms": 3552,
       "flags": [
         "long"
+      ],
+      "span": [
+        16.45,
+        19.95
       ]
     },
     {
@@ -145,7 +165,11 @@
       "part": "games › howto › candy",
       "when": "",
       "ms": 2976,
-      "flags": []
+      "flags": [],
+      "span": [
+        20.3,
+        23.23
+      ]
     },
     {
       "path": [
@@ -162,6 +186,10 @@
       "ms": 4344,
       "flags": [
         "long"
+      ],
+      "span": [
+        24.85,
+        29.14
       ]
     },
     {
@@ -179,6 +207,10 @@
       "ms": 3576,
       "flags": [
         "long"
+      ],
+      "span": [
+        29.49,
+        33
       ]
     },
     {
@@ -194,6 +226,10 @@
       "ms": 2712,
       "flags": [
         "new"
+      ],
+      "span": [
+        34.62,
+        37.27
       ]
     },
     {
@@ -207,7 +243,11 @@
       "part": "games",
       "when": "The first time a unicorn rolls a 4 and naps (once a visit).",
       "ms": 2784,
-      "flags": []
+      "flags": [],
+      "span": [
+        37.62,
+        40.35
+      ]
     },
     {
       "path": [
@@ -220,7 +260,11 @@
       "part": "games",
       "when": "Her first win in a visit; after that the cousin says well done (without a cousin, Sparkle's others in turn).",
       "ms": 1440,
-      "flags": []
+      "flags": [],
+      "span": [
+        40.7,
+        42.07
+      ]
     },
     {
       "path": [
@@ -234,7 +278,11 @@
       "part": "games › wonAgain",
       "when": "",
       "ms": 2184,
-      "flags": []
+      "flags": [],
+      "span": [
+        43.69,
+        45.81
+      ]
     },
     {
       "path": [
@@ -248,7 +296,11 @@
       "part": "games › wonAgain",
       "when": "",
       "ms": 1392,
-      "flags": []
+      "flags": [],
+      "span": [
+        46.16,
+        47.48
+      ]
     },
     {
       "path": [
@@ -263,7 +315,11 @@
       "part": "games › cousins › bb",
       "when": "The cousin across the table: sitting down; before a roll now and then (in turn); their own nap, ladder and slide; their win; losing to her; getting up.",
       "ms": 1680,
-      "flags": []
+      "flags": [],
+      "span": [
+        49.1,
+        50.71
+      ]
     },
     {
       "path": [
@@ -279,7 +335,11 @@
       "part": "games › cousins › bb › roll",
       "when": "",
       "ms": 1032,
-      "flags": []
+      "flags": [],
+      "span": [
+        52.33,
+        53.3
+      ]
     },
     {
       "path": [
@@ -295,7 +355,11 @@
       "part": "games › cousins › bb › roll",
       "when": "",
       "ms": 1896,
-      "flags": []
+      "flags": [],
+      "span": [
+        53.65,
+        55.49
+      ]
     },
     {
       "path": [
@@ -310,7 +374,11 @@
       "part": "games › cousins › bb",
       "when": "",
       "ms": 1152,
-      "flags": []
+      "flags": [],
+      "span": [
+        57.11,
+        58.21
+      ]
     },
     {
       "path": [
@@ -325,7 +393,11 @@
       "part": "games › cousins › bb",
       "when": "",
       "ms": 1104,
-      "flags": []
+      "flags": [],
+      "span": [
+        58.56,
+        59.61
+      ]
     },
     {
       "path": [
@@ -340,7 +412,11 @@
       "part": "games › cousins › bb",
       "when": "The boat race (activities/boat-trip/race/): through the rainbow gate in the bay, three laps round a lagoon against the village kids and a cheeky macaque. Sparkle gives the few instructions and the countdown; Mommy and Daddy cheer in their own voices; the kids tease and cheer; the macaque only chatters. She always wins, and the trophy says so.",
       "ms": 1224,
-      "flags": []
+      "flags": [],
+      "span": [
+        59.96,
+        61.13
+      ]
     },
     {
       "path": [
@@ -355,7 +431,11 @@
       "part": "games › cousins › bb",
       "when": "",
       "ms": 1968,
-      "flags": []
+      "flags": [],
+      "span": [
+        61.48,
+        63.38
+      ]
     },
     {
       "path": [
@@ -370,7 +450,11 @@
       "part": "games › cousins › bb",
       "when": "",
       "ms": 2328,
-      "flags": []
+      "flags": [],
+      "span": [
+        63.73,
+        65.99
+      ]
     },
     {
       "path": [
@@ -385,7 +469,11 @@
       "part": "games › cousins › bb",
       "when": "",
       "ms": 1032,
-      "flags": []
+      "flags": [],
+      "span": [
+        66.34,
+        67.31
+      ]
     },
     {
       "path": [
@@ -400,7 +488,11 @@
       "part": "games › cousins › gan",
       "when": "",
       "ms": 1728,
-      "flags": []
+      "flags": [],
+      "span": [
+        68.93,
+        70.6
+      ]
     },
     {
       "path": [
@@ -416,7 +508,11 @@
       "part": "games › cousins › gan › roll",
       "when": "",
       "ms": 888,
-      "flags": []
+      "flags": [],
+      "span": [
+        72.22,
+        73.05
+      ]
     },
     {
       "path": [
@@ -432,7 +528,11 @@
       "part": "games › cousins › gan › roll",
       "when": "",
       "ms": 1560,
-      "flags": []
+      "flags": [],
+      "span": [
+        73.4,
+        74.9
+      ]
     },
     {
       "path": [
@@ -447,7 +547,11 @@
       "part": "games › cousins › gan",
       "when": "",
       "ms": 1944,
-      "flags": []
+      "flags": [],
+      "span": [
+        76.52,
+        78.4
+      ]
     },
     {
       "path": [
@@ -462,7 +566,11 @@
       "part": "games › cousins › gan",
       "when": "",
       "ms": 2016,
-      "flags": []
+      "flags": [],
+      "span": [
+        78.75,
+        80.72
+      ]
     },
     {
       "path": [
@@ -477,7 +585,11 @@
       "part": "games › cousins › gan",
       "when": "",
       "ms": 1920,
-      "flags": []
+      "flags": [],
+      "span": [
+        81.07,
+        82.92
+      ]
     },
     {
       "path": [
@@ -492,7 +604,11 @@
       "part": "games › cousins › gan",
       "when": "",
       "ms": 1824,
-      "flags": []
+      "flags": [],
+      "span": [
+        83.27,
+        85.03
+      ]
     },
     {
       "path": [
@@ -507,7 +623,11 @@
       "part": "games › cousins › gan",
       "when": "",
       "ms": 2184,
-      "flags": []
+      "flags": [],
+      "span": [
+        85.38,
+        87.5
+      ]
     },
     {
       "path": [
@@ -522,7 +642,11 @@
       "part": "games › cousins › gan",
       "when": "",
       "ms": 1152,
-      "flags": []
+      "flags": [],
+      "span": [
+        87.85,
+        88.95
+      ]
     },
     {
       "path": [
@@ -537,7 +661,11 @@
       "part": "games › cousins › ken",
       "when": "",
       "ms": 1416,
-      "flags": []
+      "flags": [],
+      "span": [
+        90.57,
+        91.92
+      ]
     },
     {
       "path": [
@@ -553,7 +681,11 @@
       "part": "games › cousins › ken › roll",
       "when": "",
       "ms": 1224,
-      "flags": []
+      "flags": [],
+      "span": [
+        93.54,
+        94.7
+      ]
     },
     {
       "path": [
@@ -569,7 +701,11 @@
       "part": "games › cousins › ken › roll",
       "when": "",
       "ms": 1200,
-      "flags": []
+      "flags": [],
+      "span": [
+        95.05,
+        96.19
+      ]
     },
     {
       "path": [
@@ -584,7 +720,11 @@
       "part": "games › cousins › ken",
       "when": "",
       "ms": 1536,
-      "flags": []
+      "flags": [],
+      "span": [
+        97.81,
+        99.28
+      ]
     },
     {
       "path": [
@@ -599,7 +739,11 @@
       "part": "games › cousins › ken",
       "when": "",
       "ms": 2520,
-      "flags": []
+      "flags": [],
+      "span": [
+        99.63,
+        102.08
+      ]
     },
     {
       "path": [
@@ -614,7 +758,11 @@
       "part": "games › cousins › ken",
       "when": "",
       "ms": 1872,
-      "flags": []
+      "flags": [],
+      "span": [
+        102.43,
+        104.25
+      ]
     },
     {
       "path": [
@@ -629,7 +777,11 @@
       "part": "games › cousins › ken",
       "when": "",
       "ms": 2376,
-      "flags": []
+      "flags": [],
+      "span": [
+        104.6,
+        106.92
+      ]
     },
     {
       "path": [
@@ -644,7 +796,11 @@
       "part": "games › cousins › ken",
       "when": "",
       "ms": 2064,
-      "flags": []
+      "flags": [],
+      "span": [
+        107.27,
+        109.28
+      ]
     },
     {
       "path": [
@@ -659,7 +815,11 @@
       "part": "games › cousins › ken",
       "when": "",
       "ms": 672,
-      "flags": []
+      "flags": [],
+      "span": [
+        109.63,
+        110.25
+      ]
     }
   ]
 }
