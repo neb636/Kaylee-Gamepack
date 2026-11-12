@@ -1,0 +1,595 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "samet.island",
+  "title": "Thailand › Samet › Island",
+  "intro": "",
+  "page": "thailand-samet-island.html",
+  "audio": null,
+  "lines": 32,
+  "seconds": 75,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "samet.island.hi",
+      "text": "Koh Samet! Let's explore the island!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.island.beach.saikaew",
+      "text": "Hat Sai Kaew! The jet ski beach!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.island.beach.hinkhok",
+      "text": "Ao Hin Khok! Build a sandcastle!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.island.beach.wongduan",
+      "text": "Ao Wong Duan! The snorkel boat!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.island.beach.prao",
+      "text": "Ao Prao! The big driftwood tree!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.island.beach.aonoina",
+      "text": "Ao Noi Na! Look at the boats!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.island.hers",
+      "text": "The jet ski is yours now! Hop on!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.island.sunset",
+      "text": "Sunset time! To the big tree!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.island.phone.touch",
+      "text": "Tap an animal to take its photo!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.island.taxi.hi",
+      "text": "Sawasdee krap! Hop in!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.island.ji.2",
+      "text": "Mom loves you!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Mommy loves you!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "samet",
+        "island",
+        "hi"
+      ],
+      "text": "Koh Samet! Let's explore the island!",
+      "voice": "sparkle",
+      "key": "samet.island.hi",
+      "part": "samet › island",
+      "when": "Sparkle, the first time she lands on the island this visit.",
+      "ms": 3528,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "beach",
+        "saikaew"
+      ],
+      "text": "Hat Sai Kaew! The jet ski beach!",
+      "voice": "sparkle",
+      "key": "samet.island.beach.saikaew",
+      "part": "samet › island › beach",
+      "when": "Sparkle, the first time she reaches each beach this visit.",
+      "ms": 3480,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "beach",
+        "hinkhok"
+      ],
+      "text": "Ao Hin Khok! Build a sandcastle!",
+      "voice": "sparkle",
+      "key": "samet.island.beach.hinkhok",
+      "part": "samet › island › beach",
+      "when": "Sparkle, the first time she reaches each beach this visit.",
+      "ms": 3192,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "beach",
+        "phai"
+      ],
+      "text": "Ao Phai! A quiet little bay!",
+      "voice": "sparkle",
+      "key": "samet.island.beach.phai",
+      "part": "samet › island › beach",
+      "when": "Sparkle, the first time she reaches each beach this visit.",
+      "ms": 3000,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "beach",
+        "wongduan"
+      ],
+      "text": "Ao Wong Duan! The snorkel boat!",
+      "voice": "sparkle",
+      "key": "samet.island.beach.wongduan",
+      "part": "samet › island › beach",
+      "when": "Sparkle, the first time she reaches each beach this visit.",
+      "ms": 3288,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "beach",
+        "prao"
+      ],
+      "text": "Ao Prao! The big driftwood tree!",
+      "voice": "sparkle",
+      "key": "samet.island.beach.prao",
+      "part": "samet › island › beach",
+      "when": "Sparkle, the first time she reaches each beach this visit.",
+      "ms": 3360,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "beach",
+        "aonoina"
+      ],
+      "text": "Ao Noi Na! Look at the boats!",
+      "voice": "sparkle",
+      "key": "samet.island.beach.aonoina",
+      "part": "samet › island › beach",
+      "when": "Sparkle, the first time she reaches each beach this visit.",
+      "ms": 3264,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "hers"
+      ],
+      "text": "The jet ski is yours now! Hop on!",
+      "voice": "sparkle",
+      "key": "samet.island.hers",
+      "part": "samet › island",
+      "when": "The jet ski is hers (once a visit, with its flag up); all four flags: Dad calls everyone to the tree.",
+      "ms": 3768,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "sunset"
+      ],
+      "text": "Sunset time! To the big tree!",
+      "voice": "nick",
+      "key": "samet.island.sunset",
+      "part": "samet › island",
+      "when": "The island to roam (island/): Sparkle's first line, each beach the first time, the taxi, the pokes, home.",
+      "ms": 3432,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "phone",
+        "touch"
+      ],
+      "text": "Tap an animal to take its photo!",
+      "voice": "sparkle",
+      "key": "samet.island.phone.touch",
+      "part": "samet › island › phone",
+      "when": "Mom's phone out for the first time this visit; the first rubbish in the bin.",
+      "ms": 3120,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "phone",
+        "mouse"
+      ],
+      "text": "Click an animal to take its photo!",
+      "voice": "sparkle",
+      "key": "samet.island.phone.mouse",
+      "part": "samet › island › phone",
+      "when": "",
+      "ms": 2616,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "clean"
+      ],
+      "text": "Thank you for cleaning the beach!",
+      "voice": "ji",
+      "key": "samet.island.clean",
+      "part": "samet › island",
+      "when": "The island to roam (island/): Sparkle's first line, each beach the first time, the taxi, the pokes, home.",
+      "ms": 1968,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "taxi",
+        "hi"
+      ],
+      "text": "Sawasdee krap! Hop in!",
+      "voice": "sunbear",
+      "key": "samet.island.taxi.hi",
+      "part": "samet › island › taxi",
+      "when": "The green taxi's driver (a sun bear): the first ride, then each ride in turn.",
+      "ms": 3408,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "taxi",
+        "ride",
+        "0"
+      ],
+      "text": "Beep beep!",
+      "voice": "sunbear",
+      "key": "samet.island.taxi.ride.0",
+      "part": "samet › island › taxi › ride",
+      "when": "The green taxi's driver (a sun bear): the first ride, then each ride in turn.",
+      "ms": 1080,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "taxi",
+        "ride",
+        "1"
+      ],
+      "text": "Hold on! Bumpy road!",
+      "voice": "sunbear",
+      "key": "samet.island.taxi.ride.1",
+      "part": "samet › island › taxi › ride",
+      "when": "",
+      "ms": 2328,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "taxi",
+        "ride",
+        "2"
+      ],
+      "text": "Next stop, the beach!",
+      "voice": "sunbear",
+      "key": "samet.island.taxi.ride.2",
+      "part": "samet › island › taxi › ride",
+      "when": "",
+      "ms": 1968,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "taxi",
+        "stop",
+        "nadan"
+      ],
+      "text": "Na Dan pier!",
+      "voice": "sunbear",
+      "key": "samet.island.taxi.stop.nadan",
+      "part": "samet › island › taxi › stop",
+      "when": "Each stop's name, when the taxi pulls in there (never before it sets off).",
+      "ms": 1944,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "taxi",
+        "stop",
+        "saikaew"
+      ],
+      "text": "Hat Sai Kaew!",
+      "voice": "sunbear",
+      "key": "samet.island.taxi.stop.saikaew",
+      "part": "samet › island › taxi › stop",
+      "when": "Each stop's name, when the taxi pulls in there (never before it sets off).",
+      "ms": 1368,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "taxi",
+        "stop",
+        "prao"
+      ],
+      "text": "Ao Prao!",
+      "voice": "sunbear",
+      "key": "samet.island.taxi.stop.prao",
+      "part": "samet › island › taxi › stop",
+      "when": "Each stop's name, when the taxi pulls in there (never before it sets off).",
+      "ms": 1632,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "taxi",
+        "stop",
+        "wongduan"
+      ],
+      "text": "Ao Wong Duan!",
+      "voice": "sunbear",
+      "key": "samet.island.taxi.stop.wongduan",
+      "part": "samet › island › taxi › stop",
+      "when": "Each stop's name, when the taxi pulls in there (never before it sets off).",
+      "ms": 1632,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "slide"
+      ],
+      "text": "Wheee! A sand slide!",
+      "voice": "nick",
+      "key": "samet.island.slide",
+      "part": "samet › island",
+      "when": "The first time down the sand slide at the end of the puppy's shortcut.",
+      "ms": 2352,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "leave"
+      ],
+      "text": "Time to go home?",
+      "voice": "ji",
+      "key": "samet.island.leave",
+      "part": "samet › island",
+      "when": "At the end of Na Dan pier by the speedboat, before the whole island is done: the home picture comes up.",
+      "ms": 1440,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "nick",
+        "0"
+      ],
+      "text": "Hi, sweetie!",
+      "voice": "nick",
+      "key": "samet.island.nick.0",
+      "part": "samet › island › nick",
+      "when": "Tap Dad (in turn; asleep on the sand he wakes up), tap Mom (in turn).",
+      "ms": 1344,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "nick",
+        "1"
+      ],
+      "text": "I love this beach!",
+      "voice": "nick",
+      "key": "samet.island.nick.1",
+      "part": "samet › island › nick",
+      "when": "",
+      "ms": 1392,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "nick",
+        "2"
+      ],
+      "text": "Race you to the sea!",
+      "voice": "nick",
+      "key": "samet.island.nick.2",
+      "part": "samet › island › nick",
+      "when": "",
+      "ms": 1440,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "wake"
+      ],
+      "text": "Huh? I was sleeping!",
+      "voice": "nick",
+      "key": "samet.island.wake",
+      "part": "samet › island",
+      "when": "The island to roam (island/): Sparkle's first line, each beach the first time, the taxi, the pokes, home.",
+      "ms": 1896,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "ji",
+        "0"
+      ],
+      "text": "So pretty here!",
+      "voice": "ji",
+      "key": "samet.island.ji.0",
+      "part": "samet › island › ji",
+      "when": "The island to roam (island/): Sparkle's first line, each beach the first time, the taxi, the pokes, home.",
+      "ms": 1440,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "ji",
+        "1"
+      ],
+      "text": "Sunscreen on, sweetie!",
+      "voice": "ji",
+      "key": "samet.island.ji.1",
+      "part": "samet › island › ji",
+      "when": "",
+      "ms": 2352,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "ji",
+        "2"
+      ],
+      "text": "Mom loves you!",
+      "voice": "ji",
+      "key": "samet.island.ji.2",
+      "part": "samet › island › ji",
+      "when": "",
+      "ms": 1656,
+      "flags": [
+        "changed"
+      ],
+      "was": "Mommy loves you!"
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "bonk"
+      ],
+      "text": "Ow! A coconut!",
+      "voice": "nick",
+      "key": "samet.island.bonk",
+      "part": "samet › island",
+      "when": "A coconut on Dad's head, the umbrella kite.",
+      "ms": 1776,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "kite"
+      ],
+      "text": "Whoa! Hold on tight!",
+      "voice": "ji",
+      "key": "samet.island.kite",
+      "part": "samet › island",
+      "when": "The island to roam (island/): Sparkle's first line, each beach the first time, the taxi, the pokes, home.",
+      "ms": 1968,
+      "flags": []
+    },
+    {
+      "path": [
+        "samet",
+        "island",
+        "home"
+      ],
+      "text": "Smile! Bye bye, Koh Samet!",
+      "voice": "ji",
+      "key": "samet.island.home",
+      "part": "samet › island",
+      "when": "On Na Dan pier going home: Mom's photo.",
+      "ms": 2880,
+      "flags": []
+    }
+  ]
+}

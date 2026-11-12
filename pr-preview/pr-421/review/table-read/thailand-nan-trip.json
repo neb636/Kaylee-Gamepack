@@ -1,0 +1,304 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "nan.trip",
+  "title": "Thailand › Nan › Trip",
+  "intro": "The trip around the stops (activities/nan-trip/Loop.tsx, the trip kit): packing for the mountains, landing in Nan, the photo at the 3's viewpoint, and the photo on Agong's wall. The rest of the way there and home is the boat trip's (L.trip, L.home).",
+  "page": "thailand-nan-trip.html",
+  "audio": null,
+  "lines": 14,
+  "seconds": 47,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "nan.trip.cool",
+      "text": "It's cool and rainy in the mountains!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.trip.umbrella",
+      "text": "Mom always packs an umbrella!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Mommy always packs an umbrella!"
+    },
+    {
+      "key": "nan.trip.sticker",
+      "text": "Pink mushroom sticker! Mushrooms love the rain.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.trip.facts.nan",
+      "text": "Nan is in the mountains, next to Laos!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.trip.facts.pajero",
+      "text": "This big car was made in Thailand!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.trip.facts.mushrooms",
+      "text": "Mushrooms aren't plants! They love dark, wet places.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.trip.facts.sea",
+      "text": "Long ago the sea was here, and it left its salt!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.trip.facts.flower",
+      "text": "A pink flower grows on the mountain, only in Nan!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "nan.trip.facts.mountain",
+      "text": "Doi Phu Kha is a big mountain in Nan!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "nan",
+        "trip",
+        "cool"
+      ],
+      "text": "It's cool and rainy in the mountains!",
+      "voice": "ji",
+      "key": "nan.trip.cool",
+      "part": "nan › trip",
+      "when": "",
+      "ms": 3074,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "trip",
+        "umbrella"
+      ],
+      "text": "Mom always packs an umbrella!",
+      "voice": "ji",
+      "key": "nan.trip.umbrella",
+      "part": "nan › trip",
+      "when": "",
+      "ms": 2520,
+      "flags": [
+        "changed"
+      ],
+      "was": "Mommy always packs an umbrella!"
+    },
+    {
+      "path": [
+        "nan",
+        "trip",
+        "landed"
+      ],
+      "text": "Yay! We're in Nan!",
+      "voice": "nick",
+      "key": "nan.trip.landed",
+      "part": "nan › trip",
+      "when": "",
+      "ms": 2350,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "trip",
+        "three"
+      ],
+      "text": "Everybody, smile!",
+      "voice": "ji",
+      "key": "nan.trip.three",
+      "part": "nan › trip",
+      "when": "",
+      "ms": 1968,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "trip",
+        "wall"
+      ],
+      "text": "Our trip to Nan!",
+      "voice": "ji",
+      "key": "nan.trip.wall",
+      "part": "nan › trip",
+      "when": "The frame on the wall, tapped in the house.",
+      "ms": 1682,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "trip",
+        "sticker"
+      ],
+      "text": "Pink mushroom sticker! Mushrooms love the rain.",
+      "voice": "sparkle",
+      "key": "nan.trip.sticker",
+      "part": "nan › trip",
+      "when": "The stamp screen's sticker.",
+      "ms": 4765,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "trip",
+        "facts",
+        "nan"
+      ],
+      "text": "Nan is in the mountains, next to Laos!",
+      "voice": "sparkle",
+      "key": "nan.trip.facts.nan",
+      "part": "nan › trip › facts",
+      "when": "The stamp screen's tap-to-hear facts (trip/facts.ts NAN_FACTS), in Sparkle's voice.",
+      "ms": 3044,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "trip",
+        "facts",
+        "pajero"
+      ],
+      "text": "This big car was made in Thailand!",
+      "voice": "sparkle",
+      "key": "nan.trip.facts.pajero",
+      "part": "nan › trip › facts",
+      "when": "The stamp screen's tap-to-hear facts (trip/facts.ts NAN_FACTS), in Sparkle's voice.",
+      "ms": 3221,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "trip",
+        "facts",
+        "mushrooms"
+      ],
+      "text": "Mushrooms aren't plants! They love dark, wet places.",
+      "voice": "sparkle",
+      "key": "nan.trip.facts.mushrooms",
+      "part": "nan › trip › facts",
+      "when": "The stamp screen's tap-to-hear facts (trip/facts.ts NAN_FACTS), in Sparkle's voice.",
+      "ms": 5366,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "trip",
+        "facts",
+        "rice"
+      ],
+      "text": "Rice grows standing in water!",
+      "voice": "sparkle",
+      "key": "nan.trip.facts.rice",
+      "part": "nan › trip › facts",
+      "when": "The stamp screen's tap-to-hear facts (trip/facts.ts NAN_FACTS), in Sparkle's voice.",
+      "ms": 2895,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "trip",
+        "facts",
+        "salt"
+      ],
+      "text": "Bo Kluea makes salt from a well!",
+      "voice": "sparkle",
+      "key": "nan.trip.facts.salt",
+      "part": "nan › trip › facts",
+      "when": "The stamp screen's tap-to-hear facts (trip/facts.ts NAN_FACTS), in Sparkle's voice.",
+      "ms": 2917,
+      "flags": []
+    },
+    {
+      "path": [
+        "nan",
+        "trip",
+        "facts",
+        "sea"
+      ],
+      "text": "Long ago the sea was here, and it left its salt!",
+      "voice": "sparkle",
+      "key": "nan.trip.facts.sea",
+      "part": "nan › trip › facts",
+      "when": "The stamp screen's tap-to-hear facts (trip/facts.ts NAN_FACTS), in Sparkle's voice.",
+      "ms": 5238,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "trip",
+        "facts",
+        "flower"
+      ],
+      "text": "A pink flower grows on the mountain, only in Nan!",
+      "voice": "sparkle",
+      "key": "nan.trip.facts.flower",
+      "part": "nan › trip › facts",
+      "when": "The Nan Mountain Cup's facts.",
+      "ms": 4536,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "nan",
+        "trip",
+        "facts",
+        "mountain"
+      ],
+      "text": "Doi Phu Kha is a big mountain in Nan!",
+      "voice": "sparkle",
+      "key": "nan.trip.facts.mountain",
+      "part": "nan › trip › facts",
+      "when": "The stamp screen's tap-to-hear facts (trip/facts.ts NAN_FACTS), in Sparkle's voice.",
+      "ms": 3552,
+      "flags": [
+        "long"
+      ]
+    }
+  ]
+}
