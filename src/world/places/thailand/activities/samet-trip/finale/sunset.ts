@@ -28,7 +28,7 @@ import { Avatar } from '../../../characters/avatar'
 import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
 import { L as LINES } from '../../../lines'
-import { sfx } from '../../../sfx'
+import { beachBed, sunsetSfx as sfx } from './sounds'
 import { phoneCamera, snap } from '../book/photo'
 import { at as atFrame, FRAMES, STOPS, type StopId } from '../island/layout'
 import { buildProps, type Props } from '../island/props'
@@ -162,6 +162,8 @@ export class Sunset implements World3D {
     this.rig.camera.far = 3200
     this.seaYaw = Math.atan2(F.n.x, F.n.z)
     this.sea = new Vector3(F.n.x, 0, F.n.z).normalize()
+    // The beach's waves and breeze, until she leaves.
+    bag.add({ dispose: beachBed() })
 
     this.isl = buildIsland(bag)
     scene.add(this.isl.root)
@@ -411,6 +413,8 @@ export class Sunset implements World3D {
   pointerMove(x: number, y: number, _dx: number, _dy: number, held: boolean) {
     if (!held || !this.finger) return
     this.lastTouch = this.time
+    // Pulling the sun: a warm hum while it moves.
+    if (this.grabbing && Math.hypot(x - this.finger.x, y - this.finger.y) > 1) sfx.pull()
     this.finger.x = x
     this.finger.y = y
     // (A drag that starts off the sun picks it up when it passes over it.)

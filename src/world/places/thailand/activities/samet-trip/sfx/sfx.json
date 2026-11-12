@@ -47,5 +47,470 @@
   "prompt": "Gentle small waves lapping on a tropical sandy beach, soft breeze in palm leaves, a seabird calling far away now and then. Calm and sunny. Seamless loop, no music, no voices.",
   "seconds": 15,
   "loop": true
+ },
+ {
+  "id": "speedboat-sea",
+  "prompt": "Out on the open sea on a sunny breezy day: wind over the water, small waves slapping against a boat's hull, a seagull calling far away now and then. Calm and bright. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "speedboat-start",
+  "prompt": "Two outboard boat motors starting at a pier, a couple of soft coughs then catching into a burbly idle. Clean close recording, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "speedboat-throttle",
+  "prompt": "A speedboat's outboard motors revving up smoothly as it pulls away from the pier, rising roar and water churning. Clean close recording, no music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "speedboat-engine",
+  "prompt": "A small speedboat's outboard motors running steadily at speed, a smooth even roar with water rushing under the hull, heard from on board. Even pitch. Seamless loop, no music, no voices.",
+  "seconds": 6,
+  "loop": true
+ },
+ {
+  "id": "speedboat-hoof",
+  "prompt": "A hand trailing in the sea beside a moving boat, water rushing and fizzing past it, light spray. Seamless loop, no music, no voices.",
+  "seconds": 4,
+  "loop": true
+ },
+ {
+  "id": "speedboat-bump",
+  "prompt": "A speedboat hull bouncing up over a wave crest, a hollow soft whump with a light whoosh of spray. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "speedboat-horn",
+  "prompt": "A small motorboat's friendly two-note horn, a short cheerful toot toot. Clean close recording, no music, no voices.",
+  "seconds": 1,
+  "influence": 0.7
+ },
+ {
+  "id": "speedboat-pass-ferry",
+  "prompt": "A big wooden passenger ferry chugging past on the sea, a slow deep diesel putter coming near and going away, water swishing. Clean close recording, no music, no voices.",
+  "seconds": 4
+ },
+ {
+  "id": "speedboat-ferry-horn",
+  "prompt": "A passenger ferry's horn, one deep warm friendly toot, not too loud. Clean close recording, no music, no voices.",
+  "seconds": 1.5,
+  "influence": 0.7
+ },
+ {
+  "id": "speedboat-pass-longtail",
+  "prompt": "A Thai longtail boat going past on the sea, a rattly clattery motor coming near and going away. Clean close recording, no music, no voices.",
+  "seconds": 3.5
+ },
+ {
+  "id": "speedboat-pass-ski",
+  "prompt": "A jet ski zipping quickly across in front of a boat, a buzzy whine coming near and whooshing away with spray. Clean close recording, no music, no voices.",
+  "seconds": 3
+ },
+ {
+  "id": "speedboat-pass-speed",
+  "prompt": "Another speedboat roaring past on the sea, outboard motors coming near and going away with a swoosh of water. Clean close recording, no music, no voices.",
+  "seconds": 3.5
+ },
+ {
+  "id": "speedboat-dock",
+  "prompt": "A boat gently bumping against a wooden pier's rubber fenders, a soft hollow wooden thunk and a creak. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "jetski-buckle",
+  "prompt": "A plastic life jacket buckle snapping shut, two quick clicks. Clean close recording, no music, no voices.",
+  "seconds": 0.6,
+  "influence": 0.7
+ },
+ {
+  "id": "jetski-engine",
+  "prompt": "A personal watercraft jet ski engine running steadily at cruising speed, smooth buzzy two-stroke whine with the hiss of the water jet, heard from on board. Even pitch, no gear changes. Seamless loop, no music, no voices.",
+  "seconds": 5,
+  "loop": true
+ },
+ {
+  "id": "jetski-spray",
+  "prompt": "Steady rushing hiss of white spray and foamy water churning behind a fast small boat, no engine. Seamless loop, no music, no voices.",
+  "seconds": 4,
+  "loop": true
+ },
+ {
+  "id": "jetski-horn",
+  "prompt": "A small jet ski's friendly little horn, two short cheerful beeps, beep beep. Clean close recording, no music, no voices.",
+  "seconds": 0.7,
+  "influence": 0.7
+ },
+ {
+  "id": "jetski-rope",
+  "prompt": "A thick floating rope stretched tight and springing back, a soft rubbery creak and a bouncy twang. Clean close recording, no music, no voices.",
+  "seconds": 0.9
+ },
+ {
+  "id": "jetski-skid",
+  "prompt": "A small plastic boat hull sliding fast up onto wet beach sand, a gritty scraping swoosh that stops with a soft bump. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "jetski-tern",
+  "prompt": "A small seabird tern giving one short bright chirpy call. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "jetski-fish",
+  "prompt": "A small fish flicks out of calm sea water and plops back in, a tiny cute splash. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "jetski-rev",
+  "prompt": "A jet ski engine revving up high and whiny as it leaps off a wave into the air, a quick happy vroom. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "jetski-land",
+  "prompt": "A jet ski landing flat on the sea after a small jump, a big slappy splash with spray falling. Clean close recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "jetski-bonk",
+  "prompt": "Bumping into a big inflatable orange buoy, a hollow rubbery bonk with a little wobble. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "island-step-sand",
+  "prompt": "One small soft hoof step on dry beach sand, a light crunchy pad, cute and gentle. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "island-step-wood",
+  "prompt": "One small light hoof step on a wooden beach deck plank, a soft hollow clop. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "island-paddle",
+  "prompt": "A small child paddling once in calm shallow sea water, a soft gentle slosh. Clean close recording, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "island-taxi-engine",
+  "prompt": "A small old pickup truck taxi engine idling and putt-putting along a sandy road, steady, soft and friendly, toy-like. Seamless loop, no music, no voices.",
+  "seconds": 4,
+  "loop": true
+ },
+ {
+  "id": "island-taxi-horn",
+  "prompt": "A small friendly truck horn, two short cheerful beeps, soft, not loud. Clean close recording, no music, no voices.",
+  "seconds": 0.8,
+  "influence": 0.6
+ },
+ {
+  "id": "island-woof",
+  "prompt": "One happy little puppy yip, a single short high woof, cute and friendly. Clean close recording, no music, no voices.",
+  "seconds": 0.5,
+  "influence": 0.6
+ },
+ {
+  "id": "island-rustle",
+  "prompt": "Palm fronds and leaves rustling when a tree is gently shaken, soft and airy. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "island-bonk",
+  "prompt": "A cartoon coconut bonking on a head, a hollow wooden bonk with a tiny bounce, funny and soft. Clean close recording, no music, no voices.",
+  "seconds": 0.7,
+  "influence": 0.6
+ },
+ {
+  "id": "island-chair",
+  "prompt": "A wooden folding beach chair snapping shut, two light wooden clacks. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "island-crab",
+  "prompt": "A tiny crab clicking its little claws, three quick tiny clicks, cute. Clean close recording, no music, no voices.",
+  "seconds": 0.5,
+  "influence": 0.6
+ },
+ {
+  "id": "island-slide",
+  "prompt": "A child sliding down a smooth sand slide, a soft steady shhh of sand. Seamless loop, no music, no voices.",
+  "seconds": 3,
+  "loop": true
+ },
+ {
+  "id": "island-forest",
+  "prompt": "A sunny tropical island forest by day, crickets and cicadas buzzing softly, small birds chirping now and then, leaves in a light breeze. Calm and happy. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "book-monitor",
+  "prompt": "A small lizard's soft quick hiss, gentle and short, more funny than scary. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "book-mousedeer",
+  "prompt": "A tiny shy forest animal's high little squeak, cute and soft. Clean close recording, no music, no voices.",
+  "seconds": 0.5,
+  "influence": 0.6
+ },
+ {
+  "id": "book-macaque",
+  "prompt": "A little monkey chattering, a few quick playful ooh-ooh-ah-ah calls, cheeky and cute, not loud. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "book-squirrel",
+  "prompt": "A small squirrel's quick chittering chatter from a tree, cute and short. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "book-hornbill",
+  "prompt": "A hornbill bird's two honking kok-kok calls, deep, friendly and a little funny. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "book-flap",
+  "prompt": "A big bird's wings flapping a few times as it takes off, soft feathery whooshes. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "book-heron",
+  "prompt": "A heron's single low raspy croak, short and comical, not harsh. Clean close recording, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "book-flyingfox",
+  "prompt": "A fruit bat's few tiny high squeaks and chirps, cute and soft. Clean close recording, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "book-bloop",
+  "prompt": "One soft bubbly underwater bloop, a little fish blowing a bubble, cute. Clean close recording, no music, no voices.",
+  "seconds": 0.5,
+  "influence": 0.6
+ },
+ {
+  "id": "book-plonk",
+  "prompt": "A plastic bottle dropped into an empty plastic bin, a hollow satisfying plonk. Clean close recording, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "book-lid",
+  "prompt": "A plastic bin lid flapping open and shut once, a light plasticky clack. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "sand-scrape",
+  "prompt": "A child's hand steadily scooping and scraping through damp beach sand, soft gritty swishes, close up. Seamless loop, no music, no voices.",
+  "seconds": 4,
+  "loop": true
+ },
+ {
+  "id": "sand-pat",
+  "prompt": "One soft pat of a small hand on firm wet sand, a gentle muffled slap. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "sand-crab",
+  "prompt": "A tiny crab scuttling quickly over sand, light clicky little claw taps, cute and quick. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "sand-ball",
+  "prompt": "A light inflatable beach ball bouncing once on soft sand, a hollow plastic bonk. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "sand-pour",
+  "prompt": "Dry beach sand trickling and pouring from a small hand in a soft steady stream. Seamless loop, no music, no voices.",
+  "seconds": 4,
+  "loop": true
+ },
+ {
+  "id": "sand-slam",
+  "prompt": "A small plastic sand bucket turned upside down and plonked firmly onto wet sand, a soft hollow plastic thunk. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "sand-shell",
+  "prompt": "A small seashell tapped lightly, a tiny bright clink. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "sand-slump",
+  "prompt": "A small wet sandcastle tower gently slumping and sliding into a soft heap of sand, a cute soft crumble. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "sand-swash",
+  "prompt": "One small gentle wave washing up a sandy beach and fizzing back down, soft and close. Clean close recording, no music, no voices.",
+  "seconds": 2.5
+ },
+ {
+  "id": "sand-crumble",
+  "prompt": "Wet sand crumbling softly into shallow water, a little trickle and plop. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "sand-rush",
+  "prompt": "Sea water rushing happily along a little channel dug in the sand and gurgling into a sandcastle moat, bubbly and splashy, a joyful moment. Clean close recording, no music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "snorkel-under",
+  "prompt": "Calm underwater ambience heard while snorkeling near the surface: muffled soft ocean, gentle bubbles now and then, a far-off swell, peaceful and dreamy. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "snorkel-jump",
+  "prompt": "A child hopping off a boat ladder into calm sea, a playful splash then bubbles fizzing. Clean close recording, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "snorkel-swim",
+  "prompt": "Swimming slowly with a snorkel mask on, water swirling softly past the ears with a light stream of bubbles, muffled. Seamless loop, no music, no voices.",
+  "seconds": 4,
+  "loop": true
+ },
+ {
+  "id": "snorkel-kick",
+  "prompt": "One gentle swim flipper kick in water, a soft swoosh with a few bubbles. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "snorkel-bubbles",
+  "prompt": "A small cute burst of bubbles underwater, blub blub blub rising, muffled and round. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "snorkel-bump",
+  "prompt": "A soft gentle bump against something underwater, muffled and round, not hard. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "snorkel-clam",
+  "prompt": "A giant clam softly closing its shell underwater, a muffled clop with a puff of bubbles. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "snorkel-squish",
+  "prompt": "A soft funny squishy squelch, like squeezing a wet rubber toy underwater. Clean close recording, no music, no voices.",
+  "seconds": 0.6,
+  "influence": 0.6
+ },
+ {
+  "id": "snorkel-jet",
+  "prompt": "A little underwater whoosh as a small sea creature jets away quickly, with a puff of bubbles. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "hide-steps",
+  "prompt": "Light little hooves trotting on soft dry beach sand, a gentle muffled patter, steady pace. Seamless loop, no music, no voices.",
+  "seconds": 4,
+  "loop": true
+ },
+ {
+  "id": "hide-wade",
+  "prompt": "Small hooves splashing playfully through ankle-deep calm sea water, light splishy steps. Seamless loop, no music, no voices.",
+  "seconds": 4,
+  "loop": true
+ },
+ {
+  "id": "hide-rustle",
+  "prompt": "A bushy tropical tree's long leaves rustling and shaking, someone hiding inside, soft and playful. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "hide-clatter",
+  "prompt": "A stack of light plastic beach chairs knocking and clattering together, a funny wobble, not loud. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "hide-boo",
+  "prompt": "A cute cartoon surprise pop-out: a quick springy whoosh and a soft rubbery bloop, like a toy jumping out of a box. Clean close recording, no music, no voices.",
+  "seconds": 0.7,
+  "influence": 0.7
+ },
+ {
+  "id": "lunch-sip",
+  "prompt": "Gentle sipping through a straw from a fresh coconut, little bubbly sucking sips, cute. Seamless loop, no music, no voices.",
+  "seconds": 3,
+  "loop": true
+ },
+ {
+  "id": "lunch-slurp",
+  "prompt": "The last drops slurped loudly through a straw at the bottom of a coconut, a funny gurgly slurp. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "lunch-knock",
+  "prompt": "Two light knocks on an empty hollow coconut shell, a woody tok tok. Clean close recording, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "lunch-lizard",
+  "prompt": "A small lizard's quick scurry across sand, little claws pattering away, with a tiny soft tongue flick hiss, cute not scary. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "sunset-pull",
+  "prompt": "A warm soft magical hum with a gentle airy shimmer, like dragging a glowing ball through the sky, calm and dreamy. Seamless loop, no music, no voices.",
+  "seconds": 3,
+  "loop": true
+ },
+ {
+  "id": "sunset-creak",
+  "prompt": "An old driftwood tree creaking gently as it is shaken, with a light rustle of dry leaves. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "sunset-plop",
+  "prompt": "A big warm ball dropping into the calm sea: a soft deep plop followed by a gentle fizzing sizzle, cartoonish and cute. Clean close recording, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "fire-night",
+  "prompt": "A calm tropical beach at night: soft waves lapping in the dark, a small campfire crackling nearby, crickets chirping, peaceful. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "fire-drum",
+  "prompt": "One soft low hand drum hit, a warm round boom on a beach, gentle. Clean close recording, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "fire-poi",
+  "prompt": "Fire poi spinning round and round, a soft rhythmic whoosh-whoosh of flame swinging through the air with a gentle roar, cozy not scary. Seamless loop, no music, no voices.",
+  "seconds": 4,
+  "loop": true
+ },
+ {
+  "id": "fire-whoomp",
+  "prompt": "A ball of fire swung in a big circle, one soft round whoomp of flame, warm and friendly. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "fire-ring",
+  "prompt": "A ring of small flames lighting up one after another around a beach, a long soft rushing whoosh with gentle crackles, magical and calm. Clean close recording, no music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "fire-launch",
+  "prompt": "A small firework rising into the night sky, a soft gentle fizzing hiss climbing upward, no whistle. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "fire-firework",
+  "prompt": "A small pretty firework opening far away: a soft muffled pop then a long twinkly crackle-sparkle fading out, gentle, no loud bang. Clean close recording, no music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "fire-clap",
+  "prompt": "A small friendly crowd on a beach clapping happily, warm applause, no cheering voices. Clean close recording, no music, no voices.",
+  "seconds": 2
  }
 ]

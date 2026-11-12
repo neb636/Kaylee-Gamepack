@@ -26,7 +26,6 @@
 import { DynamicDrawUsage, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, Object3D, Plane, Raycaster, RingGeometry, Scene, SphereGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { clamp, spendHint, type Line } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
-import { noise as hiss, sfx, tone } from '../../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
 import { Bag } from '../../../../../engine3d/dispose'
@@ -46,6 +45,8 @@ import { BananaBoat, Fish, Swimmer, Tern } from './critters'
 import { buildScenery, SKY, type Scenery } from './scenery'
 import { buildSki, HIS, lifeJacket, loneVest, STERN, type Ski } from './ski'
 import { Wake, type Loop } from './wake'
+import { beachBed } from '../sfx/common'
+import { jetSfx as S } from './sounds'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/jetski/jetski.ts'
 /** Steering: the drive control's feel (engine3d/drive.ts), zippier than the boats. */
@@ -141,27 +142,6 @@ const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
 const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 const easeOut = (k: number) => 1 - (1 - clamp(k, 0, 1)) ** 3
 const bellK = (k: number) => Math.sin(Math.PI * clamp(k, 0, 1))
-
-// ---- Sounds (synthesized; the voices are lines.ts L.samet.jetski).
-const engine = (k: number, air: boolean) => tone(air ? 210 + k * 120 : 95 + k * 120, air ? 230 + k * 120 : 90 + k * 115, 0.07, 0.018 + k * 0.014, 'sawtooth')
-const splashBig = (k: number) => {
-  hiss(0.5 + k * 0.3, 0.12 + k * 0.12, 'lowpass', 1400, 300)
-  hiss(0.25, 0.06 + k * 0.05, 'highpass', 2500, 1200, 0.05)
-}
-const ding = () => [0, 0.35, 0.7].forEach((d) => {
-  tone(1320, 1318, 0.9, 0.07, 'sine', d)
-  tone(2640, 2630, 0.5, 0.025, 'sine', d)
-})
-const bonk = () => {
-  tone(240, 160, 0.22, 0.1)
-  tone(990, 980, 0.6, 0.03, 'sine', 0.02)
-}
-const squeal = () => [0, 0.13].forEach((d) => tone(900, 1500, 0.16, 0.05, 'triangle', d))
-const toot = () => [0, 0.18].forEach((d) => tone(620, 640, 0.14, 0.06, 'square', d))
-const twinkle = (pink: boolean) => [0, 0.09, 0.18, 0.27, 0.36].forEach((d, i) => tone((pink ? 1100 : 900) * (1 + i * 0.25), (pink ? 1300 : 1050) * (1 + i * 0.25), 0.14, 0.045, 'sine', d))
-const wobble = () => tone(520, 260, 1.1, 0.05, 'triangle')
-const beep = (go: boolean) => tone(go ? 990 : 660, go ? 990 : 660, go ? 0.45 : 0.2, 0.08, 'square')
-const click = () => [0, 0.08].forEach((d) => hiss(0.04, 0.25, 'highpass', 2800, 2800, d))
 
 /** The jet ski man: an otter in an orange life vest and a cap (cast.ts). */
 const MAN_LOOK = JETSKI_MAN
@@ -338,6 +318,8 @@ export class JetSki implements World3D {
     this.round = start.round
     this.phase = start.round === 'ride' ? 'jacket' : start.round === 'race' ? 'countdown' : 'ride'
     this.ropeNow = { ...ROPE[this.round] }
+    // Sai Kaew's waves and breeze under everything (recorded; it fades out when the stage goes).
+    bag.add({ dispose: beachBed() })
 
     this.s = buildScenery(bag)
     scene.add(this.s.root)
@@ -749,7 +731,7 @@ export class JetSki implements World3D {
       this.dizzyT = 0
       this.spinSum = 0
       this.counts.dizzy++
-      wobble()
+      S.wobble()
       this.talk('dizzy', J.dizzy, 10)
     }
 
@@ -782,7 +764,13 @@ export class JetSki implements World3D {
     this.engineT -= dt
     if (this.engineT <= 0) {
       this.engineT = 0.085
-      if (sp > 0.03 || d.airborne) engine(sp, d.airborne)
+      if (sp > 0.03 || d.airborne) S.engine(sp, d.airborne)
+      if (!d.airborne && sp > 0.25) S.spray(sp)
+      // His engine in the race, and the banana boat's motor out past the rope (recorded only: they had no synth).
+      const r = this.rival
+      if ((this.phase === 'racing' || this.phase === 'raceEnd') && Math.abs(r.speed) > 0.3) S.rival(clamp(Math.abs(r.speed) / HELM.top, 0, 1), Math.hypot(r.x - d.x, r.z - d.z))
+      const bb = this.banana.boat.position
+      S.banana(Math.hypot(bb.x - d.x, bb.z - d.z))
     }
   }
 
@@ -795,7 +783,7 @@ export class JetSki implements World3D {
       this.spinDir = d.yawRate >= 0 ? 1 : -1
       this.counts.spins++
     }
-    tone(260, 520, 0.4, 0.04, 'sawtooth')
+    S.rev()
     this.kaylee.react('wiggle')
     if (this.spinT === 0) this.talk('jump', J.spin, 6)
     else if (this.phase !== 'racing') this.talk('jump', J.jump, 9)
@@ -809,7 +797,7 @@ export class JetSki implements World3D {
     const y = this.surf
     this.spray.burst(d.x, y + 0.2, d.z, 18 + Math.round(30 * k), 3 + 5 * k, 5 + 5 * k, 0.24 + 0.18 * k)
     this.foam.emit(d.x, y + 0.05, d.z, 0, 0, 0, 1.6, 3 + 4 * k)
-    splashBig(k)
+    S.splashBig(k)
     if (k > 0.45) this.events.spray(k)
     this.nick.react('hop')
   }
@@ -837,7 +825,7 @@ export class JetSki implements World3D {
       this.stretch = { side, s, k: Math.max(this.stretch.k, ov) }
       if (ov > 0.6 && this.boingCool <= 0) {
         this.boingCool = 1.2
-        sfx.boing()
+        S.rope()
         this.counts.boings++
         if (this.counts.boings === 2) this.once('rope', J.rope)
       }
@@ -870,7 +858,7 @@ export class JetSki implements World3D {
         d.z += (gz / l) * dt * 2
         if (!sandy && Math.abs(d.speed) > 2 && this.boingCool <= 0) {
           this.boingCool = 0.8
-          bonk()
+          S.bonk()
         }
       }
     }
@@ -887,16 +875,16 @@ export class JetSki implements World3D {
       }
     }
     bump(FAR_BUOY.x, FAR_BUOY.z, 2.6, () => this.pokeBuoy())
-    for (const f of this.s.flags) bump(f.position.x, f.position.z, 1.6, () => bonk())
+    for (const f of this.s.flags) bump(f.position.x, f.position.z, 1.6, () => S.bonk())
     this.swimmers.forEach((sw, i) =>
       bump(sw.root.position.x, sw.root.position.z, 1.6, () => {
         sw.hop()
-        squeal()
+        S.squeal()
         this.counts.squeals++
         this.swimCool[i] = 3
       }),
     )
-    bump(this.rival.x, this.rival.z, 2.4, () => bonk())
+    bump(this.rival.x, this.rival.z, 2.4, () => S.bonk())
   }
 
   /** Wedged on the rocks: it bounces free with a boing, nose to the open water, and everyone laughs. */
@@ -917,8 +905,8 @@ export class JetSki implements World3D {
     d.yawRate = 0
     d.jump(4.5)
     this.spinSum = 0
-    sfx.boing()
-    bonk()
+    S.boing()
+    S.bonk()
     this.spray.burst(d.x, 0.4, d.z, 22, 3, 5, 0.22)
     this.stars.burst(d.x, 1.6, d.z, 8, 1.5, 1.5, 0.16)
     this.kaylee.react('wiggle')
@@ -945,7 +933,7 @@ export class JetSki implements World3D {
     d.stop()
     d.vx = d.vz = 0
     d.yawRate = 0
-    hiss(0.6, 0.18, 'bandpass', 900, 300)
+    S.skid()
   }
   private beached(dt: number) {
     const d = this.d
@@ -969,7 +957,7 @@ export class JetSki implements World3D {
         const tz = B.to.z + oz
         c.root.userData.to = new Vector3(tx, this.groundY(tx, tz), tz)
       }
-      sfx.thump()
+      S.thump()
       this.kaylee.react('wiggle')
       this.talk('beached', J.beached, 0)
     }
@@ -1038,7 +1026,7 @@ export class JetSki implements World3D {
     this.fill = loop
     this.fillT = 0
     this.fillFish = 0
-    twinkle(loop.heart)
+    S.twinkle(loop.heart)
     if (loop.heart) this.talk('loop', J.heart, 5)
     else if (this.counts.loops <= 2) this.talk('loop', J.loop, 5)
     this.kaylee.react('wiggle')
@@ -1108,11 +1096,11 @@ export class JetSki implements World3D {
         this.lastCount = n
         if (n >= 1) {
           this.events.count(n)
-          beep(false)
+          S.beep(false)
           this.events.say(J.count[3 - n])
         } else {
           this.events.count(0)
-          beep(true)
+          S.beep(true)
           this.events.say(J.count[3])
           this.phase = 'racing'
           this.lastTouch = this.time
@@ -1234,7 +1222,7 @@ export class JetSki implements World3D {
   private ringBell() {
     this.bellSwing.v += 7
     this.counts.bells++
-    ding()
+    S.ding()
   }
 
   // ---------------------------------------------------------------- the bay's life
@@ -1250,7 +1238,7 @@ export class JetSki implements World3D {
       if (this.swimCool[i] <= 0 && Math.abs(d.speed) > 4 && Math.hypot(d.x - p.x, d.z - p.z) < 7) {
         this.swimCool[i] = 4
         s.squeal()
-        squeal()
+        S.squeal()
         this.counts.squeals++
       }
     })
@@ -1265,7 +1253,7 @@ export class JetSki implements World3D {
       const dx = (MOMMY.x - d.x) / (md || 1)
       const dz = (MOMMY.z - d.z) / (md || 1)
       for (let i = 0; i < 30; i++) this.spray.emit(d.x, 0.3, d.z, dx * (4 + Math.random() * 3) + (Math.random() - 0.5) * 2, 3 + Math.random() * 3, dz * (4 + Math.random() * 3) + (Math.random() - 0.5) * 2, 0.9, 0.22)
-      splashBig(0.5)
+      S.splashBig(0.5)
     }
     if (this.soakT >= 0) {
       this.soakT += dt
@@ -1288,7 +1276,7 @@ export class JetSki implements World3D {
       tn.update(dt, t)
       if (tn.splash) {
         this.spray.burst(tn.splash.x, 0.2, tn.splash.z, 10, 1.5, 3, 0.16)
-        sfx.splash()
+        S.splash()
       }
     }
     // Fish jump now and then near her.
@@ -1304,7 +1292,7 @@ export class JetSki implements World3D {
     this.fish.update(dt, (x, z) => this.water(x, z))
     for (const p of this.fish.plips) {
       this.spray.burst(p.x, 0.15, p.z, 6, 1, 1.8, 0.1)
-      tone(1400, 700, 0.08, 0.03, 'sine')
+      S.plip()
     }
     // The banana boat round its loop out past the rope.
     this.bananaS += (dt * 7.5) / (Math.PI * (BANANA.ru + BANANA.rv))
@@ -1322,7 +1310,7 @@ export class JetSki implements World3D {
     if (Math.random() < 0.6) this.foam.emit(bp.x, 0.05, bp.z, 0, 0, 0, 1.6, 1.4)
     for (const p of B.splashes) {
       this.spray.burst(p.x, 0.2, p.z, 14, 2.2, 3.5, 0.2)
-      sfx.splash()
+      S.splash()
     }
     // The bell, the big buoy, the umbrellas.
     const spring = (s: Spring, k: number, damp: number) => {
@@ -1396,7 +1384,7 @@ export class JetSki implements World3D {
       if (k >= 1) {
         this.jacketFloat.visible = false
         this.jacket.visible = true
-        click()
+        S.click()
         this.kaylee.react('wiggle')
         this.phase = 'push'
         this.beachT = 0
@@ -1480,7 +1468,7 @@ export class JetSki implements World3D {
         live--
         this.caught++
         this.counts.stars++
-        twinkle(false)
+        S.twinkle(false)
         this.sparkle.burst(s.x, y, s.z, 24, 3, 4, 0.26)
         this.kaylee.react('wiggle')
         this.events.stars(this.caught, WAVES.stars)
@@ -1741,19 +1729,19 @@ export class JetSki implements World3D {
         this.jacketAt = this.time
         this.jacketFrom.copy(this.jacketFloat.position)
         this.phase = 'suit'
-        click()
+        S.click()
         return
       }
     }
     if (id === 'kaylee') {
-      toot()
+      S.toot()
       this.kaylee.react('wiggle')
       return
     }
     if (id === 'family:nick') {
       if (this.capT < 0) {
         this.capT = 0
-        hiss(0.4, 0.08, 'bandpass', 1500, 600)
+        S.cap()
         this.talk('cap', J.cap, 3)
       }
       return
@@ -1765,7 +1753,7 @@ export class JetSki implements World3D {
     }
     if (id === 'man') {
       this.man.react(this.man.root.parent === this.scene ? 'hop' : 'wave')
-      toot()
+      S.toot()
       this.talk('man', J.man, 3)
       return
     }
@@ -1773,13 +1761,13 @@ export class JetSki implements World3D {
     if (id === 'buoy') return this.pokeBuoy()
     if (id === 'banana') {
       if (this.banana.tip()) this.counts.tips++
-      squeal()
+      S.squeal()
       return
     }
     if (id?.startsWith('swimmer:')) {
       const s = this.swimmers[+id.slice(8)]
       s.hop()
-      squeal()
+      S.squeal()
       const p = s.root.position
       this.spray.burst(p.x, 0.3, p.z, 12, 1.6, 2.5, 0.16)
       return
@@ -1787,12 +1775,12 @@ export class JetSki implements World3D {
     if (id?.startsWith('tern:')) {
       const d = this.d
       this.terns[+id.slice(5)].diveAt(d.x + Math.sin(d.heading) * 7, d.z + Math.cos(d.heading) * 7)
-      tone(1800, 2400, 0.1, 0.04, 'triangle')
+      S.chirp()
       return
     }
     if (id?.startsWith('umbrella:')) {
       this.umbrellaSpin[+id.slice(9)] += 9
-      sfx.fwip()
+      S.fwip()
       return
     }
     // A quick tap on the water: drive there and stop.
@@ -1807,7 +1795,7 @@ export class JetSki implements World3D {
   private pokeBuoy() {
     this.buoyBob.v += 4
     this.counts.bonks++
-    bonk()
+    S.bonk()
   }
 
   /** After a while with no finger: a pressing finger on the water ahead of her. */

@@ -9,19 +9,12 @@ import type { Bag } from '../../../../../engine3d/dispose'
 import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
 import { FaceLife } from '../../../../../engine3d/characters/face'
 import { blobShadow } from '../../../../../engine3d/geo'
-import { noise, tone } from '../../../../../kit/sfx'
 import { PUPPY } from '../cast'
 import { pointAt, type Route } from './route'
+import { islandSfx } from './sounds'
 
 export type Trick = 'spin' | 'roll' | 'hop'
 const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
-
-/** One woof: a quick falling square tone with a puff of breath (a small dog: high). */
-export function woof(delay = 0, pitch = 1) {
-  tone(720 * pitch, 430 * pitch, 0.11, 0.07, 'square', delay)
-  tone(1440 * pitch, 860 * pitch, 0.09, 0.025, 'triangle', delay)
-  noise(0.07, 0.04, 'bandpass', 1500, 900, delay)
-}
 
 export class Puppy {
   readonly root = new Group()
@@ -74,7 +67,7 @@ export class Puppy {
     const now = this.barks.length ? this.barks[this.barks.length - 1] + gap : 0
     for (let i = 0; i < n; i++) {
       this.barks.push(now + i * gap)
-      woof(now + i * gap, 0.95 + Math.random() * 0.1)
+      islandSfx.woof(now + i * gap, 0.95 + Math.random() * 0.1)
     }
   }
   /** A silly trick (a poke). */

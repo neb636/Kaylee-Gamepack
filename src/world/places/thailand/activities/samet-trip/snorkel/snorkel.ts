@@ -26,7 +26,6 @@ import { clamp, spendHint, type Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import { FaceLife } from '../../../../../engine3d/characters/face'
 import { knobs, watch } from '../../../../../kit/knobs'
-import { noise as hiss, sfx, tone } from '../../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
 import { Bag } from '../../../../../engine3d/dispose'
@@ -40,6 +39,7 @@ import { Member } from '../../../characters/member'
 import type { AnimalId } from '../book/animals'
 import { cuttlefishModel, damselSchool, parrotfishModel, type Model } from '../book/models'
 import { bed, bedHeight, BOAT, boat, bommie, BOUNDS, bubbleRing, clam, CLAM, coralPatch, cucumber, CUCUMBER, DADDY, flipper, GARDEN, hideFish, koKudi, mask, OBSTACLES, rock, ROUTE, SANDY, seaTop, softCoral, START, sunbeams, type XZ } from './reef'
+import { reefBed, reefSfx as sfx } from './sounds'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/snorkel/snorkel.ts'
 /** Her swimming. */
@@ -126,25 +126,8 @@ const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 const bellK = (k: number) => Math.sin(Math.PI * clamp(k, 0, 1))
 const angleTo = (from: number, to: number) => Math.atan2(Math.sin(to - from), Math.cos(to - from))
 
-// ---- Sounds (synthesized; the voices come at the full-loop gate).
-const blub = (d = 0) => [0, 0.07, 0.14].forEach((x, i) => tone(320 + i * 140, 700 + i * 160, 0.07, 0.04, 'sine', d + x))
-const splashSnd = () => {
-  hiss(0.7, 0.16, 'lowpass', 1400, 300)
-  hiss(0.4, 0.06, 'highpass', 3000, 1500, 0.05)
-}
-const kickSnd = () => hiss(0.12, 0.03, 'bandpass', 900, 600, 0, 1.2)
-const toot = () => [0, 0.22].forEach((d) => tone(330, 340, 0.18, 0.07, 'square', d))
-const twinkle = (n = 5) => Array.from({ length: n }, (_, i) => tone(1000 * (1 + i * 0.25), 1150 * (1 + i * 0.25), 0.14, 0.045, 'sine', i * 0.09))
-const shutter = () => {
-  hiss(0.06, 0.12, 'highpass', 3000, 2000)
-  tone(1800, 1800, 0.03, 0.05, 'square', 0.07)
-}
-const thud = () => hiss(0.15, 0.08, 'lowpass', 400, 200)
-const prickle = () => [0, 0.05, 0.1, 0.15].forEach((d, i) => tone(1500 + i * 300, 1400 + i * 300, 0.04, 0.03, 'triangle', d))
-const clamSnd = () => {
-  hiss(0.1, 0.1, 'lowpass', 700, 300)
-  tone(220, 160, 0.12, 0.05, 'triangle', 0.02)
-}
+// ---- Sounds: sounds.ts (recorded, with the synthesized ones as fallbacks).
+const { blub, kick: kickSnd, toot, twinkle, shutter, thud, prickle, clam: clamSnd } = sfx
 
 const URCHINS = OBSTACLES.map((o, i) => ({ o, i })).filter((x) => x.o.kind === 'urchin')
 const CORALS = OBSTACLES.map((o, i) => ({ o, i })).filter((x) => x.o.kind === 'coral')
@@ -279,6 +262,7 @@ export class Snorkel implements World3D {
     this.rig.lag = 0.3
     this.rig.camera.far = 1200
     this.round = start.round
+    bag.add({ dispose: reefBed() })
 
     // ---- The sea, the bed, Ko Kudi on the horizon, sunbeams.
     this.sea = seaTop(bag)
@@ -471,7 +455,7 @@ export class Snorkel implements World3D {
     this.pMeet = { x: this.pos.x * 0.5, z: this.pos.z - 3 }
     this.pPos.set(this.pos.x - 9, -0.9, this.pos.z - 4)
     this.parrot.root.visible = true
-    tone(600, 900, 0.25, 0.05, 'triangle')
+    sfx.fishIn()
   }
 
   /** Says it once a visit to the reef. */
@@ -610,6 +594,7 @@ export class Snorkel implements World3D {
     k.steer(0, 1, clamp((speed / 1.8) * SWIM.kick, 0.12, 1), () => true)
     const fw = this.forward()
     if (speed > 0.4) {
+      sfx.swim(speed)
       const rate = speed * 9
       if (Math.random() < dt * rate) {
         const bx = this.pos.x - fw.x * 0.75
@@ -650,7 +635,7 @@ export class Snorkel implements World3D {
   }
 
   private splashIn() {
-    splashSnd()
+    sfx.splash()
     this.foam.burst(START.x, 0.02, START.z, 16, 1.6, 0, 0.35)
     this.spray.burst(START.x, 0.1, START.z, 26, 2.2, 3.2, 0.09)
     for (let i = 0; i < 30; i++) this.bubbles.emit(START.x + (Math.random() - 0.5) * 0.8, -0.3 - Math.random() * 0.8, START.z + (Math.random() - 0.5) * 0.8, 0, 0.6, 0, 1.5, 0.06 + Math.random() * 0.06)
@@ -778,7 +763,7 @@ export class Snorkel implements World3D {
         const dz = this.pos.z - d.z
         const l = Math.hypot(dx, dz) || 1
         d.ring = { t: 0, x: d.x, z: d.z, dx: dx / l, dz: dz / l }
-        blub()
+        sfx.ring()
       }
       if (d.dip > 1.4) d.dip = -1
     }
@@ -899,7 +884,7 @@ export class Snorkel implements World3D {
         const ahead = ROUTE.findIndex((w) => w.z < her.z - 2)
         this.pi = ahead < 0 ? ROUTE.length - 1 : ahead
         this.pWiggle = 1
-        tone(700, 1100, 0.18, 0.05, 'triangle')
+        sfx.fishGo()
       }
     } else if (this.pState === 'lead') {
       const wp = ROUTE[this.pi]
@@ -963,7 +948,7 @@ export class Snorkel implements World3D {
       const j = this.jet
       // (A moment showing off its new color first.)
       if (j.wait > 0 && (j.wait -= dt) <= 0) {
-        hiss(0.45, 0.1, 'bandpass', 900, 2400)
+        sfx.jet()
         this.once(`again${this.best}`, S.again[this.best - 1])
       }
       if (j.wait <= 0) j.t += dt / FISH.jet
@@ -1009,7 +994,7 @@ export class Snorkel implements World3D {
     const near = on && !this.jet && d < FISH.flash
     // (Its color: sand far off, the time's own color near; showing it off before a jet, rainbow while it jets.)
     const stage = this.round !== 'cuttle' ? 0 : this.best >= 3 ? 3 : this.jet ? (this.jet.wait > 0 ? this.best : 1) : near ? this.best + 1 : 0
-    if (stage > this.stage) tone(700 + stage * 200, 1000 + stage * 260, 0.2, 0.05, 'sine')
+    if (stage > this.stage) sfx.color(stage)
     if (near && stage === 1) this.once('colors', S.colors)
     if (on && !this.jet && d < FISH.pink) {
       // She reached it: its new color bursts out; the first two times it jets off to hide again.
@@ -1107,7 +1092,7 @@ export class Snorkel implements World3D {
     pk.fish.visible = true
     this.counts.peeks++
     if (cross) blub(0.2)
-    else tone(900, 1300, 0.12, 0.05, 'triangle')
+    else sfx.peek()
   }
 
   private burstAt(p: Vector3, n: number) {
@@ -1199,7 +1184,7 @@ export class Snorkel implements World3D {
       this.events.say(S.captain[this.turn.captain++ % S.captain.length])
     } else if (id === 'parrot') {
       this.pWiggle = 1
-      tone(800, 1200, 0.15, 0.05, 'triangle')
+      sfx.fishPoke()
       this.bubbles.burst(this.pPos.x, this.pPos.y, this.pPos.z, 6, 0.4, 0.6, 0.05)
     } else if (id === 'cuttle') {
       this.flashT = 0
@@ -1212,7 +1197,7 @@ export class Snorkel implements World3D {
       this.bubbles.burst(CLAM.x, bedHeight(CLAM.x, CLAM.z) + 0.4, CLAM.z, 10, 0.5, 1, 0.06)
     } else if (id === 'cucumber') {
       this.cucT = 0
-      tone(300, 180, 0.3, 0.05, 'triangle')
+      sfx.squish()
     } else if (id.startsWith('urchin:')) {
       const u = this.urchins[+id.slice(7)]
       if (u) u.wob = 1

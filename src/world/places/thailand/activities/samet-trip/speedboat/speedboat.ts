@@ -31,7 +31,6 @@ import { clamp, spendHint, type Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import { FaceLife } from '../../../../../engine3d/characters/face'
 import { knobs, watch } from '../../../../../kit/knobs'
-import { noise as hiss, sfx, tone } from '../../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
 import { cinemaOn, Director, Letterbox, type CineMove } from '../../../../../engine3d/cinema'
@@ -50,6 +49,7 @@ import { buildSki, HIS } from '../jetski/ski'
 import { at as atFrame, BAN_PHE, FRAMES, PIER } from '../island/layout'
 import { buildProps } from '../island/props'
 import { buildIsland, DAY, palmGeo, rng, type Island, type TimeOfDay } from '../island/scenery'
+import { boatSfx as S, seaBed } from './sounds'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/speedboat/speedboat.ts'
 const BOAT = knobs('sametBoat', 'The speedboat ride', FILE, {
@@ -164,6 +164,8 @@ interface Passer {
   across: number
   wave: number
   bumped: boolean
+  /** Its engine's been heard going by. */
+  heard: boolean
   h: number
 }
 
@@ -403,6 +405,8 @@ export class SametSpeedboat implements World3D {
   ) {
     const { scene, bag } = this
     const time = start.time ?? 'morning'
+    // The open sea under everything (recorded; it fades out when the ride goes).
+    bag.add({ dispose: seaBed() })
     scene.fog = new Fog(DAY[time].haze, 200, 1100)
     applyBands()
     this.rig.fov = 46
@@ -467,7 +471,7 @@ export class SametSpeedboat implements World3D {
       const b = buildPasser(bag, id)
       b.root.visible = false
       scene.add(b.root)
-      this.passers.push({ id, root: b.root, crew: b.crew, meet, side, off, speed, s: -1, across: 0, wave: -1, bumped: false, h: 0 })
+      this.passers.push({ id, root: b.root, crew: b.crew, meet, side, off, speed, s: -1, across: 0, wave: -1, bumped: false, heard: false, h: 0 })
     }
     for (let i = 0; i < 4; i++) {
       const root = buildFlyFish(bag)
@@ -580,10 +584,10 @@ export class SametSpeedboat implements World3D {
   private drive(dt: number, t: number) {
     if (this.phase === 'pier') {
       // The motors cough into life, and off they go.
-      if (this.phaseT > 0.3 && this.phaseT - dt <= 0.3) tone(90, 140, 0.6, 0.06, 'sawtooth')
+      if (this.phaseT > 0.3 && this.phaseT - dt <= 0.3) S.start()
       if (this.phaseT > 1.6) {
         this.setPhase('ride')
-        tone(110, 260, 0.9, 0.05, 'sawtooth')
+        S.throttle()
       }
     } else if (this.phase === 'ride') {
       const left = this.len - this.s
@@ -595,14 +599,13 @@ export class SametSpeedboat implements World3D {
         this.s = this.len
         this.v = 0
         this.setPhase('dock')
-        sfx.thump()
+        S.dock()
         this.events.say?.(B.here)
-        tone(300, 220, 0.2, 0.05, 'triangle')
       }
       // The motors' hum, a little higher the faster it goes.
       if ((this.hissT -= dt) <= 0) {
         this.hissT = 0.5
-        if (this.v > 1) tone(70 + this.v * 6, 75 + this.v * 6, 0.5, 0.012, 'sawtooth')
+        if (this.v > 1) S.engine(this.v)
       }
     } else if (this.phase === 'dock') {
       // Tied up: Kaylee hops onto the pier, Mommy and Daddy after her.
@@ -663,7 +666,7 @@ export class SametSpeedboat implements World3D {
     this.liftV = BOAT.bump * k
     this.lift = 0.001
     this.counts.bumps++
-    tone(520, 880, 0.18, 0.05, 'sine')
+    S.bump()
     if (!this.talk.jump && k > 0.6) {
       this.talk.jump = true
       this.events.say?.(B.jump)
@@ -671,7 +674,7 @@ export class SametSpeedboat implements World3D {
   }
   private land(hard: number) {
     const p = this.pos
-    sfx.splash()
+    S.splash()
     this.splash.burst(p.x + this.fwd.x * 2, p.y + 0.4, p.z + this.fwd.z * 2, Math.round(10 + hard * 8), 2 + hard * 0.6, 2 + hard * 0.5, 0.2)
     this.kaylee.react('hop')
     this.nick.react('hop')
@@ -684,7 +687,7 @@ export class SametSpeedboat implements World3D {
       this.ji.react('wiggle')
       this.events.say?.(B.soak[this.talk.soak++ % B.soak.length])
       this.hatT = 0
-      window.setTimeout(() => sfx.boing(), 300)
+      window.setTimeout(() => S.boing(), 300)
     }
   }
 
@@ -695,14 +698,14 @@ export class SametSpeedboat implements World3D {
     const f = FRAMES.nadan
     const pier = atFrame(f, -4, 22.5)
     k.hopTo(new Vector3(pier.x, PIER.y, pier.z), 0.5, 0.7, () => k.faceToward(atFrame(f, -4, 0).x, atFrame(f, -4, 0).z))
-    sfx.fwip()
+    S.fwip()
     for (const [m, i] of [[this.ji, 1], [this.nick, 2]] as const) {
       window.setTimeout(() => {
         this.scene.attach(m.root)
         const q = atFrame(f, -4 + (i === 1 ? -0.9 : 0.9), 21.2)
         m.place(q.x, PIER.y, q.z, Math.atan2(-f.n.x, -f.n.z) * DEG, 'stand')
         m.react('hop')
-        sfx.fwip()
+        S.fwip()
       }, 350 * i)
     }
   }
@@ -762,7 +765,7 @@ export class SametSpeedboat implements World3D {
       }
       if ((this.hissT -= dt * 0.5) <= 0) {
         this.hissT = 0.3
-        hiss(0.32, 0.025 + this.dip * 0.02, 'highpass', 2600, 1800)
+        S.hoof(this.dip)
       }
       // The rainbow in the spray (the sun's behind her).
       const rb = this.rainbow
@@ -833,7 +836,7 @@ export class SametSpeedboat implements World3D {
     f.live = true
     f.root.visible = true
     this.counts.fish++
-    tone(900, 1400, 0.12, 0.03, 'sine')
+    S.fish()
     if (!this.talk.fish) {
       this.talk.fish = true
       this.events.say?.(B.fish)
@@ -868,6 +871,10 @@ export class SametSpeedboat implements World3D {
         x = q.x + rx * p.across * p.side
         z = q.z + rz * p.across * p.side
         yaw = Math.atan2(rx * p.side, rz * p.side)
+        if (!p.heard && p.across > -24) {
+          p.heard = true
+          S.pass(p.id)
+        }
         if (!p.bumped && this.s > p.s + 2 && p.across > 0) {
           p.bumped = true
           this.bump(0.9)
@@ -885,6 +892,11 @@ export class SametSpeedboat implements World3D {
         x = q.x + rx * p.off * p.side
         z = q.z + rz * p.off * p.side
         yaw = Math.atan2(-tan.x, -tan.z)
+        // Its engine going by, from a couple of seconds before it's alongside.
+        if (!p.heard && p.s - this.s < (this.v + p.speed) * 2) {
+          p.heard = true
+          S.pass(p.id)
+        }
         // Its wake reaches her a little after they pass.
         if (!p.bumped && p.s < this.s - (p.id === 'ferry' ? 8 : 4)) {
           p.bumped = true
@@ -933,7 +945,7 @@ export class SametSpeedboat implements World3D {
         this.capT = -1
         this.nickCap.rotation.x = 0
         this.nick.rig.armR.rotation.set(0, 0, 0)
-        sfx.pop()
+        S.pop()
       }
     }
     // Mommy holds her sun hat on (it lifts in the wind, she grabs it).
@@ -974,7 +986,7 @@ export class SametSpeedboat implements World3D {
     if (id) return
     this.finger = { x, y, t: performance.now(), speed: 0 }
     this.counts.sprays++
-    sfx.splash()
+    S.splash()
   }
   pointerMove(x: number, y: number) {
     if (!this.finger) return
@@ -984,7 +996,7 @@ export class SametSpeedboat implements World3D {
     this.finger.speed = Math.max(this.finger.speed * 0.7, sp)
     if (sp > SPRAY.drag && this.dip > 0.3 && Math.random() < 0.15) {
       this.counts.splashes++
-      sfx.splash()
+      S.splash()
     }
     this.finger.x = x
     this.finger.y = y
@@ -1005,43 +1017,42 @@ export class SametSpeedboat implements World3D {
     this.counts.pokes++
     if (id === 'kaylee') {
       this.kaylee.react('hop')
-      tone(600, 1100, 0.25, 0.05, 'triangle')
+      S.boopKaylee()
     } else if (id === 'family:nick') {
       if (this.capT < 0) this.capT = 0
       this.nick.react('wiggle')
-      tone(400, 700, 0.2, 0.04, 'triangle')
+      S.boopNick()
       this.events.say?.(B.nick[this.talk.nick++ % B.nick.length])
     } else if (id === 'family:ji') {
       if (this.hatT < 0) this.hatT = 0
       this.ji.react('wave')
-      tone(700, 900, 0.2, 0.04, 'sine')
+      S.boopJi()
       this.events.say?.(B.ji[this.talk.ji++ % B.ji.length])
     } else if (id === 'captain') {
       // The horn, and a wiggle on the water.
-      tone(330, 330, 0.35, 0.07, 'square')
-      tone(415, 415, 0.35, 0.05, 'square', 0.4)
+      S.horn()
       if (this.phase === 'ride' && this.wiggleT < 0) this.wiggleT = 0
       this.captain.armR.rotation.z = -2
       this.events.say?.(B.captain[this.talk.captain++ % B.captain.length])
     } else if (id === 'flag') {
-      sfx.fwip()
+      S.fwip()
       this.boat.cloth.rotation.y = 1.2
     } else if (id === 'ring') {
-      sfx.boing()
+      S.boing()
       this.boat.ring.rotation.x = 6
     } else if (id.startsWith('pass:')) {
       const p = this.passers.find((q) => q.id === id.slice(5))
       if (!p || !p.root.visible) return
       p.wave = 0
       this.counts.waves++
-      tone(p.id === 'ferry' ? 220 : 360, p.id === 'ferry' ? 220 : 360, 0.4, 0.06, 'square')
+      S.toot(p.id)
       this.kaylee.react('wave')
     } else if (id.startsWith('fish:')) {
       const f = this.fish[Number(id.slice(5))]
       if (!f?.live) return
       f.flip = 0
       this.counts.fishTaps++
-      tone(1200, 1800, 0.15, 0.04, 'sine')
+      S.flip()
       this.sparkle.burst(f.root.position.x, f.root.position.y, f.root.position.z, 12, 1.2, 1, 0.12)
     }
   }

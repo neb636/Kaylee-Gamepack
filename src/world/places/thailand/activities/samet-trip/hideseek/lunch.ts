@@ -19,7 +19,6 @@ import { Fog, Group, Raycaster, Scene, Vector2, Vector3, type Object3D, type Web
 import { spendHint, type Line } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
 import { L } from '../../../lines'
-import { noise as hiss, sfx, tone } from '../../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
 import { Bag } from '../../../../../engine3d/dispose'
@@ -36,6 +35,7 @@ import { at as atFrame, DECK } from '../island/layout'
 import { resortDeck } from '../island/props'
 import { buildIsland, DAY, type Island, type TimeOfDay } from '../island/scenery'
 import { makeSeeThrough, SEE } from '../island/seethrough'
+import { beachBed, hideSfx as sfx } from './sounds'
 import { breadBasket, coconut, deckUmbrella, pandanus, roll, stickyRice } from './props'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/hideseek/lunch.ts'
@@ -90,14 +90,7 @@ const TOP = 0.78
 /** Mommy at the end of the table, by the rail. */
 const MOMMY = { u: T.u - 1.45, v: T.v + 0.95 }
 
-const slurp = (big = false) => hiss(big ? 0.6 : 0.16, big ? 0.16 : 0.07, 'bandpass', big ? 700 : 1100, big ? 300 : 800, 0, 2.5)
-const ding = () => tone(1320, 1320, 0.25, 0.06, 'triangle')
-const knock = () => [0, 0.12].forEach((d) => tone(240, 200, 0.06, 0.08, 'triangle', d))
-const chitter = () => [0, 0.06, 0.12, 0.18].forEach((d, i) => tone(2200 + i * 200, 2600, 0.04, 0.04, 'square', d))
-const shutter = () => {
-  hiss(0.06, 0.12, 'highpass', 3000, 2000)
-  tone(1800, 1800, 0.03, 0.05, 'square', 0.07)
-}
+// (Sounds: sounds.ts, recorded with the synth fallbacks.)
 
 interface Flyer {
   g: Group
@@ -175,6 +168,8 @@ export class Lunch implements World3D {
     this.rig.lag = 0.4
     this.rig.camera.far = 3200
     this.seaYaw = DECK.face
+    // The cove's waves below the rail, until she leaves.
+    this.bag.add({ dispose: beachBed() })
 
     // ---- The island, the deck (the island's own), its umbrellas, the pandanus beside it.
     this.isl = buildIsland(bag)
@@ -313,13 +308,13 @@ export class Lunch implements World3D {
     if (this.cocoK < 0 && (t > LUNCH.coconutAt || this.rollsEaten > 0)) {
       this.cocoK = 0
       this.coco.root.visible = true
-      ding()
+      sfx.ding()
       this.once('coconut', T_.coconut)
     }
     if (this.plateK < 0 && (t > LUNCH.riceAt || (this.cocoK >= 0 && this.milk < 0.5))) {
       this.plateK = 0
       this.plate.root.visible = true
-      ding()
+      sfx.ding()
       this.once('rice', T_.rice)
     }
     // (Daddy's "hide and seek?" waits for Mommy's "aroi" to finish.)
@@ -341,11 +336,11 @@ export class Lunch implements World3D {
       this.milk = Math.max(0, this.milk - LUNCH.sip * dt)
       if ((this.slurpT -= dt) <= 0) {
         this.slurpT = 0.34
-        slurp()
+        sfx.sip()
       }
       if (this.milk <= 0) {
         // The last drops: a big slurp.
-        slurp(true)
+        sfx.bigSlurp()
         this.cocoWob = 1
         this.kaylee.react('wiggle')
         this.once('slurp', T_.slurp)
@@ -474,7 +469,7 @@ export class Lunch implements World3D {
         if (this.riceLeft <= 0) {
           const p = this.plate.root.position
           this.sparkle.burst(p.x, p.y + 0.1, p.z, 20, 1, 1.2, 0.08)
-          tone(880, 1320, 0.3, 0.06, 'triangle')
+          sfx.plateDone()
           this.once('aroi', T_.aroi)
         }
       },
@@ -574,12 +569,12 @@ export class Lunch implements World3D {
     if (id === 'kaylee' || id === 'roll') {
       if (this.bite()) return
       this.kaylee.react('wiggle')
-      tone(700, 900, 0.1, 0.05, 'triangle')
+      sfx.wiggle()
       return
     }
     if (id === 'coconut') {
       if (this.milk <= 0) {
-        knock()
+        sfx.knock()
         this.cocoWob = 1
       }
       return
@@ -587,7 +582,7 @@ export class Lunch implements World3D {
     if (id === 'plate') return this.riceBite()
     if (id === 'family:ji') {
       this.ji.react('wave')
-      shutter()
+      sfx.shutter()
       this.counts.photos++
       this.events.photo()
       this.events.say(T_.photo[this.turn.photo++ % T_.photo.length])
@@ -601,14 +596,14 @@ export class Lunch implements World3D {
     if (id === 'lizard') {
       this.liz.flick = 0.6
       this.liz.hurry = 1
-      hiss(0.2, 0.06, 'bandpass', 2500, 1800)
+      sfx.lizard()
       this.once('lizard', T_.lizard)
       return
     }
     if (id === 'squirrel') {
       this.sq.goal = this.sq.k > 0.6 ? 0.15 : 1
       this.sq.chit = 0.5
-      chitter()
+      sfx.chitter()
       this.once('squirrel', T_.squirrel)
     }
   }
@@ -622,7 +617,7 @@ export class Lunch implements World3D {
       const g = this.ground(tmp.x, tmp.z)
       if (tmp.y <= Math.max(0, g)) {
         if (g < -0.2) {
-          sfx.splash()
+          sfx.fish()
           this.counts.splashes++
           this.spray.burst(tmp.x, 0.1, tmp.z, 16, 1.8, 3, 0.14)
         }

@@ -10,7 +10,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { say, sounds } from '../../../../../../sdk'
 import { L } from '../../../lines'
-import { sfx } from '../../../sfx'
+import { sametSfx as sfx } from '../sfx/common'
 import { ANIMALS, ANIMAL_IDS, PAGES, type AnimalId } from './animals'
 
 export interface BookPhoto {
