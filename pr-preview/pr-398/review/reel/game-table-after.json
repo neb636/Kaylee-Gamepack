@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "game-table-after",
+  "title": "Game table after",
+  "video": "game-table-after.mp4",
+  "gif": "game-table-after.gif",
+  "seconds": 28,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "table-sit",
+      "where": "table-sit",
+      "seconds": 18,
+      "fps": 36.2,
+      "status": "ok"
+    },
+    {
+      "name": "table-candy",
+      "where": "table-candy",
+      "seconds": 7,
+      "fps": 42,
+      "status": "ok"
+    }
+  ]
+}
