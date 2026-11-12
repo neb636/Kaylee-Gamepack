@@ -994,3 +994,14 @@ Every phrase goes in `lines.ts` under `L.samet` (tagged by speaker) and is recor
   `offFrom` (14 m) from it, or at once when she calls him, runs to her and plans again; the taxi no longer waits for
   him alone. Robot (walking back up Na Dan pier): main still aboard 21 s later, 18.9 m away; now out at 6.3 s and beside
   her (1.9 m) by 15 s; called at 15.8 m, out at once. `qa().puppy.hops`, run `thailand-samet-wayfind-walkoff`.
+
+## Recorded sound effects (ElevenLabs, 2026-11-11)
+
+Every stage's synth sounds now play recorded clips: `sfx/sfx.json` (96 clips, 210 s, prompts in play order) →
+`node scripts/generate-sfx.mjs src/world/places/thailand/activities/samet-trip/sfx`. `sfx/common.ts` is the shared set
+(`sametSfx`: splash, boing, thump, pop, fwip, shutter, munch, whoosh; `beachBed`); each stage has a `sounds.ts` with its
+old synth sounds as fallbacks (`synth`) and the recorded wrappers. Beds: the beach (most stages), `speedboat-sea`,
+`snorkel-under`, `island-forest` (inland roads, louder away from the water) and `fire-night`. New sounds with no synth
+before (footsteps, pass-bys, the taxi engine, the swim loop, the poi) stay silent in tests. Kept synth: bells, twinkles,
+note runs, countdowns, giggles and laughs. Redo one with `--only <id> --force`. Not done: a snorkel breath (asked),
+ducking the waves inland (the bed has no volume control).
