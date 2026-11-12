@@ -151,6 +151,7 @@ try {
       build: q.buildMs ?? null,
       calls: q.stats.calls,
       tris: q.stats.tris,
+      vertices: q.stats.vertices ?? null,
       drawsPerFrame: Math.round(m.draws / n),
       vertsPerFrame: Math.round(m.verts / n),
       uploadKBPerFrame: +(m.upload / n / 1024).toFixed(1),
@@ -172,7 +173,7 @@ try {
 }
 
 writeFileSync(path.join(out, `perf-${label}.json`), JSON.stringify(results, null, 2))
-const cols = ['calls', 'tris', 'vertsPerFrame', 'uploadKBPerFrame', 'programs', 'lateprograms', 'readyMs', 'jsMs', 'jsP95', 'maxFrameMs']
+const cols = ['calls', 'tris', 'vertices', 'vertsPerFrame', 'uploadKBPerFrame', 'programs', 'lateprograms', 'readyMs', 'jsMs', 'jsP95', 'maxFrameMs']
 const old = compare && existsSync(path.join(out, `perf-${compare}.json`)) ? JSON.parse(readFileSync(path.join(out, `perf-${compare}.json`), 'utf8')) : null
 const cell = (name, c) => {
   const v = results[name]?.[c]

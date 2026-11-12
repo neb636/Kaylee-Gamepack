@@ -6,7 +6,7 @@
 // one-finger drag that swings the camera, a two-finger pinch that moves it in and out, and WASD / arrows / space on a
 // keyboard for Dad.
 import { useEffect, useRef, type MutableRefObject, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
-import type { Scene, WebGLRenderer } from 'three'
+import type { InstancedMesh, Mesh, Scene, WebGLRenderer } from 'three'
 import type { CameraRig } from './camera'
 import { camLab, type LabWorld } from './camLab'
 import { automated } from './flags'
@@ -377,7 +377,16 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
     canvas.addEventListener('webglcontextlost', onLost)
 
     // (programs: compiled shader programs so far; one that appears mid-play was a compile hitch, scripts/qa-perf.mjs.)
-    window[qaKey] = () => ({ mode: 'webgl', ...world.qa(), stats: { ...world.stats, dpr, programs: renderer.info.programs?.length ?? 0 }, memory: world.memory() })
+    // (vertices: the corners the GPU shades for everything showing, before culling: an indexed shape shades each once.)
+    const vertices = () => {
+      let n = 0
+      world.scene.traverseVisible((o) => {
+        const g = (o as Mesh).geometry
+        if ((o as Mesh).isMesh && g?.attributes.position) n += g.attributes.position.count * ((o as InstancedMesh).isInstancedMesh ? (o as InstancedMesh).count : 1)
+      })
+      return n
+    }
+    window[qaKey] = () => ({ mode: 'webgl', ...world.qa(), stats: { ...world.stats, dpr, programs: renderer.info.programs?.length ?? 0, vertices: vertices() }, memory: world.memory() })
 
     return () => {
       stop()
