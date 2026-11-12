@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "nan-lookout-after",
+  "title": "Nan lookout after",
+  "video": "nan-lookout-after.mp4",
+  "gif": "nan-lookout-after.gif",
+  "seconds": 28,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "nan-lookout",
+      "where": "nan-lookout",
+      "seconds": 9,
+      "fps": 39.1,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand nan trip three",
+      "where": "#/world/thailand/nan-trip/three?to=lookout",
+      "seconds": 16,
+      "fps": 30.4,
+      "status": "ok"
+    }
+  ]
+}
