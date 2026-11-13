@@ -8,6 +8,7 @@
 // through a narrow side-on frame instead of flipping in one frame. Plain SVG, no three.js.
 import { spring } from '../../../../../sdk'
 import { LOOKS, type Kind, type Pt } from './stage'
+import { clamp } from '../../../../../sdk/math'
 
 export const INK = '#4A3B57'
 const BLUSH = '#F4A0B4'
@@ -249,7 +250,6 @@ export interface PoseIn {
   seeds: boolean
 }
 
-const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v)
 const bell = (p: number) => (p <= 0 || p >= 1 ? 0 : Math.sin(p * Math.PI))
 /** Writes an SVG attribute only when it changes. */
 const written = new WeakMap<Element, Record<string, string>>()

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Starts the ElevenLabs MCP server for Claude Code (.mcp.json) and Codex (.codex/config.toml).
+# Starts the ElevenLabs MCP server for Claude Code (.claude/mcp/elevenlabs.json) and Codex (.codex/config.toml).
 # Both keep it OFF until you switch it on for a session (see .agents/skills/sfx/SKILL.md).
 # The key never lives in a config file: it comes from your shell, this checkout's .env, or the main checkout's .env.
 set -euo pipefail

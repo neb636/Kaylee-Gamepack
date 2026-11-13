@@ -109,6 +109,7 @@ import {
 import { fieldBed, riceSfx as sfx } from './sounds'
 import { RiceStory } from './story'
 import { FarmWater } from './water'
+import { smoothstep } from '../../../../../../sdk/math'
 
 export interface RiceEvents extends LegEvents {
   /** A new round began (the address bar follows). */
@@ -236,14 +237,10 @@ const STUBBLE = new Color('#C9A35A')
 const MUD_DAMP = '#8E7458'
 const SKY = '#CFE8F7'
 /** Rice clump heights by growth (meters, before a paddy's extra tallness). */
-const smooth = (a: number, b: number, v: number) => {
-  const k = clamp((v - a) / (b - a), 0, 1)
-  return k * k * (3 - 2 * k)
-}
-const riceH = (g: number) => 0.26 + 0.38 * smooth(0, 0.5, g) + 0.14 * smooth(0.45, 0.85, g)
+const riceH = (g: number) => 0.26 + 0.38 * smoothstep(0, 0.5, g) + 0.14 * smoothstep(0.45, 0.85, g)
 /** Each hill stands in the mud, this much of it under the water. */
 const SUNK = MUD_DOWN - WATER_DOWN
-const riceW = (g: number) => 0.9 + 0.45 * smooth(0, 0.6, g)
+const riceW = (g: number) => 0.9 + 0.45 * smoothstep(0, 0.6, g)
 const PER_BUNDLE = Math.floor((PER_PADDY * PADDIES.length) / BUNDLES)
 const THRESH_AT = new Vector3(BASKET[0] - 0.75, 0, BASKET[2] - 0.1)
 const BANGS = THRESHED * BANGS_PER
@@ -943,7 +940,7 @@ export class RiceFarm extends Stage {
       this.swing += dt / SWING_S
       const t = this.swing
       if (t < 0.45) {
-        const e = smooth(0, 0.45, t)
+        const e = smoothstep(0, 0.45, t)
         a = SWING_REST + (SWING_UP - SWING_REST) * e
         raise = 0.3 + 0.7 * e
       } else if (t < HIT_AT) {
@@ -951,7 +948,7 @@ export class RiceFarm extends Stage {
         a = SWING_UP + (SWING_DOWN - SWING_UP) * e
         raise = 1 - 0.45 * e
       } else {
-        const e = smooth(HIT_AT, 1, t)
+        const e = smoothstep(HIT_AT, 1, t)
         a = SWING_DOWN + (SWING_REST - SWING_DOWN) * e
         raise = 0.55 - 0.25 * e
       }
@@ -964,7 +961,7 @@ export class RiceFarm extends Stage {
     const h = this.held
     if (h.root.visible) {
       const hands = this.handsAt(raise, tmp)
-      if (this.take < 1) h.root.position.lerpVectors(this.takeFrom, hands, smooth(0, 1, this.take)).y += bell(this.take) * 0.6
+      if (this.take < 1) h.root.position.lerpVectors(this.takeFrom, hands, smoothstep(0, 1, this.take)).y += bell(this.take) * 0.6
       else h.root.position.copy(hands)
       h.root.rotation.y = this.kaylee.root.rotation.y - Math.PI / 2
       h.pitch.rotation.z = a
@@ -988,7 +985,7 @@ export class RiceFarm extends Stage {
       this.kratipK = Math.min(1, this.kratipK + dt / 0.5)
       const k = this.kratipK
       this.kratip.root.scale.setScalar(Math.max(0.01, k < 0.7 ? (k / 0.7) * 1.2 : 1.2 - ((k - 0.7) / 0.3) * 0.2))
-      this.kratip.root.position.y = 0.3 + 0.2 * smooth(0, 0.7, k) + bell(k) * 0.25
+      this.kratip.root.position.y = 0.3 + 0.2 * smoothstep(0, 0.7, k) + bell(k) * 0.25
     }
   }
 
@@ -1285,7 +1282,7 @@ export class RiceFarm extends Stage {
       const r = this.kaylee.rig
       const from = kr.rice.getWorldPosition(tmp)
       const mouth = r.head.localToWorld(tmp2.set(...r.face.mouth))
-      this.ball.position.lerpVectors(from, mouth, smooth(0, 1, this.ballK)).y += bell(this.ballK) * 0.12
+      this.ball.position.lerpVectors(from, mouth, smoothstep(0, 1, this.ballK)).y += bell(this.ballK) * 0.12
       if (this.ballK >= 1) this.ball.visible = false
     }
     if (this.cheekGrain.visible && this.time > this.cheekUntil) this.cheekGrain.visible = false
@@ -1828,7 +1825,7 @@ export class RiceFarm extends Stage {
       const floor = p.top - MUD_DOWN
       w.visible = s.lvl > 0.003
       w.position.y = floor - 0.012 + (p.top - WATER_DOWN - floor + 0.012) * s.lvl
-      FarmWater.setShine(w, s.lvlGoal < 0.5 ? 0 : smooth(0.25, 0.85, s.lvl))
+      FarmWater.setShine(w, s.lvlGoal < 0.5 ? 0 : smoothstep(0.25, 0.85, s.lvl))
       s.gateK += ((s.open ? 1 : 0) - s.gateK) * Math.min(1, dt * 5)
       s.wiggle = Math.min(1, s.wiggle + dt / 0.6)
       const gate = this.farm.gates[p.i]
@@ -1983,7 +1980,7 @@ export class RiceFarm extends Stage {
 
   /** Height of a hill's rice now (meters). */
   private hillHeight(h: Hill) {
-    return SUNK + riceH(this.growth) * (1 + (this.paddies[h.paddy].tall - 1) * smooth(0.2, 1, this.growth))
+    return SUNK + riceH(this.growth) * (1 + (this.paddies[h.paddy].tall - 1) * smoothstep(0.2, 1, this.growth))
   }
 
   /** Every hill's look this frame: popping in, droopy or straight, growing, leaning away from Kaylee, cut to stubble. */
@@ -1991,9 +1988,9 @@ export class RiceFarm extends Stage {
     const k = this.kaylee.root.position
     const inFarm = this.phase === 'farm'
     const g = this.growth
-    const green = smooth(0, 0.45, g)
-    const gold = smooth(0.72, 1, g)
-    const hk = smooth(0.42, 0.72, g)
+    const green = smoothstep(0, 0.45, g)
+    const gold = smoothstep(0.72, 1, g)
+    const hk = smoothstep(0.42, 0.72, g)
     const sway = 0.04 + 0.08 * g
     for (const h of this.hills) {
       // ---- Popping in, springing up, a peck's twitch ----
@@ -2066,7 +2063,7 @@ export class RiceFarm extends Stage {
       const lz = h.lz + Math.sin(h.droop) * droop + w * 0.3
       col.copy(SEEDLING).lerp(DRY, 1 - h.wet).lerp(GROWN, green).lerp(LEAF_GOLD, gold).offsetHSL(0, 0, h.shade * 0.035)
       this.blades.set(h.i, hillMatrix(m4, h.x, h.floor, h.z, width, height, lx, lz, h.turn), col)
-      c2.copy(HEAD_GREEN).lerp(GOLD, smooth(0.62, 0.95, g))
+      c2.copy(HEAD_GREEN).lerp(GOLD, smoothstep(0.62, 0.95, g))
       const ate = 1 - h.eaten
       this.heads.set(h.i, hillMatrix(m4, h.x, h.floor, h.z, width * hk * ate, height * (0.94 + 0.06 * hk) * (0.7 + 0.3 * ate), lx, lz, h.turn), c2)
     }

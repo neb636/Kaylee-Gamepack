@@ -2,29 +2,12 @@
 // the glowing domes (flat, unlit colors, so a lit pod really glows), a shine on each, the white ring round each dome,
 // the ring's ink outline (the house's outline, instanced, like the barber's mane), and a soft halo behind the lit ones.
 // The wall (wall.ts) says each pod's color, halo and squash every frame; this only draws them.
-import { AdditiveBlending, BackSide, CanvasTexture, Color, DynamicDrawUsage, Group, InstancedMesh, Matrix4, MeshBasicMaterial, PlaneGeometry, Quaternion, ShaderMaterial, SphereGeometry, TorusGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
+import { AdditiveBlending, CanvasTexture, Color, DynamicDrawUsage, Group, InstancedMesh, Matrix4, MeshBasicMaterial, PlaneGeometry, Quaternion, SphereGeometry, TorusGeometry, Vector3 } from 'three'
 import type { Bag } from '../../../../../../engine3d/dispose'
-import { PAL, toon } from '../../../../../../engine3d/toon'
+import { toon } from '../../../../../../engine3d/toon'
 import { BEZEL_R, DOME_R, PODS, type V3 } from './layout'
+import { instancedOutlineMaterial } from '../../../../../../engine3d/outline'
 
-const outlineVert = /* glsl */ `
-  uniform vec2 uRes;
-  uniform float uPx;
-  void main() {
-    vec4 mvPosition = modelViewMatrix * instanceMatrix * vec4(position, 1.0);
-    vec4 clip = projectionMatrix * mvPosition;
-    vec3 n = normalMatrix * (mat3(instanceMatrix) * normal);
-    vec2 dir = (projectionMatrix * vec4(n, 0.0)).xy;
-    float len = length(dir);
-    dir = len > 1e-5 ? dir / len : vec2(0.0);
-    clip.xy += dir * uPx * 2.0 / uRes * clip.w;
-    gl_Position = clip;
-  }
-`
-const outlineFrag = /* glsl */ `
-  uniform vec3 uColor;
-  void main() { gl_FragColor = vec4(uColor, 1.0); }
-`
 
 /** What one pod looks like this frame. */
 export interface PodLook {
@@ -44,7 +27,6 @@ const q = new Quaternion()
 const pos = new Vector3()
 const scl = new Vector3()
 const Z = new Vector3(0, 0, 1)
-const size = new Vector2()
 
 export class Pods {
   readonly root = new Group()
@@ -63,13 +45,9 @@ export class Pods {
     this.shines = bag.add(new InstancedMesh(bag.add(new SphereGeometry(DOME_R * 0.24, 10, 6)), bag.add(new MeshBasicMaterial({ color: '#ffffff' })), n))
     const ringGeo = bag.add(new TorusGeometry(BEZEL_R - 0.045, 0.05, 10, 32))
     this.rings = bag.add(new InstancedMesh(ringGeo, toon('#ffffff'), n))
-    const ink = bag.add(new ShaderMaterial({ uniforms: { uRes: { value: [1, 1] }, uPx: { value: 2.2 }, uColor: { value: new Color(PAL.ink) } }, vertexShader: outlineVert, fragmentShader: outlineFrag, side: BackSide }))
+    // The house's ink line, instanced (shared and cached by the engine: not the bag's to dispose).
+    const ink = instancedOutlineMaterial(2.2)
     this.inks = bag.add(new InstancedMesh(ringGeo, ink, n))
-    // The outline is as wide in pixels as the house's (its canvas size, read as it draws).
-    this.inks.onBeforeRender = (renderer: WebGLRenderer) => {
-      renderer.getSize(size)
-      ink.uniforms.uRes.value = [Math.max(1, size.x), Math.max(1, size.y)]
-    }
     const halo = bag.add(new MeshBasicMaterial({ map: bag.add(haloTexture()), transparent: true, depthWrite: false, blending: AdditiveBlending }))
     this.halos = bag.add(new InstancedMesh(bag.add(new PlaneGeometry(1, 1)), halo, n))
     for (const im of [this.halos, this.inks, this.rings, this.domes, this.shines]) {

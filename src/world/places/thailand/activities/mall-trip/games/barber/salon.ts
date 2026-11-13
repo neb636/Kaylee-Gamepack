@@ -1,4 +1,4 @@
-// The Barber Salon in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md, "★ 2. The Barber Salon"),
+// The Barber Salon in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "★ 2. The Barber Salon"),
 // greybox: shapes and sounds, with the voices (lines.ts L.mall.barber). Dad sits in the big chair facing her, a cape
 // round him; Kaylee stands on her step stool beside him; Mom waits on the bench with her phone.
 //

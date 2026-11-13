@@ -1,4 +1,4 @@
-// The Pizza Company's table (plan: planning/around-the-world/thailand/mall-trip.md, "The Pizza Company"), in meters:
+// The Pizza Company's table (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "The Pizza Company"), in meters:
 // where everything stands, the three pizzas and how far each one's cheese stretches. Pure data (no three.js).
 //
 // Seen straight on (the camera looks toward -z), left to right:

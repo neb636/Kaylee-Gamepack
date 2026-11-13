@@ -29,14 +29,14 @@ import { makeGeckos, type Islander } from '../story/islander'
 import { memoryBed, storyMusic } from '../story/sounds'
 import { at, bay, FRAMES, STOPS, type SpotId, type XZ } from './layout'
 import type { Puppy } from './puppy'
+import { TO_DEG } from '../../../../../../sdk/math'
 
 const S = L.samet.story
-const DEG = 180 / Math.PI
 const N = FRAMES.nadan
 /** A point at Na Dan in its beach frame (`u` along the sand, `v` out to sea), as XZ. */
 const nd = (u: number, v: number): XZ => at(N, u, v)
 /** The way a point in Na Dan's frame faces another (degrees, for place()). */
-const faceTo = (from: XZ, to: XZ) => Math.atan2(to.x - from.x, to.z - from.z) * DEG
+const faceTo = (from: XZ, to: XZ) => Math.atan2(to.x - from.x, to.z - from.z) * TO_DEG
 
 /** Where the way-in film is staged, at the foot of Na Dan pier (Na Dan's frame: the pier runs out to sea at u = -4). */
 export const STAGE = {

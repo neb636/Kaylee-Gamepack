@@ -4,8 +4,6 @@ dist
 test-results
 playwright-report
 *.log
-# Full-size generated game art is scratch space; the app uses the small webp copies in src/games/*/assets/
-art/source/games/
 .env
 # Full-size generated world art is scratch space too
 art/source/world/
@@ -15,3 +13,6 @@ art/source/sfx/
 qa-output/
 # Review pages (scripts/review.mjs): media goes to the review-pages branch, never into main's history
 review/
+# Claude Code: personal settings and session worktrees
+.claude/settings.local.json
+.claude/worktrees/

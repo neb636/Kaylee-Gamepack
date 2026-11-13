@@ -415,7 +415,7 @@ export const screens = [
   { name: 'nan-cup-gold', hash: '#/world/thailand/nan-trip/podium?track=forest&place=1', reset: true, wait: 6000 },
   { name: 'nan-cup-silver', hash: '#/world/thailand/nan-trip/podium?track=steps&place=2', reset: true, wait: 6000 },
   { name: 'nan-cup-win', hash: '#/world/thailand/nan-trip/cup-win', reset: true, wait: 12000 },
-  { name: 'nan-cup-map', hash: '#/world/thailand/nan-trip/map?stops=mushrooms,cup&cup=1', reset: true, wait: 5000 },
+  { name: 'nan-cup-map', hash: '#/world/thailand/nan-trip/map?stops=mushrooms,cup', reset: true, wait: 5000 },
   { name: 'nan-salt-1', hash: '#/world/thailand/nan-trip/salt', reset: true, wait: 3500 },
   { name: 'nan-salt-2', hash: '#/world/thailand/nan-trip/salt?round=2', reset: true, wait: 3500 },
   { name: 'nan-salt-3', hash: '#/world/thailand/nan-trip/salt?round=3', reset: true, wait: 3500 },

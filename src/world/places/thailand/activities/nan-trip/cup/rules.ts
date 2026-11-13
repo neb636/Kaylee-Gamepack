@@ -2,28 +2,19 @@
 // functions, so the board, the race, the podium and the ceremony all agree. Loaded at startup (sections.ts): no
 // three.js here.
 //
-// - Behind a flag: with CUP_OPEN false the city road still ends at Nan town's market and goes back to the map, as
-//   before. `?cup=1` (or any `cup` record, which the trip's sections carry while it's on) on a Nan trip link turns it
-//   on to try (the city road ends at the race ground, the Cup is a
-//   fourth stop with its stamp on Nan town, the boarding pass gains 🏁). Every Cup section link works either way.
+// - Always on the trip (since the full loop): the city road ends at the race ground, the Cup is a fourth stop with its
+//   stamp on Nan town, and the boarding pass has 🏁.
 // - The roll: she wins two races and loses one. When she gets to the race ground, the Cup rolls which track she'll
 //   lose (`lose`) and the trip saves it; a whole new trip rolls again. The loss is never the last race she runs (Dad,
 //   2026-10-27): if she won the first and the roll is the track she hasn't picked, the loss moves to the one she
 //   picked second (the roll stops being random once one race is done and won). So the Cup always comes right after a
 //   win.
 // - The record (`cup`): the races done and her place in each, `forest:1,steps:2`.
-import { flag } from '../../../../../engine3d/flags'
 import { HOME, RIVAL_IDS, type Result, type RivalId } from './rivals'
 import { TRACK_IDS, type TrackId } from './track'
 
-/** Is the Cup on the trip? On since the full loop (step 5); false hides it again (`?cup=1` still tries it). */
-export const CUP_OPEN = true
-
 /** What the Cup in her Trophy Room says. */
 export const CUP_TROPHY = 'Nan Mountain Cup Champion'
-
-/** Read once when the trip mounts: on when the link has `cup` (`1`, or the record the trip carries while it's on). */
-export const cupOpen = () => CUP_OPEN || !!flag('cup')
 
 export type Place = 1 | 2
 /** The races she has run in the Cup, in the order she ran them, and her place in each. */

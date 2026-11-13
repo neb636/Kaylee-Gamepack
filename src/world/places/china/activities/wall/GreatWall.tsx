@@ -15,10 +15,10 @@ import { INK } from '../../puppets/ink'
 import type { ActivityProps } from '../../Place'
 import { Brick, BRICK_RATIO, BRICKS, WallWalk, type BrickColor, type WallGeom } from './Bricks'
 import SECTIONS from './sections'
+import { clamp } from '../../../../../sdk/math'
 
 const W_ = L.wall
 const TOTAL = 4
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 
 /** The three patterns: the whole sequence, which places are missing, and the bricks she can choose from. */
 const GAPS: { seq: string; missing: number[]; choices: BrickColor[] }[] = [

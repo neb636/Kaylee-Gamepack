@@ -1,4 +1,4 @@
-// Cafe & Cake in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md, "4. Cafe & Cake"), in meters:
+// Cafe & Cake in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "4. Cafe & Cake"), in meters:
 // where everything stands, the fruit and what color each one blends to, and the orders in each round. Pure data (no
 // three.js).
 //

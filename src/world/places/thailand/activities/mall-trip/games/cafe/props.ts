@@ -9,6 +9,7 @@ import { bake, merge, P, solid } from '../../../../../../engine3d/geo'
 import { PAL } from '../../../../../../engine3d/toon'
 import { BASE_H, CUP, JAR, type ItemId } from './layout'
 import { liquidMaterial } from './liquid'
+import { smoothstep } from '../../../../../../../sdk/math'
 
 const GLASS = '#E4F6FF'
 const RIM = '#B9A6F5'
@@ -144,10 +145,6 @@ export function buildStraw(bag: Bag) {
 }
 
 const lerpC = (a: string, b: string, k: number, out = new Color()) => out.set(a).lerp(new Color(b), Math.min(1, Math.max(0, k)))
-const smooth = (a: number, b: number, x: number) => {
-  const k = Math.min(1, Math.max(0, (x - a) / (b - a)))
-  return k * k * (3 - 2 * k)
-}
 
 /** Colors a baked part per vertex (a gradient or blush across a fruit's skin), from where each vertex is. */
 function paint(g: BufferGeometry, fn: (x: number, y: number, z: number, out: Color) => void) {
@@ -162,7 +159,7 @@ function paint(g: BufferGeometry, fn: (x: number, y: number, z: number, out: Col
 }
 
 /**
- * A smooth round fruit body spun round the vertical (y from 0 to `h`): `r(t)` is its radius at t = 0..1 up the body,
+ * A smoothstep round fruit body spun round the vertical (y from 0 to `h`): `r(t)` is its radius at t = 0..1 up the body,
  * `squashZ` flattens it front to back, `bend` curves its middle sideways. The seam is at the back.
  */
 function body(h: number, r: (t: number) => number, squashZ = 1, bend = 0, rows = 28): BufferGeometry {
@@ -177,7 +174,7 @@ function body(h: number, r: (t: number) => number, squashZ = 1, bend = 0, rows =
   return g
 }
 
-/** A smooth tube along a curve in the x-y plane with a rounded five-ridge cross section (a banana), closed at both ends. */
+/** A smoothstep tube along a curve in the x-y plane with a rounded five-ridge cross section (a banana), closed at both ends. */
 function tube(path: (t: number) => [number, number], radius: (t: number) => number, rings: number, sides: number, flatZ: number): BufferGeometry {
   const pos: number[] = []
   const idx: number[] = []
@@ -232,9 +229,9 @@ export function buildItem(id: ItemId, bag: Bag): Group {
       const geo = bake(body(H, (t) => 0.175 * Math.pow(t, 0.55) * Math.pow(1 - Math.pow(t, 2.6), 0.5), 0.84, 0.03), '#FFC233')
       paint(geo, (x, y, z, c) => {
         const t = y / H
-        lerpC('#FFD24A', '#FF9A2E', smooth(0.1, 0.7, t), c)
-        lerpC('#' + c.getHexString(), '#FF5C3A', smooth(0.0, 0.085, z) * (0.3 + 0.7 * smooth(0.15, 0.75, t)) * (0.55 + 0.45 * smooth(-0.1, 0.05, x)), c)
-        lerpC('#' + c.getHexString(), '#9ED14E', smooth(0.82, 0.99, t) * 0.9, c)
+        lerpC('#FFD24A', '#FF9A2E', smoothstep(0.1, 0.7, t), c)
+        lerpC('#' + c.getHexString(), '#FF5C3A', smoothstep(0.0, 0.085, z) * (0.3 + 0.7 * smoothstep(0.15, 0.75, t)) * (0.55 + 0.45 * smoothstep(-0.1, 0.05, x)), c)
+        lerpC('#' + c.getHexString(), '#9ED14E', smoothstep(0.82, 0.99, t) * 0.9, c)
       })
       const sub = new Group()
       const inner = new Group()
@@ -255,8 +252,8 @@ export function buildItem(id: ItemId, bag: Bag): Group {
       const geo = bake(body(H, R, 0.94), '#FF3B5C')
       paint(geo, (_x, y, _z, c) => {
         const t = y / H
-        lerpC('#FF6F86', '#EF2B4E', smooth(0.0, 0.45, t), c)
-        lerpC('#' + c.getHexString(), '#FFB3B0', smooth(0.9, 1.0, t) * 0.8, c)
+        lerpC('#FF6F86', '#EF2B4E', smoothstep(0.0, 0.45, t), c)
+        lerpC('#' + c.getHexString(), '#FFB3B0', smoothstep(0.9, 1.0, t) * 0.8, c)
       })
       const seeds: ReturnType<typeof P.sphere>[] = []
       for (let row = 0; row < 7; row++) {
@@ -288,7 +285,7 @@ export function buildItem(id: ItemId, bag: Bag): Group {
       break
     }
     case 'banana': {
-      // One smooth curved banana with five soft ridges: a green-brown stem on the left, golden yellow, a brown tip.
+      // One smoothstep curved banana with five soft ridges: a green-brown stem on the left, golden yellow, a brown tip.
       const arcR = 0.2
       const span = 0.95
       const path = (t: number): [number, number] => {
@@ -299,9 +296,9 @@ export function buildItem(id: ItemId, bag: Bag): Group {
       const geo = bake(tube(path, radius, 40, 15, 0.9), '#FFD83D')
       paint(geo, (x, y, z, c) => {
         const t = (Math.atan2(x, 0.25 - y) + span) / (span * 2)
-        lerpC('#FFD83D', '#FFEE88', smooth(0.0, 0.03, z) * 0.55, c)
-        lerpC('#' + c.getHexString(), '#9AA23A', 1 - smooth(0.08, 0.22, t), c)
-        lerpC('#' + c.getHexString(), '#5A3B22', smooth(0.94, 0.985, t), c)
+        lerpC('#FFD83D', '#FFEE88', smoothstep(0.0, 0.03, z) * 0.55, c)
+        lerpC('#' + c.getHexString(), '#9AA23A', 1 - smoothstep(0.08, 0.22, t), c)
+        lerpC('#' + c.getHexString(), '#5A3B22', smoothstep(0.94, 0.985, t), c)
       })
       one([geo])
       break

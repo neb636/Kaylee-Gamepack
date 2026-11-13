@@ -53,6 +53,7 @@ import { CUT_V, DIGGABLE, PATCH, Sand, sinkGround, type SandFeel } from './sand'
 import { sandSfx as sfx } from './sounds'
 import { SandyStory } from './story'
 import { beachBed } from '../sfx/common'
+import { TO_DEG, damp } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/sandcastle/sandcastle.ts'
 /** Her finger in the sand. */
@@ -144,12 +145,10 @@ const SHELL_HOMES = [
 /** Where the unicorn waits as the stop opens, and where Mom sits under her umbrella. */
 const KAYLEE_AT = { a: 0.6, v: -2.9 }
 const MOM_AT = { a: -5.3, v: -4.7 }
-const DEG = 180 / Math.PI
 const HINT_S = 8
 const MAX_TOWERS = 8
 const tmp = new Vector3()
 const tmp2 = new Vector3()
-const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 const span = (k: number, a: number, b: number) => clamp((k - a) / (b - a), 0, 1)
 const bellK = (k: number) => Math.sin(Math.PI * clamp(k, 0, 1))
 
@@ -515,15 +514,15 @@ export class Sandcastle implements World3D {
   private seat() {
     const d = this.dad
     const fp = this.sand.world(d.a, d.feet)
-    this.nick.place(fp.x, this.sand.heightAt(d.a, d.feet), fp.z, this.seaYaw * DEG, 'lie')
+    this.nick.place(fp.x, this.sand.heightAt(d.a, d.feet), fp.z, this.seaYaw * TO_DEG, 'lie')
     this.nick.lookAway()
     const mp = this.sand.world(MOM_AT.a, MOM_AT.v)
     const toC = this.sand.world(this.C.a, this.C.v)
-    this.ji.place(mp.x, this.sand.heightAt(MOM_AT.a, MOM_AT.v), mp.z, Math.atan2(toC.x - mp.x, toC.z - mp.z) * DEG, 'sit')
+    this.ji.place(mp.x, this.sand.heightAt(MOM_AT.a, MOM_AT.v), mp.z, Math.atan2(toC.x - mp.x, toC.z - mp.z) * TO_DEG, 'sit')
     const k0 = this.sand.world(KAYLEE_AT.a, KAYLEE_AT.v)
     this.kaylee.stop()
     this.kaylee.setPose('stand')
-    this.kaylee.place(k0.x, 0, k0.z, (this.seaYaw + Math.PI) * DEG)
+    this.kaylee.place(k0.x, 0, k0.z, (this.seaYaw + Math.PI) * TO_DEG)
     this.sitting = false
     this.kGoal = null
   }
@@ -532,9 +531,9 @@ export class Sandcastle implements World3D {
   private stand(who: 'kaylee' | 'nick' | 'ji', a: number, v: number, turn: number) {
     const p = this.sand.world(a, v)
     const ax = this.sand.axes
-    const s = Math.sin(turn / DEG)
-    const c = -Math.cos(turn / DEG)
-    const face = Math.atan2(ax.a.x * s + ax.v.x * c, ax.a.z * s + ax.v.z * c) * DEG
+    const s = Math.sin(turn / TO_DEG)
+    const c = -Math.cos(turn / TO_DEG)
+    const face = Math.atan2(ax.a.x * s + ax.v.x * c, ax.a.z * s + ax.v.z * c) * TO_DEG
     if (who === 'kaylee') {
       this.kaylee.stop()
       this.kaylee.setPose('stand')
@@ -1054,7 +1053,7 @@ export class Sandcastle implements World3D {
   /** Each frame her finger is down: dig, pat, bury or carry. */
   private fingerStep(dt: number) {
     const f = this.finger
-    this.fingerSpeed *= 1 - ease(dt, 6)
+    this.fingerSpeed *= 1 - damp(dt, 6)
     if (!f) return
     const g = this.groundPoint(f.x, f.y)
     if (!g) return
@@ -1557,7 +1556,7 @@ export class Sandcastle implements World3D {
     const k = this.kaylee.root.position
     const kl = this.sand.local(k.x, k.z)
     const ky = this.sand.inside(kl.a, kl.v) ? Math.max(this.sand.heightAt(kl.a, kl.v), this.sand.surfaceAt(kl.a, kl.v) - 0.25) : Math.max(0, this.isl.ground.heightAt(k.x, k.z))
-    this.kHold.position.y += (ky - this.kHold.position.y) * ease(dt, 14)
+    this.kHold.position.y += (ky - this.kHold.position.y) * damp(dt, 14)
     if (!this.finger && this.sitting && this.time - this.lastTouch > 2.5) {
       this.sitting = false
       this.kaylee.setPose('stand')
@@ -1609,7 +1608,7 @@ export class Sandcastle implements World3D {
     }
     d.mounds.forEach((m, i) => {
       const goal = d.buried[i]
-      const s = m.scale.x + (Math.max(0.001, goal) - m.scale.x) * ease(dt, d.sneezeT >= 0 ? 30 : 8)
+      const s = m.scale.x + (Math.max(0.001, goal) - m.scale.x) * damp(dt, d.sneezeT >= 0 ? 30 : 8)
       m.scale.setScalar(s)
       m.visible = s > 0.02
     })
@@ -1690,7 +1689,7 @@ export class Sandcastle implements World3D {
         const ph = (t * 0.75 + this.moulds.indexOf(m) * 0.31) % 1
         lift = Math.max(lift, ph < 0.22 ? bellK(ph / 0.22) * 0.18 : 0)
       }
-      m.lift += (lift - m.lift) * (m.state === 'flip' || m.state === 'arrive' || m.state === 'back' ? 1 : ease(dt, 12))
+      m.lift += (lift - m.lift) * (m.state === 'flip' || m.state === 'arrive' || m.state === 'back' ? 1 : damp(dt, 12))
       this.at(m.a, m.v, m.lift, m.root.position)
       m.body.rotation.x = flipR
       m.body.position.y = flipR > 0.01 ? Math.sin(flipR) * 0.25 + (1 - Math.cos(flipR)) * 0.23 : 0
@@ -1840,7 +1839,7 @@ export class Sandcastle implements World3D {
     const { C } = this
     // Looking out to sea from up the beach, steeply down over the sand: the castle in the middle, the sea at the top.
     const center = this.at(C.a + 0.2, C.v + (this.tall ? 0.55 : 1.15), 0.1)
-    const yaw = (this.seaYaw + Math.PI) * DEG
+    const yaw = (this.seaYaw + Math.PI) * TO_DEG
     // (Tall screens look down more steeply, so the sand fills the height instead of the sky and the sea.)
     const half = this.tall ? new Vector3(4.0, 0.5, 3.9) : new Vector3(5.6, 0.5, 4.2)
     return { center, half, yaw, pitch: PLAY.pitch + (this.tall ? PLAY.tallPitch : 0), follow: true, minDist: 5, maxDist: 40 }

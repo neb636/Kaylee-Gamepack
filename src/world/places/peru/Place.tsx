@@ -1,16 +1,15 @@
 import { useSections } from '../../kit/sections'
 import BALLOON_SECTIONS from './activities/BalloonSoon.sections'
-// Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md). Built one activity per PR: Luna's
+// Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md (retired; in git history)). Built one activity per PR: Luna's
 // Fluffy Day, Coco's Canyon Glide and Rosa's Rainy River so far. The other places on Luna's map say "coming soon" until they're built, and the balloon finale
 // (route `party`) waits until all five exist.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType } from 'react'
 import { BigButton, firstTime, say, SparklePuppet, sounds, useSaved, type PuppetHandle } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
-import { StampEarned } from '../../kit/StampEarned'
+import { useStampFlow, type ActivityProps } from '../../kit/stampFlow'
 import { StoryBeat } from '../../kit/StoryBeat'
-import { VideoBreak } from '../../kit/Theater'
-import type { PlaceProps, PlaceVideo } from '../../types'
+import type { PlaceProps } from '../../types'
 import { CanyonGlide } from './activities/canyon/CanyonGlide'
 import { FluffyDay, HATS_KEY } from './activities/fluffy/FluffyDay'
 import { PenguinCliff } from './activities/penguins/PenguinCliff'
@@ -23,10 +22,7 @@ import { Alpaca, HatShape, INK } from './puppets/Alpaca'
 import { Tika } from './puppets/Tika'
 import './peru.css'
 
-export interface ActivityProps {
-  onDone: () => void
-  setProgress: (done: number, total: number) => void
-}
+export type { ActivityProps } from '../../kit/stampFlow'
 
 const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, penguins: PenguinCliff, 'machu-picchu': Terraces, condor: CanyonGlide, river: RainyRiver }
 
@@ -40,48 +36,20 @@ export const SPOTS = [
 ]
 
 export default function Place(props: PlaceProps) {
-  const { meta, activity, earnStamp, setProgress, backToMap } = props
-  const [justEarned, setJustEarned] = useState<string | null>(null)
-  const [videoAfter, setVideoAfter] = useState<PlaceVideo | null>(null)
+  const { meta, activity, setProgress, backToMap } = props
+  const stamp = useStampFlow(props)
 
   if (activity === 'party') return <BalloonSoon backToMap={backToMap} />
 
   const Activity = activity ? ACTIVITIES[activity] : undefined
   const info = meta.activities.find((a) => a.id === activity)
-  if (Activity && info) {
-    const finish = () => {
-      earnStamp(info.id)
-      setJustEarned(info.id)
-    }
-    if (window.__kayleeWorld) window.__kayleeWorld.finish = finish
+  if (Activity && info)
     return (
       <>
-        <Activity key={activity} setProgress={setProgress} onDone={finish} />
-        {justEarned === info.id && (
-          <StampEarned
-            activity={info}
-            onClose={() => {
-              setJustEarned(null)
-              const video = meta.videos?.find((v) => v.after === info.id)
-              if (video) {
-                setProgress(0, 0)
-                setVideoAfter(video)
-              } else backToMap()
-            }}
-          />
-        )}
-        {videoAfter && (
-          <VideoBreak
-            video={videoAfter}
-            onDone={() => {
-              setVideoAfter(null)
-              backToMap()
-            }}
-          />
-        )}
+        <Activity key={activity} setProgress={setProgress} onDone={stamp.finishFor(info)} />
+        {stamp.overlay}
       </>
     )
-  }
   return <Hub {...props} />
 }
 

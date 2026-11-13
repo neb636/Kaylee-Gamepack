@@ -1,11 +1,6 @@
 // The canyon's own sound effects (synthesized, like ../fluffy/sfx.ts): the wind under Coco's wings (a steady loop
 // whose loudness follows his speed), the bright rising shimmer of warm air, heavy wing flaps, the river and the falls.
-let ctx: AudioContext | undefined
-function audio() {
-  if (!ctx && typeof AudioContext !== 'undefined') ctx = new AudioContext()
-  if (ctx?.state === 'suspended') void ctx.resume()
-  return ctx
-}
+import { audio } from '../../../../kit/sfx'
 
 function tone(freq: number, to: number, dur: number, vol: number, type: OscillatorType = 'sine', delay = 0) {
   const a = audio()

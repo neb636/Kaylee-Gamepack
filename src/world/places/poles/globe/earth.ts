@@ -2,8 +2,7 @@
 // globe matches the map she flew from), and `ll()`, which puts a 3D thing at a latitude and longitude on the same sphere.
 // Oceans are left transparent: the globe's shader paints them (and the snow on the land), see material.ts.
 import { CanvasTexture, SRGBColorSpace, Vector3 } from 'three'
-
-const DEG = Math.PI / 180
+import { DEG } from '../../../../sdk/math'
 
 /** A point at latitude/longitude (degrees), `r` from the center, with the same mapping as three's SphereGeometry UVs, so
  *  3D things land where the painted map puts them. */

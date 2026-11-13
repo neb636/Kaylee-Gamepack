@@ -15,8 +15,8 @@ import { Flag } from './kit/Flag'
 import { WORLD_LINES } from './lines'
 import { usePassport } from './stamps'
 
-import { useHalloween } from '../shell/season'
-import { HalloweenBanner } from '../shell/Halloween'
+import { useHalloween } from '../shell/seasonal/season'
+import { HalloweenBanner } from '../shell/seasonal/Halloween'
 
 const L = WORLD_LINES.shelf
 /** Set when a game opens from the shelf, so its top bar's back button comes back here (PlaceFrame). */

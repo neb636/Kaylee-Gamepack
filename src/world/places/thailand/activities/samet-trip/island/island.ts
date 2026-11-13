@@ -74,6 +74,7 @@ import { Taxi } from './taxi'
 import { FireDancers } from './dancers'
 import { beachBed, islandSfx as sfx } from './sounds'
 import { cleanSfx } from '../book/sounds'
+import { TO_DEG, damp, smoothstep, wrapAngle } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/island/island.ts'
 /** Leading Kaylee (and the floatie). */
@@ -167,7 +168,6 @@ const PL = L.samet.puppy
 const lookV = new Vector3()
 const herV = new Vector3()
 
-const DEG = 180 / Math.PI
 /** The table on the resort deck where the family has lunch (resortDeck's first table). */
 const LUNCH_TABLE = atFrame(DECK, -2.5, 0.8)
 /** How much the beach camera looks inland (vs along the sand): 0.6 ≈ 35° off the sand's line. */
@@ -181,12 +181,6 @@ const HOME_BOAT = 'speedboat:0'
 const HOME_PIER = atFrame(FRAMES.nadan, -4, 22)
 /** Between the two fire dancers on Sai Kaew (dancers.ts SPOTS), for their poi's whoom. */
 const FIRE_AT = bay(-6, -2)
-const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
-const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
-const smooth = (a: number, b: number, x: number) => {
-  const t = clamp((x - a) / (b - a), 0, 1)
-  return t * t * (3 - 2 * t)
-}
 
 // ---- Sounds: sounds.ts (recorded, with the synth ones as fallbacks).
 
@@ -461,12 +455,12 @@ export class SametIsland implements World3D {
     // ---- Where the link starts.
     const s = spotStart(start.at)
     this.y = this.heightAt(s.x, s.z)
-    this.kaylee.place(s.x, this.y, s.z, s.face * DEG)
+    this.kaylee.place(s.x, this.y, s.z, s.face * TO_DEG)
     this.edge = { x: s.x, z: s.z }
     for (let i = 0; i < 30; i++) this.trail.push({ x: s.x - Math.sin(s.face) * i * 0.3, z: s.z - Math.cos(s.face) * i * 0.3 })
     for (const f of [this.nick, this.ji]) {
       const p = this.trailPoint(f.back, f.side)
-      f.m.place(p.x, this.heightAt(p.x, p.z), p.z, s.face * DEG, 'stand')
+      f.m.place(p.x, this.heightAt(p.x, p.z), p.z, s.face * TO_DEG, 'stand')
     }
     this.camYaw = this.camGoal = this.spotYaw(start.at) ?? s.face
     this.seen.add(start.at)
@@ -492,7 +486,7 @@ export class SametIsland implements World3D {
     scene.add(this.pup.root, this.pup.shadow)
     this.pup.place(s.x + Math.sin(s.face) * 1.6, s.z + Math.cos(s.face) * 1.6, s.face + Math.PI)
     this.planner = new Planner(this.pupCost, FINE)
-    // The sand slide at the end of his shortcut: a smooth pale chute down the dune, pink rims, two pink posts at its top.
+    // The sand slide at the end of his shortcut: a smoothstep pale chute down the dune, pink rims, two pink posts at its top.
     {
       const parts: ReturnType<typeof P.box>[] = []
       const ux = SLIDE.foot.x - SLIDE.top.x
@@ -654,7 +648,7 @@ export class SametIsland implements World3D {
       'her finger ahead (m)': [this.aimDist, 20],
       'her speed (m/s)': [this.speedNow(), 8],
       'in the sea': [this.swimming ? 1 : 0, 1],
-      'camera turning (°)': [Math.abs(wrap(this.camGoal - this.camYaw)) * DEG, 90],
+      'camera turning (°)': [Math.abs(wrapAngle(this.camGoal - this.camYaw)) * TO_DEG, 90],
     }))
     this.rig.setShot(this.shot(), true)
   }
@@ -827,8 +821,8 @@ export class SametIsland implements World3D {
     const lag = this.isl.lagoon
     const f = this.nearestFrame(k.x, k.z)
     const goal = { x: -f.n.x, z: -f.n.z }
-    lag.waves.dir = { x: lag.waves.dir.x + (goal.x - lag.waves.dir.x) * ease(dt, 0.2), z: lag.waves.dir.z + (goal.z - lag.waves.dir.z) * ease(dt, 0.2) }
-    lag.waves.height += (WALK.wave - lag.waves.height) * ease(dt, 0.5)
+    lag.waves.dir = { x: lag.waves.dir.x + (goal.x - lag.waves.dir.x) * damp(dt, 0.2), z: lag.waves.dir.z + (goal.z - lag.waves.dir.z) * damp(dt, 0.2) }
+    lag.waves.height += (WALK.wave - lag.waves.height) * damp(dt, 0.5)
     lag.waves.length = 15
     lag.waves.speed = 3.4
     // (In a film the sea, the light and the plants follow what the camera looks at: a memory can be a beach away.)
@@ -940,7 +934,7 @@ export class SametIsland implements World3D {
     this.kaylee.setPose('stand')
     this.deckOn = this.deckAt(kp.x, kp.z)
     this.edge = { x: kp.x, z: kp.z }
-    const yaw = kp.face / DEG
+    const yaw = kp.face / TO_DEG
     this.trail = []
     for (let i = 0; i < 30; i++) this.trail.push({ x: kp.x - Math.sin(yaw) * i * 0.3, z: kp.z - Math.cos(yaw) * i * 0.3 })
     this.lastPos.copy(this.kaylee.root.position)
@@ -1011,7 +1005,7 @@ export class SametIsland implements World3D {
       const p = { x: a.x + ((s.x - a.x) / l) * d, z: a.z + ((s.z - a.z) / l) * d }
       if (this.standable(p.x, p.z)) s = { ...p, face: Math.atan2(a.x - p.x, a.z - p.z) }
     }
-    const face = s.face * DEG
+    const face = s.face * TO_DEG
     // Mom and Dad a step behind her, side by side.
     const back = (b: number, side: number) => ({ x: s.x - Math.sin(s.face) * b + Math.cos(s.face) * side, z: s.z - Math.cos(s.face) * b - Math.sin(s.face) * side, face })
     this.stand({ x: s.x, z: s.z, face }, back(this.nick.back, this.nick.side), back(this.ji.back, this.ji.side))
@@ -1103,10 +1097,10 @@ export class SametIsland implements World3D {
           this.arrive()
         }
       } else {
-        const run = smooth(1.2, WALK.gallopFrom, d)
+        const run = smoothstep(1.2, WALK.gallopFrom, d)
         const speed = this.swimming ? WALK.swim : WALK.trot + (WALK.gallop - WALK.trot) * run
         this.kaylee.pace = speed / 1.8
-        // (The walk's own speed is 1.8 m/s × pace; ease off for the last bit so she doesn't overshoot.) Something in
+        // (The walk's own speed is 1.8 m/s × pace; damp off for the last bit so she doesn't overshoot.) Something in
         // the way (a lounger, a palm, the forest's edge): turn a little at a time until there's room, the side nearer
         // the way she wants first, so she slides round it instead of stopping.
         let ux = dx / d
@@ -1221,7 +1215,7 @@ export class SametIsland implements World3D {
     const H = this.kaylee.height
     const want = deep ? water - H * 0.42 : g
     if (this.mode !== 'kite') {
-      this.y += (want - this.y) * ease(dt, deep !== was ? 6 : 18)
+      this.y += (want - this.y) * damp(dt, deep !== was ? 6 : 18)
       k.y = this.y
     }
     if (deep && !was) {
@@ -1233,7 +1227,7 @@ export class SametIsland implements World3D {
       if (!this.kaylee.wearing.includes('floaties')) this.kaylee.putOn(['floaties'])
     }
     if (!deep && was) sfx.boing()
-    this.ringK += ((deep ? 1 : 0) - this.ringK) * ease(dt, 8)
+    this.ringK += ((deep ? 1 : 0) - this.ringK) * damp(dt, 8)
     this.ring.scale.setScalar(Math.max(0.001, this.ringK))
     this.ring.visible = this.ringK > 0.02
     if (this.mode !== 'slide') this.kaylee.setPose(deep ? 'sit' : this.kaylee.pose === 'sit' ? 'stand' : this.kaylee.pose)
@@ -1379,7 +1373,7 @@ export class SametIsland implements World3D {
         }
       }
     }
-    f.reach += (want - f.reach) * (this.familySettling ? 1 : ease(dt, 4))
+    f.reach += (want - f.reach) * (this.familySettling ? 1 : damp(dt, 4))
     const x = k.x + dx * f.reach
     const z = k.z + dz * f.reach
     return this.standable(x, z) ? { x, z } : goal
@@ -1487,7 +1481,7 @@ export class SametIsland implements World3D {
           f.blocked = 0
           r.position.x = nx
           r.position.z = nz
-          r.rotation.y += wrap(Math.atan2(dx, dz) - r.rotation.y) * ease(dt, 8)
+          r.rotation.y += wrapAngle(Math.atan2(dx, dz) - r.rotation.y) * damp(dt, 8)
           f.phase += dt * (5 + f.speed * 2.2)
         }
       }
@@ -1519,7 +1513,7 @@ export class SametIsland implements World3D {
       f.shadow.position.set(r.position.x, g + 0.03, r.position.z)
       // When she stops for a while on a beach: Dad lies down on the sand, Mom watches her.
       const beach = this.surface === 'sand' || this.surface === 'wet'
-      f.lie += ((f === this.nick && idle && beach && d < 1 ? 1 : 0) - f.lie) * ease(dt, 1.5)
+      f.lie += ((f === this.nick && idle && beach && d < 1 ? 1 : 0) - f.lie) * damp(dt, 1.5)
       if (f === this.nick) {
         if (f.lie > 0.6 && m.pose !== 'lie') m.setPose('lie')
         if (f.lie < 0.4 && m.pose === 'lie') {
@@ -1557,7 +1551,7 @@ export class SametIsland implements World3D {
     tx.update(dt, (x, z) => Math.max(0, this.isl.ground.heightAt(x, z)), RIDE.taxi)
     const gm = this.taxiGlow.material as MeshBasicMaterial
     const glow = near && !this.films.on ? 0.55 + 0.3 * Math.sin(this.time * 5) : 0
-    gm.opacity += (glow - gm.opacity) * ease(dt, 6)
+    gm.opacity += (glow - gm.opacity) * damp(dt, 6)
     this.taxiGlow.position.set(tp.x, tp.y + 0.06, tp.z)
     this.taxiGlow.visible = gm.opacity > 0.02
   }
@@ -1597,8 +1591,8 @@ export class SametIsland implements World3D {
       const z = s.z - nz * 2.4 - nx * off
       const y = this.heightAt(x, z)
       c.root.rotation.set(0, 0, 0)
-      if (c instanceof Avatar) c.place(x, y, z, Math.atan2(-nx, -nz) * DEG)
-      else c.place(x, y, z, Math.atan2(-nx, -nz) * DEG, 'stand')
+      if (c instanceof Avatar) c.place(x, y, z, Math.atan2(-nx, -nz) * TO_DEG)
+      else c.place(x, y, z, Math.atan2(-nx, -nz) * TO_DEG, 'stand')
     }
     this.y = this.kaylee.root.position.y
     this.kaylee.setPose('stand')
@@ -1649,7 +1643,7 @@ export class SametIsland implements World3D {
     const hx = Math.sin(d.heading)
     const hz = Math.cos(d.heading)
     const pitchGoal = -Math.atan2(w(d.x + hx * 1.2, d.z + hz * 1.2) - w(d.x - hx * 1.2, d.z - hz * 1.2), 2.4) - clamp(d.speed / RIDE.top, 0, 1) * 0.04
-    this.skiPitch += (pitchGoal - this.skiPitch) * ease(dt, 10)
+    this.skiPitch += (pitchGoal - this.skiPitch) * damp(dt, 10)
     s.ski.tilt.rotation.set(this.skiPitch, 0, d.roll)
     const sp = Math.abs(d.speed)
     if (sp > 2) {
@@ -1713,7 +1707,7 @@ export class SametIsland implements World3D {
     const yaw = (s: number) => Math.atan2(-f.n.x * a + f.t.x * s * 0.84, -f.n.z * a + f.t.z * s * 0.84)
     const y1 = yaw(1)
     const y2 = yaw(-1)
-    return Math.abs(wrap(y1 - this.camYaw)) <= Math.abs(wrap(y2 - this.camYaw)) ? y1 : y2
+    return Math.abs(wrapAngle(y1 - this.camYaw)) <= Math.abs(wrapAngle(y2 - this.camYaw)) ? y1 : y2
   }
 
   /** Which beach she's on (the address bar's `at`), and where the camera should face. */
@@ -1791,15 +1785,15 @@ export class SametIsland implements World3D {
   private camera(dt: number) {
     const s = this.surface
     const wantIn = this.mode === 'walk' && !this.swimming && this.deckOn < 0 && (s === 'road' || s === 'path' || s === 'grass' || s === 'rock') && this.isl.ground.shoreAt(this.kaylee.root.position.x, this.kaylee.root.position.z) < -12 ? 1 : 0
-    this.inland += (wantIn - this.inland) * ease(dt, 1.2)
+    this.inland += (wantIn - this.inland) * damp(dt, 1.2)
     if (this.mode === 'ski') this.camGoal = this.d.heading
-    this.camYaw += wrap(this.camGoal - this.camYaw) * ease(dt, this.mode === 'ski' ? 2 : CAM.turn)
+    this.camYaw += wrapAngle(this.camGoal - this.camYaw) * damp(dt, this.mode === 'ski' ? 2 : CAM.turn)
     this.rig.setShot(this.shot())
   }
 
   private shot(): Shot {
     const tall = this.tall
-    const yaw = (this.camYaw + Math.PI) * DEG
+    const yaw = (this.camYaw + Math.PI) * TO_DEG
     if (this.mode === 'ski') {
       const d = this.d
       const ahead = 2 + clamp(Math.abs(d.speed) / RIDE.top, 0, 1.3) * 4
@@ -1877,7 +1871,7 @@ export class SametIsland implements World3D {
       })
     }
     const sg = this.skiGlow.material as MeshBasicMaterial
-    sg.opacity += ((near >= 0 ? 0.55 + 0.3 * Math.sin(t * 5) : 0) - sg.opacity) * ease(dt, 6)
+    sg.opacity += ((near >= 0 ? 0.55 + 0.3 * Math.sin(t * 5) : 0) - sg.opacity) * damp(dt, 6)
     if (near >= 0) this.skiGlow.position.set(this.skis[near].x, Math.max(0.05, this.isl.ground.heightAt(this.skis[near].x, this.skis[near].z)) + 0.08, this.skis[near].z)
     this.skiGlow.visible = sg.opacity > 0.02
     // The stops glow softly (brighter up close), the flags flutter.
@@ -1887,7 +1881,7 @@ export class SametIsland implements World3D {
       const d = Math.hypot(k.x - at.x, k.z - at.z)
       const m = r.material as MeshBasicMaterial
       const want = this.flags.has(id) ? 0.12 : d < 9 ? 0.6 + 0.3 * Math.sin(t * 4) : 0.25 + 0.1 * Math.sin(t * 2)
-      m.opacity += (want - m.opacity) * ease(dt, 4)
+      m.opacity += (want - m.opacity) * damp(dt, 4)
       r.scale.setScalar(1 + 0.06 * Math.sin(t * 2.5))
       const fl = this.props.flags[id]
       if (fl.visible) (fl.userData.pennant as Group).rotation.y = Math.sin(t * 3 + at.x) * 0.25 + this.springOf(`flag:${id}`, dt) * 0.8
@@ -2041,7 +2035,7 @@ export class SametIsland implements World3D {
           const home = this.anim.get(`home:${id}`)
           if (home) {
             home.t += dt
-            p.part.position.lerp(tmp.set(0, 2.45, 0), ease(dt, 3))
+            p.part.position.lerp(tmp.set(0, 2.45, 0), damp(dt, 3))
             if (home.t > 2) {
               p.part.position.set(0, 2.45, 0)
               this.anim.delete(`home:${id}`)
@@ -2057,7 +2051,7 @@ export class SametIsland implements World3D {
         if (p.part) p.part.rotation.z = Math.sin(t * 2.2 + p.at.x) * 0.03
         break
       case 'chair':
-        if (p.part) p.part.rotation.x += ((this.folded.has(id) ? -1.45 : -0.35) - p.part.rotation.x) * ease(dt, 10)
+        if (p.part) p.part.rotation.x += ((this.folded.has(id) ? -1.45 : -0.35) - p.part.rotation.x) * damp(dt, 10)
         break
       case 'icecream':
       case 'beads':
@@ -2602,7 +2596,7 @@ export class SametIsland implements World3D {
   /** The island's ambience each frame: the forest's insects and birds on the roads inland, the fire poi after dark. */
   private ambience() {
     const h = this.herXZ()
-    const inland = smooth(10, 32, -this.isl.ground.shoreAt(h.x, h.z))
+    const inland = smoothstep(10, 32, -this.isl.ground.shoreAt(h.x, h.z))
     if (inland > 0.02) sfx.forest(inland)
     const lit = this.dancers.level
     if (lit > 0.02) {
@@ -2793,7 +2787,7 @@ export class SametIsland implements World3D {
     const wp = P.root.getWorldPosition(tmp2)
     const sc = this.toScreen(tmp.set(wp.x, wp.y + P.height * 1.2, wp.z))
     const show = !!src && !this.films.on && this.mode === 'walk' && (this.pupState === 'lead' || this.pupState === 'fetch') && sc.z < 1 && sc.x > -30 && sc.x < this.w + 30 && sc.y > 0 && sc.y < this.h
-    this.bubbleK += ((show ? 1 : 0) - this.bubbleK) * ease(dt, 8)
+    this.bubbleK += ((show ? 1 : 0) - this.bubbleK) * damp(dt, 8)
     if (src && spot !== this.bubbleSpot) {
       this.bubbleSpot = spot
       const img = el.querySelector('img')
@@ -3111,7 +3105,7 @@ export class SametIsland implements World3D {
       })(),
       // Every beach on foot from Na Dan pier (meters along the puppy's best walk; null: no way there).
       reach: (this.reachMemo ??= Object.fromEntries((Object.keys(FRAMES) as (keyof typeof FRAMES)[]).map((id) => [id, ((r) => (r ? Math.round(r.len) : null))(this.planner.plan(spotStart('nadan'), spotStart(id)))]))),
-      cameraYaw: Math.round(wrap(this.camYaw) * DEG),
+      cameraYaw: Math.round(wrapAngle(this.camYaw) * TO_DEG),
       fps: this.stats.fps,
       calls: this.stats.calls,
       tris: this.stats.tris,

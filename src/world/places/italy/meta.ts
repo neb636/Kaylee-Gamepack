@@ -5,7 +5,7 @@ import type { PlaceMeta } from '../../types'
 import { art } from './art'
 import { L } from './lines'
 
-// Italy is being built in stages (plan: planning/around-the-world/italy.md). All six activities are built (the Pizzeria,
+// Italy is being built in stages (plan: planning/around-the-world/italy.md (retired; in git history)). All six activities are built (the Pizzeria,
 // the Olive Grove, the Trevi Fountain, the Colosseum, Venice and Snow on a Volcano), and so are the passport facts, the
 // coloring pages, the puzzles and the videos; the opera finale comes next.
 const meta: PlaceMeta = {

@@ -1,13 +1,10 @@
 // Extra synthesized sound effects for Around the World (the SDK's `sounds` covers taps, chimes and notes).
 // Each one layers a pitched tone with filtered noise so it reads as a real "thing" (a boing, a splash) rather than a beep.
 
-let ctx: AudioContext | undefined
-/** The shared AudioContext (for a country that builds its own sounds, e.g. panned to one side). */
-export function audio() {
-  if (!ctx && typeof AudioContext !== 'undefined') ctx = new AudioContext()
-  if (ctx?.state === 'suspended') void ctx.resume()
-  return ctx
-}
+import { audio } from '../../sdk/sounds'
+
+/** The app's shared AudioContext (sdk/sounds.ts), for a country that builds its own sounds (e.g. panned to one side). */
+export { audio }
 
 /** A pitched blip sliding from `freq` to `to` (Hz). Countries build their own sounds from this and `noise`. */
 export function tone(freq: number, to: number, dur: number, vol: number, type: OscillatorType = 'sine', delay = 0) {

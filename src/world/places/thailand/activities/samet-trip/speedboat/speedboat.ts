@@ -42,6 +42,7 @@ import { at as atFrame, BAN_PHE, FRAMES, PIER } from '../island/layout'
 import { buildProps } from '../island/props'
 import { buildIsland, DAY, palmGeo, rng, type Island, type TimeOfDay } from '../island/scenery'
 import { boatSfx as S, seaBed } from './sounds'
+import { TO_DEG } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/speedboat/speedboat.ts'
 const BOAT = knobs('sametBoat', 'The speedboat ride', FILE, {
@@ -184,7 +185,6 @@ interface FlyFish {
   live: boolean
 }
 
-const DEG = 180 / Math.PI
 const tmp = new Vector3()
 const tmp2 = new Vector3()
 const tmp3 = new Vector3()
@@ -690,7 +690,7 @@ export class SametSpeedboat implements World3D {
       window.setTimeout(() => {
         this.scene.attach(m.root)
         const q = atFrame(f, -4 + (i === 1 ? -0.9 : 0.9), 21.2)
-        m.place(q.x, PIER.y, q.z, Math.atan2(-f.n.x, -f.n.z) * DEG, 'stand')
+        m.place(q.x, PIER.y, q.z, Math.atan2(-f.n.x, -f.n.z) * TO_DEG, 'stand')
         m.react('hop')
         S.fwip()
       }, 350 * i)
@@ -968,14 +968,14 @@ export class SametSpeedboat implements World3D {
   private shot(): Shot {
     const center = new Vector3(this.pos.x + this.fwd.x * CAM.ahead, this.pos.y + 1.2, this.pos.z + this.fwd.z * CAM.ahead)
     const b = CAM.box
-    let yaw = (this.heading + Math.PI) * DEG - CAM.side * this.side
+    let yaw = (this.heading + Math.PI) * TO_DEG - CAM.side * this.side
     let half = this.tall ? new Vector3(b, 1.2, b * 1.6) : new Vector3(b * 1.35, 1.2, b)
     if (this.phase === 'dock' || this.phase === 'off') {
       // Tied up: the pier and the family on it.
       const pier = atFrame(FRAMES.nadan, -5.5, 21)
       center.set(pier.x, PIER.y + 0.8, pier.z)
       half = this.tall ? new Vector3(4, 1.2, 5) : new Vector3(5.5, 1.2, 3.5)
-      yaw = (this.heading + Math.PI) * DEG + 35
+      yaw = (this.heading + Math.PI) * TO_DEG + 35
     }
     return { center, half, yaw, pitch: this.tall ? CAM.tallPitch : CAM.pitch, follow: true, minDist: 5, maxDist: 60 }
   }

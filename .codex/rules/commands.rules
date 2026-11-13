@@ -7,12 +7,12 @@ prefix_rule(pattern = ["git"], decision = "allow")
 prefix_rule(
     pattern = ["git", "push", "--force"],
     decision = "forbidden",
-    justification = "Force-pushing rewrites shared branch history. Ask Dad first.",
+    justification = "Force-pushing rewrites shared branch history. Ask the user first.",
 )
 prefix_rule(
     pattern = ["git", "push", "-f"],
     decision = "forbidden",
-    justification = "Force-pushing rewrites shared branch history. Ask Dad first.",
+    justification = "Force-pushing rewrites shared branch history. Ask the user first.",
 )
 prefix_rule(
     pattern = ["git", "reset", "--hard"],
@@ -50,7 +50,7 @@ prefix_rule(pattern = ["gh", "api"], decision = "prompt", justification = "Raw G
 prefix_rule(
     pattern = ["gh", "pr", "merge"],
     decision = "forbidden",
-    justification = "Dad merges PRs himself. Stop once the work is pushed.",
+    justification = "The user merges PRs. Stop once the work is pushed.",
 )
 prefix_rule(
     pattern = ["gh", "pr", "create"],
@@ -62,11 +62,11 @@ prefix_rule(
 prefix_rule(pattern = ["node"], decision = "allow")
 prefix_rule(pattern = ["npm", "run"], decision = "allow")
 prefix_rule(pattern = ["npm", "ci"], decision = "allow")
-# Changing packages is Dad's call (AGENTS.md). These go to the reviewer, which is the strongest gate Codex has here.
-prefix_rule(pattern = ["npm", "install"], decision = "prompt", justification = "Installs or adds packages. AGENTS.md: ask Dad first.")
-prefix_rule(pattern = ["npm", "i"], decision = "prompt", justification = "Installs or adds packages. AGENTS.md: ask Dad first.")
-prefix_rule(pattern = ["npm", "add"], decision = "prompt", justification = "Adds packages. AGENTS.md: ask Dad first.")
-prefix_rule(pattern = ["npm", "uninstall"], decision = "prompt", justification = "Removes packages. AGENTS.md: ask Dad first.")
+# Changing packages is the user's call (AGENTS.md). These go to the reviewer, which is the strongest gate Codex has here.
+prefix_rule(pattern = ["npm", "install"], decision = "prompt", justification = "Installs or adds packages. AGENTS.md: ask the user first.")
+prefix_rule(pattern = ["npm", "i"], decision = "prompt", justification = "Installs or adds packages. AGENTS.md: ask the user first.")
+prefix_rule(pattern = ["npm", "add"], decision = "prompt", justification = "Adds packages. AGENTS.md: ask the user first.")
+prefix_rule(pattern = ["npm", "uninstall"], decision = "prompt", justification = "Removes packages. AGENTS.md: ask the user first.")
 prefix_rule(pattern = ["npm", "exec", "--no", "--", "playwright-cli"], decision = "allow")
 prefix_rule(pattern = ["npx", "tsc"], decision = "allow")
 prefix_rule(pattern = ["npx", "vite"], decision = "allow")

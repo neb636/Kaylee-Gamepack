@@ -20,7 +20,7 @@ You never edit `src/`, `scripts/`, `tests/`, `art/` or config. You only write `q
 - Pacing: the toy's rows in `qa-output/pacing.md` (talk before the first touch, talk per touch, seconds with nothing to
   touch, how many different things were touched).
 - The script: `review/table-read/<place>-<group>.json` (lines in play order, when each plays, flags).
-- The toy's notes: `planning/around-the-world/<country>/<toy>.md`.
+- The toy's notes: `planning/around-the-world/<country>/<toy>.md` (or the country's `<country>.md` when it has no folder).
 At most about 30 images in all. Spend your effort on judgment, not on re-checking pixels.
 
 ## What to judge

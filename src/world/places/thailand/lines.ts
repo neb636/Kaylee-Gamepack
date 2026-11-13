@@ -384,7 +384,7 @@ export const L = {
     goodRace: kids('Good race!'),
   },
 
-  // Baan Chang Cafe in Krabi (activities/boat-trip/chang/, plan: thailand/baan-chang.md): the sign, the chocolate milk,
+  // Baan Chang Cafe in Krabi (activities/boat-trip/chang/, plan: thailand/baan-chang.md (retired; in git history)): the sign, the chocolate milk,
   // the boardwalk and the elephants. The elephants don't talk (rumbles, trumpets, squeals); Dad and Mom react in
   // their own voices, and Sparkle says the names, what's new, and what to do after a while with nothing done. Dad's
   // "Where to, Captain Kaylee?", "Everybody, pose!", "One, two, three, cheese!" and "Pai!" are the bay's.
@@ -1204,7 +1204,7 @@ export const L = {
     },
   },
 
-  // The mall day at ICONSIAM (activities/mall-trip/, plan: thailand/mall-trip.md). Talk short, play long: Sparkle's one
+  // The mall day at ICONSIAM (activities/mall-trip/, plan: thailand/mall-trip.md (retired; in git history)). Talk short, play long: Sparkle's one
   // line when a mini game opens (and when something new starts, or after a while with nothing touched), the family's
   // and the friends' short reactions in their own voices (the monkey coach, the HarborLand staff, the pizza server, the
   // kids). Kaylee never talks: she giggles. One block per part, so each can be filled on its own.

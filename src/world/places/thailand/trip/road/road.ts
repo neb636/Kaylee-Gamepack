@@ -6,6 +6,7 @@
 // Heading 0 faces +z and turns toward +x (like the house's characters: atan2(dx, dz)). `s` is meters along the road from
 // its start, `lat` meters to the left of the middle (looking along the road). Cars in Thailand keep LEFT: Kaylee's lane
 // is lat > 0, oncoming traffic drives at lat < 0.
+import { clamp } from '../../../../../sdk/math'
 
 /** A control point: across (x), along (z), and up (y), in meters. */
 export type RoadPoint = [x: number, z: number, y: number]
@@ -26,7 +27,6 @@ export interface RoadSample {
 
 /** Meters between samples along the middle of the road. */
 const STEP = 1
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 
 /** A point on the centripetal Catmull-Rom curve through `pts` (3D): segment i, t 0..1. The ends are extended in a
  *  straight line, so the road starts and ends exactly on its first and last points. */

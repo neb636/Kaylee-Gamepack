@@ -40,6 +40,7 @@ import { BIG_R, BOX_HALF, CASTLE, CLIFF_Y, CLIMB_R, DRUM, HAT_BOX, HUGE_R, keepI
 import { Maple } from './maple'
 import { Box, buildPark, Drum, makeHat, makeSash, Owl, Sled, SKY, Trail, type Park } from './props'
 import type { BallSize, SnowmanSection } from './sections'
+import { damp } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/canada/activities/snowman/carnival.ts'
 /** Her finger pushing a ball. */
@@ -113,7 +114,6 @@ const tmp2 = new Vector3()
 const tmp3 = new Vector3()
 const tmpPlane = new Plane()
 const q = new Quaternion()
-const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 
 // ---- Sounds (synthesized; the voices are in lines.ts).
 const crunch = (r: number) => noise(0.16, 0.05 + r * 0.03, 'bandpass', 900 - r * 280, 500 - r * 120, 0, 1.3)
@@ -639,7 +639,7 @@ export class CarnivalSnowballs implements World3D {
     if (this.litT >= 0 && (this.litT += dt) > 4) this.litT = -1
     this.litGoal = this.litT >= 0 || this.paradeT >= 0 ? 1 : 0
     if (Math.abs(this.lit - this.litGoal) > 0.002) {
-      this.lit += (this.litGoal - this.lit) * ease(dt, 4)
+      this.lit += (this.litGoal - this.lit) * damp(dt, 4)
       this.park.setWindows(this.lit)
     }
     // Snow falling gently all the time.
@@ -780,7 +780,7 @@ export class CarnivalSnowballs implements World3D {
           dx *= top / s
           dz *= top / s
         }
-        const k = ease(dt, PUSH.grip)
+        const k = damp(dt, PUSH.grip)
         p.vx += (dx - p.vx) * k
         p.vz += (dz - p.vz) * k
       }
@@ -1153,7 +1153,7 @@ export class CarnivalSnowballs implements World3D {
       const dz = p.goal.z - p.z
       const d = Math.hypot(dx, dz)
       if (d < 0.02) {
-        p.root.rotation.y += (0 - p.root.rotation.y) * ease(dt, 6)
+        p.root.rotation.y += (0 - p.root.rotation.y) * damp(dt, 6)
         if (p.state === 'walk') this.arrived(p)
         return
       }
@@ -1511,7 +1511,7 @@ export class CarnivalSnowballs implements World3D {
       }
     }
 
-    this.mWalk += (walk - this.mWalk) * ease(dt, 10)
+    this.mWalk += (walk - this.mWalk) * damp(dt, 10)
     this.maple.root.position.set(this.mx, this.my, this.mz)
     this.maple.root.rotation.y = this.myaw
     if (lookAt) this.maple.look(Math.atan2(lookAt.x - this.mx, lookAt.z - this.mz) - this.myaw)
@@ -1538,14 +1538,14 @@ export class CarnivalSnowballs implements World3D {
       else if (hop?.onto) want = hop.onto
       else if (f?.to) want = f.to
     }
-    this.focusR += (r - this.focusR) * ease(dt, 2)
+    this.focusR += (r - this.focusR) * damp(dt, 2)
     if (!want) return
     const dz = this.tall ? { x: 1.4, z: 2.2 } : { x: 2.6, z: 1.4 }
     const ex = want.x - this.focus.x
     const ez = want.z - this.focus.z
     if (this.paradeT >= 0 || this.section === 'dress') {
-      this.focus.x += ex * ease(dt, 1.5)
-      this.focus.z += ez * ease(dt, 1.5)
+      this.focus.x += ex * damp(dt, 1.5)
+      this.focus.z += ez * damp(dt, 1.5)
     } else {
       if (Math.abs(ex) > dz.x) this.focus.x += ex - Math.sign(ex) * dz.x
       if (Math.abs(ez) > dz.z) this.focus.z += ez - Math.sign(ez) * dz.z

@@ -1,4 +1,4 @@
-// The Sky Pod's rules (plan: planning/around-the-world/thailand/mall-trip.md, "8. The Sky Pod"), with no three.js and
+// The Sky Pod's rules (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "8. The Sky Pod"), with no three.js and
 // no drawing: which pods are lit, the score, the pattern she copies, Dad's race. The 3D wall (wall.ts) plays it: it
 // passes every slap in (`slap`), tells it when Dad's hand lands (`daddySlap`),
 // and shows what it says (GameView).

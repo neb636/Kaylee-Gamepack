@@ -1,10 +1,18 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef } from 'react'
 import posthog, { isPostHogEnabled } from '../posthog'
-import { awardTrophy, bigCelebration, BigButton, Mascot, say, sounds, Trophy, type GameMeta } from './sdk-internal'
+import { awardTrophy, bigCelebration, BigButton, Mascot, say, sounds, Trophy } from './sdk-internal'
 
-/** The same big, happy ending for every game: confetti + a trophy with its title. */
-export function WinCeremony({ meta, onPlayAgain, onHome }: { meta: GameMeta; onPlayAgain: () => void; onHome: () => void }) {
+/** What the trophy ceremony needs to know about what was won (a country's trophy: `world-<id>`, its name, emoji, title). */
+export interface TrophyWin {
+  id: string
+  title: string
+  emoji: string
+  trophyTitle: string
+}
+
+/** The same big, happy ending for every country: confetti + a trophy with its title. */
+export function WinCeremony({ meta, onPlayAgain, onHome }: { meta: TrophyWin; onPlayAgain: () => void; onHome: () => void }) {
   const awarded = useRef(false)
   useEffect(() => {
     if (awarded.current) return

@@ -6,6 +6,7 @@
 //
 // The Nan drive keeps its own copy of the math (it reads the push along the road's direction on screen, round
 // hairpins); the feel numbers are the ones Dad tuned there by hand in the feel lab (2026-10-27).
+import { clamp } from '../../sdk/math'
 
 export interface WheelFeel {
   /** Wheel size (× a thumb's reach): how far her finger moves for a full push. */
@@ -17,8 +18,6 @@ export interface WheelFeel {
   /** Seconds a quick flick takes to count in full (0 = none). */
   ease: number
 }
-
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 
 export class FingerWheel {
   /** Her finger: where it is, and where it went down (the wheel's middle). */

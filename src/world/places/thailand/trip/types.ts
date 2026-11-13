@@ -1,4 +1,4 @@
-// A family trip is data (plan: planning/around-the-world/thailand/boat-trip.md, "The trip kit"); the legs in trip/legs/
+// A family trip is data (plan: planning/around-the-world/thailand/boat-trip.md (retired; in git history), "The trip kit"); the legs in trip/legs/
 // are generic and read it. Pure data, no three.js.
 import type { Line } from '../../../../sdk'
 import type { LonLat } from './outline'

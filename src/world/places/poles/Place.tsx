@@ -4,10 +4,9 @@
 // Iceberg Maker (activities/iceberg/), and Snow Coats (activities/coats/) and Emperor Huddle (activities/huddle/), both
 // 2D and loaded on their own so they bring no three.js. Each finished one earns its stamp and sticker, offers its video,
 // then back to the globe. All five stamps open the finale (Pole to Pole, then the Polar Quiz, activities/party/).
-import { lazy, Suspense, useState, type ComponentType } from 'react'
-import { StampEarned } from '../../kit/StampEarned'
-import { VideoBreak } from '../../kit/Theater'
-import type { PlaceProps, PlaceVideo } from '../../types'
+import { lazy, Suspense, type ComponentType } from 'react'
+import { useStampFlow } from '../../kit/stampFlow'
+import type { PlaceProps } from '../../types'
 import { FloeHop } from './activities/floe/FloeHop'
 import { Hub } from './activities/hub/Hub'
 import { IcebergMaker } from './activities/iceberg/IcebergMaker'
@@ -39,9 +38,8 @@ const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = {
 }
 
 export default function Place(props: PlaceProps) {
-  const { meta, activity, stamps, earnStamp, backToMap, onWin } = props
-  const [justEarned, setJustEarned] = useState<string | null>(null)
-  const [videoAfter, setVideoAfter] = useState<PlaceVideo | null>(null)
+  const { meta, activity, stamps, onWin } = props
+  const stamp = useStampFlow(props, { closeIcon: '🌍 ▶', videoNext: '🌍', layer: true })
 
   if (activity === 'party') {
     // The finale waits for every stamp (a link with ?stamps=all opens it straight away).
@@ -52,43 +50,10 @@ export default function Place(props: PlaceProps) {
   const info = meta.activities.find((a) => a.id === activity) ?? meta.inTheWorks?.find((a) => a.id === activity)
   if (!Activity || !info) return <Hub {...props} />
   // An activity still in the works opens from its links and earns its stamp, but its sticker line isn't recorded yet.
-  const live = meta.activities.includes(info)
-  const finish = () => {
-    earnStamp(info.id)
-    setJustEarned(info.id)
-  }
-  if (window.__kayleeWorld) window.__kayleeWorld.finish = finish
   return (
     <>
-      <Activity key={activity} onDone={finish} />
-      {justEarned === info.id && (
-        <div style={{ position: 'absolute', inset: 0, zIndex: 100 }}>
-          <StampEarned
-            activity={info}
-            quiet={!live}
-            closeIcon="🌍 ▶"
-            onClose={() => {
-              setJustEarned(null)
-              // A real-world video about what she just played comes next (skippable), then the globe.
-              const video = live ? meta.videos?.find((v) => v.after === info.id) : undefined
-              if (video) setVideoAfter(video)
-              else backToMap()
-            }}
-          />
-        </div>
-      )}
-      {videoAfter && (
-        <div style={{ position: 'absolute', inset: 0, zIndex: 100 }}>
-          <VideoBreak
-            video={videoAfter}
-            next="🌍"
-            onDone={() => {
-              setVideoAfter(null)
-              backToMap()
-            }}
-          />
-        </div>
-      )}
+      <Activity key={activity} onDone={stamp.finishFor(info, { live: meta.activities.includes(info) })} />
+      {stamp.overlay}
     </>
   )
 }

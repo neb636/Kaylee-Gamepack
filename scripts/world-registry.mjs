@@ -21,7 +21,8 @@ export function worldLink(place, activity, section, params = {}) {
 /**
  * Every country in play order of the app (oldest first, as the world map lists them), each with its activities in the
  * order the section index shows them: the hub, the live activities, the ones in the works, then the finale.
- * @returns {Promise<{ id: string, name: string, emoji: string, activities: { id: string, name: string, icon: string, kind: 'hub' | 'live' | 'works' | 'finale', sections: import('../src/world/kit/sections').ActivitySections | undefined }[] }[]>}
+ * Each activity's `sections` also carries `file`: the sections.ts it came from (its folder is the activity's code).
+ * @returns {Promise<{ id: string, name: string, emoji: string, activities: { id: string, name: string, icon: string, kind: 'hub' | 'live' | 'works' | 'finale', sections: (import('../src/world/kit/sections').ActivitySections & { file: string }) | undefined }[] }[]>}
  */
 export async function loadWorld() {
   const stub = { getItem: () => null, setItem() {}, removeItem() {} }
@@ -29,7 +30,7 @@ export async function loadWorld() {
   const server = await createServer({ configFile: false, root: process.cwd(), logLevel: 'error', appType: 'custom', server: { middlewareMode: true, hmr: false, ws: false }, optimizeDeps: { noDiscovery: true, include: [] } })
   try {
     const defs = []
-    for (const file of globSync('src/world/places/*/activities/**/*sections.ts').sort()) defs.push((await server.ssrLoadModule(`/${file}`)).default)
+    for (const file of globSync('src/world/places/*/activities/**/*sections.ts').sort()) defs.push({ ...(await server.ssrLoadModule(`/${file}`)).default, file })
     const places = []
     for (const file of globSync('src/world/places/*/meta.ts')) {
       const id = file.split('/')[3]

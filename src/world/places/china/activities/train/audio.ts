@@ -1,12 +1,6 @@
 // The train's own sounds: a wind whoosh whose loudness follows the speed, a friendly horn, and a lever click.
-let ctx: AudioContext | undefined
+import { audio } from '../../../../kit/sfx'
 let wind: { gain: GainNode; filter: BiquadFilterNode; src: AudioBufferSourceNode } | undefined
-
-function audio() {
-  if (!ctx && typeof AudioContext !== 'undefined') ctx = new AudioContext()
-  if (ctx?.state === 'suspended') void ctx.resume()
-  return ctx
-}
 
 /** Start the wind (silent until setWind is called). Call from a touch. */
 export function startWind() {
@@ -31,6 +25,7 @@ export function startWind() {
 
 /** speed 0..1 */
 export function setWind(speed: number) {
+  const ctx = audio()
   if (!wind || !ctx) return
   const t = ctx.currentTime
   wind.gain.gain.setTargetAtTime(speed * speed * 0.16, t, 0.08)

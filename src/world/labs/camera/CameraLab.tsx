@@ -11,9 +11,9 @@ import { Guides } from './Guides'
 import { frameById, freshCamera, STATE_KEYS, fromParams, toOverride, untouched, writeHash, type CamView, type Frame } from './link'
 import { CamPanel } from './Panel'
 import '../lab.css'
+import { clamp } from '../../../sdk/math'
 
 const deg = Math.PI / 180
-const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v))
 const r1 = (n: number) => Math.round(n * 10) / 10
 
 /** world.css sizes follow the window's media queries; a framed iPad or iPhone gets its own. */

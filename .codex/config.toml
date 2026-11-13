@@ -1,4 +1,4 @@
-# Codex in this repo, set up like Claude Code's auto mode: routine work runs without asking Dad.
+# Codex in this repo, set up like Claude Code's auto mode: routine work runs without asking the user.
 #
 # - rules/commands.rules: the command allowlist (what Claude's permission allow list does).
 # - approvals_reviewer = "auto_review": commands the rules mark "prompt" go to Codex's automatic reviewer, not to

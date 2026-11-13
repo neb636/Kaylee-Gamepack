@@ -17,6 +17,7 @@
 // ?cine=1 (sticky, also the camera lab's "Cinema camera" switch) turns it on for the worlds that have one.
 import { Color, Vector3, type Camera, type Object3D, type WebGLRenderer } from 'three'
 import { flag } from './flags'
+import { lerp } from '../../sdk/math'
 
 export type V3 = [x: number, y: number, z: number]
 
@@ -234,7 +235,6 @@ export class Letterbox {
 
 const BAR = new Color('#1B1622')
 const prevColor = new Color()
-const lerp = (a: number, b: number, k: number) => a + (b - a) * k
 const tmpR = new Vector3()
 const tmpP = new Vector3()
 /** Meters a two-shot's look may move toward the other thing. */

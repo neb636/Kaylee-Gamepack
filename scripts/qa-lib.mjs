@@ -241,11 +241,11 @@ export const tapAnchor = (page, id) => page.locator(`[data-anchor="${id}"]`).cli
 export const around = (n, y) => Array.from({ length: n }, (_, i) => [Math.cos(i * 0.5) * 0.9, y + Math.sin(i * 0.5) * 0.4])
 
 /**
- * The `screens`, `pacing` or `motion` lists of every src/world/places/<id>/qa.mjs and every activity's own qa.mjs (and
- * src/games/<id>/qa.mjs), in folder order. Each is an array of the same shape the script's own central list uses.
+ * The `screens`, `pacing` or `motion` lists of every src/world/places/<id>/qa.mjs and every activity's own qa.mjs, in
+ * folder order. Each is an array of the same shape the script's own central list uses.
  */
 export async function loadScenarios(kind) {
-  const files = globSync('src/{world/places,games}/**/qa.mjs', { cwd: root }).sort()
+  const files = globSync('src/world/places/**/qa.mjs', { cwd: root }).sort()
   const all = []
   for (const f of files) all.push(...((await import(pathToFileURL(path.join(root, f)).href))[kind] ?? []))
   return all

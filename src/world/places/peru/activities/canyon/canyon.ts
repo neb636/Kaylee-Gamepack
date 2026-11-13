@@ -2,6 +2,7 @@
 // One camera for everything: a straight-on side view of a cross-section of Colca Canyon, like a stage. The left and
 // right walls are drawn in code in the art's flat style, so where Coco can fly and what she sees are the same shapes.
 // The world is about two screens wide and three tall; the camera follows Coco.
+import { smoothstep } from '../../../../../sdk/math'
 
 export const WORLD = { w: 3000, h: 3000 }
 /** The river's surface: Coco skims just above it. */
@@ -140,15 +141,10 @@ export const FEEL = {
   turnY: 2.4,
 }
 
-const smooth = (a: number, b: number, v: number) => {
-  const t = Math.min(1, Math.max(0, (v - a) / (b - a)))
-  return t * t * (3 - 2 * t)
-}
-
 /** How much warm air lifts at (x, y): 0 in plain air, 1 in the middle of a swirl. Fades near its top so he hovers. */
 export function liftOf(s: Swirl, on: number, x: number, y: number) {
   if (on <= 0.01) return 0
-  const hx = 1 - smooth(s.w * 0.38, s.w * 0.5 + 50, Math.abs(x - s.x))
-  const hy = smooth(s.top - 30, s.top + 220, y) * (1 - smooth(s.bottom - 60, s.bottom + 80, y))
+  const hx = 1 - smoothstep(s.w * 0.38, s.w * 0.5 + 50, Math.abs(x - s.x))
+  const hy = smoothstep(s.top - 30, s.top + 220, y) * (1 - smoothstep(s.bottom - 60, s.bottom + 80, y))
   return on * hx * hy
 }

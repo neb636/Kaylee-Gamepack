@@ -29,9 +29,9 @@ import type { Member } from '../../../characters/member'
 import { L } from '../../../lines'
 import { bay, FAR_BUOY, RACE, SEAWARD, type RoundId } from '../island/layout'
 import { FIREFLY_IDS, Firefly, fireflySfx, Swarm, type FireflyId } from '../story/firefly'
+import { TO_DEG } from '../../../../../../sdk/math'
 
 const S = L.samet.story.jetski
-const DEG = 180 / Math.PI
 const ME: FireflyId = 'jetski'
 
 /** The stop's rounds: its two films beside the three play rounds. */
@@ -365,7 +365,7 @@ export class ZoomStory {
       const out = this.yawTo(at, CAM)
       const face = out + Math.atan2(Math.sin(this.yawTo(at, toward) - out), Math.cos(this.yawTo(at, toward) - out)) * cheat
       const y = h.groundY(at.x, at.z)
-      who.place(at.x, y, at.z, face * DEG)
+      who.place(at.x, y, at.z, face * TO_DEG)
       const eyes = mix(CAM, toward, 0.4)
       who.lookAt(eyes.x, y + 1.3, eyes.z)
     }

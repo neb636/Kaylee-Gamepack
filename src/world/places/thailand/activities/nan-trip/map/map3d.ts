@@ -34,9 +34,10 @@ import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage
 import { Entrance, mapCamKnobs, puffCloud, skyTexture } from '../../../trip/sky'
 import { Floaters } from '../mushrooms/fx'
 import { buildDiorama, PLACE_SCALE, type Diorama } from './diorama'
-import { BOARD, CAR_SPEED, CLOUDS, DRAG_SPEED, FISH, heightAt, HOME_AFTER, LAOS_FLAG, liveStops, modelAt, PAPER_Y, PLACE_IDS, PLACES, RUNWAY, STAMP_Y, STOP_PLACE, STOPS, THAI_FLAG, type PlaceId, type Stop } from './layout'
+import { BOARD, CAR_SPEED, CLOUDS, DRAG_SPEED, FISH, heightAt, HOME_AFTER, LAOS_FLAG, modelAt, PAPER_Y, PLACE_IDS, PLACES, RUNWAY, STAMP_Y, STOP_PLACE, STOPS, THAI_FLAG, type PlaceId, type Stop } from './layout'
 import { buildNet, nearest, route, STEP } from './net'
 import { mapBed, mapSfx as sfx } from './sounds'
+import { DEG } from '../../../../../../sdk/math'
 
 export interface MapEvents extends LegEvents {
   /** The little Pajero got to the place she picked: drive there for real. */
@@ -75,7 +76,6 @@ const SAY_S = 8
 const SAY_EVERY = 20
 const SAY_MAX = 3
 const M = L.nan.map
-const DEG = Math.PI / 180
 
 const tmp = new Vector3()
 
@@ -117,7 +117,7 @@ export class NanMap extends Stage {
   /** Mom's question is up (the 🏠 and 🚙 buttons). */
   private asking = false
 
-  constructor(renderer: WebGLRenderer, private ev: MapEvents, start: { stops: Stop[]; from?: PlaceId | null; cup?: boolean }) {
+  constructor(renderer: WebGLRenderer, private ev: MapEvents, start: { stops: Stop[]; from?: PlaceId | null }) {
     super(renderer, ev)
     this.bag.add({ dispose: mapBed() })
     const { scene, bag } = this
@@ -138,7 +138,7 @@ export class NanMap extends Stage {
     scene.add(this.sparkles.mesh, this.drops.mesh, this.steam.mesh)
     // ---- Where the link starts: the stops done so far, and the Pajero where she drove from (or at the last stop, or
     // at the airport). Back from a stop, its stamp lands; back from the city road, nothing new.
-    this.stops = liveStops(!!start.cup)
+    this.stops = STOPS
     this.done = new Set(start.stops.filter((s) => this.stops.includes(s)))
     const last = start.stops[start.stops.length - 1]
     const from = start.from ?? (last ? STOP_PLACE[last] : null) ?? 'airport'

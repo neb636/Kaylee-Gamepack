@@ -1,4 +1,4 @@
-// A hairdo as data (plan: planning/around-the-world/thailand/mall-trip.md, "★ 2. The Barber Salon"): the scalp is
+// A hairdo as data (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "★ 2. The Barber Salon"): the scalp is
 // TUFTS tufts of strands (mane.ts grows them), each with a length, a color and a style, plus his two eyebrows (the
 // grow tonic's silly side) and the bows and clips she put in. Dad keeps his for the rest of the trip, so it travels
 // in the `hair` param. Pure data (no three.js).

@@ -1,11 +1,9 @@
 import { useState } from 'react'
 import { useRoute } from './router'
-import { GameFrame } from './shell/GameFrame'
-import { Playground } from './shell/Playground'
 import { Splash } from './shell/Splash'
 import { World } from './world/World'
 import { ErrorCard } from './shell/ErrorCard'
-import { HalloweenMusic } from './shell/HalloweenMusic'
+import { HalloweenMusic } from './shell/seasonal/HalloweenMusic'
 
 export default function App() {
   const route = useRoute()
@@ -20,10 +18,6 @@ export default function App() {
 
 function StartedApp({ route }: { route: ReturnType<typeof useRoute> }) {
   switch (route.name) {
-    case 'game':
-      return <GameFrame id={route.id} />
-    case 'playground':
-      return <Playground />
     case 'world':
       return <World place={route.place} activity={route.activity} section={route.section} params={route.params} />
     default:

@@ -2,7 +2,9 @@
 
 let ctx: AudioContext | undefined
 
-function audio(): AudioContext | undefined {
+/** The app's one AudioContext for synthesized sounds (the splash's tap unlocks it on the iPad). Build your own sounds on
+ *  it (world/kit/sfx.ts re-exports it with `tone` and `noise`); never make a second one. */
+export function audio(): AudioContext | undefined {
   if (!ctx && typeof AudioContext !== 'undefined') ctx = new AudioContext()
   if (ctx?.state === 'suspended') void ctx.resume()
   return ctx

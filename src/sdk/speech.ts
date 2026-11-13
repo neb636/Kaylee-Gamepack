@@ -13,13 +13,11 @@ export const lineVoice = (line: Line) => (typeof line === 'string' ? DEFAULT_VOI
 type MapEntry = string | { text: string; voice: string; ms?: number; file?: string }
 const manifests = {
   ...import.meta.glob('../shell/voice-map.json', { eager: true, import: 'default' }),
-  ...import.meta.glob('../games/*/voice-map.json', { eager: true, import: 'default' }),
   ...import.meta.glob('../world/voice-map.json', { eager: true, import: 'default' }),
   ...import.meta.glob('../world/places/*/voice-map.json', { eager: true, import: 'default' }),
 } as Record<string, MapEntry[]>
 const files = {
   ...import.meta.glob('../shell/voice/*.mp3', { eager: true, query: '?url', import: 'default' }),
-  ...import.meta.glob('../games/*/voice/*.mp3', { eager: true, query: '?url', import: 'default' }),
   ...import.meta.glob('../world/voice/*.mp3', { eager: true, query: '?url', import: 'default' }),
   ...import.meta.glob('../world/places/*/voice/*.mp3', { eager: true, query: '?url', import: 'default' }),
 } as Record<string, string>

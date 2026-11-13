@@ -60,6 +60,7 @@ import { Flames, Glows } from './flame'
 import { Ribbon } from './ribbon'
 import { LoopTracker, SHAPE_IDS, shapePoints, type Pt, type ShapeId } from './shapes'
 import { FireStory, POI_FLY, POI_LOOK } from './story'
+import { TO_DEG, damp } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/finale/fireshow.ts'
 const S = LINES.samet.finale.fire
@@ -185,7 +186,6 @@ const LINKS = 9
 const HAND = new Vector3(0.05, -0.15, 0.01)
 const PAPER = ['#FFCF8F', '#FFB4DA', '#D8C2FF']
 
-const DEG = 180 / Math.PI
 const HINT_S = 6
 /** Sparkle says what to do after this long with nothing done (and no sooner again). */
 const SAY_S = 9
@@ -194,7 +194,6 @@ const tmp2 = new Vector3()
 const tmp3 = new Vector3()
 const tmpC = new Color()
 const tmpQ = new Quaternion()
-const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 const UP = new Vector3(0, 1, 0)
 
 // ---- Sounds: sounds.ts (recorded, with the synth fallbacks).
@@ -424,7 +423,7 @@ export class FireShow implements World3D {
     // ---- Kaylee behind the rope, her poi.
     this.kaylee = new Avatar(bag)
     const k0 = this.L(KAY.u, KAY.v)
-    this.kaylee.place(k0.x, k0.y, k0.z, SEAWARD * DEG)
+    this.kaylee.place(k0.x, k0.y, k0.z, SEAWARD * TO_DEG)
     scene.add(this.kaylee.root)
     const ks = (this.kShadow = blobShadow(0.42, bag))
     ks.position.set(k0.x, k0.y + 0.02, k0.z)
@@ -459,7 +458,7 @@ export class FireShow implements World3D {
       [this.nick, SEATS.nick],
     ] as const) {
       const p = this.L(s.u, s.v)
-      m.place(p.x, p.y, p.z, SEAWARD * DEG, 'stand')
+      m.place(p.x, p.y, p.z, SEAWARD * TO_DEG, 'stand')
       scene.add(m.root)
     }
 
@@ -471,7 +470,7 @@ export class FireShow implements World3D {
     ;[geckos.tuk, geckos.kae].forEach((who, i) => {
       const rig = who.m.rig
       const p = this.L(DANCE[i][0], DANCE[i][1])
-      who.place(p.x, p.y, p.z, (SEAWARD + (i ? -DANCE_TURN : DANCE_TURN)) * DEG)
+      who.place(p.x, p.y, p.z, (SEAWARD + (i ? -DANCE_TURN : DANCE_TURN)) * TO_DEG)
       scene.add(rig.root)
       const shadow = blobShadow(0.45, bag)
       shadow.position.set(p.x, p.y + 0.02, p.z)
@@ -750,7 +749,7 @@ export class FireShow implements World3D {
       d.rig.body.rotation.z = 0
       if (on) return
       const p = this.L(DANCE[i][0], DANCE[i][1])
-      d.who.place(p.x, p.y, p.z, (SEAWARD + (i ? -DANCE_TURN : DANCE_TURN)) * DEG)
+      d.who.place(p.x, p.y, p.z, (SEAWARD + (i ? -DANCE_TURN : DANCE_TURN)) * TO_DEG)
       d.who.m.lookAway()
       d.pose.up = d.pose.bow = d.pose.wai = 0
     })
@@ -1173,7 +1172,7 @@ export class FireShow implements World3D {
     } else {
       // Dad gets up and dances.
       const p = this.L(SEATS.nick.u, SEATS.nick.v)
-      this.nick.place(p.x, p.y, p.z, SEAWARD * DEG, 'stand')
+      this.nick.place(p.x, p.y, p.z, SEAWARD * TO_DEG, 'stand')
       this.dancing = true
       if (!quiet) sfx.boing()
       at = p
@@ -1226,11 +1225,11 @@ export class FireShow implements World3D {
       // Finger up: the poi keep swinging round in a small circle in front of her (in a film, low by her hooves: a
       // close shot would have them over her face).
       this.idleA += dt * POI.idle
-      this.idleLow += ((this.films.on ? 1 : 0) - this.idleLow) * ease(dt, 4)
+      this.idleLow += ((this.films.on ? 1 : 0) - this.idleLow) * damp(dt, 4)
       const ir = 0.38 - 0.24 * this.idleLow
       this.planePoint(Math.sin(this.idleA) * ir, -0.15 - 1.0 * this.idleLow + Math.cos(this.idleA) * ir, this.aim)
     }
-    this.poiA.lerp(this.aim, ease(dt, POI.follow))
+    this.poiA.lerp(this.aim, damp(dt, POI.follow))
     this.hist.push({ p: this.poiA.clone(), t })
     // The whoosh-roar of her poi while she whirls them (louder and higher the faster they go).
     if (drawing && this.hist.length > 1 && dt > 0) {
@@ -1247,7 +1246,7 @@ export class FireShow implements World3D {
         b = this.hist[i].p
         break
       }
-    this.poiB.lerp(b, ease(dt, 30))
+    this.poiB.lerp(b, damp(dt, 30))
     this.ballA.position.copy(this.poiA)
     this.ballB.position.copy(this.poiB)
     this.ribA.life = this.ribB.life = POI.life
@@ -1353,8 +1352,8 @@ export class FireShow implements World3D {
     const wantR = active ? clamp(0.28 + this.tracker.size * 0.45, 0.3, 0.75) : 0.42
     const n = tmp.copy(this.fwd).negate()
     this.dancers.forEach((d, i) => {
-      d.spin += (wantSpin - d.spin) * ease(dt, COPY.catchUp)
-      d.r += (wantR - d.r) * ease(dt, COPY.catchUp)
+      d.spin += (wantSpin - d.spin) * damp(dt, COPY.catchUp)
+      d.r += (wantR - d.r) * damp(dt, COPY.catchUp)
       d.theta += d.spin * dt
       if (d.ring > 0) {
         d.ringT += dt
@@ -1364,9 +1363,9 @@ export class FireShow implements World3D {
       const p = rig.root.position
       const ringK = staged ? 0 : d.ring
       let hy = 0
-      d.up += (d.pose.up - d.up) * ease(dt, 7)
-      d.bow += (d.pose.bow - d.bow) * ease(dt, 7)
-      d.wai += (d.pose.wai - d.wai) * ease(dt, 7)
+      d.up += (d.pose.up - d.up) * damp(dt, 7)
+      d.bow += (d.pose.bow - d.bow) * damp(dt, 7)
+      d.wai += (d.pose.wai - d.wai) * damp(dt, 7)
       if (staged) {
         // In a film they act (story.ts): arms as the story asks (up holding the poi high, out for a bow, together
         // for a wai), then the Islander's own life on top (its droop, faces, hops, a wave).
@@ -1395,7 +1394,7 @@ export class FireShow implements World3D {
       }
       // The show's cheers are in the voice the two share: both their mouths move with it.
       const loud = speechLevel('gecko')
-      d.talk += (loud - d.talk) * ease(dt, loud > d.talk ? 30 : 14)
+      d.talk += (loud - d.talk) * damp(dt, loud > d.talk ? 30 : 14)
       if (d.talk > 0.03) rig.mouth.scale.set(1 + 0.15 * d.talk, 1 + 0.9 * d.talk, 1)
       d.shadow.position.set(p.x, d.shadow.position.y, p.z)
       rig.root.updateMatrixWorld(true)
@@ -1768,7 +1767,7 @@ export class FireShow implements World3D {
     c.y += 1.9
     const b = this.tall ? CAM.tallBox : CAM.box
     const half = this.tall ? new Vector3(b, 2.8, 3.6) : new Vector3(b, 2, 3.6)
-    return { center: c, half, yaw: SEAWARD * DEG, pitch: CAM.pitch, follow: true, minDist: 6, maxDist: 40 }
+    return { center: c, half, yaw: SEAWARD * TO_DEG, pitch: CAM.pitch, follow: true, minDist: 6, maxDist: 40 }
   }
 
   render() {

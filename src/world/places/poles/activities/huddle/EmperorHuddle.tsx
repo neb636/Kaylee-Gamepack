@@ -31,6 +31,7 @@ import night from '../../assets/bg-huddle-night.webp'
 import { L } from '../../lines'
 import { BIG, DEPTH, HATCH, LATE, onChick, onDad, RADIUS, scaleAt, SMALL, SNUG, TALL, WIDE, type StageDef, type Start } from './huddle'
 import HUDDLE_SECTIONS, { type HuddleSection } from './sections'
+import { smooth } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/poles/activities/huddle/EmperorHuddle.tsx'
 /** Her finger on a penguin (live in the feel lab: ?feel=1). Stage units: the wide stage is 1600 x 1000, the tall one
@@ -79,7 +80,6 @@ type Wind = 'left' | 'right'
 type Phase = 'play' | 'end'
 
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v)
-const ease = (p: number) => (p <= 0 ? 0 : p >= 1 ? 1 : p * p * (3 - 2 * p))
 
 // ---------------------------------------------------------------- drawing: the puppets (puppets/Emperor.tsx, Pebble.tsx)
 
@@ -881,8 +881,8 @@ class HuddleWorld {
           d.anim = { kind: 'land', t0: now }
           sfx.thump()
         } else {
-          d.x = d.cork.x0 + (d.cork.x1 - d.cork.x0) * ease(p)
-          d.y = d.cork.y0 + (d.cork.y1 - d.cork.y0) * ease(p)
+          d.x = d.cork.x0 + (d.cork.x1 - d.cork.x0) * smooth(p)
+          d.y = d.cork.y0 + (d.cork.y1 - d.cork.y0) * smooth(p)
         }
       } else if (d.walk) {
         const dx = d.walk.x - d.x
@@ -962,8 +962,8 @@ class HuddleWorld {
           c.chirpAt = now + 1.5
           sfx.thump()
         } else {
-          c.x = c.tumble.x0 + (c.tumble.x1 - c.tumble.x0) * ease(p)
-          c.y = c.tumble.y0 + (c.tumble.y1 - c.tumble.y0) * ease(p)
+          c.x = c.tumble.x0 + (c.tumble.x1 - c.tumble.x0) * smooth(p)
+          c.y = c.tumble.y0 + (c.tumble.y1 - c.tumble.y0) * smooth(p)
         }
       }
       if (c.state === 'out') {
@@ -1157,7 +1157,7 @@ class HuddleWorld {
       s.el.setAttribute('opacity', Math.min(0.9, 0.25 + windNow * 0.6).toFixed(2))
     }
     // The sky.
-    const sunT = ease(this.sunT)
+    const sunT = smooth(this.sunT)
     set(this.els.sunrise, 'opacity', sunT.toFixed(3))
     set(this.els.icewarm, 'opacity', (sunT * 0.55).toFixed(3))
     set(this.els.stars, 'opacity', (1 - sunT).toFixed(3))
@@ -1199,7 +1199,7 @@ class HuddleWorld {
     const show = from && to && !this.finger && this.now - this.lastTouch > 8
     hint.setAttribute('opacity', show ? '1' : '0')
     if (!show || !from || !to) return
-    const p = ease(((this.now - this.lastTouch - 8) % 2) / 1.6)
+    const p = smooth(((this.now - this.lastTouch - 8) % 2) / 1.6)
     hint.setAttribute('transform', `translate(${(from[0] + (to[0] - from[0]) * p).toFixed(0)} ${(from[1] + (to[1] - from[1]) * p).toFixed(0)})`)
   }
 

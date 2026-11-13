@@ -17,6 +17,7 @@ import { Mouse } from '../../puppets/Mouse'
 import type { ActivityProps } from '../../Place'
 import { Flower, pic, Rain, Splash, Wheel } from './bits'
 import SECTIONS from './sections'
+import { clamp } from '../../../../../sdk/math'
 
 const R = L.race
 const TOTAL = 6
@@ -55,7 +56,6 @@ const GEO = {
 const RABBIT_START = { x: 0.76, y: NEAR }
 const CLOUD_X = [0.22, 0.5, 0.78]
 
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 const scaleAt = (y: number, far: number) => 0.52 + 0.48 * clamp((y - far) / (NEAR - far), 0, 1)
 
 interface Pos {

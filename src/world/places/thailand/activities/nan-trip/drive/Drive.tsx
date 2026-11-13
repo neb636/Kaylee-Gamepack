@@ -47,11 +47,9 @@ interface Props {
   onPhoto?: () => void
   /** ✈️🏠 on the end card at the viewpoint (from the airport: the trip's way home; not from the lookout). */
   onHome?: () => void
-  /** The Nan Mountain Cup is on (cup/rules.ts): the city road ends at its race ground. */
-  cup?: boolean
 }
 
-export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onView, onPhoto, onHome, cup = false }: Props) {
+export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onView, onPhoto, onHome }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [run, setRun] = useState(0)
@@ -87,7 +85,7 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
   }, [photo])
 
   const make = (renderer: WebGLRenderer) => {
-    const w = new NanDrive(renderer, road, { onHud: setHud, onView: () => viewCb.current?.(), say: (l) => guideRef.current?.speak(l) }, view ? 'view' : 'road', roll, toRef.current, roll.from, cup)
+    const w = new NanDrive(renderer, road, { onHud: setHud, onView: () => viewCb.current?.(), say: (l) => guideRef.current?.speak(l) }, view ? 'view' : 'road', roll, toRef.current, roll.from)
     w.setHintElement(hintRef.current)
     w.setStickElement(stickRef.current)
     return w
@@ -111,7 +109,7 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
         make={make}
         anchors={(input, els) => (
           <>
-            <Anchors list={driveAnchors(road, roll.traffic, to, cup)} els={els} {...input} />
+            <Anchors list={driveAnchors(road, roll.traffic, to)} els={els} {...input} />
             <SteerWheel ref={stickRef} />
             {/* Not steering for a while: a finger sliding side to side, the way the wheel steers. */}
             <SteerHint ref={hintRef} />
@@ -132,7 +130,7 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
       {mode === 'webgl' && <TripGuide ref={guideRef} hidden={hud.phase === 'end'} />}
       <CountPop count={hud.count} />
       <AnimatePresence>{photo && mode === 'webgl' && <Snapshot key="three" src={threePhoto} />}</AnimatePresence>
-      <AnimatePresence>{hud.phase === 'end' && !going && <EndCard road={road} cup={cup} onRoad={pick} onStop={onStop} onMap={onMap} onHome={view ? onHome : undefined} />}</AnimatePresence>
+      <AnimatePresence>{hud.phase === 'end' && !going && <EndCard road={road} onRoad={pick} onStop={onStop} onMap={onMap} onHome={view ? onHome : undefined} />}</AnimatePresence>
     </div>
   )
 }
@@ -178,9 +176,9 @@ const STOP_AT: Partial<Record<RoadId, Stop | Stop[]>> = {
 /** The end of the road: drive it again, or back to the map (without one, take another road), in big pictures, no
  *  reading. At the end of a road with a stop (the valley road's mushroom farm, the sky road's Stop Time Cafe and Bo
  *  Kluea's salt wells), its big pictures come first. */
-function EndCard({ road, cup, onRoad, onStop, onMap, onHome }: { road: RoadId; cup: boolean; onRoad: (r: RoadId) => void; onStop?: (road: RoadId, stop?: string) => void; onMap?: () => void; onHome?: () => void }) {
+function EndCard({ road, onRoad, onStop, onMap, onHome }: { road: RoadId; onRoad: (r: RoadId) => void; onStop?: (road: RoadId, stop?: string) => void; onMap?: () => void; onHome?: () => void }) {
   const size = 'clamp(92px, 15vmin, 128px)'
-  const stops = onStop && (road !== 'city' || cup) ? [STOP_AT[road] ?? []].flat() : []
+  const stops = onStop ? [STOP_AT[road] ?? []].flat() : []
   return (
     <motion.div
       key="end"

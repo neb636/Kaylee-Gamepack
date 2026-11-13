@@ -8,13 +8,14 @@
 //
 // Her tools work on what's under her finger on screen (Salon): `nearest` finds the strands there, `cut` snips every
 // strand a finger's sweep crosses (on an iPhone too: it tests the whole sweep, not just where the finger is now).
-import { CylinderGeometry, SphereGeometry, Color, DynamicDrawUsage, Group, InstancedMesh, Matrix4, Quaternion, ShaderMaterial, BackSide, Vector2, Vector3, type BufferGeometry, type WebGLRenderer } from 'three'
+import { CylinderGeometry, SphereGeometry, Color, DynamicDrawUsage, Group, InstancedMesh, Matrix4, Quaternion, Vector2, Vector3, type BufferGeometry } from 'three'
 import type { Rig } from '../../../../../../engine3d/characters/animal'
 import type { Look } from '../../../../characters/looks'
 import type { Bag } from '../../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../../engine3d/geo'
-import { PAL, toon } from '../../../../../../engine3d/toon'
+import { toon } from '../../../../../../engine3d/toon'
 import { BOW_COLORS, decodeHair, encodeHair, HAIR_COLORS, LEN_STEPS, NATURAL, TUFTS, type BowId, type ColorId, type Hairdo, type Style } from './hair'
+import { instancedOutlineMaterial } from '../../../../../../engine3d/outline'
 
 /** Segments per strand, strands per tuft, strands per eyebrow. */
 const SEG = 5
@@ -92,27 +93,6 @@ function ownColor(look: Look, tuft: number) {
   return mane[tuft % mane.length]
 }
 
-// ---------------------------------------------------------------- the outline (the house's, instanced)
-
-const outlineVert = /* glsl */ `
-  uniform vec2 uRes;
-  uniform float uPx;
-  void main() {
-    vec4 mvPosition = modelViewMatrix * instanceMatrix * vec4(position, 1.0);
-    vec4 clip = projectionMatrix * mvPosition;
-    vec3 n = normalMatrix * (mat3(instanceMatrix) * normal);
-    vec2 dir = (projectionMatrix * vec4(n, 0.0)).xy;
-    float len = length(dir);
-    dir = len > 1e-5 ? dir / len : vec2(0.0);
-    clip.xy += dir * uPx * 2.0 / uRes * clip.w;
-    gl_Position = clip;
-  }
-`
-const outlineFrag = /* glsl */ `
-  uniform vec3 uColor;
-  void main() { gl_FragColor = vec4(uColor, 1.0); }
-`
-const size = new Vector2()
 
 /** Each segment is this much thinner than the one before (the tip ends at about a quarter of the root). */
 const TAPER = 0.72
@@ -144,14 +124,10 @@ export class Mane {
     this.R = rig.face.R
     const n = (TUFTS * PER + 2 * BROW) * SEG
     const px = look.height >= 1 ? 1.6 : 1.3
-    const ink = bag.add(new ShaderMaterial({ uniforms: { uRes: { value: [1, 1] }, uPx: { value: px }, uColor: { value: new Color(PAL.ink) } }, vertexShader: outlineVert, fragmentShader: outlineFrag, side: BackSide }))
+    // The house's ink line, instanced (shared and cached by the engine: not the bag's to dispose).
+    const ink = instancedOutlineMaterial(px)
     const pair = (geo: BufferGeometry): [InstancedMesh, InstancedMesh] => {
       const ims: [InstancedMesh, InstancedMesh] = [bag.add(new InstancedMesh(geo, toon('#ffffff'), n)), bag.add(new InstancedMesh(geo, ink, n))]
-      // The outline is as wide in pixels as the house's (its canvas size, read as it draws).
-      ims[1].onBeforeRender = (renderer: WebGLRenderer) => {
-        renderer.getSize(size)
-        ink.uniforms.uRes.value = [Math.max(1, size.x), Math.max(1, size.y)]
-      }
       for (const im of ims) {
         im.instanceMatrix.setUsage(DynamicDrawUsage)
         im.frustumCulled = false

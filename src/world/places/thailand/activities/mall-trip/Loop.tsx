@@ -1,4 +1,4 @@
-// The mall day's trip loop on screen (plan: thailand/mall-trip.md, build plan step 7): the legs around HarborLand, in
+// The mall day's trip loop on screen (plan: thailand/mall-trip.md (retired; in git history), build plan step 7): the legs around HarborLand, in
 // two 3D worlds in one shared view.
 //
 //   invite, goodbye, home   Agong's own house (activities/hub/house.ts) with the trip kit's plugin

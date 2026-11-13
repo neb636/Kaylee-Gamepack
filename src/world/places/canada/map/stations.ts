@@ -8,7 +8,7 @@ import type { BufferGeometry } from 'three'
 import type { Region } from './canada'
 import { P } from '../../../engine3d/geo'
 import { PAL } from '../../../engine3d/toon'
-import { leaf, RED } from './train'
+import { leaf, RED } from './leaf'
 
 /** How far the station's root stands from the middle of the track. */
 export const TRACK_X = 0.58

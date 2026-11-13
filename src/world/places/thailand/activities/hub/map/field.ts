@@ -3,6 +3,7 @@
 // about where the coast is. No three.js here.
 import { BOARD, KARSTS, LEVEL, SWELLS, TOY_ISLANDS } from './geo'
 import { OTHERS, THAI, type LonLat } from './land'
+import { smoothstep } from '../../../../../../sdk/math'
 
 /** Grid cells per degree, and how far the grid runs past the board. */
 const RES = 40
@@ -74,11 +75,6 @@ function distance(on: Uint8Array, w: number, h: number): Float32Array {
     for (let x = 0; x < w; x++) out[y * w + x] = d[x]
   }
   return out
-}
-
-const smooth = (a: number, b: number, x: number) => {
-  const t = Math.max(0, Math.min(1, (x - a) / (b - a)))
-  return t * t * (3 - 2 * t)
 }
 
 /** The field, worked out once a visit (it's the same every time: the map is built on every trip back to it). */
@@ -160,11 +156,11 @@ function makeField(): Field {
     const sl = sample(land, lon, lat)
     const st = sample(thai, lon, lat)
     // The neighbours and the shoals: low paper land with a soft shore.
-    const low = LEVEL.floor + (LEVEL.paper - LEVEL.floor) * smooth(-0.14, 0.05, sl)
+    const low = LEVEL.floor + (LEVEL.paper - LEVEL.floor) * smoothstep(-0.14, 0.05, sl)
     // Thailand stands up from it with a steep, rounded edge; its hills start a little way in.
-    const up = smooth(-0.075, 0.035, st)
+    const up = smoothstep(-0.075, 0.035, st)
     if (up <= 0) return low
-    return low + (LEVEL.thai + swell(lon, lat) * smooth(0.04, 0.4, st) - low) * up
+    return low + (LEVEL.thai + swell(lon, lat) * smoothstep(0.04, 0.4, st) - low) * up
   }
   const sea = new Float32Array(w * h)
   for (let i = 0; i < sea.length; i++) sea[i] = Math.max(0, -land[i])

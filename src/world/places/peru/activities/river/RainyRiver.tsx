@@ -2,7 +2,7 @@ import { useSections } from '../../../../kit/sections'
 import SECTIONS from './sections'
 import { numberParam, listParam } from '../../sectionState'
 // 🐬 Rosa's Rainy River (Amazon rainforest: rain, the flooding forest, pink river dolphins). Plan:
-// planning/around-the-world/peru.md § 4.
+// planning/around-the-world/peru.md (retired; in git history) § 4.
 // The toy (one core verb): grab the rain cloud and squeeze it. Holding it makes it rain right there (harder when she
 // wiggles it, with a soft rumble); dragging it rains a trail. Everything under the rain answers. The verb deepens:
 //   1. Rain on the forest: heliconias shoot up and flower, the frog pops out and sings, the leafcutter ants hold their

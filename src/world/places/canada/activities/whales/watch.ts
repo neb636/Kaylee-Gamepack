@@ -45,6 +45,7 @@ import { L } from '../../lines'
 import { Clouds, Eagle, Gulls, HarbourSeal, Orca, Otter, Puffin, Raven, SeaLion, SeaStars, Surfer, Whale, type OrcaWho } from './critters'
 import { DOCK, DRIFTS, HARBOUR_END_Z, keepOff, KELP, LIGHTHOUSE, open, RAFT, SEA, SPOUT_BOX, STARTS, SURF } from './sea'
 import type { SteerMode, WhaleSection } from './sections'
+import { TO_DEG, damp, wrapAngle } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/canada/activities/whales/watch.ts'
 /** The boat on the drive control (both ways to steer). */
@@ -135,7 +136,6 @@ export const WHALE_ANCHORS: AnchorInfo[] = [
 ]
 
 const ORDER: WhaleSection[] = ['story', 'harbour', 'otters', 'spouts', 'orcas']
-const DEG = 180 / Math.PI
 const HINT_S = 8
 /** Listening: how long the microphone stays down by itself. */
 const LISTEN_S = 16
@@ -146,8 +146,6 @@ const HINT_EVERY_S = 22
 const tmp = new Vector3()
 const tmp2 = new Vector3()
 const tmp3 = new Vector3()
-const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
-const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 
 // ---- Sounds (synthesized; the voices come at the full-loop gate).
 const horn = () => [0, 0.42].forEach((d) => [330, 415].forEach((f) => tone(f, f, 0.32, 0.05, 'triangle', d)))
@@ -606,7 +604,7 @@ export class WhaleWatch implements World3D {
     }
 
     this.lights.follow(this.d.x, 0, this.d.z)
-    this.camYaw += wrap(this.d.heading - this.camYaw) * ease(dt, 0.4 + HELM.camera * 4)
+    this.camYaw += wrapAngle(this.d.heading - this.camYaw) * damp(dt, 0.4 + HELM.camera * 4)
     this.rig.lag = this.listening ? 0.7 : this.doneT >= 0 && this.doneT < 5 ? 0.8 : 0.35
     this.rig.setShot(this.shot())
     this.rig.update(dt)
@@ -655,7 +653,7 @@ export class WhaleWatch implements World3D {
           const dx = p.x - d.x
           const dz = p.z - d.z
           this.aimAhead = dx * Math.sin(d.heading) + dz * Math.cos(d.heading)
-          this.aimTurn = wrap(Math.atan2(dx, dz) - d.heading)
+          this.aimTurn = wrapAngle(Math.atan2(dx, dz) - d.heading)
         }
       }
       const g = d.goal
@@ -702,7 +700,7 @@ export class WhaleWatch implements World3D {
     const r = Math.hypot(ox, oz)
     if (r > SEA.r - 14) {
       const inward = Math.atan2(-ox, -oz)
-      d.heading += wrap(inward - d.heading) * Math.min(1, dt * 0.8 * ((r - (SEA.r - 14)) / 14))
+      d.heading += wrapAngle(inward - d.heading) * Math.min(1, dt * 0.8 * ((r - (SEA.r - 14)) / 14))
     }
     const before = { x: d.x, z: d.z }
     const ev = d.step(dt)
@@ -953,13 +951,13 @@ export class WhaleWatch implements World3D {
       // On the rope behind the stern, swinging along (the boat goes gently by itself while it tows her).
       const rx = d.x - sx * (BOAT_LEN * 0.5 + 3.2)
       const rz = d.z - sz * (BOAT_LEN * 0.5 + 3.2)
-      dr.x += (rx - dr.x) * ease(dt, 3)
-      dr.z += (rz - dr.z) * ease(dt, 3)
+      dr.x += (rx - dr.x) * damp(dt, 3)
+      dr.z += (rz - dr.z) * damp(dt, 3)
       if (Math.hypot(dr.x - RAFT.x, dr.z - RAFT.z) < 7) this.bringHome(dr)
       if (sp > 1 && Math.random() < dt * 6) this.foam.emit(dr.x, 0.03, dr.z, 0, 0, 0, 1, 0.5)
     }
     o.root.position.set(dr.x, 0, dr.z)
-    if (dr.state === 'towed') o.root.rotation.y += wrap(d.heading + Math.PI - o.root.rotation.y) * ease(dt, 4)
+    if (dr.state === 'towed') o.root.rotation.y += wrapAngle(d.heading + Math.PI - o.root.rotation.y) * damp(dt, 4)
   }
 
   private bringHome(dr: Drifter) {
@@ -1226,7 +1224,7 @@ export class WhaleWatch implements World3D {
         r.z += (dz / dist) * v * dt
       }
       const face = dist > 3 ? Math.atan2(dx, dz) : d.heading + (r.o.who === 'baby' ? d.yawRate * 0.5 : 0)
-      r.h += wrap(face - r.h) * ease(dt, r.o.who === 'baby' ? 5 : 2.5)
+      r.h += wrapAngle(face - r.h) * damp(dt, r.o.who === 'baby' ? 5 : 2.5)
       // Swimming forward makes the wake (and the bubbles at their blowholes now and then).
       if (r.o.landed) {
         this.spray.burst(r.x, 0.2, r.z, 12, 2.4, 3.2, 0.24)
@@ -1283,7 +1281,7 @@ export class WhaleWatch implements World3D {
 
   private updateListen(dt: number, t: number) {
     // The microphone goes down (and the camera dips) while she listens; comes up after.
-    this.mic += ((this.listening ? 1 : 0) - this.mic) * ease(dt, this.listening ? 1.4 : 3)
+    this.mic += ((this.listening ? 1 : 0) - this.mic) * damp(dt, this.listening ? 1.4 : 3)
     for (const r of this.orcas) {
       if (!this.listening) r.o.up = Math.min(1, r.o.up + dt)
       r.o.root.position.set(r.x, 0, r.z)
@@ -1367,10 +1365,10 @@ export class WhaleWatch implements World3D {
   private shot(): Shot {
     const d = this.d
     const tall = this.tall
-    const chase = (this.camYaw + Math.PI) * DEG
+    const chase = (this.camYaw + Math.PI) * TO_DEG
     if (this.section === 'story') {
       // At the dock: in front of the boat and a little to the side, on Maple at the wheel (the harbour behind her).
-      const yaw = this.d.heading * DEG + 58
+      const yaw = this.d.heading * TO_DEG + 58
       return { center: new Vector3(d.x + Math.sin(d.heading) * -0.4, 1.4, d.z + Math.cos(d.heading) * -0.4), half: tall ? new Vector3(1.2, 1.0, 1.3) : new Vector3(1.7, 0.9, 1.3), yaw, pitch: 16, minDist: 3, maxDist: 20 }
     }
     if (this.listening && this.mic > 0.5) {
@@ -1603,7 +1601,7 @@ export class WhaleWatch implements World3D {
     const goal = this.section === 'otters' && this.activeDrifter ? this.activeDrifter.o.root.position : this.spot ? tmp2.set(this.spot.x, 0, this.spot.z) : null
     let a = d.heading
     if (goal) a = Math.atan2(goal.x - d.x, goal.z - d.z)
-    const off = clamp(wrap(a - d.heading), -0.9, 0.9)
+    const off = clamp(wrapAngle(a - d.heading), -0.9, 0.9)
     const p = this.toScreen(tmp.set(d.x + Math.sin(d.heading + off) * 14, 0, d.z + Math.cos(d.heading + off) * 14))
     const x = clamp(p.x, 60, this.w - 60)
     const y = clamp(p.y, this.h * 0.25, this.h - 120)
@@ -1682,7 +1680,7 @@ export class WhaleWatch implements World3D {
       steer: this.mode,
       x: +d.x.toFixed(2),
       z: +d.z.toFixed(2),
-      heading: Math.round(wrap(d.heading) * DEG),
+      heading: Math.round(wrapAngle(d.heading) * TO_DEG),
       speed: +d.speed.toFixed(2),
       air: +d.y.toFixed(2),
       travel: +this.travel.toFixed(1),

@@ -1,11 +1,6 @@
 // Sounds for the Colosseum (synthesized, like kit/sfx): a crowd cheer, the wooden elevator's rumble, a creaky hatch,
 // a rope zip, and Cesare's Roman horn.
-let ctx: AudioContext | undefined
-function audio() {
-  if (!ctx && typeof AudioContext !== 'undefined') ctx = new AudioContext()
-  if (ctx?.state === 'suspended') void ctx.resume()
-  return ctx
-}
+import { audio } from '../../../../kit/sfx'
 
 function tone(freq: number, to: number, dur: number, vol: number, delay = 0, type: OscillatorType = 'sine') {
   const a = audio()

@@ -2,7 +2,7 @@ import { useSections } from '../../../../kit/sections'
 import SECTIONS from './sections'
 import { numberParam, listParam } from '../../sectionState'
 // 🐧 Pepa's Penguin Cliff (the desert coast at Paracas: Peru has penguins! a cold ocean full of fish). Plan:
-// planning/around-the-world/peru.md § 2.
+// planning/around-the-world/peru.md (retired; in git history) § 2.
 // The toy (one core verb): pull a penguin back on the launch rock and let go. It leaps in an arc (a dotted line shows
 // where it will splash), belly-flops in, "flies" underwater, porpoises home and hops back up the cliff. Small pull, small
 // hop; big pull, big splash and a deep dive. The same verb deepens three times:
@@ -32,6 +32,7 @@ import { pickLayout, type PenguinStage } from './layout'
 import { Boat, Candelabra, Crab, Jelly, Kelp, Sun, Surface, Tern, Underwater, WATER } from './Scene'
 import { psfx } from './sfx'
 import { Splash, type SplashHandle } from './Splash'
+import { clamp } from '../../../../../sdk/math'
 
 const P = L.penguins
 /** Pepa's orders, in fish. The first two are fishing; the rest come with the twist (third chick, pelican, waves). */
@@ -115,7 +116,6 @@ interface Flyer {
   to: Pt
 }
 
-
 const cubic = (p: Pt[], t: number): Pt => {
   const u = 1 - t
   return {
@@ -131,7 +131,6 @@ const cubicD = (p: Pt[], t: number): Pt => {
   }
 }
 const lineKey = (l: Line) => (typeof l === 'string' ? l : l.text)
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 const rand = (r: [number, number]) => r[0] + Math.random() * (r[1] - r[0])
 
 /** The picture box of a swimmer: width, and where its feet are (shares). */

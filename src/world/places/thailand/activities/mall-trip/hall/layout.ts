@@ -1,4 +1,4 @@
-// MEGA HarborLand's hall (plan: planning/around-the-world/thailand/mall-trip.md, "The hall"), in meters: one long
+// MEGA HarborLand's hall (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "The hall"), in meters: one long
 // side view she walks along, with a mini game in each part. The one source of truth for the build, the walk grid, the
 // doors and the tap targets. Pure data (no three.js).
 //

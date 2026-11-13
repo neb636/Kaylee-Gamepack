@@ -40,7 +40,7 @@ scratch folder outside the repo, and delete your scratch copies when you're done
    - **Emotion:** laughing, showing the user, "again!", or a glassy stare.
    One session is one data point. Fix what's clearly broken; for taste calls, look for the same thing twice (this
    session and her play diary, or two sessions) before changing the toy.
-4. **Write the findings** in the toy's notes (`planning/around-the-world/<country>/<toy>.md`), in words only: date,
+4. **Write the findings** in the toy's notes (`planning/around-the-world/<country>/<toy>.md` (or the country's `<country>.md` when it has no folder)), in words only: date,
    what she loved, where she got stuck or bored (section and moment), what she said (paraphrased), and the fixes you'll
    make. No quotes long enough to identify her, no pictures.
 

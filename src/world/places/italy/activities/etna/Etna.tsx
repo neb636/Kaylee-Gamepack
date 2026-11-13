@@ -1,4 +1,4 @@
-// 🌋 Snow on a Volcano (Sicily: weather and altitude, lemon granita). Plan: planning/around-the-world/italy.md § 6.
+// 🌋 Snow on a Volcano (Sicily: weather and altitude, lemon granita). Plan: planning/around-the-world/italy.md (retired; in git history) § 6.
 // The toy (one core verb): grab Nino the donkey and lead him along the trail up Mount Etna. He trots after her finger
 // (slower uphill, faster downhill), his cart rattles along behind him with Sparkle riding in it, and he reacts to
 // everything on the way. The same verb deepens three times:

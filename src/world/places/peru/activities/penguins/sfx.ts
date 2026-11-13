@@ -1,12 +1,7 @@
 // The penguin cliff's own sound effects (synthesized, like ../fluffy/sfx.ts): the rubbery stretch of a pull, the
 // splash (small and big), a "blip" plop, chick peeps, a gulp, Lobo's bark, a tern's squawk, the tour boat's toot, an
 // egg cracking, bubbles and the camera click.
-let ctx: AudioContext | undefined
-function audio() {
-  if (!ctx && typeof AudioContext !== 'undefined') ctx = new AudioContext()
-  if (ctx?.state === 'suspended') void ctx.resume()
-  return ctx
-}
+import { audio } from '../../../../kit/sfx'
 
 function tone(freq: number, to: number, dur: number, vol: number, type: OscillatorType = 'sine', delay = 0, vibrato = 0) {
   const a = audio()

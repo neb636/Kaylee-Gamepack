@@ -8,8 +8,9 @@ files). **Sparkle is the guide**: she gives the instructions (in Thailand from a
 `trip/legs/Guide.tsx`). Other characters say their own story and reaction lines in their own voices, which makes the
 world feel alive and helps a child who can't read know who is talking:
 - A country's `lines.ts` holds **every** phrase that can be spoken, tagged by speaker; `node scripts/world-voice-lines.mjs`
-  writes `voice-lines.json` from it. (A game folder writes `voice-lines.json` by hand: plain strings are Sparkle,
-  `{ "text": "Yum!", "voice": "koko" }` for anyone else.)
+  writes `voice-lines.json` from it (`npm run verify` fails when you forget). Only the shell's
+  `src/shell/voice-lines.json` is written by hand: plain strings are Sparkle, `{ "text": "Yum!", "voice": "koko" }`
+  for anyone else.
 - `cast.json` next to it gives each speaker an OpenAI `voice`, acting `instructions` (age, personality, accent, pace)
   and `pitch` in semitones (small animals +2..+4). See `src/world/places/thailand/cast.json`. Sparkle comes from
   `src/sdk/cast.json`.

@@ -3,8 +3,8 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useState, type CSSProp
 import posthog, { isPostHogEnabled } from '../posthog'
 import { go } from '../router'
 import { motion } from 'motion/react'
-import { Mascot, sounds, StarProgress, stopSpeaking, useOnline, type GameMeta } from '../sdk'
-import { WinCeremony } from '../shell/WinCeremony'
+import { Mascot, sounds, StarProgress, stopSpeaking, useOnline } from '../sdk'
+import { WinCeremony, type TrophyWin } from '../shell/WinCeremony'
 import { DOCK, DockGlyph, MapIcon, ShelfIcon, worldBack, type DockKind } from './HomeIcons'
 import { BarPill, TopBar } from './kit/Chrome'
 import { Flag } from './kit/Flag'
@@ -18,7 +18,9 @@ import type { PlaceMeta } from './types'
 
 declare global {
   interface Window {
-    /** Test/dev hooks for Around the World. */
+    // Test/dev hooks for Around the World.
+    /** `__kaylee.win()` jumps to the trophy ceremony. */
+    __kaylee?: { win: () => void }
     __kayleeWorld?: { stampAll: () => void; reset: () => void; /** Finishes the open activity (set by the country). */ finish?: () => void }
   }
 }
@@ -39,21 +41,8 @@ const barTile = (kind: DockKind): CSSProperties => ({
   padding: 'calc(var(--btn) * 0.16)',
 })
 
-/** The shell's trophy ceremony takes a GameMeta; a country trophy only needs the name parts. */
-const trophyMeta = (meta: PlaceMeta): GameMeta => ({
-  id: `world-${meta.id}`,
-  title: meta.name,
-  emoji: meta.emoji,
-  cover: meta.friend.img,
-  subject: 'social studies: around the world',
-  skills: [],
-  vocabulary: [],
-  mechanic: '',
-  setting: '',
-  source: { pages: [] },
-  createdAt: meta.createdAt,
-  trophyTitle: meta.trophyTitle,
-})
+/** The shell's trophy ceremony: a country trophy only needs the name parts. */
+const trophyMeta = (meta: PlaceMeta): TrophyWin => ({ id: `world-${meta.id}`, title: meta.name, emoji: meta.emoji, trophyTitle: meta.trophyTitle })
 
 function RunningPlace({ entry, activity: route, section, params }: { entry: PlaceEntry; activity?: string; section?: string; params: Record<string, string> }) {
   const { meta } = entry

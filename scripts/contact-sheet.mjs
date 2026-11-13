@@ -1,5 +1,5 @@
 // Puts every image in a folder onto one purple sheet so you can check cutouts at a glance.
-// Usage: node scripts/contact-sheet.mjs src/games/<game-id>/assets [out.png]
+// Usage: node scripts/contact-sheet.mjs src/world/places/<place-id>/assets [out.png]
 import sharp from 'sharp'
 import { readdirSync } from 'node:fs'
 import { join } from 'node:path'

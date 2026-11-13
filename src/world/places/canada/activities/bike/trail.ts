@@ -11,6 +11,7 @@
 //   ..END             the meadow at the bottom, by the waterfall's pool
 //
 // Plain numbers, no three.js.
+import { lerp, smooth } from '../../../../../sdk/math'
 
 export const START = -14
 export const GREEN_END = 260
@@ -56,10 +57,8 @@ const TURNS: [number, number, number][] = [
   [772, 40, 0.16],
 ]
 
-const smooth = (k: number) => (k <= 0 ? 0 : k >= 1 ? 1 : k * k * (3 - 2 * k))
 /** A soft bump, 1 in the middle, 0 at ±1 and beyond. */
 export const bump = (k: number) => (Math.abs(k) >= 1 ? 0 : (Math.cos(Math.PI * k) + 1) / 2)
-const lerp = (a: number, b: number, k: number) => a + (b - a) * k
 
 /** Which way the trail heads at s (radians from straight down the mountain, + = toward +x). */
 export function phi(s: number) {

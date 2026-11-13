@@ -1,12 +1,7 @@
 // The terraces' own sound effects (synthesized, like ../fluffy/sfx.ts): a heavy stone clonking into its gap, a funny
 // bonk for a stone that doesn't fit, a grumbly rumble as stones roll in, the wind whistling through an Inca doorway,
 // a squawk, a rustle and a llama hum.
-let ctx: AudioContext | undefined
-function audio() {
-  if (!ctx && typeof AudioContext !== 'undefined') ctx = new AudioContext()
-  if (ctx?.state === 'suspended') void ctx.resume()
-  return ctx
-}
+import { audio } from '../../../../kit/sfx'
 
 function tone(freq: number, to: number, dur: number, vol: number, type: OscillatorType = 'sine', delay = 0, vibrato = 0) {
   const a = audio()

@@ -41,6 +41,7 @@ import { Rider } from './rider'
 import { buildClouds, buildCreek, buildFallen, buildFalls, buildForest, buildHills, buildLand, buildProps, buildRainbow, buildSky, buildTrail, FALL, FlowMaterial, Gondola, HANG, onRun, roundWater, SKY } from './scenery'
 import type { BikeSection } from './sections'
 import { BERMS_END, BRIDGE_HALF, Course, CREEK, CREEK_END, curve, END, FALLS, GREEN_END, H0, half, inCreek, island, JUMP, lane, phi, POND, POOL, rattly, SHOULDER, SPLIT, START, way } from './trail'
+import { TO_DEG, wrapAngle } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/canada/activities/bike/ride.ts'
 /** The finger wheel and the handlebars: Dad's numbers from the Nan drive's feel lab (2026-10-27) as the start. */
@@ -117,7 +118,6 @@ const BEAR = { s: 236, side: -1, off: 8.5 }
 const HARE = { s: 152, side: -1 }
 /** No steering for this long: the 👆 shows how. */
 const HINT_S = 8
-const DEG = 180 / Math.PI
 /** The gondola ride: how far up the line it starts (m below the top) and how long it takes (s). */
 const GOND_FROM = 170
 const GOND_S = 11
@@ -156,7 +156,6 @@ const PORCUPINE = { s: 352, side: -1 }
 
 const tmp = new Vector3()
 const tmp2 = new Vector3()
-const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
 
 function bell() {
   tone(2400, 2380, 0.35, 0.07, 'sine')
@@ -676,7 +675,7 @@ export class MountainBike implements World3D {
     this.lights.follow(p.x, p.y, p.z)
     this.sky.position.copy(this.rig.camera.position)
     // The camera looks down the trail, turning a little with the bike.
-    this.camYaw += wrap(this.camWant() - this.camYaw) * (1 - Math.exp(-dt * 4))
+    this.camYaw += wrapAngle(this.camWant() - this.camYaw) * (1 - Math.exp(-dt * 4))
     // (Riding along with the moving cabin, the camera keeps up tightly or the cabin slides off a phone's screen.)
     this.rig.lag = this.inCabin ? 0.05 : 0.3
     this.rig.setShot(this.shot())
@@ -1064,7 +1063,7 @@ export class MountainBike implements World3D {
     this.deer.root.position.y = c.land(this.deer.root.position.x, this.deer.root.position.z)
     const out = Math.atan2(dh.nx, dh.nz)
     const want = this.deer.busy ? out : this.deer.walkBack ? out + Math.PI : Math.PI - phi(DEER.s) + 0.5
-    this.deer.root.rotation.y += wrap(want - this.deer.root.rotation.y) * Math.min(1, dt * 5)
+    this.deer.root.rotation.y += wrapAngle(want - this.deer.root.rotation.y) * Math.min(1, dt * 5)
     this.deer.update(dt, t)
     // (She bounds off by herself if Maple whooshes right past her.)
     if (this.mode === 'ride' && Math.abs(this.s - DEER.s) < 3 && this.lat * DEER.side > half(this.s) * 0.5 && !this.deer.busy && this.deer.away === 0) this.deer.poke()
@@ -1150,13 +1149,13 @@ export class MountainBike implements World3D {
       // Close on Maple in her cabin, from in front of her.
       const her = this.gondola.hers.root.position
       const yaw = this.gondola.yawAt(this.gondU) + STORY_YAW
-      return { center: new Vector3(her.x, her.y - HANG + 1.35, her.z), half: tall ? new Vector3(0.9, 0.8, 0.9) : new Vector3(1.3, 0.8, 1.0), yaw: yaw * DEG, pitch: 12, minDist: 2.2 }
+      return { center: new Vector3(her.x, her.y - HANG + 1.35, her.z), half: tall ? new Vector3(0.9, 0.8, 0.9) : new Vector3(1.3, 0.8, 1.0), yaw: yaw * TO_DEG, pitch: 12, minDist: 2.2 }
     }
     if (this.mode === 'gondola') {
       // Uphill of her cabin and off to the side, looking back down at it: the trail, the valley and the river behind.
       const her = this.gondola.hers.root.position
       const yaw = this.gondola.yawAt(this.gondU) + 1.25 - this.modeT * 0.03
-      return { center: new Vector3(her.x, her.y - 2.4, her.z), half: tall ? new Vector3(2, 2.2, 2) : new Vector3(4.6, 2.4, 3.2), yaw: yaw * DEG, pitch: tall ? 20 : 12, minDist: 7 }
+      return { center: new Vector3(her.x, her.y - 2.4, her.z), half: tall ? new Vector3(2, 2.2, 2) : new Vector3(4.6, 2.4, 3.2), yaw: yaw * TO_DEG, pitch: tall ? 20 : 12, minDist: 7 }
     }
     if (this.mode === 'done') {
       // Maple and the waterfall, the rainbow over the pool.
@@ -1166,7 +1165,7 @@ export class MountainBike implements World3D {
       return {
         center: new Vector3(p.x, c.meadowY + (wide ? 5 : 1.15), p.z),
         half: wide ? (tall ? new Vector3(7, 5.5, 5) : new Vector3(10.5, 5.5, 5)) : tall ? new Vector3(1.3, 1, 1.3) : new Vector3(1.9, 1, 1.4),
-        yaw: -phi(s) * DEG + (wide ? 22 : 150),
+        yaw: -phi(s) * TO_DEG + (wide ? 22 : 150),
         pitch: wide ? 10 : 12,
       }
     }
@@ -1180,12 +1179,12 @@ export class MountainBike implements World3D {
     if (this.s < 3) {
       // Out of the station's door: from the side, the station and the gondola behind her.
       const q = t.spot(this.s + 2, 0)
-      return { center: new Vector3(q.x, H0 + 1.4, q.z), half: tall ? new Vector3(3, 1.6, 4) : new Vector3(4.5, 1.6, 3.5), yaw: -this.camYaw * DEG + 125, pitch: 14, minDist: 6 }
+      return { center: new Vector3(q.x, H0 + 1.4, q.z), half: tall ? new Vector3(3, 1.6, 4) : new Vector3(4.5, 1.6, 3.5), yaw: -this.camYaw * TO_DEG + 125, pitch: 14, minDist: 6 }
     }
     return {
       center: new Vector3(p.x, Math.max(g, this.y - 1.2) + 0.85 + lift, p.z),
       half: tall ? new Vector3(2.4, 1.1, 5) : new Vector3(3.9, 1.1, 3.9),
-      yaw: -this.camYaw * DEG,
+      yaw: -this.camYaw * TO_DEG,
       pitch: 12,
       minDist: 4.5,
     }
@@ -1199,7 +1198,7 @@ export class MountainBike implements World3D {
     const a = t.spot(this.s - 4, this.lat * 0.9)
     const b = t.spot(this.s + 3 + v * 0.3, this.lat * 0.85)
     const chord = Math.atan2(b.x - a.x, -(b.z - a.z))
-    return chord + wrap(Math.PI - this.d.heading - chord) * STEER.camera
+    return chord + wrapAngle(Math.PI - this.d.heading - chord) * STEER.camera
   }
 
   /** Never inside the hillside: the camera rises over the ground (and over a bank between it and Maple). */
@@ -1432,8 +1431,8 @@ export class MountainBike implements World3D {
       gondola: this.mode === 'gondola' ? +clamp(this.modeT / GOND_S).toFixed(2) : 1,
       done: this.doneT >= 0,
       arms: [+this.rider.rig.armL.rotation.z.toFixed(2), +this.rider.rig.armR.rotation.z.toFixed(2)],
-      dir: Math.round(wrap(Math.PI - this.d.heading - phi(this.s)) * DEG),
-      cam: Math.round(wrap(this.camYaw - phi(this.s)) * DEG),
+      dir: Math.round(wrapAngle(Math.PI - this.d.heading - phi(this.s)) * TO_DEG),
+      cam: Math.round(wrapAngle(this.camYaw - phi(this.s)) * TO_DEG),
       roll: +this.roll.toFixed(2),
       pitch: +this.pitch.toFixed(2),
       droll: +this.d.roll.toFixed(2),

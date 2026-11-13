@@ -1,7 +1,7 @@
 import { useSections } from '../../../../kit/sections'
 import SECTIONS from './sections'
 // ✂️ Luna's Fluffy Day (Andes highlands near Cusco: alpacas, fleece, cold mountain air). Plan:
-// planning/around-the-world/peru.md § 1.
+// planning/around-the-world/peru.md (retired; in git history) § 1.
 // The toy (one core verb): rub the fleece with a tool. Her finger holds a big brush (then round clippers) and every puff
 // it passes reacts. The same verb deepens three times:
 //   1. Brush Luna: the tangles turn shiny and sparkle, and things stuck in her fleece pop out (burr, twig, dandelion, a

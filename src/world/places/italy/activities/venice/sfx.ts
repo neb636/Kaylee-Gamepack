@@ -1,11 +1,6 @@
 // Venice's own sound effects (synthesized, like ../../../../kit/sfx.ts): a duck's quack, a water bus toot, an ambulance
 // siren, a church bell, a little lion roar, and the "bloop bloop" of the tide coming in.
-let ctx: AudioContext | undefined
-function audio() {
-  if (!ctx && typeof AudioContext !== 'undefined') ctx = new AudioContext()
-  if (ctx?.state === 'suspended') void ctx.resume()
-  return ctx
-}
+import { audio } from '../../../../kit/sfx'
 
 function tone(freq: number, to: number, dur: number, vol: number, type: OscillatorType = 'sine', delay = 0) {
   const a = audio()

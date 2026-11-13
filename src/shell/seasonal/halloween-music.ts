@@ -1,4 +1,4 @@
-import { speakingVoice } from '../sdk/speech'
+import { speakingVoice } from '../../sdk/speech'
 
 // Original eight-bar music-box waltz: A minor with a playful raised seventh,
 // soft plucked bass and twinkly bells. Synthesized locally, so it works offline.

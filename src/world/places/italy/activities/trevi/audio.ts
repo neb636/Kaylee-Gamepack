@@ -1,10 +1,5 @@
 // Water sounds for the Trevi activity (synthesized, like kit/sfx): an underground gurgle that gets louder, a coin plink.
-let ctx: AudioContext | undefined
-function audio() {
-  if (!ctx && typeof AudioContext !== 'undefined') ctx = new AudioContext()
-  if (ctx?.state === 'suspended') void ctx.resume()
-  return ctx
-}
+import { audio } from '../../../../kit/sfx'
 
 function blip(freq: number, to: number, dur: number, vol: number, delay: number, type: OscillatorType = 'sine') {
   const a = audio()

@@ -37,6 +37,7 @@ import { CANADA_COLORS } from '../../characters/looks'
 import TAFFY_SECTIONS, { type TaffySection } from './sections'
 import { LOOKS, ORDER_IDS, SHAPE_IDS, TALL, WANTS, WIDE, sampleShape, shapePath, type AnimalId, type Look, type OrderId, type Pt, type ShapeId, type StageDef } from './stage'
 import { drawPiece, isGone, isSet, left, newPiece, puddleVol, removePiece, syrupColor, type Layers, type Piece } from './syrup'
+import { clamp, smooth } from '../../../../../sdk/math'
 
 const T = L.taffy
 /** Who each animal at the table is in Maple's book. */
@@ -109,8 +110,6 @@ const SHAPE_NAME: Record<ShapeId, string> = { heart: 'A heart', leaf: 'A maple l
 /** How many lollipops each section starts with (the little sticks along the tray). */
 const START_MADE: Record<TaffySection, number> = { story: 0, pour: 0, shapes: 3, orders: 6, share: 10 }
 
-const ease = (p: number) => (p < 0 ? 0 : p > 1 ? 1 : p * p * (3 - 2 * p))
-const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v)
 const NS = 'http://www.w3.org/2000/svg'
 
 // ---------------------------------------------------------------- the runtime (plain objects, written every frame)
@@ -784,7 +783,7 @@ class TaffyWorld {
       const a = this.animals.get(l.fly.to)!
       const [mx, my] = this.mouth(a)
       const p = clamp((this.now - l.fly.t0) / l.fly.dur, 0, 1)
-      const e = ease(p)
+      const e = smooth(p)
       l.x = l.fly.x0 + (mx - l.fly.x0) * e
       l.y = l.fly.y0 + (my - l.fly.y0) * e - Math.sin(p * Math.PI) * 120
       if (p >= 1) {
@@ -1094,7 +1093,7 @@ class TaffyWorld {
       drawPiece(p, rMax, feel)
       if (isGone(p) && p !== this.pot.piece) continue
       const pouring = p.endAt === Infinity
-      const sp = pouring ? 0 : ease((now - p.endAt - ROLL.set * 0.35) / (ROLL.set * 0.65))
+      const sp = pouring ? 0 : smooth((now - p.endAt - ROLL.set * 0.35) / (ROLL.set * 0.65))
       p.els.fill.setAttribute('fill', syrupColor(sp))
       p.els.fill.setAttribute('opacity', sp < 1 ? (0.9 + 0.1 * sp).toFixed(3) : '1')
       if (sp < 1) {
@@ -1220,7 +1219,7 @@ class TaffyWorld {
     const h = this.els['owl-head']
     if (h) {
       const k = (this.now - this.owlSpin) / 1.1
-      h.setAttribute('transform', `rotate(${k >= 0 && k < 1 ? (ease(k) * 360).toFixed(1) : '0'})`)
+      h.setAttribute('transform', `rotate(${k >= 0 && k < 1 ? (smooth(k) * 360).toFixed(1) : '0'})`)
     }
   }
 
@@ -1294,9 +1293,9 @@ class TaffyWorld {
       a.els.body?.setAttribute('transform', `translate(0 ${ty.toFixed(1)}) rotate(${rot.toFixed(2)}) scale(${sx.toFixed(3)} ${sy.toFixed(3)})`)
       a.els.mouth?.setAttribute('ry', (r * 0.2 * mouth).toFixed(2))
       const puff = a.puffed > 0 ? Math.max(0, 1 - (now - a.puffed) / 3) : 0
-      a.els.cheeks?.setAttribute('transform', `scale(${(puff > 0 ? 0.4 + 0.6 * ease(Math.min(1, puff * 3)) : 0).toFixed(3)})`)
+      a.els.cheeks?.setAttribute('transform', `scale(${(puff > 0 ? 0.4 + 0.6 * smooth(Math.min(1, puff * 3)) : 0).toFixed(3)})`)
       if (a.els.head) {
-        const k = a.anim?.kind === 'spin' ? ease((now - a.anim.t0) / a.anim.dur) : 0
+        const k = a.anim?.kind === 'spin' ? smooth((now - a.anim.t0) / a.anim.dur) : 0
         a.els.head.setAttribute('transform', `rotate(${(k * 360).toFixed(1)})`)
       }
       // Blinks, a squint, and happy closed eyes once she's full.
@@ -1372,7 +1371,7 @@ class TaffyWorld {
     }
     s.t += dt
     if (s.state === 'in') {
-      const k = ease(s.t / 0.9)
+      const k = smooth(s.t / 0.9)
       s.x = s.x0 + (s.tx - s.x0) * k
       s.y = s.y0 + (s.ty - s.y0) * k
       if (s.t >= 0.9) ((s.state = 'lick'), (s.t = 0))
@@ -1392,7 +1391,7 @@ class TaffyWorld {
       }
       if (s.t >= 1.6) this.squirrelOut()
     } else if (s.state === 'out') {
-      const k = ease(s.t / 0.7)
+      const k = smooth(s.t / 0.7)
       const ex = s.x0 < st.snow.x + st.snow.w / 2 ? st.snow.x - 120 : st.snow.x + st.snow.w + 120
       s.x = s.x0 + (ex - s.x0) * k
       if (s.t >= 0.7) s.state = 'off'
@@ -1421,7 +1420,7 @@ class TaffyWorld {
       const a = (52 * Math.PI) / 180
       b.x = b.on.x + Math.cos(a) * STICK * 0.7
       b.y = b.on.y + Math.sin(a) * STICK * 0.7 - 10
-      const land = ease(b.t / 0.4)
+      const land = smooth(b.t / 0.4)
       el.setAttribute('opacity', '1')
       el.setAttribute('transform', `translate(${b.x.toFixed(1)} ${(b.y - (1 - land) * 160).toFixed(1)}) scale(${(1 + 0.05 * Math.sin(this.now * 9)).toFixed(3)})`)
       return
@@ -1470,7 +1469,7 @@ class TaffyWorld {
         const best = this.bestFor(ready)
         const k = (this.now * 0.6) % 1
         const [mx, my] = best ? this.mouth(best) : ready.home
-        at = [ready.x + (mx - ready.x) * ease(k), ready.y + (my - ready.y) * ease(k)]
+        at = [ready.x + (mx - ready.x) * smooth(k), ready.y + (my - ready.y) * smooth(k)]
       } else if (lying) at = [lying.x, lying.y]
       else if (set) {
         const q = set.pts.find((o) => !o.eaten) ?? set.puddles.find((o) => !o.eaten)

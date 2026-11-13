@@ -1,4 +1,4 @@
-// The mall day at ICONSIAM (plan: planning/around-the-world/thailand/mall-trip.md). So far, in shapes and without
+// The mall day at ICONSIAM (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history)). So far, in shapes and without
 // voices: HarborLand's hall (hall/, sections hall and hungry), where she walks between the ways in; the mini games
 // behind them: the Vet Clinic (games/vet/, section vet), the Barber Salon (games/barber/, section barber: Dad keeps
 // the hairdo she gives him, `hair`, in the hall and at the pizza table), Cafe & Cake (games/cafe/, section cafe), the

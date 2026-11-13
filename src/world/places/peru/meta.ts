@@ -2,7 +2,7 @@ import type { PlaceMeta } from '../../types'
 import { art } from './art'
 import { L } from './lines'
 
-// Peru is built one activity at a time (plan: planning/around-the-world/peru.md). Luna's Fluffy Day, Pepa's Penguin
+// Peru is built one activity at a time (plan: planning/around-the-world/peru.md (retired; in git history)). Luna's Fluffy Day, Pepa's Penguin
 // Cliff, Tika's Mountain Terraces, Coco's Canyon Glide and Rosa's Rainy River are all built; the balloon finale comes next.
 const meta: PlaceMeta = {
   id: 'peru',

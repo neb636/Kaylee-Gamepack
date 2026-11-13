@@ -1,4 +1,4 @@
-// Arriving at ICONSIAM (plan: thailand/mall-trip.md, "Arrive at ICONSIAM"), a Stage like the airport (trip/legs/
+// Arriving at ICONSIAM (plan: thailand/mall-trip.md (retired; in git history), "Arrive at ICONSIAM"), a Stage like the airport (trip/legs/
 // airport.ts): one 3D world with three sets far apart, and the camera cuts between them behind a white flash.
 //
 // 1. The glimpse (about 3 s, a tap skips it): Mom's grey Veloz pulls up at the drop-off in front of the zig-zag

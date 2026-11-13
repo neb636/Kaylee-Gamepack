@@ -12,12 +12,15 @@
 //   camera, each swinging on its grip)
 // - running water (the creek across the trail, the waterfall at the bottom) with its own little shader
 // - the sky dome, clouds, and three layers of far hills
-import { BackSide, BufferAttribute, BufferGeometry, CircleGeometry, Color, DoubleSide, DynamicDrawUsage, Euler, InstancedMesh, Matrix4, Quaternion, Float32BufferAttribute, Group, Mesh, MeshBasicMaterial, ShaderMaterial, SphereGeometry, TorusGeometry, UniformsLib, UniformsUtils, Vector3, type ColorRepresentation } from 'three'
+import { BackSide, BufferAttribute, BufferGeometry, CircleGeometry, Color, DynamicDrawUsage, Euler, InstancedMesh, Matrix4, Quaternion, Float32BufferAttribute, Group, Mesh, MeshBasicMaterial, SphereGeometry, TorusGeometry, Vector3 } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid, type V3 } from '../../../../engine3d/geo'
 import { PAL, toon } from '../../../../engine3d/toon'
 import { Water } from '../../../../engine3d/water'
 import { BRIDGE_HALF, CLIFF, Course, CREEK, CREEK_END, END, FALLS, GREEN_END, half, inCreek, island, JUMP, onKicker, POOL, RIB, ROCKS, ROOTS, SPLIT, START, STATION } from './trail'
+import { smooth } from '../../../../../sdk/math'
+import { FlowMaterial } from '../../../../engine3d/flow'
+export { FlowMaterial }
 
 export const SKY = '#E6EEFB'
 const SKY_TOP = '#8CC8F2'
@@ -27,7 +30,6 @@ export function rng(seed: number) {
   let s = seed >>> 0
   return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296)
 }
-const smooth = (k: number) => (k <= 0 ? 0 : k >= 1 ? 1 : k * k * (3 - 2 * k))
 const hash = (x: number, z: number) => {
   const v = Math.sin(x * 127.1 + z * 311.7) * 43758.5453
   return v - Math.floor(v)
@@ -420,65 +422,6 @@ export function buildForest(course: Course, keepOut: (x: number, z: number) => b
 
 // ---------------------------------------------------------------- running water
 
-const flowVertex = /* glsl */ `
-  #include <fog_pars_vertex>
-  attribute vec2 flow;
-  varying vec2 vFlow;
-  void main() {
-    vFlow = flow;
-    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-    gl_Position = projectionMatrix * mvPosition;
-    #include <fog_vertex>
-  }
-`
-const flowFragment = /* glsl */ `
-  #include <fog_pars_fragment>
-  uniform vec3 uDeep;
-  uniform vec3 uLight;
-  uniform vec3 uFoam;
-  uniform float uTime;
-  uniform float uSpeed;
-  uniform float uRows;
-  uniform float uAlong;
-  varying vec2 vFlow;
-  float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-  void main() {
-    // Two flat bands that wobble, white dashes streaming along, foam along both banks.
-    float band = sin(vFlow.x * 0.7 - uTime * uSpeed * 0.6 + sin(vFlow.y * 6.0) * 0.8);
-    vec3 col = band > 0.35 ? uLight : uDeep;
-    vec2 q = vec2(vFlow.y * uRows, vFlow.x * uAlong - uTime * uSpeed * uAlong);
-    vec2 cell = floor(q);
-    vec2 f = fract(q);
-    float dash = step(0.62, hash(cell)) * step(0.3, f.x) * step(f.x, 0.7) * step(0.15, f.y) * step(f.y, 0.75);
-    col = mix(col, uFoam, dash * 0.85);
-    float edge = 1.0 - smoothstep(0.0, 0.14, min(vFlow.y, 1.0 - vFlow.y));
-    col = mix(col, uFoam, edge * 0.75);
-    gl_FragColor = vec4(col, 1.0);
-    #include <colorspace_fragment>
-    #include <fog_fragment>
-  }
-`
-
-export class FlowMaterial {
-  readonly mat: ShaderMaterial
-  constructor(bag: Bag, o: { deep: ColorRepresentation; light: ColorRepresentation; speed: number; rows: number; along?: number }) {
-    this.mat = bag.add(
-      new ShaderMaterial({
-        uniforms: UniformsUtils.merge([
-          UniformsLib.fog,
-          { uDeep: { value: new Color(o.deep) }, uLight: { value: new Color(o.light) }, uFoam: { value: new Color('#FFFFFF') }, uTime: { value: 0 }, uSpeed: { value: o.speed }, uRows: { value: o.rows }, uAlong: { value: o.along ?? 0.8 } },
-        ]),
-        vertexShader: flowVertex,
-        fragmentShader: flowFragment,
-        fog: true,
-        side: DoubleSide,
-      }),
-    )
-  }
-  update(t: number) {
-    this.mat.uniforms.uTime.value = t
-  }
-}
 
 /** A strip of running water through points (left and right bank each), with how far along each row is. */
 function strip(rows: { l: Vector3; r: Vector3; along: number }[], bag: Bag) {

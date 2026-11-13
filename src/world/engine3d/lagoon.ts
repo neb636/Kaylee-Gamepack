@@ -18,6 +18,7 @@
 // sand above the sea's level stays dry until a channel lets the water through).
 import { Color, Mesh, PlaneGeometry, Shape, ShapeGeometry, Path, ShaderMaterial, Vector2, Vector4, type ColorRepresentation, type Texture } from 'three'
 import type { Bag } from './dispose'
+import { smoothstep } from '../../sdk/math'
 
 export interface LagoonOpts {
   /** The terrain's sea texture and where it lies (terrain.ts: Terrain.sea, Terrain.seaBox). */
@@ -177,12 +178,6 @@ const fragmentShader = /* glsl */ `
   }
 `
 
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
-const smooth = (a: number, b: number, x: number) => {
-  const t = clamp((x - a) / (b - a), 0, 1)
-  return t * t * (3 - 2 * t)
-}
-
 export class Lagoon {
   readonly near: Mesh
   readonly far: Mesh
@@ -276,18 +271,18 @@ export class Lagoon {
     const dz = w.dir.z / l
     const s = (x * dx + z * dz - w.speed * t) / w.length + 0.06 * Math.sin((-dz * x + dx * z) * 0.045)
     const c = 0.5 + 0.5 * Math.cos(Math.PI * 2 * s)
-    return c * c * c * c * smooth(1, 16, shore) * this.fade(x, z)
+    return c * c * c * c * smoothstep(1, 16, shore) * this.fade(x, z)
   }
   private fade(x: number, z: number) {
     const g = this.grid * 0.5
-    return 1 - smooth(g - 22, g - 6, Math.max(Math.abs(x - this.cx), Math.abs(z - this.cz)))
+    return 1 - smoothstep(g - 22, g - 6, Math.max(Math.abs(x - this.cx), Math.abs(z - this.cz)))
   }
   /** The water's surface height here (exactly what the shader draws). `shore`: meters to the shore (Terrain.shoreAt). */
   heightAt(x: number, z: number, t: number, shore: number) {
     const w = this.waves
     const chop = 0.05 * Math.sin(x * 0.21 + t * 1.3) + 0.04 * Math.sin(z * 0.17 - t * 1.1) + 0.02 * Math.sin((x - z) * 0.5 + t * 2.1)
     const fade = this.fade(x, z)
-    return fade * w.chop * chop * (0.35 + 0.65 * smooth(0, 6, shore)) + w.height * this.crestAt(x, z, t, shore) + this.tide.level
+    return fade * w.chop * chop * (0.35 + 0.65 * smoothstep(0, 6, shore)) + w.height * this.crestAt(x, z, t, shore) + this.tide.level
   }
 
   /** New colors (a golden afternoon, the night). */

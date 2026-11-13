@@ -37,6 +37,7 @@ import { buildProps, type Props } from '../island/props'
 import { buildIsland, DAY, glowMaterial, type Island } from '../island/scenery'
 import { makeSeeThrough, SEE } from '../island/seethrough'
 import { FIREFLY_IDS, fireflySfx, Swarm } from '../story/firefly'
+import { TO_DEG, damp } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/finale/sunset.ts'
 const S = LINES.samet.finale.sunset
@@ -68,7 +69,6 @@ export interface SunsetEvents {
 }
 type Phase = 'day' | 'sinking' | 'dusk' | 'night'
 
-const DEG = 180 / Math.PI
 const tmpQ = new Quaternion()
 const phoneQ = new Quaternion()
 const phoneE = new Euler()
@@ -84,7 +84,6 @@ const tmp = new Vector3()
 const tmp2 = new Vector3()
 const horn = new Vector3()
 const spot = new Vector3()
-const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 
 /** The driftwood tree in Ao Prao's frame (u along the beach, v out to sea). */
 const F = FRAMES.prao
@@ -188,11 +187,11 @@ export class Sunset implements World3D {
     this.ji = fam('ji')
     this.nick = fam('nick')
     const k = this.L(SPOTS.kaylee.u, SPOTS.kaylee.v)
-    this.kaylee.place(k.x, k.y, k.z, this.seaYaw * DEG)
+    this.kaylee.place(k.x, k.y, k.z, this.seaYaw * TO_DEG)
     const j = this.L(SPOTS.ji.u, SPOTS.ji.v)
-    this.ji.place(j.x, j.y, j.z, this.seaYaw * DEG)
+    this.ji.place(j.x, j.y, j.z, this.seaYaw * TO_DEG)
     const n = this.L(SPOTS.nick.u, SPOTS.nick.v)
-    this.nick.place(n.x, n.y, n.z, this.seaYaw * DEG)
+    this.nick.place(n.x, n.y, n.z, this.seaYaw * TO_DEG)
     scene.add(this.kaylee.root, this.ji.root, this.nick.root)
     // Mom's phone in her hand (a lavender case, the camera on the back, the screen toward her).
     const H = this.ji.height
@@ -227,7 +226,7 @@ export class Sunset implements World3D {
     this.halo.position.z = -0.5
     this.sun.add(this.halo)
     scene.add(this.sun)
-    this.elev = this.goal = SUN.start / DEG
+    this.elev = this.goal = SUN.start / TO_DEG
 
     // ---- The fireflies she found, round her horn.
     this.flies = new Swarm(bag, scene, FIREFLY_IDS.filter((id) => start.flags.includes(id)), 1)
@@ -281,16 +280,16 @@ export class Sunset implements World3D {
         this.raycaster.setFromCamera(new Vector2((this.finger.x / this.w) * 2 - 1, -(this.finger.y / this.h) * 2 + 1), this.rig.camera)
         const d = this.raycaster.ray.direction
         // (She can only pull it down, or back up a little to where it was.)
-        this.goal = clamp(Math.asin(clamp(d.y, -1, 1)), -0.06, SUN.start / DEG)
-      } else this.goal = Math.max(-0.06, this.goal - (SUN.start / DEG / SUN.alone) * dt)
-      this.elev += (this.goal - this.elev) * ease(dt, SUN.follow)
-      if (this.elev < SUN.start / DEG - 0.01 && this.phase === 'day') this.setPhase('sinking')
+        this.goal = clamp(Math.asin(clamp(d.y, -1, 1)), -0.06, SUN.start / TO_DEG)
+      } else this.goal = Math.max(-0.06, this.goal - (SUN.start / TO_DEG / SUN.alone) * dt)
+      this.elev += (this.goal - this.elev) * damp(dt, SUN.follow)
+      if (this.elev < SUN.start / TO_DEG - 0.01 && this.phase === 'day') this.setPhase('sinking')
       if (this.elev < 0) this.sunSet()
     } else {
       // Gone: it slides on down behind the sea.
       this.elev = Math.max(-0.2, this.elev - dt * 0.02)
     }
-    const up = clamp((SUN.start / DEG - this.elev) / (SUN.start / DEG), 0, 1)
+    const up = clamp((SUN.start / TO_DEG - this.elev) / (SUN.start / TO_DEG), 0, 1)
     if (this.phase === 'dusk') {
       this.dark = Math.min(1, 0.7 + (this.phaseT / SUN.dusk) * 0.3)
       if (this.phaseT > SUN.dusk) this.toNight()
@@ -308,9 +307,9 @@ export class Sunset implements World3D {
       if (p > 3.4) this.posing = -1
     }
     const want = this.posing >= 0 && this.posing < 3.2 ? 1 : 0
-    this.turn += (want - this.turn) * ease(dt, 5)
-    const face = (this.seaYaw + Math.PI * this.turn) * DEG
-    this.kaylee.face(face / DEG)
+    this.turn += (want - this.turn) * damp(dt, 5)
+    const face = (this.seaYaw + Math.PI * this.turn) * TO_DEG
+    this.kaylee.face(face / TO_DEG)
     this.kaylee.update(dt, t)
     const sun = this.sunAt(this.elev, tmp2)
     this.kaylee.lookAt(sun.x, sun.y, sun.z)
@@ -323,7 +322,7 @@ export class Sunset implements World3D {
       const k = this.L(SPOTS.kaylee.u, SPOTS.kaylee.v)
       p.lerp(k, 0.28 * this.turn)
       m.root.position.copy(p)
-      m.root.rotation.y = face / DEG
+      m.root.rotation.y = face / TO_DEG
       m.lookAt(sun.x, sun.y, sun.z)
       m.update(dt, t)
     }
@@ -535,7 +534,7 @@ export class Sunset implements World3D {
   private shot(): Shot {
     const b = this.tall ? CAM.tallBox : CAM.box
     const half = this.tall ? new Vector3(b, 2.2, 1.5) : new Vector3(b, 1.6, 1.5)
-    return { center: this.camCenter(), half, yaw: (this.seaYaw + Math.PI) * DEG, pitch: CAM.pitch, follow: true, minDist: 5, maxDist: 40 }
+    return { center: this.camCenter(), half, yaw: (this.seaYaw + Math.PI) * TO_DEG, pitch: CAM.pitch, follow: true, minDist: 5, maxDist: 40 }
   }
 
   render() {
@@ -617,7 +616,7 @@ export class Sunset implements World3D {
       flies: this.flies.flies.map((f) => ({ id: f.id, ...sc(f.pos) })),
       // Seconds since it opened (the scene's own clock, for timing the sunset when nobody touches it).
       time: +this.time.toFixed(1),
-      sunElev: +(this.elev * DEG).toFixed(1),
+      sunElev: +(this.elev * TO_DEG).toFixed(1),
       dark: +this.dark.toFixed(2),
       sun: sc(this.sun.position),
       horizon: sc(this.sunAt(0)),

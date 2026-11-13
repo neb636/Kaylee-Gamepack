@@ -4,7 +4,7 @@ Kaylee's friends act out what happens and talk in their own voices; never just s
 How to build them in 3D and in 2D:
 
 **One Sparkle everywhere:** `src/sdk/puppet/Sparkle.tsx` owns her design. Use the SDK `SparklePuppet` (or the square
-`Mascot` adapter) in countries, games and menus; never copy her SVG or import an old pose image as a live character.
+`Mascot` adapter) in countries and menus; never copy her SVG or import an old pose image as a live character.
 The reference pictures in `art/source/mascot/` are exported from that puppet. See `docs/sparkle.md`.
 
 **In 3D (Thailand):** the characters are built from code, not generated pictures, except Kaylee herself: she is a

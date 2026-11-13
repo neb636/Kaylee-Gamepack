@@ -9,6 +9,7 @@
 //   EDGE..DIVE_END     under the sea: krill swarms, a leopard seal who wants to play
 //   SHELF..            the colony's ice, where Pebble waits
 // Plain numbers, no three.js.
+import { smooth } from '../../../../../sdk/math'
 
 export const TOP_END = 230
 export const RIDGE = { from: 290, to: 420, half: 2.4 }
@@ -31,7 +32,6 @@ export const HOME = 850
 export const cx = (s: number) => 5 * Math.sin(s / 42) + 2 * Math.sin(s / 17 + 1)
 export const dcx = (s: number) => (5 / 42) * Math.cos(s / 42) + (2 / 17) * Math.cos(s / 17 + 1)
 
-const smooth = (k: number) => (k <= 0 ? 0 : k >= 1 ? 1 : k * k * (3 - 2 * k))
 /** A soft bump, 1 in the middle, 0 at ±1 and beyond. */
 const bump = (k: number) => (Math.abs(k) >= 1 ? 0 : (Math.cos(Math.PI * k) + 1) / 2)
 

@@ -4,10 +4,9 @@ import { motion } from 'motion/react'
 import { createElement, useEffect, useState, type ComponentType, type ReactNode, type Ref } from 'react'
 import { Buddy, firstTime, say, sounds, type Line, type PuppetHandle } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
-import { StampEarned } from '../../kit/StampEarned'
+import { useStampFlow, type ActivityProps } from '../../kit/stampFlow'
 import { StoryBeat } from '../../kit/StoryBeat'
-import { VideoBreak } from '../../kit/Theater'
-import type { PlaceProps, PlaceVideo } from '../../types'
+import type { PlaceProps } from '../../types'
 import { LightShow } from './activities/LightShow'
 import { Market } from './activities/Market'
 import { Nile } from './activities/Nile'
@@ -22,10 +21,7 @@ import { Miu } from './puppets/Miu'
 import { Sphinx as SphinxPuppet } from './puppets/Sphinx'
 import { Tutu } from './puppets/Tutu'
 
-export interface ActivityProps {
-  onDone: () => void
-  setProgress: (done: number, total: number) => void
-}
+export type { ActivityProps } from '../../kit/stampFlow'
 
 const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { pyramid: Pyramid, passage: Passage, sphinx: Sphinx, nile: Nile, scribe: Scribe, market: Market }
 
@@ -51,9 +47,8 @@ export const GUESTS: Record<string, Guest> = {
 }
 
 export default function Place(props: PlaceProps) {
-  const { meta, activity, stamps, backToMap, earnStamp, setProgress, onWin } = props
-  const [justEarned, setJustEarned] = useState<string | null>(null)
-  const [videoAfter, setVideoAfter] = useState<PlaceVideo | null>(null)
+  const { meta, activity, stamps, setProgress, onWin } = props
+  const stamp = useStampFlow(props)
 
   if (activity === 'party') {
     const ready = meta.activities.every((a) => stamps.includes(a.id))
@@ -63,41 +58,13 @@ export default function Place(props: PlaceProps) {
 
   const Activity = activity ? ACTIVITIES[activity] : undefined
   const info = meta.activities.find((a) => a.id === activity)
-  if (Activity && info) {
-    const finish = () => {
-      earnStamp(info.id)
-      setJustEarned(info.id)
-    }
-    if (window.__kayleeWorld) window.__kayleeWorld.finish = finish
+  if (Activity && info)
     return (
       <>
-        <Activity key={activity} setProgress={setProgress} onDone={finish} />
-        {justEarned === info.id && (
-          <StampEarned
-            activity={info}
-            onClose={() => {
-              setJustEarned(null)
-              // A real-world video about what she just played comes next (skippable), then the map.
-              const video = meta.videos?.find((v) => v.after === info.id)
-              if (video) {
-                setProgress(0, 0)
-                setVideoAfter(video)
-              } else backToMap()
-            }}
-          />
-        )}
-        {videoAfter && (
-          <VideoBreak
-            video={videoAfter}
-            onDone={() => {
-              setVideoAfter(null)
-              backToMap()
-            }}
-          />
-        )}
+        <Activity key={activity} setProgress={setProgress} onDone={stamp.finishFor(info)} />
+        {stamp.overlay}
       </>
     )
-  }
   return <Hub {...props} />
 }
 

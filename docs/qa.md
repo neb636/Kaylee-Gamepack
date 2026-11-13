@@ -6,8 +6,7 @@ on something a script could have caught. **Passing QA means it works, not that i
 
 ## Every change, however small
 
-1. `npm run verify` must pass (heavy imports, file names that differ only in case, the game-sections page, typecheck,
-   build; about 2 minutes). Its voice-clip check fails while new lines have no clips: without a key that's expected.
+1. `npm run verify` must pass (what it checks: AGENTS.md, "Rules the checks enforce"; about 2 minutes). Its voice-clip check fails while new lines have no clips: without a key that's expected.
    Push, and the PR records them for you: its preview workflow's voices job uses the `OPENAI_API_KEY` repository secret, commits the clips to your branch and re-runs CI.
 2. Look at what you changed: open its section link, or screenshot it
    (`node scripts/qa-screens.mjs --only=ipad-portrait,ipad-landscape --routes=<activity id>`). Shared code
@@ -42,7 +41,7 @@ Then, before check-ins 3 (Kaylee plays it) and 4 (ship), the **`fresh-eyes` agen
 being made, so it doesn't grade its own homework. It looks at the reel's frames, the contact sheets, the pacing numbers
 and the table read's flags against `docs/play-design.md` and the design rules, and writes at most ten ranked findings to
 `qa-output/fresh-eyes.md`. Fix the blockers. Anything the user must know goes on the review page as one line; small things go
-in the country's `known-issues.md`.
+in the country's notes (Thailand: `thailand/known-issues.md`).
 
 ## Time budget (a session should take about an hour, not ten)
 

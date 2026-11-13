@@ -53,8 +53,6 @@ export const PASS: { id: string; icon: string; label: string }[] = [
   { id: 'cup', icon: '🏁', label: 'The Cup' },
   { id: 'home', icon: '🏠', label: 'Home' },
 ]
-/** The boarding pass's legs on this trip (🏁 only with the Cup on). */
-export const passFor = (cup: boolean) => (cup ? PASS : PASS.filter((p) => p.id !== 'cup'))
 /** The boarding pass's leg for a section (the goodbye, the airport and the plane are all the flight). */
 export function legOf(s: NanSection): string | null {
   if (s === 'invite') return null

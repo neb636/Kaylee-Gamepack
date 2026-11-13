@@ -21,6 +21,7 @@ import { Fireworks, type FireworksHandle } from './Fireworks'
 import { Friend } from './Friend'
 import { GUESTS } from './guests'
 import SECTIONS from './sections'
+import { clamp } from '../../../../../sdk/math'
 
 const P = L.parade
 const TOTAL = 5
@@ -28,7 +29,6 @@ const DRUM_TAPS = 8
 const SKY_TAPS = 5
 const N_DOTS = 14
 const TAU = Math.PI * 2
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 const backOut = (t: number) => 1 + 2.7 * Math.pow(t - 1, 3) + 1.7 * Math.pow(t - 1, 2)
 /** Pink first and every other one, then the festival colors. */
 const FIRE = ['#FF7FB0', '#FFD04A', '#FF7FB0', '#7DE0B0', '#C9A8FF', '#FF6B6B']

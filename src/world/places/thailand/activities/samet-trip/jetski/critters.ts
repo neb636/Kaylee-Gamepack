@@ -6,7 +6,7 @@ import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
 
-const ease = (k: number) => 1 - (1 - k) ** 3
+const easeOutCubic = (k: number) => 1 - (1 - k) ** 3
 const bell = (k: number) => Math.sin(Math.PI * Math.min(1, Math.max(0, k)))
 
 /** A swimmer in a rubber ring: a round head (a little animal), the ring, and an arm that waves. */
@@ -135,9 +135,9 @@ export class Tern {
       const k = d.t
       const down = Math.min(1, k / 0.4)
       const back = Math.max(0, (k - 0.5) / 0.5)
-      x = ox + (d.x - ox) * (k < 0.5 ? ease(down) : 1 - ease(back))
-      z = oz + (d.z - oz) * (k < 0.5 ? ease(down) : 1 - ease(back))
-      y = k < 0.4 ? oy + (0.1 - oy) * down * down : k < 0.5 ? 0.1 : 0.1 + (oy - 0.1) * ease(back)
+      x = ox + (d.x - ox) * (k < 0.5 ? easeOutCubic(down) : 1 - easeOutCubic(back))
+      z = oz + (d.z - oz) * (k < 0.5 ? easeOutCubic(down) : 1 - easeOutCubic(back))
+      y = k < 0.4 ? oy + (0.1 - oy) * down * down : k < 0.5 ? 0.1 : 0.1 + (oy - 0.1) * easeOutCubic(back)
       if (k >= 0.4 && k - dt / 2.2 < 0.4) this.splash = { x: d.x, z: d.z }
       flap = k < 0.4 ? 0.7 : Math.sin(t * 16) * 0.8
       if (k >= 1) this.dive = null

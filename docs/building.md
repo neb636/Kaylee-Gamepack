@@ -7,17 +7,17 @@ Kaylee needs; this file is the reference you read when you build. Thailand's 3D 
 ## Where things live
 
 ```
-src/world/places/<id>/   # one country per folder, found automatically (Thailand, Australia, Italy, ...)
+src/world/places/<id>/   # one country per folder, found automatically (docs/code-map.md: where each activity lives)
 src/world/kit/           # shared country pieces: Stage, StoryBeat, StampEarned, sections, sfx, Flag, ...
 src/world/engine3d/      # the shared 3D engine (toon look, camera, View3D, water) and the chibi rig in characters/
 src/world/labs/          # the camera lab (?cam=1) and the feel lab (?feel=1), for any country
 src/sdk/                 # shared building blocks: say, sounds, puppets, drag and drop, ... (see "SDK")
-src/shell/               # the app wrapper: splash, trophy ceremony ("Let's play!" lands on the world map)
+src/shell/               # the app wrapper: splash, trophy ceremony ("Let's play!" lands on the world map), seasonal/
 planning/around-the-world/  # builder notes per country and trip (Markdown, for agents), ACTIVITY-TEMPLATE.md, known issues
 art/STYLE.md             # the art style prompt; art/source/ holds full-size originals
 src/world/shelf/         # the game shelf's banners and icons, SVG drawn by hand (shelf/STYLE.md)
 docs/                    # play-design.md (what makes it fun), interactions.md (which tool), building.md (this), ...
-scripts/                 # verify checks, QA robots, art and voice pipelines, and the review tools (table-read, reel, review)
+scripts/                 # verify checks, QA robots, art and voice pipelines, review tools (scripts/README.md lists them)
 review/                  # (not in git) review pages the tools build; published to the review-pages branch
 ```
 
@@ -31,8 +31,7 @@ Installed and pre-approved for hands-on play that plain React can't do well (see
   puppets, speech bubbles and buttons in React on top of it.
 - **perfect-freehand**: smooth finger strokes, for tracing and drawing.
 
-Import these **only from inside a country or game folder** (`src/world/places/<id>/`, `src/games/<id>/`) or the
-shared 3D engine (`src/world/engine3d/`, which only countries import), and never from a file that loads at startup:
+Import these **only from inside a country folder** (`src/world/places/<id>/`) or the shared 3D engine (`src/world/engine3d/`, which only countries import), and never from a file that loads at startup:
 a `meta.ts`, a `*sections.ts` or a `puppets/index.ts`. Then only that country
 downloads them. `npm run verify` enforces this (`scripts/check-heavy-imports.mjs`).
 
@@ -42,16 +41,19 @@ smoke test still work). Don't add packages when the SDK or a pre-approved librar
 
 ## SDK: `import { ... } from '../../sdk'`
 
-Read `src/sdk/index.ts` and the files it exports; try everything live at `#/playground` (run `npm run dev`).
-Countries also use `src/world/kit/` (see "Reusable pieces" under A country's folder).
+Read `src/sdk/index.ts` and the files it exports. Countries also use `src/world/kit/` (see "Reusable pieces" under A
+country's folder). **Before writing a helper at the top of a file, look here first:** a local copy drifts (one file's
+`DEG` meant radians-to-degrees, another's degrees-to-radians; `ease` meant four different curves).
 
 | Import | What it does |
 |---|---|
 | `say(text, opts?) → Promise` | Speak out loud (awaitable). Interrupts previous speech unless `{ interrupt: false }`. |
 | `sounds.pop / correct / oops / sparkle / whoosh / fanfare / note(step)` | Synthesized SFX. `note(0..10)` climbs a happy scale, great for counting. |
 | `sounds.pickup / place / snap` | Pick-up, put-down and click-into-place sounds. |
+| `audio()` (`sdk/sounds.ts`, also `kit/sfx`) | The app's one AudioContext. Build your own sounds on it (with `tone`/`noise` from `kit/sfx`); never `new AudioContext()`. |
+| `clamp`, `lerp`, `smooth`, `smoothstep(a, b, x)`, `damp(dt, rate)`, `wrapAngle`, `DEG`, `TO_DEG` | `sdk/math.ts`: number helpers for 2D and 3D. `x += (target - x) * damp(dt, 8)` eases at any frame rate. |
 | `burst()` / `bigCelebration()` | Confetti. |
-| `praise()`, `KID_NAME`, `numberWord(3)`, `wait(ms)`, `randomInt`, `pick`, `shuffle`, `sample` | Helpers. `KID_NAME` is for the landing greeting only; writing activities keep their explicit name content. |
+| `KID_NAME`, `numberWord(3)`, `wait(ms)`, `pick`, `shuffle`, `sample` | Helpers. `KID_NAME` is for the landing greeting only; writing activities keep their explicit name content. |
 | `useAlive()` | `const alive = useAlive(); await say('..'); if (!alive()) return` in async scripts. |
 | `useSayOnMount(text)` | Speak when a screen appears. |
 | `<SparklePuppet ref pose? height>` | Live Sparkle: `play('wave' \| 'cheer' \| 'hop' \| 'nod' \| 'think' \| 'dance' \| 'wiggle')`. Prefer it over `<Mascot>`. |
@@ -62,12 +64,11 @@ Countries also use `src/world/kit/` (see "Reusable pieces" under A country's fol
 | `<BigButton color size onClick>` | Chunky pill button. |
 | `<PlayArea>`, `<Piece snapTo onPlace onTap>`, `<Target id hint>` | Pick up and put down: snap into a slot, stay anywhere, or float home. Hover glow, magnetic pull, hint pulse. Safe for many quick drags in Safari. |
 | `<JigsawPuzzle img rows cols onSnap onDone>` | A real jigsaw cut from any picture, with a tray and snapping. |
-| `<StickerBoard stickers items onChange surface shape>`, `countByKind` | Place-anywhere toppings/stickers from a tray. |
-| `<DressUpStudio slots values onChange character>`, `<OptionPicker>`, `<Swatch>` | Dress-up / avatar maker layout with big option buttons. |
+| `<StickerBoard stickers items onChange surface shape>` | Place-anywhere toppings/stickers from a tray. |
 | `usePointerDrag`, `toLocal`, `centerOf`, `distance` | Low-level finger dragging and coordinates, for your own interactions. |
 | `useLandscape`, `useElementSize`, `useGameLoop`, `useSaved` | Orientation, element size, a per-frame loop (write to refs, not state), state remembered on the iPad. |
-| `<ChoiceCards>`, `<SortIntoBins>`, `<MatchPairs>`, `<TapToReveal>`, `<TapCounter>`, `<Draggable>`/`<DropZone>` | Older quiz-style pieces from the school-paper games. A small part at most, never the core of an activity. |
-| `<Scene bg>`, `<Mascot>`, `<StarProgress>`, `<Trophy>` | Background wrapper, square Sparkle, the shell's stars and trophy. |
+| `<ChoiceCards>`, `<Draggable>`/`<DropZone>` | Older quiz-style pieces (Australia and Egypt use them). A small part at most, never the core of an activity; new drag play uses `PlayArea`. |
+| `<Mascot>`, `<StarProgress>`, `<Trophy>` | Square Sparkle (her poses: `#/world/puppets/mascot`), the shell's stars and trophy. |
 
 **Harder interactions:** read `docs/interactions.md` first. It says which tool to reach for (drag to a slot, puzzle,
 place anywhere, dress-up, tracing, physics, 3D), with snippets and pitfalls we've hit.
@@ -91,7 +92,8 @@ src/world/places/<id>/
   assets/*.webp    # from art/source/world/<id>/*.png via `npm run art -- world`
 ```
 
-Reusable pieces in `src/world/kit/`: `Stage` + `PromptBubble`, `StoryBeat` (pass `friend={<Pip height="100%" />}`
+Reusable pieces in `src/world/kit/`: `useStampFlow` + `ActivityProps` (`stampFlow.tsx`: what happens when an activity
+calls `onDone`: the stamp, the video, back to the map; every `Place.tsx` uses it), `Stage` + `PromptBubble`, `StoryBeat` (pass `friend={<Pip height="100%" />}`
 so the friend talks), `StampEarned`, `sfx` (boing, thump, splash, pop, fwip), `ColoringPage`
 (flood-fill coloring on line art named `bg-color-*`), `Flag` (SVG flags: add new ones there, never generate flags),
 `TopBar`/`FitBox` (keeps map pins aligned with the art).
@@ -99,12 +101,26 @@ so the friend talks), `StampEarned`, `sfx` (boing, thump, splash, pop, fwip), `C
 offers one, skippable, right after that activity's stamp); a country with videos gets a Theater button in its top bar,
 and the world map's Theater shows every country's videos.
 
-Adding a country: make the folder, add its pin in `meta.ts` (and remove it from `COMING_SOON` in `WorldMap.tsx`),
+Adding a country: make the folder, add its pin in `meta.ts`,
 write its plan in `planning/around-the-world/`, draw its shelf banner and an icon per activity (`src/world/shelf/STYLE.md`),
 generate backgrounds, props and character reference pictures with Codex
 (`codex exec -m gpt-6.1-sol -c model_reasoning_effort="medium" ...`, style rules from `art/STYLE.md`; tell Codex never
 to run git or gh), build the friend's characters, cast their voices, then
 `node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`, `npm run verify`, and QA (`docs/qa.md`).
+
+**Adding an activity, end to end** (in this order; `docs/code-map.md` shows where a sibling's pieces live):
+1. Toy notes from `planning/around-the-world/ACTIVITY-TEMPLATE.md` (the country's `<country>.md`, or `<country>/<toy>.md`).
+2. `activities/<id>/` with its component and `sections.ts` (`defineSections(place, id, ...)`, see Deep links below).
+3. `meta.ts`: the activity under `inTheWorks` (id, name, icon, pos, sticker) until it ships.
+4. `Place.tsx`: add it to the country's `ACTIVITIES` map (and to the hub's pins if the hub draws its own). The stamp,
+   video and way back come from `useStampFlow`: the activity only calls `onDone`.
+5. Its lines in the country's `lines.ts` (and a speaker in `cast.json` if new), the sticker fact, and its shelf card's
+   name line in `src/world/lines.ts` (`WORLD_LINES.shelf.games['<place>/<id>']`); then
+   `node scripts/world-voice-lines.mjs` (verify fails if you forget).
+6. A shelf icon `src/world/shelf/icons/<place>/<id>.svg` (`shelf/STYLE.md`); art via `npm run art`.
+7. A QA motion scenario for its core verb (the country's `qa.mjs` or the activity's own, `docs/qa.md`).
+8. `npm run sections-readme` (the sections page and the code map), `npm run verify`, then the `ship` skill.
+9. At the ship check-in: move it from `inTheWorks` to `activities`.
 
 **Not ready for Kaylee yet?** List the activity in the country's `meta.ts` under `inTheWorks`, not `activities`. Its
 links and the tests still reach it, but she can't: no way in, no passport slot, and the finale doesn't wait for its
@@ -172,10 +188,10 @@ that needs the internet (YouTube) checks `useOnline()` from the SDK and hides it
 ## Local commands
 
 ```
-npm run dev          # http://localhost:5173 (then #/world, #/world/sections, #/world/puppets or #/playground)
+npm run dev          # http://localhost:5173 (then #/world, #/world/sections or #/world/puppets)
 npm run typecheck    # fast check while you iterate
-npm run verify       # voice clips, heavy imports, name case, game-sections page, plans, typecheck, build (before every PR)
-npm run sections-readme  # rewrite docs/game-sections.html from every sections.ts
+npm run verify       # before every PR: the checks listed in AGENTS.md ("Rules the checks enforce"), typecheck, build
+npm run sections-readme  # rewrite docs/game-sections.html and docs/code-map.md from every meta.ts and sections.ts
 npm run art -- world # PNG -> webp with background cutout
 npm run icons        # rebuild app icons from art/source/icon-1024.png
 node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs   # lines.ts -> voice-lines.json -> clips

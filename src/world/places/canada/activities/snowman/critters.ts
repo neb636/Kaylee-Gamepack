@@ -9,12 +9,8 @@ import { blobShadow, merge, P, solid, solidMix } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
 import { tone, noise } from '../../../../kit/sfx'
 import { CLIFF_Y, TERRACE_Z, TRUMPET } from './park'
+import { damp, smooth } from '../../../../../sdk/math'
 
-const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
-const smooth = (p: number) => {
-  const k = clamp(p)
-  return k * k * (3 - 2 * k)
-}
 
 // ---------------------------------------------------------------- the horse and carriage
 
@@ -172,7 +168,7 @@ export class Carriage {
     this.t += dt
     this.stopT = Math.max(0, this.stopT - dt)
     const speed = this.stopT > 0 ? 0 : 1.9
-    this.gait += ((speed ? 1 : 0) - this.gait) * ease(dt, 4)
+    this.gait += ((speed ? 1 : 0) - this.gait) * damp(dt, 4)
     this.x += this.dir * speed * dt
     this.root.position.set(this.x, CLIFF_Y + 0.33, TERRACE_Z)
     this.root.rotation.y = (this.dir * Math.PI) / 2

@@ -2,9 +2,9 @@
 
 ![Previous and corrected shared puppet](sparkle-before-after.png)
 
-`src/sdk/puppet/Sparkle.tsx` is the single live drawing. All four countries use it directly
+`src/sdk/puppet/Sparkle.tsx` is the single live drawing. Every country uses it directly
 or through shared story/stamp components. The older `Mascot` API wraps it for the shell,
-passport, video controls and trophy ceremony. Its square `size` layout
+passport, video controls and trophy ceremony (all three poses side by side: `#/world/puppets/mascot`). Its square `size` layout
 and `wave` / `cheer` / `think` expressions remain compatible with existing callers.
 New activities should use `SparklePuppet` and its awaitable actions.
 
@@ -32,8 +32,9 @@ npm run build
 npm run preview -- --port 4185 --strictPort
 # In another terminal:
 node scripts/qa-sparkle.mjs --export-reference
-npm run test
 ```
+
+(`tests/sparkle.spec.ts` runs in CI on the PR, like every spec: don't run it locally.)
 
 `qa-output/sparkle/` contains screenshots at four iPad and three iPhone sizes, mirrored
 and snorkel views, representative country scenes and filmstrips of all seven actions,
@@ -41,9 +42,8 @@ repeated three times. Inspect ear connections, hair joins, silhouette, expressio
 scene fit. The lab can scroll on short phones; actual play scenes must fit their screens.
 The script accepts `--base=` if the dedicated preview uses another port.
 
-`tests/sparkle.spec.ts` checks the menu adapter, clip isolation and filled ear-base geometry
-through three repetitions of every action. To run that test in Safari, use Playwright's
-WebKit browser option. Automated geometry checks supplement visual inspection.
+`tests/sparkle.spec.ts` checks the menu adapter (on `#/world/puppets/mascot`), clip isolation and filled
+ear-base geometry through three repetitions of every action. Automated geometry checks supplement visual inspection.
 
 The export option refreshes the three tracked PNGs in `art/source/mascot/` and their
 WebP counterparts in `src/assets/mascot/` from the live puppet's resting poses. Generated

@@ -4,7 +4,7 @@
 
 The builder's notes for one toy (an activity, a stop on a trip, a rebuild), written by the agent after the user picks its
 pitch card (the `pitch` skill). **The user doesn't read these:** they see the pitch card, the table read and the reel. The
-notes are for you and the next agent, in `planning/around-the-world/<country>/<toy>.md`. Read `docs/play-design.md`
+notes are for you and the next agent, in `planning/around-the-world/<country>/<toy>.md` (or the country's `<country>.md` when it has no folder). Read `docs/play-design.md`
 first. If a field is hard to fill in, the toy isn't ready to build yet. Keep it short: notes that read like a story can
 hide play that is thin, so the **verbs** and **numbers** matter more than the prose.
 

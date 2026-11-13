@@ -7,7 +7,7 @@ import { Group, type BufferGeometry } from 'three'
 import type { Bag } from '../../../engine3d/dispose'
 import { merge, P, solid } from '../../../engine3d/geo'
 import { PAL } from '../../../engine3d/toon'
-import { RED } from './train'
+import { RED } from './leaf'
 
 const INK = '#2E2233'
 

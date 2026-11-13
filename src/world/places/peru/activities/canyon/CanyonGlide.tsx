@@ -1,7 +1,7 @@
 import { useSections } from '../../../../kit/sections'
 import SECTIONS from './sections'
 import { numberParam } from '../../sectionState'
-// 🦅 Coco's Canyon Glide (Colca Canyon: Andean condors soar on warm air). Plan: planning/around-the-world/peru.md § 3.
+// 🦅 Coco's Canyon Glide (Colca Canyon: Andean condors soar on warm air). Plan: planning/around-the-world/peru.md (retired; in git history) § 3.
 // The toy (one core verb): steer Coco through the canyon. He follows her finger with big slow turns, wings wide, and
 // hardly flaps: in plain air he slowly glides down; in warm air (swirls of shimmer rising off sunny rocks) he circles
 // up fast. Pull him up without warm air and he gives a few heavy flaps that barely help. The verb deepens three times:
@@ -27,6 +27,7 @@ import { Chick, CHICK_VIEW, Condor, CONDOR_VIEW } from '../../puppets/Condor'
 import { CEILING, COCO_START, FEEL, floorAt, LEDGE_TOP, liftOf, LOOKOUT, maxX, minX, NEST, PLACES, RIVER_Y, STAGE, SWIRLS, WORLD, type PlaceId, type Swirl } from './canyon'
 import { ASPECT, Cloud, Critter, Ledges, Lookout, PlaceRing, River, SwirlArt, Wall, Waterfall, type Sun } from './Scenery'
 import { csfx, windLoop } from './sfx'
+import { clamp } from '../../../../../sdk/math'
 
 const C = L.canyon
 /** Stars: first ride, three places, the ridge, Pluma's own glide. */
@@ -76,7 +77,6 @@ const VISIBLE: Record<string, SwirlId[]> = {
   afternoon: ['falls', 'ledge', 'river'],
   solo: ['big'],
 }
-const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v))
 
 export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
   const { start, param, enter } = useSections(SECTIONS)

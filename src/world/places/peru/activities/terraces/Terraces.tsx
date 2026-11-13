@@ -1,7 +1,7 @@
 import { useSections } from '../../../../kit/sections'
 import SECTIONS from './sections'
 // ⛰️ Tika's Mountain Terraces (Machu Picchu: the Inca, stone walls, terraces, llamas). Plan:
-// planning/around-the-world/peru.md § 5.
+// planning/around-the-world/peru.md (retired; in git history) § 5.
 // The toy (one core verb): fit big stones into a wall. She drags a chunky Inca stone off the pile; near its own gap it
 // gets pulled in and lands with a clonk, a dust puff and a little shake. A stone that doesn't fit bonks and rolls back
 // (not wrong, just a different gap). The same verb deepens:

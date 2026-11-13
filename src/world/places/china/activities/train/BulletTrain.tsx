@@ -21,6 +21,7 @@ import { Lever, NOTCHES } from './Lever'
 import { RouteMap, type RouteMapHandle } from './RouteMap'
 import { Scenery, type SceneryHandle, type StopId } from './Scenery'
 import SECTIONS from './sections'
+import { clamp } from '../../../../../sdk/math'
 
 const T = L.train
 type Wrongs = Record<string, Line>
@@ -47,7 +48,6 @@ const STOPS: Stop[] = [
 ]
 const TOTAL = STOPS.reduce((n, s) => n + s.steps.reduce((m, st) => m + st.right.length, 0), 0) // every item she gives
 const RIDE_SECS = [3.4, 2.8, 2.8, 2.8] // seconds at full speed to reach each stop
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 
 type Phase = 'ride' | 'stop' | 'leave' | 'end'
 /** The section for each stop (sections.ts): it starts with the ride there. */

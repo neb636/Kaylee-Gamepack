@@ -1,4 +1,4 @@
-// The Vet Clinic in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md, "★ 1. The Vet Clinic"), in
+// The Vet Clinic in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "★ 1. The Vet Clinic"), in
 // meters: where everything stands, what each patient needs and which tools are on the tray. Pure data (no three.js).
 //
 // Seen straight on (the camera looks toward -z), left to right:

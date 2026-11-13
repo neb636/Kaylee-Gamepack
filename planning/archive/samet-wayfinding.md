@@ -1,12 +1,12 @@
 # Koh Samet: finding her way (pitch, check-in 1)
 
-> **Superseded 2026-11-12 by [samet-story.md](samet-story.md).** The puppy leading her across the island didn't help
+> **Superseded 2026-11-12 by [samet-story.md](../around-the-world/thailand/samet-story.md).** The puppy leading her across the island didn't help
 > enough. Getting round is now the pictures of the beaches (tap one, the taxi takes her there); Tofu the puppy only
 > leads on the beach she's on. The sand slide and the path over the west hills are still there to find.
 
 Written 2026-11-10. A rethink of how Kaylee finds her way round the island in `samet-trip.md` (`island`), for the
 seven "Finding her way" and taxi items still open in issue #357. Read it with `samet-trip.md`,
-`../ACTIVITY-TEMPLATE.md` and `docs/play-design.md`. Branch `neb636/samet-wayfinding`.
+`../around-the-world/ACTIVITY-TEMPLATE.md` and `docs/play-design.md`. Branch `neb636/samet-wayfinding`.
 
 **Status:** card B built (2026-11-10, PR #369): the beach puppy, his shortcut and sand slide, the taxi that goes where he goes, the top-left button that calls him, home by the speedboat. Next: Kaylee's playtest.
 

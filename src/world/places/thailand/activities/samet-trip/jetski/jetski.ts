@@ -60,6 +60,7 @@ import { Wake, type Loop } from './wake'
 import { beachBed } from '../sfx/common'
 import { jetSfx as S } from './sounds'
 import { isFilmRound, ZoomStory, type JetRound } from './story'
+import { TO_DEG, damp, wrapAngle } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/jetski/jetski.ts'
 /** Steering: the drive control's feel (engine3d/drive.ts), zippier than the boats. */
@@ -162,14 +163,11 @@ const ZS = LINES.samet.story.jetski
 /** Seconds after the race's end before Zoom comes down to her (the bell, the cheer). */
 const FOUND_AFTER = 2.2
 
-const DEG = 180 / Math.PI
 const HINT_S = 8
 const tmp = new Vector3()
 const tmp2 = new Vector3()
 const tmp3 = new Vector3()
 const fm = new Matrix4()
-const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
-const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 const easeOut = (k: number) => 1 - (1 - clamp(k, 0, 1)) ** 3
 const bellK = (k: number) => Math.sin(Math.PI * clamp(k, 0, 1))
 
@@ -413,7 +411,7 @@ export class JetSki implements World3D {
     this.nick.rig.head.add(this.cap)
 
     // Mom on the sand at the water's edge, the jet ski man by his hut (or on his own jet ski in the race).
-    this.ji.place(MOMMY.x, this.groundY(MOMMY.x, MOMMY.z), MOMMY.z, SEAWARD * DEG, 'stand')
+    this.ji.place(MOMMY.x, this.groundY(MOMMY.x, MOMMY.z), MOMMY.z, SEAWARD * TO_DEG, 'stand')
     this.man = new Member({ id: 'jetski-man', name: 'The jet ski man', who: 'runs the jet skis on Sai Kaew', height: MAN_LOOK.height, spot: null, pitch: 300 }, bag, MAN_LOOK, 'otter')
     scene.add(this.ji.root, this.man.root)
     this.man.rig.body.add(lifeJacket(bag, this.man.rig.radius * 1.12, this.man.height * 0.3, this.man.height * 0.22, '#FF8A2E', '#FFE07A'))
@@ -590,7 +588,7 @@ export class JetSki implements World3D {
     this.rival.stop()
     if (this.man.root.parent !== this.scene) this.scene.attach(this.man.root)
     const m = bay(3.5, -1.6)
-    this.man.place(m.x, this.groundY(m.x, m.z), m.z, (SEAWARD + 0.4) * DEG, 'stand')
+    this.man.place(m.x, this.groundY(m.x, m.z), m.z, (SEAWARD + 0.4) * TO_DEG, 'stand')
   }
 
   // ---------------------------------------------------------------- talk
@@ -683,12 +681,12 @@ export class JetSki implements World3D {
       else if (this.round === 'race') this.events.say(J.race)
     }
     const lag = this.s.lagoon
-    lag.waves.height += (this.waveGoal() - lag.waves.height) * ease(dt, 0.4)
+    lag.waves.height += (this.waveGoal() - lag.waves.height) * damp(dt, 0.4)
     lag.waves.length = WAVES.length
     lag.waves.speed = WAVES.speed
     // The rope eases out to the round's square.
     const goal = ROPE[this.round]
-    for (const k of ['w', 'e', 'out'] as const) this.ropeNow[k] += (goal[k] - this.ropeNow[k]) * ease(dt, 0.8)
+    for (const k of ['w', 'e', 'out'] as const) this.ropeNow[k] += (goal[k] - this.ropeNow[k]) * damp(dt, 0.8)
 
     this.steer()
     this.drive(dt)
@@ -706,7 +704,7 @@ export class JetSki implements World3D {
     lag.update(t, this.d.x, this.d.z)
     this.lights.follow(this.d.x, 0, this.d.z)
     this.s.update(dt, t, this.rig.camera.position.x, this.rig.camera.position.z, this.lights)
-    this.camYaw += wrap(this.d.heading - this.camYaw) * ease(dt, 0.3 + HELM.camera * 4) * (this.beachT >= 0 ? 0.2 : 1)
+    this.camYaw += wrapAngle(this.d.heading - this.camYaw) * damp(dt, 0.3 + HELM.camera * 4) * (this.beachT >= 0 ? 0.2 : 1)
     this.rig.setShot(this.shot())
     this.rig.setCine(cine)
     this.rig.update(dt)
@@ -777,7 +775,7 @@ export class JetSki implements World3D {
         // The chase camera sits to one side of the jet ski, so straight up the screen is not its nose: turn the finger
         // back by that much, or a finger straight ahead keeps turning it toward the camera's side, for ever (the
         // camera follows the turn), and the other way is that much weaker.
-        const a = HELM.square * HELM.side / DEG
+        const a = HELM.square * HELM.side / TO_DEG
         const px = s.x - d.x
         const pz = s.z - d.z
         const rx = px * Math.cos(a) - pz * Math.sin(a)
@@ -795,7 +793,7 @@ export class JetSki implements World3D {
         const dx = at.x - d.x
         const dz = at.z - d.z
         this.aimAhead = dx * Math.sin(d.heading) + dz * Math.cos(d.heading)
-        this.aimTurn = wrap(Math.atan2(dx, dz) - d.heading)
+        this.aimTurn = wrapAngle(Math.atan2(dx, dz) - d.heading)
       }
     }
     const g = d.goal
@@ -864,7 +862,7 @@ export class JetSki implements World3D {
     const surf = this.water(d.x, d.z)
     const rise = (surf - this.surf) / Math.max(dt, 1e-3)
     this.surf = surf
-    this.climb += (rise - this.climb) * ease(dt, 12)
+    this.climb += (rise - this.climb) * damp(dt, 12)
     if (!d.airborne) {
       if (this.climb > WAVES.hopFrom) this.climbMax = Math.max(this.climbMax, this.climb)
       else if (this.climbMax > 0 && this.climb < 0.1) {
@@ -1149,7 +1147,7 @@ export class JetSki implements World3D {
       const k = easeOut((t - 2.9) / 1.4)
       d.x = B.to.x + (B.back.x - B.to.x) * k
       d.z = B.to.z + (B.back.z - B.to.z) * k
-      d.heading = B.heading + wrap(B.out - B.heading) * k
+      d.heading = B.heading + wrapAngle(B.out - B.heading) * k
       const mx = d.x - Math.sin(d.heading) * 2.1
       const mz = d.z - Math.cos(d.heading) * 2.1
       this.man.root.position.set(mx, this.groundY(mx, mz), mz)
@@ -1229,7 +1227,7 @@ export class JetSki implements World3D {
     const k = easeOut(t / 0.8)
     d.x = P0.x + (to.x - P0.x) * k
     d.z = P0.z + (to.z - P0.z) * k
-    d.heading = this.park.heading + wrap(SEAWARD + Math.PI - this.park.heading) * k
+    d.heading = this.park.heading + wrapAngle(SEAWARD + Math.PI - this.park.heading) * k
     if (t >= 0.9 && t - dt < 0.9) {
       for (const [c, side] of [[this.kaylee, 1], [this.nick, -1]] as const) {
         this.scene.attach(c.root)
@@ -1629,7 +1627,7 @@ export class JetSki implements World3D {
       const p = bay(-1.8, 2.2)
       this.jacketFloat.position.set(p.x, 1.3 + Math.sin(t * 2.4) * 0.12, p.z)
       // (It turns to and fro but keeps its front to the camera, buckles and open neck showing: a vest, not a bucket.)
-      this.jacketFloat.rotation.y = this.d.heading + 32 / DEG + Math.sin(t * 1.1) * 0.5
+      this.jacketFloat.rotation.y = this.d.heading + 32 / TO_DEG + Math.sin(t * 1.1) * 0.5
       this.jacketFloat.rotation.z = Math.sin(t * 1.6) * 0.08
       this.jacketFloat.scale.setScalar(1 + Math.sin(t * 5) * 0.06)
     } else if (this.phase === 'suit') {
@@ -1711,7 +1709,7 @@ export class JetSki implements World3D {
         const l = Math.hypot(dx, dz) || 1
         s.x += (dx / l) * Math.min(l, dt * 4)
         s.z += (dz / l) * Math.min(l, dt * 4)
-        s.y += (1.3 - s.y) * ease(dt, 1.5)
+        s.y += (1.3 - s.y) * damp(dt, 1.5)
       }
       const y = this.water(s.x, s.z) + s.y + Math.sin(t * 2.4 + s.x) * 0.15
       s.g.position.set(s.x, y, s.z)
@@ -1762,7 +1760,7 @@ export class JetSki implements World3D {
     const dx = g.x - d.x
     const dz = g.z - d.z
     const to = Math.atan2(dx, dz)
-    const off = Math.abs(wrap(to - d.heading))
+    const off = Math.abs(wrapAngle(to - d.heading))
     if (Math.hypot(dx, dz) < 6) return
     if (off < 0.7 && (this.finger || t - this.lastTouch < 3)) return
     this.arrow.visible = true
@@ -1821,7 +1819,7 @@ export class JetSki implements World3D {
         sk.tilt.rotation.y = 0
       }
     }
-    this.squash += (1 - this.squash) * ease(dt, 8)
+    this.squash += (1 - this.squash) * damp(dt, 8)
     sk.body.scale.set(1 + (1 - this.squash) * 0.4, this.squash, 1)
     this.shadow.position.set(d.x, surf + 0.03, d.z)
     this.shadow.rotation.z = -d.heading
@@ -1912,25 +1910,25 @@ export class JetSki implements World3D {
     const tall = this.tall
     if (this.phase === 'jacket' || this.phase === 'suit' || this.phase === 'push' || this.phase === 'film') {
       // Close on Kaylee and the jacket, from the sea side and a little to the right: the hut and the beach behind.
-      const yaw = d.heading * DEG + 32
+      const yaw = d.heading * TO_DEG + 32
       return { center: new Vector3(d.x - Math.sin(d.heading) * 0.6, 1.25, d.z - Math.cos(d.heading) * 0.6), half: tall ? new Vector3(2.4, 1.6, 2.4) : new Vector3(3.6, 1.4, 2.2), yaw, pitch: 15, minDist: 4, maxDist: 30 }
     }
     if (this.phase === 'beached' || this.phase === 'park') {
       // From the sea side (the jet ski faces up the beach: in front of it is the hill).
-      const yaw = SEAWARD * DEG + 28
+      const yaw = SEAWARD * TO_DEG + 28
       return { center: new Vector3(d.x, 1.0, d.z), half: tall ? new Vector3(4, 2, 4) : new Vector3(6, 2, 3.5), yaw, pitch: 24, minDist: 6, maxDist: 40 }
     }
-    const chase = (this.camYaw + Math.PI) * DEG
+    const chase = (this.camYaw + Math.PI) * TO_DEG
     const sp = clamp(Math.abs(d.speed) / Math.max(0.1, HELM.top), 0, 1.3)
     // (Partly along the way the camera looks, which keeps the jet ski in the middle of the screen at cruising speed.)
-    const sx = Math.sin(this.camYaw + (HELM.side * 0.55) / DEG)
-    const sz = Math.cos(this.camYaw + (HELM.side * 0.55) / DEG)
+    const sx = Math.sin(this.camYaw + (HELM.side * 0.55) / TO_DEG)
+    const sz = Math.cos(this.camYaw + (HELM.side * 0.55) / TO_DEG)
     const ahead = 2 + sp * HELM.ahead
     const half = tall ? new Vector3(4.4, 2, 7.6) : new Vector3(8, 2, 5.2)
     half.multiplyScalar(1 + 0.15 * sp + (this.round === 'race' ? 0.15 : 0))
     if (this.phase === 'countdown') half.set(tall ? 5.5 : 9, 2, tall ? 6 : 4.5)
     if (this.phase === 'raceEnd' && this.winner === 'her' && this.endT < 4) {
-      return { center: new Vector3(d.x, 1.3, d.z), half: tall ? new Vector3(3, 2, 3) : new Vector3(4.5, 1.8, 2.6), yaw: SEAWARD * DEG + 30, pitch: 14, minDist: 5, maxDist: 40 }
+      return { center: new Vector3(d.x, 1.3, d.z), half: tall ? new Vector3(3, 2, 3) : new Vector3(4.5, 1.8, 2.6), yaw: SEAWARD * TO_DEG + 30, pitch: 14, minDist: 5, maxDist: 40 }
     }
     return {
       center: new Vector3(d.x + sx * ahead, 0.9 + d.y * 0.6, d.z + sz * ahead),
@@ -2156,7 +2154,7 @@ export class JetSki implements World3D {
       z: +d.z.toFixed(2),
       u: +b.u.toFixed(1),
       v: +b.v.toFixed(1),
-      heading: Math.round(wrap(d.heading) * DEG),
+      heading: Math.round(wrapAngle(d.heading) * TO_DEG),
       speed: +d.speed.toFixed(2),
       turning: +d.yawRate.toFixed(2),
       spun: +(this.spinSum / (Math.PI * 2)).toFixed(2),

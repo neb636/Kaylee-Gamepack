@@ -1,4 +1,4 @@
-// The Barber Salon in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md, "★ 2. The Barber Salon"), in
+// The Barber Salon in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "★ 2. The Barber Salon"), in
 // meters: where everything stands, the tools on the trolley each round, and the kids who come in round 3. Pure data
 // (no three.js).
 //
