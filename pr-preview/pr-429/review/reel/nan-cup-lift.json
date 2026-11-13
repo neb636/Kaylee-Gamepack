@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "nan-cup-lift",
+  "title": "Nan cup lift",
+  "video": "nan-cup-lift.mp4",
+  "gif": "nan-cup-lift.gif",
+  "seconds": 9,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "nan-cup-lift",
+      "where": "nan-cup-lift",
+      "seconds": 7,
+      "fps": 72.9,
+      "status": "ok"
+    }
+  ]
+}
