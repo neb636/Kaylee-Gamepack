@@ -34,7 +34,7 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 </style></head><body><main>
 <span class="chip">Check-in fix</span>
 <h1>Nan Mountain Cup: seven fixes</h1>
-<p class="kaylee">She steers the kart with the same pink circle as the Nan drive, the board has real track pictures, mushrooms boing her up and on, and she hugs the Cup on the podium.</p>
+<p class="kaylee">She steers the kart with the same pink circle as the Nan drive, the board has real track pictures, mushrooms boing her up and on, and the Cup floats up beside her as she cheers.</p>
 
 <h2>Watch</h2><figure><video src="reel/nan-bounce.mp4" poster="" controls playsinline muted autoplay loop></video>
 <figcaption>Nan bounce · 10 s</figcaption></figure>
@@ -44,11 +44,11 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 <figcaption>Nan kart · 14 s</figcaption></figure>
 
 
-<h2>Your call</h2><ol><li><p>Is it better for her to hug the Cup to her chest? (Her arms are too short to lift it over her head.)</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+
 <h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/thailand/nan-trip/cup?cup=1">The board: the new track pictures</a> <a class="pill" href="../#/world/thailand/nan-trip/race?feel=1">Race the forest (feel lab for the steering)</a> <a class="pill" href="../#/world/thailand/nan-trip/cup-win">The Cup ceremony</a></p>
 </main>
 <script>
-const qs=["Is it better for her to hug the Cup to her chest? (Her arms are too short to lift it over her head.)"],titles=[]
+const qs=[],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})
