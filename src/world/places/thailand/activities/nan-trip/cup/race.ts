@@ -4,8 +4,9 @@
 // laps.
 //
 // The toy is the boat race's verb, which she already knows:
-// - Hold a finger on the road ahead: the kart races there at full speed (only forward along the track: her finger
-//   picks where across the road). Let go and it keeps racing by itself, a bit slower (she can never stop or get lost).
+// - Hold a finger down anywhere: the kart races at full speed, and she steers it sled style, with the Nan drive's finger
+//   wheel (engine3d/wheel.ts, the small pink circle where her finger went down): push left or right of it and the kart
+//   slides that way across the road. Let go and it keeps racing by itself, a bit slower (she can never stop or get lost).
 // - On a phone she tilts it to steer and holds a gas pedal (trip/race/tilt.ts, GasPedal.tsx), as in the boat race.
 // - The start: three lights and GO; a finger already down at GO is a rocket start. Grandma Taeng naps on the grid and
 //   wakes up at GO.
@@ -31,7 +32,7 @@
 // The numbers that decide how it feels are knobs (?feel=1): her kart,
 // the bounce, the mud, the cloud and the blossoms, the rivals' rubber band; the lab's graph shows her finger across the
 // road against the kart.
-import { BufferAttribute, BufferGeometry, CanvasTexture, Color, DoubleSide, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Raycaster, RepeatWrapping, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
+import { BufferAttribute, BufferGeometry, CanvasTexture, Color, DoubleSide, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, RepeatWrapping, Scene, Vector3, type WebGLRenderer } from 'three'
 import { clamp, firstTime, sounds, spendHint, type Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import { knobs, watch } from '../../../../../kit/knobs'
@@ -39,6 +40,7 @@ import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
 import { Bag } from '../../../../../engine3d/dispose'
 import { Driver, type Feel } from '../../../../../engine3d/drive'
+import { FingerWheel } from '../../../../../engine3d/wheel'
 import { blobShadow, merge, P, solid } from '../../../../../engine3d/geo'
 import { setOutlineResolution } from '../../../../../engine3d/outline'
 import { Particles } from '../../../../../engine3d/particles'
@@ -69,22 +71,30 @@ const FILE = 'src/world/places/thailand/activities/nan-trip/cup/race.ts'
 const KART = knobs('kart', 'Her kart', FILE, {
   top: { value: 17.5, min: 6, max: 26, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'Dad, 2026-11-09: 35% faster (was 13)' },
   accel: { value: 12, min: 2, max: 25, step: 0.5, label: 'Speeding up', unit: 'm/s²' },
-  turn: { value: 2.4, min: 0.8, max: 5, step: 0.1, label: 'Turn toward her finger', unit: 'rad/s', note: 'how hard it turns toward where her finger is' },
+  turn: { value: 2.4, min: 0.8, max: 5, step: 0.1, label: 'Turn toward her line', unit: 'rad/s', note: 'how hard it turns toward where she steers' },
   grip: { value: 4, min: 0.5, max: 12, step: 0.1, label: 'Grip', unit: '1/s', note: 'low = it slides wide through the bends' },
-  near: { value: 9, min: 3, max: 20, step: 0.5, label: 'Aim, nearest', unit: 'm', note: 'a finger close in front of the kart still aims this far up the road' },
-  far: { value: 28, min: 12, max: 60, step: 1, label: 'Aim, furthest', unit: 'm', note: 'a finger far up the road aims no further than this' },
-  offRoad: { value: 1.5, min: 0, max: 4, step: 0.1, label: 'Aim onto the grass, up to', unit: 'm past the road', note: 'a finger further out than this still steers no further' },
+  near: { value: 9, min: 3, max: 20, step: 0.5, label: 'Aim ahead', unit: 'm', note: 'how far up the road the kart aims for her line (plus a bit more when fast)' },
+  offRoad: { value: 1.5, min: 0, max: 4, step: 0.1, label: 'Steer onto the grass, up to', unit: 'm past the road', note: 'a full push holds there and steers no further' },
   cruise: { value: 0.62, min: 0.2, max: 1, step: 0.02, label: 'No finger: cruising', unit: '× top' },
   grass: { value: 0.6, min: 0.2, max: 1, step: 0.02, label: 'On the grass', unit: '× top' },
   coin: { value: 0.012, min: 0, max: 0.05, step: 0.002, label: 'Each coin', unit: '× top', note: 'up to ten coins' },
   pad: { value: 1.3, min: 0.3, max: 3, step: 0.1, label: 'Arrow pad', unit: 's of burst' },
   boost: { value: 1.6, min: 1, max: 2.5, step: 0.05, label: 'Burst speed', unit: '× top' },
 })
+/** Her finger wheel (sled style, engine3d/wheel.ts): the Nan drive's numbers (drive/mountain.ts STEER, Dad's, tuned
+ *  by hand 2026-10-27), with a slide to suit the kart. */
+const WHEEL = knobs('wheel', 'Steering (the finger wheel)', FILE, {
+  slide: { value: 7, min: 1, max: 14, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides the kart across the road' },
+  reach: { value: 1.2, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)' },
+  dead: { value: 0.15, min: 0, max: 0.4, step: 0.01, label: 'Dead middle', note: 'share of the wheel near the middle that counts as straight' },
+  curve: { value: 1.3, min: 1, max: 3, step: 0.05, label: 'Gentle small pushes', note: '1 = even all the way; higher = a small push barely steers' },
+  ease: { value: 0.08, min: 0, max: 0.6, step: 0.01, label: 'Smoothing', unit: 's', note: 'how long a quick flick takes to count in full (0 = none)' },
+})
 /** The bouncy mushrooms (the Driver's gravity is 18 m/s²: 8.5 m/s up is about 2 m high, 0.95 s in the air). */
 const BOUNCE = knobs('bounce', 'Bouncy mushrooms', FILE, {
   up: { value: 8.5, min: 3, max: 16, step: 0.5, label: 'Bounce', unit: 'm/s up' },
   big: { value: 11.5, min: 4, max: 20, step: 0.5, label: 'The big one', unit: 'm/s up' },
-  slow: { value: 0.5, min: 0, max: 1.5, step: 0.05, label: 'Slow motion up there', unit: 's' },
+  launch: { value: 0.6, min: 0, max: 2, step: 0.05, label: 'Burst off the cap', unit: 's of burst', note: 'she flies on forward (the old slow motion up there felt like the kart stopped, 2026-11-13)' },
 })
 /** The rice steps' puddles and the waterfall. */
 const MUD = knobs('mud', 'Puddles and mud', FILE, {
@@ -236,10 +246,13 @@ export class KartRace implements World3D {
   private phase: RacePhase = 'intro'
   private phaseT = 0
   private ended = false
-  private finger: { x: number; y: number; steering: boolean; t: number; id?: string } | null = null
-  /** Where across the road her finger is now (the feel lab's graph). */
+  /** Her finger wheel: where her finger went down (the pink circle) and how far she pushes it. */
+  private wheel = new FingerWheel()
+  /** Her push this frame (-1..1, + = right on screen). */
+  private push = 0
+  /** Where across the road she's steering (the feel lab's graph). */
   private fingerLat = 0
-  private raycaster = new Raycaster()
+  private wheelEl: HTMLElement | null = null
   private w = 1
   private h = 1
   time = 0
@@ -354,7 +367,7 @@ export class KartRace implements World3D {
 
     this.unwatch = watch('kart', () => {
       const edge = this.track.edge
-      const steering = !!this.finger?.steering || this.steer === 'tilt'
+      const steering = this.wheel.steering || this.steer === 'tilt'
       return { 'her finger (m across)': [steering ? this.fingerLat : this.k.lat, edge], 'the kart (m across)': [this.k.lat, edge], 'speed (m/s)': [this.k.d.speed, KART.top * KART.boost] }
     })
     this.toGrid()
@@ -693,6 +706,10 @@ export class KartRace implements World3D {
   setHintElement(el: HTMLElement | null) {
     this.hintEl = el
   }
+  /** The finger wheel's circle (engine3d/SteerWheel.tsx). */
+  setWheelElement(el: HTMLElement | null) {
+    this.wheelEl = el
+  }
   /** The minimap's dots (Cup.tsx), by racer id. */
   setMapElements(els: Map<string, SVGElement>) {
     this.mapEls = els
@@ -715,26 +732,25 @@ export class KartRace implements World3D {
     if (on) this.gasDown = false
   }
   private get pressing() {
-    return this.steer === 'tilt' ? this.gasDown : !!this.finger
+    return this.steer === 'tilt' ? this.gasDown : !!this.wheel.finger
   }
 
   pointerDown(x: number, y: number, id?: string) {
     if (this.waiting) return
     this.lastTouch = this.time
-    // On the road it steers at once (before GO it revs: still down at GO is a rocket start); on a tap target it steers
-    // once it moves or is held a moment (a quick tap there pokes it).
-    this.finger = { x, y, steering: !id && this.steer === 'finger', t: this.time, id }
+    // (Tilting, a finger only pokes things: the tilt steers.)
+    if (this.steer !== 'finger') return
+    // Anywhere open it steers at once (before GO it revs: still down at GO is a rocket start); on a tap target it
+    // steers once it moves or is held a moment (a quick tap there pokes it).
+    this.wheel.down(x, y, this.time, id)
+    this.aimLat = this.k.lat
   }
   pointerMove(x: number, y: number, downX: number, downY: number, held: boolean) {
-    const f = this.finger
-    if (!held || !f) return
-    f.x = x
-    f.y = y
-    if (!f.steering && this.steer === 'finger' && Math.hypot(x - downX, y - downY) > 12) f.steering = true
+    this.wheel.move(x, y, downX, downY, held)
   }
   pointerUp() {
-    if (this.finger?.steering) this.k.d.release()
-    this.finger = null
+    if (this.wheel.steering) this.k.d.release()
+    this.wheel.up()
   }
 
   tap(x: number, y: number, id?: string) {
@@ -797,6 +813,7 @@ export class KartRace implements World3D {
   setSize(w: number, h: number, top: number) {
     this.w = w
     this.h = h
+    this.wheel.setSize(w, h)
     this.rig.setSize(w, h, top)
     setOutlineResolution(w, h)
     this.rig.setShot(this.shot(), true)
@@ -815,10 +832,8 @@ export class KartRace implements World3D {
     const t = this.time
     this.boostKick = Math.max(0, this.boostKick - dt * 0.8)
     this.tilt?.update(rawDt)
-    if (this.finger) {
-      this.lastTouch = t
-      if (!this.finger.steering && this.steer === 'finger' && t - this.finger.t > 0.25) this.finger.steering = true
-    }
+    if (this.wheel.finger) this.lastTouch = t
+    this.push = this.wheel.update(rawDt, t, WHEEL)
     if (this.gasDown) this.lastTouch = t
     // The feel lab's numbers, every frame.
     for (const r of this.racers) {
@@ -1053,15 +1068,13 @@ export class KartRace implements World3D {
       const ds = KART.near + Math.abs(d.speed) * 0.3
       target = road.spotAt(k.s + ds, this.aimLat)
       cap = this.gasDown ? 1 : KART.cruise
-    } else if (this.finger?.steering) {
-      const p = this.groundPoint(this.finger.x, this.finger.y)
-      if (p) {
-        const loc = road.locate(p.x, p.z, k.i, 50)
-        this.fingerLat = loc.lat
-        const ds = clamp(loc.s - k.s, KART.near, KART.far)
-        const most = Math.min(edge, this.track.def.half + KART.offRoad)
-        target = road.spotAt(k.s + ds, clamp(loc.lat, -most, most))
-      }
+    } else if (this.wheel.steering) {
+      // Sled style: a push right of the circle slides her right across the road (lat is + to the left), as long as
+      // she holds it there; held in the middle, she keeps her line round the bends.
+      const most = Math.min(edge, this.track.def.half + KART.offRoad)
+      this.aimLat = clamp(this.aimLat - this.push * WHEEL.slide * dt, Math.max(-most, k.lat - 5), Math.min(most, k.lat + 5))
+      this.fingerLat = this.aimLat
+      target = road.spotAt(k.s + KART.near + Math.abs(d.speed) * 0.3, this.aimLat)
     }
     if (!target) {
       // By herself: along the inside of the next bend, but straight over a mushroom or a pad just ahead (the good bits
@@ -1190,10 +1203,13 @@ export class KartRace implements World3D {
       this.sparkle.burst(d.x, r.y + 0.4, d.z, 10, 2, 2, 0.14)
     }
     // A bouncy mushroom: BOING, up into the air.
-    const m = !d.airborne && r.bounceCool <= 0 ? this.track.mushroomAt(r.s, r.lat) : undefined
+    // (As her nose reaches the cap: off it before the kart drives into it.)
+    const m = !d.airborne && r.bounceCool <= 0 ? this.track.mushroomAt(r.s + r.v.bow * 0.8, r.lat) : undefined
     if (m) {
       r.bounceCool = 0.6
       d.jump(m.big ? BOUNCE.big : BOUNCE.up)
+      // (Off the cap at full speed and a little more: up and on, never a stop.)
+      d.vroom(Math.max(d.boostT, BOUNCE.launch))
       const sh = this.shrooms.find((x) => x.m === m)
       if (sh) sh.squash = 0
       r.squash = 0.2
@@ -1201,7 +1217,6 @@ export class KartRace implements World3D {
       if (r === this.k) {
         this.counts.bounces++
         if (m.big) this.counts.bigBounces++
-        this.slow = Math.max(this.slow, BOUNCE.slow * (m.big ? 1.6 : 1))
         sounds.sparkle()
         if (firstTime('nan-cup-boing')) this.say(C.boing)
       } else r.rider?.react('hop')
@@ -1580,28 +1595,19 @@ export class KartRace implements World3D {
     sfx.bang()
   }
 
-  /** After a while with nothing touched: a finger on the road ahead (at the start, and while racing). Tilting, the gas
-   *  pedal shows its own finger instead. */
+  /** While she steers: the circle where her finger went down and the dot where it is now (engine3d/SteerWheel). After
+   *  a while with nothing touched (at the start, and while racing): a finger sliding side to side low on the screen,
+   *  the way the wheel steers. Tilting, the gas pedal shows its own finger instead. */
   private idleHints() {
-    const el = this.hintEl
-    if (!el) return
-    let at: Vector3 | null = null
+    this.wheel.draw(this.wheelEl, this.steer === 'finger' && this.k.done < 0, WHEEL.reach)
     const idle = this.time - this.lastTouch
-    if (this.steer === 'finger' && ((this.phase === 'count' && !this.finger) || (this.phase === 'race' && idle > 7 && this.k.done < 0))) {
-      // (In the cloud: on the next lantern's line.)
-      const l = this.track.lanterns.find((x) => x.s > this.k.s + 8)
-      const lat = l && l.s < this.k.s + 30 ? l.lat : 0
-      const p = this.track.place(this.k.s + 14, lat)
-      at = new Vector3(p.x, p.y + 0.3, p.z)
-    }
+    const show = this.steer === 'finger' && ((this.phase === 'count' && !this.wheel.finger) || (this.phase === 'race' && idle > 7 && this.k.done < 0))
     // In the race, with the finger showing: Sparkle says it too (spendHint: shown first, then twice a visit at most).
-    if (at && this.phase === 'race' && this.time - this.hintSaid > 15) {
+    if (show && this.phase === 'race' && this.time - this.hintSaid > 15) {
       this.hintSaid = this.time
       if (spendHint(C.hint)) this.say(C.hint)
     }
-    const s = at ? this.toScreen(at, 1) : null
-    el.style.display = s ? '' : 'none'
-    if (s) el.style.transform = `translate3d(${s.x.toFixed(1)}px, ${s.y.toFixed(1)}px, 0)`
+    this.wheel.hint(this.hintEl, show, this.time, WHEEL.reach)
   }
 
   // ---------------------------------------------------------------- camera
@@ -1668,23 +1674,6 @@ export class KartRace implements World3D {
     r.render(this.scene, this.rig.camera)
     this.stats.calls = r.info.render.calls
     this.stats.tris = r.info.render.triangles
-  }
-
-  /** Where a finger at (x, y) on the screen is on the ground: on a level at her kart's height, then again at the
-   *  road's height there (the hills). */
-  private groundPoint(x: number, y: number) {
-    this.raycaster.setFromCamera(new Vector2((x / this.w) * 2 - 1, -(y / this.h) * 2 + 1), this.rig.camera)
-    const ray = this.raycaster.ray
-    if (ray.direction.y > -0.02) return null
-    let h = this.k.y
-    const hit = new Vector3()
-    for (let i = 0; i < 2; i++) {
-      const t = (h - ray.origin.y) / ray.direction.y
-      if (t <= 0) return null
-      hit.copy(ray.origin).addScaledVector(ray.direction, Math.min(t, 140))
-      h = this.track.road.sampleAt(this.track.road.locate(hit.x, hit.z, this.k.i, 80).s).y
-    }
-    return hit
   }
 
   private toScreen(at: Vector3, r: number, max = 150) {
@@ -1791,12 +1780,14 @@ export class KartRace implements World3D {
       speed: r2(this.k.d.speed),
       airborne: this.k.d.airborne,
       rocket: this.rocket,
-      // (Where the road's middle is on the screen a little ahead of her: QA's finger aims there.)
+      // (Where QA's finger goes to steer for the road's middle: pushed from where it went down, toward the middle;
+      // before it's down, low in the middle of the screen.)
       aim: (() => {
-        const p = this.track.place(this.k.s + 16, 0)
-        const sc = this.toScreen(new Vector3(p.x, p.y, p.z), 1)
-        return sc ? { x: Math.round(sc.x), y: Math.round(sc.y) } : null
+        const f = this.wheel.finger
+        if (!f) return { x: Math.round(this.w / 2), y: Math.round(this.h * 0.62) }
+        return { x: Math.round(f.ox + clamp(this.k.lat / 3, -1, 1) * this.wheel.radius(WHEEL.reach)), y: Math.round(f.oy) }
       })(),
+      wheel: { push: r2(this.wheel.push), k: r2(this.wheel.k) },
       steer: { mode: this.steer, gas: this.gasDown, tilt: r2(this.tilt?.value ?? 0), live: this.tilt?.live ?? false, aim: r2(this.aimLat), waiting: this.waiting },
       ...this.counts,
       grass: r2(this.counts.grass),
