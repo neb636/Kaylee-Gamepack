@@ -2413,7 +2413,8 @@
   "Hold your finger in the water to swim!",
   "Click and hold in the water to swim!",
   "Follow the parrotfish!",
-  "Swim close to the cuttlefish!",
+  "Tap the cuttlefish to swim to it!",
+  "Click the cuttlefish to swim to it!",
   "Whoosh! Find it again!",
   "Where did it go?",
   "It turned pink, just for you!",
@@ -2453,8 +2454,10 @@
     "text": "My boat waits for you, ka!",
     "voice": "pelican"
   },
-  "Swim after the parrotfish!",
-  "Swim to the cuttlefish!",
+  "Tap the parrotfish to follow it!",
+  "Click the parrotfish to follow it!",
+  "Tap the cuttlefish!",
+  "Click the cuttlefish!",
   {
     "text": "Lunch time! Who wants bread?",
     "voice": "nick"

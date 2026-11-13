@@ -18,8 +18,9 @@
 //           two rocks, over the sandy patch (a giant clam, a sea cucumber), into a hidden garden of soft corals. It goes
 //           a little ahead and waits; never too fast, and it comes back for her if she wanders off. The blue glow grows.
 //   cuttle  in the garden the cuttlefish hovers, sand-colored, hugging Bubbles' bubble. Swim close and it flashes
-//           rainbow colors and jets off with the bubble, closer the next time and it goes stripy, and the third time
-//           it turns pink (for her) and lets the bubble go. Mom's waterproof camera (the 📷 button) snaps the fish:
+//           rainbow colors and jets off with the bubble (a little ahead of her, in view), again and it goes stripy, and
+//           the third time it turns pink (for her) and lets the bubble go. Tap it (or the bubble, or the parrotfish)
+//           and she swims straight to it. Mom's waterproof camera (the 📷 button) snaps the fish:
 //           Sparkle says what each one is.
 //   found   the found film (story.ts): the bubble floats up and pops, Bubbles flies loops; then back to the island.
 // Dad swims along behind her; swim up to him and he ducks under and blows her a bubble ring.
@@ -60,8 +61,8 @@ import { TO_DEG, damp } from '../../../../../../sdk/math'
 const FILE = 'src/world/places/thailand/activities/samet-trip/snorkel/snorkel.ts'
 /** Her swimming. */
 const SWIM = knobs('snorkelSwim', 'Swimming (her finger leads her)', FILE, {
-  slow: { value: 0.9, min: 0.2, max: 3, step: 0.05, label: 'Paddles at', unit: 'm/s', note: 'her finger just ahead of her' },
-  fast: { value: 2.6, min: 0.8, max: 6, step: 0.05, label: 'Kicks fast at', unit: 'm/s', note: 'her finger far ahead' },
+  slow: { value: 1.3, min: 0.2, max: 3, step: 0.05, label: 'Paddles at', unit: 'm/s', note: 'her finger just ahead of her' },
+  fast: { value: 3.4, min: 0.8, max: 6, step: 0.05, label: 'Kicks fast at', unit: 'm/s', note: 'her finger far ahead' },
   near: { value: 0.6, min: 0, max: 3, step: 0.05, label: 'Finger this close: she floats', unit: 'm', note: 'a dead zone round her' },
   far: { value: 6, min: 1, max: 15, step: 0.1, label: 'Full speed from', unit: 'm', note: 'how far ahead her finger must point for the fast kick' },
   under: { value: 1, min: 0.2, max: 2.6, step: 0.05, label: 'Under the line, her finger points', unit: 'm deep', note: 'a finger in the underwater part points at this depth (where the fish swim): on a fish = swim to it' },
@@ -82,26 +83,27 @@ const FISH = knobs('snorkelFish', 'The fish', FILE, {
   swirl: { value: 1.0, min: 0, max: 3, step: 0.05, label: 'The crowd swirls', unit: 'm/s' },
   size: { value: 1.8, min: 0.8, max: 5, step: 0.1, label: 'The crowd is', unit: 'm wide' },
   keep: { value: 1.3, min: 0.2, max: 4, step: 0.05, label: 'The crowd keeps up', unit: '/s', note: 'how closely the crowd follows her (low = it trails behind)' },
-  speed: { value: 1.7, min: 0.5, max: 4, step: 0.05, label: 'The parrotfish swims', unit: 'm/s' },
-  near: { value: 3.4, min: 1, max: 8, step: 0.1, label: '…on when she’s within', unit: 'm', note: 'closer than this and it swims on to its next spot; further and it waits' },
-  waitFor: { value: 5, min: 1, max: 20, step: 0.5, label: '…comes back to fetch her after', unit: 's', note: 'waiting this long without her coming closer' },
+  speed: { value: 2.6, min: 0.5, max: 4, step: 0.05, label: 'The parrotfish swims', unit: 'm/s' },
+  near: { value: 5, min: 1, max: 8, step: 0.1, label: '…on when she’s within', unit: 'm', note: 'closer than this and it swims on to its next spot; further and it waits' },
+  waitFor: { value: 2.5, min: 1, max: 20, step: 0.5, label: '…comes back to fetch her after', unit: 's', note: 'waiting this long without her coming closer' },
   back: { value: 11, min: 5, max: 25, step: 0.5, label: '…comes back for her past', unit: 'm' },
   flash: { value: 5.5, min: 2, max: 10, step: 0.1, label: 'Cuttlefish shows its colors at', unit: 'm', note: 'further off it’s sand-colored (hiding)' },
-  pink: { value: 2.0, min: 0.6, max: 5, step: 0.1, label: '…she reaches it at', unit: 'm', note: 'a new color each time (rainbow, stripes, pink); the first two times it jets off to hide again' },
+  pink: { value: 3.2, min: 0.6, max: 5, step: 0.1, label: '…she reaches it at', unit: 'm', note: 'a new color each time (rainbow, stripes, pink); the first two times it jets off to hide again' },
   jet: { value: 1.1, min: 0.3, max: 3, step: 0.05, label: '…jets off in', unit: 's' },
-  shy: { value: 0.4, min: 0, max: 2, step: 0.05, label: 'The last time it backs away at', unit: 'm/s', note: 'slower than her paddle, so she catches it' },
-  glint: { value: 14, min: 4, max: 60, step: 1, label: 'Stuck: it glints after', unit: 's', note: 'a rainbow flash where it hides, and again every 5 s' },
-  comes: { value: 24, min: 8, max: 90, step: 1, label: 'Stuck: it swims to her after', unit: 's' },
+  shy: { value: 0, min: 0, max: 2, step: 0.05, label: 'The last time it backs away at', unit: 'm/s', note: 'slower than her paddle, so she catches it' },
+  glint: { value: 5, min: 4, max: 60, step: 1, label: 'Stuck: it glints after', unit: 's', note: 'a rainbow flash where it hides, and again every 5 s' },
+  comes: { value: 9, min: 8, max: 90, step: 1, label: 'Stuck: it swims to her after', unit: 's' },
 })
-/** Where the cuttlefish hides each time (it jets from one to the next): the garden's middle, then further each time. */
 /** The boat's hull for bumping: half its width, and half the length of its straight middle (reef.ts boat()). */
 const HULL = { r: 0.92, len: 2.7 }
-const CUTTLE_SPOTS: XZ[] = [GARDEN, { x: GARDEN.x - 4.5, z: GARDEN.z - 4.5 }, { x: GARDEN.x + 6.5, z: GARDEN.z - 5 }]
+/** Where the cuttlefish hides first (the garden's middle), and the last (the found link starts there). After each
+ *  time she reaches it, it jets a short way ahead of her (hideAhead). */
+const CUTTLE_SPOTS: XZ[] = [GARDEN, { x: GARDEN.x - 2, z: GARDEN.z - 4.5 }, { x: GARDEN.x + 2, z: GARDEN.z - 6 }]
 /** The rounds and the camera. */
 const PLAY = knobs('snorkelPlay', 'Rounds and the half-under camera', FILE, {
-  float: { value: 28, min: 5, max: 120, step: 1, label: 'Swim before the parrotfish', unit: 'm' },
-  floatMin: { value: 25, min: 0, max: 120, step: 1, label: '…and at least', unit: 's', note: 'time to just float and look, however fast she swims' },
-  floatFor: { value: 60, min: 10, max: 180, step: 5, label: '…or after', unit: 's' },
+  float: { value: 8, min: 5, max: 120, step: 1, label: 'Swim before the parrotfish', unit: 'm' },
+  floatMin: { value: 6, min: 0, max: 120, step: 1, label: '…and at least', unit: 's', note: 'time to just float and look, however fast she swims' },
+  floatFor: { value: 15, min: 10, max: 180, step: 5, label: '…or after', unit: 's' },
   dist: { value: 6.2, min: 3, max: 14, step: 0.1, label: 'Camera behind her', unit: 'm' },
   tallDist: { value: 7.6, min: 3, max: 16, step: 0.1, label: '…on a tall screen', unit: 'm' },
   height: { value: 0.75, min: 0.05, max: 3, step: 0.05, label: 'Camera over the water', unit: 'm', note: 'lower = the waterline sits higher on the screen' },
@@ -147,6 +149,8 @@ const LET_GO_S = 2.6
 const SEE_M = 15
 
 const HINT_S = 8
+/** She is in the garden from this far from its middle (m). */
+const GARDEN_M = 8
 /** While a film is on, the garden's fish keep this low (m), and the damselfish crowd this far off down the reef. */
 const BED_FISH = -2.25
 /** The cuttlefish holds the bubble this far round to the side of the way she comes at it (radians). */
@@ -230,6 +234,9 @@ export class Snorkel implements World3D {
   // ---- Her finger.
   private finger: { x: number; y: number; id?: string; moved: boolean; lead: boolean } | null = null
   private goal: XZ | null = null
+  /** A tap on the parrotfish, the cuttlefish or Bubbles' bubble: she swims to it, following it as it moves (the goal
+   *  goes where it goes). Playtest 2026-11-12: she tapped the bubble over and over and nothing took her there. */
+  private chase: 'parrot' | 'cuttle' | null = null
   private lastTouch = 0
   private lead = 0
   private kickT = 0
@@ -261,6 +268,8 @@ export class Snorkel implements World3D {
   private lapT = 0
   private glintT = 0
   private jet: { from: Vector3; to: Vector3; t: number; wait: number } | null = null
+  /** Where it hides now (it stays near it). */
+  private hideAt: XZ = { ...GARDEN }
   private flashT = -1
   /** When the cuttlefish turned pink and let the bubble go (the found film follows), -1 before. */
   private letGo = -1
@@ -540,12 +549,9 @@ export class Snorkel implements World3D {
   /** What Sparkle says as a round she plays begins (once a visit). */
   private roundLine(r: SnorkelRound) {
     if (r === 'story' || r === 'found') return
-    // In the garden: what she sees (the cuttlefish hugging the bubble). She has been swimming to the glow since
-    // Sparkle pointed it out; only a link straight to the garden needs telling what to do.
-    if (r === 'cuttle') {
-      this.once('hug', X.hug)
-      if (this.said.has('see')) return
-    }
+    // In the garden: what she sees (the cuttlefish hugging the bubble), then what to do. (It used to stay quiet when
+    // "Swim to it!" had come earlier: playtest 2026-11-12, nothing told her how to get the bubble.)
+    if (r === 'cuttle') this.once('hug', X.hug)
     this.once(r, S[r])
   }
   /** Later, on the world's clock. */
@@ -574,6 +580,7 @@ export class Snorkel implements World3D {
     if (this.films.on || this.bubFree) return
     this.finger = null
     this.goal = null
+    this.chase = null
     if (this.round !== 'found') {
       this.round = 'found'
       this.roundT = 0
@@ -650,6 +657,11 @@ export class Snorkel implements World3D {
   private progress() {
     if (this.round === 'float' && this.intro < 0 && ((this.swam >= PLAY.float && this.roundT >= PLAY.floatMin) || this.roundT >= PLAY.floatFor)) this.setRound('follow')
     else if (this.round === 'follow' && this.pState === 'home') this.setRound('cuttle')
+    // She found her own way to the garden (ahead of the parrotfish, or before it came): the parrotfish is home too.
+    if ((this.round === 'float' || this.round === 'follow') && this.intro < 0 && Math.hypot(this.pos.x - GARDEN.x, this.pos.z - GARDEN.z) < GARDEN_M) {
+      if (this.pState !== 'away') this.pState = 'home'
+      this.setRound('cuttle')
+    }
     // The cuttlefish has turned pink and let the bubble go: the found film (once her "just for you!" is said).
     if (this.round === 'cuttle' && this.letGo >= 0 && this.time - this.letGo > LET_GO_S) this.playFound()
   }
@@ -734,12 +746,17 @@ export class Snorkel implements World3D {
         wz = way.z
       }
     } else if (this.goal) {
+      if (this.chase === 'parrot') this.goal = { x: this.pPos.x, z: this.pPos.z }
+      else if (this.chase === 'cuttle') this.goal = { x: this.cPos.x, z: this.cPos.z }
       const dx = this.goal.x - this.pos.x
       const dz = this.goal.z - this.pos.z
       const d = Math.hypot(dx, dz)
-      if (d < 0.4) this.goal = null
-      else {
-        want = Math.min(SWIM.fast * 0.7, SWIM.slow + d * 0.35)
+      // (Chasing the parrotfish she stops a little behind it; the cuttlefish she swims right up to.)
+      if (d < (this.chase === 'parrot' ? 2.2 : 0.4)) {
+        this.goal = null
+        this.chase = null
+      } else {
+        want = this.chase ? SWIM.fast * 0.85 : Math.min(SWIM.fast * 0.7, SWIM.slow + d * 0.35)
         wx = dx / d
         wz = dz / d
       }
@@ -835,6 +852,7 @@ export class Snorkel implements World3D {
         // Boing! Off like a bouncy ball (never hurt), the urchins wiggle their spines.
         v.set(nx * SWIM.boing, 0, nz * SWIM.boing)
         this.goal = null
+        this.chase = null
         if (this.bumpT <= 0) {
           this.bumpT = 0.5
           sfx.boing()
@@ -1143,15 +1161,15 @@ export class Snorkel implements World3D {
       }
     } else if (on) {
       this.lapT += dt
-      const home = CUTTLE_SPOTS[this.best]
+      const home = this.hideAt
       const d0 = Math.hypot(this.pos.x - c.x, this.pos.z - c.z)
       const dx = c.x - this.pos.x
       const dz = c.z - this.pos.z
       if (this.lapT > FISH.comes) {
         // Stuck a long while: it comes to her (rule 3), and she reaches it.
         const l = Math.max(0.01, d0)
-        c.x -= (dx / l) * 0.7 * dt
-        c.z -= (dz / l) * 0.7 * dt
+        c.x -= (dx / l) * 1.2 * dt
+        c.z -= (dz / l) * 1.2 * dt
       } else if (this.best === 2 && d0 < 4.5 && d0 > FISH.pink && FISH.shy > 0) {
         // The last time it's shy: it backs away from her (slower than her paddle), never far from its place.
         const l = Math.max(0.01, d0)
@@ -1180,6 +1198,10 @@ export class Snorkel implements World3D {
       // to hide again, the bubble in its arms; the third it turns pink and lets the bubble go (the found film).
       this.best++
       this.counts.stages++
+      if (this.chase === 'cuttle') {
+        this.chase = null
+        this.goal = null
+      }
       this.burstAt(c, this.best === 3 ? 40 : 22)
       this.bub.twinkle()
       if (this.best === 3) {
@@ -1189,7 +1211,8 @@ export class Snorkel implements World3D {
         this.bub.cheer(true)
       } else {
         twinkle(4)
-        this.jet = { from: c.clone(), to: new Vector3(CUTTLE_SPOTS[this.best].x, -1.15, CUTTLE_SPOTS[this.best].z), t: 0, wait: 0.8 }
+        this.jet = { from: c.clone(), to: this.hideAhead(), t: 0, wait: 0.8 }
+        this.hideAt = { x: this.jet.to.x, z: this.jet.to.z }
       }
     }
     this.stage = stage
@@ -1225,6 +1248,14 @@ export class Snorkel implements World3D {
       const up = gone && !this.films.on ? Math.min(0.5, (this.time - this.letGo) * 0.22) : 0
       this.bub.pos.set(r.position.x + Math.sin(yaw) * HOLD_M + h.sway, r.position.y + HUG.y * CUTTLE_SIZE + h.lift + up, r.position.z + Math.cos(yaw) * HOLD_M)
     }
+  }
+
+  /** Where it jets off to hide: a little ahead of her (the camera looks ahead), to one side then the other, so it's
+   *  always in view. (A fixed spot beside her went off the screen: robot playtest 2026-11-12.) */
+  private hideAhead() {
+    const side = this.best % 2 === 1 ? -1 : 1
+    const b = BOUNDS
+    return new Vector3(clamp(this.pos.x * 0.85 + side * 2.2, b.x0 + 2, b.x1 - 2), -1.15, Math.max(b.z0 + 2, this.pos.z - 4.5))
   }
 
   // ---------------------------------------------------------------- Bubbles the firefly
@@ -1272,6 +1303,7 @@ export class Snorkel implements World3D {
         this.spin = -1
         this.vel.set(0, 0, 0)
         this.goal = null
+        this.chase = null
         this.finger = null
         this.pos.set(x, y + this.kaylee.height * 0.42, z)
         this.heading = face / TO_DEG
@@ -1437,8 +1469,9 @@ export class Snorkel implements World3D {
     this.finger = { x, y, id, moved: false, lead: !id }
     if (!id) {
       this.goal = null
+      this.chase = null
       this.counts.leads++
-    }
+    } else this.startChase(id)
   }
   pointerMove(x: number, y: number, downX: number, downY: number, held: boolean) {
     const f = this.finger
@@ -1451,6 +1484,7 @@ export class Snorkel implements World3D {
       if (!f.lead) {
         f.lead = true
         this.goal = null
+        this.chase = null
         this.counts.leads++
       }
     }
@@ -1462,11 +1496,22 @@ export class Snorkel implements World3D {
     if (!this.playing) return
     this.lastTouch = this.time
     this.counts.taps++
-    if (id) return this.poke(id)
+    if (id) {
+      this.startChase(id)
+      return this.poke(id)
+    }
     // A tap on the water: she swims there.
+    this.chase = null
     const way = this.fingerWay(x, y)
     const d = Math.min(way.d, 10)
     this.goal = { x: this.pos.x + way.x * d, z: this.pos.z + way.z * d }
+  }
+  /** The parrotfish, the cuttlefish or the bubble (the cuttlefish holds it): she swims to it. */
+  private startChase(id: string) {
+    const to = id === 'parrot' ? 'parrot' : id === 'cuttle' || id === 'bubble' ? 'cuttle' : null
+    if (!to || (to === 'parrot' && this.pState === 'away') || (to === 'cuttle' && (this.best >= 3 || this.letGo >= 0))) return
+    this.chase = to
+    this.goal = to === 'parrot' ? { x: this.pPos.x, z: this.pPos.z } : { x: this.cPos.x, z: this.cPos.z }
   }
   private skipIntro() {
     if (this.intro < 0) return
@@ -1618,7 +1663,10 @@ export class Snorkel implements World3D {
     const el = this.hintEl
     if (!el) return
     let at: Vector3 | null = null
-    const idle = this.playing && !this.stand && !this.finger && !this.goal && this.intro < 0 && t - this.lastTouch > HINT_S
+    let idle = this.playing && !this.stand && !this.finger && !this.goal && this.intro < 0 && t - this.lastTouch > HINT_S
+    // At the cuttlefish she may be busy and still stuck (tapping all round it): the hint comes when it hasn't been
+    // reached for a while, touches or not, unless she is on her way to it.
+    if (this.playing && this.round === 'cuttle' && this.best < 3 && !this.jet && this.lapT > HINT_S && this.chase !== 'cuttle') idle = true
     if (idle) {
       if (this.round === 'float') {
         // Out ahead of her, along the reef.

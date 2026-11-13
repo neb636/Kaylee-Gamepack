@@ -316,6 +316,12 @@ Each place's lat/lon (OSM, via the Overpass API) is turned into meters from Sai 
 - **Teaches:** coral is **alive**: look, don't touch; sea urchins are prickly; fish live in the coral like people in a town. Tap-to-hear: the cuttlefish changes color to talk and to hide.
 - **Payoff:** the fish pages of the book filling up, the cuttlefish's rainbow, the boat ride back with the wind in her mane.
 - **Numbers:** 2.5-3.5 min, 30-45 touches, 1 line before (the captain: “Masks on! Jump in!”).
+- **Made easier (2026-11-12, after Kaylee and you couldn't get the bubble):** tap the parrotfish, the cuttlefish or
+  the bubble and she swims straight to it; Sparkle always says “Tap the cuttlefish to swim to it!” in the garden; the
+  stuck hint comes after 8 s without a catch even while she's tapping; the cuttlefish jets to a spot just ahead of
+  her (it used to go off the screen), never backs away, and is caught from 3.2 m; she swims faster, the float round
+  is ~6-15 s, the parrotfish swims faster and waits less; swimming straight to the garden skips ahead to the
+  cuttlefish. Next: watch her play it once; if the swim still drags, move the garden closer (reef.ts).
 
 ## 🙈 Hide and seek at Ao Prao
 

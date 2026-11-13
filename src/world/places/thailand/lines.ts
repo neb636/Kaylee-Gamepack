@@ -1071,7 +1071,7 @@ export const L = {
       jump: by('pelican')('Masks on! Jump in!'),
       float: onDevice('Hold your finger in the water to swim!', 'Click and hold in the water to swim!'),
       follow: 'Follow the parrotfish!',
-      cuttle: 'Swim close to the cuttlefish!',
+      cuttle: onDevice('Tap the cuttlefish to swim to it!', 'Click the cuttlefish to swim to it!'),
       // The cuttlefish jets off to hide again (the first and second time she reaches it).
       again: ['Whoosh! Find it again!', 'Where did it go?'],
       pink: 'It turned pink, just for you!',
@@ -1086,8 +1086,8 @@ export const L = {
       // Sparkle, after a while with nothing done.
       hint: {
         float: onDevice('Hold your finger in the water to swim!', 'Click and hold in the water to swim!'),
-        follow: 'Swim after the parrotfish!',
-        cuttle: 'Swim to the cuttlefish!',
+        follow: onDevice('Tap the parrotfish to follow it!', 'Click the parrotfish to follow it!'),
+        cuttle: onDevice('Tap the cuttlefish!', 'Click the cuttlefish!'),
       },
     },
     // Lunch on the deck at Ao Prao (hideseek/lunch.ts).
