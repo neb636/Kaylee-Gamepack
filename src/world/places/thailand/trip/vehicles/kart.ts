@@ -54,16 +54,28 @@ export function buildKart(bag: Bag, colors: KartColors = PINK_KART, o: { horn?: 
     // The engine behind the seat, an exhaust pipe.
     P.rbox(0.62, 0.3, 0.32, 0.06, '#A3AAC4', { at: [0, R + 0.2, -1.0] }),
     P.cyl(0.06, 0.06, 0.32, '#7E86A6', { at: [0.24, R + 0.3, -1.2], rot: [Math.PI / 2, 0, 0] }, 8),
-    // The steering column.
-    P.cyl(0.03, 0.03, 0.5, '#5E5468', { at: [0, R + 0.42, 0.12], rot: [0.9, 0, 0] }, 6),
+    // The steering column: up out of the dash and back toward her, ending at the wheel's hub.
+    P.cyl(0.03, 0.035, 0.46, '#5E5468', { at: [0, R + 0.45, 0.275], rot: [-0.86, 0, 0] }, 8),
   ]
   body.add(solid(merge(parts), bag, 2))
 
-  // The steering wheel, on its own pivot (it turns with the steering).
+  // The steering wheel, at the top of the column and facing her (square to the column): a round rim, three spokes, a
+  // pink hub and two pale grips. It turns on its own axle as she steers (the inner pivot).
   const wheel = new Group()
-  wheel.position.set(0, R + 0.58, 0.02)
-  wheel.rotation.x = -0.9
-  wheel.add(solid(merge([P.torus(0.15, 0.035, '#5E5468', { rot: [Math.PI / 2, 0, 0] })]), bag, 1))
+  wheel.position.set(0, R + 0.6, 0.1)
+  wheel.rotation.x = 0.71
+  const spinner = new Group()
+  const rim = '#4A4152'
+  spinner.add(solid(merge([
+    P.torus(0.16, 0.03, rim),
+    // (One spoke down, two up to the sides.)
+    ...[-Math.PI / 2, Math.PI / 6, (Math.PI * 5) / 6].map((a) => P.box(0.032, 0.12, 0.02, rim, { at: [Math.cos(a) * 0.1, Math.sin(a) * 0.1, 0], rot: [0, 0, a - Math.PI / 2] })),
+    P.cyl(0.045, 0.045, 0.04, colors.trim, { rot: [Math.PI / 2, 0, 0] }, 12),
+    P.sphere(0.035, PAL.hotpink, { at: [0, 0, -0.025], scale: [1, 1, 0.5] }, 10),
+    P.torus(0.16, 0.036, '#EDE6F2', { rot: [0, 0, Math.PI * 0.75] }, Math.PI * 0.35),
+    P.torus(0.16, 0.036, '#EDE6F2', { rot: [0, 0, -Math.PI * 0.1] }, Math.PI * 0.35),
+  ]), bag, 1))
+  wheel.add(spinner)
   body.add(wheel)
 
   // The horn on the nose: a pink bulb on a little gold trumpet.
@@ -112,7 +124,7 @@ export function buildKart(bag: Bag, colors: KartColors = PINK_KART, o: { horn?: 
         w.spin.rotation.x = roll
         if (w.steer) w.steer.rotation.y = -steer * 0.45
       }
-      wheel.rotation.z = steer * 0.9
+      spinner.rotation.z = steer * 0.9
     },
   }
   return kart

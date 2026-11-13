@@ -12,7 +12,7 @@
 //   board (or, after the last race, the Cup).
 // - The Cup (section `cup-win`): the scoreboard over the grandstand lights up race by race (gold, silver, gold), the
 //   big gold Nan Mountain Cup with the trophy title on it flies over from its stand and floats in front of her; she taps it and
-//   lifts it over her head: fireworks, confetti, everyone cheering. Mom's photo, then 🗺️ and the stamp on Nan town.
+//   hugs it up in her hooves: fireworks, confetti, everyone cheering. Mom's photo, then 🗺️ and the stamp on Nan town.
 // Dressed for the Cup (the look step): big pennant flags flying on tall poles, a fruit stall and a drinks stall beside
 // Moon's honey stall, round paper lanterns hanging along the grandstand's roof, hay bales and cones round the edge, and
 // Nan folk come to watch, who cheer with everyone (and jump when she taps them).
@@ -43,6 +43,7 @@ import { buildRider, type Rider } from './riders'
 import { CROWD } from './scenery'
 import { applyPose, clearPose } from '../../boat-trip/bay/poses'
 import { cupDone, giftsOf, podiumOf, type CupRecord, type Place } from './rules'
+import { trackPicture } from './tilePictures'
 import { animateGifts, buildGift, type Gift } from './gifts'
 import { HOME, RIVAL_IDS, RIVALS, type RivalId } from './rivals'
 import { cupSfx as sfx } from './sounds'
@@ -115,9 +116,11 @@ const SCORE = { x: 7, y: 4.3, z: -10.6 }
 /** The Cup's stand beside the board, and how big the Cup is. */
 const CUP_STAND = { x: 0.9, z: -5.3, h: 1.6 }
 const CUP_SCALE = 0.8
-/** Where the Cup floats when it comes to her (beside her), and held up over her head (from her feet). */
+/** Where the Cup floats when it comes to her (beside her, from her feet). */
 const CUP_BY = new Vector3(0.75, 0.2, 0.45)
-const CUP_UP = new Vector3(0, 1.0, 0.05)
+/** Hugged in her hands: how big, and where its foot sits from the middle between her hooves (its bowl between them). */
+const CUP_HELD = 0.42
+const CUP_GRIP = new Vector3(0, -0.3, 0.06)
 const STALL = { x: -9.7, z: -3.6 }
 // (Out of the bottom-left corner, where Sparkle and her bubble sit, Dad 2026-11-09.)
 const HEN = { x: -2.5, z: -1.2 }
@@ -153,6 +156,7 @@ const SHOTS = {
 }
 
 const tmp = new Vector3()
+const tmp2 = new Vector3()
 
 interface Holder {
   id: RivalId
@@ -312,6 +316,7 @@ export class CupGround extends Stage {
     this.leaving = this.fiving = this.fiveDone = false
     this.flight = null
     this.cupHere = false
+    if (this.lifted >= 0) for (const arm of [this.kaylee.rig.armL, this.kaylee.rig.armR]) arm.rotation.set(0, 0, 0)
     this.lifted = -1
     this.winner = null
     this.lastTouch = this.time
@@ -321,6 +326,7 @@ export class CupGround extends Stage {
     // The Cup back on its stand.
     this.cup.position.set(CUP_STAND.x, CUP_STAND.h, CUP_STAND.z)
     this.cup.rotation.set(0, 0, 0)
+    this.cup.scale.setScalar(CUP_SCALE)
     // The medals under the tracks she has raced (the newest drops in).
     for (const t of TRACK_IDS) {
       const m = this.medals.get(t)!
@@ -663,10 +669,26 @@ export class CupGround extends Stage {
     sfx.boing()
   }
 
-  /** She lifts the Cup over her head: fireworks, confetti, everyone cheering; then Mom's photo and 🗺️. */
+  /** The middle between her two hooves (world), into `out`. */
+  private handsAt(out: Vector3) {
+    const rig = this.kaylee.rig
+    rig.root.updateMatrixWorld(true)
+    const a = new Vector3()
+    const b = new Vector3()
+    if (rig.hands) {
+      rig.hands[0].getWorldPosition(a)
+      rig.hands[1].getWorldPosition(b)
+    } else {
+      // (The code-built arms: the hoof is at the end of the capsule, down the arm.)
+      rig.armL.localToWorld(a.set(0, -0.16 * rig.height, 0))
+      rig.armR.localToWorld(b.set(0, -0.16 * rig.height, 0))
+    }
+    return out.copy(a).add(b).multiplyScalar(0.5)
+  }
+
+  /** She takes the Cup and hugs it up in front of her: fireworks, confetti, everyone cheering; then Mom's photo and 🗺️. */
   private lift() {
     this.lifted = 0
-    this.kaylee.showOff('cheer')
     sounds.fanfare()
     this.cheerAll()
     this.confettiBurst(STEP[1].x, 8)
@@ -731,7 +753,17 @@ export class CupGround extends Stage {
     })
     // ---- Kaylee, Mom and Dad ----
     for (const c of [this.kaylee, this.ji, this.nick]) c.update(dt, t)
-    if (this.lifted >= 0 && Math.floor((this.lifted + dt) / 1.3) > Math.floor(this.lifted / 1.3)) this.kaylee.showOff('cheer')
+    // Holding the Cup: hugged in front of her chest, both hooves on its bowl, bouncing on her toes and lifting it a
+    // little with each bounce (the Cup goes in her hands below; it used to float on her head, 2026-11-13). Her toy's
+    // arms are short (her hooves reach about half her height), so over her head it would hide her face.
+    if (this.lifted >= 0) {
+      const k = easeInOut(Math.min(1, this.lifted / 0.5))
+      const pump = Math.abs(Math.sin(this.lifted * 6)) * 0.25 * k
+      const rig = this.kaylee.rig
+      rig.armL.rotation.set((0.25 - pump) * k, 0, -1.65 * k)
+      rig.armR.rotation.set((0.25 - pump) * k, 0, 1.65 * k)
+      rig.body.position.y += Math.abs(Math.sin(this.lifted * 6)) * 0.03 * k
+    }
     // ---- Her kart: the horn, the gifts ----
     const horn = this.kart.horn
     if (horn) horn.scale.lerp(tmp.set(1, 1, 1), Math.min(1, dt * 8))
@@ -778,11 +810,13 @@ export class CupGround extends Stage {
       }
     } else if (this.cupHere) {
       if (this.lifted >= 0) {
+        // In her hands: the bowl between her hooves, in front of her chest, a little smaller to hold.
         this.lifted += dt
-        const k = easeInOut(Math.min(1, this.lifted / 0.6))
-        this.cup.position.copy(kp).add(tmp.lerpVectors(CUP_BY, CUP_UP, k))
-        this.cup.position.y += bell(k) * 0.3 + Math.sin(t * 9) * 0.04 * k
-        this.cup.rotation.y = Math.sin(t * 2) * 0.15
+        const k = easeInOut(Math.min(1, this.lifted / 0.5))
+        const at = this.handsAt(tmp2)
+        this.cup.position.copy(kp).add(CUP_BY).lerp(at.add(CUP_GRIP), k)
+        this.cup.scale.setScalar(CUP_SCALE + (CUP_HELD - CUP_SCALE) * k)
+        this.cup.rotation.set(0, this.kaylee.root.rotation.y, 0)
       } else {
         this.cup.position.copy(kp).add(CUP_BY)
         this.cup.position.y += Math.sin(t * 2.4) * 0.06
@@ -915,6 +949,7 @@ export class CupGround extends Stage {
       gifts: this.gifts.map((g) => g.id),
       cupHere: this.cupHere,
       lifted: this.lifted >= 0,
+      held: this.lifted >= 0 ? (() => { const h = this.handsAt(new Vector3()); const k = this.kaylee.position; return { hands: +(h.y - k.y).toFixed(2), handsZ: +(h.z - k.z).toFixed(2), tall: +this.kaylee.rig.height.toFixed(2), cup: +(this.cup.position.y - k.y).toFixed(2) } })() : null,
       scored: this.score.filter((s) => s.lit > 0).length,
       ui: this.ui,
       touches: this.touches,
@@ -964,7 +999,10 @@ export class CupGround extends Stage {
     for (const t of TRACK_IDS) {
       const tile = new Group()
       tile.position.set(tileX(t), TILE.y, z + 0.22)
-      tile.add(solid(merge(tileParts(t)), this.bag, 2))
+      tile.add(solid(merge(tileParts()), this.bag, 2))
+      const pic = new Mesh(this.bag.add(new PlaneGeometry(TILE.size - 0.16, TILE.size - 0.16)), this.bag.add(new MeshBasicMaterial({ map: this.bag.add(trackPicture(t)), transparent: true })))
+      pic.position.z = 0.085
+      tile.add(pic)
       g.add(tile)
       this.tiles.set(t, tile)
     }
@@ -982,8 +1020,10 @@ export class CupGround extends Stage {
     const parts: BufferGeometry[] = [P.rbox(5.6, 0.08, 2.4, 0.04, PAL.pink, { at: [STEP[1].x, 0.04, POD.z + 0.2] })]
     for (const n of [1, 2, 3] as const) {
       const s = STEP[n]
-      parts.push(P.rbox(POD.w, s.h, POD.d, 0.06, s.c, { at: [s.x, s.h / 2, POD.z] }))
-      parts.push(P.box(POD.w + 0.02, 0.08, POD.d + 0.02, '#FFFFFF', { at: [s.x, s.h - 0.04, POD.z] }))
+      // The step, and a white top on it. (The step stops a little under the top's face: the two used to share it and
+      // flickered as the camera moved, 2026-11-13.)
+      parts.push(P.rbox(POD.w, s.h - 0.03, POD.d, 0.06, s.c, { at: [s.x, (s.h - 0.03) / 2, POD.z] }))
+      parts.push(P.rbox(POD.w + 0.04, 0.1, POD.d + 0.04, 0.03, '#FFFFFF', { at: [s.x, s.h - 0.05, POD.z] }))
       for (let i = 0; i < n; i++) parts.push(P.sphere(0.09, PAL.ink, { at: [s.x + (i - (n - 1) / 2) * 0.26, s.h / 2, POD.z + POD.d / 2 + 0.01], scale: [1, 1, 0.3] }, 8))
     }
     return solid(merge(parts), this.bag, 2)
@@ -1110,15 +1150,36 @@ export class CupGround extends Stage {
     return g
   }
 
-  /** Bunting across the square, between the board and the grandstand. */
+  /** Bunting across the square, between the board and the grandstand: two swags of rope strung from three tall poles
+   *  (a gold knob on each top), the flags hanging off the rope (they looked like they floated in the air without it). */
   private buildBunting() {
-    const parts: BufferGeometry[] = [P.cyl(0.08, 0.08, 6.6, PAL.cream, { at: [-10.5, 3.3, -8] }, 8), P.cyl(0.08, 0.08, 6.6, PAL.cream, { at: [13.5, 3.3, -8] }, 8)]
+    const z = -8
+    const poles = [-10.5, 1.5, 13.5]
+    const top = 6.6
+    const parts: BufferGeometry[] = []
+    for (const x of poles) parts.push(P.cyl(0.08, 0.1, top, PAL.cream, { at: [x, top / 2, z] }, 8), P.sphere(0.14, PAL.gold, { at: [x, top + 0.08, z] }, 10))
     const colors = [PAL.hotpink, PAL.gold, PAL.mint, PAL.sky, PAL.lavenderDark]
-    for (let i = 0; i < 34; i++) {
-      const k = i / 33
-      const x = -10.5 + k * 24
-      const y = 6.4 - Math.sin(k * Math.PI) * 1.1
-      parts.push(P.cone(0.24, 0.5, colors[i % colors.length], { at: [x, y - 0.25, -8], rot: [Math.PI, 0, 0], scale: [1, 1, 0.2] }, 3))
+    const tie = top - 0.15
+    const ropeY = (x0: number, x1: number, x: number) => tie - Math.sin(((x - x0) / (x1 - x0)) * Math.PI) * 0.75
+    let n = 0
+    for (let p = 0; p < poles.length - 1; p++) {
+      const [x0, x1] = [poles[p], poles[p + 1]]
+      // The rope: short straight pieces along the swag.
+      const segs = 16
+      for (let i = 0; i < segs; i++) {
+        const xa = x0 + ((x1 - x0) * i) / segs
+        const xb = x0 + ((x1 - x0) * (i + 1)) / segs
+        const ya = ropeY(x0, x1, xa)
+        const yb = ropeY(x0, x1, xb)
+        const len = Math.hypot(xb - xa, yb - ya)
+        parts.push(P.cyl(0.025, 0.025, len + 0.02, '#FFFFFF', { at: [(xa + xb) / 2, (ya + yb) / 2, z], rot: [0, 0, Math.atan2(-(xb - xa), yb - ya)] }, 5))
+      }
+      // The flags, their top edge on the rope.
+      const flags = 16
+      for (let i = 1; i < flags; i++) {
+        const x = x0 + ((x1 - x0) * i) / flags
+        parts.push(P.cone(0.24, 0.5, colors[n++ % colors.length], { at: [x, ropeY(x0, x1, x) - 0.27, z], rot: [Math.PI, 0, 0], scale: [1, 1, 0.2] }, 3))
+      }
     }
     return solid(merge(parts), this.bag, 1.5)
   }
@@ -1131,33 +1192,9 @@ export class CupGround extends Stage {
 
 // ---------------------------------------------------------------- the props
 
-/** A track's tile: a rounded panel in its colors with a little picture of the track on it. */
-function tileParts(t: TrackId): BufferGeometry[] {
-  const s = TILE.size
-  if (t === 'forest')
-    return [
-      P.rbox(s, s, 0.16, 0.14, '#5FAE7E', {}),
-      P.cone(0.38, 1.0, '#3F8E63', { at: [-0.6, -0.15, 0.2] }, 8),
-      P.cone(0.3, 0.8, '#3F8E63', { at: [0.65, -0.05, 0.2] }, 8),
-      P.cyl(0.12, 0.16, 0.4, PAL.cream, { at: [0, -0.6, 0.22] }, 10),
-      P.sphere(0.5, PAL.hotpink, { at: [0, -0.35, 0.22], scale: [1, 0.5, 0.4] }, 14),
-      P.sphere(0.09, '#FFFFFF', { at: [-0.2, -0.2, 0.42], scale: [1, 0.6, 0.4] }, 8),
-      P.sphere(0.09, '#FFFFFF', { at: [0.18, -0.24, 0.42], scale: [1, 0.6, 0.4] }, 8),
-    ]
-  if (t === 'steps')
-    return [
-      P.rbox(s, s, 0.16, 0.14, '#BFE8C8', {}),
-      ...[0, 1, 2, 3].flatMap((i) => [P.box(s - 0.3 - i * 0.3, 0.32, 0.12, i % 2 ? '#8FD6B0' : '#A8DCEB', { at: [0.15 * i, 0.55 - i * 0.38, 0.12] }), P.box(s - 0.3 - i * 0.3, 0.06, 0.13, '#6FB886', { at: [0.15 * i, 0.38 - i * 0.38, 0.13] })]),
-      P.sphere(0.2, PAL.gold, { at: [-0.7, 0.75, 0.15], scale: [1, 1, 0.3] }, 10),
-    ]
-  return [
-    P.rbox(s, s, 0.16, 0.14, '#A8DCFF', {}),
-    P.cone(0.95, 1.5, '#9C93AE', { at: [0, -0.3, 0.1], scale: [1, 1, 0.3] }, 10),
-    P.sphere(0.32, '#FFFFFF', { at: [-0.35, 0.05, 0.22], scale: [1.4, 0.7, 0.4] }, 10),
-    P.sphere(0.34, '#FFFFFF', { at: [0.25, 0.12, 0.22], scale: [1.4, 0.7, 0.4] }, 10),
-    P.sphere(0.13, PAL.pink, { at: [0.55, -0.55, 0.2], scale: [1, 1, 0.4] }, 8),
-    P.sphere(0.11, PAL.pink, { at: [-0.6, -0.65, 0.2], scale: [1, 1, 0.4] }, 8),
-  ]
+/** A track's tile: a rounded white frame; its picture (tilePictures.ts) goes on the front. */
+function tileParts(): BufferGeometry[] {
+  return [P.rbox(TILE.size, TILE.size, 0.16, 0.14, '#FFFFFF', {})]
 }
 
 /** A little gold cup's shapes at (x, y, z), `k` its height. */

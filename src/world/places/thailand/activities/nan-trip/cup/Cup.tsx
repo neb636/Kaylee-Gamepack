@@ -1,13 +1,13 @@
-// The Nan Mountain Cup's race screen (section `race`; greybox 1): the 3D race (race.ts) with its tap targets and the
-// hint finger, the races' HUD over it (trip/race/RaceHud.tsx: her place and everyone's faces, coins, the minimap, the
+// The Nan Mountain Cup's race screen (section `race`; greybox 1): the 3D race (race.ts) with its tap targets, the
+// finger wheel's pink circle (engine3d/SteerWheel, as on the Nan drive) and the hint finger, the races' HUD over it (trip/race/RaceHud.tsx: her place and everyone's faces, coins, the minimap, the
 // countdown, the banners), and on a phone the tilt steering and the gas pedal, as in the boat race. When the race is
 // over (everyone over the line, the fireworks going), it hands over to the podium on the race ground (Ground.tsx).
-import { motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { bigCelebration, sounds, useLandscape } from '../../../../../../sdk'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { flag } from '../../../../../engine3d/flags'
+import { SteerHint, SteerWheel } from '../../../../../engine3d/SteerWheel'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
 import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { GasPedal } from '../../../trip/race/GasPedal'
@@ -45,6 +45,7 @@ export function Cup({ track, result, packed, gifts = [], again: before = false, 
   const [done, setDone] = useState(false)
   const worldRef = useRef<KartRace | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
+  const wheelRef = useRef<HTMLDivElement>(null)
   const guideRef = useRef<TripGuideHandle>(null)
   const mapEls = useRef(new Map<string, SVGElement>())
   const raced = useRef(before ? 1 : 0)
@@ -97,6 +98,7 @@ export function Cup({ track, result, packed, gifts = [], again: before = false, 
       },
     })
     w.setHintElement(hintRef.current)
+    w.setWheelElement(wheelRef.current)
     w.setMapElements(mapEls.current)
     w.setSteer(steerRef.current ? 'tilt' : 'finger', (tiltRef.current ??= new Tilt()))
     return w
@@ -115,12 +117,10 @@ export function Cup({ track, result, packed, gifts = [], again: before = false, 
         anchors={(input, els) => (
           <>
             <Anchors list={KART_ANCHORS} els={els} {...input} />
-            {/* After a while with nothing touched: a finger on the road ahead. */}
-            <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
-              <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.0, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
-                👆
-              </motion.div>
-            </div>
+            {/* While she steers: the pink circle where her finger went down (the Nan drive's finger wheel). */}
+            <SteerWheel ref={wheelRef} />
+            {/* After a while with nothing touched: a finger sliding side to side, the way the wheel steers. */}
+            <SteerHint ref={hintRef} />
           </>
         )}
       />
