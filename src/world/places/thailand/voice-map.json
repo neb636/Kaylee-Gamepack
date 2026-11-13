@@ -6104,11 +6104,18 @@
     "file": "29e5b8f57bd9.mp3"
   },
   {
-    "text": "Swim close to the cuttlefish!",
+    "text": "Tap the cuttlefish to swim to it!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2448,
-    "file": "8d5b80c7b427.mp3"
+    "ms": 3048,
+    "file": "115381a9a867.mp3"
+  },
+  {
+    "text": "Click the cuttlefish to swim to it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2616,
+    "file": "e03ab8ea4b28.mp3"
   },
   {
     "text": "Whoosh! Find it again!",
@@ -6216,18 +6223,32 @@
     "file": "7916b0e3c4d7.mp3"
   },
   {
-    "text": "Swim after the parrotfish!",
+    "text": "Tap the parrotfish to follow it!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2256,
-    "file": "4bec79e6511a.mp3"
+    "file": "0c19b7a837bf.mp3"
   },
   {
-    "text": "Swim to the cuttlefish!",
+    "text": "Click the parrotfish to follow it!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2472,
-    "file": "ea1ba4ec7111.mp3"
+    "ms": 2592,
+    "file": "dfd84331241f.mp3"
+  },
+  {
+    "text": "Tap the cuttlefish!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1728,
+    "file": "f5adbe9c03f9.mp3"
+  },
+  {
+    "text": "Click the cuttlefish!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1824,
+    "file": "6ea6d7efcc27.mp3"
   },
   {
     "text": "Lunch time! Who wants bread?",
