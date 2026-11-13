@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "nan-kart",
+  "title": "Nan kart",
+  "video": "nan-kart.mp4",
+  "gif": "nan-kart.gif",
+  "seconds": 14,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "nan-kart",
+      "where": "nan-kart",
+      "seconds": 12,
+      "fps": 56.6,
+      "status": "ok"
+    }
+  ]
+}
