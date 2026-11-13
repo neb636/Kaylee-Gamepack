@@ -12,7 +12,7 @@
 //   board (or, after the last race, the Cup).
 // - The Cup (section `cup-win`): the scoreboard over the grandstand lights up race by race (gold, silver, gold), the
 //   big gold Nan Mountain Cup with the trophy title on it flies over from its stand and floats in front of her; she taps it and
-//   hugs it up in her hooves: fireworks, confetti, everyone cheering. Mom's photo, then 🗺️ and the stamp on Nan town.
+//   it floats up beside her as she cheers: fireworks, confetti, everyone cheering. Mom's photo, then 🗺️ and the stamp on Nan town.
 // Dressed for the Cup (the look step): big pennant flags flying on tall poles, a fruit stall and a drinks stall beside
 // Moon's honey stall, round paper lanterns hanging along the grandstand's roof, hay bales and cones round the edge, and
 // Nan folk come to watch, who cheer with everyone (and jump when she taps them).
@@ -118,9 +118,8 @@ const CUP_STAND = { x: 0.9, z: -5.3, h: 1.6 }
 const CUP_SCALE = 0.8
 /** Where the Cup floats when it comes to her (beside her, from her feet). */
 const CUP_BY = new Vector3(0.75, 0.2, 0.45)
-/** Hugged in her hands: how big, and where its foot sits from the middle between her hooves (its bowl between them). */
-const CUP_HELD = 0.42
-const CUP_GRIP = new Vector3(0, -0.3, 0.06)
+/** Where the Cup floats once she takes it: up beside her, its foot about at her knees, so it stands as tall as her (from her feet). */
+const CUP_SIDE = new Vector3(0.85, 0.2, 0.45)
 const STALL = { x: -9.7, z: -3.6 }
 // (Out of the bottom-left corner, where Sparkle and her bubble sit, Dad 2026-11-09.)
 const HEN = { x: -2.5, z: -1.2 }
@@ -316,7 +315,6 @@ export class CupGround extends Stage {
     this.leaving = this.fiving = this.fiveDone = false
     this.flight = null
     this.cupHere = false
-    if (this.lifted >= 0) for (const arm of [this.kaylee.rig.armL, this.kaylee.rig.armR]) arm.rotation.set(0, 0, 0)
     this.lifted = -1
     this.winner = null
     this.lastTouch = this.time
@@ -669,26 +667,10 @@ export class CupGround extends Stage {
     sfx.boing()
   }
 
-  /** The middle between her two hooves (world), into `out`. */
-  private handsAt(out: Vector3) {
-    const rig = this.kaylee.rig
-    rig.root.updateMatrixWorld(true)
-    const a = new Vector3()
-    const b = new Vector3()
-    if (rig.hands) {
-      rig.hands[0].getWorldPosition(a)
-      rig.hands[1].getWorldPosition(b)
-    } else {
-      // (The code-built arms: the hoof is at the end of the capsule, down the arm.)
-      rig.armL.localToWorld(a.set(0, -0.16 * rig.height, 0))
-      rig.armR.localToWorld(b.set(0, -0.16 * rig.height, 0))
-    }
-    return out.copy(a).add(b).multiplyScalar(0.5)
-  }
-
-  /** She takes the Cup and hugs it up in front of her: fireworks, confetti, everyone cheering; then Mom's photo and 🗺️. */
+  /** She takes the Cup (it floats up beside her) and cheers: fireworks, confetti, everyone cheering; then Mom's photo and 🗺️. */
   private lift() {
     this.lifted = 0
+    this.kaylee.showOff('cheer')
     sounds.fanfare()
     this.cheerAll()
     this.confettiBurst(STEP[1].x, 8)
@@ -753,17 +735,8 @@ export class CupGround extends Stage {
     })
     // ---- Kaylee, Mom and Dad ----
     for (const c of [this.kaylee, this.ji, this.nick]) c.update(dt, t)
-    // Holding the Cup: hugged in front of her chest, both hooves on its bowl, bouncing on her toes and lifting it a
-    // little with each bounce (the Cup goes in her hands below; it used to float on her head, 2026-11-13). Her toy's
-    // arms are short (her hooves reach about half her height), so over her head it would hide her face.
-    if (this.lifted >= 0) {
-      const k = easeInOut(Math.min(1, this.lifted / 0.5))
-      const pump = Math.abs(Math.sin(this.lifted * 6)) * 0.25 * k
-      const rig = this.kaylee.rig
-      rig.armL.rotation.set((0.25 - pump) * k, 0, -1.65 * k)
-      rig.armR.rotation.set((0.25 - pump) * k, 0, 1.65 * k)
-      rig.body.position.y += Math.abs(Math.sin(this.lifted * 6)) * 0.03 * k
-    }
+    // Cheering with the Cup floating up beside her (it used to sit on her head, 2026-11-13).
+    if (this.lifted >= 0 && Math.floor((this.lifted + dt) / 1.3) > Math.floor(this.lifted / 1.3)) this.kaylee.showOff('cheer')
     // ---- Her kart: the horn, the gifts ----
     const horn = this.kart.horn
     if (horn) horn.scale.lerp(tmp.set(1, 1, 1), Math.min(1, dt * 8))
@@ -810,13 +783,12 @@ export class CupGround extends Stage {
       }
     } else if (this.cupHere) {
       if (this.lifted >= 0) {
-        // In her hands: the bowl between her hooves, in front of her chest, a little smaller to hold.
+        // Up beside her at head height, bobbing and turning to shine.
         this.lifted += dt
-        const k = easeInOut(Math.min(1, this.lifted / 0.5))
-        const at = this.handsAt(tmp2)
-        this.cup.position.copy(kp).add(CUP_BY).lerp(at.add(CUP_GRIP), k)
-        this.cup.scale.setScalar(CUP_SCALE + (CUP_HELD - CUP_SCALE) * k)
-        this.cup.rotation.set(0, this.kaylee.root.rotation.y, 0)
+        const k = easeInOut(Math.min(1, this.lifted / 0.6))
+        this.cup.position.copy(kp).add(tmp2.lerpVectors(CUP_BY, CUP_SIDE, k))
+        this.cup.position.y += bell(k) * 0.3 + Math.sin(t * 2.4) * 0.06 * k
+        this.cup.rotation.y = Math.sin(t * 1.6) * 0.35
       } else {
         this.cup.position.copy(kp).add(CUP_BY)
         this.cup.position.y += Math.sin(t * 2.4) * 0.06
@@ -949,7 +921,6 @@ export class CupGround extends Stage {
       gifts: this.gifts.map((g) => g.id),
       cupHere: this.cupHere,
       lifted: this.lifted >= 0,
-      held: this.lifted >= 0 ? (() => { const h = this.handsAt(new Vector3()); const k = this.kaylee.position; return { hands: +(h.y - k.y).toFixed(2), handsZ: +(h.z - k.z).toFixed(2), tall: +this.kaylee.rig.height.toFixed(2), cup: +(this.cup.position.y - k.y).toFixed(2) } })() : null,
       scored: this.score.filter((s) => s.lit > 0).length,
       ui: this.ui,
       touches: this.touches,

@@ -1870,7 +1870,7 @@ motion.push(
 
 // The Nan Mountain Cup (greybox 3): the silver podium, where she taps the winner (Grandma Taeng) for a high five and
 // Taeng hops down to tie her ribbon on the pink kart and back up; then the Cup ceremony: the scoreboard lights up race by
-// race, the Cup flies over from its stand, a tap and she hugs it up in her hooves (fireworks, everyone cheering).
+// race, the Cup flies over from its stand, a tap and it floats up beside her as she cheers (fireworks, everyone cheering).
 motion.push(
   {
     name: 'nan-high-five',
