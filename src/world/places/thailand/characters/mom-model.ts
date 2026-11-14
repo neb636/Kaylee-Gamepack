@@ -47,8 +47,8 @@ const EYE_Z = 0.669
 const EYE_FRONT = 0.206
 const EYE_YAW = 0.43
 /** The glasses (model meters): each rim's half-width and half-height around the eye, how far off the face it stands,
- *  and the wire's thickness. */
-const RIM = { rx: 0.058, ry: 0.055, lift: 0.007, wire: 0.0042 }
+ *  and the wire's thickness. Round, like the concept picture. */
+const RIM = { rx: 0.057, ry: 0.057, lift: 0.007, wire: 0.0042 }
 
 let model: GLTF | null = null
 let ready: Promise<GLTF | null> | null = null
@@ -93,12 +93,22 @@ function traceGlasses(face: BufferGeometry): V3[][] {
       const a = (i / 48) * Math.PI * 2
       pts.push(onFace(s * EYE_X + RIM.rx * Math.cos(a), EYE_Z + RIM.ry * Math.sin(a), RIM.lift))
     }
-    // Smooth the depth along the rim (the painted lashes and the sculpt's little bumps kink it), never letting it sink
-    // below where the face put it.
-    for (let pass = 0; pass < 4; pass++) {
-      const z = pts.map((p) => p[2])
-      pts.forEach((p, i) => (p[2] = Math.max(z[i], (z[(i + 47) % 48] + 2 * z[i] + z[(i + 1) % 48]) / 4)))
+    // The depth along the rim, kept to its gentle trend (the first two harmonics round the circle: the face's tilt and
+    // its curve), so the sculpt's lash bumps can't kink the ring; then stood out just far enough that no point sits
+    // nearer the face than half the lift.
+    const z = pts.map((p) => p[2])
+    const smooth = z.map(() => z.reduce((s, v) => s + v, 0) / 48)
+    for (let h = 1; h <= 2; h++) {
+      let c = 0
+      let d = 0
+      z.forEach((v, i) => {
+        c += v * Math.cos((h * i * Math.PI * 2) / 48)
+        d += v * Math.sin((h * i * Math.PI * 2) / 48)
+      })
+      smooth.forEach((_, i) => (smooth[i] += (2 / 48) * (c * Math.cos((h * i * Math.PI * 2) / 48) + d * Math.sin((h * i * Math.PI * 2) / 48))))
     }
+    const out = Math.max(0, ...z.map((v, i) => v - RIM.lift / 2 - smooth[i]))
+    pts.forEach((p, i) => (p[2] = smooth[i] + out))
     return pts
   })
   // The bridge: from one rim's inner edge to the other's, over the top of her nose in a little arch.
