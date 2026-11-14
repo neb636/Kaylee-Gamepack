@@ -120,6 +120,8 @@ export class PlaneRide extends Stage {
   /** Their own little plane over the map below (the view of all of Thailand), and its dotted route. */
   private mini = new Group()
   private balloon: Sprite | null = null
+  /** The lap straps over Mom's and Dad's seats. */
+  private straps = {} as Record<'ji' | 'nick', Group>
   private parts: Record<'belt' | 'buckle' | 'shade' | 'tray' | 'call' | 'light' | 'vent' | 'cone' | 'screen', Object3D>
   private screen: { canvas: HTMLCanvasElement; tex: CanvasTexture; mode: 'map' | 'cartoon'; drawn: number }
   private teddy: Group | null = null
@@ -188,6 +190,8 @@ export class PlaneRide extends Stage {
       this.seats[id].add(this.riders[id].root)
       this.put(this.riders[id], 0, SEAT_Y, 0, 'sit', -90)
     }
+    // A toy with legs of its own (the modelled Mom) sits with them out over the seat: her strap goes over her lap.
+    for (const id of ['ji', 'nick'] as const) if (this.riders[id].rig.legL) this.straps[id].position.y = 0.12
     // Starting from a section link: the plane already where that part begins.
     this.sec = start
     if (start !== 'takeoff') {
@@ -306,12 +310,7 @@ export class PlaneRide extends Stage {
     const belt = strap()
     belt.visible = false
     this.seats.kaylee.add(belt)
-    for (const id of ['ji', 'nick'] as const) {
-      // A toy with legs of its own (the modelled Mom) sits with them out over the seat: the strap goes over her lap.
-      const s = strap()
-      if (this.riders[id].rig.legL) s.position.y = 0.12
-      this.seats[id].add(s)
-    }
+    for (const id of ['ji', 'nick'] as const) this.seats[id].add((this.straps[id] = strap()))
     const buckle = new Group()
     buckle.position.set(-0.16, 0.6, 0)
     buckle.add(solid(merge([P.rbox(0.1, 0.06, 0.12, 0.02, PAL.gold)]), bag, 1.5))

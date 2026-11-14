@@ -153,6 +153,16 @@ pictures move her), the night screen shooting before the fire dancers fade in (`
   - Check: `#/world/thailand/samet-trip/speedboat`
 - [ ] **The films' music.** The island's films have no music cue of their own yet (the rice farm's has one).
 
+## Mom as the vinyl toy (2026-11-14)
+Swapped in everywhere and checked scene by scene with `scripts/qa-mom.mjs` (every section, plus the moments that need
+taps). Small things left:
+- [ ] **Seated, she is shorter than the code-built Mom was** (her legs go forward; the old toy sat on its whole
+  height). Fine on every seat checked; at the Pajero's wheel she sits on a cushion (`DRIVER_CUSHION`). On the Samet
+  speedboat's wide shot, Kaylee's straw hat can hide her face for a moment.
+  - Check: `#/world/thailand/samet-trip/speedboat`
+- [ ] **Her glasses from the side:** the outer rim stands a little past her cheek (the rims are round on a round face).
+- [ ] **Her tail hides while she sits** (it went through seat backs) and her ears hide under the boat's sun hat.
+
 ## Listen on the iPad (automated checks can't hear)
 - [ ] **The mall trip's new voices** (2026-10-21): the transcription check flagged Thai words written back in Thai
   ("Sawasdee ka", "Khob khun ka"), Dad's "Ooh, strong!" heard in Japanese, the coach's
