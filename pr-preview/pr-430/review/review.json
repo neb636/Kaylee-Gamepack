@@ -1,0 +1,16 @@
+{
+  "title": "Floating maps: centered on every screen",
+  "checkIn": "fix",
+  "kaylee": "The Thailand map and the Nan map float whole and centered on the iPad, the iPhone and the Mac, never cut off or pushed to a corner.",
+  "questions": [],
+  "links": [
+    {
+      "label": "The Thailand map",
+      "hash": "#/world/thailand/hub/map"
+    },
+    {
+      "label": "The Nan map",
+      "hash": "#/world/thailand/nan-trip/map"
+    }
+  ]
+}
