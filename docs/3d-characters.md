@@ -182,6 +182,20 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   and their arms poked out of her cheeks (the user: "the glasses look bad"). Now each rim and the bridge are traced on
   the face mesh (rays cast at it, each point pushed 7 mm out along the face's normal, the depth smoothed along the rim)
   and drawn as one thin tube with a fine ink line. No arms: they'd only show as dashes on the cheek.
+- **Slimmed in Blender (2026-11-14):** she looked chubbier in 3D than in the concept picture. Without regenerating,
+  `rig-2`'s dress is 12% narrower and 16% shallower (4% more off the front) at the belly and hips, fading to none by
+  the shoulders (z 0.36 → 0.49), the fold under the bust smoothed; each leg 12% narrower around its own center; the arm
+  pivots 5 mm in and the tail root 15 mm forward to stay attached. Texture, UVs and the whole head are unchanged (the
+  export was checked piece by piece against the old GLB). The unslimmed file is `mom-rig-before-slim.blend`.
+- **Arms that lift cleanly:** Tripo left each arm an open tube at the shoulder, flush on the body, with the pivot on
+  its lower edge, so a raised arm (wave, cheer, heart, silly) swung the hole off the body and showed black inside.
+  Each hole is now closed with a rounded skin-coloured plug reaching 4.6 cm into the shoulder, and the pivot is the
+  hole's middle (±0.150, −0.035, 0.479), so the arm turns in place under the sleeve. Check a modelled character's
+  pieces for open ends (`is_boundary` edges after welding) before it waves.
+- **Round glasses:** the rims are circles (r 0.057), and their depth keeps only its gentle trend round the circle (the
+  first two harmonics), stood out just enough to clear the face, so the sculpted lashes no longer kink a rim.
+- **Her ink is finer than Kaylee's:** the lab's Outline slider at 0.35 instead of 0.75 (`inkPieces`' `px`), so
+  0.84 px before TUNE, and the glasses' and lids' ink shrink with it.
 - Lab only: `#/world/characters/mom-model?lineup=ji,mom-model`. Next: make her the game's Mom (`Member` for `ji`,
   loaded before the scenes like Kaylee) and fit what the trips hang on her (Dad's reverted PR #291 lists them).
 

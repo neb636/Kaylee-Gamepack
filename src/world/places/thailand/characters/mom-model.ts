@@ -1,5 +1,6 @@
 // Mom as a modelled vinyl toy (docs/3d-characters.md), like Kaylee (model.ts): a Tripo3D mesh of a cream unicorn with
-// a brown bun and a pink dress (Tripo's generation 2, the user's pick), split in Blender into the code-built rig's
+// a brown bun and a pink dress (Tripo's generation 2, the user's pick; slimmed in Blender at
+// the belly, hips and legs, she looked chubbier than the concept picture), split in Blender into the code-built rig's
 // pivots (body, head at the neck, eyes, arms at the shoulders, legs at the hips, tail). For now she is in the
 // character lab only (`mom-model`); the code-built Mom is still the game's.
 //
@@ -19,6 +20,11 @@ import url from './models/mom.glb?url'
 export const MOM_SIZE = 1.55
 /** How far each arm's swing plane turns forward (model.ts swingForward): her hair is about as wide as her reach. */
 const ARM_TILT = 2.0
+/** Her ink widths before TUNE.outline: the user's pick in the lab, the Outline slider at 0.35 instead of 0.75, so her
+ *  line is under half of Kaylee's (1.8 px) and the glasses' and lids' ink shrink with it. */
+const INK = 0.35 / 0.75
+const BODY_INK = 1.8 * INK
+const FACE_INK = 1.2 * INK
 
 const SMILE = '#5A2A2A'
 const MOUTH = '#7A2745'
@@ -41,8 +47,8 @@ const EYE_Z = 0.669
 const EYE_FRONT = 0.206
 const EYE_YAW = 0.43
 /** The glasses (model meters): each rim's half-width and half-height around the eye, how far off the face it stands,
- *  and the wire's thickness. */
-const RIM = { rx: 0.058, ry: 0.055, lift: 0.007, wire: 0.0042 }
+ *  and the wire's thickness. Round, like the concept picture. */
+const RIM = { rx: 0.057, ry: 0.057, lift: 0.007, wire: 0.0042 }
 
 let model: GLTF | null = null
 let ready: Promise<GLTF | null> | null = null
@@ -87,12 +93,22 @@ function traceGlasses(face: BufferGeometry): V3[][] {
       const a = (i / 48) * Math.PI * 2
       pts.push(onFace(s * EYE_X + RIM.rx * Math.cos(a), EYE_Z + RIM.ry * Math.sin(a), RIM.lift))
     }
-    // Smooth the depth along the rim (the painted lashes and the sculpt's little bumps kink it), never letting it sink
-    // below where the face put it.
-    for (let pass = 0; pass < 4; pass++) {
-      const z = pts.map((p) => p[2])
-      pts.forEach((p, i) => (p[2] = Math.max(z[i], (z[(i + 47) % 48] + 2 * z[i] + z[(i + 1) % 48]) / 4)))
+    // The depth along the rim, kept to its gentle trend (the first two harmonics round the circle: the face's tilt and
+    // its curve), so the sculpt's lash bumps can't kink the ring; then stood out just far enough that no point sits
+    // nearer the face than half the lift.
+    const z = pts.map((p) => p[2])
+    const smooth = z.map(() => z.reduce((s, v) => s + v, 0) / 48)
+    for (let h = 1; h <= 2; h++) {
+      let c = 0
+      let d = 0
+      z.forEach((v, i) => {
+        c += v * Math.cos((h * i * Math.PI * 2) / 48)
+        d += v * Math.sin((h * i * Math.PI * 2) / 48)
+      })
+      smooth.forEach((_, i) => (smooth[i] += (2 / 48) * (c * Math.cos((h * i * Math.PI * 2) / 48) + d * Math.sin((h * i * Math.PI * 2) / 48))))
     }
+    const out = Math.max(0, ...z.map((v, i) => v - RIM.lift / 2 - smooth[i]))
+    pts.forEach((p, i) => (p[2] = smooth[i] + out))
     return pts
   })
   // The bridge: from one rim's inner edge to the other's, over the top of her nose in a little arch.
@@ -129,7 +145,7 @@ export function buildMomRig(gltf: GLTF, bag: Bag): Rig {
     }
   })
   // Tripo made her head, arms, legs and tail separate pieces: nothing was cut, so no caps to keep the ink off.
-  inkPieces(meshes, null)
+  inkPieces(meshes, null, BODY_INK)
 
   const [body, head, eyes, armL, armR, tail, legL, legR] = ['body', 'head', 'eyes', 'armL', 'armR', 'tail', 'legL', 'legR'].map(node)
   for (const [arm, s] of [[armL, -1], [armR, 1]] as const) swingForward(arm, s, ARM_TILT)
@@ -174,7 +190,7 @@ export function buildMomRig(gltf: GLTF, bag: Bag): Rig {
     turn.rotation.y = s * EYE_YAW
     const lid = new Group()
     lid.position.y = 0.052
-    lid.add(solid(P.sphere(0.064, LID, { at: [0, -0.052, -0.016], scale: [1, 0.92, 0.35] }), bag, 1.2))
+    lid.add(solid(P.sphere(0.064, LID, { at: [0, -0.052, -0.016], scale: [1, 0.92, 0.35] }), bag, FACE_INK))
     lid.scale.y = 0.001
     lid.visible = false
     turn.add(lid)
@@ -188,7 +204,7 @@ export function buildMomRig(gltf: GLTF, bag: Bag): Rig {
     const curve = new CatmullRomCurve3(pts.map((p) => new Vector3(...p)), closed)
     return bake(new TubeGeometry(curve, closed ? 72 : 16, RIM.wire, 6, closed), FRAME)
   })
-  face.add(solid(merge(wires), bag, 1.2))
+  face.add(solid(merge(wires), bag, FACE_INK))
 
   return {
     root,
