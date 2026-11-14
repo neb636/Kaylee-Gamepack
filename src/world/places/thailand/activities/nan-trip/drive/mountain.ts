@@ -14,7 +14,7 @@
 // it nods like mad and squeaks). The wipers swish by themselves in the rain; tap them and they go faster.
 //
 // Every drive rolls its weather (rain, sun or cloud; a link can say which) and who's on the road (roads.ts rollDrive).
-// The mountains' look: soft grey-lavender skies and low cloud on the hills when it's grey, a wet road that shines with
+// The mountains' look: soft grey-lavender skies and low cloud on the hills when it's grey, a darker wet road with
 // puddles that splash when it rains, sunshine when it's sunny. On the way: oncoming songthaews, scooters and tuk-tuks
 // that pull over and toot a tune if she drifts onto their side (Mom: "Keep left!"); chickens that flap off the road;
 // on the sky road, round mirrors on the blind bends (one flashes when a car is coming round, and it beeps hello), a
@@ -393,7 +393,7 @@ export class NanDrive implements World3D {
       }
       if (low.length) scene.add((this.lowCloud = buildPuffs(low, 8, r.look.seed + 2, bag)))
     }
-    // Rain: the road shines, with puddles.
+    // Rain: the road goes darker, with puddles.
     if (this.weather === 'rain') {
       // (Wet all the way along, past the ends too; the puddles she can splash in are the ones on her part of it.)
       const wet = buildWet(this.world.drawn, r.look.seed, bag)
