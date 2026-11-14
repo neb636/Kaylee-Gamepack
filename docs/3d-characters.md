@@ -166,21 +166,24 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
 - **Try it:** the lab entry `kaylee` (`#/world/characters/kaylee?lineup=kaylee,kaylee-code`) shows her next to the
   code-built Kaylee (`kaylee-code`, kept to compare).
 
-## Mom (2026-11-14: two models in the lab, to pick one)
+## Mom (2026-11-14: in the lab, picked from Tripo's four)
 
 - **Make the concept picture without a mouth and without glasses.** A talking character's mouth is drawn in code, and
   thin wire glasses come out of Tripo blobby. Step one is the look with glasses and a smile, step two is "the same
   picture with no glasses and no mouth", and that second picture goes to Tripo. Nothing to paint out afterwards.
-- `characters/mom-model.ts` builds `mom-2` and `mom-4` (Tripo's generations 2 and 4; files and `mom-rig.blend` in the
-  planning repo's `models/mom/`). Tripo made the arms, legs, ears, brows and tail separate pieces already; mom-4's head
-  and body were one piece (cut level at the neck, y 0.54, the body's neck extruded 4 cm up into the head so a nod
-  shows skin) and its legs one piece (split at x 0, inside the skirt).
-- Like Dad's earlier try, only the meshes scale (1.55 m); pivots stay in meters. The code draws her smile (ink beads
-  on the muzzle), the open mouth `FaceLife` grows with her voice, cream lids for the blink (a flatter cap over mom-2's
-  painted eyes, a deeper one over mom-4's domes) and the glasses (a ring per eye turned with the face, a bridge, arms
-  into the hair). `Member` takes the rig as its 5th argument and seats any rig with legs on its hips.
-- Lab only: `#/world/characters/mom-4?lineup=ji,mom-2,mom-4`. Next, once one is picked: make it the game's Mom
-  (`Member` for `ji`, loaded before the scenes like Kaylee), fit what the trips hang on her, and drop the other GLB.
+- The user picked Tripo's generation 2 (`characters/models/mom.glb`; `mom-rig.blend` and the other generations are in
+  the planning repo's `models/mom/`). Tripo made the head, arms, legs, ears, brows and tail separate pieces, so nothing
+  was cut: only pivots were added.
+- `characters/mom-model.ts`: like Dad's earlier try, only the meshes scale (1.55 m); pivots stay in meters. The code
+  draws her smile (ink beads on the muzzle), the open mouth `FaceLife` grows with her voice, and cream lids for the
+  blink (a flat cap over each painted eye). `Member` takes the rig as its 5th argument and seats any rig with legs on its
+  hips.
+- **Glasses go on the face, not in front of it.** Flat torus rings in front of a round face floated off it from the side
+  and their arms poked out of her cheeks (the user: "the glasses look bad"). Now each rim and the bridge are traced on
+  the face mesh (rays cast at it, each point pushed 7 mm out along the face's normal, the depth smoothed along the rim)
+  and drawn as one thin tube with a fine ink line. No arms: they'd only show as dashes on the cheek.
+- Lab only: `#/world/characters/mom-model?lineup=ji,mom-model`. Next: make her the game's Mom (`Member` for `ji`,
+  loaded before the scenes like Kaylee) and fit what the trips hang on her (Dad's reverted PR #291 lists them).
 
 ## Open questions
 

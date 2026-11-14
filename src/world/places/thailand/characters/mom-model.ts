@@ -1,22 +1,19 @@
 // Mom as a modelled vinyl toy (docs/3d-characters.md), like Kaylee (model.ts): a Tripo3D mesh of a cream unicorn with
-// a brown bun and a pink dress, split in Blender into the code-built rig's pivots (body, head at the neck, eyes, arms at
-// the shoulders, legs at the hips, tail). Two of Tripo's four meshes are in the lab side by side (`mom-2`, `mom-4`) so
-// the user can pick one; the code-built Mom stays the game's until then.
+// a brown bun and a pink dress (Tripo's generation 2, the user's pick), split in Blender into the code-built rig's
+// pivots (body, head at the neck, eyes, arms at the shoulders, legs at the hips, tail). For now she is in the
+// character lab only (`mom-model`); the code-built Mom is still the game's.
 //
 // The concept picture went to Tripo with no mouth and no glasses: both are drawn here instead. The smile is a row of
-// ink beads on her muzzle and the open mouth grows with her voice (FaceLife), and the round glasses sit in front of her
-// painted eyes (thin wire rings from a picture come out of Tripo blobby). She blinks with cream lids over the eyes, like
-// Kaylee's.
-import { Group, Mesh, type Object3D } from 'three'
+// ink beads on her muzzle and the open mouth grows with her voice (FaceLife). The glasses are traced on her face: each
+// rim and the bridge follow the face's own surface a few millimetres off it (rays cast at the face mesh), so they sit
+// on her from every side instead of floating as flat rings. She blinks with cream lids over her painted eyes.
+import { CatmullRomCurve3, Group, Mesh, Raycaster, TubeGeometry, Vector3, type BufferGeometry, type Object3D } from 'three'
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import type { Bag } from '../../../engine3d/dispose'
-import { blobShadow, merge, P, solid, solidMix, type V3 } from '../../../engine3d/geo'
+import { bake, blobShadow, merge, P, solid, solidMix, type V3 } from '../../../engine3d/geo'
 import type { Rig } from '../../../engine3d/characters/animal'
 import { inkPieces, swingForward } from './model'
-import url2 from './models/mom-2.glb?url'
-import url4 from './models/mom-4.glb?url'
-
-export type MomModel = 'mom-2' | 'mom-4'
+import url from './models/mom.glb?url'
 
 /** How tall she stands (meters; the model is 1 m, like LOOKS.ji). */
 export const MOM_SIZE = 1.55
@@ -31,62 +28,95 @@ const FRAME = '#8B3A2A'
 /** Her face's cream (the lids that close over her painted eyes). */
 const LID = '#FACCA2'
 
-/** What was measured on each mesh in Blender (model meters, Blender axes: z up, the face toward -y). */
-interface Fit {
-  /** The head pivot's depth (Blender y; it sits at z 0.54, the neck). */
-  neckY: number
-  /** The front of her muzzle at the mouth (Blender -y at x 0) and how fast it curves back across (per x²). */
-  muzzle: number
-  curve: number
-  /** Eye centers (x, z) and how far forward the eye's surface is (Blender -y). */
-  eyeX: number
-  eyeZ: number
-  eyeFront: number
-  /** How far the face turns away at the eyes (radians): the lids and lenses turn with it. */
-  eyeYaw: number
-  /** Eye domes sculpted over the painted eye (mom-4) or painted flat on the face (mom-2). */
-  domes: boolean
-}
-const FITS: Record<MomModel, Fit> = {
-  'mom-2': { neckY: -0.0416, muzzle: 0.2267, curve: 2.5, eyeX: 0.077, eyeZ: 0.669, eyeFront: 0.206, eyeYaw: 0.43, domes: false },
-  'mom-4': { neckY: -0.0742, muzzle: 0.21, curve: 3.0, eyeX: 0.0768, eyeZ: 0.669, eyeFront: 0.195, eyeYaw: 0.25, domes: true },
-}
+// Measured on the model in Blender (model meters, Blender axes: z up, the face toward -y).
+/** The head pivot: at the neck (z 0.54), this deep. */
 const NECK_Z = 0.54
-const URLS: Record<MomModel, string> = { 'mom-2': url2, 'mom-4': url4 }
+const NECK_Y = -0.0416
+/** The front of her muzzle at the mouth (Blender -y at x 0), and how fast it curves back across (per x²). */
+const MUZZLE = 0.2267
+const CURVE = 2.5
+/** Her painted eyes: centers (x, z), how far forward the face is there, and how far it turns away (radians). */
+const EYE_X = 0.077
+const EYE_Z = 0.669
+const EYE_FRONT = 0.206
+const EYE_YAW = 0.43
+/** The glasses (model meters): each rim's half-width and half-height around the eye, how far off the face it stands,
+ *  and the wire's thickness. */
+const RIM = { rx: 0.058, ry: 0.055, lift: 0.007, wire: 0.0042 }
 
-const models = new Map<MomModel, GLTF>()
-const loading = new Map<MomModel, Promise<GLTF | null>>()
+let model: GLTF | null = null
+let ready: Promise<GLTF | null> | null = null
 
 /** The loaded model, or null while it's on its way (or if it couldn't load). */
-export const momModel = (id: MomModel) => models.get(id) ?? null
+export const momModel = () => model
 
-/** Resolves once it's loaded, or with null if it couldn't be (never rejects: the code-built Mom stands in). */
-export function momReady(id: MomModel): Promise<GLTF | null> {
-  let p = loading.get(id)
-  if (!p) {
-    p = new GLTFLoader()
-      .loadAsync(URLS[id])
-      .then((g) => (models.set(id, g), g))
-      .catch((e) => {
-        console.warn(`${id}.glb could not be loaded, using the code-built Mom.`, e)
-        return null
-      })
-    loading.set(id, p)
-  }
-  return p
+/** Resolves once she's loaded, or with null if she couldn't be (never rejects: the code-built Mom stands in). */
+export function momReady(): Promise<GLTF | null> {
+  ready ??= new GLTFLoader()
+    .loadAsync(url)
+    .then((g) => (model = g))
+    .catch((e) => {
+      console.warn('mom.glb could not be loaded, using the code-built Mom.', e)
+      return null
+    })
+  return ready
 }
 
-/** A rig like buildAnimal's, from one of her models.
+/** A point of the model (three.js axes: x, y up, z forward) in the head pivot's space. */
+const toHead = (p: Vector3): V3 => [p.x, p.y - NECK_Z, p.z + NECK_Y]
+
+// The glasses' wire, traced once per face mesh (clones share its geometry) and kept for the session.
+const traced = new WeakMap<BufferGeometry, V3[][]>()
+/** The glasses as head-local polylines (two closed rims, then the bridge), each point on her face pushed `lift` out
+ *  along the face's normal there. */
+function traceGlasses(face: BufferGeometry): V3[][] {
+  let lines = traced.get(face)
+  if (lines) return lines
+  const probe = new Mesh(face)
+  const ray = new Raycaster()
+  const down = new Vector3(0, 0, -1)
+  const onFace = (x: number, y: number, lift: number): V3 => {
+    ray.set(new Vector3(x, y, 1), down)
+    const hit = ray.intersectObject(probe, false)[0]
+    if (!hit?.face) return toHead(new Vector3(x, y, EYE_FRONT + lift))
+    return toHead(hit.point.clone().addScaledVector(hit.face.normal, lift))
+  }
+  const rims = ([-1, 1] as const).map((s) => {
+    const pts: V3[] = []
+    for (let i = 0; i < 48; i++) {
+      const a = (i / 48) * Math.PI * 2
+      pts.push(onFace(s * EYE_X + RIM.rx * Math.cos(a), EYE_Z + RIM.ry * Math.sin(a), RIM.lift))
+    }
+    // Smooth the depth along the rim (the painted lashes and the sculpt's little bumps kink it), never letting it sink
+    // below where the face put it.
+    for (let pass = 0; pass < 4; pass++) {
+      const z = pts.map((p) => p[2])
+      pts.forEach((p, i) => (p[2] = Math.max(z[i], (z[(i + 47) % 48] + 2 * z[i] + z[(i + 1) % 48]) / 4)))
+    }
+    return pts
+  })
+  // The bridge: from one rim's inner edge to the other's, over the top of her nose in a little arch.
+  const inner = EYE_X - RIM.rx
+  const bridge: V3[] = []
+  for (let i = 0; i <= 12; i++) {
+    const t = i / 12
+    bridge.push(onFace(-inner + 2 * inner * t, EYE_Z + 0.004 + 0.008 * Math.sin(Math.PI * t), RIM.lift + 0.002))
+  }
+  lines = [...rims, bridge]
+  traced.set(face, lines)
+  return lines
+}
+
+/** A rig like buildAnimal's, from her model.
  *
  *  Like the code-built rig, every pivot sits where it is at full size and only the meshes are scaled up, so head-local,
  *  body-local and leg-local positions are in meters. */
-export function buildMomRig(id: MomModel, gltf: GLTF, bag: Bag): Rig {
+export function buildMomRig(gltf: GLTF, bag: Bag): Rig {
   const S = MOM_SIZE
-  const fit = FITS[id]
   const scene = gltf.scene.clone(true)
   const node = (name: string): Group => {
     const n = scene.getObjectByName(name)
-    if (!n) throw new Error(`${id}.glb has no ${name}`)
+    if (!n) throw new Error(`mom.glb has no ${name}`)
     return n as Group
   }
   const meshes: Mesh[] = []
@@ -98,8 +128,8 @@ export function buildMomRig(id: MomModel, gltf: GLTF, bag: Bag): Rig {
       meshes.push(o)
     }
   })
-  // Her arms and legs were their own pieces already; mom-4's head was cut off at the neck, inside her chin (y 0.54).
-  inkPieces(meshes, (_x, y) => Math.abs(y - NECK_Z) < 0.001)
+  // Tripo made her head, arms, legs and tail separate pieces: nothing was cut, so no caps to keep the ink off.
+  inkPieces(meshes, null)
 
   const [body, head, eyes, armL, armR, tail, legL, legR] = ['body', 'head', 'eyes', 'armL', 'armR', 'tail', 'legL', 'legR'].map(node)
   for (const [arm, s] of [[armL, -1], [armR, 1]] as const) swingForward(arm, s, ARM_TILT)
@@ -112,9 +142,9 @@ export function buildMomRig(id: MomModel, gltf: GLTF, bag: Bag): Rig {
   face.scale.setScalar(S)
   head.add(face)
   /** A Blender point (x, z up, y toward the back) in the head pivot's space. */
-  const onHead = (x: number, z: number, y: number): V3 => [x, z - NECK_Z, -y + fit.neckY]
+  const onHead = (x: number, z: number, y: number): V3 => [x, z - NECK_Z, -y + NECK_Y]
   /** A point on her muzzle, stood `lift` off it. */
-  const onMuzzle = (x: number, z: number, lift: number): V3 => onHead(x, z, -(fit.muzzle - fit.curve * x * x + lift))
+  const onMuzzle = (x: number, z: number, lift: number): V3 => onHead(x, z, -(MUZZLE - CURVE * x * x + lift))
 
   // The smile: little ink beads along a gentle curve under her nose (a flat torus would float off its ends, where the
   // face curves back).
@@ -135,18 +165,16 @@ export function buildMomRig(id: MomModel, gltf: GLTF, bag: Bag): Rig {
   talk.visible = false
   face.add(mouth, talk)
 
-  // The lids: a cream cap over each eye that grows down from above it as she blinks, turned with her face. Over the
-  // sculpted domes (mom-4) it is a deeper cap; over eyes painted on the face (mom-2) a flatter one, so its edges don't
-  // sink into the face.
+  // The lids: a flat cream cap over each painted eye that grows down from above it as she blinks, turned with her face
+  // (flat, so its edges don't sink into the face).
   const lids: Group[] = []
   for (const s of [-1, 1] as const) {
     const turn = new Group()
-    turn.position.set(...onHead(s * fit.eyeX, fit.eyeZ, -fit.eyeFront))
-    turn.rotation.y = s * fit.eyeYaw
+    turn.position.set(...onHead(s * EYE_X, EYE_Z, -EYE_FRONT))
+    turn.rotation.y = s * EYE_YAW
     const lid = new Group()
     lid.position.y = 0.052
-    const cap = fit.domes ? { r: 0.056, depth: 0.6, back: -0.016 } : { r: 0.064, depth: 0.35, back: -0.016 }
-    lid.add(solid(P.sphere(cap.r, LID, { at: [0, -0.052, cap.back], scale: [1, 0.92, cap.depth] }), bag, 1.2))
+    lid.add(solid(P.sphere(0.064, LID, { at: [0, -0.052, -0.016], scale: [1, 0.92, 0.35] }), bag, 1.2))
     lid.scale.y = 0.001
     lid.visible = false
     turn.add(lid)
@@ -154,23 +182,13 @@ export function buildMomRig(id: MomModel, gltf: GLTF, bag: Bag): Rig {
     lids.push(lid)
   }
 
-  // The glasses: a round frame in front of each eye (turned with the face), a little arched bridge and the arms
-  // tucking back into her hair.
-  const frames = []
-  const RING = 0.06
-  const lens = (s: -1 | 1) => onHead(s * fit.eyeX, fit.eyeZ, -(fit.eyeFront + 0.013))
-  for (const s of [-1, 1] as const) {
-    const at = lens(s)
-    frames.push(P.torus(RING, 0.0055, FRAME, { at, rot: [0, s * fit.eyeYaw, 0] }))
-    // The arm from the frame's outer edge back along the side of her head (it disappears under her hair).
-    const edge: V3 = [at[0] + s * RING * Math.cos(fit.eyeYaw), at[1] + 0.006, at[2] - RING * Math.sin(fit.eyeYaw)]
-    frames.push(P.cyl(0.0045, 0.0045, 0.12, FRAME, { at: [edge[0] + s * 0.012, edge[1], edge[2] - 0.06], rot: [Math.PI / 2, 0, -s * 0.2] }, 8))
-  }
-  const inner = fit.eyeX - RING * Math.cos(fit.eyeYaw)
-  const bridgeAt = lens(1)
-  frames.push(P.torus(inner + 0.002, 0.005, FRAME, { at: [0, bridgeAt[1] + 0.004, bridgeAt[2] + RING * Math.sin(fit.eyeYaw) + 0.004] }, Math.PI))
-  const glasses = solid(merge(frames), bag, 1.2)
-  face.add(glasses)
+  // The glasses: the traced rims and bridge as one thin wire with a fine ink line.
+  const wires = traceGlasses((head.getObjectByName('face_mesh') as Mesh).geometry).map((pts, i) => {
+    const closed = i < 2
+    const curve = new CatmullRomCurve3(pts.map((p) => new Vector3(...p)), closed)
+    return bake(new TubeGeometry(curve, closed ? 72 : 16, RIM.wire, 6, closed), FRAME)
+  })
+  face.add(solid(merge(wires), bag, 1.2))
 
   return {
     root,

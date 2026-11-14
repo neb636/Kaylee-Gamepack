@@ -164,7 +164,7 @@ export class Studio implements World3D {
     // Who's on stage: build the new ones, drop the ones that left, keep the rest as they are.
     const keyOf = (id: string) => {
       const e = castById(id)
-      const modelled = (e?.model && kayleeModel()) || (e?.momModel && momModel(e.momModel))
+      const modelled = (e?.model && kayleeModel()) || (e?.momModel && momModel())
       return `${id}|${v.phone ? 'phone' : ''}|${modelled ? 'model' : ''}`
     }
     const keep = new Map(this.actors.map((a) => [a.key, a]))
@@ -199,10 +199,10 @@ export class Studio implements World3D {
       k.place(0, 0, 0, 0)
       char = k
     } else if (entry.kind === 'member' && entry.look) {
-      // Mom's vinyl toys the same way: the code-built Mom until the model has loaded.
-      const mom = entry.momModel ? momModel(entry.momModel) : null
-      if (entry.momModel && !mom) void momReady(entry.momModel).then(() => !this.disposed && this.view && this.apply(this.view))
-      const rig = entry.momModel && mom ? buildMomRig(entry.momModel, mom, bag) : undefined
+      // Mom's vinyl toy the same way: the code-built Mom until the model has loaded.
+      const mom = entry.momModel ? momModel() : null
+      if (entry.momModel && !mom) void momReady().then(() => !this.disposed && this.view && this.apply(this.view))
+      const rig = mom ? buildMomRig(mom, bag) : undefined
       char = new Member({ id: entry.id, name: entry.name, who: entry.who, height: entry.look.height, spot: null, pitch: 300 }, bag, entry.look, entry.voice, rig)
       char.place(0, 0, 0, 0)
     } else if (entry.critter) critter = buildCritter(entry.critter, bag)

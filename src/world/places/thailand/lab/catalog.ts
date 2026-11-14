@@ -12,7 +12,6 @@ import { RIVAL_LOOKS } from '../activities/nan-trip/cup/rivals'
 import { LUNG } from '../activities/nan-trip/rice/farm'
 import { CAPTAIN, FIRE_DANCERS, JETSKI_MAN, PUPPY, TAXI_DRIVER } from '../activities/samet-trip/cast'
 import { FAMILY } from '../characters/family'
-import type { MomModel } from '../characters/mom-model'
 import { POLES_LOOKS } from '../../poles/characters/looks'
 import { CANADA_LOOKS } from '../../canada/characters/looks'
 import { COACH_LOOK, LOOKS, PATIENT_LOOKS, type Look, type Wearable } from '../characters/looks'
@@ -61,16 +60,16 @@ export interface CastEntry {
   set?: string
   /** Kaylee as the modelled vinyl toy (characters/model.ts, the game's Kaylee) instead of the code-built one. */
   model?: boolean
-  /** One of Mom's modelled vinyl toys to try (characters/mom-model.ts) instead of her code-built one. */
-  momModel?: MomModel
+  /** Mom as the modelled vinyl toy (characters/mom-model.ts) instead of her code-built one. */
+  momModel?: boolean
 }
 
 const family: CastEntry[] = [
   { id: 'kaylee', name: 'Your unicorn', who: 'Her, a lilac unicorn (the vinyl toy, modelled in Tripo3D)', group: 'family', kind: 'kaylee', look: LOOKS.kaylee, src: 'characters/model.ts', color: '#C9B6F0', model: true },
   { id: 'kaylee-code', name: 'Your unicorn (code-built)', who: 'The code-built unicorn she used to be (kept to compare)', group: 'family', kind: 'kaylee', look: LOOKS.kaylee, src: 'characters/looks.ts', color: LOOKS.kaylee.fur },
   ...FAMILY.map((m): CastEntry => ({ id: m.id, name: m.name, who: m.who, group: 'family', kind: 'member', look: LOOKS[m.id], voice: m.id, src: 'characters/looks.ts', color: LOOKS[m.id].fur, set: m.id === 'ji' ? 'mom' : undefined })),
-  // Mom's two vinyl toys from Tripo3D, to pick one (the code-built Mom above stays the game's until then).
-  ...(['mom-2', 'mom-4'] as const).map((id): CastEntry => ({ id, name: `Mom (model ${id.slice(-1)})`, who: 'Your mom, a cream unicorn (a vinyl toy modelled in Tripo3D, to try)', group: 'family', kind: 'member', look: LOOKS.ji, voice: 'ji', src: 'characters/mom-model.ts', color: '#FACCA2', set: 'mom', momModel: id })),
+  // Mom as a vinyl toy from Tripo3D (the code-built Mom above stays the game's until she's in).
+  { id: 'mom-model', name: 'Mom (vinyl toy)', who: 'Your mom, a cream unicorn (a vinyl toy modelled in Tripo3D)', group: 'family', kind: 'member', look: LOOKS.ji, voice: 'ji', src: 'characters/mom-model.ts', color: '#FACCA2', set: 'mom', momModel: true },
 ]
 
 const person = (id: string, name: string, who: string, group: CastGroup, look: Look, src: string, voice?: string, set?: string): CastEntry => ({ id, name, who, group, kind: 'member', look, voice, src, color: look.fur, set })
