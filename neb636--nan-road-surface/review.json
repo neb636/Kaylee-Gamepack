@@ -1,0 +1,11 @@
+{
+  "title": "Nan's roads: no phantom lanes, a real road surface",
+  "checkIn": "fix",
+  "kaylee": "In the rain the Nan roads no longer grow white lane dashes, and every road now looks like a real mountain road: worn, mended tarmac, a dusty earth edge, cat's-eye studs and a double yellow line on the mountain roads.",
+  "questions": [],
+  "reels": [{ "name": "nan-roads", "moments": [] }],
+  "links": [
+    { "label": "Valley road in rain", "hash": "#/world/thailand/nan-trip/drive?road=valley&weather=rain" },
+    { "label": "Sky road in sun", "hash": "#/world/thailand/nan-trip/drive?road=sky&weather=sun" }
+  ]
+}
