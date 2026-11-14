@@ -2085,7 +2085,7 @@ motion.push(
 // glug), lifts it full (it swings on its rope), carries it over the pan and lowers it so it tips and pours; then in
 // round 3 the finger drags the paddle's blade through the salt toward her and lets go over the basket.
 // Pa Kluea's story (salt/story.ts): the way in plays to the end, a skip in the memory leaves the hut ready to dip, and at
-// the dinner a held finger drags across each food's spots (the soup, the egg jar, the three fish) until every lantern
+// the dinner a held finger holds the salt shaker over each food (the soup, the egg jar, the three fish) until every lantern
 // is lit and the party film has played.
 const saltStoryReady = async (page, base, round) => {
   await page.goto(`${base}#/world/thailand/nan-trip/salt?round=${round}`)
@@ -2123,10 +2123,11 @@ motion.push(
         const spots = (await page.evaluate(() => window.__thaiNanQA())).points.food[i].filter(Boolean)
         await page.mouse.move(...spots[0])
         await page.mouse.down()
-        for (let pass = 0; pass < (spots.length > 1 ? 9 : 4); pass++)
+        // The shaker hangs over her finger and shakes: hold it over the food, wiggling a little, until it's salted.
+        for (let pass = 0; pass < 24 && !(await page.evaluate((k) => window.__thaiNanQA().story.done[k], i)); pass++)
           for (const p of pass % 2 ? [...spots].reverse() : spots) {
-            await page.mouse.move(p[0], p[1], { steps: 6 })
-            await page.waitForTimeout(spots.length > 1 ? 160 : 420)
+            await page.mouse.move(p[0] + (pass % 2 ? 6 : -6), p[1], { steps: 6 })
+            await page.waitForTimeout(spots.length > 1 ? 260 : 300)
           }
         await page.mouse.up()
         await page.waitForFunction((k) => window.__thaiNanQA().story.done[k], i, { timeout: 8000 })
