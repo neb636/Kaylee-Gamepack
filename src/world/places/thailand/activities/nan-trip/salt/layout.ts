@@ -5,10 +5,10 @@
 // The open-sided salt hut, seen from the front (the camera looks toward -z, a little from above, straight on):
 //
 //   across the road:          the wooden house with the Tai Lue couple painted on it
-//   the hut's back:   (the rooster) Mom    [the shelf for the salt bags]  Dad               the salt aunty
+//   the hut's back:   (the rooster) Mom    [the shelf for the salt bags]  Dad                  (the empty salt jar)
 //   the beam:       ===========================================================  (the bucket's rope slides along it)
 //   the plane z=0:      ( the well )        the bucket           [ the big pan on its mud stove ]   the woodpile
-//   the front:     baskets      Kaylee walks along under the bucket    her salt basket   (the fire's mouth)   cat
+//   the front:     baskets      Kaylee walks along under the bucket    her salt basket   (the fire's mouth)   cat   the salt aunty
 
 export type V3 = [number, number, number]
 
@@ -102,7 +102,9 @@ export const KAYLEE_FIRE: V3 = [PAN.x0 - 0.58, 0, 0.82]
 export const KAYLEE_SCRAPE: V3 = [PAN.x0 - 0.52, 0, 0.12]
 export const NICK_AT: V3 = [0.08, 0, -0.68]
 export const JI_AT: V3 = [-2.2, 0, -0.55]
-export const AUNTY_AT: V3 = [2.3, 0, -0.3]
+/** Pa Kluea stands right of her pan, in front of the beam's right post and behind her woodpile (she stood behind the
+ *  post once and it ran right through her, 2026-11-14). */
+export const AUNTY_AT: V3 = [2.25, 0, 0.25]
 export const CAT: V3 = [1.68, 0, 0.92]
 export const BASKETS: V3 = [-2.25, 0, 0.55]
 export const ROOSTER: V3 = [-2.45, 0, -1.65]
@@ -110,7 +112,7 @@ export const ROOSTER: V3 = [-2.45, 0, -1.65]
 export const ROAD_Z = -2.6
 export const MURAL = { x: 0.7, y: 1.12, z: -4.15, w: 2.6, h: 1.55 }
 /** On a tall screen the edges come in a little, so everyone fits. */
-export const TALL = { ji: [-1.55, 0, -0.85] as V3, aunty: [1.7, 0, -0.75] as V3, wood: [1.95, 0, 0.75] as V3, baskets: [-1.95, 0, 0.62] as V3 }
+export const TALL = { ji: [-1.55, 0, -0.85] as V3, aunty: [2.05, 0, 0.25] as V3, wood: [1.95, 0, 0.75] as V3, baskets: [-1.95, 0, 0.62] as V3 }
 
 // ---------------------------------------------------------------- Pa Kluea's story (story.ts, dinner.ts)
 
@@ -127,8 +129,8 @@ export const COOKS_IN: V3[] = [
   [0.5, 0, 1.15],
   [1.25, 0, 1.0],
 ]
-/** Pa Kluea's big salt jar (empty: the trouble), on the floor right of the pan. */
-export const SALT_JAR: V3 = [2.65, 0, 0.2]
+/** Pa Kluea's big salt jar (empty: the trouble), on the floor behind her, right of the beam's post. */
+export const SALT_JAR: V3 = [2.7, 0, -0.45]
 /** Where Pa Kluea stands to talk in the films (by her pan, toward the front). */
 export const AUNTY_TALK: V3 = [1.95, 0, 0.5]
 

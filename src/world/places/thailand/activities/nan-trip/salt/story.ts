@@ -32,7 +32,6 @@ import type { Floaters } from '../mushrooms/fx'
 import { buildDinner, lightLantern, type Dinner } from './dinner'
 import { SALT_AUNTY } from './hut'
 import {
-  AUNTY_AT,
   AUNTY_TALK,
   COOKS_IN,
   COOKS_WAIT,
@@ -190,6 +189,8 @@ export interface StoryHost {
   put(c: Rider, x: number, y: number, z: number, pose: Pose3, face?: number): void
   /** Someone says something (in play, not in a film): their bubble and voice. */
   say(l: Line): void
+  /** Where Pa Kluea stands in play (it depends on the screen's shape). */
+  auntyHome(): readonly [number, number, number]
   /** The hop Pa Kluea does (the hut animates her). */
   hopAunty(): void
   /** Later, on the world's clock (it stops when the world does). */
@@ -484,7 +485,7 @@ export class SaltStory {
         this.stopBed = null
         this.memoryOn(false)
         h.memory(false)
-        h.aunty.position.set(...AUNTY_AT)
+        h.aunty.position.set(...h.auntyHome())
         h.aunty.rotation.y = -0.9
         h.put(kaylee, ...KAYLEE_AT, 'stand', 0)
         h.put(h.nick, ...NICK_AT, 'stand', 10)
