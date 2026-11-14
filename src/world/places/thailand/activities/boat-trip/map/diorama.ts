@@ -1,23 +1,21 @@
 // The Krabi map's shapes (layout.ts says where): a toy diorama of Krabi and Phang Nga Bay floating in the sky, in the
-// same toy tray as the Thailand map. What makes it Krabi: an emerald sea full of tall limestone towers (cream rock
-// streaked with rust, jungle spilling over the top, the sea's notch cut round the foot), limestone crags standing up
-// out of the jungle on the land too, coconut palms on every flat and wide pale beaches (ground.ts paints them). No
-// roads, no fields, no pointed mountains: Khao Phanom Bencha and the other hills are round domes of rainforest.
+// same toy tray as the Thailand map. What makes it Krabi: a calm emerald sea with a few groups of limestone towers in
+// it (soft green humps of jungle over cream cliffs, the sea's notch cut round the foot), a few crags standing up out of
+// the jungle on the land, coconut palms along the beaches and wide pale sand (ground.ts paints it). It's kept laid back on purpose (2026-11-14: the first Krabi board was too busy): open water, a few
+// big shapes, a handful of toys. No roads, no fields, no pointed mountains: Khao Phanom Bencha and the other hills are
+// round domes of rainforest.
 //
 // The places stand up like chunky toys (layout.ts PLACES `scale`): the airport (a pink-roofed terminal, its tower and
-// a little runway), Krabi Town (pastel shophouses along the river between its twin rocks, the giant fiddler crab by
-// the water), Baan Chang (a thatched cafe in a bamboo yard, two elephants under the palms) and the pier (a wooden jetty
-// out into the bay, a ticket hut, the family's longtail with its ribbons at the end).
+// a little runway), Krabi Town (a row of pastel shophouses by the river between its twin rocks, the Thai flag), Baan
+// Chang (a thatched cafe in a bamboo yard, two elephants) and the pier (a wooden jetty out into the bay, a ticket hut,
+// the family's longtail with its ribbons at the end).
 //
 // The pins (layout.ts PINS): over each place she can go to floats a pink pin, a toy of the place on its head (a baby
-// elephant with bananas, a longtail under a rock tower, the plane home on a cloud). The places still to come wear a
-// lavender one: Ao Nang's beach front (a beach umbrella, a ball and a sandcastle) and Koh Lanta (its lighthouse).
+// elephant with bananas, a longtail under a rock tower, the plane home on a cloud).
 //
-// To poke: Ao Nang's beach (umbrellas, longtails pulled up, the sailfish statue), Railay's cliffs with a monkey on
-// top, Chicken Island (a rock with a chicken's head) and its sandbar, Koh Phi Phi, Koh Lanta's huts and lighthouse, the
-// Emerald Pool in the jungle, Ko Tapu (the Nail Island) and Ko Panyee's stilt village with its floating football
-// pitch. And what moves: a tiny plane, two longtails buzzing round, the big ferry to Phi Phi and Lanta, dolphins, a
-// whale shark, a sea turtle, a yacht, a sea eagle, clouds.
+// To poke: Ao Nang's beach (two umbrellas and the sailfish statue), Railay's cliffs with a monkey on top, Chicken
+// Island (a rock with a chicken's head) and its sandbar, Koh Phi Phi, Koh Lanta's lighthouse and Ko Tapu (the Nail
+// Island). And what moves, slowly: a tiny plane, a longtail among the rocks, dolphins, a yacht, clouds.
 import { Group, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid, solidMix } from '../../../../../engine3d/geo'
@@ -28,6 +26,7 @@ import type { Sea } from '../../hub/map/terrain'
 import { buildField, buildGround, buildSea } from './ground'
 import {
   BOARD,
+  BOAT_LOOPS,
   CLOUDS,
   CRAGS,
   DEG_M,
@@ -68,7 +67,7 @@ const SAND = '#FFF0C4'
 /** The spots (the places the trip doesn't go to yet) stand this much bigger than the board's scale, like toys. */
 const SPOT_SCALE = 1.5
 /** The rock towers' size on this board (layout.ts sizes them about 1). */
-const KARST_S = 0.46
+const KARST_S = 0.56
 /** The sea's top (the land stands up from it). */
 const LEVEL_SEA = 0
 
@@ -79,7 +78,7 @@ export interface Pin {
   mini: Group
   /** The baby elephant's ears and trunk (Baan Chang's pin). */
   elephant?: T.Elephant
-  /** What goes round and round on it (the plane over its cloud, the lighthouse's lamp). */
+  /** What goes round and round on it (the plane over its cloud). */
   spin?: Group
 }
 
@@ -88,24 +87,19 @@ export interface Diorama {
   places: Record<PlaceId, Group>
   spots: Record<SpotId, Group>
   stamps: Record<Stop, Group>
-  /** The pins (layout.ts PINS): over a place still to do, the way home, and the places still to come (a stop's stamp
-   *  takes its pin's place once it's done). */
+  /** The pins (layout.ts PINS): over a place still to do, and the way home (a stop's stamp takes its pin's place once
+   *  it's done). */
   pins: Record<PinId, Pin>
   plane: Group
   clouds: Group[]
-  /** The longtails buzzing round (BOAT_LOOPS), the family's longtail at the pier, the big ferry. */
+  /** The longtail buzzing round (BOAT_LOOPS), the family's longtail at the pier. */
   boats: Group[]
   pierBoat: Group
-  ferry: Group
   dolphins: Group[]
-  turtle: T.Turtle
-  whale: { root: Group; tail: Group }
   yacht: Group
-  eagle: { root: Group; wingL: Group; wingR: Group }
   elephants: T.Elephant[]
-  crab: { root: Group; claw: Group }
   monkey: Group
-  /** Ao Nang's sailfish statue (it leaps when the beach is poked), the Emerald Pool's water. */
+  /** Ao Nang's sailfish statue (it leaps when the beach is poked). */
   sailfish: Group
   chicken: Group
   beam: Group
@@ -140,7 +134,7 @@ export function buildDiorama(bag: Bag): Diorama {
     if (f.land(x, z) > -0.04) return
     karsts.push([x, z, s])
     addTower(x, LEVEL_SEA - 0.02, z, s * KARST_S, i)
-    if (i % 3 !== 1) {
+    if (i % 2 === 0) {
       const a = i * 1.9
       const [bx, bz] = [x + Math.cos(a) * 0.15 * s, z + Math.sin(a) * 0.11 * s]
       if (f.land(bx, bz) < -0.05) addTower(bx, LEVEL_SEA - 0.02, bz, s * KARST_S * 0.55, i + 2)
@@ -155,7 +149,7 @@ export function buildDiorama(bag: Bag): Diorama {
   // ---- On the land: limestone crags, jungle hills, palms and rainforest, away from the places and the rivers ----
   const placeSpots: [number, number, number][] = [
     ...(Object.keys(PLACES) as PlaceId[]).map((id) => [...PLACES[id].at, 0.4] as [number, number, number]),
-    ...(Object.keys(SPOTS) as SpotId[]).map((id) => [...SPOTS[id], id === 'bencha' ? 0.3 : 0.3] as [number, number, number]),
+    ...(Object.keys(SPOTS) as SpotId[]).map((id) => [...SPOTS[id], 0.3] as [number, number, number]),
     [RUNWAY.at[0], RUNWAY.at[1], 0.42],
     ...TWINS.map(([lon, lat]) => [...ll(lon, lat), 0.22] as [number, number, number]),
   ]
@@ -168,8 +162,10 @@ export function buildDiorama(bag: Bag): Diorama {
     if (f.land(x, z) < 0.06 || !away(x, z, 0.08)) return
     const size = s * 0.52
     addTower(x, y(x, z) - 0.03, z, size, i + 1)
-    const a = i * 2.3 + 0.6
-    addTower(x + Math.cos(a) * 0.17 * s, y(x, z) - 0.03, z + Math.sin(a) * 0.12 * s, size * 0.62, i + 3)
+    if (s >= 1.2) {
+      const a = i * 2.3 + 0.6
+      addTower(x + Math.cos(a) * 0.17 * s, y(x, z) - 0.03, z + Math.sin(a) * 0.12 * s, size * 0.62, i + 3)
+    }
     taken.push([x, z, 0.2 * s])
     shadows.push([x, z, 0.24 * s])
   })
@@ -188,22 +184,25 @@ export function buildDiorama(bag: Bag): Diorama {
   const planted: [number, number][] = []
   let seed = 23
   const rnd = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280)
-  for (let i = 0; i < 9000 && planted.length < 330; i++) {
+  // Few and spaced out, so the land reads as a few calm shapes: palms in loose twos and threes along the beaches,
+  // big soft clumps of rainforest up the hills, and the painted greens (ground.ts) everywhere between.
+  for (let i = 0; i < 6000 && planted.length < 110; i++) {
     const x = BOARD.x0 + 0.1 + rnd() * (W - 0.2)
     const z = BOARD.z0 + 0.1 + rnd() * (D - 0.2)
     const d = f.land(x, z)
     if (d < 0.085 || !away(x, z) || taken.some(([px, pz, r]) => Math.hypot(px - x, pz - z) < r)) continue
     if (RIVER_PTS.some(([rx, rz]) => Math.hypot(rx - x, rz - z) < 0.09)) continue
-    // Rainforest up the hills and in clumps on the flat; coconut palms along the shore and dotted everywhere else.
     const hill = f.hill(x, z)
-    const shore = d < 0.22
-    const jungle = hill > 0.05 || (!shore && Math.sin(x * 3.1 + 1.7) * Math.cos(z * 2.7 - 0.4) > 0.25)
-    if (!shore && !jungle && rnd() > 0.45) continue
-    if (planted.some(([sx, sz]) => Math.hypot(sx - x, sz - z) < (jungle ? 0.085 : 0.1))) continue
+    const shore = d < 0.2
+    const jungle = hill > 0.06
+    if (!shore && !jungle) continue
+    // Palms come in little groups along the shore (a stretch with, a stretch without).
+    if (shore && !jungle && Math.sin(x * 4.3 + z * 1.9) < 0.1) continue
+    if (planted.some(([sx, sz]) => Math.hypot(sx - x, sz - z) < (jungle ? 0.16 : 0.11))) continue
     planted.push([x, z])
     const s = 0.42 + rnd() * 0.22
-    if (jungle) trees.push(...clump(x, y(x, z), z, s * 1.25, i))
-    else trees.push(...palm(x, y(x, z), z, s * (shore ? 0.6 : 0.52), rnd() * 6.28))
+    if (jungle) trees.push(...clump(x, y(x, z), z, s * 1.6, i))
+    else trees.push(...palm(x, y(x, z), z, s * 0.62, rnd() * 6.28))
     shadows.push([x, z, 0.1 * s + 0.02])
   }
   root.add(solid(merge(hills), bag, 1.5), solid(merge(trees), bag, 1.5))
@@ -262,39 +261,19 @@ export function buildDiorama(bag: Bag): Diorama {
     e.root.rotation.y = -0.5 - i * 0.4
     places.chang.add(e.root)
   })
-  // Krabi Town's giant fiddler crab by the river mouth (its big claw waves).
-  const crab = { root: new Group(), claw: new Group() }
-  {
-    const [x, z] = ll(98.94, 8.074)
-    crab.root.position.set(x, y(x, z), z)
-    crab.root.add(solid(merge([
-      P.cyl(0.045, 0.05, 0.025, '#FFF7F0', { at: [0, 0.012, 0] }, 12),
-      P.sphere(0.04, '#8E7FD0', { at: [0, 0.05, 0], scale: [1.3, 0.6, 1] }, 12),
-      ...[-1, 1].flatMap((s) => [P.cyl(0.004, 0.004, 0.03, '#8E7FD0', { at: [s * 0.012, 0.08, 0.02] }, 5), P.sphere(0.008, '#FFFFFF', { at: [s * 0.012, 0.095, 0.02] }, 6), P.sphere(0.004, '#2B2330', { at: [s * 0.012, 0.096, 0.026] }, 5)]),
-      ...[-1, 1].flatMap((s) => [0, 1, 2].map((k) => P.cyl(0.004, 0.004, 0.04, '#7A6CC0', { at: [s * 0.05, 0.04, -0.02 + k * 0.018], rot: [0, 0, s * 1.1] }, 4))),
-      P.sphere(0.012, '#8E7FD0', { at: [-0.05, 0.05, 0.03] }, 6),
-    ]), bag, 1.5))
-    crab.claw.position.set(0.045, 0.055, 0.025)
-    crab.claw.add(solid(merge([P.cyl(0.006, 0.006, 0.03, '#8E7FD0', { at: [0.008, 0.012, 0], rot: [0, 0, -0.5] }, 5), P.sphere(0.03, PAL.hotpink, { at: [0.02, 0.04, 0], scale: [0.8, 1.2, 0.6] }, 10)]), bag, 1.5))
-    crab.root.add(crab.claw)
-    crab.root.scale.setScalar(2.2)
-    root.add(crab.root)
-  }
-
-  // ---- Toys to poke (Ao Nang and Koh Lanta are the next places: each wears a pin) ----
+  // ---- Toys to poke ----
   const monkey = new Group()
   const sailfish = new Group()
   const chicken = new Group()
   const beam = new Group()
   const spots = {} as Record<SpotId, Group>
   {
-    // Ao Nang's beach front: umbrellas, longtails pulled up on the sand, little hotels behind, and the sailfish statue.
+    // Ao Nang's beach: two umbrellas, a longtail pulled up on the sand, and the sailfish statue.
     const [x, z] = SPOTS.aonang
     const g = y(x, z)
     spots.aonang = toyAt(SPOTS.aonang, [
-      ...[[-0.12, 0.04, '#FF8FB8'], [0.0, 0.07, PAL.butter], [0.12, 0.05, PAL.mint]].flatMap(([dx, dz, c]) => parasol(x + (dx as number), g, z + (dz as number), c as string)),
-      ...[[-0.15, -0.09, '#FFE9D9', ROOF], [-0.03, -0.12, '#FFD9E6', '#E86A8E'], [0.1, -0.1, '#E7E0FF', '#9C8BE0']].flatMap(([dx, dz, wall, roof]) => house(x + (dx as number), z + (dz as number), 0.09, 0.07, 0.1, wall as string, roof as string, y)),
-      ...[-0.07, 0.03, 0.12].flatMap((dx, k) => boatParts(x + dx, g + 0.004, z + 0.13, 0.25 + k * 0.3)),
+      ...[[-0.08, 0.04, '#FF8FB8'], [0.05, 0.07, PAL.butter]].flatMap(([dx, dz, c]) => parasol(x + (dx as number), g, z + (dz as number), c as string)),
+      ...boatParts(x - 0.01, g + 0.004, z + 0.14, 0.4),
       P.cyl(0.03, 0.036, 0.03, '#FFF7F0', { at: [x + 0.2, g + 0.015, z + 0.02] }, 10),
     ])
     // The sailfish leaps over its plinth (nose up, its big sail along its back).
@@ -349,7 +328,7 @@ export function buildDiorama(bag: Bag): Diorama {
     }
     phi.lined.push(...[0, 1, 2].flatMap((k) => T.palmParts(px + (k - 1) * 0.04, y(px, pz), pz + (k % 2) * 0.03, 0.3, k * 2.1)))
     spots.phiphi = toyAt(SPOTS.phiphi, phi.lined, 1.5, 1, phi.plain)
-    // Koh Lanta: the lighthouse on the south tip (white with pink bands, its lamp turns), beach huts on the west shore.
+    // Koh Lanta's lighthouse on the south tip (white with pink bands, its lamp turns), a palm beside it.
     const [lx, lz] = SPOTS.lighthouse
     const lg = y(lx, lz)
     spots.lighthouse = toyAt(SPOTS.lighthouse, [
@@ -358,46 +337,12 @@ export function buildDiorama(bag: Bag): Diorama {
       P.cyl(0.05, 0.05, 0.012, '#FFF7F0', { at: [lx, lg + 0.205, lz] }, 12),
       P.cyl(0.03, 0.03, 0.04, '#FFF4B8', { at: [lx, lg + 0.23, lz] }, 10),
       P.cone(0.04, 0.04, PAL.hotpink, { at: [lx, lg + 0.27, lz] }, 10),
+      ...T.palmParts(lx + 0.08, lg, lz + 0.03, 0.34, 0.6),
     ])
     beam.position.set(lx, lg + 0.23 * SPOT_SCALE, lz)
     beam.add(solid(merge([P.cone(0.05, 0.3, '#FFF4B8', { at: [0.17, 0, 0], rot: [0, 0, Math.PI / 2] }, 10)]), bag, 0))
     beam.visible = false
     root.add(beam)
-    const [ax, az] = SPOTS.lanta
-    spots.lanta = toyAt(SPOTS.lanta, [
-      ...[[-0.05, 0, '#FFE9D9'], [0.04, 0.06, '#E4F4E8'], [-0.02, 0.12, '#FFD9E6']].flatMap(([dx, dz, c]) => hut(ax + (dx as number), az + (dz as number), c as string, y)),
-      ...[[0.05, -0.06], [-0.07, 0.08]].flatMap(([dx, dz], k) => T.palmParts(ax + dx, y(ax + dx, az + dz), az + dz, 0.38, k * 2.4)),
-      ...parasol(ax - 0.1, y(ax, az), az + 0.04, PAL.butter),
-    ])
-    // Khao Phanom Bencha: the big mountain north of town, a waterfall down its side into a pool.
-    const [bx, bz] = SPOTS.bencha
-    const bg = y(bx, bz)
-    const fall: BufferGeometry[] = []
-    const [br, bh] = [0.4, 0.5]
-    for (const deg of [22, 38, 54, 70, 84]) {
-      // Down the dome's front: each piece lies along the slope there.
-      const a = (deg * Math.PI) / 180
-      const at = (out: number): [number, number, number] => [bx + 0.02, bg - 0.06 + bh * Math.cos(a) + out * Math.cos(a), bz + br * Math.sin(a) + out * Math.sin(a)]
-      const tilt = Math.atan2(-br * Math.cos(a), bh * Math.sin(a))
-      const len = 0.3 * Math.hypot(br * Math.cos(a), bh * Math.sin(a)) + 0.02
-      fall.push(P.box(0.06, len, 0.012, '#BFEAFF', { at: at(0.008), rot: [tilt, 0, 0] }), P.box(0.026, len, 0.014, '#FFFFFF', { at: at(0.01), rot: [tilt, 0, 0] }))
-    }
-    spots.bencha = toyAt(SPOTS.bencha, [...jungleHill(bx, bg - 0.06, bz, br, bh, 1), P.cyl(0.085, 0.085, 0.012, '#8FE9D2', { at: [bx + 0.02, bg + 0.006, bz + br + 0.05] }, 14), P.cyl(0.05, 0.05, 0.014, '#D6FBF0', { at: [bx + 0.02, bg + 0.006, bz + br + 0.03] }, 12)], 1.5, 1, fall)
-    // The Emerald Pool, deep in the jungle: bright green water in pale stone steps, a little fall between them.
-    const [ex, ez] = SPOTS.pool
-    const eg = y(ex, ez)
-    spots.pool = toyAt(SPOTS.pool, [
-      P.cyl(0.125, 0.135, 0.02, '#F6EBDD', { at: [ex, eg + 0.01, ez], scale: [1.25, 1, 1] }, 18),
-      P.cyl(0.105, 0.105, 0.022, '#5FE6BE', { at: [ex, eg + 0.012, ez], scale: [1.25, 1, 1] }, 18),
-      P.cyl(0.06, 0.06, 0.024, '#A9F7DD', { at: [ex - 0.02, eg + 0.012, ez + 0.01], scale: [1.3, 1, 1] }, 14),
-      P.cyl(0.07, 0.078, 0.05, '#F6EBDD', { at: [ex + 0.06, eg + 0.025, ez - 0.11] }, 14),
-      P.cyl(0.055, 0.055, 0.052, '#5FE6BE', { at: [ex + 0.06, eg + 0.026, ez - 0.11] }, 14),
-      P.box(0.035, 0.05, 0.012, '#D6FBF0', { at: [ex + 0.045, eg + 0.03, ez - 0.04], rot: [0.5, 0, 0] }),
-      ...clump(ex - 0.15, eg, ez - 0.07, 0.6, 0),
-      ...clump(ex + 0.16, eg, ez - 0.05, 0.55, 1),
-      ...T.palmParts(ex - 0.06, eg, ez - 0.13, 0.36, 2.2, false),
-      ...T.palmParts(ex + 0.15, eg, ez + 0.07, 0.3, 0.4, false),
-    ], 1.5)
     // Ko Tapu, the Nail Island: a thin rock spike standing straight up out of the sea, wider at the top.
     const [nx, nz] = SPOTS.nail
     spots.nail = toyAt(SPOTS.nail, [
@@ -405,21 +350,6 @@ export function buildDiorama(bag: Bag): Diorama {
       P.cyl(0.03, 0.02, 0.18, ROCK_DARK, { at: [nx + 0.02, 0.08, nz + 0.01] }, 7),
       P.sphere(0.05, '#79CC8F', { at: [nx, 0.31, nz], scale: [1, 0.55, 1] }, 9),
       P.cyl(0.05, 0.06, 0.02, '#F2FBFF', { at: [nx, 0.004, nz] }, 12),
-    ], 1.5, 1)
-    // Ko Panyee: the stilt village on its platform in front of a big rock, and the floating football pitch.
-    const [vx, vz] = SPOTS.panyee
-    spots.panyee = toyAt(SPOTS.panyee, [
-      ...tower(vx, -0.02, vz - 0.14, 0.52, 0).lined,
-      P.box(0.34, 0.012, 0.16, WOOD, { at: [vx, 0.03, vz] }),
-      ...[-0.15, -0.05, 0.05, 0.15].flatMap((dx) => [-0.06, 0.06].map((dz) => P.cyl(0.005, 0.005, 0.04, WOOD_DARK, { at: [vx + dx, 0.012, vz + dz] }, 5))),
-      ...[[-0.11, '#FFE9D9', ROOF], [-0.01, '#E7E0FF', '#9C8BE0'], [0.1, '#FFF4CF', '#F59E5B']].flatMap(([dx, wall, roof]) => [
-        P.rbox(0.07, 0.05, 0.06, 0.008, wall as string, { at: [vx + (dx as number), 0.06, vz - 0.03] }),
-        P.prism([[-0.045, 0], [0.045, 0], [0, 0.035]], 0.07, roof as string, { at: [vx + (dx as number), 0.085, vz - 0.03] }),
-      ]),
-      // The floating pitch: yellow with white lines and two little goals.
-      P.box(0.16, 0.01, 0.1, PAL.butter, { at: [vx + 0.05, 0.02, vz + 0.12] }),
-      P.box(0.004, 0.012, 0.1, '#FFFFFF', { at: [vx + 0.05, 0.022, vz + 0.12] }),
-      ...[-1, 1].map((s) => P.box(0.006, 0.025, 0.04, '#FFFFFF', { at: [vx + 0.05 + s * 0.08, 0.035, vz + 0.12] })),
     ], 1.5, 1)
   }
 
@@ -436,20 +366,8 @@ export function buildDiorama(bag: Bag): Diorama {
     pierBoat.rotation.y = Math.PI / 2
     root.add(pierBoat)
   }
-  const boats = [boat(), boat()]
+  const boats = BOAT_LOOPS.map(() => boat())
   root.add(...boats)
-  const ferry = new Group()
-  ferry.add(solid(merge([
-    P.rbox(0.14, 0.06, 0.38, 0.03, '#FFFFFF', { at: [0, 0.02, 0] }),
-    P.box(0.145, 0.016, 0.34, '#7FD8F4', { at: [0, 0.04, 0] }),
-    P.rbox(0.11, 0.05, 0.22, 0.02, '#FFF7F0', { at: [0, 0.08, -0.02] }),
-    P.box(0.112, 0.016, 0.2, '#BFE2FA', { at: [0, 0.085, -0.02] }),
-    P.rbox(0.07, 0.035, 0.08, 0.012, '#FFFFFF', { at: [0, 0.12, 0.04] }),
-    P.cyl(0.016, 0.018, 0.05, PAL.hotpink, { at: [0, 0.14, -0.08] }, 8),
-  ]), bag, 1.5))
-  ferry.scale.setScalar(1.6)
-  root.add(ferry)
-
   // ---- The tiny plane at the end of the runway ----
   const plane = new Group()
   plane.add(solid(merge(planeParts()), bag, 1.5))
@@ -501,38 +419,11 @@ export function buildDiorama(bag: Bag): Diorama {
     return g
   })
 
-  // ---- Out at sea: dolphins, the turtle; over the bay, the sea eagle ----
+  // ---- Out at sea: the dolphins, the yacht ----
   const dolphins = [T.dolphin(bag), T.dolphin(bag)]
   for (const d of dolphins) {
     d.scale.setScalar(0.7)
     root.add(d)
-  }
-  const turtle = T.turtle(bag)
-  turtle.root.scale.setScalar(0.75)
-  root.add(turtle.root)
-  // The whale shark: a big blue-grey body with white spots, a wide mouth, its tail swinging (nose along +z).
-  const whale = { root: new Group(), tail: new Group() }
-  {
-    const c = '#8E9ED8'
-    const spots: BufferGeometry[] = []
-    for (let i = 0; i < 16; i++) {
-      const a = i * 2.4
-      const along = -0.12 + (i / 16) * 0.3
-      spots.push(P.sphere(0.009, '#FFFFFF', { at: [Math.cos(a) * 0.045, 0.03 + Math.abs(Math.sin(a)) * 0.012, along] }, 5))
-    }
-    whale.root.add(solid(merge([
-      P.sphere(0.07, c, { at: [0, 0, 0.02], scale: [0.85, 0.55, 2.4] }, 14),
-      P.sphere(0.055, '#F2F4FF', { at: [0, -0.018, 0.04], scale: [0.8, 0.35, 2.1] }, 12),
-      P.box(0.06, 0.006, 0.012, '#5E5468', { at: [0, -0.006, 0.18] }),
-      ...[-1, 1].flatMap((s) => [P.sphere(0.008, '#2B2330', { at: [s * 0.045, 0.012, 0.15] }, 6), P.prism([[0, 0], [0.07, 0], [0.02, -0.02]], 0.006, c, { at: [s * 0.05, -0.01, 0.06], rot: [0, s > 0 ? 0 : Math.PI, 0] })]),
-      P.prism([[-0.03, 0], [0.04, 0], [-0.02, 0.06]], 0.01, c, { at: [0, 0.035, -0.02], rot: [0, -Math.PI / 2, 0] }),
-      ...spots,
-    ]), bag, 1.5))
-    whale.tail.position.set(0, 0, -0.14)
-    whale.tail.add(solid(merge([P.prism([[0, 0.07], [0, -0.04], [-0.07, 0.1]], 0.01, c, { rot: [0, Math.PI / 2, 0] })]), bag, 1.5))
-    whale.root.add(whale.tail)
-    whale.root.scale.setScalar(1.4)
-    root.add(whale.root)
   }
   // The yacht: a white hull, a tall mast and a pink sail (sails along +z).
   const yacht = new Group()
@@ -546,21 +437,7 @@ export function buildDiorama(bag: Bag): Diorama {
   ]), bag, 1.5))
   yacht.scale.setScalar(1.3)
   root.add(yacht)
-  const eagle = { root: new Group(), wingL: new Group(), wingR: new Group() }
-  eagle.root.scale.setScalar(1.8)
-  eagle.root.add(solid(merge([
-    P.sphere(0.03, '#B98A66', { scale: [0.8, 0.7, 1.6] }, 10),
-    P.sphere(0.022, '#FFFFFF', { at: [0, 0.01, 0.045] }, 8),
-    P.cone(0.008, 0.02, PAL.butter, { at: [0, 0.006, 0.07], rot: [Math.PI / 2, 0, 0] }, 6),
-    P.prism([[-0.02, 0], [0.02, 0], [0, -0.04]], 0.006, '#FFFFFF', { at: [0, 0, -0.05], rot: [Math.PI / 2, 0, 0] }),
-  ]), bag, 1.2))
-  for (const [s, w] of [[-1, eagle.wingL], [1, eagle.wingR]] as const) {
-    w.add(solid(merge([P.box(0.09, 0.006, 0.04, '#B98A66', { at: [s * 0.045, 0, 0] }), P.box(0.03, 0.007, 0.035, '#8A6448', { at: [s * 0.08, 0, -0.004] })]), bag, 1.2))
-    eagle.root.add(w)
-  }
-  root.add(eagle.root)
-
-  return { root, places, spots, stamps, pins, plane, clouds, boats, pierBoat, ferry, dolphins, turtle, whale, yacht, eagle, elephants, crab, monkey, sailfish, chicken, beam, sea, karsts }
+  return { root, places, spots, stamps, pins, plane, clouds, boats, pierBoat, dolphins, yacht, elephants, monkey, sailfish, chicken, beam, sea, karsts }
 }
 
 type Ground = (x: number, z: number) => number
@@ -575,16 +452,6 @@ function house(x: number, z: number, w: number, d: number, h: number, wall: stri
     P.prism([[-w / 2 - 0.02, 0], [w / 2 + 0.02, 0], [0, h * 0.62]], d + 0.04, roof, { at: at(0, g + h - 0.004, 0), rot }),
     P.rbox(w * 0.24, h * 0.5, 0.012, 0.005, '#B07A58', { at: at(0, g + h * 0.25, d / 2 + 0.003), rot }),
     ...[-1, 1].map((k) => P.rbox(w * 0.17, h * 0.22, 0.012, 0.004, '#DDF3FF', { at: at(k * w * 0.31, g + h * 0.58, d / 2 + 0.003), rot })),
-  ]
-}
-
-/** A beach hut on short stilts with a thatched roof. */
-function hut(x: number, z: number, wall: string, y: Ground): BufferGeometry[] {
-  const g = y(x, z)
-  return [
-    ...[[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([a, b]) => P.cyl(0.004, 0.004, 0.03, WOOD_DARK, { at: [x + a * 0.025, g + 0.015, z + b * 0.02] }, 5)),
-    P.rbox(0.06, 0.04, 0.05, 0.006, wall, { at: [x, g + 0.05, z] }),
-    P.prism([[-0.045, 0], [0.045, 0], [0, 0.04]], 0.065, THATCH, { at: [x, g + 0.068, z] }),
   ]
 }
 
@@ -641,19 +508,13 @@ function runwayParts(y: Ground): BufferGeometry[] {
   ]
 }
 
-/** Krabi Town: pastel shophouses in rows along the river, a market umbrella or two, the Thai flag on a pole. */
+/** Krabi Town: a row of pastel shophouses along the river, the Thai flag on a pole. */
 function townParts([tx, tz]: XZ, y: Ground): BufferGeometry[] {
   const tg = y(tx, tz)
   const row = (x0: number, z: number, cols: [string, string][], yaw = 0) =>
     cols.flatMap(([wall, roof], k) => house(tx + x0 + k * 0.06, tz + z, 0.055, 0.07, 0.09 + (k % 2) * 0.025, wall, roof, y, yaw))
   return [
-    ...row(-0.16, -0.06, [['#FFE9D9', ROOF], ['#FFD9E6', '#E86A8E'], ['#FFF4CF', '#F59E5B']]),
-    ...row(0.04, -0.09, [['#E7E0FF', '#9C8BE0'], ['#E4F4E8', '#5FBF8F'], ['#FFE9D9', ROOF]]),
-    ...[[-0.06, 0.06, PAL.pink], [0.06, 0.07, PAL.mint]].flatMap(([dx, dz, c]) => [
-      P.rbox(0.045, 0.022, 0.032, 0.006, '#FFF7F0', { at: [tx + (dx as number), tg + 0.011, tz + (dz as number)] }),
-      P.cyl(0.003, 0.003, 0.06, '#EDEAF2', { at: [tx + (dx as number), tg + 0.03, tz + (dz as number)] }),
-      P.cone(0.045, 0.026, c as string, { at: [tx + (dx as number), tg + 0.07, tz + (dz as number)] }, 10),
-    ]),
+    ...row(-0.1, -0.04, [['#FFE9D9', ROOF], ['#FFD9E6', '#E86A8E'], ['#E7E0FF', '#9C8BE0'], ['#FFF4CF', '#F59E5B']]),
     // The flag of Thailand on its pole.
     P.cyl(0.004, 0.004, 0.22, '#EDEAF2', { at: [tx + 0.17, tg + 0.11, tz + 0.04] }, 5),
     ...([['#E8404E', 0], ['#FFFFFF', 1], ['#2D3A8C', 2], ['#2D3A8C', 3], ['#FFFFFF', 4], ['#E8404E', 5]] as const).map(([c, k]) => P.box(0.08, 0.009, 0.004, c, { at: [tx + 0.212, tg + 0.21 - k * 0.009, tz + 0.04] })),
@@ -712,40 +573,36 @@ export const MONKEY_Y = 0.5
 /** The Krabi River and the creeks, as points (nothing is planted on them). */
 const RIVER_PTS: XZ[] = RIVERS.flatMap((r) => r.flatMap(([lon, lat], i) => (i ? [ll((lon + r[i - 1][0]) / 2, (lat + r[i - 1][1]) / 2), ll(lon, lat)] : [ll(lon, lat)])))
 
-/** A limestone tower, Krabi's own: cream rock that leans out over the notch the sea cuts round its foot, a buttress
- *  and a little spire beside it, rust streaks down its face, jungle spilling over the top. `lined` are its shapes,
- *  `plain` what's painted on them (no outline). About 0.9 * s tall, 0.34 * s across. */
+/** A limestone tower, Krabi's own, kept soft: a rounded hump of cream rock leaning out over the notch the sea cuts
+ *  round its foot, a lower shoulder beside it, a rust streak or two, and jungle draped thick over the top and spilling
+ *  down the sides (mostly green, the cliff showing between). `lined` are its shapes, `plain` what's painted on them
+ *  (no outline). About 0.75 * s tall, 0.4 * s across. */
 function tower(x: number, y: number, z: number, s: number, k: number): { lined: BufferGeometry[]; plain: BufferGeometry[] } {
-  const h = (0.7 + (k % 4) * 0.16) * s
-  const r = 0.17 * s
-  const foot = y + 0.06 * s
+  const h = (0.46 + (k % 4) * 0.08) * s
+  const r = 0.2 * s
+  const foot = y + 0.05 * s
   const a = k * 2.4 + 0.5
-  const [ax, az] = [Math.cos(a) * r * 0.85, Math.sin(a) * r * 0.85]
-  const [cx, cz] = [Math.cos(a + 2.4) * r * 0.9, Math.sin(a + 2.4) * r * 0.9]
+  const [ax, az] = [Math.cos(a) * r * 0.9, Math.sin(a) * r * 0.9]
   const lined = [
-    P.cyl(r * 0.78, r * 0.7, 0.08 * s, NOTCH, { at: [x, y + 0.035 * s, z] }, 8),
-    P.cyl(r * 0.8, r, h, ROCK, { at: [x, foot + h / 2, z], rot: [0, k, 0] }, 7),
-    P.cyl(r * 0.9, r * 0.94, 0.035 * s, ROCK_DARK, { at: [x, foot + h * 0.4, z], rot: [0, k, 0] }, 7),
-    P.cyl(r * 0.48, r * 0.66, h * 0.6, ROCK_DARK, { at: [x + ax, foot + h * 0.3, z + az] }, 6),
-    P.cyl(r * 0.28, r * 0.42, h * 0.34, ROCK, { at: [x + cx, foot + h * 0.17, z + cz] }, 5),
-    // Jungle on every top.
-    P.sphere(r * 0.98, JUNGLE[k % 3], { at: [x, foot + h, z], scale: [1, 0.52, 1] }, 8),
-    P.sphere(r * 0.6, JUNGLE[(k + 1) % 3], { at: [x + r * 0.28, foot + h + r * 0.3, z - r * 0.12], scale: [1, 0.7, 1] }, 7),
-    P.sphere(r * 0.6, JUNGLE[(k + 2) % 3], { at: [x + ax, foot + h * 0.6, z + az], scale: [1, 0.55, 1] }, 7),
-    P.sphere(r * 0.36, JUNGLE[(k + 1) % 3], { at: [x + cx, foot + h * 0.34, z + cz], scale: [1, 0.6, 1] }, 6),
+    P.cyl(r * 0.8, r * 0.74, 0.07 * s, NOTCH, { at: [x, y + 0.03 * s, z] }, 10),
+    P.cyl(r * 0.88, r, h, ROCK, { at: [x, foot + h / 2, z], rot: [0, k, 0] }, 10),
+    P.cyl(r * 0.56, r * 0.7, h * 0.56, ROCK_DARK, { at: [x + ax, foot + h * 0.28, z + az] }, 8),
+    // The jungle: a big soft dome on top, a smaller one on the shoulder.
+    P.sphere(r * 1.1, JUNGLE[k % 3], { at: [x, foot + h * 0.96, z], scale: [1, 0.66, 1] }, 12),
+    P.sphere(r * 0.66, JUNGLE[(k + 1) % 3], { at: [x - r * 0.25, foot + h * 0.96 + r * 0.42, z - r * 0.1], scale: [1, 0.72, 1] }, 9),
+    P.sphere(r * 0.66, JUNGLE[(k + 2) % 3], { at: [x + ax, foot + h * 0.58, z + az], scale: [1, 0.66, 1] }, 9),
   ]
   const plain: BufferGeometry[] = []
-  // Down the faces that look at us (south, +z): rust streaks, and greenery hanging over the edge.
-  for (let i = 0; i < 3; i++) {
-    const b = Math.PI / 2 + (i - 1) * 0.75 + (k % 3) * 0.22
-    const t = 0.74 - i * 0.13
-    const rad = r * (1 - 0.2 * t) * 0.87
-    plain.push(P.sphere(r * 0.13, RUST, { at: [x + Math.cos(b) * rad, foot + h * t, z + Math.sin(b) * rad], rot: [0, -b, 0], scale: [0.5, (h / r) * 0.75, 1] }, 5))
+  // Down the face that looks at us (south, +z): a rust streak or two, and greenery hanging over the edge.
+  for (let i = 0; i < 2; i++) {
+    const b = Math.PI / 2 + (i - 0.5) * 0.9 + (k % 3) * 0.2
+    const t = 0.62 - i * 0.12
+    plain.push(P.sphere(r * 0.12, RUST, { at: [x + Math.cos(b) * r * 0.9, foot + h * t, z + Math.sin(b) * r * 0.9], rot: [0, -b, 0], scale: [0.5, (h / r) * 0.6, 1] }, 5))
   }
-  for (let i = 0; i < 4; i++) {
-    const b = 0.5 + i * 0.95 + k
-    const rad = r * 0.8
-    plain.push(P.sphere(r * 0.2, JUNGLE[(k + i) % 3], { at: [x + Math.cos(b) * rad, foot + h * 0.93, z + Math.sin(b) * rad], scale: [1, 1.5 + (i % 2), 1] }, 5))
+  for (let i = 0; i < 5; i++) {
+    const b = 0.5 + i * 1.26 + k
+    const rad = r * 0.86
+    plain.push(P.sphere(r * 0.3, JUNGLE[(k + i) % 3], { at: [x + Math.cos(b) * rad, foot + h * 0.8, z + Math.sin(b) * rad], scale: [1, 1.5 + (i % 2) * 0.6, 1] }, 6))
   }
   return { lined, plain }
 }
@@ -804,15 +661,14 @@ function planeParts(): BufferGeometry[] {
 }
 
 /** How high a pin's head is over its point, and how wide. */
-export const PIN = { head: 0.2, r: 0.15, top: 0.5, size: 1.5, soon: 0.8 }
+export const PIN = { head: 0.2, r: 0.15, top: 0.5, size: 1.5 }
 
-/** A pin: a white point, a round head (pink: go there; lavender: still to come), and a toy of the place on top. */
+/** A pin: a white point, a round pink head, and a toy of the place on top. */
 function buildPin(id: PinId, bag: Bag): Pin {
   const root = new Group()
-  const soon = PINS[id].soon
-  const c = soon ? PAL.lavenderDark : PAL.hotpink
+  const c = PAL.hotpink
   const top = PIN.head + 0.035
-  const floor = id === 'bay' ? '#8FEBD8' : id === 'home' ? '#DDF3FF' : id === 'chang' ? '#CDEFB0' : SAND
+  const floor = id === 'bay' ? '#8FEBD8' : id === 'home' ? '#DDF3FF' : '#CDEFB0'
   root.add(solid(merge([
     P.cone(0.09, 0.19, c, { at: [0, 0.095, 0], rot: [Math.PI, 0, 0] }, 16),
     P.sphere(0.016, '#FFFFFF', { at: [0, 0.004, 0] }, 6),
@@ -841,7 +697,7 @@ function buildPin(id: PinId, bag: Bag): Pin {
     mini.add(b)
     const t = tower(-0.045, -0.01, -0.055, 0.3, 1)
     mini.add(solidMix(t.lined, t.plain, bag, 1.5))
-  } else if (id === 'home') {
+  } else {
     // The plane home, round and round over a puff of cloud.
     add([P.sphere(0.06, '#FFFFFF', { at: [0, 0.05, 0], scale: [1.3, 0.7, 1] }, 10), P.sphere(0.045, '#FFFFFF', { at: [0.07, 0.04, 0.01], scale: [1.2, 0.75, 1] }, 9), P.sphere(0.04, '#F4F1FA', { at: [-0.07, 0.04, -0.01], scale: [1.2, 0.75, 1] }, 9)], 2)
     const spin = new Group()
@@ -853,37 +709,7 @@ function buildPin(id: PinId, bag: Bag): Pin {
     spin.add(p)
     mini.add(spin)
     pin.spin = spin
-  } else if (id === 'aonang') {
-    // The beach front: a striped umbrella, a beach ball, a sandcastle with a flag.
-    add([
-      P.cyl(0.005, 0.005, 0.17, '#FFF7F0', { at: [-0.03, 0.085, -0.02] }, 6),
-      P.cone(0.1, 0.05, PAL.hotpink, { at: [-0.03, 0.185, -0.02] }, 10),
-      P.cone(0.1005, 0.05, '#FFFFFF', { at: [-0.03, 0.1852, -0.02], rot: [0, Math.PI / 10, 0] }, 5),
-      P.sphere(0.012, PAL.butter, { at: [-0.03, 0.215, -0.02] }, 6),
-      P.sphere(0.034, '#FFFFFF', { at: [0.065, 0.034, 0.06] }, 10),
-      P.sphere(0.0345, PAL.mint, { at: [0.065, 0.034, 0.06], scale: [1, 1, 0.45] }, 10),
-      P.sphere(0.0345, PAL.hotpink, { at: [0.065, 0.034, 0.06], scale: [0.45, 1, 1] }, 10),
-      P.cyl(0.03, 0.036, 0.04, '#F7D99A', { at: [0.07, 0.02, -0.045] }, 8),
-      P.cone(0.022, 0.03, '#F7D99A', { at: [0.07, 0.055, -0.045] }, 8),
-      P.cyl(0.002, 0.002, 0.03, '#FFF7F0', { at: [0.07, 0.08, -0.045] }, 4),
-      P.box(0.02, 0.012, 0.002, PAL.hotpink, { at: [0.081, 0.089, -0.045] }),
-    ])
-  } else {
-    // Koh Lanta: its lighthouse, a palm, the lamp going round.
-    add([
-      P.cyl(0.03, 0.042, 0.17, '#FFFFFF', { at: [-0.02, 0.085, 0] }, 12),
-      ...[0.04, 0.1].map((h) => P.cyl(0.039 - h * 0.07, 0.04 - h * 0.07, 0.026, PAL.hotpink, { at: [-0.02, h, 0] }, 12)),
-      P.cyl(0.04, 0.04, 0.01, '#FFF7F0', { at: [-0.02, 0.175, 0] }, 12),
-      P.cyl(0.024, 0.024, 0.034, '#FFF4B8', { at: [-0.02, 0.197, 0] }, 10),
-      P.cone(0.034, 0.034, PAL.hotpink, { at: [-0.02, 0.23, 0] }, 10),
-      ...T.palmParts(0.075, 0, 0.03, 0.26, 0.4, false),
-    ])
-    const spin = new Group()
-    spin.position.set(-0.02, 0.197, 0)
-    spin.add(solid(merge([P.cone(0.03, 0.12, '#FFF4B8', { at: [0.075, 0, 0], rot: [0, 0, Math.PI / 2] }, 8)]), bag, 0))
-    mini.add(spin)
-    pin.spin = spin
   }
-  root.scale.setScalar(PIN.size * (soon ? PIN.soon : 1))
+  root.scale.setScalar(PIN.size)
   return pin
 }
