@@ -831,7 +831,8 @@ function patches(road: Road, look: RoadLook, bag: Bag) {
     const w0 = 0.7 + rand() * 0.4
     const w1 = h - 0.75 - rand() * 0.6
     const len = 2 + rand() * 4
-    strip(s, s + len, side * w0, side * w1, patch, 0.034)
+    // (Lowest lat first, so the patch faces up on either side: the material culls back faces.)
+    strip(s, s + len, Math.min(side * w0, side * w1), Math.max(side * w0, side * w1), patch, 0.034)
     // Now and then a sealed crack wandering along near it.
     if (rand() < 0.55) {
       const lat = side * (1 + rand() * 2)
