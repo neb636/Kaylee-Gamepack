@@ -414,6 +414,8 @@ export class NanDrive implements World3D {
       seat.add(c.root)
       put(c, 0, 0, 0, 'sit', 0)
     }
+    // Mom's hooves on the wheel (a modelled Mom's would go out through the door).
+    this.ji.drive()
     this.dust = new Particles({ kind: 'spray', count: 260, colors: ['#FFFFFF', '#F1E4D6', '#EDE7F7'], gravity: 3 }, bag)
     this.grass = new Particles({ kind: 'spray', count: 160, colors: ['#9BD37E', '#7CC46A', '#C9A77C', '#B8E39A'], gravity: 9 }, bag)
     this.rain = new Particles({ kind: 'spray', count: 700, color: '#E7EEFF', gravity: 0 }, bag)

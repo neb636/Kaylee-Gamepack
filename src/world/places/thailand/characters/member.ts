@@ -6,18 +6,34 @@ import { bell, clamp, span } from '../../../../sdk'
 import type { Bag } from '../../../engine3d/dispose'
 import { buildAnimal, Wind, type Rig } from '../../../engine3d/characters/animal'
 import { FaceLife } from '../../../engine3d/characters/face'
+import { automated, flag } from '../../../engine3d/flags'
 import type { FamilyMember } from './family'
 import { LOOKS, type Look } from './looks'
+import { buildMomRig, momModel } from './mom-model'
 import type { Character, Pose } from './types'
 
 const deg = Math.PI / 180
 /** A modelled toy with legs of its own sitting (Mom's, mom-model.ts): how far its body drops (a fraction of its height)
  *  and how far its legs swing forward over the seat (radians). */
 const LEGS_SIT = { drop: 0.04, legs: -1.35 }
+/** How far a modelled toy's arms reach forward to a steering wheel (radians; drive()). */
+const ON_THE_WHEEL = 1.1
 const tmp = new Vector3()
 
 /** The family members who also have a game-table voice (`<id>play` in cast.json). */
 const PLAY_VOICES = new Set(['bb', 'gan', 'ken'])
+
+/** A family member's toy in this look: Mom (in her own look) is the modelled vinyl toy once it has loaded, everyone
+ *  else the code-built animal. The mall race's racers use it too. */
+export function familyRig(id: string, look: Look, bag: Bag): Rig {
+  // (`?mom=code` brings back the code-built Mom, to compare in QA.)
+  const mom = id === 'ji' && look === LOOKS.ji && flag('mom') !== 'code' ? momModel() : null
+  const rig = mom ? buildMomRig(mom, bag) : buildAnimal(look, bag)
+  // QA robots find family members by this (scripts/qa-mom.mjs), and under webdriver their rig too.
+  rig.root.userData.family = id
+  if (automated) Object.defineProperty(rig.root, 'qaRig', { value: rig })
+  return rig
+}
 
 export class Member implements Character {
   readonly id: string
@@ -43,10 +59,11 @@ export class Member implements Character {
   private wind = new Wind()
 
   /** `look` and `voice` default to the family member's own; the character lab (lab/) gives a trip's extras theirs, and
-   *  `rig` a modelled vinyl toy to try instead of the code-built one (Mom's, mom-model.ts). */
+   *  `rig` a toy to use instead of the usual one. Mom in her own look is the modelled vinyl toy (mom-model.ts, loaded
+   *  before Thailand's scenes build), or the code-built Mom if her model couldn't load. */
   constructor(readonly member: FamilyMember, bag: Bag, look: Look = LOOKS[member.id], voice: string | undefined = member.id, rig?: Rig) {
     this.id = member.id
-    this.chibi = rig ?? buildAnimal(look, bag)
+    this.chibi = rig ?? familyRig(member.id, look, bag)
     this.root = this.chibi.root
     this.height = this.chibi.height
     // (The big cousins also talk at the game table, in a cheerful voice of their own: cast.json's bbplay, ganplay, kenplay.)
@@ -78,6 +95,16 @@ export class Member implements Character {
     this.setPose(pose)
   }
 
+  private driving = false
+  /** Hands on the wheel, in a driver's seat. A modelled toy's arms hang out wide (Mom's, 47°), so at the wheel a hoof
+   *  went out through the car's door: they reach forward instead (her reachForward brings them in toward her middle).
+   *  The code-built toys' arms hang at their sides and stay as they are. Standing up again lets go (setPose). */
+  drive(on = true) {
+    if (!this.chibi.legL) return
+    this.driving = on
+    this.chibi.armL.rotation.x = this.chibi.armR.rotation.x = on ? -ON_THE_WHEEL : 0
+  }
+
   /** The height they stand at, for someone walking over uneven ground (update() puts them back here every frame). */
   setGround(y: number) {
     this.baseY = y
@@ -85,6 +112,7 @@ export class Member implements Character {
 
   setPose(pose: Pose) {
     this.pose = pose
+    if (pose !== 'sit' && this.driving) this.drive(false)
     const { body, legL, legR } = this.chibi
     body.rotation.set(pose === 'lie' ? -Math.PI / 2 : 0, 0, 0)
     body.position.set(0, pose === 'lie' ? this.chibi.radius : 0, 0)
@@ -93,6 +121,8 @@ export class Member implements Character {
       const sit = pose === 'sit'
       if (sit) body.position.y = -LEGS_SIT.drop * this.height
       legL.rotation.x = legR.rotation.x = sit ? LEGS_SIT.legs : 0
+      // Its tail curls out behind it: sitting, it would go through the seat's back, so it tucks away.
+      if (this.chibi.tail) this.chibi.tail.visible = !sit
     }
   }
 
@@ -144,6 +174,11 @@ export class Member implements Character {
     const lying = this.pose === 'lie'
     this.life.update(dt)
     this.wind.update(this.chibi, dt, t)
+    // A modelled toy's ears tuck under a hat on its head (anything there with `userData.hidesEars`).
+    if (this.chibi.ears) {
+      const hat = this.chibi.head.children.some((c) => c.visible && c.userData.hidesEars)
+      for (const e of this.chibi.ears) e.visible = !hat
+    }
     if (this.phoneDown >= 0) {
       // The phone shrinks away into a pocket while the arms come down from holding it.
       this.phoneDown = Math.min(1, this.phoneDown + dt / 0.5)

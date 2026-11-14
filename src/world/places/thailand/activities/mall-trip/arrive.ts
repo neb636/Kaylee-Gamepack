@@ -352,6 +352,9 @@ export class Arrive extends Stage {
       seat.add(c.root)
       this.put(c, 0, 0, 0, 'sit', 0)
     }
+    // Mom's hooves on the wheel (a modelled Mom's would go out through the door); hopping out lets go.
+    const ji = this.riders.ji
+    if ('drive' in ji) ji.drive()
     sfx.vroom()
     setTimeout(() => this.phase === 'glimpse' && this.events.say(W.arrive.here), 1200)
   }

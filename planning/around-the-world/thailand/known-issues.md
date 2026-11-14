@@ -153,6 +153,18 @@ pictures move her), the night screen shooting before the fire dancers fade in (`
   - Check: `#/world/thailand/samet-trip/speedboat`
 - [ ] **The films' music.** The island's films have no music cue of their own yet (the rice farm's has one).
 
+## Mom as the vinyl toy (2026-11-14)
+Swapped in everywhere and checked scene by scene with `scripts/qa-mom.mjs` (every section, plus the moments that need
+taps). Small things left:
+- [x] **Her size:** she stands as tall as Dad now (`MOM_SIZE` 1.85: her horn tip level with his; at 1.55 she was
+  barely taller than Kaylee). At a car's wheel her hooves go on the wheel (`Member.drive`), since her wide-hanging arms
+  went out through the driver's door at this size; the Pajero's cushion is gone.
+- [ ] On the Samet speedboat's wide shot, Kaylee's straw hat can hide her face for a moment.
+- [ ] **The Nan trip's ride home:** in the open-sided truck one hoof rests on the window edge.
+  - Check: `#/world/thailand/samet-trip/speedboat`
+- [ ] **Her glasses from the side:** the outer rim stands a little past her cheek (the rims are round on a round face).
+- [ ] **Her tail hides while she sits** (it went through seat backs) and her ears hide under the boat's sun hat.
+
 ## Listen on the iPad (automated checks can't hear)
 - [ ] **The mall trip's new voices** (2026-10-21): the transcription check flagged Thai words written back in Thai
   ("Sawasdee ka", "Khob khun ka"), Dad's "Ooh, strong!" heard in Japanese, the coach's

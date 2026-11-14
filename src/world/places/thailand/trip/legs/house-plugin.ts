@@ -107,6 +107,9 @@ function velozCar(v: Veloz): Car {
 
 const U = DIM.g0
 const deg = Math.PI / 180
+/** Hooves on the wheel for whoever sits in the driver's seat (Member.drive: a modelled Mom's would go out through the
+ *  door); hopping out lets go. */
+const atTheWheel = (c: object) => 'drive' in c && typeof c.drive === 'function' && c.drive()
 /** Where everything is in her room for packing (meters; y above her floor). */
 const ROOM = {
   wall: { x: 0.3, z: -20.45 },
@@ -1000,7 +1003,7 @@ export class TripHouse implements HousePlugin {
         // Round the front of the car to the driver's door, then in.
         const front = van.root.localToWorld(new Vector3(0, 0, 3.0))
         const door = van.root.localToWorld(new Vector3(-1.45, 0, 0.7))
-        this.hopper.hop(c, h.scene, front, { face: 90, delay: inSeat.delay, arc: 0.45, dur: 0.6, done: () => this.hopper.hop(c, h.scene, door, { face: -90, arc: 0.4, dur: 0.45, done: () => this.hopper.hop(c, seat, new Vector3(0, 0, 0), { ...inSeat, delay: 0.05 }) }) })
+        this.hopper.hop(c, h.scene, front, { face: 90, delay: inSeat.delay, arc: 0.45, dur: 0.6, done: () => this.hopper.hop(c, h.scene, door, { face: -90, arc: 0.4, dur: 0.45, done: () => this.hopper.hop(c, seat, new Vector3(0, 0, 0), { ...inSeat, delay: 0.05, done: () => (atTheWheel(c), sat()) }) }) })
       } else this.hopper.hop(c, seat, new Vector3(0, 0, 0), inSeat)
     })
     h.family.get('nick')?.react('wave')
@@ -1089,6 +1092,7 @@ export class TripHouse implements HousePlugin {
       if (id !== 'kaylee') h.placeFamily(id, { floor: 0, x: this.carX, z: STREET.carZ, face: 90, pose: 'sit' })
       seat.add(c.root)
       put(c, 0, 0, 0, 'sit', 0)
+      if (seat === this.car.seats.driver) atTheWheel(c)
     }
     this.suitcase.root.visible = false
     this.lid.angle = this.lid.goal = 0

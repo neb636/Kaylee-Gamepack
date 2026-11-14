@@ -1,23 +1,25 @@
 // Mom as a modelled vinyl toy (docs/3d-characters.md), like Kaylee (model.ts): a Tripo3D mesh of a cream unicorn with
 // a brown bun and a pink dress (Tripo's generation 2, the user's pick; slimmed in Blender at
 // the belly, hips and legs, she looked chubbier than the concept picture), split in Blender into the code-built rig's
-// pivots (body, head at the neck, eyes, arms at the shoulders, legs at the hips, tail). For now she is in the
-// character lab only (`mom-model`); the code-built Mom is still the game's.
+// pivots (body, head at the neck, eyes, arms at the shoulders, legs at the hips, tail). She is the game's Mom: Member
+// builds her for `ji` (familyRig), Thailand's Place waits for her GLB, and the code-built Mom stands in only if it can't
+// load (the lab keeps it as `ji-code`).
 //
 // The concept picture went to Tripo with no mouth and no glasses: both are drawn here instead. The smile is a row of
 // ink beads on her muzzle and the open mouth grows with her voice (FaceLife). The glasses are traced on her face: each
 // rim and the bridge follow the face's own surface a few millimetres off it (rays cast at the face mesh), so they sit
 // on her from every side instead of floating as flat rings. She blinks with cream lids over her painted eyes.
-import { CatmullRomCurve3, Group, Mesh, Raycaster, TubeGeometry, Vector3, type BufferGeometry, type Object3D } from 'three'
+import { CatmullRomCurve3, Euler, Group, Mesh, Quaternion, Raycaster, TubeGeometry, Vector3, type BufferGeometry, type Object3D } from 'three'
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import type { Bag } from '../../../engine3d/dispose'
 import { bake, blobShadow, merge, P, solid, solidMix, type V3 } from '../../../engine3d/geo'
 import type { Rig } from '../../../engine3d/characters/animal'
-import { inkPieces, swingForward } from './model'
+import { inkPieces } from './model'
 import url from './models/mom.glb?url'
 
-/** How tall she stands (meters; the model is 1 m, like LOOKS.ji). */
-export const MOM_SIZE = 1.55
+/** How tall she stands (meters; the 1 m model's top is her horn tip). 1.85 puts her horn tip level with Dad's (the
+ *  code-built Dad, LOOKS.nick at 1.7, reaches 1.87 with his horn); at 1.55 she was barely taller than Kaylee (1.25). */
+export const MOM_SIZE = 1.85
 /** How far each arm's swing plane turns forward (model.ts swingForward): her hair is about as wide as her reach. */
 const ARM_TILT = 2.0
 /** Her ink widths before TUNE.outline: the user's pick in the lab, the Outline slider at 0.35 instead of 0.75, so her
@@ -66,6 +68,42 @@ export function momReady(): Promise<GLTF | null> {
       return null
     })
   return ready
+}
+
+/** The middle of her right hoof from the shoulder pivot (model meters, three.js axes; the left is mirrored): her arms
+ *  hang 47° out. */
+const HOOF: V3 = [0.137, -0.125, 0.011]
+
+const qTurn = new Quaternion()
+const qPose = new Quaternion()
+const qOut = new Quaternion()
+const eIn = new Euler()
+/** How far a reach forward brings an arm in toward her middle (radians, at a reach of 1 radian or more). */
+const IN_REACH = 0.6
+const yAxis = new Vector3(0, 1, 0)
+/** Her arms in the code-built rig's poses. A code-built arm hangs at the side: `rotation.x` swings it forward (a reach,
+ *  a phone held up) and `rotation.z` raises it out to the side (a wave, a stretch). Her hair is as wide as her reach,
+ *  so an arm raised out to the side would go up inside it: the more an arm is raised out to the side (rather than
+ *  forward), the more its swing plane turns forward by up to `tilt`, so a wave comes up in front of her. A pure reach
+ *  forward stays forward (model.ts swingForward turns every pose, so a reach went back into her body). The rest pose
+ *  is unchanged. `s` is -1 for the left arm, 1 for the right. */
+function reachForward(arm: Object3D, s: -1 | 1, tilt: number) {
+  arm.updateMatrix = function (this: Object3D) {
+    const { x, z } = this.rotation
+    const out = Math.max(0, s * z)
+    const fwd = Math.max(0, -x)
+    const k = out < 1e-4 ? 0 : tilt * (out / (out + fwd)) * Math.min(1, out / 0.5)
+    // (Into a quaternion of its own: writing the arm's `quaternion` would rewrite its `rotation`.)
+    // Her arms hang 47° out (a code-built arm hangs at her side), so a reach forward also brings the hoof in toward her
+    // middle, or a clap or a phone held in both hands would stay wide apart.
+    eIn.copy(this.rotation)
+    eIn.z -= s * IN_REACH * Math.min(1, fwd)
+    qPose.setFromEuler(eIn)
+    qOut.setFromAxisAngle(yAxis, -s * k).multiply(qPose)
+    qOut.multiply(qTurn.setFromAxisAngle(yAxis, s * k))
+    this.matrix.compose(this.position, qOut, this.scale)
+    this.matrixWorldNeedsUpdate = true
+  }
 }
 
 /** A point of the model (three.js axes: x, y up, z forward) in the head pivot's space. */
@@ -148,7 +186,15 @@ export function buildMomRig(gltf: GLTF, bag: Bag): Rig {
   inkPieces(meshes, null, BODY_INK)
 
   const [body, head, eyes, armL, armR, tail, legL, legR] = ['body', 'head', 'eyes', 'armL', 'armR', 'tail', 'legL', 'legR'].map(node)
-  for (const [arm, s] of [[armL, -1], [armR, 1]] as const) swingForward(arm, s, ARM_TILT)
+  // Her arms take the code-built rig's poses (reachForward), and each holds things at its hoof (`hands`: a group turned
+  // like her body at rest).
+  const hands = ([[armL, -1], [armR, 1]] as const).map(([arm, s]) => {
+    reachForward(arm, s, ARM_TILT)
+    const hand = new Group()
+    hand.position.set(s * HOOF[0] * S, HOOF[1] * S, HOOF[2] * S)
+    arm.add(hand)
+    return hand
+  })
 
   const root = new Group()
   root.add(blobShadow(0.24 * S, bag), body)
@@ -159,6 +205,8 @@ export function buildMomRig(gltf: GLTF, bag: Bag): Rig {
   head.add(face)
   /** A Blender point (x, z up, y toward the back) in the head pivot's space. */
   const onHead = (x: number, z: number, y: number): V3 => [x, z - NECK_Z, -y + NECK_Y]
+  /** A model-meter point at her size. */
+  const sc = (p: V3): V3 => [p[0] * S, p[1] * S, p[2] * S]
   /** A point on her muzzle, stood `lift` off it. */
   const onMuzzle = (x: number, z: number, lift: number): V3 => onHead(x, z, -(MUZZLE - CURVE * x * x + lift))
 
@@ -219,12 +267,17 @@ export function buildMomRig(gltf: GLTF, bag: Bag): Rig {
     tail,
     legL,
     legR,
+    hands: [hands[0], hands[1]],
+    ears: ['ear_L', 'ear_R'].map((n) => head.getObjectByName(n)).filter((e): e is Object3D => !!e),
     mane: null,
     height: S,
     radius: 0.2 * S,
     phone: null,
     // Her head (head-local): about 0.23 round, its middle 0.15 above the neck (model meters).
     face: { R: 0.23 * S, headY: 0.15 * S, mouth: [mouthAt[0] * S, mouthAt[1] * S, mouthAt[2] * S] },
+    // Measured on the face mesh (model meters, Blender z up and -y forward as onHead takes them): a hat goes round her
+    // head where it is 0.4 wide (z 0.8, under the bun), the nose tip, and the face between her eyes.
+    spots: { crown: sc(onHead(0, 0.8, -0.06)), hat: 0.2 * S, nose: sc(onHead(0, 0.631, -0.241)), eyes: sc(onHead(0, 0.667, -0.222)) },
     blink(open: number) {
       const shut = (1 - open) / 0.9
       for (const lid of lids) {

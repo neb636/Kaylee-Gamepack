@@ -6,7 +6,7 @@
 // one-finger drag that swings the camera, a two-finger pinch that moves it in and out, and WASD / arrows / space on a
 // keyboard for Dad.
 import { useEffect, useRef, type MutableRefObject, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
-import type { InstancedMesh, Mesh, Scene, WebGLRenderer } from 'three'
+import type { Camera, InstancedMesh, Mesh, Scene, WebGLRenderer } from 'three'
 import type { CameraRig } from './camera'
 import { camLab, type LabWorld } from './camLab'
 import { automated } from './flags'
@@ -46,6 +46,9 @@ export interface World3D extends Roamable {
 export type QAKey = '__thaiHouseQA' | '__thaiBoatQA' | '__thaiMallQA' | '__thaiNanQA' | '__thaiCastQA' | '__thaiSametQA' | '__thaiMapQA' | '__polesGlobeQA' | '__polesFloeQA' | '__polesSlideQA' | '__polesIcebergQA' | '__polesPartyQA' | '__canadaMapQA' | '__canadaBikeQA' | '__canadaCanoeQA' | '__canadaWhalesQA' | '__canadaSnowmanQA' | '__canadaPartyQA'
 declare global {
   interface Window {
+    /** QA only (under webdriver): the 3D world on screen, so a robot can find a character and photograph it up close
+     *  (scripts/qa-mom.mjs). */
+    __kaylee3d?: { scene: Scene; camera: Camera; renderer: WebGLRenderer; render(): void }
     __thaiHouseQA?: () => Record<string, unknown>
     __thaiBoatQA?: () => Record<string, unknown>
     __thaiMallQA?: () => Record<string, unknown>
@@ -126,6 +129,8 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
       },
     }
     camLab.attach(lab)
+    const qa3d = { scene: world.scene, camera: world.rig.camera, renderer, render: () => world.render() }
+    if (automated) window.__kaylee3d = qa3d
 
     // ---- Size: the canvas fills the screen; the camera keeps the framing below the top bar ----
     // The desktop Studio draws at 1.5x at most (a Retina pane at 2x costs nearly twice the GPU for little Dad can see).
@@ -391,6 +396,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
     return () => {
       stop()
       camLab.detach(lab)
+      if (window.__kaylee3d === qa3d) delete window.__kaylee3d
       ro.disconnect()
       clearTimeout(orientTimer)
       window.removeEventListener('orientationchange', onOrient)

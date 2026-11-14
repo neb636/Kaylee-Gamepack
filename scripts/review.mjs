@@ -20,6 +20,9 @@
 //     "tableReads": [["thailand", "mall.barber"]],
 //     "reels": [{ "name": "barber", "moments": ["barber"] }],      // reel.mjs names: qa.mjs motion runs or #/links~s
 //     "links": [{ "label": "Play it", "hash": "#/world/thailand/mall-trip/barber" }],
+//     "pictures": [{ "title": "On the boat", "before": "pics/bay-old.jpg", "after": "pics/bay-new.jpg",   // before and
+//                    "caption": "Her sun hat sits round her bun" }],   // after, side by side (relative to review/; a fix,
+//                                                                      // a swapped model)
 //     "listens": [{ "title": "The salt hut", "audio": "sfx/salt.mp3",   // sound effects: one track per stage (made by
 //                   "items": [{ "text": "bucket: the bucket down the well", "at": 0, "end": 1.4 }, "..."] }],
 //                                                   // scripts/sfx-listens.mjs), the items numbered in play order. With
@@ -158,6 +161,10 @@ ${r.audio ? `<audio controls preload="metadata" src="table-read/${esc(r.audio)}"
 <audio controls preload="metadata" src="${esc(l.audio)}"></audio>
 <ol class="meta">${(l.items ?? []).map(cue).join('')}</ol></div>`)
     .join('\n')
+  const picHtml = (brief.pictures ?? [])
+    .map((p) => `<figure class="pair"><div>${p.before ? `<img src="${esc(p.before)}" alt="Before: ${esc(p.title)}" loading="lazy"><span>Before</span>` : ''}</div><div><img src="${esc(p.after)}" alt="After: ${esc(p.title)}" loading="lazy"><span>After</span></div>
+<figcaption><b>${esc(p.title)}</b>${p.caption ? `: ${esc(p.caption)}` : ''}</figcaption></figure>`)
+    .join('\n')
   const qs = (brief.questions ?? []).slice(0, 3)
   const qHtml = qs
     .map((q, i) => `<li><p>${esc(q)}</p><textarea rows="2" data-q="${i}" placeholder="Your answer (a word is fine)"></textarea></li>`)
@@ -196,13 +203,16 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 .grows{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;counter-reset:g}
 .grows li{background:var(--lav);border-radius:12px;padding:8px;font-size:14px;text-align:center}.grows span{display:block;font-size:28px}
 .also{font-size:15px;color:var(--soft)}.also span{font-size:18px}
-@media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:6px}.pair>div{position:relative}.pair img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;display:block;background:var(--lav)}
+.pair span{position:absolute;left:6px;top:6px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;font-weight:700;border-radius:99px;padding:1px 8px}.pair figcaption{grid-column:1/-1}
+@media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.pics{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}}
 </style></head><body><main>
 ${brief.checkIn ? `<span class="chip">Check-in ${esc(brief.checkIn)}</span>` : ''}
 <h1>${esc(title)}</h1>
 ${brief.kaylee ? `<p class="kaylee">${esc(brief.kaylee)}</p>` : ''}
 ${pitchHtml ? `<h2>Pick one</h2><div class="pitches">${pitchHtml}</div><p class="meta" id="picked"></p>` : ''}
 ${reelHtml ? `<h2>Watch</h2>${reelHtml}` : ''}
+${picHtml ? `<h2>Before and after</h2><div class="pics">${picHtml}</div>` : ''}
 ${readHtml ? `<h2>Hear the script</h2>${readHtml}` : ''}
 ${listenHtml ? `<h2>Listen</h2>${listenHtml}` : ''}
 ${qHtml ? `<h2>Your call</h2><ol>${qHtml}</ol><button id="copy">Copy my answers</button>${prLink ? `<a class="pill" href="${prLink}">Open the PR to paste them</a>` : ''}<p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>` : ''}
