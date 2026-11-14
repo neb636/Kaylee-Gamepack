@@ -1,4 +1,5 @@
-// The boat trip as a trip (trip/types.ts): Mom, Dad and Kaylee, Aunty Sri's van to the airport, a window seat to Krabi, then the longtail at the pier. Pure data.
+// The boat trip as a trip (trip/types.ts): Mom, Dad and Kaylee, Aunty Sri's van to the airport, a window seat to Krabi,
+// then the Krabi map (map/), where she picks the elephants or the longtail at the pier. Pure data.
 import { L } from '../../lines'
 import { PLACES } from '../../trip/outline'
 import type { TripDef } from '../../trip/types'
@@ -32,7 +33,7 @@ export const BOAT_TRIP: TripDef = {
 }
 
 /** Which 3D world each section runs in (one mount each; switching worlds goes behind the boarding pass). */
-export type TripWorld = 'house' | 'airport' | 'plane' | 'bay' | 'race' | 'chang'
+export type TripWorld = 'house' | 'airport' | 'plane' | 'map' | 'bay' | 'race' | 'chang'
 export const WORLD_OF: Record<BoatSection, TripWorld> = {
   invite: 'house',
   pack: 'house',
@@ -41,6 +42,7 @@ export const WORLD_OF: Record<BoatSection, TripWorld> = {
   takeoff: 'plane',
   fly: 'plane',
   land: 'plane',
+  map: 'map',
   chang: 'chang',
   sign: 'chang',
   drinks: 'chang',

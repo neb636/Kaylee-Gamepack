@@ -12,13 +12,10 @@
 //   pretends to snore), the air vent (it blows her mane), the seat-back screen (the little plane going down the
 //   elephant's trunk; again: cartoons), Dad (snorts awake), Mom (shares her snack). Then the clouds part and the
 //   camera leans out: all of Thailand below, an elephant's head with a long trunk, Kaylee's crayon ear and eye on it.
-// - land: seatbelts on, the sea and the first rock islands come up, bump bump roll, and everyone claps. Then a white
-//   flash and Krabi: the Thai-roofed arrivals arch and the songthaew, which drives them off to the pier (3 seconds).
-//   On the boat trip with Baan Chang open (`fork`), it stops at the signpost down the road instead and Dad asks
-//   "Where to?" (`events.asking`: the trip shows his card of postcards, WhereTo.tsx): the elephants turn it up the
-//   side road (to Baan Chang), the longtail drives on to the pier (`choose`).
-//   The Nan road trip lands in the mountains instead (`landing: 'nan'`): a green valley with rice fields and a ring of
-//   round mountains comes up under the plane, and after the claps the trip goes on to the Nan map (`events.done`).
+// - land: seatbelts on, the sea and the first rock islands come up, bump bump roll, and everyone claps. Then the trip
+//   goes on to its map (`events.done('map')`): the Krabi map (boat-trip/map/), where she picks the elephants or the
+//   boat. The Nan road trip lands in the mountains instead (`landing: 'nan'`): a green valley with rice fields and a
+//   ring of round mountains comes up under the plane, and after the claps it goes on to the Nan map.
 // Every part moves on by itself (about 35 s in all), whatever she does, and the ⏩ button skips ahead (`skip`).
 import { CanvasTexture, CatmullRomCurve3, Color, ConeGeometry, ExtrudeGeometry, Fog, Group, Matrix4, Mesh, MeshBasicMaterial, Path, PlaneGeometry, Shape, ShapeGeometry, Sprite, SpriteMaterial, SRGBColorSpace, TextureLoader, TubeGeometry, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, sounds, spendHint } from '../../../../../sdk'
@@ -38,9 +35,8 @@ import { art } from '../../art'
 import { drawSeatback } from '../drawings'
 import { ELEPHANT, flat, PHUKET, PLACES, THAILAND, type LonLat } from '../outline'
 import { wearing } from '../packing'
-import { buildItem, buildSuitcase } from '../props'
-import { buildArrival, type Arrival } from './krabi'
-import { cabinBed, krabiBed, planeSfx } from './plane-sounds'
+import { buildItem } from '../props'
+import { cabinBed, planeSfx } from './plane-sounds'
 import { Stage, type AnchorSpot, type LegEvents } from './stage'
 
 export type FlySection = 'takeoff' | 'fly' | 'land'
@@ -59,14 +55,10 @@ export const PLANE_ANCHORS: AnchorInfo[] = [
   { id: 'family:nick', label: 'Dad', kind: 'family' },
   { id: 'family:kaylee', label: 'You', kind: 'family' },
   { id: 'balloon', label: "Sparkle's balloon", kind: 'thing' },
-  { id: 'songthaew', label: 'Songthaew', kind: 'thing' },
 ]
 
-/** Where the plane comes down: Krabi by the sea (then the songthaew), or Nan's green valley in the mountains. */
+/** Where the plane comes down: Krabi by the sea, or Nan's green valley in the mountains (then the trip's map). */
 export type Landing = 'krabi' | 'nan'
-
-/** Where the songthaew goes at Krabi: straight to the pier or to Baan Chang, or it stops at the signpost and she picks. */
-export type KrabiFork = 'pier' | 'chang' | 'ask'
 
 /** The flight attendant (a background figure with a line or two): a navy penguin in a pink scarf. */
 export const ATTENDANT: Look = { species: 'penguin', height: 1.32, fur: '#4F5F9E', light: '#FFF6EC', dark: '#FFA640', extras: ['scarf'], lashes: true }
@@ -102,19 +94,11 @@ const FLY_S = 18
 const DESCEND_S = 6
 /** The whole flight as built, takeoff to the cheer at Krabi (a trip can ask for a shorter or longer one). */
 const FLIGHT_S = 35
-/** Krabi: the arrival set, far from the cabin (shown behind a white flash), and how long the songthaew takes. */
-const ARRIVAL_AT = new Vector3(0, 0, 420)
-const SONGTHAEW_S = 3.1
-/** Down the road to the signpost (s), and how long the turn up the side road or the drive on to the pier takes. */
-const TO_FORK_S = 2.1
-const FORK_AWAY_S = 1.9
 /** Snacks on the tray, at most (the pile wobbles after that). */
 const MAX_SNACKS = 14
 
 type Ev = LegEvents & {
   flash?(): void
-  /** At the signpost: Dad asks "Where to?" (true) until she picks (false). */
-  asking?(on: boolean): void
 }
 type Who = 'kaylee' | 'ji' | 'nick'
 const WHO: Who[] = ['kaylee', 'ji', 'nick']
@@ -131,7 +115,6 @@ export class PlaneRide extends Stage {
   private runwayDashes = new Group()
   private krabi = new Group()
   private thailand = new Group()
-  private arrival: Arrival
   private clouds: { g: Object3D; speed: number }[] = []
   private storks = new Group()
   /** Their own little plane over the map below (the view of all of Thailand), and its dotted route. */
@@ -164,27 +147,21 @@ export class PlaneRide extends Stage {
   /** Kaylee pretending to snore (the shade down and the reading light on). */
   private napping = false
   private clap = -1
-  private view: 'cabin' | 'screen' | 'elephant' | 'krabi' = 'cabin'
+  private view: 'cabin' | 'screen' | 'elephant' = 'cabin'
   private viewT = 0
   private elephantDone = false
   private touchdown = -1
   private cheered = false
-  /** Seconds into the songthaew ride at Krabi (-1: still on the plane). */
-  private drive = -1
-  /** At the signpost: seconds waiting there (-1: not there yet), which way she picked, and seconds since it set off. */
-  private forkWait = -1
-  private forkGo: 'chang' | 'pier' | null = null
-  private forkT = 0
   private told = new Set<string>()
   private counts = { snacks: 0, shades: 0, lights: 0, screens: 0, belts: 0, vents: 0 }
   /** Flight seconds per real second (the trip's cap). */
   private pace = 1
-  /** Landed in Nan and off to the Nan map. */
+  /** Landed and off to the trip's map. */
   private off = false
   /** Stops the cabin's hum (off the plane). */
   private stopCabin: () => void = () => {}
 
-  constructor(renderer: WebGLRenderer, protected events: Ev, start: FlySection, private packed: string[], private route: { from: LonLat; to: LonLat } = { from: PLACES.bangkok, to: PLACES.krabi }, cap = FLIGHT_S, private fork: KrabiFork = 'pier', private landing: Landing = 'krabi', ashore = false) {
+  constructor(renderer: WebGLRenderer, protected events: Ev, start: FlySection, private packed: string[], private route: { from: LonLat; to: LonLat } = { from: PLACES.bangkok, to: PLACES.krabi }, cap = FLIGHT_S, private landing: Landing = 'krabi') {
     super(renderer, events)
     this.pace = FLIGHT_S / cap
     const { scene, bag } = this
@@ -203,11 +180,6 @@ export class PlaneRide extends Stage {
     this.screen = { canvas, tex, mode: 'map', drawn: -1 }
     this.attendant = this.buildAttendant()
     this.buildOutside()
-    this.arrival = buildArrival(bag)
-    this.arrival.root.position.copy(ARRIVAL_AT)
-    this.arrival.root.visible = false
-    this.arrival.songthaew.root.userData.pick = 'songthaew'
-    scene.add(this.arrival.root)
     const { kaylee, members } = this.makeFamily(['ji', 'nick'])
     kaylee.wear(wearing(packed))
     kaylee.glassesUp(true)
@@ -226,19 +198,9 @@ export class PlaneRide extends Stage {
       this.parts.belt.visible = true
     }
     this.place()
-    // The cabin's hum, the whole flight (off the plane it stops, and Krabi's roadside starts: toKrabi).
+    // The cabin's hum, the whole flight (off the plane it stops: offPlane).
     this.bag.add({ dispose: () => this.stopCabin() })
-    if (!ashore || this.landing !== 'krabi') this.stopCabin = cabinBed()
-    // Already off the plane (Krabi from the Thailand map): the first frame is the arrivals arch and the songthaew, with
-    // no cabin, no flash and no landing line before it.
-    if (ashore && this.landing === 'krabi') {
-      this.sec = 'land'
-      this.alt = 2.2
-      this.touchdown = 99
-      this.cheered = true
-      this.toKrabi(false)
-      return
-    }
+    this.stopCabin = cabinBed()
     setTimeout(() => this.events.say(start === 'land' ? L.trip.plane.land : start === 'fly' ? L.trip.plane.tray : L.trip.plane.belt), 400)
   }
 
@@ -602,7 +564,7 @@ export class PlaneRide extends Stage {
   // ---------------------------------------------------------------- touch
 
   protected pickRoots(): Object3D[] {
-    return [this.cabin, this.arrival.root, ...(this.balloon ? [this.balloon] : [])]
+    return [this.cabin, ...(this.balloon ? [this.balloon] : [])]
   }
 
   protected onTap(id: string | null) {
@@ -686,9 +648,6 @@ export class PlaneRide extends Stage {
         sounds.sparkle()
         k.react('wave')
         return
-      case 'songthaew':
-        planeSfx.horn()
-        return
     }
   }
 
@@ -753,13 +712,11 @@ export class PlaneRide extends Stage {
     this.view = v
     this.viewT = 0
     this.cabin.visible = v === 'cabin' || v === 'screen'
-    this.outside.visible = v !== 'krabi'
-    this.arrival.root.visible = v === 'krabi'
-    // No haze on the view below (all of Thailand, crisp), nor in Krabi.
-    this.scene.fog = v === 'elephant' || v === 'krabi' ? null : this.haze
+    // No haze on the view below (all of Thailand, crisp).
+    this.scene.fog = v === 'elephant' ? null : this.haze
     this.rig.lag = v === 'screen' ? 0.35 : 0.5
     // In and out of the view below happen behind a white flash: cut, don't fly through the wall.
-    if (v === 'elephant' || was === 'elephant' || v === 'krabi') this.rig.setShot(this.shot(), true)
+    if (v === 'elephant' || was === 'elephant') this.rig.setShot(this.shot(), true)
   }
 
   // ---------------------------------------------------------------- per frame
@@ -882,11 +839,10 @@ export class PlaneRide extends Stage {
           for (const id of WHO) this.riders[id].react('hop')
           this.events.say(this.landing === 'nan' ? L.nan.trip.landed : L.trip.plane.krabi)
         }
-        // Krabi: a white flash, the arrivals arch, and off they go in the songthaew.
-        if (b > 3.8 && this.drive < 0) this.toKrabi()
+        // Off the plane: on to the trip's map.
+        if (b > 3.8) this.offPlane()
       }
     }
-    if (this.drive >= 0) this.stepKrabi(dt)
     // Clouds stream past (fast on the ground they're far, up high they're all around).
     for (const c of this.clouds) {
       c.g.position.x += c.speed * dt * (sec === 'takeoff' ? clamp(this.roll / TAKEOFF_ROLL) : 1)
@@ -901,12 +857,11 @@ export class PlaneRide extends Stage {
     this.cabin.rotation.z += (tilt - this.cabin.rotation.z) * (1 - Math.exp(-dt * 4))
     this.cabin.position.y = Math.sin(t * 31) * 0.02 * shake + Math.sin(t * 1.3) * 0.01
     this.cabin.rotation.x = Math.sin(t * 23) * 0.012 * shake
-    if (this.drive < 0)
-      for (const id of WHO) {
-        const seat = this.seats[id]
-        const doze = id === 'nick' && this.dad.asleep ? -0.22 : 0
-        seat.rotation.z += (lean + doze - seat.rotation.z) * (1 - Math.exp(-dt * 6))
-      }
+    for (const id of WHO) {
+      const seat = this.seats[id]
+      const doze = id === 'nick' && this.dad.asleep ? -0.22 : 0
+      seat.rotation.z += (lean + doze - seat.rotation.z) * (1 - Math.exp(-dt * 6))
+    }
     if (!this.dad.asleep) {
       this.dad.t += dt
       if (this.dad.t > 9) this.dad.asleep = true
@@ -924,7 +879,7 @@ export class PlaneRide extends Stage {
       this.parts.vent.rotation.y += dt * 9
       if (this.ventT > 2.6) this.ventT = -1
     }
-    if (this.drive < 0) k.setWind(this.ventT >= 0 ? 0.85 : 0)
+    k.setWind(this.ventT >= 0 ? 0.85 : 0)
     this.stepAttendant(dt, t)
     for (const g of this.snacks) {
       const f = g.userData.fly as { from: Vector3; to: Vector3; t: number }
@@ -956,7 +911,7 @@ export class PlaneRide extends Stage {
     if (this.view === 'screen' && this.viewT > 6) this.setView('cabin')
     // She looks out of her window when there's something to see (the balloon, the storks, the runway going by, the
     // islands coming up), and now and then anyway; otherwise ahead, at her tray and her screen.
-    if (this.view === 'cabin' && this.drive < 0) {
+    if (this.view === 'cabin' && !this.off) {
       const sights = this.balloon?.visible || this.storks.visible || (sec === 'takeoff' && this.roll > 0) || (sec === 'land' && this.alt < 30 && this.touchdown < 0)
       if ((sights && !this.shade.down) || t % 9 < 2.2) k.lookAt(WINDOW.x, WINDOW.y, WALL_Z - 3)
       else k.lookAt(FRONT_X - 1.5, 1.1, SEATS.kaylee + 0.6)
@@ -968,7 +923,7 @@ export class PlaneRide extends Stage {
   /** On top of the usual life: Dad asleep with his mouth open (and Kaylee pretending), the Zs, the claps at Krabi. */
   private stepFaces(dt: number, t: number) {
     const dad = this.riders.nick.rig
-    const dozing = this.dad.asleep && this.drive < 0
+    const dozing = this.dad.asleep && !this.off
     if (dozing) {
       dad.eyes.scale.y = 0.08
       dad.head.rotation.x = -0.32
@@ -1081,157 +1036,26 @@ export class PlaneRide extends Stage {
     if (s === 'fly') setTimeout(() => this.sec === 'fly' && this.events.say(L.trip.plane.tray), 1500)
   }
 
-  /** The ⏩ button: from the takeoff or the cabin straight to the landing; from the landing to Krabi; then the pier. */
+  /** The ⏩ button: from the takeoff or the cabin straight to the landing; from the landing on to the trip's map. */
   skip() {
-    if (this.drive >= 0) {
-      if (this.fork === 'pier') {
-        this.drive = SONGTHAEW_S + 1
-        this.events.done('pier')
-        return
-      }
-      // (It waits at the signpost for her pick: ⏩ only gets it there, and Dad asks again.)
-      const go = this.forkGo ?? (this.fork === 'chang' ? 'chang' : null)
-      if (go) {
-        this.forkGo = go
-        this.forkT = FORK_AWAY_S + 1
-        this.events.done(go)
-      } else if (this.forkWait < 0) this.drive = 0.7 + TO_FORK_S
-      else this.forkWait = Math.max(this.forkWait, 3)
-    } else if (this.sec !== 'land') {
+    if (this.sec !== 'land') {
       if (!this.belt) this.setBelt(true)
       this.storks.visible = false
       if (this.balloon) this.balloon.visible = false
       this.enterSection('land')
     } else {
       this.cheered = true
-      this.toKrabi()
+      this.offPlane()
     }
   }
 
-  /** Off the plane: the family on the songthaew's bench at the arrivals arch, the suitcase across from them. (In Nan
-   *  the trip goes on to the Nan map.) */
-  private toKrabi(flash = true) {
+  /** Off the plane: the trip goes on to its map (the Krabi map, the Nan map). */
+  private offPlane() {
+    if (this.off) return
+    this.off = true
     this.stopCabin()
     this.stopCabin = () => {}
-    if (this.landing === 'nan') {
-      if (!this.off) this.events.done('map')
-      this.off = true
-      return
-    }
-    this.drive = 0
-    if (flash) this.events.flash?.()
-    this.bag.add({ dispose: krabiBed() })
-    const st = this.arrival.songthaew
-    for (const id of WHO) {
-      const c = this.riders[id]
-      st.seats[id].add(c.root)
-      this.put(c, 0, 0, 0, 'sit', 0)
-      c.rig.armL.rotation.set(0, 0, 0)
-      c.rig.armR.rotation.set(0, 0, 0)
-      c.rig.head.rotation.set(0, 0, 0)
-    }
-    this.clap = -1
-    this.napping = false
-    for (const z of this.zs) z.g.removeFromParent()
-    this.zs = []
-    const bag = buildSuitcase(this.bag)
-    bag.root.scale.setScalar(0.75)
-    bag.root.rotation.y = Math.PI
-    st.luggage.add(bag.root)
-    this.riders.kaylee.glassesUp(false)
-    this.setView('krabi')
-  }
-
-  private stepKrabi(dt: number) {
-    this.drive += dt
-    const d = this.drive
-    const st = this.arrival.songthaew
-    // A moment at the curb, a toot, then off along the road toward the pier, everyone's mane in the wind.
-    const go = Math.max(0, d - 0.7)
-    if (this.fork !== 'pier') return this.stepFork(dt, go)
-    st.root.position.x = this.arrival.curbX + go * go * 1.6
-    for (const w of st.wheels) w.rotation.z = (-go * go * 1.6) / 0.3
-    st.body.position.y = go > 0 ? Math.abs(Math.sin(go * 9)) * 0.03 : 0
-    planeSfx.engine(go > 0)
-    if (d > 0.7 && d - dt <= 0.7) {
-      planeSfx.horn()
-      planeSfx.pullaway()
-      this.riders.nick.react('wave')
-      this.riders.kaylee.react('wave')
-    }
-    const wind = clamp(go / 1.2)
-    this.riders.kaylee.setWind(wind)
-    this.riders.ji.setWind(wind)
-    if (d > SONGTHAEW_S && d - dt <= SONGTHAEW_S) this.events.done('pier')
-  }
-
-  /** The boat trip with Baan Chang: down the road to the signpost, a stop ("Where to?"), then her pick. */
-  private stepFork(dt: number, go: number) {
-    const st = this.arrival.songthaew
-    const a = this.arrival
-    const d = this.drive
-    if (d > 0.7 && d - dt <= 0.7) {
-      planeSfx.horn()
-      planeSfx.pullaway()
-      this.riders.kaylee.react('wave')
-    }
-    // Down the road, slowing to a stop where the side road turns off.
-    const k = clamp(go / TO_FORK_S)
-    const x = a.curbX + (a.forkX - a.curbX) * k * k * (3 - 2 * k)
-    let rolled = x - a.curbX
-    // (Also on the frame it gets there: ⏩ jumps the drive straight to its end.)
-    if (k < 1 || this.forkWait < 0) st.root.position.x = x
-    if (k >= 1 && this.forkWait < 0) {
-      this.forkWait = 0
-      if (this.fork === 'chang') this.forkGo = 'chang'
-      else if (!this.forkGo) {
-        this.events.say(L.bay.whereTo)
-        this.events.asking?.(true)
-        this.riders.nick.react('wave')
-      }
-    }
-    const moving = k > 0 && k < 1
-    if (this.forkWait >= 0) {
-      if (!this.forkGo) {
-        this.forkWait += dt
-        // Still deciding a while later: Sparkle says it's her pick (once).
-        if (this.forkWait > 9 && this.forkWait - dt <= 9 && this.time - this.lastTouch > 6 && spendHint(L.chang.hint.fork)) this.events.say(L.chang.hint.fork)
-      } else {
-        this.forkT += dt
-        const t = this.forkT
-        if (this.forkGo === 'chang') {
-          // A turn up the side road, then away into the palms.
-          const turn = clamp(t / 0.55)
-          st.root.rotation.y = (Math.PI / 2) * turn * turn * (3 - 2 * turn)
-          const away = Math.max(0, t - 0.45)
-          st.root.position.z = a.roadZ - 0.6 - away * away * 2.2
-          rolled += away * away * 2.2 + turn * 0.8
-        } else {
-          st.root.position.x = a.forkX + t * t * 1.8
-          rolled += t * t * 1.8
-        }
-        if (t > FORK_AWAY_S && t - dt <= FORK_AWAY_S) this.events.done(this.forkGo)
-      }
-    }
-    for (const w of st.wheels) w.rotation.z = -rolled / 0.3
-    const going = moving || (this.forkGo !== null && this.forkT > 0)
-    planeSfx.engine(going)
-    st.body.position.y = going ? Math.abs(Math.sin(d * 9)) * 0.03 : 0
-    const wind = going ? 0.8 : 0
-    this.riders.kaylee.setWind(wind)
-    this.riders.ji.setWind(wind)
-  }
-
-  /** She picked a postcard on Dad's card: it turns that way. */
-  choose(go: 'chang' | 'pier') {
-    if (this.fork !== 'ask' || this.forkGo) return
-    this.events.asking?.(false)
-    this.forkGo = go
-    this.forkT = 0
-    planeSfx.horn()
-    this.riders.kaylee.react('hop')
-    this.riders.nick.react('wave')
-    this.events.say(L.bay.pai)
+    this.events.done('map')
   }
 
   // ---------------------------------------------------------------- camera, anchors
@@ -1246,21 +1070,6 @@ export class PlaneRide extends Stage {
       const [cx, cy] = flat([100.9, 13.0])
       return { center: new Vector3(c.x + cy * MAP_S, c.y, c.z + cx * MAP_S), half: new Vector3(24, 1, tall ? 14 : 16), yaw: -90, pitch: 62, minDist: 20, maxDist: 400 }
     }
-    if (this.view === 'krabi') {
-      // (Outdoors again: sunglasses back on.)
-      // From across the road: the arch, and the songthaew pulling away with them.
-      const x = this.arrival.songthaew.root.position.x
-      // (At the fork: the songthaew and the signpost, the side road between them.)
-      if (this.fork !== 'pier') {
-        const cx = ARRIVAL_AT.x + (tall ? Math.min(x, this.arrival.forkX) + 1.3 : Math.min(x, this.arrival.forkX) * 0.75 + 1.0)
-        // (While Dad asks, the road in front goes in too, so his card of postcards doesn't cover the family.)
-        const ask = this.fork === 'ask' && this.forkWait >= 0 && !this.forkGo ? 1 : 0
-        return { center: new Vector3(cx, (tall ? 2.0 : 1.8) - ask * (tall ? 0.9 : 1.2), ARRIVAL_AT.z - 0.6), half: new Vector3(tall ? 2.9 : 4.6, (tall ? 2.4 : 2.0) + ask * (tall ? 0.9 : 1.2), 1.8), yaw: 4, pitch: 9, minDist: 5 }
-      }
-      // (Tall screens: centred on the songthaew, following it as it pulls away.)
-      if (tall) return { center: new Vector3(ARRIVAL_AT.x + Math.min(x, 4) + 0.2, 2.0, ARRIVAL_AT.z - 0.6), half: new Vector3(2.8, 2.4, 1.8), yaw: 4, pitch: 9, minDist: 5 }
-      return { center: new Vector3(ARRIVAL_AT.x + Math.min(x + 1.2, 2.5) * 0.6, 2.0, ARRIVAL_AT.z - 0.6), half: new Vector3(4.6, 2.0, 1.8), yaw: 4, pitch: 9, minDist: 5 }
-    }
     // In the aisle in front of their row: all three faces, Kaylee's window beside her and the windows in front of it.
     if (tall) return { center: new Vector3(-0.3, 1.0, -0.22), half: new Vector3(0.8, 0.8, 1.12), yaw: -64, pitch: 23, minDist: 3, maxDist: 5.2 }
     return { center: new Vector3(-0.3, 1.0, -0.42), half: new Vector3(1.0, 0.72, 0.95), yaw: -64, pitch: 23, minDist: 3, maxDist: 5.2 }
@@ -1268,10 +1077,6 @@ export class PlaneRide extends Stage {
 
   protected anchorAt(id: string): AnchorSpot | null {
     if (this.view === 'elephant') return null
-    if (this.view === 'krabi') {
-      if (id === 'songthaew') return { at: this.arrival.songthaew.root.getWorldPosition(new Vector3()).setY(1.4), r: 1.4 }
-      return null
-    }
     const at = (o: Object3D, dy = 0) => {
       const p = o.getWorldPosition(new Vector3())
       p.y += dy
@@ -1332,10 +1137,7 @@ export class PlaneRide extends Stage {
       dadAsleep: this.dad.asleep,
       napping: this.napping,
       attendant: Math.round(this.attendant.x * 10) / 10,
-      krabi: this.drive >= 0,
-      fork: this.fork,
-      atFork: this.forkWait >= 0,
-      forkGo: this.forkGo,
+      off: this.off,
       touches: this.touches,
       ...this.counts,
     }

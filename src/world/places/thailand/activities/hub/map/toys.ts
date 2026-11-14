@@ -75,7 +75,7 @@ export function mountainParts(x: number, y: number, z: number, r: number, h: num
 }
 
 /** One of Krabi's limestone towers: a lumpy grey-lavender column with a jungle top. */
-function karstParts(x: number, y: number, z: number, s: number, k: number): BufferGeometry[] {
+export function karstParts(x: number, y: number, z: number, s: number, k: number): BufferGeometry[] {
   const h = (0.62 + (k % 3) * 0.14) * s
   const r = 0.17 * s
   const parts = [

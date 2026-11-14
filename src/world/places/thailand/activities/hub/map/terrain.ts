@@ -309,39 +309,66 @@ const seaFragment = /* glsl */ `
   }
 `
 
-/** The sea: one flat plane over the whole board, drawn by a small shader that knows how far each spot is from land. */
+/** How far out to sea every spot is (a grid, rows from the north), and the board rectangle it covers (x0..x1 west to
+ *  east, z0..z1 north to south), in the board's own units: the bands and the foam are sized in them. */
+export interface SeaMap {
+  data: Float32Array
+  w: number
+  h: number
+  x0: number
+  z0: number
+  x1: number
+  z1: number
+}
+
+/** The sea's three bands (pale by the beach, the middle, the deep) and the lighter blots far out. */
+export interface SeaColors {
+  shallow: string
+  mid: string
+  deep: string
+  light: string
+}
+const SEA_COLORS: SeaColors = { shallow: '#B9F3EA', mid: '#7FE0E6', deep: '#6CCDF0', light: '#7FD8F4' }
+
+/** The sea: one flat plane over the whole board, drawn by a small shader that knows how far each spot is from land.
+ *  (The Thailand map's, and any trip map's with sea: the Krabi map's, boat-trip/map/.) */
 export class Sea {
   readonly mesh: Mesh
   private mat: ShaderMaterial
 
-  constructor(field: Field, bag: Bag) {
-    const s = field.sea
+  constructor(s: SeaMap, plane: { w: number; d: number; cx?: number; cz?: number }, bag: Bag, colors: Partial<SeaColors> = {}) {
+    const c = { ...SEA_COLORS, ...colors }
     const half = new Uint16Array(s.w * s.h)
     for (let i = 0; i < half.length; i++) half[i] = DataUtils.toHalfFloat(s.data[i])
     const tex = bag.add(new DataTexture(half, s.w, s.h, RedFormat, HalfFloatType))
     tex.minFilter = tex.magFilter = LinearFilter
     tex.needsUpdate = true
-    const x0 = toX(s.lon0)
-    const z0 = toZ(s.lat1)
     this.mat = bag.add(
       new ShaderMaterial({
         uniforms: {
           uSea: { value: tex },
-          uMap: { value: [x0, z0, 1 / (toX(s.lon1) - x0), 1 / (toZ(s.lat0) - z0)] },
+          uMap: { value: [s.x0, s.z0, 1 / (s.x1 - s.x0), 1 / (s.z1 - s.z0)] },
           uTime: { value: 0 },
-          uShallow: { value: new Color('#B9F3EA') },
-          uMid: { value: new Color('#7FE0E6') },
-          uDeep: { value: new Color('#6CCDF0') },
-          uLight: { value: new Color('#7FD8F4') },
+          uShallow: { value: new Color(c.shallow) },
+          uMid: { value: new Color(c.mid) },
+          uDeep: { value: new Color(c.deep) },
+          uLight: { value: new Color(c.light) },
         },
         vertexShader: seaVertex,
         fragmentShader: seaFragment,
       }),
     )
+    this.mesh = new Mesh(bag.add(new PlaneGeometry(plane.w, plane.d)), this.mat)
+    this.mesh.rotation.x = -Math.PI / 2
+    this.mesh.position.set(plane.cx ?? 0, 0, plane.cz ?? 0)
+  }
+
+  /** The Thailand map's sea, from its field (in degrees: one unit is one degree). */
+  static of(field: Field, bag: Bag) {
+    const s = field.sea
     const w = toX(BOARD.lon1) - toX(BOARD.lon0)
     const d = toZ(BOARD.lat0) - toZ(BOARD.lat1)
-    this.mesh = new Mesh(bag.add(new PlaneGeometry(w, d)), this.mat)
-    this.mesh.rotation.x = -Math.PI / 2
+    return new Sea({ data: s.data, w: s.w, h: s.h, x0: toX(s.lon0), z0: toZ(s.lat1), x1: toX(s.lon1), z1: toZ(s.lat0) }, { w, d }, bag)
   }
 
   update(t: number) {

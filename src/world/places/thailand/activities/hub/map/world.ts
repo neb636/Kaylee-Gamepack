@@ -155,7 +155,7 @@ export class ThaiMapWorld implements World3D {
     this.rig.lag = 0.5
     this.field = buildField()
     this.land = buildLand(this.field, this.bag)
-    this.sea = new Sea(this.field, this.bag)
+    this.sea = Sea.of(this.field, this.bag)
     this.scenery = T.buildScenery(this.field, this.bag)
     this.scene.add(this.land, this.sea.mesh, buildTray(this.bag), this.scenery.group)
     this.spray = new Particles({ kind: 'spray', count: 110, colors: ['#8FD3F7', '#FFFFFF', '#FF8FB8', '#FBEA9A', '#8BD79A', '#D9CCFF'], gravity: 3.2 }, this.bag)

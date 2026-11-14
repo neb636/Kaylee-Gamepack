@@ -25,7 +25,7 @@
 //              the hiccups and a chocolate moustache. After a dozen more, they're full.
 //   splash     full and happy, they dip their trunks in the trough and spray it up over the family, under a rainbow.
 //              A tap on an elephant: another spray. Dad's photo of it drops into the album, then Khanom's sticker
-//              flies in, and the way on shows (BoatTrip: 🚤 to the pier if she hasn't been, else ✈️🏠).
+//              flies in, and the way on shows (BoatTrip: 🗺️ back to the Krabi map).
 // Talk (lines.ts L.chang): Dad and Mom react in their own voices, Sparkle says each elephant's name and nickname
 // the first time it eats, what's new (the wishes, Lamyai, the splash), counts a wish of three, and after ~8 s with
 // nothing done says what to do next (stuckLine).
@@ -245,8 +245,6 @@ export class Chang extends Stage {
     packed: string[],
     fed: number,
     straw: StrawColor,
-    /** Where the splash's way on goes (🚤 if she hasn't been on the boat yet), for Sparkle's hint there. */
-    private after: 'pier' | 'home' = 'pier',
   ) {
     super(renderer, events)
     const { scene, bag } = this
@@ -1433,7 +1431,8 @@ export class Chang extends Stage {
       case 'feed':
         return L.chang.hint.hold
       case 'splash':
-        return this.stuckN === 0 ? L.chang.hint.spray : this.after === 'pier' ? L.chang.hint.boat : L.home.fly
+        // (Then the 🗺️ back to the Krabi map pulses by itself.)
+        return this.stuckN === 0 ? L.chang.hint.spray : null
       default:
         return this.eaters.some((x) => x.want) ? L.chang.hint.want : L.chang.hint.hold
     }

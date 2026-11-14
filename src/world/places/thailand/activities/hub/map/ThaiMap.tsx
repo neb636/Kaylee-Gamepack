@@ -111,7 +111,8 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
     if (id === 'samet') {
       return void (location.hash = worldLink(meta.id, trip, readSametSave()?.at ? 'island' : 'speedboat'))
     }
-    location.hash = id === 'krabi' ? worldLink(meta.id, trip, 'land', { quick: '1' }) : worldLink(meta.id, trip, 'map')
+    // (Krabi and Nan open on their own maps.)
+    location.hash = worldLink(meta.id, trip, 'map')
   }
 
   const events = useRef<MapEvents>(null!)

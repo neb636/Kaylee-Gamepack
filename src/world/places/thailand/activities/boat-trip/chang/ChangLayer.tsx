@@ -1,7 +1,7 @@
 // Baan Chang's way on (plan: thailand/baan-chang.md (retired; in git history)): one big pulsing button top right once the place she's at is done,
 // never forced (she can keep playing): 🥤 after a photo at the sign wall (up to the cafe), 🐘 once her chocolate milk is
-// ready (out onto the boardwalk), and after the splash 🚤 to the pier if she hasn't been on the boat yet, else ✈️🏠 (the
-// real elephants' video plays first, chang/video.ts).
+// ready (out onto the boardwalk), and after the splash 🗺️ back to the Krabi map (the real elephants' video plays first,
+// chang/video.ts).
 import { AnimatePresence, motion } from 'motion/react'
 import { sounds } from '../../../../../../sdk'
 import type { BoatSection } from '../sections'
@@ -10,11 +10,9 @@ interface Props {
   section: BoatSection
   /** The way on is open (the world says when). */
   ready: boolean
-  /** She has been on the boat already (the splash goes home). */
-  bay: boolean
   onOnward: () => void
-  onPier: () => void
-  onHome: () => void
+  /** After the splash: back to the Krabi map. */
+  onMap: () => void
 }
 
 const ICON: Partial<Record<BoatSection, { icon: string; label: string }>> = {
@@ -22,9 +20,9 @@ const ICON: Partial<Record<BoatSection, { icon: string; label: string }>> = {
   drinks: { icon: '🐘', label: 'To the elephants' },
 }
 
-export function ChangLayer({ section, ready, bay, onOnward, onPier, onHome }: Props) {
+export function ChangLayer({ section, ready, onOnward, onMap }: Props) {
   const splash = section === 'splash'
-  const b = splash ? (bay ? { icon: '✈️🏠', label: 'Fly home' } : { icon: '🚤', label: 'To the boat' }) : ICON[section]
+  const b = splash ? { icon: '🗺️', label: 'Back to the Krabi map' } : ICON[section]
   return (
     <AnimatePresence>
       {ready && b && (
@@ -39,8 +37,7 @@ export function ChangLayer({ section, ready, bay, onOnward, onPier, onHome }: Pr
           onClick={() => {
             sounds.pop()
             if (!splash) onOnward()
-            else if (bay) onHome()
-            else onPier()
+            else onMap()
           }}
           style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 18px)', top: 'calc(var(--top-clear) + 12px)', minWidth: 'clamp(110px, 18vw, 150px)', height: 'clamp(88px, 13vmin, 110px)', borderRadius: 999, border: '5px solid #fff', background: 'var(--butter)', fontSize: 'clamp(40px, 7vmin, 56px)', boxShadow: '0 0 0 6px rgba(255,79,154,.45), var(--shadow)', zIndex: 33, padding: '0 20px' }}
         >

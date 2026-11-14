@@ -72,7 +72,7 @@ New: 🌍 World map → 🗺️ Thailand map (fly the plane) → 📍 Land on a 
 ## 📍 The pins
 
 - 🏠 **Bangkok: Agong's house**: The plane's home. Landing here opens the house (the tuk-tuk ride, `hub/arrive`). The **mall day** starts inside: Mom or Dad asks. The mall's stamp shows on this pin.
-- 🚤 **Krabi: the boat and the elephants**: Lands at Krabi airport, where Dad's postcards ask 🐘 the elephants or 🚤 the boat (the fork that's already built). The boat trip's stamp lands here.
+- 🚤 **Krabi: the boat and the elephants**: Opens the **Krabi map** (2026-11-13, [its notes](krabi-map.md)): a 3D diorama of Krabi and Phang Nga Bay where she taps a pin to go to 🐘 the elephants or 🚤 the boat. The boat trip's stamp lands here.
 - 🏔️ **Nan: the mountains**: Lands straight on the **Nan map**, the Pajero waiting at the airport (PR #228 already skips the rental desk). The Nan trip's stamp lands here.
 
 **What floats over each place (user feedback, 2026-11-10):** a friend she'll meet there, bobbing and waving like a pin (`map/pins.ts`): Agong in Bangkok, the baby elephant in Krabi, Moon the sun bear in Nan, the jet ski otter on Koh Samet. The boats' and the turtle's loops (`geo.ts`) are measured to stay out at sea.
@@ -81,9 +81,9 @@ A new trip later (Chiang Mai, Songkran, the night market) is a new pin. Until it
 
 ## 🧳 How a trip goes now
 
-First trip this session: 📍 Tap Krabi or Nan → 🧳 Pack the suitcase → 🪟 The window seat (seatbelt, snacks, Thailand below) → 🛬 Landing (Krabi's fork or the Nan map)
+First trip this session: 📍 Tap Krabi or Nan → 🧳 Pack the suitcase → 🪟 The window seat (seatbelt, snacks, Thailand below) → 🛬 Landing (the Krabi map or the Nan map)
 
-Every trip after: 📍 Tap Krabi or Nan → ⚡ Straight there → 🛬 Krabi's fork or the Nan map
+Every trip after: 📍 Tap Krabi or Nan → ⚡ Straight there → 🛬 the Krabi map or the Nan map
 
 The end: 🌅 The last stop (Krabi's sunset, Nan's 3 road) → 🏅 The stamp and the sticker → 📍 Back on the map: the stamp lands on the pin
 
@@ -114,7 +114,7 @@ The mall (from the house): 🏠 Bangkok pin → the house → 👩 Mom or Dad: �
 
 ### The trips' new ends
 
-1. `#/world/thailand/boat-trip/land?quick=1` Krabi on a later trip: straight to the signpost
+1. `#/world/thailand/boat-trip/map` Krabi: straight to the Krabi map
 2. `#/world/thailand/boat-trip/pack` The first trip of the session: pack, then down the stairs to the window seat
 3. `#/world/thailand/boat-trip/sunset?been=chang` ✈️🏠 at the pier ends the trip: the stamp, then the map
 4. `#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt` ✈️🏠 at the 3 ends the Nan trip: the stamp, then the map
