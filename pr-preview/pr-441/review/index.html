@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mom as a vinyl toy: pick a model</title>
+<title>Mom as a vinyl toy: model 2, glasses fixed</title>
 <style>
 :root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a;--lav:#efe6ff;--warn:#b0124f}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}}
@@ -32,33 +32,19 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 .also{font-size:15px;color:var(--soft)}.also span{font-size:18px}
 @media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}}
 </style></head><body><main>
-<span class="chip">Check-in pick</span>
-<h1>Mom as a vinyl toy: pick a model</h1>
-<p class="kaylee">Mom becomes a vinyl toy like her unicorn: same cream unicorn, glasses and smile, and her mouth moves when she talks.</p>
-<h2>Pick one</h2><div class="pitches"><article class="pitch"><img src="pitch/mom-2.png" alt="">
-<div class="pbody"><h3>Model 2</h3>
-<p class="finger">👆 Hair like the picture from the front; two little curls stick out at the nape.</p>
-<ol class="grows"><li><span>👓</span>glasses drawn on</li><li><span>🙂</span>smile that opens when she talks</li><li><span>😌</span>blinks</li></ol>
-<p><b>Why her:</b> Eyes painted flat on her face.</p>
-<p class="meta"></p>
-<button class="pick" data-p="0">Pick this one</button></div></article>
-<article class="pitch"><img src="pitch/mom-4.png" alt="">
-<div class="pbody"><h3>Model 4</h3>
-<p class="finger">👆 The cleanest back: real hair locks over the back of her head, no stray curls.</p>
-<ol class="grows"><li><span>👓</span>glasses drawn on</li><li><span>🙂</span>smile that opens when she talks</li><li><span>😌</span>blinks</li></ol>
-<p><b>Why her:</b> Glossy sculpted eyes, like your unicorn's.</p>
-<p class="meta"></p>
-<button class="pick" data-p="1">Pick this one</button></div></article></div><p class="meta" id="picked"></p>
-<h2>Watch</h2><figure><video src="reel/mom-models.mp4" poster="" controls playsinline muted autoplay loop></video>
-<figcaption>Mom models · 11 s</figcaption></figure>
+<span class="chip">Check-in fix</span>
+<h1>Mom as a vinyl toy: model 2, glasses fixed</h1>
+<p class="kaylee">Mom is your pick (model 2), and her glasses now sit on her face from every side, with no stray arms poking out of her cheeks.</p>
+
+<h2>Watch</h2><figure><video src="reel/mom-glasses.mp4" poster="" controls playsinline muted autoplay loop></video>
+<figcaption>Mom glasses · 11 s</figcaption></figure>
 
 
-<h2>Your call</h2><ol><li><p>Model 2 or model 4? (tap &quot;Pick this one&quot; on a card)</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
-<li><p>The glasses and smile are drawn in code: keep them as they are?</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><a class="pill" href="https://github.com/neb636/Kaylee-Gamepack/pull/441">Open the PR to paste them</a><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
-<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/characters/mom-4?lineup=ji,mom-2,mom-4">Try them in the lab (today's Mom, model 2, model 4)</a></p>
+<h2>Your call</h2><ol><li><p>Glasses look right now?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><a class="pill" href="https://github.com/neb636/Kaylee-Gamepack/pull/441">Open the PR to paste them</a><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/characters/mom-model?lineup=ji,mom-model">Try her in the lab, next to today's Mom</a></p>
 </main>
 <script>
-const qs=["Model 2 or model 4? (tap \"Pick this one\" on a card)","The glasses and smile are drawn in code: keep them as they are?"],titles=["Model 2","Model 4"]
+const qs=["Glasses look right now?"],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})

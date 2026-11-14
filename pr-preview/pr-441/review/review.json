@@ -1,27 +1,8 @@
 {
-  "title": "Mom as a vinyl toy: pick a model",
-  "checkIn": "pick",
-  "kaylee": "Mom becomes a vinyl toy like her unicorn: same cream unicorn, glasses and smile, and her mouth moves when she talks.",
-  "questions": [
-    "Model 2 or model 4? (tap \"Pick this one\" on a card)",
-    "The glasses and smile are drawn in code: keep them as they are?"
-  ],
-  "pitches": [
-    {
-      "title": "Model 2",
-      "image": "pitch/mom-2.png",
-      "finger": "Hair like the picture from the front; two little curls stick out at the nape.",
-      "grows": [["👓", "glasses drawn on"], ["🙂", "smile that opens when she talks"], ["😌", "blinks"]],
-      "why": "Eyes painted flat on her face."
-    },
-    {
-      "title": "Model 4",
-      "image": "pitch/mom-4.png",
-      "finger": "The cleanest back: real hair locks over the back of her head, no stray curls.",
-      "grows": [["👓", "glasses drawn on"], ["🙂", "smile that opens when she talks"], ["😌", "blinks"]],
-      "why": "Glossy sculpted eyes, like your unicorn's."
-    }
-  ],
-  "reels": [{ "name": "mom-models", "moments": ["#/world/characters/ji?lineup=ji,mom-2,mom-4&spin=1~9"] }],
-  "links": [{ "label": "Try them in the lab (today's Mom, model 2, model 4)", "hash": "#/world/characters/mom-4?lineup=ji,mom-2,mom-4" }]
+  "title": "Mom as a vinyl toy: model 2, glasses fixed",
+  "checkIn": "fix",
+  "kaylee": "Mom is your pick (model 2), and her glasses now sit on her face from every side, with no stray arms poking out of her cheeks.",
+  "questions": ["Glasses look right now?"],
+  "reels": [{ "name": "mom-glasses", "moments": ["#/world/characters/mom-model?shot=face&spin=1~9"] }],
+  "links": [{ "label": "Try her in the lab, next to today's Mom", "hash": "#/world/characters/mom-model?lineup=ji,mom-model" }]
 }
