@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "nan-salt-aunty",
+  "title": "Nan salt aunty",
+  "video": "nan-salt-aunty.mp4",
+  "gif": "nan-salt-aunty.gif",
+  "seconds": 14,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Thailand nan trip salt",
+      "where": "#/world/thailand/nan-trip/salt",
+      "seconds": 6,
+      "fps": 15.4,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand nan trip salt",
+      "where": "#/world/thailand/nan-trip/salt?round=2",
+      "seconds": 5,
+      "fps": 17.3,
+      "status": "ok"
+    }
+  ]
+}
