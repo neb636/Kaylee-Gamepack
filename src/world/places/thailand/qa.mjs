@@ -2114,6 +2114,32 @@ motion.push(
   },
 )
 
+// Round 3, the scrape: the finger drags the paddle's blade down the pan, back to front, one stroke a column (it tips
+// into the basket when full or let go), until the aunty sweeps up the rest. It counts how many strokes that took.
+motion.push({
+  name: 'nan-salt-scrape',
+  seconds: 40,
+  setup: async (page, base) => {
+    await saltStoryReady(page, base, '3')
+    await page.waitForTimeout(2500)
+  },
+  act: async (page) => {
+    for (let stroke = 0; stroke < 24; stroke++) {
+      const q = await page.evaluate(() => window.__thaiNanQA())
+      if (q.saltLeft === 0 || q.bags > 0) break
+      const [back, front] = q.points.saltStrokes[stroke % q.points.saltStrokes.length]
+      await page.mouse.move(...back)
+      await page.mouse.down()
+      await page.mouse.move(...front, { steps: 14 })
+      await page.mouse.up()
+      await page.waitForFunction(() => !window.__thaiNanQA().paddle.dump, null, { timeout: 4000 }).catch(() => {})
+      await page.waitForTimeout(250)
+    }
+    await page.waitForFunction(() => window.__thaiNanQA().bags > 0, null, { timeout: 15000 })
+    await page.waitForTimeout(2500)
+  },
+})
+
 const saltReady = async (page, base, round) => {
   await page.goto(`${base}#/world/thailand/nan-trip/salt?round=${round}`)
   await page.waitForFunction(() => window.__thaiNanQA?.().game === 'salt', null, { timeout: 30000 })

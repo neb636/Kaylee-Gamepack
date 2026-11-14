@@ -2,12 +2,13 @@
 // 3D"): the rain-wet road (darker, with shiny streaks and puddles that drizzle rings across), its ditches and the power
 // poles along it, the wooden house across the road with the Tai Lue couple painted big on its wall (from Dad's video,
 // drawn by us in our flat style), the neighbours' houses, banana plants, bamboo and trees, and behind it all the green
-// mountains with low cloud lying on them (a painted ring all the way round, and soft clouds that drift). A scooter
-// putters past now and then, on the far lane (Thailand drives on the left).
+// mountains with low cloud lying on them (a painted ring all the way round, and soft clouds that drift). A scooter (the
+// one on the Nan roads) putters past now and then, on the far lane (Thailand drives on the left).
 import { BackSide, CanvasTexture, CylinderGeometry, Group, Mesh, MeshBasicMaterial, PlaneGeometry, RepeatWrapping, RingGeometry, SRGBColorSpace } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { blobShadow, merge, P, solid } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
+import { buildScooter, type Local } from '../../../trip/vehicles/locals'
 import { MURAL, ROAD_Z, type V3 } from './layout'
 
 const ROAD = '#8F8BA6'
@@ -31,8 +32,8 @@ export interface Village {
   sky: Mesh
   mural: Group
   scooter: Group
-  /** The scooter's wheels (they spin) and its rider (bobs). */
-  wheels: Group[]
+  /** The scooter itself: its wheels (they spin) and its riders (they blink and look about). */
+  ride: Local
   /** Low clouds on the mountains (they drift; soft, no outline). */
   clouds: Group[]
   /** Drizzle rings on the puddles (each one grows and fades, then starts again somewhere else). */
@@ -255,37 +256,16 @@ export function buildVillage(bag: Bag): Village {
     root.add(g)
     return g
   })
-  // ---- The scooter: a pink step-through with a rider in a lavender rain poncho and a helmet ----
+  // ---- The scooter: the Nan roads' step-through (trip/vehicles/locals.ts), a gecko on a pink one,
+  // turned to drive along the road (+x) ----
+  const ride = buildScooter(3, bag)
+  ride.root.rotation.y = Math.PI / 2
   const scooter = new Group()
-  const wheels = [0.28, -0.28].map((x) => {
-    const w = solid(merge([P.cyl(0.14, 0.14, 0.07, '#3E3548', { rot: [Math.PI / 2, 0, 0] }, 14), P.cyl(0.06, 0.06, 0.08, '#C9C3D6', { rot: [Math.PI / 2, 0, 0] }, 10)]), bag, 2)
-    w.position.set(x, 0.14, 0)
-    scooter.add(w)
-    return w
-  })
-  scooter.add(
-    solid(
-      merge([
-        P.rbox(0.48, 0.16, 0.22, 0.06, PAL.pink, { at: [-0.06, 0.3, 0] }),
-        P.rbox(0.12, 0.42, 0.2, 0.05, PAL.pink, { at: [0.24, 0.45, 0], rot: [0, 0, -0.25] }),
-        P.rbox(0.3, 0.07, 0.2, 0.03, '#4E4060', { at: [-0.1, 0.43, 0] }),
-        P.box(0.04, 0.04, 0.34, '#7E7A8E', { at: [0.3, 0.68, 0] }),
-        P.sphere(0.045, '#FFF3B0', { at: [0.34, 0.56, 0] }, 8),
-        // The rider: a poncho cone, arms to the handlebar, a round helmet.
-        P.cone(0.2, 0.42, '#C9B6FF', { at: [-0.08, 0.65, 0] }, 12),
-        P.capsule(0.035, 0.22, '#C9B6FF', { at: [0.12, 0.66, 0.09], rot: [0, 0, -1.2] }),
-        P.capsule(0.035, 0.22, '#C9B6FF', { at: [0.12, 0.66, -0.09], rot: [0, 0, -1.2] }),
-        P.sphere(0.1, '#F2C9A0', { at: [-0.05, 0.92, 0] }, 12),
-        P.sphere(0.115, '#FFE27A', { at: [-0.07, 0.96, 0], scale: [1, 0.75, 1] }, 12),
-      ]),
-      bag,
-      2,
-    ),
-  )
-  scooter.add(blobShadow(0.35, bag))
+  scooter.add(ride.root, blobShadow(0.7, bag))
+  scooter.scale.setScalar(0.85)
   scooter.position.set(-20, 0, ROAD_Z - 0.45)
   root.add(scooter)
-  return { root, sky, mural, scooter, wheels, clouds, rings, puddles, hen: { root: hen, head: henHead }, chicks }
+  return { root, sky, mural, scooter, ride, clouds, rings, puddles, hen: { root: hen, head: henHead }, chicks }
 }
 
 /** Each frame: the clouds drift, the drizzle rings spread on the puddles. */
@@ -352,9 +332,11 @@ function panorama(bag: Bag) {
   return m
 }
 
-/** The Tai Lue couple painted on the house across the road, in our flat style (our own drawing, not a copy of the real
- *  one): she in a pink head wrap, a dark jacket with a pink trim and a striped pha sin; he in an indigo jacket with a
- *  white head cloth and a red sash; hand in hand and waving, the green mountains and flowers behind them. */
+/** The Tai Lue couple painted on the house across the road (from Dad's video), redrawn as two toy animals in the
+ *  game's chibi look (2026-11-13: the stick figures looked lame): she a cream pony in a pink head wrap, an indigo
+ *  jacket with silver buttons and a striped pha sin with a zigzag hem; he a brown bear in an indigo jacket, a white head
+ *  cloth and a red sash. Hand in hand and waving, a heart between them, on a hillside of rice terraces with misty
+ *  mountains, a smiling sun, birds and flowers, inside a painted border of woven diamonds. */
 function muralTexture(bag: Bag) {
   const W = 1024
   const H = 612
@@ -363,126 +345,321 @@ function muralTexture(bag: Bag) {
   c.height = H
   const g = c.getContext('2d')!
   const ink = '#3A2B33'
-  const shape = (draw: () => void, fill: string, line = 6) => {
-    g.beginPath()
-    draw()
+  g.lineJoin = 'round'
+  g.lineCap = 'round'
+  const fillStroke = (fill: string, line = 6) => {
     g.fillStyle = fill
     g.fill()
-    g.lineWidth = line
-    g.strokeStyle = ink
-    g.lineJoin = 'round'
-    g.stroke()
+    if (line > 0) {
+      g.lineWidth = line
+      g.strokeStyle = ink
+      g.stroke()
+    }
   }
-  const poly = (pts: [number, number][], fill: string, line = 6) =>
-    shape(() => {
+  const oval = (x: number, y: number, rx: number, ry: number, fill: string, line = 6, rot = 0) => {
+    g.beginPath()
+    g.ellipse(x, y, rx, ry, rot, 0, Math.PI * 2)
+    fillStroke(fill, line)
+  }
+  const dot = (x: number, y: number, r: number, fill: string) => oval(x, y, r, r, fill, 0)
+  const path = (pts: [number, number][], fill: string, line = 6, closed = true) => {
+    g.beginPath()
+    g.moveTo(...pts[0])
+    for (const p of pts.slice(1)) g.lineTo(...p)
+    if (closed) g.closePath()
+    fillStroke(fill, line)
+  }
+  /** A soft blob through the points (a rounded shape for skirts, jackets, mountains). */
+  const blob = (pts: [number, number][], fill: string, line = 6) => {
+    g.beginPath()
+    const n = pts.length
+    const mid = (a: [number, number], b: [number, number]): [number, number] => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]
+    g.moveTo(...mid(pts[n - 1], pts[0]))
+    for (let i = 0; i < n; i++) g.quadraticCurveTo(...pts[i], ...mid(pts[i], pts[(i + 1) % n]))
+    g.closePath()
+    fillStroke(fill, line)
+  }
+  /** A thick round-ended limb with an ink outline: through the points. */
+  const limb = (pts: [number, number][], w: number, fill: string) => {
+    for (const [lw, col] of [[w + 10, ink], [w, fill]] as const) {
+      g.beginPath()
       g.moveTo(...pts[0])
-      for (const p of pts.slice(1)) g.lineTo(...p)
-      g.closePath()
-    }, fill, line)
-  const oval = (x: number, y: number, rx: number, ry: number, fill: string, rot = 0, line = 6) => shape(() => g.ellipse(x, y, rx, ry, rot, 0, Math.PI * 2), fill, line)
-  const dot = (x: number, y: number, r: number, fill: string) => {
-    g.beginPath()
-    g.ellipse(x, y, r, r, 0, 0, Math.PI * 2)
-    g.fillStyle = fill
-    g.fill()
+      if (pts.length === 3) g.quadraticCurveTo(...pts[1], ...pts[2])
+      else for (const p of pts.slice(1)) g.lineTo(...p)
+      g.lineWidth = lw
+      g.strokeStyle = col
+      g.stroke()
+    }
   }
-  // The painted wall: a pale sky, the mountains, a sun, a meadow with flowers.
-  const sky = g.createLinearGradient(0, 0, 0, H)
-  sky.addColorStop(0, '#CFE9F7')
-  sky.addColorStop(1, '#F6EAD8')
+  const heart = (x: number, y: number, s: number, fill: string, line = 5) => {
+    g.beginPath()
+    g.moveTo(x, y + s * 0.9)
+    g.bezierCurveTo(x - s * 1.5, y - s * 0.1, x - s * 0.75, y - s * 1.15, x, y - s * 0.4)
+    g.bezierCurveTo(x + s * 0.75, y - s * 1.15, x + s * 1.5, y - s * 0.1, x, y + s * 0.9)
+    fillStroke(fill, line)
+  }
+
+  // ---- The sky, the sun, the mountains with mist, the rice terraces ----
+  const sky = g.createLinearGradient(0, 0, 0, 360)
+  sky.addColorStop(0, '#BFE3F7')
+  sky.addColorStop(1, '#FBEEDD')
   g.fillStyle = sky
   g.fillRect(0, 0, W, H)
-  dot(860, 110, 56, '#FFD86B')
-  for (const [y, col, amp] of [[330, '#A9D6B8', 120], [400, '#8CC79E', 90]] as const) {
+  // The sun with a smile, its rays.
+  g.save()
+  g.translate(890, 112)
+  for (let i = 0; i < 12; i++) {
+    g.rotate(Math.PI / 6)
+    path([[0, -70], [10, -92], [-10, -92]], '#FFC83D', 0)
+  }
+  g.restore()
+  oval(890, 112, 54, 54, '#FFD86B', 5)
+  dot(874, 106, 5, ink)
+  dot(906, 106, 5, ink)
+  dot(864, 124, 8, '#FFAA8A')
+  dot(916, 124, 8, '#FFAA8A')
+  g.beginPath()
+  g.arc(890, 118, 14, 0.3, Math.PI - 0.3)
+  g.lineWidth = 4
+  g.strokeStyle = ink
+  g.stroke()
+  // Fluffy clouds.
+  for (const [x, y, s] of [[150, 90, 1], [560, 60, 0.8], [720, 150, 0.6]] as const) {
+    g.fillStyle = '#FFFFFF'
+    g.beginPath()
+    for (const [dx, dy, r] of [[-40, 6, 26], [-10, -10, 34], [28, -2, 28], [52, 10, 20], [0, 14, 26]] as const) {
+      g.moveTo(x + dx * s + r * s, y + dy * s)
+      g.arc(x + dx * s, y + dy * s, r * s, 0, Math.PI * 2)
+    }
+    g.fill()
+  }
+  // Mountains, far to near, each with a band of mist lying along its foot.
+  const ridge = (base: number, amp: number, col: string, f: number, ph: number) => {
     g.fillStyle = col
     g.beginPath()
     g.moveTo(0, H)
-    for (let x = 0; x <= W; x += 16) g.lineTo(x, y - amp * (0.5 + 0.5 * Math.sin(x / 140 + y)))
+    for (let x = 0; x <= W; x += 8) g.lineTo(x, base - amp * (0.55 + 0.3 * Math.sin(x / f + ph) + 0.15 * Math.sin(x / (f * 0.37) + ph * 2)))
     g.lineTo(W, H)
     g.fill()
   }
-  g.fillStyle = '#B9DE9A'
-  g.fillRect(0, 500, W, H - 500)
-  for (let i = 0; i < 22; i++) {
-    const x = 30 + i * 46 + (i % 3) * 7
-    const y = 530 + (i % 4) * 18
-    for (let k = 0; k < 5; k++) dot(x + Math.cos((k / 5) * 6.28) * 9, y + Math.sin((k / 5) * 6.28) * 9, 7, i % 2 ? '#FF8FB8' : '#FFFFFF')
-    dot(x, y, 6, '#FFC83D')
+  const mist = (y: number) => {
+    const m = g.createLinearGradient(0, y - 22, 0, y + 22)
+    m.addColorStop(0, 'rgba(255,255,255,0)')
+    m.addColorStop(0.5, 'rgba(255,255,255,0.75)')
+    m.addColorStop(1, 'rgba(255,255,255,0)')
+    g.fillStyle = m
+    g.fillRect(0, y - 22, W, 44)
   }
-  // ---- She (on the left): striped pha sin, the jacket, her face, the pink head wrap, waving ----
-  const sx = 400
-  poly([[sx - 70, 330], [sx + 70, 330], [sx + 92, 575], [sx - 92, 575]], '#FF8FB8')
-  for (const [i, y] of [360, 400, 440, 480, 520, 555].entries()) {
-    const k = (y - 330) / 245
-    g.fillStyle = ['#B97CE0', '#FFFFFF', '#3FA58A', '#FF4F9A', '#FFC83D', '#B97CE0'][i]
-    g.fillRect(sx - 70 - k * 22 + 4, y, 140 + k * 44 - 8, 14)
+  ridge(300, 150, '#B7D3D6', 120, 1)
+  mist(270)
+  ridge(360, 120, '#9CCBAA', 90, 4)
+  mist(335)
+  // The rice terraces: stepped bands of greens down the hill, each lip a lighter line.
+  const greens = ['#A6D98C', '#93CF7E', '#B5E39A', '#86C574', '#A0D688']
+  for (let i = 0; i < 5; i++) {
+    const y = 380 + i * 38
+    g.beginPath()
+    g.moveTo(0, H)
+    for (let x = 0; x <= W; x += 8) g.lineTo(x, y + 10 * Math.sin(x / 160 + i * 1.3))
+    g.lineTo(W, H)
+    g.fillStyle = greens[i]
+    g.fill()
+    g.beginPath()
+    for (let x = 0; x <= W; x += 8) (x ? g.lineTo : g.moveTo).call(g, x, y + 10 * Math.sin(x / 160 + i * 1.3))
+    g.lineWidth = 4
+    g.strokeStyle = '#D6F0B8'
+    g.stroke()
   }
-  poly([[sx - 70, 330], [sx + 70, 330], [sx + 92, 575], [sx - 92, 575]], 'rgba(0,0,0,0)')
-  poly([[sx - 66, 200], [sx + 66, 200], [sx + 74, 338], [sx - 74, 338]], '#3E3A6E')
-  poly([[sx - 10, 200], [sx + 10, 200], [sx + 50, 338], [sx + 30, 338]], '#FF8FB8', 4)
-  // Her waving arm (up on the left) and the hand she holds his with (to the right).
-  poly([[sx - 60, 215], [sx - 40, 240], [sx - 125, 160], [sx - 140, 175]], '#3E3A6E')
-  oval(sx - 138, 150, 22, 24, '#F2C9A0')
-  poly([[sx + 55, 220], [sx + 70, 245], [sx + 130, 300], [sx + 118, 318]], '#3E3A6E')
-  oval(sx + 140, 314, 22, 20, '#F2C9A0')
-  oval(sx, 140, 58, 62, '#F2C9A0')
-  shape(() => {
-    g.ellipse(sx, 98, 66, 42, 0, Math.PI, Math.PI * 2)
-    g.closePath()
-  }, '#FF4F9A')
-  poly([[sx - 62, 100], [sx + 62, 100], [sx + 56, 116], [sx - 56, 116]], '#FF8FB8', 4)
-  dot(sx - 20, 142, 7, ink)
-  dot(sx + 20, 142, 7, ink)
-  dot(sx - 18, 139, 2.5, '#FFFFFF')
-  dot(sx + 22, 139, 2.5, '#FFFFFF')
-  dot(sx - 34, 162, 11, '#FF9DB8')
-  dot(sx + 34, 162, 11, '#FF9DB8')
+  // Birds far off.
+  for (const [x, y] of [[160, 215], [195, 196], [222, 222], [770, 215]] as const) {
+    g.beginPath()
+    g.moveTo(x - 14, y)
+    g.quadraticCurveTo(x - 7, y - 9, x, y)
+    g.quadraticCurveTo(x + 7, y - 9, x + 14, y)
+    g.lineWidth = 4
+    g.strokeStyle = '#5B5068'
+    g.stroke()
+  }
+
+  // ---- She, the pony (left) ----
+  const sx = 395
+  const FUR_S = '#FFF1E2'
+  const MANE = '#B97CE0'
+  const JACKET = '#3E3A7E'
+  // Her feet, the pha sin (striped, flaring, with a zigzag hem), the jacket over it.
+  oval(sx - 34, 572, 26, 14, '#C9A48E')
+  oval(sx + 34, 572, 26, 14, '#C9A48E')
+  g.save()
   g.beginPath()
-  g.arc(sx, 160, 16, 0.2, Math.PI - 0.2)
+  g.moveTo(sx - 74, 330)
+  g.lineTo(sx + 74, 330)
+  g.quadraticCurveTo(sx + 96, 450, sx + 100, 556)
+  g.lineTo(sx - 100, 556)
+  g.quadraticCurveTo(sx - 96, 450, sx - 74, 330)
+  g.closePath()
+  g.fillStyle = '#FF8FB8'
+  g.fill()
+  g.clip()
+  const stripes = ['#B97CE0', '#FFFFFF', '#3FA58A', '#FF4F9A', '#FFC83D']
+  for (let i = 0; i < 9; i++) {
+    g.fillStyle = stripes[i % stripes.length]
+    g.fillRect(sx - 110, 360 + i * 22, 220, 9)
+  }
+  // The zigzag hem.
+  g.fillStyle = '#7A3D9C'
+  g.fillRect(sx - 110, 528, 220, 30)
+  g.beginPath()
+  for (let i = 0; i <= 12; i++) g.lineTo(sx - 110 + i * 19, i % 2 ? 518 : 534)
+  g.lineWidth = 6
+  g.strokeStyle = '#FFC83D'
+  g.stroke()
+  g.restore()
+  g.beginPath()
+  g.moveTo(sx - 74, 330)
+  g.lineTo(sx + 74, 330)
+  g.quadraticCurveTo(sx + 96, 450, sx + 100, 556)
+  g.lineTo(sx - 100, 556)
+  g.quadraticCurveTo(sx - 96, 450, sx - 74, 330)
+  g.closePath()
+  g.lineWidth = 6
+  g.strokeStyle = ink
+  g.stroke()
+  // Arms first (behind the jacket's shoulders): waving up on the left, reaching right to hold his hand.
+  limb([[sx - 52, 248], [sx - 120, 230], [sx - 138, 168]], 30, JACKET)
+  oval(sx - 140, 152, 22, 24, FUR_S)
+  limb([[sx + 52, 252], [sx + 100, 300], [sx + 128, 318]], 30, JACKET)
+  // The jacket: rounded, crossing over with a pink trim, silver buttons down the side.
+  blob([[sx - 70, 216], [sx + 70, 216], [sx + 82, 342], [sx - 82, 342]], JACKET)
+  path([[sx - 14, 218], [sx + 14, 218], [sx + 56, 340], [sx + 34, 340]], '#FF8FB8', 4)
+  for (const y of [252, 284, 316]) oval(sx + 22 + (y - 252) * 0.28, y, 6, 6, '#E6E8F2', 3)
+  // Her head: the cream pony face, a long muzzle, ears, the lilac mane showing under the head wrap.
+  oval(sx - 46, 72, 18, 30, FUR_S, 6, -0.4)
+  oval(sx + 46, 72, 18, 30, FUR_S, 6, 0.4)
+  oval(sx - 46, 76, 8, 16, '#FFC2C8', 0, -0.4)
+  oval(sx + 46, 76, 8, 16, '#FFC2C8', 0, 0.4)
+  oval(sx, 148, 74, 70, FUR_S)
+  oval(sx, 186, 44, 30, '#FFE0CC', 5)
+  dot(sx - 14, 186, 5, '#C98A7A')
+  dot(sx + 14, 186, 5, '#C98A7A')
+  // The mane: two swoops of bangs down the sides of her face.
+  blob([[sx - 70, 110], [sx - 30, 92], [sx - 50, 150], [sx - 80, 170]], MANE, 5)
+  blob([[sx + 70, 110], [sx + 30, 92], [sx + 50, 150], [sx + 80, 170]], MANE, 5)
+  // The pink head wrap, tied in a knot on top with a flower.
+  blob([[sx - 78, 118], [sx - 70, 78], [sx, 66], [sx + 70, 78], [sx + 78, 118], [sx, 104]], '#FF4F9A', 6)
+  g.beginPath()
+  g.moveTo(sx - 70, 108)
+  g.quadraticCurveTo(sx, 92, sx + 70, 108)
+  g.lineWidth = 6
+  g.strokeStyle = '#FF9DC4'
+  g.stroke()
+  for (let k = 0; k < 5; k++) dot(sx + 42 + Math.cos((k / 5) * 6.28) * 10, 78 + Math.sin((k / 5) * 6.28) * 10, 8, '#FFFFFF')
+  dot(sx + 42, 78, 6, '#FFC83D')
+  // Big shiny eyes with lashes, blush, a smile.
+  for (const s of [-1, 1]) {
+    oval(sx + s * 28, 140, 12, 15, ink, 0)
+    dot(sx + s * 28 + 4, 134, 5, '#FFFFFF')
+    dot(sx + s * 28 - 3, 146, 2.5, '#FFFFFF')
+    g.beginPath()
+    g.moveTo(sx + s * 38, 130)
+    g.lineTo(sx + s * 46, 124)
+    g.lineWidth = 4
+    g.strokeStyle = ink
+    g.stroke()
+    dot(sx + s * 54, 168, 13, '#FF9DB8')
+  }
+  g.beginPath()
+  g.arc(sx, 196, 14, 0.25, Math.PI - 0.25)
   g.lineWidth = 5
   g.strokeStyle = ink
   g.stroke()
-  dot(sx - 58, 160, 7, '#D9D4E4')
-  dot(sx + 58, 160, 7, '#D9D4E4')
-  // ---- He (on the right): indigo jacket and trousers, the red sash, the white head cloth, waving ----
-  const hx = 640
-  poly([[hx - 64, 360], [hx + 64, 360], [hx + 70, 575], [hx + 10, 575], [hx, 430], [hx - 10, 575], [hx - 70, 575]], '#34386A')
-  poly([[hx - 72, 205], [hx + 72, 205], [hx + 78, 368], [hx - 78, 368]], '#4A4F8C')
-  poly([[hx - 78, 340], [hx + 78, 340], [hx + 80, 372], [hx - 80, 372]], '#E8505B', 4)
-  for (const y of [240, 280, 320]) dot(hx, y, 6, '#FFFFFF')
-  poly([[hx - 62, 220], [hx - 76, 245], [hx - 122, 300], [hx - 108, 318]], '#4A4F8C')
-  poly([[hx + 62, 220], [hx + 44, 240], [hx + 128, 160], [hx + 142, 175]], '#4A4F8C')
-  oval(hx + 140, 150, 22, 24, '#E5B488')
-  oval(hx, 140, 58, 62, '#E5B488')
-  shape(() => {
-    g.ellipse(hx, 100, 64, 36, 0, Math.PI, Math.PI * 2)
-    g.closePath()
-  }, '#FFFFFF')
-  poly([[hx + 50, 92], [hx + 92, 70], [hx + 86, 110]], '#FFFFFF', 4)
-  dot(hx - 20, 142, 7, ink)
-  dot(hx + 20, 142, 7, ink)
-  dot(hx - 18, 139, 2.5, '#FFFFFF')
-  dot(hx + 22, 139, 2.5, '#FFFFFF')
-  dot(hx - 34, 162, 10, '#F5A0A8')
-  dot(hx + 34, 162, 10, '#F5A0A8')
+
+  // ---- He, the bear (right) ----
+  const hx = 650
+  const FUR_H = '#B07A55'
+  const MUZ = '#F6DCC0'
+  const INDIGO = '#2F3570'
+  // Baggy trousers, feet.
+  oval(hx - 36, 572, 28, 14, '#6E4A3A')
+  oval(hx + 36, 572, 28, 14, '#6E4A3A')
+  blob([[hx - 70, 350], [hx + 70, 350], [hx + 78, 560], [hx + 8, 560], [hx, 450], [hx - 8, 560], [hx - 78, 560]], INDIGO)
+  // Arms: one reaching left to hold her hand, one waving up on the right.
+  limb([[hx - 56, 254], [hx - 104, 300], [hx - 128, 318]], 32, '#4A52A0')
+  limb([[hx + 56, 248], [hx + 122, 230], [hx + 140, 168]], 32, '#4A52A0')
+  oval(hx + 142, 152, 24, 25, FUR_H)
+  // The jacket, the red sash, the buttons.
+  blob([[hx - 76, 212], [hx + 76, 212], [hx + 86, 368], [hx - 86, 368]], '#4A52A0')
+  path([[hx - 84, 338], [hx + 84, 338], [hx + 86, 368], [hx - 86, 368]], '#E8505B', 5)
+  path([[hx + 40, 360], [hx + 62, 404], [hx + 36, 410]], '#E8505B', 4)
+  for (const y of [240, 272, 304]) oval(hx, y, 6, 6, '#FFFFFF', 3)
+  // His head: round ears, a round face, a big muzzle with a nose.
+  oval(hx - 58, 92, 26, 26, FUR_H)
+  oval(hx + 58, 92, 26, 26, FUR_H)
+  dot(hx - 58, 94, 13, '#FFB8A8')
+  dot(hx + 58, 94, 13, '#FFB8A8')
+  oval(hx, 150, 78, 72, FUR_H)
+  oval(hx, 186, 42, 30, MUZ, 5)
+  oval(hx, 174, 14, 10, ink, 0)
+  dot(hx + 4, 171, 3.5, '#FFFFFF')
+  // The white head cloth, tied with its ends flying out to the right.
+  blob([[hx - 76, 124], [hx - 66, 86], [hx, 74], [hx + 66, 86], [hx + 76, 124], [hx, 110]], '#FFFFFF', 6)
+  path([[hx + 66, 100], [hx + 116, 70], [hx + 106, 98], [hx + 120, 118]], '#FFFFFF', 5)
+  for (const s of [-1, 1]) {
+    oval(hx + s * 30, 146, 11, 14, ink, 0)
+    dot(hx + s * 30 + 4, 140, 4.5, '#FFFFFF')
+    dot(hx + s * 56, 172, 13, '#F5A0A8')
+  }
   g.beginPath()
-  g.arc(hx, 158, 18, 0.2, Math.PI - 0.2)
+  g.moveTo(hx, 184)
+  g.lineTo(hx, 192)
+  g.arc(hx - 10, 192, 10, 0, Math.PI * 0.85)
+  g.moveTo(hx, 192)
+  g.arc(hx + 10, 192, 10, Math.PI, Math.PI * 0.15, true)
   g.lineWidth = 5
   g.strokeStyle = ink
   g.stroke()
-  // Their hands held between them, and a little heart above.
-  oval(hx - 112, 314, 22, 20, '#E5B488')
-  const heart = (x: number, y: number, s: number) =>
-    shape(() => {
-      g.moveTo(x, y + s * 0.9)
-      g.bezierCurveTo(x - s * 1.4, y, x - s * 0.7, y - s, x, y - s * 0.35)
-      g.bezierCurveTo(x + s * 0.7, y - s, x + s * 1.4, y, x, y + s * 0.9)
-    }, '#FF4F9A', 5)
-  heart(520, 250, 30)
-  // The painted border.
-  g.lineWidth = 16
-  g.strokeStyle = '#C9785A'
-  g.strokeRect(8, 8, W - 16, H - 16)
+
+  // ---- Their hands held between them, a big heart and two little ones above ----
+  oval(sx + 140, 322, 22, 20, FUR_S)
+  oval(hx - 140, 322, 24, 21, FUR_H)
+  heart(522, 238, 34, '#FF4F9A')
+  heart(478, 196, 14, '#FF9DC4', 4)
+  heart(566, 186, 16, '#FF9DC4', 4)
+
+  // ---- Flowers along the bottom ----
+  for (let i = 0; i < 18; i++) {
+    const x = 24 + i * 58 + (i % 3) * 9
+    if (Math.abs(x - sx) < 110 || Math.abs(x - hx) < 100) continue
+    const y = 548 + (i % 3) * 16
+    g.beginPath()
+    g.moveTo(x, y + 30)
+    g.quadraticCurveTo(x - 6, y + 14, x, y)
+    g.lineWidth = 5
+    g.strokeStyle = '#5FA866'
+    g.stroke()
+    for (let k = 0; k < 5; k++) oval(x + Math.cos((k / 5) * 6.28) * 11, y + Math.sin((k / 5) * 6.28) * 11, 9, 9, ['#FF8FB8', '#FFFFFF', '#C9B6FF'][i % 3], 3)
+    dot(x, y, 7, '#FFC83D')
+  }
+
+  // ---- The painted border: woven diamonds, like a Tai Lue cloth ----
+  const B = 26
+  g.fillStyle = '#C9785A'
+  g.fillRect(0, 0, W, B)
+  g.fillRect(0, H - B, W, B)
+  g.fillRect(0, 0, B, H)
+  g.fillRect(W - B, 0, B, H)
+  const diamond = (x: number, y: number, r: number, fill: string) => path([[x, y - r], [x + r, y], [x, y + r], [x - r, y]], fill, 0)
+  for (let x = B; x < W - B; x += 34) {
+    diamond(x + 17, B / 2, 9, (x / 34) % 2 < 1 ? '#FFD86B' : '#FFB8D0')
+    diamond(x + 17, H - B / 2, 9, (x / 34) % 2 < 1 ? '#FFD86B' : '#FFB8D0')
+  }
+  for (let y = B; y < H - B; y += 34) {
+    diamond(B / 2, y + 17, 9, (y / 34) % 2 < 1 ? '#FFB8D0' : '#FFD86B')
+    diamond(W - B / 2, y + 17, 9, (y / 34) % 2 < 1 ? '#FFB8D0' : '#FFD86B')
+  }
+  g.lineWidth = 5
+  g.strokeStyle = ink
+  g.strokeRect(B, B, W - 2 * B, H - 2 * B)
+
   const tex = bag.add(new CanvasTexture(c))
   tex.colorSpace = SRGBColorSpace
   tex.anisotropy = 4

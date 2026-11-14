@@ -75,11 +75,12 @@ export const SALT = Array.from({ length: SALT_COLS * SALT_ROWS }, (_, i): V3 => 
   const jz = Math.cos(i * 78.233) * 0.035
   return [PAN.x0 + 0.1 + (c * (PAN.x1 - PAN.x0 - 0.2)) / (SALT_COLS - 1) + jx, PAN.top - PAN.depth + 0.03, PAN.z0 + 0.09 + (r * (PAN.z1 - PAN.z0 - 0.18)) / (SALT_ROWS - 1) + jz]
 })
-/** The paddle's blade (across the scraping direction) and how much it holds before it wants emptying. */
-export const BLADE = { w: 0.24, reach: 0.11 }
-export const PADDLE_HOLDS = 8
+/** The paddle's blade (across the scraping direction) and how much it holds before it wants emptying. (Wider and
+ *  holding more since the user found the scrape too long, 2026-11-13: about 4 paddlefuls instead of 7.) */
+export const BLADE = { w: 0.3, reach: 0.13 }
+export const PADDLE_HOLDS = 10
 /** Scraped this much of the salt and the aunty sweeps up the rest. */
-export const SWEEP_AT = 0.85
+export const SWEEP_AT = 0.6
 /** Her salt basket, beside the pan (the paddle empties into it); the bags on the shelf at the end. */
 export const SALT_BASKET: V3 = [-0.12, 0, 0.62]
 export const BASKET_R = 0.27
