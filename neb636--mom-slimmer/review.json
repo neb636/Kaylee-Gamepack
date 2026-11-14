@@ -1,7 +1,12 @@
 {
-  "title": "Mom: slimmer, finer outline",
+  "title": "Mom: slimmer, finer outline, clean arms, round glasses",
   "checkIn": "fix",
-  "kaylee": "Mom's vinyl toy looks like her concept picture: a slimmer dress and legs, and a finer ink line (0.35).",
+  "kaylee": "Mom's vinyl toy looks like her concept picture: slimmer, a finer ink line, arms that wave, cheer, heart and act silly without a black hole at the shoulder, and round glasses.",
   "questions": [],
-  "links": [{ "label": "Mom in the character lab", "hash": "#/world/characters/mom-model?lineup=ji,mom-model" }]
+  "links": [
+    {
+      "label": "Mom in the character lab",
+      "hash": "#/world/characters/mom-model?lineup=ji,mom-model"
+    }
+  ]
 }
