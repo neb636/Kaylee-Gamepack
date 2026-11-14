@@ -262,8 +262,9 @@ function hullOf(geometry: BufferGeometry, face: boolean, onCut: OnCut | null) {
 }
 
 /** The toon look on a modelled toy's pieces (Kaylee's, Mom's): each texture lit with the shared toon bands, and an ink
- *  hull on every piece except the glossy eye domes (names starting with "eye"). `onCut` as in smoothHull. */
-export function inkPieces(meshes: Mesh[], onCut: OnCut | null) {
+ *  hull on every piece except the glossy eye domes (names starting with "eye"). `onCut` as in smoothHull; `px` is the
+ *  ink's width before TUNE.outline (Kaylee's PX by default). */
+export function inkPieces(meshes: Mesh[], onCut: OnCut | null, px = PX) {
   for (const m of meshes) {
     const map = (m.material as { map?: Texture | null }).map
     if (map) {
@@ -275,8 +276,8 @@ export function inkPieces(meshes: Mesh[], onCut: OnCut | null) {
       // The hair's line is drawn a little nearer, so the bangs keep their line where they rest on the forehead (only
       // the hair: on the face it would bring ink up through the creases around the nose and eyes).
       const bias = m.name.startsWith('hair') ? HULL_BIAS : 0
-      const hull = new Mesh(hullOf(m.geometry, m.name.startsWith('face'), onCut), outlineMaterial(PX, undefined, bias))
-      hull.userData.hull = PX
+      const hull = new Mesh(hullOf(m.geometry, m.name.startsWith('face'), onCut), outlineMaterial(px, undefined, bias))
+      hull.userData.hull = px
       hull.userData.hullBias = bias
       m.add(hull)
     }
