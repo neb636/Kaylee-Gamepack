@@ -1,24 +1,54 @@
 {
-  "title": "Mom is the new vinyl toy, everywhere",
+  "title": "Mom is the new vinyl toy, as tall as Dad",
   "checkIn": "fix",
-  "kaylee": "The cream unicorn Mom with the bun and glasses is now the Mom in every Thailand scene: home, the boat, the plane, the mall, Nan and Koh Samet.",
+  "kaylee": "The cream unicorn Mom with the bun and glasses is the Mom in every Thailand scene, and now she stands as tall as Dad, horn to horn, instead of barely taller than Kaylee.",
   "pictures": [
-    { "title": "Her room", "before": "pics/hub-upstairs-old.jpg", "after": "pics/hub-upstairs-new.jpg" },
-    { "title": "The longtail boat", "before": "pics/boat-trip-bay-old.jpg", "after": "pics/boat-trip-bay-new.jpg", "caption": "the sun hat goes round her head and her ears tuck under it; the teddy sits on her lap" },
-    { "title": "The plane", "before": "pics/boat-trip-fly-old.jpg", "after": "pics/boat-trip-fly-new.jpg", "caption": "she sits with her legs out over the seat" },
-    { "title": "Cafe & Cake", "before": "pics/mall-trip-cafe-old.jpg", "after": "pics/mall-trip-cafe-new.jpg" },
-    { "title": "The pizza table", "before": "pics/mall-trip-share-old.jpg", "after": "pics/mall-trip-share-new.jpg" },
-    { "title": "At the Pajero's wheel", "before": "pics/nan-trip-drive-old.jpg", "after": "pics/nan-trip-drive-new.jpg", "caption": "a cushion keeps her eyes over the wheel" },
-    { "title": "The mushroom farm's pizza", "before": "pics/nan-trip-mushrooms-old.jpg", "after": "pics/nan-trip-mushrooms-new.jpg" },
-    { "title": "Koh Samet", "before": "pics/samet-trip-island-old.jpg", "after": "pics/samet-trip-island-new.jpg" },
-    { "title": "The sunset selfie", "after": "pics/samet-selfie-new.jpg", "caption": "her phone held out for the photo of the three of you" }
+    {
+      "title": "The whole family",
+      "before": "pics/hub-family-before.jpg",
+      "after": "pics/hub-family-after.jpg",
+      "caption": "her horn tip is level with Dad's"
+    },
+    {
+      "title": "Cafe & Cake",
+      "before": "pics/mall-trip-cafe-before.jpg",
+      "after": "pics/mall-trip-cafe-after.jpg"
+    },
+    {
+      "title": "The pizza table",
+      "before": "pics/mall-trip-menu-before.jpg",
+      "after": "pics/mall-trip-menu-after.jpg"
+    },
+    {
+      "title": "Baan Chang",
+      "before": "pics/boat-trip-sign-before.jpg",
+      "after": "pics/boat-trip-sign-after.jpg"
+    },
+    {
+      "title": "The sunset",
+      "before": "pics/samet-trip-sunset-before.jpg",
+      "after": "pics/samet-trip-sunset-after.jpg"
+    },
+    {
+      "title": "At the Pajero's wheel",
+      "before": "pics/nan-trip-drive-before.jpg",
+      "after": "pics/nan-trip-drive-after.jpg",
+      "caption": "no cushion now, and her hooves are on the wheel (at this size one went through the door)"
+    }
   ],
-  "questions": [
-    "She is a little shorter than the old Mom (her horn tip is her top, so Dad stands about a head taller). Keep her this size, or a bit taller?"
-  ],
+  "questions": [],
   "links": [
-    { "label": "Mom next to the old Mom (character lab)", "hash": "#/world/characters/ji?lineup=ji,ji-code" },
-    { "label": "The boat (her sun hat)", "hash": "#/world/thailand/boat-trip/bay" },
-    { "label": "The sunset selfie", "hash": "#/world/thailand/samet-trip/sunset?flags=all" }
+    {
+      "label": "The whole family",
+      "hash": "#/world/thailand/hub/family"
+    },
+    {
+      "label": "Cafe & Cake",
+      "hash": "#/world/thailand/mall-trip/cafe"
+    },
+    {
+      "label": "Mom next to the old Mom (character lab)",
+      "hash": "#/world/characters/ji?lineup=ji,ji-code"
+    }
   ]
 }
