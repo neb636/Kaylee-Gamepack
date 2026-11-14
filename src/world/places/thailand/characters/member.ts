@@ -6,8 +6,10 @@ import { bell, clamp, span } from '../../../../sdk'
 import type { Bag } from '../../../engine3d/dispose'
 import { buildAnimal, Wind, type Rig } from '../../../engine3d/characters/animal'
 import { FaceLife } from '../../../engine3d/characters/face'
+import { flag } from '../../../engine3d/flags'
 import type { FamilyMember } from './family'
 import { LOOKS, type Look } from './looks'
+import { buildMomRig, momModel } from './mom-model'
 import type { Character, Pose } from './types'
 
 const deg = Math.PI / 180
@@ -18,6 +20,17 @@ const tmp = new Vector3()
 
 /** The family members who also have a game-table voice (`<id>play` in cast.json). */
 const PLAY_VOICES = new Set(['bb', 'gan', 'ken'])
+
+/** A family member's toy in this look: Mom (in her own look) is the modelled vinyl toy once it has loaded, everyone
+ *  else the code-built animal. The mall race's racers use it too. */
+export function familyRig(id: string, look: Look, bag: Bag): Rig {
+  // (`?mom=code` brings back the code-built Mom, to compare in QA.)
+  const mom = id === 'ji' && look === LOOKS.ji && flag('mom') !== 'code' ? momModel() : null
+  const rig = mom ? buildMomRig(mom, bag) : buildAnimal(look, bag)
+  // QA robots find family members by this (scripts/qa-mom.mjs).
+  rig.root.userData.family = id
+  return rig
+}
 
 export class Member implements Character {
   readonly id: string
@@ -43,10 +56,11 @@ export class Member implements Character {
   private wind = new Wind()
 
   /** `look` and `voice` default to the family member's own; the character lab (lab/) gives a trip's extras theirs, and
-   *  `rig` a modelled vinyl toy to try instead of the code-built one (Mom's, mom-model.ts). */
+   *  `rig` a toy to use instead of the usual one. Mom in her own look is the modelled vinyl toy (mom-model.ts, loaded
+   *  before Thailand's scenes build), or the code-built Mom if her model couldn't load. */
   constructor(readonly member: FamilyMember, bag: Bag, look: Look = LOOKS[member.id], voice: string | undefined = member.id, rig?: Rig) {
     this.id = member.id
-    this.chibi = rig ?? buildAnimal(look, bag)
+    this.chibi = rig ?? familyRig(member.id, look, bag)
     this.root = this.chibi.root
     this.height = this.chibi.height
     // (The big cousins also talk at the game table, in a cheerful voice of their own: cast.json's bbplay, ganplay, kenplay.)

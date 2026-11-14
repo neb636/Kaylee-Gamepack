@@ -1,8 +1,9 @@
 // Mom as a modelled vinyl toy (docs/3d-characters.md), like Kaylee (model.ts): a Tripo3D mesh of a cream unicorn with
 // a brown bun and a pink dress (Tripo's generation 2, the user's pick; slimmed in Blender at
 // the belly, hips and legs, she looked chubbier than the concept picture), split in Blender into the code-built rig's
-// pivots (body, head at the neck, eyes, arms at the shoulders, legs at the hips, tail). For now she is in the
-// character lab only (`mom-model`); the code-built Mom is still the game's.
+// pivots (body, head at the neck, eyes, arms at the shoulders, legs at the hips, tail). She is the game's Mom: Member
+// builds her for `ji` (familyRig), Thailand's Place waits for her GLB, and the code-built Mom stands in only if it can't
+// load (the lab keeps it as `ji-code`).
 //
 // The concept picture went to Tripo with no mouth and no glasses: both are drawn here instead. The smile is a row of
 // ink beads on her muzzle and the open mouth grows with her voice (FaceLife). The glasses are traced on her face: each

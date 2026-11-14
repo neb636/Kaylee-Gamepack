@@ -5,6 +5,7 @@
 import { Group, Vector3 } from 'three'
 import { bell, clamp, span, wobble } from '../../../../../../../sdk'
 import { buildAnimal, Wind, type Rig } from '../../../../../../engine3d/characters/animal'
+import { familyRig } from '../../../../characters/member'
 import { Dress } from '../../../../characters/avatar'
 import { FaceLife } from '../../../../../../engine3d/characters/face'
 import { LOOKS, type Look } from '../../../../characters/looks'
@@ -78,7 +79,8 @@ export class Racer {
   constructor(readonly id: RacerId, bag: Bag, look?: Look) {
     // Kaylee herself is the modelled vinyl toy (loaded before the mall builds).
     const model = id === 'kaylee' && !look ? kayleeModel() : null
-    this.rig = model ? buildModelRig(model, bag) : buildAnimal(look ?? (id === 'kidA' || id === 'kidB' ? KID_LOOKS[id] : LOOKS[id]), bag)
+    // So is Mom (familyRig: her modelled toy).
+    this.rig = model ? buildModelRig(model, bag) : look || id === 'kidA' || id === 'kidB' ? buildAnimal(look ?? KID_LOOKS[id as 'kidA' | 'kidB'], bag) : familyRig(id, LOOKS[id], bag)
     this.height = this.rig.height
     this.life = new FaceLife(this.rig)
     this.flipper.position.y = 0.45 * this.height
