@@ -60,12 +60,16 @@ export interface CastEntry {
   set?: string
   /** Kaylee as the modelled vinyl toy (characters/model.ts, the game's Kaylee) instead of the code-built one. */
   model?: boolean
+  /** Mom as the modelled vinyl toy (characters/mom-model.ts) instead of her code-built one. */
+  momModel?: boolean
 }
 
 const family: CastEntry[] = [
   { id: 'kaylee', name: 'Your unicorn', who: 'Her, a lilac unicorn (the vinyl toy, modelled in Tripo3D)', group: 'family', kind: 'kaylee', look: LOOKS.kaylee, src: 'characters/model.ts', color: '#C9B6F0', model: true },
   { id: 'kaylee-code', name: 'Your unicorn (code-built)', who: 'The code-built unicorn she used to be (kept to compare)', group: 'family', kind: 'kaylee', look: LOOKS.kaylee, src: 'characters/looks.ts', color: LOOKS.kaylee.fur },
-  ...FAMILY.map((m): CastEntry => ({ id: m.id, name: m.name, who: m.who, group: 'family', kind: 'member', look: LOOKS[m.id], voice: m.id, src: 'characters/looks.ts', color: LOOKS[m.id].fur })),
+  ...FAMILY.map((m): CastEntry => ({ id: m.id, name: m.name, who: m.who, group: 'family', kind: 'member', look: LOOKS[m.id], voice: m.id, src: 'characters/looks.ts', color: LOOKS[m.id].fur, set: m.id === 'ji' ? 'mom' : undefined })),
+  // Mom as a vinyl toy from Tripo3D (the code-built Mom above stays the game's until she's in).
+  { id: 'mom-model', name: 'Mom (vinyl toy)', who: 'Your mom, a cream unicorn (a vinyl toy modelled in Tripo3D)', group: 'family', kind: 'member', look: LOOKS.ji, voice: 'ji', src: 'characters/mom-model.ts', color: '#FACCA2', set: 'mom', momModel: true },
 ]
 
 const person = (id: string, name: string, who: string, group: CastGroup, look: Look, src: string, voice?: string, set?: string): CastEntry => ({ id, name, who, group, kind: 'member', look, voice, src, color: look.fur, set })

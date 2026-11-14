@@ -11,6 +11,9 @@ import { LOOKS, type Look } from './looks'
 import type { Character, Pose } from './types'
 
 const deg = Math.PI / 180
+/** A modelled toy with legs of its own sitting (Mom's, mom-model.ts): how far its body drops (a fraction of its height)
+ *  and how far its legs swing forward over the seat (radians). */
+const LEGS_SIT = { drop: 0.04, legs: -1.35 }
 const tmp = new Vector3()
 
 /** The family members who also have a game-table voice (`<id>play` in cast.json). */
@@ -39,10 +42,11 @@ export class Member implements Character {
   private phoneWaving = -1
   private wind = new Wind()
 
-  /** `look` and `voice` default to the family member's own; the character lab (lab/) gives a trip's extras theirs. */
-  constructor(readonly member: FamilyMember, bag: Bag, look: Look = LOOKS[member.id], voice: string | undefined = member.id) {
+  /** `look` and `voice` default to the family member's own; the character lab (lab/) gives a trip's extras theirs, and
+   *  `rig` a modelled vinyl toy to try instead of the code-built one (Mom's, mom-model.ts). */
+  constructor(readonly member: FamilyMember, bag: Bag, look: Look = LOOKS[member.id], voice: string | undefined = member.id, rig?: Rig) {
     this.id = member.id
-    this.chibi = buildAnimal(look, bag)
+    this.chibi = rig ?? buildAnimal(look, bag)
     this.root = this.chibi.root
     this.height = this.chibi.height
     // (The big cousins also talk at the game table, in a cheerful voice of their own: cast.json's bbplay, ganplay, kenplay.)
@@ -81,9 +85,15 @@ export class Member implements Character {
 
   setPose(pose: Pose) {
     this.pose = pose
-    const { body } = this.chibi
+    const { body, legL, legR } = this.chibi
     body.rotation.set(pose === 'lie' ? -Math.PI / 2 : 0, 0, 0)
     body.position.set(0, pose === 'lie' ? this.chibi.radius : 0, 0)
+    // A toy with legs of its own (a modelled one) sits on its hips with its legs out over the seat.
+    if (legL && legR) {
+      const sit = pose === 'sit'
+      if (sit) body.position.y = -LEGS_SIT.drop * this.height
+      legL.rotation.x = legR.rotation.x = sit ? LEGS_SIT.legs : 0
+    }
   }
 
   react(kind: 'hop' | 'wiggle' | 'wave') {
