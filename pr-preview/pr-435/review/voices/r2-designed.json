@@ -1,0 +1,38 @@
+{
+  "saltaunty": {
+    "description": "A relaxed, warm Thai aunty in her fifties from a quiet mountain village in northern Thailand. Calm, soft, unhurried and smiling, a gentle twinkle of humor, never loud or rushed, like chatting kindly over a cup of tea. Speaks English with a soft northern Thai accent.",
+    "seed": 31,
+    "options": {
+      "A": "SSmKGrDzJRIIMpE2uGS1",
+      "B": "QcC58aZ5rEPiy0hqriX9",
+      "C": "QyThnoC3FEzEZqL4PjKx"
+    }
+  },
+  "kwai": {
+    "description": "A big, easygoing Thai uncle in his sixties with a deep, mellow, relaxed voice and a soft chuckle. Calm and unhurried, warm and good-humored, never shouting, like a gentle cook chatting in his kitchen. Speaks English with a soft northern Thai accent.",
+    "seed": 32,
+    "options": {
+      "A": "KFmc9nQFs1P6FjBV1JzY",
+      "B": "FFKg5fJR7wN1ZKTG26sz",
+      "C": "FFBBhMSM9rq6FtzsUo6l"
+    }
+  },
+  "kai": {
+    "description": "A sweet, bright Thai auntie in her forties who sells salted eggs at a village market. A light, pleasant voice, cheerful but relaxed and unhurried, softly amused, never shrill or loud. Speaks English with a soft northern Thai accent, like a friendly character in a gentle animated film.",
+    "seed": 33,
+    "options": {
+      "A": "JIsAwB4eW4CEjWL8di0e",
+      "B": "XJwobaxP0FoUDmoAdvg9",
+      "C": "TVKaiW7ZDWLYFAqp1vNT"
+    }
+  },
+  "nak": {
+    "description": "A sweet old Thai grandmother in her eighties with a soft, slow, quiet voice and a tiny giggle. Calm, cozy and tender, never loud, like telling a bedtime story. Calls everyone dear. Speaks English with a soft northern Thai accent.",
+    "seed": 34,
+    "options": {
+      "A": "wW26mgFRsmUYWneTlpn2",
+      "B": "zq9vJYKe0XNRthea5KQz",
+      "C": "FnP8e7RpnaSU2h3fpJqV"
+    }
+  }
+}
