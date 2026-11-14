@@ -6,7 +6,7 @@ import { bell, clamp, span } from '../../../../sdk'
 import type { Bag } from '../../../engine3d/dispose'
 import { buildAnimal, Wind, type Rig } from '../../../engine3d/characters/animal'
 import { FaceLife } from '../../../engine3d/characters/face'
-import { flag } from '../../../engine3d/flags'
+import { automated, flag } from '../../../engine3d/flags'
 import type { FamilyMember } from './family'
 import { LOOKS, type Look } from './looks'
 import { buildMomRig, momModel } from './mom-model'
@@ -27,8 +27,9 @@ export function familyRig(id: string, look: Look, bag: Bag): Rig {
   // (`?mom=code` brings back the code-built Mom, to compare in QA.)
   const mom = id === 'ji' && look === LOOKS.ji && flag('mom') !== 'code' ? momModel() : null
   const rig = mom ? buildMomRig(mom, bag) : buildAnimal(look, bag)
-  // QA robots find family members by this (scripts/qa-mom.mjs).
+  // QA robots find family members by this (scripts/qa-mom.mjs), and under webdriver their rig too.
   rig.root.userData.family = id
+  if (automated) Object.defineProperty(rig.root, 'qaRig', { value: rig })
   return rig
 }
 

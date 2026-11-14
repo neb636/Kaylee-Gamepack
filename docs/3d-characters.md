@@ -166,7 +166,7 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
 - **Try it:** the lab entry `kaylee` (`#/world/characters/kaylee?lineup=kaylee,kaylee-code`) shows her next to the
   code-built Kaylee (`kaylee-code`, kept to compare).
 
-## Mom (2026-11-14: in the lab, picked from Tripo's four)
+## Mom (2026-11-14: picked from Tripo's four, the game's Mom the same day)
 
 - **Make the concept picture without a mouth and without glasses.** A talking character's mouth is drawn in code, and
   thin wire glasses come out of Tripo blobby. Step one is the look with glasses and a smile, step two is "the same
@@ -196,8 +196,24 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   first two harmonics), stood out just enough to clear the face, so the sculpted lashes no longer kink a rim.
 - **Her ink is finer than Kaylee's:** the lab's Outline slider at 0.35 instead of 0.75 (`inkPieces`' `px`), so
   0.84 px before TUNE, and the glasses' and lids' ink shrink with it.
-- Lab only: `#/world/characters/mom-model?lineup=ji,mom-model`. Next: make her the game's Mom (`Member` for `ji`,
-  loaded before the scenes like Kaylee) and fit what the trips hang on her (Dad's reverted PR #291 lists them).
+- **In the game (2026-11-14):** she is the game's Mom everywhere. `Member` builds every `ji` in her own look through
+  `familyRig` (member.ts; the mall race's `Racer('ji')` too), and Thailand's `Place.tsx` waits for `momReady()` as it
+  does for Kaylee. If the GLB can't load, the code-built Mom stands in; `?mom=code` on any link brings her back on
+  purpose, to compare. The lab's `ji` is the model and `ji-code` the code-built Mom
+  (`#/world/characters/ji?lineup=ji,ji-code`).
+- **Her arms take the code-built poses** (`reachForward` in mom-model.ts). Scenes pose arms the code-built way:
+  `rotation.x` swings an arm forward (a phone held up, a reach, both hands up for a photo) and `rotation.z` raises it
+  out to the side (a wave, a stretch). Kaylee's `swingForward` turns every pose's swing plane forward, so on Mom a
+  reach forward went back into her body. Mom's arms turn their swing plane forward only as much as the pose raises
+  the arm out to the side (none for a pure reach, all of `ARM_TILT` for a wave), worked out in the arm's own
+  `updateMatrix`. Check a new modelled character's arms in the poses the scenes use, not only the lab's buttons.
+- **What the scenes hang on her** goes through the rig: `Rig.hands` (a group at each hoof: the sunset phone, the pizza
+  bracelets up her forearm) and `Rig.spots` (head-local: `crown` and `hat`, the inner size of a hat going round her
+  head under the bun; `nose` for the cafe's cream; `eyes`). The cafe's cup comes to her real mouth (`face.mouth`).
+- **QA:** `node scripts/qa-mom.mjs` (after a build) opens every Thailand section, finds her (`userData.family`, set
+  by `familyRig`), and saves a sheet per section: the screen with her outlined and three close-ups drawn from the
+  game's own scene. `--code` shoots the code-built Mom the same way, `--who=nick` anyone else, `--hashes=a|b` any
+  links.
 
 ## Open questions
 

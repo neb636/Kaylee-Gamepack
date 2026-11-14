@@ -26,6 +26,9 @@ After `npm run build`; WebKit, because the iPad runs Safari (`npx playwright ins
 - `node scripts/qa-screens.mjs`: every screen at 4 iPad + 3 iPhone sizes with touch emulation (`qa-output/webkit-*/`).
 - `node scripts/qa-motion.mjs`: filmstrips + gifs of character actions and play moments (`qa-output/motion/`). Still
   screenshots can't show whether something feels alive; filmstrips can.
+- `node scripts/qa-mom.mjs`: a character swapped for a new model, scene by scene: every Thailand section with her
+  outlined and three close-ups of her from the game's own scene (`qa-output/mom/`; `--who=nick` for anyone else,
+  `--code` for the code-built one, `docs/3d-characters.md`).
 - `node scripts/qa-art.mjs`: white patches left inside sprite cutouts (`qa-output/art/`). Every hole is a major finding.
 - `node scripts/qa-pacing.mjs`: seconds of talk before her first touch and in total, from the real clip lengths, plus
   the fun numbers: talk per touch, seconds with nothing to touch, how many different things she touched, and a play

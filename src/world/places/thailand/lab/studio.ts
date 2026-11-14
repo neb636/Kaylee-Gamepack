@@ -12,7 +12,7 @@ import { buildBird, buildCat, buildCrab, buildLizard, buildMacaque, buildMudskip
 import { Avatar, SHOW_SECS } from '../characters/avatar'
 import { kayleeModel, loadKayleeModel } from '../characters/model'
 import { Member } from '../characters/member'
-import { buildMomRig, momModel, momReady } from '../characters/mom-model'
+import { momModel, momReady } from '../characters/mom-model'
 import type { Wearable } from '../characters/looks'
 import { parseLook, type ShowPose } from '../characters/style'
 import type { Pose } from '../characters/types'
@@ -199,11 +199,10 @@ export class Studio implements World3D {
       k.place(0, 0, 0, 0)
       char = k
     } else if (entry.kind === 'member' && entry.look) {
-      // Mom's vinyl toy the same way: the code-built Mom until the model has loaded.
-      const mom = entry.momModel ? momModel() : null
-      if (entry.momModel && !mom) void momReady().then(() => !this.disposed && this.view && this.apply(this.view))
-      const rig = mom ? buildMomRig(mom, bag) : undefined
-      char = new Member({ id: entry.id, name: entry.name, who: entry.who, height: entry.look.height, spot: null, pitch: 300 }, bag, entry.look, entry.voice, rig)
+      // Mom's vinyl toy the same way: the code-built Mom until the model has loaded (Member builds her for `ji`,
+      // familyRig; `ji-code` stays code-built).
+      if (entry.momModel && !momModel()) void momReady().then(() => !this.disposed && this.view && this.apply(this.view))
+      char = new Member({ id: entry.id, name: entry.name, who: entry.who, height: entry.look.height, spot: null, pitch: 300 }, bag, entry.look, entry.voice)
       char.place(0, 0, 0, 0)
     } else if (entry.critter) critter = buildCritter(entry.critter, bag)
     const root = char?.root ?? critter!.root

@@ -48,7 +48,8 @@ function shoot(who) {
   scene.updateMatrixWorld(true)
   const camPos = camera.getWorldPosition(found[0].position.clone())
   const vis = found.filter(shown)
-  const root = (vis.length ? vis : found).sort((a, b) => a.getWorldPosition(a.position.clone()).distanceTo(camPos) - b.getWorldPosition(b.position.clone()).distanceTo(camPos))[0]
+  if (!vis.length) return { found: found.length, visible: 0 }
+  const root = vis.sort((a, b) => a.getWorldPosition(a.position.clone()).distanceTo(camPos) - b.getWorldPosition(b.position.clone()).distanceTo(camPos))[0]
   // Her box from her meshes (not the blob shadow, which lies flat and wide on the floor).
   const V = root.position.constructor
   const lo = new V(Infinity, Infinity, Infinity)
@@ -98,10 +99,17 @@ function shoot(who) {
     renderer.render(scene, cam)
     shots.push(renderer.domElement.toDataURL('image/png'))
   }
+  // Everyone else steps out of the close-ups (a clipped neighbour's ink hull shows black from inside).
+  const others = []
+  scene.traverse((o) => {
+    if (o !== root && o.visible && ((o.userData?.family && o.userData.family !== who) || o.userData?.pick === 'kaylee')) others.push(o)
+  })
+  for (const o of others) o.visible = false
   const H = Math.max(size.y, 0.3)
   shot(0, center, H * 1.35, 0.12)
   shot(0.75, center, H * 1.35, 0.12)
   shot(0, new V(center.x, hi.y - H * 0.28, center.z), H * 0.62, 0.05)
+  for (const o of others) o.visible = true
   v.render()
   return { found: found.length, visible: vis.length, onScreen, screen, px: Math.round(screen.y1 - screen.y0), box: { lo: lo.toArray(), hi: hi.toArray() }, shots }
 }
@@ -131,7 +139,7 @@ try {
     const name = `${pad(i)}-${s.name}`
     const row = { name: s.name, hash, ...r, shots: undefined, errors: [...errors] }
     report.push(row)
-    console.log(r.error ?? (r.found ? `found (${r.onScreen ? `on screen, ${r.px}px tall` : 'off screen'})` : 'not here'))
+    console.log(r.error ?? (r.found ? (r.visible ? `found (${r.onScreen ? `on screen, ${r.px}px tall` : 'off screen'})` : 'hidden') : 'not here'))
     if (!r.shots) continue
     // The sheet: the game view (her box outlined) and the three close-ups, each 590 wide.
     const W = 590

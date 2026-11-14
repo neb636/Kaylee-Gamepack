@@ -174,10 +174,13 @@ export class OpenWater implements BayPart {
     this.shades.position.set(0, R * 0.92 + 0.12 * R, R * 0.93)
     nick.rig.head.add(this.shades)
     const ji = bay.rider('ji').char
-    const Rj = 0.24 * ji.height
+    // The modelled Mom says where her head is under her bun (rig.spots), the code-built one is a ball.
+    const spot = ji.rig.spots
+    const Rj = spot ? spot.hat / 0.74 : 0.24 * ji.height
     this.hat = new Group()
     this.hat.add(solid(merge([P.cyl(Rj * 1.4, Rj * 1.4, 0.03, PAL.butter, {}, 24), P.cyl(Rj * 0.7, Rj * 0.78, 0.2, PAL.butter, { at: [0, 0.1, 0] }, 20), P.cyl(Rj * 0.79, Rj * 0.79, 0.05, PAL.hotpink, { at: [0, 0.04, 0] }, 20), P.sphere(0.07, '#FFFFFF', { at: [Rj * 0.7, 0.1, 0.1] }, 8)]), bag, 1.5))
-    this.hat.position.set(0, Rj * 0.92 + 0.6 * Rj, -0.04 * Rj)
+    if (spot) this.hat.position.set(spot.crown[0], spot.crown[1], spot.crown[2] - 0.03)
+    else this.hat.position.set(0, Rj * 0.92 + 0.6 * Rj, -0.04 * Rj)
     this.hat.rotation.x = -0.12
     ji.rig.head.add(this.hat)
     // ---- What she packed ----

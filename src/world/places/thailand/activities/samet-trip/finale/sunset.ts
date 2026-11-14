@@ -205,8 +205,13 @@ export class Sunset implements World3D {
       bag,
       1.2,
     )
-    this.phone.position.set(0.05 * H, -0.2 * H, 0.04 * H)
-    this.ji.rig.armR.add(this.phone)
+    // In her right hoof (a modelled Mom's `hands`), or at the end of the code-built arm.
+    const hand = this.ji.rig.hands?.[1]
+    if (hand) hand.add(this.phone)
+    else {
+      this.phone.position.set(0.05 * H, -0.2 * H, 0.04 * H)
+      this.ji.rig.armR.add(this.phone)
+    }
     for (const [p, r] of [
       [k, 0.42],
       [j, 0.5],

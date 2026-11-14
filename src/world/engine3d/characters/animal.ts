@@ -64,6 +64,10 @@ export interface Rig {
   waist?: { y: number; z: number; rx: number; rz: number }
   /** How far forward the front of the body is at (x, y), body-local z, for things stuck on it (mud). */
   front?: (x: number, y: number) => number
+  /** Where things sit on a modelled head whose shape isn't the code-built ball (the modelled Mom's), head-local meters:
+   *  the top of the head under the hair (a hat's middle, with the hat's inner radius `hat`), the tip of the nose (a dab
+   *  of cream), between the eyes on the face (sunglasses). */
+  spots?: { crown: V3; hat: number; nose: V3; eyes: V3 }
 }
 
 /** One worn thing, a group for each pivot it rides on (null where there's nothing). */
