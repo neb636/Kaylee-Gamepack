@@ -1,6 +1,6 @@
 // The Krabi map's screen: the 3D diorama (map3d.ts) with its tap targets, the 👆 after a while with nothing touched, and
 // the loading cover it fades in from (trip/MapCover.tsx). The words go to the boat trip's own guide (Sparkle in the
-// corner, BoatTrip.tsx). A place picked (the songthaew got there): `onGo` opens that part of the trip.
+// corner, BoatTrip.tsx). A pin tapped (the camera has dived in): `onGo` opens that part of the trip.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
@@ -16,7 +16,7 @@ import { KrabiMap as MapWorld, KRABI_CAM, MAP_ANCHORS } from './map3d'
 interface Props {
   /** Krabi's places done so far, in the order she did them (the newest one's stamp lands). */
   been: Stop[]
-  /** Where the songthaew waits (the place she came back from; none: at the last place done, or the airport). */
+  /** The place she just came back from (its stamp lands; none: every stamp is there already). */
   from?: PlaceId | null
   say: (l: Line) => void
   onGo: (place: 'chang' | 'pier' | 'airport') => void

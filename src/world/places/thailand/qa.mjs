@@ -445,19 +445,19 @@ export const screens = [
   // packed, the seat-back screen, the boarding pass between legs, and the beach after landing (the photo).
   // (The house's shaders compile on the first one: it waits a little longer.)
   ...['invite', 'pack', 'goodbye', 'airport', 'takeoff', 'fly', 'land', 'map', 'chang', 'sign', 'drinks', 'boardwalk', 'feed', 'favorites', 'lamyai', 'splash', 'pier', 'bay', 'village', 'cave', 'hong', 'nail', 'sunset'].map((to) => ({ name: `boat-trip-${to}`, hash: `#/world/thailand/boat-trip/${to}`, reset: true, wait: to === 'invite' ? 3800 : to === 'bay' ? 4600 : to === 'hong' ? 4000 : 2200 })),
-  // The Krabi map (the trip's hub): fresh, with Baan Chang's stamp landing, and both done (the airport glows); then the
-  // songthaew driving to Baan Chang, and the plane taking off home.
+  // The Krabi map (the trip's hub): fresh, with Baan Chang's stamp landing, and both done (the plane's pin glows); then
+  // the elephants' pin picked (it hops, the camera starts its dive), and the plane taking off home.
   { name: 'boat-trip-map', hash: '#/world/thailand/boat-trip/map', reset: true, wait: 7000 },
   { name: 'boat-trip-map-stamp', hash: '#/world/thailand/boat-trip/map?been=chang', reset: true, wait: 6000 },
   { name: 'boat-trip-map-home', hash: '#/world/thailand/boat-trip/map?been=chang,bay', reset: true, wait: 14000 },
   {
-    name: 'boat-trip-map-drive',
+    name: 'boat-trip-map-pick',
     hash: '#/world/thailand/boat-trip/map',
     reset: true,
     act: async (p) => {
       await p.waitForTimeout(6000)
-      await p.locator('[data-anchor="place:chang"]').click({ force: true }).catch(() => {})
-      await p.waitForTimeout(700)
+      await p.locator('[data-anchor="pin:chang"]').click({ force: true }).catch(() => {})
+      await p.waitForTimeout(900)
     },
   },
   {
@@ -466,7 +466,7 @@ export const screens = [
     reset: true,
     act: async (p) => {
       await p.waitForTimeout(6000)
-      await p.locator('[data-anchor="place:airport"]').click({ force: true }).catch(() => {})
+      await p.locator('[data-anchor="pin:home"]').click({ force: true }).catch(() => {})
       await p.waitForTimeout(2400)
     },
   },
@@ -874,7 +874,7 @@ export const pacing = [
   // The Nan map and the 3 (greybox, step 6): on the map a tap on a place drives the little Pajero there; the 3 from
   // above plays by itself.
   { name: 'thailand nan: the nan map', id: 'nan-map', hash: '#/world/thailand/nan-trip/map', reset: true },
-  // The Krabi map (the boat trip's hub): a tap on a place drives the songthaew there.
+  // The Krabi map (the boat trip's hub): a tap on a pin goes there.
   { name: 'thailand boat: the krabi map', id: 'krabi-map', hash: '#/world/thailand/boat-trip/map', reset: true },
   { name: 'thailand nan: the 3 from above', id: 'nan-three-view', hash: '#/world/thailand/nan-trip/three', reset: true },
   { name: "thailand house: the photo wall (agong's wall downstairs)", id: 'photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall },
@@ -2221,9 +2221,9 @@ motion.push(
 )
 
 // The Krabi map (the boat trip's hub, boat-trip/map/): the board alive (things poked: Chicken Island, the whale shark,
-// the lighthouse, the ferry, the dolphins, Railay's monkey, the crab), the songthaew grabbed at the airport and pulled along the road through
-// Krabi Town and Baan Chang to the pier (let go there: the longtail revs off and the camera dives in), and with both
-// places done, the airport tapped (the plane takes off for home).
+// the pins of the places to come, the Emerald Pool, the ferry, the dolphins, Railay's monkey, the crab), the boat's pin
+// tapped (it hops and spins, the longtail revs off and the camera dives in), and with both places done, the plane's
+// pin tapped (the plane takes off for home).
 const krabiReady = async (page, base, hash) => {
   await page.goto(`${base}#/world/thailand/boat-trip/${hash}`)
   await page.waitForFunction(() => window.__thaiBoatQA?.().game === 'krabi-map', null, { timeout: 30000 })
@@ -2235,32 +2235,20 @@ motion.push(
     seconds: 12,
     setup: (page, base) => krabiReady(page, base, 'map'),
     act: async (page) => {
-      for (const [what, wait] of [['spot:chicken', 1600], ['whale', 2000], ['spot:lighthouse', 1800], ['ferry', 1600], ['dolphins', 1800], ['spot:railay', 1600], ['crab', 1400]]) {
+      for (const [what, wait] of [['spot:chicken', 1400], ['whale', 1800], ['pin:lanta', 1600], ['pin:aonang', 1500], ['spot:pool', 1300], ['ferry', 1300], ['dolphins', 1500], ['spot:railay', 1300], ['crab', 1200]]) {
         await tapAnchor(page, what)
         await page.waitForTimeout(wait)
       }
     },
   },
   {
-    name: 'krabi-map-drag',
-    seconds: 9,
+    name: 'krabi-map-pick',
+    seconds: 5,
     setup: (page, base) => krabiReady(page, base, 'map'),
     act: async (page) => {
-      const q = await page.evaluate(() => window.__thaiBoatQA())
-      const n = q.points.nodes
-      await page.mouse.move(...q.car)
-      await page.mouse.down()
-      for (const to of [n.town, n.chang, n.pier]) {
-        const from = (await page.evaluate(() => window.__thaiBoatQA())).car ?? to
-        for (let k = 1; k <= 12; k++) {
-          await page.mouse.move(from[0] + ((to[0] - from[0]) * k) / 12, from[1] + ((to[1] - from[1]) * k) / 12)
-          await page.waitForTimeout(100)
-        }
-        await page.waitForTimeout(400)
-      }
-      await page.waitForTimeout(500)
-      await page.mouse.up()
-      await page.waitForTimeout(1500)
+      await page.waitForTimeout(800)
+      await tapAnchor(page, 'pin:bay')
+      await page.waitForTimeout(3600)
     },
   },
   {
@@ -2268,8 +2256,9 @@ motion.push(
     seconds: 6,
     setup: (page, base) => krabiReady(page, base, 'map?been=chang,bay'),
     act: async (page) => {
-      await tapAnchor(page, 'place:airport')
-      await page.waitForTimeout(5500)
+      await page.waitForTimeout(600)
+      await tapAnchor(page, 'pin:home')
+      await page.waitForTimeout(4800)
     },
   },
 )

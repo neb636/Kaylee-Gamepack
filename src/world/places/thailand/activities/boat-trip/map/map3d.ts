@@ -1,22 +1,22 @@
 // The Krabi map (section `map`; notes: planning/around-the-world/thailand/krabi-map.md): the boat trip's hub, a toy
-// diorama of Krabi and Phang Nga Bay floating in the sky like the Thailand map and the Nan map (diorama.ts; the sky,
-// the tray and the entrance are trip/sky.ts). It opens like them: the camera is already moving behind the loading cover,
-// then settles lower and closer (KRABI_CAM, ?feel=1). North is up the screen.
+// diorama of Krabi and Phang Nga Bay floating in the sky (diorama.ts; the sky, the tray and the entrance are
+// trip/sky.ts). It opens like the Thailand map: the camera is already moving behind the loading cover, then settles
+// lower and closer (KRABI_CAM, ?feel=1). North is up the screen.
 //
-// The toy: the little pink songthaew is a toy on the board's roads. Tap a place and it drives there (beep, its diesel
-// putters), and when it gets there the camera dives in and that part of the trip opens: Baan Chang (the elephants) or
-// the pier (the family's longtail revs off into the bay). Or grab the songthaew and pull it: it follows her finger
-// along the roads, and let go at a place (or hold it still there a moment) to go. The places she's done wear a pink
-// stamp; the newest one lands with a ka-chunk when she comes back. After one place the airport opens too (the way
-// home): the songthaew drives there, the tiny plane takes off down the runway and climbs away, and the trip ends.
-// Krabi Town (where the roads meet) is on the way, not a stop.
+// The toy: pins. Over each place she can go to floats a pink pin with a toy of the place on its head: a baby elephant
+// over Baan Chang, a longtail under a rock tower over the pier. Tap one (or the place under it): the pin hops and
+// spins in a burst of sparkles, the camera dives in and that part of the trip opens (the pier: the family's longtail
+// revs off into the bay; Baan Chang: the elephants trumpet and spray). The places she's done wear a pink stamp instead;
+// the newest one lands with a ka-chunk when she comes back. After one place the way home opens: the plane's pin pops
+// up over the airport, and a tap sends the tiny plane down the runway and away. The places still to come (Ao Nang's
+// beach front, Koh Lanta) wear a lavender pin: a tap only plays with it.
 //
-// Things to poke: Ao Nang's beach (the umbrellas twirl), Railay's cliffs (the monkey hops and chatters), Chicken Island
+// Things to poke: Ao Nang's beach (the sailfish leaps), Railay's cliffs (the monkey hops and chatters), Chicken Island
 // (it clucks and bobs), Koh Phi Phi, Koh Lanta's huts and its lighthouse (the lamp comes on and turns), Khao Phanom
-// Bencha (its waterfall splashes, its cloud rains), Ko Tapu and Ko Panyee's stilt village (a cheer from the pitch), the
-// giant crab in Krabi Town (it waves its big claw), the elephants (a trumpet and a spray), the longtails (they roar
-// off), the ferry (toot toot), the dolphins (they leap), the turtle (it dives), the sea eagle (it swoops), the clouds
-// (a little rain), the rock towers (a wobble), the tiny plane (round the circuit) and the songthaew itself.
+// Bencha (its waterfall splashes, its cloud rains), the Emerald Pool (a splash), Ko Tapu and Ko Panyee's stilt village
+// (a cheer from the pitch), the giant crab in Krabi Town (it waves its big claw), the elephants (a trumpet and a
+// spray), the longtails (they roar off), the ferry (toot toot), the dolphins (they leap), the turtle (it dives), the
+// sea eagle (it swoops), the clouds (a little rain), the rock towers (a splash) and the tiny plane (round the circuit).
 //
 // Talk (lines.ts, Dad and Sparkle, all recorded already): the first time, Dad asks "Where to, Captain?"; when she
 // picks, "Pai!". After ~8 s with nothing done Sparkle says what's next: elephants or the boat, the elephants are
@@ -31,11 +31,9 @@ import { PAL } from '../../../../../engine3d/toon'
 import { L } from '../../../lines'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
 import { circuitAt, circuitEase, CIRCUIT_S, departAt } from '../../../trip/map-plane'
-import { buildNet, nearest, route, STEP } from '../../../trip/net'
 import { Entrance, mapCamKnobs, puffCloud, skyTexture, trayBox } from '../../../trip/sky'
-import { knobs } from '../../../../../kit/knobs'
 import { Floaters } from '../../nan-trip/mushrooms/fx'
-import { buildDiorama, type Diorama } from './diorama'
+import { buildDiorama, MONKEY_Y, PIN, type Diorama } from './diorama'
 import { buildField, type Field } from './ground'
 import {
   BOARD,
@@ -46,9 +44,11 @@ import {
   FERRY,
   HOME_AFTER,
   ll,
+  PIN_IDS,
+  PINS,
   PLACE_IDS,
+  PLACE_PIN,
   PLACES,
-  ROADS,
   RUNWAY,
   SPOTS,
   STAMP_Y,
@@ -57,6 +57,7 @@ import {
   TURTLE,
   WHALE,
   YACHT,
+  type PinId,
   type PlaceId,
   type SpotId,
   type Stop,
@@ -64,14 +65,14 @@ import {
 import { mapBed, mapSfx as sfx } from './sounds'
 
 export interface MapEvents extends LegEvents {
-  /** The songthaew got to the place she picked (the airport: the plane has flown off): that part of the trip opens. */
+  /** She picked a place and the camera has dived in (the airport: the plane has flown off): that part of the trip opens. */
   go(place: 'chang' | 'pier' | 'airport'): void
   /** The camera has been moving behind the loading cover long enough: it can fade (KRABI_CAM.cover). */
   revealed(): void
 }
 
 /** The box the map's camera frames: the board, its tray (as diorama.ts builds it) and the mountains on it. */
-const BOARD_BOX = trayBox(BOARD.x1 - BOARD.x0, BOARD.z1 - BOARD.z0, 0.07, 0.75, 0.2, 0.55)
+const BOARD_BOX = trayBox(BOARD.x1 - BOARD.x0, BOARD.z1 - BOARD.z0, 0.07, 0.95, 0.2, 0.55)
 export const KRABI_CAM = mapCamKnobs('krabi-map-cam', 'Krabi map camera', 'src/world/places/thailand/activities/boat-trip/map/map3d.ts', { yaw: 6, pitch: -8, zoom: 0.9 })
 
 const SPOT_LABELS: Record<SpotId, string> = {
@@ -82,16 +83,16 @@ const SPOT_LABELS: Record<SpotId, string> = {
   lanta: 'Koh Lanta',
   lighthouse: "Koh Lanta's lighthouse",
   bencha: 'Khao Phanom Bencha, the waterfall',
+  pool: 'The Emerald Pool',
   nail: 'Ko Tapu, the Nail Island',
   panyee: "Ko Panyee's floating football pitch",
 }
 const SPOT_IDS = Object.keys(SPOTS) as SpotId[]
 
 export const MAP_ANCHORS: AnchorInfo[] = [
-  { id: 'car', label: 'The songthaew (beep beep!)', kind: 'thing' },
   ...PLACE_IDS.map((id): AnchorInfo => ({ id: `place:${id}`, label: PLACES[id].label, kind: 'thing' })),
   ...SPOT_IDS.map((id): AnchorInfo => ({ id: `spot:${id}`, label: SPOT_LABELS[id], kind: 'thing' })),
-  ...STOPS.map((s): AnchorInfo => ({ id: `marker:${s}`, label: s === 'chang' ? 'To the elephants' : 'To the boat', kind: 'thing' })),
+  ...PIN_IDS.map((id): AnchorInfo => ({ id: `pin:${id}`, label: PINS[id].label, kind: 'thing' })),
   { id: 'plane', label: 'Tiny plane', kind: 'thing' },
   { id: 'pierboat', label: 'Our longtail boat', kind: 'thing' },
   ...BOAT_LOOPS.map((_, i): AnchorInfo => ({ id: `boat:${i}`, label: 'Longtail boat', kind: 'thing' })),
@@ -106,19 +107,12 @@ export const MAP_ANCHORS: AnchorInfo[] = [
   ...CLOUDS.map((_, i): AnchorInfo => ({ id: `cloud:${i}`, label: 'Cloud', kind: 'thing' })),
 ]
 
-/** How the songthaew answers her finger (the feel lab, ?feel=1): read live every frame. */
-export const KRABI_DRIVE = knobs('krabi-map-drive', 'Krabi map songthaew', 'src/world/places/thailand/activities/boat-trip/map/map3d.ts', {
-  speed: { value: 1.6, min: 0.5, max: 4, step: 0.1, label: 'Drive speed', unit: 'm/s', note: 'how fast it drives to a place she tapped (a long way goes a little faster, to get there in about 2.6 s)' },
-  drag: { value: 3.2, min: 1, max: 6, step: 0.1, label: 'Drag speed', unit: 'm/s', note: 'how fast it catches up with her finger while she pulls it' },
-  grab: { value: 80, min: 40, max: 160, step: 5, label: 'Grab reach', unit: 'px', note: 'how near the songthaew her finger has to land to pick it up' },
-  snap: { value: 0.5, min: 0.1, max: 1.2, step: 0.05, label: 'Road reach', unit: 'm', note: 'how far off the road her finger can be and still pull it along' },
-  dwell: { value: 0.8, min: 0.2, max: 2.5, step: 0.05, label: 'Hold to go', unit: 's', note: "held still at the pier (a road's end) this long while she holds it: off it goes" },
-})
-
 /** Nothing touched for this long: the place to go next glows. */
 const STUCK_S = 5
-/** The camera dives in this long before that part of the trip opens (the plane's climb home a little longer). */
-const DIVE_S = 1.2
+/** A picked pin hops and spins this long before the camera dives; the dive lasts this long before that part of the
+ *  trip opens (the plane's climb home a little longer). */
+const HOP_S = 0.4
+const DIVE_S = 1.5
 const DEPART_S = 2.8
 /** Nothing done for this long: Sparkle says what to do (again after SAY_EVERY, at most SAY_MAX times). */
 const SAY_S = 8
@@ -130,19 +124,13 @@ const tmp = new Vector3()
 export class KrabiMap extends Stage {
   private d: Diorama
   private f: Field
-  private net = buildNet(PLACES, ROADS)
   private done: Set<Stop>
   private fresh: Stop | null
-  private car = { path: [0], k: 0, speed: 0, heading: 0, hop: 1, flash: 0, putT: 0, lift: 0 }
-  private going: PlaceId | null = null
   private arrived: { id: PlaceId; t: number } | null = null
-  private held = false
-  private finger = { x: 0, y: 0 }
-  private target = -1
-  private dwell = 0
-  private counted = false
   /** When each thing was last poked (seconds). */
   private pokeT = new Map<string, number>()
+  /** The way home's pin popped up this long ago (-1: not yet). */
+  private homeT = -1
   private planeT = -1
   private departT = -1
   private rain = CLOUDS.map(() => -1)
@@ -179,26 +167,22 @@ export class KrabiMap extends Stage {
       for (const [t, f] of this.onShow.splice(0)) this.after(t, f)
     })
     this.f = buildField()
-    this.d = buildDiorama(bag, this.net)
+    this.d = buildDiorama(bag)
     scene.add(this.d.root)
     this.buildSky()
     this.sparkles = new Floaters(new OctahedronGeometry(0.5), [PAL.gold, PAL.hotpink, '#FFFFFF', PAL.mint], 140, bag, 0.6, 1.2)
     this.drops = new Floaters(new IcosahedronGeometry(0.5, 0), ['#A8DCFF', '#D6EEFF'], 80, bag, 2.2, 0.2)
     this.foam = new Floaters(new IcosahedronGeometry(0.5, 1), ['#FFFFFF', '#E9FBFF'], 90, bag, 0.6, 1.4)
     scene.add(this.sparkles.mesh, this.drops.mesh, this.foam.mesh)
-    // ---- Where it starts: the places done so far, and the songthaew where she came back from (or at the airport). ----
+    // ---- Where it starts: the places done so far (the one she just came back from: its stamp lands) ----
     this.done = new Set(start.been.filter((s) => (STOPS as readonly string[]).includes(s)))
     const last = start.been[start.been.length - 1]
-    const from = start.from ?? (last ? STOP_PLACE[last] : null) ?? 'airport'
+    const from = start.from ?? (last ? STOP_PLACE[last] : null)
     this.fresh = last && from === STOP_PLACE[last] ? last : null
-    const at = this.net.place[from]
-    this.car.path = [at]
-    const n = this.net.nbr[at][0]
-    if (n !== undefined) this.car.heading = Math.atan2(this.net.pts[at][0] - this.net.pts[n][0], this.net.pts[at][1] - this.net.pts[n][1]) - Math.PI / 2
     for (const s of STOPS) this.d.stamps[s].visible = this.done.has(s) && s !== this.fresh
     if (this.fresh) this.onShow.push([0.7, () => this.landStamp()])
-    // (Back from the boat, the longtail is back at the pier; still to go, it waits there too.)
-    this.placeCar(0)
+    // (The way home's pin pops up once the cover has gone, after the stamp.)
+    if (this.open('airport')) this.onShow.push([this.fresh ? 1.5 : 0.5, () => this.showHome()])
     // ---- The opening line: Dad the first time; with both places done, Sparkle points at the plane home ----
     const t0 = this.fresh ? 1.6 : 0.6
     if (this.done.size === 0) this.onShow.push([t0, () => this.say('first', L.bay.whereTo)])
@@ -221,7 +205,7 @@ export class KrabiMap extends Stage {
     return this.done.has('chang') ? L.chang.hint.boat : L.chang.waiting
   }
   private stuck() {
-    if (this.held || this.going || this.arrived) return
+    if (this.arrived) return
     if (this.time - Math.max(this.lastTouch, this.quietFrom) < SAY_S || this.time - this.lastSay < SAY_EVERY || this.sayN >= SAY_MAX) return
     if (speakingVoice()) return
     this.lastSay = this.time
@@ -232,7 +216,7 @@ export class KrabiMap extends Stage {
 
   // ---------------------------------------------------------------- which places are open
 
-  /** Can she go there now? The places she hasn't done; the airport after one. (Krabi Town is on the way, never a stop.) */
+  /** Can she go there now? The places she hasn't done; the airport after one. (Krabi Town is only to poke.) */
   private open(id: PlaceId) {
     if (id === 'town') return false
     if (id === 'airport') return this.done.size >= HOME_AFTER
@@ -242,139 +226,48 @@ export class KrabiMap extends Stage {
     return this.done.size >= STOPS.length
   }
 
-  // ---------------------------------------------------------------- the songthaew
+  // ---------------------------------------------------------------- picking a place
 
   private ground(x: number, z: number) {
     return Math.max(0, this.f.height(x, z))
   }
-  /** The road point it's on (or just passed). */
-  private get at() {
-    const p = this.car.path
-    return p[Math.min(p.length - 1, Math.round(this.car.k))]
-  }
-  private carPos(out = new Vector3()) {
-    const { path, k } = this.car
-    const i = Math.min(path.length - 1, Math.floor(k))
-    const j = Math.min(path.length - 1, i + 1)
-    const fr = k - i
-    const a = this.net.pts[path[i]]
-    const b = this.net.pts[path[j]]
-    const x = a[0] + (b[0] - a[0]) * fr
-    const z = a[1] + (b[1] - a[1]) * fr
-    return out.set(x, this.ground(x, z) + 0.012, z)
-  }
 
-  /** Off along the roads to a place (from the map). */
-  private goTo(id: PlaceId) {
-    const node = this.net.place[id]
-    if (this.at === node && this.car.path.length <= 1) return this.arrive(id)
-    this.car.path = route(this.net, this.at, node)
-    this.car.k = 0
-    this.car.speed = Math.max(KRABI_DRIVE.speed, (this.car.path.length * STEP) / 2.6)
-    if (!this.going) {
-      sfx.pullaway()
-      this.say(`pai:${id}`, L.bay.pai)
-    }
-    this.going = id
-    this.car.hop = 0
-    sfx.zoom()
-  }
-
-  /** It's there: a hop and sparkles, and the camera dives in (the pier: the longtail revs off into the bay; the airport:
-   *  the plane takes off for home). */
-  private arrive(id: PlaceId) {
+  /** She picked a place: its pin hops and spins in sparkles, then the camera dives in (the pier: the longtail revs off
+   *  into the bay; Baan Chang: the elephants trumpet; the airport: the plane takes off for home). */
+  private choose(id: PlaceId) {
     if (this.arrived || id === 'town') return
-    this.going = null
-    this.held = false
     this.arrived = { id, t: this.time }
-    this.car.hop = 0
-    this.car.flash = 0.6
-    sfx.horn()
-    const p = this.carPos()
-    this.sparkles.burst(p.setY(p.y + 0.1), 24, 0.6, 0.8, 0.8, 0.03)
+    const pin = PLACE_PIN[id]
+    if (pin) {
+      this.poke(`pin:${pin}`)
+      const p = this.d.pins[pin].root.position
+      this.sparkles.burst(tmp.set(p.x, p.y + PIN.top * PIN.size * 0.6, p.z), 26, 0.6, 0.8, 0.8, 0.03)
+    }
+    sfx.zoom()
+    sfx.chime()
+    this.say('pai', L.bay.pai)
     this.rig.lag = 0.75
     if (id === 'airport') {
-      this.departT = 0
-      this.planeT = -1
-      this.after(0.4, () => sfx.takeoff())
-      this.after(DEPART_S, () => this.ev.go('airport'))
+      this.after(HOP_S, () => {
+        this.departT = 0
+        this.planeT = -1
+        sfx.takeoff()
+      })
+      this.after(HOP_S + DEPART_S, () => this.ev.go('airport'))
       return
     }
-    this.after(0.3, () => sfx.dive())
-    if (id === 'pier') this.after(0.2, () => sfx.rev())
-    else this.after(0.2, () => sfx.trumpet())
-    this.after(DIVE_S, () => this.ev.go(id))
+    this.after(HOP_S, () => sfx.dive())
+    this.after(HOP_S - 0.1, () => (id === 'pier' ? sfx.rev() : sfx.trumpet()))
+    this.after(HOP_S + DIVE_S, () => this.ev.go(id))
   }
 
-  private stepCar(dt: number, t: number) {
-    const c = this.car
-    // ---- Her finger pulls it along the roads ----
-    if (this.held && !this.arrived) {
-      const g = this.groundAt(this.finger.x, this.finger.y)
-      const n = g ? nearest(this.net, g.x, g.z) : null
-      if (n && n.d < KRABI_DRIVE.snap && n.i !== this.target) {
-        this.target = n.i
-        c.path = route(this.net, this.at, n.i)
-        c.k = 0
-        c.speed = KRABI_DRIVE.drag
-      }
-    }
-    // ---- Along its path ----
-    const before = this.carPos(tmp).clone()
-    if (c.path.length > 1) {
-      c.k = Math.min(c.path.length - 1, c.k + (c.speed * dt) / STEP)
-      c.putT -= dt
-      if (c.putT <= 0) {
-        c.putT = 0.09
-        sfx.putter()
-      }
-      if (c.k >= c.path.length - 1) {
-        c.path = [c.path[c.path.length - 1]]
-        c.k = 0
-        if (this.going && this.at === this.net.place[this.going]) this.arrive(this.going)
-      }
-    }
-    const now = this.carPos(tmp)
-    const dx = now.x - before.x
-    const dz = now.z - before.z
-    if (Math.hypot(dx, dz) > 1e-4) {
-      // (The songthaew's model faces +x.)
-      const want = Math.atan2(dx, dz) - Math.PI / 2
-      c.heading += Math.atan2(Math.sin(want - c.heading), Math.cos(want - c.heading)) * Math.min(1, dt * 14)
-    }
-    // ---- Held still at a place she can go to: off it goes ----
-    const here = this.placeHere()
-    // (Only at a road's end: Baan Chang is on the way to the pier, so passing it slowly doesn't stop there.)
-    if (this.held && here && here !== 'airport' && this.net.nbr[this.net.place[here]].length <= 1 && c.path.length <= 1) {
-      this.dwell += dt
-      if (this.dwell > KRABI_DRIVE.dwell) this.arrive(here)
-    } else this.dwell = 0
-    c.lift += ((this.held ? 1 : 0) - c.lift) * Math.min(1, dt * 10)
-    c.hop = Math.min(1, c.hop + dt / 0.45)
-    c.flash = Math.max(0, c.flash - dt)
-    this.placeCar(t)
-  }
-
-  /** An open place right where the songthaew is (null: none). */
-  private placeHere(): PlaceId | null {
-    const p = this.carPos(tmp)
-    for (const id of PLACE_IDS) {
-      const [x, z] = PLACES[id].at
-      if (this.open(id) && Math.hypot(p.x - x, p.z - z) < 0.12) return id
-    }
-    return null
-  }
-
-  private placeCar(t: number) {
-    const c = this.car
-    const o = this.d.car
-    this.carPos(o.root.position)
-    o.root.position.y += c.lift * 0.08 + bell(c.hop) * 0.1
-    o.root.rotation.y = c.heading
-    const moving = c.path.length > 1
-    o.body.position.y = moving ? Math.abs(Math.sin(t * 16)) * 0.25 : 0
-    o.body.rotation.x = c.lift * Math.sin(t * 9) * 0.06
-    for (const w of o.wheels) if (moving) w.rotation.z -= 0.4
+  /** The way home opens: the plane's pin pops up over the airport. */
+  private showHome() {
+    if (this.homeT >= 0) return
+    this.homeT = 0
+    sfx.plip()
+    const p = this.d.pins.home.root.position
+    this.sparkles.burst(tmp.set(p.x, p.y + 0.2, p.z), 14, 0.5, 0.6, 0.6, 0.025)
   }
 
   // ---------------------------------------------------------------- the stamps, the pokes
@@ -399,7 +292,6 @@ export class KrabiMap extends Stage {
     this.poke(`place:${id}`)
     const stop = (Object.keys(STOP_PLACE) as Stop[]).find((s) => STOP_PLACE[s] === id)
     const stamp = stop ? this.d.stamps[stop] : null
-    if (id === 'airport') return this.fly()
     if (id === 'town') {
       this.poke('crab')
       sfx.crab()
@@ -417,6 +309,8 @@ export class KrabiMap extends Stage {
     const [x, z] = SPOTS[id]
     switch (id) {
       case 'aonang':
+        this.poke('pin:aonang')
+        this.foam.burst(new Vector3(x + 0.3, this.ground(x, z) + 0.06, z + 0.03), 8, 0.3, 0.5, 0.4, 0.016)
         return sfx.twirl()
       case 'railay':
         this.poke('monkey')
@@ -430,7 +324,13 @@ export class KrabiMap extends Stage {
       case 'lighthouse':
         return sfx.glow()
       case 'lanta':
-        return sfx.chime()
+        this.poke('pin:lanta')
+        this.poke('spot:lighthouse')
+        return sfx.glow()
+      case 'pool':
+        this.foam.burst(new Vector3(x, this.ground(x, z) + 0.05, z), 12, 0.4, 0.6, 0.5, 0.018)
+        this.sparkles.burst(new Vector3(x, this.ground(x, z) + 0.1, z), 8, 0.4, 0.5, 0.5, 0.02)
+        return sfx.splash(0.8)
       case 'bencha':
         if (this.rain[0] < 0) this.rain[0] = 0
         return sfx.splosh()
@@ -440,9 +340,9 @@ export class KrabiMap extends Stage {
   }
 
   /** The tiny plane takes off down the runway, loops round over the board, and lands again (or, the way home open,
-   *  the songthaew drives there). */
+   *  off it goes for home). */
   private fly() {
-    if (this.open('airport')) return this.goTo('airport')
+    if (this.open('airport')) return this.choose('airport')
     if (this.planeT >= 0) return
     this.planeT = 0
     sfx.takeoff()
@@ -473,7 +373,7 @@ export class KrabiMap extends Stage {
   // ---------------------------------------------------------------- the frame
 
   protected step(dt: number, t: number) {
-    if (this.arrived || this.going || this.held) this.entrance.finish()
+    if (this.arrived) this.entrance.finish()
     this.entrance.step(dt)
     this.stepSky(dt, t)
     this.d.sea.update(t)
@@ -481,7 +381,6 @@ export class KrabiMap extends Stage {
       this.later.splice(this.later.indexOf(l), 1)
       if (!this.disposed) l.f()
     }
-    this.stepCar(dt, t)
     this.stepPlane(dt)
     this.stepPlaces(dt, t)
     this.stepToys(dt, t)
@@ -499,30 +398,44 @@ export class KrabiMap extends Stage {
       g.position.y = this.ground(...at) + (hint ? Math.abs(Math.sin(t * 4)) * 0.04 : 0)
     }
     const hintId = this.time - this.lastTouch > STUCK_S ? this.hintPlace() : null
-    for (const id of PLACE_IDS) bounce(d.places[id], `place:${id}`, PLACES[id].scale, PLACES[id].model, hintId === id)
+    for (const id of PLACE_IDS) bounce(d.places[id], `place:${id}`, PLACES[id].scale, PLACES[id].at, false)
     for (const id of SPOT_IDS) bounce(d.spots[id], `spot:${id}`, d.spots[id].userData.base ?? (d.spots[id].userData.base = d.spots[id].scale.x), SPOTS[id], false)
-    // ---- The floating friends bob and turn over the places still to do (the one she's stuck on bounces higher) ----
-    for (const s of STOPS) {
-      const g = d.markers[s]
-      g.visible = !this.done.has(s) && this.arrived?.id !== STOP_PLACE[s]
+    // ---- The pins bob and face her; a poked one hops and its toy spins; the one she's stuck on bounces ----
+    if (this.homeT >= 0) this.homeT += dt
+    for (const id of PIN_IDS) {
+      const pin = d.pins[id]
+      const info = PINS[id]
+      const place = 'place' in info ? info.place : null
+      const stop = STOPS.find((s) => STOP_PLACE[s] === place)
+      const g = pin.root
+      // A stop's pin until it's done (then its stamp); the way home's once it's open; the places to come always.
+      g.visible = stop ? !this.done.has(stop) : place === 'airport' ? this.homeT >= 0 : true
       if (!g.visible) continue
-      const [x, z] = PLACES[STOP_PLACE[s]].model
-      const k = Math.min(1, (this.time - (this.pokeT.get(`place:${STOP_PLACE[s]}`) ?? -9)) / 0.5)
-      g.position.y = this.ground(x, z) + STAMP_Y + Math.sin(t * 2.2 + x * 3) * 0.035 + bell(k) * 0.12 + (hintId === STOP_PLACE[s] ? Math.abs(Math.sin(t * 4)) * 0.08 : 0)
-      g.rotation.y = this.rig.yaw * DEG + Math.sin(t * 0.9 + x) * 0.5
-      const e = g.userData.toy as { trunk: Group; earL: Group; earR: Group } | undefined
+      const [x, z] = info.at
+      const k = clamp((this.time - (this.pokeT.get(`pin:${id}`) ?? -9)) / 0.5, 0, 1)
+      const hint = !!place && hintId === place
+      const pop = place === 'airport' ? clamp(this.homeT / 0.4, 0, 1) : 1
+      const picked = this.arrived?.id === place
+      g.position.y = this.ground(x, z) + info.lift + Math.sin(t * 2.2 + x * 3) * 0.03 + bell(k) * 0.14 + (hint ? Math.abs(Math.sin(t * 4)) * 0.09 : 0)
+      g.rotation.y = this.rig.yaw * DEG + Math.sin(t * 0.9 + x) * 0.25
+      const b = bell(k)
+      const size = PIN.size * (info.soon ? PIN.soon : 1) * (pop + bell(pop) * 0.25) * (picked ? 1 + 0.15 * clamp((this.time - this.arrived!.t) / HOP_S, 0, 1) : 1)
+      g.scale.set(size * (1 + 0.1 * b), size * (1 - 0.12 * b + (k > 0.5 ? 0.12 * b : 0)), size * (1 + 0.1 * b))
+      pin.mini.rotation.y = k < 1 ? k * k * (3 - 2 * k) * Math.PI * 2 : 0
+      if (pin.spin) pin.spin.rotation.y = -t * (id === 'home' ? 1.6 : 2.4)
+      const e = pin.elephant
       if (e) {
         const flap = Math.sin(t * 3 + x) * 0.3
         e.earL.rotation.y = -0.25 - flap
         e.earR.rotation.y = 0.25 + flap
-        e.trunk.rotation.x = Math.sin(t * 1.6) * 0.3 - 0.4
+        e.trunk.rotation.x = Math.sin(t * 1.6) * 0.3 - 0.4 - b * 1.2
       }
     }
     // ---- The stamps bob and turn; the newest one lands ----
     for (const s of STOPS) {
       const g = d.stamps[s]
       if (!g.visible) continue
-      const [x, z] = PLACES[STOP_PLACE[s]].model
+      const [x, z] = PLACES[STOP_PLACE[s]].at
       const base = this.ground(x, z) + STAMP_Y
       const spin = clamp((this.time - (this.pokeT.get(`stamp:${s}`) ?? -9)) / 0.8, 0, 1)
       g.rotation.y = this.rig.yaw * DEG + Math.sin(t * 1.3 + x) * 0.25 + (spin < 1 ? spin * Math.PI * 2 : 0)
@@ -573,8 +486,8 @@ export class KrabiMap extends Stage {
     // ---- The family's longtail at the pier rocks; at the dive (the pier picked) it roars off into the bay ----
     {
       const b = d.pierBoat
-      const [mx, mz] = PLACES.pier.model
-      const off = this.arrived?.id === 'pier' ? Math.max(0, this.time - this.arrived.t - 0.2) : 0
+      const [mx, mz] = PLACES.pier.at
+      const off = this.arrived?.id === 'pier' ? Math.max(0, this.time - this.arrived.t - HOP_S) : 0
       const k = this.poked('pierboat', 0.6)
       b.position.set(mx - 0.56 - off * off * 0.5, 0.004 + (k >= 0 ? bell(k / 0.6) * 0.04 : 0), mz + 0.1)
       b.rotation.set(Math.sin(t * 1.7) * 0.04 - (off > 0 ? 0.08 : 0), -Math.PI / 2, Math.sin(t * 1.3) * 0.05)
@@ -687,10 +600,14 @@ export class KrabiMap extends Stage {
     {
       const k = this.poked('monkey', 1)
       const [rx, rz] = SPOTS.railay
-      d.monkey.position.y = this.ground(rx, rz) + 0.36 + (k >= 0 ? bell(clamp(k / 0.6, 0, 1)) * 0.12 : Math.abs(Math.sin(t * 2.2)) * 0.008)
+      d.monkey.position.y = this.ground(rx, rz) + MONKEY_Y + (k >= 0 ? bell(clamp(k / 0.6, 0, 1)) * 0.12 : Math.abs(Math.sin(t * 2.2)) * 0.008)
       d.monkey.rotation.y = this.rig.yaw * DEG + (k >= 0 ? k * 6 : 0)
       const c = this.poked('spot:chicken', 1.2)
       d.chicken.rotation.z = c >= 0 ? Math.sin(c * 18) * 0.12 : Math.sin(t * 0.8) * 0.02
+      // Ao Nang's sailfish leaps right over.
+      const a = this.poked('spot:aonang', 0.9)
+      d.sailfish.position.y = 0.03 + (a >= 0 ? bell(clamp(a / 0.9, 0, 1)) * 0.09 : 0)
+      d.sailfish.rotation.z = -0.35 - (a >= 0 ? clamp(a / 0.9, 0, 1) * Math.PI * 2 : 0)
       const l = this.poked('spot:lighthouse', 6)
       d.beam.visible = l >= 0
       d.beam.rotation.y = t * 2.5
@@ -729,75 +646,34 @@ export class KrabiMap extends Stage {
     return c.z > 1 ? null : { x: ((c.x + 1) / 2) * this.w, y: ((1 - c.y) / 2) * this.h }
   }
 
-  tap(x: number, y: number, id?: string) {
-    if (this.counted) this.touches--
-    this.counted = false
-    super.tap(x, y, id)
-  }
-
-  pointerDown(x?: number, y?: number, id?: string) {
-    super.pointerDown()
-    this.counted = false
-    if (x === undefined || y === undefined || this.arrived) return
-    const s = this.screenOf(this.carPos())
-    const onCar = id === 'car' || (!id && !!s && Math.hypot(s.x - x, s.y - y) < KRABI_DRIVE.grab)
-    if (!onCar) return
-    this.held = true
-    this.target = -1
-    this.going = null
-    this.finger = { x, y }
-    this.touches++
-    this.counted = true
-  }
-
-  pointerMove(x: number, y: number, _dx: number, _dy: number, isHeld: boolean) {
-    if (!isHeld || !this.held) return
-    this.finger = { x, y }
-    this.lastTouch = this.time
-  }
-
-  pointerUp() {
-    if (!this.held) return
-    this.held = false
-    // Let go at a place she can go to: off it goes. Let go while the songthaew is still catching up with her finger: it
-    // goes where she let go, once it gets there.
-    const here = this.placeHere()
-    if (here && !this.arrived) return this.arrive(here)
-    const end = this.car.path[this.car.path.length - 1]
-    const to = PLACE_IDS.find((p) => this.net.place[p] === end && this.open(p))
-    if (to && this.car.path.length > 1) this.going = to
-  }
-
   protected onTap(id: string | null, x: number, y: number): void {
     if (this.arrived) return
     if (id === null) {
       // On the board near a place, a spot or a rock tower: as if she'd tapped it.
       const g = this.groundAt(x, y)
       if (!g) return
-      for (const p of PLACE_IDS) if (Math.hypot(PLACES[p].model[0] - g.x, PLACES[p].model[1] - g.z) < 0.2) return this.onTap(`place:${p}`, x, y)
+      for (const p of PLACE_IDS) if (Math.hypot(PLACES[p].at[0] - g.x, PLACES[p].at[1] - g.z) < 0.2) return this.onTap(`place:${p}`, x, y)
       for (const s of SPOT_IDS) if (Math.hypot(SPOTS[s][0] - g.x, SPOTS[s][1] - g.z) < 0.18) return this.onTap(`spot:${s}`, x, y)
       for (const [i, [kx, kz, s]] of this.d.karsts.entries())
         if (Math.hypot(kx - g.x, kz - g.z) < 0.1 * s + 0.04) {
           this.poke(`karst:${i}`)
-          sfx.bloop()
+          sfx.splash(0.5)
           return
         }
       return
     }
-    if (id === 'car') {
-      this.car.hop = 0
-      this.car.flash = 0.6
-      sfx.horn()
-      return
-    }
     if (id.startsWith('place:')) {
       const p = id.slice(6) as PlaceId
-      if (this.open(p)) this.goTo(p)
+      if (p === 'airport') return this.fly()
+      if (this.open(p)) this.choose(p)
       else this.pokePlace(p)
       return
     }
     if (id.startsWith('spot:')) return this.pokeSpot(id.slice(5) as SpotId)
-    if (id.startsWith('marker:')) return this.onTap(`place:${STOP_PLACE[id.slice(7) as Stop]}`, x, y)
+    if (id.startsWith('pin:')) {
+      const info = PINS[id.slice(4) as PinId]
+      return this.onTap('place' in info ? `place:${info.place}` : `spot:${info.spot}`, x, y)
+    }
     if (id.startsWith('cloud:')) {
       const i = Number(id.slice(6))
       if (this.rain[i] < 0) this.rain[i] = 0
@@ -814,11 +690,11 @@ export class KrabiMap extends Stage {
         return this.fly()
       case 'pierboat':
         // The boat still to go on: off to the pier. (Done: it just revs.)
-        if (this.open('pier')) return this.goTo('pier')
+        if (this.open('pier')) return this.choose('pier')
         this.poke('pierboat')
         return sfx.rev()
       case 'elephants':
-        if (this.open('chang')) return this.goTo('chang')
+        if (this.open('chang')) return this.choose('chang')
         this.poke('elephants')
         return sfx.trumpet()
       case 'ferry':
@@ -849,7 +725,7 @@ export class KrabiMap extends Stage {
   // ---------------------------------------------------------------- camera, tap targets, hints
 
   protected shot(): Shot {
-    if (this.arrived) {
+    if (this.arrived && this.time - this.arrived.t > HOP_S) {
       const id = this.arrived.id
       // Climbing away home: the camera rises after the plane.
       if (id === 'airport') {
@@ -921,46 +797,46 @@ export class KrabiMap extends Stage {
 
   /** The place the hint points at: a place she hasn't done (the elephants first), or, all done, the airport. */
   private hintPlace(): PlaceId | null {
-    if (this.arrived || this.going || this.held) return null
+    if (this.arrived) return null
     if (this.allDone) return 'airport'
     return this.done.has('chang') ? 'pier' : 'chang'
   }
 
   protected hintAt() {
     const id = this.hintPlace()
-    if (!id) return null
-    const [x, z] = PLACES[id].model
-    return new Vector3(x, this.ground(x, z) + 0.2, z)
+    const pin = id && PLACE_PIN[id]
+    if (!pin) return null
+    return this.d.pins[pin].root.position.clone().setY(this.d.pins[pin].root.position.y + PIN.top * PIN.size * 0.7)
   }
 
   protected anchorAt(id: string): AnchorSpot | null {
     if (this.arrived) return null
     const d = this.d
     const glow = (pid: PlaceId) => (this.time - this.lastTouch > STUCK_S && this.hintPlace() === pid) || (pid === 'airport' && this.allDone)
-    // (Over everything: it's the toy she grabs.)
-    if (id === 'car') return { at: this.carPos().setY(d.car.root.position.y + 0.08), r: 0.16, prio: 6, max: 110 }
     if (id.startsWith('place:')) {
       const p = id.slice(6) as PlaceId
-      const [x, z] = PLACES[p].model
-      // (Where a friend floats over it, the friend glows instead.)
-      const marked = (Object.keys(STOP_PLACE) as Stop[]).some((st) => STOP_PLACE[st] === p && d.markers[st].visible)
-      return { at: new Vector3(x, this.ground(x, z) + 0.15, z), r: p === 'town' ? 0.24 : 0.26, prio: 3, max: 150, glow: glow(p) && !marked }
+      const [x, z] = PLACES[p].at
+      return { at: new Vector3(x, this.ground(x, z) + 0.12, z), r: p === 'town' ? 0.24 : 0.26, prio: 3, max: 150 }
     }
-    if (id.startsWith('marker:')) {
-      const g = d.markers[id.slice(7) as Stop]
-      return g.visible ? { at: g.position.clone(), r: 0.13, prio: 4, max: 120, glow: glow(STOP_PLACE[id.slice(7) as Stop]) } : null
+    if (id.startsWith('pin:')) {
+      const pid = id.slice(4) as PinId
+      const g = d.pins[pid].root
+      const info = PINS[pid]
+      if (!g.visible) return null
+      // (Over the toys under it: the pin is what she taps.)
+      return { at: g.position.clone().setY(g.position.y + PIN.top * PIN.size * 0.5), r: 0.26, prio: 6, max: 150, glow: 'place' in info && glow(info.place) }
     }
     if (id.startsWith('spot:')) {
       const s = id.slice(5) as SpotId
       const [x, z] = SPOTS[s]
-      const r = s === 'bencha' ? 0.3 : s === 'nail' || s === 'lighthouse' ? 0.12 : 0.18
+      const r = s === 'bencha' ? 0.34 : s === 'nail' || s === 'lighthouse' ? 0.12 : 0.18
       return { at: new Vector3(x, this.ground(x, z) + 0.12, z), r, prio: 2, max: 130 }
     }
     if (id.startsWith('cloud:')) return { at: d.clouds[Number(id.slice(6))].position.clone(), r: 0.26, prio: 1, max: 140 }
     if (id.startsWith('boat:')) return { at: d.boats[Number(id.slice(5))].position.clone().setY(0.05), r: 0.1, prio: 4, max: 100 }
     switch (id) {
       case 'plane':
-        return { at: d.plane.position.clone(), r: 0.1, prio: 5, max: 100, glow: this.allDone && this.time - this.lastTouch > STUCK_S }
+        return { at: d.plane.position.clone(), r: 0.1, prio: 5, max: 100 }
       case 'pierboat':
         return { at: d.pierBoat.position.clone().setY(0.05), r: 0.11, prio: 4, max: 110 }
       case 'ferry':
@@ -989,24 +865,20 @@ export class KrabiMap extends Stage {
       return s ? [Math.round(s.x), Math.round(s.y)] : null
     }
     const places: Record<string, unknown> = {}
-    const nodes: Record<string, unknown> = {}
+    const pins: Record<string, unknown> = {}
     for (const id of PLACE_IDS) {
-      const [x, z] = PLACES[id].model
+      const [x, z] = PLACES[id].at
       places[id] = pt(new Vector3(x, this.ground(x, z) + 0.15, z))
-      const [nx, nz] = PLACES[id].at
-      nodes[id] = pt(new Vector3(nx, this.ground(nx, nz) + 0.02, nz))
     }
+    for (const id of PIN_IDS) if (this.d.pins[id].root.visible) pins[id] = pt(this.d.pins[id].root.position)
     return {
       game: 'krabi-map',
       been: [...this.done],
       open: PLACE_IDS.filter((p) => this.open(p)),
-      car: pt(this.carPos()),
-      held: this.held,
-      going: this.going,
       arrived: this.arrived?.id ?? null,
       plane: this.planeT >= 0 || this.departT >= 0,
       touches: this.touches,
-      points: { places, nodes },
+      points: { places, pins },
     }
   }
 }

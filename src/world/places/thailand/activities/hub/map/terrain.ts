@@ -321,13 +321,23 @@ export interface SeaMap {
   z1: number
 }
 
+/** The sea's three bands (pale by the beach, the middle, the deep) and the lighter blots far out. */
+export interface SeaColors {
+  shallow: string
+  mid: string
+  deep: string
+  light: string
+}
+const SEA_COLORS: SeaColors = { shallow: '#B9F3EA', mid: '#7FE0E6', deep: '#6CCDF0', light: '#7FD8F4' }
+
 /** The sea: one flat plane over the whole board, drawn by a small shader that knows how far each spot is from land.
  *  (The Thailand map's, and any trip map's with sea: the Krabi map's, boat-trip/map/.) */
 export class Sea {
   readonly mesh: Mesh
   private mat: ShaderMaterial
 
-  constructor(s: SeaMap, plane: { w: number; d: number; cx?: number; cz?: number }, bag: Bag) {
+  constructor(s: SeaMap, plane: { w: number; d: number; cx?: number; cz?: number }, bag: Bag, colors: Partial<SeaColors> = {}) {
+    const c = { ...SEA_COLORS, ...colors }
     const half = new Uint16Array(s.w * s.h)
     for (let i = 0; i < half.length; i++) half[i] = DataUtils.toHalfFloat(s.data[i])
     const tex = bag.add(new DataTexture(half, s.w, s.h, RedFormat, HalfFloatType))
@@ -339,10 +349,10 @@ export class Sea {
           uSea: { value: tex },
           uMap: { value: [s.x0, s.z0, 1 / (s.x1 - s.x0), 1 / (s.z1 - s.z0)] },
           uTime: { value: 0 },
-          uShallow: { value: new Color('#B9F3EA') },
-          uMid: { value: new Color('#7FE0E6') },
-          uDeep: { value: new Color('#6CCDF0') },
-          uLight: { value: new Color('#7FD8F4') },
+          uShallow: { value: new Color(c.shallow) },
+          uMid: { value: new Color(c.mid) },
+          uDeep: { value: new Color(c.deep) },
+          uLight: { value: new Color(c.light) },
         },
         vertexShader: seaVertex,
         fragmentShader: seaFragment,

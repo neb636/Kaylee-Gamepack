@@ -72,7 +72,7 @@ New: 🌍 World map → 🗺️ Thailand map (fly the plane) → 📍 Land on a 
 ## 📍 The pins
 
 - 🏠 **Bangkok: Agong's house**: The plane's home. Landing here opens the house (the tuk-tuk ride, `hub/arrive`). The **mall day** starts inside: Mom or Dad asks. The mall's stamp shows on this pin.
-- 🚤 **Krabi: the boat and the elephants**: Opens the **Krabi map** (2026-11-13, [its notes](krabi-map.md)): a 3D diorama of Krabi and Phang Nga Bay where she sends the songthaew to 🐘 the elephants or 🚤 the boat. The boat trip's stamp lands here.
+- 🚤 **Krabi: the boat and the elephants**: Opens the **Krabi map** (2026-11-13, [its notes](krabi-map.md)): a 3D diorama of Krabi and Phang Nga Bay where she taps a pin to go to 🐘 the elephants or 🚤 the boat. The boat trip's stamp lands here.
 - 🏔️ **Nan: the mountains**: Lands straight on the **Nan map**, the Pajero waiting at the airport (PR #228 already skips the rental desk). The Nan trip's stamp lands here.
 
 **What floats over each place (user feedback, 2026-11-10):** a friend she'll meet there, bobbing and waving like a pin (`map/pins.ts`): Agong in Bangkok, the baby elephant in Krabi, Moon the sun bear in Nan, the jet ski otter on Koh Samet. The boats' and the turtle's loops (`geo.ts`) are measured to stay out at sea.

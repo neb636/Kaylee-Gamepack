@@ -1,7 +1,7 @@
 // The window seat's and Krabi's recorded sounds (trip/sfx/, ElevenLabs), each with the old synthesized sound
 // (../../sfx.ts) as its fallback: the cabin's hum, the seatbelt sign's chime and her buckle, the landing gear, the
 // wheels touching down and the rollout, everyone clapping, the cabin's things she pokes (the shade, the tray, the
-// reading light, the air vent, the call button). (Krabi's songthaew sounds are the Krabi map's now: boat-trip/map/.) Toy
+// reading light, the air vent, the call button). Toy
 // sounds stay synthesized: her boing, the teddy's boop, Dad's snort, the snacks
 // landing on her tray, the sparkle when everyone cheers.
 import { sounds } from '../../../../../sdk'

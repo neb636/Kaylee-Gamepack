@@ -2,7 +2,7 @@
 // #/world/thailand/boat-trip/<section>?packed=<what's in the suitcase>&ribbons=...&stops=...&photos=...&found=...
 // The trip there (step 4): Mom asks if she's ready, packing, the goodbye and Aunty Sri's van, the airport and the
 // window seat; then the Krabi map (map?been=..., notes: thailand/krabi-map.md), the trip's hub: a toy diorama of Krabi
-// and Phang Nga Bay where she sends the little songthaew to Baan Chang or the pier, in any order, and back to it after
+// and Phang Nga Bay where she taps a pin to go to Baan Chang or the pier, in any order, and back to it after
 // each (its stamp lands there); then Phang Nga Bay (step 3): the pier and its ribbons, open water, the village, the
 // cave and the hong, the boat race through the rainbow gate (its own lagoon: three laps, then the podium and the
 // trophy), the Nail Island's photo and the sunset ride back; Baan Chang Cafe in Krabi (thailand/baan-chang.md (retired;
@@ -20,7 +20,7 @@ const BOAT_SECTIONS = defineSections('thailand', 'boat-trip', {
     ribbons: { default: 'pink,butter,mint', doc: 'the three ribbons on the longtail\'s bow: pink, butter, mint, sky, lavender, hotpink (a pier link with it has them tied already)' },
     stops: { default: '', doc: 'stops already visited: village, cave, race (their glows are out; village = the football rides in the boat, race = she won the boat race and the trophy rides in the bow)' },
     photos: { default: '', doc: 'photos already in the trip album: village, hong, nail' },
-    been: { default: '', doc: "Krabi's two places already done, in the order she did them: chang (Baan Chang, the elephants), bay (the boat; back at the pier at sunset). On the Krabi map they wear a stamp (the newest one lands when she's back), the songthaew waits at the last one, and after one the airport opens (home); and the boarding pass's punches" },
+    been: { default: '', doc: "Krabi's two places already done, in the order she did them: chang (Baan Chang, the elephants), bay (the boat; back at the pier at sunset). On the Krabi map they wear a stamp (the newest one lands when she's back), and after one the plane's pin pops up over the airport (home); and the boarding pass's punches" },
     found: { default: '', doc: 'animal stickers found: needlefish, eagle, macaque, cat, crab, mudskipper, lizard, kingfisher, porpoise, elephant (Baan Chang, Khanom)' },
     fed: { default: '0', doc: 'Baan Chang: how many foods the elephants have had already (their bellies are that round)' },
     straw: { default: 'pink', values: ['pink', 'purple', 'yellow'], doc: 'Baan Chang: the straw she put in her chocolate milk at the cafe (it rides along to the yard, on the rail post)' },
@@ -35,7 +35,7 @@ const BOAT_SECTIONS = defineSections('thailand', 'boat-trip', {
     { id: 'takeoff', name: 'Window seat: seatbelt and takeoff', params: ['packed', 'replay'], group: 'Getting there' },
     { id: 'fly', name: 'Window seat: tray, snacks, the elephant below', params: ['packed', 'replay'], group: 'Getting there' },
     { id: 'land', name: 'Landing in Krabi, then the Krabi map', params: ['packed', 'replay', 'been'], group: 'Getting there' },
-    { id: 'map', name: 'The Krabi map: send the songthaew to the elephants or the boat', params: ['packed', 'been'], group: 'The Krabi map', links: [{ label: 'The Krabi map: tap a place, or drag the little songthaew there (from the Thailand map)' }, { label: 'Back from Baan Chang: its stamp lands, the airport opens', params: { been: 'chang' } }, { label: 'Both done: the stamps, and the plane home', params: { been: 'chang,bay' } }] },
+    { id: 'map', name: 'The Krabi map: tap a pin to go to the elephants or the boat', params: ['packed', 'been'], group: 'The Krabi map', links: [{ label: 'The Krabi map: tap the elephant pin or the boat pin (from the Thailand map)' }, { label: "Back from Baan Chang: its stamp lands, the plane's pin pops up", params: { been: 'chang' } }, { label: "Both done: the stamps, and the plane's pin home", params: { been: 'chang,bay' } }] },
     { id: 'chang', name: 'Baan Chang: the songthaew to the elephant cafe', params: ['packed', 'been'], group: 'Baan Chang' },
     { id: 'sign', name: 'Baan Chang: the bamboo sign wall and a photo', params: ['packed', 'been', 'photos', 'found'], group: 'Baan Chang' },
     { id: 'drinks', name: 'Baan Chang: the cafe, her chocolate milk (and an iced coffee for Dad)', params: ['packed', 'straw', 'been'], group: 'Baan Chang' },

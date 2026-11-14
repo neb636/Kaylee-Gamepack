@@ -7,7 +7,7 @@
 //   airport                 the van pulls away and they're at the airport: the x-ray belt (trip/legs/airport.ts)
 //   takeoff, fly, land      the window seat (trip/legs/plane.ts), down into Krabi, then
 //   map                     the Krabi map (map/, notes: thailand/krabi-map.md), the trip's hub: a toy diorama of
-//                           Krabi and Phang Nga Bay in the sky. She sends the little songthaew to Baan Chang or the
+//                           Krabi and Phang Nga Bay in the sky. She taps a pin to go to Baan Chang or the
 //                           pier (either first), comes back to the map after each (its stamp lands), and after one the
 //                           airport opens: the tiny plane takes off for home (endTrip). Away from the map, the top-left
 //                           button and the browser's Back go back to it
@@ -186,7 +186,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     return () => clearTimeout(t)
   }, [phase])
   const [flash, setFlash] = useState(0)
-  /** On the Krabi map: where the songthaew waits (the place she came back from). */
+  /** On the Krabi map: the place she just came back from (its stamp lands). */
   const [mapFrom, setMapFrom] = useState<MapPlace | null>(null)
   // The bay: her ribbons, the stops she's been to, the album's photos and stickers.
   const [ribbons, setRibbons] = useState<string[]>(() => list(flag('ribbons'), ['pink', 'butter', 'mint', 'sky', 'lavender', 'hotpink']).slice(0, 3))
@@ -483,7 +483,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     setMapFrom('chang')
     finish('map', 'chang')
   }
-  /** A place picked on the Krabi map (the songthaew got there): that part of the trip, or (the airport) home. */
+  /** A place picked on the Krabi map (its pin tapped): that part of the trip, or (the airport) home. */
   const fromMap = (place: 'chang' | 'pier' | 'airport') => {
     if (place === 'airport') return endTrip()
     finish(place, null)

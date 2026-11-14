@@ -1,9 +1,9 @@
-// The Krabi map's ground, in the Thailand map's look (hub/map/terrain.ts): Krabi, Phuket's east side and the islands
-// stand up out of a turquoise sea like slices of cake (the real coasts, coast.ts), their cut edges in two cake layers.
-// The tops are painted: soft greens that darken up the hills, sandy beaches along the shore, dark mangroves round the
-// top of Phang Nga Bay, rubber and oil palm rows inland, the Krabi River and the creeks with pale banks, cream roads
-// with a dashed middle (and the road on to Ao Nang), a soft shadow under every tree and toy. The sea (the Thailand
-// map's Sea) foams along every shore and round every rock tower.
+// The Krabi map's ground: Krabi, Phuket's east side and the islands stand up out of an emerald sea like slices of cake
+// (the real coasts, coast.ts), their cut edges in two cake layers. The tops are painted: wide pale beaches along the
+// shore, bright jungle greens that deepen up the hills, dark mangroves round the top of Phang Nga Bay, the Krabi River
+// and the creeks with pale banks, a soft shadow under every palm, rock and toy. No roads and no fields: this is a map
+// of sea, rock and beach. The sea (the Thailand map's Sea, in Krabi's own emerald greens) foams along every shore and
+// round every rock tower, and goes pale over the sandbars (layout.ts SHOALS).
 import { BufferAttribute, BufferGeometry, CanvasTexture, Mesh, MeshToonMaterial, SRGBColorSpace } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { toonGradient } from '../../../../../engine3d/toon'
@@ -11,28 +11,31 @@ import { smoothstep } from '../../../../../../sdk/math'
 import { distance } from '../../hub/map/field'
 import { Sea } from '../../hub/map/terrain'
 import { ISLANDS, MAINLAND, type LonLat } from './coast'
-import { BOARD, CLIFF_W, DEG_M, HILLS, KARSTS, LEVEL, ll, RIVER_W, RIVERS, toX, toZ, TOY_ISLANDS, type XZ } from './layout'
+import { BOARD, CLIFF_W, DEG_M, HILLS, KARSTS, LEVEL, ll, RIVER_W, RIVERS, SHOALS, toX, toZ, TOY_ISLANDS, type XZ } from './layout'
 
 /** Field cells per meter, ground mesh cells per meter, painted pixels per meter. */
 const RES = 40
-const MESH = 46
+const MESH = 36
 const TEX = 280
 /** How far the field runs past the board (m). */
 const PAD = 0.5
 
 const C = {
-  sand: [255, 236, 190],
-  wet: [250, 222, 168],
-  cliff: [244, 200, 158],
-  cliffLow: [229, 172, 130],
-  rim: [222, 247, 178],
-  plain: [182, 233, 160],
-  south: [170, 229, 168],
-  forest: [146, 216, 152],
-  deep: [122, 202, 142],
-  peak: [100, 188, 134],
-  mangrove: [112, 190, 140],
+  sand: [255, 243, 208],
+  wet: [252, 228, 178],
+  cliff: [246, 208, 166],
+  cliffLow: [232, 180, 140],
+  rim: [214, 244, 170],
+  plain: [166, 230, 150],
+  south: [158, 226, 158],
+  forest: [122, 208, 140],
+  deep: [96, 192, 130],
+  peak: [80, 178, 122],
+  mangrove: [92, 180, 132],
 } satisfies Record<string, [number, number, number]>
+
+/** Krabi's water: pale mint over the sand, emerald, then a deep teal out in the Andaman Sea. */
+const SEA = { shallow: '#CFF9E6', mid: '#74E6CF', deep: '#45C9D2', light: '#5AD3DA' }
 
 export interface Field {
   /** Meters inside land (negative: out at sea). */
@@ -134,7 +137,13 @@ function build() {
       }
       // (The shader's bands and foam are sized for the Thailand map: here the bay is narrower, so its water reads a
       // little deeper.)
-      sea[i] = d * 0.62
+      d *= 0.62
+      // A sandbar or a reef flat: pale water, but no foam line (that's the shore's).
+      for (const [sx, sz, r] of SHOALS) {
+        const k = Math.max(0.075, 0.075 + (Math.hypot(x - sx, z - sz) - r) * 0.9 + wobble(x * 5, z * 5) * 0.02)
+        if (k < d) d = k
+      }
+      sea[i] = d
     }
   built = { field, sea, w, h, x0, z0 }
   return built
@@ -153,17 +162,13 @@ export function buildSea(bag: Bag) {
     { data: b.sea, w: b.w, h: b.h, x0: b.x0, z0: b.z0, x1: b.x0 + b.w / RES, z1: b.z0 + b.h / RES },
     { w: W, d: D, cx: (BOARD.x0 + BOARD.x1) / 2, cz: (BOARD.z0 + BOARD.z1) / 2 },
     bag,
+    SEA,
   )
 }
 
 export interface GroundInput {
-  roads: XZ[][]
-  /** Roads painted that don't go anywhere yet (a little paler). */
-  more: XZ[][]
   /** Soft shadows painted under things: [x, z, radius]. */
   shadows: [number, number, number][]
-  /** Keep the palm rows off these: [x, z, radius]. */
-  keep: [number, number, number][]
 }
 
 // The painted top, once a visit (the same every time).
@@ -217,7 +222,7 @@ export function buildGround(bag: Bag, input: GroundInput) {
 /** Ao Phang Nga's mangroves: along the top of the bay, where the creeks come out. */
 const inMangroves = (x: number, z: number) => z < toZ(8.3) && x > toX(98.44) && x < toX(98.86)
 
-function paint(f: Field, { roads, more, shadows, keep }: GroundInput) {
+function paint(f: Field, { shadows }: GroundInput) {
   const W = BOARD.x1 - BOARD.x0
   const D = BOARD.z1 - BOARD.z0
   const w = Math.round(W * TEX)
@@ -249,8 +254,8 @@ function paint(f: Field, { roads, more, shadows, keep }: GroundInput) {
         col = d < -CLIFF_W * 0.4 ? C.cliffLow : C.cliff
       } else {
         const up = f.hill(x, z)
-        if (d < 0.045 + n * 0.012) col = inMangroves(x, z) ? C.mangrove : C.sand
-        else if (d < 0.075 + n * 0.01) col = C.rim
+        if (d < (inMangroves(x, z) ? 0.045 : 0.075) + n * 0.016) col = inMangroves(x, z) ? C.mangrove : C.sand
+        else if (d < 0.105 + n * 0.012) col = C.rim
         else if (up > 0.38 + n * 0.03) col = C.peak
         else if (up > 0.22 + n * 0.03) col = C.deep
         else if (up > 0.08 + n * 0.02) col = C.forest
@@ -268,10 +273,6 @@ function paint(f: Field, { roads, more, shadows, keep }: GroundInput) {
   g.drawImage(base, 0, 0, w, h)
 
   const P = ([x, z]: XZ): [number, number] => [(x - BOARD.x0) * TEX, (z - BOARD.z0) * TEX]
-  const path = (pts: XZ[]) => {
-    g.beginPath()
-    pts.forEach((p, i) => (i ? g.lineTo(...P(p)) : g.moveTo(...P(p))))
-  }
   const smooth = (pts: XZ[]) => {
     const q = pts.map(P)
     g.beginPath()
@@ -284,35 +285,19 @@ function paint(f: Field, { roads, more, shadows, keep }: GroundInput) {
   g.lineCap = g.lineJoin = 'round'
   let seed = 5
   const rnd = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280)
-  const near = (x: number, z: number, lines: XZ[][], r: number) => lines.some((l) => l.some(([lx, lz], i) => i % 2 === 0 && Math.hypot(lx - x, lz - z) < r))
-
-  // ---- Rows of rubber trees and oil palms on the flat land inland: little patches of dotted rows.
   const rivers = RIVERS.map((r) => r.map(([lon, lat]) => ll(lon, lat)))
-  const rows = ['#A6DE9A', '#B4E5A2', '#9BD69A']
-  for (let z = BOARD.z0 + 0.15; z < BOARD.z1 - 0.1; z += 0.13)
-    for (let x = BOARD.x0 + 0.15 + ((z * 7) % 0.05); x < BOARD.x1 - 0.1; x += 0.16) {
-      const fx = x + (rnd() - 0.5) * 0.03
-      const fz = z + (rnd() - 0.5) * 0.02
-      if (f.land(fx, fz) < 0.18 || f.hill(fx, fz) > 0.05 || near(fx, fz, roads, 0.09) || near(fx, fz, rivers, 0.1)) continue
-      if (keep.some(([kx, kz, r]) => Math.hypot(kx - fx, kz - fz) < r) || wobble(x * 0.9 + 1.3, z * 0.8 - 2.1) < 0.2 || rnd() > 0.8) continue
-      const [cx, cy] = P([fx, fz])
-      g.save()
-      g.translate(cx, cy)
-      g.rotate((rnd() - 0.5) * 0.3)
-      const fw = TEX * (0.12 + rnd() * 0.02)
-      const fh = TEX * (0.085 + rnd() * 0.015)
-      g.fillStyle = rows[Math.floor(rnd() * rows.length)]
-      g.beginPath()
-      g.roundRect(-fw / 2, -fh / 2, fw, fh, TEX * 0.012)
-      g.fill()
-      g.fillStyle = 'rgba(80,160,100,0.45)'
-      for (let ry = -1; ry <= 1; ry++) for (let rx = -2; rx <= 2; rx++) {
-        g.beginPath()
-        g.arc((rx * fw) / 5.5, (ry * fh) / 3.6, TEX * 0.006, 0, Math.PI * 2)
-        g.fill()
-      }
-      g.restore()
-    }
+
+  // ---- Jungle: soft darker and lighter blots all over the green, so the land isn't one flat color.
+  for (let n = 0; n < 1400; n++) {
+    const x = BOARD.x0 + rnd() * W
+    const z = BOARD.z0 + rnd() * D
+    if (f.land(x, z) < 0.13) continue
+    const [cx, cy] = P([x, z])
+    g.fillStyle = rnd() > 0.45 ? 'rgba(70,170,110,0.16)' : 'rgba(220,250,180,0.2)'
+    g.beginPath()
+    g.ellipse(cx, cy, TEX * (0.02 + rnd() * 0.03), TEX * (0.015 + rnd() * 0.02), rnd() * 3, 0, Math.PI * 2)
+    g.fill()
+  }
 
   // ---- The mangroves at the top of the bay: dark round bushes along the shore.
   for (let n = 0; n < 900; n++) {
@@ -354,26 +339,5 @@ function paint(f: Field, { roads, more, shadows, keep }: GroundInput) {
     g.stroke()
   }
 
-  // ---- The roads: cream with a warm edge and a dashed white middle (the ones that don't go anywhere yet: no dashes).
-  for (const l of [...roads, ...more]) {
-    smooth(l)
-    g.strokeStyle = '#EBCB9E'
-    g.lineWidth = TEX * 0.078
-    g.stroke()
-  }
-  for (const l of [...roads, ...more]) {
-    smooth(l)
-    g.strokeStyle = '#FFF4DC'
-    g.lineWidth = TEX * 0.06
-    g.stroke()
-  }
-  g.strokeStyle = '#FFFFFF'
-  g.lineWidth = TEX * 0.009
-  g.setLineDash([TEX * 0.03, TEX * 0.035])
-  for (const l of roads) {
-    path(l)
-    g.stroke()
-  }
-  g.setLineDash([])
   return c
 }
