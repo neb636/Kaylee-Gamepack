@@ -1,0 +1,8 @@
+{
+  "title": "Nan sky road: no phantom lane dashes",
+  "checkIn": "fix",
+  "kaylee": "On a rainy drive the road no longer shows stray white bars in the lanes; the darker wet road and the splashy puddles stay.",
+  "questions": [],
+  "reels": [{ "name": "nan-sky-rain", "moments": ["#/world/thailand/nan-trip/drive?road=sky&weather=rain~10"] }],
+  "links": [{ "label": "Drive it in the rain", "hash": "#/world/thailand/nan-trip/drive?road=sky&weather=rain" }]
+}

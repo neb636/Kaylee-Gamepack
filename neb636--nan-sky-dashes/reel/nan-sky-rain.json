@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "nan-sky-rain",
+  "title": "Nan sky rain",
+  "video": "nan-sky-rain.mp4",
+  "gif": "nan-sky-rain.gif",
+  "seconds": 12,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Thailand nan trip drive",
+      "where": "#/world/thailand/nan-trip/drive?road=sky&weather=rain",
+      "seconds": 10,
+      "fps": 69.4,
+      "status": "ok"
+    }
+  ]
+}
