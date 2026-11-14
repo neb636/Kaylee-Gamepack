@@ -250,21 +250,25 @@ function smoothHull(geometry: BufferGeometry, rounds: number, lift: number, onCu
 // smoothing (a neighbour set per vertex, then 12 to 36 passes) is the slow part. Clones of the model share its
 // geometries, so the piece's own geometry is the key. Kept for the session (never in a world's bag: the next world
 // draws the same ones).
-const hulls = new WeakMap<BufferGeometry, BufferGeometry>()
-function hullOf(geometry: BufferGeometry, face: boolean, onCut: OnCut | null) {
-  let h = hulls.get(geometry)
+const hulls = new WeakMap<BufferGeometry, Map<number, BufferGeometry>>()
+function hullOf(geometry: BufferGeometry, face: boolean, onCut: OnCut | null, faceLift: number) {
+  const lift = face ? faceLift : -1
+  let byLift = hulls.get(geometry)
+  if (!byLift) hulls.set(geometry, (byLift = new Map()))
+  let h = byLift.get(lift)
   if (!h) {
     // The face gets extra rounds and stands off: the sculpted mouth's dimples otherwise poke ink ticks through.
-    h = face ? smoothHull(geometry, 18, HULL_LIFT, onCut) : smoothHull(geometry, 6, 0, onCut)
-    hulls.set(geometry, h)
+    h = face ? smoothHull(geometry, 18, faceLift, onCut) : smoothHull(geometry, 6, 0, onCut)
+    byLift.set(lift, h)
   }
   return h
 }
 
 /** The toon look on a modelled toy's pieces (Kaylee's, Mom's): each texture lit with the shared toon bands, and an ink
  *  hull on every piece except the glossy eye domes (names starting with "eye"). `onCut` as in smoothHull; `px` is the
- *  ink's width before TUNE.outline (Kaylee's PX by default). */
-export function inkPieces(meshes: Mesh[], onCut: OnCut | null, px = PX) {
+ *  ink's width before TUNE.outline (Kaylee's PX by default); `faceLift` is how far the face's hull stands off it (model
+ *  meters, HULL_LIFT by default: Mom passes 0, her hair is part of her face mesh). */
+export function inkPieces(meshes: Mesh[], onCut: OnCut | null, px = PX, faceLift = HULL_LIFT) {
   for (const m of meshes) {
     const map = (m.material as { map?: Texture | null }).map
     if (map) {
@@ -276,7 +280,7 @@ export function inkPieces(meshes: Mesh[], onCut: OnCut | null, px = PX) {
       // The hair's line is drawn a little nearer, so the bangs keep their line where they rest on the forehead (only
       // the hair: on the face it would bring ink up through the creases around the nose and eyes).
       const bias = m.name.startsWith('hair') ? HULL_BIAS : 0
-      const hull = new Mesh(hullOf(m.geometry, m.name.startsWith('face'), onCut), outlineMaterial(px, undefined, bias))
+      const hull = new Mesh(hullOf(m.geometry, m.name.startsWith('face'), onCut, faceLift), outlineMaterial(px, undefined, bias))
       hull.userData.hull = px
       hull.userData.hullBias = bias
       m.add(hull)

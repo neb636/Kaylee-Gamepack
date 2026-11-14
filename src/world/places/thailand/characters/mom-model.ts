@@ -22,9 +22,9 @@ import url from './models/mom.glb?url'
 export const MOM_SIZE = 1.85
 /** How far each arm's swing plane turns forward (model.ts swingForward): her hair is about as wide as her reach. */
 const ARM_TILT = 2.0
-/** Her ink widths before TUNE.outline: the user's pick in the lab, the Outline slider at 0.35 instead of 0.75, so her
- *  line is under half of Kaylee's (1.8 px) and the glasses' and lids' ink shrink with it. */
-const INK = 0.35 / 0.75
+/** Her ink widths before TUNE.outline: the user's pick, the Outline slider at 1 instead of 0.75 (it was 0.35 until her
+ *  hair stopped drawing a thick band, 2026-11-14), and the glasses' and lids' ink follow it. */
+const INK = 1 / 0.75
 const BODY_INK = 1.8 * INK
 const FACE_INK = 1.2 * INK
 
@@ -183,7 +183,10 @@ export function buildMomRig(gltf: GLTF, bag: Bag): Rig {
     }
   })
   // Tripo made her head, arms, legs and tail separate pieces: nothing was cut, so no caps to keep the ink off.
-  inkPieces(meshes, null, BODY_INK)
+  // TEMPORARY (issue #444): her hair is part of face_mesh, so the face's hull
+  // lift (model.ts HULL_LIFT, 4 mm, 7.4 mm at her size) drew a thick band around it. A lift of 0 keeps her face's
+  // line on the surface. Once the hair is its own `hair_mesh`, go back to `inkPieces(meshes, null, BODY_INK)`.
+  inkPieces(meshes, null, BODY_INK, 0)
 
   const [body, head, eyes, armL, armR, tail, legL, legR] = ['body', 'head', 'eyes', 'armL', 'armR', 'tail', 'legL', 'legR'].map(node)
   // Her arms take the code-built rig's poses (reachForward), and each holds things at its hoof (`hands`: a group turned
