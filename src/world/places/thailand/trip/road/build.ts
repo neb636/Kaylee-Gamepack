@@ -1,11 +1,12 @@
 // The road kit's scenery, built from a Road (road.ts): the hills it's cut into (one height field, so the ground always
-// meets the road), the ribbon of the road itself (two lanes, white edge lines, a dashed yellow middle, dirt verges),
+// meets the road), the ribbon of the road itself (two lanes of mottled, mended asphalt, white edge lines, a yellow
+// middle with road studs, dirt verges),
 // steel guard rails wherever the ground drops away beside it, black-and-white chevron signs round the sharp bends,
 // round convex mirrors on blind bends, trees, a ring of far mountains, and a river with a bridge where one crosses; and
-// after rain, the wet road's shine and its puddles (buildWet). Few draw calls: each kind of thing is merged into one mesh (plus its outline).
+// after rain, the wet road's sheen and its puddles (buildWet). Few draw calls: each kind of thing is merged into one mesh (plus its outline).
 //
 // The Nan look (`look.jungle`, the mountain roads; the photos Dad sent of Route 1081 and 1256): the road runs on past
-// both ends into the hills (it never just stops), dark asphalt with a solid yellow middle and a grass shoulder, steel
+// both ends into the hills (it never just stops), dark asphalt with a double yellow middle and a red-earth shoulder, steel
 // W-beam rails, power poles with sagging wires and white kilometer stones, hillsides deep in a lumpy forest canopy
 // (forest.ts), cleared fields on the far slopes, paddies cut into fields with green bunds, villages with tin roofs in
 // pink and blue (village.ts), and layer after layer of blue ridges going pale into the haze (far.ts).
@@ -53,11 +54,12 @@ const MIDDLE = '#FFD45C'
 const VERGE = '#D9BC9C'
 const RAIL = '#E9ECF4'
 const POST = '#B9BCCB'
-// The Nan look's road: dark asphalt, a solid yellow middle, a concrete edge and a grass shoulder.
+// The Nan look's road: dark asphalt, a yellow middle, a dusty earth shoulder and grass.
 const J_ASPHALT = '#7A7686'
 const J_MIDDLE = '#FFC93C'
-const J_KERB = '#C9C5CF'
 const J_VERGE = '#86C468'
+// The red-earth shoulder beside the asphalt (laterite, the color of Nan's roadsides).
+const J_DIRT = '#C2AA88'
 
 export const smooth = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)))
@@ -670,43 +672,112 @@ function roadside(road: Road, field: HeightField, railed: (s: number, side: numb
   return g
 }
 
-/** The road itself: strips across it (verge, edge line, lane, the dashed middle, lane, edge line, verge), one mesh. */
+/** Smooth value noise 0..1 at (x, y) (seeded; for the asphalt's mottling). */
+function noise2(seed: number) {
+  const hash = (i: number, j: number) => {
+    let h = (i * 374761393 + j * 668265263 + seed * 2246822519) | 0
+    h = Math.imul(h ^ (h >>> 13), 1274126177)
+    return ((h ^ (h >>> 16)) >>> 0) / 4294967296
+  }
+  return (x: number, y: number) => {
+    const i = Math.floor(x)
+    const j = Math.floor(y)
+    const u = smooth(0, 1, x - i)
+    const v = smooth(0, 1, y - j)
+    const a = hash(i, j) + (hash(i + 1, j) - hash(i, j)) * u
+    const b = hash(i, j + 1) + (hash(i + 1, j + 1) - hash(i, j + 1)) * u
+    return a + (b - a) * v
+  }
+}
+
+/** What each strip across the road is (its color comes from the look). */
+type Strip = 'verge' | 'dirt' | 'asphalt' | 'line' | 'middle'
+
+/** The road itself: strips across it (verge, edge line, lanes, the middle line, lanes, edge line, verge), one mesh.
+ *  The asphalt is mottled (worn paler where the wheels run, darker along the edges and down the middle) so it never
+ *  reads as one flat sheet; the strips inside a lane are only for that shading, never lines. */
 function ribbon(road: Road, look: RoadLook, bag: Bag) {
   const h = road.half
-  // Across the road from right to left, with each strip's color (a function of `s` for the dashes).
-  let cuts = [-(h + 1.5), -h, -h + 0.2, -0.09, 0.09, h - 0.2, h, h + 1.5]
-  let color = (j: number, s: number) => [VERGE, LINE, ASPHALT, Math.floor(s / 3) % 2 ? ASPHALT : MIDDLE, ASPHALT, LINE, VERGE][j]
+  // Across the road from right to left: the edge of each strip, and what it is.
+  let cuts: number[]
+  let kinds: Strip[]
+  // Inside each lane: a few edges for the mottling to vary across (shading only).
+  const lane = (from: number, to: number) => [0.2, 0.4, 0.6, 0.8].map((t) => from + (to - from) * t)
   if (look.jungle) {
-    // The Nan look: grass, a strip of concrete, a white edge line inset from it, dark asphalt, the yellow middle.
-    cuts = [-(h + 1.5), -(h + 0.25), -h, -h + 0.35, -h + 0.55, -0.1, 0.1, h - 0.55, h - 0.35, h, h + 0.25, h + 1.5]
-    const mid = (s: number) => (look.middle === 'dashed' && Math.floor(s / 3) % 2 ? J_ASPHALT : J_MIDDLE)
-    color = (j: number, s: number) => [J_VERGE, J_KERB, J_ASPHALT, LINE, J_ASPHALT, mid(s), J_ASPHALT, LINE, J_ASPHALT, J_KERB, J_VERGE][j]
+    // The Nan look (the photos of Route 1081): grass, a dusty red-earth shoulder, the asphalt's own edge, a white edge
+    // line inset from it, the two lanes, and the yellow middle (two lines on the mountain roads: no passing).
+    const double = look.middle !== 'dashed'
+    const mid = double ? [-0.24, -0.1, 0.1, 0.24] : [-0.1, 0.1]
+    const midKinds: Strip[] = double ? ['middle', 'asphalt', 'middle'] : ['middle']
+    cuts = [-(h + 1.6), -(h + 0.6), -(h + 0.2), -h + 0.3, -h + 0.45, ...lane(-h + 0.45, mid[0]), ...mid, ...lane(mid[mid.length - 1], h - 0.45), h - 0.45, h - 0.3, h + 0.2, h + 0.6, h + 1.6]
+    kinds = ['verge', 'dirt', 'asphalt', 'line', ...Array<Strip>(5).fill('asphalt'), ...midKinds, ...Array<Strip>(5).fill('asphalt'), 'line', 'asphalt', 'dirt', 'verge']
+  } else {
+    cuts = [-(h + 1.5), -h, -h + 0.2, ...lane(-h + 0.2, -0.09), -0.09, 0.09, ...lane(0.09, h - 0.2), h - 0.2, h, h + 1.5]
+    kinds = ['verge', 'line', ...Array<Strip>(5).fill('asphalt'), 'middle', ...Array<Strip>(5).fill('asphalt'), 'line', 'verge']
+  }
+  const base: Record<Strip, string> = look.jungle
+    ? { verge: J_VERGE, dirt: J_DIRT, asphalt: J_ASPHALT, line: LINE, middle: J_MIDDLE }
+    : { verge: VERGE, dirt: VERGE, asphalt: ASPHALT, line: LINE, middle: MIDDLE }
+  const dashed = look.jungle ? look.middle === 'dashed' : true
+  const asphalt = new Color(base.asphalt)
+  const worn = new Color(base.asphalt).offsetHSL(0, -0.02, 0.06)
+  const dark = new Color(base.asphalt).offsetHSL(0, 0.01, -0.07)
+  const tint = new Color('#8A7F9C')
+  const n1 = noise2(look.seed)
+  const n2 = noise2(look.seed + 7)
+  const tmp = new Color()
+  /** The asphalt's color at (s, lat): paler in the wheel tracks, darker at the edges and down the middle, and big soft
+   *  patches lighter, darker or a touch more lilac (older and newer tarmac). */
+  const asphaltAt = (s: number, lat: number) => {
+    const a = Math.abs(lat)
+    // Two wheel tracks in each lane (worn paler), the oil-dark strip between them and at the lane's edges.
+    const inLane = (a - h / 2) / (h / 2)
+    const track = Math.exp(-(((Math.abs(inLane) - 0.45) / 0.22) ** 2))
+    const edge = smooth(h - 0.9, h + 0.2, a)
+    tmp.copy(asphalt).lerp(worn, 0.6 * track).lerp(dark, 0.8 * edge)
+    const big = n1(s / 26, lat / 9) - 0.5
+    const small = n2(s / 5.5, lat / 2.2) - 0.5
+    tmp.offsetHSL(0, 0, big * 0.11 + small * 0.05)
+    tmp.lerp(tint, Math.max(0, n2(s / 40 + 9, lat / 12) - 0.6) * 0.5)
+    return tmp
+  }
+  const colorAt = (k: Strip, s: number, lat: number) => {
+    if (k === 'asphalt') return asphaltAt(s, lat)
+    if (k === 'middle' && dashed && Math.floor(s / 3) % 2) return asphaltAt(s, lat)
+    tmp.set(base[k])
+    // Painted lines wear a little too, and the dirt and grass vary.
+    if (k === 'line' || k === 'middle') tmp.offsetHSL(0, 0, (n2(s / 7, lat) - 0.5) * 0.06)
+    else tmp.offsetHSL(0, 0, (n1(s / 9, lat / 2) - 0.5) * 0.1)
+    return tmp
   }
   const last = cuts.length - 2
-  const lift = (j: number) => (j === 0 || j === last ? -0.03 : 0.03)
+  // (The grass edge dips into the ground; the dirt sits just under the asphalt, so the asphalt has a lip.)
+  const liftOf = (k: Strip) => (k === 'verge' ? -0.03 : k === 'dirt' ? 0 : 0.03)
   const pos: number[] = []
   const col: number[] = []
-  const c = new Color()
   const S = road.samples
   for (let i = 0; i < S.length - 1; i++) {
     const a = S[i]
     const b = S[i + 1]
     for (let j = 0; j < cuts.length - 1; j++) {
-      c.set(color(j, a.s))
+      const k = kinds[j]
       const l0 = cuts[j]
       const l1 = cuts[j + 1]
-      // The verges' outer edges dip a little into the ground.
-      const y0 = j === 0 ? -0.2 : lift(j)
-      const y1 = j === last ? -0.2 : lift(j)
+      const y0 = j === 0 ? -0.2 : liftOf(k)
+      const y1 = j === last ? -0.2 : liftOf(k)
       const quad: V3[] = [
         [a.x + a.lx * l0, a.y + y0, a.z + a.lz * l0],
         [b.x + b.lx * l0, b.y + y0, b.z + b.lz * l0],
         [a.x + a.lx * l1, a.y + y1, a.z + a.lz * l1],
         [b.x + b.lx * l1, b.y + y1, b.z + b.lz * l1],
       ]
-      for (const k of [0, 1, 2, 1, 3, 2]) {
-        pos.push(...quad[k])
-        col.push(c.r, c.g, c.b)
+      // Lines and dashes keep one color per meter (crisp); the asphalt is shaded per corner (soft).
+      const flat = k !== 'asphalt' && k !== 'verge' && k !== 'dirt'
+      const corner: [number, number][] = [[a.s, l0], [b.s, l0], [a.s, l1], [b.s, l1]]
+      const cs = corner.map(([cs, cl]) => colorAt(k, flat ? a.s : cs, flat ? (l0 + l1) / 2 : cl).toArray() as V3)
+      for (const q of [0, 1, 2, 1, 3, 2]) {
+        pos.push(...quad[q])
+        col.push(...cs[q])
       }
     }
   }
@@ -714,9 +785,87 @@ function ribbon(road: Road, look: RoadLook, bag: Bag) {
   g.setAttribute('position', new BufferAttribute(new Float32Array(pos), 3))
   g.setAttribute('color', new BufferAttribute(new Float32Array(col), 3))
   g.computeVertexNormals()
+  const root = new Group()
   const m = new Mesh(bag.add(g), toon('#ffffff', true))
   m.renderOrder = 1
+  root.add(m)
+  root.add(patches(road, look, bag))
+  if (look.jungle) root.add(studs(road, bag))
+  return root
+}
+
+/** Patches of newer, darker tarmac across one lane now and then, and a few long cracks sealed in black (an old road
+ *  that's been mended), laid just over the ribbon. */
+function patches(road: Road, look: RoadLook, bag: Bag) {
+  const rand = rng(look.seed * 13 + 5)
+  const h = road.half
+  const pos: number[] = []
+  const col: number[] = []
+  const c = new Color()
+  const strip = (s0: number, s1: number, lat0: number, lat1: number, color: string, y: number, wob = 0) => {
+    c.set(color)
+    for (let s = s0; s < s1 - 1e-3; s += 1) {
+      const u = Math.min(s + 1, s1)
+      const a = road.sampleAt(s)
+      const b = road.sampleAt(u)
+      const da = wob ? Math.sin(s * 0.9 + lat0 * 3) * wob : 0
+      const db = wob ? Math.sin(u * 0.9 + lat0 * 3) * wob : 0
+      const q: V3[] = [
+        [a.x + a.lx * (lat0 + da), a.y + y, a.z + a.lz * (lat0 + da)],
+        [b.x + b.lx * (lat0 + db), b.y + y, b.z + b.lz * (lat0 + db)],
+        [a.x + a.lx * (lat1 + da), a.y + y, a.z + a.lz * (lat1 + da)],
+        [b.x + b.lx * (lat1 + db), b.y + y, b.z + b.lz * (lat1 + db)],
+      ]
+      for (const k of [0, 1, 2, 1, 3, 2]) {
+        pos.push(...q[k])
+        col.push(c.r, c.g, c.b)
+      }
+    }
+  }
+  const base = look.jungle ? J_ASPHALT : ASPHALT
+  const patch = new Color(base).offsetHSL(0.01, 0.02, -0.06).getStyle()
+  const seal = new Color(base).offsetHSL(0, 0, -0.17).getStyle()
+  for (let s = 20 + rand() * 30; s < road.length - 20; s += 35 + rand() * 60) {
+    // A rectangle of new tarmac in one lane (clear of the lines), 2-6 m long.
+    const side = rand() < 0.5 ? 1 : -1
+    const w0 = 0.7 + rand() * 0.4
+    const w1 = h - 0.75 - rand() * 0.6
+    const len = 2 + rand() * 4
+    strip(s, s + len, side * w0, side * w1, patch, 0.034)
+    // Now and then a sealed crack wandering along near it.
+    if (rand() < 0.55) {
+      const lat = side * (1 + rand() * 2)
+      strip(s + len + 2, s + len + 6 + rand() * 8, lat - 0.035, lat + 0.035, seal, 0.036, 0.12)
+    }
+  }
+  const g = new BufferGeometry()
+  g.setAttribute('position', new BufferAttribute(new Float32Array(pos), 3))
+  g.setAttribute('color', new BufferAttribute(new Float32Array(col), 3))
+  g.computeVertexNormals()
+  const mat = bag.add(toon('#ffffff', true).clone())
+  mat.polygonOffset = true
+  mat.polygonOffsetFactor = -1
+  mat.polygonOffsetUnits = -1
+  const m = new Mesh(bag.add(g), mat)
+  m.renderOrder = 1
   return m
+}
+
+/** Road studs (the Nan look): little raised reflectors down the middle every 8 m, and along both
+ *  edge lines every 16 m (white, like cat's eyes), so the road has some bumps and glints instead of being only paint. */
+function studs(road: Road, bag: Bag) {
+  const h = road.half
+  const parts: BufferGeometry[] = []
+  const put = (s: number, lat: number, color: string) => {
+    const p = road.spotAt(s, lat)
+    const box = P.rbox(0.2, 0.07, 0.14, 0.03, color, { at: [0, 0.055, 0] })
+    box.applyMatrix4(new Matrix4().makeRotationY(p.heading))
+    box.applyMatrix4(new Matrix4().makeTranslation(p.x, p.y, p.z))
+    parts.push(box)
+  }
+  for (let s = 4; s < road.length - 2; s += 8) put(s, 0, '#FFFFFF')
+  for (let s = 8; s < road.length - 2; s += 16) for (const side of [1, -1]) put(s, side * (h - 0.375), '#F4F2FF')
+  return solid(merge(parts), bag, 0)
 }
 
 /** A puddle on a wet road: where along it (s), how far across (lat) and how big (meters). */
@@ -726,8 +875,8 @@ export interface Puddle {
   r: number
 }
 
-/** The road after rain: the asphalt a shade darker, long pale shine streaks along both lanes (the sky in the wet road),
- *  and puddles here and there that she can drive through (splash!). Two meshes, laid just over the ribbon. */
+/** The road after rain: the asphalt a shade darker, soft patches of sheen here and there (the sky in the wet road),
+ *  and puddles that she can drive through (splash!). Three meshes, laid just over the ribbon. */
 export function buildWet(road: Road, seed: number, bag: Bag): { root: Group; puddles: Puddle[] } {
   const rand = rng(seed * 7 + 3)
   const root = new Group()
@@ -748,38 +897,43 @@ export function buildWet(road: Road, seed: number, bag: Bag): { root: Group; pud
   }
   const fg = new BufferGeometry()
   fg.setAttribute('position', new BufferAttribute(new Float32Array(film), 3))
-  const filmMesh = new Mesh(bag.add(fg), bag.add(new MeshBasicMaterial({ color: '#5E5878', transparent: true, opacity: 0.16, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 })))
+  const filmMesh = new Mesh(bag.add(fg), bag.add(new MeshBasicMaterial({ color: '#4E4868', transparent: true, opacity: 0.22, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 })))
   filmMesh.renderOrder = 2
   root.add(filmMesh)
 
-  // Shine streaks along the lanes and the puddles, one mesh with vertex colors.
+  // The sheen and the puddles, two meshes with vertex colors (the sheen fainter).
   const pos: number[] = []
   const col: number[] = []
   const c = new Color()
-  const quad = (q: V3[], color: string) => {
+  // The sky shining in the wet road: broad soft patches of sheen, wandering across both lanes and the middle at any
+  // angle (never long thin streaks down the lanes: those read as painted lane lines on a road that has only two lanes).
+  for (let s = 4 + rand() * 8; s < road.length - 8; s += 7 + rand() * 12) {
+    const t = road.sampleAt(s)
+    const lat = (rand() * 2 - 1) * (h - 1)
+    const along = 1.4 + rand() * 2.6
+    const across = 0.6 + rand() * 0.9
+    const turn = (rand() - 0.5) * 0.7
+    const color = rand() < 0.4 ? '#F6F4FF' : '#DCD8F0'
+    const N = 12
+    // A lumpy ellipse (a wobble on its rim), so no two look alike.
+    const wob = Array.from({ length: N }, () => 0.75 + rand() * 0.35)
+    const at = (i: number, k: number): V3 => {
+      const a = (i / N) * Math.PI * 2
+      const u = Math.cos(a) * along * k * wob[i % N]
+      const v = Math.sin(a) * across * k * wob[i % N]
+      const al = u * Math.cos(turn) - v * Math.sin(turn)
+      const ac = lat + u * Math.sin(turn) + v * Math.cos(turn)
+      return [t.x + t.tx * al + t.lx * ac, t.y + 0.06, t.z + t.tz * al + t.lz * ac]
+    }
+    const mid: V3 = [t.x + t.lx * lat, t.y + 0.06, t.z + t.lz * lat]
     c.set(color)
-    for (const k of [0, 1, 2, 1, 3, 2]) {
-      pos.push(...q[k])
-      col.push(c.r, c.g, c.b)
-    }
-  }
-  for (const lane of [-h / 2, h / 2])
-    for (let s = 2 + rand() * 6; s < road.length - 6; ) {
-      const len = 1.5 + rand() * 3.5
-      const lat = lane + (rand() - 0.5) * 2.2
-      const w = 0.06 + rand() * 0.14
-      for (let u = s; u < s + len && u < road.length - 1; u += 1) {
-        const a = road.sampleAt(u)
-        const b = road.sampleAt(Math.min(u + 1, s + len))
-        quad([
-          [a.x + a.lx * (lat - w), a.y + 0.06, a.z + a.lz * (lat - w)],
-          [b.x + b.lx * (lat - w), b.y + 0.06, b.z + b.lz * (lat - w)],
-          [a.x + a.lx * (lat + w), a.y + 0.06, a.z + a.lz * (lat + w)],
-          [b.x + b.lx * (lat + w), b.y + 0.06, b.z + b.lz * (lat + w)],
-        ], rand() < 0.3 ? '#E9E6F6' : '#C9C6E0')
+    for (let i = 0; i < N; i++)
+      for (const v of [mid, at(i, 1), at(i + 1, 1)]) {
+        pos.push(...v)
+        col.push(c.r, c.g, c.b)
       }
-      s += len + 3 + rand() * 9
-    }
+  }
+  const sheenEnd = pos.length
   const puddles: Puddle[] = []
   for (let s = 18 + rand() * 20; s < road.length - 30; s += 22 + rand() * 30) {
     const p: Puddle = { s, lat: (rand() < 0.6 ? 1 : -1) * (0.8 + rand() * 2), r: 0.7 + rand() * 0.7 }
@@ -804,11 +958,15 @@ export function buildWet(road: Road, seed: number, bag: Bag): { root: Group; pud
         }
       }
   }
-  const g = new BufferGeometry()
-  g.setAttribute('position', new BufferAttribute(new Float32Array(pos), 3))
-  g.setAttribute('color', new BufferAttribute(new Float32Array(col), 3))
-  const shine = new Mesh(bag.add(g), bag.add(new MeshBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.55, depthWrite: false, side: 2, polygonOffset: true, polygonOffsetFactor: -3 })))
-  shine.renderOrder = 3
-  root.add(shine)
+  const layer = (from: number, to: number, opacity: number, order: number) => {
+    const g = new BufferGeometry()
+    g.setAttribute('position', new BufferAttribute(new Float32Array(pos.slice(from, to)), 3))
+    g.setAttribute('color', new BufferAttribute(new Float32Array(col.slice(from, to)), 3))
+    const m = new Mesh(bag.add(g), bag.add(new MeshBasicMaterial({ vertexColors: true, transparent: true, opacity, depthWrite: false, side: 2, polygonOffset: true, polygonOffsetFactor: -order })))
+    m.renderOrder = order
+    root.add(m)
+  }
+  layer(0, sheenEnd, 0.16, 3)
+  layer(sheenEnd, pos.length, 0.55, 4)
   return { root, puddles }
 }
