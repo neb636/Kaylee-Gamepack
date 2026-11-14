@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "mom-glasses",
+  "title": "Mom glasses",
+  "video": "mom-glasses.mp4",
+  "gif": "mom-glasses.gif",
+  "seconds": 11,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Characters mom model",
+      "where": "#/world/characters/mom-model?shot=face&spin=1",
+      "seconds": 9,
+      "fps": 29.9,
+      "status": "ok"
+    }
+  ]
+}
