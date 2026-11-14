@@ -113,7 +113,7 @@ export const NanLoop = forwardRef<NanLoopHandle, Props>(function NanLoop({ secti
     const { world, section: s } = mountRef.current
     let w: World3D & { setHintElement?(el: HTMLElement | null): void }
     if (world === 'airport') w = new Airport(renderer, leg, st.packed)
-    else if (world === 'plane') w = new PlaneRide(renderer, leg, s as FlySection, st.packed, FLIGHT, replay ? (NAN_TRIP.caps.replayFly ?? NAN_TRIP.caps.fly) : NAN_TRIP.caps.fly, 'pier', 'nan')
+    else if (world === 'plane') w = new PlaneRide(renderer, leg, s as FlySection, st.packed, FLIGHT, replay ? (NAN_TRIP.caps.replayFly ?? NAN_TRIP.caps.fly) : NAN_TRIP.caps.fly, 'nan')
     else {
       const trip = new TripHouse(s as HouseLeg, st.packed, { ...leg, phase: setPhase, packed: (ids) => cb.current.onPacked(ids) }, NAN_TRIP, replay)
       tripRef.current = trip

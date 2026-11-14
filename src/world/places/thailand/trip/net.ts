@@ -1,16 +1,16 @@
-// The Nan map's roads as one network of points 5 cm apart (the places are shared points where roads meet), so the
-// little Pajero can drive from wherever it is to anywhere along the roads: picked from the map, or pulled by her
-// finger. Pure (no three.js).
-import { PLACES, ROADS, type PlaceId, type XZ } from './layout'
+// A trip map's roads as one network of points 5 cm apart (the places are shared points where roads meet), so the
+// little car on the board (the Nan map's Pajero, the Krabi map's songthaew) can drive from wherever it is to anywhere
+// along the roads: picked from the map, or pulled by her finger. Pure (no three.js).
+export type XZ = [number, number]
 
 export const STEP = 0.05
 
-export interface Net {
+export interface Net<P extends string = string> {
   pts: XZ[]
   /** Each point's neighbours along the roads. */
   nbr: number[][]
   /** The point each place sits on. */
-  place: Record<PlaceId, number>
+  place: Record<P, number>
   /** Each road's points, from its first place to its last (for drawing the ribbons). */
   lines: XZ[][]
 }
@@ -54,7 +54,8 @@ export function smoothLine(ctrl: XZ[], step = STEP): XZ[] {
   return out
 }
 
-export function buildNet(): Net {
+/** The network for a map's places (`at`: where each one sits on the roads) and the roads between them. */
+export function buildNet<P extends string>(places: Record<P, { at: XZ }>, roads: { from: P; to: P; via: XZ[] }[]): Net<P> {
   const pts: XZ[] = []
   const nbr: number[][] = []
   const add = (p: XZ) => {
@@ -66,11 +67,11 @@ export function buildNet(): Net {
     nbr[a].push(b)
     nbr[b].push(a)
   }
-  const place = {} as Record<PlaceId, number>
-  for (const id of Object.keys(PLACES) as PlaceId[]) place[id] = add(PLACES[id].at)
+  const place = {} as Record<P, number>
+  for (const id of Object.keys(places) as P[]) place[id] = add(places[id].at)
   const lines: XZ[][] = []
-  for (const r of ROADS) {
-    const line = smoothLine([PLACES[r.from].at, ...r.via, PLACES[r.to].at])
+  for (const r of roads) {
+    const line = smoothLine([places[r.from].at, ...r.via, places[r.to].at])
     lines.push(line)
     let prev = place[r.from]
     for (const p of line.slice(1, -1)) {

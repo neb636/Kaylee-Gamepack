@@ -41,7 +41,7 @@ import {
   type XZ,
 } from './layout'
 import { buildGround, riverGlints } from './ground'
-import { smoothLine, type Net } from './net'
+import { smoothLine, type Net } from '../../../trip/net'
 
 const WOOD = '#C99A6E'
 const WOOD_DARK = '#9C7250'
@@ -118,7 +118,7 @@ function flag(bag: Bag, at: XZ, stripes: [string, number][], disc?: string) {
   return root
 }
 
-export function buildDiorama(bag: Bag, net: Net): Diorama {
+export function buildDiorama(bag: Bag, net: Net<PlaceId>): Diorama {
   const root = new Group()
   // ---- The toy tray round the board (the Thailand map's); Nan's ground is built below, once the trees are planted ----
   const W = BOARD.x1 - BOARD.x0

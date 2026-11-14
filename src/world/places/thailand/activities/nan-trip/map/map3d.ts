@@ -34,9 +34,10 @@ import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage
 import { Entrance, mapCamKnobs, puffCloud, skyTexture, trayBox } from '../../../trip/sky'
 import { Floaters } from '../mushrooms/fx'
 import { buildDiorama, PLACE_SCALE, type Diorama } from './diorama'
-import { BOARD, CAR_SPEED, CLOUDS, DRAG_SPEED, FISH, heightAt, HOME_AFTER, LAOS_FLAG, modelAt, PAPER_Y, PLACE_IDS, PLACES, RUNWAY, STAMP_Y, STOP_PLACE, STOPS, THAI_FLAG, type PlaceId, type Stop } from './layout'
-import { buildNet, nearest, route, STEP } from './net'
+import { BOARD, CAR_SPEED, CLOUDS, DRAG_SPEED, FISH, heightAt, HOME_AFTER, LAOS_FLAG, modelAt, PAPER_Y, PLACE_IDS, PLACES, ROADS, RUNWAY, STAMP_Y, STOP_PLACE, STOPS, THAI_FLAG, type PlaceId, type Stop } from './layout'
+import { buildNet, nearest, route, STEP } from '../../../trip/net'
 import { mapBed, mapSfx as sfx } from './sounds'
+import { circuitAt, circuitEase, CIRCUIT_S } from '../../../trip/map-plane'
 import { DEG } from '../../../../../../sdk/math'
 
 export interface MapEvents extends LegEvents {
@@ -72,7 +73,7 @@ const STUCK_S = 5
 const DWELL_S = 0.8
 /** The camera dives into the road this long before the drive opens. */
 const DIVE_S = 1.15
-const PLANE_S = 6
+const PLANE_S = CIRCUIT_S
 /** Nothing done for this long: Sparkle says what to do (again after SAY_EVERY, at most SAY_MAX times). */
 const SAY_S = 8
 const SAY_EVERY = 20
@@ -83,7 +84,7 @@ const tmp = new Vector3()
 
 export class NanMap extends Stage {
   private d: Diorama
-  private net = buildNet()
+  private net = buildNet(PLACES, ROADS)
   private done: Set<Stop>
   private fresh: Stop | null
   /** The stops on this trip (the Cup in Nan town only when it's open). */
@@ -369,52 +370,6 @@ export class NanMap extends Stage {
     sfx.takeoff()
   }
 
-  /** The plane's circuit: down the runway and up, out round a racetrack loop over the board, and back down onto the
-   *  runway where it started. Where it is at `k` (0..1) and which way it's heading. */
-  private planeAt(k: number) {
-    const rw = RUNWAY
-    const dir = new Vector3(Math.cos(rw.yaw), 0, -Math.sin(rw.yaw))
-    const left = new Vector3(dir.z, 0, -dir.x)
-    const ground = heightAt(...rw.at) + 0.03
-    const S = new Vector3(rw.at[0], ground, rw.at[1]).addScaledVector(dir, -rw.len * 0.42)
-    const L = rw.len * 0.84
-    const R = 0.55
-    const UP = 0.5
-    const roll = L
-    const arc = Math.PI * R
-    const back = L + 0.6
-    const legs = [roll + 0.3, arc, back, arc, 0.3]
-    const total = legs.reduce((a, b) => a + b, 0)
-    let u = k * total
-    const at = new Vector3()
-    let heading = dir.clone()
-    let alt = UP
-    if ((u -= legs[0]) < 0) {
-      const d = u + legs[0]
-      at.copy(S).addScaledVector(dir, d)
-      alt = clamp((d - roll * 0.6) / 0.6, 0, 1) * UP
-    } else if ((u -= legs[1]) < 0) {
-      const a = (u + legs[1]) / R
-      const c = S.clone().addScaledVector(dir, L + 0.3).addScaledVector(left, R)
-      at.copy(c).addScaledVector(left, -Math.cos(a) * R).addScaledVector(dir, Math.sin(a) * R)
-      heading = dir.clone().multiplyScalar(Math.cos(a)).addScaledVector(left, Math.sin(a))
-    } else if ((u -= legs[2]) < 0) {
-      at.copy(S).addScaledVector(dir, L + 0.3 - (u + legs[2])).addScaledVector(left, 2 * R)
-      heading = dir.clone().negate()
-    } else if ((u -= legs[3]) < 0) {
-      const a = (u + legs[3]) / R
-      const c = S.clone().addScaledVector(dir, -0.3).addScaledVector(left, R)
-      at.copy(c).addScaledVector(left, Math.cos(a) * R).addScaledVector(dir, -Math.sin(a) * R)
-      heading = dir.clone().multiplyScalar(-Math.cos(a)).addScaledVector(left, -Math.sin(a))
-    } else {
-      const d = clamp(u + legs[4], 0, 0.3)
-      at.copy(S).addScaledVector(dir, d - 0.3)
-      alt = (1 - d / 0.3) * UP
-    }
-    at.y = ground + alt
-    return { at, yaw: Math.atan2(heading.x, heading.z) - Math.PI / 2, bank: alt > 0.05 && Math.abs(heading.dot(dir)) < 0.99 ? 0.4 : 0 }
-  }
-
   private stepPlane(dt: number) {
     const p = this.d.plane
     if (this.planeT >= 0) {
@@ -425,9 +380,7 @@ export class NanMap extends Stage {
       }
     }
     // (Eased, so it rolls off slowly and slows down to land.)
-    const k = this.planeT < 0 ? 0 : this.planeT / PLANE_S
-    const e = k < 0.15 ? (k * k) / 0.3 : k > 0.9 ? 1 - ((1 - k) * (1 - k)) / 0.2 : 0.075 + (k - 0.15) * (0.875 / 0.75)
-    const at = this.planeAt(clamp(e, 0, 1))
+    const at = circuitAt(RUNWAY, heightAt(...RUNWAY.at) + 0.03, circuitEase(this.planeT))
     p.position.copy(at.at)
     p.rotation.set(at.bank, at.yaw, 0, 'YXZ')
   }

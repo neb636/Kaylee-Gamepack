@@ -5,29 +5,29 @@
 //                           Mom asks (Ask.tsx) by the elephant map, packing (with the suitcase card and ✅ here),
 //                           the goodbye at the shutter and Aunty Sri's van
 //   airport                 the van pulls away and they're at the airport: the x-ray belt (trip/legs/airport.ts)
-//   takeoff, fly, land      the window seat (trip/legs/plane.ts), then Krabi's arrivals arch and the songthaew (it
-//                           stops at the signpost to Baan Chang, 🐘 or 🚤, either first)
+//   takeoff, fly, land      the window seat (trip/legs/plane.ts), down into Krabi, then
+//   map                     the Krabi map (map/, notes: thailand/krabi-map.md), the trip's hub: a toy diorama of
+//                           Krabi and Phang Nga Bay in the sky. She sends the little songthaew to Baan Chang or the
+//                           pier (either first), comes back to the map after each (its stamp lands), and after one the
+//                           airport opens: the tiny plane takes off for home (endTrip). Away from the map, the top-left
+//                           button and the browser's Back go back to it
 //   pier ... sunset         Phang Nga Bay by longtail boat (bay/bay.ts and its parts): the ribbons, open water, the
 //                           village, the cave and the hong, the Nail Island photo, the sunset ride back; at the pier her
-//                           album opens and a big 🏠 takes them home
+//                           album opens and a big 🗺️ takes her back to the Krabi map
 //   chang ... splash        Baan Chang Cafe in Krabi (chang/chang.ts, plan: thailand/baan-chang.md (retired; in git history)), greybox: the
 //                           songthaew to the entrance and a pose photo at the bamboo sign (🥤 after it), the cafe,
 //                           where she makes her chocolate milk (chang/cafe.ts; a big 🐘 when it's ready), down the
 //                           boardwalk to the elephants' yard, where she holds bananas and sugarcane out to the trunks;
 //                           then their favorites, Lamyai and Khanom's sneaky sips, and the rainbow splash (Dad's photo
-//                           and Khanom's sticker, then 🚤 to the pier or, with the boat done, ✈️🏠, after a video of
-//                           real elephants, chang/video.ts). `been` says which of
-//                           Krabi's two places are done: the pier at sunset offers 🐘 until Baan Chang is
+//                           and Khanom's sticker, then 🗺️ back to the Krabi map, after a video of real elephants,
+//                           chang/video.ts). `been` says which of Krabi's two places are done
 //   race, podium            through the bay's rainbow gate (bay/race-gate.ts), behind a checkered flag: the boat race
 //                           in its own lagoon (race/race.ts, its screen race/RaceLayer.tsx), three laps against the
 //                           village kids and the macaque; she always wins, lifts the trophy on the podium (it goes in
 //                           her Trophy Room and rides in the bow), and 🚤 takes her back out of the gate
-//   (the end)               From the Thailand map (Dad, 2026-10-27): ✈️🏠 at the pier or after the splash ends the trip
-//                           there (endTrip): her best photo goes on Agong's wall by itself, then the stamp, and the
-//                           plane flies home on the map. The first trip of a session packs, then straight down the
-//                           stairs to the window seat (the goodbye and the x-ray belt are out of the way); later ones
-//                           open at `land?quick=1`: straight to Krabi airport (the plane world starts on the ground,
-//                           no cabin), where Dad asks 🐘 or 🚤.
+//   (the end)               The airport on the Krabi map ends the trip (endTrip): her best photo goes on Agong's wall
+//                           by itself, then the stamp, and back to the Thailand map. The Thailand map's Krabi pin opens
+//                           straight on the Krabi map.
 //   home                    (only its links now) Agong's house again (the plugin's `home` leg): the flight home, Aunty Sri's van at the door,
 //                           the photo she picks (PhotoFan.tsx) goes on Agong's wall (saved on the iPad, trip/wall-photos.ts),
 //                           the cousins look up from their phones, and the stamp (onDone)
@@ -59,8 +59,7 @@ import { BoardingPass, type PassChoice } from '../../trip/legs/BoardingPass'
 import { TripGuide, type TripGuideHandle } from '../../trip/legs/Guide'
 import { TRIP_HOUSE_ANCHORS, TripHouse, type HouseLeg, type Phase } from '../../trip/legs/house-plugin'
 import { PackCard } from '../../trip/legs/PackCard'
-import { WhereTo } from '../../trip/legs/WhereTo'
-import { PLANE_ANCHORS, PlaneRide, type FlySection, type KrabiFork } from '../../trip/legs/plane'
+import { PLANE_ANCHORS, PlaneRide, type FlySection } from '../../trip/legs/plane'
 import type { LegEvents } from '../../trip/legs/stage'
 import { DEFAULT_PACKED, formatPacked, parsePacked } from '../../trip/packing'
 import { addWallPhoto, newestByTrip, shrinkPhoto, today, useWallPhotos } from '../../trip/wall-photos'
@@ -75,7 +74,11 @@ import { ChangLayer } from './chang/ChangLayer'
 import { CHANG_VIDEO } from './chang/video'
 import { isStraw, type StrawColor } from './chang/layout'
 import { Debug } from './Debug'
-import { FORK_CARDS } from './ForkCards'
+import { KrabiMap } from './map/KrabiMap'
+import type { PlaceId as MapPlace } from './map/layout'
+import { useInnerBack } from '../../../../kit/innerBack'
+import { useTopLeft } from '../../../../kit/topLeft'
+import { MapIcon } from '../../../../HomeIcons'
 import { PhotoFan } from './PhotoFan'
 import { Race, RACE_ANCHORS, type RaceHud, type RaceSection } from './race/race'
 import { RACE_TROPHY, RaceFlag, RaceLayer } from './race/RaceLayer'
@@ -94,7 +97,7 @@ interface Progress {
   /** Krabi's places done on this trip (the pier, then 🐘 still to come; cleared at home). */
   been?: Been[]
 }
-const RESUME: BoatSection[] = ['goodbye', 'airport', 'takeoff', 'chang', 'pier']
+const RESUME: BoatSection[] = ['goodbye', 'airport', 'takeoff', 'map', 'chang', 'pier']
 const RESUME_AT: Partial<Record<BoatSection, BoatSection>> = {
   fly: 'takeoff',
   land: 'takeoff',
@@ -129,7 +132,8 @@ const legOf = (s: BoatSection) => PUNCH[s] ?? (WORLD_OF[s] === 'bay' ? 'pier' : 
 /** The legs already punched before `next` (leaving out the one being punched now). Krabi's two places go in either
  *  order, so each counts only once `been` says it's done. */
 function doneBefore(legs: typeof PASS, next: BoatSection, punch: string | null, been: Been[]) {
-  const upto = legs.findIndex((p) => p.id === legOf(next))
+  // (The Krabi map comes after the way there: everything up to Krabi's places is done.)
+  const upto = legs.findIndex((p) => p.id === (next === 'map' ? 'pier' : legOf(next)))
   const krabi = BEEN.map((b) => LEG_OF_BEEN[b])
   const before = legs.slice(0, Math.max(0, upto)).map((p) => p.id).filter((id) => !krabi.includes(id))
   return [...before, ...been.map((b) => LEG_OF_BEEN[b])].filter((id) => id !== punch && id !== legOf(next) && legs.some((p) => p.id === id))
@@ -141,6 +145,8 @@ const ANCHORS_OF: Record<TripWorld, typeof BAY_ANCHORS> = {
   house: [...HOUSE_ANCHORS.map((a) => ({ ...a, name: undefined, thai: undefined })), ...TRIP_HOUSE_ANCHORS],
   airport: AIRPORT_ANCHORS,
   plane: PLANE_ANCHORS,
+  // (The Krabi map is its own screen, KrabiMap.tsx, with its own anchors.)
+  map: [],
   bay: BAY_ANCHORS,
   race: RACE_ANCHORS,
   chang: CHANG_ANCHORS,
@@ -149,8 +155,6 @@ const ANCHORS_OF: Record<TripWorld, typeof BAY_ANCHORS> = {
 export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () => void }) {
   const { start, enter } = useSections(BOAT_SECTIONS)
   const legs = PASS
-  // From the Thailand map: no flight, the trip opens at Krabi airport (read once).
-  const [quick] = useState(() => flag('quick') === '1')
   const [stored, setSaved] = useSaved<Progress>('thailand-boat-trip', { at: null, packed: DEFAULT_PACKED })
   // A trip saved before a leg was cut (Aunty Sri's car ride) starts over.
   const saved = stored.at && !(stored.at in WORLD_OF) ? { ...stored, at: null } : stored
@@ -182,9 +186,8 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     return () => clearTimeout(t)
   }, [phase])
   const [flash, setFlash] = useState(0)
-  /** Krabi's fork: Dad is asking "Where to?" (his card of postcards is up). */
-  const [whereTo, setWhereTo] = useState(false)
-  useEffect(() => setWhereTo(false), [mount.key])
+  /** On the Krabi map: where the songthaew waits (the place she came back from). */
+  const [mapFrom, setMapFrom] = useState<MapPlace | null>(null)
   // The bay: her ribbons, the stops she's been to, the album's photos and stickers.
   const [ribbons, setRibbons] = useState<string[]>(() => list(flag('ribbons'), ['pink', 'butter', 'mint', 'sky', 'lavender', 'hotpink']).slice(0, 3))
   const tied = useRef(flag('ribbons') !== null)
@@ -193,7 +196,8 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   const [photos, setPhotos] = useState<AlbumPhoto[]>([])
   const [found, setFound] = useState<StickerId[]>(() => list(flag('found'), STICKERS))
   // Krabi's places done (a link's, else the trip she's picking up again).
-  const [been, setBeen] = useState<Been[]>(() => list(flag('been') ?? (start ? '' : (saved.been ?? []).join(',')), BEEN))
+  // (The Krabi map from the Thailand map, no `been` in the link: the places she'd done on this trip so far.)
+  const [been, setBeen] = useState<Been[]>(() => list(flag('been') ?? (start && start !== 'map' ? '' : (saved.been ?? []).join(',')), BEEN))
   // Baan Chang: how many foods the elephants have had (a link's bellies are that round).
   const [fed, setFed] = useState(() => Math.max(0, Math.floor(Number(flag('fed') ?? 0)) || 0))
   // Her straw from the cafe (it's in her glass in the yard), and whether her chocolate milk is ready (the 🐘 shows).
@@ -204,7 +208,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   // Baan Chang's way on is open (ChangLayer's button).
   const [onward, setOnward] = useState(false)
   // After the splash, the way on plays the real elephants' video first (chang/video.ts), then leaves for here.
-  const [changVideo, setChangVideo] = useState<'pier' | 'home' | null>(null)
+  const [changVideo, setChangVideo] = useState(false)
   const [albumOpen, setAlbumOpen] = useState(false)
   const [bump, setBump] = useState(0)
   const [flights, setFlights] = useState<{ key: number; id: StickerId; x: number; y: number }[]>([])
@@ -339,7 +343,8 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       const t0 = performance.now()
       const wait = setInterval(() => {
         const w = worldRef.current
-        const ready = w && (w !== old || world === 'house') && w.stats.fps > 0
+        // (The Krabi map is its own screen with its own loading cover: the pass can go as soon as it's mounted.)
+        const ready = world === 'map' || (w && (w !== old || world === 'house') && w.stats.fps > 0)
         if ((ready && performance.now() - t0 > 700) || performance.now() - t0 > 2600) {
           clearInterval(wait)
           setPass(null)
@@ -360,7 +365,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       return
     }
     const choices: PassChoice[] = [{ label: 'A new trip', icon: '🧳', on: () => choose('again') }]
-    if (half && half !== 'pier') choices.push({ label: 'Keep going', icon: legs.find((p) => p.id === legOf(half))?.icon ?? '🧳', on: () => choose('resume') })
+    if (half && half !== 'pier') choices.push({ label: 'Keep going', icon: half === 'map' ? '🗺️' : (legs.find((p) => p.id === legOf(half))?.icon ?? '🧳'), on: () => choose('resume') })
     if (replay || half === 'pier') choices.push({ label: 'Straight to the boat', icon: '🚤', on: () => choose('boat') })
     if (replay && half !== 'chang') choices.push({ label: 'Straight to the elephants', icon: '🐘', on: () => choose('chang') })
     setPass({ punch: null, done: half ? doneBefore(legs, half, null, state.current.saved.been ?? []) : [], choices })
@@ -417,13 +422,13 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     }, 2400)
   }
 
-  /** Baan Chang is still to do (the pier offers 🐘). */
+  /** Baan Chang is still to do. */
   const changNext = !been.includes('chang')
-  // At the pier, nothing done for ~8 s: Sparkle points her home (the ✈️🏠 is the only cue there, no finger on the boat),
-  // or to the elephants while Baan Chang is still to do.
-  // Twice at most; a finger held down (driving back out for more sunset) counts as playing.
+  // At the pier, nothing done for ~8 s, Baan Chang still to do: Sparkle says the elephants are waiting (the pulsing 🗺️
+  // goes back to the map, where they are). Twice at most; a finger held down (driving back out for more sunset) counts
+  // as playing.
   useEffect(() => {
-    if (!atPier || mount.world !== 'bay') return
+    if (!atPier || mount.world !== 'bay' || !changNext) return
     let last = performance.now()
     let down = false
     let said = 0
@@ -437,7 +442,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       if (said >= 2 || performance.now() - last < 8000) return
       last = performance.now() + 12000
       said++
-      say(changNext ? L.chang.waiting : L.home.fly)
+      say(L.chang.waiting)
     }, 1000)
     return () => {
       window.removeEventListener('pointerdown', press)
@@ -460,31 +465,55 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     sounds.sparkle()
     onDone()
   }
-  /** The big ✈️🏠 at the pier: the trip is over. */
-  const goHome = () => {
+  /** The big 🗺️ at the pier: back to the Krabi map, where the boat's stamp lands. */
+  const pierToMap = () => {
     if (!atPier) return
     sounds.pop()
     setAtPier(false)
     setAlbumOpen(false)
-    endTrip()
+    setMapFrom('pier')
+    finish('map', null)
   }
-  /** The big 🐘 at the pier (Baan Chang still to do): the songthaew to the elephants. */
-  const goChang = () => {
-    if (!atPier) return
-    sounds.pop()
-    setAtPier(false)
-    setAlbumOpen(false)
-    finish('chang', null)
-  }
-  /** After the splash: on to the pier (🚤) or, with the boat done, home (✈️🏠). The elephants are punched. */
-  const leaveChang = (to: 'pier' | 'home') => {
+  /** After the splash (and the elephants' video): back to the Krabi map, where Baan Chang's stamp lands. */
+  const leaveChang = () => {
     if (state.current.busy) return
     setOnward(false)
     setAlbumOpen(false)
     addBeen('chang')
-    if (to === 'home') return endTrip()
-    finish(to, 'chang')
+    setMapFrom('chang')
+    finish('map', 'chang')
   }
+  /** A place picked on the Krabi map (the songthaew got there): that part of the trip, or (the airport) home. */
+  const fromMap = (place: 'chang' | 'pier' | 'airport') => {
+    if (place === 'airport') return endTrip()
+    finish(place, null)
+  }
+  // Away from the Krabi map (at Baan Chang, in the bay, at the race): the top-left button and the browser's Back go back
+  // to the map, not off to the Thailand map. (Not on the way there or at home.)
+  const awayFromMap = mode === 'webgl' && (mount.world === 'bay' || mount.world === 'chang' || mount.world === 'race') && !prep.current
+  const backToMap = () => {
+    if (state.current.busy) return
+    sounds.pop()
+    setAtPier(false)
+    setAlbumOpen(false)
+    setChangVideo(false)
+    setMapFrom(null)
+    finish('map', null)
+  }
+  useInnerBack(awayFromMap, backToMap)
+  useTopLeft(
+    awayFromMap
+      ? {
+          icon: (
+            <span style={{ width: '58%', height: '58%' }}>
+              <MapIcon color="var(--lavender-dark)" />
+            </span>
+          ),
+          label: 'Back to the Krabi map',
+          onBack: backToMap,
+        }
+      : null,
+  )
   /** A photo for the album (the bay's, the race's, Baan Chang's): at most 12, the oldest selfie goes first. */
   const addPhoto = (kind: PhotoKind, src: string) =>
     setPhotos((ps) => {
@@ -518,12 +547,11 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     if (prep.current && prepWant.current && photos.length >= prepWant.current) finish('home', null)
   }, [photos])
 
-  const leg: LegEvents & { flash(): void; asking(on: boolean): void } = {
+  const leg: LegEvents & { flash(): void } = {
     say,
     section: (s) => moveTo(s as BoatSection),
     done: (next) => finish(next as BoatSection),
     flash: () => setFlash((n) => n + 1),
-    asking: setWhereTo,
   }
 
   const make = (renderer: WebGLRenderer): World3D => {
@@ -549,15 +577,8 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       trip.setWall(newestByTrip(wallPhotos).get('boat-trip')?.src ?? null)
       w = new House(renderer, { section: s === 'goodbye' || s === 'home' ? 'street' : 'upstairs' }, { onSpot: () => {}, onArrived: () => {} }, trip)
     } else if (world === 'airport') w = new Airport(renderer, leg, items)
-    else if (world === 'plane') {
-      // Krabi's signpost: she picks while neither place is done; otherwise the songthaew goes to the one left.
-      const b = state.current.been
-      const fork: KrabiFork = b.includes('chang') ? 'pier' : b.includes('bay') ? 'chang' : 'ask'
-      // From the Thailand map (`land?quick=1`): no flight at all, the world starts at Krabi airport. (It used to build
-      // the cabin and skip out of it once it drew, which flashed the plane ride first.)
-      const ashore = quick && s === 'land'
-      w = new PlaneRide(renderer, leg, s as FlySection, items, FLIGHT, replay ? (BOAT_TRIP.caps.replayFly ?? BOAT_TRIP.caps.fly) : BOAT_TRIP.caps.fly, fork, 'krabi', ashore)
-    } else if (world === 'chang') {
+    else if (world === 'plane') w = new PlaneRide(renderer, leg, s as FlySection, items, FLIGHT, replay ? (BOAT_TRIP.caps.replayFly ?? BOAT_TRIP.caps.fly) : BOAT_TRIP.caps.fly, 'krabi')
+    else if (world === 'chang') {
       setOnward(false)
       w = new Chang(
         renderer,
@@ -580,7 +601,6 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
         items,
         state.current.fed,
         state.current.straw,
-        state.current.been.includes('bay') ? 'home' : 'pier',
       )
     }
     else if (world === 'race') {
@@ -657,6 +677,9 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#A8DCFF', overflow: 'clip' }}>
+      {mount.world === 'map' ? (
+        <KrabiMap key={mount.key} been={been} from={mapFrom} say={say} onGo={fromMap} onMode={setMode} />
+      ) : (
       <View3D
         key={mount.key}
         name={`The boat trip (${mount.world})`}
@@ -708,7 +731,8 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
           </>
         )}
       />
-      {mode === 'lost' && (
+      )}
+      {mode === 'lost' && mount.world !== 'map' && (
         <button
           onClick={() => {
             setMode('webgl')
@@ -718,9 +742,6 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
         >
           🚤 Tap to wake the trip
         </button>
-      )}
-      {mount.world === 'plane' && mode === 'webgl' && (
-        <WhereTo open={whereTo && !pass} who="Dad" whoColor="#A9EBD6" line={L.bay.whereTo} cards={FORK_CARDS} onPick={(id) => (worldRef.current as PlaneRide | null)?.choose(id as 'chang' | 'pier')} />
       )}
       {mount.world === 'chang' && mode === 'webgl' && <PoseButtons show={section === 'sign' && !pass && !albumOpen} onPose={(p) => (worldRef.current as Chang | null)?.pose(p)} />}
       {/* (At Baan Chang the album shows where photos are taken: the sign and the splash.) */}
@@ -779,75 +800,47 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
           }}
         />
       )}
-      {/* At the pier at sunset: home (also inside the album that opens there), and 🐘 beside it while Baan Chang is still
-          to do. Side by side in the middle; with the album open, to the right of its ✓ (both stacked at the right edge,
-          so they stay on a phone's narrow screen). */}
+      {/* At the pier at sunset: 🗺️ back to the Krabi map (also over the album that opens there, to the right of its ✓). */}
       <div
         style={{
           position: 'absolute',
           bottom: 'calc(var(--safe-bottom) + 18px)',
-          display: 'flex',
-          flexDirection: albumOpen && changNext ? 'column' : 'row',
-          gap: albumOpen && changNext ? 12 : 20,
           zIndex: albumOpen ? 61 : 33,
           pointerEvents: 'none',
-          ...(albumOpen && changNext ? { right: 'calc(var(--safe-right, 0px) + 12px)' } : { left: '50%', translate: albumOpen ? '64px 0' : '-50% 0' }),
+          left: '50%',
+          translate: albumOpen ? '64px 0' : '-50% 0',
         }}
       >
         <AnimatePresence>
           {mount.world === 'bay' && atPier && !pass && mode === 'webgl' && (
             <motion.button
-              key="home"
-              aria-label="Fly home"
+              key="map"
+              aria-label="Back to the Krabi map"
               initial={{ scale: 0, y: 40 }}
-              animate={{ scale: [1, 1.08, 1], y: 0 }}
+              animate={{ scale: [1, 1.1, 1], y: 0 }}
               exit={{ scale: 0, transition: { duration: 0.2 } }}
-              transition={{ scale: { repeat: Infinity, duration: 1.4, ease: 'easeInOut' }, y: { type: 'spring' } }}
+              transition={{ scale: { repeat: Infinity, duration: 1.2, ease: 'easeInOut' }, y: { type: 'spring' } }}
               whileTap={{ scale: 0.9 }}
-              onClick={goHome}
+              onClick={pierToMap}
               style={{ pointerEvents: 'auto', minWidth: 'clamp(120px, 22vw, 170px)', height: 'clamp(88px, 13vmin, 110px)', borderRadius: 999, border: '5px solid #fff', background: 'var(--butter)', fontSize: 'clamp(40px, 7vmin, 56px)', boxShadow: '0 0 0 6px rgba(255,79,154,.45), var(--shadow)', padding: '0 20px' }}
             >
-              ✈️🏠
-            </motion.button>
-          )}
-          {/* (The bigger pulse: the elephants are waiting.) */}
-          {mount.world === 'bay' && atPier && changNext && !pass && mode === 'webgl' && (
-            <motion.button
-              key="chang"
-              aria-label="To the elephants"
-              initial={{ scale: 0, y: 40 }}
-              animate={{ scale: [1, 1.14, 1], y: 0 }}
-              exit={{ scale: 0, transition: { duration: 0.2 } }}
-              transition={{ scale: { repeat: Infinity, duration: 1.1, ease: 'easeInOut' }, y: { type: 'spring' } }}
-              whileTap={{ scale: 0.9 }}
-              onClick={goChang}
-              style={{ pointerEvents: 'auto', minWidth: 'clamp(120px, 22vw, 170px)', height: 'clamp(88px, 13vmin, 110px)', borderRadius: 999, border: '5px solid #fff', background: 'var(--pink)', fontSize: 'clamp(40px, 7vmin, 56px)', boxShadow: '0 0 0 6px rgba(255,200,61,.6), var(--shadow)', padding: '0 20px' }}
-            >
-              🐘
+              🗺️
             </motion.button>
           )}
         </AnimatePresence>
       </div>
-      {/* At Baan Chang: the way on (🥤 to the cafe, 🐘 to the elephants, 🚤 or ✈️🏠 after the splash). */}
+      {/* At Baan Chang: the way on (🥤 to the cafe, 🐘 to the elephants, 🗺️ back to the Krabi map after the splash). */}
       {mount.world === 'chang' && mode === 'webgl' && (
-        <ChangLayer
-          section={section}
-          ready={onward && !pass && !changVideo}
-          bay={been.includes('bay')}
-          onOnward={() => (worldRef.current as Chang | null)?.onward()}
-          onPier={() => setChangVideo('pier')}
-          onHome={() => setChangVideo('home')}
-        />
+        <ChangLayer section={section} ready={onward && !pass && !changVideo} onOnward={() => (worldRef.current as Chang | null)?.onward()} onMap={() => setChangVideo(true)} />
       )}
       {/* The end of Baan Chang: real elephants on video (skippable: ⏭ then the way she picked), then the way on. */}
       {changVideo && (
         <VideoBreak
           video={CHANG_VIDEO}
-          next={changVideo === 'home' ? '✈️🏠' : '🚤'}
+          next="🗺️"
           onDone={() => {
-            const to = changVideo
-            setChangVideo(null)
-            leaveChang(to)
+            setChangVideo(false)
+            leaveChang()
           }}
         />
       )}

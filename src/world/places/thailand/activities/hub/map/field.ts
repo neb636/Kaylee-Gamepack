@@ -23,7 +23,7 @@ export interface Field {
 }
 
 /** Squared distance to the nearest "on" cell, for every cell (Felzenszwalb and Huttenlocher's two passes). */
-function distance(on: Uint8Array, w: number, h: number): Float32Array {
+export function distance(on: Uint8Array, w: number, h: number): Float32Array {
   const INF = 1e12
   const out = new Float32Array(w * h)
   for (let i = 0; i < out.length; i++) out[i] = on[i] ? 0 : INF
