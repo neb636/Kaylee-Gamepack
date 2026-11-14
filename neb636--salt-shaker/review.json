@@ -1,0 +1,11 @@
+{
+  "title": "Bo Kluea dinner: the salt shaker",
+  "checkIn": "fix",
+  "kaylee": "At the village dinner a pink salt shaker hangs over her finger and shakes salt straight down onto the soup, the eggs' jar and the fish; white specks show it landing. Mom and Dad now stand apart.",
+  "questions": [],
+  "reels": [
+    { "name": "salt-dinner-before", "moments": ["nan-salt-dinner"] },
+    { "name": "salt-dinner-after", "moments": ["nan-salt-dinner"] }
+  ],
+  "links": [{ "label": "Play the dinner", "hash": "#/world/thailand/nan-trip/salt?round=dinner" }]
+}
