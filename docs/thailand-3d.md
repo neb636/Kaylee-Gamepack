@@ -33,6 +33,11 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
 - **A trip's own map** looks like the Thailand map: the board floats in the same sky and tray and opens with the same
   camera entrance behind the loading cover (`trip/sky.ts`: `skyTexture`, `puffCloud`, `trayParts`, `mapCamKnobs`,
   `Entrance`; `trip/MapCover.tsx`). The Nan map (`activities/nan-trip/map/`) uses them; a new trip's map should too.
+  Its camera frames the board like CSS `object-fit: contain`: the shot's box is the board and its tray (`trayBox`)
+  with `objectFit: 'contain'`, and the rig centers that box's picture below the top bar and fits it, on any screen
+  shape (`'cover'` fills the screen instead). A tilted board's near edge looks bigger than its far edge, so a camera
+  that just looks at the board's middle leaves it low and off to one side; don't fix that with a center per screen
+  shape. A screen shape may pick its own angle (a wide screen looks from lower and further round).
 - **The trip kit** (`trip/`): packing, the goodbye, the vehicles, the airport, the window seat, the photo wall. Reuse it
   for a new trip instead of building travel again.
 - **Debugging:** `?debug=1` shows a tuning panel (camera, light bands, outlines, walk), `?fps=N` overrides the frame cap,

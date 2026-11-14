@@ -3,7 +3,7 @@
 // it sits in (a cream rim with a pink edge on a lavender base), and the camera's entrance: when the board opens the
 // camera is already moving behind the loading cover, then settles a little lower and closer (MapCover.tsx is the
 // cover).
-import { CanvasTexture, Group, SRGBColorSpace, type BufferGeometry } from 'three'
+import { CanvasTexture, Group, SRGBColorSpace, Vector3, type BufferGeometry } from 'three'
 import { clamp } from '../../../../sdk'
 import type { Bag } from '../../../engine3d/dispose'
 import { merge, P, solid } from '../../../engine3d/geo'
@@ -56,6 +56,18 @@ export function trayParts(w: number, d: number, top: number, rim = 0.34, k = 1, 
   parts.push(P.rbox(w + rim * 2 + 0.3 * k, 0.6 * k, d + rim * 2 + 0.3 * k, 0.2 * k, '#FFA8C9', { at: [cx, top - 0.8 * k, cz] }))
   parts.push(P.rbox(w + rim * 2 + 0.05 * k, 0.6 * k, d + rim * 2 + 0.05 * k, 0.2 * k, '#CDBBF7', { at: [cx, top - 1.3 * k, cz] }))
   return parts
+}
+
+/** The box a floating map's camera frames (a Shot with `objectFit`, engine3d/camera.ts): the board and its tray (the
+ *  same `w`, `d`, `top`, `rim`, `k`, `cx`, `cz` as trayParts), from the base's underside up to `high`, the tallest
+ *  thing standing on the board. The camera centers this box's picture on every screen shape, so the map floats in the
+ *  middle of the sky on an iPad either way round, an iPhone and a wide Mac window alike: don't hand-tune a center per
+ *  screen shape. */
+export function trayBox(w: number, d: number, top: number, high: number, rim = 0.34, k = 1, cx = 0, cz = 0) {
+  const edge = rim + 0.15 * k
+  const y0 = top - 1.6 * k
+  const y1 = Math.max(top, high)
+  return { center: new Vector3(cx, (y0 + y1) / 2, cz), half: new Vector3(w / 2 + edge, (y1 - y0) / 2, d / 2 + edge) }
 }
 
 /** A map camera's entrance knobs (the feel lab, ?feel=1): each map tunes its own. */

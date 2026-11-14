@@ -181,6 +181,11 @@ fixes), `kaylee-week` (the play diary), `sfx` (first-pass ElevenLabs sound effec
   the stamp → video → map flow is `useStampFlow` (`src/world/kit/stampFlow.tsx`), and 3D has `engine3d/` (outlines,
   water, floaters). A private copy at the top of a file drifts from the original; import the shared one.
 - Don't run `npm run test` or `npm run check` locally; CI runs the specs on the PR.
+- **Floating 3D maps are framed like CSS `object-fit`.** Any board that floats in the sky (the Thailand map, the Nan
+  map, a new trip's map, any 3D toy board) frames its real box with `objectFit: 'contain'` on its `Shot`
+  (`engine3d/camera.ts`), built with `trayBox()` (`trip/sky.ts`), so it sits whole and centered below the top bar on
+  an iPad either way round, an iPhone and a wide Mac window. Don't hand-tune a center or box per screen shape; per
+  shape, change only the angle (yaw, pitch). Check it in all of those shapes.
 
 ## Before you finish
 

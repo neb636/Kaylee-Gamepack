@@ -16,12 +16,12 @@ import { makeLights } from '../../../../../engine3d/toon'
 import type { World3D } from '../../../../../engine3d/View3D'
 import { noise, sfx, tone } from '../../../../../kit/sfx'
 import { buildField, type Field } from './field'
-import { BOARD, PINS, POKES, SPEEDBOAT_LOOP, toLat, toLon, toX, toZ, WATER_LOOPS, type PinId, type ToyId } from './geo'
+import { BOARD, LEVEL, PINS, POKES, SPEEDBOAT_LOOP, toLat, toLon, toX, toZ, WATER_LOOPS, type PinId, type ToyId } from './geo'
 import type { LonLat } from './land'
 import { buildPin, type PinToy } from './pins'
 import { buildLand, buildTray, Sea } from './terrain'
 import * as T from './toys'
-import { mapCamKnobs, skyTexture } from '../../../trip/sky'
+import { mapCamKnobs, skyTexture, trayBox } from '../../../trip/sky'
 
 export interface MapEvents {
   /** She tapped a place: it opens. */
@@ -105,12 +105,14 @@ export class ThaiMapWorld implements World3D {
   private touches = 0
   private anchorEls = new Map<string, HTMLElement>()
   private raycaster = new Raycaster()
-  private overview: Shot = { center: new Vector3(0, 0.2, 0.1), half: new Vector3(5.1, 0.7, 8.3), yaw: -6, pitch: 54, maxDist: 200, roam: { yaw: [-38, 38], pitch: [-14, 22], zoom: [0.5, 1] } }
+  /** The board and its tray (the box the overview frames, object-fit: contain, centered on any screen shape). */
+  private board = trayBox(toX(BOARD.lon1) - toX(BOARD.lon0), toZ(BOARD.lat0) - toZ(BOARD.lat1), LEVEL.paper + 0.1, LEVEL.thai + 0.3)
+  private overview: Shot = { center: this.board.center.clone(), half: this.board.half.clone(), yaw: -6, pitch: 54, maxDist: 200, objectFit: 'contain', roam: { yaw: [-38, 38], pitch: [-14, 22], zoom: [0.5, 1] } }
   private close: Shot = { center: new Vector3(), half: new Vector3(1.7, 0.8, 1.7), yaw: -6, pitch: 46, maxDist: 200 }
   private picked: Place | null = null
   private hint = false
   /** The overview before the entrance's change (set per screen shape in setSize). */
-  private base = { yaw: -6, pitch: 47, half: new Vector3(4.5, 0.5, 7.3) }
+  private base = { yaw: -6, pitch: 47 }
   /** Seconds into the entrance (it runs once, when the board opens). */
   private introT = 0
   private revealed = false
@@ -316,8 +318,6 @@ export class ThaiMapWorld implements World3D {
     const wide = w > h * 1.15
     this.base.yaw = wide ? -26 : -6
     this.base.pitch = wide ? 42 : 47
-    this.base.half.set(wide ? 3.6 : 4.5, 0.5, wide ? 6.0 : 7.3)
-    this.overview.center.set(wide ? 0.5 : 0.2, 0.2, wide ? 1.3 : 0.6)
     this.frameOverview()
     this.rig.setShot(this.picked ? this.close : this.overview, true)
   }
@@ -331,7 +331,7 @@ export class ThaiMapWorld implements World3D {
     const k = MAP_CAM.intro > 0 ? easeInOut(clamp((this.introT - MAP_CAM.hold) / MAP_CAM.intro, 0, 1)) : 1
     this.overview.yaw = this.close.yaw = this.base.yaw + MAP_CAM.yaw
     this.overview.pitch = this.base.pitch + MAP_CAM.pitch * k
-    this.overview.half.copy(this.base.half).multiplyScalar(1 + (MAP_CAM.zoom - 1) * k)
+    this.overview.half.copy(this.board.half).multiplyScalar(1 + (MAP_CAM.zoom - 1) * k)
   }
 
   /** She may swing the board round and pinch it closer (no walking, no jumping). */
@@ -352,7 +352,7 @@ export class ThaiMapWorld implements World3D {
     this.spray.update(dt)
     this.foam.update(dt)
     const c = this.overview.center
-    this.lights.follow(c.x, c.y, c.z)
+    this.lights.follow(c.x, 0.2, c.z) // (the sun aims at the board's top, not the middle of its tray)
     // The entrance: the camera rides it exactly (no lag), until she picks a place.
     // (A slow frame, like the first ones uploading the board's textures, slows it a moment instead of skipping ahead.)
     const end = MAP_CAM.hold + MAP_CAM.intro

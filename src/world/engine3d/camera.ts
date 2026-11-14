@@ -5,6 +5,9 @@
 // The top bar covers the top of the screen, so the view is extended upward by the bar's height (setViewOffset): the
 // framing is centered in the part of the screen below the bar.
 //
+// A shot with `objectFit` frames its box the way CSS object-fit frames a picture ('contain' or 'cover'): the box's
+// picture is centered below the bar on any screen shape, not just its middle point looked at. The floating 3D maps use it.
+//
 // The camera lab (?cam=1, lab/camera/) can change whatever shot the game asks for (`override`): the game keeps choosing
 // its shots, the rig frames the changed one.
 //
@@ -33,6 +36,12 @@ export interface Shot {
   /** The box turns with the camera (a chase camera behind a boat): its x runs across the screen and its z away from the
    *  camera, so the fit is the same whichever way the camera faces. */
   follow?: boolean
+  /** Frame the box the way CSS `object-fit` frames a picture, centered in the screen below the top bar on any screen
+   *  shape: 'contain' (the whole box shows, with a small margin) or 'cover' (the box fills the screen and its edges may
+   *  go off it). Centered on the box *as it looks from this angle*, not on `center`: a tilted board's near edge looks
+   *  bigger than its far edge, so just looking at its middle leaves it sitting low (and off to one side when turned).
+   *  Without it the rig looks straight at `center` and only fits the distance. For the floating 3D maps (docs/thailand-3d.md). */
+  objectFit?: 'contain' | 'cover'
   /** How far she may turn this shot herself (Roblox-style drag and pinch): degrees added to its yaw and pitch, and how
    *  far in and out (times the distance that fits). No `roam`: the camera is the game's alone. */
   roam?: Roam
@@ -273,12 +282,15 @@ export class CameraRig {
     const g = this.turned(shot)
     const o = this.over
     // (Turning keeps the distance that fits the game's own view, like Roblox's camera on its stick: no refit per degree.)
-    if (!o) return { center: g.center, yaw: g.yaw, pitch: g.pitch, dist: this.fit(shot) * (g.zoom ?? 1) }
+    if (!o) {
+      const dist = this.fit(shot) * (g.zoom ?? 1)
+      return { center: this.centered(g, g.yaw, g.pitch, dist), yaw: g.yaw, pitch: g.pitch, dist }
+    }
     const yaw = o.mode === 'lock' ? o.yaw : g.yaw + o.yaw
     const pitch = Math.max(-20, Math.min(89, o.mode === 'lock' ? o.pitch : g.pitch + o.pitch))
     const dist = this.fit({ ...g, yaw, pitch }) * o.zoom * (g.zoom ?? 1)
     const y = yaw * deg
-    const center = g.center.clone()
+    const center = this.centered(g, yaw, pitch, dist)
     center.x += Math.cos(y) * o.px
     center.z -= Math.sin(y) * o.px
     center.y += o.py
@@ -317,19 +329,94 @@ export class CameraRig {
     this.camera.lookAt(center)
   }
 
-  /** The smallest distance at which the whole box shows below the top bar (with a small margin). */
-  fit(shot: Shot): number {
-    const yaw = shot.follow ? 0 : shot.yaw
-    const key = `${shot.half.x.toFixed(2)},${shot.half.y.toFixed(2)},${shot.half.z.toFixed(2)},${yaw.toFixed(2)},${shot.pitch.toFixed(2)},${shot.minDist},${shot.maxDist}`
-    const cached = this.fits.get(key)
-    if (cached !== undefined) return cached
+  /** The part of the (extended) view below the top bar, in normalized device coordinates (its middle is 0, 0). */
+  private get room() {
+    return { x: 0.94, y: ((this.h - this.top) / (this.h + this.top)) * 0.94 }
+  }
+
+  /** The probe camera with the game camera's lens and shape. */
+  private lensProbe() {
     const p = this.probe
     p.fov = this.lens
     p.aspect = this.camera.aspect
     p.updateProjectionMatrix()
-    // The part of the (extended) view below the top bar, in normalized device coordinates.
-    const yMax = ((this.h - this.top) / (this.h + this.top)) * 0.94
-    const xMax = 0.94
+    return p
+  }
+
+  /** An object-fit shot, seen from (yaw, pitch, dist): how far to slide the camera sideways and up (meters, along the
+   *  screen) so the box's picture sits in the middle of the room below the bar, and how big that picture is then
+   *  (half its width and height, in the same units as `room`). Null if part of the box is behind the camera. */
+  private spread(half: Vector3, yaw: number, pitch: number, dist: number) {
+    const p = this.lensProbe()
+    p.position.copy(offset(yaw, pitch, dist))
+    p.lookAt(0, 0, 0)
+    const home = p.position.clone()
+    const right = new Vector3(1, 0, 0).applyQuaternion(p.quaternion)
+    const up = new Vector3(0, 1, 0).applyQuaternion(p.quaternion)
+    const tanY = Math.tan((p.fov * deg) / 2)
+    const tanX = tanY * p.aspect
+    const v = new Vector3()
+    let ax = 0
+    let ay = 0
+    let ex = 0
+    let ey = 0
+    // Sliding changes how near each corner is, so the middle moves a little each slide: a few rounds settle it.
+    for (let i = 0; i < 5; i++) {
+      p.position.copy(home).addScaledVector(right, ax).addScaledVector(up, ay)
+      p.updateMatrixWorld()
+      let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity
+      for (const sx of [-1, 1])
+        for (const sy of [-1, 1])
+          for (const sz of [-1, 1]) {
+            v.set(sx * half.x, sy * half.y, sz * half.z).project(p)
+            if (v.z > 1) return null
+            x0 = Math.min(x0, v.x)
+            x1 = Math.max(x1, v.x)
+            y0 = Math.min(y0, v.y)
+            y1 = Math.max(y1, v.y)
+          }
+      ex = (x1 - x0) / 2
+      ey = (y1 - y0) / 2
+      ax += ((x0 + x1) / 2) * dist * tanX
+      ay += ((y0 + y1) / 2) * dist * tanY
+    }
+    return { ax, ay, ex, ey, right, up }
+  }
+
+  /** Where to look for this shot: `center`, or for an object-fit shot, slid so the box's picture is centered. */
+  private centered(shot: Shot, yaw: number, pitch: number, dist: number) {
+    const c = shot.center.clone()
+    if (!shot.objectFit || shot.follow) return c
+    const s = this.spread(shot.half, yaw, pitch, dist)
+    return s ? c.addScaledVector(s.right, s.ax).addScaledVector(s.up, s.ay) : c
+  }
+
+  /** The distance that fits the box below the top bar (with a small margin): the smallest at which it all shows, or for
+   *  `objectFit` (centered first) the one where it just contains the room or just covers it. */
+  fit(shot: Shot): number {
+    const yaw = shot.follow ? 0 : shot.yaw
+    const mode = shot.follow ? undefined : shot.objectFit
+    const key = `${shot.half.x.toFixed(2)},${shot.half.y.toFixed(2)},${shot.half.z.toFixed(2)},${yaw.toFixed(2)},${shot.pitch.toFixed(2)},${shot.minDist},${shot.maxDist},${mode}`
+    const cached = this.fits.get(key)
+    if (cached !== undefined) return cached
+    const room = this.room
+    if (mode) {
+      // Contain: the bigger of width and height just fills its side; cover: the smaller does. Both shrink as the
+      // camera backs off, so the search is the same as below.
+      const fits = (d: number) => {
+        const s = this.spread(shot.half, yaw, shot.pitch, d)
+        if (!s) return false
+        const rx = s.ex / room.x
+        const ry = s.ey / room.y
+        return (mode === 'cover' ? Math.min(rx, ry) : Math.max(rx, ry)) <= 1
+      }
+      const d = search(fits, shot.minDist ?? 2, shot.maxDist ?? 120)
+      this.fits.set(key, d)
+      return d
+    }
+    const p = this.lensProbe()
+    const yMax = room.y
+    const xMax = room.x
     const v = new Vector3()
     const fits = (d: number) => {
       p.position.copy(offset(yaw, shot.pitch, d))
@@ -362,4 +449,15 @@ function offset(yaw: number, pitch: number, dist: number) {
   return new Vector3(Math.sin(y) * Math.cos(p), Math.sin(p), Math.cos(y) * Math.cos(p)).multiplyScalar(dist)
 }
 
-const clampTo = (v: number, [lo, hi]: [number, number]) => Math.max(lo, Math.min(hi, v))
+/** The smallest distance in [lo, hi] that `fits` (which stays true once it is true). */
+function search(fits: (d: number) => boolean, lo: number, hi: number) {
+  if (fits(lo)) return lo
+  for (let i = 0; i < 28; i++) {
+    const mid = (lo + hi) / 2
+    if (fits(mid)) hi = mid
+    else lo = mid
+  }
+  return hi
+}
+
+const clampTo =(v: number, [lo, hi]: [number, number]) => Math.max(lo, Math.min(hi, v))
