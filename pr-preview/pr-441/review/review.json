@@ -1,8 +1,0 @@
-{
-  "title": "Mom as a vinyl toy: model 2, glasses fixed",
-  "checkIn": "fix",
-  "kaylee": "Mom is your pick (model 2), and her glasses now sit on her face from every side, with no stray arms poking out of her cheeks.",
-  "questions": ["Glasses look right now?"],
-  "reels": [{ "name": "mom-glasses", "moments": ["#/world/characters/mom-model?shot=face&spin=1~9"] }],
-  "links": [{ "label": "Try her in the lab, next to today's Mom", "hash": "#/world/characters/mom-model?lineup=ji,mom-model" }]
-}
