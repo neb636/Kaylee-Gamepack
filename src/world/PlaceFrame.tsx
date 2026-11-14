@@ -8,6 +8,7 @@ import { WinCeremony, type TrophyWin } from '../shell/WinCeremony'
 import { DOCK, DockGlyph, MapIcon, ShelfIcon, worldBack, type DockKind } from './HomeIcons'
 import { BarPill, TopBar } from './kit/Chrome'
 import { Flag } from './kit/Flag'
+import { LoadingSky } from './kit/LoadingSky'
 import { HUB, SectionLinkProvider, type SectionLink } from './kit/sections'
 import { Theater } from './kit/Theater'
 import { useTopLeftOverride } from './kit/topLeft'
@@ -111,9 +112,9 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
     <div style={{ position: 'absolute', inset: 0 }}>
       <Suspense
         fallback={
-          <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', background: 'var(--lavender)' }}>
+          <LoadingSky>
             <Mascot pose="think" />
-          </div>
+          </LoadingSky>
         }
       >
         {activity === 'theater' ? (
