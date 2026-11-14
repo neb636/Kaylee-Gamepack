@@ -91,12 +91,13 @@ try {
       // ElevenLabs' safety filter sometimes blocks a harmless prompt and passes it the next time: try the next seeds.
       let res
       let seed = s.design.seed
-      for (let tries = 0; !res; tries++, seed += 100) {
+      for (let tries = 0; !res; tries++) {
         try {
           res = await (await api('/v1/text-to-voice/design', { voice_description: s.design.description, model_id: 'eleven_ttv_v3', text, seed })).json()
         } catch (error) {
           if (tries === 3 || !String(error.message).includes('blocked_generation')) throw error
           console.log(`${speaker}: blocked with seed ${seed}, trying ${seed + 100}`)
+          seed += 100
         }
       }
       designed[speaker] = { description: s.design.description, seed, options: {} }
