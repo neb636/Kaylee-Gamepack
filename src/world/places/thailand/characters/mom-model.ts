@@ -267,6 +267,7 @@ export function buildMomRig(gltf: GLTF, bag: Bag): Rig {
     legL,
     legR,
     hands: [hands[0], hands[1]],
+    ears: ['ear_L', 'ear_R'].map((n) => head.getObjectByName(n)).filter((e): e is Object3D => !!e),
     mane: null,
     height: S,
     radius: 0.2 * S,

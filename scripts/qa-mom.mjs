@@ -2,38 +2,47 @@
 // (Mom's vinyl toy, 2026-11-14) can be checked scene by scene instead of squinting at a full screen where she's tiny.
 //
 //   npm run build && node scripts/qa-mom.mjs [--who=ji] [--routes=rice,bay] [--code] [--wait=3500] [--hashes=a|b]
+//                                            [--screens=pizza-stretch,cafe-pour] [--out=name] [--parallel=3]
 //
 // Each section (or each `--hashes` link) opens on an iPad in landscape; once its 3D world is up (window.__kaylee3d,
 // View3D under webdriver) the robot looks for the toy whose root says `userData.family === who` (familyRig), and saves
 // one sheet: the screen as Kaylee sees it, with her outlined, then three close-ups drawn from the game's own scene (the
 // front, three-quarter, and the face). Things between the close-up camera and her are clipped away by the near plane.
-// `--code` adds `mom=code` to every link (the code-built Mom, to compare). Writes qa-output/mom[-code]/<nn>-<name>.png
+// `--code` opens every link with `?mom=code` (the code-built Mom, to compare); `--side` makes the second close-up a
+// side view (seats, a lap). Writes qa-output/mom[-code]/<nn>-<name>.jpg
 // and report.json (where she was: on screen or not, how tall in pixels, her world box).
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import sharp from 'sharp'
-import { device, flag, launch, openApp, out, pad, serve, skip, args } from './qa-lib.mjs'
+import { args, device, flag, launch, loadScenarios, openApp, out, pad, serve, skip } from './qa-lib.mjs'
 import { loadWorld, worldLink } from './world-registry.mjs'
 
 const WHO = flag('who') ?? 'ji'
 const CODE = args.includes('--code')
 const WAIT = Number(flag('wait')) || 3500
 const routes = flag('routes')?.split(',')
-const dir = path.join(out, `mom${CODE ? '-code' : ''}`)
+const dir = path.join(out, flag('out') ?? `mom${CODE ? '-code' : ''}`)
 rmSync(dir, { recursive: true, force: true })
 mkdirSync(dir, { recursive: true })
 
 let list
 if (flag('hashes')) list = flag('hashes').split('|').map((h, i) => ({ name: `link-${i}`, hash: h }))
-else {
+// --screens=a,b: Thailand's own QA scenarios (qa.mjs `screens`, by exact name) with their taps, for moments a link
+// alone doesn't reach.
+else if (flag('screens')) {
+  const want = flag('screens').split(',')
+  list = (await loadScenarios('screens')).filter((s) => want.includes(s.name))
+} else {
   const t = (await loadWorld()).find((p) => p.id === 'thailand')
   list = t.activities.flatMap((a) => (a.sections?.sections ?? []).map((s) => ({ name: `${a.id}-${s.id}`, hash: worldLink('thailand', a.id, s.id) })))
 }
 if (routes) list = list.filter((s) => routes.some((r) => s.name.includes(r)))
-const withFlag = (h) => (CODE ? `${h}${h.includes('?') ? '&' : '?'}mom=code` : h)
+// (`mom=code` goes in the page's own query: sections rewrite the hash's.)
+const query = CODE ? '?mom=code' : ''
+const withFlag = (h) => h
 
 /** In the page: find them, outline them on the game view, and draw the close-ups. */
-function shoot(who) {
+function shoot([who, side]) {
   const v = window.__kaylee3d
   if (!v) return { error: 'no 3D world on screen' }
   const { scene, camera, renderer } = v
@@ -97,7 +106,7 @@ function shoot(who) {
     cam.lookAt(at)
     cam.updateMatrixWorld(true)
     renderer.render(scene, cam)
-    shots.push(renderer.domElement.toDataURL('image/png'))
+    shots.push(renderer.domElement.toDataURL('image/jpeg', 0.85))
   }
   // Everyone else steps out of the close-ups (a clipped neighbour's ink hull shows black from inside).
   const others = []
@@ -107,55 +116,81 @@ function shoot(who) {
   for (const o of others) o.visible = false
   const H = Math.max(size.y, 0.3)
   shot(0, center, H * 1.35, 0.12)
-  shot(0.75, center, H * 1.35, 0.12)
+  shot(side ? Math.PI / 2 : 0.75, center, H * 1.35, side ? 0 : 0.12)
   shot(0, new V(center.x, hi.y - H * 0.28, center.z), H * 0.62, 0.05)
   for (const o of others) o.visible = true
   v.render()
   return { found: found.length, visible: vis.length, onScreen, screen, px: Math.round(screen.y1 - screen.y0), box: { lo: lo.toArray(), hi: hi.toArray() }, shots }
 }
 
+
+/** One section or scenario: open it, find her, save the sheet. */
+async function shootOne(page, i, s, errors) {
+  const hash = withFlag(s.hash)
+  if (s.reset) await page.evaluate(() => localStorage.clear())
+  if (s.seed) await page.evaluate(s.seed)
+  if (s.stampAll) {
+    await page.goto(`${base}${query}#/world/${s.stampAll === true ? 'australia' : s.stampAll}`)
+    await page.waitForTimeout(400)
+    await skip(page)
+    await page.evaluate(() => window.__kayleeWorld?.stampAll())
+  }
+  await page.goto(`${base}${query}#/blank`)
+  await page.goto(`${base}${query}${hash}`)
+  await page.getByRole('button', { name: /let's play/i }).click({ timeout: 700 }).catch(() => {})
+  await page.waitForFunction(() => !!window.__kaylee3d, null, { timeout: 25000 }).catch(() => {})
+  if (s.act) {
+    // A scenario: its own wait and taps, exactly as qa-screens plays it.
+    await page.waitForTimeout(s.wait ?? 900)
+    await s.act(page).catch((e) => errors.push(`step failed: ${e.message.split('\n')[0]}`))
+  } else {
+    await page.waitForTimeout(s.wait && flag('screens') ? s.wait : WAIT)
+    await skip(page)
+    await page.waitForTimeout(600)
+  }
+  const r = await page.evaluate(shoot, [WHO, args.includes('--side')]).catch((e) => ({ error: String(e) }))
+  const game = await page.screenshot()
+  const name = `${pad(i)}-${s.name}`
+  report.push({ name: s.name, hash, ...r, shots: undefined, errors: [...errors] })
+  console.log(`${s.name}: ${r.error ?? (r.found ? (r.visible ? `found (${r.onScreen ? `on screen, ${r.px}px tall` : 'off screen'})` : 'hidden') : 'not here')}`)
+  if (!r.shots) return
+  // The sheet: the game view (her box outlined) and the three close-ups, each 590 wide.
+  const W = 590
+  const Hh = Math.round((820 / 1180) * W)
+  const k = W / 1180
+  const box = r.onScreen
+    ? Buffer.from(`<svg width="${W}" height="${Hh}"><rect x="${Math.max(1, r.screen.x0 * k)}" y="${Math.max(1, r.screen.y0 * k)}" width="${Math.min(W - 2, (r.screen.x1 - r.screen.x0) * k)}" height="${Math.min(Hh - 2, (r.screen.y1 - r.screen.y0) * k)}" fill="none" stroke="#FF2E93" stroke-width="2" stroke-dasharray="6 4"/></svg>`)
+    : null
+  const tiles = [await sharp(game).resize(W, Hh).composite(box ? [{ input: box }] : []).png().toBuffer()]
+  for (const d of r.shots) tiles.push(await sharp(Buffer.from(d.split(',')[1], 'base64')).resize(W, Hh, { fit: 'cover' }).png().toBuffer())
+  const label = Buffer.from(`<svg width="${W * 2}" height="34"><rect width="${W * 2}" height="34" fill="#2E2233"/><text x="10" y="23" font-family="sans-serif" font-size="17" fill="#fff">${s.name}${CODE ? ' (code-built)' : ''}  ${hash.replace(/&/g, '&amp;')}</text></svg>`)
+  await sharp({ create: { width: W * 2, height: Hh * 2 + 34, channels: 3, background: '#ffffff' } })
+    .composite([{ input: label, left: 0, top: 0 }, ...tiles.map((t, j) => ({ input: t, left: (j % 2) * W, top: 34 + Math.floor(j / 2) * Hh }))])
+    .jpeg({ quality: 88 })
+    .toFile(path.join(dir, `${name}.jpg`))
+}
+
 const { base, stop } = await serve(Number(flag('port')) || 4260)
 const browser = await launch()
 const report = []
 try {
-  const ctx = await device(browser, { width: 1180, height: 820 })
-  const page = await ctx.newPage()
-  const errors = []
-  page.on('pageerror', (e) => errors.push(String(e)))
-  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
-  await openApp(page, base)
-  for (const [i, s] of list.entries()) {
-    errors.length = 0
-    const hash = withFlag(s.hash)
-    process.stdout.write(`${s.name} ... `)
-    await page.goto(`${base}#/blank`)
-    await page.goto(`${base}${hash}`)
-    await page.waitForFunction(() => !!window.__kaylee3d, null, { timeout: 25000 }).catch(() => {})
-    await page.waitForTimeout(WAIT)
-    await skip(page)
-    await page.waitForTimeout(600)
-    const r = await page.evaluate(shoot, WHO).catch((e) => ({ error: String(e) }))
-    const game = await page.screenshot()
-    const name = `${pad(i)}-${s.name}`
-    const row = { name: s.name, hash, ...r, shots: undefined, errors: [...errors] }
-    report.push(row)
-    console.log(r.error ?? (r.found ? (r.visible ? `found (${r.onScreen ? `on screen, ${r.px}px tall` : 'off screen'})` : 'hidden') : 'not here'))
-    if (!r.shots) continue
-    // The sheet: the game view (her box outlined) and the three close-ups, each 590 wide.
-    const W = 590
-    const Hh = Math.round((820 / 1180) * W)
-    const k = W / 1180
-    const box = r.onScreen
-      ? Buffer.from(`<svg width="${W}" height="${Hh}"><rect x="${Math.max(1, r.screen.x0 * k)}" y="${Math.max(1, r.screen.y0 * k)}" width="${Math.min(W - 2, (r.screen.x1 - r.screen.x0) * k)}" height="${Math.min(Hh - 2, (r.screen.y1 - r.screen.y0) * k)}" fill="none" stroke="#FF2E93" stroke-width="2" stroke-dasharray="6 4"/></svg>`)
-      : null
-    const tiles = [await sharp(game).resize(W, Hh).composite(box ? [{ input: box }] : []).png().toBuffer()]
-    for (const d of r.shots) tiles.push(await sharp(Buffer.from(d.split(',')[1], 'base64')).resize(W, Hh, { fit: 'cover' }).png().toBuffer())
-    const label = Buffer.from(`<svg width="${W * 2}" height="34"><rect width="${W * 2}" height="34" fill="#2E2233"/><text x="10" y="23" font-family="sans-serif" font-size="17" fill="#fff">${s.name}${CODE ? ' (code-built)' : ''}  ${hash.replace(/&/g, '&amp;')}</text></svg>`)
-    await sharp({ create: { width: W * 2, height: Hh * 2 + 34, channels: 3, background: '#ffffff' } })
-      .composite([{ input: label, left: 0, top: 0 }, ...tiles.map((t, j) => ({ input: t, left: (j % 2) * W, top: 34 + Math.floor(j / 2) * Hh }))])
-      .png()
-      .toFile(path.join(dir, `${name}.png`))
+  // --parallel=N pages side by side (default 3): loading and compiling each 3D scene is most of the time.
+  const queue = [...list.entries()]
+  const worker = async () => {
+    const ctx = await device(browser, { width: 1180, height: 820 })
+    const page = await ctx.newPage()
+    const errors = []
+    page.on('pageerror', (e) => errors.push(String(e)))
+    page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
+    await openApp(page, base)
+    for (let next = queue.shift(); next; next = queue.shift()) {
+      const [i, s] = next
+      errors.length = 0
+      await shootOne(page, i, s, errors).catch((e) => report.push({ name: s.name, error: String(e) }))
+    }
+    await ctx.close()
   }
+  await Promise.all(Array.from({ length: Math.max(1, Number(flag('parallel')) || 3) }, worker))
 } finally {
   writeFileSync(path.join(dir, 'report.json'), JSON.stringify(report, null, 1))
   await browser.close()

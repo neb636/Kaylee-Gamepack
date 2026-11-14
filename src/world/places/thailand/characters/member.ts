@@ -108,6 +108,8 @@ export class Member implements Character {
       const sit = pose === 'sit'
       if (sit) body.position.y = -LEGS_SIT.drop * this.height
       legL.rotation.x = legR.rotation.x = sit ? LEGS_SIT.legs : 0
+      // Its tail curls out behind it: sitting, it would go through the seat's back, so it tucks away.
+      if (this.chibi.tail) this.chibi.tail.visible = !sit
     }
   }
 

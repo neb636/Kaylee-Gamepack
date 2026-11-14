@@ -10,7 +10,7 @@
 //
 // Sizes are fractions of the character's height H, so the same recipe makes Agong and little Putter; `chub` makes the
 // body rounder (Mom, and Jum the elephant).
-import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry } from 'three'
+import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry, type Object3D } from 'three'
 import type { Bag } from '../dispose'
 import { blobShadow, P, solidMix, type PartOpts, type V3 } from '../geo'
 import { WEARABLES, type Look, type PaintColor, type PaintPart, type Wearable } from './look'
@@ -68,6 +68,8 @@ export interface Rig {
    *  the top of the head under the hair (a hat's middle, with the hat's inner radius `hat`), the tip of the nose (a dab
    *  of cream), between the eyes on the face (sunglasses). */
   spots?: { crown: V3; hat: number; nose: V3; eyes: V3 }
+  /** A modelled toy's own ears (the modelled Mom's stick out at her temples): a hat tucks them under it. */
+  ears?: Object3D[]
 }
 
 /** One worn thing, a group for each pivot it rides on (null where there's nothing). */

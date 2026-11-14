@@ -306,7 +306,12 @@ export class PlaneRide extends Stage {
     const belt = strap()
     belt.visible = false
     this.seats.kaylee.add(belt)
-    for (const id of ['ji', 'nick'] as const) this.seats[id].add(strap())
+    for (const id of ['ji', 'nick'] as const) {
+      // A toy with legs of its own (the modelled Mom) sits with them out over the seat: the strap goes over her lap.
+      const s = strap()
+      if (this.riders[id].rig.legL) s.position.y = 0.12
+      this.seats[id].add(s)
+    }
     const buckle = new Group()
     buckle.position.set(-0.16, 0.6, 0)
     buckle.add(solid(merge([P.rbox(0.1, 0.06, 0.12, 0.02, PAL.gold)]), bag, 1.5))

@@ -8,7 +8,7 @@
 // - Silly moments: a big bonk sends Dad's sunglasses flying (drive over them and they're back on his face, upside
 //   down); a high jump off a wake blows Mom's hat off (drive over it to scoop it back).
 // - What she packed rides along: the duck on its string behind the boat, the teddy on Mom's lap, her bucket.
-import { BufferGeometry, Float32BufferAttribute, Group, Line, LineBasicMaterial, Vector3 } from 'three'
+import { BufferGeometry, Float32BufferAttribute, Group, Line, LineBasicMaterial, Vector3, type Object3D } from 'three'
 import { bell, clamp } from '../../../../../../sdk'
 import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
 import type { Look } from '../../../characters/looks'
@@ -38,6 +38,8 @@ export const OPEN_ANCHORS: AnchorInfo[] = [
 ]
 
 const tmp = new Vector3()
+/** How far the teddy sits lower and further forward on a modelled Mom's lap than on the code-built one's. */
+const LAP = new Vector3(0, -0.1, 0.05)
 export const FISHER: Look = { species: 'buffalo', height: 1.5, fur: '#A79A8A', light: '#E8DFD2', dark: '#5E5468', ear: '#FFB8CC', outfit: { kind: 'shirt', color: '#8EC9F5' } }
 /** The macaques' ledge on their rock, facing the open water toward the pier. */
 const LEDGE_DIR = new Vector3(-0.85, 0, 0.53).normalize()
@@ -93,6 +95,7 @@ export class OpenWater implements BayPart {
   private shades: Group
   private shadesUp = true
   private hat: Group
+  private jiEars: Object3D[] = []
   private floaters = new Map<'sunglasses' | 'hat', Floater>()
   // What she packed.
   private duck: Group | null = null
@@ -183,12 +186,16 @@ export class OpenWater implements BayPart {
     else this.hat.position.set(0, Rj * 0.92 + 0.6 * Rj, -0.04 * Rj)
     this.hat.rotation.x = -0.12
     ji.rig.head.add(this.hat)
+    // A modelled Mom's ears stick out at her temples, through the hat's sides: they tuck under it while she wears it.
+    this.jiEars = ji.rig.ears ?? []
     // ---- What she packed ----
     const cargo = bay.rides.longtail.v.cargo
     if (bay.packed.includes('teddy')) {
       const t = buildItem('teddy', bag)
       t.scale.setScalar(1.3)
       t.position.set(...CARGO.teddy)
+      // A modelled Mom sits on her hips with her legs out (her lap is lower and further forward than the code-built one's).
+      if (bay.rider('ji').char.rig.legL) t.position.add(LAP)
       cargo.add(t)
     }
     if (bay.packed.includes('bucket')) {
@@ -384,6 +391,9 @@ export class OpenWater implements BayPart {
     for (const m of this.monkeys) m.root.visible = seeLedge || this.heist !== null
     this.fisher.root.visible = Math.hypot(cam.x - FISHING.x, cam.z - FISHING.z) < 160
     this.hat.visible = bay.using === 'longtail'
+    // Her ears show whenever the hat isn't on her head (in the canoe, overboard, flying off in the wind).
+    const hatOn = this.hat.visible && this.hat.parent === bay.rider('ji').char.rig.head
+    for (const e of this.jiEars) e.visible = !hatOn
     this.updateNeedlefish(dt, t)
     this.updateEagle(dt, t)
     this.updateCoconut(dt, t)
