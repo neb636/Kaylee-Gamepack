@@ -33,6 +33,7 @@ import {
   WELL,
   WOODPILE,
 } from './layout'
+import { buildCat, type Blink } from '../../boat-trip/bay/critters'
 import { buildVillage, type Village } from './village'
 
 const WOOD = '#9A7462'
@@ -68,7 +69,8 @@ export interface Hut {
   paddle: { root: Group; load: Mesh }
   handle: Mesh
   bags: Group[]
-  cat: { root: Group; head: Group; tail: Group }
+  /** `root` jumps and stretches; the cat in it (scaled down) turns its head, swishes its tail and blinks. */
+  cat: { root: Group; head: Group; tail: Group; blink: Blink }
   baskets: Group
   rooster: { root: Group; head: Group }
   mural: Group
@@ -307,33 +309,14 @@ export function buildHut(bag: Bag): Hut {
     bags.push(b)
     root.add(b)
   }
-  // ---- The cat, curled up warm by the fire ----
+  // ---- The cat, sitting warm by the fire: the round ginger village cat from the boat trip (it blinks) ----
   const catRoot = new Group()
   catRoot.position.set(...CAT)
-  catRoot.rotation.y = 0.5
+  catRoot.rotation.y = -0.35
   catRoot.userData.pick = 'cat'
-  catRoot.add(solid(merge([P.sphere(0.16, '#C9C3D6', { at: [0, 0.1, 0], scale: [1.45, 0.72, 1.1] }), ...[-0.06, 0.04].map((x) => P.box(0.03, 0.02, 0.2, '#A39CB6', { at: [x, 0.2, 0], rot: [0.2, 0, 0] }))]), bag, 2))
-  const catHead = new Group()
-  catHead.position.set(0.2, 0.12, 0.06)
-  catHead.add(
-    solid(
-      merge([
-        P.sphere(0.085, '#C9C3D6', { scale: [1, 0.9, 1] }),
-        ...[1, -1].map((s) => P.cone(0.035, 0.07, '#C9C3D6', { at: [0, 0.075, s * 0.045], rot: [s * 0.3, 0, 0] }, 6)),
-        ...[1, -1].map((s) => P.cone(0.02, 0.04, '#FFB8CC', { at: [0.008, 0.07, s * 0.045], rot: [s * 0.3, 0, 0] }, 6)),
-        ...[1, -1].map((s) => P.box(0.008, 0.008, 0.03, PAL.ink, { at: [0.07, 0.015, s * 0.032] })),
-        P.sphere(0.012, '#FF9DB8', { at: [0.085, -0.01, 0] }, 8),
-      ]),
-      bag,
-      2,
-    ),
-  )
-  catRoot.add(catHead)
-  const catTail = new Group()
-  catTail.position.set(-0.2, 0.08, 0)
-  catTail.add(solid(P.capsule(0.025, 0.16, '#C9C3D6', { at: [0, 0.02, 0.09], rot: [Math.PI / 2, 0, 0.2] }), bag, 1))
-  catRoot.add(catTail)
-  catRoot.add(blobShadow(0.3, bag))
+  const kitty = buildCat(bag)
+  kitty.root.scale.setScalar(0.62)
+  catRoot.add(kitty.root, blobShadow(0.24, bag))
   root.add(catRoot)
   // ---- A stack of woven baskets by the well ----
   const baskets = new Group()
@@ -401,7 +384,7 @@ export function buildHut(bag: Bag): Hut {
     paddle: { root: paddle, load },
     handle,
     bags,
-    cat: { root: catRoot, head: catHead, tail: catTail },
+    cat: { root: catRoot, head: kitty.head, tail: kitty.tail, blink: kitty.blink },
     baskets,
     rooster: { root: rRoot, head: rHead },
     mural: village.mural,

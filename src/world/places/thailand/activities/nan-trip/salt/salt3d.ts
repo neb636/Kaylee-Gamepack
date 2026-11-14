@@ -116,7 +116,7 @@ export const SALT_ANCHORS: AnchorInfo[] = [
   { id: 'wood', label: 'Woodpile', kind: 'thing' },
   { id: 'basket', label: 'Salt basket', kind: 'thing' },
   { id: 'aunty', label: 'Salt aunty', kind: 'thing' },
-  { id: 'cat', label: 'Sleepy cat', kind: 'thing' },
+  { id: 'cat', label: 'Cat', kind: 'thing' },
   { id: 'rooster', label: 'Rooster', kind: 'thing' },
   { id: 'hen', label: 'Hen and chicks', kind: 'thing' },
   { id: 'baskets', label: 'Baskets', kind: 'thing' },
@@ -1297,6 +1297,7 @@ export class SaltHut extends Stage {
     this.catJump = Math.min(1, this.catJump + dt / 0.7)
     this.catStretch = Math.min(1, this.catStretch + dt / 1.4)
     const cat = this.hut.cat
+    cat.blink.update(dt)
     cat.root.position.y = bell(this.catJump) * 0.35
     cat.root.scale.set(1 + 0.25 * bell(this.catStretch), 1 + 0.03 * Math.sin(t * 1.5) - 0.1 * bell(this.catStretch), 1)
     cat.head.rotation.z = bell(this.catStretch) * 0.5 + (this.catJump < 1 ? Math.sin(t * 30) * 0.3 : 0)
@@ -1329,11 +1330,17 @@ export class SaltHut extends Stage {
     this.scooterT -= dt
     const sc = this.hut.scooter
     if (this.scooterT < 0) {
-      if (sc.position.x <= -9.99) sfx.scooter()
+      if (sc.position.x <= -9.99) {
+        sfx.scooter()
+        // The riders wave as they go by.
+        this.hut.village.ride.wave = 3
+      }
       sc.position.x += dt * 2.4
       sc.position.y = Math.abs(Math.sin(t * 9)) * 0.015
-      for (const w of this.hut.village.wheels) w.rotation.z -= (dt * 2.4) / 0.14
-      if (Math.random() < dt * 14) this.drops.emit(tmp.set(sc.position.x - 0.38, 0.05, sc.position.z), tmp2.set(-0.5 - Math.random() * 0.4, 0.6 + Math.random() * 0.5, (Math.random() - 0.5) * 0.3), 0.4, 0.02)
+      // (Its wheels' radius is 0.27 in the scooter's own size, scaled down here.)
+      for (const w of this.hut.village.ride.wheels) w.rotation.x += (dt * 2.4) / (0.27 * sc.scale.x)
+      this.hut.village.ride.update(dt, t)
+      if (Math.random() < dt * 14) this.drops.emit(tmp.set(sc.position.x - 0.55, 0.05, sc.position.z), tmp2.set(-0.5 - Math.random() * 0.4, 0.6 + Math.random() * 0.5, (Math.random() - 0.5) * 0.3), 0.4, 0.02)
       if (sc.position.x > 10) {
         sc.position.x = -10
         this.scooterT = 10 + Math.random() * 8
@@ -1559,7 +1566,7 @@ export class SaltHut extends Stage {
       case 'aunty':
         return { at: this.hut.aunty.root.position.clone().setY(1.0), r: 0.3, prio: 1, max: 130 }
       case 'cat':
-        return { at: this.hut.cat.root.position.clone().setY(0.15), r: 0.2, max: 110 }
+        return { at: this.hut.cat.root.position.clone().setY(0.25), r: 0.24, max: 110 }
       case 'rooster':
         return three ? null : { at: new Vector3(ROOSTER[0], 0.3, ROOSTER[2]), r: 0.18, max: 110 }
       case 'baskets':
@@ -1618,6 +1625,11 @@ export class SaltHut extends Stage {
         spot: this.round === '3' ? pt(this.saltSpot()) : null,
         saltBack: pt(new Vector3(PAN_X, SALT[0][1], PAN.z0 + 0.1)),
         saltFront: pt(new Vector3(PAN_X, SALT[0][1], PAN.z1 - 0.1)),
+        /** Strokes across the pan, back to front, one per blade's width (the robot scrape). */
+        saltStrokes: Array.from({ length: 6 }, (_, i) => {
+          const x = PAN.x0 + 0.14 + (i * (PAN.x1 - PAN.x0 - 0.28)) / 5
+          return [pt(new Vector3(x, SALT[0][1], PAN.z0 + 0.08)), pt(new Vector3(x, SALT[0][1], PAN.z1 - 0.08))]
+        }),
         nick: pt(this.nick.root.position.clone().setY(0.1)),
         cat: pt(new Vector3(CAT[0], 0.15, CAT[2])),
         // The dinner: each food's spots, in order (a held drag across them salts them).
