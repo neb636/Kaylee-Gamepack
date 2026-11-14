@@ -726,8 +726,8 @@ export interface Puddle {
   r: number
 }
 
-/** The road after rain: the asphalt a shade darker, long pale shine streaks along both lanes (the sky in the wet road),
- *  and puddles here and there that she can drive through (splash!). Two meshes, laid just over the ribbon. */
+/** The road after rain: the asphalt a shade darker and puddles here and there that she can drive through (splash!).
+ *  Two meshes, laid just over the ribbon. */
 export function buildWet(road: Road, seed: number, bag: Bag): { root: Group; puddles: Puddle[] } {
   const rand = rng(seed * 7 + 3)
   const root = new Group()
@@ -752,34 +752,11 @@ export function buildWet(road: Road, seed: number, bag: Bag): { root: Group; pud
   filmMesh.renderOrder = 2
   root.add(filmMesh)
 
-  // Shine streaks along the lanes and the puddles, one mesh with vertex colors.
+  // The puddles, one mesh with vertex colors. (No shine streaks along the lanes: short pale bars read as phantom lane
+  // dashes.)
   const pos: number[] = []
   const col: number[] = []
   const c = new Color()
-  const quad = (q: V3[], color: string) => {
-    c.set(color)
-    for (const k of [0, 1, 2, 1, 3, 2]) {
-      pos.push(...q[k])
-      col.push(c.r, c.g, c.b)
-    }
-  }
-  for (const lane of [-h / 2, h / 2])
-    for (let s = 2 + rand() * 6; s < road.length - 6; ) {
-      const len = 1.5 + rand() * 3.5
-      const lat = lane + (rand() - 0.5) * 2.2
-      const w = 0.06 + rand() * 0.14
-      for (let u = s; u < s + len && u < road.length - 1; u += 1) {
-        const a = road.sampleAt(u)
-        const b = road.sampleAt(Math.min(u + 1, s + len))
-        quad([
-          [a.x + a.lx * (lat - w), a.y + 0.06, a.z + a.lz * (lat - w)],
-          [b.x + b.lx * (lat - w), b.y + 0.06, b.z + b.lz * (lat - w)],
-          [a.x + a.lx * (lat + w), a.y + 0.06, a.z + a.lz * (lat + w)],
-          [b.x + b.lx * (lat + w), b.y + 0.06, b.z + b.lz * (lat + w)],
-        ], rand() < 0.3 ? '#E9E6F6' : '#C9C6E0')
-      }
-      s += len + 3 + rand() * 9
-    }
   const puddles: Puddle[] = []
   for (let s = 18 + rand() * 20; s < road.length - 30; s += 22 + rand() * 30) {
     const p: Puddle = { s, lat: (rand() < 0.6 ? 1 : -1) * (0.8 + rand() * 2), r: 0.7 + rand() * 0.7 }
