@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "salt-before",
+  "title": "Salt before",
+  "video": "salt-before.mp4",
+  "gif": "salt-before.gif",
+  "seconds": 55,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "nan-salt-scrape",
+      "where": "nan-salt-scrape",
+      "seconds": 40,
+      "fps": 60.6,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand nan trip salt",
+      "where": "#/world/thailand/nan-trip/salt",
+      "seconds": 12,
+      "fps": 58.4,
+      "status": "ok"
+    }
+  ]
+}
