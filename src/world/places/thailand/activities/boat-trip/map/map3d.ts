@@ -33,16 +33,15 @@ import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage
 import { circuitAt, circuitEase, CIRCUIT_S, departAt } from '../../../trip/map-plane'
 import { buildNet, nearest, route, STEP } from '../../../trip/net'
 import { Entrance, mapCamKnobs, puffCloud, skyTexture, trayBox } from '../../../trip/sky'
+import { knobs } from '../../../../../kit/knobs'
 import { Floaters } from '../../nan-trip/mushrooms/fx'
 import { buildDiorama, type Diorama } from './diorama'
 import { buildField, type Field } from './ground'
 import {
   BOARD,
   BOAT_LOOPS,
-  CAR_SPEED,
   CLOUDS,
   DOLPHINS,
-  DRAG_SPEED,
   EAGLE,
   FERRY,
   HOME_AFTER,
@@ -107,11 +106,17 @@ export const MAP_ANCHORS: AnchorInfo[] = [
   ...CLOUDS.map((_, i): AnchorInfo => ({ id: `cloud:${i}`, label: 'Cloud', kind: 'thing' })),
 ]
 
+/** How the songthaew answers her finger (the feel lab, ?feel=1): read live every frame. */
+export const KRABI_DRIVE = knobs('krabi-map-drive', 'Krabi map songthaew', 'src/world/places/thailand/activities/boat-trip/map/map3d.ts', {
+  speed: { value: 1.6, min: 0.5, max: 4, step: 0.1, label: 'Drive speed', unit: 'm/s', note: 'how fast it drives to a place she tapped (a long way goes a little faster, to get there in about 2.6 s)' },
+  drag: { value: 3.2, min: 1, max: 6, step: 0.1, label: 'Drag speed', unit: 'm/s', note: 'how fast it catches up with her finger while she pulls it' },
+  grab: { value: 80, min: 40, max: 160, step: 5, label: 'Grab reach', unit: 'px', note: 'how near the songthaew her finger has to land to pick it up' },
+  snap: { value: 0.5, min: 0.1, max: 1.2, step: 0.05, label: 'Road reach', unit: 'm', note: 'how far off the road her finger can be and still pull it along' },
+  dwell: { value: 0.8, min: 0.2, max: 2.5, step: 0.05, label: 'Hold to go', unit: 's', note: "held still at the pier (a road's end) this long while she holds it: off it goes" },
+})
+
 /** Nothing touched for this long: the place to go next glows. */
 const STUCK_S = 5
-/** Held still at a stop at a road's end this long while she holds the songthaew: off it goes (the pier; Baan Chang
- *  is on the way there, so only letting go there or a tap goes to it). */
-const DWELL_S = 0.8
 /** The camera dives in this long before that part of the trip opens (the plane's climb home a little longer). */
 const DIVE_S = 1.2
 const DEPART_S = 2.8
@@ -128,7 +133,7 @@ export class KrabiMap extends Stage {
   private net = buildNet(PLACES, ROADS)
   private done: Set<Stop>
   private fresh: Stop | null
-  private car = { path: [0], k: 0, speed: CAR_SPEED, heading: 0, hop: 1, flash: 0, putT: 0, lift: 0 }
+  private car = { path: [0], k: 0, speed: 0, heading: 0, hop: 1, flash: 0, putT: 0, lift: 0 }
   private going: PlaceId | null = null
   private arrived: { id: PlaceId; t: number } | null = null
   private held = false
@@ -265,7 +270,7 @@ export class KrabiMap extends Stage {
     if (this.at === node && this.car.path.length <= 1) return this.arrive(id)
     this.car.path = route(this.net, this.at, node)
     this.car.k = 0
-    this.car.speed = Math.max(CAR_SPEED, (this.car.path.length * STEP) / 2.6)
+    this.car.speed = Math.max(KRABI_DRIVE.speed, (this.car.path.length * STEP) / 2.6)
     if (!this.going) {
       sfx.pullaway()
       this.say(`pai:${id}`, L.bay.pai)
@@ -307,11 +312,11 @@ export class KrabiMap extends Stage {
     if (this.held && !this.arrived) {
       const g = this.groundAt(this.finger.x, this.finger.y)
       const n = g ? nearest(this.net, g.x, g.z) : null
-      if (n && n.d < 0.5 && n.i !== this.target) {
+      if (n && n.d < KRABI_DRIVE.snap && n.i !== this.target) {
         this.target = n.i
         c.path = route(this.net, this.at, n.i)
         c.k = 0
-        c.speed = DRAG_SPEED
+        c.speed = KRABI_DRIVE.drag
       }
     }
     // ---- Along its path ----
@@ -342,7 +347,7 @@ export class KrabiMap extends Stage {
     // (Only at a road's end: Baan Chang is on the way to the pier, so passing it slowly doesn't stop there.)
     if (this.held && here && here !== 'airport' && this.net.nbr[this.net.place[here]].length <= 1 && c.path.length <= 1) {
       this.dwell += dt
-      if (this.dwell > DWELL_S) this.arrive(here)
+      if (this.dwell > KRABI_DRIVE.dwell) this.arrive(here)
     } else this.dwell = 0
     c.lift += ((this.held ? 1 : 0) - c.lift) * Math.min(1, dt * 10)
     c.hop = Math.min(1, c.hop + dt / 0.45)
@@ -735,7 +740,7 @@ export class KrabiMap extends Stage {
     this.counted = false
     if (x === undefined || y === undefined || this.arrived) return
     const s = this.screenOf(this.carPos())
-    const onCar = id === 'car' || (!id && !!s && Math.hypot(s.x - x, s.y - y) < 80)
+    const onCar = id === 'car' || (!id && !!s && Math.hypot(s.x - x, s.y - y) < KRABI_DRIVE.grab)
     if (!onCar) return
     this.held = true
     this.target = -1

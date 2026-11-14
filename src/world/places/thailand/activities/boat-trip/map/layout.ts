@@ -162,7 +162,5 @@ export const CLOUDS: [number, number, number][] = [
   [99.12, 7.62, 0.72],
 ]
 
-/** The little songthaew, scaled down to the board. How fast it drives along the roads (m/s), picked or dragged. */
+/** The little songthaew, scaled down to the board (how it drives is on knobs: map3d.ts KRABI_DRIVE). */
 export const CAR_SCALE = 0.085
-export const CAR_SPEED = 1.6
-export const DRAG_SPEED = 3.2

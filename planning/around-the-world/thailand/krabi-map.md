@@ -33,7 +33,7 @@ section. Koh Lanta has no road: a new place there would want the longtail or the
 ## Knobs and links
 
 - `#/world/thailand/boat-trip/map` (fresh), `?been=chang` (Baan Chang's stamp lands), `?been=chang,bay` (the airport).
-- `?feel=1`: the camera's entrance (`krabi-map-cam`).
+- `?feel=1`: the camera's entrance (`krabi-map-cam`) and how the songthaew drives and drags (`krabi-map-drive`).
 
 ## Next
 
