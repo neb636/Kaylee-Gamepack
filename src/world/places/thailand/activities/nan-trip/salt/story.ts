@@ -18,7 +18,7 @@
 // The hut (salt3d.ts) owns the salt game; this file owns the cooks, the memory's grandma and little Pa Kluea, the salt
 // jar, the dinner set (dinner.ts) and the films' beats. Everything a film does that the game needs afterwards is also
 // done by its finish(), so skipping from any beat leaves the world right.
-import { Color, Group, Vector3, type Object3D } from 'three'
+import { Color, Group, Mesh, MeshBasicMaterial, SphereGeometry, Vector3, type Object3D } from 'three'
 import { bell, clamp, type Line } from '../../../../../../sdk'
 import type { Look } from '../../../../../engine3d/characters/look'
 import type { Avatar } from '../../../characters/avatar'
@@ -45,6 +45,10 @@ import {
   DINNER_NICK,
   FOOD_SPOTS,
   FOOD_X,
+  SHAKER_ABOVE,
+  SHAKER_SIZE,
+  SHAKER_X,
+  SPECKS,
   JI_AT,
   KAYLEE_AT,
   NICK_AT,
@@ -61,6 +65,7 @@ import { saltSfx as sfx, saltStoryMusic, saltMemoryBed } from './sounds'
 const S = L.nan.salt.story
 const deg = Math.PI / 180
 const tmp = new Vector3()
+const tmp2 = new Vector3()
 
 // ---------------------------------------------------------------- the people
 
@@ -224,9 +229,18 @@ export class SaltStory {
   private eggsIn = 0
   private eggT = -1
   private bulbsOn = 0
-  /** At the dinner: what her finger is sprinkling on (the stall, and where on the counter), or null. */
-  sprinkle: { stall: number; at: Vector3 } | null = null
+  /** At the dinner: the salt shaker. It rides in her hand; a held finger (\`held\`, at \`goal\`) brings it over the
+   *  food, where it turns over and shakes and the salt falls straight down onto whatever is under it. */
+  readonly shaker: Group
+  readonly shakeAt = new Vector3()
+  readonly goal = new Vector3()
+  held = false
+  private tip = 0
+  private shakeVx = 0
+  private grainDebt = 0
   private sprinkleT = 0
+  /** The salt that has landed on each food spot, shown as white specks (more as it's salted). */
+  private specks: Mesh[][][] = []
   private stopMusic: (() => void) | null = null
   private stopBed: (() => void) | null = null
   private told = new Set<string>()
@@ -272,6 +286,33 @@ export class SaltStory {
     this.basket.visible = false
     scene.add(this.basket)
     for (const [i, s] of this.dinner.stalls.entries()) s.food.userData.pick = `food${i}`
+    // Her salt shaker: a fat little clay pot with a pink cap full of holes, salt showing through its window.
+    this.shaker = solid(merge([
+      P.cyl(0.075, 0.085, 0.16, '#E9C3A4', { at: [0, 0, 0] }),
+      P.box(0.07, 0.09, 0.012, '#FFFFFF', { at: [0, -0.005, 0.082] }),
+      P.cyl(0.085, 0.085, 0.05, '#FF8FB8', { at: [0, 0.1, 0] }),
+      P.sphere(0.08, '#FF8FB8', { at: [0, 0.125, 0], scale: [1, 0.35, 1] }),
+      ...[[0, 0], [0.035, 0.02], [-0.035, 0.02], [0.02, -0.035], [-0.02, -0.035]].map(([x, z]) => P.sphere(0.011, '#7E5A4C', { at: [x, 0.15, z] })),
+    ]), bag, 2)
+    this.shaker.scale.setScalar(SHAKER_SIZE)
+    this.shaker.visible = false
+    scene.add(this.shaker)
+    // The specks of salt on each food, hidden until it's salted.
+    const speckGeo = bag.add(new SphereGeometry(0.014, 6, 4))
+    const speckMat = bag.add(new MeshBasicMaterial({ color: '#FFFFFF' }))
+    this.specks = this.dinner.stalls.map((st, i) =>
+      st.spots.map((sp) =>
+        Array.from({ length: SPECKS[i].n }, (_, k) => {
+          const m = new Mesh(speckGeo, speckMat)
+          const a = k * 2.4
+          const r = SPECKS[i].r * Math.sqrt((k + 0.5) / SPECKS[i].n)
+          m.position.set(sp[0] + Math.cos(a) * r * SPECKS[i].sx, sp[1] + SPECKS[i].y, sp[2] + Math.sin(a) * r * SPECKS[i].sz)
+          m.scale.setScalar(0)
+          this.dinner.root.add(m)
+          return m
+        }),
+      ),
+    )
     this.wait()
   }
 
@@ -524,8 +565,10 @@ export class SaltStory {
     h.aunty.rotation.y = -0.5
     h.put(h.nick, ...DINNER_NICK, 'stand', 35)
     h.put(h.ji, ...DINNER_JI, 'stand', 30)
-    h.put(h.kaylee, DINNER.x - 1.3, 0, DINNER_KAYLEE_Z, 'stand', 20)
+    h.put(h.kaylee, this.standAt(STALL_X[0]), 0, DINNER_KAYLEE_Z, 'stand', 20)
     this.basket.visible = true
+    this.shaker.visible = true
+    this.shakeAt.set(this.standAt(STALL_X[0]) + 0.2, 0.75, DINNER_KAYLEE_Z)
     for (const [i, s] of this.dinner.stalls.entries()) lightLantern(s, this.done[i] ? 1 : 0)
   }
 
@@ -550,7 +593,8 @@ export class SaltStory {
     }
   }
 
-  /** The dinner's play, every frame: her finger sprinkles salt where it points. */
+  /** The dinner's play, every frame: the shaker goes where her finger holds it (or back to her hand), turns over and
+   *  shakes, and the salt falls straight down onto the food under it. */
   stepDinner(dt: number, t: number, hand: Vector3) {
     const d = this.dinner
     // Her basket on her left hip.
@@ -558,43 +602,71 @@ export class SaltStory {
     const yaw = k.rotation.y
     this.basket.position.set(k.position.x - Math.cos(yaw) * 0.26, 0.38, k.position.z + Math.sin(yaw) * 0.26)
     this.basket.rotation.y = yaw
-    // A quick tap: a pinch of salt on the next spot that wants it.
-    let sp = this.sprinkle
-    if (!sp && this.pinchT > 0) {
+    // ---- Where the shaker wants to be: her finger, a tap's food, or her hand ----
+    if (!this.held && this.pinchT > 0) {
       this.pinchT -= dt
-      sp = this.done[this.pinchOn] ? null : { stall: this.pinchOn, at: this.nextSpot(this.pinchOn) }
+      const at = this.nextSpot(this.pinchOn)
+      this.goal.set(at.x, at.y + SHAKER_ABOVE, at.z)
     }
-    if (sp && this.evening) {
-      // Grains fall from her hand to where her finger points, and fill the spots there.
+    const pouring = this.evening && (this.held || this.pinchT > 0)
+    if (!pouring) this.goal.copy(hand)
+    const before = this.shakeAt.x
+    const kk = 1 - Math.exp(-dt * (pouring ? 14 : 7))
+    tmp.copy(this.goal).sub(this.shakeAt).multiplyScalar(kk)
+    const max = 6 * dt
+    if (tmp.length() > max) tmp.setLength(max)
+    this.shakeAt.add(tmp)
+    this.shakeVx += ((this.shakeAt.x - before) / Math.max(dt, 1e-3) - this.shakeVx) * Math.min(1, dt * 10)
+    // Upside down over the food, shaking; upright in her hand.
+    this.tip += ((pouring ? 1 : 0) - this.tip) * Math.min(1, dt * 9)
+    const jig = Math.sin(t * 24) * this.tip
+    this.shaker.position.copy(this.shakeAt).add(tmp.set(0, jig * 0.035, 0))
+    this.shaker.rotation.set(0, 0, this.tip * 2.75 + jig * 0.22 - clamp(this.shakeVx * 0.12, -0.35, 0.35))
+    // ---- The salt falls straight down onto whatever is under it ----
+    if (this.tip > 0.75) {
+      const x = this.shakeAt.x
+      const under = this.under(x)
+      const wiggle = clamp(Math.abs(this.shakeVx) / 1.2, 0, 1)
+      this.grainDebt += dt * (28 + wiggle * 30)
+      const mouth = tmp2.copy(this.shakeAt).add(tmp.set(0, -0.13 * SHAKER_SIZE, 0))
+      const h = Math.max(0.05, mouth.y - under.y)
+      const life = (-0.5 + Math.sqrt(0.25 + 10 * h)) / 5
+      for (; this.grainDebt >= 1; this.grainDebt--)
+        this.h.grains.emit(mouth.clone().add(tmp.set((Math.random() - 0.5) * 0.06, 0, (Math.random() - 0.5) * 0.06)), tmp.set((Math.random() - 0.5) * 0.08, -0.5, (Math.random() - 0.5) * 0.08), life, 0.024 + Math.random() * 0.014)
       this.sprinkleT -= dt
       if (this.sprinkleT <= 0) {
-        this.sprinkleT = 0.18
+        this.sprinkleT = 0.16
         sfx.scrape()
       }
-      for (let n = 0; n < 3; n++) {
-        tmp.copy(sp.at).sub(hand)
-        const life = 0.35
-        this.h.grains.emit(hand.clone().add(new Vector3((Math.random() - 0.5) * 0.06, 0, (Math.random() - 0.5) * 0.06)), new Vector3(tmp.x / life, tmp.y / life + 2.5 * life * 0.5, tmp.z / life), life, 0.018 + Math.random() * 0.012)
-      }
-      const i = sp.stall
-      const spots = i >= 0 ? d.stalls[i].spots : []
-      let full = i >= 0
-      for (const [j, s] of spots.entries()) {
-        if (Math.hypot(s[0] - sp.at.x, s[1] - sp.at.y, s[2] - sp.at.z) < SPOT_R) this.salted[i][j] = Math.min(1, this.salted[i][j] + dt * SALT_RATE)
-        if (this.salted[i][j] < 1) full = false
-      }
-      if (i < 0) {
-        // On the ground, or on someone: a little sparkle where it lands.
-        if (Math.random() < dt * 6) this.h.sparkles.emit(sp.at.clone().setY(0.1), new Vector3(0, 0.4, 0), 0.4, 0.02)
-      } else if (full && !this.done[i]) this.justRight(i)
-      else if (full && this.eggT < 0) {
-        this.over[i] += dt
-        if (this.over[i] > TOO_SALTY) {
-          this.over[i] = 0
-          this.tooSalty(i)
+      if (under.stall < 0) {
+        // On the counter or the ground: a little sparkle where it lands.
+        if (Math.random() < dt * 5) this.h.sparkles.emit(tmp.set(x, under.y + 0.03, STALL_Z), tmp2.set(0, 0.4, 0), 0.4, 0.02)
+      } else {
+        const i = under.stall
+        let full = true
+        for (const [j, sp] of d.stalls[i].spots.entries()) {
+          if (Math.abs(sp[0] - x) < SPOT_R) this.salted[i][j] = Math.min(1, this.salted[i][j] + dt * SALT_RATE * (1 + wiggle * 0.6))
+          if (this.salted[i][j] < 1) full = false
+        }
+        // The cook leans in to watch it land.
+        if (!this.done[i]) this.cooks[i].m.lookAt(x, under.y, STALL_Z)
+        if (full && !this.done[i]) this.justRight(i)
+        else if (full && this.eggT < 0) {
+          this.over[i] += dt
+          if (this.over[i] > TOO_SALTY) {
+            this.over[i] = 0
+            this.tooSalty(i)
+          }
         }
       }
     }
+    // The specks of salt pop in on the food as it's salted.
+    for (const [i, food] of this.specks.entries())
+      for (const [j, spot] of food.entries())
+        for (const [n, m] of spot.entries()) {
+          const want = this.salted[i][j] * spot.length > n ? 1 : 0
+          m.scale.setScalar(m.scale.x + (want - m.scale.x) * Math.min(1, dt * 12))
+        }
     // The lanterns ease on, the bulbs pop on at the party.
     for (const [i, s] of d.stalls.entries()) {
       this.lit[i] += ((this.done[i] ? 1 : 0) - this.lit[i]) * Math.min(1, dt * 3)
@@ -637,7 +709,6 @@ export class SaltStory {
 
   private justRight(i: number) {
     this.done[i] = true
-    this.sprinkle = null
     const c = this.cooks[i]
     const s = this.dinner.stalls[i]
     s.food.userData.bounce = 0
@@ -674,10 +745,10 @@ export class SaltStory {
 
   private pinchT = 0
   private pinchOn = 0
-  /** A quick tap on a food: a pinch of salt, about a second's sprinkle. */
+  /** A quick tap on a food: the shaker hops over it for a good shake. */
   pinch(i: number) {
     this.pinchOn = i
-    this.pinchT = 0.9
+    this.pinchT = 1.3
   }
   /** The first spot on a food that still wants salt (its middle when it's all salted). */
   nextSpot(i: number) {
@@ -685,24 +756,40 @@ export class SaltStory {
     const j = this.salted[i].findIndex((v) => v < 1)
     return new Vector3(...spots[j < 0 ? Math.floor(spots.length / 2) : j])
   }
-
-  /** Which stall a point on the counter plane is over (or -1). */
-  stallAt(p: Vector3) {
-    for (const [i, x] of STALL_X.entries()) if (Math.abs(p.x - x) < 0.65 && Math.abs(p.z - STALL_Z) < 0.55) return i
-    return -1
+  /** What is under the shaker at \`x\`: a food (its stall, and the top of it the salt lands on), a counter, or the ground. */
+  under(x: number): { stall: number; y: number } {
+    for (const [i, st] of this.dinner.stalls.entries()) {
+      for (const sp of st.spots) if (Math.abs(sp[0] - x) < SPOT_R) return { stall: i, y: sp[1] }
+      if (Math.abs(x - STALL_X[i]) < 0.62) return { stall: -1, y: COUNTER_Y }
+    }
+    return { stall: -1, y: 0 }
+  }
+  /** Where her finger holds the shaker (a point on the food's row): just above it, so the salt falls on what she points
+   *  at, never into the food and never off past the stalls. */
+  aim(p: Vector3) {
+    const x = clamp(p.x, SHAKER_X[0], SHAKER_X[1])
+    const top = this.under(x).y
+    this.goal.set(x, clamp(p.y + SHAKER_ABOVE, top + SHAKER_ABOVE, COUNTER_Y + 1.25), STALL_Z + 0.02)
   }
   /** The next food that wants salt (the hint points there). */
   nextFood() {
     const i = this.done.findIndex((d) => !d)
     return i < 0 ? null : this.nextSpot(i)
   }
-  /** Something is being salted now (a held finger, or a pinch). */
+  /** The shaker is out over the food (a held finger, or a tap). */
   get sprinkling() {
-    return !!this.sprinkle || this.pinchT > 0
+    return this.held || this.pinchT > 0
   }
-  /** Where the salt is landing now (Kaylee walks there and faces it), or null. */
+  /** Where the shaker is pouring now, or null. */
   get target() {
-    return this.sprinkle?.at ?? (this.pinchT > 0 ? this.nextSpot(this.pinchOn) : null)
+    return this.sprinkling ? this.shakeAt : null
+  }
+  /** Where Kaylee stands to salt at \`x\`: in the gap left of the stall under it (beside the food, never in front of
+   *  it). */
+  standAt(x: number) {
+    let i = 0
+    for (const [k, sx] of STALL_X.entries()) if (Math.abs(x - sx) < Math.abs(x - STALL_X[i])) i = k
+    return STALL_X[i] - (STALL_X[1] - STALL_X[0]) / 2
   }
 
   /** The string lights, all on (the party), or none. */
@@ -808,7 +895,8 @@ export class SaltStory {
       done: this.done,
       eggsIn: this.eggsIn,
       bulbs: this.bulbsOn,
-      sprinkling: this.sprinkle?.stall ?? null,
+      sprinkling: this.sprinkling,
+      shaker: { x: Math.round(this.shakeAt.x * 100) / 100, y: Math.round(this.shakeAt.y * 100) / 100, tip: Math.round(this.tip * 100) / 100 },
     }
   }
 }

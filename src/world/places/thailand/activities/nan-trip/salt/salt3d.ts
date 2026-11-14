@@ -88,7 +88,7 @@ import {
   TIP_BELOW_PAN,
   WELL,
   WOODPILE,
-  COUNTER_Y,
+  STALL_Z,
   DINNER,
   DINNER_KAYLEE_Z,
   type Round,
@@ -170,8 +170,8 @@ const up = new Vector3(0, 1, 0)
 const bucketPlane = new Plane(new Vector3(0, 0, 1), 0)
 const saltPlane = new Plane(new Vector3(0, 1, 0), -(SALT[0][1] + 0.02))
 const frontPlane = new Plane(new Vector3(0, 0, 1), -(STOVE_FRONT + 0.25))
-/** The dinner's counters, a little above their tops (where her sprinkled salt lands). */
-const counterPlane = new Plane(new Vector3(0, 1, 0), -(COUNTER_Y + 0.2))
+/** The dinner's row of food, facing us (her finger holds the salt shaker over a point on it). */
+const foodPlane = new Plane(new Vector3(0, 0, 1), -(STALL_Z + 0.02))
 
 const overWell = (x: number) => Math.abs(x - WELL.x) < WELL.r - BUCKET.r + 0.02
 const overPan = (x: number) => x > PAN.x0 + 0.04 && x < PAN.x1 - 0.04
@@ -998,10 +998,11 @@ export class SaltHut extends Stage {
     if (this.films.on || this.round === 'story') return
     if (id && POKES.has(id)) return
     if (this.round === 'dinner') {
-      // The salt sprinkles from her hand to wherever her finger points (on a stall's food, it salts it).
+      // The salt shaker comes to her finger, turns over and shakes: the salt falls on whatever is under it.
       this.touches++
       this.counted = true
-      this.sprinkleAt(x, y, id)
+      this.story.held = true
+      this.aimShaker(x, y)
       return
     }
     if (this.round === '3') {
@@ -1040,9 +1041,9 @@ export class SaltHut extends Stage {
     if (!isHeld) return
     this.fingerX = x
     this.fingerY = y
-    if (this.story.sprinkle) {
+    if (this.story.held) {
       this.lastTouch = this.time
-      this.sprinkleAt(x, y)
+      this.aimShaker(x, y)
       return
     }
     if (this.bucket.held || this.paddle.held || this.blowing) this.lastTouch = this.time
@@ -1058,32 +1059,14 @@ export class SaltHut extends Stage {
     }
   }
 
-  /** Where her sprinkle lands now: the spot on a food nearest her finger on screen (within a finger's reach), or the
-   *  ground under it. A press on a food's tap target counts as that food's next spot. */
-  private sprinkleAt(x: number, y: number, id?: string) {
-    let best: { stall: number; at: Vector3 } | null = null
-    let near = Math.max(70, Math.min(this.w, this.h) * 0.09)
-    for (const [i, st] of this.story.dinner.stalls.entries())
-      for (const sp of st.spots) {
-        const at = new Vector3(...sp)
-        const s = this.screen(at)
-        const d = s ? Math.hypot(s.x - x, s.y - y) : Infinity
-        if (d < near) {
-          near = d
-          best = { stall: i, at }
-        }
-      }
-    const food = id?.startsWith('food') ? Number(id.slice(4)) : -1
-    if (!best && food >= 0) best = { stall: food, at: this.story.nextSpot(food) }
-    if (!best) {
-      const p = this.onPlane(x, y, counterPlane)
-      if (p) best = { stall: -1, at: p }
-    }
-    if (best) this.story.sprinkle = best
+  /** The salt shaker goes to her finger (just above it, on the food's row). */
+  private aimShaker(x: number, y: number) {
+    const p = this.onPlane(x, y, foodPlane)
+    if (p) this.story.aim(p)
   }
 
   pointerUp() {
-    this.story.sprinkle = null
+    this.story.held = false
     if (this.bucket.held) {
       this.bucket.held = false
       this.bucket.goal.copy(this.bucket.at)
@@ -1108,7 +1091,7 @@ export class SaltHut extends Stage {
     if (id?.startsWith('cook')) return this.story.pokeCook(Number(id.slice(4)))
     if (id === 'jar') return this.story.pokeJar()
     if (id?.startsWith('food')) {
-      // A quick tap on the food: a pinch of salt (a held finger sprinkles more).
+      // A quick tap on the food: the shaker hops over it for a good shake (a held finger shakes as long as she likes).
       const i = Number(id.slice(4))
       if (!this.story.done[i]) this.story.pinch(i)
       if (i === 1 || i === 2) this.once('fact', R.story.fact, true)
@@ -1352,13 +1335,13 @@ export class SaltHut extends Stage {
     if (Math.random() < dt * 1.6) this.drops.emit(tmp.set(-3 + Math.random() * 6, EAVE.y, EAVE.z), tmp2.set(0, -0.5, 0), 0.9, 0.022)
     if (this.round === '3' && !this.doneSaid && Math.random() < dt * 1.2) this.steam.emit(tmp.set(PAN.x0 + Math.random() * (PAN.x1 - PAN.x0), PAN.top, (Math.random() - 0.5) * 0.5), tmp2.set(0, 0.3, 0), 1.4, 0.08)
     this.story.update(dt, t)
-    if (this.round === 'dinner') this.story.stepDinner(dt, t, this.handAt().add(new Vector3(0, 0.25, 0)))
+    if (this.round === 'dinner') this.story.stepDinner(dt, t, this.handAt().add(new Vector3(0.26, -0.08, 0.12)))
     if (this.films.on || this.round === 'story' || this.round === 'dinner') {
-      // (A film places and turns everyone itself.) At the dinner she walks along the stalls to wherever she's
-      // sprinkling, three-quarters to us, her arm out over the food.
+      // (A film places and turns everyone itself.) At the dinner she walks along beside the shaker (to its left, so
+      // she never hides the food), three-quarters to us, her arm up toward it.
       if (this.round === 'dinner' && !this.films.on) this.dinnerFamily()
       for (const c of [this.kaylee, this.nick, this.ji]) c.update(dt, t)
-      if (this.round === 'dinner' && !this.films.on && this.story.sprinkling) this.kaylee.rig.armR.rotation.set(-1.7, 0, -0.25)
+      if (this.round === 'dinner' && !this.films.on && this.story.sprinkling) this.kaylee.rig.armR.rotation.set(-2.5, 0, -0.35)
       for (const fl of [this.drops, this.stream, this.steam, this.bubbles, this.sparkles, this.grains, this.smoke]) fl.update(dt)
       if (this.round === 'dinner' && !this.films.on) this.stuck()
       this.rig.setCine(cine)
@@ -1395,15 +1378,15 @@ export class SaltHut extends Stage {
     const kp = k.root.position
     const at = this.story.target
     if (at) {
-      const gx = clamp(at.x - 0.55, DINNER.x - 2.6, DINNER.x + 2.4)
-      if (Math.abs(gx - this.followGoal) > 0.2 || (!k.walking && Math.abs(gx - kp.x) > 0.35)) {
+      const gx = this.story.standAt(at.x)
+      if (Math.abs(gx - this.followGoal) > 0.35 || (!k.walking && Math.abs(gx - kp.x) > 0.35)) {
         this.followGoal = gx
         k.walk([[gx, DINNER_KAYLEE_Z]])
       }
     }
-    // Side on to the food (it's on her right), or resting, three-quarters to us; she looks at what she's salting, or
-    // at us.
-    if (!k.walking) k.faceToward(kp.x + (at ? 1.15 : 0.6), kp.z + (at ? 0.2 : 0.5))
+    // In the gap beside the stall, three-quarters to us (the shaker is up on her right); she looks at what she's
+    // salting, or at us.
+    if (!k.walking) k.faceToward(kp.x + 0.6, kp.z + 0.8)
     const cam = this.rig.camera.position
     if (at) k.lookAt(at.x, at.y, at.z)
     else k.lookAt(cam.x, cam.y, cam.z)
@@ -1478,7 +1461,7 @@ export class SaltHut extends Stage {
     if (this.round === 'dinner') {
       // The three stalls in a row, Pa Kluea at the right end, the family at the left.
       if (tall) return { center: new Vector3(DINNER.x, 0.95, -0.1), half: new Vector3(2.4, 1.1, 0.8), yaw: 0, pitch: 22, minDist: 3 }
-      return { center: new Vector3(DINNER.x - 0.1, 0.95, -0.1), half: new Vector3(3.05, 0.95, 0.7), yaw: 0, pitch: 20, minDist: 3 }
+      return { center: new Vector3(DINNER.x - 0.45, 0.95, -0.1), half: new Vector3(3.5, 0.95, 0.7), yaw: 0, pitch: 20, minDist: 3 }
     }
     // A very wide, short screen (an iPhone on its side): a little more room above and below, so heads and feet stay
     // clear of the top bar and the bottom edge.

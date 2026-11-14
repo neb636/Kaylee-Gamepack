@@ -43,16 +43,21 @@ in `salt/layout.ts`, wired into `salt3d.ts` like the rice farm's films (`docs/fi
 - **While she makes the salt:** the cooks wait across the road by the painted house (tap them: hungry lines). Half a pan:
   "Is it salt yet?" / "Not yet!". The first white salt: Pa Kai's "Ooh! Salt!".
 - **The dinner (`dusk`, then play):** evening on the same road at x = 16 (pink-lavender sky tint, warm light, unlit
-  lanterns and string lights). Her finger held over a food: salt streams from her hand to the nearest food spot on
-  screen (`SPOT_R`, `SALT_RATE`). The soup pot (1 spot), Pa Kai's jar (1 spot, then 4 eggs hop in), Yai Nak's three fish
-  (3 spots, a drag across them). Each done: the cook tastes, a yum face, their line, the lantern lights. A new press on
-  a done food: a pucker face and a "too salty" line. A quick tap is a pinch (about a second of salt).
+  lanterns and string lights). The salt shaker (rebuilt 2026-11-14: the first version threw
+  salt sideways from her hip to an invisible spot and she walked in front of the food, which the user found janky): a
+  pink-capped shaker rides in her hand; a held finger brings it just above the finger on the food's row
+  (`SHAKER_ABOVE`), it turns over and shakes, and the salt falls straight down onto whatever is under it. White specks
+  pop in on the food as it's salted (`SPECKS`), wiggling salts faster, and the cook watches it land. Kaylee walks along
+  to the shaker's left so she never hides the food. The soup pot (1 spot), Pa Kai's jar (1 spot, then 4 eggs hop in),
+  Yai Nak's three fish (3 spots). Each done: the cook tastes, a yum face, their line, the lantern lights. Keep shaking
+  a done food (`TOO_SALTY`): a pucker face and a "too salty" line. A quick tap on a food sends the shaker over it for a
+  good shake. Dad and Mom stand a step apart left of the stalls (they merged before).
 - **The party (`party`):** the string lights pop on one by one, Pa Kluea's thanks, Dad's "Mmm! Just right!", a cheer.
 - **New:** a `hen` species in the shared rig (comb, wattle, tail fan); voices `kwai` (onyx), `kai` (shimmer),
   `nak` (fable) in `cast.json`. The fish grandma is an otter (no goose rig yet).
 - **Scratch:** the films borrow the rice farm's story music and memory bed; no ElevenLabs sounds of its own yet.
 - **QA:** screens `nan-salt-story`, `nan-salt-memory`, `nan-salt-dinner`; motion `nan-salt-story`,
-  `nan-salt-story-skip`, `nan-salt-dinner` (a robot drags over each food until the party ends).
+  `nan-salt-story-skip`, `nan-salt-dinner` (a robot holds the shaker over each food until the party ends).
 
 ## Next
 

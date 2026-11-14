@@ -145,8 +145,9 @@ export const FOOD_X = [0.2, 0.16, 0.12]
 export const COOK_DX = -0.36
 /** Kaylee's line in front of the stalls, and where the family stand to watch. */
 export const DINNER_KAYLEE_Z = 0.55
-export const DINNER_NICK: V3 = [DINNER.x - 2.6, 0, -1.0]
-export const DINNER_JI: V3 = [DINNER.x - 3.05, 0, -0.75]
+// (Dad and Mom a good step apart, and both clear of Lung Kwai behind the first stall, so nobody merges.)
+export const DINNER_NICK: V3 = [DINNER.x - 2.85, 0, -0.95]
+export const DINNER_JI: V3 = [DINNER.x - 3.75, 0, -0.45]
 export const DINNER_AUNTY: V3 = [DINNER.x + 2.95, 0, 0.35]
 /** The salt each food wants (the spots on it a sprinkle fills: the soup pot has one, the egg jar one, the grill one per
  *  fish), how near a sprinkle must land (m), and how fast a held sprinkle fills a spot (per second). */
@@ -156,6 +157,19 @@ export const FOOD_SPOTS: [x: number, z: number][][] = [
   [[-0.3, 0.02], [0, 0.02], [0.3, 0.02]],
 ]
 export const SPOT_R = 0.2
-export const SALT_RATE = 0.9
+export const SALT_RATE = 0.5
+/** The salt shaker hangs this far above her finger (and above the food), so the salt falls on what she points at. And
+ *  how far along the stalls it goes. */
+export const SHAKER_ABOVE = 0.5
+/** How big the shaker is (it must read clearly from the dinner's wide shot). */
+export const SHAKER_SIZE = 1.7
+export const SHAKER_X = [DINNER.x - 2.5, DINNER.x + 2.4]
+/** The specks of salt that pop in on each food as it's salted: how many per spot, how far they spread (x and z
+ *  stretch), and how far above the spot they sit (the soup's top, the jar's water, along each fish's back). */
+export const SPECKS = [
+  { n: 14, r: 0.17, sx: 1, sz: 1, y: 0.015 },
+  { n: 9, r: 0.12, sx: 1, sz: 1, y: -0.005 },
+  { n: 7, r: 0.12, sx: 0.35, sz: 1, y: 0.06 },
+]
 /** Held on after it's just right, this much more and the cook gets a too-salty face (and it starts again). */
-export const TOO_SALTY = 0.9
+export const TOO_SALTY = 1.4
