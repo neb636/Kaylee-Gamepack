@@ -16,6 +16,8 @@ const deg = Math.PI / 180
 /** A modelled toy with legs of its own sitting (Mom's, mom-model.ts): how far its body drops (a fraction of its height)
  *  and how far its legs swing forward over the seat (radians). */
 const LEGS_SIT = { drop: 0.04, legs: -1.35 }
+/** How far a modelled toy's arms reach forward to a steering wheel (radians; drive()). */
+const ON_THE_WHEEL = 1.1
 const tmp = new Vector3()
 
 /** The family members who also have a game-table voice (`<id>play` in cast.json). */
@@ -93,6 +95,16 @@ export class Member implements Character {
     this.setPose(pose)
   }
 
+  private driving = false
+  /** Hands on the wheel, in a driver's seat. A modelled toy's arms hang out wide (Mom's, 47°), so at the wheel a hoof
+   *  went out through the car's door: they reach forward instead (her reachForward brings them in toward her middle).
+   *  The code-built toys' arms hang at their sides and stay as they are. Standing up again lets go (setPose). */
+  drive(on = true) {
+    if (!this.chibi.legL) return
+    this.driving = on
+    this.chibi.armL.rotation.x = this.chibi.armR.rotation.x = on ? -ON_THE_WHEEL : 0
+  }
+
   /** The height they stand at, for someone walking over uneven ground (update() puts them back here every frame). */
   setGround(y: number) {
     this.baseY = y
@@ -100,6 +112,7 @@ export class Member implements Character {
 
   setPose(pose: Pose) {
     this.pose = pose
+    if (pose !== 'sit' && this.driving) this.drive(false)
     const { body, legL, legR } = this.chibi
     body.rotation.set(pose === 'lie' ? -Math.PI / 2 : 0, 0, 0)
     body.position.set(0, pose === 'lie' ? this.chibi.radius : 0, 0)

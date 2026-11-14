@@ -80,8 +80,6 @@ export type DriveStart = 'road' | 'view'
 /** The heavy, bouncy Pajero, leaning a lot. 60% quicker than it first was (top 9.5, accel 4, turn 1.15): the turn rate
  *  rises with it so it still holds the same line round the hairpins. (Its top speed, turn and grip are `STEER`'s.) */
 const ZOOM = 1.6
-/** How much higher the modelled Mom sits at the Pajero's wheel (meters; see the seats below). */
-const DRIVER_CUSHION = 0.15
 const PAJERO_FEEL: Feel = { top: 9.5 * ZOOM, boost: 1.2, accel: 4 * ZOOM, coast: 0.6, turn: 1.15 * ZOOM, grip: 7, near: 2, far: 7, dead: 0.02, lean: 0.12 }
 /** The steering's feel, live in the feel lab (?feel=1 on the drive's link). The wheel is sled style: a push slides her
  *  across the road for as long as she holds it. Dad found 7.5 m/s with no smoothing far too twitchy on a phone and a
@@ -416,9 +414,8 @@ export class NanDrive implements World3D {
       seat.add(c.root)
       put(c, 0, 0, 0, 'sit', 0)
     }
-    // The modelled Mom sits on her hips with her legs out, so she sits lower than the code-built toys: a cushion under
-    // her keeps her eyes over the wheel.
-    if (this.ji.rig.legL) put(this.ji, 0, DRIVER_CUSHION, 0, 'sit', 0)
+    // Mom's hooves on the wheel (a modelled Mom's would go out through the door).
+    this.ji.drive()
     this.dust = new Particles({ kind: 'spray', count: 260, colors: ['#FFFFFF', '#F1E4D6', '#EDE7F7'], gravity: 3 }, bag)
     this.grass = new Particles({ kind: 'spray', count: 160, colors: ['#9BD37E', '#7CC46A', '#C9A77C', '#B8E39A'], gravity: 9 }, bag)
     this.rain = new Particles({ kind: 'spray', count: 700, color: '#E7EEFF', gravity: 0 }, bag)
