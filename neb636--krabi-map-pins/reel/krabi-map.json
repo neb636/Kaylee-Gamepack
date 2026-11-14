@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "krabi-map",
+  "title": "Krabi map",
+  "video": "krabi-map.mp4",
+  "gif": "krabi-map.gif",
+  "seconds": 28,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "krabi-map-pokes",
+      "where": "krabi-map-pokes",
+      "seconds": 12,
+      "fps": 65.9,
+      "status": "ok"
+    },
+    {
+      "name": "krabi-map-pick",
+      "where": "krabi-map-pick",
+      "seconds": 5,
+      "fps": 59,
+      "status": "ok"
+    },
+    {
+      "name": "krabi-map-fly-home",
+      "where": "krabi-map-fly-home",
+      "seconds": 6,
+      "fps": 62.8,
+      "status": "ok"
+    }
+  ]
+}
