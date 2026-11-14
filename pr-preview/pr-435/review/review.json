@@ -1,0 +1,142 @@
+{
+  "title": "Thailand voices: an ElevenLabs trial",
+  "checkIn": "voice trial: choose one",
+  "kaylee": "Nothing changes in the game yet. Hear Mom and the four Bo Kluea cooks as they sound now, then three ElevenLabs options for each, reading the same lines.",
+  "questions": [
+    "Mom: Now, A, B or C?",
+    "Pa Kluea, Lung Kwai, Pa Kai, Yai Nak: one letter each (or Now)",
+    "Worth moving more of Thailand to ElevenLabs if these win? Yes or no"
+  ],
+  "listens": [
+    {
+      "title": "Mom",
+      "audio": "voices/ji.mp3",
+      "items": [
+        {
+          "text": "Now (OpenAI, what the game plays today)",
+          "at": 0,
+          "end": 12.37
+        },
+        {
+          "text": "A. Anna: Thai woman, English with a Thai accent, clear and natural",
+          "at": 13.57,
+          "end": 27.09
+        },
+        {
+          "text": "B. Onnie: Thai woman, soft and smooth",
+          "at": 28.29,
+          "end": 40.54
+        },
+        {
+          "text": "C. Hammy: native Thai speaker, warm and friendly",
+          "at": 41.74,
+          "end": 52.14
+        }
+      ]
+    },
+    {
+      "title": "Pa Kluea, the salt aunty (pony)",
+      "audio": "voices/saltaunty.mp3",
+      "items": [
+        {
+          "text": "Now (OpenAI, what the game plays today)",
+          "at": 0,
+          "end": 15.44
+        },
+        {
+          "text": "A. Designed voice A",
+          "at": 16.64,
+          "end": 33.47
+        },
+        {
+          "text": "B. Designed voice B",
+          "at": 34.67,
+          "end": 49.67
+        },
+        {
+          "text": "C. Designed voice C",
+          "at": 50.87,
+          "end": 69.36
+        }
+      ]
+    },
+    {
+      "title": "Lung Kwai, the noodle-soup buffalo",
+      "audio": "voices/kwai.mp3",
+      "items": [
+        {
+          "text": "Now (OpenAI, what the game plays today)",
+          "at": 0,
+          "end": 16.93
+        },
+        {
+          "text": "A. Designed voice A",
+          "at": 18.13,
+          "end": 32.31
+        },
+        {
+          "text": "B. Designed voice B",
+          "at": 33.51,
+          "end": 48.2
+        },
+        {
+          "text": "C. Designed voice C",
+          "at": 49.4,
+          "end": 67.4
+        }
+      ]
+    },
+    {
+      "title": "Pa Kai, the salty-egg hen",
+      "audio": "voices/kai.mp3",
+      "items": [
+        {
+          "text": "Now (OpenAI, what the game plays today)",
+          "at": 0,
+          "end": 11.02
+        },
+        {
+          "text": "A. Designed voice A",
+          "at": 12.22,
+          "end": 22.3
+        },
+        {
+          "text": "B. Designed voice B",
+          "at": 23.5,
+          "end": 34.18
+        },
+        {
+          "text": "C. Designed voice C",
+          "at": 35.38,
+          "end": 45.31
+        }
+      ]
+    },
+    {
+      "title": "Yai Nak, the otter grandma",
+      "audio": "voices/nak.mp3",
+      "items": [
+        {
+          "text": "Now (OpenAI, what the game plays today)",
+          "at": 0,
+          "end": 12.19
+        },
+        {
+          "text": "A. Designed voice A",
+          "at": 13.39,
+          "end": 32.08
+        },
+        {
+          "text": "B. Designed voice B",
+          "at": 33.28,
+          "end": 52.59
+        },
+        {
+          "text": "C. Designed voice C",
+          "at": 53.79,
+          "end": 72.02
+        }
+      ]
+    }
+  ]
+}

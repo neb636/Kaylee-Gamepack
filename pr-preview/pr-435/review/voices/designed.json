@@ -1,0 +1,38 @@
+{
+  "kai": {
+    "description": "A cheerful, busy Thai auntie in her forties who sells salted eggs at a village market. Quick, bright, slightly high voice, a little flustered when worried and delighted when things go right. Speaks English with a northern Thai accent, like a funny animated movie character.",
+    "seed": 23,
+    "options": {
+      "A": "6LptPSlu87snodxg5OHW",
+      "B": "MXJwer969egRQZTypUPB",
+      "C": "ZP7EG78yyObLJ5FqPGxi"
+    }
+  },
+  "nak": {
+    "description": "A sweet old Thai grandmother in her eighties, slow, gentle and a little wobbly, with a soft giggle, calls everyone dear. Speaks English with a northern Thai accent. A cartoon otter grandma character talking to a five-year-old.",
+    "seed": 14,
+    "options": {
+      "A": "yFhl8q7Uux2lSQxqnCxl",
+      "B": "0qR8lNpeg8QpcuUFHX0R",
+      "C": "CA61qPyz87yB3Zf3JClr"
+    }
+  },
+  "saltaunty": {
+    "description": "A chubby, funny Thai aunty in her fifties from a mountain village in northern Thailand, speaking English with a warm northern Thai accent. Kind and playful with a twinkle in her voice and a little giggle, a bit of a tease, talking to a five-year-old in a cartoon.",
+    "seed": 11,
+    "options": {
+      "A": "2GTCvqhFpmdToxNv9XfJ",
+      "B": "MSaFlJkKpuFYwlOdpDP9",
+      "C": "g3RiOdozJYbWpDtCCe0V"
+    }
+  },
+  "kwai": {
+    "description": "A big, jolly Thai uncle in his sixties, a deep booming warm voice that laughs from the belly, a bit dramatic about his cooking. Speaks English with a northern Thai accent. A cartoon water buffalo character talking to a five-year-old.",
+    "seed": 112,
+    "options": {
+      "A": "U5wQ4laqagX5EyVXCYuq",
+      "B": "uVdDyRzePOo6H2RYCYSs",
+      "C": "ZUuVOoMMoHMpFRawjh6j"
+    }
+  }
+}
