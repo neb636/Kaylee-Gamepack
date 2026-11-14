@@ -161,6 +161,11 @@ export class Member implements Character {
     const lying = this.pose === 'lie'
     this.life.update(dt)
     this.wind.update(this.chibi, dt, t)
+    // A modelled toy's ears tuck under a hat on its head (anything there with `userData.hidesEars`).
+    if (this.chibi.ears) {
+      const hat = this.chibi.head.children.some((c) => c.visible && c.userData.hidesEars)
+      for (const e of this.chibi.ears) e.visible = !hat
+    }
     if (this.phoneDown >= 0) {
       // The phone shrinks away into a pocket while the arms come down from holding it.
       this.phoneDown = Math.min(1, this.phoneDown + dt / 0.5)

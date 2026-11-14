@@ -41,6 +41,8 @@ import { TO_DEG, damp } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/finale/sunset.ts'
 const S = LINES.samet.finale.sunset
+/** How far a modelled Mom swings her phone arm up for the selfie (radians; the code-built Mom's is 1.75). */
+const SELFIE_LIFT = 2.5
 const SUN = knobs('sunsetSun', 'Pulling the sun down', FILE, {
   start: { value: 9, min: 4, max: 25, step: 0.5, label: 'It starts this high', unit: '°' },
   grab: { value: 150, min: 60, max: 300, step: 10, label: 'Grab it within', unit: 'px', note: 'her finger this close to the sun picks it up' },
@@ -335,7 +337,8 @@ export class Sunset implements World3D {
       // Mom's phone up at arm's length; everyone smiles at it.
       const r = this.ji.rig
       // Out to the side and up, at arm's length, so the phone clears her (and their heads fit in its picture).
-      r.armR.rotation.set(-1.75 * this.turn, 0, 0.85 * this.turn)
+      // (A modelled Mom's arms hang out at a slant, so the same swing leaves her hoof lower: she lifts it further.)
+      r.armR.rotation.set(-(r.legL ? SELFIE_LIFT : 1.75) * this.turn, 0, 0.85 * this.turn)
       // The phone turns upright, its screen to the three of them (the game's camera sees its back): its turn in the
       // world, undone by the arm's.
       r.armR.updateWorldMatrix(true, false)

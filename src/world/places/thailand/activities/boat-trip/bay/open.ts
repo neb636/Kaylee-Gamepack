@@ -8,7 +8,7 @@
 // - Silly moments: a big bonk sends Dad's sunglasses flying (drive over them and they're back on his face, upside
 //   down); a high jump off a wake blows Mom's hat off (drive over it to scoop it back).
 // - What she packed rides along: the duck on its string behind the boat, the teddy on Mom's lap, her bucket.
-import { BufferGeometry, Float32BufferAttribute, Group, Line, LineBasicMaterial, Vector3, type Object3D } from 'three'
+import { BufferGeometry, Float32BufferAttribute, Group, Line, LineBasicMaterial, Vector3 } from 'three'
 import { bell, clamp } from '../../../../../../sdk'
 import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
 import type { Look } from '../../../characters/looks'
@@ -95,7 +95,6 @@ export class OpenWater implements BayPart {
   private shades: Group
   private shadesUp = true
   private hat: Group
-  private jiEars: Object3D[] = []
   private floaters = new Map<'sunglasses' | 'hat', Floater>()
   // What she packed.
   private duck: Group | null = null
@@ -186,8 +185,9 @@ export class OpenWater implements BayPart {
     else this.hat.position.set(0, Rj * 0.92 + 0.6 * Rj, -0.04 * Rj)
     this.hat.rotation.x = -0.12
     ji.rig.head.add(this.hat)
-    // A modelled Mom's ears stick out at her temples, through the hat's sides: they tuck under it while she wears it.
-    this.jiEars = ji.rig.ears ?? []
+    // A modelled Mom's ears stick out at her temples, through the hat's sides: they tuck under it while she wears it
+    // (Member, `hidesEars`).
+    this.hat.userData.hidesEars = true
     // ---- What she packed ----
     const cargo = bay.rides.longtail.v.cargo
     if (bay.packed.includes('teddy')) {
@@ -391,9 +391,6 @@ export class OpenWater implements BayPart {
     for (const m of this.monkeys) m.root.visible = seeLedge || this.heist !== null
     this.fisher.root.visible = Math.hypot(cam.x - FISHING.x, cam.z - FISHING.z) < 160
     this.hat.visible = bay.using === 'longtail'
-    // Her ears show whenever the hat isn't on her head (in the canoe, overboard, flying off in the wind).
-    const hatOn = this.hat.visible && this.hat.parent === bay.rider('ji').char.rig.head
-    for (const e of this.jiEars) e.visible = !hatOn
     this.updateNeedlefish(dt, t)
     this.updateEagle(dt, t)
     this.updateCoconut(dt, t)
