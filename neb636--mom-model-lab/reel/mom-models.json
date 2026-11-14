@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "mom-models",
+  "title": "Mom models",
+  "video": "mom-models.mp4",
+  "gif": "mom-models.gif",
+  "seconds": 11,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Characters ji",
+      "where": "#/world/characters/ji?lineup=ji,mom-2,mom-4&spin=1",
+      "seconds": 9,
+      "fps": 30.3,
+      "status": "ok"
+    }
+  ]
+}
