@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "salt-dinner-after",
+  "title": "Salt dinner after",
+  "video": "salt-dinner-after.mp4",
+  "gif": "salt-dinner-after.gif",
+  "seconds": 42,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "nan-salt-dinner",
+      "where": "nan-salt-dinner",
+      "seconds": 40,
+      "fps": 47.8,
+      "status": "ok"
+    }
+  ]
+}
