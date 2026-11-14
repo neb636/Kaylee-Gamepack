@@ -24,8 +24,9 @@ export type Round = (typeof ROUNDS)[number]
 
 /** The well: a round stone rim; the brine far down inside it. */
 export const WELL = { x: -1.45, z: 0, r: 0.4, rim: 0.55, water: 0.16 }
-/** The bamboo beam the bucket's rope slides along (on two posts), in the plane z = 0. */
-export const BEAM = { x0: -2.0, x1: 2.05, y: 2.2 }
+/** The bamboo beam the bucket's rope slides along (on two posts), in the plane z = 0. Its right post stands out at the
+ *  hut's corner line (`post1`), past Pa Kluea, so her wide sun hat never meets it (2026-11-14). */
+export const BEAM = { x0: -2.0, x1: 2.05, y: 2.2, post1: 2.85 }
 export const BUCKET = { r: 0.17, h: 0.28 }
 /** Where the bucket hangs when nobody holds it (its middle), and out of the way over the well in round 3. */
 export const BUCKET_REST: V3 = [-0.75, 1.45, 0]
