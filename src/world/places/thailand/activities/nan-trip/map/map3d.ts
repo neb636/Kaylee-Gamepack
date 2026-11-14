@@ -31,7 +31,7 @@ import { blobShadow } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
 import { L } from '../../../lines'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
-import { Entrance, mapCamKnobs, puffCloud, skyTexture } from '../../../trip/sky'
+import { Entrance, mapCamKnobs, puffCloud, skyTexture, trayBox } from '../../../trip/sky'
 import { Floaters } from '../mushrooms/fx'
 import { buildDiorama, PLACE_SCALE, type Diorama } from './diorama'
 import { BOARD, CAR_SPEED, CLOUDS, DRAG_SPEED, FISH, heightAt, HOME_AFTER, LAOS_FLAG, modelAt, PAPER_Y, PLACE_IDS, PLACES, RUNWAY, STAMP_Y, STOP_PLACE, STOPS, THAI_FLAG, type PlaceId, type Stop } from './layout'
@@ -50,6 +50,8 @@ export interface MapEvents extends LegEvents {
 
 /** The board's camera when she lands, as on the Thailand map: turned a little, then it settles lower and closer
  *  (the feel lab, ?feel=1). */
+/** The box the map's camera frames: the board, its tray (as diorama.ts builds it) and the hills on it. */
+const BOARD_BOX = trayBox(BOARD.x1 - BOARD.x0, BOARD.z1 - BOARD.z0, PAPER_Y + 0.07, 0.6, 0.2, 0.55)
 export const NAN_CAM = mapCamKnobs('nan-map-cam', 'Nan map camera', 'src/world/places/thailand/activities/nan-trip/map/map3d.ts', { yaw: 8, pitch: -16, zoom: 0.88 })
 
 export const MAP_ANCHORS: AnchorInfo[] = [
@@ -648,8 +650,10 @@ export class NanMap extends Stage {
     const zoom = 1 + (NAN_CAM.zoom - 1) * k
     // Tall: from the west side, so the board's long side runs up the screen (Laos at the top).
     // (A tall screen settles less low: the board is already small across it.)
-    if (tall) return { center: new Vector3(-0.45, 0, 0), half: new Vector3(3.0, 0.3, 2.3).multiplyScalar(zoom), yaw: -90 + NAN_CAM.yaw, pitch: 62 + NAN_CAM.pitch * k * 0.6, minDist: 3 }
-    return { center: new Vector3(-0.08, 0, 0.3), half: new Vector3(3.05, 0.3, 2.3).multiplyScalar(zoom), yaw: NAN_CAM.yaw, pitch: 54 + NAN_CAM.pitch * k, minDist: 3 }
+    // The board and its tray, object-fit: contain, so it floats in the middle of the sky on any screen shape.
+    const { center, half } = BOARD_BOX
+    if (tall) return { center: center.clone(), half: half.clone().multiplyScalar(zoom), yaw: -90 + NAN_CAM.yaw, pitch: 62 + NAN_CAM.pitch * k * 0.6, minDist: 3, objectFit: 'contain' }
+    return { center: center.clone(), half: half.clone().multiplyScalar(zoom), yaw: NAN_CAM.yaw, pitch: 54 + NAN_CAM.pitch * k, minDist: 3, objectFit: 'contain' }
   }
 
   /** The entrance rides the camera exactly (no lag). */
