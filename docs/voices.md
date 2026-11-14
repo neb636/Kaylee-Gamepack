@@ -30,7 +30,7 @@ world feel alive and helps a child who can't read know who is talking:
   hub. Hubs and free-play toys (the maps, the house, the globe, the train) never speak an idle hint: they glow. A
   welcome or menu line plays once per visit (`useSayOnMount(line, { once: true })`, `firstTime(key)`), and a hub only
   talks when something is new (her first look, a new stamp, the party).
-- `node scripts/voice-audition.mjs <speaker> <voice> <voice>...` renders samples to compare. Generation trims silence,
+- `node scripts/voice-audition.mjs <speaker> <voice> <voice>...` renders samples to compare. `node scripts/voice-audition-eleven.mjs <trial.json>` does the same with ElevenLabs (library voices, or three designed from a description), next to the clips the game plays now, as review-page listen tracks (`planning/around-the-world/thailand/eleven-voice-trial.json`, 2026-11-14). Generation trims silence,
   matches loudness, and transcribes each new clip to flag ones that don't say the right words. **On a PR it
   runs by itself:** the PR preview workflow's `voices` job writes `voice-lines.json`, records every line without a clip
   with the `OPENAI_API_KEY` repository secret, commits the clips to the branch, gives them to the preview build and

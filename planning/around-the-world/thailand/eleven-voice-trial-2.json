@@ -1,0 +1,55 @@
+{
+  "_about": "ElevenLabs voice trial, round 2 (2026-11-14). Your note on round 1: every option sounded too energetic and frantic, almost yelling; only Lung Kwai B was OK. So this round is calm: Mom's library voices read one line at a time (like the game plays them) with eleven_multilingual_v2 at a steady, slower setting (round 1's eleven_v3 acts out every exclamation mark), and the designed voices are described as relaxed, soft and unhurried, with lower loudness. Lung Kwai B from round 1 is saved to the ElevenLabs account (voice id uVdDyRzePOo6H2RYCYSs) and plays first on his track to compare against. Made by scripts/voice-audition-eleven.mjs.",
+  "place": "src/world/places/thailand",
+  "round": 2,
+  "speakers": {
+    "ji": {
+      "title": "Mom",
+      "lines": ["Look! The sky is turning pink!", "You did it, sweetie!", "Shall we go to the mall?", "It's too full! Sit on it!", "Bo Kluea! The salt village!"],
+      "model": "eleven_multilingual_v2",
+      "settings": { "stability": 0.65, "similarity_boost": 0.8, "style": 0, "use_speaker_boost": true, "speed": 0.8 },
+      "library": [
+        { "name": "Anna", "id": "brM9iIbwDREZaWL8luun", "about": "round 1's Anna, read the calm way" },
+        { "name": "Hammy", "id": "MYZYcGOqrkYQcwDunXl7", "about": "round 1's Hammy, read the calm way" },
+        { "name": "Air", "id": "wMBr6SfqQVuOqplK01NE", "about": "new: a friendly Thai teacher" }
+      ]
+    },
+    "saltaunty": {
+      "title": "Pa Kluea, the salt aunty (pony)",
+      "lines": ["Sawasdee ka! I'm Pa Kluea. I make the salt!", "Oh no! My salt jar is empty!", "Will you be my salt carrier?", "Not yet! Keep going!", "Hee hee! Taste it!"],
+      "design": {
+        "seed": 31,
+        "tuning": { "loudness": -0.3 },
+        "description": "A relaxed, warm Thai aunty in her fifties from a quiet mountain village in northern Thailand. Calm, soft, unhurried and smiling, a gentle twinkle of humor, never loud or rushed, like chatting kindly over a cup of tea. Speaks English with a soft northern Thai accent."
+      }
+    },
+    "kwai": {
+      "title": "Lung Kwai, the noodle-soup buffalo",
+      "lines": ["Pa Kluea! Pa Kluea!", "Blehh! My soup tastes like puddle water!", "And the village dinner is tonight!", "Aroi mak! Just right!", "Too salty! Water, please!"],
+      "keep": [{ "label": "Round 1 B (the one you liked)", "file": "kwai-B.mp3" }],
+      "design": {
+        "seed": 32,
+        "tuning": { "loudness": -0.3 },
+        "description": "A big, easygoing Thai uncle in his sixties with a deep, mellow, relaxed voice and a soft chuckle. Calm and unhurried, warm and good-humored, never shouting, like a gentle cook chatting in his kitchen. Speaks English with a soft northern Thai accent."
+      }
+    },
+    "kai": {
+      "title": "Pa Kai, the salty-egg hen",
+      "lines": ["Bawk! My salty eggs aren't salty!", "Ooh! Salt!", "Cluck cluck! No salt!", "Now my eggs will be salty!", "Bawk! So salty!"],
+      "design": {
+        "seed": 33,
+        "tuning": { "loudness": -0.3 },
+        "description": "A sweet, bright Thai auntie in her forties who sells salted eggs at a village market. A light, pleasant voice, cheerful but relaxed and unhurried, softly amused, never shrill or loud. Speaks English with a soft northern Thai accent, like a friendly character in a gentle animated film."
+      }
+    },
+    "nak": {
+      "title": "Yai Nak, the otter grandma",
+      "lines": ["And my fish is so... plain.", "I'm so hungry, dear.", "Yummy fish! Thank you!", "Ooh! My whiskers!", "So yummy, dear!"],
+      "design": {
+        "seed": 34,
+        "tuning": { "loudness": -0.3 },
+        "description": "A sweet old Thai grandmother in her eighties with a soft, slow, quiet voice and a tiny giggle. Calm, cozy and tender, never loud, like telling a bedtime story. Calls everyone dear. Speaks English with a soft northern Thai accent."
+      }
+    }
+  }
+}

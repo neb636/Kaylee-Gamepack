@@ -1,0 +1,47 @@
+{
+  "_about": "ElevenLabs voice trial (2026-11-14): three options per speaker, heard against the current OpenAI voice before anything changes in cast.json. `library` options are ElevenLabs voice-library voices read with eleven_v3; `design` speakers get three voices from one ElevenLabs Voice Design call (eleven_ttv_v3, the seed keeps it repeatable), whose generated ids are saved after you pick one. Made by scripts/voice-audition-eleven.mjs.",
+  "place": "src/world/places/thailand",
+  "speakers": {
+    "ji": {
+      "title": "Mom",
+      "lines": ["Look! The sky is turning pink!", "You did it, sweetie!", "Shall we go to the mall?", "It's too full! Sit on it!", "Bo Kluea! The salt village!"],
+      "library": [
+        { "name": "Anna", "id": "brM9iIbwDREZaWL8luun", "about": "Thai woman, English with a Thai accent, clear and natural" },
+        { "name": "Onnie", "id": "OSCkDOqeWrrCkMiFPGB3", "about": "Thai woman, soft and smooth" },
+        { "name": "Hammy", "id": "MYZYcGOqrkYQcwDunXl7", "about": "native Thai speaker, warm and friendly" }
+      ]
+    },
+    "saltaunty": {
+      "title": "Pa Kluea, the salt aunty (pony)",
+      "lines": ["Sawasdee ka! I'm Pa Kluea. I make the salt!", "Oh no! My salt jar is empty!", "Will you be my salt carrier?", "Not yet! Keep going!", "Hee hee! Taste it!"],
+      "design": {
+        "seed": 11,
+        "description": "A chubby, funny Thai aunty in her fifties from a mountain village in northern Thailand, speaking English with a warm northern Thai accent. Kind and playful with a twinkle in her voice and a little giggle, a bit of a tease, talking to a five-year-old in a cartoon."
+      }
+    },
+    "kwai": {
+      "title": "Lung Kwai, the noodle-soup buffalo",
+      "lines": ["Pa Kluea! Pa Kluea!", "Blehh! My soup tastes like puddle water!", "And the village dinner is tonight!", "Aroi mak! Just right!", "Too salty! Water, please!"],
+      "design": {
+        "seed": 12,
+        "description": "A big, jolly Thai uncle in his sixties, a deep booming warm voice that laughs from the belly, a bit dramatic about his cooking. Speaks English with a northern Thai accent. A cartoon water buffalo character talking to a five-year-old."
+      }
+    },
+    "kai": {
+      "title": "Pa Kai, the salty-egg hen",
+      "lines": ["Bawk! My salty eggs aren't salty!", "Ooh! Salt!", "Cluck cluck! No salt!", "Now my eggs will be salty!", "Bawk! So salty!"],
+      "design": {
+        "seed": 23,
+        "description": "A cheerful, busy Thai auntie in her forties who sells salted eggs at a village market. Quick, bright, slightly high voice, a little flustered when worried and delighted when things go right. Speaks English with a northern Thai accent, like a funny animated movie character."
+      }
+    },
+    "nak": {
+      "title": "Yai Nak, the otter grandma",
+      "lines": ["And my fish is so... plain.", "I'm so hungry, dear.", "Yummy fish! Thank you!", "Ooh! My whiskers!", "So yummy, dear!"],
+      "design": {
+        "seed": 14,
+        "description": "A sweet old Thai grandmother in her eighties, slow, gentle and a little wobbly, with a soft giggle, calls everyone dear. Speaks English with a northern Thai accent. A cartoon otter grandma character talking to a five-year-old."
+      }
+    }
+  }
+}
