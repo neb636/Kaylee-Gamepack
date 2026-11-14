@@ -1,8 +1,0 @@
-{
-  "title": "Salt hut: Pa Kluea out of the pole",
-  "checkIn": "fix",
-  "kaylee": "Pa Kluea now stands in front of the bamboo post, beside her pan, instead of with the post (or the chimney, on a tall iPad) running through her.",
-  "questions": [],
-  "reels": [{ "name": "nan-salt-aunty", "moments": ["#/world/thailand/nan-trip/salt~6", "#/world/thailand/nan-trip/salt?round=2~5"] }],
-  "links": [{ "label": "Open the salt hut", "hash": "#/world/thailand/nan-trip/salt" }]
-}
