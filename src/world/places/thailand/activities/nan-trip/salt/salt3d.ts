@@ -288,6 +288,7 @@ export class SaltHut extends Stage {
       drops: this.drops,
       put: (c, x, y, z, pose, face) => this.put(c, x, y, z, pose, face),
       say: (l) => this.ev.say(l),
+      auntyHome: () => (this.tallNow ? TALL.aunty : AUNTY_AT),
       hopAunty: () => this.hopAunty(),
       after: (s, f) => this.after(s, f),
       memory: (on) => this.longAgo(on),
