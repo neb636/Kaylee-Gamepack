@@ -12,14 +12,14 @@
       "name": "Thailand nan trip salt",
       "where": "#/world/thailand/nan-trip/salt",
       "seconds": 6,
-      "fps": 15.4,
+      "fps": 48.2,
       "status": "ok"
     },
     {
       "name": "Thailand nan trip salt",
       "where": "#/world/thailand/nan-trip/salt?round=2",
       "seconds": 5,
-      "fps": 17.3,
+      "fps": 49.5,
       "status": "ok"
     }
   ]
