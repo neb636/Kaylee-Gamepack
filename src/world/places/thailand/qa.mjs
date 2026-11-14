@@ -2246,8 +2246,8 @@ motion.push(
   },
 )
 
-// The Krabi map (the boat trip's hub, boat-trip/map/): the board alive (things poked: Chicken Island, the whale shark,
-// the pins of the places to come, the Emerald Pool, the ferry, the dolphins, Railay's monkey, the crab), the boat's pin
+// The Krabi map (the boat trip's hub, boat-trip/map/): the board alive (things poked: Chicken Island, the yacht,
+// Ao Nang's sailfish, the lighthouse, the dolphins, Railay's monkey, Krabi Town, a cloud), the boat's pin
 // tapped (it hops and spins, the longtail revs off and the camera dives in), and with both places done, the plane's
 // pin tapped (the plane takes off for home).
 const krabiReady = async (page, base, hash) => {
@@ -2261,7 +2261,7 @@ motion.push(
     seconds: 12,
     setup: (page, base) => krabiReady(page, base, 'map'),
     act: async (page) => {
-      for (const [what, wait] of [['spot:chicken', 1400], ['whale', 1800], ['pin:lanta', 1600], ['pin:aonang', 1500], ['spot:pool', 1300], ['ferry', 1300], ['dolphins', 1500], ['spot:railay', 1300], ['crab', 1200]]) {
+      for (const [what, wait] of [['spot:chicken', 1400], ['yacht', 1500], ['spot:aonang', 1300], ['spot:lighthouse', 1600], ['dolphins', 1500], ['spot:railay', 1300], ['place:town', 1200], ['cloud:0', 1600]]) {
         await tapAnchor(page, what)
         await page.waitForTimeout(wait)
       }

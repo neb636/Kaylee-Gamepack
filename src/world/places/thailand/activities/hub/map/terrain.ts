@@ -279,6 +279,8 @@ const seaFragment = /* glsl */ `
   uniform vec3 uMid;
   uniform vec3 uDeep;
   uniform vec3 uLight;
+  uniform float uRings;
+  uniform float uDashes;
   varying vec3 vWorld;
   float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
   void main() {
@@ -297,13 +299,13 @@ const seaFragment = /* glsl */ `
     float k = (d - uTime * 0.028) * 6.5;
     float ring = step(fract(k), 0.17) * (1.0 - smoothstep(0.1, 0.5, d));
     ring *= step(0.34, hash(floor(p * 2.2) + floor(k)));
-    foam = max(foam, ring * 0.85);
+    foam = max(foam, ring * 0.85 * uRings);
     // Little wave dashes on the open sea, drifting.
     vec2 q = vec2(p.x * 2.2 + uTime * 0.12, p.y * 4.5);
     vec2 cell = floor(q);
     vec2 f = fract(q);
     float dash = step(0.9, hash(cell)) * step(0.2, f.x) * step(f.x, 0.75) * step(0.4, f.y) * step(f.y, 0.62) * step(0.3, d);
-    foam = max(foam, dash * 0.75);
+    foam = max(foam, dash * 0.75 * uDashes);
     gl_FragColor = vec4(mix(col, vec3(1.0), foam), 1.0);
     #include <colorspace_fragment>
   }
@@ -330,13 +332,20 @@ export interface SeaColors {
 }
 const SEA_COLORS: SeaColors = { shallow: '#B9F3EA', mid: '#7FE0E6', deep: '#6CCDF0', light: '#7FD8F4' }
 
+/** How busy the water is: the foam rings drifting out from the shore and the little wave dashes on the open sea (1:
+ *  the Thailand map's; 0: none, a calm sea). */
+export interface SeaFoam {
+  rings: number
+  dashes: number
+}
+
 /** The sea: one flat plane over the whole board, drawn by a small shader that knows how far each spot is from land.
  *  (The Thailand map's, and any trip map's with sea: the Krabi map's, boat-trip/map/.) */
 export class Sea {
   readonly mesh: Mesh
   private mat: ShaderMaterial
 
-  constructor(s: SeaMap, plane: { w: number; d: number; cx?: number; cz?: number }, bag: Bag, colors: Partial<SeaColors> = {}) {
+  constructor(s: SeaMap, plane: { w: number; d: number; cx?: number; cz?: number }, bag: Bag, colors: Partial<SeaColors> = {}, foam: Partial<SeaFoam> = {}) {
     const c = { ...SEA_COLORS, ...colors }
     const half = new Uint16Array(s.w * s.h)
     for (let i = 0; i < half.length; i++) half[i] = DataUtils.toHalfFloat(s.data[i])
@@ -353,6 +362,8 @@ export class Sea {
           uMid: { value: new Color(c.mid) },
           uDeep: { value: new Color(c.deep) },
           uLight: { value: new Color(c.light) },
+          uRings: { value: foam.rings ?? 1 },
+          uDashes: { value: foam.dashes ?? 1 },
         },
         vertexShader: seaVertex,
         fragmentShader: seaFragment,

@@ -3,7 +3,7 @@
 // shore, bright jungle greens that deepen up the hills, dark mangroves round the top of Phang Nga Bay, the Krabi River
 // and the creeks with pale banks, a soft shadow under every palm, rock and toy. No roads and no fields: this is a map
 // of sea, rock and beach. The sea (the Thailand map's Sea, in Krabi's own emerald greens) foams along every shore and
-// round every rock tower, and goes pale over the sandbars (layout.ts SHOALS).
+// round every rock tower, and goes pale over the sandbars (layout.ts SHOALS). It's a calm sea: no foam rings.
 import { BufferAttribute, BufferGeometry, CanvasTexture, Mesh, MeshToonMaterial, SRGBColorSpace } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { toonGradient } from '../../../../../engine3d/toon'
@@ -131,8 +131,9 @@ function build() {
       let d = Math.max(0, -land[i])
       const x = x0 + (ix + 0.5) / RES
       const z = z0 + (iz + 0.5) / RES
+      // (A tight halo: the shore's pale band reaches only a little way out from a rock.)
       for (const [kx, kz, r] of karsts) {
-        const k = Math.hypot(x - kx, z - kz) - r
+        const k = (Math.hypot(x - kx, z - kz) - r) * 1.7
         if (k < d) d = Math.max(0, k)
       }
       // (The shader's bands and foam are sized for the Thailand map: here the bay is narrower, so its water reads a
@@ -153,7 +154,8 @@ export function buildField(): Field {
   return build().field
 }
 
-/** The sea, the size of the board, foaming along the real coasts. */
+/** The sea, the size of the board, foaming along the real coasts. A calm sea: no foam rings drifting out from the
+ *  shore, only a few wave dashes far out. */
 export function buildSea(bag: Bag) {
   const b = build()
   const W = BOARD.x1 - BOARD.x0
@@ -163,6 +165,7 @@ export function buildSea(bag: Bag) {
     { w: W, d: D, cx: (BOARD.x0 + BOARD.x1) / 2, cz: (BOARD.z0 + BOARD.z1) / 2 },
     bag,
     SEA,
+    { rings: 0, dashes: 0.35 },
   )
 }
 
@@ -288,7 +291,7 @@ function paint(f: Field, { shadows }: GroundInput) {
   const rivers = RIVERS.map((r) => r.map(([lon, lat]) => ll(lon, lat)))
 
   // ---- Jungle: soft darker and lighter blots all over the green, so the land isn't one flat color.
-  for (let n = 0; n < 1400; n++) {
+  for (let n = 0; n < 700; n++) {
     const x = BOARD.x0 + rnd() * W
     const z = BOARD.z0 + rnd() * D
     if (f.land(x, z) < 0.13) continue

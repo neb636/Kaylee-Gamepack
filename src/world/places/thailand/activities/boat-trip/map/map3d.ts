@@ -8,15 +8,13 @@
 // spins in a burst of sparkles, the camera dives in and that part of the trip opens (the pier: the family's longtail
 // revs off into the bay; Baan Chang: the elephants trumpet and spray). The places she's done wear a pink stamp instead;
 // the newest one lands with a ka-chunk when she comes back. After one place the way home opens: the plane's pin pops
-// up over the airport, and a tap sends the tiny plane down the runway and away. The places still to come (Ao Nang's
-// beach front, Koh Lanta) wear a lavender pin: a tap only plays with it.
+// up over the airport, and a tap sends the tiny plane down the runway and away.
 //
-// Things to poke: Ao Nang's beach (the sailfish leaps), Railay's cliffs (the monkey hops and chatters), Chicken Island
-// (it clucks and bobs), Koh Phi Phi, Koh Lanta's huts and its lighthouse (the lamp comes on and turns), Khao Phanom
-// Bencha (its waterfall splashes, its cloud rains), the Emerald Pool (a splash), Ko Tapu and Ko Panyee's stilt village
-// (a cheer from the pitch), the giant crab in Krabi Town (it waves its big claw), the elephants (a trumpet and a
-// spray), the longtails (they roar off), the ferry (toot toot), the dolphins (they leap), the turtle (it dives), the
-// sea eagle (it swoops), the clouds (a little rain), the rock towers (a splash) and the tiny plane (round the circuit).
+// Things to poke, a few and calm (2026-11-14: the first board was too busy): Ao Nang's beach (the sailfish leaps),
+// Railay's cliffs (the monkey hops and chatters), Chicken Island (it clucks and bobs), Koh Phi Phi and Ko Tapu (a
+// splash), Koh Lanta's lighthouse (the lamp comes on and turns), Krabi Town (its shophouses bounce), the elephants (a
+// trumpet and a spray), the longtails (they roar off), the dolphins (they leap), the yacht (it spins), the clouds (a
+// little rain), the rock towers (a splash) and the tiny plane (round the circuit).
 //
 // Talk (lines.ts, Dad and Sparkle, all recorded already): the first time, Dad asks "Where to, Captain?"; when she
 // picks, "Pai!". After ~8 s with nothing done Sparkle says what's next: elephants or the boat, the elephants are
@@ -40,8 +38,6 @@ import {
   BOAT_LOOPS,
   CLOUDS,
   DOLPHINS,
-  EAGLE,
-  FERRY,
   HOME_AFTER,
   ll,
   PIN_IDS,
@@ -54,8 +50,6 @@ import {
   STAMP_Y,
   STOP_PLACE,
   STOPS,
-  TURTLE,
-  WHALE,
   YACHT,
   type PinId,
   type PlaceId,
@@ -80,12 +74,8 @@ const SPOT_LABELS: Record<SpotId, string> = {
   railay: "Railay's cliffs",
   chicken: 'Chicken Island',
   phiphi: 'Koh Phi Phi',
-  lanta: 'Koh Lanta',
   lighthouse: "Koh Lanta's lighthouse",
-  bencha: 'Khao Phanom Bencha, the waterfall',
-  pool: 'The Emerald Pool',
   nail: 'Ko Tapu, the Nail Island',
-  panyee: "Ko Panyee's floating football pitch",
 }
 const SPOT_IDS = Object.keys(SPOTS) as SpotId[]
 
@@ -96,14 +86,9 @@ export const MAP_ANCHORS: AnchorInfo[] = [
   { id: 'plane', label: 'Tiny plane', kind: 'thing' },
   { id: 'pierboat', label: 'Our longtail boat', kind: 'thing' },
   ...BOAT_LOOPS.map((_, i): AnchorInfo => ({ id: `boat:${i}`, label: 'Longtail boat', kind: 'thing' })),
-  { id: 'ferry', label: 'The ferry', kind: 'thing' },
   { id: 'elephants', label: 'Elephants', kind: 'thing' },
-  { id: 'crab', label: 'The giant crab', kind: 'thing' },
   { id: 'dolphins', label: 'Dolphins', kind: 'thing' },
-  { id: 'turtle', label: 'Sea turtle', kind: 'thing' },
-  { id: 'whale', label: 'Whale shark', kind: 'thing' },
   { id: 'yacht', label: 'Sailboat', kind: 'thing' },
-  { id: 'eagle', label: 'Sea eagle', kind: 'thing' },
   ...CLOUDS.map((_, i): AnchorInfo => ({ id: `cloud:${i}`, label: 'Cloud', kind: 'thing' })),
 ]
 
@@ -136,8 +121,6 @@ export class KrabiMap extends Stage {
   private rain = CLOUDS.map(() => -1)
   private stampT = -1
   private boatA = BOAT_LOOPS.map((_, i) => i * 2.2)
-  private ferryK = 0
-  private eagleA = 0
   private later: { t: number; f: () => void }[] = []
   private sparkles: Floaters
   private drops: Floaters
@@ -292,11 +275,7 @@ export class KrabiMap extends Stage {
     this.poke(`place:${id}`)
     const stop = (Object.keys(STOP_PLACE) as Stop[]).find((s) => STOP_PLACE[s] === id)
     const stamp = stop ? this.d.stamps[stop] : null
-    if (id === 'town') {
-      this.poke('crab')
-      sfx.crab()
-      return
-    }
+    if (id === 'town') return sfx.town()
     if (stamp?.visible) {
       sfx.been()
       this.poke(`stamp:${stop}`)
@@ -309,7 +288,6 @@ export class KrabiMap extends Stage {
     const [x, z] = SPOTS[id]
     switch (id) {
       case 'aonang':
-        this.poke('pin:aonang')
         this.foam.burst(new Vector3(x + 0.3, this.ground(x, z) + 0.06, z + 0.03), 8, 0.3, 0.5, 0.4, 0.016)
         return sfx.twirl()
       case 'railay':
@@ -323,19 +301,6 @@ export class KrabiMap extends Stage {
         return sfx.splash(0.6)
       case 'lighthouse':
         return sfx.glow()
-      case 'lanta':
-        this.poke('pin:lanta')
-        this.poke('spot:lighthouse')
-        return sfx.glow()
-      case 'pool':
-        this.foam.burst(new Vector3(x, this.ground(x, z) + 0.05, z), 12, 0.4, 0.6, 0.5, 0.018)
-        this.sparkles.burst(new Vector3(x, this.ground(x, z) + 0.1, z), 8, 0.4, 0.5, 0.5, 0.02)
-        return sfx.splash(0.8)
-      case 'bencha':
-        if (this.rain[0] < 0) this.rain[0] = 0
-        return sfx.splosh()
-      case 'panyee':
-        return sfx.chime()
     }
   }
 
@@ -405,21 +370,21 @@ export class KrabiMap extends Stage {
     for (const id of PIN_IDS) {
       const pin = d.pins[id]
       const info = PINS[id]
-      const place = 'place' in info ? info.place : null
+      const place = info.place
       const stop = STOPS.find((s) => STOP_PLACE[s] === place)
       const g = pin.root
-      // A stop's pin until it's done (then its stamp); the way home's once it's open; the places to come always.
-      g.visible = stop ? !this.done.has(stop) : place === 'airport' ? this.homeT >= 0 : true
+      // A stop's pin until it's done (then its stamp); the way home's once it's open.
+      g.visible = stop ? !this.done.has(stop) : this.homeT >= 0
       if (!g.visible) continue
       const [x, z] = info.at
       const k = clamp((this.time - (this.pokeT.get(`pin:${id}`) ?? -9)) / 0.5, 0, 1)
-      const hint = !!place && hintId === place
+      const hint = hintId === place
       const pop = place === 'airport' ? clamp(this.homeT / 0.4, 0, 1) : 1
       const picked = this.arrived?.id === place
       g.position.y = this.ground(x, z) + info.lift + Math.sin(t * 2.2 + x * 3) * 0.03 + bell(k) * 0.14 + (hint ? Math.abs(Math.sin(t * 4)) * 0.09 : 0)
       g.rotation.y = this.rig.yaw * DEG + Math.sin(t * 0.9 + x) * 0.25
       const b = bell(k)
-      const size = PIN.size * (info.soon ? PIN.soon : 1) * (pop + bell(pop) * 0.25) * (picked ? 1 + 0.15 * clamp((this.time - this.arrived!.t) / HOP_S, 0, 1) : 1)
+      const size = PIN.size * (pop + bell(pop) * 0.25) * (picked ? 1 + 0.15 * clamp((this.time - this.arrived!.t) / HOP_S, 0, 1) : 1)
       g.scale.set(size * (1 + 0.1 * b), size * (1 - 0.12 * b + (k > 0.5 ? 0.12 * b : 0)), size * (1 + 0.1 * b))
       pin.mini.rotation.y = k < 1 ? k * k * (3 - 2 * k) * Math.PI * 2 : 0
       if (pin.spin) pin.spin.rotation.y = -t * (id === 'home' ? 1.6 : 2.4)
@@ -493,27 +458,6 @@ export class KrabiMap extends Stage {
       b.rotation.set(Math.sin(t * 1.7) * 0.04 - (off > 0 ? 0.08 : 0), -Math.PI / 2, Math.sin(t * 1.3) * 0.05)
       if (off > 0 && Math.random() < dt * 30) this.foam.emit(tmp.set(b.position.x + 0.1, 0.012, b.position.z), new Vector3(0.1, 0.1, 0), 0.8, 0.014)
     }
-    // ---- The ferry chugs round its run to Phi Phi and Lanta; poked, it toots and bobs ----
-    {
-      const ferry = d.ferry
-      const n = FERRY.length
-      this.ferryK = (this.ferryK + dt * 0.09) % n
-      const i = Math.floor(this.ferryK)
-      const fr = this.ferryK - i
-      const p0 = FERRY[(i - 1 + n) % n]
-      const p1 = FERRY[i]
-      const p2 = FERRY[(i + 1) % n]
-      const p3 = FERRY[(i + 2) % n]
-      const cr = (a: number, b: number, c: number, e: number) => 0.5 * (2 * b + (-a + c) * fr + (2 * a - 5 * b + 4 * c - e) * fr * fr + (-a + 3 * b - 3 * c + e) * fr * fr * fr)
-      const x = cr(p0[0], p1[0], p2[0], p3[0])
-      const z = cr(p0[1], p1[1], p2[1], p3[1])
-      const dx = x - ferry.position.x
-      const dz = z - ferry.position.z
-      const k = this.poked('ferry', 0.8)
-      ferry.position.set(x, 0.004 + (k >= 0 ? bell(k / 0.8) * 0.05 : Math.sin(t * 1.5) * 0.004), z)
-      if (Math.hypot(dx, dz) > 1e-5) ferry.rotation.y = Math.atan2(dx, dz)
-      if (Math.random() < dt * 5) this.foam.emit(tmp.set(x - Math.sin(ferry.rotation.y) * 0.18, 0.012, z - Math.cos(ferry.rotation.y) * 0.18), new Vector3(0, 0.04, 0), 1, 0.014)
-    }
     // ---- Dolphins: they bob and hop now and then; poked, both leap high with a splash ----
     {
       const k = this.poked('dolphins', 1.5)
@@ -530,29 +474,6 @@ export class KrabiMap extends Stage {
         if (p < 1) g.userData.in = false
       })
     }
-    // ---- The turtle paddles round off Lanta; poked, it dives and pops back up ----
-    {
-      const k = this.poked('turtle', 2)
-      const g = d.turtle
-      const a = t * 0.25
-      const dive = k >= 0 ? bell(clamp(k / 1.6, 0, 1)) : 0
-      g.root.position.set(TURTLE[0] + Math.cos(a) * 0.18, Math.sin(t * 1.4) * 0.004 - dive * 0.12, TURTLE[1] + Math.sin(a) * 0.12)
-      g.root.rotation.set(0, Math.atan2(-Math.sin(a) * 0.18, Math.cos(a) * 0.12), 0)
-      const paddle = Math.sin(t * (k >= 0 ? 12 : 3)) * 0.5
-      g.flipL.rotation.y = paddle
-      g.flipR.rotation.y = -paddle
-    }
-    // ---- The whale shark cruises slowly round the open sea, tail swinging; poked, it dives and comes up with a splash ----
-    {
-      const k = this.poked('whale', 2.4)
-      const w = d.whale
-      const a = t * 0.12
-      const dive = k >= 0 ? bell(clamp(k / 2, 0, 1)) : 0
-      w.root.position.set(WHALE.at[0] + Math.cos(a) * WHALE.rx, -0.012 - dive * 0.1 + Math.sin(t * 0.9) * 0.004, WHALE.at[1] + Math.sin(a) * WHALE.rz)
-      w.root.rotation.set(k >= 0 ? Math.sin(clamp(k / 2, 0, 1) * Math.PI * 2) * 0.4 : 0, Math.atan2(-Math.sin(a) * WHALE.rx, Math.cos(a) * WHALE.rz), 0)
-      w.tail.rotation.y = Math.sin(t * (k >= 0 ? 7 : 2.2)) * 0.45
-      if (k >= 0 && k < dt * 1.5) this.foam.burst(w.root.position.clone().setY(0.012), 14, 0.5, 0.6, 0.6, 0.02)
-    }
     // ---- The yacht sails round, leaning in the wind; poked, it spins right round ----
     {
       const k = this.poked('yacht', 1.4)
@@ -560,19 +481,6 @@ export class KrabiMap extends Stage {
       const y = d.yacht
       y.position.set(YACHT.at[0] + Math.cos(a) * YACHT.rx, 0.004 + Math.sin(t * 1.7) * 0.004, YACHT.at[1] + Math.sin(a) * YACHT.rz)
       y.rotation.set(0, Math.atan2(Math.sin(a) * YACHT.rx, -Math.cos(a) * YACHT.rz) + (k >= 0 ? (k / 1.4) * Math.PI * 2 : 0), 0.18 + Math.sin(t * 1.3) * 0.05)
-    }
-    // ---- The sea eagle circles high over the bay; poked, it swoops down to the water and back up ----
-    {
-      const k = this.poked('eagle', 2)
-      const swoop = k >= 0 ? bell(clamp(k / 2, 0, 1)) : 0
-      this.eagleA += dt * (0.35 + swoop * 0.6)
-      const a = this.eagleA
-      const e = d.eagle
-      e.root.position.set(EAGLE.at[0] + Math.cos(a) * EAGLE.r, EAGLE.y - swoop * 0.85 + Math.sin(t * 1.1) * 0.03, EAGLE.at[1] + Math.sin(a) * EAGLE.r * 0.7)
-      e.root.rotation.set(0, Math.atan2(-Math.sin(a) * EAGLE.r, Math.cos(a) * EAGLE.r * 0.7), -0.3)
-      const flap = swoop > 0.1 ? Math.sin(t * 14) * 0.6 : Math.sin(t * 2) * 0.12
-      e.wingL.rotation.z = flap
-      e.wingR.rotation.z = -flap
     }
     // ---- Baan Chang's elephants: ears flap; poked (or the elephants picked), trunks up and a spray ----
     {
@@ -589,12 +497,6 @@ export class KrabiMap extends Stage {
         const p = d.elephants[0].trunk.getWorldPosition(tmp)
         this.drops.emit(tmp.set(p.x, p.y + 0.03, p.z), new Vector3((Math.random() - 0.5) * 0.2, 0.5, (Math.random() - 0.5) * 0.2), 0.7, 0.01)
       }
-    }
-    // ---- The crab waves its big claw (a lot, when poked) ----
-    {
-      const k = this.poked('crab', 1.6)
-      d.crab.claw.rotation.z = k >= 0 ? Math.sin(k * 14) * 0.6 : Math.sin(t * 1.4) * 0.2
-      d.crab.root.position.y = this.ground(d.crab.root.position.x, d.crab.root.position.z) + (k >= 0 ? bell(clamp(k / 0.5, 0, 1)) * 0.04 : 0)
     }
     // ---- Railay's monkey hops; Chicken Island bobs its head; the lighthouse lamp turns ----
     {
@@ -670,10 +572,7 @@ export class KrabiMap extends Stage {
       return
     }
     if (id.startsWith('spot:')) return this.pokeSpot(id.slice(5) as SpotId)
-    if (id.startsWith('pin:')) {
-      const info = PINS[id.slice(4) as PinId]
-      return this.onTap('place' in info ? `place:${info.place}` : `spot:${info.spot}`, x, y)
-    }
+    if (id.startsWith('pin:')) return this.onTap(`place:${PINS[id.slice(4) as PinId].place}`, x, y)
     if (id.startsWith('cloud:')) {
       const i = Number(id.slice(6))
       if (this.rain[i] < 0) this.rain[i] = 0
@@ -697,28 +596,12 @@ export class KrabiMap extends Stage {
         if (this.open('chang')) return this.choose('chang')
         this.poke('elephants')
         return sfx.trumpet()
-      case 'ferry':
-        this.poke('ferry')
-        return sfx.toot()
-      case 'crab':
-        this.poke('crab')
-        this.poke('place:town')
-        return sfx.crab()
       case 'dolphins':
         this.poke('dolphins')
         return sfx.dolphin()
-      case 'turtle':
-        this.poke('turtle')
-        return sfx.plop()
-      case 'whale':
-        this.poke('whale')
-        return sfx.splash(1.1)
       case 'yacht':
         this.poke('yacht')
         return sfx.twirl()
-      case 'eagle':
-        this.poke('eagle')
-        return sfx.eagle()
     }
   }
 
@@ -824,12 +707,12 @@ export class KrabiMap extends Stage {
       const info = PINS[pid]
       if (!g.visible) return null
       // (Over the toys under it: the pin is what she taps.)
-      return { at: g.position.clone().setY(g.position.y + PIN.top * PIN.size * 0.5), r: 0.26, prio: 6, max: 150, glow: 'place' in info && glow(info.place) }
+      return { at: g.position.clone().setY(g.position.y + PIN.top * PIN.size * 0.5), r: 0.26, prio: 6, max: 150, glow: glow(info.place) }
     }
     if (id.startsWith('spot:')) {
       const s = id.slice(5) as SpotId
       const [x, z] = SPOTS[s]
-      const r = s === 'bencha' ? 0.34 : s === 'nail' || s === 'lighthouse' ? 0.12 : 0.18
+      const r = s === 'nail' || s === 'lighthouse' ? 0.12 : 0.18
       return { at: new Vector3(x, this.ground(x, z) + 0.12, z), r, prio: 2, max: 130 }
     }
     if (id.startsWith('cloud:')) return { at: d.clouds[Number(id.slice(6))].position.clone(), r: 0.26, prio: 1, max: 140 }
@@ -839,20 +722,10 @@ export class KrabiMap extends Stage {
         return { at: d.plane.position.clone(), r: 0.1, prio: 5, max: 100 }
       case 'pierboat':
         return { at: d.pierBoat.position.clone().setY(0.05), r: 0.11, prio: 4, max: 110 }
-      case 'ferry':
-        return { at: d.ferry.position.clone().setY(0.08), r: 0.13, prio: 4, max: 110 }
       case 'elephants':
         return { at: d.places.chang.position.clone().add(tmp.set(0.24, 0.12, 0.06)), r: 0.12, prio: 4, max: 110 }
-      case 'crab':
-        return { at: d.crab.root.position.clone().setY(d.crab.root.position.y + 0.08), r: 0.08, prio: 4, max: 100 }
       case 'dolphins':
         return { at: new Vector3(DOLPHINS[0], 0.08, DOLPHINS[1]), r: 0.16, prio: 3, max: 120 }
-      case 'turtle':
-        return { at: d.turtle.root.position.clone().setY(0.05), r: 0.1, prio: 3, max: 100 }
-      case 'eagle':
-        return { at: d.eagle.root.position.clone(), r: 0.1, prio: 5, max: 100 }
-      case 'whale':
-        return { at: d.whale.root.position.clone().setY(0.04), r: 0.2, prio: 3, max: 130 }
       case 'yacht':
         return { at: d.yacht.position.clone().setY(0.15), r: 0.14, prio: 3, max: 110 }
     }

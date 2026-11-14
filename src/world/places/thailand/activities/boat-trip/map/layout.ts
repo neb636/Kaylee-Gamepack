@@ -1,18 +1,19 @@
 // The Krabi map (section `map`; notes: planning/around-the-world/thailand/krabi-map.md), in meters: a toy diorama of
 // Krabi and Phang Nga Bay floating in the sky. Where everything stands: the places, the pins over them, the limestone
-// towers and the things in the sea. No roads: this is a map of sea, rock and beach, and she goes somewhere by tapping
-// its pin. The coasts are real (coast.ts, Natural Earth); the places are where they really are, the toys a little
+// towers and the few things in the sea. It's kept calm on purpose (2026-11-14: the first Krabi board was too busy):
+// open water between a few groups of rocks, a few palms, a handful of toys. No roads: this is a map of sea, rock and
+// beach, and she goes somewhere by tapping its pin. The coasts are real (coast.ts, Natural Earth); the places are where they really are, the toys a little
 // bigger than life. Pure data (no three.js): sections.ts can read it.
 //
 // Seen from above at a slant, north up the screen (-z):
 //
-//     Phuket's    Ko Panyee's stilt village    the mangroves of Ao Phang Nga          Khao Phanom Bencha
+//     Phuket's                                 the mangroves of Ao Phang Nga          Khao Phanom Bencha
 //     east side   Ko Tapu, the Nail Island      ~~ Phang Nga Bay, rock towers ~~      (a cloud on top)
 //                 Koh Yao Noi  Koh Yao Yai              the pier     Baan Chang     Krabi Town     the airport
 //                                                  Ao Nang, Railay      (the Krabi River, its twin rocks)
-//                                                Chicken Island, its sandbar           the Emerald Pool
+//                                                Chicken Island, its sandbar
 //                 the Andaman Sea           Koh Phi Phi                               Koh Lanta Noi
-//                                                                                     Koh Lanta Yai, the lighthouse
+//                     (dolphins, a yacht)                                             Koh Lanta Yai, the lighthouse
 import type { LonLat } from './coast'
 
 export type XZ = [number, number]
@@ -104,60 +105,49 @@ export const RUNWAY = { at: ll(99.16, 8.06), len: 0.62, w: 0.15, yaw: -0.88 }
 
 // ---------------------------------------------------------------- the toys, the pokes
 
-/** What stands on the board to poke. Ao Nang's beach front (umbrellas, longtails pulled up on the sand, the sailfish
- *  statue) and Koh Lanta (beach huts, and the lighthouse on its south tip) are the next places: each already wears a
- *  pin (PINS). Railay's cliffs, Chicken Island and its sandbar, Koh Phi Phi, Khao Phanom Bencha's waterfall, the
- *  Emerald Pool in the jungle, Ko Tapu and Ko Panyee are just for fun. */
+/** What stands on the board to poke, kept to a few so the board stays calm: Ao Nang's beach (two umbrellas and the
+ *  sailfish statue), Railay's cliffs with a monkey on top, Chicken Island and its sandbar, Koh Phi Phi, Koh Lanta's
+ *  lighthouse and Ko Tapu (the Nail Island). Ao Nang and Koh Lanta are the next places: making one a real place gives
+ *  it a pin (PINS). */
 export const SPOTS = {
   aonang: ll(98.818, 8.03),
   railay: ll(98.842, 8.008),
   chicken: ll(98.802, 7.95),
   phiphi: ll(98.772, 7.75),
-  lanta: ll(99.03, 7.6),
   lighthouse: ll(99.085, 7.483),
-  bencha: ll(98.99, 8.3),
-  pool: ll(99.15, 7.9),
   nail: ll(98.5, 8.272),
-  panyee: ll(98.51, 8.322),
 } satisfies Record<string, XZ>
 export type SpotId = keyof typeof SPOTS
 
 /** The pins: a pink pin floats over each place she can go to, with a little toy of the place on top (a baby elephant,
- *  a longtail among the rocks, the plane home). The places still to come wear a lavender pin (`soon`): tapping one
- *  only plays with it. Making one a real place: drop `soon`, give it a stop (STOPS) and its own section.
- *  `lift`: how high over the ground the pin's point hangs (clear of the toy under it). */
+ *  a longtail among the rocks, the plane home). Only the places she can go to wear one. `lift`: how high over the
+ *  ground the pin's point hangs (clear of the toy under it). */
 export const PINS = {
-  chang: { at: PLACES.chang.at, lift: 0.5, label: 'To the elephants', place: 'chang', soon: false },
-  bay: { at: PLACES.pier.at, lift: 0.4, label: 'To the boat', place: 'pier', soon: false },
-  home: { at: PLACES.airport.at, lift: 0.46, label: 'Fly home', place: 'airport', soon: false },
-  aonang: { at: SPOTS.aonang, lift: 0.4, label: 'Ao Nang beach', spot: 'aonang', soon: true },
-  lanta: { at: SPOTS.lanta, lift: 0.34, label: 'Koh Lanta', spot: 'lanta', soon: true },
-} satisfies Record<string, { at: XZ; lift: number; label: string; soon: boolean; place?: PlaceId; spot?: SpotId }>
+  chang: { at: PLACES.chang.at, lift: 0.5, label: 'To the elephants', place: 'chang' },
+  bay: { at: PLACES.pier.at, lift: 0.4, label: 'To the boat', place: 'pier' },
+  home: { at: PLACES.airport.at, lift: 0.46, label: 'Fly home', place: 'airport' },
+} satisfies Record<string, { at: XZ; lift: number; label: string; place: PlaceId }>
 export type PinId = keyof typeof PINS
 export const PIN_IDS = Object.keys(PINS) as PinId[]
 export const PLACE_PIN: Partial<Record<PlaceId, PinId>> = { chang: 'chang', pier: 'bay', airport: 'home' }
 
-/** The limestone towers standing in the sea, in Phang Nga Bay and off Krabi's coast: [lon, lat, size]. (diorama.ts
- *  drops any that land on land.) */
+/** The limestone towers standing in the sea, in three loose groups with open water between them (the references: a
+ *  calm bay, a few clusters, not a forest of rocks): [lon, lat, size]. (diorama.ts drops any that land on land.) */
 export const KARSTS: [number, number, number][] = [
-  // Phang Nga Bay, thick with them.
-  [98.47, 8.3, 1.25], [98.545, 8.3, 1.0], [98.478, 8.245, 0.9], [98.535, 8.24, 1.15], [98.575, 8.265, 0.8], [98.63, 8.25, 1.0],
-  [98.5, 8.2, 0.85], [98.56, 8.19, 0.7], [98.44, 8.2, 0.75], [98.6, 8.31, 0.8], [98.66, 8.2, 0.9], [98.42, 8.28, 0.8],
-  // The Hong islands and the rocks off Ao Nang.
-  [98.69, 8.13, 1.0], [98.675, 8.095, 0.8], [98.72, 8.06, 1.1], [98.74, 7.98, 0.9], [98.66, 7.99, 0.65],
-  // Out toward Koh Phi Phi and Koh Lanta.
-  [98.69, 7.9, 1.0], [98.62, 7.85, 0.75], [98.84, 7.86, 0.8], [98.99, 7.88, 0.75], [98.47, 8.13, 0.7],
-  [99.0, 7.79, 0.7], [98.9, 7.48, 0.9], [98.87, 7.5, 0.6], [98.58, 7.66, 0.7],
+  // Phang Nga Bay, between the Yao islands and Krabi's shore.
+  [98.54, 8.3, 1.15], [98.5, 8.235, 0.9], [98.575, 8.22, 1.05], [98.625, 8.27, 0.8], [98.6, 8.15, 0.7],
+  // The Hong islands, off Ao Nang.
+  [98.69, 8.11, 1.0], [98.66, 8.05, 0.75], [98.67, 7.99, 0.65],
+  // Out in the Andaman Sea, one or two on their own.
+  [98.65, 7.87, 0.85], [98.985, 7.86, 0.7], [98.88, 7.49, 0.8],
 ]
-/** The limestone hills on the land, jungle on top: [lon, lat, size]. Krabi's coast and the top of Phang Nga Bay are
- *  full of them. (diorama.ts drops any that fall in the sea or on a place.) */
+/** The limestone crags on the land, jungle on top: [lon, lat, size]. Just a few, round the top of the bay and behind
+ *  Krabi Town. (diorama.ts drops any that fall in the sea or on a place.) */
 export const CRAGS: [number, number, number][] = [
-  [98.765, 8.1, 1.1], [98.76, 8.16, 1.0],
-  [98.935, 8.19, 1.2], [98.965, 8.22, 0.9],
-  [98.55, 8.42, 1.4], [98.62, 8.4, 1.0], [98.46, 8.4, 1.2], [98.4, 8.37, 0.9], [98.68, 8.42, 0.9],
-  [98.78, 8.36, 1.1], [98.74, 8.39, 0.9], [98.83, 8.33, 0.8],
-  [99.12, 7.99, 0.9], [99.05, 8.0, 0.7], [99.17, 7.82, 0.8],
-  [98.6, 8.16, 0.7], [98.34, 8.22, 0.9],
+  [98.765, 8.1, 1.1],
+  [98.935, 8.19, 1.1],
+  [98.55, 8.42, 1.3],
+  [98.44, 8.395, 1.0],
 ]
 /** Krabi Town's twin rocks at the river mouth (Khao Khanap Nam). */
 export const TWINS: [number, number][] = [[98.905, 8.062], [98.925, 8.058]]
@@ -166,28 +156,19 @@ export const TWINS: [number, number][] = [[98.905, 8.062], [98.925, 8.058]]
 export const SANDBAR: XZ[] = [SPOTS.chicken, [SPOTS.chicken[0] - 0.13, SPOTS.chicken[1] + 0.12], [SPOTS.chicken[0] - 0.3, SPOTS.chicken[1] + 0.15], [SPOTS.chicken[0] - 0.42, SPOTS.chicken[1] + 0.07]]
 export const SHOALS: [number, number, number][] = [
   ...SANDBAR.map(([x, z]) => [x, z, 0.1] as [number, number, number]),
-  [...ll(98.772, 7.745), 0.2], [...ll(98.98, 7.6), 0.16], [...ll(98.99, 7.5), 0.14], [...ll(98.6, 8.02), 0.12], [...ll(98.79, 8.0), 0.14],
+  [...ll(98.772, 7.745), 0.2], [...ll(98.98, 7.6), 0.16], [...ll(98.99, 7.5), 0.14],
 ]
 
-/** The longtails buzzing round the bay and off Ao Nang: [lon, lat, east-west radius, north-south radius (m)]. */
-export const BOAT_LOOPS: [number, number, number, number][] = [
-  [98.53, 8.255, 0.32, 0.22],
-  [98.79, 8.0, 0.24, 0.13],
-]
-/** The big ferry's run: Krabi Town's river mouth, Koh Phi Phi, Koh Lanta and back (out in the sea all the way). */
-export const FERRY: XZ[] = [ll(98.9, 8.035), ll(98.86, 7.92), ll(98.82, 7.79), ll(98.85, 7.7), ll(98.95, 7.63), ll(98.97, 7.7), ll(98.95, 7.84), ll(98.93, 7.97)]
-/** The dolphins out in the Andaman Sea, the sea turtle off Koh Lanta, the sea eagle circling over the bay. */
+/** The longtail buzzing slowly round Phang Nga Bay, among the rocks: [lon, lat, east-west radius, north-south radius
+ *  (m)]. */
+export const BOAT_LOOPS: [number, number, number, number][] = [[98.53, 8.255, 0.32, 0.2]]
+/** The dolphins out in the Andaman Sea. */
 export const DOLPHINS = ll(98.44, 7.56)
-export const TURTLE = ll(98.98, 7.53)
-export const EAGLE = { at: ll(98.6, 8.18), r: 0.45, y: 1.05 }
-/** Out in the open Andaman Sea: a whale shark cruising round (they visit the reefs off Koh Lanta), and a yacht with a
- *  pink sail: [lon, lat], and the loop's east-west and north-south radius (m). */
-export const WHALE = { at: ll(98.53, 7.8), rx: 0.4, rz: 0.26 }
-export const YACHT = { at: ll(98.66, 7.53), rx: 0.38, rz: 0.2 }
+/** A yacht with a pink sail on the open sea, going slowly round: [lon, lat], and the loop's east-west and north-south
+ *  radius (m). */
+export const YACHT = { at: ll(98.66, 7.6), rx: 0.38, rz: 0.2 }
 /** The clouds over the hills (tap: a little rain): [lon, lat, height]. */
 export const CLOUDS: [number, number, number][] = [
   [98.99, 8.3, 1.1],
-  [99.17, 8.33, 0.85],
-  [98.32, 8.05, 0.8],
   [99.12, 7.62, 0.72],
 ]
