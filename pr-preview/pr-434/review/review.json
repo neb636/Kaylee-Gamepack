@@ -1,0 +1,13 @@
+{
+  "title": "Krabi map: calmer",
+  "checkIn": "fix",
+  "kaylee": "The Krabi map is quieter: open water and a few groups of rocks, the pins easy to spot, and still a handful of toys to poke.",
+  "questions": [
+    "Calm enough now, or still too busy?",
+    "Is anything you miss gone (the whale shark, the ferry, the lavender pins for places to come)?"
+  ],
+  "links": [
+    { "label": "The Krabi map", "hash": "#/world/thailand/boat-trip/map" },
+    { "label": "Both stamps in (the plane home)", "hash": "#/world/thailand/boat-trip/map?been=chang,bay" }
+  ]
+}
