@@ -23,11 +23,12 @@ export const screens = [
   // The flight over each leg (the balloon behind Terry; Pola fanning herself in the warm middle; the albatross in the
   // south), each round of Papa's song (three dads; five dads; the snowstorm), a question of each kind (drag, spin,
   // tap a pole, pick from the row) and the badge.
-  ...['fly?leg=north', 'fly?leg=warm', 'fly?leg=south', 'song', 'song?round=2', 'song?round=3', 'quiz?q=bear', 'quiz?q=south&stars=2', 'quiz?q=coldest&stars=3', 'quiz?q=summer&stars=4', 'quiz?q=tern&stars=1', 'badge'].map((to) => ({
+  // (The badge first: the first screen of a run also waits for the place's code to load.)
+  ...['badge', 'fly?leg=north', 'fly?leg=warm', 'fly?leg=south', 'song', 'song?round=2', 'song?round=3', 'quiz?q=bear', 'quiz?q=south&stars=2', 'quiz?q=coldest&stars=3', 'quiz?q=summer&stars=4', 'quiz?q=tern&stars=1'].map((to) => ({
     name: `poles-party-${to.replace(/[?=&]/g, '-')}`,
     hash: link(to),
     reset: true,
-    wait: to.startsWith('song') ? 5200 : to === 'fly?leg=south' ? 9000 : 3200,
+    wait: to === 'badge' ? 9000 : to.startsWith('song') ? 5200 : to === 'fly?leg=south' ? 9000 : to.startsWith('fly') ? 5000 : 3200,
   })),
   // The finale as she meets it (no section in the link): the film of the balloon lifting off.
   { name: 'poles-party-film', hash: '#/world/poles/party?stamps=all', reset: true, wait: 3500 },

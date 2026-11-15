@@ -34,7 +34,7 @@ const SONG = knobs('song', "Papa's song", FILE, {
   sway: { value: 0.22, min: 0, max: 0.6, step: 0.01, label: 'Sway', unit: 'rad', note: 'how far a singer rocks to his notes' },
   help: { value: 2, min: 1, max: 5, step: 1, label: 'Misses before help', unit: '', note: 'after this many wrong dads in a round, the right one sways and glows' },
   call: { value: 2.6, min: 1.5, max: 6, step: 0.1, label: 'Blizzard calls every', unit: 's', note: 'in the snowstorm the dads call in turn, this far apart' },
-  white: { value: 0.9, min: 0.3, max: 1, step: 0.02, label: 'Whiteout', unit: '', note: 'how much of the row the snowstorm hides (1 = only shapes)' },
+  white: { value: 0.86, min: 0.3, max: 1, step: 0.02, label: 'Whiteout', unit: '', note: 'how much of the row the snowstorm hides (1 = only shapes)' },
 })
 
 export const ROUNDS = 3
@@ -45,7 +45,7 @@ const PLAN: { dads: number[]; papa: number }[] = [
   { dads: [1, 2, 3, 5], papa: 5 },
 ]
 /** Where a found pair goes to watch the rest: [papa x, z, chick x, z]. */
-const PAIR_SPOT: [number, number, number, number][] = [[-4.3, 1.1, -3.5, 1.5], [4.3, 1.1, 3.5, 1.5], [0.5, 0.9, -0.3, 1.4]]
+const PAIR_SPOT: [number, number, number, number][] = [[-3.9, 0.9, -3.1, 1.3], [3.9, 0.9, 3.1, 1.3], [0.5, 0.9, -0.3, 1.4]]
 
 export type MissKind = 'bow' | 'neighbor' | 'peek'
 export type SongPoke = 'pola' | 'colony' | 'balloon' | 'pair' | 'snow'
@@ -183,13 +183,13 @@ export class SongWorld implements World3D {
     this.pola = actor('pola', 1.2, 'pola')
     for (let i = 0; i < 5; i++) {
       const c = actor('papa', 1.3 + (i % 3) * 0.06)
-      this.colonyHome.push([-5.6 + (i % 3) * 1.3 - Math.floor(i / 3) * 0.6, -6.6 - Math.floor(i / 3) * 1.3])
+      this.colonyHome.push([-7.4 + (i % 3) * 1.3 - Math.floor(i / 3) * 0.6, -9 - Math.floor(i / 3) * 1.3])
       c.place(this.colonyHome[i][0], 0, this.colonyHome[i][1], 60)
       this.colony.push(c)
     }
-    this.pola.place(5.6, 0, -5.6, -50)
+    this.pola.place(5.2, 0, -8.5, -50)
     this.balloon = new Balloon(bag)
-    this.balloon.root.position.set(8.2, 0.25, -8.5)
+    this.balloon.root.position.set(7, 0.25, -11)
     scene.add(this.balloon.root)
 
     this.flakes = new Particles({ kind: 'spray', count: 420, color: '#FFFFFF', gravity: 0.4 }, bag)
@@ -250,6 +250,8 @@ export class SongWorld implements World3D {
       else d.a.walkTo(d.slot.x, d.slot.z, 1.7, 0)
     })
     const c = this.chick
+    this.chickTalker = c
+    this.papaTalker = null
     if (snap) c.place(0, 0, 1.3, 0)
     else {
       c.place(n === 1 ? 8.5 : -8.5, 0, 2.2, 0)
@@ -345,7 +347,7 @@ export class SongWorld implements World3D {
 
   private shot(): Shot {
     // The row, the chick in front and the pairs at the sides; the snowstorm comes in a little closer.
-    return { center: new Vector3(0, 1.05, -0.1), half: new Vector3(5, 1.55, 2.3), yaw: 0, pitch: 9, minDist: 3, maxDist: 60 }
+    return { center: new Vector3(0, 0.95, 0), half: new Vector3(4.5, 1.25, 1.2), yaw: 0, pitch: 8, minDist: 3, maxDist: 60 }
   }
   setSize(w: number, h: number, top: number) {
     this.w = w
@@ -454,11 +456,11 @@ export class SongWorld implements World3D {
     }
 
     // The snowstorm: the white comes in round the row (measured from the camera, so it's the same on any screen).
-    this.storm += ((this.round === 2 && this.state !== 'done' ? 1 : 0) - this.storm) * (1 - Math.exp(-dt * 0.9))
+    this.storm += ((this.round === 2 && this.state !== 'done' ? 1 : 0) - this.storm) * (1 - Math.exp(-dt * 1.8))
     const k = this.storm
     const dist = this.rig.camera.position.length()
     this.fog.near = DAY.near + (dist - 5.5 - DAY.near) * k
-    this.fog.far = DAY.far + (dist + 1.2 + (1 - SONG.white) * 12 - DAY.far) * k
+    this.fog.far = DAY.far + (dist + 1.6 + (1 - SONG.white) * 14 - DAY.far) * k
     this.bg.copy(DAY.sky).lerp(WHITE, k)
     this.fog.color.copy(this.bg)
     const fall = (0.25 + 5 * k) * dt * 60
@@ -551,14 +553,14 @@ export class SongWorld implements World3D {
     const before = this.gag
     const g = (this.gag += dt)
     const at = (s: number) => before < s && g >= s
-    if (at(3)) this.pola.walkTo(-1.6, -6.4, 3.2, -70)
+    if (at(3)) this.pola.walkTo(-3.4, -9.2, 3.2, -70)
     if (at(6.4)) {
       this.pola.wave()
       this.pola.pull('happy')
     }
     if (at(7)) this.shy(1.9)
     if (at(8.6)) this.pola.pull('sad')
-    if (at(9.6)) this.pola.walkTo(5.6, -5.6, 3.4, -50)
+    if (at(9.6)) this.pola.walkTo(5.2, -8.5, 3.4, -50)
     if (at(13.4)) this.colony.forEach((c, i) => c.walkTo(this.colonyHome[i][0], this.colonyHome[i][1], 2, 60))
     if (g > 18) this.gag = 0
   }

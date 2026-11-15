@@ -105,8 +105,10 @@ const ALT = 0.075
 const QUIZ_N = 6
 /** The balloon: its size on the globe (story/props.ts builds it about 5.5 m tall), how far behind Terry it trails and
  *  how high its basket floor is. */
-const B_SCALE = 0.021
-const B_BACK = 0.1
+const B_SCALE = 0.03
+const B_BACK = 0.18
+/** It leans forward as it is towed (and so the basket, and the friends' faces, show under it from behind). */
+const B_LEAN = -0.7
 const B_Y = 1.014
 /** The sea under the flight: Arctic blue, the warm middle's turquoise, the deep southern blue. */
 const SEA: Record<Leg, Color> = { north: new Color(OCEAN), warm: new Color('#3FD9CE'), south: new Color('#6AA8EE') }
@@ -316,8 +318,9 @@ export class PartyWorld implements World3D {
     this.pebble = makePebble(kit, 'pebble')
     ;[this.pola, this.pebble].forEach((c, i) => {
       const [x, , z] = this.balloon.seat(i)
-      c.root.scale.setScalar((i ? 0.5 : 0.56) / c.height)
-      c.root.position.set(x * 1.15, 0.36, z)
+      // (Toy sizes: two big plush friends standing out of a little basket.)
+      c.root.scale.setScalar((i ? 1.05 : 1.2) / c.height)
+      c.root.position.set(x * 1.5, 0.36, z + 0.2)
       this.balloon.basket.add(c.root)
     })
     this.makeAlbatross()
@@ -572,7 +575,7 @@ export class PartyWorld implements World3D {
   private shot(): Shot {
     // Close behind Terry, looking down his way, with room either side for his reach.
     // (Steep enough that the balloon, nearer her, sits below him in the picture and not over him.)
-    if (this.section === 'fly') return { center: new Vector3(0, 1.05, -0.07), half: new Vector3(FLY.reach + 0.05, 0.06, 0.2), yaw: 0, pitch: 36, minDist: 0.05, maxDist: 4 }
+    if (this.section === 'fly') return { center: new Vector3(0, 1.05, -0.02), half: new Vector3(FLY.reach + 0.05, 0.06, 0.25), yaw: 0, pitch: 36, minDist: 0.05, maxDist: 4 }
     // The whole globe, with the row of pieces under it and room above for the badge.
     return { center: new Vector3(0, -0.38, 0), half: new Vector3(1.12, 1.56, 0.3), yaw: 0, pitch: 4 }
   }
@@ -800,7 +803,7 @@ export class PartyWorld implements World3D {
     this.balloonKick = Math.max(0, this.balloonKick - dt * 1.4)
     const kick = this.balloonKick * Math.sin(this.balloonKick * 16)
     this.balloonG.position.set(this.balloonX, B_Y + 0.006 * kick, B_BACK)
-    this.balloonG.rotation.set(-0.16, 0, this.balloonLean + 0.25 * kick)
+    this.balloonG.rotation.set(B_LEAN, 0, this.balloonLean + 0.25 * kick)
     this.balloon.update(dt, t)
     const cam = this.rig.camera.position
     this.pola.update(dt, t, cam)
@@ -840,7 +843,7 @@ export class PartyWorld implements World3D {
     this.whales.forEach((w) => (w.o.visible = false))
     // Terry hovers beside the globe: it's his quiz. (He faces her now, not down his way.)
     this.terry.visible = true
-    this.terry.scale.setScalar(3.2)
+    this.terry.scale.setScalar(5)
     this.ternPose.quaternion.identity()
     this.fish.forEach((f) => (f.o.visible = false))
     this.clouds.forEach((c) => (c.o.visible = false))
@@ -939,8 +942,8 @@ export class PartyWorld implements World3D {
     // The host: up beside the globe, beating his wings (in the row instead when he's one of the answers).
     this.terry.visible = this.qState !== 'done' && this.q !== 'tern'
     if (this.hostHop >= 0 && (this.hostHop += dt / 0.6) >= 1) this.hostHop = -1
-    this.terry.position.set(-0.98, 0.98 + 0.03 * Math.sin(t * 2.2) + (this.hostHop >= 0 ? 0.12 * bell(this.hostHop) : 0), 0.35)
-    this.terry.rotation.set(0, 0.35 + (this.hostHop >= 0 ? smooth(this.hostHop) * Math.PI * 2 : 0), 0)
+    this.terry.position.set(0.92, 0.72 + 0.03 * Math.sin(t * 2.2) + (this.hostHop >= 0 ? 0.12 * bell(this.hostHop) : 0), 0.4)
+    this.terry.rotation.set(0, -0.35 + (this.hostHop >= 0 ? smooth(this.hostHop) * Math.PI * 2 : 0), 0)
     this.ternLife.update(dt)
     this.flapWings(1, Math.sin(t * 10))
     tq.setFromAxisAngle(tmp.set(1, 0, 0), this.pitch).multiply(tq2.setFromAxisAngle(UP, this.yaw))
@@ -1299,12 +1302,12 @@ export class PartyWorld implements World3D {
         if (s.z < 1) spot = { x: s.x, y: s.y, size: Math.max(min, size), z, glow }
       }
       if (id === 'terry' && this.section === 'fly') at(this.terry.position, 110)
-      else if (id === 'balloon' && this.section === 'fly') at(this.balloonG.localToWorld(tmp.set(0, 0.06, 0)), 120, 4800)
+      else if (id === 'balloon' && this.section === 'fly') at(this.balloonG.localToWorld(tmp.set(0, 0.07, 0)), 140, 4800)
       else if (id === 'albatross' && this.section === 'fly' && this.albatross.visible) at(this.albatross.position, 96, 4700)
       else if (id === 'whale' && this.section === 'fly') {
         const w = this.whales.find((w) => this.earth.localToWorld(tmp.copy(w.at)).y > 0.93 && Math.abs(tmp.z + 0.1) < 0.22)
         if (w) at(tmp, 96, 4600)
-      } else if (id === 'host' && this.section === 'quiz' && this.terry.visible) at(this.terry.position, 96, 5500)
+      } else if (id === 'host' && this.section === 'quiz' && this.terry.visible) at(tmp.copy(this.terry.position).setY(this.terry.position.y + 0.18), 110, 5500)
       else if (id === 'globe' && this.section === 'quiz') spot = { x: g.x, y: g.y, size: g.r * 2, z: 1 }
       else if (id === 'piece' && kind === 'drag' && this.row[0]) at(this.row[0].o.getWorldPosition(tmp).add(tmp2.set(0, 0.1, 0)), g.r * 0.32, 9000)
       else if ((id === 'north' || id === 'south') && kind === 'tap') at(this.poleWorld(id, tmp, 0.96), g.r * 0.6, 6000)
