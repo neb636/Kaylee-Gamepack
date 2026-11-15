@@ -13,8 +13,11 @@
 // Payoff: night falls, a tap on the forest sends up a sky lantern, the balloon's ribbons turn red and white like the
 // flag, every friend lines up wearing their present, Luna says gracias and Sparkle says what it means. Then onDone
 // (the shell's trophy ceremony). Per-frame work (the presents, the friends, the lanterns) runs in refs and one loop.
-// Where it stands (2026-11-15): check-in 2 (hear it). Scratch voices; the worn presents' spots on each friend are hand
-// placed (WEAR below); Kaylee hasn't played it.
+// Where it stands (2026-11-15, PR #453): check-in 2 (hear it). Scratch voices recorded; the worn presents' spots on
+// each friend are hand placed (WEAR below, checked on the night lineup). Open for the user: the length (a fourth stop
+// with Paco and Abuela?) and lanterns or fireflies. Next: check-in 3, Kaylee's playtest (does she find the pull-down
+// on her own, and does she give presents to the friend she aims at). Robot play: the whole trip to the trophy takes
+// about 45 s of fast drops on iPad landscape, iPad portrait and iPhone, with no errors.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode, type RefObject } from 'react'
 import { Buddy, burst, firstTime, say, sounds, spendHint, SparklePuppet, useAlive, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
