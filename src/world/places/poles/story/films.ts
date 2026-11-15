@@ -590,7 +590,7 @@ const slideIn: StoryFilm = {
       },
       {
         id: 'call',
-        shot: close(papa, 0.5, 3, 0.1),
+        shot: close(papa, 0.8, 4.8, 0.1),
         say: X.call,
         start: () => (papa.armsUp = 0.5),
         cues: [[0.2, () => s.sfx.call()], [1.6, () => ((papa.headTurn = 0.6), 0)], [2.4, () => (papa.headTurn = -0.6)]],
@@ -697,7 +697,7 @@ const huddleIn: StoryFilm = {
       },
       {
         id: 'wait',
-        shot: close(papa, 0.5, 3, 0.1),
+        shot: close(papa, 0.8, 4.8, 0.1),
         say: X.wait,
         start: () => (papa.lean = -0.14),
       },
@@ -724,7 +724,7 @@ const huddleOut: StoryFilm = {
     return [
       {
         id: 'warm',
-        shot: close(papa, 0.5, 3, 0.1),
+        shot: close(papa, 0.8, 4.8, 0.1),
         say: X.warm,
         start: () => {
           s.sfx.wind(true)
@@ -884,9 +884,9 @@ const homeLand: StoryFilm = {
       },
       {
         id: 'bear',
-        shot: close(pola, -0.6, 2.8),
+        shot: close(pola, -0.9, 3.2),
         say: X.bear,
-        start: () => (pola.wave(), pola.pull('happy')),
+        start: () => ((pola.root.rotation.y = -0.5), pola.wave(), pola.pull('happy')),
       },
       {
         // Pebble looks along the row: every one of them is tall, black and white.
@@ -958,7 +958,7 @@ const homeReunion: StoryFilm = {
       },
       {
         id: 'thanks',
-        shot: close(papa, 0.7, 3.1, 0.1),
+        shot: close(papa, 0.9, 4.8, 0.1),
         say: X.thanks,
         start: () => papa.turnTo(1, 2.5),
         cues: [[2.6, () => (papa.lean = 0.4)], [3.4, () => (papa.lean = 0)]],

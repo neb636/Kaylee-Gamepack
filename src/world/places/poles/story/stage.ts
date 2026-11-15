@@ -370,7 +370,7 @@ export class StoryStage implements World3D {
     ;(this.scene.fog as Fog).color.copy(this.bg)
     this.lightK = [a.light[0] + (b.light[0] - a.light[0]) * k, a.light[1] + (b.light[1] - a.light[1]) * k]
     this.stars.opacity = 1 - k
-    this.aurora.amount = 0.9 * (1 - k)
+    this.aurora.amount = 0.9 * Math.max(0, 1 - k * 2.5)
     this.sunDisc.visible = k > 0.05
     this.sunDisc.position.set(-70, -8 + k * 22, -190)
   }
