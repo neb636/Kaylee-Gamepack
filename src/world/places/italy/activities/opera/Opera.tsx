@@ -7,11 +7,11 @@
 // then louder) and the wand lifts Lupa's big high note. Roses, the Frecce Tricolori painting the flag where she sweeps
 // the wand, and the picnic, where hugging Lupa calls onDone (the trophy ceremony). Nothing can fail: each step helps
 // her along if she's stuck. Stroke detection and its feel numbers are in conduct.ts (FEEL).
-// Where it stands (2026-11-14, PR #449): check-in 3, Kaylee's playtest. The user heard the table read and said go on.
-// For her playtest to answer: does swinging feel like she plays the music, do big and small swings read as different
-// (fresh-eyes worried "forte"/"piano" are only words; the band's bounce and the owl are the only pictures of it), and
-// does the hold-still solo fight the swing (a tap gives a solo too). Small things: Sparkle's lines run 4-7 s (the owl's
-// is the longest); the picnic pizza is a Margherita, not the one she made at the Pizzeria (it isn't saved).
+// Where it stands (2026-11-14, PR #449): shipped. The user skipped the playtest (Kaylee already played the greybox
+// and enjoyed it), so her play diary is the playtest now: watch whether she finishes the opera or leaves it, and where.
+// Open questions it can answer: do big and small swings read as different (only the band's bounce and the owl show
+// "forte"/"piano"), and does the hold-still solo fight the swing (a tap gives a solo too). Small things: Sparkle's
+// lines run 4-7 s (the owl's is the longest); the picnic pizza is a Margherita, not her own (the Pizzeria doesn't save it).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode, type RefObject } from 'react'
 import { burst, say, SparklePuppet, sounds, useElementSize, useGameLoop, type Line, type PuppetHandle } from '../../../../../sdk'
