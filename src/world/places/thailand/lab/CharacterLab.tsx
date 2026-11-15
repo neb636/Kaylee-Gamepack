@@ -9,6 +9,7 @@ import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { stopSpeaking } from '../../../../sdk'
 import type { Wearable } from '../characters/looks'
 import { kayleeReady } from '../characters/model'
+import { dadReady } from '../characters/dad-model'
 import { momReady } from '../characters/mom-model'
 import type { Pose } from '../characters/types'
 import { View3D, type RenderMode } from '../../../engine3d/View3D'
@@ -104,6 +105,8 @@ export default function CharacterLab({ id, params = {} }: { id?: string; params?
   // Kaylee and Mom are modelled vinyl toys: their GLBs load before the studio builds anyone (World.tsx's Suspense).
   use(kayleeReady())
   use(momReady())
+  // The modelled Dad on trial (dad-model.ts).
+  use(dadReady())
   const [view, setView] = useState(() => fromLink(id, params))
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [film, setFilm] = useState<string[]>([])
