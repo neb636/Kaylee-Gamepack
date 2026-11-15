@@ -6,8 +6,9 @@
 //     a pink light; out by the flag buoys Zoom whips a figure-eight round them, stops nose to nose with the camera,
 //     giggles and darts off to sea; "She only stops for someone fast!". Then the life jacket, as ever.
 //   in play: she flies figure-eights out ahead of the jet ski. Go fast (or just keep riding a while) and she comes
-//     alongside for a look, then darts ahead ("There she is! After her!"); slow down and she drifts back to her loops. In the waves she skims the
-//     water, up and over every crest, and loops the loop when the jet ski jumps. In the race she hovers at the start,
+//     alongside for a look, then darts ahead ("There she is! After her!"); slow down and she drifts back to her loops. Riding, she loops the loop when
+//     the jet ski jumps; in the waves she darts from one of her sparkles to the next instead, hovering over the one
+//     nearest the jet ski (catch it!). In the race she hovers at the start,
 //     leads the way to the big orange buoy, sits on top of it until it's rounded, then leads the way home.
 //   found (film `found`, jetski?round=found): Zoom spirals down and lands on your unicorn's horn. "Ha ha! She likes
 //     you!", "You found Zoom!", "Fast like a firefly!". Then back to the island with her.
@@ -101,6 +102,8 @@ export interface PlayNow {
   y: number
   /** Seconds she has ridden this visit. */
   rode: number
+  /** The waves round: the sparkle nearest her, still to catch (null: none out). */
+  sparkle: Vector3 | null
 }
 
 const tmp = new Vector3()
@@ -230,6 +233,14 @@ export class ZoomStory {
     else if (now.doing === 'jacket' || now.doing === 'off') this.go('loops')
     else if (this.state === 'start' || this.state === 'perch' || this.state === 'over') this.go('loops')
 
+    if (now.round === 'waves' && now.doing === 'ride' && now.sparkle) {
+      // The waves round: she hovers over the sparkle nearest the jet ski, as if she just left it there, and darts on
+      // to the next as it's caught.
+      to.set(now.sparkle.x, now.sparkle.y + 0.85 + Math.sin(t * 3) * 0.15, now.sparkle.z)
+      z.fly(to, dt, 7)
+      z.faceToward(d.x, d.z, dt)
+      return
+    }
     if (this.state === 'start') {
       // The race's countdown: she hovers out in front of the two jet skis, looking back at them.
       const a = RACE.start[0]

@@ -146,11 +146,6 @@
       "pitch": -1,
       "instructions": "You are the green taxi driver on Koh Samet, a big, cuddly, easygoing sun bear in an island-green shirt. Slow and friendly, a deep happy chuckle, honks for fun. English with a warm Thai accent."
     },
-    "gecko": {
-      "voice": "coral",
-      "pitch": 3,
-      "instructions": "You are the fire dancers on Koh Samet beach at night, two bouncy little tokay geckos. Excited, rhythmic and showy, like performers hyping up the crowd, kind to a little girl. English with a Thai accent."
-    },
     "tuk": {
       "voice": "fable",
       "pitch": 3,

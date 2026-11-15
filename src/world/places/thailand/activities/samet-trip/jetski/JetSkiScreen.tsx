@@ -140,9 +140,9 @@ export function JetSkiScreen({ round: first, flags, onRound, onIsland }: Props) 
         </div>
       )}
       {stars.of > 0 && (
-        <div className="jet-stars" aria-label={`${stars.n} of ${stars.of} stars`}>
+        <div className="jet-stars" aria-label={`${stars.n} of ${stars.of} sparkles`}>
           {Array.from({ length: stars.of }, (_, i) => (
-            <span key={i} className={i < stars.n ? 'on' : ''}>★</span>
+            <span key={i} className={i < stars.n ? 'on' : ''}>✦</span>
           ))}
         </div>
       )}
@@ -225,7 +225,7 @@ const CSS = `
 @keyframes jet-bob { 0%, 100% { transform: translateY(-3%) rotate(-5deg); } 50% { transform: translateY(5%) rotate(5deg); } }
 @keyframes jet-roll { 0%, 100% { transform: translateX(-3%); } 50% { transform: translateX(3%); } }
 .jet-stars { position: absolute; left: 50%; translate: -50% 0; top: calc(var(--top-clear) + 6px); z-index: 11; pointer-events: none; display: flex; gap: 2px; padding: 4px 12px; border-radius: 999px; background: rgba(255,255,255,.75); font-size: clamp(20px, 3.8vmin, 34px); line-height: 1.1; color: rgba(43,35,48,.2); }
-.jet-stars .on { color: var(--gold, #FFC83D); }
+.jet-stars .on { color: #FF4FA3; }
 .jet-badge { padding: 12px 24px; border-radius: 999px; background: rgba(255,255,255,.92); box-shadow: var(--shadow); font-size: clamp(26px, 5vmin, 44px); font-weight: 700; color: var(--ink); }
 .jet-chips { position: absolute; right: 12px; top: calc(var(--top-clear) + 6px); z-index: 20; display: flex; gap: 6px; }
 .jet-chips button { min-height: 48px; padding: 6px 14px; border-radius: 999px; border: none; background: rgba(255,255,255,.85); box-shadow: var(--shadow); font: inherit; font-size: 16px; font-weight: 600; color: var(--ink); }
