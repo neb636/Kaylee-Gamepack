@@ -1,5 +1,5 @@
-// Penguin Slide's animals: Pebble's papa (an emperor penguin), Pebble (a grey fluffy chick) and the Adélies on the slope
-// are the toys from the character lab on the chibi rig (engine3d/characters/animal.ts, their looks in
+// Penguin Slide's penguins: Pebble's papa (an emperor penguin), the Adélies on the slope and the gentoos on the
+// snowbank (the Adélie toy with a bright orange beak) are the toys from the character lab on the chibi rig (engine3d/characters/animal.ts, their looks in
 // characters/looks.ts); the leopard seal is still a greybox shape in the toon look. Flippers on their own pivots so they flap,
 // paddle and flail. The world (slide.ts) sets the pose each frame; this file owns the little actions that play by
 // themselves (a hop, a spin like a top) and the rig's face (blinks, and the beak with their voice once they have one).
@@ -12,7 +12,7 @@ import { P, solidMix } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
 import { POLES_LOOKS } from '../../characters/looks'
 
-export type Kind = 'emperor' | 'chick' | 'adelie'
+export type Kind = 'emperor' | 'chick' | 'adelie' | 'gentoo'
 
 const HOP_S = 0.5
 const SPIN_S = 1.4
@@ -35,6 +35,8 @@ export interface Pose {
   waddle?: number
   /** + long, - squashed. */
   stretch?: number
+  /** Head tipped back, looking up at the sky (0..1). */
+  lookUp?: number
 }
 
 export class Penguin {
@@ -66,8 +68,10 @@ export class Penguin {
     const chick = kind === 'chick'
     this.height = (chick ? 0.82 : 1.15) * size
     // The same height as the greybox was (the slide, the camera and the tap targets were tuned to it).
-    const who = chick ? 'pebble' : kind === 'adelie' ? 'adelie' : 'papa'
-    const rig = buildAnimal({ ...POLES_LOOKS[who], height: this.height }, bag)
+    const who = chick ? 'pebble' : kind === 'emperor' ? 'papa' : 'adelie'
+    // (A gentoo: no white eye-ring, an orange beak.)
+    const look = kind === 'gentoo' ? { ...POLES_LOOKS.adelie, dark: '#F58A3C', extras: [] } : POLES_LOOKS[who]
+    const rig = buildAnimal({ ...look, height: this.height }, bag)
     this.rig = rig
     this.inner = rig.root
     this.pivot = PIVOT * this.height
@@ -148,7 +152,7 @@ export class Penguin {
     rig.body.rotation.set(0, wiggle * 0.3 * Math.sin(t * 22), wiggle * 0.2 * Math.sin(t * 17))
     // The head follows through: up as he lies down (looking where he's going), up again when he flails, and it bobs
     // with a waddle.
-    rig.head.rotation.set(-0.9 * belly * (1 - wiggle) - 0.3 * (pose.flail ?? 0), 0, (pose.waddle ?? 0) * 0.25 * Math.sin(t * 11 + 0.6))
+    rig.head.rotation.set(-0.9 * belly * (1 - wiggle) - 0.3 * (pose.flail ?? 0) - 0.55 * (pose.lookUp ?? 0), 0, (pose.waddle ?? 0) * 0.25 * Math.sin(t * 11 + 0.6))
 
     const swim = pose.swim ?? 0
     const flail = pose.flail ?? 0

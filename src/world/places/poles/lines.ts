@@ -244,34 +244,68 @@ export const L = {
 
   // ---- Penguin Slide (activities/slide/) ----
   slide: {
-    // The story (a fresh start only; a tap skips it): Pebble is hungry, so Papa goes fishing.
-    story: [pebble("Papa, I'm so hungry!"), papa('Krill coming right up!')],
-    // Sparkle, when each stretch starts (and again when she's stuck there).
+    // Papa's search, in play order (the films either side are story.slideIn and story.slideOut). Sparkle says what to
+    // do; Papa says the rest in his own voice.
+    // Sparkle, as he flops onto his tummy at the top, then when each stretch starts (and again when she's stuck there).
     hints: {
       top: 'Steer Papa left and right!',
       bumps: 'Bumps! Pick a way down the hill!',
       dive: 'Steer Papa to the pink krill!',
     },
-    // The first time each new thing comes along: what's true about it (Sparkle).
-    bumps: 'Antarctica is one big hill of ice!',
-    dive: 'Penguins fly under the water!',
-    // Papa, when something happens to him (a few each, not every time).
+    // Sparkle, the first time something small and grey shows up ahead (and when she pokes one he hasn't looked at).
+    look: 'Is that Pebble? Steer Papa over to look!',
+    // Papa calls for Pebble as he slides down the hill: in turn, every so often, when nothing else is going on.
+    call: [papa('Pebble? Are you down here?'), papa('Not behind this snowbank!'), papa('Pebble! Where are you?'), papa('No little footprints here.')],
+    // Papa, to an Adelie who hops out of his way.
+    ask: [papa('Have you seen my Pebble?'), papa('A little grey chick? No?')],
+    // Papa, when the thing he slid up to turns out not to be Pebble (one each, in the order he comes to them).
+    found: {
+      snowy: papa('Oh! A snowy Adelie, not Pebble!'),
+      seal: papa('Not Pebble. A sleepy seal!'),
+      skua: papa('A skua chick! Not my chick.'),
+      hat: papa('A woolly hat! It fits!'),
+      buoy: papa('Bong! Only a buoy.'),
+      fish: papa('Just a ball of little fish!'),
+    },
+    // Papa, when something happens to him on the hill (a few each, not every time): big air, head first in a
+    // snowbank, bumping an Adelie.
     air: [papa('Whoa, I can fly!'), papa('Wheee!')],
-    bank: [papa('Oops! Snow on my beak!'), papa('Brr, a snowy nose!')],
+    bank: [papa('Ha! Snow on my beak!'), papa('Brr, a snowy nose!')],
     bump: [papa('Oh! Sorry, little friend!'), papa('Round and round!')],
-    seal: papa('Hello, silly seal!'),
-    gulp: [papa('Yum, krill!'), papa('Gulp!'), papa('More for Pebble!')],
-    leap: papa("Pebble, I'm home!"),
-    // Home: Pebble is fed.
-    fed: pebble('Yummy! Thank you, Papa!'),
-    pebbleTap: [pebble('Hee hee!'), pebble('Hi, hi!')],
-    // Tap-to-hear facts, the first time she pokes each one (Sparkle).
+    // Sparkle, when the bumps begin: what's true about this place.
+    bumps: 'Antarctica is land, under a big hill of ice!',
+    // Sparkle, when he dives off the ice edge into the sea.
+    dive: 'Penguins fly under the water!',
+    // Papa calls for Pebble under the sea (in turn).
+    callSea: [papa('Pebble? Are you in the sea?'), papa('Not under this ice!')],
+    // Papa, gulping krill (the first swarm, then now and then).
+    gulp: [papa("Krill! For Pebble's supper!"), papa('Gulp!'), papa("More for Pebble's supper!")],
+    // Sparkle, after his second swarm.
+    krill: 'Krill are tiny pink sea animals. Penguin food!',
+    // Papa, when the leopard seal bumps noses with him.
+    seal: papa('Seal, have you seen Pebble?'),
+    // Papa, rocketing out of the sea onto the ice.
+    leap: papa('Up and out!'),
+    // The ice edge: the Adelies cheer his tummy full of krill, and he looks up at the sky.
+    home: papa('Pebble! Supper is ready!'),
+    // Tap-to-hear facts, the first time she pokes each one (Sparkle), in the order she comes to them.
     facts: {
       papa: 'Emperor penguins are the biggest penguins of all!',
+      gentoo: 'Gentoo penguins have bright orange beaks.',
       adelie: 'These little ones are Adelie penguins.',
-      seal: 'A leopard seal! This one just wants to play.',
-      pebble: 'Penguin chicks eat krill, tiny pink sea animals.',
       noBears: 'No polar bears live here, so the penguins are not scared.',
+      elephant: 'An elephant seal! The biggest seal of all.',
+      weddell: 'Weddell seals sing. It sounds like outer space!',
+      skua: 'A skua! A big, bold seabird.',
+      chick: 'Skua chicks are grey and fluffy, just like Pebble.',
+      hat: 'A woolly hat keeps your head warm.',
+      flag: 'Scientists stay here to study the ice.',
+      scientist: 'Nobody lives here for good. Scientists come to visit!',
+      spout: 'A humpback whale! It eats krill too.',
+      seal: 'A leopard seal! This one just wants to play.',
+      swimmer: 'Under the water, penguins are super fast!',
+      buoy: 'A buoy floats on the sea. It tells the ships the way.',
+      fish: 'Silverfish! They shine like little coins.',
     },
   },
 
