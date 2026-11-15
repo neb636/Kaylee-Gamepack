@@ -1,0 +1,6 @@
+{
+  "title": "Koh Samet: tidy names and notes",
+  "checkIn": "fix",
+  "kaylee": "Nothing she'll notice: the animals' folder and sounds lose the old photo-book name, the trip's notes say what's done and what's left, and the code map points at them again.",
+  "pictures": [{ "title": "Lunch on the deck, after the move", "after": "pics/lunch.png", "caption": "The animals still load from their new folder (the squirrel by the railing)" }]
+}
