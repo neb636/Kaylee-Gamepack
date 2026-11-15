@@ -2,7 +2,7 @@
 // (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing.) Plain strings are Sparkle, the guide:
 // she says what to do. The friends say their own story and reaction lines in their own voices (cast.json): Pola the
 // polar bear cub and Mama Bear up north, Pebble the emperor chick and Papa down south, Terry the Arctic tern who visits
-// both. Each activity has its own block below (one per PR, so they don't collide). Keep lines under ~3 seconds, and the
+// both, and Nari the narwhal. Each activity has its own block below (one per PR, so they don't collide). Keep lines under ~3 seconds, and the
 // name for the big moments only. Straight apostrophes only: curly ones failed the transcription check in PR #63.
 import { onDevice } from '../../../sdk/device.ts'
 
@@ -13,6 +13,7 @@ export const mama = by('mama')
 export const pebble = by('pebble')
 export const papa = by('papa')
 export const terry = by('terry')
+export const nari = by('nari')
 
 export const L = {
   // The shell's trophy ceremony and the trophy room speak these.
@@ -75,6 +76,109 @@ export const L = {
       whale: 'Whales swim in the cold seas at both poles.',
       lightsNorth: 'The northern lights! They dance in the dark winter sky.',
       lightsSouth: 'The southern lights! They glow in the long winter night.',
+    },
+  },
+
+  // ---- The story films (story/films.ts): Pebble's Long Way Home. One block per film, in play order. ----
+  story: {
+    // The way in (the first visit): Pola finds a penguin at the top of the world.
+    intro: {
+      top: 'This is Pola. She lives at the very top of the world.',
+      what: pola('Whoa! What ARE you?'),
+      penguin: pebble("I'm Pebble. I'm a penguin!"),
+      never: pola("A pen-guin? I've never seen one!"),
+      papa: pebble('I want my Papa.'),
+      ship: pebble('I saw a big red ship. It smelled like fish!'),
+      nap: pebble('I climbed inside, and I fell asleep.'),
+      sailed: 'The ship sailed all the way up the world. From the bottom, to the top!',
+      woke: pebble('When I woke up, everything was different.'),
+      terry: terry('A penguin? Up here?'),
+      bottom: terry('Penguins live at the bottom of the world! I fly there every year.'),
+      show: pola('Can you show us the way?'),
+      long: terry("It's a long, long way. But yes!"),
+      ask: "My balloon can carry Pebble home. Let's help him!",
+    },
+    // Ice Floe Hop: across the floating ice to Mama Bear.
+    floeIn: {
+      mama: pola("Mama will know what to do! She's across the ice."),
+      swim: pebble("I can't swim yet. My feathers are too fluffy!"),
+      hop: pola('Then hop on my back!'),
+    },
+    floeOut: {
+      far: mama('A penguin! You are so far from home, little one.'),
+      hug: pebble("You're so warm!"),
+      go: mama('Pola, go with him. Friends help friends.'),
+      yes: pola('I will, Mama!'),
+    },
+    // The narwhal ride: out to the balloon on the big iceberg.
+    narwhalIn: {
+      far: terry('The balloon is out past the icebergs.'),
+      hop: pola("That's too far to hop!"),
+      ride: nari("Need a ride? I'm Nari the narwhal!"),
+      unicorn: pebble('A unicorn fish!'),
+      sea: nari('The unicorn of the sea. Hold on tight!'),
+    },
+    narwhalOut: {
+      here: nari('Here we are! One balloon.'),
+      thanks: pebble('Thank you, Nari!'),
+      bye: nari('Say hello to the bottom of the world for me!'),
+    },
+    // Snow Coats: Terry flies south when the snow comes.
+    coatsIn: {
+      when: pola('Terry, when do we fly?'),
+      snow: terry('When the snow comes, and the fox turns white.'),
+      brown: pebble('But the fox is brown!'),
+      help: "Then let's help the winter along!",
+    },
+    coatsOut: {
+      white: terry('Snow! White coats everywhere!'),
+      time: terry("Winter is here. It's time to fly south!"),
+      bye: pola('Bye, fox! Bye, hare!'),
+    },
+    // Penguin Slide: meanwhile, Papa looks everywhere.
+    slideIn: {
+      meanwhile: 'Meanwhile, at the bottom of the world...',
+      call: papa('Pebble! Pebble, where are you?'),
+      seen: papa('Has anyone seen my little Pebble?'),
+      look: papa("I'll look down the hill, and in the sea. I'll look everywhere!"),
+    },
+    slideOut: {
+      none: papa('No Pebble in the sea.'),
+      supper: papa('But I caught his favorite supper.'),
+      soon: papa('Come home soon, little one.'),
+    },
+    // Emperor Huddle: the long night, and the night Pebble hatched.
+    huddleIn: {
+      dark: 'Winter at the South Pole. The sun is gone for months.',
+      wait: papa("I'll wait right here, Pebble."),
+      remember: papa('I remember the night you hatched.'),
+    },
+    huddleOut: {
+      warm: papa('I kept you warm all winter long.'),
+      sun: papa('Look. The sun is coming back.'),
+      dot: papa('Wait. What is that, up in the sky?'),
+    },
+    // The finale: the flight home, Papa's song, and a polar bear at the South Pole.
+    homeIn: {
+      aboard: 'All aboard! Next stop, the bottom of the world!',
+      bye: mama('Goodbye, my brave cub! Hurry home!'),
+      follow: terry('Follow me! All the way down the world!'),
+    },
+    homeLand: {
+      land: 'We made it! This is Antarctica.',
+      ground: pola("There's ground under this ice! Not sea!"),
+      what: papa('Goodness! What is THAT?'),
+      bear: pola("Hi! I'm a polar bear!"),
+      same: pebble('Papa? They all look the same!'),
+      song: "Every penguin papa has his own song. Let's find Papa's!",
+    },
+    homeReunion: {
+      pebble: papa('Pebble! My Pebble!'),
+      papa: pebble('Papa! I went to the top of the world!'),
+      friend: pebble('This is Pola. She carried me home.'),
+      thanks: papa('A polar bear at the South Pole! Thank you, Pola.'),
+      lights: pola('Look! The sky is dancing!'),
+      quiz: terry("Top to bottom! Who's ready for my Polar Explorer quiz?"),
     },
   },
 
