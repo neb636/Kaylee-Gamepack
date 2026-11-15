@@ -1,0 +1,75 @@
+[
+ {
+  "id": "hub-horn",
+  "label": "The red ship's horn",
+  "prompt": "A small toy steamship horn, two short friendly toots, warm and round, soft and cute. Clean close recording, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "hub-seal",
+  "label": "The seal barks",
+  "prompt": "A baby seal gives two short happy barks, soft and cute, toy-like. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "hub-spout",
+  "label": "The whale spouts",
+  "prompt": "A small whale blows a soft puff of spray from its blowhole, a gentle airy whoosh with a little splash of water. Clean close recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "hub-bell",
+  "label": "The North Pole's marker",
+  "prompt": "A tiny bright bell dings once and wobbles, like a toy pole being flicked, sweet and light. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "hub-door",
+  "label": "The station's door",
+  "prompt": "A small toy hut door pops open with a soft wooden click and a tiny squeak. Clean close recording, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "hub-tern",
+  "label": "Terry's call",
+  "prompt": "A small seabird, an Arctic tern, gives two short cheerful chirping calls as it swoops past with a soft flutter of wings. Gentle, not shrill. Clean recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "hub-burner",
+  "label": "The balloon's burner",
+  "prompt": "A hot-air balloon burner gives one short soft puff of flame, a gentle warm whoosh, toy-like and quiet. Clean close recording, no music, no voices.",
+  "seconds": 0.9
+ },
+ {
+  "id": "hub-pick",
+  "label": "A picture on the trail is picked",
+  "prompt": "A happy soft pop followed by a tiny rising sparkle, like a toy button being pressed. Short, sweet and light. No music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "hub-roll",
+  "label": "The globe rolls to a pole",
+  "prompt": "A toy globe turns on its stand: a soft smooth rolling whoosh with a gentle wooden rumble, ending softly. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "hub-snow",
+  "label": "Snowflakes burst from her finger",
+  "prompt": "A soft puff of powder snow with tiny glassy twinkles, light and magical, very gentle. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "hub-lights",
+  "label": "The polar lights flare",
+  "prompt": "A soft shimmering glassy swell, like the northern lights rippling, three gentle rising chimes with an airy shimmer. Calm and magical, no melody, no voices.",
+  "seconds": 1.8
+ },
+ {
+  "id": "hub-wind",
+  "label": "The wind over the ice (the globe's bed)",
+  "prompt": "A very soft, calm polar wind over open snow and sea ice, steady and airy, with a faint gentle lapping of cold water far away. Peaceful, nothing scary. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ }
+]

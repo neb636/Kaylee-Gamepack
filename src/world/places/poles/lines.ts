@@ -49,31 +49,43 @@ export const L = {
     narwhal: "Let's see narwhals, the unicorns of the sea!",
   },
 
-  // ---- The globe hub (activities/hub/) ----
+  // ---- The globe hub (activities/hub/): the map of the story. In play order. ----
   hub: {
-    welcome: 'Welcome to the Poles! Grab the globe and spin it.',
-    spin: 'Spin the globe up or down!',
-    // Each friend's hello the first time their side comes round, then what they say when she taps them (in turn).
-    polaHi: pola("Hi! I'm Pola. I live on the sea ice!"),
-    pebbleHi: pebble("Hi! I'm Pebble. I live in Antarctica!"),
-    pola: [pola('Ha ha, that tickles!'), pola('The ice floats on the sea!'), pola('Brr! I love the cold!')],
-    pebble: [pebble('Hello again!'), pebble('Waddle, waddle!'), pebble('No polar bears down here!')],
+    // Her first look at the globe after the way-in film (no stamps yet), once: Sparkle sends her to the first picture.
+    welcome: onDevice("Let's take Pebble home! Tap the first picture.", "Let's take Pebble home! Click the first picture."),
+    // Back at the globe with a new stamp (or her first look on another day), once per stop: where the balloon is now.
+    // Keyed by the next stop on the trail.
+    next: {
+      floe: 'Next stop: across the floating ice!',
+      narwhal: 'Next stop: a ride on a narwhal!',
+      coats: 'Next stop: the snow is coming!',
+      slide: 'Next stop: the bottom of the world!',
+      huddle: 'Next stop: the long, dark night.',
+    },
+    // Every stamp is in, once: home is the last picture on the trail.
+    home: onDevice('Every stamp! Tap the last picture to fly home!', 'Every stamp! Click the last picture to fly home!'),
+    // Left alone a while: shown in Sparkle's bubble only, never said by itself (a hub doesn't nag). She says one if tapped.
     spots: onDevice('Tap a picture to play!', 'Click a picture to play!'),
-    party: onDevice('You got every stamp! Tap the party!', 'You got every stamp! Click the party!'),
-    sunOut: 'Here comes the sun! Drag it!',
+    spin: 'Spin the globe up or down!',
     sun: 'Drag the sun up or down!',
+    // She taps a friend on the globe: their lines in turn, in their own voices. Pola and Pebble stand together up north.
+    pola: [pola("I've never seen a penguin before!"), pola("Don't worry, Pebble. We'll get you home!"), pola('Ha ha, that tickles!')],
+    pebble: [pebble('I miss my Papa.'), pebble('Are we nearly there?'), pebble('Waddle, waddle!')],
+    // Papa waits down south, looking up at the sky. (Also what he says if she picks home before every stamp is in.)
+    papa: [papa('Pebble? Where are you?'), papa("I'll keep looking, little one.")],
+    // She taps Terry as he flies his loop between the poles.
+    terry: [terry('I fly from pole to pole every year!'), terry('Follow me! I know the way!')],
+    // The sun pops out beside the globe (once she has seen both poles), then the first time summer lands on each pole.
+    sunOut: 'Here comes the sun! Drag it!',
     summer: { north: 'Summer up north, and night down south!', south: 'Summer down south, night up north!' },
-    lost: { penguin: 'A lost penguin! Carry him home.', bear: 'A lost polar bear cub! Carry her home.' },
-    carry: 'Carry it home: the top or the bottom?',
-    home: { penguin: pebble('Yay! Welcome home!'), bear: pola('Welcome home, little cub!') },
-    // Put down on the wrong pole: whoever lives there is surprised (silly, never an "oops"), then its own pole glows.
-    wrong: { penguin: pola('A penguin? Penguins live down south!'), bear: pebble('Eek! Polar bears live up north!') },
     // A fact the first time she pokes each thing (once per visit).
     pokes: {
       marker: 'This is the North Pole, the very top of the world!',
       seal: 'Seals pop up through holes in the ice to breathe.',
       station: 'Scientists stay here to learn about the ice.',
       whale: 'Whales swim in the cold seas at both poles.',
+      ship: 'The red ship! Pebble fell asleep on it.',
+      balloon: 'My balloon! It will fly Pebble home.',
       lightsNorth: 'The northern lights! They dance in the dark winter sky.',
       lightsSouth: 'The southern lights! They glow in the long winter night.',
     },
