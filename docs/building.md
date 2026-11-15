@@ -168,8 +168,8 @@ never edit it by hand. What it shows lives in `sections.ts`, next to the section
 - A section's `name` is its link. `group` ("Getting there", "Baan Chang") puts sections under a bullet for that stage,
   and a label that starts with the group's name drops it ("Baan Chang: the cafe" reads "The cafe").
 - `links` replaces that one link when a section needs more: a step per round in play order (`{ label, params: {
-  round: '2' } }`), with variants of the same step in brackets on its line (`also: [{ label: 'iPhone tilt to steer',
-  flags: { steer: 'tilt' } }]`). `params` are the activity's own (typo-checked); `flags` are switches like `steer` and
+  round: '2' } }`), with variants of the same step in brackets on its line (`also: [{ label: 'tune the feel',
+  flags: { feel: '1' } }]`). `params` are the activity's own (typo-checked); `flags` are switches like `feel` and
   `look`. A finale's links get `?stamps=all` by themselves.
 - `title` names a finale or hub in its heading, `note` adds a line under it. Activities in `inTheWorks` say so.
 

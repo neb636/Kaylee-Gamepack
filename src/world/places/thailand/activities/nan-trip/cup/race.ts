@@ -7,7 +7,6 @@
 // - Hold a finger down anywhere: the kart races at full speed, and she steers it sled style, with the Nan drive's finger
 //   wheel (engine3d/wheel.ts, the small pink circle where her finger went down): push left or right of it and the kart
 //   slides that way across the road. Let go and it keeps racing by itself, a bit slower (she can never stop or get lost).
-// - On a phone she tilts it to steer and holds a gas pedal (trip/race/tilt.ts, GasPedal.tsx), as in the boat race.
 // - The start: three lights and GO; a finger already down at GO is a rocket start. Grandma Taeng naps on the grid and
 //   wakes up at GO.
 // - Pick a line: gold coins make her a little faster (up to ten), gold arrow pads give a burst of speed, and each
@@ -28,7 +27,7 @@
 // Talk (lines.ts L.nan.cup): Sparkle's one instruction before her first race, the lights counted in Thai (Sahm, Song,
 // Neung, Go!), the home rival's tease just after GO, Sparkle the first time each track's trick happens this visit, a
 // rival's "Hey!" when she bumps them, "Nearly there!" and the finish. After a while with her finger off the road the
-// 👆 shows and Sparkle says what to do (spendHint). On a phone that tilts to steer, the finger lines aren't said.
+// 👆 shows and Sparkle says what to do (spendHint).
 // The numbers that decide how it feels are knobs (?feel=1): her kart,
 // the bounce, the mud, the cloud and the blossoms, the rivals' rubber band; the lab's graph shows her finger across the
 // road against the kart.
@@ -53,7 +52,6 @@ import { Coins, Pads } from '../../../trip/race/items'
 import { RaceMusic } from '../../../trip/race/music'
 import type { RaceHud, RacePhase } from '../../../trip/race/RaceHud'
 import { herLimit, rivalPace, scripted, type Script } from '../../../trip/race/rubber'
-import type { SteerMode, Tilt } from '../../../trip/race/tilt'
 import { buildMirror, buildRoadScene, rng, type RoadScene } from '../../../trip/road/build'
 import { buildCloudLayer, buildCloudSea, seaShows } from '../../../trip/road/clouds'
 import { buildKart, type Kart } from '../../../trip/vehicles/kart'
@@ -270,11 +268,7 @@ export class KartRace implements World3D {
   private photoFinish = false
   private rocket = false
   private told = new Set<string>()
-  private steer: SteerMode = 'finger'
-  private tilt: Tilt | null = null
-  private gasDown = false
   private aimLat = 0
-  private waiting = false
   private counts = { coinsTaken: 0, pads: 0, bounces: 0, bigBounces: 0, bales: 0, grass: 0, bumps: 0, honks: 0, pokes: 0, splashes: 0, washes: 0, lanterns: 0, showers: 0, fords: 0 }
   private timers: number[] = []
   /** Her first race this visit: Sparkle's instruction, and a longer look before the lights. */
@@ -367,8 +361,7 @@ export class KartRace implements World3D {
 
     this.unwatch = watch('kart', () => {
       const edge = this.track.edge
-      const steering = this.wheel.steering || this.steer === 'tilt'
-      return { 'her finger (m across)': [steering ? this.fingerLat : this.k.lat, edge], 'the kart (m across)': [this.k.lat, edge], 'speed (m/s)': [this.k.d.speed, KART.top * KART.boost] }
+      return { 'her finger (m across)': [this.wheel.steering ? this.fingerLat : this.k.lat, edge], 'the kart (m across)': [this.k.lat, edge], 'speed (m/s)': [this.k.d.speed, KART.top * KART.boost] }
     })
     this.toGrid()
     this.emitHud()
@@ -714,32 +707,13 @@ export class KartRace implements World3D {
   setMapElements(els: Map<string, SVGElement>) {
     this.mapEls = els
   }
-  /** A finger on the road, or (on a phone) tilting it with the gas pedal. */
-  setSteer(mode: SteerMode, tilt: Tilt | null) {
-    this.steer = mode
-    this.tilt = mode === 'tilt' ? tilt : null
-    this.aimLat = this.k.lat
-    if (mode === 'finger') this.gasDown = false
-  }
-  /** The gas pedal, down or up (tilting). */
-  gas(down: boolean) {
-    this.lastTouch = this.time
-    this.gasDown = down
-  }
-  /** The phone's setup is showing (turn it sideways, allow the tilt): the race waits for it. */
-  setWaiting(on: boolean) {
-    this.waiting = on
-    if (on) this.gasDown = false
-  }
+  /** A finger down on the road: full speed (and before GO it revs). */
   private get pressing() {
-    return this.steer === 'tilt' ? this.gasDown : !!this.wheel.finger
+    return !!this.wheel.finger
   }
 
   pointerDown(x: number, y: number, id?: string) {
-    if (this.waiting) return
     this.lastTouch = this.time
-    // (Tilting, a finger only pokes things: the tilt steers.)
-    if (this.steer !== 'finger') return
     // Anywhere open it steers at once (before GO it revs: still down at GO is a rocket start); on a tap target it
     // steers once it moves or is held a moment (a quick tap there pokes it).
     this.wheel.down(x, y, this.time, id)
@@ -754,7 +728,6 @@ export class KartRace implements World3D {
   }
 
   tap(x: number, y: number, id?: string) {
-    if (this.waiting) return
     this.lastTouch = this.time
     void x
     void y
@@ -824,17 +797,14 @@ export class KartRace implements World3D {
   }
 
   update(rawDt: number) {
-    if (this.waiting) rawDt = 0
     const dt = this.slow > 0 ? rawDt * 0.35 : rawDt
     this.slow = Math.max(0, this.slow - rawDt)
     this.time += dt
     this.phaseT += dt
     const t = this.time
     this.boostKick = Math.max(0, this.boostKick - dt * 0.8)
-    this.tilt?.update(rawDt)
     if (this.wheel.finger) this.lastTouch = t
     this.push = this.wheel.update(rawDt, t, WHEEL)
-    if (this.gasDown) this.lastTouch = t
     // The feel lab's numbers, every frame.
     for (const r of this.racers) {
       r.feel.accel = KART.accel * (r.rival ? 1.1 : 1)
@@ -995,7 +965,7 @@ export class KartRace implements World3D {
     if (this.phase === 'intro') {
       if (!this.told.has('intro') && t > 0.3) {
         this.told.add('intro')
-        this.firstRace = this.steer === 'finger' && firstTime('nan-cup-start')
+        this.firstRace = firstTime('nan-cup-start')
         if (this.firstRace) this.say(C.start)
       }
       if (t > (this.start.again ? 1.6 : 2.6) + (this.firstRace ? 0.9 : 0)) {
@@ -1016,7 +986,7 @@ export class KartRace implements World3D {
     }
   }
 
-  /** GO! The music starts, Grandma Taeng wakes up; a finger already down (or the gas pedal) is a rocket start. */
+  /** GO! The music starts, Grandma Taeng wakes up; a finger already down is a rocket start. */
   private go() {
     this.phase = 'race'
     this.phaseT = 0
@@ -1039,7 +1009,7 @@ export class KartRace implements World3D {
     }
   }
 
-  /** Before GO, a finger down (or the gas pedal) revs the engine: the kart squats, the exhaust puffs. */
+  /** Before GO, a finger down revs the engine: the kart squats, the exhaust puffs. */
   private rev(dt: number) {
     const k = this.k
     if (!this.pressing || this.phaseT < 0.3) return
@@ -1050,7 +1020,7 @@ export class KartRace implements World3D {
     }
   }
 
-  /** Her finger (only forward along the road: it picks where across it), tilting the phone, or racing on by herself. */
+  /** Her finger (only forward along the road: it picks where across it), or racing on by herself. */
   private driveKaylee(dt: number) {
     const k = this.k
     const d = k.d
@@ -1061,13 +1031,6 @@ export class KartRace implements World3D {
     if (k.done >= 0) {
       target = road.spotAt(Math.min(k.s + 14, road.length - 1), PARK.kaylee)
       cap = this.rollOut(k)
-    } else if (this.steer === 'tilt') {
-      // The tilt slides her aim across the road (full lock: about 9 m/s sideways); held level, she keeps her line.
-      this.aimLat = clamp(this.aimLat - (this.tilt?.value ?? 0) * 9 * dt, Math.max(-edge, k.lat - 5), Math.min(edge, k.lat + 5))
-      this.fingerLat = this.aimLat
-      const ds = KART.near + Math.abs(d.speed) * 0.3
-      target = road.spotAt(k.s + ds, this.aimLat)
-      cap = this.gasDown ? 1 : KART.cruise
     } else if (this.wheel.steering) {
       // Sled style: a push right of the circle slides her right across the road (lat is + to the left), as long as
       // she holds it there; held in the middle, she keeps her line round the bends.
@@ -1597,11 +1560,11 @@ export class KartRace implements World3D {
 
   /** While she steers: the circle where her finger went down and the dot where it is now (engine3d/SteerWheel). After
    *  a while with nothing touched (at the start, and while racing): a finger sliding side to side low on the screen,
-   *  the way the wheel steers. Tilting, the gas pedal shows its own finger instead. */
+   *  the way the wheel steers. */
   private idleHints() {
-    this.wheel.draw(this.wheelEl, this.steer === 'finger' && this.k.done < 0, WHEEL.reach)
+    this.wheel.draw(this.wheelEl, this.k.done < 0, WHEEL.reach)
     const idle = this.time - this.lastTouch
-    const show = this.steer === 'finger' && ((this.phase === 'count' && !this.wheel.finger) || (this.phase === 'race' && idle > 7 && this.k.done < 0))
+    const show = (this.phase === 'count' && !this.wheel.finger) || (this.phase === 'race' && idle > 7 && this.k.done < 0)
     // In the race, with the finger showing: Sparkle says it too (spendHint: shown first, then twice a visit at most).
     if (show && this.phase === 'race' && this.time - this.hintSaid > 15) {
       this.hintSaid = this.time
@@ -1788,7 +1751,6 @@ export class KartRace implements World3D {
         return { x: Math.round(f.ox + clamp(this.k.lat / 3, -1, 1) * this.wheel.radius(WHEEL.reach)), y: Math.round(f.oy) }
       })(),
       wheel: { push: r2(this.wheel.push), k: r2(this.wheel.k) },
-      steer: { mode: this.steer, gas: this.gasDown, tilt: r2(this.tilt?.value ?? 0), live: this.tilt?.live ?? false, aim: r2(this.aimLat), waiting: this.waiting },
       ...this.counts,
       grass: r2(this.counts.grass),
       mud: r2(this.k.mud),

@@ -9,9 +9,6 @@
 // The toy is the same as the bay's (drive the longtail with one finger), made into a race:
 // - Hold a finger on the water: the boat goes there at full speed (only forward along the course: her finger picks
 //   where across it). Let go and it keeps racing by itself, a little slower (so she can never stop or get lost).
-// - On a phone (tilt.ts) she steers by tilting it like a wheel instead: the tilt moves her across the course (held
-//   level, the boat follows the course round its bends in her lane), and a gas pedal on the screen is full speed (off
-//   it she cruises on, slower). The pedal does what a held finger does: revs, the rocket start.
 // - The start: three lights and Sparkle's "Three! Two! One! Go!"; a finger already down at GO is a rocket start.
 // - Gold coins make her a little faster (up to ten), golden arrow pads give a burst of speed, the ramps throw her in the air (a burst of speed on
 //   landing; the big jump flies through the flower hoop), holding a long hard turn builds sparks and a little turbo when it straightens (a drift's mini-turbo).
@@ -56,7 +53,6 @@ import { rivalPace, scripted, type Script } from '../../../trip/race/rubber'
 import { buildRaceScenery, RAINBOW, type RaceScenery } from './scenery'
 import { ahead, bendAhead, branchLat, ELEPHANTS, FORK, GRID, halfAt, HOOP, LAPS, LENGTH, locate, mapXY, PODIUM, RAMPS, rockAt, spotAt, STAND } from './track'
 import { buildPodium, buildTrophy, type Podium } from './trophy'
-import type { SteerMode, Tilt } from '../../../trip/race/tilt'
 import { Dolphins, Elephants, type Splasher } from './wildlife'
 import { wrapAngle } from '../../../../../../sdk/math'
 
@@ -237,14 +233,6 @@ export class Race implements World3D {
   private photoAt = -1
   private shots: (() => void)[] = []
   private rocket = false
-  /** How she steers (a finger on the water, or tilting the phone with the gas pedal), and the tilt. */
-  private steer: SteerMode = 'finger'
-  private tilt: Tilt | null = null
-  private gasDown = false
-  /** Tilting: where across the course she's aiming (meters left of the middle). */
-  private aimLat = 0
-  /** The phone's setup is showing (turn it sideways, allow the tilt): everything waits. */
-  private waiting = false
   private counts = { coinsTaken: 0, pads: 0, jumps: 0, bigJumps: 0, hoops: 0, slips: 0, hits: 0, drifts: 0, bumps: 0, showers: 0, balls: 0, dolphins: 0, pokes: 0 }
   /** The side of the Twin Rocks she's heading for (+1 left, -1 right): the rivals take the other one. */
   private branch = 1
@@ -396,43 +384,18 @@ export class Race implements World3D {
     this.mapEls = els
   }
 
-  /** A finger on the water, or (on a phone) tilting it with the gas pedal. */
-  setSteer(mode: SteerMode, tilt: Tilt | null) {
-    this.steer = mode
-    this.tilt = mode === 'tilt' ? tilt : null
-    this.aimLat = this.k.lat
-    if (mode === 'finger') this.gasDown = false
-  }
-  /** The gas pedal, down or up (tilting). */
-  gas(down: boolean) {
-    this.lastTouch = this.time
-    this.gasDown = down
-  }
-  /** The phone's setup is showing (turn it sideways, allow the tilt): the race waits for it. */
-  setWaiting(on: boolean) {
-    this.waiting = on
-    if (on) this.gasDown = false
-  }
-  /** Going full speed: the gas pedal, or a finger on the water. */
-  private get pressing() {
-    return this.steer === 'tilt' ? this.gasDown : !!this.finger
-  }
-
   pointerDown(x: number, y: number, id?: string) {
-    // (Waiting for the phone's setup, whose picture lets taps through: they do nothing here.)
-    if (this.waiting) return
     this.lastTouch = this.time
     // A finger on the water steers at once (before GO it revs, and it's a rocket start if it's still there at GO); one
-    // on a tap target steers too once it moves or is held a moment (a quick tap there pokes it). Tilting, a finger
-    // on the water steers nothing (only pokes).
-    this.finger = { x, y, steering: !id && this.steer === 'finger', t: this.time, id }
+    // on a tap target steers too once it moves or is held a moment (a quick tap there pokes it).
+    this.finger = { x, y, steering: !id, t: this.time, id }
   }
   pointerMove(x: number, y: number, downX: number, downY: number, held: boolean) {
     const f = this.finger
     if (!held || !f) return
     f.x = x
     f.y = y
-    if (!f.steering && this.steer === 'finger' && Math.hypot(x - downX, y - downY) > 12) f.steering = true
+    if (!f.steering && Math.hypot(x - downX, y - downY) > 12) f.steering = true
   }
   pointerUp() {
     if (this.finger?.steering) this.k.d.release()
@@ -440,7 +403,6 @@ export class Race implements World3D {
   }
 
   tap(x: number, y: number, id?: string) {
-    if (this.waiting) return
     this.lastTouch = this.time
     void x
     void y
@@ -529,8 +491,6 @@ export class Race implements World3D {
   }
 
   update(rawDt: number) {
-    // The phone's setup showing (turn it sideways, allow the tilt): everything holds still until it's done.
-    if (this.waiting) rawDt = 0
     // Slow motion as she crosses the line.
     const dt = this.slow > 0 ? rawDt * 0.35 : rawDt
     this.slow = Math.max(0, this.slow - rawDt)
@@ -539,12 +499,10 @@ export class Race implements World3D {
     const t = this.time
     this.vroomCool -= dt
     this.boostKick = Math.max(0, this.boostKick - dt * 0.8)
-    this.tilt?.update(rawDt)
     if (this.finger) {
       this.lastTouch = t
-      if (!this.finger.steering && this.steer === 'finger' && t - this.finger.t > 0.25) this.finger.steering = true
+      if (!this.finger.steering && t - this.finger.t > 0.25) this.finger.steering = true
     }
-    if (this.gasDown) this.lastTouch = t
 
     this.updatePhase(dt)
     if (this.phase === 'race' || this.phase === 'finish') {
@@ -593,10 +551,9 @@ export class Race implements World3D {
   private updatePhase(dt: number) {
     const t = this.phaseT
     if (this.phase === 'intro') {
-      // (Tilting, the finger line would be wrong: the gas pedal and a tilting phone show it instead.)
       if (t > 0.3 && !this.told.has('start')) {
         this.told.add('start')
-        if (this.steer === 'finger') this.say(L.race.start)
+        this.say(L.race.start)
       }
       if (!this.start.again && t > 4 && !this.told.has('raceYou')) {
         this.told.add('raceYou')
@@ -623,14 +580,14 @@ export class Race implements World3D {
     void dt
   }
 
-  /** GO! The music starts; a finger already down (or the gas pedal) is a rocket start. */
+  /** GO! The music starts; a finger already down is a rocket start. */
   private go() {
     this.phase = 'race'
     this.phaseT = 0
     this.music.start()
     this.rig.lag = 0.3
     const k = this.k
-    if (this.pressing) {
+    if (this.finger) {
       this.rocket = true
       k.d.vroom(1.6)
       sfx.vroom()
@@ -641,16 +598,15 @@ export class Race implements World3D {
     this.later(() => this.scenery.setLights(-1), 1500)
   }
 
-  /** Before GO, a finger down (or the gas pedal) revs the engine (the boat squats, the propeller throws spray). */
+  /** Before GO, a finger down revs the engine (the boat squats, the propeller throws spray). */
   private rev(dt: number) {
     const k = this.k
-    if (!this.pressing || this.phaseT < 0.4) return
+    if (!this.finger || this.phaseT < 0.4) return
     k.pitch.v -= dt * 3
     if (Math.random() < dt * 30) this.spray.emit(k.d.x + Math.sin(k.d.heading) * k.v.stern, 0.2, k.d.z + Math.cos(k.d.heading) * k.v.stern, -Math.sin(k.d.heading) * 3, 4, -Math.cos(k.d.heading) * 3, 0.6, 0.22)
   }
 
-  /** Her finger (only forward along the course: it picks where across it), tilting the phone, or racing on by
-   *  herself. */
+  /** Her finger (only forward along the course: it picks where across it), or racing on by herself. */
   private driveKaylee(dt: number) {
     const k = this.k
     const d = k.d
@@ -660,16 +616,6 @@ export class Race implements World3D {
       // Over the line: easing down, cruising on round.
       target = spotAt(k.s + 14, 0)
       cap = 0.45
-    } else if (this.steer === 'tilt') {
-      // The tilt slides her aim across the course (full lock: about 11 m/s sideways); held level, she keeps her lane
-      // round the bends. Her aim stays near where she really is (after a bump or a banana), and on the course.
-      const h = halfAt(k.s) - 1.4
-      this.aimLat = clamp(this.aimLat - (this.tilt?.value ?? 0) * 11 * dt, Math.max(-h, k.lat - 6), Math.min(h, k.lat + 6))
-      const ds = 8 + Math.abs(d.speed) * 0.25
-      if (rockAt(k.s + ds) > 0 || rockAt(k.s + 30) > 0) this.branch = Math.sign(this.aimLat) || this.branch
-      target = spotAt(k.s + ds, keepOn(k.s + ds, this.aimLat, 1.4, this.branch))
-      // The gas pedal is full speed; off it she cruises on, slower (never stopped).
-      cap = this.gasDown ? 1 : 0.6
     } else if (this.finger?.steering) {
       const p = this.waterPoint(this.finger.x, this.finger.y)
       if (p) {
@@ -1209,7 +1155,7 @@ export class Race implements World3D {
   /** The engine: putt-putt slow, RRRAAAH fast (revving on the grid). */
   private engine(dt: number) {
     const d = this.k.d
-    const rev = this.pressing && (this.phase === 'count' || this.phase === 'intro') ? 0.9 : 0
+    const rev = this.finger && (this.phase === 'count' || this.phase === 'intro') ? 0.9 : 0
     const sp = Math.max(rev, Math.min(1.4, Math.abs(d.speed) / d.feel.top))
     if (sp < 0.04 || this.phase === 'podium') return
     this.engineT += dt
@@ -1239,15 +1185,10 @@ export class Race implements World3D {
     sfx.bang()
   }
 
-  /** After a while with nothing touched: a finger on the water ahead (at the start, and while racing). Tilting, the
-   *  gas pedal shows its own finger instead (RaceLayer.tsx). */
+  /** After a while with nothing touched: a finger on the water ahead (at the start, and while racing). */
   private idleHints() {
     const el = this.hintEl
     if (!el) return
-    if (this.steer === 'tilt') {
-      el.style.display = 'none'
-      return
-    }
     let at: Vector3 | null = null
     const idle = this.time - this.lastTouch
     if ((this.phase === 'count' && !this.finger) || (this.phase === 'race' && idle > 7 && this.k.done < 0)) {
@@ -1600,7 +1541,6 @@ export class Race implements World3D {
       speed: r2(this.k.d.speed),
       airborne: this.k.d.airborne,
       rocket: this.rocket,
-      steer: { mode: this.steer, gas: this.gasDown, tilt: r2(this.tilt?.value ?? 0), live: this.tilt?.live ?? false, aim: r2(this.aimLat), waiting: this.waiting },
       ...this.counts,
     }
   }

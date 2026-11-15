@@ -862,11 +862,11 @@ export const pacing = [
   // The Nan Mountain Cup (greybox 1, no voices): the kart races on by itself when no finger is down, so the
   // auto-player's taps are honks and pokes (the rivals, the mushrooms) all the way to the line; the finger-held run is
   // qa-motion's nan-kart.
-  { name: 'thailand nan: the cup race', id: 'nan-cup', hash: '#/world/thailand/nan-trip/race?steer=finger', reset: true },
+  { name: 'thailand nan: the cup race', id: 'nan-cup', hash: '#/world/thailand/nan-trip/race', reset: true },
   // Greybox 2's tracks: racing on by itself it drives through the puddles and the waterfall (the rice steps), the
   // blossom showers and under the lanterns (the cloud), so the auto-player sees each trick.
-  { name: 'thailand nan: the cup race, rice steps', id: 'nan-cup-steps', hash: '#/world/thailand/nan-trip/race?track=steps&steer=finger', reset: true },
-  { name: 'thailand nan: the cup race, cloud top', id: 'nan-cup-cloud', hash: '#/world/thailand/nan-trip/race?track=cloud&steer=finger', reset: true },
+  { name: 'thailand nan: the cup race, rice steps', id: 'nan-cup-steps', hash: '#/world/thailand/nan-trip/race?track=steps', reset: true },
+  { name: 'thailand nan: the cup race, cloud top', id: 'nan-cup-cloud', hash: '#/world/thailand/nan-trip/race?track=cloud', reset: true },
   // Greybox 3: the silver podium (the auto-player's taps find the glowing winner for the high five, then ➡️) and the
   // Cup ceremony (the Cup floats over, a tap lifts it, the photo, 🗺️).
   { name: 'thailand nan: the cup podium, silver', id: 'nan-cup-podium', hash: '#/world/thailand/nan-trip/podium?track=steps&place=2', reset: true },
@@ -1771,7 +1771,7 @@ motion.push(
     name: 'nan-kart',
     seconds: 12,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/nan-trip/race?steer=finger`)
+      await page.goto(`${base}#/world/thailand/nan-trip/race`)
       await page.waitForFunction(() => window.__thaiNanQA?.().phase === 'race', null, { timeout: 40000 })
     },
     act: async (page) => {
@@ -1793,7 +1793,7 @@ motion.push(
     setup: async (page, base) => {
       // Racing on by itself, it drives straight over the mushrooms (the good bits don't need her to aim): up to just
       // before the first one.
-      await page.goto(`${base}#/world/thailand/nan-trip/race?steer=finger`)
+      await page.goto(`${base}#/world/thailand/nan-trip/race`)
       await page.waitForFunction(() => window.__thaiNanQA?.().racers?.kaylee.progress > 140, null, { timeout: 60000 })
     },
     act: async (page) => {
@@ -1811,7 +1811,7 @@ motion.push(
     name: 'nan-splash',
     seconds: 8,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/nan-trip/race?track=steps&steer=finger`)
+      await page.goto(`${base}#/world/thailand/nan-trip/race?track=steps`)
       await page.waitForFunction(() => window.__thaiNanQA?.().racers?.kaylee.progress > 50, null, { timeout: 60000 })
     },
     act: async (page) => {
@@ -1823,7 +1823,7 @@ motion.push(
     name: 'nan-cloud',
     seconds: 10,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/nan-trip/race?track=cloud&steer=finger`)
+      await page.goto(`${base}#/world/thailand/nan-trip/race?track=cloud`)
       await page.waitForFunction(() => window.__thaiNanQA?.().cloud?.in > 0.15, null, { timeout: 120000 })
     },
     act: async (page) => {
@@ -1869,7 +1869,7 @@ motion.push(
     name: 'nan-ducks',
     seconds: 6,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/nan-trip/race?track=steps&steer=finger`)
+      await page.goto(`${base}#/world/thailand/nan-trip/race?track=steps`)
       await raceTo(page, () => window.__thaiNanQA().scenery?.ducks?.state === 'cross', 240000)
     },
     act: async (page) => {
@@ -1881,7 +1881,7 @@ motion.push(
     name: 'nan-log',
     seconds: 6,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/nan-trip/race?steer=finger`)
+      await page.goto(`${base}#/world/thailand/nan-trip/race`)
       await raceTo(page, () => window.__thaiNanQA().racers?.kaylee.progress > 670, 300000)
     },
     act: async (page) => {
