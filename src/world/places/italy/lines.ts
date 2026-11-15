@@ -430,7 +430,7 @@ export const L = {
     dance: 'Everyone wants to dance! Big swings: forte, loud!',
     solo: onDevice('Hold the wand on a friend for a solo!', 'Keep the wand on a friend for a solo!'),
     star: onDevice('The wishing star! Tap it!', 'The wishing star! Click it!'),
-    brave: lupa('The wishing star! I feel brave!'),
+    brave: lupa('Oh! I feel brave now!'),
     lupa: 'Lupa is singing! Swing bigger and she gets braver!',
     high: 'Lift the wand up high!',
     roses: 'Brava! Brava, Lupa! Catch the roses!',

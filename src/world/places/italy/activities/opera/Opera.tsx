@@ -7,9 +7,11 @@
 // then louder) and the wand lifts Lupa's big high note. Roses, the Frecce Tricolori painting the flag where she sweeps
 // the wand, and the picnic, where hugging Lupa calls onDone (the trophy ceremony). Nothing can fail: each step helps
 // her along if she's stuck. Stroke detection and its feel numbers are in conduct.ts (FEEL).
-// Where it stands (2026-11-14, PR #449): check-in 2, the look and voices are in; next is the user's table read, then
-// Kaylee's playtest (check-in 3). Known small things: on a tall iPad the band is one small row (the plan's two rows
-// would make them bigger); the picnic pizza is a Margherita, not the one she made at the Pizzeria (it isn't saved).
+// Where it stands (2026-11-14, PR #449): check-in 3, Kaylee's playtest. The user heard the table read and said go on.
+// For her playtest to answer: does swinging feel like she plays the music, do big and small swings read as different
+// (fresh-eyes worried "forte"/"piano" are only words; the band's bounce and the owl are the only pictures of it), and
+// does the hold-still solo fight the swing (a tap gives a solo too). Small things: Sparkle's lines run 4-7 s (the owl's
+// is the longest); the picnic pizza is a Margherita, not the one she made at the Pizzeria (it isn't saved).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode, type RefObject } from 'react'
 import { burst, say, SparklePuppet, sounds, useElementSize, useGameLoop, type Line, type PuppetHandle } from '../../../../../sdk'
@@ -161,7 +163,7 @@ function makeGeo(W: number, H: number): Geo {
     members,
     lupa: { x: W / 2, y: stageFront - avail * 0.03, w: lupaW },
     podium: { x: W * 0.5, y: H - crowdR * 1.6 },
-    owl: { x: W * 0.08, y: standsTop - avail * 0.02, r: Math.max(34, memberW * 0.32) },
+    owl: { x: W * 0.09, y: standsTop - avail * 0.02, r: Math.max(44, memberW * 0.36) },
     moon: { x: W * 0.84, y: top + (standsTop - top) * 0.45, r: Math.max(34, Math.min(W, avail) * 0.06) },
     candles,
     crowd,
@@ -286,6 +288,7 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
     setProgress(done, TOTAL)
     burst()
     sounds.correct()
+    void sparkle.current?.play('cheer')
     later(ms, () => setStage(s))
   }
 
@@ -404,6 +407,7 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
     setCrowdUp(1)
     setWave((w) => w + 1)
     act(LUPA, 'cheer')
+    void sparkle.current?.play('dance')
     BAND.forEach((_, i) => later(200 + i * 120, () => act(i, 'cheer')))
     later(600, () => {
       setStage('roses')
@@ -811,8 +815,8 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
             </motion.div>
           ))}
           {/* Sparkle in the front row, in her Venice mask spirit: she cheers when poked. */}
-          <div data-poke="sparkle" style={{ position: 'absolute', right: geo.W * 0.02, bottom: -geo.memberW * 0.12, zIndex: 4 }}>
-            <SparklePuppet ref={sparkle} height={`${Math.max(90, geo.memberW * 1.05)}px`} lookToward={-0.6} />
+          <div data-poke="sparkle" style={{ position: 'absolute', right: geo.W * 0.02, bottom: 0, zIndex: 4 }}>
+            <SparklePuppet ref={sparkle} height={`${Math.max(100, geo.memberW * 1.2)}px`} lookToward={-0.6} />
           </div>
           {/* Podium. */}
           <div style={{ position: 'absolute', left: geo.podium.x - geo.memberW * 0.45, top: geo.podium.y - geo.memberW * 0.3, zIndex: 3 }}>
@@ -847,7 +851,7 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
               </div>
             ))}
           <AnimatePresence>
-            {flag && (
+            {flag && stage === 'sky' && (
               <motion.div initial={{ scale: 0, rotate: -10 }} animate={{ scale: 1, rotate: [0, 3, -3, 0] }} transition={{ rotate: { repeat: Infinity, duration: 2 } }} style={{ position: 'absolute', left: geo.W / 2, top: geo.standsTop, translate: '-50% -50%', zIndex: 8, pointerEvents: 'none' }}>
                 <Flag id="italy" width={Math.min(geo.W * 0.32, 320)} />
               </motion.div>
