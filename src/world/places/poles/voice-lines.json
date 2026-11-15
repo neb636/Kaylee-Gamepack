@@ -21,30 +21,37 @@
   "Let's see the penguin dads huddle!",
   "Want to see a real iceberg break off?",
   "Let's see narwhals, the unicorns of the sea!",
-  "Welcome to the Poles! Grab the globe and spin it.",
+  "Let's take Pebble home! Tap the first picture.",
+  "Let's take Pebble home! Click the first picture.",
+  "Next stop: across the floating ice!",
+  "Next stop: a ride on a narwhal!",
+  "Next stop: the snow is coming!",
+  "Next stop: the bottom of the world!",
+  "Next stop: the long, dark night.",
+  "Every stamp! Tap the last picture to fly home!",
+  "Every stamp! Click the last picture to fly home!",
+  "Tap a picture to play!",
+  "Click a picture to play!",
   "Spin the globe up or down!",
+  "Drag the sun up or down!",
   {
-    "text": "Hi! I'm Pola. I live on the sea ice!",
+    "text": "I've never seen a penguin before!",
     "voice": "pola"
   },
   {
-    "text": "Hi! I'm Pebble. I live in Antarctica!",
-    "voice": "pebble"
+    "text": "Don't worry, Pebble. We'll get you home!",
+    "voice": "pola"
   },
   {
     "text": "Ha ha, that tickles!",
     "voice": "pola"
   },
   {
-    "text": "The ice floats on the sea!",
-    "voice": "pola"
+    "text": "I miss my Papa.",
+    "voice": "pebble"
   },
   {
-    "text": "Brr! I love the cold!",
-    "voice": "pola"
-  },
-  {
-    "text": "Hello again!",
+    "text": "Are we nearly there?",
     "voice": "pebble"
   },
   {
@@ -52,96 +59,303 @@
     "voice": "pebble"
   },
   {
-    "text": "No polar bears down here!",
-    "voice": "pebble"
+    "text": "Pebble? Where are you?",
+    "voice": "papa"
   },
-  "Tap a picture to play!",
-  "Click a picture to play!",
-  "You got every stamp! Tap the party!",
-  "You got every stamp! Click the party!",
+  {
+    "text": "I'll keep looking, little one.",
+    "voice": "papa"
+  },
+  {
+    "text": "I fly from pole to pole every year!",
+    "voice": "terry"
+  },
+  {
+    "text": "Follow me! I know the way!",
+    "voice": "terry"
+  },
   "Here comes the sun! Drag it!",
-  "Drag the sun up or down!",
   "Summer up north, and night down south!",
   "Summer down south, night up north!",
-  "A lost penguin! Carry him home.",
-  "A lost polar bear cub! Carry her home.",
-  "Carry it home: the top or the bottom?",
-  {
-    "text": "Yay! Welcome home!",
-    "voice": "pebble"
-  },
-  {
-    "text": "Welcome home, little cub!",
-    "voice": "pola"
-  },
-  {
-    "text": "A penguin? Penguins live down south!",
-    "voice": "pola"
-  },
-  {
-    "text": "Eek! Polar bears live up north!",
-    "voice": "pebble"
-  },
   "This is the North Pole, the very top of the world!",
   "Seals pop up through holes in the ice to breathe.",
   "Scientists stay here to learn about the ice.",
   "Whales swim in the cold seas at both poles.",
+  "The red ship! Pebble fell asleep on it.",
+  "My balloon! It will fly Pebble home.",
   "The northern lights! They dance in the dark winter sky.",
   "The southern lights! They glow in the long winter night.",
+  "This is Pola. She lives at the very top of the world.",
   {
-    "text": "Mama! I am way over here!",
+    "text": "Whoa! What ARE you?",
     "voice": "pola"
+  },
+  {
+    "text": "I'm Pebble. I'm a penguin!",
+    "voice": "pebble"
+  },
+  {
+    "text": "A pen-guin? I've never seen one!",
+    "voice": "pola"
+  },
+  {
+    "text": "I want my Papa.",
+    "voice": "pebble"
+  },
+  {
+    "text": "I saw a big red ship. It smelled like fish!",
+    "voice": "pebble"
+  },
+  {
+    "text": "I climbed inside, and I fell asleep.",
+    "voice": "pebble"
+  },
+  "The ship sailed all the way up the world. From the bottom, to the top!",
+  {
+    "text": "When I woke up, everything was different.",
+    "voice": "pebble"
+  },
+  {
+    "text": "A penguin? Up here?",
+    "voice": "terry"
+  },
+  {
+    "text": "Penguins live at the bottom of the world! I fly there every year.",
+    "voice": "terry"
+  },
+  {
+    "text": "Can you show us the way?",
+    "voice": "pola"
+  },
+  {
+    "text": "It's a long, long way. But yes!",
+    "voice": "terry"
+  },
+  "My balloon can carry Pebble home. Let's help him!",
+  {
+    "text": "Mama will know what to do! She's across the ice.",
+    "voice": "pola"
+  },
+  {
+    "text": "I can't swim yet. My feathers are too fluffy!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Then hop on my back!",
+    "voice": "pola"
+  },
+  {
+    "text": "A penguin! You are so far from home, little one.",
+    "voice": "mama"
+  },
+  {
+    "text": "You're so warm!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Pola, go with him. Friends help friends.",
+    "voice": "mama"
+  },
+  {
+    "text": "I will, Mama!",
+    "voice": "pola"
+  },
+  {
+    "text": "The balloon is out past the icebergs.",
+    "voice": "terry"
+  },
+  {
+    "text": "That's too far to hop!",
+    "voice": "pola"
+  },
+  {
+    "text": "Need a ride? I'm Nari the narwhal!",
+    "voice": "nari"
+  },
+  {
+    "text": "A unicorn fish!",
+    "voice": "pebble"
+  },
+  {
+    "text": "The unicorn of the sea. Hold on tight!",
+    "voice": "nari"
+  },
+  {
+    "text": "Here we are! One balloon.",
+    "voice": "nari"
+  },
+  {
+    "text": "Thank you, Nari!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Say hello to the bottom of the world for me!",
+    "voice": "nari"
+  },
+  {
+    "text": "Terry, when do we fly?",
+    "voice": "pola"
+  },
+  {
+    "text": "When the snow comes, and the fox turns white.",
+    "voice": "terry"
+  },
+  {
+    "text": "But the fox is brown!",
+    "voice": "pebble"
+  },
+  "Then let's help the winter along!",
+  {
+    "text": "Snow! White coats everywhere!",
+    "voice": "terry"
+  },
+  {
+    "text": "Winter is here. It's time to fly south!",
+    "voice": "terry"
+  },
+  {
+    "text": "Bye, fox! Bye, hare!",
+    "voice": "pola"
+  },
+  "Meanwhile, at the bottom of the world...",
+  {
+    "text": "Pebble! Pebble, where are you?",
+    "voice": "papa"
+  },
+  {
+    "text": "Has anyone seen my little Pebble?",
+    "voice": "papa"
+  },
+  {
+    "text": "I'll look down the hill, and in the sea. I'll look everywhere!",
+    "voice": "papa"
+  },
+  {
+    "text": "No Pebble in the sea.",
+    "voice": "papa"
+  },
+  {
+    "text": "But I caught his favorite supper.",
+    "voice": "papa"
+  },
+  {
+    "text": "Come home soon, little one.",
+    "voice": "papa"
+  },
+  "Winter at the South Pole. The sun is gone for months.",
+  {
+    "text": "I'll wait right here, Pebble.",
+    "voice": "papa"
+  },
+  {
+    "text": "I remember the night you hatched.",
+    "voice": "papa"
+  },
+  {
+    "text": "I kept you warm all winter long.",
+    "voice": "papa"
+  },
+  {
+    "text": "Look. The sun is coming back.",
+    "voice": "papa"
+  },
+  {
+    "text": "Wait. What is that, up in the sky?",
+    "voice": "papa"
+  },
+  "All aboard! Next stop, the bottom of the world!",
+  {
+    "text": "Goodbye, my brave cub! Hurry home!",
+    "voice": "mama"
+  },
+  {
+    "text": "Follow me! All the way down the world!",
+    "voice": "terry"
+  },
+  "We made it! This is Antarctica.",
+  {
+    "text": "There's ground under this ice! Not sea!",
+    "voice": "pola"
+  },
+  {
+    "text": "Goodness! What is THAT?",
+    "voice": "papa"
+  },
+  {
+    "text": "Hi! I'm a polar bear!",
+    "voice": "pola"
+  },
+  {
+    "text": "Papa? They all look the same!",
+    "voice": "pebble"
+  },
+  "Every penguin papa has his own song. Let's find Papa's!",
+  {
+    "text": "Pebble! My Pebble!",
+    "voice": "papa"
+  },
+  {
+    "text": "Papa! I went to the top of the world!",
+    "voice": "pebble"
+  },
+  {
+    "text": "This is Pola. She carried me home.",
+    "voice": "pebble"
+  },
+  {
+    "text": "A polar bear at the South Pole! Thank you, Pola.",
+    "voice": "papa"
+  },
+  {
+    "text": "Look! The sky is dancing!",
+    "voice": "pola"
+  },
+  {
+    "text": "Top to bottom! Who's ready for my Polar Explorer quiz?",
+    "voice": "terry"
   },
   "Pull Pola back, and let go!",
   "Click Pola, pull her back, and let go!",
   "The ice is drifting. Wait, then fling!",
   "Summer melts the ice. Push floes together!",
   {
-    "text": "Whoa! This ice is moving!",
-    "voice": "pola"
+    "text": "Wheee!",
+    "voice": "pebble"
   },
   {
-    "text": "The ice is so little now!",
-    "voice": "pola"
+    "text": "Again! Again!",
+    "voice": "pebble"
   },
   {
-    "text": "Splash! I love swimming!",
-    "voice": "pola"
+    "text": "I'm flying!",
+    "voice": "pebble"
   },
   {
-    "text": "Polar bears are great swimmers!",
-    "voice": "pola"
-  },
-  {
-    "text": "Wheee! Splash!",
-    "voice": "pola"
-  },
-  {
-    "text": "Brr! Paddle paddle!",
-    "voice": "pola"
-  },
-  {
-    "text": "Wheee! A slide!",
-    "voice": "pola"
-  },
-  {
-    "text": "Whoops! Too tippy!",
-    "voice": "pola"
+    "text": "Higher, Pola!",
+    "voice": "pebble"
   },
   {
     "text": "Hee hee!",
     "voice": "pola"
   },
   {
+    "text": "Peep peep!",
+    "voice": "pebble"
+  },
+  {
     "text": "That tickles!",
     "voice": "pola"
   },
   {
-    "text": "Again! Again!",
-    "voice": "pola"
+    "text": "Hop, Pola, hop!",
+    "voice": "pebble"
   },
   {
     "text": "Hop home to me, Pola!",
+    "voice": "mama"
+  },
+  {
+    "text": "Who is that on your back?",
     "voice": "mama"
   },
   {
@@ -159,14 +373,63 @@
   "This ice is floating on the sea!",
   "The North Pole is a frozen sea. There is water under the ice!",
   {
-    "text": "My brave little cub! You made it!",
-    "voice": "mama"
+    "text": "Don't drop me!",
+    "voice": "pebble"
   },
   {
-    "text": "Mama! I hopped all the way home!",
+    "text": "Polar bears are great swimmers!",
     "voice": "pola"
   },
-  "You got Pola home!",
+  {
+    "text": "Hold me up high!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Splash! I love swimming!",
+    "voice": "pola"
+  },
+  {
+    "text": "Brr! Paddle paddle!",
+    "voice": "pola"
+  },
+  {
+    "text": "I'm still dry!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Not one drop on me!",
+    "voice": "pebble"
+  },
+  "A ringed seal! That hole is how she breathes.",
+  "An iceberg! Most of it hides under the water.",
+  "A snowy owl! She is white like the snow.",
+  "There goes Terry! Terns fly from pole to pole.",
+  "A walrus! His long teeth are called tusks.",
+  "A narwhal! That long horn is really a tooth.",
+  "A puffin! She dives for little fish.",
+  "Beluga whales! They sing like birds.",
+  "A baby seal! Her white fur keeps her warm.",
+  {
+    "text": "Whoa! This ice is moving!",
+    "voice": "pola"
+  },
+  {
+    "text": "The ice is so little now!",
+    "voice": "pola"
+  },
+  {
+    "text": "Wheee! A slide!",
+    "voice": "pola"
+  },
+  {
+    "text": "Whoops! Too tippy!",
+    "voice": "pola"
+  },
+  {
+    "text": "Mama! Look who I found!",
+    "voice": "pola"
+  },
+  "You carried Pebble all the way!",
   "Brr, winter is coming! Rub snow on the fox.",
   "Brr, winter is coming! Click and wiggle snow on the fox.",
   "Rub the fox with your finger.",
@@ -192,19 +455,58 @@
   "Polar bears are white all year.",
   "White fur hides in white snow. That's camouflage!",
   "Lots of animals live on the land around the frozen sea.",
-  {
-    "text": "Papa, I'm so hungry!",
-    "voice": "pebble"
-  },
-  {
-    "text": "Krill coming right up!",
-    "voice": "papa"
-  },
   "Steer Papa left and right!",
   "Bumps! Pick a way down the hill!",
   "Steer Papa to the pink krill!",
-  "Antarctica is one big hill of ice!",
-  "Penguins fly under the water!",
+  "Is that Pebble? Steer Papa over to look!",
+  {
+    "text": "Pebble? Are you down here?",
+    "voice": "papa"
+  },
+  {
+    "text": "Not behind this snowbank!",
+    "voice": "papa"
+  },
+  {
+    "text": "Pebble! Where are you?",
+    "voice": "papa"
+  },
+  {
+    "text": "No little footprints here.",
+    "voice": "papa"
+  },
+  {
+    "text": "Have you seen my Pebble?",
+    "voice": "papa"
+  },
+  {
+    "text": "A little grey chick? No?",
+    "voice": "papa"
+  },
+  {
+    "text": "Oh! A snowy Adelie, not Pebble!",
+    "voice": "papa"
+  },
+  {
+    "text": "Not Pebble. A sleepy seal!",
+    "voice": "papa"
+  },
+  {
+    "text": "A skua chick! Not my chick.",
+    "voice": "papa"
+  },
+  {
+    "text": "A woolly hat! It fits!",
+    "voice": "papa"
+  },
+  {
+    "text": "Bong! Only a buoy.",
+    "voice": "papa"
+  },
+  {
+    "text": "Just a ball of little fish!",
+    "voice": "papa"
+  },
   {
     "text": "Whoa, I can fly!",
     "voice": "papa"
@@ -214,7 +516,7 @@
     "voice": "papa"
   },
   {
-    "text": "Oops! Snow on my beak!",
+    "text": "Ha! Snow on my beak!",
     "voice": "papa"
   },
   {
@@ -229,12 +531,18 @@
     "text": "Round and round!",
     "voice": "papa"
   },
+  "Antarctica is land, under a big hill of ice!",
+  "Penguins fly under the water!",
   {
-    "text": "Hello, silly seal!",
+    "text": "Pebble? Are you in the sea?",
     "voice": "papa"
   },
   {
-    "text": "Yum, krill!",
+    "text": "Not under this ice!",
+    "voice": "papa"
+  },
+  {
+    "text": "Krill! For Pebble's supper!",
     "voice": "papa"
   },
   {
@@ -242,30 +550,38 @@
     "voice": "papa"
   },
   {
-    "text": "More for Pebble!",
+    "text": "More for Pebble's supper!",
+    "voice": "papa"
+  },
+  "Krill are tiny pink sea animals. Penguin food!",
+  {
+    "text": "Seal, have you seen Pebble?",
     "voice": "papa"
   },
   {
-    "text": "Pebble, I'm home!",
+    "text": "Up and out!",
     "voice": "papa"
   },
   {
-    "text": "Yummy! Thank you, Papa!",
-    "voice": "pebble"
-  },
-  {
-    "text": "Hee hee!",
-    "voice": "pebble"
-  },
-  {
-    "text": "Hi, hi!",
-    "voice": "pebble"
+    "text": "Pebble! Supper is ready!",
+    "voice": "papa"
   },
   "Emperor penguins are the biggest penguins of all!",
+  "Gentoo penguins have bright orange beaks.",
   "These little ones are Adelie penguins.",
-  "A leopard seal! This one just wants to play.",
-  "Penguin chicks eat krill, tiny pink sea animals.",
   "No polar bears live here, so the penguins are not scared.",
+  "An elephant seal! The biggest seal of all.",
+  "Weddell seals sing. It sounds like outer space!",
+  "A skua! A big, bold seabird.",
+  "Skua chicks are grey and fluffy, just like Pebble.",
+  "A woolly hat keeps your head warm.",
+  "Scientists stay here to study the ice.",
+  "Nobody lives here for good. Scientists come to visit!",
+  "A humpback whale! It eats krill too.",
+  "A leopard seal! This one just wants to play.",
+  "Under the water, penguins are super fast!",
+  "A buoy floats on the sea. It tells the ships the way.",
+  "Silverfish! They shine like little coins.",
   "Carry the cold penguin into the middle!",
   "More penguin dads are coming!",
   "A blizzard! Keep the cold ones moving in.",
@@ -329,125 +645,160 @@
     "text": "Ooh, so pretty!",
     "voice": "pebble"
   },
-  "Pick a pole: north or south?",
-  "Tap the cracks to break off the ice!",
-  "Click the cracks to break off the ice!",
-  "A giant crack! Tap, tap, tap!",
-  "A giant crack! Click, click, click!",
-  "Look! Most of the iceberg hides under the water.",
-  "Push the iceberg down with your finger!",
-  "Click and drag to push the iceberg down!",
-  "Now push the icebergs out to sea!",
-  "Your icebergs are sailing away!",
-  "When ice breaks off, it's called calving!",
-  "Icebergs up north are tall and pointy.",
-  "Icebergs down south are flat, like a table!",
-  "Nine parts out of ten are under the water!",
-  "Icebergs are made of snow, so they're not salty!",
+  {
+    "text": "Here we go! Hold on tight!",
+    "voice": "nari"
+  },
+  "Slide your finger to steer Nari!",
+  "Click and drag to steer Nari!",
+  "Icebergs! Steer Nari around them!",
+  "Steer Nari under the ice!",
+  "Steer Nari to the balloon!",
+  {
+    "text": "Follow me! The balloon is this way!",
+    "voice": "terry"
+  },
+  {
+    "text": "Yum!",
+    "voice": "nari"
+  },
+  {
+    "text": "Yum, a fish!",
+    "voice": "nari"
+  },
+  {
+    "text": "Catch another one!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Fishy, fishy!",
+    "voice": "pola"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "pola"
+  },
+  {
+    "text": "We're flying!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Tusk first!",
+    "voice": "nari"
+  },
+  {
+    "text": "Splash! Again, again!",
+    "voice": "pebble"
+  },
+  {
+    "text": "What a splash!",
+    "voice": "pola"
+  },
+  {
+    "text": "Ha ha! Nice one!",
+    "voice": "nari"
+  },
+  {
+    "text": "Boing! Silly ice!",
+    "voice": "nari"
+  },
+  {
+    "text": "Bumper narwhal!",
+    "voice": "pola"
+  },
+  {
+    "text": "Hee hee! Boing!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Look at those icebergs!",
+    "voice": "pola"
+  },
+  {
+    "text": "Deep breath! Here's your bubble!",
+    "voice": "nari"
+  },
+  "Look! Most of an iceberg hides under the water.",
+  {
+    "text": "I'm in a bubble! I'm still dry!",
+    "voice": "pebble"
+  },
+  {
+    "text": "No ground down here. It's all sea!",
+    "voice": "pola"
+  },
+  {
+    "text": "Up we go!",
+    "voice": "nari"
+  },
+  {
+    "text": "There you are!",
+    "voice": "terry"
+  },
+  {
+    "text": "Whoa! The glacier is cracking!",
+    "voice": "pola"
+  },
+  "A new iceberg! It broke off the glacier.",
+  {
+    "text": "Big wave! Surf it!",
+    "voice": "nari"
+  },
+  {
+    "text": "Surf, Nari, surf!",
+    "voice": "pola"
+  },
+  {
+    "text": "I see the balloon!",
+    "voice": "pebble"
+  },
+  {
+    "text": "We made it!",
+    "voice": "pola"
+  },
+  {
+    "text": "That tickles my tusk!",
+    "voice": "nari"
+  },
+  {
+    "text": "Pfff! A spout!",
+    "voice": "nari"
+  },
+  {
+    "text": "Faster, Nari!",
+    "voice": "pola"
+  },
+  {
+    "text": "Giddy-up, unicorn!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Keep up, slowpokes!",
+    "voice": "terry"
+  },
+  {
+    "text": "This way!",
+    "voice": "terry"
+  },
+  "Nari's horn is really a long tooth!",
+  "Narwhals and belugas live only in the Arctic.",
+  "A walrus! He has two long teeth.",
+  "Puffins! They catch fish in their bright beaks.",
+  "A seal is napping on a little iceberg.",
+  "Belugas! They whistle like little birds.",
+  "An orca! This one is just saying hello.",
   "Fizz! Old air bubbles pop out of the ice.",
   "Old ice is packed so tight, it looks blue!",
-  "A seal is napping on a little iceberg.",
-  "Orcas live at both poles!",
-  {
-    "text": "Hi! Break off some ice with me!",
-    "voice": "pola"
-  },
-  {
-    "text": "Wheee, splash!",
-    "voice": "pola"
-  },
-  {
-    "text": "Ooh, a little one!",
-    "voice": "pola"
-  },
-  {
-    "text": "Another one!",
-    "voice": "pola"
-  },
-  {
-    "text": "Whoa! It's a big one!",
-    "voice": "pola"
-  },
-  {
-    "text": "Splash! I'm all wet!",
-    "voice": "pola"
-  },
-  {
-    "text": "Wow, it goes way down!",
-    "voice": "pola"
-  },
-  {
-    "text": "I'm riding the iceberg!",
-    "voice": "pola"
-  },
-  {
-    "text": "Hi again!",
-    "voice": "pola"
-  },
-  {
-    "text": "Bye bye, icebergs!",
-    "voice": "pola"
-  },
-  {
-    "text": "Welcome to our ice shelf!",
-    "voice": "papa"
-  },
-  {
-    "text": "Splendid!",
-    "voice": "papa"
-  },
-  {
-    "text": "Plop, into the sea!",
-    "voice": "papa"
-  },
-  {
-    "text": "Another one!",
-    "voice": "papa"
-  },
-  {
-    "text": "Oh my, a giant!",
-    "voice": "papa"
-  },
-  {
-    "text": "Brr! A cold shower!",
-    "voice": "papa"
-  },
-  {
-    "text": "So much ice under the water!",
-    "voice": "papa"
-  },
-  {
-    "text": "All aboard, everyone!",
-    "voice": "papa"
-  },
-  {
-    "text": "Hello there!",
-    "voice": "papa"
-  },
-  {
-    "text": "Honk honk!",
-    "voice": "papa"
-  },
-  {
-    "text": "Off they go! Thank you!",
-    "voice": "papa"
-  },
-  {
-    "text": "Pola's postcard! Let's fly it to Pebble!",
-    "voice": "terry"
-  },
+  "When ice breaks off, it's called calving!",
+  "The North Pole is a frozen sea. No land under here!",
   "Steer Terry with your finger!",
   "Click and drag to steer Terry!",
+  {
+    "text": "Follow me, balloon!",
+    "voice": "terry"
+  },
   "Move your finger to steer Terry!",
   "Hold the click and move to steer Terry!",
-  {
-    "text": "Phew! It's warm in the middle of the world!",
-    "voice": "terry"
-  },
-  {
-    "text": "Brr, it's windy! Nearly at the South Pole!",
-    "voice": "terry"
-  },
   {
     "text": "Yum, a fish!",
     "voice": "terry"
@@ -489,25 +840,120 @@
     "voice": "terry"
   },
   {
-    "text": "A postcard for you, Pebble!",
+    "text": "Phew! I'm melting!",
+    "voice": "pola"
+  },
+  "The middle of the world is the warmest part!",
+  {
+    "text": "Look down! A whale!",
     "voice": "terry"
   },
   {
-    "text": "From Pola! Look, a polar bear!",
+    "text": "It smells like home!",
     "voice": "pebble"
   },
-  "Quiz time!",
-  "Put Pola where polar bears live!",
-  "Put Pebble where penguins live!",
-  "Spin the South Pole to the front!",
-  "Spin the North Pole to the front!",
-  "Which pole is ocean under the ice? Tap it!",
-  "Which pole is ocean under the ice? Click it!",
-  "Which pole is the coldest? Tap it!",
-  "Which pole is the coldest? Click it!",
-  "Who visits both poles? Tap them!",
-  "Who visits both poles? Click them!",
-  "It's summer up north. What is it down south?",
+  {
+    "text": "Hello, albatross! Nearly there!",
+    "voice": "terry"
+  },
+  {
+    "text": "Higher, higher!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Papa sings like this!",
+    "voice": "pebble"
+  },
+  "Tap a papa to hear his song!",
+  "Click a papa to hear his song!",
+  "Tap the chick to hear the song again.",
+  "Click the chick to hear the song again.",
+  {
+    "text": "Not my chick! Try my neighbor.",
+    "voice": "papa"
+  },
+  "Look! Who is swaying?",
+  {
+    "text": "That's Papa's song!",
+    "voice": "pebble"
+  },
+  {
+    "text": "My little Pebble!",
+    "voice": "papa"
+  },
+  {
+    "text": "Find my papa too!",
+    "voice": "pebble"
+  },
+  "More papas! Listen for the same song.",
+  {
+    "text": "Papa! You found him!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Thank you! Thank you!",
+    "voice": "pebble"
+  },
+  "Brr, a snowstorm! Just listen.",
+  {
+    "text": "I can't see my papa!",
+    "voice": "pebble"
+  },
+  "Every chick has a papa!",
+  {
+    "text": "I just want to say hi!",
+    "voice": "pola"
+  },
+  {
+    "text": "Hi, penguins!",
+    "voice": "pola"
+  },
+  "Penguins have never seen a polar bear. They're a little shy!",
+  "Emperor penguins find their family by their song.",
+  {
+    "text": "Quiz time!",
+    "voice": "terry"
+  },
+  {
+    "text": "Take Pola home! Where do polar bears live?",
+    "voice": "terry"
+  },
+  {
+    "text": "Where do penguins live?",
+    "voice": "terry"
+  },
+  {
+    "text": "Show me the South Pole!",
+    "voice": "terry"
+  },
+  {
+    "text": "Show me the North Pole!",
+    "voice": "terry"
+  },
+  {
+    "text": "Which pole is sea under the ice?",
+    "voice": "terry"
+  },
+  {
+    "text": "Which pole is the coldest?",
+    "voice": "terry"
+  },
+  {
+    "text": "Who flies to both poles?",
+    "voice": "terry"
+  },
+  {
+    "text": "It's summer up north. What is it down south?",
+    "voice": "terry"
+  },
+  "Drag to the top or the bottom!",
+  "Click and drag to the top or the bottom!",
+  "Swipe the globe up or down!",
+  "Drag the globe up or down!",
+  "Tap the top or the bottom!",
+  "Click the top or the bottom!",
+  "Tap your answer!",
+  "Click your answer!",
   {
     "text": "Where's the sea ice? I live up top!",
     "voice": "pola"
@@ -516,15 +962,49 @@
     "text": "Brr! Where is everybody?",
     "voice": "pebble"
   },
-  "Wobble, wobble! Try the other end.",
-  "That's rock and land under there! Try the other pole.",
-  "Brr! The other pole is even colder.",
-  "Hmm, not them. Who can fly far?",
-  "Down south it's dark and snowy! Try again.",
+  {
+    "text": "Wobble, wobble! The other end!",
+    "voice": "terry"
+  },
+  {
+    "text": "That one is rock and land! Try the other.",
+    "voice": "terry"
+  },
+  {
+    "text": "Brr! The other one is even colder.",
+    "voice": "terry"
+  },
+  {
+    "text": "Not them. Who can fly far?",
+    "voice": "terry"
+  },
+  {
+    "text": "Down south it's dark and snowy!",
+    "voice": "terry"
+  },
   "Look for the sparkle!",
-  "Yes!",
-  "That's right!",
-  "You got it!",
-  "Super!",
-  "Wow, you know your poles!"
+  {
+    "text": "I'm home! Bye, Pebble!",
+    "voice": "pola"
+  },
+  {
+    "text": "Yes!",
+    "voice": "terry"
+  },
+  {
+    "text": "That's right!",
+    "voice": "terry"
+  },
+  {
+    "text": "You got it!",
+    "voice": "terry"
+  },
+  {
+    "text": "Top marks!",
+    "voice": "terry"
+  },
+  {
+    "text": "A real Polar Explorer!",
+    "voice": "terry"
+  }
 ]
