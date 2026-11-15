@@ -86,7 +86,10 @@ mocap; a Tripo auto-rig gives canned clips. Both would replace the code-driven p
 
 Steps (Claude does them through the Blender MCP):
 1. Import the textured GLB, merge by distance, **separate by loose parts**. Tripo makes separate pieces for hair, face,
-   body (dress + legs + arms), tail, ears, eyes and braid bits. Name them by size and position.
+   body (dress + legs + arms), tail, ears, eyes and braid bits. Name them by size and position. **The hair must be
+   its own `hair*` piece:** `inkPieces` picks each outline by name, and a `face*` piece's hull stands 4 mm off the
+   surface, so hair left inside the face mesh draws a thick band. If Tripo fused them (Mom did), separate the hair
+   by its texture color (below).
 2. **Cut the arms off the body with a clean plane, then cap the holes.** Bisect the shoulder region at a plane
    (`bmesh.ops.bisect_plane`, Kaylee: x = ±0.105 above the armpit), flood-fill the faces from the hoof without crossing
    the cut, and separate them. Then fill the cut on both sides (`bmesh.ops.holes_fill`, UVs borrowed from a
@@ -194,8 +197,14 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   pieces for open ends (`is_boundary` edges after welding) before it waves.
 - **Round glasses:** the rims are circles (r 0.057), and their depth keeps only its gentle trend round the circle (the
   first two harmonics), stood out just enough to clear the face, so the sculpted lashes no longer kink a rim.
-- **Her ink is finer than Kaylee's:** the lab's Outline slider at 0.35 instead of 0.75 (`inkPieces`' `px`), so
-  0.84 px before TUNE, and the glasses' and lids' ink shrink with it.
+- **Her ink:** the lab's Outline slider at 1 instead of Kaylee's 0.75 (`inkPieces`' `px`), so 2.4 px before TUNE,
+  and the glasses' and lids' ink follow it. (It was 0.35 while her hair drew a thick band.)
+- **Her hair is its own piece (2026-11-15, issue #444):** Tripo fused the hair around her face into `face_mesh`, so
+  the face hull's lift drew a thick band of ink round all her hair. It's now `hair_mesh` under `head`: the faces whose
+  texture is dark brown (lightness < 0.45), only the one big connected region (her painted eyes and the six lash
+  islands stay on the face), then a few passes of a majority filter on its edge. `face_mesh` keeps her face, muzzle,
+  eyes and lashes. Every other piece and the glasses' trace are unchanged. The file before the split is
+  `mom-rig-before-hair.blend`.
 - **In the game (2026-11-14):** she is the game's Mom everywhere. `Member` builds every `ji` in her own look through
   `familyRig` (member.ts; the mall race's `Racer('ji')` too), and Thailand's `Place.tsx` waits for `momReady()` as it
   does for Kaylee. If the GLB can't load, the code-built Mom stands in; `?mom=code` on any link brings her back on

@@ -183,10 +183,7 @@ export function buildMomRig(gltf: GLTF, bag: Bag): Rig {
     }
   })
   // Tripo made her head, arms, legs and tail separate pieces: nothing was cut, so no caps to keep the ink off.
-  // TEMPORARY (issue #444): her hair is part of face_mesh, so the face's hull
-  // lift (model.ts HULL_LIFT, 4 mm, 7.4 mm at her size) drew a thick band around it. A lift of 0 keeps her face's
-  // line on the surface. Once the hair is its own `hair_mesh`, go back to `inkPieces(meshes, null, BODY_INK)`.
-  inkPieces(meshes, null, BODY_INK, 0)
+  inkPieces(meshes, null, BODY_INK)
 
   const [body, head, eyes, armL, armR, tail, legL, legR] = ['body', 'head', 'eyes', 'armL', 'armR', 'tail', 'legL', 'legR'].map(node)
   // Her arms take the code-built rig's poses (reachForward), and each holds things at its hoof (`hands`: a group turned
