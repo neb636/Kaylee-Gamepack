@@ -1001,5 +1001,62 @@
   "Gelato is Italian ice cream! Yum!",
   "The Pantheon in Rome has a big hole in its roof. When it rains, rain falls inside!",
   "This is Italy! Tap a picture to learn more.",
-  "This is Italy! Click a picture to learn more."
+  "This is Italy! Click a picture to learn more.",
+  {
+    "text": "So many people... I'm too shy to sing!",
+    "voice": "lupa"
+  },
+  "Grab the wand and lead the band!",
+  "Put your finger on the wand and swing it! Lead the band!",
+  "Click and hold, then swing the wand! Lead the band!",
+  "Big swings: forte! Loud!",
+  "Little swings: piano. Soft!",
+  "Shh! The baby owl is sleepy. Little swings: piano, soft.",
+  "Everyone wants to dance! Big swings: forte, loud!",
+  "Hold the wand on a friend for a solo!",
+  "Keep the wand on a friend for a solo!",
+  "The wishing star! Tap it!",
+  "The wishing star! Click it!",
+  {
+    "text": "The wishing star! I feel brave!",
+    "voice": "lupa"
+  },
+  "Lupa is singing! Swing bigger and she gets braver!",
+  "Lift the wand up high!",
+  "Brava! Brava, Lupa! Catch the roses!",
+  "Sweep the wand across the sky!",
+  "Picnic time! Tap Lupa for a hug!",
+  "Picnic time! Click Lupa for a hug!",
+  {
+    "text": "Grazie! Ciao for now!",
+    "voice": "lupa"
+  },
+  "Swing the wand!",
+  "Little, soft swings.",
+  "Big, big swings!",
+  "Hold the wand still on a friend, or tap one!",
+  "Keep the wand still on a friend, or click one!",
+  "Swing the wand for Lupa!",
+  "Up, up, up!",
+  "Swing the wand across the sky!",
+  {
+    "text": "Ho ho! My mandolino!",
+    "voice": "bruno"
+  },
+  {
+    "text": "Shake, shake, shake!",
+    "voice": "spina"
+  },
+  {
+    "text": "Behold! The emperor's horn!",
+    "voice": "cesare"
+  },
+  {
+    "text": "Coo! Accordion time!",
+    "voice": "gino"
+  },
+  {
+    "text": "Hee-haw! Piano, piano!",
+    "voice": "nino"
+  }
 ]

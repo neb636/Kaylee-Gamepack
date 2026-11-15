@@ -1,5 +1,6 @@
-// 🎭 Opera Night at the Arena, Italy's finale (plan: planning/around-the-world/italy.md (retired; in git history), "Finale"). GATE 1: THE GREYBOX.
-// Only placeholder shapes, no art, no puppets, no voices (the prompts are text for Dad): Kaylee grabs the conductor's
+// 🎭 Opera Night at the Arena, Italy's finale (plan: planning/around-the-world/italy.md (retired; in git history), "Finale").
+// The look is drawn in code (art.tsx), the band are Italy's puppets with their instruments, and every prompt is spoken
+// (lines.ts L.opera). Lupa says she's too shy (the story), then Kaylee grabs the conductor's
 // wand and every swing is one beat of a synthesized tarantella (band.ts), so her hand is the tempo; big swings play
 // forte, little swings piano, and the band freezes when she stops. The loop: candles light up the arena as she plays,
 // the baby owl wants piano, the crowd wants forte, three solos of her choice, then the Trevi star lets Lupa sing (soft,
@@ -7,24 +8,36 @@
 // the wand, and the picnic, where hugging Lupa calls onDone (the trophy ceremony). Nothing can fail: each step helps
 // her along if she's stuck. Stroke detection and its feel numbers are in conduct.ts (FEEL).
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useRef, useState, type PointerEvent } from 'react'
-import { burst, onDevice, sounds, useElementSize, useGameLoop } from '../../../../../sdk'
+import { useEffect, useRef, useState, type PointerEvent, type ReactNode, type RefObject } from 'react'
+import { burst, say, SparklePuppet, sounds, useElementSize, useGameLoop, type Line, type PuppetHandle } from '../../../../../sdk'
 import { Flag } from '../../../../kit/Flag'
 import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
 import { sfx } from '../../../../kit/sfx'
+import { StoryBeat } from '../../../../kit/StoryBeat'
+import { art } from '../../art'
+import { L } from '../../lines'
 import type { ActivityProps } from '../../Place'
+import { Bruno } from '../../puppets/Bruno'
+import { Cesare } from '../../puppets/Cesare'
+import { Gino } from '../../puppets/Gino'
 import { INK } from '../../puppets/ink'
+import { Lupa } from '../../puppets/Lupa'
+import { Nino } from '../../puppets/Nino'
+import { Spina } from '../../puppets/Spina'
+import { Arena, BabyOwl, Candle, CrowdHead, Curtain, Gelato, Jet, Moon, Piano, Pigeon, Pizza, Podium, Rose, Stars, StarFace } from './art'
 import { endHighNote, playBeat, pluck, setHighNote, setLupa, setSolo, startBand, startHighNote, stopBand, type Part } from './band'
 import { createConductor, FEEL, type Beat } from './conduct'
 import SECTIONS from './sections'
+
+const O = L.opera
 
 /** The steps in play order; each one is a section (sections.ts), so #/world/italy/party/<step> starts there. */
 type Stage = (typeof SECTIONS.sections)[number]['id']
 const STAGES = SECTIONS.sections.map((x) => x.id)
 const after = (a: Stage, b: Stage) => STAGES.indexOf(a) > STAGES.indexOf(b)
 /** Stars she has when each step starts. */
-const DONE_AT: Record<Stage, number> = { candles: 0, owl: 1, dance: 2, solo: 3, star: 4, lupa: 4, high: 4, roses: 5, sky: 5, picnic: 5 }
+const DONE_AT: Record<Stage, number> = { story: 0, candles: 0, owl: 1, dance: 2, solo: 3, star: 4, lupa: 4, high: 4, roses: 5, sky: 5, picnic: 5 }
 
 /** Stars in the top bar: candles, owl, dance, solos, Lupa's note. */
 const TOTAL = 5
@@ -40,36 +53,50 @@ const ROSES = 5
 const HINT_AFTER = 8
 const ASSIST_AFTER = 22
 
-/** The band on the stage's back row, and Lupa in front. Colored blocks stand in for the puppets in this gate. */
-const BAND: { id: string; name: string; part: Part; instrument: string; color: string }[] = [
-  { id: 'bruno', name: 'Bruno', part: 'mandolin', instrument: 'mandolin', color: '#C98B5B' },
-  { id: 'spina', name: 'Spina', part: 'tambourine', instrument: 'tambourine', color: '#B9A4F0' },
-  { id: 'cesare', name: 'Cesare', part: 'horn', instrument: 'horn', color: '#FFB36B' },
-  { id: 'gino', name: 'Gino', part: 'accordion', instrument: 'accordion', color: '#8CC8F0' },
-  { id: 'nino', name: 'Nino', part: 'piano', instrument: 'piano', color: '#8FD3B0' },
+type BandId = keyof typeof O.solos
+/** The band on the stage's back row, and Lupa in front: Italy's puppets, each with the instrument they brought. */
+const BAND: { id: BandId; name: string; part: Part; instrument: string }[] = [
+  { id: 'bruno', name: 'Zio Bruno', part: 'mandolin', instrument: 'mandolin' },
+  { id: 'spina', name: 'Spina', part: 'tambourine', instrument: 'tambourine' },
+  { id: 'cesare', name: 'Cesare', part: 'horn', instrument: 'horn' },
+  { id: 'gino', name: 'Gino', part: 'accordion', instrument: 'accordion' },
+  { id: 'nino', name: 'Nino', part: 'piano', instrument: 'piano' },
 ]
 const LUPA = BAND.length
 
-const PROMPTS: Record<Stage, string> = {
-  candles: 'Grab the wand and swing it! Lead the band!',
-  owl: 'Shh! The baby owl is sleepy. Little swings: piano, soft.',
-  dance: 'Everyone wants to dance! Big swings: forte, loud!',
-  solo: 'Hold the wand on a friend for a solo!',
-  star: onDevice('The wishing star! Tap it!', 'The wishing star! Click it!'),
-  lupa: 'Lupa is singing! Swing bigger and she gets braver!',
-  high: 'Lift the wand up high!',
-  roses: 'Brava! Brava, Lupa! Catch the roses!',
-  sky: 'Sweep the wand across the sky!',
-  picnic: 'Picnic time! Give Lupa a hug!',
+const PROMPTS: Record<Stage, Line> = {
+  story: O.candles,
+  candles: O.candles,
+  owl: O.owl,
+  dance: O.dance,
+  solo: O.solo,
+  star: O.star,
+  lupa: O.lupa,
+  high: O.high,
+  roses: O.roses,
+  sky: O.sky,
+  picnic: O.picnic,
 }
-const HINTS: Partial<Record<Stage, string>> = {
-  candles: 'Swing the wand!',
-  owl: 'Little, soft swings.',
-  dance: 'Big, big swings!',
-  solo: onDevice('Hold the wand still on a friend, or tap one!', 'Hold the wand still on a friend, or click one!'),
-  lupa: 'Swing the wand for Lupa!',
-  high: 'Up, up, up!',
-  sky: 'Swing the wand across the sky!',
+const HINTS: Partial<Record<Stage, Line>> = O.hints
+
+/** A puppet for each band member, holding their instrument (held pictures for the mandolin, tambourine and horn;
+ *  Gino's accordion is his own; Nino stands at his little piano). `h` is the member's slot height. */
+function Member({ id, h, refs }: { id: BandId; h: number; refs: RefObject<PuppetHandle | null> }): ReactNode {
+  const held = (src: string, w: number, x: number, y: number, rot: number) => (
+    <img src={src} alt="" draggable={false} style={{ position: 'absolute', width: h * w, left: `${x}%`, top: `${y}%`, rotate: `${rot}deg`, pointerEvents: 'none' }} />
+  )
+  if (id === 'bruno') return <><Bruno ref={refs} height={`${h}px`} />{held(art.mandolin, 0.5, 20, 48, -28)}</>
+  if (id === 'spina') return <><Spina ref={refs} height={`${h}px`} />{held(art.tambourine, 0.38, 54, 40, 14)}</>
+  if (id === 'cesare') return <><Cesare ref={refs} height={`${h}px`} />{held(art.romanHorn, 0.5, 46, 36, -12)}</>
+  if (id === 'gino') return <Gino ref={refs} height={`${h}px`} accordion singing />
+  return (
+    <>
+      <div style={{ position: 'absolute', left: '-18%', bottom: 0, pointerEvents: 'none' }}>
+        <Piano w={h * 0.62} />
+      </div>
+      <Nino ref={refs} height={`${h * 0.86}px`} style={{ position: 'relative', left: '16%' }} />
+    </>
+  )
 }
 
 interface Geo {
@@ -138,7 +165,7 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
   const { start, param, enter } = useSections(SECTIONS)
   // A deep link starts at its step, as if she had played up to there (the solos param says who had theirs).
   const [seed] = useState(() => {
-    const at: Stage = start ?? 'candles'
+    const at: Stage = start ?? 'story'
     const picked = [...new Set(param('solos').split(',').map((id) => BAND.findIndex((m) => m.id === id)).filter((i) => i >= 0))]
     // Still choosing solos: fewer than three. Past them: three (the ones in the link first).
     const solos = at === 'solo' ? picked.slice(0, SOLOS - 1) : after(at, 'solo') ? [...picked, ...BAND.map((_, i) => i).filter((i) => !picked.includes(i))].slice(0, SOLOS) : []
@@ -146,7 +173,12 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
   })
   const seedPast = (s: Stage) => after(seed.at, s)
   const [stage, setStageState] = useState<Stage>(seed.at)
-  const [prompt, setPrompt] = useState(PROMPTS[seed.at])
+  const [prompt, setPrompt] = useState<Line>(PROMPTS[seed.at])
+  /** The puppets' handles: the band in BAND order, then Lupa. */
+  const [pups] = useState(() => Array.from({ length: BAND.length + 1 }, () => ({ current: null as PuppetHandle | null })))
+  const act = (i: number, action: string) => void pups[i]?.current?.play(action)
+  const sparkle = useRef<PuppetHandle>(null)
+  const picnicLupa = useRef<PuppetHandle>(null)
   const [lit, setLit] = useState(seedPast('candles') ? CANDLES : 0)
   const [owl, setOwl] = useState<'awake' | 'dozing' | 'startled' | 'asleep'>(seedPast('owl') ? 'asleep' : 'awake')
   const [owlSleep, setOwlSleep] = useState(seedPast('owl') ? 1 : 0)
@@ -157,6 +189,8 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
   const [roses, setRoses] = useState<number[]>(seed.at === 'roses' ? Array.from({ length: ROSES }, (_, i) => i) : [])
   const [flag, setFlag] = useState(seed.at === 'picnic')
   const [moonWink, setMoonWink] = useState(0)
+  const [sway, setSway] = useState(0)
+  const [starTapped, setStarTapped] = useState(false)
   const [pigeon, setPigeon] = useState(0)
   const [cheer, setCheer] = useState<{ i: number; n: number } | null>(null)
   const [flare, setFlare] = useState(-1)
@@ -269,10 +303,10 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
         setLit(st.lit)
         if (forte && !st.saidForte) {
           st.saidForte = true
-          setPrompt('Big swings: forte! Loud!')
+          setPrompt(O.forte)
         } else if (piano && !st.saidPiano && st.lit > 8) {
           st.saidPiano = true
-          setPrompt('Little swings: piano. Soft!')
+          setPrompt(O.piano)
         }
         if (st.lit >= CANDLES) {
           st.stage = 'owl'
@@ -308,6 +342,7 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
       }
       case 'lupa': {
         st.lupaBeats++
+        if (st.lupaBeats % 3 === 1) act(LUPA, 'howl')
         st.brave = Math.min(1, st.brave + 0.03 + beat.amp * 0.12)
         setLupa(true, 1 - st.brave)
         if (st.lupaBeats >= LUPA_BEATS) {
@@ -332,6 +367,8 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
     sounds.sparkle()
     if (st.stage !== 'solo' || st.solos.has(i)) return
     st.solos.add(i)
+    act(i, 'cheer')
+    void say(O.solos[BAND[i].id])
     setSolos([...st.solos])
     if (st.solos.size < SOLOS) enterStage('solo')
     if (st.solos.size >= SOLOS) {
@@ -353,6 +390,8 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
     sounds.fanfare()
     setCrowdUp(1)
     setWave((w) => w + 1)
+    act(LUPA, 'cheer')
+    BAND.forEach((_, i) => later(200 + i * 120, () => act(i, 'cheer')))
     later(600, () => {
       setStage('roses')
       setRoses(Array.from({ length: ROSES }, (_, i) => i))
@@ -367,11 +406,18 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
       // Lupa sings her own part later (she isn't in BAND), so tapping her during the solos is just a poke.
       if ((st.stage === 'solo' || st.stage === 'star') && i !== LUPA) return giveSolo(i)
       pluck(i === LUPA ? 'lupa' : BAND[i].part)
+      act(i, i === LUPA ? 'howl' : 'wave')
       st.kick[i].v -= 380
     } else if (kind === 'owl') {
       sounds.pop()
       setOwl('startled')
       later(900, () => setOwl(g.current.stage === 'owl' || g.current.stage === 'candles' ? 'awake' : 'asleep'))
+    } else if (kind === 'sparkle') {
+      sounds.sparkle()
+      void sparkle.current?.play('wave')
+    } else if (kind === 'curtain') {
+      sfx.fwip()
+      setSway((n) => n + 1)
     } else if (kind === 'moon') {
       sounds.sparkle()
       setMoonWink((n) => n + 1)
@@ -398,7 +444,7 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
   }
   const onPointerDown = (e: PointerEvent) => {
     const st = g.current
-    if (st.drag || (e.target as HTMLElement).closest('[data-tap]') || st.stage === 'picnic') return
+    if (st.drag || (e.target as HTMLElement).closest('[data-tap]') || st.stage === 'picnic' || st.stage === 'story') return
     if (e.clientX < 22) return // keep clear of Safari's back-swipe edge
     startBand()
     const p = local(e)
@@ -589,13 +635,15 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
     st.done = true
     sounds.fanfare()
     burst()
-    setPrompt('Grazie! Ciao for now!')
-    later(1500, onDone)
+    void picnicLupa.current?.play('cheer')
+    setPrompt(O.bye)
+    later(2600, onDone)
   }
 
   const night = Math.min(1, lit / CANDLES)
-  const sky = `linear-gradient(#${night > 0.5 ? '1E1B4B' : '5B4A8F'}, ${night > 0.5 ? '#3B2F73' : '#E8A0A8'})`
+  const sky = `linear-gradient(${night > 0.5 ? '#2A2363' : '#7A62A8'}, ${night > 0.5 ? '#5B4A8F' : '#F4A6B8'})`
   const conducting = ['candles', 'owl', 'dance', 'solo', 'lupa', 'sky'].includes(stage)
+  const owlOpen = owl === 'asleep' ? 0 : owl === 'awake' && stage !== 'owl' ? 1 : 1 - owlSleep
 
   return (
     <div
@@ -608,59 +656,64 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
     >
       {geo && (
         <>
-          {/* Moon (winks), and the night sky's stars as the candles come on. */}
+          <Stars W={geo.W} H={geo.stageBack} night={night} />
+          {/* Moon (winks). */}
           <motion.div
             data-poke="moon"
             key={`moon${moonWink}`}
-            animate={moonWink ? { scaleY: [1, 0.15, 1] } : {}}
-            transition={{ duration: 0.35 }}
-            style={{ position: 'absolute', left: geo.moon.x - geo.moon.r, top: geo.moon.y - geo.moon.r, width: geo.moon.r * 2, height: geo.moon.r * 2, borderRadius: '50%', background: '#FFF4C8', border: `4px solid ${INK}`, opacity: 0.4 + night * 0.6 }}
-          />
-          {/* The arena's stands: a stone wall of arches with three rows of candles. */}
-          <div style={{ position: 'absolute', left: 0, right: 0, top: geo.standsTop, height: geo.stageBack - geo.standsTop, background: '#D9B48A', borderTop: `5px solid ${INK}`, display: 'flex', justifyContent: 'space-around', alignItems: 'flex-end', overflow: 'hidden' }}>
-            {Array.from({ length: Math.round(geo.W / 90) }, (_, i) => (
-              <div key={i} style={{ width: 46, height: '62%', borderRadius: '23px 23px 0 0', background: '#B88D63', border: `3px solid ${INK}`, borderBottom: 'none' }} />
-            ))}
+            animate={moonWink ? { rotate: [0, -10, 8, 0] } : {}}
+            transition={{ duration: 0.5 }}
+            style={{ position: 'absolute', left: geo.moon.x - geo.moon.r, top: geo.moon.y - geo.moon.r, opacity: 0.55 + night * 0.45 }}
+          >
+            <Moon r={geo.moon.r} wink={moonWink % 2 === 1} />
+          </motion.div>
+          {/* The arena: the Ala's arches, the candlelit terraces, the stage. */}
+          <Arena W={geo.W} top={geo.top} standsTop={geo.standsTop} stageBack={geo.stageBack} stageFront={geo.stageFront} />
+          <div aria-hidden style={{ position: 'absolute', left: geo.W * 0.6 + Math.min(geo.W * 0.3, 400) * 0.05, top: geo.standsTop - geo.memberW * 0.36 }}>
+            <motion.div data-poke="pigeon" key={`p${pigeon}`} animate={pigeon ? { x: [0, -60, -140, -60, 0], y: [0, -80, -50, -80, 0], scaleX: [1, 1, -1, -1, 1] } : {}} transition={{ duration: 2.2 }}>
+              <Pigeon size={Math.max(44, geo.memberW * 0.42)} />
+            </motion.div>
           </div>
-          <div aria-hidden style={{ position: 'absolute', left: geo.W * 0.66 - 22, top: geo.standsTop - 40 }}>
-            <motion.div
-              data-poke="pigeon"
-              key={`p${pigeon}`}
-              animate={pigeon ? { x: [0, 60, 140, 60, 0], y: [0, -80, -50, -80, 0] } : {}}
-              transition={{ duration: 2.2 }}
-              style={{ width: 44, height: 36, borderRadius: '50% 50% 40% 40%', background: '#A9B4C2', border: `3px solid ${INK}` }}
-            />
-          </div>
-          {geo.candles.map((c, i) => (
-            <motion.div
-              key={i}
-              data-poke="candle"
-              data-i={i}
-              animate={flare === i ? { scale: [1, 2, 1] } : {}}
-              style={{ position: 'absolute', left: c.x - 9, top: c.y - 9, width: 18, height: 18, borderRadius: '50%', background: i < lit ? '#FFD84A' : '#7A5C46', border: `2px solid ${INK}`, boxShadow: i < lit ? '0 0 14px 6px rgba(255,210,90,.75)' : 'none', transition: 'background .3s, box-shadow .3s' }}
-            />
-          ))}
+          {geo.candles.map((c, i) => {
+            const size = Math.max(20, geo.memberW * 0.17)
+            return (
+              <motion.div key={i} data-poke="candle" data-i={i} animate={flare === i ? { scale: [1, 1.8, 1] } : {}} style={{ position: 'absolute', left: c.x - size / 2, top: c.y - size * 0.95 }}>
+                <Candle lit={i < lit} size={size} />
+              </motion.div>
+            )
+          })}
           {/* Baby owl in the stands: wants piano. */}
           {(stage === 'owl' || owl === 'asleep' || owl === 'startled') && (
-            <motion.div
-              data-poke="owl"
-              initial={{ scale: 0 }}
-              animate={{ scale: owl === 'startled' ? [1, 1.25, 1] : 1 }}
-              style={{ position: 'absolute', left: geo.owl.x - geo.owl.r, top: geo.owl.y - geo.owl.r, width: geo.owl.r * 2, height: geo.owl.r * 2.2, borderRadius: '50% 50% 45% 45%', background: '#C9A27A', border: `4px solid ${INK}`, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12%' }}
-            >
-              {[0, 1].map((k) => (
-                <div key={k} style={{ width: '30%', height: owl === 'startled' ? '34%' : owl === 'asleep' ? '4%' : `${Math.max(4, 30 - owlSleep * 26)}%`, borderRadius: 999, background: '#fff', border: `3px solid ${INK}`, transition: 'height .3s' }} />
-              ))}
-              {owl === 'asleep' && <motion.span animate={{ y: [0, -14], opacity: [1, 0] }} transition={{ repeat: Infinity, duration: 1.4 }} style={{ position: 'absolute', right: -18, top: -16, fontWeight: 700, color: '#fff', fontSize: 22 }}>z</motion.span>}
+            <motion.div data-poke="owl" initial={{ scale: 0 }} animate={{ scale: owl === 'startled' ? [1, 1.25, 1] : 1, rotate: owl === 'asleep' ? 8 : 0 }} style={{ position: 'absolute', left: geo.owl.x - geo.owl.r, top: geo.owl.y - geo.owl.r }}>
+              <BabyOwl open={owlOpen} startled={owl === 'startled'} size={geo.owl.r * 2} />
+              {owl === 'asleep' && (
+                <motion.span animate={{ y: [0, -14], opacity: [1, 0] }} transition={{ repeat: Infinity, duration: 1.4 }} style={{ position: 'absolute', right: -18, top: -16, fontWeight: 700, color: '#fff', fontSize: 22 }}>
+                  z
+                </motion.span>
+              )}
             </motion.div>
           )}
-          {/* The stage boards. */}
-          <div style={{ position: 'absolute', left: 0, right: 0, top: geo.stageBack, height: geo.stageFront - geo.stageBack, background: '#C98B5B', borderTop: `5px solid ${INK}`, borderBottom: `6px solid ${INK}` }} />
+          {/* The curtains at the sides of the stage (they sway when poked). */}
+          {[-1, 1].map((side) => {
+            const h = (geo.stageFront - geo.stageBack) * 1.9
+            const w = geo.W * 0.06
+            return (
+              <motion.div
+                key={`${side}${sway}`}
+                data-poke="curtain"
+                animate={sway ? { skewX: [0, side * 6, -side * 3, 0] } : {}}
+                transition={{ duration: 0.8 }}
+                style={{ position: 'absolute', top: geo.stageFront - h, [side < 0 ? 'left' : 'right']: 0, transform: side > 0 ? 'scaleX(-1)' : undefined, transformOrigin: '50% 0' }}
+              >
+                <Curtain w={w} h={h} />
+              </motion.div>
+            )
+          })}
           {/* Spotlight on the soloist. */}
           {solo !== null && (
             <div style={{ position: 'absolute', left: geo.members[solo].x - geo.memberW * 0.9, top: geo.top, width: geo.memberW * 1.8, height: geo.members[solo].y - geo.top + geo.memberW * 1.3, background: 'linear-gradient(rgba(255,250,200,.05), rgba(255,250,200,.45))', clipPath: 'polygon(38% 0, 62% 0, 100% 100%, 0 100%)', pointerEvents: 'none' }} />
           )}
-          {/* The band (placeholder blocks): real buttons so they're tappable and countable. */}
+          {/* The band: real buttons so they're tappable and countable. */}
           {BAND.map((m, i) => (
             <button
               key={m.id}
@@ -668,36 +721,37 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
               data-i={i}
               aria-label={`${m.name}, ${m.instrument}`}
               onClick={(e) => e.detail === 0 && poke('member', i)}
-              style={{ position: 'absolute', left: geo.members[i].x - geo.memberW / 2, top: geo.members[i].y, width: geo.memberW, height: geo.memberW * 1.25, padding: 0, border: 'none', background: 'none' }}
+              style={{ position: 'absolute', left: geo.members[i].x - geo.memberW / 2, top: geo.members[i].y - geo.memberW * 0.1, width: geo.memberW, height: geo.memberW * 1.3, padding: 0, border: 'none', background: 'none' }}
             >
               <div
                 ref={(el) => void (memberEls.current[i] = el)}
-                style={{ width: '100%', height: '100%', borderRadius: '40% 40% 18% 18%', background: m.color, border: `4px solid ${INK}`, transformOrigin: '50% 100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', boxShadow: solo === i ? '0 0 0 6px #FFF2A8' : 'none', fontWeight: 700, color: INK, fontSize: Math.max(12, geo.memberW * 0.15), lineHeight: 1.1 }}
+                style={{ position: 'relative', width: '100%', height: '100%', transformOrigin: '50% 100%', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', filter: solo === i ? 'drop-shadow(0 0 12px #FFF2A8)' : undefined }}
               >
-                <span>{m.name}</span>
-                <span style={{ fontWeight: 500, fontSize: '0.8em' }}>{m.instrument}</span>
-                {solos.includes(i) && <span>★</span>}
+                <Member id={m.id} h={geo.memberW * 1.25} refs={pups[i]} />
+                {solos.includes(i) && (
+                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ position: 'absolute', right: -6, top: -6, pointerEvents: 'none' }}>
+                    <StarFace size={Math.max(30, geo.memberW * 0.3)} />
+                  </motion.div>
+                )}
               </div>
             </button>
           ))}
-          {/* Lupa, front and center. */}
+          {/* Lupa, front and center (at the picnic she's on the blanket instead). */}
           <button
+            hidden={stage === 'picnic'}
             data-poke="member"
             data-i={LUPA}
             aria-label="Lupa"
             onClick={(e) => e.detail === 0 && poke('member', LUPA)}
-            style={{ position: 'absolute', left: geo.lupa.x - geo.lupa.w / 2, top: geo.lupa.y - geo.lupa.w * 1.2, width: geo.lupa.w, height: geo.lupa.w * 1.2, padding: 0, border: 'none', background: 'none', zIndex: 2 }}
+            style={{ position: 'absolute', left: geo.lupa.x - geo.lupa.w / 2, top: geo.lupa.y - geo.lupa.w * 1.25, width: geo.lupa.w, height: geo.lupa.w * 1.25, padding: 0, border: 'none', background: 'none', zIndex: 2 }}
           >
-            <div
-              ref={(el) => void (memberEls.current[LUPA] = el)}
-              style={{ width: '100%', height: '100%', borderRadius: '45% 45% 22% 22%', background: '#9AA7B8', border: `5px solid ${INK}`, transformOrigin: '50% 100%', display: 'grid', placeItems: 'center', fontWeight: 700, color: INK, fontSize: Math.max(14, geo.lupa.w * 0.17) }}
-            >
-              {stage === 'lupa' || stage === 'high' ? 'Lupa ♪' : 'Lupa'}
+            <div ref={(el) => void (memberEls.current[LUPA] = el)} style={{ width: '100%', height: '100%', transformOrigin: '50% 100%', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', filter: stage === 'lupa' || stage === 'high' ? 'drop-shadow(0 0 14px #FFF2A8)' : undefined }}>
+              <Lupa ref={pups[LUPA]} height={`${geo.lupa.w * 1.25}px`} />
             </div>
           </button>
           {/* The wishing star from Trevi floats down to Lupa. */}
           <AnimatePresence>
-            {stage === 'star' && (
+            {stage === 'star' && !starTapped && (
               <motion.button
                 data-tap
                 aria-label="Wishing star"
@@ -707,15 +761,21 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
                 exit={{ scale: 3, opacity: 0 }}
                 transition={{ y: { duration: 2.2, ease: 'easeOut' }, rotate: { repeat: Infinity, duration: 1.6 } }}
                 onClick={() => {
+                  if (starTapped) return
                   sounds.sparkle()
                   burst()
-                  g.current.brave = 0
-                  setLupa(true, 1)
-                  setStage('lupa')
+                  setStarTapped(true)
+                  act(LUPA, 'cheer')
+                  setPrompt(O.brave)
+                  later(2300, () => {
+                    g.current.brave = 0
+                    setLupa(true, 1)
+                    setStage('lupa')
+                  })
                 }}
-                style={{ position: 'absolute', left: geo.lupa.x - 48, top: geo.lupa.y - geo.lupa.w * 1.2 - 110, width: 96, height: 96, borderRadius: '50%', border: 'none', background: '#FFE27A', fontSize: 56, display: 'grid', placeItems: 'center', zIndex: 4 }}
+                style={{ position: 'absolute', left: geo.lupa.x - 52, top: geo.lupa.y - geo.lupa.w * 1.25 - 116, width: 104, height: 104, borderRadius: '50%', border: 'none', background: 'none', padding: 0, display: 'grid', placeItems: 'center', zIndex: 4 }}
               >
-                ★
+                <StarFace size={100} glow />
               </motion.button>
             )}
           </AnimatePresence>
@@ -727,17 +787,24 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
               data-i={i}
               animate={wave ? { y: [0, 0, -c.r * 1.3, 0] } : { y: -crowdUp * c.r * 0.6 }}
               transition={wave ? { duration: 0.9, delay: i * 0.08, times: [0, 0.01, 0.5, 1] } : { type: 'spring' }}
-              style={{ position: 'absolute', left: c.x - c.r, top: c.y - c.r, width: c.r * 2, height: c.r * 2.4, borderRadius: '50% 50% 30% 30%', background: ['#7C6A9E', '#5E7E9E', '#9E6A7C'][i % 3], border: `4px solid ${INK}`, zIndex: 3 }}
+              style={{ position: 'absolute', left: c.x - c.r, top: c.y - c.r, zIndex: 3 }}
             >
+              <CrowdHead i={i} size={c.r * 2} />
               {cheer?.i === i && (
-                <motion.span key={cheer.n} initial={{ y: 0, opacity: 1 }} animate={{ y: -50, opacity: 0 }} transition={{ duration: 1.2 }} style={{ position: 'absolute', left: '50%', top: -10, translate: '-50% 0', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap' }}>
+                <motion.span key={cheer.n} initial={{ y: 0, opacity: 1 }} animate={{ y: -50, opacity: 0 }} transition={{ duration: 1.2 }} style={{ position: 'absolute', left: '50%', top: -10, translate: '-50% 0', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', textShadow: `0 2px 0 ${INK}` }}>
                   Bravo!
                 </motion.span>
               )}
             </motion.div>
           ))}
+          {/* Sparkle in the front row, in her Venice mask spirit: she cheers when poked. */}
+          <div data-poke="sparkle" style={{ position: 'absolute', right: geo.W * 0.02, bottom: -geo.memberW * 0.12, zIndex: 4 }}>
+            <SparklePuppet ref={sparkle} height={`${Math.max(90, geo.memberW * 1.05)}px`} lookToward={-0.6} />
+          </div>
           {/* Podium. */}
-          <div style={{ position: 'absolute', left: geo.podium.x - geo.memberW * 0.45, top: geo.podium.y - geo.memberW * 0.3, width: geo.memberW * 0.9, height: geo.H - geo.podium.y + geo.memberW * 0.3, background: '#8A5A3C', border: `4px solid ${INK}`, borderRadius: '10px 10px 0 0', zIndex: 3 }} />
+          <div style={{ position: 'absolute', left: geo.podium.x - geo.memberW * 0.45, top: geo.podium.y - geo.memberW * 0.3, zIndex: 3 }}>
+            <Podium w={geo.memberW * 0.9} h={geo.H - geo.podium.y + geo.memberW * 0.3} />
+          </div>
           {/* Roses fly onto the stage: tap to catch. */}
           {roses.map((i) => (
             <motion.button
@@ -748,9 +815,9 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
               animate={{ x: geo.W * (0.18 + i * 0.16), y: geo.stageBack + 20 + (i % 2) * 40, rotate: [0, 360] }}
               transition={{ duration: 1.1, delay: i * 0.18, ease: 'easeOut' }}
               onClick={() => catchRose(i)}
-              style={{ position: 'absolute', left: -40, top: -40, width: 80, height: 80, borderRadius: '50%', border: `4px solid ${INK}`, background: '#E8574F', color: '#fff', fontWeight: 700, zIndex: 5 }}
+              style={{ position: 'absolute', left: -44, top: -44, width: 88, height: 88, borderRadius: '50%', border: 'none', background: 'rgba(255,255,255,.25)', padding: 0, display: 'grid', placeItems: 'center', zIndex: 5 }}
             >
-              rose
+              <Rose size={62} />
             </motion.button>
           ))}
           {/* The Frecce Tricolori's smoke: green, white and red where she sweeps the wand. */}
@@ -762,7 +829,9 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
           </svg>
           {stage === 'sky' &&
             [0, 1, 2].map((k) => (
-              <div key={k} ref={(el) => void (jetEls.current[k] = el)} style={{ position: 'absolute', left: -30, top: -12, width: 60, height: 24, background: '#5A7FD8', border: `3px solid ${INK}`, clipPath: 'polygon(0 30%, 70% 30%, 100% 50%, 70% 70%, 0 70%)', zIndex: 7, pointerEvents: 'none' }} />
+              <div key={k} ref={(el) => void (jetEls.current[k] = el)} style={{ position: 'absolute', left: -36, top: -14, zIndex: 7, pointerEvents: 'none' }}>
+                <Jet size={72} />
+              </div>
             ))}
           <AnimatePresence>
             {flag && (
@@ -773,48 +842,47 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
           </AnimatePresence>
           {/* The wand (pointer-events none: the stage under it gets the touches). */}
           <div ref={wandEl} aria-hidden style={{ position: 'absolute', left: 0, top: 0, zIndex: 9, pointerEvents: 'none', transformOrigin: '0 0' }}>
-            <div style={{ position: 'absolute', left: -4, top: 0, width: 8, height: Math.max(70, geo.memberW * 0.75), background: '#fff', border: `3px solid ${INK}`, borderRadius: 6 }} />
-            <motion.div
-              animate={nudge || stage === 'candles' ? { scale: [1, 1.35, 1] } : { scale: 1 }}
-              transition={{ repeat: nudge || stage === 'candles' ? Infinity : 0, duration: 1 }}
-              style={{ position: 'absolute', left: -20, top: -20, width: 40, height: 40, background: '#FFE27A', border: `3px solid ${INK}`, clipPath: 'polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)' }}
-            />
+            <div style={{ position: 'absolute', left: -5, top: 6, width: 10, height: Math.max(70, geo.memberW * 0.75), background: '#FFF7F0', border: `3px solid ${INK}`, borderRadius: 6 }} />
+            <div style={{ position: 'absolute', left: -7, top: Math.max(70, geo.memberW * 0.75) - 12, width: 14, height: 22, background: '#FF8FB8', border: `3px solid ${INK}`, borderRadius: 7 }} />
+            <motion.div animate={nudge || stage === 'candles' ? { scale: [1, 1.35, 1] } : { scale: 1 }} transition={{ repeat: nudge || stage === 'candles' ? Infinity : 0, duration: 1 }} style={{ position: 'absolute', left: -24, top: -24 }}>
+              <StarFace size={48} glow />
+            </motion.div>
           </div>
           {/* Up arrow for the high note. */}
           {stage === 'high' && (
-            <motion.div animate={{ y: [0, -24, 0] }} transition={{ repeat: Infinity, duration: 1 }} style={{ position: 'absolute', left: geo.W * 0.82, top: geo.standsTop, fontSize: 64, color: '#FFE27A', fontWeight: 700, pointerEvents: 'none', zIndex: 8 }}>
+            <motion.div animate={{ y: [0, -24, 0] }} transition={{ repeat: Infinity, duration: 1 }} style={{ position: 'absolute', left: geo.W * 0.82, top: geo.standsTop, fontSize: 64, color: '#FFE27A', fontWeight: 700, pointerEvents: 'none', zIndex: 8, textShadow: `0 3px 0 ${INK}` }}>
               ↑
             </motion.div>
           )}
-          {/* Picnic: her pizza, gelato for everyone, and a hug for Lupa. */}
+          {/* Picnic: a pizza Margherita, gelato for everyone, and a hug for Lupa. */}
           {stage === 'picnic' && (
-            <motion.div initial={{ y: geo.H * 0.4 }} animate={{ y: 0 }} style={{ position: 'absolute', left: geo.W * 0.08, right: geo.W * 0.08, top: geo.stageFront - geo.memberW * 0.2, bottom: geo.H * 0.03, background: 'repeating-conic-gradient(#E8574F 0 25%, #fff 0 50%) 0 0 / 60px 60px', border: `5px solid ${INK}`, borderRadius: 24, zIndex: 10, display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
-              <div style={{ width: geo.memberW, aspectRatio: '1', borderRadius: '50%', background: '#F2C27A', border: `5px solid ${INK}`, display: 'grid', placeItems: 'center', fontWeight: 700 }}>her pizza</div>
-              <motion.button
-                data-tap
-                aria-label="Hug Lupa"
-                className="world-glow"
-                whileTap={{ scale: 0.9 }}
-                onClick={hug}
-                style={{ width: Math.max(96, geo.memberW * 1.1), aspectRatio: '1', borderRadius: '50%', background: '#9AA7B8', border: `5px solid ${INK}`, fontWeight: 700, fontSize: 22 }}
-              >
-                Hug Lupa ♥
+            <motion.div
+              initial={{ y: geo.H * 0.4 }}
+              animate={{ y: 0 }}
+              style={{ position: 'absolute', left: geo.W * 0.08, right: geo.W * 0.08, top: geo.stageFront - geo.memberW * 0.2, bottom: geo.H * 0.03, background: 'repeating-conic-gradient(#E8574F 0 25%, #FFF7F0 0 50%) 0 0 / 60px 60px', border: `5px solid ${INK}`, borderRadius: 24, zIndex: 10, display: 'flex', justifyContent: 'space-evenly', alignItems: 'flex-end', paddingBottom: '2%' }}
+            >
+              <Pizza size={Math.max(88, geo.memberW * 0.95)} />
+              <motion.button data-tap aria-label="Hug Lupa" className="world-glow" whileTap={{ scale: 0.9 }} onClick={hug} style={{ border: 'none', background: 'none', padding: 0, borderRadius: 24, minWidth: 96 }}>
+                <Lupa ref={picnicLupa} height={`${Math.max(130, geo.memberW * 1.45)}px`} />
               </motion.button>
-              <div style={{ width: geo.memberW * 0.7, height: geo.memberW, borderRadius: '50% 50% 10% 10%', background: '#FFC4D8', border: `5px solid ${INK}`, display: 'grid', placeItems: 'center', fontWeight: 700 }}>gelato</div>
+              <Gelato size={Math.max(88, geo.memberW * 0.9)} />
             </motion.div>
           )}
         </>
       )}
-      <div style={{ position: 'absolute', left: 0, right: 0, top: 'var(--top-clear)', display: 'flex', justifyContent: 'center', padding: '0 16px', pointerEvents: 'none', zIndex: 11 }}>
-        <div style={{ pointerEvents: 'auto' }} data-tap>
-          <PromptBubble text={prompt} speak={false} />
+      {stage !== 'story' && (
+        <div style={{ position: 'absolute', left: 0, right: 0, top: 'var(--top-clear)', display: 'flex', justifyContent: 'center', padding: '0 16px', pointerEvents: 'none', zIndex: 11 }}>
+          <div style={{ pointerEvents: 'auto' }} data-tap>
+            <PromptBubble text={prompt} />
+          </div>
         </div>
-      </div>
+      )}
       {frozen && conducting && (
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ position: 'absolute', right: 16, bottom: 16, background: '#fff', border: `4px solid ${INK}`, borderRadius: 999, padding: '4px 16px', fontWeight: 700, zIndex: 11, pointerEvents: 'none' }}>
-          freeze!
+          ❄️ freeze!
         </motion.div>
       )}
+      {stage === 'story' && <StoryBeat lines={O.story} friend={<Lupa height="100%" />} onDone={() => setStage('candles')} />}
     </div>
   )
 }
