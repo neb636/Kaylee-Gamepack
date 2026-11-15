@@ -1,0 +1,7 @@
+{
+  "title": "Koh Samet: clear out the old island",
+  "checkIn": "fix",
+  "kaylee": "Nothing she'll notice: the leftovers of the first Koh Samet (the old plans, the taxi's driving loop, the photo book's posing animals, six lines nobody hears) are gone, so the next story fixes land on clean code.",
+  "pictures": [{ "title": "Ao Prao, before and after", "before": "pics/prao-before.png", "after": "pics/prao-after.png", "caption": "Same beach, same taxi spot: nothing she sees changes" }],
+  "links": [{ "label": "The island", "hash": "#/world/thailand/samet-trip/island?at=prao&flags=jetski,sandcastle,snorkel" }]
+}
