@@ -12,6 +12,9 @@ const MAPS = [
   { name: 'the Nan map', link: 'nan-trip/map', key: '__thaiNanQA' },
 ] as const
 
+// (Three 3D boards on the CI's software renderer: each frame is slow, so each test gets three times as long.)
+test.beforeEach(() => test.slow())
+
 const qa = (page: Page, key: string) => page.evaluate((k) => (window as unknown as Record<string, () => MapQA | undefined>)[k]?.(), key)
 
 async function open(page: Page, link: string, key: string) {
@@ -30,10 +33,7 @@ async function drag(page: Page, dx: number) {
   const y = height * 0.3
   await page.mouse.move(x, y)
   await page.mouse.down()
-  for (let i = 1; i <= 16; i++) {
-    await page.mouse.move(x + (dx * i) / 16, y)
-    await page.waitForTimeout(20)
-  }
+  for (let i = 1; i <= 8; i++) await page.mouse.move(x + (dx * i) / 8, y)
   await page.mouse.up()
 }
 
@@ -42,7 +42,7 @@ for (const map of MAPS) {
     await open(page, map.link, map.key)
     const before = (await qa(page, map.key))!.yaw!
     await drag(page, -220)
-    await expect.poll(async () => Math.abs((await qa(page, map.key))!.yaw! - before), { timeout: 5000 }).toBeGreaterThan(20)
+    await expect.poll(async () => Math.abs((await qa(page, map.key))!.yaw! - before), { timeout: 15_000 }).toBeGreaterThan(20)
   })
 }
 
