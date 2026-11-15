@@ -1,0 +1,14 @@
+{
+  "title": "Old 3D models: removed",
+  "checkIn": "fix",
+  "kaylee": "Nothing changes on her iPad: the new cream-unicorn Mom and the vinyl Kaylee are the only Mom and Kaylee left in the code.",
+  "questions": [],
+  "pictures": [
+    { "title": "The character lab", "before": "pics/lab-before.jpg", "after": "pics/lab-after.jpg", "caption": "Before: the old code-built Mom and Kaylee stood next to the new ones (62 characters). After: only the new ones (60)." }
+  ],
+  "links": [
+    { "label": "Mom and Kaylee in the lab", "hash": "#/world/characters/ji" },
+    { "label": "Mom on the boat (her hat and the teddy)", "hash": "#/world/thailand/boat-trip/bay" },
+    { "label": "Mom's sunset selfie phone", "hash": "#/world/thailand/samet-trip/sunset" }
+  ]
+}
