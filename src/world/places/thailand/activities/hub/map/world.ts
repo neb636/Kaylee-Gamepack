@@ -21,7 +21,7 @@ import type { LonLat } from './land'
 import { buildPin, type PinToy } from './pins'
 import { buildLand, buildTray, Sea } from './terrain'
 import * as T from './toys'
-import { mapCamKnobs, skyTexture, trayBox } from '../../../trip/sky'
+import { MAP_ROAM, mapCamKnobs, skyTexture, trayBox } from '../../../trip/sky'
 
 export interface MapEvents {
   /** She tapped a place: it opens. */
@@ -107,7 +107,7 @@ export class ThaiMapWorld implements World3D {
   private raycaster = new Raycaster()
   /** The board and its tray (the box the overview frames, object-fit: contain, centered on any screen shape). */
   private board = trayBox(toX(BOARD.lon1) - toX(BOARD.lon0), toZ(BOARD.lat0) - toZ(BOARD.lat1), LEVEL.paper + 0.1, LEVEL.thai + 0.3)
-  private overview: Shot = { center: this.board.center.clone(), half: this.board.half.clone(), yaw: -6, pitch: 54, maxDist: 200, objectFit: 'contain', roam: { yaw: [-38, 38], pitch: [-14, 22], zoom: [0.5, 1] } }
+  private overview: Shot = { center: this.board.center.clone(), half: this.board.half.clone(), yaw: -6, pitch: 54, maxDist: 200, objectFit: 'contain', roam: MAP_ROAM }
   private close: Shot = { center: new Vector3(), half: new Vector3(1.7, 0.8, 1.7), yaw: -6, pitch: 46, maxDist: 200 }
   private picked: Place | null = null
   private hint = false
@@ -785,7 +785,7 @@ export class ThaiMapWorld implements World3D {
   // ---------------------------------------------------------------- QA
 
   qa() {
-    return { touches: this.touches, buildMs: this.buildMs, picked: this.picked?.id ?? null, poking: [...this.toys.values()].filter((t) => t.t >= 0).map((t) => t.id) }
+    return { touches: this.touches, yaw: Math.round(this.rig.yaw * 10) / 10, buildMs: this.buildMs, picked: this.picked?.id ?? null, poking: [...this.toys.values()].filter((t) => t.t >= 0).map((t) => t.id) }
   }
 
   memory() {

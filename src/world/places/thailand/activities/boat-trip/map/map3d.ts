@@ -1,7 +1,8 @@
 // The Krabi map (section `map`; notes: planning/around-the-world/thailand/krabi-map.md): the boat trip's hub, a toy
 // diorama of Krabi and Phang Nga Bay floating in the sky (diorama.ts; the sky, the tray and the entrance are
 // trip/sky.ts). It opens like the Thailand map: the camera is already moving behind the loading cover, then settles
-// lower and closer (KRABI_CAM, ?feel=1). North is up the screen.
+// lower and closer (KRABI_CAM, ?feel=1). North is up the screen, and like every map she can swing it round with a
+// drag and pinch it closer (boardShot, trip/sky.ts).
 //
 // The toy: pins. Over each place she can go to floats a pink pin with a toy of the place on its head: a baby elephant
 // over Baan Chang, a longtail under a rock tower over the pier. Tap one (or the place under it): the pin hops and
@@ -29,10 +30,10 @@ import { PAL } from '../../../../../engine3d/toon'
 import { L } from '../../../lines'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
 import { circuitAt, circuitEase, CIRCUIT_S, departAt } from '../../../trip/map-plane'
-import { Entrance, mapCamKnobs, puffCloud, skyTexture, trayBox } from '../../../trip/sky'
+import { boardShot, Entrance, mapCamKnobs, puffCloud, skyTexture, trayBox } from '../../../trip/sky'
 import { Floaters } from '../../nan-trip/mushrooms/fx'
 import { buildDiorama, MONKEY_Y, PIN, type Diorama } from './diorama'
-import { buildField, type Field } from './ground'
+import { buildField, buildRocks, rockFoot, rockSide, straddle, type Field } from './ground'
 import {
   BOARD,
   BOAT_LOOPS,
@@ -105,6 +106,25 @@ const SAY_EVERY = 20
 const SAY_MAX = 3
 
 const tmp = new Vector3()
+
+/** The toys that stand on one side of the shore: [where, which side, footprint (m)]. Railay's cliffs (its three rocks)
+ *  stand in the sea off the beach, Ao Nang's umbrellas on the sand, Ko Tapu out at sea. */
+const SIDED: [SpotId, 'sea' | 'land', number][] = [['railay', 'sea', 0.21], ['aonang', 'land', 0.08], ['nail', 'sea', 0.06], ['chicken', 'sea', 0.1]]
+
+/** Every rock tower and sided toy that pokes over the shore it shouldn't (the QA hook's `stranded`: none, or a rock
+ *  stands half on the beach). */
+function stranded(f: Field) {
+  const out: string[] = []
+  for (const r of buildRocks()) {
+    const d = straddle(f, r.x, r.z, rockFoot(r.s), rockSide(r))
+    if (d > 0.002) out.push(`${r.from}:${r.i}${r.kid ? ' (little)' : ''} ${d.toFixed(3)}`)
+  }
+  for (const [id, side, foot] of SIDED) {
+    const d = straddle(f, ...SPOTS[id], foot, side)
+    if (d > 0.002) out.push(`${id} ${d.toFixed(3)}`)
+  }
+  return out
+}
 
 export class KrabiMap extends Stage {
   private d: Diorama
@@ -620,13 +640,14 @@ export class KrabiMap extends Stage {
       return { center: p.clone().setY(p.y + 0.05), half: new Vector3(0.24, 0.1, 0.24), yaw: id === 'pier' ? -30 : 0, pitch: 30, minDist: 0.7 }
     }
     // The entrance (as on the Thailand map): from the plain view, turned by KRABI_CAM.yaw, down and in to where it
-    // settles. The board and its tray, object-fit: contain, so it floats in the middle of the sky on any screen shape.
+    // settles. The board and its tray, object-fit: contain, so it floats in the middle of the sky on any screen shape,
+    // and hers to turn (boardShot).
     const k = this.entrance.k
     const tall = this.w < this.h
     const zoom = 1 + (KRABI_CAM.zoom - 1) * k
-    const { center, half } = BOARD_BOX
-    if (tall) return { center: center.clone(), half: half.clone().multiplyScalar(zoom), yaw: KRABI_CAM.yaw, pitch: 64 + KRABI_CAM.pitch * k * 0.6, minDist: 3, objectFit: 'contain' }
-    return { center: center.clone(), half: half.clone().multiplyScalar(zoom), yaw: KRABI_CAM.yaw, pitch: 56 + KRABI_CAM.pitch * k, minDist: 3, objectFit: 'contain' }
+    // (boardShot: she can swing it round and pinch it closer, like the Thailand map.)
+    if (tall) return boardShot(BOARD_BOX, KRABI_CAM.yaw, 64 + KRABI_CAM.pitch * k * 0.6, zoom, { minDist: 3 })
+    return boardShot(BOARD_BOX, KRABI_CAM.yaw, 56 + KRABI_CAM.pitch * k, zoom, { minDist: 3 })
   }
 
   /** The entrance rides the camera exactly (no lag). */
@@ -752,6 +773,10 @@ export class KrabiMap extends Stage {
       plane: this.planeT >= 0 || this.departT >= 0,
       touches: this.touches,
       points: { places, pins },
+      /** Which way the camera faces (degrees): her drag swings it round. */
+      yaw: Math.round(this.rig.yaw * 10) / 10,
+      /** Rocks and sea toys that straddle the shore (should be none): which, and by how much (m). */
+      stranded: stranded(this.f),
     }
   }
 }

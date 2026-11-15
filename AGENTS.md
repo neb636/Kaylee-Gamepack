@@ -186,6 +186,10 @@ fixes), `kaylee-week` (the play diary), `sfx` (first-pass ElevenLabs sound effec
   (`engine3d/camera.ts`), built with `trayBox()` (`trip/sky.ts`), so it sits whole and centered below the top bar on
   an iPad either way round, an iPhone and a wide Mac window. Don't hand-tune a center or box per screen shape; per
   shape, change only the angle (yaw, pitch). Check it in all of those shapes.
+- **Every floating 3D map turns like the Thailand map.** She swings the board round with a drag and pinches it closer:
+  build the overview with `boardShot()` (`trip/sky.ts`), which frames the `trayBox` and adds `roam: MAP_ROAM`. A
+  `Stage`-based map turns whenever its shot allows it; something she drags on the board (Nan's car) says so with
+  `roamGrabbed()`, so that drag isn't a turn.
 
 ## Before you finish
 

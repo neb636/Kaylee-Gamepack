@@ -11,7 +11,7 @@ import { smoothstep } from '../../../../../../sdk/math'
 import { distance } from '../../hub/map/field'
 import { Sea } from '../../hub/map/terrain'
 import { ISLANDS, MAINLAND, type LonLat } from './coast'
-import { BOARD, CLIFF_W, DEG_M, HILLS, KARSTS, LEVEL, ll, RIVER_W, RIVERS, SHOALS, toX, toZ, TOY_ISLANDS, type XZ } from './layout'
+import { BOARD, CLIFF_W, CRAGS, DEG_M, HILLS, KARST_S, KARSTS, LEVEL, ll, RIVER_W, RIVERS, SHOALS, toX, toZ, TOY_ISLANDS, TWINS, type XZ } from './layout'
 
 /** Field cells per meter, ground mesh cells per meter, painted pixels per meter. */
 const RES = 40
@@ -51,6 +51,110 @@ const wobble = (x: number, z: number) => 0.5 * Math.sin(x * 7.3 + z * 3.1) + 0.3
 
 /** The hills, as meters on the board: [x, z, radius, height]. */
 const HILLS_M = HILLS.map(([lon, lat, r, h]) => [toX(lon), toZ(lat), r * DEG_M, h] as const)
+
+// ---------------------------------------------------------------- where the rocks stand
+
+/** How wide a rock tower of size `s` stands on the board (m, from its middle): diorama.ts tower()'s jungle dome is
+ *  1.1 × 0.2 s across, the widest part of it. */
+export const rockFoot = (s: number) => 0.22 * s
+/** Clear water (or ground) left between a rock's foot and the shore (m), so no rock straddles the beach. */
+const SHORE_GAP = 0.035
+
+/** A rock tower on the board, wholly in the sea or wholly on the land: where it stands, its size (as diorama.ts's
+ *  tower() takes it) and its look (`k`). */
+export interface Rock {
+  x: number
+  z: number
+  s: number
+  k: number
+  /** Which entry of layout.ts it came from (KARSTS, CRAGS, TWINS), so a tap pokes the right one. */
+  from: 'karst' | 'crag' | 'twin'
+  i: number
+  /** A little one standing beside a big one. */
+  kid?: boolean
+}
+
+/** Where a rock of footprint `r` near (x, z) stands wholly in the sea ('sea') or wholly on the land ('land'): moved
+ *  straight away from the shore, as little as it needs (the coasts are real and coarse, so the layout's degrees put
+ *  some rocks half on the beach). Null when that's further than `reach`: the rock is left out. */
+export function settle(f: Field, x: number, z: number, r: number, where: 'sea' | 'land', reach = 0.3): XZ | null {
+  const sign = where === 'sea' ? -1 : 1
+  const need = r + SHORE_GAP
+  const e = 0.01
+  let px = x
+  let pz = z
+  for (let i = 0; i < 16; i++) {
+    const d = sign * f.land(px, pz)
+    if (d >= need) return Math.hypot(px - x, pz - z) <= reach ? [px, pz] : null
+    // Downhill of the field, toward deeper sea (or further inland).
+    const gx = sign * (f.land(px + e, pz) - f.land(px - e, pz))
+    const gz = sign * (f.land(px, pz + e) - f.land(px, pz - e))
+    const len = Math.hypot(gx, gz)
+    if (len < 1e-6) return null
+    const step = need - d + 0.004
+    px += (gx / len) * step
+    pz += (gz / len) * step
+  }
+  return null
+}
+
+/** How far a rock of footprint `r` at (x, z) pokes over the shore it shouldn't (m; 0: it stands clear). The QA hook
+ *  reports every rock that does (`stranded`), so a new rock half on the beach shows up in the tests. */
+export function straddle(f: Field, x: number, z: number, r: number, where: 'sea' | 'land') {
+  const d = (where === 'sea' ? -1 : 1) * f.land(x, z)
+  return Math.max(0, r - d)
+}
+
+let rocksBuilt: Rock[] | null = null
+
+/** Every rock tower on the board, settled clear of the shore: the limestone towers in the sea (a little one beside every
+ *  other one), the crags on the land and Krabi Town's twin rocks out in the river mouth. ground.ts foams the sea round
+ *  the sea ones, diorama.ts builds them all. */
+export function buildRocks(): Rock[] {
+  if (rocksBuilt) return rocksBuilt
+  const f = build().field
+  const out: Rock[] = []
+  const free = (x: number, z: number, r: number) => out.every((o) => Math.hypot(o.x - x, o.z - z) > rockFoot(o.s) * 0.7 + r * 0.7)
+  KARSTS.forEach(([lon, lat, size], i) => {
+    const s = size * KARST_S
+    const at = settle(f, ...ll(lon, lat), rockFoot(s), 'sea')
+    if (!at || !free(...at, rockFoot(s))) return
+    out.push({ x: at[0], z: at[1], s, k: i, from: 'karst', i })
+    if (i % 2) return
+    const a = i * 1.9
+    const ks = s * 0.55
+    const kid = settle(f, at[0] + Math.cos(a) * 0.15 * size, at[1] + Math.sin(a) * 0.11 * size, rockFoot(ks), 'sea', 0.08)
+    if (kid) out.push({ x: kid[0], z: kid[1], s: ks, k: i + 2, from: 'karst', i, kid: true })
+  })
+  // Krabi Town's twins stand in the water where the river meets the sea (Khao Khanap Nam), not on its bank.
+  // (The second stands beside the first, the pair together.)
+  let twin: XZ | null = null
+  TWINS.forEach(([lon, lat], i) => {
+    const s = 0.3 + i * 0.04
+    const [x, z] = ll(lon, lat)
+    const at = twin ? settle(f, twin[0] + (x - ll(...TWINS[0])[0]), twin[1] + (z - ll(...TWINS[0])[1]), rockFoot(s), 'sea', 0.08) : settle(f, x, z, rockFoot(s), 'sea', 0.25)
+    if (!at) return
+    if (!twin) twin = at
+    out.push({ x: at[0], z: at[1], s, k: i + 1, from: 'twin', i })
+  })
+  CRAGS.forEach(([lon, lat, size], i) => {
+    const s = size * 0.52
+    // (A big crag has a little one on its shoulder: the pair must stand on the land together.)
+    const r = rockFoot(s) + (size >= 1.2 ? 0.17 * size * 0.6 : 0)
+    const at = settle(f, ...ll(lon, lat), r, 'land', 0.25)
+    if (!at) return
+    out.push({ x: at[0], z: at[1], s, k: i + 1, from: 'crag', i })
+    if (size >= 1.2) {
+      const a = i * 2.3 + 0.6
+      out.push({ x: at[0] + Math.cos(a) * 0.17 * size, z: at[1] + Math.sin(a) * 0.12 * size, s: s * 0.62, k: i + 3, from: 'crag', i, kid: true })
+    }
+  })
+  rocksBuilt = out
+  return out
+}
+
+/** Which side of the shore a rock belongs on. */
+export const rockSide = (r: Rock): 'sea' | 'land' => (r.from === 'crag' ? 'land' : 'sea')
 
 // The field, worked out once a visit (it's the same every time: the map is built on every trip back to it).
 let built: { field: Field; sea: Float32Array; w: number; h: number; x0: number; z0: number } | null = null
@@ -124,7 +228,11 @@ function build() {
   }
   // The sea's own picture: how far out each spot is, plus a little shoal round each rock tower so it foams at its foot.
   const sea = new Float32Array(land.length)
-  const karsts = KARSTS.map(([lon, lat, s]) => [...ll(lon, lat), 0.09 * s] as const)
+  // (Built before the sea's picture: the rocks need the field, and the sea foams round them.)
+  built = { field, sea, w, h, x0, z0 }
+  const karsts = buildRocks()
+    .filter((r) => rockSide(r) === 'sea')
+    .map((r) => [r.x, r.z, (0.09 * r.s) / KARST_S] as const)
   for (let iz = 0; iz < h; iz++)
     for (let ix = 0; ix < w; ix++) {
       const i = iz * w + ix
@@ -146,7 +254,6 @@ function build() {
       }
       sea[i] = d
     }
-  built = { field, sea, w, h, x0, z0 }
   return built
 }
 
