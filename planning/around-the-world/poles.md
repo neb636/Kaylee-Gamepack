@@ -85,6 +85,18 @@ same props, so the balloon she follows in the finale is the one in the films.
 
 Stickers: polar bear (floe), narwhal (narwhal), Arctic fox (coats), Adélie penguin (slide), emperor chick (huddle).
 
+## Known small things (2026-11-15)
+
+- Narwhal Ride: the glacier wall is boxy and the three waves read as flat foamy bands (an art pass); from the chase
+  camera Pebble sits hidden behind Pola most of the ride; four lines play in about 16 s under the ice.
+- Penguin Slide: a run is about 1:45 (the course length was kept); the humpback under the sea is easy to miss; in
+  portrait the station hut is mostly off the right edge.
+- The finale: the friends in the balloon's basket are small on an iPhone; Papa's song leaves empty snow above and
+  below the row in portrait; the whole chain (film, flight, film, song, film, quiz) was checked piece by piece from
+  its links, not played end to end by a robot.
+- Nobody ran `qa-pacing` on the rebuilt games: touches and minutes are unmeasured.
+- Snow Coats and Emperor Huddle are unchanged 2D games; only their films are new.
+
 ## Next
 
 Kaylee plays it. Watch for: does she say "penguin" and "home"; does she tap the next picture without help; does she sit
