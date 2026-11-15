@@ -28,7 +28,6 @@ export const L = {
   hub: onDevice('Tap a picture to explore Peru!', 'Click a picture to explore Peru!'),
   hubNext: luna(`Another discovery!`),
   soon: 'This place opens soon!',
-  balloonSoon: 'Our balloon trip comes soon!',
   tickle: [luna('Hee hee!'), luna('I love exploring with you!')],
   journal: luna('My explorer journal!'),
   alpacaWindow: luna('My cozy alpaca family!'),
@@ -220,6 +219,50 @@ export const L = {
       pads: 'Drag a friend onto a lily pad!',
     },
     sticker: 'Pink dolphin sticker! These dolphins live in rivers!',
+  },
+
+  // ---- Finale: Luna's Thank-You Balloon (route `party`; drop a present to every friend) ----
+  balloon: {
+    // Before the journal is full (the balloon on the hub, or a link, with stamps missing).
+    wait: 'Help every friend first! Then we fly!',
+    // On the hub, once all five stamps are in.
+    ready: onDevice('Tap the balloon! Off we fly!', 'Click the balloon! Off we fly!'),
+    story: [luna('Our journal is full!'), luna("Let's fly and say thank you!")],
+    // The core verb, said once at the first stop (and as the stuck hint).
+    go: onDevice('Pull a present off the balloon, then let it go!', 'Click a present, pull it off, then let it go!'),
+    // A new stop: what's different here.
+    coast: 'Drop a present for each friend!',
+    mountains: 'Windy! Coco and Pluma catch in the air!',
+    forest: 'Drop it through a gap in the leaves!',
+    // Each friend catches their present (their own voice).
+    caught: {
+      pepa: pepa('A present! Gracias!'),
+      chick: pepa('My baby caught one!'),
+      lobo: lobo('Arf arf! I love it!'),
+      coco: coco('What a catch! Gracias!'),
+      pluma: pluma('I caught it in the air!'),
+      tika: tika('For me? Gracias!'),
+      sloth: sloth('Graaacias...'),
+      monkey: monkey('Mine! Yay!'),
+      rosa: rosa('Wheee! Gracias!'),
+    },
+    // Every friend at a stop has a present: the balloon flies on (Luna names the next of Peru's three worlds).
+    toMountains: luna('Bye-bye, sea! Up to the mountains!'),
+    toForest: luna('Down to the rainforest!'),
+    // Pokeables (the first poke of each; after that just sounds).
+    burner: 'Hot air lifts the balloon up!',
+    pelican: 'Pelicans scoop up fish!',
+    lunaTap: [luna('Hee hee!'), luna('Wheee! We are flying!'), luna('I can see the whole country!')],
+    // The payoff at night.
+    night: onDevice('Night time! Tap the forest to send up lanterns!', 'Night time! Click the forest to send up lanterns!'),
+    pretty: luna('So pretty!'),
+    flag: "Red and white, like Peru's flag!",
+    gracias: luna('Gracias, everyone!'),
+    meaning: 'Gracias means thank you!',
+    idle: {
+      grab: onDevice('Pull a present off the balloon!', 'Click a present and pull it off!'),
+      lantern: onDevice('Tap the forest!', 'Click the forest!'),
+    },
   },
 
   sticker: 'Alpaca sticker! Alpacas have soft, warm fleece!',

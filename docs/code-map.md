@@ -87,7 +87,7 @@ pieces fit together is `docs/building.md` (2D) and `docs/thailand-3d.md` (3D). S
 | 🐧 Pepa's Penguin Cliff (`penguins`) | live | [activities/penguins/](../src/world/places/peru/activities/penguins) | [activities/penguins/sections.ts](../src/world/places/peru/activities/penguins/sections.ts) (7) | country qa.mjs |  |
 | 🦅 Coco's Canyon Glide (`condor`) | live | [activities/canyon/](../src/world/places/peru/activities/canyon) | [activities/canyon/sections.ts](../src/world/places/peru/activities/canyon/sections.ts) (7) | country qa.mjs |  |
 | 🌧️ Rosa's Rainy River (`river`) | live | [activities/river/](../src/world/places/peru/activities/river) | [activities/river/sections.ts](../src/world/places/peru/activities/river/sections.ts) (7) | country qa.mjs |  |
-| 🎉 Finale (`party`) | finale |  | [activities/BalloonSoon.sections.ts](../src/world/places/peru/activities/BalloonSoon.sections.ts) (1) | country qa.mjs |  |
+| 🎉 Finale (`party`) | finale | [activities/balloon/](../src/world/places/peru/activities/balloon) | [activities/balloon/sections.ts](../src/world/places/peru/activities/balloon/sections.ts) (5) | country qa.mjs |  |
 
 ## 🐘 Thailand (`thailand`)
 

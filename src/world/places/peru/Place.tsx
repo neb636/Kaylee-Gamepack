@@ -1,8 +1,7 @@
-import { useSections } from '../../kit/sections'
-import BALLOON_SECTIONS from './activities/BalloonSoon.sections'
-// Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md (retired; in git history)). Built one activity per PR: Luna's
-// Fluffy Day, Coco's Canyon Glide and Rosa's Rainy River so far. The other places on Luna's map say "coming soon" until they're built, and the balloon finale
-// (route `party`) waits until all five exist.
+// Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md (retired; in git history)). Five
+// activities, one per corner of Peru (Luna's Fluffy Day, Pepa's Penguin Cliff, Tika's Mountain Terraces, Coco's Canyon
+// Glide, Rosa's Rainy River), and the balloon finale (route `party`, activities/balloon/), which opens once all five
+// stamps are in.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType } from 'react'
 import { BigButton, firstTime, say, SparklePuppet, sounds, useSaved, type PuppetHandle } from '../../../sdk'
@@ -15,6 +14,7 @@ import { FluffyDay, HATS_KEY } from './activities/fluffy/FluffyDay'
 import { PenguinCliff } from './activities/penguins/PenguinCliff'
 import { RainyRiver } from './activities/river/RainyRiver'
 import { Terraces } from './activities/terraces/Terraces'
+import { BalloonTrip } from './activities/balloon/BalloonTrip'
 import { art } from './art'
 import { L } from './lines'
 import { PeruMap, MAP_RATIO } from './PeruMap'
@@ -27,6 +27,9 @@ export type { ActivityProps } from '../../kit/stampFlow'
 const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, penguins: PenguinCliff, 'machu-picchu': Terraces, condor: CanyonGlide, river: RainyRiver }
 
 /** The five places on Luna's map (in % of the map), on their real spots, nudged apart so the pins don't overlap. */
+/** The balloon trip waits until the journal is full (all five stamps). Test links skip the wait: #/world/peru/party?stamps=all. */
+const BALLOON_LOCKED = true
+
 export const SPOTS = [
   { id: 'penguins', name: "Pepa's Penguin Cliff", icon: '🐧', x: 38.75, y: 75 },
   { id: 'machu-picchu', name: "Tika's Mountain Terraces", icon: '⛰️', x: 51.5, y: 60 },
@@ -36,10 +39,14 @@ export const SPOTS = [
 ]
 
 export default function Place(props: PlaceProps) {
-  const { meta, activity, setProgress, backToMap } = props
+  const { meta, activity, stamps, setProgress, backToMap, onWin } = props
   const stamp = useStampFlow(props)
 
-  if (activity === 'party') return <BalloonSoon backToMap={backToMap} />
+  if (activity === 'party') {
+    const ready = meta.activities.every((a) => stamps.includes(a.id))
+    if (BALLOON_LOCKED && !ready) return <BalloonSoon backToMap={backToMap} />
+    return <BalloonTrip setProgress={setProgress} onDone={onWin} />
+  }
 
   const Activity = activity ? ACTIVITIES[activity] : undefined
   const info = meta.activities.find((a) => a.id === activity)
@@ -66,13 +73,14 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const tickles = useRef(0)
   const playable = new Set(meta.activities.map((a) => a.id))
   const lunaDone = stamps.includes('alpaca')
+  const full = meta.activities.every((a) => stamps.includes(a.id))
   const [hats] = useSaved<Record<string, string | null> | null>(HATS_KEY, null)
 
   useEffect(() => {
     // Only when something is new (her first look, a new stamp, the party): coming back with nothing new is quiet.
     if (intro || !firstTime(`peru:hub:${stamps.length}`)) return
-    // Her first look: how to play. Back with a new stamp: just the cheer.
-    void say(stamps.length ? L.hubNext : L.hub)
+    // Her first look: how to play. Back with a new stamp: just the cheer. The journal full: off to the balloon.
+    void say(full ? L.balloon.ready : stamps.length ? L.hubNext : L.hub)
   }, [intro])
 
   return (
@@ -153,8 +161,8 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
               sounds.pop()
               openActivity('party')
             }}
-            className="peru-panel-balloon"
-            style={{ padding: 0, borderRadius: 22, border: `4px solid ${INK}`, background: '#D9CCFF', display: 'grid', placeItems: 'center', opacity: 0.85 }}
+            className={full ? 'peru-panel-balloon world-glow' : 'peru-panel-balloon'}
+            style={{ padding: 0, borderRadius: 22, border: `4px solid ${INK}`, background: full ? '#FFE27A' : '#D9CCFF', display: 'grid', placeItems: 'center', opacity: full ? 1 : 0.85 }}
           >
             <Balloon />
           </motion.button>
@@ -256,14 +264,12 @@ function Balloon() {
   )
 }
 
-/** Route `party` before the finale exists: Luna's balloon trip is coming once all five places are built. */
+/** Route `party` before the journal is full: the balloon trip waits until every friend has been helped. */
 function BalloonSoon({ backToMap }: { backToMap: () => void }) {
-  const { enter } = useSections(BALLOON_SECTIONS)
-  useEffect(() => enter('soon'), [enter])
   const sparkle = useRef<PuppetHandle>(null)
   const luna = useRef<PuppetHandle>(null)
   useEffect(() => {
-    void say(L.balloonSoon)
+    void say(L.balloon.wait)
     const t = setTimeout(() => {
       void sparkle.current?.play('wave')
       void luna.current?.play('hop')
@@ -272,7 +278,7 @@ function BalloonSoon({ backToMap }: { backToMap: () => void }) {
   }, [])
   return (
     <div style={{ position: 'absolute', inset: 0, background: `url(${art.bgAndes}) center / cover`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', gap: 'min(20px, 3vh)', padding: 'var(--top-clear) 20px calc(var(--safe-bottom) + 28px)' }}>
-      <div style={{ background: '#fff', borderRadius: 'var(--radius)', padding: '12px 26px', boxShadow: 'var(--shadow)', fontSize: 'clamp(22px, min(4vw, 5vh), 38px)', fontWeight: 600, textAlign: 'center' }}>🎈 {L.balloonSoon}</div>
+      <div style={{ background: '#fff', borderRadius: 'var(--radius)', padding: '12px 26px', boxShadow: 'var(--shadow)', fontSize: 'clamp(22px, min(4vw, 5vh), 38px)', fontWeight: 600, textAlign: 'center' }}>🎈 {L.balloon.wait}</div>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 'min(20px, 3vw)' }}>
         <SparklePuppet ref={sparkle} height="min(300px, 34vh, 40vw)" lookToward={0.5} />
         <Alpaca ref={luna} kind="luna" height="min(300px, 34vh, 40vw)" onTap={() => void luna.current?.play('giggle')} label="Luna" />

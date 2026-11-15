@@ -82,8 +82,52 @@ export const screens = [
     },
   })),
   { name: 'peru-hub-stamps', hash: '#/world/peru', stampAll: 'peru' },
-  { name: 'peru-balloon-soon', hash: '#/world/peru/party/soon', stampAll: 'peru', wait: 800 },
+  // The balloon before the journal is full, then Luna's Thank-You Balloon (the finale), stop by stop.
+  { name: 'peru-balloon-wait', hash: '#/world/peru/party', reset: true, wait: 800 },
+  { name: 'balloon-story', hash: '#/world/peru/party/story?stamps=all', reset: true, wait: 600 },
+  ...['coast', 'mountains', 'forest'].map((to) => ({
+    name: `balloon-${to}`,
+    hash: `#/world/peru/party/${to}?stamps=all`,
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(2600)
+      // One present pulled off the balloon and dropped in the middle of the scene: its parachute, a friend running.
+      const bag = await p.locator('[aria-label^="present"]').nth(2).boundingBox()
+      const vw = p.viewportSize()
+      if (bag) await dropPresent(p, bag, { x: vw.width * 0.62, y: vw.height * 0.35 })
+      await p.waitForTimeout(900)
+    },
+  })),
+  {
+    name: 'balloon-night',
+    hash: '#/world/peru/party/night?stamps=all',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(2600)
+      const buds = await p.locator('[aria-label="lantern"]').all()
+      for (const b of buds.slice(0, 3)) await b.click({ force: true }).catch(() => {})
+      await p.waitForTimeout(1500)
+    },
+  },
+  {
+    name: 'balloon-lineup',
+    hash: '#/world/peru/party/night?stamps=all',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(2600)
+      for (let i = 0; i < 6; i++) await p.locator('[aria-label="lantern"]').nth(i).click({ force: true }).catch(() => {})
+      await p.waitForTimeout(6500)
+    },
+  },
 ]
+
+/** Pull a present off the balloon (press on its bag, drag) and let it go at `to` (page coordinates). */
+async function dropPresent(p, bag, to) {
+  await p.mouse.move(bag.x + bag.width / 2, bag.y + bag.height / 2)
+  await p.mouse.down()
+  await p.mouse.move(to.x, to.y, { steps: 10 })
+  await p.mouse.up()
+}
 
 /** Auto-played runs (scripts/qa-pacing.mjs): talk before the first touch, talk per touch, the play strip. */
 export const pacing = [
@@ -93,10 +137,29 @@ export const pacing = [
   { name: "peru pepa's penguin cliff", id: 'penguins', hash: '#/world/peru/penguins', reset: true },
   { name: "peru coco's canyon glide", id: 'condor', hash: '#/world/peru/condor', reset: true },
   { name: "peru rosa's rainy river", id: 'river', hash: '#/world/peru/river', reset: true },
+  { name: "peru luna's thank-you balloon", id: 'party', hash: '#/world/peru/party', reset: true, stampAll: 'peru' },
 ]
 
 /** Filmed moments (scripts/qa-motion.mjs): the core verbs, driven the way a child would. */
 export const motion = []
+
+// Luna's Thank-You Balloon: pull a present off the balloon and let it go over a friend (the parachute pops open, it
+// drifts down swinging, the friend runs, catches and wears it). On the coast and in the windy mountains.
+const balloonDrop = (name, stop, toShare) => ({
+  name,
+  seconds: 3.4,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/peru/party/${stop}?stamps=all`)
+    await page.waitForTimeout(2600)
+  },
+  act: async (page) => {
+    const bag = await page.locator('[aria-label^="present"]').nth(1).boundingBox()
+    const vw = page.viewportSize()
+    if (!bag) throw new Error('no present found')
+    await dropPresent(page, bag, { x: vw.width * toShare.x, y: vw.height * toShare.y })
+  },
+})
+motion.push(balloonDrop('balloon-drop-coast', 'coast', { x: 0.55, y: 0.3 }), balloonDrop('balloon-drop-mountains', 'mountains', { x: 0.6, y: 0.25 }))
 
 // Luna's Fluffy Day: rub the brush over Luna's fleece (tangles turn shiny, sparkles, things pop out), then the
 // clippers (puffs snip off and float into the basket).

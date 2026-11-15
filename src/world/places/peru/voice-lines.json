@@ -17,7 +17,6 @@
     "voice": "luna"
   },
   "This place opens soon!",
-  "Our balloon trip comes soon!",
   {
     "text": "Hee hee!",
     "voice": "luna"
@@ -605,6 +604,88 @@
   "Drag the cloud over the lagoon!",
   "Drag a friend onto a lily pad!",
   "Pink dolphin sticker! These dolphins live in rivers!",
+  "Help every friend first! Then we fly!",
+  "Tap the balloon! Off we fly!",
+  "Click the balloon! Off we fly!",
+  {
+    "text": "Our journal is full!",
+    "voice": "luna"
+  },
+  {
+    "text": "Let's fly and say thank you!",
+    "voice": "luna"
+  },
+  "Pull a present off the balloon, then let it go!",
+  "Click a present, pull it off, then let it go!",
+  "Drop a present for each friend!",
+  "Windy! Coco and Pluma catch in the air!",
+  "Drop it through a gap in the leaves!",
+  {
+    "text": "A present! Gracias!",
+    "voice": "pepa"
+  },
+  {
+    "text": "My baby caught one!",
+    "voice": "pepa"
+  },
+  {
+    "text": "Arf arf! I love it!",
+    "voice": "lobo"
+  },
+  {
+    "text": "What a catch! Gracias!",
+    "voice": "coco"
+  },
+  {
+    "text": "I caught it in the air!",
+    "voice": "pluma"
+  },
+  {
+    "text": "For me? Gracias!",
+    "voice": "tika"
+  },
+  {
+    "text": "Graaacias...",
+    "voice": "sloth"
+  },
+  {
+    "text": "Mine! Yay!",
+    "voice": "monkey"
+  },
+  {
+    "text": "Wheee! Gracias!",
+    "voice": "rosa"
+  },
+  {
+    "text": "Bye-bye, sea! Up to the mountains!",
+    "voice": "luna"
+  },
+  {
+    "text": "Down to the rainforest!",
+    "voice": "luna"
+  },
+  "Hot air lifts the balloon up!",
+  "Pelicans scoop up fish!",
+  {
+    "text": "Wheee! We are flying!",
+    "voice": "luna"
+  },
+  {
+    "text": "I can see the whole country!",
+    "voice": "luna"
+  },
+  "Night time! Tap the forest to send up lanterns!",
+  "Night time! Click the forest to send up lanterns!",
+  "Red and white, like Peru's flag!",
+  {
+    "text": "Gracias, everyone!",
+    "voice": "luna"
+  },
+  "Gracias means thank you!",
+  "Pull a present off the balloon!",
+  "Click a present and pull it off!",
+  "Tap the forest!",
+  "Click the forest!",
   "Alpaca sticker! Alpacas have soft, warm fleece!",
   "Want to see real condors?",
   "Want to see Machu Picchu?",
