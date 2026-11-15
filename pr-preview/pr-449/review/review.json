@@ -1,11 +1,8 @@
 {
   "title": "Italy's finale: Opera Night at the Arena",
-  "checkIn": "2 of 4: hear the script",
-  "kaylee": "She swings a sparkly wand to lead Lupa's band, loud and soft, lighting the arena's candles, until shy Lupa sings her big note. Then roses, jets paint the flag, and a picnic.",
-  "questions": [
-    "Lupa's opening line: sweet, or too sad for a finale?",
-    "Nino says 'Piano, piano!' (Italian for 'slowly'): keep the joke?"
-  ],
+  "checkIn": "4 of 4: ship",
+  "kaylee": "She swings a sparkly wand to lead Lupa's band at the Arena di Verona, loud and soft, lights the candles, and helps shy Lupa sing her big note; then roses, jets paint the flag, a picnic and the Italy Explorer trophy. No playtest this time: she already played the earlier version and liked it, so her play diary takes over from here.",
+  "questions": [],
   "tableReads": [
     [
       "italy",
@@ -29,10 +26,6 @@
     {
       "label": "Play the whole finale",
       "hash": "#/world/italy/party?stamps=all"
-    },
-    {
-      "label": "Jump to the solos",
-      "hash": "#/world/italy/party/solo?stamps=all"
     }
   ]
 }

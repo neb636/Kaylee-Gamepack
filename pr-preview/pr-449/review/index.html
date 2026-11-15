@@ -34,24 +34,23 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 .pair span{position:absolute;left:6px;top:6px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;font-weight:700;border-radius:99px;padding:1px 8px}.pair figcaption{grid-column:1/-1}
 @media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.pics{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}}
 </style></head><body><main>
-<span class="chip">Check-in 2 of 4: hear the script</span>
+<span class="chip">Check-in 4 of 4: ship</span>
 <h1>Italy's finale: Opera Night at the Arena</h1>
-<p class="kaylee">She swings a sparkly wand to lead Lupa's band, loud and soft, lighting the arena's candles, until shy Lupa sings her big note. Then roses, jets paint the flag, and a picnic.</p>
+<p class="kaylee">She swings a sparkly wand to lead Lupa's band at the Arena di Verona, loud and soft, lights the candles, and helps shy Lupa sing her big note; then roses, jets paint the flag, a picnic and the Italy Explorer trophy. No playtest this time: she already played the earlier version and liked it, so her play diary takes over from here.</p>
 
 <h2>Watch</h2><figure><video src="reel/opera.mp4" poster="" controls playsinline muted autoplay loop></video>
 <figcaption>Opera · 32 s</figcaption></figure>
 
 <h2>Hear the script</h2><div class="card"><h3>Italy › Opera</h3>
-<p class="meta">32 lines · 107 s of talk · her name 0× · 32 flagged</p>
-
+<p class="meta">32 lines · 107 s of talk · her name 0× · 16 flagged</p>
+<audio controls preload="metadata" src="table-read/italy-opera.mp3"></audio>
 <p><a href="table-read/italy-opera.html">Read along: who says what, and when</a></p></div>
 
-<h2>Your call</h2><ol><li><p>Lupa's opening line: sweet, or too sad for a finale?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
-<li><p>Nino says 'Piano, piano!' (Italian for 'slowly'): keep the joke?</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><a class="pill" href="https://github.com/neb636/Kaylee-Gamepack/pull/449">Open the PR to paste them</a><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
-<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/italy/party?stamps=all">Play the whole finale</a> <a class="pill" href="../#/world/italy/party/solo?stamps=all">Jump to the solos</a></p>
+
+<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/italy/party?stamps=all">Play the whole finale</a></p>
 </main>
 <script>
-const qs=["Lupa's opening line: sweet, or too sad for a finale?","Nino says 'Piano, piano!' (Italian for 'slowly'): keep the joke?"],titles=[]
+const qs=[],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})
