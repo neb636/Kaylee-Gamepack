@@ -26,7 +26,7 @@ const SECTIONS = [
   ['mall hall', '#/world/thailand/mall-trip/hall'],
   ['poles globe', '#/world/poles/hub/globe'],
   ['poles floe', '#/world/poles/floe/steady'],
-  ['poles slide', '#/world/poles/slide/story'],
+  ['poles slide', '#/world/poles/slide/top'],
   ['poles iceberg', '#/world/poles/iceberg/bits?pole=north'],
   ['poles party', '#/world/poles/party/fly?stamps=all'],
   ['canada map', '#/world/canada/hub/map?at=bc'],
