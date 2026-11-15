@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "thailand-house",
+  "title": "Thailand house",
+  "video": "thailand-house.mp4",
+  "gif": "thailand-house.gif",
+  "seconds": 11,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Thailand hub downstairs",
+      "where": "#/world/thailand/hub/downstairs",
+      "seconds": 6,
+      "fps": 0.6,
+      "status": "too slow to film here (0.6 fps, no GPU?): film it on the Mac"
+    },
+    {
+      "name": "trip-give-jum",
+      "where": "trip-give-jum",
+      "seconds": 9,
+      "fps": 9.9,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand mall trip home",
+      "where": "#/world/thailand/mall-trip/home?hair=k.r",
+      "seconds": 14,
+      "fps": 3.9,
+      "status": "too slow to film here (3.9 fps, no GPU?): film it on the Mac"
+    }
+  ]
+}

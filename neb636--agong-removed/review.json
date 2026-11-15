@@ -1,0 +1,30 @@
+{
+  "title": "Agong leaves the game; the Thailand house",
+  "checkIn": "fix",
+  "kaylee": "The house is now the Thailand house. Agong is gone without any fuss: no goodbye, no memorial. Aunty Jum takes the photo or the pizza box when a trip comes home. His desk and empty chair stay for now.",
+  "questions": [],
+  "reels": [
+    {
+      "name": "thailand-house",
+      "moments": [
+        "#/world/thailand/hub/downstairs~6",
+        "trip-give-jum",
+        "#/world/thailand/mall-trip/home?hair=k.r~14"
+      ]
+    }
+  ],
+  "links": [
+    {
+      "label": "The house",
+      "hash": "#/world/thailand/hub/downstairs"
+    },
+    {
+      "label": "Boat trip home (give Aunty Jum the photo)",
+      "hash": "#/world/thailand/boat-trip/home?photos=village,hong,nail&found=crab,eagle"
+    },
+    {
+      "label": "Mall day home (give Aunty Jum the box)",
+      "hash": "#/world/thailand/mall-trip/home"
+    }
+  ]
+}
