@@ -1589,11 +1589,11 @@
     "file": "3915c541ffae.mp3"
   },
   {
-    "text": "Help every friend first! Then we fly!",
+    "text": "Help every friend first!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4200,
-    "file": "ad265d9e2b26.mp3"
+    "ms": 2160,
+    "file": "8c9dcc80e60c.mp3"
   },
   {
     "text": "Tap the balloon! Off we fly!",
@@ -1624,18 +1624,11 @@
     "file": "e58fab92f06c.mp3"
   },
   {
-    "text": "Pull a present off the balloon, then let it go!",
+    "text": "Pull down a present, then let go!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3240,
-    "file": "1fb03a2c8f1f.mp3"
-  },
-  {
-    "text": "Click a present, pull it off, then let it go!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3912,
-    "file": "13473190c393.mp3"
+    "ms": 3168,
+    "file": "9516042d7ccc.mp3"
   },
   {
     "text": "Drop a present for each friend!",
@@ -1645,11 +1638,11 @@
     "file": "b57903a01c47.mp3"
   },
   {
-    "text": "Windy! Coco and Pluma catch in the air!",
+    "text": "Windy! They catch it in the air!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3552,
-    "file": "8abfe2ff7870.mp3"
+    "ms": 2880,
+    "file": "df3656cc5ae7.mp3"
   },
   {
     "text": "Drop it through a gap in the leaves!",
@@ -1680,11 +1673,11 @@
     "file": "f078210fed25.mp3"
   },
   {
-    "text": "What a catch! Gracias!",
+    "text": "Nice catch! Gracias!",
     "voice": "coco",
     "sig": "794c66c94c",
-    "ms": 3264,
-    "file": "f9439e9fce0c.mp3"
+    "ms": 2544,
+    "file": "422dd89fc3dd.mp3"
   },
   {
     "text": "I caught it in the air!",
@@ -1764,25 +1757,25 @@
     "file": "75aa30e8868a.mp3"
   },
   {
-    "text": "Night time! Tap the forest to send up lanterns!",
+    "text": "Tap the trees to light lanterns!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4488,
-    "file": "e12d880eb81e.mp3"
+    "ms": 2256,
+    "file": "9ec83c4d250f.mp3"
   },
   {
-    "text": "Night time! Click the forest to send up lanterns!",
+    "text": "Click the trees to light lanterns!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3648,
-    "file": "9b3759b8ef62.mp3"
+    "ms": 2928,
+    "file": "0bae3b2b6851.mp3"
   },
   {
-    "text": "Red and white, like Peru's flag!",
+    "text": "Peru's flag! Red and white!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3120,
-    "file": "266062eabc33.mp3"
+    "ms": 3288,
+    "file": "fb6a20b1d0c1.mp3"
   },
   {
     "text": "Gracias, everyone!",
@@ -1799,32 +1792,25 @@
     "file": "bc9ba7219883.mp3"
   },
   {
-    "text": "Pull a present off the balloon!",
+    "text": "Pull down a present!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2136,
-    "file": "88157a6b6b72.mp3"
+    "ms": 1776,
+    "file": "fcde6386b307.mp3"
   },
   {
-    "text": "Click a present and pull it off!",
+    "text": "Tap the trees!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2352,
-    "file": "f782fdcbff57.mp3"
+    "ms": 1584,
+    "file": "0760b674c1ef.mp3"
   },
   {
-    "text": "Tap the forest!",
+    "text": "Click the trees!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 1824,
-    "file": "4e0ac297310e.mp3"
-  },
-  {
-    "text": "Click the forest!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1800,
-    "file": "e0204fef8f22.mp3"
+    "ms": 1104,
+    "file": "56984c315d65.mp3"
   },
   {
     "text": "Alpaca sticker! Alpacas have soft, warm fleece!",
