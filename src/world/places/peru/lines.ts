@@ -227,7 +227,7 @@ export const L = {
     wait: 'Help every friend first!',
     // On the hub, once all five stamps are in.
     ready: onDevice('Tap the balloon! Off we fly!', 'Click the balloon! Off we fly!'),
-    story: [luna('Our journal is full!'), luna("Let's fly and say thank you!")],
+    story: [luna('Our journal is full!'), luna("Let's say thank you!")],
     // The core verb, said at the first stop (no gesture word: pulling works the same with a finger or a mouse).
     go: 'Pull a present, let it go!',
     // A new stop: what's different here.
