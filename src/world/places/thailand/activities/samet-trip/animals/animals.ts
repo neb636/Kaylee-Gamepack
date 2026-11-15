@@ -2,7 +2,7 @@
 // how it behaves. (They were the pages of a photo book once; the book is gone, the animals stayed as the island's
 // life.) Plain data, no three.js.
 //
-// The names are lines.ts L.samet.book.name (Sparkle's voice): the snorkel says a reef animal's name the first time
+// The names are lines.ts L.samet.animals.name (Sparkle's voice): the snorkel says a reef animal's name the first time
 // she pokes it, and they label the island's tap targets.
 import { L } from '../../../lines'
 
@@ -20,7 +20,7 @@ export interface Animal {
   rare?: boolean
 }
 
-const B = L.samet.book
+const B = L.samet.animals
 export const ANIMALS: Record<AnimalId, Animal> = {
   tern: { id: 'tern', name: B.name.tern, behavior: 'perch' },
   crab: { id: 'crab', name: B.name.crab, behavior: 'flee' },

@@ -105,7 +105,7 @@ const samet: CastEntry[] = [
   person('jetski-man', 'The jet ski man', 'Koh Samet: runs the jet skis on Sai Kaew, an otter', 'samet', JETSKI_MAN, 'activities/samet-trip/cast.ts'),
   person('samet-captain', 'The captain', 'Koh Samet: drives the speedboat and the snorkel boat, a pelican', 'samet', CAPTAIN, 'activities/samet-trip/cast.ts'),
   person('taxi-driver', 'The taxi driver', 'Koh Samet: drives the green taxi, a sun bear', 'samet', TAXI_DRIVER, 'activities/samet-trip/cast.ts'),
-  person('beach-puppy', 'The beach puppy', 'Koh Samet: knows the way round the island, a cream beach dog in a pink bandana', 'samet', PUPPY, 'activities/samet-trip/cast.ts'),
+  person('beach-puppy', 'Tofu', 'Koh Samet: the beach puppy who saw where the fireflies landed, a cream beach dog in a pink bandana', 'samet', PUPPY, 'activities/samet-trip/cast.ts'),
   ...FIRE_DANCERS.map((look, i) => person(`fire-dancer-${i + 1}`, i ? 'Kae' : 'Tuk', i ? 'Koh Samet: a fire dancer on Sai Kaew, Tuk\'s little sister, a mint tokay gecko' : 'Koh Samet: a fire dancer on Sai Kaew, Kae\'s big brother, a blue tokay gecko', 'samet', look, 'activities/samet-trip/cast.ts', i ? 'kae' : 'tuk', 'fire-dancers')),
 ]
 

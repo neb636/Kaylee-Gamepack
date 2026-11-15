@@ -8,7 +8,7 @@
 // mermaid's flute, the bell, the ice cream and the stall's dings, the beads' jingle, the telescope, the lifeguard's
 // whistle, the hide-and-seek tree's notes, the banana boat's blip), and so do the whee (the wave spin, the kite, the
 // slide), her own toot when she's poked, the hammock's swish and the rocks' clack. The animals' sounds and the beach
-// clean's are the book's (../book/sounds.ts).
+// clean's are in ../animals/sounds.ts.
 import { clip, held, playClip } from '../../../../../kit/clips'
 import { noise as hiss, tone } from '../../../../../kit/sfx'
 import { sametSfx } from '../sfx/common'

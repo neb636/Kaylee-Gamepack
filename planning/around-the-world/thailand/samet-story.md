@@ -103,6 +103,20 @@ swim, poke things, ride the jet ski once it's hers. Walking between neighbouring
 - **QA**: each stop's `qa.mjs` has its films watched to the end and skipped, and a whole-stop play-through; the
   island's runs are in `samet-trip/qa.mjs` (`thailand-samet-story-*`).
 
+## The old island's leftovers (2026-11-15)
+
+An audit found what the first build left behind. Done: the first plans retired (#450); the taxi only parks; the
+animals' photo-book posing and the snorkel's camera gone; the pier no longer a second way to the finale; no hermit
+crab before Sandy moves in; Sparkle's beach lines wait while a firefly hides there; Dad doesn't say "Peekaboo"; the
+waves round's stars are Zoom's sparkles; Tuk and Kae cheer in their own voices (#451); `book/` is `animals/` and the
+sound ids follow.
+
+Left on purpose, your call (2026-11-15): **Tofu** keeps his first-build habits for now (fetching her when she's idle,
+barking each beach's name, his thought bubble, the sand slide at the end of his old shortcut), and the **beach clean**
+stays a side verb. The plan if he gets a bigger part: he's the nose that knows (the pictures as his memory, sniffing
+out each hiding firefly, a beat in every stop's films). **Lunch** stays a side place; the sticker stays the pink
+mermaid. The map pin is still the jet ski man.
+
 ## Next
 
 Kaylee plays it. Watch for: does she follow the story (does she say "firefly"?), does she tap a picture without

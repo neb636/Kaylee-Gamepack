@@ -958,9 +958,9 @@ export const L = {
         aonoina: 'Ao Noi Na!',
       },
     },
-    // The island's animals (book/animals.ts): Sparkle says a reef animal's name the first time she pokes it on the
-    // snorkel (the parrotfish, an urchin).
-    book: {
+    // The island's animals (animals/animals.ts): Sparkle says a reef animal's name the first time she pokes it on the
+    // snorkel (the parrotfish, an urchin), and they label the island's tap targets.
+    animals: {
       name: {
         tern: 'A tern!',
         crab: 'A crab!',
