@@ -45,7 +45,7 @@ const TONGUE = '#FF8FA8'
 
 // Where he was cut and what's on his face, measured in Blender (model meters, Blender axes: z up, the face toward -y).
 const NECK = 0.53
-/** The right eye dome's box: centre (x, y, z) and half-sizes (the left is mirrored). */
+/** The right eye dome's box (Blender axes: x across, y depth, z up): centre and half-sizes (the left is mirrored). */
 const EYE = { c: [0.0942, -0.1711, 0.6885] as V3, r: [0.0408, 0.02, 0.0405] as V3 }
 /** The bottom of his nose (the mouth goes under it). */
 const NOSE = 0.627
@@ -174,12 +174,13 @@ export function buildDadRig(gltf: GLTF, bag: Bag): Rig {
 
   // The lids: his skin colour over each eye dome, growing down from above it.
   const [ex, ey, ez] = EYE.c
-  const [rx, ry, rz] = EYE.r
+  // Blender's half-sizes: across, depth, up (the lid's sphere is in three.js axes: across, up, depth).
+  const [rx, depth, up] = EYE.r
   const lids: Group[] = []
   for (const s of [-1, 1] as const) {
     const lid = new Group()
-    lid.position.set(...onHead(s * ex, ez + ry + 0.005, ey))
-    lid.add(solid(P.sphere(1, SKIN, { at: [0, -(ry + 0.005), 0], scale: [rx + 0.005, ry + 0.005, rz + 0.005] }), bag, FACE_INK))
+    lid.position.set(...onHead(s * ex, ez + up + 0.005, ey))
+    lid.add(solid(P.sphere(1, SKIN, { at: [0, -(up + 0.005), 0], scale: [rx + 0.005, up + 0.005, depth + 0.005] }), bag, FACE_INK))
     lid.scale.y = 0.001
     lid.visible = false
     face.add(lid)
