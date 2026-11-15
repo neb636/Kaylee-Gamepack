@@ -22,9 +22,8 @@ import { Lupa } from './puppets/Lupa'
 
 export type { ActivityProps } from '../../kit/stampFlow'
 
-/** The opera finale is a greybox (gate 1) that Dad plays on the PR preview, so it opens without all six stamps for now.
- *  Gate 3 sets this back to true: the opera waits until the band is full. */
-const OPERA_LOCKED = false
+/** The opera waits until the band is full (all six stamps). Test links skip the wait: #/world/italy/party?stamps=all. */
+const OPERA_LOCKED = true
 
 const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { pizzeria: Pizzeria, olives: OliveGrove, trevi: Trevi, colosseum: Colosseum, venice: Venice, etna: Etna }
 

@@ -6,6 +6,7 @@ export default defineSections('italy', 'party', {
     solos: { default: '', doc: 'comma list of friends who already had a solo: bruno, spina, cesare, gino, nino (later sections fill up to three)' },
   },
   sections: [
+    { id: 'story', name: 'Lupa is too shy (story)' },
     { id: 'candles', name: 'Light the candles' },
     { id: 'owl', name: 'Baby owl: piano, soft' },
     { id: 'dance', name: 'Crowd dances: forte, loud' },

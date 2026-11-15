@@ -73,7 +73,7 @@ pieces fit together is `docs/building.md` (2D) and `docs/thailand-3d.md` (3D). S
 | 🛶 Venice (`venice`) | live | [activities/venice/](../src/world/places/italy/activities/venice) | [activities/venice/sections.ts](../src/world/places/italy/activities/venice/sections.ts) (9) | country qa.mjs |  |
 | 🌋 Snow on a Volcano (`etna`) | live | [activities/etna/](../src/world/places/italy/activities/etna) | [activities/etna/sections.ts](../src/world/places/italy/activities/etna/sections.ts) (9) | country qa.mjs |  |
 | ⛲ Trevi Fountain (`trevi`) | live | [activities/trevi/](../src/world/places/italy/activities/trevi) | [activities/trevi/sections.ts](../src/world/places/italy/activities/trevi/sections.ts) (6) | country qa.mjs |  |
-| 🎉 Finale (`party`) | finale | [activities/opera/](../src/world/places/italy/activities/opera) | [activities/opera/sections.ts](../src/world/places/italy/activities/opera/sections.ts) (10) | country qa.mjs |  |
+| 🎉 Finale (`party`) | finale | [activities/opera/](../src/world/places/italy/activities/opera) | [activities/opera/sections.ts](../src/world/places/italy/activities/opera/sections.ts) (11) | country qa.mjs |  |
 
 ## 🦙 Peru (`peru`)
 
