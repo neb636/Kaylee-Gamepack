@@ -1,9 +1,13 @@
 ---
 name: sfx
-description: Make first-pass recorded sound effects with ElevenLabs for a place or toy (engines, animals, water, ambience) and wire them in over the synth sounds, so the user hears real sounds instead of blips. Use when the user asks for ElevenLabs sound effects or real sounds for a place.
+description: Make recorded sound effects with ElevenLabs for a place or toy (engines, animals, water, ambience) and wire them in over the synth sounds, so the user hears real sounds instead of blips. Use on your own, without asking, whenever you build a new game or level or change one (new things that move, live or get tapped need sounds), and when the user asks for real sounds for a place. Not for character voices (those stay on OpenAI).
 ---
 
-# First-pass sound effects (ElevenLabs)
+# Sound effects (ElevenLabs)
+
+**Use it always, no need to ask.** Every new game or level, and every change that adds things that move, live or react
+to a tap, gets its sound effects from ElevenLabs as part of the work (the user approved the credits, 2026-11-15).
+Character voices are not sound effects: they stay on OpenAI (`docs/voices.md`, `cast.json`).
 
 Two ways in, same key (`ELEVENLABS_API_KEY` from the shell, this checkout's `.env` or `~/repos/Kaylee-Gamepack/.env`):
 

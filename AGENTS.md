@@ -54,6 +54,10 @@ were handed plan pages, grey boxes and up to 40 PRs a day, they ended up merging
 - **Between check-ins, don't stop to ask.** Make the reasonable call, say which on the review page, and keep going.
   Stop only for: family facts (the user decides who each person is, which animal, who comes on a trip), anything sacred
   (rule 8), a new package, spending money (Tripo credits, paid APIs), or deleting something of the user's.
+  ElevenLabs sound effects are the one paid API you don't ask about (next point).
+- **Real sounds, always.** Whenever you build a new game or level, or change one, make its sound effects with
+  ElevenLabs yourself (`sfx` skill): no need to ask first. Say how many seconds you made on the review page.
+  Character voices stay on OpenAI (`docs/voices.md`); ElevenLabs is for sound effects, ambience and music cues only.
 - **No grey boxes for the user or Kaylee.** Greybox privately if it helps you, with robots and numbers (`docs/qa.md`). What
   Kaylee plays at check-in 3 is bright and voiced (scratch voices are fine; in 3D the toon look comes free), its core
   verb works and every section has a link. If her playtest says the toy isn't fun, change the toy, not the decoration.
@@ -165,7 +169,7 @@ and `docs/3d-characters.md`.
 
 **Skills** (in `.agents/skills/`, shared by Claude Code and Codex): `pitch` (three pitch cards), `table-read` (hear a
 script), `reel` (film the game), `ship` (the review page and the PR, fixes too), `playtest` (a recording of Kaylee into
-fixes), `kaylee-week` (the play diary), `sfx` (first-pass ElevenLabs sound effects). **Agent:** `fresh-eyes` reviews a toy it hasn't seen before check-ins 3 and 4.
+fixes), `kaylee-week` (the play diary), `sfx` (ElevenLabs sound effects for every new or changed game or level). **Agent:** `fresh-eyes` reviews a toy it hasn't seen before check-ins 3 and 4.
 
 ## Rules the checks enforce
 
