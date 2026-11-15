@@ -210,9 +210,8 @@ export class PierStop implements BayPart {
             this.tying = false
             this.boarding = -1
             bay.setPhase('drive')
-            // (Tilting the phone, the gas pedal shows how instead of the finger line. Said the first boarding of the visit;
-            // after that it's a hint like any other, from the shared budget.)
-            if (!bay.tilting && (spendHint(L.bay.hint.drive) || firstTime('bay.hint.drive'))) bay.say(L.bay.hint.drive)
+            // (Said the first boarding of the visit; after that it's a hint like any other, from the shared budget.)
+            if (spendHint(L.bay.hint.drive) || firstTime('bay.hint.drive')) bay.say(L.bay.hint.drive)
           }
         })
       })

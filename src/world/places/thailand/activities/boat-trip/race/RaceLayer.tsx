@@ -3,19 +3,13 @@
 // - The countdown: three lights and a giant 3, 2, 1, GO!
 // - Her place (a medal with 1st / 2nd / 3rd) and everyone's faces in order, the lap (🏁 2/3) and her coins, and a
 //   minimap of the course with the three boats on it (race.ts moves the dots).
-// - Tilting to steer (a phone, trip/race/tilt.ts): the gas pedal (GasPedal.tsx), a big button bottom left beside Sparkle for her
-//   left thumb. Held down, the boat goes full speed (and revs before GO: still down at GO is a rocket start). A phone
-//   rocking like a wheel shows how to steer during the countdown. (The space bar is the pedal on a computer, with ← →
-//   to steer.)
 // - Banners sweeping across: lap 2, the last lap, 1st!
 // - The podium: the trophy with the trophy title on it (the SDK's own, as in her Trophy Room), then 🔁 race again or 🚤 back to the
 //   bay.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { bigCelebration, Trophy } from '../../../../../../sdk'
-import { GasPedal } from '../../../trip/race/GasPedal'
 import { Banner, CoinsAndMap, Countdown, Standings, type Face } from '../../../trip/race/RaceHud'
-import { TiltingPhone } from '../../../trip/race/TiltSetup'
 import type { RaceHud, RacerId } from './race'
 import { LAPS, MAP } from './track'
 
@@ -35,11 +29,9 @@ interface Props {
   onBay: () => void
   /** The minimap's dots, by racer id (race.ts moves them). */
   mapEls: Map<string, SVGElement>
-  /** Tilting to steer: the gas pedal shows, and calls this as it goes down and up. */
-  onGas?: (down: boolean) => void
 }
 
-export function RaceLayer({ hud, onAgain, onBay, mapEls, onGas }: Props) {
+export function RaceLayer({ hud, onAgain, onBay, mapEls }: Props) {
   const racing = hud.phase === 'race' || hud.phase === 'count' || hud.phase === 'finish'
   // Confetti on the screen too, as she wins.
   const celebrated = useRef(false)
@@ -52,12 +44,6 @@ export function RaceLayer({ hud, onAgain, onBay, mapEls, onGas }: Props) {
     <>
       {racing && <Standings hud={hud} faces={FACES} me="kaylee" />}
       {racing && <CoinsAndMap hud={hud} laps={LAPS} map={MAP} dots={['monkey', 'kids', 'kaylee']} faces={FACES} me="kaylee" mapEls={mapEls} />}
-      {onGas && hud.phase !== 'podium' && hud.phase !== 'finish' && <GasPedal onGas={onGas} eager={hud.phase !== 'race'} />}
-      {onGas && (hud.phase === 'intro' || hud.phase === 'count') && (
-        <div aria-hidden style={{ position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 14px)', translate: '-50% 0', zIndex: 32, pointerEvents: 'none', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.25))' }}>
-          <TiltingPhone size="clamp(84px, 15vmin, 120px)" />
-        </div>
-      )}
       <Countdown count={hud.count} />
       <Banner banner={hud.banner} />
       {hud.phase === 'podium' && <Podium trophy={hud.trophy} onAgain={onAgain} onBay={onBay} />}

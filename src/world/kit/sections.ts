@@ -34,7 +34,7 @@ export interface StateLink<P extends string = string> {
   label: string
   /** The state in the URL. */
   params?: Partial<Record<P, string>>
-  /** Switches that aren't the activity's params, read with engine3d/flags.ts flag() (`steer=tilt`, `look=...`). */
+  /** Switches that aren't the activity's params, read with engine3d/flags.ts flag() (`feel=1`, `look=...`). */
   flags?: Record<string, string>
   /** A hub's link to the country itself (#/world/<place>), where she lands, instead of this section. */
   bare?: boolean
@@ -55,7 +55,7 @@ export interface SectionDef<P extends string = string> {
    *  group together under it. */
   group?: string
   /** The section's game-sections page entries, when one link named `name` isn't enough: a step per round (`?round=2`), or a
-   *  variant of the step in brackets (`also`: `?steer=tilt`). Leave out for one link to the bare section. */
+   *  variant of the step in brackets (`also`: `?feel=1`). Leave out for one link to the bare section. */
   links?: readonly DirectoryLink<P>[]
 }
 
