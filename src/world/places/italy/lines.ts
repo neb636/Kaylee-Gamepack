@@ -422,7 +422,7 @@ export const L = {
   passport: onDevice('This is Italy! Tap a picture to learn more.', 'This is Italy! Click a picture to learn more.'),
   // 🎭 Opera Night at the Arena (the finale, activities/opera/). Sparkle gives the instructions; the friends react.
   opera: {
-    story: [lupa('So many people... I\'m too shy to sing!'), 'Grab the wand and lead the band!'],
+    story: [lupa('So many people... I\'m too shy to sing!')],
     candles: onDevice('Put your finger on the wand and swing it! Lead the band!', 'Click and hold, then swing the wand! Lead the band!'),
     forte: 'Big swings: forte! Loud!',
     piano: 'Little swings: piano. Soft!',

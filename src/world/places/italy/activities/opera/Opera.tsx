@@ -127,10 +127,20 @@ function makeGeo(W: number, H: number): Geo {
   const standsTop = top + avail * 0.22
   const stageBack = top + avail * 0.5
   const stageFront = top + avail * 0.8
-  const memberW = Math.max(64, Math.min(W * 0.14, avail * 0.17, 170))
-  // Three on the left, two on the right, and a gap in the middle for Lupa (so she never hides Cesare).
-  const slots = [0.1, 0.24, 0.37, 0.65, 0.87]
-  const members = BAND.map((_, i) => ({ x: W * slots[i], y: stageBack + avail * 0.06 }))
+  // A tall screen (an iPad held upright) puts the band in two rows so they're bigger: Bruno, Spina and Cesare at the
+  // back, Gino and Nino in front either side of Lupa. A wide one has one row: three on the left, two on the right, and
+  // a gap in the middle for Lupa (so she never hides Cesare).
+  const tall = H > W * 1.1
+  const memberW = tall ? Math.max(64, Math.min(W * 0.22, avail * 0.15, 190)) : Math.max(64, Math.min(W * 0.14, avail * 0.17, 170))
+  const members = tall
+    ? [
+        { x: W * 0.2, y: stageBack - memberW * 1.05 },
+        { x: W * 0.5, y: stageBack - memberW * 1.05 },
+        { x: W * 0.8, y: stageBack - memberW * 1.05 },
+        { x: W * 0.17, y: stageFront - memberW * 1.25 },
+        { x: W * 0.83, y: stageFront - memberW * 1.25 },
+      ]
+    : [0.1, 0.24, 0.37, 0.65, 0.87].map((f) => ({ x: W * f, y: stageBack + avail * 0.06 }))
   const lupaW = memberW * 1.15
   const candles: { x: number; y: number }[] = []
   const rows = 3
