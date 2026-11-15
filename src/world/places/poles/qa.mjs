@@ -1,4 +1,4 @@
-// The Poles' QA scenarios for the globe hub and the finale, picked up by scripts/qa-screens.mjs (screens),
+// The Poles' QA scenarios for the globe hub (the finale's are in activities/party/qa.mjs), picked up by scripts/qa-screens.mjs (screens),
 // qa-pacing.mjs (pacing) and qa-motion.mjs (motion). Each activity keeps its own next to its sections.ts
 // (activities/<id>/qa.mjs); sections no screen reaches get a plain screenshot anyway. Not part of the app: Node runs it, Vite never sees it.
 import { vp } from '../../../../scripts/qa-lib.mjs'
@@ -13,21 +13,11 @@ export const screens = [
     reset: true,
     wait: 1800,
   })),
-  // The finale: Terry over each leg of the flight, the postcard at the colony, a question of each kind
-  // (drag, spin, tap a pole, pick from the row) and the badge (with every stamp, or the finale opens the globe).
-  ...['fly?leg=north', 'fly?leg=warm', 'fly?leg=south', 'deliver', 'quiz?q=bear', 'quiz?q=south&stars=2', 'quiz?q=coldest&stars=3', 'quiz?q=summer&stars=4', 'badge'].map((to) => ({
-    name: `poles-party-${to.replace(/[?=&]/g, '-')}`,
-    hash: `#/world/poles/party/${to}${to.includes('?') ? '&' : '?'}stamps=all`,
-    reset: true,
-    wait: to === 'deliver' ? 3600 : 2500,
-  })),
 ]
 
 /** Auto-played runs (scripts/qa-pacing.mjs): talk before the first touch, talk per touch, the play strip. */
 export const pacing = [
   { name: 'poles globe hub', id: 'poles', hash: '#/world/poles', reset: true },
-  // The finale: Terry's flight from the top (she steers; the robot just watches him fly).
-  { name: 'poles pole to pole', id: 'party', hash: '#/world/poles/party/fly?stamps=all', reset: true },
 ]
 
 /** Filmed moments (scripts/qa-motion.mjs): the core verbs, driven the way a child would. */
@@ -106,24 +96,6 @@ motion.push(
       await page.waitForTimeout(4200)
       await carry(0.94)
       await page.waitForTimeout(3000)
-    },
-  },
-  {
-    // The finale: her finger steers Terry left, right, left over the Arctic; the fish he flies over are his.
-    name: 'poles-party-fly',
-    seconds: 7,
-    setup: async (page, base) => {
-      await page.goto(`${base}#/world/poles/party/fly?leg=north&stamps=all`)
-      await page.waitForFunction(() => window.__polesPartyQA?.().mode, null, { timeout: 20000 })
-      await page.waitForTimeout(1200)
-    },
-    act: async (page) => {
-      for (const x of [0.2, 0.8, 0.3, 0.7]) {
-        await page.mouse.move(vp.width * x, vp.height * 0.75)
-        await page.mouse.down()
-        await page.waitForTimeout(1400)
-        await page.mouse.up()
-      }
     },
   },
 )

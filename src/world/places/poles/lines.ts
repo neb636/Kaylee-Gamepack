@@ -355,16 +355,17 @@ export const L = {
     },
   },
 
-  // ---- The finale: Pole to Pole and the Polar Quiz (activities/party/) ----
+  // ---- The finale (activities/party/): the flight home, Papa's song, Terry's Polar Explorer quiz. In play order. ----
   party: {
-    // Pole to Pole: Terry carries Pola's postcard down the world; Sparkle says how to steer.
-    setOff: terry("Pola's postcard! Let's fly it to Pebble!"),
+    // -- The flight home: Terry leads the balloon down the world.
+    // As the flight starts: Sparkle says how to steer, then Terry calls back to the balloon.
     steer: onDevice('Steer Terry with your finger!', 'Click and drag to steer Terry!'),
+    setOff: terry('Follow me, balloon!'),
+    // Sparkle, when nothing has been touched for a while.
     steerHint: onDevice('Move your finger to steer Terry!', 'Hold the click and move to steer Terry!'),
-    warm: terry("Phew! It's warm in the middle of the world!"),
-    south: terry("Brr, it's windy! Nearly at the South Pole!"),
+    // Terry, every few fish he gulps (in turn).
     fish: [terry('Yum, a fish!'), terry('Fishy!'), terry('Got one!')],
-    // Over a country she has been to (the passport's), by its id.
+    // Terry, over a country she has been to (the passport's), by its id.
     hello: {
       thailand: terry('Hello, Thailand!'),
       australia: terry('Hello, Australia!'),
@@ -374,35 +375,84 @@ export const L = {
       peru: terry('Hello, Peru!'),
       canada: terry('Hello, Canada!'),
     } as Record<string, { text: string; voice: string }>,
-    // The postcard.
-    delivery: terry('A postcard for you, Pebble!'),
-    card: pebble('From Pola! Look, a polar bear!'),
-    // The Polar Quiz: Sparkle asks, Kaylee answers by doing.
-    quiz: 'Quiz time!',
-    ask: {
-      bear: 'Put Pola where polar bears live!',
-      penguin: 'Put Pebble where penguins live!',
-      south: 'Spin the South Pole to the front!',
-      north: 'Spin the North Pole to the front!',
-      ocean: onDevice('Which pole is ocean under the ice? Tap it!', 'Which pole is ocean under the ice? Click it!'),
-      coldest: onDevice('Which pole is the coldest? Tap it!', 'Which pole is the coldest? Click it!'),
-      tern: onDevice('Who visits both poles? Tap them!', 'Who visits both poles? Click them!'),
-      summer: "It's summer up north. What is it down south?",
+    // The warm middle of the world: the sea turns turquoise, Pola pants and fans herself. Then Sparkle's fact.
+    warm: pola("Phew! I'm melting!"),
+    warmFact: 'The middle of the world is the warmest part!',
+    // The first whale spouts below.
+    whale: terry('Look down! A whale!'),
+    // The cold comes back: Pebble bounces in the basket.
+    south: pebble('It smells like home!'),
+    // The albatross glides in beside them.
+    albatross: terry('Hello, albatross! Nearly there!'),
+    // A tap on the balloon (in turn).
+    balloon: [pola('Wheee!'), pebble('Higher, higher!')],
+
+    // -- Papa's song: find each chick's papa by his tune.
+    song: {
+      // Round 1. Pebble, then he hums; then Sparkle says what to do.
+      ask: pebble('Papa sings like this!'),
+      how: onDevice('Tap a papa to hear his song!', 'Click a papa to hear his song!'),
+      // Sparkle, when nothing has been touched for a while (the chick's tune plays again on a tap).
+      hint: onDevice('Tap the chick to hear the song again.', 'Click the chick to hear the song again.'),
+      // A dad who isn't the papa, the second miss of a round (Papa's voice; the first miss is a bow).
+      neighbor: papa('Not my chick! Try my neighbor.'),
+      // After two misses the right papa sways and glows.
+      glow: 'Look! Who is swaying?',
+      // Found, round 1: Pebble, then Papa.
+      found: pebble("That's Papa's song!"),
+      papa: papa('My little Pebble!'),
+      // Round 2: another chick peeps for help (Pebble's voice); Sparkle.
+      more: pebble('Find my papa too!'),
+      moreHow: 'More papas! Listen for the same song.',
+      // Found, rounds 2 and 3 (the chick).
+      thanks: [pebble('Papa! You found him!'), pebble('Thank you! Thank you!')],
+      // Round 3: the wind and the snow come up (Sparkle); one last chick.
+      storm: 'Brr, a snowstorm! Just listen.',
+      last: pebble("I can't see my papa!"),
+      // All three found.
+      done: 'Every chick has a papa!',
+      // Taps behind the row: Pola (in turn), and Sparkle's facts the first time she pokes the colony or a found pair.
+      pola: [pola('I just want to say hi!'), pola('Hi, penguins!')],
+      colonyFact: "Penguins have never seen a polar bear. They're a little shy!",
+      songFact: 'Emperor penguins find their family by their song.',
     },
-    // A miss: something silly, then the right thing glows and she does it herself.
+
+    // -- Terry's Polar Explorer quiz: Terry asks, she answers by doing; Sparkle says how.
+    quiz: terry('Quiz time!'),
+    ask: {
+      bear: terry('Take Pola home! Where do polar bears live?'),
+      penguin: terry('Where do penguins live?'),
+      south: terry('Show me the South Pole!'),
+      north: terry('Show me the North Pole!'),
+      ocean: terry('Which pole is sea under the ice?'),
+      coldest: terry('Which pole is the coldest?'),
+      tern: terry('Who flies to both poles?'),
+      summer: terry("It's summer up north. What is it down south?"),
+    },
+    // Sparkle: how to answer each kind of question (the first time it comes up, and when she's stuck).
+    how: {
+      drag: onDevice('Drag to the top or the bottom!', 'Click and drag to the top or the bottom!'),
+      spin: onDevice('Swipe the globe up or down!', 'Drag the globe up or down!'),
+      tap: onDevice('Tap the top or the bottom!', 'Click the top or the bottom!'),
+      pick: onDevice('Tap your answer!', 'Click your answer!'),
+    },
+    // A miss: something silly, then the right thing glows and she does it herself. (Pola and the penguin speak for
+    // themselves when she puts them at the wrong pole; Terry for the rest.)
     miss: {
       bear: pola("Where's the sea ice? I live up top!"),
       penguin: pebble('Brr! Where is everybody?'),
-      south: 'Wobble, wobble! Try the other end.',
-      north: 'Wobble, wobble! Try the other end.',
-      ocean: "That's rock and land under there! Try the other pole.",
-      coldest: 'Brr! The other pole is even colder.',
-      tern: 'Hmm, not them. Who can fly far?',
-      summer: "Down south it's dark and snowy! Try again.",
+      south: terry('Wobble, wobble! The other end!'),
+      north: terry('Wobble, wobble! The other end!'),
+      ocean: terry('That one is rock and land! Try the other.'),
+      coldest: terry('Brr! The other one is even colder.'),
+      tern: terry('Not them. Who can fly far?'),
+      summer: terry("Down south it's dark and snowy!"),
     },
     glow: 'Look for the sparkle!',
-    right: ['Yes!', "That's right!", 'You got it!', 'Super!'],
-    // No name here: the trophy's line says it right after.
-    badge: 'Wow, you know your poles!',
+    // Right, the first question: Pola waves from the sea ice. Right, the others: Terry cheers (in turn).
+    home: pola("I'm home! Bye, Pebble!"),
+    right: [terry('Yes!'), terry("That's right!"), terry('You got it!'), terry('Top marks!')],
+    // The badge. No name here: the trophy's line says it right after.
+    badge: terry('A real Polar Explorer!'),
   },
 }
