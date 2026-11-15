@@ -7,7 +7,7 @@
   "page": "peru-balloon.html",
   "audio": null,
   "lines": 34,
-  "seconds": 78,
+  "seconds": 72,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -48,9 +48,8 @@
     },
     {
       "key": "balloon.go",
-      "text": "Pull down a present, then let go!",
+      "text": "Pull a present, let it go!",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -119,9 +118,8 @@
     },
     {
       "key": "balloon.caught.sloth",
-      "text": "Graaacias...",
+      "text": "Gracias...",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -211,9 +209,8 @@
     },
     {
       "key": "balloon.flag",
-      "text": "Peru's flag! Red and white!",
+      "text": "Peru's red and white flag!",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -338,14 +335,13 @@
         "balloon",
         "go"
       ],
-      "text": "Pull down a present, then let go!",
+      "text": "Pull a present, let it go!",
       "voice": "sparkle",
       "key": "balloon.go",
       "part": "balloon",
       "when": "The core verb, said at the first stop (no gesture word: pulling works the same with a finger or a mouse).",
-      "ms": 3168,
+      "ms": 2304,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -496,14 +492,13 @@
         "caught",
         "sloth"
       ],
-      "text": "Graaacias...",
+      "text": "Gracias...",
       "voice": "sloth",
       "key": "balloon.caught.sloth",
       "part": "balloon › caught",
       "when": "Each friend catches their present (their own voice).",
-      "ms": 6144,
+      "ms": 1224,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -699,14 +694,13 @@
         "balloon",
         "flag"
       ],
-      "text": "Peru's flag! Red and white!",
+      "text": "Peru's red and white flag!",
       "voice": "sparkle",
       "key": "balloon.flag",
       "part": "balloon",
       "when": "",
-      "ms": 3288,
+      "ms": 2712,
       "flags": [
-        "long",
         "new"
       ]
     },
