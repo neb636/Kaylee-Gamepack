@@ -1,6 +1,6 @@
 // Pola and Mama Bear on the chibi rig (engine3d/characters/animal.ts, their looks in characters/looks.ts): the toy polar
-// bears from the character lab, with the body, head and arms on their own pivots so he can paddle, wave and flail. The
-// world (floe.ts) sets his pose each frame; this file owns the little actions that play by themselves (a hop, a wave, a
+// bears from the character lab, with the body, head and arms on their own pivots so she can paddle, wave and flail. The
+// world (floe.ts) sets her pose each frame; this file owns the little actions that play by themselves (a hop, a wave, a
 // shake) and the face's life (blinks, and the mouth with their voice once they have one).
 import { Group, type Vector3 } from 'three'
 import { bell, span } from '../../../../../sdk'
@@ -24,6 +24,8 @@ export class Bear {
   private waveT = -1
   private shakeT = -1
   private phase = Math.random() * 6
+  /** How high the body is off its feet right now, from a hop (m): whoever rides on her back goes up with it. */
+  lift = 0
 
   /**
    * `height`: bigger than in the lab (Pola stands 0.9 m beside Kaylee), so he reads from the camera over the floes.
@@ -84,7 +86,7 @@ export class Bear {
     const squash = sq + crouch * 0.32 - stretch
     const shake = this.shakeT >= 0 ? Math.sin(this.shakeT * 42) * (1 - this.shakeT / SHAKE_S) : 0
     const w = this.waveT >= 0 ? bell(this.waveT / WAVE_S) : 0
-    body.position.y = lift
+    body.position.y = this.lift = lift
     body.scale.set(1 + squash * 0.6, 1 - squash + breathe, 1 + squash * 0.6)
     body.rotation.set((pose.lean ?? 0) - crouch * 0.25, 0, 0.32 * shake)
     // The head follows through: it lags the shake the other way, tips up into a flail and to the side for a wave.

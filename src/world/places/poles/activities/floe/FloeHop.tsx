@@ -1,11 +1,14 @@
-// Ice Floe Hop: fling Pola floe to floe back to Mama Bear (floe.ts is the world). The address bar follows him from
-// stage to stage (sections.ts). Pola and Mama open it in their own voices and react to what happens (a belly-flop, a
-// tippy slide, a new kind of ice, a tap); Sparkle, in the corner (kit/Guide), says what to do at each stretch, again
-// when she's stuck, and a fact the first time she pokes the ice or the sea. Home with Mama: the hug, then the stamp
-// (onDone). "Again" lays the floes out a new way.
+// Ice Floe Hop: fling Pola, with Pebble on her back, floe to floe to Mama Bear (floe.ts is the world). The film before
+// it (story/films.ts, `floe-in`) tells why, so the game opens with her hands busy and one line from Sparkle. The
+// address bar follows Pola from stage to stage (sections.ts). The friends react in their own voices, in turn and not
+// too often: Pebble as they fly, Pola and Pebble on a belly-flop ("Don't drop me!") and when they climb out ("I'm
+// still dry!"), Mama when she's poked. Sparkle, in the corner (kit/Guide), says what to do at each stretch, again when
+// she's stuck, and a fact the first time she pokes the ice, the sea or one of the animals. Home on Mama's ice: a
+// cheer, then the stamp (onDone; the film after it is Mama meeting Pebble). "Again" lays the floes out a new way.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BigButton, burst, say, useAlive, wait, type Line } from '../../../../../sdk'
+import { BigButton, burst, say, speakingVoice, useAlive, wait, type Line } from '../../../../../sdk'
+import { onDevice } from '../../../../../sdk/device'
 import { afterTalk, Guide, type GuideHandle } from '../../../../kit/Guide'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
@@ -18,13 +21,15 @@ import FLOE_SECTIONS, { type FloeSection } from './sections'
 const HINT: Partial<Record<FloeSection, Line>> = L.floe.hint
 /** A friend's reaction waits this long after the last one, so they don't chatter after every fling. */
 const REACT_GAP_MS = 5000
-/** Home with Mama: the stamp comes after their lines, or after this long at most (a clip that never ends). */
-const HOME_MAX_MS = 9000
+/** Pebble calls out on the second fling, then every this many. */
+const FLY_EVERY = 4
+/** Home on Mama's ice: the stamp comes after the cheer, or after this long at most (a clip that never ends). */
+const HOME_MAX_MS = 6000
 
 export function FloeHop({ onDone }: ActivityProps) {
   const { start, param, enter } = useSections(FLOE_SECTIONS)
   const alive = useAlive()
-  const [run, setRun] = useState(() => ({ section: (start ?? 'story') as FloeSection, layout: Math.max(1, Math.floor(+param('layout')) || 1), n: 0 }))
+  const [run, setRun] = useState(() => ({ section: (start ?? 'steady') as FloeSection, layout: Math.max(1, Math.floor(+param('layout')) || 1), n: 0 }))
   const [section, setSection] = useState<FloeSection>(run.section)
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [drops, setDrops] = useState(0)
@@ -39,30 +44,20 @@ export function FloeHop({ onDone }: ActivityProps) {
 
   useEffect(() => enter(run.section, { layout: String(run.layout) }), [run])
 
-  // The opening: Pola calls from far out (Mama waves back). (A touch skips ahead: the world ends the story on any touch.)
-  // A link straight to a later stretch: Sparkle says what to do there.
+  // Sparkle says what to do on the ice the game (or a link) starts on: one line, while her hands are already busy.
   useEffect(() => {
     const hint = HINT[run.section]
-    if (hint) {
-      const t = setTimeout(() => guide.current?.speak(hint), 700)
-      return () => clearTimeout(t)
-    }
-    if (run.section !== 'story') return
-    void (async () => {
-      for (const l of L.floe.story) {
-        if (!alive()) return
-        await say(l, { interrupt: false })
-        await wait(150)
-      }
-    })()
+    if (!hint) return
+    const t = setTimeout(() => guide.current?.speak(hint), 500)
+    return () => clearTimeout(t)
   }, [])
 
   // The friends' reactions: in turn from each list, and not too often.
   const lastReact = useRef(0)
   const turn = useRef<Record<string, number>>({})
-  const react = (key: string, lines: Line[]) => {
+  const react = (key: string, lines: Line[], gap = REACT_GAP_MS) => {
     const now = performance.now()
-    if (now - lastReact.current < REACT_GAP_MS) return
+    if (now - lastReact.current < gap) return
     lastReact.current = now
     const i = turn.current[key] ?? 0
     turn.current[key] = i + 1
@@ -77,16 +72,24 @@ export function FloeHop({ onDone }: ActivityProps) {
         // Pola says what's new, then Sparkle what to do with it.
         lastReact.current = performance.now()
         void say(L.floe.arrive[s]).then(() => alive() && guide.current?.speak(HINT[s]!, true))
-      } else if (s === 'steady') guide.current?.speak(HINT.steady!, true)
+      }
     },
     shake: () => setDrops((n) => n + 1),
+    fling: (n) => {
+      if (n % FLY_EVERY === 2) react('fly', L.floe.fly)
+    },
     flop: () => react('flop', L.floe.flop),
+    // (Out of the water: only if nobody is still talking about the splash.)
+    dry: () => {
+      if (!speakingVoice()) react('dry', L.floe.dry, 2500)
+    },
     slide: () => react('slide', L.floe.slide),
     poke: (what) => {
       if (what === 'pola') react('pola', L.floe.pola)
       else if (what === 'mama') react('mama', L.floe.mama)
       else if (what === 'floe') guide.current?.once('poles-floe-ice', L.floe.floeFact)
-      else guide.current?.once('poles-floe-water', L.floe.waterFact)
+      else if (what === 'water') guide.current?.once('poles-floe-water', L.floe.waterFact)
+      else guide.current?.once(`poles-floe-${what}`, L.floe.facts[what])
     },
     home: () => {
       setHome(true)
@@ -100,17 +103,15 @@ export function FloeHop({ onDone }: ActivityProps) {
         onDone()
       }
       // At most this long, unless someone is still cheering (then right after).
-      setTimeout(() => afterTalk(stamp, 6000), HOME_MAX_MS)
+      setTimeout(() => afterTalk(stamp, 4000), HOME_MAX_MS)
       void (async () => {
-        await wait(600)
-        for (const l of L.floe.home) {
-          if (!alive() || homeRun.current !== mine) return
-          await say(l, { interrupt: false })
-        }
+        await wait(400)
+        if (!alive() || homeRun.current !== mine) return
+        await say(L.floe.home, { interrupt: false })
         if (!still()) return
         guide.current?.speak(L.floe.homeCheer, true)
-        await wait(2600)
-        stamp()
+        await wait(1800)
+        afterTalk(stamp, 3000)
       })()
     },
   })
@@ -123,7 +124,7 @@ export function FloeHop({ onDone }: ActivityProps) {
   }
 
   return (
-    <div style={{ position: 'absolute', inset: 0, background: '#E6F3FD', overflow: 'clip' }}>
+    <div style={{ position: 'absolute', inset: 0, background: '#CFE9FF', overflow: 'clip' }}>
       <View3D
         key={run.n}
         name="The sea ice"
@@ -139,12 +140,12 @@ export function FloeHop({ onDone }: ActivityProps) {
             setMode('webgl')
             setRun((r) => ({ ...r, section, n: r.n + 1 }))
           }}
-          style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(230,243,253,.88)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: 'var(--ink)' }}
+          style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(207,233,255,.88)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: 'var(--ink)' }}
         >
-          🧊 Tap to wake the sea
+          {onDevice('🧊 Tap to wake the sea', '🧊 Click to wake the sea')}
         </button>
       )}
-      {/* He shook the water off: drops on the screen. */}
+      {/* She shook the water off: drops on the screen. */}
       <AnimatePresence>
         {drops > 0 && (
           <motion.div key={drops} initial={{ opacity: 1 }} animate={{ opacity: 0 }} transition={{ duration: 1.4, ease: 'easeIn' }} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 15 }}>
@@ -160,7 +161,7 @@ export function FloeHop({ onDone }: ActivityProps) {
           </motion.div>
         )}
       </AnimatePresence>
-      <Guide ref={guide} hint={home || section === 'story' || section === 'mama' ? null : HINT[section]} quiet={home} />
+      <Guide ref={guide} hint={home || section === 'mama' ? null : HINT[section]} quiet={home} />
       {home && (
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2.5, type: 'spring' }} style={{ position: 'absolute', right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', zIndex: 20 }}>
           <BigButton onClick={again} ariaLabel="Again, with new floes">
