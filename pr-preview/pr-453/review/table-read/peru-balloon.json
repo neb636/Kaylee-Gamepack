@@ -6,16 +6,15 @@
   "intro": "---- Finale: Luna's Thank-You Balloon (route `party`; drop a present to every friend) ----",
   "page": "peru-balloon.html",
   "audio": null,
-  "lines": 36,
-  "seconds": 92,
+  "lines": 34,
+  "seconds": 78,
   "missing": 0,
   "names": 0,
   "flags": [
     {
       "key": "balloon.wait",
-      "text": "Help every friend first! Then we fly!",
+      "text": "Help every friend first!",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -48,16 +47,8 @@
       ]
     },
     {
-      "key": "balloon.go.touch",
-      "text": "Pull a present off the balloon, then let it go!",
-      "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.go.mouse",
-      "text": "Click a present, pull it off, then let it go!",
+      "key": "balloon.go",
+      "text": "Pull down a present, then let go!",
       "flags": [
         "long",
         "new"
@@ -72,9 +63,8 @@
     },
     {
       "key": "balloon.mountains",
-      "text": "Windy! Coco and Pluma catch in the air!",
+      "text": "Windy! They catch it in the air!",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -108,9 +98,8 @@
     },
     {
       "key": "balloon.caught.coco",
-      "text": "What a catch! Gracias!",
+      "text": "Nice catch! Gracias!",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -201,17 +190,15 @@
     },
     {
       "key": "balloon.night.touch",
-      "text": "Night time! Tap the forest to send up lanterns!",
+      "text": "Tap the trees to light lanterns!",
       "flags": [
-        "long",
         "new"
       ]
     },
     {
       "key": "balloon.night.mouse",
-      "text": "Night time! Click the forest to send up lanterns!",
+      "text": "Click the trees to light lanterns!",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -224,7 +211,7 @@
     },
     {
       "key": "balloon.flag",
-      "text": "Red and white, like Peru's flag!",
+      "text": "Peru's flag! Red and white!",
       "flags": [
         "long",
         "new"
@@ -245,29 +232,22 @@
       ]
     },
     {
-      "key": "balloon.idle.grab.touch",
-      "text": "Pull a present off the balloon!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.idle.grab.mouse",
-      "text": "Click a present and pull it off!",
+      "key": "balloon.idle.grab",
+      "text": "Pull down a present!",
       "flags": [
         "new"
       ]
     },
     {
       "key": "balloon.idle.lantern.touch",
-      "text": "Tap the forest!",
+      "text": "Tap the trees!",
       "flags": [
         "new"
       ]
     },
     {
       "key": "balloon.idle.lantern.mouse",
-      "text": "Click the forest!",
+      "text": "Click the trees!",
       "flags": [
         "new"
       ]
@@ -279,14 +259,13 @@
         "balloon",
         "wait"
       ],
-      "text": "Help every friend first! Then we fly!",
+      "text": "Help every friend first!",
       "voice": "sparkle",
       "key": "balloon.wait",
       "part": "balloon",
       "when": "Before the journal is full (the balloon on the hub, or a link, with stamps missing).",
-      "ms": 4200,
+      "ms": 2160,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -357,32 +336,14 @@
     {
       "path": [
         "balloon",
-        "go",
-        "touch"
+        "go"
       ],
-      "text": "Pull a present off the balloon, then let it go!",
+      "text": "Pull down a present, then let go!",
       "voice": "sparkle",
-      "key": "balloon.go.touch",
-      "part": "balloon › go",
-      "when": "The core verb, said once at the first stop (and as the stuck hint).",
-      "ms": 3240,
-      "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "path": [
-        "balloon",
-        "go",
-        "mouse"
-      ],
-      "text": "Click a present, pull it off, then let it go!",
-      "voice": "sparkle",
-      "key": "balloon.go.mouse",
-      "part": "balloon › go",
-      "when": "",
-      "ms": 3912,
+      "key": "balloon.go",
+      "part": "balloon",
+      "when": "The core verb, said at the first stop (no gesture word: pulling works the same with a finger or a mouse).",
+      "ms": 3168,
       "flags": [
         "long",
         "new"
@@ -408,14 +369,13 @@
         "balloon",
         "mountains"
       ],
-      "text": "Windy! Coco and Pluma catch in the air!",
+      "text": "Windy! They catch it in the air!",
       "voice": "sparkle",
       "key": "balloon.mountains",
       "part": "balloon",
       "when": "",
-      "ms": 3552,
+      "ms": 2880,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -488,14 +448,13 @@
         "caught",
         "coco"
       ],
-      "text": "What a catch! Gracias!",
+      "text": "Nice catch! Gracias!",
       "voice": "coco",
       "key": "balloon.caught.coco",
       "part": "balloon › caught",
       "when": "Each friend catches their present (their own voice).",
-      "ms": 3264,
+      "ms": 2544,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -694,14 +653,13 @@
         "night",
         "touch"
       ],
-      "text": "Night time! Tap the forest to send up lanterns!",
+      "text": "Tap the trees to light lanterns!",
       "voice": "sparkle",
       "key": "balloon.night.touch",
       "part": "balloon › night",
       "when": "The payoff at night.",
-      "ms": 4488,
+      "ms": 2256,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -711,14 +669,13 @@
         "night",
         "mouse"
       ],
-      "text": "Night time! Click the forest to send up lanterns!",
+      "text": "Click the trees to light lanterns!",
       "voice": "sparkle",
       "key": "balloon.night.mouse",
       "part": "balloon › night",
       "when": "",
-      "ms": 3648,
+      "ms": 2928,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -742,12 +699,12 @@
         "balloon",
         "flag"
       ],
-      "text": "Red and white, like Peru's flag!",
+      "text": "Peru's flag! Red and white!",
       "voice": "sparkle",
       "key": "balloon.flag",
       "part": "balloon",
       "when": "",
-      "ms": 3120,
+      "ms": 3288,
       "flags": [
         "long",
         "new"
@@ -787,32 +744,14 @@
       "path": [
         "balloon",
         "idle",
-        "grab",
-        "touch"
+        "grab"
       ],
-      "text": "Pull a present off the balloon!",
+      "text": "Pull down a present!",
       "voice": "sparkle",
-      "key": "balloon.idle.grab.touch",
-      "part": "balloon › idle › grab",
+      "key": "balloon.idle.grab",
+      "part": "balloon › idle",
       "when": "",
-      "ms": 2136,
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "path": [
-        "balloon",
-        "idle",
-        "grab",
-        "mouse"
-      ],
-      "text": "Click a present and pull it off!",
-      "voice": "sparkle",
-      "key": "balloon.idle.grab.mouse",
-      "part": "balloon › idle › grab",
-      "when": "",
-      "ms": 2352,
+      "ms": 1776,
       "flags": [
         "new"
       ]
@@ -824,12 +763,12 @@
         "lantern",
         "touch"
       ],
-      "text": "Tap the forest!",
+      "text": "Tap the trees!",
       "voice": "sparkle",
       "key": "balloon.idle.lantern.touch",
       "part": "balloon › idle › lantern",
       "when": "",
-      "ms": 1824,
+      "ms": 1584,
       "flags": [
         "new"
       ]
@@ -841,12 +780,12 @@
         "lantern",
         "mouse"
       ],
-      "text": "Click the forest!",
+      "text": "Click the trees!",
       "voice": "sparkle",
       "key": "balloon.idle.lantern.mouse",
       "part": "balloon › idle › lantern",
       "when": "",
-      "ms": 1800,
+      "ms": 1104,
       "flags": [
         "new"
       ]
