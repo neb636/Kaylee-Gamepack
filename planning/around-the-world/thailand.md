@@ -43,7 +43,7 @@ each, from the same photos.
 
 **Kaylee as a vinyl toy (2026-10-25).** Kaylee's unicorn is now a modelled soft-vinyl toy (Tripo3D, split in Blender
 into the same rig: `characters/model.ts`, the recipe in `docs/3d-characters.md`), everywhere she appears: the house,
-every trip, the races and the mini games. The code-built one stays in the lab as `kaylee-code` to compare. Next: the
+every trip, the races and the mini games. (The code-built one was removed on 2026-11-15, with the old Mom.) Next: the
 rest of the family the same way, one at a time.
 
 **Her own look (planned 2026-10-26).** Kaylee dresses her unicorn at a wardrobe in her room, like the Roblox avatar

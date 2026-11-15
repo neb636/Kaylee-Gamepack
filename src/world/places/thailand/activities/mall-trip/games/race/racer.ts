@@ -8,7 +8,7 @@ import { buildAnimal, Wind, type Rig } from '../../../../../../engine3d/characte
 import { familyRig } from '../../../../characters/member'
 import { Dress } from '../../../../characters/avatar'
 import { FaceLife } from '../../../../../../engine3d/characters/face'
-import { LOOKS, type Look } from '../../../../characters/looks'
+import type { Look } from '../../../../characters/looks'
 import { buildModelRig, kayleeModel } from '../../../../characters/model'
 import { currentLook } from '../../../../characters/style'
 import type { Bag } from '../../../../../../engine3d/dispose'
@@ -77,10 +77,9 @@ export class Racer {
 
   /** `look` dresses it as someone else (HarborLand's hall: more kids, the staff). */
   constructor(readonly id: RacerId, bag: Bag, look?: Look) {
-    // Kaylee herself is the modelled vinyl toy (loaded before the mall builds).
-    const model = id === 'kaylee' && !look ? kayleeModel() : null
-    // So is Mom (familyRig: her modelled toy).
-    this.rig = model ? buildModelRig(model, bag) : look || id === 'kidA' || id === 'kidB' ? buildAnimal(look ?? KID_LOOKS[id as 'kidA' | 'kidB'], bag) : familyRig(id, LOOKS[id], bag)
+    // Kaylee herself is the modelled vinyl toy (loaded before the mall builds), and so is Mom (familyRig).
+    const own = id === 'kaylee' && !look
+    this.rig = own ? buildModelRig(kayleeModel(), bag) : look || id === 'kidA' || id === 'kidB' ? buildAnimal(look ?? KID_LOOKS[id as 'kidA' | 'kidB'], bag) : familyRig(id, bag)
     this.height = this.rig.height
     this.life = new FaceLife(this.rig)
     this.flipper.position.y = 0.45 * this.height
@@ -89,7 +88,7 @@ export class Racer {
     this.root.add(this.flipper)
     this.root.userData.pick = id === 'kaylee' ? 'kaylee' : `racer:${id}`
     this.dress = new Dress(this.rig, bag)
-    if (model) this.dress.setLook(currentLook())
+    if (own) this.dress.setLook(currentLook())
   }
 
   /** A rubber ring round its middle (round 3), popping on with a squeaky boing. */

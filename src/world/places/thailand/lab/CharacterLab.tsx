@@ -5,9 +5,11 @@
 // in the address bar, so a link opens the same view. Not something Kaylee plays: World.tsx loads it lazily, so only
 // this route downloads three.js.
 import { shareLab } from '../../../labs/share'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { stopSpeaking } from '../../../../sdk'
 import type { Wearable } from '../characters/looks'
+import { kayleeReady } from '../characters/model'
+import { momReady } from '../characters/mom-model'
 import type { Pose } from '../characters/types'
 import { View3D, type RenderMode } from '../../../engine3d/View3D'
 import { CAST, castById } from './catalog'
@@ -99,6 +101,9 @@ function toLink(v: StudioView) {
 const wide = () => typeof window === 'undefined' || window.matchMedia('(min-width: 901px)').matches
 
 export default function CharacterLab({ id, params = {} }: { id?: string; params?: Record<string, string> }) {
+  // Kaylee and Mom are modelled vinyl toys: their GLBs load before the studio builds anyone (World.tsx's Suspense).
+  use(kayleeReady())
+  use(momReady())
   const [view, setView] = useState(() => fromLink(id, params))
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [film, setFilm] = useState<string[]>([])

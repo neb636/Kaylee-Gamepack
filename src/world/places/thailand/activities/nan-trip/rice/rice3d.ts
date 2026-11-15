@@ -421,23 +421,19 @@ export class RiceFarm extends Stage {
     this.hatBase = this.kit.ngob.position.y
     // A costume (looks.ts SPOTS_OF: her head): it goes on instead of her own hat, which waits in her pocket.
     kaylee.attach('ngob', [[this.kit.ngob, kaylee.rig.head]])
-    // In her hooves: `at` is from the code-built arm's pivot; a rig with its own hands (the vinyl toy) holds them there,
-    // `held` from the hoof.
-    const hold = (g: Group, s: -1 | 1, at: V3, held: V3) => {
-      const hand = kaylee.rig.hands?.[s < 0 ? 0 : 1]
-      g.position.set(...(hand ? held : at))
-      ;(hand ?? (s < 0 ? kaylee.rig.armL : kaylee.rig.armR)).add(g)
+    // In her hooves (`held` from the hoof).
+    const hold = (g: Group, s: -1 | 1, held: V3) => {
+      g.position.set(...held)
+      kaylee.rig.hands![s < 0 ? 0 : 1].add(g)
     }
-    hold(this.kit.seedlings, -1, [-0.06, -0.17, 0.05], [0, 0.01, 0.05])
+    hold(this.kit.seedlings, -1, [0, 0.01, 0.05])
     this.kit.sickle.rotation.set(1.2, 0, 0)
-    hold(this.kit.sickle, 1, [0.06, -0.17, 0.04], [0, 0.01, 0.04])
+    hold(this.kit.sickle, 1, [0, 0.01, 0.04])
     this.kit.armful.rotation.set(0, Math.PI / 2 + 0.3, 0.3)
-    hold(this.kit.armful, -1, [-0.04, -0.12, 0.14], [0.03, 0.05, 0.12])
-    // Mud spots for the wallow (stuck on her front when her body isn't the code-built one).
-    const front = kaylee.rig.front
-    const spots: V3[] = front
-      ? [[0.08, 0.3], [-0.1, 0.23], [0.02, 0.21], [0.06, 0.41], [-0.06, 0.38]].map(([x, y]) => [x, y, front(x, y)])
-      : [[0.12, 0.3, 0.17], [-0.15, 0.22, 0.12], [0.02, 0.15, 0.2], [0.17, 0.42, 0.05], [-0.1, 0.4, 0.15]]
+    hold(this.kit.armful, -1, [0.03, 0.05, 0.12])
+    // Mud spots for the wallow, stuck on her front.
+    const front = kaylee.rig.front!
+    const spots: V3[] = [[0.08, 0.3], [-0.1, 0.23], [0.02, 0.21], [0.06, 0.41], [-0.06, 0.38]].map(([x, y]) => [x, y, front(x, y)])
     this.mud = solid(merge(spots.map(([x, y, z], k) => P.sphere(0.04 + (k % 2) * 0.015, '#8A6A4F', { at: [x, y, z], scale: [1, 0.8, 0.5] }, 8))), bag, 0)
     this.mud.visible = false
     kaylee.rig.body.add(this.mud)

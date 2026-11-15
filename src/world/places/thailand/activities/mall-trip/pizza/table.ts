@@ -814,11 +814,10 @@ export class PizzaTable extends Stage {
     this.scene.add(b)
     b.position.copy(ring.getWorldPosition(new Vector3()))
     this.play(sfx.fwip)
-    // Stacking up her forearm: down the code-built arm, or toward a modelled hoof (rig.hands; that arm hangs out at a
-    // slant, so the ring tips to go round it).
-    const hand = r.hands?.[1].position
-    const local = hand ? hand.clone().multiplyScalar(0.8 - k * 0.09) : new Vector3(0.05 * r.height, -(0.1 + k * 0.022) * r.height, 0.005 * r.height)
-    const tip = hand ? Math.atan2(hand.x, -hand.y) : 0
+    // Stacking up her forearm toward her hoof (rig.hands; that arm hangs out at a slant, so the ring tips to go round it).
+    const hand = r.hands![1].position
+    const local = hand.clone().multiplyScalar(0.8 - k * 0.09)
+    const tip = Math.atan2(hand.x, -hand.y)
     this.tosses.push({
       o: b,
       from: b.position.clone(),

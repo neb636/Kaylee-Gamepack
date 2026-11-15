@@ -2,8 +2,8 @@
 // a brown bun and a pink dress (Tripo's generation 2, the user's pick; slimmed in Blender at
 // the belly, hips and legs, she looked chubbier than the concept picture), split in Blender into the code-built rig's
 // pivots (body, head at the neck, eyes, arms at the shoulders, legs at the hips, tail). She is the game's Mom: Member
-// builds her for `ji` (familyRig), Thailand's Place waits for her GLB, and the code-built Mom stands in only if it can't
-// load (the lab keeps it as `ji-code`).
+// builds her for `ji` (familyRig), and Thailand's Place and the character lab wait for her GLB before they build. She
+// is the only Mom there is (the code-built unicorn she used to be is gone).
 //
 // The concept picture went to Tripo with no mouth and no glasses: both are drawn here instead. The smile is a row of
 // ink beads on her muzzle and the open mouth grows with her voice (FaceLife). The glasses are traced on her face: each
@@ -53,20 +53,23 @@ const EYE_YAW = 0.43
 const RIM = { rx: 0.057, ry: 0.057, lift: 0.007, wire: 0.0042 }
 
 let model: GLTF | null = null
-let ready: Promise<GLTF | null> | null = null
+let ready: Promise<GLTF> | null = null
 
-/** The loaded model, or null while it's on its way (or if it couldn't load). */
-export const momModel = () => model
+/** The loaded model. Thailand's Place and the character lab wait for momReady() before they build anything. */
+export function momModel(): GLTF {
+  if (!model) throw new Error('mom.glb is not loaded yet: wait for momReady() first')
+  return model
+}
 
-/** Resolves once she's loaded, or with null if she couldn't be (never rejects: the code-built Mom stands in). */
-export function momReady(): Promise<GLTF | null> {
-  ready ??= new GLTFLoader()
-    .loadAsync(url)
-    .then((g) => (model = g))
-    .catch((e) => {
-      console.warn('mom.glb could not be loaded, using the code-built Mom.', e)
-      return null
-    })
+/** Resolves once she's loaded. If the GLB can't be fetched it rejects, and the next call tries again. */
+export function momReady(): Promise<GLTF> {
+  ready ??= new GLTFLoader().loadAsync(url).then(
+    (g) => (model = g),
+    (e) => {
+      ready = null
+      throw e
+    },
+  )
   return ready
 }
 

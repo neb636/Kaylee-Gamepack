@@ -161,13 +161,13 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   texture and the code mouth (`talk`) placed on the face.
 - **In the game (2026-10-25):** she is the game's Kaylee. Thailand's `Place.tsx` waits for the GLB (`kayleeReady()`,
   under PlaceFrame's Suspense: Sparkle thinking for a moment) before any scene builds, so every `new Avatar(bag)` and
-  the mall's `Racer('kaylee')` get her from the first frame. If the GLB fails to load, the code-built Kaylee stands in.
+  the mall's `Racer('kaylee')` get her from the first frame. There is no other Kaylee: the code-built unicorn she used
+  to be was removed (2026-11-15), so if the GLB fails to load the shell's try-again screen shows.
 - **What the scenes hang on her** goes through the rig, not code-built numbers: `Rig.hands` (a group at each hoof,
   turned like her body at rest: the rice farm's seedlings and sickle), `Rig.waist` (the boxing belt) and `Rig.front`
   (the dress's surface: the rice farm's mud). The grip socks (`mall-trip/socks.ts`) go on her leg pivots. A new
   modelled character fills these in the same way.
-- **Try it:** the lab entry `kaylee` (`#/world/characters/kaylee?lineup=kaylee,kaylee-code`) shows her next to the
-  code-built Kaylee (`kaylee-code`, kept to compare).
+- **Try it:** the lab entry `kaylee` (`#/world/characters/kaylee`). The lab waits for both GLBs before it builds.
 
 ## Mom (2026-11-14: picked from Tripo's four, the game's Mom the same day)
 
@@ -207,9 +207,8 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   `mom-rig-before-hair.blend`.
 - **In the game (2026-11-14):** she is the game's Mom everywhere. `Member` builds every `ji` in her own look through
   `familyRig` (member.ts; the mall race's `Racer('ji')` too), and Thailand's `Place.tsx` waits for `momReady()` as it
-  does for Kaylee. If the GLB can't load, the code-built Mom stands in; `?mom=code` on any link brings her back on
-  purpose, to compare. The lab's `ji` is the model and `ji-code` the code-built Mom
-  (`#/world/characters/ji?lineup=ji,ji-code`).
+  does for Kaylee. The code-built Mom she replaced was removed (2026-11-15: her `LOOKS.ji`, the lab's `ji-code` and
+  `?mom=code`), so `momModel()` is the only Mom. The lab's `ji` is her (`#/world/characters/ji`).
 - **Her arms take the code-built poses** (`reachForward` in mom-model.ts). Scenes pose arms the code-built way:
   `rotation.x` swings an arm forward (a phone held up, a reach, both hands up for a photo) and `rotation.z` raises it
   out to the side (a wave, a stretch). Kaylee's `swingForward` turns every pose's swing plane forward, so on Mom a
@@ -221,8 +220,7 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   head under the bun; `nose` for the cafe's cream; `eyes`). The cafe's cup comes to her real mouth (`face.mouth`).
 - **QA:** `node scripts/qa-mom.mjs` (after a build) opens every Thailand section, finds her (`userData.family`, set
   by `familyRig`), and saves a sheet per section: the screen with her outlined and three close-ups drawn from the
-  game's own scene. `--code` shoots the code-built Mom the same way, `--who=nick` anyone else, `--hashes=a|b` any
-  links.
+  game's own scene. `--who=nick` shoots anyone else, `--hashes=a|b` any links.
 
 ## Open questions
 

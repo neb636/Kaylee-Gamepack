@@ -294,7 +294,6 @@ The wardrobe in her room: doors, six drawers, 12 things and 8 pots of paint; dra
 
 - No silly moments yet (a shoe on her head, paint on the mirror): gate 3.
 - The doors and drawers don’t say what’s inside (no voices): gate 4.
-- The code-built Kaylee (if the model can’t load) can’t wear or paint anything.
 - On an iPad in portrait the wardrobe’s far door goes off the left edge; the shelves and drawers stay.
 
 ### Greybox 2: everywhere, and every clash solved ([done] · 2026-10-26 · PR #205)
@@ -352,7 +351,6 @@ All 25 things in the plan's list built and fitted to her shape, each with its ow
 - No silly moments yet (a shoe on her head, glasses on her tail, paint on the mirror): gate 4.
 - The tiara's band shows a little past her pink lock at the side.
 - On the shelf the outfits drawer's leftmost thing (the tutu) is partly behind the open left door on wide screens.
-- The code-built Kaylee (if the model can't load) still can't wear anything.
 - Full QA waits for gate 4 (the plan's full loop): this gate was checked with lab sheets of every thing, pose filmstrips and the wardrobe and mirror button on iPad and iPhone.
 
 ### Full loop: voices, looks on the door, the family notices ([done] · 2026-10-26 · PR #212)
@@ -379,7 +377,6 @@ Sparkle's lines and each thing's name, the family noticing her look, Mom's “Go
 - Gan on the mattress doesn't peek at her new look (he only says his notice line when tapped).
 - A picture stays as it was taken; her wings may be spread or folded in it, depending on the pose.
 - Hangers and the fan don't react to her look yet.
-- The code-built Kaylee (if the model can't load) still can't wear anything.
 
 ### Original wardrobe restored (2026-10-31)
 
@@ -449,7 +446,7 @@ src/world/kit/sections.ts                  `look` is sticky (like `debug`, `cam`
 - **Fitting.** Each item is fitted to her measured shape like `model-wear.ts` does (the hair dome frame for hats, the face frame for glasses, `shell()` for outfits, `along()` for arms). Wide outfits (tutu, gown) change the body silhouette: the costumes that sit on the body (apron, belt) take the body spot, so they never sit inside a gown.
 - **The horn rule** is a test, not a hope: a check in the lab (and a unit-ish check in the build) that every hat's bounding box tops out under `HORN × height` (1.09, `cave.ts:39`).
 - **Memory.** Items are built the first time they're worn and go in the scene's `Bag` (disposed with it). The wardrobe builds the shelf items lazily per drawer.
-- **The code-built Kaylee** (if the GLB can't load): colors map to `Look.fur` / `mane` / `outfit.color`; items fall back to `animal.ts`'s frames (`buildWorn`), or simply don't show.
+- **The code-built Kaylee** was removed (2026-11-15): the modelled one is the only Kaylee, and the GLB loads before any scene builds.
 - **Tests stay deterministic.** Test browsers start with nothing saved, so it's today's Kaylee. `tap-around` and `sections.spec.ts` find the new `wardrobe` section by themselves. No bespoke spec.
 - **Voices** (gate 4): Sparkle's few lines, a name per thing (finite, ~30 short clips), and one notice line per kind of thing for Mom, Dad, Agong and Jum. All in `lines.ts`.
 

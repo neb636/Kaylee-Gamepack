@@ -10,9 +10,8 @@ import { clamp, say } from '../../../../sdk'
 import { applyPose, clearPose } from '../activities/boat-trip/bay/poses'
 import { buildBird, buildCat, buildCrab, buildLizard, buildMacaque, buildMudskipper, buildNeedlefish, buildPorpoise, type Blink, type CritterId } from '../activities/boat-trip/bay/critters'
 import { Avatar, SHOW_SECS } from '../characters/avatar'
-import { kayleeModel, loadKayleeModel } from '../characters/model'
+import { FAMILY } from '../characters/family'
 import { Member } from '../characters/member'
-import { momModel, momReady } from '../characters/mom-model'
 import type { Wearable } from '../characters/looks'
 import { parseLook, type ShowPose } from '../characters/style'
 import type { Pose } from '../characters/types'
@@ -163,9 +162,7 @@ export class Studio implements World3D {
     }
     // Who's on stage: build the new ones, drop the ones that left, keep the rest as they are.
     const keyOf = (id: string) => {
-      const e = castById(id)
-      const modelled = (e?.model && kayleeModel()) || (e?.momModel && momModel())
-      return `${id}|${v.phone ? 'phone' : ''}|${modelled ? 'model' : ''}`
+      return `${id}|${v.phone ? 'phone' : ''}`
     }
     const keep = new Map(this.actors.map((a) => [a.key, a]))
     const next: Actor[] = []
@@ -192,17 +189,16 @@ export class Studio implements World3D {
     let char: Member | Avatar | null = null
     let critter: CritterRig | null = null
     if (entry.kind === 'kaylee') {
-      // The vinyl toy loads its model the first time; until then the code-built Kaylee stands in, then gets swapped.
-      const model = entry.model ? kayleeModel() : null
-      if (entry.model && !model) void loadKayleeModel().then(() => !this.disposed && this.view && this.apply(this.view))
-      const k = new Avatar(bag, model)
+      // The vinyl toy (CharacterLab waits for her GLB before the studio builds).
+      const k = new Avatar(bag)
       k.place(0, 0, 0, 0)
       char = k
-    } else if (entry.kind === 'member' && entry.look) {
-      // Mom's vinyl toy the same way: the code-built Mom until the model has loaded (Member builds her for `ji`,
-      // familyRig; `ji-code` stays code-built).
-      if (entry.momModel && !momModel()) void momReady().then(() => !this.disposed && this.view && this.apply(this.view))
-      char = new Member({ id: entry.id, name: entry.name, who: entry.who, height: entry.look.height, spot: null, pitch: 300 }, bag, entry.look, entry.voice)
+    } else if (entry.kind === 'member') {
+      // The family in their own toys (Mom is her vinyl toy, familyRig), everyone else in their look.
+      const own = entry.group === 'family' ? FAMILY.find((m) => m.id === entry.id) : undefined
+      char = own
+        ? new Member({ ...own, spot: null }, bag, undefined, entry.voice)
+        : new Member({ id: entry.id, name: entry.name, who: entry.who, height: entry.look!.height, spot: null, pitch: 300 }, bag, entry.look, entry.voice)
       char.place(0, 0, 0, 0)
     } else if (entry.critter) critter = buildCritter(entry.critter, bag)
     const root = char?.root ?? critter!.root
