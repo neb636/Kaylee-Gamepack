@@ -1,0 +1,15 @@
+{
+  "title": "Peru finale: Luna's Thank-You Balloon",
+  "checkIn": "2 of 4: hear the script",
+  "kaylee": "With the journal full, she rides Sparkle's balloon over the coast, the mountains and the rainforest at sunset, pulls a present off the balloon for every friend and watches it parachute down to them, then lights lanterns at night for the Peru Explorer trophy.",
+  "questions": [
+    "About two minutes, nine presents: feel right, or add a fourth stop (Paco and Abuela in the Andes)?",
+    "Lanterns at night to finish: keep them, or fireflies instead?"
+  ],
+  "tableReads": [["peru", "balloon"]],
+  "reels": [{ "name": "peru-balloon", "moments": ["balloon-drop-coast", "balloon-drop-mountains", "balloon-drop-forest", "balloon-night"] }],
+  "links": [
+    { "label": "Play it from the start", "hash": "#/world/peru/party?stamps=all" },
+    { "label": "Jump to the night", "hash": "#/world/peru/party/night?stamps=all" }
+  ]
+}

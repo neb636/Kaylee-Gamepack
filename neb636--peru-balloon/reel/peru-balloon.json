@@ -1,0 +1,40 @@
+{
+  "kind": "reel",
+  "name": "peru-balloon",
+  "title": "Peru balloon",
+  "video": "peru-balloon.mp4",
+  "gif": "peru-balloon.gif",
+  "seconds": 30,
+  "browser": "chromium",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "balloon-drop-coast",
+      "where": "balloon-drop-coast",
+      "seconds": 3.4,
+      "fps": 11.1,
+      "status": "ok"
+    },
+    {
+      "name": "balloon-drop-mountains",
+      "where": "balloon-drop-mountains",
+      "seconds": 3.4,
+      "fps": 9.8,
+      "status": "ok"
+    },
+    {
+      "name": "balloon-drop-forest",
+      "where": "balloon-drop-forest",
+      "seconds": 4.6,
+      "fps": 10.7,
+      "status": "ok"
+    },
+    {
+      "name": "balloon-night",
+      "where": "balloon-night",
+      "seconds": 12,
+      "fps": 8.5,
+      "status": "ok"
+    }
+  ]
+}
