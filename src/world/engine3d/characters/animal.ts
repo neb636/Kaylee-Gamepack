@@ -67,9 +67,21 @@ export interface Rig {
   /** Where things sit on a modelled head whose shape isn't the code-built ball (the modelled Mom's), head-local meters:
    *  the top of the head under the hair (a hat's middle, with the hat's inner radius `hat`), the tip of the nose (a dab
    *  of cream), between the eyes on the face (sunglasses). */
-  spots?: { crown: V3; hat: number; nose: V3; eyes: V3 }
+  spots?: { crown: V3; hat: number; nose: V3; eyes: V3; brow?: V3; horn?: V3 }
   /** A modelled toy's own ears (the modelled Mom's stick out at her temples): a hat tucks them under it. */
   ears?: Object3D[]
+  /** A modelled toy's own hairdo (the modelled Dad's), a group on the head: the barber's strands replace it and the
+   *  vet's suds fluff it up. Unlike `mane`, the wind leaves it be. `hairColors`: its browns, dark to light (the
+   *  barber's strands start out in them). `brows`: his eyebrows (the barber's strands grow new ones over them).
+   *  `horn`: his horn (the barber's horn, one a snip can boing, stands in for it). `spots.brow` is the middle of the
+   *  left brow and `spots.horn` the tip of the horn (head-local meters). */
+  hair?: Group
+  hairColors?: string[]
+  brows?: Group
+  horn?: Object3D
+  /** A modelled leg below the shorts, in its hip pivot's space (meters, the left leg; the right is mirrored): its
+   *  middle across and front to back, how thick it is, and the heights of the sole and of the hem it goes up under. */
+  shin?: { x: number; z: number; r: number; sole: number; hem: number }
 }
 
 /** One worn thing, a group for each pivot it rides on (null where there's nothing). */

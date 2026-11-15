@@ -40,7 +40,10 @@ export function applyPose(rig: Rig, kind: PoseKind, t: number, k: number) {
       set(-0.6, -0.9, 0, 1.7 + Math.sin(t * 10) * 0.2)
       body.rotation.z = 0.26 * ease
       head.rotation.z = -0.35 * ease
-      eyes.scale.y = 1 - 0.65 * ease
+      // A squint: a modelled toy's lids come down (squashing its glossy eye domes shows the socket behind them, and
+      // nothing would unsquash them: its blink is the lids), a code-built toy's eyes squash.
+      if (rig.blink) rig.blink(1 - 0.65 * ease)
+      else eyes.scale.y = 1 - 0.65 * ease
       // Tongue out (a beak just opens).
       if (rig.beak) rig.beak.open(0.8 * ease)
       else if (!rig.open) {
