@@ -5257,11 +5257,11 @@
     "file": "9f3eb820786d.mp3"
   },
   {
-    "text": "Ao Hin Khok! Build a sandcastle!",
+    "text": "Ao Hin Khok! Sandy's castle beach!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3192,
-    "file": "f5fc4a31ea9a.mp3"
+    "ms": 3792,
+    "file": "141575cef0ac.mp3"
   },
   {
     "text": "Ao Phai! A quiet little bay!",
@@ -5593,11 +5593,11 @@
     "file": "fd862fec39c3.mp3"
   },
   {
-    "text": "Big waves! Catch the stars!",
+    "text": "Big waves! Catch the firefly's sparkles!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3120,
-    "file": "86e2cb1ae44c.mp3"
+    "ms": 3696,
+    "file": "c898d62ddaa6.mp3"
   },
   {
     "text": "Race the jet ski man!",
@@ -6097,20 +6097,6 @@
     "file": "b97697377077.mp3"
   },
   {
-    "text": "Tap the camera for a photo!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1968,
-    "file": "4cdb22ad8147.mp3"
-  },
-  {
-    "text": "Click the camera for a photo!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1920,
-    "file": "ea1e3ea3d7d9.mp3"
-  },
-  {
     "text": "Coral is alive! Fish live in it.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -6559,11 +6545,11 @@
     "file": "ba538d2ab124.mp3"
   },
   {
-    "text": "Peekaboo! You found me!",
+    "text": "Boo! You found me!",
     "voice": "nick",
     "sig": "a2881bb105",
-    "ms": 2064,
-    "file": "bb7b1061f130.mp3"
+    "ms": 2088,
+    "file": "6487261036dc.mp3"
   },
   {
     "text": "My turn to count! Go hide!",
@@ -6671,11 +6657,11 @@
     "file": "0a02e7d1fb99.mp3"
   },
   {
-    "text": "Peekaboo! I see you!",
+    "text": "I see you!",
     "voice": "nick",
     "sig": "a2881bb105",
-    "ms": 2016,
-    "file": "aa94d335d572.mp3"
+    "ms": 1416,
+    "file": "265ebe171426.mp3"
   },
   {
     "text": "Waah! You scared me!",
@@ -6805,31 +6791,31 @@
   },
   {
     "text": "Whoa! Big circle!",
-    "voice": "gecko",
-    "sig": "920df6b5a1",
-    "ms": 2064,
-    "file": "2fc23a9b9939.mp3"
+    "voice": "tuk",
+    "sig": "2b33d85502",
+    "ms": 2184,
+    "file": "743ac054b14e.mp3"
   },
   {
     "text": "Faster! Faster!",
-    "voice": "gecko",
-    "sig": "920df6b5a1",
-    "ms": 1872,
-    "file": "e64b59a3cd68.mp3"
+    "voice": "kae",
+    "sig": "515df55c74",
+    "ms": 1056,
+    "file": "5ff088df97ff.mp3"
   },
   {
     "text": "Wow! You are good!",
-    "voice": "gecko",
-    "sig": "920df6b5a1",
-    "ms": 2208,
-    "file": "4ecadd097902.mp3"
+    "voice": "tuk",
+    "sig": "2b33d85502",
+    "ms": 2064,
+    "file": "30283b9ae0d5.mp3"
   },
   {
     "text": "Watch us! Now you!",
-    "voice": "gecko",
-    "sig": "920df6b5a1",
-    "ms": 2112,
-    "file": "a782c2d13e01.mp3"
+    "voice": "tuk",
+    "sig": "2b33d85502",
+    "ms": 2208,
+    "file": "219ae61bfab3.mp3"
   },
   {
     "text": "Draw over the dots!",
@@ -6840,24 +6826,24 @@
   },
   {
     "text": "A circle!",
-    "voice": "gecko",
-    "sig": "920df6b5a1",
-    "ms": 672,
-    "file": "29d55ccb70d1.mp3"
+    "voice": "kae",
+    "sig": "515df55c74",
+    "ms": 744,
+    "file": "97e68812ccd0.mp3"
   },
   {
     "text": "A star!",
-    "voice": "gecko",
-    "sig": "920df6b5a1",
-    "ms": 888,
-    "file": "707aedbc3985.mp3"
+    "voice": "tuk",
+    "sig": "2b33d85502",
+    "ms": 1056,
+    "file": "1d18936da7be.mp3"
   },
   {
     "text": "A heart!",
-    "voice": "gecko",
-    "sig": "920df6b5a1",
-    "ms": 984,
-    "file": "08482922273d.mp3"
+    "voice": "kae",
+    "sig": "515df55c74",
+    "ms": 768,
+    "file": "09f00d43077d.mp3"
   },
   {
     "text": "It floats up like a lantern!",
@@ -6910,10 +6896,10 @@
   },
   {
     "text": "Ring of fire!",
-    "voice": "gecko",
-    "sig": "920df6b5a1",
-    "ms": 2016,
-    "file": "22cc4330a8f3.mp3"
+    "voice": "kae",
+    "sig": "515df55c74",
+    "ms": 1320,
+    "file": "e1ba30637b2b.mp3"
   },
   {
     "text": "What a show!",
@@ -6930,25 +6916,32 @@
     "file": "225ef15e1a61.mp3"
   },
   {
-    "text": "Sawasdee!",
-    "voice": "gecko",
-    "sig": "920df6b5a1",
-    "ms": 1080,
-    "file": "79ab9e8ac4c1.mp3"
-  },
-  {
-    "text": "Tukkae! Tukkae!",
-    "voice": "gecko",
-    "sig": "920df6b5a1",
-    "ms": 1800,
-    "file": "a7085ebcb180.mp3"
+    "text": "Sawasdee krap!",
+    "voice": "tuk",
+    "sig": "2b33d85502",
+    "ms": 1656,
+    "file": "ecc6c84b8639.mp3"
   },
   {
     "text": "Hot, hot fire!",
-    "voice": "gecko",
-    "sig": "920df6b5a1",
-    "ms": 1896,
-    "file": "6375359a9a01.mp3"
+    "voice": "tuk",
+    "sig": "2b33d85502",
+    "ms": 1776,
+    "file": "6b482e8d6497.mp3"
+  },
+  {
+    "text": "Tukkae! Tukkae!",
+    "voice": "kae",
+    "sig": "515df55c74",
+    "ms": 2040,
+    "file": "986c7596477a.mp3"
+  },
+  {
+    "text": "Sawasdee ka!",
+    "voice": "kae",
+    "sig": "515df55c74",
+    "ms": 1152,
+    "file": "8a97fc9c810b.mp3"
   },
   {
     "text": "So beautiful!",
