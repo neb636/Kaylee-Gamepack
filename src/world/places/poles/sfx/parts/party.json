@@ -1,0 +1,100 @@
+[
+ {
+  "id": "party-fish",
+  "label": "Terry gulps a fish",
+  "prompt": "A tiny cartoon gulp, a small seabird swallowing a little fish, one quick wet blip. Soft and cute, toy-like. No music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "party-cloud",
+  "label": "Through a cloud",
+  "prompt": "A soft airy poof, like bursting through a little cotton cloud, light and fluffy with a tiny sparkle at the end. Toy-like, gentle. No music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "party-whale",
+  "label": "A whale blows",
+  "prompt": "A friendly whale spouts at the surface: one soft whoosh of misty spray and a gentle low whistle. Calm and happy, not scary. No music, no voices.",
+  "seconds": 1.6
+ },
+ {
+  "id": "party-albatross",
+  "label": "The albatross calls",
+  "prompt": "A big seabird gives two short cheerful creaky calls while gliding, light and friendly, far out at sea. Clean close recording. No music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "party-burner",
+  "label": "The balloon's burner",
+  "prompt": "A hot-air balloon burner gives one short soft roar of flame, warm and breathy, then stops. Gentle, toy-like, not loud. No music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "party-gust",
+  "label": "A gust of the southern wind",
+  "prompt": "One quick gust of cold wind sweeping past from one side, a soft whistling whoosh. Gentle, not stormy. No music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "party-leg",
+  "label": "A new part of the world",
+  "prompt": "A light magical whoosh with a soft shimmer, like the air changing as you fly into a new place. Short, gentle, toy-like. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "party-step",
+  "label": "A penguin steps forward",
+  "prompt": "Two quick little flappy footsteps of a penguin waddling on crunchy packed snow. Soft, cute, close. No music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "party-snow",
+  "label": "A poke in the snow",
+  "prompt": "A tiny soft puff of powder snow being flicked, light and crisp. Very short, gentle. No music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "party-bow",
+  "label": "A penguin bows",
+  "prompt": "A short polite cartoon slide-whistle dip down and back up, soft and friendly, like a little bow. Toy-like. No music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "party-peek",
+  "label": "A chick peeks out",
+  "prompt": "A soft cartoon pop followed by one tiny baby bird peep. Cute and light, toy-like. No music, no human voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "party-shuffle",
+  "label": "The colony shuffles away",
+  "prompt": "A small group of penguins shuffling quickly sideways on snow, many little flappy footsteps and a couple of soft surprised honks. Funny and gentle. No music, no human voices.",
+  "seconds": 1.6
+ },
+ {
+  "id": "party-hug",
+  "label": "Found: the hug",
+  "prompt": "A warm happy magical chime, soft bells rising in a little glow, like a hug. Gentle and sweet, toy-like. No voices.",
+  "seconds": 1.6
+ },
+ {
+  "id": "party-cheer",
+  "label": "The whole colony cheers",
+  "prompt": "A colony of penguins all trumpeting happily together for a moment, joyful honks and flapping flippers, bright and friendly. No music, no human voices.",
+  "seconds": 2
+ },
+ {
+  "id": "party-colony",
+  "label": "The colony in the background (bed)",
+  "prompt": "A calm emperor penguin colony far off on the Antarctic ice: quiet scattered soft honks and chick peeps, a light cold breeze. Peaceful, sparse, not busy. Seamless loop, no music, no human voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "party-blizzard",
+  "label": "The snowstorm (bed)",
+  "prompt": "A soft steady snowstorm wind, airy and whooshing with fine snow hissing past, cozy rather than scary, no howling. Seamless loop, no music, no voices.",
+  "seconds": 6,
+  "loop": true
+ }
+]
