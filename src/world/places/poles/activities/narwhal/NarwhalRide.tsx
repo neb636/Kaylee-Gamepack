@@ -135,6 +135,7 @@ export function NarwhalRide({ onDone }: ActivityProps) {
     orca: () => guide.current?.once('narwhal:orca', N.facts.orca),
     fizz: () => guide.current?.once('narwhal:fizz', N.facts.fizz),
     blue: () => guide.current?.once('narwhal:blue', N.facts.blue),
+    chunk: () => guide.current?.once('narwhal:calving', N.facts.calving),
     water: () => guide.current?.once('narwhal:water', N.facts.water),
     ice: () => guide.current?.once('narwhal:ice', N.facts.ice),
   }
@@ -144,10 +145,9 @@ export function NarwhalRide({ onDone }: ActivityProps) {
       setSection(s)
       enter(s, params(s, n))
       if (s === 'bergs') later(() => friend('bergs', N.bergs, 1), 3500)
-      // (Under the ice, Nari's own line comes first; by the glacier, the crack is seconds away.)
+      // (Under the ice and by the glacier the friends' story lines come first: Sparkle's instruction there is only
+      // the hint for when she's stuck.)
       if (s === 'bergs') arrive(s)
-      else if (s === 'under') arrive(s, true)
-      else if (s === 'glacier') later(() => guide.current?.once('narwhal:calving', N.facts.calving, true), 15000)
     },
     fish: (n) => {
       setFish(n)

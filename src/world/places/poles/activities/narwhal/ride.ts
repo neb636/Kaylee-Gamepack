@@ -68,7 +68,7 @@ export interface RideStart {
 /** Off she goes; a jump; a big landing; a boing off the ice; down under the ice; in the bubble; up through the hole;
  *  the glacier cracks; the new iceberg lands; a wave lifts her; the balloon is in sight. */
 export type RideMoment = 'go' | 'jump' | 'land' | 'bump' | 'dive' | 'bubble' | 'up' | 'crack' | 'calved' | 'wave' | 'balloon'
-export type RidePoke = 'nari' | 'pola' | 'pebble' | 'terry' | 'walrus' | 'puffins' | 'seal' | 'fizz' | 'blue' | 'beluga' | 'orca' | 'water' | 'ice'
+export type RidePoke = 'nari' | 'pola' | 'pebble' | 'terry' | 'walrus' | 'puffins' | 'seal' | 'fizz' | 'blue' | 'beluga' | 'orca' | 'chunk' | 'water' | 'ice'
 export interface RideEvents {
   /** She reached the next stretch (the address bar follows). */
   section(s: NarwhalSection, fish: number): void
@@ -95,6 +95,7 @@ export const RIDE_ANCHORS: AnchorInfo[] = [
   { id: 'beluga:0', label: 'A beluga', kind: 'thing' },
   { id: 'beluga:1', label: 'A beluga', kind: 'thing' },
   { id: 'orca', label: 'The orca', kind: 'thing' },
+  { id: 'chunk', label: 'The new iceberg', kind: 'thing' },
 ]
 
 type Mode = 'ready' | 'swim' | 'arrive' | 'done'
@@ -226,6 +227,8 @@ export class NarwhalRide implements World3D {
   /** Seconds since the glacier started to crack (-1: not yet). */
   private calveT = -1
   private calved = false
+  /** Seconds since the new iceberg was poked (it rocks). */
+  private chunkT = 9
   private balloon: Balloon
   private walrus: Critter
   private seal: Critter
@@ -316,7 +319,7 @@ export class NarwhalRide implements World3D {
     )
     this.chunk.position.copy(this.chunkAt)
     scene.add(this.chunk)
-    const waveGeo = bag.add(merge([P.cyl(1, 1, 46, '#8CCBF0', { rot: [0, 0, Math.PI / 2] }, 14), P.cyl(0.45, 0.45, 46.2, '#FFFFFF', { at: [0, 0.7, 0], rot: [0, 0, Math.PI / 2] }, 8)]))
+    const waveGeo = bag.add(merge([P.cyl(1, 1, 46, '#4F9BDD', { rot: [0, 0, Math.PI / 2] }, 14), P.cyl(0.45, 0.45, 46.2, '#FFFFFF', { at: [0, 0.7, 0], rot: [0, 0, Math.PI / 2] }, 8)]))
     for (const h of [1.5, 1.15, 0.85]) {
       const mesh = new Mesh(waveGeo, toon('#ffffff', true))
       mesh.visible = false
@@ -337,7 +340,7 @@ export class NarwhalRide implements World3D {
     scene.add(this.nariRoot)
     this.pola = new Actor('pola', bag, { height: 1.2 })
     this.pebble = new Actor('pebble', bag, { height: 0.8 })
-    this.terry = new Actor('terry', bag, { height: 0.7 })
+    this.terry = new Actor('terry', bag, { height: 1.05 })
     scene.add(this.pola.root, this.pebble.root, this.terry.root)
     this.pola.ride(this.nari.saddle, 0, 0, -0.25, 0)
     this.pebble.ride(this.nari.saddle, 0, 0.05, 0.45, 0)
@@ -415,6 +418,13 @@ export class NarwhalRide implements World3D {
         if ((side < 0 && s > GLACIER - 8 && lat < WALL_LAT + rad + 1) || !clear(s, lat, rad + 4.5)) continue
         put(s, floeGeo(rad, Math.floor(r() * 900), 0.18, 0.4).rotateY(r() * 6), lat)
       }
+    }
+    // Little bits of loose ice all over the channel: they stream past, so her speed reads (she swims right through).
+    for (let s = 8; s < DOCK; s += 2.6) {
+      if (s > DIVE.from - 4 && s < DIVE.sheetTo + 2) continue
+      const lat = (r() * 2 - 1) * (half(s) + 2)
+      const rad = 0.22 + r() * 0.5
+      put(s, P.sphere(rad, r() < 0.3 ? ICE_SHADE : ICE, { scale: [1.3, 0.4, 1], rot: [0, r() * 3, 0] }, 6), lat, 0.02)
     }
     // Floes behind her at the start, so the sea isn't empty when the camera looks back.
     for (let i = 0; i < 8; i++) put(-10 - r() * 26, floeGeo(1.5 + r() * 2.5, 300 + i, 0.18, 0.4), (r() - 0.5) * 40)
@@ -494,11 +504,16 @@ export class NarwhalRide implements World3D {
       const d = 13 + r() * 2
       parts.push(P.box(d, h, 8.3, cols[i++ % 3], { at: [cx(s + 4) + WALL_LAT - d / 2 + r() * 1.2, h / 2 - 1, -(s + 4)], rot: [0, (r() - 0.5) * 0.12, 0] }))
       parts.push(P.box(d + 0.3, 1.5, 8.5, ICE_BLUE, { at: [cx(s + 4) + WALL_LAT - d / 2 + 0.4, 0.3, -(s + 4)] }))
+      // Jagged ice along the top, and a blue crack down the face.
+      for (let j = 0; j < 2; j++) parts.push(P.cone(2.2 + r() * 1.6, 3 + r() * 3.5, j ? ICE : '#E6F1FF', { at: [cx(s + 4) + WALL_LAT - 2.5 - r() * 6, h - 1 + 1.2, -(s + 2 + j * 4)], rot: [(r() - 0.5) * 0.3, r() * 3, (r() - 0.5) * 0.3] }, 5))
+      parts.push(P.box(0.5, h * 0.92, 0.3 + r() * 0.3, '#7FBDEC', { at: [cx(s + 4) + WALL_LAT + 1.25, h * 0.46 - 1, -(s + 1 + r() * 6)], rot: [(r() - 0.5) * 0.25, 0, 0] }))
     }
     for (let lat = WALL_LAT - 14; lat < 70; lat += 8) {
       const h = 10 + r() * 7
       parts.push(P.box(8.3, h, 14, cols[i++ % 3], { at: [lat + 4, h / 2 - 1, -(BACK_WALL + 7 + r() * 1.5)], rot: [0, (r() - 0.5) * 0.1, 0] }))
       parts.push(P.box(8.5, 1.5, 14.3, ICE_BLUE, { at: [lat + 4, 0.3, -(BACK_WALL + 7)] }))
+      parts.push(P.cone(2.4 + r() * 1.6, 3 + r() * 4, i % 2 ? ICE : '#E6F1FF', { at: [lat + 2 + r() * 4, h - 1 + 1.2, -(BACK_WALL + 5 + r() * 6)], rot: [(r() - 0.5) * 0.3, r() * 3, (r() - 0.5) * 0.3] }, 5))
+      parts.push(P.box(0.3 + r() * 0.3, h * 0.92, 0.5, '#7FBDEC', { at: [lat + 1 + r() * 6, h * 0.46 - 1, -(BACK_WALL - 0.2)], rot: [0, 0, (r() - 0.5) * 0.25] }))
     }
     for (const [lat, s, rr, h, seed] of [[-80, 900, 34, 38, 1], [-20, 930, 40, 46, 2], [45, 905, 30, 32, 3], [-75, 760, 26, 30, 4], [-70, 650, 24, 26, 5]] as const) parts.push(mountainGeo(rr, h, seed).translate(lat, 0, -s))
     this.scene.add(solid(merge(parts), this.bag, 3))
@@ -875,10 +890,10 @@ export class NarwhalRide implements World3D {
         // Leaping out of the water in little arcs (under the ice: swimming round in a ring).
         const ph = t * 3.4 + j * 1.9 + f.s
         const hop = f.under ? 0.3 * Math.sin(ph * 0.6) : -0.3 + 1.05 * Math.sin(ph)
-        const x = bx + Math.cos(a) * 0.95
+        const x = bx + Math.cos(a) * 1.1
         const y = by + hop
-        const z = bz + Math.sin(a) * 0.95
-        const sc = (1 - q) * 1.25
+        const z = bz + Math.sin(a) * 1.1
+        const sc = (1 - q) * 1.7
         eul.set(f.under ? 0 : -0.9 * Math.cos(ph), -a, 0)
         mtx.compose(tmp2.set(x + (mouth.x - x) * q, y + (mouth.y - y) * q, z + (mouth.z - z) * q), quat.setFromEuler(eul), scl.set(sc, sc, sc))
         this.fishMesh.setMatrixAt(n++, mtx)
@@ -961,7 +976,8 @@ export class NarwhalRide implements World3D {
       }
       // Afloat on its side: it rocks and settles, drifting out a little.
       const u = Math.min(60, ct - 2.6)
-      c.rotation.z = -Math.PI / 2 + 0.3 * Math.exp(-u * 0.5) * Math.cos(u * 2.2)
+      this.chunkT += dt
+      c.rotation.z = -Math.PI / 2 + 0.3 * Math.exp(-u * 0.5) * Math.cos(u * 2.2) + 0.14 * Math.exp(-this.chunkT * 1.2) * Math.sin(this.chunkT * 5)
       c.position.set(at.x + 2.5 + 4 * (1 - Math.exp(-u * 0.4)), -1.9 - 1.6 * Math.exp(-u * 0.8) * Math.cos(u * 2.6) + 0.12 * Math.sin(t * 0.9), at.z)
     }
     for (const w of this.waves) {
@@ -971,7 +987,7 @@ export class NarwhalRide implements World3D {
       const h = w.h * clamp(w.age / 0.6) * clamp((w.s - (CALVE.trig - 60)) / 20)
       w.mesh.visible = h > 0.02
       w.mesh.position.set(cx(w.s) - 4, -0.05, -w.s)
-      w.mesh.scale.set(1, Math.max(0.01, h), 2.6)
+      w.mesh.scale.set(1, Math.max(0.01, h), 1.9)
       if (w.s < CALVE.trig - 60) w.on = false
       // Foam along its crest.
       if (w.mesh.visible && Math.random() < dt * 22) this.foam.emit(cx(w.s) - 4 + (Math.random() - 0.5) * 34, 0.03, -w.s + 2.4, 0, 0, 2, 0.9, 1.2)
@@ -985,10 +1001,14 @@ export class NarwhalRide implements World3D {
     const up = this.air ? 1 : 0
     for (const a of [this.pola, this.pebble]) a.armsUp += (up - a.armsUp) * (1 - Math.exp(-dt * 10))
     this.lookBack = Math.max(0, this.lookBack - dt)
-    const look = this.mode === 'done' ? 0 : 2.1 * smooth(0, 0.3, this.lookBack) * smooth(0, 0.3, 1.6 - this.lookBack)
+    const look = 2.1 * smooth(0, 0.3, this.lookBack) * smooth(0, 0.3, 1.6 - this.lookBack)
     if (this.lookBack === 0) this.lookWho = 1 - this.lookWho
-    this.pola.headTurn = this.lookWho ? look : 0
-    this.pebble.headTurn = this.lookWho ? 0 : -look
+    // (At the balloon they turn to her, cheering.)
+    const end = this.mode === 'done' || this.mode === 'arrive'
+    const turn = (a: Actor, to: number) => (a.headTurn += (to - a.headTurn) * (1 - Math.exp(-dt * 6)))
+    turn(this.pola, end ? -1.25 : this.lookWho ? look : 0)
+    turn(this.pebble, end ? -1.25 : this.lookWho ? 0 : -look)
+    if (this.mode === 'done') for (const a of [this.pola, this.pebble]) a.armsUp = 0.5 + 0.5 * Math.sin(t * 6)
     this.pola.update(dt, t)
     this.pebble.update(dt, t)
     // Their air bubble under the ice.
@@ -1038,10 +1058,10 @@ export class NarwhalRide implements World3D {
   private placeTerry(dt: number, snap = false) {
     const t = this.time
     const a = this.terry
-    const ahead = this.s + 11
+    const ahead = this.s + 9
     const done = this.mode === 'done' || this.mode === 'arrive'
     if (done) tmp2.set(cx(BALLOON) + 0.4, 1.12, -BALLOON + 0.05)
-    else tmp2.set(cx(ahead) + lane(ahead, this.lat, this.prefer) * 0.6 + this.lat * 0.4 + Math.sin(t * 0.8) * 1.2, 2.5 + Math.sin(t * 2) * 0.25 + Math.max(0, this.y) * 0.5, -ahead)
+    else tmp2.set(cx(ahead) + lane(ahead, this.lat, this.prefer) * 0.6 + this.lat * 0.4 + Math.sin(t * 0.8) * 1.2, 2.1 + Math.sin(t * 2) * 0.25 + Math.max(0, this.y) * 0.5, -ahead)
     if (this.terryT >= 0) {
       // Poked: a loop the loop.
       this.terryT += dt / 0.9
@@ -1060,10 +1080,10 @@ export class NarwhalRide implements World3D {
   /** Her wake: foam spreading out behind her, spray off her side in a swerve. */
   private wake(dt: number, t: number) {
     if (this.mode === 'done' || this.air || this.y < -0.4 || this.v < 1 || (this.trailT -= dt) > 0) return
-    this.trailT = 0.05
+    this.trailT = 0.07
     const p = this.pos()
     const sw = clamp(Math.abs(this.latV) / 4)
-    for (const side of [-1, 1]) this.foam.emit(p.x + side * 0.5, 0.03, p.z + 1.7, side * (1.1 + sw), 0, 1.5, 1.3, 0.8 + this.v * 0.07 + sw * 0.5)
+    for (const side of [-1, 1]) this.foam.emit(p.x + side * 0.45 + (Math.random() - 0.5) * 0.2, 0.03, p.z + 1.8, side * (1.3 + sw), 0, 1.2, 1, 0.42 + Math.random() * 0.25 + sw * 0.35)
     if (sw > 0.35) this.spray.emit(p.x - Math.sign(this.latV) * 0.7, 0.2, p.z + 0.4 * Math.sin(t * 30), -Math.sign(this.latV) * (1.5 + Math.random() * 1.5), 2 + Math.random() * 2 * sw, 1.2, 0.5, 0.12 + 0.1 * sw)
   }
 
@@ -1094,23 +1114,24 @@ export class NarwhalRide implements World3D {
     const tall = this.tall
     if (this.mode === 'done' || (this.mode === 'arrive' && this.modeT > 0.6)) {
       // The three of them and the balloon, from the side so their faces show.
-      const c = new Vector3(cx(BALLOON) + 0.4, 2.3, -(BALLOON - 5))
-      return { center: c, half: tall ? new Vector3(3.2, 3.2, 6) : new Vector3(6, 3, 6.5), yaw: tall ? 150 : 128, pitch: 9 }
+      const c = new Vector3(cx(DOCK) + this.lat * 0.5 + 0.3, 2.1, -(DOCK + 3.5))
+      return { center: c, half: tall ? new Vector3(2.4, 2.6, 5) : new Vector3(3, 2.4, 6.5), yaw: 96, pitch: 8 }
     }
     if (this.mode === 'ready' && this.intro) {
       // A look at their faces before she sets off.
       return { center: new Vector3(cx(this.s), 1.1, -this.s - 0.3), half: new Vector3(2.4, 1.3, 2.4), yaw: 152, pitch: 10 }
     }
     const yaw = -Math.atan(dcx(this.s)) * TO_DEG * 0.7
-    if (this.y < -0.5 || (this.diving && !this.air)) {
+    // (Low over the water already as she comes up to the ice bridge, so the camera dips under with her.)
+    if (this.y < -0.5 || (this.s > DIVE.from - 7 && this.s < DIVE.to)) {
       const s = this.s + 5
-      return { center: new Vector3(cx(s) + this.lat * 0.65, this.y + 0.5, -s), half: tall ? new Vector3(2.8, 1.3, 5) : new Vector3(4.4, 1.3, 4), yaw, pitch: 5, maxDist: 12.5 }
+      return { center: new Vector3(cx(s) + this.lat * 0.82, this.y + 0.5, -s), half: tall ? new Vector3(2.8, 1.3, 5) : new Vector3(4.4, 1.3, 4), yaw, pitch: 5, maxDist: 12.5 }
     }
     // Behind her: further ahead the faster she goes, so what's coming shows. (A glance at the glacier as it cracks.)
-    const ahead = 5 + this.v * this.rig.lag
+    const ahead = 3.4 + this.v * this.rig.lag * 0.6
     const s = this.s + ahead
     const watching = this.calveT >= 0 && this.calveT < 3.4 ? 1 : 0
-    const c = new Vector3(cx(s) + this.lat * 0.6 - watching * 4, 0.8 + Math.max(0, this.y) * 0.45 + watching, -s - watching * 6)
+    const c = new Vector3(cx(s) + this.lat * 0.82 - watching * 4, 0.8 + Math.max(0, this.y) * 0.45 + watching, -s - watching * 6)
     return { center: c, half: tall ? new Vector3(3.6, 1.3, 7) : new Vector3(5.6, 1.3, 4.8), yaw: yaw + watching * 14, pitch: 21 - watching * 5 }
   }
 
@@ -1192,6 +1213,13 @@ export class NarwhalRide implements World3D {
       this.spray.burst(cx(SPOTS.fizz[0]) + SPOTS.fizz[1], 0.1, -SPOTS.fizz[0], 30, 1.4, 4, 0.14)
       return poke('fizz')
     }
+    if (id === 'chunk') {
+      this.chunkT = 0
+      rideSfx.tick()
+      const q = this.chunk.position
+      this.spray.burst(q.x + 2, 0.2, q.z, 26, 3.5, 4, 0.2)
+      return poke('chunk')
+    }
     if (id === 'blue') {
       this.blueT = 0
       rideSfx.glint()
@@ -1258,6 +1286,7 @@ export class NarwhalRide implements World3D {
       else if (id === 'fizz') place(el, over && near(SPOTS.fizz[0]) ? tmp.set(cx(SPOTS.fizz[0]) + SPOTS.fizz[1], 0.4, -SPOTS.fizz[0]) : null, 1.6)
       else if (id === 'blue') place(el, over && near(SPOTS.blue[0], -6, 90) ? tmp.copy(this.blue.position).setY(3) : null, 5)
       else if (id === 'orca') place(el, over && this.orca.root.visible && this.s > OPEN_END + 20 ? tmp.copy(this.orca.root.position).setY(0.8) : null, 2.4)
+      else if (id === 'chunk') place(el, this.calved && over && near(CALVE.s, -14, 70) ? tmp.copy(this.chunk.position).setY(1.2) : null, 5)
       else if (id.startsWith('beluga:')) {
         const b = this.belugas[+id.slice(7)]
         const q = b?.root.position

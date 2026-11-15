@@ -6,7 +6,7 @@ import { vp } from '../../../../../../scripts/qa-lib.mjs'
 export const screens = [
   // Narwhal Ride: the look at the three of them at the start, each stretch from its link a few seconds in (Sparkle in
   // the corner), each channel round the big icebergs, at the balloon, then the stamp and the narwhal sticker.
-  { name: 'poles-narwhal-start', hash: '#/world/poles/narwhal/open', reset: true, wait: 900 },
+  { name: 'poles-narwhal-start', hash: '#/world/poles/narwhal/open', reset: true, wait: 2300 },
   ...['open', 'bergs', 'bergs?channel=left', 'bergs?channel=right', 'under', 'glacier', 'balloon?fish=14'].map((to) => ({
     name: `poles-narwhal-${to.replace(/[?=&]/g, '-')}`,
     hash: `#/world/poles/narwhal/${to}`,
