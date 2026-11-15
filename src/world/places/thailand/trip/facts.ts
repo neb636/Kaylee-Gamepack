@@ -43,7 +43,7 @@ export const NAN_FACTS = [
   { icon: '🏔️', label: 'Doi Phu Kha', say: L.nan.trip.facts.mountain },
 ]
 
-// The Koh Samet trip's tap-to-hear facts (plan: thailand/samet-trip.md), for its stamp screen and the passport.
+// The Koh Samet trip's tap-to-hear facts (plan: thailand/samet-trip.md (retired; in git history)), for its stamp screen and the passport.
 export const SAMET_FACTS = [
   { icon: '🏝️', label: 'Koh', say: L.samet.trip.facts.island },
   { icon: '🌳', label: 'Samet tree', say: L.samet.trip.facts.samet },

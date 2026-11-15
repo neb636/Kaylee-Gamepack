@@ -1,4 +1,4 @@
-// The speedboat from Ban Phe to Koh Samet (plan: planning/around-the-world/thailand/samet-trip.md, greybox 7): the
+// The speedboat from Ban Phe to Koh Samet (plan: planning/around-the-world/thailand/samet-trip.md (retired; in git history), greybox 7): the
 // way onto the island. A cutscene now (the user, 2026-11-12: drop the hoof in the water, show the ride with the cinema
 // camera, a third of the time): the captain drives the family's hired speedboat from Ban Phe pier on the mainland to
 // Na Dan pier on the real island (island/scenery.ts buildIsland and props.ts), so the boat ties up right where she

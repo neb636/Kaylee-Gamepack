@@ -101,9 +101,8 @@ const CAM = knobs('sametCam', 'The island camera', FILE, {
   far: { value: 95, min: 40, max: 400, step: 5, label: 'Draws plants out to', unit: 'm', note: 'further trees are left to the haze (fewer triangles on the iPad)' },
   forest: { value: 54, min: 25, max: 80, step: 1, label: 'Looks down in the forest', unit: '°', note: 'on the roads and paths through the trees the camera rises over them' },
 })
-const RIDE = knobs('sametRide', 'The green taxi and the jet ski', FILE, {
-  taxi: { value: 6, min: 2, max: 14, step: 0.25, label: 'Taxi speed', unit: 'm/s' },
-  near: { value: 7, min: 3, max: 15, step: 0.5, label: 'Hop on from', unit: 'm', note: 'she can hop on the taxi or a jet ski this close to it' },
+const RIDE = knobs('sametRide', 'Her jet ski (and how close things answer a tap)', FILE, {
+  near: { value: 7, min: 3, max: 15, step: 0.5, label: 'Close enough from', unit: 'm', note: 'she can hop on a jet ski this close to it; the taxi glows, and a tapped thing farther than this has her walk over first' },
   top: { value: 9.5, min: 4, max: 18, step: 0.25, label: 'Jet ski top speed', unit: 'm/s' },
   accel: { value: 7, min: 1, max: 16, step: 0.25, label: 'Jet ski speeding up', unit: 'm/s²' },
   turnRate: { value: 2, min: 0.5, max: 4, step: 0.05, label: 'Jet ski turn rate', unit: 'rad/s' },
@@ -477,8 +476,8 @@ export class SametIsland implements World3D {
         ti = i
       }
     }
-    this.taxi = new Taxi(bag, ti)
-    this.taxi.waitT = 14
+    this.taxi = new Taxi(bag)
+    this.taxi.park(ti, (x, z) => Math.max(0, this.isl.ground.heightAt(x, z)))
     scene.add(this.taxi.root)
 
     // ---- The beach puppy: a step in front of her, ready to run (he picks where to on the first frame).
@@ -570,12 +569,10 @@ export class SametIsland implements World3D {
     this.banana = new BananaBoat(bag)
     scene.add(this.banana.root)
 
-    // ---- The animals for her book, and the beach clean.
+    // ---- The animals, and the beach clean.
     const palms = new Map<string, PalmInfo>()
     for (const [id, p] of this.props.pokes) if (p.kind === 'palm') palms.set(id, { at: p.at, y: p.y, top: p.top })
     this.wild = new Wildlife(bag, palms)
-    // (No photo book any more: nothing sparkles to be snapped.)
-    this.wild.found = new Set(Object.keys(ANIMALS) as (keyof typeof ANIMALS)[])
     scene.add(this.wild.root)
     this.clean = new BeachClean(bag, this.isl.ground, (x, z, r) => this.isl.blockers.add(x, z, r))
     scene.add(this.clean.root)
@@ -1547,8 +1544,7 @@ export class SametIsland implements World3D {
     const k = this.kaylee.root.position
     const tp = tx.root.position
     const near = this.mode === 'walk' && Math.hypot(k.x - tp.x, k.z - tp.z) < RIDE.near + 2
-    tx.hold = true
-    tx.update(dt, (x, z) => Math.max(0, this.isl.ground.heightAt(x, z)), RIDE.taxi)
+    tx.update(dt)
     const gm = this.taxiGlow.material as MeshBasicMaterial
     const glow = near && !this.films.on ? 0.55 + 0.3 * Math.sin(this.time * 5) : 0
     gm.opacity += (glow - gm.opacity) * damp(dt, 6)
@@ -1812,7 +1808,7 @@ export class SametIsland implements World3D {
     // Beside the waiting taxi: the camera takes it in too, so it's never off the screen right next to her.
     const tp = this.taxi.root.position
     const td = Math.hypot(tp.x - k.x, tp.z - k.z)
-    this.taxiFrameK += ((this.mode === 'walk' && this.taxi.state === 'wait' && td < PUP.frame && td > 1.5 ? 1 : 0) - this.taxiFrameK) * 0.05
+    this.taxiFrameK += ((this.mode === 'walk' && td < PUP.frame && td > 1.5 ? 1 : 0) - this.taxiFrameK) * 0.05
     const fk = this.taxiFrameK
     const grow = td * 0.3 * fk
     return {

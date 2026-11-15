@@ -1,5 +1,5 @@
 // Lunch on the deck at Ao Prao (notes: planning/around-the-world/thailand/samet-story.md; the first plan:
-// samet-trip.md): Dad's photo 2, on
+// samet-trip.md (retired; in git history)): Dad's photo 2, on
 // the resort deck above the cove (island/layout.ts DECK, the island's own deck from island/props.ts resortDeck). A place,
 // not a stop: no stamp, 45-90 s, 8-15 touches.
 //

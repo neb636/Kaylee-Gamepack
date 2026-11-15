@@ -1,5 +1,5 @@
 // The sunset at the driftwood tree on Ao Prao (planning/around-the-world/thailand/samet-story.md; the first plan:
-// samet-trip.md, step 9, the finale's first beat), on the island's real sunset beach (island/layout.ts FRAMES.prao)
+// samet-trip.md (retired; in git history), step 9, the finale's first beat), on the island's real sunset beach (island/layout.ts FRAMES.prao)
 // once all four fireflies are found.
 //
 // Kaylee, Mom and Dad stand by the big driftwood tree watching the sun go down over the sea, the fireflies she found

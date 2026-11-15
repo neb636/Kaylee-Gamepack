@@ -141,11 +141,11 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
    north, Mom drives a silver rental Pajero Sport over the mountain roads (Kaylee steers), and they stop at
    Baan Huanam Mushroom Farm, Stop Time Cafe above Sapan's rice terraces and Bo Kluea's salt wells,
    coming home by the "number 3" road (`thailand/nan-trip.md`; built and in the game 2026-10-25).
-   The fourth family trip (user feedback, 2026-11-04) is Koh Samet, the family's island vacation off Rayong, and the first
-   **open world**: one island she roams freely (five real beaches at their real map positions, shrunk to 1:10), with
-   Mom's phone to snap the island's animals for a book, the jet ski at Sai Kaew, a sandcastle at Ao Hin Khok,
-   snorkeling at Ko Kudi, hide and seek at Ao Prao's driftwood tree, and a fire show finale
-   (`thailand/samet-trip.md`; planned, greybox 1 is the jet ski).
+   The fourth family trip (user feedback, 2026-11-04) is Koh Samet, the family's island vacation off Rayong: one story,
+   "The Lost Fireflies". The gecko fire dancers' four fireflies blew all over the island; the pictures of the beaches take
+   her to each stop (the jet ski at Sai Kaew, a sandcastle at Ao Hin Khok, snorkeling at Ko Kudi, hide and seek at Ao
+   Prao's driftwood tree), each finds one, and with all four the fire show can start (`thailand/samet-story.md`; built
+   and in the game 2026-11-12).
 
 ## Tech notes
 

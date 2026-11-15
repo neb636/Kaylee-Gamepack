@@ -5,7 +5,7 @@ reference for it. The look, the engine, the hub, the trip kit and the labs are b
 house private is at the end.
 
 Read `planning/around-the-world/thailand.md` (the family, the house), then the notes of the trip you're working on in
-`planning/around-the-world/thailand/` (`nan-trip.md` is the road trip and the road kit, `samet-trip.md` the open
+`planning/around-the-world/thailand/` (`nan-trip.md` is the road trip and the road kit, `samet-story.md` the
 island). The finished boat and mall trips (and Baan Chang) have no notes left; read their code in `trip/` and
 `activities/`. `thailand/known-issues.md` lists small things QA found, with links and code paths.
 
