@@ -1,0 +1,159 @@
+[
+ {
+  "id": "floe-bed",
+  "label": "The sea ice: wind and water",
+  "prompt": "Calm Arctic sea ice ambience: a soft steady breeze, gentle water lapping against floating ice, now and then a faint far-off ice creak. Peaceful and airy, not stormy. Seamless loop, no music, no voices, no animals.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "floe-grab",
+  "label": "She grabs Pola",
+  "prompt": "A tiny soft fluffy squish, like picking up a plush toy, with a little rubbery stretch. Very short, cute, toy-like. No music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "floe-leap",
+  "label": "Pola springs off the ice",
+  "prompt": "A soft cartoon spring boing with a light whoosh of air, a small fluffy animal jumping. Short, bouncy, friendly, toy-like. No music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "floe-land",
+  "label": "Paws thump down on a floe",
+  "prompt": "A soft padded thump of paws landing on packed snow and ice, with a small crunchy squeak of snow and a tiny water slosh under the ice. Short, gentle, close. No music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "floe-splash",
+  "label": "A belly-flop into the sea",
+  "prompt": "A big happy cartoon belly-flop splash into cold water, round and bubbly, then a few drips. Playful, not scary. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "floe-plip",
+  "label": "A little splash",
+  "prompt": "A small light water plip, a finger poking the surface of calm water, one droplet and a tiny ripple. Short, clean, close. No music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "floe-climb",
+  "label": "Pola scrambles out onto the ice",
+  "prompt": "A wet fluffy animal scrambling out of water onto ice: a quick slosh, dripping, and two soft wet paw pats. Short, cute. No music, no voices.",
+  "seconds": 0.9
+ },
+ {
+  "id": "floe-shake",
+  "label": "She shakes the water off",
+  "prompt": "A wet furry animal shaking itself dry, fast fluttery shake with a spray of water droplets pattering down. Short, funny, cartoon-like. No music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "floe-slide",
+  "label": "Sliding off a tippy floe",
+  "prompt": "A quick slippery slide across wet ice, a smooth rising zip. Short, playful, cartoon-like. No music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "floe-knock",
+  "label": "A poke at the ice",
+  "prompt": "One soft hollow knock on a thick slab of floating ice, a muted woody clunk with a little watery wobble after it. Short, gentle. No music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "floe-clink",
+  "label": "Bits of ice clink",
+  "prompt": "Two or three small ice cubes clinking together in water, bright and glassy, light. Very short, delicate. No music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "floe-push",
+  "label": "A floe pushed over the water",
+  "prompt": "A slab of ice gliding across calm water, a soft low watery swoosh with a gentle lapping at the end. Short, smooth. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "floe-squeak",
+  "label": "Pebble holds on tight",
+  "prompt": "One tiny high squeak of a baby penguin chick, a short surprised cheep like a small squeaky toy. Very short, cute, soft. No music, no human voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "floe-peep",
+  "label": "Pebble's happy peep",
+  "prompt": "Two quick happy peeps of a baby penguin chick, bright and chirpy, like a little whistle. Short, cute, soft. No music, no human voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "floe-pop",
+  "label": "Something pops up out of the water",
+  "prompt": "A soft wet pop and a little bloop of water as a small animal's head pops up through the surface. Short, round, cute. No music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "floe-seal",
+  "label": "The ringed seal barks",
+  "prompt": "Two short friendly barks of a small seal, a little honky and funny, close up. Cute, not loud. No music, no human voices.",
+  "seconds": 0.9
+ },
+ {
+  "id": "floe-owl",
+  "label": "The snowy owl hoots",
+  "prompt": "A soft low owl hoot, hoo hoo, two gentle notes, warm and round. Calm, close, not spooky. No music, no human voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "floe-walrus",
+  "label": "The walrus snorts",
+  "prompt": "A big sleepy walrus snort and a blubbery puff of air through whiskers, low and funny, like a rumbly raspberry. Short, comical, not scary. No music, no human voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "floe-blow",
+  "label": "A whale's blow",
+  "prompt": "A small whale surfacing and blowing a soft puff of spray, a breathy whoosh then fine mist pattering on water. Gentle, close. No music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "floe-beluga",
+  "label": "The belugas sing",
+  "prompt": "Beluga whales singing: a few bright chirps, a rising whistle and a little trill, like canaries under water. Playful, sweet, short. No music, no human voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "floe-pup",
+  "label": "The seal pup calls",
+  "prompt": "A baby harp seal pup's little call, one soft wobbly maa like a tiny lamb. Short, very cute, gentle. No music, no human voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "floe-puffin",
+  "label": "The puffin's funny growl",
+  "prompt": "A puffin's funny low purring growl, arrr, like a tiny creaky door, with a quick flutter of small wings. Short, comical, soft. No music, no human voices.",
+  "seconds": 1
+ },
+ {
+  "id": "floe-tern",
+  "label": "Terry the tern calls",
+  "prompt": "An Arctic tern's call as it flies overhead, two sharp bright kee-arr cries with a light swoop of wings. Short, airy, cheerful. No music, no human voices.",
+  "seconds": 1
+ },
+ {
+  "id": "floe-twinkle",
+  "label": "An iceberg twinkles",
+  "prompt": "A short icy glassy twinkle, a few tiny crystal bell notes shimmering like sunlight on ice. Delicate, bright, magical. No melody, no voices.",
+  "seconds": 0.9
+ },
+ {
+  "id": "floe-stage",
+  "label": "A new kind of ice begins",
+  "prompt": "A short bright sparkle chime rising, three quick glassy notes, like a little reward. Cheerful, light. No voices.",
+  "seconds": 0.9
+ },
+ {
+  "id": "floe-home",
+  "label": "Home on Mama's ice",
+  "prompt": "A short warm happy arrival chime: a soft glockenspiel flourish going up with a gentle sparkle at the end. Cozy and proud, about two seconds. No voices.",
+  "seconds": 2
+ }
+]

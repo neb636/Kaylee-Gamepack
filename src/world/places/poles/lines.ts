@@ -196,37 +196,50 @@ export const L = {
 
   // ---- Ice Floe Hop (activities/floe/) ----
   floe: {
-    // The opening (the story section): Pola far out on the ice calls to Mama, who waves from the big ice.
-    story: [pola('Mama! I am way over here!')],
-    // Sparkle: what to do at each stretch (said when it starts, and again when she's stuck).
+    // Ice Floe Hop: Pola carries Pebble on her back across the floating ice to Mama Bear (the film before it ends with
+    // him hopping on). In play order.
+    // Sparkle: what to do at each stretch (the first as the game opens, each as its ice begins, and again when she's stuck).
     hint: {
       steady: onDevice('Pull Pola back, and let go!', 'Click Pola, pull her back, and let go!'),
       drift: 'The ice is drifting. Wait, then fling!',
       melt: 'Summer melts the ice. Push floes together!',
+    },
+    // Pebble, up on Pola's back as she leaps (in turn, every few flings, not every time).
+    fly: [pebble('Wheee!'), pebble('Again! Again!'), pebble("I'm flying!"), pebble('Higher, Pola!')],
+    // She pokes Pola and Pebble (in turn).
+    pola: [pola('Hee hee!'), pebble('Peep peep!'), pola('That tickles!'), pebble('Hop, Pola, hop!')],
+    // She pokes Mama Bear, far across the ice (in turn). Mama hasn't met Pebble yet.
+    mama: [mama('Hop home to me, Pola!'), mama('Who is that on your back?'), mama('I am right here, Pola!'), mama('You can do it, little one!'), mama('Keep hopping!')],
+    // Tap-to-hear, the first time she pokes the ice or the water.
+    floeFact: 'This ice is floating on the sea!',
+    waterFact: 'The North Pole is a frozen sea. There is water under the ice!',
+    // A miss: a happy belly-flop, and Pola swims with Pebble held up dry (in turn, not every time).
+    flop: [pebble("Don't drop me!"), pola('Polar bears are great swimmers!'), pebble('Hold me up high!'), pola('Splash! I love swimming!'), pola('Brr! Paddle paddle!')],
+    // They climb out and Pola shakes the water off (in turn, when nobody else is talking).
+    dry: [pebble("I'm still dry!"), pebble('Not one drop on me!')],
+    // Tap-to-hear: who lives on the sea ice, the first time she pokes each (in the order they come along the way).
+    facts: {
+      seal: 'A ringed seal! That hole is how she breathes.',
+      berg: 'An iceberg! Most of it hides under the water.',
+      owl: 'A snowy owl! She is white like the snow.',
+      terry: 'There goes Terry! Terns fly from pole to pole.',
+      walrus: 'A walrus! His long teeth are called tusks.',
+      narwhal: 'A narwhal! That long horn is really a tooth.',
+      puffin: 'A puffin! She dives for little fish.',
+      beluga: 'Beluga whales! They sing like birds.',
+      pup: 'A baby seal! Her white fur keeps her warm.',
     },
     // Pola arriving on a new kind of ice.
     arrive: {
       drift: pola('Whoa! This ice is moving!'),
       melt: pola('The ice is so little now!'),
     },
-    // A miss: a happy belly-flop (in turn, not every time).
-    flop: [pola('Splash! I love swimming!'), pola('Polar bears are great swimmers!'), pola('Wheee! Splash!'), pola('Brr! Paddle paddle!')],
     // Landing on a tippy edge: down it like a slide.
     slide: [pola('Wheee! A slide!'), pola('Whoops! Too tippy!')],
-    // Taps on the friends.
-    pola: [pola('Hee hee!'), pola('That tickles!'), pola('Again! Again!')],
-    mama: [mama('Hop home to me, Pola!'), mama('I am right here, Pola!'), mama('You can do it, little one!'), mama('Keep hopping!')],
-    // Tap-to-hear, the first time she pokes the ice or the water.
-    floeFact: 'This ice is floating on the sea!',
-    waterFact: 'The North Pole is a frozen sea. There is water under the ice!',
-    // Home with Mama.
-    home: [mama('My brave little cub! You made it!'), pola('Mama! I hopped all the way home!')],
-    homeCheer: `You got Pola home!`,
+    // Home on Mama's ice: Pola calls out, then Sparkle's cheer (the film after it is Mama meeting Pebble).
+    home: pola('Mama! Look who I found!'),
+    homeCheer: `You carried Pebble all the way!`,
   },
-
-  // ---- Snow Coats (activities/coats/) ----
-  // Sparkle says what to do as each part starts (and again when nothing's been touched for a while); the facts come the
-  // first time she pokes an animal (Guide.once), never as required listening.
   coats: {
     fox: { start: onDevice('Brr, winter is coming! Rub snow on the fox.', 'Brr, winter is coming! Click and wiggle snow on the fox.'), hint: onDevice('Rub the fox with your finger.', 'Hold the click and wiggle on the fox.') },
     hide: {

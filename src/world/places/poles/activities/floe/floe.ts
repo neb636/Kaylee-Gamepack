@@ -1,19 +1,22 @@
-// Ice Floe Hop (plan: planning/around-the-world/poles.md): the North Pole is frozen sea, and the ice
-// floats. Pola the polar bear cub is far from Mama Bear across the floating sea ice; Kaylee flings him floe to floe.
+// Ice Floe Hop, chapter one of "Pebble's Long Way Home" (the films are story/films.ts: `floe-in` plays before this,
+// `floe-out` after): the North Pole is frozen sea, and the ice floats. Pebble the penguin chick can't swim yet (his
+// fluff isn't waterproof), so Pola the polar bear cub carries him on her back across the floating ice to Mama Bear.
+// The story stays in play: Pebble rides the whole way (rider.ts) and acts out every leap; a miss is Pola swimming
+// with him held up dry.
 //
-// The toy (core verb): grab Pola, pull back and let go. He crouches deeper the further she pulls (a dotted arc and a
-// ring show where he'll land), leaps, and lands with a thump: the floe dips under his weight, bobs and leans toward
+// The toy (core verb): grab Pola, pull back and let go. She crouches deeper the further Kaylee pulls (a dotted arc and a
+// ring show where she'll land), leaps, and lands with a thump: the floe dips under his weight, bobs and leans toward
 // where he stands. A landing near a floe still lands on it (`magnet`). A miss is a happy belly-flop: he swims to the
 // nearest floe (or the one she taps), climbs out and shakes the water off. The verb deepens three ways along one course
 // (layout.ts): big steady floes, floes that drift and turn (and little tippy ones he slides off), then summer's small
 // floes she can push together with her finger. Mama Bear waits on the big ice at the end; every landing leaves paw
-// prints, so the path she made stays on the water.
+// prints, so the path she made stays on the water. The sea is alive on the way (life.ts): a seal, an owl, a walrus, a
+// narwhal, a puffin, belugas, a seal pup and Terry flying over, each with something to do when she pokes it.
 //
 // Built for engine3d/View3D.tsx; nothing here comes from Thailand. The fling and the floes are feel-lab knobs (?feel=1).
-import { CircleGeometry, Color, ExtrudeGeometry, Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, RingGeometry, Scene, Shape, SphereGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
-import { clamp, smooth, sounds } from '../../../../../sdk'
+import { type BufferAttribute, CircleGeometry, Color, ExtrudeGeometry, Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, RingGeometry, Scene, Shape, SphereGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
+import { clamp, smooth } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
-import { sfx } from '../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../engine3d/camera'
 import { Bag } from '../../../../engine3d/dispose'
@@ -23,7 +26,11 @@ import { Particles } from '../../../../engine3d/particles'
 import { applyBands, makeLights } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
 import { swell, Water } from '../../../../engine3d/water'
+import { driftGeo, ICE, ICE_BLUE, ICE_SHADE } from '../../story/props'
 import { Bear } from './bear'
+import { Life, type Critter, type CritterId, type Sea } from './life'
+import { Rider } from './rider'
+import { floeSfx } from './sounds'
 import { layout, type FloeSpec, type Stage } from './layout'
 import type { FloeSection } from './sections'
 import { DEG } from '../../../../../sdk/math'
@@ -69,13 +76,25 @@ export interface FloeEvents {
   flop(): void
   /** He landed on a tippy edge and is sliding off. */
   slide(): void
-  /** She poked something (Pola, Mama, a floe, the open water). */
-  poke(what: 'pola' | 'mama' | 'floe' | 'water'): void
+  /** She poked something (Pola and Pebble, Mama, a floe, the open water, or one of the animals). */
+  poke(what: 'pola' | 'mama' | 'floe' | 'water' | CritterId): void
+  /** Pola leapt (the `n`th fling). */
+  fling(n: number): void
+  /** They climbed out of the sea: Pebble is still dry. */
+  dry(): void
 }
 
 export const FLOE_ANCHORS: AnchorInfo[] = [
-  { id: 'pola', label: 'Pola: pull him back and let go', kind: 'thing' },
+  { id: 'pola', label: 'Pola, with Pebble on her back: pull her back and let go', kind: 'thing' },
   { id: 'mama', label: 'Mama Bear', kind: 'thing' },
+  { id: 'seal', label: 'A ringed seal in her breathing hole', kind: 'thing' },
+  { id: 'owl', label: 'A snowy owl', kind: 'thing' },
+  { id: 'walrus', label: 'A walrus', kind: 'thing' },
+  { id: 'narwhal', label: 'A narwhal', kind: 'thing' },
+  { id: 'puffin', label: 'A puffin', kind: 'thing' },
+  { id: 'beluga', label: 'Two beluga whales', kind: 'thing' },
+  { id: 'pup', label: 'A seal pup', kind: 'thing' },
+  { id: 'terry', label: 'Terry the tern', kind: 'thing' },
 ]
 
 /** Floes' top above the water at rest, and how thick they are. */
@@ -87,12 +106,13 @@ const DRY = 0.14
 const SWIM_Y = -0.42
 /** No fling for this long: Pola glows and hops ("grab me"). */
 const HINT_S = 8
-const ORDER: FloeSection[] = ['story', 'steady', 'drift', 'melt', 'mama']
+const ORDER: FloeSection[] = ['steady', 'drift', 'melt', 'mama']
+/** Where Pebble sits on Pola's back (the films' spot: story/films.ts, `floe-in`), in her own meters. */
+const SEAT = { y: 0.84, z: -0.3 }
 const STAGE_SECTION: Record<Stage, FloeSection> = { start: 'steady', steady: 'steady', drift: 'drift', melt: 'melt', mama: 'mama' }
-const SKY = '#E6F3FD'
-const ICE = '#D9E0EA'
-const ICE_MAMA = '#E4EAF2'
-const PRINT = '#97A3B8'
+/** The films' Arctic (story/stage.ts): the same sky, haze and sea. */
+const SKY = '#CFE9FF'
+const PRINT = '#9FB4D4'
 
 type Mode = 'stand' | 'aim' | 'fly' | 'flop' | 'swim' | 'climb' | 'slide' | 'walk'
 
@@ -177,6 +197,11 @@ export class FloeHop implements World3D {
   private mamaFloe: Floe
   private pola: Bear
   private mama: Bear
+  private pebble: Rider
+  private life: Life
+  private sea: Sea
+  private stopBed: () => void
+  private squeaked = false
   private shadow: Mesh
   private foam: Particles
   private spray: Particles
@@ -233,7 +258,8 @@ export class FloeHop implements World3D {
   private lastFling = 0
 
   // ---- Counts (QA and the pacing check).
-  private counts = { flings: 0, landings: 0, flops: 0, slides: 0, swims: 0, pushes: 0, taps: 0, giggles: 0 }
+  private counts = { flings: 0, landings: 0, flops: 0, slides: 0, swims: 0, pushes: 0, taps: 0, giggles: 0, pokes: 0 }
+  private poked = new Set<string>()
 
   constructor(
     private renderer: WebGLRenderer,
@@ -242,12 +268,12 @@ export class FloeHop implements World3D {
   ) {
     const { scene, bag } = this
     scene.background = new Color(SKY)
-    scene.fog = new Fog(SKY, 60, 200)
+    scene.fog = new Fog(SKY, 70, 230)
     applyBands()
     this.rig.fov = 34
     this.rig.lag = 0.45
 
-    this.water = new Water({ size: 600, deep: '#5FA6DE', shallow: '#78BCEA', haze: SKY, hazeNear: 55, hazeFar: 190 }, bag)
+    this.water = new Water({ size: 600, deep: '#5FA6DE', shallow: '#78BCEA', haze: SKY, hazeNear: 60, hazeFar: 220 }, bag)
     scene.add(this.water.mesh)
 
     for (const spec of layout(start.layout)) this.floes.push(this.makeFloe(spec, this.floes.length))
@@ -257,6 +283,10 @@ export class FloeHop implements World3D {
     this.mama = new Bear(bag, 'mama', 1.8)
     this.shadow = blobShadow(0.45, bag)
     scene.add(this.shadow)
+    // Pebble on her back, the whole way.
+    this.pebble = new Rider(bag, 0.8)
+    this.pola.root.add(this.pebble.root)
+    this.pebble.root.position.set(0, SEAT.y, SEAT.z)
     // Mama on the far side of her ice, facing the way Pola comes.
     this.mamaFloe.spinner.add(this.mama.root)
     const m = toLocal(this.mamaFloe, this.mamaFloe.x, this.mamaFloe.z - 1.6)
@@ -264,11 +294,27 @@ export class FloeHop implements World3D {
     // (Facing her, whichever way the ice is turned.)
     this.mama.root.rotation.y = -this.mamaFloe.yaw
 
+    // Who lives here: the seal's hole is on the first floe, off to one side of where Pola starts.
+    const f0 = this.floes[0]
+    let hole = { x: 0, z: 0 }
+    for (const [dx, dz] of [[1.25, -0.35], [-1.25, -0.35], [1.1, 0.5], [-1.1, 0.5], [0, -1.2]]) {
+      hole = toLocal(f0, f0.x + dx, f0.z + dz)
+      if (inside(f0.pts, hole.x * 1.45, hole.z * 1.45)) break
+    }
+    this.sea = {
+      pola: this.pos,
+      covered: (x, z, pad) => this.floes.some((f) => Math.hypot(f.x - x, f.z - z) < f.r * 1.1 + pad),
+      spray: (x, y, z, n, speed, up, size) => this.spray.burst(x, y, z, n, speed, up, size),
+      ripple: (x, z, size) => this.foam.emit(x, 0.02, z, 0, 0, 0, 1.1, size),
+    }
+    this.life = new Life(scene, bag, this.floes.map((f) => f.spec), { parent: f0.spinner, x: hole.x, y: TOP, z: hole.z, face: -f0.yaw })
+    this.stopBed = floeSfx.bed()
+
     this.foam = new Particles({ kind: 'foam', count: 80, opacity: 0.85 }, bag)
     this.spray = new Particles({ kind: 'spray', count: 160 }, bag)
     scene.add(this.foam.mesh, this.spray.mesh)
 
-    // The aim: a dotted arc and a ring where he'll land.
+    // The aim: a dotted arc and a ring where she'll land.
     const dotGeo = bag.add(new SphereGeometry(0.08, 10, 8))
     const dotMat = bag.add(new MeshBasicMaterial({ color: '#FFFFFF' }))
     for (let i = 0; i < 12; i++) {
@@ -304,7 +350,6 @@ export class FloeHop implements World3D {
     this.attach(first, l.x, l.z)
     this.face = this.faceGoal = 0
     if (start.section === 'mama') this.goHome()
-    if (start.section === 'story') this.mama.wave()
 
     this.unwatch = watch('fling', () => ({
       'pull (px)': [this.pullPx, FLING.pull * 1.5],
@@ -323,7 +368,36 @@ export class FloeHop implements World3D {
     geo.rotateX(-Math.PI / 2)
     // (The extrusion now runs up from y = 0: put its top at TOP.)
     geo.translate(0, TOP - (THICK - 0.12) - 0.06, 0)
-    const body = solid(bake(geo, spec.stage === 'mama' ? ICE_MAMA : ICE), this.bag, 2.5)
+    // Ice: a white top, sides that go bluer down to the water (the films' floes, story/props.ts).
+    const ice = bake(geo, ICE)
+    const at = ice.attributes.position
+    const col = ice.attributes.color as BufferAttribute
+    const shade = new Color(ICE_SHADE)
+    const deep = new Color(ICE_BLUE)
+    const c = new Color()
+    for (let k = 0; k < at.count; k++) {
+      const y = at.getY(k)
+      if (y > TOP - 0.03) continue
+      c.copy(shade).lerp(deep, clamp((TOP - 0.1 - y) / 0.3))
+      col.setXYZ(k, c.r, c.g, c.b)
+    }
+    const parts = [ice]
+    // Snow blown into soft heaps on the ice that holds still (round its edge, clear of the middle where Pola lands).
+    if (spec.rest) {
+      const home = spec.stage === 'mama'
+      const n = home ? 9 : 3
+      for (let k = 0; k < n; k++) {
+        const [px, pz] = spec.pts[(k * 2 + i) % spec.pts.length]
+        // (On Mama's ice, none where Pola runs up to her, nor at the near edge in front of the camera.)
+        const wx = px * Math.cos(spec.yaw) + pz * Math.sin(spec.yaw)
+        const wz = -px * Math.sin(spec.yaw) + pz * Math.cos(spec.yaw)
+        if (home && (Math.abs(wx) < 2.4 || wz > 1.5)) continue
+        const far = home ? 0.5 + (k % 3) * 0.14 : 0.74
+        const r = home ? 0.7 + (k % 3) * 0.3 : 0.34 + (k % 2) * 0.1
+        parts.push(bake(driftGeo(r, r * 0.42).toNonIndexed(), '#FFFFFF', { at: [px * far, TOP - 0.02, pz * far], rot: [0, k * 1.3, 0] }))
+      }
+    }
+    const body = solid(parts.length > 1 ? merge(parts) : ice, this.bag, 2.5)
     const group = new Group()
     const spinner = new Group()
     spinner.add(body)
@@ -431,6 +505,11 @@ export class FloeHop implements World3D {
       if (v2.lengthSq() > 1e-4) this.aimDir.copy(v2.normalize())
     }
     this.range = FLING.reach * this.power ** FLING.curve
+    // Pebble holds on tight as she crouches: one squeak a pull.
+    if (this.power > 0.45 && !this.squeaked) {
+      this.squeaked = true
+      floeSfx.squeak()
+    }
   }
 
   private launch() {
@@ -451,12 +530,22 @@ export class FloeHop implements World3D {
     this.setMode('fly')
     this.counts.flings++
     this.lastFling = this.time
-    sfx.boing()
+    floeSfx.leap()
+    this.events.fling(this.counts.flings)
   }
 
   private land() {
     const l = this.landing(this.end.x, this.end.z)
     if (!l) {
+      // (Not into the walrus's ice or the owl's block: beside it, and whoever lives there jumps.)
+      const s = this.life.solidAt(this.end.x, this.end.z, 0.35)
+      if (s) {
+        const dx = this.end.x - s.x || 0.01
+        const dz = this.end.z - s.z
+        const d = Math.hypot(dx, dz)
+        this.end.x = s.x + (dx / d) * (s.r + 0.55)
+        this.end.z = s.z + (dz / d) * (s.r + 0.55)
+      }
       this.flop()
       this.events.flop()
       return
@@ -474,7 +563,9 @@ export class FloeHop implements World3D {
     f.txv += (wo.z / f.r) * FLOES.thump * 1.2 * s
     f.tzv -= (wo.x / f.r) * FLOES.thump * 1.2 * s
     this.spray.burst(this.pos.x, this.surfaceY(f) + 0.05, this.pos.z, 8, 1.6, 2.2, 0.12)
-    sfx.thump()
+    floeSfx.land()
+    this.pebble.bounce()
+    if (this.counts.landings % 3 === 1) floeSfx.peep()
     // A little floe tips him off when he lands near its edge.
     if (f.spec.tippy && Math.hypot(l.x, l.z) / f.r > FLOES.tippy) {
       f.tipOff = 0.8
@@ -482,7 +573,7 @@ export class FloeHop implements World3D {
       f.tipDir.set(wl.x, wl.z).normalize()
       this.setMode('slide')
       this.counts.slides++
-      sfx.fwip()
+      floeSfx.slide()
       this.events.slide()
       return
     }
@@ -492,7 +583,7 @@ export class FloeHop implements World3D {
       this.section = next
       this.events.section(next)
       if (next === 'mama') this.goHome()
-      else sounds.sparkle()
+      else floeSfx.stage()
     }
   }
 
@@ -508,7 +599,9 @@ export class FloeHop implements World3D {
   }
 
   private splash(x: number, z: number, big: number) {
-    sfx.splash()
+    if (big > 0.6) floeSfx.splash()
+    else floeSfx.plip()
+    this.life.splash(x, z, big)
     this.spray.burst(x, 0.1, z, Math.round(18 * big), 2.6 * big, 4.5 * big, 0.2)
     for (let i = 0; i < 3; i++) this.foam.emit(x, 0.02, z, 0, 0, 0, 1.2 + i * 0.3, (1.4 + i * 0.9) * big)
   }
@@ -558,6 +651,7 @@ export class FloeHop implements World3D {
     this.updateFloes(dt, t)
     this.updatePola(dt, t)
     this.mama.update(dt, t)
+    this.life.update(dt, t, this.sea)
     this.foam.update(dt)
     this.spray.update(dt)
     // The spot she's aiming at rides along with him (on a drifting floe).
@@ -565,19 +659,13 @@ export class FloeHop implements World3D {
     this.updateAim()
 
     // Stuck: no fling for a while, he hops to say "grab me" (and his tap target glows).
-    if (this.mode === 'stand' && this.homeT < 0 && this.section !== 'story' && t - Math.max(this.lastTouch, this.lastFling) > HINT_S && Math.floor(t * 0.4) !== Math.floor((t - dt) * 0.4)) this.pola.hop()
-
-    if (this.section === 'story' && t > 4.5) this.endStory()
+    if (this.mode === 'stand' && this.homeT < 0 && t - Math.max(this.lastTouch, this.lastFling) > HINT_S && Math.floor(t * 0.4) !== Math.floor((t - dt) * 0.4)) {
+      this.pola.hop()
+      this.pebble.flap()
+    }
     this.lights.follow(this.pos.x, 0, this.pos.z - 2)
     this.rig.setShot(this.shot())
     this.rig.update(dt)
-  }
-
-  private endStory() {
-    if (this.section !== 'story') return
-    this.section = 'steady'
-    this.events.section('steady')
-    this.pola.wave()
   }
 
   private updateFloes(dt: number, t: number) {
@@ -633,9 +721,18 @@ export class FloeHop implements World3D {
       f.tz += f.tzv * dt
       this.placeFloe(f, t)
     }
-    // Pushed floes bump the others instead of going through them.
+    // Pushed floes bump the others instead of going through them (and the walrus's and the pup's ice, the owl's block).
     for (const a of this.floes) {
       if (!a.spec.push) continue
+      for (const b of this.life.solids) {
+        const dx = a.x - b.x
+        const dz = a.z - b.z
+        const min = a.rMin + b.r
+        const d = Math.hypot(dx, dz)
+        if (d >= min || d < 1e-4) continue
+        a.x += (dx / d) * (min - d)
+        a.z += (dz / d) * (min - d)
+      }
       for (const b of this.floes) {
         if (a === b) continue
         const dx = a.x - b.x
@@ -667,11 +764,14 @@ export class FloeHop implements World3D {
   private updatePola(dt: number, t: number) {
     const p = this.pola
     const pose: { crouch?: number; lean?: number; stretch?: number; swim?: number; flail?: number } = {}
+    // Pebble, on her back: what he does about it.
+    const ride = { cling: 0, up: 0, dry: 0 }
     switch (this.mode) {
       case 'stand':
       case 'aim':
         if (this.mode === 'aim') {
           pose.crouch = this.power * FLING.crouch
+          ride.cling = this.power
           // He looks at her finger, leaning back into the pull.
           this.faceGoal = Math.atan2(-this.aimDir.x, -this.aimDir.y)
         }
@@ -697,6 +797,7 @@ export class FloeHop implements World3D {
         pose.stretch = k < 0.25 ? 0.25 * (1 - k / 0.25) : k > 0.8 ? -0.1 : 0.05
         pose.lean = 0.35 * Math.sin(k * Math.PI)
         pose.flail = l ? 0.25 : smooth((k - 0.4) / 0.4)
+        ride.up = smooth(k / 0.15) * (1 - smooth((k - 0.85) / 0.15))
         if (k >= 1) this.land()
         break
       }
@@ -705,6 +806,8 @@ export class FloeHop implements World3D {
         const k = this.modeT / 0.8
         pose.lean = Math.PI * 0.45 * Math.sin(Math.min(1, k) * Math.PI)
         pose.flail = 1 - k
+        ride.up = 1 - Math.min(1, k)
+        ride.dry = Math.min(1, k * 2)
         this.pos.y = SWIM_Y - 0.25 * Math.sin(Math.min(1, k) * Math.PI)
         p.root.position.copy(this.pos)
         if (k >= 1) {
@@ -727,7 +830,7 @@ export class FloeHop implements World3D {
           this.climbTo = { f, x: e.x * k, z: e.z * k }
           this.climbFrom.copy(this.pos)
           this.setMode('climb')
-          sfx.boing()
+          floeSfx.climb()
           break
         }
         const step = Math.min(d, FLOES.swim * dt)
@@ -738,6 +841,7 @@ export class FloeHop implements World3D {
         this.faceGoal = Math.atan2(dx, dz)
         pose.swim = 1
         pose.lean = 0.5
+        ride.dry = 1
         if (Math.floor(t * 3) !== Math.floor((t - dt) * 3)) this.foam.emit(this.pos.x, 0.02, this.pos.z, 0, 0, 0, 1, 0.9)
         break
       }
@@ -749,6 +853,7 @@ export class FloeHop implements World3D {
         this.pos.set(this.climbFrom.x + (goal.x - this.climbFrom.x) * k, this.climbFrom.y + (gy - this.climbFrom.y) * k + 0.7 * Math.sin(k * Math.PI), this.climbFrom.z + (goal.z - this.climbFrom.z) * k)
         p.root.position.copy(this.pos)
         pose.lean = 0.3
+        ride.dry = 1 - k
         if (k >= 1) {
           const f = c.f!
           this.attach(f, c.x, c.z)
@@ -760,9 +865,11 @@ export class FloeHop implements World3D {
           // Shake the water off (onto the screen).
           this.faceGoal = 0
           p.shake()
+          this.pebble.shake()
           this.spray.burst(this.pos.x, this.pos.y + 0.6, this.pos.z, 26, 2.4, 2.5, 0.14)
-          sfx.splash()
+          floeSfx.shake()
           this.events.shake()
+          this.events.dry()
           const next = STAGE_SECTION[f.spec.stage]
           if (ORDER.indexOf(next) > ORDER.indexOf(this.section)) {
             this.section = next
@@ -783,6 +890,7 @@ export class FloeHop implements World3D {
         p.root.position.set(this.at.x, TOP, this.at.z)
         pose.flail = 1
         pose.lean = -0.4
+        ride.up = 1
         if (!inside(f.pts, this.at.x * 0.92, this.at.z * 0.92)) {
           this.detach()
           this.end.copy(this.pos)
@@ -810,9 +918,10 @@ export class FloeHop implements World3D {
           this.homeT = 0
           this.faceGoal = 0
           p.hop()
+          this.pebble.flap()
           this.mama.hop()
           this.mama.wave()
-          sounds.fanfare()
+          floeSfx.home()
           this.events.home()
         }
         break
@@ -826,6 +935,13 @@ export class FloeHop implements World3D {
     this.face += d * (1 - Math.exp(-dt * (this.mode === 'fly' ? 14 : 7)))
     p.root.rotation.y = this.face - (this.on ? this.on.yaw : 0)
     p.update(dt, t, pose)
+    // Pebble stays on her back wherever it goes: down as she crouches, up with a hop, and up on top as she tips forward
+    // into the water (her back is the dry part), standing a little taller to keep his fluff out of the splash.
+    const tip = (pose.lean ?? 0) - (pose.crouch ?? 0) * 0.25
+    const seat = SEAT.y * (1 - (pose.crouch ?? 0) * 0.3 + (pose.stretch ?? 0) * 0.5)
+    this.pebble.root.position.set(0, seat * Math.cos(tip) - SEAT.z * Math.sin(tip) + p.lift + ride.dry * 0.14, seat * Math.sin(tip) * 0.8 + SEAT.z * Math.cos(tip))
+    this.pebble.root.rotation.x = tip * 0.3
+    this.pebble.update(dt, t, ride)
 
     // His shadow on whatever is under him.
     const under = this.mode === 'swim' || this.mode === 'flop' ? null : this.on ?? this.floeAt(this.pos.x, this.pos.z)
@@ -882,21 +998,18 @@ export class FloeHop implements World3D {
 
   /** What the camera frames: Pola and the floes ahead of him (further ahead while she pulls). */
   private shot(): Shot {
-    if (this.section === 'story' && this.time < 2.4) {
+    if (this.section === 'mama' && this.homeT < 4.5) {
+      // Home: low across Mama's ice as Pola runs up to her, the icebergs and the sun behind (where the next film starts)...
       const m = this.mamaFloe
-      return { center: new Vector3(m.x, 0.6, m.z + 1), half: new Vector3(7, 1.2, 6), yaw: 0, pitch: 30 }
+      return { center: new Vector3(m.x, 1.1, m.z - 0.6), half: this.tall ? new Vector3(2.2, 1.3, 2) : new Vector3(3.4, 1.3, 2), yaw: 0, pitch: 13 }
     }
-    if (this.homeT >= 0 && this.homeT < 2.6) {
-      // Home: close on the hug first...
-      return { center: new Vector3(this.pos.x, 0.9, this.pos.z - 0.6), half: new Vector3(2, 1, 1.6), yaw: 0, pitch: 26 }
-    }
-    if (this.homeT >= 2.6 && this.homeT < 7) {
+    if (this.homeT >= 4.5 && this.homeT < 9) {
       // ...then a look back over the last of the way she brought him, paw prints and all.
       const z1 = this.mamaFloe.z
       return { center: new Vector3(this.mamaFloe.x * 0.5, 0, z1 + 9), half: new Vector3(5, 1, 12), yaw: 0, pitch: 55 }
     }
     // Pola stays a little below the middle (room to pull back under him); a pull widens the view instead of moving it,
-    // so the ring where he'll land shows.
+    // so the ring where she'll land shows.
     const ahead = this.tall ? 2.4 : 1.6
     const c = new Vector3(this.pos.x * 0.7, 0.3, this.pos.z - ahead)
     const wider = this.mode === 'aim' ? 1 + 0.35 * this.power : 1
@@ -929,6 +1042,31 @@ export class FloeHop implements World3D {
     return { x: c.x, y: c.y, r: Math.max(Math.min(this.w, this.h) < 500 ? 32 : 44, Math.abs(c.y - top.y) * 1.4) }
   }
 
+  /** Where an animal is on screen and how big a finger target it gets (never under 64 px; an iceberg is as big as it looks). */
+  private critterSpot(c: Critter) {
+    const m = c.center(tmp)
+    const s = this.toScreen(m)
+    const edge = this.toScreen(tmp2.set(m.x + c.r, m.y, m.z))
+    const min = c.id === 'berg' ? 0 : Math.min(this.w, this.h) < 500 ? 32 : 44
+    return { x: s.x, y: s.y, z: s.z, r: Math.max(min, Math.abs(edge.x - s.x)) }
+  }
+
+  /** The animal under her finger (the nearest, if two are close), or null. */
+  private critterAt(x: number, y: number) {
+    let best: Critter | null = null
+    let bd = Infinity
+    for (const c of this.life.critters) {
+      if (c.hidden) continue
+      const s = this.critterSpot(c)
+      const d = Math.hypot(x - s.x, y - s.y)
+      if (s.z < 1 && d < s.r && d / s.r < bd) {
+        bd = d / s.r
+        best = c
+      }
+    }
+    return best
+  }
+
   pointerDown(x: number, y: number, id?: string) {
     this.lastTouch = this.time
     // A second finger while one already holds Pola or a floe: View3D now follows the new finger, so let go of the old
@@ -936,7 +1074,7 @@ export class FloeHop implements World3D {
     if (this.grab === 'pola' && this.mode === 'aim') this.setMode('stand')
     this.pullPx = this.range = this.power = 0
     this.held = null
-    if (this.section === 'story') this.endStory()
+    this.squeaked = false
     const pp = this.polaOnScreen()
     const onPola = id === 'pola' || (!id && Math.hypot(x - pp.x, y - pp.y) < pp.r)
     if (onPola && this.mode === 'stand' && this.on) {
@@ -944,11 +1082,11 @@ export class FloeHop implements World3D {
       this.down = { x, y }
       this.downHit.copy(this.hitPlane(x, y, this.surfaceY(this.on)) ?? this.pos)
       this.setMode('aim')
-      sounds.pickup()
+      floeSfx.grab()
       return
     }
     this.grab = null
-    if (id) return
+    if (id || this.critterAt(x, y)) return
     // A floe she can push (summer's little ones): it follows her finger across the water.
     const hit = this.hitPlane(x, y, TOP)
     const f = hit && this.floeAt(hit.x, hit.z)
@@ -973,7 +1111,10 @@ export class FloeHop implements World3D {
     const grab = this.grab
     this.grab = null
     if (grab === 'floe' && this.held) {
-      if (Math.hypot(this.held.vx, this.held.vz) > 0.2) this.counts.pushes++
+      if (Math.hypot(this.held.vx, this.held.vz) > 0.2) {
+        this.counts.pushes++
+        floeSfx.push()
+      }
       this.held = null
       return
     }
@@ -991,8 +1132,9 @@ export class FloeHop implements World3D {
       // A giggle and a hop.
       if (this.mode === 'stand') {
         this.pola.hop()
+        this.pebble.flap()
         this.counts.giggles++
-        sfx.chirp()
+        floeSfx.peep()
         if (this.on) this.on.hv -= FLOES.thump * 0.3
       } else if (this.mode === 'swim') this.splash(this.pos.x, this.pos.z, 0.4)
       this.events.poke('pola')
@@ -1001,10 +1143,20 @@ export class FloeHop implements World3D {
     if (id === 'mama') {
       this.mama.hop()
       this.mama.wave()
-      sfx.boing()
+      floeSfx.knock()
       this.events.poke('mama')
       return
     }
+    // One of the animals (or an iceberg): its own little act, and Sparkle says who it is the first time.
+    const who = id ? this.life.critters.find((c) => c.id === id && !c.hidden) : this.critterAt(x, y)
+    if (who) {
+      who.poke()
+      this.counts.pokes++
+      this.poked.add(who.id)
+      this.events.poke(who.id)
+      return
+    }
+    if (id) return
     const hit = this.hitPlane(x, y, TOP)
     if (!hit) return
     const f = this.floeAt(hit.x, hit.z)
@@ -1016,7 +1168,7 @@ export class FloeHop implements World3D {
       const s = Math.sin(f.yaw)
       f.txv += ((-l.x * s + l.z * c) / f.r) * 0.6
       f.tzv -= ((l.x * c + l.z * s) / f.r) * 0.6
-      sfx.thump()
+      floeSfx.knock()
       if (this.mode === 'swim') this.swimTo = f
       this.events.poke('floe')
     } else {
@@ -1033,12 +1185,18 @@ export class FloeHop implements World3D {
       let spot: { x: number; y: number; size: number; glow?: boolean } | null = null
       if (id === 'pola') {
         const pp = this.polaOnScreen()
-        const stuck = this.mode === 'stand' && this.homeT < 0 && this.section !== 'story' && this.time - Math.max(this.lastTouch, this.lastFling) > HINT_S
+        const stuck = this.mode === 'stand' && this.homeT < 0 && this.time - Math.max(this.lastTouch, this.lastFling) > HINT_S
         spot = { x: pp.x, y: pp.y, size: Math.max(min, pp.r * 2), glow: stuck }
       } else if (id === 'mama') {
         const c = this.toScreen(this.mama.center(tmp))
         const top = this.toScreen(this.mama.root.localToWorld(tmp2.set(0, this.mama.height, 0)))
         if (c.z < 1) spot = { x: c.x, y: c.y, size: Math.max(min, Math.abs(c.y - top.y) * 2.2) }
+      } else {
+        const c = this.life.critters.find((k) => k.id === id)
+        if (c && !c.hidden) {
+          const s = this.critterSpot(c)
+          if (s.z < 1) spot = { x: s.x, y: s.y, size: Math.max(min, s.r * 2) }
+        }
       }
       const show = !!spot && spot.x > -spot.size / 2 && spot.x < this.w + spot.size / 2 && spot.y > -spot.size / 2 && spot.y < this.h + spot.size / 2
       if (show && spot) {
@@ -1066,6 +1224,13 @@ export class FloeHop implements World3D {
       power: +this.power.toFixed(2),
       home: this.homeT >= 0,
       ...this.counts,
+      poked: [...this.poked],
+      // The animals on screen now (pixels), for QA's finger.
+      critters: this.life.critters.flatMap((c) => {
+        if (c.hidden) return []
+        const s = this.critterSpot(c)
+        return s.z < 1 && s.x > 0 && s.x < this.w && s.y > 0 && s.y < this.h ? [{ id: c.id, x: Math.round(s.x), y: Math.round(s.y), r: Math.round(s.r) }] : []
+      }),
       // The floes on screen (pixels), for QA's finger.
       onScreen: this.floes.flatMap((f) => {
         const p = this.toScreen(tmp.set(f.x, this.surfaceY(f), f.z))
@@ -1079,6 +1244,7 @@ export class FloeHop implements World3D {
   }
 
   dispose() {
+    this.stopBed()
     this.unwatch()
     this.scene.clear()
     this.bag.dispose()
