@@ -127,12 +127,12 @@ motion.push(
   etnaDrive('etna-cold', 3.2, 'cold', [[0.25, 0, 900]]),
 )
 
-// Opera greybox: swing the conductor's wand (big swings bounce the band high, little ones sway), then stop (freeze).
+// The opera: swing the conductor's wand (big swings bounce the band high, little ones sway), then stop (freeze).
 const operaSwing = (name, seconds, size, ms) => ({
   name,
   seconds,
   setup: async (page, base) => {
-    await page.goto(`${base}#/world/italy/party`)
+    await page.goto(`${base}#/world/italy/party/candles?stamps=all`)
     await page.waitForTimeout(600)
     await skip(page)
     await page.waitForTimeout(400)

@@ -7,6 +7,9 @@
 // then louder) and the wand lifts Lupa's big high note. Roses, the Frecce Tricolori painting the flag where she sweeps
 // the wand, and the picnic, where hugging Lupa calls onDone (the trophy ceremony). Nothing can fail: each step helps
 // her along if she's stuck. Stroke detection and its feel numbers are in conduct.ts (FEEL).
+// Where it stands (2026-11-14, PR #449): check-in 2, the look and voices are in; next is the user's table read, then
+// Kaylee's playtest (check-in 3). Known small things: on a tall iPad the band is one small row (the plan's two rows
+// would make them bigger); the picnic pizza is a Margherita, not the one she made at the Pizzeria (it isn't saved).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode, type RefObject } from 'react'
 import { burst, say, SparklePuppet, sounds, useElementSize, useGameLoop, type Line, type PuppetHandle } from '../../../../../sdk'
