@@ -1,0 +1,38 @@
+{
+  "title": "Italy's finale: Opera Night at the Arena",
+  "checkIn": "2 of 4: hear the script",
+  "kaylee": "She swings a sparkly wand to lead Lupa's band, loud and soft, lighting the arena's candles, until shy Lupa sings her big note. Then roses, jets paint the flag, and a picnic.",
+  "questions": [
+    "Lupa's opening line: sweet, or too sad for a finale?",
+    "Nino says 'Piano, piano!' (Italian for 'slowly'): keep the joke?"
+  ],
+  "tableReads": [
+    [
+      "italy",
+      "opera"
+    ]
+  ],
+  "reels": [
+    {
+      "name": "opera",
+      "moments": [
+        "opera-forte",
+        "opera-piano",
+        "#/world/italy/party/solo?stamps=all&solos=bruno~4",
+        "#/world/italy/party/star?stamps=all~4",
+        "#/world/italy/party/roses?stamps=all~4",
+        "#/world/italy/party/picnic?stamps=all~4"
+      ]
+    }
+  ],
+  "links": [
+    {
+      "label": "Play the whole finale",
+      "hash": "#/world/italy/party?stamps=all"
+    },
+    {
+      "label": "Jump to the solos",
+      "hash": "#/world/italy/party/solo?stamps=all"
+    }
+  ]
+}
