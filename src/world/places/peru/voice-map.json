@@ -63,13 +63,6 @@
     "file": "7383ac54928f.mp3"
   },
   {
-    "text": "Our balloon trip comes soon!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2690,
-    "file": "b340c9d6e692.mp3"
-  },
-  {
     "text": "Hee hee!",
     "voice": "luna",
     "sig": "8c4095048f",
@@ -1594,6 +1587,244 @@
     "sig": "ed7dbdac3d",
     "ms": 4707,
     "file": "3915c541ffae.mp3"
+  },
+  {
+    "text": "Help every friend first! Then we fly!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4200,
+    "file": "ad265d9e2b26.mp3"
+  },
+  {
+    "text": "Tap the balloon! Off we fly!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2904,
+    "file": "9faa16c92f2c.mp3"
+  },
+  {
+    "text": "Click the balloon! Off we fly!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2448,
+    "file": "45a0dfae0c21.mp3"
+  },
+  {
+    "text": "Our journal is full!",
+    "voice": "luna",
+    "sig": "8c4095048f",
+    "ms": 2064,
+    "file": "fce467005385.mp3"
+  },
+  {
+    "text": "Let's fly and say thank you!",
+    "voice": "luna",
+    "sig": "8c4095048f",
+    "ms": 2040,
+    "file": "e58fab92f06c.mp3"
+  },
+  {
+    "text": "Pull a present off the balloon, then let it go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3240,
+    "file": "1fb03a2c8f1f.mp3"
+  },
+  {
+    "text": "Click a present, pull it off, then let it go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3912,
+    "file": "13473190c393.mp3"
+  },
+  {
+    "text": "Drop a present for each friend!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2184,
+    "file": "b57903a01c47.mp3"
+  },
+  {
+    "text": "Windy! Coco and Pluma catch in the air!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3552,
+    "file": "8abfe2ff7870.mp3"
+  },
+  {
+    "text": "Drop it through a gap in the leaves!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2688,
+    "file": "57751e7377c7.mp3"
+  },
+  {
+    "text": "A present! Gracias!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 2544,
+    "file": "76f9f122e38e.mp3"
+  },
+  {
+    "text": "My baby caught one!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 1656,
+    "file": "62be04ffe598.mp3"
+  },
+  {
+    "text": "Arf arf! I love it!",
+    "voice": "lobo",
+    "sig": "1ae02eaef4",
+    "ms": 2184,
+    "file": "f078210fed25.mp3"
+  },
+  {
+    "text": "What a catch! Gracias!",
+    "voice": "coco",
+    "sig": "794c66c94c",
+    "ms": 3264,
+    "file": "f9439e9fce0c.mp3"
+  },
+  {
+    "text": "I caught it in the air!",
+    "voice": "pluma",
+    "sig": "666bb7638e",
+    "ms": 1584,
+    "file": "3d8d801d9d79.mp3"
+  },
+  {
+    "text": "For me? Gracias!",
+    "voice": "tika",
+    "sig": "241b278019",
+    "ms": 1896,
+    "file": "ec348cba0827.mp3"
+  },
+  {
+    "text": "Graaacias...",
+    "voice": "sloth",
+    "sig": "1a6320a9e1",
+    "ms": 6144,
+    "file": "cb9a5bab7641.mp3"
+  },
+  {
+    "text": "Mine! Yay!",
+    "voice": "monkey",
+    "sig": "5eefd2db79",
+    "ms": 1680,
+    "file": "fa2a09aca610.mp3"
+  },
+  {
+    "text": "Wheee! Gracias!",
+    "voice": "rosa",
+    "sig": "795618f009",
+    "ms": 2376,
+    "file": "14bd5da00e11.mp3"
+  },
+  {
+    "text": "Bye-bye, sea! Up to the mountains!",
+    "voice": "luna",
+    "sig": "8c4095048f",
+    "ms": 2544,
+    "file": "bbe343198202.mp3"
+  },
+  {
+    "text": "Down to the rainforest!",
+    "voice": "luna",
+    "sig": "8c4095048f",
+    "ms": 1512,
+    "file": "8f495d42206a.mp3"
+  },
+  {
+    "text": "Hot air lifts the balloon up!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2376,
+    "file": "d0940cb7c707.mp3"
+  },
+  {
+    "text": "Pelicans scoop up fish!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2472,
+    "file": "2fd738c0d5b5.mp3"
+  },
+  {
+    "text": "Wheee! We are flying!",
+    "voice": "luna",
+    "sig": "8c4095048f",
+    "ms": 2808,
+    "file": "f0431abd643a.mp3"
+  },
+  {
+    "text": "I can see the whole country!",
+    "voice": "luna",
+    "sig": "8c4095048f",
+    "ms": 2352,
+    "file": "75aa30e8868a.mp3"
+  },
+  {
+    "text": "Night time! Tap the forest to send up lanterns!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4488,
+    "file": "e12d880eb81e.mp3"
+  },
+  {
+    "text": "Night time! Click the forest to send up lanterns!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3648,
+    "file": "9b3759b8ef62.mp3"
+  },
+  {
+    "text": "Red and white, like Peru's flag!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3120,
+    "file": "266062eabc33.mp3"
+  },
+  {
+    "text": "Gracias, everyone!",
+    "voice": "luna",
+    "sig": "8c4095048f",
+    "ms": 1464,
+    "file": "08cf8d245837.mp3"
+  },
+  {
+    "text": "Gracias means thank you!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2136,
+    "file": "bc9ba7219883.mp3"
+  },
+  {
+    "text": "Pull a present off the balloon!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2136,
+    "file": "88157a6b6b72.mp3"
+  },
+  {
+    "text": "Click a present and pull it off!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2352,
+    "file": "f782fdcbff57.mp3"
+  },
+  {
+    "text": "Tap the forest!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1824,
+    "file": "4e0ac297310e.mp3"
+  },
+  {
+    "text": "Click the forest!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1800,
+    "file": "e0204fef8f22.mp3"
   },
   {
     "text": "Alpaca sticker! Alpacas have soft, warm fleece!",
