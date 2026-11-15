@@ -1,5 +1,5 @@
-// The mall day at ICONSIAM (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history)). So far, in shapes and without
-// voices: HarborLand's hall (hall/, sections hall and hungry), where she walks between the ways in; the mini games
+// The mall day at ICONSIAM (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history)), built and voiced:
+// HarborLand's hall (hall/, sections hall and hungry), where she walks between the ways in; the mini games
 // behind them: the Vet Clinic (games/vet/, section vet), the Barber Salon (games/barber/, section barber: Dad keeps
 // the hairdo she gives him, `hair`, in the hall and at the pizza table), Cafe & Cake (games/cafe/, section cafe), the
 // Racing Slide (games/race/, section race), Little Land (games/blocks/, section blocks), the Golden Mountain
@@ -44,7 +44,7 @@ import MALL_SECTIONS, { type MallSection, type PatientId } from './sections'
 import { SOCK_COLORS } from './socks'
 import { mallVoice } from './voice'
 
-/** What she can play so far: the mini games (any big ride in the Big Frame is `frame`). */
+/** The mini games she can play (any big ride in the Big Frame is `frame`). */
 const GAMES = ['vet', 'cafe', 'race', 'barber', 'blocks', 'mountain', 'boxing', 'skypod', 'frame'] as const
 type GameId = (typeof GAMES)[number]
 /** The first climbing toy's big rides (PR #120's links): they count for the Big Frame. */

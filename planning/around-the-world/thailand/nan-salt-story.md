@@ -2,7 +2,7 @@
 
 The user asked for a story for the salt hut in the same way as Lung's rice farm (`nan-rice.md`, `docs/films.md`):
 something that draws Kaylee in, the salt aunty with a good backstory, films and cinema mode, and non-playable
-story-only scenes where they help. Check-in 1: three stories pitched on branch `neb636/salt-story` (PR #416). **You picked No Salt for the Soup!** (2026-11-12). The name Pa Kluea was not answered; it stays until you say otherwise.
+story-only scenes where they help. Check-in 1: three stories pitched on branch `neb636/salt-story` (PR #416). **You picked No Salt for the Soup!** (2026-11-12).
 
 The salt aunty gets a name in all three: **Pa Kluea** ("Auntie Salt"), the pony in the sun hat and mint apron
 (`cast.json` `saltaunty`). The hut's three rounds stay as built (dip and pour, the fire, scrape); each story gives them
@@ -61,5 +61,5 @@ in `salt/layout.ts`, wired into `salt3d.ts` like the rice farm's films (`docs/fi
 
 ## Next
 
-You hear the table read and watch the reel (check-in 2). Then Kaylee plays it (check-in 3): does she follow the story,
+Kaylee plays it (check-in 3): does she follow the story,
 and is the dinner long enough? Own music and sounds after the script is heard.

@@ -1,4 +1,4 @@
-// ?debug=1 on the boat trip: Dad's tuning panel for the greybox. Frame time and draw calls, where the boat is, sliders
+// ?debug=1 on the boat trip: a tuning panel for the boat trip. Frame time and draw calls, where the boat is, sliders
 // for how the longtail drives and for the chase camera, and a button that copies the numbers (paste them into
 // trip/vehicles/longtail.ts and bay/tune.ts).
 import { useEffect, useState, type RefObject } from 'react'

@@ -7,8 +7,8 @@
 //                           the pizza box for Agong, the cousins' phones down, the photo of the day on his wall
 //   arrive                  ICONSIAM (arrive.ts): the glimpse, the lift (its floor number big, here), the counter
 //
-// Sparkle sits in the corner (trip/legs/Guide.tsx); the greybox's words aren't recorded yet, so they show in its
-// bubble without a sound (words.ts). The trip around it (the day pass
+// Sparkle sits in the corner (trip/legs/Guide.tsx) and plays each recorded line (words.ts, `L.mall.trip`) with its
+// words in her bubble. The trip around it (the day pass
 // between legs, resume and replays) is MallTrip.tsx.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
