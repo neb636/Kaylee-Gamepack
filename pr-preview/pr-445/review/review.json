@@ -1,8 +1,0 @@
-{
-  "title": "Mom: even outline",
-  "checkIn": "fix",
-  "kaylee": "Mom's hair no longer has a thick black rim, and her whole outline is a bit bolder (Outline 1).",
-  "questions": [],
-  "pictures": [{ "title": "Mom in the character lab", "before": "pics/mom-before.jpg", "after": "pics/mom-after.jpg", "caption": "Her hair line now matches the rest of her" }],
-  "links": [{ "label": "Mom in the lab", "hash": "#/world/characters/ji" }]
-}
