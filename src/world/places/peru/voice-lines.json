@@ -615,7 +615,7 @@
     "text": "Let's fly and say thank you!",
     "voice": "luna"
   },
-  "Pull down a present, then let go!",
+  "Pull a present, let it go!",
   "Drop a present for each friend!",
   "Windy! They catch it in the air!",
   "Drop it through a gap in the leaves!",
@@ -644,7 +644,7 @@
     "voice": "tika"
   },
   {
-    "text": "Graaacias...",
+    "text": "Gracias...",
     "voice": "sloth"
   },
   {
@@ -675,7 +675,7 @@
   },
   "Tap the trees to light lanterns!",
   "Click the trees to light lanterns!",
-  "Peru's flag! Red and white!",
+  "Peru's red and white flag!",
   {
     "text": "Gracias, everyone!",
     "voice": "luna"

@@ -229,7 +229,7 @@ export const L = {
     ready: onDevice('Tap the balloon! Off we fly!', 'Click the balloon! Off we fly!'),
     story: [luna('Our journal is full!'), luna("Let's fly and say thank you!")],
     // The core verb, said at the first stop (no gesture word: pulling works the same with a finger or a mouse).
-    go: 'Pull down a present, then let go!',
+    go: 'Pull a present, let it go!',
     // A new stop: what's different here.
     coast: 'Drop a present for each friend!',
     mountains: 'Windy! They catch it in the air!',
@@ -242,7 +242,7 @@ export const L = {
       coco: coco('Nice catch! Gracias!'),
       pluma: pluma('I caught it in the air!'),
       tika: tika('For me? Gracias!'),
-      sloth: sloth('Graaacias...'),
+      sloth: sloth('Gracias...'),
       monkey: monkey('Mine! Yay!'),
       rosa: rosa('Wheee! Gracias!'),
     },
@@ -256,7 +256,7 @@ export const L = {
     // The payoff at night.
     night: onDevice('Tap the trees to light lanterns!', 'Click the trees to light lanterns!'),
     pretty: luna('So pretty!'),
-    flag: "Peru's flag! Red and white!",
+    flag: "Peru's red and white flag!",
     gracias: luna('Gracias, everyone!'),
     meaning: 'Gracias means thank you!',
     idle: {
