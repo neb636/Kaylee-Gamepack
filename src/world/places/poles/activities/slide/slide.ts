@@ -1,6 +1,6 @@
-// Penguin Slide (plan: planning/around-the-world/poles.md): Antarctica is land, a giant mountain of ice
-// that slopes down to the sea. Pebble is hungry; Kaylee steers Pebble's papa on his belly down the ice and into the sea
-// to catch krill for her.
+// Penguin Slide: Antarctica is land, a giant dome of ice that slopes down to the sea. Pebble is lost (he is at the
+// other end of the world: story/films.ts), and his papa looks for him everywhere: down the ice hill on his belly, and
+// in the sea. Kaylee steers him.
 //
 // The toy (core verb): steer the sliding penguin, with the Nan drive's finger wheel (engine3d/wheel.ts): her finger
 // goes down anywhere, a wheel appears under it, and pushing left or right slides him that way across the slope for as
@@ -9,8 +9,14 @@
 // aside, squawk, or spin like tops when he bumps them; steer into a snowbank and he plunges in head first, feet
 // wiggling), bumps and cracks (snow mounds that pop him into the air, a rock ridge with two runs, moguls or a big
 // kicker, a lip and a crack right across), then off the ice cliff into the sea, where the same wheel steers him through
-// pink krill swarms (gulp: his tummy grows) past a leopard seal who only wants to play. At the end he rockets out onto
-// the colony's ice and feeds Pebble.
+// pink krill swarms (gulp: his tummy grows, "for Pebble's supper") past a leopard seal who only wants to play. At the
+// end he rockets out onto the ice edge, the Adélies gather and cheer, and he looks up at the sky.
+//
+// The search is the same verb: all the way down there are small grey round things that might be Pebble (course.ts
+// LOOKS, critters.ts Lookalike). Steer him up to one and it turns out to be something funny (a snowed-on Adélie, a
+// sleeping seal, a skua chick, a woolly hat that lands on his head, the station's buoy, a ball of little fish).
+// Nothing waits on them. Beside the way there is a world to poke (scenery.ts): mountains, the science station with
+// its flag and a waving scientist, an elephant seal, a skua, gentoos, a humpback blowing.
 //
 // The ground is a height field (course.ts `ground`): on it he follows its height; where it drops away faster than he
 // can fall (a bump's crest, the kicker's end, the lip, the edge) he flies. Built for engine3d/View3D.tsx; nothing here
@@ -18,7 +24,6 @@
 import { BackSide, BufferAttribute, BufferGeometry, Color, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Quaternion, Raycaster, Scene, SphereGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { clamp, sounds } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
-import { noise, sfx, tone } from '../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../engine3d/camera'
 import { Bag } from '../../../../engine3d/dispose'
@@ -29,8 +34,12 @@ import { applyBands, makeLights, PAL, toon } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
 import { Water } from '../../../../engine3d/water'
 import { FingerWheel } from '../../../../engine3d/wheel'
-import { ADELIES, base, bumps, CRACK, cx, dcx, depth, DIVE_END, EDGE, ground, half, HOME, inCrack, KICKER, KRILL, lane, ridge, RIDGE, SEAL, SHELF, SHELF_Y, TOP_END } from './course'
+import { skyDisc } from '../../story/props'
+import { ADELIES, base, bumps, CRACK, cx, dcx, depth, DIVE_END, EDGE, ground, half, HOME, inCrack, KICKER, KRILL, lane, LOOKS, ridge, RIDGE, SEAL, SHELF, SHELF_Y, SPOTS, TOP_END, type LookKind } from './course'
+import { hatGeo, Humpback, IceSeal, Lookalike, Skua } from './critters'
 import { Penguin, Seal } from './penguin'
+import { buildFloor, buildLand, buildSea, buildShafts, buildStation } from './scenery'
+import { slideBed, slideSfx } from './sounds'
 import type { SlideSection } from './sections'
 import { TO_DEG } from '../../../../../sdk/math'
 
@@ -69,32 +78,68 @@ export interface SlideStart {
   section: SlideSection
   run: 'left' | 'middle' | 'right'
   krill: number
+  /** The maybe-Pebbles he has already looked at (their letters, course.ts LOOKS). */
+  looked: string
 }
+/** Who she poked. A maybe-Pebble he hasn't looked at yet is 'maybe'; after, it's what it turned out to be. */
+export type PokeId = 'papa' | 'seal' | 'adelie' | 'gentoo' | 'elephant' | 'skua' | 'flag' | 'scientist' | 'spout' | 'whale' | 'swimmer' | 'maybe' | 'snowy' | 'weddell' | 'chick' | 'hat' | 'buoy' | 'fish'
+const LOOK_POKE: Record<LookKind, PokeId> = { snowy: 'snowy', seal: 'weddell', skua: 'chick', hat: 'hat', buoy: 'buoy', fish: 'fish' }
 export interface SlideEvents {
   /** He reached the next stretch (the address bar follows). */
   section(s: SlideSection, krill: number): void
   /** He gulped a swarm: how many now. */
   krill(n: number): void
-  /** Pebble is fed. */
+  /** He slid up to something that might have been Pebble: what it was, and all he has looked at now. */
+  look(kind: LookKind, looked: string): void
+  /** Out on the ice edge, the Adélies cheering. */
   home(): void
   /** Something happened that a friend says something about (PenguinSlide.tsx picks the lines). */
   moment(m: SlideMoment): void
   /** She poked someone (the first time, Sparkle says something true about them). */
-  poke(id: 'papa' | 'pebble' | 'seal' | 'adelie'): void
+  poke(id: PokeId): void
 }
-/** Off he goes; big air off a bump; head first in a snowbank; bumped an Adélie; booped by the seal; out of the sea. */
-export type SlideMoment = 'go' | 'air' | 'bank' | 'bump' | 'seal' | 'leap'
+/** Off he goes; big air off a bump; head first in a snowbank; bumped an Adélie; an Adélie hopped aside (he asks it);
+ *  booped by the seal; out of the sea; every so often with nothing else going on, time to call for Pebble (on the
+ *  hill, in the sea); and the first maybe-Pebble coming into sight. */
+export type SlideMoment = 'go' | 'air' | 'bank' | 'bump' | 'ask' | 'seal' | 'leap' | 'call' | 'callSea' | 'spot'
+
+/** The Adélies at the ice edge: where each waits (m from where he stops: across, onward) and the angle of its place
+ *  in the ring round him when they gather (rad, 0 = straight on past him). */
+const FANS: [number, number, number][] = [
+  [-6.5, 3, -2.2],
+  [-5, 7.5, -1.45],
+  [-2, 9, -0.75],
+  [1.5, 8.5, 0],
+  [4.5, 8, 0.75],
+  [6.5, 4, 1.45],
+  [7, -0.5, 2.2],
+]
+/** How long they waddle in before the cheer (s), and how far from him they stop (m). */
+const GATHER_S = 1.7
+const RING = 2.3
+/** He calls for Pebble after this long with nothing else going on (s). */
+const CALL_S = 11
 
 export const SLIDE_ANCHORS: AnchorInfo[] = [
   { id: 'papa', label: "Pebble's papa", kind: 'thing' },
-  { id: 'pebble', label: 'Pebble', kind: 'thing' },
   { id: 'seal', label: 'The leopard seal', kind: 'thing' },
   ...ADELIES.map((_, i) => ({ id: `adelie:${i}`, label: 'An Adélie penguin', kind: 'thing' as const })),
+  ...LOOKS.map((_, i) => ({ id: `look:${i}`, label: 'Is that Pebble?', kind: 'thing' as const })),
+  ...SPOTS.gentoos.map((_, i) => ({ id: `gentoo:${i}`, label: 'A gentoo penguin', kind: 'thing' as const })),
+  { id: 'elephant', label: 'The elephant seal', kind: 'thing' },
+  { id: 'skua', label: 'The skua', kind: 'thing' },
+  { id: 'flag', label: "The station's flag", kind: 'thing' },
+  { id: 'scientist', label: 'The scientist', kind: 'thing' },
+  ...SPOTS.spouts.map((_, i) => ({ id: `spout:${i}`, label: 'A humpback whale', kind: 'thing' as const })),
+  { id: 'whale', label: 'The humpback whale', kind: 'thing' },
+  ...[0, 1].map((i) => ({ id: `swimmer:${i}`, label: 'An Adélie penguin, flying under water', kind: 'thing' as const })),
+  ...FANS.map((_, i) => ({ id: `fan:${i}`, label: 'An Adélie penguin', kind: 'thing' as const })),
 ]
 
-type Mode = 'ready' | 'slide' | 'bank' | 'swim' | 'leap' | 'shelf' | 'feed' | 'done'
+type Mode = 'ready' | 'slide' | 'bank' | 'swim' | 'leap' | 'shelf' | 'gather' | 'done'
 
-const SKY = '#F1ECFF'
+/** The films' Antarctic sky (story/stage.ts). */
+const SKY = '#DCEBFF'
 const DEEP = '#3D7FBF'
 const ICE = new Color('#ABD3F4')
 const ICE_STRIPE = new Color('#8EC2EE')
@@ -115,14 +160,6 @@ function rng(seed: number) {
   return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296)
 }
 
-/** A short squawk (an Adélie) or a deep honk (Papa). */
-function honk(deep = false) {
-  const f = deep ? 260 : 520
-  tone(f, f * 0.75, 0.16, 0.12, 'square')
-  tone(f * 1.01, f * 0.7, 0.16, 0.06, 'sawtooth', 0.01)
-  noise(0.12, 0.04, 'bandpass', f * 3, f * 2, 0, 2)
-}
-
 interface Adelie {
   pen: Penguin
   s: number
@@ -132,6 +169,12 @@ interface Adelie {
   awake: boolean
   dodged: boolean
   hitT: number
+}
+
+/** A penguin standing somewhere beside the way (a gentoo on the snowbank, an Adélie at the ice edge). */
+interface Stander {
+  pen: Penguin
+  s: number
 }
 
 interface Swarm {
@@ -164,14 +207,18 @@ export class PenguinSlide implements World3D {
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
   private bag = new Bag()
   private lights = makeLights(this.scene)
-  private fogAir = new Fog(SKY, 70, 230)
-  private fogSea = new Fog(DEEP, 3, 40)
+  private fogAir = new Fog(SKY, 80, 260)
+  private fogSea = new Fog(DEEP, 3, 46)
   private skyColor = new Color(SKY)
   private seaColor = new Color(DEEP)
   private water: Water
   private ribbon: Mesh
   private seafloor: Mesh
   private shelf: Group
+  private sun: Group
+  private shafts: { mesh: Mesh; update(t: number): void }
+  private bedStop: (() => void) | null = null
+  private bedUnder: boolean | null = null
   private wheel = new FingerWheel()
   private wheelEl: HTMLElement | null = null
   private hintEl: HTMLElement | null = null
@@ -216,15 +263,33 @@ export class PenguinSlide implements World3D {
   private krill = 0
   private leapFrom = new Vector3()
   private leapTo = new Vector3()
-  private fed = 0
-  private feedN = 0
-  private feedT = 0
   private homeT = -1
+  private lookUp = 0
+  private callT = CALL_S - 5
 
   // ---- Everyone else.
-  private pebble: Penguin
-  private colony: Penguin[] = []
   private adelies: Adelie[] = []
+  /** The maybe-Pebbles, the gold star over each one he hasn't looked at, and which letters he has. */
+  private looks: Lookalike[] = []
+  private stars: Group[] = []
+  private looked = ''
+  private missed = 0
+  private spotted = false
+  private passed = new Set<number>()
+  /** The woolly hat, once it's on his head (it floats off when he dives). */
+  private papaHat: Group
+  private lostHat: Group
+  private gentoos: Stander[] = []
+  private fans: (Stander & { from: Vector3; to: Vector3; phase: number })[] = []
+  private swimmers: Penguin[] = []
+  private elephant: IceSeal
+  private skua: Skua
+  private station: ReturnType<typeof buildStation>
+  private flagSpot = new Object3D()
+  private flagT = -1
+  private waveT = -1
+  private spouts: { root: Group; t: number; s: number }[] = []
+  private whale: Humpback
   private seal: Seal
   private sealOn = 0
   private sealCool = 0
@@ -234,13 +299,12 @@ export class PenguinSlide implements World3D {
   private bubbles: InstancedMesh
   private bubblePool: { x: number; y: number; z: number; vy: number; age: number; life: number; size: number }[] = []
   private nextBubble = 0
-  private bites: Mesh[] = []
   private spray: Particles
   private foam: Particles
 
   private lastTouch = 0
   private lastSteer = -99
-  private counts = { steered: 0, hops: 0, bigAir: 0, landings: 0, dodges: 0, bumps: 0, banks: 0, bonks: 0, gulps: 0, boops: 0, taps: 0, pokes: 0 }
+  private counts = { steered: 0, hops: 0, bigAir: 0, landings: 0, dodges: 0, bumps: 0, banks: 0, bonks: 0, gulps: 0, boops: 0, looks: 0, taps: 0, pokes: 0 }
 
   constructor(
     private renderer: WebGLRenderer,
@@ -274,15 +338,32 @@ export class PenguinSlide implements World3D {
       rocks.push(P.sphere(r, rand() < 0.5 ? '#8B97B3' : '#717D9C', { at: [cx(s) + (rand() - 0.5) * 30, -9 + r * 0.3, -s], scale: [1.3, 0.7, 1] }, 10))
     }
     scene.add(solid(merge(rocks), bag, 2))
+    scene.add(buildFloor(bag, -9), buildSea(bag))
+    this.shafts = buildShafts(bag)
+    scene.add(this.shafts.mesh)
+    this.sun = skyDisc(bag, 9, '#FFF6C9', '#FFFDF0')
+    scene.add(this.sun)
 
     // ---- The ice: the valley, its snowbanks and walls, the crack and the cliff ----
     this.ribbon = this.buildRibbon()
     scene.add(this.ribbon)
     scene.add(this.buildRidge())
     scene.add(this.buildFlags())
-    // The colony's ice at the end, rising out of the sea.
-    this.shelf = solid(P.rbox(30, 5, 44, 0.4, '#E4EEF8', { at: [cx(HOME), SHELF_Y - 2.5, -(SHELF + 22)] }), bag, 2.5)
+    scene.add(buildLand(bag))
+    // The ice edge at the end, rising out of the sea.
+    this.shelf = solid(P.rbox(30, 5, 44, 0.4, '#F4F8FF', { at: [cx(HOME), SHELF_Y - 2.5, -(SHELF + 22)] }), bag, 2.5)
     scene.add(this.shelf)
+    // The science station up on the right bank, its scientist at the top of the snowbank.
+    const on = (o: Object3D, [s, lat]: [number, number], yaw: number, lift = 0) => {
+      o.position.set(cx(s) + lat, ground(s, lat) + lift, -s)
+      o.rotation.y = yaw
+      scene.add(o)
+    }
+    this.station = buildStation(bag)
+    on(this.station.hut, SPOTS.station, -Math.PI / 2 + 0.5, 0.2)
+    on(this.station.who, SPOTS.scientist, -Math.PI / 2 + 0.75)
+    this.flagSpot.position.set(0.78, -0.45, 0)
+    this.station.flag.add(this.flagSpot)
 
     // ---- The penguins and the seal ----
     this.papa = new Penguin(bag, 'emperor', 1.25, false)
@@ -291,22 +372,6 @@ export class PenguinSlide implements World3D {
     scene.add(this.papaRoot)
     this.shadow = blobShadow(0.55, bag)
     scene.add(this.shadow)
-    this.pebble = new Penguin(bag, 'chick', 1)
-    this.pebble.root.position.set(cx(HOME), SHELF_Y, -HOME)
-    scene.add(this.pebble.root)
-    for (const [dl, ds, yaw] of [
-      [-2.6, 1.5, 0.4],
-      [2.8, 2.2, -0.5],
-      [-4.2, 4, 0.2],
-      [4.5, 5, -0.2],
-      [0.5, 4.5, 0],
-    ]) {
-      const p = new Penguin(bag, 'emperor', 1.25)
-      p.root.position.set(cx(HOME) + dl, SHELF_Y, -(HOME + ds))
-      p.root.rotation.y = yaw
-      scene.add(p.root)
-      this.colony.push(p)
-    }
     ADELIES.forEach(([s, lat], i) => {
       const pen = new Penguin(bag, 'adelie', 0.75)
       scene.add(pen.root)
@@ -315,6 +380,70 @@ export class PenguinSlide implements World3D {
     this.seal = new Seal(bag)
     this.seal.root.visible = false
     scene.add(this.seal.root)
+
+    // ---- Who he meets: the maybe-Pebbles, and everyone beside the way ----
+    this.looked = start.looked
+    LOOKS.forEach((d, i) => {
+      const l = new Lookalike(bag, d.kind)
+      const sea = d.s > EDGE
+      l.root.position.set(cx(d.s) + d.lat, sea ? depth(d.s) : ground(d.s, d.lat), -d.s)
+      scene.add(l.root)
+      this.looks.push(l)
+      const star = solid(merge([P.cone(0.2, 0.3, PAL.gold, { at: [0, 0.15, 0] }, 4), P.cone(0.2, 0.3, PAL.gold, { at: [0, -0.15, 0], rot: [Math.PI, 0, 0] }, 4)]), bag, 2)
+      star.position.copy(l.root.position)
+      scene.add(star)
+      this.stars.push(star)
+      if (start.looked.includes(d.key)) {
+        l.reveal(true)
+        this.passed.add(i)
+      }
+    })
+    this.papaHat = solid(hatGeo(), bag, 2.5)
+    const f = this.papa.rig.face
+    this.papaHat.scale.setScalar(f.R * 1.7)
+    this.papaHat.position.set(0, f.headY + f.R * 0.62, 0)
+    this.papaHat.visible = false
+    this.papa.rig.head.add(this.papaHat)
+    this.lostHat = solid(hatGeo(), bag, 2.5)
+    this.lostHat.scale.setScalar(0.6)
+    this.lostHat.visible = false
+    scene.add(this.lostHat)
+    for (const [s, lat] of SPOTS.gentoos) {
+      const pen = new Penguin(bag, 'gentoo', 0.8)
+      on(pen.root, [s, lat], -Math.sign(lat) * 1.1)
+      this.gentoos.push({ pen, s })
+    }
+    this.elephant = new IceSeal(bag, 'elephant', 1.7)
+    on(this.elephant.root, SPOTS.elephant, 1.2)
+    this.skua = new Skua(bag)
+    on(this.skua.root, SPOTS.skua, -1.1)
+    // The Adélies at the ice edge, waiting about until he climbs out.
+    const stop = this.stopAt()
+    FANS.forEach(([dx, dz, a], i) => {
+      const pen = new Penguin(bag, 'adelie', 0.75)
+      const from = new Vector3(stop.x + dx, SHELF_Y, stop.z - dz)
+      pen.root.position.copy(from)
+      pen.root.rotation.y = i * 1.9
+      scene.add(pen.root)
+      this.fans.push({ pen, s: HOME, from, to: new Vector3(stop.x + Math.sin(a) * RING, SHELF_Y, stop.z - Math.cos(a) * RING), phase: i * 0.37 })
+    })
+    for (let i = 0; i < 2; i++) {
+      const pen = new Penguin(bag, 'adelie', 0.75, false)
+      pen.root.visible = false
+      scene.add(pen.root)
+      this.swimmers.push(pen)
+    }
+    // Humpbacks: two backs at the top of the sea that blow, and one swimming along under it.
+    for (const [s, lat] of SPOTS.spouts) {
+      const root = solid(merge([P.sphere(1.6, '#4F6A92', { at: [0, -0.5, 0], scale: [1, 0.6, 2.4] }), P.sphere(0.3, '#4F6A92', { at: [0, 0.5, -1.6], scale: [0.5, 1, 1.4] }, 8)]), bag, 3)
+      root.position.set(cx(s) + lat, 0, -s)
+      root.rotation.y = 0.6
+      scene.add(root)
+      this.spouts.push({ root, t: 2 + this.spouts.length * 3, s })
+    }
+    this.whale = new Humpback(bag)
+    this.whale.root.visible = false
+    scene.add(this.whale.root)
 
     // ---- Krill swarms, bubbles, snow ----
     const krillGeo = bag.add(new SphereGeometry(0.07, 6, 4).scale(1, 0.7, 1.6))
@@ -332,13 +461,6 @@ export class PenguinSlide implements World3D {
     this.bubbles.count = 0
     scene.add(this.bubbles)
     for (let i = 0; i < BUBBLES; i++) this.bubblePool.push({ x: 0, y: 0, z: 0, vy: 0, age: 1, life: 0, size: 0 })
-    const biteGeo = bag.add(new SphereGeometry(0.09, 8, 6))
-    for (let i = 0; i < 6; i++) {
-      const b = new Mesh(biteGeo, toon(PAL.pink))
-      b.visible = false
-      scene.add(b)
-      this.bites.push(b)
-    }
     this.spray = new Particles({ kind: 'spray', count: 200 }, bag)
     this.foam = new Particles({ kind: 'foam', count: 40, opacity: 0.85 }, bag)
     scene.add(this.spray.mesh, this.foam.mesh)
@@ -374,6 +496,8 @@ export class PenguinSlide implements World3D {
       for (const sw of this.swarms) sw.eaten = 99
     }
     if (this.mode === 'slide' || this.mode === 'ready') this.y = ground(this.s, this.lat)
+    // (He found the woolly hat further up: it's on his head until he dives.)
+    this.papaHat.visible = this.looks[LOOKS.findIndex((d) => d.kind === 'hat')].found && (this.mode === 'slide' || this.mode === 'ready')
     // The Adélies behind him have nothing to do.
     for (const a of this.adelies) if (a.s < this.s) a.dodged = true
     this.placePapa(0)
@@ -385,6 +509,11 @@ export class PenguinSlide implements World3D {
       'across (m)': [this.lat, 10],
       'in the air (m)': [this.air ? this.y - ground(this.s, this.lat) : 0, 4],
     }))
+  }
+
+  /** Where he stops on the ice edge. */
+  private stopAt(out = new Vector3()) {
+    return out.set(cx(HOME - 1.7), SHELF_Y, -(HOME - 1.7))
   }
 
   // ---------------------------------------------------------------- building
@@ -504,9 +633,6 @@ export class PenguinSlide implements World3D {
     this.hintEl = el
   }
 
-  /** Waiting at the top while the story's opening lines play (PenguinSlide.tsx lets him go). */
-  held = false
-
   get calm() {
     return this.mode === 'done' && !this.papa.busy && !this.spray.busy && !this.rig.moving
   }
@@ -540,13 +666,12 @@ export class PenguinSlide implements World3D {
 
     switch (this.mode) {
       case 'ready':
-        // He looks down the hill, flops onto his tummy, and off he goes (once the story's opening lines are done).
-        if (this.held) this.modeT = 0
-        else if (this.modeT > 0.7) {
+        // He looks down the hill, flops onto his tummy, and off he goes.
+        if (this.modeT > 0.7) {
           this.setMode('slide')
           this.v = 2
-          sounds.whoosh()
-          honk(true)
+          slideSfx.go()
+          slideSfx.papa()
           this.events.moment('go')
         }
         break
@@ -564,7 +689,7 @@ export class PenguinSlide implements World3D {
           this.vy = 4
           this.air = true
           this.spray.burst(this.pos().x, this.y + 0.4, -this.s, 22, 2.5, 4, 0.2)
-          sfx.boing()
+          slideSfx.hop()
         }
         break
       case 'swim':
@@ -586,42 +711,55 @@ export class PenguinSlide implements World3D {
           this.setMode('shelf')
           this.v = 6
           this.thump(5)
-          this.pebble.hop()
+          for (const f of this.fans) f.pen.hop()
         }
         break
       }
       case 'shelf': {
-        // On his tummy across the ice to Pebble, slowing down, then up on his feet.
+        // On his tummy across the ice, slowing down, then up on his feet.
         const stop = HOME - 1.7
         this.v = Math.max(0, Math.min(this.v, Math.sqrt(Math.max(0, 2 * 2.8 * (stop - this.s)))))
         this.s = Math.min(stop, this.s + this.v * dt)
         this.lat += (0 - this.lat) * (1 - Math.exp(-dt * 2))
         this.y = SHELF_Y
         if (this.s >= stop - 0.02) {
-          this.setMode('feed')
-          this.feedN = Math.max(4, this.krill)
-          this.fed = 0
-          this.feedT = 0.7
+          this.setMode('gather')
           this.enter('home')
         }
         break
       }
-      case 'feed':
-        this.feed(dt)
+      case 'gather':
+        // The Adélies waddle in round him (updateFans), then the cheer.
+        if (this.modeT > GATHER_S) {
+          this.homeT = 0
+          this.setMode('done')
+          this.papa.hop()
+          slideSfx.papa()
+          slideSfx.cheer()
+          sounds.fanfare()
+          this.events.home()
+        }
         break
       case 'done':
         break
     }
     if (this.homeT >= 0) this.homeT += dt
 
+    // He calls for Pebble now and then, when he's just sliding or swimming along.
+    if (this.mode === 'slide' || this.mode === 'swim') {
+      if ((this.callT += dt) > CALL_S) {
+        this.callT = 0
+        this.events.moment(this.mode === 'swim' ? 'callSea' : 'call')
+      }
+      this.search()
+    }
     this.updateAdelies(dt, t)
+    this.updateOthers(dt, t)
     this.updateSeal(dt, t)
     this.updateKrill(dt, t)
     this.updateBubbles(dt)
     this.placePapa(dt)
     this.papa.update(dt, t, this.pose(dt, t))
-    this.pebble.update(dt, t, { waddle: this.mode === 'feed' ? 0.3 : 0 })
-    for (const c of this.colony) c.update(dt, t)
     this.seal.update(dt, t)
     this.spray.update(dt)
     this.foam.update(dt)
@@ -630,6 +768,14 @@ export class PenguinSlide implements World3D {
     const underSea = this.rig.camera.position.y < 0
     this.scene.fog = underSea ? this.fogSea : this.fogAir
     ;(this.scene.background as Color).copy(underSea ? this.seaColor : this.skyColor)
+    if (underSea !== this.bedUnder) {
+      this.bedUnder = underSea
+      this.bedStop?.()
+      this.bedStop = slideBed(underSea)
+    }
+    this.shafts.update(t)
+    this.sun.visible = !underSea
+    this.sun.position.set(this.rig.camera.position.x - 80, this.rig.camera.position.y + 95, this.rig.camera.position.z - 300)
 
     const p = this.pos()
     this.lights.follow(p.x, this.y, p.z)
@@ -666,7 +812,10 @@ export class PenguinSlide implements World3D {
     // (A bumps link with a run keeps him on that side until the runs split.)
     const rest = this.prefer && this.s < RIDGE.from ? this.prefer * 4 : lane(this.s, this.lat)
     this.steer(dt, k, STEER.slide, rest, range)
-    if (!this.air) this.v += clamp(target - this.v, -SLIDE.accel * 1.5 * dt, SLIDE.accel * dt)
+    if (!this.air) {
+      this.v += clamp(target - this.v, -SLIDE.accel * 1.5 * dt, SLIDE.accel * dt)
+      slideSfx.scrape(this.v)
+    }
     const n = Math.max(1, Math.ceil(dt * 120))
     const h = dt / n
     for (let i = 0; i < n && this.mode === 'slide'; i++) this.substep(h)
@@ -689,8 +838,7 @@ export class PenguinSlide implements World3D {
       this.y = ground(this.s, this.lat) - 0.35
       this.latV = this.vy = 0
       this.spray.burst(this.pos().x, this.y + 0.5, -this.s, 30, 3, 4.5, 0.24)
-      sfx.thump()
-      sfx.fwip()
+      slideSfx.poof()
       return
     }
     // The rock between the runs: he bonks off its side, into whichever run he's on.
@@ -703,7 +851,7 @@ export class PenguinSlide implements World3D {
         if (this.bonkCool <= 0) {
           this.bonkCool = 0.6
           this.counts.bonks++
-          sfx.thump()
+          slideSfx.thump()
           this.spray.burst(this.pos().x, this.y + 0.3, -this.s, 8, 1.5, 2, 0.14)
         }
       }
@@ -725,6 +873,12 @@ export class PenguinSlide implements World3D {
       this.setMode('swim')
       this.splash(1.3)
       this.enter('dive')
+      // His woolly hat floats off.
+      if (this.papaHat.visible) {
+        this.papaHat.visible = false
+        this.lostHat.visible = true
+        this.lostHat.position.set(this.pos().x, 0.12, -this.s)
+      }
     }
   }
 
@@ -762,7 +916,7 @@ export class PenguinSlide implements World3D {
       this.airT = 0
       this.vy -= SLIDE.gravity * h
       this.y += this.vy * h
-      if (this.vy - fall > 1.5) sfx.boing()
+      if (this.vy - fall > 1.5) slideSfx.hop()
       return
     }
     this.gv = follow
@@ -777,7 +931,7 @@ export class PenguinSlide implements World3D {
     this.vy = 5
     this.air = true
     this.v = Math.max(this.v, SLIDE.speed * 0.7)
-    sfx.boing()
+    slideSfx.hop()
   }
 
   private thump(impact: number) {
@@ -786,12 +940,12 @@ export class PenguinSlide implements World3D {
     this.landT = 0
     const p = this.pos()
     this.spray.burst(p.x, p.y + 0.15, p.z, Math.round(clamp(impact * 2.5, 6, 26)), 2.2, 2.4, 0.16)
-    sfx.thump()
+    slideSfx.thump()
   }
 
   private splash(big: number) {
     const p = this.pos()
-    sfx.splash()
+    slideSfx.splash()
     this.spray.burst(p.x, 0.1, p.z, Math.round(22 * big), 2.8 * big, 5 * big, 0.22)
     for (let i = 0; i < 3; i++) this.foam.emit(p.x, 0.02, p.z, 0, 0, 0, 1.2 + i * 0.3, (1.6 + i) * big)
     for (let i = 0; i < 14; i++) this.bubble(p.x + (Math.random() - 0.5) * 1.5, -0.6 - Math.random() * 1.5, p.z + (Math.random() - 0.5) * 1.5)
@@ -821,8 +975,8 @@ export class PenguinSlide implements World3D {
       this.setMode('leap')
       this.events.moment('leap')
       this.enter('home')
-      sounds.whoosh()
-      honk(true)
+      slideSfx.leap()
+      slideSfx.papa()
     }
   }
 
@@ -872,7 +1026,7 @@ export class PenguinSlide implements World3D {
     this.papa.full = this.tummy()
     this.events.krill(this.krill)
     sounds.note(Math.min(10, this.krill - 1))
-    sfx.chomp()
+    slideSfx.gulp()
     const b = this.beak(tmp)
     for (let i = 0; i < 6; i++) this.bubble(b.x + (Math.random() - 0.5) * 0.5, b.y, b.z + (Math.random() - 0.5) * 0.5)
   }
@@ -935,7 +1089,7 @@ export class PenguinSlide implements World3D {
       this.events.moment('seal')
       this.seal.spin()
       this.papa.spin()
-      sfx.boing()
+      slideSfx.boop()
       for (let i = 0; i < 10; i++) this.bubble(p.x + (Math.random() - 0.5), p.y, p.z + (Math.random() - 0.5))
     }
   }
@@ -952,7 +1106,8 @@ export class PenguinSlide implements World3D {
         a.goal = a.lat + Math.sign(a.lat - this.lat || 1) * 1.9
         a.pen.hop()
         this.counts.dodges++
-        honk()
+        slideSfx.adelie()
+        this.events.moment('ask')
       }
       a.lat += (a.goal - a.lat) * (1 - Math.exp(-dt * 7))
       const x = cx(a.s) + a.lat
@@ -967,61 +1122,190 @@ export class PenguinSlide implements World3D {
         this.papa.spin()
         this.counts.bumps++
         this.events.moment('bump')
-        honk()
-        honk(true)
+        slideSfx.adelie()
+        slideSfx.papa()
         this.spray.burst(x, y + 0.4, -a.s, 12, 2, 2.5, 0.16)
       }
       if (a.hitT >= 0) a.hitT += dt
-      a.pen.update(dt, t)
+      a.pen.root.visible = this.near(a.s)
+      if (a.pen.root.visible) a.pen.update(dt, t)
     }
   }
 
-  // ---------------------------------------------------------------- home: feeding Pebble
+  // ---------------------------------------------------------------- the search
 
-  private feed(dt: number) {
-    // One beakful at a time: a pink krill hops from his beak to hers.
-    this.feedT -= dt
-    for (const b of this.bites) {
-      if (!b.visible) continue
-      const u = (b.userData.t += dt) / 0.32
-      const from = b.userData.from as Vector3
-      const to = this.pebble.beak(tmp)
-      if (u >= 1) {
-        b.visible = false
-        this.pebble.full = Math.min(1.45, this.pebble.full + 0.4 / this.feedN)
-        sfx.munch()
-        continue
+  /** Close enough to bother with (m along the course): everything further off is hidden and still. */
+  private near(s: number) {
+    return Math.abs(s - this.s) < 130
+  }
+
+  /** Is that Pebble? He slides (or swims) up to it, hops over it, and it turns out to be something else. After she
+   *  has gone past one or two, the next ones count from further off. */
+  private search() {
+    const reach = 1.8 + Math.min(2, this.missed) * 0.6
+    LOOKS.forEach((d, i) => {
+      const l = this.looks[i]
+      if (l.found) return
+      const ahead = d.s - this.s
+      if (!this.spotted && ahead > 0 && ahead < 34) {
+        this.spotted = true
+        this.events.moment('spot')
       }
-      b.position.lerpVectors(from, to, u)
-      b.position.y += Math.sin(u * Math.PI) * 0.5
-    }
-    if (this.fed >= this.feedN) {
-      // The last beakfuls land first, then everyone cheers.
-      if (this.homeT < 0 && !this.bites.some((m) => m.visible)) {
-        this.homeT = 0
-        this.setMode('done')
-        this.papa.hop()
-        this.pebble.hop()
-        for (const c of this.colony) c.hop()
-        honk(true)
-        sounds.fanfare()
-        this.events.home()
+      if (ahead < 2.2 && ahead > -1 && Math.abs(d.lat - this.lat) < reach) return this.find(i)
+      if (ahead < -2 && !this.passed.has(i)) {
+        this.passed.add(i)
+        this.missed++
       }
-      return
+    })
+  }
+
+  private find(i: number) {
+    const d = LOOKS[i]
+    const l = this.looks[i]
+    l.reveal()
+    this.passed.add(i)
+    this.missed = 0
+    this.looked += d.key
+    this.counts.looks++
+    this.callT = 0
+    slideSfx.reveal()
+    const at = l.root.position
+    if (this.mode === 'slide') {
+      // Over it he hops, snow flying.
+      if (!this.air) {
+        this.y = ground(this.s, this.lat) + 0.1
+        this.vy = Math.max(this.vy, 5)
+        this.air = true
+        this.airT = 0
+      }
+      this.spray.burst(at.x, at.y + 0.4, at.z, d.kind === 'snowy' ? 34 : 14, 2.6, 4, 0.2)
+    } else for (let k = 0; k < 12; k++) this.bubble(at.x + (Math.random() - 0.5) * 1.4, at.y + (Math.random() - 0.5), at.z + (Math.random() - 0.5) * 1.4)
+    this.trick(d.kind)
+    if (d.kind === 'hat') this.papaHat.visible = true
+    if (d.kind === 'buoy') this.papa.spin()
+    this.events.look(d.kind, this.looked)
+  }
+
+  /** The sound of what it turned out to be (and of poking it again after). */
+  private trick(kind: LookKind) {
+    if (kind === 'snowy') slideSfx.adelie()
+    else if (kind === 'seal') slideSfx.weddell()
+    else if (kind === 'skua') slideSfx.peep()
+    else if (kind === 'hat') slideSfx.hat()
+    else if (kind === 'buoy') slideSfx.buoy()
+    else slideSfx.fish()
+  }
+
+  /** Everyone beside the way: the maybe-Pebbles and their stars, the gentoos, the seals, the skua, the station's flag
+   *  and scientist, the whales, the Adélies flying past under the sea, and the ones at the ice edge. */
+  private updateOthers(dt: number, t: number) {
+    const p = this.pos(me)
+    this.looks.forEach((l, i) => {
+      const show = this.near(LOOKS[i].s)
+      l.root.visible = show
+      const star = this.stars[i]
+      star.visible = show && !l.found
+      if (!show) return
+      l.update(dt, t)
+      star.position.y = l.root.position.y + 1.25 + 0.12 * Math.sin(t * 3 + i)
+      star.rotation.y = t * 2.4
+    })
+    if (this.lostHat.visible) {
+      this.lostHat.position.y = 0.12 + 0.05 * Math.sin(t * 2)
+      this.lostHat.rotation.y = t * 0.4
     }
-    if (this.feedT <= 0) {
-      const b = this.bites.find((m) => !m.visible)
-      if (b) {
-        this.feedT = Math.min(0.32, 3 / this.feedN)
-        b.visible = true
-        b.userData = { t: 0, from: this.beak(new Vector3()) }
-        b.position.copy(b.userData.from)
-        this.fed++
-        this.papa.full = Math.max(1, this.papa.full - 0.5 / this.feedN)
-        this.pebble.hop()
-        sounds.note(Math.min(10, this.fed - 1))
+    for (const g of this.gentoos) {
+      g.pen.root.visible = this.near(g.s)
+      if (g.pen.root.visible) g.pen.update(dt, t)
+    }
+    this.elephant.root.visible = this.near(SPOTS.elephant[0])
+    if (this.elephant.root.visible) this.elephant.update(dt, t)
+    this.skua.root.visible = this.near(SPOTS.skua[0])
+    if (this.skua.root.visible) this.skua.update(dt, t)
+
+    // The flag streams in the wind (hard, when she pokes it); the scientist waves as he goes by, and when poked.
+    const st = this.station
+    st.hut.visible = st.who.visible = this.near(SPOTS.station[0])
+    if (st.hut.visible) {
+      if (this.flagT >= 0 && (this.flagT += dt) > 1.6) this.flagT = -1
+      const hard = this.flagT >= 0 ? 1 - this.flagT / 1.6 : 0
+      st.flag.rotation.y = 0.25 * Math.sin(t * 3.1) + 0.1 * Math.sin(t * 7.3) + hard * 0.9 * Math.sin(t * 22)
+      st.flag.scale.y = 1 + hard * 0.15 * Math.sin(t * 30)
+      if (this.waveT >= 0 && (this.waveT += dt) > 2) this.waveT = -1
+      const passing = this.mode === 'slide' && Math.abs(SPOTS.scientist[0] - this.s - 12) < 26
+      const wave = this.waveT >= 0 || passing ? 1 : 0
+      st.arm.rotation.z = -0.2 - wave * (0.5 + 0.45 * Math.sin(t * 9))
+      st.arm.rotation.x = wave ? 0 : 2.6
+      st.who.position.y = ground(...SPOTS.scientist) + (this.waveT >= 0 ? Math.abs(Math.sin(this.waveT * 9)) * 0.12 : 0)
+      // (Turning to watch him go by.)
+      st.who.rotation.y = Math.atan2(p.x - st.who.position.x, p.z - st.who.position.z)
+    }
+
+    // A whale's back at the top of the sea: it blows every so often.
+    for (const w of this.spouts) {
+      w.root.visible = Math.abs(w.s - this.s) < 200
+      if (!w.root.visible) continue
+      w.root.position.y = 0.12 * Math.sin(t * 0.8 + w.s)
+      if ((w.t -= dt) < 0) this.blow(w, false)
+    }
+    // The humpback under the sea, off to one side, falling slowly behind.
+    const W = SPOTS.whale
+    this.whale.root.visible = this.mode === 'swim' && this.s > W.from - 30 && this.s < W.to + 40
+    if (this.whale.root.visible) {
+      const ws = W.from + (this.s - W.from) * 0.8 + 18
+      this.whale.root.position.set(cx(ws) + W.lat, -5 + 0.4 * Math.sin(t * 0.5), -ws)
+      this.whale.root.rotation.y = Math.PI
+      this.whale.update(dt, t)
+    }
+    // Two Adélies fly past under the water, one each side, quicker than he is.
+    this.swimmers.forEach((pen, i) => {
+      const s0 = EDGE + (i ? 232 : 118)
+      const s = s0 + (this.s - s0) * 1.7
+      pen.root.visible = this.mode === 'swim' && Math.abs(s - this.s) < 30
+      if (!pen.root.visible) return
+      const side = i ? -1 : 1
+      pen.root.position.set(cx(s) + side * (4.6 + 0.8 * Math.sin(t * 0.9)), depth(s) + 0.9 + 0.5 * Math.sin(t * 2.2 + i), -s)
+      pen.root.rotation.y = Math.PI
+      pen.update(dt, t, { belly: 1, swim: 1 })
+    })
+    this.updateFans(dt, t)
+  }
+
+  private blow(w: { root: Group; t: number }, poked: boolean) {
+    w.t = 6 + Math.random() * 4
+    const at = w.root.position
+    for (let i = 0; i < 16; i++) this.spray.emit(at.x + (Math.random() - 0.5) * 0.3, 0.9, at.z + 1.2, (Math.random() - 0.5) * 1.2, 6 + Math.random() * 3, (Math.random() - 0.5) * 1.2, 1.1, 0.3)
+    this.foam.emit(at.x, 0.03, at.z, 0, 0, 0, 1.6, 4)
+    if (poked) slideSfx.spout()
+  }
+
+  // ---------------------------------------------------------------- the ice edge: the Adélies gather and cheer
+
+  private updateFans(dt: number, t: number) {
+    const show = this.s > DIVE_END - 70
+    const stop = this.stopAt(tmp2)
+    const gathering = this.mode === 'gather' || this.mode === 'done'
+    for (const f of this.fans) {
+      f.pen.root.visible = show
+      if (!show) continue
+      const r = f.pen.root
+      if (gathering) {
+        // Waddling in to their places round him, then hopping in turn for as long as the cheer lasts.
+        const before = tmp.copy(r.position)
+        r.position.lerp(f.to, 1 - Math.exp(-dt * 2.6))
+        const moving = before.distanceTo(r.position) > dt * 0.25
+        r.rotation.y = Math.atan2(stop.x - r.position.x, stop.z - r.position.z)
+        if (this.mode === 'done' && Math.floor((this.homeT + f.phase) / 0.75) !== Math.floor((this.homeT + f.phase - dt) / 0.75)) f.pen.hop()
+        f.pen.update(dt, t, { waddle: moving ? 1 : 0, wings: this.mode === 'done' ? 0.8 : 0 })
+      } else {
+        // Watching him come.
+        const p = this.pos(me)
+        if (this.mode === 'leap' || this.mode === 'shelf') r.rotation.y = Math.atan2(p.x - r.position.x, p.z - r.position.z)
+        f.pen.update(dt, t)
       }
     }
+    // He looks up at the sky: somewhere under it is Pebble.
+    this.lookUp += ((this.mode === 'done' && this.homeT > 1.3 ? 1 : 0) - this.lookUp) * (1 - Math.exp(-dt * 3))
   }
 
   // ---------------------------------------------------------------- Papa: where and how he lies
@@ -1039,20 +1323,20 @@ export class PenguinSlide implements World3D {
       }
       return { belly: this.belly, wings: this.air ? Math.min(1, this.airT * 4) : 0.15 + 0.1 * Math.sin(t * 3), stretch }
     }
-    if (m === 'feed' || m === 'done') return { belly: this.belly, waddle: m === 'feed' ? 0.2 : 0 }
+    if (m === 'gather' || m === 'done') return { belly: this.belly, lookUp: this.lookUp, wings: this.lookUp * 0.25 }
     return { belly: this.belly }
   }
 
   private placePapa(dt: number) {
     const m = this.mode
-    const wantBelly = m === 'ready' ? clamp((this.modeT - 0.25) / 0.4) : m === 'feed' || m === 'done' ? 0 : 1
+    const wantBelly = m === 'ready' ? clamp((this.modeT - 0.25) / 0.4) : m === 'gather' || m === 'done' ? 0 : 1
     this.belly += (wantBelly - this.belly) * (dt ? 1 - Math.exp(-dt * 9) : 1)
     const p = this.pos()
     this.papaRoot.position.copy(p)
-    // Facing the way he's going (home: toward Pebble).
+    // Facing the way he's going (at the ice edge he turns round, toward her).
     const vx = dcx(this.s) * this.v + this.latV
     const vz = -Math.max(0.5, this.v)
-    let yaw = m === 'feed' || m === 'done' ? Math.PI : m === 'ready' ? Math.PI : Math.atan2(vx, vz)
+    let yaw = m === 'gather' || m === 'done' ? 0.35 : m === 'ready' ? Math.PI : Math.atan2(vx, vz)
     if (m === 'leap') yaw = Math.atan2(this.leapTo.x - this.leapFrom.x, this.leapTo.z - this.leapFrom.z)
     let d = yaw - this.yaw
     d = Math.atan2(Math.sin(d), Math.cos(d))
@@ -1068,7 +1352,7 @@ export class PenguinSlide implements World3D {
     this.roll += (roll - this.roll) * (dt ? 1 - Math.exp(-dt * 8) : 1)
     this.lean.rotation.set(this.pitch, 0, -this.roll)
     // His shadow on the ice under him (none in the sea).
-    const gy = m === 'slide' || m === 'ready' ? ground(this.s, this.lat) : m === 'shelf' || m === 'feed' || m === 'done' ? SHELF_Y : NaN
+    const gy = m === 'slide' || m === 'ready' ? ground(this.s, this.lat) : m === 'shelf' || m === 'gather' || m === 'done' ? SHELF_Y : NaN
     this.shadow.visible = !Number.isNaN(gy) && gy > -1
     if (this.shadow.visible) {
       this.shadow.position.set(p.x, gy + 0.03, p.z)
@@ -1081,10 +1365,11 @@ export class PenguinSlide implements World3D {
   private shot(): Shot {
     const m = this.mode
     const tall = this.tall
-    if (m === 'feed' || m === 'done') {
-      const wide = this.homeT > 1.2
-      const c = new Vector3(cx(HOME), SHELF_Y + 0.6, -(HOME - 1.2))
-      return { center: c, half: wide ? new Vector3(5.5, 1.2, 4) : new Vector3(tall ? 2 : 2.8, 1, 2), yaw: wide ? 25 : 60, pitch: wide ? 26 : 16 }
+    if (m === 'gather' || m === 'done') {
+      // Wide while the Adélies waddle in and cheer, then low and close as he looks up at the sky.
+      const close = this.homeT > 1.6
+      const c = this.stopAt().add(tmp.set(0, close ? 0.9 : 0.7, close ? 0 : -0.6))
+      return { center: c, half: close ? new Vector3(tall ? 1.6 : 2.4, 1.1, 1.6) : new Vector3(tall ? 2.6 : 4, 1.1, 3), yaw: close ? 14 : 24, pitch: close ? 5 : 15 }
     }
     if (m === 'shelf' || m === 'leap') {
       const s = Math.max(this.s, SHELF) + 3
@@ -1136,35 +1421,29 @@ export class PenguinSlide implements World3D {
     if (id === 'papa') {
       this.counts.pokes++
       this.events.poke('papa')
-      honk(true)
-      if (this.mode === 'feed' || this.mode === 'done' || this.mode === 'ready') this.papa.hop()
+      slideSfx.papa()
+      if (this.mode === 'gather' || this.mode === 'done' || this.mode === 'ready') this.papa.hop()
       else if (this.mode === 'swim') {
         const p = this.pos()
         for (let i = 0; i < 8; i++) this.bubble(p.x + (Math.random() - 0.5), p.y + 0.3, p.z + (Math.random() - 0.5))
       } else this.papa.spin()
       return
     }
-    if (id === 'pebble') {
-      this.counts.pokes++
-      this.events.poke('pebble')
-      this.pebble.hop()
-      sfx.chirp()
-      return
-    }
     if (id === 'seal') {
       this.counts.pokes++
       this.events.poke('seal')
       this.seal.spin()
-      sfx.boing()
+      slideSfx.boop()
       return
     }
+    if (id && this.pokeOther(id)) return
     if (id?.startsWith('adelie:')) {
       const a = this.adelies[+id.slice(7)]
       if (!a) return
       this.counts.pokes++
       this.events.poke('adelie')
       a.pen.hop()
-      honk()
+      slideSfx.adelie()
       return
     }
     // The snow puffs where she pokes it; under the sea, bubbles.
@@ -1173,10 +1452,84 @@ export class PenguinSlide implements World3D {
     if (!hit) return
     if (hit.point.y < 0) {
       for (let i = 0; i < 6; i++) this.bubble(hit.point.x + (Math.random() - 0.5), Math.min(-0.3, hit.point.y + 0.3), hit.point.z + (Math.random() - 0.5))
+      slideSfx.bubbles()
     } else {
       this.spray.burst(hit.point.x, hit.point.y + 0.1, hit.point.z, 10, 1.6, 2.6, 0.16)
-      sfx.fwip()
+      slideSfx.snow()
     }
+  }
+
+  /** Someone beside the way, poked: each does its own thing, with its own sound. */
+  private pokeOther(id: string) {
+    const n = +id.split(':')[1]
+    const poked = (who: PokeId) => {
+      this.counts.pokes++
+      this.events.poke(who)
+      return true
+    }
+    if (id.startsWith('look:')) {
+      const l = this.looks[n]
+      if (!l) return false
+      if (l.found) {
+        l.act()
+        this.trick(l.kind)
+        return poked(LOOK_POKE[l.kind])
+      }
+      // Not looked at yet: it only wobbles (asleep, the seal snores).
+      l.wobble()
+      if (l.kind === 'seal') slideSfx.snore()
+      else slideSfx.maybe()
+      return poked('maybe')
+    }
+    if (id.startsWith('gentoo:') || id.startsWith('fan:')) {
+      const pen = (id.startsWith('fan:') ? this.fans : this.gentoos)[n]?.pen
+      if (!pen) return false
+      pen.hop()
+      if (id.startsWith('fan:')) slideSfx.adelie()
+      else slideSfx.gentoo()
+      return poked(id.startsWith('fan:') ? 'adelie' : 'gentoo')
+    }
+    if (id.startsWith('swimmer:')) {
+      const pen = this.swimmers[n]
+      if (!pen) return false
+      pen.spin()
+      slideSfx.adelie()
+      return poked('swimmer')
+    }
+    if (id.startsWith('spout:')) {
+      const w = this.spouts[n]
+      if (!w) return false
+      this.blow(w, true)
+      return poked('spout')
+    }
+    if (id === 'elephant') {
+      this.elephant.act()
+      slideSfx.burp()
+      return poked('elephant')
+    }
+    if (id === 'skua') {
+      this.skua.flap()
+      slideSfx.skua()
+      return poked('skua')
+    }
+    if (id === 'flag') {
+      this.flagT = 0
+      slideSfx.flag()
+      return poked('flag')
+    }
+    if (id === 'scientist') {
+      this.waveT = 0
+      slideSfx.hello()
+      return poked('scientist')
+    }
+    if (id === 'whale') {
+      this.whale.sing()
+      slideSfx.whale()
+      const at = this.whale.root.position
+      for (let i = 0; i < 10; i++) this.bubble(at.x + (Math.random() - 0.5) * 2, at.y + 1, at.z - 2 + (Math.random() - 0.5) * 2)
+      return poked('whale')
+    }
+    return false
   }
 
   // ---------------------------------------------------------------- tap targets
@@ -1202,14 +1555,32 @@ export class PenguinSlide implements World3D {
     }
     for (const [id, el] of this.anchorEls) {
       if (id === 'papa') place(el, this.papa.root, this.belly > 0.5 ? 0.7 : this.papa.height)
-      else if (id === 'pebble') place(el, this.s > SHELF - 30 || this.mode === 'leap' ? this.pebble.root : null, this.pebble.height, 1.8)
       else if (id === 'seal') place(el, this.seal.root.visible && this.sealOn > 0.5 ? this.seal.root : null, 1, 1.6)
       else if (id.startsWith('adelie:')) {
         const a = this.adelies[+id.slice(7)]
         const ahead = a ? a.s - this.s : -1
         place(el, a && this.mode === 'slide' && ahead > -2 && ahead < 40 ? a.pen.root : null, a?.pen.height ?? 1, 1.5)
       }
-      el.style.zIndex = id === 'papa' ? '3' : '1'
+      else {
+        const n = +id.split(':')[1]
+        // (On the hill, only what's still in front of him; in the sea, only what's in the sea.)
+        const ahead = (s: number, far = 45) => s - this.s > -3 && s - this.s < far
+        const hill = this.mode === 'slide' || this.mode === 'ready' || this.mode === 'bank'
+        const sea = this.mode === 'swim'
+        if (id.startsWith('look:')) {
+          const d = LOOKS[n]
+          place(el, d && (d.s > EDGE ? sea : hill) && ahead(d.s, 38) ? this.looks[n].root : null, this.looks[n]?.height ?? 1, 1.6)
+        } else if (id.startsWith('gentoo:')) place(el, hill && this.gentoos[n] && ahead(this.gentoos[n].s) ? this.gentoos[n].pen.root : null, 0.9, 1.5)
+        else if (id.startsWith('fan:')) place(el, this.fans[n]?.pen.root.visible && (this.mode === 'shelf' || this.mode === 'gather' || this.mode === 'done') ? this.fans[n].pen.root : null, 0.9, 1.5)
+        else if (id.startsWith('swimmer:')) place(el, this.swimmers[n]?.root.visible ? this.swimmers[n].root : null, 0.6, 1.6)
+        else if (id.startsWith('spout:')) place(el, this.spouts[n] && !sea && this.rig.camera.position.y > 0 && Math.abs(this.spouts[n].s - this.s) < 130 ? this.spouts[n].root : null, 1.2, 1.6)
+        else if (id === 'elephant') place(el, hill && ahead(SPOTS.elephant[0]) ? this.elephant.root : null, this.elephant.height, 1.5)
+        else if (id === 'skua') place(el, hill && ahead(SPOTS.skua[0]) ? this.skua.root : null, this.skua.height, 1.6)
+        else if (id === 'flag') place(el, hill && ahead(SPOTS.station[0], 60) ? this.flagSpot : null, 0.9, 1.3)
+        else if (id === 'scientist') place(el, hill && ahead(SPOTS.scientist[0], 50) ? this.station.who : null, 1.8, 1.3)
+        else if (id === 'whale') place(el, this.whale.root.visible ? this.whale.root : null, 1.2, 2)
+      }
+      el.style.zIndex = id === 'papa' ? '3' : id.startsWith('look:') ? '2' : '1'
     }
   }
 
@@ -1230,6 +1601,11 @@ export class PenguinSlide implements World3D {
       push: +this.wheel.push.toFixed(2),
       run: ridge(this.s) > 0 ? (this.lat < 0 ? 'left' : 'right') : null,
       krill: this.krill,
+      looked: this.looked,
+      hat: this.papaHat.visible,
+      // What a child would steer for next: the nearest maybe-Pebble ahead that he hasn't looked at, the next swarm.
+      nextLook: LOOKS.find((d, i) => !this.looks[i].found && d.s > this.s + 1 && d.s < this.s + 60 && d.s > EDGE === (this.mode === 'swim')) ?? null,
+      nextKrill: this.swarms.find((sw) => sw.eaten < 0 && sw.s > this.s + 2)?.lat ?? null,
       home: this.homeT >= 0,
       papa: { x: Math.round(papa.x), y: Math.round(papa.y) },
       ...this.counts,
@@ -1243,6 +1619,7 @@ export class PenguinSlide implements World3D {
 
   dispose() {
     this.unwatch()
+    this.bedStop?.()
     this.scene.clear()
     this.bag.dispose()
   }
