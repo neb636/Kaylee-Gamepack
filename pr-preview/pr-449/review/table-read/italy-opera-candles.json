@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "italy",
+  "group": "opera.candles",
+  "title": "Italy › Opera › Candles",
+  "intro": "",
+  "page": "italy-opera-candles.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 10,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "opera.candles.touch",
+      "text": "Put your finger on the wand and swing it! Lead the band!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "opera.candles.mouse",
+      "text": "Click and hold, then swing the wand! Lead the band!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "opera",
+        "candles",
+        "touch"
+      ],
+      "text": "Put your finger on the wand and swing it! Lead the band!",
+      "voice": "sparkle",
+      "key": "opera.candles.touch",
+      "part": "opera › candles",
+      "when": "🎭 Opera Night at the Arena (the finale, activities/opera/). Sparkle gives the instructions; the friends react.",
+      "ms": 5424,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "opera",
+        "candles",
+        "mouse"
+      ],
+      "text": "Click and hold, then swing the wand! Lead the band!",
+      "voice": "sparkle",
+      "key": "opera.candles.mouse",
+      "part": "opera › candles",
+      "when": "",
+      "ms": 4488,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}
