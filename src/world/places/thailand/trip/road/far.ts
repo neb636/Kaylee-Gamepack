@@ -2,8 +2,9 @@
 // one paler and bluer than the one before it until the last is nearly the sky; a sky that's deeper overhead and pale at
 // the horizon (it takes the weather's haze, and goes white inside the cloud); and mist lying in the valleys between the
 // ridges and hanging on the hillsides, thicker when it's grey or raining.
-import { BackSide, BufferAttribute, BufferGeometry, CanvasTexture, CircleGeometry, Color, DoubleSide, Group, Mesh, MeshToonMaterial, ShaderMaterial, SphereGeometry, Sprite, SpriteMaterial } from 'three'
+import { BackSide, BufferAttribute, BufferGeometry, CircleGeometry, Color, DoubleSide, Group, Mesh, MeshToonMaterial, ShaderMaterial, SphereGeometry, Sprite, SpriteMaterial, type Texture } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
+import { over, radialAlpha, softTexture } from '../../../../engine3d/softTexture'
 import { toonGradient } from '../../../../engine3d/toon'
 import { fbm, rng, type HeightField } from './build'
 import type { Road } from './road'
@@ -141,26 +142,21 @@ export function buildSky(bag: Bag) {
   }
 }
 
-let mistTex: CanvasTexture | null = null
-/** A soft cloud of mist: a few overlapping round glows, fading out at every edge. */
+let mistTex: Texture | null = null
+/** A soft cloud of mist: a few overlapping round glows, fading out at every edge. (Pixels written by hand, not a canvas
+ *  gradient: on iPhone and iPad that speckled the mist with colored static, see `softTexture`.) */
 function mistTexture() {
   if (mistTex) return mistTex
-  const c = document.createElement('canvas')
-  c.width = 256
-  c.height = 128
-  const x = c.getContext('2d')!
   const rand = rng(7)
+  const glows: [number, number, number][] = []
   for (let i = 0; i < 14; i++) {
     const px = 50 + rand() * 156
     const py = 58 + (rand() - 0.5) * 30
     const r = 26 + rand() * 30
-    const g = x.createRadialGradient(px, py, 0, px, py, r)
-    g.addColorStop(0, 'rgba(255,255,255,0.55)')
-    g.addColorStop(1, 'rgba(255,255,255,0)')
-    x.fillStyle = g
-    x.fillRect(0, 0, 256, 128)
+    glows.push([px, py, r])
   }
-  return (mistTex = new CanvasTexture(c))
+  const stops: [number, number][] = [[0, 0.55], [1, 0]]
+  return (mistTex = softTexture(256, 128, [255, 255, 255], (x, y) => over(glows.map(([px, py, r]) => radialAlpha(Math.hypot(x - px, y - py), r, stops)))))
 }
 
 /** Mist: lying in the valleys between the ridges (long low banks) and hanging on the hillsides away from the road.
