@@ -11,7 +11,7 @@ import { useStampFlow } from '../../kit/stampFlow'
 import type { PlaceProps } from '../../types'
 import { FloeHop } from './activities/floe/FloeHop'
 import { Hub } from './activities/hub/Hub'
-import { IcebergMaker } from './activities/iceberg/IcebergMaker'
+import { NarwhalRide } from './activities/narwhal/NarwhalRide'
 import { Finale } from './activities/party/Finale'
 import { PenguinSlide } from './activities/slide/PenguinSlide'
 import STORY_SECTIONS, { type FilmId } from './activities/story/sections'
@@ -29,7 +29,7 @@ const EmperorHuddle = lazy(() => import('./activities/huddle/EmperorHuddle').the
 const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = {
   floe: FloeHop,
   slide: PenguinSlide,
-  iceberg: IcebergMaker,
+  narwhal: NarwhalRide,
   coats: (p) => (
     <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: '#ECE5EE' }} />}>
       <SnowCoats {...p} />

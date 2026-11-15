@@ -310,48 +310,65 @@ export const L = {
     },
   },
 
-  // ---- Iceberg Maker (activities/iceberg/) ----
-  iceberg: {
-    // Sparkle: what to do (each is also the hint when she's stuck there).
-    pick: 'Pick a pole: north or south?',
-    bits: onDevice('Tap the cracks to break off the ice!', 'Click the cracks to break off the ice!'),
-    giant: onDevice('A giant crack! Tap, tap, tap!', 'A giant crack! Click, click, click!'),
-    under: 'Look! Most of the iceberg hides under the water.',
-    push: onDevice('Push the iceberg down with your finger!', 'Click and drag to push the iceberg down!'),
-    sail: 'Now push the icebergs out to sea!',
-    done: 'Your icebergs are sailing away!',
-    // Sparkle's facts, each the first time it comes up.
+  // ---- Narwhal Ride (activities/narwhal/) ----
+  // In play order. Sparkle says what to do as each stretch starts (and again when she's stuck there); Nari, Pola,
+  // Pebble and Terry say their own lines when something happens (a few each, in turn, never every time).
+  narwhal: {
+    // Nari sets off, Pola and Pebble on her back.
+    go: nari('Here we go! Hold on tight!'),
+    // Sparkle, when each stretch starts (and again when nothing has been steered for a while).
+    hints: {
+      open: onDevice('Slide your finger to steer Nari!', 'Click and drag to steer Nari!'),
+      bergs: 'Icebergs! Steer Nari around them!',
+      under: 'Steer Nari under the ice!',
+      glacier: 'Steer Nari to the balloon!',
+    },
+    // Terry, flying ahead, a moment after the start.
+    follow: terry('Follow me! The balloon is this way!'),
+    // The first schools of fish she scoops up (Nari, then the riders).
+    fish: [nari('Yum!'), nari('Yum, a fish!'), pebble('Catch another one!'), pola('Fishy, fishy!')],
+    // Up off a ramp of ice (or a wave), and the big splash back down.
+    jump: [pola('Wheee!'), pebble("We're flying!"), nari('Tusk first!')],
+    land: [pebble('Splash! Again, again!'), pola('What a splash!'), nari('Ha ha! Nice one!')],
+    // A boing off a floe or an iceberg.
+    bump: [nari('Boing! Silly ice!'), pola('Bumper narwhal!'), pebble('Hee hee! Boing!')],
+    // Among the icebergs (Pola, as the first tall ones come up).
+    bergs: pola('Look at those icebergs!'),
+    // At the low ice bridge: Nari dips under, and blows the riders a bubble to sit in.
+    dive: nari("Deep breath! Here's your bubble!"),
+    // Under the sea ice: what's true about it (Sparkle), then the riders.
+    hidden: 'Look! Most of an iceberg hides under the water.',
+    bubble: pebble("I'm in a bubble! I'm still dry!"),
+    sea: pola("No ground down here. It's all sea!"),
+    // Up through the hole in the ice; Terry was waiting.
+    up: nari('Up we go!'),
+    there: terry('There you are!'),
+    // The glacier: a piece cracks off, lands in the sea, and sends the waves.
+    crack: pola('Whoa! The glacier is cracking!'),
+    calved: 'A new iceberg! It broke off the glacier.',
+    wave: [nari('Big wave! Surf it!'), pola('Surf, Nari, surf!')],
+    // The balloon comes into sight, then she pulls up beside it.
+    balloon: pebble('I see the balloon!'),
+    here: pola('We made it!'),
+    // Pokes on the friends (in turn).
+    nari: [nari('That tickles my tusk!'), nari('Pfff! A spout!')],
+    pola: [pola('Faster, Nari!'), pola('Hee hee!')],
+    pebble: [pebble('Giddy-up, unicorn!'), pebble('Peep peep!')],
+    terry: [terry('Keep up, slowpokes!'), terry('This way!')],
+    // Tap-to-hear facts, each the first time she pokes that thing (Sparkle).
     facts: {
-      calving: "When ice breaks off, it's called calving!",
-      north: 'Icebergs up north are tall and pointy.',
-      south: 'Icebergs down south are flat, like a table!',
-      hidden: 'Nine parts out of ten are under the water!',
-      fresh: "Icebergs are made of snow, so they're not salty!",
+      tusk: "Nari's horn is really a long tooth!",
+      arctic: 'Narwhals and belugas live only in the Arctic.',
+      walrus: 'A walrus! He has two long teeth.',
+      puffins: 'Puffins! They catch fish in their bright beaks.',
+      seal: 'A seal is napping on a little iceberg.',
+      beluga: 'Belugas! They whistle like little birds.',
+      orca: 'An orca! This one is just saying hello.',
       fizz: 'Fizz! Old air bubbles pop out of the ice.',
       blue: 'Old ice is packed so tight, it looks blue!',
-      seal: 'A seal is napping on a little iceberg.',
-      orca: 'Orcas live at both poles!',
-    },
-    // The friend at each pole: Pola on Greenland's glacier, Papa with the penguins on Antarctica's shelf.
-    north: {
-      hi: pola('Hi! Break off some ice with me!'),
-      bit: [pola('Wheee, splash!'),pola('Ooh, a little one!'), pola('Another one!')],
-      groan: pola("Whoa! It's a big one!"),
-      soak: pola("Splash! I'm all wet!"),
-      under: pola('Wow, it goes way down!'),
-      ride: pola("I'm riding the iceberg!"),
-      poke: [pola('Hee hee!'), pola('Hi again!')],
-      bye: pola('Bye bye, icebergs!'),
-    },
-    south: {
-      hi: papa('Welcome to our ice shelf!'),
-      bit: [papa('Splendid!'), papa('Plop, into the sea!'), papa('Another one!')],
-      groan: papa('Oh my, a giant!'),
-      soak: papa('Brr! A cold shower!'),
-      under: papa('So much ice under the water!'),
-      ride: papa('All aboard, everyone!'),
-      poke: [papa('Hello there!'), papa('Honk honk!')],
-      bye: papa('Off they go! Thank you!'),
+      calving: "When ice breaks off, it's called calving!",
+      water: 'The North Pole is a frozen sea. No land under here!',
+      ice: 'This ice is floating on the sea!',
     },
   },
 
