@@ -1,5 +1,5 @@
 // The jet ski at Hat Sai Kaew (the trip's story: planning/around-the-world/thailand/samet-story.md; the first plan:
-// samet-trip.md): Kaylee steers, Dad sits behind her, in the island's real coordinates (island/layout.ts), so the bay
+// samet-trip.md (retired; in git history)): Kaylee steers, Dad sits behind her, in the island's real coordinates (island/layout.ts), so the bay
 // is the island's own bay.
 //
 // The story: Zoom, the pink firefly, is somewhere out here. She zoomed round the jet ski man's buoys all night and only

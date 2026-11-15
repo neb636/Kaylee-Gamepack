@@ -753,7 +753,7 @@ export const L = {
     },
   },
 
-  // The Koh Samet island trip (activities/samet-trip/, plan: thailand/samet-trip.md). Talk short, play long: Sparkle
+  // The Koh Samet island trip (activities/samet-trip/, plan: thailand/samet-trip.md (retired; in git history)). Talk short, play long: Sparkle
   // says what's new (the first time she reaches each beach, a new round) and, after a while with nothing done, what to
   // do (spendHint, so at most twice a visit); the family and the islanders react in their own voices (cast.json): the
   // jet ski man (an otter), the captain (a pelican, both boats), the taxi driver (a sun bear) and the fire dancers (two
@@ -908,7 +908,7 @@ export const L = {
         thanks: kae('Khob khun ka! Come back soon!'),
       },
     },
-    // The island between the stops (island/): each beach the first time, the taxi, the pokes, home.
+    // The island between the stops (island/): each beach the first time, the taxi, the pokes.
     island: {
       // Sparkle, the first time she reaches each beach this visit.
       beach: {
@@ -919,15 +919,12 @@ export const L = {
         prao: 'Ao Prao! The big driftwood tree!',
         aonoina: 'Ao Noi Na! Look at the boats!',
       },
-      // The jet ski is hers (once a visit, with its flag up); all four flags: Dad calls everyone to the tree.
-      hers: 'The jet ski is yours now! Hop on!',
+      // All four flags: Dad calls everyone to the tree.
       sunset: nick('Sunset time! To the big tree!'),
       // The first rubbish in the bin.
       clean: ji('Thank you for cleaning the beach!'),
-      // The green taxi's driver (a sun bear): poked (in turn), and each beach's name as the taxi pulls in there.
+      // The green taxi's driver (a sun bear): each beach's name on the ride card as the taxi gets there.
       taxi: {
-        hi: by('sunbear')('Sawasdee krap! Hop in!'),
-        ride: [by('sunbear')('Beep beep!'), by('sunbear')('Hold on! Bumpy road!'), by('sunbear')('Next stop, the beach!')],
         stop: {
           nadan: by('sunbear')('Na Dan pier!'),
           saikaew: by('sunbear')('Hat Sai Kaew!'),
@@ -946,8 +943,6 @@ export const L = {
       // A coconut on Dad's head, the umbrella kite.
       bonk: nick('Ow! A coconut!'),
       kite: ji('Whoa! Hold on tight!'),
-      // On Na Dan pier going home: Mom's photo.
-      home: ji('Smile! Bye bye, Koh Samet!'),
     },
     // Tofu the beach puppy (island/puppy.ts). His voice is barks; Sparkle says why he runs back the first time he
     // fetches her, and each beach's name when she gets there.

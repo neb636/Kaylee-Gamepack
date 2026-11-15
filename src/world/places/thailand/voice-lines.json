@@ -2108,7 +2108,6 @@
   "Ao Wong Duan! The snorkel boat!",
   "Ao Prao! The big driftwood tree!",
   "Ao Noi Na! Look at the boats!",
-  "The jet ski is yours now! Hop on!",
   {
     "text": "Sunset time! To the big tree!",
     "voice": "nick"
@@ -2116,22 +2115,6 @@
   {
     "text": "Thank you for cleaning the beach!",
     "voice": "ji"
-  },
-  {
-    "text": "Sawasdee krap! Hop in!",
-    "voice": "sunbear"
-  },
-  {
-    "text": "Beep beep!",
-    "voice": "sunbear"
-  },
-  {
-    "text": "Hold on! Bumpy road!",
-    "voice": "sunbear"
-  },
-  {
-    "text": "Next stop, the beach!",
-    "voice": "sunbear"
   },
   {
     "text": "Na Dan pier!",
@@ -2191,10 +2174,6 @@
   },
   {
     "text": "Whoa! Hold on tight!",
-    "voice": "ji"
-  },
-  {
-    "text": "Smile! Bye bye, Koh Samet!",
     "voice": "ji"
   },
   "The puppy wants you to come!",

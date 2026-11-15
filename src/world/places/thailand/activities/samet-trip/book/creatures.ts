@@ -1,4 +1,4 @@
-// The island's animals, alive (greybox 3 of samet-trip.md): where each lives and what it does when Kaylee comes by.
+// The island's animals, alive (greybox 3 of samet-trip.md (retired; in git history)): where each lives and what it does when Kaylee comes by.
 // Four simple ways of living, each with its own character on top:
 //   wander: the monitor lizards waddle round Ao Prao flicking their tongues, the macaques mooch along the hill road
 //           (the mother reaches for Dad as he passes), hermit crabs potter on the wet sand;
@@ -9,7 +9,7 @@
 //   swim:   the parrotfish noses round the coral, the damselfish swirl in a crowd that parts round her, the cuttlefish
 //           hovers and changes color as she comes near;
 //   still:  the urchins (prickly: she boings off them) and the coral.
-// Every one reacts to a tap (`poke`; `pose`, a cute look at the camera, was for the photo book, which is gone). The
+// Every one reacts to a tap (`poke`). The
 // terns and the crab holes' ghost crabs are the island's own (island.ts, props.ts).
 import { Group, Matrix4, Quaternion, Vector3, type InstancedMesh, type MeshToonMaterial } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
@@ -47,7 +47,7 @@ export interface WildCtx {
   daddy: Vector3
   /** The golden hour or night (the flying fox flies). */
   dusk: boolean
-  /** The camera (they turn to it to pose). */
+  /** The camera (the flying fox turns to it as it sleeps; far from it the animals rest). */
   eye: Vector3
   fx: WildFx
 }
@@ -69,37 +69,17 @@ export abstract class Creature {
   rare = false
   /** Out of sight for now (hiding in the forest, not spawned yet): no tap target, no photo. */
   hidden = false
-  protected poseT = -1
-  protected poseLen = 1.2
   constructor(
     readonly id: string,
     readonly kind: AnimalId,
   ) {}
-  /** For the camera: turn to it and do something cute. The photo is taken `snapAt` seconds in. */
-  pose() {
-    this.poseT = 0
-  }
-  get snapAt() {
-    return this.poseLen * 0.45
-  }
-  get posing() {
-    return this.poseT >= 0
-  }
-  /** The pose's swell (0 at rest, 1 at its peak). */
-  protected get pk() {
-    return this.poseT < 0 ? 0 : bell(this.poseT)
-  }
   update(dt: number, c: WildCtx) {
-    if (this.poseT >= 0) {
-      this.poseT += dt / this.poseLen
-      if (this.poseT >= 1) this.poseT = -1
-    }
     this.step(dt, c)
   }
   protected abstract step(dt: number, c: WildCtx): void
-  /** A tap without the phone. */
+  /** A tap. */
   abstract poke(c: WildCtx): void
-  /** Turn `yaw` toward the camera (for posing), easing. */
+  /** Turn `yaw` toward the camera, easing. */
   protected toCam(yaw: number, x: number, z: number, c: WildCtx, dt: number, side = 0) {
     return yaw + wrapAngle(Math.atan2(c.eye.x - x, c.eye.z - z) + side - yaw) * damp(dt, 6)
   }
@@ -167,7 +147,7 @@ abstract class Walker extends Creature {
   protected abstract animate(dt: number, c: WildCtx, moving: number): void
   protected step(dt: number, c: WildCtx) {
     const d = Math.hypot(c.her.x - this.x, c.her.z - this.z)
-    if (this.state === 'roam' && !this.posing && this.scared(c, d)) {
+    if (this.state === 'roam' && this.scared(c, d)) {
       const g = this.fleeGoal(c)
       if (g) {
         this.state = 'flee'
@@ -176,9 +156,7 @@ abstract class Walker extends Creature {
       }
     }
     let want = 0
-    if (this.posing) {
-      this.yaw = this.toCam(this.yaw, this.x, this.z, c, dt)
-    } else if (this.goal) {
+    if (this.goal) {
       const dx = this.goal.x - this.x
       const dz = this.goal.z - this.z
       const l = Math.hypot(dx, dz)
@@ -239,7 +217,6 @@ class Monitor extends Walker {
     this.m.root.scale.setScalar(0.85)
     this.root.add(this.m.root)
     this.size = 0.8
-    this.poseLen = 1.4
   }
   protected scared(c: WildCtx, d: number) {
     return d < 2.4 && c.herSpeed > 2.8
@@ -256,17 +233,16 @@ class Monitor extends Walker {
     const s = Math.sin(this.phase)
     body.rotation.y = s * 0.16 * moving
     head.rotation.y = -s * 0.2 * moving + Math.sin(this.phase * 0.21) * 0.25 * (1 - moving)
-    head.rotation.x = -0.3 * this.pk
+    head.rotation.x = 0
     tail.rotation.y = -Math.sin(this.phase - 0.8) * (0.3 * moving + 0.08)
     tip.rotation.y = -Math.sin(this.phase - 1.6) * (0.45 * moving + 0.12)
     body.position.y = Math.abs(s) * 0.02 * moving
-    // The tongue: flick, flick (more of them for the camera).
+    // The tongue: flick, flick.
     this.flickWait -= dt
     if (this.flickWait <= 0 && this.flick < 0) {
       this.flick = 0
       this.flickWait = rand(1.5, 3.5)
     }
-    if (this.posing && this.flick < 0) this.flick = 0
     if (this.flick >= 0) {
       this.flick += dt / 0.7
       tongue.scale.z = Math.max(0.001, bell((this.flick * 2) % 1)) * 1.2
@@ -321,9 +297,9 @@ class MouseDeer extends Walker {
     body.position.y = run * Math.abs(Math.sin(this.phase * 0.55)) * 0.22 + moving * (1 - run) * Math.abs(Math.sin(this.phase)) * 0.02
     body.rotation.x = run * Math.sin(this.phase * 0.55) * 0.25
     this.nibble += dt
-    const n = moving < 0.1 && !this.posing ? Math.max(0, Math.sin(this.nibble * 0.9)) : 0
-    head.rotation.x += (n * 0.9 - this.pk * 0.25 - head.rotation.x) * damp(dt, 5)
-    head.rotation.z = this.pk * 0.3
+    const n = moving < 0.1 ? Math.max(0, Math.sin(this.nibble * 0.9)) : 0
+    head.rotation.x += (n * 0.9 - head.rotation.x) * damp(dt, 5)
+    head.rotation.z = 0
     head.rotation.y = Math.sin(this.nibble * 0.5) * 0.4 * (1 - moving)
   }
 }
@@ -388,15 +364,10 @@ class Macaque extends Walker {
       head.rotation.z = Math.sin(this.scratch * 8) * 0.15
       if (this.scratch >= 1) this.scratch = -1
     }
-    // For the camera: a wave and a big grin.
-    if (this.posing) {
-      armX = -2.4
-      armZ = Math.sin(this.poseT * 30) * 0.3
-    }
     arm.rotation.x += (armX - arm.rotation.x) * damp(dt, 10)
     arm.rotation.z += (armZ - arm.rotation.z) * damp(dt, 10)
     head.rotation.y = Math.sin(this.phase * 0.13) * 0.4 * (1 - moving)
-    head.rotation.x = -0.2 * this.pk
+    head.rotation.x = 0
   }
 }
 
@@ -435,13 +406,13 @@ class Hermit extends Walker {
     const d = Math.hypot(c.her.x - this.x, c.her.z - this.z)
     if (d < 1.4 && c.herSpeed > 1) this.shy = 2.5
     this.shy -= dt
-    const want = this.shy > 0 && !this.posing ? 1 : 0
+    const want = this.shy > 0 ? 1 : 0
     this.inShell += (want - this.inShell) * damp(dt, want ? 14 : 3)
     const { legs, shell } = this.m.parts
     legs.scale.setScalar(Math.max(0.05, 1 - this.inShell * 0.95))
     legs.position.y = -this.inShell * 0.05
     shell.position.y = Math.abs(Math.sin(this.phase * 2)) * 0.02 * moving
-    legs.rotation.z = Math.sin(this.phase * 2) * 0.12 * moving + (this.posing ? Math.sin(this.poseT * 25) * 0.25 : 0)
+    legs.rotation.z = Math.sin(this.phase * 2) * 0.12 * moving
     if (this.inShell > 0.5) this.speed = 0
   }
 }
@@ -510,7 +481,7 @@ class Squirrel extends Creature {
           this.wait = rand(1.5, 4)
         }
       }
-      if (this.goal && !this.posing) {
+      if (this.goal) {
         const dx = this.goal.x - this.x
         const dz = this.goal.z - this.z
         const l = Math.hypot(dx, dz)
@@ -526,13 +497,12 @@ class Squirrel extends Creature {
           this.z += (dz / l) * st
         }
       }
-      if (this.posing) this.yaw = this.toCam(this.yaw, this.x, this.z, c, dt)
       this.phase += dt * (3 + moving * 14)
       const y = Math.max(0, c.ground.heightAt(this.x, this.z))
       p.set(this.x, y + Math.abs(Math.sin(this.phase)) * 0.12 * moving, this.z)
       this.root.quaternion.setFromAxisAngle(tmp.set(0, 1, 0), this.yaw)
-      // Sitting up for the camera (or to look round), nose down when it forages.
-      const sit = this.posing ? 1 : moving ? 0 : Math.max(0, Math.sin(this.phase * 0.25)) * 0.6
+      // Sitting up to look round, nose down when it forages.
+      const sit = moving ? 0 : Math.max(0, Math.sin(this.phase * 0.25)) * 0.6
       body.rotation.x += (-sit * 0.9 + (moving ? 0.15 : 0) - body.rotation.x) * damp(dt, 8)
     } else {
       // On the trunk: belly to the bark, head up, peeking round at her from her side of the trunk.
@@ -553,7 +523,7 @@ class Squirrel extends Creature {
     }
     // The tail: flicks when it chatters, flows while it runs.
     this.flick = Math.max(0, this.flick - dt * 1.5)
-    tail.rotation.x = Math.sin(this.phase * 0.9) * 0.15 + Math.sin(c.t * 22) * this.flick * 0.5 + (this.posing ? Math.sin(this.poseT * 30) * 0.35 : 0)
+    tail.rotation.x = Math.sin(this.phase * 0.9) * 0.15 + Math.sin(c.t * 22) * this.flick * 0.5
     this.focus.copy(p).y += 0.3
   }
 }
@@ -618,7 +588,7 @@ class Hornbill extends Creature {
     const { body, wl, wr } = this.m.parts
     const p = this.root.position
     const d = Math.hypot(c.her.x - p.x, c.her.z - p.z)
-    if (!this.fly && !this.posing) {
+    if (!this.fly) {
       this.nextT -= dt
       if (this.nextT <= 0 || (d < 2.5 && c.herSpeed > 2)) {
         this.nextT = rand(14, 24)
@@ -642,16 +612,14 @@ class Hornbill extends Creature {
         this.hop = 1
       }
     } else {
-      // Perched: little hops and head turns; for the camera, wings half open and a bow.
+      // Perched: little hops and head turns, wings folded.
       this.hop = Math.max(0, this.hop - dt * 2)
       const perch = this.perches[this.at]
       p.copy(perch.p).y += bell(this.hop) * 0.15
-      if (this.posing) this.yaw = this.toCam(this.yaw, p.x, p.z, c, dt)
-      else this.yaw += wrapAngle(perch.yaw + Math.sin(c.t * 0.5) * 0.6 - this.yaw) * damp(dt, 2)
-      const open = this.pk
-      wl.rotation.set(0, 1.35 - open * 1.2, -0.1 + open * 0.6)
-      wr.rotation.set(0, -1.35 + open * 1.2, 0.1 - open * 0.6)
-      body.rotation.x = Math.sin(c.t * 1.3) * 0.04 + this.pk * 0.35 * Math.sin(this.poseT * 12)
+      this.yaw += wrapAngle(perch.yaw + Math.sin(c.t * 0.5) * 0.6 - this.yaw) * damp(dt, 2)
+      wl.rotation.set(0, 1.35, -0.1)
+      wr.rotation.set(0, -1.35, 0.1)
+      body.rotation.x = Math.sin(c.t * 1.3) * 0.04
     }
     this.root.rotation.y = this.yaw
     this.focus.copy(p).y += 0.35
@@ -699,20 +667,20 @@ class FlyingFox extends Creature {
       wr.rotation.set(-HALF, -flap, 0)
       body.rotation.set(0, 0, 0)
     } else {
-      // Asleep upside down, wrapped in its wings, swaying; now and then a big stretch (and one for the camera).
+      // Asleep upside down, wrapped in its wings, swaying; now and then a big stretch.
       p.copy(this.roost)
       this.root.rotation.order = 'YXZ'
-      this.root.rotation.set(0, this.toCam(this.root.rotation.y, p.x, p.z, c, dt * (this.posing ? 1 : 0.1)), Math.PI)
+      this.root.rotation.set(0, this.toCam(this.root.rotation.y, p.x, p.z, c, dt * 0.1), Math.PI)
       body.rotation.x = Math.sin(c.t * 1.1) * 0.06
       this.stretchWait -= dt
       if (this.stretchWait <= 0 && this.stretch < 0) {
         this.stretch = 0
         this.stretchWait = rand(8, 14)
       }
-      let open = this.pk
+      let open = 0
       if (this.stretch >= 0) {
         this.stretch += dt / 1.8
-        open = Math.max(open, bell(this.stretch))
+        open = bell(this.stretch)
         if (this.stretch >= 1) this.stretch = -1
       }
       wl.rotation.set(-HALF, -1.9 + open * 1.6, 0)
@@ -766,7 +734,7 @@ class Heron extends Creature {
     const { body, neck, wl, wr } = this.m.parts
     const p = this.root.position
     const d = Math.hypot(c.her.x - p.x, c.her.z - p.z)
-    if (!this.fly && !this.posing && ((d < 5.5 && c.herSpeed > 2.7) || d < 2.4)) this.takeOff()
+    if (!this.fly && ((d < 5.5 && c.herSpeed > 2.7) || d < 2.4)) this.takeOff()
     if (this.fly) {
       const f = this.fly
       f.t += dt / f.dur
@@ -789,7 +757,7 @@ class Heron extends Creature {
       body.rotation.x += (0 - body.rotation.x) * damp(dt, 6)
       // Fishing: very still, then a stab at the water (sometimes a fish).
       this.stabWait -= dt
-      if (this.stabWait <= 0 && this.stab < 0 && !this.posing) {
+      if (this.stabWait <= 0 && this.stab < 0) {
         this.stab = 0
         this.stabWait = rand(3, 6)
       }
@@ -803,13 +771,8 @@ class Heron extends Creature {
         }
         if (this.stab >= 1) this.stab = -1
       }
-      // For the camera: stretches up tall, chin up.
-      if (this.posing) {
-        nx = -0.45 * this.pk
-        this.yaw = this.toCam(this.yaw, p.x, p.z, c, dt, 0.9)
-      }
       neck.rotation.x += (nx - neck.rotation.x) * damp(dt, this.stab >= 0 ? 20 : 6)
-      neck.scale.y = 1 + this.pk * 0.25
+      neck.scale.y = 1
     }
     this.root.rotation.y = this.yaw
     this.focus.copy(p).y += 0.6
@@ -846,10 +809,9 @@ class Parrotfish extends Creature {
   }
   protected step(dt: number, c: WildCtx) {
     const p = this.root.position
-    const slow = this.posing ? 0.15 : 1
     this.nibble += dt
     const pause = Math.max(0, Math.sin(this.nibble * 0.35)) > 0.92 ? 0.1 : 1
-    this.ang += ((dt * 0.55) / Math.max(1, this.r)) * 2.5 * slow * pause
+    this.ang += ((dt * 0.55) / Math.max(1, this.r)) * 2.5 * pause
     // Swim away from her if she paddles right up to it.
     const d = Math.hypot(c.her.x - p.x, c.her.z - p.z)
     if (d < 2.2) this.dart.add(tmp.set(p.x - c.her.x, 0, p.z - c.her.z).setLength(dt * 4))
@@ -857,9 +819,8 @@ class Parrotfish extends Creature {
     const x = this.home.x + Math.sin(this.ang) * this.r + this.dart.x
     const z = this.home.z + Math.cos(this.ang) * this.r * 0.7 + this.dart.z
     const before = p.clone()
-    p.set(x, underY(c, x, z, 0.35) + (this.posing ? this.pk * 0.15 : 0), z)
+    p.set(x, underY(c, x, z, 0.35), z)
     if (p.distanceTo(before) > 1e-4) this.yaw = Math.atan2(p.x - before.x, p.z - before.z)
-    if (this.posing) this.yaw = this.toCam(this.yaw, p.x, p.z, c, dt, HALF)
     this.root.rotation.y = this.yaw
     this.m.parts.tail.rotation.y = Math.sin(c.t * (pause < 1 ? 4 : 9)) * 0.45
     this.m.parts.body.rotation.z = Math.sin(c.t * 1.7) * 0.08
@@ -897,12 +858,10 @@ class Damsels extends Creature {
   protected step(dt: number, c: WildCtx) {
     const cy = underY(c, this.home.x, this.home.z, 0.45)
     this.center.set(this.home.x + Math.sin(c.t * 0.2) * 0.8, cy, this.home.z + Math.cos(c.t * 0.27) * 0.8)
-    const tight = 1 - this.pk * 0.5
-    const spin = 1 + this.pk * 1.5
     this.fish.forEach((f, i) => {
-      f.a += dt * f.sp * spin * (1.2 / f.r)
-      const bx = this.center.x + Math.sin(f.a) * f.r * tight
-      const bz = this.center.z + Math.cos(f.a) * f.r * tight
+      f.a += dt * f.sp * (1.2 / f.r)
+      const bx = this.center.x + Math.sin(f.a) * f.r
+      const bz = this.center.z + Math.cos(f.a) * f.r
       // They part round her and close up again behind her.
       const dx = bx + f.off.x - c.her.x
       const dz = bz + f.off.z - c.her.z
@@ -949,14 +908,13 @@ class Cuttlefish extends Creature {
     const before = p.clone()
     p.set(x, underY(c, x, z, 0.4) + Math.sin(c.t * 1.4) * 0.05, z)
     if (p.distanceTo(before) > 1e-4) this.yaw += wrapAngle(Math.atan2(p.x - before.x, p.z - before.z) - this.yaw) * damp(dt, 2)
-    if (this.posing) this.yaw = this.toCam(this.yaw, p.x, p.z, c, dt, HALF)
     this.root.rotation.y = this.yaw
     // Its colors: browns and creams at rest, a slow rainbow as she comes near, pink up close (and a fast rainbow
     // flash for the camera or a tap).
     const d = Math.hypot(c.her.x - p.x, c.her.z - p.z)
     this.flash = Math.max(0, this.flash - dt)
     const near = d < 6 ? 1 - Math.max(0, d - 3) / 3 : 0
-    const fast = this.posing || this.flash > 0
+    const fast = this.flash > 0
     this.hue = (this.hue + dt * (fast ? 1.4 : near * 0.25)) % 1
     const mat = this.m.mat
     if (fast || near > 0.05) mat.color.setHSL(d < 3 && !fast ? 0.92 : this.hue, 0.75 * Math.max(near, fast ? 1 : 0) + 0.15, 0.68)
@@ -990,12 +948,11 @@ class Still extends Creature {
   }
   protected step(dt: number, c: WildCtx) {
     this.wob = Math.max(0, this.wob - dt * 1.2)
-    const w = Math.max(this.wob, this.pk)
+    const w = this.wob
     const part = this.m.parts.ball ?? this.m.parts.patch
     const k = Math.sin(c.t * (this.kind === 'urchin' ? 18 : 6)) * w
     part.scale.set(1 + k * 0.08, 1 - k * 0.06, 1 + k * 0.08)
     if (this.kind === 'coral') part.rotation.z = Math.sin(c.t * 0.9 + this.root.rotation.y) * 0.02
-    if (this.posing && Math.random() < dt * 8) c.fx.bubbles(this.focus.x + rand(-0.4, 0.4), this.focus.y, this.focus.z + rand(-0.4, 0.4), 1)
   }
 }
 
@@ -1060,9 +1017,6 @@ export class Wildlife {
   readonly root = new Group()
   readonly list: Creature[] = []
   readonly byId = new Map<string, Creature>()
-  /** Already in her book: rare ones stop sparkling. */
-  found = new Set<AnimalId>()
-  private sparkT = 0
   private hermitNext = 2
   private born = new Set<Creature>()
 
@@ -1173,23 +1127,18 @@ export class Wildlife {
   }
 
   update(dt: number, c: WildCtx, cull: number) {
-    this.sparkT -= dt
-    const spark = this.sparkT <= 0
-    if (spark) this.sparkT = 0.3
     for (const a of this.list) {
       const p = a.root.position
       // (Each one lives one frame first, so it's where it belongs before the distance check.)
       const far = this.born.has(a) && Math.hypot(p.x - c.eye.x, p.z - c.eye.z) > cull
       this.born.add(a)
-      if (far && !a.posing) {
+      if (far) {
         a.root.visible = false
         continue
       }
       a.update(dt, c)
       // (The mouse-deer hiding in the trees stays drawn: the trees hide it. A hermit crab not out yet isn't.)
       a.root.visible = a.kind === 'mousedeer' || !a.hidden
-      // Rare ones she hasn't snapped yet sparkle when she's near, so she can spot them.
-      if (spark && a.rare && !a.hidden && !this.found.has(a.kind) && Math.hypot(c.her.x - p.x, c.her.z - p.z) < 18) c.fx.sparkle(a.focus.x + rand(-0.4, 0.4), a.focus.y + rand(-0.2, 0.5), a.focus.z + rand(-0.4, 0.4))
     }
   }
 }

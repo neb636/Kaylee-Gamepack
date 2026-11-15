@@ -5292,13 +5292,6 @@
     "file": "df956f865fb8.mp3"
   },
   {
-    "text": "The jet ski is yours now! Hop on!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3768,
-    "file": "620991d88008.mp3"
-  },
-  {
     "text": "Sunset time! To the big tree!",
     "voice": "nick",
     "sig": "a2881bb105",
@@ -5311,34 +5304,6 @@
     "sig": "ba2e98c34e",
     "ms": 1968,
     "file": "16fff68cc009.mp3"
-  },
-  {
-    "text": "Sawasdee krap! Hop in!",
-    "voice": "sunbear",
-    "sig": "b772c24652",
-    "ms": 3408,
-    "file": "a650b545a1de.mp3"
-  },
-  {
-    "text": "Beep beep!",
-    "voice": "sunbear",
-    "sig": "b772c24652",
-    "ms": 1080,
-    "file": "7e48d1932ee5.mp3"
-  },
-  {
-    "text": "Hold on! Bumpy road!",
-    "voice": "sunbear",
-    "sig": "b772c24652",
-    "ms": 2328,
-    "file": "35b67c43fc25.mp3"
-  },
-  {
-    "text": "Next stop, the beach!",
-    "voice": "sunbear",
-    "sig": "b772c24652",
-    "ms": 1968,
-    "file": "0d15a817cbed.mp3"
   },
   {
     "text": "Na Dan pier!",
@@ -5444,13 +5409,6 @@
     "sig": "ba2e98c34e",
     "ms": 1968,
     "file": "6d6a17c1b2fc.mp3"
-  },
-  {
-    "text": "Smile! Bye bye, Koh Samet!",
-    "voice": "ji",
-    "sig": "ba2e98c34e",
-    "ms": 2880,
-    "file": "28aa128d19c9.mp3"
   },
   {
     "text": "The puppy wants you to come!",

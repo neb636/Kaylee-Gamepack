@@ -1,4 +1,4 @@
-// The Koh Samet trip (notes: planning/around-the-world/thailand/samet-story.md; the first plan: samet-trip.md), as
+// The Koh Samet trip (notes: planning/around-the-world/thailand/samet-story.md; the first plan: samet-trip.md (retired; in git history)), as
 // deep-linkable sections: #/world/thailand/samet-trip/<section>?...
 //
 // One story runs through it, "The Lost Fireflies": last night's wind blew the fire show's four fireflies all over the
