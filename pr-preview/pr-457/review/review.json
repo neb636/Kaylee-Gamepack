@@ -1,7 +1,0 @@
-{
-  "title": "Inventory cleanup: done items and stale notes",
-  "checkIn": "fix",
-  "kaylee": "Nothing changes in the game. Your six 'waiting on you' items are now treated as done, and the code comments describe what's really built.",
-  "questions": [],
-  "links": [{ "label": "The Thailand map", "hash": "#/world/thailand" }, { "label": "Peru", "hash": "#/world/peru" }]
-}
