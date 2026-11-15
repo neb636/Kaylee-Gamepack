@@ -23,8 +23,8 @@
 // everywhere (props.ts): palms drop coconuts (on Dad's head, if he's under one), samet bark peels, umbrellas spin
 // (three pokes and one takes off like a kite with her holding on), chairs fold, the beach ball rolls where she kicks
 // it, crabs pop out of their holes, the ice cream cart dings, the bead tray jingles, the hammock swings, boats bob and
-// toot, the mermaid's tail splashes. The island's animals (../book/creatures.ts: wander, flee, perch, swim) react to a
-// tap. The beach clean (../book/clean.ts) is the side verb: lift the rubbish on the wet sand (an animal pops out where
+// toot, the mermaid's tail splashes. The island's animals (../animals/creatures.ts: wander, flee, perch, swim) react to a
+// tap. The beach clean (../animals/clean.ts) is the side verb: lift the rubbish on the wet sand (an animal pops out where
 // it was), carry it to the green bin, plonk.
 //
 // The green taxi (taxi.ts) waits by the road nearest her; a tap on it honks and brings the pictures up. Tofu the beach
@@ -52,10 +52,10 @@ import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
 import { wearing } from '../../../trip/packing'
 import { BananaBoat, Fish, Swimmer, Tern } from '../jetski/critters'
-import { ANIMALS } from '../book/animals'
-import { BeachClean, BIN_IDS, JUNK_IDS } from '../book/clean'
-import { WILD, Wildlife, type PalmInfo, type WildCtx } from '../book/creatures'
-import { PHOTO_SIZE, snap } from '../book/photo'
+import { ANIMALS } from '../animals/animals'
+import { BeachClean, BIN_IDS, JUNK_IDS } from '../animals/clean'
+import { WILD, Wildlife, type PalmInfo, type WildCtx } from '../animals/creatures'
+import { PHOTO_SIZE, snap } from '../photo'
 import { buildSki, type Ski } from '../jetski/ski'
 import { at as atFrame, bay, DECK, FRAMES, LANDMARKS, PARKED, POKES, RING, SLIDE, spotStart, STOP_IDS, STOPS, SWIMMERS, WAVE_DIR, WAYS, type SpotId, type StopId, type XZ } from './layout'
 import { FINE } from './scenery'
@@ -73,7 +73,7 @@ import { SwimRope } from './swimrope'
 import { Taxi } from './taxi'
 import { FireDancers } from './dancers'
 import { beachBed, islandSfx as sfx } from './sounds'
-import { cleanSfx } from '../book/sounds'
+import { cleanSfx } from '../animals/sounds'
 import { TO_DEG, damp, smoothstep, wrapAngle } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/island/island.ts'

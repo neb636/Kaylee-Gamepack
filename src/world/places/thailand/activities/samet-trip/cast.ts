@@ -4,7 +4,8 @@
 //   - the boat captain (the speedboat from Ban Phe and the snorkel boat to Ko Kudi): a pelican in a navy captain's cap,
 //   - the green taxi's driver: a sun bear in an island-green shirt,
 //   - the fire dancers on Sai Kaew at night: two tokay geckos (the "tukkae" that calls its name after dark),
-//   - the beach puppy who knows the way round the island (#357 way-finding): a cream beach dog in a pink bandana.
+//   - Tofu the beach puppy, who saw where the fireflies landed (#357 way-finding gave him to us): a cream beach dog in
+//     a pink bandana.
 // Pure data (no three.js), so the character lab can list them.
 import type { Look } from '../../../../engine3d/characters/look'
 
@@ -19,6 +20,6 @@ export const FIRE_DANCERS: Look[] = [
   { species: 'gecko', height: 1.15, fur: '#7FD3B0', light: '#E4FAF0', dark: '#2F7A5E', ear: '#FF7FB0', outfit: { kind: 'tee', color: '#FFC83D', shorts: '#E8403F' }, open: true },
 ]
 
-/** The beach puppy (#357 way-finding): a cream island dog with brown floppy ears and a pink bandana, smaller than
+/** Tofu the beach puppy (#357 way-finding): a cream island dog with brown floppy ears and a pink bandana, smaller than
  *  Kaylee. He knows the way; his voice is barks. */
 export const PUPPY: Look = { species: 'puppy', height: 0.8, chub: 1.05, fur: '#FFF1DC', light: '#FFFFFF', dark: '#3B2A26', ear: '#C98A55', extras: ['scarf'], open: true }

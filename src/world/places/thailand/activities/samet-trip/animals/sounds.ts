@@ -1,9 +1,9 @@
-// The photo book's animals and the beach clean (creatures.ts, clean.ts): the monitor lizard's soft hiss, the mouse
+// The island's animals and the beach clean (creatures.ts, clean.ts): the monitor lizard's soft hiss, the mouse
 // deer's squeak, the macaques' and the squirrel's chatter, the hermit crab's claws, the hornbill's kok-kok and the
 // heron's croak with their wings flapping up, the flying fox's squeaks, the reef's bubbly bloops, and the rubbish
 // plonked into the green bin and its lid flapping. Recorded clips (../sfx, ElevenLabs) with the synthesized ones (the
 // world kit's tone/noise) as their fallbacks. The bin's little sparkle up after the plonk, the lift as she picks a bit
-// up, and the boing stay synthesized (tuned, toy blips). The book's own buttons (Book.tsx) use the shared `sametSfx`.
+// up, and the boing stay synthesized (tuned, toy blips).
 import { clip, playClip } from '../../../../../kit/clips'
 import { noise as hiss, tone } from '../../../../../kit/sfx'
 import { sametClip as c } from '../sfx'
@@ -31,28 +31,28 @@ const synth = {
 /** The animals' sounds (creatures.ts `SOUND`). Who makes which: see each class there. */
 export const wildSfx = {
   /** The monitor lizard (scared or poked). */
-  hiss: clip(c('book-monitor'), synth.hiss, { vol: 0.45, jitter: 0.08 }),
+  hiss: clip(c('animal-monitor'), synth.hiss, { vol: 0.45, jitter: 0.08 }),
   /** The mouse deer and the flying fox (the mouse deer's is the clip; the bat's has its own). */
-  squeak: clip(c('book-mousedeer'), synth.squeak, { vol: 0.5, jitter: 0.1 }),
-  batSqueak: clip(c('book-flyingfox'), synth.squeak, { vol: 0.45, jitter: 0.1 }),
-  monkey: clip(c('book-macaque'), synth.monkey, { vol: 0.55, jitter: 0.1 }),
-  chatter: clip(c('book-squirrel'), synth.chatter, { vol: 0.5, jitter: 0.1 }),
+  squeak: clip(c('animal-mousedeer'), synth.squeak, { vol: 0.5, jitter: 0.1 }),
+  batSqueak: clip(c('animal-flyingfox'), synth.squeak, { vol: 0.45, jitter: 0.1 }),
+  monkey: clip(c('animal-macaque'), synth.monkey, { vol: 0.55, jitter: 0.1 }),
+  chatter: clip(c('animal-squirrel'), synth.chatter, { vol: 0.5, jitter: 0.1 }),
   /** The hermit crab's claws (the island's crabs share it). */
   click: clip(c('island-crab'), synth.click, { vol: 0.55, jitter: 0.12 }),
-  kok: clip(c('book-hornbill'), synth.kok, { vol: 0.55 }),
-  croak: clip(c('book-heron'), synth.croak, { vol: 0.55 }),
-  flap: clip(c('book-flap'), synth.flap, { vol: 0.5, jitter: 0.1 }),
+  kok: clip(c('animal-hornbill'), synth.kok, { vol: 0.55 }),
+  croak: clip(c('animal-heron'), synth.croak, { vol: 0.55 }),
+  flap: clip(c('animal-flap'), synth.flap, { vol: 0.5, jitter: 0.1 }),
   /** The reef (parrotfish, damsels, cuttlefish, the urchins and the coral). */
-  bloop: clip(c('book-bloop'), synth.bloop, { vol: 0.45, jitter: 0.15 }),
+  bloop: clip(c('animal-bloop'), synth.bloop, { vol: 0.45, jitter: 0.15 }),
   boing: synth.boing,
 }
 
 /** The beach clean's sounds (clean.ts, and the bins' lids in island.ts). */
 export const cleanSfx = {
   plonk: () => {
-    if (!playClip(c('book-plonk'), { vol: 0.75, rate: 0.95 + Math.random() * 0.1 })) synth.plonkThud()
+    if (!playClip(c('clean-plonk'), { vol: 0.75, rate: 0.95 + Math.random() * 0.1 })) synth.plonkThud()
     synth.plonkSparkle()
   },
   lift: synth.lift,
-  lid: clip(c('book-lid'), synth.lid, { vol: 0.55, jitter: 0.08 }),
+  lid: clip(c('clean-lid'), synth.lid, { vol: 0.55, jitter: 0.08 }),
 }

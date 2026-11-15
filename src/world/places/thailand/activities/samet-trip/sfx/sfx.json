@@ -245,59 +245,59 @@
   "loop": true
  },
  {
-  "id": "book-monitor",
+  "id": "animal-monitor",
   "prompt": "A small lizard's soft quick hiss, gentle and short, more funny than scary. Clean close recording, no music, no voices.",
   "seconds": 0.6
  },
  {
-  "id": "book-mousedeer",
+  "id": "animal-mousedeer",
   "prompt": "A tiny shy forest animal's high little squeak, cute and soft. Clean close recording, no music, no voices.",
   "seconds": 0.5,
   "influence": 0.6
  },
  {
-  "id": "book-macaque",
+  "id": "animal-macaque",
   "prompt": "A little monkey chattering, a few quick playful ooh-ooh-ah-ah calls, cheeky and cute, not loud. Clean close recording, no music, no voices.",
   "seconds": 1
  },
  {
-  "id": "book-squirrel",
+  "id": "animal-squirrel",
   "prompt": "A small squirrel's quick chittering chatter from a tree, cute and short. Clean close recording, no music, no voices.",
   "seconds": 0.8
  },
  {
-  "id": "book-hornbill",
+  "id": "animal-hornbill",
   "prompt": "A hornbill bird's two honking kok-kok calls, deep, friendly and a little funny. Clean close recording, no music, no voices.",
   "seconds": 1
  },
  {
-  "id": "book-flap",
+  "id": "animal-flap",
   "prompt": "A big bird's wings flapping a few times as it takes off, soft feathery whooshes. Clean close recording, no music, no voices.",
   "seconds": 0.8
  },
  {
-  "id": "book-heron",
+  "id": "animal-heron",
   "prompt": "A heron's single low raspy croak, short and comical, not harsh. Clean close recording, no music, no voices.",
   "seconds": 0.7
  },
  {
-  "id": "book-flyingfox",
+  "id": "animal-flyingfox",
   "prompt": "A fruit bat's few tiny high squeaks and chirps, cute and soft. Clean close recording, no music, no voices.",
   "seconds": 0.7
  },
  {
-  "id": "book-bloop",
+  "id": "animal-bloop",
   "prompt": "One soft bubbly underwater bloop, a little fish blowing a bubble, cute. Clean close recording, no music, no voices.",
   "seconds": 0.5,
   "influence": 0.6
  },
  {
-  "id": "book-plonk",
+  "id": "clean-plonk",
   "prompt": "A plastic bottle dropped into an empty plastic bin, a hollow satisfying plonk. Clean close recording, no music, no voices.",
   "seconds": 0.7
  },
  {
-  "id": "book-lid",
+  "id": "clean-lid",
   "prompt": "A plastic bin lid flapping open and shut once, a light plasticky clack. Clean close recording, no music, no voices.",
   "seconds": 0.5
  },

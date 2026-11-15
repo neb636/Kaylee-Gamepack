@@ -1,4 +1,4 @@
-// The beach puppy (#357 way-finding, card B: "Follow the Beach Puppy"): a cream island dog in a pink bandana who
+// Tofu the beach puppy (first built for #357 way-finding, card B: "Follow the Beach Puppy"): a cream island dog in a pink bandana who
 // knows the way. His body and how he moves live here; where he goes (a beach she hasn't played, the taxi, fetching
 // her when she stands still) is the island's (island.ts, "the beach puppy"). On the shared chibi rig, like the other
 // islanders (../cast.ts). He's alive: he breathes, his tail wags (harder when she's near), his head turns to look back

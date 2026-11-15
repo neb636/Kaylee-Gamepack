@@ -8,7 +8,7 @@ import { AdditiveBlending, BufferAttribute, CatmullRomCurve3, CircleGeometry, Do
 import type { Bag } from '../../../../../engine3d/dispose'
 import { bake, merge, P, solid, solidMix } from '../../../../../engine3d/geo'
 import { PAL, toon } from '../../../../../engine3d/toon'
-import { coralModel, urchinModel, type Model } from '../book/models'
+import { coralModel, urchinModel, type Model } from '../animals/models'
 import { palmGeo, rng } from '../island/scenery'
 
 export interface XZ {

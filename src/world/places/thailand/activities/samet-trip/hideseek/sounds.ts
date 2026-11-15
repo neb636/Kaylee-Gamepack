@@ -69,7 +69,7 @@ export const hideSfx = {
   bigSlurp: clip(c('lunch-slurp'), () => synth.slurp(true), { vol: 0.7 }),
   knock: clip(c('lunch-knock'), synth.knock, { vol: 0.7, jitter: 0.06 }),
   lizard: clip(c('lunch-lizard'), synth.lizard, { vol: 0.55 }),
-  chitter: clip(c('book-squirrel'), synth.chitter, { vol: 0.5, jitter: 0.08 }),
+  chitter: clip(c('animal-squirrel'), synth.chitter, { vol: 0.5, jitter: 0.08 }),
   /** A fish jumps where she taps the sea (and the glowing fish at the fire show). */
   fish: () => {
     if (!playClip(c('jetski-fish'), { vol: 0.6, rate: 0.92 + Math.random() * 0.16 })) sametSfx.splash()

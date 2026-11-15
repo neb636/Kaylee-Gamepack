@@ -134,9 +134,10 @@ function components(file) {
   const dir = dirname(file)
   return readdirSync(dir).filter((f) => /^[A-Z].*\.tsx$/.test(f)).sort().map((f) => join(dir, f))
 }
-/** Notes for an activity: <country>/<activity>.md, or the country's own notes. */
+/** Notes for an activity: <country>/<activity>.md, or a trip's story notes (<country>/samet-story.md for samet-trip),
+ *  or the country's own notes. */
 function notesFor(place, activity) {
-  for (const f of [`${PLAN}/${place}/${activity}.md`]) if (exists(f)) return f
+  for (const f of [`${PLAN}/${place}/${activity}.md`, `${PLAN}/${place}/${activity.replace(/-trip$/, '')}-story.md`]) if (exists(f)) return f
   return null
 }
 

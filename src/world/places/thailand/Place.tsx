@@ -7,7 +7,7 @@
 // hall of mini games, the pizza table, and home with the pizza box for Agong, then its stamp and the pizza slice
 // sticker); the third is the Nan road trip (activities/nan-trip/, in the works: greyboxes from Mom's question to the
 // photo on Agong's wall, then its stamp); the fourth is the Koh Samet island trip (activities/samet-trip/: the
-// speedboat, the island to roam, four stops and the fire show, the pink mermaid sticker). The finale (route `party`) is the family party, coming soon.
+// speedboat, the story of the lost fireflies, four stops and the fire show, the pink mermaid sticker). The finale (route `party`) is the family party, coming soon.
 import { use } from 'react'
 import { useStampFlow } from '../../kit/stampFlow'
 import { worldLink } from '../../../router'
