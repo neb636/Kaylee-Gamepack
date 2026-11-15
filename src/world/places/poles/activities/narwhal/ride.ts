@@ -1114,8 +1114,8 @@ export class NarwhalRide implements World3D {
     const tall = this.tall
     if (this.mode === 'done' || (this.mode === 'arrive' && this.modeT > 0.6)) {
       // The three of them and the balloon, from the side so their faces show.
-      const c = new Vector3(cx(DOCK) + this.lat * 0.5 + 0.3, 2.1, -(DOCK + 3.5))
-      return { center: c, half: tall ? new Vector3(2.4, 2.6, 5) : new Vector3(3, 2.4, 6.5), yaw: 96, pitch: 8 }
+      const c = new Vector3(cx(DOCK) + this.lat * 0.5 + 0.3, 1.9, -(DOCK + 2.2))
+      return { center: c, half: tall ? new Vector3(2.4, 2.2, 3.4) : new Vector3(3, 2.2, 4.6), yaw: 96, pitch: 8 }
     }
     if (this.mode === 'ready' && this.intro) {
       // A look at their faces before she sets off.
