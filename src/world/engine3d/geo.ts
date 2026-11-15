@@ -6,11 +6,12 @@
 //     P.rbox(0.9, 0.06, 1.9, 0.02, PAL.peach, { at: [0, 0.72, 0] }),
 //     ...legs.map((at) => P.cyl(0.04, 0.04, 0.7, PAL.ink, { at })),
 //   ]), bag, 2)
-import { BoxGeometry, BufferAttribute, CanvasTexture, CapsuleGeometry, Color, ConeGeometry, CylinderGeometry, Euler, ExtrudeGeometry, Group, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Shape, SphereGeometry, TorusGeometry, Vector2, Vector3, BufferGeometry, type ColorRepresentation } from 'three'
+import { BoxGeometry, BufferAttribute, CapsuleGeometry, Color, ConeGeometry, CylinderGeometry, Euler, ExtrudeGeometry, Group, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Shape, SphereGeometry, TorusGeometry, type Texture, Vector2, Vector3, BufferGeometry, type ColorRepresentation } from 'three'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import type { Bag } from './dispose'
 import { makeHull } from './outline'
+import { radialAlpha, softTexture } from './softTexture'
 import { toon } from './toon'
 
 export type V3 = [number, number, number]
@@ -111,21 +112,11 @@ export function solidMix(outlined: BufferGeometry[], plain: BufferGeometry[], ba
 /** Like `solid`, without merging: a single part. */
 export const one = (part: BufferGeometry, bag: Bag, px = 2) => solid(part, bag, px)
 
-let blobTexture: CanvasTexture | null = null
+let blobTexture: Texture | null = null
 /** A soft ink-tinted disc on the floor under something, so it reads as standing there (no shadow maps needed). */
 export function blobShadow(r: number, bag: Bag) {
-  if (!blobTexture) {
-    const c = document.createElement('canvas')
-    c.width = c.height = 64
-    const x = c.getContext('2d')!
-    const grad = x.createRadialGradient(32, 32, 0, 32, 32, 32)
-    grad.addColorStop(0, 'rgba(43,35,48,0.34)')
-    grad.addColorStop(0.62, 'rgba(43,35,48,0.2)')
-    grad.addColorStop(1, 'rgba(43,35,48,0)')
-    x.fillStyle = grad
-    x.fillRect(0, 0, 64, 64)
-    blobTexture = new CanvasTexture(c)
-  }
+  // (Pixels written by hand, not a canvas gradient: on iPhone and iPad that speckles with colored static, see softTexture.)
+  blobTexture ??= softTexture(64, 64, [43, 35, 48], (x, y) => radialAlpha(Math.hypot(x - 32, y - 32), 32, [[0, 0.34], [0.62, 0.2], [1, 0]]))
   const m = new Mesh(bag.add(new PlaneGeometry(r * 2, r * 2)), blobMaterial())
   m.rotation.x = -Math.PI / 2
   m.position.y = 0.012
