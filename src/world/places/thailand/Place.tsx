@@ -1,13 +1,13 @@
 // Thailand: Kaylee's family's country, in 3D (plan: planning/around-the-world/thailand.md). She lands on the Thailand
-// map (activities/hub/map/, plan: thailand/thailand-map.md) and taps Bangkok, Krabi or Nan. Bangkok
+// map (activities/hub/map/, plan: thailand/thailand-map.md) and taps Bangkok, Krabi, Nan or Koh Samet. Bangkok
 // is Agong's shophouse (activities/hub/), where she walks around, meets her family and pokes everything. The places the family
-// loves become activities, one per PR: the first is the boat trip (activities/boat-trip/), which ends with her photo on
-// Agong's wall and the stamp (the fiddler crab sticker, and the trip's facts to tap); the second is the mall day
-// (activities/mall-trip/, greyboxes so far, still in the works: Mom's question, the Veloz, ICONSIAM, HarborLand's
-// hall of mini games, the pizza table, and home with the pizza box for Agong, then its stamp and the pizza slice
-// sticker); the third is the Nan road trip (activities/nan-trip/, in the works: greyboxes from Mom's question to the
-// photo on Agong's wall, then its stamp); the fourth is the Koh Samet island trip (activities/samet-trip/: the
-// speedboat, the island to roam, four stops and the fire show, the pink mermaid sticker). The finale (route `party`) is the family party, coming soon.
+// loves become activities, four of them, all built and on for Kaylee: the boat trip in Krabi (activities/boat-trip/: the
+// bay, the stamp and the fiddler crab sticker); the mall day (activities/mall-trip/: Mom's question, the Veloz,
+// ICONSIAM, HarborLand's hall of mini games, the pizza table, home with the pizza box for Agong, the pizza slice
+// sticker); the Nan road trip (activities/nan-trip/: the Nan map, the mushroom farm, the rice farm, the salt wells, the
+// Nan Mountain Cup, the pink mushroom sticker); and the Koh Samet trip (activities/samet-trip/: the Lost Fireflies
+// story, four stops and the fire show, the pink mermaid sticker). The finale (route `party`), the family party, isn't
+// built yet: it shows `PartySoon`.
 import { use } from 'react'
 import { useStampFlow } from '../../kit/stampFlow'
 import { worldLink } from '../../../router'
@@ -61,7 +61,7 @@ export default function Place(props: PlaceProps) {
       </>
     )
   }
-  // The Nan road trip: greyboxes joined up into the whole trip, still in the works (only its links open it).
+  // The Nan road trip, from the map's Nan pin.
   if (activity === 'nan-trip' && info) {
     return (
       <>

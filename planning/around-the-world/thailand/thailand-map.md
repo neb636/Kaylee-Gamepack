@@ -4,13 +4,13 @@ Built: a 3D toy map · Country hub (3D) · updated 2026-11-10
 
 Thailand has grown past one house. Now when Sparkle's balloon lands in Thailand, Kaylee sees a big **map of Thailand** with a pin for each place, like Australia's map. She taps **Bangkok** (Agong's house), **Krabi** (the boat and the elephants) or **Nan** (the mountains) and that place opens; the animals and boats on the map hop when she taps them. Trips end back on the map, where their stamp lands on the pin. The mall day still starts at the house: Mom or Dad asks if she wants to go to the mall.
 
-**Next:** The user taps around [the map](#/world/thailand) on the iPad, opens Krabi and Nan, and plays a trip to its end. The **[open questions](#questions)** went with my picks for now (they're easy to change). Next: **the look**, the painted map in layers with the pokes as sprites.
+**Next:** voices, hints and QA (step 6). The **[open questions](#questions)** went with my picks for now (they're easy to change).
 
 - Bangkok · Krabi · Nan (room for more): 3 pins
 - tap a pin and that place opens: 1 tap
 - packing and the window seat, the first trip only: once a session
 - every trip after that: straight there
-- plan, greyboxes built; the look, voices + QA next: 3 of 5
+- plan, greyboxes and the look built; voices + QA next: 5 of 6
 
 Related: [← Thailand plan](../thailand.md), [🏔️ The Nan road trip](nan-trip.md), [Canada's train map (the 3D hub)](../canada.md), [Activity template](../ACTIVITY-TEMPLATE.md), [Play design](../../../docs/play-design.md)
 

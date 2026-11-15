@@ -1,8 +1,8 @@
 import { useSections } from '../../kit/sections'
 import BALLOON_SECTIONS from './activities/BalloonSoon.sections'
-// Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md (retired; in git history)). Built one activity per PR: Luna's
-// Fluffy Day, Coco's Canyon Glide and Rosa's Rainy River so far. The other places on Luna's map say "coming soon" until they're built, and the balloon finale
-// (route `party`) waits until all five exist.
+// Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md (retired; in git history)). All five
+// places on Luna's map are built: Pepa's Penguin Cliff, Tika's Mountain Terraces, Luna's Fluffy Day, Coco's Canyon Glide
+// and Rosa's Rainy River. The balloon finale (route `party`) isn't built yet: it shows `BalloonSoon`.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType } from 'react'
 import { BigButton, firstTime, say, SparklePuppet, sounds, useSaved, type PuppetHandle } from '../../../sdk'

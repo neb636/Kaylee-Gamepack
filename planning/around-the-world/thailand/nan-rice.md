@@ -423,8 +423,7 @@ The user played greybox B (2026-10-25): threshing feels good (ten bangs, the swi
   line then Sparkle's, back to back, play in that order on every trip leg (before, Sparkle cut the friend off when
   their clip hadn't started yet).
 
-**Next:** The user listens on the iPad: Lung's voice and accent (the Thai numbers especially), and whether Lung + Dad +
-Sparkle is too much talk. Then the next stop: Bo Kluea salt (step 4).
+**Next:** the next stop, Bo Kluea salt (step 4).
 
 ## Fun check
 
@@ -473,7 +472,7 @@ turning in and out, last year's afternoon (a bed), and two music cues (`rice-sto
 "Aroi mak!" without "That means so yummy!" (Kaylee speaks Thai). Recorded by the PR's voices job (no working OpenAI
 key locally).
 
-**Next.** The user listens to the table read and watches the films; then Kaylee plays it (check-in 3). If she likes it,
+**Next.** Kaylee plays it (check-in 3). If she likes it,
 the user will use this as the pattern for every story and cutscene (`docs/films.md`).
 
 **Lung's bench and look (2026-11-12, fix).** Last year's nap is now on a plank bench just left of the scarecrow
