@@ -1,4 +1,4 @@
-// Packing for Koh Samet: the trip kit's packing in Agong's own house (activities/hub/house.ts with the trip kit's
+// Packing for Koh Samet: the trip kit's packing in the Thailand house (activities/hub/house.ts with the trip kit's
 // plugin, trip/legs/house-plugin.ts, told by SAMET_TRIP what the trip is). Kaylee's room, the suitcase open: tap
 // anything and it hops in (the swimsuit, the sun hat, the floaties, the bucket and spade, or the silly things), Mom's
 // hint makes the sun things glint, then she sits on the suitcase, click, her sun hat and floaties go on, and she walks

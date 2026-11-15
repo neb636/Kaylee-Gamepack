@@ -1,5 +1,5 @@
 // The mall day as a trip (trip/types.ts): Mom, Dad and Kaylee in Mom's grey Veloz (she drives) to ICONSIAM, a
-// day out with no packing. The whole family waves them off at the shutter, and the pizza box comes home for Agong.
+// day out with no packing. The whole family waves them off at the shutter, and the pizza box comes home for Aunty Jum.
 // Its day pass (the cover between legs, like the boat trip's boarding pass). Pure data.
 import type { TripDef } from '../../trip/types'
 import type { MallSection } from './sections'

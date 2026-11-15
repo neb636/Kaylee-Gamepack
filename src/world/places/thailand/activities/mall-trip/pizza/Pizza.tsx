@@ -19,7 +19,7 @@ interface Props {
   onPizza: (id: PizzaId) => void
   onServed: () => void
   onShared: (n: number) => void
-  /** The pan is empty and Agong's box is shut (the trip goes home). */
+  /** The pan is empty and the box is shut (the trip goes home). */
   onAllDone?: () => void
 }
 

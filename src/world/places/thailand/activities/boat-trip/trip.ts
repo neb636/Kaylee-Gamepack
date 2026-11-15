@@ -24,7 +24,7 @@ export const BOAT_TRIP: TripDef = {
     ready: L.trip.goodbye.van,
     horn: L.trip.goodbye.horn,
     home: L.home.sri,
-    agong: L.home.agong,
+    ask: L.home.ask,
     thanks: L.home.thanks,
     cousins: { gan: L.home.gan, ken: L.home.ken, bb: L.home.bb },
     pick: L.home.pick,

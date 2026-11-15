@@ -1,5 +1,5 @@
 // Home from the trip: her photos fan out at the bottom of the screen like a hand of cards, and she picks the one for
-// Agong's wall. The picked one lifts up and flies off into her hands (the house shows it there, in a pink frame); the
+// the photo wall. The picked one lifts up and flies off into her hands (the house shows it there, in a pink frame); the
 // others slide away. Up to six: the places first (the village, the hong, the race, the Nail Island, Baan Chang's splash
 // and its sign), then her newest pose photos, Mom's selfies last. Nothing to read. (The Nan road trip fans out its
 // own: the places she went, in the order she did them.)
@@ -35,7 +35,7 @@ export function PhotoFan<P extends FanPhoto>({ photos, open, onPick }: { photos:
         <motion.div
           key="fan"
           role="group"
-          aria-label="Pick a photo for Agong"
+          aria-label="Pick a photo for Aunty Jum"
           exit={{ opacity: 0, transition: { delay: 0.5 } }}
           style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 'min(46vh, 62vw)', zIndex: 34, pointerEvents: 'none' }}
         >

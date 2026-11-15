@@ -1,4 +1,4 @@
-// Thailand's pictures. Agong's house is drawn in 3D (activities/hub/), so this is only what the 2D screens need: the
+// Thailand's pictures. the Thailand house is drawn in 3D (activities/hub/), so this is only what the 2D screens need: the
 // boat trip's fiddler crab sticker, the mall day's pizza slice, the Nan trip's pink mushroom and Koh Samet's pink mermaid
 // (each trip's one generated picture), and the balloon that the passport's friend and the trophy borrow until the family characters
 // have a real cover.

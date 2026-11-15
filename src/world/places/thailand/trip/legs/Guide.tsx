@@ -15,8 +15,7 @@ export interface TripGuideHandle {
 export const WHO: Record<string, { name: string; icon: string; color: string }> = {
   ji: { name: 'Mom', icon: '🦄', color: '#FF8FB8' },
   nick: { name: 'Dad', icon: '🦄', color: '#7FD1B9' },
-  agong: { name: 'Agong', icon: '🐼', color: '#B9A6F5' },
-  jum: { name: 'Jum', icon: '🐘', color: '#FFB3CF' },
+  jum: { name: 'Aunty Jum', icon: '🐘', color: '#FFB3CF' },
   gan: { name: 'Gan', icon: '🦊', color: '#7CC4F2' },
   ken: { name: 'Ken', icon: '🦊', color: '#8FE3C8' },
   bb: { name: 'BB', icon: '🐃', color: '#FFB3D6' },

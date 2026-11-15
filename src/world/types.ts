@@ -57,7 +57,7 @@ export interface PlaceMeta {
    *  poke them, but they're nowhere in the game yet: no button, no passport slot, and the finale doesn't wait for their
    *  stamps. Move one to `activities` when it's ready for Kaylee. */
   inTheWorks?: ActivityInfo[]
-  /** A hub with more than one place in it (Thailand: the map, and Agong's house): the hub section the top bar's back
+  /** A hub with more than one place in it (Thailand: the map, and the Thailand house): the hub section the top bar's back
    *  button goes to from the others, before the world map. */
   hubHome?: string
   /** Passport page facts: weather, hello, food, fun fact... */

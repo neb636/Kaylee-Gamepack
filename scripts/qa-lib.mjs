@@ -210,7 +210,7 @@ export async function filmstrip(frames, file) {
 /** The viewport the running script films or plays at (qa-motion and qa-pacing set it before loading scenarios). */
 export const vp = { name: '', width: 0, height: 0 }
 
-// Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
+// Kaylee's boat trip photo on the photo wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
 // friends), for the photo wall's screens. Runs in the page (`seed: seedWall`).
 export function seedWall() {
   const c = document.createElement('canvas')

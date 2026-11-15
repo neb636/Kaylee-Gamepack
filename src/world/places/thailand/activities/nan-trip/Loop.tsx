@@ -1,11 +1,11 @@
 // The Nan road trip's legs around the stops (plan: thailand/nan-trip.md, build plan step 7), the trip kit's, in three
 // 3D worlds in one shared view:
 //
-//   invite, pack, goodbye, home   Agong's own house (activities/hub/house.ts) with the trip kit's plugin
+//   invite, pack, goodbye, home   the Thailand house (activities/hub/house.ts) with the trip kit's plugin
 //                                 (trip/legs/house-plugin.ts, told by NAN_TRIP what the trip is): Mom asks where to
 //                                 (Ask.tsx: 🚤, 🛝🍕 or 🏔️🚙); packing for the mountains (her raincoat, her rain boots,
 //                                 Mom tucks in the umbrella); the goodbye at the shutter and Aunty Sri's van; coming
-//                                 home, the flight, Agong asks for his photo, she picks one (PhotoFan) and it goes on
+//                                 home, the flight, Aunty Jum asks for his photo, she picks one (PhotoFan) and it goes on
 //                                 his wall, in the Nan trip's own frame
 //   airport                       the x-ray belt (trip/legs/airport.ts)
 //   takeoff, fly, land            the window seat north to Nan (trip/legs/plane.ts, `landing: 'nan'`): a green valley
@@ -46,7 +46,7 @@ export interface NanLoopHandle {
 interface Props {
   section: LoopSection
   packed: string[]
-  /** The photos she can pick for Agong's wall coming home. */
+  /** The photos she can pick for the photo wall coming home. */
   photos: PhotoId[]
   /** She has done the whole trip before: the goodbye is quicker, the flight shorter. */
   replay: boolean
@@ -118,7 +118,7 @@ export const NanLoop = forwardRef<NanLoopHandle, Props>(function NanLoop({ secti
       const trip = new TripHouse(s as HouseLeg, st.packed, { ...leg, phase: setPhase, packed: (ids) => cb.current.onPacked(ids) }, NAN_TRIP, replay)
       tripRef.current = trip
       trip.setHintElement(() => hintRef.current)
-      // Coming home: last time's photo is still on the wall until Agong hangs the new one (the other trips' beside it).
+      // Coming home: last time's photo is still on the wall until Aunty Jum hangs the new one (the other trips' beside it).
       const walls = newestByTrip(st.wallPhotos)
       trip.setWall(walls.get(NAN_TRIP.id)?.src ?? null)
       trip.setOtherWalls(new Map([...walls].map(([t, p]) => [t, p.src])))
@@ -139,7 +139,7 @@ export const NanLoop = forwardRef<NanLoopHandle, Props>(function NanLoop({ secti
   }, [phase])
   const asking = mode === 'webgl' && section === 'invite' && phase === 'invite' && !covered && !fromHouse.current
 
-  // Home: her photos fan out once Agong has asked for his (the fan would cover his words).
+  // Home: her photos fan out once Aunty Jum has asked for his (the fan would cover his words).
   const fan = useMemo(() => photos.map((id, n) => ({ n, kind: id, src: drawPhoto(id) })), [photos.join(',')])
   const [fanReady, setFanReady] = useState(false)
   useEffect(() => {
@@ -147,7 +147,7 @@ export const NanLoop = forwardRef<NanLoopHandle, Props>(function NanLoop({ secti
     const t = setTimeout(() => setFanReady(true), 2000)
     return () => clearTimeout(t)
   }, [phase])
-  // The photo she picked goes on Agong's wall (saved on the iPad), then the stamp.
+  // The photo she picked goes on the photo wall (saved on the iPad), then the stamp.
   const chosen = useRef<string | null>(null)
   const saved = useRef(false)
   useEffect(() => {

@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
-// Agong's house, Thailand's 3D home base (src/world/places/thailand/activities/hub/): it renders in WebGL, floor
+// The Thailand house, Thailand's 3D home base (src/world/places/thailand/activities/hub/): it renders in WebGL, floor
 // reminders, and no leftover GPU memory after going back and forth. Read-only state comes from window.__thaiHouseQA (no jump hooks).
 
 type HouseQA = { mode: string; spot?: string; floor?: number; pose?: string; using?: string | null; memory?: { geometries: number; textures: number } }
@@ -21,11 +21,11 @@ async function open(page: Page, link: string, query = '') {
   await page.getByRole('button', { name: /let's play/i }).click()
 }
 
-test('Agong\'s house renders in 3D', async ({ page }) => {
+test('The Thailand house renders in 3D', async ({ page }) => {
   const errors = trackErrors(page)
   await open(page, 'hub/downstairs')
   await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
-  await expect(page.locator('[data-anchor="family:agong"]')).toBeVisible()
+  await expect(page.locator('[data-anchor="family:joy"]')).toBeVisible()
   expect(errors).toEqual([])
 })
 
@@ -60,7 +60,7 @@ test('@behavior house reminders highlight a visible target and only speak when a
   await page.clock.install()
   await open(page, 'hub/downstairs')
   await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
-  await expect(page.locator('[data-anchor="family:agong"]')).toBeVisible()
+  await expect(page.locator('[data-anchor="family:joy"]')).toBeVisible()
   const speech = () => page.evaluate(() => (window.__kayleeSpeech ?? []).map((s) => s.text))
   const before = await speech()
   await page.clock.fastForward(13_000)

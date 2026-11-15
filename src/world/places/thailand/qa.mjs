@@ -20,7 +20,7 @@ async function slideTo(page, until, taps = 0, after = 0) {
 /** Screenshots (scripts/qa-screens.mjs): how to get to each screen from a fresh start. */
 export const screens = [
   // Thailand: the Thailand map (thailand-map.md: where she lands; home from a trip with a stamp landing, every stamp
-  // in), then Agong's house in 3D (the arrival mid-ride, each spot, a few things in
+  // in), then the Thailand house in 3D (the arrival mid-ride, each spot, a few things in
   // use), and the party card.
   { name: 'thailand-map', hash: '#/world/thailand', reset: true, wait: 3000 },
   { name: 'thailand-map-home', hash: '#/world/thailand/hub/map?stamp=boat-trip', stampAll: 'thailand', wait: 3200 },
@@ -57,11 +57,11 @@ export const screens = [
   })),
   // The family photo (everyone, then a few alone on the turntable, in the three-quarter view it rests on first).
   { name: 'thailand-family', hash: '#/world/thailand/hub/family', reset: true, wait: 1800 },
-  ...['kaylee', 'agong', 'ja', 'sri'].map((who) => ({ name: `thailand-family-${who}`, hash: `#/world/thailand/hub/family?who=${who}`, reset: true, wait: 1500 })),
+  ...['kaylee', 'jum', 'ja', 'sri'].map((who) => ({ name: `thailand-family-${who}`, hash: `#/world/thailand/hub/family?who=${who}`, reset: true, wait: 1500 })),
   { name: 'thailand-party-soon', hash: '#/world/thailand/party/soon', stampAll: 'thailand', wait: 800 },
   // The mall day's trip loop (greybox): Mom's card (🚤 / 🛝🍕), the day pass's choices on a replay, the goodbye with
   // the whole family and the Veloz (then everyone in it), ICONSIAM's glimpse, the lift going up, the counter with her
-  // socks on, home (the car at Agong's door; the box given, the photo on the wall).
+  // socks on, home (the car at the door; the box given, the photo on the wall).
   { name: 'mall-loop-invite', hash: '#/world/thailand/mall-trip/invite', reset: true, wait: 4000 },
   { name: 'mall-loop-replay', hash: '#/world/thailand/mall-trip/invite?replay=1', reset: true, wait: 3500, act: async (p) => {
     await p.locator('button[aria-label="The mall"]').click({ force: true })
@@ -91,7 +91,7 @@ export const screens = [
   } },
   { name: 'mall-loop-home-wall', hash: '#/world/thailand/mall-trip/home', reset: true, wait: 1500, act: async (p) => {
     await p.waitForFunction(() => window.__thaiMallQA?.().trip === 'give', null, { timeout: 40000 }).catch(() => {})
-    await p.locator('[data-anchor="family:agong"]').click({ force: true }).catch(() => {})
+    await p.locator('[data-anchor="family:jum"]').click({ force: true }).catch(() => {})
     await p.waitForFunction(() => window.__thaiMallQA?.().held === 'wall', null, { timeout: 60000 }).catch(() => {})
     await p.waitForTimeout(1200)
   } },
@@ -371,7 +371,7 @@ export const screens = [
   },
   { name: 'skypod-hint', hash: '#/world/thailand/mall-trip/skypod', reset: true, wait: 9500 },
   // The Pizza Company (greybox): the menu, the table at the start, a slice pulled out with the cheese stretching (held
-  // over Dad's plate), the last two for Agong's box, the box closed.
+  // over Dad's plate), the last two for the box, the box closed.
   { name: 'pizza-menu', hash: '#/world/thailand/mall-trip/menu', reset: true, wait: 3500 },
   { name: 'pizza-share', hash: '#/world/thailand/mall-trip/share?pizza=cheese', reset: true, wait: 3500 },
   {
@@ -389,7 +389,7 @@ export const screens = [
       await p.waitForTimeout(400)
     },
   },
-  { name: 'pizza-agong', hash: '#/world/thailand/mall-trip/share?pizza=hawaiian&shared=6', reset: true, wait: 3500 },
+  { name: 'pizza-aunty-jum', hash: '#/world/thailand/mall-trip/share?pizza=hawaiian&shared=6', reset: true, wait: 3500 },
   { name: 'pizza-done', hash: '#/world/thailand/mall-trip/share?pizza=seafood&shared=8', reset: true, wait: 3500 },
   // The Nan road trip's mountain road (greybox): the Pajero setting off on each of the four roads, a few seconds in on
   // the sky road (the switchbacks, the first mirror).
@@ -429,7 +429,7 @@ export const screens = [
   { name: 'nan-three', hash: '#/world/thailand/nan-trip/three', reset: true, wait: 4000 },
   // The Nan trip's loop (the trip kit's legs): Mom's card with 🏔️🚙, packing with the mountain things, the goodbye,
   // the x-ray, the window seat, landing in Nan's green valley (it plays out to the Nan map), and coming home (the
-  // flight, then Agong asks for his photo and the Nan photos fan out).
+  // flight, then Aunty Jum asks for his photo and the Nan photos fan out).
   ...['invite', 'pack', 'goodbye', 'airport', 'fly'].map((to) => ({ name: `nan-${to}`, hash: `#/world/thailand/nan-trip/${to}`, reset: true, wait: to === 'invite' ? 3800 : 2600 })),
   { name: 'nan-land', hash: '#/world/thailand/nan-trip/land', reset: true, wait: 5500 },
   { name: 'nan-home', hash: '#/world/thailand/nan-trip/home?photos=deck,three,pizza,salt', reset: true, wait: 16000 },
@@ -693,7 +693,7 @@ export const screens = [
       await p.waitForTimeout(1400)
     },
   },
-  // Home (step 5): the photos fanned out for Agong, everyone gathered round her photo on the wall, the stamp with the
+  // Home (step 5): the photos fanned out for Aunty Jum, everyone gathered round her photo on the wall, the stamp with the
   // trip's facts, the photo wall in the house (and close up), a replay's boarding pass (🧳 or 🚤).
   {
     name: 'boat-trip-home-pick',
@@ -717,7 +717,7 @@ export const screens = [
       await p.waitForFunction(() => window.__thaiBoatQA?.().trip === 'pick', null, { timeout: 60000 }).catch(() => {})
       await p.getByRole('button', { name: /^Photo: / }).first().click({ force: true }).catch(() => {})
       await p.waitForTimeout(1500)
-      await p.locator('[data-anchor="family:agong"]').click({ force: true }).catch(() => {})
+      await p.locator('[data-anchor="family:jum"]').click({ force: true }).catch(() => {})
       await p.waitForFunction(() => window.__thaiBoatQA?.().trip === 'home', null, { timeout: 60000 }).catch(() => {})
     },
   },
@@ -732,7 +732,7 @@ export const screens = [
       await p.waitForFunction(() => window.__thaiBoatQA?.().trip === 'pick', null, { timeout: 60000 }).catch(() => {})
       await p.getByRole('button', { name: /^Photo: / }).first().click({ force: true }).catch(() => {})
       await p.waitForTimeout(1500)
-      await p.locator('[data-anchor="family:agong"]').click({ force: true }).catch(() => {})
+      await p.locator('[data-anchor="family:jum"]').click({ force: true }).catch(() => {})
       await p.waitForFunction(() => window.__thaiBoatQA?.().trip === 'gather', null, { timeout: 60000 }).catch(() => {})
       await p.waitForTimeout(3000)
     },
@@ -774,7 +774,7 @@ export const screens = [
 /** Auto-played runs (scripts/qa-pacing.mjs): talk before the first touch, talk per touch, the play strip. */
 export const pacing = [
   { name: 'thailand map (tap a pin)', id: 'thailand', hash: '#/world/thailand', reset: true },
-  { name: "thailand agong's house (arrival)", id: 'thailand-house', hash: '#/world/thailand/hub/arrive', reset: true, play: false },
+  { name: "the Thailand house (arrival)", id: 'thailand-house', hash: '#/world/thailand/hub/arrive', reset: true, play: false },
   // The trip there, one run per leg (each from its own section link).
   { name: "thailand: kaylee's wardrobe", id: 'wardrobe', hash: '#/world/thailand/hub/wardrobe?drawer=head', reset: true },
   { name: 'thailand trip: mommy asks', id: 'trip-invite', hash: '#/world/thailand/boat-trip/invite', reset: true },
@@ -804,15 +804,15 @@ export const pacing = [
   { name: 'thailand bay: the sunset ride back', id: 'bay-sunset', hash: '#/world/thailand/boat-trip/sunset', reset: true },
   { name: 'thailand bay: the boat race', id: 'bay-race', hash: '#/world/thailand/boat-trip/race', reset: true },
   { name: 'thailand bay: the race podium', id: 'bay-podium', hash: '#/world/thailand/boat-trip/podium', reset: true },
-  // Home (step 5): a home link builds the bay first for its photos, then the flight home, the van, the photo for Agong.
-  { name: 'thailand trip: home, the photo for agong', id: 'trip-home', hash: '#/world/thailand/boat-trip/home?photos=village,hong,nail&found=crab,eagle', reset: true },
+  // Home (step 5): a home link builds the bay first for its photos, then the flight home, the van, the photo for Aunty Jum.
+  { name: 'thailand trip: home, the photo for aunty jum', id: 'trip-home', hash: '#/world/thailand/boat-trip/home?photos=village,hong,nail&found=crab,eagle', reset: true },
   { name: 'thailand trip: a replay (🧳 or 🚤)', id: 'trip-replay', hash: '#/world/thailand/boat-trip/invite?replay=1', reset: true },
   // The mall day's trip loop (greybox, no voices yet: the words show in bubbles). Mom's card, the goodbye (hugs, the
-  // Veloz), ICONSIAM (the lift, the counter's toys, the gate), and home (the box for Agong, the photo on the wall).
+  // Veloz), ICONSIAM (the lift, the counter's toys, the gate), and home (the box for Aunty Jum, the photo on the wall).
   { name: 'thailand mall: mommy asks where to', id: 'mall-invite', hash: '#/world/thailand/mall-trip/invite', reset: true },
   { name: 'thailand mall: goodbye and the veloz', id: 'mall-goodbye', hash: '#/world/thailand/mall-trip/goodbye', reset: true },
   { name: 'thailand mall: iconsiam, the lift and the counter', id: 'mall-arrive', hash: '#/world/thailand/mall-trip/arrive', reset: true },
-  { name: 'thailand mall: home, the box for agong', id: 'mall-home', hash: '#/world/thailand/mall-trip/home', reset: true },
+  { name: 'thailand mall: home, the box for aunty jum', id: 'mall-home', hash: '#/world/thailand/mall-trip/home', reset: true },
   // HarborLand's hall (greybox, no voices): walking between the ways in; a tap on one goes into that mini game.
   { name: 'thailand mall: the hall', id: 'mall-hall', hash: '#/world/thailand/mall-trip/hall', reset: true },
   // HarborLand's Big Frame (greybox, no voices, and no end: a toy with no goal): climb up, slide down, the cannon.
@@ -839,7 +839,7 @@ export const pacing = [
   // pods only by chance, so it may not reach the finale: the scripted run in the plan does).
   { name: 'thailand mall: sky pod', id: 'mall-skypod', hash: '#/world/thailand/mall-trip/skypod', reset: true },
   // The Pizza Company (greybox, no voices): a tap on the pizza serves a slice (with its stretch) to the plate that's
-  // behind, so the auto-player can share all eight and fill Agong's box.
+  // behind, so the auto-player can share all eight and fill the box.
   { name: 'thailand mall: pizza share', id: 'mall-pizza', hash: '#/world/thailand/mall-trip/share', reset: true },
   // The Nan road trip's mountain road (greybox, no voices): Mom drives by herself to the end of the road, so the
   // auto-player's taps are pokes and steering; one run per road that deepens the verb.
@@ -877,7 +877,7 @@ export const pacing = [
   // The Krabi map (the boat trip's hub): a tap on a pin goes there.
   { name: 'thailand boat: the krabi map', id: 'krabi-map', hash: '#/world/thailand/boat-trip/map', reset: true },
   { name: 'thailand nan: the 3 from above', id: 'nan-three-view', hash: '#/world/thailand/nan-trip/three', reset: true },
-  { name: "thailand house: the photo wall (agong's wall downstairs)", id: 'photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall },
+  { name: "thailand house: the photo wall (downstairs)", id: 'photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall },
 ]
 
 /** Filmed moments (scripts/qa-motion.mjs): the core verbs, driven the way a child would. */
@@ -917,7 +917,7 @@ motion.push(
   thaiMap('thai-map-pin', 4, mapTaps([['pin:krabi', 3200]])),
 )
 
-// Agong's house (Thailand, 3D): Kaylee's hop-trot across the floor, hopping up the stairs (the camera follows her to
+// The Thailand house (Thailand, 3D): Kaylee's hop-trot across the floor, hopping up the stairs (the camera follows her to
 // the other floor), and the mattress bounce getting higher until she flops down. Taps go through the house's tap
 // targets ([data-anchor]), like a finger.
 // Wait for the board transition, then enough rendered frames for the arrival camera to settle.
@@ -2290,7 +2290,7 @@ motion.push(
   },
 )
 
-// Coming home (step 5): the flight home (the plane over the pink sunset), and Agong taking the photo, holding it up and
+// Coming home (step 5): the flight home (the plane over the pink sunset), and Aunty Jum taking the photo, holding it up and
 // walking in to hang it on his wall; then everyone gathering and the cousins putting their phones down. A home link
 // first builds the bay to take its photo, so the setup waits for each moment.
 const thaiHome = (name, seconds, until, act) => ({
@@ -2306,15 +2306,15 @@ const thaiHome = (name, seconds, until, act) => ({
     await page.waitForFunction(() => window.__thaiBoatQA?.().trip === 'give', null, { timeout: 20000 })
     await page.waitForTimeout(1200)
     if (until === 'give') return
-    await page.locator('[data-anchor="family:agong"]').click({ force: true })
+    await page.locator('[data-anchor="family:jum"]').click({ force: true })
     await page.waitForFunction(() => window.__thaiBoatQA?.().trip === 'gather', null, { timeout: 60000 })
   },
   act,
 })
 motion.push(
   thaiHome('trip-flight-home', 4, 'flight', async (page) => page.waitForTimeout(3800)),
-  thaiHome('trip-give-agong', 9, 'give', async (page) => {
-    await page.locator('[data-anchor="family:agong"]').click({ force: true })
+  thaiHome('trip-give-jum', 9, 'give', async (page) => {
+    await page.locator('[data-anchor="family:jum"]').click({ force: true })
     await page.waitForTimeout(8800)
   }),
   // Everyone hops in; once the cousins glow she taps Ken, and he puts his phone down ("Whoa! Cool!").

@@ -1,6 +1,6 @@
-// Kaylee's trip photos on Agong's wall downstairs: a pink frame for each trip, hung in a row on the left wall next to
+// Kaylee's trip photos on the photo wall downstairs: a pink frame for each trip, hung in a row on the left wall next to
 // the old family photos, toward the door (the boat trip first; later trips hang beside it). The photo is the one she
-// picked for Agong at the end of the trip (trip/wall-photos.ts, saved on the iPad). The trip's `home` leg hangs it
+// picked for Aunty Jum at the end of the trip (trip/wall-photos.ts, saved on the iPad). The trip's `home` leg hangs it
 // (trip/legs/house-plugin.ts); in the house (the hub) WallPlugin hangs what's saved and makes the frames tappable: tap
 // one and it comes close (the screen shows it big) and Mom says "Our boat trip!" (each trip has its own line). The
 // mall day's frame hangs next to the boat trip's, toward the door. A link with `at=photos` (where the
@@ -45,7 +45,7 @@ export interface TripFrame {
   set(src: string | null): void
 }
 
-/** A pink frame with a cream mat and a little heart on top, built facing +z (Agong holds it up like that); on the wall
+/** A pink frame with a cream mat and a little heart on top, built facing +z (Aunty Jum holds it up like that); on the wall
  *  it turns to face into the room. */
 export function buildTripFrame(bag: Bag): TripFrame {
   const root = new Group()

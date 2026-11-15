@@ -1,4 +1,4 @@
-// A family member in Agong's house: their toy animal (engine3d/characters/animal.ts, looks.ts) standing, sitting or
+// A family member in the Thailand house: their toy animal (engine3d/characters/animal.ts, looks.ts) standing, sitting or
 // lying at their spot, breathing and blinking, turning their head to look at Kaylee when she comes near, waving and
 // hopping when she says hi, and moving their mouth when their voice plays (engine3d/characters/face.ts).
 import { Group, Vector3 } from 'three'
