@@ -63,11 +63,11 @@
     "file": "8ce90a849b18.mp3"
   },
   {
-    "text": "We're at Agong's house in Thailand!",
+    "text": "We're at the Thailand house!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3408,
-    "file": "d9723cb8a6fa.mp3"
+    "ms": 2006,
+    "file": "93c8c2f7a803.mp3"
   },
   {
     "text": "Tap the door to go inside!",
@@ -518,27 +518,6 @@
     "file": "667a35ed53a1.mp3"
   },
   {
-    "text": "Sawasdee krub! Welcome home!",
-    "voice": "agong",
-    "sig": "0f90e139f5",
-    "ms": 2424,
-    "file": "441a6aa05b53.mp3"
-  },
-  {
-    "text": "Come, sit with Agong.",
-    "voice": "agong",
-    "sig": "0f90e139f5",
-    "ms": 2269,
-    "file": "0bea3df853d9.mp3"
-  },
-  {
-    "text": "Ho ho! My little unicorn!",
-    "voice": "agong",
-    "sig": "0f90e139f5",
-    "ms": 2662,
-    "file": "b117b3dc1ac8.mp3"
-  },
-  {
     "text": "Hi sweetie! This is our room!",
     "voice": "ji",
     "sig": "ba2e98c34e",
@@ -560,11 +539,11 @@
     "file": "5961911b4a52.mp3"
   },
   {
-    "text": "Hi! Welcome to Agong's house!",
+    "text": "Hi! Welcome to the Thailand house!",
     "voice": "nick",
     "sig": "a2881bb105",
-    "ms": 3360,
-    "file": "c9f51272a59a.mp3"
+    "ms": 2543,
+    "file": "cc7ab62736ef.mp3"
   },
   {
     "text": "High five!",
@@ -602,11 +581,11 @@
     "file": "305d4c74df84.mp3"
   },
   {
-    "text": "Sawasdee ka! Look at Agong's treasures!",
+    "text": "Sawasdee ka! Look at all the treasures!",
     "voice": "joy",
     "sig": "c3cd84e045",
-    "ms": 3096,
-    "file": "b27d8f53cb2d.mp3"
+    "ms": 4154,
+    "file": "1cec0d1ec9ea.mp3"
   },
   {
     "text": "The lucky cat says hi!",
@@ -1160,34 +1139,6 @@
     "sig": "a2881bb105",
     "ms": 1719,
     "file": "5387fd209410.mp3"
-  },
-  {
-    "text": "Ho ho! So pretty!",
-    "voice": "agong",
-    "sig": "0f90e139f5",
-    "ms": 2160,
-    "file": "04d67008120b.mp3"
-  },
-  {
-    "text": "Ho ho! So fancy!",
-    "voice": "agong",
-    "sig": "0f90e139f5",
-    "ms": 2282,
-    "file": "606b50695e79.mp3"
-  },
-  {
-    "text": "Ho ho! Nice shoes!",
-    "voice": "agong",
-    "sig": "0f90e139f5",
-    "ms": 2447,
-    "file": "9893da02881a.mp3"
-  },
-  {
-    "text": "Ho ho! New colors!",
-    "voice": "agong",
-    "sig": "0f90e139f5",
-    "ms": 2188,
-    "file": "638f40906600.mp3"
   },
   {
     "text": "Oh! What a pretty hat!",
@@ -1783,13 +1734,6 @@
     "sig": "ba2e98c34e",
     "ms": 1104,
     "file": "e1780093e36b.mp3"
-  },
-  {
-    "text": "Bring Agong a photo of the Nail Island!",
-    "voice": "agong",
-    "sig": "0f90e139f5",
-    "ms": 3114,
-    "file": "1a96dd3eabb1.mp3"
   },
   {
     "text": "Snacks for the trip!",
@@ -2773,17 +2717,17 @@
   },
   {
     "text": "Did you bring my photo?",
-    "voice": "agong",
-    "sig": "0f90e139f5",
-    "ms": 1590,
-    "file": "de65bfc92a83.mp3"
+    "voice": "jum",
+    "sig": "4e8ef39b9e",
+    "ms": 2711,
+    "file": "efa592d99b6e.mp3"
   },
   {
     "text": "Beautiful! Thank you!",
-    "voice": "agong",
-    "sig": "0f90e139f5",
-    "ms": 2232,
-    "file": "542de9432cd9.mp3"
+    "voice": "jum",
+    "sig": "4e8ef39b9e",
+    "ms": 1972,
+    "file": "6af521d7f712.mp3"
   },
   {
     "text": "Whoa! Cool!",
@@ -2807,13 +2751,6 @@
     "file": "c34f36a93362.mp3"
   },
   {
-    "text": "So pretty!",
-    "voice": "jum",
-    "sig": "4e8ef39b9e",
-    "ms": 1396,
-    "file": "4c274688494e.mp3"
-  },
-  {
     "text": "Our boat trip!",
     "voice": "ji",
     "sig": "ba2e98c34e",
@@ -2828,25 +2765,25 @@
     "file": "8597807fb09a.mp3"
   },
   {
-    "text": "Pick a photo for Agong!",
+    "text": "Pick a photo for Aunty Jum!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 1796,
-    "file": "197e4aefff00.mp3"
+    "ms": 2518,
+    "file": "ec06b34c930c.mp3"
   },
   {
-    "text": "Tap Agong to give it to him!",
+    "text": "Tap Aunty Jum to give it to her!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 1954,
-    "file": "ab615401d6be.mp3"
+    "ms": 3110,
+    "file": "a7b5bcd4f8f3.mp3"
   },
   {
-    "text": "Click Agong to give it to him!",
+    "text": "Click Aunty Jum to give it to her!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2472,
-    "file": "1d1abd396fac.mp3"
+    "ms": 2777,
+    "file": "0db312c17367.mp3"
   },
   {
     "text": "Tap the plane to fly home!",
@@ -8505,18 +8442,18 @@
     "file": "34e9346802c7.mp3"
   },
   {
-    "text": "Those are for Agong!",
+    "text": "Those are for Aunty Jum!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 1775,
-    "file": "b0f201480dff.mp3"
+    "ms": 2062,
+    "file": "6f871488b159.mp3"
   },
   {
-    "text": "Yay! Pizza for Agong!",
+    "text": "Yay! Pizza for Aunty Jum!",
     "voice": "nick",
     "sig": "a2881bb105",
-    "ms": 2818,
-    "file": "1509854de2fa.mp3"
+    "ms": 2580,
+    "file": "800b452f8810.mp3"
   },
   {
     "text": "Sharing fairly means everyone gets the same!",
@@ -8589,11 +8526,11 @@
     "file": "931758e4b13f.mp3"
   },
   {
-    "text": "Put one in Agong's box!",
+    "text": "Put one in Aunty Jum's box!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2600,
-    "file": "3cba839a81d9.mp3"
+    "ms": 2978,
+    "file": "64f772e54cf4.mp3"
   },
   {
     "text": "Where shall we go?",
@@ -8603,11 +8540,11 @@
     "file": "c496d943b4ec.mp3"
   },
   {
-    "text": "Bring Agong something yummy!",
-    "voice": "agong",
-    "sig": "0f90e139f5",
-    "ms": 2379,
-    "file": "cf74f03c7e30.mp3"
+    "text": "Bring me something yummy!",
+    "voice": "jum",
+    "sig": "4e8ef39b9e",
+    "ms": 2492,
+    "file": "da36ab5d3285.mp3"
   },
   {
     "text": "Mom is driving! Hop in!",
@@ -8624,18 +8561,18 @@
     "file": "0c12000bb68c.mp3"
   },
   {
-    "text": "Ho ho! What is that?",
-    "voice": "agong",
-    "sig": "0f90e139f5",
-    "ms": 2112,
-    "file": "7ab15cb0e793.mp3"
+    "text": "Ooh! What is that?",
+    "voice": "jum",
+    "sig": "4e8ef39b9e",
+    "ms": 2787,
+    "file": "c9cfda48e8e1.mp3"
   },
   {
     "text": "Pizza! Thank you!",
-    "voice": "agong",
-    "sig": "0f90e139f5",
-    "ms": 1632,
-    "file": "f2e3e8a9355e.mp3"
+    "voice": "jum",
+    "sig": "4e8ef39b9e",
+    "ms": 2120,
+    "file": "b8f647c0ec9e.mp3"
   },
   {
     "text": "Pizza?!",
@@ -8659,25 +8596,25 @@
     "file": "446184698469.mp3"
   },
   {
-    "text": "Ho ho ho! Look at Dad's hair!",
-    "voice": "agong",
-    "sig": "0f90e139f5",
-    "ms": 3384,
-    "file": "df86dcc3e272.mp3"
+    "text": "Ha ha! Look at Dad's hair!",
+    "voice": "jum",
+    "sig": "4e8ef39b9e",
+    "ms": 2772,
+    "file": "d0511ef77b19.mp3"
   },
   {
-    "text": "Tap Agong to give him the box!",
+    "text": "Tap Aunty Jum to give her the box!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2895,
-    "file": "e0ddf39c6b7e.mp3"
+    "ms": 3234,
+    "file": "bc204f908c96.mp3"
   },
   {
-    "text": "Click Agong to give him the box!",
+    "text": "Click Aunty Jum to give her the box!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3720,
-    "file": "45b2439cbe40.mp3"
+    "ms": 3218,
+    "file": "8b9ce0d046dd.mp3"
   },
   {
     "text": "Our mall day!",
