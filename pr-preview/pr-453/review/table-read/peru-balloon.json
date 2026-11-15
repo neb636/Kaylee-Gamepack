@@ -5,251 +5,12 @@
   "title": "Peru › Balloon",
   "intro": "---- Finale: Luna's Thank-You Balloon (route `party`; drop a present to every friend) ----",
   "page": "peru-balloon.html",
-  "audio": null,
+  "audio": "peru-balloon.mp3",
   "lines": 34,
   "seconds": 71,
   "missing": 0,
   "names": 0,
-  "flags": [
-    {
-      "key": "balloon.wait",
-      "text": "Help every friend first!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.ready.touch",
-      "text": "Tap the balloon! Off we fly!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.ready.mouse",
-      "text": "Click the balloon! Off we fly!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.story.0",
-      "text": "Our journal is full!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.story.1",
-      "text": "Let's say thank you!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.go",
-      "text": "Pull a present, let it go!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.coast",
-      "text": "Drop a present for each friend!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.mountains",
-      "text": "Windy! They catch it in the air!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.forest",
-      "text": "Drop it through a gap in the leaves!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.caught.pepa",
-      "text": "A present! Gracias!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.caught.chick",
-      "text": "My baby caught one!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.caught.lobo",
-      "text": "Arf arf! I love it!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.caught.coco",
-      "text": "Nice catch! Gracias!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.caught.pluma",
-      "text": "I caught it in the air!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.caught.tika",
-      "text": "For me? Gracias!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.caught.sloth",
-      "text": "Gracias...",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.caught.monkey",
-      "text": "Mine! Yay!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.caught.rosa",
-      "text": "Wheee! Gracias!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.toMountains",
-      "text": "Bye-bye, sea! Up to the mountains!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.toForest",
-      "text": "Down to the rainforest!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.burner",
-      "text": "Hot air lifts the balloon up!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.pelican",
-      "text": "Pelicans scoop up fish!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.lunaTap.0",
-      "text": "Hee hee!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.lunaTap.1",
-      "text": "Wheee! We are flying!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.lunaTap.2",
-      "text": "I can see the whole country!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.night.touch",
-      "text": "Tap the trees to light lanterns!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.night.mouse",
-      "text": "Click the trees to light lanterns!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.pretty",
-      "text": "So pretty!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.flag",
-      "text": "Peru's red and white flag!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.gracias",
-      "text": "Gracias, everyone!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.meaning",
-      "text": "Gracias means thank you!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.idle.grab",
-      "text": "Pull down a present!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.idle.lantern.touch",
-      "text": "Tap the trees!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "balloon.idle.lantern.mouse",
-      "text": "Click the trees!",
-      "flags": [
-        "new"
-      ]
-    }
-  ],
+  "flags": [],
   "script": [
     {
       "path": [
@@ -262,8 +23,10 @@
       "part": "balloon",
       "when": "Before the journal is full (the balloon on the hub, or a link, with stamps missing).",
       "ms": 2160,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        0,
+        2.05
       ]
     },
     {
@@ -278,8 +41,10 @@
       "part": "balloon › ready",
       "when": "On the hub, once all five stamps are in.",
       "ms": 2904,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        3.75,
+        6.5
       ]
     },
     {
@@ -294,8 +59,10 @@
       "part": "balloon › ready",
       "when": "",
       "ms": 2448,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        6.89,
+        9.22
       ]
     },
     {
@@ -310,8 +77,10 @@
       "part": "balloon › story",
       "when": "",
       "ms": 2064,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        10.9,
+        12.87
       ]
     },
     {
@@ -326,8 +95,10 @@
       "part": "balloon › story",
       "when": "",
       "ms": 1272,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        13.25,
+        14.47
       ]
     },
     {
@@ -341,8 +112,10 @@
       "part": "balloon",
       "when": "The core verb, said at the first stop (no gesture word: pulling works the same with a finger or a mouse).",
       "ms": 2304,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        16.15,
+        18.35
       ]
     },
     {
@@ -356,8 +129,10 @@
       "part": "balloon",
       "when": "A new stop: what's different here.",
       "ms": 2184,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        18.73,
+        20.81
       ]
     },
     {
@@ -371,8 +146,10 @@
       "part": "balloon",
       "when": "",
       "ms": 2880,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        21.2,
+        23.93
       ]
     },
     {
@@ -386,8 +163,10 @@
       "part": "balloon",
       "when": "",
       "ms": 2688,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        24.32,
+        26.87
       ]
     },
     {
@@ -402,8 +181,10 @@
       "part": "balloon › caught",
       "when": "Each friend catches their present (their own voice).",
       "ms": 2544,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        28.56,
+        30.98
       ]
     },
     {
@@ -418,8 +199,10 @@
       "part": "balloon › caught",
       "when": "Each friend catches their present (their own voice).",
       "ms": 1656,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        31.37,
+        32.95
       ]
     },
     {
@@ -434,8 +217,10 @@
       "part": "balloon › caught",
       "when": "Each friend catches their present (their own voice).",
       "ms": 2184,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        33.33,
+        35.41
       ]
     },
     {
@@ -450,8 +235,10 @@
       "part": "balloon › caught",
       "when": "Each friend catches their present (their own voice).",
       "ms": 2544,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        35.8,
+        38.21
       ]
     },
     {
@@ -466,8 +253,10 @@
       "part": "balloon › caught",
       "when": "Each friend catches their present (their own voice).",
       "ms": 1584,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        38.6,
+        40.1
       ]
     },
     {
@@ -482,8 +271,10 @@
       "part": "balloon › caught",
       "when": "Each friend catches their present (their own voice).",
       "ms": 1896,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        40.49,
+        42.3
       ]
     },
     {
@@ -498,8 +289,10 @@
       "part": "balloon › caught",
       "when": "Each friend catches their present (their own voice).",
       "ms": 1224,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        42.68,
+        43.85
       ]
     },
     {
@@ -514,8 +307,10 @@
       "part": "balloon › caught",
       "when": "Each friend catches their present (their own voice).",
       "ms": 1680,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        44.24,
+        45.84
       ]
     },
     {
@@ -530,8 +325,10 @@
       "part": "balloon › caught",
       "when": "Each friend catches their present (their own voice).",
       "ms": 2376,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        46.22,
+        48.48
       ]
     },
     {
@@ -545,8 +342,10 @@
       "part": "balloon",
       "when": "Every friend at a stop has a present: the balloon flies on (Luna names the next of Peru's three worlds).",
       "ms": 2544,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        50.17,
+        52.58
       ]
     },
     {
@@ -560,8 +359,10 @@
       "part": "balloon",
       "when": "",
       "ms": 1512,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        52.97,
+        54.41
       ]
     },
     {
@@ -575,8 +376,10 @@
       "part": "balloon",
       "when": "Pokeables (the first poke of each; after that just sounds).",
       "ms": 2376,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        54.8,
+        57.05
       ]
     },
     {
@@ -590,8 +393,10 @@
       "part": "balloon",
       "when": "",
       "ms": 2472,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        57.44,
+        59.79
       ]
     },
     {
@@ -606,8 +411,10 @@
       "part": "balloon › lunaTap",
       "when": "",
       "ms": 956,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        61.48,
+        62.44
       ]
     },
     {
@@ -622,8 +429,10 @@
       "part": "balloon › lunaTap",
       "when": "",
       "ms": 2808,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        62.83,
+        65.49
       ]
     },
     {
@@ -638,8 +447,10 @@
       "part": "balloon › lunaTap",
       "when": "",
       "ms": 2352,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        65.88,
+        68.12
       ]
     },
     {
@@ -654,8 +465,10 @@
       "part": "balloon › night",
       "when": "The payoff at night.",
       "ms": 2256,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        69.81,
+        71.96
       ]
     },
     {
@@ -670,8 +483,10 @@
       "part": "balloon › night",
       "when": "",
       "ms": 2928,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        72.34,
+        75.12
       ]
     },
     {
@@ -685,8 +500,10 @@
       "part": "balloon",
       "when": "",
       "ms": 1211,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        76.81,
+        78.02
       ]
     },
     {
@@ -700,8 +517,10 @@
       "part": "balloon",
       "when": "",
       "ms": 2712,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        78.41,
+        80.99
       ]
     },
     {
@@ -715,8 +534,10 @@
       "part": "balloon",
       "when": "",
       "ms": 1464,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        81.38,
+        82.76
       ]
     },
     {
@@ -730,8 +551,10 @@
       "part": "balloon",
       "when": "",
       "ms": 2136,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        83.15,
+        85.19
       ]
     },
     {
@@ -746,8 +569,10 @@
       "part": "balloon › idle",
       "when": "",
       "ms": 1776,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        86.87,
+        88.56
       ]
     },
     {
@@ -763,8 +588,10 @@
       "part": "balloon › idle › lantern",
       "when": "",
       "ms": 1584,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        90.25,
+        91.76
       ]
     },
     {
@@ -780,8 +607,10 @@
       "part": "balloon › idle › lantern",
       "when": "",
       "ms": 1104,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        92.15,
+        93.19
       ]
     }
   ]

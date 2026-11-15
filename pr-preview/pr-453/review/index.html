@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Script check: Peru › Balloon</title>
+<title>Peru finale: Luna's Thank-You Balloon</title>
 <style>
 :root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a;--lav:#efe6ff;--warn:#b0124f}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}}
@@ -34,22 +34,24 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 .pair span{position:absolute;left:6px;top:6px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;font-weight:700;border-radius:99px;padding:1px 8px}.pair figcaption{grid-column:1/-1}
 @media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.pics{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}}
 </style></head><body><main>
+<span class="chip">Check-in 2 of 4: hear the script</span>
+<h1>Peru finale: Luna's Thank-You Balloon</h1>
+<p class="kaylee">With the journal full, she rides Sparkle's balloon over the coast, the mountains and the rainforest at sunset, pulls a present off the balloon for every friend and watches it parachute down to them, then lights lanterns at night for the Peru Explorer trophy.</p>
 
-<h1>Script check: Peru › Balloon</h1>
-
-
-
+<h2>Watch</h2><figure><video src="reel/peru-balloon.mp4" poster="" controls playsinline muted autoplay loop></video>
+<figcaption>Peru balloon · 30 s</figcaption></figure>
 
 <h2>Hear the script</h2><div class="card"><h3>Peru › Balloon</h3>
-<p class="meta">34 lines · 71 s of talk · her name 0× · 34 flagged</p>
-
+<p class="meta">34 lines · 71 s of talk · her name 0×</p>
+<audio controls preload="metadata" src="table-read/peru-balloon.mp3"></audio>
 <p><a href="table-read/peru-balloon.html">Read along: who says what, and when</a></p></div>
 
-
-
+<h2>Your call</h2><ol><li><p>About two minutes, nine presents: feel right, or add a fourth stop (Paco and Abuela in the Andes)?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
+<li><p>Lanterns at night to finish: keep them, or fireflies instead?</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><a class="pill" href="https://github.com/neb636/Kaylee-Gamepack/pull/453">Open the PR to paste them</a><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/peru/party?stamps=all">Play it from the start</a> <a class="pill" href="../#/world/peru/party/night?stamps=all">Jump to the night</a></p>
 </main>
 <script>
-const qs=[],titles=[]
+const qs=["About two minutes, nine presents: feel right, or add a fourth stop (Paco and Abuela in the Andes)?","Lanterns at night to finish: keep them, or fireflies instead?"],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})
