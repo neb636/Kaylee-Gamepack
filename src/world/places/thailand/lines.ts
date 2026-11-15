@@ -757,7 +757,7 @@ export const L = {
   // says what's new (the first time she reaches each beach, a new round) and, after a while with nothing done, what to
   // do (spendHint, so at most twice a visit); the family and the islanders react in their own voices (cast.json): the
   // jet ski man (an otter), the captain (a pelican, both boats), the taxi driver (a sun bear) and the fire dancers (two
-  // tokay geckos: Tuk and Kae in the story, one shared voice for their cheers in the show). Kaylee never talks: she
+  // tokay geckos, Tuk and Kae, each in their own voice in the films and the show). Kaylee never talks: she
   // giggles. The island is a hub: no idle hints spoken.
   //
   // One story holds it together, "The Lost Fireflies" (`story`, plan: thailand/samet-story.md): last night's wind blew
@@ -910,10 +910,10 @@ export const L = {
     },
     // The island between the stops (island/): each beach the first time, the taxi, the pokes.
     island: {
-      // Sparkle, the first time she reaches each beach this visit.
+      // Sparkle, the first time she reaches each beach this visit (a beach whose firefly is still hiding waits for it).
       beach: {
         saikaew: 'Hat Sai Kaew! The jet ski beach!',
-        hinkhok: 'Ao Hin Khok! Build a sandcastle!',
+        hinkhok: "Ao Hin Khok! Sandy's castle beach!",
         phai: 'Ao Phai! A quiet little bay!',
         wongduan: 'Ao Wong Duan! The snorkel boat!',
         prao: 'Ao Prao! The big driftwood tree!',
@@ -958,8 +958,8 @@ export const L = {
         aonoina: 'Ao Noi Na!',
       },
     },
-    // The island's animals (book/animals.ts): Sparkle says a reef animal's name the first time Mom's camera snaps it
-    // on the snorkel.
+    // The island's animals (book/animals.ts): Sparkle says a reef animal's name the first time she pokes it on the
+    // snorkel (the parrotfish, an urchin).
     book: {
       name: {
         tern: 'A tern!',
@@ -985,7 +985,7 @@ export const L = {
       ready: by('otter')('Hold on tight! Off you go!'),
       // Sparkle, as each round begins (the jacket's tap and the waves and the race moving on by themselves).
       ride: onDevice('Steer it with your finger!', 'Click and drag to steer it!'),
-      waves: 'Big waves! Catch the stars!',
+      waves: "Big waves! Catch the firefly's sparkles!",
       race: 'Race the jet ski man!',
       // Sparkle's countdown (3, 2, 1, go).
       count: ['Three!', 'Two!', 'One!', 'Go!'],
@@ -1062,7 +1062,8 @@ export const L = {
     snorkel: {
       // The captain (the pelican) toots and sends her in; Sparkle says what each round is for (the first two before
       // her first touch), the facts the first time (coral when she first bumps or pokes one, the cuttlefish when it
-      // first flashes), and after a while with nothing done what to do. Dad blows bubble rings.
+      // first flashes, a reef animal's name when she first pokes it), and after a while with nothing done what to do.
+      // Dad blows bubble rings.
       jump: by('pelican')('Masks on! Jump in!'),
       float: onDevice('Hold your finger in the water to swim!', 'Click and hold in the water to swim!'),
       follow: 'Follow the parrotfish!',
@@ -1070,7 +1071,6 @@ export const L = {
       // The cuttlefish jets off to hide again (the first and second time she reaches it).
       again: ['Whoosh! Find it again!', 'Where did it go?'],
       pink: 'It turned pink, just for you!',
-      camera: onDevice('Tap the camera for a photo!', 'Click the camera for a photo!'),
       coral: 'Coral is alive! Fish live in it.',
       colors: 'Cuttlefish change color to talk!',
       urchin: by('nick')('Boing! Prickly!'),
@@ -1126,7 +1126,8 @@ export const L = {
       hehe: by('nick')('Hee hee hee!'),
       // Stuck a long time: he jumps out and waves; then he runs over to her (it counts as found).
       here: by('nick')('Here I am!'),
-      peekaboo: by('nick')('Peekaboo! You found me!'),
+      // (Not "Peekaboo": that's the green firefly's name.)
+      came: by('nick')('Boo! You found me!'),
       // Her turn: Dad counts at the tree (tap him: he peeks), searches the wrong places, gives up.
       myTurn: by('nick')('My turn to count! Go hide!'),
       hide: 'Hide in a glowing spot!',
@@ -1140,7 +1141,7 @@ export const L = {
       giveUp: by('nick')('Where is she? I give up!'),
       win: by('nick')('You win! Super hider!'),
       first: `You win hide and seek!`,
-      spotted: [by('nick')('Found you!'), by('nick')('Peekaboo! I see you!')],
+      spotted: [by('nick')('Found you!'), by('nick')('I see you!')],
       boo: by('nick')('Waah! You scared me!'),
       hint: {
         seek: 'Where is Dad? Listen!',
@@ -1163,7 +1164,8 @@ export const L = {
         // Sparkle, after a while with nothing done (spendHint).
         hint: { pull: 'Pull the sun down into the sea!', fire: onDevice('Tap the fire for the show!', 'Click the fire for the show!') },
       },
-      // The fire show (finale/fireshow.ts): Mom as it opens, then Sparkle; the gecko fire dancers (one voice) cheer and
+      // The fire show (finale/fireshow.ts): Mom as it opens, then Sparkle; the gecko fire dancers (Tuk and Kae, each in
+      // their own voice, as in the films) cheer and
       // show off; each pink flag's surprise in the finish gets its friend's line; the big finish is a big moment.
       fire: {
         look: ji('Look! Fire dancers!'),
@@ -1171,11 +1173,11 @@ export const L = {
         // Once, the first time the dancers answer her with a ring of fire.
         grownups: 'Fire is for grown-ups. Yours are lights!',
         // Big loops of hers (in turn, now and then).
-        big: [by('gecko')('Whoa! Big circle!'), by('gecko')('Faster! Faster!'), by('gecko')('Wow! You are good!')],
+        big: [tuk('Whoa! Big circle!'), kae('Faster! Faster!'), tuk('Wow! You are good!')],
         // The shapes: they draw one in fire, then it's her turn; each one lifting off (circle, star, heart, in order).
-        watch: by('gecko')('Watch us! Now you!'),
+        watch: tuk('Watch us! Now you!'),
         dots: 'Draw over the dots!',
-        shapes: [by('gecko')('A circle!'), by('gecko')('A star!'), by('gecko')('A heart!')],
+        shapes: [kae('A circle!'), tuk('A star!'), kae('A heart!')],
         lantern: 'It floats up like a lantern!',
         // The finish: Sparkle's line, each flag's surprise, the big ring, the ring of fire, the fireworks.
         loops: 'Swirl a loop! Something is coming!',
@@ -1186,11 +1188,11 @@ export const L = {
           hideseek: nick('Dad can dance too!'),
         },
         giant: 'Now one giant circle!',
-        ring: by('gecko')('Ring of fire!'),
+        ring: kae('Ring of fire!'),
         wow: `What a show!`,
         home: ji('Time to go home!'),
         // Tap a dancer, Mom, Dad (each in turn).
-        dancer: [by('gecko')('Sawasdee!'), by('gecko')('Tukkae! Tukkae!'), by('gecko')('Hot, hot fire!')],
+        dancer: { tuk: [tuk('Sawasdee krap!'), tuk('Hot, hot fire!')], kae: [kae('Tukkae! Tukkae!'), kae('Sawasdee ka!')] },
         jiTap: [ji('So beautiful!'), ji('My little fire dancer!')],
         nickTap: [nick('Twirl, twirl!'), nick('Wow!'), nick('Do a big one!')],
         // Sparkle, after a while with nothing done (spendHint).

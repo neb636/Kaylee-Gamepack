@@ -24,11 +24,6 @@ export const synth = {
   /** The captain's toot. */
   toot: () => [0, 0.22].forEach((d) => tone(330, 340, 0.18, 0.07, 'square', d)),
   twinkle: (n = 5) => Array.from({ length: n }, (_, i) => tone(1000 * (1 + i * 0.25), 1150 * (1 + i * 0.25), 0.14, 0.045, 'sine', i * 0.09)),
-  /** Mom's waterproof camera. */
-  shutter: () => {
-    hiss(0.06, 0.12, 'highpass', 3000, 2000)
-    tone(1800, 1800, 0.03, 0.05, 'square', 0.07)
-  },
   /** A soft bump on coral, a rock or the hull. */
   thud: () => hiss(0.15, 0.08, 'lowpass', 400, 200),
   /** An urchin's spines. */
@@ -75,7 +70,6 @@ export const reefSfx = {
   /** Every frame she swims (speed in m/s): the water's rush past her mask, quicker and louder the faster she goes. */
   swim: held(c('snorkel-swim'), synth.swim, (speed: number) => ({ rate: 0.85 + Math.min(speed, 2.4) * 0.12, vol: 0.2 + Math.min(speed, 2.4) * 0.15 }), { linger: 0.25, fade: 0.35 }),
   toot: clip(c('speedboat-horn'), synth.toot, { vol: 0.4 }),
-  shutter: clip(c('samet-shutter'), synth.shutter, { vol: 0.7 }),
   thud: clip(c('snorkel-bump'), synth.thud, { vol: 0.6, jitter: 0.1 }),
   clam: clip(c('snorkel-clam'), synth.clam, { vol: 0.7 }),
   squish: clip(c('snorkel-squish'), synth.squish, { vol: 0.6, jitter: 0.08 }),

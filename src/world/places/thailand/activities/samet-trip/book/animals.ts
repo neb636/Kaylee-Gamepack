@@ -3,7 +3,7 @@
 // life.) Plain data, no three.js.
 //
 // The names are lines.ts L.samet.book.name (Sparkle's voice): the snorkel says a reef animal's name the first time
-// Mom's camera snaps it, and they label the island's tap targets.
+// she pokes it, and they label the island's tap targets.
 import { L } from '../../../lines'
 
 export type AnimalId = 'monitor' | 'squirrel' | 'macaque' | 'mousedeer' | 'hornbill' | 'flyingfox' | 'heron' | 'tern' | 'crab' | 'parrotfish' | 'damselfish' | 'cuttlefish' | 'urchin' | 'coral'

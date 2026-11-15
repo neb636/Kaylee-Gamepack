@@ -16,8 +16,9 @@
 //          The secret: drive a loop and close it, and the wake circle sparkles and fills with jumping fish (pink
 //          sparkles for a heart).
 //   waves  the wind comes up and bigger waves roll in from the open sea (engine3d/lagoon.ts draws the same waves the
-//          jet ski rides): steer into them to jump, higher waves for bigger jumps, a spin in the air on the biggest. Gold
-//          stars hang over the waves, the later ones high enough to need a jump; catching them all moves on to the race.
+//          jet ski rides): steer into them to jump, higher waves for bigger jumps, a spin in the air on the biggest. The
+//          pink firefly (Zoom, story.ts) darts ahead over the waves leaving her sparkles hanging there, the later ones
+//          high enough to need a jump; catching them all moves on to the race.
 //   race   race the jet ski man out round the big orange buoy and back to the flags. She wins most of the time (he
 //          slows behind her, takes a wide turn), and when he wins it's by a nose; after a loss he waits for her at the
 //          line (design rule 3), and a pink arrow points the way when she's stuck. The winner rings the bell on the hut.
@@ -60,6 +61,7 @@ import { Wake, type Loop } from './wake'
 import { beachBed } from '../sfx/common'
 import { jetSfx as S } from './sounds'
 import { isFilmRound, ZoomStory, type JetRound } from './story'
+import { FIREFLIES } from '../story/firefly'
 import { TO_DEG, damp, wrapAngle } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/jetski/jetski.ts'
@@ -442,15 +444,16 @@ export class JetSki implements World3D {
     this.dock.renderOrder = 3
     this.dock.visible = false
     scene.add(this.dock)
-    // The stars of the waves round (three at a time).
-    const star = Array.from({ length: 10 }, (_, i): [number, number] => {
-      const a = (i / 10) * Math.PI * 2
-      const r = i % 2 ? 0.55 : 1.25
-      return [Math.sin(a) * r, Math.cos(a) * r]
-    })
+    // Zoom's sparkles in the waves round (three at a time): four-pointed twinkles in her pink, a white heart to each.
+    const twinkle = (k: number) =>
+      Array.from({ length: 16 }, (_, i): [number, number] => {
+        const a = (i / 16) * Math.PI * 2
+        const r = (i % 4 === 0 ? 1.35 : i % 2 ? 0.34 : 0.42) * k
+        return [Math.sin(a) * r, Math.cos(a) * r]
+      })
     for (let i = 0; i < 3; i++) {
       const g = new Group()
-      g.add(solid(merge([P.prism(star, 0.28, PAL.gold)]), bag, 3))
+      g.add(solid(merge([P.prism(twinkle(1), 0.24, FIREFLIES.jetski.color), P.prism(twinkle(0.45), 0.3, '#FFFFFF')]), bag, 3))
       g.visible = false
       scene.add(g)
       this.gold.push({ g, x: 0, z: 0, y: 1.2, age: -1, high: false })
@@ -1615,6 +1618,7 @@ export class JetSki implements World3D {
       surf: this.surf,
       y: d.y,
       rode: this.rodeT,
+      sparkle: this.nextSparkle(),
     })
     // Dad's hands over hers on the handlebars (when nothing else is moving his arms).
     if (this.nick.root.parent === this.ski.back && this.nick.pose === 'sit') {
@@ -1713,7 +1717,7 @@ export class JetSki implements World3D {
       }
       const y = this.water(s.x, s.z) + s.y + Math.sin(t * 2.4 + s.x) * 0.15
       s.g.position.set(s.x, y, s.z)
-      // (Rocking, its face kept to the camera: spun edge-on a star is just a yellow splinter.)
+      // (Rocking, its face kept to the camera: spun edge-on a sparkle is just a splinter.)
       s.g.rotation.y = this.camYaw + Math.sin(t * 2.2 + s.x) * 0.5
       s.g.scale.setScalar(Math.min(1, s.g.scale.x + dt * 4))
       // Caught: steered close enough, and level with it (the high ones want a jump).
@@ -1732,7 +1736,22 @@ export class JetSki implements World3D {
       }
     }
   }
-  /** What she's heading for right now: the buoy, then the flags, or the nearest star. */
+  /** The waves round's sparkle nearest her (Zoom hovers over it), if one is out. */
+  private nextSparkle(): Vector3 | null {
+    if (this.round !== 'waves' || this.phase !== 'ride') return null
+    let best: Vector3 | null = null
+    let bd = Infinity
+    for (const s of this.gold) {
+      if (s.age < 0) continue
+      const dd = Math.hypot(s.x - this.d.x, s.z - this.d.z)
+      if (dd < bd) {
+        bd = dd
+        best = s.g.position
+      }
+    }
+    return best
+  }
+  /** What she's heading for right now: the buoy, then the flags, or the nearest sparkle. */
   private wayGoal(): { x: number; z: number } | null {
     if (this.phase === 'racing') return this.leg[0] === 0 ? FAR_BUOY : bay(0, RACE.finish.v)
     if (this.phase === 'ride' && this.time < this.dockShowUntil) return DOCK

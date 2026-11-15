@@ -2103,7 +2103,7 @@
     "voice": "kae"
   },
   "Hat Sai Kaew! The jet ski beach!",
-  "Ao Hin Khok! Build a sandcastle!",
+  "Ao Hin Khok! Sandy's castle beach!",
   "Ao Phai! A quiet little bay!",
   "Ao Wong Duan! The snorkel boat!",
   "Ao Prao! The big driftwood tree!",
@@ -2208,7 +2208,7 @@
   },
   "Steer it with your finger!",
   "Click and drag to steer it!",
-  "Big waves! Catch the stars!",
+  "Big waves! Catch the firefly's sparkles!",
   "Race the jet ski man!",
   {
     "text": "Catch me if you can!",
@@ -2397,8 +2397,6 @@
   "Whoosh! Find it again!",
   "Where did it go?",
   "It turned pink, just for you!",
-  "Tap the camera for a photo!",
-  "Click the camera for a photo!",
   "Coral is alive! Fish live in it.",
   "Cuttlefish change color to talk!",
   {
@@ -2581,7 +2579,7 @@
     "voice": "nick"
   },
   {
-    "text": "Peekaboo! You found me!",
+    "text": "Boo! You found me!",
     "voice": "nick"
   },
   {
@@ -2639,7 +2637,7 @@
     "voice": "nick"
   },
   {
-    "text": "Peekaboo! I see you!",
+    "text": "I see you!",
     "voice": "nick"
   },
   {
@@ -2689,32 +2687,32 @@
   "Fire is for grown-ups. Yours are lights!",
   {
     "text": "Whoa! Big circle!",
-    "voice": "gecko"
+    "voice": "tuk"
   },
   {
     "text": "Faster! Faster!",
-    "voice": "gecko"
+    "voice": "kae"
   },
   {
     "text": "Wow! You are good!",
-    "voice": "gecko"
+    "voice": "tuk"
   },
   {
     "text": "Watch us! Now you!",
-    "voice": "gecko"
+    "voice": "tuk"
   },
   "Draw over the dots!",
   {
     "text": "A circle!",
-    "voice": "gecko"
+    "voice": "kae"
   },
   {
     "text": "A star!",
-    "voice": "gecko"
+    "voice": "tuk"
   },
   {
     "text": "A heart!",
-    "voice": "gecko"
+    "voice": "kae"
   },
   "It floats up like a lantern!",
   "Swirl a loop! Something is coming!",
@@ -2737,7 +2735,7 @@
   "Now one giant circle!",
   {
     "text": "Ring of fire!",
-    "voice": "gecko"
+    "voice": "kae"
   },
   "What a show!",
   {
@@ -2745,16 +2743,20 @@
     "voice": "ji"
   },
   {
-    "text": "Sawasdee!",
-    "voice": "gecko"
-  },
-  {
-    "text": "Tukkae! Tukkae!",
-    "voice": "gecko"
+    "text": "Sawasdee krap!",
+    "voice": "tuk"
   },
   {
     "text": "Hot, hot fire!",
-    "voice": "gecko"
+    "voice": "tuk"
+  },
+  {
+    "text": "Tukkae! Tukkae!",
+    "voice": "kae"
+  },
+  {
+    "text": "Sawasdee ka!",
+    "voice": "kae"
   },
   {
     "text": "So beautiful!",

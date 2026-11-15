@@ -1,27 +1,22 @@
 // Snorkeling at Ko Kudi, on screen (snorkel.ts is the world): the reef with its tap targets, the waterline drawn where
-// the two views meet, the pressing finger after a while with nothing touched, and Mom's waterproof camera (📷) once
-// the cuttlefish round begins: a snap flashes, and Sparkle says what each animal is the first time it's in a picture.
+// the two views meet, and the pressing finger after a while with nothing touched.
 // Bubbles' story (story.ts) plays its films over it: FilmOverlay draws their words and the hold-to-skip ⏭. The stop
 // ends with the found film (the bubble pops, Bubbles is out), then the island by itself: no button to find.
 // With ?feel=1 you also get round chips (float, follow, cuttle).
-// Sparkle sits in the corner (trip/legs/Guide.tsx) and plays everyone's lines (lines.ts L.samet.snorkel); Mom's
-// camera sits above her (on a phone on its side, on the right: Dad swims on her left).
+// Sparkle sits in the corner (trip/legs/Guide.tsx) and plays everyone's lines (lines.ts L.samet.snorkel).
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst, type Line } from '../../../../../../sdk'
+import { burst, type Line } from '../../../../../../sdk'
 import { isFeelParam } from '../../../../../kit/knobs'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import type { FilmState } from '../../../../../engine3d/film'
 import { FilmOverlay } from '../../../../../engine3d/FilmOverlay'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
 import { TripGuide, WHO, type TripGuideHandle } from '../../../trip/legs/Guide'
-import { ANIMALS, type AnimalId } from '../book/animals'
 import { Snorkel as World, SNORKEL_ANCHORS, SNORKEL_ROUND_IDS, type SnorkelEvents, type SnorkelPlayRound, type SnorkelRound } from './snorkel'
 
 const feelOn = () => [...new URLSearchParams(location.hash.split('?')[1] ?? '').keys()].some(isFeelParam)
 const CHIP: Record<SnorkelPlayRound, string> = { float: '🤿 float', follow: '🐟 follow', cuttle: '🦑 cuttle' }
-const ICON: Partial<Record<AnimalId, string>> = { parrotfish: '🐟', damselfish: '🐠', cuttlefish: '🦑', urchin: '🟣', coral: '🪸' }
 
 interface Props {
   /** `story`: the way-in film, then the swim. `found`: the found film, then the island. */
@@ -38,8 +33,6 @@ export function SnorkelScreen({ round: first, onRound, onIsland }: Props) {
   const [run, setRun] = useState({ round: first, n: 0 })
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [round, setRound] = useState<SnorkelRound>(first)
-  const [snapped, setSnapped] = useState<AnimalId[]>([])
-  const [flash, setFlash] = useState(0)
   const [feel] = useState(feelOn)
   // Bubbles' story: a film on screen (its beat) and the words being said.
   const [film, setFilm] = useState<FilmState | null>(null)
@@ -83,15 +76,6 @@ export function SnorkelScreen({ round: first, onRound, onIsland }: Props) {
     setFilmLine(null)
     setRun((v) => ({ round: r, n: v.n + 1 }))
   }
-  const snap = () => {
-    const got = worldRef.current?.snap() ?? []
-    setFlash((f) => f + 1)
-    const fresh = got.filter((a) => !snapped.includes(a))
-    if (!fresh.length) return
-    setSnapped((s) => [...s, ...fresh.filter((a) => !s.includes(a))])
-    // Sparkle says its name, the first time it's in a picture on this dive.
-    guideRef.current?.speak(ANIMALS[fresh[0]].name)
-  }
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#1F8EA5', overflow: 'clip' }}>
@@ -115,23 +99,6 @@ export function SnorkelScreen({ round: first, onRound, onIsland }: Props) {
       />
       {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!film} />}
       {mode === 'webgl' && <FilmOverlay state={film} line={filmLine} speaker={(v) => WHO[v]} onSkip={() => worldRef.current?.skipFilm()} />}
-      <AnimatePresence>
-        {flash > 0 && <motion.div key={flash} className="reef-flash" initial={{ opacity: 0.85 }} animate={{ opacity: 0 }} transition={{ duration: 0.45 }} />}
-      </AnimatePresence>
-      {round === 'cuttle' && !film && (
-        <div className="reef-cam">
-          <BigButton color="pink" onClick={snap} ariaLabel="Take a photo">
-            📷
-          </BigButton>
-          <div className="reef-snaps">
-            {snapped.map((a) => (
-              <motion.span key={a} initial={{ scale: 0 }} animate={{ scale: 1 }}>
-                {ICON[a] ?? '⭐'}
-              </motion.span>
-            ))}
-          </div>
-        </div>
-      )}
       {feel && (
         <div className="reef-chips">
           {SNORKEL_ROUND_IDS.map((r) => (
@@ -159,12 +126,6 @@ const CSS = `
 .reef-hint { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: 4; }
 .reef-hint span { position: absolute; left: -26px; top: -10px; font-size: 52px; line-height: 1; filter: drop-shadow(0 3px 4px rgba(43,35,48,.3)); animation: reef-press 1.4s ease-in-out infinite; }
 @keyframes reef-press { 0%, 100% { transform: scale(1); } 45% { transform: scale(0.82) translateY(6px); } }
-.reef-flash { position: absolute; inset: 0; background: #fff; pointer-events: none; z-index: 15; }
-.reef-cam { position: absolute; left: 16px; bottom: calc(var(--safe-bottom, 0px) + min(140px, 19vh, 28vw) + 18px); z-index: 12; display: flex; gap: 10px; align-items: center; }
-/* A phone on its side: Dad swims on her left, where the camera would cover him; it goes to the right. */
-@media (orientation: landscape) and (max-height: 500px) { .reef-cam { left: auto; right: 16px; flex-direction: row-reverse; } }
-.reef-snaps { display: flex; gap: 6px; font-size: clamp(26px, 4.5vmin, 38px); }
-.reef-snaps span { display: inline-block; background: rgba(255,255,255,.88); border-radius: 14px; padding: 4px 8px; box-shadow: var(--shadow); }
 .reef-chips { position: absolute; right: 12px; top: calc(var(--top-clear) + 6px); z-index: 20; display: flex; gap: 6px; }
 .reef-chips button { min-height: 48px; padding: 6px 14px; border-radius: 999px; border: none; background: rgba(255,255,255,.85); box-shadow: var(--shadow); font: inherit; font-size: 16px; font-weight: 600; color: var(--ink); }
 .reef-chips button.on { background: var(--hotpink); color: #fff; }

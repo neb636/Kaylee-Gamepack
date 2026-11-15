@@ -16,9 +16,9 @@
 //           is) and tap it: it flips, slams down and lifts off to leave a tower. Shells and coral bits to push into the
 //           walls and the towers. Dig under a tower and it slumps into a heap.
 //   tide    the tide comes in: the sea creeps up the beach, wave after wave. Dig a channel from the moat to the sea and
-//           the water rushes along it and fills the moat (the best moment): sparkles, Dad cheers, and a hermit crab
-//           walks up out of the sea and moves into a tower's door. One big wave washes the tower nearest the sea half
-//           away (build it again!).
+//           the water rushes along it and fills the moat (the best moment): sparkles, Dad cheers, and Sandy moves in
+//           (the found film; on a later visit a hermit crab walks up out of the sea into a tower's door instead). One
+//           big wave washes the tower nearest the sea half away (build it again!).
 // The side verb, any time: bury Dad. He lies beside the castle; rub sand over him and it heaps up, shins to chest,
 // until only his head and toes stick out. Tap his toes: they wiggle. Tap his head: he sneezes and the sand flies off.
 //
@@ -936,16 +936,17 @@ export class Sandcastle implements World3D {
       const p = this.at(d.a + (Math.random() - 0.5) * 2.4, d.v + (Math.random() - 0.5) * 2.2, 0.1)
       this.sparkle.emit(p.x, p.y, p.z, (Math.random() - 0.5) * 0.6, 1 + Math.random() * 1.4, (Math.random() - 0.5) * 0.6, 1.4, 0.07)
     }
-    // Dad cheers (if he isn't buried) and Mom waves; a hermit crab walks up out of the sea to move in.
+    // Dad cheers (if he isn't buried) and Mom waves.
     if (this.dad.buried.every((b) => b < 0.5)) this.nick.react('wiggle')
     this.ji.react('wave')
     this.kaylee.react('hop')
-    this.sendHermit()
     this.say(S.filled)
     if (this.sandyFound) {
-      // A visit after she was found: no film. She sits on the tallest tower, the castle glows, and the badge has the
-      // way back to the island.
+      // A visit after she was found: no film. She sits on the tallest tower, the castle glows, a hermit crab walks up
+      // out of the sea to move in next door, and the badge has the way back to the island. (The first time, Sandy
+      // moving in is the moment: no crab to get there first.)
       this.story.perch()
+      this.sendHermit()
       this.events.filled()
       return
     }

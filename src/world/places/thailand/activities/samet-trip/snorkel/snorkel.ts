@@ -20,8 +20,7 @@
 //   cuttle  in the garden the cuttlefish hovers, sand-colored, hugging Bubbles' bubble. Swim close and it flashes
 //           rainbow colors and jets off with the bubble (a little ahead of her, in view), again and it goes stripy, and
 //           the third time it turns pink (for her) and lets the bubble go. Tap it (or the bubble, or the parrotfish)
-//           and she swims straight to it. Mom's waterproof camera (the 📷 button) snaps the fish:
-//           Sparkle says what each one is.
+//           and she swims straight to it.
 //   found   the found film (story.ts): the bubble floats up and pops, Bubbles flies loops; then back to the island.
 // Dad swims along behind her; swim up to him and he ducks under and blows her a bubble ring.
 //
@@ -48,7 +47,7 @@ import type { World3D } from '../../../../../engine3d/View3D'
 import { Avatar } from '../../../characters/avatar'
 import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
-import type { AnimalId } from '../book/animals'
+import { ANIMALS } from '../book/animals'
 import { cuttlefishModel, damselSchool, parrotfishModel, type Model } from '../book/models'
 import { CAPTAIN } from '../cast'
 import { fireflySfx } from '../story/firefly'
@@ -170,7 +169,7 @@ const bellK = (k: number) => Math.sin(Math.PI * clamp(k, 0, 1))
 const angleTo = (from: number, to: number) => Math.atan2(Math.sin(to - from), Math.cos(to - from))
 
 // ---- Sounds: sounds.ts (recorded, with the synthesized ones as fallbacks).
-const { blub, kick: kickSnd, toot, twinkle, shutter, thud, prickle, clam: clamSnd } = sfx
+const { blub, kick: kickSnd, toot, twinkle, thud, prickle, clam: clamSnd } = sfx
 
 const URCHINS = OBSTACLES.map((o, i) => ({ o, i })).filter((x) => x.o.kind === 'urchin')
 const CORALS = OBSTACLES.map((o, i) => ({ o, i })).filter((x) => x.o.kind === 'coral')
@@ -325,7 +324,7 @@ export class Snorkel implements World3D {
   private spray: Particles
   private sparkle: Particles
   private patches: { root: Group; at: Vector3 }[] = []
-  private counts = { leads: 0, taps: 0, pokes: 0, kicks: 0, bumps: 0, boings: 0, rings: 0, peeks: 0, snaps: 0, stages: 0, glints: 0, sees: 0 }
+  private counts = { leads: 0, taps: 0, pokes: 0, kicks: 0, bumps: 0, boings: 0, rings: 0, peeks: 0, stages: 0, glints: 0, sees: 0 }
 
   constructor(
     private renderer: WebGLRenderer,
@@ -1156,8 +1155,6 @@ export class Snorkel implements World3D {
         this.jet = null
         this.lapT = 0
         this.glintT = 0
-        // (A quiet moment, the first time it has hidden: Mom's camera.)
-        if (this.best === 1) this.once('camera', S.camera)
       }
     } else if (on) {
       this.lapT += dt
@@ -1428,27 +1425,6 @@ export class Snorkel implements World3D {
     for (let i = 0; i < n; i++) this.sparkle.emit(p.x + (Math.random() - 0.5) * 1.2, p.y + (Math.random() - 0.5) * 0.8, p.z + (Math.random() - 0.5) * 1.2, (Math.random() - 0.5) * 0.8, 0.4 + Math.random() * 0.8, (Math.random() - 0.5) * 0.8, 1.6, 0.06)
   }
 
-  // ---------------------------------------------------------------- Mom's waterproof camera
-
-  /** Snaps what's in view under the water: which animals are in the picture. */
-  snap(): AnimalId[] {
-    shutter()
-    this.counts.snaps++
-    const out: AnimalId[] = []
-    const cam = this.rig.camera.position
-    const seen = (p: Vector3, range: number) => {
-      if (p.distanceTo(cam) > range) return false
-      const s = this.toScreen(p)
-      return s.z < 1 && s.x > 0 && s.x < this.w && s.y > this.split && s.y < this.h
-    }
-    if (this.pState !== 'away' && seen(this.pPos, 16)) out.push('parrotfish')
-    if (seen(this.cuttle.root.position, 16)) out.push('cuttlefish')
-    if (seen(this.crowdC, 14)) out.push('damselfish')
-    if (URCHINS.some(({ o }) => seen(tmp2.set(o.x, o.top - 0.2, o.z), 16))) out.push('urchin')
-    if (this.patches.some((p) => seen(p.at, 14)) || CORALS.some(({ o }) => seen(tmp2.set(o.x, o.top - 0.3, o.z), 14))) out.push('coral')
-    return out
-  }
-
   // ---------------------------------------------------------------- her finger
 
   /** The reef takes her finger (not during a film, or before the way-in film has begun). */
@@ -1540,6 +1516,8 @@ export class Snorkel implements World3D {
       this.pWiggle = 1
       sfx.fishPoke()
       this.bubbles.burst(this.pPos.x, this.pPos.y, this.pPos.z, 6, 0.4, 0.6, 0.05)
+      // (Its name, the first time she pokes it.)
+      this.once('name:parrotfish', ANIMALS.parrotfish.name)
     } else if (id === 'cuttle') {
       this.flashT = 0
       twinkle(4)
@@ -1565,6 +1543,7 @@ export class Snorkel implements World3D {
       const u = this.urchins[+id.slice(7)]
       if (u) u.wob = 1
       prickle()
+      this.once('name:urchin', ANIMALS.urchin.name)
     } else if (id.startsWith('coral:')) {
       this.peek(+id.slice(6), false)
       this.once('coral', S.coral)

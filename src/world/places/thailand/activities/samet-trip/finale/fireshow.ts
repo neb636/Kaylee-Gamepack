@@ -26,9 +26,8 @@
 //
 // Talk (lines.ts L.samet.finale.fire, and L.samet.story.show for the films): after the way-in film only Sparkle's one
 // instruction (a link straight to the twirl gets Mom's hello first), then one a round; the gecko dancers cheer her
-// loops and shapes (the shared voice `gecko`; in the films Tuk and Kae talk in their own, and their mouths move with
-// all three); each firefly's surprise gets its friend's line; after a while with nothing done Sparkle says what to do
-// (spendHint). The screen's TripGuide speaks them and shows the words for grown-ups; FilmOverlay shows a film's. Every
+// loops and shapes (Tuk and Kae, each in their own voice, in the show as in the films); each firefly's surprise gets
+// its friend's line; after a while with nothing done Sparkle says what to do (spendHint). The screen's TripGuide speaks them and shows the words for grown-ups; FilmOverlay shows a film's. Every
 // number that decides the feel is a knob (?feel=1), with a graph of her spin against theirs.
 import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, CylinderGeometry, Fog, Group, InstancedMesh, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, Object3D, Plane, Quaternion, Raycaster, Scene, SphereGeometry, TorusGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { clamp, speechLevel, spendHint, type Line } from '../../../../../../sdk'
@@ -217,7 +216,7 @@ interface Dancer {
   bow: number
   wai: number
   pose: { up: number; bow: number; wai: number }
-  /** Their mouth for the shared voice `gecko` (the show's cheers; their own voices move it too). */
+  /** Their mouth, opened by their own voice (`tuk`, `kae`). */
   talk: number
   hands: Vector3[]
   spin: number
@@ -1392,8 +1391,8 @@ export class FireShow implements World3D {
         rig.armL.rotation.set(-1.25 - ringK * 1.0 + Math.sin(d.theta) * 0.25 * (1 - ringK), 0, -0.45)
         rig.armR.rotation.set(-1.25 - ringK * 1.0 - Math.sin(d.theta) * 0.25 * (1 - ringK), 0, 0.45)
       }
-      // The show's cheers are in the voice the two share: both their mouths move with it.
-      const loud = speechLevel('gecko')
+      // Each one's mouth moves with their own voice (Tuk, Kae), in the show's cheers as in the films.
+      const loud = speechLevel(i ? 'kae' : 'tuk')
       d.talk += (loud - d.talk) * damp(dt, loud > d.talk ? 30 : 14)
       if (d.talk > 0.03) rig.mouth.scale.set(1 + 0.15 * d.talk, 1 + 0.9 * d.talk, 1)
       d.shadow.position.set(p.x, d.shadow.position.y, p.z)
@@ -1719,14 +1718,16 @@ export class FireShow implements World3D {
       this.say(S.jiTap[this.talk.ji++ % S.jiTap.length])
     } else if (id.startsWith('dancer:')) {
       // A dancer swings a ring of fire for her.
-      const d = this.dancers[+id.slice(7)]
+      const i = +id.slice(7)
+      const d = this.dancers[i]
       d.ring = 1
       d.ringR = 1.3
       d.ringT = 0
       d.hop = 0.001
       sfx.whoomp()
       sfx.tukkae()
-      this.say(S.dancer[this.talk.dancer++ % S.dancer.length])
+      const mine = i ? S.dancer.kae : S.dancer.tuk
+      this.say(mine[this.talk.dancer++ % mine.length])
     } else if (id === 'drum') {
       this.drumHit = 1
       sfx.drum(true)

@@ -348,6 +348,7 @@ export class SametIsland implements World3D {
   private fish: Fish
   private bubbles: Particles
   /** Off to the finale by speedboat: null before all four flags are up (or with no way on), false waiting, true on the way. */
+  /** All four fireflies found (false; null before): the speedboat no longer offers the way home. */
   private goingHome: boolean | null = null
   private bumpV = { x: 0, z: 0, t: 0 }
   private wctx!: WildCtx
@@ -1728,8 +1729,10 @@ export class SametIsland implements World3D {
           this.seen.add(best)
           this.counts.beaches++
         }
-        // Sparkle, the first time she reaches each beach this visit.
-        const line = (I.beach as Partial<Record<SpotId, string>>)[best]
+        // Sparkle, the first time she reaches each beach this visit. Not while its firefly is still hiding there: the
+        // story's own line says what's glowing when she comes near it (story.ts), and the beach can wait.
+        const hiding = STOP_IDS.some((id) => STOPS[id].place === best && !this.flags.has(id))
+        const line = hiding ? undefined : (I.beach as Partial<Record<SpotId, string>>)[best]
         const first = !!line && this.greeted && firstTime(`samet-beach-${best}`)
         if (first) this.events.say?.(line)
         // The puppy brought her (he's right there): he barks the beach's name, a woof a beat, and Sparkle says it
@@ -2174,18 +2177,14 @@ export class SametIsland implements World3D {
     const k = this.kaylee.root.position
     const near = (x: number, z: number, r = RIDE.near) => Math.hypot(k.x - x, k.z - z) < r
     if (id === HOME_BOAT && this.goingHome !== null) {
-      // The whole island done: the speedboat at Na Dan pier takes them round to Ao Prao for the sunset (the finale),
-      // never straight home: the fire show's 🏠 at the end of the finale is the way home. She walks to the end of the
-      // pier, Dad calls the sunset, and off they go.
-      if (this.goingHome || this.mode !== 'walk') return
-      if (!near(HOME_PIER.x, HOME_PIER.z, 2.5)) return this.goTo(id, HOME_PIER.x, HOME_PIER.z, 1)
-      this.goingHome = true
-      this.kaylee.faceToward(HOME_PIER.x - FRAMES.nadan.t.x * 3, HOME_PIER.z - FRAMES.nadan.t.z * 3)
-      this.kaylee.react('wave')
+      // All four fireflies found: the speedboat isn't the way on (the driftwood tree is, and the fire show's 🏠 is the
+      // way home). It toots, Dad calls the sunset, and the pictures come up with only the sunset left.
+      this.kick(id, 3)
+      sfx.toot()
+      if (this.mode !== 'walk' || this.films.on) return
       this.nick.m.react('wave')
       this.events.say?.(I.sunset)
-      sfx.toot()
-      window.setTimeout(() => this.events.open('sunset'), 1600)
+      this.story.after(0.6, () => this.events.board?.(true))
       return
     }
     if (id === 'puppy') {

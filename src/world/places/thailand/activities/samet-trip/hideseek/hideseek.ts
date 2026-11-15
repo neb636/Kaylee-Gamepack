@@ -848,7 +848,7 @@ export class HideSeek implements World3D {
     this.dad.hop = { from, to, t: 0, dur: SEEK.hop }
     this.setPhase('found')
     this.glowing = false
-    this.say(came ? H.peekaboo : H.found[this.turn.found++ % H.found.length])
+    this.say(came ? H.came : H.found[this.turn.found++ % H.found.length])
     sfx.found()
     // (Peekaboo, who knew all along: a flash and a giggle.)
     this.peeka.flash()
