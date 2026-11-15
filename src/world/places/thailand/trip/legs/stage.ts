@@ -88,9 +88,10 @@ export abstract class Stage implements World3D {
   abstract qa(): Record<string, unknown>
   // ---------------------------------------------------------------- Roblox controls (engine3d/roam.ts)
 
-  /** She may turn the camera herself now (drag, pinch), within the shot's `roam`. */
+  /** She may turn the camera herself now (drag, pinch), within the shot's `roam`. By default: whenever the shot
+   *  allows it (a floating map's boardShot, trip/sky.ts), so a shot without `roam` (a dive, a cutscene) is the game's. */
   protected roams(): boolean {
-    return false
+    return !!this.rig.shot?.roam
   }
   /** Who the thumbstick and jump button move, and where they may stand (null: the camera turns, but no pad). `stop`
    *  calls off a walk the world planned (a Walker's), the moment she takes the stick. */

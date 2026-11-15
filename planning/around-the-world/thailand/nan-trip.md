@@ -154,7 +154,8 @@ the same camera entrance behind the loading cover (`trip/sky.ts`, `trip/MapCover
 the paper past the dashed border. The top is painted once (`ground.ts`: height bands, rice-field patches by the river,
 the river and roads, a soft shadow under every tree and toy) and the river's glints drift. Trees and mountains are the
 Thailand map's (`hub/map/toys.ts`). The board stays wide on a wide screen; a tall screen still swings round to the west
-side so the long side runs up it.
+side so the long side runs up it. Since 2026-11-14 she can turn it like the Thailand map: a drag on the board swings
+it round and a pinch brings it closer (`boardShot()`, `trip/sky.ts`); a drag that starts on the Pajero still drives it.
 
 ## 🚙 The mountain road
 

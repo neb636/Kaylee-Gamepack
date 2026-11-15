@@ -31,7 +31,7 @@ import { blobShadow } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
 import { L } from '../../../lines'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
-import { Entrance, mapCamKnobs, puffCloud, skyTexture, trayBox } from '../../../trip/sky'
+import { boardShot, Entrance, mapCamKnobs, puffCloud, skyTexture, trayBox } from '../../../trip/sky'
 import { Floaters } from '../mushrooms/fx'
 import { buildDiorama, PLACE_SCALE, type Diorama } from './diorama'
 import { BOARD, CAR_SPEED, CLOUDS, DRAG_SPEED, FISH, heightAt, HOME_AFTER, LAOS_FLAG, modelAt, PAPER_Y, PLACE_IDS, PLACES, ROADS, RUNWAY, STAMP_Y, STOP_PLACE, STOPS, THAI_FLAG, type PlaceId, type Stop } from './layout'
@@ -518,6 +518,11 @@ export class NanMap extends Stage {
     this.counted = true
   }
 
+  /** Her finger is on the little car: a drag drives it along the road instead of turning the board. */
+  roamGrabbed() {
+    return this.held
+  }
+
   pointerMove(x: number, y: number, _dx: number, _dy: number, isHeld: boolean) {
     if (!isHeld || !this.held) return
     this.finger = { x, y }
@@ -604,9 +609,9 @@ export class NanMap extends Stage {
     // Tall: from the west side, so the board's long side runs up the screen (Laos at the top).
     // (A tall screen settles less low: the board is already small across it.)
     // The board and its tray, object-fit: contain, so it floats in the middle of the sky on any screen shape.
-    const { center, half } = BOARD_BOX
-    if (tall) return { center: center.clone(), half: half.clone().multiplyScalar(zoom), yaw: -90 + NAN_CAM.yaw, pitch: 62 + NAN_CAM.pitch * k * 0.6, minDist: 3, objectFit: 'contain' }
-    return { center: center.clone(), half: half.clone().multiplyScalar(zoom), yaw: NAN_CAM.yaw, pitch: 54 + NAN_CAM.pitch * k, minDist: 3, objectFit: 'contain' }
+    // (boardShot: she can swing it round and pinch it closer, like the Thailand map.)
+    if (tall) return boardShot(BOARD_BOX, -90 + NAN_CAM.yaw, 62 + NAN_CAM.pitch * k * 0.6, zoom, { minDist: 3 })
+    return boardShot(BOARD_BOX, NAN_CAM.yaw, 54 + NAN_CAM.pitch * k, zoom, { minDist: 3 })
   }
 
   /** The entrance rides the camera exactly (no lag). */
@@ -733,6 +738,8 @@ export class NanMap extends Stage {
       plane: this.planeT >= 0,
       touches: this.touches,
       points: { places, nodes },
+      /** Which way the camera faces (degrees): her drag swings it round. */
+      yaw: Math.round(this.rig.yaw * 10) / 10,
     }
   }
 }

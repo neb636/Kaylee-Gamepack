@@ -1,10 +1,15 @@
-// What Thailand's toy maps share (the Thailand map, hub/map/, and the Nan map, nan-trip/map/): the board floats in the
-// sky Sparkle's balloon flies through. A soft blue-to-pink sky behind it, puffy clouds round and under it, the toy tray
-// it sits in (a cream rim with a pink edge on a lavender base), and the camera's entrance: when the board opens the
-// camera is already moving behind the loading cover, then settles a little lower and closer (MapCover.tsx is the
-// cover).
+// What Thailand's toy maps share (the Thailand map, hub/map/, the Nan map, nan-trip/map/, and the Krabi map,
+// boat-trip/map/): the board floats in the sky Sparkle's balloon flies through. A soft blue-to-pink sky behind it,
+// puffy clouds round and under it, the toy tray it sits in (a cream rim with a pink edge on a lavender base), and the
+// camera's entrance: when the board opens the camera is already moving behind the loading cover, then settles a
+// little lower and closer (MapCover.tsx is the cover).
+//
+// Every floating map turns like the Thailand map: she swings the board round with a one-finger drag (or the mouse) and
+// pinches it closer, within MAP_ROAM. A map gets that by framing its board with boardShot(); a Stage-based map turns
+// whenever its shot allows it (trip/legs/stage.ts), the Thailand map opts in with its own roam().
 import { CanvasTexture, Group, SRGBColorSpace, Vector3, type BufferGeometry } from 'three'
 import { clamp } from '../../../../sdk'
+import type { Roam, Shot } from '../../../engine3d/camera'
 import type { Bag } from '../../../engine3d/dispose'
 import { merge, P, solid } from '../../../engine3d/geo'
 import { knobs } from '../../../kit/knobs'
@@ -68,6 +73,18 @@ export function trayBox(w: number, d: number, top: number, high: number, rim = 0
   const y0 = top - 1.6 * k
   const y1 = Math.max(top, high)
   return { center: new Vector3(cx, (y0 + y1) / 2, cz), half: new Vector3(w / 2 + edge, (y1 - y0) / 2, d / 2 + edge) }
+}
+
+/** How far she may turn a floating map herself (engine3d/roam.ts, Roblox-style): degrees round either way and up or
+ *  down from the map's own view, and how close a pinch brings it (times the distance that fits the board). The
+ *  Thailand map's numbers, shared by every map. */
+export const MAP_ROAM: Roam = { yaw: [-38, 38], pitch: [-14, 22], zoom: [0.5, 1] }
+
+/** A floating map's board view: its `trayBox`, framed object-fit: contain from `yaw` and `pitch` (`zoom` below 1:
+ *  closer, as the entrance settles), and hers to swing round and pinch (MAP_ROAM). Use it for every map's overview,
+ *  so a new map turns like the others without asking. */
+export function boardShot(box: { center: Vector3; half: Vector3 }, yaw: number, pitch: number, zoom = 1, more: Partial<Shot> = {}): Shot {
+  return { center: box.center.clone(), half: box.half.clone().multiplyScalar(zoom), yaw, pitch, objectFit: 'contain', roam: MAP_ROAM, ...more }
 }
 
 /** A map camera's entrance knobs (the feel lab, ?feel=1): each map tunes its own. */

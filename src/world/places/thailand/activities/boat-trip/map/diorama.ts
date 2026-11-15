@@ -23,15 +23,14 @@ import { PAL } from '../../../../../engine3d/toon'
 import { trayParts } from '../../../trip/sky'
 import * as T from '../../hub/map/toys'
 import type { Sea } from '../../hub/map/terrain'
-import { buildField, buildGround, buildSea } from './ground'
+import { buildField, buildGround, buildRocks, buildSea } from './ground'
 import {
   BOARD,
   BOAT_LOOPS,
   CLOUDS,
-  CRAGS,
   DEG_M,
   HILLS,
-  KARSTS,
+  KARST_S,
   ll,
   PIN_IDS,
   PINS,
@@ -44,7 +43,6 @@ import {
   STOP_PLACE,
   STOPS,
   TOY_ISLANDS,
-  TWINS,
   type PinId,
   type PlaceId,
   type SpotId,
@@ -66,8 +64,6 @@ const JUNGLE = ['#52B881', '#67C78F', '#84D79C']
 const SAND = '#FFF0C4'
 /** The spots (the places the trip doesn't go to yet) stand this much bigger than the board's scale, like toys. */
 const SPOT_SCALE = 1.5
-/** The rock towers' size on this board (layout.ts sizes them about 1). */
-const KARST_S = 0.56
 /** The sea's top (the land stands up from it). */
 const LEVEL_SEA = 0
 
@@ -127,23 +123,14 @@ export function buildDiorama(bag: Bag): Diorama {
     rock.plain.push(...t.plain)
   }
 
-  // ---- The limestone towers in the sea (only the ones out at sea), each with a little one or two beside it ----
+  // ---- The rock towers (ground.ts buildRocks(): each settled wholly in the sea or wholly on the land) ----
+  const rocks = buildRocks()
   const karsts: [number, number, number][] = []
-  KARSTS.forEach(([lon, lat, s], i) => {
-    const [x, z] = ll(lon, lat)
-    if (f.land(x, z) > -0.04) return
-    karsts.push([x, z, s])
-    addTower(x, LEVEL_SEA - 0.02, z, s * KARST_S, i)
-    if (i % 2 === 0) {
-      const a = i * 1.9
-      const [bx, bz] = [x + Math.cos(a) * 0.15 * s, z + Math.sin(a) * 0.11 * s]
-      if (f.land(bx, bz) < -0.05) addTower(bx, LEVEL_SEA - 0.02, bz, s * KARST_S * 0.55, i + 2)
-    }
-  })
-  // Krabi Town's twin rocks at the river mouth.
-  for (const [k, [lon, lat]] of TWINS.entries()) {
-    const [x, z] = ll(lon, lat)
-    addTower(x, y(x, z) - 0.02, z, 0.3 + k * 0.04, k + 1)
+  for (const r of rocks) {
+    if (r.from === 'crag') continue
+    addTower(r.x, LEVEL_SEA - 0.02, r.z, r.s, r.k)
+    // (The big sea ones are tap targets of their own: a poke wobbles them.)
+    if (r.from === 'karst' && !r.kid) karsts.push([r.x, r.z, r.s / KARST_S])
   }
 
   // ---- On the land: limestone crags, jungle hills, palms and rainforest, away from the places and the rivers ----
@@ -151,24 +138,21 @@ export function buildDiorama(bag: Bag): Diorama {
     ...(Object.keys(PLACES) as PlaceId[]).map((id) => [...PLACES[id].at, 0.4] as [number, number, number]),
     ...(Object.keys(SPOTS) as SpotId[]).map((id) => [...SPOTS[id], 0.3] as [number, number, number]),
     [RUNWAY.at[0], RUNWAY.at[1], 0.42],
-    ...TWINS.map(([lon, lat]) => [...ll(lon, lat), 0.22] as [number, number, number]),
+    ...rocks.filter((r) => r.from === 'twin').map((r) => [r.x, r.z, 0.12] as [number, number, number]),
   ]
   const away = (x: number, z: number, pad = 0) => placeSpots.every(([px, pz, r]) => Math.hypot(px - x, pz - z) > r + pad)
   const shadows: [number, number, number][] = []
   /** What stands where already (nothing is planted inside): [x, z, radius]. */
   const taken: [number, number, number][] = []
-  CRAGS.forEach(([lon, lat, s], i) => {
-    const [x, z] = ll(lon, lat)
-    if (f.land(x, z) < 0.06 || !away(x, z, 0.08)) return
-    const size = s * 0.52
-    addTower(x, y(x, z) - 0.03, z, size, i + 1)
-    if (s >= 1.2) {
-      const a = i * 2.3 + 0.6
-      addTower(x + Math.cos(a) * 0.17 * s, y(x, z) - 0.03, z + Math.sin(a) * 0.12 * s, size * 0.62, i + 3)
-    }
-    taken.push([x, z, 0.2 * s])
-    shadows.push([x, z, 0.24 * s])
-  })
+  // (A crag on a place is left out, the little one on its shoulder with it.)
+  const onPlace = new Set(rocks.filter((r) => r.from === 'crag' && !r.kid && !away(r.x, r.z, 0.08)).map((r) => r.i))
+  for (const r of rocks) {
+    if (r.from !== 'crag' || onPlace.has(r.i)) continue
+    addTower(r.x, y(r.x, r.z) - 0.03, r.z, r.s, r.k)
+    if (r.kid) continue
+    taken.push([r.x, r.z, 0.38 * r.s])
+    shadows.push([r.x, r.z, 0.46 * r.s])
+  }
   root.add(solidMix(rock.lined, rock.plain, bag, 1.5))
   const hills: BufferGeometry[] = []
   HILLS.forEach(([lon, lat, r, h], i) => {
@@ -288,7 +272,7 @@ export function buildDiorama(bag: Bag): Diorama {
     ]), bag, 1.2))
     sailfish.rotation.z = -0.35
     spots.aonang.add(sailfish)
-    // Railay: its cliffs (a big rock on the land) with a monkey on top.
+    // Railay: its cliffs (a big rock standing in the sea off the beach) with a monkey on top.
     const [rx, rz] = SPOTS.railay
     const railay = towers(rx, y(rx, rz) - 0.02, rz, [[0, 0, 0.5, 1], [0.1, -0.05, 0.4, 2], [-0.1, 0.03, 0.3, 0]])
     spots.railay = toyAt(SPOTS.railay, railay.lined, 1.5, 1, railay.plain)

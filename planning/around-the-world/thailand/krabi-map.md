@@ -26,6 +26,16 @@ the second longtail, Krabi Town's giant crab and market umbrellas, Ko Panyee's s
 Khao Phanom Bencha's waterfall, Koh Lanta's huts, two thirds of the trees and rock towers. (A see-through mist among
 the rocks was tried and dropped: it didn't show on the pale toy water.)
 
+**Rocks off the beach (2026-11-14):** some rock towers stood half on the sand and Krabi Town's twin rocks stood on
+dry land (the real coasts are coarse). Now `ground.ts` `buildRocks()` moves every rock straight away from the shore
+until it stands wholly in the sea (or, for a crag, wholly on the land), or leaves it out; the sea foams round where
+they really stand. The crag on the thin spit by Ao Nang went (it looked like an island run aground). Ao Nang's beach
+toy moved up onto the sand, Railay's cliffs out into the sea off it. The QA hook's `stranded` lists anything that
+still straddles the shore (none).
+
+**She can turn it (2026-11-14):** like the Thailand map, a drag swings the board round and a pinch brings it closer
+(`boardShot()`, `trip/sky.ts`).
+
 ## How it plays
 
 - **The toy: pins.** Over each place she can go to floats a pink pin with a toy of the place on its head: 🐘 a baby

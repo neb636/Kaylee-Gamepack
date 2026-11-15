@@ -110,8 +110,9 @@ export const RUNWAY = { at: ll(99.16, 8.06), len: 0.62, w: 0.15, yaw: -0.88 }
  *  lighthouse and Ko Tapu (the Nail Island). Ao Nang and Koh Lanta are the next places: making one a real place gives
  *  it a pin (PINS). */
 export const SPOTS = {
-  aonang: ll(98.818, 8.03),
-  railay: ll(98.842, 8.008),
+  // (Ao Nang's beach toy stands on the sand, Railay's cliffs just off it in the sea: neither straddles the shore.)
+  aonang: ll(98.84, 8.043),
+  railay: ll(98.864, 7.96),
   chicken: ll(98.802, 7.95),
   phiphi: ll(98.772, 7.75),
   lighthouse: ll(99.085, 7.483),
@@ -132,7 +133,8 @@ export const PIN_IDS = Object.keys(PINS) as PinId[]
 export const PLACE_PIN: Partial<Record<PlaceId, PinId>> = { chang: 'chang', pier: 'bay', airport: 'home' }
 
 /** The limestone towers standing in the sea, in three loose groups with open water between them (the references: a
- *  calm bay, a few clusters, not a forest of rocks): [lon, lat, size]. (diorama.ts drops any that land on land.) */
+ *  calm bay, a few clusters, not a forest of rocks): [lon, lat, size]. (The coasts are coarse: ground.ts buildRocks()
+ *  moves each one out until it stands wholly in the sea, or leaves it out.) */
 export const KARSTS: [number, number, number][] = [
   // Phang Nga Bay, between the Yao islands and Krabi's shore.
   [98.54, 8.3, 1.15], [98.5, 8.235, 0.9], [98.575, 8.22, 1.05], [98.625, 8.27, 0.8], [98.6, 8.15, 0.7],
@@ -141,15 +143,17 @@ export const KARSTS: [number, number, number][] = [
   // Out in the Andaman Sea, one or two on their own.
   [98.65, 7.87, 0.85], [98.985, 7.86, 0.7], [98.88, 7.49, 0.8],
 ]
+/** The rock towers' size on this board (KARSTS sizes them about 1). */
+export const KARST_S = 0.56
 /** The limestone crags on the land, jungle on top: [lon, lat, size]. Just a few, round the top of the bay and behind
- *  Krabi Town. (diorama.ts drops any that fall in the sea or on a place.) */
+ *  Krabi Town (none on the thin spits by the shore: there a crag looks like an island run aground). (ground.ts
+ *  buildRocks() moves each one inland until it stands wholly on the land; diorama.ts drops any on a place.) */
 export const CRAGS: [number, number, number][] = [
-  [98.765, 8.1, 1.1],
   [98.935, 8.19, 1.1],
   [98.55, 8.42, 1.3],
   [98.44, 8.395, 1.0],
 ]
-/** Krabi Town's twin rocks at the river mouth (Khao Khanap Nam). */
+/** Krabi Town's twin rocks at the river mouth (Khao Khanap Nam): they stand in the water (buildRocks()). */
 export const TWINS: [number, number][] = [[98.905, 8.062], [98.925, 8.058]]
 /** Pale shallows out in the sea, where the sand comes up under the water: [x, z, radius] (m). The sandbar off Chicken
  *  Island, the lagoon between Koh Phi Phi's two halves, the reef flats off Koh Lanta. */
