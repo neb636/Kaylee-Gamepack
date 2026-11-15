@@ -12,42 +12,42 @@
       "name": "opera-forte",
       "where": "opera-forte",
       "seconds": 3.4,
-      "fps": 17.5,
+      "fps": 11,
       "status": "ok"
     },
     {
       "name": "opera-piano",
       "where": "opera-piano",
       "seconds": 3.4,
-      "fps": 17,
+      "fps": 13.3,
       "status": "ok"
     },
     {
       "name": "Italy party solo",
       "where": "#/world/italy/party/solo?stamps=all&solos=bruno",
       "seconds": 4,
-      "fps": 16,
+      "fps": 14.5,
       "status": "ok"
     },
     {
       "name": "Italy party star",
       "where": "#/world/italy/party/star?stamps=all",
       "seconds": 4,
-      "fps": 17.4,
+      "fps": 16.4,
       "status": "ok"
     },
     {
       "name": "Italy party roses",
       "where": "#/world/italy/party/roses?stamps=all",
       "seconds": 4,
-      "fps": 19.8,
+      "fps": 17.1,
       "status": "ok"
     },
     {
       "name": "Italy party picnic",
       "where": "#/world/italy/party/picnic?stamps=all",
       "seconds": 4,
-      "fps": 18.8,
+      "fps": 17.4,
       "status": "ok"
     }
   ]

@@ -1,11 +1,8 @@
 {
   "title": "Italy's finale: Opera Night at the Arena",
-  "checkIn": "2 of 4: hear the script",
-  "kaylee": "She swings a sparkly wand to lead Lupa's band, loud and soft, lighting the arena's candles, until shy Lupa sings her big note. Then roses, jets paint the flag, and a picnic.",
-  "questions": [
-    "Lupa's opening line: sweet, or too sad for a finale?",
-    "Nino says 'Piano, piano!' (Italian for 'slowly'): keep the joke?"
-  ],
+  "checkIn": "3 of 4: watch Kaylee play",
+  "kaylee": "Hand her the iPad at the link below, say as little as you can, and screen-record with the mic on (Control Center: hold the record button, turn on Microphone). If she asks what to do: \"I don't know, what do you think?\" Send me the video when she's done, or tell me what you saw.",
+  "questions": [],
   "tableReads": [
     [
       "italy",
@@ -27,12 +24,8 @@
   ],
   "links": [
     {
-      "label": "Play the whole finale",
+      "label": "\u25b6 Kaylee's link: the opera from the start",
       "hash": "#/world/italy/party?stamps=all"
-    },
-    {
-      "label": "Jump to the solos",
-      "hash": "#/world/italy/party/solo?stamps=all"
     }
   ]
 }
