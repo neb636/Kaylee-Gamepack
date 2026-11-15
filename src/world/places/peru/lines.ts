@@ -224,22 +224,22 @@ export const L = {
   // ---- Finale: Luna's Thank-You Balloon (route `party`; drop a present to every friend) ----
   balloon: {
     // Before the journal is full (the balloon on the hub, or a link, with stamps missing).
-    wait: 'Help every friend first! Then we fly!',
+    wait: 'Help every friend first!',
     // On the hub, once all five stamps are in.
     ready: onDevice('Tap the balloon! Off we fly!', 'Click the balloon! Off we fly!'),
     story: [luna('Our journal is full!'), luna("Let's fly and say thank you!")],
-    // The core verb, said once at the first stop (and as the stuck hint).
-    go: onDevice('Pull a present off the balloon, then let it go!', 'Click a present, pull it off, then let it go!'),
+    // The core verb, said at the first stop (no gesture word: pulling works the same with a finger or a mouse).
+    go: 'Pull down a present, then let go!',
     // A new stop: what's different here.
     coast: 'Drop a present for each friend!',
-    mountains: 'Windy! Coco and Pluma catch in the air!',
+    mountains: 'Windy! They catch it in the air!',
     forest: 'Drop it through a gap in the leaves!',
     // Each friend catches their present (their own voice).
     caught: {
       pepa: pepa('A present! Gracias!'),
       chick: pepa('My baby caught one!'),
       lobo: lobo('Arf arf! I love it!'),
-      coco: coco('What a catch! Gracias!'),
+      coco: coco('Nice catch! Gracias!'),
       pluma: pluma('I caught it in the air!'),
       tika: tika('For me? Gracias!'),
       sloth: sloth('Graaacias...'),
@@ -254,14 +254,14 @@ export const L = {
     pelican: 'Pelicans scoop up fish!',
     lunaTap: [luna('Hee hee!'), luna('Wheee! We are flying!'), luna('I can see the whole country!')],
     // The payoff at night.
-    night: onDevice('Night time! Tap the forest to send up lanterns!', 'Night time! Click the forest to send up lanterns!'),
+    night: onDevice('Tap the trees to light lanterns!', 'Click the trees to light lanterns!'),
     pretty: luna('So pretty!'),
-    flag: "Red and white, like Peru's flag!",
+    flag: "Peru's flag! Red and white!",
     gracias: luna('Gracias, everyone!'),
     meaning: 'Gracias means thank you!',
     idle: {
-      grab: onDevice('Pull a present off the balloon!', 'Click a present and pull it off!'),
-      lantern: onDevice('Tap the forest!', 'Click the forest!'),
+      grab: 'Pull down a present!',
+      lantern: onDevice('Tap the trees!', 'Click the trees!'),
     },
   },
 

@@ -604,7 +604,7 @@
   "Drag the cloud over the lagoon!",
   "Drag a friend onto a lily pad!",
   "Pink dolphin sticker! These dolphins live in rivers!",
-  "Help every friend first! Then we fly!",
+  "Help every friend first!",
   "Tap the balloon! Off we fly!",
   "Click the balloon! Off we fly!",
   {
@@ -615,10 +615,9 @@
     "text": "Let's fly and say thank you!",
     "voice": "luna"
   },
-  "Pull a present off the balloon, then let it go!",
-  "Click a present, pull it off, then let it go!",
+  "Pull down a present, then let go!",
   "Drop a present for each friend!",
-  "Windy! Coco and Pluma catch in the air!",
+  "Windy! They catch it in the air!",
   "Drop it through a gap in the leaves!",
   {
     "text": "A present! Gracias!",
@@ -633,7 +632,7 @@
     "voice": "lobo"
   },
   {
-    "text": "What a catch! Gracias!",
+    "text": "Nice catch! Gracias!",
     "voice": "coco"
   },
   {
@@ -674,18 +673,17 @@
     "text": "I can see the whole country!",
     "voice": "luna"
   },
-  "Night time! Tap the forest to send up lanterns!",
-  "Night time! Click the forest to send up lanterns!",
-  "Red and white, like Peru's flag!",
+  "Tap the trees to light lanterns!",
+  "Click the trees to light lanterns!",
+  "Peru's flag! Red and white!",
   {
     "text": "Gracias, everyone!",
     "voice": "luna"
   },
   "Gracias means thank you!",
-  "Pull a present off the balloon!",
-  "Click a present and pull it off!",
-  "Tap the forest!",
-  "Click the forest!",
+  "Pull down a present!",
+  "Tap the trees!",
+  "Click the trees!",
   "Alpaca sticker! Alpacas have soft, warm fleece!",
   "Want to see real condors?",
   "Want to see Machu Picchu?",

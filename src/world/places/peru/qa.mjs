@@ -159,7 +159,27 @@ const balloonDrop = (name, stop, toShare) => ({
     await dropPresent(page, bag, { x: vw.width * toShare.x, y: vw.height * toShare.y })
   },
 })
-motion.push(balloonDrop('balloon-drop-coast', 'coast', { x: 0.55, y: 0.3 }), balloonDrop('balloon-drop-mountains', 'mountains', { x: 0.6, y: 0.25 }))
+motion.push(
+  balloonDrop('balloon-drop-coast', 'coast', { x: 0.55, y: 0.3 }),
+  balloonDrop('balloon-drop-mountains', 'mountains', { x: 0.6, y: 0.25 }),
+  // In the rainforest the sloth and the monkey are taken: this one is Rosa's, and a leaf bounces it to a gap.
+  { ...balloonDrop('balloon-drop-forest', 'forest?gifts=sloth:crown,monkey:party', { x: 0.6, y: 0.3 }), seconds: 4.6 },
+)
+// The payoff: lanterns up from the trees, the flag under the basket, everyone lined up in their presents.
+motion.push({
+  name: 'balloon-night',
+  seconds: 12,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/peru/party/night?stamps=all`)
+    await page.waitForTimeout(2600)
+  },
+  act: async (page) => {
+    for (let i = 0; i < 6; i++) {
+      await page.locator('[aria-label="lantern"]').nth(i).click({ force: true }).catch(() => {})
+      await page.waitForTimeout(350)
+    }
+  },
+})
 
 // Luna's Fluffy Day: rub the brush over Luna's fleece (tangles turn shiny, sparkles, things pop out), then the
 // clippers (puffs snip off and float into the basket).
