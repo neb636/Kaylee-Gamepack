@@ -673,7 +673,7 @@ export function LineBar({ lab }: { lab: LabApi }) {
 }
 
 /** Kaylee's own look (the wardrobe's things and paint, characters/style.ts): one chip row per drawer, one swatch row
- *  per part she can paint. The modelled Kaylee only (the code-built one has no closet). */
+ *  per part she can paint. */
 function LookPanel({ look, set }: { look: string; set: (look: string) => void }) {
   const style = parseLook(look)
   return (

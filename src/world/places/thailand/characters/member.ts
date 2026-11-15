@@ -6,7 +6,7 @@ import { bell, clamp, span } from '../../../../sdk'
 import type { Bag } from '../../../engine3d/dispose'
 import { buildAnimal, Wind, type Rig } from '../../../engine3d/characters/animal'
 import { FaceLife } from '../../../engine3d/characters/face'
-import { automated, flag } from '../../../engine3d/flags'
+import { automated } from '../../../engine3d/flags'
 import type { FamilyMember } from './family'
 import { LOOKS, type Look } from './looks'
 import { buildMomRig, momModel } from './mom-model'
@@ -23,12 +23,11 @@ const tmp = new Vector3()
 /** The family members who also have a game-table voice (`<id>play` in cast.json). */
 const PLAY_VOICES = new Set(['bb', 'gan', 'ken'])
 
-/** A family member's toy in this look: Mom (in her own look) is the modelled vinyl toy once it has loaded, everyone
- *  else the code-built animal. The mall race's racers use it too. */
-export function familyRig(id: string, look: Look, bag: Bag): Rig {
-  // (`?mom=code` brings back the code-built Mom, to compare in QA.)
-  const mom = id === 'ji' && look === LOOKS.ji && flag('mom') !== 'code' ? momModel() : null
-  const rig = mom ? buildMomRig(mom, bag) : buildAnimal(look, bag)
+/** A family member's toy: Mom is the modelled vinyl toy (mom-model.ts), everyone else the code-built animal of their
+ *  look (looks.ts). `look` dresses them as someone else instead (the character lab's extras). The mall race's racers
+ *  use it too. */
+export function familyRig(id: string, bag: Bag, look?: Look): Rig {
+  const rig = id === 'ji' && !look ? buildMomRig(momModel(), bag) : buildAnimal(look ?? LOOKS[id], bag)
   // QA robots find family members by this (scripts/qa-mom.mjs), and under webdriver their rig too.
   rig.root.userData.family = id
   if (automated) Object.defineProperty(rig.root, 'qaRig', { value: rig })
@@ -59,16 +58,16 @@ export class Member implements Character {
   private wind = new Wind()
 
   /** `look` and `voice` default to the family member's own; the character lab (lab/) gives a trip's extras theirs, and
-   *  `rig` a toy to use instead of the usual one. Mom in her own look is the modelled vinyl toy (mom-model.ts, loaded
-   *  before Thailand's scenes build), or the code-built Mom if her model couldn't load. */
-  constructor(readonly member: FamilyMember, bag: Bag, look: Look = LOOKS[member.id], voice: string | undefined = member.id, rig?: Rig) {
+   *  `rig` a toy to use instead of the usual one. Mom is the modelled vinyl toy (mom-model.ts, loaded before Thailand's
+   *  scenes build). */
+  constructor(readonly member: FamilyMember, bag: Bag, look?: Look, voice: string | undefined = member.id, rig?: Rig) {
     this.id = member.id
-    this.chibi = rig ?? familyRig(member.id, look, bag)
+    this.chibi = rig ?? familyRig(member.id, bag, look)
     this.root = this.chibi.root
     this.height = this.chibi.height
     // (The big cousins also talk at the game table, in a cheerful voice of their own: cast.json's bbplay, ganplay, kenplay.)
     this.life = new FaceLife(this.chibi, voice && PLAY_VOICES.has(voice) ? [voice, `${voice}play`] : voice)
-    this.onPhone = !!look.extras?.includes('phone')
+    this.onPhone = !!(look ?? LOOKS[member.id])?.extras?.includes('phone')
     if (this.onPhone) {
       this.chibi.armL.rotation.set(-1.2, 0, 0.75)
       this.chibi.armR.rotation.set(-1.2, 0, -0.75)

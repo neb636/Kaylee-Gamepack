@@ -1,15 +1,14 @@
 // Finds a family member in every Thailand section and photographs them up close, so a new model swapped in for one
 // (Mom's vinyl toy, 2026-11-14) can be checked scene by scene instead of squinting at a full screen where she's tiny.
 //
-//   npm run build && node scripts/qa-mom.mjs [--who=ji] [--routes=rice,bay] [--code] [--wait=3500] [--hashes=a|b]
+//   npm run build && node scripts/qa-mom.mjs [--who=ji] [--routes=rice,bay] [--wait=3500] [--hashes=a|b]
 //                                            [--screens=pizza-stretch,cafe-pour] [--out=name] [--parallel=3]
 //
 // Each section (or each `--hashes` link) opens on an iPad in landscape; once its 3D world is up (window.__kaylee3d,
 // View3D under webdriver) the robot looks for the toy whose root says `userData.family === who` (familyRig), and saves
 // one sheet: the screen as Kaylee sees it, with her outlined, then three close-ups drawn from the game's own scene (the
 // front, three-quarter, and the face). Things between the close-up camera and her are clipped away by the near plane.
-// `--code` opens every link with `?mom=code` (the code-built Mom, to compare); `--side` makes the second close-up a
-// side view (seats, a lap). Writes qa-output/mom[-code]/<nn>-<name>.jpg
+// `--side` makes the second close-up a side view (seats, a lap). Writes qa-output/mom/<nn>-<name>.jpg
 // and report.json (where she was: on screen or not, how tall in pixels, her world box).
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
@@ -18,10 +17,9 @@ import { args, device, flag, launch, loadScenarios, openApp, out, pad, serve, sk
 import { loadWorld, worldLink } from './world-registry.mjs'
 
 const WHO = flag('who') ?? 'ji'
-const CODE = args.includes('--code')
 const WAIT = Number(flag('wait')) || 3500
 const routes = flag('routes')?.split(',')
-const dir = path.join(out, flag('out') ?? `mom${CODE ? '-code' : ''}`)
+const dir = path.join(out, flag('out') ?? 'mom')
 rmSync(dir, { recursive: true, force: true })
 mkdirSync(dir, { recursive: true })
 
@@ -37,8 +35,6 @@ else if (flag('screens')) {
   list = t.activities.flatMap((a) => (a.sections?.sections ?? []).map((s) => ({ name: `${a.id}-${s.id}`, hash: worldLink('thailand', a.id, s.id) })))
 }
 if (routes) list = list.filter((s) => routes.some((r) => s.name.includes(r)))
-// (`mom=code` goes in the page's own query: sections rewrite the hash's.)
-const query = CODE ? '?mom=code' : ''
 const withFlag = (h) => h
 
 /** In the page: find them, outline them on the game view, and draw the close-ups. */
@@ -130,13 +126,13 @@ async function shootOne(page, i, s, errors) {
   if (s.reset) await page.evaluate(() => localStorage.clear())
   if (s.seed) await page.evaluate(s.seed)
   if (s.stampAll) {
-    await page.goto(`${base}${query}#/world/${s.stampAll === true ? 'australia' : s.stampAll}`)
+    await page.goto(`${base}#/world/${s.stampAll === true ? 'australia' : s.stampAll}`)
     await page.waitForTimeout(400)
     await skip(page)
     await page.evaluate(() => window.__kayleeWorld?.stampAll())
   }
-  await page.goto(`${base}${query}#/blank`)
-  await page.goto(`${base}${query}${hash}`)
+  await page.goto(`${base}#/blank`)
+  await page.goto(`${base}${hash}`)
   await page.getByRole('button', { name: /let's play/i }).click({ timeout: 700 }).catch(() => {})
   await page.waitForFunction(() => !!window.__kaylee3d, null, { timeout: 25000 }).catch(() => {})
   if (s.act) {
@@ -163,7 +159,7 @@ async function shootOne(page, i, s, errors) {
     : null
   const tiles = [await sharp(game).resize(W, Hh).composite(box ? [{ input: box }] : []).png().toBuffer()]
   for (const d of r.shots) tiles.push(await sharp(Buffer.from(d.split(',')[1], 'base64')).resize(W, Hh, { fit: 'cover' }).png().toBuffer())
-  const label = Buffer.from(`<svg width="${W * 2}" height="34"><rect width="${W * 2}" height="34" fill="#2E2233"/><text x="10" y="23" font-family="sans-serif" font-size="17" fill="#fff">${s.name}${CODE ? ' (code-built)' : ''}  ${hash.replace(/&/g, '&amp;')}</text></svg>`)
+  const label = Buffer.from(`<svg width="${W * 2}" height="34"><rect width="${W * 2}" height="34" fill="#2E2233"/><text x="10" y="23" font-family="sans-serif" font-size="17" fill="#fff">${s.name}  ${hash.replace(/&/g, '&amp;')}</text></svg>`)
   await sharp({ create: { width: W * 2, height: Hh * 2 + 34, channels: 3, background: '#ffffff' } })
     .composite([{ input: label, left: 0, top: 0 }, ...tiles.map((t, j) => ({ input: t, left: (j % 2) * W, top: 34 + Math.floor(j / 2) * Hh }))])
     .jpeg({ quality: 88 })

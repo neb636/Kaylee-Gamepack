@@ -38,7 +38,7 @@ export const OPEN_ANCHORS: AnchorInfo[] = [
 ]
 
 const tmp = new Vector3()
-/** How far the teddy sits lower and further forward on a modelled Mom's lap than on the code-built one's. */
+/** How far the teddy sits lower and further forward than its cargo spot, on Mom's lap (she sits with her legs out). */
 const LAP = new Vector3(0, -0.1, 0.05)
 export const FISHER: Look = { species: 'buffalo', height: 1.5, fur: '#A79A8A', light: '#E8DFD2', dark: '#5E5468', ear: '#FFB8CC', outfit: { kind: 'shirt', color: '#8EC9F5' } }
 /** The macaques' ledge on their rock, facing the open water toward the pier. */
@@ -176,16 +176,15 @@ export class OpenWater implements BayPart {
     this.shades.position.set(0, R * 0.92 + 0.12 * R, R * 0.93)
     nick.rig.head.add(this.shades)
     const ji = bay.rider('ji').char
-    // The modelled Mom says where her head is under her bun (rig.spots), the code-built one is a ball.
-    const spot = ji.rig.spots
-    const Rj = spot ? spot.hat / 0.74 : 0.24 * ji.height
+    // Mom says where her head is under her bun (rig.spots).
+    const spot = ji.rig.spots!
+    const Rj = spot.hat / 0.74
     this.hat = new Group()
     this.hat.add(solid(merge([P.cyl(Rj * 1.4, Rj * 1.4, 0.03, PAL.butter, {}, 24), P.cyl(Rj * 0.7, Rj * 0.78, 0.2, PAL.butter, { at: [0, 0.1, 0] }, 20), P.cyl(Rj * 0.79, Rj * 0.79, 0.05, PAL.hotpink, { at: [0, 0.04, 0] }, 20), P.sphere(0.07, '#FFFFFF', { at: [Rj * 0.7, 0.1, 0.1] }, 8)]), bag, 1.5))
-    if (spot) this.hat.position.set(spot.crown[0], spot.crown[1], spot.crown[2] - 0.03)
-    else this.hat.position.set(0, Rj * 0.92 + 0.6 * Rj, -0.04 * Rj)
+    this.hat.position.set(spot.crown[0], spot.crown[1], spot.crown[2] - 0.03)
     this.hat.rotation.x = -0.12
     ji.rig.head.add(this.hat)
-    // A modelled Mom's ears stick out at her temples, through the hat's sides: they tuck under it while she wears it
+    // Mom's ears stick out at her temples, through the hat's sides: they tuck under it while she wears it
     // (Member, `hidesEars`).
     this.hat.userData.hidesEars = true
     // ---- What she packed ----
@@ -194,8 +193,8 @@ export class OpenWater implements BayPart {
       const t = buildItem('teddy', bag)
       t.scale.setScalar(1.3)
       t.position.set(...CARGO.teddy)
-      // A modelled Mom sits on her hips with her legs out (her lap is lower and further forward than the code-built one's).
-      if (bay.rider('ji').char.rig.legL) t.position.add(LAP)
+      // Mom sits on her hips with her legs out, so her lap is lower and further forward.
+      t.position.add(LAP)
       cargo.add(t)
     }
     if (bay.packed.includes('bucket')) {

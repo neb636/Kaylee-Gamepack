@@ -1,5 +1,5 @@
 // Kaylee, the one she steers: her lilac unicorn, a modelled vinyl toy with brown hair and a pink striped dress
-// (model.ts; on purpose nothing like Sparkle). The code-built one (looks.ts) stands in if the model can't load.
+// (model.ts; on purpose nothing like Sparkle).
 //
 // How she moves: a bouncy hop-trot along a path (a little hop every step, squash when she lands, stretch at the top,
 // leaning into the walk), turning with a spring so corners curve, a settle wobble when she arrives. Everything else
@@ -10,8 +10,7 @@ import type { Bag } from '../../../engine3d/dispose'
 import { Particles } from '../../../engine3d/particles'
 import type { XZ } from '../../../engine3d/nav'
 import { THAI_TUNE } from '../tune'
-import { buildAnimal, buildWorn, Wind, type Rig } from '../../../engine3d/characters/animal'
-import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { buildWorn, Wind, type Rig } from '../../../engine3d/characters/animal'
 import { FaceLife } from '../../../engine3d/characters/face'
 import { HATS, LOOKS, SPOTS_OF, type Spot, type Wearable } from './looks'
 import { buildModelRig, kayleeModel } from './model'
@@ -133,7 +132,7 @@ export class Dress {
     rig.root.add(this.sparkle.mesh)
   }
 
-  /** Can she wear her own things (the modelled Kaylee)? The code-built one has no closet and no paint. */
+  /** Can this rig wear her own things (the modelled Kaylee can; the hall's code-built kids have no closet, no paint)? */
   get dressable() {
     return !!this.rig.closet
   }
@@ -498,10 +497,9 @@ export class Avatar implements Character {
   /** Showing off something new she put on (showOff). */
   private showing: { kind: ShowPose; t: number } | null = null
 
-  /** `model`: the modelled vinyl-toy Kaylee (model.ts), the one the game uses (Place.tsx loads it before any scene
-   *  builds); `null` builds the code-built Kaylee instead (the lab's comparison, or if the model couldn't load). */
-  constructor(bag: Bag, model: GLTF | null = kayleeModel()) {
-    this.chibi = model ? buildModelRig(model, bag) : buildAnimal(LOOKS.kaylee, bag)
+  /** The modelled vinyl-toy Kaylee (model.ts): Place.tsx and the character lab load her GLB before any scene builds. */
+  constructor(bag: Bag) {
+    this.chibi = buildModelRig(kayleeModel(), bag)
     this.height = this.chibi.height
     this.life = new FaceLife(this.chibi)
     this.root = this.chibi.root
@@ -509,7 +507,7 @@ export class Avatar implements Character {
     this.root.userData.pick = 'kaylee'
     this.dress = new Dress(this.chibi, bag)
     // In her own look in every scene: the link's ?look=, else the one saved in her wardrobe (style.ts).
-    if (model) this.dress.setLook(currentLook())
+    this.dress.setLook(currentLook())
   }
 
   get position() {
@@ -525,7 +523,7 @@ export class Avatar implements Character {
     this.dress.wear(ids)
   }
   /** Dresses her in her own look (style.ts): her things on their spots, her colors. `show`: what's new pops on. Things
-   *  she can't wear (the code-built Kaylee has no closet and no paint) are just left off. */
+   *  a rig can't wear (one with no closet and no paint) are just left off. */
   setLook(style: Style, show = false) {
     this.dress.setLook(style, show)
   }

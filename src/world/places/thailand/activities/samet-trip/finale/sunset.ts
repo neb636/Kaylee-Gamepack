@@ -41,7 +41,7 @@ import { TO_DEG, damp } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/finale/sunset.ts'
 const S = LINES.samet.finale.sunset
-/** How far a modelled Mom swings her phone arm up for the selfie (radians; the code-built Mom's is 1.75). */
+/** How far Mom swings her phone arm up for the selfie (radians). */
 const SELFIE_LIFT = 2.5
 const SUN = knobs('sunsetSun', 'Pulling the sun down', FILE, {
   start: { value: 9, min: 4, max: 25, step: 0.5, label: 'It starts this high', unit: '°' },
@@ -196,7 +196,6 @@ export class Sunset implements World3D {
     this.nick.place(n.x, n.y, n.z, this.seaYaw * TO_DEG)
     scene.add(this.kaylee.root, this.ji.root, this.nick.root)
     // Mom's phone in her hand (a lavender case, the camera on the back, the screen toward her).
-    const H = this.ji.height
     this.phone = solid(
       merge([
         P.rbox(0.13, 0.22, 0.024, 0.02, '#9C82DC', {}),
@@ -207,13 +206,8 @@ export class Sunset implements World3D {
       bag,
       1.2,
     )
-    // In her right hoof (a modelled Mom's `hands`), or at the end of the code-built arm.
-    const hand = this.ji.rig.hands?.[1]
-    if (hand) hand.add(this.phone)
-    else {
-      this.phone.position.set(0.05 * H, -0.2 * H, 0.04 * H)
-      this.ji.rig.armR.add(this.phone)
-    }
+    // In her right hoof.
+    this.ji.rig.hands![1].add(this.phone)
     for (const [p, r] of [
       [k, 0.42],
       [j, 0.5],
@@ -338,7 +332,7 @@ export class Sunset implements World3D {
       const r = this.ji.rig
       // Out to the side and up, at arm's length, so the phone clears her (and their heads fit in its picture).
       // (A modelled Mom's arms hang out at a slant, so the same swing leaves her hoof lower: she lifts it further.)
-      r.armR.rotation.set(-(r.legL ? SELFIE_LIFT : 1.75) * this.turn, 0, 0.85 * this.turn)
+      r.armR.rotation.set(-SELFIE_LIFT * this.turn, 0, 0.85 * this.turn)
       // The phone turns upright, its screen to the three of them (the game's camera sees its back): its turn in the
       // world, undone by the arm's.
       r.armR.updateWorldMatrix(true, false)

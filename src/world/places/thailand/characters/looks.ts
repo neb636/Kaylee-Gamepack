@@ -1,6 +1,7 @@
 // How each of Kaylee's family looks as a toy animal: Dad's picks from the lineup (2026-10-17: column A, so kids share
-// their parent's animal, and Kaylee's lilac unicorn); later Dad made Jum a chubby pink elephant and Mom a bit rounder,
-// and gave the big cousins (Gan, Ken, BB) phones they never look up from. The concepts are in planning/around-the-world/thailand/lineup.webp;
+// their parent's animal); later Dad made Jum a chubby pink elephant and gave the big cousins (Gan, Ken, BB) phones they
+// never look up from. Kaylee and Mom are modelled vinyl toys instead (model.ts, mom-model.ts): Kaylee's entry here is
+// only the size her worn things are made for (buildWorn), and Mom has none. The concepts are in planning/around-the-world/thailand/lineup.webp;
 // engine3d/characters/animal.ts builds them in 3D. The vet's patients at HarborLand (a puppy, a pony, a baby elephant) are toy
 // animals too (PATIENT_LOOKS). Pure data (no three.js).
 import type { Look, Wearable } from '../../../engine3d/characters/look'
@@ -41,8 +42,8 @@ const BUFFALO = { species: 'buffalo' as const, fur: '#94A0C8', light: '#DCD8EE',
 const PENGUIN = { species: 'penguin' as const, fur: '#3F365F', light: '#FFF6EC', dark: '#FFA640' }
 
 export const LOOKS: Record<string, Look> = {
+  // Not a toy any more: the size the game's hats, glasses and costumes are built at (avatar.ts, closet/, model-wear.ts).
   kaylee: { species: 'unicorn', height: 1.0, fur: '#CDB9F6', light: '#F4EDFF', dark: '#A88EE8', ear: '#FFB3D1', mane: ['#FF6FAE', '#FBE27A', '#8FE3C8', '#8EC9F5'], hair: 'medium', outfit: { kind: 'dress', color: '#FF5FA2' }, lashes: true },
-  ji: { species: 'unicorn', height: 1.55, chub: 1.15, fur: '#FFF5EF', light: '#FFE8E0', dark: '#BBA3F2', ear: '#FFC9D6', mane: ['#C7A6F2', '#FF9CC8', '#B494EE', '#FFB8D8'], hair: 'long', outfit: { kind: 'dress', color: '#FFB79E' }, lashes: true },
   nick: { species: 'unicorn', height: 1.7, fur: '#A9EBD6', light: '#E2FAF1', dark: '#9C86DA', ear: '#FFB3C7', mane: ['#8EC9F5', '#B9A6F5'], hair: 'short', outfit: { kind: 'polo', color: '#FBE78A' }, open: true },
   agong: { species: 'panda', height: 1.45, fur: '#FFF6EE', light: '#FFFDF8', dark: '#4A3F4F', ear: '#FFB3C7', outfit: { kind: 'shirt', color: '#FFF0DA' }, extras: ['glasses', 'moustache', 'cane'] },
   jum: { species: 'elephant', height: 1.5, chub: 1.25, fur: '#FFB3CF', light: '#FFE3EE', dark: '#F28CB3', ear: '#FF94BC', outfit: { kind: 'blouse', color: '#A7EBD0' }, lashes: true },

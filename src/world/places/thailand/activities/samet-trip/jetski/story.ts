@@ -163,8 +163,7 @@ export class ZoomStory {
     const r = this.h.kaylee.rig
     // (This frame's place: the jet ski has just moved under her.)
     r.head.updateWorldMatrix(true, false)
-    // (The modelled unicorn's horn is measured; the code-built one's sits on top of her head.)
-    return r.head.localToWorld(r.closet ? out.set(0, HORN_TIP, HORN_FWD) : out.set(0, r.face.headY + r.face.R * 1.5, r.face.R * 0.4))
+    return r.head.localToWorld(out.set(0, HORN_TIP, HORN_FWD))
   }
   private yawTo(from: { x: number; z: number }, to: { x: number; z: number }) {
     return Math.atan2(to.x - from.x, to.z - from.z)

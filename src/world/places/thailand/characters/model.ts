@@ -4,7 +4,7 @@
 // every piece gets the usual ink outline.
 //
 // She is the game's Kaylee: Place.tsx waits for the GLB (kayleeReady) before any Thailand scene builds, and every
-// Kaylee after that clones it. If it can't load, kayleeModel() stays null and the code-built Kaylee stands in.
+// Kaylee after that clones it. She is the only Kaylee there is (the code-built unicorn she used to be is gone).
 import { Group, Mesh, MeshToonMaterial, Vector3, Vector4, type BufferGeometry, type Object3D, type Texture } from 'three'
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import type { Bag } from '../../../engine3d/dispose'
@@ -38,23 +38,23 @@ const HIP_CUT = 0.17
 const HULL_BIAS = 0.007
 
 let model: GLTF | null = null
-let loading: Promise<GLTF> | null = null
+let ready: Promise<GLTF> | null = null
 
-/** The loaded model, or null while it's still on its way. */
-export const kayleeModel = () => model
-
-export function loadKayleeModel(): Promise<GLTF> {
-  loading ??= new GLTFLoader().loadAsync(url).then((g) => (model = g))
-  return loading
+/** The loaded model. Thailand's Place and the character lab wait for kayleeReady() before they build anything. */
+export function kayleeModel(): GLTF {
+  if (!model) throw new Error('kaylee.glb is not loaded yet: wait for kayleeReady() first')
+  return model
 }
 
-let ready: Promise<GLTF | null> | null = null
-/** Resolves once she's loaded, or with null if she couldn't be (never rejects: the code-built Kaylee stands in). */
-export function kayleeReady(): Promise<GLTF | null> {
-  ready ??= loadKayleeModel().catch((e) => {
-    console.warn('kaylee.glb could not be loaded, using the code-built unicorn.', e)
-    return null
-  })
+/** Resolves once she's loaded. If the GLB can't be fetched it rejects, and the next call tries again. */
+export function kayleeReady(): Promise<GLTF> {
+  ready ??= new GLTFLoader().loadAsync(url).then(
+    (g) => (model = g),
+    (e) => {
+      ready = null
+      throw e
+    },
+  )
   return ready
 }
 
