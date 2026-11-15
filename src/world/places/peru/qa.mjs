@@ -149,7 +149,7 @@ const balloonDrop = (name, stop, toShare) => ({
   name,
   seconds: 3.4,
   setup: async (page, base) => {
-    await page.goto(`${base}#/world/peru/party/${stop}?stamps=all`)
+    await page.goto(`${base}#/world/peru/party/${stop}${stop.includes('?') ? '&' : '?'}stamps=all`)
     await page.waitForTimeout(2600)
   },
   act: async (page) => {
