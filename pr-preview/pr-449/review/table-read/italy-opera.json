@@ -5,9 +5,9 @@
   "title": "Italy › Opera",
   "intro": "🎭 Opera Night at the Arena (the finale, activities/opera/). Sparkle gives the instructions; the friends react.",
   "page": "italy-opera.html",
-  "audio": "italy-opera.mp3",
-  "lines": 33,
-  "seconds": 110,
+  "audio": null,
+  "lines": 32,
+  "seconds": 107,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -15,119 +15,240 @@
       "key": "opera.story.0",
       "text": "So many people... I'm too shy to sing!",
       "flags": [
-        "long"
+        "long",
+        "new"
       ]
     },
     {
       "key": "opera.candles.touch",
       "text": "Put your finger on the wand and swing it! Lead the band!",
       "flags": [
-        "long"
+        "long",
+        "new"
       ]
     },
     {
       "key": "opera.candles.mouse",
       "text": "Click and hold, then swing the wand! Lead the band!",
       "flags": [
-        "long"
+        "long",
+        "new"
       ]
     },
     {
       "key": "opera.forte",
       "text": "Big swings: forte! Loud!",
       "flags": [
-        "long"
+        "long",
+        "new"
       ]
     },
     {
       "key": "opera.piano",
       "text": "Little swings: piano. Soft!",
       "flags": [
-        "long"
+        "long",
+        "new"
       ]
     },
     {
       "key": "opera.owl",
       "text": "Shh! The baby owl is sleepy. Little swings: piano, soft.",
       "flags": [
-        "long"
+        "long",
+        "new"
       ]
     },
     {
       "key": "opera.dance",
       "text": "Everyone wants to dance! Big swings: forte, loud!",
       "flags": [
-        "long"
+        "long",
+        "new"
       ]
     },
     {
       "key": "opera.solo.touch",
       "text": "Hold the wand on a friend for a solo!",
       "flags": [
-        "long"
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "opera.solo.mouse",
+      "text": "Keep the wand on a friend for a solo!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "opera.star.touch",
+      "text": "The wishing star! Tap it!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "opera.star.mouse",
+      "text": "The wishing star! Click it!",
+      "flags": [
+        "new"
       ]
     },
     {
       "key": "opera.brave",
-      "text": "The wishing star! I feel brave!",
+      "text": "Oh! I feel brave now!",
       "flags": [
-        "long"
+        "new"
       ]
     },
     {
       "key": "opera.lupa",
       "text": "Lupa is singing! Swing bigger and she gets braver!",
       "flags": [
-        "long"
+        "long",
+        "new"
       ]
     },
     {
       "key": "opera.high",
       "text": "Lift the wand up high!",
       "flags": [
-        "long"
+        "long",
+        "new"
       ]
     },
     {
       "key": "opera.roses",
       "text": "Brava! Brava, Lupa! Catch the roses!",
       "flags": [
-        "long"
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "opera.sky",
+      "text": "Sweep the wand across the sky!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "opera.picnic.touch",
+      "text": "Picnic time! Tap Lupa for a hug!",
+      "flags": [
+        "new"
       ]
     },
     {
       "key": "opera.picnic.mouse",
       "text": "Picnic time! Click Lupa for a hug!",
       "flags": [
-        "long"
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "opera.bye",
+      "text": "Grazie! Ciao for now!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "opera.hints.candles",
+      "text": "Swing the wand!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "opera.hints.owl",
+      "text": "Little, soft swings.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "opera.hints.dance",
+      "text": "Big, big swings!",
+      "flags": [
+        "new"
       ]
     },
     {
       "key": "opera.hints.solo.touch",
       "text": "Hold the wand still on a friend, or tap one!",
       "flags": [
-        "long"
+        "long",
+        "new"
       ]
     },
     {
       "key": "opera.hints.solo.mouse",
       "text": "Keep the wand still on a friend, or click one!",
       "flags": [
-        "long"
+        "long",
+        "new"
       ]
     },
     {
       "key": "opera.hints.lupa",
       "text": "Swing the wand for Lupa!",
       "flags": [
-        "long"
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "opera.hints.high",
+      "text": "Up, up, up!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "opera.hints.sky",
+      "text": "Swing the wand across the sky!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "opera.solos.bruno",
+      "text": "Ho ho! My mandolino!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "opera.solos.spina",
+      "text": "Shake, shake, shake!",
+      "flags": [
+        "new"
       ]
     },
     {
       "key": "opera.solos.cesare",
       "text": "Behold! The emperor's horn!",
       "flags": [
-        "long"
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "opera.solos.gino",
+      "text": "Coo! Accordion time!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "opera.solos.nino",
+      "text": "Hee-haw! Piano, piano!",
+      "flags": [
+        "new"
       ]
     }
   ],
@@ -145,29 +266,8 @@
       "when": "",
       "ms": 3960,
       "flags": [
-        "long"
-      ],
-      "span": [
-        0,
-        3.82
-      ]
-    },
-    {
-      "path": [
-        "opera",
-        "story",
-        "1"
-      ],
-      "text": "Grab the wand and lead the band!",
-      "voice": "sparkle",
-      "key": "opera.story.1",
-      "part": "opera › story",
-      "when": "",
-      "ms": 2736,
-      "flags": [],
-      "span": [
-        4.22,
-        6.85
+        "long",
+        "new"
       ]
     },
     {
@@ -183,11 +283,8 @@
       "when": "",
       "ms": 5424,
       "flags": [
-        "long"
-      ],
-      "span": [
-        8.57,
-        13.8
+        "long",
+        "new"
       ]
     },
     {
@@ -203,11 +300,8 @@
       "when": "",
       "ms": 4488,
       "flags": [
-        "long"
-      ],
-      "span": [
-        14.19,
-        18.53
+        "long",
+        "new"
       ]
     },
     {
@@ -222,11 +316,8 @@
       "when": "",
       "ms": 3528,
       "flags": [
-        "long"
-      ],
-      "span": [
-        20.25,
-        23.64
+        "long",
+        "new"
       ]
     },
     {
@@ -241,11 +332,8 @@
       "when": "",
       "ms": 3240,
       "flags": [
-        "long"
-      ],
-      "span": [
-        24.04,
-        27.16
+        "long",
+        "new"
       ]
     },
     {
@@ -260,11 +348,8 @@
       "when": "",
       "ms": 7464,
       "flags": [
-        "long"
-      ],
-      "span": [
-        27.56,
-        34.76
+        "long",
+        "new"
       ]
     },
     {
@@ -279,11 +364,8 @@
       "when": "",
       "ms": 4992,
       "flags": [
-        "long"
-      ],
-      "span": [
-        35.15,
-        39.97
+        "long",
+        "new"
       ]
     },
     {
@@ -299,11 +381,8 @@
       "when": "",
       "ms": 3168,
       "flags": [
-        "long"
-      ],
-      "span": [
-        41.69,
-        44.75
+        "long",
+        "new"
       ]
     },
     {
@@ -318,10 +397,8 @@
       "part": "opera › solo",
       "when": "",
       "ms": 2760,
-      "flags": [],
-      "span": [
-        45.14,
-        47.81
+      "flags": [
+        "new"
       ]
     },
     {
@@ -336,10 +413,8 @@
       "part": "opera › star",
       "when": "",
       "ms": 2712,
-      "flags": [],
-      "span": [
-        49.51,
-        52.13
+      "flags": [
+        "new"
       ]
     },
     {
@@ -354,10 +429,8 @@
       "part": "opera › star",
       "when": "",
       "ms": 2808,
-      "flags": [],
-      "span": [
-        52.52,
-        55.24
+      "flags": [
+        "new"
       ]
     },
     {
@@ -365,18 +438,14 @@
         "opera",
         "brave"
       ],
-      "text": "The wishing star! I feel brave!",
+      "text": "Oh! I feel brave now!",
       "voice": "lupa",
       "key": "opera.brave",
       "part": "opera",
       "when": "",
-      "ms": 3696,
+      "ms": 2616,
       "flags": [
-        "long"
-      ],
-      "span": [
-        56.95,
-        60.51
+        "new"
       ]
     },
     {
@@ -391,11 +460,8 @@
       "when": "",
       "ms": 4992,
       "flags": [
-        "long"
-      ],
-      "span": [
-        60.91,
-        65.72
+        "long",
+        "new"
       ]
     },
     {
@@ -410,11 +476,8 @@
       "when": "",
       "ms": 3432,
       "flags": [
-        "long"
-      ],
-      "span": [
-        66.12,
-        69.43
+        "long",
+        "new"
       ]
     },
     {
@@ -429,11 +492,8 @@
       "when": "",
       "ms": 4104,
       "flags": [
-        "long"
-      ],
-      "span": [
-        69.83,
-        73.78
+        "long",
+        "new"
       ]
     },
     {
@@ -447,10 +507,8 @@
       "part": "opera",
       "when": "",
       "ms": 2952,
-      "flags": [],
-      "span": [
-        74.18,
-        77.02
+      "flags": [
+        "new"
       ]
     },
     {
@@ -465,10 +523,8 @@
       "part": "opera › picnic",
       "when": "",
       "ms": 2976,
-      "flags": [],
-      "span": [
-        78.74,
-        81.62
+      "flags": [
+        "new"
       ]
     },
     {
@@ -484,11 +540,8 @@
       "when": "",
       "ms": 3336,
       "flags": [
-        "long"
-      ],
-      "span": [
-        82,
-        85.23
+        "long",
+        "new"
       ]
     },
     {
@@ -502,10 +555,8 @@
       "part": "opera",
       "when": "",
       "ms": 2496,
-      "flags": [],
-      "span": [
-        86.94,
-        89.35
+      "flags": [
+        "new"
       ]
     },
     {
@@ -520,10 +571,8 @@
       "part": "opera › hints",
       "when": "",
       "ms": 1488,
-      "flags": [],
-      "span": [
-        91.07,
-        92.5
+      "flags": [
+        "new"
       ]
     },
     {
@@ -538,10 +587,8 @@
       "part": "opera › hints",
       "when": "",
       "ms": 2832,
-      "flags": [],
-      "span": [
-        92.89,
-        95.63
+      "flags": [
+        "new"
       ]
     },
     {
@@ -556,10 +603,8 @@
       "part": "opera › hints",
       "when": "",
       "ms": 2136,
-      "flags": [],
-      "span": [
-        96.02,
-        98.08
+      "flags": [
+        "new"
       ]
     },
     {
@@ -576,11 +621,8 @@
       "when": "",
       "ms": 3480,
       "flags": [
-        "long"
-      ],
-      "span": [
-        99.8,
-        103.16
+        "long",
+        "new"
       ]
     },
     {
@@ -597,11 +639,8 @@
       "when": "",
       "ms": 4392,
       "flags": [
-        "long"
-      ],
-      "span": [
-        103.54,
-        107.79
+        "long",
+        "new"
       ]
     },
     {
@@ -617,11 +656,8 @@
       "when": "",
       "ms": 3120,
       "flags": [
-        "long"
-      ],
-      "span": [
-        109.5,
-        112.51
+        "long",
+        "new"
       ]
     },
     {
@@ -636,10 +672,8 @@
       "part": "opera › hints",
       "when": "",
       "ms": 2016,
-      "flags": [],
-      "span": [
-        112.9,
-        114.85
+      "flags": [
+        "new"
       ]
     },
     {
@@ -654,10 +688,8 @@
       "part": "opera › hints",
       "when": "",
       "ms": 2712,
-      "flags": [],
-      "span": [
-        115.24,
-        117.86
+      "flags": [
+        "new"
       ]
     },
     {
@@ -672,10 +704,8 @@
       "part": "opera › solos",
       "when": "",
       "ms": 2208,
-      "flags": [],
-      "span": [
-        119.57,
-        121.7
+      "flags": [
+        "new"
       ]
     },
     {
@@ -690,10 +720,8 @@
       "part": "opera › solos",
       "when": "",
       "ms": 2016,
-      "flags": [],
-      "span": [
-        122.1,
-        124.04
+      "flags": [
+        "new"
       ]
     },
     {
@@ -709,11 +737,8 @@
       "when": "",
       "ms": 3552,
       "flags": [
-        "long"
-      ],
-      "span": [
-        124.43,
-        127.86
+        "long",
+        "new"
       ]
     },
     {
@@ -728,10 +753,8 @@
       "part": "opera › solos",
       "when": "",
       "ms": 2520,
-      "flags": [],
-      "span": [
-        128.26,
-        130.69
+      "flags": [
+        "new"
       ]
     },
     {
@@ -746,10 +769,8 @@
       "part": "opera › solos",
       "when": "",
       "ms": 2592,
-      "flags": [],
-      "span": [
-        131.08,
-        133.58
+      "flags": [
+        "new"
       ]
     }
   ]
