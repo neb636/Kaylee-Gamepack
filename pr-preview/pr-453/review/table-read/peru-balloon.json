@@ -7,7 +7,7 @@
   "page": "peru-balloon.html",
   "audio": null,
   "lines": 34,
-  "seconds": 72,
+  "seconds": 71,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -41,7 +41,7 @@
     },
     {
       "key": "balloon.story.1",
-      "text": "Let's fly and say thank you!",
+      "text": "Let's say thank you!",
       "flags": [
         "new"
       ]
@@ -320,12 +320,12 @@
         "story",
         "1"
       ],
-      "text": "Let's fly and say thank you!",
+      "text": "Let's say thank you!",
       "voice": "luna",
       "key": "balloon.story.1",
       "part": "balloon › story",
       "when": "",
-      "ms": 2040,
+      "ms": 1272,
       "flags": [
         "new"
       ]
