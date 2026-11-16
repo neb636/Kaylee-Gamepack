@@ -263,6 +263,8 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   back under the skin wherever it came out of his face, closed under the horn, joined into `head_mesh` in skin mint.
   The skin flaps round the hairline (the light tips of his hair spikes, taken for skin) are worn away by the hair,
   but not his ears. `render-head.py` renders the head from four sides, with and without the hair, to check it.
+  `skin-nick.py` then paints the dome, the neck cap and the collar faces round his neck his forehead's mint (the
+  collar, hidden inside the head at rest, was the chin's cream and showed as a pale patch when he turned his head).
 - **The barber:** his own hair (`rig.hair`) stays on under the strands while it's about its natural length, and goes
   once she cuts it short (`Mane.showOwn`): then it's the strands on his bald scalp. (Shrinking it into his head instead
   pushed its ink out through his scalp as black lines.) The strands root on the scalp under where his hair is (rays
