@@ -1,0 +1,18 @@
+{
+  "kind": "reel",
+  "name": "ending",
+  "title": "Robot play, software rendering in the cloud (choppy: the smooth reel needs the Mac's GPU)",
+  "video": "ending.mp4",
+  "gif": "ending.gif",
+  "seconds": 50,
+  "browser": "chromium",
+  "viewport": "960x640",
+  "moments": [
+    { "name": "fly", "status": "ok" },
+    { "name": "night-lost", "status": "ok" },
+    { "name": "huddle", "status": "ok" },
+    { "name": "huddle?part=middle", "status": "ok" },
+    { "name": "goodbye", "status": "ok" },
+    { "name": "the-end", "status": "ok" }
+  ]
+}
