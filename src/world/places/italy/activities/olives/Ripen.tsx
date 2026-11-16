@@ -3,7 +3,7 @@
 // (one sun, two suns, three suns). Then Spina tries a fresh one: "Bleh! Bitter!"
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { burst, Piece, say, SparklePuppet, sounds, Target, useAlive, useLandscape, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, Piece, say, SparklePuppet, sounds, Target, useAlive, useLandscape, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { WIGGLE } from '../../../../kit/Stage'
 import { art } from '../../art'
@@ -50,6 +50,7 @@ const LAYOUT = {
 }
 
 export function Ripen({ onStar, onDone }: { onStar: (n: number) => void; onDone: () => void }) {
+  const timers = useTimers()
   const landscape = useLandscape()
   const lay = landscape ? LAYOUT.land : LAYOUT.tall
   const ratio = landscape ? 1.5 : 1 / 1.5
@@ -69,7 +70,7 @@ export function Ripen({ onStar, onDone }: { onStar: (n: number) => void; onDone:
   const tickles = useRef(0)
 
   useEffect(() => {
-    const t = setTimeout(() => void sparkle.current?.play('wave'), 300)
+    const t = timers.later(() => void sparkle.current?.play('wave'), 300)
     return () => clearTimeout(t)
   }, [])
 
@@ -124,7 +125,7 @@ export function Ripen({ onStar, onDone }: { onStar: (n: number) => void; onDone:
       const wrong = Number(target.split('-')[1])
       sounds.oops()
       setWiggle(wrong)
-      setTimeout(() => setWiggle(null), 550)
+      timers.later(() => setWiggle(null), 550)
       void sparkle.current?.play('think')
     }
     setHint(right)

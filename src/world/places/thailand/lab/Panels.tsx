@@ -4,7 +4,7 @@
 import { shareLab } from '../../../labs/share'
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import { go } from '../../../../router'
-import { lineText, stopSpeaking, type Line } from '../../../../sdk'
+import { lineText, stopSpeaking, type Line, useTimers } from '../../../../sdk'
 import { WEARABLES, type Look } from '../characters/looks'
 import { formatLook, ITEMS, PAINT_COLORS, PAINT_PARTS, PAINTS, paintOf, parseLook, SLOTS, withItem, withPaint, type ShowPose } from '../characters/style'
 import type { Pose } from '../characters/types'
@@ -245,12 +245,13 @@ function SceneList({ lab }: { lab: LabApi }) {
 
 /** The ✦ popover: portraits of a character's variations (Kaylee's outfits, the kids of a group). */
 function Variations({ lab, id, at, onClose }: { lab: LabApi; id: string; at: { top: number; left: number }; onClose: () => void }) {
+  const timers = useTimers()
   const entry = CAST.find((c) => c.id === id)!
   const variants = useMemo(() => variantsFor(entry), [entry])
   const [thumbs, setThumbs] = useState<string[] | null>(null)
   useEffect(() => {
     // Built after the popover shows, so the click feels instant.
-    const t = setTimeout(() => {
+    const t = timers.later(() => {
       try {
         setThumbs(lab.studio.current?.thumbs(entry, variants) ?? null)
       } catch {

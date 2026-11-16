@@ -62,7 +62,7 @@ export const noises = {
   bonk() {
     noise(0.08, 0.5, 'bandpass', 1100, 500, 0, 2.5)
     tone(170, 60, 0.18, 0.22)
-    setTimeout(() => sfx.boing(), 90)
+    setTimeout(() => sfx.boing(), 90) // timers-ok: the second half of one sound, 90 ms later
   },
   /** A plant popping up on the bridge (a rising note). */
   sprout(step: number) {

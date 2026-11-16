@@ -14,6 +14,7 @@ import { frameLoop } from './loop'
 import { acquireRenderer, dropRenderer, releaseRenderer, warmUp } from './renderer'
 import { ROAM, type Roamable } from './roam'
 import { RoamPad, type RoamPadHandle } from './RoamPad'
+import { useTimers, type Timers } from '../../sdk'
 
 export type RenderMode = 'webgl' | 'lost'
 
@@ -39,6 +40,9 @@ export interface World3D extends Roamable {
   hoverAnchor?(id: string | null): void
   qa(): Record<string, unknown>
   memory(): Record<string, number>
+  /** Its delayed callbacks (sdk/timers.ts): cancelled the moment it leaves the screen, even when freeing the GPU has
+   *  to wait for its shaders. */
+  readonly timers?: Timers
   dispose(): void
 }
 
@@ -93,6 +97,7 @@ interface Props<W extends World3D> {
 }
 
 export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef, anchors, paused = false }: Props<W>) {
+  const timers = useTimers()
   const pausedRef = useRef(paused)
   pausedRef.current = paused
   const host = useRef<HTMLDivElement>(null)
@@ -160,7 +165,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
     let orientTimer = 0
     const onOrient = () => {
       clearTimeout(orientTimer)
-      orientTimer = window.setTimeout(measure, 250)
+      orientTimer = timers.later(measure, 250)
     }
     window.addEventListener('orientationchange', onOrient)
     window.visualViewport?.addEventListener('resize', onOrient)
@@ -416,6 +421,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
       downFromAnchor.current = null
       if (window[qaKey]) delete window[qaKey]
       gone = true
+      world.timers?.dispose()
       // Left before the shaders finished compiling (a quick section link, a leg swap): free it once they have.
       const dispose = () => world.dispose()
       if (compiled) dispose()

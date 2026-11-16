@@ -5,7 +5,7 @@
 // is brushed in Chinese and she stamps it with a red chop. No failing: after a few misses the brush finishes the stroke.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { burst, Buddy, say, sounds, useAlive, useElementSize, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, Buddy, say, sounds, useAlive, useElementSize, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
@@ -83,6 +83,7 @@ function paintedBefore(n: number) {
 const Z: Record<ThingId, number> = { sun: 1, moon: 1, hills: 2, person: 3, bao: 3, tree: 3, bird: 4 }
 
 export function MagicBrush({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const box = useRef<HTMLDivElement>(null)
   const { width: W, height: H } = useElementSize(box)
   const alive = useAlive()
@@ -172,7 +173,7 @@ export function MagicBrush({ onDone, setProgress }: ActivityProps) {
     } else if (ci === 3) {
       setThings((t) => [...t, 'bird'])
       sounds.note(6)
-      setTimeout(() => {
+      timers.later(() => {
         if (!alive()) return
         setLanded(true)
         sounds.note(9)

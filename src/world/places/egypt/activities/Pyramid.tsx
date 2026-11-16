@@ -3,7 +3,7 @@
 // Jamal is a puppet: he walks in pulling the sled, shakes his head at a stone that's too big, and cheers at the end.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { burst, DragArea, Draggable, DropZone, pick, say, shuffle, sounds, useAlive, wait, type PuppetHandle } from '../../../../sdk'
+import { burst, DragArea, Draggable, DropZone, pick, say, shuffle, sounds, useAlive, wait, type PuppetHandle, useTimers } from '../../../../sdk'
 import { sfx } from '../../../kit/sfx'
 import { Stage, WIGGLE } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
@@ -45,6 +45,7 @@ function load(slot: number): Size[] {
 }
 
 export function Pyramid({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const { start, enter } = useSections(SECTIONS)
   const seed = start === 'row-2' ? 3 : start === 'row-1' ? 5 : start === 'capstone' ? 6 : 0
   const [story, setStory] = useState(!start || start === 'story')
@@ -74,7 +75,7 @@ export function Pyramid({ onDone, setProgress }: ActivityProps) {
     if (story) return
     setArriving(true)
     void jamal.current?.play('walk')
-    const t = setTimeout(() => setArriving(false), 1100)
+    const t = timers.later(() => setArriving(false), 1100)
     return () => clearTimeout(t)
   }, [sled.id, story])
 
@@ -88,7 +89,7 @@ export function Pyramid({ onDone, setProgress }: ActivityProps) {
       sounds.oops()
       setWiggle(index)
       setHelp(true)
-      setTimeout(() => setWiggle(null), 500)
+      timers.later(() => setWiggle(null), 500)
       void jamal.current?.play('shake')
       void say(L.pyramid.tooBig)
       return false
@@ -99,11 +100,11 @@ export function Pyramid({ onDone, setProgress }: ActivityProps) {
     setHelp(false)
     setSled((s) => ({ ...s, sizes: [] }))
     // The stone drops into place with a thump and a puff of dust.
-    setTimeout(() => {
+    timers.later(() => {
       if (!alive()) return
       sfx.thump()
       setPuffs((p) => [...p, n - 1])
-      setTimeout(() => setPuffs((p) => p.filter((q) => q !== n - 1)), 700)
+      timers.later(() => setPuffs((p) => p.filter((q) => q !== n - 1)), 700)
     }, 250)
     sounds.note(n)
     if (n <= 3) {

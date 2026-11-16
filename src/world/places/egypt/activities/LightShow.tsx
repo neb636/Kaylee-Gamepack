@@ -3,7 +3,7 @@
 // who dances and says hello. Then she pulls the rope to raise Egypt's flag, and there are fireworks.
 import { AnimatePresence, motion } from 'motion/react'
 import { createRef, useEffect, useMemo, useRef, useState, type RefObject } from 'react'
-import { bigCelebration, burst, say, sounds, SparklePuppet, useAlive, wait, type PuppetHandle } from '../../../../sdk'
+import { bigCelebration, burst, say, sounds, SparklePuppet, useAlive, wait, type PuppetHandle, useTimers } from '../../../../sdk'
 import { Flag } from '../../../kit/Flag'
 import { sfx } from '../../../kit/sfx'
 import { Stage } from '../../../kit/Stage'
@@ -30,6 +30,7 @@ const BG_W = 1536
 const BG_H = 1024
 
 export function LightShow({ guests, onDone, setProgress }: { guests: Guest[]; onDone: () => void; setProgress: (done: number, total: number) => void }) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(SECTIONS)
   const seed = start === 'flag' || start === 'fireworks' ? guests.length : start?.startsWith('wake-') ? Number(start.slice(5)) - 1 : 0
   const [lighting, setLighting] = useState(() => {
@@ -67,9 +68,9 @@ export function LightShow({ guests, onDone, setProgress }: { guests: Guest[]; on
   useEffect(() => {
     if (!fireworks) return
     const all = [sparkle, miu, ...refs]
-    const go = () => all.forEach((r, i) => setTimeout(() => void r.current?.play(i % 2 ? 'dance' : 'cheer'), i * 120))
+    const go = () => all.forEach((r, i) => timers.later(() => void r.current?.play(i % 2 ? 'dance' : 'cheer'), i * 120))
     go()
-    const id = setInterval(go, 2300)
+    const id = timers.every(go, 2300)
     return () => clearInterval(id)
   }, [fireworks, refs, miu, sparkle])
 
@@ -92,7 +93,7 @@ export function LightShow({ guests, onDone, setProgress }: { guests: Guest[]; on
     const m = [...visible].sort((a, b) => Math.hypot(a.center[0] - px, a.center[1] - py) - Math.hypot(b.center[0] - px, b.center[1] - py))[0] ?? MONUMENTS[1]
     const id = Date.now()
     setBeams((b) => [...b, { id, to: m.center, color }])
-    setTimeout(() => setBeams((b) => b.filter((x) => x.id !== id)), 1600)
+    timers.later(() => setBeams((b) => b.filter((x) => x.id !== id)), 1600)
     sfx.fwip()
     sounds.sparkle()
     setLit((l) => ({ ...l, [m.id]: color }))
@@ -129,7 +130,7 @@ export function LightShow({ guests, onDone, setProgress }: { guests: Guest[]; on
 
   const finishFireworks = async () => {
     sounds.fanfare()
-    for (let k = 0; k < 6; k++) setTimeout(() => (burst(0.15 + Math.random() * 0.7, 0.15 + Math.random() * 0.25), sfx.pop()), k * 380)
+    for (let k = 0; k < 6; k++) timers.later(() => (burst(0.15 + Math.random() * 0.7, 0.15 + Math.random() * 0.25), sfx.pop()), k * 380)
     await wait(1600)
     if (!alive()) return
     bigCelebration(1500)

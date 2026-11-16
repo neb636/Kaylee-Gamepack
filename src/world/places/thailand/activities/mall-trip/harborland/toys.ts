@@ -9,7 +9,7 @@
 //   the spires     a temple bell and a little bounce
 //   Phi Ta Khon    the masks on the roller's posts jangle; when she rattles past, each one turns and sticks its tongue out
 import { Group, Vector3, type Object3D } from 'three'
-import { bell, clamp, span, wobble } from '../../../../../../sdk'
+import { bell, clamp, span, wobble, Timers } from '../../../../../../sdk'
 import type { Member } from '../../../characters/member'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../engine3d/geo'
@@ -28,6 +28,13 @@ const w = new Vector3()
 
 export class FrameToys {
   /** Dad in the ball pit (his toy animal inside, so he can tip back and flop). */
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
+
+  /** Cancels its pending callbacks: its owner is going away. */
+  dispose() {
+    this.timers.dispose()
+  }
   readonly daddy = new Group()
   /** Times the cannon has hit him (the third: he flops back in himself). */
   hits = 0
@@ -146,7 +153,7 @@ export class FrameToys {
   boxer() {
     this.boxerT = 0
     sfx.ringBell()
-    ;[0.15, 0.45, 0.75].forEach((d) => setTimeout(() => sfx.jab(), d * 1000))
+    ;[0.15, 0.45, 0.75].forEach((d) => this.timers.later(() => sfx.jab(), d * 1000))
   }
 
   spire(i: number) {

@@ -12,6 +12,7 @@ import { MapCover } from '../../../trip/MapCover'
 import { SKY_TOP } from '../../../trip/sky'
 import type { PlaceId, Stop } from './layout'
 import { KrabiMap as MapWorld, KRABI_CAM, MAP_ANCHORS } from './map3d'
+import { useTimers } from '../../../../../../sdk'
 
 interface Props {
   /** Krabi's places done so far, in the order she did them (the newest one's stamp lands). */
@@ -24,13 +25,14 @@ interface Props {
 }
 
 export function KrabiMap({ been, from, say, onGo, onMode }: Props) {
+  const timers = useTimers()
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   // The loading screen stays over the board while the camera already starts moving, then fades into it (trip/sky.ts).
   const [revealed, setRevealed] = useState(false)
   useEffect(() => {
     // (If the board never draws, say the camera lab froze it, the cover still goes.)
-    const safety = setTimeout(() => setRevealed(true), 6000)
+    const safety = timers.later(() => setRevealed(true), 6000)
     return () => clearTimeout(safety)
   }, [])
   const worldRef = useRef<MapWorld | null>(null)

@@ -19,7 +19,7 @@
 // Its timing numbers are knobs (?feel=1).
 import { CAPTAIN } from '../cast'
 import { Fog, Group, Mesh, CatmullRomCurve3, Plane, Raycaster, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
-import { clamp, type Line } from '../../../../../../sdk'
+import { clamp, type Line, Timers } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import { FaceLife } from '../../../../../engine3d/characters/face'
 import { knobs, watch } from '../../../../../kit/knobs'
@@ -316,6 +316,8 @@ function buildFlyFish(bag: Bag) {
 }
 
 export class SametSpeedboat implements World3D {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   readonly scene = new Scene()
   readonly rig = new CameraRig()
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
@@ -687,7 +689,7 @@ export class SametSpeedboat implements World3D {
     k.hopTo(new Vector3(pier.x, PIER.y, pier.z), 0.5, 0.7, () => k.faceToward(atFrame(f, -4, 0).x, atFrame(f, -4, 0).z))
     S.fwip()
     for (const [m, i] of [[this.ji, 1], [this.nick, 2]] as const) {
-      window.setTimeout(() => {
+      this.timers.later(() => {
         this.scene.attach(m.root)
         const q = atFrame(f, -4 + (i === 1 ? -0.9 : 0.9), 21.2)
         m.place(q.x, PIER.y, q.z, Math.atan2(-f.n.x, -f.n.z) * TO_DEG, 'stand')
@@ -1051,6 +1053,7 @@ export class SametSpeedboat implements World3D {
     return { ...this.renderer.info.memory }
   }
   dispose() {
+    this.timers.dispose()
     this.unwatch()
     this.scene.clear()
     this.bag.dispose()

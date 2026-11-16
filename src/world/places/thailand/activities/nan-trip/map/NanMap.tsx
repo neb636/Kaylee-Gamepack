@@ -5,7 +5,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { sounds } from '../../../../../../sdk'
+import { sounds, useTimers } from '../../../../../../sdk'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
 import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
@@ -23,6 +23,7 @@ interface Props {
 }
 
 export function NanMap({ stops, from, onGo }: Props) {
+  const timers = useTimers()
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [ask, setAsk] = useState(false)
@@ -30,7 +31,7 @@ export function NanMap({ stops, from, onGo }: Props) {
   const [revealed, setRevealed] = useState(false)
   useEffect(() => {
     // (If the board never draws, say the camera lab froze it, the cover still goes.)
-    const safety = setTimeout(() => setRevealed(true), 6000)
+    const safety = timers.later(() => setRevealed(true), 6000)
     return () => clearTimeout(safety)
   }, [])
   const worldRef = useRef<MapWorld | null>(null)

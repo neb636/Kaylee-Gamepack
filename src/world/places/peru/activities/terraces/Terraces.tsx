@@ -14,7 +14,7 @@ import SECTIONS from './sections'
 // re-render per move).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
-import { BigButton, burst, Buddy, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, burst, Buddy, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
@@ -73,6 +73,7 @@ interface Cam {
 }
 
 export function Terraces({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(SECTIONS)
   const seeded = useRef(false)
   const alive = useAlive()
@@ -248,7 +249,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
     })
     void stoneEls.current.values().next().value?.offsetWidth
     tsfx.rumble()
-    ids.forEach((id, i) => setTimeout(() => alive() && sendHome(id, 700), 60 + i * 110))
+    ids.forEach((id, i) => timers.later(() => alive() && sendHome(id, 700), 60 + i * 110))
   }, [pile, phase === 'story'])
 
   // ---- The story, then play ----
@@ -262,7 +263,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
   const dust = (x: number, y: number, w: number) => {
     const id = g.current.dustId++
     setDusts((d) => [...d, { id, x, y, w }])
-    setTimeout(() => alive() && setDusts((d) => d.filter((q) => q.id !== id)), 800)
+    timers.later(() => alive() && setDusts((d) => d.filter((q) => q.id !== id)), 800)
   }
 
   // ---- The core verb: a stone lands in its gap ----
@@ -297,7 +298,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
     const st = stoneById(G.k, id)
     const at = holeAt(G.k, st)
     setStone(id, at.x, at.y, 1, 260, 'cubic-bezier(.4,1.4,.6,1)')
-    setTimeout(() => alive() && place(id), 270)
+    timers.later(() => alive() && place(id), 270)
   }
 
   const bonk = (id: string) => {
@@ -335,12 +336,12 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
     setTikaLedge(kk)
     if (kk >= 1) {
       const f = kk - 1
-      setTimeout(() => {
+      timers.later(() => {
         if (!alive()) return
         void friendRefs.current[f]?.play('jump')
         sfx.boing()
         setHopping(f)
-        setTimeout(() => {
+        timers.later(() => {
           if (!alive()) return
           setHopping(null)
           setFriendAt((a) => a.map((v, i) => (i === f ? kk - 1 : v)))
@@ -377,7 +378,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
     // Silly: Tika nibbles a flower she just planted and looks innocent.
     if (crop === 'flower' && !G.flowerEaten) {
       G.flowerEaten = true
-      setTimeout(async () => {
+      timers.later(async () => {
         if (!alive()) return
         void tika.current?.play('munch')
         sfx.munch()
@@ -625,7 +626,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
     if (i === 1 && friendAt[0] === friendAt[1]) {
       tsfx.spit()
       setSpitBall((b) => b + 1)
-      setTimeout(() => alive() && void friendRefs.current[0]?.play('wiggle'), 450)
+      timers.later(() => alive() && void friendRefs.current[0]?.play('wiggle'), 450)
     }
   }
   const tapBush = () => {
@@ -637,13 +638,13 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
       setBear(true)
       sounds.sparkle()
       if (G.bush === 2) say1(T.bear)
-      setTimeout(() => alive() && setBear(false), 2600)
+      timers.later(() => alive() && setBear(false), 2600)
     }
   }
 
   // ---- The quiet guide: Sparkle only speaks when nothing has happened for a while ----
   useEffect(() => {
-    const t = setInterval(() => {
+    const t = timers.every(() => {
       const G = g.current
       const now = performance.now()
       if (G.held || now - G.lastProgress < 9000 || now - G.lastHint < 12000) return
@@ -711,7 +712,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
         orders[G.k]
           .filter((id) => !G.placed.has(keyOf(G.k, id)))
           .slice(0, n)
-          .forEach((id, i) => setTimeout(() => flyIn(id), i * 320))
+          .forEach((id, i) => timers.later(() => flyIn(id), i * 320))
       },
 
     }

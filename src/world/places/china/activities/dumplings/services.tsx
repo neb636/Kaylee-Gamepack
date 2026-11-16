@@ -2,7 +2,7 @@
 // Service 2 is colors and a two-basket stack; Service 3 is Bao Bao's big order, free colors, and a sneaky monkey.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type RefObject } from 'react'
-import { burst, Buddy, Piece, say, sounds, Target, useAlive, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, Buddy, Piece, say, sounds, Target, useAlive, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { WIGGLE } from '../../../../kit/Stage'
 import { art } from '../../art'
 import { L } from '../../lines'
@@ -42,16 +42,17 @@ function cookPrompt(stage: CookStage, fact: boolean): Line | undefined {
 
 /** Runs a CookStove and says the steam fact once, then "pop the steam puffs". */
 function useCook(onCooked: () => void, initial: CookStage = 'idle') {
+  const timers = useTimers()
   const [stage, setStage] = useState<CookStage>(initial)
   const [fact, setFact] = useState(true)
   const alive = useAlive()
   useEffect(() => {
     if (stage === 'steam') {
-      const t = setTimeout(() => alive() && setFact(false), 4200)
+      const t = timers.later(() => alive() && setFact(false), 4200)
       return () => clearTimeout(t)
     }
     if (stage === 'cooked') {
-      const t = setTimeout(() => alive() && onCooked(), 2600)
+      const t = timers.later(() => alive() && onCooked(), 2600)
       return () => clearTimeout(t)
     }
   }, [stage])
@@ -65,6 +66,7 @@ type S1 = (typeof STEPS1)[number]
 const PROMPT1: Partial<Record<S1, Line>> = { knead: D.knead, snake: D.snake, chop: D.chop, roll: D.roll, fill: D.fill, pleat: D.pleat, pleat3: D.pleatMore, basket: D.steamer, lid: D.lid }
 
 export function Service1({ chef, onDone, start, onAt }: ServiceProps) {
+  const timers = useTimers()
   const [step, setStep] = useState<S1>(() => startStep(STEPS1, start))
   const [folded, setFolded] = useState(1) // dumplings folded so far (in pleat3)
   const basket: Basket = { id: 's1', colors: ['cream', 'cream', 'cream', 'cream'], ribbon: RIBBON.grandpa }
@@ -146,7 +148,7 @@ export function Service1({ chef, onDone, start, onAt }: ServiceProps) {
           setPlaced(n)
           sounds.place()
           if (n.length === 1) void say(D.leaf)
-          if (n.length === 4) setTimeout(() => alive() && setStep('lid'), 500)
+          if (n.length === 4) timers.later(() => alive() && setStep('lid'), 500)
         }}
       />
     )
@@ -161,6 +163,7 @@ export function Service1({ chef, onDone, start, onAt }: ServiceProps) {
 
 /** The lid hovers over the full basket, glowing: tap to close it. */
 function CloseLid({ colors, ribbon, onDone }: { colors: DoughColor[]; ribbon?: string; onDone: () => void }) {
+  const timers = useTimers()
   const [on, setOn] = useState(false)
   return (
     <div style={{ width: 'min(76cqw, 80cqh, 460px)', position: 'relative' }}>
@@ -176,7 +179,7 @@ function CloseLid({ colors, ribbon, onDone }: { colors: DoughColor[]; ribbon?: s
           onClick={() => {
             setOn(true)
             sounds.place()
-            setTimeout(onDone, 600)
+            timers.later(onDone, 600)
           }}
           style={{ position: 'absolute', left: 0, right: 0, top: '-30%', background: 'none', border: 'none', padding: 0, borderRadius: '50%' }}
         >
@@ -196,6 +199,7 @@ const GOOSE: DoughColor[] = ['yellow', 'yellow']
 const BOWLS: DoughColor[] = ['cream', 'pink', 'green', 'yellow']
 
 export function Service2({ chef, onDone, start, onAt }: ServiceProps) {
+  const timers = useTimers()
   const [step, setStep] = useState<S2>(() => startStep(STEPS2, start))
   const [first] = useState(step)
   const [wrappers, setWrappers] = useState<DoughColor[]>(() => (past(STEPS2, first, 'color') ? BUNNY : []))
@@ -236,7 +240,7 @@ export function Service2({ chef, onDone, start, onAt }: ServiceProps) {
       sounds.oops()
       setWrong(c)
       setHint(true)
-      setTimeout(() => setWrong(null), 520)
+      timers.later(() => setWrong(null), 520)
       void play(chef, 'shake')
       void say(D.notThat[want as 'pink' | 'green'])
       return
@@ -246,7 +250,7 @@ export function Service2({ chef, onDone, start, onAt }: ServiceProps) {
     const n = [...wrappers, c]
     setWrappers(n)
     void say(D.colorName[c])
-    if (n.length === 4) setTimeout(() => alive() && setStep('fill'), 700)
+    if (n.length === 4) timers.later(() => alive() && setStep('fill'), 700)
   }
 
   const bowls = (onPick: (c: DoughColor) => void, glow?: DoughColor) => (
@@ -294,7 +298,7 @@ export function Service2({ chef, onDone, start, onAt }: ServiceProps) {
                 onDone={() => {
                   const n = folded + 1
                   setFolded(n)
-                  if (n === 4) setTimeout(() => alive() && setStep('goose'), 400)
+                  if (n === 4) timers.later(() => alive() && setStep('goose'), 400)
                 }}
               />
             ) : (
@@ -346,7 +350,7 @@ export function Service2({ chef, onDone, start, onAt }: ServiceProps) {
           const n = [...placed, c]
           setPlaced(n)
           sounds.place()
-          if (n.length === 4) setTimeout(() => alive() && setStep('stack'), 500)
+          if (n.length === 4) timers.later(() => alive() && setStep('stack'), 500)
         }}
       />
     )
@@ -411,6 +415,7 @@ type S3 = (typeof STEPS3)[number]
 export const SAMPLE_SIX: DoughColor[] = ['pink', 'green', 'yellow', 'cream', 'pink', 'yellow']
 
 export function Service3({ chef, onDone, start, onAt, made: seeded }: ServiceProps & { made?: DoughColor[] }) {
+  const timers = useTimers()
   const [step, setStep] = useState<S3>(() => startStep(STEPS3, start))
   const [first] = useState(step)
   // A deep link into the making keeps what the link made (up to five); after it, all six (the link's, or a sample).
@@ -443,7 +448,7 @@ export function Service3({ chef, onDone, start, onAt, made: seeded }: ServicePro
     sounds.pop()
     void play(chef, 'quick')
     void say(D.count[n.length - 1])
-    if (n.length === 3 && monkey === 'no') setTimeout(() => alive() && setMonkey('sneak'), 900)
+    if (n.length === 3 && monkey === 'no') timers.later(() => alive() && setMonkey('sneak'), 900)
     if (n.length === 6) {
       await wait(900)
       if (!alive()) return

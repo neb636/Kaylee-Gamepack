@@ -14,7 +14,7 @@
 // after each leg; saying yes to the mall again offers to keep going, and after a whole day 🛝 or 🍕 straight there.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { sounds, stopSpeaking, useSaved } from '../../../../../sdk'
+import { sounds, stopSpeaking, useSaved, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { TripGuide, type TripGuideHandle } from '../../trip/legs/Guide'
 import { BoardingPass, type PassChoice } from '../../trip/legs/BoardingPass'
@@ -80,6 +80,7 @@ interface Props {
 }
 
 export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(MALL_SECTIONS)
   // Old links into the first climbing toy (PR #120's play and dragon) land in the Big Frame.
   const [legacy] = useState(() => (start ? null : (/\/mall-trip\/(play|dragon)(?:[?/]|$)/.exec(location.hash)?.[1] ?? null)))
@@ -186,11 +187,11 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
     setPass({ punch, done: doneBefore(next, punch) })
     const st = state.current
     if (RESUME.includes(next)) setSaved((p) => ({ ...p, at: next, socks: st.socks, games: st.games.join(','), hair: st.hair }))
-    setTimeout(() => {
+    timers.later(() => {
       if (next === 'hall') setFrom('in')
       setSection(next)
     }, 900)
-    setTimeout(() => {
+    timers.later(() => {
       setPass(null)
       moving.current = false
     }, 2300)
@@ -215,17 +216,17 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
       setGames(list(saved.games))
       setHair(saved.hair)
     }
-    setTimeout(() => go(next), 50)
+    timers.later(() => go(next), 50)
   }
   // A yes in the house (Mom's card there, 🛝🍕): no asking again.
   useEffect(() => {
     if (section !== 'invite' || !justSaidYes('mall-trip')) return
     saidYes.at = 0
-    const t = setTimeout(yes, 600)
+    const t = timers.later(yes, 600)
     return () => clearTimeout(t)
   }, [])
   // The box is shut at the pizza table: home to Aunty Jum.
-  const allShared = () => setTimeout(() => state.current.section === 'share' && go('home'), 2200)
+  const allShared = () => timers.later(() => state.current.section === 'share' && go('home'), 2200)
   const finishedDay = () => {
     setSaved((p) => ({ at: null, socks: state.current.socks, games: '', hair: '', trips: (p.trips ?? 0) + 1 }))
     onDone?.()

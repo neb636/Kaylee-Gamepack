@@ -1,7 +1,7 @@
 // Direct activity selection on Canada’s 3D map.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { lineText, lineVoice, say, stopSpeaking, useAlive, wait, type Line } from '../../../../../sdk'
+import { lineText, lineVoice, say, stopSpeaking, useAlive, wait, type Line, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import type { PlaceProps } from '../../../../types'
 import { Anchors } from '../../../../engine3d/Anchors'
@@ -40,6 +40,7 @@ const session = {
 const once = (key: string) => (session.said.has(key) ? false : (session.said.add(key), true))
 
 export function Hub({ meta, openActivity, stamps }: PlaceProps) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(HUB_SECTIONS)
   const alive = useAlive()
   const [initial] = useState(() => {
@@ -89,7 +90,7 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
       }
       // (Long enough to read if a clip is missing.)
       await Promise.all([say(l, { interrupt: false }), wait(700 + lineText(l).length * 40)])
-      setTimeout(() => show((cur) => (cur === l ? null : cur)), 1400)
+      timers.later(() => show((cur) => (cur === l ? null : cur)), 1400)
     }
     queue.current = queue.current.then(run)
     return queue.current
@@ -98,7 +99,7 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
   // One short invitation per visit; all pins are already available while she hears it.
   useEffect(() => {
     if (session.told) return
-    const timer = window.setTimeout(() => {
+    const timer = timers.later(() => {
       session.told = true
       void talk(L.hub.bubbles)
     }, 0)
@@ -111,7 +112,7 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
 
   // ---- Back from an activity with a new stamp: a new friend on the team.
   useEffect(() => {
-    if (session.stamps !== null && stamps.length > session.stamps) window.setTimeout(() => alive() && void talk(L.hub.newFriend), 900)
+    if (session.stamps !== null && stamps.length > session.stamps) timers.later(() => alive() && void talk(L.hub.newFriend), 900)
     session.stamps = stamps.length
   }, [])
 

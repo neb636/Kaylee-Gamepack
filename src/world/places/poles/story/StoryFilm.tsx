@@ -9,6 +9,7 @@ import { FilmOverlay, type Speaker } from '../../../engine3d/FilmOverlay'
 import { View3D, type RenderMode } from '../../../engine3d/View3D'
 import { FILMS, type FilmId } from './films'
 import { STORY_ANCHORS, StoryStage } from './stage'
+import { useTimers } from '../../../../sdk'
 
 /** Who each voice is (the chip beside a film's words). */
 export const WHO: Record<string, Speaker> = {
@@ -21,6 +22,7 @@ export const WHO: Record<string, Speaker> = {
 }
 
 export function StoryFilm({ id, onDone }: { id: FilmId; onDone: () => void }) {
+  const timers = useTimers()
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [film, setFilm] = useState<FilmState | null>(null)
   const [line, setLine] = useState<Line | null>(null)
@@ -30,7 +32,7 @@ export function StoryFilm({ id, onDone }: { id: FilmId; onDone: () => void }) {
     if (done.current) return
     done.current = true
     // (After this frame: the stage is still inside its own update when it says so.)
-    setTimeout(onDone, 0)
+    timers.later(onDone, 0)
   }
   return (
     <div data-story-film={id} style={{ position: 'absolute', inset: 0, background: '#1B1622', overflow: 'clip', zIndex: 50 }}>

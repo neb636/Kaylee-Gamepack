@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef, type CSSProperties } from 'react'
-import { pick, SparklePuppet, sounds, useLandscape, type PuppetHandle, type SparkleAction } from '../sdk'
+import { pick, SparklePuppet, sounds, useLandscape, type PuppetHandle, type SparkleAction, useTimers } from '../sdk'
 import { unlockSpeech } from '../sdk/speech'
 import { unlockSounds } from '../sdk/sounds'
 import { Balloon, Cloud, HiKaylee, Pill, Rainbow, Sky, Wave } from './Sky'
@@ -11,12 +11,13 @@ const TRICKS: SparkleAction[] = ['hop', 'dance', 'wiggle', 'cheer']
 
 /** First screen: Sparkle on a cloud under a rainbow. Its big button is the tap iPad needs before we can play sounds and talk. */
 export function Splash({ onStart }: { onStart: () => void }) {
+  const timers = useTimers()
   const halloween = useHalloween()
   const CREAM = halloween ? '#fff3e3' : '#fff7f0'
   const landscape = useLandscape()
   const sparkle = useRef<PuppetHandle>(null)
   useEffect(() => {
-    const t = setTimeout(() => void sparkle.current?.play('wave'), 700)
+    const t = timers.later(() => void sparkle.current?.play('wave'), 700)
     return () => clearTimeout(t)
   }, [])
 

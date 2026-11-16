@@ -18,7 +18,7 @@ import { numberParam, listParam } from '../../sectionState'
 // Every moving penguin is driven by refs and one game loop (no React re-render per frame).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type MutableRefObject, type PointerEvent as ReactPointerEvent } from 'react'
-import { burst, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, useGameLoop, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
@@ -170,6 +170,7 @@ const simulate = (T: PenguinStage, vx: number, vy: number) => {
 }
 
 export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(SECTIONS)
   const seeded = useRef(false)
   const alive = useAlive()
@@ -385,7 +386,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     setPrompt(P.pull)
     g.current.lastTouch = g.current.lastProgress = performance.now()
     // Show the pull (a ghost finger on the front penguin) until her first launch.
-    setTimeout(() => alive() && !g.current.launches && setHint('front'), 4000)
+    timers.later(() => alive() && !g.current.launches && setHint('front'), 4000)
   }
 
   // ---- Fish schools ----
@@ -569,8 +570,8 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     if (s.kind !== 'chick' && Math.abs(s.x - lx) < T.rock.w * 0.45 && performance.now() > G.loboBusy) {
       G.loboBusy = performance.now() + 3000
       void lobo.current?.play('dive')
-      setTimeout(() => alive() && setSeaweed(true), 1200)
-      setTimeout(() => {
+      timers.later(() => alive() && setSeaweed(true), 1200)
+      timers.later(() => {
         if (!alive()) return
         void lobo.current?.play('clap')
         psfx.bark()
@@ -721,7 +722,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
   const fly = (from: Pt, to: Pt) => {
     const id = g.current.flyerId++
     setFlyers((l) => [...l, { id, from, to }])
-    setTimeout(() => alive() && setFlyers((l) => l.filter((f) => f.id !== id)), 800)
+    timers.later(() => alive() && setFlyers((l) => l.filter((f) => f.id !== id)), 800)
   }
 
   const deliver = (s: Swimmer) => {
@@ -731,7 +732,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
       const i = G.filled++
       const gen = G.gen
       fly({ x: s.x, y: s.y - 30 }, T.burrow.fish[i])
-      setTimeout(() => {
+      timers.later(() => {
         if (!alive() || gen !== G.gen) return
         G.arrived++
         setOrder({ need: G.need, filled: G.filled })
@@ -754,11 +755,11 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     setFeeding(true)
     setQuiet(true)
     setPrompt(P.idle.feed)
-    for (let i = 0; i < G.chicks; i++) setTimeout(() => alive() && void chicks.current[i]?.play(G.fed[i] >= ROUND ? 'wiggle' : 'beg'), i * 250)
+    for (let i = 0; i < G.chicks; i++) timers.later(() => alive() && void chicks.current[i]?.play(G.fed[i] >= ROUND ? 'wiggle' : 'beg'), i * 250)
     psfx.peep(3)
     if (!G.fedOnce) {
       G.fedOnce = true
-      setTimeout(() => alive() && void sayKey(P.feed, 2.4), 500)
+      timers.later(() => alive() && void sayKey(P.feed, 2.4), 500)
     }
     G.lastProgress = performance.now()
   }
@@ -798,7 +799,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     setOrder({ need: G.need, filled: G.filled })
     void pepa.current?.play('feed')
     fly(T.burrow.fish[k], { x: T.chicks[i].x, y: T.burrow.floor - T.chicks[i].h * 0.55 })
-    setTimeout(() => {
+    timers.later(() => {
       if (!alive()) return
       void chicks.current[i]?.play('gulp')
       psfx.gulp()
@@ -970,7 +971,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     s.state = 'off'
     s.shown = false
     setChickHome((h) => h.map((v, i) => (i === s.chick ? true : v)))
-    setTimeout(() => alive() && void chicks.current[s.chick]?.play('cheer'), 50)
+    timers.later(() => alive() && void chicks.current[s.chick]?.play('cheer'), 50)
     psfx.peep(3)
     G.swimHome++
     if (G.swimHome === 1) void sayKey(P.firstSwim, 1.8)

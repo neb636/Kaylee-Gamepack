@@ -8,7 +8,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst, lineText, say, type Line } from '../../../../../sdk'
+import { BigButton, burst, lineText, say, type Line, useTimers } from '../../../../../sdk'
 import { isFeelParam } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
@@ -31,6 +31,7 @@ const FOUND = { icon: '🏔️', line: L.canoe.found }
 const feelOn = () => [...new URLSearchParams(location.hash.split('?')[1] ?? '').keys()].some(isFeelParam)
 
 export function RedCanoe({ onDone, setProgress }: CanadaActivityProps) {
+  const timers = useTimers()
   const [feel] = useState(feelOn)
   const { start, param, enter } = useSections(CANOE_SECTIONS)
   const [run, setRun] = useState<CanoeStart & { n: number }>(() => ({ section: (start ?? 'story') as CanoeSection, paddle: param('paddle') as PaddleMode, n: 0 }))
@@ -43,7 +44,7 @@ export function RedCanoe({ onDone, setProgress }: CanadaActivityProps) {
   const paddle = useRef(run.paddle)
   paddle.current = run.paddle
   const finished = useRef(false)
-  const stampTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const stampTimer = useRef<number | null>(null)
   const props = useRef({ onDone, setProgress })
   props.current = { onDone, setProgress }
 
@@ -64,7 +65,7 @@ export function RedCanoe({ onDone, setProgress }: CanadaActivityProps) {
       // The celebration plays (the loon family round the canoe, Maple cheering), then the stamp, the first time.
       if (!finished.current) {
         finished.current = true
-        stampTimer.current = setTimeout(() => props.current.onDone(), DONE_S * 1000)
+        stampTimer.current = timers.later(() => props.current.onDone(), DONE_S * 1000)
       }
     },
   })

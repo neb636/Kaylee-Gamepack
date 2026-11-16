@@ -10,7 +10,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst } from '../../../../../../sdk'
+import { BigButton, burst, useTimers } from '../../../../../../sdk'
 import { isFeelParam } from '../../../../../kit/knobs'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
@@ -36,6 +36,7 @@ interface Props {
 }
 
 export function JetSkiScreen({ round: first, flags, onRound, onIsland }: Props) {
+  const timers = useTimers()
   const [run, setRun] = useState<{ round: JetRound; n: number }>({ round: first, n: 0 })
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [count, setCount] = useState(-1)
@@ -72,7 +73,7 @@ export function JetSkiScreen({ round: first, flags, onRound, onIsland }: Props) 
     raceOver: (won) => {
       setOver(won ? 'won' : 'lost')
       if (won) burst()
-      else window.setTimeout(() => setOver(null), 2600)
+      else timers.later(() => setOver(null), 2600)
     },
     count: (n) => setCount(n),
     stars: (n, of) => setStars({ n, of }),

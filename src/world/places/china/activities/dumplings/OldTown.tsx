@@ -2,7 +2,7 @@
 // along), then the dumpling house door, and Chef Fu bursts out.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { say, SparklePuppet, sounds, useAlive, useElementSize, wait, type PuppetHandle } from '../../../../../sdk'
+import { say, SparklePuppet, sounds, useAlive, useElementSize, wait, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { PromptBubble } from '../../../../kit/Stage'
 import { art } from '../../art'
 import { L } from '../../lines'
@@ -18,6 +18,7 @@ const BRIDGE = { x: 0.16, y: 0.38, w: 0.3, h: 0.17 }
 const DOOR = { x: 0.84, y: 0.28, w: 0.14, h: 0.32 }
 
 export function OldTown({ onDone }: { onDone: () => void }) {
+  const timers = useTimers()
   const box = useRef<HTMLDivElement>(null)
   const { width: W, height: H } = useElementSize(box)
   const [stage, setStage] = useState<'bridge' | 'walk' | 'door' | 'chef'>('bridge')
@@ -34,7 +35,7 @@ export function OldTown({ onDone }: { onDone: () => void }) {
   const pan = Math.min(0, Math.max(W - pw, W / 2 - focus * pw))
 
   useEffect(() => {
-    const t = setTimeout(() => {
+    const t = timers.later(() => {
       void sparkle.current?.play('wave')
       void dou.current?.play('wave')
     }, 400)

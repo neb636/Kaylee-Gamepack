@@ -21,7 +21,7 @@
 // are knobs (herd.ts), with the planting and the highway's here (?feel=1). 2D only: one SVG written every frame.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { BigButton, bigCelebration, burst, lineText, say as speak, sounds, speechLevel, spendHint, useElementSize, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, bigCelebration, burst, lineText, say as speak, sounds, speechLevel, spendHint, useElementSize, type Line, type PuppetHandle, useTimers, Timers } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { sfx } from '../../../../kit/sfx'
@@ -130,6 +130,8 @@ interface Events {
 }
 
 class BridgeWorld {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   st: StageDef
   herd: Herd
   lead: FamilyId | null
@@ -184,7 +186,7 @@ class BridgeWorld {
   /** Set when the scene goes away (a new run, or React trying the effect twice): its timers do nothing then. */
   dead = false
   private later(f: () => void, ms: number) {
-    setTimeout(() => !this.dead && f(), ms)
+    this.timers.later(() => !this.dead && f(), ms)
   }
 
   constructor(
@@ -1103,6 +1105,7 @@ interface Run {
 }
 
 export function AnimalBridge({ onDone, setProgress }: CanadaActivityProps) {
+  const gameTimers = useTimers()
   const { start, param, enter } = useSections(BRIDGE_SECTIONS)
   const first = (start && start !== 'story' ? start : 'elk') as Part
   // The bare link (and the story's own link) opens with Maple's line; a later section starts playing at once.
@@ -1138,7 +1141,7 @@ export function AnimalBridge({ onDone, setProgress }: CanadaActivityProps) {
     else if (first !== 'album') {
       setSay(SAY[first])
       void speak(SAY[first])
-      const t = setTimeout(() => void maple.current?.play('wave'), 600)
+      const t = gameTimers.later(() => void maple.current?.play('wave'), 600)
       return () => clearTimeout(t)
     }
   }, [])
@@ -1194,6 +1197,7 @@ export function AnimalBridge({ onDone, setProgress }: CanadaActivityProps) {
     raf = requestAnimationFrame(loop)
     return () => {
       w.dead = true
+      w.timers.dispose()
       cancelAnimationFrame(raf)
       unwatch()
       if (world.current === w) world.current = null
@@ -1215,7 +1219,7 @@ export function AnimalBridge({ onDone, setProgress }: CanadaActivityProps) {
   // Each photo clicks as it pops in.
   useEffect(() => {
     if (!album) return
-    const ts = album.map((_, i) => setTimeout(() => noises.click(), 300 + i * 500))
+    const ts = album.map((_, i) => gameTimers.later(() => noises.click(), 300 + i * 500))
     return () => ts.forEach(clearTimeout)
   }, [album])
 
@@ -1228,7 +1232,7 @@ export function AnimalBridge({ onDone, setProgress }: CanadaActivityProps) {
       w.lastTouch = w.now
       w.info()
     }
-    setTimeout(() => void maple.current?.play('wave'), 300)
+    gameTimers.later(() => void maple.current?.play('wave'), 300)
   }
 
   const again = () => {

@@ -221,7 +221,7 @@ export class Airport extends Stage {
       const [x, z] = START[id]
       this.put(c, x, 0, z, 'stand', 35)
     }
-    setTimeout(() => this.phase === 'belt' && this.events.say(L.trip.airport.start), 500)
+    this.timers.later(() => this.phase === 'belt' && this.events.say(L.trip.airport.start), 500)
   }
 
   // ---------------------------------------------------------------- touch
@@ -363,7 +363,7 @@ export class Airport extends Stage {
               c.root.visible = false
               if (id === 'nick') {
                 this.phase = 'gone'
-                setTimeout(() => this.events.done('takeoff'), 600)
+                this.timers.later(() => this.events.done('takeoff'), 600)
               }
             } }) }) }) })
     })

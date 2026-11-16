@@ -2,7 +2,7 @@
 // The world map's Theater shows every country; a country's Theater button (in its top bar) shows only its own videos.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { say, SparklePuppet, sounds, useOnline, useSayOnMount, type PuppetHandle } from '../../sdk'
+import { say, SparklePuppet, sounds, useOnline, useSayOnMount, type PuppetHandle, useTimers } from '../../sdk'
 import { WORLD_LINES } from '../lines'
 import type { PlaceMeta, PlaceVideo } from '../types'
 import { BarPill, TopBar } from './Chrome'
@@ -202,10 +202,11 @@ function Ticket({ video, delay, onPick }: { video: PlaceVideo; delay: number; on
  * edge in portrait; on short landscape phones it takes the full height and the extras tuck under the back button.
  */
 function Screening({ video, onDone, full, onFull, children }: { video: PlaceVideo; onDone: () => void; full: boolean; onFull: (full: boolean) => void; children: ReactNode }) {
+  const timers = useTimers()
   const sparkle = useRef<PuppetHandle>(null)
   const roomy = window.innerHeight > 560
   useEffect(() => {
-    const t = setTimeout(() => void sparkle.current?.play('wave'), 400)
+    const t = timers.later(() => void sparkle.current?.play('wave'), 400)
     return () => clearTimeout(t)
   }, [])
   return (

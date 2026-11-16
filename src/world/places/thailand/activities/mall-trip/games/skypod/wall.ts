@@ -350,9 +350,10 @@ export class SkyPodWall extends Stage {
     }
   }
 
-  private timers: { at: number; f: () => void }[] = []
+  /** Game-clock beats (they pause with the game), run from update(). */
+  private beats: { at: number; f: () => void }[] = []
   private later(s: number, f: () => void) {
-    this.timers.push({ at: this.time + s, f })
+    this.beats.push({ at: this.time + s, f })
   }
 
   private podAt3(i: number) {
@@ -576,9 +577,9 @@ export class SkyPodWall extends Stage {
   // ---------------------------------------------------------------- per frame
 
   protected step(dt: number, t: number) {
-    for (const tm of [...this.timers]) {
+    for (const tm of [...this.beats]) {
       if (this.time < tm.at) continue
-      this.timers.splice(this.timers.indexOf(tm), 1)
+      this.beats.splice(this.beats.indexOf(tm), 1)
       tm.f()
     }
     this.game.update(dt)

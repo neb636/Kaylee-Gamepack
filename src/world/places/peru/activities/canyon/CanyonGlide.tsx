@@ -16,7 +16,7 @@ import { numberParam } from '../../sectionState'
 // game loop; React only sees phase changes.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
-import { burst, say, sounds, spendHint, SparklePuppet, useAlive, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, sounds, spendHint, SparklePuppet, useAlive, useGameLoop, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
@@ -79,6 +79,7 @@ const VISIBLE: Record<string, SwirlId[]> = {
 }
 
 export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(SECTIONS)
   const seeded = useRef(false)
   const alive = useAlive()
@@ -120,7 +121,7 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
   useEffect(() => setProgress(Math.min(stars, TOTAL), TOTAL), [stars])
   useEffect(() => {
     if (!prompt) return
-    const t = setTimeout(() => setPrompt(null), PROMPT_MS)
+    const t = timers.later(() => setPrompt(null), PROMPT_MS)
     return () => clearTimeout(t)
   }, [prompt])
   const star = (n: number) => setStars((s) => Math.max(s, n))
@@ -235,7 +236,7 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
     G.rides++
     star(1)
     if (G.rides === 1) {
-      setTimeout(() => alive() && G.phase === 'morning' && showSwirls('more'), 1200)
+      timers.later(() => alive() && G.phase === 'morning' && showSwirls('more'), 1200)
     }
     if (G.phase === 'morning' && G.rides >= 2) void join()
   }
@@ -291,7 +292,7 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
       nudge(pluma, 'cheer')
       say1(C.falls)
     } else if (id === 'condors') {
-      perched.forEach((r, i) => setTimeout(() => nudge(r, 'nod'), i * 220))
+      perched.forEach((r, i) => timers.later(() => nudge(r, 'nod'), i * 220))
       nudge(coco, 'bow')
       say1(C.condors)
     } else if (id === 'lookout') {
@@ -878,7 +879,7 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
     if (to === 'follow') {
       showSwirls('follow'); setRings(true); setPhase('follow'); setPrompt(C.lead)
       // All three places already visited (the address normal play writes during the pause): carry on to the ridge.
-      if ((['falls', 'condors', 'lookout'] as PlaceId[]).every((id) => G.places[id])) setTimeout(() => alive() && g.current.phase === 'follow' && void toRidge(), 1200)
+      if ((['falls', 'condors', 'lookout'] as PlaceId[]).every((id) => G.places[id])) timers.later(() => alive() && g.current.phase === 'follow' && void toRidge(), 1200)
     }
     else {
       setSun({ left: 0.15, right: 1 })

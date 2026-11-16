@@ -7,7 +7,7 @@
 // instead (`who="nick"`, tap him), so a trip can start right where the tuk-tuk drops her off.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { lineText, say, sounds, type Line } from '../../../../../sdk'
+import { lineText, say, sounds, type Line, useTimers } from '../../../../../sdk'
 import { L } from '../../lines'
 import meta from '../../meta'
 
@@ -52,9 +52,10 @@ interface Props {
 }
 
 export function Ask({ open, onYes, onNotYet, trips, who = 'ji' }: Props) {
+  const timers = useTimers()
   const asker = ASKERS[who]
   const [later, setLater] = useState(false)
-  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const timer = useRef<number>(undefined)
   useEffect(() => {
     if (open) setLater(false)
     // The house can dismiss the invitation when she walks away. Don't let an old "Not yet" close the next card.
@@ -76,7 +77,7 @@ export function Ask({ open, onYes, onNotYet, trips, who = 'ji' }: Props) {
     { id: 'not-yet', label: 'Not yet', icon: '✋', extra: '⏳', color: 'var(--lavender)', on: () => {
       sounds.pop()
       setLater(true)
-      timer.current = setTimeout(onNotYet, 1300)
+      timer.current = timers.later(onNotYet, 1300)
     } },
   ]
   return (

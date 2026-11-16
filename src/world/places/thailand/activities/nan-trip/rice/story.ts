@@ -18,7 +18,7 @@
 // of his snore, and the films' beats. Everything a film does that the game needs afterwards is also done by its
 // finish(), so skipping from any beat leaves the farm right.
 import { BufferGeometry, Group, Vector3, type Object3D } from 'three'
-import { bell, type Line } from '../../../../../../sdk'
+import { bell, type Line, Timers } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import type { Member } from '../../../characters/member'
 import { L } from '../../../lines'
@@ -109,6 +109,8 @@ function zGeo(): BufferGeometry {
 type LungPose = 'stand' | 'holdHat' | 'lean' | 'sleep' | 'wake' | 'wai' | 'sad' | 'look'
 
 export class RiceStory {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   readonly jip: Jip
   readonly chicks: Chicks
   readonly nest: Group
@@ -220,7 +222,7 @@ export class RiceStory {
     sfx.peep()
     const was = this.chicks.hungry
     this.chicks.hungry = 1
-    setTimeout(() => (this.chicks.hungry = was), 1200)
+    this.timers.later(() => (this.chicks.hungry = was), 1200)
   }
 
   // ---------------------------------------------------------------- the way in
@@ -427,7 +429,7 @@ export class RiceStory {
           start: () => {
             h.birds.away()
             sfx.flutter()
-            setTimeout(() => sfx.flock(), 120)
+            this.timers.later(() => sfx.flock(), 120)
             this.lungPose = 'wake'
             lung.react('hop')
             this.jip.flyTo(new Vector3(7, 4, -3), { dur: 1.6, arc: 0.6 })
@@ -754,23 +756,23 @@ export class RiceStory {
     if (k === 0) {
       // Down from the nest, wobbly and peeping, to the pile.
       this.chicks.hungry = 1
-      for (let i = 0; i < 3; i++) setTimeout(() => this.chicks.hopTo(i, this.chickSpot(i), { face: Math.PI * 1.2 - i * 0.4 }), i * 250)
+      for (let i = 0; i < 3; i++) this.timers.later(() => this.chicks.hopTo(i, this.chickSpot(i), { face: Math.PI * 1.2 - i * 0.4 }), i * 250)
       this.jip.flyTo(this.chickSpot(3), { face: Math.PI })
-      setTimeout(() => this.h.say(S.oneEach), 600)
+      this.timers.later(() => this.h.say(S.oneEach), 600)
     }
     this.chicks.feed(k)
     this.h.grains.burst(at.clone().add(new Vector3(0, 0.15, 0)), 10, 0.6, 1, 0.5, 0.03)
     if (k === SHARE_N - 1) {
-      setTimeout(() => {
+      this.timers.later(() => {
         this.chicks.hungry = 0.2
         this.jip.flyTo(() => this.kayleeHatTop(), { dur: 1.1, arc: 0.6 })
-        setTimeout(() => {
+        this.timers.later(() => {
           this.jip.sing(3)
           this.h.say(S.friends)
           this.h.kaylee.react('hop')
           sfx.giggle()
         }, 1200)
-        setTimeout(() => {
+        this.timers.later(() => {
           this.sharing = false
           this.shareDone?.()
         }, 2600)
@@ -928,6 +930,7 @@ export class RiceStory {
   }
 
   dispose() {
+    this.timers.dispose()
     this.stopMusic?.()
     this.stopBed?.()
   }

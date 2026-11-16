@@ -22,7 +22,7 @@
 // Built for engine3d/View3D.tsx; nothing here comes from Thailand. The push, the growth and the box's aim help are feel-lab knobs (?feel=1), with a graph of her finger
 // against the ball.
 import { Color, Fog, Group, Plane, Quaternion, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { bell, burst, clamp, say, sounds, span, speakingVoice, speechLevel, stopSpeaking, wait, wobble, type Line } from '../../../../../sdk'
+import { bell, burst, clamp, say, sounds, span, speakingVoice, speechLevel, stopSpeaking, wait, wobble, type Line, Timers } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -194,6 +194,8 @@ interface Flight {
 type MapleMode = 'free' | 'pat' | 'climb' | 'top' | 'down' | 'drum'
 
 export class CarnivalSnowballs implements World3D {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   readonly scene = new Scene()
   readonly rig = new CameraRig()
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
@@ -1809,7 +1811,7 @@ export class CarnivalSnowballs implements World3D {
     this.sled.go()
     sounds.whoosh()
     if (tapped) this.counts.pokes++
-    setTimeout(() => sounds.whoosh(), 500)
+    this.timers.later(() => sounds.whoosh(), 500)
   }
 
   private snowmanAt2D(x: number, y: number) {
@@ -1951,6 +1953,7 @@ export class CarnivalSnowballs implements World3D {
   }
 
   dispose() {
+    this.timers.dispose()
     this.gone = true
     this.unwatch()
     this.scene.clear()

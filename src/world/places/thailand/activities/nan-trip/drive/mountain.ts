@@ -32,7 +32,7 @@
 // The screen (Drive.tsx) draws the steering wheel, the count's big numbers, Sparkle and the end card; the wheel's place
 // and turn, the hint finger and the tap targets are written here every frame.
 import { Color, Fog, Group, Scene, Vector3, type WebGLRenderer } from 'three'
-import { clamp, sounds, speakingVoice, spendHint, type Line } from '../../../../../../sdk'
+import { clamp, sounds, speakingVoice, spendHint, type Line, Timers } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
 import { Avatar } from '../../../characters/avatar'
 import { FAMILY } from '../../../characters/family'
@@ -174,6 +174,8 @@ const heard = new Set<string>()
 let drives = 0
 
 export class NanDrive implements World3D {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   readonly scene = new Scene()
   readonly rig = new CameraRig()
   readonly bag = new Bag()
@@ -1104,7 +1106,7 @@ export class NanDrive implements World3D {
         sounds.correct()
         const l = this.landmark.position
         this.sparkle.burst(l.x, l.y + 5, l.z, 50, 5, 7, 0.28)
-        window.setTimeout(() => this.phase === 'view' && this.setPhase('end'), 2600)
+        this.timers.later(() => this.phase === 'view' && this.setPhase('end'), 2600)
       }
     }
   }
@@ -1296,7 +1298,7 @@ export class NanDrive implements World3D {
     if (this.viewT < VIEW_POP + VIEW_GAP * bends.length) return
     sounds.fanfare()
     this.speak(L.nan.drive.drew)
-    for (const [k, c] of [this.kaylee, this.nick, this.ji].entries()) window.setTimeout(() => c.react('hop'), k * 120)
+    for (const [k, c] of [this.kaylee, this.nick, this.ji].entries()) this.timers.later(() => c.react('hop'), k * 120)
     const b = road.bounds()
     for (const k of [0.2, 0.5, 0.8]) {
       const q = road.sampleAt(road.length * k)
@@ -1562,6 +1564,8 @@ export class NanDrive implements World3D {
   }
 
   dispose() {
+    this.timers.dispose()
+    this.traffic.dispose()
     this.unwatch()
     this.scene.clear()
     this.bag.dispose()

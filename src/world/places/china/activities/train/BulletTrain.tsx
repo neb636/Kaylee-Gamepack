@@ -5,7 +5,7 @@
 // Bao Bao. Wrong pick: the train toots, Bao Bao giggles and the right one glows. A small map shows how far the train went.
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useRef, useState } from 'react'
-import { Buddy, burst, Piece, PlayArea, say, sounds, Target, useAlive, useElementSize, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { Buddy, burst, Piece, PlayArea, say, sounds, Target, useAlive, useElementSize, useGameLoop, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
 import { sfx } from '../../../../kit/sfx'
@@ -56,6 +56,7 @@ const STOP_SECTION = { harbin: 'harbin', hainan: 'hainan', gobi: 'gobi', himalay
 const givenBefore = (i: number) => STOPS.slice(0, i).reduce((n, st) => n + st.steps.reduce((m, x) => m + x.right.length, 0), 0)
 
 export function BulletTrain({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const alive = useAlive()
   const root = useRef<HTMLDivElement>(null)
   const { width: W, height: H } = useElementSize(root)
@@ -144,7 +145,7 @@ export function BulletTrain({ onDone, setProgress }: ActivityProps) {
   // Nudge if she hasn't touched the lever for a while.
   useEffect(() => {
     if (story || phase !== 'ride' || notch > 0) return
-    const t = setTimeout(() => setHint(true), 4000)
+    const t = timers.later(() => setHint(true), 4000)
     return () => clearTimeout(t)
   }, [story, phase, notch, si])
 
@@ -264,7 +265,7 @@ export function BulletTrain({ onDone, setProgress }: ActivityProps) {
     } else if (item === 'water') {
       setDrinking(true)
       void bao.current?.play('munch')
-      ;[300, 750, 1200].forEach((ms) => setTimeout(() => sfx.munch(), ms))
+      ;[300, 750, 1200].forEach((ms) => timers.later(() => sfx.munch(), ms))
       void say(line)
       await wait(1500)
       setDrinking(false)
@@ -530,12 +531,13 @@ const EMOJI = { tiger: '🐯', camel: '🐫', yak: '🐂' } as const
 
 /** The animal at the stop: a Buddy from the generated picture, or an emoji until that picture exists. */
 const Critter = forwardRef<PuppetHandle, { kind: 'tiger' | 'camel' | 'yak'; height: number; shiver?: boolean }>(function Critter({ kind, height, shiver }, ref) {
+  const timers = useTimers()
   const img = A[kind]
   const buddy = useRef<PuppetHandle>(null)
   // Shivering: quick little wiggles every second or so until he gets his scarf.
   useEffect(() => {
     if (!shiver) return
-    const t = setInterval(() => void buddy.current?.play('wiggle'), 1100)
+    const t = timers.every(() => void buddy.current?.play('wiggle'), 1100)
     void buddy.current?.play('wiggle')
     return () => clearInterval(t)
   }, [shiver])

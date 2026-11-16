@@ -494,7 +494,7 @@ export class OpenWater implements BayPart {
       e.root.rotation.set(0, Math.atan2(v.x, v.z) + (k > 0.45 ? Math.PI : 0), 0)
       if (k >= 1) {
         this.swoop = null
-        setTimeout(() => (this.eagleFish.visible = false), 2500)
+        this.bay.timers.later(() => (this.eagleFish.visible = false), 2500)
       }
       return
     }

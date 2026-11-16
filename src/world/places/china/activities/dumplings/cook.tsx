@@ -2,7 +2,7 @@
 // cook (and wobble), then lift the lid: whoosh, shiny cooked dumplings.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { burst, Piece, say, sounds, Target, useAlive, wait } from '../../../../../sdk'
+import { burst, Piece, say, sounds, Target, useAlive, wait, useTimers } from '../../../../../sdk'
 import { L } from '../../lines'
 import { Lid, SteamPuff, Steamer, Stove } from '../../props'
 import { Dumpling, type DoughColor } from '../../puppets/Dumpling'
@@ -29,6 +29,7 @@ export function BasketDumplings({ colors, state, max = 6 }: { colors: (DoughColo
 
 /** The stove with a stack of baskets, run through fire → steam → lift. */
 export function CookStove({ baskets, stage, onStage, steamPops = 6 }: { baskets: Basket[]; stage: CookStage; onStage: (s: CookStage) => void; steamPops?: number }) {
+  const timers = useTimers()
   const alive = useAlive()
   const [puffs, setPuffs] = useState<{ id: number; x: number }[]>([])
   const popped = useRef(0)
@@ -39,8 +40,8 @@ export function CookStove({ baskets, stage, onStage, steamPops = 6 }: { baskets:
   useEffect(() => {
     if (stage !== 'steam') return
     popped.current = 0
-    const spawn = setInterval(() => setPuffs((p) => [...p.slice(-5), { id: nextId.current++, x: Math.random() * 60 - 30 }]), 850)
-    const giveUp = setTimeout(() => alive() && onStage('lift'), 11000)
+    const spawn = timers.every(() => setPuffs((p) => [...p.slice(-5), { id: nextId.current++, x: Math.random() * 60 - 30 }]), 850)
+    const giveUp = timers.later(() => alive() && onStage('lift'), 11000)
     return () => {
       clearInterval(spawn)
       clearTimeout(giveUp)

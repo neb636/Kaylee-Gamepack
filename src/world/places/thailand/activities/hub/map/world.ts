@@ -809,7 +809,7 @@ const SOUND: Record<ToyId, () => void> = {
   dolphins: () => tone(1400, 2200, 0.12, 0.05, 'sine'),
   boat: () => (tone(300, 300, 0.25, 0.05, 'square'), noise(0.4, 0.04, 'bandpass', 600, 300)),
   palm: () => noise(0.3, 0.07, 'highpass', 2400, 1600, 0, 0.7),
-  balloon: () => (noise(0.9, 0.07, 'lowpass', 900, 400, 0, 0.6), setTimeout(() => sounds.sparkle(), 500)),
+  balloon: () => (noise(0.9, 0.07, 'lowpass', 900, 400, 0, 0.6), setTimeout(() => sounds.sparkle(), 500)), // timers-ok: the tail of one sound
   turtle: () => sfx.splash(),
   barge: () => (tone(220, 220, 0.5, 0.1, 'sawtooth'), tone(277, 277, 0.5, 0.05, 'triangle')),
 }

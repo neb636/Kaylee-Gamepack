@@ -566,7 +566,7 @@ export class VillageStop implements BayPart {
         this.playT = 0
       } else if (this.goalT > 1.7 && !this.gift.visible) {
         bay.say(L.bay.thanks)
-        setTimeout(() => bay.once('khobkhun', L.bay.facts.khobkhun), 2000)
+        this.bay.timers.later(() => bay.once('khobkhun', L.bay.facts.khobkhun), 2000)
         this.kids.forEach((k) => (k.cheer = 2))
         this.gift.visible = true
         this.gift.position.copy(this.kids[1].rig.root.position).setY(1.2)
@@ -590,7 +590,7 @@ export class VillageStop implements BayPart {
         this.goalT = 0
         this.playT = 0
         // Dad snaps the photo with the kids cheering behind.
-        setTimeout(() => {
+        this.bay.timers.later(() => {
           sfx.shutter()
           bay.flash()
           bay.photo('village')

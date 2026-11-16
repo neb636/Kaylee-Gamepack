@@ -9,7 +9,7 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { burst, say, speakingVoice, type Line } from '../../../../../sdk'
+import { burst, say, speakingVoice, type Line, useTimers } from '../../../../../sdk'
 import { Guide, type GuideHandle } from '../../../../kit/Guide'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
@@ -31,6 +31,7 @@ const DONE_S = 4.2
 const FACTS: Partial<Record<PokeId, Line>> = { ...L.slide.facts, snowy: L.slide.facts.adelie, whale: L.slide.facts.spout }
 
 export function PenguinSlide({ onDone }: ActivityProps) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(SLIDE_SECTIONS)
   const [run, setRun] = useState<SlideStart & { n: number }>(() => ({
     section: (start ?? 'top') as SlideSection,
@@ -49,7 +50,7 @@ export function PenguinSlide({ onDone }: ActivityProps) {
   const guide = useRef<GuideHandle>(null)
   const said = useRef<Partial<Record<SlideMoment | 'gulp', number>>>({})
   const lastPapa = useRef(-Infinity)
-  const done = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const done = useRef<number>(undefined)
   const adeliePokes = useRef(0)
   /** Where he is and what he has (the address bar is rewritten from these). */
   const now = useRef({ section: run.section, krill: run.krill, looked: run.looked, run: run.run })
@@ -118,7 +119,7 @@ export function PenguinSlide({ onDone }: ActivityProps) {
       burst()
       void say(L.slide.home)
       clearTimeout(done.current)
-      done.current = setTimeout(onDone, DONE_S * 1000)
+      done.current = timers.later(onDone, DONE_S * 1000)
     },
     moment: (m) => {
       if (m === 'go') return

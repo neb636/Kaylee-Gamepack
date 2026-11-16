@@ -4,7 +4,7 @@
 // A few olives bonk Spina and stick to her quills: tap her and she shakes them into the basket.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { burst, say, spendHint, SparklePuppet, sounds, useAlive, useLandscape, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, spendHint, SparklePuppet, sounds, useAlive, useLandscape, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { art } from '../../art'
 import { L } from '../../lines'
@@ -82,6 +82,7 @@ interface Faller {
 }
 
 export function Grove({ onBranch, onDone }: { onBranch: (n: number) => void; onDone: () => void }) {
+  const timers = useTimers()
   const landscape = useLandscape()
   const lay = landscape ? LAYOUT.land : LAYOUT.tall
   const ratio = landscape ? 1.5 : 1 / 1.5
@@ -185,7 +186,7 @@ export function Grove({ onBranch, onDone }: { onBranch: (n: number) => void; onD
       sounds.note(Math.min(10, popCount.current++ % 11))
       if (o.bonk) {
         const to = spinaHead()
-        setTimeout(() => bonk(), 650)
+        timers.later(() => bonk(), 650)
         return { id: o.id, color: o.color, from, to, arc: 10, dur: 0.65 }
       }
       return { id: o.id, color: o.color, from, to: landing(from[0]), arc: 1.5, dur: 0.55 + Math.random() * 0.2 }
@@ -193,7 +194,7 @@ export function Grove({ onBranch, onDone }: { onBranch: (n: number) => void; onD
     setFallers((f) => [...f, ...add])
     add.forEach((f) => {
       if (f.arc > 5) return
-      setTimeout(() => {
+      timers.later(() => {
         if (!alive()) return
         setFallers((all) => all.filter((x) => x.id !== f.id))
         setInNet((n) => [...n, { id: f.id, x: f.to[0], y: f.to[1], color: f.color, rot: Math.random() * 40 - 20 }])
@@ -259,7 +260,7 @@ export function Grove({ onBranch, onDone }: { onBranch: (n: number) => void; onD
     setInNet([])
     setFallers(moving.map((o, i) => ({ id: `b-${o.id}`, color: o.color, from: [o.x, o.y], to: [bx + (Math.random() - 0.5) * 3, by], arc: 9, dur: 0.6, delay: i * 0.05 })))
     moving.forEach((_, i) =>
-      setTimeout(() => {
+      timers.later(() => {
         if (!alive()) return
         sounds.note(i % 11)
         setBasket((n) => n + 1)
@@ -329,7 +330,7 @@ export function Grove({ onBranch, onDone }: { onBranch: (n: number) => void; onD
   // Idle for a while: say the hint once more.
   useEffect(() => {
     if (phase !== 'comb') return
-    const id = setInterval(() => {
+    const id = timers.every(() => {
       if (Date.now() - lastTouch.current > 10000 && !dragging.current) {
         lastTouch.current = Date.now()
         if (spendHint(O.combHint)) void say(O.combHint)

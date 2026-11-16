@@ -55,6 +55,7 @@ country's folder). **Before writing a helper at the top of a file, look here fir
 | `burst()` / `bigCelebration()` | Confetti. |
 | `KID_NAME`, `numberWord(3)`, `wait(ms)`, `pick`, `shuffle`, `sample` | Helpers. `KID_NAME` is for the landing greeting only; writing activities keep their explicit name content. |
 | `useAlive()` | `const alive = useAlive(); await say('..'); if (!alive()) return` in async scripts. |
+| `useTimers()`, `Timers` | Every delay in a game: `const timers = useTimers(); timers.later(fn, 800)` (cancelled on unmount); a class owns `new Timers()` and disposes it with itself. `timers.wait(ms)` never resolves once the game is gone. No raw `setTimeout` in a game (`scripts/check-timers.mjs`). |
 | `useSayOnMount(text)` | Speak when a screen appears. |
 | `<SparklePuppet ref pose? height>` | Live Sparkle: `play('wave' \| 'cheer' \| 'hop' \| 'nod' \| 'think' \| 'dance' \| 'wiggle')`. Prefer it over `<Mascot>`. |
 | `<Buddy img voice height ref>` | Brings a flat sprite to life: `play('jump' \| 'dance' \| 'wiggle' \| 'cheer' \| 'nod')`. |

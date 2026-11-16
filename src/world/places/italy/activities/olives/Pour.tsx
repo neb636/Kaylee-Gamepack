@@ -4,7 +4,7 @@
 // little off the top ("Just a taste!") and it still counts.
 import { animate, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { burst, say, spendHint, SparklePuppet, sounds, useAlive, useLandscape, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, spendHint, SparklePuppet, sounds, useAlive, useLandscape, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { art } from '../../art'
 import { L } from '../../lines'
@@ -27,6 +27,7 @@ const LAYOUT = {
 }
 
 export function Pour({ onStar, onDone }: { onStar: (n: number) => void; onDone: () => void }) {
+  const timers = useTimers()
   const landscape = useLandscape()
   const lay = landscape ? LAYOUT.land : LAYOUT.tall
   const ratio = landscape ? 1.5 : 1 / 1.5
@@ -202,7 +203,7 @@ export function Pour({ onStar, onDone }: { onStar: (n: number) => void; onDone: 
   // Idle: remind her to hold the jug.
   useEffect(() => {
     if (bottle > 1) return
-    const id = setInterval(() => {
+    const id = timers.every(() => {
       if (!busy && !holding.current && Date.now() - lastTouch.current > 9000) {
         lastTouch.current = Date.now()
         const line = bottle === 0 ? O.pourFull : O.pourHalf

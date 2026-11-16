@@ -4,7 +4,7 @@
 // nods along. Then the finished cartouche gets a gold frame and Miu reads it: "Kaylee!"
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { Buddy, burst, say, sample, shuffle, sounds, useAlive, wait, type PuppetHandle } from '../../../../sdk'
+import { Buddy, burst, say, sample, shuffle, sounds, useAlive, wait, type PuppetHandle, useTimers } from '../../../../sdk'
 import { sfx } from '../../../kit/sfx'
 import { Stage, WIGGLE } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
@@ -27,6 +27,7 @@ function choicesFor(i: number): GlyphId[] {
 }
 
 export function Scribe({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(SECTIONS)
   const steps = ['k', 'a', 'y', 'l', 'e-1', 'e-2'] as const
   const seed = start === 'framed' ? 6 : Math.max(0, steps.indexOf(start as typeof steps[number]))
@@ -41,7 +42,7 @@ export function Scribe({ onDone, setProgress }: ActivityProps) {
   const [wiggle, setWiggle] = useState<GlyphId | null>(null)
   const [help, setHelp] = useState(false)
   const [framed, setFramed] = useState(start === 'framed')
-  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const timer = useRef<number>(undefined)
   const early = useRef(0)
   const busy = useRef(start === 'framed')
   const ibis = useRef<PuppetHandle>(null)
@@ -64,13 +65,13 @@ export function Scribe({ onDone, setProgress }: ActivityProps) {
       sounds.oops()
       setWiggle(g)
       setHelp(true)
-      setTimeout(() => setWiggle(null), 500)
+      timers.later(() => setWiggle(null), 500)
       void ibis.current?.play('wiggle')
       void say(L.scribe.hint)
       return
     }
     setHolding(g)
-    timer.current = setTimeout(() => void stamp(), HOLD_MS)
+    timer.current = timers.later(() => void stamp(), HOLD_MS)
   }
 
   const release = () => {

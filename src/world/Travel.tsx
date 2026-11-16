@@ -1,7 +1,7 @@
 // The trip: the globe spins and Sparkle's balloon floats across. Tap to skip.
 import { motion } from 'motion/react'
 import { useEffect, useRef } from 'react'
-import { say, sounds } from '../sdk'
+import { say, sounds, useTimers } from '../sdk'
 import balloon from './assets/balloon.webp'
 import globe from './assets/globe.webp'
 import { WORLD_LINES } from './lines'
@@ -9,6 +9,7 @@ import { needsCode } from './lock'
 import type { PlaceEntry } from './registry'
 
 export function Travel({ entry, onDone }: { entry: PlaceEntry; onDone: () => void }) {
+  const timers = useTimers()
   const done = useRef(false)
   const finish = () => {
     if (done.current) return
@@ -19,7 +20,7 @@ export function Travel({ entry, onDone }: { entry: PlaceEntry; onDone: () => voi
     sounds.whoosh()
     void say(WORLD_LINES.takeoff)
     if (!needsCode(entry.meta.id)) void entry.load() // start downloading the country while we fly (a locked one can't yet)
-    const t = setTimeout(finish, 2800)
+    const t = timers.later(finish, 2800)
     return () => clearTimeout(t)
   }, [entry])
 

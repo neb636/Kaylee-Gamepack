@@ -6,7 +6,7 @@
 // (`nudge`). Sparkle asks "Where shall we play?" as it opens (lines.ts `L.mall.hall.map`).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
-import { sounds, useLandscape } from '../../../../../../sdk'
+import { sounds, useLandscape, useTimers } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import { mallVoice } from '../voice'
 import { GAMES, type DoorId, type GameDoor } from './layout'
@@ -31,12 +31,13 @@ interface Props {
 }
 
 export function HallMap({ open, done, here, fresh, nudge, hidden, onOpen, onPick }: Props) {
+  const timers = useTimers()
   const landscape = useLandscape()
   // The button's badge cycles through the games she hasn't played yet (so it isn't the top bar's 🗺️, and says "more!").
   const left = GAMES.filter((g) => !done.includes(g.id))
   const [tick, setTick] = useState(0)
   useEffect(() => {
-    const t = setInterval(() => setTick((n) => n + 1), 1600)
+    const t = timers.every(() => setTick((n) => n + 1), 1600)
     return () => clearInterval(t)
   }, [])
   const badge = left.length ? left[tick % left.length] : null
@@ -49,7 +50,7 @@ export function HallMap({ open, done, here, fresh, nudge, hidden, onOpen, onPick
   // The new star's twinkle.
   useEffect(() => {
     if (!open || !fresh || !(done as string[]).includes(fresh)) return
-    const t = setTimeout(() => sounds.sparkle(), 700)
+    const t = timers.later(() => sounds.sparkle(), 700)
     return () => clearTimeout(t)
   }, [open])
   const tile = landscape ? 'clamp(88px, min(15vw, 24vh), 150px)' : 'clamp(88px, min(25vw, 15vh), 170px)'

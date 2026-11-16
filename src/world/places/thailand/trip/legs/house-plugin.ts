@@ -31,7 +31,7 @@
 // packing: the whole family gathers at the shutter to wave goodbye (she hugs anyone she taps), Aunty Jum asks for
 // something yummy, the cousins wave without looking up, and the doors go thunk, thunk.
 import { Group, Vector3, type Object3D } from 'three'
-import { bell, clamp, sounds, wobble, type Line } from '../../../../../sdk'
+import { bell, clamp, sounds, wobble, type Line, Timers } from '../../../../../sdk'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
 import type { Shot } from '../../../../engine3d/camera'
 import { DIM } from '../../activities/hub/layout'
@@ -199,6 +199,13 @@ const tmp = new Vector3()
 const tmp2 = new Vector3()
 
 export class TripHouse implements HousePlugin {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
+
+  /** Cancels its pending callbacks: its owner is going away. */
+  dispose() {
+    this.timers.dispose()
+  }
   private house!: House
   private root = new Group()
   private suitcase!: Suitcase
@@ -253,7 +260,7 @@ export class TripHouse implements HousePlugin {
    *  she waits). */
   private phonesReady = false
   private readonly phonesDown = new Set<string>()
-  private phoneTimer: ReturnType<typeof setTimeout> | undefined
+  private phoneTimer: number | undefined
   /** Things in the suitcase before she has to sit on it three times to close it. */
   private fits: number
   /** A take-away box for Aunty Jum (the mall day): in her hands, in her, then on her table; its lid opens. */
@@ -381,12 +388,12 @@ export class TripHouse implements HousePlugin {
         for (const th of this.things.values()) th.g.visible = false
       }
       this.lid.angle = this.lid.goal = 0
-      setTimeout(() => this.phase === 'invite' && h.family.get('ji')?.react('wave'), 500)
+      this.timers.later(() => this.phase === 'invite' && h.family.get('ji')?.react('wave'), 500)
     } else {
       h.teleport('upstairs', ROOM.kaylee.x, ROOM.kaylee.z, ROOM.kaylee.face)
       this.placeSuitcase(ROOM.suitcase.x, ROOM.suitcase.z)
       this.lid.angle = this.lid.goal = -1.9
-      setTimeout(() => this.phase === 'pack' && this.events.say(L.trip.pack.start), 500)
+      this.timers.later(() => this.phase === 'pack' && this.events.say(L.trip.pack.start), 500)
     }
     // (Gan goes in once the suitcase is where it'll be.)
     if (packed.has('gan')) this.packGan(true)
@@ -421,7 +428,7 @@ export class TripHouse implements HousePlugin {
       this.blockSuitcase()
     })
     this.house.walkTo([ROOM.kaylee.x, ROOM.kaylee.z], () => this.house.kaylee.face(ROOM.kaylee.face * deg), false)
-    setTimeout(() => {
+    this.timers.later(() => {
       if (this.phase !== 'opening') return
       this.setPhase('pack')
       this.lastTouch = this.t
@@ -687,7 +694,7 @@ export class TripHouse implements HousePlugin {
 
   private hint() {
     this.hinted = true
-    setTimeout(() => {
+    this.timers.later(() => {
       if (this.phase !== 'pack') return
       const cool = this.weather === 'cool'
       this.events.say(cool ? L.nan.trip.cool : L.trip.pack.hint)
@@ -835,7 +842,7 @@ export class TripHouse implements HousePlugin {
     if (added.length || sunny) ji?.react('wiggle')
     this.events.packed([...this.order])
     this.setPhase('closed')
-    setTimeout(() => {
+    this.timers.later(() => {
       sfx.latch()
       this.lid.goal = 0
       for (const th of this.things.values()) if (th.packed) th.g.visible = false
@@ -843,7 +850,7 @@ export class TripHouse implements HousePlugin {
       this.house.kaylee.react('wave')
     }, added.length ? 650 : 150)
     // Her things on: the hat drops onto her head, the sunglasses slide down, the floaties pop on.
-    setTimeout(() => {
+    this.timers.later(() => {
       if (this.phase !== 'closed') return
       this.house.kaylee.putOn(wearing(this.order))
       this.house.kaylee.glassesUp(false)
@@ -907,13 +914,13 @@ export class TripHouse implements HousePlugin {
     }
     if (crowd) {
       // Aunty Jum's wish for the trip, then the big cousins wave bye without looking up from their phones.
-      setTimeout(() => {
+      this.timers.later(() => {
         if (this.phase !== 'goodbye') return
         h.family.get(HOST)?.react('wave')
         if (this.trip.lines.wish) this.events.say(this.trip.lines.wish)
       }, 700)
       COUSINS.forEach((c, i) =>
-        setTimeout(() => {
+        this.timers.later(() => {
           if (this.phase !== 'goodbye') return
           h.family.get(c)?.phoneWave()
           const l = this.trip.lines.bye?.[c]
@@ -965,10 +972,10 @@ export class TripHouse implements HousePlugin {
       m.react('wiggle')
       sounds.sparkle()
       sfx.giggle()
-      setTimeout(() => this.hugging?.id === id && (this.hugging = null), 700)
+      this.timers.later(() => this.hugging?.id === id && (this.hugging = null), 700)
     }
     if (!h.walkTo([p.x + (p.x > h.kaylee.root.position.x ? -0.45 : 0.45), p.z + 0.4], done, false)) done()
-    setTimeout(() => this.hugging?.id === id && (this.hugging = null), 4000)
+    this.timers.later(() => this.hugging?.id === id && (this.hugging = null), 4000)
   }
 
   /** The doors open, Dad loads the suitcase, everyone hops in, the doors shut and off they go. In Mom's car she
@@ -1017,9 +1024,9 @@ export class TripHouse implements HousePlugin {
     if (this.car.kind === 'van') sfx.vanShut()
     else {
       sfx.carShut()
-      setTimeout(() => sfx.carShut(), 260)
+      this.timers.later(() => sfx.carShut(), 260)
     }
-    setTimeout(() => {
+    this.timers.later(() => {
       if (this.phase !== 'boarding') return
       sfx.beep()
       sfx.drive()
@@ -1027,7 +1034,7 @@ export class TripHouse implements HousePlugin {
       if (this.trip.goodbye === 'family') for (const [id] of STREET.row) this.house.family.get(id)?.phoneWave()
       this.house.kaylee.react('wave')
       this.setPhase('gone')
-      setTimeout(() => this.events.done(afterGoodbye(this.trip)), 1500)
+      this.timers.later(() => this.events.done(afterGoodbye(this.trip)), 1500)
     }, 350)
   }
 
@@ -1144,17 +1151,17 @@ export class TripHouse implements HousePlugin {
           this.gift.fly = 1
           sfx.pop()
         }
-        if (i === 2) setTimeout(() => this.comeOut(), 200)
+        if (i === 2) this.timers.later(() => this.comeOut(), 200)
       } })
     })
-    if (this.car.kind === 'veloz') setTimeout(() => (this.door.goal = 0), 1600)
+    if (this.car.kind === 'veloz') this.timers.later(() => (this.door.goal = 0), 1600)
     // The suitcase comes out after them.
     if (!this.trip.pack) return
     const s = this.suitcase.root
     s.visible = true
     const from = this.car.body.localToWorld(new Vector3(...this.car.trunk))
     s.position.copy(from)
-    setTimeout(() => this.tweenObject(s, from, new Vector3(STREET.suitcase.x, 0, STREET.suitcase.z), 0.45, 0.8, () => sfx.thump()), 1300)
+    this.timers.later(() => this.tweenObject(s, from, new Vector3(STREET.suitcase.x, 0, STREET.suitcase.z), 0.45, 0.8, () => sfx.thump()), 1300)
   }
 
   /** The family who live here hop out of the shop to meet them, and Aunty Jum asks for her photo. */
@@ -1164,7 +1171,7 @@ export class TripHouse implements HousePlugin {
     let out = STREET.row.length
     const landed = () => {
       if (--out > 0) return
-      setTimeout(() => {
+      this.timers.later(() => {
         if (this.phase !== 'arrive') return
         const host = h.family.get(HOST)
         // Dad's new hairdo (the mall's barber): Aunty Jum laughs first.
@@ -1174,9 +1181,9 @@ export class TripHouse implements HousePlugin {
           host?.lookAt(HOME.out.nick.x, 1.9, HOME.out.nick.z)
           sfx.haha()
           this.events.say(this.trip.lines.hair!)
-          setTimeout(() => h.family.get('nick')?.react('wiggle'), 500)
+          this.timers.later(() => h.family.get('nick')?.react('wiggle'), 500)
         }
-        setTimeout(() => {
+        this.timers.later(() => {
           if (this.phase !== 'arrive') return
           host?.react('hop')
           this.events.say(this.trip.lines.ask)
@@ -1250,14 +1257,14 @@ export class TripHouse implements HousePlugin {
       host.react('hop')
       this.holdGoal = 0.35
       sfx.boing()
-      setTimeout(() => {
+      this.timers.later(() => {
         if (!this.gift || this.phase !== 'pizza') return
         this.gift.goal = 1
         sounds.sparkle()
         this.events.say(this.trip.lines.thanks)
-        for (const id of ['ji', 'nick', 'joy']) setTimeout(() => h.family.get(id)?.react('hop'), 300 + Math.random() * 500)
+        for (const id of ['ji', 'nick', 'joy']) this.timers.later(() => h.family.get(id)?.react('hop'), 300 + Math.random() * 500)
       }, 600)
-      setTimeout(() => {
+      this.timers.later(() => {
         if (this.phase !== 'pizza') return
         this.phonesReady = true
         this.lastTouch = this.t
@@ -1266,7 +1273,7 @@ export class TripHouse implements HousePlugin {
     }
     h.walkTo([a.x + 0.15, a.z + 0.85], hand, false)
     // If she can't get to her (no path), Aunty Jum takes it where she stands.
-    setTimeout(hand, 3500)
+    this.timers.later(hand, 3500)
   }
 
   /** The box flies to whoever has it now (or onto the table). */
@@ -1298,13 +1305,13 @@ export class TripHouse implements HousePlugin {
       this.holdGoal = 1
       sfx.boing()
       this.events.say(L.home.thanks)
-      for (const id of ['ji', 'nick', 'joy', 'sri']) setTimeout(() => h.family.get(id)?.react('hop'), 300 + Math.random() * 500)
+      for (const id of ['ji', 'nick', 'joy', 'sri']) this.timers.later(() => h.family.get(id)?.react('hop'), 300 + Math.random() * 500)
       // Then Aunty Jum walks in with it, and Kaylee follows.
-      setTimeout(() => this.walkIn(), 1900)
+      this.timers.later(() => this.walkIn(), 1900)
     }
     h.walkTo([a.x + 0.15, a.z + 0.85], hand, false)
     // If she can't get to her (no path), Aunty Jum takes it where she stands.
-    setTimeout(hand, 3500)
+    this.timers.later(hand, 3500)
   }
 
   /** Aunty Jum walks in to her wall with the photo held up; Kaylee follows; she hangs it by the old photos. */
@@ -1320,7 +1327,7 @@ export class TripHouse implements HousePlugin {
       i: 0,
       done: () => this.hangIt(),
     }
-    setTimeout(() => h.walkTo([HOME.kaylee.x, HOME.kaylee.z], () => {
+    this.timers.later(() => h.walkTo([HOME.kaylee.x, HOME.kaylee.z], () => {
       h.kaylee.face(-Math.PI / 2 + 0.25)
       const at = this.slot
       h.kaylee.lookAt(at[0], at[1], at[2])
@@ -1343,7 +1350,7 @@ export class TripHouse implements HousePlugin {
       const k = h.kaylee.root.position
       fr.root.position.set(k.x, 1.1, k.z)
       h.kaylee.react('hop')
-      setTimeout(() => {
+      this.timers.later(() => {
         this.held = 'flying'
         this.frameFly = { from: fr.root.position.clone(), yaw: h.kaylee.root.rotation.y, t: 0 }
         sfx.boing()
@@ -1373,7 +1380,7 @@ export class TripHouse implements HousePlugin {
     let landed = 0
     const ready = () => {
       if (++landed < crowd.length) return
-      setTimeout(() => {
+      this.timers.later(() => {
         if (this.phase !== 'gather') return
         // (A box trip: the phones are already down, for the pizza.)
         if (this.phonesDown.size >= COUSINS.length) return this.cheerHome(2000)
@@ -1395,7 +1402,7 @@ export class TripHouse implements HousePlugin {
       } })
     })
     // Aunty Jum and Kaylee turn round to the others, proud.
-    setTimeout(() => {
+    this.timers.later(() => {
       h.family.get(HOST)?.place(HOME.host.x, 0, HOME.host.z, 40)
       h.placeFamily(HOST, { floor: 0, x: HOME.host.x, z: HOME.host.z, face: 40, pose: 'stand' })
       h.kaylee.face((40 * Math.PI) / 180)
@@ -1413,7 +1420,7 @@ export class TripHouse implements HousePlugin {
     this.phonesDown.add(id)
     m.putPhoneDown()
     sfx.pop()
-    setTimeout(() => m.react('hop'), 450)
+    this.timers.later(() => m.react('hop'), 450)
     this.events.say(this.trip.lines.cousins[id as (typeof COUSINS)[number]])
     if (ph === 'pizza') {
       // A step closer to the pizza.
@@ -1428,19 +1435,19 @@ export class TripHouse implements HousePlugin {
     if (this.phonesDown.size < COUSINS.length) return
     clearTimeout(this.phoneTimer)
     if (ph === 'gather') return this.cheerHome(1600)
-    setTimeout(() => {
+    this.timers.later(() => {
       if (this.phase !== 'pizza') return
       for (const f of h.family.values()) if (f.root.visible) f.react('hop')
       h.kaylee.react('hop')
       sounds.sparkle()
       this.setPhase('hang')
-      setTimeout(() => this.walkIn(), 900)
+      this.timers.later(() => this.walkIn(), 900)
     }, 1600)
   }
 
   /** Everyone hops and cheers: it's done (the screen gives her the stamp). */
   private cheerHome(ms: number) {
-    setTimeout(() => {
+    this.timers.later(() => {
       if (this.phase !== 'gather') return
       for (const f of this.house.family.values()) if (f.root.visible) f.react('hop')
       this.house.kaylee.react('hop')
@@ -1452,7 +1459,7 @@ export class TripHouse implements HousePlugin {
   /** If she leaves them be, the next cousin looks up by themselves after a while. */
   private autoPhones(ms: number) {
     clearTimeout(this.phoneTimer)
-    this.phoneTimer = setTimeout(() => {
+    this.phoneTimer = this.timers.later(() => {
       const next = COUSINS.find((c) => !this.phonesDown.has(c))
       if (!next || (this.phase !== 'gather' && this.phase !== 'pizza')) return
       this.phoneDown(next)

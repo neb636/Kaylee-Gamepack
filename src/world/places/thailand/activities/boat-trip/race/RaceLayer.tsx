@@ -8,7 +8,7 @@
 //   bay.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { bigCelebration, Trophy } from '../../../../../../sdk'
+import { bigCelebration, Trophy, useTimers } from '../../../../../../sdk'
 import { Banner, CoinsAndMap, Countdown, Standings, type Face } from '../../../trip/race/RaceHud'
 import type { RaceHud, RacerId } from './race'
 import { LAPS, MAP } from './track'
@@ -54,15 +54,16 @@ export function RaceLayer({ hud, onAgain, onBay, mapEls }: Props) {
 function Podium({ trophy, onAgain, onBay }: { trophy: boolean; onAgain: () => void; onBay: () => void }) {
   // The trophy card comes up big for a moment, then tucks into the corner so the podium shows.
   // The buttons come up almost at once (something to touch while the trophy floats down).
+  const timers = useTimers()
   const [big, setBig] = useState(true)
   const [buttons, setButtons] = useState(false)
   useEffect(() => {
-    const b = setTimeout(() => setButtons(true), 900)
+    const b = timers.later(() => setButtons(true), 900)
     return () => clearTimeout(b)
   }, [])
   useEffect(() => {
     if (!trophy) return
-    const a = setTimeout(() => setBig(false), 2800)
+    const a = timers.later(() => setBig(false), 2800)
     return () => clearTimeout(a)
   }, [trophy])
   return (

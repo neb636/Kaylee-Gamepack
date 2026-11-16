@@ -6,7 +6,7 @@
 // this route downloads three.js.
 import { shareLab } from '../../../labs/share'
 import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { stopSpeaking } from '../../../../sdk'
+import { stopSpeaking, useTimers } from '../../../../sdk'
 import type { Wearable } from '../characters/looks'
 import { kayleeReady } from '../characters/model'
 import { dadReady } from '../characters/dad-model'
@@ -103,6 +103,7 @@ const wide = () => typeof window === 'undefined' || window.matchMedia('(min-widt
 
 export default function CharacterLab({ id, params = {} }: { id?: string; params?: Record<string, string> }) {
   // Kaylee and Mom are modelled vinyl toys: their GLBs load before the studio builds anyone (World.tsx's Suspense).
+  const timers = useTimers()
   use(kayleeReady())
   use(momReady())
   // The modelled Dad on trial (dad-model.ts).
@@ -141,7 +142,7 @@ export default function CharacterLab({ id, params = {} }: { id?: string; params?
   const showToast = useCallback((text: string) => {
     setToast(text)
     clearTimeout(toastTimer.current)
-    toastTimer.current = window.setTimeout(() => setToast(null), 1800)
+    toastTimer.current = timers.later(() => setToast(null), 1800)
   }, [])
 
   const select = useCallback(

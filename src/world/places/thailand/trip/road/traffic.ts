@@ -12,6 +12,7 @@ import { buildSongthaew } from '../vehicles/songthaew'
 import type { HeightField } from './build'
 import type { Road } from './road'
 import { wrapAngle } from '../../../../../sdk/math'
+import { Timers } from '../../../../../sdk'
 
 export type MoverKind = 'songthaew' | 'scooter' | 'tuktuk' | 'car'
 
@@ -174,6 +175,13 @@ export function buildBuffaloToy(bag: Bag) {
 }
 
 export class Traffic {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
+
+  /** Cancels its pending callbacks: its owner is going away. */
+  dispose() {
+    this.timers.dispose()
+  }
   readonly root = new Group()
   readonly movers: Mover[] = []
   readonly buffalo: Buffalo[] = []
@@ -230,14 +238,14 @@ export class Traffic {
         this.counts.replies++
         m.hop = 1
         if (m.local) m.local.wave = 2
-        window.setTimeout(() => ev.beepBack(), 380)
+        this.timers.later(() => ev.beepBack(), 380)
         heard = true
       }
     for (const b of this.buffalo)
       if (Math.abs(b.s - her.s) < 45 && b.state !== 'done') {
         b.hurry = 2.2
         b.hop = 1
-        window.setTimeout(() => ev.moo(), 300)
+        this.timers.later(() => ev.moo(), 300)
         heard = true
       }
     for (const f of this.flocks) if (Math.abs(f.s - her.s) < 30 && !f.fled) this.scatter(f, ev)

@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { INK } from './puppets/ink'
+import { useTimers } from '../../../sdk'
 
 export const WORDS = {
   ciao: { it: 'Ciao!', en: 'hello / bye' },
@@ -54,13 +55,14 @@ export function WordCard({ word }: { word: WordId | null }) {
 
 /** Shows a WordCard for a few seconds: `const [word, showWord] = useWord()`. */
 export function useWord(): [WordId | null, (w: WordId) => void] {
+  const timers = useTimers()
   const [word, setWord] = useState<WordId | null>(null)
-  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const timer = useRef<number>(undefined)
   useEffect(() => () => clearTimeout(timer.current), [])
   const show = useCallback((w: WordId) => {
     setWord(w)
     clearTimeout(timer.current)
-    timer.current = setTimeout(() => setWord(null), 3800)
+    timer.current = timers.later(() => setWord(null), 3800)
   }, [])
   return [word, show]
 }

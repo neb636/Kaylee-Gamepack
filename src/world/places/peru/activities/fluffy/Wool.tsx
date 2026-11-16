@@ -3,7 +3,7 @@
 // so a fast haircut never re-renders React.
 import { motion } from 'motion/react'
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
-import { useGameLoop } from '../../../../../sdk'
+import { useGameLoop, useTimers } from '../../../../../sdk'
 import { art } from '../../art'
 import { INK } from '../../puppets/Alpaca'
 
@@ -18,10 +18,11 @@ export interface BasketHandle {
 }
 
 export const Basket = forwardRef<BasketHandle, { cx: number; bottom: number; w: number; onTap: () => void }>(function Basket({ cx, bottom, w, onTap }, ref) {
+  const timers = useTimers()
   const [bands, setBands] = useState<{ color: string; n: number }[]>([])
   const [kick, setKick] = useState(0)
   const pending = useRef<string[]>([])
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const timer = useRef<number | null>(null)
   const h = w * 0.72
   const geo = useRef({ cx, bottom, h })
   geo.current = { cx, bottom, h }
@@ -31,7 +32,7 @@ export const Basket = forwardRef<BasketHandle, { cx: number; bottom: number; w: 
       // Batch the arrivals so a big snip is one re-render, not twenty.
       pending.current.push(color)
       if (timer.current) return
-      timer.current = setTimeout(() => {
+      timer.current = timers.later(() => {
         timer.current = null
         const add = pending.current
         pending.current = []

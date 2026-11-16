@@ -12,7 +12,7 @@
 // after ~8 s with nothing touched.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { sounds } from '../../../../../../sdk'
+import { sounds, useTimers } from '../../../../../../sdk'
 import { onDevice } from '../../../../../../sdk/device'
 import { worldLink } from '../../../../../../router'
 import { Anchors } from '../../../../../engine3d/Anchors'
@@ -34,6 +34,7 @@ let welcomed = false
 const told = new Set<string>()
 
 export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
+  const timers = useTimers()
   const { param, enter } = useSections(HUB_SECTIONS)
   // Read once: the stamp that lands (the end of a trip).
   const [arriving] = useState(() => param('stamp') || null)
@@ -61,7 +62,7 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
   useEffect(() => {
     enter('map', {})
     // (If the board never draws, say the camera lab froze it, the cover still goes.)
-    const safety = setTimeout(() => setRevealed(true), 6000)
+    const safety = timers.later(() => setRevealed(true), 6000)
     return () => clearTimeout(safety)
   }, [])
 
@@ -71,20 +72,20 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
     lastTouch.current = Math.max(lastTouch.current, performance.now() + 3000)
     const hello =
       !welcomed && !arriving
-        ? setTimeout(() => {
+        ? timers.later(() => {
             welcomed = true
             guide.current?.speak(L.map.hello)
           }, 400)
         : undefined
     const land = arriving
-      ? setTimeout(() => {
+      ? timers.later(() => {
           setLanded(true)
           sfx.thump()
-          setTimeout(() => sounds.sparkle(), 250)
+          timers.later(() => sounds.sparkle(), 250)
         }, 700)
       : undefined
     // After ~8 s with nothing touched the pins glow. No voice: it's a toy map, and she just heard the welcome.
-    const idle = setInterval(() => {
+    const idle = timers.every(() => {
       if (performance.now() - lastTouch.current < 8000) return
       setHint(true)
     }, 1000)
@@ -127,9 +128,9 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
       pickedRef.current = id
       setPicked(id)
       sounds.pop()
-      setTimeout(() => sounds.sparkle(), 120)
+      timers.later(() => sounds.sparkle(), 120)
       // The camera swoops down to the place, then it opens.
-      setTimeout(() => go(id), 900)
+      timers.later(() => go(id), 900)
     },
     poked: (id: ToyId) => {
       const fact = L.map.pokes[id]

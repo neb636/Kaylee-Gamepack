@@ -24,7 +24,7 @@
 // engine3d/water.ts. Built for engine3d/View3D.tsx; nothing here comes from Thailand. The
 // steering and the bounce are feel-lab knobs (?feel=1), with a graph of her finger against what the boat does.
 import { Color, Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, RingGeometry, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp, sounds, spendHint, type Line } from '../../../../../sdk'
+import { clamp, sounds, spendHint, type Line, Timers } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -235,6 +235,8 @@ interface OrcaRide {
 }
 
 export class WhaleWatch implements World3D {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   readonly scene = new Scene()
   readonly rig = new CameraRig()
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
@@ -890,11 +892,11 @@ export class WhaleWatch implements World3D {
         for (const o of this.raft) o.dive()
         for (const dr of this.drifters) if (dr.state === 'home') dr.o.dive()
         sfx.splash()
-        setTimeout(() => squeak(), 1700)
-        setTimeout(() => this.talk(L.whales.otterGrumpy, { cool: 8 }), 2000)
+        this.timers.later(() => squeak(), 1700)
+        this.timers.later(() => this.talk(L.whales.otterGrumpy, { cool: 8 }), 2000)
       } else if (sp < FIND.gentle && dist < 10) {
         this.raftCool = 5
-        this.raft.forEach((o, i) => setTimeout(() => o.wave(), i * 120))
+        this.raft.forEach((o, i) => this.timers.later(() => o.wave(), i * 120))
         squeak()
         if (!this.met('sea-otter')) this.talk(L.whales.otterHi, { cool: 10 })
       }
@@ -940,12 +942,12 @@ export class WhaleWatch implements World3D {
         this.counts.tows++
         this.progressed()
         if (!this.met('sea-otter')) this.talk(L.whales.otterWake)
-        setTimeout(() => this.talk(L.whales.otterTow, { once: `tow${this.homed}` }), 1800)
+        this.timers.later(() => this.talk(L.whales.otterTow, { once: `tow${this.homed}` }), 1800)
       } else if (dist < 6 && sp > FIND.fast && !o.diving) {
         o.dive()
         this.counts.dives++
         sfx.splash()
-        setTimeout(() => this.talk(L.whales.otterGrumpy, { cool: 8 }), 2000)
+        this.timers.later(() => this.talk(L.whales.otterGrumpy, { cool: 8 }), 2000)
       }
     } else if (dr.state === 'towed') {
       // On the rope behind the stern, swinging along (the boat goes gently by itself while it tows her).
@@ -971,7 +973,7 @@ export class WhaleWatch implements World3D {
     dr.o.root.position.set(dr.x, 0, dr.z)
     dr.o.root.rotation.y = pair.root.rotation.y
     dr.o.hold = 1
-    this.raft.forEach((o, j) => setTimeout(() => o.wave(), j * 140))
+    this.raft.forEach((o, j) => this.timers.later(() => o.wave(), j * 140))
     this.sparkle.burst(dr.x, 0.5, dr.z, 30, 2, 2.6, 0.18)
     sounds.correct()
     squeak()
@@ -980,11 +982,11 @@ export class WhaleWatch implements World3D {
     this.progressed()
     this.talk(L.whales.otterHome)
     // (The first time, Maple says why they hold hands.)
-    setTimeout(() => this.talk(L.whales.otterHold, { once: 'hold' }), 1600)
+    this.timers.later(() => this.talk(L.whales.otterHold, { once: 'hold' }), 1600)
     if (this.homed >= this.drifters.length) {
       this.boat.cheer()
       this.events.progress(1)
-      setTimeout(() => this.enter('spouts'), 2600)
+      this.timers.later(() => this.enter('spouts'), 2600)
       this.nextSpotT = 4
     }
   }
@@ -1039,7 +1041,7 @@ export class WhaleWatch implements World3D {
       this.puff(this.spot.x, this.spot.z, 0.7, this.found < 2)
       if (this.lookT < 1) {
         this.boat.spot()
-        setTimeout(() => this.spot && this.boat.pointAt(tmp2.set(this.spot.x, 1.5, this.spot.z)), 2300)
+        this.timers.later(() => this.spot && this.boat.pointAt(tmp2.set(this.spot.x, 1.5, this.spot.z)), 2300)
       }
     }
     // Taking a while: the next spout comes up closer.
@@ -1116,7 +1118,7 @@ export class WhaleWatch implements World3D {
         this.counts.sneezes++
         achoo()
         this.boat.soak()
-        setTimeout(() => this.talk(L.whales.sneeze, { cool: 4 }), 700)
+        this.timers.later(() => this.talk(L.whales.sneeze, { cool: 4 }), 700)
         const m = this.boat.headAt(tmp2)
         for (let i = 0; i < 40; i++) this.spray.emit(m.x + (Math.random() - 0.5) * 2, m.y + 3 + Math.random() * 2, m.z + (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, -2, (Math.random() - 0.5) * 2, 0.9, 0.18)
       }
@@ -1166,7 +1168,7 @@ export class WhaleWatch implements World3D {
     }
     if (!snap) {
       orcaCall()
-      setTimeout(() => {
+      this.timers.later(() => {
         if (!this.met('orca')) this.talk(L.whales.orcaHello, { once: 'orcas' })
       }, 2500)
     }
@@ -1237,15 +1239,15 @@ export class WhaleWatch implements World3D {
 
   private finale() {
     this.doneT = 0
-    this.orcas.forEach((r, i) => setTimeout(() => r.o.jump(), 150 + i * 160))
-    setTimeout(() => {
+    this.orcas.forEach((r, i) => this.timers.later(() => r.o.jump(), 150 + i * 160))
+    this.timers.later(() => {
       this.boat.cheer()
       this.boat.slap()
       sounds.fanfare()
     }, 900)
     orcaCall()
     this.events.progress(3)
-    setTimeout(() => this.talk(L.whales.finale, { once: 'finale' }), 1800)
+    this.timers.later(() => this.talk(L.whales.finale, { once: 'finale' }), 1800)
     this.events.done()
   }
 
@@ -1708,6 +1710,7 @@ export class WhaleWatch implements World3D {
   }
 
   dispose() {
+    this.timers.dispose()
     this.unwatch()
     this.scene.clear()
     this.bag.dispose()

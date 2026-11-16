@@ -5,6 +5,7 @@
 import { motion } from 'motion/react'
 import { useEffect } from 'react'
 import { sfx } from '../../sfx'
+import { useTimers } from '../../../../../sdk'
 
 export interface PassLeg {
   id: string
@@ -32,9 +33,10 @@ export interface PassChoice {
 }
 
 export function BoardingPass({ legs, done, punch, choices, title = 'BOARDING PASS', badge = '✈️ 🐘', route = 'BKK → KBV · 1A 🪟' }: Props) {
+  const timers = useTimers()
   useEffect(() => {
     if (!punch) return
-    const t = setTimeout(() => sfx.stamp(), 420)
+    const t = timers.later(() => sfx.stamp(), 420)
     return () => clearTimeout(t)
   }, [punch])
   return (

@@ -22,7 +22,7 @@
 // The race shows its state to the screen (onHud: the countdown, lap, place, coins); the minimap's dots and the
 // tap targets are written here every frame.
 import { Color, Fog, Group, Plane, Raycaster, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
-import { clamp, sounds, spendHint, type Line } from '../../../../../../sdk'
+import { clamp, sounds, spendHint, Timers, type Line } from '../../../../../../sdk'
 import { Avatar } from '../../../characters/avatar'
 import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
@@ -238,7 +238,8 @@ export class Race implements World3D {
   private branch = 1
   /** The lap she last met the dolphins on. */
   private dolphinLap = -9
-  private timers: number[] = []
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   /** The lap the race started on (a `lap=3` link). */
   private lap0 = 1
   private anchorEls = new Map<string, HTMLElement>()
@@ -1550,11 +1551,11 @@ export class Race implements World3D {
 
   /** After `ms`, unless she has left the race by then. */
   private later(fn: () => void, ms: number) {
-    this.timers.push(window.setTimeout(fn, ms))
+    this.timers.later(fn, ms)
   }
 
   dispose() {
-    for (const t of this.timers) clearTimeout(t)
+    this.timers.dispose()
     this.music.stop()
     this.scene.clear()
     this.bag.dispose()

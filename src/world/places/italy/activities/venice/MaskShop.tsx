@@ -3,7 +3,7 @@
 // she likes it. Her mask is saved, and Sparkle wears it at the finale (MaskView).
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react'
-import { BigButton, say, sounds, SparklePuppet, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, say, sounds, SparklePuppet, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { PromptBubble } from '../../../../kit/Stage'
 import { L } from '../../lines'
@@ -86,6 +86,7 @@ export function MaskView({ data, live, width = '100%' }: { data: MaskData; live?
 }
 
 export function MaskShop({ onDone }: { onDone: (m: MaskData) => void }) {
+  const timers = useTimers()
   const [step, setStep] = useState<'paint' | 'gems'>('paint')
   // A fresh mask every visit (her last one is saved for the finale).
   const [data, setData] = useState<MaskData>({ strokes: [], gems: [] })
@@ -105,7 +106,7 @@ export function MaskShop({ onDone }: { onDone: (m: MaskData) => void }) {
   useEffect(() => {
     setWaited(false)
     if (!enough) return
-    const t = setTimeout(() => {
+    const t = timers.later(() => {
       setWaited(true)
       void say(V.maskCheck, { interrupt: false })
     }, 8000)

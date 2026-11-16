@@ -9,7 +9,7 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { burst, say, speakingVoice, type Line } from '../../../../../sdk'
+import { burst, say, speakingVoice, type Line, useTimers } from '../../../../../sdk'
 import { afterTalk, Guide, type GuideHandle } from '../../../../kit/Guide'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
@@ -27,6 +27,7 @@ const GAP_S = 5
 const DONE_S = 2.6
 
 export function NarwhalRide({ onDone }: ActivityProps) {
+  const gameTimers = useTimers()
   const { start, param, enter } = useSections(NARWHAL_SECTIONS)
   const [run, setRun] = useState<RideStart & { n: number }>(() => ({
     section: (start ?? 'open') as NarwhalSection,
@@ -44,9 +45,9 @@ export function NarwhalRide({ onDone }: ActivityProps) {
   /** How many times each kind of line has been said, and when a friend last spoke. */
   const said = useRef<Record<string, number>>({})
   const lastLine = useRef(-Infinity)
-  const timers = useRef<ReturnType<typeof setTimeout>[]>([])
+  const timers = useRef<number[]>([])
   const cancel = useRef<() => void>(undefined)
-  const later = (fn: () => void, ms: number) => timers.current.push(setTimeout(fn, ms))
+  const later = (fn: () => void, ms: number) => timers.current.push(gameTimers.later(fn, ms))
 
   const params = (s: NarwhalSection, n: number, channel = 'middle') => ({ ...(s === 'bergs' && channel !== 'middle' ? { channel } : {}), ...(s !== 'open' && n ? { fish: String(n) } : {}) })
   useEffect(() => {

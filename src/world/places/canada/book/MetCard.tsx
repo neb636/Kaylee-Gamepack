@@ -3,7 +3,7 @@
 // itself); tapping it plays the fact again. Mounted once by Place.tsx, over every activity and the hub.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
-import { say, sounds } from '../../../../sdk'
+import { say, sounds, useTimers } from '../../../../sdk'
 import { L } from '../lines'
 import { ANIMAL, picOf, type AnimalId } from './animals'
 import { onMeet } from './met'
@@ -13,6 +13,7 @@ const SHOW_MS = 3600
 let lastSpoke = 0
 
 export function MetCard() {
+  const timers = useTimers()
   const [queue, setQueue] = useState<AnimalId[]>([])
   const id = queue[0]
   useEffect(() => onMeet((a) => setQueue((q) => (q.includes(a) ? q : [...q, a]))), [])
@@ -23,7 +24,7 @@ export function MetCard() {
       lastSpoke = Date.now()
       void say(L.book[id], { interrupt: false })
     }
-    const t = window.setTimeout(() => setQueue((q) => q.slice(1)), SHOW_MS)
+    const t = timers.later(() => setQueue((q) => q.slice(1)), SHOW_MS)
     return () => window.clearTimeout(t)
   }, [id])
   const a = id ? ANIMAL[id] : undefined

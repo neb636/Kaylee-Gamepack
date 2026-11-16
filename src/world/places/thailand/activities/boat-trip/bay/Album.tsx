@@ -11,6 +11,7 @@ import { sfx } from '../../../sfx'
 import { STICKERS, type StickerId } from './critters'
 import type { PhotoKind } from './part'
 import { Sticker } from './Stickers'
+import { useTimers } from '../../../../../../sdk'
 
 export interface AlbumPhoto {
   n: number
@@ -26,6 +27,7 @@ const BTN = 'min(96px, max(68px, 12vmin))'
 const buttonCenter = () => ({ x: window.innerWidth - 18 - 48, y: window.innerHeight - 18 - 48 })
 
 export function Album(props: { photos: AlbumPhoto[]; found: StickerId[]; open: boolean; bump: number; onOpen: () => void; onClose: () => void; onFact: (line: Line) => void }) {
+  const timers = useTimers()
   const { photos, found, open, bump, onOpen, onClose, onFact } = props
   const [big, setBig] = useState<AlbumPhoto | null>(null)
   const [wiggle, setWiggle] = useState<string | null>(null)
@@ -114,7 +116,7 @@ export function Album(props: { photos: AlbumPhoto[]; found: StickerId[]; open: b
                           onFact(stickerFact(id))
                         } else sfx.boop()
                         setWiggle(id)
-                        setTimeout(() => setWiggle(null), 520)
+                        timers.later(() => setWiggle(null), 520)
                       }}
                       style={{ minHeight: 88, background: 'none', border: 'none', padding: 4, display: 'grid', placeItems: 'center' }}
                     >

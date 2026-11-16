@@ -2,7 +2,7 @@
 // tap one and they dance and say hello in their own voice. When everyone has danced: fireworks and a big group dance.
 import { AnimatePresence, motion } from 'motion/react'
 import { createRef, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react'
-import { bigCelebration, burst, say, sounds, SparklePuppet, useAlive, wait, type PuppetHandle } from '../../../../sdk'
+import { bigCelebration, burst, say, sounds, SparklePuppet, useAlive, wait, type PuppetHandle, useTimers } from '../../../../sdk'
 import { sfx } from '../../../kit/sfx'
 import { Stage } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
@@ -131,6 +131,7 @@ function useSize() {
 }
 
 export function Party({ guests, onDone, setProgress }: { guests: Guest[]; onDone: () => void; setProgress: (done: number, total: number) => void }) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(SECTIONS)
   const [story, setStory] = useState(!start || start === 'story')
   const [danced, setDanced] = useState<number[]>(() => {
@@ -156,9 +157,9 @@ export function Party({ guests, onDone, setProgress }: { guests: Guest[]; onDone
   useEffect(() => {
     if (!fireworks) return
     const all = [sparkle, pip, ...refs]
-    const go = () => all.forEach((r, i) => setTimeout(() => void r.current?.play(i % 2 ? 'dance' : 'cheer'), i * 120))
+    const go = () => all.forEach((r, i) => timers.later(() => void r.current?.play(i % 2 ? 'dance' : 'cheer'), i * 120))
     go()
-    const id = setInterval(go, 2300)
+    const id = timers.every(go, 2300)
     return () => clearInterval(id)
   }, [fireworks, refs, pip, sparkle])
 
@@ -179,7 +180,7 @@ export function Party({ guests, onDone, setProgress }: { guests: Guest[]; onDone
   const allDanced = !story && danced.length === guests.length
   useEffect(() => {
     if (!allDanced || fireworks || finished.current) return
-    const id = setTimeout(() => {
+    const id = timers.later(() => {
       if (finished.current) return
       finished.current = true
       void finish()
@@ -190,7 +191,7 @@ export function Party({ guests, onDone, setProgress }: { guests: Guest[]; onDone
   const finish = async () => {
     setFireworks(true)
     sounds.fanfare()
-    for (let k = 0; k < 6; k++) setTimeout(() => (burst(0.15 + Math.random() * 0.7, 0.15 + Math.random() * 0.25), sfx.pop()), k * 380)
+    for (let k = 0; k < 6; k++) timers.later(() => (burst(0.15 + Math.random() * 0.7, 0.15 + Math.random() * 0.25), sfx.pop()), k * 380)
     await say(L.party.fireworks)
     if (!alive()) return
     bigCelebration(1500)

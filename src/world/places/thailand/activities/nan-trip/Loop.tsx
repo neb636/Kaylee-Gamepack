@@ -16,7 +16,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { sounds, type Line } from '../../../../../sdk'
+import { sounds, type Line, useTimers } from '../../../../../sdk'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode, type World3D } from '../../../../engine3d/View3D'
 import { ANCHORS as HOUSE_ANCHORS, House } from '../hub/house'
@@ -66,6 +66,7 @@ interface Props {
 }
 
 export const NanLoop = forwardRef<NanLoopHandle, Props>(function NanLoop({ section, packed, photos, replay, covered, onYes, onTrip, onNotYet, onSection, onLeg, onPacked, onDone }, ref) {
+  const timers = useTimers()
   const world = WORLD_OF[section]
   const [mount, setMount] = useState(() => ({ world, section, key: 0 }))
   const [mode, setMode] = useState<RenderMode>('webgl')
@@ -134,7 +135,7 @@ export const NanLoop = forwardRef<NanLoopHandle, Props>(function NanLoop({ secti
     if (phase !== 'invite' || !fromHouse.current) return
     fromHouse.current = false
     saidYes.at = 0
-    const t = setTimeout(onYes, 300)
+    const t = timers.later(onYes, 300)
     return () => clearTimeout(t)
   }, [phase])
   const asking = mode === 'webgl' && section === 'invite' && phase === 'invite' && !covered && !fromHouse.current
@@ -144,7 +145,7 @@ export const NanLoop = forwardRef<NanLoopHandle, Props>(function NanLoop({ secti
   const [fanReady, setFanReady] = useState(false)
   useEffect(() => {
     if (phase !== 'pick') return setFanReady(false)
-    const t = setTimeout(() => setFanReady(true), 2000)
+    const t = timers.later(() => setFanReady(true), 2000)
     return () => clearTimeout(t)
   }, [phase])
   // The photo she picked goes on the photo wall (saved on the iPad), then the stamp.
@@ -157,7 +158,7 @@ export const NanLoop = forwardRef<NanLoopHandle, Props>(function NanLoop({ secti
       void shrinkPhoto(chosen.current).then((small) => setWallPhotos((list) => addWallPhoto(list, { trip: NAN_TRIP.id, src: small, at: today() })))
     }
     if (phase === 'home') {
-      const t = setTimeout(onDone, 1800)
+      const t = timers.later(onDone, 1800)
       return () => clearTimeout(t)
     }
   }, [phase, section])

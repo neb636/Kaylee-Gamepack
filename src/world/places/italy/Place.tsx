@@ -2,7 +2,7 @@
 // Pizzeria in Naples came first; arches whose activities aren't built yet say "coming soon".
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react'
-import { BigButton, firstTime, say, SparklePuppet, sounds, type PuppetHandle } from '../../../sdk'
+import { BigButton, firstTime, say, SparklePuppet, sounds, type PuppetHandle, useTimers } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
 import { sfx } from '../../kit/sfx'
 import { useStampFlow, type ActivityProps } from '../../kit/stampFlow'
@@ -64,6 +64,7 @@ export default function Place(props: PlaceProps) {
 let introSeen = false
 
 function Hub({ meta, stamps, openActivity }: PlaceProps) {
+  const timers = useTimers()
   const [intro, setIntro] = useState(stamps.length === 0 && !introSeen)
   const [wiggle, setWiggle] = useState<string | null>(null)
   const [kick, setKick] = useState(0)
@@ -122,7 +123,7 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
                   if (open) openActivity(spot.id)
                   else {
                     setWiggle(spot.id)
-                    setTimeout(() => setWiggle(null), 650)
+                    timers.later(() => setWiggle(null), 650)
                     void say(L.soon)
                   }
                 }}
@@ -256,11 +257,12 @@ function BandPanel({ done, total, onOpen }: { done: typeof SPOTS; total: number;
 
 /** Before the band is full (route `party`): Lupa's opera night arrives when every stamp is collected. */
 function OperaSoon({ backToMap }: { backToMap: () => void }) {
+  const timers = useTimers()
   const sparkle = useRef<PuppetHandle>(null)
   const lupa = useRef<PuppetHandle>(null)
   useEffect(() => {
     void say(L.bandSoon)
-    const t = setTimeout(() => {
+    const t = timers.later(() => {
       void sparkle.current?.play('wave')
       void lupa.current?.play('howl')
     }, 400)

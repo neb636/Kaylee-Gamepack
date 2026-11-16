@@ -23,7 +23,7 @@
 // whole trip, 🗺️ straight to the Nan map with the Pajero ready.
 import { AnimatePresence } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { sounds, useSaved } from '../../../../../sdk'
+import { sounds, useSaved, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { flag } from '../../../../engine3d/flags'
 import { useInnerBack } from '../../../../kit/innerBack'
@@ -108,6 +108,7 @@ interface Props {
 }
 
 export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(NAN_SECTIONS)
   const first: NanSection = start ?? 'invite'
   const legs = PASS
@@ -234,8 +235,8 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
     const punch = was && was !== leg ? was : null
     setPass({ punch, done: doneBefore(next.section, state.current.stops, punch) })
     save(next.section)
-    setTimeout(() => setAt(next), 900)
-    setTimeout(() => {
+    timers.later(() => setAt(next), 900)
+    timers.later(() => {
       setPass(null)
       moving.current = false
     }, 2300)
@@ -278,7 +279,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
     setLose(l)
     state.current = { ...state.current, packed: ids, stops: st, cup: c, lose: l }
     const to = how === 'map' ? 'map' : saved.at!
-    setTimeout(() => go(isLoop(to) ? { section: to } : { section: 'map' }), 50)
+    timers.later(() => go(isLoop(to) ? { section: to } : { section: 'map' }), 50)
   }
 
   /** Back to the map from a stop: its stamp lands there (the trip saves there). */

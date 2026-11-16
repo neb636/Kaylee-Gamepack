@@ -1,7 +1,7 @@
 // Beach Postcard: free coloring (no wrong colors!), then send it home with "G'day, mate!".
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
-import { Buddy, burst, say, sounds, useAlive, wait } from '../../../../sdk'
+import { Buddy, burst, say, sounds, useAlive, wait, useTimers } from '../../../../sdk'
 import { ColoringPage } from '../../../kit/ColoringPage'
 import { Stage } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
@@ -14,6 +14,7 @@ import type { ActivityProps } from '../Place'
 const ENOUGH = 5 // fills before the send button shows up
 
 export function Postcard({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const { start, enter } = useSections(SECTIONS)
   const [phase, setPhase] = useState<'story' | 'color' | 'send'>(start ?? 'story')
   useEffect(() => enter(phase), [phase, enter])
@@ -35,8 +36,8 @@ export function Postcard({ onDone, setProgress }: ActivityProps) {
     setFlying(true)
     sounds.whoosh()
     burst(0.5, 0.5)
-    setTimeout(() => sounds.sparkle(), 450)
-    setTimeout(() => burst(0.85, 0.15), 700)
+    timers.later(() => sounds.sparkle(), 450)
+    timers.later(() => burst(0.85, 0.15), 700)
     await wait(1500)
     if (alive()) onDone()
   }

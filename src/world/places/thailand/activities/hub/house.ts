@@ -26,7 +26,7 @@ import { setHullHighlight, setOutlineResolution } from '../../../../engine3d/out
 import { applyBands, makeLights } from '../../../../engine3d/toon'
 import { THAI_TUNE } from '../../tune'
 import type { World3D } from '../../../../engine3d/View3D'
-import { say } from '../../../../../sdk'
+import { say, Timers } from '../../../../../sdk'
 import { L } from '../../lines'
 import { sfx } from '../../sfx'
 import { snapPhoto } from '../../../../engine3d/photo'
@@ -99,6 +99,8 @@ export interface HousePlugin {
   glows?(id: string): boolean
   readonly busy?: boolean
   qa?(): Record<string, unknown>
+  /** The house is going away: cancel anything still pending (its timers). */
+  dispose?(): void
 }
 
 /** Several plugins in one house (the wardrobe and the trip photos on the wall): each hook asks them in order, and the
@@ -123,6 +125,7 @@ export function bothPlugins(...list: HousePlugin[]): HousePlugin {
       return list.some((p) => p.busy)
     },
     qa: () => Object.assign({}, ...list.map((p) => p.qa?.() ?? {})),
+    dispose: () => list.forEach((p) => p.dispose?.()),
   }
 }
 
@@ -140,6 +143,8 @@ export const ANCHORS: AnchorInfo[] = [
 ]
 
 export class House implements World3D {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   readonly scene = new Scene()
   readonly rig = new CameraRig()
   private bag = new Bag()
@@ -648,7 +653,7 @@ export class House implements World3D {
       k.react('hop')
       who.react('hop')
       sfx.boing()
-      setTimeout(() => k.react('wave'), 450)
+      this.timers.later(() => k.react('wave'), 450)
     })
   }
 
@@ -1143,6 +1148,9 @@ export class House implements World3D {
   }
 
   dispose() {
+    this.timers.dispose()
+    this.plugin?.dispose?.()
+    this.reactor.dispose()
     this.scene.clear()
     this.bag.dispose()
   }

@@ -16,7 +16,7 @@
 // and the photo), sunset.ts (the ride home) and race-gate.ts (the rainbow gate into the boat race, race/). The soft bumps
 // are bumps.ts, the tap targets and arrows overlay.ts.
 import { Color, Fog, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type PerspectiveCamera, type WebGLRenderer } from 'three'
-import { bell, clamp, spendHint, type Line } from '../../../../../../sdk'
+import { bell, clamp, spendHint, type Line, Timers } from '../../../../../../sdk'
 import { Avatar } from '../../../characters/avatar'
 import { wearing } from '../../../trip/packing'
 import { FAMILY } from '../../../characters/family'
@@ -145,6 +145,8 @@ const STUCK_EVERY = 22
 const WHERE_S = 3.4
 
 export class Bay implements World3D {
+  /** Its delayed callbacks (and its parts'): cancelled when it's disposed. */
+  readonly timers = new Timers()
   readonly scene = new Scene()
   readonly rig = new CameraRig()
   readonly bag = new Bag()
@@ -674,12 +676,12 @@ export class Bay implements World3D {
       // Dad digs in hard with the paddle.
       r.d.vroom(1.1)
       sfx.paddle()
-      setTimeout(sfx.paddle, 160)
+      this.timers.later(sfx.paddle, 160)
       this.splashAt(r, r.v.bow * 0.3, 6)
     } else {
       r.d.vroom(2)
       sfx.vroom()
-      setTimeout(() => this.once('longtail', L.bay.facts.longtail), 1600)
+      this.timers.later(() => this.once('longtail', L.bay.facts.longtail), 1600)
       r.pitch.v -= 2.6
       r.squash = 0.3
       this.splashAt(r, r.v.stern, 24)
@@ -710,7 +712,7 @@ export class Bay implements World3D {
     const ji = this.rider('ji')
     this.strike(ji, 'selfie', 1.8)
     ji.char.react('hop')
-    setTimeout(() => {
+    this.timers.later(() => {
       sfx.shutter()
       this.riders.forEach((r) => r.id !== 'ji' && r.char.react('hop'))
       if (this.selfies < 3) {
@@ -868,7 +870,7 @@ export class Bay implements World3D {
         this.paiSaid = true
         this.say(L.bay.pai)
         this.strike(this.rider('nick'), 'point', 1.2)
-        setTimeout(() => this.once('pai', L.bay.facts.pai), 1100)
+        this.timers.later(() => this.once('pai', L.bay.facts.pai), 1100)
       }
     }
 
@@ -1028,7 +1030,7 @@ export class Bay implements World3D {
     ride.squash = 0
     ride.roll.v += (Math.random() < 0.5 ? -1 : 1) * Math.min(3, hit * 0.4)
     this.spray.burst(x, 0.3, z, Math.round(4 + hit * 1.5), 2 + hit * 0.3, 3 + hit * 0.25, 0.2)
-    this.riders.forEach((r, i) => setTimeout(() => r.char.react('wiggle'), i * 60))
+    this.riders.forEach((r, i) => this.timers.later(() => r.char.react('wiggle'), i * 60))
     for (const p of this.parts) p.bonked?.(x, z, hit)
   }
 
@@ -1331,6 +1333,7 @@ export class Bay implements World3D {
   }
 
   dispose() {
+    this.timers.dispose()
     this.scene.clear()
     this.bag.dispose()
   }

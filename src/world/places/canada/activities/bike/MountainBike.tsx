@@ -8,7 +8,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst, lineText, say, SayButton, SparklePuppet, speakingVoice, stopSpeaking, useAlive, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, burst, lineText, say, SayButton, SparklePuppet, speakingVoice, stopSpeaking, useAlive, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { SteerHint, SteerWheel } from '../../../../engine3d/SteerWheel'
@@ -30,6 +30,7 @@ const SAY: Record<BikeSection, string> = {
 const PARTS: BikeSection[] = ['green', 'berms', 'creek', 'falls']
 
 export function MountainBike({ onDone, setProgress }: Partial<CanadaActivityProps> = {}) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(BIKE_SECTIONS)
   const [run, setRun] = useState<BikeStart & { n: number }>(() => ({ section: (start ?? 'story') as BikeSection, trail: param('trail') as BikeStart['trail'], n: 0 }))
   const [section, setSection] = useState<BikeSection>(run.section)
@@ -115,7 +116,7 @@ export function MountainBike({ onDone, setProgress }: Partial<CanadaActivityProp
   // Sparkle's line stays up for a while, then the section's label comes back.
   useEffect(() => {
     if (!said?.sparkle) return
-    const t = setTimeout(() => setSaid((s) => (s === said ? null : s)), 6500)
+    const t = timers.later(() => setSaid((s) => (s === said ? null : s)), 6500)
     return () => clearTimeout(t)
   }, [said])
 

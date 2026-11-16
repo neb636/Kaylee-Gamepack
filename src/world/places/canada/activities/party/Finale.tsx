@@ -5,7 +5,7 @@
 // line at the bottom says what's on screen (for Dad) with a button to hear it again.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BigButton, SayButton, type Line } from '../../../../../sdk'
+import { BigButton, SayButton, type Line, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type QAKey, type RenderMode } from '../../../../engine3d/View3D'
@@ -25,6 +25,7 @@ const ROUND_ICON = ['🏒', '🪿', '🏆']
 type Part = 'homes' | 'hockey'
 
 export function Finale({ onDone, setProgress, stamps }: CanadaActivityProps) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(PARTY)
   const [initial] = useState(() => {
     const section = (start ?? 'story') as PartySection
@@ -73,10 +74,10 @@ export function Finale({ onDone, setProgress, stamps }: CanadaActivityProps) {
     done: () => {
       // Off to the canal: a snowy white fade, then the rink.
       setFade(true)
-      setTimeout(() => {
+      timers.later(() => {
         setPart('hockey')
         enter('hockey', { score: '0', ...teamState })
-        setTimeout(() => setFade(false), 250)
+        timers.later(() => setFade(false), 250)
       }, 650)
     },
   })

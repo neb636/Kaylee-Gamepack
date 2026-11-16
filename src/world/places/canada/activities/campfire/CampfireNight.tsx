@@ -22,7 +22,7 @@
 // drawn once and slid under her finger (only the compositor moves it).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent, type RefObject } from 'react'
-import { BigButton, bell as bellIn, onDevice, bigCelebration, burst, lerp, lineText, say, smooth, sounds, span, spendHint, useElementSize, wobble, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, bell as bellIn, onDevice, bigCelebration, burst, lerp, lineText, say, smooth, sounds, span, spendHint, useElementSize, wobble, type Line, type PuppetHandle, useTimers, Timers } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { sfx } from '../../../../kit/sfx'
@@ -229,6 +229,8 @@ function put(el: Element | null | undefined, name: string, value: string) {
 }
 
 class CampWorld {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   stage: StageDef
   section: CampSection
   crits = new Map<CritterId, Crit>()
@@ -267,7 +269,7 @@ class CampWorld {
   dead = false
   private back: SVGSVGElement
   private later(f: () => void, ms: number) {
-    setTimeout(() => !this.dead && f(), ms)
+    this.timers.later(() => !this.dead && f(), ms)
   }
 
   constructor(
@@ -1690,6 +1692,7 @@ interface Run {
 }
 
 export function CampfireNight({ onDone, setProgress }: CanadaActivityProps) {
+  const gameTimers = useTimers()
   const { start, param, enter } = useSections(CAMPFIRE_SECTIONS)
   const [story, setStory] = useState(!start || start === 'story')
   const first = (start && start !== 'story' ? start : 'eyes') as CampSection
@@ -1754,7 +1757,7 @@ export function CampfireNight({ onDone, setProgress }: CanadaActivityProps) {
         else if (who === 'raccoon') void raccoon.current?.play(action)
         else {
           void kitA.current?.play(action)
-          setTimeout(() => void kitB.current?.play(action), 120)
+          gameTimers.later(() => void kitB.current?.play(action), 120)
         }
       },
       light: (x, y) => lightAt.current?.(x, y),
@@ -1764,7 +1767,7 @@ export function CampfireNight({ onDone, setProgress }: CanadaActivityProps) {
         // The stamp, once, after the celebration (🔁 plays it again without another stamp).
         if (!done.current) {
           done.current = true
-          setTimeout(() => !w.dead && onDone(), 4200)
+          gameTimers.later(() => !w.dead && onDone(), 4200)
         }
       },
     })
@@ -1801,6 +1804,7 @@ export function CampfireNight({ onDone, setProgress }: CanadaActivityProps) {
     raf = requestAnimationFrame(loop)
     return () => {
       w.dead = true
+      w.timers.dispose()
       cancelAnimationFrame(raf)
       unwatch()
       if (world.current === w) world.current = null

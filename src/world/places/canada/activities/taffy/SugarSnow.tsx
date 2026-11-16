@@ -21,7 +21,7 @@
 // voices (lines.ts, L.taffy). A short line at the bottom shows what's said, for Dad.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent, type Ref } from 'react'
-import { BigButton, bigCelebration, onDevice, burst, say, sounds, spendHint, useElementSize, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, bigCelebration, onDevice, burst, say, sounds, spendHint, useElementSize, type Line, type PuppetHandle, Timers } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { noise, sfx, tone } from '../../../../kit/sfx'
@@ -174,6 +174,8 @@ interface Events {
 }
 
 class TaffyWorld {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   stage: StageDef
   section: TaffySection
   tipMode: 'hold' | 'lead'
@@ -214,7 +216,7 @@ class TaffyWorld {
   /** Set when the scene goes away (a new section, or React trying the effect twice): its timers do nothing then. */
   dead = false
   private later(f: () => void, ms: number) {
-    setTimeout(() => !this.dead && f(), ms)
+    this.timers.later(() => !this.dead && f(), ms)
   }
 
   /** Says a line. With a key: once only (every = 0), or at most every `every` seconds. */
@@ -1782,6 +1784,7 @@ export function SugarSnow({ onDone, setProgress }: CanadaActivityProps) {
     raf = requestAnimationFrame(loop)
     return () => {
       w.dead = true
+      w.timers.dispose()
       cancelAnimationFrame(raf)
       unwatch()
       if (world.current === w) world.current = null

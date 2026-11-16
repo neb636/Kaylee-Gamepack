@@ -5,6 +5,7 @@ import { useEffect, useState, type RefObject } from 'react'
 import { TUNE } from '../../../../engine3d/tune'
 import { THAI_TUNE } from '../../tune'
 import type { House } from './house'
+import { useTimers } from '../../../../../sdk'
 
 type Nums = Record<string, number>
 /** The sliders only touch the look's plain numbers (not its bands). */
@@ -27,10 +28,11 @@ const SLIDERS: [Nums, string, number, number, number][] = [
 ]
 
 export function Debug({ houseRef }: { houseRef: RefObject<House | null> }) {
+  const timers = useTimers()
   const [, tick] = useState(0)
   const [open, setOpen] = useState(false)
   useEffect(() => {
-    const id = setInterval(() => tick((n) => n + 1), 400)
+    const id = timers.every(() => tick((n) => n + 1), 400)
     return () => clearInterval(id)
   }, [])
   const qa = window.__thaiHouseQA?.() as { stats?: Record<string, number>; memory?: Record<string, number> } & Record<string, unknown> | undefined

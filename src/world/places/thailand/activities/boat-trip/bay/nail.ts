@@ -253,14 +253,14 @@ export class NailStop implements BayPart {
     this.busy = true
     bay.lastTouch = bay.time
     const order: RiderId[] = ['kaylee', 'ji', 'nick']
-    order.forEach((id, i) => setTimeout(() => {
+    order.forEach((id, i) => this.bay.timers.later(() => {
       bay.strike(bay.rider(id), kind)
       bay.rider(id).char.react('hop')
     }, i * 320))
     sfx.pop()
     const first = this.photos === 0
-    setTimeout(() => (first ? bay.say(L.bay.cheese) : sfx.countdown()), 700)
-    setTimeout(() => {
+    this.bay.timers.later(() => (first ? bay.say(L.bay.cheese) : sfx.countdown()), 700)
+    this.bay.timers.later(() => {
       // (She may have tapped the boat to go before the flash.)
       if (bay.phase !== 'beach') return
       sfx.shutter()
@@ -268,7 +268,7 @@ export class NailStop implements BayPart {
       bay.photo('nail')
       this.photos++
     }, first ? 2900 : 1800)
-    setTimeout(() => {
+    this.bay.timers.later(() => {
       for (const r of bay.riders) bay.strike(r, null)
       this.busy = false
     }, first ? 4300 : 3200)

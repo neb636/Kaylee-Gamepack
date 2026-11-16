@@ -7,7 +7,7 @@
 // cheer, then the stamp (onDone; the film after it is Mama meeting Pebble). "Again" lays the floes out a new way.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BigButton, burst, say, speakingVoice, useAlive, wait, type Line } from '../../../../../sdk'
+import { BigButton, burst, say, speakingVoice, useAlive, wait, type Line, useTimers } from '../../../../../sdk'
 import { onDevice } from '../../../../../sdk/device'
 import { afterTalk, Guide, type GuideHandle } from '../../../../kit/Guide'
 import { useSections } from '../../../../kit/sections'
@@ -27,6 +27,7 @@ const FLY_EVERY = 4
 const HOME_MAX_MS = 6000
 
 export function FloeHop({ onDone }: ActivityProps) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(FLOE_SECTIONS)
   const alive = useAlive()
   const [run, setRun] = useState(() => ({ section: (start ?? 'steady') as FloeSection, layout: Math.max(1, Math.floor(+param('layout')) || 1), n: 0 }))
@@ -48,7 +49,7 @@ export function FloeHop({ onDone }: ActivityProps) {
   useEffect(() => {
     const hint = HINT[run.section]
     if (!hint) return
-    const t = setTimeout(() => guide.current?.speak(hint), 500)
+    const t = timers.later(() => guide.current?.speak(hint), 500)
     return () => clearTimeout(t)
   }, [])
 
@@ -103,7 +104,7 @@ export function FloeHop({ onDone }: ActivityProps) {
         onDone()
       }
       // At most this long, unless someone is still cheering (then right after).
-      setTimeout(() => afterTalk(stamp, 4000), HOME_MAX_MS)
+      timers.later(() => afterTalk(stamp, 4000), HOME_MAX_MS)
       void (async () => {
         await wait(400)
         if (!alive() || homeRun.current !== mine) return

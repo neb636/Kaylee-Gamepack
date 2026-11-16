@@ -2,6 +2,7 @@ import { motion } from 'motion/react'
 import { useState, type ReactNode } from 'react'
 import { sounds } from '../sounds'
 import { say, type Line } from '../speech'
+import { useTimers } from '../timers'
 
 export interface Choice {
   key: string | number
@@ -29,6 +30,7 @@ export interface ChoiceCardsProps {
  * Wrong answers wiggle gently and can be tried again; the right one bounces.
  */
 export function ChoiceCards({ choices, onCorrect, onWrong, hint = "Hmm, let's try again!", size = 150, color = '#fff' }: ChoiceCardsProps) {
+  const timers = useTimers()
   const [shaking, setShaking] = useState<Choice['key'] | null>(null)
   const [picked, setPicked] = useState<Choice['key'] | null>(null)
 
@@ -37,11 +39,11 @@ export function ChoiceCards({ choices, onCorrect, onWrong, hint = "Hmm, let's tr
     if (c.correct) {
       setPicked(c.key)
       sounds.correct()
-      setTimeout(() => onCorrect(c), 700)
+      timers.later(() => onCorrect(c), 700)
     } else {
       sounds.oops()
       setShaking(c.key)
-      setTimeout(() => setShaking(null), 500)
+      timers.later(() => setShaking(null), 500)
       if (onWrong) onWrong(c)
       else void say(hint)
     }

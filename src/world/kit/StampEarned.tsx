@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BigButton, Buddy, burst, lineText, say, SparklePuppet, sounds, type PuppetHandle } from '../../sdk'
+import { BigButton, Buddy, burst, lineText, say, SparklePuppet, sounds, type PuppetHandle, useTimers } from '../../sdk'
 import type { ActivityInfo, PlaceFact } from '../types'
 
 /** Stamp slam + animal sticker + one spoken fun fact, then back to the country map. `facts` (optional): a row of
@@ -8,6 +8,7 @@ import type { ActivityInfo, PlaceFact } from '../types'
  *  `closeIcon` (optional): what the way-on button shows, when it goes somewhere other than the map. `quiet`: shows the
  *  sticker's line without saying it (an activity still in the works, whose voices aren't recorded yet). */
 export function StampEarned({ activity, onClose, facts, closeIcon = '🗺️ ▶', quiet = false }: { activity: ActivityInfo; onClose: () => void; facts?: PlaceFact[]; closeIcon?: string; quiet?: boolean }) {
+  const timers = useTimers()
   const [tapped, setTapped] = useState<string | null>(null)
   const [ready, setReady] = useState(false)
   const buddy = useRef<PuppetHandle>(null)
@@ -15,12 +16,12 @@ export function StampEarned({ activity, onClose, facts, closeIcon = '🗺️ ▶
   const roomy = window.innerHeight > 560 && window.innerWidth > 600
   useEffect(() => {
     sounds.sparkle()
-    const t1 = setTimeout(() => {
+    const t1 = timers.later(() => {
       sounds.pop()
       burst(0.5, 0.45)
     }, 450)
-    const t2 = setTimeout(() => setReady(true), 900)
-    const t3 = setTimeout(() => {
+    const t2 = timers.later(() => setReady(true), 900)
+    const t3 = timers.later(() => {
       void buddy.current?.play('cheer')
       void sparkle.current?.play('cheer')
     }, 850)
@@ -80,7 +81,7 @@ export function StampEarned({ activity, onClose, facts, closeIcon = '🗺️ ▶
               onClick={() => {
                 sounds.pop()
                 setTapped(f.label)
-                setTimeout(() => setTapped((t) => (t === f.label ? null : t)), 460)
+                timers.later(() => setTapped((t) => (t === f.label ? null : t)), 460)
                 void say(f.say)
               }}
               style={{ flexShrink: 0, width: 'clamp(64px, 10vh, 88px)', height: 'clamp(64px, 10vh, 88px)', borderRadius: '50%', border: '4px solid #fff', background: 'var(--cream)', boxShadow: 'var(--shadow)', fontSize: 'clamp(30px, 5vh, 42px)', display: 'grid', placeItems: 'center', padding: 0 }}

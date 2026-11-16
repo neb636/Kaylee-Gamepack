@@ -175,7 +175,7 @@ fixes), `kaylee-week` (the play diary), `sfx` (ElevenLabs sound effects for ever
 
 - `npm run verify` must pass before every PR. It checks: the player-name rule (rule 5) and its own tests, every
   `voice-lines.json` matches its `lines.ts`, a voice clip for every line, heavy libraries (three, phaser) only inside a
-  country folder or the 3D engine, no file names that differ only in case, the generated `docs/game-sections.html` and
+  country folder or the 3D engine, no raw `setTimeout`/`setInterval` in a game (next point), no file names that differ only in case, the generated `docs/game-sections.html` and
   `docs/code-map.md` (run `npm run sections-readme`), typecheck, build. This list is the one source; other docs link here.
   Changed lines? Push them: the PR records them for you: its preview workflow's voices job uses the `OPENAI_API_KEY` repository secret, commits the clips to your branch and re-runs CI. `git pull` to get the clips. With a key of your own you can record
   them first (`node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`); you don't need one.
@@ -184,6 +184,11 @@ fixes), `kaylee-week` (the play diary), `sfx` (ElevenLabs sound effects for ever
 - **Reuse before you write.** Number helpers are `src/sdk/math.ts`, the sound context is `audio()` (`src/sdk/sounds.ts`),
   the stamp → video → map flow is `useStampFlow` (`src/world/kit/stampFlow.tsx`), and 3D has `engine3d/` (outlines,
   water, floaters). A private copy at the top of a file drifts from the original; import the shared one.
+- **Delays end with their game.** A game never calls `setTimeout`/`setInterval` itself: they kept firing after she
+  left (Sparkle talking in the next game, a trophy from a screen that was gone). Components and hooks use
+  `const timers = useTimers()` → `timers.later(fn, ms)`; a 3D world, plugin or other class owns `new Timers()` and
+  disposes it in its `dispose()` (a `Stage` subclass has `this.timers` already). `src/sdk/timers.ts`, checked by
+  `scripts/check-timers.mjs`.
 - Don't run `npm run test` or `npm run check` locally; CI runs the specs on the PR.
 - **Floating 3D maps are framed like CSS `object-fit`.** Any board that floats in the sky (the Thailand map, the Nan
   map, a new trip's map, any 3D toy board) frames its real box with `objectFit: 'contain'` on its `Shot`

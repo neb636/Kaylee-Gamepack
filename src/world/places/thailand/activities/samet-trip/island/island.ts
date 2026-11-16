@@ -3340,6 +3340,7 @@ export class SametIsland implements World3D {
     return { ...this.renderer.info.memory }
   }
   dispose() {
+    this.wild.dispose()
     this.unwatch()
     this.scene.clear()
     this.bag.dispose()

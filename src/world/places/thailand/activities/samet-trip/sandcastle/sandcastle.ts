@@ -28,7 +28,7 @@
 // done the finger shows and Sparkle says what to do (spendHint). Every number that decides the feel is a knob
 // (?feel=1), with a graph of her finger against the sand.
 import { Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, RingGeometry, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp, spendHint, type Line } from '../../../../../../sdk'
+import { clamp, spendHint, type Line, Timers } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
@@ -219,6 +219,8 @@ interface Crab {
 }
 
 export class Sandcastle implements World3D {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   readonly scene = new Scene()
   readonly rig = new CameraRig()
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
@@ -929,7 +931,7 @@ export class Sandcastle implements World3D {
     this.filledAt = this.time
     this.counts.filled++
     sfx.rush()
-    window.setTimeout(fanfare, 900)
+    this.timers.later(fanfare, 900)
     // Sparkles over the water standing in the moat.
     const d = this.sand.deepest()
     for (let i = 0; i < 40; i++) {
@@ -1987,6 +1989,7 @@ export class Sandcastle implements World3D {
     return { ...this.renderer.info.memory }
   }
   dispose() {
+    this.timers.dispose()
     this.unwatch()
     this.scene.clear()
     this.bag.dispose()

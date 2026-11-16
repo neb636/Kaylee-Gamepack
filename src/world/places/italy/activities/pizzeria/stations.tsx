@@ -5,7 +5,7 @@
 //   Cutter    drag the pizza wheel across: one cut = two halves, two cuts = four slices.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BigButton, say, sounds, StickerBoard, useAlive, useElementSize, wait, type Placed } from '../../../../../sdk'
+import { BigButton, say, sounds, StickerBoard, useAlive, useElementSize, wait, type Placed, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { art } from '../../art'
 import { L } from '../../lines'
@@ -100,6 +100,7 @@ const BRUSH = 0.13 // brush radius as a fraction of the pizza box
 
 /** Press and swirl the ladle over the pizza; the sauce paints where it goes. Done at about 82% covered. */
 export function SauceSwirl({ pizza, color, onDone }: { pizza: PizzaState; color: Sauce; onDone: () => void }) {
+  const timers = useTimers()
   const box = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const ladle = useRef<HTMLImageElement>(null)
@@ -172,7 +173,7 @@ export function SauceSwirl({ pizza, color, onDone }: { pizza: PizzaState; color:
     if (frac >= 0.82) {
       setDone(true)
       sounds.sparkle()
-      setTimeout(onDone, 700)
+      timers.later(onDone, 700)
     }
   }
 

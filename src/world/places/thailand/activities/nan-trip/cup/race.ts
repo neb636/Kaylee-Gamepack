@@ -32,7 +32,7 @@
 // the bounce, the mud, the cloud and the blossoms, the rivals' rubber band; the lab's graph shows her finger across the
 // road against the kart.
 import { BufferAttribute, BufferGeometry, CanvasTexture, Color, DoubleSide, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, RepeatWrapping, Scene, Vector3, type WebGLRenderer } from 'three'
-import { clamp, firstTime, sounds, spendHint, type Line } from '../../../../../../sdk'
+import { clamp, firstTime, sounds, spendHint, Timers, type Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import { knobs, watch } from '../../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
@@ -270,7 +270,8 @@ export class KartRace implements World3D {
   private told = new Set<string>()
   private aimLat = 0
   private counts = { coinsTaken: 0, pads: 0, bounces: 0, bigBounces: 0, bales: 0, grass: 0, bumps: 0, honks: 0, pokes: 0, splashes: 0, washes: 0, lanterns: 0, showers: 0, fords: 0 }
-  private timers: number[] = []
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   /** Her first race this visit: Sparkle's instruction, and a longer look before the lights. */
   private firstRace = false
   private bumpSaid = new Map<RacerId, number>()
@@ -1763,11 +1764,11 @@ export class KartRace implements World3D {
   }
 
   private later(fn: () => void, ms: number) {
-    this.timers.push(window.setTimeout(fn, ms))
+    this.timers.later(fn, ms)
   }
 
   dispose() {
-    for (const t of this.timers) clearTimeout(t)
+    this.timers.dispose()
     this.music.stop()
     this.unwatch()
     this.scene.clear()

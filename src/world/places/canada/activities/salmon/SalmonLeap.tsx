@@ -24,7 +24,7 @@
 // (?feel=1). 2D only: the SVGs are written every frame, no three.js or Phaser.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as RPointerEvent, type RefObject } from 'react'
-import { BigButton, bigCelebration, burst, lineText, say, speakingVoice, spendHint, useElementSize, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, bigCelebration, burst, lineText, say, speakingVoice, spendHint, useElementSize, wait, type Line, type PuppetHandle, Timers } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { StoryBeat } from '../../../../kit/StoryBeat'
@@ -149,6 +149,8 @@ interface Events {
 const saidOnce = new Set<string>()
 
 class SalmonWorld {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   st: StageDef
   river: River
   section: Part
@@ -197,7 +199,7 @@ class SalmonWorld {
   /** Set when the scene goes away (a new run, or React trying the effect twice): its timers do nothing then. */
   dead = false
   private later(f: () => void, ms: number) {
-    setTimeout(() => !this.dead && f(), ms)
+    this.timers.later(() => !this.dead && f(), ms)
   }
 
   constructor(
@@ -1268,6 +1270,7 @@ function TheRiver({ sec, onDone, setProgress }: CanadaActivityProps & { sec: Ret
     raf = requestAnimationFrame(loop)
     return () => {
       w.dead = true
+      w.timers.dispose()
       cancelAnimationFrame(raf)
       unwatch()
       if (world.current === w) world.current = null
