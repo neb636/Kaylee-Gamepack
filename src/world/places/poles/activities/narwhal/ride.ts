@@ -342,8 +342,9 @@ export class NarwhalRide implements World3D {
     this.pebble = new Actor('pebble', bag, { height: 0.8 })
     this.terry = new Actor('terry', bag, { height: 1.05 })
     scene.add(this.pola.root, this.pebble.root, this.terry.root)
-    this.pola.ride(this.nari.saddle, 0, 0, -0.25, 0)
-    this.pebble.ride(this.nari.saddle, 0, 0.05, 0.45, 0)
+    // (Pebble behind Pola: the camera follows from behind, and in front of her he was hidden the whole ride.)
+    this.pola.ride(this.nari.saddle, 0, 0, 0.3, 0)
+    this.pebble.ride(this.nari.saddle, 0, 0.05, -0.45, 0)
     this.terry.place(0, 3, 0, 180)
     this.terry.flying = true
     // The riders' air bubble for under the ice.

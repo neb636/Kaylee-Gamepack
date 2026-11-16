@@ -134,15 +134,13 @@ const intro: StoryFilm = {
         id: 'nap',
         memory: true,
         shot: cam([12.6, 2.3, 2.6], [17.6, 1.4, -3.1], { eye: [13.8, 2.2, 1.4] }),
-        say: X.nap,
-        sayAt: 1.5,
-        dur: 5.4,
+        dur: 3.6,
         start: () => pebble.hopTo(15.9, 0.56, -3.1, 0.7, 90, 0.5),
         cues: [
           [0.8, () => pebble.hopTo(18, 1.02, -3.1, 0.8, 20, 0.7)],
           [1.6, () => s.sfx.crate()],
-          [3.2, () => (pebble.pull('sad', true), s.sfx.snore())],
-          [4.4, () => s.sfx.horn()],
+          [2, () => (pebble.pull('sad', true), s.sfx.snore())],
+          [3, () => s.sfx.horn()],
         ],
       },
       {
@@ -152,8 +150,8 @@ const intro: StoryFilm = {
         memory: true,
         shot: { eye: [GLOBE_AT.x, GLOBE_AT.y + 0.2, GLOBE_AT.z + 4.3], look: [GLOBE_AT.x, GLOBE_AT.y, GLOBE_AT.z], fov: 36, sway: 0.008 },
         say: X.sailed,
-        sayAt: 0.9,
-        dur: 7,
+        sayAt: 0.7,
+        dur: 5.6,
         start: () => {
           s.use('globe')
           s.sail(0)
@@ -161,24 +159,7 @@ const intro: StoryFilm = {
         tick: (k) => s.sail(ease(Math.min(1, k * 1.08))),
       },
       {
-        id: 'woke',
-        turn: true,
-        memory: true,
-        shot: cam([-3.4, 1.5, 5.4], [3, 1, -3], { eye: [-2.6, 1.4, 4.8] }),
-        say: X.woke,
-        sayAt: 1,
-        dur: 4.4,
-        start: () => {
-          s.use('arctic')
-          s.put(crate, 0.6, Y, 0.5, 12)
-          pebble.place(0.6, Y + 0.08, 0.5, 35)
-          s.put(ship, 16, 0, -16, 150)
-        },
-        tick: (k) => ship.position.set(lerp(16, 34, k), 0, lerp(-16, -40, k)),
-        cues: [[0.9, () => s.sfx.horn()], [1.6, () => pebble.pull('wow')]],
-      },
-      {
-        // Now again: Terry the tern swoops in and lands on the crate.
+        // Now again (the page turns back): Terry the tern swoops in and lands on the crate.
         id: 'terry',
         turn: true,
         shot: cam([0.7, 1.5, 6.6], [0.5, 0.95, 0.9]),
@@ -204,12 +185,6 @@ const intro: StoryFilm = {
         shot: cam([0.7, 1.5, 6.6], [0.5, 0.95, 0.9]),
         say: X.show,
         start: () => pola.hop(),
-      },
-      {
-        id: 'long',
-        shot: close(terry, -0.4, 2.3, 0.1),
-        say: X.long,
-        cues: [[1.6, () => terry.nod()]],
       },
       {
         // Sparkle's balloon comes down behind them.
@@ -449,7 +424,7 @@ const narwhalOut: StoryFilm = {
       },
       {
         id: 'bye',
-        shot: cam([4.6, 1.2, 7.6], [7.2, 0.7, 2.8]),
+        shot: cam([6, 1.4, 9.4], [7.2, 0.8, 2.8]),
         say: X.bye,
         hold: 1.3,
         cues: [[2.6, () => (s.splash(7.4, 3, 1.2), s.sfx.whale())]],
@@ -612,9 +587,9 @@ const slideIn: StoryFilm = {
         id: 'look',
         shot: cam([-1.6, 1.5, 5.2], [-0.5, 1.1, 0.4], { eye: [-2.2, 1.7, 6.4] }),
         say: X.look,
-        hold: 1.2,
+        hold: 1.8,
         start: () => papa.place(-0.6, SNOW_Y, 0.4, 10),
-        cues: [[0.3, () => papa.hop()], [3.4, () => papa.slideTo(9, 6, 1.4)]],
+        cues: [[0.3, () => papa.hop()], [4.6, () => papa.slideTo(9, 6, 1.4)]],
       },
     ]
   },
@@ -930,12 +905,11 @@ const homeReunion: StoryFilm = {
           s.sfx.music('happy')
           crowd()
           papa.place(-2.4, SNOW_Y, 1, 60)
-          pebble.place(1.2, SNOW_Y, 1.5, -70)
+          pebble.place(-1.5, SNOW_Y, 1.2, -60)
           pola.place(2.8, SNOW_Y, 0.6, -40)
           papa.armsUp = 0.6
-          papa.pull('wow')
         },
-        cues: [[1, () => pebble.walkTo(-1.5, 1.2, 0.9, -60)], [1.9, () => (s.sfx.chime(), pebble.pull('happy', true), papa.pull('happy', true), (papa.lean = 0.3))]],
+        cues: [[0.4, () => (s.sfx.chime(), pebble.pull('happy', true), papa.pull('happy', true), (papa.lean = 0.3))]],
       },
       {
         id: 'papa',
@@ -964,28 +938,15 @@ const homeReunion: StoryFilm = {
         cues: [[2.6, () => (papa.lean = 0.4)], [3.4, () => (papa.lean = 0)]],
       },
       {
-        // That night: the southern lights over everyone.
-        id: 'lights',
-        shot: cam([1, 1.2, 7.4], [-0.6, 6, -20], { look: [-0.6, 12, -40] }),
-        say: X.lights,
-        sayAt: 1,
-        dur: 4.6,
-        start: () => {
-          s.use('night', true)
-          for (const a of [pola, pebble, papa, ...colony]) a.turnTo(-2, -30)
-          pola.armsUp = 1
-        },
-        cues: [[1.2, () => s.aurora.flare()], [2.6, () => (s.aurora.flare(), colony.forEach((c, i) => i % 2 && c.hop()))]],
-      },
-      {
         id: 'quiz',
-        shot: cam([0.6, 1.6, 7], [0.2, 1.2, 1]),
+        shot: cam([0.6, 1.6, 7.6], [0, 1.2, 1]),
         say: X.quiz,
         sayAt: 1.5,
         hold: 1,
         start: () => {
-          pola.armsUp = 0
           for (const a of [pola, pebble, papa]) a.turnTo(0.4, 12)
+          colony.forEach((c, i) => i % 2 && c.hop())
+          s.sfx.chime()
           terry.place(7, 5, -3, -70)
           terry.flyTo(0.3, SNOW_Y + 1.5, 1.6, 1.3, 0, 0.5)
           s.sfx.swoop()

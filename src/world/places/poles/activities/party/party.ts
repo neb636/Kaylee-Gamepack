@@ -8,7 +8,7 @@
 // countries she has been to. The journey's lesson happens to the friends: over the warm middle of the world the sea
 // turns turquoise, Pola pants and fans herself and Pebble peeks over the edge; a whale spouts below; in the cold south
 // Pebble bounces (home!), an albatross glides alongside and gusts push Terry about. At the end: `events.landed()`.
-// Quiz: the whole globe, and Terry (hovering beside it) asks six questions, each answered by doing. The first is the
+// Quiz: the whole globe, and Terry (hovering beside it) asks four questions, each answered by doing. The first is the
 // story's last step: Pola has to go home (drag her to the top of the world). A wrong answer gets a silly reaction, then
 // the right place glows and she does it herself: every question ends in a star. Six stars: the badge, then the trophy.
 import { CanvasTexture, Color, Group, Matrix4, Mesh, Plane, Quaternion, Raycaster, Scene, SphereGeometry, Sprite, SpriteMaterial, Vector2, Vector3, type BufferGeometry, type WebGLRenderer } from 'three'
@@ -102,7 +102,7 @@ const TERN_H = 0.07
 const FLAT = new Quaternion().setFromRotationMatrix(new Matrix4().makeBasis(new Vector3(-1, 0, 0), new Vector3(0, 0, -1), new Vector3(0, -1, 0)))
 /** Terry's height over the sea (the Earth is 1). */
 const ALT = 0.075
-const QUIZ_N = 6
+const QUIZ_N = 4
 /** The balloon: its size on the globe (story/props.ts builds it about 5.5 m tall), how far behind Terry it trails and
  *  how high its basket floor is. */
 const B_SCALE = 0.03

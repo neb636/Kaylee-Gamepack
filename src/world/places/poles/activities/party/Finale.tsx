@@ -30,7 +30,7 @@ import { SONG_ANCHORS, SongWorld, type SongEvents, type SongStart } from './song
 const FRIEND_MISS = new Set<Question>(['bear', 'penguin'])
 /** Terry cheers every few fish (not every one: talk short, play long). */
 const FISH_CHEER = 6
-const STARS = 6
+const STARS = 4
 
 type Enter = (id: PartySection, state?: Partial<Record<'leg' | 'round' | 'q' | 'stars', string>>) => void
 type Step = { kind: 'film'; id: FilmId } | { kind: 'globe'; start: PartyStart } | { kind: 'song'; round: number }

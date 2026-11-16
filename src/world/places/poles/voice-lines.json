@@ -103,18 +103,10 @@
     "voice": "pebble"
   },
   {
-    "text": "I saw a big red ship. It smelled like fish!",
+    "text": "I saw a big red ship. I climbed in, and fell asleep!",
     "voice": "pebble"
   },
-  {
-    "text": "I climbed inside, and I fell asleep.",
-    "voice": "pebble"
-  },
-  "The ship sailed all the way up the world. From the bottom, to the top!",
-  {
-    "text": "When I woke up, everything was different.",
-    "voice": "pebble"
-  },
+  "The ship sailed up the whole world. From the bottom, to the top!",
   {
     "text": "A penguin? Up here?",
     "voice": "terry"
@@ -126,10 +118,6 @@
   {
     "text": "Can you show us the way?",
     "voice": "pola"
-  },
-  {
-    "text": "It's a long, long way. But yes!",
-    "voice": "terry"
   },
   "My balloon can carry Pebble home. Let's help him!",
   {
@@ -239,7 +227,7 @@
     "voice": "papa"
   },
   {
-    "text": "Come home soon, little one.",
+    "text": "I just know he's on his way home.",
     "voice": "papa"
   },
   "Winter at the South Pole. The sun is gone for months.",
@@ -305,10 +293,6 @@
   {
     "text": "A polar bear at the South Pole! Thank you, Pola.",
     "voice": "papa"
-  },
-  {
-    "text": "Look! The sky is dancing!",
-    "voice": "pola"
   },
   {
     "text": "Top to bottom! Who's ready for my Polar Explorer quiz?",

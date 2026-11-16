@@ -100,14 +100,11 @@ export const L = {
       penguin: pebble("I'm Pebble. I'm a penguin!"),
       never: pola("A pen-guin? I've never seen one!"),
       papa: pebble('I want my Papa.'),
-      ship: pebble('I saw a big red ship. It smelled like fish!'),
-      nap: pebble('I climbed inside, and I fell asleep.'),
-      sailed: 'The ship sailed all the way up the world. From the bottom, to the top!',
-      woke: pebble('When I woke up, everything was different.'),
+      ship: pebble('I saw a big red ship. I climbed in, and fell asleep!'),
+      sailed: 'The ship sailed up the whole world. From the bottom, to the top!',
       terry: terry('A penguin? Up here?'),
       bottom: terry('Penguins live at the bottom of the world! I fly there every year.'),
       show: pola('Can you show us the way?'),
-      long: terry("It's a long, long way. But yes!"),
       ask: "My balloon can carry Pebble home. Let's help him!",
     },
     // Ice Floe Hop: across the floating ice to Mama Bear.
@@ -157,7 +154,7 @@ export const L = {
     slideOut: {
       none: papa('No Pebble in the sea.'),
       supper: papa('But I caught his favorite supper.'),
-      soon: papa('Come home soon, little one.'),
+      soon: papa("I just know he's on his way home."),
     },
     // Emperor Huddle: the long night, and the night Pebble hatched.
     huddleIn: {
@@ -189,7 +186,6 @@ export const L = {
       papa: pebble('Papa! I went to the top of the world!'),
       friend: pebble('This is Pola. She carried me home.'),
       thanks: papa('A polar bear at the South Pole! Thank you, Pola.'),
-      lights: pola('Look! The sky is dancing!'),
       quiz: terry("Top to bottom! Who's ready for my Polar Explorer quiz?"),
     },
   },

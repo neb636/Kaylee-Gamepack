@@ -15,5 +15,24 @@ export const CHAPTER_FILMS: Record<string, { in: FilmId; out: FilmId }> = {
 export const STORY_ORDER = ['floe', 'narwhal', 'coats', 'slide', 'huddle'] as const
 
 const seen = new Set<FilmId>()
-export const filmSeen = (id: FilmId) => seen.has(id)
-export const seeFilm = (id: FilmId) => void seen.add(id)
+// The way-in film is remembered between visits too (she has no stamp until her first chapter is done, and a minute of
+// film every time she opens the Poles would be the talk she never asked for). It still opens from its link.
+const INTRO_KEY = 'kaylee-gamepack:poles:intro-seen'
+export const filmSeen = (id: FilmId) => {
+  if (seen.has(id)) return true
+  if (id !== 'intro') return false
+  try {
+    return localStorage.getItem(INTRO_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+export const seeFilm = (id: FilmId) => {
+  seen.add(id)
+  if (id !== 'intro') return
+  try {
+    localStorage.setItem(INTRO_KEY, '1')
+  } catch {
+    /* a private window: it plays again next visit */
+  }
+}

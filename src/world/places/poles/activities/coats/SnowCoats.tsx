@@ -1075,6 +1075,9 @@ class CoatsWorld {
 const FLAKES = 80
 
 /** `onDone` (Place.tsx): the stamp, a few seconds after the summer's fanfare. */
+/** Seconds of the winter dusk (the eyes blinking in the snow) before the story's chapter ends. */
+const DUSK_DONE_S = 6
+
 export function SnowCoats({ onDone }: ActivityProps) {
   const { start, param, enter } = useSections(COATS_SECTIONS)
   const [run, setRun] = useState(() => ({ section: (start ?? 'fox') as CoatsSection, painted: (param('painted') || '').split(',').filter(Boolean), n: 0 }))
@@ -1128,7 +1131,15 @@ export function SnowCoats({ onDone }: ActivityProps) {
         if (p === 'bear') {
           if (firstTime('poles:coats:bear')) guide.current?.speak(L.coats.hide.bear)
         }
-        else if (p === 'dusk') guide.current?.speak(L.coats.hide.gone)
+        else if (p === 'dusk') {
+          guide.current?.speak(L.coats.hide.gone)
+          // In the story the chapter ends here, in winter: Terry flies south when the coats are white (the film that
+          // follows opens on the snow). The summer's rub stays a section of its own, from its link.
+          if (start === null) {
+            clearTimeout(stampTimer.current)
+            stampTimer.current = setTimeout(() => alive() && world.current?.section === 'hide' && onDone(), DUSK_DONE_S * 1000)
+          }
+        }
         else if (p === 'end') {
           guide.current?.speak(L.coats.summer.end)
           clearTimeout(stampTimer.current)

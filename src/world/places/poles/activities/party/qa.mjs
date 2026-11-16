@@ -24,7 +24,7 @@ export const screens = [
   // south), each round of Papa's song (three dads; five dads; the snowstorm), a question of each kind (drag, spin,
   // tap a pole, pick from the row) and the badge.
   // (The badge first: the first screen of a run also waits for the place's code to load.)
-  ...['badge', 'fly?leg=north', 'fly?leg=warm', 'fly?leg=south', 'song', 'song?round=2', 'song?round=3', 'quiz?q=bear', 'quiz?q=south&stars=2', 'quiz?q=coldest&stars=3', 'quiz?q=summer&stars=4', 'quiz?q=tern&stars=1'].map((to) => ({
+  ...['badge', 'fly?leg=north', 'fly?leg=warm', 'fly?leg=south', 'song', 'song?round=2', 'song?round=3', 'quiz?q=bear', 'quiz?q=south&stars=2', 'quiz?q=coldest&stars=2', 'quiz?q=summer&stars=3', 'quiz?q=tern&stars=1'].map((to) => ({
     name: `poles-party-${to.replace(/[?=&]/g, '-')}`,
     hash: link(to),
     reset: true,
