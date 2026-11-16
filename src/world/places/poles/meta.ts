@@ -45,14 +45,15 @@ const meta: PlaceMeta = {
     { icon: '🔬', label: 'Scientists', say: L.facts.scientists },
   ],
   coloringPages: [],
-  // Real-world videos for the Theater (button in the place's top bar). `after` offers one when that activity is done.
+  // Real-world videos for the Theater (button in the place's top bar). None plays after a chapter (it broke up the
+  // story): once the whole story is told, the trail ends in a movie ticket that opens them all (activities/hub/Hub.tsx).
   videos: [
-    { id: 'bears', youtubeId: 'mIGpzhADMC4', icon: '🐻‍❄️', title: 'Polar bear cubs on the ice', say: L.videos.bears, after: 'floe' },
-    { id: 'fox', youtubeId: '5FnJ70WwCXw', icon: '🦊', title: 'White for winter', say: L.videos.fox, after: 'coats' },
-    { id: 'penguins', youtubeId: 'A9mbCNs47FI', icon: '🐧', title: 'Penguins zoom out of the sea', say: L.videos.penguins, after: 'slide' },
-    { id: 'huddle', youtubeId: 'OL7O5O7U4Gs', icon: '🥚', title: 'The emperor huddle', say: L.videos.huddle, after: 'huddle' },
+    { id: 'bears', youtubeId: 'mIGpzhADMC4', icon: '🐻‍❄️', title: 'Polar bear cubs on the ice', say: L.videos.bears },
+    { id: 'fox', youtubeId: '5FnJ70WwCXw', icon: '🦊', title: 'White for winter', say: L.videos.fox },
+    { id: 'penguins', youtubeId: 'A9mbCNs47FI', icon: '🐧', title: 'Penguins zoom out of the sea', say: L.videos.penguins },
+    { id: 'huddle', youtubeId: 'OL7O5O7U4Gs', icon: '🥚', title: 'The emperor huddle', say: L.videos.huddle },
     { id: 'iceberg', youtubeId: '00_-JlbIftg', icon: '🧊', title: 'An iceberg breaks off', say: L.videos.iceberg },
-    { id: 'narwhal', youtubeId: 'MXsZg1sQYvA', icon: '🦄', title: 'Narwhals', say: L.videos.narwhal, after: 'narwhal' },
+    { id: 'narwhal', youtubeId: 'MXsZg1sQYvA', icon: '🦄', title: 'Narwhals', say: L.videos.narwhal },
   ],
   passportLine: L.passport,
   createdAt: '2026-10-27',

@@ -6,6 +6,13 @@ import { vp } from '../../../../scripts/qa-lib.mjs'
 /** The first two chapters' stamps in the passport (the balloon has moved on down the trail). */
 const twoStamps = () => localStorage.setItem('kaylee-gamepack:/:world', JSON.stringify({ visited: ['poles'], stamps: { poles: ['floe', 'narwhal'] } }))
 
+/** The whole story told: every stamp and the Polar Explorer trophy (the movie ticket ends the trail). */
+const told = () => {
+  localStorage.setItem('kaylee-gamepack:/:world', JSON.stringify({ visited: ['poles'], stamps: { poles: ['floe', 'narwhal', 'coats', 'slide', 'huddle'] } }))
+  const now = new Date().toISOString()
+  localStorage.setItem('kaylee-gamepack:/:trophies', JSON.stringify([{ gameId: 'world-poles', gameTitle: 'The Poles', trophyTitle: 'Polar Explorer', emoji: '🐧', firstEarnedAt: now, lastEarnedAt: now, count: 1 }]))
+}
+
 /** Screenshots (scripts/qa-screens.mjs): how to get to each screen from a fresh start. */
 export const screens = [
   // The Poles: the globe hub, the map of the story. With no stamps (the balloon over the first stop): the whole globe
@@ -20,6 +27,7 @@ export const screens = [
   })),
   ...['globe', 'globe?side=north'].map((to) => ({ name: `poles-two-stamps-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/poles/hub/${to}`, reset: true, seed: twoStamps, wait: 1800 })),
   { name: 'poles-two-stamps-arrive', hash: '#/world/poles', reset: true, seed: twoStamps, wait: 5200 },
+  { name: 'poles-story-told', hash: '#/world/poles/hub/globe', reset: true, seed: told, wait: 1800 },
   ...['globe', 'globe?side=south'].map((to) => ({ name: `poles-all-stamps-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/poles/hub/${to}${to.includes('?') ? '&' : '?'}stamps=all`, reset: true, wait: 1800 })),
 ]
 

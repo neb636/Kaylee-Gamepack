@@ -6,6 +6,9 @@ import { STORY_ORDER } from '../../story/chapters'
 
 /** The finale's id (Place.tsx opens it once every stamp is in). */
 export const HOME = 'party'
+/** The movie ticket at the end of the trail once the whole story is told (Hub.tsx): it opens the Theater. Not on the
+ *  globe (no flag), only in the trail of pictures. */
+export const MOVIES: Stop = { id: 'movies', name: 'Real animals movies', lat: -90, pole: 'south', done: false }
 /** Where each stop's flag stands on the trail's meridian (globe/trail.ts): three up north, two down south, and home
  *  near the South Pole. */
 const STOP_LAT: Record<string, number> = { floe: 70, narwhal: 59, coats: 48, slide: -63, huddle: -72, [HOME]: -81 }
