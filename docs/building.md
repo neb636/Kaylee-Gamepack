@@ -181,12 +181,19 @@ Links point to the published main build. PR links target that PR's preview (the 
 ## Offline
 
 Deployed builds play offline: `src/offline/sw.js` (written to `dist/sw.js` with the list of every built file by
-`scripts/vite-offline.ts`) saves every file the first time the app opens online. It is **network first**: online she
-always gets the latest deploy, and the saved copies are used only when the network fails or takes over 4 s. Never make it
-cache-first. Each build saves into its own cache, and only a complete one answers first: a new deploy downloads beside
-the last complete copy (unchanged hashed files are copied over, not downloaded), and the old copy is dropped only once
-the new one has every file, so a download cut short never leaves a half-new app offline. Only `fill()` saves
-`index.html` and other unhashed files, after checking `index.html` is this build's (`tests/offline-worker.spec.ts`). It doesn't run in `npm run dev` or test browsers (add `?sw=1` to try it on `npm run preview`). Anything
+`scripts/vite-offline.ts`) saves every file the first time the app opens online. `index.html` is **network first**:
+online she always gets the latest deploy, and its saved copy is used only when the network fails, answers with a page
+that isn't the app (a wifi login page: every deploy's `index.html` carries `<meta name="gamepack-offline">`), or hasn't
+delivered the whole page within 4 s. The 4 s is a per-request fallback, not a limit on downloading the app: `fill()` has
+no deadline, and a file with no saved copy keeps waiting on the network.
+Never make `index.html` cache-first. Content-hashed files (`assets/<name>-<hash>.<ext>`) never change under one name, so
+this build's saved copy of one answers first, and a slow connection plays from the iPad. Each build saves into its own
+cache, and only a complete one answers first: a new deploy downloads beside the last complete copy (unchanged hashed
+files are copied over, not downloaded), and the old copy is dropped only once the new one has every file, so a download
+cut short never leaves a half-new app offline. A copy is saved only when it is whole: exactly the size the build
+listed, not redirected and not HTML where a file should be, so a hotel wifi login page (a 200 for every request) or a download cut short is never saved as
+the game. Only `fill()` saves `index.html` and other unhashed files, after checking `index.html` is this build's
+(`tests/offline-worker.spec.ts`). It doesn't run in `npm run dev` or test browsers (add `?sw=1` to try it on `npm run preview`). Anything
 that needs the internet (YouTube) checks `useOnline()` from the SDK and hides itself offline.
 
 ## Local commands
