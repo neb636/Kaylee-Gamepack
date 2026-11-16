@@ -6,7 +6,9 @@
 // goes in order: the trail shows only the stops she has finished and the next one, and each new picture pops in as the
 // one before it earns its stamp. Once every stamp is in (the whole story told), every picture shows and she can pick
 // any game at any time. (Starting the story over puts it back in order.) Picking one rolls the globe to its pole, then
-// opens it. Until he is home, Pebble stands beside Pola up north and Papa
+// opens it. Once the whole story is told (every stamp and the trophy), home wears its stamp and a movie ticket joins
+// the end of the trail: the real animals from the story, in the Theater. (No video plays after a chapter: it broke up
+// the story.) Until he is home, Pebble stands beside Pola up north and Papa
 // looks for him down south. The globe is still a toy: she spins it, drags the sun so summer and night swap between the
 // poles, and pokes what lives on it. The address bar follows her (sections.ts): which side faces her and where the
 // summer is. Sparkle in the corner (kit/Guide) speaks only when something is new (her first look, a new stamp, every
@@ -14,6 +16,7 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { onDevice, say, useElementSize, useLandscape, type Line, useTimers } from '../../../../../sdk'
+import { useTrophies } from '../../../../../sdk/trophies'
 import { Guide, type GuideHandle } from '../../../../kit/Guide'
 import { useSections } from '../../../../kit/sections'
 import type { PlaceProps } from '../../../../types'
@@ -23,7 +26,7 @@ import { L } from '../../lines'
 import { GLOBE_ANCHORS, PolesGlobe, type GlobeEvents, type Side } from '../../globe/globe'
 import { hubSfx } from '../../globe/sounds'
 import HUB_SECTIONS, { type HubSection } from './sections'
-import { HOME, trail, type Stop } from './stops'
+import { HOME, MOVIES, trail, type Stop } from './stops'
 
 // Per visit to the app: which friend line comes next when she taps them.
 const taps = { pola: 0, pebble: 0, papa: 0, terry: 0 }
@@ -50,9 +53,13 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const guide = useRef<GuideHandle>(null)
   const goTimer = useRef<number>(undefined)
   const { stops, next, all } = trail(meta, stamps)
+  // The whole story told: every stamp, and the finale's trophy (it stays hers after a start-over; the stamps don't).
+  const trophies = useTrophies()
+  const told = all && trophies.some((t) => t.gameId === `world-${meta.id}`)
   // The pictures she can pick: in story order the first time through (what's done, and the next one), all of them once
-  // the story has been told.
-  const open = all ? stops : stops.filter((s, i) => s.done || i === next)
+  // every stamp is in; with the story told, home is done and the movie ticket is next.
+  const open = told ? [...stops.map((s) => (s.id === HOME ? { ...s, done: true } : s)), MOVIES] : all ? stops : stops.filter((s, i) => s.done || i === next)
+  const openNext = told ? open.length - 1 : open.indexOf(stops[next])
   // A friend says it (their mouth moves on the globe), not Sparkle: no bubble in her corner.
   const friend = (l: Line) => void say(l)
   // What the address bar shows (so a copied link reproduces the moment).
@@ -66,7 +73,8 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   useEffect(() => {
     const t = timers.later(() => {
       const id = stops[next].id
-      if (all) guide.current?.once('hub:home', L.hub.home)
+      if (told) guide.current?.once('hub:movies', L.hub.movies)
+      else if (all) guide.current?.once('hub:home', L.hub.home)
       else if (stamps.length === 0) guide.current?.once('hub:welcome', L.hub.welcome)
       else if (id in L.hub.next) guide.current?.once(`hub:next:${id}`, L.hub.next[id as keyof typeof L.hub.next])
     }, 600)
@@ -109,6 +117,11 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const pick = (s: Stop) => {
     if (going) return
     hubSfx.pick()
+    if (s.id === MOVIES.id) {
+      setGoing(s.id)
+      goTimer.current = timers.later(() => openActivity('theater'), GO_MS.there)
+      return
+    }
     worldRef.current?.showPole(s.pole)
     if (s.id === HOME && !all) {
       worldRef.current?.cheer('papa')
@@ -120,7 +133,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   }
 
   // What she's stuck on, for Sparkle's hint (shown in her bubble, not said: the globe is a toy).
-  const hint: Line = all ? L.hub.home : sunOut && summer === 'middle' ? L.hub.sun : stamps.length > 0 && !sunOut && side === 'middle' ? L.hub.spin : L.hub.spots
+  const hint: Line = told ? L.hub.movies : all ? L.hub.home : sunOut && summer === 'middle' ? L.hub.sun : stamps.length > 0 && !sunOut && side === 'middle' ? L.hub.spin : L.hub.spots
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#F6EEFF', overflow: 'clip' }}>
@@ -150,7 +163,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           {onDevice('Tap to wake the globe', 'Click to wake the globe')}
         </button>
       )}
-      <Trail stops={open} next={open.indexOf(stops[next])} all={all} going={going} pick={pick} />
+      <Trail stops={open} next={openNext} all={all} going={going} pick={pick} />
       <Guide ref={guide} hint={hint} voice={false} />
     </div>
   )
@@ -240,7 +253,7 @@ function Trail({ stops, next, all, going, pick }: { stops: Stop[]; next: number;
                   padding: 0,
                 }}
               >
-                {home ? <PapaWaits found={all} /> : <img src={s.img} alt="" draggable={false} style={{ width: '84%', height: '84%', objectFit: 'contain', pointerEvents: 'none' }} />}
+                {s.id === MOVIES.id ? <Ticket /> : home ? <PapaWaits found={all} /> : <img src={s.img} alt="" draggable={false} style={{ width: '84%', height: '84%', objectFit: 'contain', pointerEvents: 'none' }} />}
                 {s.done && <StampMark />}
                 {isNext && (
                   <motion.span animate={{ y: [0, -4, 0], rotate: [-5, 5, -5] }} transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }} style={{ position: 'absolute', left: '-22%', top: '-34%', width: '52%', pointerEvents: 'none' }}>
@@ -303,6 +316,21 @@ function PapaWaits({ found }: { found: boolean }) {
       <circle cx="59.500" cy="29" r="1.900" fill="#2B2330" />
       <path d="M45 35.500q5-4.500 10 0q-5 6-10 0z" fill="#3A3A4A" stroke="#2B2330" strokeWidth="1.200" strokeLinejoin="round" />
       <path d="M50 15.500c-3.600-6.500-12.500-2.500-9 3.800c2 3.600 6 5.600 9 8.200c3-2.600 7-4.600 9-8.200c3.500-6.300-5.400-10.300-9-3.800z" fill={found ? '#FF4F9A' : '#fff'} stroke={found ? '#fff' : '#FF8FB8'} strokeWidth="2" transform="translate(0 -11) scale(1 .9)" />
+    </svg>
+  )
+}
+
+/** The movie ticket at the end of the told story: a pink ticket with a play button (the Theater's real animals). */
+function Ticket() {
+  return (
+    <svg viewBox="0 0 100 100" style={{ width: '82%', height: '82%', pointerEvents: 'none' }} aria-hidden>
+      <g transform="rotate(-10 50 50)">
+        <path d="M14 28h72a4 4 0 0 1 4 4v10a8 8 0 0 0 0 16v10a4 4 0 0 1-4 4H14a4 4 0 0 1-4-4V58a8 8 0 0 0 0-16V32a4 4 0 0 1 4-4z" fill="#FF8FB8" stroke="#2B2330" strokeWidth="3" strokeLinejoin="round" />
+        <path d="M70 31v38" stroke="#fff" strokeWidth="2.5" strokeDasharray="4 4" />
+        <circle cx="42" cy="50" r="15" fill="#fff" stroke="#2B2330" strokeWidth="2.5" />
+        <path d="M37 42.5l13 7.5-13 7.5z" fill="#FF4F9A" stroke="#2B2330" strokeWidth="2" strokeLinejoin="round" />
+        <path d="M80 44l1.8 3.7 4 .6-2.9 2.8.7 4-3.6-1.9-3.6 1.9.7-4-2.9-2.8 4-.6z" fill="#FFC83D" stroke="#2B2330" strokeWidth="1.2" strokeLinejoin="round" />
+      </g>
     </svg>
   )
 }

@@ -46,6 +46,11 @@ getting from one to the other means going down the whole world, through the warm
   the bottom with Sparkle's balloon on the next one, shows only the finished chapters and the next one; each new
   picture appears when the one before earns its stamp. Once every stamp is in, every picture shows and she can pick
   any game at any time. Starting the story over puts it back in order.
+- **The real animals' videos wait for the end.** A video after each chapter broke up the story (the user, 2026-11-16),
+  so none plays after a chapter: the stamp goes straight back to the globe and the next picture. Once the whole story
+  is told (every stamp and the trophy), home wears its stamp and a movie ticket joins the end of the trail, with
+  Sparkle's "Movie time!": it opens the Theater, every real animal from the story. The Theater button in the top bar
+  still opens them any time.
 - **A chapter** is a film, the game, a film, then its stamp and sticker (`Place.tsx`, `story/chapters.ts`). The films
   play the first time; a link to one of a game's sections goes straight to the game.
 - **Iceberg Maker is gone** (all four sections). Its lessons moved into the Narwhal Ride, where she sees them from the

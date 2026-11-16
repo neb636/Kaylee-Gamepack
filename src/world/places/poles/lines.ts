@@ -39,7 +39,7 @@ export const L = {
     chick: 'Emperor penguin dads keep the egg warm on their feet.',
     narwhal: 'Narwhals have a long tooth that grows out like a unicorn horn!',
   },
-  // The Theater's real-world videos (meta.videos), offered after an activity or picked from the shelf.
+  // The Theater's real-world videos (meta.videos), picked from its shelf (the movie ticket at the end of the story).
   videos: {
     bears: 'Want to see real polar bear cubs on the ice?',
     fox: 'Want to see foxes that turn white for winter?',
@@ -62,6 +62,9 @@ export const L = {
       slide: 'Next stop: the bottom of the world!',
       huddle: 'Next stop: the long, dark night.',
     },
+    // The whole story told (every stamp and the trophy), once: the movie ticket at the end of the trail opens the real
+    // animals' videos (the Theater).
+    movies: "Movie time! Let's see the real animals from our story!",
     // Every stamp is in, once: home is the last picture on the trail.
     home: onDevice('Every stamp! Tap the last picture to fly home!', 'Every stamp! Click the last picture to fly home!'),
     // Left alone a while: shown in Sparkle's bubble only, never said by itself (a hub doesn't nag). She says one if tapped.
