@@ -191,8 +191,13 @@ export class PlaneRide extends Stage {
       this.put(this.riders[id], 0, SEAT_Y, 0, 'sit', -90)
     }
     // A toy with legs of its own (the modelled Mom) sits with them out over the seat: her strap goes over her lap.
-    // (Dad's toy sits deeper in the hips: his lap is higher.)
-    for (const id of ['ji', 'nick'] as const) if (this.riders[id].rig.legL) this.straps[id].position.y = id === 'nick' ? 0.24 : 0.12
+    // (Dad's toy has thick legs that sit higher and wider apart: his strap goes on top of them, wider.)
+    for (const id of ['ji', 'nick'] as const) if (this.riders[id].rig.legL) this.straps[id].position.y = id === 'nick' ? 0.33 : 0.12
+    if (this.riders.nick.rig.legL) {
+      // (And forward of his round tummy.)
+      this.straps.nick.position.x = -0.2
+      this.straps.nick.scale.z = 1.45
+    }
     // Starting from a section link: the plane already where that part begins.
     this.sec = start
     if (start !== 'takeoff') {

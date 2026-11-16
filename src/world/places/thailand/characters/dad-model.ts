@@ -41,8 +41,9 @@ const ARM_TILT = 1.2
 const INK = 0.35 / 0.75
 const BODY_INK = 1.8 * INK
 const FACE_INK = 1.2 * INK
-/** His mint, as split-nick.py's mint() painted it into the texture (the lids). */
-const SKIN = '#A8EAD5'
+/** His mint, as split-nick.py's mint() painted it into the texture (the lids, the barber's plug under his horn). */
+export const DAD_SKIN = '#A8EAD5'
+const SKIN = DAD_SKIN
 const SMILE = '#4A2A2A'
 const MOUTH = '#7A2745'
 const TONGUE = '#FF8FA8'

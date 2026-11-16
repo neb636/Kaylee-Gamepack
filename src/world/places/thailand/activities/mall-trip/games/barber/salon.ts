@@ -18,11 +18,13 @@
 import { BufferAttribute, CapsuleGeometry, Color, Group, IcosahedronGeometry, Mesh, OctahedronGeometry, Quaternion, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, spendHint, wobble, type Line } from '../../../../../../../sdk'
 import type { Avatar } from '../../../../characters/avatar'
+import { DAD_SKIN } from '../../../../characters/dad-model'
 import { LOOKS } from '../../../../characters/looks'
 import { L } from '../../../../lines'
 import type { Member } from '../../../../characters/member'
 import type { AnchorInfo } from '../../../../../../engine3d/Anchors'
 import type { Shot } from '../../../../../../engine3d/camera'
+import type { Bag } from '../../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../../engine3d/geo'
 import { PAL } from '../../../../../../engine3d/toon'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../../trip/legs/stage'
@@ -165,7 +167,7 @@ export class Salon extends Stage {
     const R = nr.face.R
     const tip = nr.spots?.horn
     let horn: Object3D
-    if (nr.horn && tip) horn = ownHorn(nr.head, nr.horn, new Vector3(...tip))
+    if (nr.horn && tip) horn = ownHorn(nr.head, nr.horn, new Vector3(...tip), bag)
     else {
       horn = solid(P.cone(0.155 * R, 0.8 * R, '#FFC83D', { at: [0, 0.4 * R, 0] }), bag, 2.5)
       horn.rotation.x = 0.28
@@ -1051,7 +1053,7 @@ export class Salon extends Stage {
 
 /** A modelled toy's own horn on a pivot of its own at the middle of its base (head-local), its y axis running up to
  *  the tip, so a snip squashes and wobbles the real horn from its root. */
-function ownHorn(head: Object3D, horn: Object3D, tip: Vector3): Group {
+function ownHorn(head: Object3D, horn: Object3D, tip: Vector3, bag: Bag): Group {
   head.updateWorldMatrix(true, true)
   const toHead = head.matrixWorld.clone().invert()
   // Its base: the middle of the lowest of its vertices (head-local).
@@ -1069,6 +1071,12 @@ function ownHorn(head: Object3D, horn: Object3D, tip: Vector3): Group {
   pivot.position.copy(base)
   pivot.quaternion.copy(new Quaternion().setFromUnitVectors(new Vector3(0, 1, 0), tip.clone().sub(base).normalize()))
   head.add(pivot)
+  // The head has a hole where the horn was cut from it: a skin-coloured plug fills it while a snip squashes the horn.
+  const r = ring.reduce((a, p) => a + p.distanceTo(base), 0) / Math.max(1, ring.length)
+  const plug = solid(P.sphere(r * 1.05, DAD_SKIN, { scale: [1, 0.45, 1] }, 12), bag, 0)
+  plug.position.copy(base)
+  plug.quaternion.copy(pivot.quaternion)
+  head.add(plug)
   pivot.updateWorldMatrix(true, false)
   pivot.attach(horn)
   return pivot

@@ -439,8 +439,8 @@ export class SametSpeedboat implements World3D {
     // A modelled head's goes over its hair, on its crown (rig.spots).
     const crown = this.nick.rig.spots?.crown
     if (crown) {
-      this.nickCap.position.set(crown[0], crown[1] + 0.06, crown[2])
-      this.nickCap.scale.setScalar(1.12)
+      this.nickCap.position.set(crown[0], crown[1] + 0.12, crown[2])
+      this.nickCap.scale.setScalar(0.92)
     } else this.nickCap.position.set(0, nf.headY + nf.R * 0.55, 0)
     this.capY = this.nickCap.position.y
     this.nick.rig.head.add(this.nickCap)
