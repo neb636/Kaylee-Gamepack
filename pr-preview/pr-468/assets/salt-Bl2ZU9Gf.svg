@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>The salt wells</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ece6ff"/><stop offset="1" stop-color="#cdbfff"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <pattern id="weave" width="10" height="8" patternUnits="userSpaceOnUse">
+      <rect width="10" height="8" fill="#e3bb7a"/>
+      <rect x="0.8" y="0.8" width="3.6" height="2.6" rx="1.2" fill="#fdeecc"/>
+      <rect x="5.8" y="4.6" width="3.6" height="2.6" rx="1.2" fill="#fdeecc"/>
+      <rect x="5.6" y="0.8" width="3.8" height="2.6" rx="1.2" fill="#f5dba8"/>
+      <rect x="0.6" y="4.6" width="3.8" height="2.6" rx="1.2" fill="#f5dba8"/>
+    </pattern>
+    <path id="basketP" d="M22 64H82L77 99C76.5 102 74 104 70 104H34C30 104 27.5 102 27 99Z"/>
+    <clipPath id="basket"><use href="#basketP"/></clipPath>
+    <path id="saltP" d="M21 63C23 53 31 43 42 37C47 34 51 32.5 55 32.5C59 32.5 63 34 67 37C77 43 83 53 85 63Z"/>
+    <clipPath id="salt"><use href="#saltP"/></clipPath>
+    <clipPath id="bucket"><path d="M77 46H101L98 72C97.8 73.5 96.5 74.5 95 74.5H83C81.5 74.5 80.2 73.5 80 72Z"/></clipPath>
+    <!-- a salt crystal: a little cube, lit on top -->
+    <g id="cube">
+      <path d="M0-4L3.6-2L0 0L-3.6-2Z" fill="#fff"/>
+      <path d="M-3.6-2L0 0V4.2L-3.6 2.2Z" fill="#ece6ff"/>
+      <path d="M3.6-2L0 0V4.2L3.6 2.2Z" fill="#c9bff0"/>
+    </g>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+
+  <!-- the wooden bucket, just pulled up the well on its rope -->
+  <g transform="rotate(7 89 40)">
+    <path d="M89-4V34" stroke="#e3bb7a" stroke-width="3" stroke-linecap="round"/>
+    <path d="M78.5 47C79 38 84 34 89 34C94 34 99 38 99.5 47" fill="none" stroke="#e3bb7a" stroke-width="2.6" stroke-linecap="round"/>
+    <g clip-path="url(#bucket)">
+      <rect x="76" y="44" width="26" height="32" fill="#a46e4b"/>
+      <rect x="74" y="44" width="21" height="32" fill="#c99266"/>
+      <path d="M83 48V74M89 48V74M95 48V74" stroke="#a46e4b" stroke-width="2"/>
+      <path d="M81 48V72" stroke="#e5b78f" stroke-width="2.4" stroke-linecap="round"/>
+      <rect x="76" y="51" width="26" height="3.5" fill="#9790ba"/>
+      <rect x="76" y="65" width="26" height="3.5" fill="#9790ba"/>
+    </g>
+    <ellipse cx="89" cy="46" rx="12" ry="3.6" fill="#a46e4b"/>
+    <ellipse cx="89" cy="46.6" rx="10" ry="2.6" fill="#3fc1cf"/>
+    <ellipse cx="86" cy="46.2" rx="4.5" ry="1.2" fill="#8fe3ea"/>
+  </g>
+  <!-- drips -->
+  <path d="M84 80C85.5 82 86.5 83.5 86.5 84.6A2.5 2.5 0 0 1 81.5 84.6C81.5 83.5 82.5 82 84 80Z" fill="#3fc1cf"/>
+  <path d="M90 87C91.2 88.6 92 89.8 92 90.7A2 2 0 0 1 88 90.7C88 89.8 88.8 88.6 90 87Z" fill="#8fe3ea"/>
+
+  <!-- the woven bamboo basket -->
+  <ellipse cx="52" cy="105" rx="31" ry="4.5" fill="#4b3a8c" opacity="0.15"/>
+  <g clip-path="url(#basket)">
+    <rect x="20" y="62" width="64" height="44" fill="url(#weave)"/>
+    <path d="M70 62H84V106H68Z" fill="#6a57c7" opacity="0.18"/>
+  </g>
+
+  <!-- heaped up with white salt: lit on the left, cool shade on the right, crystals -->
+  <g clip-path="url(#salt)">
+    <rect x="20" y="28" width="66" height="36" fill="#d6cdf3"/>
+    <path d="M21 63C23 53 31 43 42 37C47 34 51 32.5 55 32.5C58 32.5 60 33 62 34C64 44 65 54 66 63Z" fill="#fbf9ff"/>
+    <path d="M29 55C32 48 37 43 44 39" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    <g fill="#e4ddf6"><circle cx="36" cy="58" r="1.2"/><circle cx="48" cy="48" r="1.2"/><circle cx="58" cy="44" r="1.2"/><circle cx="50" cy="59" r="1.2"/><circle cx="44" cy="54" r="1"/></g>
+    <g fill="#bdb2ea"><circle cx="72" cy="50" r="1.2"/><circle cx="76" cy="58" r="1.2"/><circle cx="68" cy="43" r="1"/></g>
+  </g>
+  <use href="#cube" transform="translate(40 51)"/>
+  <use href="#cube" transform="translate(54 39) scale(0.85)"/>
+  <use href="#cube" transform="translate(69 50) scale(0.9)"/>
+  <use href="#cube" transform="translate(57 54) scale(0.8)"/>
+  <use href="#cube" transform="translate(30 59) scale(0.7)"/>
+  <use href="#cube" transform="translate(77 59) scale(0.7)"/>
+  <!-- the rim -->
+  <rect x="19" y="60" width="66" height="7.5" rx="3.75" fill="#e3bb7a"/>
+  <path d="M74 60H81.3C83.3 60 85 61.7 85 63.7C85 65.8 83.3 67.5 81.3 67.5H74Z" fill="#c99c5c"/>
+  <path d="M23 62.5H66" stroke="#fdeecc" stroke-width="2" stroke-linecap="round"/>
+  <!-- a few crystals spilled by the basket -->
+  <use href="#cube" transform="translate(16 104) scale(0.8)"/>
+  <use href="#cube" transform="translate(88 106) scale(0.7)"/>
+
+  <!-- sparkles -->
+  <path d="M57 15v8M53 19h8M34 30v5M31.5 32.5h5M76 26v4M74 28h4" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+</svg>
