@@ -1,7 +1,7 @@
 // Captain Kaylee's boat trip (plan: planning/around-the-world/thailand/boat-trip.md (retired; in git history)). It runs the trip's legs in order,
 // each its own 3D world in the shared view:
 //
-//   invite, pack, goodbye   Agong's own house (activities/hub/house.ts) with the trip's plugin (trip/legs/house-plugin.ts):
+//   invite, pack, goodbye   the Thailand house (activities/hub/house.ts) with the trip's plugin (trip/legs/house-plugin.ts):
 //                           Mom asks (Ask.tsx) by the elephant map, packing (with the suitcase card and ✅ here),
 //                           the goodbye at the shutter and Aunty Sri's van
 //   airport                 the van pulls away and they're at the airport: the x-ray belt (trip/legs/airport.ts)
@@ -25,11 +25,11 @@
 //                           in its own lagoon (race/race.ts, its screen race/RaceLayer.tsx), three laps against the
 //                           village kids and the macaque; she always wins, lifts the trophy on the podium (it goes in
 //                           her Trophy Room and rides in the bow), and 🚤 takes her back out of the gate
-//   (the end)               The airport on the Krabi map ends the trip (endTrip): her best photo goes on Agong's wall
+//   (the end)               The airport on the Krabi map ends the trip (endTrip): her best photo goes on the photo wall
 //                           by itself, then the stamp, and back to the Thailand map. The Thailand map's Krabi pin opens
 //                           straight on the Krabi map.
-//   home                    (only its links now) Agong's house again (the plugin's `home` leg): the flight home, Aunty Sri's van at the door,
-//                           the photo she picks (PhotoFan.tsx) goes on Agong's wall (saved on the iPad, trip/wall-photos.ts),
+//   home                    (only its links now) the Thailand house again (the plugin's `home` leg): the flight home, Aunty Sri's van at the door,
+//                           the photo she picks (PhotoFan.tsx) goes on the photo wall (saved on the iPad, trip/wall-photos.ts),
 //                           the cousins look up from their phones, and the stamp (onDone)
 //
 // Everyone speaks in their own recorded voice (lines.ts; trip/legs/Guide.tsx shows the words with who said them, and
@@ -88,7 +88,7 @@ import { BEEN, BOAT_TRIP, LEG_OF_BEEN, PASS, PUNCH, WORLD_OF, type Been, type Tr
 interface Progress {
   at: BoatSection | null
   packed: string
-  /** Whole trips done, Mom's question to the photo on Agong's wall (after the first, replays are shorter). */
+  /** Whole trips done, Mom's question to the photo on the photo wall (after the first, replays are shorter). */
   trips?: number
   /** Krabi's places done on this trip (the pier, then 🐘 still to come; cleared at home). */
   been?: Been[]
@@ -174,7 +174,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   const [atPier, setAtPier] = useState(false)
   const [landed, setLanded] = useState(false)
   const [phase, setPhase] = useState<Phase | null>(null)
-  // Her photos fan out once Agong has asked for his (the fan would cover his words).
+  // Her photos fan out once Aunty Jum has asked for his (the fan would cover his words).
   const [fanReady, setFanReady] = useState(false)
   useEffect(() => {
     if (phase !== 'pick') return setFanReady(false)
@@ -221,7 +221,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   const [lapLink] = useState(() => Number(flag('lap') ?? 1))
   const arrowEls = useRef(new Map<string, HTMLElement>())
   // A link into the bay with photos: they're staged and taken when the bay is first built (a `home` link's and a
-  // `sunset` link's too, with at least the Nail Island's, so there's always one to give Agong).
+  // `sunset` link's too, with at least the Nail Island's, so there's always one to give Aunty Jum).
   const linkPhotos = useRef(((): PhotoKind[] => {
     const asked = list(flag('photos'), KINDS)
     if (asked.length || (!prep.current && start !== 'sunset')) return WORLD_OF[start ?? 'invite'] === 'bay' || prep.current ? asked : []
@@ -408,7 +408,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     }
   }, [atPier, mount.world, changNext])
 
-  /** The trip is over (✈️🏠): her best photo goes on Agong's wall by itself (the Nail Island's, else the newest that
+  /** The trip is over (✈️🏠): her best photo goes on the photo wall by itself (the Nail Island's, else the newest that
    *  isn't a selfie), the trip counts as done, then the stamp and back to the Thailand map (Place.tsx). */
   const endTrip = () => {
     const st = state.current
@@ -482,7 +482,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       return next
     })
 
-  // Home: the photo she picked goes on Agong's wall (saved on the iPad), the trip counts as done, then the stamp.
+  // Home: the photo she picked goes on the photo wall (saved on the iPad), the trip counts as done, then the stamp.
   const chosen = useRef<string | null>(null)
   const finished = useRef(false)
   useEffect(() => {
@@ -529,7 +529,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       }, BOAT_TRIP, replay)
       tripRef.current = trip
       trip.setHintElement(() => hintRef.current)
-      // Coming home: last trip's photo is still on the wall, until Agong hangs the new one.
+      // Coming home: last trip's photo is still on the wall, until Aunty Jum hangs the new one.
       trip.setWall(newestByTrip(wallPhotos).get('boat-trip')?.src ?? null)
       w = new House(renderer, { section: s === 'goodbye' || s === 'home' ? 'street' : 'upstairs' }, { onSpot: () => {}, onArrived: () => {} }, trip)
     } else if (world === 'airport') w = new Airport(renderer, leg, items)

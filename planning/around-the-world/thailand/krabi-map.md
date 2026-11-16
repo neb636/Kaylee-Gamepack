@@ -42,7 +42,7 @@ still straddles the shore (none).
   elephant with bananas over Baan Chang, 🚤 a longtail under a rock tower over the pier. Tap the pin (or the place):
   it hops and spins in sparkles, the camera dives in and that part of the trip opens. Any order.
 - **Home:** after one place the ✈️ plane's pin pops up over the airport: tap it, the plane takes off and the trip ends
-  (photo on Agong's wall, the stamp, back to the Thailand map).
+  (photo on the photo wall, the stamp, back to the Thailand map).
 - **Coming back:** after the splash at Baan Chang and at the pier at sunset, a big 🗺️ goes back to the map, where
   that place's stamp lands in its pin's place. Away from the map, the top-left button goes back to it.
 - **The places to come** (Ao Nang's beach, Koh Lanta's lighthouse) have no pin: they're toys to poke (the sailfish

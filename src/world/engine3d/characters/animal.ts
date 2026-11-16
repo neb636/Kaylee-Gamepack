@@ -8,7 +8,7 @@
 // a line around the features that sit on top (a muzzle, a sleeve, an ear), like the concept pictures. Blush and the
 // shine in the eyes have no outline.
 //
-// Sizes are fractions of the character's height H, so the same recipe makes Agong and little Putter; `chub` makes the
+// Sizes are fractions of the character's height H, so the same recipe makes the grown-ups and little Putter; `chub` makes the
 // body rounder (Mom, and Jum the elephant).
 import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry, type Object3D } from 'three'
 import type { Bag } from '../dispose'

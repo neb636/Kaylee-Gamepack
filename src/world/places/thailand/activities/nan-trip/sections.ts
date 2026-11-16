@@ -1,7 +1,7 @@
 // The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.md), as deep-linkable sections:
 // #/world/thailand/nan-trip/<section>?stops=<done so far>&... The trip loop (step 7): Mom asks where to (invite:
 // 🚤, 🛝🍕 or 🏔️🚙), packing for the mountains (pack?packed=...), the goodbye and Aunty Sri's van (goodbye), the x-ray
-// belt (airport), the window seat north to Nan (takeoff, fly, land), and home (home?photos=...: the flight home, Agong
+// belt (airport), the window seat north to Nan (takeoff, fly, land), and home (home?photos=...: the flight home, Aunty Jum
 // asks for his photo, she picks one for his wall, the stamp). Then, straight off the plane: the Nan map
 // (map?stops=..., step 6), the trip's hub: a toy diorama where she picks the next stop (or drags the little Pajero
 // there); the mountain road (drive?road=city|valley|sky|three&to=<stop>, step 1); Baan Huanam Mushroom Farm
@@ -50,7 +50,7 @@ const NAN_SECTIONS = defineSections('thailand', 'nan-trip', {
   sections: [
     { id: 'invite', name: 'Mom asks: where shall we go? (🚤, 🛝🍕 or 🏔️🚙)', params: ['replay'], group: 'Getting there' },
     { id: 'pack', name: 'Pack for the mountains: the raincoat, the rain boots, the umbrella', params: ['packed'], group: 'Getting there' },
-    { id: 'goodbye', name: "Goodbye at Agong's house, into Aunty Sri's van", params: ['packed', 'replay'], group: 'Getting there' },
+    { id: 'goodbye', name: "Goodbye at the Thailand house, into Aunty Sri's van", params: ['packed', 'replay'], group: 'Getting there' },
     { id: 'airport', name: 'The airport: the suitcase on the x-ray belt', params: ['packed'], group: 'Getting there' },
     { id: 'takeoff', name: 'The window seat: seatbelt on, take off', params: ['packed', 'replay'], group: 'Getting there' },
     { id: 'fly', name: 'The window seat: the tray, snacks, Thailand below, north to Nan', params: ['packed', 'replay'], group: 'Getting there' },
@@ -65,7 +65,7 @@ const NAN_SECTIONS = defineSections('thailand', 'nan-trip', {
     { id: 'podium', name: "The Nan Mountain Cup (greybox): the podium, gold, or silver and the winner's gift", params: ['track', 'place', 'cup', 'lose', 'stops', 'packed'], group: 'The Nan Mountain Cup (greybox)', links: [{ label: 'The podium: gold, the home rival on 2', params: { track: 'forest', place: '1' } }, { label: 'The podium: silver, a high five to Grandma Taeng and her ribbon on the kart', params: { track: 'steps', place: '2', cup: 'forest:1,steps:2' } }, { label: "The last race's podium, then 🏆", params: { track: 'cloud', place: '1', cup: 'forest:1,steps:2,cloud:1' } }] },
     { id: 'cup-win', name: 'The Nan Mountain Cup (greybox): the Cup ceremony, the champion’s Cup, the photo, the stamp', params: ['cup', 'stops', 'packed'], group: 'The Nan Mountain Cup (greybox)', links: [{ label: 'The Cup ceremony: the scoreboard, lift the Cup, the photo, the stamp on Nan town', params: { cup: 'forest:1,steps:2,cloud:1' } }] },
     { id: 'three', name: 'The "number 3" from the viewpoint: its bends pop one, two, three, the photo, then home', params: ['to', 'stops', 'packed'], group: 'Viewpoint and home', links: [{ label: 'The "number 3" from the viewpoint: one, two, three, Mom\'s photo, ✈️🏠', params: { stops: 'mushrooms,rice,salt' } }, { label: 'From the lookout: one, two, three, Mom\'s photo, 🗺️ back to the map', params: { to: 'lookout' } }] },
-    { id: 'home', name: "Home: the flight, Agong's photo, the frame on his wall, the stamp", params: ['packed', 'photos'], group: 'Viewpoint and home' },
+    { id: 'home', name: "Home: the flight, the photo for Aunty Jum, the frame on the wall, the stamp", params: ['packed', 'photos'], group: 'Viewpoint and home' },
   ],
 })
 export default NAN_SECTIONS

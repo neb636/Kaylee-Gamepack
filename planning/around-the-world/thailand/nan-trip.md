@@ -1,6 +1,6 @@
 # 🏔️ The Nan Road Trip
 
-Built and on for Kaylee: the third Thailand trip, from Mom's card to Agong's wall · Family trip · updated 2026-10-28
+Built and on for Kaylee: the third Thailand trip, from Mom's card to the photo wall · Family trip · updated 2026-10-28
 
 The plane lands in the green valley and the big Pajero is waiting on the Nan map. Mom drives and Kaylee steers it round the bends of the mountains into the clouds. At each stop she makes something the mountains make: she mists mushrooms until pink ones pop out, fills the rice steps with water, and boils salt from a well. On the way home the road draws a giant **3**.
 
@@ -72,7 +72,7 @@ So the game feels like the place.
 
 ## 🗺️ The shape of it
 
-🏠 Mom asks (where to? 🚤 🛝🍕 🏔️🚙) → ✈️ The way there (pack, goodbye, van, airport, window seat: Bangkok → Nan) → 🗺️ The Nan map ⇄ drive ⇄ a stop (mushrooms · rice · salt, any order) → 3️⃣ The “3” road (to the airport) → 🖼️ Fly home (the photo on Agong's wall)
+🏠 Mom asks (where to? 🚤 🛝🍕 🏔️🚙) → ✈️ The way there (pack, goodbye, van, airport, window seat: Bangkok → Nan) → 🗺️ The Nan map ⇄ drive ⇄ a stop (mushrooms · rice · salt, any order) → 3️⃣ The “3” road (to the airport) → 🖼️ Fly home (the photo on the photo wall)
 
 ### Each leg
 
@@ -99,7 +99,7 @@ So the game feels like the place.
 | **Rice farm + café** | `rice` | ~3 s | 50-70 | 1 line | lead Kaylee: plant, shoo the birds, cut; bang the grains |
 | **Bo Kluea** | `salt` | ~5 s | 25-40 | 1 line | dip, pour, stoke, scoop |
 | The “3” road | `three` | at once | 15-25 | 0 lines | steer down the hairpins, the 3 from above |
-| Home | `home` | 20-30 s | 2-4 | 1 line | pick the photo for Agong's wall |
+| Home | `home` | 20-30 s | 2-4 | 1 line | pick the photo for the photo wall |
 | **Total** |  | **~10-17 min** (all three stops) | **~150-225** |  |  |
 
 > **🔀 Any order, as Kaylee asked**
@@ -312,7 +312,7 @@ Activity `nan-trip`: `activities/nan-trip/sections.ts`. Every param has a defaul
 11. `#/world/thailand/nan-trip/rice` Sapan's rice farm and Stop Time Cafe (reads stops, round)
 12. `#/world/thailand/nan-trip/salt` Bo Kluea: salt from the well (reads stops, round)
 13. `#/world/thailand/nan-trip/three` The “3” road from above (reads stops)
-14. `#/world/thailand/nan-trip/home` Home: the photo on Agong's wall, the stamp (reads packed, photos)
+14. `#/world/thailand/nan-trip/home` Home: the photo on the photo wall, the stamp (reads packed, photos)
 
 ### Every round that's built
 
@@ -339,7 +339,7 @@ Activity `nan-trip`: `activities/nan-trip/sections.ts`. Every param has a defaul
 💗. `#/world/thailand/nan-trip/map?stops=mushrooms,rice` After two stops: the stamps, the airport opens
 🍄. `#/world/thailand/nan-trip/drive?road=valley&to=mushrooms` Picked on the map: the farm opens at the end of the road
 3️⃣. `#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt` The 3 from above: one, two, three, the photo
-🏠. `#/world/thailand/nan-trip/home?photos=deck,three,pizza,salt` Home: pick one of the four Nan photos for Agong's wall
+🏠. `#/world/thailand/nan-trip/home?photos=deck,three,pizza,salt` Home: pick one of the four Nan photos for the photo wall
 
 ### Params
 
@@ -474,7 +474,7 @@ Shapes in the toon look, no voices, no art. The trip is joined up from the renta
 
 ### Step 7, the trip loop ([done] · 2026-10-25)
 
-The whole trip joined up: Mom's card, packing for the mountains, the plane north, the stops, the 3's photo, home to Agong's wall and the stamp.
+The whole trip joined up: Mom's card, packing for the mountains, the plane north, the stops, the 3's photo, home to the photo wall and the stamp.
 
 - **Mom's card** (`trip/legs/Ask.tsx`) has a third picture button, 🏔️🚙 the mountains. It shows only on Nan's own card (`tripChoices`): the house and the mall day still offer only the trips in the game, so Kaylee can't get in until step 10. The mall day's card now opens whichever trip she picks (`onTrip`), not only the boat.
 - **`NAN_TRIP`** (`activities/nan-trip/trip.ts`): packing with `pack.hint: 'cool'`, Aunty Sri's van, the x-ray belt, the window seat Bangkok → Nan (`PLACES.nan`, the seat-back map flies north), the goodbye with just the three of them, and coming home with the photo she picks (`gift: 'photo'`, the boat trip's way: Agong asks for his photo).
@@ -578,7 +578,7 @@ Filled in at planning time, to be re-checked on the iPad.
 - 👆 **Core verbs**: Steer (the road), mist (the mushrooms), pour (the rice steps and the salt well). Each deepens three times; the road is the verb that comes back between every stop.
 - 🙌 **Hands busy**: One line at each stop, then playing. Driving starts at once. Sparkle speaks only for new things or after 8 s.
 - 🔢 **Touches**: 15-30 per drive, 20-40 per stop.
-- 🤔 **Choices**: Which trip, what to pack, which stop next, where on the road, how silly to drive, which mushrooms, where to plant, the photo for Agong's wall.
+- 🤔 **Choices**: Which trip, what to pack, which stop next, where on the road, how silly to drive, which mushrooms, where to plant, the photo for the photo wall.
 - 👉 **Pokeables**: At least five at every stop and on every road.
 - 🌱 **Grows**: The map's stamps; the basket fills; the valley turns from brown to shiny to green; the pan turns to salt.
 - 🎉 **Surprise**: Popping out above the cloud; the giant bouncy mushroom; Dad in a mushroom hat; the salty face; the road drawing a 3.

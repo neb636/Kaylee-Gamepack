@@ -2,7 +2,7 @@
 
 The full loop built · Toy in Agong's house · updated 2026-10-31
 
-Kaylee loves the avatar maker in Roblox, so she gets one in Thailand. In her room at Agong's she opens her wardrobe and dresses her unicorn herself: she drags a crown, heart sunglasses, fairy wings or light-up shoes onto herself and they pop on, and she drops paint on her dress, her hair or her fur to change its color. What she picks is saved on the iPad, and she wears it **everywhere in Thailand**: the house, every trip, every mini game and the photos on Agong's wall. When a game needs its own hat (the chef's hat, the vet's cap), the game's hat wins for that game and hers comes back afterwards.
+Kaylee loves the avatar maker in Roblox, so she gets one in Thailand. In her room at Agong's she opens her wardrobe and dresses her unicorn herself: she drags a crown, heart sunglasses, fairy wings or light-up shoes onto herself and they pop on, and she drops paint on her dress, her hair or her fur to change its color. What she picks is saved on the iPad, and she wears it **everywhere in Thailand**: the house, every trip, every mini game and the photos on the photo wall. When a game needs its own hat (the chef's hat, the vet's cap), the game's hat wins for that game and hers comes back afterwards.
 
 **Next:** nothing waiting. Her play diary says whether it needs more.
 
@@ -142,7 +142,7 @@ Every scene in Thailand builds Kaylee the same way, so her saved look goes on in
 - 🚤 **Boat trip**: the bay, the race, Baan Chang
 - 🛝 **Mall day**: HarborLand, the frame, every mini game, the race slide, Sky Pod, Pizza Co.
 - 🏔️ **Nan**: the Pajero, mushrooms, rice, salt
-- 🖼️ **Agong's wall**: new photos show her in that day's look
+- 🖼️ **the photo wall**: new photos show her in that day's look
 - 🔬 **The character lab**: for the user: any look, any pose
 
 > **👀 The payoff: being seen**
@@ -182,7 +182,7 @@ Every clash in the code today, and the one rule (plus a few small ones) that sol
 - 🪑 **3. Wings fold when she sits**: In a car seat, on a stool, a couch, a booster seat, a slide or the donut ring, wings fold flat and the cape drapes; lying down (pillows, the canoe in the cave, the straw pile) they tuck away. Folded, they stay inside the circle she walks in, so she never snags on furniture. They spread when she stands still, and flap when she hops.
 - 👟 **4. Shoes off in the house**: Like a real Thai home: at Agong's door her shoes hop onto the shoe rack (it's already by the door) and back on when she goes out to the street. A real culture fact she does with her feet. In the wardrobe she can still try them on, on the rug.
 - ✋ **5. Her hands stay free**: No things to hold in the wardrobe (for now). Every game puts things in her hands (the stethoscope, the sickle, the key fob, the boxing gloves, the photo for Agong, the trophy), and none of them will ever fight with her look.
-- 🖼️ **6. Photos remember**: A photo on Agong's wall shows what she wore that day. Changing her look later doesn't change old photos.
+- 🖼️ **6. Photos remember**: A photo on the photo wall shows what she wore that day. Changing her look later doesn't change old photos.
 - 🙏 **7. Respect**: For a wai (the spirit house, the altar, the little shrine, the village's mosque dome, the wai kru in Muay Thai) her hat comes off into her hooves and goes back on after. The user's call (see below). Sacred things still never wobble.
 - 👨‍👩‍👧 **8. Everyone still knows her**: She's always a unicorn and her face never changes, so the family (and Kaylee) always know who she is. A bare start (no saved look) is exactly today's Kaylee.
 
@@ -251,7 +251,7 @@ Every clash in the code today, and the one rule (plus a few small ones) that sol
 16. `#/world/thailand/hub/street?at=spirit-house&look=cap` Hat off for a wai at the spirit house
 17. `#/world/thailand/hub/upstairs?at=pillows&look=fairy,crown` Wings fold on the mattress and pillows
 18. `#/world/thailand/nan-trip/rice?look=crown,hearts,fairy` Rice farm: the ngob instead of her crown
-19. `#/world/thailand/mall-trip/home?look=fur-mint,hair-pink` Mall photo for Agong's wall, in mint fur and pink hair
+19. `#/world/thailand/mall-trip/home?look=fur-mint,hair-pink` Mall photo for the photo wall, in mint fur and pink hair
 20. `#/world/thailand/nan-trip/home?look=fur-sky&photos=deck,three,pizza,salt` Nan photos, in sky fur
 
 ## 🧱 Build plan

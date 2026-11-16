@@ -1,11 +1,6 @@
 {
   "_about": "Kaylee's family as animal characters (characters/looks.ts). Dad asked me to cast them from what we know (2026-10-17); change any voice here and regenerate. Thai family speak English with a warm Thai accent.",
   "speakers": {
-    "agong": {
-      "voice": "onyx",
-      "pitch": -1,
-      "instructions": "You are Agong, a kind Thai grandfather in his seventies, a gentle panda. Warm, slow and proud of his granddaughter, with a soft chuckle. English with a warm Thai accent."
-    },
     "ji": {
       "voice": "shimmer",
       "pitch": 0,

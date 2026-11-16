@@ -62,10 +62,10 @@ const THAILAND: ShelfRow[] = [
   {
     id: 'house',
     banner: banner('house'),
-    title: "Agong's house",
+    title: "The Thailand house",
     flag: 'thailand',
     emoji: '🏠',
-    games: [th('street', "Agong's house", HUB, 'street', '🏠'), th('upstairs', 'My room', HUB, 'upstairs', '🛏️'), th('wardrobe', 'Wardrobe', HUB, 'wardrobe', '👗'), th('map', 'Thailand map', HUB, 'map', '🗺️')],
+    games: [th('street', "The Thailand house", HUB, 'street', '🏠'), th('upstairs', 'My room', HUB, 'upstairs', '🛏️'), th('wardrobe', 'Wardrobe', HUB, 'wardrobe', '👗'), th('map', 'Thailand map', HUB, 'map', '🗺️')],
   },
   {
     id: 'mall',

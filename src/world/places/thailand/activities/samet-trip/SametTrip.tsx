@@ -8,7 +8,7 @@
 // its rounds, and ends with its firefly found (`round=found`); back on the island that firefly flies in to join the
 // others round her horn and the pictures come up again. A stop already done opens at its first play round. With all
 // four, the driftwood tree at Ao Prao opens the finale (finale/): the sunset (Mom's photo of the three of them), then
-// the fire show on Sai Kaew at night, which the fireflies light; its 🏠 takes them home (the photo on Agong's wall,
+// the fire show on Sai Kaew at night, which the fireflies light; its 🏠 takes them home (the photo on the photo wall,
 // the stamp). Lunch on the deck above Ao Prao (hideseek/lunch.ts) is a place to visit, not a stop.
 //
 // The trip is saved on the iPad as she plays (where she was, the fireflies, what she packed: a link's params win over
@@ -43,7 +43,7 @@ import SAMET_SECTIONS, { FIRE_ROUNDS, FLAGS, HIDE_ROUNDS, JET_ROUNDS, SAND_ROUND
 const readFlags = (s: string): StopId[] => (s === 'all' ? [...FLAGS] : (s.split(',').filter((f) => (FLAGS as readonly string[]).includes(f)) as StopId[]))
 
 interface Props {
-  /** Home: Mom's photo is on Agong's wall: the stamp. */
+  /** Home: Mom's photo is on the photo wall: the stamp. */
   onDone?: () => void
   /** Home on the speedboat before the island is done (the home picture at Na Dan pier): back to the Thailand map. */
   onExit?: () => void
@@ -97,7 +97,7 @@ export function SametTrip({ onDone, onExit }: Props = {}) {
     }
   })
   const time = (param('time') || null) as TimeOfDay | null
-  /** Mom's photo of the three of them at sunset (for Agong's wall). */
+  /** Mom's photo of the three of them at sunset (for the photo wall). */
   const sunsetPhoto = useRef<string | null>(null)
   const flagParam = (f: StopId[]) => (f.length === FLAGS.length ? 'all' : f.join(',') || undefined)
   const [packed, setPacked] = useState<string[]>(first.packed)
@@ -125,7 +125,7 @@ export function SametTrip({ onDone, onExit }: Props = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sec.n])
 
-  // Home: Mom's photo of the island goes on Agong's wall by itself, the trip starts afresh next time, then the stamp.
+  // Home: Mom's photo of the island goes on the photo wall by itself, the trip starts afresh next time, then the stamp.
   const [, setWallPhotos] = useWallPhotos()
   const ended = useRef(false)
   const home = (photo: string) => {

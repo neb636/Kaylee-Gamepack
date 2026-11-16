@@ -1,4 +1,4 @@
-// Thailand's own numbers worth tuning by eye: the camera at Agong's house and Kaylee's walk. The house's ?debug panel
+// Thailand's own numbers worth tuning by eye: the camera at the Thailand house and Kaylee's walk. The house's ?debug panel
 // edits this object live (with the shared look's, engine3d/tune.ts) and copies both as JSON to paste back here.
 export const THAI_TUNE = {
   /** Camera inside the house: degrees, and the floor box (meters) that must fit on screen around Kaylee. */
