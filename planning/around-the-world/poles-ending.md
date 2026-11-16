@@ -1,4 +1,4 @@
-# 🌅 The Poles' new ending: The Longest Night (being built: Act 2 and the script are in, see poles.md, Next)
+# 🌅 The Poles' new ending: The Longest Night (playable end to end for Kaylee's playtest: see poles.md, Next)
 
 **The pitch:** the last stretch of Pebble's story becomes one 3D finale with a real third act. She flies Sparkle's
 balloon down the world herself, a blizzard knocks it out of the sky, and Pebble remembers the song Papa taught him the

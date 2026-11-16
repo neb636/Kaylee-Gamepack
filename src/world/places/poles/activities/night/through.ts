@@ -300,7 +300,7 @@ export class ThroughWorld implements World3D {
     this.eggDad.actor!.root.add(this.egg)
 
     // ---- Pebble (on his own now), and Pola outside the huddle, peeking over.
-    this.pebble = new Actor('pebble', bag, { height: CHICK_H + 0.05 })
+    this.pebble = new Actor('pebble', bag, { height: CHICK_H + 0.15 })
     this.pola = new Actor('pola', bag, { height: 1.45 })
     scene.add(this.pebble.root, this.pola.root)
     this.pola.place(-4.8, 0, 7.2, 20)
@@ -308,7 +308,7 @@ export class ThroughWorld implements World3D {
     this.glow = new Sprite(bag.add(new SpriteMaterial({ map: glowTex, transparent: true, opacity: 0.35, blending: AdditiveBlending, depthWrite: false, fog: false, color: '#FFB6D5' })))
     scene.add(this.glow)
     const ringTex = bag.add(softTexture(64, 64, [255, 111, 168], (x, y) => radialAlpha(Math.hypot(x - 32, y - 32), 32, [[0, 0], [0.6, 0], [0.78, 0.9], [0.92, 0.4], [1, 0]])))
-    this.ring = new Mesh(bag.add(new PlaneGeometry(1.1, 1.1).rotateX(-Math.PI / 2)), bag.add(new MeshBasicMaterial({ map: ringTex, transparent: true, depthWrite: false, fog: false })))
+    this.ring = new Mesh(bag.add(new PlaneGeometry(1.35, 1.35).rotateX(-Math.PI / 2)), bag.add(new MeshBasicMaterial({ map: ringTex, transparent: true, depthWrite: false, fog: false })))
     this.ring.renderOrder = 3
     scene.add(this.ring)
     const goldTex = bag.add(softTexture(64, 64, [255, 214, 110], (x, y) => radialAlpha(Math.hypot(x - 32, y - 32), 32, [[0, 0.9], [0.55, 0.6], [1, 0]])))
@@ -921,7 +921,8 @@ export class ThroughWorld implements World3D {
     this.pola.update(dt, t)
     // Pola peeks over the huddle and waves now and then.
     if (Math.floor(t / 6) !== Math.floor((t - dt) / 6)) this.pola.wave()
-    this.pola.turnTo(this.px, this.pz)
+    // (Watching Pebble, cheated toward the camera so her face shows.)
+    this.pola.root.rotation.y = clamp(Math.atan2(this.px - this.pola.pos.x, this.pz - this.pola.pos.z), -1.1, 1.1)
     this.ring.position.set(this.px, 0.035, this.pz)
     this.ring.visible = !this.tucked
     this.ring.scale.setScalar(1 + 0.08 * Math.sin(t * 4))
@@ -967,8 +968,8 @@ export class ThroughWorld implements World3D {
    *  opens, so Papa is in it too. */
   private shot(): Shot {
     const s: Shot = this.tall
-      ? { center: new Vector3(this.px, 0.5, this.pz - 1.1), half: new Vector3(2.4, 0.7, 3.2), yaw: 0, pitch: 58 }
-      : { center: new Vector3(this.px, 0.5, this.pz - 1), half: new Vector3(3.8, 0.7, 2.6), yaw: 0, pitch: 54 }
+      ? { center: new Vector3(this.px, 0.5, this.pz - 1.1), half: new Vector3(2.4, 0.7, 3.2), yaw: 0, pitch: this.step === 'packed' ? 58 : 50 }
+      : { center: new Vector3(this.px, 0.5, this.pz - 1), half: new Vector3(3.8, 0.7, 2.6), yaw: 0, pitch: this.step === 'packed' ? 54 : 46 }
     if (this.step === 'opening' || this.step === 'aisle' || this.step === 'tucked') {
       const mx = (this.px + this.papa.x) / 2
       const mz = (this.pz + this.papa.z) / 2

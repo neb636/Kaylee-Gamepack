@@ -156,11 +156,11 @@ const RIBBON_FS = /* glsl */ `
     float band = smoothstep(-0.15, 0.12, h) * smoothstep(1.15, 0.88, h);
     // Streaks along the wind: thin rows, each a dashed line scrolling the way it blows.
     float row = fract(h * 5.0);
-    float line = smoothstep(0.42, 0.5, row) * smoothstep(0.58, 0.5, row);
+    float line = smoothstep(0.36, 0.5, row) * smoothstep(0.64, 0.5, row);
     float seed = floor(h * 5.0);
     float dash = smoothstep(0.0, 0.18, fract(vW.x * 0.07 - uShift * (0.8 + 0.25 * seed) + seed * 0.37));
     dash *= smoothstep(0.62, 0.45, fract(vW.x * 0.07 - uShift * (0.8 + 0.25 * seed) + seed * 0.37));
-    float a = band * (0.16 + 0.1 * uLit) + line * dash * band * (0.65 + 0.35 * uLit);
+    float a = band * (0.22 + 0.12 * uLit) + line * dash * band * (0.8 + 0.2 * uLit);
     gl_FragColor = vec4(uCol, a * uA);
     #include <colorspace_fragment>
   }`
@@ -305,7 +305,7 @@ export class FlyWorld implements World3D {
     this.balloon.basket.add(this.flame)
     this.pola = new Actor('pola', bag, { height: 1.3 })
     this.pebble = new Actor('pebble', bag, { height: 0.9 })
-    this.terry = new Actor('terry', bag, { height: 0.95 })
+    this.terry = new Actor('terry', bag, { height: 1.35 })
     scene.add(this.pola.root, this.pebble.root, this.terry.root)
     // (Standing tall in the basket, a little forward of the burner, so their faces show under the balloon.)
     this.pola.ride(this.balloon.basket, -0.26, 0.5, 0.3, 8)
@@ -535,10 +535,15 @@ export class FlyWorld implements World3D {
   private pinkLow() {
     return Math.max(FLY.blueHigh + 0.5, FLY.pinkLow - this.wider)
   }
+  /** The pink wind's top right now (higher after a slow stretch up in the clouds). */
+  private pinkHigh() {
+    return Math.min(HIGH - 0.3, FLY.pinkHigh + this.wider)
+  }
   /** 0 out of it .. 1 in the middle of the pink wind. */
   private inPink(y = this.y) {
     const lo = this.pinkLow()
-    return smoothstep(lo - 0.6, lo + 0.4, y) * (1 - smoothstep(FLY.pinkHigh - 0.4, FLY.pinkHigh + 0.8, y))
+    const hi = this.pinkHigh()
+    return smoothstep(lo - 0.6, lo + 0.4, y) * (1 - smoothstep(hi - 0.4, hi + 0.8, y))
   }
   /** How fast the balloon goes south at a height: the pink wind's speed in it, creeping anywhere else. */
   private southSpeed(y: number) {
@@ -570,7 +575,7 @@ export class FlyWorld implements World3D {
       this.fans--
       this.pola.wave()
     }
-    const ty = (this.pinkLow() + FLY.pinkHigh) / 2 + Math.sin(t * 0.9) * 0.4
+    const ty = (this.pinkLow() + this.pinkHigh()) / 2 + Math.sin(t * 0.9) * 0.4
     const tx = this.x + (this.tall ? 3.2 : 6.5) + Math.sin(t * 0.5) * 0.6
     this.terry.pos.x += (tx - this.terry.pos.x) * Math.min(1, dt * 2)
     this.terry.pos.y += (ty - this.terry.pos.y) * Math.min(1, dt * 1.5)
@@ -647,7 +652,7 @@ export class FlyWorld implements World3D {
         this.sparkles.burst(this.x, this.y, 0.5, 20, 2, 1.5, 0.15, 0)
       }
     } else if (!this.stormOn) {
-      // A slow stretch: the pink wind reaches down a little to meet her (twice at most).
+      // A slow stretch: the pink wind reaches out a little to meet her, down and up (twice at most).
       this.slowFor += dt
       if (this.slowFor > 9 && this.wider < FLY.widen * 2 - 0.01) {
         this.slowFor = 0
@@ -722,7 +727,7 @@ export class FlyWorld implements World3D {
     // The winds: their heights, their streaks scrolling the way they blow, brighter when she's in them.
     const pu = this.pinkMat.uniforms
     pu.uLow.value = this.pinkLow()
-    pu.uHigh.value = FLY.pinkHigh
+    pu.uHigh.value = this.pinkHigh()
     this.pinkShift += dt * FLY.pink * 0.07
     pu.uShift.value = this.pinkShift
     this.ribbonLit = Math.max(0, this.ribbonLit - dt)
@@ -990,7 +995,7 @@ export class FlyWorld implements World3D {
     // A wind ribbon (a tap on its streaks), or the night sky's lights.
     const yAt = (wy: number) => this.toScreen(tmp.set(this.x, wy, -1.2)).y
     const inBand = (lo: number, hi: number) => y < yAt(lo) && y > yAt(hi)
-    if (inBand(this.pinkLow(), FLY.pinkHigh) || inBand(FLY.blueLow, FLY.blueHigh)) {
+    if (inBand(this.pinkLow(), this.pinkHigh()) || inBand(FLY.blueLow, FLY.blueHigh)) {
       this.ribbonLit = 1.2
       flySfx.whoosh()
       return poke('ribbons', F.pokes.ribbons)
