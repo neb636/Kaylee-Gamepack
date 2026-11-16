@@ -1,0 +1,1513 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "story",
+  "title": "Poles › Story",
+  "intro": "---- The story films (story/films.ts): Pebble's Long Way Home. One block per film, in play order. ----",
+  "page": "poles-story.html",
+  "audio": null,
+  "lines": 64,
+  "seconds": 0,
+  "missing": 64,
+  "names": 0,
+  "flags": [
+    {
+      "key": "story.intro.top",
+      "text": "This is Pola. She lives at the very top of the world.",
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "key": "story.intro.what",
+      "text": "Whoa! What ARE you?",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.intro.penguin",
+      "text": "I'm Pebble. I'm a penguin!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.intro.never",
+      "text": "A pen-guin? I've never seen one!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.intro.papa",
+      "text": "I want my Papa.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.intro.ship",
+      "text": "I saw a big red ship. It smelled like fish!",
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "key": "story.intro.nap",
+      "text": "I climbed inside, and I fell asleep.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.intro.sailed",
+      "text": "The ship sailed all the way up the world. From the bottom, to the top!",
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "key": "story.intro.woke",
+      "text": "When I woke up, everything was different.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.intro.terry",
+      "text": "A penguin? Up here?",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.intro.bottom",
+      "text": "Penguins live at the bottom of the world! I fly there every year.",
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "key": "story.intro.show",
+      "text": "Can you show us the way?",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.intro.long",
+      "text": "It's a long, long way. But yes!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.intro.ask",
+      "text": "My balloon can carry Pebble home. Let's help him!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.floeIn.mama",
+      "text": "Mama will know what to do! She's across the ice.",
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "key": "story.floeIn.swim",
+      "text": "I can't swim yet. My feathers are too fluffy!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.floeIn.hop",
+      "text": "Then hop on my back!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.floeOut.far",
+      "text": "A penguin! You are so far from home, little one.",
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "key": "story.floeOut.hug",
+      "text": "You're so warm!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.floeOut.go",
+      "text": "Pola, go with him. Friends help friends.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.floeOut.yes",
+      "text": "I will, Mama!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.narwhalIn.far",
+      "text": "The balloon is out past the icebergs.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.narwhalIn.hop",
+      "text": "That's too far to hop!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.narwhalIn.ride",
+      "text": "Need a ride? I'm Nari the narwhal!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.narwhalIn.unicorn",
+      "text": "A unicorn fish!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.narwhalIn.sea",
+      "text": "The unicorn of the sea. Hold on tight!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.narwhalOut.here",
+      "text": "Here we are! One balloon.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.narwhalOut.thanks",
+      "text": "Thank you, Nari!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.narwhalOut.bye",
+      "text": "Say hello to the bottom of the world for me!",
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "key": "story.coatsIn.when",
+      "text": "Terry, when do we fly?",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.coatsIn.snow",
+      "text": "When the snow comes, and the fox turns white.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.coatsIn.brown",
+      "text": "But the fox is brown!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.coatsIn.help",
+      "text": "Then let's help the winter along!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.coatsOut.white",
+      "text": "Snow! White coats everywhere!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.coatsOut.time",
+      "text": "Winter is here. It's time to fly south!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.coatsOut.bye",
+      "text": "Bye, fox! Bye, hare!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.slideIn.meanwhile",
+      "text": "Meanwhile, at the bottom of the world...",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.slideIn.call",
+      "text": "Pebble! Pebble, where are you?",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.slideIn.seen",
+      "text": "Has anyone seen my little Pebble?",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.slideIn.look",
+      "text": "I'll look down the hill, and in the sea. I'll look everywhere!",
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "key": "story.slideOut.none",
+      "text": "No Pebble in the sea.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.slideOut.supper",
+      "text": "But I caught his favorite supper.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.slideOut.soon",
+      "text": "Come home soon, little one.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.huddleIn.dark",
+      "text": "Winter at the South Pole. The sun is gone for months.",
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "key": "story.huddleIn.wait",
+      "text": "I'll wait right here, Pebble.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.huddleIn.remember",
+      "text": "I remember the night you hatched.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.huddleOut.warm",
+      "text": "I kept you warm all winter long.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.huddleOut.sun",
+      "text": "Look. The sun is coming back.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.huddleOut.dot",
+      "text": "Wait. What is that, up in the sky?",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.homeIn.aboard",
+      "text": "All aboard! Next stop, the bottom of the world!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.homeIn.bye",
+      "text": "Goodbye, my brave cub! Hurry home!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.homeIn.follow",
+      "text": "Follow me! All the way down the world!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.homeLand.land",
+      "text": "We made it! This is Antarctica.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.homeLand.ground",
+      "text": "There's ground under this ice! Not sea!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.homeLand.what",
+      "text": "Goodness! What is THAT?",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.homeLand.bear",
+      "text": "Hi! I'm a polar bear!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.homeLand.same",
+      "text": "Papa? They all look the same!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.homeLand.song",
+      "text": "Every penguin papa has his own song. Let's find Papa's!",
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "key": "story.homeReunion.pebble",
+      "text": "Pebble! My Pebble!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.homeReunion.papa",
+      "text": "Papa! I went to the top of the world!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.homeReunion.friend",
+      "text": "This is Pola. She carried me home.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.homeReunion.thanks",
+      "text": "A polar bear at the South Pole! Thank you, Pola.",
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "key": "story.homeReunion.lights",
+      "text": "Look! The sky is dancing!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "story.homeReunion.quiz",
+      "text": "Top to bottom! Who's ready for my Polar Explorer quiz?",
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "story",
+        "intro",
+        "top"
+      ],
+      "text": "This is Pola. She lives at the very top of the world.",
+      "voice": "sparkle",
+      "key": "story.intro.top",
+      "part": "story › intro",
+      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "what"
+      ],
+      "text": "Whoa! What ARE you?",
+      "voice": "pola",
+      "key": "story.intro.what",
+      "part": "story › intro",
+      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "penguin"
+      ],
+      "text": "I'm Pebble. I'm a penguin!",
+      "voice": "pebble",
+      "key": "story.intro.penguin",
+      "part": "story › intro",
+      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "never"
+      ],
+      "text": "A pen-guin? I've never seen one!",
+      "voice": "pola",
+      "key": "story.intro.never",
+      "part": "story › intro",
+      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "papa"
+      ],
+      "text": "I want my Papa.",
+      "voice": "pebble",
+      "key": "story.intro.papa",
+      "part": "story › intro",
+      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "ship"
+      ],
+      "text": "I saw a big red ship. It smelled like fish!",
+      "voice": "pebble",
+      "key": "story.intro.ship",
+      "part": "story › intro",
+      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "nap"
+      ],
+      "text": "I climbed inside, and I fell asleep.",
+      "voice": "pebble",
+      "key": "story.intro.nap",
+      "part": "story › intro",
+      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "sailed"
+      ],
+      "text": "The ship sailed all the way up the world. From the bottom, to the top!",
+      "voice": "sparkle",
+      "key": "story.intro.sailed",
+      "part": "story › intro",
+      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "woke"
+      ],
+      "text": "When I woke up, everything was different.",
+      "voice": "pebble",
+      "key": "story.intro.woke",
+      "part": "story › intro",
+      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "terry"
+      ],
+      "text": "A penguin? Up here?",
+      "voice": "terry",
+      "key": "story.intro.terry",
+      "part": "story › intro",
+      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "bottom"
+      ],
+      "text": "Penguins live at the bottom of the world! I fly there every year.",
+      "voice": "terry",
+      "key": "story.intro.bottom",
+      "part": "story › intro",
+      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "show"
+      ],
+      "text": "Can you show us the way?",
+      "voice": "pola",
+      "key": "story.intro.show",
+      "part": "story › intro",
+      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "long"
+      ],
+      "text": "It's a long, long way. But yes!",
+      "voice": "terry",
+      "key": "story.intro.long",
+      "part": "story › intro",
+      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "ask"
+      ],
+      "text": "My balloon can carry Pebble home. Let's help him!",
+      "voice": "sparkle",
+      "key": "story.intro.ask",
+      "part": "story › intro",
+      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "floeIn",
+        "mama"
+      ],
+      "text": "Mama will know what to do! She's across the ice.",
+      "voice": "pola",
+      "key": "story.floeIn.mama",
+      "part": "story › floeIn",
+      "when": "Ice Floe Hop: across the floating ice to Mama Bear.",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "floeIn",
+        "swim"
+      ],
+      "text": "I can't swim yet. My feathers are too fluffy!",
+      "voice": "pebble",
+      "key": "story.floeIn.swim",
+      "part": "story › floeIn",
+      "when": "Ice Floe Hop: across the floating ice to Mama Bear.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "floeIn",
+        "hop"
+      ],
+      "text": "Then hop on my back!",
+      "voice": "pola",
+      "key": "story.floeIn.hop",
+      "part": "story › floeIn",
+      "when": "Ice Floe Hop: across the floating ice to Mama Bear.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "floeOut",
+        "far"
+      ],
+      "text": "A penguin! You are so far from home, little one.",
+      "voice": "mama",
+      "key": "story.floeOut.far",
+      "part": "story › floeOut",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "floeOut",
+        "hug"
+      ],
+      "text": "You're so warm!",
+      "voice": "pebble",
+      "key": "story.floeOut.hug",
+      "part": "story › floeOut",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "floeOut",
+        "go"
+      ],
+      "text": "Pola, go with him. Friends help friends.",
+      "voice": "mama",
+      "key": "story.floeOut.go",
+      "part": "story › floeOut",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "floeOut",
+        "yes"
+      ],
+      "text": "I will, Mama!",
+      "voice": "pola",
+      "key": "story.floeOut.yes",
+      "part": "story › floeOut",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "narwhalIn",
+        "far"
+      ],
+      "text": "The balloon is out past the icebergs.",
+      "voice": "terry",
+      "key": "story.narwhalIn.far",
+      "part": "story › narwhalIn",
+      "when": "The narwhal ride: out to the balloon on the big iceberg.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "narwhalIn",
+        "hop"
+      ],
+      "text": "That's too far to hop!",
+      "voice": "pola",
+      "key": "story.narwhalIn.hop",
+      "part": "story › narwhalIn",
+      "when": "The narwhal ride: out to the balloon on the big iceberg.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "narwhalIn",
+        "ride"
+      ],
+      "text": "Need a ride? I'm Nari the narwhal!",
+      "voice": "nari",
+      "key": "story.narwhalIn.ride",
+      "part": "story › narwhalIn",
+      "when": "The narwhal ride: out to the balloon on the big iceberg.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "narwhalIn",
+        "unicorn"
+      ],
+      "text": "A unicorn fish!",
+      "voice": "pebble",
+      "key": "story.narwhalIn.unicorn",
+      "part": "story › narwhalIn",
+      "when": "The narwhal ride: out to the balloon on the big iceberg.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "narwhalIn",
+        "sea"
+      ],
+      "text": "The unicorn of the sea. Hold on tight!",
+      "voice": "nari",
+      "key": "story.narwhalIn.sea",
+      "part": "story › narwhalIn",
+      "when": "The narwhal ride: out to the balloon on the big iceberg.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "narwhalOut",
+        "here"
+      ],
+      "text": "Here we are! One balloon.",
+      "voice": "nari",
+      "key": "story.narwhalOut.here",
+      "part": "story › narwhalOut",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "narwhalOut",
+        "thanks"
+      ],
+      "text": "Thank you, Nari!",
+      "voice": "pebble",
+      "key": "story.narwhalOut.thanks",
+      "part": "story › narwhalOut",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "narwhalOut",
+        "bye"
+      ],
+      "text": "Say hello to the bottom of the world for me!",
+      "voice": "nari",
+      "key": "story.narwhalOut.bye",
+      "part": "story › narwhalOut",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "coatsIn",
+        "when"
+      ],
+      "text": "Terry, when do we fly?",
+      "voice": "pola",
+      "key": "story.coatsIn.when",
+      "part": "story › coatsIn",
+      "when": "Snow Coats: Terry flies south when the snow comes.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "coatsIn",
+        "snow"
+      ],
+      "text": "When the snow comes, and the fox turns white.",
+      "voice": "terry",
+      "key": "story.coatsIn.snow",
+      "part": "story › coatsIn",
+      "when": "Snow Coats: Terry flies south when the snow comes.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "coatsIn",
+        "brown"
+      ],
+      "text": "But the fox is brown!",
+      "voice": "pebble",
+      "key": "story.coatsIn.brown",
+      "part": "story › coatsIn",
+      "when": "Snow Coats: Terry flies south when the snow comes.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "coatsIn",
+        "help"
+      ],
+      "text": "Then let's help the winter along!",
+      "voice": "sparkle",
+      "key": "story.coatsIn.help",
+      "part": "story › coatsIn",
+      "when": "Snow Coats: Terry flies south when the snow comes.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "coatsOut",
+        "white"
+      ],
+      "text": "Snow! White coats everywhere!",
+      "voice": "terry",
+      "key": "story.coatsOut.white",
+      "part": "story › coatsOut",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "coatsOut",
+        "time"
+      ],
+      "text": "Winter is here. It's time to fly south!",
+      "voice": "terry",
+      "key": "story.coatsOut.time",
+      "part": "story › coatsOut",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "coatsOut",
+        "bye"
+      ],
+      "text": "Bye, fox! Bye, hare!",
+      "voice": "pola",
+      "key": "story.coatsOut.bye",
+      "part": "story › coatsOut",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "slideIn",
+        "meanwhile"
+      ],
+      "text": "Meanwhile, at the bottom of the world...",
+      "voice": "sparkle",
+      "key": "story.slideIn.meanwhile",
+      "part": "story › slideIn",
+      "when": "Penguin Slide: meanwhile, Papa looks everywhere.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "slideIn",
+        "call"
+      ],
+      "text": "Pebble! Pebble, where are you?",
+      "voice": "papa",
+      "key": "story.slideIn.call",
+      "part": "story › slideIn",
+      "when": "Penguin Slide: meanwhile, Papa looks everywhere.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "slideIn",
+        "seen"
+      ],
+      "text": "Has anyone seen my little Pebble?",
+      "voice": "papa",
+      "key": "story.slideIn.seen",
+      "part": "story › slideIn",
+      "when": "Penguin Slide: meanwhile, Papa looks everywhere.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "slideIn",
+        "look"
+      ],
+      "text": "I'll look down the hill, and in the sea. I'll look everywhere!",
+      "voice": "papa",
+      "key": "story.slideIn.look",
+      "part": "story › slideIn",
+      "when": "Penguin Slide: meanwhile, Papa looks everywhere.",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "slideOut",
+        "none"
+      ],
+      "text": "No Pebble in the sea.",
+      "voice": "papa",
+      "key": "story.slideOut.none",
+      "part": "story › slideOut",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "slideOut",
+        "supper"
+      ],
+      "text": "But I caught his favorite supper.",
+      "voice": "papa",
+      "key": "story.slideOut.supper",
+      "part": "story › slideOut",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "slideOut",
+        "soon"
+      ],
+      "text": "Come home soon, little one.",
+      "voice": "papa",
+      "key": "story.slideOut.soon",
+      "part": "story › slideOut",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "huddleIn",
+        "dark"
+      ],
+      "text": "Winter at the South Pole. The sun is gone for months.",
+      "voice": "sparkle",
+      "key": "story.huddleIn.dark",
+      "part": "story › huddleIn",
+      "when": "Emperor Huddle: the long night, and the night Pebble hatched.",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "huddleIn",
+        "wait"
+      ],
+      "text": "I'll wait right here, Pebble.",
+      "voice": "papa",
+      "key": "story.huddleIn.wait",
+      "part": "story › huddleIn",
+      "when": "Emperor Huddle: the long night, and the night Pebble hatched.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "huddleIn",
+        "remember"
+      ],
+      "text": "I remember the night you hatched.",
+      "voice": "papa",
+      "key": "story.huddleIn.remember",
+      "part": "story › huddleIn",
+      "when": "Emperor Huddle: the long night, and the night Pebble hatched.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "huddleOut",
+        "warm"
+      ],
+      "text": "I kept you warm all winter long.",
+      "voice": "papa",
+      "key": "story.huddleOut.warm",
+      "part": "story › huddleOut",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "huddleOut",
+        "sun"
+      ],
+      "text": "Look. The sun is coming back.",
+      "voice": "papa",
+      "key": "story.huddleOut.sun",
+      "part": "story › huddleOut",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "huddleOut",
+        "dot"
+      ],
+      "text": "Wait. What is that, up in the sky?",
+      "voice": "papa",
+      "key": "story.huddleOut.dot",
+      "part": "story › huddleOut",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "homeIn",
+        "aboard"
+      ],
+      "text": "All aboard! Next stop, the bottom of the world!",
+      "voice": "sparkle",
+      "key": "story.homeIn.aboard",
+      "part": "story › homeIn",
+      "when": "The finale: the flight home, Papa's song, and a polar bear at the South Pole.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "homeIn",
+        "bye"
+      ],
+      "text": "Goodbye, my brave cub! Hurry home!",
+      "voice": "mama",
+      "key": "story.homeIn.bye",
+      "part": "story › homeIn",
+      "when": "The finale: the flight home, Papa's song, and a polar bear at the South Pole.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "homeIn",
+        "follow"
+      ],
+      "text": "Follow me! All the way down the world!",
+      "voice": "terry",
+      "key": "story.homeIn.follow",
+      "part": "story › homeIn",
+      "when": "The finale: the flight home, Papa's song, and a polar bear at the South Pole.",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "homeLand",
+        "land"
+      ],
+      "text": "We made it! This is Antarctica.",
+      "voice": "sparkle",
+      "key": "story.homeLand.land",
+      "part": "story › homeLand",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "homeLand",
+        "ground"
+      ],
+      "text": "There's ground under this ice! Not sea!",
+      "voice": "pola",
+      "key": "story.homeLand.ground",
+      "part": "story › homeLand",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "homeLand",
+        "what"
+      ],
+      "text": "Goodness! What is THAT?",
+      "voice": "papa",
+      "key": "story.homeLand.what",
+      "part": "story › homeLand",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "homeLand",
+        "bear"
+      ],
+      "text": "Hi! I'm a polar bear!",
+      "voice": "pola",
+      "key": "story.homeLand.bear",
+      "part": "story › homeLand",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "homeLand",
+        "same"
+      ],
+      "text": "Papa? They all look the same!",
+      "voice": "pebble",
+      "key": "story.homeLand.same",
+      "part": "story › homeLand",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "homeLand",
+        "song"
+      ],
+      "text": "Every penguin papa has his own song. Let's find Papa's!",
+      "voice": "sparkle",
+      "key": "story.homeLand.song",
+      "part": "story › homeLand",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "homeReunion",
+        "pebble"
+      ],
+      "text": "Pebble! My Pebble!",
+      "voice": "papa",
+      "key": "story.homeReunion.pebble",
+      "part": "story › homeReunion",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "homeReunion",
+        "papa"
+      ],
+      "text": "Papa! I went to the top of the world!",
+      "voice": "pebble",
+      "key": "story.homeReunion.papa",
+      "part": "story › homeReunion",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "homeReunion",
+        "friend"
+      ],
+      "text": "This is Pola. She carried me home.",
+      "voice": "pebble",
+      "key": "story.homeReunion.friend",
+      "part": "story › homeReunion",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "homeReunion",
+        "thanks"
+      ],
+      "text": "A polar bear at the South Pole! Thank you, Pola.",
+      "voice": "papa",
+      "key": "story.homeReunion.thanks",
+      "part": "story › homeReunion",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "homeReunion",
+        "lights"
+      ],
+      "text": "Look! The sky is dancing!",
+      "voice": "pola",
+      "key": "story.homeReunion.lights",
+      "part": "story › homeReunion",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "homeReunion",
+        "quiz"
+      ],
+      "text": "Top to bottom! Who's ready for my Polar Explorer quiz?",
+      "voice": "terry",
+      "key": "story.homeReunion.quiz",
+      "part": "story › homeReunion",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded",
+        "long"
+      ]
+    }
+  ]
+}

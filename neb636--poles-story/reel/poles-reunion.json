@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "poles-reunion",
+  "title": "Poles reunion",
+  "video": "poles-reunion.mp4",
+  "gif": "poles-reunion.gif",
+  "seconds": 65,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Poles story home land",
+      "where": "#/world/poles/story/home-land",
+      "seconds": 32,
+      "fps": 41.3,
+      "status": "ok"
+    },
+    {
+      "name": "Poles story home reunion",
+      "where": "#/world/poles/story/home-reunion",
+      "seconds": 30,
+      "fps": 35.9,
+      "status": "ok"
+    }
+  ]
+}
