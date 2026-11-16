@@ -43,7 +43,8 @@ export function StartOver({ onRestart, label = 'Start the story again' }: { onRe
     onRestart()
   }
   const press = () => {
-    if (done.current) return
+    // (A second finger on it while one is already holding changes nothing: one hold, one timer.)
+    if (done.current || held.current) return
     sounds.pickup()
     held.current = true
     setHolding(true)
