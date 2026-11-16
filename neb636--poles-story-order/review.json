@@ -1,0 +1,15 @@
+{
+  "title": "The Poles: the story goes in order the first time",
+  "checkIn": "fix",
+  "kaylee": "On her first trip she sees only the next picture; each new one pops in after a stamp. Once the story's told, every game is open any time.",
+  "questions": [],
+  "links": [
+    { "label": "Fresh start: one picture", "hash": "#/world/poles/hub/globe" },
+    { "label": "Every stamp: all open", "hash": "#/world/poles/hub/globe?stamps=all" }
+  ],
+  "pictures": [
+    { "title": "First visit", "before": "pics/fresh-before.png", "after": "pics/fresh-after.png", "caption": "Only the first picture shows" },
+    { "title": "Two stamps in", "before": "pics/two-before.png", "after": "pics/two-after.png", "caption": "The two she's done, plus the next one" },
+    { "title": "Every stamp in", "before": "pics/all-after.png", "after": "pics/all-after.png", "caption": "Unchanged: every game, any order" }
+  ]
+}
