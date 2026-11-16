@@ -1673,11 +1673,11 @@
     "file": "8e60555f4820.mp3"
   },
   {
-    "text": "Look! The sun is coming back!",
+    "text": "Shh. Papa is singing to Pebble.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3061,
-    "file": "c46f7d2947dc.mp3"
+    "ms": 3000,
+    "file": "4146c22691c4.mp3"
   },
   {
     "text": "You kept them all warm!",
@@ -1699,6 +1699,13 @@
     "sig": "ed7dbdac3d",
     "ms": 4466,
     "file": "3b95d17c3296.mp3"
+  },
+  {
+    "text": "Emperor dads don't eat all winter. They just keep the egg warm!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4992,
+    "file": "3b8d5310ce9a.mp3"
   },
   {
     "text": "Brrr! So cold!",
@@ -1757,11 +1764,18 @@
     "file": "0e898ceaae23.mp3"
   },
   {
-    "text": "Look, Pebble. The sun!",
+    "text": "Listen, Pebble. This is my song.",
     "voice": "papa",
     "sig": "c038db870a",
-    "ms": 2475,
-    "file": "f9bba19d9be2.mp3"
+    "ms": 3144,
+    "file": "6533067c60d2.mp3"
+  },
+  {
+    "text": "That's it! Now you'll always find me.",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 3192,
+    "file": "8ad563dd7270.mp3"
   },
   {
     "text": "Hi, Papa! Peep peep!",
@@ -1783,13 +1797,6 @@
     "sig": "77076520c0",
     "ms": 1283,
     "file": "5a8774deacfe.mp3"
-  },
-  {
-    "text": "Ooh, so pretty!",
-    "voice": "pebble",
-    "sig": "77076520c0",
-    "ms": 2234,
-    "file": "0f76dda4a937.mp3"
   },
   {
     "text": "Here we go! Hold on tight!",
