@@ -14,7 +14,7 @@
 // Two meshes share the sea's material, as in lagoon.ts: a fine grid round the action (it follows `update`'s center,
 // snapped to its cells) and a flat sheet with a matching hole out to the horizon; the swell fades out before the grid's
 // edge, so the two meet.
-import { BufferAttribute, BufferGeometry, Color, DoubleSide, FrontSide, Mesh, Path, PlaneGeometry, ShaderMaterial, Shape, ShapeGeometry, Vector2, Vector3, type ColorRepresentation } from 'three'
+import { BufferAttribute, BufferGeometry, Color, DoubleSide, UniformsLib, FrontSide, Mesh, Path, PlaneGeometry, ShaderMaterial, Shape, ShapeGeometry, Vector2, Vector3, type ColorRepresentation } from 'three'
 import type { Bag } from '../../../engine3d/dispose'
 import { CLOUD_GLSL, POLAR } from './look'
 
@@ -56,6 +56,10 @@ const fragmentShader = /* glsl */ `
   uniform vec3 uSunDir;
   uniform float uHazeNear;
   uniform float uHazeFar;
+  // (The scene's own fog: under the water it is the deep blue that ends the view.)
+  uniform vec3 fogColor;
+  uniform float fogNear;
+  uniform float fogFar;
   varying vec3 vWorld;
   varying float vFade;
   ${CLOUD_GLSL}
@@ -75,6 +79,7 @@ const fragmentShader = /* glsl */ `
     if (!gl_FrontFacing) {
       // From under the water: the bright rippling ceiling of the sea.
       vec3 c = mix(uUnder, vec3(1.0), (web * 0.5 + fine * 0.3));
+      c = mix(c, fogColor, smoothstep(fogNear, fogFar, distance(cameraPosition, vWorld)));
       gl_FragColor = vec4(c, 1.0);
       #include <colorspace_fragment>
       return;
@@ -159,6 +164,7 @@ export class PolarSea {
     this.mat = bag.add(
       new ShaderMaterial({
         uniforms: {
+          ...UniformsLib.fog,
           ...POLAR,
           uLevel: { value: o.level ?? 0 },
           uCenter: { value: new Vector2() },
@@ -177,6 +183,7 @@ export class PolarSea {
         vertexShader,
         fragmentShader,
         side: DoubleSide,
+        fog: true,
       }),
     )
     this.ice.set(c.ice)
