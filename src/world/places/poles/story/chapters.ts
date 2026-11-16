@@ -36,3 +36,12 @@ export const seeFilm = (id: FilmId) => {
     /* a private window: it plays again next visit */
   }
 }
+/** Start the story over (the start-over pill): every film plays again, the way-in film first. */
+export const forgetFilms = () => {
+  seen.clear()
+  try {
+    localStorage.removeItem(INTRO_KEY)
+  } catch {
+    /* a private window: nothing was saved anyway */
+  }
+}

@@ -23,7 +23,9 @@ import { formatPacked, parsePacked } from '../../trip/packing'
 import { addWallPhoto, shrinkPhoto, today, useWallPhotos } from '../../trip/wall-photos'
 import { PackScreen } from './PackScreen'
 import { SpeedboatScreen } from './speedboat/SpeedboatScreen'
-import { NEW_TRIP, SAMET_PACKED, SAMET_SAVE_KEY, type SametProgress } from './trip'
+import { clearSametSave, NEW_TRIP, SAMET_PACKED, SAMET_SAVE_KEY, type SametProgress } from './trip'
+import { StartOver } from '../../../../kit/StartOver'
+import { worldLink } from '../../../../../router'
 import { IslandScreen } from './island/IslandScreen'
 import type { RoundId, SpotId, StopId } from './island/layout'
 import type { TimeOfDay } from './island/scenery'
@@ -66,6 +68,8 @@ interface Sec {
   story: 'intro' | 'all' | null
   found: StopId | null
   board: boolean
+  /** A plain visit picked a trip half done back up: the start-over pill shows for a few seconds. */
+  resumed?: boolean
 }
 
 export function SametTrip({ onDone, onExit }: Props = {}) {
@@ -94,6 +98,7 @@ export function SametTrip({ onDone, onExit }: Props = {}) {
       story: story === 'intro' || story === 'all' ? story : plain && !flags.length ? 'intro' : null,
       found: (FLAGS as readonly string[]).includes(found) && flags.includes(found) ? found : null,
       board: param('board') === '1' || (plain && flags.length > 0),
+      resumed: plain && flags.length > 0,
     }
   })
   const time = (param('time') || null) as TimeOfDay | null
@@ -268,7 +273,18 @@ export function SametTrip({ onDone, onExit }: Props = {}) {
       />
     )
   return (
-    <IslandScreen
+    <>
+      {sec.resumed && sec.n === 0 && (
+        <StartOver
+          label="Start the fireflies story again"
+          onRestart={() => {
+            // Forget the beach and the fireflies, then a new trip: the speedboat to Na Dan pier and the way-in film.
+            clearSametSave()
+            location.hash = worldLink('thailand', 'samet-trip', 'speedboat')
+          }}
+        />
+      )}
+      <IslandScreen
       key={sec.n}
       start={{ at: here.current.at, flags: sec.flags, time, packed, story: sec.story, found: sec.found, board: sec.board }}
       onHome={home}
@@ -291,5 +307,6 @@ export function SametTrip({ onDone, onExit }: Props = {}) {
         openStop(stop)
       }}
     />
+    </>
   )
 }
