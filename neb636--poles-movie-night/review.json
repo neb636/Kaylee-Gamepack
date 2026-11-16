@@ -4,7 +4,7 @@
   "kaylee": "No video after each chapter: the stamp goes straight back to the globe and the next picture. Once the whole story is told, a movie ticket ends the trail and Sparkle says \"Movie time! Let's see the real animals from our story!\"",
   "questions": [],
   "links": [
-    { "label": "The story told: the movie ticket", "hash": "#/world/poles/hub/globe?stamps=all" }
+    { "label": "Every stamp in: finish the finale, and the ticket appears", "hash": "#/world/poles/party?stamps=all" }
   ],
   "pictures": [
     { "title": "After a chapter's stamp", "before": "pics/stamp-before.png", "after": "pics/stamp-after.png", "caption": "Before: a video. Now: back to the globe, the next picture waiting" },
