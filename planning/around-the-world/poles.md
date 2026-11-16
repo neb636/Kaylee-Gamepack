@@ -132,6 +132,9 @@ the finale's emperor (story/actor.ts) as every dad and Pebble.
 - Robot-played in a cloud session (software GL, very slow): the carry, the warm-ups into the blizzard, the hatch, the
   tuck and the song all run from their links. Not yet: a reel on a real GPU, `qa-pacing` touches and minutes, an
   iPhone check.
+- Next for the huddle: film the reel on the Mac (`poles-huddle-carry`, `-hatch`, `-tuck`, `-song` in its qa.mjs), make
+  the three new sounds, then Kaylee plays it. Watch for: does she find Papa by his glow, does she carry Pebble back
+  without the hint, does she sit through the song. `assets/bg-huddle-night.webp` (the 2D game's painting) is unused now.
 
 ## North and south at a glance (the facts the place is built on)
 
