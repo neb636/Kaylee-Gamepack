@@ -334,8 +334,10 @@ export const L = {
   },
 
   // ---- Emperor Huddle (activities/huddle/) ----
-  // Sparkle says what to do (and a fact the first time something comes up); the dads speak in Papa's voice (the one
-  // whose beak moves is the one talking), Pebble in Pebble's. Finite: one line per moment, a few thank-yous in turn.
+  // Sparkle says what to do (and a fact the first time something comes up). Papa is the only dad who talks (the others
+  // honk their own songs), Pebble in Pebble's voice. Finite: one line per moment, a few thank-yous in turn. In the
+  // last section Papa sings Pebble his song (synthesized: activities/party/sounds.ts TUNES[0], the one the finale's
+  // chick hums) and Pebble peeps it back.
   huddle: {
     small: 'Carry the cold penguin into the middle!',
     more: 'More penguin dads are coming!',
@@ -344,12 +346,13 @@ export const L = {
     hatch: "Keep Pebble's papa warm in the middle.",
     hatched: 'Tuck Pebble back under Papa!',
     blown: 'Whoosh! Carry Pebble back to Papa.',
-    sunrise: 'Look! The sun is coming back!',
+    song: 'Shh. Papa is singing to Pebble.',
     done: 'You kept them all warm!',
     facts: {
       egg: 'Emperor dads keep the egg warm on their feet!',
       coldest: 'Antarctica is the coldest, windiest place on Earth.',
       night: 'In winter here, the sun stays away for months!',
+      fast: "Emperor dads don't eat all winter. They just keep the egg warm!",
     },
     papa: {
       cold: papa('Brrr! So cold!'),
@@ -358,15 +361,16 @@ export const L = {
       hatched: papa('Hello, little Pebble!'),
       blown: papa('Oh no! Pebble!'),
       tucked: papa('There you are, Pebble!'),
-      sunrise: papa('Look, Pebble. The sun!'),
+      song: papa('Listen, Pebble. This is my song.'),
+      always: papa("That's it! Now you'll always find me."),
     },
     pebble: {
       hi: pebble('Hi, Papa! Peep peep!'),
       blown: pebble('Whoa! Papa, help!'),
       tucked: pebble('So cozy!'),
-      sunrise: pebble('Ooh, so pretty!'),
     },
   },
+
 
   // ---- Narwhal Ride (activities/narwhal/) ----
   // In play order. Sparkle says what to do as each stretch starts (and again when she's stuck there); Nari, Pola,

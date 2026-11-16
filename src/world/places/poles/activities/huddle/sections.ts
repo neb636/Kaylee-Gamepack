@@ -1,6 +1,6 @@
-// Emperor Huddle (plan: planning/around-the-world/poles.md): drag the shivering emperor dads from the windy
-// edge into the middle of the huddle, keep them moving in when the wind turns, then Pebble's egg hatches and the first
-// sunrise. #/world/poles/huddle/<section>?wind=left&chick=hatched
+// Emperor Huddle (plan: planning/around-the-world/poles.md): carry the shivering emperor dads from the windy edge into
+// the middle of the huddle, keep them moving in when the wind turns, then Pebble's egg hatches and Papa sings him his
+// song. #/world/poles/huddle/<section>?wind=left&chick=hatched
 // A section link sets the scene up as if she had played to there. Loaded at startup by the section index.
 import { defineSections } from '../../../../kit/sections'
 
@@ -13,7 +13,7 @@ const HUDDLE_SECTIONS = defineSections('poles', 'huddle', {
     { id: 'small', name: 'A small huddle', params: ['wind'], links: [{ label: 'A small huddle', also: [{ label: 'wind from the right', params: { wind: 'right' } }] }] },
     { id: 'blizzard', name: 'The wind turns', params: ['wind'] },
     { id: 'hatch', name: "Crack! Pebble's egg", params: ['wind', 'chick'], links: [{ label: "Crack! Pebble's egg", also: [{ label: 'already hatched: tuck Pebble back', params: { chick: 'hatched' } }] }] },
-    { id: 'sunrise', name: 'The first sunrise' },
+    { id: 'song', name: "Papa's song" },
   ],
 })
 export default HUDDLE_SECTIONS

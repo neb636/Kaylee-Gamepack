@@ -762,5 +762,23 @@
   "prompt": "A soft steady snowstorm wind, airy and whooshing with fine snow hissing past, cozy rather than scary, no howling. Seamless loop, no music, no voices.",
   "seconds": 6,
   "loop": true
+ },
+ {
+  "id": "huddle-brrr",
+  "label": "A cold dad shivers",
+  "prompt": "A small cartoon penguin shivering with cold: a quick soft teeth-chattering brrrr, fluttery and funny, not sad. Close recording, no music, no voice, no words.",
+  "seconds": 0.8
+ },
+ {
+  "id": "huddle-sneeze",
+  "label": "A frozen dad sneezes",
+  "prompt": "A tiny cute cartoon sneeze of a small bird, a quick ah-choo puff with a soft snowy poof after it. Toy-like and funny, no words, no music.",
+  "seconds": 0.9
+ },
+ {
+  "id": "huddle-crack",
+  "label": "Pebble's egg cracks",
+  "prompt": "A small eggshell cracking: two or three tiny dry crisp ticks and a soft crunch, close and gentle. No music, no voice.",
+  "seconds": 0.7
  }
 ]

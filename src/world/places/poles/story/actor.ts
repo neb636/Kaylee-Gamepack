@@ -14,6 +14,20 @@ const DEG = Math.PI / 180
 
 export type Face = 'sad' | 'wow' | 'happy'
 
+/** Opens a penguin's beak by hand, 0 shut .. 1 wide (a song has no speech level, and in a crowd of dads who share
+ *  Papa's voice only the one talking should move his). Call it after the actor's `update`, which shuts it. */
+export function openBeak(a: Actor, k: number) {
+  const r = a.rig
+  if (r.beak) r.beak.open(k)
+  else if (r.open) r.mouth.scale.set(1 + 0.15 * k, 1 + 0.9 * k, 1)
+  else {
+    const on = k > 0.04
+    r.talk.visible = on
+    r.mouth.visible = !on
+    if (on) r.talk.scale.set(0.55 + 0.45 * k, Math.min(1, 0.25 + k), 1)
+  }
+}
+
 interface Move {
   from: Vector3
   to: Vector3

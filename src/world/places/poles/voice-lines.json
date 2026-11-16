@@ -574,10 +574,11 @@
   "Keep Pebble's papa warm in the middle.",
   "Tuck Pebble back under Papa!",
   "Whoosh! Carry Pebble back to Papa.",
-  "Look! The sun is coming back!",
+  "Shh. Papa is singing to Pebble.",
   "You kept them all warm!",
   "Emperor dads keep the egg warm on their feet!",
   "In winter here, the sun stays away for months!",
+  "Emperor dads don't eat all winter. They just keep the egg warm!",
   {
     "text": "Brrr! So cold!",
     "voice": "papa"
@@ -611,7 +612,11 @@
     "voice": "papa"
   },
   {
-    "text": "Look, Pebble. The sun!",
+    "text": "Listen, Pebble. This is my song.",
+    "voice": "papa"
+  },
+  {
+    "text": "That's it! Now you'll always find me.",
     "voice": "papa"
   },
   {
@@ -624,10 +629,6 @@
   },
   {
     "text": "So cozy!",
-    "voice": "pebble"
-  },
-  {
-    "text": "Ooh, so pretty!",
     "voice": "pebble"
   },
   {
