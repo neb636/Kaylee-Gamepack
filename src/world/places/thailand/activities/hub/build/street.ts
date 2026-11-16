@@ -122,7 +122,7 @@ export function buildStreet(kit: Kit): Street {
     poke(kit, 'neighbor-right', [P.rbox(4.4, 0.12, 1.1, 0.05, PAL.hotpink, { at: [0, 0, 0.45], rot: [0.28, 0, 0] }), ...[-1.5, 0, 1.5].map((dx) => P.sphere(0.12, PAL.butter, { at: [dx, -0.16, 0.95] }))], [DIM.row[3], 2.75, 0], { px: 2 }),
   )
 
-  // ---- Agong's house front: pillars, header, sign board, tube lights, folding gates ----
+  // ---- the Thailand house front: pillars, header, sign board, tube lights, folding gates ----
   front.add(
     scenery(kit, [
       P.box(0.22, DIM.g0, 0.4, AGONG_WALL, { at: [-HALF, DIM.g0 / 2, 0.05] }),

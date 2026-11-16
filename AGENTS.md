@@ -5,7 +5,7 @@ This is a learning app for **Kaylee, age 5**. She plays it on an iPad (saved to 
 with a friend who needs her help, a handful of activities, passport stamps, stickers and a finale.
 
 **Thailand is where the app is going.** It's the family's country, built in 3D with three.js: Kaylee walks around
-Agong's shophouse as a unicorn, the whole family are animal characters who talk in their own voices, and the places
+the Thailand house (the family's shophouse) as a unicorn, the whole family are animal characters who talk in their own voices, and the places
 the family loves become day trips (the boat trip in Phang Nga Bay, the mall day at ICONSIAM, Nan, Koh Samet). Its guide
 is `docs/thailand-3d.md`. Australia, Italy, China, Egypt and Peru are 2D countries; Australia is the 2D reference.
 Canada (a 3D toy-table map) and the Poles (a 3D globe) mix 3D and 2D activities.

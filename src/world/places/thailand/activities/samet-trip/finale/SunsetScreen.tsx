@@ -14,7 +14,7 @@ import { Sunset as World, SUNSET_ANCHORS } from './sunset'
 
 interface Props {
   flags: StopId[]
-  /** Mom's photo of the three of them (for Agong's wall). */
+  /** Mom's photo of the three of them (for the photo wall). */
   onPhoto(src: string): void
   /** On to the fire show. */
   onFireShow(): void

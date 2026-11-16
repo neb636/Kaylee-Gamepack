@@ -1,4 +1,4 @@
-// The Nail Island (section `nail`): Agong asked for a photo of it. Khao Phing Kan's two cliffs lean against each other
+// The Nail Island (section `nail`): Aunty Jum asked for a photo of it. Khao Phing Kan's two cliffs lean against each other
 // with a split between them, a little beach below, and out in the water Ko Tapu, the nail-shaped rock, stands alone. A
 // ring of red-and-white buoys keeps boats back: they bump her softly away ("Boats stay back so the Nail Island keeps
 // standing!", the real reason: it's protected). She drives onto the glowing beach and the family hops off.

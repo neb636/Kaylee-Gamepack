@@ -1,9 +1,9 @@
 // The Thailand map (plan: planning/around-the-world/thailand/thailand-map.md): where Kaylee lands in Thailand. A toy
 // map in 3D (world.ts): Thailand stands up out of the sea, with a little model of each place she can go and a bobbing
-// pin over it. Tap one and it opens. Bangkok is Agong's house (the mall day starts in there). Krabi is the boat trip
+// pin over it. Tap one and it opens. Bangkok is the Thailand house (the mall day starts in there). Krabi is the boat trip
 // and the elephants, Nan the road trip, Koh Samet the island: each goes straight there, no packing or plane ride
 // (Krabi's landing signpost, the Nan map, the island where she left it or the speedboat). Packing will start from a
-// place-picker inside Agong's house later. A trip ends back here (`stamp=<trip>`): the stamp lands on its pin. Each pin
+// place-picker inside the Thailand house later. A trip ends back here (`stamp=<trip>`): the stamp lands on its pin. Each pin
 // wears its trip's stamp.
 //
 // Everything on the map does something when she pokes it (the elephants, the rain cloud over Nan, the gibbon, the
@@ -101,7 +101,7 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
   /**
    * That place opens: Bangkok the house; Krabi, Nan or Koh Samet the trip, straight there. Packing and the plane ride
    * are skipped from the map for now (Dad, 2026-11-10): the pack/goodbye/airport/window-seat sections are all still in
-   * each trip, and a way to pick a place from inside Agong's house will start them again (tripSession.kitDone is
+   * each trip, and a way to pick a place from inside the Thailand house will start them again (tripSession.kitDone is
    * left in session.ts for that).
    */
   const go = (id: PinId) => {

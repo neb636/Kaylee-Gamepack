@@ -8,7 +8,7 @@
 // trophy), the Nail Island's photo and the sunset ride back; Baan Chang Cafe in Krabi (thailand/baan-chang.md (retired;
 // in git history)): the songthaew to the entrance, the photo at the bamboo sign, her chocolate milk at the cafe, down
 // the boardwalk, then the elephants' yard: feeding, favorites, Lamyai and the splash. Home is the airport on the map
-// (the plane takes off, then the stamp); home (step 5) is the old way home through Agong's house, by its link only.
+// (the plane takes off, then the stamp); home (step 5) is the old way home through the Thailand house, by its link only.
 // `replay=1` plays it as a trip she has done before (Mom's yes offers 🧳 or 🚤, and the flight is shorter). Loaded at
 // startup: keep three.js out of this file.
 import { defineSections } from '../../../../kit/sections'
@@ -30,7 +30,7 @@ const BOAT_SECTIONS = defineSections('thailand', 'boat-trip', {
   sections: [
     { id: 'invite', name: 'Mom asks: ready for a trip?', params: ['replay'], group: 'Getting there' },
     { id: 'pack', name: 'Pack the suitcase', params: ['packed', 'replay'], group: 'Getting there' },
-    { id: 'goodbye', name: "Goodbye at Agong's house, into Aunty Sri's van", params: ['packed', 'replay'], group: 'Getting there' },
+    { id: 'goodbye', name: "Goodbye at the Thailand house, into Aunty Sri's van", params: ['packed', 'replay'], group: 'Getting there' },
     { id: 'airport', name: 'The x-ray belt', params: ['packed', 'replay'], group: 'Getting there' },
     { id: 'takeoff', name: 'Window seat: seatbelt and takeoff', params: ['packed', 'replay'], group: 'Getting there' },
     { id: 'fly', name: 'Window seat: tray, snacks, the elephant below', params: ['packed', 'replay'], group: 'Getting there' },
@@ -53,7 +53,7 @@ const BOAT_SECTIONS = defineSections('thailand', 'boat-trip', {
     { id: 'podium', name: 'The race podium and the trophy', params: ['packed', 'ribbons', 'been'], group: 'Phang Nga Bay' },
     { id: 'nail', name: 'The Nail Island and the photo', params: ['packed', 'ribbons', 'stops', 'photos', 'found', 'been'], group: 'Phang Nga Bay' },
     { id: 'sunset', name: 'The ride back at sunset, and the porpoise (then 🗺️ back to the Krabi map)', params: ['packed', 'ribbons', 'photos', 'found', 'been'], group: 'Phang Nga Bay' },
-    { id: 'home', name: "Home: the photo for Agong's wall, and the stamp", params: ['packed', 'photos', 'found'], group: 'Home' },
+    { id: 'home', name: "Home: the photo for the photo wall, and the stamp", params: ['packed', 'photos', 'found'], group: 'Home' },
   ],
 })
 export default BOAT_SECTIONS

@@ -24,7 +24,7 @@
 //   fireshow  the fire show on Sai Kaew at night (fireshow?round=story|twirl|shapes|finish|thanks): the fireflies
 //           light the dancers' poi and hers.
 // With all four fireflies the driftwood tree opens the finale; at the end of the fire show they go home: Mom's photo
-// goes on Agong's wall, the stamp lands on the 🏝️ pin. The trip is saved on the iPad as she plays (trip.ts). The
+// goes on the photo wall, the stamp lands on the 🏝️ pin. The trip is saved on the iPad as she plays (trip.ts). The
 // Thailand map's 🏝️ pin opens it. Loaded at startup: keep three.js (and the island's coastline data) out of this file.
 import { defineSections } from '../../../../kit/sections'
 import { ITEMS } from '../../trip/packing'

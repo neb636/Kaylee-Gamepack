@@ -18,7 +18,7 @@ Related: [← Thailand plan](../thailand.md), [🏔️ The Nan road trip](nan-tr
 
 Every Krabi or Nan trip starts upstairs in Agong's house today: walk up, find Mom, pick a trip, pack, say goodbye, the x-ray belt, the window seat. With three trips (and more coming) that's a long walk to the fun, and the house doesn't show *where* in Thailand the places are. A map does both: it's the quickest way in, and it teaches that Krabi is down by the sea and Nan is up in the mountains.
 
-Now: 🌍 World map → 🛺 Agong's house → 👩 Mom upstairs (🚤 🛝🍕 🏔️🚙) → 🧳 Pack, goodbye, x-ray, window seat → 🌴 The trip → 🖼️ Agong's wall
+Now: 🌍 World map → 🛺 Agong's house → 👩 Mom upstairs (🚤 🛝🍕 🏔️🚙) → 🧳 Pack, goodbye, x-ray, window seat → 🌴 The trip → 🖼️ the photo wall
 
 New: 🌍 World map → 🗺️ Thailand map (fly the plane) → 📍 Land on a pin → 🌴 The trip → 🗺️ Back on the map (the stamp lands on the pin)
 
@@ -97,7 +97,7 @@ The mall (from the house): 🏠 Bangkok pin → the house → 👩 Mom or Dad: �
 
 - Mom's trip card upstairs and Dad's on the street stop offering 🚤 and 🏔️🚙: they ask only about the mall.
 - The goodbye at Agong's door and Aunty Sri's van, and the x-ray belt (`goodbye`, `airport`).
-- The flight home and the photo for Agong's wall (`home`) on the boat and Nan trips (see the open questions).
+- The flight home and the photo for the photo wall (`home`) on the boat and Nan trips (see the open questions).
 - The boat trip's `replay` shortcut: the once-per-session rule replaces it.
 
 ## 🔗 Section links
@@ -136,7 +136,7 @@ The mall (from the house): 🏠 Bangkok pin → the house → 👩 Mom or Dad: �
 
 ## ❓ Open questions
 
-- **Agong's wall: the trip photos?** OPEN: Trips no longer go home through the house, so she doesn't pick a photo for Agong. My pick: the trip's best photo goes up on his wall by itself, and she finds it next time she's in the house. Or drop the wall for the boat and Nan trips. *Built with my pick for now.*
+- **the photo wall: the trip photos?** OPEN: Trips no longer go home through the house, so she doesn't pick a photo for Agong. My pick: the trip's best photo goes up on his wall by itself, and she finds it next time she's in the house. Or drop the wall for the boat and Nan trips. *Built with my pick for now.*
 - **The finale (the family party): where?** OPEN: My pick: at Agong's house. When every pin wears its stamp, the Bangkok pin grows a 🎉 and landing there opens the party. *Built with my pick for now.*
 - **Pins for places that aren't built yet?** OPEN: My pick: none until they're built (no taps that go nowhere). Or grey “coming soon” pins so she can see more is coming. *Built with my pick for now.*
 - **Where does Sparkle's balloon go?** OPEN: My pick: it floats in at the map's edge when she arrives, and Sparkle talks from the corner as she does in the trips. *For now Sparkle sits in the corner, as in the trips; no balloon yet.*
@@ -174,7 +174,7 @@ The user said “build it out”: the plan and both greyboxes in one PR.
 - **The map** (`activities/hub/map/ThaiMap.tsx`, shapes in `geo.ts`): Thailand drawn in code (the border and coasts simplified, hills, the Mekong and the Chao Phraya, a few islands) on lavender neighbours and blue seas that run past the stage on wide screens. Thailand opens on it (`#/world/thailand`, section `hub/map`).
 - **The plane:** pink with lavender wings, a gold horn on the nose and a blurring propeller. Grab it and it follows her finger, banks into turns (its wings foreshorten), buzzes and puffs a trail; let go and it glides into a lazy circle; tap the map and it flies there. Its feel is on 10 knobs (`?feel=1`), with her finger, the plane, its speed and bank on the graph.
 - **Pins:** Bangkok (🏠, the mall's stamp), Krabi (🚤, the boat trip's) and Nan (🏔️). Let go over one (it grows and the plane's wheels drop) or tap it, and the plane lands with a bump and that place opens. Bangkok: the house (the tuk-tuk the first time a session, then where she left off).
-- **The trips:** the first Krabi or Nan trip a session packs, then straight down the stairs to the window seat (the goodbye and the x-ray belt are out of the way). After that Krabi opens at `boat-trip/land?quick=1` (straight to the airport's signpost) and Nan on the Nan map. ✈️🏠 at the pier, after the splash or at the 3 ends the trip: the photo goes on Agong's wall by itself, the stamp, then back on the map, where the plane flies home and the stamp lands on the pin.
+- **The trips:** the first Krabi or Nan trip a session packs, then straight down the stairs to the window seat (the goodbye and the x-ray belt are out of the way). After that Krabi opens at `boat-trip/land?quick=1` (straight to the airport's signpost) and Nan on the Nan map. ✈️🏠 at the pier, after the splash or at the 3 ends the trip: the photo goes on the photo wall by itself, the stamp, then back on the map, where the plane flies home and the stamp lands on the pin.
 - **The house:** Mom upstairs and Dad on the street only ask “Shall we go to the mall?” (👍 with 🛝🍕, or ✋). The top bar's back button in the house goes to the map (`PlaceMeta.hubHome`).
 - **Pokes:** the elephant, the rain cloud, the gibbon, the buffalo, the hornbill, the tuk-tuk, the dolphins, the longtail and the palm, tapped or flown low over: a hop and a sound, and Sparkle's fact the first time (voiced, `L.map`). Sparkle welcomes her once a session and hints after ~8 s with nothing touched.
 - QA: `qa-screens` (`thailand-map*`), a `qa-motion` scenario (`thailand-plane`) and `qa-pacing` cover it.

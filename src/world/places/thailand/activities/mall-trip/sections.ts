@@ -1,7 +1,7 @@
 // The mall day at ICONSIAM (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history)), as deep-linkable sections:
 // #/world/thailand/mall-trip/<section>?socks=<color>&games=<stickers so far>. The trip loop: Mom asks where to
-// (invite: 🚤 or 🛝🍕), the goodbye at Agong's house and Mom's grey Veloz (goodbye), ICONSIAM, the lift and the
-// HarborLand counter (arrive), and home (home?photos=<the photos from the day>: the pizza box for Agong, the photo on
+// (invite: 🚤 or 🛝🍕), the goodbye at the Thailand house and Mom's grey Veloz (goodbye), ICONSIAM, the lift and the
+// HarborLand counter (arrive), and home (home?photos=<the photos from the day>: the pizza box for Aunty Jum, the photo on
 // his wall, the stamp); replay=1 plays it as a trip she has done before. In between: HarborLand's hall
 // (hall?from=<the door she comes out of>&map=1 for the 🗺️ map of every mini game, and hungry: Mom asks "Pizza time?"), the mini games: the Vet Clinic
 // (vet?patient=puppy|pony|elephant), the Barber Salon (barber?round=1|2|3&hair=<Dad's hairdo>), Cafe & Cake
@@ -31,13 +31,13 @@ const MALL_SECTIONS = defineSections('thailand', 'mall-trip', {
     card: { default: 'chedi', values: ['chedi', 'elephant'], doc: "Little Land's picture card in round 2: the chedi, then the elephant" },
     pizza: { default: 'cheese', values: PIZZAS, doc: 'the pizza she picked at The Pizza Company: Hawaiian, Seafood or Double Cheese (the longest stretch)' },
     at: { default: 'in', values: AT, doc: "where she is in the Big Frame: in (just through the tunnel), pit (in the balls with Dad), l1, l2, top (the levels) or out (on the mats in front)" },
-    shared: { default: '0', values: ['0', '1', '2', '3', '4', '5', '6', '7', '8'], doc: "slices handed out so far, round the table (Mom, Dad, your unicorn) then into Agong's box: 6 starts at the last two, for Agong" },
-    photos: { default: 'dragon', doc: "the photos from the day, a comma list of dragon (on the dragon slide) and cheese (Dad's cheese nose at the pizza table): the first one goes on Agong's wall" },
+    shared: { default: '0', values: ['0', '1', '2', '3', '4', '5', '6', '7', '8'], doc: "slices handed out so far, round the table (Mom, Dad, your unicorn) then into the box: 6 starts at the last two, for Aunty Jum" },
+    photos: { default: 'dragon', doc: "the photos from the day, a comma list of dragon (on the dragon slide) and cheese (Dad's cheese nose at the pizza table): the first one goes on the photo wall" },
     replay: { default: '', doc: '1 = she has done the whole mall day before: picking 🛝🍕 offers 🚗 the whole day, 🛝 straight to HarborLand (her socks from last time) or 🍕 straight to the table' },
   },
   sections: [
     { id: 'invite', name: 'Mom asks: where shall we go? (🚤 or 🛝🍕)', params: ['replay'], group: 'Getting there' },
-    { id: 'goodbye', name: "Goodbye at Agong's house (hugs), into Mom's grey Veloz", params: ['replay'], group: 'Getting there' },
+    { id: 'goodbye', name: "Goodbye at the Thailand house (hugs), into Mom's grey Veloz", params: ['replay'], group: 'Getting there' },
     { id: 'arrive', name: 'ICONSIAM: pull up by the river, the lift to 6, shoes off, socks on, the height chart', params: ['socks', 'replay'], group: 'Getting there' },
     { id: 'hall', name: 'HarborLand: walk the hall and pick a mini game (or tap 🗺️ for the map)', params: ['socks', 'games', 'from', 'hair', 'map'], group: 'HarborLand mini games', links: [{ label: 'HarborLand: walk the hall and pick a mini game', also: [{ label: 'the 🗺️ map', params: { map: '1', games: 'vet,cafe,race' } }] }] },
     { id: 'vet', name: 'The Vet Clinic: heal the puppy, the pony and the baby elephant', params: ['socks', 'games', 'patient'], group: 'HarborLand mini games' },
@@ -52,7 +52,7 @@ const MALL_SECTIONS = defineSections('thailand', 'mall-trip', {
     { id: 'hungry', name: "HarborLand: Dad's tummy rumbles, Mom asks: pizza time?", params: ['socks', 'games'], group: 'HarborLand mini games' },
     { id: 'menu', name: 'The Pizza Company: pick a pizza', params: ['hair'], group: 'The Pizza Company' },
     { id: 'share', name: 'The Pizza Company: pull the cheesy slices and share them fairly', params: ['pizza', 'shared', 'hair'], group: 'The Pizza Company' },
-    { id: 'home', name: "Home: the pizza box for Agong, the cousins' phones down, the photo on his wall, the stamp", params: ['socks', 'pizza', 'photos', 'hair'], group: 'Home' },
+    { id: 'home', name: "Home: the pizza box for Aunty Jum, the cousins' phones down, the photo on his wall, the stamp", params: ['socks', 'pizza', 'photos', 'hair'], group: 'Home' },
   ],
 })
 export default MALL_SECTIONS

@@ -129,7 +129,7 @@ export interface FireEvents {
   shape?(i: number): void
   /** A flag's surprise arrived. */
   gift?(id: StopId): void
-  /** The ring of fire and the fireworks: the show is done. `photo`: the fireworks (for Agong's wall if there's no
+  /** The ring of fire and the fireworks: the show is done. `photo`: the fireworks (for the photo wall if there's no
    *  sunset photo). */
   done(photo: string): void
   /** Someone says a line (the screen's TripGuide speaks it). */
@@ -1776,7 +1776,7 @@ export class FireShow implements World3D {
     this.stats.calls = this.renderer.info.render.calls
     this.stats.tris = this.renderer.info.render.triangles
     if (this.snapPending && this.phaseT > 1.6 && !this.films.on && this.bars.amount < 0.01) {
-      // The photo of the fireworks (for Agong's wall, if there's no sunset photo). The way home comes after the
+      // The photo of the fireworks (for the photo wall, if there's no sunset photo). The way home comes after the
       // dancers' thank you (goHome).
       this.snapPending = false
       this.photo = this.renderer.domElement.toDataURL('image/jpeg', 0.8)

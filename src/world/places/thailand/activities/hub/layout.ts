@@ -1,4 +1,4 @@
-// Agong's shophouse in meters: one source of truth for the 3D build, where Kaylee can walk, what she can tap and where
+// The Thailand house in meters: one source of truth for the 3D build, where Kaylee can walk, what she can tap and where
 // she goes to use it. Pure data (no three.js): tests read it too.
 //
 // Axes: +x is right as seen from the street, +y up, +z toward the street. The house front (the shutter) is at z = 0 and
@@ -144,7 +144,7 @@ export const PICKABLES: Pickable[] = [
   { id: 'neighbor-right', label: "Neighbor's shop", floor: 0, area: 'street', at: [DIM.row[3], 2.7, 0.5], r: 1.1, react: 'jelly' },
 
   // ---- Downstairs ----
-  { id: 'desk', label: "Agong's desk", floor: 0, area: 'inside', at: [2.765, 0.9, -4.45], r: 0.7, react: 'hop', use: { x: 2.225, z: -3.1, face: 150, pose: 'peek' } },
+  { id: 'desk', label: "the desk", floor: 0, area: 'inside', at: [2.765, 0.9, -4.45], r: 0.7, react: 'hop', use: { x: 2.225, z: -3.1, face: 150, pose: 'peek' } },
   { id: 'table', label: 'Table', floor: 0, area: 'inside', at: [-2.075, 0.75, -2.6], r: 1.05, react: 'jelly', use: { x: -0.55, z: -2.0, face: -90, pose: 'sit', snap: { x: -1.3, z: -2.0, y: 0.45 } } },
   { id: 'ground-couch', label: 'Grey couch', floor: 0, area: 'inside', at: [-2.7, 0.5, -6.5], r: 0.9, react: 'jelly', use: { x: -1.65, z: -6.5, face: 90, pose: 'sit', snap: { x: -2.6, z: -6.5, y: 0.44 } } },
   { id: 'photos', label: 'Old photos', floor: 0, area: 'inside', at: [DIM.left + 0.05, 2.45, -4.0], r: 0.95, react: 'tilt', use: { x: -0.3, z: -3.0, face: -70, pose: 'lookup' } },
@@ -276,9 +276,9 @@ export const GAME_SEAT = { floor: 1 as const, x: DIM.gameTable.them.x, z: DIM.ga
  *  wall), and so the way she faces to show off. */
 export const WARDROBE_YAW = 52
 
-/** The family photo on the sidewalk in front of Agong's house: grown-ups behind, each kid in front, beside a parent. */
+/** The family photo on the sidewalk in front of the Thailand house: grown-ups behind, each kid in front, beside a parent. */
 export const PHOTO: { back: string[]; front: [string, number][]; backZ: number; frontZ: number; spacing: number } = {
-  back: ['bird', 'joy', 'jum', 'agong', 'ji', 'nick', 'ja', 'sri'],
+  back: ['bird', 'joy', 'jum', 'ji', 'nick', 'ja', 'sri'],
   front: [
     ['bb', -4.45],
     ['gan', -3.3],

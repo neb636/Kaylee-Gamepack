@@ -1,5 +1,5 @@
-// Agong's take-away box from The Pizza Company (the one she filled at the table, pizza/share.ts): white with the green
-// band and Agong the panda on the front, the two slices she saved inside. Coming home she carries it to him, and its
+// Aunty Jum's take-away box from The Pizza Company (the one she filled at the table, pizza/share.ts): white with the green
+// band and a pink heart on the front, the two slices she saved inside. Coming home she carries it to her, and its
 // lid opens (trip/legs/house-plugin.ts, a box trip's gift). Built facing +z, its lid hinged at the back.
 import { Group } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
@@ -20,10 +20,9 @@ export function buildPizzaBox(bag: Bag, pizza: PizzaId) {
     P.box(t, h, w, '#FFFFFF', { at: [w / 2 - t / 2, h / 2, 0] }),
     P.box(t, h, w, '#FFFFFF', { at: [-w / 2 + t / 2, h / 2, 0] }),
     P.box(w + 0.002, 0.02, t + 0.004, '#4DB57A', { at: [0, h * 0.35, w / 2 - t / 2] }),
-    // Agong (a panda) on the front.
-    P.sphere(0.034, '#FFFFFF', { at: [0.11, h * 0.62, w / 2 + 0.004], scale: [1, 1, 0.3] }),
-    ...[-1, 1].map((s) => P.sphere(0.013, '#4A3F4F', { at: [0.11 + s * 0.027, h * 0.62 + 0.029, w / 2 + 0.006], scale: [1, 1, 0.4] })),
-    ...[-1, 1].map((s) => P.sphere(0.009, '#4A3F4F', { at: [0.11 + s * 0.012, h * 0.63, w / 2 + 0.014], scale: [1, 1.2, 0.4] })),
+    // A little pink heart sticker on the front.
+    ...[-1, 1].map((s) => P.sphere(0.018, '#FF6FAE', { at: [0.11 + s * 0.0135, h * 0.62 + 0.0063, w / 2 + 0.004], scale: [1, 1, 0.3] })),
+    P.box(0.031, 0.031, 0.006, '#FF6FAE', { at: [0.11, h * 0.62 - 0.0081, w / 2 + 0.002], rot: [0, 0, Math.PI / 4] }),
     // The two slices inside, side by side, with their toppings.
     ...[-1, 1].flatMap((s) => [
       P.prism([[0, 0.17], [-0.1, -0.13], [0.1, -0.13]], 0.025, '#E7A94B', { at: [s * 0.095, t + 0.014, 0], rot: [-Math.PI / 2, 0, s * 0.5] }),

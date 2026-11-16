@@ -13,14 +13,13 @@ export interface FamilyMember {
   who: string
   /** Meters (Kaylee is 1.0). */
   height: number
-  /** Where they are today (null: not at Agong's house in gate 1). */
+  /** Where they are today (null: not at the Thailand house in gate 1). */
   spot: { floor: 0 | 1; x: number; z: number; face: number; pose: FamilyPose; seat?: number } | null
   /** Base pitch (Hz) of their greeting babble until they have voices. */
   pitch: number
 }
 
 export const FAMILY: FamilyMember[] = [
-  { id: 'agong', name: 'Agong', thai: 'อากง', who: 'Grandpa', height: 1.45, pitch: 150, spot: { floor: 0, x: 2.025, z: -4.2, face: 65, pose: 'sit', seat: 0.45 } },
   { id: 'jum', name: 'Jum', who: 'Aunt', height: 1.5, pitch: 260, spot: { floor: 0, x: 1.0, z: -18.698, face: -30, pose: 'stand' } },
   { id: 'joy', name: 'Joy', who: 'Aunt, mom of Gan and Ken', height: 1.5, pitch: 280, spot: { floor: 0, x: 0.2, z: -7.0, face: -20, pose: 'stand' } },
   { id: 'bird', name: 'Bird', who: 'Uncle, dad of BB', height: 1.65, pitch: 130, spot: { floor: 0, x: -3.3, z: 1.0, face: 25, pose: 'stand' } },
