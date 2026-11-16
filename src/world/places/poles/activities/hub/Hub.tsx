@@ -1,12 +1,12 @@
 // The Poles' home base: the globe (globe/globe.ts), and the map of the story, "Pebble's Long Way Home". The trail of
-// pictures (stops.ts) runs down the world in story order: three chapters up north, two down south, then home. It shows
+// pictures (stops.ts) runs down the world in story order: three chapters up north, one down south, then home (the ending). It shows
 // twice, always in step: as big picture buttons joined by a dotted line (down the right edge on a wide screen, so the
 // column itself reads top = north, bottom = south; along the bottom on a tall one), and on the globe as a dotted line
 // with a flag at each stop and Sparkle's balloon over the next one (globe/trail.ts). The first time through, the story
 // goes in order: the trail shows only the stops she has finished and the next one, and each new picture pops in as the
-// one before it earns its stamp. Once every stamp is in (the whole story told), every picture shows and she can pick
+// one before it earns its stamp. Once every chapter's stamp is in, every picture shows and she can pick
 // any game at any time. (Starting the story over puts it back in order.) Picking one rolls the globe to its pole, then
-// opens it. Once the whole story is told (every stamp and the trophy), home wears its stamp and a movie ticket joins
+// opens it. Once the whole story is told (the ending's stamp, and the trophy that comes with it), home wears its stamp and a movie ticket joins
 // the end of the trail: the real animals from the story, in the Theater. (No video plays after a chapter: it broke up
 // the story.) Until he is home, Pebble stands beside Pola up north and Papa
 // looks for him down south. The globe is still a toy: she spins it, drags the sun so summer and night swap between the
@@ -16,7 +16,6 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { onDevice, say, useElementSize, useLandscape, type Line, useTimers } from '../../../../../sdk'
-import { useTrophies } from '../../../../../sdk/trophies'
 import { Guide, type GuideHandle } from '../../../../kit/Guide'
 import { useSections } from '../../../../kit/sections'
 import type { PlaceProps } from '../../../../types'
@@ -52,10 +51,8 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const worldRef = useRef<PolesGlobe | null>(null)
   const guide = useRef<GuideHandle>(null)
   const goTimer = useRef<number>(undefined)
-  const { stops, next, all } = trail(meta, stamps)
-  // The whole story told: every stamp, and the finale's trophy (it stays hers after a start-over; the stamps don't).
-  const trophies = useTrophies()
-  const told = all && trophies.some((t) => t.gameId === `world-${meta.id}`)
+  // The whole story told: home (the ending) has its stamp too, and the trophy came with it.
+  const { stops, next, all, told } = trail(meta, stamps)
   // The pictures she can pick: in story order the first time through (what's done, and the next one), all of them once
   // every stamp is in; with the story told, home is done and the movie ticket is next.
   const open = told ? [...stops.map((s) => (s.id === HOME ? { ...s, done: true } : s)), MOVIES] : all ? stops : stops.filter((s, i) => s.done || i === next)

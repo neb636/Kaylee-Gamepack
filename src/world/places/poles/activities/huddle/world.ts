@@ -400,31 +400,9 @@ export class HuddleWorld implements World3D {
 
   // ---------------------------------------------------------------- building
 
-  /** The sea ice the colony stands on (flat, a few soft drifts), rising to snowy land and mountains far off, a couple
-   *  of icebergs frozen into the ice: the films' Antarctica, at night. */
+  /** The sea ice the colony stands on (colonyIce, below). */
   private buildIce() {
-    const { scene, bag } = this
-    const r = rng(41)
-    const flat = { x0: -14, x1: 14, z0: -14, z1: 10 }
-    const heightAt = (x: number, z: number) => (fbm(x * 0.025 + 5, z * 0.025) - 0.3) * 12 * smoothstep(0, 60, outside(x, z, flat)) + (noise(x * 0.2, z * 0.2) - 0.5) * 0.1 * smoothstep(3, 10, outside(x, z, { x0: -6, x1: 6, z0: -4.5, z1: 4 }))
-    scene.add(solid(field({ x0: -200, x1: 200, z0: -220, z1: 40, cell: 1.4, height: heightAt, color: (_x, _z, h, slope) => '#' + snowColor(h, slope, -0.1, 0.6).getHexString() }), bag, 0))
-    const drifts: BufferGeometry[] = []
-    for (let i = 0; i < 14; i++) {
-      const x = -32 + r() * 64
-      const z = -30 + r() * 22
-      if (Math.abs(x) < 9 && z > -9) continue
-      drifts.push(driftGeo(2 + r() * 3.5, 0.35 + r() * 0.5).translate(x, heightAt(x, z) - 0.05, z))
-    }
-    // Little drifts round the edge of the colony's ice, low and soft.
-    for (const [x, z, s] of [[-6.4, -3.6, 1], [6.6, -3.2, 1.1], [-7, 2.2, 0.8], [7.2, 2.4, 0.8]] as const) drifts.push(driftGeo(s * 1.4, s * 0.3).translate(x, 0, z))
-    scene.add(solid(merge(drifts), bag, 1.5, ICE_LINE))
-    scene.add(solid(merge([[-70, -150, 26, 30, 1], [-20, -170, 34, 40, 2], [36, -160, 24, 26, 3], [-120, -130, 22, 24, 4], [84, -140, 20, 22, 5]].map(([x, z, rr, h, seed]) => mountainGeo(rr, h, seed).translate(x, heightAt(x, z) - 2, z))), bag, 2.5, ICE_LINE))
-    scene.add(solid(merge([tableBergGeo(20, 10, 4).translate(30, heightAt(30, -48) - 0.6, -48), tableBergGeo(13, 8, 3).translate(-34, heightAt(-34, -40) - 0.6, -40), tableBergGeo(3.4, 2.2, 1.2).translate(-10.5, -0.2, -7.5)]), bag, 2.5, ICE_LINE))
-    // Icebergs frozen into the sea ice just behind the colony (the emperors huddle in their shelter), and a few
-    // broken blocks of ice: what she sees over the huddle's heads.
-    const near = [tableBergGeo(7, 4, 2.4).translate(-6.5, -0.3, -10), tableBergGeo(9, 5, 3).translate(5.5, -0.3, -13), tableBergGeo(4, 3, 1.6).translate(-1.5, -0.3, -15)]
-    for (const [x, z, sz, seed] of [[-3.6, -7.4, 0.7, 3], [3.1, -6.8, 0.55, 5], [8.6, -6.2, 0.8, 8], [-8.8, -5.4, 0.6, 11], [-9.6, 1.2, 0.5, 13], [9.8, 0.6, 0.6, 17]] as const) near.push(bergGeo(sz, seed).translate(x, sz * 0.25, z))
-    scene.add(solid(merge(near), bag, 2, ICE_LINE))
+    colonyIce(this.scene, this.bag)
   }
 
   /** The seal's hole: a ring of packed snow round dark water, and his round grey head with whiskers that pops up. */
@@ -1702,4 +1680,30 @@ export class HuddleWorld implements World3D {
     this.scene.clear()
     this.bag.dispose()
   }
+}
+
+/** The sea ice the colony stands on (flat, a few soft drifts), rising to snowy land and mountains far off, a couple
+ *  of icebergs frozen into the ice: the films' Antarctica, at night. */
+export function colonyIce(scene: Scene, bag: Bag, cell = 1.4) {
+  const r = rng(41)
+  const flat = { x0: -14, x1: 14, z0: -14, z1: 10 }
+  const heightAt = (x: number, z: number) => (fbm(x * 0.025 + 5, z * 0.025) - 0.3) * 12 * smoothstep(0, 60, outside(x, z, flat)) + (noise(x * 0.2, z * 0.2) - 0.5) * 0.1 * smoothstep(3, 10, outside(x, z, { x0: -6, x1: 6, z0: -4.5, z1: 4 }))
+  scene.add(solid(field({ x0: -200, x1: 200, z0: -220, z1: 40, cell, height: heightAt, color: (_x, _z, h, slope) => '#' + snowColor(h, slope, -0.1, 0.6).getHexString() }), bag, 0))
+  const drifts: BufferGeometry[] = []
+  for (let i = 0; i < 14; i++) {
+    const x = -32 + r() * 64
+    const z = -30 + r() * 22
+    if (Math.abs(x) < 9 && z > -9) continue
+    drifts.push(driftGeo(2 + r() * 3.5, 0.35 + r() * 0.5).translate(x, heightAt(x, z) - 0.05, z))
+  }
+  // Little drifts round the edge of the colony's ice, low and soft.
+  for (const [x, z, s] of [[-6.4, -3.6, 1], [6.6, -3.2, 1.1], [-7, 2.2, 0.8], [7.2, 2.4, 0.8]] as const) drifts.push(driftGeo(s * 1.4, s * 0.3).translate(x, 0, z))
+  scene.add(solid(merge(drifts), bag, 1.5, ICE_LINE))
+  scene.add(solid(merge([[-70, -150, 26, 30, 1], [-20, -170, 34, 40, 2], [36, -160, 24, 26, 3], [-120, -130, 22, 24, 4], [84, -140, 20, 22, 5]].map(([x, z, rr, h, seed]) => mountainGeo(rr, h, seed).translate(x, heightAt(x, z) - 2, z))), bag, 2.5, ICE_LINE))
+  scene.add(solid(merge([tableBergGeo(20, 10, 4).translate(30, heightAt(30, -48) - 0.6, -48), tableBergGeo(13, 8, 3).translate(-34, heightAt(-34, -40) - 0.6, -40), tableBergGeo(3.4, 2.2, 1.2).translate(-10.5, -0.2, -7.5)]), bag, 2.5, ICE_LINE))
+  // Icebergs frozen into the sea ice just behind the colony (the emperors huddle in their shelter), and a few
+  // broken blocks of ice: what she sees over the huddle's heads.
+  const near = [tableBergGeo(7, 4, 2.4).translate(-6.5, -0.3, -10), tableBergGeo(9, 5, 3).translate(5.5, -0.3, -13), tableBergGeo(4, 3, 1.6).translate(-1.5, -0.3, -15)]
+  for (const [x, z, sz, seed] of [[-3.6, -7.4, 0.7, 3], [3.1, -6.8, 0.55, 5], [8.6, -6.2, 0.8, 8], [-8.8, -5.4, 0.6, 11], [-9.6, 1.2, 0.5, 13], [9.8, 0.6, 0.6, 17]] as const) near.push(bergGeo(sz, seed).translate(x, sz * 0.25, z))
+  scene.add(solid(merge(near), bag, 2, ICE_LINE))
 }

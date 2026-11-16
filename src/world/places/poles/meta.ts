@@ -15,9 +15,10 @@ const ALL: [ActivityInfo, boolean][] = [
   [narwhal, narwhalReady],
   [coats, coatsReady],
   [slide, slideReady],
-  [huddle, huddleReady],
-  // The new ending (planning/around-the-world/poles-ending.md), being built act by act: links only until it's done.
+  // The ending (planning/around-the-world/poles-ending.md): home, the last picture on the trail.
   [night, nightReady],
+  // The old last chapter, off the trail now (its links still open it).
+  [huddle, huddleReady],
 ]
 /** Which side of the globe each activity's spot shows on (the hub reads it). */
 export const ACTIVITY_POLE: Record<string, 'north' | 'south' | 'both'> = { floe: floePole, coats: coatsPole, slide: slidePole, huddle: huddlePole, narwhal: narwhalPole, night: nightPole }

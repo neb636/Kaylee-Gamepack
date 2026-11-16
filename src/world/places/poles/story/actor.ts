@@ -64,6 +64,8 @@ export class Actor {
   lean = 0
   /** Turning the head (radians, + to their left). */
   headTurn = 0
+  /** Waddling on the spot while a game moves them itself (0..1: how fast). */
+  waddle = 0
   private home: Object3D | null = null
 
   /** `who`: whose look; `voice`: their speaker in cast.json (default: the same id; null for a silent extra). */
@@ -220,6 +222,10 @@ export class Actor {
         if (m.face !== null) this.root.rotation.y = m.face * DEG
         if (m.kind === 'fly' && this.landing) this.flying = false
       }
+    }
+    if (!m && this.waddle > 0.01) {
+      lift = Math.abs(Math.sin(t * 11)) * 0.05 * this.height * this.waddle
+      rock = Math.sin(t * 11) * 0.1 * this.waddle
     }
     if (this.hopT >= 0) {
       this.hopT += dt / 0.55

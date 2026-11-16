@@ -138,6 +138,15 @@ export const SEA = {
   night: { deep: '#1A2462', mid: '#283A84', sheen: '#7F8FE0', sky: '#4A4590', haze: '#3E3C7E', glow: '#CFD6FF', ice: '#5AA6D8', under: '#6A88D8' },
 } satisfies Record<string, SeaColors>
 
+/** Part way between two sets of sea colors (a sunrise, the warm middle of the world). */
+export function mixSea(a: SeaColors, b: SeaColors, k: number): SeaColors {
+  const out = {} as Record<keyof SeaColors, string>
+  for (const key of Object.keys(a) as (keyof SeaColors)[]) out[key] = '#' + mixA.set(a[key]).lerp(mixB.set(b[key]), k).getHexString()
+  return out
+}
+const mixA = new Color()
+const mixB = new Color()
+
 export interface SeaOpts {
   colors?: SeaColors
   /** The water's height (m). */

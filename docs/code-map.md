@@ -115,9 +115,8 @@ pieces fit together is `docs/building.md` (2D) and `docs/thailand-3d.md` (3D). S
 | 🦄 Narwhal Ride (`narwhal`) | live | [activities/narwhal/](../src/world/places/poles/activities/narwhal) | [activities/narwhal/sections.ts](../src/world/places/poles/activities/narwhal/sections.ts) (5) | [qa.mjs](../src/world/places/poles/activities/narwhal/qa.mjs) |  |
 | 🦊 Snow Coats (`coats`) | live | [activities/coats/](../src/world/places/poles/activities/coats) | [activities/coats/sections.ts](../src/world/places/poles/activities/coats/sections.ts) (3) | [qa.mjs](../src/world/places/poles/activities/coats/qa.mjs) |  |
 | 🐧 Penguin Slide (`slide`) | live | [activities/slide/](../src/world/places/poles/activities/slide) | [activities/slide/sections.ts](../src/world/places/poles/activities/slide/sections.ts) (4) | [qa.mjs](../src/world/places/poles/activities/slide/qa.mjs) |  |
-| 🥚 Emperor Huddle (`huddle`) | live | [activities/huddle/](../src/world/places/poles/activities/huddle) | [activities/huddle/sections.ts](../src/world/places/poles/activities/huddle/sections.ts) (4) | [qa.mjs](../src/world/places/poles/activities/huddle/qa.mjs) |  |
-| 🎶 The Longest Night (`night`) | works | [activities/night/](../src/world/places/poles/activities/night) | [activities/night/sections.ts](../src/world/places/poles/activities/night/sections.ts) (3) | [qa.mjs](../src/world/places/poles/activities/night/qa.mjs) |  |
-| 🎉 Finale (`party`) | finale | [activities/party/](../src/world/places/poles/activities/party) | [activities/party/sections.ts](../src/world/places/poles/activities/party/sections.ts) (4) | [qa.mjs](../src/world/places/poles/activities/party/qa.mjs) |  |
+| 🎶 The Longest Night (`night`) | live | [activities/night/](../src/world/places/poles/activities/night) | [activities/night/sections.ts](../src/world/places/poles/activities/night/sections.ts) (6) | [qa.mjs](../src/world/places/poles/activities/night/qa.mjs) |  |
+| 🥚 Emperor Huddle (`huddle`) | works | [activities/huddle/](../src/world/places/poles/activities/huddle) | [activities/huddle/sections.ts](../src/world/places/poles/activities/huddle/sections.ts) (4) | [qa.mjs](../src/world/places/poles/activities/huddle/qa.mjs) |  |
 
 ## 🍁 Canada (`canada`)
 

@@ -1,103 +1,48 @@
 import { expect, test, type Page } from '@playwright/test'
 
-// Lifecycle contracts for the Poles' finale: a departed finale cannot win, GPU recovery keeps earned progress, and a
-// section link opens straight at its section (no film before it). The flight and the quiz are one world on the globe;
-// Papa's song is another; both answer on window.__polesPartyQA (only one is on screen at a time).
-async function open(page: Page, section: string) {
-  await page.goto(`./#/world/poles/party/${section}${section.includes('?') ? '&' : '?'}stamps=all`)
+// Lifecycle contracts for the Poles' ending, The Longest Night (activities/night/): a section link opens straight into
+// its act (no film before it), GPU recovery keeps where she was, and leaving an act cancels what it had pending. Every
+// act answers on window.__polesNightQA (only one is on screen at a time).
+async function open(page: Page, hash: string) {
+  await page.goto(`./#/world/poles/night/${hash}`)
   await page.getByRole('button', { name: /let's play/i }).click()
-  await page.waitForFunction(() => window.__polesPartyQA?.().mode === 'webgl')
+  await page.waitForFunction(() => window.__polesNightQA?.().mode === 'webgl')
 }
 
-async function loseContext(page: Page) {
+async function loseContext(page: Page, wakeLabel: RegExp) {
   await page.locator('canvas[data-engine]').evaluate((canvas: HTMLCanvasElement) => {
     const ext = canvas.getContext('webgl2')?.getExtension('WEBGL_lose_context')
     if (!ext) throw new Error('GPU context loss is unavailable')
     ext.loseContext()
   })
-  await expect(page.getByRole('button', { name: /wake the sky/i })).toBeVisible()
+  await expect(page.getByRole('button', { name: wakeLabel })).toBeVisible()
 }
 
-async function wake(page: Page) {
-  await page.getByRole('button', { name: /wake the sky/i }).click()
-  await expect(page.getByRole('button', { name: /wake the sky/i })).toHaveCount(0)
-  await page.waitForFunction(() => window.__polesPartyQA?.().mode === 'webgl')
-}
-
-const trophy = (page: Page) => page.getByRole('heading', { name: /You did it/ })
-
-test('leaving the badge cancels its pending trophy', async ({ page }) => {
-  await open(page, 'badge')
-  await page.evaluate(() => { location.hash = '#/world/poles/hub/globe' })
-  await page.waitForFunction(() => !!window.__polesGlobeQA)
-  await page.waitForTimeout(5000)
-  await expect(trophy(page)).toHaveCount(0)
-})
-
-test('flight recovery keeps the current position and catches', async ({ page }) => {
-  await open(page, 'fly?leg=warm')
-  await page.waitForFunction(() => Number(window.__polesPartyQA?.().along) > 0.3)
-  await loseContext(page)
-  const before = await page.evaluate(() => window.__polesPartyQA!())
-  await wake(page)
-  const after = await page.evaluate(() => window.__polesPartyQA!())
-  expect(after.section).toBe('fly')
-  expect(after.leg).toBe(before.leg)
-  expect(Number(after.along)).toBeCloseTo(Number(before.along), 1)
-  expect(after.fish).toBe(before.fish)
-})
-
-test("Papa's song opens from its link with no film, and finds Papa by his tune", async ({ page }) => {
-  // Three singing turns and a waddle to the next round, in a browser with no GPU: more than the default 30 s.
-  test.setTimeout(120_000)
-  await open(page, 'song')
+test('an act opens from its link with no film before it', async ({ page }) => {
+  await open(page, 'huddle?part=middle')
   await expect(page.locator('[data-story-film]')).toHaveCount(0)
-  await page.waitForFunction(() => window.__polesPartyQA?.().state === 'listen')
-  const q = (await page.evaluate(() => window.__polesPartyQA!())) as { section: string; round: number; row: string[]; papa: string }
-  expect(q.section).toBe('song')
-  expect(q.round).toBe(1)
-  expect(q.row).toHaveLength(3)
-  // A dad who isn't Papa sings his own tune and steps back: never a fail, the round goes on.
-  await page.locator(`[data-anchor="${q.row.find((d) => d !== q.papa)}"]`).click({ force: true })
-  await page.waitForFunction(() => window.__polesPartyQA?.().misses === 1 && window.__polesPartyQA?.().state === 'listen')
-  // Papa: the same song. The next round brings five dads.
-  await page.locator(`[data-anchor="${q.papa}"]`).click({ force: true })
-  await page.waitForFunction(() => window.__polesPartyQA?.().round === 2)
-  expect(((await page.evaluate(() => window.__polesPartyQA!())) as { row: string[] }).row).toHaveLength(5)
+  const q = (await page.evaluate(() => window.__polesNightQA!())) as { section: string; part: string; step: string }
+  expect(q.section).toBe('huddle')
+  expect(q.part).toBe('middle')
+  expect(q.step).toBe('packed')
 })
 
-test("song recovery keeps the round she is on", async ({ page }) => {
-  await open(page, 'song?round=2')
-  await page.waitForFunction(() => window.__polesPartyQA?.().state === 'listen')
-  await loseContext(page)
-  await wake(page)
-  const q = await page.evaluate(() => window.__polesPartyQA!())
-  expect(q.section).toBe('song')
-  expect(q.round).toBe(2)
+test('flight recovery keeps the stretch of the way she was on', async ({ page }) => {
+  await open(page, 'fly?leg=warm')
+  await loseContext(page, /to fly again/)
+  await page.getByRole('button', { name: /to fly again/ }).click()
+  await page.waitForFunction(() => window.__polesNightQA?.().mode === 'webgl')
+  const q = (await page.evaluate(() => window.__polesNightQA!())) as { section: string; leg: string }
+  expect(q.section).toBe('fly')
+  expect(q.leg).toBe('warm')
 })
 
-test('quiz recovery keeps a newly earned star and advances past its answered question', async ({ page }) => {
-  await open(page, 'quiz?q=tern&stars=2')
-  // Terry is the third real piece in this question.
-  await expect(page.locator('[data-anchor="opt2"]')).toBeVisible()
-  await page.locator('[data-anchor="opt2"]').click({ force: true })
-  await page.waitForFunction(() => window.__polesPartyQA?.().stars === 3)
-  await loseContext(page)
-  await wake(page)
-  const q = await page.evaluate(() => window.__polesPartyQA!())
-  expect(q.section).toBe('quiz')
-  expect(q.stars).toBe(3)
-  expect(q.question).not.toBe('tern')
-  expect(q.state).toBe('ask')
-})
-
-test('lost badge waits for recovery before opening the trophy', async ({ page }) => {
-  await open(page, 'badge')
-  await loseContext(page)
-  await page.waitForTimeout(5000)
-  await expect(trophy(page)).toHaveCount(0)
-  await wake(page)
-  expect(await page.evaluate(() => window.__polesPartyQA?.().section)).toBe('badge')
-  await page.getByRole('button', { name: 'The trophy', exact: true }).click()
-  await expect(trophy(page)).toBeVisible()
+test('leaving the goodbye flight cancels its pending trophy', async ({ page }) => {
+  await open(page, 'goodbye')
+  await page.evaluate(() => {
+    location.hash = '#/world/poles/hub/globe'
+  })
+  await page.waitForFunction(() => !!window.__polesGlobeQA)
+  await page.waitForTimeout(4000)
+  await expect(page.getByRole('heading', { name: /You did it/ })).toHaveCount(0)
 })

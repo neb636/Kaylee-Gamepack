@@ -57,6 +57,70 @@ export const nightSfx = {
   hic: () => (tone(700, 1200, 0.08, 0.06, 'triangle'), tone(1200, 900, 0.06, 0.04, 'triangle', 0.08)),
 }
 
+/** Hold to Fly (Act 1) and the goodbye flight: recorded clips from the Poles' folder (no new ones were made: the
+ *  cloud session had no ElevenLabs key). */
+export const flySfx = {
+  /** The wind over the sea (until stopped). */
+  wind: () => bed(url('story-wind'), 0.28),
+  /** The blizzard at the end (until stopped). */
+  blizzard: () => bed(url('party-blizzard'), 0.3),
+  /** The burner roars (again every second or so while she holds). */
+  burner: clip(url('party-burner'), () => noise(0.7, 0.12, 'lowpass', 500, 900), { vol: 0.7 }),
+  /** A gust in the storm. */
+  gust: clip(url('party-gust'), () => noise(0.9, 0.1, 'bandpass', 400, 1600)),
+  /** The balloon boings off a berg. */
+  boing: clip(url('narwhal-bump'), () => sfx.boing()),
+  /** The basket dips in the sea. */
+  splash: clip(url('story-splash'), () => noise(0.4, 0.1, 'highpass', 900, 2600)),
+  /** The red ship's horn. */
+  horn: clip(url('story-horn'), () => [0, 0.35].forEach((d) => tone(220, 220, 0.25, 0.06, 'square', d))),
+  /** A whale spouts. */
+  spout: clip(url('party-whale'), () => noise(0.8, 0.08, 'highpass', 600, 2400)),
+  /** The albatross calls. */
+  albatross: clip(url('party-albatross'), () => tone(800, 600, 0.3, 0.04, 'square')),
+  /** Terry's call. */
+  tern: clip(url('hub-tern'), () => [0, 0.14].forEach((d) => tone(1900, 1500, 0.12, 0.04, 'square', d))),
+  /** Through the thundercloud: a fluffy poof and the rain. */
+  rain: clip(url('party-cloud'), () => noise(1, 0.08, 'highpass', 2000, 5000)),
+  /** A tap on the wind's streaks. */
+  whoosh: clip(url('party-leg'), () => sounds.sparkle()),
+  /** The southern lights flare. */
+  lights: clip(url('hub-lights'), () => sounds.sparkle()),
+  /** Home at the top of the world (the goodbye flight). */
+  hug: clip(url('party-hug'), () => sounds.fanfare()),
+}
+
+/** Through the Huddle (Act 3): the colony's sounds (recorded clips from the Poles' folder). */
+export const huddleSfx3 = {
+  /** The colony all round: soft honks, the wind (until stopped). */
+  colony: () => bed(url('party-colony'), 0.32),
+  wind: () => bed(url('story-wind-night'), 0.22),
+  /** Pebble's little feet. */
+  step: clip(url('party-step'), () => sfx.thump(), { vol: 0.5 }),
+  /** A dad squished aside honks. */
+  honk: clip(url('slide-honk-papa'), () => tone(300, 260, 0.2, 0.05, 'square'), { vol: 0.6 }),
+  /** Pebble bounces off a tummy. */
+  boing: clip(url('narwhal-bump'), () => sfx.boing()),
+  /** A tummy slide. */
+  slide: clip(url('slide-scrape'), () => noise(0.8, 0.06, 'highpass', 1200, 3000), { vol: 0.6 }),
+  /** The gust. */
+  gust: clip(url('party-gust'), () => noise(0.9, 0.1, 'bandpass', 400, 1600)),
+  /** The dads shuffle round. */
+  shuffle: clip(url('party-shuffle'), () => sfx.thump()),
+  /** A dad shivers. */
+  brrr: clip(url('huddle-brrr'), () => tone(300, 280, 0.4, 0.03, 'sawtooth')),
+  /** Papa's gold notes rise. */
+  gold: clip(url('story-chime'), () => tone(660, 990, 0.5, 0.04, 'sine'), { vol: 0.6 }),
+  /** The dads step aside, one by one. */
+  aside: clip(url('party-bow'), () => sounds.pop()),
+  /** Tucked onto Papa's feet. */
+  hug: clip(url('party-hug'), () => sounds.fanfare()),
+  /** Everyone cheers. */
+  cheer: clip(url('party-cheer'), () => sounds.fanfare()),
+  /** Pola, far off, growls along. */
+  far: clip(url('story-call'), () => tone(260, 330, 0.6, 0.03, 'sine'), { vol: 0.5 }),
+}
+
 const hz = (semi: number, base: number) => base * 2 ** (semi / 12)
 
 /** One note of Papa's song in a singer's own voice: `semi` above their low note, `dur` seconds, `vol` 0..1, `pan`

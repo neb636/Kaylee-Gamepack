@@ -60,7 +60,6 @@ export const L = {
       narwhal: 'Next stop: a ride on a narwhal!',
       coats: 'Next stop: the snow is coming!',
       slide: 'Next stop: the bottom of the world!',
-      huddle: 'Next stop: the long, dark night.',
     },
     // The whole story told (every stamp and the trophy), once: the movie ticket at the end of the trail opens the real
     // animals' videos (the Theater).
@@ -158,38 +157,6 @@ export const L = {
       none: papa('No Pebble in the sea.'),
       supper: papa('But I caught his favorite supper.'),
       soon: papa("I just know he's on his way home."),
-    },
-    // Emperor Huddle: the long night, and the night Pebble hatched.
-    huddleIn: {
-      dark: 'Winter at the South Pole. The sun is gone for months.',
-      wait: papa("I'll wait right here, Pebble."),
-      remember: papa('I remember the night you hatched.'),
-    },
-    huddleOut: {
-      warm: papa('I kept you warm all winter long.'),
-      sun: papa('Look. The sun is coming back.'),
-      dot: papa('Wait. What is that, up in the sky?'),
-    },
-    // The finale: the flight home, Papa's song, and a polar bear at the South Pole.
-    homeIn: {
-      aboard: 'All aboard! Next stop, the bottom of the world!',
-      bye: mama('Goodbye, my brave cub! Hurry home!'),
-      follow: terry('Follow me! All the way down the world!'),
-    },
-    homeLand: {
-      land: 'We made it! This is Antarctica.',
-      ground: pola("There's ground under this ice! Not sea!"),
-      what: papa('Goodness! What is THAT?'),
-      bear: pola("Hi! I'm a polar bear!"),
-      same: pebble('Papa? They all look the same!'),
-      song: "Every penguin papa has his own song. Let's find Papa's!",
-    },
-    homeReunion: {
-      pebble: papa('Pebble! My Pebble!'),
-      papa: pebble('Papa! I went to the top of the world!'),
-      friend: pebble('This is Pola. She carried me home.'),
-      thanks: papa('A polar bear at the South Pole! Thank you, Pola.'),
-      quiz: terry("Top to bottom! Who's ready for my Polar Explorer quiz?"),
     },
   },
 
@@ -436,15 +403,9 @@ export const L = {
 
   // ---- The finale (activities/party/): the flight home, Papa's song, Terry's Polar Explorer quiz. In play order. ----
   party: {
-    // -- The flight home: Terry leads the balloon down the world.
-    // As the flight starts: Sparkle says how to steer, then Terry calls back to the balloon.
-    steer: onDevice('Steer Terry with your finger!', 'Click and drag to steer Terry!'),
-    setOff: terry('Follow me, balloon!'),
-    // Sparkle, when nothing has been touched for a while.
-    steerHint: onDevice('Move your finger to steer Terry!', 'Hold the click and move to steer Terry!'),
-    // Terry, every few fish he gulps (in turn).
-    fish: [terry('Yum, a fish!'), terry('Fishy!'), terry('Got one!')],
-    // Terry, over a country she has been to (the passport's), by its id.
+    // (The old finale's flight, Papa's song and Terry's quiz were retired by the ending, The Longest Night: its
+    // goodbye answers the quiz's first question by flying. What the ending and Emperor Huddle still say from here.)
+    // Terry, over a country she has been to (the passport's), by its id (the ending's Act 1).
     hello: {
       thailand: terry('Hello, Thailand!'),
       australia: terry('Hello, Australia!'),
@@ -454,85 +415,12 @@ export const L = {
       peru: terry('Hello, Peru!'),
       canada: terry('Hello, Canada!'),
     } as Record<string, { text: string; voice: string }>,
-    // The warm middle of the world: the sea turns turquoise, Pola pants and fans herself. Then Sparkle's fact.
-    warm: pola("Phew! I'm melting!"),
-    warmFact: 'The middle of the world is the warmest part!',
-    // The first whale spouts below.
-    whale: terry('Look down! A whale!'),
-    // The cold comes back: Pebble bounces in the basket.
-    south: pebble('It smells like home!'),
-    // The albatross glides in beside them.
-    albatross: terry('Hello, albatross! Nearly there!'),
-    // A tap on the balloon (in turn).
+    // A tap on the balloon (the goodbye flight).
     balloon: [pola('Wheee!'), pebble('Higher, higher!')],
-
-    // -- Papa's song: find each chick's papa by his tune.
     song: {
-      // Round 1. Pebble, then he hums; then Sparkle says what to do.
-      ask: pebble('Papa sings like this!'),
-      how: onDevice('Tap a papa to hear his song!', 'Click a papa to hear his song!'),
-      // Sparkle, when nothing has been touched for a while (the chick's tune plays again on a tap).
-      hint: onDevice('Tap the chick to hear the song again.', 'Click the chick to hear the song again.'),
-      // A dad who isn't the papa, the second miss of a round (Papa's voice; the first miss is a bow).
-      neighbor: papa('Not my chick! Try my neighbor.'),
-      // After two misses the right papa sways and glows.
-      glow: 'Look! Who is swaying?',
-      // Found, round 1: Pebble, then Papa.
-      found: pebble("That's Papa's song!"),
-      papa: papa('My little Pebble!'),
-      // Round 2: another chick peeps for help (Pebble's voice); Sparkle.
-      more: pebble('Find my papa too!'),
-      moreHow: 'More papas! Listen for the same song.',
-      // Found, rounds 2 and 3 (the chick).
-      thanks: [pebble('Papa! You found him!'), pebble('Thank you! Thank you!')],
-      // Round 3: the wind and the snow come up (Sparkle); one last chick.
-      storm: 'Brr, a snowstorm! Just listen.',
-      last: pebble("I can't see my papa!"),
-      // All three found.
-      done: 'Every chick has a papa!',
-      // Taps behind the row: Pola (in turn), and Sparkle's facts the first time she pokes the colony or a found pair.
-      pola: [pola('I just want to say hi!'), pola('Hi, penguins!')],
-      colonyFact: "Penguins have never seen a polar bear. They're a little shy!",
+      // Emperor Huddle's fact the first time Papa sings.
       songFact: 'Emperor penguins find their family by their song.',
     },
-
-    // -- Terry's Polar Explorer quiz: Terry asks, she answers by doing; Sparkle says how.
-    quiz: terry('Quiz time!'),
-    ask: {
-      bear: terry('Take Pola home! Where do polar bears live?'),
-      penguin: terry('Where do penguins live?'),
-      south: terry('Show me the South Pole!'),
-      north: terry('Show me the North Pole!'),
-      ocean: terry('Which pole is sea under the ice?'),
-      coldest: terry('Which pole is the coldest?'),
-      tern: terry('Who flies to both poles?'),
-      summer: terry("It's summer up north. What is it down south?"),
-    },
-    // Sparkle: how to answer each kind of question (the first time it comes up, and when she's stuck).
-    how: {
-      drag: onDevice('Drag to the top or the bottom!', 'Click and drag to the top or the bottom!'),
-      spin: onDevice('Swipe the globe up or down!', 'Drag the globe up or down!'),
-      tap: onDevice('Tap the top or the bottom!', 'Click the top or the bottom!'),
-      pick: onDevice('Tap your answer!', 'Click your answer!'),
-    },
-    // A miss: something silly, then the right thing glows and she does it herself. (Pola and the penguin speak for
-    // themselves when she puts them at the wrong pole; Terry for the rest.)
-    miss: {
-      bear: pola("Where's the sea ice? I live up top!"),
-      penguin: pebble('Brr! Where is everybody?'),
-      south: terry('Wobble, wobble! The other end!'),
-      north: terry('Wobble, wobble! The other end!'),
-      ocean: terry('That one is rock and land! Try the other.'),
-      coldest: terry('Brr! The other one is even colder.'),
-      tern: terry('Not them. Who can fly far?'),
-      summer: terry("Down south it's dark and snowy!"),
-    },
-    glow: 'Look for the sparkle!',
-    // Right, the first question: Pola waves from the sea ice. Right, the others: Terry cheers (in turn).
-    home: pola("I'm home! Bye, Pebble!"),
-    right: [terry('Yes!'), terry("That's right!"), terry('You got it!'), terry('Top marks!')],
-    // The badge. No name here: the trophy's line says it right after.
-    badge: terry('A real Polar Explorer!'),
   },
 
   // ---- The new ending, The Longest Night (planning/around-the-world/poles-ending.md; activities/night/). ----

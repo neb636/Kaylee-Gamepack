@@ -4,7 +4,9 @@ import type { ActivityInfo } from '../../../../types'
 import { art } from '../../art'
 import { L } from '../../lines'
 
-export const READY = true
+// Off the trail: the ending (activities/night/) took its place, and its Act 3 stands on this huddle's ice. Its links
+// still open it.
+export const READY = false
 /** Which side of the globe its spot shows on. */
 export const POLE = 'south' as const
 

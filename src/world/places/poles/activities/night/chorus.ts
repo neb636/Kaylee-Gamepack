@@ -40,7 +40,7 @@ import { Actor, openBeak } from '../../story/actor'
 import { Aurora, Balloon, driftGeo, ICE_LINE, mountainGeo, rng, tableBergGeo } from '../../story/props'
 import { IceSeal, Humpback, hatGeo } from '../slide/critters'
 import { noteAt, sing, TUNES, tuneSeconds } from '../party/sounds'
-import type { NightSection } from './sections'
+import type { ChorusSection } from './sections'
 import { nightSfx, voice, type Singer } from './sounds'
 
 const FILE = 'src/world/places/poles/activities/night/chorus.ts'
@@ -66,7 +66,7 @@ export type TalkKind = 'cue' | 'fact' | 'friend'
 export type Phase = 'play' | 'end'
 
 export interface ChorusEvents {
-  section(s: NightSection): void
+  section(s: ChorusSection): void
   talk(what: ChorusTalk, kind: TalkKind): void
   /** Her hint when she's stuck: the current instruction (null: nothing to do, a scene is playing). */
   hint(what: 'start' | 'long' | null): void
@@ -75,7 +75,7 @@ export interface ChorusEvents {
 }
 
 export interface ChorusStart {
-  section: NightSection
+  section: ChorusSection
 }
 
 /** The things the rings can find (the hat is found, not a singer). */
@@ -86,8 +86,8 @@ const SINGER: Partial<Record<Find, Singer>> = { terry: 'terry', seal: 'seal', ad
 
 /** Where Pola stands at each stop (she faces -z, away from the camera, into the dark; Pebble on her back faces us). */
 const STOPS = [new Vector3(0, 0, 0), new Vector3(0, 0, -14), new Vector3(0, 0, -27)] as const
-const STOP_OF: Record<NightSection, number> = { whiteout: 0, edge: 1, together: 2 }
-const SECTION_OF: NightSection[] = ['whiteout', 'edge', 'together']
+const STOP_OF: Record<ChorusSection, number> = { whiteout: 0, edge: 1, together: 2 }
+const SECTION_OF: ChorusSection[] = ['whiteout', 'edge', 'together']
 /** Where each hidden friend is, and at which stop. */
 const HIDE: Record<Find, { at: [number, number]; stop: number }> = {
   hat: { at: [1.8, -1.3], stop: 0 },
@@ -263,7 +263,7 @@ export class ChorusWorld implements World3D {
   private time = 0
 
   // ---- The story.
-  private section: NightSection
+  private section: ChorusSection
   private stop = 0
   /** 0..2 between stops while Pola walks (the air blends). */
   private air = 0

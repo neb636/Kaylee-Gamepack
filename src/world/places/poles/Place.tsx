@@ -13,13 +13,14 @@ import type { PlaceProps } from '../../types'
 import { FloeHop } from './activities/floe/FloeHop'
 import { Hub } from './activities/hub/Hub'
 import { NarwhalRide } from './activities/narwhal/NarwhalRide'
-import { Finale } from './activities/party/Finale'
 import { PenguinSlide } from './activities/slide/PenguinSlide'
 import STORY_SECTIONS, { type FilmId } from './activities/story/sections'
 import { CHAPTER_FILMS, filmSeen, forgetFilms, seeFilm } from './story/chapters'
 import { StartOver } from '../../kit/StartOver'
 import { setStamps } from '../../stamps'
 import { StoryFilm } from './story/StoryFilm'
+import { ACT_SECTION, forgetNight, STEPS } from './activities/night/steps'
+import { go } from '../../../router'
 
 /** What every Poles activity gets: call `onDone` at its payoff (its film, the stamp, the sticker, the video, then the globe). */
 export interface ActivityProps {
@@ -44,7 +45,7 @@ const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = {
       <EmperorHuddle {...p} />
     </Suspense>
   ),
-  // The new ending, The Longest Night (3D, loaded on its own like the huddle). Being built: its links open it.
+  // The ending, The Longest Night (3D, loaded on its own like the huddle): its films and acts run inside it.
   night: (p) => (
     <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: '#2A2766' }} />}>
       <Night {...p} />
@@ -53,16 +54,11 @@ const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = {
 }
 
 export default function Place(props: PlaceProps) {
-  const { meta, activity, stamps, onWin } = props
-  const stamp = useStampFlow(props, { closeIcon: '🌍 ▶', videoNext: '🌍', layer: true })
-  const all = meta.activities.every((a) => stamps.includes(a.id))
+  const { meta, activity, stamps, onWin, backToMap } = props
+  // The ending's stamp is the last: the trophy comes straight after it (then the globe, where the movie ticket waits).
+  const stamp = useStampFlow(props, { closeIcon: '🌍 ▶', videoNext: '🌍', layer: true, after: (info) => (info.id === 'night' ? onWin() : backToMap()) })
 
   if (activity === 'story') return <FilmLink {...props} />
-  if (activity === 'party') {
-    // The finale waits for every stamp (a link with ?stamps=all opens it straight away).
-    if (!all) return <Hub {...props} />
-    return <Finale onWin={onWin} />
-  }
   const Activity = activity ? ACTIVITIES[activity] : undefined
   const info = meta.activities.find((a) => a.id === activity) ?? meta.inTheWorks?.find((a) => a.id === activity)
   if (!Activity || !info) return <Arrival {...props} />
@@ -102,6 +98,7 @@ function Arrival(props: PlaceProps) {
             // finale waits for them), the films are unseen, and the way-in film plays. The trophy stays hers.
             setStamps(props.meta.id, [])
             forgetFilms()
+            forgetNight()
             setResumed(false)
             setFilm(true)
           }}
@@ -157,8 +154,12 @@ function FilmLink({ openActivity, backToMap }: PlaceProps) {
       onDone={() => {
         seeFilm(id)
         const chapter = Object.entries(CHAPTER_FILMS).find(([, f]) => f.in === id)?.[0]
+        // (The ending's films go on to what follows them in the chapter: the next act, or the next film.)
+        const at = STEPS.findIndex((st) => 'film' in st && st.film === id)
+        const after = at >= 0 ? STEPS[at + 1] : undefined
         if (chapter) openActivity(chapter)
-        else if (id === 'home-in') openActivity('party')
+        else if (after && 'act' in after) go.world('poles', 'night', ACT_SECTION[after.act])
+        else if (after && 'film' in after) go.world('poles', 'story', after.film)
         else backToMap()
       }}
     />

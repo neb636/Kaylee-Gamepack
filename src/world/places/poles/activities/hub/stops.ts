@@ -4,14 +4,14 @@
 import type { PlaceMeta } from '../../../../types'
 import { STORY_ORDER } from '../../story/chapters'
 
-/** The finale's id (Place.tsx opens it once every stamp is in). */
-export const HOME = 'party'
+/** Home: the ending, The Longest Night (Place.tsx opens it once the chapters' stamps are in). */
+export const HOME = 'night'
 /** The movie ticket at the end of the trail once the whole story is told (Hub.tsx): it opens the Theater. Not on the
  *  globe (no flag), only in the trail of pictures. */
 export const MOVIES: Stop = { id: 'movies', name: 'Real animals movies', lat: -90, pole: 'south', done: false }
 /** Where each stop's flag stands on the trail's meridian (globe/trail.ts): three up north, two down south, and home
  *  near the South Pole. */
-const STOP_LAT: Record<string, number> = { floe: 70, narwhal: 59, coats: 48, slide: -63, huddle: -72, [HOME]: -81 }
+const STOP_LAT: Record<string, number> = { floe: 70, narwhal: 59, coats: 48, slide: -66, [HOME]: -81 }
 
 export interface Stop {
   id: string
@@ -24,7 +24,8 @@ export interface Stop {
 }
 
 /** The trail for this passport: every chapter the place has, in story order, then home. `next` is the first stop
- *  without a stamp (home once the chapters are done); `all` is true once every stamp is in (the finale is open). */
+ *  without a stamp (home once the chapters are done); `all` is true once every chapter's stamp is in (home is open);
+ *  `told` once home's is too (the whole story told). */
 export function trail(meta: PlaceMeta, stamps: string[]) {
   const stops: Stop[] = []
   for (const id of STORY_ORDER) {
@@ -34,8 +35,10 @@ export function trail(meta: PlaceMeta, stamps: string[]) {
     const lat = STOP_LAT[id] ?? 0
     stops.push({ id, name: a.name, img: a.sticker.img, lat, pole: lat >= 0 ? 'north' : 'south', done: stamps.includes(id) })
   }
-  const all = meta.activities.length > 0 && meta.activities.every((a) => stamps.includes(a.id))
-  stops.push({ id: HOME, name: 'Home: Pole to Pole', lat: STOP_LAT[HOME], pole: 'south', done: false })
+  const all = stops.length > 0 && stops.every((s) => s.done)
+  const home = meta.activities.find((a) => a.id === HOME)
+  const told = !!home && stamps.includes(HOME)
+  stops.push({ id: HOME, name: home?.name ?? 'Home: Pole to Pole', lat: STOP_LAT[HOME], pole: 'south', done: told })
   const next = Math.max(0, stops.findIndex((s) => !s.done))
-  return { stops, next, all }
+  return { stops, next, all, told }
 }
