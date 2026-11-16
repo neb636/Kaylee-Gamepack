@@ -1,0 +1,14 @@
+{
+  "title": "Offline: hotel wifi and slow connections",
+  "checkIn": "fix",
+  "kaylee": "The game keeps working on the plane, even if hotel wifi got in the way while it was saving. On weak wifi, saved voices and pictures load straight from the iPad instead of waiting.",
+  "questions": [],
+  "pictures": [
+    {
+      "title": "On the plane, after a night on hotel wifi",
+      "before": "pics/plane-before.jpg",
+      "after": "pics/plane-after.jpg",
+      "caption": "The iPad joined hotel wifi while a new update was half saved. Before, the hotel's login page was saved as the game's code: blank pink screen. Now nothing wrong is saved, and the last good copy plays. Filmed in Safari's engine with the server switched off."
+    }
+  ]
+}
