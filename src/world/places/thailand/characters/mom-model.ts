@@ -90,7 +90,7 @@ const yAxis = new Vector3(0, 1, 0)
  *  forward), the more its swing plane turns forward by up to `tilt`, so a wave comes up in front of her. A pure reach
  *  forward stays forward (model.ts swingForward turns every pose, so a reach went back into her body). The rest pose
  *  is unchanged. `s` is -1 for the left arm, 1 for the right. */
-function reachForward(arm: Object3D, s: -1 | 1, tilt: number) {
+export function reachForward(arm: Object3D, s: -1 | 1, tilt: number) {
   arm.updateMatrix = function (this: Object3D) {
     const { x, z } = this.rotation
     const out = Math.max(0, s * z)

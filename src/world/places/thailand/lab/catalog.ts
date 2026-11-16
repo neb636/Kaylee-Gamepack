@@ -58,6 +58,8 @@ export interface CastEntry {
   color: string
   /** Entries that are variations of each other share this. */
   set?: string
+  /** The modelled Dad on trial (characters/dad-model.ts), built from his GLB instead of `look`. */
+  dadModel?: boolean
 }
 
 const family: CastEntry[] = [
@@ -67,8 +69,11 @@ const family: CastEntry[] = [
   ...FAMILY.map((m): CastEntry =>
     m.id === 'ji'
       ? { id: m.id, name: m.name, who: 'Your mom, a cream unicorn (the vinyl toy, modelled in Tripo3D)', group: 'family', kind: 'member', voice: 'ji', src: 'characters/mom-model.ts', color: '#FACCA2' }
-      : { id: m.id, name: m.name, who: m.who, group: 'family', kind: 'member', look: LOOKS[m.id], voice: m.id, src: 'characters/looks.ts', color: LOOKS[m.id].fur },
+
+      : { id: m.id, name: m.name, who: m.who, group: 'family', kind: 'member', look: LOOKS[m.id], voice: m.id, src: 'characters/looks.ts', color: LOOKS[m.id].fur, set: m.id === 'nick' ? 'dads' : undefined },
   ),
+  // The modelled Dad on trial (Tripo3D, the user's pick): the code-built Dad above stays the game's until he's ready.
+  { id: 'dad-model', name: 'Dad: the new toy', who: 'Your dad, a mint unicorn (the vinyl toy, modelled in Tripo3D; on trial)', group: 'family', kind: 'member', voice: 'nick', src: 'characters/dad-model.ts', color: '#A9EBD6', set: 'dads', dadModel: true },
 ]
 
 const person = (id: string, name: string, who: string, group: CastGroup, look: Look, src: string, voice?: string, set?: string): CastEntry => ({ id, name, who, group, kind: 'member', look, voice, src, color: look.fur, set })
