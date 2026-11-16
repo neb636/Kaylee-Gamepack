@@ -62,7 +62,7 @@ import { FINE } from './scenery'
 import { BEATS, Puppy, type Trick } from './puppy'
 import { Planner, pointAt, project, route, type Route } from './route'
 import { Letterbox } from '../../../../../engine3d/cinema'
-import { FilmPlayer, type Film, type FilmState } from '../../../../../engine3d/film'
+import { FilmPlayer, TURN_S, type Film, type FilmState } from '../../../../../engine3d/film'
 import type { FireflyId } from '../story/firefly'
 import { IslandStory } from './story'
 import { buildProps, type PokeThing, type Props } from './props'
@@ -1052,6 +1052,8 @@ export class SametIsland implements World3D {
     let dir: 1 | -1 = 1
     let sp = 0
     let landed = false
+    // Which leg's start() has run (a page-turning beat starts under the cover, TURN_S in; its ticks wait for it).
+    let leg = 0
     // The camera runs alongside, on the side the family face (the truck's local +z): a little ahead or behind, or round
     // toward its front or back corner, whichever has least (a shop, a palm) between it and the taxi along this leg of the road.
     const CAMS = [
@@ -1126,6 +1128,7 @@ export class SametIsland implements World3D {
           id: 'off',
           turn: true,
           start: () => {
+            leg = 1
             seat()
             s = 0
             dir = 1
@@ -1138,8 +1141,9 @@ export class SametIsland implements World3D {
           dur: 3.2,
           hold: 0.2,
           tick: (_k, t, dt) => {
+            if (leg !== 1) return
             // Off from a standstill: slow, then away up the road.
-            const goal = RUN * Math.min(1, Math.max(0, t - 0.5) / 2.6) ** 1.6
+            const goal = RUN * Math.min(1, Math.max(0, t - TURN_S) / 2.6) ** 1.6
             roll(dt, goal, 9)
             tx.drive(away, s, 1, ground)
           },
@@ -1148,6 +1152,7 @@ export class SametIsland implements World3D {
           id: 'in',
           turn: true,
           start: () => {
+            leg = 2
             s = RUN
             dir = -1
             pick(home, -1)
@@ -1157,11 +1162,12 @@ export class SametIsland implements World3D {
           shot: { eye, look, fov: 42, sway: 0.03 },
           say: named,
           sayAt: 1.6,
-          dur: 3.0,
+          dur: 3.2,
           hold: 0.3,
           tick: (_k, t, dt) => {
+            if (leg !== 2) return
             // Pulling in and slowing to a stop at the beach.
-            const e = Math.min(1, t / 2.4)
+            const e = Math.min(1, Math.max(0, t - TURN_S) / 2.4)
             roll(dt, RUN * (1 - e) * (1 - e), 10)
             tx.drive(home, s, dir, ground)
           },
