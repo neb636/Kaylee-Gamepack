@@ -1,0 +1,14 @@
+{
+  "title": "The Poles: real-animal videos wait for the end of the story",
+  "checkIn": "fix",
+  "kaylee": "No video after each chapter: the stamp goes straight back to the globe and the next picture. Once the whole story is told, a movie ticket ends the trail and Sparkle says \"Movie time! Let's see the real animals from our story!\"",
+  "questions": [],
+  "links": [
+    { "label": "The story told: the movie ticket", "hash": "#/world/poles/hub/globe?stamps=all" }
+  ],
+  "pictures": [
+    { "title": "After a chapter's stamp", "before": "pics/stamp-before.png", "after": "pics/stamp-after.png", "caption": "Before: a video. Now: back to the globe, the next picture waiting" },
+    { "title": "The story told (phone)", "before": "pics/told.png", "after": "pics/theater.png", "caption": "The movie ticket ends the trail; it opens every real-animal video" },
+    { "title": "The story told (iPad)", "before": "pics/told-ipad.png", "after": "pics/told-ipad.png", "caption": "The ticket at the bottom of the trail, with the balloon on it" }
+  ]
+}
