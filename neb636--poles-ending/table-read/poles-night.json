@@ -15,766 +15,315 @@
       "key": "night.in.fox",
       "text": "Snow! The fox is white. Time to fly south!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.in.bye",
       "text": "Goodbye, my brave cub! Hurry home!",
       "flags": [
-        "long",
-        "reused"
+        "long"
       ]
     },
     {
       "key": "night.in.promise",
       "text": "I'll come back, Mama. I promise.",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.in.nari",
       "text": "Narwhals stay up north. Say hi for me!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.in.aboard",
       "text": "All aboard! Next stop, the bottom of the world!",
       "flags": [
-        "long",
-        "reused"
+        "long"
       ]
     },
     {
       "key": "night.in.meanwhile",
       "text": "Meanwhile, at the bottom of the world...",
       "flags": [
-        "long",
-        "reused"
-      ]
-    },
-    {
-      "key": "night.in.wait",
-      "text": "I'll wait right here, Pebble.",
-      "flags": [
-        "reused"
+        "long"
       ]
     },
     {
       "key": "night.fly.start.touch",
       "text": "Hold your finger down to fly up!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.fly.start.mouse",
-      "text": "Click and hold to fly up!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.fly.follow",
       "text": "Follow me! The pink wind goes south!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.fly.pink",
-      "text": "Ride the pink wind south!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.fly.stuck.touch",
-      "text": "Hold your finger down to go up!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.fly.stuck.mouse",
-      "text": "Click and hold to go up!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.fly.hot",
-      "text": "Hot air goes up, up, up!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.fly.hum",
       "text": "This is Papa's song. Hmm hm hmm!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.fly.cloud",
-      "text": "I can't see! It's all fluffy!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.fly.wet",
-      "text": "Don't get me wet! I'm too fluffy!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.fly.warm",
-      "text": "Phew! I'm melting!",
-      "flags": [
-        "reused"
+        "long"
       ]
     },
     {
       "key": "night.fly.warmFact",
       "text": "The middle of the world is the warmest part!",
       "flags": [
-        "long",
-        "reused"
-      ]
-    },
-    {
-      "key": "night.fly.shower",
-      "text": "Ahh! A cool shower!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.fly.ship",
-      "text": "The red ship! That's how I got lost!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.fly.crates",
-      "text": "No more fish crates for you!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.fly.whale",
-      "text": "Look down! A whale!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "night.fly.south",
-      "text": "It smells like home!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "night.fly.albatross",
-      "text": "Hello, albatross! Nearly there!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "night.fly.storm",
-      "text": "Hold on! A big storm!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.fly.holdOn.touch",
       "text": "Hold your finger down! Keep the balloon up!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.fly.holdOn.mouse",
       "text": "Click and hold! Keep the balloon up!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.fly.pokes.balloon",
       "text": "Hot air is light, so it floats up!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.fly.pokes.ribbons",
       "text": "Balloons steer by finding the right wind.",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.fly.pokes.berg",
       "text": "Southern icebergs are flat, like tables!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.fly.pokes.lights",
       "text": "The southern lights! They glow in the long winter night.",
       "flags": [
-        "long",
-        "reused"
+        "long"
       ]
     },
     {
       "key": "night.fly.pokes.ship",
       "text": "The red ship! Pebble fell asleep on it.",
       "flags": [
-        "long",
-        "reused"
-      ]
-    },
-    {
-      "key": "night.fly.friends.0",
-      "text": "Wheee!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "night.fly.friends.1",
-      "text": "Higher, higher!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "night.lost.terry",
-      "text": "I can't see the way!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.lost.how",
-      "text": "How will I ever find Papa?",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.lost.friends",
       "text": "Friends help friends. Mama said so.",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.lost.song",
       "text": "Listen, Pebble. This is my song.",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.lost.always",
       "text": "That's it! Now you'll always find me.",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.lost.sing",
-      "text": "Papa's song! I'll sing it!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.lost.windy",
-      "text": "It's too windy. He can't hear me.",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.lost.all",
-      "text": "Then we'll ALL sing it!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.chorus.start.touch",
-      "text": "Hold Pebble to sing!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.chorus.start.mouse",
       "text": "Click and hold Pebble to sing!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.chorus.lights",
-      "text": "Look! The song lights up the dark!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.chorus.camo",
       "text": "Pola is white like the snow. Camouflage!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.chorus.hat",
-      "text": "A hat! It fits!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.chorus.terry",
-      "text": "Kee-arr! I'll sing too!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.chorus.weddell",
       "text": "Weddell seals sing. It sounds like outer space!",
       "flags": [
-        "long",
-        "reused"
-      ]
-    },
-    {
-      "key": "night.chorus.adelies",
-      "text": "The penguins are singing too!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.chorus.whale",
       "text": "Humpback whales sing long, long songs!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.chorus.grr",
-      "text": "Grr-la-la!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.chorus.together",
-      "text": "All together now!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.chorus.long.touch",
       "text": "Hold Pebble for a long, long time!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.chorus.long.mouse",
       "text": "Click and hold Pebble for a long, long time!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.chorus.papa",
-      "text": "That's Papa! He heard us!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.chorus.terryPoke",
-      "text": "Keep singing! I'm right here!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.chorus.pola.0",
-      "text": "I just want to say hi!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "night.chorus.pola.1",
-      "text": "Hi, penguins!",
-      "flags": [
-        "reused"
+        "long"
       ]
     },
     {
       "key": "night.colony.whoa",
       "text": "Whoa! So many penguins!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.colony.same",
-      "text": "Papa? They all look the same!",
-      "flags": [
-        "reused"
+        "long"
       ]
     },
     {
       "key": "night.colony.shy",
       "text": "Penguins have never seen a polar bear. They're a little shy!",
       "flags": [
-        "long",
-        "reused"
-      ]
-    },
-    {
-      "key": "night.colony.go",
-      "text": "Go on, Pebble. You can do it.",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.huddle.start.touch",
       "text": "Pull Pebble along with your finger!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.huddle.start.mouse",
-      "text": "Click and drag Pebble along!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.huddle.sing.touch",
-      "text": "Tap Pebble to sing!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.huddle.sing.mouse",
-      "text": "Click Pebble to sing!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.huddle.stuck",
-      "text": "Follow Papa's gold notes!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.huddle.egg",
       "text": "Emperor dads keep the egg warm on their feet!",
       "flags": [
-        "long",
-        "reused"
-      ]
-    },
-    {
-      "key": "night.huddle.wait",
-      "text": "Papa, wait!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.huddle.blown",
       "text": "Whoosh! Carry Pebble back to Papa.",
       "flags": [
-        "long",
-        "reused"
-      ]
-    },
-    {
-      "key": "night.huddle.pebbleBlown",
-      "text": "Whoa! Papa, help!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "night.huddle.turns",
-      "text": "The dads take turns in the cold!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.huddle.fast",
       "text": "Emperor dads don't eat all winter. They just keep the egg warm!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.huddle.slide",
-      "text": "Wheee! Tummy slide!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.huddle.loud",
       "text": "Sing, Pebble! As loud as you can!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.huddle.you",
-      "text": "Pebble? Is that you?",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.huddle.take",
-      "text": "Take Pebble to Papa!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.huddle.night",
       "text": "In winter here, the sun stays away for months!",
       "flags": [
-        "long",
-        "reused"
-      ]
-    },
-    {
-      "key": "night.sunrise.pebble",
-      "text": "Pebble! My Pebble!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "night.sunrise.papa",
-      "text": "Papa! I went to the top of the world!",
-      "flags": [
-        "reused"
+        "long"
       ]
     },
     {
       "key": "night.sunrise.heard",
       "text": "I heard your song. I knew you'd come.",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.sunrise.sun",
       "text": "The sun! It's back after months of night!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.sunrise.what",
-      "text": "Goodness! What is THAT?",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "night.sunrise.bear",
-      "text": "Hi! I'm a polar bear!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "night.sunrise.friend",
-      "text": "This is Pola. She carried me home.",
-      "flags": [
-        "reused"
+        "long"
       ]
     },
     {
       "key": "night.sunrise.thanks",
       "text": "A polar bear at the South Pole! Thank you, Pola.",
       "flags": [
-        "long",
-        "reused"
-      ]
-    },
-    {
-      "key": "night.sunrise.friends",
-      "text": "Friends help friends!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.goodbye.go",
       "text": "I have to go home now. Mama is waiting.",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.goodbye.wait",
-      "text": "Wait! I have something for you.",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.goodbye.pebble",
       "text": "For you! Penguins give pebbles to best friends.",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.goodbye.keep",
-      "text": "I'll keep it forever.",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.goodbye.ask",
       "text": "Take Pola home! Where do polar bears live?",
       "flags": [
-        "long",
-        "reused"
+        "long"
       ]
     },
     {
       "key": "night.goodbye.back",
       "text": "My brave cub! You came back!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.goodbye.home",
-      "text": "I'm home! Bye, Pebble!",
-      "flags": [
-        "reused"
+        "long"
       ]
     },
     {
       "key": "night.goodbye.pebbleFact",
       "text": "A penguin pebble means I love you!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.end.top",
       "text": "Polar bears live at the top of the world.",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "night.end.bottom",
-      "text": "Penguins live at the bottom.",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "night.end.never",
-      "text": "They never meet...",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "night.end.except.0",
       "text": "Except best friends!",
       "flags": [
-        "twice",
-        "new"
+        "twice"
       ]
     },
     {
       "key": "night.end.except.1",
       "text": "Except best friends!",
       "flags": [
-        "twice",
-        "new"
-      ]
-    },
-    {
-      "key": "night.end.year",
-      "text": "See you next year!",
-      "flags": [
-        "new"
+        "twice"
       ]
     }
   ],
@@ -792,8 +341,7 @@
       "when": "Terry, landing on the balloon's rope.",
       "ms": 4416,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         0,
@@ -813,8 +361,7 @@
       "when": "Mama Bear hugs Pola at the balloon. (♻️ story.homeIn.bye)",
       "ms": 4104,
       "flags": [
-        "long",
-        "reused"
+        "long"
       ],
       "span": [
         4.63,
@@ -834,8 +381,7 @@
       "when": "🎬 Film 1, night-in: Time to fly. The autumn tundra under fresh snow; the Arctic fox, all white now, pounces.",
       "ms": 3768,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         8.98,
@@ -855,8 +401,7 @@
       "when": "At the ice edge, Nari bursts up and spins as the balloon goes over.",
       "ms": 3624,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         12.99,
@@ -876,8 +421,7 @@
       "when": "Sparkle, as the balloon lifts. (♻️ story.homeIn.aboard)",
       "ms": 4272,
       "flags": [
-        "long",
-        "reused"
+        "long"
       ],
       "span": [
         16.86,
@@ -897,8 +441,7 @@
       "when": "The camera follows the balloon down the little globe into darkness. (♻️ story.slideIn.meanwhile)",
       "ms": 3048,
       "flags": [
-        "long",
-        "reused"
+        "long"
       ],
       "span": [
         21.36,
@@ -917,9 +460,7 @@
       "part": "night › in",
       "when": "Papa at the windy edge of the huddle, looking up; then he hums his song into the wind, alone. (♻️ story.huddleIn.wait)",
       "ms": 2280,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         24.69,
         26.88
@@ -939,8 +480,7 @@
       "when": "Sparkle, as the game opens (and when nothing is held for a while: `stuck`).",
       "ms": 3744,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         28.6,
@@ -960,9 +500,7 @@
       "part": "night › fly › start",
       "when": "",
       "ms": 3000,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         32.59,
         35.47
@@ -981,8 +519,7 @@
       "when": "Terry, flying ahead, as the first pink ribbon of wind shows.",
       "ms": 3672,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         37.17,
@@ -1001,9 +538,7 @@
       "part": "night › fly",
       "when": "Sparkle, the first time the balloon reaches the pink ribbon.",
       "ms": 2232,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         41.1,
         43.25
@@ -1022,9 +557,7 @@
       "part": "night › fly › stuck",
       "when": "🎈 Act 1, fly: Hold to Fly. She flies the balloon down the world: hold to heat the air and rise, let go to sink.",
       "ms": 2544,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         44.95,
         47.4
@@ -1043,9 +576,7 @@
       "part": "night › fly › stuck",
       "when": "",
       "ms": 2208,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         47.79,
         49.91
@@ -1063,9 +594,7 @@
       "part": "night › fly",
       "when": "Sparkle, the first time the burner lifts the balloon (once).",
       "ms": 2640,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         51.62,
         54.16
@@ -1084,8 +613,7 @@
       "when": "She pokes Pebble in the basket: this the first time, then he just hums the song.",
       "ms": 3312,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         54.56,
@@ -1104,9 +632,7 @@
       "part": "night › fly",
       "when": "Silly, never \"oops\": held too long, the balloon pokes into a cloud; let go too long, the basket dips in the sea.",
       "ms": 2616,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         58.13,
         60.64
@@ -1124,9 +650,7 @@
       "part": "night › fly",
       "when": "🎈 Act 1, fly: Hold to Fly. She flies the balloon down the world: hold to heat the air and rise, let go to sink.",
       "ms": 2424,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         61.04,
         63.36
@@ -1144,9 +668,7 @@
       "part": "night › fly",
       "when": "The warm middle of the world: Pola fans herself, then Sparkle's fact. (♻️ party.warm, party.warmFact)",
       "ms": 2160,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         63.76,
         65.83
@@ -1165,8 +687,7 @@
       "when": "🎈 Act 1, fly: Hold to Fly. She flies the balloon down the world: hold to heat the air and rise, let go to sink.",
       "ms": 3264,
       "flags": [
-        "long",
-        "reused"
+        "long"
       ],
       "span": [
         66.23,
@@ -1185,9 +706,7 @@
       "part": "night › fly",
       "when": "Through the thundercloud instead of over it.",
       "ms": 2856,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         69.76,
         72.51
@@ -1205,9 +724,7 @@
       "part": "night › fly",
       "when": "The red ship sails by below.",
       "ms": 2976,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         72.9,
         75.76
@@ -1225,9 +742,7 @@
       "part": "night › fly",
       "when": "🎈 Act 1, fly: Hold to Fly. She flies the balloon down the world: hold to heat the air and rise, let go to sink.",
       "ms": 2232,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         76.15,
         78.3
@@ -1245,9 +760,7 @@
       "part": "night › fly",
       "when": "A whale spouts below. (♻️ party.whale) Over a country in her passport, Terry says hello (♻️ party.hello).",
       "ms": 2016,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         78.69,
         80.63
@@ -1265,9 +778,7 @@
       "part": "night › fly",
       "when": "The cold comes back, then the albatross. (♻️ party.south, party.albatross)",
       "ms": 1560,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         81.02,
         82.52
@@ -1285,9 +796,7 @@
       "part": "night › fly",
       "when": "🎈 Act 1, fly: Hold to Fly. She flies the balloon down the world: hold to heat the air and rise, let go to sink.",
       "ms": 2976,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         82.91,
         85.78
@@ -1305,9 +814,7 @@
       "part": "night › fly",
       "when": "The blizzard starts: gusts push the balloon down. Terry, then Sparkle.",
       "ms": 2520,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         86.17,
         88.59
@@ -1327,8 +834,7 @@
       "when": "🎈 Act 1, fly: Hold to Fly. She flies the balloon down the world: hold to heat the air and rise, let go to sink.",
       "ms": 4200,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         90.3,
@@ -1349,8 +855,7 @@
       "when": "",
       "ms": 3312,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         94.73,
@@ -1371,8 +876,7 @@
       "when": "Sparkle, the first time she pokes each thing (the lights and the ship are ♻️ hub.pokes).",
       "ms": 3432,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         99.62,
@@ -1393,8 +897,7 @@
       "when": "Sparkle, the first time she pokes each thing (the lights and the ship are ♻️ hub.pokes).",
       "ms": 3336,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         103.31,
@@ -1415,8 +918,7 @@
       "when": "Sparkle, the first time she pokes each thing (the lights and the ship are ♻️ hub.pokes).",
       "ms": 4152,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         106.91,
@@ -1437,8 +939,7 @@
       "when": "Sparkle, the first time she pokes each thing (the lights and the ship are ♻️ hub.pokes).",
       "ms": 4493,
       "flags": [
-        "long",
-        "reused"
+        "long"
       ],
       "span": [
         111.3,
@@ -1459,8 +960,7 @@
       "when": "Sparkle, the first time she pokes each thing (the lights and the ship are ♻️ hub.pokes).",
       "ms": 3912,
       "flags": [
-        "long",
-        "reused"
+        "long"
       ],
       "span": [
         116.07,
@@ -1480,9 +980,7 @@
       "part": "night › fly › friends",
       "when": "A tap on the friends in the basket, in turn (♻️ party.balloon); a tap on Terry says ♻️ hub.terry.",
       "ms": 1368,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         121.54,
         122.86
@@ -1501,9 +999,7 @@
       "part": "night › fly › friends",
       "when": "",
       "ms": 1608,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         123.25,
         124.79
@@ -1521,9 +1017,7 @@
       "part": "night › lost",
       "when": "🎬 Film 2, night-lost: The storm. The flame gutters out and the balloon sinks into deep snow. White everywhere.",
       "ms": 1752,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         126.51,
         128.19
@@ -1541,9 +1035,7 @@
       "part": "night › lost",
       "when": "Pebble, very small in the snow.",
       "ms": 2448,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         128.58,
         130.94
@@ -1562,8 +1054,7 @@
       "when": "Pola wraps him in a hug.",
       "ms": 3408,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         131.32,
@@ -1583,8 +1074,7 @@
       "when": "The memory, in the storybook look: the night he hatched (the 3D huddle's hatch scene). (🔁 huddle.papa.song, huddle.papa.always) Papa sings, and baby Pebble peeps it back between the two.",
       "ms": 3144,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         135,
@@ -1604,8 +1094,7 @@
       "when": "🎬 Film 2, night-lost: The storm. The flame gutters out and the balloon sinks into deep snow. White everywhere.",
       "ms": 3192,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         138.41,
@@ -1624,9 +1113,7 @@
       "part": "night › lost",
       "when": "Back in the storm.",
       "ms": 1872,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         141.87,
         143.67
@@ -1644,9 +1131,7 @@
       "part": "night › lost",
       "when": "He peeps it, tiny, and the wind tears the notes away.",
       "ms": 2424,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         144.06,
         146.4
@@ -1664,9 +1149,7 @@
       "part": "night › lost",
       "when": "Pola stands up tall, Terry on her head.",
       "ms": 2352,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         146.78,
         149.05
@@ -1685,9 +1168,7 @@
       "part": "night › chorus › start",
       "when": "Sparkle, as the game opens (and her hint when nothing has been sung for a while).",
       "ms": 2568,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         150.76,
         153.23
@@ -1707,8 +1188,7 @@
       "when": "",
       "ms": 3096,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         153.62,
@@ -1727,9 +1207,7 @@
       "part": "night › chorus",
       "when": "Sparkle, as the first ring rolls out (once).",
       "ms": 2832,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         158.3,
         161.02
@@ -1748,8 +1226,7 @@
       "when": "Sparkle, when a ring lights up Pola, white in the white (once).",
       "ms": 3984,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         161.42,
@@ -1768,9 +1245,7 @@
       "part": "night › chorus",
       "when": "A ring finds the woolly hat half buried in the snow; Pebble puts it on. (Papa's line from the slide.)",
       "ms": 1632,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         165.64,
         167.21
@@ -1788,9 +1263,7 @@
       "part": "night › chorus",
       "when": "A ring finds Terry, upside down in a drift: he pops out, shakes, and joins in.",
       "ms": 2832,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         167.6,
         170.32
@@ -1809,8 +1282,7 @@
       "when": "The ice edge. The Weddell seal pops up in her breathing hole and trills (Sparkle, ♻️ slide.facts.weddell).",
       "ms": 4296,
       "flags": [
-        "long",
-        "reused"
+        "long"
       ],
       "span": [
         170.72,
@@ -1829,9 +1301,7 @@
       "part": "night › chorus",
       "when": "The slide's Adelies hop up out of their drift, honking along.",
       "ms": 1608,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         175.25,
         176.78
@@ -1850,8 +1320,7 @@
       "when": "A humpback rises in the dark sea and sings (Sparkle).",
       "ms": 4008,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         177.18,
@@ -1870,9 +1339,7 @@
       "part": "night › chorus",
       "when": "Silly: she pokes Pola, and Pola sings it back, the growly bear way.",
       "ms": 1728,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         181.43,
         183.09
@@ -1890,9 +1357,7 @@
       "part": "night › chorus",
       "when": "Everyone's found: the hilltop, the colony's glow far off. Pola, then Sparkle.",
       "ms": 1296,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         183.48,
         184.73
@@ -1912,8 +1377,7 @@
       "when": "🎶 Act 2, chorus: Sing in the Dark (activities/night/chorus.ts). She holds Pebble, on Pola's back, to sing: the longer she holds, the bigger the ring of song that rolls out across the dark snow when she lets go. It lights up what it passes, and every friend it finds joins the song.",
       "ms": 3432,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         186.44,
@@ -1934,8 +1398,7 @@
       "when": "",
       "ms": 4584,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         190.13,
@@ -1954,9 +1417,7 @@
       "part": "night › chorus",
       "when": "The rainbow ring rolls over the hills to the colony. Silence. A gold ring comes back: Papa's song.",
       "ms": 2280,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         196.24,
         198.44
@@ -1974,9 +1435,7 @@
       "part": "night › chorus",
       "when": "She pokes Terry once he's singing with them.",
       "ms": 2328,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         198.82,
         201.06
@@ -1995,9 +1454,7 @@
       "part": "night › chorus › pola",
       "when": "She pokes Pola once the Adelies are there (♻️ party.song.pola, in turn).",
       "ms": 2352,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         202.77,
         205.03
@@ -2016,9 +1473,7 @@
       "part": "night › chorus › pola",
       "when": "",
       "ms": 1632,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         205.43,
         206.99
@@ -2037,8 +1492,7 @@
       "when": "🎬 Film 3, night-colony: So many papas. Over the hill, a huddle of a thousand dads, steaming in the dark.",
       "ms": 3072,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         208.71,
@@ -2057,9 +1511,7 @@
       "part": "night › colony",
       "when": "(♻️ story.homeLand.same)",
       "ms": 2352,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         212.05,
         214.31
@@ -2078,8 +1530,7 @@
       "when": "Gold notes rise from deep inside the huddle; the dads near Pola squeeze together and shuffle away. Sparkle (♻️ party.song.colonyFact).",
       "ms": 4464,
       "flags": [
-        "long",
-        "reused"
+        "long"
       ],
       "span": [
         214.71,
@@ -2098,9 +1549,7 @@
       "part": "night › colony",
       "when": "Pola kneels and lifts Pebble down from her back.",
       "ms": 2496,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         219.39,
         221.78
@@ -2120,8 +1569,7 @@
       "when": "Sparkle, as the game opens: how to lead him, then the side verb.",
       "ms": 3216,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         223.49,
@@ -2141,9 +1589,7 @@
       "part": "night › huddle › start",
       "when": "",
       "ms": 2280,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         226.97,
         229.17
@@ -2162,9 +1608,7 @@
       "part": "night › huddle › sing",
       "when": "🐧 Act 3, huddle: Through the Huddle. She leads Pebble through the churning huddle to Papa (the 3D huddle's world).",
       "ms": 2064,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         230.88,
         232.86
@@ -2183,9 +1627,7 @@
       "part": "night › huddle › sing",
       "when": "",
       "ms": 2376,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         233.25,
         235.54
@@ -2203,9 +1645,7 @@
       "part": "night › huddle",
       "when": "Sparkle, when she's stuck.",
       "ms": 2424,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         237.24,
         239.58
@@ -2224,8 +1664,7 @@
       "when": "A dad lifts his belly: an egg (Sparkle, once, ♻️ huddle.facts.egg).",
       "ms": 4366,
       "flags": [
-        "long",
-        "reused"
+        "long"
       ],
       "span": [
         239.97,
@@ -2244,9 +1683,7 @@
       "part": "night › huddle",
       "when": "The huddle shuffles Papa away just as Pebble gets close.",
       "ms": 1344,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         244.61,
         245.9
@@ -2265,8 +1702,7 @@
       "when": "A gust rolls Pebble out: Sparkle, then Pebble (♻️ huddle.blown, huddle.pebble.blown).",
       "ms": 3312,
       "flags": [
-        "long",
-        "reused"
+        "long"
       ],
       "span": [
         246.29,
@@ -2285,9 +1721,7 @@
       "part": "night › huddle",
       "when": "🐧 Act 3, huddle: Through the Huddle. She leads Pebble through the churning huddle to Papa (the 3D huddle's world).",
       "ms": 2282,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         249.92,
         252.18
@@ -2305,9 +1739,7 @@
       "part": "night › huddle",
       "when": "The dads on the edge swap into the middle (Sparkle, once).",
       "ms": 2904,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         252.57,
         255.36
@@ -2326,8 +1758,7 @@
       "when": "She pokes a thin, sleepy dad (Sparkle, once, 🔁 huddle.facts.fast).",
       "ms": 4992,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         255.75,
@@ -2346,9 +1777,7 @@
       "part": "night › huddle",
       "when": "Silly: a flick sends him tummy-sliding. (Walked into a dad's tummy: a bounce and a grumpy honk, no line.)",
       "ms": 2304,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         260.95,
         263.17
@@ -2367,8 +1796,7 @@
       "when": "The middle, packed tight (Sparkle).",
       "ms": 3168,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         263.55,
@@ -2387,9 +1815,7 @@
       "part": "night › huddle",
       "when": "The big song; the friends outside join in; the dads turn and step aside, one by one. Papa, far off, then close.",
       "ms": 1920,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         266.99,
         268.84
@@ -2407,9 +1833,7 @@
       "part": "night › huddle",
       "when": "The aisle is open (Sparkle).",
       "ms": 2328,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         269.23,
         271.47
@@ -2428,8 +1852,7 @@
       "when": "She pokes the dark sky (♻️ huddle.facts.night). Pola waving over the huddle says chorus.pola.",
       "ms": 4466,
       "flags": [
-        "long",
-        "reused"
+        "long"
       ],
       "span": [
         271.86,
@@ -2448,9 +1871,7 @@
       "part": "night › sunrise",
       "when": "(♻️ story.homeReunion.pebble, .papa)",
       "ms": 2424,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         277.94,
         280.26
@@ -2468,9 +1889,7 @@
       "part": "night › sunrise",
       "when": "🎬 Film 4, night-sunrise: Sunrise. Pebble on Papa's feet; the first sun in months comes up as they meet.",
       "ms": 2424,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         280.66,
         282.98
@@ -2489,8 +1908,7 @@
       "when": "🎬 Film 4, night-sunrise: Sunrise. Pebble on Papa's feet; the first sun in months comes up as they meet.",
       "ms": 4200,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         283.38,
@@ -2510,8 +1928,7 @@
       "when": "A thin line of gold on the horizon; light runs across the snow and every penguin lifts its head (Sparkle).",
       "ms": 3960,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         287.81,
@@ -2530,9 +1947,7 @@
       "part": "night › sunrise",
       "when": "Over the hill: Pola, Terry on her head. A thousand dads gasp. (♻️ story.homeLand.what, .bear, story.homeReunion.friend, .thanks)",
       "ms": 2424,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         292.01,
         294.34
@@ -2550,9 +1965,7 @@
       "part": "night › sunrise",
       "when": "🎬 Film 4, night-sunrise: Sunrise. Pebble on Papa's feet; the first sun in months comes up as they meet.",
       "ms": 2712,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         294.73,
         297.34
@@ -2570,9 +1983,7 @@
       "part": "night › sunrise",
       "when": "🎬 Film 4, night-sunrise: Sunrise. Pebble on Papa's feet; the first sun in months comes up as they meet.",
       "ms": 2496,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         297.73,
         300.13
@@ -2591,8 +2002,7 @@
       "when": "🎬 Film 4, night-sunrise: Sunrise. Pebble on Papa's feet; the first sun in months comes up as they meet.",
       "ms": 3792,
       "flags": [
-        "long",
-        "reused"
+        "long"
       ],
       "span": [
         300.52,
@@ -2611,9 +2021,7 @@
       "part": "night › sunrise",
       "when": "🎬 Film 4, night-sunrise: Sunrise. Pebble on Papa's feet; the first sun in months comes up as they meet.",
       "ms": 1776,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         304.56,
         306.27
@@ -2632,8 +2040,7 @@
       "when": "Morning. Pola looks north.",
       "ms": 3792,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         307.97,
@@ -2652,9 +2059,7 @@
       "part": "night › goodbye",
       "when": "🪨 Goodbye: Pebble gives Pola a pebble, then she flies Pola home up the toy globe (hold to rise, Act 1's move).",
       "ms": 1968,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         312.01,
         313.91
@@ -2673,8 +2078,7 @@
       "when": "He waddles off and comes back with a smooth round pebble in his beak.",
       "ms": 3672,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         314.3,
@@ -2693,9 +2097,7 @@
       "part": "night › goodbye",
       "when": "🪨 Goodbye: Pebble gives Pola a pebble, then she flies Pola home up the toy globe (hold to rise, Act 1's move).",
       "ms": 2496,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         318.22,
         320.63
@@ -2714,8 +2116,7 @@
       "when": "The globe: Terry asks (♻️ party.ask.bear); Sparkle says fly.start; over the warm middle, Pola's fly.warm again.",
       "ms": 3768,
       "flags": [
-        "long",
-        "reused"
+        "long"
       ],
       "span": [
         321.01,
@@ -2735,8 +2136,7 @@
       "when": "At the top, Mama on the ice; then Pola (♻️ party.home).",
       "ms": 3264,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         325.03,
@@ -2755,9 +2155,7 @@
       "part": "night › goodbye",
       "when": "🪨 Goodbye: Pebble gives Pola a pebble, then she flies Pola home up the toy globe (hold to rise, Act 1's move).",
       "ms": 2472,
-      "flags": [
-        "reused"
-      ],
+      "flags": [],
       "span": [
         328.56,
         330.93
@@ -2776,8 +2174,7 @@
       "when": "She pokes the pebble in Pola's paws (Sparkle, once).",
       "ms": 3288,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         331.33,
@@ -2797,8 +2194,7 @@
       "when": "🎬 Film 5, the-end: Top and bottom. The screen splits: Pola with her pebble under the northern lights at the top, Pebble on Papa's feet in the sun at the bottom, both humming the song. Sparkle tells it.",
       "ms": 3528,
       "flags": [
-        "long",
-        "new"
+        "long"
       ],
       "span": [
         336.2,
@@ -2817,9 +2213,7 @@
       "part": "night › end",
       "when": "🎬 Film 5, the-end: Top and bottom. The screen splits: Pola with her pebble under the northern lights at the top, Pebble on Papa's feet in the sun at the bottom, both humming the song. Sparkle tells it.",
       "ms": 2256,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         339.98,
         342.15
@@ -2837,9 +2231,7 @@
       "part": "night › end",
       "when": "🎬 Film 5, the-end: Top and bottom. The screen splits: Pola with her pebble under the northern lights at the top, Pebble on Papa's feet in the sun at the bottom, both humming the song. Sparkle tells it.",
       "ms": 1824,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         342.55,
         344.3
@@ -2859,8 +2251,7 @@
       "when": "Pola and Pebble together, from the two ends of the world (one clip each, played at once).",
       "ms": 1848,
       "flags": [
-        "twice",
-        "new"
+        "twice"
       ],
       "span": [
         346.01,
@@ -2881,8 +2272,7 @@
       "when": "",
       "ms": 1800,
       "flags": [
-        "twice",
-        "new"
+        "twice"
       ],
       "span": [
         348.17,
@@ -2901,9 +2291,7 @@
       "part": "night › end",
       "when": "Terry flies up the screen between them. Then the shell's trophy ceremony (♻️ trophyWin).",
       "ms": 1608,
-      "flags": [
-        "new"
-      ],
+      "flags": [],
       "span": [
         351.62,
         353.16

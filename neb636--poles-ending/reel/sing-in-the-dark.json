@@ -1,15 +1,24 @@
 {
   "kind": "reel",
   "name": "sing-in-the-dark",
-  "title": "Robot play, software rendering (choppy: the smooth reel needs the Mac's GPU)",
+  "title": "Act 2, Sing in the Dark (from milestone 1; unchanged since): Robot play, software rendering (choppy: the smooth reel needs the Mac's GPU)",
   "video": "sing-in-the-dark.mp4",
   "gif": "sing-in-the-dark.gif",
   "seconds": 50,
   "browser": "chromium",
   "viewport": "ipad-landscape",
   "moments": [
-    { "name": "whiteout", "status": "ok" },
-    { "name": "edge", "status": "ok" },
-    { "name": "together", "status": "ok" }
+    {
+      "name": "whiteout",
+      "status": "ok"
+    },
+    {
+      "name": "edge",
+      "status": "ok"
+    },
+    {
+      "name": "together",
+      "status": "ok"
+    }
   ]
 }
