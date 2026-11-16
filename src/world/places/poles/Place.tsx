@@ -99,20 +99,18 @@ function Chapter({ id, first, Activity, onDone }: { id: string; first: boolean; 
         }}
       />
     )
-  return (
-    <>
-      <Activity onDone={() => (films && wasFirst && !filmSeen(films.out) ? setPhase('out') : onDone())} />
-      {phase === 'out' && films && (
-        <StoryFilm
-          id={films.out}
-          onDone={() => {
-            seeFilm(films.out)
-            onDone()
-          }}
-        />
-      )}
-    </>
-  )
+  // (The closing film takes the game's place: two 3D worlds would share the one renderer and both keep drawing.)
+  if (phase === 'out' && films)
+    return (
+      <StoryFilm
+        id={films.out}
+        onDone={() => {
+          seeFilm(films.out)
+          onDone()
+        }}
+      />
+    )
+  return <Activity onDone={() => (films && wasFirst && !filmSeen(films.out) ? setPhase('out') : onDone())} />
 }
 
 /** #/world/poles/story/<film>: plays that film, then goes on to what follows it in the game. */

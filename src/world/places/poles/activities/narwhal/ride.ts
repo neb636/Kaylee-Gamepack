@@ -15,7 +15,7 @@
 // ride are feel-lab knobs (?feel=1).
 import { BackSide, Color, Euler, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Scene, SphereGeometry, Vector3, type BufferGeometry, type WebGLRenderer } from 'three'
 import { clamp } from '../../../../../sdk'
-import { TO_DEG } from '../../../../../sdk/math'
+import { smoothstep as smooth, TO_DEG } from '../../../../../sdk/math'
 import { knobs, watch } from '../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../engine3d/camera'
@@ -109,10 +109,6 @@ const HINT_S = 8
 /** Fish in each school. */
 const PER = 5
 const BUBBLES = 90
-const smooth = (a: number, b: number, x: number) => {
-  const k = clamp((x - a) / (b - a))
-  return k * k * (3 - 2 * k)
-}
 
 /** Something she can bump: a loose floe, a slalom iceberg, a keel under the sheet. */
 interface Bumper {

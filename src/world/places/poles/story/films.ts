@@ -8,14 +8,13 @@
 // degrees toward the camera (chibi profiles read as the backs of heads). Lines are in lines.ts `L.story.<film>`, in
 // this order. A film leaves nothing behind (the stage is thrown away), so skipping needs no clean-up.
 import { Vector3 } from 'three'
+import { lerp, smooth as ease } from '../../../../sdk/math'
 import type { Beat, FilmPoint, FilmShot, V3 } from '../../../engine3d/film'
 import type { FilmId } from '../activities/story/sections'
 import { L } from '../lines'
 import { GLOBE_AT, ICE_Y as Y, SNOW_Y, type StoryFilm, type StoryStage } from './stage'
 
 const S = L.story
-const ease = (k: number) => k * k * (3 - 2 * k)
-const lerp = (a: number, b: number, k: number) => a + (b - a) * k
 
 /** A shot: where the camera is and what it looks at, maybe moving to `to` over the beat. */
 const cam = (eye: FilmPoint, look: FilmPoint, to?: { eye?: FilmPoint; look?: FilmPoint; fov?: number }, more: Partial<FilmShot> = {}): FilmShot => ({ eye, look, to, ...more })

@@ -1,11 +1,7 @@
 // Narwhal Ride's course: one long swim from the floes to the balloon, measured along the way (`s`, meters) and across
 // it (`lat`, + to her right). Pure numbers (no three.js): where the channel runs, how wide it is, what floats in it.
 // The world (ride.ts) builds what's listed here and moves Nari through it.
-
-const smooth = (a: number, b: number, x: number) => {
-  const k = Math.min(1, Math.max(0, (x - a) / (b - a)))
-  return k * k * (3 - 2 * k)
-}
+import { smoothstep as smooth } from '../../../../../sdk/math'
 
 /** Where the open water ends and the icebergs start. */
 export const OPEN_END = 250

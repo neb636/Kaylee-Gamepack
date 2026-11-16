@@ -4,14 +4,13 @@
 // tells them what to do in a beat's `start` or a cue; `update` plays it out. Everything is set each frame (never
 // added to), so an action can be cut off by the next without leaving a limb behind.
 import { Group, Vector3, type Object3D } from 'three'
-import { bell } from '../../../../sdk'
+import { bell, smooth as easeIO } from '../../../../sdk'
 import { buildAnimal, type Rig } from '../../../engine3d/characters/animal'
 import { FaceLife } from '../../../engine3d/characters/face'
 import type { Bag } from '../../../engine3d/dispose'
 import { POLES_LOOKS, type PolesFriend } from '../characters/looks'
 
 const DEG = Math.PI / 180
-const easeIO = (k: number) => k * k * (3 - 2 * k)
 
 export type Face = 'sad' | 'wow' | 'happy'
 
