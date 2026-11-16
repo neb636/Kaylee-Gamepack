@@ -47,7 +47,7 @@ export interface World3D extends Roamable {
 }
 
 /** Read-only state for tests and QA scripts (no jump hooks: use section links). */
-export type QAKey = '__thaiHouseQA' | '__thaiBoatQA' | '__thaiMallQA' | '__thaiNanQA' | '__thaiCastQA' | '__thaiSametQA' | '__thaiMapQA' | '__polesGlobeQA' | '__polesFloeQA' | '__polesSlideQA' | '__polesPartyQA' | '__polesStoryQA' | '__polesNarwhalQA' | '__canadaMapQA' | '__canadaBikeQA' | '__canadaCanoeQA' | '__canadaWhalesQA' | '__canadaSnowmanQA' | '__canadaPartyQA'
+export type QAKey = '__thaiHouseQA' | '__thaiBoatQA' | '__thaiMallQA' | '__thaiNanQA' | '__thaiCastQA' | '__thaiSametQA' | '__thaiMapQA' | '__polesGlobeQA' | '__polesFloeQA' | '__polesSlideQA' | '__polesPartyQA' | '__polesStoryQA' | '__polesNarwhalQA' | '__polesHuddleQA' | '__polesNightQA' | '__canadaMapQA' | '__canadaBikeQA' | '__canadaCanoeQA' | '__canadaWhalesQA' | '__canadaSnowmanQA' | '__canadaPartyQA'
 declare global {
   interface Window {
     /** QA only (under webdriver): the 3D world on screen, so a robot can find a character and photograph it up close
@@ -66,6 +66,8 @@ declare global {
     __polesPartyQA?: () => Record<string, unknown>
     __polesStoryQA?: () => Record<string, unknown>
     __polesNarwhalQA?: () => Record<string, unknown>
+    __polesHuddleQA?: () => Record<string, unknown>
+    __polesNightQA?: () => Record<string, unknown>
     __canadaMapQA?: () => Record<string, unknown>
     __canadaBikeQA?: () => Record<string, unknown>
     __canadaCanoeQA?: () => Record<string, unknown>

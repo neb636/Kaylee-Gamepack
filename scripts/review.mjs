@@ -21,6 +21,7 @@
 //     "reels": [{ "name": "barber", "moments": ["barber"] }],      // reel.mjs names: qa.mjs motion runs or #/links~s
 //     "links": [{ "label": "Play it", "hash": "#/world/thailand/mall-trip/barber" }],
 //     "pictures": [{ "title": "On the boat", "before": "pics/bay-old.jpg", "after": "pics/bay-new.jpg",   // before and
+//                                                                      // after (no `before`: one picture, full width, e.g. a storyboard)
 //                    "caption": "Her sun hat sits round her bun" }],   // after, side by side (relative to review/; a fix,
 //                                                                      // a swapped model)
 //     "listens": [{ "title": "The salt hut", "audio": "sfx/salt.mp3",   // sound effects: one track per stage (made by
@@ -141,9 +142,12 @@ ${p.learns ? `<p><b>She learns:</b> ${esc(p.learns)}</p>` : ''}${p.silly ? `<p><
     .join('\n')
   const readHtml = reads
     .map((r) => {
-      const flags = r.flags.length
+      // (New, reworded and reused lines are marked on the sheet; they aren't problems, so they're counted apart.)
+      const mark = ['new', 'changed', 'reused']
+      const flags = r.flags.filter((f) => f.flags.some((x) => !mark.includes(x))).length
+      const fresh = r.flags.filter((f) => f.flags.includes('new') || f.flags.includes('changed')).length
       return `<div class="card"><h3>${esc(r.title)}</h3>
-<p class="meta">${r.lines} lines · ${Math.round(r.seconds)} s of talk · her name ${r.names}×${r.missing ? ` · <b class="warn">${r.missing} not recorded</b>` : ''}${flags ? ` · ${flags} flagged` : ''}</p>
+<p class="meta">${r.lines} lines${fresh ? ` (${fresh} new)` : ''} · ${Math.round(r.seconds)} s of talk · her name ${r.names}×${r.missing ? ` · <b class="warn">${r.missing} not recorded</b>` : ''}${flags ? ` · ${flags} flagged` : ''}</p>
 ${r.audio ? `<audio controls preload="metadata" src="table-read/${esc(r.audio)}"></audio>` : ''}
 <p><a href="table-read/${esc(r.page)}">Read along: who says what, and when</a></p></div>`
     })
@@ -162,7 +166,8 @@ ${r.audio ? `<audio controls preload="metadata" src="table-read/${esc(r.audio)}"
 <ol class="meta">${(l.items ?? []).map(cue).join('')}</ol></div>`)
     .join('\n')
   const picHtml = (brief.pictures ?? [])
-    .map((p) => `<figure class="pair"><div>${p.before ? `<img src="${esc(p.before)}" alt="Before: ${esc(p.title)}" loading="lazy"><span>Before</span>` : ''}</div><div><img src="${esc(p.after)}" alt="After: ${esc(p.title)}" loading="lazy"><span>After</span></div>
+    .map((p) => p.before ? `<figure class="pair"><div><img src="${esc(p.before)}" alt="Before: ${esc(p.title)}" loading="lazy"><span>Before</span></div><div><img src="${esc(p.after)}" alt="After: ${esc(p.title)}" loading="lazy"><span>After</span></div>
+<figcaption><b>${esc(p.title)}</b>${p.caption ? `: ${esc(p.caption)}` : ''}</figcaption></figure>` : `<figure class="solo"><img src="${esc(p.after)}" alt="${esc(p.title)}" loading="lazy">
 <figcaption><b>${esc(p.title)}</b>${p.caption ? `: ${esc(p.caption)}` : ''}</figcaption></figure>`)
     .join('\n')
   const qs = (brief.questions ?? []).slice(0, 3)
@@ -205,6 +210,7 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 .also{font-size:15px;color:var(--soft)}.also span{font-size:18px}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:6px}.pair>div{position:relative}.pair img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;display:block;background:var(--lav)}
 .pair span{position:absolute;left:6px;top:6px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;font-weight:700;border-radius:99px;padding:1px 8px}.pair figcaption{grid-column:1/-1}
+.solo img{width:100%;border-radius:12px;display:block;background:var(--lav)}
 @media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.pics{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}}
 </style></head><body><main>
 ${brief.checkIn ? `<span class="chip">Check-in ${esc(brief.checkIn)}</span>` : ''}
@@ -212,7 +218,7 @@ ${brief.checkIn ? `<span class="chip">Check-in ${esc(brief.checkIn)}</span>` : '
 ${brief.kaylee ? `<p class="kaylee">${esc(brief.kaylee)}</p>` : ''}
 ${pitchHtml ? `<h2>Pick one</h2><div class="pitches">${pitchHtml}</div><p class="meta" id="picked"></p>` : ''}
 ${reelHtml ? `<h2>Watch</h2>${reelHtml}` : ''}
-${picHtml ? `<h2>Before and after</h2><div class="pics">${picHtml}</div>` : ''}
+${picHtml ? `<h2>${(brief.pictures ?? []).some((p) => p.before) ? 'Before and after' : 'Pictures'}</h2><div class="pics">${picHtml}</div>` : ''}
 ${readHtml ? `<h2>Hear the script</h2>${readHtml}` : ''}
 ${listenHtml ? `<h2>Listen</h2>${listenHtml}` : ''}
 ${qHtml ? `<h2>Your call</h2><ol>${qHtml}</ol><button id="copy">Copy my answers</button>${prLink ? `<a class="pill" href="${prLink}">Open the PR to paste them</a>` : ''}<p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>` : ''}

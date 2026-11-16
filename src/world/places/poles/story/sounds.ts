@@ -32,6 +32,21 @@ export const storySfx = {
   call: clip(url('story-call'), () => [0, 0.14, 0.28].forEach((d) => tone(700, 520, 0.12, 0.1, 'square', d))),
   /** The balloon's burner: a soft roar. */
   burner: clip(url('story-burner'), () => noise(0.9, 0.12, 'lowpass', 500, 900)),
+  /** The ending's films (planning/around-the-world/poles-ending.md). An egg cracks (the memory). */
+  crack: clip(url('huddle-crack'), () => tone(2400, 1800, 0.05, 0.06, 'square')),
+  /** A whole colony cheering, and a gust. */
+  cheer: clip(url('party-cheer'), () => sounds.fanfare()),
+  gust: clip(url('party-gust'), () => noise(0.9, 0.1, 'bandpass', 400, 1600)),
+  /** A whoosh of light (the sun coming up, the screen splitting). */
+  hug: clip(url('party-hug'), () => sounds.sparkle()),
+  /** The blizzard, until the film ends. */
+  blizzard() {
+    stops.push(bed(url('party-blizzard'), 0.4))
+  },
+  /** The colony far off, until the film ends. */
+  colony() {
+    stops.push(bed(url('party-colony'), 0.3))
+  },
   /** The wind over the ice, until the film ends. */
   wind(night = false) {
     stops.push(bed(url(night ? 'story-wind-night' : 'story-wind'), night ? 0.3 : 0.22))

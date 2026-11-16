@@ -1,4 +1,4 @@
-// The Poles' QA scenarios for the globe hub (the finale's are in activities/party/qa.mjs), picked up by scripts/qa-screens.mjs (screens),
+// The Poles' QA scenarios for the globe hub (the ending's are in activities/night/qa.mjs), picked up by scripts/qa-screens.mjs (screens),
 // qa-pacing.mjs (pacing) and qa-motion.mjs (motion). Each activity keeps its own next to its sections.ts
 // (activities/<id>/qa.mjs); sections no screen reaches get a plain screenshot anyway. Not part of the app: Node runs it, Vite never sees it.
 import { vp } from '../../../../scripts/qa-lib.mjs'
@@ -6,9 +6,9 @@ import { vp } from '../../../../scripts/qa-lib.mjs'
 /** The first two chapters' stamps in the passport (the balloon has moved on down the trail). */
 const twoStamps = () => localStorage.setItem('kaylee-gamepack:/:world', JSON.stringify({ visited: ['poles'], stamps: { poles: ['floe', 'narwhal'] } }))
 
-/** The whole story told: every stamp and the Polar Explorer trophy (the movie ticket ends the trail). */
+/** The whole story told: every stamp (the ending's too) and the Polar Explorer trophy (the movie ticket ends the trail). */
 const told = () => {
-  localStorage.setItem('kaylee-gamepack:/:world', JSON.stringify({ visited: ['poles'], stamps: { poles: ['floe', 'narwhal', 'coats', 'slide', 'huddle'] } }))
+  localStorage.setItem('kaylee-gamepack:/:world', JSON.stringify({ visited: ['poles'], stamps: { poles: ['floe', 'narwhal', 'coats', 'slide', 'night'] } }))
   const now = new Date().toISOString()
   localStorage.setItem('kaylee-gamepack:/:trophies', JSON.stringify([{ gameId: 'world-poles', gameTitle: 'The Poles', trophyTitle: 'Polar Explorer', emoji: '🐧', firstEarnedAt: now, lastEarnedAt: now, count: 1 }]))
 }

@@ -2,9 +2,10 @@
 // story, "Pebble's Long Way Home". A penguin chick wakes up at the North Pole; Pola the polar bear cub, Terry the tern
 // and Sparkle's balloon take him home to Papa at the South Pole. The home base is the 3D globe (activities/hub/,
 // globe/) with the story's pictures along the way down it. Each picture is a chapter: a film (story/, on its own film
-// stage), the game, a film, then its stamp and sticker. The first visit opens with the way-in film. All five stamps
-// open the finale (activities/party/): the flight home, Papa's song, the reunion and Terry's Polar Explorer quiz.
-// Snow Coats and Emperor Huddle are 2D and loaded on their own, so they bring no three.js.
+// stage), the game, a film, then its stamp and sticker. The first visit opens with the way-in film. The last chapter
+// is the finale, The Longest Night (activities/night/, meta.finale): its stamp brings the trophy.
+// Snow Coats is 2D and loaded on its own, so it brings no three.js; Emperor Huddle (3D) loads on its own too, the last
+// chapter, so its world isn't built into the first ones' download.
 import { lazy, Suspense, useState, type ComponentType } from 'react'
 import { useSections } from '../../kit/sections'
 import { useStampFlow } from '../../kit/stampFlow'
@@ -12,13 +13,14 @@ import type { PlaceProps } from '../../types'
 import { FloeHop } from './activities/floe/FloeHop'
 import { Hub } from './activities/hub/Hub'
 import { NarwhalRide } from './activities/narwhal/NarwhalRide'
-import { Finale } from './activities/party/Finale'
 import { PenguinSlide } from './activities/slide/PenguinSlide'
 import STORY_SECTIONS, { type FilmId } from './activities/story/sections'
 import { CHAPTER_FILMS, filmSeen, forgetFilms, seeFilm } from './story/chapters'
 import { StartOver } from '../../kit/StartOver'
 import { setStamps } from '../../stamps'
 import { StoryFilm } from './story/StoryFilm'
+import { ACT_SECTION, forgetNight, STEPS } from './activities/night/steps'
+import { go } from '../../../router'
 
 /** What every Poles activity gets: call `onDone` at its payoff (its film, the stamp, the sticker, the video, then the globe). */
 export interface ActivityProps {
@@ -26,6 +28,7 @@ export interface ActivityProps {
 }
 
 const SnowCoats = lazy(() => import('./activities/coats/SnowCoats').then((m) => ({ default: m.SnowCoats })))
+const Night = lazy(() => import('./activities/night/Night').then((m) => ({ default: m.Night })))
 const EmperorHuddle = lazy(() => import('./activities/huddle/EmperorHuddle').then((m) => ({ default: m.EmperorHuddle })))
 
 const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = {
@@ -42,19 +45,20 @@ const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = {
       <EmperorHuddle {...p} />
     </Suspense>
   ),
+  // The ending, The Longest Night (3D, loaded on its own like the huddle): its films and acts run inside it.
+  night: (p) => (
+    <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: '#2A2766' }} />}>
+      <Night {...p} />
+    </Suspense>
+  ),
 }
 
 export default function Place(props: PlaceProps) {
-  const { meta, activity, stamps, onWin } = props
-  const stamp = useStampFlow(props, { closeIcon: '🌍 ▶', videoNext: '🌍', layer: true })
-  const all = meta.activities.every((a) => stamps.includes(a.id))
+  const { meta, activity, stamps, onWin, backToMap } = props
+  // The ending's stamp is the last: the trophy comes straight after it (then the globe, where the movie ticket waits).
+  const stamp = useStampFlow(props, { closeIcon: '🌍 ▶', videoNext: '🌍', layer: true, after: (info) => (info.id === 'night' ? onWin() : backToMap()) })
 
   if (activity === 'story') return <FilmLink {...props} />
-  if (activity === 'party') {
-    // The finale waits for every stamp (a link with ?stamps=all opens it straight away).
-    if (!all) return <Hub {...props} />
-    return <Finale onWin={onWin} />
-  }
   const Activity = activity ? ACTIVITIES[activity] : undefined
   const info = meta.activities.find((a) => a.id === activity) ?? meta.inTheWorks?.find((a) => a.id === activity)
   if (!Activity || !info) return <Arrival {...props} />
@@ -94,6 +98,7 @@ function Arrival(props: PlaceProps) {
             // finale waits for them), the films are unseen, and the way-in film plays. The trophy stays hers.
             setStamps(props.meta.id, [])
             forgetFilms()
+            forgetNight()
             setResumed(false)
             setFilm(true)
           }}
@@ -149,8 +154,12 @@ function FilmLink({ openActivity, backToMap }: PlaceProps) {
       onDone={() => {
         seeFilm(id)
         const chapter = Object.entries(CHAPTER_FILMS).find(([, f]) => f.in === id)?.[0]
+        // (The ending's films go on to what follows them in the chapter: the next act, or the next film.)
+        const at = STEPS.findIndex((st) => 'film' in st && st.film === id)
+        const after = at >= 0 ? STEPS[at + 1] : undefined
         if (chapter) openActivity(chapter)
-        else if (id === 'home-in') openActivity('party')
+        else if (after && 'act' in after) go.world('poles', 'night', ACT_SECTION[after.act])
+        else if (after && 'film' in after) go.world('poles', 'story', after.film)
         else backToMap()
       }}
     />

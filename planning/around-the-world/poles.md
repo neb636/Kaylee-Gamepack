@@ -38,7 +38,7 @@ getting from one to the other means going down the whole world, through the warm
 | 🦄 | **Narwhal Ride** `narwhal` (new) | north | steers Nari, both friends riding | out past the icebergs to the balloon | most of an iceberg is under the water; icebergs break off glaciers; under the sea ice there is only sea |
 | 🦊 | **Snow Coats** `coats` (2D) | north | rubs coats white, then brown | Terry flies south when the snow comes and the fox turns white | camouflage; the Arctic has land animals and seasons |
 | 🐧 | **Penguin Slide** `slide` | south | steers Papa down the ice and under the sea | meanwhile: Papa looks everywhere, and catches Pebble's favorite supper | Antarctica is high land under ice, downhill to the sea; penguins fly under water |
-| 🥚 | **Emperor Huddle** `huddle` (2D) | south | carries cold dads into the middle | the long night; Papa remembers the night Pebble hatched (the game is that memory) | huddling; dads keep the egg on their feet; months without the sun |
+| 🥚 | **Emperor Huddle** `huddle` (3D, rebuilt 2026-11-16) | south | carries cold dads into the middle | the long night; Papa remembers the night Pebble hatched (the game is that memory), and it ends with Papa singing Pebble his song | huddling; dads keep the egg on their feet and don't eat all winter; months without the sun; each papa's own song |
 | 🎈 | **Home** `party` (the finale) | both | steers Terry, the balloon behind him; finds Papa by his song; Terry's quiz | the flight down the world, a polar bear at the South Pole, Papa and Pebble | the poles are opposite ends, warm in between; penguins know each other's calls; the quiz, answered by doing |
 
 - **In order the first time, any order after.** The Poles is a story, so the first time through it goes in order (the
@@ -104,6 +104,38 @@ Costs: Narwhal Ride draws about 310k triangles (127k before), Penguin Slide 360k
 Samet's island is 397k (`node scripts/qa-perf.mjs --only=poles`). The globe hub and the finale's flight over the toy
 globe kept their look: they are the toy globe, not a place.
 
+## Emperor Huddle in 3D (2026-11-16)
+
+The user asked for the huddle to be rebuilt in 3D with the penguins the films animate, and freedom to improve the play
+and the story. It is now a 3D world (`activities/huddle/world.ts`) on the films' night Antarctica, with the films' and
+the finale's emperor (story/actor.ts) as every dad and Pebble.
+
+- **Same verb, a real huddle.** Pick a dad up (flippers flap), carry him, set him down: the huddle squishes and shuffles
+  together. Seen from above at 34°, the middle of the huddle is a real place (it glows pink-gold on the snow, brighter
+  the more dads are out of the wind), where the 2D side view squashed it into a line.
+- **Cold you can see without reading:** a snowflake shakes over a cold dad's head, snow piles on his cap and shoulders,
+  his breath puffs, he shivers and droops. Warm again: the snow falls off, a heart, a hop.
+- **Papa is one dad from the start** (the first, the one alone on the windy edge), and the only one who talks; the
+  others honk their own songs. While it's his egg he has a soft gold glow under him.
+- **The hatch is a little scene:** warm in the middle, his egg wobbles; at the first crack he waddles out to the front
+  of the huddle and faces her, the camera comes in low, crack, and Pebble pops out at his feet.
+- **The ending changed: Papa's song, not the sunrise.** The film after the game (`huddle-out`) already shows the sun
+  coming back, so the game's own sunrise made two in a row. Now the payoff is the moment the finale depends on: under
+  the southern lights Papa sings Pebble his song (party/sounds.ts `TUNES[0]`, the tune the finale's chick hums to find
+  him) and Pebble peeps it back: "Now you'll always find me." The section is `song` (it was `sunrise`).
+- **New things to poke:** a Weddell seal in its breathing hole (pops up now and then), the snow, each dad's song, and
+  in the close-ups the lights and the moon. Facts reused from the hub (the seal, the southern lights) and the finale
+  (family by their song); one new fact (dads don't eat all winter).
+- **Lines:** four new (Sparkle's "Shh. Papa is singing to Pebble.", Papa's two song lines, the fast fact); the three
+  sunrise lines are gone. Sounds reuse the Poles' recorded clips; three new prompts (`huddle-brrr`, `huddle-sneeze`,
+  `huddle-crack`) are in `sfx.json`, waiting to be made (the synth plays until then).
+- Robot-played in a cloud session (software GL, very slow): the carry, the warm-ups into the blizzard, the hatch, the
+  tuck and the song all run from their links. Not yet: a reel on a real GPU, `qa-pacing` touches and minutes, an
+  iPhone check.
+- Next for the huddle: film the reel on the Mac (`poles-huddle-carry`, `-hatch`, `-tuck`, `-song` in its qa.mjs), make
+  the three new sounds, then Kaylee plays it. Watch for: does she find Papa by his glow, does she carry Pebble back
+  without the hint, does she sit through the song. `assets/bg-huddle-night.webp` (the 2D game's painting) is unused now.
+
 ## North and south at a glance (the facts the place is built on)
 
 | | 🐻‍❄️ North Pole (the Arctic) | 🐧 South Pole (Antarctica) |
@@ -128,9 +160,115 @@ Stickers: polar bear (floe), narwhal (narwhal), Arctic fox (coats), Adélie peng
   below the row in portrait; the whole chain (film, flight, film, song, film, quiz) was checked piece by piece from
   its links, not played end to end by a robot.
 - Nobody ran `qa-pacing` on the rebuilt games: touches and minutes are unmeasured.
-- Snow Coats and Emperor Huddle are unchanged 2D games; only their films are new.
+- Snow Coats is an unchanged 2D game; only its films are new.
 
 ## Next
+
+**The new ending, The Longest Night, is playable end to end** (plan and script: [poles-ending.md](poles-ending.md), PR
+#475, with #474's 3D huddle folded into the same branch). It's `activities/night/` and it is home now: the last
+picture on the trail (`info.ts` READY = true, `hub/stops.ts` HOME = 'night'), in place of Emperor Huddle and the old
+finale. Its stamp earns the emperor chick, the trophy comes straight after (Place.tsx's stamp flow `after`), then the
+trail ends in the movie ticket.
+
+- **Milestone 1 (2026-11-16): Act 2 and the whole script.** Every line of the ending is in `lines.ts` as `L.night`, in
+  play order. Act 2, Sing in the Dark (`chorus.ts`): `#/world/poles/night/whiteout`, `/edge`, `/together`, knobs
+  `chorus`.
+- **Milestone 2 (2026-11-16): the whole chapter, for Kaylee's playtest.** `Night.tsx` runs it as one chapter
+  (`steps.ts`): film → act → film … → the stamp, and remembers where she left off between acts.
+  - **Act 1, Hold to Fly** (`fly.ts`, `#/world/poles/night/fly?leg=north|warm|south`): a side view, the balloon
+    flying left (north) to right (south). Hold anywhere: the burner roars and it rises; let go: it sinks. The pink
+    wind up high carries it south fast, the blue wind down low only lets it creep. Arctic (floes, two tall bergs that
+    boing it up, Nari), the warm middle (sea turns turquoise, Pola melts, palm islands with Terry's hellos for her
+    passport, the red ship, a humpback spout, a thundercloud to go through: "A cool shower!"), the south (dusk to
+    night, table bergs, the albatross, the southern lights), the blizzard (gusts push it down). Silly: the cloud
+    deck, the dip in the sea. Help: after 9 s out of the pink wind it reaches out to her (down and up, twice).
+    Knobs `balloon`. The walrus is left out (no prop yet).
+    **Shortened (2026-11-16, your note: "way too long and boring, shorten it by 75%"):** she flies only until she has
+    ridden the pink wind for 2.5 s (knob `takeover`); then the wind takes over like a film: her finger rests, the
+    balloon holds the pink wind's middle and races south at 18 m/s (knob `cruise`) through the warm middle, the ship,
+    the whale, the night and the storm, saying only the story's lines (no hellos, second facts or "hold on"). About
+    45 s in all, from about three minutes.
+  - **Act 3, Through the Huddle** (`through.ts`, `#/world/poles/night/huddle?part=near|churn|middle`), on the 3D
+    huddle's ice (`huddle/world.ts` `colonyIce`): her finger on the ice leads Pebble (a flick: tummy slide); the dads
+    he walks into squish aside and honk. Tap him: he sings and Papa's gold notes rise (longer each time). Near: Papa
+    is shuffled away ("Papa, wait!"), a dad shows his egg. Churn: the huddle turns, cold edge dads swap in, a gust
+    rolls Pebble out, then it slows. Middle: packed (he bounces off tummies), three songs, the friends outside join
+    in from afar, Papa calls, the dads step aside one by one, the aisle, the tuck. About 750 dads: ~110 near ones
+    (one instanced shape with faces and outlines) of which the nearest borrow real rigs, and 640 far ones (no
+    outline); ~370k triangles. Knobs `lead`. A pink ring on the snow marks Pebble among the dads.
+  - **The films** (`story/nightFilms.ts` on the film stage; links `#/world/poles/story/night-in`, `night-lost`,
+    `night-colony`, `night-sunrise`, `night-goodbye`, `the-end`). New sets on `story/stage.ts`: `blizzard` (a
+    whiteout look) and `dawn` (the night that `dawn(k)` turns to day, with a sun disc rising); a huddle of hundreds
+    (`showHuddle`, `activities/night/dads.ts`); the end's split screen (`split`, two cameras, each half its own set,
+    look and cast). The memory in night-lost is staged on the stage's night set (Papa bending over a tiny Pebble, the
+    egg-crack sound and his song), not #474's game world. Pola and Pebble's "Except best friends!" play at once
+    (`sdk/speech.ts` `sayAlong`).
+  - **Goodbye** (`goodbye.ts`, `#/world/poles/night/goodbye`): the toy globe turns under the balloon along
+    `party/route.ts`'s way, run backwards (colony → passport countries → North Pole); hold to rise into the pink
+    wind. Mama waits at the top. Knobs `goodbyeFly`.
+  - **Retired** (the plan's list): the films huddle-in, huddle-out, home-in, home-land, home-reunion and their
+    `L.story` lines; the old finale's code (`party/Finale.tsx`, `party.ts`, `song.ts`, its sections and QA) and its
+    lines (the flight's steer lines, the song game, Terry's quiz and badge); `hub.next.huddle`. Kept: `party/route.ts`,
+    `party/sounds.ts` (the song), `L.party.hello`, `.balloon`, `.song.songFact`. Emperor Huddle is off the trail
+    (READY = false); its links still open it.
+  - **Sounds:** no ElevenLabs key in the cloud session again, so everything reuses the Poles' recorded clips
+    (`night/sounds.ts` `flySfx`, `huddleSfx3`; `story/sounds.ts` crack, cheer, gust, blizzard, colony).
+- **Next:** Kaylee's playtest (check-in 3). Then: ElevenLabs sounds on a session with a key (burner roar, wind
+  ribbons, the ring shimmer, the sunrise swell, the colony's hum); the woolly hat on Pebble in the last films; a
+  walrus in the Arctic; the smooth reel on the Mac (`poles-night-*` motion runs in `activities/night/qa.mjs`).
+
+Kaylee plays it. Watch for: does she find Papa by his glow, does she carry Pebble back
+  without the hint, does she sit through the song. `assets/bg-huddle-night.webp` (the 2D game's painting) is unused now.
+
+## North and south at a glance (the facts the place is built on)
+
+| | 🐻‍❄️ North Pole (the Arctic) | 🐧 South Pole (Antarctica) |
+|---|---|---|
+| Under the ice | Ocean: the ice floats | Land: a continent, ice up to about 4 km thick |
+| Who lives there | Polar bears, Arctic foxes and hares, walruses, narwhals, belugas | Penguins, seals, whales; no land animals all year |
+| People | Arctic peoples have lived there for thousands of years | Only scientists at research stations |
+| Icebergs | Tall and pointy, from Greenland's glaciers | Huge and flat, from the ice shelves |
+| Seasons | Summer in June and July | Summer in December and January: the opposite |
+| Day and night | Months of daylight, then months of dark | The same, at the opposite time of year |
+| Visits both | The Arctic tern, every year: the longest trip any animal makes | |
+
+Stickers: polar bear (floe), narwhal (narwhal), Arctic fox (coats), Adélie penguin (slide), emperor chick (huddle).
+
+## Known small things (2026-11-15)
+
+- Narwhal Ride: the three waves read as flat foamy bands; from the chase
+  camera Pebble sits hidden behind Pola most of the ride; four lines play in about 16 s under the ice.
+- Penguin Slide: a run is about 1:45 (the course length was kept); the humpback under the sea is easy to miss; in
+  portrait the station hut is mostly off the right edge.
+- The finale: the friends in the balloon's basket are small on an iPhone; Papa's song leaves empty snow above and
+  below the row in portrait; the whole chain (film, flight, film, song, film, quiz) was checked piece by piece from
+  its links, not played end to end by a robot.
+- Nobody ran `qa-pacing` on the rebuilt games: touches and minutes are unmeasured.
+- Snow Coats is an unchanged 2D game; only its films are new.
+
+## Next
+
+**The new ending, The Longest Night, is being built** (plan and script: [poles-ending.md](poles-ending.md), PR #475,
+with #474's 3D huddle folded into the same branch). It's `activities/night/`, not on the globe yet (`info.ts`
+READY = false), so Emperor Huddle and the finale still play for her until it's done.
+
+- **Milestone 1 (2026-11-16): Act 2 and the whole script.** Every line of the ending is in `lines.ts` as one block,
+  `L.night`, in play order (films, acts, goodbye, the end), so `node scripts/table-read.mjs poles night` is the
+  ending as she hears it. Lines already recorded elsewhere keep their words and share their clips (the table read
+  marks them `reused`). Act 2, Sing in the Dark, is playable: `#/world/poles/night/whiteout`, `/edge`, `/together`
+  (`chorus.ts`). Hold Pebble and a dashed circle shows how far the song will go; let go and the ring rolls across the
+  snow on the ground's own shape (it rolls over the hills to the colony at the end), lighting what it passes. Each
+  friend found adds a band of color and a voice (`sounds.ts` `voice`: one synth per singer on `TUNES[0]`). Feel knobs
+  `chorus` (`?feel=1`): tap length, peep/smallest/biggest ring, hold-to-full and its curve, ring speed and width,
+  glow time, misses before a friend answers anyway, and the big song's hold.
+- Decided on my own: the hat is the slide's grey woolly hat (the plan's end film says pink; the slide's is grey);
+  holding Pola sings too (her finger may land on her, not the chick); the leopard seal's wobbly note is left out of
+  Act 2 for now; the end of Act 2 offers 🔁 until Act 3 exists. No ElevenLabs key in the cloud session: Act 2 reuses
+  the Poles' recorded clips (Weddell trill, whale, Adelie honks, tern, hat, reveal) and synthesizes the ring's shimmer.
+- **Next (milestone 2, after you hear the script):** Act 1 (the balloon), then Act 3 on the 3D huddle's world, the
+  five films, the goodbye flight, then swapping the chapter in for Emperor Huddle and the finale on the globe and
+  retiring their lines. Make the ring shimmer and a sunrise swell with ElevenLabs on a session with a key. Film the
+  reel on the Mac (`poles-night-*` in `activities/night/qa.mjs`).
 
 Kaylee plays it. Watch for: does she say "penguin" and "home"; does she tap the next picture without help; does she sit
 through the way-in film or hold ⏭ (her diary counts both); which chapter she replays; whether Papa's song is too hard

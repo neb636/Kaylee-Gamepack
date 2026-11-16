@@ -7,7 +7,7 @@
 //
 // Nothing here takes taps (FilmOverlay sparkles where her finger was and holds the ⏭). When the film ends or is
 // skipped, `events.done()` moves on; the stage is thrown away, so a film's `finish()` has nothing to put back.
-import { BufferAttribute, Color, Fog, Group, IcosahedronGeometry, Matrix4, Mesh, Scene, SphereGeometry, Vector3, type BufferGeometry, type WebGLRenderer } from 'three'
+import { BufferAttribute, Color, Fog, Group, IcosahedronGeometry, InstancedMesh, Matrix4, Mesh, PerspectiveCamera, Quaternion, Scene, SphereGeometry, Vector3, type BufferGeometry, type Object3D, type WebGLRenderer } from 'three'
 import type { Line } from '../../../../sdk'
 import type { AnchorInfo } from '../../../engine3d/Anchors'
 import { CameraRig } from '../../../engine3d/camera'
@@ -18,21 +18,31 @@ import { merge, P, solid, solidMix } from '../../../engine3d/geo'
 import { smoothstep } from '../../../../sdk/math'
 import { makeHull, setOutlineResolution } from '../../../engine3d/outline'
 import { Particles } from '../../../engine3d/particles'
-import { applyBands, makeLights } from '../../../engine3d/toon'
+import { applyBands, makeLights, toon } from '../../../engine3d/toon'
 import type { World3D } from '../../../engine3d/View3D'
 import { swell } from '../../../engine3d/water'
 import { fbm, field, iceCliff, noise, outside, snowColor } from '../look/ground'
 import { dress } from '../look/look'
-import { PolarSea, roundSkirt, SEA, skirtGeo, type SeaColors } from '../look/sea'
-import { PolarSky, type MoodName } from '../look/sky'
+import { mixSea, PolarSea, roundSkirt, SEA, skirtGeo, type SeaColors } from '../look/sea'
+import { MOODS, PolarSky, type Mood, type MoodName } from '../look/sky'
 import { earthTexture, ll } from '../globe/earth'
 import { buildNorth, buildSouth, standOn } from '../globe/globe'
 import { globeMaterials } from '../globe/material'
 import { Actor } from './actor'
-import { Aurora, Balloon, bergGeo, driftGeo, floeGeo, floeSkirt, ICE_LINE, makeCrate, makeRamp, makeShip, mountainGeo, Narwhal, rng, Stars, tableBergGeo } from './props'
+import { Aurora, Balloon, bergGeo, driftGeo, floeGeo, floeSkirt, ICE_LINE, makeCrate, makeRamp, makeShip, mountainGeo, Narwhal, rng, skyDisc, Stars, tableBergGeo } from './props'
+import { dadGeo } from '../activities/night/dads'
 import { storySfx } from './sounds'
 
-export type SetName = 'arctic' | 'tundra' | 'antarctic' | 'night' | 'globe'
+export type SetName = 'arctic' | 'tundra' | 'antarctic' | 'night' | 'globe' | 'blizzard' | 'dawn'
+
+/** One half of the split screen: its set's look and who is in it (the rest of the cast is hidden there). */
+export interface SplitHalf {
+  set: SetName
+  /** Another set's sky, sea and light over it (the Arctic at night). */
+  look?: SetName
+  show: Object3D[]
+}
+const HUDDLE_N = 260
 
 /** A film for this stage: which set it opens on, and its beats (built once the stage exists; they close over it). */
 export interface StoryFilm {
@@ -54,7 +64,7 @@ export const SNOW_Y = 0
 
 interface Look {
   /** The sky's mood (look/sky.ts) and the sea's colors (look/sea.ts). */
-  mood: MoodName
+  mood: MoodName | Mood
   sea: SeaColors
   fog: [number, number]
   /** Ambient and sun, times the usual. */
@@ -67,7 +77,12 @@ const LOOKS: Record<SetName, Look> = {
   antarctic: { mood: 'south', sea: SEA.south, fog: [120, 420], light: [1, 1], tint: '#FAFCFF' },
   night: { mood: 'night', sea: SEA.night, fog: [60, 240], light: [0.62, 0.5], tint: '#C9D2FF' },
   globe: { mood: 'globe', sea: SEA.day, fog: [400, 900], light: [1, 1], tint: '#FFF7F0' },
+  // The ending's: the storm the balloon comes down in, and the colony's long night that turns to the first sunrise.
+  blizzard: { mood: { ...MOODS.night, top: '#5B5797', mid: '#8E89C6', horizon: '#C9C5EC', haze: '#B4B0E2', night: 0.4, clouds: 0 }, sea: SEA.night, fog: [2, 26], light: [0.95, 0.8], tint: '#E6E6FF' },
+  dawn: { mood: 'night', sea: SEA.night, fog: [60, 240], light: [0.62, 0.5], tint: '#C9D2FF' },
 }
+/** Sets that stand on Antarctica's snow. */
+const SOUTH_SETS: SetName[] = ['antarctic', 'night', 'blizzard', 'dawn']
 /** Where the little globe hangs (far above the sets, so nothing of them shows behind it). */
 export const GLOBE_AT = new Vector3(0, 400, 0)
 
@@ -113,6 +128,12 @@ export class StoryStage implements World3D {
   readonly krill: Group
   readonly stars: Stars
   readonly aurora: Aurora
+  /** The ending's props: the pebble Pebble gives Pola, the first sun in months, the huddle of hundreds. */
+  readonly stone: Group
+  readonly sunDisc: Group
+  readonly huddle: InstancedMesh
+  /** The end's split screen: the top of the world above, the bottom below, each its own set, cast and camera. */
+  readonly split: { cam: PerspectiveCamera; on: boolean; top: SplitHalf; bottom: SplitHalf }
   /** The tundra's two coats: autumn's brown ground and winter's snow. */
   private tundraBrown = new Group()
   private tundraSnow = new Group()
@@ -141,7 +162,7 @@ export class StoryStage implements World3D {
     this.spray = new Particles({ kind: 'spray', count: 120 }, bag)
     scene.add(this.flakes.mesh, this.foam.mesh, this.spray.mesh)
 
-    for (const name of ['arctic', 'tundra', 'antarctic', 'night', 'globe'] as const) {
+    for (const name of ['arctic', 'tundra', 'antarctic', 'night', 'globe', 'blizzard', 'dawn'] as const) {
       this.sets[name] = new Group()
       this.sets[name].visible = false
       scene.add(this.sets[name])
@@ -178,10 +199,19 @@ export class StoryStage implements World3D {
     this.ramp = makeRamp(bag)
     this.crate = makeCrate(bag)
     this.krill = solid(merge([...Array(9)].map((_, i) => P.sphere(0.09, '#FF9DB8', { at: [Math.cos(i * 2.4) * 0.16 * (i % 3), 0.07 + (i % 3) * 0.07, Math.sin(i * 2.4) * 0.16 * (i % 3)], scale: [1.5, 0.8, 0.8], rot: [0, i, 0] }, 8))), bag, 2)
-    for (const o of [this.nari.root, this.balloon.root, this.ship, this.ramp, this.crate, this.krill]) {
+    this.stone = solid(P.sphere(0.09, '#A6A3BC', { scale: [1.25, 0.8, 1] }, 12), bag, 1.5)
+    for (const o of [this.nari.root, this.balloon.root, this.ship, this.ramp, this.crate, this.krill, this.stone]) {
       o.visible = false
       scene.add(o)
     }
+    // The ending's: the first sun in months, and a huddle of hundreds of dads (one cheap instanced shape).
+    this.sunDisc = skyDisc(bag, 6, '#FFE7A8', '#FFC9B8')
+    this.sunDisc.visible = false
+    scene.add(this.sunDisc)
+    this.huddle = bag.add(new InstancedMesh(bag.add(dadGeo(1.38, 6, true)), bag.add(toon('#ffffff', true)), HUDDLE_N))
+    this.huddle.visible = false
+    scene.add(this.huddle)
+    this.split = { cam: new PerspectiveCamera(34, 1, 0.05, 900), on: false, top: { set: 'arctic', show: [] }, bottom: { set: 'antarctic', show: [] } }
 
     // The polar look on everything built so far (look/look.ts: cloud shade, snow that glints).
     dress(scene)
@@ -390,16 +420,16 @@ export class StoryStage implements World3D {
   /** Switches the set (under a cut or a page turn): its sky, fog and light, and everyone hidden until placed. */
   use(set: SetName, keepCast = false) {
     this.setNow = set
-    for (const [name, g] of Object.entries(this.sets)) g.visible = name === set || (name === 'antarctic' && set === 'night')
+    for (const [name, g] of Object.entries(this.sets)) g.visible = name === set || (name === 'antarctic' && SOUTH_SETS.includes(set))
     const look = LOOKS[set]
     this.sky.set(look.mood)
     const fog = this.scene.fog as Fog
     fog.color.copy(this.sky.haze)
     fog.near = look.fog[0]
     fog.far = look.fog[1]
-    const night = set === 'night'
+    const night = set === 'night' || set === 'dawn'
     this.sea.setColors(look.sea)
-    this.sea.level = set === 'antarctic' || night ? -0.5 : 0
+    this.sea.level = SOUTH_SETS.includes(set) ? -0.5 : 0
     this.sea.visible = set !== 'globe'
     this.lights.ambient.color.set(look.tint)
     this.lights.sun.color.set(look.tint)
@@ -407,6 +437,8 @@ export class StoryStage implements World3D {
     this.stars.opacity = night ? 1 : 0
     this.aurora.amount = night ? 0.9 : 0
     this.snowing = 0
+    this.sunDisc.visible = false
+    this.huddle.visible = false
     if (!keepCast) this.clear()
   }
   private lightK: [number, number] = [1, 1]
@@ -416,7 +448,7 @@ export class StoryStage implements World3D {
   /** Everyone and everything off the stage. */
   clear() {
     for (const a of this.cast) a.hide()
-    for (const o of [this.nari.root, this.balloon.root, this.ship, this.ramp, this.crate, this.krill]) o.visible = false
+    for (const o of [this.nari.root, this.balloon.root, this.ship, this.ramp, this.crate, this.krill, this.stone]) o.visible = false
   }
   get cast() {
     return [this.pola, this.mama, this.pebble, this.papa, this.terry, this.fox, this.snowfox, ...this.colony, ...this.adelies]
@@ -452,6 +484,26 @@ export class StoryStage implements World3D {
     this.stars.opacity = 1 - k
     this.aurora.amount = 0.9 * Math.max(0, 1 - k * 2.5)
   }
+  /** The huddle of dads, standing packed round (cx, cz) out to radius r, faces toward `face` (deg); off with r = 0. */
+  showHuddle(cx: number, cz: number, r: number, face = 0, hole = 0) {
+    const R = rng(5)
+    const gap = 0.92
+    let n = 0
+    for (let row = -40; row <= 40 && n < HUDDLE_N; row++) {
+      for (let col = -40; col <= 40 && n < HUDDLE_N; col++) {
+        const x = (col + (row % 2 ? 0.5 : 0)) * gap
+        const z = row * gap * 0.87
+        const d = Math.hypot(x, z)
+        if (d > r || d < hole) continue
+        Q.setFromAxisAngle(UPV, (face * Math.PI) / 180 + (R() - 0.5) * 0.6)
+        this.huddle.setMatrixAt(n++, M.compose(V.set(cx + x + (R() - 0.5) * 0.1, 0, cz + z), Q, S.setScalar(0.95 + R() * 0.1)))
+      }
+    }
+    this.huddle.count = n
+    this.huddle.instanceMatrix.needsUpdate = true
+    this.huddle.visible = r > 0
+  }
+
   /** A splash on the water, or a puff of snow, at a point. */
   splash(x: number, z: number, big = 1) {
     this.spray.burst(x, 0.1, z, Math.round(22 * big), 2.6 * big, 4.2 * big, 0.2)
@@ -517,9 +569,62 @@ export class StoryStage implements World3D {
   }
 
   render() {
-    this.bars.render(this.renderer, this.scene, this.rig.camera, this.w, this.h)
+    if (this.split.on) this.renderSplit()
+    else this.bars.render(this.renderer, this.scene, this.rig.camera, this.w, this.h)
     this.stats.calls = this.renderer.info.render.calls
     this.stats.tris = this.renderer.info.render.triangles
+  }
+
+  /** The end: two pictures, one above the other (the film's camera on top, `split.cam` below), each half with its own
+   *  set, sky, sea, light and cast. A white line between them. */
+  private renderSplit() {
+    const r = this.renderer
+    const { w, h } = this
+    const half = Math.floor(h / 2)
+    const cast = this.cast.map((a) => a.root)
+    const amb = this.lights.ambient.intensity / this.lightK[0]
+    const sun = this.lights.sun.intensity / this.lightK[1]
+    const was = this.setNow
+    r.setScissorTest(false)
+    r.setClearColor('#FFFFFF', 1)
+    r.clear()
+    r.setScissorTest(true)
+    const paint = (which: SplitHalf, cam: PerspectiveCamera, y: number, hh: number) => {
+      const look = LOOKS[which.look ?? which.set]
+      for (const [name, g] of Object.entries(this.sets)) g.visible = name === which.set || (name === 'antarctic' && SOUTH_SETS.includes(which.set))
+      for (const o of cast) o.visible = which.show.includes(o)
+      for (const o of [this.stone, this.balloon.root, this.huddle, this.sunDisc]) o.visible = which.show.includes(o)
+      this.sky.set(look.mood)
+      this.sea.setColors(look.sea)
+      this.sea.level = SOUTH_SETS.includes(which.set) ? -0.5 : 0
+      const night = look.mood === 'night' || which.look === 'night'
+      this.stars.opacity = night ? 1 : 0
+      this.aurora.amount = night ? 0.95 : 0
+      ;(this.scene.fog as Fog).color.copy(this.sky.haze)
+      this.lights.ambient.color.set(look.tint)
+      this.lights.sun.color.set(look.tint)
+      this.lights.ambient.intensity = amb * look.light[0]
+      this.lights.sun.intensity = sun * look.light[1]
+      cam.aspect = w / hh
+      cam.updateProjectionMatrix()
+      this.sky.update(this.time, cam, this.scene.fog as Fog)
+      this.sea.update(cam.position.x, cam.position.z - 30, this.sky.sun)
+      r.setViewport(0, y, w, hh)
+      r.setScissor(0, y, w, hh)
+      r.render(this.scene, cam)
+    }
+    paint(this.split.top, this.rig.camera, half + 2, h - half - 2)
+    paint(this.split.bottom, this.split.cam, 0, half - 2)
+    // Hiding is only for each half's render pass: everyone in either half stays visible between frames, or Actor.update
+    // (which skips hidden actors) would freeze the top half's cast (Pola and Mama stop blinking, Terry's last flight stops).
+    const shown = new Set([...this.split.top.show, ...this.split.bottom.show])
+    for (const o of cast) o.visible = shown.has(o)
+    for (const o of [this.stone, this.balloon.root, this.huddle, this.sunDisc]) o.visible = shown.has(o)
+    r.setScissorTest(false)
+    r.setViewport(0, 0, w, h)
+    this.rig.camera.aspect = w / h
+    this.rig.camera.updateProjectionMatrix()
+    this.setNow = was
   }
 
   placeAnchors() {}
@@ -567,10 +672,8 @@ function rockGeo(s: number, seed: number) {
   return g
 }
 const tmpD = new Color()
-/** Part way between two sets of sea colors. */
-function mixSea(a: SeaColors, b: SeaColors, k: number): SeaColors {
-  const out = {} as Record<keyof SeaColors, string>
-  for (const key of Object.keys(a) as (keyof SeaColors)[]) out[key] = '#' + tmpC.set(a[key]).lerp(tmpD.set(b[key]), k).getHexString()
-  return out
-}
 const M = new Matrix4()
+const Q = new Quaternion()
+const V = new Vector3()
+const S = new Vector3()
+const UPV = new Vector3(0, 1, 0)

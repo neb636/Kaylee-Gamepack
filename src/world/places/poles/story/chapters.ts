@@ -8,11 +8,10 @@ export const CHAPTER_FILMS: Record<string, { in: FilmId; out: FilmId }> = {
   narwhal: { in: 'narwhal-in', out: 'narwhal-out' },
   coats: { in: 'coats-in', out: 'coats-out' },
   slide: { in: 'slide-in', out: 'slide-out' },
-  huddle: { in: 'huddle-in', out: 'huddle-out' },
 }
 
 /** The chapters in story order (the globe's trail of pictures runs down the world in this order). */
-export const STORY_ORDER = ['floe', 'narwhal', 'coats', 'slide', 'huddle'] as const
+export const STORY_ORDER = ['floe', 'narwhal', 'coats', 'slide'] as const
 
 const seen = new Set<FilmId>()
 // The way-in film is remembered between visits too (she has no stamp until her first chapter is done, and a minute of

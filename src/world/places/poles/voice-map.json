@@ -196,13 +196,6 @@
     "file": "0169b1646ca1.mp3"
   },
   {
-    "text": "Next stop: the long, dark night.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2928,
-    "file": "6af868c11d84.mp3"
-  },
-  {
     "text": "Movie time! Let's see the real animals from our story!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -677,146 +670,6 @@
     "sig": "c038db870a",
     "ms": 2904,
     "file": "8e98baa2d413.mp3"
-  },
-  {
-    "text": "Winter at the South Pole. The sun is gone for months.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4944,
-    "file": "52cf397b512c.mp3"
-  },
-  {
-    "text": "I'll wait right here, Pebble.",
-    "voice": "papa",
-    "sig": "c038db870a",
-    "ms": 2280,
-    "file": "a93f3b01e0ff.mp3"
-  },
-  {
-    "text": "I remember the night you hatched.",
-    "voice": "papa",
-    "sig": "c038db870a",
-    "ms": 2928,
-    "file": "f33c2cad04ae.mp3"
-  },
-  {
-    "text": "I kept you warm all winter long.",
-    "voice": "papa",
-    "sig": "c038db870a",
-    "ms": 3432,
-    "file": "70ac0050f826.mp3"
-  },
-  {
-    "text": "Look. The sun is coming back.",
-    "voice": "papa",
-    "sig": "c038db870a",
-    "ms": 2616,
-    "file": "235b1e433839.mp3"
-  },
-  {
-    "text": "Wait. What is that, up in the sky?",
-    "voice": "papa",
-    "sig": "c038db870a",
-    "ms": 2976,
-    "file": "2bbe48b2b2dd.mp3"
-  },
-  {
-    "text": "All aboard! Next stop, the bottom of the world!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4272,
-    "file": "c1067e2dfc2a.mp3"
-  },
-  {
-    "text": "Goodbye, my brave cub! Hurry home!",
-    "voice": "mama",
-    "sig": "13d0232cf0",
-    "ms": 4104,
-    "file": "dde2097c4158.mp3"
-  },
-  {
-    "text": "Follow me! All the way down the world!",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 3984,
-    "file": "ffb09f0a9556.mp3"
-  },
-  {
-    "text": "We made it! This is Antarctica.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3720,
-    "file": "07d39b01e2db.mp3"
-  },
-  {
-    "text": "There's ground under this ice! Not sea!",
-    "voice": "pola",
-    "sig": "2c88a3bfe7",
-    "ms": 3144,
-    "file": "34f2d28c6c76.mp3"
-  },
-  {
-    "text": "Goodness! What is THAT?",
-    "voice": "papa",
-    "sig": "c038db870a",
-    "ms": 2424,
-    "file": "a47bc2df699b.mp3"
-  },
-  {
-    "text": "Hi! I'm a polar bear!",
-    "voice": "pola",
-    "sig": "2c88a3bfe7",
-    "ms": 2712,
-    "file": "120517fcfdf7.mp3"
-  },
-  {
-    "text": "Papa? They all look the same!",
-    "voice": "pebble",
-    "sig": "77076520c0",
-    "ms": 2352,
-    "file": "fb6cd94f225e.mp3"
-  },
-  {
-    "text": "Every penguin papa has his own song. Let's find Papa's!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 5160,
-    "file": "d6e163cac87b.mp3"
-  },
-  {
-    "text": "Pebble! My Pebble!",
-    "voice": "papa",
-    "sig": "c038db870a",
-    "ms": 2424,
-    "file": "f003cd6338c4.mp3"
-  },
-  {
-    "text": "Papa! I went to the top of the world!",
-    "voice": "pebble",
-    "sig": "77076520c0",
-    "ms": 2424,
-    "file": "02dc5b6a9f79.mp3"
-  },
-  {
-    "text": "This is Pola. She carried me home.",
-    "voice": "pebble",
-    "sig": "77076520c0",
-    "ms": 2496,
-    "file": "3a9a962cdbb6.mp3"
-  },
-  {
-    "text": "A polar bear at the South Pole! Thank you, Pola.",
-    "voice": "papa",
-    "sig": "c038db870a",
-    "ms": 3792,
-    "file": "21f3e7aed3a0.mp3"
-  },
-  {
-    "text": "Top to bottom! Who's ready for my Polar Explorer quiz?",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 3864,
-    "file": "ce239bb65b08.mp3"
   },
   {
     "text": "Pull Pola back, and let go!",
@@ -1673,11 +1526,11 @@
     "file": "8e60555f4820.mp3"
   },
   {
-    "text": "Look! The sun is coming back!",
+    "text": "Shh. Papa is singing to Pebble.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3061,
-    "file": "c46f7d2947dc.mp3"
+    "ms": 3000,
+    "file": "4146c22691c4.mp3"
   },
   {
     "text": "You kept them all warm!",
@@ -1699,6 +1552,13 @@
     "sig": "ed7dbdac3d",
     "ms": 4466,
     "file": "3b95d17c3296.mp3"
+  },
+  {
+    "text": "Emperor dads don't eat all winter. They just keep the egg warm!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4992,
+    "file": "3b8d5310ce9a.mp3"
   },
   {
     "text": "Brrr! So cold!",
@@ -1757,11 +1617,18 @@
     "file": "0e898ceaae23.mp3"
   },
   {
-    "text": "Look, Pebble. The sun!",
+    "text": "Listen, Pebble. This is my song.",
     "voice": "papa",
     "sig": "c038db870a",
-    "ms": 2475,
-    "file": "f9bba19d9be2.mp3"
+    "ms": 3144,
+    "file": "6533067c60d2.mp3"
+  },
+  {
+    "text": "That's it! Now you'll always find me.",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 3192,
+    "file": "8ad563dd7270.mp3"
   },
   {
     "text": "Hi, Papa! Peep peep!",
@@ -1783,13 +1650,6 @@
     "sig": "77076520c0",
     "ms": 1283,
     "file": "5a8774deacfe.mp3"
-  },
-  {
-    "text": "Ooh, so pretty!",
-    "voice": "pebble",
-    "sig": "77076520c0",
-    "ms": 2234,
-    "file": "0f76dda4a937.mp3"
   },
   {
     "text": "Here we go! Hold on tight!",
@@ -2142,62 +2002,6 @@
     "file": "46de55508f18.mp3"
   },
   {
-    "text": "Steer Terry with your finger!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2787,
-    "file": "3b8176178bc2.mp3"
-  },
-  {
-    "text": "Click and drag to steer Terry!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2544,
-    "file": "bea5a6d7290b.mp3"
-  },
-  {
-    "text": "Follow me, balloon!",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 2112,
-    "file": "f24c8aaab323.mp3"
-  },
-  {
-    "text": "Move your finger to steer Terry!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3813,
-    "file": "720484ab957d.mp3"
-  },
-  {
-    "text": "Hold the click and move to steer Terry!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3288,
-    "file": "92fd31a5aec5.mp3"
-  },
-  {
-    "text": "Yum, a fish!",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 1947,
-    "file": "41bbab082f75.mp3"
-  },
-  {
-    "text": "Fishy!",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 746,
-    "file": "ee5ae77cb1cc.mp3"
-  },
-  {
-    "text": "Got one!",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 922,
-    "file": "260bf3f0a1b4.mp3"
-  },
-  {
     "text": "Hello, Thailand!",
     "voice": "terry",
     "sig": "164d612c04",
@@ -2247,6 +2051,132 @@
     "file": "356b58508cb4.mp3"
   },
   {
+    "text": "Higher, higher!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 1608,
+    "file": "36ac4e21630e.mp3"
+  },
+  {
+    "text": "Emperor penguins find their family by their song.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4080,
+    "file": "c722eef36ac8.mp3"
+  },
+  {
+    "text": "Snow! The fox is white. Time to fly south!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 4416,
+    "file": "bf8a9c799941.mp3"
+  },
+  {
+    "text": "Goodbye, my brave cub! Hurry home!",
+    "voice": "mama",
+    "sig": "13d0232cf0",
+    "ms": 4104,
+    "file": "dde2097c4158.mp3"
+  },
+  {
+    "text": "I'll come back, Mama. I promise.",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 3768,
+    "file": "cb6b271f4eda.mp3"
+  },
+  {
+    "text": "Narwhals stay up north. Say hi for me!",
+    "voice": "nari",
+    "sig": "7e9efe3ed5",
+    "ms": 3624,
+    "file": "0b2a31fd2ce4.mp3"
+  },
+  {
+    "text": "All aboard! Next stop, the bottom of the world!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4272,
+    "file": "c1067e2dfc2a.mp3"
+  },
+  {
+    "text": "I'll wait right here, Pebble.",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2280,
+    "file": "a93f3b01e0ff.mp3"
+  },
+  {
+    "text": "Hold your finger down to fly up!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3744,
+    "file": "1187b97d6767.mp3"
+  },
+  {
+    "text": "Click and hold to fly up!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3000,
+    "file": "c05ee60771ee.mp3"
+  },
+  {
+    "text": "Follow me! The pink wind goes south!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 3672,
+    "file": "0a0bd7f46ecb.mp3"
+  },
+  {
+    "text": "Ride the pink wind south!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2232,
+    "file": "75fb516128df.mp3"
+  },
+  {
+    "text": "Hold your finger down to go up!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2544,
+    "file": "e15f41d250ba.mp3"
+  },
+  {
+    "text": "Click and hold to go up!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2208,
+    "file": "d20a35627d54.mp3"
+  },
+  {
+    "text": "Hot air goes up, up, up!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2640,
+    "file": "f514685a7c0d.mp3"
+  },
+  {
+    "text": "This is Papa's song. Hmm hm hmm!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 3312,
+    "file": "38fb6648f92b.mp3"
+  },
+  {
+    "text": "I can't see! It's all fluffy!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2616,
+    "file": "6e96f721d74f.mp3"
+  },
+  {
+    "text": "Don't get me wet! I'm too fluffy!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 2424,
+    "file": "7907d6ca1de6.mp3"
+  },
+  {
     "text": "Phew! I'm melting!",
     "voice": "pola",
     "sig": "2c88a3bfe7",
@@ -2259,6 +2189,27 @@
     "sig": "ed7dbdac3d",
     "ms": 3264,
     "file": "63d0b33bc724.mp3"
+  },
+  {
+    "text": "Ahh! A cool shower!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2856,
+    "file": "d3d9fce42a5d.mp3"
+  },
+  {
+    "text": "The red ship! That's how I got lost!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 2976,
+    "file": "6538122fb127.mp3"
+  },
+  {
+    "text": "No more fish crates for you!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2232,
+    "file": "3755ca768a8b.mp3"
   },
   {
     "text": "Look down! A whale!",
@@ -2282,123 +2233,186 @@
     "file": "b4b159daca82.mp3"
   },
   {
-    "text": "Higher, higher!",
-    "voice": "pebble",
-    "sig": "77076520c0",
-    "ms": 1608,
-    "file": "36ac4e21630e.mp3"
+    "text": "Hold on! A big storm!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 2520,
+    "file": "720629f41a52.mp3"
   },
   {
-    "text": "Papa sings like this!",
-    "voice": "pebble",
-    "sig": "77076520c0",
-    "ms": 1680,
-    "file": "2f6f202687ed.mp3"
-  },
-  {
-    "text": "Tap a papa to hear his song!",
+    "text": "Hold your finger down! Keep the balloon up!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2472,
-    "file": "52a1e13089d2.mp3"
+    "ms": 4200,
+    "file": "122cc2c74f30.mp3"
   },
   {
-    "text": "Click a papa to hear his song!",
+    "text": "Click and hold! Keep the balloon up!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2208,
-    "file": "e0a095b4efd6.mp3"
+    "ms": 3312,
+    "file": "96308ca79deb.mp3"
   },
   {
-    "text": "Tap the chick to hear the song again.",
+    "text": "Hot air is light, so it floats up!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3432,
+    "file": "39fc2022583b.mp3"
+  },
+  {
+    "text": "Balloons steer by finding the right wind.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3336,
+    "file": "9be454db8fb4.mp3"
+  },
+  {
+    "text": "Southern icebergs are flat, like tables!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4152,
+    "file": "57a588c56868.mp3"
+  },
+  {
+    "text": "I can't see the way!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 1752,
+    "file": "7296c875b70a.mp3"
+  },
+  {
+    "text": "How will I ever find Papa?",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 2448,
+    "file": "525af029cae6.mp3"
+  },
+  {
+    "text": "Friends help friends. Mama said so.",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 3408,
+    "file": "87a00c5212e7.mp3"
+  },
+  {
+    "text": "Papa's song! I'll sing it!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 1872,
+    "file": "5a8751952e36.mp3"
+  },
+  {
+    "text": "It's too windy. He can't hear me.",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 2424,
+    "file": "273018d4f9fd.mp3"
+  },
+  {
+    "text": "Then we'll ALL sing it!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2352,
+    "file": "0f3d9a088315.mp3"
+  },
+  {
+    "text": "Hold Pebble to sing!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2568,
+    "file": "b73cbc4d1a1f.mp3"
+  },
+  {
+    "text": "Click and hold Pebble to sing!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3096,
+    "file": "4189ab4da90b.mp3"
+  },
+  {
+    "text": "Look! The song lights up the dark!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 2832,
-    "file": "cceb82c07c74.mp3"
+    "file": "8f0d8457f358.mp3"
   },
   {
-    "text": "Click the chick to hear the song again.",
+    "text": "Pola is white like the snow. Camouflage!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2976,
-    "file": "71e2545e7cf7.mp3"
+    "ms": 3984,
+    "file": "28bda31b5e55.mp3"
   },
   {
-    "text": "Not my chick! Try my neighbor.",
-    "voice": "papa",
-    "sig": "c038db870a",
-    "ms": 3792,
-    "file": "8c14ed78c0eb.mp3"
-  },
-  {
-    "text": "Look! Who is swaying?",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2112,
-    "file": "45f5b146fea8.mp3"
-  },
-  {
-    "text": "That's Papa's song!",
-    "voice": "pebble",
-    "sig": "77076520c0",
-    "ms": 1320,
-    "file": "1695f81ff7d2.mp3"
-  },
-  {
-    "text": "My little Pebble!",
-    "voice": "papa",
-    "sig": "c038db870a",
-    "ms": 1416,
-    "file": "0897fae739a2.mp3"
-  },
-  {
-    "text": "Find my papa too!",
-    "voice": "pebble",
-    "sig": "77076520c0",
-    "ms": 1416,
-    "file": "77da23cb2777.mp3"
-  },
-  {
-    "text": "More papas! Listen for the same song.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3912,
-    "file": "ba5d21fcf4a7.mp3"
-  },
-  {
-    "text": "Papa! You found him!",
+    "text": "A hat! It fits!",
     "voice": "pebble",
     "sig": "77076520c0",
     "ms": 1632,
-    "file": "c9f16ec58ad4.mp3"
+    "file": "2dd1653626bf.mp3"
   },
   {
-    "text": "Thank you! Thank you!",
+    "text": "Kee-arr! I'll sing too!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 2832,
+    "file": "f9417ddc716a.mp3"
+  },
+  {
+    "text": "The penguins are singing too!",
     "voice": "pebble",
     "sig": "77076520c0",
-    "ms": 1848,
-    "file": "62ce247be662.mp3"
+    "ms": 1608,
+    "file": "3507f56609dc.mp3"
   },
   {
-    "text": "Brr, a snowstorm! Just listen.",
+    "text": "Humpback whales sing long, long songs!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3552,
-    "file": "824eabc4b684.mp3"
+    "ms": 4008,
+    "file": "6227e8187465.mp3"
   },
   {
-    "text": "I can't see my papa!",
+    "text": "Grr-la-la!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 1728,
+    "file": "b37a3d5708f5.mp3"
+  },
+  {
+    "text": "All together now!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 1296,
+    "file": "1399c8b9e552.mp3"
+  },
+  {
+    "text": "Hold Pebble for a long, long time!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3432,
+    "file": "124923b20945.mp3"
+  },
+  {
+    "text": "Click and hold Pebble for a long, long time!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4584,
+    "file": "a21f2d4ddc9b.mp3"
+  },
+  {
+    "text": "That's Papa! He heard us!",
     "voice": "pebble",
     "sig": "77076520c0",
-    "ms": 1560,
-    "file": "7451b48b15d0.mp3"
+    "ms": 2280,
+    "file": "c2e91672c0bd.mp3"
   },
   {
-    "text": "Every chick has a papa!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2088,
-    "file": "5cbc06a0be11.mp3"
+    "text": "Keep singing! I'm right here!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 2328,
+    "file": "6a278d67aa67.mp3"
   },
   {
     "text": "I just want to say hi!",
@@ -2415,6 +2429,20 @@
     "file": "e9f20c43a1f7.mp3"
   },
   {
+    "text": "Whoa! So many penguins!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 3072,
+    "file": "30e6fc335969.mp3"
+  },
+  {
+    "text": "Papa? They all look the same!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 2352,
+    "file": "fb6cd94f225e.mp3"
+  },
+  {
     "text": "Penguins have never seen a polar bear. They're a little shy!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -2422,18 +2450,179 @@
     "file": "5f360c11534c.mp3"
   },
   {
-    "text": "Emperor penguins find their family by their song.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4080,
-    "file": "c722eef36ac8.mp3"
+    "text": "Go on, Pebble. You can do it.",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2496,
+    "file": "1cd1b657f6fd.mp3"
   },
   {
-    "text": "Quiz time!",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 1056,
-    "file": "b9aa1b26c343.mp3"
+    "text": "Pull Pebble along with your finger!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3216,
+    "file": "2ef450cf45a9.mp3"
+  },
+  {
+    "text": "Click and drag Pebble along!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2280,
+    "file": "07a168f6d930.mp3"
+  },
+  {
+    "text": "Tap Pebble to sing!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2064,
+    "file": "d315656845ae.mp3"
+  },
+  {
+    "text": "Click Pebble to sing!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2376,
+    "file": "ee675d4673f2.mp3"
+  },
+  {
+    "text": "Follow Papa's gold notes!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2424,
+    "file": "35670d92f0eb.mp3"
+  },
+  {
+    "text": "Papa, wait!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 1344,
+    "file": "daac2ddae76b.mp3"
+  },
+  {
+    "text": "The dads take turns in the cold!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2904,
+    "file": "1bea8b3c3b39.mp3"
+  },
+  {
+    "text": "Wheee! Tummy slide!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 2304,
+    "file": "17ccde885332.mp3"
+  },
+  {
+    "text": "Sing, Pebble! As loud as you can!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3168,
+    "file": "fed39c4a4a2d.mp3"
+  },
+  {
+    "text": "Pebble? Is that you?",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 1920,
+    "file": "cdf20891401d.mp3"
+  },
+  {
+    "text": "Take Pebble to Papa!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2328,
+    "file": "8cf2a502b4a2.mp3"
+  },
+  {
+    "text": "Pebble! My Pebble!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2424,
+    "file": "f003cd6338c4.mp3"
+  },
+  {
+    "text": "Papa! I went to the top of the world!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 2424,
+    "file": "02dc5b6a9f79.mp3"
+  },
+  {
+    "text": "I heard your song. I knew you'd come.",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 4200,
+    "file": "55405bfb793d.mp3"
+  },
+  {
+    "text": "The sun! It's back after months of night!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3960,
+    "file": "b214cee5bd19.mp3"
+  },
+  {
+    "text": "Goodness! What is THAT?",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2424,
+    "file": "a47bc2df699b.mp3"
+  },
+  {
+    "text": "Hi! I'm a polar bear!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2712,
+    "file": "120517fcfdf7.mp3"
+  },
+  {
+    "text": "This is Pola. She carried me home.",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 2496,
+    "file": "3a9a962cdbb6.mp3"
+  },
+  {
+    "text": "A polar bear at the South Pole! Thank you, Pola.",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 3792,
+    "file": "21f3e7aed3a0.mp3"
+  },
+  {
+    "text": "Friends help friends!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 1776,
+    "file": "2c5177b8f8a5.mp3"
+  },
+  {
+    "text": "I have to go home now. Mama is waiting.",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 3792,
+    "file": "9caa9452da00.mp3"
+  },
+  {
+    "text": "Wait! I have something for you.",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 1968,
+    "file": "74b262f158ed.mp3"
+  },
+  {
+    "text": "For you! Penguins give pebbles to best friends.",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 3672,
+    "file": "58b868cb2695.mp3"
+  },
+  {
+    "text": "I'll keep it forever.",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2496,
+    "file": "d62e90efd64f.mp3"
   },
   {
     "text": "Take Pola home! Where do polar bears live?",
@@ -2443,165 +2632,11 @@
     "file": "5b7248ed3603.mp3"
   },
   {
-    "text": "Where do penguins live?",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 1896,
-    "file": "2db93e70a5d6.mp3"
-  },
-  {
-    "text": "Show me the South Pole!",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 2016,
-    "file": "3c4f881c6bea.mp3"
-  },
-  {
-    "text": "Show me the North Pole!",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 2328,
-    "file": "4d17f60e7fa0.mp3"
-  },
-  {
-    "text": "Which pole is sea under the ice?",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 3024,
-    "file": "bc89b5aa5383.mp3"
-  },
-  {
-    "text": "Which pole is the coldest?",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 2328,
-    "file": "e91447eb75cf.mp3"
-  },
-  {
-    "text": "Who flies to both poles?",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 2304,
-    "file": "9a75a57a0f7d.mp3"
-  },
-  {
-    "text": "It's summer up north. What is it down south?",
-    "voice": "terry",
-    "sig": "164d612c04",
+    "text": "My brave cub! You came back!",
+    "voice": "mama",
+    "sig": "13d0232cf0",
     "ms": 3264,
-    "file": "fb75e6fc9aca.mp3"
-  },
-  {
-    "text": "Drag to the top or the bottom!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2640,
-    "file": "65f4b0ffbe98.mp3"
-  },
-  {
-    "text": "Click and drag to the top or the bottom!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2976,
-    "file": "22a254ea93fc.mp3"
-  },
-  {
-    "text": "Swipe the globe up or down!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2808,
-    "file": "d001c9edcae4.mp3"
-  },
-  {
-    "text": "Drag the globe up or down!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3720,
-    "file": "f6ce26e10509.mp3"
-  },
-  {
-    "text": "Tap the top or the bottom!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2160,
-    "file": "3d80a5434bff.mp3"
-  },
-  {
-    "text": "Click the top or the bottom!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2472,
-    "file": "d6434ce79a05.mp3"
-  },
-  {
-    "text": "Tap your answer!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1800,
-    "file": "1c4ca0823997.mp3"
-  },
-  {
-    "text": "Click your answer!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2040,
-    "file": "f41927cdaff5.mp3"
-  },
-  {
-    "text": "Where's the sea ice? I live up top!",
-    "voice": "pola",
-    "sig": "2c88a3bfe7",
-    "ms": 2710,
-    "file": "b56909b8a13c.mp3"
-  },
-  {
-    "text": "Brr! Where is everybody?",
-    "voice": "pebble",
-    "sig": "77076520c0",
-    "ms": 2134,
-    "file": "0a173027ebd0.mp3"
-  },
-  {
-    "text": "Wobble, wobble! The other end!",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 3024,
-    "file": "894f409ef8d1.mp3"
-  },
-  {
-    "text": "That one is rock and land! Try the other.",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 3456,
-    "file": "9ccebff6a4e8.mp3"
-  },
-  {
-    "text": "Brr! The other one is even colder.",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 2832,
-    "file": "00babbcbdff4.mp3"
-  },
-  {
-    "text": "Not them. Who can fly far?",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 2664,
-    "file": "c460d5e3a121.mp3"
-  },
-  {
-    "text": "Down south it's dark and snowy!",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 2976,
-    "file": "e5aaf39379a2.mp3"
-  },
-  {
-    "text": "Look for the sparkle!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1349,
-    "file": "d82745b8e95f.mp3"
+    "file": "c4a5aaaab23f.mp3"
   },
   {
     "text": "I'm home! Bye, Pebble!",
@@ -2611,38 +2646,52 @@
     "file": "ada45b971eda.mp3"
   },
   {
-    "text": "Yes!",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 792,
-    "file": "b6d8e34caf40.mp3"
+    "text": "A penguin pebble means I love you!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3288,
+    "file": "3332ae73adff.mp3"
   },
   {
-    "text": "That's right!",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 960,
-    "file": "260c9eecd3e8.mp3"
+    "text": "Polar bears live at the top of the world.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3528,
+    "file": "d03ec005e0ac.mp3"
   },
   {
-    "text": "You got it!",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 984,
-    "file": "3f73082516a2.mp3"
+    "text": "Penguins live at the bottom.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2256,
+    "file": "eea76f3b68e4.mp3"
   },
   {
-    "text": "Top marks!",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 1320,
-    "file": "0913c500add1.mp3"
+    "text": "They never meet...",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1824,
+    "file": "70544deeab2c.mp3"
   },
   {
-    "text": "A real Polar Explorer!",
+    "text": "Except best friends!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 1848,
+    "file": "0c571462ad76.mp3"
+  },
+  {
+    "text": "Except best friends!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 1800,
+    "file": "225d5375cc03.mp3"
+  },
+  {
+    "text": "See you next year!",
     "voice": "terry",
     "sig": "164d612c04",
-    "ms": 2184,
-    "file": "24f739df1956.mp3"
+    "ms": 1608,
+    "file": "3dd6aa4caf72.mp3"
   }
 ]

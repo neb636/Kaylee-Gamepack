@@ -57,6 +57,10 @@ export interface PlaceMeta {
    *  poke them, but they're nowhere in the game yet: no button, no passport slot, and the finale doesn't wait for their
    *  stamps. Move one to `activities` when it's ready for Kaylee. */
   inTheWorks?: ActivityInfo[]
+  /** When the finale is the place's last activity rather than a separate `party` screen (the Poles: The Longest Night
+   *  is the last chapter, and its stamp brings the trophy): that activity's id. The section index lists no `party`
+   *  for the place, and the hub marks the finale's spot with `data-finale`. */
+  finale?: string
   /** A hub with more than one place in it (Thailand: the map, and the Thailand house): the hub section the top bar's back
    *  button goes to from the others, before the world map. */
   hubHome?: string

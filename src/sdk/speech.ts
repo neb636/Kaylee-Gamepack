@@ -132,6 +132,39 @@ export function say(line: Line, { interrupt = true }: SayOptions = {}): Promise<
   return result
 }
 
+/** Plays a line at the same time as whatever is being said (two friends saying it together, one at each end of the
+ *  world): no interrupt, no queue. */
+export function sayAlong(line: Line): void {
+  const text = lineText(line)
+  const voice = lineVoice(line)
+  if (!text) return
+  if (navigator.webdriver) {
+    const clip = clips.get(keyOf(voice, text))
+    if (!clip) console.error(`Missing voice clip: [${voice}] ${JSON.stringify(text)}`)
+    ;(window.__kayleeSpeech ??= []).push({ text, voice, ms: clip?.ms ?? 0, at: performance.now() })
+    return
+  }
+  const url = clips.get(keyOf(voice, text))?.url
+  const ctx = audio()
+  if (!url || !ctx) return
+  // stopSpeaking() stops these too: a line still downloading when she skips the film or leaves never starts, and one
+  // already playing stops with the rest.
+  const gen = generation
+  void bufferFor(url, ctx)
+    .then((buffer) => {
+      if (gen !== generation) return
+      const source = ctx.createBufferSource()
+      source.buffer = buffer
+      source.connect(ctx.destination)
+      along.add(source)
+      source.onended = () => along.delete(source)
+      source.start()
+    })
+    .catch((error) => console.error('Voice playback failed:', error))
+}
+/** Lines playing along (sayAlong), so stopSpeaking() can stop them. */
+const along = new Set<AudioBufferSourceNode>()
+
 /** How long a line's recorded clip is (ms from the voice map; 0 if it has no clip yet). Films time their beats by it, so
  *  a cutscene keeps its pace in test browsers too, where the audio is skipped. */
 export function lineMs(line: Line): number {
@@ -142,6 +175,8 @@ export function stopSpeaking() {
   generation++
   current?.stop()
   current = undefined
+  for (const source of along) source.stop()
+  along.clear()
 }
 
 /** Call from the first tap to allow later audio on iPad. */

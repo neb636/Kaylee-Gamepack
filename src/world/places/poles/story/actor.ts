@@ -14,6 +14,20 @@ const DEG = Math.PI / 180
 
 export type Face = 'sad' | 'wow' | 'happy'
 
+/** Opens a penguin's beak by hand, 0 shut .. 1 wide (a song has no speech level, and in a crowd of dads who share
+ *  Papa's voice only the one talking should move his). Call it after the actor's `update`, which shuts it. */
+export function openBeak(a: Actor, k: number) {
+  const r = a.rig
+  if (r.beak) r.beak.open(k)
+  else if (r.open) r.mouth.scale.set(1 + 0.15 * k, 1 + 0.9 * k, 1)
+  else {
+    const on = k > 0.04
+    r.talk.visible = on
+    r.mouth.visible = !on
+    if (on) r.talk.scale.set(0.55 + 0.45 * k, Math.min(1, 0.25 + k), 1)
+  }
+}
+
 interface Move {
   from: Vector3
   to: Vector3
@@ -50,6 +64,8 @@ export class Actor {
   lean = 0
   /** Turning the head (radians, + to their left). */
   headTurn = 0
+  /** Waddling on the spot while a game moves them itself (0..1: how fast). */
+  waddle = 0
   private home: Object3D | null = null
 
   /** `who`: whose look; `voice`: their speaker in cast.json (default: the same id; null for a silent extra). */
@@ -206,6 +222,10 @@ export class Actor {
         if (m.face !== null) this.root.rotation.y = m.face * DEG
         if (m.kind === 'fly' && this.landing) this.flying = false
       }
+    }
+    if (!m && this.waddle > 0.01) {
+      lift = Math.abs(Math.sin(t * 11)) * 0.05 * this.height * this.waddle
+      rock = Math.sin(t * 11) * 0.1 * this.waddle
     }
     if (this.hopT >= 0) {
       this.hopT += dt / 0.55

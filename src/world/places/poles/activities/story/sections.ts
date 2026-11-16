@@ -3,8 +3,8 @@
 // Loaded at startup by the section index (keep three.js out of this file).
 import { defineSections } from '../../../../kit/sections'
 
-/** Every film, in story order: the way in, then a film into and out of each chapter, then the finale's three. */
-export const FILM_IDS = ['intro', 'floe-in', 'floe-out', 'narwhal-in', 'narwhal-out', 'coats-in', 'coats-out', 'slide-in', 'slide-out', 'huddle-in', 'huddle-out', 'home-in', 'home-land', 'home-reunion'] as const
+/** Every film, in story order: the way in, a film into and out of each chapter, then the ending's (story/nightFilms.ts). */
+export const FILM_IDS = ['intro', 'floe-in', 'floe-out', 'narwhal-in', 'narwhal-out', 'coats-in', 'coats-out', 'slide-in', 'slide-out', 'night-in', 'night-lost', 'night-colony', 'night-sunrise', 'night-goodbye', 'the-end'] as const
 export type FilmId = (typeof FILM_IDS)[number]
 
 const NAMES: Record<FilmId, string> = {
@@ -17,11 +17,12 @@ const NAMES: Record<FilmId, string> = {
   'coats-out': 'Snow Coats, after: winter is here',
   'slide-in': 'Penguin Slide, before: Papa looks everywhere',
   'slide-out': 'Penguin Slide, after: his favorite supper',
-  'huddle-in': 'Emperor Huddle, before: the long night',
-  'huddle-out': 'Emperor Huddle, after: the sun comes back',
-  'home-in': 'The finale: the balloon lifts off',
-  'home-land': 'The finale: a polar bear at the South Pole',
-  'home-reunion': 'The finale: Papa and Pebble',
+  'night-in': 'The Longest Night: time to fly',
+  'night-lost': 'The Longest Night: the storm',
+  'night-colony': 'The Longest Night: so many papas',
+  'night-sunrise': 'The Longest Night: sunrise',
+  'night-goodbye': 'The Longest Night: a pebble for Pola',
+  'the-end': 'The Longest Night: top and bottom (the end)',
 }
 
 const STORY_SECTIONS = defineSections('poles', 'story', {
