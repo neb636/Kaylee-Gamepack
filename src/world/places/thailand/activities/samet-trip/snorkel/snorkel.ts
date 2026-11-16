@@ -938,6 +938,17 @@ export class Snorkel implements World3D {
         const s = Math.min(2.4, dist * 0.7) * dt
         d.x += (dx / dist) * s
         d.z += (dz / dist) * s
+        // (Round the rocks and coral, not through them: pushed out to their edge, so he slides along it.)
+        for (const o of OBSTACLES) {
+          const ox = d.x - o.x
+          const oz = d.z - o.z
+          const ol = Math.hypot(ox, oz)
+          const min = o.r + SWIM.body
+          if (ol < min && ol > 1e-4) {
+            d.x = o.x + (ox / ol) * min
+            d.z = o.z + (oz / ol) * min
+          }
+        }
       }
     }
     // Swim up to him: he ducks under and blows a bubble ring her way.

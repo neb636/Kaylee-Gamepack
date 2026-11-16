@@ -272,6 +272,8 @@ export class HideSeek implements World3D {
   private speed = 0
   private hiddenAt: SpotId | null = null
   private stuckT = 0
+  /** Walking to a tapped spot: the closest she has got to it, and how long since she last got closer. */
+  private gain = { x: 0, z: 0, best: Infinity, t: 0 }
 
   // ---- Dad and Mom.
   private nick: Member
@@ -1624,11 +1626,43 @@ export class HideSeek implements World3D {
     this.dad.pose = pose
   }
   private dadWalk(path: XZ[], speed: number, done?: () => void) {
-    this.dad.path = path.slice()
+    this.dad.path = this.roundThings({ x: this.dad.x, z: this.dad.z }, path)
     this.dad.speed = speed
     this.dad.pose = 'stand'
     this.dad.hidden = false
     this.onArrive = done ?? null
+  }
+  /** Dad's walk with a step round any hiding place it would go straight through (the tree, the chairs, the umbrella):
+   *  a point beside it, off the line on the side the line passes. Not the ones he's walking to or from. */
+  private roundThings(from: XZ, path: XZ[]): XZ[] {
+    const out: XZ[] = []
+    let a = from
+    for (const b of path) {
+      for (let pass = 0; pass < 3; pass++) {
+        const dx = b.x - a.x
+        const dz = b.z - a.z
+        const l2 = dx * dx + dz * dz
+        if (l2 < 0.01) break
+        let hit: { x: number; z: number; r: number; s: number } | null = null
+        for (const t of this.things.values()) {
+          if (t.r <= 0 || Math.hypot(a.x - t.x, a.z - t.z) < t.r + 1 || Math.hypot(b.x - t.x, b.z - t.z) < t.r + 1) continue
+          const s = Math.max(0, Math.min(1, ((t.x - a.x) * dx + (t.z - a.z) * dz) / l2))
+          const d = Math.hypot(a.x + dx * s - t.x, a.z + dz * s - t.z)
+          if (d < t.r + 0.4 && (!hit || s < hit.s)) hit = { x: t.x, z: t.z, r: t.r, s }
+        }
+        if (!hit) break
+        // (Out from its middle through the line's nearest point; straight at the middle: square to the line.)
+        const cx = a.x + dx * hit.s - hit.x
+        const cz = a.z + dz * hit.s - hit.z
+        const cl = Math.hypot(cx, cz)
+        const [nx, nz] = cl > 0.05 ? [cx / cl, cz / cl] : [-dz / Math.sqrt(l2), dx / Math.sqrt(l2)]
+        a = { x: hit.x + nx * (hit.r + 0.7), z: hit.z + nz * (hit.r + 0.7) }
+        out.push(a)
+      }
+      out.push(b)
+      a = b
+    }
+    return out
   }
   private dadY() {
     const def = BYID[this.hide]
@@ -1751,7 +1785,20 @@ export class HideSeek implements World3D {
     const moved = Math.hypot(k.x - this.lastPos.x, k.z - this.lastPos.z)
     this.speed = dt > 0 ? moved / dt : 0
     this.stuckT = this.target && !this.finger && moved < dt * 0.3 && !this.kaylee.walking ? this.stuckT + dt : 0
+    // Sliding along a trunk and back again is still moving, so `stuckT` never fires: getting no closer to a tapped spot
+    // for a while counts the same (the island's rule).
+    const g = this.gain
+    if (this.target && !this.finger && !this.kaylee.walking) {
+      const d = Math.hypot(this.target.x - k.x, this.target.z - k.z)
+      if (Math.hypot(g.x - this.target.x, g.z - this.target.z) > 0.3) Object.assign(g, { x: this.target.x, z: this.target.z, best: Infinity, t: 0 })
+      if (d < g.best - 0.25) {
+        g.best = d
+        g.t = 0
+      } else g.t += dt
+      if (g.t > 1.5) this.stuckT = 1
+    } else g.best = Infinity
     if (this.stuckT > 0.6) {
+      g.best = Infinity
       // Stuck against something on the way: she's as close as she gets.
       this.stuckT = 0
       this.target = null

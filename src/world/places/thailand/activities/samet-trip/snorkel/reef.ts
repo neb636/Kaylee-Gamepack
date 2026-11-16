@@ -60,11 +60,12 @@ export interface Obstacle extends XZ {
   top: number
 }
 export const OBSTACLES: Obstacle[] = [
-  // The gap: two big rocks, and more rock either side (she can swim round the very ends).
-  { x: -2.9, z: -16, r: 1.7, kind: 'rock', top: 1.5 },
-  { x: 2.9, z: -16.2, r: 1.7, kind: 'rock', top: 1.2 },
-  { x: -6.4, z: -16.6, r: 2.2, kind: 'rock', top: 0.9 },
-  { x: 6.6, z: -15.6, r: 2.2, kind: 'rock', top: 0.7 },
+  // The gap: two big rocks, and more rock either side (she can swim round the very ends). Wide enough that she and
+  // Dad swim through side by side (it was 1.5 m once her body was counted, and she got wedged).
+  { x: -3.6, z: -16, r: 1.7, kind: 'rock', top: 1.5 },
+  { x: 3.6, z: -16.2, r: 1.7, kind: 'rock', top: 1.2 },
+  { x: -7.1, z: -16.6, r: 2.2, kind: 'rock', top: 0.9 },
+  { x: 7.3, z: -15.6, r: 2.2, kind: 'rock', top: 0.7 },
   // Coral heads (a soft bump) and the prickly ones (a boing).
   { x: -4.6, z: -5.5, r: 0.95, kind: 'coral', top: -0.5 },
   { x: 4.8, z: -9.2, r: 0.9, kind: 'urchin', top: -0.45 },

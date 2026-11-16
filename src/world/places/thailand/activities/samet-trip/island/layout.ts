@@ -361,9 +361,14 @@ export const RING = 2.6
 
 /** The resort deck above Ao Prao (lunch: a place, not a stop yet), up the slope behind the sand. Its steps (`steps`
  *  wide, in the middle of the sea side) come down to the sand: behind it the slope is forest. */
-export const DECK = { ...at(FRAMES.prao, 10, -16.5), t: FRAMES.prao.t, n: FRAMES.prao.n, face: Math.atan2(FRAMES.prao.n.x, FRAMES.prao.n.z), w: 9, d: 6, y: 2.2, steps: 2.8 }
-/** Na Dan pier: from the sand out into the bay (where the speedboat ties up). */
-export const PIER = { from: at(FRAMES.nadan, -4, -1), to: at(FRAMES.nadan, -4, 26), w: 3.2, y: 1.1 }
+export const DECK = { ...at(FRAMES.prao, 10, -16.5), t: FRAMES.prao.t, n: FRAMES.prao.n, face: Math.atan2(FRAMES.prao.n.x, FRAMES.prao.n.z), w: 9, d: 6, y: 2.2, steps: 4.2 }
+/** Na Dan pier: from the sand out into the bay (where the speedboat ties up). Wide enough for the three of them side
+ *  by side (it was 3.2 m and Mom got left on the sand, 2026-11-16). */
+export const PIER = { from: at(FRAMES.nadan, -4, -1), to: at(FRAMES.nadan, -4, 26), w: 4.6, y: 1.1 }
+/** The snorkel jetty at Ao Wong Duan, along the sand at `u`, out from `from` to `to` (v), `w` wide. */
+export const JETTY = { u: -4, from: -1, to: 11, w: 3.2 }
+/** Where the speedboat ties up beside Na Dan pier (u along the sand, v out to sea): just off the pier's side. */
+export const SPEEDBOAT_DOCK = { u: -4 - PIER.w / 2 - 1.9, v: 22 }
 
 /** Where she stands on arrival at each spot (a few meters up the sand, looking out to sea). */
 export function spotStart(id: SpotId): XZ & { face: number } {
@@ -419,7 +424,8 @@ for (const [id, u] of [['saikaew', -10], ['hinkhok', 0], ['prao', 15.5], ['wongd
 // Pink umbrellas (spin; poke one three times and it takes off like a kite with Kaylee holding on) and red chairs (fold up).
 // (Ao Prao's third stands beside the foot of the resort deck's steps, its loungers clear of them.)
 for (const [id, us] of [['hinkhok', [-4, 3]], ['phai', [0]], ['wongduan', [-4, 4]], ['prao', [-7, -1, 14]]] as const) for (const u of us) add('umbrella', at(FRAMES[id], u, -6))
-for (const u of [-6, -2, 3, 7]) add('chair', at(FRAMES.prao, u, -3.6))
+// (Down by the water, so there's a wide way between them and the umbrellas' loungers: they used to fence the sand.)
+for (const u of [-6, -2, 3, 7]) add('chair', at(FRAMES.prao, u, -1.2))
 add('ball', at(FRAMES.hinkhok, 3, -2.5))
 add('icecream', bay(-14, -10))
 add('beads', bay(12, -3.5))
@@ -428,7 +434,7 @@ for (const [id, u, v] of [['saikaew', -24, -3], ['saikaew', 30, -2.5], ['hinkhok
 for (const p of [{ x: -9, z: -36 }, { x: -60, z: -48 }, { x: -120, z: 64 }, { x: -136, z: -44 }, { x: -86, z: 44 }]) add('bush', inland(p, 4))
 add('longtail', at(FRAMES.nadan, 5, 11))
 add('longtail', at(FRAMES.wongduan, -9, 7))
-add('speedboat', at(FRAMES.nadan, -7.5, 22))
+add('speedboat', at(FRAMES.nadan, SPEEDBOAT_DOCK.u, SPEEDBOAT_DOCK.v))
 add('hammock', at(FRAMES.aonoina, 0, -9))
 add('telescope', { x: -193, z: 132 })
 add('tamarind', at(FRAMES.wongduan, -2, -16))

@@ -103,6 +103,26 @@ swim, poke things, ride the jet ski once it's hers. Walking between neighbouring
 - **QA**: each stop's `qa.mjs` has its films watched to the end and skipped, and a whole-stop play-through; the
   island's runs are in `samet-trip/qa.mjs` (`thailand-samet-story-*`).
 
+## Walking: nobody gets stuck (2026-11-16)
+
+Mom kept getting left on the sand by Na Dan pier, pacing back and forth. The way-in film ended with her on the sand
+hard by the pier's side, where parents can't stand, and her walk only ever looked 0.3 m ahead. What changed:
+
+- **Mom and Dad's walk** (`island.ts`, `follow()`): straight along her footsteps when the whole line is open
+  (`familyLine`); otherwise a planned way round (`familyRoute`: off a deck down its middle and steps, the puppy's
+  planner across the island, up the other deck's steps). They slide round palms and chairs like she does
+  (`slideRound`). Her footstep trail is 60 m, longer than the pier.
+- **Getting unstuck** (`UNSTICK`): no nearer and getting nowhere for 0.6 s, a new plan; 2 s, a hop a few meters on;
+  4 s, a sparkly poof beside her. Off screen they just catch up. A film or ride never stands them somewhere they can't
+  walk from (`walkable`).
+- **Room**: Na Dan pier is 4.6 m wide with a long, flared ramp, the snorkel jetty 3.2 m, the resort deck's steps
+  4.2 m. Ao Prao's chairs are down by the water. An umbrella's two loungers are one blocker. The snorkel gap rocks
+  are 7.2 m apart.
+- **The rule**: two things on walkable ground either touch or leave 2.4 m between them (`island/walkcheck.ts`).
+- **The robot**: `npm run build && node scripts/qa-samet-walk.mjs` walks the pier (straight, from each side, after
+  the film), the jetty, the deck, Ao Prao's chairs and Sai Kaew's umbrellas, and runs the walkways audit. It fails on
+  any parent stuck more than 2.5 s, a poof she could see, or a too-narrow gap.
+
 ## Next
 
 Kaylee plays it. Watch for: does she follow the story (does she say "firefly"?), does she tap a picture without

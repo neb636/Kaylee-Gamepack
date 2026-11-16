@@ -38,7 +38,7 @@ import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
 import { wearing } from '../../../trip/packing'
 import { buildSki, HIS } from '../jetski/ski'
-import { at as atFrame, BAN_PHE, FRAMES, PIER } from '../island/layout'
+import { at as atFrame, BAN_PHE, FRAMES, PIER, SPEEDBOAT_DOCK } from '../island/layout'
 import { buildProps } from '../island/props'
 import { buildIsland, DAY, palmGeo, rng, type Island, type TimeOfDay } from '../island/scenery'
 import { boatSfx as S, seaBed } from './sounds'
@@ -404,8 +404,8 @@ export class SametSpeedboat implements World3D {
     // ---- The route: off the end of Ban Phe pier, across the sea, round to Na Dan pier's side.
     const f = FRAMES.nadan
     const P0 = new Vector3(BAN_PHE.x + 7.5, 0, BAN_PHE.z + 30)
-    const dock = atFrame(f, -7.5, 22)
-    const a1 = atFrame(f, -7.5, 48)
+    const dock = atFrame(f, SPEEDBOAT_DOCK.u, SPEEDBOAT_DOCK.v)
+    const a1 = atFrame(f, SPEEDBOAT_DOCK.u, 48)
     const a2 = atFrame(f, -9, 105)
     const mid = { x: (P0.x + a2.x) / 2 + 30, z: (P0.z + a2.z) / 2 }
     this.route = new CatmullRomCurve3([P0, new Vector3(P0.x + 1, 0, P0.z + 30), new Vector3(P0.x + 18, 0, P0.z + 90), new Vector3(mid.x, 0, mid.z), new Vector3(a2.x, 0, a2.z), new Vector3(a1.x, 0, a1.z), new Vector3(dock.x, 0, dock.z)], false, 'centripetal')
