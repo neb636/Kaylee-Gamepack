@@ -55,3 +55,14 @@ export function readSametSave(): SametProgress | null {
     return null
   }
 }
+
+/** Start the story over (the start-over pill on a trip picked back up): no beach, no fireflies. What she packed and
+ *  how many trips she has done stay. */
+export function clearSametSave() {
+  const old = readSametSave()
+  try {
+    localStorage.setItem(savedKey(SAMET_SAVE_KEY), JSON.stringify({ ...NEW_TRIP, packed: old?.packed || SAMET_PACKED, trips: old?.trips } satisfies SametProgress))
+  } catch {
+    /* a private window: nothing was saved anyway */
+  }
+}

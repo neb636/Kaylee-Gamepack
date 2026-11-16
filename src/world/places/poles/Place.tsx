@@ -15,7 +15,9 @@ import { NarwhalRide } from './activities/narwhal/NarwhalRide'
 import { Finale } from './activities/party/Finale'
 import { PenguinSlide } from './activities/slide/PenguinSlide'
 import STORY_SECTIONS, { type FilmId } from './activities/story/sections'
-import { CHAPTER_FILMS, filmSeen, seeFilm } from './story/chapters'
+import { CHAPTER_FILMS, filmSeen, forgetFilms, seeFilm } from './story/chapters'
+import { StartOver } from '../../kit/StartOver'
+import { setStamps } from '../../stamps'
 import { StoryFilm } from './story/StoryFilm'
 
 /** What every Poles activity gets: call `onDone` at its payoff (its film, the stamp, the sticker, the video, then the globe). */
@@ -65,9 +67,12 @@ export default function Place(props: PlaceProps) {
   )
 }
 
-/** The globe; on her first visit (no stamps yet, a bare link) the way-in film plays first. */
+/** The globe; on her first visit (no stamps yet, a bare link) the way-in film plays first. Coming back to a story
+ *  under way, the start-over pill shows for a few seconds. */
 function Arrival(props: PlaceProps) {
-  const [film, setFilm] = useState(() => props.activity === undefined && props.stamps.length === 0 && !filmSeen('intro') && !location.hash.includes('/hub'))
+  const [bare] = useState(() => props.activity === undefined && !location.hash.includes('/hub'))
+  const [film, setFilm] = useState(() => bare && props.stamps.length === 0 && !filmSeen('intro'))
+  const [resumed, setResumed] = useState(() => bare && !film && (props.stamps.length > 0 || filmSeen('intro')))
   if (film)
     return (
       <StoryFilm
@@ -78,7 +83,24 @@ function Arrival(props: PlaceProps) {
         }}
       />
     )
-  return <Hub {...props} />
+  return (
+    <>
+      <Hub {...props} />
+      {resumed && (
+        <StartOver
+          label="Start Pebble's story again"
+          onRestart={() => {
+            // Back to the very start: the chapters' stamps come off (so each chapter's films play again and the
+            // finale waits for them), the films are unseen, and the way-in film plays. The trophy stays hers.
+            setStamps(props.meta.id, [])
+            forgetFilms()
+            setResumed(false)
+            setFilm(true)
+          }}
+        />
+      )}
+    </>
+  )
 }
 
 /** One chapter: its way-in film (the first time, and only from the globe: a section link goes straight to the game),
