@@ -38,7 +38,7 @@ getting from one to the other means going down the whole world, through the warm
 | 🦄 | **Narwhal Ride** `narwhal` (new) | north | steers Nari, both friends riding | out past the icebergs to the balloon | most of an iceberg is under the water; icebergs break off glaciers; under the sea ice there is only sea |
 | 🦊 | **Snow Coats** `coats` (2D) | north | rubs coats white, then brown | Terry flies south when the snow comes and the fox turns white | camouflage; the Arctic has land animals and seasons |
 | 🐧 | **Penguin Slide** `slide` | south | steers Papa down the ice and under the sea | meanwhile: Papa looks everywhere, and catches Pebble's favorite supper | Antarctica is high land under ice, downhill to the sea; penguins fly under water |
-| 🥚 | **Emperor Huddle** `huddle` (2D) | south | carries cold dads into the middle | the long night; Papa remembers the night Pebble hatched (the game is that memory) | huddling; dads keep the egg on their feet; months without the sun |
+| 🥚 | **Emperor Huddle** `huddle` (3D, rebuilt 2026-11-16) | south | carries cold dads into the middle | the long night; Papa remembers the night Pebble hatched (the game is that memory), and it ends with Papa singing Pebble his song | huddling; dads keep the egg on their feet and don't eat all winter; months without the sun; each papa's own song |
 | 🎈 | **Home** `party` (the finale) | both | steers Terry, the balloon behind him; finds Papa by his song; Terry's quiz | the flight down the world, a polar bear at the South Pole, Papa and Pebble | the poles are opposite ends, warm in between; penguins know each other's calls; the quiz, answered by doing |
 
 - **In order the first time, any order after.** The Poles is a story, so the first time through it goes in order (the
@@ -104,6 +104,35 @@ Costs: Narwhal Ride draws about 310k triangles (127k before), Penguin Slide 360k
 Samet's island is 397k (`node scripts/qa-perf.mjs --only=poles`). The globe hub and the finale's flight over the toy
 globe kept their look: they are the toy globe, not a place.
 
+## Emperor Huddle in 3D (2026-11-16)
+
+The user asked for the huddle to be rebuilt in 3D with the penguins the films animate, and freedom to improve the play
+and the story. It is now a 3D world (`activities/huddle/world.ts`) on the films' night Antarctica, with the films' and
+the finale's emperor (story/actor.ts) as every dad and Pebble.
+
+- **Same verb, a real huddle.** Pick a dad up (flippers flap), carry him, set him down: the huddle squishes and shuffles
+  together. Seen from above at 34°, the middle of the huddle is a real place (it glows pink-gold on the snow, brighter
+  the more dads are out of the wind), where the 2D side view squashed it into a line.
+- **Cold you can see without reading:** a snowflake shakes over a cold dad's head, snow piles on his cap and shoulders,
+  his breath puffs, he shivers and droops. Warm again: the snow falls off, a heart, a hop.
+- **Papa is one dad from the start** (the first, the one alone on the windy edge), and the only one who talks; the
+  others honk their own songs. While it's his egg he has a soft gold glow under him.
+- **The hatch is a little scene:** warm in the middle, his egg wobbles; at the first crack he waddles out to the front
+  of the huddle and faces her, the camera comes in low, crack, and Pebble pops out at his feet.
+- **The ending changed: Papa's song, not the sunrise.** The film after the game (`huddle-out`) already shows the sun
+  coming back, so the game's own sunrise made two in a row. Now the payoff is the moment the finale depends on: under
+  the southern lights Papa sings Pebble his song (party/sounds.ts `TUNES[0]`, the tune the finale's chick hums to find
+  him) and Pebble peeps it back: "Now you'll always find me." The section is `song` (it was `sunrise`).
+- **New things to poke:** a Weddell seal in its breathing hole (pops up now and then), the snow, each dad's song, and
+  in the close-ups the lights and the moon. Facts reused from the hub (the seal, the southern lights) and the finale
+  (family by their song); one new fact (dads don't eat all winter).
+- **Lines:** four new (Sparkle's "Shh. Papa is singing to Pebble.", Papa's two song lines, the fast fact); the three
+  sunrise lines are gone. Sounds reuse the Poles' recorded clips; three new prompts (`huddle-brrr`, `huddle-sneeze`,
+  `huddle-crack`) are in `sfx.json`, waiting to be made (the synth plays until then).
+- Robot-played in a cloud session (software GL, very slow): the carry, the warm-ups into the blizzard, the hatch, the
+  tuck and the song all run from their links. Not yet: a reel on a real GPU, `qa-pacing` touches and minutes, an
+  iPhone check.
+
 ## North and south at a glance (the facts the place is built on)
 
 | | 🐻‍❄️ North Pole (the Arctic) | 🐧 South Pole (Antarctica) |
@@ -128,7 +157,7 @@ Stickers: polar bear (floe), narwhal (narwhal), Arctic fox (coats), Adélie peng
   below the row in portrait; the whole chain (film, flight, film, song, film, quiz) was checked piece by piece from
   its links, not played end to end by a robot.
 - Nobody ran `qa-pacing` on the rebuilt games: touches and minutes are unmeasured.
-- Snow Coats and Emperor Huddle are unchanged 2D games; only their films are new.
+- Snow Coats is an unchanged 2D game; only its films are new.
 
 ## Next
 

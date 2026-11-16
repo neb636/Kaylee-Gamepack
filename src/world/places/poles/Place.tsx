@@ -4,7 +4,8 @@
 // globe/) with the story's pictures along the way down it. Each picture is a chapter: a film (story/, on its own film
 // stage), the game, a film, then its stamp and sticker. The first visit opens with the way-in film. All five stamps
 // open the finale (activities/party/): the flight home, Papa's song, the reunion and Terry's Polar Explorer quiz.
-// Snow Coats and Emperor Huddle are 2D and loaded on their own, so they bring no three.js.
+// Snow Coats is 2D and loaded on its own, so it brings no three.js; Emperor Huddle (3D) loads on its own too, the last
+// chapter, so its world isn't built into the first ones' download.
 import { lazy, Suspense, useState, type ComponentType } from 'react'
 import { useSections } from '../../kit/sections'
 import { useStampFlow } from '../../kit/stampFlow'

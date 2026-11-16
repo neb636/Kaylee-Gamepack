@@ -12,7 +12,7 @@
 //      papa by listening alone (no dots).
 // Behind them the story goes on: the balloon has landed, and Pola keeps trying to say hi to the colony, who keep
 // edging away from the polar bear. Everything takes a tap (Pola, the colony, the balloon, the found pairs, the snow).
-import { CanvasTexture, Color, Fog, Plane, Raycaster, Scene, Sprite, SpriteMaterial, Vector2, Vector3, type WebGLRenderer } from 'three'
+import { Color, Fog, Plane, Raycaster, Scene, Sprite, SpriteMaterial, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { bell, clamp, shuffle, speechLevel } from '../../../../../sdk'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../engine3d/camera'
@@ -27,7 +27,8 @@ import { Particles } from '../../../../engine3d/particles'
 import { applyBands, makeLights } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
 import { knobs } from '../../../../kit/knobs'
-import { Actor } from '../../story/actor'
+import { Actor, openBeak as beak } from '../../story/actor'
+import { glowTexture, heartTexture, NOTE_COLORS, noteTexture } from '../../look/sprites'
 import { Balloon, driftGeo, ICE_LINE, mountainGeo, rng, tableBergGeo } from '../../story/props'
 import { BEAT, noteAt, partySfx, sing, TUNES, tuneSeconds, type Tune } from './sounds'
 
@@ -83,7 +84,6 @@ export const SONG_ANCHORS: AnchorInfo[] = [
 type State = 'gather' | 'hum' | 'listen' | 'sing' | 'react' | 'found' | 'done'
 const DAY = { sky: new Color('#E2ECFA'), near: 110, far: 400 }
 const WHITE = new Color('#F4F7FF')
-const NOTE_COLORS = ['#FF6FA8', '#FFB24D', '#FFD84D', '#7ED6A5', '#7EC8F2', '#B79CFF']
 const tmp = new Vector3()
 
 interface Dad {
@@ -726,63 +726,3 @@ const GROUND = new Plane(new Vector3(0, 1, 0), 0)
 const tmp2 = new Vector3()
 const tmp3 = new Vector3()
 
-/** Opens a penguin's beak by hand (a song has no speech level; several dads share Papa's voice). */
-function beak(a: Actor, k: number) {
-  const r = a.rig
-  if (r.beak) r.beak.open(k)
-  else if (r.open) r.mouth.scale.set(1 + 0.15 * k, 1 + 0.9 * k, 1)
-  else {
-    const on = k > 0.04
-    r.talk.visible = on
-    r.mouth.visible = !on
-    if (on) r.talk.scale.set(0.55 + 0.45 * k, Math.min(1, 0.25 + k), 1)
-  }
-}
-
-function canvas(size: number, draw: (g: CanvasRenderingContext2D) => void) {
-  const c = document.createElement('canvas')
-  c.width = c.height = size
-  draw(c.getContext('2d')!)
-  return new CanvasTexture(c)
-}
-function heartTexture() {
-  return canvas(96, (g) => {
-    g.translate(48, 50)
-    g.beginPath()
-    g.moveTo(0, 30)
-    g.bezierCurveTo(-46, -4, -24, -42, 0, -18)
-    g.bezierCurveTo(24, -42, 46, -4, 0, 30)
-    g.fillStyle = '#FF6FA8'
-    g.fill()
-    g.lineWidth = 6
-    g.lineJoin = 'round'
-    g.strokeStyle = '#3A2A3F'
-    g.stroke()
-  })
-}
-/** A song's dot: a round colored bead with a shine. */
-function noteTexture(color: string) {
-  return canvas(64, (g) => {
-    g.beginPath()
-    g.arc(32, 32, 24, 0, Math.PI * 2)
-    g.fillStyle = color
-    g.fill()
-    g.lineWidth = 6
-    g.strokeStyle = '#3A2A3F'
-    g.stroke()
-    g.beginPath()
-    g.arc(24, 24, 6, 0, Math.PI * 2)
-    g.fillStyle = 'rgba(255,255,255,.85)'
-    g.fill()
-  })
-}
-function glowTexture() {
-  return canvas(128, (g) => {
-    const grad = g.createRadialGradient(64, 64, 8, 64, 64, 64)
-    grad.addColorStop(0, 'rgba(255,234,154,0.95)')
-    grad.addColorStop(0.5, 'rgba(255,170,200,0.45)')
-    grad.addColorStop(1, 'rgba(255,170,200,0)')
-    g.fillStyle = grad
-    g.fillRect(0, 0, 128, 128)
-  })
-}
