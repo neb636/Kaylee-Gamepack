@@ -232,7 +232,15 @@ function Trail({ stops, next, all, going, pick }: { stops: Stop[]; next: number;
                 transition={{ scale: going === s.id ? { repeat: Infinity, duration: 0.5 } : { delay: going ? 0 : 0.2 + i * 0.07, type: 'spring' }, y: { repeat: Infinity, duration: 1.3 } }}
                 whileTap={{ scale: 0.88 }}
                 className={isNext ? 'world-glow' : undefined}
-                onClick={() => pick(s)}
+                // On her finger going down, not on click: the next picture bounces and every picture shrinks under
+                // her finger, so by the time she lifted it the click often landed beside the picture and she had to
+                // tap again. (Enter/Space still work through click.)
+                onPointerDown={(e) => {
+                  if (!e.isPrimary || e.button > 0) return
+                  e.preventDefault()
+                  pick(s)
+                }}
+                onClick={(e) => e.detail === 0 && pick(s)}
                 style={{
                   position: 'absolute',
                   left: p.x - size / 2,
@@ -249,12 +257,15 @@ function Trail({ stops, next, all, going, pick }: { stops: Stop[]; next: number;
                   display: 'grid',
                   placeItems: 'center',
                   padding: 0,
+                  touchAction: 'none',
+                  WebkitTapHighlightColor: 'transparent',
+                  cursor: 'pointer',
                 }}
               >
                 {s.id === MOVIES.id ? <Ticket /> : home ? <PapaWaits found={all} /> : <img src={s.img} alt="" draggable={false} style={{ width: '84%', height: '84%', objectFit: 'contain', pointerEvents: 'none' }} />}
                 {s.done && <StampMark />}
                 {isNext && (
-                  <motion.span animate={{ y: [0, -4, 0], rotate: [-5, 5, -5] }} transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }} style={{ position: 'absolute', left: '-22%', top: '-34%', width: '52%', pointerEvents: 'none' }}>
+                  <motion.span animate={{ y: [0, -4, 0], rotate: [-5, 5, -5] }} transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }} style={{ position: 'absolute', left: '-22%', top: '-34%', width: '52%' }}>
                     <LittleBalloon />
                   </motion.span>
                 )}
