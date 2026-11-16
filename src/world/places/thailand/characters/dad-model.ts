@@ -16,9 +16,14 @@
 // mint, and the texture's blotchy baked shading is calmed. His eyes are glossy domes over a socket (squashing them
 // would show it), so like Mom he blinks with lids, in his mint. No mouth was sculpted: the smile and the talking mouth
 // are drawn on his muzzle.
-import { Group, Mesh, Raycaster, Vector3, type BufferGeometry, type Object3D } from 'three'
+//
+// His sleeves go with his arms (sleevesFollow, below): the shirt past each shoulder seam turns with the arm, so a wave
+// or a cheer brings the sleeve up with it instead of the arm sliding out from under a sleeve that stays down. For that,
+// split-nick.py's pink_sleeves() painted each sleeve's end cap (Tripo's was mint) and each arm's hidden top shirt pink.
+import { Group, Matrix3, Matrix4, Mesh, Raycaster, Vector3, type BufferAttribute, type BufferGeometry, type Object3D } from 'three'
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import type { Bag } from '../../../engine3d/dispose'
+import { smoothstep } from '../../../../sdk/math'
 import { blobShadow, P, solid, solidMix, type V3 } from '../../../engine3d/geo'
 import type { Rig } from '../../../engine3d/characters/animal'
 import { inkPieces } from './model'
@@ -56,6 +61,10 @@ const BROW: V3 = [-0.104, -0.1809, 0.7548]
 const HORN: V3 = [-0.0081, -0.2209, 0.9995]
 /** The middle of his hair's height (the vet's suds puff it from there). */
 const HAIR_MID = 0.816
+/** Where each sleeve meets the shirt (model meters, three.js axes, the right side: the left is mirrored): a seam
+ *  line through `x`, `y` running down toward the armpit, its normal `n` pointing out along the sleeve, and how wide
+ *  (`band`) the shirt stretches from the body's hold to the arm's. Nothing below `low` (the tail curls out there). */
+const SEAM = { x: 0.13, y: 0.5, n: [0.945, 0.327] as const, band: 0.05, low: 0.37 }
 /** His left leg in its hip pivot's space (three.js axes, model meters): middle x and z, radius, sole and hem heights. */
 const SHIN = { x: -0.0125, z: 0.0096, r: 0.0758, sole: -0.1623, hem: -0.01 }
 
@@ -104,6 +113,9 @@ export function buildDadRig(gltf: GLTF, bag: Bag): Rig {
   // No ink on the flat cap where Blender cut his head off (model meters, three.js axes: y up). His arms and legs are
   // Tripo's own pieces: nothing else was cut.
   const onCut = (_x: number, y: number) => Math.abs(y - NECK) < 0.001
+  // The body's shape bends where the sleeves go with the arms: his own copy (clones share the model's).
+  const bodyMesh = node('body_mesh') as unknown as Mesh
+  bodyMesh.geometry = bag.add(bodyMesh.geometry.clone())
   inkPieces(meshes, onCut, BODY_INK)
 
   const [body, head, eyes, armL, armR, tail, legL, legR] = ['body', 'head', 'eyes', 'armL', 'armR', 'tail', 'legL', 'legR'].map(node)
@@ -117,6 +129,7 @@ export function buildDadRig(gltf: GLTF, bag: Bag): Rig {
     arm.add(hand)
     return hand
   })
+  sleevesFollow(bodyMesh, [[armL, -1], [armR, 1]], bag)
   const root = new Group()
   root.add(blobShadow(0.24 * S, bag), body)
 
@@ -228,5 +241,75 @@ export function buildDadRig(gltf: GLTF, bag: Bag): Rig {
         lid.scale.y = Math.max(0.001, shut)
       }
     },
+  }
+}
+
+/** His short sleeves are part of the shirt (Tripo made the arms on their own, tucked up inside them), so a raised arm
+ *  used to come up out of a sleeve that stayed down, its mint top showing under the hem. Each sleeve goes with its arm
+ *  instead: the shirt's vertices past the seam (SEAM) turn with the arm, fading across the seam's band to the ones the
+ *  body holds, so the shoulder stretches like cloth. Done on the CPU just before each draw, for the shirt and its ink
+ *  hull alike (the hull is a welded copy, so it gets its own weights from the same seam). */
+function sleevesFollow(mesh: Mesh, arms: [Object3D, -1 | 1][], bag: Bag) {
+  const hull = mesh.children.find((c) => c.userData.hull) as Mesh | undefined
+  // (His hull was made from his own copy of the shape, so it's his alone too.)
+  if (hull) bag.add(hull.geometry)
+  // Each arm's rest pose in the body's space (its matrix once unturned), inverted.
+  const rest = arms.map(([arm]) => new Matrix4().compose(arm.position, arm.quaternion, arm.scale).invert())
+  const D = new Matrix4()
+  const M = new Matrix4()
+  const N = new Matrix3()
+  const v = new Vector3()
+  const n = new Vector3()
+  const a = new Vector3()
+  for (const part of hull ? [mesh, hull] : [mesh]) {
+    const pos = part.geometry.attributes.position as BufferAttribute
+    const nor = part.geometry.attributes.normal as BufferAttribute
+    const P = pos.array as Float32Array
+    const Nr = nor.array as Float32Array
+    const P0 = P.slice()
+    const N0 = Nr.slice()
+    const sides = arms.map(([arm, s], k) => {
+      const idx: number[] = []
+      const w: number[] = []
+      for (let i = 0; i < pos.count; i++) {
+        const f = (s * P0[i * 3] - SEAM.x) * SEAM.n[0] + (P0[i * 3 + 1] - SEAM.y) * SEAM.n[1]
+        const t = smoothstep(0, SEAM.band, f) * smoothstep(SEAM.low - 0.02, SEAM.low, P0[i * 3 + 1])
+        if (t > 0) {
+          idx.push(i)
+          w.push(t)
+        }
+      }
+      return { arm, inv: rest[k], idx, w, last: new Matrix4() }
+    })
+    part.onBeforeRender = () => {
+      let moved = false
+      for (const side of sides) {
+        // The arm's turn since rest, in the mesh's own space (the mesh is scaled up inside the body).
+        M.compose(mesh.position, mesh.quaternion, mesh.scale)
+        D.copy(M).invert().multiply(side.arm.matrix).multiply(side.inv).multiply(M)
+        if (D.equals(side.last)) continue
+        side.last.copy(D)
+        moved = true
+        N.getNormalMatrix(D)
+        side.idx.forEach((i, j) => {
+          const t = side.w[j]
+          v.fromArray(P0, i * 3)
+          const x = v.x
+          const y = v.y
+          const z = v.z
+          v.applyMatrix4(D)
+          P[i * 3] = x + (v.x - x) * t
+          P[i * 3 + 1] = y + (v.y - y) * t
+          P[i * 3 + 2] = z + (v.z - z) * t
+          a.fromArray(N0, i * 3)
+          n.copy(a).applyMatrix3(N).sub(a).multiplyScalar(t).add(a).normalize()
+          n.toArray(Nr, i * 3)
+        })
+      }
+      if (moved) {
+        pos.needsUpdate = true
+        nor.needsUpdate = true
+      }
+    }
   }
 }
