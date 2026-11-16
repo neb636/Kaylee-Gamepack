@@ -17,6 +17,9 @@ const FILES = __FILES__ // every built file (relative to the app's folder) and i
 const FOLDER = __FOLDER__ // this deploy folder (main, each PR preview): they share the origin
 const BUILD = __BUILD__ // this build's id (its files and its index.html)
 const INDEX_SHA256 = __INDEX_SHA256__ // the index.html this build was made with
+const APP_MARK = __APP_MARK__ // in every deploy's index.html: a page without it (a wifi login page) isn't the app
+// Per request, not a limit on downloading the app: fill() has no deadline, and a file with no saved copy keeps waiting
+// on the network. index.html must arrive whole (it is small) within it, or the saved one answers.
 const TIMEOUT_MS = 4000
 
 const CACHE = `${FOLDER}#${BUILD}`
@@ -93,7 +96,7 @@ async function fillOnce() {
 
 /** `res` as a copy worth saving, or null: this build's file `url`, all of it (see the top). */
 async function whole(url, res) {
-  if (!res?.ok || res.redirected) return null
+  if (!res || !usable(url, res)) return null
   const body = await res.arrayBuffer().catch(() => null) // a connection that drops mid-download rejects here
   if (!body || body.byteLength !== SIZE.get(url)) return null
   // The bytes are already decoded: the network's length and encoding no longer describe them.
@@ -110,8 +113,13 @@ async function save(cache, url, res) {
   return !!copy
 }
 
-/** A network answer to use: a wifi login page is a 200 too, but it's HTML where a script, model or sound should be. */
+/** An answer to use or save: a wifi login page is a 200 too, but it's HTML where a script, model or sound should be.
+ *  (A page of the same length as a file still can't pass as it.) */
 const usable = (key, res) => res.ok && !res.redirected && (key.endsWith('.html') || !/text\/html/i.test(res.headers.get('content-type') ?? ''))
+
+/** Whether a navigation's answer is the app (this deploy's or a newer one), read to the end: a wifi login page isn't,
+ *  and a page that stalls or drops halfway never answers. It is a few KB. */
+const appPage = async (res) => usable(INDEX, res) && (await res.clone().text()).includes(APP_MARK)
 
 async function sha256(buffer) {
   const digest = await crypto.subtle.digest('SHA-256', buffer)
@@ -162,7 +170,7 @@ async function fromThisBuild(url) {
 async function networkFirst(event, network, key) {
   let answered = false
   const fromNetwork = network.then(async (res) => {
-    if (usable(key, res)) {
+    if (key === INDEX ? await appPage(res) : usable(key, res)) {
       answered = true
       // Only a hashed file is saved on the way past: it is the same in every build. index.html and the other unhashed
       // files are saved by fill() alone, which checks they belong to this build (the server may already have a newer
