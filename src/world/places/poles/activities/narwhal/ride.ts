@@ -52,7 +52,7 @@ const STEER = knobs('nari', 'Steering Nari', FILE, {
 })
 /** The ride itself. */
 const RIDE = knobs('nariRide', 'The ride', FILE, {
-  speed: { value: 7.5, min: 3, max: 14, step: 0.25, label: 'Swim speed', unit: 'm/s', note: 'among the icebergs and by the glacier' },
+  speed: { value: 12, min: 3, max: 20, step: 0.25, label: 'Swim speed', unit: 'm/s', note: 'among the icebergs and by the glacier' },
   calm: { value: 0.88, min: 0.4, max: 1, step: 0.02, label: 'Open water', unit: '×', note: 'swim speed on the first stretch, as a share' },
   under: { value: 0.82, min: 0.4, max: 1, step: 0.02, label: 'Under the ice', unit: '×', note: 'swim speed under the sea ice, as a share' },
   pop: { value: 5.6, min: 2, max: 10, step: 0.2, label: 'Pop off a ramp', unit: 'm/s', note: 'how hard a ramp of ice throws her up' },
@@ -693,7 +693,7 @@ export class NarwhalRide implements World3D {
   private swim(dt: number, k: number) {
     const watching = this.calveT >= 0 && this.calveT < 2.6
     const target = RIDE.speed * (this.s < OPEN_END ? RIDE.calm : this.diving ? RIDE.under : 1) * (watching ? 0.6 : 1)
-    this.v += clamp(target - this.v, -6 * dt, 4 * dt)
+    this.v += clamp(target - this.v, -9.6 * dt, 6.4 * dt)
     // The wheel's push slides where she's steering to; she swerves toward it (a point `aim` m ahead), or, let go,
     // drifts back to the middle of her channel. (Narrower on the way to the hole in the ice.)
     const slot = this.s > DIVE.to - 26 && this.s < DIVE.sheetTo ? 4 + 4.5 * (1 - smooth(DIVE.to - 26, DIVE.to - 8, this.s)) : 99
