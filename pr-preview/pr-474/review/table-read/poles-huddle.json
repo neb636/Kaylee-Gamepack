@@ -1,0 +1,462 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "huddle",
+  "title": "Poles › Huddle",
+  "intro": "",
+  "page": "poles-huddle.html",
+  "audio": null,
+  "lines": 26,
+  "seconds": 72,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "huddle.blizzard",
+      "text": "A blizzard! Keep the cold ones moving in.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "huddle.blown",
+      "text": "Whoosh! Carry Pebble back to Papa.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "huddle.song",
+      "text": "Shh. Papa is singing to Pebble.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "huddle.facts.egg",
+      "text": "Emperor dads keep the egg warm on their feet!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "huddle.facts.coldest",
+      "text": "Antarctica is the coldest, windiest place on Earth.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "huddle.facts.night",
+      "text": "In winter here, the sun stays away for months!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "huddle.facts.fast",
+      "text": "Emperor dads don't eat all winter. They just keep the egg warm!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "huddle.papa.song",
+      "text": "Listen, Pebble. This is my song.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "huddle.papa.always",
+      "text": "That's it! Now you'll always find me.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "huddle",
+        "small"
+      ],
+      "text": "Carry the cold penguin into the middle!",
+      "voice": "sparkle",
+      "key": "huddle.small",
+      "part": "huddle",
+      "when": "---- Emperor Huddle (activities/huddle/) ---- Sparkle says what to do (and a fact the first time something comes up). Papa is the only dad who talks (the others honk their own songs), Pebble in Pebble's voice. Finite: one line per moment, a few thank-yous in turn. In the last section Papa sings Pebble his song (synthesized: activities/party/sounds.ts TUNES[0], the one the finale's chick hums) and Pebble peeps it back.",
+      "ms": 2858,
+      "flags": []
+    },
+    {
+      "path": [
+        "huddle",
+        "more"
+      ],
+      "text": "More penguin dads are coming!",
+      "voice": "sparkle",
+      "key": "huddle.more",
+      "part": "huddle",
+      "when": "---- Emperor Huddle (activities/huddle/) ---- Sparkle says what to do (and a fact the first time something comes up). Papa is the only dad who talks (the others honk their own songs), Pebble in Pebble's voice. Finite: one line per moment, a few thank-yous in turn. In the last section Papa sings Pebble his song (synthesized: activities/party/sounds.ts TUNES[0], the one the finale's chick hums) and Pebble peeps it back.",
+      "ms": 1757,
+      "flags": []
+    },
+    {
+      "path": [
+        "huddle",
+        "blizzard"
+      ],
+      "text": "A blizzard! Keep the cold ones moving in.",
+      "voice": "sparkle",
+      "key": "huddle.blizzard",
+      "part": "huddle",
+      "when": "---- Emperor Huddle (activities/huddle/) ---- Sparkle says what to do (and a fact the first time something comes up). Papa is the only dad who talks (the others honk their own songs), Pebble in Pebble's voice. Finite: one line per moment, a few thank-yous in turn. In the last section Papa sings Pebble his song (synthesized: activities/party/sounds.ts TUNES[0], the one the finale's chick hums) and Pebble peeps it back.",
+      "ms": 3450,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "huddle",
+        "turned"
+      ],
+      "text": "The wind turned around!",
+      "voice": "sparkle",
+      "key": "huddle.turned",
+      "part": "huddle",
+      "when": "---- Emperor Huddle (activities/huddle/) ---- Sparkle says what to do (and a fact the first time something comes up). Papa is the only dad who talks (the others honk their own songs), Pebble in Pebble's voice. Finite: one line per moment, a few thank-yous in turn. In the last section Papa sings Pebble his song (synthesized: activities/party/sounds.ts TUNES[0], the one the finale's chick hums) and Pebble peeps it back.",
+      "ms": 2285,
+      "flags": []
+    },
+    {
+      "path": [
+        "huddle",
+        "hatch"
+      ],
+      "text": "Keep Pebble's papa warm in the middle.",
+      "voice": "sparkle",
+      "key": "huddle.hatch",
+      "part": "huddle",
+      "when": "---- Emperor Huddle (activities/huddle/) ---- Sparkle says what to do (and a fact the first time something comes up). Papa is the only dad who talks (the others honk their own songs), Pebble in Pebble's voice. Finite: one line per moment, a few thank-yous in turn. In the last section Papa sings Pebble his song (synthesized: activities/party/sounds.ts TUNES[0], the one the finale's chick hums) and Pebble peeps it back.",
+      "ms": 2947,
+      "flags": []
+    },
+    {
+      "path": [
+        "huddle",
+        "hatched"
+      ],
+      "text": "Tuck Pebble back under Papa!",
+      "voice": "sparkle",
+      "key": "huddle.hatched",
+      "part": "huddle",
+      "when": "---- Emperor Huddle (activities/huddle/) ---- Sparkle says what to do (and a fact the first time something comes up). Papa is the only dad who talks (the others honk their own songs), Pebble in Pebble's voice. Finite: one line per moment, a few thank-yous in turn. In the last section Papa sings Pebble his song (synthesized: activities/party/sounds.ts TUNES[0], the one the finale's chick hums) and Pebble peeps it back.",
+      "ms": 2362,
+      "flags": []
+    },
+    {
+      "path": [
+        "huddle",
+        "blown"
+      ],
+      "text": "Whoosh! Carry Pebble back to Papa.",
+      "voice": "sparkle",
+      "key": "huddle.blown",
+      "part": "huddle",
+      "when": "---- Emperor Huddle (activities/huddle/) ---- Sparkle says what to do (and a fact the first time something comes up). Papa is the only dad who talks (the others honk their own songs), Pebble in Pebble's voice. Finite: one line per moment, a few thank-yous in turn. In the last section Papa sings Pebble his song (synthesized: activities/party/sounds.ts TUNES[0], the one the finale's chick hums) and Pebble peeps it back.",
+      "ms": 3312,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "huddle",
+        "song"
+      ],
+      "text": "Shh. Papa is singing to Pebble.",
+      "voice": "sparkle",
+      "key": "huddle.song",
+      "part": "huddle",
+      "when": "---- Emperor Huddle (activities/huddle/) ---- Sparkle says what to do (and a fact the first time something comes up). Papa is the only dad who talks (the others honk their own songs), Pebble in Pebble's voice. Finite: one line per moment, a few thank-yous in turn. In the last section Papa sings Pebble his song (synthesized: activities/party/sounds.ts TUNES[0], the one the finale's chick hums) and Pebble peeps it back.",
+      "ms": 3000,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "huddle",
+        "done"
+      ],
+      "text": "You kept them all warm!",
+      "voice": "sparkle",
+      "key": "huddle.done",
+      "part": "huddle",
+      "when": "---- Emperor Huddle (activities/huddle/) ---- Sparkle says what to do (and a fact the first time something comes up). Papa is the only dad who talks (the others honk their own songs), Pebble in Pebble's voice. Finite: one line per moment, a few thank-yous in turn. In the last section Papa sings Pebble his song (synthesized: activities/party/sounds.ts TUNES[0], the one the finale's chick hums) and Pebble peeps it back.",
+      "ms": 2256,
+      "flags": []
+    },
+    {
+      "path": [
+        "huddle",
+        "facts",
+        "egg"
+      ],
+      "text": "Emperor dads keep the egg warm on their feet!",
+      "voice": "sparkle",
+      "key": "huddle.facts.egg",
+      "part": "huddle › facts",
+      "when": "",
+      "ms": 4366,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "huddle",
+        "facts",
+        "coldest"
+      ],
+      "text": "Antarctica is the coldest, windiest place on Earth.",
+      "voice": "sparkle",
+      "key": "huddle.facts.coldest",
+      "part": "huddle › facts",
+      "when": "",
+      "ms": 4649,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "huddle",
+        "facts",
+        "night"
+      ],
+      "text": "In winter here, the sun stays away for months!",
+      "voice": "sparkle",
+      "key": "huddle.facts.night",
+      "part": "huddle › facts",
+      "when": "",
+      "ms": 4466,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "huddle",
+        "facts",
+        "fast"
+      ],
+      "text": "Emperor dads don't eat all winter. They just keep the egg warm!",
+      "voice": "sparkle",
+      "key": "huddle.facts.fast",
+      "part": "huddle › facts",
+      "when": "",
+      "ms": 4992,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "huddle",
+        "papa",
+        "cold"
+      ],
+      "text": "Brrr! So cold!",
+      "voice": "papa",
+      "key": "huddle.papa.cold",
+      "part": "huddle › papa",
+      "when": "",
+      "ms": 2646,
+      "flags": []
+    },
+    {
+      "path": [
+        "huddle",
+        "papa",
+        "thanks",
+        "0"
+      ],
+      "text": "Ahh, much better!",
+      "voice": "papa",
+      "key": "huddle.papa.thanks.0",
+      "part": "huddle › papa › thanks",
+      "when": "",
+      "ms": 2186,
+      "flags": []
+    },
+    {
+      "path": [
+        "huddle",
+        "papa",
+        "thanks",
+        "1"
+      ],
+      "text": "Thank you! So cozy.",
+      "voice": "papa",
+      "key": "huddle.papa.thanks.1",
+      "part": "huddle › papa › thanks",
+      "when": "",
+      "ms": 2695,
+      "flags": []
+    },
+    {
+      "path": [
+        "huddle",
+        "papa",
+        "thanks",
+        "2"
+      ],
+      "text": "Warm at last!",
+      "voice": "papa",
+      "key": "huddle.papa.thanks.2",
+      "part": "huddle › papa › thanks",
+      "when": "",
+      "ms": 1709,
+      "flags": []
+    },
+    {
+      "path": [
+        "huddle",
+        "papa",
+        "egg"
+      ],
+      "text": "My egg is getting cold!",
+      "voice": "papa",
+      "key": "huddle.papa.egg",
+      "part": "huddle › papa",
+      "when": "",
+      "ms": 1854,
+      "flags": []
+    },
+    {
+      "path": [
+        "huddle",
+        "papa",
+        "hatched"
+      ],
+      "text": "Hello, little Pebble!",
+      "voice": "papa",
+      "key": "huddle.papa.hatched",
+      "part": "huddle › papa",
+      "when": "",
+      "ms": 2448,
+      "flags": []
+    },
+    {
+      "path": [
+        "huddle",
+        "papa",
+        "blown"
+      ],
+      "text": "Oh no! Pebble!",
+      "voice": "papa",
+      "key": "huddle.papa.blown",
+      "part": "huddle › papa",
+      "when": "",
+      "ms": 1893,
+      "flags": []
+    },
+    {
+      "path": [
+        "huddle",
+        "papa",
+        "tucked"
+      ],
+      "text": "There you are, Pebble!",
+      "voice": "papa",
+      "key": "huddle.papa.tucked",
+      "part": "huddle › papa",
+      "when": "",
+      "ms": 1805,
+      "flags": []
+    },
+    {
+      "path": [
+        "huddle",
+        "papa",
+        "song"
+      ],
+      "text": "Listen, Pebble. This is my song.",
+      "voice": "papa",
+      "key": "huddle.papa.song",
+      "part": "huddle › papa",
+      "when": "",
+      "ms": 3144,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "huddle",
+        "papa",
+        "always"
+      ],
+      "text": "That's it! Now you'll always find me.",
+      "voice": "papa",
+      "key": "huddle.papa.always",
+      "part": "huddle › papa",
+      "when": "",
+      "ms": 3192,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "huddle",
+        "pebble",
+        "hi"
+      ],
+      "text": "Hi, Papa! Peep peep!",
+      "voice": "pebble",
+      "key": "huddle.pebble.hi",
+      "part": "huddle › pebble",
+      "when": "",
+      "ms": 1835,
+      "flags": []
+    },
+    {
+      "path": [
+        "huddle",
+        "pebble",
+        "blown"
+      ],
+      "text": "Whoa! Papa, help!",
+      "voice": "pebble",
+      "key": "huddle.pebble.blown",
+      "part": "huddle › pebble",
+      "when": "",
+      "ms": 2282,
+      "flags": []
+    },
+    {
+      "path": [
+        "huddle",
+        "pebble",
+        "tucked"
+      ],
+      "text": "So cozy!",
+      "voice": "pebble",
+      "key": "huddle.pebble.tucked",
+      "part": "huddle › pebble",
+      "when": "",
+      "ms": 1283,
+      "flags": []
+    }
+  ]
+}
