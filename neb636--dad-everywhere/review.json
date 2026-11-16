@@ -1,0 +1,21 @@
+{
+  "title": "Dad: the new toy everywhere",
+  "checkIn": "fix",
+  "kaylee": "The mint vinyl-toy Dad from the lab is now Dad in every Thailand scene: at the house, on every trip, at the barber and on the plane.",
+  "questions": [
+    "At the barber, his own hair now shrinks into his head as she cuts it short. Does that feel right?",
+    "Can the old code-built Dad leave the character lab (\"Dad: the old toy\")? Yes or keep."
+  ],
+  "reels": [{ "name": "dad", "moments": ["barber-grow-snip", "#/world/thailand/hub/family~5", "#/world/thailand/boat-trip/cave~5", "#/world/thailand/mall-trip/menu~4", "#/world/thailand/samet-trip/speedboat~5"] }],
+  "pictures": [
+    { "title": "The family on the street", "before": "pics/family-old.jpg", "after": "pics/family-new.jpg", "caption": "The new Dad with everyone" },
+    { "title": "The barber", "before": "pics/barber-old.jpg", "after": "pics/barber-new.jpg", "caption": "His own hair stays on under the strands she cuts; a snip wobbles his real horn" },
+    { "title": "The canoe", "before": "pics/cave-old.jpg", "after": "pics/cave-new.jpg", "caption": "He reaches forward with the paddle in his hooves" },
+    { "title": "The plane", "before": "pics/plane-old.jpg", "after": "pics/plane-new.jpg", "caption": "Asleep with his eyes shut, the lap belt over his legs" },
+    { "title": "The speedboat", "before": "pics/speedboat-old.jpg", "after": "pics/speedboat-new.jpg", "caption": "His cap sits over his hair" }
+  ],
+  "links": [
+    { "label": "The barber", "hash": "#/world/thailand/mall-trip/barber" },
+    { "label": "Dad in the character lab", "hash": "#/world/characters/nick" }
+  ]
+}

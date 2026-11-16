@@ -1,0 +1,47 @@
+{
+  "kind": "reel",
+  "name": "dad",
+  "title": "Dad",
+  "video": "dad.mp4",
+  "gif": "dad.gif",
+  "seconds": 33,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "barber-grow-snip",
+      "where": "barber-grow-snip",
+      "seconds": 6,
+      "fps": 55,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand hub family",
+      "where": "#/world/thailand/hub/family",
+      "seconds": 5,
+      "fps": 62.6,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand boat trip cave",
+      "where": "#/world/thailand/boat-trip/cave",
+      "seconds": 5,
+      "fps": 93,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand mall trip menu",
+      "where": "#/world/thailand/mall-trip/menu",
+      "seconds": 4,
+      "fps": 58.8,
+      "status": "ok"
+    },
+    {
+      "name": "Thailand samet trip speedboat",
+      "where": "#/world/thailand/samet-trip/speedboat",
+      "seconds": 5,
+      "fps": 61.9,
+      "status": "ok"
+    }
+  ]
+}
