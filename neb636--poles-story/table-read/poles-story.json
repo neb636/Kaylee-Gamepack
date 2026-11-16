@@ -6,9 +6,9 @@
   "intro": "---- The story films (story/films.ts): Pebble's Long Way Home. One block per film, in play order. ----",
   "page": "poles-story.html",
   "audio": null,
-  "lines": 64,
+  "lines": 60,
   "seconds": 0,
-  "missing": 64,
+  "missing": 60,
   "names": 0,
   "flags": [
     {
@@ -49,32 +49,18 @@
     },
     {
       "key": "story.intro.ship",
-      "text": "I saw a big red ship. It smelled like fish!",
+      "text": "I saw a big red ship. I climbed in, and fell asleep!",
       "flags": [
         "not recorded",
         "long"
-      ]
-    },
-    {
-      "key": "story.intro.nap",
-      "text": "I climbed inside, and I fell asleep.",
-      "flags": [
-        "not recorded"
       ]
     },
     {
       "key": "story.intro.sailed",
-      "text": "The ship sailed all the way up the world. From the bottom, to the top!",
+      "text": "The ship sailed up the whole world. From the bottom, to the top!",
       "flags": [
         "not recorded",
         "long"
-      ]
-    },
-    {
-      "key": "story.intro.woke",
-      "text": "When I woke up, everything was different.",
-      "flags": [
-        "not recorded"
       ]
     },
     {
@@ -95,13 +81,6 @@
     {
       "key": "story.intro.show",
       "text": "Can you show us the way?",
-      "flags": [
-        "not recorded"
-      ]
-    },
-    {
-      "key": "story.intro.long",
-      "text": "It's a long, long way. But yes!",
       "flags": [
         "not recorded"
       ]
@@ -315,7 +294,7 @@
     },
     {
       "key": "story.slideOut.soon",
-      "text": "Come home soon, little one.",
+      "text": "I just know he's on his way home.",
       "flags": [
         "not recorded"
       ]
@@ -457,13 +436,6 @@
       ]
     },
     {
-      "key": "story.homeReunion.lights",
-      "text": "Look! The sky is dancing!",
-      "flags": [
-        "not recorded"
-      ]
-    },
-    {
       "key": "story.homeReunion.quiz",
       "text": "Top to bottom! Who's ready for my Polar Explorer quiz?",
       "flags": [
@@ -560,7 +532,7 @@
         "intro",
         "ship"
       ],
-      "text": "I saw a big red ship. It smelled like fish!",
+      "text": "I saw a big red ship. I climbed in, and fell asleep!",
       "voice": "pebble",
       "key": "story.intro.ship",
       "part": "story › intro",
@@ -575,25 +547,9 @@
       "path": [
         "story",
         "intro",
-        "nap"
-      ],
-      "text": "I climbed inside, and I fell asleep.",
-      "voice": "pebble",
-      "key": "story.intro.nap",
-      "part": "story › intro",
-      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
-      "ms": 0,
-      "flags": [
-        "not recorded"
-      ]
-    },
-    {
-      "path": [
-        "story",
-        "intro",
         "sailed"
       ],
-      "text": "The ship sailed all the way up the world. From the bottom, to the top!",
+      "text": "The ship sailed up the whole world. From the bottom, to the top!",
       "voice": "sparkle",
       "key": "story.intro.sailed",
       "part": "story › intro",
@@ -602,22 +558,6 @@
       "flags": [
         "not recorded",
         "long"
-      ]
-    },
-    {
-      "path": [
-        "story",
-        "intro",
-        "woke"
-      ],
-      "text": "When I woke up, everything was different.",
-      "voice": "pebble",
-      "key": "story.intro.woke",
-      "part": "story › intro",
-      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
-      "ms": 0,
-      "flags": [
-        "not recorded"
       ]
     },
     {
@@ -662,22 +602,6 @@
       "text": "Can you show us the way?",
       "voice": "pola",
       "key": "story.intro.show",
-      "part": "story › intro",
-      "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
-      "ms": 0,
-      "flags": [
-        "not recorded"
-      ]
-    },
-    {
-      "path": [
-        "story",
-        "intro",
-        "long"
-      ],
-      "text": "It's a long, long way. But yes!",
-      "voice": "terry",
-      "key": "story.intro.long",
       "part": "story › intro",
       "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
       "ms": 0,
@@ -1159,7 +1083,7 @@
         "slideOut",
         "soon"
       ],
-      "text": "Come home soon, little one.",
+      "text": "I just know he's on his way home.",
       "voice": "papa",
       "key": "story.slideOut.soon",
       "part": "story › slideOut",
@@ -1474,22 +1398,6 @@
       "flags": [
         "not recorded",
         "long"
-      ]
-    },
-    {
-      "path": [
-        "story",
-        "homeReunion",
-        "lights"
-      ],
-      "text": "Look! The sky is dancing!",
-      "voice": "pola",
-      "key": "story.homeReunion.lights",
-      "part": "story › homeReunion",
-      "when": "",
-      "ms": 0,
-      "flags": [
-        "not recorded"
       ]
     },
     {

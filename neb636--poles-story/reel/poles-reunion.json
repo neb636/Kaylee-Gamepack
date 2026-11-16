@@ -12,14 +12,14 @@
       "name": "Poles story home land",
       "where": "#/world/poles/story/home-land",
       "seconds": 32,
-      "fps": 41.3,
+      "fps": 30.1,
       "status": "ok"
     },
     {
       "name": "Poles story home reunion",
       "where": "#/world/poles/story/home-reunion",
       "seconds": 30,
-      "fps": 35.9,
+      "fps": 29.7,
       "status": "ok"
     }
   ]
