@@ -62,3 +62,10 @@ in the country's notes (Thailand: `thailand/known-issues.md`).
 - 3D reels need a real GPU: film them on the Mac (or a cloud session linked to it). In the cloud `reel.mjs` skips a
   scene that films under 4 fps and says so; say it in the review page instead of waiting.
 - Check whether a failing spec also fails on `main` before debugging it.
+
+## The weekly code-health look
+
+`.github/workflows/code-health.yml` runs on Sundays (skipped on weeks with under 25 merged PRs). Claude reads what
+changed and opens one issue labelled `code-health` with at most three refactors worth doing now, each with a one-line
+prompt to hand an agent. Closing an issue as "not planned", or the owner replying "no to 2", keeps that finding from
+coming back. Picking one up: a small fix-lane PR that says `Part of #<issue>`.
