@@ -83,12 +83,15 @@ motion.push(
     },
   },
   {
-    // A picture on the trail: from the whole globe she picks the slide (a southern stop): the globe rolls over to
-    // Antarctica with the trail in front, then the chapter opens (its way-in film).
+    // A picture on the trail: from the whole globe she picks the slide (a southern stop, the next one once the north's
+    // three are done; the story goes in order the first time): the globe rolls over to Antarctica with the trail in
+    // front, then the chapter opens (its way-in film).
     name: 'poles-stop',
     seconds: 6,
     setup: async (page, base) => {
       await page.goto(`${base}#/world/poles/hub/globe`)
+      await page.evaluate(() => localStorage.setItem('kaylee-gamepack:/:world', JSON.stringify({ visited: ['poles'], stamps: { poles: ['floe', 'narwhal', 'coats'] } })))
+      await page.reload()
       await page.waitForFunction(() => window.__polesGlobeQA?.().mode, null, { timeout: 20000 })
       await page.waitForTimeout(1200)
     },

@@ -41,9 +41,11 @@ getting from one to the other means going down the whole world, through the warm
 | 🥚 | **Emperor Huddle** `huddle` (2D) | south | carries cold dads into the middle | the long night; Papa remembers the night Pebble hatched (the game is that memory) | huddling; dads keep the egg on their feet; months without the sun |
 | 🎈 | **Home** `party` (the finale) | both | steers Terry, the balloon behind him; finds Papa by his song; Terry's quiz | the flight down the world, a polar bear at the South Pole, Papa and Pebble | the poles are opposite ends, warm in between; penguins know each other's calls; the quiz, answered by doing |
 
-- **Any order still holds.** Every chapter is open from the start. The globe shows them as one trail of pictures from
-  the top of the world to the bottom, with Sparkle's balloon on the next one; she can tap any. The south's two chapters
-  are told as "meanwhile, at the bottom of the world", so they make sense before or after the north's.
+- **In order the first time, any order after.** The Poles is a story, so the first time through it goes in order (the
+  user asked for this 2026-11-16, an exception to "any order"): the globe's trail of pictures, top of the world to
+  the bottom with Sparkle's balloon on the next one, shows only the finished chapters and the next one; each new
+  picture appears when the one before earns its stamp. Once every stamp is in, every picture shows and she can pick
+  any game at any time. Starting the story over puts it back in order.
 - **A chapter** is a film, the game, a film, then its stamp and sticker (`Place.tsx`, `story/chapters.ts`). The films
   play the first time; a link to one of a game's sections goes straight to the game.
 - **Iceberg Maker is gone** (all four sections). Its lessons moved into the Narwhal Ride, where she sees them from the
