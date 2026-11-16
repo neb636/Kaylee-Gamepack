@@ -5,7 +5,7 @@
   "title": "Poles › Story",
   "intro": "---- The story films (story/films.ts): Pebble's Long Way Home. One block per film, in play order. ----",
   "page": "poles-story.html",
-  "audio": null,
+  "audio": "poles-story.mp3",
   "lines": 60,
   "seconds": 184,
   "missing": 0,
@@ -15,450 +15,210 @@
       "key": "story.intro.top",
       "text": "This is Pola. She lives at the very top of the world.",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.intro.what",
-      "text": "Whoa! What ARE you?",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "story.intro.penguin",
-      "text": "I'm Pebble. I'm a penguin!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "story.intro.never",
-      "text": "A pen-guin? I've never seen one!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "story.intro.papa",
-      "text": "I want my Papa.",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.intro.ship",
       "text": "I saw a big red ship. I climbed in, and fell asleep!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.intro.sailed",
       "text": "The ship sailed up the whole world. From the bottom, to the top!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.intro.terry",
-      "text": "A penguin? Up here?",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.intro.bottom",
       "text": "Penguins live at the bottom of the world! I fly there every year.",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.intro.show",
-      "text": "Can you show us the way?",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.intro.ask",
       "text": "My balloon can carry Pebble home. Let's help him!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.floeIn.mama",
       "text": "Mama will know what to do! She's across the ice.",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.floeIn.swim",
       "text": "I can't swim yet. My feathers are too fluffy!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.floeIn.hop",
-      "text": "Then hop on my back!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.floeOut.far",
       "text": "A penguin! You are so far from home, little one.",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.floeOut.hug",
-      "text": "You're so warm!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.floeOut.go",
       "text": "Pola, go with him. Friends help friends.",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.floeOut.yes",
-      "text": "I will, Mama!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.narwhalIn.far",
       "text": "The balloon is out past the icebergs.",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.narwhalIn.hop",
-      "text": "That's too far to hop!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.narwhalIn.ride",
       "text": "Need a ride? I'm Nari the narwhal!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.narwhalIn.unicorn",
-      "text": "A unicorn fish!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.narwhalIn.sea",
       "text": "The unicorn of the sea. Hold on tight!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.narwhalOut.here",
-      "text": "Here we are! One balloon.",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "story.narwhalOut.thanks",
-      "text": "Thank you, Nari!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.narwhalOut.bye",
       "text": "Say hello to the bottom of the world for me!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.coatsIn.when",
-      "text": "Terry, when do we fly?",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.coatsIn.snow",
       "text": "When the snow comes, and the fox turns white.",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.coatsIn.brown",
-      "text": "But the fox is brown!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.coatsIn.help",
       "text": "Then let's help the winter along!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.coatsOut.white",
-      "text": "Snow! White coats everywhere!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.coatsOut.time",
       "text": "Winter is here. It's time to fly south!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.coatsOut.bye",
       "text": "Bye, fox! Bye, hare!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.slideIn.meanwhile",
       "text": "Meanwhile, at the bottom of the world...",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.slideIn.call",
-      "text": "Pebble! Pebble, where are you?",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.slideIn.seen",
       "text": "Has anyone seen my little Pebble?",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.slideIn.look",
       "text": "I'll look down the hill, and in the sea. I'll look everywhere!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.slideOut.none",
-      "text": "No Pebble in the sea.",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "story.slideOut.supper",
-      "text": "But I caught his favorite supper.",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "story.slideOut.soon",
-      "text": "I just know he's on his way home.",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.huddleIn.dark",
       "text": "Winter at the South Pole. The sun is gone for months.",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.huddleIn.wait",
-      "text": "I'll wait right here, Pebble.",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "story.huddleIn.remember",
-      "text": "I remember the night you hatched.",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.huddleOut.warm",
       "text": "I kept you warm all winter long.",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.huddleOut.sun",
-      "text": "Look. The sun is coming back.",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "story.huddleOut.dot",
-      "text": "Wait. What is that, up in the sky?",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.homeIn.aboard",
       "text": "All aboard! Next stop, the bottom of the world!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.homeIn.bye",
       "text": "Goodbye, my brave cub! Hurry home!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.homeIn.follow",
       "text": "Follow me! All the way down the world!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.homeLand.land",
       "text": "We made it! This is Antarctica.",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.homeLand.ground",
       "text": "There's ground under this ice! Not sea!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.homeLand.what",
-      "text": "Goodness! What is THAT?",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "story.homeLand.bear",
-      "text": "Hi! I'm a polar bear!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "story.homeLand.same",
-      "text": "Papa? They all look the same!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.homeLand.song",
       "text": "Every penguin papa has his own song. Let's find Papa's!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "story.homeReunion.pebble",
-      "text": "Pebble! My Pebble!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "story.homeReunion.papa",
-      "text": "Papa! I went to the top of the world!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "story.homeReunion.friend",
-      "text": "This is Pola. She carried me home.",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.homeReunion.thanks",
       "text": "A polar bear at the South Pole! Thank you, Pola.",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "story.homeReunion.quiz",
       "text": "Top to bottom! Who's ready for my Polar Explorer quiz?",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     }
   ],
@@ -476,8 +236,11 @@
       "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
       "ms": 4296,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        0,
+        4.24
       ]
     },
     {
@@ -492,8 +255,10 @@
       "part": "story › intro",
       "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
       "ms": 2928,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        4.59,
+        7.46
       ]
     },
     {
@@ -508,8 +273,10 @@
       "part": "story › intro",
       "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
       "ms": 2280,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        7.81,
+        10.02
       ]
     },
     {
@@ -524,8 +291,10 @@
       "part": "story › intro",
       "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
       "ms": 2592,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        10.37,
+        12.89
       ]
     },
     {
@@ -540,8 +309,10 @@
       "part": "story › intro",
       "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
       "ms": 1488,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        13.24,
+        14.67
       ]
     },
     {
@@ -557,8 +328,11 @@
       "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
       "ms": 3744,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        15.02,
+        18.69
       ]
     },
     {
@@ -574,8 +348,11 @@
       "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
       "ms": 4944,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        19.04,
+        23.92
       ]
     },
     {
@@ -590,8 +367,10 @@
       "part": "story › intro",
       "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
       "ms": 2088,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        24.27,
+        26.29
       ]
     },
     {
@@ -607,8 +386,11 @@
       "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
       "ms": 4152,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        26.64,
+        30.74
       ]
     },
     {
@@ -623,8 +405,10 @@
       "part": "story › intro",
       "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
       "ms": 1752,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        31.09,
+        32.78
       ]
     },
     {
@@ -640,8 +424,11 @@
       "when": "The way in (the first visit): Pola finds a penguin at the top of the world.",
       "ms": 4944,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        33.13,
+        38.02
       ]
     },
     {
@@ -657,8 +444,11 @@
       "when": "Ice Floe Hop: across the floating ice to Mama Bear.",
       "ms": 4152,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        39.64,
+        43.73
       ]
     },
     {
@@ -674,8 +464,11 @@
       "when": "Ice Floe Hop: across the floating ice to Mama Bear.",
       "ms": 3456,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        44.08,
+        47.48
       ]
     },
     {
@@ -690,8 +483,10 @@
       "part": "story › floeIn",
       "when": "Ice Floe Hop: across the floating ice to Mama Bear.",
       "ms": 1848,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        47.83,
+        49.63
       ]
     },
     {
@@ -707,8 +502,11 @@
       "when": "",
       "ms": 4176,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        51.25,
+        55.37
       ]
     },
     {
@@ -723,8 +521,10 @@
       "part": "story › floeOut",
       "when": "",
       "ms": 1296,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        55.72,
+        56.96
       ]
     },
     {
@@ -740,8 +540,11 @@
       "when": "",
       "ms": 4968,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        57.31,
+        62.21
       ]
     },
     {
@@ -756,8 +559,10 @@
       "part": "story › floeOut",
       "when": "",
       "ms": 1320,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        62.56,
+        63.83
       ]
     },
     {
@@ -773,8 +578,11 @@
       "when": "The narwhal ride: out to the balloon on the big iceberg.",
       "ms": 3120,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        65.45,
+        68.51
       ]
     },
     {
@@ -789,8 +597,10 @@
       "part": "story › narwhalIn",
       "when": "The narwhal ride: out to the balloon on the big iceberg.",
       "ms": 1488,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        68.86,
+        70.29
       ]
     },
     {
@@ -806,8 +616,11 @@
       "when": "The narwhal ride: out to the balloon on the big iceberg.",
       "ms": 3072,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        70.64,
+        73.66
       ]
     },
     {
@@ -822,8 +635,10 @@
       "part": "story › narwhalIn",
       "when": "The narwhal ride: out to the balloon on the big iceberg.",
       "ms": 1560,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        74.01,
+        75.5
       ]
     },
     {
@@ -839,8 +654,11 @@
       "when": "The narwhal ride: out to the balloon on the big iceberg.",
       "ms": 3600,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        75.85,
+        79.38
       ]
     },
     {
@@ -855,8 +673,10 @@
       "part": "story › narwhalOut",
       "when": "",
       "ms": 2112,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        81,
+        83.05
       ]
     },
     {
@@ -871,8 +691,10 @@
       "part": "story › narwhalOut",
       "when": "",
       "ms": 1296,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        83.4,
+        84.63
       ]
     },
     {
@@ -888,8 +710,11 @@
       "when": "",
       "ms": 3288,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        84.98,
+        88.21
       ]
     },
     {
@@ -904,8 +729,10 @@
       "part": "story › coatsIn",
       "when": "Snow Coats: Terry flies south when the snow comes.",
       "ms": 2448,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        89.83,
+        92.22
       ]
     },
     {
@@ -921,8 +748,11 @@
       "when": "Snow Coats: Terry flies south when the snow comes.",
       "ms": 3384,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        92.57,
+        95.9
       ]
     },
     {
@@ -937,8 +767,10 @@
       "part": "story › coatsIn",
       "when": "Snow Coats: Terry flies south when the snow comes.",
       "ms": 1896,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        96.25,
+        98.08
       ]
     },
     {
@@ -954,8 +786,11 @@
       "when": "Snow Coats: Terry flies south when the snow comes.",
       "ms": 3048,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        98.43,
+        101.41
       ]
     },
     {
@@ -970,8 +805,10 @@
       "part": "story › coatsOut",
       "when": "",
       "ms": 2976,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        103.03,
+        105.95
       ]
     },
     {
@@ -987,8 +824,11 @@
       "when": "",
       "ms": 3312,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        106.3,
+        109.56
       ]
     },
     {
@@ -1004,8 +844,11 @@
       "when": "",
       "ms": 3048,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        109.91,
+        112.91
       ]
     },
     {
@@ -1021,8 +864,11 @@
       "when": "Penguin Slide: meanwhile, Papa looks everywhere.",
       "ms": 3048,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        114.53,
+        117.51
       ]
     },
     {
@@ -1037,8 +883,10 @@
       "part": "story › slideIn",
       "when": "Penguin Slide: meanwhile, Papa looks everywhere.",
       "ms": 2880,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        117.86,
+        120.68
       ]
     },
     {
@@ -1054,8 +902,11 @@
       "when": "Penguin Slide: meanwhile, Papa looks everywhere.",
       "ms": 3360,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        121.03,
+        124.34
       ]
     },
     {
@@ -1071,8 +922,11 @@
       "when": "Penguin Slide: meanwhile, Papa looks everywhere.",
       "ms": 5088,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        124.69,
+        129.72
       ]
     },
     {
@@ -1087,8 +941,10 @@
       "part": "story › slideOut",
       "when": "",
       "ms": 2040,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        131.34,
+        133.33
       ]
     },
     {
@@ -1103,8 +959,10 @@
       "part": "story › slideOut",
       "when": "",
       "ms": 2784,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        133.68,
+        136.4
       ]
     },
     {
@@ -1119,8 +977,10 @@
       "part": "story › slideOut",
       "when": "",
       "ms": 2904,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        136.75,
+        139.6
       ]
     },
     {
@@ -1136,8 +996,11 @@
       "when": "Emperor Huddle: the long night, and the night Pebble hatched.",
       "ms": 4944,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        141.22,
+        146.09
       ]
     },
     {
@@ -1152,8 +1015,10 @@
       "part": "story › huddleIn",
       "when": "Emperor Huddle: the long night, and the night Pebble hatched.",
       "ms": 2280,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        146.44,
+        148.67
       ]
     },
     {
@@ -1168,8 +1033,10 @@
       "part": "story › huddleIn",
       "when": "Emperor Huddle: the long night, and the night Pebble hatched.",
       "ms": 2928,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        149.02,
+        151.87
       ]
     },
     {
@@ -1185,8 +1052,11 @@
       "when": "",
       "ms": 3432,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        153.49,
+        156.87
       ]
     },
     {
@@ -1201,8 +1071,10 @@
       "part": "story › huddleOut",
       "when": "",
       "ms": 2616,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        157.22,
+        159.77
       ]
     },
     {
@@ -1217,8 +1089,10 @@
       "part": "story › huddleOut",
       "when": "",
       "ms": 2976,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        160.12,
+        163.04
       ]
     },
     {
@@ -1234,8 +1108,11 @@
       "when": "The finale: the flight home, Papa's song, and a polar bear at the South Pole.",
       "ms": 4272,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        164.66,
+        168.88
       ]
     },
     {
@@ -1251,8 +1128,11 @@
       "when": "The finale: the flight home, Papa's song, and a polar bear at the South Pole.",
       "ms": 4104,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        169.23,
+        173.28
       ]
     },
     {
@@ -1268,8 +1148,11 @@
       "when": "The finale: the flight home, Papa's song, and a polar bear at the South Pole.",
       "ms": 3984,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        173.63,
+        177.56
       ]
     },
     {
@@ -1285,8 +1168,11 @@
       "when": "",
       "ms": 3720,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        179.18,
+        182.84
       ]
     },
     {
@@ -1302,8 +1188,11 @@
       "when": "",
       "ms": 3144,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        183.19,
+        186.28
       ]
     },
     {
@@ -1318,8 +1207,10 @@
       "part": "story › homeLand",
       "when": "",
       "ms": 2424,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        186.63,
+        188.99
       ]
     },
     {
@@ -1334,8 +1225,10 @@
       "part": "story › homeLand",
       "when": "",
       "ms": 2712,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        189.34,
+        192
       ]
     },
     {
@@ -1350,8 +1243,10 @@
       "part": "story › homeLand",
       "when": "",
       "ms": 2352,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        192.35,
+        194.63
       ]
     },
     {
@@ -1367,8 +1262,11 @@
       "when": "",
       "ms": 5160,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        194.98,
+        200.09
       ]
     },
     {
@@ -1383,8 +1281,10 @@
       "part": "story › homeReunion",
       "when": "",
       "ms": 2424,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        201.71,
+        204.07
       ]
     },
     {
@@ -1399,8 +1299,10 @@
       "part": "story › homeReunion",
       "when": "",
       "ms": 2424,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        204.42,
+        206.79
       ]
     },
     {
@@ -1415,8 +1317,10 @@
       "part": "story › homeReunion",
       "when": "",
       "ms": 2496,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        207.14,
+        209.57
       ]
     },
     {
@@ -1432,8 +1336,11 @@
       "when": "",
       "ms": 3792,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        209.92,
+        213.66
       ]
     },
     {
@@ -1449,8 +1356,11 @@
       "when": "",
       "ms": 3864,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        214.01,
+        217.82
       ]
     }
   ]
