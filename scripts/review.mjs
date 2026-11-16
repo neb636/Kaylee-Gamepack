@@ -142,9 +142,12 @@ ${p.learns ? `<p><b>She learns:</b> ${esc(p.learns)}</p>` : ''}${p.silly ? `<p><
     .join('\n')
   const readHtml = reads
     .map((r) => {
-      const flags = r.flags.length
+      // (New, reworded and reused lines are marked on the sheet; they aren't problems, so they're counted apart.)
+      const mark = ['new', 'changed', 'reused']
+      const flags = r.flags.filter((f) => f.flags.some((x) => !mark.includes(x))).length
+      const fresh = r.flags.filter((f) => f.flags.includes('new') || f.flags.includes('changed')).length
       return `<div class="card"><h3>${esc(r.title)}</h3>
-<p class="meta">${r.lines} lines · ${Math.round(r.seconds)} s of talk · her name ${r.names}×${r.missing ? ` · <b class="warn">${r.missing} not recorded</b>` : ''}${flags ? ` · ${flags} flagged` : ''}</p>
+<p class="meta">${r.lines} lines${fresh ? ` (${fresh} new)` : ''} · ${Math.round(r.seconds)} s of talk · her name ${r.names}×${r.missing ? ` · <b class="warn">${r.missing} not recorded</b>` : ''}${flags ? ` · ${flags} flagged` : ''}</p>
 ${r.audio ? `<audio controls preload="metadata" src="table-read/${esc(r.audio)}"></audio>` : ''}
 <p><a href="table-read/${esc(r.page)}">Read along: who says what, and when</a></p></div>`
     })
