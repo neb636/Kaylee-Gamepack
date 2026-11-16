@@ -628,6 +628,30 @@ export const motion = [
     act: (page) => leadAlong(page, [[-6, -22], [-6, -17], [-11, -27], [-14, -40]], 13000),
   },
   {
+    // Na Dan pier after the way-in film (skipped): the family on the sand at the pier's foot, then up the pier to its
+    // end. Mom and Dad come up the ramp behind her (Mom used to pace on the sand beside the pier, 2026-11-16).
+    name: 'thailand-samet-family-pier',
+    seconds: 22,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/island?at=nadan&story=intro`)
+      await ready(page)
+      await page.waitForTimeout(2500)
+      await holdSkip(page)
+      const board = page.locator('[data-board="beaches"]')
+      await board.waitFor({ timeout: 15000 })
+      await page.waitForTimeout(800)
+      await board.click({ position: { x: 8, y: 8 }, force: true })
+      await page.waitForTimeout(1500)
+    },
+    act: async (page) => {
+      // (Up the middle of the pier: 6 m, then 20 m out from the waterline. Na Dan's frame, as qa() reports it.)
+      const f = { x: -10.92, z: -79.78, t: [-0.984, 0.177], n: [-0.177, -0.984] }
+      const pt = (v) => [f.x + f.t[0] * -4 + f.n[0] * v, f.z + f.t[1] * -4 + f.n[1] * v]
+      await leadAlong(page, [pt(6), pt(20)], 14000)
+      await page.waitForTimeout(7000)
+    },
+  },
+  {
     name: 'thailand-samet-family-swim',
     seconds: 44,
     setup: async (page, base) => {

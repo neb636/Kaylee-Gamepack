@@ -10,7 +10,7 @@ import { merge, P, solid, type V3 } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
 import { longtail, SNORKEL_BOAT, speedboat, WOOD_BOAT } from './boats'
 import { groundAt } from './ground'
-import { at, bay, DECK, FRAMES, HUT, PIER, PLACES, POKES, STOPS, UMBRELLAS, type Frame, type PokeKind, type StopId, type XZ } from './layout'
+import { at, bay, DECK, FRAMES, HUT, JETTY, PIER, PLACES, POKES, STOPS, UMBRELLAS, type Frame, type PokeKind, type StopId, type XZ } from './layout'
 import { bushGeo, glowMaterial, palmGeo, palmTop, rng, sametGeo, stick, type Blockers, type Ground } from './scenery'
 
 const ang = (f: { n: XZ }) => Math.atan2(f.n.x, f.n.z)
@@ -25,6 +25,11 @@ export interface SaiKaew {
   tail: Group
 }
 
+/** One round blocker over an umbrella, its pole and its pair of loungers: its middle this far out along the loungers,
+ *  and its radius (m). One circle, so there's no notch between pole and loungers to get wedged in. */
+const SET_AT = 1.25
+const SET_R = 1.45
+
 export function buildSaiKaew(bag: Bag, root: Group, block?: Blockers['add']): SaiKaew {
   // ---- Pink umbrellas and red chairs along the sand.
   const umbrellas: Group[] = []
@@ -34,7 +39,6 @@ export function buildSaiKaew(bag: Bag, root: Group, block?: Blockers['add']): Sa
     const y = groundAt(a.x, a.z).h
     const c = [PAL.pink, '#FFFFFF', PAL.hotpink, '#FFD0E2'][i % 4]
     beach.push(P.cyl(0.05, 0.05, 2.3, '#F4EEE6', { at: [a.x, y + 1.15, a.z] }, 6))
-    block?.(a.x, a.z, 0.2)
     const u = new Group()
     u.add(solid(merge([P.cone(1.55, 0.6, c, { at: [0, 0, 0] }, 10), P.sphere(0.09, '#FFFFFF', { at: [0, 0.34, 0] }, 8), P.cone(1.56, 0.08, i % 2 ? PAL.pink : '#FFFFFF', { at: [0, -0.3, 0] }, 10)]), bag, 2))
     u.position.set(a.x, y + 2.45, a.z)
@@ -46,8 +50,8 @@ export function buildSaiKaew(bag: Bag, root: Group, block?: Blockers['add']): Sa
       const lz = a.z + n.z * 1.4 - Math.sin(0.31) * side
       const ly = groundAt(lx, lz).h
       beach.push(...lounger(lx, ly, lz, 0.31, i % 2 ? '#F0596B' : '#FFFFFF'))
-      block?.(lx, lz, 0.45)
     }
+    block?.(a.x + n.x * SET_AT, a.z + n.z * SET_AT, SET_R)
   })
   root.add(solid(merge(beach), bag, 2))
 
@@ -211,8 +215,8 @@ export function buildProps(bag: Bag, root: Group, ground: Ground, blockers: Bloc
       g.add(can)
       const f = facing(p.at)
       for (const g2 of [...lounger(Math.sin(f) * 1.4 + Math.cos(f) * 0.7, 0, Math.cos(f) * 1.4 - Math.sin(f) * 0.7, f, '#F0596B'), ...lounger(Math.sin(f) * 1.4 - Math.cos(f) * 0.7, 0, Math.cos(f) * 1.4 + Math.sin(f) * 0.7, f, '#FFFFFF')]) fixed(g2, p.at, y)
-      blockers.add(p.at.x, p.at.z, 0.2)
-      for (const sd of [-0.7, 0.7]) blockers.add(p.at.x + Math.sin(f) * 1.4 + Math.cos(f) * sd, p.at.z + Math.cos(f) * 1.4 - Math.sin(f) * sd, 0.45)
+      // (The set is one solid thing: the slot between the loungers looked like a way through and wedged her.)
+      blockers.add(p.at.x + Math.sin(f) * SET_AT, p.at.z + Math.cos(f) * SET_AT, SET_R)
       add(p.id, 'umbrella', g, p.at, y, 2.6, { part: can })
     } else if (p.kind === 'chair') {
       // A red folding beach chair (Ao Prao's, from the sunset photo): the back folds down flat on a tap.
@@ -381,7 +385,9 @@ export function buildProps(bag: Bag, root: Group, ground: Ground, blockers: Bloc
     for (const [u, v] of [[-1, -1.2], [1, -1.2], [-1, 1.2], [1, 1.2]]) place.push(P.cyl(0.07, 0.07, 2.4, '#F4EEE6', { at: [e.x + t.x * u + n.x * v, PIER.y + 1.2, e.z + t.z * u + n.z * v] }, 6))
     place.push(P.rbox(2.8, 0.18, 3.2, 0.06, '#3F8FE8', { at: [e.x, PIER.y + 2.45, e.z], rot: [0, yaw, 0] }))
     place.push(P.rbox(2.6, 0.12, 3.0, 0.05, '#FFFFFF', { at: [e.x, PIER.y + 2.58, e.z], rot: [0, yaw, 0] }))
-    decks.push({ x: mid.x, z: mid.z, t, n, hw: PIER.w / 2 - 0.25, hd: len / 2 + 1.2, y: PIER.y, ramp: 3 })
+    // (Its ramp onto the sand: long and gentle, and wider than the pier at its foot, so coming at it from a side
+    // still finds the way up.)
+    decks.push({ x: mid.x, z: mid.z, t, n, hw: PIER.w / 2 - 0.25, hd: len / 2 + 1.2, y: PIER.y, ramp: 4.5, rw: PIER.w / 2 + 0.5 })
   }
   // The shops by Na Dan pier and a beach bar on every beach: little houses with pastel walls and tin or thatch roofs,
   // fairy lights along the front (they glow at night).
@@ -457,20 +463,22 @@ export function buildProps(bag: Bag, root: Group, ground: Ground, blockers: Bloc
   // Ao Wong Duan: a little wooden jetty and the snorkel boat (a blue-and-white longtail with a canopy and a ladder).
   {
     const f = FRAMES.wongduan
-    const a0 = at(f, -3, -1)
-    const a1 = at(f, -3, 11)
+    const a0 = at(f, JETTY.u, JETTY.from)
+    const a1 = at(f, JETTY.u, JETTY.to)
+    const L = JETTY.to - JETTY.from
+    const half = JETTY.w / 2
     const yaw = Math.atan2(a1.x - a0.x, a1.z - a0.z)
     const mid = { x: (a0.x + a1.x) / 2, z: (a0.z + a1.z) / 2 }
     const t = { x: Math.cos(yaw), z: -Math.sin(yaw) }
     const n = { x: Math.sin(yaw), z: Math.cos(yaw) }
-    place.push(P.rbox(2, 0.18, 13, 0.04, '#C99A66', { at: [mid.x, 0.85, mid.z], rot: [0, yaw, 0] }))
-    for (let k = 0; k <= 12; k += 2.4) for (const s of [-1, 1]) {
-      const px = a0.x + n.x * k + t.x * s * 0.85
-      const pz = a0.z + n.z * k + t.z * s * 0.85
+    place.push(P.rbox(JETTY.w, 0.18, L + 1, 0.04, '#C99A66', { at: [mid.x, 0.85, mid.z], rot: [0, yaw, 0] }))
+    for (let k = 0; k <= L; k += 2.4) for (const s of [-1, 1]) {
+      const px = a0.x + n.x * k + t.x * s * (half - 0.15)
+      const pz = a0.z + n.z * k + t.z * s * (half - 0.15)
       place.push(P.cyl(0.1, 0.1, 2.6, '#8A5E3C', { at: [px, -0.4, pz] }, 6))
       blockers.add(px, pz, 0.1)
     }
-    decks.push({ x: mid.x, z: mid.z, t, n, hw: 0.8, hd: 7.2, y: 0.94, ramp: 2 })
+    decks.push({ x: mid.x, z: mid.z, t, n, hw: half - 0.2, hd: L / 2 + 1.2, y: 0.94, ramp: 3 })
     const boat = new Group()
     const b = STOPS.snorkel.at
     boat.position.set(b.x, 0, b.z)

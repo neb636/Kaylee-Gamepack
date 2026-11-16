@@ -203,7 +203,12 @@ export interface Blockers {
   /** Circles near a point (a 4 m hash grid). */
   near(x: number, z: number): readonly [number, number, number][]
   add(x: number, z: number, r: number): void
+  /** Every circle (for the walkways audit, walkcheck.ts). */
+  all(): readonly [number, number, number][]
 }
+/** How far past a circle's edge `near()` still finds it: any test with a body radius up to this sees it from the next
+ *  cell over (a step blocked and the next one not, at a cell line, was a jitter). */
+export const BLOCK_REACH = 0.6
 
 export interface Island {
   root: Group
@@ -249,12 +254,15 @@ export function buildIsland(bag: Bag): Island {
   // ---- Blockers on a hash grid.
   const grid = new Map<number, [number, number, number][]>()
   const key = (i: number, j: number) => (i + 500) * 1000 + (j + 500)
+  const every: [number, number, number][] = []
   const blockers: Blockers = {
     add(x, z, r) {
-      const i0 = Math.floor((x - r) / 4)
-      const i1 = Math.floor((x + r) / 4)
-      const j0 = Math.floor((z - r) / 4)
-      const j1 = Math.floor((z + r) / 4)
+      every.push([x, z, r])
+      const R = r + BLOCK_REACH
+      const i0 = Math.floor((x - R) / 4)
+      const i1 = Math.floor((x + R) / 4)
+      const j0 = Math.floor((z - R) / 4)
+      const j1 = Math.floor((z + R) / 4)
       for (let i = i0; i <= i1; i++)
         for (let j = j0; j <= j1; j++) {
           const k = key(i, j)
@@ -266,6 +274,7 @@ export function buildIsland(bag: Bag): Island {
     near(x, z) {
       return grid.get(key(Math.floor(x / 4), Math.floor(z / 4))) ?? []
     },
+    all: () => every,
   }
 
   // ---- The sky.
