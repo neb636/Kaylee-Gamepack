@@ -28,6 +28,7 @@ import { wearHair } from './games/barber/mane'
 import { drawPhoto, PHOTO_IDS, type PhotoId } from './photo'
 import type { PizzaId } from './pizza/layout'
 import { MALL_TRIP } from './trip'
+import { useTimers } from '../../../../../sdk'
 
 export type LoopSection = 'invite' | 'goodbye' | 'arrive' | 'home'
 type LoopWorld = 'house' | 'arrive'
@@ -62,6 +63,7 @@ interface Props {
 }
 
 export function MallLoop({ section, socks, hair, pizza, photos, replay, covered, onMall, onTrip, onNotYet, onLeg, onSocks, onDone }: Props) {
+  const timers = useTimers()
   const world = WORLD_OF[section]
   const [mount, setMount] = useState(() => ({ world, section, key: 0 }))
   const [mode, setMode] = useState<RenderMode>('webgl')
@@ -140,7 +142,7 @@ export function MallLoop({ section, socks, hair, pizza, photos, replay, covered,
       setWallPhotos((list) => addWallPhoto(list, { trip: MALL_TRIP.id, src: drawPhoto(photoId), at: today() }))
     }
     if (phase === 'home') {
-      const t = setTimeout(onDone, 1800)
+      const t = timers.later(onDone, 1800)
       return () => clearTimeout(t)
     }
   }, [phase, section])

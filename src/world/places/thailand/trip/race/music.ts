@@ -2,7 +2,7 @@
 // and noise, no files): a bouncy four-bar loop (bass, a little drum kit, chords and a tune), quiet under the voices (it
 // ducks while anyone talks), faster on the last lap (or the last stretch), with sparkly runs on top while the rainbow
 // lasts. Notes are scheduled a moment ahead.
-import { speakingVoice } from '../../../../../sdk'
+import { speakingVoice, Timers } from '../../../../../sdk'
 import { noise, tone } from '../../../../kit/sfx'
 
 const C4 = 261.63
@@ -23,7 +23,8 @@ const CHORDS = [
 ]
 
 export class RaceMusic {
-  private timer = 0
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   private step = 0
   private next = 0
   private bpm = 150
@@ -35,11 +36,11 @@ export class RaceMusic {
     this.on = true
     this.step = 0
     this.next = performance.now() / 1000 + 0.05
-    this.timer = window.setInterval(() => this.schedule(), 50)
+    this.timers.every(() => this.schedule(), 50)
   }
   stop() {
     this.on = false
-    clearInterval(this.timer)
+    this.timers.clear()
   }
   /** The last lap: a little faster. */
   setFinal(on: boolean) {

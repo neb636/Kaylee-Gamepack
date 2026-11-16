@@ -4,7 +4,7 @@
 // The house's family speak for themselves (house.ts).
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { lineText, say, spendHint, stopSpeaking, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
+import { lineText, say, spendHint, stopSpeaking, SparklePuppet, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { L } from '../../lines'
 import type { Spot } from './house'
 
@@ -28,6 +28,7 @@ const MAX_REMINDERS = 3
 /** `talk`: say the stuck hint out loud too (the game table, where she can sit waiting on her turn). The house itself only
  *  glows its hint, as hubs do (docs/voices.md). */
 export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean; dressing: boolean; talk?: boolean; hint(glow: boolean): Line | null }>(function Guide({ spot, quiet, dressing, talk = false, hint }, ref) {
+  const timers = useTimers()
   const sparkle = useRef<PuppetHandle>(null)
   const [line, setLine] = useState<Line | null>(null)
   const last = useRef<Line | null>(null)
@@ -37,7 +38,7 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean; dress
   const lastTalk = useRef(0)
   const lastPoke = useRef(0)
   const reminders = useRef({ count: 0, last: 0 })
-  const hide = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const hide = useRef<number>(undefined)
   const hintRef = useRef(hint)
   hintRef.current = hint
   const talkRef = useRef(talk)
@@ -54,7 +55,7 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean; dress
     void say(l, { interrupt: !after }).then(() => {
       if (spoken !== speech.current) return
       speaking.current = false
-      hide.current = setTimeout(() => setLine((cur) => (cur === l ? null : cur)), 2200)
+      hide.current = timers.later(() => setLine((cur) => (cur === l ? null : cur)), 2200)
     })
   }
   const speakRef = useRef(speak)
@@ -103,7 +104,7 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean; dress
   useEffect(() => {
     const touch = () => (lastTouch.current = performance.now())
     window.addEventListener('pointerdown', touch, true)
-    const timer = setInterval(() => {
+    const timer = timers.every(() => {
       const now = performance.now()
       if (quiet || now - lastTouch.current < STUCK_S * 1000 || now - lastTalk.current < STUCK_S * 1000) return
       const reminder = reminders.current

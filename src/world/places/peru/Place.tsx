@@ -5,7 +5,7 @@ import BALLOON_SECTIONS from './activities/BalloonSoon.sections'
 // and Rosa's Rainy River. The balloon finale (route `party`) isn't built yet: it shows `BalloonSoon`.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType } from 'react'
-import { BigButton, firstTime, say, SparklePuppet, sounds, useSaved, type PuppetHandle } from '../../../sdk'
+import { BigButton, firstTime, say, SparklePuppet, sounds, useSaved, type PuppetHandle, useTimers } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
 import { useStampFlow, type ActivityProps } from '../../kit/stampFlow'
 import { StoryBeat } from '../../kit/StoryBeat'
@@ -60,6 +60,7 @@ const PIN_IMG: Record<string, string> = { alpaca: art.luna, penguins: art.pepa, 
 let introSeen = false
 
 function Hub({ meta, stamps, openActivity }: PlaceProps) {
+  const timers = useTimers()
   const [intro, setIntro] = useState(stamps.length === 0 && !introSeen)
   const [wiggle, setWiggle] = useState<string | null>(null)
   const luna = useRef<PuppetHandle>(null)
@@ -97,7 +98,7 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
                   if (open) openActivity(spot.id)
                   else {
                     setWiggle(spot.id)
-                    setTimeout(() => setWiggle(null), 650)
+                    timers.later(() => setWiggle(null), 650)
                     void say(L.soon)
                   }
                 }}
@@ -258,13 +259,14 @@ function Balloon() {
 
 /** Route `party` before the finale exists: Luna's balloon trip is coming once all five places are built. */
 function BalloonSoon({ backToMap }: { backToMap: () => void }) {
+  const timers = useTimers()
   const { enter } = useSections(BALLOON_SECTIONS)
   useEffect(() => enter('soon'), [enter])
   const sparkle = useRef<PuppetHandle>(null)
   const luna = useRef<PuppetHandle>(null)
   useEffect(() => {
     void say(L.balloonSoon)
-    const t = setTimeout(() => {
+    const t = timers.later(() => {
       void sparkle.current?.play('wave')
       void luna.current?.play('hop')
     }, 400)

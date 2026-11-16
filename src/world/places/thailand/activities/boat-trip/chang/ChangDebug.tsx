@@ -4,6 +4,7 @@
 import { useEffect, useState, type RefObject } from 'react'
 import type { Chang } from './chang'
 import { CHANG_FEEL, type ChangFeel } from './feel'
+import { useTimers } from '../../../../../../sdk'
 
 const SLIDERS: [keyof ChangFeel & string, string, number, number, number][] = [
   ['reach', 'reach ×', 0.6, 1.6, 0.05],
@@ -31,10 +32,11 @@ interface QA {
 }
 
 export function ChangDebug({ changRef }: { changRef: RefObject<Chang | null> }) {
+  const timers = useTimers()
   const [, tick] = useState(0)
   const [open, setOpen] = useState(true)
   useEffect(() => {
-    const id = setInterval(() => tick((n) => n + 1), 400)
+    const id = timers.every(() => tick((n) => n + 1), 400)
     return () => clearInterval(id)
   }, [])
   const qa = window.__thaiBoatQA?.() as QA | undefined

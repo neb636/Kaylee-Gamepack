@@ -10,6 +10,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { sfx } from '../../sfx'
 import type { CourseMap } from './course'
+import { useTimers } from '../../../../../sdk'
 
 export type RacePhase = 'intro' | 'count' | 'race' | 'finish' | 'podium'
 export type BannerKind = 'lap2' | 'final' | 'win' | 'second'
@@ -141,11 +142,12 @@ export function Countdown({ count }: { count: number }) {
 const BANNERS: Record<BannerKind, string> = { win: '🏆 1st!', second: '🥈 2nd!', final: '🏁 Last lap!', lap2: '🏁 Lap 2' }
 
 export function Banner({ banner, texts }: { banner: RaceHud['banner']; texts?: Partial<Record<BannerKind, string>> }) {
+  const timers = useTimers()
   const [shown, setShown] = useState<RaceHud['banner']>(null)
   useEffect(() => {
     if (!banner) return
     setShown(banner)
-    const t = setTimeout(() => setShown(null), banner.kind === 'win' || banner.kind === 'second' ? 3200 : 2000)
+    const t = timers.later(() => setShown(null), banner.kind === 'win' || banner.kind === 'second' ? 3200 : 2000)
     return () => clearTimeout(t)
   }, [banner?.n])
   const big = shown?.kind === 'win' || shown?.kind === 'second'

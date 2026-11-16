@@ -131,7 +131,7 @@ export class Hall extends Stage {
   /** Each shop door: how open it is now, and how open it wants to be. */
   private doorOpen = Object.fromEntries(SHOP_IDS.map((id) => [id, { k: 0, goal: 0 }])) as Record<ShopId, { k: number; goal: number }>
   /** Timed happenings (the door shutting behind her, Dad's tummy, the bricks hopping home). */
-  private timers: { at: number; run: () => void }[] = []
+  private beats: { at: number; run: () => void }[] = []
   private poleSpin = 0
   private chase = 0
   private bulbT = 0
@@ -287,7 +287,7 @@ export class Hall extends Stage {
   }
 
   private after(s: number, run: () => void) {
-    this.timers.push({ at: this.time + s, run })
+    this.beats.push({ at: this.time + s, run })
   }
 
   /** Dad's tummy: a rumble, a wobble, and he pats it; again; then the question. */
@@ -550,9 +550,9 @@ export class Hall extends Stage {
 
   protected step(dt: number, t: number) {
     const k = this.kaylee
-    for (const tm of [...this.timers]) {
+    for (const tm of [...this.beats]) {
       if (this.time < tm.at) continue
-      this.timers.splice(this.timers.indexOf(tm), 1)
+      this.beats.splice(this.beats.indexOf(tm), 1)
       tm.run()
     }
     this.walker.update()

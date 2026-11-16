@@ -4,7 +4,7 @@
 // Maple's book card (bottom left).
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { lineText, lineVoice, say, sounds, speakingVoice, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
+import { lineText, lineVoice, say, sounds, speakingVoice, SparklePuppet, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 
 export interface WhaleGuideHandle {
   /** Says it; resolves when it's done. */
@@ -19,10 +19,11 @@ const WHO: Record<string, { name: string; icon: string; color: string }> = {
 }
 
 export const WhaleGuide = forwardRef<WhaleGuideHandle, { hidden?: boolean }>(function WhaleGuide({ hidden }, ref) {
+  const timers = useTimers()
   const sparkle = useRef<PuppetHandle>(null)
   const [line, setLine] = useState<{ l: Line; n: number } | null>(null)
   const last = useRef<Line | null>(null)
-  const hide = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const hide = useRef<number>(undefined)
   const asked = useRef<{ voice: string } | null>(null)
 
   const show = (l: Line) => {
@@ -30,7 +31,7 @@ export const WhaleGuide = forwardRef<WhaleGuideHandle, { hidden?: boolean }>(fun
     clearTimeout(hide.current)
   }
   const later = (l: Line) => {
-    hide.current = setTimeout(() => setLine((cur) => (cur?.l === l ? null : cur)), 1600)
+    hide.current = timers.later(() => setLine((cur) => (cur?.l === l ? null : cur)), 1600)
   }
 
   useImperativeHandle(ref, () => ({
@@ -57,7 +58,7 @@ export const WhaleGuide = forwardRef<WhaleGuideHandle, { hidden?: boolean }>(fun
         void sparkle.current?.play('wave')
       }
       show(l)
-      hide.current = setTimeout(() => setLine((cur) => (cur?.l === l ? null : cur)), 4000)
+      hide.current = timers.later(() => setLine((cur) => (cur?.l === l ? null : cur)), 4000)
     },
   }))
   useEffect(() => () => clearTimeout(hide.current), [])

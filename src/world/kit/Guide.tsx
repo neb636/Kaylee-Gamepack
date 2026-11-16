@@ -4,7 +4,7 @@
 // Sparkle only says what to do. Thailand's house has its own (thailand/activities/hub/Guide.tsx).
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { lineText, say, speakingVoice, spendHint, SparklePuppet, type Line, type PuppetHandle } from '../../sdk'
+import { lineText, say, speakingVoice, spendHint, SparklePuppet, type Line, type PuppetHandle, useTimers } from '../../sdk'
 
 export interface GuideHandle {
   /** Say a line now. `after`: wait for the line before to finish instead of cutting it off. */
@@ -50,13 +50,14 @@ export interface GuideProps {
 }
 
 export const Guide = forwardRef<GuideHandle, GuideProps>(function Guide({ hint = null, stuckS = 10, againS = 25, maxHints = 3, voice = true, quiet = false, corner = 'left' }, ref) {
+  const timers = useTimers()
   const sparkle = useRef<PuppetHandle>(null)
   const [line, setLine] = useState<Line | null>(null)
   const last = useRef<Line | null>(hint)
   const lastTouch = useRef(performance.now())
   const lastTalk = useRef(0)
   const hints = useRef({ count: 0, last: 0 })
-  const hide = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const hide = useRef<number>(undefined)
   const hintRef = useRef(hint)
   hintRef.current = hint
 
@@ -68,7 +69,7 @@ export const Guide = forwardRef<GuideHandle, GuideProps>(function Guide({ hint =
     clearTimeout(hide.current)
     void say(l, { interrupt: !after }).then(() => {
       lastTalk.current = performance.now()
-      hide.current = setTimeout(() => setLine((cur) => (cur === l ? null : cur)), 2200)
+      hide.current = timers.later(() => setLine((cur) => (cur === l ? null : cur)), 2200)
     })
   }
   /** A hint without the voice: she waves and the bubble shows it for a moment (tap her to hear it). */
@@ -77,7 +78,7 @@ export const Guide = forwardRef<GuideHandle, GuideProps>(function Guide({ hint =
     setLine(l)
     void sparkle.current?.play('wave')
     clearTimeout(hide.current)
-    hide.current = setTimeout(() => setLine((cur) => (cur === l ? null : cur)), 4000)
+    hide.current = timers.later(() => setLine((cur) => (cur === l ? null : cur)), 4000)
   }
   useImperativeHandle(ref, () => ({
     speak,
@@ -103,7 +104,7 @@ export const Guide = forwardRef<GuideHandle, GuideProps>(function Guide({ hint =
     }
     window.addEventListener('pointerdown', touch, true)
     window.addEventListener('pointermove', move, true)
-    const timer = setInterval(() => {
+    const timer = timers.every(() => {
       const now = performance.now()
       const h = hintRef.current
       // Someone talking (a friend's line) counts as talk too: the hint never cuts them off.

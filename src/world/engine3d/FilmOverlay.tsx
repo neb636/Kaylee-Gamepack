@@ -6,7 +6,7 @@
 // finger was (nothing in the world reacts during a film, but the screen never ignores her).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
-import { lineText, lineVoice, sounds, type Line } from '../../sdk'
+import { lineText, lineVoice, sounds, type Line, useTimers } from '../../sdk'
 import { TURN_S, type FilmState } from './film'
 
 export interface Speaker {
@@ -27,6 +27,7 @@ interface Props {
 const HOLD_S = 0.7
 
 export function FilmOverlay({ state, line, speaker, onSkip }: Props) {
+  const timers = useTimers()
   const memory = !!state?.memory
   const [sparks, setSparks] = useState<{ x: number; y: number; n: number }[]>([])
   const n = useRef(0)
@@ -48,7 +49,7 @@ export function FilmOverlay({ state, line, speaker, onSkip }: Props) {
         const s = { x: e.clientX - r.left, y: e.clientY - r.top, n: ++n.current }
         setSparks((list) => [...list.slice(-4), s])
         sounds.sparkle()
-        setTimeout(() => setSparks((list) => list.filter((x) => x.n !== s.n)), 700)
+        timers.later(() => setSparks((list) => list.filter((x) => x.n !== s.n)), 700)
       }}
       style={{ position: 'absolute', inset: 0, zIndex: 40, touchAction: 'none', userSelect: 'none', WebkitUserSelect: 'none' }}
     >
@@ -104,8 +105,9 @@ export function FilmOverlay({ state, line, speaker, onSkip }: Props) {
 
 /** ⏭, held for a moment: a ring fills round it, then the film is skipped. */
 function SkipButton({ onSkip }: { onSkip: () => void }) {
+  const timers = useTimers()
   const [held, setHeld] = useState(false)
-  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const timer = useRef<number>(undefined)
   const up = () => {
     clearTimeout(timer.current)
     setHeld(false)
@@ -122,7 +124,7 @@ function SkipButton({ onSkip }: { onSkip: () => void }) {
         e.currentTarget.setPointerCapture?.(e.pointerId)
         setHeld(true)
         clearTimeout(timer.current)
-        timer.current = setTimeout(() => {
+        timer.current = timers.later(() => {
           setHeld(false)
           sounds.pop()
           onSkip()

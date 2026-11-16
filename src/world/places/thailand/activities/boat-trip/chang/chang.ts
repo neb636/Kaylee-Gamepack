@@ -358,7 +358,7 @@ export class Chang extends Stage {
     return this.eaters.find((x) => x.e.id === id)!
   }
   private later(ms: number, fn: () => void) {
-    setTimeout(() => !this.disposed && fn(), ms)
+    this.timers.later(() => !this.disposed && fn(), ms)
   }
   /** Says it the first time only. A family reaction (`now`) is dropped while Sparkle talks, rather than heard late. */
   private once(key: string, l: Line, now = false) {

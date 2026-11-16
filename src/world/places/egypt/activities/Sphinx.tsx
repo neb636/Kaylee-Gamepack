@@ -3,7 +3,7 @@
 // fits the three pieces back together, and the Sphinx asks if anyone has seen his nose.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { burst, DragArea, Draggable, DropZone, pick, say, sounds, useAlive, wait, type PuppetHandle } from '../../../../sdk'
+import { burst, DragArea, Draggable, DropZone, pick, say, sounds, useAlive, wait, type PuppetHandle, useTimers } from '../../../../sdk'
 import { ScratchReveal, type RevealRegion, type ScratchRevealHandle } from '../../../kit/ScratchReveal'
 import { sfx } from '../../../kit/sfx'
 import { Stage } from '../../../kit/Stage'
@@ -95,6 +95,7 @@ function paintSand(ctx: CanvasRenderingContext2D, w: number, h: number) {
 }
 
 export function Sphinx({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const { start, enter } = useSections(SECTIONS)
   const [phase, setPhase] = useState<'story' | Stage3 | 'pot' | 'end'>(start ?? 'story')
   const [awake, setAwake] = useState(!!start && !['story', 'face'].includes(start))
@@ -186,7 +187,7 @@ export function Sphinx({ onDone, setProgress }: ActivityProps) {
     if (Math.random() < 0.35) sfx.fwip()
     const id = now + Math.random()
     setGrains((g) => [...g.slice(-10), { id, x, y }])
-    setTimeout(() => setGrains((g) => g.filter((q) => q.id !== id)), 650)
+    timers.later(() => setGrains((g) => g.filter((q) => q.id !== id)), 650)
   }
 
   const fit = async (i: number) => {

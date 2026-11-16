@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
-import { sounds } from '../../../../../../sdk'
+import { sounds, useTimers } from '../../../../../../sdk'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
 import type { TimeOfDay } from '../island/scenery'
@@ -18,6 +18,7 @@ interface Props {
 }
 
 export function SpeedboatScreen({ time, packed, onIsland }: Props) {
+  const timers = useTimers()
   const [n, setN] = useState(0)
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [skip, setSkip] = useState(false)
@@ -28,7 +29,7 @@ export function SpeedboatScreen({ time, packed, onIsland }: Props) {
   const make = (renderer: WebGLRenderer) => new World(renderer, { time, packed }, { done: () => cb.current(), say: (l, mute) => guideRef.current?.speak(l, mute) })
   // ⏩ once the motors have started (and not once it's slowing in to the pier).
   useEffect(() => {
-    const id = setInterval(() => setSkip(!!worldRef.current?.canSkip), 500)
+    const id = timers.every(() => setSkip(!!worldRef.current?.canSkip), 500)
     return () => clearInterval(id)
   }, [])
 

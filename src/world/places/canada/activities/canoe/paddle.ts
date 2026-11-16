@@ -19,7 +19,7 @@
 // reflection, and the canoe's wake ripples over it. Built for engine3d/View3D.tsx; nothing here comes from Thailand.
 // Stroke power, turn and drag are feel-lab knobs (?feel=1), with a graph of her stroke against what the canoe does.
 import { Color, Fog, Group, Mesh, Plane, Raycaster, RingGeometry, MeshBasicMaterial, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp, say, sounds, spendHint, stopSpeaking, type Line } from '../../../../../sdk'
+import { clamp, say, sounds, spendHint, stopSpeaking, type Line, Timers } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -188,6 +188,8 @@ interface Ducky {
 type LoonPhase = 'wait' | 'bubbles' | 'float' | 'found' | 'family'
 
 export class RedCanoe implements World3D {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   readonly scene = new Scene()
   readonly rig = new CameraRig()
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
@@ -429,7 +431,7 @@ export class RedCanoe implements World3D {
     if (start.section === 'loon') this.startLoon()
     if (start.section === 'glacier') this.reachFamily()
     // A section link starts playing at once; the bare link opens with Maple's question (the story).
-    else if (start.section !== 'story') setTimeout(() => this.go(start.section), 400)
+    else if (start.section !== 'story') this.timers.later(() => this.go(start.section), 400)
     this.setGlow()
     this.placeCanoe(0)
     this.eagleC.set(this.x, EAGLE_Y, this.z - 20)
@@ -1168,7 +1170,7 @@ export class RedCanoe implements World3D {
       this.foam.emit(p.x, 0.03, p.z, 0, 0, 0, 1.4, 1.8)
       slap()
       // Maple slaps back.
-      if (Math.hypot(this.x - p.x, this.z - p.z) < 30) setTimeout(() => this.canoe.slap(), 500)
+      if (Math.hypot(this.x - p.x, this.z - p.z) < 30) this.timers.later(() => this.canoe.slap(), 500)
     }
     // The moose: grazes on lake weeds; when the canoe glides close he watches it; water drips off his chin.
     const mooseNear = Math.hypot(this.x - MOOSE.x, this.z - MOOSE.z) < 20
@@ -1634,6 +1636,7 @@ export class RedCanoe implements World3D {
   }
 
   dispose() {
+    this.timers.dispose()
     this.dead = true
     stopSpeaking()
     this.unwatch()

@@ -6,7 +6,7 @@
 // Nothing can fail. If she stops, Long Long says a hint and then parades on his own.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { bell, burst, bigCelebration, lineText, say, sounds, span, spendHint, stopSpeaking, useAlive, useElementSize, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { bell, burst, bigCelebration, lineText, say, sounds, span, spendHint, stopSpeaking, useAlive, useElementSize, useGameLoop, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { Flag } from '../../../../kit/Flag'
 import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
@@ -73,6 +73,7 @@ interface Trail {
 }
 
 export function Parade({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const box = useRef<HTMLDivElement>(null)
   const { width: W, height: H } = useElementSize(box)
   const alive = useAlive()
@@ -386,7 +387,7 @@ export function Parade({ onDone, setProgress }: ActivityProps) {
     setHintRing(false)
     await speak(guest.line)
     if (!alive()) return
-    if (i === 0) setTimeout(() => alive() && setWord(null), 500)
+    if (i === 0) timers.later(() => alive() && setWord(null), 500)
     if (i < GUESTS.length - 1) return
     // A whole lap!
     setProgress(1, TOTAL)
@@ -409,7 +410,7 @@ export function Parade({ onDone, setProgress }: ActivityProps) {
     sfx.thump()
     if (kind === 'gong') sounds.sparkle()
     void ll.current?.play(n % 2 ? 'dance' : 'wiggle')
-    friends.current.forEach((fs, i) => setTimeout(() => alive() && fs.forEach((f) => void f?.play('cheer')), 90 * (i + 1)))
+    friends.current.forEach((fs, i) => timers.later(() => alive() && fs.forEach((f) => void f?.play('cheer')), 90 * (i + 1)))
     if (n === 4) {
       void ll.current?.play('roar')
       void speak(P.drumMid)
@@ -429,7 +430,7 @@ export function Parade({ onDone, setProgress }: ActivityProps) {
   }
   useEffect(() => {
     if (stage !== 'drum') return
-    const id = setInterval(() => setBeat((b) => b + 1), 900)
+    const id = timers.every(() => setBeat((b) => b + 1), 900)
     return () => clearInterval(id)
   }, [stage])
 
@@ -466,7 +467,7 @@ export function Parade({ onDone, setProgress }: ActivityProps) {
     if (stageRef.current !== 'flag' || raised) return
     setRaised(true)
     sounds.whoosh()
-    for (let i = 0; i < 4; i++) setTimeout(() => alive() && sfx.fwip(), i * 500)
+    for (let i = 0; i < 4; i++) timers.later(() => alive() && sfx.fwip(), i * 500)
     const talk = speak(P.flagFact)
     await wait(2300)
     sounds.sparkle()

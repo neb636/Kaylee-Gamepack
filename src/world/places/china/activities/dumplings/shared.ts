@@ -1,6 +1,6 @@
 // Small helpers shared by the Dumpling House scenes.
 import { useCallback, useEffect, useRef, useState, type RefObject, type Ref } from 'react'
-import { say, type Line, type PuppetHandle } from '../../../../../sdk'
+import { say, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import type { WordId } from '../../WordCard'
 
 const tickleTurn = new Map<Line[], number>()
@@ -15,13 +15,14 @@ export function tickle(ref: Ref<PuppetHandle> | undefined, lines: Line[], action
 
 /** Shows a WordCard for a few seconds: `const [word, showWord] = useWord()`. */
 export function useWord(): [WordId | null, (w: WordId) => void] {
+  const timers = useTimers()
   const [word, setWord] = useState<WordId | null>(null)
-  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const timer = useRef<number>(undefined)
   useEffect(() => () => clearTimeout(timer.current), [])
   const show = useCallback((w: WordId) => {
     setWord(w)
     clearTimeout(timer.current)
-    timer.current = setTimeout(() => setWord(null), 3800)
+    timer.current = timers.later(() => setWord(null), 3800)
   }, [])
   return [word, show]
 }

@@ -12,6 +12,7 @@ import { motion } from 'motion/react'
 import { createContext, useContext, useEffect, useLayoutEffect, useRef, useSyncExternalStore, type CSSProperties, type ReactNode } from 'react'
 import { sounds } from '../sounds'
 import { centerOf, distance, toLocal, usePointerDrag, type DragInfo } from './pointer'
+import { useTimers } from '../timers'
 
 /** What happens after she lets go. */
 export type PlaceResult =
@@ -142,6 +143,7 @@ let nextPieceId = 0
 
 /** Something Kaylee can pick up. Put your picture/emoji/SVG inside. */
 export function Piece({ children, id, snapTo, snapRadius = 70, onPlace, onTap, onPickUp, disabled, lift = 1.12, label, style }: PieceProps) {
+  const timers = useTimers()
   const area = useContext(AreaContext)
   const ref = useRef<HTMLDivElement>(null)
   const autoId = useRef<string>(null)
@@ -263,7 +265,7 @@ export function Piece({ children, id, snapTo, snapRadius = 70, onPlace, onTap, o
       if (ref.current) ref.current.style.zIndex = ''
     }
     if (kind === 'reset') done()
-    else setTimeout(done, 400)
+    else timers.later(done, 400)
   }
 
   // After every render (and on mount), glide from where she let go, if this piece was just dropped.

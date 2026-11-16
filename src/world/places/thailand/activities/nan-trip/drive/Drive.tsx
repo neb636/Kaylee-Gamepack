@@ -19,6 +19,7 @@ import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { drawPhoto } from '../photo'
 import { Snapshot } from '../Snapshot'
 import { nanRoad, ROAD_IDS, rollDrive, WEATHERS, type RoadId, type Weather } from './roads'
+import { useTimers } from '../../../../../../sdk'
 
 const hashParam = (k: string) => new URLSearchParams(location.hash.split('?')[1] ?? '').get(k) ?? ''
 /** The weather a link states (`?weather=rain`), read when the drive first opens. */
@@ -137,11 +138,12 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
 
 /** The 3 road's count: a giant 1, 2, 3 as she rounds each bend (and again from the viewpoint, as each bend pops). */
 function CountPop({ count }: { count: DriveHud['count'] }) {
+  const timers = useTimers()
   const [shown, setShown] = useState<{ k: number; n: number } | null>(null)
   useEffect(() => {
     if (!count.n || !count.k) return
     setShown(count)
-    const t = setTimeout(() => setShown(null), 1300)
+    const t = timers.later(() => setShown(null), 1300)
     return () => clearTimeout(t)
   }, [count.n])
   return (

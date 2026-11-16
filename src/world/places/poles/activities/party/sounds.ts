@@ -114,5 +114,6 @@ export function sing(tune: Tune, who: 'papa' | 'chick', pan = 0, vol = 1) {
     }
     t += dur
   }
+  // timers-ok: disconnects an audio node after its sound has played out; nothing in the game is touched.
   if (out) setTimeout(() => out.disconnect(), (t - a.currentTime + 0.5) * 1000)
 }

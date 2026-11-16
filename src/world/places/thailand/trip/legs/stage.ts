@@ -3,7 +3,7 @@
 // can poke, a "do this" finger after a while with nothing touched, and little hops for the family (into a seat, up
 // the plane's stairs). Each leg says what's where (anchorAt), where the camera looks (shot) and what a tap does (onTap).
 import { Color, Object3D, Raycaster, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
-import { bell, clamp, type Line } from '../../../../../sdk'
+import { bell, clamp, Timers, type Line } from '../../../../../sdk'
 import { Avatar } from '../../characters/avatar'
 import { FAMILY } from '../../characters/family'
 import { Member } from '../../characters/member'
@@ -62,6 +62,8 @@ export abstract class Stage implements World3D {
   protected touches = 0
   /** Unmounted (a timer that fires late must not build anything). */
   protected disposed = false
+  /** Its delayed callbacks (and its subclasses'): cancelled when it's disposed. */
+  readonly timers = new Timers()
   /** The Roblox thumbstick's push (engine3d/roam.ts). */
   private stickIn = { x: 0, y: 0 }
 
@@ -273,6 +275,7 @@ export abstract class Stage implements World3D {
 
   dispose() {
     this.disposed = true
+    this.timers.dispose()
     this.scene.clear()
     this.bag.dispose()
   }

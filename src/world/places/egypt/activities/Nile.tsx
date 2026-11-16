@@ -3,7 +3,7 @@
 // the fields (3 pulls, then 5): the brown fields turn green and sprout. Egypt is a desert; the Nile makes it green.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { Buddy, burst, say, sounds, useAlive, wait, type PuppetHandle } from '../../../../sdk'
+import { Buddy, burst, say, sounds, useAlive, wait, type PuppetHandle, useTimers } from '../../../../sdk'
 import { Flag } from '../../../kit/Flag'
 import { sfx } from '../../../kit/sfx'
 import { Stage } from '../../../kit/Stage'
@@ -289,13 +289,14 @@ function Farm({ green, pulls, need }: { green: boolean; pulls: number; need: num
 
 /** The shaduf on the near bank: a post, a long pole with a bucket, and a rope to pull. Drag the rope down (or tap it). */
 function Shaduf({ pulls, splash, onPull }: { pulls: number; splash: number; onPull: () => void }) {
+  const timers = useTimers()
   const [dip, setDip] = useState(false)
   const start = useRef<number | null>(null)
   // Each pull: the bucket dips into the river, then swings up and pours onto the field.
   useEffect(() => {
     if (!splash) return
     setDip(true)
-    const t = setTimeout(() => setDip(false), 450)
+    const t = timers.later(() => setDip(false), 450)
     return () => clearTimeout(t)
   }, [splash])
   return (

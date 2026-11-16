@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import posthog, { isPostHogEnabled } from '../posthog'
 import { worldLink } from '../router'
-import { burst, Mascot, say, sounds, useElementSize, useSaved } from '../sdk'
+import { burst, Mascot, say, sounds, useElementSize, useSaved, useTimers } from '../sdk'
 import { ALL_GAMES, banner, nameLine, SHELF, SURPRISE_ICON, type ShelfGame } from './cards'
 import { Flag } from './kit/Flag'
 import { WORLD_LINES } from './lines'
@@ -265,6 +265,7 @@ function GamePage({ game, loved, onLove, onPlay, onClose }: { game: ShelfGame; l
 /** The surprise: the icons flick past in a window, fast then slower, each with a rising note, and land on one (a game
  *  she hasn't tried yet, most of the time). A tap lands it at once. */
 function Spinner({ played, onLand, onCancel }: { played: string[]; onLand: (g: ShelfGame) => void; onCancel: () => void }) {
+  const timers = useTimers()
   const random = () => ALL_GAMES[Math.floor(Math.random() * ALL_GAMES.length)]
   const [shown, setShown] = useState(random)
   const [target] = useState(() => {
@@ -274,21 +275,21 @@ function Spinner({ played, onLand, onCancel }: { played: string[]; onLand: (g: S
   })
   const STEPS = 16
   const step = useRef(0)
-  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const timer = useRef<number>(undefined)
   const tick = () => {
     step.current++
     if (step.current >= STEPS) {
       setShown(target)
       sounds.fanfare()
-      timer.current = setTimeout(() => onLand(target), 650)
+      timer.current = timers.later(() => onLand(target), 650)
       return
     }
     setShown(random())
     sounds.note(Math.min(10, Math.floor((step.current / STEPS) * 11)))
-    timer.current = setTimeout(tick, 70 + step.current * step.current * 1.6)
+    timer.current = timers.later(tick, 70 + step.current * step.current * 1.6)
   }
   useEffect(() => {
-    timer.current = setTimeout(tick, 80)
+    timer.current = timers.later(tick, 80)
     return () => clearTimeout(timer.current)
   }, [])
   return (

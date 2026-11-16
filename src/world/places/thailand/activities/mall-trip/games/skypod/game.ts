@@ -85,7 +85,8 @@ export class SkyGame {
   private wrongs = 0
   private idle = 0
   private time = 0
-  private timers: { at: number; f: () => void }[] = []
+  /** Game-clock beats (they pause with the game), run from update(). */
+  private beats: { at: number; f: () => void }[] = []
   private last = -1
   private dad: 'out' | 'idle' | 'going' | 'rest' | 'dawdle' = 'out'
   private dadTarget = -1
@@ -117,7 +118,7 @@ export class SkyGame {
   }
 
   private after(s: number, f: () => void) {
-    this.timers.push({ at: this.time + s, f })
+    this.beats.push({ at: this.time + s, f })
   }
   private setPhase(p: Phase) {
     this.phase = p
@@ -139,7 +140,7 @@ export class SkyGame {
   // ---------------------------------------------------------------- rounds
 
   start(n: Round) {
-    this.timers = []
+    this.beats = []
     this.round = n
     this.score = 0
     this.daddy = 0
@@ -370,9 +371,9 @@ export class SkyGame {
 
   update(dt: number) {
     this.time += dt
-    for (const tm of [...this.timers]) {
+    for (const tm of [...this.beats]) {
       if (this.time < tm.at) continue
-      this.timers.splice(this.timers.indexOf(tm), 1)
+      this.beats.splice(this.beats.indexOf(tm), 1)
       tm.f()
     }
     if (this.phase === 'copy') {

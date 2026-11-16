@@ -2,7 +2,7 @@
 // lucky cat's paw, the cat's tail, birds bobbing, candle flames). Sacred things (gentle) never wobble or hop: their
 // candles glow brighter, a curl of incense smoke rises and a soft bell rings.
 import { Group, Mesh, MeshBasicMaterial, SphereGeometry, Vector3, type Object3D } from 'three'
-import { bell, clamp, sounds, span, wobble } from '../../../../../../sdk'
+import { bell, clamp, sounds, span, wobble, Timers } from '../../../../../../sdk'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { PAL } from '../../../../../engine3d/toon'
 import { sfx } from '../../../sfx'
@@ -17,6 +17,13 @@ interface Active {
 const DUR: Partial<Record<Pickable['react'], number>> = { jelly: 0.65, hop: 0.7, tilt: 0.9, shutter: 1.2, birds: 1.6, cat: 1.3, glow: 2.2, beep: 0.6, toot: 0.7, puff: 0.6, tick: 1.1, flip: 0.7, rattle: 0.6, wave: 1.6, open: 2.2, spin: 2.6, stairs: 0.4 }
 
 export class Reactor {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
+
+  /** Cancels its pending callbacks: its owner is going away. */
+  dispose() {
+    this.timers.dispose()
+  }
   private active = new Map<string, Active>()
   private shutter = { open: false, value: 0 }
   private puffs: { mesh: Mesh; mat: MeshBasicMaterial; t: number; from: Vector3 }[] = []
@@ -78,7 +85,7 @@ export class Reactor {
         break
       case 'birds':
         sfx.chirp()
-        setTimeout(() => sfx.chirp(), 260)
+        this.timers.later(() => sfx.chirp(), 260)
         break
       case 'cat':
         sfx.meow()

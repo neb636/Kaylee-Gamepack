@@ -14,7 +14,7 @@ import SECTIONS from './sections'
 // Per-frame work (the tool, particles, Paco's scoot, Abuela's snores, the idle hint) runs in refs and one game loop.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
-import { burst, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, useGameLoop, useSaved, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, useGameLoop, useSaved, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
@@ -74,6 +74,7 @@ const mainFraction = (rig: AlpacaRig | null) => {
 }
 
 export function FluffyDay({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(SECTIONS)
   const seeded = useRef(false)
   const alive = useAlive()
@@ -235,7 +236,7 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
   const fly = (f: Omit<Flyer, 'id'>) => {
     const id = g.current.flyerId++
     setFlyers((list) => [...list, { ...f, id }])
-    setTimeout(() => alive() && setFlyers((list) => list.filter((x) => x.id !== id)), 2200)
+    timers.later(() => alive() && setFlyers((list) => list.filter((x) => x.id !== id)), 2200)
   }
 
   // ---- 1. Brushing ----
@@ -251,7 +252,7 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
     if (kind === 'bird') {
       fsfx.peep()
       fly({ img: it.img, from: at, to: { x: S.post.cx, y: S.post.bottom - S.post.h - 25 }, size: 90, kind: 'fly' })
-      setTimeout(() => alive() && setBirdOnPost(true), 1300)
+      timers.later(() => alive() && setBirdOnPost(true), 1300)
       nudge('luna', 'nod')
     } else if (kind === 'beetle') {
       sounds.pop()
@@ -319,7 +320,7 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
     nudge('luna', 'shiver')
     setArrived(true)
     setWalking(true)
-    for (let i = 0; i < 3; i++) setTimeout(() => nudge('paco', 'hop'), 300 + i * 600)
+    for (let i = 0; i < 3; i++) timers.later(() => nudge('paco', 'hop'), 300 + i * 600)
     await Promise.all([say(F.chilly), wait(1900)])
     if (!alive()) return
     setGust(false)
@@ -504,7 +505,7 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
           if (p.zone === 'bang' && !G.bangs) {
             G.bangs = true
             rig.bangsAside()
-            setTimeout(() => {
+            timers.later(() => {
               if (!alive()) return
               nudge('luna', 'nod')
               say1(F.see)
@@ -554,7 +555,7 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
           nudge('luna', 'lean')
           fsfx.hum()
           setHappy(true)
-          setTimeout(() => alive() && setHappy(false), 1100)
+          timers.later(() => alive() && setHappy(false), 1100)
         }
         checkBrushed()
       } else {
@@ -580,7 +581,7 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
           G.slept = true
           nudge('abuela', 'yawn')
           say1(F.sleepy)
-          setTimeout(() => {
+          timers.later(() => {
             if (!alive() || G.done.abuela) return
             G.asleep = true
             G.nextSnore = performance.now() + 1500
@@ -934,7 +935,7 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
             }}
           />
           {yarn && <Yarn cx={S.basket.cx} y={S.basket.bottom - S.basket.w * 0.72 - 70} pink={yarn === 'pink'} />}
-          <Cactus {...S.cactus} glow={glow === 'cactus'} bug={bug} onTap={() => (phase === 'yarn' ? void dye() : (setBug('peek'), sounds.pop(), setTimeout(() => alive() && setBug('hide'), 1600)))} />
+          <Cactus {...S.cactus} glow={glow === 'cactus'} bug={bug} onTap={() => (phase === 'yarn' ? void dye() : (setBug('peek'), sounds.pop(), timers.later(() => alive() && setBug('hide'), 1600)))} />
 
           {/* The tray: the tool rests here; later, the hats. */}
           <div style={{ position: 'absolute', left: S.tray.x, top: S.tray.y, width: S.tray.w, height: S.tray.h, borderRadius: 36, background: 'rgba(255,247,240,.82)', border: `5px solid ${INK}`, boxShadow: '0 8px 0 rgba(43,35,48,.15)', zIndex: 10, display: 'flex', flexDirection: S.tall ? 'row' : 'column', alignItems: 'center', justifyContent: 'space-evenly', opacity: toolOn || phase === 'hats' ? 1 : 0.4, transition: 'opacity .4s' }}>

@@ -455,7 +455,7 @@ export class CaveStop implements BayPart {
     dr.drop.position.copy(dr.g.position).setY(dr.g.position.y - 0.75)
     if (loud) {
       dr.g.scale.setScalar(1.15)
-      setTimeout(sfx.plink, 260)
+      this.bay.timers.later(sfx.plink, 260)
     }
   }
 

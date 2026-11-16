@@ -12,7 +12,7 @@
 // All feel numbers are in canal.ts (FEEL). Everything per-frame is written straight to the DOM from one game loop.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent, type ReactNode, type RefObject } from 'react'
-import { burst, say, sounds, spendHint, SparklePuppet, useGameLoop, useSaved, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, sounds, spendHint, SparklePuppet, useGameLoop, useSaved, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
@@ -118,6 +118,7 @@ const SAMPLE_MASK: MaskData = {
 }
 
 export function Venice({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const root = useRef<HTMLDivElement>(null)
   const [layout, setLayout] = useState<Layout | null>(null)
   const { start, param, enter } = useSections(SECTIONS)
@@ -329,7 +330,7 @@ export function Venice({ onDone, setProgress }: ActivityProps) {
     } else {
       setSpraying(true)
       sfx.splash()
-      setTimeout(() => setSpraying(false), 1600)
+      timers.later(() => setSpraying(false), 1600)
     }
   }
   const tapDuck = (i: number) => {
@@ -382,7 +383,7 @@ export function Venice({ onDone, setProgress }: ActivityProps) {
     const side = Math.sign(wrap(doorX(target) - s.bx, CANAL)) || 1
     s.lastSide = side
     talk(side < 0 ? V.left : V.right, queue)
-    if (s.rider >= 0) setTimeout(() => void actorRefs.current[s.rider]?.play('wave'), 1200)
+    if (s.rider >= 0) timers.later(() => void actorRefs.current[s.rider]?.play('wave'), 1200)
     setGoFacade(HOUSES[target].facade)
     // From the far ride on, the bubble at the edge waits a few seconds: she goes by the word LEFT or RIGHT first.
     s.goAt = s.t + (s.rides >= RIDES - 1 || s.maskTrip ? 4.5 : 0)
@@ -581,7 +582,7 @@ export function Venice({ onDone, setProgress }: ActivityProps) {
       s.spins = [...s.spins.filter((t) => t > s.t - 6), s.t]
       if (s.spins.length >= 3 && cooled('dizzy', 15)) {
         setGino((v) => ({ ...v, dizzy: true }))
-        setTimeout(() => setGino((v) => ({ ...v, dizzy: false })), 2600)
+        timers.later(() => setGino((v) => ({ ...v, dizzy: false })), 2600)
         react(V.dizzy)
       }
     }
@@ -609,7 +610,7 @@ export function Venice({ onDone, setProgress }: ActivityProps) {
     if (s.fastT > 0.8 && cooled('wheee', 14)) {
       react(V.wheee)
       setGino((v) => ({ ...v, singing: true }))
-      setTimeout(() => setGino((v) => ({ ...v, singing: false })), 2500)
+      timers.later(() => setGino((v) => ({ ...v, singing: false })), 2500)
     }
 
     // ---- Wake and spray ----
@@ -1181,6 +1182,7 @@ function BoatPicker({ onPick }: { onPick: (k: BoatKind) => void }) {
 /** Night on the canal: fireworks over the lagoon (tap the sky for more), the friends she drove wave from the walkway,
  *  Gino plays his accordion. Then the stamp. */
 function Finale({ friends, onDone }: { friends: number[]; onDone: () => void }) {
+  const timers = useTimers()
   const [shots, setShots] = useState<{ id: number; x: number; y: number; c: string }[]>([])
   const next = useRef(0)
   const refs = useRef<(PuppetHandle | null)[]>([])
@@ -1193,9 +1195,9 @@ function Finale({ friends, onDone }: { friends: number[]; onDone: () => void }) 
     void say(V.night)
     void say(V.fireworks, { interrupt: false })
     void say(V.accordion, { interrupt: false })
-    const auto = setInterval(() => fire(15 + Math.random() * 70, 12 + Math.random() * 22), 900)
-    const wave = setInterval(() => refs.current.forEach((r, i) => setTimeout(() => void r?.play('cheer'), i * 250)), 2600)
-    const done = setTimeout(onDone, 11000)
+    const auto = timers.every(() => fire(15 + Math.random() * 70, 12 + Math.random() * 22), 900)
+    const wave = timers.every(() => refs.current.forEach((r, i) => timers.later(() => void r?.play('cheer'), i * 250)), 2600)
+    const done = timers.later(onDone, 11000)
     return () => (clearInterval(auto), clearInterval(wave), clearTimeout(done))
   }, [])
   return (

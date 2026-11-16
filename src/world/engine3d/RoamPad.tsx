@@ -3,6 +3,7 @@
 // Each new gesture shows it for two seconds, then fades while steering keeps working.
 import { forwardRef, useEffect, useImperativeHandle, useRef, type PointerEvent as ReactPointerEvent } from 'react'
 import { ROAM, type RoamState } from './roam'
+import { useTimers } from '../../sdk'
 
 export interface RoamPadHandle {
   /** What shows now (null: nothing). Cheap to call every frame. */
@@ -34,6 +35,7 @@ const clearOffsets = () => {
 }
 
 export const RoamPad = forwardRef<RoamPadHandle, Props>(function RoamPad({ onStick, onJump }, ref) {
+  const timers = useTimers()
   const stickEl = useRef<HTMLDivElement>(null)
   const knobEl = useRef<HTMLDivElement>(null)
   const jumpEl = useRef<HTMLButtonElement>(null)
@@ -41,7 +43,7 @@ export const RoamPad = forwardRef<RoamPadHandle, Props>(function RoamPad({ onSti
   /** Gesture origin and reach (client px), independent of the fixed hint. */
   const floating = useRef<{ cx: number; cy: number; r: number } | null>(null)
   const shown = useRef({ walk: false, jump: false })
-  const hintTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const hintTimer = useRef<number | null>(null)
   const hideHint = () => {
     if (hintTimer.current !== null) clearTimeout(hintTimer.current)
     hintTimer.current = null
@@ -58,7 +60,7 @@ export const RoamPad = forwardRef<RoamPadHandle, Props>(function RoamPad({ onSti
       stickEl.current.style.pointerEvents = 'auto'
     }
     document.documentElement.style.setProperty('--roam-left', `calc(${STICK} + ${EDGE}px)`)
-    hintTimer.current = setTimeout(hideHint, 2000)
+    hintTimer.current = timers.later(hideHint, 2000)
   }
   useEffect(() => () => {
     if (hintTimer.current !== null) clearTimeout(hintTimer.current)
@@ -196,7 +198,7 @@ export const RoamPad = forwardRef<RoamPadHandle, Props>(function RoamPad({ onSti
           const el = jumpEl.current
           if (el) {
             el.style.scale = '0.86'
-            setTimeout(() => (el.style.scale = ''), 140)
+            timers.later(() => (el.style.scale = ''), 140)
           }
         }}
         onClick={(e) => e.stopPropagation()}

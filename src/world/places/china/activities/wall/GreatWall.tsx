@@ -4,7 +4,7 @@
 // tower along the wall. No failing: a wrong brick wiggles, Hou Hou shakes his head, and the right brick glows.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { burst, Piece, PlayArea, say, shuffle, sounds, Target, useAlive, useElementSize, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, Piece, PlayArea, say, shuffle, sounds, Target, useAlive, useElementSize, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
@@ -99,6 +99,7 @@ function makeGeom(W: number, H: number): Geom {
 type Phase = 'story' | 'follow' | 'brick' | 'beacon' | 'fire'
 
 export function GreatWall({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(SECTIONS)
   /** A deep link to a gap: earlier gaps are already fixed. */
   const linkGap = start === 'follow' || start === 'brick' ? Number(param('gap')) - 1 : start === 'beacon' || start === 'fire' ? 3 : 0
@@ -126,7 +127,7 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   const wrongs = useRef(0)
   const beaconSaid = useRef(false)
   const patternSaid = useRef(false)
-  const nudge = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const nudge = useRef<number>(undefined)
   const houWrap = useRef<HTMLDivElement>(null)
   const houRunning = useRef(false)
   const houX = useRef(-1)
@@ -242,7 +243,7 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   }
   const armNudge = () => {
     clearTimeout(nudge.current)
-    nudge.current = setTimeout(() => {
+    nudge.current = timers.later(() => {
       if (alive() && (phase.current === 'follow' || phase.current === 'beacon') && where() !== 0) void goToTarget()
     }, 9000)
   }
@@ -396,7 +397,7 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
       setHoleIdx(hole.current)
       enter('brick', brickState())
       void hou.current?.play('nod')
-      setTimeout(() => alive() && void sayPattern(), 500)
+      timers.later(() => alive() && void sayPattern(), 500)
     } else {
       completing.current = true
       void finishGap(round.current)

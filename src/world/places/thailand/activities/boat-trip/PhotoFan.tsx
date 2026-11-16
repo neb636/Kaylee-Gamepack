@@ -6,6 +6,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useMemo, useState } from 'react'
 import { sfx } from '../../sfx'
+import { useTimers } from '../../../../../sdk'
 
 /** A photo to pick: the album's (bay/Album.tsx), or another trip's. */
 export interface FanPhoto {
@@ -26,6 +27,7 @@ export function fanOf<P extends FanPhoto>(photos: P[]): P[] {
 }
 
 export function PhotoFan<P extends FanPhoto>({ photos, open, onPick }: { photos: P[]; open: boolean; onPick: (p: P) => void }) {
+  const timers = useTimers()
   const fan = useMemo(() => fanOf(photos), [photos])
   const [picked, setPicked] = useState<number | null>(null)
   const n = fan.length
@@ -62,7 +64,7 @@ export function PhotoFan<P extends FanPhoto>({ photos, open, onPick }: { photos:
                   if (picked !== null) return
                   sfx.pop()
                   setPicked(p.n)
-                  setTimeout(() => onPick(p), 450)
+                  timers.later(() => onPick(p), 450)
                 }}
                 style={{
                   position: 'absolute',

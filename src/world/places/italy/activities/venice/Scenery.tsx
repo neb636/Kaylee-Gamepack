@@ -9,6 +9,7 @@ import { INK } from '../../puppets/ink'
 import { BRIDGES, clouds, critters, houses, posts, props, skyline, windowFriends } from './art'
 import { BOLLARDS, CLOUD_LIST, FEEL, LANE, LION_X, PIGEONS, QUAY_Y, SIDE_CANALS, SKYLINE, type Facade, type House as HouseData } from './canal'
 import { vsfx } from './sfx'
+import { useTimers } from '../../../../../sdk'
 
 /** Where a window friend pops up on each facade: x center and sill y (shares of the facade's width and height). */
 const WINDOW: Record<Facade, [number, number]> = {
@@ -24,6 +25,7 @@ const WINDOW: Record<Facade, [number, number]> = {
 
 /** A canal house facade. Tap: it wiggles and a friend pops up in a window (a cat, a nonna, a baby pigeon). */
 export function House({ house, index }: { house: HouseData; index: number }) {
+  const timers = useTimers()
   const [taps, setTaps] = useState(0)
   const [peek, setPeek] = useState(false)
   const friend = windowFriends[(index + taps) % windowFriends.length]
@@ -38,7 +40,7 @@ export function House({ house, index }: { house: HouseData; index: number }) {
         setTaps((n) => n + 1)
         setPeek(true)
         sfx.pop()
-        setTimeout(() => setPeek(false), 2200)
+        timers.later(() => setPeek(false), 2200)
       }}
       style={{ position: 'absolute', left: house.x, top: -house.h, width: house.w, height: house.h, padding: 0, border: 'none', background: 'none', transformOrigin: '50% 100%', cursor: 'pointer' }}
     >
@@ -111,6 +113,7 @@ export function Post({ x, lane, postRef }: { x: number; lane: 'near' | 'front'; 
 
 /** The far skyline: paler and a little hazy, so it sits back. Bell towers bong when tapped. */
 export function Skyline() {
+  const timers = useTimers()
   const [bong, setBong] = useState<number | null>(null)
   return (
     <>
@@ -131,7 +134,7 @@ export function Skyline() {
             onClick={() => {
               vsfx.bong()
               setBong(i)
-              setTimeout(() => setBong(null), 1300)
+              timers.later(() => setBong(null), 1300)
             }}
             style={{ ...style, transformOrigin: '50% 100%', cursor: 'pointer' }}
           />
@@ -154,6 +157,7 @@ export function Clouds({ top }: { top: number }) {
 
 /** A pigeon on the walkway: tap and it flies off, then comes back. */
 function Pigeon({ x }: { x: number }) {
+  const timers = useTimers()
   const [flying, setFlying] = useState(false)
   const k = flying ? critters.pigeonFly : critters.pigeon
   const h = 64
@@ -167,7 +171,7 @@ function Pigeon({ x }: { x: number }) {
         setFlying(true)
         sfx.fwip()
         sfx.chirp()
-        setTimeout(() => setFlying(false), 3200)
+        timers.later(() => setFlying(false), 3200)
       }}
       style={{ position: 'absolute', left: x, top: QUAY_Y + 6 - h, width: h * k.aspect, height: h, padding: 0, border: 'none', background: 'none' }}
     >

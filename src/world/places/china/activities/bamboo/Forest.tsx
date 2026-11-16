@@ -2,7 +2,7 @@
 // carry from round to round.
 import { animate, AnimatePresence, motion } from 'motion/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { burst, say, sounds, useAlive, useElementSize, useLandscape, wait, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, sounds, useAlive, useElementSize, useLandscape, wait, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { PromptBubble } from '../../../../kit/Stage'
 import { sfx } from '../../../../kit/sfx'
 import { art } from '../../art'
@@ -31,6 +31,7 @@ const tween = (from: number, to: number, duration: number, onUpdate: (v: number)
   new Promise<void>((res) => void animate(from, to, { duration, ease, onUpdate, onComplete: res }))
 
 export function Forest({ start, onSection, onDone, setProgress }: ActivityProps & { start?: Phase | null; onSection?: (id: Phase) => void }) {
+  const timers = useTimers()
   const seed = SEED[start ?? 'r1']
   const landscape = useLandscape()
   const alive = useAlive()
@@ -103,7 +104,7 @@ export function Forest({ start, onSection, onDone, setProgress }: ActivityProps 
     setBundle(false)
     setBamboo(true)
     void say(line)
-    ;[300, 750, 1200].forEach((ms) => setTimeout(() => sfx.munch(), ms))
+    ;[300, 750, 1200].forEach((ms) => timers.later(() => sfx.munch(), ms))
     await bao.current?.play('munch')
     await wait(150)
     setBamboo(false)
@@ -145,8 +146,8 @@ export function Forest({ start, onSection, onDone, setProgress }: ActivityProps 
   }
   const growFx = (i: number) => {
     sounds.whoosh()
-    setTimeout(() => sfx.pop(), 130)
-    setTimeout(() => sounds.note(i), 60)
+    timers.later(() => sfx.pop(), 130)
+    timers.later(() => sounds.note(i), 60)
     void bao.current?.play('hop')
   }
 
@@ -257,7 +258,7 @@ export function Forest({ start, onSection, onDone, setProgress }: ActivityProps 
 
   // A gentle nudge if she pauses in a growing round.
   useEffect(() => {
-    const t = setInterval(() => {
+    const t = timers.every(() => {
       if (busy.current || Date.now() - idleAt.current < 9000) return
       if (phase === 'r1') bump(0)
       if (phase === 'r2') bump(1)
@@ -326,7 +327,7 @@ export function Forest({ start, onSection, onDone, setProgress }: ActivityProps 
     await wait(800)
     // munch!
     setBamboo(true)
-    ;[200, 650, 1100, 1700, 2150, 2600].forEach((ms) => setTimeout(() => sfx.munch(), ms))
+    ;[200, 650, 1100, 1700, 2150, 2600].forEach((ms) => timers.later(() => sfx.munch(), ms))
     void bao.current?.play('munch')
     await wait(1650)
     void bao.current?.play('munch')

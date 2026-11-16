@@ -35,7 +35,7 @@
 // After a while with nothing done a finger shows, and Sparkle says what to do (spendHint). Every number that decides
 // the feel is a knob (?feel=1), with a graph of her finger against what the jet ski does.
 import { DynamicDrawUsage, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, Object3D, Plane, Raycaster, RingGeometry, Scene, SphereGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
-import { clamp, spendHint, type Line } from '../../../../../../sdk'
+import { clamp, spendHint, type Line, Timers } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
@@ -209,6 +209,8 @@ interface Float {
 }
 
 export class JetSki implements World3D {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   readonly scene = new Scene()
   readonly rig = new CameraRig()
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
@@ -1347,7 +1349,7 @@ export class JetSki implements World3D {
           this.events.say(J.count[3])
           this.phase = 'racing'
           this.lastTouch = this.time
-          window.setTimeout(() => this.events.count(-1), 900)
+          this.timers.later(() => this.events.count(-1), 900)
         }
       }
       return
@@ -2198,6 +2200,7 @@ export class JetSki implements World3D {
     return { ...this.renderer.info.memory }
   }
   dispose() {
+    this.timers.dispose()
     this.unwatch()
     this.scene.clear()
     this.bag.dispose()

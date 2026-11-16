@@ -5,7 +5,7 @@
 // and the right thing glows. Payoff: everyone eats together, Hong stands up and cheers.
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { Buddy, burst, say, sounds, spendHint, useAlive, useElementSize, useLandscape, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { Buddy, burst, say, sounds, spendHint, useAlive, useElementSize, useLandscape, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Stage } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
@@ -61,6 +61,7 @@ const sectionOf = (round: number, p: Phase): SectionId | null =>
 type DragState = { kind: 'food' | 'chop'; food?: FoodKind; x: number; y: number }
 
 export function Hotpot({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const landscape = useLandscape()
   const box = useRef<HTMLDivElement>(null)
   const { width: W, height: Ht } = useElementSize(box)
@@ -96,7 +97,7 @@ export function Hotpot({ onDone, setProgress }: ActivityProps) {
   const wrongs = useRef(0)
   const taught = useRef(false)
   const chopSaid = useRef(false)
-  const nudge = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const nudge = useRef<number>(undefined)
   const roundRef = useRef(0)
   roundRef.current = round
 
@@ -130,7 +131,7 @@ export function Hotpot({ onDone, setProgress }: ActivityProps) {
   const clearNudge = () => clearTimeout(nudge.current)
   const armNudge = (line: Line, glowWhat: typeof glow) => {
     clearNudge()
-    nudge.current = setTimeout(() => {
+    nudge.current = timers.later(() => {
       if (!alive()) return
       setGlow(glowWhat)
       if (spendHint(line)) void say(line)
@@ -253,9 +254,9 @@ export function Hotpot({ onDone, setProgress }: ActivityProps) {
       void hong.current?.play('standUp')
       void say(H.bigBubbles)
     }
-    setTimeout(() => alive() && setBig(false), roundRef.current === 1 ? 2600 : 900)
+    timers.later(() => alive() && setBig(false), roundRef.current === 1 ? 2600 : 900)
     if (placedRef.current >= R.count) setPhase('scoop')
-    setTimeout(() => {
+    timers.later(() => {
       if (!alive()) return
       itemsRef.current = itemsRef.current.map((i) => (i.id === item.id ? { ...i, ready: true } : i))
       setItems(itemsRef.current)

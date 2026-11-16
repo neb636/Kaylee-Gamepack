@@ -14,7 +14,7 @@
 // lines run 4-7 s (the owl's is the longest); the picnic pizza is a Margherita, not her own (the Pizzeria doesn't save it).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode, type RefObject } from 'react'
-import { burst, say, SparklePuppet, sounds, useElementSize, useGameLoop, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, SparklePuppet, sounds, useElementSize, useGameLoop, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { Flag } from '../../../../kit/Flag'
 import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
@@ -171,6 +171,7 @@ function makeGeo(W: number, H: number): Geo {
 }
 
 export function Opera({ onDone, setProgress }: ActivityProps) {
+  const gameTimers = useTimers()
   const root = useRef<HTMLDivElement>(null)
   const { width: W, height: H } = useElementSize(root)
   const geo = W > 0 && H > 0 ? makeGeo(W, H) : null
@@ -243,7 +244,7 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
     done: false,
   })
   const timers = useRef<number[]>([])
-  const later = (ms: number, fn: () => void) => void timers.current.push(window.setTimeout(fn, ms))
+  const later = (ms: number, fn: () => void) => void timers.current.push(gameTimers.later(fn, ms))
   useEffect(
     () => () => {
       timers.current.forEach(clearTimeout)

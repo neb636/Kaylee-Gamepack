@@ -11,7 +11,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { onDevice } from '../../../../../sdk/device'
-import { BigButton, bigCelebration, burst, pick, say, SayButton, useAlive, type Line } from '../../../../../sdk'
+import { BigButton, bigCelebration, burst, pick, say, SayButton, useAlive, type Line, useTimers } from '../../../../../sdk'
 import { afterTalk, Guide, type GuideHandle } from '../../../../kit/Guide'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
@@ -68,6 +68,7 @@ export function Finale({ onWin }: { onWin: () => void }) {
 // ---------------------------------------------------------------- the globe: the flight home, and Terry's quiz
 
 function Globe({ start, enter, onLanded, onWin }: { start: PartyStart; enter: Enter; onLanded: () => void; onWin: () => void }) {
+  const timers = useTimers()
   const restart = useRef<PartyStart>(start)
   const alive = useAlive()
   const [mode, setMode] = useState<RenderMode>('webgl')
@@ -90,7 +91,7 @@ function Globe({ start, enter, onLanded, onWin }: { start: PartyStart; enter: En
     if (start.section !== 'fly') return
     enter('fly', { leg: start.leg })
     // Off they go: how to steer first (her hands get busy at once), then Terry calls back to the balloon.
-    const t = setTimeout(() => {
+    const t = timers.later(() => {
       guide.current?.speak(L.party.steer)
       if (start.leg === 'north') void friend(L.party.setOff, true)
     }, 500)
@@ -106,7 +107,7 @@ function Globe({ start, enter, onLanded, onWin }: { start: PartyStart; enter: En
   // The badge owns its timer: leaving it or losing the GPU cancels the transition.
   useEffect(() => {
     if (section !== 'badge' || mode !== 'webgl') return
-    const timer = setTimeout(win, 4500)
+    const timer = timers.later(win, 4500)
     return () => clearTimeout(timer)
   }, [section, mode])
 
@@ -139,7 +140,7 @@ function Globe({ start, enter, onLanded, onWin }: { start: PartyStart; enter: En
     pin: (id) => {
       const n = ++pins.current
       setPin({ id, n })
-      setTimeout(() => setPin((p) => (p?.n === n ? null : p)), 2800)
+      timers.later(() => setPin((p) => (p?.n === n ? null : p)), 2800)
       const hello = L.party.hello[id]
       if (hello) void friend(hello)
     },
@@ -259,6 +260,7 @@ function Globe({ start, enter, onLanded, onWin }: { start: PartyStart; enter: En
 // ---------------------------------------------------------------- Papa's song
 
 function Song({ round, enter, onDone }: { round: number; enter: Enter; onDone: () => void }) {
+  const timers = useTimers()
   const restart = useRef<SongStart>({ round })
   const alive = useAlive()
   const [mode, setMode] = useState<RenderMode>('webgl')
@@ -302,7 +304,7 @@ function Song({ round, enter, onDone }: { round: number; enter: Enter; onDone: (
       bigCelebration()
       guide.current?.speak(L.party.song.done, true)
       // The cheer and Sparkle's line, then the film of the reunion.
-      setTimeout(() => afterTalk(() => alive() && onDone(), 5000), 1800)
+      timers.later(() => afterTalk(() => alive() && onDone(), 5000), 1800)
     },
   })
 

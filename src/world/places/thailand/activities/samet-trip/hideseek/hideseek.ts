@@ -37,7 +37,7 @@
 // plays each line and shows its words, and FilmOverlay the films' lines. Every number that decides the feel is a knob
 // (?feel=1), with a graph of how far she is from Dad.
 import { Fog, Group, Mesh, MeshBasicMaterial, Raycaster, RingGeometry, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp, lineText, spendHint, type Line } from '../../../../../../sdk'
+import { clamp, lineText, spendHint, type Line, Timers } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import { knobs, watch } from '../../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
@@ -234,6 +234,8 @@ interface Look {
 }
 
 export class HideSeek implements World3D {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   readonly scene = new Scene()
   readonly rig = new CameraRig()
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
@@ -855,9 +857,9 @@ export class HideSeek implements World3D {
     this.peeka.sparkle(18)
     this.peeka.wiggle()
     fireflySfx.giggle('hideseek')
-    window.setTimeout(() => sfx.fanfare(), 350)
+    this.timers.later(() => sfx.fanfare(), 350)
     this.kaylee.faceToward(to.x, to.z)
-    window.setTimeout(() => {
+    this.timers.later(() => {
       if (this.phase !== 'found') return
       this.kaylee.twirl()
       this.nick.react('hop')
@@ -925,7 +927,7 @@ export class HideSeek implements World3D {
     this.dad.hop = { from, to, t: 0, dur: SEEK.hop }
     this.say(H.here)
     sfx.here()
-    window.setTimeout(() => {
+    this.timers.later(() => {
       if (this.phase === 'seek' && this.poppedT >= 0) this.nick.react('wave')
     }, (SEEK.hop + 0.1) * 1000)
   }
@@ -951,7 +953,7 @@ export class HideSeek implements World3D {
       this.say(H.notHere[this.turn.notHere++ % H.notHere.length])
     }
     // A giggle from where he really is: a clue.
-    window.setTimeout(() => {
+    this.timers.later(() => {
       if (this.phase !== 'seek') return
       this.shake(this.hide, 0.7)
       sfx.giggle()
@@ -1150,7 +1152,7 @@ export class HideSeek implements World3D {
     this.say(H.boo)
     this.nick.react('hop')
     this.puffs.burst(this.dad.x, this.dadY() + 0.2, this.dad.z, 10, 1.4, 1.6, 0.1)
-    window.setTimeout(() => {
+    this.timers.later(() => {
       if (this.phase === 'search' || this.phase === 'giveup') this.win()
     }, 500)
   }
@@ -1939,7 +1941,7 @@ export class HideSeek implements World3D {
         this.dad.yaw = Math.atan2(k.x - this.dad.x, k.z - this.dad.z)
         this.say(H.peek)
         sfx.giggle()
-        window.setTimeout(() => {
+        this.timers.later(() => {
           if (this.phase === 'dadcount') this.dad.yaw = this.seaYaw
         }, 900)
         return
@@ -2240,6 +2242,7 @@ export class HideSeek implements World3D {
     return { ...this.renderer.info.memory }
   }
   dispose() {
+    this.timers.dispose()
     this.later = []
     this.unwatch()
     this.scene.clear()

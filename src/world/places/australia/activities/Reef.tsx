@@ -2,7 +2,7 @@
 // The reef is alive: seaweed sways, little fish swim by, bubbles rise, and Sparkle (in her snorkel) looks where to go.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { Buddy, burst, say, sounds, SparklePuppet, useAlive, wait, type PuppetHandle } from '../../../../sdk'
+import { Buddy, burst, say, sounds, SparklePuppet, useAlive, wait, type PuppetHandle, useTimers } from '../../../../sdk'
 import { Stage, WIGGLE } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
 import { useSections } from '../../../kit/sections'
@@ -25,6 +25,7 @@ const CRITTERS: Critter[] = [
 const ORDER = ['turtle', 'clownfish', 'starfish', 'octopus'] as const
 
 export function Reef({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const { start, enter } = useSections(SECTIONS)
   const firstRound = start && start !== 'story' ? ORDER.indexOf(start) : 0
   const [story, setStory] = useState(!start || start === 'story')
@@ -49,7 +50,7 @@ export function Reef({ onDone, setProgress }: ActivityProps) {
     if (!r) return
     const id = Date.now() + Math.random()
     setBubbles((b) => [...b, { id, x: clientX - r.left, y: clientY - r.top }])
-    setTimeout(() => setBubbles((b) => b.filter((x) => x.id !== id)), 1000)
+    timers.later(() => setBubbles((b) => b.filter((x) => x.id !== id)), 1000)
   }
 
   const tap = async (c: Critter) => {
@@ -59,7 +60,7 @@ export function Reef({ onDone, setProgress }: ActivityProps) {
       if (c.img) void buddies.current[c.id]?.play('wiggle')
       else {
         setWiggle(c.id)
-        setTimeout(() => setWiggle(null), 500)
+        timers.later(() => setWiggle(null), 500)
       }
       setHint(true)
       void sparkle.current?.play('think')

@@ -11,6 +11,7 @@ import { HallMap } from './HallMap'
 import { Hungry } from './Hungry'
 import { GAMES, type DoorId, type GameDoor } from './layout'
 import { mallVoice } from '../voice'
+import { useTimers } from '../../../../../../sdk'
 
 /** Each sign's letters. */
 const LABEL_COLORS: Record<string, string> = { little: '#3FAF8E', muay: '#E04848' }
@@ -37,6 +38,7 @@ interface Props {
 }
 
 export function HallScreen({ socks, hair, done, from, hungry, asking, map, back, onMap, onEnter, onHungry, onPizza, onMorePlay }: Props) {
+  const timers = useTimers()
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [going, setGoing] = useState(false)
@@ -58,7 +60,7 @@ export function HallScreen({ socks, hair, done, from, hungry, asking, map, back,
   const fresh = back && from !== 'in' ? from : null
   useEffect(() => {
     if (!fresh || hungry || asking || done.length >= GAMES.length) return
-    const t = setTimeout(() => onMap(true), 1700)
+    const t = timers.later(() => onMap(true), 1700)
     return () => clearTimeout(t)
   }, [])
 

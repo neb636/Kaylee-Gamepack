@@ -205,7 +205,7 @@ export class PlaneRide extends Stage {
     // The cabin's hum, the whole flight (off the plane it stops: offPlane).
     this.bag.add({ dispose: () => this.stopCabin() })
     this.stopCabin = cabinBed()
-    setTimeout(() => this.events.say(start === 'land' ? L.trip.plane.land : start === 'fly' ? L.trip.plane.tray : L.trip.plane.belt), 400)
+    this.timers.later(() => this.events.say(start === 'land' ? L.trip.plane.land : start === 'fly' ? L.trip.plane.tray : L.trip.plane.belt), 400)
   }
 
   // ---------------------------------------------------------------- the cabin
@@ -707,7 +707,7 @@ export class PlaneRide extends Stage {
         this.told.add('night')
         this.events.say(L.trip.plane.snore)
       }
-      setTimeout(() => this.napping && sfx.snort(), 900)
+      this.timers.later(() => this.napping && sfx.snort(), 900)
     } else if (!nap) this.napping = false
   }
 
@@ -1037,7 +1037,7 @@ export class PlaneRide extends Stage {
       this.events.say(L.trip.plane.land)
       if (this.view !== 'cabin') this.setView('cabin')
     }
-    if (s === 'fly') setTimeout(() => this.sec === 'fly' && this.events.say(L.trip.plane.tray), 1500)
+    if (s === 'fly') this.timers.later(() => this.sec === 'fly' && this.events.say(L.trip.plane.tray), 1500)
   }
 
   /** The ⏩ button: from the takeoff or the cabin straight to the landing; from the landing on to the trip's map. */

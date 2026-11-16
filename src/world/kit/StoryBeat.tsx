@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { Buddy, lineText, lineVoice, say, SparklePuppet, stopSpeaking, useAlive, wait, type Line, type PuppetHandle } from '../../sdk'
+import { Buddy, lineText, lineVoice, say, SparklePuppet, stopSpeaking, useAlive, wait, type Line, type PuppetHandle, useTimers } from '../../sdk'
 
 /**
  * A tiny bit of story: a friend says 1-2 short lines, then the play starts.
@@ -9,6 +9,7 @@ import { Buddy, lineText, lineVoice, say, SparklePuppet, stopSpeaking, useAlive,
  * mouth moves on theirs; a flat `img` becomes a Buddy that bounces along with the friend's voice.
  */
 export function StoryBeat({ lines, img, friend, onDone, bg }: { lines: Line[]; img?: string; friend?: ReactNode; onDone: () => void; bg?: string }) {
+  const timers = useTimers()
   const [index, setIndex] = useState(0)
   const alive = useAlive()
   const done = useRef(false)
@@ -21,7 +22,7 @@ export function StoryBeat({ lines, img, friend, onDone, bg }: { lines: Line[]; i
   }
 
   useEffect(() => {
-    const t = setTimeout(() => void sparkle.current?.play('wave'), 350)
+    const t = timers.later(() => void sparkle.current?.play('wave'), 350)
     return () => clearTimeout(t)
   }, [])
 

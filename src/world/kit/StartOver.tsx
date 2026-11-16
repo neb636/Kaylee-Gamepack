@@ -5,7 +5,7 @@
 // wipes her progress; a quick tap only wiggles it. No voice: it's for the grown-up, and a line every visit would be the talk she skips.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { onDevice, sounds } from '../../sdk'
+import { onDevice, sounds, useTimers } from '../../sdk'
 
 /** How long the pill stays up when a story is picked back up. */
 export const START_OVER_SHOW_MS = 10_000
@@ -15,6 +15,7 @@ export const START_OVER_HOLD_MS = 1_000
 const HINT = onDevice('Hold to start over', 'Click and hold to start over')
 
 export function StartOver({ onRestart, label = 'Start the story again' }: { onRestart: () => void; label?: string }) {
+  const timers = useTimers()
   const [shown, setShown] = useState(true)
   const [holding, setHolding] = useState(false)
   const [wiggle, setWiggle] = useState(0)
@@ -25,7 +26,7 @@ export function StartOver({ onRestart, label = 'Start the story again' }: { onRe
 
   // Up for ten seconds; if a finger is on it when the time runs out, it waits for the finger to lift.
   useEffect(() => {
-    const t = window.setTimeout(() => {
+    const t = timers.later(() => {
       timeUp.current = true
       if (!held.current) setShown(false)
     }, START_OVER_SHOW_MS)
@@ -48,7 +49,7 @@ export function StartOver({ onRestart, label = 'Start the story again' }: { onRe
     sounds.pickup()
     held.current = true
     setHolding(true)
-    holdTimer.current = window.setTimeout(restart, START_OVER_HOLD_MS)
+    holdTimer.current = timers.later(restart, START_OVER_HOLD_MS)
   }
   const release = (tooSoon: boolean) => {
     if (!held.current || done.current) return

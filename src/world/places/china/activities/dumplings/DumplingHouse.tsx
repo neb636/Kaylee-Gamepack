@@ -3,7 +3,7 @@
 // service and come back later to the next one.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BigButton, say, SparklePuppet, useSaved, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, say, SparklePuppet, useSaved, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
@@ -135,8 +135,9 @@ export function DumplingHouse({ onDone, setProgress }: ActivityProps) {
 
 /** Shows 侬好 when Dou Dou says hello. */
 function ArriveWord({ show }: { show: (w: 'nonghao') => void }) {
+  const timers = useTimers()
   useEffect(() => {
-    const t = setTimeout(() => show('nonghao'), 300)
+    const t = timers.later(() => show('nonghao'), 300)
     return () => clearTimeout(t)
   }, [])
   return null
@@ -144,11 +145,12 @@ function ArriveWord({ show }: { show: (w: 'nonghao') => void }) {
 
 /** Between services: a little cheer, then on to the next customers (or back to the map; progress is saved). */
 function Break({ onNext }: { onNext: () => void }) {
+  const timers = useTimers()
   const sparkle = useRef<PuppetHandle>(null)
   const dou = useRef<PuppetHandle>(null)
   useEffect(() => {
     void say(D.serviceDone)
-    const t = setTimeout(() => {
+    const t = timers.later(() => {
       void sparkle.current?.play('cheer')
       void dou.current?.play('cheer')
     }, 300)

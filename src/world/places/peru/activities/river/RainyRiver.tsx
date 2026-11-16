@@ -16,7 +16,7 @@ import { numberParam, listParam } from '../../sectionState'
 // Per-frame work (cloud, rain, water levels, Rosa, floating things) runs in refs and one game loop.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
-import { burst, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, useGameLoop, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
@@ -62,6 +62,7 @@ declare global {
 }
 
 export function RainyRiver({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(SECTIONS)
   const seeded = useRef(false)
   const alive = useAlive()
@@ -282,7 +283,7 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
         break
       case 'ants':
         setUmbrella(true)
-        setTimeout(() => alive() && !floodedRef.current && setUmbrella(false), 3500)
+        timers.later(() => alive() && !floodedRef.current && setUmbrella(false), 3500)
         sounds.pop()
         G.woke.delete(k)
         G.wet[k] = -2
@@ -292,7 +293,7 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
           G.slothEyes = 1
           setSlothEyes(1)
           rsfx.yawn()
-          setTimeout(() => alive() && say1(R.slothWake), 900)
+          timers.later(() => alive() && say1(R.slothWake), 900)
           G.woke.delete(k)
           G.wet[k] = -3
         } else if (G.slothEyes === 1) {
@@ -517,7 +518,7 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
     const land = wet ? water : groundAt(S0, f.x)
     rsfx.drop()
     setFruits((list) => list.map((x, k) => (k === i ? { ...x, gone: true, at: { x: f.x, y: land } } : x)))
-    setTimeout(() => {
+    timers.later(() => {
       if (!alive()) return
       if (wet) {
         rsfx.splash()
@@ -529,7 +530,7 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
       } else sounds.pop()
     }, 650)
     // It grows back.
-    setTimeout(() => alive() && setFruits((list) => list.map((x, k) => (k === i ? { ...x, gone: false, at: undefined } : x))), 6000)
+    timers.later(() => alive() && setFruits((list) => list.map((x, k) => (k === i ? { ...x, gone: false, at: undefined } : x))), 6000)
   }
 
   // ---- Pointer handling on the stage ----
@@ -1265,7 +1266,7 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
               onTap={() => {
                 setUmbrella(true)
                 sounds.pop()
-                if (!floodedRef.current) setTimeout(() => alive() && !floodedRef.current && setUmbrella(false), 2500)
+                if (!floodedRef.current) timers.later(() => alive() && !floodedRef.current && setUmbrella(false), 2500)
               }}
             />
             </div>

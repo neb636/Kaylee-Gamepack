@@ -3,7 +3,7 @@
 // lands with a puff of dust and leaves footprints to count; Mama hops in and Pip jumps into her pouch.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { burst, DragArea, Draggable, DropZone, pick, say, sounds, useAlive, wait, type Line, type PuppetHandle } from '../../../../sdk'
+import { burst, DragArea, Draggable, DropZone, pick, say, sounds, useAlive, wait, type Line, type PuppetHandle, useTimers } from '../../../../sdk'
 import { sfx } from '../../../kit/sfx'
 import { Stage, WIGGLE } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
@@ -52,6 +52,7 @@ function OutbackLife() {
 }
 
 function Pack({ onDone }: { onDone: () => void }) {
+  const timers = useTimers()
   const [worn, setWorn] = useState<Item['id'][]>([])
   const [wiggle, setWiggle] = useState<string | null>(null)
   const [helped, setHelped] = useState(false)
@@ -62,7 +63,7 @@ function Pack({ onDone }: { onDone: () => void }) {
   // Until she's dressed, Pip is hot: every few seconds she fans herself.
   useEffect(() => {
     if (worn.length >= 3) return
-    const id = setInterval(() => {
+    const id = timers.every(() => {
       if (!busy.current) void pip.current?.play('fan')
     }, 5200)
     return () => clearInterval(id)
@@ -74,7 +75,7 @@ function Pack({ onDone }: { onDone: () => void }) {
       sounds.oops()
       setWiggle(item.id)
       setHelped(true)
-      setTimeout(() => setWiggle(null), 500)
+      timers.later(() => setWiggle(null), 500)
       void pip.current?.play('shake')
       void say(L.outback.brrr)
       return false
@@ -143,6 +144,7 @@ const WATER_X = 40
 const MAMA_X = 82
 
 function Hop({ onDone, setProgress, start, onSection }: ActivityProps & { start: number; onSection: (id: 'water' | 'mama') => void }) {
+  const timers = useTimers()
   const [leg, setLeg] = useState(start)
   const [hops, setHops] = useState(0)
   const [busy, setBusy] = useState(false)
@@ -178,7 +180,7 @@ function Hop({ onDone, setProgress, start, onSection }: ActivityProps & { start:
     const id = Date.now()
     setPuffs((p) => [...p, { id, x: at }])
     setPrints((p) => [...p, at])
-    setTimeout(() => setPuffs((p) => p.filter((q) => q.id !== id)), 700)
+    timers.later(() => setPuffs((p) => p.filter((q) => q.id !== id)), 700)
   }
 
   const hop = async () => {
@@ -189,7 +191,7 @@ function Hop({ onDone, setProgress, start, onSection }: ActivityProps & { start:
     sfx.boing()
     const done = pip.current?.play('hop')
     setX(nx)
-    setTimeout(() => alive() && land(nx), HOP_MS * 0.78)
+    timers.later(() => alive() && land(nx), HOP_MS * 0.78)
     await done
     if (!alive()) return
     setHops(n)

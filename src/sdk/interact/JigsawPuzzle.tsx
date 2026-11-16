@@ -10,6 +10,7 @@ import { burst } from '../confetti'
 import { useElementSize } from '../hooks'
 import { sounds } from '../sounds'
 import { Piece, PlayArea, Target } from './PlayArea'
+import { useTimers } from '../timers'
 
 export interface JigsawPuzzleProps {
   /** The picture (an imported .webp). Scenes without tiny details work best. */
@@ -30,6 +31,7 @@ export interface JigsawPuzzleProps {
 }
 
 export function JigsawPuzzle({ img, rows, cols, aspect: aspectProp, seed = 7, onSnap, onMiss, onDone, style }: JigsawPuzzleProps) {
+  const timers = useTimers()
   const box = useRef<HTMLDivElement>(null)
   const { width: w, height: h } = useElementSize(box)
   const aspect = useImageAspect(img, aspectProp)
@@ -49,12 +51,12 @@ export function JigsawPuzzle({ img, rows, cols, aspect: aspectProp, seed = 7, on
       setHintFor((hint) => (hint === i ? null : hint))
       onSnap?.(next.size, total)
       if (next.size === total) {
-        setTimeout(() => {
+        timers.later(() => {
           sounds.sparkle()
           const r = box.current?.getBoundingClientRect()
           if (r) burst(r.left + r.width / 2, r.top + r.height / 2)
         }, 350)
-        setTimeout(onDone, 1300)
+        timers.later(onDone, 1300)
       }
       return 'snap' as const
     }

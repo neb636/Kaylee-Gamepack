@@ -17,7 +17,7 @@ export const planeSfx = {
   /** The second bump: the engines easing down and the wheels rumbling along the runway. */
   rollout: clip(c('land-rollout'), sfx.thump, { vol: 0.7 }),
   /** Everyone claps for a second and a half (the synth: a pop on each clap of their hands). */
-  clap: clip(c('land-clap'), () => Array.from({ length: 7 }, (_, i) => setTimeout(() => sounds.pop(), i * 224)), { vol: 0.8 }),
+  clap: clip(c('land-clap'), () => Array.from({ length: 7 }, (_, i) => setTimeout(() => sounds.pop(), i * 224)), { vol: 0.8 }), // timers-ok: one clap sound's pops
   shade: clip(c('land-shade'), sfx.fwip, { vol: 0.7 }),
   tray: clip(c('land-tray'), sfx.thump, { vol: 0.8 }),
   light: clip(c('land-light'), sfx.pop, { vol: 0.8 }),

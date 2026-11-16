@@ -356,7 +356,7 @@ export class Arrive extends Stage {
     const ji = this.riders.ji
     if ('drive' in ji) ji.drive()
     sfx.vroom()
-    setTimeout(() => this.phase === 'glimpse' && this.events.say(W.arrive.here), 1200)
+    this.timers.later(() => this.phase === 'glimpse' && this.events.say(W.arrive.here), 1200)
   }
 
   /** The car is at the doors: out they hop, and head in. */
@@ -368,7 +368,7 @@ export class Arrive extends Stage {
     order.forEach((id, i) => {
       const to = new Vector3(STOP - 1.0 + i * 1.0, 0, -1.6 - (i % 2) * 0.4)
       this.hop(this.riders[id], this.scene, to, { face: 180, delay: 0.25 + i * 0.25, arc: 0.5, dur: 0.5, done: () => {
-        if (i === 2) setTimeout(() => this.cutToLift(), 900)
+        if (i === 2) this.timers.later(() => this.cutToLift(), 900)
       } })
     })
   }
@@ -420,7 +420,7 @@ export class Arrive extends Stage {
     this.placeShoes()
     this.lastTouch = this.time
     this.rig.setShot(this.shot(), true)
-    setTimeout(() => {
+    this.timers.later(() => {
       if (this.phase !== 'counter') return
       this.staffHop = 0
       this.events.say(W.arrive.counter)
@@ -487,7 +487,7 @@ export class Arrive extends Stage {
     this.kaylee.react('hop')
     const cubby = (i: number) => new Vector3(RACK.x - RACK.w / 2 + (RACK.w / RACK.cols) * ((i % RACK.cols) + 0.5), (RACK.h / RACK.rows) * (Math.floor(i / RACK.cols) + 0.5) + 0.0, RACK.z + 0.15)
     this.shoes.forEach((s, i) => {
-      setTimeout(() => {
+      this.timers.later(() => {
         s.from.copy(s.g.position)
         const slot = s.owner === 'kaylee' ? cubby(0) : cubby(1)
         s.to.copy(slot).add(new Vector3(((i % 2) - 0.5) * 0.18, 0, 0))
@@ -496,7 +496,7 @@ export class Arrive extends Stage {
         sfx.boing()
       }, i * 380)
     })
-    setTimeout(() => {
+    this.timers.later(() => {
       this.riders.nick.react('wiggle')
       this.events.say(W.arrive.shoes)
     }, 1900)
@@ -511,7 +511,7 @@ export class Arrive extends Stage {
     const first = !this.worn
     this.sockHop = { id, t: 0 }
     sfx.fwip()
-    if (first) setTimeout(() => this.phase === 'counter' && this.events.say(W.arrive.stretch), 1500)
+    if (first) this.timers.later(() => this.phase === 'counter' && this.events.say(W.arrive.stretch), 1500)
   }
 
   private wear(id: SockId, instant = false) {
@@ -555,7 +555,7 @@ export class Arrive extends Stage {
       // Her horn counts.
       this.markerGoal = Math.min(CHART.top, k.height * 1.22)
       sfx.boop()
-      setTimeout(() => {
+      this.timers.later(() => {
         if (this.disposed) return
         sounds.sparkle()
         this.confetti.burst(CHART.x, this.markerGoal + 0.1, CHART.z + 0.3, 20, 1.4, 1.8, 0.06)
@@ -563,12 +563,12 @@ export class Arrive extends Stage {
         this.events.say(W.arrive.tall)
         k.react('wiggle')
       }, 650)
-      setTimeout(() => {
+      this.timers.later(() => {
         if (this.disposed) return
         this.hop(k, this.scene, back('kaylee'), { face: 0, dur: 0.5, arc: 0.4 })
         this.hop(n, this.scene, spot, { face: 0, delay: 0.3, dur: 0.6, arc: 0.45, done: () => {
           this.markerGoal = CHART.top
-          setTimeout(() => {
+          this.timers.later(() => {
             if (this.disposed) return
             // Off the top: it pops up and away, boing, and comes back down.
             this.markerOff = 0.001
@@ -576,7 +576,7 @@ export class Arrive extends Stage {
             sfx.haha()
             this.staffHop = 0
             this.events.say(W.arrive.horn)
-            setTimeout(() => {
+            this.timers.later(() => {
               if (this.disposed) return
               this.hop(n, this.scene, back('nick'), { face: -20, dur: 0.55, arc: 0.4, done: () => {
                 this.done.chart = true
@@ -603,7 +603,7 @@ export class Arrive extends Stage {
     this.events.say(W.arrive.gate)
     const order: Who[] = ['kaylee', 'nick', 'ji']
     order.forEach((id, i) => this.hop(this.riders[id], this.scene, new Vector3(GATE.x - 0.3 + i * 0.3, 0, GATE.z - 0.1), { face: 180, delay: i * 0.25, dur: 0.7, arc: 0.5, done: () => {
-      if (i === 2) setTimeout(() => this.events.done('hall'), 400)
+      if (i === 2) this.timers.later(() => this.events.done('hall'), 400)
     } }))
   }
 
@@ -689,11 +689,11 @@ export class Arrive extends Stage {
         s.state = s.owner === 'nick' ? 'stuck' : 'in'
         if (s.owner === 'nick' && this.shoes.every((x) => x.owner !== 'nick' || x.state === 'stuck')) {
           this.riders.nick.react('hop')
-          setTimeout(() => {
+          this.timers.later(() => {
             if (this.disposed) return
             this.squash = 0
             sfx.thump()
-            setTimeout(() => sfx.thump(), 200)
+            this.timers.later(() => sfx.thump(), 200)
             for (const x of this.shoes) if (x.owner === 'nick') x.state = 'in'
           }, 900)
         }

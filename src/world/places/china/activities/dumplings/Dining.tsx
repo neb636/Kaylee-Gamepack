@@ -3,7 +3,7 @@
 // front, two behind. She carries baskets from the tray (top) to the right table.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react'
-import { Buddy, burst, Piece, PlayArea, say, sounds, Target, useAlive, useLandscape, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { Buddy, burst, Piece, PlayArea, say, sounds, Target, useAlive, useLandscape, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { PromptBubble } from '../../../../kit/Stage'
 import { sfx } from '../../../../kit/sfx'
 import { art } from '../../art'
@@ -54,6 +54,7 @@ export interface DiningProps {
 }
 
 export function DiningRoom({ guests, served = {}, prompt, onTable = {}, onTableTap, tray = [], onServe, refs = {}, children, word }: DiningProps) {
+  const timers = useTimers()
   const landscape = useLandscape()
   const layout = seats(landscape)
   const [hint, setHint] = useState<Seat | null>(null)
@@ -73,7 +74,7 @@ export function DiningRoom({ guests, served = {}, prompt, onTable = {}, onTableT
     const g = guests[seat]
     sounds.oops()
     setShake(seat)
-    setTimeout(() => setShake(null), 600)
+    timers.later(() => setShake(null), 600)
     setHint(b.seat)
     if (g) void say(GUESTS[g].notMine)
     void ref(seat).current?.play('wiggle')
@@ -230,6 +231,7 @@ function Spoon({ children }: { children: ReactNode }) {
 
 /** Service 2: two baskets to two tables, then the tea tap. */
 export function Dining2({ baskets, onDone }: { baskets: Basket[]; onDone: () => void }) {
+  const timers = useTimers()
   const seatOf = (b: Basket): Seat => (b.id === 'bunnies' ? 'left' : 'right')
   const [served, setServed] = useState<Partial<Record<Seat, Basket>>>({ center: { id: 'grandpa', colors: ['cream', 'cream'] } })
   const [tea, setTea] = useState<'no' | 'pour' | 'tap' | 'done'>('no')
@@ -259,7 +261,7 @@ export function Dining2({ baskets, onDone }: { baskets: Basket[]; onDone: () => 
   // The tea tap is optional: it moves on by itself after a while.
   useEffect(() => {
     if (tea !== 'tap') return
-    const t = setTimeout(() => alive() && finishTea(), 9000)
+    const t = timers.later(() => alive() && finishTea(), 9000)
     return () => clearTimeout(t)
   }, [tea])
   const teaDone = useRef(false)

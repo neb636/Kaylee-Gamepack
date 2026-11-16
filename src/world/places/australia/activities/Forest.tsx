@@ -3,7 +3,7 @@
 // her tummy gets rounder, and each lullaby note makes her sleepier until she snores.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
-import { burst, DragArea, Draggable, DropZone, pick, say, shuffle, sounds, useAlive, wait, type PuppetHandle } from '../../../../sdk'
+import { burst, DragArea, Draggable, DropZone, pick, say, shuffle, sounds, useAlive, wait, type PuppetHandle, useTimers } from '../../../../sdk'
 import { sfx } from '../../../kit/sfx'
 import { Stage, WIGGLE } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
@@ -146,6 +146,7 @@ function Branch() {
 }
 
 function Feed({ round, setRound, onDone }: { round: number; setRound: (r: number) => void; onDone: () => void }) {
+  const timers = useTimers()
   const { need, prompt } = ROUNDS[round]
   const foods = useMemo<Food[]>(
     () =>
@@ -176,7 +177,7 @@ function Feed({ round, setRound, onDone }: { round: number; setRound: (r: number
       sounds.oops()
       setWiggle(food.id)
       setHelped(true)
-      setTimeout(() => setWiggle(null), 500)
+      timers.later(() => setWiggle(null), 500)
       void koko.current?.play('yuck')
       void say(L.forest.only)
       return
@@ -379,6 +380,7 @@ const NOTES = [
 ]
 
 function Lullaby({ onDone }: { onDone: () => void }) {
+  const timers = useTimers()
   const [ready, setReady] = useState(false)
   const [sung, setSung] = useState<number[]>([])
   const koko = useRef<PuppetHandle>(null)
@@ -409,8 +411,8 @@ function Lullaby({ onDone }: { onDone: () => void }) {
     const next = [...sung, i]
     setSung(next)
     sounds.note(8 - next.length * 2)
-    setTimeout(() => sounds.note(6 - next.length * 2), 200)
-    setTimeout(() => sounds.note(4 - next.length), 400)
+    timers.later(() => sounds.note(6 - next.length * 2), 200)
+    timers.later(() => sounds.note(4 - next.length), 400)
     if (next.length < NOTES.length) {
       if (next.length === 2) void koko.current?.play('yawn')
       return

@@ -7,10 +7,13 @@ if (enabled) {
     try {
       await navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`)
       void navigator.storage?.persist?.() // ask iOS not to clear the copies
-      const { active } = await navigator.serviceWorker.ready
-      const fill = () => navigator.onLine && active?.postMessage('fill')
+      const ready = await navigator.serviceWorker.ready
+      // Always the worker in charge now: after a deploy the new one takes over during this launch (controllerchange)
+      // and should start saving its build straight away, not on the next launch.
+      const fill = () => navigator.onLine && (navigator.serviceWorker.controller ?? ready.active)?.postMessage('fill')
       fill()
       window.addEventListener('online', fill)
+      navigator.serviceWorker.addEventListener('controllerchange', fill)
     } catch {
       // No worker (private browsing, old Safari): the app just needs the network, as before.
     }

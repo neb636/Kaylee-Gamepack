@@ -6,7 +6,7 @@
 // her own zodiac year, this year's horse galloping past, and the sleepy cat who missed the race.
 import { motion } from 'motion/react'
 import { forwardRef, useEffect, useRef, useState, type ReactNode } from 'react'
-import { burst, Buddy, Piece, PlayArea, say, shuffle, spendHint, sounds, Target, useAlive, useElementSize, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, Buddy, Piece, PlayArea, say, shuffle, spendHint, sounds, Target, useAlive, useElementSize, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
 import { sfx } from '../../../../kit/sfx'
@@ -77,6 +77,7 @@ const Critter = forwardRef<PuppetHandle, { id: Id; height: string; riding?: bool
 type Phase = 'story' | 'board' | 'paddle' | 'tiger' | 'stones' | 'rain' | 'steps' | 'wheel' | 'cat'
 
 export function GreatRace({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const box = useRef<HTMLDivElement>(null)
   const { width: W, height: H } = useElementSize(box)
   const alive = useAlive()
@@ -110,10 +111,10 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
     setPrompt(l)
     if (spendHint(l)) void say(l)
   }
-  const nudge = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const nudge = useRef<number>(undefined)
   const armNudge = (fn: () => void, ms = 9000) => {
     clearTimeout(nudge.current)
-    nudge.current = setTimeout(() => alive() && fn(), ms)
+    nudge.current = timers.later(() => alive() && fn(), ms)
   }
   useEffect(() => () => clearTimeout(nudge.current), [])
 
@@ -137,7 +138,7 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
   const addFx = (kind: 'splash' | 'puff', x: number, y: number) => {
     const n = fxN.current++
     setFx((f) => [...f, { n, kind, x, y }])
-    setTimeout(() => setFx((f) => f.filter((e) => e.n !== n)), 1100)
+    timers.later(() => setFx((f) => f.filter((e) => e.n !== n)), 1100)
   }
 
   // ---- Mouse and Ox ----
@@ -448,7 +449,7 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
     if (step === null) {
       // Let go on nothing: it floats back. A gentle pulse shows where the steps are.
       setGlowStep(k)
-      setTimeout(() => setGlowStep(null), 1600)
+      timers.later(() => setGlowStep(null), 1600)
       return false
     }
     if (id !== ORDER[k] || step !== k) {

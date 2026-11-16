@@ -2,7 +2,7 @@
 // knead (push), snake (swipe), chop (tap), roll (back and forth), fill (tap, too many taps blorp out), pleat (circle).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type RefObject } from 'react'
-import { burst, say, sounds, usePointerDrag, useAlive, wait, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, sounds, usePointerDrag, useAlive, wait, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { L } from '../../lines'
 import { Cleaver, DoughSnake, FillingBowl, RollingPin } from '../../props'
@@ -65,6 +65,7 @@ function Taps({ n, of }: { n: number; of: number }) {
 
 /** Swipe the dough ball sideways to stretch it into a long snake (or tap three times). */
 export function Snake({ onDone, color = 'cream' }: StepProps) {
+  const timers = useTimers()
   const el = useRef<HTMLDivElement>(null)
   const [stretch, setStretch] = useState(0)
   const [snake, setSnake] = useState(false)
@@ -75,7 +76,7 @@ export function Snake({ onDone, color = 'cream' }: StepProps) {
     setSnake(true)
     sfx.fwip()
     sounds.correct()
-    setTimeout(onDone, 700)
+    timers.later(onDone, 700)
   }
   usePointerDrag(el, {
     onMove: ({ dx }) => apply(Math.min(1, stretch + Math.abs(dx) / (window.innerWidth * 0.35))),
@@ -232,16 +233,17 @@ export function Roll({ chef, onDone, color = 'cream' }: StepProps) {
 
 /** Tap the bowl for one spoonful. Extra taps blorp out the side (Chef Fu laughs and scoops it back); nothing fails. */
 export function Fill({ chef, onDone, color = 'cream' }: StepProps) {
+  const timers = useTimers()
   const [filled, setFilled] = useState(false)
   const [blorp, setBlorp] = useState(false)
   const done = useRef(false)
   const alive = useAlive()
   const blorped = useRef(false)
-  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const timer = useRef<number>(undefined)
   useEffect(() => () => clearTimeout(timer.current), [])
   const next = (ms: number) => {
     clearTimeout(timer.current)
-    timer.current = setTimeout(() => {
+    timer.current = timers.later(() => {
       if (!done.current && alive()) {
         done.current = true
         onDone()
@@ -262,7 +264,7 @@ export function Fill({ chef, onDone, color = 'cream' }: StepProps) {
     void play(chef, 'laugh')
     void say(D.blorp)
     clearTimeout(timer.current)
-    setTimeout(() => alive() && setBlorp(false), 1700)
+    timers.later(() => alive() && setBlorp(false), 1700)
     next(2600)
   }
   return (
@@ -288,6 +290,7 @@ export function Fill({ chef, onDone, color = 'cream' }: StepProps) {
 
 /** Draw circles around the dumpling to fold its pleats (each tap folds one too). `laps` = circles needed. */
 export function Pleat({ onDone, color = 'cream', laps = 1, size = BIG, auto }: StepProps & { laps?: number; size?: string; auto?: boolean }) {
+  const timers = useTimers()
   const area = useRef<HTMLDivElement>(null)
   const dumpling = useRef<PuppetHandle>(null)
   const [folds, setFolds] = useState(0)
@@ -306,7 +309,7 @@ export function Pleat({ onDone, color = 'cream', laps = 1, size = BIG, auto }: S
     void dumpling.current?.play('pop')
     if (next === need) {
       sounds.sparkle()
-      setTimeout(onDone, 500)
+      timers.later(onDone, 500)
     }
   }
   const center = () => {
@@ -337,7 +340,7 @@ export function Pleat({ onDone, color = 'cream', laps = 1, size = BIG, auto }: S
   useEffect(() => {
     if (!auto) return
     let i = 0
-    const t = setInterval(() => fold(++i), 160)
+    const t = timers.every(() => fold(++i), 160)
     return () => clearInterval(t)
   }, [auto])
   return (

@@ -763,4 +763,9 @@ export class BigFrame extends Stage {
       touches: this.touches,
     }
   }
+
+  dispose() {
+    this.toys.dispose()
+    super.dispose()
+  }
 }

@@ -112,7 +112,8 @@ export class IslandStory {
   /** How far the wind has taken the memory's fireflies (0: circling the dancers, 1: gone). */
   private blown = 0
   private windy = false
-  private timers: { t: number; f: () => void }[] = []
+  /** Game-clock beats (they pause with the game), run from update(). */
+  private beats: { t: number; f: () => void }[] = []
   private center = new Vector3()
   /** How far above her horn they circle (a film lifts them for a moment). */
   private lift = 0
@@ -172,7 +173,7 @@ export class IslandStory {
 
   /** Later, on the island's clock. */
   after(s: number, f: () => void) {
-    this.timers.push({ t: s, f })
+    this.beats.push({ t: s, f })
   }
 
   /** Tuk, Kae and the lantern where they wait at the foot of Na Dan pier: sad until the fireflies are all home. */
@@ -228,10 +229,10 @@ export class IslandStory {
 
   /** Every frame. `her`: where she is (her head, the jet ski she rides); `spot`: the beach she's on; `film`: a film is on. */
   update(dt: number, t: number, her: Vector3, spot: SpotId, film: boolean, calm: boolean) {
-    for (const tm of [...this.timers]) {
+    for (const tm of [...this.beats]) {
       tm.t -= dt
       if (tm.t <= 0) {
-        this.timers.splice(this.timers.indexOf(tm), 1)
+        this.beats.splice(this.beats.indexOf(tm), 1)
         tm.f()
       }
     }

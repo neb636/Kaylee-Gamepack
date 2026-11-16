@@ -279,7 +279,7 @@ export class FireShow implements World3D {
   private idleLow = 0
   private kShadow: Mesh
   /** Things to do later, on the show's clock. */
-  private timers: { at: number; f: () => void }[] = []
+  private pending: { at: number; f: () => void }[] = []
   /** The fireworks' photo; the thank you is over (the way home is up), and since when. */
   private photo: string | null = null
   private thanked = false
@@ -684,7 +684,7 @@ export class FireShow implements World3D {
   }
   /** Later, on the show's clock (nothing fires once the show is gone). */
   private after(s: number, f: () => void) {
-    this.timers.push({ at: this.time + s, f })
+    this.pending.push({ at: this.time + s, f })
   }
   /** The screen's hold-to-skip: the film jumps to its end. */
   skipFilm() {
@@ -694,7 +694,7 @@ export class FireShow implements World3D {
   update(dt: number) {
     const t = (this.time += dt)
     this.phaseT += dt
-    for (let i = this.timers.length - 1; i >= 0; i--) if (this.timers[i].at <= t) this.timers.splice(i, 1)[0].f()
+    for (let i = this.pending.length - 1; i >= 0; i--) if (this.pending[i].at <= t) this.pending.splice(i, 1)[0].f()
     // A film takes the camera (and the world takes no taps, shows no hints).
     const cine = this.films.update(dt, this.w / this.h)
     if (this.films.on) {

@@ -4,7 +4,7 @@
 // rainbow. Positions are stage units (bottom-centre anchored unless noted).
 import { motion } from 'motion/react'
 import { forwardRef, useEffect, useRef, useState, type CSSProperties, type ReactNode, type Ref } from 'react'
-import { Buddy, sounds, type PuppetHandle } from '../../../../../sdk'
+import { Buddy, sounds, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { art } from '../../art'
 import { INK } from '../../puppets/Alpaca'
 import { rsfx } from './sfx'
@@ -409,10 +409,11 @@ export function HintRing({ x, y, r = 70 }: { x: number; y: number; r?: number })
 
 /** A fish that pops up to nibble a fruit that fell in the water, then dives. */
 export function NibbleFish({ x, y }: { x: number; y: number }) {
+  const timers = useTimers()
   const [on, setOn] = useState(true)
   useEffect(() => {
     rsfx.nibble()
-    const t = setTimeout(() => setOn(false), 1800)
+    const t = timers.later(() => setOn(false), 1800)
     return () => clearTimeout(t)
   }, [])
   const r = useRef(Math.random() < 0.5)

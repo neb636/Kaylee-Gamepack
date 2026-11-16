@@ -43,7 +43,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { sounds, useSaved, type Line } from '../../../../../sdk'
+import { sounds, useSaved, type Line, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { VideoBreak } from '../../../../kit/Theater'
 import { awardTrophy } from '../../../../../sdk/trophies'
@@ -149,6 +149,7 @@ const ANCHORS_OF: Record<TripWorld, typeof BAY_ANCHORS> = {
 }
 
 export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () => void }) {
+  const timers = useTimers()
   const { start, enter } = useSections(BOAT_SECTIONS)
   const legs = PASS
   const [stored, setSaved] = useSaved<Progress>('thailand-boat-trip', { at: null, packed: DEFAULT_PACKED })
@@ -178,7 +179,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   const [fanReady, setFanReady] = useState(false)
   useEffect(() => {
     if (phase !== 'pick') return setFanReady(false)
-    const t = setTimeout(() => setFanReady(true), 2000)
+    const t = timers.later(() => setFanReady(true), 2000)
     return () => clearTimeout(t)
   }, [phase])
   const [flash, setFlash] = useState(0)
@@ -288,7 +289,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     const at = RESUME.includes(next) ? next : (RESUME_AT[next] ?? null)
     if (at) setSaved((p) => ({ ...p, at, packed: formatPacked(st.packed), been: st.been }))
     const old = worldRef.current
-    setTimeout(() => {
+    timers.later(() => {
       const world = WORLD_OF[next]
       if (world === st.mount.world && world === 'house') tripRef.current?.goTo(next as HouseLeg)
       else setMount((m) => ({ world, section: next, key: m.key + 1 }))
@@ -297,7 +298,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       moveTo(next)
       // Away once the new world has drawn its first frame (or after a while, whatever happens).
       const t0 = performance.now()
-      const wait = setInterval(() => {
+      const wait = timers.every(() => {
         const w = worldRef.current
         // (The Krabi map is its own screen with its own loading cover: the pass can go as soon as it's mounted.)
         const ready = world === 'map' || (w && (w !== old || world === 'house') && w.stats.fps > 0)
@@ -325,14 +326,14 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     if (replay || half === 'pier') choices.push({ label: 'Straight to the boat', icon: '🚤', on: () => choose('boat') })
     if (replay && half !== 'chang') choices.push({ label: 'Straight to the elephants', icon: '🐘', on: () => choose('chang') })
     setPass({ punch: null, done: half ? doneBefore(legs, half, null, state.current.saved.been ?? []) : [], choices })
-    if (choices.length > 1 && choices.at(-1)!.icon === '🚤') setTimeout(() => say(L.home.again), 600)
+    if (choices.length > 1 && choices.at(-1)!.icon === '🚤') timers.later(() => say(L.home.again), 600)
   }
   // Mom asks in her room (the trip's first section); a yes back in the house goes straight on to packing.
   const asking = mode === 'webgl' && section === 'invite' && phase === 'invite' && !pass
   useEffect(() => {
     if (phase !== 'invite' || !justSaidYes()) return
     saidYes.at = 0
-    const t = setTimeout(yes, 300)
+    const t = timers.later(yes, 300)
     return () => clearTimeout(t)
   }, [phase])
 
@@ -355,7 +356,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     setPacked(parsePacked(state.current.saved.packed))
     state.current.packed = parsePacked(state.current.saved.packed)
     setPass(null)
-    setTimeout(() => finish(at), 50)
+    timers.later(() => finish(at), 50)
   }
 
   const t0 = useRef(performance.now())
@@ -371,7 +372,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   const docked = () => {
     sounds.sparkle()
     setPass({ punch: 'pier', done: doneBefore(legs, 'home', 'pier', addBeen('bay')) })
-    setTimeout(() => {
+    timers.later(() => {
       setPass(null)
       setAlbumOpen(true)
       setAtPier(true)
@@ -393,7 +394,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     window.addEventListener('pointerdown', press)
     window.addEventListener('pointerup', lift)
     window.addEventListener('pointercancel', lift)
-    const id = setInterval(() => {
+    const id = timers.every(() => {
       if (down) last = performance.now()
       if (said >= 2 || performance.now() - last < 8000) return
       last = performance.now() + 12000
@@ -494,7 +495,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       setSaved((p) => ({ at: null, packed: formatPacked(state.current.packed) || p.packed, trips: (p.trips ?? 0) + 1 }))
     }
     if (phase === 'home') {
-      const t = setTimeout(onDone, 1800)
+      const t = timers.later(onDone, 1800)
       return () => clearTimeout(t)
     }
   }, [phase, section])

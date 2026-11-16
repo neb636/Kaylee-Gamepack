@@ -3,7 +3,7 @@
 // countdown, the banners). When the race is over (everyone over the line, the fireworks going), it hands over to the podium on the race ground (Ground.tsx).
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { bigCelebration } from '../../../../../../sdk'
+import { bigCelebration, useTimers } from '../../../../../../sdk'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { SteerHint, SteerWheel } from '../../../../../engine3d/SteerWheel'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
@@ -34,6 +34,7 @@ interface Props {
 }
 
 export function Cup({ track, result, packed, gifts = [], again: before = false, onFinish }: Props) {
+  const timers = useTimers()
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [hud, setHud] = useState<KartHud | null>(null)
@@ -60,7 +61,7 @@ export function Cup({ track, result, packed, gifts = [], again: before = false, 
       onDone: (place) => {
         setDone(true)
         // (A moment of the fireworks, then the podium.)
-        setTimeout(() => finish.current(place), 700)
+        timers.later(() => finish.current(place), 700)
       },
     })
     w.setHintElement(hintRef.current)

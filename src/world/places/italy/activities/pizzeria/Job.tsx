@@ -2,7 +2,7 @@
 // then the kitchen steps (dough, sauce, cheese, toppings), the oven, the cutter, and back to the counter to serve it.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react'
-import { BigButton, burst, Buddy, say, sounds, useAlive, wait, type Line, type Placed, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, burst, Buddy, say, sounds, useAlive, wait, type Line, type Placed, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { Flag } from '../../../../kit/Flag'
 import { art } from '../../art'
 import { L } from '../../lines'
@@ -76,6 +76,7 @@ export const toppingKinds = (pizza: PizzaState) => pizza.items.filter((it) => !i
 const STATION: Record<Step, StationId> = { dough: 'dough', pickSauce: 'sauce', sauce: 'sauce', cheese: 'toppings', quick: 'dough', toppings: 'toppings' }
 
 export function Job({ spec, start, onAt, onDone }: { spec: JobSpec; start?: JobStart; onAt?: (at: JobAt, pizza: PizzaState, sauce: Sauce) => void; onDone: (pizza: PizzaState) => void }) {
+  const timers = useTimers()
   const [first] = useState(() => seed(spec, start))
   const [phase, setPhase] = useState<Phase>(first.phase)
   const [step, setStep] = useState(first.step)
@@ -156,7 +157,7 @@ export function Job({ spec, start, onAt, onDone }: { spec: JobSpec; start?: JobS
       <PickSauce
         onPick={(c) => {
           setSauce(c)
-          setTimeout(nextStep, 900)
+          timers.later(nextStep, 900)
         }}
       />
     )
@@ -263,6 +264,7 @@ function PizzaLayers({ pizza }: { pizza: PizzaState }) {
 
 /** The toppings station, plus Cesare the cat sneaking a piece of mozzarella (her own pizza only). */
 function ToppingsStep({ spec, pizza, onChange, onDone }: { spec: JobSpec; pizza: PizzaState; onChange: (items: Placed[]) => void; onDone: () => void }) {
+  const timers = useTimers()
   const [cat, setCat] = useState<'away' | 'sneak' | 'sorry' | 'gone'>('away')
   const stolen = useRef<Placed | null>(null)
   const placed = pizza.items.filter((i) => !i.id.startsWith('cheese-')).length
@@ -272,7 +274,7 @@ function ToppingsStep({ spec, pizza, onChange, onDone }: { spec: JobSpec; pizza:
     if (!spec.cesare || cat !== 'away' || placed < 2) return
     const cheese = pizza.items.find((i) => i.kind === 'mozzarella')
     if (!cheese) return
-    const t = setTimeout(async () => {
+    const t = timers.later(async () => {
       if (!alive()) return
       stolen.current = cheese
       onChange(pizza.items.filter((i) => i.id !== cheese.id))

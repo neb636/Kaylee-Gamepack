@@ -10,7 +10,7 @@
 // stamp); the friends answer a tap in their own voices.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { onDevice, say, useElementSize, useLandscape, type Line } from '../../../../../sdk'
+import { onDevice, say, useElementSize, useLandscape, type Line, useTimers } from '../../../../../sdk'
 import { Guide, type GuideHandle } from '../../../../kit/Guide'
 import { useSections } from '../../../../kit/sections'
 import type { PlaceProps } from '../../../../types'
@@ -30,6 +30,7 @@ const isTalker = (id: string): id is Talker => id in taps
 const GO_MS = { roll: 1150, there: 450 }
 
 export function Hub({ meta, stamps, openActivity }: PlaceProps) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(HUB_SECTIONS)
   const [initial] = useState(() => {
     const section = (start ?? 'globe') as HubSection
@@ -44,7 +45,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const [going, setGoing] = useState<string | null>(null)
   const worldRef = useRef<PolesGlobe | null>(null)
   const guide = useRef<GuideHandle>(null)
-  const goTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const goTimer = useRef<number>(undefined)
   const { stops, next, all } = trail(meta, stamps)
   // A friend says it (their mouth moves on the globe), not Sparkle: no bubble in her corner.
   const friend = (l: Line) => void say(l)
@@ -57,7 +58,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   useEffect(show, [])
   // Sparkle speaks when something is new, once each: her first look, a new stamp (where the balloon is now), every stamp.
   useEffect(() => {
-    const t = setTimeout(() => {
+    const t = timers.later(() => {
       const id = stops[next].id
       if (all) guide.current?.once('hub:home', L.hub.home)
       else if (stamps.length === 0) guide.current?.once('hub:welcome', L.hub.welcome)
@@ -109,7 +110,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       return
     }
     setGoing(s.id)
-    goTimer.current = setTimeout(() => openActivity(s.id), now.current.side === s.pole ? GO_MS.there : GO_MS.roll)
+    goTimer.current = timers.later(() => openActivity(s.id), now.current.side === s.pole ? GO_MS.there : GO_MS.roll)
   }
 
   // What she's stuck on, for Sparkle's hint (shown in her bubble, not said: the globe is a toy).

@@ -4,7 +4,7 @@
 // wants mint tea: press and hold to pour, let go at the gold line (too much just drips over, with a giggle).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { Buddy, burst, DragArea, Draggable, DropZone, pick, say, shuffle, sounds, useAlive, wait, type Line, type PuppetHandle } from '../../../../sdk'
+import { Buddy, burst, DragArea, Draggable, DropZone, pick, say, shuffle, sounds, useAlive, wait, type Line, type PuppetHandle, useTimers } from '../../../../sdk'
 import { sfx } from '../../../kit/sfx'
 import { Stage, WIGGLE } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
@@ -182,6 +182,7 @@ function Bowl({ layers, size }: { layers: Food[]; size: string }) {
 }
 
 function Koshari({ onServed }: { onServed: () => void }) {
+  const timers = useTimers()
   const [layers, setLayers] = useState<Food[]>([])
   const [wiggle, setWiggle] = useState<Food | null>(null)
   const [help, setHelp] = useState(false)
@@ -201,7 +202,7 @@ function Koshari({ onServed }: { onServed: () => void }) {
       sounds.oops()
       setWiggle(f)
       setHelp(true)
-      setTimeout(() => setWiggle(null), 500)
+      timers.later(() => setWiggle(null), 500)
       void say(L.market.wrong)
       return false
     }

@@ -16,7 +16,7 @@
 // taps the sun; Mom's photo; after a while with nothing done Sparkle says what to do (spendHint). The screen's
 // TripGuide speaks them and shows the words for Dad. The feel numbers are knobs (?feel=1).
 import { CircleGeometry, Color, Euler, Fog, Group, Mesh, MeshBasicMaterial, Quaternion, Raycaster, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
-import { clamp, spendHint, type Line } from '../../../../../../sdk'
+import { clamp, spendHint, type Line, Timers } from '../../../../../../sdk'
 import { knobs } from '../../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
@@ -105,6 +105,8 @@ export const SUNSET_ANCHORS: AnchorInfo[] = [
 ]
 
 export class Sunset implements World3D {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   readonly scene = new Scene()
   readonly rig = new CameraRig()
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
@@ -508,7 +510,7 @@ export class Sunset implements World3D {
     this.posing = 0
     this.ji.react('wave')
     sfx.giggle()
-    this.flies.flies.forEach((f, i) => window.setTimeout(() => (f.flash(), fireflySfx.chime(f.id, 0.03)), 500 + i * 110))
+    this.flies.flies.forEach((f, i) => this.timers.later(() => (f.flash(), fireflySfx.chime(f.id, 0.03)), 500 + i * 110))
     this.say(S.photo)
   }
 
@@ -635,6 +637,7 @@ export class Sunset implements World3D {
     return { ...this.renderer.info.memory }
   }
   dispose() {
+    this.timers.dispose()
     this.scene.clear()
     this.bag.dispose()
   }

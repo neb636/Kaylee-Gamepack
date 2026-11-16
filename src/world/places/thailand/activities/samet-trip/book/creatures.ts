@@ -22,6 +22,7 @@ import type { AnimalId } from './animals'
 import { wildSfx } from './sounds'
 import { coralModel, cuttlefishModel, damselSchool, flyingFoxModel, heronModel, hermitModel, hornbillModel, macaqueModel, monitorModel, mouseDeerModel, parrotfishModel, squirrelModel, urchinModel, type Model } from './models'
 import { damp, wrapAngle } from '../../../../../../sdk/math'
+import { Timers } from '../../../../../../sdk'
 
 const HALF = Math.PI / 2
 const bell = (k: number) => Math.sin(Math.PI * Math.min(1, Math.max(0, k)))
@@ -63,9 +64,14 @@ export interface WildFx {
 /** One animal on the island. */
 export abstract class Creature {
   readonly root = new Group()
+  /** Its delayed callbacks: cancelled when the island goes (Wildlife.dispose). */
+  readonly timers = new Timers()
   /** What the photo frames, and about how big the animal is (m). */
   readonly focus = new Vector3()
   size = 0.5
+  dispose() {
+    this.timers.dispose()
+  }
   rare = false
   /** Out of sight for now (hiding in the forest, not spawned yet): no tap target, no photo. */
   hidden = false
@@ -348,7 +354,7 @@ class Macaque extends Walker {
       this.reach = 1.6
       this.reachCool = 9
       SOUND.monkey()
-      setTimeout(() => c.fx.daddy('wiggle'), 450)
+      this.timers.later(() => c.fx.daddy('wiggle'), 450)
     }
     if (this.reach > 0) {
       this.reach -= dt
@@ -1019,6 +1025,11 @@ export class Wildlife {
   readonly byId = new Map<string, Creature>()
   private hermitNext = 2
   private born = new Set<Creature>()
+
+  /** Cancels every animal's pending callbacks (the island is going away). */
+  dispose() {
+    for (const c of this.list) c.dispose()
+  }
 
   constructor(bag: Bag, palms: Map<string, PalmInfo>) {
     const add = (c: Creature) => {

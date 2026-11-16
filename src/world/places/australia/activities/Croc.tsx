@@ -4,7 +4,7 @@
 // teeth, and she talks in her own voice. The babies chirp; the river has lilies, reeds, a dragonfly and ripples.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
-import { Buddy, burst, DragArea, Draggable, DropZone, pick, say, sounds, SparklePuppet, useAlive, wait, type PuppetHandle } from '../../../../sdk'
+import { Buddy, burst, DragArea, Draggable, DropZone, pick, say, sounds, SparklePuppet, useAlive, wait, type PuppetHandle, useTimers } from '../../../../sdk'
 import { sfx } from '../../../kit/sfx'
 import { Stage } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
@@ -34,6 +34,7 @@ function useLandscape() {
 type Phase = 'story' | 'hatch' | 'ride' | 'swim' | 'snap'
 
 export function Croc({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const { start, enter } = useSections(SECTIONS)
   const [phase, setPhase] = useState<Phase>(start ?? 'story')
   const [hatched, setHatched] = useState<number[]>(() => start === 'ride' || start === 'swim' || start === 'snap' ? [0, 1, 2] : [])
@@ -55,7 +56,7 @@ export function Croc({ onDone, setProgress }: ActivityProps) {
     void chompy.current?.play('swim')
     void sparkle.current?.play('cheer')
     void say(L.croc.gentle)
-    const id = setTimeout(() => { busy.current = false; setPhase('snap') }, 1700)
+    const id = timers.later(() => { busy.current = false; setPhase('snap') }, 1700)
     return () => clearTimeout(id)
   }, [start])
 
@@ -67,7 +68,7 @@ export function Croc({ onDone, setProgress }: ActivityProps) {
   useEffect(() => {
     setHint(false)
     if (phase === 'story' || phase === 'swim') return
-    const id = setTimeout(() => setHint(true), 7000)
+    const id = timers.later(() => setHint(true), 7000)
     return () => clearTimeout(id)
   }, [phase, hatched.length, carried.length, snaps])
 
@@ -78,7 +79,7 @@ export function Croc({ onDone, setProgress }: ActivityProps) {
     sfx.crack()
     sounds.note(next.length * 2)
     burst()
-    setTimeout(() => {
+    timers.later(() => {
       sfx.chirp()
       void babies.current[i]?.play('jump')
     }, 250)

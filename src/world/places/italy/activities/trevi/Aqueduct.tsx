@@ -6,7 +6,7 @@
 //   3. Water on: tap the spring, the water runs along the whole channel toward Rome (she can follow it for splashes).
 import { animate, AnimatePresence, motion, useMotionValue, useTransform, type MotionValue } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { burst, pick, say, SparklePuppet, sounds, stopSpeaking, useAlive, useElementSize, useLandscape, usePointerDrag, wait, type PuppetHandle } from '../../../../../sdk'
+import { burst, pick, say, SparklePuppet, sounds, stopSpeaking, useAlive, useElementSize, useLandscape, usePointerDrag, wait, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { PromptBubble } from '../../../../kit/Stage'
 import { art } from '../../art'
@@ -41,6 +41,7 @@ export function Aqueduct({
   onDone: () => void
   showWord: (w: WordId) => void
 }) {
+  const timers = useTimers()
   const box = useRef<HTMLDivElement>(null)
   const { width: W, height: H } = useElementSize(box)
   const landscape = useLandscape()
@@ -92,7 +93,7 @@ export function Aqueduct({
   const camPx = useTransform(cam, (c) => -c * (G.current?.A ?? 0))
 
   useEffect(() => {
-    const t = setTimeout(() => void sparkle.current?.play('wave'), 700)
+    const t = timers.later(() => void sparkle.current?.play('wave'), 700)
     return () => clearTimeout(t)
   }, [])
 
@@ -112,7 +113,7 @@ export function Aqueduct({
     const wy = e.clientY - r.top
     const id = nextId.current++
     setRings((rs) => [...rs.slice(-4), { id, x: wx, y: wy }])
-    setTimeout(() => setRings((rs) => rs.filter((q) => q.id !== id)), 1300)
+    timers.later(() => setRings((rs) => rs.filter((q) => q.id !== id)), 1300)
     const n = taps + 1
     setTaps(n)
     water.gurgle(Math.min(2, n - 1))
@@ -189,7 +190,7 @@ export function Aqueduct({
       setHint(null)
       setPrompt((p) => (p?.text === T.glowing ? { text: round === 0 ? T.drag : T.round2, speak: false } : p))
       onStep()
-      setTimeout(() => {
+      timers.later(() => {
         sfx.thump()
         sounds.correct()
       }, 260)
@@ -207,11 +208,11 @@ export function Aqueduct({
       // Wrong height: it stands there with the channel tilted uphill, a drop rolls back, then it goes home.
       setTrial({ bay, kind })
       setPrompt(null) // keep the view clear: the channel tilting up is the lesson
-      setTimeout(() => sounds.oops(), 300)
+      timers.later(() => sounds.oops(), 300)
       void lupa.current?.play('shake')
       void sparkle.current?.play('think')
       void say(T.downhill)
-      setTimeout(() => {
+      timers.later(() => {
         if (!alive()) return
         const gg = G.current!
         const slots = gg.tray(ROUNDS[round].tray.length)
@@ -327,7 +328,7 @@ export function Aqueduct({
     water.drip()
     const id = nextId.current++
     setSplashes((s) => [...s.slice(-8), { id, x: wx * g.A, y: gy }])
-    setTimeout(() => setSplashes((s) => s.filter((q) => q.id !== id)), 700)
+    timers.later(() => setSplashes((s) => s.filter((q) => q.id !== id)), 700)
   }
 
   const bg = landscape ? art.bgAqueduct : art.bgAqueductTall
@@ -805,6 +806,7 @@ function TrayArch({ g, kind, x, gone, glow, selected, back, hit, onHover, onTap,
   onTap: (k: Kind) => void
   onDrop: (k: Kind, bay: number, from: Pt) => void
 }) {
+  const timers = useTimers()
   const ref = useRef<HTMLDivElement>(null)
   const { A } = g
   const h = KINDS[kind] * A
@@ -842,7 +844,7 @@ function TrayArch({ g, kind, x, gone, glow, selected, back, hit, onHover, onTap,
       }
       el.style.transition = 'transform .4s cubic-bezier(.3,1.3,.5,1)'
       el.style.transform = 'none'
-      setTimeout(() => {
+      timers.later(() => {
         if (ref.current) ref.current.style.zIndex = ''
       }, 400)
     },

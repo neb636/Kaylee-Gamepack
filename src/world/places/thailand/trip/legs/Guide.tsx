@@ -4,7 +4,7 @@
 // for Dad, with who said them.
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { lineText, lineVoice, say, sounds, speakingVoice, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
+import { lineText, lineVoice, say, sounds, speakingVoice, SparklePuppet, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 
 export interface TripGuideHandle {
   /** Says it (`mute`: a greybox's line that isn't recorded yet, so only its bubble shows, for a while). */
@@ -55,10 +55,11 @@ interface Props {
 }
 
 export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({ hidden, raised, idle, corner }, ref) {
+  const timers = useTimers()
   const sparkle = useRef<PuppetHandle>(null)
   const [line, setLine] = useState<{ l: Line; n: number } | null>(null)
   const last = useRef<Line | null>(null)
-  const hide = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const hide = useRef<number>(undefined)
   /** Whose line was asked for last and hasn't finished: it counts as talking while its clip is still loading. */
   const asked = useRef<{ voice: string } | null>(null)
   /** Sparkle's lines queued behind someone else's, not played yet. */
@@ -75,7 +76,7 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
       setLine((cur) => ({ l, n: (cur?.n ?? 0) + 1 }))
       clearTimeout(hide.current)
       if (mute) {
-        hide.current = setTimeout(() => setLine((cur) => (cur?.l === l ? null : cur)), 1400 + lineText(l).length * 55)
+        hide.current = timers.later(() => setLine((cur) => (cur?.l === l ? null : cur)), 1400 + lineText(l).length * 55)
         return
       }
       // The family's reactions cut in on each other ("My horn!" right away), but Sparkle's lines and anything said
@@ -92,7 +93,7 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
       void say(l, { interrupt }).then(() => {
         if (queued) waiting.current--
         if (asked.current === mine) asked.current = null
-        hide.current = setTimeout(() => setLine((cur) => (cur?.l === l ? null : cur)), 1600)
+        hide.current = timers.later(() => setLine((cur) => (cur?.l === l ? null : cur)), 1600)
       })
     },
   }))
@@ -111,7 +112,7 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
           setLine((cur) => ({ l, n: (cur?.n ?? 0) + 1 }))
           clearTimeout(hide.current)
           void say(l).then(() => {
-            hide.current = setTimeout(() => setLine((cur) => (cur?.l === l ? null : cur)), 1600)
+            hide.current = timers.later(() => setLine((cur) => (cur?.l === l ? null : cur)), 1600)
           })
         }}
         style={{ pointerEvents: 'auto', background: 'none', border: 'none', padding: 0, width: 'min(120px, 16vh, 24vw)', height: 'min(140px, 19vh, 28vw)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}

@@ -7,7 +7,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst, lineText, say, SparklePuppet, spendHint, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, burst, lineText, say, SparklePuppet, spendHint, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
@@ -32,6 +32,7 @@ const DEFAULT_SNOWMEN: Partial<Record<SnowmanSection, number>> = { dress: 1, par
 const HINT_GAP = 16
 
 export function CarnivalSnowballs({ onDone, setProgress }: Partial<CanadaActivityProps> = {}) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(SNOWMAN_SECTIONS)
   const [run, setRun] = useState<SnowStart & { n: number }>(() => {
     const section = (start ?? 'story') as SnowmanSection
@@ -94,7 +95,7 @@ export function CarnivalSnowballs({ onDone, setProgress }: Partial<CanadaActivit
       // The stamp, once (a replay after it doesn't earn another).
       if (!finished.current) {
         finished.current = true
-        setTimeout(() => cb.current.onDone?.(), 1200)
+        timers.later(() => cb.current.onDone?.(), 1200)
       }
     },
   })

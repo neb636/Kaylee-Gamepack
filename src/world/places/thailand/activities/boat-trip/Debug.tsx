@@ -5,6 +5,7 @@ import { useEffect, useState, type RefObject } from 'react'
 import { LONGTAIL_FEEL } from '../../trip/vehicles/longtail'
 import type { Bay } from './bay/bay'
 import { BAY_TUNE } from './bay/tune'
+import { useTimers } from '../../../../../sdk'
 
 type Feel = typeof LONGTAIL_FEEL
 const FEEL: [keyof Feel & string, string, number, number, number][] = [
@@ -29,10 +30,11 @@ const CAM: [keyof typeof BAY_TUNE & string, string, number, number, number][] = 
 ]
 
 export function Debug({ bayRef }: { bayRef: RefObject<Bay | null> }) {
+  const timers = useTimers()
   const [, tick] = useState(0)
   const [open, setOpen] = useState(true)
   useEffect(() => {
-    const id = setInterval(() => tick((n) => n + 1), 400)
+    const id = timers.every(() => tick((n) => n + 1), 400)
     return () => clearInterval(id)
   }, [])
   const qa = window.__thaiBoatQA?.() as { stats?: Record<string, number>; section?: string; vehicle?: string; where?: string; speed?: number; pos?: number[] } | undefined

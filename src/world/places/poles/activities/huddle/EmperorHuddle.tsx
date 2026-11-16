@@ -19,7 +19,7 @@
 // The sunrise is the payoff: then `onDone` (the stamp). The drag and the warmth are knobs (?feel=1).
 import { motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { BigButton, burst, say, sounds, useElementSize, type Line } from '../../../../../sdk'
+import { BigButton, burst, say, sounds, useElementSize, type Line, Timers } from '../../../../../sdk'
 import { afterTalk, Guide, type GuideHandle } from '../../../../kit/Guide'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
@@ -163,6 +163,8 @@ interface Events {
 }
 
 class HuddleWorld {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   dads: Dad[] = []
   chick: Chick
   stage: StageDef
@@ -513,7 +515,7 @@ class HuddleWorld {
     g.setAttribute('transform', `translate(${(d.x + 76 * s * d.face).toFixed(0)} ${(d.y - 186 * s).toFixed(0)})`)
     g.innerHTML = `<circle class="huddle-ball" style="--dx:${(d.face * 140 * s).toFixed(0)}px;--dy:${(186 * s).toFixed(0)}px" r="${(14 * s).toFixed(1)}" fill="${SNOW}" stroke="${INK}" stroke-width="4"/>`
     this.els.fx?.appendChild(g)
-    setTimeout(() => g.remove(), 1000)
+    this.timers.later(() => g.remove(), 1000)
     this.at(0.7, () => {
       if (!d.held && d.on) d.walk = this.leeSpot(d)
     })
@@ -529,7 +531,7 @@ class HuddleWorld {
       return `<circle class="huddle-fly" style="--dx:${(Math.cos(a) * 60).toFixed(0)}px;--dy:${(Math.sin(a) * 40).toFixed(0)}px" r="9" fill="${col}" stroke="#9FB4D6" stroke-width="2"/>`
     }).join('')
     this.els.fx?.appendChild(g)
-    setTimeout(() => g.remove(), 800)
+    this.timers.later(() => g.remove(), 800)
   }
 
   private at(sec: number, fn: () => void) {
@@ -625,7 +627,7 @@ class HuddleWorld {
     this.puff(d.x + 24 * s * d.face, d.y - 20 * s, '#FFF3DA')
     sfx.crack()
     sounds.sparkle()
-    setTimeout(() => sfx.chirp(), 250)
+    this.timers.later(() => sfx.chirp(), 250)
     this.chick.hop = this.now + 0.2
     this.dads.forEach((o, i) => o.on && (o.anim = { kind: 'hop', t0: this.now + 0.3 + i * 0.12 }))
     this.ev.section('hatch', { wind: this.windFrom, chick: 'hatched' })
@@ -681,7 +683,7 @@ class HuddleWorld {
     d.walk = null
     d.anim = { kind: 'hop', t0: this.now + 0.1 }
     sfx.fwip()
-    setTimeout(() => sfx.chirp(), 150)
+    this.timers.later(() => sfx.chirp(), 150)
     this.tucks++
     this.talk(this.tucks % 2 ? 'papa' : 'pebble', 'tucked')
     this.cue('hatched', false)
@@ -1347,6 +1349,7 @@ export function EmperorHuddle({ onDone }: ActivityProps) {
       }
       cancelAnimationFrame(raf)
       unwatch()
+      w.timers.dispose()
       if (world.current === w) world.current = null
     }
   }, [run])

@@ -14,7 +14,7 @@
 // the films' props (story/props.ts) and cast (story/actor.ts); nothing here comes from Thailand. The steering and the
 // ride are feel-lab knobs (?feel=1).
 import { BackSide, Color, Euler, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Scene, SphereGeometry, Vector3, type BufferGeometry, type WebGLRenderer } from 'three'
-import { clamp } from '../../../../../sdk'
+import { clamp, Timers } from '../../../../../sdk'
 import { smoothstep as smooth, TO_DEG } from '../../../../../sdk/math'
 import { knobs, watch } from '../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -149,6 +149,8 @@ const eul = new Euler()
 const scl = new Vector3()
 
 export class NarwhalRide implements World3D {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   readonly scene = new Scene()
   readonly rig = new CameraRig()
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
@@ -1193,7 +1195,7 @@ export class NarwhalRide implements World3D {
       return poke(id)
     }
     if (id === 'puffins') {
-      this.puffins.forEach((q, i) => setTimeout(() => q.poke(), i * 120))
+      this.puffins.forEach((q, i) => this.timers.later(() => q.poke(), i * 120))
       rideSfx.puffin()
       return poke('puffins')
     }
@@ -1322,6 +1324,7 @@ export class NarwhalRide implements World3D {
   }
 
   dispose() {
+    this.timers.dispose()
     this.unwatch()
     this.stopSea()
     this.scene.clear()

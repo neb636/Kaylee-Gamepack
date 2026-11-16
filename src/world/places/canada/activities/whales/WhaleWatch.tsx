@@ -8,7 +8,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst, stopSpeaking, useAlive, wait } from '../../../../../sdk'
+import { BigButton, burst, stopSpeaking, useAlive, wait, useTimers } from '../../../../../sdk'
 import { isFeelParam } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
@@ -28,6 +28,7 @@ const STAMP_AFTER_S = 5
 const feelOn = () => [...new URLSearchParams(location.hash.split('?')[1] ?? '').keys()].some(isFeelParam)
 
 export function WhaleWatch({ onDone, setProgress }: CanadaActivityProps) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(WHALE_SECTIONS)
   const [run, setRun] = useState<WhaleStart & { n: number }>(() => ({ section: (start ?? 'story') as WhaleSection, steer: param('steer') as SteerMode, found: +param('found') || 0, n: 0 }))
   const [section, setSection] = useState<WhaleSection>(run.section)
@@ -76,7 +77,7 @@ export function WhaleWatch({ onDone, setProgress }: CanadaActivityProps) {
   useEffect(() => {
     if (run.section !== 'story') {
       // A link that starts later: Sparkle says what this part is about.
-      const t = setTimeout(() => speak(run.section), 600)
+      const t = timers.later(() => speak(run.section), 600)
       return () => clearTimeout(t)
     }
     void (async () => {
@@ -101,7 +102,7 @@ export function WhaleWatch({ onDone, setProgress }: CanadaActivityProps) {
     done: () => {
       setDone(true)
       burst()
-      setTimeout(() => {
+      timers.later(() => {
         if (!alive() || stamped.current) return
         stamped.current = true
         onDone()

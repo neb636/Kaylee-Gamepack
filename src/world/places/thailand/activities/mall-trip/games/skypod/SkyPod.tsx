@@ -12,6 +12,7 @@ import { ScoreBoard } from './board'
 import { BLUE, PINK, type Round } from './layout'
 import { SKYPOD_ANCHORS, SkyPodWall } from './wall'
 import { mallVoice } from '../../voice'
+import { useTimers } from '../../../../../../../sdk'
 
 interface Props {
   round: Round
@@ -30,6 +31,7 @@ interface Plus {
 }
 
 export function SkyPod({ round, socks, onRound, onSticker, onPlay }: Props) {
+  const timers = useTimers()
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [allDone, setAllDone] = useState(false)
@@ -63,7 +65,7 @@ export function SkyPod({ round, socks, onRound, onSticker, onPlay }: Props) {
         plus: (x, y, who) => {
           const id = ++plusId.current
           setPluses((p) => [...p.slice(-6), { id, x, y, who }])
-          setTimeout(() => setPluses((p) => p.filter((q) => q.id !== id)), 900)
+          timers.later(() => setPluses((p) => p.filter((q) => q.id !== id)), 900)
         },
         allDone: () => setAllDone(true),
       },

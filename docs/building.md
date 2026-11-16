@@ -55,6 +55,7 @@ country's folder). **Before writing a helper at the top of a file, look here fir
 | `burst()` / `bigCelebration()` | Confetti. |
 | `KID_NAME`, `numberWord(3)`, `wait(ms)`, `pick`, `shuffle`, `sample` | Helpers. `KID_NAME` is for the landing greeting only; writing activities keep their explicit name content. |
 | `useAlive()` | `const alive = useAlive(); await say('..'); if (!alive()) return` in async scripts. |
+| `useTimers()`, `Timers` | Every delay in a game: `const timers = useTimers(); timers.later(fn, 800)` (cancelled on unmount); a class owns `new Timers()` and disposes it with itself. `timers.wait(ms)` never resolves once the game is gone. No raw `setTimeout` in a game (`scripts/check-timers.mjs`). |
 | `useSayOnMount(text)` | Speak when a screen appears. |
 | `<SparklePuppet ref pose? height>` | Live Sparkle: `play('wave' \| 'cheer' \| 'hop' \| 'nod' \| 'think' \| 'dance' \| 'wiggle')`. Prefer it over `<Mascot>`. |
 | `<Buddy img voice height ref>` | Brings a flat sprite to life: `play('jump' \| 'dance' \| 'wiggle' \| 'cheer' \| 'nod')`. |
@@ -182,7 +183,10 @@ Links point to the published main build. PR links target that PR's preview (the 
 Deployed builds play offline: `src/offline/sw.js` (written to `dist/sw.js` with the list of every built file by
 `scripts/vite-offline.ts`) saves every file the first time the app opens online. It is **network first**: online she
 always gets the latest deploy, and the saved copies are used only when the network fails or takes over 4 s. Never make it
-cache-first. It doesn't run in `npm run dev` or test browsers (add `?sw=1` to try it on `npm run preview`). Anything
+cache-first. Each build saves into its own cache, and only a complete one answers first: a new deploy downloads beside
+the last complete copy (unchanged hashed files are copied over, not downloaded), and the old copy is dropped only once
+the new one has every file, so a download cut short never leaves a half-new app offline. Only `fill()` saves
+`index.html` and other unhashed files, after checking `index.html` is this build's (`tests/offline-worker.spec.ts`). It doesn't run in `npm run dev` or test browsers (add `?sw=1` to try it on `npm run preview`). Anything
 that needs the internet (YouTube) checks `useOnline()` from the SDK and hides itself offline.
 
 ## Local commands

@@ -8,7 +8,7 @@
 // Progress is saved between services, so she can stop after any of them and carry on later.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { bigCelebration, BigButton, say, SparklePuppet, sounds, useAlive, useLandscape, useSaved, wait, type PuppetHandle } from '../../../../../sdk'
+import { bigCelebration, BigButton, say, SparklePuppet, sounds, useAlive, useLandscape, useSaved, wait, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
@@ -151,12 +151,13 @@ export function Pizzeria({ onDone, setProgress }: ActivityProps) {
 
 /** Between services: a little cheer, then on to the next customers (or back to the map; progress is saved). */
 function Break({ onNext }: { onNext: () => void }) {
+  const timers = useTimers()
   const sparkle = useRef<PuppetHandle>(null)
   const lupa = useRef<PuppetHandle>(null)
   useEffect(() => {
     void say(P.serviceDone)
     sounds.fanfare()
-    const t = setTimeout(() => {
+    const t = timers.later(() => {
       void sparkle.current?.play('cheer')
       void lupa.current?.play('cheer')
     }, 300)

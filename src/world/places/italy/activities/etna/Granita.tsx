@@ -7,7 +7,7 @@
 // the keys to play.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
-import { Buddy, burst, say, sounds, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
+import { Buddy, burst, say, sounds, SparklePuppet, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { L as LINES } from '../../lines'
 import { INK } from '../../puppets/ink'
@@ -69,6 +69,7 @@ export function Granita({ fruit: picked, served: servedBefore = [], payoff: atPa
   onStar: (n: number) => void
   onDone: () => void
 }) {
+  const timers = useTimers()
   const box = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ W: 1180, H: 820 })
   useEffect(() => {
@@ -151,14 +152,14 @@ export function Granita({ fruit: picked, served: servedBefore = [], payoff: atPa
     const id = nextId.current++
     const n = c.scoops + 1
     setScoopFly((f) => [...f, { id, to: i! }])
-    setTimeout(() => {
+    timers.later(() => {
       setCups((cs) => cs.map((x, j) => (j === i ? { ...x, scoops: n } : x)))
       esfx.pomf()
     }, 520)
     const want = ORDER[FRIENDS[i]]
     if (n <= want) talk(E.count[n - 1])
     if (n === want) {
-      setTimeout(() => once('squeeze', E.squeeze), 300)
+      timers.later(() => once('squeeze', E.squeeze), 300)
     } else if (n > want && n === want + 1) once(`more${i}`, E.more[FRIENDS[i]])
   }
 
@@ -210,12 +211,12 @@ export function Granita({ fruit: picked, served: servedBefore = [], payoff: atPa
     setEating(i)
     sounds.correct()
     const id = FRIENDS[i]
-    setTimeout(() => {
+    timers.later(() => {
       esfx.crunch()
       void friendRefs.current[i]?.play(i === 0 ? 'shake' : 'wiggle')
       talk(E.eat[id])
     }, 700)
-    setTimeout(() => {
+    timers.later(() => {
       void friendRefs.current[i]?.play(i === 0 ? 'cheer' : 'cheer')
       const r = box.current?.getBoundingClientRect()
       if (r) burst(0.5 + (P.friendX[i] * s) / r.width, 0.42)
@@ -227,7 +228,7 @@ export function Granita({ fruit: picked, served: servedBefore = [], payoff: atPa
       if (n < FRIENDS.length) onSection('granita', FRIENDS.filter((_, j) => j === i || cupsRef.current[j].served))
       else {
         talk(E.history)
-        setTimeout(startPayoff, 2600)
+        timers.later(startPayoff, 2600)
       }
     }, 2200)
   }
@@ -235,7 +236,7 @@ export function Granita({ fruit: picked, served: servedBefore = [], payoff: atPa
   function startPayoff() {
     setPayoff(true)
     onSection('payoff', [...FRIENDS])
-    setTimeout(() => {
+    timers.later(() => {
       void ninoRef.current?.play('bray')
       sounds.fanfare()
       talk(E.piano)
@@ -251,16 +252,16 @@ export function Granita({ fruit: picked, served: servedBefore = [], payoff: atPa
     if (n === 1) talk(E.pianoFact)
     if (n === 8) {
       talk(E.band)
-      setTimeout(onDone, 3500)
+      timers.later(onDone, 3500)
     }
   }
   // If she stops playing, the stamp still comes.
   useEffect(() => {
     if (!payoff) return
-    const t = setTimeout(() => {
+    const t = timers.later(() => {
       if (keysPlayed < 8) {
         talk(E.band)
-        setTimeout(onDone, 3500)
+        timers.later(onDone, 3500)
       }
     }, 20000)
     return () => clearTimeout(t)

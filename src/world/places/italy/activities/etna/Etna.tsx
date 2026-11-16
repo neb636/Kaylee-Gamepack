@@ -13,7 +13,7 @@
 // from one game loop (like Venice).
 import { AnimatePresence } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent } from 'react'
-import { Buddy, say, sounds, spendHint, SparklePuppet, useGameLoop, type Line, type PuppetHandle } from '../../../../../sdk'
+import { Buddy, say, sounds, spendHint, SparklePuppet, useGameLoop, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { sfx } from '../../../../kit/sfx'
 import { StoryBeat } from '../../../../kit/StoryBeat'
@@ -97,6 +97,7 @@ const trailSection = (x: number, snow: number): SectionId =>
 const mix = (a: number[], b: number[], k: number) => `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * k)).join(',')})`
 
 export function Etna({ onDone, setProgress }: ActivityProps) {
+  const timers = useTimers()
   const root = useRef<HTMLDivElement>(null)
   const { start, param, enter } = useSections(SECTIONS)
   // A deep link starts at its section, as if she had played up to there (params carry what she did on the way).
@@ -319,7 +320,7 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
     puff(x + 60, top, '#6FA95A', 5, 80)
     // Right under the tree? It bonks Nino (silly, not a failure).
     if (Math.abs(s.x - x) < 220) {
-      setTimeout(() => {
+      timers.later(() => {
         sfx.thump()
         void ninoRef.current?.play('shake')
         puff(g.current.x + 40, ground(g.current.x) - 190, '#8FB86A', 6, 200)
@@ -332,7 +333,7 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
     const s = g.current
     for (let i = 0; i < 10; i++) spawn({ x: x + (Math.random() - 0.5) * 200, y: ground(x) - 300 - Math.random() * 100, vx: (Math.random() - 0.5) * 80, vy: 40 + Math.random() * 100, age: 0, life: 1.2, size: 14 + Math.random() * 12, color: '#EEF5FF' })
     if (Math.abs(s.x - x) < 240) {
-      setTimeout(() => {
+      timers.later(() => {
         void ninoRef.current?.play('sneeze')
         if (cooled('achoo', 10)) react(E.achoo)
       }, 600)
@@ -379,7 +380,7 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
     setScarfGlow(false)
     sounds.sparkle()
     fly([SCARF_X, ground(SCARF_X) - 150])
-    setTimeout(() => {
+    timers.later(() => {
       void ninoRef.current?.play('cheer')
       talk(E.cozy)
     }, 500)
@@ -506,12 +507,12 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
           for (let k = 0; k < 12; k++) spawn({ x: dx, y: ground(dx) - 60, vx: (Math.random() - 0.5) * 360, vy: -300 - Math.random() * 300, age: 0, life: 0.9, size: 14 + Math.random() * 14, color: '#EEF5FF' })
           const n = s.snow
           fly([dx, ground(dx) - 80])
-          setTimeout(() => setSnow(n), 650)
+          timers.later(() => setSnow(n), 650)
           sounds.note(n + 2)
           void say(E.count[n - 1])
           if (n === DRIFTS.length && first('full')) {
             star(3)
-            setTimeout(() => {
+            timers.later(() => {
               void ninoRef.current?.play('bray')
               void sparkleRef.current?.play('cheer')
               talk(E.full)
@@ -542,9 +543,9 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
         s.drag = null
         star(4)
         void ninoRef.current?.play('cheer')
-        friendRefs.current.forEach((f, i) => setTimeout(() => void f?.play(i === 0 ? 'cheer' : 'jump'), i * 200))
+        friendRefs.current.forEach((f, i) => timers.later(() => void f?.play(i === 0 ? 'cheer' : 'jump'), i * 200))
         talk(E.yay)
-        setTimeout(() => {
+        timers.later(() => {
           g.current.stage = 'granita'
           setStage('granita')
         }, 1800)

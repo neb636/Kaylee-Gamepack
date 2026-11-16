@@ -4,7 +4,7 @@
 // golden-green oil trickles out of the spout into the jug.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { burst, Piece, say, spendHint, SparklePuppet, sounds, Target, useAlive, useLandscape, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, Piece, say, spendHint, SparklePuppet, sounds, Target, useAlive, useLandscape, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { art } from '../../art'
 import { L } from '../../lines'
@@ -24,6 +24,7 @@ const LAYOUT = {
 }
 
 export function Mill({ onDone }: { onDone: () => void }) {
+  const timers = useTimers()
   const landscape = useLandscape()
   const lay = landscape ? LAYOUT.land : LAYOUT.tall
   const ratio = landscape ? 1.5 : 1 / 1.5
@@ -83,7 +84,7 @@ export function Mill({ onDone }: { onDone: () => void }) {
   // Idle: show where the olives go.
   useEffect(() => {
     if (phase !== 'drop') return
-    const id = setInterval(() => {
+    const id = timers.every(() => {
       if (Date.now() - lastTouch.current > 9000) {
         lastTouch.current = Date.now()
         setHint(true)
@@ -100,7 +101,7 @@ export function Mill({ onDone }: { onDone: () => void }) {
     const n = ++counted.current
     const id = flyId.current++
     setFlying((f) => [...f, { id, from, color: MIX[(n - 1) % MIX.length] }])
-    setTimeout(() => {
+    timers.later(() => {
       if (!alive()) return
       setFlying((f) => f.filter((x) => x.id !== id))
       setCount(n)

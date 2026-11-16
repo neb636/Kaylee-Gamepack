@@ -3,7 +3,7 @@
 // the Bullet Train and the Dragon Parade finale. Every lantern is open from the start; each stamp brings a friend to the parade.
 import { motion } from 'motion/react'
 import { useEffect, useState, type ComponentType } from 'react'
-import { firstTime, say, sounds } from '../../../sdk'
+import { firstTime, say, sounds, useTimers } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
 import { useStampFlow, type ActivityProps } from '../../kit/stampFlow'
 import { VideoBreak } from '../../kit/Theater'
@@ -80,6 +80,7 @@ let introSeen = false
 let unrolled = false
 
 function Hub({ meta, stamps, openActivity }: PlaceProps) {
+  const timers = useTimers()
   const [intro, setIntro] = useState(stamps.length === 0 && !introSeen)
   const [unroll] = useState(() => !unrolled)
   const [wiggle, setWiggle] = useState<string | null>(null)
@@ -130,7 +131,7 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
                   if (open) openActivity(spot.id)
                   else {
                     setWiggle(spot.id)
-                    setTimeout(() => setWiggle(null), 650)
+                    timers.later(() => setWiggle(null), 650)
                     void say(L.soon)
                   }
                 }}

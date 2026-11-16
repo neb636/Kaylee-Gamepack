@@ -19,7 +19,7 @@
 import { getStroke } from 'perfect-freehand'
 import { motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { BigButton, burst, firstTime, sounds, useAlive, useElementSize, type Line } from '../../../../../sdk'
+import { BigButton, burst, firstTime, sounds, useAlive, useElementSize, type Line, useTimers, Timers } from '../../../../../sdk'
 import { Guide, type GuideHandle } from '../../../../kit/Guide'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
@@ -324,6 +324,8 @@ interface Events {
 }
 
 class CoatsWorld {
+  /** Its delayed callbacks: cancelled when it's disposed. */
+  readonly timers = new Timers()
   coats: Coat[] = []
   stage: StageDef
   mode: Mode
@@ -616,10 +618,10 @@ class CoatsWorld {
     this.endSeg(c.seg, BRUSH.size / c.s, () => (c.seg = null))
     c.anim = { kind: 'hop', t0: this.now + 0.15 }
     sounds.sparkle()
-    setTimeout(() => sfx.boing(), 200)
+    this.timers.later(() => sfx.boing(), 200)
     if (this.section === 'fox') {
       this.ground.settleV = Math.max(this.ground.settleV, 0.6)
-      setTimeout(() => this.ev.section('hide', 'fox'), 2600)
+      this.timers.later(() => this.ev.section('hide', 'fox'), 2600)
     } else if (this.section === 'hide') {
       this.ev.section('hide', this.coats.filter((k) => k.done).map((k) => k.id).join(','))
     } else if (this.coats.every((k) => k.done)) this.summerDone()
@@ -652,7 +654,7 @@ class CoatsWorld {
     sounds.fanfare()
     burst()
     const w = this.stage.w
-    for (let i = 0; i < 26; i++) setTimeout(() => this.flower((Math.random() - 0.5) * w * 0.95, 20 + Math.random() * (this.stage.h - this.stage.ground - 60)), i * 60)
+    for (let i = 0; i < 26; i++) this.timers.later(() => this.flower((Math.random() - 0.5) * w * 0.95, 20 + Math.random() * (this.stage.h - this.stage.ground - 60)), i * 60)
     this.coats.forEach((c, i) => (c.anim = { kind: 'hop', t0: this.now + 0.3 + i * 0.15 }))
   }
 
@@ -724,7 +726,7 @@ class CoatsWorld {
       return `<circle class="coats-fly" style="--dx:${(Math.cos(a) * 60).toFixed(0)}px;--dy:${(Math.sin(a) * 60).toFixed(0)}px" r="9" fill="${col}" stroke="#9FB4D6" stroke-width="2"/>`
     }).join('')
     this.svg.querySelector('[data-k="fx"]')?.appendChild(g)
-    setTimeout(() => g.remove(), 800)
+    this.timers.later(() => g.remove(), 800)
   }
 
   // -------------------------------------------------------------- every frame
@@ -1008,7 +1010,7 @@ class CoatsWorld {
         } else {
           // Brown showing: a giggle and off it runs (never caught). He'll come back for it.
           this.squeak(c.id)
-          setTimeout(() => this.squeak(c.id), 220)
+          this.timers.later(() => this.squeak(c.id), 220)
           this.ev.sniffed('ran')
           // A free spot on its own row, behind the bear (he has already looked there).
           let away = c.x
@@ -1079,6 +1081,7 @@ const FLAKES = 80
 const DUSK_DONE_S = 6
 
 export function SnowCoats({ onDone }: ActivityProps) {
+  const timers = useTimers()
   const { start, param, enter } = useSections(COATS_SECTIONS)
   const [run, setRun] = useState(() => ({ section: (start ?? 'fox') as CoatsSection, painted: (param('painted') || '').split(',').filter(Boolean), n: 0 }))
   const [phase, setPhase] = useState<Phase>('play')
@@ -1086,7 +1089,7 @@ export function SnowCoats({ onDone }: ActivityProps) {
   const alive = useAlive()
   const talk = useRef({ ran: -99, owl: -99 })
   /** The summer payoff's stamp, waiting for the cheer; 🔁 cancels it. */
-  const stampTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const stampTimer = useRef<number>(undefined)
   const box = useRef<HTMLDivElement>(null)
   const svg = useRef<SVGSVGElement>(null)
   const world = useRef<CoatsWorld | null>(null)
@@ -1104,7 +1107,7 @@ export function SnowCoats({ onDone }: ActivityProps) {
   // Each part starts with one short line from Sparkle, then her hands are busy.
   useEffect(() => {
     enter(run.section, run.section === 'hide' ? { painted: run.painted.join(',') } : {})
-    const t = setTimeout(() => guide.current?.speak(START[run.section]), 400)
+    const t = timers.later(() => guide.current?.speak(START[run.section]), 400)
     return () => clearTimeout(t)
   }, [run])
 
@@ -1137,13 +1140,13 @@ export function SnowCoats({ onDone }: ActivityProps) {
           // follows opens on the snow). The summer's rub stays a section of its own, from its link.
           if (start === null) {
             clearTimeout(stampTimer.current)
-            stampTimer.current = setTimeout(() => alive() && world.current?.section === 'hide' && onDone(), DUSK_DONE_S * 1000)
+            stampTimer.current = timers.later(() => alive() && world.current?.section === 'hide' && onDone(), DUSK_DONE_S * 1000)
           }
         }
         else if (p === 'end') {
           guide.current?.speak(L.coats.summer.end)
           clearTimeout(stampTimer.current)
-          stampTimer.current = setTimeout(() => alive() && onDone(), DONE_AFTER_S * 1000)
+          stampTimer.current = timers.later(() => alive() && onDone(), DONE_AFTER_S * 1000)
         }
       },
       note: (show) => show && say(L.coats.summer.owl, 'owl'),
@@ -1170,6 +1173,7 @@ export function SnowCoats({ onDone }: ActivityProps) {
     return () => {
       cancelAnimationFrame(raf)
       unwatch()
+      w.timers.dispose()
       if (world.current === w) world.current = null
     }
   }, [run])

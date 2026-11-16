@@ -293,7 +293,7 @@ export class Snorkel implements World3D {
   /** Which way Dad faces when a film has placed him (degrees; null: he swims along and looks at her). */
   private dadFace: number | null = null
   /** Things to do later, on the world's own clock (it stops when the world does). */
-  private timers: { at: number; f: () => void }[] = []
+  private beats: { at: number; f: () => void }[] = []
   /** A film just ended: the camera cuts back to the game's shot (no glide through the boat). */
   private cutBack = false
   private filmStage: Stage
@@ -555,7 +555,7 @@ export class Snorkel implements World3D {
   }
   /** Later, on the world's clock. */
   private after(s: number, f: () => void) {
-    this.timers.push({ at: this.time + s, f })
+    this.beats.push({ at: this.time + s, f })
   }
   /** On the boat's ladder, upright, about to splash in. */
   private toLadder() {
@@ -614,9 +614,9 @@ export class Snorkel implements World3D {
   update(dt: number) {
     const t = (this.time += dt)
     this.roundT += dt
-    if (this.timers.length) {
-      const due = this.timers.filter((x) => x.at <= t)
-      this.timers = this.timers.filter((x) => x.at > t)
+    if (this.beats.length) {
+      const due = this.beats.filter((x) => x.at <= t)
+      this.beats = this.beats.filter((x) => x.at > t)
       for (const x of due) x.f()
     }
     // A film has the camera (and moves people about) before anything else this frame.

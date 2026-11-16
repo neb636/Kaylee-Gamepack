@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react'
-import { BigButton, Mascot, say, sounds, stopSpeaking } from '../../sdk'
+import { BigButton, Mascot, say, sounds, stopSpeaking, useTimers } from '../../sdk'
 import { WORLD_LINES } from '../lines'
 import type { PlaceVideo } from '../types'
 import { FitBox } from './Chrome'
@@ -71,6 +71,7 @@ type State = 'poster' | 'loading' | 'tap-video' | 'playing' | 'paused' | 'ended'
  * YouTube's "more videos" panels with our own pause and end screens.
  */
 export function YouTubePlayer({ video, onDone, full, onFull }: { video: PlaceVideo; onDone: () => void; full: boolean; onFull: (full: boolean) => void }) {
+  const timers = useTimers()
   useEffect(() => {
     window.dispatchEvent(new CustomEvent('kaylee:video-open', { detail: true }))
     return () => { window.dispatchEvent(new CustomEvent('kaylee:video-open', { detail: false })) }
@@ -164,7 +165,7 @@ export function YouTubePlayer({ video, onDone, full, onFull }: { video: PlaceVid
     // Called inside the tap, so the browser counts it as hers and plays with sound.
     if (ready.current) player.current?.playVideo()
     // If it still isn't playing, the browser wanted a tap on the video itself: uncover it and let her tap it.
-    setTimeout(() => {
+    timers.later(() => {
       if (stateRef.current === 'loading') setState('tap-video')
     }, 2500)
   }
@@ -268,9 +269,10 @@ export function YouTubePlayer({ video, onDone, full, onFull }: { video: PlaceVid
 
 /** A thin pink bar along the bottom, since YouTube's own controls are hidden. */
 function Progress({ player }: { player: { current: YTPlayer | null } }) {
+  const timers = useTimers()
   const [p, setP] = useState(0)
   useEffect(() => {
-    const id = setInterval(() => {
+    const id = timers.every(() => {
       const d = player.current?.getDuration() ?? 0
       if (d > 0) setP(Math.min(1, (player.current?.getCurrentTime() ?? 0) / d))
     }, 500)

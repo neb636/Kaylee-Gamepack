@@ -3,7 +3,7 @@
 // basin. Two coins for Kaylee, then Lupa tosses one and wishes out loud, and a wishing star rises for the opera night.
 import { animate, AnimatePresence, motion, useMotionValue } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { bigCelebration, burst, pick, say, SparklePuppet, sounds, useAlive, useElementSize, useLandscape, usePointerDrag, wait, type PuppetHandle } from '../../../../../sdk'
+import { bigCelebration, burst, pick, say, SparklePuppet, sounds, useAlive, useElementSize, useLandscape, usePointerDrag, wait, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { PromptBubble } from '../../../../kit/Stage'
 import { art } from '../../art'
@@ -24,6 +24,7 @@ const SPOTS = {
 }
 
 export function Fountain({ onStep, onDone, showWord }: { onStep: () => void; onDone: () => void; showWord: (w: WordId) => void }) {
+  const timers = useTimers()
   const box = useRef<HTMLDivElement>(null)
   const { width: W, height: H } = useElementSize(box)
   const landscape = useLandscape()
@@ -85,7 +86,7 @@ export function Fountain({ onStep, onDone, showWord }: { onStep: () => void; onD
     sfx.splash()
     const id = Date.now() + Math.random()
     setPlops((p) => [...p.slice(-3), { id, ...at }])
-    setTimeout(() => setPlops((p) => p.filter((q) => q.id !== id)), 1600)
+    timers.later(() => setPlops((p) => p.filter((q) => q.id !== id)), 1600)
   }
 
   /** Her coin landed. */
