@@ -85,7 +85,8 @@ jobs:
             ## 1. Read the context
             - AGENTS.md (house rules; note "Reuse before you write" and "Rules the checks enforce"), docs/code-map.md,
               docs/building.md.
-            - Past reviews: `gh api repos/${{ github.repository }}/issues -X GET -f labels=code-health -f state=all -f per_page=20`,
+            - Past reviews: `gh api repos/${{ github.repository }}/issues -X GET --paginate -f labels=code-health -f state=all -f per_page=100`
+              (every page: a decline never expires),
               and the comments of each (`gh api repos/${{ github.repository }}/issues/<n>/comments`).
               A finding is DECLINED if its issue was closed with state_reason "not_planned", or if the repo owner
               (user login `${{ github.repository_owner }}`) replied turning it down. Never raise a declined finding
