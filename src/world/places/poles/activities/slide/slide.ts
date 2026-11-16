@@ -59,9 +59,9 @@ const STEER = knobs('steer', 'Steering', FILE, {
 })
 /** The slide down the ice. */
 const SLIDE = knobs('slide', 'The slide', FILE, {
-  speed: { value: 11, min: 4, max: 20, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'on the bumps; the gentle slope is a share of it' },
+  speed: { value: 17.5, min: 4, max: 28, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'on the bumps; the gentle slope is a share of it' },
   gentle: { value: 0.8, min: 0.4, max: 1, step: 0.05, label: 'Gentle slope', unit: '×', note: 'top speed on the first stretch, as a share' },
-  accel: { value: 4, min: 1, max: 12, step: 0.25, label: 'Speeding up', unit: 'm/s²', note: 'how fast he gets going' },
+  accel: { value: 6.5, min: 1, max: 16, step: 0.25, label: 'Speeding up', unit: 'm/s²', note: 'how fast he gets going' },
   gravity: { value: 16, min: 6, max: 30, step: 0.5, label: 'Gravity in the air', unit: 'm/s²', note: 'lower = floatier hops off the bumps' },
   bank: { value: 1.8, min: 0, max: 3, step: 0.1, label: 'Up the snowbank', unit: 'm', note: 'how far past the edge of the ice she can steer him' },
   stuck: { value: 1.3, min: 0.4, max: 3, step: 0.1, label: 'Stuck in the snow', unit: 's', note: 'how long his feet wiggle before he pops out' },
@@ -69,7 +69,7 @@ const SLIDE = knobs('slide', 'The slide', FILE, {
 })
 /** Under the sea. */
 const SWIM = knobs('swim', 'Under the sea', FILE, {
-  speed: { value: 7, min: 3, max: 14, step: 0.5, label: 'Swim speed', unit: 'm/s', note: 'how fast he flies through the water' },
+  speed: { value: 11, min: 3, max: 20, step: 0.5, label: 'Swim speed', unit: 'm/s', note: 'how fast he flies through the water' },
   slide: { value: 5.5, min: 1, max: 12, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push moves him across' },
   magnet: { value: 1.4, min: 0, max: 4, step: 0.1, label: 'Krill come to him', unit: 'm', note: 'a swarm this close drifts into his beak (0 = only dead on)' },
   leap: { value: 3.5, min: 1, max: 7, step: 0.25, label: 'Leap out', unit: 'm', note: 'how high he rockets out onto the ice at the end' },
