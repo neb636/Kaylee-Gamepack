@@ -792,7 +792,8 @@ export class SametIsland implements World3D {
     else if (this.mode === 'kite') this.flyKite(dt)
     else if (this.mode === 'slide') this.slideStep(dt)
     this.kaylee.update(dt, t)
-    if (this.mode === 'walk' || this.mode === 'kite' || this.mode === 'slide') this.underfoot(dt)
+    // (Not in the taxi: she sits in its seat, in its own frame, not on the ground.)
+    if (!this.riding3d && (this.mode === 'walk' || this.mode === 'kite' || this.mode === 'slide')) this.underfoot(dt)
     if (this.mode === 'walk' && !film) this.intoSlide()
     {
       // The swim area's edge comes up round her as she paddles near it.
