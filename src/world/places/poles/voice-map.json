@@ -427,32 +427,18 @@
     "file": "3f7e357c096a.mp3"
   },
   {
-    "text": "I saw a big red ship. It smelled like fish!",
+    "text": "I saw a big red ship. I climbed in, and fell asleep!",
     "voice": "pebble",
     "sig": "77076520c0",
-    "ms": 3360,
-    "file": "5b3f434fd2fa.mp3"
+    "ms": 3744,
+    "file": "346817fb58bc.mp3"
   },
   {
-    "text": "I climbed inside, and I fell asleep.",
-    "voice": "pebble",
-    "sig": "77076520c0",
-    "ms": 2496,
-    "file": "c9e9017e25d3.mp3"
-  },
-  {
-    "text": "The ship sailed all the way up the world. From the bottom, to the top!",
+    "text": "The ship sailed up the whole world. From the bottom, to the top!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 6240,
-    "file": "88e83d5932f9.mp3"
-  },
-  {
-    "text": "When I woke up, everything was different.",
-    "voice": "pebble",
-    "sig": "77076520c0",
-    "ms": 2352,
-    "file": "ea4ddc282b0f.mp3"
+    "ms": 4944,
+    "file": "4b01faceb362.mp3"
   },
   {
     "text": "A penguin? Up here?",
@@ -474,13 +460,6 @@
     "sig": "2c88a3bfe7",
     "ms": 1752,
     "file": "cbf65be7ab92.mp3"
-  },
-  {
-    "text": "It's a long, long way. But yes!",
-    "voice": "terry",
-    "sig": "164d612c04",
-    "ms": 3288,
-    "file": "ec370bc4248e.mp3"
   },
   {
     "text": "My balloon can carry Pebble home. Let's help him!",
@@ -686,11 +665,11 @@
     "file": "a42691d0c505.mp3"
   },
   {
-    "text": "Come home soon, little one.",
+    "text": "I just know he's on his way home.",
     "voice": "papa",
     "sig": "c038db870a",
-    "ms": 1968,
-    "file": "35b023a708b0.mp3"
+    "ms": 2904,
+    "file": "8e98baa2d413.mp3"
   },
   {
     "text": "Winter at the South Pole. The sun is gone for months.",
@@ -824,13 +803,6 @@
     "sig": "c038db870a",
     "ms": 3792,
     "file": "21f3e7aed3a0.mp3"
-  },
-  {
-    "text": "Look! The sky is dancing!",
-    "voice": "pola",
-    "sig": "2c88a3bfe7",
-    "ms": 2424,
-    "file": "249faf8beb4b.mp3"
   },
   {
     "text": "Top to bottom! Who's ready for my Polar Explorer quiz?",
