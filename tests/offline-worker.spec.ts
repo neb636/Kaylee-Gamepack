@@ -239,3 +239,21 @@ test('a PR preview never deletes main\'s copies', async () => {
   await sw.fill()
   expect((await caches.keys()).sort()).toEqual(['gamepack:/Kaylee-Gamepack/#m', 'gamepack:/Kaylee-Gamepack/pr-preview/pr-7/#p'])
 })
+
+test('the first update from an older worker keeps its copy until the new build is whole', async () => {
+  const folder = '/Kaylee-Gamepack/'
+  const scope = `https://example.test${folder}`
+  const caches = new FakeCaches()
+  const legacy = await caches.open('gamepack:/Kaylee-Gamepack/')
+  await legacy.put(`${scope}index.html`, new Response('LEGACY -> old-aaaaaaaa.js'))
+  await legacy.put(`${scope}assets/old-aaaaaaaa.js`, new Response('OLD CHUNK'))
+  const host = site(scope, { 'index.html': 'NEW -> new-bbbbbbbb.js', 'assets/new-bbbbbbbb.js': 'NEW CHUNK' })
+  const sw = worker({ folder, files: ['index.html', 'assets/new-bbbbbbbb.js'], index: 'NEW -> new-bbbbbbbb.js', build: 'b', caches, server: host.server })
+  host.failAfter = 1 // the new index.html is saved, then the wifi drops before its chunk
+  await sw.fill()
+  expect(await (await sw.cache()).text(sw.at('index.html'))).toBe('NEW -> new-bbbbbbbb.js')
+  host.online = false
+  host.failAfter = Infinity
+  expect(await (await sw.request(''))!.text()).toBe('LEGACY -> old-aaaaaaaa.js')
+  expect(await (await sw.request('assets/old-aaaaaaaa.js', 'cors'))!.text()).toBe('OLD CHUNK')
+})

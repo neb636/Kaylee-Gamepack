@@ -99,14 +99,15 @@ async function matchIn(list, url) {
 }
 
 /** The saved copy of `url`: from a complete build first (this one, else the last one), so index.html and its chunks
- *  come from the same build; a half-filled cache only when nothing complete has it. */
+ *  come from the same build; then the unversioned cache an older worker filled (a whole app as far as it knows); a
+ *  half-filled cache only when none of those has it. */
 async function saved(url) {
   const names = (await caches.keys()).filter(ours)
   const all = await Promise.all(names.map(async (name) => {
     const cache = await caches.open(name)
     return { name, cache, complete: !!(await cache.match(COMPLETE)) }
   }))
-  const rank = (c) => (c.complete ? 0 : 2) + (c.name === CACHE ? 0 : 1)
+  const rank = (c) => (c.complete ? (c.name === CACHE ? 0 : 1) : c.name === FOLDER ? 2 : c.name === CACHE ? 3 : 4)
   all.sort((a, b) => rank(a) - rank(b))
   return matchIn(all.map((c) => c.cache), url)
 }
