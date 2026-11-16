@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "hub.home",
+  "title": "Poles › Hub › Home",
+  "intro": "Every stamp is in, once: home is the last picture on the trail.",
+  "page": "poles-hub-home.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 9,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "hub.home.touch",
+      "text": "Every stamp! Tap the last picture to fly home!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "hub.home.mouse",
+      "text": "Every stamp! Click the last picture to fly home!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "hub",
+        "home",
+        "touch"
+      ],
+      "text": "Every stamp! Tap the last picture to fly home!",
+      "voice": "sparkle",
+      "key": "hub.home.touch",
+      "part": "hub › home",
+      "when": "Every stamp is in, once: home is the last picture on the trail.",
+      "ms": 4584,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "home",
+        "mouse"
+      ],
+      "text": "Every stamp! Click the last picture to fly home!",
+      "voice": "sparkle",
+      "key": "hub.home.mouse",
+      "part": "hub › home",
+      "when": "",
+      "ms": 4440,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

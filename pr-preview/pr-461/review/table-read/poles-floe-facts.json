@@ -1,0 +1,242 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "floe.facts",
+  "title": "Poles › Floe › Facts",
+  "intro": "Tap-to-hear: who lives on the sea ice, the first time she pokes each (in the order they come along the way).",
+  "page": "poles-floe-facts.html",
+  "audio": null,
+  "lines": 9,
+  "seconds": 34,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "floe.facts.seal",
+      "text": "A ringed seal! That hole is how she breathes.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "floe.facts.berg",
+      "text": "An iceberg! Most of it hides under the water.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "floe.facts.owl",
+      "text": "A snowy owl! She is white like the snow.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "floe.facts.terry",
+      "text": "There goes Terry! Terns fly from pole to pole.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "floe.facts.walrus",
+      "text": "A walrus! His long teeth are called tusks.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "floe.facts.narwhal",
+      "text": "A narwhal! That long horn is really a tooth.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "floe.facts.puffin",
+      "text": "A puffin! She dives for little fish.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "floe.facts.beluga",
+      "text": "Beluga whales! They sing like birds.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "floe.facts.pup",
+      "text": "A baby seal! Her white fur keeps her warm.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "floe",
+        "facts",
+        "seal"
+      ],
+      "text": "A ringed seal! That hole is how she breathes.",
+      "voice": "sparkle",
+      "key": "floe.facts.seal",
+      "part": "floe › facts",
+      "when": "",
+      "ms": 4152,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "floe",
+        "facts",
+        "berg"
+      ],
+      "text": "An iceberg! Most of it hides under the water.",
+      "voice": "sparkle",
+      "key": "floe.facts.berg",
+      "part": "floe › facts",
+      "when": "",
+      "ms": 3768,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "floe",
+        "facts",
+        "owl"
+      ],
+      "text": "A snowy owl! She is white like the snow.",
+      "voice": "sparkle",
+      "key": "floe.facts.owl",
+      "part": "floe › facts",
+      "when": "",
+      "ms": 3648,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "floe",
+        "facts",
+        "terry"
+      ],
+      "text": "There goes Terry! Terns fly from pole to pole.",
+      "voice": "sparkle",
+      "key": "floe.facts.terry",
+      "part": "floe › facts",
+      "when": "",
+      "ms": 3840,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "floe",
+        "facts",
+        "walrus"
+      ],
+      "text": "A walrus! His long teeth are called tusks.",
+      "voice": "sparkle",
+      "key": "floe.facts.walrus",
+      "part": "floe › facts",
+      "when": "",
+      "ms": 3960,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "floe",
+        "facts",
+        "narwhal"
+      ],
+      "text": "A narwhal! That long horn is really a tooth.",
+      "voice": "sparkle",
+      "key": "floe.facts.narwhal",
+      "part": "floe › facts",
+      "when": "",
+      "ms": 3792,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "floe",
+        "facts",
+        "puffin"
+      ],
+      "text": "A puffin! She dives for little fish.",
+      "voice": "sparkle",
+      "key": "floe.facts.puffin",
+      "part": "floe › facts",
+      "when": "",
+      "ms": 3120,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "floe",
+        "facts",
+        "beluga"
+      ],
+      "text": "Beluga whales! They sing like birds.",
+      "voice": "sparkle",
+      "key": "floe.facts.beluga",
+      "part": "floe › facts",
+      "when": "",
+      "ms": 3504,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "floe",
+        "facts",
+        "pup"
+      ],
+      "text": "A baby seal! Her white fur keeps her warm.",
+      "voice": "sparkle",
+      "key": "floe.facts.pup",
+      "part": "floe › facts",
+      "when": "",
+      "ms": 4440,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

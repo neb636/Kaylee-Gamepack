@@ -1,0 +1,129 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "floe.mama",
+  "title": "Poles › Floe › Mama",
+  "intro": "",
+  "page": "poles-floe-mama.html",
+  "audio": null,
+  "lines": 5,
+  "seconds": 11,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "floe.mama.1",
+      "text": "Who is that on your back?",
+      "flags": [
+        "changed"
+      ],
+      "was": "I am right here, Pola!"
+    },
+    {
+      "key": "floe.mama.2",
+      "text": "I am right here, Pola!",
+      "flags": [
+        "changed"
+      ],
+      "was": "You can do it, little one!"
+    },
+    {
+      "key": "floe.mama.3",
+      "text": "You can do it, little one!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Keep hopping!"
+    },
+    {
+      "key": "floe.mama.4",
+      "text": "Keep hopping!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "floe",
+        "mama",
+        "0"
+      ],
+      "text": "Hop home to me, Pola!",
+      "voice": "mama",
+      "key": "floe.mama.0",
+      "part": "floe › mama",
+      "when": "She pokes Mama Bear, far across the ice (in turn). Mama hasn't met Pebble yet.",
+      "ms": 2520,
+      "flags": []
+    },
+    {
+      "path": [
+        "floe",
+        "mama",
+        "1"
+      ],
+      "text": "Who is that on your back?",
+      "voice": "mama",
+      "key": "floe.mama.1",
+      "part": "floe › mama",
+      "when": "",
+      "ms": 2232,
+      "flags": [
+        "changed"
+      ],
+      "was": "I am right here, Pola!"
+    },
+    {
+      "path": [
+        "floe",
+        "mama",
+        "2"
+      ],
+      "text": "I am right here, Pola!",
+      "voice": "mama",
+      "key": "floe.mama.2",
+      "part": "floe › mama",
+      "when": "",
+      "ms": 2282,
+      "flags": [
+        "changed"
+      ],
+      "was": "You can do it, little one!"
+    },
+    {
+      "path": [
+        "floe",
+        "mama",
+        "3"
+      ],
+      "text": "You can do it, little one!",
+      "voice": "mama",
+      "key": "floe.mama.3",
+      "part": "floe › mama",
+      "when": "",
+      "ms": 2266,
+      "flags": [
+        "changed"
+      ],
+      "was": "Keep hopping!"
+    },
+    {
+      "path": [
+        "floe",
+        "mama",
+        "4"
+      ],
+      "text": "Keep hopping!",
+      "voice": "mama",
+      "key": "floe.mama.4",
+      "part": "floe › mama",
+      "when": "",
+      "ms": 1514,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

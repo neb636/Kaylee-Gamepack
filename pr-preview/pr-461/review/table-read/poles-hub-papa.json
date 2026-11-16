@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "hub.papa",
+  "title": "Poles › Hub › Papa",
+  "intro": "Papa waits down south, looking up at the sky. (Also what he says if she picks home before every stamp is in.)",
+  "page": "poles-hub-papa.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 4,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "hub.papa.0",
+      "text": "Pebble? Where are you?",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "hub.papa.1",
+      "text": "I'll keep looking, little one.",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "hub",
+        "papa",
+        "0"
+      ],
+      "text": "Pebble? Where are you?",
+      "voice": "papa",
+      "key": "hub.papa.0",
+      "part": "hub › papa",
+      "when": "Papa waits down south, looking up at the sky. (Also what he says if she picks home before every stamp is in.)",
+      "ms": 2256,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "papa",
+        "1"
+      ],
+      "text": "I'll keep looking, little one.",
+      "voice": "papa",
+      "key": "hub.papa.1",
+      "part": "hub › papa",
+      "when": "",
+      "ms": 1992,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

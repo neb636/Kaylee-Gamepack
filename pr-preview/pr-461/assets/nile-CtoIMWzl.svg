@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Sail the Nile</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ddf7ee"/><stop offset="1" stop-color="#a9e8d2"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.65"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="nile" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a3def0"/><stop offset="1" stop-color="#3fb2d8"/></linearGradient>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="58" r="50" fill="url(#glow)"/>
+
+  <!-- the far bank: pale dunes, a green strip, a grassy point on the left -->
+  <path d="M0 72C24 69.5 60 70.5 120 69.5V79H0Z" fill="#f7dcae"/>
+  <path d="M0 75.5C40 74.5 80 75 120 74.5V79H0Z" fill="#a8dea6"/>
+  <path d="M0 70C10 68.5 20 69 30 71.5C36 73 41 75.5 44 78.5H0Z" fill="#9fd89c"/>
+  <path d="M0 75C14 74.5 30 75.5 42 78.5H0Z" fill="#78c28c"/>
+
+  <!-- a date palm on the bank -->
+  <path d="M20.5 72.5C21 61 22.5 50 25.5 39.5H29.5C27 50 26 61 26.5 72.5Z" fill="#c99266"/>
+  <path d="M23.5 72.5C24 61 25.5 50 27.5 39.5H29.5C27 50 26 61 26.5 72.5Z" fill="#a46e4b"/>
+  <path d="M21.5 64H25.5M22 56H26M23.5 48H27" stroke="#e5b78f" stroke-width="2" stroke-linecap="round"/>
+  <g fill="#48a96c">
+    <path d="M27.5 38C19 33 10 35 6 43C12 39 19 38.5 27.5 40.5Z"/>
+    <path d="M27.5 38C36 33 45 35 49 43C43 39 36 38.5 27.5 40.5Z"/>
+  </g>
+  <g fill="#73cf86">
+    <path d="M27.5 38C22 30 14 27 8 29C14 31 20.5 34.5 26.5 40Z"/>
+    <path d="M27.5 38C33 30 41 27 47 29C41 31 34.5 34.5 28.5 40Z"/>
+    <path d="M27.5 38C26.5 31 28.5 25 32.5 21C31.5 27 30.5 33 29 39Z"/>
+  </g>
+  <path d="M26.5 37C21 32 15.5 30 10.5 30M28.5 37C34 32 39.5 30 44.5 30" fill="none" stroke="#aee8b7" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="25.5" cy="41.5" r="2.2" fill="#e57a35"/><circle cx="29.8" cy="41.8" r="2.2" fill="#ff9c57"/>
+
+  <!-- the Nile, with light streaks -->
+  <rect y="77" width="120" height="43" fill="url(#nile)"/>
+  <rect y="77" width="120" height="2" fill="#effcff" opacity="0.75"/>
+  <g fill="#fff" opacity="0.55">
+    <rect x="6" y="85" width="14" height="2.5" rx="1.25"/><rect x="99" y="87" width="13" height="2.5" rx="1.25"/>
+    <rect x="12" y="106" width="18" height="2.5" rx="1.25"/><rect x="66" y="108" width="24" height="2.5" rx="1.25"/><rect x="98" y="102" width="10" height="2.5" rx="1.25"/>
+  </g>
+
+  <!-- the felucca: a wooden boat under a big white sail -->
+  <ellipse cx="62" cy="96.5" rx="37" ry="3.5" fill="#1f8fb8" opacity="0.35"/>
+  <path d="M64 90V44.5" stroke="#8a5b3d" stroke-width="3" stroke-linecap="round"/>
+  <path d="M34.5 81L82.5 21C89 38 93 60 92 82Z" fill="#fff"/>
+  <path d="M82.5 21C89 38 93 60 92 82H82C85 62 85.5 40 82.5 21Z" fill="#e4ddf6"/>
+  <path d="M50.5 61.5C62 64 74 65 84.5 64.5M66.5 41.5C72 43 77 43.5 83.5 43" fill="none" stroke="#ece6fb" stroke-width="2" stroke-linecap="round"/>
+  <path d="M31 85L86 17" stroke="#8a5b3d" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M85.5 17.5L96.5 19.5L87 23.5Z" fill="#ff8fb8"/>
+  <path d="M27 82C39 88.5 83 89.5 97 82C95 91 90 96 83 96H43C35 96 29.5 91 27 82Z" fill="#c99266"/>
+  <path d="M29.5 88C41 91.5 81 92 95 88C93 93 88.5 96 83 96H43C37 96 32 93 29.5 88Z" fill="#a46e4b"/>
+  <path d="M28.5 84.2C40 90 82 91 95.5 84.5" fill="none" stroke="#3fc1cf" stroke-width="3" stroke-linecap="round"/>
+  <g fill="#fff" opacity="0.7"><rect x="14" y="93" width="10" height="2.5" rx="1.25"/><rect x="7" y="98.5" width="14" height="2.5" rx="1.25"/></g>
+</svg>

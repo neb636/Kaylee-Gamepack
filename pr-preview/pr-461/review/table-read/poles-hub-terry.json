@@ -1,0 +1,65 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "hub.terry",
+  "title": "Poles › Hub › Terry",
+  "intro": "She taps Terry as he flies his loop between the poles.",
+  "page": "poles-hub-terry.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 5,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "hub.terry.0",
+      "text": "I fly from pole to pole every year!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "hub.terry.1",
+      "text": "Follow me! I know the way!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "hub",
+        "terry",
+        "0"
+      ],
+      "text": "I fly from pole to pole every year!",
+      "voice": "terry",
+      "key": "hub.terry.0",
+      "part": "hub › terry",
+      "when": "She taps Terry as he flies his loop between the poles.",
+      "ms": 3120,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "terry",
+        "1"
+      ],
+      "text": "Follow me! I know the way!",
+      "voice": "terry",
+      "key": "hub.terry.1",
+      "part": "hub › terry",
+      "when": "",
+      "ms": 2304,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

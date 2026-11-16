@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "hub.welcome",
+  "title": "Poles › Hub › Welcome",
+  "intro": "Her first look at the globe after the way-in film (no stamps yet), once: Sparkle sends her to the first picture.",
+  "page": "poles-hub-welcome.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 9,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "hub.welcome.touch",
+      "text": "Let's take Pebble home! Tap the first picture.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "hub.welcome.mouse",
+      "text": "Let's take Pebble home! Click the first picture.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "hub",
+        "welcome",
+        "touch"
+      ],
+      "text": "Let's take Pebble home! Tap the first picture.",
+      "voice": "sparkle",
+      "key": "hub.welcome.touch",
+      "part": "hub › welcome",
+      "when": "Her first look at the globe after the way-in film (no stamps yet), once: Sparkle sends her to the first picture.",
+      "ms": 5088,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "welcome",
+        "mouse"
+      ],
+      "text": "Let's take Pebble home! Click the first picture.",
+      "voice": "sparkle",
+      "key": "hub.welcome.mouse",
+      "part": "hub › welcome",
+      "when": "",
+      "ms": 4056,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

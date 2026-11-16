@@ -1,0 +1,1660 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "party",
+  "title": "Poles › Party",
+  "intro": "---- The finale (activities/party/): the flight home, Papa's song, Terry's Polar Explorer quiz. In play order. ----",
+  "page": "poles-party.html",
+  "audio": null,
+  "lines": 74,
+  "seconds": 169,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "party.setOff",
+      "text": "Follow me, balloon!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Pola's postcard! Let's fly it to Pebble!"
+    },
+    {
+      "key": "party.steerHint.touch",
+      "text": "Move your finger to steer Terry!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "party.steerHint.mouse",
+      "text": "Hold the click and move to steer Terry!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "party.warm",
+      "text": "Phew! I'm melting!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Phew! It's warm in the middle of the world!"
+    },
+    {
+      "key": "party.warmFact",
+      "text": "The middle of the world is the warmest part!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "party.whale",
+      "text": "Look down! A whale!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.south",
+      "text": "It smells like home!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Brr, it's windy! Nearly at the South Pole!"
+    },
+    {
+      "key": "party.albatross",
+      "text": "Hello, albatross! Nearly there!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.balloon.0",
+      "text": "Wheee!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.balloon.1",
+      "text": "Higher, higher!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.ask",
+      "text": "Papa sings like this!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.how.touch",
+      "text": "Tap a papa to hear his song!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.how.mouse",
+      "text": "Click a papa to hear his song!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.hint.touch",
+      "text": "Tap the chick to hear the song again.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.hint.mouse",
+      "text": "Click the chick to hear the song again.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.neighbor",
+      "text": "Not my chick! Try my neighbor.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.glow",
+      "text": "Look! Who is swaying?",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.found",
+      "text": "That's Papa's song!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.papa",
+      "text": "My little Pebble!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.more",
+      "text": "Find my papa too!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.moreHow",
+      "text": "More papas! Listen for the same song.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.thanks.0",
+      "text": "Papa! You found him!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.thanks.1",
+      "text": "Thank you! Thank you!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.storm",
+      "text": "Brr, a snowstorm! Just listen.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.last",
+      "text": "I can't see my papa!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.done",
+      "text": "Every chick has a papa!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.pola.0",
+      "text": "I just want to say hi!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.pola.1",
+      "text": "Hi, penguins!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.colonyFact",
+      "text": "Penguins have never seen a polar bear. They're a little shy!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "party.song.songFact",
+      "text": "Emperor penguins find their family by their song.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "party.quiz",
+      "text": "Quiz time!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Quiz time!"
+    },
+    {
+      "key": "party.ask.bear",
+      "text": "Take Pola home! Where do polar bears live?",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Put Pola where polar bears live!"
+    },
+    {
+      "key": "party.ask.penguin",
+      "text": "Where do penguins live?",
+      "flags": [
+        "changed"
+      ],
+      "was": "Put Pebble where penguins live!"
+    },
+    {
+      "key": "party.ask.south",
+      "text": "Show me the South Pole!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Spin the South Pole to the front!"
+    },
+    {
+      "key": "party.ask.north",
+      "text": "Show me the North Pole!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Spin the North Pole to the front!"
+    },
+    {
+      "key": "party.ask.ocean",
+      "text": "Which pole is sea under the ice?",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "party.ask.coldest",
+      "text": "Which pole is the coldest?",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.ask.tern",
+      "text": "Who flies to both poles?",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.ask.summer",
+      "text": "It's summer up north. What is it down south?",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "It's summer up north. What is it down south?"
+    },
+    {
+      "key": "party.how.drag.touch",
+      "text": "Drag to the top or the bottom!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.how.drag.mouse",
+      "text": "Click and drag to the top or the bottom!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.how.spin.touch",
+      "text": "Swipe the globe up or down!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.how.spin.mouse",
+      "text": "Drag the globe up or down!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "party.how.tap.touch",
+      "text": "Tap the top or the bottom!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.how.tap.mouse",
+      "text": "Click the top or the bottom!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.how.pick.touch",
+      "text": "Tap your answer!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.how.pick.mouse",
+      "text": "Click your answer!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.miss.south",
+      "text": "Wobble, wobble! The other end!",
+      "flags": [
+        "long",
+        "twice",
+        "changed"
+      ],
+      "was": "Wobble, wobble! Try the other end."
+    },
+    {
+      "key": "party.miss.north",
+      "text": "Wobble, wobble! The other end!",
+      "flags": [
+        "long",
+        "twice",
+        "changed"
+      ],
+      "was": "Wobble, wobble! Try the other end."
+    },
+    {
+      "key": "party.miss.ocean",
+      "text": "That one is rock and land! Try the other.",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "That's rock and land under there! Try the other pole."
+    },
+    {
+      "key": "party.miss.coldest",
+      "text": "Brr! The other one is even colder.",
+      "flags": [
+        "changed"
+      ],
+      "was": "Brr! The other pole is even colder."
+    },
+    {
+      "key": "party.miss.tern",
+      "text": "Not them. Who can fly far?",
+      "flags": [
+        "changed"
+      ],
+      "was": "Hmm, not them. Who can fly far?"
+    },
+    {
+      "key": "party.miss.summer",
+      "text": "Down south it's dark and snowy!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Down south it's dark and snowy! Try again."
+    },
+    {
+      "key": "party.home",
+      "text": "I'm home! Bye, Pebble!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "party.right.0",
+      "text": "Yes!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Yes!"
+    },
+    {
+      "key": "party.right.1",
+      "text": "That's right!",
+      "flags": [
+        "changed"
+      ],
+      "was": "That's right!"
+    },
+    {
+      "key": "party.right.2",
+      "text": "You got it!",
+      "flags": [
+        "changed"
+      ],
+      "was": "You got it!"
+    },
+    {
+      "key": "party.right.3",
+      "text": "Top marks!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Super!"
+    },
+    {
+      "key": "party.badge",
+      "text": "A real Polar Explorer!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Wow, you know your poles!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "party",
+        "steer",
+        "touch"
+      ],
+      "text": "Steer Terry with your finger!",
+      "voice": "sparkle",
+      "key": "party.steer.touch",
+      "part": "party › steer",
+      "when": "-- The flight home: Terry leads the balloon down the world. As the flight starts: Sparkle says how to steer, then Terry calls back to the balloon.",
+      "ms": 2787,
+      "flags": []
+    },
+    {
+      "path": [
+        "party",
+        "steer",
+        "mouse"
+      ],
+      "text": "Click and drag to steer Terry!",
+      "voice": "sparkle",
+      "key": "party.steer.mouse",
+      "part": "party › steer",
+      "when": "",
+      "ms": 2544,
+      "flags": []
+    },
+    {
+      "path": [
+        "party",
+        "setOff"
+      ],
+      "text": "Follow me, balloon!",
+      "voice": "terry",
+      "key": "party.setOff",
+      "part": "party",
+      "when": "",
+      "ms": 2112,
+      "flags": [
+        "changed"
+      ],
+      "was": "Pola's postcard! Let's fly it to Pebble!"
+    },
+    {
+      "path": [
+        "party",
+        "steerHint",
+        "touch"
+      ],
+      "text": "Move your finger to steer Terry!",
+      "voice": "sparkle",
+      "key": "party.steerHint.touch",
+      "part": "party › steerHint",
+      "when": "Sparkle, when nothing has been touched for a while.",
+      "ms": 3813,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "steerHint",
+        "mouse"
+      ],
+      "text": "Hold the click and move to steer Terry!",
+      "voice": "sparkle",
+      "key": "party.steerHint.mouse",
+      "part": "party › steerHint",
+      "when": "",
+      "ms": 3288,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "fish",
+        "0"
+      ],
+      "text": "Yum, a fish!",
+      "voice": "terry",
+      "key": "party.fish.0",
+      "part": "party › fish",
+      "when": "Terry, every few fish he gulps (in turn).",
+      "ms": 1947,
+      "flags": []
+    },
+    {
+      "path": [
+        "party",
+        "fish",
+        "1"
+      ],
+      "text": "Fishy!",
+      "voice": "terry",
+      "key": "party.fish.1",
+      "part": "party › fish",
+      "when": "",
+      "ms": 746,
+      "flags": []
+    },
+    {
+      "path": [
+        "party",
+        "fish",
+        "2"
+      ],
+      "text": "Got one!",
+      "voice": "terry",
+      "key": "party.fish.2",
+      "part": "party › fish",
+      "when": "",
+      "ms": 922,
+      "flags": []
+    },
+    {
+      "path": [
+        "party",
+        "hello",
+        "thailand"
+      ],
+      "text": "Hello, Thailand!",
+      "voice": "terry",
+      "key": "party.hello.thailand",
+      "part": "party › hello",
+      "when": "Terry, over a country she has been to (the passport's), by its id.",
+      "ms": 1375,
+      "flags": []
+    },
+    {
+      "path": [
+        "party",
+        "hello",
+        "australia"
+      ],
+      "text": "Hello, Australia!",
+      "voice": "terry",
+      "key": "party.hello.australia",
+      "part": "party › hello",
+      "when": "Terry, over a country she has been to (the passport's), by its id.",
+      "ms": 1742,
+      "flags": []
+    },
+    {
+      "path": [
+        "party",
+        "hello",
+        "italy"
+      ],
+      "text": "Hello, Italy!",
+      "voice": "terry",
+      "key": "party.hello.italy",
+      "part": "party › hello",
+      "when": "Terry, over a country she has been to (the passport's), by its id.",
+      "ms": 1651,
+      "flags": []
+    },
+    {
+      "path": [
+        "party",
+        "hello",
+        "china"
+      ],
+      "text": "Hello, China!",
+      "voice": "terry",
+      "key": "party.hello.china",
+      "part": "party › hello",
+      "when": "Terry, over a country she has been to (the passport's), by its id.",
+      "ms": 1653,
+      "flags": []
+    },
+    {
+      "path": [
+        "party",
+        "hello",
+        "egypt"
+      ],
+      "text": "Hello, Egypt!",
+      "voice": "terry",
+      "key": "party.hello.egypt",
+      "part": "party › hello",
+      "when": "Terry, over a country she has been to (the passport's), by its id.",
+      "ms": 1442,
+      "flags": []
+    },
+    {
+      "path": [
+        "party",
+        "hello",
+        "peru"
+      ],
+      "text": "Hello, Peru!",
+      "voice": "terry",
+      "key": "party.hello.peru",
+      "part": "party › hello",
+      "when": "Terry, over a country she has been to (the passport's), by its id.",
+      "ms": 1545,
+      "flags": []
+    },
+    {
+      "path": [
+        "party",
+        "hello",
+        "canada"
+      ],
+      "text": "Hello, Canada!",
+      "voice": "terry",
+      "key": "party.hello.canada",
+      "part": "party › hello",
+      "when": "Terry, over a country she has been to (the passport's), by its id.",
+      "ms": 1546,
+      "flags": []
+    },
+    {
+      "path": [
+        "party",
+        "warm"
+      ],
+      "text": "Phew! I'm melting!",
+      "voice": "pola",
+      "key": "party.warm",
+      "part": "party",
+      "when": "The warm middle of the world: the sea turns turquoise, Pola pants and fans herself. Then Sparkle's fact.",
+      "ms": 2160,
+      "flags": [
+        "changed"
+      ],
+      "was": "Phew! It's warm in the middle of the world!"
+    },
+    {
+      "path": [
+        "party",
+        "warmFact"
+      ],
+      "text": "The middle of the world is the warmest part!",
+      "voice": "sparkle",
+      "key": "party.warmFact",
+      "part": "party",
+      "when": "",
+      "ms": 3264,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "whale"
+      ],
+      "text": "Look down! A whale!",
+      "voice": "terry",
+      "key": "party.whale",
+      "part": "party",
+      "when": "The first whale spouts below.",
+      "ms": 2016,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "south"
+      ],
+      "text": "It smells like home!",
+      "voice": "pebble",
+      "key": "party.south",
+      "part": "party",
+      "when": "The cold comes back: Pebble bounces in the basket.",
+      "ms": 1560,
+      "flags": [
+        "changed"
+      ],
+      "was": "Brr, it's windy! Nearly at the South Pole!"
+    },
+    {
+      "path": [
+        "party",
+        "albatross"
+      ],
+      "text": "Hello, albatross! Nearly there!",
+      "voice": "terry",
+      "key": "party.albatross",
+      "part": "party",
+      "when": "The albatross glides in beside them.",
+      "ms": 2976,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "balloon",
+        "0"
+      ],
+      "text": "Wheee!",
+      "voice": "pola",
+      "key": "party.balloon.0",
+      "part": "party › balloon",
+      "when": "A tap on the balloon (in turn).",
+      "ms": 1368,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "balloon",
+        "1"
+      ],
+      "text": "Higher, higher!",
+      "voice": "pebble",
+      "key": "party.balloon.1",
+      "part": "party › balloon",
+      "when": "",
+      "ms": 1608,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "ask"
+      ],
+      "text": "Papa sings like this!",
+      "voice": "pebble",
+      "key": "party.song.ask",
+      "part": "party › song",
+      "when": "Round 1. Pebble, then he hums; then Sparkle says what to do.",
+      "ms": 1680,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "how",
+        "touch"
+      ],
+      "text": "Tap a papa to hear his song!",
+      "voice": "sparkle",
+      "key": "party.song.how.touch",
+      "part": "party › song › how",
+      "when": "-- Papa's song: find each chick's papa by his tune.",
+      "ms": 2472,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "how",
+        "mouse"
+      ],
+      "text": "Click a papa to hear his song!",
+      "voice": "sparkle",
+      "key": "party.song.how.mouse",
+      "part": "party › song › how",
+      "when": "",
+      "ms": 2208,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "hint",
+        "touch"
+      ],
+      "text": "Tap the chick to hear the song again.",
+      "voice": "sparkle",
+      "key": "party.song.hint.touch",
+      "part": "party › song › hint",
+      "when": "Sparkle, when nothing has been touched for a while (the chick's tune plays again on a tap).",
+      "ms": 2832,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "hint",
+        "mouse"
+      ],
+      "text": "Click the chick to hear the song again.",
+      "voice": "sparkle",
+      "key": "party.song.hint.mouse",
+      "part": "party › song › hint",
+      "when": "",
+      "ms": 2976,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "neighbor"
+      ],
+      "text": "Not my chick! Try my neighbor.",
+      "voice": "papa",
+      "key": "party.song.neighbor",
+      "part": "party › song",
+      "when": "A dad who isn't the papa, the second miss of a round (Papa's voice; the first miss is a bow).",
+      "ms": 3792,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "glow"
+      ],
+      "text": "Look! Who is swaying?",
+      "voice": "sparkle",
+      "key": "party.song.glow",
+      "part": "party › song",
+      "when": "After two misses the right papa sways and glows.",
+      "ms": 2112,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "found"
+      ],
+      "text": "That's Papa's song!",
+      "voice": "pebble",
+      "key": "party.song.found",
+      "part": "party › song",
+      "when": "Found, round 1: Pebble, then Papa.",
+      "ms": 1320,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "papa"
+      ],
+      "text": "My little Pebble!",
+      "voice": "papa",
+      "key": "party.song.papa",
+      "part": "party › song",
+      "when": "-- Papa's song: find each chick's papa by his tune.",
+      "ms": 1416,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "more"
+      ],
+      "text": "Find my papa too!",
+      "voice": "pebble",
+      "key": "party.song.more",
+      "part": "party › song",
+      "when": "Round 2: another chick peeps for help (Pebble's voice); Sparkle.",
+      "ms": 1416,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "moreHow"
+      ],
+      "text": "More papas! Listen for the same song.",
+      "voice": "sparkle",
+      "key": "party.song.moreHow",
+      "part": "party › song",
+      "when": "-- Papa's song: find each chick's papa by his tune.",
+      "ms": 3912,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "thanks",
+        "0"
+      ],
+      "text": "Papa! You found him!",
+      "voice": "pebble",
+      "key": "party.song.thanks.0",
+      "part": "party › song › thanks",
+      "when": "Found, rounds 2 and 3 (the chick).",
+      "ms": 1632,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "thanks",
+        "1"
+      ],
+      "text": "Thank you! Thank you!",
+      "voice": "pebble",
+      "key": "party.song.thanks.1",
+      "part": "party › song › thanks",
+      "when": "",
+      "ms": 1848,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "storm"
+      ],
+      "text": "Brr, a snowstorm! Just listen.",
+      "voice": "sparkle",
+      "key": "party.song.storm",
+      "part": "party › song",
+      "when": "Round 3: the wind and the snow come up (Sparkle); one last chick.",
+      "ms": 3552,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "last"
+      ],
+      "text": "I can't see my papa!",
+      "voice": "pebble",
+      "key": "party.song.last",
+      "part": "party › song",
+      "when": "-- Papa's song: find each chick's papa by his tune.",
+      "ms": 1560,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "done"
+      ],
+      "text": "Every chick has a papa!",
+      "voice": "sparkle",
+      "key": "party.song.done",
+      "part": "party › song",
+      "when": "All three found.",
+      "ms": 2088,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "pola",
+        "0"
+      ],
+      "text": "I just want to say hi!",
+      "voice": "pola",
+      "key": "party.song.pola.0",
+      "part": "party › song › pola",
+      "when": "Taps behind the row: Pola (in turn), and Sparkle's facts the first time she pokes the colony or a found pair.",
+      "ms": 2352,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "pola",
+        "1"
+      ],
+      "text": "Hi, penguins!",
+      "voice": "pola",
+      "key": "party.song.pola.1",
+      "part": "party › song › pola",
+      "when": "",
+      "ms": 1632,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "colonyFact"
+      ],
+      "text": "Penguins have never seen a polar bear. They're a little shy!",
+      "voice": "sparkle",
+      "key": "party.song.colonyFact",
+      "part": "party › song",
+      "when": "-- Papa's song: find each chick's papa by his tune.",
+      "ms": 4464,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "song",
+        "songFact"
+      ],
+      "text": "Emperor penguins find their family by their song.",
+      "voice": "sparkle",
+      "key": "party.song.songFact",
+      "part": "party › song",
+      "when": "-- Papa's song: find each chick's papa by his tune.",
+      "ms": 4080,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "quiz"
+      ],
+      "text": "Quiz time!",
+      "voice": "terry",
+      "key": "party.quiz",
+      "part": "party",
+      "when": "-- Terry's Polar Explorer quiz: Terry asks, she answers by doing; Sparkle says how.",
+      "ms": 1056,
+      "flags": [
+        "changed"
+      ],
+      "was": "Quiz time!"
+    },
+    {
+      "path": [
+        "party",
+        "ask",
+        "bear"
+      ],
+      "text": "Take Pola home! Where do polar bears live?",
+      "voice": "terry",
+      "key": "party.ask.bear",
+      "part": "party › ask",
+      "when": "",
+      "ms": 3768,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Put Pola where polar bears live!"
+    },
+    {
+      "path": [
+        "party",
+        "ask",
+        "penguin"
+      ],
+      "text": "Where do penguins live?",
+      "voice": "terry",
+      "key": "party.ask.penguin",
+      "part": "party › ask",
+      "when": "",
+      "ms": 1896,
+      "flags": [
+        "changed"
+      ],
+      "was": "Put Pebble where penguins live!"
+    },
+    {
+      "path": [
+        "party",
+        "ask",
+        "south"
+      ],
+      "text": "Show me the South Pole!",
+      "voice": "terry",
+      "key": "party.ask.south",
+      "part": "party › ask",
+      "when": "",
+      "ms": 2016,
+      "flags": [
+        "changed"
+      ],
+      "was": "Spin the South Pole to the front!"
+    },
+    {
+      "path": [
+        "party",
+        "ask",
+        "north"
+      ],
+      "text": "Show me the North Pole!",
+      "voice": "terry",
+      "key": "party.ask.north",
+      "part": "party › ask",
+      "when": "",
+      "ms": 2328,
+      "flags": [
+        "changed"
+      ],
+      "was": "Spin the North Pole to the front!"
+    },
+    {
+      "path": [
+        "party",
+        "ask",
+        "ocean"
+      ],
+      "text": "Which pole is sea under the ice?",
+      "voice": "terry",
+      "key": "party.ask.ocean",
+      "part": "party › ask",
+      "when": "",
+      "ms": 3024,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "ask",
+        "coldest"
+      ],
+      "text": "Which pole is the coldest?",
+      "voice": "terry",
+      "key": "party.ask.coldest",
+      "part": "party › ask",
+      "when": "",
+      "ms": 2328,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "ask",
+        "tern"
+      ],
+      "text": "Who flies to both poles?",
+      "voice": "terry",
+      "key": "party.ask.tern",
+      "part": "party › ask",
+      "when": "",
+      "ms": 2304,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "ask",
+        "summer"
+      ],
+      "text": "It's summer up north. What is it down south?",
+      "voice": "terry",
+      "key": "party.ask.summer",
+      "part": "party › ask",
+      "when": "",
+      "ms": 3264,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "It's summer up north. What is it down south?"
+    },
+    {
+      "path": [
+        "party",
+        "how",
+        "drag",
+        "touch"
+      ],
+      "text": "Drag to the top or the bottom!",
+      "voice": "sparkle",
+      "key": "party.how.drag.touch",
+      "part": "party › how › drag",
+      "when": "Sparkle: how to answer each kind of question (the first time it comes up, and when she's stuck).",
+      "ms": 2640,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "how",
+        "drag",
+        "mouse"
+      ],
+      "text": "Click and drag to the top or the bottom!",
+      "voice": "sparkle",
+      "key": "party.how.drag.mouse",
+      "part": "party › how › drag",
+      "when": "",
+      "ms": 2976,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "how",
+        "spin",
+        "touch"
+      ],
+      "text": "Swipe the globe up or down!",
+      "voice": "sparkle",
+      "key": "party.how.spin.touch",
+      "part": "party › how › spin",
+      "when": "Sparkle: how to answer each kind of question (the first time it comes up, and when she's stuck).",
+      "ms": 2808,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "how",
+        "spin",
+        "mouse"
+      ],
+      "text": "Drag the globe up or down!",
+      "voice": "sparkle",
+      "key": "party.how.spin.mouse",
+      "part": "party › how › spin",
+      "when": "",
+      "ms": 3720,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "how",
+        "tap",
+        "touch"
+      ],
+      "text": "Tap the top or the bottom!",
+      "voice": "sparkle",
+      "key": "party.how.tap.touch",
+      "part": "party › how › tap",
+      "when": "Sparkle: how to answer each kind of question (the first time it comes up, and when she's stuck).",
+      "ms": 2160,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "how",
+        "tap",
+        "mouse"
+      ],
+      "text": "Click the top or the bottom!",
+      "voice": "sparkle",
+      "key": "party.how.tap.mouse",
+      "part": "party › how › tap",
+      "when": "",
+      "ms": 2472,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "how",
+        "pick",
+        "touch"
+      ],
+      "text": "Tap your answer!",
+      "voice": "sparkle",
+      "key": "party.how.pick.touch",
+      "part": "party › how › pick",
+      "when": "Sparkle: how to answer each kind of question (the first time it comes up, and when she's stuck).",
+      "ms": 1800,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "how",
+        "pick",
+        "mouse"
+      ],
+      "text": "Click your answer!",
+      "voice": "sparkle",
+      "key": "party.how.pick.mouse",
+      "part": "party › how › pick",
+      "when": "",
+      "ms": 2040,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "miss",
+        "bear"
+      ],
+      "text": "Where's the sea ice? I live up top!",
+      "voice": "pola",
+      "key": "party.miss.bear",
+      "part": "party › miss",
+      "when": "A miss: something silly, then the right thing glows and she does it herself. (Pola and the penguin speak for themselves when she puts them at the wrong pole; Terry for the rest.)",
+      "ms": 2710,
+      "flags": []
+    },
+    {
+      "path": [
+        "party",
+        "miss",
+        "penguin"
+      ],
+      "text": "Brr! Where is everybody?",
+      "voice": "pebble",
+      "key": "party.miss.penguin",
+      "part": "party › miss",
+      "when": "A miss: something silly, then the right thing glows and she does it herself. (Pola and the penguin speak for themselves when she puts them at the wrong pole; Terry for the rest.)",
+      "ms": 2134,
+      "flags": []
+    },
+    {
+      "path": [
+        "party",
+        "miss",
+        "south"
+      ],
+      "text": "Wobble, wobble! The other end!",
+      "voice": "terry",
+      "key": "party.miss.south",
+      "part": "party › miss",
+      "when": "A miss: something silly, then the right thing glows and she does it herself. (Pola and the penguin speak for themselves when she puts them at the wrong pole; Terry for the rest.)",
+      "ms": 3024,
+      "flags": [
+        "long",
+        "twice",
+        "changed"
+      ],
+      "was": "Wobble, wobble! Try the other end."
+    },
+    {
+      "path": [
+        "party",
+        "miss",
+        "north"
+      ],
+      "text": "Wobble, wobble! The other end!",
+      "voice": "terry",
+      "key": "party.miss.north",
+      "part": "party › miss",
+      "when": "A miss: something silly, then the right thing glows and she does it herself. (Pola and the penguin speak for themselves when she puts them at the wrong pole; Terry for the rest.)",
+      "ms": 3024,
+      "flags": [
+        "long",
+        "twice",
+        "changed"
+      ],
+      "was": "Wobble, wobble! Try the other end."
+    },
+    {
+      "path": [
+        "party",
+        "miss",
+        "ocean"
+      ],
+      "text": "That one is rock and land! Try the other.",
+      "voice": "terry",
+      "key": "party.miss.ocean",
+      "part": "party › miss",
+      "when": "A miss: something silly, then the right thing glows and she does it herself. (Pola and the penguin speak for themselves when she puts them at the wrong pole; Terry for the rest.)",
+      "ms": 3456,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "That's rock and land under there! Try the other pole."
+    },
+    {
+      "path": [
+        "party",
+        "miss",
+        "coldest"
+      ],
+      "text": "Brr! The other one is even colder.",
+      "voice": "terry",
+      "key": "party.miss.coldest",
+      "part": "party › miss",
+      "when": "A miss: something silly, then the right thing glows and she does it herself. (Pola and the penguin speak for themselves when she puts them at the wrong pole; Terry for the rest.)",
+      "ms": 2832,
+      "flags": [
+        "changed"
+      ],
+      "was": "Brr! The other pole is even colder."
+    },
+    {
+      "path": [
+        "party",
+        "miss",
+        "tern"
+      ],
+      "text": "Not them. Who can fly far?",
+      "voice": "terry",
+      "key": "party.miss.tern",
+      "part": "party › miss",
+      "when": "A miss: something silly, then the right thing glows and she does it herself. (Pola and the penguin speak for themselves when she puts them at the wrong pole; Terry for the rest.)",
+      "ms": 2664,
+      "flags": [
+        "changed"
+      ],
+      "was": "Hmm, not them. Who can fly far?"
+    },
+    {
+      "path": [
+        "party",
+        "miss",
+        "summer"
+      ],
+      "text": "Down south it's dark and snowy!",
+      "voice": "terry",
+      "key": "party.miss.summer",
+      "part": "party › miss",
+      "when": "A miss: something silly, then the right thing glows and she does it herself. (Pola and the penguin speak for themselves when she puts them at the wrong pole; Terry for the rest.)",
+      "ms": 2976,
+      "flags": [
+        "changed"
+      ],
+      "was": "Down south it's dark and snowy! Try again."
+    },
+    {
+      "path": [
+        "party",
+        "glow"
+      ],
+      "text": "Look for the sparkle!",
+      "voice": "sparkle",
+      "key": "party.glow",
+      "part": "party",
+      "when": "",
+      "ms": 1349,
+      "flags": []
+    },
+    {
+      "path": [
+        "party",
+        "home"
+      ],
+      "text": "I'm home! Bye, Pebble!",
+      "voice": "pola",
+      "key": "party.home",
+      "part": "party",
+      "when": "Right, the first question: Pola waves from the sea ice. Right, the others: Terry cheers (in turn).",
+      "ms": 2472,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "party",
+        "right",
+        "0"
+      ],
+      "text": "Yes!",
+      "voice": "terry",
+      "key": "party.right.0",
+      "part": "party › right",
+      "when": "",
+      "ms": 792,
+      "flags": [
+        "changed"
+      ],
+      "was": "Yes!"
+    },
+    {
+      "path": [
+        "party",
+        "right",
+        "1"
+      ],
+      "text": "That's right!",
+      "voice": "terry",
+      "key": "party.right.1",
+      "part": "party › right",
+      "when": "",
+      "ms": 960,
+      "flags": [
+        "changed"
+      ],
+      "was": "That's right!"
+    },
+    {
+      "path": [
+        "party",
+        "right",
+        "2"
+      ],
+      "text": "You got it!",
+      "voice": "terry",
+      "key": "party.right.2",
+      "part": "party › right",
+      "when": "",
+      "ms": 984,
+      "flags": [
+        "changed"
+      ],
+      "was": "You got it!"
+    },
+    {
+      "path": [
+        "party",
+        "right",
+        "3"
+      ],
+      "text": "Top marks!",
+      "voice": "terry",
+      "key": "party.right.3",
+      "part": "party › right",
+      "when": "",
+      "ms": 1320,
+      "flags": [
+        "changed"
+      ],
+      "was": "Super!"
+    },
+    {
+      "path": [
+        "party",
+        "badge"
+      ],
+      "text": "A real Polar Explorer!",
+      "voice": "terry",
+      "key": "party.badge",
+      "part": "party",
+      "when": "The badge. No name here: the trophy's line says it right after.",
+      "ms": 2184,
+      "flags": [
+        "changed"
+      ],
+      "was": "Wow, you know your poles!"
+    }
+  ]
+}

@@ -1,0 +1,1091 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "slide",
+  "title": "Poles › Slide",
+  "intro": "",
+  "page": "poles-slide.html",
+  "audio": null,
+  "lines": 49,
+  "seconds": 144,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "slide.hints.dive",
+      "text": "Steer Papa to the pink krill!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "slide.look",
+      "text": "Is that Pebble? Steer Papa over to look!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "slide.call.0",
+      "text": "Pebble? Are you down here?",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "slide.call.1",
+      "text": "Not behind this snowbank!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "slide.call.2",
+      "text": "Pebble! Where are you?",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "slide.call.3",
+      "text": "No little footprints here.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "slide.ask.0",
+      "text": "Have you seen my Pebble?",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "slide.ask.1",
+      "text": "A little grey chick? No?",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "slide.found.snowy",
+      "text": "Oh! A snowy Adelie, not Pebble!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "slide.found.seal",
+      "text": "Not Pebble. A sleepy seal!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "slide.found.skua",
+      "text": "A skua chick! Not my chick.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "slide.found.hat",
+      "text": "A woolly hat! It fits!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "slide.found.buoy",
+      "text": "Bong! Only a buoy.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "slide.found.fish",
+      "text": "Just a ball of little fish!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "slide.bank.0",
+      "text": "Ha! Snow on my beak!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Oops! Snow on my beak!"
+    },
+    {
+      "key": "slide.bumps",
+      "text": "Antarctica is land, under a big hill of ice!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Antarctica is one big hill of ice!"
+    },
+    {
+      "key": "slide.callSea.0",
+      "text": "Pebble? Are you in the sea?",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "slide.callSea.1",
+      "text": "Not under this ice!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "slide.gulp.0",
+      "text": "Krill! For Pebble's supper!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Yum, krill!"
+    },
+    {
+      "key": "slide.gulp.2",
+      "text": "More for Pebble's supper!",
+      "flags": [
+        "changed"
+      ],
+      "was": "More for Pebble!"
+    },
+    {
+      "key": "slide.krill",
+      "text": "Krill are tiny pink sea animals. Penguin food!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "slide.seal",
+      "text": "Seal, have you seen Pebble?",
+      "flags": [
+        "changed"
+      ],
+      "was": "Hello, silly seal!"
+    },
+    {
+      "key": "slide.leap",
+      "text": "Up and out!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Pebble, I'm home!"
+    },
+    {
+      "key": "slide.home",
+      "text": "Pebble! Supper is ready!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "slide.facts.papa",
+      "text": "Emperor penguins are the biggest penguins of all!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "slide.facts.gentoo",
+      "text": "Gentoo penguins have bright orange beaks.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "slide.facts.noBears",
+      "text": "No polar bears live here, so the penguins are not scared.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "slide.facts.elephant",
+      "text": "An elephant seal! The biggest seal of all.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "slide.facts.weddell",
+      "text": "Weddell seals sing. It sounds like outer space!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "slide.facts.skua",
+      "text": "A skua! A big, bold seabird.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "slide.facts.chick",
+      "text": "Skua chicks are grey and fluffy, just like Pebble.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "slide.facts.hat",
+      "text": "A woolly hat keeps your head warm.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "slide.facts.flag",
+      "text": "Scientists stay here to study the ice.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "slide.facts.scientist",
+      "text": "Nobody lives here for good. Scientists come to visit!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "slide.facts.spout",
+      "text": "A humpback whale! It eats krill too.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "slide.facts.seal",
+      "text": "A leopard seal! This one just wants to play.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "slide.facts.swimmer",
+      "text": "Under the water, penguins are super fast!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "slide.facts.buoy",
+      "text": "A buoy floats on the sea. It tells the ships the way.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "slide.facts.fish",
+      "text": "Silverfish! They shine like little coins.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "slide",
+        "hints",
+        "top"
+      ],
+      "text": "Steer Papa left and right!",
+      "voice": "sparkle",
+      "key": "slide.hints.top",
+      "part": "slide › hints",
+      "when": "Papa's search, in play order (the films either side are story.slideIn and story.slideOut). Sparkle says what to do; Papa says the rest in his own voice. Sparkle, as he flops onto his tummy at the top, then when each stretch starts (and again when she's stuck there).",
+      "ms": 2571,
+      "flags": []
+    },
+    {
+      "path": [
+        "slide",
+        "hints",
+        "bumps"
+      ],
+      "text": "Bumps! Pick a way down the hill!",
+      "voice": "sparkle",
+      "key": "slide.hints.bumps",
+      "part": "slide › hints",
+      "when": "Papa's search, in play order (the films either side are story.slideIn and story.slideOut). Sparkle says what to do; Papa says the rest in his own voice. Sparkle, as he flops onto his tummy at the top, then when each stretch starts (and again when she's stuck there).",
+      "ms": 2691,
+      "flags": []
+    },
+    {
+      "path": [
+        "slide",
+        "hints",
+        "dive"
+      ],
+      "text": "Steer Papa to the pink krill!",
+      "voice": "sparkle",
+      "key": "slide.hints.dive",
+      "part": "slide › hints",
+      "when": "Papa's search, in play order (the films either side are story.slideIn and story.slideOut). Sparkle says what to do; Papa says the rest in his own voice. Sparkle, as he flops onto his tummy at the top, then when each stretch starts (and again when she's stuck there).",
+      "ms": 3130,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "look"
+      ],
+      "text": "Is that Pebble? Steer Papa over to look!",
+      "voice": "sparkle",
+      "key": "slide.look",
+      "part": "slide",
+      "when": "Sparkle, the first time something small and grey shows up ahead (and when she pokes one he hasn't looked at).",
+      "ms": 3720,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "call",
+        "0"
+      ],
+      "text": "Pebble? Are you down here?",
+      "voice": "papa",
+      "key": "slide.call.0",
+      "part": "slide › call",
+      "when": "Papa calls for Pebble as he slides down the hill: in turn, every so often, when nothing else is going on.",
+      "ms": 2400,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "call",
+        "1"
+      ],
+      "text": "Not behind this snowbank!",
+      "voice": "papa",
+      "key": "slide.call.1",
+      "part": "slide › call",
+      "when": "",
+      "ms": 2376,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "call",
+        "2"
+      ],
+      "text": "Pebble! Where are you?",
+      "voice": "papa",
+      "key": "slide.call.2",
+      "part": "slide › call",
+      "when": "",
+      "ms": 1680,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "call",
+        "3"
+      ],
+      "text": "No little footprints here.",
+      "voice": "papa",
+      "key": "slide.call.3",
+      "part": "slide › call",
+      "when": "",
+      "ms": 2088,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "ask",
+        "0"
+      ],
+      "text": "Have you seen my Pebble?",
+      "voice": "papa",
+      "key": "slide.ask.0",
+      "part": "slide › ask",
+      "when": "Papa, to an Adelie who hops out of his way.",
+      "ms": 1848,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "ask",
+        "1"
+      ],
+      "text": "A little grey chick? No?",
+      "voice": "papa",
+      "key": "slide.ask.1",
+      "part": "slide › ask",
+      "when": "",
+      "ms": 2424,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "found",
+        "snowy"
+      ],
+      "text": "Oh! A snowy Adelie, not Pebble!",
+      "voice": "papa",
+      "key": "slide.found.snowy",
+      "part": "slide › found",
+      "when": "Papa, when the thing he slid up to turns out not to be Pebble (one each, in the order he comes to them).",
+      "ms": 4272,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "found",
+        "seal"
+      ],
+      "text": "Not Pebble. A sleepy seal!",
+      "voice": "papa",
+      "key": "slide.found.seal",
+      "part": "slide › found",
+      "when": "Papa, when the thing he slid up to turns out not to be Pebble (one each, in the order he comes to them).",
+      "ms": 3672,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "found",
+        "skua"
+      ],
+      "text": "A skua chick! Not my chick.",
+      "voice": "papa",
+      "key": "slide.found.skua",
+      "part": "slide › found",
+      "when": "Papa, when the thing he slid up to turns out not to be Pebble (one each, in the order he comes to them).",
+      "ms": 2856,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "found",
+        "hat"
+      ],
+      "text": "A woolly hat! It fits!",
+      "voice": "papa",
+      "key": "slide.found.hat",
+      "part": "slide › found",
+      "when": "Papa, when the thing he slid up to turns out not to be Pebble (one each, in the order he comes to them).",
+      "ms": 2520,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "found",
+        "buoy"
+      ],
+      "text": "Bong! Only a buoy.",
+      "voice": "papa",
+      "key": "slide.found.buoy",
+      "part": "slide › found",
+      "when": "Papa, when the thing he slid up to turns out not to be Pebble (one each, in the order he comes to them).",
+      "ms": 2640,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "found",
+        "fish"
+      ],
+      "text": "Just a ball of little fish!",
+      "voice": "papa",
+      "key": "slide.found.fish",
+      "part": "slide › found",
+      "when": "Papa, when the thing he slid up to turns out not to be Pebble (one each, in the order he comes to them).",
+      "ms": 2424,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "air",
+        "0"
+      ],
+      "text": "Whoa, I can fly!",
+      "voice": "papa",
+      "key": "slide.air.0",
+      "part": "slide › air",
+      "when": "Papa, when something happens to him on the hill (a few each, not every time): big air, head first in a snowbank, bumping an Adelie.",
+      "ms": 2613,
+      "flags": []
+    },
+    {
+      "path": [
+        "slide",
+        "air",
+        "1"
+      ],
+      "text": "Wheee!",
+      "voice": "papa",
+      "key": "slide.air.1",
+      "part": "slide › air",
+      "when": "Up off a ramp of ice (or a wave), and the big splash back down.",
+      "ms": 874,
+      "flags": []
+    },
+    {
+      "path": [
+        "slide",
+        "bank",
+        "0"
+      ],
+      "text": "Ha! Snow on my beak!",
+      "voice": "papa",
+      "key": "slide.bank.0",
+      "part": "slide › bank",
+      "when": "",
+      "ms": 2664,
+      "flags": [
+        "changed"
+      ],
+      "was": "Oops! Snow on my beak!"
+    },
+    {
+      "path": [
+        "slide",
+        "bank",
+        "1"
+      ],
+      "text": "Brr, a snowy nose!",
+      "voice": "papa",
+      "key": "slide.bank.1",
+      "part": "slide › bank",
+      "when": "",
+      "ms": 2898,
+      "flags": []
+    },
+    {
+      "path": [
+        "slide",
+        "bump",
+        "0"
+      ],
+      "text": "Oh! Sorry, little friend!",
+      "voice": "papa",
+      "key": "slide.bump.0",
+      "part": "slide › bump",
+      "when": "",
+      "ms": 2540,
+      "flags": []
+    },
+    {
+      "path": [
+        "slide",
+        "bump",
+        "1"
+      ],
+      "text": "Round and round!",
+      "voice": "papa",
+      "key": "slide.bump.1",
+      "part": "slide › bump",
+      "when": "",
+      "ms": 1694,
+      "flags": []
+    },
+    {
+      "path": [
+        "slide",
+        "bumps"
+      ],
+      "text": "Antarctica is land, under a big hill of ice!",
+      "voice": "sparkle",
+      "key": "slide.bumps",
+      "part": "slide",
+      "when": "",
+      "ms": 4056,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Antarctica is one big hill of ice!"
+    },
+    {
+      "path": [
+        "slide",
+        "dive"
+      ],
+      "text": "Penguins fly under the water!",
+      "voice": "sparkle",
+      "key": "slide.dive",
+      "part": "slide",
+      "when": "",
+      "ms": 2570,
+      "flags": []
+    },
+    {
+      "path": [
+        "slide",
+        "callSea",
+        "0"
+      ],
+      "text": "Pebble? Are you in the sea?",
+      "voice": "papa",
+      "key": "slide.callSea.0",
+      "part": "slide › callSea",
+      "when": "",
+      "ms": 2160,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "callSea",
+        "1"
+      ],
+      "text": "Not under this ice!",
+      "voice": "papa",
+      "key": "slide.callSea.1",
+      "part": "slide › callSea",
+      "when": "",
+      "ms": 2160,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "gulp",
+        "0"
+      ],
+      "text": "Krill! For Pebble's supper!",
+      "voice": "papa",
+      "key": "slide.gulp.0",
+      "part": "slide › gulp",
+      "when": "",
+      "ms": 2496,
+      "flags": [
+        "changed"
+      ],
+      "was": "Yum, krill!"
+    },
+    {
+      "path": [
+        "slide",
+        "gulp",
+        "1"
+      ],
+      "text": "Gulp!",
+      "voice": "papa",
+      "key": "slide.gulp.1",
+      "part": "slide › gulp",
+      "when": "",
+      "ms": 626,
+      "flags": []
+    },
+    {
+      "path": [
+        "slide",
+        "gulp",
+        "2"
+      ],
+      "text": "More for Pebble's supper!",
+      "voice": "papa",
+      "key": "slide.gulp.2",
+      "part": "slide › gulp",
+      "when": "",
+      "ms": 1872,
+      "flags": [
+        "changed"
+      ],
+      "was": "More for Pebble!"
+    },
+    {
+      "path": [
+        "slide",
+        "krill"
+      ],
+      "text": "Krill are tiny pink sea animals. Penguin food!",
+      "voice": "sparkle",
+      "key": "slide.krill",
+      "part": "slide",
+      "when": "",
+      "ms": 4608,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "seal"
+      ],
+      "text": "Seal, have you seen Pebble?",
+      "voice": "papa",
+      "key": "slide.seal",
+      "part": "slide",
+      "when": "",
+      "ms": 2520,
+      "flags": [
+        "changed"
+      ],
+      "was": "Hello, silly seal!"
+    },
+    {
+      "path": [
+        "slide",
+        "leap"
+      ],
+      "text": "Up and out!",
+      "voice": "papa",
+      "key": "slide.leap",
+      "part": "slide",
+      "when": "",
+      "ms": 1752,
+      "flags": [
+        "changed"
+      ],
+      "was": "Pebble, I'm home!"
+    },
+    {
+      "path": [
+        "slide",
+        "home"
+      ],
+      "text": "Pebble! Supper is ready!",
+      "voice": "papa",
+      "key": "slide.home",
+      "part": "slide",
+      "when": "",
+      "ms": 2232,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "facts",
+        "papa"
+      ],
+      "text": "Emperor penguins are the biggest penguins of all!",
+      "voice": "sparkle",
+      "key": "slide.facts.papa",
+      "part": "slide › facts",
+      "when": "",
+      "ms": 3101,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "facts",
+        "gentoo"
+      ],
+      "text": "Gentoo penguins have bright orange beaks.",
+      "voice": "sparkle",
+      "key": "slide.facts.gentoo",
+      "part": "slide › facts",
+      "when": "",
+      "ms": 3720,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "facts",
+        "adelie"
+      ],
+      "text": "These little ones are Adelie penguins.",
+      "voice": "sparkle",
+      "key": "slide.facts.adelie",
+      "part": "slide › facts",
+      "when": "",
+      "ms": 2741,
+      "flags": []
+    },
+    {
+      "path": [
+        "slide",
+        "facts",
+        "noBears"
+      ],
+      "text": "No polar bears live here, so the penguins are not scared.",
+      "voice": "sparkle",
+      "key": "slide.facts.noBears",
+      "part": "slide › facts",
+      "when": "",
+      "ms": 4612,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "facts",
+        "elephant"
+      ],
+      "text": "An elephant seal! The biggest seal of all.",
+      "voice": "sparkle",
+      "key": "slide.facts.elephant",
+      "part": "slide › facts",
+      "when": "",
+      "ms": 4248,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "facts",
+        "weddell"
+      ],
+      "text": "Weddell seals sing. It sounds like outer space!",
+      "voice": "sparkle",
+      "key": "slide.facts.weddell",
+      "part": "slide › facts",
+      "when": "",
+      "ms": 4296,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "facts",
+        "skua"
+      ],
+      "text": "A skua! A big, bold seabird.",
+      "voice": "sparkle",
+      "key": "slide.facts.skua",
+      "part": "slide › facts",
+      "when": "",
+      "ms": 3552,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "facts",
+        "chick"
+      ],
+      "text": "Skua chicks are grey and fluffy, just like Pebble.",
+      "voice": "sparkle",
+      "key": "slide.facts.chick",
+      "part": "slide › facts",
+      "when": "",
+      "ms": 4632,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "facts",
+        "hat"
+      ],
+      "text": "A woolly hat keeps your head warm.",
+      "voice": "sparkle",
+      "key": "slide.facts.hat",
+      "part": "slide › facts",
+      "when": "",
+      "ms": 2280,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "facts",
+        "flag"
+      ],
+      "text": "Scientists stay here to study the ice.",
+      "voice": "sparkle",
+      "key": "slide.facts.flag",
+      "part": "slide › facts",
+      "when": "",
+      "ms": 3480,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "facts",
+        "scientist"
+      ],
+      "text": "Nobody lives here for good. Scientists come to visit!",
+      "voice": "sparkle",
+      "key": "slide.facts.scientist",
+      "part": "slide › facts",
+      "when": "",
+      "ms": 4464,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "facts",
+        "spout"
+      ],
+      "text": "A humpback whale! It eats krill too.",
+      "voice": "sparkle",
+      "key": "slide.facts.spout",
+      "part": "slide › facts",
+      "when": "",
+      "ms": 3792,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "facts",
+        "seal"
+      ],
+      "text": "A leopard seal! This one just wants to play.",
+      "voice": "sparkle",
+      "key": "slide.facts.seal",
+      "part": "slide › facts",
+      "when": "",
+      "ms": 3824,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "facts",
+        "swimmer"
+      ],
+      "text": "Under the water, penguins are super fast!",
+      "voice": "sparkle",
+      "key": "slide.facts.swimmer",
+      "part": "slide › facts",
+      "when": "",
+      "ms": 3672,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "facts",
+        "buoy"
+      ],
+      "text": "A buoy floats on the sea. It tells the ships the way.",
+      "voice": "sparkle",
+      "key": "slide.facts.buoy",
+      "part": "slide › facts",
+      "when": "",
+      "ms": 4032,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "slide",
+        "facts",
+        "fish"
+      ],
+      "text": "Silverfish! They shine like little coins.",
+      "voice": "sparkle",
+      "key": "slide.facts.fish",
+      "part": "slide › facts",
+      "when": "",
+      "ms": 4152,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

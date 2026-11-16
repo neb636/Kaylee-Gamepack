@@ -1,0 +1,94 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "hub.pola",
+  "title": "Poles › Hub › Pola",
+  "intro": "She taps a friend on the globe: their lines in turn, in their own voices. Pola and Pebble stand together up north.",
+  "page": "poles-hub-pola.html",
+  "audio": null,
+  "lines": 3,
+  "seconds": 7,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "hub.pola.0",
+      "text": "I've never seen a penguin before!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Ha ha, that tickles!"
+    },
+    {
+      "key": "hub.pola.1",
+      "text": "Don't worry, Pebble. We'll get you home!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "The ice floats on the sea!"
+    },
+    {
+      "key": "hub.pola.2",
+      "text": "Ha ha, that tickles!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Brr! I love the cold!"
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "hub",
+        "pola",
+        "0"
+      ],
+      "text": "I've never seen a penguin before!",
+      "voice": "pola",
+      "key": "hub.pola.0",
+      "part": "hub › pola",
+      "when": "She taps a friend on the globe: their lines in turn, in their own voices. Pola and Pebble stand together up north.",
+      "ms": 1992,
+      "flags": [
+        "changed"
+      ],
+      "was": "Ha ha, that tickles!"
+    },
+    {
+      "path": [
+        "hub",
+        "pola",
+        "1"
+      ],
+      "text": "Don't worry, Pebble. We'll get you home!",
+      "voice": "pola",
+      "key": "hub.pola.1",
+      "part": "hub › pola",
+      "when": "",
+      "ms": 3288,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "The ice floats on the sea!"
+    },
+    {
+      "path": [
+        "hub",
+        "pola",
+        "2"
+      ],
+      "text": "Ha ha, that tickles!",
+      "voice": "pola",
+      "key": "hub.pola.2",
+      "part": "hub › pola",
+      "when": "",
+      "ms": 2087,
+      "flags": [
+        "changed"
+      ],
+      "was": "Brr! I love the cold!"
+    }
+  ]
+}

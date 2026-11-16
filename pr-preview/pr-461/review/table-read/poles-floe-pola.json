@@ -1,0 +1,104 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "floe.pola",
+  "title": "Poles › Floe › Pola",
+  "intro": "She taps a friend on the globe: their lines in turn, in their own voices. Pola and Pebble stand together up north.",
+  "page": "poles-floe-pola.html",
+  "audio": null,
+  "lines": 4,
+  "seconds": 5,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "floe.pola.1",
+      "text": "Peep peep!",
+      "flags": [
+        "changed"
+      ],
+      "was": "That tickles!"
+    },
+    {
+      "key": "floe.pola.2",
+      "text": "That tickles!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Again! Again!"
+    },
+    {
+      "key": "floe.pola.3",
+      "text": "Hop, Pola, hop!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "floe",
+        "pola",
+        "0"
+      ],
+      "text": "Hee hee!",
+      "voice": "pola",
+      "key": "floe.pola.0",
+      "part": "floe › pola",
+      "when": "She pokes Pola and Pebble (in turn).",
+      "ms": 884,
+      "flags": []
+    },
+    {
+      "path": [
+        "floe",
+        "pola",
+        "1"
+      ],
+      "text": "Peep peep!",
+      "voice": "pebble",
+      "key": "floe.pola.1",
+      "part": "floe › pola",
+      "when": "---- Narwhal Ride (activities/narwhal/) ---- In play order. Sparkle says what to do as each stretch starts (and again when she's stuck there); Nari, Pola, Pebble and Terry say their own lines when something happens (a few each, in turn, never every time).",
+      "ms": 1128,
+      "flags": [
+        "changed"
+      ],
+      "was": "That tickles!"
+    },
+    {
+      "path": [
+        "floe",
+        "pola",
+        "2"
+      ],
+      "text": "That tickles!",
+      "voice": "pola",
+      "key": "floe.pola.2",
+      "part": "floe › pola",
+      "when": "",
+      "ms": 1212,
+      "flags": [
+        "changed"
+      ],
+      "was": "Again! Again!"
+    },
+    {
+      "path": [
+        "floe",
+        "pola",
+        "3"
+      ],
+      "text": "Hop, Pola, hop!",
+      "voice": "pebble",
+      "key": "floe.pola.3",
+      "part": "floe › pola",
+      "when": "",
+      "ms": 1704,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

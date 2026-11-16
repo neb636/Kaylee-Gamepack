@@ -1,0 +1,205 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "hub.pokes",
+  "title": "Poles › Hub › Pokes",
+  "intro": "A fact the first time she pokes each thing (once per visit).",
+  "page": "poles-hub-pokes.html",
+  "audio": null,
+  "lines": 8,
+  "seconds": 32,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "hub.pokes.marker",
+      "text": "This is the North Pole, the very top of the world!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.seal",
+      "text": "Seals pop up through holes in the ice to breathe.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.station",
+      "text": "Scientists stay here to learn about the ice.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.whale",
+      "text": "Whales swim in the cold seas at both poles.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.ship",
+      "text": "The red ship! Pebble fell asleep on it.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "hub.pokes.balloon",
+      "text": "My balloon! It will fly Pebble home.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "hub.pokes.lightsNorth",
+      "text": "The northern lights! They dance in the dark winter sky.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.lightsSouth",
+      "text": "The southern lights! They glow in the long winter night.",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "marker"
+      ],
+      "text": "This is the North Pole, the very top of the world!",
+      "voice": "sparkle",
+      "key": "hub.pokes.marker",
+      "part": "hub › pokes",
+      "when": "",
+      "ms": 4132,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "seal"
+      ],
+      "text": "Seals pop up through holes in the ice to breathe.",
+      "voice": "sparkle",
+      "key": "hub.pokes.seal",
+      "part": "hub › pokes",
+      "when": "",
+      "ms": 3825,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "station"
+      ],
+      "text": "Scientists stay here to learn about the ice.",
+      "voice": "sparkle",
+      "key": "hub.pokes.station",
+      "part": "hub › pokes",
+      "when": "",
+      "ms": 3583,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "whale"
+      ],
+      "text": "Whales swim in the cold seas at both poles.",
+      "voice": "sparkle",
+      "key": "hub.pokes.whale",
+      "part": "hub › pokes",
+      "when": "",
+      "ms": 4388,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "ship"
+      ],
+      "text": "The red ship! Pebble fell asleep on it.",
+      "voice": "sparkle",
+      "key": "hub.pokes.ship",
+      "part": "hub › pokes",
+      "when": "",
+      "ms": 3912,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "balloon"
+      ],
+      "text": "My balloon! It will fly Pebble home.",
+      "voice": "sparkle",
+      "key": "hub.pokes.balloon",
+      "part": "hub › pokes",
+      "when": "",
+      "ms": 3312,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "lightsNorth"
+      ],
+      "text": "The northern lights! They dance in the dark winter sky.",
+      "voice": "sparkle",
+      "key": "hub.pokes.lightsNorth",
+      "part": "hub › pokes",
+      "when": "",
+      "ms": 4136,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "lightsSouth"
+      ],
+      "text": "The southern lights! They glow in the long winter night.",
+      "voice": "sparkle",
+      "key": "hub.pokes.lightsSouth",
+      "part": "hub › pokes",
+      "when": "",
+      "ms": 4493,
+      "flags": [
+        "long"
+      ]
+    }
+  ]
+}
