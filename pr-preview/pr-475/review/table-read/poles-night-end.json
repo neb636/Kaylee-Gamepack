@@ -1,0 +1,163 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "night.end",
+  "title": "Poles › Night › End",
+  "intro": "🎬 Film 5, the-end: Top and bottom. The screen splits: Pola with her pebble under the northern lights at the top, Pebble on Papa's feet in the sun at the bottom, both humming the song. Sparkle tells it.",
+  "page": "poles-night-end.html",
+  "audio": null,
+  "lines": 6,
+  "seconds": 13,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "night.end.top",
+      "text": "Polar bears live at the top of the world.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "night.end.bottom",
+      "text": "Penguins live at the bottom.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "night.end.never",
+      "text": "They never meet...",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "night.end.except.0",
+      "text": "Except best friends!",
+      "flags": [
+        "twice",
+        "new"
+      ]
+    },
+    {
+      "key": "night.end.except.1",
+      "text": "Except best friends!",
+      "flags": [
+        "twice",
+        "new"
+      ]
+    },
+    {
+      "key": "night.end.year",
+      "text": "See you next year!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "night",
+        "end",
+        "top"
+      ],
+      "text": "Polar bears live at the top of the world.",
+      "voice": "sparkle",
+      "key": "night.end.top",
+      "part": "night › end",
+      "when": "",
+      "ms": 3528,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "end",
+        "bottom"
+      ],
+      "text": "Penguins live at the bottom.",
+      "voice": "sparkle",
+      "key": "night.end.bottom",
+      "part": "night › end",
+      "when": "",
+      "ms": 2256,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "end",
+        "never"
+      ],
+      "text": "They never meet...",
+      "voice": "sparkle",
+      "key": "night.end.never",
+      "part": "night › end",
+      "when": "",
+      "ms": 1824,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "end",
+        "except",
+        "0"
+      ],
+      "text": "Except best friends!",
+      "voice": "pola",
+      "key": "night.end.except.0",
+      "part": "night › end › except",
+      "when": "Pola and Pebble together, from the two ends of the world (one clip each, played at once).",
+      "ms": 1848,
+      "flags": [
+        "twice",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "end",
+        "except",
+        "1"
+      ],
+      "text": "Except best friends!",
+      "voice": "pebble",
+      "key": "night.end.except.1",
+      "part": "night › end › except",
+      "when": "",
+      "ms": 1800,
+      "flags": [
+        "twice",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "end",
+        "year"
+      ],
+      "text": "See you next year!",
+      "voice": "terry",
+      "key": "night.end.year",
+      "part": "night › end",
+      "when": "Terry flies up the screen between them. Then the shell's trophy ceremony (♻️ trophyWin).",
+      "ms": 1608,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

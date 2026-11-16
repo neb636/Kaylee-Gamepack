@@ -1,0 +1,207 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "night.lost",
+  "title": "Poles › Night › Lost",
+  "intro": "🎬 Film 2, night-lost: The storm. The flame gutters out and the balloon sinks into deep snow. White everywhere.",
+  "page": "poles-night-lost.html",
+  "audio": null,
+  "lines": 8,
+  "seconds": 21,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "night.lost.terry",
+      "text": "I can't see the way!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "night.lost.how",
+      "text": "How will I ever find Papa?",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "night.lost.friends",
+      "text": "Friends help friends. Mama said so.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "night.lost.song",
+      "text": "Listen, Pebble. This is my song.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "night.lost.always",
+      "text": "That's it! Now you'll always find me.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "night.lost.sing",
+      "text": "Papa's song! I'll sing it!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "night.lost.windy",
+      "text": "It's too windy. He can't hear me.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "night.lost.all",
+      "text": "Then we'll ALL sing it!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "night",
+        "lost",
+        "terry"
+      ],
+      "text": "I can't see the way!",
+      "voice": "terry",
+      "key": "night.lost.terry",
+      "part": "night › lost",
+      "when": "",
+      "ms": 1752,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "lost",
+        "how"
+      ],
+      "text": "How will I ever find Papa?",
+      "voice": "pebble",
+      "key": "night.lost.how",
+      "part": "night › lost",
+      "when": "Pebble, very small in the snow.",
+      "ms": 2448,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "lost",
+        "friends"
+      ],
+      "text": "Friends help friends. Mama said so.",
+      "voice": "pola",
+      "key": "night.lost.friends",
+      "part": "night › lost",
+      "when": "Pola wraps him in a hug.",
+      "ms": 3408,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "lost",
+        "song"
+      ],
+      "text": "Listen, Pebble. This is my song.",
+      "voice": "papa",
+      "key": "night.lost.song",
+      "part": "night › lost",
+      "when": "The memory, in the storybook look: the night he hatched (the 3D huddle's hatch scene). (🔁 huddle.papa.song, huddle.papa.always) Papa sings, and baby Pebble peeps it back between the two.",
+      "ms": 3144,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "lost",
+        "always"
+      ],
+      "text": "That's it! Now you'll always find me.",
+      "voice": "papa",
+      "key": "night.lost.always",
+      "part": "night › lost",
+      "when": "",
+      "ms": 3192,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "lost",
+        "sing"
+      ],
+      "text": "Papa's song! I'll sing it!",
+      "voice": "pebble",
+      "key": "night.lost.sing",
+      "part": "night › lost",
+      "when": "Back in the storm.",
+      "ms": 1872,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "lost",
+        "windy"
+      ],
+      "text": "It's too windy. He can't hear me.",
+      "voice": "pebble",
+      "key": "night.lost.windy",
+      "part": "night › lost",
+      "when": "He peeps it, tiny, and the wind tears the notes away.",
+      "ms": 2424,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "lost",
+        "all"
+      ],
+      "text": "Then we'll ALL sing it!",
+      "voice": "pola",
+      "key": "night.lost.all",
+      "part": "night › lost",
+      "when": "Pola stands up tall, Terry on her head.",
+      "ms": 2352,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,230 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "night.sunrise",
+  "title": "Poles › Night › Sunrise",
+  "intro": "🎬 Film 4, night-sunrise: Sunrise. Pebble on Papa's feet; the first sun in months comes up as they meet.",
+  "page": "poles-night-sunrise.html",
+  "audio": null,
+  "lines": 9,
+  "seconds": 26,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "night.sunrise.pebble",
+      "text": "Pebble! My Pebble!",
+      "flags": [
+        "reused"
+      ]
+    },
+    {
+      "key": "night.sunrise.papa",
+      "text": "Papa! I went to the top of the world!",
+      "flags": [
+        "reused"
+      ]
+    },
+    {
+      "key": "night.sunrise.heard",
+      "text": "I heard your song. I knew you'd come.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "night.sunrise.sun",
+      "text": "The sun! It's back after months of night!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "night.sunrise.what",
+      "text": "Goodness! What is THAT?",
+      "flags": [
+        "reused"
+      ]
+    },
+    {
+      "key": "night.sunrise.bear",
+      "text": "Hi! I'm a polar bear!",
+      "flags": [
+        "reused"
+      ]
+    },
+    {
+      "key": "night.sunrise.friend",
+      "text": "This is Pola. She carried me home.",
+      "flags": [
+        "reused"
+      ]
+    },
+    {
+      "key": "night.sunrise.thanks",
+      "text": "A polar bear at the South Pole! Thank you, Pola.",
+      "flags": [
+        "long",
+        "reused"
+      ]
+    },
+    {
+      "key": "night.sunrise.friends",
+      "text": "Friends help friends!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "night",
+        "sunrise",
+        "pebble"
+      ],
+      "text": "Pebble! My Pebble!",
+      "voice": "papa",
+      "key": "night.sunrise.pebble",
+      "part": "night › sunrise",
+      "when": "",
+      "ms": 2424,
+      "flags": [
+        "reused"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "sunrise",
+        "papa"
+      ],
+      "text": "Papa! I went to the top of the world!",
+      "voice": "pebble",
+      "key": "night.sunrise.papa",
+      "part": "night › sunrise",
+      "when": "",
+      "ms": 2424,
+      "flags": [
+        "reused"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "sunrise",
+        "heard"
+      ],
+      "text": "I heard your song. I knew you'd come.",
+      "voice": "papa",
+      "key": "night.sunrise.heard",
+      "part": "night › sunrise",
+      "when": "",
+      "ms": 4200,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "sunrise",
+        "sun"
+      ],
+      "text": "The sun! It's back after months of night!",
+      "voice": "sparkle",
+      "key": "night.sunrise.sun",
+      "part": "night › sunrise",
+      "when": "A thin line of gold on the horizon; light runs across the snow and every penguin lifts its head (Sparkle).",
+      "ms": 3960,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "sunrise",
+        "what"
+      ],
+      "text": "Goodness! What is THAT?",
+      "voice": "papa",
+      "key": "night.sunrise.what",
+      "part": "night › sunrise",
+      "when": "Over the hill: Pola, Terry on her head. A thousand dads gasp. (♻️ story.homeLand.what, .bear, story.homeReunion.friend, .thanks)",
+      "ms": 2424,
+      "flags": [
+        "reused"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "sunrise",
+        "bear"
+      ],
+      "text": "Hi! I'm a polar bear!",
+      "voice": "pola",
+      "key": "night.sunrise.bear",
+      "part": "night › sunrise",
+      "when": "",
+      "ms": 2712,
+      "flags": [
+        "reused"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "sunrise",
+        "friend"
+      ],
+      "text": "This is Pola. She carried me home.",
+      "voice": "pebble",
+      "key": "night.sunrise.friend",
+      "part": "night › sunrise",
+      "when": "",
+      "ms": 2496,
+      "flags": [
+        "reused"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "sunrise",
+        "thanks"
+      ],
+      "text": "A polar bear at the South Pole! Thank you, Pola.",
+      "voice": "papa",
+      "key": "night.sunrise.thanks",
+      "part": "night › sunrise",
+      "when": "",
+      "ms": 3792,
+      "flags": [
+        "long",
+        "reused"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "sunrise",
+        "friends"
+      ],
+      "text": "Friends help friends!",
+      "voice": "pola",
+      "key": "night.sunrise.friends",
+      "part": "night › sunrise",
+      "when": "",
+      "ms": 1776,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

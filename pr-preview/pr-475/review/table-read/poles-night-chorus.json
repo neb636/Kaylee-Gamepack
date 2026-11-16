@@ -1,0 +1,426 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "night.chorus",
+  "title": "Poles › Night › Chorus",
+  "intro": "🎶 Act 2, chorus: Sing in the Dark (activities/night/chorus.ts). She holds Pebble, on Pola's back, to sing: the longer she holds, the bigger the ring of song that rolls out across the dark snow when she lets go. It lights up what it passes, and every friend it finds joins the song.",
+  "page": "poles-night-chorus.html",
+  "audio": null,
+  "lines": 17,
+  "seconds": 46,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "night.chorus.start.touch",
+      "text": "Hold Pebble to sing!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "night.chorus.start.mouse",
+      "text": "Click and hold Pebble to sing!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "night.chorus.lights",
+      "text": "Look! The song lights up the dark!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "night.chorus.camo",
+      "text": "Pola is white like the snow. Camouflage!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "night.chorus.hat",
+      "text": "A hat! It fits!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "night.chorus.terry",
+      "text": "Kee-arr! I'll sing too!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "night.chorus.weddell",
+      "text": "Weddell seals sing. It sounds like outer space!",
+      "flags": [
+        "long",
+        "reused"
+      ]
+    },
+    {
+      "key": "night.chorus.adelies",
+      "text": "The penguins are singing too!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "night.chorus.whale",
+      "text": "Humpback whales sing long, long songs!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "night.chorus.grr",
+      "text": "Grr-la-la!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "night.chorus.together",
+      "text": "All together now!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "night.chorus.long.touch",
+      "text": "Hold Pebble for a long, long time!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "night.chorus.long.mouse",
+      "text": "Click and hold Pebble for a long, long time!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "night.chorus.papa",
+      "text": "That's Papa! He heard us!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "night.chorus.terryPoke",
+      "text": "Keep singing! I'm right here!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "night.chorus.pola.0",
+      "text": "I just want to say hi!",
+      "flags": [
+        "reused"
+      ]
+    },
+    {
+      "key": "night.chorus.pola.1",
+      "text": "Hi, penguins!",
+      "flags": [
+        "reused"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "night",
+        "chorus",
+        "start",
+        "touch"
+      ],
+      "text": "Hold Pebble to sing!",
+      "voice": "sparkle",
+      "key": "night.chorus.start.touch",
+      "part": "night › chorus › start",
+      "when": "Sparkle, as the game opens (and her hint when nothing has been sung for a while).",
+      "ms": 2568,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "chorus",
+        "start",
+        "mouse"
+      ],
+      "text": "Click and hold Pebble to sing!",
+      "voice": "sparkle",
+      "key": "night.chorus.start.mouse",
+      "part": "night › chorus › start",
+      "when": "",
+      "ms": 3096,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "chorus",
+        "lights"
+      ],
+      "text": "Look! The song lights up the dark!",
+      "voice": "sparkle",
+      "key": "night.chorus.lights",
+      "part": "night › chorus",
+      "when": "Sparkle, as the first ring rolls out (once).",
+      "ms": 2832,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "chorus",
+        "camo"
+      ],
+      "text": "Pola is white like the snow. Camouflage!",
+      "voice": "sparkle",
+      "key": "night.chorus.camo",
+      "part": "night › chorus",
+      "when": "Sparkle, when a ring lights up Pola, white in the white (once).",
+      "ms": 3984,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "chorus",
+        "hat"
+      ],
+      "text": "A hat! It fits!",
+      "voice": "pebble",
+      "key": "night.chorus.hat",
+      "part": "night › chorus",
+      "when": "A ring finds the woolly hat half buried in the snow; Pebble puts it on. (Papa's line from the slide.)",
+      "ms": 1632,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "chorus",
+        "terry"
+      ],
+      "text": "Kee-arr! I'll sing too!",
+      "voice": "terry",
+      "key": "night.chorus.terry",
+      "part": "night › chorus",
+      "when": "A ring finds Terry, upside down in a drift: he pops out, shakes, and joins in.",
+      "ms": 2832,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "chorus",
+        "weddell"
+      ],
+      "text": "Weddell seals sing. It sounds like outer space!",
+      "voice": "sparkle",
+      "key": "night.chorus.weddell",
+      "part": "night › chorus",
+      "when": "The ice edge. The Weddell seal pops up in her breathing hole and trills (Sparkle, ♻️ slide.facts.weddell).",
+      "ms": 4296,
+      "flags": [
+        "long",
+        "reused"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "chorus",
+        "adelies"
+      ],
+      "text": "The penguins are singing too!",
+      "voice": "pebble",
+      "key": "night.chorus.adelies",
+      "part": "night › chorus",
+      "when": "The slide's Adelies hop up out of their drift, honking along.",
+      "ms": 1608,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "chorus",
+        "whale"
+      ],
+      "text": "Humpback whales sing long, long songs!",
+      "voice": "sparkle",
+      "key": "night.chorus.whale",
+      "part": "night › chorus",
+      "when": "A humpback rises in the dark sea and sings (Sparkle).",
+      "ms": 4008,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "chorus",
+        "grr"
+      ],
+      "text": "Grr-la-la!",
+      "voice": "pola",
+      "key": "night.chorus.grr",
+      "part": "night › chorus",
+      "when": "Silly: she pokes Pola, and Pola sings it back, the growly bear way.",
+      "ms": 1728,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "chorus",
+        "together"
+      ],
+      "text": "All together now!",
+      "voice": "pola",
+      "key": "night.chorus.together",
+      "part": "night › chorus",
+      "when": "Everyone's found: the hilltop, the colony's glow far off. Pola, then Sparkle.",
+      "ms": 1296,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "chorus",
+        "long",
+        "touch"
+      ],
+      "text": "Hold Pebble for a long, long time!",
+      "voice": "sparkle",
+      "key": "night.chorus.long.touch",
+      "part": "night › chorus › long",
+      "when": "",
+      "ms": 3432,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "chorus",
+        "long",
+        "mouse"
+      ],
+      "text": "Click and hold Pebble for a long, long time!",
+      "voice": "sparkle",
+      "key": "night.chorus.long.mouse",
+      "part": "night › chorus › long",
+      "when": "",
+      "ms": 4584,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "chorus",
+        "papa"
+      ],
+      "text": "That's Papa! He heard us!",
+      "voice": "pebble",
+      "key": "night.chorus.papa",
+      "part": "night › chorus",
+      "when": "The rainbow ring rolls over the hills to the colony. Silence. A gold ring comes back: Papa's song.",
+      "ms": 2280,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "chorus",
+        "terryPoke"
+      ],
+      "text": "Keep singing! I'm right here!",
+      "voice": "terry",
+      "key": "night.chorus.terryPoke",
+      "part": "night › chorus",
+      "when": "She pokes Terry once he's singing with them.",
+      "ms": 2328,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "chorus",
+        "pola",
+        "0"
+      ],
+      "text": "I just want to say hi!",
+      "voice": "pola",
+      "key": "night.chorus.pola.0",
+      "part": "night › chorus › pola",
+      "when": "She pokes Pola once the Adelies are there (♻️ party.song.pola, in turn).",
+      "ms": 2352,
+      "flags": [
+        "reused"
+      ]
+    },
+    {
+      "path": [
+        "night",
+        "chorus",
+        "pola",
+        "1"
+      ],
+      "text": "Hi, penguins!",
+      "voice": "pola",
+      "key": "night.chorus.pola.1",
+      "part": "night › chorus › pola",
+      "when": "",
+      "ms": 1632,
+      "flags": [
+        "reused"
+      ]
+    }
+  ]
+}
