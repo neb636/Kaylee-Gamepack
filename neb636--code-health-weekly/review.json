@@ -1,0 +1,9 @@
+{
+  "title": "Weekly code-health look",
+  "checkIn": "fix",
+  "kaylee": "Nothing changes in the game. Each Sunday you get one GitHub issue with at most three refactors worth doing now, so the code stays easy to change while toys keep landing.",
+  "questions": [],
+  "links": [
+    { "label": "The workflow", "url": "https://github.com/neb636/Kaylee-Gamepack/blob/neb636/code-health-weekly/.github/workflows/code-health.yml" }
+  ]
+}
