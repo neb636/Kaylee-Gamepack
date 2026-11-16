@@ -6,7 +6,8 @@
 //   npm run build && node scripts/qa-samet-walk.mjs [--only=pier,jetty] [--chromium] [--viewport=ipad-landscape]
 //
 // Writes qa-output/samet-walk/<walk>.png, <walk>-stuck.png and report.json; exits 1 if a parent was stuck longer
-// than 2.5 s or poofed while she could see it, or the walkways audit found a too-narrow gap or deck.
+// than 2.5 s or poofed while she could see it, she couldn't reach a point or finish a walk, or the walkways audit found
+// a too-narrow gap or deck.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { device, flag, launch, openApp, out, serve, vp, VIEWPORTS } from './qa-lib.mjs'
@@ -43,7 +44,8 @@ async function frames(page) {
 }
 const toXZ = (F, [id, u, v]) => [F[id].x + F[id].t[0] * u + F[id].n[0] * v, F[id].z + F[id].t[1] * u + F[id].n[1] * v]
 
-/** Leads her with a held finger ~150 px ahead, point by point; samples the family every ~200 ms. */
+/** Leads her with a held finger ~150 px ahead, point by point; samples the family every ~200 ms. Returns the points
+ *  she never reached (got no nearer for 6 s) and why the walk ended early, if it did: either one fails the walk. */
 async function walk(page, pts, samples, limit = 70000) {
   const v = page.viewportSize()
   const start = Date.now()
@@ -51,13 +53,18 @@ async function walk(page, pts, samples, limit = 70000) {
   let down = false
   let since = Date.now()
   let best = Infinity
+  const missed = []
+  let ended = null
   while (Date.now() - start < limit && i < pts.length) {
     const q = await page.evaluate(() => {
       const q = window.__thaiSametQA()
       return { x: q.x, z: q.z, yaw: q.cameraYaw, k: q.kaylee, family: q.family, unstuck: q.unstuck ?? null, clock: q.clock, deck: q.deck }
     })
     samples.push({ t: Date.now() - start, ...q })
-    if (!q.k || !Number.isFinite(q.yaw) || !Number.isFinite(q.k.x)) break
+    if (!q.k || !Number.isFinite(q.yaw) || !Number.isFinite(q.k.x)) {
+      ended = 'lost her on screen'
+      break
+    }
     const d = Math.hypot(pts[i][0] - q.x, pts[i][1] - q.z)
     // (Got there, or got no nearer for 6 s: the next point.)
     if (d < best - 0.3) {
@@ -65,6 +72,7 @@ async function walk(page, pts, samples, limit = 70000) {
       since = Date.now()
     }
     if (d < 1.6 || Date.now() - since > 6000) {
+      if (d >= 1.6) missed.push({ point: i, left: +d.toFixed(1) })
       i++
       best = Infinity
       since = Date.now()
@@ -89,6 +97,7 @@ async function walk(page, pts, samples, limit = 70000) {
     await page.waitForTimeout(150)
   }
   if (down) await page.mouse.up()
+  if (!ended && i < pts.length) ended = `timed out at point ${i} of ${pts.length}`
   // Then she stands still for a few seconds: they should come to her.
   const end = Date.now()
   while (Date.now() - end < 5000) {
@@ -99,6 +108,7 @@ async function walk(page, pts, samples, limit = 70000) {
     samples.push({ t: Date.now() - start, still: true, ...q })
     await page.waitForTimeout(200)
   }
+  return { missed, ended }
 }
 
 /** Per parent: the longest run of being stuck: more than 5 m from her (they follow 2.6-4 m behind) and less than half a
@@ -187,7 +197,7 @@ try {
     // (A screenshot every 2 s, kept in memory: the worst stuck moment's is saved.)
     const timer = setInterval(() => page.screenshot().then((b) => shots.push({ t: Date.now(), b })).catch(() => {}), 2000)
     const t0 = Date.now()
-    await walk(page, w.pts.map((p) => toXZ(F, p)), samples)
+    const { missed, ended } = await walk(page, w.pts.map((p) => toXZ(F, p)), samples)
     clearInterval(timer)
     await page.screenshot({ path: path.join(dir, `${w.name}.png`) })
     const s = stuck(samples)
@@ -196,16 +206,17 @@ try {
     const when = (s.nick.stuck >= s.ji.stuck ? s.nick.at : s.ji.at) ?? 0
     const shot = shots.reduce((a, b) => (Math.abs(b.t - t0 - when) < Math.abs((a?.t ?? Infinity) - t0 - when) ? b : a), null)
     if (shot && worst > 1) writeFileSync(path.join(dir, `${w.name}-stuck.png`), shot.b)
-    report[w.name] = { ...s, unstuck: last }
+    report[w.name] = { ...s, unstuck: last, missed, ended }
     if (process.argv.includes('--trace')) {
       // (Around the worst stuck moment: where she and they were, and what the game thought.)
       const who = s.nick.stuck >= s.ji.stuck ? 'nick' : 'ji'
       const at = report[w.name][who].at ?? 0
       report[w.name].trace = samples.filter((q) => Math.abs(q.t - at) < 3500).map((q) => ({ t: q.t, k: [q.x, q.z], p: [q.family[who].x, q.family[who].z], deck: q.family[who].deck, now: q.unstuck?.now?.[who], routed: q.unstuck?.routed?.[who], goal: q.unstuck?.goal?.[who], why: q.unstuck?.why?.[who] }))
     }
-    const bad = worst > 2.5 || (last && last.poofsSeen > 0)
+    // (She has to get through the whole walk too: a Kaylee who can't reach the pier would leave them nothing to follow.)
+    const bad = worst > 2.5 || (last && last.poofsSeen > 0) || missed.length > 0 || !!ended
     if (bad) failed = true
-    console.log(`${bad ? '✗' : '✓'} ${w.name}: Dad stuck ${s.nick.stuck}s (farthest ${s.nick.farthest} m), Mom stuck ${s.ji.stuck}s (farthest ${s.ji.farthest} m)${last ? `; ways round ${last.replans}, hops ${last.hops}, poofs ${last.poofs} (${last.poofsSeen} seen)` : ''}`)
+    console.log(`${bad ? '✗' : '✓'} ${w.name}: Dad stuck ${s.nick.stuck}s (farthest ${s.nick.farthest} m), Mom stuck ${s.ji.stuck}s (farthest ${s.ji.farthest} m)${last ? `; ways round ${last.replans}, hops ${last.hops}, poofs ${last.poofs} (${last.poofsSeen} seen)` : ''}${missed.length ? `; she never reached ${missed.map((m) => `point ${m.point} (${m.left} m short)`).join(', ')}` : ''}${ended ? `; walk ${ended}` : ''}`)
     await ctx.close()
   }
 } finally {
