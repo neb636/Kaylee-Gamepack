@@ -58,32 +58,41 @@ interface Scalp {
   on?: (d: Vector3) => { p: Vector3; n: Vector3 } | null
 }
 
-/** Where a modelled hairdo (rig.hair, on the head) is, as a function from a direction out of `c` to the point on its
- *  outside and its normal there, head-local. */
-function hairShell(head: Object3D, hair: Object3D, c: Vector3, reach: number): Scalp['on'] {
-  const probes: Mesh[] = []
+/** Where a modelled toy's strands root, head-local: a direction out of `c` has a strand when it passes through his own
+ *  hairdo (rig.hair), and the strand roots on his head under it (the bald scalp under the hair), pointing out from it. */
+function hairShell(rig: Rig, c: Vector3, reach: number): Scalp['on'] {
+  const { head, hair } = rig
+  if (!hair) return undefined
   head.updateWorldMatrix(true, true)
   const toHead = new Matrix4().copy(head.matrixWorld).invert()
-  hair.traverse((o) => {
-    if (!(o instanceof Mesh) || o.userData.hull) return
-    const m = new Mesh(o.geometry)
-    m.matrixAutoUpdate = false
-    m.matrix.multiplyMatrices(toHead, o.matrixWorld)
-    m.matrixWorld.copy(m.matrix)
-    probes.push(m)
-  })
+  const probe = (root: Object3D, skip: (Object3D | undefined)[]) => {
+    const out: Mesh[] = []
+    root.traverse((o) => {
+      if (!(o instanceof Mesh) || o.userData.hull) return
+      for (let p: Object3D | null = o; p && p !== head; p = p.parent) if (skip.includes(p)) return
+      const m = new Mesh(o.geometry)
+      m.matrixAutoUpdate = false
+      m.matrix.multiplyMatrices(toHead, o.matrixWorld)
+      m.matrixWorld.copy(m.matrix)
+      out.push(m)
+    })
+    return out
+  }
+  const hairs = probe(hair, [])
+  // His head without the hair, the horn, the brows or the eyes: the scalp.
+  const skull = probe(head, [hair, rig.horn, rig.brows, rig.eyes])
   const ray = new Raycaster()
   const from = new Vector3()
   const back = new Vector3()
   return (d) => {
     from.copy(c).addScaledVector(d, reach)
     ray.set(from, back.copy(d).negate())
-    const hit = ray.intersectObjects(probes, false)[0]
+    if (!ray.intersectObjects(hairs, false).length) return null
+    const hit = ray.intersectObjects(skull, false)[0]
     if (!hit?.face) return null
     const n = hit.face.normal.clone().transformDirection((hit.object as Mesh).matrixWorld)
     if (n.dot(d) < 0) n.negate()
-    // A shade under the outside, so a strand's root is in the hair, not on it.
-    return { p: hit.point.addScaledVector(d, -0.012), n: n.lerp(d, 0.4).normalize() }
+    return { p: hit.point, n: n.lerp(d, 0.4).normalize() }
   }
 }
 
@@ -99,8 +108,8 @@ const BACK = new Vector3(0, 0, -1)
 const FACE = new Vector3(0, 0.15, 1).normalize()
 const ZERO = new Matrix4().makeScale(0, 0, 0)
 
-/** How small a modelled toy's own hairdo gets (of its size) as it's all cut off: by then it's inside his head. */
-const OWN_GONE = 0.6
+/** How long his hair has to be, on average (of its natural length), for a modelled toy's own hairdo to stay on. */
+const OWN_KEEP = 0.9
 
 /** A tiny repeatable random (a strand's lean is the same every time its hairdo is rebuilt). */
 function rand(seed: number) {
@@ -121,8 +130,8 @@ function scalpOf(rig: Rig, look: Look): Scalp {
   if (own?.scalp) {
     const c = new Vector3(...own.scalp.c)
     const r = new Vector3(...own.scalp.r)
-    // The strands root where his own hair is (rig.hair): not on his ears, cheeks or face.
-    const on = rig.hair ? hairShell(rig.head, rig.hair, c, 3 * Math.max(r.x, r.y, r.z)) : undefined
+    // The strands root on his scalp where his own hair is (rig.hair): not on his ears, cheeks or face.
+    const on = hairShell(rig, c, 3 * Math.max(r.x, r.y, r.z))
     return { c, r, low: -0.6, avoid: [{ c, r: r.clone().multiplyScalar(1.0) }], brows, browN: new Vector3(0, 0.3, 1).normalize(), on }
   }
   // Strands grow from the head itself, from the crown down to `low` (a unicorn's down the back and sides too).
@@ -193,14 +202,14 @@ export class Mane {
     this.set(typeof hairdo === 'string' ? decodeHair(hairdo) : hairdo)
     rig.head.add(this.root)
     // The toy's own back locks and a modelled toy's brows give way to the strands. A modelled toy's own hairdo stays
-    // under them as the body of his hair, and shrinks into his head as she cuts it short (`own`).
+    // under them until she cuts his hair short (`own`, showOwn).
     for (const g of [rig.mane, rig.brows]) if (g) g.visible = false
     this.own = rig.hair ?? null
   }
 
-  /** A modelled toy's own hairdo is as full as his hair is long, up to its natural length: cut short, it sinks into
-   *  his head (shrinking toward its middle), and a buzz cut leaves only the strands' stubble. */
-  private shrinkOwn() {
+  /** A modelled toy's own hairdo stays on while his hair is still about its natural length; once she has cut it
+   *  shorter (or a link gives him a cut), it goes and only the strands are left, over his bald scalp (dad.glb's dome). */
+  private showOwn() {
     let sum = 0
     let n = 0
     for (const s of this.strands) {
@@ -208,10 +217,7 @@ export class Mane {
       sum += Math.min(1, s.len / NATURAL)
       n++
     }
-    const k = n ? sum / n : 1
-    const scale = OWN_GONE + (1 - OWN_GONE) * k
-    this.own!.scale.setScalar(scale)
-    this.own!.visible = k > 0.08
+    this.own!.visible = !n || sum / n >= OWN_KEEP
   }
 
   /** Length in meters of a step (0..LEN_STEPS): a step past his own is a lot longer. */
@@ -433,7 +439,7 @@ export class Mane {
 
   update(dt: number, t: number) {
     for (const b of this.bows) b.k = Math.min(1, b.k + dt / 0.3)
-    if (this.own && this.dirty) this.shrinkOwn()
+    if (this.own && this.dirty) this.showOwn()
     if (!this.dirty && this.wind.k < 0.01) return
     this.dirty = false
     const R = this.R

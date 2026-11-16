@@ -257,10 +257,17 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   shade higher on him), `spots.crown` (the rice straw, the Samet caps: over his hair, scaled up), `spots.horn` (the
   HarborLand horn ball), `spots.nose` (the cafe's cream), `face.mouth` (the vet's treat), `shin` (the mall socks, one
   on each leg), `chest` (the jet ski's life jacket, round his shirt), `hair` (the vet's suds puff it).
-- **The barber:** his own hair (`rig.hair`) stays on under the strands as the body of his hair and sinks into his head
-  as she cuts it short (`Mane.shrinkOwn`); the strands root only where that hair is (rays at it, `hairShell`), in his
-  browns (`hairColors`); his brows give way to strand brows at `spots.brow`. A snip wobbles his real horn on a pivot at
-  its base (`ownHorn` in salon.ts), not a copy.
+- **His bald scalp (2026-11-15, `scalp-nick.py` next to split-nick.py):** split_hair's first scalp (the hair's faces
+  pushed in) was lumpy, kept the bangs' spiky edge and had holes, the horn's among them, so at the barber his head
+  showed through. It's replaced by a smooth dome: an ellipsoid fitted to that old scalp, kept a shade inside it, pushed
+  back under the skin wherever it came out of his face, closed under the horn, joined into `head_mesh` in skin mint.
+  The skin flaps round the hairline (the light tips of his hair spikes, taken for skin) are worn away by the hair,
+  but not his ears. `render-head.py` renders the head from four sides, with and without the hair, to check it.
+- **The barber:** his own hair (`rig.hair`) stays on under the strands while it's about its natural length, and goes
+  once she cuts it short (`Mane.showOwn`): then it's the strands on his bald scalp. (Shrinking it into his head instead
+  pushed its ink out through his scalp as black lines.) The strands root on the scalp under where his hair is (rays
+  through the hair to the head, `hairShell`), in his browns (`hairColors`); his brows give way to strand brows at
+  `spots.brow`. A snip wobbles his real horn on a pivot at its base (`ownHorn` in salon.ts), not a copy.
 - **Scene fits for his size** (1.95 m, broad, arms hanging out): the canoe's paddle goes to his hooves as he reaches
   forward (`Vehicle.held`, bay.ts), the plane's lap strap sits higher on him and he sleeps with his lids shut, the
   pizza booth seats him a little further from Kaylee (`DAD_ROOM`), the vet's parrot hoop hangs higher, and he sits a

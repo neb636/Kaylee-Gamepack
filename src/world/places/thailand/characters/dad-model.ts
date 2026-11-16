@@ -9,6 +9,8 @@
 // open shoulder end up inside the sleeve (Tripo's arm already runs up under the sleeve, so a raised arm comes out from
 // under it as one limb); his own legs under the shorts; the head cut off at the neck and capped (the collar stays on
 // the body); the hair and horn by their colours, with a skin scalp under the hair so the barber can take it away. The
+// (scalp-nick.py, 2026-11-15: that first scalp, the hair's faces pushed in, was lumpy and open in places, and his head
+// showed through at the barber; it's now a smooth dome under the hair, closed under the horn.) The
 // tail stays on the body (it joins it right at the shirt's hem, and cutting it off left a patch across the hem): the
 // rig's `tail` is an empty joint where it starts, so it doesn't stream back in the wind. Tripo's own normals are copied back onto every piece (rebuilt pieces lose them,
 // and the shirt's folded-back hem then shows light jagged teeth), the shirt-pink Tripo painted on top of each arm is
@@ -41,9 +43,8 @@ const ARM_TILT = 1.2
 const INK = 0.35 / 0.75
 const BODY_INK = 1.8 * INK
 const FACE_INK = 1.2 * INK
-/** His mint, as split-nick.py's mint() painted it into the texture (the lids, the barber's plug under his horn). */
-export const DAD_SKIN = '#A8EAD5'
-const SKIN = DAD_SKIN
+/** His mint, as split-nick.py's mint() painted it into the texture (the lids). */
+const SKIN = '#A8EAD5'
 const SMILE = '#4A2A2A'
 const MOUTH = '#7A2745'
 const TONGUE = '#FF8FA8'
