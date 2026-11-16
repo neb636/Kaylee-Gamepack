@@ -412,7 +412,8 @@ export class NanDrive implements World3D {
     this.ji = member('ji')
     for (const [c, seat] of [[this.ji, this.car.seats.driver], [this.nick, this.car.seats.nick], [this.kaylee, this.car.seats.kaylee]] as const) {
       seat.add(c.root)
-      put(c, 0, 0, 0, 'sit', 0)
+      // (Dad's toy is tall: a little lower in his seat, or his horn goes through the roof.)
+      put(c, 0, c === this.nick ? -0.07 : 0, 0, 'sit', 0)
     }
     // Mom's hooves on the wheel (a modelled Mom's would go out through the door).
     this.ji.drive()

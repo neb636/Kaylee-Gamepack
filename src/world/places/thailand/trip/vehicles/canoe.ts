@@ -39,6 +39,7 @@ export function buildCanoe(bag: Bag): Vehicle {
   return {
     root,
     body,
+    held: { g: paddle, rest: paddle.position.clone() },
     seats: { nick: { x: 0, y: 0.34, z: 1.15 }, ji: { x: 0, y: 0.34, z: 0.05 }, kaylee: { x: 0, y: 0.34, z: -1.1 } },
     hull: { at: [1.4, 0, -1.4], r: 0.5 },
     feel: CANOE_FEEL,

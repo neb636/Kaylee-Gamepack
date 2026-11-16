@@ -11,7 +11,6 @@ import { applyPose, clearPose } from '../activities/boat-trip/bay/poses'
 import { buildBird, buildCat, buildCrab, buildLizard, buildMacaque, buildMudskipper, buildNeedlefish, buildPorpoise, type Blink, type CritterId } from '../activities/boat-trip/bay/critters'
 import { Avatar, SHOW_SECS } from '../characters/avatar'
 import { FAMILY } from '../characters/family'
-import { buildDadRig, dadModel } from '../characters/dad-model'
 import { Member } from '../characters/member'
 import type { Wearable } from '../characters/looks'
 import { parseLook, type ShowPose } from '../characters/style'
@@ -195,12 +194,10 @@ export class Studio implements World3D {
       k.place(0, 0, 0, 0)
       char = k
     } else if (entry.kind === 'member') {
-      // The family in their own toys (Mom is her vinyl toy, familyRig), everyone else in their look.
-      const own = entry.group === 'family' ? FAMILY.find((m) => m.id === entry.id) : undefined
-      const dad = FAMILY.find((m) => m.id === 'nick')!
-      char = entry.dadModel
-        ? new Member({ ...dad, id: entry.id, spot: null }, bag, undefined, entry.voice, buildDadRig(dadModel(), bag))
-        : own
+      // The family in their own toys (Mom and Dad are their vinyl toys, familyRig), everyone else in their look (the
+      // old code-built Dad too).
+      const own = entry.group === 'family' && !entry.dadCode ? FAMILY.find((m) => m.id === entry.id) : undefined
+      char = own
         ? new Member({ ...own, spot: null }, bag, undefined, entry.voice)
         : new Member({ id: entry.id, name: entry.name, who: entry.who, height: entry.look!.height, spot: null, pitch: 300 }, bag, entry.look, entry.voice)
       char.place(0, 0, 0, 0)

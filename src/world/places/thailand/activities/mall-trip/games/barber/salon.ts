@@ -15,7 +15,7 @@
 // curly): whatever she makes, "close enough!". After a dozen or so touches of hair work the mirror glows: a tap and
 // the chair spins round to it, Dad poses and Mom takes a photo. Dad keeps the hairdo (the `hair` param).
 // A tap on a tool does a short go with it, so dragging is never a must. Nothing fails.
-import { CapsuleGeometry, Color, IcosahedronGeometry, OctahedronGeometry, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
+import { BufferAttribute, CapsuleGeometry, Color, Group, IcosahedronGeometry, Mesh, OctahedronGeometry, Quaternion, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, spendHint, wobble, type Line } from '../../../../../../../sdk'
 import type { Avatar } from '../../../../characters/avatar'
 import { LOOKS } from '../../../../characters/looks'
@@ -160,12 +160,18 @@ export class Salon extends Stage {
       ...[-1, 0, 1].map((s) => P.sphere(0.022 * H, PAL.pink, { at: [s * 0.12 * H, 0.28 * H, 0.26 * H], scale: [1, 1, 0.4] })),
     ]), bag, 2.5)
     nr.body.add(this.cape)
-    // His horn, on its own (a snip makes it boing): a copy sitting just over the toy's own.
+    // His horn, on its own (a snip makes it boing): a modelled toy's own horn on a pivot at its base, turned so the
+    // pivot's y runs up the horn (ownHorn), or a copy over the code-built head's.
     const R = nr.face.R
-    const horn = solid(P.cone(0.155 * R, 0.8 * R, '#FFC83D', { at: [0, 0.4 * R, 0] }), bag, 2.5)
-    horn.position.set(0, nr.face.headY + 0.72 * R, 0.14 * R)
-    horn.rotation.x = 0.28
-    nr.head.add(horn)
+    const tip = nr.spots?.horn
+    let horn: Object3D
+    if (nr.horn && tip) horn = ownHorn(nr.head, nr.horn, new Vector3(...tip))
+    else {
+      horn = solid(P.cone(0.155 * R, 0.8 * R, '#FFC83D', { at: [0, 0.4 * R, 0] }), bag, 2.5)
+      horn.rotation.x = 0.28
+      horn.position.set(0, nr.face.headY + 0.72 * R, 0.14 * R)
+      nr.head.add(horn)
+    }
     this.horn = { g: horn, k: 1 }
     this.mane = new Mane(nr, LOOKS.nick, bag, start.hair)
     // ---- Effects ----
@@ -1041,4 +1047,29 @@ export class Salon extends Stage {
       room: { x0: ROOM.x0, x1: ROOM.x1 },
     }
   }
+}
+
+/** A modelled toy's own horn on a pivot of its own at the middle of its base (head-local), its y axis running up to
+ *  the tip, so a snip squashes and wobbles the real horn from its root. */
+function ownHorn(head: Object3D, horn: Object3D, tip: Vector3): Group {
+  head.updateWorldMatrix(true, true)
+  const toHead = head.matrixWorld.clone().invert()
+  // Its base: the middle of the lowest of its vertices (head-local).
+  const pts: Vector3[] = []
+  horn.traverse((o) => {
+    if (!(o instanceof Mesh) || o.userData.hull) return
+    const pos = o.geometry.attributes.position as BufferAttribute
+    const m = toHead.clone().multiply(o.matrixWorld)
+    for (let i = 0; i < pos.count; i++) pts.push(new Vector3().fromBufferAttribute(pos, i).applyMatrix4(m))
+  })
+  const low = Math.min(...pts.map((p) => p.y))
+  const ring = pts.filter((p) => p.y < low + 0.03)
+  const base = ring.reduce((a, p) => a.add(p), new Vector3()).divideScalar(Math.max(1, ring.length))
+  const pivot = new Group()
+  pivot.position.copy(base)
+  pivot.quaternion.copy(new Quaternion().setFromUnitVectors(new Vector3(0, 1, 0), tip.clone().sub(base).normalize()))
+  head.add(pivot)
+  pivot.updateWorldMatrix(true, false)
+  pivot.attach(horn)
+  return pivot
 }

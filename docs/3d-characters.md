@@ -222,10 +222,12 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   by `familyRig`), and saves a sheet per section: the screen with her outlined and three close-ups drawn from the
   game's own scene. `--who=nick` shoots anyone else, `--hashes=a|b` any links.
 
-## Dad (2026-11-15: on trial in the character lab)
+## Dad (the modelled vinyl toy, in the game since 2026-11-15)
 
-- **Lab only so far:** `#/world/characters/dad-model` (`characters/dad-model.ts`, `models/dad.glb`). The game's Dad is
-  still the code-built `LOOKS.nick`; the user wants him right in the lab before he replaces it everywhere.
+- **In the game:** he is the game's Dad everywhere. `familyRig` (member.ts) builds every `nick` from his GLB (the mall
+  race's `Racer('nick')` too), and Thailand's `Place.tsx` waits for `dadReady()` as it does for Kaylee and Mom. The
+  lab's `nick` is him (`#/world/characters/nick`); the code-built Dad he replaced is `nick-code`, kept to compare.
+  `LOOKS.nick` stays: the barber's strands are built against it (hair.ts' tuft lengths and its look).
 - **Check Tripo's pieces before anything else.** In step 3, also count the loose parts: a model whose arms and legs are
   their own pieces (Mom's, Dad's regeneration 2) animates; a fused one doesn't. The first four Dads were one fused
   mesh with short sleeves, and no cut worked: at the sleeve's hem the arm looked like a tube sliding out of a fixed
@@ -251,10 +253,19 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   talking mouth placed by rays at his face; mint lids for the blink, since his eye domes sit over sockets). His ink is
   the user's pick, the Outline slider at 0.35. Silly now squints with a modelled toy's lids (`poses.ts`): squashing the
   domes showed the socket and nothing unsquashed them (Mom too).
-- **For the swap into the game** (not done): `familyRig` builds him for `nick` and Place `use(dadReady())`, then fit
-  what the trips hang on Dad. The rig already says where his hair, brows and horn are (`hair`, `brows`, `horn`,
-  `hairColors`, `spots.brow`/`horn`) and his legs (`shin`). The reverted PR #291 shows the scene changes: boat
-  sunglasses, mall socks, barber, vet suds, HarborLand horn ball, rice straw. Then `qa-mom.mjs --who=nick`.
+- **What the scenes hang on him** goes through the rig, like Mom's: `spots.eyes` (the boat's sunglasses, bigger and a
+  shade higher on him), `spots.crown` (the rice straw, the Samet caps: over his hair, scaled up), `spots.horn` (the
+  HarborLand horn ball), `spots.nose` (the cafe's cream), `face.mouth` (the vet's treat), `shin` (the mall socks, one
+  on each leg), `chest` (the jet ski's life jacket, round his shirt), `hair` (the vet's suds puff it).
+- **The barber:** his own hair (`rig.hair`) stays on under the strands as the body of his hair and sinks into his head
+  as she cuts it short (`Mane.shrinkOwn`); the strands root only where that hair is (rays at it, `hairShell`), in his
+  browns (`hairColors`); his brows give way to strand brows at `spots.brow`. A snip wobbles his real horn on a pivot at
+  its base (`ownHorn` in salon.ts), not a copy.
+- **Scene fits for his size** (1.95 m, broad, arms hanging out): the canoe's paddle goes to his hooves as he reaches
+  forward (`Vehicle.held`, bay.ts), the plane's lap strap sits higher on him and he sleeps with his lids shut, the
+  pizza booth seats him a little further from Kaylee (`DAD_ROOM`), the vet's parrot hoop hangs higher, and he sits a
+  little lower in the Pajero (his horn met the roof).
+- **QA:** `node scripts/qa-mom.mjs --who=nick` (after a build), compared old and new sheets for all 64 sections.
 
 ## Open questions
 

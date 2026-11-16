@@ -9,6 +9,7 @@ import { FaceLife } from '../../../engine3d/characters/face'
 import { automated } from '../../../engine3d/flags'
 import type { FamilyMember } from './family'
 import { LOOKS, type Look } from './looks'
+import { buildDadRig, dadModel } from './dad-model'
 import { buildMomRig, momModel } from './mom-model'
 import type { Character, Pose } from './types'
 
@@ -23,11 +24,11 @@ const tmp = new Vector3()
 /** The family members who also have a game-table voice (`<id>play` in cast.json). */
 const PLAY_VOICES = new Set(['bb', 'gan', 'ken'])
 
-/** A family member's toy: Mom is the modelled vinyl toy (mom-model.ts), everyone else the code-built animal of their
- *  look (looks.ts). `look` dresses them as someone else instead (the character lab's extras). The mall race's racers
+/** A family member's toy: Mom and Dad are modelled vinyl toys (mom-model.ts, dad-model.ts), everyone else the
+ *  code-built animal of their look (looks.ts). `look` dresses them as someone else instead (the character lab's extras). The mall race's racers
  *  use it too. */
 export function familyRig(id: string, bag: Bag, look?: Look): Rig {
-  const rig = id === 'ji' && !look ? buildMomRig(momModel(), bag) : buildAnimal(look ?? LOOKS[id], bag)
+  const rig = look ? buildAnimal(look, bag) : id === 'ji' ? buildMomRig(momModel(), bag) : id === 'nick' ? buildDadRig(dadModel(), bag) : buildAnimal(LOOKS[id], bag)
   // QA robots find family members by this (scripts/qa-mom.mjs), and under webdriver their rig too.
   rig.root.userData.family = id
   if (automated) Object.defineProperty(rig.root, 'qaRig', { value: rig })
@@ -58,8 +59,8 @@ export class Member implements Character {
   private wind = new Wind()
 
   /** `look` and `voice` default to the family member's own; the character lab (lab/) gives a trip's extras theirs, and
-   *  `rig` a toy to use instead of the usual one. Mom is the modelled vinyl toy (mom-model.ts, loaded before Thailand's
-   *  scenes build). */
+   *  `rig` a toy to use instead of the usual one. Mom and Dad are modelled vinyl toys (mom-model.ts, dad-model.ts, loaded
+   *  before Thailand's scenes build). */
   constructor(readonly member: FamilyMember, bag: Bag, look?: Look, voice: string | undefined = member.id, rig?: Rig) {
     this.id = member.id
     this.chibi = rig ?? familyRig(member.id, bag, look)

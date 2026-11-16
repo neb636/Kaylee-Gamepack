@@ -102,10 +102,9 @@ function toLink(v: StudioView) {
 const wide = () => typeof window === 'undefined' || window.matchMedia('(min-width: 901px)').matches
 
 export default function CharacterLab({ id, params = {} }: { id?: string; params?: Record<string, string> }) {
-  // Kaylee and Mom are modelled vinyl toys: their GLBs load before the studio builds anyone (World.tsx's Suspense).
+  // Kaylee, Mom and Dad are modelled vinyl toys: their GLBs load before the studio builds anyone (World.tsx's Suspense).
   use(kayleeReady())
   use(momReady())
-  // The modelled Dad on trial (dad-model.ts).
   use(dadReady())
   const [view, setView] = useState(() => fromLink(id, params))
   const [mode, setMode] = useState<RenderMode>('webgl')

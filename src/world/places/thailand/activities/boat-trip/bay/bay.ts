@@ -139,6 +139,8 @@ const deg = Math.PI / 180
 const wrapDeg = (a: number) => ((((a + 180) % 360) + 360) % 360) - 180
 const tmp = new Vector3()
 const tmp2 = new Vector3()
+const tmpA = new Vector3()
+const tmpB = new Vector3()
 const grip = new Vector3()
 const STUCK_EVERY = 22
 /** How long Dad's "where to?" look over the bay lasts (any touch ends it). */
@@ -1100,6 +1102,21 @@ export class Bay implements World3D {
     const s = r.squash < 1 ? Math.cos(r.squash * Math.PI * 3) * (1 - r.squash) ** 2 : 0
     v.body.scale.set(1 + 0.08 * s, 1 - 0.16 * s, 1 + 0.04 * s)
     v.animate(clamp(d.yawRate / d.feel.turn, -1, 1), Math.min(1, Math.abs(sp)), t, dt)
+    if (v.held) this.holdPaddle(v, v.held)
+  }
+  /** Dad holds the canoe's paddle: a modelled Dad (rig.hands) sitting in his seat reaches forward, and the paddle goes
+   *  between his hooves. Out of his seat, it lies back where it was. */
+  private holdPaddle(v: Vehicle, grip: NonNullable<Vehicle['held']>) {
+    const dad = this.rider('nick').char
+    const hands = dad.rig.hands
+    if (!(dad instanceof Member) || !hands || dad.root.parent !== v.body || dad.pose !== 'sit') {
+      grip.g.position.copy(grip.rest)
+      return
+    }
+    dad.drive(true)
+    const a = hands[0].getWorldPosition(tmpA)
+    const b = hands[1].getWorldPosition(tmpB)
+    grip.g.position.copy(v.body.worldToLocal(a.add(b).multiplyScalar(0.5)))
   }
   /** Rocks the boat (a step in at the pier, a bump). */
   tip(ride: Ride, v: number) {

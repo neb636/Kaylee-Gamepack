@@ -24,7 +24,7 @@ export const WINDOW = { x0: 0.5, x1: 1.85, y0: 1.12, y1: 2.0 }
 export const BENCH = { z: -2.0, y: 1.12, spots: [0.8, 1.18, 1.56], scale: 0.5 }
 export const XRAY = { x: -0.72, y: 1.66, w: 0.84, h: 0.6 }
 /** The parrot swings on a hoop hanging from the ceiling, over Dad's shoulder. */
-export const PARROT = { x: -1.72, z: -1.15, perch: 1.98 }
+export const PARROT = { x: -1.8, z: -1.15, perch: 2.1 }
 export const CABINET = { x0: 0.72, x1: 1.78, z: -1.2, d: 0.5, top: 0.72 }
 export const JAR: V3 = [0.95, CABINET.top, -1.12]
 export const CARRIER: V3 = [1.44, CABINET.top, -1.14]

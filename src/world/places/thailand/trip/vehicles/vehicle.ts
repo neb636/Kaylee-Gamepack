@@ -1,7 +1,7 @@
 // What every trip vehicle is: a toy model at the waterline (or on the road) facing +z, with seats for the family and
 // the moving parts the drive animates. The world moves `root` (where it is, which way it faces); `body` inside it
 // rolls, pitches, bobs and squashes.
-import type { Group } from 'three'
+import type { Group, Object3D, Vector3 } from 'three'
 import type { Feel } from '../../../../engine3d/drive'
 
 export interface Seat {
@@ -27,4 +27,7 @@ export interface Vehicle {
   bow: number
   /** Animates its moving parts: `steer` -1..1 (left..right), `speed` 0..1 of its top speed, `t` seconds. */
   animate(steer: number, speed: number, t: number, dt: number): void
+  /** Something Dad holds in both hands from his seat (the canoe's paddle): a modelled Dad reaches forward and it goes
+   *  to his hooves (bay.ts); `rest` is where it sits otherwise (body-local). */
+  held?: { g: Object3D; rest: Vector3 }
 }

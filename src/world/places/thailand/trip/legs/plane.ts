@@ -191,7 +191,8 @@ export class PlaneRide extends Stage {
       this.put(this.riders[id], 0, SEAT_Y, 0, 'sit', -90)
     }
     // A toy with legs of its own (the modelled Mom) sits with them out over the seat: her strap goes over her lap.
-    for (const id of ['ji', 'nick'] as const) if (this.riders[id].rig.legL) this.straps[id].position.y = 0.12
+    // (Dad's toy sits deeper in the hips: his lap is higher.)
+    for (const id of ['ji', 'nick'] as const) if (this.riders[id].rig.legL) this.straps[id].position.y = id === 'nick' ? 0.24 : 0.12
     // Starting from a section link: the plane already where that part begins.
     this.sec = start
     if (start !== 'takeoff') {
@@ -929,14 +930,17 @@ export class PlaneRide extends Stage {
     const dad = this.riders.nick.rig
     const dozing = this.dad.asleep && !this.off
     if (dozing) {
-      dad.eyes.scale.y = 0.08
+      // A modelled toy's eyes shut with its lids (squashing its eye domes would show the sockets).
+      if (dad.blink) dad.blink(0.1)
+      else dad.eyes.scale.y = 0.08
       dad.head.rotation.x = -0.32
       dad.head.rotation.z = 0.12
       dad.mouth.scale.set(1.25, 1.5 + Math.sin(t * 1.6) * 0.25, 1)
     } else dad.head.rotation.set(0, dad.head.rotation.y, 0)
     const kay = this.riders.kaylee.rig
     if (this.napping) {
-      kay.eyes.scale.y = 0.08
+      if (kay.blink) kay.blink(0.1)
+      else kay.eyes.scale.y = 0.08
       kay.head.rotation.z = -0.25
     } else kay.head.rotation.z = 0
     // A little Z floats up from each sleeper every so often.

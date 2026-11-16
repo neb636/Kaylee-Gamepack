@@ -62,19 +62,23 @@ export interface Rig {
   /** Her waist when the body isn't the code-built capsule (the modelled Kaylee's dress): its height, its center
    *  front-to-back and the half-width and half-depth a belt goes round (body-local). */
   waist?: { y: number; z: number; rx: number; rz: number }
+  /** A modelled chest (the modelled Dad's shirt), body-local: its middle height and depth, its half-width and
+   *  half-depth, and how tall it is from the hem to the collar (a life jacket goes round it). */
+  chest?: { y: number; z: number; rx: number; rz: number; h: number }
   /** How far forward the front of the body is at (x, y), body-local z, for things stuck on it (mud). */
   front?: (x: number, y: number) => number
   /** Where things sit on a modelled head whose shape isn't the code-built ball (the modelled Mom's), head-local meters:
    *  the top of the head under the hair (a hat's middle, with the hat's inner radius `hat`), the tip of the nose (a dab
    *  of cream), between the eyes on the face (sunglasses). */
-  spots?: { crown: V3; hat: number; nose: V3; eyes: V3; brow?: V3; horn?: V3 }
+  spots?: { crown: V3; hat: number; nose: V3; eyes: V3; brow?: V3; horn?: V3; scalp?: { c: V3; r: V3 } }
   /** A modelled toy's own ears (the modelled Mom's stick out at her temples): a hat tucks them under it. */
   ears?: Object3D[]
   /** A modelled toy's own hairdo (the modelled Dad's), a group on the head: the barber's strands replace it and the
    *  vet's suds fluff it up. Unlike `mane`, the wind leaves it be. `hairColors`: its browns, dark to light (the
    *  barber's strands start out in them). `brows`: his eyebrows (the barber's strands grow new ones over them).
    *  `horn`: his horn (the barber's horn, one a snip can boing, stands in for it). `spots.brow` is the middle of the
-   *  left brow and `spots.horn` the tip of the horn (head-local meters). */
+   *  left brow, `spots.horn` the tip of the horn and `spots.scalp` the round of the head under the hair (an ellipsoid:
+   *  the barber's strands root on it), head-local meters. */
   hair?: Group
   hairColors?: string[]
   brows?: Group

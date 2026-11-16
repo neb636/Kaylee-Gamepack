@@ -2,9 +2,8 @@
 // The user made four in Tripo3D and picked "Green 2" in the character lab (2026-11-15), recoloured in the texture to
 // the code-built Dad's mint. Green 2 came out of Tripo as one fused mesh, and no cut through its short sleeves let an
 // arm lift cleanly, so the user regenerated the same picture: this is regeneration 2 (planning repo models/nick/regen/),
-// where Tripo made the arms and legs pieces of their own, like Mom's. For now he is on trial in the character lab
-// (#/world/characters/dad-model, which waits for his GLB): the game's Dad stays the code-built unicorn until the user
-// says he's ready.
+// where Tripo made the arms and legs pieces of their own, like Mom's. He is the game's Dad: Member builds him for
+// `nick` (familyRig), and Thailand's Place and the character lab wait for his GLB before they build (2026-11-15).
 //
 // Blender (split-nick.py next to nick-rigs.blend in models/nick/): his own arms, each with a ball joint closing its
 // open shoulder end up inside the sleeve (Tripo's arm already runs up under the sleeve, so a raised arm comes out from
@@ -65,6 +64,9 @@ const HAIR_MID = 0.816
  *  line through `x`, `y` running down toward the armpit, its normal `n` pointing out along the sleeve, and how wide
  *  (`band`) the shirt stretches from the body's hold to the arm's. Nothing below `low` (the tail curls out there). */
 const SEAM = { x: 0.13, y: 0.5, n: [0.945, 0.327] as const, band: 0.05, low: 0.37 }
+/** His chest (model meters, three.js axes, measured on the shirt): its middle height and depth, half-width and
+ *  half-depth, and its height from the hem to the collar. */
+const CHEST = { y: 0.44, z: -0.02, rx: 0.18, rz: 0.13, h: 0.16 }
 /** His left leg in its hip pivot's space (three.js axes, model meters): middle x and z, radius, sole and hem heights. */
 const SHIN = { x: -0.0125, z: 0.0096, r: 0.0758, sole: -0.1623, hem: -0.01 }
 
@@ -152,6 +154,15 @@ export function buildDadRig(gltf: GLTF, bag: Bag): Rig {
   /** A Blender point (x, z up, y toward the back) in the head pivot's space. */
   const onHead = (x: number, z: number, y: number): V3 => [x - neck.x, z - neck.y, -y - neck.z]
   const sc = (p: V3): V3 => [p[0] * S, p[1] * S, p[2] * S]
+  // The round of his head under the hair (the barber's strands root on it): his hair's box (model meters, three.js
+  // axes), its middle a hair's depth down from the crown so the crown is on it, a shade inside so strands start under
+  // where his own hair was.
+  const hairGeo = (hairMesh as unknown as Mesh).geometry
+  hairGeo.boundingBox ?? hairGeo.computeBoundingBox()
+  const hb = hairGeo.boundingBox!
+  const half = [(hb.max.x - hb.min.x) / 2, (hb.max.z - hb.min.z) / 2]
+  const cy = hb.max.y - (half[0] + half[1]) / 2
+  const SCALP = { c: [0, (cy - neck.y) * S, ((hb.max.z + hb.min.z) / 2 - neck.z) * S] as V3, r: [half[0] * S * 0.97, (hb.max.y - cy) * S * 0.97, half[1] * S * 0.97] as V3 }
   // Points on his face: rays cast at the head mesh from in front (it's in model meters, three.js axes).
   const probe = new Mesh(headMesh.geometry as BufferGeometry)
   const ray = new Raycaster()
@@ -232,7 +243,9 @@ export function buildDadRig(gltf: GLTF, bag: Bag): Rig {
       eyes: sc(onFace(0, ez, 0)),
       brow: sc(onHead(BROW[0], BROW[2], BROW[1])),
       horn: sc(onHead(HORN[0], HORN[2], HORN[1])),
+      scalp: SCALP,
     },
+    chest: { y: CHEST.y * S, z: CHEST.z * S, rx: CHEST.rx * S, rz: CHEST.rz * S, h: CHEST.h * S },
     shin: { x: SHIN.x * S, z: SHIN.z * S, r: SHIN.r * S, sole: SHIN.sole * S, hem: SHIN.hem * S },
     blink(open: number) {
       const shut = (1 - open) / 0.9

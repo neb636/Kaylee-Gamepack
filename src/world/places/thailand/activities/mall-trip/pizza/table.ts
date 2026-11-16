@@ -109,6 +109,9 @@ const tmp2 = new Vector3()
 const right = new Vector3()
 const q = new Quaternion()
 
+/** How much further along the bench the modelled Dad sits than his plate's middle (meters). */
+const DAD_ROOM = 0.14
+
 export class PizzaTable extends Stage {
   private room: Room
   private kaylee: Avatar
@@ -198,7 +201,9 @@ export class PizzaTable extends Stage {
     kaylee.root.userData.pick = 'family:kaylee'
     for (const e of EATERS) {
       scene.add(this.people[e].root)
-      this.put(this.people[e], SEATS[e].x, SEATS[e].seat, SEAT_Z, 'sit', 0)
+      // Dad's toy is broad and his arms hang out wide: he sits a little further along, or his hoof is in her side.
+      const out = e === 'nick' && this.nick.rig.legL ? DAD_ROOM : 0
+      this.put(this.people[e], SEATS[e].x + out, SEATS[e].seat, SEAT_Z, 'sit', 0)
     }
     // ---- The plates, the box, the pan and the cheese ----
     this.plates = buildPlates(bag)

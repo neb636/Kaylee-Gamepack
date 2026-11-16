@@ -15,6 +15,7 @@ import { useSections } from '../../kit/sections'
 import type { PlaceProps } from '../../types'
 import { BoatTrip } from './activities/boat-trip/BoatTrip'
 import { kayleeReady } from './characters/model'
+import { dadReady } from './characters/dad-model'
 import { momReady } from './characters/mom-model'
 import { Hub } from './activities/hub/Hub'
 import { ThaiMap } from './activities/hub/map/ThaiMap'
@@ -28,10 +29,12 @@ import { MALL_FACTS, NAN_FACTS, SAMET_FACTS, TRIP_FACTS } from './trip/facts'
 
 export default function Place(props: PlaceProps) {
   const { meta, activity, backToMap, openActivity } = props
-  // Kaylee and Mom are modelled vinyl toys: their GLBs load before any scene builds (PlaceFrame's Suspense shows Sparkle
-  // thinking meanwhile), so every Avatar is her and every Mom is the cream unicorn from the first frame.
+  // Kaylee, Mom and Dad are modelled vinyl toys: their GLBs load before any scene builds (PlaceFrame's Suspense shows
+  // Sparkle thinking meanwhile), so every Avatar is her, every Mom the cream unicorn and every Dad the mint one from
+  // the first frame.
   use(kayleeReady())
   use(momReady())
+  use(dadReady())
   // The boat and Nan trips end on the Thailand map: the stamp, then the plane flies home and the stamp lands on the
   // pin. The mall day ends on the photo wall: the stamp, then back in the house downstairs, by her photo.
   const stamps = useStampFlow(props, {

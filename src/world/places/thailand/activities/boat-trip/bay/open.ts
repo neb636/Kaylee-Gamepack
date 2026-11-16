@@ -170,10 +170,16 @@ export class OpenWater implements BayPart {
     scene.add(this.crab.root)
     // ---- Dad's sunglasses and Mom's sun hat, on their heads ----
     const nick = bay.rider('nick').char
-    const R = 0.24 * nick.height
+    // A modelled Dad says where his eyes are (rig.spots), and his head's size.
+    const eyes = nick.rig.spots?.eyes
+    const R = eyes ? nick.rig.face.R : 0.24 * nick.height
     this.shades = new Group()
     this.shades.add(solid(merge([...[-1, 1].flatMap((s) => [P.rbox(0.19, 0.13, 0.04, 0.04, '#3A3350', { at: [s * 0.37 * R, 0, 0], rot: [0, s * 0.35, 0] }), P.box(0.05, 0.03, 0.03, PAL.hotpink, { at: [s * 0.48 * R, 0.05, -0.02] })]), P.box(0.1, 0.03, 0.03, PAL.hotpink, { at: [0, 0.03, 0.01] })]), bag, 1.5))
-    this.shades.position.set(0, R * 0.92 + 0.12 * R, R * 0.93)
+    if (eyes) {
+      // His eye domes are taller than the lenses: bigger glasses, a shade higher, so his eyes don't peek over them.
+      this.shades.position.set(eyes[0], eyes[1] + 0.025, eyes[2] + 0.03)
+      this.shades.scale.setScalar(1.2)
+    } else this.shades.position.set(0, R * 0.92 + 0.12 * R, R * 0.93)
     nick.rig.head.add(this.shades)
     const ji = bay.rider('ji').char
     // Mom says where her head is under her bun (rig.spots).

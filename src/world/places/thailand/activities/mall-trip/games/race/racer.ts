@@ -77,7 +77,7 @@ export class Racer {
 
   /** `look` dresses it as someone else (HarborLand's hall: more kids, the staff). */
   constructor(readonly id: RacerId, bag: Bag, look?: Look) {
-    // Kaylee herself is the modelled vinyl toy (loaded before the mall builds), and so is Mom (familyRig).
+    // Kaylee herself is the modelled vinyl toy (loaded before the mall builds), and so are Mom and Dad (familyRig).
     const own = id === 'kaylee' && !look
     this.rig = own ? buildModelRig(kayleeModel(), bag) : look || id === 'kidA' || id === 'kidB' ? buildAnimal(look ?? KID_LOOKS[id as 'kidA' | 'kidB'], bag) : familyRig(id, bag)
     this.height = this.rig.height

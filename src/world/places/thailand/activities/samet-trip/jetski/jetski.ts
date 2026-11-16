@@ -241,6 +241,8 @@ export class JetSki implements World3D {
   private jacket: Group
   private jacketFloat: Group
   private nickJacket: Group
+  /** Where Dad's cap sits on his head (head-local). */
+  private capRest = new Vector3()
   private cap: Group
   private capT = -1
   private pitch: Spring = { x: 0, v: 0 }
@@ -400,7 +402,13 @@ export class JetSki implements World3D {
     this.kaylee.rig.body.add(this.jacket)
     this.jacketFloat = loneVest(bag, PAL.hotpink)
     scene.add(this.jacketFloat)
-    this.nickJacket = lifeJacket(bag, this.nick.rig.radius * 1.12, this.nick.height * 0.3, this.nick.height * 0.2, '#FF8A2E', '#FFE07A')
+    // Round a modelled chest (rig.chest) where it is, or round the code-built body.
+    const chest = this.nick.rig.chest
+    this.nickJacket = chest ? lifeJacket(bag, chest.rx * 1.08, chest.y, chest.h, '#FF8A2E', '#FFE07A') : lifeJacket(bag, this.nick.rig.radius * 1.12, this.nick.height * 0.3, this.nick.height * 0.2, '#FF8A2E', '#FFE07A')
+    if (chest) {
+      this.nickJacket.position.z = chest.z
+      this.nickJacket.scale.z = (chest.rz * 1.15) / (chest.rx * 1.08)
+    }
     this.nick.rig.body.add(this.nickJacket)
     // (The way-in film ends at the life jacket: it isn't on yet.)
     this.jacket.visible = this.phase !== 'jacket' && this.filmRound !== 'story'
@@ -409,7 +417,13 @@ export class JetSki implements World3D {
     const f = this.nick.rig.face
     this.cap = new Group()
     this.cap.add(capMesh(bag, f.R))
-    this.cap.position.set(0, f.headY + f.R * 0.72, -f.R * 0.05)
+    // A modelled head's goes over its hair, on its crown (rig.spots).
+    const crown = this.nick.rig.spots?.crown
+    if (crown) {
+      this.cap.position.set(crown[0], crown[1] + 0.12, crown[2])
+      this.cap.scale.setScalar(1.12)
+    } else this.cap.position.set(0, f.headY + f.R * 0.72, -f.R * 0.05)
+    this.capRest.copy(this.cap.position)
     this.nick.rig.head.add(this.cap)
 
     // Mom on the sand at the water's edge, the jet ski man by his hut (or on his own jet ski in the race).
@@ -1581,8 +1595,7 @@ export class JetSki implements World3D {
     if (this.capT >= 0) {
       this.capT += dt / 1.4
       const k = this.capT
-      const f = this.nick.rig.face
-      const rest = tmp2.set(0, f.headY + f.R * 0.72, -f.R * 0.05)
+      const rest = this.capRest
       this.cap.position.set(rest.x + Math.sin(k * 8) * bellK(k) * 0.4, rest.y + bellK(k) * 1.6, rest.z - bellK(k) * 0.7)
       this.cap.rotation.set(k * 14 * bellK(k), k * 6, 0)
       if (k > 0.85 && k - dt / 1.4 <= 0.85) this.nick.react('hop')

@@ -67,7 +67,10 @@ export class FrameToys {
     this.daddy.add(nick.root)
     scene.add(this.daddy)
     this.hornBall = solid(merge([P.sphere(0.13, PAL.hotpink)]), bag, 1.5)
-    this.hornBall.position.set(0, 0.98, 0.08)
+    // On the tip of his horn (a modelled Dad says where it is, rig.spots).
+    const tip = nick.rig.spots?.horn
+    if (tip) this.hornBall.position.set(tip[0], tip[1] + 0.06, tip[2])
+    else this.hornBall.position.set(0, 0.98, 0.08)
     this.hornBall.visible = false
     nick.rig.head.add(this.hornBall)
     for (let i = 0; i < 4; i++) {

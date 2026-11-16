@@ -58,22 +58,23 @@ export interface CastEntry {
   color: string
   /** Entries that are variations of each other share this. */
   set?: string
-  /** The modelled Dad on trial (characters/dad-model.ts), built from his GLB instead of `look`. */
-  dadModel?: boolean
+  /** The code-built Dad the modelled one replaced (LOOKS.nick), kept in the lab to compare them. */
+  dadCode?: boolean
 }
 
 const family: CastEntry[] = [
-  // Kaylee and Mom are modelled vinyl toys from Tripo3D (characters/model.ts, characters/mom-model.ts), so they have no
-  // look of their own here.
+  // Kaylee, Mom and Dad are modelled vinyl toys from Tripo3D (characters/model.ts, mom-model.ts, dad-model.ts), so
+  // they have no look of their own here.
   { id: 'kaylee', name: 'Your unicorn', who: 'Her, a lilac unicorn (the vinyl toy, modelled in Tripo3D)', group: 'family', kind: 'kaylee', src: 'characters/model.ts', color: '#C9B6F0' },
   ...FAMILY.map((m): CastEntry =>
     m.id === 'ji'
       ? { id: m.id, name: m.name, who: 'Your mom, a cream unicorn (the vinyl toy, modelled in Tripo3D)', group: 'family', kind: 'member', voice: 'ji', src: 'characters/mom-model.ts', color: '#FACCA2' }
-
-      : { id: m.id, name: m.name, who: m.who, group: 'family', kind: 'member', look: LOOKS[m.id], voice: m.id, src: 'characters/looks.ts', color: LOOKS[m.id].fur, set: m.id === 'nick' ? 'dads' : undefined },
+      : m.id === 'nick'
+      ? { id: m.id, name: m.name, who: 'Your dad, a mint unicorn (the vinyl toy, modelled in Tripo3D)', group: 'family', kind: 'member', voice: 'nick', src: 'characters/dad-model.ts', color: '#A9EBD6', set: 'dads' }
+      : { id: m.id, name: m.name, who: m.who, group: 'family', kind: 'member', look: LOOKS[m.id], voice: m.id, src: 'characters/looks.ts', color: LOOKS[m.id].fur },
   ),
-  // The modelled Dad on trial (Tripo3D, the user's pick): the code-built Dad above stays the game's until he's ready.
-  { id: 'dad-model', name: 'Dad: the new toy', who: 'Your dad, a mint unicorn (the vinyl toy, modelled in Tripo3D; on trial)', group: 'family', kind: 'member', voice: 'nick', src: 'characters/dad-model.ts', color: '#A9EBD6', set: 'dads', dadModel: true },
+  // The code-built Dad the modelled one replaced (2026-11-15), to compare them side by side.
+  { id: 'nick-code', name: 'Dad: the old toy', who: 'The code-built mint unicorn Dad was before his vinyl toy', group: 'family', kind: 'member', look: LOOKS.nick, voice: 'nick', src: 'characters/looks.ts', color: LOOKS.nick.fur, set: 'dads', dadCode: true },
 ]
 
 const person = (id: string, name: string, who: string, group: CastGroup, look: Look, src: string, voice?: string, set?: string): CastEntry => ({ id, name, who, group, kind: 'member', look, voice, src, color: look.fur, set })
