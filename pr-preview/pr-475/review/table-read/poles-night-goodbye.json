@@ -7,7 +7,7 @@
   "page": "poles-night-goodbye.html",
   "audio": null,
   "lines": 8,
-  "seconds": 27,
+  "seconds": 25,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -66,7 +66,7 @@
     },
     {
       "key": "night.goodbye.pebbleFact",
-      "text": "Some penguins give pebbles to say I love you!",
+      "text": "A penguin pebble means I love you!",
       "flags": [
         "long",
         "new"
@@ -196,12 +196,12 @@
         "goodbye",
         "pebbleFact"
       ],
-      "text": "Some penguins give pebbles to say I love you!",
+      "text": "A penguin pebble means I love you!",
       "voice": "sparkle",
       "key": "night.goodbye.pebbleFact",
       "part": "night › goodbye",
       "when": "She pokes the pebble in Pola's paws (Sparkle, once).",
-      "ms": 5592,
+      "ms": 3288,
       "flags": [
         "long",
         "new"

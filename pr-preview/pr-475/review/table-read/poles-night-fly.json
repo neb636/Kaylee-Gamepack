@@ -182,7 +182,7 @@
     },
     {
       "key": "night.fly.pokes.berg",
-      "text": "Southern icebergs are big and flat, like tables!",
+      "text": "Southern icebergs are flat, like tables!",
       "flags": [
         "long",
         "new"
@@ -611,12 +611,12 @@
         "pokes",
         "berg"
       ],
-      "text": "Southern icebergs are big and flat, like tables!",
+      "text": "Southern icebergs are flat, like tables!",
       "voice": "sparkle",
       "key": "night.fly.pokes.berg",
       "part": "night › fly › pokes",
       "when": "Sparkle, the first time she pokes each thing (the lights and the ship are ♻️ hub.pokes).",
-      "ms": 4392,
+      "ms": 4152,
       "flags": [
         "long",
         "new"

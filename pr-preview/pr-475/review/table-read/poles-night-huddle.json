@@ -7,7 +7,7 @@
   "page": "poles-night-huddle.html",
   "audio": null,
   "lines": 16,
-  "seconds": 47,
+  "seconds": 46,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -79,9 +79,8 @@
     },
     {
       "key": "night.huddle.turns",
-      "text": "Dads take turns in the cold. So everyone's warm!",
+      "text": "The dads take turns in the cold!",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -289,14 +288,13 @@
         "huddle",
         "turns"
       ],
-      "text": "Dads take turns in the cold. So everyone's warm!",
+      "text": "The dads take turns in the cold!",
       "voice": "sparkle",
       "key": "night.huddle.turns",
       "part": "night › huddle",
       "when": "The dads on the edge swap into the middle (Sparkle, once).",
-      "ms": 4536,
+      "ms": 2904,
       "flags": [
-        "long",
         "new"
       ]
     },
