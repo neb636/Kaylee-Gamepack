@@ -60,18 +60,15 @@ export const pacing = [
 export const motion = [
   {
     // Hold to Fly: hold and the burner roars, the balloon climbs out of the slow blue wind into the fast pink one
-    // (Terry rides it ahead); let go and it sinks back toward the sea.
+    // (Terry rides it ahead); a couple of seconds in the pink wind and it takes over: the rest races south like a film.
     name: 'poles-night-fly',
-    seconds: 18,
+    seconds: 20,
     setup: async (page, base) => ready(page, base, '#/world/poles/night/fly'),
     act: async (page) => {
       await page.waitForTimeout(1500)
-      await hold(page, 2600)
-      await page.waitForTimeout(1200)
-      await hold(page, 900)
-      await page.waitForTimeout(1500)
-      await hold(page, 900)
-      await page.waitForTimeout(6000)
+      await hold(page, 3200)
+      await page.waitForFunction(() => window.__polesNightQA?.().auto === true, null, { timeout: 12000 })
+      await page.waitForTimeout(12000)
     },
   },
   {

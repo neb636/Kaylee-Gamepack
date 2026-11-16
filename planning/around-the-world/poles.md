@@ -183,6 +183,11 @@ trail ends in the movie ticket.
     night, table bergs, the albatross, the southern lights), the blizzard (gusts push it down). Silly: the cloud
     deck, the dip in the sea. Help: after 9 s out of the pink wind it reaches out to her (down and up, twice).
     Knobs `balloon`. The walrus is left out (no prop yet).
+    **Shortened (2026-11-16, your note: "way too long and boring, shorten it by 75%"):** she flies only until she has
+    ridden the pink wind for 2.5 s (knob `takeover`); then the wind takes over like a film: her finger rests, the
+    balloon holds the pink wind's middle and races south at 18 m/s (knob `cruise`) through the warm middle, the ship,
+    the whale, the night and the storm, saying only the story's lines (no hellos, second facts or "hold on"). About
+    45 s in all, from about three minutes.
   - **Act 3, Through the Huddle** (`through.ts`, `#/world/poles/night/huddle?part=near|churn|middle`), on the 3D
     huddle's ice (`huddle/world.ts` `colonyIce`): her finger on the ice leads Pebble (a flick: tummy slide); the dads
     he walks into squish aside and honk. Tap him: he sings and Papa's gold notes rise (longer each time). Near: Papa

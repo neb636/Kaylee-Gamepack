@@ -17,6 +17,11 @@
 // the basket dips in the sea ("Don't get me wet!"); bump a berg and it boings off.
 // Never fails: the balloon always drifts south, only slowly in the blue wind, and the pink wind gets wider after a slow
 // stretch. The landing in the storm is the story, not her mistake.
+// Short (the user, 2026-11-16: "way too long and boring, shorten it by 75%"): she only flies until she has ridden the
+// pink wind for a couple of seconds (`takeover`). Then the wind takes over like a film: her finger rests, the balloon
+// holds the middle of the pink wind and races south (`cruise`) past the warm middle, the ship, the whale, the southern
+// night and into the storm, with only the story's lines (Terry's hellos, the second facts and the storm's "hold on" are
+// left out). About 45 s in all, where it was about three minutes.
 //
 // Built for engine3d/View3D.tsx. The balloon's feel is feel-lab knobs (?feel=1).
 import { AdditiveBlending, Color, DoubleSide, Fog, Group, Mesh, MeshBasicMaterial, PlaneGeometry, Scene, ShaderMaterial, Sprite, SpriteMaterial, Vector3, type BufferGeometry, type WebGLRenderer } from 'three'
@@ -59,6 +64,8 @@ const FLY = knobs('balloon', 'Hold to Fly: the balloon', FILE, {
   widen: { value: 1, min: 0, max: 3, step: 0.1, label: 'Help: pink widens', unit: 'm', note: 'after a slow stretch the pink wind grows this much wider downward (twice at most)' },
   gust: { value: 3.2, min: 0, max: 8, step: 0.1, label: 'Blizzard gusts', unit: 'm/s', note: 'how hard a gust pushes the balloon down in the storm' },
   gustEvery: { value: 2.6, min: 0.8, max: 8, step: 0.1, label: 'Gust every', unit: 's' },
+  takeover: { value: 2.5, min: 0.5, max: 10, step: 0.25, label: 'Pink wind, then the film', unit: 's', note: 'how long she rides the pink wind herself before the wind takes over and the rest plays like a film' },
+  cruise: { value: 18, min: 6, max: 40, step: 0.5, label: 'Film speed south', unit: 'm/s', note: 'how fast the balloon races south once the wind has taken over (the whole way is 735 m)' },
 })
 
 export type FlyLeg = 'north' | 'warm' | 'south'
@@ -250,6 +257,8 @@ export class FlyWorld implements World3D {
   private wetSaid = -99
   private pinkSaid = false
   private stormOn = false
+  /** The wind has taken over: the rest of the way plays like a film (her finger rests). */
+  private auto = false
   private gustT = 0
   private gustK = 0
   private ended = false
@@ -484,16 +493,16 @@ export class FlyWorld implements World3D {
       this.events.leg('warm')
       this.fans = 6
       this.events.talk(F.warm, 'friend')
-      this.at(2.6, () => this.events.talk(F.warmFact, 'fact', 'warmFact'))
+      if (!this.auto) this.at(2.6, () => this.events.talk(F.warmFact, 'fact', 'warmFact'))
     })
     // Hello to a country in her passport (the first two she has, over two islands).
     const hellos = visited.filter((id) => id in L.party.hello).slice(0, 2)
-    hellos.forEach((id, i) => m(i ? 425 : 268, () => (this.terry.wave(), this.events.talk(L.party.hello[id], 'friend'))))
+    hellos.forEach((id, i) => m(i ? 425 : 268, () => (this.terry.wave(), this.auto || this.events.talk(L.party.hello[id], 'friend'))))
     m(this.shipX - 8, () => {
       flySfx.horn()
       this.pebble.pull('wow')
       this.events.talk(F.ship, 'friend')
-      this.at(2.8, () => (this.pola.pull('happy'), this.events.talk(F.crates, 'friend')))
+      this.at(2.8, () => (this.pola.pull('happy'), this.auto || this.events.talk(F.crates, 'friend')))
     })
     m(this.whaleX - 6, () => {
       this.whaleSpout()
@@ -510,7 +519,7 @@ export class FlyWorld implements World3D {
       this.albT = 0
       this.albatross.visible = true
       flySfx.albatross()
-      this.at(1.4, () => this.events.talk(F.albatross, 'friend'))
+      if (!this.auto) this.at(1.4, () => this.events.talk(F.albatross, 'friend'))
     })
     m(STORM_AT, () => {
       this.stormOn = true
@@ -518,10 +527,11 @@ export class FlyWorld implements World3D {
       this.gustT = 1.5
       this.terry.pull('wow')
       this.events.talk(F.storm, 'friend')
-      this.at(2.4, () => {
-        this.events.hint(F.holdOn)
-        this.events.talk(F.holdOn, 'cue')
-      })
+      if (!this.auto)
+        this.at(2.4, () => {
+          this.events.hint(F.holdOn)
+          this.events.talk(F.holdOn, 'cue')
+        })
     })
   }
 
@@ -598,7 +608,8 @@ export class FlyWorld implements World3D {
   private updateBalloon(dt: number, t: number) {
     if (this.held) this.holdT += dt
     // Up while she holds, down when she lets go; gusts in the storm push it down.
-    const want = this.ended ? -FLY.sink * 0.6 : this.held ? FLY.lift : -FLY.sink
+    const mid = (this.pinkLow() + this.pinkHigh()) / 2
+    const want = this.ended ? -FLY.sink * 0.6 : this.auto ? clamp((mid - this.y) * 1.5, -FLY.sink, FLY.lift) : this.held ? FLY.lift : -FLY.sink
     this.vy += (want - this.vy) * Math.min(1, dt * FLY.ease)
     if (this.stormOn && !this.ended) {
       this.gustT -= dt
@@ -611,7 +622,8 @@ export class FlyWorld implements World3D {
       }
     }
     this.gustK = Math.max(0, this.gustK - dt * 0.9)
-    this.vy -= this.gustK * FLY.gust * dt * 2.2
+    // (Once the wind has taken over, a gust only shakes the balloon.)
+    if (!this.auto) this.vy -= this.gustK * FLY.gust * dt * 2.2
     this.y += this.vy * dt
     // The cloud deck stops it (it pokes in, all fluffy), the sea lets the basket dip.
     if (this.y > HIGH) {
@@ -639,8 +651,8 @@ export class FlyWorld implements World3D {
       }
     }
     // South: the wind at its height (the blue creeps, the pink flies).
-    const vx = this.ended ? 0.8 : this.southSpeed(this.y)
-    this.vx += (vx - this.vx) * Math.min(1, dt * 1.6)
+    const vx = this.ended ? 0.8 : this.auto ? FLY.cruise : this.southSpeed(this.y)
+    this.vx += (vx - this.vx) * Math.min(1, dt * (this.auto ? 0.8 : 1.6))
     this.x += this.vx * dt
     const pink = this.inPink()
     if (pink > 0.5) {
@@ -651,6 +663,7 @@ export class FlyWorld implements World3D {
         this.events.talk(F.pink, 'fact', 'pink')
         this.sparkles.burst(this.x, this.y, 0.5, 20, 2, 1.5, 0.15, 0)
       }
+      if (!this.auto && this.counts.inPink >= FLY.takeover) this.takeOver()
     } else if (!this.stormOn) {
       // A slow stretch: the pink wind reaches out a little to meet her, down and up (twice at most).
       this.slowFor += dt
@@ -685,14 +698,15 @@ export class FlyWorld implements World3D {
     }
     this.wet = wet
     // The burner roars while she holds.
-    if (this.held && t >= this.nextBurner) {
+    const burning = this.held || (this.auto && !this.ended && want > 0.3)
+    if (burning && t >= this.nextBurner) {
       this.nextBurner = t + 1.1
       flySfx.burner()
     }
-    this.flame.visible = this.held
-    if (this.held) this.flame.scale.set(1 + 0.15 * Math.sin(t * 31), 0.9 + 0.25 * Math.abs(Math.sin(t * 23)), 1 + 0.15 * Math.sin(t * 27))
+    this.flame.visible = burning
+    if (burning) this.flame.scale.set(1 + 0.15 * Math.sin(t * 31), 0.9 + 0.25 * Math.abs(Math.sin(t * 23)), 1 + 0.15 * Math.sin(t * 27))
     this.flameMat.color.set(Math.sin(t * 40) > 0 ? '#FFB347' : '#FFD45E')
-    if (this.held && Math.random() < dt * 14) this.sparkles.emit(this.x + (Math.random() - 0.5) * 0.3, this.y - MID + 1.9, 0.2, (Math.random() - 0.5) * 0.4, 1.4, 0, 0.6, 0.06, 1)
+    if (burning && Math.random() < dt * 14) this.sparkles.emit(this.x + (Math.random() - 0.5) * 0.3, this.y - MID + 1.9, 0.2, (Math.random() - 0.5) * 0.4, 1.4, 0, 0.6, 0.06, 1)
     // The balloon: leans into its speed, shakes in a gust, boings off a berg.
     this.bounce = Math.max(0, this.bounce - dt * 2.2)
     this.balloonShake = Math.max(0, this.balloonShake - dt * 1.5)
@@ -702,10 +716,10 @@ export class FlyWorld implements World3D {
     b.rotation.set(0, 0, this.tilt + Math.sin(t * 25) * 0.03 * this.balloonShake)
     this.balloon.update(dt, t)
     // The glow round the balloon while she holds (her finger's heat), the hint when she's left it a while.
-    const stuck = !this.held && !this.ended && t - this.lastHold > HINT_S
+    const stuck = !this.held && !this.ended && !this.auto && t - this.lastHold > HINT_S
     this.glow.position.set(this.x, this.y, 0.6)
     this.glow.scale.setScalar(6.5 + (stuck ? Math.sin(t * 5) * 0.8 : 0))
-    this.glow.material.opacity = this.held ? 0.18 : stuck ? 0.25 + 0.15 * Math.sin(t * 5) : 0
+    this.glow.material.opacity = this.held && !this.auto ? 0.18 : stuck ? 0.25 + 0.15 * Math.sin(t * 5) : 0
     // The act ends when the storm has had its way.
     if (!this.ended && this.x >= END_AT) {
       this.ended = true
@@ -715,6 +729,19 @@ export class FlyWorld implements World3D {
     }
   }
   private balloonShake = 0
+
+  /** She has ridden the pink wind: it takes over, and the rest of the way plays like a film. */
+  private takeOver() {
+    this.auto = true
+    this.held = false
+    this.events.hint(null)
+    this.sparkles.burst(this.x, this.y, 0.6, 30, 2.4, 1.8, 0.15, 0)
+    this.ribbonLit = 1.5
+    this.terry.wave()
+    this.pebble.hop()
+    this.pebble.pull('happy')
+    this.pola.pull('happy')
+  }
 
   private whaleSpout() {
     flySfx.spout()
@@ -867,7 +894,7 @@ export class FlyWorld implements World3D {
 
   /** Anywhere: the burner (hold to rise). */
   pointerDown() {
-    if (this.ended) return
+    if (this.ended || this.auto) return
     this.held = true
     this.holdT = 0
     this.lastHold = this.time
@@ -883,7 +910,7 @@ export class FlyWorld implements World3D {
   pointerUp() {
     if (this.held) this.lastHold = this.time
     this.held = false
-    if (!this.ended) this.events.hint(this.stormOn ? F.holdOn : F.stuck)
+    if (!this.ended && !this.auto) this.events.hint(this.stormOn ? F.holdOn : F.stuck)
   }
 
   private toScreen(v: Vector3) {
@@ -1063,6 +1090,7 @@ export class FlyWorld implements World3D {
       vx: +this.vx.toFixed(2),
       held: this.held,
       storm: this.stormOn,
+      auto: this.auto,
       ended: this.ended,
       wider: this.wider,
       said: this.moments.filter((m) => m.done).length,

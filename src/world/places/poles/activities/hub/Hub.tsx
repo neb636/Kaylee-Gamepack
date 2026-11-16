@@ -224,6 +224,7 @@ function Trail({ stops, next, all, going, pick }: { stops: Stop[]; next: number;
                 key={s.id}
                 aria-label={s.name}
                 data-activity={s.id}
+                data-finale={home || undefined}
                 data-next={isNext || undefined}
                 data-done={s.done || undefined}
                 initial={{ scale: 0 }}

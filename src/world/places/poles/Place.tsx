@@ -2,8 +2,8 @@
 // story, "Pebble's Long Way Home". A penguin chick wakes up at the North Pole; Pola the polar bear cub, Terry the tern
 // and Sparkle's balloon take him home to Papa at the South Pole. The home base is the 3D globe (activities/hub/,
 // globe/) with the story's pictures along the way down it. Each picture is a chapter: a film (story/, on its own film
-// stage), the game, a film, then its stamp and sticker. The first visit opens with the way-in film. All five stamps
-// open the finale (activities/party/): the flight home, Papa's song, the reunion and Terry's Polar Explorer quiz.
+// stage), the game, a film, then its stamp and sticker. The first visit opens with the way-in film. The last chapter
+// is the finale, The Longest Night (activities/night/, meta.finale): its stamp brings the trophy.
 // Snow Coats is 2D and loaded on its own, so it brings no three.js; Emperor Huddle (3D) loads on its own too, the last
 // chapter, so its world isn't built into the first ones' download.
 import { lazy, Suspense, useState, type ComponentType } from 'react'

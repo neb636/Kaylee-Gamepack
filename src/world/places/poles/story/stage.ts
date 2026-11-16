@@ -615,6 +615,11 @@ export class StoryStage implements World3D {
     }
     paint(this.split.top, this.rig.camera, half + 2, h - half - 2)
     paint(this.split.bottom, this.split.cam, 0, half - 2)
+    // Hiding is only for each half's render pass: everyone in either half stays visible between frames, or Actor.update
+    // (which skips hidden actors) would freeze the top half's cast (Pola and Mama stop blinking, Terry's last flight stops).
+    const shown = new Set([...this.split.top.show, ...this.split.bottom.show])
+    for (const o of cast) o.visible = shown.has(o)
+    for (const o of [this.stone, this.balloon.root, this.huddle, this.sunDisc]) o.visible = shown.has(o)
     r.setScissorTest(false)
     r.setViewport(0, 0, w, h)
     this.rig.camera.aspect = w / h

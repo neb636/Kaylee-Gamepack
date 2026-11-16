@@ -147,15 +147,23 @@ export function sayAlong(line: Line): void {
   const url = clips.get(keyOf(voice, text))?.url
   const ctx = audio()
   if (!url || !ctx) return
+  // stopSpeaking() stops these too: a line still downloading when she skips the film or leaves never starts, and one
+  // already playing stops with the rest.
+  const gen = generation
   void bufferFor(url, ctx)
     .then((buffer) => {
+      if (gen !== generation) return
       const source = ctx.createBufferSource()
       source.buffer = buffer
       source.connect(ctx.destination)
+      along.add(source)
+      source.onended = () => along.delete(source)
       source.start()
     })
     .catch((error) => console.error('Voice playback failed:', error))
 }
+/** Lines playing along (sayAlong), so stopSpeaking() can stop them. */
+const along = new Set<AudioBufferSourceNode>()
 
 /** How long a line's recorded clip is (ms from the voice map; 0 if it has no clip yet). Films time their beats by it, so
  *  a cutscene keeps its pace in test browsers too, where the audio is skipped. */
@@ -167,6 +175,8 @@ export function stopSpeaking() {
   generation++
   current?.stop()
   current = undefined
+  for (const source of along) source.stop()
+  along.clear()
 }
 
 /** Call from the first tap to allow later audio on iPad. */

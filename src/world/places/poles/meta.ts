@@ -36,6 +36,8 @@ const meta: PlaceMeta = {
   mapPos: { x: 50, y: 91 },
   friend: { name: 'Pola the polar bear cub', img: art.friend },
   trophyTitle: 'Polar Explorer',
+  // The ending is the last chapter (its stamp brings the trophy), not a separate party screen.
+  finale: 'night',
   activities: ALL.filter(([, ready]) => ready).map(([a]) => a),
   inTheWorks: ALL.filter(([, ready]) => !ready).map(([a]) => a),
   facts: [
