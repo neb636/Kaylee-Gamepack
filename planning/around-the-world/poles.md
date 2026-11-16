@@ -132,6 +132,9 @@ Stickers: polar bear (floe), narwhal (narwhal), Arctic fox (coats), Adélie peng
 
 ## Next
 
+A plan to replace the ending (Emperor Huddle and Home) with one 3D finale, The Longest Night, with its full
+script: [poles-ending.md](poles-ending.md). Not built yet; waiting on your read.
+
 Kaylee plays it. Watch for: does she say "penguin" and "home"; does she tap the next picture without help; does she sit
 through the way-in film or hold ⏭ (her diary counts both); which chapter she replays; whether Papa's song is too hard
 or too easy by ear.
