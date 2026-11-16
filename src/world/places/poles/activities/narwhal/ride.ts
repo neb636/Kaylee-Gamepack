@@ -13,7 +13,8 @@
 // Pebble stays dry under the ice: Nari blows the riders a big air bubble to sit in. Built for engine3d/View3D.tsx with
 // the films' props (story/props.ts) and cast (story/actor.ts); nothing here comes from Thailand. The steering and the
 // ride are feel-lab knobs (?feel=1).
-import { BackSide, Color, Euler, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Scene, SphereGeometry, Vector3, type BufferGeometry, type WebGLRenderer } from 'three'
+import { Color, Euler, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, Quaternion, Scene, SphereGeometry, Vector3, type BufferGeometry, type WebGLRenderer } from 'three'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { clamp, Timers } from '../../../../../sdk'
 import { smoothstep as smooth, TO_DEG } from '../../../../../sdk/math'
 import { knobs, watch } from '../../../../kit/knobs'
@@ -25,10 +26,12 @@ import { setOutlineResolution } from '../../../../engine3d/outline'
 import { Particles } from '../../../../engine3d/particles'
 import { applyBands, makeLights, PAL, toon } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
-import { Water } from '../../../../engine3d/water'
+import { dress } from '../../look/look'
+import { PolarSea, roundSkirt, skirtGeo } from '../../look/sea'
+import { PolarSky } from '../../look/sky'
 import { FingerWheel } from '../../../../engine3d/wheel'
 import { Actor } from '../../story/actor'
-import { Balloon, bergGeo, floeGeo, ICE, ICE_BLUE, ICE_SHADE, mountainGeo, Narwhal, rng, skyDisc } from '../../story/props'
+import { Balloon, bergGeo, floeGeo, floeSkirt, ICE, ICE_BLUE, ICE_LINE, ICE_SHADE, iceSlab, mountainGeo, Narwhal, rng, roundOff, tableBergGeo } from '../../story/props'
 import { BACK_WALL, BALLOON, BERGS, CALVE, cx, dcx, DIVE, DOCK, FISH, FLOES, FORK, GLACIER, half, KEELS, lane, OPEN_END, rampAt, RAMPS, ridge, ROW, SPOTS, WALL_LAT } from './course'
 import { Critter } from './critters'
 import type { NarwhalSection } from './sections'
@@ -156,12 +159,11 @@ export class NarwhalRide implements World3D {
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
   private bag = new Bag()
   private lights = makeLights(this.scene)
-  private fogAir = new Fog(SKY, 70, 230)
+  private fogAir = new Fog(SKY, 110, 400)
   private fogSea = new Fog(DEEP, 4, 46)
-  private skyColor = new Color(SKY)
   private seaColor = new Color(DEEP)
-  private water: Water
-  private sun: Group
+  private sky: PolarSky
+  private ocean: PolarSea
   private wheel = new FingerWheel()
   private wheelEl: HTMLElement | null = null
   private hintEl: HTMLElement | null = null
@@ -249,22 +251,17 @@ export class NarwhalRide implements World3D {
     private events: RideEvents,
   ) {
     const { scene, bag } = this
-    scene.background = this.skyColor.clone()
+    scene.background = this.seaColor.clone()
     scene.fog = this.fogAir
     applyBands()
     this.rig.fov = 46
     this.rig.lag = 0.28
 
     // ---- The sea, seen from above and from below ----
-    this.water = new Water({ size: 1500, deep: '#5FA6DE', shallow: '#78BCEA', haze: SKY, hazeNear: 60, hazeFar: 220 }, bag)
-    this.water.mesh.position.set(0, 0, -420)
-    scene.add(this.water.mesh)
-    // (The water's own plane lies flat: a child a little along its z is a little under it.)
-    const under = new Mesh(bag.add(new PlaneGeometry(1500, 1500)), bag.add(new MeshBasicMaterial({ color: '#C9F0FF', side: BackSide })))
-    under.position.z = -0.03
-    this.water.mesh.add(under)
-    this.sun = skyDisc(bag, 9, '#FFF3C4', '#FFE9A8')
-    scene.add(this.sun)
+    // (Its underside is the bright ceiling she sees from under the ice: look/sea.ts.)
+    this.sky = new PolarSky(bag, 'day')
+    this.ocean = new PolarSea({ hazeNear: 80, hazeFar: 280, grid: 180 }, bag)
+    scene.add(this.sky.root, ...this.ocean.meshes)
 
     this.buildScenery()
     this.buildSheet()
@@ -273,13 +270,15 @@ export class NarwhalRide implements World3D {
 
     // ---- What she can bump ----
     FLOES.forEach(([s, lat, r], i) => {
-      const o = solid(floeGeo(r, 40 + i, 0.2, 0.42), bag, 2)
+      const o = solid(floeGeo(r, 40 + i, 0.2, 0.42), bag, 2, ICE_LINE)
+      o.add(this.ocean.skirt(floeSkirt(r, 40 + i), bag))
       o.rotation.y = i * 1.7
       scene.add(o)
       this.bumpers.push({ kind: 'floe', s, lat, r: r * 0.92, o, shove: 0, shoveV: 0, hitT: -1, phase: i * 1.3 })
     })
     BERGS.forEach(([s, lat, size], i) => {
-      const o = solid(withKeel(bergGeo(size, 60 + i), size), bag, 2.5)
+      const o = solid(withKeel(bergGeo(size, 60 + i), size), bag, 2.5, ICE_LINE)
+      o.add(this.ocean.skirt(roundSkirt(size * 0.95, size * 0.5), bag))
       scene.add(o)
       this.bumpers.push({ kind: 'berg', s, lat, r: size * 1.05, o, shove: 0, shoveV: 0, hitT: -1, phase: i * 2.1 })
     })
@@ -307,13 +306,14 @@ export class NarwhalRide implements World3D {
       scene.add(b.root)
       this.belugas.push(b)
     }
-    this.blue = solid(blueBergGeo(4.2), bag, 2.5)
+    this.blue = solid(blueBergGeo(4.2), bag, 2.5, '#4F7FC0')
+    this.blue.add(this.ocean.skirt(roundSkirt(4, 2.2), bag))
     at(this.blue, SPOTS.blue, -0.3, 0.4)
 
     // ---- The glacier's loose piece, its waves, and the balloon on its floe ----
     this.chunkAt.set(cx(CALVE.s) + WALL_LAT, 0, -CALVE.s)
     this.chunk.add(
-      solid(merge([P.rbox(7, 13, 9.4, 0.6, ICE, { at: [-3.5, 6.5, 0] }), P.rbox(7.1, 2.4, 9.5, 0.3, ICE_BLUE, { at: [-3.5, 1.2, 0] }), P.rbox(6.6, 7, 9, 0.6, KEEL, { at: [-3.5, -3.5, 0] })]), bag, 3),
+      solid(merge([tableBergGeo(7.4, 9.6, 13).translate(-3.5, 0, 0), P.rbox(6.6, 7, 9, 0.6, KEEL, { at: [-3.5, -3.5, 0] })]), bag, 2.5, ICE_LINE),
     )
     this.chunk.position.copy(this.chunkAt)
     scene.add(this.chunk)
@@ -324,7 +324,8 @@ export class NarwhalRide implements World3D {
       scene.add(mesh)
       this.waves.push({ s: 0, h, age: 0, on: false, mesh, passed: false })
     }
-    const home = solid(floeGeo(6.5, 11, 0.18), bag, 2.5)
+    const home = solid(floeGeo(6.5, 11, 0.18), bag, 2.5, ICE_LINE)
+    home.add(this.ocean.skirt(floeSkirt(6.5, 11), bag))
     home.position.set(cx(BALLOON), 0, -BALLOON)
     scene.add(home)
     this.balloon = new Balloon(bag)
@@ -388,6 +389,9 @@ export class NarwhalRide implements World3D {
     this.placeNari(0)
     this.placeTerry(0, true)
 
+    // The polar look on everything (look/look.ts).
+    dress(scene)
+
     this.stopSea = rideSfx.sea()
     this.unwatch = watch('nari', () => ({
       'her push': [this.wheel.push, 1],
@@ -407,6 +411,9 @@ export class NarwhalRide implements World3D {
     const r = rng(17)
     const chunks: BufferGeometry[][] = [[], [], [], [], []]
     const put = (s: number, g: BufferGeometry, lat: number, y = 0) => chunks[clamp(Math.floor(s / 180), 0, 4)].push(g.translate(cx(s) + lat, y, -s))
+    // The glow round each piece of ice under the water (look/sea.ts), merged a stretch at a time like the ice.
+    const glows: BufferGeometry[][] = [[], [], [], [], []]
+    const glow = (s: number, g: BufferGeometry, lat: number) => glows[clamp(Math.floor(s / 180), 0, 4)].push(g.translate(cx(s) + lat, 0, -s))
     const spots: (readonly [number, number])[] = [SPOTS.walrus, SPOTS.puffins, SPOTS.seal, SPOTS.fizz, SPOTS.blue, SPOTS.orca, [DIVE.from + 6, -16], [DIVE.from + 6, 16]]
     const clear = (s: number, lat: number, d: number) => spots.every(([a, b]) => Math.hypot(a - s, b - lat) > d) && !(s > DIVE.sheetFrom - 6 && s < DIVE.sheetTo + 3 && Math.abs(lat) < 26)
     // Pack ice along both sides (none where the glacier's wall is).
@@ -415,7 +422,10 @@ export class NarwhalRide implements World3D {
         const rad = 1.4 + r() * 3.2
         const lat = side * (half(Math.max(0, s)) + 1.6 + rad + r() * r() * 34)
         if ((side < 0 && s > GLACIER - 8 && lat < WALL_LAT + rad + 1) || !clear(s, lat, rad + 4.5)) continue
-        put(s, floeGeo(rad, Math.floor(r() * 900), 0.18, 0.4).rotateY(r() * 6), lat)
+        const seed = Math.floor(r() * 900)
+        const turn = r() * 6
+        put(s, floeGeo(rad, seed, 0.18, 0.4, rad > 3.4).rotateY(turn), lat)
+        glow(s, floeSkirt(rad, seed).rotateY(turn), lat)
       }
     }
     // Little bits of loose ice all over the channel: they stream past, so her speed reads (she swims right through).
@@ -426,7 +436,13 @@ export class NarwhalRide implements World3D {
       put(s, P.sphere(rad, r() < 0.3 ? ICE_SHADE : ICE, { scale: [1.3, 0.4, 1], rot: [0, r() * 3, 0] }, 6), lat, 0.02)
     }
     // Floes behind her at the start, so the sea isn't empty when the camera looks back.
-    for (let i = 0; i < 8; i++) put(-10 - r() * 26, floeGeo(1.5 + r() * 2.5, 300 + i, 0.18, 0.4), (r() - 0.5) * 40)
+    for (let i = 0; i < 8; i++) {
+      const s = -10 - r() * 26
+      const rad = 1.5 + r() * 2.5
+      const lat = (r() - 0.5) * 40
+      put(s, floeGeo(rad, 300 + i, 0.18, 0.4), lat)
+      glow(s, floeSkirt(rad, 300 + i), lat)
+    }
     // Icebergs far off on both sides, all the way.
     for (let s = 10; s < 940; s += 24) {
       for (const side of [-1, 1]) {
@@ -434,7 +450,8 @@ export class NarwhalRide implements World3D {
         const lat = side * (36 + size + r() * 55)
         if (side < 0 && s > GLACIER - 40) continue
         if (!clear(s, lat, size + 6)) continue
-        put(s, withKeel(bergGeo(size, Math.floor(r() * 900)), size), lat, -0.4)
+        put(s, withKeel(bergGeo(size, Math.floor(r() * 900), 2), size), lat)
+        glow(s, roundSkirt(size * 0.95, Math.min(4, size * 0.45)), lat)
       }
     }
     // Icebergs close along both sides of the iceberg stretch.
@@ -443,19 +460,30 @@ export class NarwhalRide implements World3D {
         const size = 2.6 + r() * 2.6
         const lat = side * (half(s) + 2.2 + size + r() * 5)
         if (!clear(s, lat, size + 5)) continue
-        put(s, withKeel(bergGeo(size, Math.floor(r() * 900)), size), lat, -0.3)
+        put(s, withKeel(bergGeo(size, Math.floor(r() * 900)), size), lat)
+        glow(s, roundSkirt(size * 0.95, size * 0.5), lat)
       }
     }
     // The big ones down the middle of the fork, and the two giants the sea ice hangs between.
-    ROW.forEach((s, i) => put(s, withKeel(bergGeo(3.4 + (i % 2) * 0.5, 80 + i), 3.6), i % 2 ? 0.4 : -0.4, -0.3))
-    for (const side of [-1, 1]) put(DIVE.from + 6, withKeel(bergGeo(6, 90 + side), 6), side * 15.5, -0.3)
+    ROW.forEach((s, i) => {
+      put(s, withKeel(bergGeo(3.4 + (i % 2) * 0.5, 80 + i), 3.6), i % 2 ? 0.4 : -0.4)
+      glow(s, roundSkirt(3.4, 1.7), i % 2 ? 0.4 : -0.4)
+    })
+    for (const side of [-1, 1]) {
+      put(DIVE.from + 6, withKeel(bergGeo(6, 90 + side), 6), side * 15.5)
+      glow(DIVE.from + 6, roundSkirt(5.7, 2.6), side * 15.5)
+    }
     // The ice the animals lie on: the walrus's and the puffins' floes, the seal's growler.
     put(SPOTS.walrus[0], floeGeo(3.8, 71, 0.2, 0.5), SPOTS.walrus[1])
+    glow(SPOTS.walrus[0], floeSkirt(3.8, 71), SPOTS.walrus[1])
     put(SPOTS.puffins[0], floeGeo(3.4, 72, 0.2, 0.5), SPOTS.puffins[1])
+    glow(SPOTS.puffins[0], floeSkirt(3.4, 72), SPOTS.puffins[1])
     put(SPOTS.seal[0], merge([P.sphere(1.9, ICE_SHADE, { scale: [1.25, 0.42, 1] }, 12), P.sphere(1.2, ICE, { at: [0.5, 0.25, -0.3], scale: [1.2, 0.5, 1] }, 10)]), SPOTS.seal[1])
     // The berg the bubbles fizz out of.
-    put(SPOTS.fizz[0], withKeel(bergGeo(2.6, 77), 2.6), SPOTS.fizz[1] - 4.8, -0.3)
-    for (const c of chunks) if (c.length) this.scene.add(solid(merge(c), this.bag, 2.5))
+    put(SPOTS.fizz[0], withKeel(bergGeo(2.6, 77), 2.6), SPOTS.fizz[1] - 4.8)
+    glow(SPOTS.fizz[0], roundSkirt(2.5, 1.3), SPOTS.fizz[1] - 4.8)
+    for (const c of chunks) if (c.length) this.scene.add(solid(merge(c), this.bag, 2.5, ICE_LINE))
+    for (const g of glows) if (g.length) this.scene.add(this.ocean.skirt(mergeGeometries(g)!, this.bag))
   }
 
   /** The sea ice she swims under: a wide sheet between the two giants (a low bridge at its front edge), white on top
@@ -466,8 +494,13 @@ export class NarwhalRide implements World3D {
       const z = -(from + to) / 2
       const w = l1 - l0
       const mid = x + (l0 + l1) / 2
-      return [P.box(w, 0.25, to - from, '#FFFFFF', { at: [mid, 0.13, z] }), P.box(w, 0.6, to - from, '#9CCBEF', { at: [mid, -0.3, z] })]
+      // (A slab of sea ice with snow on it, corners rounded, as in the films; the glow along its edge.)
+      const d = (to - from) / 2
+      const outline = roundOff([[mid - w / 2, z + d], [mid + w / 2, z + d], [mid + w / 2, z - d], [mid - w / 2, z - d]], 3)
+      glowEdges.push(skirtGeo(outline, 1.6))
+      return [iceSlab(outline, 0.26, 0.86)]
     }
+    const glowEdges: BufferGeometry[] = []
     const hole = DIVE.hole - 13
     const parts = [...slab(DIVE.sheetFrom, hole, -26, 26), ...slab(hole, DIVE.sheetTo, -26, -5.2), ...slab(hole, DIVE.sheetTo, 5.2, 26)]
     // The low bridge of ice at the front edge: too low to swim under with riders, so Nari dips.
@@ -483,7 +516,7 @@ export class NarwhalRide implements World3D {
       const h = 2 + r() * 5
       parts.push(P.cone(1 + r() * 1.6, h, i % 2 ? KEEL : '#A9D4F5', { at: [cx(s) + lat, -0.3 - h / 2, -s], rot: [Math.PI, i, 0] }, 6))
     }
-    this.scene.add(solid(merge(parts), this.bag, 2.5))
+    this.scene.add(solid(merge(parts), this.bag, 2.5, ICE_LINE), this.ocean.skirt(mergeGeometries(glowEdges)!, this.bag))
   }
 
   /** The glacier: a tall wall of ice along the left of the bay and across its end, with a gap where the loose piece
@@ -491,31 +524,28 @@ export class NarwhalRide implements World3D {
   private buildGlacier() {
     const r = rng(31)
     const parts: BufferGeometry[] = []
-    const cols = [ICE, '#E6F1FF', ICE_SHADE]
-    let i = 0
-    for (let s = GLACIER - 12; s < BACK_WALL + 14; s += 8) {
+    const glowAt: BufferGeometry[] = []
+    // The wall: tall faceted blocks of ice with flat snowy tops, shouldering into each other, cliffs to the water.
+    for (let s = GLACIER - 12; s < BACK_WALL + 14; s += 7) {
       if (Math.abs(s + 4 - CALVE.s) < 5.5) {
         // (Behind the loose piece: the wall's blue inside.)
-        parts.push(P.box(10, 11, 9.4, ICE_BLUE, { at: [cx(s + 4) + WALL_LAT - 12, 5.5, -(s + 4)] }))
+        parts.push(recolor(tableBergGeo(12, 9.4, 11), BLUE_ICE).translate(cx(s + 4) + WALL_LAT - 12, 0, -(s + 4)))
         continue
       }
       const h = 10 + r() * 6
-      const d = 13 + r() * 2
-      parts.push(P.box(d, h, 8.3, cols[i++ % 3], { at: [cx(s + 4) + WALL_LAT - d / 2 + r() * 1.2, h / 2 - 1, -(s + 4)], rot: [0, (r() - 0.5) * 0.12, 0] }))
-      parts.push(P.box(d + 0.3, 1.5, 8.5, ICE_BLUE, { at: [cx(s + 4) + WALL_LAT - d / 2 + 0.4, 0.3, -(s + 4)] }))
-      // Jagged ice along the top, and a blue crack down the face.
-      for (let j = 0; j < 2; j++) parts.push(P.cone(2.2 + r() * 1.6, 3 + r() * 3.5, j ? ICE : '#E6F1FF', { at: [cx(s + 4) + WALL_LAT - 2.5 - r() * 6, h - 1 + 1.2, -(s + 2 + j * 4)], rot: [(r() - 0.5) * 0.3, r() * 3, (r() - 0.5) * 0.3] }, 5))
-      parts.push(P.box(0.5, h * 0.92, 0.3 + r() * 0.3, '#7FBDEC', { at: [cx(s + 4) + WALL_LAT + 1.25, h * 0.46 - 1, -(s + 1 + r() * 6)], rot: [(r() - 0.5) * 0.25, 0, 0] }))
+      const d = 15 + r() * 3
+      const x = cx(s + 4) + WALL_LAT - d / 2 + 1 + r() * 1.2
+      parts.push(tableBergGeo(d, 10.5, h).rotateY((r() - 0.5) * 0.2).translate(x, 0, -(s + 4)))
+      glowAt.push(roundSkirt(d / 2, 2.4, 24, 10.5 / d).translate(x, 0, -(s + 4)))
     }
-    for (let lat = WALL_LAT - 14; lat < 70; lat += 8) {
+    for (let lat = WALL_LAT - 14; lat < 70; lat += 7) {
       const h = 10 + r() * 7
-      parts.push(P.box(8.3, h, 14, cols[i++ % 3], { at: [lat + 4, h / 2 - 1, -(BACK_WALL + 7 + r() * 1.5)], rot: [0, (r() - 0.5) * 0.1, 0] }))
-      parts.push(P.box(8.5, 1.5, 14.3, ICE_BLUE, { at: [lat + 4, 0.3, -(BACK_WALL + 7)] }))
-      parts.push(P.cone(2.4 + r() * 1.6, 3 + r() * 4, i % 2 ? ICE : '#E6F1FF', { at: [lat + 2 + r() * 4, h - 1 + 1.2, -(BACK_WALL + 5 + r() * 6)], rot: [(r() - 0.5) * 0.3, r() * 3, (r() - 0.5) * 0.3] }, 5))
-      parts.push(P.box(0.3 + r() * 0.3, h * 0.92, 0.5, '#7FBDEC', { at: [lat + 1 + r() * 6, h * 0.46 - 1, -(BACK_WALL - 0.2)], rot: [0, 0, (r() - 0.5) * 0.25] }))
+      const z = -(BACK_WALL + 7 + r() * 1.5)
+      parts.push(tableBergGeo(10.5, 16, h).rotateY((r() - 0.5) * 0.15).translate(lat + 4, 0, z))
+      glowAt.push(roundSkirt(5.4, 2.4, 24, 16 / 10.5).translate(lat + 4, 0, z))
     }
     for (const [lat, s, rr, h, seed] of [[-80, 900, 34, 38, 1], [-20, 930, 40, 46, 2], [45, 905, 30, 32, 3], [-75, 760, 26, 30, 4], [-70, 650, 24, 26, 5]] as const) parts.push(mountainGeo(rr, h, seed).translate(lat, 0, -s))
-    this.scene.add(solid(merge(parts), this.bag, 3))
+    this.scene.add(solid(merge(parts), this.bag, 2.5, ICE_LINE), this.ocean.skirt(mergeGeometries(glowAt)!, this.bag))
   }
 
   /** The little ramps of ice: a blue wedge each, with a pink flag either side of its lip. */
@@ -576,7 +606,11 @@ export class NarwhalRide implements World3D {
     const t = (this.time += dt)
     this.modeT += dt
     this.bumpCool -= dt
-    this.water.update(t)
+    {
+      const p = this.pos()
+      this.sky.update(t, this.rig.camera, this.fogAir)
+      this.ocean.update(p.x, p.z - 14, this.sky.sun)
+    }
     const k = this.wheel.update(dt, t, STEER)
     if (Math.abs(k) > 0.05) {
       this.counts.steered += dt
@@ -628,12 +662,11 @@ export class NarwhalRide implements World3D {
     // Under the sea, the world turns blue.
     const underSea = this.rig.camera.position.y < 0
     this.scene.fog = underSea ? this.fogSea : this.fogAir
-    ;(this.scene.background as Color).copy(underSea ? this.seaColor : this.skyColor)
+    this.sky.root.visible = !underSea
     if (this.y < -0.8) rideSfx.under()
     else if (this.mode === 'swim' && !this.air) rideSfx.swim(clamp(this.v / RIDE.speed), clamp(Math.abs(this.latV) / 5))
 
     const p = this.pos()
-    this.sun.position.set(p.x - 70, 26, p.z - 190)
     this.lights.follow(p.x, Math.max(0, this.y), p.z)
     this.rig.setShot(this.shot())
     this.rig.update(dt)
@@ -1337,15 +1370,20 @@ function withKeel(top: BufferGeometry, size: number) {
   return merge([top, P.cone(size * 1.2, size * 3.4, KEEL, { at: [0, -size * 1.7 + 0.1, 0], rot: [Math.PI, 0.4, 0] }, 7)])
 }
 
-/** The old blue iceberg: ice packed so tight it has gone blue. */
+/** The old blue iceberg: ice packed so tight it has gone blue (an iceberg's facets, all in blues). */
 function blueBergGeo(size: number) {
-  const r = rng(51)
-  const parts = [P.cyl(size * 0.85, size, size * 0.5, '#8CC8F2', { at: [0, size * 0.12, 0] }, 7)]
-  for (let i = 0; i < 4; i++) {
-    const a = r() * Math.PI * 2
-    const d = r() * size * 0.45
-    const h = size * (1.1 + r() * 1.1)
-    parts.push(P.cone(size * (0.36 + r() * 0.22), h, ['#6DB8EE', '#8CC8F2', '#56A6E6', '#A5D6F7'][i], { at: [Math.cos(a) * d, h / 2 + size * 0.2, Math.sin(a) * d], rot: [(r() - 0.5) * 0.3, r() * 3, (r() - 0.5) * 0.3] }, 5))
+  return withKeel(recolor(bergGeo(size, 51), BLUE_ICE), size)
+}
+
+const BLUE_ICE = ['#6DB8EE', '#8CC8F2', '#56A6E6', '#A5D6F7']
+/** The same ice, its facets in these colors (snow stays snow). */
+function recolor(g: BufferGeometry, cols: string[]) {
+  const c = g.attributes.color
+  const k = new Color()
+  for (let i = 0; i < c.count; i += 3) {
+    if (c.getX(i) > 0.97 && c.getY(i) > 0.97 && c.getZ(i) > 0.97) continue
+    k.set(cols[(i / 3) % cols.length])
+    for (let j = 0; j < 3; j++) c.setXYZ(i + j, k.r, k.g, k.b)
   }
-  return withKeel(merge(parts), size)
+  return g
 }

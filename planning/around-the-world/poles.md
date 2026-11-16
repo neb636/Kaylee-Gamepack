@@ -71,6 +71,32 @@ same props, so the balloon she follows in the finale is the one in the films.
 - To look at a film without filming a reel: `npm run build && node scripts/film-strip.mjs '#/world/poles/story/intro'`
   writes a contact sheet to `qa-output/films/` (`--portrait`, `--at=12,23` for full-size frames).
 
+## The look (2026-11-16)
+
+The look pass brought the 3D scenes up to Koh Samet's bar, from the user's references (a pink aurora dusk, chunky snowy
+floes with turquoise sides in deep blue water, a sunny bay of ice). One kit in `places/poles/look/`, used by the film
+stage and every 3D game:
+
+- `sky.ts` `PolarSky`: a painted dome (deep blue overhead, a peach or pink blush on the horizon, the low sun's glow or a
+  crescent moon), toon clouds with lavender bellies, stars. Moods: `day` (the Arctic), `autumn` (the tundra), `south`
+  (Antarctica), `dusk`, `night`, `globe`; `blend()` eases between two (the huddle's sunrise). It runs the look's clock
+  and colors the fog.
+- `sea.ts` `PolarSea`: sapphire water in drifting patches, a painted web of ripples, the horizon mirrored at a low
+  angle, a glitter path under the sun, cloud shade; it rises and falls with `engine3d/water.ts` `swell()` exactly, so
+  whatever bobs on the swell rides what she sees. From below it is the bright ceiling of the sea (Narwhal Ride under the
+  ice, Papa's dive). `skirt()` is the turquoise glow of ice under the water round anything floating, with foam lapping
+  at its edge (`skirtGeo` for an outline, `roundSkirt` for a berg, `floeSkirt` for a `floeGeo`).
+- `look.ts` `dress(scene)`: the shared toon material swapped for one with drifting cloud shade, a faint blue dapple on
+  snow and little pastel glints that wink on it. Call it once a world is built.
+- `ground.ts`: rolling snowfields and the tundra (`field`), an ice cliff (`iceCliff`).
+- `story/props.ts`: floes are slabs with a cushion of snow and turquoise sides (`iceSlab`, `roundOff` turns a layout's
+  octagon into a floe); icebergs, table bergs and mountains are faceted lumps (`bergGeo` has a `detail` for far ones);
+  ice and snow have a soft blue-grey line (`ICE_LINE`), never ink.
+
+Costs: Narwhal Ride draws about 310k triangles (127k before), Penguin Slide 360k (300k), Ice Floe Hop 125k (59k); Koh
+Samet's island is 397k (`node scripts/qa-perf.mjs --only=poles`). The globe hub and the finale's flight over the toy
+globe kept their look: they are the toy globe, not a place.
+
 ## North and south at a glance (the facts the place is built on)
 
 | | 🐻‍❄️ North Pole (the Arctic) | 🐧 South Pole (Antarctica) |
@@ -87,7 +113,7 @@ Stickers: polar bear (floe), narwhal (narwhal), Arctic fox (coats), Adélie peng
 
 ## Known small things (2026-11-15)
 
-- Narwhal Ride: the glacier wall is boxy and the three waves read as flat foamy bands (an art pass); from the chase
+- Narwhal Ride: the three waves read as flat foamy bands; from the chase
   camera Pebble sits hidden behind Pola most of the ride; four lines play in about 16 s under the ice.
 - Penguin Slide: a run is about 1:45 (the course length was kept); the humpback under the sea is easy to miss; in
   portrait the station hut is mostly off the right edge.

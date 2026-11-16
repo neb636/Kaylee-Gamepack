@@ -14,7 +14,7 @@
 // narwhal, a puffin, belugas, a seal pup and Terry flying over, each with something to do when she pokes it.
 //
 // Built for engine3d/View3D.tsx; nothing here comes from Thailand. The fling and the floes are feel-lab knobs (?feel=1).
-import { type BufferAttribute, CircleGeometry, Color, ExtrudeGeometry, Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, RingGeometry, Scene, Shape, SphereGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
+import { CircleGeometry, Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, RingGeometry, Scene, SphereGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { clamp, smooth } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -25,8 +25,11 @@ import { setOutlineResolution } from '../../../../engine3d/outline'
 import { Particles } from '../../../../engine3d/particles'
 import { applyBands, makeLights } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
-import { swell, Water } from '../../../../engine3d/water'
-import { driftGeo, ICE, ICE_BLUE, ICE_SHADE } from '../../story/props'
+import { swell } from '../../../../engine3d/water'
+import { dress } from '../../look/look'
+import { PolarSea, skirtGeo } from '../../look/sea'
+import { PolarSky } from '../../look/sky'
+import { driftGeo, ICE_LINE, iceSlab, roundOff } from '../../story/props'
 import { Bear } from './bear'
 import { Life, type Critter, type CritterId, type Sea } from './life'
 import { Rider } from './rider'
@@ -192,7 +195,8 @@ export class FloeHop implements World3D {
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
   private bag = new Bag()
   private lights = makeLights(this.scene)
-  private water: Water
+  private sky: PolarSky
+  private ocean: PolarSea
   private floes: Floe[] = []
   private mamaFloe: Floe
   private pola: Bear
@@ -267,14 +271,14 @@ export class FloeHop implements World3D {
     private events: FloeEvents,
   ) {
     const { scene, bag } = this
-    scene.background = new Color(SKY)
-    scene.fog = new Fog(SKY, 70, 230)
+    scene.fog = new Fog(SKY, 110, 400)
     applyBands()
     this.rig.fov = 34
     this.rig.lag = 0.45
 
-    this.water = new Water({ size: 600, deep: '#5FA6DE', shallow: '#78BCEA', haze: SKY, hazeNear: 60, hazeFar: 220 }, bag)
-    scene.add(this.water.mesh)
+    this.sky = new PolarSky(bag, 'day')
+    this.ocean = new PolarSea({ hazeNear: 80, hazeFar: 280 }, bag)
+    scene.add(this.sky.root, ...this.ocean.meshes)
 
     for (const spec of layout(start.layout)) this.floes.push(this.makeFloe(spec, this.floes.length))
     this.mamaFloe = this.floes.find((f) => f.spec.stage === 'mama')!
@@ -307,7 +311,7 @@ export class FloeHop implements World3D {
       spray: (x, y, z, n, speed, up, size) => this.spray.burst(x, y, z, n, speed, up, size),
       ripple: (x, z, size) => this.foam.emit(x, 0.02, z, 0, 0, 0, 1.1, size),
     }
-    this.life = new Life(scene, bag, this.floes.map((f) => f.spec), { parent: f0.spinner, x: hole.x, y: TOP, z: hole.z, face: -f0.yaw })
+    this.life = new Life(scene, bag, this.floes.map((f) => f.spec), { parent: f0.spinner, x: hole.x, y: TOP, z: hole.z, face: -f0.yaw }, (g) => this.ocean.skirt(g, bag))
     this.stopBed = floeSfx.bed()
 
     this.foam = new Particles({ kind: 'foam', count: 80, opacity: 0.85 }, bag)
@@ -351,6 +355,9 @@ export class FloeHop implements World3D {
     this.face = this.faceGoal = 0
     if (start.section === 'mama') this.goHome()
 
+    // The polar look on everything (look/look.ts).
+    dress(scene)
+
     this.unwatch = watch('fling', () => ({
       'pull (px)': [this.pullPx, FLING.pull * 1.5],
       'power': [this.power, 1],
@@ -362,25 +369,9 @@ export class FloeHop implements World3D {
   // ---------------------------------------------------------------- building
 
   private makeFloe(spec: FloeSpec, i: number): Floe {
-    // The outline drawn as a shape in x and -z, pushed down `THICK` with a soft rounded edge.
-    const shape = new Shape(spec.pts.map(([x, z]) => new Vector2(x, -z)))
-    const geo = new ExtrudeGeometry(shape, { depth: THICK - 0.12, bevelEnabled: true, bevelThickness: 0.06, bevelSize: 0.08, bevelSegments: 2, curveSegments: 1 })
-    geo.rotateX(-Math.PI / 2)
-    // (The extrusion now runs up from y = 0: put its top at TOP.)
-    geo.translate(0, TOP - (THICK - 0.12) - 0.06, 0)
-    // Ice: a white top, sides that go bluer down to the water (the films' floes, story/props.ts).
-    const ice = bake(geo, ICE)
-    const at = ice.attributes.position
-    const col = ice.attributes.color as BufferAttribute
-    const shade = new Color(ICE_SHADE)
-    const deep = new Color(ICE_BLUE)
-    const c = new Color()
-    for (let k = 0; k < at.count; k++) {
-      const y = at.getY(k)
-      if (y > TOP - 0.03) continue
-      c.copy(shade).lerp(deep, clamp((TOP - 0.1 - y) / 0.3))
-      col.setXYZ(k, c.r, c.g, c.b)
-    }
+    // Ice with a thin cushion of snow (the films' floes, story/props.ts), its top at TOP where Pola stands.
+    const look = roundOff(spec.pts)
+    const ice = iceSlab(look, TOP, THICK, 0.06)
     const parts = [ice]
     // Snow blown into soft heaps on the ice that holds still (round its edge, clear of the middle where Pola lands).
     if (spec.rest) {
@@ -394,13 +385,16 @@ export class FloeHop implements World3D {
         if (home && (Math.abs(wx) < 2.4 || wz > 1.5)) continue
         const far = home ? 0.5 + (k % 3) * 0.14 : 0.74
         const r = home ? 0.7 + (k % 3) * 0.3 : 0.34 + (k % 2) * 0.1
-        parts.push(bake(driftGeo(r, r * 0.42).toNonIndexed(), '#FFFFFF', { at: [px * far, TOP - 0.02, pz * far], rot: [0, k * 1.3, 0] }))
+        parts.push(driftGeo(r, r * 0.42).toNonIndexed().rotateY(k * 1.3).translate(px * far, TOP - 0.02, pz * far))
       }
     }
-    const body = solid(parts.length > 1 ? merge(parts) : ice, this.bag, 2.5)
+    const body = solid(parts.length > 1 ? merge(parts) : ice, this.bag, 2.5, ICE_LINE)
     const group = new Group()
     const spinner = new Group()
     spinner.add(body)
+    // Its glow under the water and the foam at its edge (look/sea.ts): rides along wherever it drifts.
+    const reach = spec.pts.reduce((m, [x, z]) => Math.max(m, Math.hypot(x, z)), 0)
+    spinner.add(this.ocean.skirt(skirtGeo(look, Math.max(0.6, Math.min(1.6, reach * 0.3))), this.bag))
     group.add(spinner)
     this.scene.add(group)
     const rs = spec.pts.map(([x, z]) => Math.hypot(x, z))
@@ -647,7 +641,8 @@ export class FloeHop implements World3D {
     this.driftT += dt * FLOES.drift
     this.modeT += dt
     if (this.homeT >= 0) this.homeT += dt
-    this.water.update(t)
+    this.sky.update(t, this.rig.camera, this.scene.fog as Fog)
+    this.ocean.update(this.pos.x, this.pos.z - 12, this.sky.sun)
     this.updateFloes(dt, t)
     this.updatePola(dt, t)
     this.mama.update(dt, t)

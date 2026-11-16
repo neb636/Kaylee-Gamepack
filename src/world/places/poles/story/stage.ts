@@ -7,24 +7,29 @@
 //
 // Nothing here takes taps (FilmOverlay sparkles where her finger was and holds the ⏭). When the film ends or is
 // skipped, `events.done()` moves on; the stage is thrown away, so a film's `finish()` has nothing to put back.
-import { CircleGeometry, Color, Fog, Group, Matrix4, Mesh, Scene, SphereGeometry, Vector3, type WebGLRenderer } from 'three'
+import { BufferAttribute, Color, Fog, Group, IcosahedronGeometry, Matrix4, Mesh, Scene, SphereGeometry, Vector3, type BufferGeometry, type WebGLRenderer } from 'three'
 import type { Line } from '../../../../sdk'
 import type { AnchorInfo } from '../../../engine3d/Anchors'
 import { CameraRig } from '../../../engine3d/camera'
 import { Letterbox } from '../../../engine3d/cinema'
 import { Bag } from '../../../engine3d/dispose'
 import { FilmPlayer, type Beat, type FilmState } from '../../../engine3d/film'
-import { bake, merge, P, solid } from '../../../engine3d/geo'
+import { merge, P, solid, solidMix } from '../../../engine3d/geo'
+import { smoothstep } from '../../../../sdk/math'
 import { makeHull, setOutlineResolution } from '../../../engine3d/outline'
 import { Particles } from '../../../engine3d/particles'
 import { applyBands, makeLights } from '../../../engine3d/toon'
 import type { World3D } from '../../../engine3d/View3D'
-import { Water } from '../../../engine3d/water'
+import { swell } from '../../../engine3d/water'
+import { fbm, field, iceCliff, noise, outside, snowColor } from '../look/ground'
+import { dress } from '../look/look'
+import { PolarSea, roundSkirt, SEA, skirtGeo, type SeaColors } from '../look/sea'
+import { PolarSky, type MoodName } from '../look/sky'
 import { earthTexture, ll } from '../globe/earth'
 import { buildNorth, buildSouth, standOn } from '../globe/globe'
 import { globeMaterials } from '../globe/material'
 import { Actor } from './actor'
-import { Aurora, Balloon, bergGeo, driftGeo, floeGeo, makeCrate, makeRamp, makeShip, mountainGeo, Narwhal, rng, skyDisc, Stars, tableBergGeo } from './props'
+import { Aurora, Balloon, bergGeo, driftGeo, floeGeo, floeSkirt, ICE_LINE, makeCrate, makeRamp, makeShip, mountainGeo, Narwhal, rng, Stars, tableBergGeo } from './props'
 import { storySfx } from './sounds'
 
 export type SetName = 'arctic' | 'tundra' | 'antarctic' | 'night' | 'globe'
@@ -48,18 +53,20 @@ export const ICE_Y = 0.18
 export const SNOW_Y = 0
 
 interface Look {
-  sky: string
+  /** The sky's mood (look/sky.ts) and the sea's colors (look/sea.ts). */
+  mood: MoodName
+  sea: SeaColors
   fog: [number, number]
   /** Ambient and sun, times the usual. */
   light: [number, number]
   tint: string
 }
 const LOOKS: Record<SetName, Look> = {
-  arctic: { sky: '#CFE9FF', fog: [70, 230], light: [1, 1], tint: '#FFF7F0' },
-  tundra: { sky: '#D9E6FA', fog: [70, 230], light: [1, 1], tint: '#FFF4E6' },
-  antarctic: { sky: '#DCEBFF', fog: [80, 260], light: [1, 1], tint: '#FFF7F0' },
-  night: { sky: '#232A63', fog: [60, 240], light: [0.62, 0.5], tint: '#C9D2FF' },
-  globe: { sky: '#F1E8FF', fog: [400, 900], light: [1, 1], tint: '#FFF7F0' },
+  arctic: { mood: 'day', sea: SEA.day, fog: [120, 420], light: [1, 1], tint: '#FAFCFF' },
+  tundra: { mood: 'autumn', sea: SEA.day, fog: [120, 420], light: [1, 1], tint: '#FFF4E6' },
+  antarctic: { mood: 'south', sea: SEA.south, fog: [120, 420], light: [1, 1], tint: '#FAFCFF' },
+  night: { mood: 'night', sea: SEA.night, fog: [60, 240], light: [0.62, 0.5], tint: '#C9D2FF' },
+  globe: { mood: 'globe', sea: SEA.day, fog: [400, 900], light: [1, 1], tint: '#FFF7F0' },
 }
 /** Where the little globe hangs (far above the sets, so nothing of them shows behind it). */
 export const GLOBE_AT = new Vector3(0, 400, 0)
@@ -76,9 +83,9 @@ export class StoryStage implements World3D {
   private h = 1
   time = 0
   private sets = {} as Record<SetName, Group>
-  private bg = new Color()
   private setNow: SetName = 'arctic'
-  private water: Water
+  private sea: PolarSea
+  private sky: PolarSky
   private snowing = 0
   private flakes: Particles
   private foam: Particles
@@ -106,8 +113,6 @@ export class StoryStage implements World3D {
   readonly krill: Group
   readonly stars: Stars
   readonly aurora: Aurora
-  private sunDisc: Group
-  private moon: Group
   /** The tundra's two coats: autumn's brown ground and winter's snow. */
   private tundraBrown = new Group()
   private tundraSnow = new Group()
@@ -124,13 +129,13 @@ export class StoryStage implements World3D {
   ) {
     const { scene, bag } = this
     applyBands()
-    scene.background = this.bg
-    scene.fog = new Fog('#CFE9FF', 70, 230)
+    scene.fog = new Fog('#DCEEFB', 90, 260)
     this.rig.fov = 36
     this.rig.camera.near = 0.05
 
-    this.water = new Water({ size: 900, deep: '#5FA6DE', shallow: '#78BCEA', haze: '#CFE9FF', hazeNear: 60, hazeFar: 220 }, bag)
-    scene.add(this.water.mesh)
+    this.sky = new PolarSky(bag)
+    this.sea = new PolarSea({ hazeNear: 90, hazeFar: 300 }, bag)
+    scene.add(this.sky.root, ...this.sea.meshes)
     this.flakes = new Particles({ kind: 'spray', count: 260, color: '#FFFFFF', gravity: 0.5 }, bag)
     this.foam = new Particles({ kind: 'foam', count: 60, opacity: 0.85 }, bag)
     this.spray = new Particles({ kind: 'spray', count: 120 }, bag)
@@ -141,13 +146,9 @@ export class StoryStage implements World3D {
       this.sets[name].visible = false
       scene.add(this.sets[name])
     }
-    this.sunDisc = skyDisc(bag, 9, '#FFF3C4', '#FFE9A8')
-    this.sunDisc.position.set(-70, 26, -190)
-    this.moon = skyDisc(bag, 6, '#FFF6D8', '#C9D2FF')
-    this.moon.position.set(60, 70, -190)
     this.stars = new Stars(bag)
     this.aurora = new Aurora(bag)
-    scene.add(this.sunDisc, this.moon, this.stars.points, this.aurora.root)
+    scene.add(this.stars.points, this.aurora.root)
 
     this.buildArctic()
     this.buildTundra()
@@ -182,6 +183,9 @@ export class StoryStage implements World3D {
       scene.add(o)
     }
 
+    // The polar look on everything built so far (look/look.ts: cloud shade, snow that glints).
+    dress(scene)
+
     this.films = new FilmPlayer({ line: (l) => this.events.line(l), state: (s) => this.events.film(s) })
     this.use(film.set)
     this.films.play({ id: film.id, beats: film.beats(this), finish: () => this.sfx.stop() }, () => this.end())
@@ -189,77 +193,152 @@ export class StoryStage implements World3D {
 
   // ---------------------------------------------------------------- the sets
 
-  private add(set: SetName, geo: ReturnType<typeof merge>, x = 0, y = 0, z = 0, px = 2.5) {
-    const o = solid(geo, this.bag, px)
+  private add(set: SetName, geo: BufferGeometry, x = 0, y = 0, z = 0, px = 2.5, line?: string) {
+    const o = solid(geo, this.bag, px, line)
     o.position.set(x, y, z)
     this.sets[set].add(o)
     return o
   }
+  /** Ice (a soft blue line, not ink), with its glow on the water as a child (`skirt`: look/sea.ts skirtGeo). */
+  private ice(set: SetName, geo: BufferGeometry, skirt: BufferGeometry | null, x = 0, y = 0, z = 0, px = 2) {
+    const o = this.add(set, geo, x, y, z, px, ICE_LINE)
+    if (skirt) o.add(this.sea.skirt(skirt, this.bag))
+    return o
+  }
 
-  /** The Arctic: floes on the sea round a big one at the middle, Mama's wide ice behind, pointy bergs far off. */
+  /** The Arctic: floes on the sea round a big one at the middle, Mama's wide ice behind, the pack ice going off to the
+   *  horizon, and faceted icebergs far off. */
   private buildArctic() {
     const r = rng(3)
     // The floe the story stands on, and Mama's ice across the water.
-    this.add('arctic', floeGeo(6.5, 11, ICE_Y), 0, 0, 0)
-    this.add('arctic', floeGeo(11, 12, ICE_Y), 4, 0, -24)
+    this.ice('arctic', floeGeo(6.5, 11, ICE_Y), floeSkirt(6.5, 11), 0, 0, 0, 2.5)
+    this.ice('arctic', floeGeo(11, 12, ICE_Y), floeSkirt(11, 12), 4, 0, -24, 2.5)
     for (let i = 0; i < 16; i++) {
       const a = r() * Math.PI * 2
       const d = 11 + r() * 34
       const x = Math.cos(a) * d
       const z = Math.sin(a) * d - 6
       if (Math.hypot(x - 4, z + 24) < 14) continue
-      const o = this.add('arctic', floeGeo(1.2 + r() * 2.6, 20 + i, ICE_Y, 0.4), x, 0, z, 2)
+      const rr = 1.2 + r() * 2.6
+      const o = this.ice('arctic', floeGeo(rr, 20 + i, ICE_Y, 0.4), floeSkirt(rr, 20 + i), x, 0, z, 2)
       o.rotation.y = r() * 6
       this.bobbers.push({ o, y: 0, phase: r() * 6 })
     }
-    for (const [x, z, s, seed] of [[-46, -80, 9, 1], [38, -95, 12, 2], [-12, -120, 15, 3], [74, -70, 7, 4], [-85, -60, 8, 5], [18, -62, 4, 6]] as const) this.add('arctic', bergGeo(s, seed), x, -0.4, z, 3)
+    // The pack ice out to the horizon: many flat floes, smaller and thinner the further off (one mesh, no outline).
+    const far: BufferGeometry[] = []
+    for (let i = 0; i < 70; i++) {
+      const a = -Math.PI * (0.05 + r() * 0.9)
+      const d = 50 + r() * r() * 120
+      const x = Math.cos(a) * d * 1.3
+      const z = Math.sin(a) * d - 10
+      const rr = 1.6 + r() * 5 * (d / 90)
+      far.push(floeGeo(rr, 300 + i, 0.14, 0.3, rr > 3).rotateY(r() * 6).translate(x, 0, z))
+    }
+    this.add('arctic', merge(far), 0, 0, 0, 0)
+    for (const [x, z, s, seed] of [[-46, -80, 9, 1], [38, -95, 12, 2], [-12, -120, 15, 3], [74, -70, 7, 4], [-85, -60, 8, 5], [18, -62, 4, 6]] as const) this.ice('arctic', bergGeo(s, seed), roundSkirt(s * 0.95, Math.min(4, s * 0.45)), x, 0, z, 2.5)
   }
 
-  /** The tundra beside the frozen sea: low land in autumn's reds and golds, and the same land under snow. */
+  /** The tundra beside the frozen sea: low rolling land in autumn's golds, rusts and berry reds, lichen rocks, and the
+   *  same land under snow; snowy mountains far off. */
   private buildTundra() {
     const r = rng(8)
-    const land = (c: string, hill: string, into: Group) => {
-      const parts = [bake(new CircleGeometry(60, 40).rotateX(-Math.PI / 2), c, { at: [0, ICE_Y - 0.05, -61.5] })]
-      for (const [x, z, rr, h] of [[-30, -52, 22, 5], [16, -64, 30, 7], [48, -46, 18, 4], [-58, -40, 16, 3.4]] as const) parts.push(bake(new SphereGeometry(rr, 18, 10), hill, { at: [x, ICE_Y - 0.5, z], scale: [1, h / rr, 0.6] }))
-      const o = solid(merge(parts), this.bag, 2.5)
-      into.add(o)
+    const near = { x0: -34, x1: 34, z0: -30, z1: 4 }
+    const heightAt = (x: number, z: number) => {
+      const out = outside(x, z, near)
+      const roll = (fbm(x * 0.03 + 4, z * 0.03) - 0.35) * 9 * smoothstep(0, 40, out) + (noise(x * 0.25, z * 0.25) - 0.5) * 0.12
+      // (Down to the water at the shore.)
+      return ICE_Y - 0.05 + roll * smoothstep(-1, -6, z) - smoothstep(-2.5, 0.5, z) * 0.9
     }
-    land('#D99A52', '#C9703F', this.tundraBrown)
-    land('#FFFFFF', '#EEF3FF', this.tundraSnow)
-    // Autumn's tufts and red bushes, and winter's drifts.
-    const tufts = []
-    const drifts = []
-    for (let i = 0; i < 40; i++) {
-      const x = (r() - 0.5) * 44
-      const z = -3 - r() * 26
-      tufts.push(P.cone(0.16 + r() * 0.12, 0.3 + r() * 0.25, i % 3 ? '#8DB36B' : '#E2553F', { at: [x, ICE_Y + 0.14, z] }, 5))
-      if (i % 3 === 0) drifts.push(bake(driftGeo(1 + r() * 1.6, 0.3 + r() * 0.3), '#FFFFFF', { at: [x, ICE_Y, z] }))
+    const box = { x0: -150, x1: 150, z0: -190, z1: 1, cell: 1.5, height: heightAt }
+    const autumn = field({
+      ...box,
+      color: (x, z, h) => {
+        const n = fbm(x * 0.09, z * 0.09)
+        const m = noise(x * 0.4 + 9, z * 0.4)
+        if (z > -2.2) return h < 0 ? '#8C8597' : '#A79C8C'
+        const base = n < 0.36 ? '#C9643A' : n < 0.5 ? '#E0A548' : n < 0.62 ? '#B9A04E' : n < 0.72 ? '#D98A45' : '#8FA65A'
+        return '#' + tmpC.set(base).lerp(tmpD.set(m > 0.6 ? '#F0CF7A' : '#B5523A'), Math.abs(m - 0.5) * 0.5).getHexString()
+      },
+    })
+    const winter = field({ ...box, color: (_x, z, h, slope) => (z > -2.2 && h < 0 ? '#BFD0EC' : '#' + snowColor(h, slope, ICE_Y - 0.1, ICE_Y + 2).getHexString()) })
+    this.tundraBrown.add(solid(autumn, this.bag, 0))
+    this.tundraSnow.add(solid(winter, this.bag, 0))
+    // Autumn's tufts of grass, berry bushes and little willows; winter's drifts over them.
+    const tufts: BufferGeometry[] = []
+    const plain: BufferGeometry[] = []
+    const drifts: BufferGeometry[] = []
+    for (let i = 0; i < 70; i++) {
+      const x = (r() - 0.5) * 60
+      const z = -3.5 - r() * 34
+      if (Math.abs(x) < 3 && z > -9) continue
+      const y = heightAt(x, z)
+      const kind = i % 4
+      if (kind === 0) {
+        // A berry bush: a round green heap dotted with red.
+        const s = 0.22 + r() * 0.16
+        tufts.push(P.sphere(s, '#6E9A4C', { at: [x, y + s * 0.5, z], scale: [1.3, 0.75, 1.1] }, 10))
+        for (let k = 0; k < 6; k++) plain.push(P.sphere(0.045, '#E2384B', { at: [x + Math.cos(k * 2.3) * s * 0.9, y + s * (0.6 + (k % 2) * 0.25), z + Math.sin(k * 2.3) * s * 0.75] }, 6))
+      } else if (kind === 1) {
+        // A dwarf willow gone gold.
+        const s = 0.3 + r() * 0.2
+        tufts.push(P.cyl(0.03, 0.04, s * 0.8, '#7A5A44', { at: [x, y + s * 0.4, z] }, 5), P.sphere(s * 0.7, r() < 0.5 ? '#E8B547' : '#D9773F', { at: [x, y + s * 1.05, z], scale: [1.2, 0.8, 1.2] }, 9))
+      } else {
+        // A tuft of grass: a few blades leaning out.
+        const c = r() < 0.5 ? '#D9B25C' : '#A9A65A'
+        for (let k = 0; k < 4; k++) tufts.push(P.cone(0.05, 0.32 + r() * 0.2, c, { at: [x + Math.cos(k * 1.7) * 0.06, y + 0.14, z + Math.sin(k * 1.7) * 0.06], rot: [Math.sin(k * 1.7) * 0.35, 0, -Math.cos(k * 1.7) * 0.35] }, 4))
+      }
+      if (i % 3 === 0) drifts.push(driftGeo(1 + r() * 1.6, 0.3 + r() * 0.3).translate(x, y, z))
     }
-    this.tundraBrown.add(solid(merge(tufts), this.bag, 1.5))
-    this.tundraSnow.add(solid(merge(drifts), this.bag, 2))
+    this.tundraBrown.add(solidMix(tufts, plain, this.bag, 1.2))
+    this.tundraSnow.add(solid(merge(drifts), this.bag, 1.5, ICE_LINE))
     this.tundraSnow.visible = false
     this.sets.tundra.add(this.tundraBrown, this.tundraSnow)
-    // The shore's rocks and a strip of sea ice in front.
-    this.add('tundra', merge([...Array(7)].map((_, i) => P.sphere(0.5 + r() * 0.6, '#9A93A8', { at: [(i - 3) * 5.5 + r() * 2, ICE_Y + 0.1, -2.2 - r() * 2], scale: [1.3, 0.6, 1] }, 8))), 0, 0, 0, 2)
-    this.add('tundra', floeGeo(9, 31, ICE_Y), 0, 0, 5)
-    for (const [x, z, s, seed] of [[-60, -110, 12, 7], [52, -120, 14, 8]] as const) this.add('tundra', mountainGeo(s * 2.4, s * 2.2, seed), x, 0, z, 3)
+    // The shore's lichen rocks (faceted, with orange and mint lichen), and a strip of sea ice in front.
+    const rocks: BufferGeometry[] = []
+    for (let i = 0; i < 9; i++) {
+      const s = 0.3 + r() * 0.45
+      const x = (i - 4) * 5 + r() * 2.5
+      const z = -2 - r() * 2.4
+      rocks.push(rockGeo(s, 40 + i).translate(x, heightAt(x, z) - 0.05, z))
+    }
+    this.add('tundra', merge(rocks), 0, 0, 0, 2)
+    this.ice('tundra', floeGeo(9, 31, ICE_Y), floeSkirt(9, 31), 0, 0, 5, 2.5)
+    for (const [x, z, s, seed] of [[-60, -130, 12, 7], [52, -140, 14, 8], [-5, -170, 10, 9]] as const) this.add('tundra', mountainGeo(s * 2.4, s * 2.2, seed), x, heightAt(x, z) - 2, z, 2.5, ICE_LINE)
   }
 
-  /** Antarctica: a wide land of snow with mountains behind, drifts, and the ice edge along its right-hand side, where
-   *  the sea (and the red ship) is. The night uses the same land under a dark sky. */
+  /** Antarctica: a wide land of snow rolling up to mountains behind, drifts, and the ice cliff along its right-hand
+   *  side, where the sea (and the red ship) is. The night uses the same land under a dark sky. */
   private buildAntarctic() {
     const r = rng(14)
-    const parts = [
-      // The land: a great slab whose right edge (x = 16) is the ice edge, a blue band along its foot.
-      P.box(260, 3, 320, '#FFFFFF', { at: [-114, SNOW_Y - 1.5, -60] }),
-      P.box(0.4, 1.2, 320, '#A9D4F5', { at: [16.1, SNOW_Y - 0.9, -60] }),
-    ]
-    for (let i = 0; i < 14; i++) parts.push(bake(driftGeo(2 + r() * 3.5, 0.35 + r() * 0.5), '#FFFFFF', { at: [-48 + r() * 58, SNOW_Y, -34 + r() * 30] }))
-    const land = solid(merge(parts), this.bag, 2.5)
-    const far = solid(merge([[-70, -130, 26, 30, 1], [-20, -150, 34, 40, 2], [36, -140, 24, 26, 3], [-120, -110, 22, 24, 4], [-48, -105, 14, 15, 5]].map(([x, z, rr, h, seed]) => mountainGeo(rr, h, seed).translate(x, 0, z))), this.bag, 3)
-    const bergs = solid(merge([tableBergGeo(26, 14, 5).translate(60, -0.4, -70), tableBergGeo(16, 10, 3.6).translate(44, -0.4, -22)]), this.bag, 3)
+    const EDGE = 16
+    const flat = { x0: -60, x1: EDGE, z0: -32, z1: 24 }
+    const heightAt = (x: number, z: number) => {
+      const out = outside(x, z, flat)
+      return SNOW_Y + (fbm(x * 0.025 + 2, z * 0.025) - 0.3) * 12 * smoothstep(0, 60, out) + (noise(x * 0.18, z * 0.18) - 0.5) * 0.18 * smoothstep(EDGE, EDGE - 3, x)
+    }
+    const land = field({ x0: -230, x1: EDGE, z0: -220, z1: 60, cell: 1.6, height: heightAt, color: (_x, _z, h, slope) => '#' + snowColor(h, slope, SNOW_Y - 0.12, SNOW_Y + 0.6).getHexString() })
+    const drifts: BufferGeometry[] = []
+    for (let i = 0; i < 14; i++) {
+      const x = -48 + r() * 58
+      const z = -34 + r() * 30
+      drifts.push(driftGeo(2 + r() * 3.5, 0.35 + r() * 0.5).translate(x, heightAt(x, z) - 0.05, z))
+    }
+    // The ice cliff down to the sea, all along the edge, and the sea's glow along its foot.
+    const cliff = iceCliff(EDGE, 60, EDGE, -220, SNOW_Y + 0.05, -2.4, -0.5, 3)
+    const glow = this.sea.skirt(skirtGeo([[EDGE + 0.5, 60], [EDGE + 0.5, -220], [-230, -220], [-230, 60]].flatMap(([x, z], i, a) => {
+      const [nx, nz] = a[(i + 1) % a.length]
+      return [...Array(40)].map((_, k) => [x + ((nx - x) * k) / 40, z + ((nz - z) * k) / 40] as [number, number])
+    }), 2.6), this.bag)
+    const far = solid(merge([[-70, -150, 26, 30, 1], [-20, -170, 34, 40, 2], [36, -160, 24, 26, 3], [-120, -130, 22, 24, 4], [-48, -125, 14, 15, 5]].map(([x, z, rr, h, seed]) => mountainGeo(rr, h, seed).translate(x, heightAt(x, z) - 2, z))), this.bag, 2.5, ICE_LINE)
+    const bergs = new Group()
+    for (const [x, z, w, d, h] of [[60, -70, 26, 14, 5], [44, -22, 16, 10, 3.6], [96, -120, 30, 18, 6]] as const) {
+      const b = solid(tableBergGeo(w, d, h), this.bag, 2.5, ICE_LINE)
+      b.position.set(x, -0.5, z)
+      b.add(this.sea.skirt(roundSkirt(w / 2, 3, 32, d / w), this.bag))
+      bergs.add(b)
+    }
     // (One land for both the day and the night sets: `use` shows it for either.)
-    this.sets.antarctic.add(land, far, bergs)
+    this.sets.antarctic.add(solid(land, this.bag, 0), solid(merge(drifts), this.bag, 0), solid(cliff, this.bag, 2, ICE_LINE), glow, far, bergs)
   }
 
   /** The little globe (the hub's Earth, a meter across) and a toy red ship that sails up it. */
@@ -313,20 +392,18 @@ export class StoryStage implements World3D {
     this.setNow = set
     for (const [name, g] of Object.entries(this.sets)) g.visible = name === set || (name === 'antarctic' && set === 'night')
     const look = LOOKS[set]
-    this.bg.set(look.sky)
+    this.sky.set(look.mood)
     const fog = this.scene.fog as Fog
-    fog.color.set(look.sky)
+    fog.color.copy(this.sky.haze)
     fog.near = look.fog[0]
     fog.far = look.fog[1]
     const night = set === 'night'
-    this.water.setColors(night ? '#2B3C8C' : '#5FA6DE', night ? '#3D54A8' : '#78BCEA', look.sky)
-    this.water.mesh.position.y = set === 'antarctic' || night ? -0.5 : 0
-    this.water.mesh.visible = set !== 'globe'
+    this.sea.setColors(look.sea)
+    this.sea.level = set === 'antarctic' || night ? -0.5 : 0
+    this.sea.visible = set !== 'globe'
     this.lights.ambient.color.set(look.tint)
     this.lights.sun.color.set(look.tint)
     this.lightK = look.light
-    this.sunDisc.visible = set === 'arctic' || set === 'tundra' || set === 'antarctic'
-    this.moon.visible = night
     this.stars.opacity = night ? 1 : 0
     this.aurora.amount = night ? 0.9 : 0
     this.snowing = 0
@@ -366,13 +443,14 @@ export class StoryStage implements World3D {
   dawn(k: number) {
     const a = LOOKS.night
     const b = LOOKS.antarctic
-    this.bg.set(a.sky).lerp(tmpC.set(k < 0.6 ? '#F2B8C6' : b.sky), Math.min(1, k * 1.4))
-    ;(this.scene.fog as Fog).color.copy(this.bg)
+    // Night, through the pink of the first light, to day.
+    if (k < 0.5) this.sky.blend('night', 'dusk', k * 2)
+    else this.sky.blend('dusk', 'south', (k - 0.5) * 2)
+    this.sea.setColors(k < 0.5 ? mixSea(SEA.night, SEA.dusk, k * 2) : mixSea(SEA.dusk, SEA.south, (k - 0.5) * 2))
+    ;(this.scene.fog as Fog).color.copy(this.sky.haze)
     this.lightK = [a.light[0] + (b.light[0] - a.light[0]) * k, a.light[1] + (b.light[1] - a.light[1]) * k]
     this.stars.opacity = 1 - k
     this.aurora.amount = 0.9 * Math.max(0, 1 - k * 2.5)
-    this.sunDisc.visible = k > 0.05
-    this.sunDisc.position.set(-70, -8 + k * 22, -190)
   }
   /** A splash on the water, or a puff of snow, at a point. */
   splash(x: number, z: number, big = 1) {
@@ -400,9 +478,12 @@ export class StoryStage implements World3D {
   update(dt: number) {
     const t = (this.time += dt)
     const cine = this.films.update(dt, this.w / this.h)
-    this.water.update(t)
+    this.sky.update(t, this.rig.camera, this.scene.fog as Fog)
+    this.sea.update(this.rig.camera.position.x, this.rig.camera.position.z - 30, this.sky.sun)
+    this.sea.setHaze(this.sky.haze)
     for (const b of this.bobbers) {
-      b.o.position.y = Math.sin(t * 0.9 + b.phase) * 0.05
+      // (On the sea's own swell, so the floe and its glow ride the same waves.)
+      b.o.position.y = swell(b.o.position.x, b.o.position.z, t) * 0.8
       b.o.rotation.z = Math.sin(t * 0.7 + b.phase) * 0.012
     }
     for (const a of this.cast) a.update(dt, t)
@@ -463,4 +544,33 @@ export class StoryStage implements World3D {
 export const STORY_ANCHORS: AnchorInfo[] = []
 const ZERO = new Vector3()
 const tmpC = new Color()
+/** A faceted rock with lichen on top. */
+function rockGeo(s: number, seed: number) {
+  const g = new IcosahedronGeometry(s, 1)
+  const pos = g.attributes.position
+  const R = rng(seed)
+  for (let i = 0; i < pos.count; i++) {
+    const k = 0.8 + noise(pos.getX(i) * 3 + seed, pos.getZ(i) * 3) * 0.45
+    pos.setXYZ(i, pos.getX(i) * k * 1.25, Math.max(-s * 0.3, pos.getY(i) * k * 0.65), pos.getZ(i) * k)
+  }
+  g.computeVertexNormals()
+  const rgb = new Float32Array(pos.count * 3)
+  const c = new Color()
+  for (let i = 0; i < pos.count; i += 3) {
+    const up = (pos.getY(i) + pos.getY(i + 1) + pos.getY(i + 2)) / 3 > s * 0.25
+    const k = R()
+    c.set(up && k < 0.12 ? '#E7B27A' : up && k < 0.22 ? '#C5D6A6' : k < 0.55 ? '#A39DB4' : '#B2ACC3')
+    for (let j = 0; j < 3; j++) rgb.set([c.r, c.g, c.b], (i + j) * 3)
+  }
+  g.setAttribute('color', new BufferAttribute(rgb, 3))
+  g.deleteAttribute('uv')
+  return g
+}
+const tmpD = new Color()
+/** Part way between two sets of sea colors. */
+function mixSea(a: SeaColors, b: SeaColors, k: number): SeaColors {
+  const out = {} as Record<keyof SeaColors, string>
+  for (const key of Object.keys(a) as (keyof SeaColors)[]) out[key] = '#' + tmpC.set(a[key]).lerp(tmpD.set(b[key]), k).getHexString()
+  return out
+}
 const M = new Matrix4()

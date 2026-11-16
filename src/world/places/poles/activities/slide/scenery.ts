@@ -3,11 +3,13 @@
 // science station with its flag and a waving scientist, the sea's table icebergs and floes, the light under the sea,
 // and the sea floor. Everything that never moves is merged into a few shapes; the station's flag and the scientist's
 // arm are on pivots for slide.ts to swing.
-import { AdditiveBlending, Group, Mesh, MeshBasicMaterial } from 'three'
+import { AdditiveBlending, Group, Mesh, MeshBasicMaterial, type BufferGeometry, type Object3D } from 'three'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
+import { roundSkirt } from '../../look/sea'
 import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid, solidMix } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
-import { driftGeo, floeGeo, ICE_BLUE, mountainGeo, rng, tableBergGeo } from '../../story/props'
+import { bergGeo, driftGeo, floeGeo, floeSkirt, ICE_BLUE, ICE_LINE, mountainGeo, rng, tableBergGeo } from '../../story/props'
 import { cx, DIVE_END, EDGE, ground, half, HOME, LOOKS, SHELF, SHELF_Y, SPOTS } from './course'
 
 /** Nothing is scattered this close (m) to someone standing on the snowbank. */
@@ -27,7 +29,7 @@ export function buildLand(bag: Bag) {
       far.push(mountainGeo(rr, h, Math.floor(r() * 99)).translate(cx(s) + lat, ground(Math.max(0, s), lat) - 3, -s - r() * 20))
     }
   }
-  g.add(solid(merge(far), bag, 3))
+  g.add(solid(merge(far), bag, 2.5, ICE_LINE))
   const near = []
   for (let s = 6; s < EDGE - 6; s += 9) {
     for (const side of [-1, 1]) {
@@ -38,11 +40,8 @@ export function buildLand(bag: Bag) {
       const y = ground(s, lat)
       if (k < 0.5) near.push(driftGeo(1.3 + r() * 1.8, 0.5 + r() * 0.5).rotateY(r() * 3).translate(x, y - 0.05, -s))
       else if (k < 0.8) {
-        // Blue ice: a few leaning shards.
-        for (let i = 0; i < 3; i++) {
-          const h = 1.2 + r() * 2.6
-          near.push(P.cone(0.5 + r() * 0.5, h, i % 2 ? ICE_BLUE : '#CBE6FB', { at: [x + (r() - 0.5) * 1.6, y + h * 0.4, -s + (r() - 0.5) * 1.6], rot: [(r() - 0.5) * 0.4, r() * 3, (r() - 0.5) * 0.4] }, 5))
-        }
+        // Blue ice: a faceted lump of old ice poking through the snow.
+        near.push(bergGeo(0.9 + r() * 0.9, Math.floor(r() * 500)).rotateY(r() * 6).translate(x, y - 0.2, -s))
       } else {
         const w = 1 + r() * 1.4
         near.push(P.rbox(w, w * 0.8, w * 1.2, 0.3, r() < 0.5 ? '#8E95A8' : '#7F879B', { at: [x + side * 2, ground(s, lat + side * 2) + w * 0.2, -s], rot: [r() * 0.4, r() * 3, r() * 0.4] }), P.sphere(w * 0.5, '#FFFFFF', { at: [x + side * 2, ground(s, lat + side * 2) + w * 0.62, -s], scale: [1.1, 0.35, 1.2] }, 10))
@@ -127,10 +126,12 @@ export function buildStation(bag: Bag) {
 
 /** The sea: flat table icebergs standing in it (each with its blue keel under the water), floes on top (their
  *  undersides are the ceiling he swims under) and the ice edge's land at the end, mountains beyond. */
-export function buildSea(bag: Bag) {
+/** `glow`: the sea's glow round floating ice (look/sea.ts PolarSea.skirt), from its skirt geometry. */
+export function buildSea(bag: Bag, glow: (g: BufferGeometry) => Object3D) {
   const r = rng(33)
   const g = new Group()
   const bergs = []
+  const glows: BufferGeometry[] = []
   for (const [ds, lat, w, d, h] of [
     [40, -78, 34, 20, 7],
     [70, 46, 30, 18, 6],
@@ -144,23 +145,32 @@ export function buildSea(bag: Bag) {
     [345, -70, 30, 18, 7],
   ]) {
     const s = EDGE + ds
-    bergs.push(tableBergGeo(w, d, h).translate(cx(s) + lat, -0.4, -s), P.rbox(w * 0.86, 8, d * 0.86, 0.5, '#9CCBEF', { at: [cx(s) + lat, -4.3, -s] }))
+    bergs.push(tableBergGeo(w, d, h).translate(cx(s) + lat, 0, -s), P.rbox(w * 0.86, 8, d * 0.86, 0.5, '#9CCBEF', { at: [cx(s) + lat, -4.3, -s] }))
+    glows.push(roundSkirt(w / 2, Math.min(3, w * 0.12), 32, d / w).translate(cx(s) + lat, 0, -s))
   }
   // The land at the ice edge behind where he climbs out, and its mountains.
   bergs.push(P.box(260, 6, 150, '#FFFFFF', { at: [cx(HOME), SHELF_Y - 3.05, -(SHELF + 44 + 75)] }), P.box(260, 1.2, 0.4, ICE_BLUE, { at: [cx(HOME), SHELF_Y - 1.4, -(SHELF + 43.9)] }))
   for (const [dx, dz, rr, h, seed] of [[-60, 110, 26, 30, 1], [-8, 130, 34, 40, 2], [52, 105, 24, 26, 3], [-110, 90, 22, 24, 4], [96, 120, 20, 22, 5]]) bergs.push(mountainGeo(rr, h, seed).translate(cx(HOME) + dx, SHELF_Y - 0.5, -(SHELF + dz)))
   for (let i = 0; i < 9; i++) bergs.push(driftGeo(1.5 + r() * 2.5, 0.4 + r() * 0.5).translate(cx(HOME) + (r() - 0.5) * 36, SHELF_Y - 0.05, -(SHELF + 16 + r() * 40)))
-  g.add(solid(merge(bergs), bag, 3))
+  g.add(solid(merge(bergs), bag, 2.5, ICE_LINE))
 
   const floes = []
   for (let s = EDGE + 26; s < DIVE_END - 26; s += 15) {
     const side = r() < 0.5 ? -1 : 1
     const rr = 1.6 + r() * 2.2
-    floes.push(floeGeo(rr, Math.floor(r() * 999)).rotateY(r() * 6).translate(cx(s) + side * (rr + 0.5 + r() * 8), 0, -s - r() * 6))
+    const seed = Math.floor(r() * 999)
+    const turn = r() * 6
+    const x = cx(s) + side * (rr + 0.5 + r() * 8)
+    const z = -s - r() * 6
+    floes.push(floeGeo(rr, seed).rotateY(turn).translate(x, 0, z))
+    glows.push(floeSkirt(rr, seed).rotateY(turn).translate(x, 0, z))
   }
   // A few round the ice edge too.
-  for (const [dx, dz, rr] of [[-19, 6, 2.6], [20, 14, 3], [-22, 26, 2.2]]) floes.push(floeGeo(rr, 70 + dz).translate(cx(HOME) + dx, 0, -(SHELF + dz)))
-  g.add(solid(merge(floes), bag, 2.5))
+  for (const [dx, dz, rr] of [[-19, 6, 2.6], [20, 14, 3], [-22, 26, 2.2]]) {
+    floes.push(floeGeo(rr, 70 + dz).translate(cx(HOME) + dx, 0, -(SHELF + dz)))
+    glows.push(floeSkirt(rr, 70 + dz).translate(cx(HOME) + dx, 0, -(SHELF + dz)))
+  }
+  g.add(solid(merge(floes), bag, 2.5, ICE_LINE), glow(mergeGeometries(glows)!))
   return g
 }
 
