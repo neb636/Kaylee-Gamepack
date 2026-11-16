@@ -24,6 +24,7 @@ import { hasPlayerName, permitsPlayerName } from './player-name-policy.mjs'
 //   touch only     a gesture word (tap, finger, swipe...) with no Mac version: onDevice() (AGENTS.md design rule 2)
 //   curly quote    curly quotes fail the clip transcription check
 //   new / changed  with --changed: what this branch added or reworded (the old words are shown)
+//   reused         with --changed: under a new key, but the same words in the same voice were already recorded
 // Needs ffmpeg for the audio; without it the sheet is still written.
 import { execFileSync, spawnSync } from 'node:child_process'
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
@@ -152,6 +153,7 @@ export async function scriptOf(place, group, { before } = {}) {
   const counts = new Map()
   for (const l of lines) counts.set(l.text, (counts.get(l.text) ?? 0) + 1)
   const old = before ? new Map(before.map((b) => [b.path.join('.'), b])) : null
+  const oldWords = new Set((before ?? []).map((b) => `${b.voice}|${b.text}`))
   const script = lines.map((l, i) => {
     const m = clip.get(`${l.voice}|${l.text}`)
     const audio = m?.file && existsSync(path.join(dir, 'voice', m.file)) ? path.join(dir, 'voice', m.file) : null
@@ -165,7 +167,9 @@ export async function scriptOf(place, group, { before } = {}) {
     if (/[‘’“”]/.test(l.text)) flags.push('curly quote')
     const was = old?.get(l.path.join('.'))
     let change = null
-    if (old) change = !was ? 'new' : was.text !== l.text || was.voice !== l.voice ? 'changed' : null
+    // (A line under a new key with words already recorded elsewhere in the place, in the same voice, shares that clip:
+    // it's reused, not new.)
+    if (old) change = !was ? (oldWords.has(`${l.voice}|${l.text}`) ? 'reused' : 'new') : was.text !== l.text || was.voice !== l.voice ? 'changed' : null
     if (change) flags.push(change)
     return { ...l, key: l.path.join('.'), part: l.path.slice(0, -1).filter((p) => !/^\d+$/.test(p)).join(' › '), when: notes[i], ms: m?.ms ?? 0, audio, flags, was: change === 'changed' ? was.text : undefined }
   })
@@ -284,7 +288,7 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
 .text{font-size:17px}.text s{display:block;color:var(--soft);font-size:14px}
 .when,.meta{grid-column:2;font-size:13px;color:var(--soft)}
 .flag{display:inline-block;font-weight:600;font-size:11.5px;padding:1px 7px;border-radius:99px;margin-left:6px;background:#ffe2a8;color:#5a3d00}
-.flag.name{background:#e9dcff;color:#3d2470}.flag.new,.flag.changed{background:#c9f3dd;color:#0d4a2c}.flag.name,.flag.not-recorded,.flag.rule-8,.flag.touch-only{background:#ffd0d6;color:#6b0717}
+.flag.name{background:#e9dcff;color:#3d2470}.flag.new,.flag.changed{background:#c9f3dd;color:#0d4a2c}.flag.reused{background:#dbe9ff;color:#173a6b}.flag.name,.flag.not-recorded,.flag.rule-8,.flag.touch-only{background:#ffd0d6;color:#6b0717}
 </style></head><body>
 <header>
 <h1>Table read: ${esc(title)}</h1>

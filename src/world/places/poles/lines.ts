@@ -534,4 +534,214 @@ export const L = {
     // The badge. No name here: the trophy's line says it right after.
     badge: terry('A real Polar Explorer!'),
   },
+
+  // ---- The new ending, The Longest Night (planning/around-the-world/poles-ending.md; activities/night/). ----
+  // One chapter in three acts and five films, and the whole of it is here in play order, so its table read is the
+  // ending as she hears it. It replaces Emperor Huddle and the finale (the blocks above) once it's built; until then
+  // those still play. Lines marked ♻️ are already recorded under another key (the same words in the same voice share
+  // one clip, so nothing is recorded twice); 🔁 came with the 3D huddle. Everything else is new. Papa's song itself
+  // (activities/party/sounds.ts TUNES[0]) is never words: it's sung.
+  night: {
+    // 🎬 Film 1, night-in: Time to fly. The autumn tundra under fresh snow; the Arctic fox, all white now, pounces.
+    in: {
+      // Terry, landing on the balloon's rope.
+      fox: terry('Snow! The fox is white. Time to fly south!'),
+      // Mama Bear hugs Pola at the balloon. (♻️ story.homeIn.bye)
+      bye: mama('Goodbye, my brave cub! Hurry home!'),
+      promise: pola("I'll come back, Mama. I promise."),
+      // At the ice edge, Nari bursts up and spins as the balloon goes over.
+      nari: nari('Narwhals stay up north. Say hi for me!'),
+      // Sparkle, as the balloon lifts. (♻️ story.homeIn.aboard)
+      aboard: 'All aboard! Next stop, the bottom of the world!',
+      // The camera follows the balloon down the little globe into darkness. (♻️ story.slideIn.meanwhile)
+      meanwhile: 'Meanwhile, at the bottom of the world...',
+      // Papa at the windy edge of the huddle, looking up; then he hums his song into the wind, alone. (♻️ story.huddleIn.wait)
+      wait: papa("I'll wait right here, Pebble."),
+    },
+
+    // 🎈 Act 1, fly: Hold to Fly. She flies the balloon down the world: hold to heat the air and rise, let go to sink.
+    fly: {
+      // Sparkle, as the game opens (and when nothing is held for a while: `stuck`).
+      start: onDevice('Hold your finger down to fly up!', 'Click and hold to fly up!'),
+      // Terry, flying ahead, as the first pink ribbon of wind shows.
+      follow: terry('Follow me! The pink wind goes south!'),
+      // Sparkle, the first time the balloon reaches the pink ribbon.
+      pink: 'Ride the pink wind south!',
+      stuck: onDevice('Hold your finger down to go up!', 'Click and hold to go up!'),
+      // Sparkle, the first time the burner lifts the balloon (once).
+      hot: 'Hot air goes up, up, up!',
+      // She pokes Pebble in the basket: this the first time, then he just hums the song.
+      hum: pebble("This is Papa's song. Hmm hm hmm!"),
+      // Silly, never "oops": held too long, the balloon pokes into a cloud; let go too long, the basket dips in the sea.
+      cloud: pola("I can't see! It's all fluffy!"),
+      wet: pebble("Don't get me wet! I'm too fluffy!"),
+      // The warm middle of the world: Pola fans herself, then Sparkle's fact. (♻️ party.warm, party.warmFact)
+      warm: pola("Phew! I'm melting!"),
+      warmFact: 'The middle of the world is the warmest part!',
+      // Through the thundercloud instead of over it.
+      shower: pola('Ahh! A cool shower!'),
+      // The red ship sails by below.
+      ship: pebble("The red ship! That's how I got lost!"),
+      crates: pola('No more fish crates for you!'),
+      // A whale spouts below. (♻️ party.whale) Over a country in her passport, Terry says hello (♻️ party.hello).
+      whale: terry('Look down! A whale!'),
+      // The cold comes back, then the albatross. (♻️ party.south, party.albatross)
+      south: pebble('It smells like home!'),
+      albatross: terry('Hello, albatross! Nearly there!'),
+      // The blizzard starts: gusts push the balloon down. Terry, then Sparkle.
+      storm: terry('Hold on! A big storm!'),
+      holdOn: onDevice('Hold your finger down! Keep the balloon up!', 'Click and hold! Keep the balloon up!'),
+      // Sparkle, the first time she pokes each thing (the lights and the ship are ♻️ hub.pokes).
+      pokes: {
+        balloon: 'Hot air is light, so it floats up!',
+        ribbons: 'Balloons steer by finding the right wind.',
+        berg: 'Southern icebergs are big and flat, like tables!',
+        lights: 'The southern lights! They glow in the long winter night.',
+        ship: 'The red ship! Pebble fell asleep on it.',
+      },
+      // A tap on the friends in the basket, in turn (♻️ party.balloon); a tap on Terry says ♻️ hub.terry.
+      friends: [pola('Wheee!'), pebble('Higher, higher!')],
+    },
+
+    // 🎬 Film 2, night-lost: The storm. The flame gutters out and the balloon sinks into deep snow. White everywhere.
+    lost: {
+      terry: terry("I can't see the way!"),
+      // Pebble, very small in the snow.
+      how: pebble('How will I ever find Papa?'),
+      // Pola wraps him in a hug.
+      friends: pola('Friends help friends. Mama said so.'),
+      // The memory, in the storybook look: the night he hatched (the 3D huddle's hatch scene). (🔁 huddle.papa.song,
+      // huddle.papa.always) Papa sings, and baby Pebble peeps it back between the two.
+      song: papa('Listen, Pebble. This is my song.'),
+      always: papa("That's it! Now you'll always find me."),
+      // Back in the storm.
+      sing: pebble("Papa's song! I'll sing it!"),
+      // He peeps it, tiny, and the wind tears the notes away.
+      windy: pebble("It's too windy. He can't hear me."),
+      // Pola stands up tall, Terry on her head.
+      all: pola("Then we'll ALL sing it!"),
+    },
+
+    // 🎶 Act 2, chorus: Sing in the Dark (activities/night/chorus.ts). She holds Pebble, on Pola's back, to sing: the
+    // longer she holds, the bigger the ring of song that rolls out across the dark snow when she lets go. It lights up
+    // what it passes, and every friend it finds joins the song.
+    chorus: {
+      // Sparkle, as the game opens (and her hint when nothing has been sung for a while).
+      start: onDevice('Hold Pebble to sing!', 'Click and hold Pebble to sing!'),
+      // Sparkle, as the first ring rolls out (once).
+      lights: 'Look! The song lights up the dark!',
+      // Sparkle, when a ring lights up Pola, white in the white (once).
+      camo: 'Pola is white like the snow. Camouflage!',
+      // A ring finds the woolly hat half buried in the snow; Pebble puts it on. (Papa's line from the slide.)
+      hat: pebble('A hat! It fits!'),
+      // A ring finds Terry, upside down in a drift: he pops out, shakes, and joins in.
+      terry: terry("Kee-arr! I'll sing too!"),
+      // The ice edge. The Weddell seal pops up in her breathing hole and trills (Sparkle, ♻️ slide.facts.weddell).
+      weddell: 'Weddell seals sing. It sounds like outer space!',
+      // The slide's Adelies hop up out of their drift, honking along.
+      adelies: pebble('The penguins are singing too!'),
+      // A humpback rises in the dark sea and sings (Sparkle).
+      whale: 'Humpback whales sing long, long songs!',
+      // Silly: she pokes Pola, and Pola sings it back, the growly bear way.
+      grr: pola('Grr-la-la!'),
+      // Everyone's found: the hilltop, the colony's glow far off. Pola, then Sparkle.
+      together: pola('All together now!'),
+      long: onDevice('Hold Pebble for a long, long time!', 'Click and hold Pebble for a long, long time!'),
+      // The rainbow ring rolls over the hills to the colony. Silence. A gold ring comes back: Papa's song.
+      papa: pebble("That's Papa! He heard us!"),
+      // She pokes Terry once he's singing with them.
+      terryPoke: terry("Keep singing! I'm right here!"),
+      // She pokes Pola once the Adelies are there (♻️ party.song.pola, in turn).
+      pola: [pola('I just want to say hi!'), pola('Hi, penguins!')],
+    },
+
+    // 🎬 Film 3, night-colony: So many papas. Over the hill, a huddle of a thousand dads, steaming in the dark.
+    colony: {
+      whoa: pola('Whoa! So many penguins!'),
+      // (♻️ story.homeLand.same)
+      same: pebble('Papa? They all look the same!'),
+      // Gold notes rise from deep inside the huddle; the dads near Pola squeeze together and shuffle away. Sparkle
+      // (♻️ party.song.colonyFact).
+      shy: "Penguins have never seen a polar bear. They're a little shy!",
+      // Pola kneels and lifts Pebble down from her back.
+      go: pola('Go on, Pebble. You can do it.'),
+    },
+
+    // 🐧 Act 3, huddle: Through the Huddle. She leads Pebble through the churning huddle to Papa (the 3D huddle's world).
+    huddle: {
+      // Sparkle, as the game opens: how to lead him, then the side verb.
+      start: onDevice('Pull Pebble along with your finger!', 'Click and drag Pebble along!'),
+      sing: onDevice('Tap Pebble to sing!', 'Click Pebble to sing!'),
+      // Sparkle, when she's stuck.
+      stuck: "Follow Papa's gold notes!",
+      // A dad lifts his belly: an egg (Sparkle, once, ♻️ huddle.facts.egg).
+      egg: 'Emperor dads keep the egg warm on their feet!',
+      // The huddle shuffles Papa away just as Pebble gets close.
+      wait: pebble('Papa, wait!'),
+      // A gust rolls Pebble out: Sparkle, then Pebble (♻️ huddle.blown, huddle.pebble.blown).
+      blown: 'Whoosh! Carry Pebble back to Papa.',
+      pebbleBlown: pebble('Whoa! Papa, help!'),
+      // The dads on the edge swap into the middle (Sparkle, once).
+      turns: "Dads take turns in the cold. So everyone's warm!",
+      // She pokes a thin, sleepy dad (Sparkle, once, 🔁 huddle.facts.fast).
+      fast: "Emperor dads don't eat all winter. They just keep the egg warm!",
+      // Silly: a flick sends him tummy-sliding. (Walked into a dad's tummy: a bounce and a grumpy honk, no line.)
+      slide: pebble('Wheee! Tummy slide!'),
+      // The middle, packed tight (Sparkle).
+      loud: 'Sing, Pebble! As loud as you can!',
+      // The big song; the friends outside join in; the dads turn and step aside, one by one. Papa, far off, then close.
+      you: papa('Pebble? Is that you?'),
+      // The aisle is open (Sparkle).
+      take: 'Take Pebble to Papa!',
+      // She pokes the dark sky (♻️ huddle.facts.night). Pola waving over the huddle says chorus.pola.
+      night: 'In winter here, the sun stays away for months!',
+    },
+
+    // 🎬 Film 4, night-sunrise: Sunrise. Pebble on Papa's feet; the first sun in months comes up as they meet.
+    sunrise: {
+      // (♻️ story.homeReunion.pebble, .papa)
+      pebble: papa('Pebble! My Pebble!'),
+      papa: pebble('Papa! I went to the top of the world!'),
+      heard: papa("I heard your song. I knew you'd come."),
+      // A thin line of gold on the horizon; light runs across the snow and every penguin lifts its head (Sparkle).
+      sun: "The sun! It's back after months of night!",
+      // Over the hill: Pola, Terry on her head. A thousand dads gasp. (♻️ story.homeLand.what, .bear,
+      // story.homeReunion.friend, .thanks)
+      what: papa('Goodness! What is THAT?'),
+      bear: pola("Hi! I'm a polar bear!"),
+      friend: pebble('This is Pola. She carried me home.'),
+      thanks: papa('A polar bear at the South Pole! Thank you, Pola.'),
+      friends: pola('Friends help friends!'),
+      // Then everyone sings Papa's song, the whole colony too, and the music swells (no words).
+    },
+
+    // 🪨 Goodbye: Pebble gives Pola a pebble, then she flies Pola home up the toy globe (hold to rise, Act 1's move).
+    goodbye: {
+      // Morning. Pola looks north.
+      go: pola('I have to go home now. Mama is waiting.'),
+      wait: pebble('Wait! I have something for you.'),
+      // He waddles off and comes back with a smooth round pebble in his beak.
+      pebble: pebble('For you! Penguins give pebbles to best friends.'),
+      keep: pola("I'll keep it forever."),
+      // The globe: Terry asks (♻️ party.ask.bear); Sparkle says fly.start; over the warm middle, Pola's fly.warm again.
+      ask: terry('Take Pola home! Where do polar bears live?'),
+      // At the top, Mama on the ice; then Pola (♻️ party.home).
+      back: mama('My brave cub! You came back!'),
+      home: pola("I'm home! Bye, Pebble!"),
+      // She pokes the pebble in Pola's paws (Sparkle, once).
+      pebbleFact: 'Some penguins give pebbles to say I love you!',
+    },
+
+    // 🎬 Film 5, the-end: Top and bottom. The screen splits: Pola with her pebble under the northern lights at the top,
+    // Pebble on Papa's feet in the sun at the bottom, both humming the song. Sparkle tells it.
+    end: {
+      top: 'Polar bears live at the top of the world.',
+      bottom: 'Penguins live at the bottom.',
+      never: 'They never meet...',
+      // Pola and Pebble together, from the two ends of the world (one clip each, played at once).
+      except: [pola('Except best friends!'), pebble('Except best friends!')],
+      // Terry flies up the screen between them. Then the shell's trophy ceremony (♻️ trophyWin).
+      year: terry('See you next year!'),
+    },
+  },
 }
