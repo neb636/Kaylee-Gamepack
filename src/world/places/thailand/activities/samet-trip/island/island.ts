@@ -836,8 +836,14 @@ export class SametIsland implements World3D {
     this.dancers.update(dt, t, this.isl.lamps)
     // The fireflies, the geckos, Tofu in a film: round her horn (or the jet ski she rides).
     if (this.mode === 'ski') herV.set(this.d.x, 1.7, this.d.z)
+    else if (this.riding3d) this.kaylee.root.getWorldPosition(herV).setY(herV.y + this.kaylee.height * 1.12)
     else herV.set(k.x, k.y + this.kaylee.height * 1.12, k.z)
     this.story.update(dt, t, herV, this.spot, film, this.mode === 'walk' && !this.welcoming)
+    // Tofu rides on the taxi's luggage spot: the story's film step put him back at his island place (in its frame).
+    if (this.riding3d) {
+      this.pup.root.position.set(0, 0, 0)
+      this.pup.root.rotation.set(0, 0.5, 0)
+    }
     this.ambience()
     for (const p of [this.spray, this.puffs, this.petals, this.stars, this.bubbles]) p.update(dt)
     this.camera(dt)
@@ -1046,7 +1052,37 @@ export class SametIsland implements World3D {
     let dir: 1 | -1 = 1
     let sp = 0
     let landed = false
-    // The camera runs alongside, on the side the family face (the truck's local +z), a little ahead.
+    // The camera runs alongside, on the side the family face (the truck's local +z): a little ahead or behind, or round
+    // toward its front or back corner, whichever has least (a shop, a palm) between it and the taxi along this leg of the road.
+    const CAMS = [
+      { side: 7.5, fwd: 3, up: 4.2 },
+      { side: 7.5, fwd: -3, up: 4.2 },
+      { side: 5.5, fwd: 5.5, up: 3.6 },
+      { side: 5.5, fwd: -5.5, up: 3.6 },
+    ]
+    let cam = CAMS[0]
+    const at = (road: Route, sAt: number, d: 1 | -1, c: (typeof CAMS)[number]) => {
+      const p = pointAt(road, sAt)
+      const q = pointAt(road, sAt + d * 1.5)
+      const r = Math.atan2(q.x - p.x, q.z - p.z) - Math.PI / 2
+      const o = { x: Math.sin(r), z: Math.cos(r), fx: Math.cos(r), fz: -Math.sin(r) }
+      return { p, eye: { x: p.x + o.x * c.side + o.fx * c.fwd, z: p.z + o.z * c.side + o.fz * c.fwd } }
+    }
+    const pick = (road: Route, d: 1 | -1) => {
+      const hits = (c: (typeof CAMS)[number]) => {
+        let n = 0
+        for (const sAt of [0, RUN * 0.33, RUN * 0.66, RUN]) {
+          const { p, eye: e } = at(road, sAt, d, c)
+          for (let k = 0.25; k <= 1; k += 0.125) {
+            const x = p.x + (e.x - p.x) * k
+            const z = p.z + (e.z - p.z) * k
+            for (const [bx, bz, br] of this.isl.blockers.near(x, z)) if (Math.hypot(x - bx, z - bz) < br + 0.4) n++
+          }
+        }
+        return n
+      }
+      cam = CAMS.map((c) => ({ c, n: hits(c) })).sort((a, b) => a.n - b.n)[0].c
+    }
     const side = () => {
       const r = tx.root.rotation.y
       return { x: Math.sin(r), z: Math.cos(r), fx: Math.cos(r), fz: -Math.sin(r) }
@@ -1054,7 +1090,7 @@ export class SametIsland implements World3D {
     const eye = () => {
       const p = tx.root.position
       const d = side()
-      return new Vector3(p.x + d.x * 7.5 + d.fx * 3, p.y + 4.2, p.z + d.z * 7.5 + d.fz * 3)
+      return new Vector3(p.x + d.x * cam.side + d.fx * cam.fwd, p.y + cam.up, p.z + d.z * cam.side + d.fz * cam.fwd)
     }
     const look = () => {
       const p = tx.root.position
@@ -1093,6 +1129,7 @@ export class SametIsland implements World3D {
             seat()
             s = 0
             dir = 1
+            pick(away, 1)
             tx.drive(away, 0, 1, ground)
           },
           shot: { eye, look, fov: 42, sway: 0.03 },
@@ -1113,6 +1150,7 @@ export class SametIsland implements World3D {
           start: () => {
             s = RUN
             dir = -1
+            pick(home, -1)
             tx.stop = dest
             tx.drive(home, s, -1, ground)
           },
