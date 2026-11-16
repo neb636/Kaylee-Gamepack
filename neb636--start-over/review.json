@@ -1,0 +1,17 @@
+{
+  "title": "Start over: Koh Samet and the Poles",
+  "checkIn": "fix",
+  "kaylee": "Coming back to Koh Samet or the Poles mid-story, a small pill at the top lets you start the story from the beginning. It hides itself after 10 seconds, and a quick tap does nothing: you hold it for a second.",
+  "questions": [],
+  "pictures": [
+    { "title": "The Poles: back on the globe mid-story", "after": "pics/poles-ipad.jpg", "caption": "Top center, level with the top bar; a thin bar under it runs out over 10 seconds" },
+    { "title": "Holding it", "after": "pics/poles-holding.jpg", "caption": "A pink ring fills round the arrow; let go early and it just wiggles" },
+    { "title": "The Poles, started over", "after": "pics/poles-after.jpg", "caption": "Stamps back to 0/5 and Pebble's way-in film plays (the trophy stays)" },
+    { "title": "Koh Samet: back on the island", "after": "pics/samet-ipad.jpg", "caption": "Started over: no fireflies, back on the speedboat to Na Dan pier" },
+    { "title": "On an iPhone", "after": "pics/samet-phone.jpg", "caption": "On a narrow phone it sits just under the top bar" }
+  ],
+  "links": [
+    { "label": "The Poles (play a chapter first, then come back)", "hash": "#/world/poles" },
+    { "label": "Koh Samet (find a firefly first, then come back)", "hash": "#/world/thailand/samet-trip/island" }
+  ]
+}
