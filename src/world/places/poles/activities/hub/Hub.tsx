@@ -2,8 +2,11 @@
 // pictures (stops.ts) runs down the world in story order: three chapters up north, two down south, then home. It shows
 // twice, always in step: as big picture buttons joined by a dotted line (down the right edge on a wide screen, so the
 // column itself reads top = north, bottom = south; along the bottom on a tall one), and on the globe as a dotted line
-// with a flag at each stop and Sparkle's balloon over the next one (globe/trail.ts). Every stop is open from the start;
-// picking one rolls the globe to its pole, then opens it. Until he is home, Pebble stands beside Pola up north and Papa
+// with a flag at each stop and Sparkle's balloon over the next one (globe/trail.ts). The first time through, the story
+// goes in order: the trail shows only the stops she has finished and the next one, and each new picture pops in as the
+// one before it earns its stamp. Once every stamp is in (the whole story told), every picture shows and she can pick
+// any game at any time. (Starting the story over puts it back in order.) Picking one rolls the globe to its pole, then
+// opens it. Until he is home, Pebble stands beside Pola up north and Papa
 // looks for him down south. The globe is still a toy: she spins it, drags the sun so summer and night swap between the
 // poles, and pokes what lives on it. The address bar follows her (sections.ts): which side faces her and where the
 // summer is. Sparkle in the corner (kit/Guide) speaks only when something is new (her first look, a new stamp, every
@@ -47,6 +50,9 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const guide = useRef<GuideHandle>(null)
   const goTimer = useRef<number>(undefined)
   const { stops, next, all } = trail(meta, stamps)
+  // The pictures she can pick: in story order the first time through (what's done, and the next one), all of them once
+  // the story has been told.
+  const open = all ? stops : stops.filter((s, i) => s.done || i === next)
   // A friend says it (their mouth moves on the globe), not Sparkle: no bubble in her corner.
   const friend = (l: Line) => void say(l)
   // What the address bar shows (so a copied link reproduces the moment).
@@ -144,7 +150,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           {onDevice('Tap to wake the globe', 'Click to wake the globe')}
         </button>
       )}
-      <Trail stops={stops} next={next} all={all} going={going} pick={pick} />
+      <Trail stops={open} next={open.indexOf(stops[next])} all={all} going={going} pick={pick} />
       <Guide ref={guide} hint={hint} voice={false} />
     </div>
   )

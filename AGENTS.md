@@ -84,7 +84,7 @@ were handed plan pages, grey boxes and up to 40 PRs a day, they ended up merging
 
 ## What Kaylee told us (follow it everywhere)
 
-- **Any order.** Every activity is open from the start and earns a passport stamp + animal sticker right away.
+- **Any order.** Every activity is open from the start and earns a passport stamp + animal sticker right away. (Exception: the Poles is one story, so its first time through goes in order; see `planning/around-the-world/poles.md`.)
   Collecting every stamp unlocks a short finale, then `onWin()` shows the shell's trophy ceremony (gold trophy displaying
   the country's `trophyTitle`). Don't build your own trophy screen.
 - **Talk short, play long.** What bored her was listening and forced easy rounds, never touching. At most 1-2 short
