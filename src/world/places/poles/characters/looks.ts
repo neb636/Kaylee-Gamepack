@@ -25,7 +25,7 @@ export const POLES_COLORS = {
 
 const C = POLES_COLORS
 
-export type PolesFriend = 'pola' | 'mama' | 'pebble' | 'papa' | 'terry' | 'adelie'
+export type PolesFriend = 'pola' | 'mama' | 'pebble' | 'papa' | 'terry' | 'adelie' | 'fox' | 'snowfox'
 
 export const POLES_LOOKS: Record<PolesFriend, Look> = {
   /** Pola: a small, round, fluffy cub, happy mouth open. */
@@ -38,5 +38,8 @@ export const POLES_LOOKS: Record<PolesFriend, Look> = {
   /** Terry: pale grey wings, white body and face, a black cap, red-orange beak and legs. */
   /** An Adélie (Penguin Slide's slope): small, all black on top with a white tummy and a white ring round each eye. */
   adelie: { species: 'penguin', height: 0.86, fur: C.adelieBlack, light: C.chickFace, dark: C.adelieBeak, extras: ['eye-ring'] },
+  /** The Arctic fox in the story films: brown in summer, white once the snow comes. */
+  fox: { species: 'fox', height: 0.7, fur: '#A9764E', light: '#F3DDC4', dark: C.nose, ear: C.bearEar },
+  snowfox: { species: 'fox', height: 0.7, fur: '#FFFFFF', light: '#FFFFFF', dark: C.nose, ear: C.bearEar },
   terry: { species: 'tern', height: 0.8, fur: C.ternGrey, light: C.ternWhite, dark: C.ternBeak, cap: C.ternCap, open: false },
 }

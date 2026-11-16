@@ -1,6 +1,8 @@
 import { expect, test, type Page } from '@playwright/test'
 
-// Lifecycle contracts: a departed finale cannot win, and GPU recovery keeps earned progress.
+// Lifecycle contracts for the Poles' finale: a departed finale cannot win, GPU recovery keeps earned progress, and a
+// section link opens straight at its section (no film before it). The flight and the quiz are one world on the globe;
+// Papa's song is another; both answer on window.__polesPartyQA (only one is on screen at a time).
 async function open(page: Page, section: string) {
   await page.goto(`./#/world/poles/party/${section}${section.includes('?') ? '&' : '?'}stamps=all`)
   await page.getByRole('button', { name: /let's play/i }).click()
@@ -43,6 +45,35 @@ test('flight recovery keeps the current position and catches', async ({ page }) 
   expect(after.leg).toBe(before.leg)
   expect(Number(after.along)).toBeCloseTo(Number(before.along), 1)
   expect(after.fish).toBe(before.fish)
+})
+
+test("Papa's song opens from its link with no film, and finds Papa by his tune", async ({ page }) => {
+  // Three singing turns and a waddle to the next round, in a browser with no GPU: more than the default 30 s.
+  test.setTimeout(120_000)
+  await open(page, 'song')
+  await expect(page.locator('[data-story-film]')).toHaveCount(0)
+  await page.waitForFunction(() => window.__polesPartyQA?.().state === 'listen')
+  const q = (await page.evaluate(() => window.__polesPartyQA!())) as { section: string; round: number; row: string[]; papa: string }
+  expect(q.section).toBe('song')
+  expect(q.round).toBe(1)
+  expect(q.row).toHaveLength(3)
+  // A dad who isn't Papa sings his own tune and steps back: never a fail, the round goes on.
+  await page.locator(`[data-anchor="${q.row.find((d) => d !== q.papa)}"]`).click({ force: true })
+  await page.waitForFunction(() => window.__polesPartyQA?.().misses === 1 && window.__polesPartyQA?.().state === 'listen')
+  // Papa: the same song. The next round brings five dads.
+  await page.locator(`[data-anchor="${q.papa}"]`).click({ force: true })
+  await page.waitForFunction(() => window.__polesPartyQA?.().round === 2)
+  expect(((await page.evaluate(() => window.__polesPartyQA!())) as { row: string[] }).row).toHaveLength(5)
+})
+
+test("song recovery keeps the round she is on", async ({ page }) => {
+  await open(page, 'song?round=2')
+  await page.waitForFunction(() => window.__polesPartyQA?.().state === 'listen')
+  await loseContext(page)
+  await wake(page)
+  const q = await page.evaluate(() => window.__polesPartyQA!())
+  expect(q.section).toBe('song')
+  expect(q.round).toBe(2)
 })
 
 test('quiz recovery keeps a newly earned star and advances past its answered question', async ({ page }) => {

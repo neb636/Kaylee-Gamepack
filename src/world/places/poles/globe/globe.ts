@@ -1,6 +1,8 @@
-// The Poles' hub (greybox 1): a toy globe she grabs and spins, and a sun she drags. Spin it down and the Arctic comes to
-// the front: thin sea ice floating on the ocean, Pola waving. Spin it up and it's Antarctica: a thick white land with
-// mountains, Pebble waving. Then the sun pops out beside the globe; drag it up and the north gets summer (daylight all
+// The Poles' hub: a toy globe she grabs and spins, and a sun she drags. It is the map of the story (Pebble's Long Way
+// Home): a dotted trail runs down it from pole to pole with a flag at each stop and Sparkle's balloon over the next one
+// (trail.ts), and when she arrives it turns by itself to show where the balloon is. Spin it down and the Arctic comes to
+// the front: thin sea ice floating on the ocean, Pola with Pebble, the lost chick, beside her. Spin it up and it's
+// Antarctica: a thick white land with mountains, and Papa looking up at the sky for him. Then the sun pops out beside the globe; drag it up and the north gets summer (daylight all
 // the way round, the floes melt back, the snow line climbs) while the south goes dark (stars, southern lights), and the
 // other way round. The light is real: the sun sits in the Earth's frame, tilted up to `SUN.tilt` (the Earth's 23.4°).
 //
@@ -23,8 +25,10 @@ import { makeLights, PAL } from '../../../engine3d/toon'
 import type { World3D } from '../../../engine3d/View3D'
 import { POLES_LOOKS } from '../characters/looks'
 import { earthTexture, ll } from './earth'
-import { CARRY, GlobeExtras, type Lost, type PokeId } from './extras'
+import { GlobeExtras, type GlobeHost, type PokeId } from './extras'
 import { globeMaterials } from './material'
+import { hubSfx } from './sounds'
+import { GlobeTrail, TRAIL_LON, type TrailStop } from './trail'
 import { DEG } from '../../../../sdk/math'
 
 const FILE = 'src/world/places/poles/globe/globe.ts'
@@ -55,8 +59,12 @@ export interface GlobeStart {
   sun: boolean
   /** Where the sun shines. */
   summer: Side
-  /** Step 3 from the start: this one is lost in the middle of the ocean (the `lost` section). */
-  lost: Lost | null
+  /** The story's trail: each stop's latitude and whether its stamp is in (trail.ts). */
+  stops: TrailStop[]
+  /** The stop the balloon floats over. */
+  next: number
+  /** She has just arrived (not a link to a view): the globe turns by itself to show where the balloon is. */
+  arrive: boolean
 }
 export interface GlobeEvents {
   /** Another pole (or the middle) came to the front. */
@@ -65,12 +73,8 @@ export interface GlobeEvents {
   sunOut(): void
   /** Summer moved: north, south, or in between. */
   summer(s: Side): void
-  /** A lost penguin or bear turned up adrift (or the last one is home: null). */
-  lost(kind: Lost | null): void
-  /** She put the lost one down on a pole: its own (`home`), or the other one. */
-  saved(kind: Lost, home: boolean): void
-  /** She tapped something: a poke (`marker`, `seal`, `station`, `whale`), a friend (`pola`, `pebble`), or the night sky
-   *  so the lights flared (`lightsNorth`, `lightsSouth`). */
+  /** She tapped something: a poke (`marker`, `seal`, `station`, `whale`, `ship`, `terry`), a friend (`pola`, `pebble`,
+   *  `papa`), the `balloon`, or the night sky so the lights flared (`lightsNorth`, `lightsSouth`). */
   poke(id: string): void
 }
 
@@ -78,14 +82,28 @@ export const GLOBE_ANCHORS: AnchorInfo[] = [
   { id: 'globe', label: 'The globe: spin it', kind: 'thing' },
   { id: 'pola', label: 'Pola the polar bear cub', kind: 'thing' },
   { id: 'pebble', label: 'Pebble the penguin chick', kind: 'thing' },
+  { id: 'papa', label: 'Papa the emperor penguin', kind: 'thing' },
+  { id: 'balloon', label: "Sparkle's balloon: the next stop", kind: 'thing' },
   { id: 'sun', label: 'The sun: drag it up and down', kind: 'thing' },
-  { id: 'lost', label: 'The lost one: carry it home', kind: 'thing' },
   { id: 'marker', label: 'The North Pole', kind: 'thing' },
   { id: 'seal', label: 'A seal in its hole', kind: 'thing' },
   { id: 'station', label: 'The science station', kind: 'thing' },
   { id: 'whale', label: 'A whale', kind: 'thing' },
+  { id: 'ship', label: "The scientists' red ship", kind: 'thing' },
+  { id: 'terry', label: 'Terry the Arctic tern', kind: 'thing' },
 ]
-const POKES = new Set<string>(['lost', 'marker', 'seal', 'station', 'whale'])
+const POKES = new Set<string>(['marker', 'seal', 'station', 'whale', 'ship', 'terry'])
+const FRIENDS = ['pola', 'pebble', 'papa'] as const
+type FriendId = (typeof FRIENDS)[number]
+const isFriend = (id: string | null | undefined): id is FriendId => !!id && (FRIENDS as readonly string[]).includes(id)
+/** The globe's turn that brings the trail's meridian to the front. */
+const TRAIL_YAW = (() => {
+  const p = ll(0, TRAIL_LON, 1)
+  return Math.atan2(-p.x, p.z)
+})()
+/** Arriving: the globe starts turned this far away and swings round to the trail, then (after `wait` seconds of the
+ *  whole world, if she hasn't touched it) rolls to the balloon's pole. */
+const ARRIVE = { from: 1.3, wait: 1.5 }
 
 const UP = new Vector3(0, 1, 0)
 /** The sun's distance from the Earth's center (a little closer on a tall screen, so the globe can be bigger), and how
@@ -317,6 +335,15 @@ export function makePebble(k: EarthKit, voice?: string) {
   return c
 }
 
+/** Papa, the toy emperor penguin, his head tipped back: he is looking up at the sky for Pebble. */
+function makePapa(k: EarthKit, voice?: string) {
+  const c = new Critter(0.21)
+  const rig = buildAnimal({ ...POLES_LOOKS.papa, height: 0.21 }, k.bag)
+  c.dress(rig, voice)
+  rig.root.rotation.x = -0.2
+  return c
+}
+
 export class PolesGlobe implements World3D {
   readonly scene = new Scene()
   readonly rig = new CameraRig()
@@ -346,6 +373,10 @@ export class PolesGlobe implements World3D {
   /** While she drags: where her finger has pulled it (before the rubber band). */
   private pulled = 0
   private yaw = 0
+  /** Where the globe turns to by itself (the trail to the front), until she spins it sideways herself. */
+  private yawGoal: number | null = TRAIL_YAW
+  private arriveIn = -1
+  private arrivePole: Side = 'middle'
   private spinVel = 0
   private quarter = 0
   private side: Side = 'middle'
@@ -354,7 +385,7 @@ export class PolesGlobe implements World3D {
   private inviteAt = INVITE_S
 
   // ---- Her finger.
-  private grab: 'globe' | 'sun' | 'lost' | null = null
+  private grab: 'globe' | 'sun' | null = null
   private down = { x: 0, y: 0 }
   private last = { x: 0, y: 0, t: 0 }
   private vYaw = 0
@@ -384,6 +415,7 @@ export class PolesGlobe implements World3D {
   private capN!: Group
   private pola: Critter
   private pebble: Critter
+  private papa: Critter
   private starsN: Sprite[] = []
   private starsS: Sprite[] = []
   private starMatN: SpriteMaterial
@@ -393,8 +425,9 @@ export class PolesGlobe implements World3D {
   /** A tap on the night sky: the lights flare up and ripple faster for a moment. */
   private flare = { n: 0, s: 0, tN: 0, tS: 0 }
   private bg = BG.middle.clone()
-  /** Step 3 and the pokes (extras.ts). */
+  /** The pokes (extras.ts) and the story's trail with the balloon (trail.ts). */
   private extras: GlobeExtras
+  private trail: GlobeTrail
 
   constructor(
     private renderer: WebGLRenderer,
@@ -421,32 +454,28 @@ export class PolesGlobe implements World3D {
     this.floesS = buildSouth(kit)
     this.pola = makePola(kit, 'pola')
     this.pebble = makePebble(kit, 'pebble')
-    standOn(this.pola.root, 85, -95, 1.022)
-    standOn(this.pebble.root, -81, -60, domeR(9) - 0.002)
-    this.spin.add(this.pola.root, this.pebble.root)
+    this.papa = makePapa(kit, 'papa')
+    // Until he is home, Pebble is up north beside Pola (he is lost there: it's the story), and Papa waits down south.
+    // (Side by side to the left of the trail when it faces her, clear of the balloon over the first stop.)
+    standOn(this.pola.root, 84.5, -123, 1.022)
+    standOn(this.pebble.root, 79.5, -88, 1.022)
+    standOn(this.papa.root, -82, -75, domeR(8) - 0.002)
+    this.spin.add(this.pola.root, this.pebble.root, this.papa.root)
     ;[this.starMatN, this.starsN] = this.makeStars(1)
     ;[this.starMatS, this.starsS] = this.makeStars(-1)
     this.auroraN = this.makeAurora(1, '#8FE3C8', '#FF8FB8')
     this.auroraS = this.makeAurora(-1, '#8FE3C8', '#B9A6F5')
     this.makeSun()
-    this.extras = new GlobeExtras(
-      {
-        bag: this.bag,
-        spin: this.spin,
-        world: this.scene,
-        camera: this.rig.camera,
-        prop: (g, px) => this.prop(g, px),
-        make: (kind) => (kind === 'bear' ? makePola(kit) : makePebble(kit)),
-        friend: (kind) => (kind === 'bear' ? this.pola : this.pebble),
-        ground: (lat) => (lat < 0 ? domeR(90 + lat) : 1.022),
-        show: (pole) => {
-          if (this.grab !== 'globe') this.rest = this.restFor(pole ?? 'middle')
-        },
-        lost: (kind) => this.events.lost(kind),
-        saved: (kind, home) => this.events.saved(kind, home),
-      },
-      start.lost,
-    )
+    const host: GlobeHost = {
+      bag: this.bag,
+      spin: this.spin,
+      world: this.scene,
+      camera: this.rig.camera,
+      prop: (g, px) => this.prop(g, px),
+      ground: (lat) => (lat < -68 ? domeR(90 + lat) : lat > 77 ? 1.022 : 1),
+    }
+    this.extras = new GlobeExtras(host)
+    this.trail = new GlobeTrail(host, start.stops, start.next)
 
     // Where the link starts.
     this.side = start.side
@@ -457,8 +486,12 @@ export class PolesGlobe implements World3D {
     this.sunOut = start.sun
     this.sunT = start.sun ? 9 : 0
     this.sunLight = start.sun ? 1 : 0
-    // (Starting with a lost one: the sun has been dragged already.)
-    this.sunDragged = !!start.lost
+    // The trail faces her. Arriving, the globe swings round to it, then rolls to the balloon's pole.
+    this.yaw = TRAIL_YAW - (start.arrive ? ARRIVE.from : 0)
+    if (start.arrive && start.stops[start.next]) {
+      this.arriveIn = ARRIVE.wait
+      this.arrivePole = start.stops[start.next].lat >= 0 ? 'north' : 'south'
+    }
     const tilt = SUN.tilt * DEG
     this.decl = this.declGoal = start.summer === 'north' ? tilt : start.summer === 'south' ? -tilt : 0
     this.season = this.decl / tilt
@@ -577,6 +610,19 @@ export class PolesGlobe implements World3D {
     pole: { center: new Vector3(0, 0.62, 0.3), half: new Vector3(0.8, 0.46, 0.3), yaw: 0, pitch: 6 },
   } satisfies Record<string, Shot>
 
+  /** Turns the globe by itself to show a pole with the trail in front (a picture on the trail was picked). */
+  showPole(pole: 'north' | 'south') {
+    this.arriveIn = -1
+    this.yawGoal = TRAIL_YAW
+    this.spinVel = 0
+    if (this.grab !== 'globe') this.rest = this.restFor(pole)
+  }
+
+  /** A friend hops and waves (Papa, when home is picked before he can be found). */
+  cheer(id: FriendId) {
+    this[id].hop(true)
+  }
+
   private get sunD() {
     return this.tall ? SUN_D.tall : SUN_D.wide
   }
@@ -597,13 +643,21 @@ export class PolesGlobe implements World3D {
     this.w = w
     this.h = h
     this.tall = h > w
+    // On a wide screen the trail's pictures run down the right edge: room for them beside the globe (and the sun).
+    const pad = this.tall ? 0 : 0.34
     // The sun's right edge (its rays) and the globe's left edge.
-    const right = this.sunD * Math.cos(SUN_TOWARD) + 0.32
+    const right = this.sunD * Math.cos(SUN_TOWARD) + 0.32 + pad
     this.shots.withSun.center.x = (right - 1.04) / 2
     this.shots.withSun.half.x = (right + 1.04) / 2
+    this.shots.middle.center.x = pad / 2
+    this.shots.middle.half.x = 1.04 + pad / 2
+    // On a tall one they run along the bottom, above Sparkle: the whole globe sits over them.
+    const under = this.tall ? 0.85 : 0
+    this.shots.middle.center.y = this.shots.withSun.center.y = -0.08 - under / 2
+    this.shots.middle.half.y = this.shots.withSun.half.y = 1.24 + under / 2
     // A tall screen gets closer to the pole (the wide box would make it tiny).
-    this.shots.pole.center.y = this.tall ? 0.68 : 0.62
-    this.shots.pole.half.set(this.tall ? 0.52 : 0.8, this.tall ? 0.42 : 0.46, 0.3)
+    this.shots.pole.center.set(pad / 3, this.tall ? 0.6 : 0.62, 0.3)
+    this.shots.pole.half.set(this.tall ? 0.52 : 0.8 + pad / 3, this.tall ? 0.42 : 0.46, 0.3)
     this.rig.setSize(w, h, top)
     setOutlineResolution(w, h)
     this.rig.setShot(this.shot(), true)
@@ -614,7 +668,7 @@ export class PolesGlobe implements World3D {
   }
 
   get calm() {
-    return !this.grab && Math.abs(this.spinVel) < 0.02 && Math.abs(this.pitchVel) < 0.01 && Math.abs(this.roll.rotation.z - (this.side === 'south' ? Math.PI : 0)) < 0.01 && !this.pola.busy && !this.pebble.busy && !this.extras.busy && (!this.sunOut || this.sunT > 2)
+    return !this.grab && Math.abs(this.spinVel) < 0.02 && Math.abs(this.pitchVel) < 0.01 && Math.abs(this.roll.rotation.z - (this.side === 'south' ? Math.PI : 0)) < 0.01 && this.arriveIn < 0 && !this.pola.busy && !this.pebble.busy && !this.papa.busy && !this.extras.busy && !this.trail.busy && (!this.sunOut || this.sunT > 2)
   }
 
   update(dt: number) {
@@ -627,6 +681,8 @@ export class PolesGlobe implements World3D {
     const cam = this.rig.camera.position
     this.pola.update(dt, t, cam)
     this.pebble.update(dt, t, cam)
+    this.papa.update(dt, t, cam)
+    this.trail.tick(dt, t)
     this.bobFloes(this.floesN, t)
     this.bobFloes(this.floesS, t)
     for (const [stars, mat] of [[this.starsN, this.starMatN], [this.starsS, this.starMatS]] as const) {
@@ -656,8 +712,14 @@ export class PolesGlobe implements World3D {
 
   private updateGlobe(dt: number) {
     // The Earth's own slow turn, and a flick's spin dying away.
+    // Arriving: once she has seen the whole trail, the globe rolls to where the balloon is (unless she took it first).
+    if (this.arriveIn >= 0 && (this.arriveIn -= dt) < 0 && this.touches === 0 && !this.grab && this.arrivePole !== 'middle') this.rest = this.restFor(this.arrivePole)
     if (this.grab !== 'globe') {
-      this.yaw += (this.spinVel + SPIN.idle) * dt
+      if (this.yawGoal !== null) {
+        // The trail swings round to the front and stays there until she spins the globe herself.
+        const d = this.yawGoal - this.yaw
+        this.yaw += Math.atan2(Math.sin(d), Math.cos(d)) * (1 - Math.exp(-dt * 3))
+      } else this.yaw += (this.spinVel + SPIN.idle) * dt
       this.spinVel *= Math.exp(-dt / Math.max(0.05, SPIN.coast))
       // A critically damped spring to where it settles.
       const k = SPIN.settle
@@ -679,7 +741,7 @@ export class PolesGlobe implements World3D {
       if (this.wobbleT > 0.6) this.wobbleT = -1
     }
     this.spin.scale.setScalar(s)
-    if (!this.grab && this.time - this.lastTouch > this.inviteAt && (!this.sunOut || this.sunDragged) && !this.extras.active) {
+    if (!this.grab && this.time - this.lastTouch > this.inviteAt && (!this.sunOut || this.sunDragged)) {
       this.inviteAt = this.time - this.lastTouch + INVITE_S
       this.pitchVel += (this.side === 'north' ? -1 : 1) * 1.6
     }
@@ -701,10 +763,13 @@ export class PolesGlobe implements World3D {
     else if (Math.abs(this.pitch) < off) s = 'middle'
     if (s === this.side) return
     this.side = s
-    sounds.whoosh()
+    hubSfx.roll()
     if (s !== 'middle') {
       this.visited.add(s)
-      ;(s === 'north' ? this.pola : this.pebble).hop(true)
+      if (s === 'north') {
+        this.pola.hop(true)
+        this.pebble.hop()
+      } else this.papa.hop(true)
     }
     this.events.side(s)
   }
@@ -842,18 +907,14 @@ export class PolesGlobe implements World3D {
     this.vYaw = this.vPitch = this.fingerVy = 0
     this.down = { x, y }
     const g = this.globeOnScreen()
-    if (id === 'lost' && this.extras.grab()) {
-      this.grab = 'lost'
-      // Back to the whole globe, so both poles are in sight while she carries it.
-      this.rest = 0
-      this.spinVel = 0
-    } else if (id === 'sun' || (!id && this.nearSun(x, y))) {
+    this.arriveIn = -1
+    if (id === 'sun' || (!id && this.nearSun(x, y))) {
       this.grab = 'sun'
       this.sunDragged = true
       // Back to the whole globe, so she sees both poles while she moves the sun.
       this.rest = 0
       sounds.pickup()
-    } else if (id === 'globe' || id === 'pola' || id === 'pebble' || (id && POKES.has(id)) || (!id && Math.hypot(x - g.x, y - g.y) < g.r * 1.15)) {
+    } else if (id === 'globe' || id === 'balloon' || isFriend(id) || (id && POKES.has(id)) || (!id && Math.hypot(x - g.x, y - g.y) < g.r * 1.15)) {
       this.grab = 'globe'
       this.pulled = this.pitch
       this.spinVel = 0
@@ -871,10 +932,8 @@ export class PolesGlobe implements World3D {
     const smoothing = SPIN.flick > 0 ? 1 - Math.exp(-dt / SPIN.flick) : 1
     this.fingerVy += (my / dt - this.fingerVy) * smoothing
     if (this.grab === 'sun') return this.dragSun(x, y)
-    if (this.grab === 'lost') {
-      this.extras.finger = { x, y }
-      return this.extras.drag(this.inFront(x, y), Math.hypot(x - this.down.x, y - this.down.y) > CARRY.deadZone)
-    }
+    // Spun sideways by her own hand: the globe is hers now (it stops turning back to the trail).
+    if (Math.abs(x - this.down.x) > 18) this.yawGoal = null
     // The spot under her finger follows it (at grip 1): a move of one globe-radius turns it by one radian.
     // (Rolled upside down for the south: the same finger moves turn it the other way.)
     const k = (Math.cos(this.rolled) * SPIN.grip) / this.globeOnScreen().r
@@ -916,13 +975,6 @@ export class PolesGlobe implements World3D {
   pointerUp() {
     const grab = this.grab
     this.grab = null
-    if (grab === 'sun') this.extras.begin()
-    if (grab === 'lost') {
-      // Over the top of the globe: the north. Over the bottom: the south. (Upside down when the world is rolled.)
-      const g = this.globeOnScreen()
-      const dy = ((this.last.y - g.y) / g.r) * Math.sign(Math.cos(this.rolled) || 1)
-      this.extras.drop(dy < -CARRY.poleReach ? 'north' : dy > CARRY.poleReach ? 'south' : null)
-    }
     if (grab !== 'globe') return
     // A finger that stopped before letting go doesn't flick.
     if (performance.now() - this.last.t > 90) this.vYaw = this.vPitch = 0
@@ -941,8 +993,8 @@ export class PolesGlobe implements World3D {
     const hit = id ?? (this.nearSun(x, y) ? 'sun' : Math.hypot(x - this.globeOnScreen().x, y - this.globeOnScreen().y) < this.globeOnScreen().r ? 'globe' : null)
     if (hit && hit !== 'globe' && hit !== 'sun') this.events.poke(hit)
     if (hit && POKES.has(hit)) this.extras.poke(hit as PokeId)
-    else if (hit === 'pola') this.pola.hop(true)
-    else if (hit === 'pebble') this.pebble.hop(true)
+    else if (isFriend(hit)) this[hit].hop(true)
+    else if (hit === 'balloon') this.trail.poke()
     else if (hit === 'sun') {
       this.sunJiggle = 0
       sounds.sparkle()
@@ -960,7 +1012,7 @@ export class PolesGlobe implements World3D {
       if (this.side === 'north') this.flare.n = 1
       else this.flare.s = 1
       this.events.poke(this.side === 'north' ? 'lightsNorth' : 'lightsSouth')
-      ;[0, 0.12, 0.24].forEach((d, i) => tone(660 * 1.25 ** i, 660 * 1.25 ** i, 0.5, 0.045, 'sine', d))
+      hubSfx.lights()
     }
   }
 
@@ -980,17 +1032,21 @@ export class PolesGlobe implements World3D {
         const s = this.extras.spot(id as PokeId, tmp)
         if (s && s.facing > 0.2) {
           const p = this.toScreen(tmp)
-          if (id === 'lost') this.extras.carried = { x: p.x, y: p.y }
-          // Above the globe and the friends (the lost one most of all: it's the thing to do).
-          if (p.z < 1) spot = { x: p.x, y: p.y, size: Math.max(min, g.r * s.size), z: id === 'lost' ? 9500 : 6000, glow: id === 'lost' }
+          // Above the globe and the friends.
+          if (p.z < 1) spot = { x: p.x, y: p.y, size: Math.max(min, g.r * s.size), z: 6000 }
         }
-      } else if (id === 'pola' || id === 'pebble') {
-        const c = id === 'pola' ? this.pola : this.pebble
+      } else if (id === 'balloon') {
+        const s = this.trail.spot(tmp)
+        const p = this.toScreen(tmp)
+        // Above everything on the globe: it's the next step.
+        if (s.facing > 0.05 && p.z < 1) spot = { x: p.x, y: p.y, size: Math.max(min, g.r * s.size), z: 7000 }
+      } else if (isFriend(id)) {
+        const c = this[id]
         const at = c.center(tmp)
         // Only when it stands on the side of the globe facing her.
         const facing = c.up(tmp2).dot(toCam.subVectors(cam, at).normalize())
         const s = this.toScreen(at)
-        if (facing > 0.2 && s.z < 1) spot = { x: s.x, y: s.y, size: Math.max(min, g.r * 0.3), z: 5000 }
+        if (facing > 0.2 && s.z < 1) spot = { x: s.x, y: s.y, size: Math.max(min, g.r * (id === 'papa' ? 0.36 : 0.3)), z: id === 'pebble' ? 5001 : 5000 }
       }
       const show = !!spot && spot.x > -spot.size / 2 && spot.x < this.w + spot.size / 2 && spot.y > -spot.size / 2 && spot.y < this.h + spot.size / 2
       if (show && spot) {
@@ -1021,6 +1077,8 @@ export class PolesGlobe implements World3D {
       floesNorth: this.floesN.filter((f) => f.o.visible).length,
       floesSouth: this.floesS.filter((f) => f.o.visible).length,
       touches: this.touches,
+      trailInFront: this.yawGoal !== null,
+      ...this.trail.qa(),
       ...this.extras.qa(),
     }
   }
@@ -1031,7 +1089,6 @@ export class PolesGlobe implements World3D {
 
   dispose() {
     this.unwatch()
-    this.extras.dispose()
     this.scene.clear()
     this.bag.dispose()
   }

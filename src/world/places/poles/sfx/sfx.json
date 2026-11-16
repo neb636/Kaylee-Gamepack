@@ -1,0 +1,766 @@
+[
+ {
+  "id": "story-music",
+  "label": "The story (music)",
+  "prompt": "Gentle, wondering storybook music for a cartoon for five-year-olds about a little lost penguin far from home: soft celesta and glockenspiel like falling snow, a warm clarinet melody, light pizzicato strings, a little sad at first then hopeful, cozy, ends softly. Instrumental, no vocals.",
+  "seconds": 60,
+  "music": true
+ },
+ {
+  "id": "story-music-happy",
+  "label": "Meetings and goodbyes (music)",
+  "prompt": "Happy, bouncy, warm music for a cartoon for five-year-olds, friends setting off on an adventure across the snow: playful glockenspiel and ukulele, pizzicato strings, a light sleigh-bell shimmer, a skipping rhythm, joyful and gentle, ends with a little flourish. Instrumental, no vocals.",
+  "seconds": 40,
+  "music": true
+ },
+ {
+  "id": "story-wind",
+  "label": "Arctic wind (bed)",
+  "prompt": "Soft cold wind blowing over open sea ice on a bright day, gentle and airy, small ripples of water lapping at ice now and then. Calm, not howling. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "story-wind-night",
+  "label": "Antarctic night wind (bed)",
+  "prompt": "Low steady wind over a wide snowy plain at night, soft powder snow hissing along the ground, deep and quiet, a little lonely but calm. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "story-splash",
+  "label": "A splash",
+  "prompt": "One clean, round water splash, something plump plopping into cold sea water, a few drips after. Close recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "story-pop",
+  "label": "Popping out",
+  "prompt": "A soft cartoon pop, a small fluffy animal popping up out of a box, light and funny. No music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "story-thump",
+  "label": "A thump on snow",
+  "prompt": "A soft heavy thump onto packed snow, a muffled crunch. Close recording, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "story-swoop",
+  "label": "Terry swoops in",
+  "prompt": "A small seabird swooping down and landing, quick fluttering wing beats and a little whoosh. Close recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "story-horn",
+  "label": "The red ship's horn",
+  "prompt": "A friendly small ship's horn, two short warm toots, like a toy tugboat, across calm water. No music, no voices.",
+  "seconds": 1.8
+ },
+ {
+  "id": "story-crate",
+  "label": "The crate knocks",
+  "prompt": "Two quick knocks from inside a wooden crate, a hollow wooden rattle and a little creak. Close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "story-chime",
+  "label": "A happy sparkle",
+  "prompt": "A warm magical chime, a soft glockenspiel sparkle rising, sweet and short, for a hug. No voices.",
+  "seconds": 1.4
+ },
+ {
+  "id": "story-whale",
+  "label": "Nari the narwhal",
+  "prompt": "A small whale surfacing: a short happy squeaky whistle then a soft puff of breath and spray. Cute, gentle, close recording, no music, no voices.",
+  "seconds": 1.8
+ },
+ {
+  "id": "story-snore",
+  "label": "A tiny snore",
+  "prompt": "One tiny cute cartoon snore of a small sleeping baby animal, a little squeaky whistle on the way out. No music, no words.",
+  "seconds": 1.6
+ },
+ {
+  "id": "story-gasp",
+  "label": "The penguins gasp",
+  "prompt": "A small crowd of penguins all squawking and honking in surprise at once, short, funny, then quiet. No music, no human voices.",
+  "seconds": 1.6
+ },
+ {
+  "id": "story-call",
+  "label": "A penguin papa's call",
+  "prompt": "One emperor penguin calling, a short trumpeting braying call that rises and falls, musical and friendly. Close recording, no music, no human voices.",
+  "seconds": 1.6
+ },
+ {
+  "id": "story-burner",
+  "label": "The balloon's burner",
+  "prompt": "A hot-air balloon burner, one soft roaring whoosh of flame for two seconds, warm and gentle, heard from the basket. No music, no voices.",
+  "seconds": 2.2
+ },
+ {
+  "id": "hub-horn",
+  "label": "The red ship's horn",
+  "prompt": "A small toy steamship horn, two short friendly toots, warm and round, soft and cute. Clean close recording, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "hub-seal",
+  "label": "The seal barks",
+  "prompt": "A baby seal gives two short happy barks, soft and cute, toy-like. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "hub-spout",
+  "label": "The whale spouts",
+  "prompt": "A small whale blows a soft puff of spray from its blowhole, a gentle airy whoosh with a little splash of water. Clean close recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "hub-bell",
+  "label": "The North Pole's marker",
+  "prompt": "A tiny bright bell dings once and wobbles, like a toy pole being flicked, sweet and light. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "hub-door",
+  "label": "The station's door",
+  "prompt": "A small toy hut door pops open with a soft wooden click and a tiny squeak. Clean close recording, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "hub-tern",
+  "label": "Terry's call",
+  "prompt": "A small seabird, an Arctic tern, gives two short cheerful chirping calls as it swoops past with a soft flutter of wings. Gentle, not shrill. Clean recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "hub-burner",
+  "label": "The balloon's burner",
+  "prompt": "A hot-air balloon burner gives one short soft puff of flame, a gentle warm whoosh, toy-like and quiet. Clean close recording, no music, no voices.",
+  "seconds": 0.9
+ },
+ {
+  "id": "hub-pick",
+  "label": "A picture on the trail is picked",
+  "prompt": "A happy soft pop followed by a tiny rising sparkle, like a toy button being pressed. Short, sweet and light. No music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "hub-roll",
+  "label": "The globe rolls to a pole",
+  "prompt": "A toy globe turns on its stand: a soft smooth rolling whoosh with a gentle wooden rumble, ending softly. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "hub-snow",
+  "label": "Snowflakes burst from her finger",
+  "prompt": "A soft puff of powder snow with tiny glassy twinkles, light and magical, very gentle. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "hub-lights",
+  "label": "The polar lights flare",
+  "prompt": "A soft shimmering glassy swell, like the northern lights rippling, three gentle rising chimes with an airy shimmer. Calm and magical, no melody, no voices.",
+  "seconds": 1.8
+ },
+ {
+  "id": "hub-wind",
+  "label": "The wind over the ice (the globe's bed)",
+  "prompt": "A very soft, calm polar wind over open snow and sea ice, steady and airy, with a faint gentle lapping of cold water far away. Peaceful, nothing scary. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "floe-bed",
+  "label": "The sea ice: wind and water",
+  "prompt": "Calm Arctic sea ice ambience: a soft steady breeze, gentle water lapping against floating ice, now and then a faint far-off ice creak. Peaceful and airy, not stormy. Seamless loop, no music, no voices, no animals.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "floe-grab",
+  "label": "She grabs Pola",
+  "prompt": "A tiny soft fluffy squish, like picking up a plush toy, with a little rubbery stretch. Very short, cute, toy-like. No music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "floe-leap",
+  "label": "Pola springs off the ice",
+  "prompt": "A soft cartoon spring boing with a light whoosh of air, a small fluffy animal jumping. Short, bouncy, friendly, toy-like. No music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "floe-land",
+  "label": "Paws thump down on a floe",
+  "prompt": "A soft padded thump of paws landing on packed snow and ice, with a small crunchy squeak of snow and a tiny water slosh under the ice. Short, gentle, close. No music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "floe-splash",
+  "label": "A belly-flop into the sea",
+  "prompt": "A big happy cartoon belly-flop splash into cold water, round and bubbly, then a few drips. Playful, not scary. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "floe-plip",
+  "label": "A little splash",
+  "prompt": "A small light water plip, a finger poking the surface of calm water, one droplet and a tiny ripple. Short, clean, close. No music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "floe-climb",
+  "label": "Pola scrambles out onto the ice",
+  "prompt": "A wet fluffy animal scrambling out of water onto ice: a quick slosh, dripping, and two soft wet paw pats. Short, cute. No music, no voices.",
+  "seconds": 0.9
+ },
+ {
+  "id": "floe-shake",
+  "label": "She shakes the water off",
+  "prompt": "A wet furry animal shaking itself dry, fast fluttery shake with a spray of water droplets pattering down. Short, funny, cartoon-like. No music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "floe-slide",
+  "label": "Sliding off a tippy floe",
+  "prompt": "A quick slippery slide across wet ice, a smooth rising zip. Short, playful, cartoon-like. No music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "floe-knock",
+  "label": "A poke at the ice",
+  "prompt": "One soft hollow knock on a thick slab of floating ice, a muted woody clunk with a little watery wobble after it. Short, gentle. No music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "floe-clink",
+  "label": "Bits of ice clink",
+  "prompt": "Two or three small ice cubes clinking together in water, bright and glassy, light. Very short, delicate. No music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "floe-push",
+  "label": "A floe pushed over the water",
+  "prompt": "A slab of ice gliding across calm water, a soft low watery swoosh with a gentle lapping at the end. Short, smooth. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "floe-squeak",
+  "label": "Pebble holds on tight",
+  "prompt": "One tiny high squeak of a baby penguin chick, a short surprised cheep like a small squeaky toy. Very short, cute, soft. No music, no human voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "floe-peep",
+  "label": "Pebble's happy peep",
+  "prompt": "Two quick happy peeps of a baby penguin chick, bright and chirpy, like a little whistle. Short, cute, soft. No music, no human voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "floe-pop",
+  "label": "Something pops up out of the water",
+  "prompt": "A soft wet pop and a little bloop of water as a small animal's head pops up through the surface. Short, round, cute. No music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "floe-seal",
+  "label": "The ringed seal barks",
+  "prompt": "Two short friendly barks of a small seal, a little honky and funny, close up. Cute, not loud. No music, no human voices.",
+  "seconds": 0.9
+ },
+ {
+  "id": "floe-owl",
+  "label": "The snowy owl hoots",
+  "prompt": "A soft low owl hoot, hoo hoo, two gentle notes, warm and round. Calm, close, not spooky. No music, no human voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "floe-walrus",
+  "label": "The walrus snorts",
+  "prompt": "A big sleepy walrus snort and a blubbery puff of air through whiskers, low and funny, like a rumbly raspberry. Short, comical, not scary. No music, no human voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "floe-blow",
+  "label": "A whale's blow",
+  "prompt": "A small whale surfacing and blowing a soft puff of spray, a breathy whoosh then fine mist pattering on water. Gentle, close. No music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "floe-beluga",
+  "label": "The belugas sing",
+  "prompt": "Beluga whales singing: a few bright chirps, a rising whistle and a little trill, like canaries under water. Playful, sweet, short. No music, no human voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "floe-pup",
+  "label": "The seal pup calls",
+  "prompt": "A baby harp seal pup's little call, one soft wobbly maa like a tiny lamb. Short, very cute, gentle. No music, no human voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "floe-puffin",
+  "label": "The puffin's funny growl",
+  "prompt": "A puffin's funny low purring growl, arrr, like a tiny creaky door, with a quick flutter of small wings. Short, comical, soft. No music, no human voices.",
+  "seconds": 1
+ },
+ {
+  "id": "floe-tern",
+  "label": "Terry the tern calls",
+  "prompt": "An Arctic tern's call as it flies overhead, two sharp bright kee-arr cries with a light swoop of wings. Short, airy, cheerful. No music, no human voices.",
+  "seconds": 1
+ },
+ {
+  "id": "floe-twinkle",
+  "label": "An iceberg twinkles",
+  "prompt": "A short icy glassy twinkle, a few tiny crystal bell notes shimmering like sunlight on ice. Delicate, bright, magical. No melody, no voices.",
+  "seconds": 0.9
+ },
+ {
+  "id": "floe-stage",
+  "label": "A new kind of ice begins",
+  "prompt": "A short bright sparkle chime rising, three quick glassy notes, like a little reward. Cheerful, light. No voices.",
+  "seconds": 0.9
+ },
+ {
+  "id": "floe-home",
+  "label": "Home on Mama's ice",
+  "prompt": "A short warm happy arrival chime: a soft glockenspiel flourish going up with a gentle sparkle at the end. Cozy and proud, about two seconds. No voices.",
+  "seconds": 2
+ },
+ {
+  "id": "narwhal-sea",
+  "label": "The Arctic sea all around",
+  "prompt": "Calm Arctic sea ambience: small waves lapping softly against floating ice, a gentle steady breeze, a few far-off seabird calls. Peaceful and airy. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "narwhal-swim",
+  "label": "Water rushing past Nari",
+  "prompt": "Water rushing and bubbling steadily along the side of a small boat gliding fast through calm water, soft playful swoosh. Seamless loop, no engine, no music, no voices.",
+  "seconds": 5,
+  "loop": true
+ },
+ {
+  "id": "narwhal-under",
+  "label": "Under the sea ice",
+  "prompt": "Underwater ambience under sea ice: soft muffled deep hush, slow gentle bubbles, a far-off friendly whale whistle. Calm and dreamy, not scary. Seamless loop, no music, no voices.",
+  "seconds": 6,
+  "loop": true
+ },
+ {
+  "id": "narwhal-splash",
+  "label": "Landing after a jump",
+  "prompt": "A big happy splash as a dolphin lands back in the water after a jump, bright and bubbly, short tail of fizz. Clean close recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "narwhal-jump",
+  "label": "Up off an ice ramp",
+  "prompt": "A cartoon springy boing with a quick wet whoosh, something bouncy leaping up out of water. Toy-like, soft, short. No music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "narwhal-bump",
+  "label": "A bump on the ice",
+  "prompt": "A soft rubbery cartoon boing-bonk, like a beach ball bouncing off a block of ice, with a tiny splash. Funny and gentle. No music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "narwhal-yum",
+  "label": "A fish scooped up",
+  "prompt": "One quick wet cartoon gulp with a tiny happy bubble pop, cute and soft. No music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "narwhal-dive",
+  "label": "Down under the ice",
+  "prompt": "A smooth watery plunge going under: a soft gloop, then the sound goes muffled with rising bubbles. Gentle, toy-like. No music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "narwhal-surface",
+  "label": "Up through the hole",
+  "prompt": "Something bursts up out of the water with a bright splash and a joyful airy whoosh, drops raining back down. Short and happy. No music, no voices.",
+  "seconds": 1.3
+ },
+ {
+  "id": "narwhal-spout",
+  "label": "Nari blows a spout",
+  "prompt": "A small whale blowing a short puff of spray from its blowhole, a soft breathy pfff with a light mist of drops. Cute, close, no music, no voices.",
+  "seconds": 0.9
+ },
+ {
+  "id": "narwhal-walrus",
+  "label": "The walrus",
+  "prompt": "A friendly walrus giving three short gruff happy barks, ork ork ork, a little bit silly. Clean close recording, no music, no voices.",
+  "seconds": 1.4
+ },
+ {
+  "id": "narwhal-beluga",
+  "label": "A beluga whistles",
+  "prompt": "A beluga whale's cheerful chirpy whistle, two rising notes and a little squeak, like a canary of the sea. Clean, sweet, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "narwhal-seal",
+  "label": "The seal",
+  "prompt": "A small seal giving two short happy barks, arf arf, cute and soft. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "narwhal-orca",
+  "label": "The orca says hello",
+  "prompt": "An orca surfacing gently: a soft whoosh of breath from the blowhole and one friendly high squeaky call. Calm, not scary, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "narwhal-puffin",
+  "label": "The puffins",
+  "prompt": "Small seabirds fluttering their wings quickly and one funny low purring puffin growl, arrr. Cute and short. No music, no voices.",
+  "seconds": 1.1
+ },
+ {
+  "id": "narwhal-tern",
+  "label": "Terry the tern",
+  "prompt": "A small Arctic tern giving two quick bright cheerful chirps, kee-kee. Clean close recording, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "narwhal-fizz",
+  "label": "Old air fizzing out of the ice",
+  "prompt": "Tiny bubbles fizzing and popping out of melting ice in water, light crackly fizz like a fizzy drink. Close, delicate, no music, no voices.",
+  "seconds": 1.3
+ },
+ {
+  "id": "narwhal-glint",
+  "label": "The old blue iceberg glints",
+  "prompt": "A soft glassy ice chime, three high crystal notes ringing like tapping an icicle, magical and gentle. No music bed, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "narwhal-plip",
+  "label": "A poke on the water",
+  "prompt": "One small water plip, a single drop falling into calm water. Clean, soft, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "narwhal-tick",
+  "label": "A poke on the ice",
+  "prompt": "One light tap on a block of ice with a tiny puff of snow, soft and crisp. No music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "narwhal-crack",
+  "label": "The glacier cracks",
+  "prompt": "A big block of ice creaking and cracking slowly, a long squeaky groan with two sharp ice cracks. Exciting but not scary. No music, no voices.",
+  "seconds": 1.8
+ },
+ {
+  "id": "narwhal-calve",
+  "label": "A new iceberg drops into the sea",
+  "prompt": "A large piece of ice slides off a glacier with a deep soft rumble and lands in the sea with a huge whooshing splash and falling spray. Big but friendly, no music, no voices.",
+  "seconds": 3
+ },
+ {
+  "id": "narwhal-wave",
+  "label": "The rolling wave",
+  "prompt": "A rolling wave swelling and whooshing past with a foamy crest, a smooth rising and falling swoosh of water. Playful, no music, no voices.",
+  "seconds": 1.6
+ },
+ {
+  "id": "narwhal-arrive",
+  "label": "At the balloon",
+  "prompt": "A short happy arrival chime: a bright rising sparkle of bells with a soft splash at the end. Toy-like and joyful, no voices.",
+  "seconds": 1.6
+ },
+ {
+  "id": "slide-wind",
+  "label": "The wind over the ice hill (bed)",
+  "prompt": "Soft steady polar wind over a wide open snowfield, gentle airy whoosh, light and calm, a few faraway penguin calls. Seamless loop, no music, no voices, nothing scary.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "slide-under",
+  "label": "Under the sea (bed)",
+  "prompt": "Calm underwater ambience under sea ice, soft muffled rumble, gentle bubbles drifting up now and then, a faint far-off whale note. Peaceful, seamless loop, no music, no voices, nothing scary.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "slide-scrape",
+  "label": "His tummy sliding on the ice (held)",
+  "prompt": "Something smooth sliding fast over hard snow and ice, a steady soft hissing scrape like a sled runner, even and continuous. Seamless loop, no music, no voices.",
+  "seconds": 4,
+  "loop": true
+ },
+ {
+  "id": "slide-go",
+  "label": "He flops onto his tummy and goes",
+  "prompt": "A soft belly flop onto snow followed by a quick sliding whoosh away, light and playful, toy-like. No music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "slide-honk-papa",
+  "label": "Papa's honk",
+  "prompt": "One short deep trumpeting call of an emperor penguin, warm and friendly. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "slide-honk-adelie",
+  "label": "An Adelie squawks",
+  "prompt": "One short squawk of a small Adelie penguin, bright and funny. Clean close recording, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "slide-honk-gentoo",
+  "label": "A gentoo honks",
+  "prompt": "A gentoo penguin's short donkey-like honk, two quick brays, silly and friendly. Clean close recording, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "slide-cheer",
+  "label": "The Adelies cheer",
+  "prompt": "A small group of happy penguins squawking and calling together in excitement, a short cheerful burst. No music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "slide-hop",
+  "label": "A hop off a bump",
+  "prompt": "A quick soft springy whoosh as something light pops up off a snow bump, playful and toy-like. No music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "slide-thump",
+  "label": "Landing on the snow",
+  "prompt": "A soft padded thump landing on packed snow with a little powdery puff. Short, gentle, no music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "slide-poof",
+  "label": "Head first into a snowbank",
+  "prompt": "A big soft poof as something plunges into a deep powdery snowbank, muffled and fluffy, funny. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "slide-snow",
+  "label": "She pokes the snow",
+  "prompt": "A tiny soft puff of powder snow being flicked, light and crisp. Very short, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "slide-splash",
+  "label": "Into the sea",
+  "prompt": "A round friendly splash as a penguin dives into calm cold sea water, then a short fizz of bubbles. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "slide-leap",
+  "label": "He rockets out of the sea",
+  "prompt": "A quick burst of water as a penguin shoots up out of the sea, a short whoosh through the air with drips. Playful, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "slide-gulp",
+  "label": "A swarm of krill, gulped",
+  "prompt": "A quick cartoonish underwater gulp, soft and round with a tiny bubble pop. Toy-like, very short, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "slide-bubbles",
+  "label": "Bubbles where she pokes the water",
+  "prompt": "A small cluster of bubbles blooping up under water, soft and round. Very short, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "slide-boop",
+  "label": "The leopard seal bumps noses",
+  "prompt": "A soft rubbery underwater boop and a swirl of water as two animals bump noses and spin, playful and gentle. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "slide-reveal",
+  "label": "It wasn't Pebble",
+  "prompt": "A soft pop followed by a tiny bright twinkle, a gentle surprise sound, toy-like and sweet. Short, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "slide-maybe",
+  "label": "A maybe-Pebble, poked",
+  "prompt": "A soft muffled wobble, like poking a small pillow, curious and quiet. Very short, toy-like, no music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "slide-weddell",
+  "label": "The Weddell seal sings",
+  "prompt": "A Weddell seal's song: a string of falling whistling trills and chirps like a toy laser or a spaceship, strange and pretty, gentle. No music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "slide-snore",
+  "label": "The seal snores",
+  "prompt": "One soft snuffly snore of a sleeping seal, gentle and funny. Close recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "slide-burp",
+  "label": "The elephant seal burps",
+  "prompt": "An elephant seal's deep rumbling belch, one big wobbly burp, silly and friendly, not scary. Close recording, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "slide-skua",
+  "label": "The skua calls",
+  "prompt": "Two short calls of a skua seabird with a quick flap of wings, bright and bold. Clean recording, no music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "slide-peep",
+  "label": "The skua chick peeps",
+  "prompt": "Three tiny high peeps of a fluffy baby seabird, sweet and small. Clean close recording, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "slide-hat",
+  "label": "The woolly hat flips onto his head",
+  "prompt": "A soft cloth flip through the air and a gentle plop as a woolly hat lands, light and funny. Short, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "slide-flag",
+  "label": "The station's flag flaps",
+  "prompt": "A cloth flag flapping hard in a gust of wind for a moment, crisp fluttering. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "slide-hello",
+  "label": "The scientist says hello",
+  "prompt": "Two cheerful dings of a small hand bell, bright and friendly, like a hello. Short, no music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "slide-spout",
+  "label": "A humpback blows",
+  "prompt": "A whale's blow at the surface of a calm sea: one big airy whoosh of spray, soft and round. No music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "slide-whale",
+  "label": "The humpback sings",
+  "prompt": "One gentle rising note of a humpback whale's song heard under water, warm and slow. Peaceful, no music, no voices, nothing scary.",
+  "seconds": 2
+ },
+ {
+  "id": "slide-buoy",
+  "label": "The buoy rings",
+  "prompt": "A hollow metal buoy struck once under water, a soft round bong that rings and fades. Gentle, no music, no voices.",
+  "seconds": 1.5
+ },
+ {
+  "id": "slide-fish",
+  "label": "A ball of little fish darts apart",
+  "prompt": "A school of tiny fish darting apart under water, a quick shimmery swish with small bubbles. Short, no music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "party-fish",
+  "label": "Terry gulps a fish",
+  "prompt": "A tiny cartoon gulp, a small seabird swallowing a little fish, one quick wet blip. Soft and cute, toy-like. No music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "party-cloud",
+  "label": "Through a cloud",
+  "prompt": "A soft airy poof, like bursting through a little cotton cloud, light and fluffy with a tiny sparkle at the end. Toy-like, gentle. No music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "party-whale",
+  "label": "A whale blows",
+  "prompt": "A friendly whale spouts at the surface: one soft whoosh of misty spray and a gentle low whistle. Calm and happy, not scary. No music, no voices.",
+  "seconds": 1.6
+ },
+ {
+  "id": "party-albatross",
+  "label": "The albatross calls",
+  "prompt": "A big seabird gives two short cheerful creaky calls while gliding, light and friendly, far out at sea. Clean close recording. No music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "party-burner",
+  "label": "The balloon's burner",
+  "prompt": "A hot-air balloon burner gives one short soft roar of flame, warm and breathy, then stops. Gentle, toy-like, not loud. No music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "party-gust",
+  "label": "A gust of the southern wind",
+  "prompt": "One quick gust of cold wind sweeping past from one side, a soft whistling whoosh. Gentle, not stormy. No music, no voices.",
+  "seconds": 1.2
+ },
+ {
+  "id": "party-leg",
+  "label": "A new part of the world",
+  "prompt": "A light magical whoosh with a soft shimmer, like the air changing as you fly into a new place. Short, gentle, toy-like. No music, no voices.",
+  "seconds": 1
+ },
+ {
+  "id": "party-step",
+  "label": "A penguin steps forward",
+  "prompt": "Two quick little flappy footsteps of a penguin waddling on crunchy packed snow. Soft, cute, close. No music, no voices.",
+  "seconds": 0.6
+ },
+ {
+  "id": "party-snow",
+  "label": "A poke in the snow",
+  "prompt": "A tiny soft puff of powder snow being flicked, light and crisp. Very short, gentle. No music, no voices.",
+  "seconds": 0.5
+ },
+ {
+  "id": "party-bow",
+  "label": "A penguin bows",
+  "prompt": "A short polite cartoon slide-whistle dip down and back up, soft and friendly, like a little bow. Toy-like. No music, no voices.",
+  "seconds": 0.8
+ },
+ {
+  "id": "party-peek",
+  "label": "A chick peeks out",
+  "prompt": "A soft cartoon pop followed by one tiny baby bird peep. Cute and light, toy-like. No music, no human voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "party-shuffle",
+  "label": "The colony shuffles away",
+  "prompt": "A small group of penguins shuffling quickly sideways on snow, many little flappy footsteps and a couple of soft surprised honks. Funny and gentle. No music, no human voices.",
+  "seconds": 1.6
+ },
+ {
+  "id": "party-hug",
+  "label": "Found: the hug",
+  "prompt": "A warm happy magical chime, soft bells rising in a little glow, like a hug. Gentle and sweet, toy-like. No voices.",
+  "seconds": 1.6
+ },
+ {
+  "id": "party-cheer",
+  "label": "The whole colony cheers",
+  "prompt": "A colony of penguins all trumpeting happily together for a moment, joyful honks and flapping flippers, bright and friendly. No music, no human voices.",
+  "seconds": 2
+ },
+ {
+  "id": "party-colony",
+  "label": "The colony in the background (bed)",
+  "prompt": "A calm emperor penguin colony far off on the Antarctic ice: quiet scattered soft honks and chick peeps, a light cold breeze. Peaceful, sparse, not busy. Seamless loop, no music, no human voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "party-blizzard",
+  "label": "The snowstorm (bed)",
+  "prompt": "A soft steady snowstorm wind, airy and whooshing with fine snow hissing past, cozy rather than scary, no howling. Seamless loop, no music, no voices.",
+  "seconds": 6,
+  "loop": true
+ }
+]

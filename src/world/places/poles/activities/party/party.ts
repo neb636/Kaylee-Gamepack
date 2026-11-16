@@ -1,19 +1,22 @@
-// The Poles' finale (greybox): Pole to Pole, then the Polar Quiz, on the hub's globe (globe/globe.ts's Earth parts).
+// The Poles' finale on the hub's globe (globe/globe.ts's Earth parts): the flight home, and Terry's Polar Explorer quiz.
+// (Papa's song, between them, is its own little world: song.ts. Finale.tsx runs the phases and the films between.)
 //
-// Fly: Terry the Arctic tern carries Pola's postcard from the top of the world to the bottom. The globe turns under him
-// (his way is a string of great circles, route.ts): the Arctic's floes, then the warm middle of the world past the pins
-// of the countries she has been to, then the cold southern sea. Her finger steers him left and right (he heads for
-// where her finger is); fish leap in the sea and he gulps the ones he flies over. Warm: clouds to puff through. South:
-// gusts push him sideways. At the end he lands at Pebble's colony.
-// Deliver: he hands Pebble the postcard; she holds up Pola's picture and the colony jumps back (a polar bear!).
-// Quiz: the camera pulls back to the whole globe and Sparkle asks six questions from a pool, each answered by doing
-// (drag Pola to his pole, spin the South Pole to the front, tap the coldest pole, tap who visits both...). A wrong
-// answer gets a silly reaction, then the right place glows and she does it herself: every question ends in a star.
-// Six stars: the badge, then the trophy (Finale.tsx calls onWin). No voices yet (the full-loop gate).
-import { CanvasTexture, Color, Euler, Group, Matrix4, Mesh, Plane, Quaternion, Raycaster, Scene, SphereGeometry, Sprite, SpriteMaterial, Vector2, Vector3, type BufferGeometry, type WebGLRenderer } from 'three'
+// Fly: Terry the Arctic tern leads Sparkle's balloon (story/props.ts, the one in the films) from the top of the world
+// to the bottom, with Pola and Pebble in the basket. The globe turns under him (his way is a string of great circles,
+// route.ts). Her finger steers him left and right (he heads for where her finger is) and the balloon trails behind him
+// like a kite, swaying into his turns. Fish leap in the sea and he gulps the ones he flies over; he says hello to the
+// countries she has been to. The journey's lesson happens to the friends: over the warm middle of the world the sea
+// turns turquoise, Pola pants and fans herself and Pebble peeks over the edge; a whale spouts below; in the cold south
+// Pebble bounces (home!), an albatross glides alongside and gusts push Terry about. At the end: `events.landed()`.
+// Quiz: the whole globe, and Terry (hovering beside it) asks four questions, each answered by doing. The first is the
+// story's last step: Pola has to go home (drag her to the top of the world). A wrong answer gets a silly reaction, then
+// the right place glows and she does it herself: every question ends in a star. Six stars: the badge, then the trophy.
+import { CanvasTexture, Color, Group, Matrix4, Mesh, Plane, Quaternion, Raycaster, Scene, SphereGeometry, Sprite, SpriteMaterial, Vector2, Vector3, type BufferGeometry, type WebGLRenderer } from 'three'
 import { bell, clamp, shuffle, smooth, sounds, span, wobble } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { sfx, tone } from '../../../../kit/sfx'
+import { Balloon } from '../../story/props'
+import { partySfx } from './sounds'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../engine3d/camera'
 import { buildAnimal, type Rig } from '../../../../engine3d/characters/animal'
@@ -25,9 +28,9 @@ import { makeLights, PAL } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
 import { earthTexture, ll } from '../../globe/earth'
 import { POLES_LOOKS } from '../../characters/looks'
-import { buildNorth, buildSouth, Critter, domeR, makePebble, makePola, standOn, type EarthKit, type Floe } from '../../globe/globe'
-import { globeMaterials } from '../../globe/material'
-import { COLONY, latOf, lonOf, PINS, point, Route } from './route'
+import { buildNorth, buildSouth, type Critter, domeR, makePebble, makePola, standOn, type EarthKit, type Floe } from '../../globe/globe'
+import { globeMaterials, OCEAN } from '../../globe/material'
+import { latOf, lonOf, PINS, point, Route } from './route'
 import { QUESTIONS, type PartySection, type Question } from './sections'
 import { DEG } from '../../../../../sdk/math'
 
@@ -41,11 +44,16 @@ const FLY = knobs('tern', 'Fly Terry', FILE, {
   catch: { value: 0.045, min: 0.01, max: 0.12, step: 0.005, label: 'Catch width', unit: '', note: 'how close he has to fly to a fish to gulp it' },
   fishEvery: { value: 4.5, min: 1.5, max: 12, step: 0.5, label: 'Fish every', unit: '°', note: 'how far apart the fish are along the way' },
   gust: { value: 0.1, min: 0, max: 0.4, step: 0.01, label: 'Gusts (south)', unit: '/s', note: 'how hard the southern wind pushes him sideways' },
+  trail: { value: 0.55, min: 0.1, max: 2, step: 0.05, label: 'Balloon lag', unit: 's', note: 'how far behind his turns the balloon swings (higher = lazier kite)' },
+  sway: { value: 2.6, min: 0, max: 6, step: 0.1, label: 'Balloon sway', unit: '', note: 'how far the balloon leans into a turn' },
 })
 
 export type Leg = 'north' | 'warm' | 'south'
+/** The globe's part of the finale (Papa's song is song.ts). */
+export type GlobeSection = Exclude<PartySection, 'song'>
+export type Sight = 'whale' | 'albatross' | 'balloon'
 export interface PartyStart {
-  section: PartySection
+  section: GlobeSection
   leg: Leg
   /** The quiz: start on this question, with this many stars. */
   q: Question
@@ -58,8 +66,12 @@ export interface PartyStart {
   questions?: Question[]
 }
 export interface PartyEvents {
-  section(s: PartySection, state?: Record<string, string>): void
+  section(s: GlobeSection, state?: Record<string, string>): void
   leg(l: Leg): void
+  /** Something new comes by on the way (the first time). */
+  sight(what: Sight): void
+  /** The balloon is over Antarctica: the flight is done. */
+  landed(): void
   fish(n: number): void
   pin(place: string): void
   question(q: Question, n: number): void
@@ -70,8 +82,10 @@ export interface PartyEvents {
 
 export const PARTY_ANCHORS: AnchorInfo[] = [
   { id: 'terry', label: 'Terry the Arctic tern: steer him', kind: 'thing' },
-  { id: 'pebble', label: 'Pebble', kind: 'thing' },
-  { id: 'colony', label: 'The penguins', kind: 'thing' },
+  { id: 'balloon', label: "Sparkle's balloon, with Pola and Pebble", kind: 'thing' },
+  { id: 'whale', label: 'A whale', kind: 'thing' },
+  { id: 'albatross', label: 'An albatross', kind: 'thing' },
+  { id: 'host', label: 'Terry', kind: 'thing' },
   { id: 'globe', label: 'The globe: spin it', kind: 'thing' },
   { id: 'piece', label: 'Drag me onto the globe', kind: 'thing' },
   { id: 'north', label: 'The North Pole', kind: 'thing' },
@@ -84,13 +98,20 @@ export const PARTY_ANCHORS: AnchorInfo[] = [
 const UP = new Vector3(0, 1, 0)
 /** How big Terry is (the rig's standing height; flying flat it's his length), in the Earth's units. */
 const TERN_H = 0.07
-/** Terry flying: the rig (head up +y, face +z) laid on its tummy, head first toward -z, back up. Standing: just turned
- *  round to face -z. */
+/** Terry flying: the rig (head up +y, face +z) laid on its tummy, head first toward -z, back up. */
 const FLAT = new Quaternion().setFromRotationMatrix(new Matrix4().makeBasis(new Vector3(-1, 0, 0), new Vector3(0, 0, -1), new Vector3(0, -1, 0)))
-const UPRIGHT = new Quaternion().setFromEuler(new Euler(0, Math.PI, 0))
 /** Terry's height over the sea (the Earth is 1). */
 const ALT = 0.075
-const QUIZ_N = 6
+const QUIZ_N = 4
+/** The balloon: its size on the globe (story/props.ts builds it about 5.5 m tall), how far behind Terry it trails and
+ *  how high its basket floor is. */
+const B_SCALE = 0.03
+const B_BACK = 0.18
+/** It leans forward as it is towed (and so the basket, and the friends' faces, show under it from behind). */
+const B_LEAN = -0.7
+const B_Y = 1.014
+/** The sea under the flight: Arctic blue, the warm middle's turquoise, the deep southern blue. */
+const SEA: Record<Leg, Color> = { north: new Color(OCEAN), warm: new Color('#3FD9CE'), south: new Color('#6AA8EE') }
 /** The quiz's globe: tipped this far to show a pole. */
 const POLE_VIEW = 40 * DEG
 const SKY: Record<Leg | 'quiz', Color> = { north: new Color('#D3EEFF'), warm: new Color('#FFE6D2'), south: new Color('#E4DDFF'), quiz: new Color('#F6EEFF') }
@@ -103,7 +124,7 @@ const tm = new Matrix4()
 const rp = point()
 
 type Kind = 'drag' | 'spin' | 'tap' | 'pick'
-const KIND: Record<Question, Kind> = { bear: 'drag', penguin: 'drag', south: 'spin', north: 'spin', ocean: 'tap', coldest: 'tap', tern: 'pick', summer: 'pick' }
+export const KIND: Record<Question, Kind> = { bear: 'drag', penguin: 'drag', south: 'spin', north: 'spin', ocean: 'tap', coldest: 'tap', tern: 'pick', summer: 'pick' }
 /** The right answer: a pole, or which of the row. */
 const RIGHT: Record<Question, 'north' | 'south' | number> = { bear: 'north', penguin: 'south', south: 'south', north: 'north', ocean: 'north', coldest: 'south', tern: 2, summer: 0 }
 
@@ -161,7 +182,7 @@ export class PartyWorld implements World3D {
   private anchorEls = new Map<string, HTMLElement>()
   private raycaster = new Raycaster()
   private unwatch: () => void
-  private section: PartySection
+  private section: GlobeSection
   private sky = SKY.north.clone()
   private floesN: Floe[]
   private floesS: Floe[]
@@ -192,12 +213,24 @@ export class PartyWorld implements World3D {
   private puffMat: SpriteMaterial
   private puffs: { s: Sprite; v: Vector3; t: number }[] = []
 
-  // ---- Deliver.
+  // ---- The balloon behind him, and what comes by on the way.
+  private balloon: Balloon
+  private balloonG = new Group()
+  private balloonX = 0
+  private balloonLean = 0
+  private balloonKick = 0
+  private pola: Critter
   private pebble: Critter
-  private colony: Critter[] = []
-  private card = new Group()
-  private deliverT = -1
-  private landFrom = new Vector3()
+  /** 0..1: how warm it is (Pola pants and fans herself, Pebble peeks over the edge). */
+  private heat = 0
+  /** Seconds since the cold came back (Pebble bounces: it smells like home). */
+  private homeT = -1
+  private whales: { o: Group; at: Vector3; spoutT: number; seen: boolean }[] = []
+  private albatross = new Group()
+  private albWings: Group[] = []
+  private albT = -1
+  private albRoll = -1
+  private landed = false
 
   // ---- Quiz.
   private quizT = -1
@@ -240,6 +273,7 @@ export class PartyWorld implements World3D {
   private sunOn = 0
   private nightStars: Sprite[] = []
   private loopT = -1
+  private hostHop = -1
 
   constructor(
     private renderer: WebGLRenderer,
@@ -274,21 +308,22 @@ export class PartyWorld implements World3D {
     this.makeTerry()
     this.scatter(start.visited)
 
-    // Pebble and the colony at the end of the way.
-    const [clat, clon] = COLONY
+    // Sparkle's balloon behind him, Pola and Pebble in the basket (bigger than life, so their faces read), and the
+    // albatross who joins in the south.
+    this.balloon = new Balloon(this.bag)
+    this.balloon.root.scale.setScalar(B_SCALE)
+    this.balloonG.add(this.balloon.root)
+    this.scene.add(this.balloonG)
+    this.pola = makePola(kit, 'pola')
     this.pebble = makePebble(kit, 'pebble')
-    standOn(this.pebble.root, clat, clon, domeR(90 + clat) - 0.002)
-    this.earth.add(this.pebble.root)
-    for (let i = 0; i < 4; i++) {
-      // The grown-up emperors (Papa's look) round her.
-      const c = new Critter(0.15)
-      c.dress(buildAnimal({ ...POLES_LOOKS.papa, height: 0.15 }, this.bag))
-      // Two either side of Pebble, a step back (wide apart: the toys' heads are big, and Pebble is the star).
-      standOn(c.root, clat - 0.8 - (i % 2) * 1.4, clon + (i < 2 ? -1 : 1) * (20 + (i % 2) * 18), domeR(90 + clat - 1.5) - 0.002)
-      this.earth.add(c.root)
-      this.colony.push(c)
-    }
-    this.makeCard()
+    ;[this.pola, this.pebble].forEach((c, i) => {
+      const [x, , z] = this.balloon.seat(i)
+      // (Toy sizes: two big plush friends standing out of a little basket.)
+      c.root.scale.setScalar((i ? 1.05 : 1.2) / c.height)
+      c.root.position.set(x * 1.5, 0.36, z + 0.2)
+      this.balloon.basket.add(c.root)
+    })
+    this.makeAlbatross()
 
     // The quiz's pieces, its glow, its "?" and its props.
     this.pieces = {
@@ -326,9 +361,7 @@ export class PartyWorld implements World3D {
     } else {
       this.s = this.route.length
       this.orientFly(1)
-      this.terry.visible = false
-      if (start.section === 'deliver') this.startDeliver(true)
-      else if (start.section === 'quiz') this.startQuiz(start.q, start.stars, true, start.questions)
+      if (start.section === 'quiz') this.startQuiz(start.q, start.stars, true, start.questions)
       else this.startQuiz('bear', QUIZ_N, true)
     }
 
@@ -385,11 +418,12 @@ export class PartyWorld implements World3D {
 
   /** The fish, the clouds and the pins along the way. */
   private scatter(visited: string[]) {
-    for (const item of [...this.fish, ...this.clouds, ...this.pins]) item.o.removeFromParent()
+    for (const item of [...this.fish, ...this.clouds, ...this.pins, ...this.whales]) item.o.removeFromParent()
     this.scatterBag.dispose()
     this.fish = []
     this.clouds = []
     this.pins = []
+    this.whales = []
     this.fishSpacing = FLY.fishEvery
     const prop = (g: BufferGeometry, px: number) => this.prop(g, px, this.scatterBag)
     let r = 7
@@ -424,6 +458,22 @@ export class PartyWorld implements World3D {
         this.clouds.push({ o, puffed: false })
       }
     }
+    // Two whales in the open sea below: one in the warm middle, one in the cold south.
+    for (const [from, to, side] of [[8, -30, -0.8], [-46, -62, 0.8]] as const) {
+      for (let s = this.sAtLat(from); s < this.route.length; s += 1.5 * DEG) {
+        this.route.at(s, rp)
+        if (latOf(rp.p) < to) break
+        const at = rp.p.clone().addScaledVector(rp.side, side * FLY.reach).normalize()
+        if (this.land(latOf(at), lonOf(at))) continue
+        const skin = '#7F97C4'
+        const o = prop(merge([P.sphere(0.022, skin, { scale: [1, 0.55, 1.7] }), P.sphere(0.012, skin, { at: [0.012, 0.002, 0.045], scale: [1.3, 0.25, 0.8], rot: [0, 0.5, 0] }), P.sphere(0.012, skin, { at: [-0.012, 0.002, 0.045], scale: [1.3, 0.25, 0.8], rot: [0, -0.5, 0] }), P.sphere(0.0026, PAL.ink, { at: [0.016, 0.006, -0.022] }), P.sphere(0.0026, PAL.ink, { at: [-0.016, 0.006, -0.022] })]), 1.5)
+        o.position.copy(at).multiplyScalar(1.001)
+        o.quaternion.setFromUnitVectors(UP, at)
+        this.earth.add(o)
+        this.whales.push({ o, at, spoutT: -1, seen: false })
+        break
+      }
+    }
     for (const id of visited) {
       const ll0 = PINS[id]
       if (!ll0) continue
@@ -434,25 +484,20 @@ export class PartyWorld implements World3D {
     }
   }
 
-  /** Pola's postcard: a white card with a pink edge and a little polar bear's face on it. */
-  private makeCard() {
-    this.card.add(
-      this.prop(
-        merge([
-          P.box(0.05, 0.034, 0.002, '#FF9EC4'),
-          P.box(0.044, 0.028, 0.0025, '#FFFFFF', { at: [0, 0, 0.0004] }),
-          P.sphere(0.008, '#FFFFFF', { at: [0, -0.002, 0.003], scale: [1, 1, 0.4] }),
-          P.sphere(0.003, '#FFFFFF', { at: [0.006, 0.005, 0.003], scale: [1, 1, 0.4] }),
-          P.sphere(0.003, '#FFFFFF', { at: [-0.006, 0.005, 0.003], scale: [1, 1, 0.4] }),
-          P.sphere(0.0015, PAL.ink, { at: [0.003, 0, 0.0045] }),
-          P.sphere(0.0015, PAL.ink, { at: [-0.003, 0, 0.0045] }),
-          P.sphere(0.0017, PAL.ink, { at: [0, -0.004, 0.0045] }),
-        ]),
-        1.2,
-      ),
-    )
-    this.card.visible = false
-    this.scene.add(this.card)
+  /** The wandering albatross who glides alongside in the south: a big white seabird with very long dark-tipped wings
+   *  (each on a hinge, so they tip as she glides). Her nose points to -z. */
+  private makeAlbatross() {
+    const body = this.prop(merge([P.sphere(0.014, '#FFFFFF', { scale: [0.8, 0.7, 1.9] }), P.sphere(0.009, '#FFFFFF', { at: [0, 0.004, -0.024] }), P.cone(0.0035, 0.014, '#FFB8A0', { at: [0, 0.003, -0.037], rot: [-Math.PI / 2, 0, 0] }), P.sphere(0.0016, PAL.ink, { at: [0.005, 0.007, -0.03] }), P.sphere(0.0016, PAL.ink, { at: [-0.005, 0.007, -0.03] }), P.cone(0.007, 0.014, '#FFFFFF', { at: [0, 0, 0.03], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 0.3] })]), 1.2)
+    this.albatross.add(body)
+    for (const side of [-1, 1]) {
+      const w = new Group()
+      w.add(this.prop(merge([P.box(0.05, 0.003, 0.014, '#FFFFFF', { at: [side * 0.03, 0, 0] }), P.box(0.03, 0.003, 0.011, '#4A4F66', { at: [side * 0.068, 0, 0.002] })]), 1.2))
+      w.position.set(side * 0.006, 0.004, 0)
+      this.albatross.add(w)
+      this.albWings.push(w)
+    }
+    this.albatross.visible = false
+    this.scene.add(this.albatross)
   }
 
   private standee(top: Group, floe = true) {
@@ -529,8 +574,8 @@ export class PartyWorld implements World3D {
 
   private shot(): Shot {
     // Close behind Terry, looking down his way, with room either side for his reach.
-    if (this.section === 'fly') return { center: new Vector3(0, 1.04, -0.16), half: new Vector3(FLY.reach + 0.05, 0.04, 0.2), yaw: 0, pitch: 24, minDist: 0.05, maxDist: 4 }
-    if (this.section === 'deliver') return { center: new Vector3(0, 1.14, 0), half: new Vector3(0.3, 0.13, 0.14), yaw: 0, pitch: 16, minDist: 0.05, maxDist: 4 }
+    // (Steep enough that the balloon, nearer her, sits below him in the picture and not over him.)
+    if (this.section === 'fly') return { center: new Vector3(0, 1.05, -0.02), half: new Vector3(FLY.reach + 0.05, 0.06, 0.25), yaw: 0, pitch: 36, minDist: 0.05, maxDist: 4 }
     // The whole globe, with the row of pieces under it and room above for the badge.
     return { center: new Vector3(0, -0.38, 0), half: new Vector3(1.12, 1.56, 0.3), yaw: 0, pitch: 4 }
   }
@@ -556,11 +601,7 @@ export class PartyWorld implements World3D {
   update(dt: number) {
     const t = (this.time += dt)
     if (this.section === 'fly') this.updateFly(dt, t)
-    else if (this.section === 'deliver') this.updateDeliver(dt, t)
     else this.updateQuiz(dt, t)
-    const cam = this.rig.camera.position
-    this.pebble.update(dt, t, cam)
-    for (const c of this.colony) c.update(dt, t, cam)
     for (const f of [...this.floesN, ...this.floesS]) {
       f.o.position.copy(f.dir).multiplyScalar(1.004 + 0.004 * Math.sin(t * 1.4 + f.phase))
     }
@@ -575,7 +616,8 @@ export class PartyWorld implements World3D {
         this.puffs.splice(i, 1)
       }
     }
-    const goal = this.section === 'fly' ? SKY[this.leg] : this.section === 'deliver' ? SKY.south : SKY.quiz
+    const goal = this.section === 'fly' ? SKY[this.leg] : SKY.quiz
+    ;(this.mats.land.uniforms.uOcean.value as Color).lerp(this.section === 'fly' ? SEA[this.leg] : SEA.north, 1 - Math.exp(-dt * 1.2))
     this.sky.lerp(goal, 1 - Math.exp(-dt * 1.5))
     this.rig.setShot(this.shot())
     this.rig.update(dt)
@@ -596,21 +638,23 @@ export class PartyWorld implements World3D {
 
   private updateFly(dt: number, t: number) {
     if (this.fishSpacing !== FLY.fishEvery) this.scatter(this.visited)
-    this.s += Math.max(FLY.speed * DEG, this.route.length / FLY.minTime) * dt
+    this.s = Math.min(this.route.length, this.s + Math.max(FLY.speed * DEG, this.route.length / FLY.minTime) * dt)
     this.orientFly(1 - Math.exp(-dt * 2.5))
     const lat = latOf(this.route.at(this.s, rp).p)
     const leg: Leg = lat > 40 ? 'north' : lat < -40 ? 'south' : 'warm'
     if (leg !== this.leg) {
       this.leg = leg
-      sounds.whoosh()
+      partySfx.leg()
+      if (leg === 'south') this.homeT = 0
       this.events.leg(leg)
     }
+    this.updateBalloon(dt, t, leg)
 
     // Steering: he heads for her finger, banks into the turn; the south's gusts push him about.
     if (leg === 'south' && (this.gustT -= dt) < 0) {
       this.gustT = 4 + Math.random() * 3
       this.gust = FLY.gust * (Math.random() < 0.5 ? -1 : 1)
-      tone(300, 180, 0.6, 0.04, 'sawtooth')
+      partySfx.gust()
       for (let i = 0; i < 5; i++) {
         const s = new Sprite(this.streakMat)
         s.position.set(-Math.sign(this.gust) * 0.3, 1 + ALT + (Math.random() - 0.3) * 0.05, -0.05 - Math.random() * 0.3)
@@ -666,18 +710,23 @@ export class PartyWorld implements World3D {
       if (tmp.y > 0.9 && Math.abs(tmp.z) < 0.03 && Math.abs(tmp.x - tx) < FLY.catch) {
         f.caught = 0
         this.caught++
+        partySfx.fish()
         sounds.note(this.caught % 11)
         this.events.fish(this.caught)
       }
     }
     for (const c of this.clouds) {
       c.o.getWorldPosition(tmp)
-      if (!c.puffed && Math.abs(tmp.z) < 0.03 && Math.abs(tmp.x - tx) < 0.05) {
+      // Terry loops through a cloud; the balloon behind him bursts through one in a puff and a wobble.
+      const terry = Math.abs(tmp.z) < 0.03 && Math.abs(tmp.x - tx) < 0.05
+      const balloon = Math.abs(tmp.z - B_BACK) < 0.03 && Math.abs(tmp.x - this.balloonX) < 0.06
+      if (!c.puffed && (terry || balloon)) {
         c.puffed = true
         c.o.visible = false
-        this.puff(tmp, 8)
-        this.flip = 0
-        tone(500, 900, 0.3, 0.06, 'triangle')
+        this.puff(tmp, balloon ? 12 : 8)
+        if (terry) this.flip = 0
+        else this.balloonKick = 1
+        partySfx.cloud()
       }
     }
     for (const p of this.pins) {
@@ -693,7 +742,87 @@ export class PartyWorld implements World3D {
       }
     }
 
-    if (this.s >= this.route.length) this.startDeliver(false)
+    // A whale below: it spouts as they come by (and whenever she pokes it).
+    for (const w of this.whales) {
+      this.earth.localToWorld(tmp.copy(w.at))
+      const near = tmp.y > 0.9 && Math.abs(tmp.z) < 0.16
+      if (near && !w.seen) {
+        w.seen = true
+        w.spoutT = 0
+        partySfx.whale()
+        this.events.sight('whale')
+      }
+      w.o.position.copy(w.at).multiplyScalar(1.001 + 0.003 * Math.sin(t * 1.6))
+      if (w.spoutT >= 0) {
+        const before = w.spoutT
+        w.spoutT += dt
+        if (Math.floor(before / 0.12) !== Math.floor(w.spoutT / 0.12) && w.spoutT < 0.9) {
+          const s = new Sprite(this.puffMat)
+          s.position.copy(tmp).multiplyScalar(1.012)
+          this.scene.add(s)
+          this.puffs.push({ s, v: new Vector3((Math.random() - 0.5) * 0.05, 0.22, (Math.random() - 0.5) * 0.05), t: 0.25 })
+        }
+        if (w.spoutT > 3.5) w.spoutT = near ? 0 : -1
+      }
+    }
+
+    // The albatross glides in beside them in the south, wings tipping.
+    if (leg === 'south' && this.albT < 0 && lat < -48) {
+      this.albT = 0
+      this.albatross.visible = true
+      partySfx.albatross()
+      this.events.sight('albatross')
+    }
+    if (this.albT >= 0) {
+      this.albT += dt
+      const inK = smooth(clamp(this.albT / 3, 0, 1))
+      const side = -(FLY.reach + 0.035)
+      this.albatross.position.set(side + 0.02 * Math.sin(t * 0.6), 1 + ALT + 0.03 + 0.008 * Math.sin(t * 1.3), 0.3 - 0.42 * inK + 0.02 * Math.sin(t * 0.4))
+      let roll = 0.18 * Math.sin(t * 0.8)
+      if (this.albRoll >= 0) {
+        this.albRoll += dt / 0.8
+        roll += smooth(Math.min(1, this.albRoll)) * Math.PI * 2
+        if (this.albRoll >= 1) this.albRoll = -1
+      }
+      this.albatross.rotation.set(0, 0, roll)
+      this.albWings.forEach((w, i) => (w.rotation.z = (i ? 1 : -1) * (0.12 + 0.1 * Math.sin(t * 1.1))))
+    }
+
+    if (this.s >= this.route.length && !this.landed) {
+      this.landed = true
+      this.events.landed()
+    }
+  }
+
+  /** The balloon trails Terry like a kite and leans into his turns; the friends in the basket feel the weather. */
+  private updateBalloon(dt: number, t: number, leg: Leg) {
+    const before = this.balloonX
+    this.balloonX += (this.terryX - this.balloonX) * (1 - Math.exp(-dt / Math.max(0.05, FLY.trail)))
+    const vx = (this.balloonX - before) / Math.max(dt, 1e-3)
+    this.balloonLean += (clamp(-vx * FLY.sway, -0.5, 0.5) - this.balloonLean) * (1 - Math.exp(-dt * 5))
+    this.balloonKick = Math.max(0, this.balloonKick - dt * 1.4)
+    const kick = this.balloonKick * Math.sin(this.balloonKick * 16)
+    this.balloonG.position.set(this.balloonX, B_Y + 0.006 * kick, B_BACK)
+    this.balloonG.rotation.set(B_LEAN, 0, this.balloonLean + 0.25 * kick)
+    this.balloon.update(dt, t)
+    const cam = this.rig.camera.position
+    this.pola.update(dt, t, cam)
+    this.pebble.update(dt, t, cam)
+    // Warm: Pola pants (quick little breaths) and fans herself with a paw; Pebble stretches up to peek over the edge.
+    this.heat += ((leg === 'warm' ? 1 : 0) - this.heat) * (1 - Math.exp(-dt * 1.5))
+    const h = this.heat
+    this.pola.body.scale.y *= 1 + 0.06 * h * Math.sin(t * 11)
+    this.pola.body.rotation.x = 0.18 * h
+    if (h > 0.05 && this.pola.arms[0]) this.pola.arms[0].rotation.z = 0.14 + h * (1.9 + 0.5 * Math.sin(t * 15))
+    let up = 0.14 * h * (0.6 + 0.4 * Math.sin(t * 1.7))
+    // Cold again: Pebble bounces, hard at first, then now and then.
+    if (this.homeT >= 0) {
+      this.homeT += dt
+      const keen = this.homeT < 5 ? 1 : Math.max(0, Math.sin(this.homeT * 0.9)) ** 6
+      up += 0.26 * keen * Math.abs(Math.sin(this.homeT * 7))
+      if (keen > 0.05) this.pebble.arms.forEach((a, i) => (a.rotation.z = (i ? -1 : 1) * (0.14 + keen * (1.2 + 0.5 * Math.sin(t * 20)))))
+    }
+    this.pebble.root.position.y = 0.36 + up
   }
 
   private puff(at: Vector3, n: number) {
@@ -705,68 +834,17 @@ export class PartyWorld implements World3D {
     }
   }
 
-  // ---------------------------------------------------------------- the postcard
-
-  private startDeliver(snap: boolean) {
-    this.section = 'deliver'
-    this.deliverT = snap ? 1.2 : 0
-    this.landFrom.copy(this.terry.position)
-    this.terry.visible = true
-    this.events.section('deliver')
-    if (snap) this.rig.setShot(this.shot(), true)
-  }
-
-  private updateDeliver(dt: number, t: number) {
-    this.orientFly(1 - Math.exp(-dt * 4))
-    const d = (this.deliverT += dt)
-    // He glides down in front of Pebble and lands.
-    // (In front of Pebble as she sees it: toward the camera.)
-    const spot = this.pebble.root.getWorldPosition(tmp2).add(tmp.set(0.05, 0, 0.07))
-    const k = smooth(clamp(d / 1.2, 0, 1))
-    this.terry.position.lerpVectors(this.landFrom, spot, k)
-    this.terry.position.y += 0.03 * bell(k)
-    this.terry.rotation.set(0, Math.PI * k, 0)
-    // He tips up from flying flat to standing, and folds his wings when he lands.
-    this.ternPose.quaternion.slerpQuaternions(FLAT, UPRIGHT, smooth(span(d, 0.6, 1.3)))
-    this.ternLife.update(dt)
-    this.flapWings(1 - smooth(span(d, 1.1, 1.5)), d < 1.2 ? Math.sin(t * 12) : 0)
-    if (d - dt < 1.2 && d >= 1.2) sfx.thump()
-    // The card: out of his beak, up into Pebble's flippers, held up high.
-    this.card.visible = d > 1.5
-    if (d > 1.5) {
-      const from = this.terry.localToWorld(tmp.set(0, 0.01, 0.04))
-      const to = this.pebble.root.localToWorld(tmp2.set(0, 0.2, 0.02))
-      this.card.position.lerpVectors(from, to, smooth(span(d, 1.8, 2.5)))
-      this.card.quaternion.copy(this.rig.camera.quaternion)
-      this.card.scale.setScalar(1 + 0.25 * bell(span(d, 2.5, 3)))
-    }
-    if (d - dt < 1.6 && d >= 1.6) sounds.pop()
-    if (d - dt < 2.5 && d >= 2.5) {
-      this.pebble.hop(true)
-      sounds.sparkle()
-    }
-    // The colony sees Pola's picture: a polar bear! They all jump back.
-    if (d - dt < 3.1 && d >= 3.1) {
-      tone(700, 1100, 0.25, 0.07, 'triangle')
-      this.colony.forEach((c) => c.hop())
-    }
-    if (d > 3.1) for (const c of this.colony) c.body.position.z = -0.03 * smooth(span(d, 3.1, 3.5))
-    if (d - dt < 5 && d >= 5) {
-      this.pebble.hop(true)
-      this.colony.forEach((c) => c.hop(true))
-      sounds.fanfare()
-    }
-    if (d > 7.5) this.startQuiz('bear', 0, false)
-  }
-
   // ---------------------------------------------------------------- the quiz
 
   private startQuiz(first: Question, stars: number, snap: boolean, questions?: Question[]) {
     this.section = 'quiz'
-    this.card.visible = false
-    this.terry.visible = false
-    this.pebble.root.visible = false
-    this.colony.forEach((c) => (c.root.visible = false))
+    this.balloonG.visible = false
+    this.albatross.visible = false
+    this.whales.forEach((w) => (w.o.visible = false))
+    // Terry hovers beside the globe: it's his quiz. (He faces her now, not down his way.)
+    this.terry.visible = true
+    this.terry.scale.setScalar(5)
+    this.ternPose.quaternion.identity()
     this.fish.forEach((f) => (f.o.visible = false))
     this.clouds.forEach((c) => (c.o.visible = false))
     this.fromQ.copy(this.earth.quaternion)
@@ -861,6 +939,13 @@ export class PartyWorld implements World3D {
       this.pitch += this.pitchVel * dt
     }
     this.yaw += dt * 0.08
+    // The host: up beside the globe, beating his wings (in the row instead when he's one of the answers).
+    this.terry.visible = this.qState !== 'done' && this.q !== 'tern'
+    if (this.hostHop >= 0 && (this.hostHop += dt / 0.6) >= 1) this.hostHop = -1
+    this.terry.position.set(0.92, 0.72 + 0.03 * Math.sin(t * 2.2) + (this.hostHop >= 0 ? 0.12 * bell(this.hostHop) : 0), 0.4)
+    this.terry.rotation.set(0, -0.35 + (this.hostHop >= 0 ? smooth(this.hostHop) * Math.PI * 2 : 0), 0)
+    this.ternLife.update(dt)
+    this.flapWings(1, Math.sin(t * 10))
     tq.setFromAxisAngle(tmp.set(1, 0, 0), this.pitch).multiply(tq2.setFromAxisAngle(UP, this.yaw))
     const blend = smooth(clamp(this.quizT / 1.4, 0, 1))
     this.earth.quaternion.slerpQuaternions(this.fromQ, tq, blend)
@@ -1149,13 +1234,26 @@ export class PartyWorld implements World3D {
       if (id === 'terry') {
         this.flip = 0
         sfx.boing()
+      } else if (id === 'balloon') {
+        // A blast of the burner: the balloon bobs and the friends hop and wave.
+        this.balloonKick = 1
+        partySfx.burner()
+        this.pola.hop(true)
+        this.pebble.hop(true)
+        this.events.sight('balloon')
+      } else if (id === 'whale') {
+        const w = this.whales.find((w) => this.earth.localToWorld(tmp.copy(w.at)).y > 0.9)
+        if (w) w.spoutT = 0
+        partySfx.whale()
+      } else if (id === 'albatross') {
+        this.albRoll = 0
+        partySfx.albatross()
       } else this.steer(x)
       return
     }
-    if (this.section === 'deliver') {
-      if (id === 'pebble') this.pebble.hop(true)
-      else if (id === 'colony') this.colony.forEach((c, i) => setTimeout(() => c.hop(), i * 90))
-      else if (id === 'terry') sfx.boing()
+    if (id === 'host') {
+      this.hostHop = 0
+      sfx.boing()
       return
     }
     if (this.qState !== 'ask') return
@@ -1203,9 +1301,13 @@ export class PartyWorld implements World3D {
         const s = this.toScreen(v)
         if (s.z < 1) spot = { x: s.x, y: s.y, size: Math.max(min, size), z, glow }
       }
-      if (id === 'terry' && this.terry.visible && this.section !== 'quiz') at(this.terry.position, 110)
-      else if (id === 'pebble' && this.section === 'deliver') at(this.pebble.center(tmp), g.r * 0.12)
-      else if (id === 'colony' && this.section === 'deliver') at(this.colony[1].center(tmp), g.r * 0.16, 4000)
+      if (id === 'terry' && this.section === 'fly') at(this.terry.position, 110)
+      else if (id === 'balloon' && this.section === 'fly') at(this.balloonG.localToWorld(tmp.set(0, 0.07, 0)), 140, 4800)
+      else if (id === 'albatross' && this.section === 'fly' && this.albatross.visible) at(this.albatross.position, 96, 4700)
+      else if (id === 'whale' && this.section === 'fly') {
+        const w = this.whales.find((w) => this.earth.localToWorld(tmp.copy(w.at)).y > 0.93 && Math.abs(tmp.z + 0.1) < 0.22)
+        if (w) at(tmp, 96, 4600)
+      } else if (id === 'host' && this.section === 'quiz' && this.terry.visible) at(tmp.copy(this.terry.position).setY(this.terry.position.y + 0.18), 110, 5500)
       else if (id === 'globe' && this.section === 'quiz') spot = { x: g.x, y: g.y, size: g.r * 2, z: 1 }
       else if (id === 'piece' && kind === 'drag' && this.row[0]) at(this.row[0].o.getWorldPosition(tmp).add(tmp2.set(0, 0.1, 0)), g.r * 0.32, 9000)
       else if ((id === 'north' || id === 'south') && kind === 'tap') at(this.poleWorld(id, tmp, 0.96), g.r * 0.6, 6000)
@@ -1252,6 +1354,11 @@ export class PartyWorld implements World3D {
       leg: this.leg,
       along: +(this.s / Math.max(1e-6, this.route.length)).toFixed(2),
       terry: +this.terryX.toFixed(3),
+      balloon: +this.balloonX.toFixed(3),
+      heat: +this.heat.toFixed(2),
+      landed: this.landed,
+      whales: this.whales.length,
+      albatross: this.albatross.visible,
       fish: this.caught,
       fishAvailable: this.fish.length,
       pins: this.pins.map((p) => `${p.id}${p.popped >= 0 ? '!' : ''}`),

@@ -7,7 +7,8 @@
 //                      then a lip and a crack across the whole slope
 //   EDGE               the ice cliff: off he goes, into the sea
 //   EDGE..DIVE_END     under the sea: krill swarms, a leopard seal who wants to play
-//   SHELF..            the colony's ice, where Pebble waits
+//   SHELF..            the ice edge where he climbs out, and the Adélies who cheer
+// All the way down there are things that might be Pebble (LOOKS), and others to poke beside the way (SPOTS).
 // Plain numbers, no three.js.
 import { smooth } from '../../../../../sdk/math'
 
@@ -23,7 +24,7 @@ export const EDGE = 545
 /** The cliff's top above the sea. */
 export const CLIFF = 5
 export const DIVE_END = 830
-/** The colony's ice: where it starts, its top above the sea, and where Pebble stands. */
+/** The ice edge at the end: where it starts, its top above the sea, and where he stops. */
 export const SHELF = 838
 export const SHELF_Y = 1
 export const HOME = 850
@@ -157,3 +158,40 @@ export const KRILL: [number, number, number][] = [
 ]
 /** Where the leopard seal plays alongside him (s). */
 export const SEAL = { from: EDGE + 70, to: EDGE + 200 }
+
+/** What a maybe-Pebble turns out to be (critters.ts, `Lookalike`). */
+export type LookKind = 'snowy' | 'seal' | 'skua' | 'hat' | 'buoy' | 'fish'
+/** The things that might be Pebble, in the order he comes to them: something small, grey and round, right where she
+ *  can steer him. `key` is its letter in the link's `looked` param. */
+export const LOOKS: { kind: LookKind; key: string; s: number; lat: number }[] = [
+  { kind: 'snowy', key: 'a', s: 58, lat: 3.6 },
+  { kind: 'seal', key: 's', s: 122, lat: -3.6 },
+  { kind: 'skua', key: 'k', s: 182, lat: 3.2 },
+  { kind: 'hat', key: 'h', s: 242, lat: 1.8 },
+  { kind: 'buoy', key: 'b', s: EDGE + 52, lat: 0.5 },
+  { kind: 'fish', key: 'f', s: EDGE + 226, lat: 1 },
+]
+
+/** Who stands beside the way, up on the snowbanks and out at sea (s, lat): there to poke. */
+export const SPOTS = {
+  gentoos: [
+    [20, 10.2],
+    [22.5, 11.4],
+    [25, 10],
+    [448, -10.4],
+    [451, -11.6],
+    [454, -10.2],
+  ] as [number, number][],
+  elephant: [90, -11] as [number, number],
+  skua: [172, 10.4] as [number, number],
+  /** The science station's hut, and the scientist waving at the top of the snowbank below it. */
+  station: [278, 13.6] as [number, number],
+  scientist: [266, 10.6] as [number, number],
+  /** A humpback blowing at the top of the sea (seen from the bottom of the hill), and one more by the ice edge. */
+  spouts: [
+    [EDGE + 70, -26],
+    [SHELF + 6, 21],
+  ] as [number, number][],
+  /** The humpback under the sea swims along beside him between these (s) at this lat. */
+  whale: { from: EDGE + 95, to: EDGE + 215, lat: -15 },
+}
