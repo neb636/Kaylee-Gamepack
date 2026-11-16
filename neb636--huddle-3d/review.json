@@ -1,0 +1,23 @@
+{
+  "title": "Emperor Huddle in 3D",
+  "checkIn": "2 of 4: hear the script",
+  "kaylee": "The penguin dads from the films, in 3D: she carries the shivering ones into the warm middle, sees Pebble hatch at Papa's feet, carries him back when the wind rolls him away, and hears Papa sing Pebble the song he'll find him by at the end.",
+  "questions": [
+    "The game now ends with Papa singing Pebble his song (the tune the finale's chick hums), not a sunrise, because the film right after already shows the sunrise. Keep the song?",
+    "While she carries dads the camera looks down on the ice, so the night sky only shows in the hatch and song close-ups. Is that fine, or should the camera sit lower to show more sky (the dads overlap more)?"
+  ],
+  "tableReads": [["poles", "huddle"]],
+  "links": [
+    { "label": "Play it from the start", "hash": "#/world/poles/huddle/small" },
+    { "label": "The hatch", "hash": "#/world/poles/huddle/hatch" },
+    { "label": "Papa's song", "hash": "#/world/poles/huddle/song" },
+    { "label": "Feel knobs", "hash": "#/world/poles/huddle/small?feel=1" }
+  ],
+  "pictures": [
+    { "title": "Robot play", "after": "pics/huddle-storyboard.gif", "caption": "Carry a cold dad in, the hatch, Pebble rolled away and tucked back, Papa's song (a cloud computer, so it's slow and choppy; a smooth reel needs a Mac)" },
+    { "title": "The huddle", "before": "pics/before-small.png", "after": "pics/after-small.png", "caption": "Papa alone on the windy edge, a snowflake over his head; the warm middle glows pink on the snow" },
+    { "title": "Pebble", "before": "pics/before-hatch.png", "after": "pics/after-hatch.png", "caption": "Papa steps out in front with a gold glow under him, and Pebble pops out at his feet" },
+    { "title": "Papa's song", "after": "pics/after-song.png", "caption": "Under the southern lights, Papa sings and Pebble peeps it back" },
+    { "title": "iPad upright", "after": "pics/after-blizzard-portrait.png", "caption": "The blizzard: eight dads, cold ones on the windy side" }
+  ]
+}
