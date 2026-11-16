@@ -1,0 +1,703 @@
+{
+  "kind": "table-read",
+  "place": "poles",
+  "group": "hub",
+  "title": "Poles › Hub",
+  "intro": "---- The globe hub (activities/hub/): the map of the story. In play order. ----",
+  "page": "poles-hub.html",
+  "audio": null,
+  "lines": 35,
+  "seconds": 110,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "hub.welcome.touch",
+      "text": "Let's take Pebble home! Tap the first picture.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.welcome.mouse",
+      "text": "Let's take Pebble home! Click the first picture.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.next.floe",
+      "text": "Next stop: across the floating ice!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.next.narwhal",
+      "text": "Next stop: a ride on a narwhal!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.next.coats",
+      "text": "Next stop: the snow is coming!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.next.slide",
+      "text": "Next stop: the bottom of the world!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.movies",
+      "text": "Movie time! Let's see the real animals from our story!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "hub.home.touch",
+      "text": "Every stamp! Tap the last picture to fly home!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.home.mouse",
+      "text": "Every stamp! Click the last picture to fly home!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pola.1",
+      "text": "Don't worry, Pebble. We'll get you home!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.terry.0",
+      "text": "I fly from pole to pole every year!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.sunOut",
+      "text": "Here comes the sun! Drag it!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.summer.north",
+      "text": "Summer up north, and night down south!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.summer.south",
+      "text": "Summer down south, night up north!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.marker",
+      "text": "This is the North Pole, the very top of the world!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.seal",
+      "text": "Seals pop up through holes in the ice to breathe.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.station",
+      "text": "Scientists stay here to learn about the ice.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.whale",
+      "text": "Whales swim in the cold seas at both poles.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.ship",
+      "text": "The red ship! Pebble fell asleep on it.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.balloon",
+      "text": "My balloon! It will fly Pebble home.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.lightsNorth",
+      "text": "The northern lights! They dance in the dark winter sky.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.lightsSouth",
+      "text": "The southern lights! They glow in the long winter night.",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "hub",
+        "welcome",
+        "touch"
+      ],
+      "text": "Let's take Pebble home! Tap the first picture.",
+      "voice": "sparkle",
+      "key": "hub.welcome.touch",
+      "part": "hub › welcome",
+      "when": "Her first look at the globe after the way-in film (no stamps yet), once: Sparkle sends her to the first picture.",
+      "ms": 5088,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "welcome",
+        "mouse"
+      ],
+      "text": "Let's take Pebble home! Click the first picture.",
+      "voice": "sparkle",
+      "key": "hub.welcome.mouse",
+      "part": "hub › welcome",
+      "when": "",
+      "ms": 4056,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "next",
+        "floe"
+      ],
+      "text": "Next stop: across the floating ice!",
+      "voice": "sparkle",
+      "key": "hub.next.floe",
+      "part": "hub › next",
+      "when": "Back at the globe with a new stamp (or her first look on another day), once per stop: where the balloon is now. Keyed by the next stop on the trail.",
+      "ms": 3288,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "next",
+        "narwhal"
+      ],
+      "text": "Next stop: a ride on a narwhal!",
+      "voice": "sparkle",
+      "key": "hub.next.narwhal",
+      "part": "hub › next",
+      "when": "Back at the globe with a new stamp (or her first look on another day), once per stop: where the balloon is now. Keyed by the next stop on the trail.",
+      "ms": 3312,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "next",
+        "coats"
+      ],
+      "text": "Next stop: the snow is coming!",
+      "voice": "sparkle",
+      "key": "hub.next.coats",
+      "part": "hub › next",
+      "when": "Back at the globe with a new stamp (or her first look on another day), once per stop: where the balloon is now. Keyed by the next stop on the trail.",
+      "ms": 3072,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "next",
+        "slide"
+      ],
+      "text": "Next stop: the bottom of the world!",
+      "voice": "sparkle",
+      "key": "hub.next.slide",
+      "part": "hub › next",
+      "when": "Back at the globe with a new stamp (or her first look on another day), once per stop: where the balloon is now. Keyed by the next stop on the trail.",
+      "ms": 3432,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "next",
+        "huddle"
+      ],
+      "text": "Next stop: the long, dark night.",
+      "voice": "sparkle",
+      "key": "hub.next.huddle",
+      "part": "hub › next",
+      "when": "Back at the globe with a new stamp (or her first look on another day), once per stop: where the balloon is now. Keyed by the next stop on the trail.",
+      "ms": 2928,
+      "flags": []
+    },
+    {
+      "path": [
+        "hub",
+        "movies"
+      ],
+      "text": "Movie time! Let's see the real animals from our story!",
+      "voice": "sparkle",
+      "key": "hub.movies",
+      "part": "hub",
+      "when": "The whole story told (every stamp and the trophy), once: the movie ticket at the end of the trail opens the real animals' videos (the Theater).",
+      "ms": 3761,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "home",
+        "touch"
+      ],
+      "text": "Every stamp! Tap the last picture to fly home!",
+      "voice": "sparkle",
+      "key": "hub.home.touch",
+      "part": "hub › home",
+      "when": "Every stamp is in, once: home is the last picture on the trail.",
+      "ms": 4584,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "home",
+        "mouse"
+      ],
+      "text": "Every stamp! Click the last picture to fly home!",
+      "voice": "sparkle",
+      "key": "hub.home.mouse",
+      "part": "hub › home",
+      "when": "",
+      "ms": 4440,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "spots",
+        "touch"
+      ],
+      "text": "Tap a picture to play!",
+      "voice": "sparkle",
+      "key": "hub.spots.touch",
+      "part": "hub › spots",
+      "when": "Left alone a while: shown in Sparkle's bubble only, never said by itself (a hub doesn't nag). She says one if tapped.",
+      "ms": 2576,
+      "flags": []
+    },
+    {
+      "path": [
+        "hub",
+        "spots",
+        "mouse"
+      ],
+      "text": "Click a picture to play!",
+      "voice": "sparkle",
+      "key": "hub.spots.mouse",
+      "part": "hub › spots",
+      "when": "",
+      "ms": 2328,
+      "flags": []
+    },
+    {
+      "path": [
+        "hub",
+        "spin"
+      ],
+      "text": "Spin the globe up or down!",
+      "voice": "sparkle",
+      "key": "hub.spin",
+      "part": "hub",
+      "when": "",
+      "ms": 2162,
+      "flags": []
+    },
+    {
+      "path": [
+        "hub",
+        "sun"
+      ],
+      "text": "Drag the sun up or down!",
+      "voice": "sparkle",
+      "key": "hub.sun",
+      "part": "hub",
+      "when": "",
+      "ms": 2225,
+      "flags": []
+    },
+    {
+      "path": [
+        "hub",
+        "pola",
+        "0"
+      ],
+      "text": "I've never seen a penguin before!",
+      "voice": "pola",
+      "key": "hub.pola.0",
+      "part": "hub › pola",
+      "when": "She taps a friend on the globe: their lines in turn, in their own voices. Pola and Pebble stand together up north.",
+      "ms": 1992,
+      "flags": []
+    },
+    {
+      "path": [
+        "hub",
+        "pola",
+        "1"
+      ],
+      "text": "Don't worry, Pebble. We'll get you home!",
+      "voice": "pola",
+      "key": "hub.pola.1",
+      "part": "hub › pola",
+      "when": "",
+      "ms": 3288,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pola",
+        "2"
+      ],
+      "text": "Ha ha, that tickles!",
+      "voice": "pola",
+      "key": "hub.pola.2",
+      "part": "hub › pola",
+      "when": "",
+      "ms": 2087,
+      "flags": []
+    },
+    {
+      "path": [
+        "hub",
+        "pebble",
+        "0"
+      ],
+      "text": "I miss my Papa.",
+      "voice": "pebble",
+      "key": "hub.pebble.0",
+      "part": "hub › pebble",
+      "when": "",
+      "ms": 1368,
+      "flags": []
+    },
+    {
+      "path": [
+        "hub",
+        "pebble",
+        "1"
+      ],
+      "text": "Are we nearly there?",
+      "voice": "pebble",
+      "key": "hub.pebble.1",
+      "part": "hub › pebble",
+      "when": "",
+      "ms": 1344,
+      "flags": []
+    },
+    {
+      "path": [
+        "hub",
+        "pebble",
+        "2"
+      ],
+      "text": "Waddle, waddle!",
+      "voice": "pebble",
+      "key": "hub.pebble.2",
+      "part": "hub › pebble",
+      "when": "",
+      "ms": 1646,
+      "flags": []
+    },
+    {
+      "path": [
+        "hub",
+        "papa",
+        "0"
+      ],
+      "text": "Pebble? Where are you?",
+      "voice": "papa",
+      "key": "hub.papa.0",
+      "part": "hub › papa",
+      "when": "Papa waits down south, looking up at the sky. (Also what he says if she picks home before every stamp is in.)",
+      "ms": 2256,
+      "flags": []
+    },
+    {
+      "path": [
+        "hub",
+        "papa",
+        "1"
+      ],
+      "text": "I'll keep looking, little one.",
+      "voice": "papa",
+      "key": "hub.papa.1",
+      "part": "hub › papa",
+      "when": "",
+      "ms": 1992,
+      "flags": []
+    },
+    {
+      "path": [
+        "hub",
+        "terry",
+        "0"
+      ],
+      "text": "I fly from pole to pole every year!",
+      "voice": "terry",
+      "key": "hub.terry.0",
+      "part": "hub › terry",
+      "when": "She taps Terry as he flies his loop between the poles.",
+      "ms": 3120,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "terry",
+        "1"
+      ],
+      "text": "Follow me! I know the way!",
+      "voice": "terry",
+      "key": "hub.terry.1",
+      "part": "hub › terry",
+      "when": "",
+      "ms": 2304,
+      "flags": []
+    },
+    {
+      "path": [
+        "hub",
+        "sunOut"
+      ],
+      "text": "Here comes the sun! Drag it!",
+      "voice": "sparkle",
+      "key": "hub.sunOut",
+      "part": "hub",
+      "when": "The sun pops out beside the globe (once she has seen both poles), then the first time summer lands on each pole.",
+      "ms": 3318,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "summer",
+        "north"
+      ],
+      "text": "Summer up north, and night down south!",
+      "voice": "sparkle",
+      "key": "hub.summer.north",
+      "part": "hub › summer",
+      "when": "",
+      "ms": 3055,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "summer",
+        "south"
+      ],
+      "text": "Summer down south, night up north!",
+      "voice": "sparkle",
+      "key": "hub.summer.south",
+      "part": "hub › summer",
+      "when": "",
+      "ms": 3157,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "marker"
+      ],
+      "text": "This is the North Pole, the very top of the world!",
+      "voice": "sparkle",
+      "key": "hub.pokes.marker",
+      "part": "hub › pokes",
+      "when": "A fact the first time she pokes each thing (once per visit).",
+      "ms": 4132,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "seal"
+      ],
+      "text": "Seals pop up through holes in the ice to breathe.",
+      "voice": "sparkle",
+      "key": "hub.pokes.seal",
+      "part": "hub › pokes",
+      "when": "A fact the first time she pokes each thing (once per visit).",
+      "ms": 3825,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "station"
+      ],
+      "text": "Scientists stay here to learn about the ice.",
+      "voice": "sparkle",
+      "key": "hub.pokes.station",
+      "part": "hub › pokes",
+      "when": "A fact the first time she pokes each thing (once per visit).",
+      "ms": 3583,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "whale"
+      ],
+      "text": "Whales swim in the cold seas at both poles.",
+      "voice": "sparkle",
+      "key": "hub.pokes.whale",
+      "part": "hub › pokes",
+      "when": "A fact the first time she pokes each thing (once per visit).",
+      "ms": 4388,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "ship"
+      ],
+      "text": "The red ship! Pebble fell asleep on it.",
+      "voice": "sparkle",
+      "key": "hub.pokes.ship",
+      "part": "hub › pokes",
+      "when": "A fact the first time she pokes each thing (once per visit).",
+      "ms": 3912,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "balloon"
+      ],
+      "text": "My balloon! It will fly Pebble home.",
+      "voice": "sparkle",
+      "key": "hub.pokes.balloon",
+      "part": "hub › pokes",
+      "when": "A fact the first time she pokes each thing (once per visit).",
+      "ms": 3312,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "lightsNorth"
+      ],
+      "text": "The northern lights! They dance in the dark winter sky.",
+      "voice": "sparkle",
+      "key": "hub.pokes.lightsNorth",
+      "part": "hub › pokes",
+      "when": "A fact the first time she pokes each thing (once per visit).",
+      "ms": 4136,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "lightsSouth"
+      ],
+      "text": "The southern lights! They glow in the long winter night.",
+      "voice": "sparkle",
+      "key": "hub.pokes.lightsSouth",
+      "part": "hub › pokes",
+      "when": "A fact the first time she pokes each thing (once per visit).",
+      "ms": 4493,
+      "flags": [
+        "long"
+      ]
+    }
+  ]
+}
