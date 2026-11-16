@@ -422,8 +422,9 @@ for (const [id, us] of [['saikaew', [-20, 4, 26]], ['hinkhok', [-6, 6]], ['phai'
 // (Ao Prao's stands beside the resort deck's end, clear of its steps.)
 for (const [id, u] of [['saikaew', -10], ['hinkhok', 0], ['prao', 15.5], ['wongduan', 1]] as const) add('samet', at(FRAMES[id], u, -13.5))
 // Pink umbrellas (spin; poke one three times and it takes off like a kite with Kaylee holding on) and red chairs (fold up).
-// (Ao Prao's third stands beside the foot of the resort deck's steps, its loungers clear of them.)
-for (const [id, us] of [['hinkhok', [-4, 3]], ['phai', [0]], ['wongduan', [-4, 4]], ['prao', [-7, -1, 14]]] as const) for (const u of us) add('umbrella', at(FRAMES[id], u, -6))
+// (Ao Prao's third stands beside the foot of the resort deck's steps, its loungers clear of them. Ao Hin Khok's stand
+// well either side of the sandcastle, a wide way round it.)
+for (const [id, us] of [['hinkhok', [-6.5, 5.5]], ['phai', [0]], ['wongduan', [-4, 4]], ['prao', [-7, -1, 14]]] as const) for (const u of us) add('umbrella', at(FRAMES[id], u, -6))
 // (Down by the water, so there's a wide way between them and the umbrellas' loungers: they used to fence the sand.)
 for (const u of [-6, -2, 3, 7]) add('chair', at(FRAMES.prao, u, -1.2))
 add('ball', at(FRAMES.hinkhok, 3, -2.5))

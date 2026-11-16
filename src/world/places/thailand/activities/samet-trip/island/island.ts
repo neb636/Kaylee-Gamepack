@@ -73,7 +73,7 @@ import { SwimRope } from './swimrope'
 import { Taxi } from './taxi'
 import { FireDancers } from './dancers'
 import { beachBed, islandSfx as sfx } from './sounds'
-import { narrowDecks, narrowGaps, type Gap } from './walkcheck'
+import { narrowDecks, narrowGaps, seal, SEAL, type Gap } from './walkcheck'
 import { cleanSfx } from '../book/sounds'
 import { TO_DEG, damp, smoothstep, wrapAngle } from '../../../../../../sdk/math'
 
@@ -219,12 +219,20 @@ interface Follower {
   hopped: boolean
   /** The way they last turned to slide round something (-1, 1; 0: none). */
   turn: number
+  /** Where they were heading this frame, and whether that's waiting for her at the water's edge (for qa()). */
+  goal: XZ
+  waiting: boolean
+  /** How this frame's step went (for qa()): straight, route, trail, inside, slid, shut (nowhere open), blocked. */
+  why: string
 }
 
 /** Something in the way of a step along (ux, uz): the nearest turn that `open` (the side `prefer` first), as the new
  *  direction and the side it turned to; null if every turn up to square is shut. */
-function slideRound(ux: number, uz: number, open: (rx: number, rz: number) => boolean, prefer: number): [number, number, number] | null {
-  for (const a of [0.35, -0.35, 0.7, -0.7, 1.05, -1.05, 1.4, -1.4, Math.PI / 2, -Math.PI / 2]) {
+const FAN = [0.35, -0.35, 0.7, -0.7, 1.05, -1.05, 1.4, -1.4, Math.PI / 2, -Math.PI / 2]
+/** (Mom and Dad, boxed in, may turn right round: better a step back than standing frozen.) */
+const FAN_WIDE = [...FAN, 2.0, -2.0, 2.5, -2.5, Math.PI]
+function slideRound(ux: number, uz: number, open: (rx: number, rz: number) => boolean, prefer: number, wide = false): [number, number, number] | null {
+  for (const a of wide ? FAN_WIDE : FAN) {
     const r = a * prefer
     const rx = ux * Math.cos(r) + uz * Math.sin(r)
     const rz = -ux * Math.sin(r) + uz * Math.cos(r)
@@ -399,6 +407,7 @@ export class SametIsland implements World3D {
   // ---- The beach puppy (#357 way-finding).
   private pup: Puppy
   private planner: Planner
+  private famPlanner: Planner
   /** Where he's taking her: a stop still to do (on its beach), or the driftwood tree for the sunset. Null: all done,
    *  he trots along beside her. */
   private pupGoal: { stop: StopId; beach: SpotId; at: XZ } | null = null
@@ -436,7 +445,10 @@ export class SametIsland implements World3D {
   private nudged = false
   private frames = 0
   private reachMemo: Record<string, number | null> | null = null
-  private walkMemo: { gaps: number; narrowest: Gap[]; decks: number[] } | null = null
+  private walkMemo: { gaps: number; narrowest: Gap[]; tight: number; sealed: number; decks: number[] } | null = null
+  private sealed = 0
+  /** The waiting taxi, for Mom and Dad to walk round (x, z, r). */
+  private taxiDiscs: [number, number, number][] = []
   private talk = { nick: 0, ji: 0, taxi: 0 }
 
   constructor(
@@ -488,7 +500,7 @@ export class SametIsland implements World3D {
       scene.add(m.root)
       const shadow = blobShadow(0.5, bag)
       scene.add(shadow)
-      return { m, back, side, phase: Math.random() * 3, speed: 0, shadow, lie: 0, on: -1, reach: 1, blocked: 0, waveT: 2 + Math.random() * 2, route: null, ri: 0, routeFor: { x: 0, z: 0 }, planAt: -99, best: Infinity, stall: 0, was: [], hop: null, hopped: false, turn: 0 }
+      return { m, back, side, phase: Math.random() * 3, speed: 0, shadow, lie: 0, on: -1, reach: 1, blocked: 0, waveT: 2 + Math.random() * 2, route: null, ri: 0, routeFor: { x: 0, z: 0 }, planAt: -99, best: Infinity, stall: 0, was: [], hop: null, hopped: false, turn: 0, goal: { x: 0, z: 0 }, waiting: false, why: '' }
     }
     this.nick = fam('nick', 2.6, 0.9)
     this.ji = fam('ji', 3.8, -0.9)
@@ -527,6 +539,8 @@ export class SametIsland implements World3D {
     scene.add(this.pup.root, this.pup.shadow)
     this.pup.place(s.x + Math.sin(s.face) * 1.6, s.z + Math.cos(s.face) * 1.6, s.face + Math.PI)
     this.planner = new Planner(this.pupCost, FINE)
+    // (Mom and Dad's: finer, and palms, chairs and loungers are walls, not just dear: a way round them, not through.)
+    this.famPlanner = new Planner(this.famCost, FINE, 0.75)
     // The sand slide at the end of his shortcut: a smoothstep pale chute down the dune, pink rims, two pink posts at its top.
     {
       const parts: ReturnType<typeof P.box>[] = []
@@ -617,6 +631,8 @@ export class SametIsland implements World3D {
     this.wild = new Wildlife(bag, palms)
     scene.add(this.wild.root)
     this.clean = new BeachClean(bag, this.isl.ground, (x, z, r) => this.isl.blockers.add(x, z, r))
+    // Every slot she'd fit through and Mom and Dad wouldn't, shut (walkcheck.ts): one solid thing to walk round.
+    this.sealed = seal(this.isl.blockers, (x, z) => this.standable(x, z))
     scene.add(this.clean.root)
     this.fish = new Fish(bag, 6)
     scene.add(this.fish.root)
@@ -751,10 +767,16 @@ export class SametIsland implements World3D {
     if (on >= 0) {
       if (di === on) return true
       if (di >= 0) return false
-      // Off a deck only down its steps (past its land end), then the ground's own rules apply.
+      // Off a deck only down its steps (past its land end), then the ground's own rules apply. (Or off the side of its
+      // steps low down, where they're barely above the sand: like stepping off the last step.)
       const d = this.props.decks[on]
       const v = (x - d.x) * d.n.x + (z - d.z) * d.n.z
-      if (v > -d.hd - d.ramp + 0.05) return false
+      if (v > -d.hd - d.ramp + 0.05) {
+        if (v > -d.hd) return false
+        const g = Math.max(0, this.isl.ground.heightAt(x, z))
+        const step = d.y + (g - d.y) * Math.min(1, (-d.hd - v) / d.ramp)
+        if (step - g > 0.35) return false
+      }
     }
     if (di < 0) for (let i = 0; i < this.props.decks.length; i++) if (i !== on && this.inDeckTop(i, x, z)) return false
     if (di >= 0) {
@@ -1580,6 +1602,10 @@ export class SametIsland implements World3D {
    *  clear of palms, chairs and posts (unless they're in one already, `from`, and this takes them further out). */
   private familyOk(x: number, z: number, on: number, from?: XZ) {
     if (!this.deckOk(x, z, on) || !this.standable(x, z)) return false
+    for (const [bx, bz, r] of this.taxiDiscs) {
+      const d = Math.hypot(x - bx, z - bz)
+      if (d < r + FAMILY_R && !(from && Math.hypot(from.x - bx, from.z - bz) < r + FAMILY_R && d > Math.hypot(from.x - bx, from.z - bz))) return false
+    }
     for (const [bx, bz, r] of this.isl.blockers.near(x, z)) {
       const d = Math.hypot(x - bx, z - bz)
       if (d < r + FAMILY_R && !(from && Math.hypot(from.x - bx, from.z - bz) < r + FAMILY_R && d > Math.hypot(from.x - bx, from.z - bz))) return false
@@ -1621,9 +1647,10 @@ export class SametIsland implements World3D {
       pts.push(this.deckLine(on, from), this.deckLine(on, a), a)
     }
     const b = gd >= 0 ? this.deckFoot(gd) : to
-    const walk = this.planner.plan(a, b)
-    if (!walk) return null
-    pts.push(...walk.pts.slice(1))
+    const walk = this.famPlanner.plan(a, b) ?? this.planner.plan(a, b)
+    // (No way found from here: still off the deck by its steps, then straight on, sliding round what's in the way.)
+    if (!walk && on < 0 && gd < 0) return null
+    pts.push(...(walk ? walk.pts.slice(1) : [b]))
     if (gd >= 0) pts.push(this.deckLine(gd, b), this.deckLine(gd, to), to)
     return pts
   }
@@ -1765,6 +1792,15 @@ export class SametIsland implements World3D {
 
   private follow(dt: number, t: number) {
     const k = this.kaylee.root.position
+    // The green taxi waiting at its stop: they walk round it, not through it (three circles along its length).
+    const tx = this.taxi.root
+    if (this.riding3d || !tx.visible) this.taxiDiscs = []
+    else {
+      const L = this.taxi.st.length / 2 - 1
+      const ax = Math.cos(tx.rotation.y)
+      const az = -Math.sin(tx.rotation.y)
+      this.taxiDiscs = [-1, 0, 1].map((s) => [tx.position.x + ax * s * L, tx.position.z + az * s * L, 1.05])
+    }
     const idle = this.time - this.lastTouch > 7 && this.lastSpeed < 0.1 && this.mode === 'walk' && !this.swimming
     if (this.mode === 'walk' && this.standable(k.x, k.z) && this.isl.ground.heightAt(k.x, k.z) > 0.02) {
       this.edge.x = k.x
@@ -1788,7 +1824,9 @@ export class SametIsland implements World3D {
       // the jetty's rail), or where beside her is no place to stand.
       const mid = this.trailPoint(f.back, 0)
       let goal = this.trailPoint(f.back, f.side)
-      if (this.deckAt(goal.x, goal.z) !== this.deckAt(mid.x, mid.z) || !this.standable(goal.x, goal.z)) goal = mid
+      // (A spot they can't stand on, in a palm or a lounger: her own footstep instead.)
+      const fine = (q: XZ) => this.familyOk(q.x, q.z, this.deckAt(q.x, q.z))
+      if (this.deckAt(goal.x, goal.z) !== this.deckAt(mid.x, mid.z) || !this.standable(goal.x, goal.z) || !fine(goal)) goal = mid
       // She's out in the sea: they wait at the water's edge where she went in, and wave.
       const waiting = !this.standable(goal.x, goal.z)
       if (waiting) {
@@ -1805,7 +1843,7 @@ export class SametIsland implements World3D {
         const ux = l > 0.05 ? ax / l : f === this.nick ? rx : -rx
         const uz = l > 0.05 ? az / l : f === this.nick ? rz : -rz
         const q = { x: o.x + ux * gap, z: o.z + uz * gap }
-        if (this.standable(q.x, q.z)) goal = q
+        if (this.standable(q.x, q.z) && fine(q)) goal = q
       }
       if (!waiting) away(k, FAMILY_GAP)
       if (placed) away(placed, FAMILY_GAP)
@@ -1817,7 +1855,7 @@ export class SametIsland implements World3D {
         const along = (goal.x - p.x) * -rz + (goal.z - p.z) * rx
         if (Math.abs(across) < 1 && Math.abs(along) < 2.6) {
           for (const q of [{ x: p.x + rx * 1.35, z: p.z + rz * 1.35 }, { x: p.x - rx * 1.35, z: p.z - rz * 1.35 }, { x: 2 * k.x - p.x, z: 2 * k.z - p.z }]) {
-            if (Math.hypot(q.x - k.x, q.z - k.z) >= FAMILY_GAP && this.standable(q.x, q.z) && this.inFamilyFrame(q.x, q.z)) {
+            if (Math.hypot(q.x - k.x, q.z - k.z) >= FAMILY_GAP && this.standable(q.x, q.z) && fine(q) && this.inFamilyFrame(q.x, q.z)) {
               goal = q
               break
             }
@@ -1825,6 +1863,8 @@ export class SametIsland implements World3D {
         }
       }
       placed = goal
+      f.goal = goal
+      f.waiting = waiting
       const here = { x: r.position.x, z: r.position.z }
       const dGoal = Math.hypot(goal.x - here.x, goal.z - here.z)
       // Getting no closer (a deck's side, a lounger, the sea round a bay): how long for. (She walking off makes the
@@ -1875,6 +1915,7 @@ export class SametIsland implements World3D {
       // Which way: straight at the goal when the whole line is open; otherwise along a planned way round (off a deck
       // by its steps, round the bay, up the other deck's steps), re-planned when the goal moves on.
       const inside = !this.familyOk(here.x, here.z, f.on)
+      f.why = inside ? 'inside' : 'straight'
       let aim: XZ = goal
       if (!inside && dGoal > 0.3) {
         if (this.familyLine(here, goal, f.on)) f.route = null
@@ -1895,7 +1936,8 @@ export class SametIsland implements World3D {
               else break
             }
             aim = rt[Math.min(f.ri, rt.length - 1)]
-          } else aim = this.trailToward(here.x, here.z, (q) => this.familyLine(here, q, f.on)) ?? here
+            f.why = `route ${f.ri}/${rt.length} ${aim.x.toFixed(1)},${aim.z.toFixed(1)}`
+          } else aim = this.trailToward(here.x, here.z, (q) => this.familyLine(here, q, f.on)) ?? goal
         }
       }
       let dx = aim.x - here.x
@@ -1909,14 +1951,17 @@ export class SametIsland implements World3D {
         const open = (x: number, z: number) => inside || this.familyOk(x, z, f.on, here)
         dx /= d
         dz /= d
-        // Something just ahead (a palm, a lounger, a post): slide round it, the way they turned last time first.
-        if (!open(here.x + dx * 0.45, here.z + dz * 0.45)) {
-          const s = slideRound(dx, dz, (rx, rz) => open(here.x + rx * 0.45, here.z + rz * 0.45), f.turn || (f === this.nick ? 1 : -1))
+        // Something just ahead (a palm, a lounger, a post): slide round it, the way they turned last time first. (Both
+        // a look a little ahead and this frame's own step must be open: a thin thing can sit between them.)
+        const way = (rx: number, rz: number) => open(here.x + rx * 0.45, here.z + rz * 0.45) && open(here.x + rx * step, here.z + rz * step)
+        if (!way(dx, dz)) {
+          const s = slideRound(dx, dz, way, f.turn || (f === this.nick ? 1 : -1), true)
           if (s) {
             dx = s[0]
             dz = s[1]
             f.turn = s[2]
-          }
+            f.why += ' slid'
+          } else f.why += ' shut'
         } else f.turn = 0
         const nx = here.x + dx * step
         const nz = here.z + dz * step
@@ -1929,6 +1974,7 @@ export class SametIsland implements World3D {
         } else {
           f.speed = 0
           f.blocked += dt
+          f.why += ' blocked'
         }
       }
       // She walked right up to them, or they bunched up: a step aside (on a deck or the jetty, only along it: never
@@ -1944,11 +1990,13 @@ export class SametIsland implements World3D {
         const push = Math.min(gap - l, dt * 6)
         let base = l > 0.05 ? Math.atan2(ax, az) : Math.atan2(f === this.nick ? rx : -rx, f === this.nick ? rz : -rz)
         if (deck) {
-          const along = ax * deck.n.x + az * deck.n.z
+          // (Each other: a step to the side to pass, the deck's wide enough now. Her: back along it.)
+          const ax2 = o === k ? deck.n : deck.t
+          const along = ax * ax2.x + az * ax2.z
           const sg = Math.abs(along) > 0.05 ? Math.sign(along) : f === this.nick ? -1 : 1
-          base = Math.atan2(deck.n.x * sg, deck.n.z * sg)
+          base = Math.atan2(ax2.x * sg, ax2.z * sg)
         }
-        for (const a of deck ? [0] : [0, 0.9, -0.9, 1.6, -1.6]) {
+        for (const a of deck ? (o === k ? [0] : [0, Math.PI]) : [0, 0.9, -0.9, 1.6, -1.6]) {
           const nx = r.position.x + Math.sin(base + a) * push
           const nz = r.position.z + Math.cos(base + a) * push
           if (this.familyOk(nx, nz, f.on, r.position)) {
@@ -3071,6 +3119,12 @@ export class SametIsland implements World3D {
     for (const [bx, bz, r] of this.isl.blockers.near(x, z)) if (Math.hypot(x - bx, z - bz) < r + 0.25) return 8
     return s === 'road' || s === 'path' ? 1 : s === 'sand' || s === 'grass' ? 1.15 : s === 'wet' ? 1.3 : 1.8
   }
+  /** What a meter costs Mom and Dad's planner: the puppy's, but never through a palm, a chair or a post. */
+  private famCost = (x: number, z: number) => {
+    // (A little more room than they need: the straight line between two cells mustn't clip a corner.)
+    for (const [bx, bz, r] of this.isl.blockers.near(x, z)) if (Math.hypot(x - bx, z - bz) < r + FAMILY_R + 0.3) return Infinity
+    return this.pupCost(x, z)
+  }
   /** Where he sits to show her a stop: beside its pink ring, on the side she comes from. */
   private goalPoint(id: StopId): XZ {
     const a = STOPS[id].at
@@ -3525,7 +3579,7 @@ export class SametIsland implements World3D {
       family: Object.fromEntries((['nick', 'ji'] as const).map((id) => [id, (({ x, y, z }) => ({ x: +x.toFixed(2), z: +z.toFixed(2), y: +y.toFixed(2), ground: +this.heightAt(x, z).toFixed(2), deck: this.deckAt(x, z), screen: sc(new Vector3(x, y + 0.7, z)) }))(this[id].m.root.position)])),
       // Mom and Dad getting unstuck (planned ways round, hops, poofs, poofs she could see, the longest stuck in s), and
       // how long each has been getting no closer right now.
-      unstuck: { ...this.unstuck, stuckMax: +this.unstuck.stuckMax.toFixed(2), now: { nick: +this.nick.stall.toFixed(2), ji: +this.ji.stall.toFixed(2) }, routed: { nick: !!this.nick.route, ji: !!this.ji.route } },
+      unstuck: { ...this.unstuck, stuckMax: +this.unstuck.stuckMax.toFixed(2), now: { nick: +this.nick.stall.toFixed(2), ji: +this.ji.stall.toFixed(2) }, routed: { nick: !!this.nick.route, ji: !!this.ji.route }, goal: { nick: [+this.nick.goal.x.toFixed(2), +this.nick.goal.z.toFixed(2), this.nick.waiting], ji: [+this.ji.goal.x.toFixed(2), +this.ji.goal.z.toFixed(2), this.ji.waiting] }, why: { nick: this.nick.why, ji: this.ji.why } },
       speed: +this.lastSpeed.toFixed(2),
       // The scene's own clock (s): timings from it don't depend on how fast a headless browser draws.
       clock: +this.time.toFixed(2),
@@ -3563,7 +3617,7 @@ export class SametIsland implements World3D {
       decks: this.props.decks.map((d) => ({ x: +d.x.toFixed(2), z: +d.z.toFixed(2), n: [+d.n.x.toFixed(3), +d.n.z.toFixed(3)], hw: d.hw, hd: +d.hd.toFixed(2), ramp: +d.ramp.toFixed(2), y: +d.y.toFixed(2) })),
       // The walkways audit (walkcheck.ts): how many too-narrow ways between things there are where she can walk, the
       // narrowest of them, and any deck too narrow to step past someone on.
-      walkways: (this.walkMemo ??= ((g) => ({ gaps: g.length, narrowest: g.slice(0, 12), decks: narrowDecks(this.props.decks) }))(narrowGaps(this.isl.blockers.all(), (x, z) => this.standable(x, z)))),
+      walkways: (this.walkMemo ??= ((all) => ((g) => ({ gaps: g.length, narrowest: g.slice(0, 12), tight: all.length, sealed: this.sealed, decks: narrowDecks(this.props.decks) }))(all.filter((q) => q.gap < SEAL)))(narrowGaps(this.isl.blockers.all(), (x, z) => this.standable(x, z)))),
       cameraYaw: Math.round(wrapAngle(this.camYaw) * TO_DEG),
       fps: this.stats.fps,
       calls: this.stats.calls,

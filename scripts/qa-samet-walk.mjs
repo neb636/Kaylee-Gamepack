@@ -170,6 +170,14 @@ try {
       const ww = await page.evaluate(() => window.__thaiSametQA?.().walkways ?? null)
       if (ww) {
         report.walkways = ww
+        // Every beach still on foot from Na Dan pier (the puppy's planner, after the slots are shut).
+        const reach = await page.evaluate(() => window.__thaiSametQA?.().reach ?? null)
+        report.reach = reach
+        const lost = reach ? Object.entries(reach).filter(([, m]) => m === null).map(([id]) => id) : []
+        if (lost.length) {
+          console.log(`✗ no way on foot to ${lost.join(', ')}`)
+          failed = true
+        }
         console.log(`${ww.gaps || ww.decks.length ? '✗' : '✓'} walkways: ${ww.gaps} too-narrow gaps${ww.gaps ? ` (narrowest ${ww.narrowest.map((g) => `${g.gap} m at ${g.a.x.toFixed(0)},${g.a.z.toFixed(0)}`).slice(0, 6).join('; ')})` : ''}, ${ww.decks.length} narrow decks`)
         if (ww.gaps || ww.decks.length) failed = true
       }
@@ -189,6 +197,12 @@ try {
     const shot = shots.reduce((a, b) => (Math.abs(b.t - t0 - when) < Math.abs((a?.t ?? Infinity) - t0 - when) ? b : a), null)
     if (shot && worst > 1) writeFileSync(path.join(dir, `${w.name}-stuck.png`), shot.b)
     report[w.name] = { ...s, unstuck: last }
+    if (process.argv.includes('--trace')) {
+      // (Around the worst stuck moment: where she and they were, and what the game thought.)
+      const who = s.nick.stuck >= s.ji.stuck ? 'nick' : 'ji'
+      const at = report[w.name][who].at ?? 0
+      report[w.name].trace = samples.filter((q) => Math.abs(q.t - at) < 3500).map((q) => ({ t: q.t, k: [q.x, q.z], p: [q.family[who].x, q.family[who].z], deck: q.family[who].deck, now: q.unstuck?.now?.[who], routed: q.unstuck?.routed?.[who], goal: q.unstuck?.goal?.[who], why: q.unstuck?.why?.[who] }))
+    }
     const bad = worst > 2.5 || (last && last.poofsSeen > 0)
     if (bad) failed = true
     console.log(`${bad ? '✗' : '✓'} ${w.name}: Dad stuck ${s.nick.stuck}s (farthest ${s.nick.farthest} m), Mom stuck ${s.ji.stuck}s (farthest ${s.ji.farthest} m)${last ? `; ways round ${last.replans}, hops ${last.hops}, poofs ${last.poofs} (${last.poofsSeen} seen)` : ''}`)
