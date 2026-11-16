@@ -6,14 +6,16 @@
 // Each acts by itself a little (so the sea is alive before she touches it) and has one bigger act for a poke, with its
 // own sound. Plus what only drifts: little bits of ice, falling snow sparkles, far icebergs, the low sun.
 // Toon shapes from engine3d/geo.ts; the narwhal, the icebergs and the sun are the films' (story/props.ts).
-import { BufferAttribute, BufferGeometry, CircleGeometry, Group, Mesh, MeshBasicMaterial, Points, PointsMaterial, RingGeometry, Vector3, type Scene } from 'three'
+import { BufferAttribute, BufferGeometry, CircleGeometry, Group, Mesh, MeshBasicMaterial, Points, PointsMaterial, RingGeometry, Vector3, type Object3D, type Scene } from 'three'
 import { bell, clamp, smooth } from '../../../../../sdk'
 import type { Bag } from '../../../../engine3d/dispose'
 import { bake, merge, P, solid, solidMix } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
 import { swell } from '../../../../engine3d/water'
 import { Actor } from '../../story/actor'
-import { bergGeo, floeGeo, ICE, ICE_BLUE, ICE_SHADE, Narwhal, rng, skyDisc } from '../../story/props'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
+import { roundSkirt } from '../../look/sea'
+import { bergGeo, floeGeo, ICE, ICE_BLUE, ICE_LINE, ICE_SHADE, Narwhal, rng } from '../../story/props'
 import type { FloeSpec } from './layout'
 import { floeSfx } from './sounds'
 
@@ -502,8 +504,8 @@ class Berg extends Critter {
     seed: number,
   ) {
     super('berg', size * 0.9, size * 0.9)
-    this.root.add(solid(bergGeo(size, seed), bag, 3))
-    this.root.position.set(x, -0.3, z)
+    this.root.add(solid(bergGeo(size, seed), bag, 2.5, ICE_LINE))
+    this.root.position.set(x, 0, z)
   }
   protected voice() {
     floeSfx.twinkle()
@@ -556,7 +558,8 @@ export class Life {
   private far = new Group()
 
   /** `hole`: where the seal's breathing hole goes (a spot on the first floe, in its own coordinates). */
-  constructor(scene: Scene, bag: Bag, specs: FloeSpec[], hole: { parent: Group; x: number; y: number; z: number; face: number }) {
+  /** `glow`: the sea's glow round a piece of floating ice (look/sea.ts PolarSea.skirt), from its skirt geometry. */
+  constructor(scene: Scene, bag: Bag, specs: FloeSpec[], hole: { parent: Group; x: number; y: number; z: number; face: number }, glow?: (g: BufferGeometry) => Object3D) {
     const rest = (stage: string) => specs.find((f) => f.stage === stage && f.rest)!
     const drift = rest('drift')
     const melt = rest('melt')
@@ -565,6 +568,7 @@ export class Life {
       this.critters.push(c)
       if (c.root.parent === null) scene.add(c.root)
       if (solidR) this.solids.push({ x: c.root.position.x, z: c.root.position.z, r: solidR, who: c })
+      if (solidR && glow) c.root.add(glow(roundSkirt(solidR * 0.95, 0.9)))
       return c
     }
     add(new Seal(bag, hole.parent, hole.x, hole.y, hole.z, hole.face))
@@ -590,18 +594,25 @@ export class Life {
     const end = mama.z
     for (let z = -3, i = 0; z > end + 8; z -= 11 + r() * 5, i++) {
       const s = i % 2 ? 1 : -1
-      add(new Berg(bag, s * (8.6 + r() * 2.2), z, 1.5 + r() * 1.1, 50 + i))
+      const size = 1.5 + r() * 1.1
+      const berg = add(new Berg(bag, s * (8.6 + r() * 2.2), z, size, 50 + i))
+      if (glow) berg.root.add(glow(roundSkirt(size * 0.95, size * 0.5)))
     }
     const farParts = []
+    const farGlow: BufferGeometry[] = []
     for (let z = 6, i = 0; z > end - 6; z -= 13 + r() * 6, i++) {
       const s = i % 2 ? -1 : 1
-      farParts.push(bergGeo(3.4 + r() * 3.2, 70 + i).translate(s * (17 + r() * 9), -0.4, z))
+      const size = 3.4 + r() * 3.2
+      const x = s * (17 + r() * 9)
+      farParts.push(bergGeo(size, 70 + i).translate(x, 0, z))
+      farGlow.push(roundSkirt(size * 0.95, size * 0.45).translate(x, 0, z))
     }
-    for (const [x, dz, size, seed] of [[-30, -34, 10, 1], [-9, -44, 13, 2], [17, -38, 9, 3], [36, -52, 14, 4], [-52, -60, 12, 5], [6, -26, 4.5, 6], [-17, -22, 3.6, 7], [24, -20, 3.2, 8]] as const) farParts.push(bergGeo(size, seed).translate(mama.x + x, -0.4, end + dz))
-    this.far.add(solid(merge(farParts), bag, 3))
-    const sun = skyDisc(bag, 9, '#FFF3C4', '#FFE9A8')
-    sun.position.set(mama.x - 30, 30, end - 190)
-    this.far.add(sun)
+    for (const [x, dz, size, seed] of [[-30, -34, 10, 1], [-9, -44, 13, 2], [17, -38, 9, 3], [36, -52, 14, 4], [-52, -60, 12, 5], [6, -26, 4.5, 6], [-17, -22, 3.6, 7], [24, -20, 3.2, 8]] as const) {
+      farParts.push(bergGeo(size, seed).translate(mama.x + x, 0, end + dz))
+      farGlow.push(roundSkirt(size * 0.95, Math.min(4, size * 0.45)).translate(mama.x + x, 0, end + dz))
+    }
+    this.far.add(solid(merge(farParts), bag, 2.5, ICE_LINE))
+    if (glow) this.far.add(glow(mergeGeometries(farGlow)!))
     scene.add(this.far)
 
     // Little bits of ice adrift on the water.

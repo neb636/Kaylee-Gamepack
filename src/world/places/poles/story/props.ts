@@ -2,10 +2,12 @@
 // balloon she flies in the finale is the one in the films): Sparkle's balloon, the scientists' red ship and its fish
 // crate, Nari the narwhal, sea ice, icebergs, snowy mountains, the stars and the polar lights. All toon shapes with
 // ink outlines (engine3d/geo.ts), built into a caller's Bag.
-import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, DoubleSide, Group, Mesh, MeshBasicMaterial, PlaneGeometry, Points, PointsMaterial, ShaderMaterial, Vector3 } from 'three'
+import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, DoubleSide, ExtrudeGeometry, Group, IcosahedronGeometry, Mesh, MeshBasicMaterial, PlaneGeometry, Points, PointsMaterial, ShaderMaterial, Shape, Vector2, Vector3 } from 'three'
 import { speechLevel } from '../../../../sdk'
 import type { Bag } from '../../../engine3d/dispose'
-import { merge, P, solid, solidMix } from '../../../engine3d/geo'
+import { bake, merge, P, solid, solidMix } from '../../../engine3d/geo'
+import { smoothstep } from '../../../../sdk/math'
+import { skirtGeo } from '../look/sea'
 import { PAL } from '../../../engine3d/toon'
 
 /** A little random-number maker with a seed, so a set looks the same every time. */
@@ -220,54 +222,276 @@ export class Narwhal {
 }
 
 // ---------------------------------------------------------------- ice, snow and mountains
+// (The look pass of 2026-11-16: floes with a cushion of snow on top and turquoise sides going down into the water,
+// faceted icebergs and mountains sculpted from a lumpy ball instead of cones, soft blue-grey lines on the ice instead
+// of ink. The polar sea's skirts, look/sea.ts, give each its glow under the water.)
 
-/** A floe: a flat slab of sea ice with a ragged outline, its top at y = `top`. `r`: about how far across (m). */
-export function floeGeo(r: number, seed: number, top = 0.18, thick = 0.5) {
+/** The soft line round ice and snow (ink would draw black scribbles across a field of snow). */
+export const ICE_LINE = '#7F9CC8'
+/** The ice's colors, top to bottom: snow, the rim of the slab, its side, the waterline, under the water. */
+const ICE_COLS = { snow: '#FFFFFF', rim: '#EAF5FF', side: '#CBEBFA', water: '#7FD6EE', under: '#3FA9D8' }
+
+/** A floe's ragged, rounded outline ([x, z], counter-clockwise from above), about `r` meters out. */
+export function floeOutline(r: number, seed: number): [number, number][] {
   const rand = rng(seed)
   const n = 7 + Math.floor(rand() * 3)
+  const radii: number[] = []
+  for (let i = 0; i < n; i++) radii.push(r * (0.78 + rand() * 0.34))
+  const m = Math.max(12, Math.min(30, Math.round(r * 4)))
+  const wob = rand() * 6
   const pts: [number, number][] = []
-  for (let i = 0; i < n; i++) {
-    const a = (i / n) * Math.PI * 2
-    const rr = r * (0.78 + rand() * 0.34)
-    pts.push([Math.cos(a) * rr, Math.sin(a) * rr])
+  for (let i = 0; i < m; i++) {
+    const a = (i / m) * Math.PI * 2
+    const u = (i / m) * n
+    const i0 = Math.floor(u)
+    const f = u - i0
+    const k = f * f * (3 - 2 * f)
+    const rr = (radii[i0 % n] * (1 - k) + radii[(i0 + 1) % n] * k) * (1 + 0.035 * Math.sin(a * 5 + wob) + 0.02 * Math.sin(a * 11 + wob * 2))
+    pts.push([Math.cos(a) * rr, -Math.sin(a) * rr])
   }
-  const g = P.prism(pts, thick, ICE).rotateX(-Math.PI / 2).translate(0, top - thick / 2, 0)
-  // The sides a shade bluer than the top, so the slab reads as thick ice, not paper.
+  return pts
+}
+
+/** An outline with its corners rounded off (Chaikin's corner cutting, `times` over): an octagon becomes a floe. */
+export function roundOff(pts: [number, number][], times = 2): [number, number][] {
+  let p = pts
+  for (let t = 0; t < times; t++) {
+    const out: [number, number][] = []
+    for (let i = 0; i < p.length; i++) {
+      const [ax, az] = p[i]
+      const [bx, bz] = p[(i + 1) % p.length]
+      out.push([ax * 0.75 + bx * 0.25, az * 0.75 + bz * 0.25], [ax * 0.25 + bx * 0.75, az * 0.25 + bz * 0.75])
+    }
+    p = out
+  }
+  return p
+}
+
+/** Paints an extrusion by height: snow on its top, then the rim, the side bluer down to the water and under it. */
+function paintIce(g: BufferGeometry, top: number, snowTop: number | null) {
   const pos = g.attributes.position
   const col = g.attributes.color
-  const c = new Color(ICE_SHADE)
-  for (let i = 0; i < pos.count; i++) if (pos.getY(i) < top - 0.01) col.setXYZ(i, c.r, c.g, c.b)
+  const c = new Color()
+  const side = new Color(ICE_COLS.side)
+  const water = new Color(ICE_COLS.water)
+  const under = new Color(ICE_COLS.under)
+  for (let i = 0; i < pos.count; i++) {
+    const y = pos.getY(i)
+    if (snowTop !== null && y > top - 0.01) c.set(ICE_COLS.snow)
+    else if (y > top - 0.025) c.set(ICE_COLS.rim)
+    else if (y > 0.02) c.copy(side).lerp(water, smoothstep(top - 0.05, 0.02, y))
+    else c.copy(water).lerp(under, smoothstep(0.02, -0.25, y))
+    col.setXYZ(i, c.r, c.g, c.b)
+  }
+}
+
+/** A slab of ice with this outline ([x, z]), its top at `top`, `thick` deep, edges rounded; `snow` puts a soft
+ *  cushion of snow on it (its top is then `top`, the ice's a little lower; a number: how thick). */
+export function iceSlab(pts: [number, number][], top = 0.18, thick = 0.5, snow: boolean | number = true) {
+  const pillow = snow === false ? 0 : typeof snow === 'number' ? snow : Math.min(0.1, thick * 0.22)
+  const iceTop = top - pillow
+  const bevel = Math.min(0.08, thick * 0.18)
+  const depth = Math.max(0.02, thick - pillow - bevel * 2)
+  const shape = new Shape(pts.map(([x, z]) => new Vector2(x, -z)))
+  const slab = bake(new ExtrudeGeometry(shape, { depth, bevelEnabled: true, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 2, curveSegments: 1 }).rotateX(-Math.PI / 2), ICE)
+  slab.translate(0, iceTop - depth - bevel, 0)
+  paintIce(slab, iceTop, null)
+  if (!snow) return slab
+  // The cushion: the outline pulled in a little (more on a small floe), thick and very rounded.
+  let cx = 0
+  let cz = 0
+  for (const [x, z] of pts) {
+    cx += x / pts.length
+    cz += z / pts.length
+  }
+  const r = pts.reduce((s, [x, z]) => s + Math.hypot(x - cx, z - cz), 0) / pts.length
+  const inset = Math.min(0.32, 0.1 + r * 0.03)
+  const inner = new Shape(pts.map(([x, z]) => {
+    const dx = x - cx
+    const dz = z - cz
+    const l = Math.hypot(dx, dz) || 1
+    const k = Math.max(0.3, (l - inset - 0.12) / l)
+    return new Vector2(cx + dx * k, -(cz + dz * k))
+  }))
+  // (Its bottom hidden in the ice, its top at `top`: the bevel rounds it over.)
+  const tall = pillow + 0.04
+  const pb = tall * 0.4
+  const cushion = bake(new ExtrudeGeometry(inner, { depth: tall - pb * 2, bevelEnabled: true, bevelThickness: pb, bevelSize: pb + 0.05, bevelSegments: 2, curveSegments: 1 }).rotateX(-Math.PI / 2), SNOW)
+  cushion.translate(0, iceTop - 0.04 + pb, 0)
+  return merge([slab, cushion])
+}
+
+/** A floe: a slab of sea ice with a ragged, rounded outline and a cushion of snow, its top at y = `top`. `r`: about
+ *  how far across (m). */
+export function floeGeo(r: number, seed: number, top = 0.18, thick = 0.5, snow = true) {
+  return iceSlab(floeOutline(r, seed), top, thick, snow)
+}
+/** The glow round `floeGeo(r, seed)` under the water (look/sea.ts PolarSea.skirt). */
+export function floeSkirt(r: number, seed: number) {
+  return skirtGeo(floeOutline(r, seed), Math.max(0.55, Math.min(2.2, r * 0.32)))
+}
+
+// A little 3D value noise for the lumps (the same every time for a seed).
+function hash3(x: number, y: number, z: number) {
+  const h = Math.sin(x * 127.1 + y * 311.7 + z * 74.7) * 43758.5453
+  return h - Math.floor(h)
+}
+function noise3(x: number, y: number, z: number) {
+  const xi = Math.floor(x)
+  const yi = Math.floor(y)
+  const zi = Math.floor(z)
+  const xf = x - xi
+  const yf = y - yi
+  const zf = z - zi
+  const s = (t: number) => t * t * (3 - 2 * t)
+  const u = s(xf)
+  const v = s(yf)
+  const w = s(zf)
+  const l = (a: number, b: number, t: number) => a + (b - a) * t
+  const c = (dx: number, dy: number, dz: number) => hash3(xi + dx, yi + dy, zi + dz)
+  return l(l(l(c(0, 0, 0), c(1, 0, 0), u), l(c(0, 1, 0), c(1, 1, 0), u), v), l(l(c(0, 0, 1), c(1, 0, 1), u), l(c(0, 1, 1), c(1, 1, 1), u), v), w)
+}
+const fbm = (x: number, y: number, z: number) => noise3(x, y, z) * 0.6 + noise3(x * 2.1 + 5, y * 2.1, z * 2.1) * 0.3 + noise3(x * 4.3, y * 4.3 + 9, z * 4.3) * 0.1
+
+interface LumpOpts {
+  /** Half-widths and the height above the water (m). */
+  rx: number
+  rz: number
+  h: number
+  seed: number
+  /** Peaks ([angle round, out from the middle 0..1, height ×]), or a flat top. */
+  peaks?: [number, number, number][]
+  flat?: boolean
+  /** How far it goes below the waterline (m). */
+  under?: number
+  detail?: number
+  /** How rough (0..1). */
+  rough?: number
+  paint(cy: number, ny: number, hf: number, r: () => number): string
+}
+
+/** A faceted lump: a ball pushed into peaks (or a table), roughened by noise, flat-shaded, each facet painted. */
+function lump(o: LumpOpts) {
+  const base = new IcosahedronGeometry(1, o.detail ?? 3)
+  const g = base.index ? base.toNonIndexed() : base
+  const pos = g.attributes.position
+  const rough = o.rough ?? 0.55
+  const sd = o.seed * 1.37
+  const peaks = (o.peaks ?? []).map(([a, d, k]) => ({ x: Math.cos(a) * d, z: Math.sin(a) * d, k }))
+  const v = new Vector3()
+  for (let i = 0; i < pos.count; i++) {
+    v.fromBufferAttribute(pos, i)
+    const n = fbm(v.x * 1.7 + sd, v.y * 1.7, v.z * 1.7 - sd)
+    let x = v.x
+    let z = v.z
+    let y: number
+    if (v.y < 0) {
+      // Under the water: a short keel, a little wider than the top.
+      y = v.y * (o.under ?? o.h * 0.15)
+      x *= 1.04
+      z *= 1.04
+    } else if (o.flat) {
+      // A table: cliffs up to an edge, rounded over, then flat.
+      const e = 0.42
+      y = v.y < e ? (v.y / e) * 0.92 : 0.92 + (1 - Math.cos(((v.y - e) / (1 - e)) * Math.PI * 0.5)) * 0.08
+      const shrink = v.y < e ? 1 : Math.cos(((v.y - e) / (1 - e)) * Math.PI * 0.5) * 0.25 + 0.75
+      x = (v.x / Math.max(0.0001, Math.hypot(v.x, v.z))) * Math.sqrt(1 - Math.min(v.y, e) ** 2) * shrink
+      z = (v.z / Math.max(0.0001, Math.hypot(v.x, v.z))) * Math.sqrt(1 - Math.min(v.y, e) ** 2) * shrink
+      y *= o.h
+    } else {
+      // Peaks: the top pulled up toward each, most where the ball points at it.
+      let lift = 0.35
+      for (const p of peaks) {
+        const d = Math.hypot(v.x - p.x, v.z - p.z)
+        lift = Math.max(lift, p.k * Math.exp(-(d * d) / 0.18))
+      }
+      y = Math.pow(v.y, 0.85) * lift * o.h
+      // (Higher up, narrower: a peak, not a dome.)
+      const narrow = 1 - 0.45 * Math.pow(v.y, 1.5)
+      x *= narrow
+      z *= narrow
+    }
+    const push = 1 + (n - 0.5) * rough * 0.5
+    pos.setXYZ(i, x * o.rx * push, y * (v.y > 0 ? 1 + (n - 0.5) * rough * 0.25 : 1), z * o.rz * push)
+  }
+  g.computeVertexNormals()
+  const nrm = g.attributes.normal
+  const rgb = new Float32Array(pos.count * 3)
+  const r = rng(o.seed + 3)
+  const c = new Color()
+  let top = 0.0001
+  for (let i = 0; i < pos.count; i++) top = Math.max(top, pos.getY(i))
+  for (let i = 0; i < pos.count; i += 3) {
+    const cy = (pos.getY(i) + pos.getY(i + 1) + pos.getY(i + 2)) / 3
+    const ny = (nrm.getY(i) + nrm.getY(i + 1) + nrm.getY(i + 2)) / 3
+    c.set(o.paint(cy, ny, cy / top, r))
+    for (let k = 0; k < 3; k++) rgb.set([c.r, c.g, c.b], (i + k) * 3)
+  }
+  g.setAttribute('color', new BufferAttribute(rgb, 3))
+  for (const name of Object.keys(g.attributes)) if (!['position', 'normal', 'color'].includes(name)) g.deleteAttribute(name)
   return g
 }
 
-/** A pointy northern iceberg (several leaning peaks on a base). The origin is at the waterline. */
-export function bergGeo(size: number, seed: number) {
+/** Ice facets: snow where they face the sky, pale blue sides going turquoise down to the waterline. */
+function paintBerg(cy: number, ny: number, hf: number, r: () => number) {
+  if (cy < 0) return ICE_COLS.under
+  if (ny > 0.62) return r() < 0.25 ? '#F4FAFF' : SNOW
+  if (cy < 0.25 || hf < 0.08) return ICE_COLS.water
+  const k = r()
+  if (hf < 0.35) return k < 0.3 ? '#A6E2F4' : k < 0.75 ? '#BCE8F7' : '#D3F0FB'
+  return k < 0.25 ? '#C4E9F8' : k < 0.7 ? '#DDF2FC' : '#EEF8FF'
+}
+
+/** A pointy northern iceberg, faceted: a few leaning peaks of ice with snow on every ledge. The origin is at the
+ *  waterline; it reaches about `size` × 2 up. `detail`: how finely faceted (2 for far off). */
+export function bergGeo(size: number, seed: number, detail = size < 1.6 ? 2 : 3) {
   const rand = rng(seed)
-  const parts = [P.cyl(size * 0.9, size * 1.05, size * 0.5, ICE_SHADE, { at: [0, size * 0.1, 0] }, 7)]
-  const n = 3 + Math.floor(rand() * 2)
-  for (let i = 0; i < n; i++) {
-    const a = rand() * Math.PI * 2
-    const d = rand() * size * 0.5
-    const h = size * (1.1 + rand() * 1.3)
-    parts.push(P.cone(size * (0.38 + rand() * 0.25), h, i % 2 ? ICE : '#E6F1FF', { at: [Math.cos(a) * d, h / 2 + size * 0.2, Math.sin(a) * d], rot: [(rand() - 0.5) * 0.3, rand() * 3, (rand() - 0.5) * 0.3] }, 5))
-  }
-  return merge(parts)
+  const n = 2 + Math.floor(rand() * 3)
+  const peaks: [number, number, number][] = []
+  for (let i = 0; i < n; i++) peaks.push([rand() * Math.PI * 2, rand() * 0.55, 0.6 + rand() * 0.55])
+  peaks[0][2] = 1
+  return lump({ rx: size * 0.95, rz: size * (0.8 + rand() * 0.25), h: size * (1.7 + rand() * 0.9), seed, peaks, under: size * 0.3, detail, rough: 0.6, paint: paintBerg })
 }
 
-/** A flat southern iceberg: a table of ice with a blue band at the waterline. */
+/** A flat southern iceberg: a table of ice, cliffs all round, snow on top. */
 export function tableBergGeo(w: number, d: number, h: number) {
-  return merge([P.rbox(w, h, d, 0.25, ICE, { at: [0, h / 2, 0] }), P.rbox(w * 1.01, h * 0.22, d * 1.01, 0.1, ICE_BLUE, { at: [0, h * 0.11, 0] })])
+  return lump({ rx: w / 2, rz: d / 2, h, seed: Math.round(w * 7 + d * 3), flat: true, under: h * 0.25, detail: 3, rough: 0.35, paint: paintBerg })
 }
 
-/** A snowy mountain: a blue-grey cone with a white cap. */
+/** A snowy mountain, faceted: blue-grey rock with snow down its upper slopes and on every ledge. */
 export function mountainGeo(r: number, h: number, seed: number) {
   const rand = rng(seed)
-  const rot: [number, number, number] = [0, rand() * 3, 0]
-  return merge([P.cone(r, h, '#C6D3EC', { at: [0, h / 2, 0], rot }, 6), P.cone(r * 0.56, h * 0.56, SNOW, { at: [0, h * 0.73, 0], rot }, 6), P.cone(r * 0.7, h * 0.5, '#D9E3F5', { at: [r * 0.5, h * 0.25, r * 0.2], rot }, 5)])
+  const peaks: [number, number, number][] = [[rand() * 6, rand() * 0.15, 1], [rand() * 6, 0.45 + rand() * 0.2, 0.55 + rand() * 0.2], [rand() * 6, 0.5 + rand() * 0.2, 0.45 + rand() * 0.2]]
+  return lump({
+    rx: r,
+    rz: r * (0.7 + rand() * 0.25),
+    h,
+    seed: seed + 40,
+    peaks,
+    under: 1,
+    detail: 3,
+    rough: 0.75,
+    paint: (_cy, ny, hf, rr) => {
+      if (hf > 0.62 - ny * 0.25 || ny > 0.78) return rr() < 0.2 ? '#EEF3FF' : SNOW
+      const k = rr()
+      return hf > 0.35 ? (k < 0.5 ? '#B4C0E0' : '#A5B2D8') : k < 0.5 ? '#C3CBE8' : '#B3BEE2'
+    },
+  })
 }
 
-/** A soft snow drift: a low wide mound. */
-export const driftGeo = (r: number, h: number) => P.sphere(r, SNOW, { scale: [1, h / r, 0.7] }, 14)
+/** A soft snow drift: a low wide mound, a little blue underneath. */
+export function driftGeo(r: number, h: number) {
+  const g = P.sphere(r, SNOW, { scale: [1, h / r, 0.7] }, 14)
+  const pos = g.attributes.position
+  const col = g.attributes.color
+  const c = new Color()
+  for (let i = 0; i < pos.count; i++) {
+    c.set(SNOW).lerp(tmpCol.set('#DCE6FA'), smoothstep(h * 0.5, -h * 0.2, pos.getY(i)))
+    col.setXYZ(i, c.r, c.g, c.b)
+  }
+  return g
+}
+const tmpCol = new Color()
 
 // ---------------------------------------------------------------- the sky
 

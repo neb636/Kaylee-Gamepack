@@ -17,14 +17,18 @@ import { bell, clamp, shuffle, speechLevel } from '../../../../../sdk'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../engine3d/camera'
 import { Bag } from '../../../../engine3d/dispose'
-import { bake, merge, P, solid } from '../../../../engine3d/geo'
+import { merge, solid } from '../../../../engine3d/geo'
+import { smoothstep } from '../../../../../sdk/math'
+import { fbm, field, noise, outside, snowColor } from '../../look/ground'
+import { dress } from '../../look/look'
+import { PolarSky } from '../../look/sky'
 import { setOutlineResolution } from '../../../../engine3d/outline'
 import { Particles } from '../../../../engine3d/particles'
 import { applyBands, makeLights } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
 import { knobs } from '../../../../kit/knobs'
 import { Actor } from '../../story/actor'
-import { Balloon, driftGeo, mountainGeo, rng, skyDisc, tableBergGeo } from '../../story/props'
+import { Balloon, driftGeo, ICE_LINE, mountainGeo, rng, tableBergGeo } from '../../story/props'
 import { BEAT, noteAt, partySfx, sing, TUNES, tuneSeconds, type Tune } from './sounds'
 
 const FILE = 'src/world/places/poles/activities/party/song.ts'
@@ -77,7 +81,7 @@ export const SONG_ANCHORS: AnchorInfo[] = [
 ]
 
 type State = 'gather' | 'hum' | 'listen' | 'sing' | 'react' | 'found' | 'done'
-const DAY = { sky: new Color('#DCEBFF'), near: 60, far: 240 }
+const DAY = { sky: new Color('#E2ECFA'), near: 110, far: 400 }
 const WHITE = new Color('#F4F7FF')
 const NOTE_COLORS = ['#FF6FA8', '#FFB24D', '#FFD84D', '#7ED6A5', '#7EC8F2', '#B79CFF']
 const tmp = new Vector3()
@@ -97,7 +101,8 @@ export class SongWorld implements World3D {
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
   private bag = new Bag()
   private lights = makeLights(this.scene)
-  private fog = new Fog('#DCEBFF', DAY.near, DAY.far)
+  private fog = new Fog('#E2ECFA', DAY.near, DAY.far)
+  private sky: PolarSky
   private bg = DAY.sky.clone()
   private w = 1
   private h = 1
@@ -154,22 +159,24 @@ export class SongWorld implements World3D {
     this.rig.fov = 36
     this.rig.camera.near = 0.05
 
-    // The films' Antarctica: a wide land of snow, drifts, mountains behind, table icebergs and a low sun.
+    // The films' Antarctica (story/stage.ts): snow rolling away to the mountains under the painted sky, drifts, ice.
+    this.sky = new PolarSky(bag, 'south')
+    scene.add(this.sky.root)
     const r = rng(14)
-    const ground = [P.box(260, 3, 320, '#FFFFFF', { at: [0, -1.5, -60] })]
+    const flat = { x0: -16, x1: 16, z0: -16, z1: 12 }
+    const heightAt = (x: number, z: number) => (fbm(x * 0.025 + 2, z * 0.025) - 0.3) * 12 * smoothstep(0, 60, outside(x, z, flat)) + (noise(x * 0.18, z * 0.18) - 0.5) * 0.12 * smoothstep(4, 14, outside(x, z, { x0: -9, x1: 9, z0: -12, z1: 6 }))
+    scene.add(solid(field({ x0: -200, x1: 200, z0: -220, z1: 40, cell: 1.6, height: heightAt, color: (_x, _z, h, slope) => '#' + snowColor(h, slope, -0.1, 0.6).getHexString() }), bag, 0))
+    const drifts = []
     for (let i = 0; i < 16; i++) {
       const x = -30 + r() * 60
       const z = -30 + r() * 24
-      ground.push(bake(driftGeo(2 + r() * 3.5, 0.35 + r() * 0.5), '#FFFFFF', { at: [x, 0, z] }))
+      drifts.push(driftGeo(2 + r() * 3.5, 0.35 + r() * 0.5).translate(x, heightAt(x, z) - 0.05, z))
     }
     // Little drifts and ice blocks near the row, so the stage isn't a bare sheet.
-    for (const [x, z, s] of [[-6.4, -3.2, 1.1], [6.6, -2.6, 1.3], [-2.4, -4.6, 0.9], [3.2, -4.9, 1], [-7.2, 1.8, 0.8], [7.3, 2, 0.9]] as const) ground.push(bake(driftGeo(s * 1.6, s * 0.4), '#FFFFFF', { at: [x, 0, z] }))
-    scene.add(solid(merge(ground), bag, 2.5))
-    scene.add(solid(merge([[-70, -130, 26, 30, 1], [-20, -150, 34, 40, 2], [36, -140, 24, 26, 3], [-120, -110, 22, 24, 4], [84, -120, 20, 22, 5]].map(([x, z, rr, h, seed]) => mountainGeo(rr, h, seed).translate(x, 0, z))), bag, 3))
-    scene.add(solid(merge([tableBergGeo(20, 10, 4).translate(34, -0.4, -52), tableBergGeo(13, 8, 3).translate(-36, -0.4, -44), tableBergGeo(3.2, 2, 1.1).translate(-8.4, -0.2, -6.5), tableBergGeo(2.2, 1.6, 0.8).translate(9.2, -0.2, -4.2)]), bag, 3))
-    const sun = skyDisc(bag, 9, '#FFF3C4', '#FFE9A8')
-    sun.position.set(-62, 30, -190)
-    scene.add(sun)
+    for (const [x, z, s] of [[-6.4, -3.2, 1.1], [6.6, -2.6, 1.3], [-2.4, -4.6, 0.9], [3.2, -4.9, 1], [-7.2, 1.8, 0.8], [7.3, 2, 0.9]] as const) drifts.push(driftGeo(s * 1.6, s * 0.4).translate(x, 0, z))
+    scene.add(solid(merge(drifts), bag, 1.5, ICE_LINE))
+    scene.add(solid(merge([[-70, -150, 26, 30, 1], [-20, -170, 34, 40, 2], [36, -160, 24, 26, 3], [-120, -130, 22, 24, 4], [84, -140, 20, 22, 5]].map(([x, z, rr, h, seed]) => mountainGeo(rr, h, seed).translate(x, heightAt(x, z) - 2, z))), bag, 2.5, ICE_LINE))
+    scene.add(solid(merge([tableBergGeo(20, 10, 4).translate(34, heightAt(34, -52) - 0.6, -52), tableBergGeo(13, 8, 3).translate(-36, heightAt(-36, -44) - 0.6, -44), tableBergGeo(3.2, 2, 1.1).translate(-8.4, -0.2, -6.5), tableBergGeo(2.2, 1.6, 0.8).translate(9.2, -0.2, -4.2)]), bag, 2.5, ICE_LINE))
 
     // The cast. Every dad the same height and the same look: only the song tells them apart.
     const actor = (who: ConstructorParameters<typeof Actor>[0], height: number, voice: string | null = null) => {
@@ -198,6 +205,8 @@ export class SongWorld implements World3D {
     this.heartMat = bag.add(new SpriteMaterial({ map: bag.add(heartTexture()), transparent: true, depthWrite: false, fog: false }))
     this.noteMats = NOTE_COLORS.map((c) => bag.add(new SpriteMaterial({ map: bag.add(noteTexture(c)), transparent: true, depthWrite: false, fog: false })))
     this.glow = new Sprite(bag.add(new SpriteMaterial({ map: bag.add(glowTexture()), transparent: true, depthWrite: false, opacity: 0, fog: false })))
+    // The polar look on everything (look/look.ts).
+    dress(scene)
     this.glow.visible = false
     scene.add(this.glow)
 
@@ -461,7 +470,10 @@ export class SongWorld implements World3D {
     const dist = this.rig.camera.position.length()
     this.fog.near = DAY.near + (dist - 5.5 - DAY.near) * k
     this.fog.far = DAY.far + (dist + 1.6 + (1 - SONG.white) * 14 - DAY.far) * k
-    this.bg.copy(DAY.sky).lerp(WHITE, k)
+    // (The painted sky until the white closes in; then the white itself.)
+    this.sky.update(t, this.rig.camera)
+    this.sky.root.visible = k < 0.4
+    this.bg.copy(this.sky.haze).lerp(WHITE, k)
     this.fog.color.copy(this.bg)
     const fall = (0.25 + 5 * k) * dt * 60
     for (let i = 0; i < fall; i++) if (Math.random() < 0.5) this.flakes.emit((Math.random() - 0.5) * 22 - k * 3, 6 + Math.random() * 3, -6 + Math.random() * 12, 0.4 + k * 4.5, -1.2 - Math.random() - k, 0, 5, 0.07 + Math.random() * 0.06)

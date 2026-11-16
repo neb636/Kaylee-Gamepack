@@ -21,7 +21,7 @@
 // The ground is a height field (course.ts `ground`): on it he follows its height; where it drops away faster than he
 // can fall (a bump's crest, the kicker's end, the lip, the edge) he flies. Built for engine3d/View3D.tsx; nothing here
 // comes from Thailand. The steering, the slide and the swim are feel-lab knobs (?feel=1).
-import { BackSide, BufferAttribute, BufferGeometry, Color, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Quaternion, Raycaster, Scene, SphereGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
+import { BufferAttribute, BufferGeometry, Color, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Quaternion, Raycaster, Scene, SphereGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { clamp, sounds } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -32,9 +32,10 @@ import { setOutlineResolution } from '../../../../engine3d/outline'
 import { Particles } from '../../../../engine3d/particles'
 import { applyBands, makeLights, PAL, toon } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
-import { Water } from '../../../../engine3d/water'
+import { dress } from '../../look/look'
+import { PolarSea, SEA } from '../../look/sea'
+import { PolarSky } from '../../look/sky'
 import { FingerWheel } from '../../../../engine3d/wheel'
-import { skyDisc } from '../../story/props'
 import { ADELIES, base, bumps, CRACK, cx, dcx, depth, DIVE_END, EDGE, ground, half, HOME, inCrack, KICKER, KRILL, lane, LOOKS, ridge, RIDGE, SEAL, SHELF, SHELF_Y, SPOTS, TOP_END, type LookKind } from './course'
 import { hatGeo, Humpback, IceSeal, Lookalike, Skua } from './critters'
 import { Penguin, Seal } from './penguin'
@@ -141,8 +142,8 @@ type Mode = 'ready' | 'slide' | 'bank' | 'swim' | 'leap' | 'shelf' | 'gather' | 
 /** The films' Antarctic sky (story/stage.ts). */
 const SKY = '#DCEBFF'
 const DEEP = '#3D7FBF'
-const ICE = new Color('#ABD3F4')
-const ICE_STRIPE = new Color('#8EC2EE')
+const ICE = new Color('#A2D8F4')
+const ICE_STRIPE = new Color('#86C6EE')
 const SNOW = new Color('#FFFFFF')
 const WALL = new Color('#E4EBF8')
 const CRACK_BLUE = new Color('#4F7FBF')
@@ -207,15 +208,14 @@ export class PenguinSlide implements World3D {
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
   private bag = new Bag()
   private lights = makeLights(this.scene)
-  private fogAir = new Fog(SKY, 80, 260)
+  private fogAir = new Fog(SKY, 120, 420)
   private fogSea = new Fog(DEEP, 3, 46)
-  private skyColor = new Color(SKY)
   private seaColor = new Color(DEEP)
-  private water: Water
+  private sky: PolarSky
+  private ocean: PolarSea
   private ribbon: Mesh
   private seafloor: Mesh
   private shelf: Group
-  private sun: Group
   private shafts: { mesh: Mesh; update(t: number): void }
   private bedStop: (() => void) | null = null
   private bedUnder: boolean | null = null
@@ -312,20 +312,17 @@ export class PenguinSlide implements World3D {
     private events: SlideEvents,
   ) {
     const { scene, bag } = this
-    scene.background = this.skyColor.clone()
+    scene.background = this.seaColor.clone()
     scene.fog = this.fogAir
     applyBands()
     this.rig.fov = 46
     this.rig.lag = 0.28
 
     // ---- The sea, seen from above and from below, and its floor ----
-    this.water = new Water({ size: 700, deep: '#5FA6DE', shallow: '#78BCEA', haze: SKY, hazeNear: 70, hazeFar: 220 }, bag)
-    this.water.mesh.position.set(cx(EDGE), 0, -(EDGE + 300))
-    scene.add(this.water.mesh)
-    const under = new Mesh(bag.add(new PlaneGeometry(700, 700)), bag.add(new MeshBasicMaterial({ color: '#B7E2F8', side: BackSide })))
-    under.rotation.x = -Math.PI / 2
-    under.position.set(cx(EDGE), -0.03, -(EDGE + 300))
-    scene.add(under)
+    // (Its underside is the bright ceiling he swims under: look/sea.ts.)
+    this.sky = new PolarSky(bag, 'south')
+    this.ocean = new PolarSea({ colors: SEA.south, hazeNear: 80, hazeFar: 280, grid: 180 }, bag)
+    scene.add(this.sky.root, ...this.ocean.meshes)
     this.seafloor = new Mesh(bag.add(new PlaneGeometry(160, DIVE_END - EDGE + 120)), toon('#7E9CC4'))
     this.seafloor.rotation.x = -Math.PI / 2
     this.seafloor.position.set(cx(EDGE), -9, -(EDGE + DIVE_END) / 2)
@@ -338,11 +335,9 @@ export class PenguinSlide implements World3D {
       rocks.push(P.sphere(r, rand() < 0.5 ? '#8B97B3' : '#717D9C', { at: [cx(s) + (rand() - 0.5) * 30, -9 + r * 0.3, -s], scale: [1.3, 0.7, 1] }, 10))
     }
     scene.add(solid(merge(rocks), bag, 2))
-    scene.add(buildFloor(bag, -9), buildSea(bag))
+    scene.add(buildFloor(bag, -9), buildSea(bag, (g) => this.ocean.skirt(g, bag)))
     this.shafts = buildShafts(bag)
     scene.add(this.shafts.mesh)
-    this.sun = skyDisc(bag, 9, '#FFF6C9', '#FFFDF0')
-    scene.add(this.sun)
 
     // ---- The ice: the valley, its snowbanks and walls, the crack and the cliff ----
     this.ribbon = this.buildRibbon()
@@ -502,6 +497,9 @@ export class PenguinSlide implements World3D {
     for (const a of this.adelies) if (a.s < this.s) a.dodged = true
     this.placePapa(0)
 
+    // The polar look on everything (look/look.ts).
+    dress(scene)
+
     this.unwatch = watch('slide', () => ({
       'her push': [this.wheel.push, 1],
       steer: [this.wheel.k, 1],
@@ -657,7 +655,8 @@ export class PenguinSlide implements World3D {
     this.bankCool -= dt
     this.bonkCool -= dt
     this.sealCool -= dt
-    this.water.update(t)
+    this.sky.update(t, this.rig.camera, this.fogAir)
+    this.ocean.update(this.rig.camera.position.x, this.rig.camera.position.z - 14, this.sky.sun)
     const k = this.wheel.update(dt, t, STEER)
     if (Math.abs(k) > 0.05) {
       this.counts.steered += dt
@@ -767,15 +766,13 @@ export class PenguinSlide implements World3D {
     // Under the sea, the world turns blue.
     const underSea = this.rig.camera.position.y < 0
     this.scene.fog = underSea ? this.fogSea : this.fogAir
-    ;(this.scene.background as Color).copy(underSea ? this.seaColor : this.skyColor)
+    this.sky.root.visible = !underSea
     if (underSea !== this.bedUnder) {
       this.bedUnder = underSea
       this.bedStop?.()
       this.bedStop = slideBed(underSea)
     }
     this.shafts.update(t)
-    this.sun.visible = !underSea
-    this.sun.position.set(this.rig.camera.position.x - 80, this.rig.camera.position.y + 95, this.rig.camera.position.z - 300)
 
     const p = this.pos()
     this.lights.follow(p.x, this.y, p.z)
