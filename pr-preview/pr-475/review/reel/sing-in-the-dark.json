@@ -1,0 +1,15 @@
+{
+  "kind": "reel",
+  "name": "sing-in-the-dark",
+  "title": "Robot play, software rendering (choppy: the smooth reel needs the Mac's GPU)",
+  "video": "sing-in-the-dark.mp4",
+  "gif": "sing-in-the-dark.gif",
+  "seconds": 50,
+  "browser": "chromium",
+  "viewport": "ipad-landscape",
+  "moments": [
+    { "name": "whiteout", "status": "ok" },
+    { "name": "edge", "status": "ok" },
+    { "name": "together", "status": "ok" }
+  ]
+}

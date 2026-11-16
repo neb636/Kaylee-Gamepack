@@ -5,7 +5,7 @@
   "title": "Poles › Huddle",
   "intro": "",
   "page": "poles-huddle.html",
-  "audio": null,
+  "audio": "poles-huddle.mp3",
   "lines": 26,
   "seconds": 72,
   "missing": 0,
@@ -90,7 +90,11 @@
       "part": "huddle",
       "when": "---- Emperor Huddle (activities/huddle/) ---- Sparkle says what to do (and a fact the first time something comes up). Papa is the only dad who talks (the others honk their own songs), Pebble in Pebble's voice. Finite: one line per moment, a few thank-yous in turn. In the last section Papa sings Pebble his song (synthesized: activities/party/sounds.ts TUNES[0], the one the finale's chick hums) and Pebble peeps it back.",
       "ms": 2858,
-      "flags": []
+      "flags": [],
+      "span": [
+        0,
+        2.82
+      ]
     },
     {
       "path": [
@@ -103,7 +107,11 @@
       "part": "huddle",
       "when": "---- Emperor Huddle (activities/huddle/) ---- Sparkle says what to do (and a fact the first time something comes up). Papa is the only dad who talks (the others honk their own songs), Pebble in Pebble's voice. Finite: one line per moment, a few thank-yous in turn. In the last section Papa sings Pebble his song (synthesized: activities/party/sounds.ts TUNES[0], the one the finale's chick hums) and Pebble peeps it back.",
       "ms": 1757,
-      "flags": []
+      "flags": [],
+      "span": [
+        3.21,
+        4.96
+      ]
     },
     {
       "path": [
@@ -118,6 +126,10 @@
       "ms": 3450,
       "flags": [
         "long"
+      ],
+      "span": [
+        5.36,
+        8.72
       ]
     },
     {
@@ -131,7 +143,11 @@
       "part": "huddle",
       "when": "---- Emperor Huddle (activities/huddle/) ---- Sparkle says what to do (and a fact the first time something comes up). Papa is the only dad who talks (the others honk their own songs), Pebble in Pebble's voice. Finite: one line per moment, a few thank-yous in turn. In the last section Papa sings Pebble his song (synthesized: activities/party/sounds.ts TUNES[0], the one the finale's chick hums) and Pebble peeps it back.",
       "ms": 2285,
-      "flags": []
+      "flags": [],
+      "span": [
+        9.12,
+        11.38
+      ]
     },
     {
       "path": [
@@ -144,7 +160,11 @@
       "part": "huddle",
       "when": "---- Emperor Huddle (activities/huddle/) ---- Sparkle says what to do (and a fact the first time something comes up). Papa is the only dad who talks (the others honk their own songs), Pebble in Pebble's voice. Finite: one line per moment, a few thank-yous in turn. In the last section Papa sings Pebble his song (synthesized: activities/party/sounds.ts TUNES[0], the one the finale's chick hums) and Pebble peeps it back.",
       "ms": 2947,
-      "flags": []
+      "flags": [],
+      "span": [
+        11.77,
+        14.65
+      ]
     },
     {
       "path": [
@@ -157,7 +177,11 @@
       "part": "huddle",
       "when": "---- Emperor Huddle (activities/huddle/) ---- Sparkle says what to do (and a fact the first time something comes up). Papa is the only dad who talks (the others honk their own songs), Pebble in Pebble's voice. Finite: one line per moment, a few thank-yous in turn. In the last section Papa sings Pebble his song (synthesized: activities/party/sounds.ts TUNES[0], the one the finale's chick hums) and Pebble peeps it back.",
       "ms": 2362,
-      "flags": []
+      "flags": [],
+      "span": [
+        15.05,
+        17.38
+      ]
     },
     {
       "path": [
@@ -172,6 +196,10 @@
       "ms": 3312,
       "flags": [
         "long"
+      ],
+      "span": [
+        17.77,
+        21
       ]
     },
     {
@@ -187,6 +215,10 @@
       "ms": 3000,
       "flags": [
         "new"
+      ],
+      "span": [
+        21.4,
+        24.28
       ]
     },
     {
@@ -200,7 +232,11 @@
       "part": "huddle",
       "when": "---- Emperor Huddle (activities/huddle/) ---- Sparkle says what to do (and a fact the first time something comes up). Papa is the only dad who talks (the others honk their own songs), Pebble in Pebble's voice. Finite: one line per moment, a few thank-yous in turn. In the last section Papa sings Pebble his song (synthesized: activities/party/sounds.ts TUNES[0], the one the finale's chick hums) and Pebble peeps it back.",
       "ms": 2256,
-      "flags": []
+      "flags": [],
+      "span": [
+        24.67,
+        26.84
+      ]
     },
     {
       "path": [
@@ -216,6 +252,10 @@
       "ms": 4366,
       "flags": [
         "long"
+      ],
+      "span": [
+        28.55,
+        32.79
       ]
     },
     {
@@ -232,6 +272,10 @@
       "ms": 4649,
       "flags": [
         "long"
+      ],
+      "span": [
+        33.18,
+        37.71
       ]
     },
     {
@@ -248,6 +292,10 @@
       "ms": 4466,
       "flags": [
         "long"
+      ],
+      "span": [
+        38.1,
+        42.46
       ]
     },
     {
@@ -265,6 +313,10 @@
       "flags": [
         "long",
         "new"
+      ],
+      "span": [
+        42.86,
+        47.66
       ]
     },
     {
@@ -279,7 +331,11 @@
       "part": "huddle › papa",
       "when": "",
       "ms": 2646,
-      "flags": []
+      "flags": [],
+      "span": [
+        49.37,
+        51.97
+      ]
     },
     {
       "path": [
@@ -294,7 +350,11 @@
       "part": "huddle › papa › thanks",
       "when": "",
       "ms": 2186,
-      "flags": []
+      "flags": [],
+      "span": [
+        53.68,
+        55.85
+      ]
     },
     {
       "path": [
@@ -309,7 +369,11 @@
       "part": "huddle › papa › thanks",
       "when": "",
       "ms": 2695,
-      "flags": []
+      "flags": [],
+      "span": [
+        56.24,
+        58.9
+      ]
     },
     {
       "path": [
@@ -324,7 +388,11 @@
       "part": "huddle › papa › thanks",
       "when": "",
       "ms": 1709,
-      "flags": []
+      "flags": [],
+      "span": [
+        59.29,
+        60.99
+      ]
     },
     {
       "path": [
@@ -338,7 +406,11 @@
       "part": "huddle › papa",
       "when": "",
       "ms": 1854,
-      "flags": []
+      "flags": [],
+      "span": [
+        62.71,
+        64.55
+      ]
     },
     {
       "path": [
@@ -352,7 +424,11 @@
       "part": "huddle › papa",
       "when": "",
       "ms": 2448,
-      "flags": []
+      "flags": [],
+      "span": [
+        64.95,
+        67.34
+      ]
     },
     {
       "path": [
@@ -366,7 +442,11 @@
       "part": "huddle › papa",
       "when": "",
       "ms": 1893,
-      "flags": []
+      "flags": [],
+      "span": [
+        67.74,
+        69.6
+      ]
     },
     {
       "path": [
@@ -380,7 +460,11 @@
       "part": "huddle › papa",
       "when": "",
       "ms": 1805,
-      "flags": []
+      "flags": [],
+      "span": [
+        69.99,
+        71.79
+      ]
     },
     {
       "path": [
@@ -397,6 +481,10 @@
       "flags": [
         "long",
         "new"
+      ],
+      "span": [
+        72.19,
+        75.22
       ]
     },
     {
@@ -414,6 +502,10 @@
       "flags": [
         "long",
         "new"
+      ],
+      "span": [
+        75.6,
+        78.68
       ]
     },
     {
@@ -428,7 +520,11 @@
       "part": "huddle › pebble",
       "when": "",
       "ms": 1835,
-      "flags": []
+      "flags": [],
+      "span": [
+        80.38,
+        82.21
+      ]
     },
     {
       "path": [
@@ -442,7 +538,11 @@
       "part": "huddle › pebble",
       "when": "",
       "ms": 2282,
-      "flags": []
+      "flags": [],
+      "span": [
+        82.6,
+        84.86
+      ]
     },
     {
       "path": [
@@ -456,7 +556,11 @@
       "part": "huddle › pebble",
       "when": "",
       "ms": 1283,
-      "flags": []
+      "flags": [],
+      "span": [
+        85.26,
+        86.54
+      ]
     }
   ]
 }

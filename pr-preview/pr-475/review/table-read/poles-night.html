@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Table read: Poles › Night</title>
+<style>
+:root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;color-scheme:dark}}
+:root[data-theme="dark"]{--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;font:16px/1.4 ui-rounded,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink)}
+header{padding-block:16px 4px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:760px;margin:0 auto}
+.player{position:sticky;top:env(safe-area-inset-top,0px);z-index:2;background:var(--bg);padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line)}
+.player audio{display:block;max-width:728px;margin:0 auto}
+h1{font-size:20px;margin:0 0 4px}.sum{color:var(--soft);font-size:14px;margin:0 0 10px}.intro{font-size:14px;margin:0 0 6px}
+audio{width:100%}main{padding-block:4px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:760px;margin:0 auto}
+h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft);margin:22px 0 6px}
+.cast{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+.cast li{font-size:13px;padding:3px 10px;border-radius:99px;background:hsl(var(--h) 80% 50% / .14)}
+.cast small{color:var(--soft)}
+.line{display:grid;grid-template-columns:88px 1fr;gap:2px 10px;width:100%;text-align:left;font:inherit;color:inherit;background:var(--card);border:1px solid var(--line);border-left:5px solid hsl(var(--h) 75% 58%);border-radius:12px;padding:10px 12px;margin:6px 0;cursor:pointer}
+.line.playing{outline:3px solid var(--pink)}.line.silent{opacity:.6;border-left-style:dashed}
+.who{font-weight:700;font-size:14px;color:hsl(var(--h) 60% 42%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .who{color:hsl(var(--h) 80% 74%)}}:root[data-theme="dark"] .who{color:hsl(var(--h) 80% 74%)}
+.text{font-size:17px}.text s{display:block;color:var(--soft);font-size:14px}
+.when,.meta{grid-column:2;font-size:13px;color:var(--soft)}
+.flag{display:inline-block;font-weight:600;font-size:11.5px;padding:1px 7px;border-radius:99px;margin-left:6px;background:#ffe2a8;color:#5a3d00}
+.flag.name{background:#e9dcff;color:#3d2470}.flag.new,.flag.changed{background:#c9f3dd;color:#0d4a2c}.flag.reused{background:#dbe9ff;color:#173a6b}.flag.name,.flag.not-recorded,.flag.rule-8,.flag.touch-only{background:#ffd0d6;color:#6b0717}
+</style></head><body>
+<header>
+<h1>Table read: Poles › Night</h1>
+
+<p class="sum">103 lines · 4.9 min of talk · her name 0× · 103 flagged</p>
+<ul class="cast"><li style="--h:330"><b>Terry</b> 10 lines <small>verse voice</small></li><li style="--h:265"><b>Mama Bear</b> 2 lines <small>sage voice</small></li><li style="--h:190"><b>Pola</b> 20 lines <small>ballad voice</small></li><li style="--h:25"><b>Nari</b> 1 lines <small>coral voice</small></li><li style="--h:140"><b>Sparkle</b> 42 lines <small>coral voice</small></li><li style="--h:45"><b>Papa</b> 8 lines <small>ash voice</small></li><li style="--h:300"><b>Pebble</b> 20 lines <small>nova voice</small></li></ul>
+</header>
+<div class="player"><audio controls preload="metadata" src="poles-night.mp3"></audio></div>
+<main>
+<h2>night › in</h2><button class="line" data-i="0" style="--h:330">
+  <span class="who">Terry</span>
+  <span class="text">Snow! The fox is white. Time to fly south!</span>
+  <span class="when">Terry, landing on the balloon's rope.</span>
+  <span class="meta">4.4 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="1" style="--h:265">
+  <span class="who">Mama Bear</span>
+  <span class="text">Goodbye, my brave cub! Hurry home!</span>
+  <span class="when">Mama Bear hugs Pola at the balloon. (♻️ story.homeIn.bye)</span>
+  <span class="meta">4.1 s<b class="flag long">long</b><b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="2" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">I'll come back, Mama. I promise.</span>
+  <span class="when">🎬 Film 1, night-in: Time to fly. The autumn tundra under fresh snow; the Arctic fox, all white now, pounces.</span>
+  <span class="meta">3.8 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="3" style="--h:25">
+  <span class="who">Nari</span>
+  <span class="text">Narwhals stay up north. Say hi for me!</span>
+  <span class="when">At the ice edge, Nari bursts up and spins as the balloon goes over.</span>
+  <span class="meta">3.6 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="4" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">All aboard! Next stop, the bottom of the world!</span>
+  <span class="when">Sparkle, as the balloon lifts. (♻️ story.homeIn.aboard)</span>
+  <span class="meta">4.3 s<b class="flag long">long</b><b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="5" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Meanwhile, at the bottom of the world...</span>
+  <span class="when">The camera follows the balloon down the little globe into darkness. (♻️ story.slideIn.meanwhile)</span>
+  <span class="meta">3.0 s<b class="flag long">long</b><b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="6" style="--h:45">
+  <span class="who">Papa</span>
+  <span class="text">I'll wait right here, Pebble.</span>
+  <span class="when">Papa at the windy edge of the huddle, looking up; then he hums his song into the wind, alone. (♻️ story.huddleIn.wait)</span>
+  <span class="meta">2.3 s<b class="flag reused">reused</b></span>
+</button>
+<h2>night › fly › start</h2><button class="line" data-i="7" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Hold your finger down to fly up!</span>
+  <span class="when">Sparkle, as the game opens (and when nothing is held for a while: `stuck`).</span>
+  <span class="meta">3.7 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="8" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Click and hold to fly up!</span>
+  
+  <span class="meta">3.0 s<b class="flag new">new</b></span>
+</button>
+<h2>night › fly</h2><button class="line" data-i="9" style="--h:330">
+  <span class="who">Terry</span>
+  <span class="text">Follow me! The pink wind goes south!</span>
+  <span class="when">Terry, flying ahead, as the first pink ribbon of wind shows.</span>
+  <span class="meta">3.7 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="10" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Ride the pink wind south!</span>
+  <span class="when">Sparkle, the first time the balloon reaches the pink ribbon.</span>
+  <span class="meta">2.2 s<b class="flag new">new</b></span>
+</button>
+<h2>night › fly › stuck</h2><button class="line" data-i="11" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Hold your finger down to go up!</span>
+  <span class="when">🎈 Act 1, fly: Hold to Fly. She flies the balloon down the world: hold to heat the air and rise, let go to sink.</span>
+  <span class="meta">2.5 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="12" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Click and hold to go up!</span>
+  
+  <span class="meta">2.2 s<b class="flag new">new</b></span>
+</button>
+<h2>night › fly</h2><button class="line" data-i="13" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Hot air goes up, up, up!</span>
+  <span class="when">Sparkle, the first time the burner lifts the balloon (once).</span>
+  <span class="meta">2.6 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="14" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">This is Papa's song. Hmm hm hmm!</span>
+  <span class="when">She pokes Pebble in the basket: this the first time, then he just hums the song.</span>
+  <span class="meta">3.3 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="15" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">I can't see! It's all fluffy!</span>
+  <span class="when">Silly, never &quot;oops&quot;: held too long, the balloon pokes into a cloud; let go too long, the basket dips in the sea.</span>
+  <span class="meta">2.6 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="16" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">Don't get me wet! I'm too fluffy!</span>
+  <span class="when">🎈 Act 1, fly: Hold to Fly. She flies the balloon down the world: hold to heat the air and rise, let go to sink.</span>
+  <span class="meta">2.4 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="17" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">Phew! I'm melting!</span>
+  <span class="when">The warm middle of the world: Pola fans herself, then Sparkle's fact. (♻️ party.warm, party.warmFact)</span>
+  <span class="meta">2.2 s<b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="18" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">The middle of the world is the warmest part!</span>
+  <span class="when">🎈 Act 1, fly: Hold to Fly. She flies the balloon down the world: hold to heat the air and rise, let go to sink.</span>
+  <span class="meta">3.3 s<b class="flag long">long</b><b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="19" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">Ahh! A cool shower!</span>
+  <span class="when">Through the thundercloud instead of over it.</span>
+  <span class="meta">2.9 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="20" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">The red ship! That's how I got lost!</span>
+  <span class="when">The red ship sails by below.</span>
+  <span class="meta">3.0 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="21" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">No more fish crates for you!</span>
+  <span class="when">🎈 Act 1, fly: Hold to Fly. She flies the balloon down the world: hold to heat the air and rise, let go to sink.</span>
+  <span class="meta">2.2 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="22" style="--h:330">
+  <span class="who">Terry</span>
+  <span class="text">Look down! A whale!</span>
+  <span class="when">A whale spouts below. (♻️ party.whale) Over a country in her passport, Terry says hello (♻️ party.hello).</span>
+  <span class="meta">2.0 s<b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="23" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">It smells like home!</span>
+  <span class="when">The cold comes back, then the albatross. (♻️ party.south, party.albatross)</span>
+  <span class="meta">1.6 s<b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="24" style="--h:330">
+  <span class="who">Terry</span>
+  <span class="text">Hello, albatross! Nearly there!</span>
+  <span class="when">🎈 Act 1, fly: Hold to Fly. She flies the balloon down the world: hold to heat the air and rise, let go to sink.</span>
+  <span class="meta">3.0 s<b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="25" style="--h:330">
+  <span class="who">Terry</span>
+  <span class="text">Hold on! A big storm!</span>
+  <span class="when">The blizzard starts: gusts push the balloon down. Terry, then Sparkle.</span>
+  <span class="meta">2.5 s<b class="flag new">new</b></span>
+</button>
+<h2>night › fly › hold On</h2><button class="line" data-i="26" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Hold your finger down! Keep the balloon up!</span>
+  <span class="when">🎈 Act 1, fly: Hold to Fly. She flies the balloon down the world: hold to heat the air and rise, let go to sink.</span>
+  <span class="meta">4.2 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="27" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Click and hold! Keep the balloon up!</span>
+  
+  <span class="meta">3.3 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<h2>night › fly › pokes</h2><button class="line" data-i="28" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Hot air is light, so it floats up!</span>
+  <span class="when">Sparkle, the first time she pokes each thing (the lights and the ship are ♻️ hub.pokes).</span>
+  <span class="meta">3.4 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="29" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Balloons steer by finding the right wind.</span>
+  
+  <span class="meta">3.3 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="30" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Southern icebergs are flat, like tables!</span>
+  
+  <span class="meta">4.2 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="31" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">The southern lights! They glow in the long winter night.</span>
+  
+  <span class="meta">4.5 s<b class="flag long">long</b><b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="32" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">The red ship! Pebble fell asleep on it.</span>
+  
+  <span class="meta">3.9 s<b class="flag long">long</b><b class="flag reused">reused</b></span>
+</button>
+<h2>night › fly › friends</h2><button class="line" data-i="33" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">Wheee!</span>
+  <span class="when">A tap on the friends in the basket, in turn (♻️ party.balloon); a tap on Terry says ♻️ hub.terry.</span>
+  <span class="meta">1.4 s<b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="34" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">Higher, higher!</span>
+  
+  <span class="meta">1.6 s<b class="flag reused">reused</b></span>
+</button>
+<h2>night › lost</h2><button class="line" data-i="35" style="--h:330">
+  <span class="who">Terry</span>
+  <span class="text">I can't see the way!</span>
+  <span class="when">🎬 Film 2, night-lost: The storm. The flame gutters out and the balloon sinks into deep snow. White everywhere.</span>
+  <span class="meta">1.8 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="36" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">How will I ever find Papa?</span>
+  <span class="when">Pebble, very small in the snow.</span>
+  <span class="meta">2.4 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="37" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">Friends help friends. Mama said so.</span>
+  <span class="when">Pola wraps him in a hug.</span>
+  <span class="meta">3.4 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="38" style="--h:45">
+  <span class="who">Papa</span>
+  <span class="text">Listen, Pebble. This is my song.</span>
+  <span class="when">The memory, in the storybook look: the night he hatched (the 3D huddle's hatch scene). (🔁 huddle.papa.song, huddle.papa.always) Papa sings, and baby Pebble peeps it back between the two.</span>
+  <span class="meta">3.1 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="39" style="--h:45">
+  <span class="who">Papa</span>
+  <span class="text">That's it! Now you'll always find me.</span>
+  <span class="when">🎬 Film 2, night-lost: The storm. The flame gutters out and the balloon sinks into deep snow. White everywhere.</span>
+  <span class="meta">3.2 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="40" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">Papa's song! I'll sing it!</span>
+  <span class="when">Back in the storm.</span>
+  <span class="meta">1.9 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="41" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">It's too windy. He can't hear me.</span>
+  <span class="when">He peeps it, tiny, and the wind tears the notes away.</span>
+  <span class="meta">2.4 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="42" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">Then we'll ALL sing it!</span>
+  <span class="when">Pola stands up tall, Terry on her head.</span>
+  <span class="meta">2.4 s<b class="flag new">new</b></span>
+</button>
+<h2>night › chorus › start</h2><button class="line" data-i="43" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Hold Pebble to sing!</span>
+  <span class="when">Sparkle, as the game opens (and her hint when nothing has been sung for a while).</span>
+  <span class="meta">2.6 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="44" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Click and hold Pebble to sing!</span>
+  
+  <span class="meta">3.1 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<h2>night › chorus</h2><button class="line" data-i="45" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Look! The song lights up the dark!</span>
+  <span class="when">Sparkle, as the first ring rolls out (once).</span>
+  <span class="meta">2.8 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="46" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Pola is white like the snow. Camouflage!</span>
+  <span class="when">Sparkle, when a ring lights up Pola, white in the white (once).</span>
+  <span class="meta">4.0 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="47" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">A hat! It fits!</span>
+  <span class="when">A ring finds the woolly hat half buried in the snow; Pebble puts it on. (Papa's line from the slide.)</span>
+  <span class="meta">1.6 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="48" style="--h:330">
+  <span class="who">Terry</span>
+  <span class="text">Kee-arr! I'll sing too!</span>
+  <span class="when">A ring finds Terry, upside down in a drift: he pops out, shakes, and joins in.</span>
+  <span class="meta">2.8 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="49" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Weddell seals sing. It sounds like outer space!</span>
+  <span class="when">The ice edge. The Weddell seal pops up in her breathing hole and trills (Sparkle, ♻️ slide.facts.weddell).</span>
+  <span class="meta">4.3 s<b class="flag long">long</b><b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="50" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">The penguins are singing too!</span>
+  <span class="when">The slide's Adelies hop up out of their drift, honking along.</span>
+  <span class="meta">1.6 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="51" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Humpback whales sing long, long songs!</span>
+  <span class="when">A humpback rises in the dark sea and sings (Sparkle).</span>
+  <span class="meta">4.0 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="52" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">Grr-la-la!</span>
+  <span class="when">Silly: she pokes Pola, and Pola sings it back, the growly bear way.</span>
+  <span class="meta">1.7 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="53" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">All together now!</span>
+  <span class="when">Everyone's found: the hilltop, the colony's glow far off. Pola, then Sparkle.</span>
+  <span class="meta">1.3 s<b class="flag new">new</b></span>
+</button>
+<h2>night › chorus › long</h2><button class="line" data-i="54" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Hold Pebble for a long, long time!</span>
+  <span class="when">🎶 Act 2, chorus: Sing in the Dark (activities/night/chorus.ts). She holds Pebble, on Pola's back, to sing: the longer she holds, the bigger the ring of song that rolls out across the dark snow when she lets go. It lights up what it passes, and every friend it finds joins the song.</span>
+  <span class="meta">3.4 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="55" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Click and hold Pebble for a long, long time!</span>
+  
+  <span class="meta">4.6 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<h2>night › chorus</h2><button class="line" data-i="56" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">That's Papa! He heard us!</span>
+  <span class="when">The rainbow ring rolls over the hills to the colony. Silence. A gold ring comes back: Papa's song.</span>
+  <span class="meta">2.3 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="57" style="--h:330">
+  <span class="who">Terry</span>
+  <span class="text">Keep singing! I'm right here!</span>
+  <span class="when">She pokes Terry once he's singing with them.</span>
+  <span class="meta">2.3 s<b class="flag new">new</b></span>
+</button>
+<h2>night › chorus › pola</h2><button class="line" data-i="58" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">I just want to say hi!</span>
+  <span class="when">She pokes Pola once the Adelies are there (♻️ party.song.pola, in turn).</span>
+  <span class="meta">2.4 s<b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="59" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">Hi, penguins!</span>
+  
+  <span class="meta">1.6 s<b class="flag reused">reused</b></span>
+</button>
+<h2>night › colony</h2><button class="line" data-i="60" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">Whoa! So many penguins!</span>
+  <span class="when">🎬 Film 3, night-colony: So many papas. Over the hill, a huddle of a thousand dads, steaming in the dark.</span>
+  <span class="meta">3.1 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="61" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">Papa? They all look the same!</span>
+  <span class="when">(♻️ story.homeLand.same)</span>
+  <span class="meta">2.4 s<b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="62" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Penguins have never seen a polar bear. They're a little shy!</span>
+  <span class="when">Gold notes rise from deep inside the huddle; the dads near Pola squeeze together and shuffle away. Sparkle (♻️ party.song.colonyFact).</span>
+  <span class="meta">4.5 s<b class="flag long">long</b><b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="63" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">Go on, Pebble. You can do it.</span>
+  <span class="when">Pola kneels and lifts Pebble down from her back.</span>
+  <span class="meta">2.5 s<b class="flag new">new</b></span>
+</button>
+<h2>night › huddle › start</h2><button class="line" data-i="64" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Pull Pebble along with your finger!</span>
+  <span class="when">Sparkle, as the game opens: how to lead him, then the side verb.</span>
+  <span class="meta">3.2 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="65" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Click and drag Pebble along!</span>
+  
+  <span class="meta">2.3 s<b class="flag new">new</b></span>
+</button>
+<h2>night › huddle › sing</h2><button class="line" data-i="66" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Tap Pebble to sing!</span>
+  <span class="when">🐧 Act 3, huddle: Through the Huddle. She leads Pebble through the churning huddle to Papa (the 3D huddle's world).</span>
+  <span class="meta">2.1 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="67" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Click Pebble to sing!</span>
+  
+  <span class="meta">2.4 s<b class="flag new">new</b></span>
+</button>
+<h2>night › huddle</h2><button class="line" data-i="68" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Follow Papa's gold notes!</span>
+  <span class="when">Sparkle, when she's stuck.</span>
+  <span class="meta">2.4 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="69" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Emperor dads keep the egg warm on their feet!</span>
+  <span class="when">A dad lifts his belly: an egg (Sparkle, once, ♻️ huddle.facts.egg).</span>
+  <span class="meta">4.4 s<b class="flag long">long</b><b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="70" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">Papa, wait!</span>
+  <span class="when">The huddle shuffles Papa away just as Pebble gets close.</span>
+  <span class="meta">1.3 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="71" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Whoosh! Carry Pebble back to Papa.</span>
+  <span class="when">A gust rolls Pebble out: Sparkle, then Pebble (♻️ huddle.blown, huddle.pebble.blown).</span>
+  <span class="meta">3.3 s<b class="flag long">long</b><b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="72" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">Whoa! Papa, help!</span>
+  <span class="when">🐧 Act 3, huddle: Through the Huddle. She leads Pebble through the churning huddle to Papa (the 3D huddle's world).</span>
+  <span class="meta">2.3 s<b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="73" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">The dads take turns in the cold!</span>
+  <span class="when">The dads on the edge swap into the middle (Sparkle, once).</span>
+  <span class="meta">2.9 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="74" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Emperor dads don't eat all winter. They just keep the egg warm!</span>
+  <span class="when">She pokes a thin, sleepy dad (Sparkle, once, 🔁 huddle.facts.fast).</span>
+  <span class="meta">5.0 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="75" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">Wheee! Tummy slide!</span>
+  <span class="when">Silly: a flick sends him tummy-sliding. (Walked into a dad's tummy: a bounce and a grumpy honk, no line.)</span>
+  <span class="meta">2.3 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="76" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Sing, Pebble! As loud as you can!</span>
+  <span class="when">The middle, packed tight (Sparkle).</span>
+  <span class="meta">3.2 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="77" style="--h:45">
+  <span class="who">Papa</span>
+  <span class="text">Pebble? Is that you?</span>
+  <span class="when">The big song; the friends outside join in; the dads turn and step aside, one by one. Papa, far off, then close.</span>
+  <span class="meta">1.9 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="78" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Take Pebble to Papa!</span>
+  <span class="when">The aisle is open (Sparkle).</span>
+  <span class="meta">2.3 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="79" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">In winter here, the sun stays away for months!</span>
+  <span class="when">She pokes the dark sky (♻️ huddle.facts.night). Pola waving over the huddle says chorus.pola.</span>
+  <span class="meta">4.5 s<b class="flag long">long</b><b class="flag reused">reused</b></span>
+</button>
+<h2>night › sunrise</h2><button class="line" data-i="80" style="--h:45">
+  <span class="who">Papa</span>
+  <span class="text">Pebble! My Pebble!</span>
+  <span class="when">(♻️ story.homeReunion.pebble, .papa)</span>
+  <span class="meta">2.4 s<b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="81" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">Papa! I went to the top of the world!</span>
+  <span class="when">🎬 Film 4, night-sunrise: Sunrise. Pebble on Papa's feet; the first sun in months comes up as they meet.</span>
+  <span class="meta">2.4 s<b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="82" style="--h:45">
+  <span class="who">Papa</span>
+  <span class="text">I heard your song. I knew you'd come.</span>
+  
+  <span class="meta">4.2 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="83" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">The sun! It's back after months of night!</span>
+  <span class="when">A thin line of gold on the horizon; light runs across the snow and every penguin lifts its head (Sparkle).</span>
+  <span class="meta">4.0 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="84" style="--h:45">
+  <span class="who">Papa</span>
+  <span class="text">Goodness! What is THAT?</span>
+  <span class="when">Over the hill: Pola, Terry on her head. A thousand dads gasp. (♻️ story.homeLand.what, .bear, story.homeReunion.friend, .thanks)</span>
+  <span class="meta">2.4 s<b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="85" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">Hi! I'm a polar bear!</span>
+  <span class="when">🎬 Film 4, night-sunrise: Sunrise. Pebble on Papa's feet; the first sun in months comes up as they meet.</span>
+  <span class="meta">2.7 s<b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="86" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">This is Pola. She carried me home.</span>
+  
+  <span class="meta">2.5 s<b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="87" style="--h:45">
+  <span class="who">Papa</span>
+  <span class="text">A polar bear at the South Pole! Thank you, Pola.</span>
+  
+  <span class="meta">3.8 s<b class="flag long">long</b><b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="88" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">Friends help friends!</span>
+  
+  <span class="meta">1.8 s<b class="flag new">new</b></span>
+</button>
+<h2>night › goodbye</h2><button class="line" data-i="89" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">I have to go home now. Mama is waiting.</span>
+  <span class="when">Morning. Pola looks north.</span>
+  <span class="meta">3.8 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="90" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">Wait! I have something for you.</span>
+  <span class="when">🪨 Goodbye: Pebble gives Pola a pebble, then she flies Pola home up the toy globe (hold to rise, Act 1's move).</span>
+  <span class="meta">2.0 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="91" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">For you! Penguins give pebbles to best friends.</span>
+  <span class="when">He waddles off and comes back with a smooth round pebble in his beak.</span>
+  <span class="meta">3.7 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="92" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">I'll keep it forever.</span>
+  <span class="when">🪨 Goodbye: Pebble gives Pola a pebble, then she flies Pola home up the toy globe (hold to rise, Act 1's move).</span>
+  <span class="meta">2.5 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="93" style="--h:330">
+  <span class="who">Terry</span>
+  <span class="text">Take Pola home! Where do polar bears live?</span>
+  <span class="when">The globe: Terry asks (♻️ party.ask.bear); Sparkle says fly.start; over the warm middle, Pola's fly.warm again.</span>
+  <span class="meta">3.8 s<b class="flag long">long</b><b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="94" style="--h:265">
+  <span class="who">Mama Bear</span>
+  <span class="text">My brave cub! You came back!</span>
+  <span class="when">At the top, Mama on the ice; then Pola (♻️ party.home).</span>
+  <span class="meta">3.3 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="95" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">I'm home! Bye, Pebble!</span>
+  <span class="when">🪨 Goodbye: Pebble gives Pola a pebble, then she flies Pola home up the toy globe (hold to rise, Act 1's move).</span>
+  <span class="meta">2.5 s<b class="flag reused">reused</b></span>
+</button>
+<button class="line" data-i="96" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">A penguin pebble means I love you!</span>
+  <span class="when">She pokes the pebble in Pola's paws (Sparkle, once).</span>
+  <span class="meta">3.3 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<h2>night › end</h2><button class="line" data-i="97" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Polar bears live at the top of the world.</span>
+  <span class="when">🎬 Film 5, the-end: Top and bottom. The screen splits: Pola with her pebble under the northern lights at the top, Pebble on Papa's feet in the sun at the bottom, both humming the song. Sparkle tells it.</span>
+  <span class="meta">3.5 s<b class="flag long">long</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="98" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">Penguins live at the bottom.</span>
+  
+  <span class="meta">2.3 s<b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="99" style="--h:140">
+  <span class="who">Sparkle</span>
+  <span class="text">They never meet...</span>
+  
+  <span class="meta">1.8 s<b class="flag new">new</b></span>
+</button>
+<h2>night › end › except</h2><button class="line" data-i="100" style="--h:190">
+  <span class="who">Pola</span>
+  <span class="text">Except best friends!</span>
+  <span class="when">Pola and Pebble together, from the two ends of the world (one clip each, played at once).</span>
+  <span class="meta">1.8 s<b class="flag twice">twice</b><b class="flag new">new</b></span>
+</button>
+<button class="line" data-i="101" style="--h:300">
+  <span class="who">Pebble</span>
+  <span class="text">Except best friends!</span>
+  
+  <span class="meta">1.8 s<b class="flag twice">twice</b><b class="flag new">new</b></span>
+</button>
+<h2>night › end</h2><button class="line" data-i="102" style="--h:330">
+  <span class="who">Terry</span>
+  <span class="text">See you next year!</span>
+  <span class="when">Terry flies up the screen between them. Then the shell's trophy ceremony (♻️ trophyWin).</span>
+  <span class="meta">1.6 s<b class="flag new">new</b></span>
+</button>
+</main>
+<script>
+const spans=[[0,4.25],[4.63,8.59],[8.98,12.6],[12.99,16.48],[16.86,20.98],[21.36,24.3],[24.69,26.88],[28.6,32.19],[32.59,35.47],[37.17,40.71],[41.1,43.25],[44.95,47.4],[47.79,49.91],[51.62,54.16],[54.56,57.74],[58.13,60.64],[61.04,63.36],[63.76,65.83],[66.23,69.36],[69.76,72.51],[72.9,75.76],[76.15,78.3],[78.69,80.63],[81.02,82.52],[82.91,85.78],[86.17,88.59],[90.3,94.33],[94.73,97.91],[99.62,102.92],[103.31,106.52],[106.91,110.9],[111.3,115.68],[116.07,119.83],[121.54,122.86],[123.25,124.79],[126.51,128.19],[128.58,130.94],[131.32,134.6],[135,138.02],[138.41,141.48],[141.87,143.67],[144.06,146.4],[146.78,149.05],[150.76,153.23],[153.62,156.59],[158.3,161.02],[161.42,165.25],[165.64,167.21],[167.6,170.32],[170.72,174.85],[175.25,176.78],[177.18,181.03],[181.43,183.09],[183.48,184.73],[186.44,189.74],[190.13,194.53],[196.24,198.44],[198.82,201.06],[202.77,205.03],[205.43,206.99],[208.71,211.66],[212.05,214.31],[214.71,218.99],[219.39,221.78],[223.49,226.59],[226.97,229.17],[230.88,232.86],[233.25,235.54],[237.24,239.58],[239.97,244.21],[244.61,245.9],[246.29,249.52],[249.92,252.18],[252.57,255.36],[255.75,260.55],[260.95,263.17],[263.55,266.6],[266.99,268.84],[269.23,271.47],[271.86,276.22],[277.94,280.26],[280.66,282.98],[283.38,287.42],[287.81,291.62],[292.01,294.34],[294.73,297.34],[297.73,300.13],[300.52,304.17],[304.56,306.27],[307.97,311.63],[312.01,313.91],[314.3,317.83],[318.22,320.63],[321.01,324.64],[325.03,328.16],[328.56,330.93],[331.33,334.49],[336.2,339.59],[339.98,342.15],[342.55,344.3],[346.01,347.78],[348.17,349.9],[351.62,353.16]];const a=document.querySelector('audio');let stop=null,cur=null
+const mark=(el)=>{cur?.classList.remove('playing');cur=el;el?.classList.add('playing')}
+document.querySelectorAll('.line').forEach(el=>el.addEventListener('click',()=>{const s=spans[+el.dataset.i];if(!a||!s)return;a.currentTime=s[0];stop=s[1];mark(el);a.play()}))
+a?.addEventListener('timeupdate',()=>{if(stop!==null&&a.currentTime>=stop){a.pause();stop=null}
+  if(stop===null){const i=spans.findIndex(s=>s&&a.currentTime>=s[0]&&a.currentTime<s[1]);if(i>=0)mark(document.querySelector('.line[data-i="'+i+'"]'))}})
+a?.addEventListener('play',()=>{if(stop===null)mark(null)})
+</script>
+</body></html>
