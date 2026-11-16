@@ -27,6 +27,7 @@ export interface ActivityProps {
 }
 
 const SnowCoats = lazy(() => import('./activities/coats/SnowCoats').then((m) => ({ default: m.SnowCoats })))
+const Night = lazy(() => import('./activities/night/Night').then((m) => ({ default: m.Night })))
 const EmperorHuddle = lazy(() => import('./activities/huddle/EmperorHuddle').then((m) => ({ default: m.EmperorHuddle })))
 
 const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = {
@@ -41,6 +42,12 @@ const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = {
   huddle: (p) => (
     <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: '#1B2150' }} />}>
       <EmperorHuddle {...p} />
+    </Suspense>
+  ),
+  // The new ending, The Longest Night (3D, loaded on its own like the huddle). Being built: its links open it.
+  night: (p) => (
+    <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: '#2A2766' }} />}>
+      <Night {...p} />
     </Suspense>
   ),
 }

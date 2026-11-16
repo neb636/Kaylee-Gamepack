@@ -3,6 +3,7 @@ import coats, { POLE as coatsPole, READY as coatsReady } from './activities/coat
 import floe, { POLE as floePole, READY as floeReady } from './activities/floe/info'
 import huddle, { POLE as huddlePole, READY as huddleReady } from './activities/huddle/info'
 import narwhal, { POLE as narwhalPole, READY as narwhalReady } from './activities/narwhal/info'
+import night, { POLE as nightPole, READY as nightReady } from './activities/night/info'
 import slide, { POLE as slidePole, READY as slideReady } from './activities/slide/info'
 import { art } from './art'
 import { L } from './lines'
@@ -15,9 +16,11 @@ const ALL: [ActivityInfo, boolean][] = [
   [coats, coatsReady],
   [slide, slideReady],
   [huddle, huddleReady],
+  // The new ending (planning/around-the-world/poles-ending.md), being built act by act: links only until it's done.
+  [night, nightReady],
 ]
 /** Which side of the globe each activity's spot shows on (the hub reads it). */
-export const ACTIVITY_POLE: Record<string, 'north' | 'south' | 'both'> = { floe: floePole, coats: coatsPole, slide: slidePole, huddle: huddlePole, narwhal: narwhalPole }
+export const ACTIVITY_POLE: Record<string, 'north' | 'south' | 'both'> = { floe: floePole, coats: coatsPole, slide: slidePole, huddle: huddlePole, narwhal: narwhalPole, night: nightPole }
 
 // The Poles: the top and the bottom of the world in one place (plan: planning/around-the-world/poles.md). The hub is a
 // 3D globe she spins (top = the Arctic's sea ice, bottom = Antarctica's land) and a sun she drags, so day and night swap
