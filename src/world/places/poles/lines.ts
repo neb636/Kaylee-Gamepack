@@ -595,7 +595,7 @@ export const L = {
       pokes: {
         balloon: 'Hot air is light, so it floats up!',
         ribbons: 'Balloons steer by finding the right wind.',
-        berg: 'Southern icebergs are big and flat, like tables!',
+        berg: 'Southern icebergs are flat, like tables!',
         lights: 'The southern lights! They glow in the long winter night.',
         ship: 'The red ship! Pebble fell asleep on it.',
       },
@@ -682,7 +682,7 @@ export const L = {
       blown: 'Whoosh! Carry Pebble back to Papa.',
       pebbleBlown: pebble('Whoa! Papa, help!'),
       // The dads on the edge swap into the middle (Sparkle, once).
-      turns: "Dads take turns in the cold. So everyone's warm!",
+      turns: 'The dads take turns in the cold!',
       // She pokes a thin, sleepy dad (Sparkle, once, 🔁 huddle.facts.fast).
       fast: "Emperor dads don't eat all winter. They just keep the egg warm!",
       // Silly: a flick sends him tummy-sliding. (Walked into a dad's tummy: a bounce and a grumpy honk, no line.)
@@ -729,7 +729,7 @@ export const L = {
       back: mama('My brave cub! You came back!'),
       home: pola("I'm home! Bye, Pebble!"),
       // She pokes the pebble in Pola's paws (Sparkle, once).
-      pebbleFact: 'Some penguins give pebbles to say I love you!',
+      pebbleFact: 'A penguin pebble means I love you!',
     },
 
     // 🎬 Film 5, the-end: Top and bottom. The screen splits: Pola with her pebble under the northern lights at the top,

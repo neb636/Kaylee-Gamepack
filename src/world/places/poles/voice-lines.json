@@ -1047,7 +1047,7 @@
   "Click and hold! Keep the balloon up!",
   "Hot air is light, so it floats up!",
   "Balloons steer by finding the right wind.",
-  "Southern icebergs are big and flat, like tables!",
+  "Southern icebergs are flat, like tables!",
   {
     "text": "I can't see the way!",
     "voice": "terry"
@@ -1124,7 +1124,7 @@
     "text": "Papa, wait!",
     "voice": "pebble"
   },
-  "Dads take turns in the cold. So everyone's warm!",
+  "The dads take turns in the cold!",
   {
     "text": "Wheee! Tummy slide!",
     "voice": "pebble"
@@ -1164,7 +1164,7 @@
     "text": "My brave cub! You came back!",
     "voice": "mama"
   },
-  "Some penguins give pebbles to say I love you!",
+  "A penguin pebble means I love you!",
   "Polar bears live at the top of the world.",
   "Penguins live at the bottom.",
   "They never meet...",

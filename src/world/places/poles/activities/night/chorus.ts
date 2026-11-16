@@ -92,8 +92,8 @@ const SECTION_OF: NightSection[] = ['whiteout', 'edge', 'together']
 const HIDE: Record<Find, { at: [number, number]; stop: number }> = {
   hat: { at: [1.8, -1.3], stop: 0 },
   terry: { at: [-2.5, -3.2], stop: 0 },
-  seal: { at: [-2.1, -16.6], stop: 1 },
-  adelies: { at: [-3.5, -11], stop: 1 },
+  seal: { at: [2.5, -17.3], stop: 1 },
+  adelies: { at: [-3.2, -17.4], stop: 1 },
   whale: { at: [7, -17.4], stop: 1 },
 }
 /** The sea along the ice edge (east of this x, between these z). */

@@ -164,8 +164,27 @@ Stickers: polar bear (floe), narwhal (narwhal), Arctic fox (coats), Adélie peng
 
 ## Next
 
-A plan to replace the ending (Emperor Huddle and Home) with one 3D finale, The Longest Night, with its full
-script: [poles-ending.md](poles-ending.md). Not built yet; waiting on your read.
+**The new ending, The Longest Night, is being built** (plan and script: [poles-ending.md](poles-ending.md), PR #475,
+with #474's 3D huddle folded into the same branch). It's `activities/night/`, not on the globe yet (`info.ts`
+READY = false), so Emperor Huddle and the finale still play for her until it's done.
+
+- **Milestone 1 (2026-11-16): Act 2 and the whole script.** Every line of the ending is in `lines.ts` as one block,
+  `L.night`, in play order (films, acts, goodbye, the end), so `node scripts/table-read.mjs poles night` is the
+  ending as she hears it. Lines already recorded elsewhere keep their words and share their clips (the table read
+  marks them `reused`). Act 2, Sing in the Dark, is playable: `#/world/poles/night/whiteout`, `/edge`, `/together`
+  (`chorus.ts`). Hold Pebble and a dashed circle shows how far the song will go; let go and the ring rolls across the
+  snow on the ground's own shape (it rolls over the hills to the colony at the end), lighting what it passes. Each
+  friend found adds a band of color and a voice (`sounds.ts` `voice`: one synth per singer on `TUNES[0]`). Feel knobs
+  `chorus` (`?feel=1`): tap length, peep/smallest/biggest ring, hold-to-full and its curve, ring speed and width,
+  glow time, misses before a friend answers anyway, and the big song's hold.
+- Decided on my own: the hat is the slide's grey woolly hat (the plan's end film says pink; the slide's is grey);
+  holding Pola sings too (her finger may land on her, not the chick); the leopard seal's wobbly note is left out of
+  Act 2 for now; the end of Act 2 offers 🔁 until Act 3 exists. No ElevenLabs key in the cloud session: Act 2 reuses
+  the Poles' recorded clips (Weddell trill, whale, Adelie honks, tern, hat, reveal) and synthesizes the ring's shimmer.
+- **Next (milestone 2, after you hear the script):** Act 1 (the balloon), then Act 3 on the 3D huddle's world, the
+  five films, the goodbye flight, then swapping the chapter in for Emperor Huddle and the finale on the globe and
+  retiring their lines. Make the ring shimmer and a sunrise swell with ElevenLabs on a session with a key. Film the
+  reel on the Mac (`poles-night-*` in `activities/night/qa.mjs`).
 
 Kaylee plays it. Watch for: does she say "penguin" and "home"; does she tap the next picture without help; does she sit
 through the way-in film or hold ⏭ (her diary counts both); which chapter she replays; whether Papa's song is too hard
