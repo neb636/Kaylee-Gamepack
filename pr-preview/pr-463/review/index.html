@@ -39,11 +39,13 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 <p class="kaylee">The mint vinyl-toy Dad from the lab is now Dad in every Thailand scene: at the house, on every trip, at the barber and on the plane.</p>
 
 <h2>Watch</h2><figure><video src="reel/dad.mp4" poster="" controls playsinline muted autoplay loop></video>
-<figcaption>Dad · 33 s</figcaption></figure>
+<figcaption>Dad · 26 s<br><b class="warn">Thailand samet trip speedboat: too slow to film here (2.5 fps, no GPU?): film it on the Mac</b></figcaption></figure>
 <h2>Before and after</h2><div class="pics"><figure class="pair"><div><img src="pics/family-old.jpg" alt="Before: The family on the street" loading="lazy"><span>Before</span></div><div><img src="pics/family-new.jpg" alt="After: The family on the street" loading="lazy"><span>After</span></div>
 <figcaption><b>The family on the street</b>: The new Dad with everyone</figcaption></figure>
 <figure class="pair"><div><img src="pics/barber-old.jpg" alt="Before: The barber" loading="lazy"><span>Before</span></div><div><img src="pics/barber-new.jpg" alt="After: The barber" loading="lazy"><span>After</span></div>
-<figcaption><b>The barber</b>: His own hair stays on under the strands she cuts; a snip wobbles his real horn</figcaption></figure>
+<figcaption><b>The barber</b>: After a grow and a snip: the strands on a smooth bald scalp, no black lines, nothing see-through</figcaption></figure>
+<figure class="pair"><div><img src="pics/scalp-old.jpg" alt="Before: His bald head (hair hidden)" loading="lazy"><span>Before</span></div><div><img src="pics/scalp-new.jpg" alt="After: His bald head (hair hidden)" loading="lazy"><span>After</span></div>
+<figcaption><b>His bald head (hair hidden)</b>: The lumpy scalp with holes is now a smooth dome, closed under the horn</figcaption></figure>
 <figure class="pair"><div><img src="pics/cave-old.jpg" alt="Before: The canoe" loading="lazy"><span>Before</span></div><div><img src="pics/cave-new.jpg" alt="After: The canoe" loading="lazy"><span>After</span></div>
 <figcaption><b>The canoe</b>: He reaches forward with the paddle in his hooves</figcaption></figure>
 <figure class="pair"><div><img src="pics/plane-old.jpg" alt="Before: The plane" loading="lazy"><span>Before</span></div><div><img src="pics/plane-new.jpg" alt="After: The plane" loading="lazy"><span>After</span></div>
@@ -52,12 +54,12 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 <figcaption><b>The speedboat</b>: His cap sits over his hair</figcaption></figure></div>
 
 
-<h2>Your call</h2><ol><li><p>At the barber, his own hair now shrinks into his head as she cuts it short. Does that feel right?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
+<h2>Your call</h2><ol><li><p>At the barber, his own hair stays on until she cuts it short, then it's the strands on his bald head. Does that feel right?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
 <li><p>Can the old code-built Dad leave the character lab (&quot;Dad: the old toy&quot;)? Yes or keep.</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><a class="pill" href="https://github.com/neb636/Kaylee-Gamepack/pull/463">Open the PR to paste them</a><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
 <h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/thailand/mall-trip/barber">The barber</a> <a class="pill" href="../#/world/characters/nick">Dad in the character lab</a></p>
 </main>
 <script>
-const qs=["At the barber, his own hair now shrinks into his head as she cuts it short. Does that feel right?","Can the old code-built Dad leave the character lab (\"Dad: the old toy\")? Yes or keep."],titles=[]
+const qs=["At the barber, his own hair stays on until she cuts it short, then it's the strands on his bald head. Does that feel right?","Can the old code-built Dad leave the character lab (\"Dad: the old toy\")? Yes or keep."],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})
