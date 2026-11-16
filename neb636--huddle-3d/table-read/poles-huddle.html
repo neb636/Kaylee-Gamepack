@@ -27,7 +27,7 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
 <header>
 <h1>Table read: Poles › Huddle</h1>
 
-<p class="sum">26 lines · 1.0 min of talk · <b>4 not recorded</b> · her name 0× · 9 flagged</p>
+<p class="sum">26 lines · 1.2 min of talk · her name 0× · 8 flagged</p>
 <ul class="cast"><li style="--h:330"><b>Sparkle</b> 13 lines <small>coral voice</small></li><li style="--h:265"><b>Papa</b> 10 lines <small>ash voice</small></li><li style="--h:190"><b>Pebble</b> 3 lines <small>nova voice</small></li></ul>
 </header>
 <div class="player"><audio controls preload="metadata" src="poles-huddle.mp3"></audio></div>
@@ -74,11 +74,11 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
   
   <span class="meta">3.3 s<b class="flag long">long</b></span>
 </button>
-<button class="line silent" data-i="7" style="--h:330">
+<button class="line" data-i="7" style="--h:330">
   <span class="who">Sparkle</span>
   <span class="text">Shh. Papa is singing to Pebble.</span>
   
-  <span class="meta"><b class="flag not-recorded">not recorded</b></span>
+  <span class="meta">3.0 s</span>
 </button>
 <button class="line" data-i="8" style="--h:330">
   <span class="who">Sparkle</span>
@@ -104,11 +104,11 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
   
   <span class="meta">4.5 s<b class="flag long">long</b></span>
 </button>
-<button class="line silent" data-i="12" style="--h:330">
+<button class="line" data-i="12" style="--h:330">
   <span class="who">Sparkle</span>
   <span class="text">Emperor dads don't eat all winter. They just keep the egg warm!</span>
   
-  <span class="meta"><b class="flag not-recorded">not recorded</b><b class="flag long">long</b></span>
+  <span class="meta">5.0 s<b class="flag long">long</b></span>
 </button>
 <h2>huddle › papa</h2><button class="line" data-i="13" style="--h:265">
   <span class="who">Papa</span>
@@ -158,17 +158,17 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
   
   <span class="meta">1.8 s</span>
 </button>
-<button class="line silent" data-i="21" style="--h:265">
+<button class="line" data-i="21" style="--h:265">
   <span class="who">Papa</span>
   <span class="text">Listen, Pebble. This is my song.</span>
   
-  <span class="meta"><b class="flag not-recorded">not recorded</b></span>
+  <span class="meta">3.1 s<b class="flag long">long</b></span>
 </button>
-<button class="line silent" data-i="22" style="--h:265">
+<button class="line" data-i="22" style="--h:265">
   <span class="who">Papa</span>
   <span class="text">That's it! Now you'll always find me.</span>
   
-  <span class="meta"><b class="flag not-recorded">not recorded</b></span>
+  <span class="meta">3.2 s<b class="flag long">long</b></span>
 </button>
 <h2>huddle › pebble</h2><button class="line" data-i="23" style="--h:190">
   <span class="who">Pebble</span>
@@ -190,7 +190,7 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
 </button>
 </main>
 <script>
-const spans=[[0,2.81],[3.2,4.95],[5.34,8.7],[9.1,11.35],[11.74,14.62],[15.02,17.34],[17.73,20.96],null,[21.35,23.51],[25.22,29.46],[29.84,34.36],[34.75,39.1],null,[40.81,43.41],[45.11,47.27],[47.67,50.32],[50.71,52.41],[54.11,55.96],[56.35,58.74],[59.13,61],[61.39,63.19],null,null,[64.89,66.71],[67.11,69.36],[69.75,71.04]];const a=document.querySelector('audio');let stop=null,cur=null
+const spans=[[0,2.82],[3.21,4.96],[5.36,8.72],[9.12,11.38],[11.77,14.65],[15.05,17.38],[17.77,21],[21.4,24.28],[24.67,26.84],[28.55,32.79],[33.18,37.71],[38.1,42.46],[42.86,47.66],[49.37,51.97],[53.68,55.85],[56.24,58.9],[59.29,60.99],[62.71,64.55],[64.95,67.34],[67.74,69.6],[69.99,71.79],[72.19,75.22],[75.6,78.68],[80.38,82.21],[82.6,84.86],[85.26,86.54]];const a=document.querySelector('audio');let stop=null,cur=null
 const mark=(el)=>{cur?.classList.remove('playing');cur=el;el?.classList.add('playing')}
 document.querySelectorAll('.line').forEach(el=>el.addEventListener('click',()=>{const s=spans[+el.dataset.i];if(!a||!s)return;a.currentTime=s[0];stop=s[1];mark(el);a.play()}))
 a?.addEventListener('timeupdate',()=>{if(stop!==null&&a.currentTime>=stop){a.pause();stop=null}
