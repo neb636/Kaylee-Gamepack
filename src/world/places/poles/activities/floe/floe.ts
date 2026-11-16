@@ -50,6 +50,8 @@ const FLING = knobs('fling', 'Fling Pola', FILE, {
   hang: { value: 0.85, min: 0.3, max: 2, step: 0.05, label: 'Hang time', unit: 's', note: 'seconds in the air for a full-reach fling (shorter ones are quicker)' },
   magnet: { value: 0.8, min: 0, max: 2.5, step: 0.05, label: 'Landing help', unit: 'm', note: 'a landing this close to a floe gets pulled onto it (0 = none)' },
   crouch: { value: 1, min: 0, max: 2, step: 0.05, label: 'Crouch', unit: '×', note: 'how much he squashes down as she pulls' },
+  grab: { value: 85, min: 44, max: 160, step: 1, label: 'Grab size', unit: 'px', note: "the smallest reach of the finger target round Pola on an iPad, while she can be grabbed (an iPhone gets 70% of it); she's never smaller than she looks × Grab look" },
+  grabLook: { value: 2.4, min: 1, max: 4, step: 0.05, label: 'Grab look', unit: '× height', note: 'the finger target round Pola, as a share of how tall she looks on screen' },
 })
 /** The floes and the sea. */
 const FLOES = knobs('floes', 'Floes and water', FILE, {
@@ -1030,11 +1032,17 @@ export class FloeHop implements World3D {
     return this.raycaster.ray.intersectPlane(this.plane, new Vector3())
   }
 
-  /** Pola's middle on screen and how big a finger target he needs. */
+  /** Pola's middle on screen and how big a finger target he needs: generous while she can grab him (standing, or
+   *  already held), snug otherwise, so a big target round him while he swims doesn't steal her pushes on the floes
+   *  around him. */
   private polaOnScreen() {
     const c = this.toScreen(this.pola.center(tmp))
     const top = this.toScreen(this.pola.root.localToWorld(tmp2.set(0, this.pola.height, 0)))
-    return { x: c.x, y: c.y, r: Math.max(Math.min(this.w, this.h) < 500 ? 32 : 44, Math.abs(c.y - top.y) * 1.4) }
+    const small = Math.min(this.w, this.h) < 500
+    const tall = Math.abs(c.y - top.y)
+    const grabbable = (this.mode === 'stand' && !!this.on) || this.mode === 'aim'
+    const r = grabbable ? Math.max(FLING.grab * (small ? 0.7 : 1), tall * FLING.grabLook) : Math.max(small ? 32 : 44, tall * 1.4)
+    return { x: c.x, y: c.y, r }
   }
 
   /** Where an animal is on screen and how big a finger target it gets (never under 64 px; an iceberg is as big as it looks). */
