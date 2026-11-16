@@ -48,6 +48,8 @@ test('flight recovery keeps the current position and catches', async ({ page }) 
 })
 
 test("Papa's song opens from its link with no film, and finds Papa by his tune", async ({ page }) => {
+  // Three singing turns and a waddle to the next round, in a browser with no GPU: more than the default 30 s.
+  test.setTimeout(120_000)
   await open(page, 'song')
   await expect(page.locator('[data-story-film]')).toHaveCount(0)
   await page.waitForFunction(() => window.__polesPartyQA?.().state === 'listen')
