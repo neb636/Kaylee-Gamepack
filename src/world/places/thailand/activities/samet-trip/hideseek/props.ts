@@ -79,7 +79,7 @@ export function pandanus(bag: Bag, seed = 3) {
   for (let k = 0; k < 16; k++) {
     const a = (k / 16) * Math.PI * 2 + R() * 0.2
     const up = 0.5 + R() * 0.5
-    leaves.push(P.box(0.14, 0.03, 1.35, k % 3 ? '#6FB25A' : '#89C766', { at: [Math.sin(a) * 0.62, Math.sin(up) * 0.45 - 0.1, Math.cos(a) * 0.62], rot: [-up + 0.2, a, 0] }))
+    leaves.push(P.box(0.14, 0.03, 1.35, k % 3 ? '#6FB25A' : '#89C766', { at: [Math.sin(a) * 0.62, Math.sin(up) * 0.45 - 0.1, Math.cos(a) * 0.62], rot: [-up + 0.2, a, 0], order: 'YXZ' }))
   }
   leaves.push(P.sphere(0.24, '#F29A4A', { at: [0, -0.25, 0.1], scale: [1, 1.2, 1] }, 10))
   crown.add(solid(merge(leaves), bag, 2))

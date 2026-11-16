@@ -1065,10 +1065,11 @@ export const motion = [
     },
   },
   {
-    // The pictures: tap the sandcastle, the green taxi drives across, and she's at Ao Hin Khok a few steps from its
-    // ring, Tofu running to it. Then she walks into the ring (the stop opens).
+    // The pictures: tap the sandcastle, the family hop in the green taxi and it drives up the road and in at Sai Kaew
+    // (a little film), and she's at Ao Hin Khok a few steps from its ring, Tofu running to it. Then she walks into the
+    // ring (the stop opens).
     name: 'thailand-samet-story-ride',
-    seconds: 14,
+    seconds: 20,
     setup: async (page, base) => {
       await page.goto(`${base}#/world/thailand/samet-trip/island?at=nadan&board=1`)
       await ready(page)
@@ -1077,7 +1078,7 @@ export const motion = [
     },
     act: async (page) => {
       await page.locator('[data-pick="sandcastle"]').click()
-      await page.waitForFunction(() => { const q = window.__thaiSametQA(); return q.at === 'hinkhok' && !document.querySelector('.isle-ride') }, null, { timeout: 8000 })
+      await page.waitForFunction(() => { const q = window.__thaiSametQA(); return q.at === 'hinkhok' }, null, { timeout: 16000 })
       await page.waitForFunction(() => window.__thaiSametQA().puppy.goal === 'sandcastle', null, { timeout: 8000 })
       await page.waitForTimeout(2500)
       const q = await page.evaluate(() => window.__thaiSametQA())
@@ -1105,7 +1106,7 @@ export const motion = [
     // All four: the fireflies swirl, Mom, Dad calls the sunset; the one picture left is the sunset. Tap it: the taxi to
     // Ao Prao, a few steps from the driftwood tree.
     name: 'thailand-samet-story-all',
-    seconds: 20,
+    seconds: 26,
     setup: async (page, base) => {
       await page.goto(`${base}#/world/thailand/samet-trip/island?at=saikaew&flags=all&story=all`)
       await ready(page)
@@ -1113,7 +1114,7 @@ export const motion = [
     act: async (page) => {
       await filmOver(page, 'all')
       await page.locator('[data-board="sunset"] button').click({ timeout: 8000 })
-      await page.waitForFunction(() => { const q = window.__thaiSametQA(); return q.at === 'prao' && !document.querySelector('.isle-ride') }, null, { timeout: 8000 })
+      await page.waitForFunction(() => { const q = window.__thaiSametQA(); return q.at === 'prao' }, null, { timeout: 16000 })
       await page.waitForTimeout(3000)
     },
   },

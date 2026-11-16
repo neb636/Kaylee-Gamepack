@@ -6,7 +6,7 @@
 // Faces +z.
 import { CylinderGeometry, Group, Mesh } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
-import { bake, merge, P, solid } from '../../../../../engine3d/geo'
+import { bake, loft, merge, P, solid } from '../../../../../engine3d/geo'
 import { makeHull } from '../../../../../engine3d/outline'
 import { PAL, toon } from '../../../../../engine3d/toon'
 
@@ -39,32 +39,70 @@ export function buildSki(bag: Bag, c: SkiColors = HERS): Ski {
   const body = new Group()
   root.add(tilt)
   tilt.add(body)
-  // Side profile (z along the ski, y up), pushed across the ski.
-  const prof = (pts: [number, number][], w: number, col: string, x = 0) => P.prism(pts, w, col, { at: [x, 0, 0], rot: [0, -Math.PI / 2, 0] })
+  // The hull, lofted through its sections from the swim platform to the bow: a deep V underneath that rises and
+  // narrows to a pointed bow, wide sponsons at the back, a colored lower hull under a pinstripe, a dark rub rail all the
+  // way round, and a white deck. Each section: keel, then up the right side to the deck's middle and down the left.
+  const ring = (z: number, w: number, keel: number, chine: number, stripe: number, rail: number, deck: number) => {
+    const half: [number, number][] = [
+      [w * 0.86, chine],
+      [w * 0.97, stripe],
+      [w, stripe + 0.06],
+      [w, rail],
+      [w * 0.98, rail + 0.06],
+      [w * 0.8, deck],
+    ]
+    return { z, pts: [[0, keel], ...half, [0, deck + 0.04], ...half.reverse().map(([x, y]) => [-x, y] as [number, number])] as [number, number][] }
+  }
+  const bands = [c.stripe, c.stripe, c.stripe2, c.hull, '#3A3140', c.hull, c.hull, c.hull, c.hull, '#3A3140', c.hull, c.stripe2, c.stripe, c.stripe]
+  const hullGeo = loft(
+    [
+      ring(-1.55, 0.5, -0.04, 0.0, 0.1, 0.24, 0.3),
+      ring(-1.25, 0.56, -0.1, -0.02, 0.12, 0.3, 0.36),
+      ring(-0.7, 0.58, -0.16, -0.04, 0.14, 0.34, 0.42),
+      ring(0.1, 0.57, -0.18, -0.04, 0.16, 0.36, 0.46),
+      ring(0.75, 0.5, -0.13, 0.0, 0.2, 0.38, 0.5),
+      ring(1.2, 0.36, -0.02, 0.08, 0.25, 0.4, 0.52),
+      ring(1.5, 0.18, 0.14, 0.2, 0.3, 0.42, 0.5),
+      ring(1.66, 0.04, 0.34, 0.36, 0.4, 0.44, 0.47),
+    ],
+    bands,
+  )
+  // The hood: a smooth hump from the bow up to the handlebars, with a dark visor and the steering pod.
+  const hood = (z: number, w: number, base: number, top: number) => ({
+    z,
+    pts: [[w, base], [w * 0.92, base + (top - base) * 0.55], [w * 0.6, top - 0.02], [0, top], [-w * 0.6, top - 0.02], [-w * 0.92, base + (top - base) * 0.55], [-w, base]] as [number, number][],
+  })
+  const hoodGeo = loft([hood(0.32, 0.36, 0.44, 0.76), hood(0.55, 0.42, 0.46, 0.84), hood(0.85, 0.4, 0.48, 0.8), hood(1.15, 0.3, 0.5, 0.68), hood(1.45, 0.12, 0.5, 0.56)], [c.hull, c.stripe, c.hull, c.hull, c.stripe, c.hull, c.hull])
   const hull = [
-    prof([[-1.5, -0.16], [0.85, -0.16], [1.62, 0.32], [1.42, 0.5], [0.3, 0.52], [-1.5, 0.48]], 1.08, c.hull),
-    // The deck: a little narrower, rounded on top.
-    P.rbox(0.96, 0.22, 2.4, 0.1, c.hull, { at: [0, 0.52, -0.25] }),
-    // The cowl in front of the handlebars, and its windscreen.
-    P.rbox(0.86, 0.34, 0.86, 0.16, c.hull, { at: [0, 0.68, 0.9], rot: [-0.25, 0, 0] }),
-    P.rbox(0.62, 0.05, 0.32, 0.03, '#6FC4E6', { at: [0, 0.9, 1.02], rot: [-0.75, 0, 0] }),
-    // The black seat (Kaylee in front, Dad behind).
-    P.capsule(0.19, 1.15, '#3A3140', { at: [0, 0.74, -0.35], rot: [Math.PI / 2, 0, 0], scale: [1.35, 1, 0.8] }),
-    // The stripes down both sides, and a rub rail.
-    ...[-1, 1].flatMap((s) => [
-      prof([[-1.45, 0.16], [1.0, 0.16], [1.32, 0.3], [1.1, 0.34], [-1.45, 0.3]], 0.03, c.stripe, s * 0.545),
-      prof([[-1.45, 0.05], [0.75, 0.05], [0.95, 0.12], [-1.45, 0.12]], 0.03, c.stripe2, s * 0.545),
-      P.box(0.06, 0.08, 2.3, '#3A3140', { at: [s * 0.52, 0.47, -0.25] }),
+    hullGeo,
+    hoodGeo,
+    // The tinted visor in front of the bars, and the round gauge pod under them.
+    P.rbox(0.56, 0.05, 0.3, 0.025, '#6FC4E6', { at: [0, 0.88, 0.66], rot: [-0.55, 0, 0] }),
+    P.cyl(0.13, 0.15, 0.12, '#3A3140', { at: [0, 0.86, 0.42], rot: [-0.4, 0, 0] }, 12),
+    // Mirrors on little stalks either side of the hood.
+    ...[-1, 1].flatMap((sd) => [
+      P.cyl(0.02, 0.02, 0.18, '#3A3140', { at: [sd * 0.34, 0.86, 0.6], rot: [0, 0, -sd * 0.6] }, 5),
+      P.sphere(0.07, '#3A3140', { at: [sd * 0.42, 0.94, 0.6], scale: [1.3, 0.8, 0.5] }, 8),
     ]),
-    // Footwells, the back step.
-    P.box(1.02, 0.05, 0.5, '#E4E0EC', { at: [0, 0.43, -1.25] }),
+    // The seat on its raised white base: a long saddle, a step up for the back rider, colored piping down the middle.
+    P.rbox(0.6, 0.2, 1.75, 0.08, c.hull, { at: [0, 0.54, -0.42] }),
+    P.rbox(0.5, 0.18, 0.95, 0.09, '#3A3140', { at: [0, 0.71, 0.0] }),
+    P.rbox(0.5, 0.22, 0.85, 0.1, '#3A3140', { at: [0, 0.73, -0.86] }),
+    P.box(0.05, 0.02, 1.7, c.stripe, { at: [0, 0.83, -0.43] }),
+    // The grab handle behind the seat, the swim platform's grippy mat, the jet nozzle at the back.
+    P.torus(0.17, 0.035, '#3A3140', { at: [0, 0.7, -1.33], rot: [0, Math.PI / 2, 0] }, Math.PI),
+    P.box(0.7, 0.02, 0.24, '#5C5468', { at: [0, 0.31, -1.42] }),
+    P.cyl(0.1, 0.12, 0.16, '#5C5468', { at: [0, 0.02, -1.58], rot: [Math.PI / 2, 0, 0] }, 10),
+    // Sponson fins low on both sides at the back, and a bow eye.
+    ...[-1, 1].map((sd) => P.rbox(0.06, 0.08, 0.5, 0.02, '#3A3140', { at: [sd * 0.58, 0.04, -1.1] })),
+    P.torus(0.04, 0.012, '#C8CCD2', { at: [0, 0.4, 1.63], rot: [0, Math.PI / 2, 0] }),
   ]
   body.add(solid(merge(hull), bag, 2.5))
   const bars = new Group()
   bars.add(
     solid(
       merge([
-        P.cyl(0.07, 0.09, 0.32, '#3A3140', { at: [0, -0.12, 0] }, 8),
+        P.cyl(0.06, 0.08, 0.22, '#3A3140', { at: [0, -0.08, 0] }, 8),
         P.cyl(0.035, 0.035, 0.95, '#3A3140', { rot: [0, 0, Math.PI / 2] }, 8),
         P.cyl(0.055, 0.055, 0.2, '#2B2330', { at: [0.48, 0, 0], rot: [0, 0, Math.PI / 2] }, 8),
         P.cyl(0.055, 0.055, 0.2, '#2B2330', { at: [-0.48, 0, 0], rot: [0, 0, Math.PI / 2] }, 8),

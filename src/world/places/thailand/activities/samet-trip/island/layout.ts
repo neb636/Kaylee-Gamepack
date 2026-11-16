@@ -386,6 +386,14 @@ export const TAXI_STOPS: { id: SpotId; at: XZ }[] = [
   { id: 'wongduan', at: { x: J.wongduan[0], z: J.wongduan[1] } },
 ]
 
+/** The road from taxi stop `i` inland (the stop first): the taxi pulls away along it, and pulls in along it backwards. */
+export function taxiRoad(i: number): XZ[] {
+  const of = (id: string) => WAYS.find((w) => w.id === id)!.pts
+  const id = TAXI_STOPS[i].id
+  if (id === 'nadan') return of('road-nadan')
+  return [...of(id === 'saikaew' ? 'road-nadan' : id === 'prao' ? 'road-prao' : 'road-wongduan')].reverse()
+}
+
 /** Jet skis waiting at the water's edge on every beach once the jet ski is hers. */
 export const PARKED: { id: SpotId; at: XZ; face: number }[] = (['saikaew', 'hinkhok', 'phai', 'wongduan', 'prao', 'nadan'] as const).map((id) => {
   const f = FRAMES[id]
@@ -418,7 +426,7 @@ add('beads', bay(12, -3.5))
 for (const [id, u, v] of [['saikaew', -24, -3], ['saikaew', 30, -2.5], ['hinkhok', -3, -1.5], ['phai', 2, -2], ['wongduan', 2, -2], ['prao', 0, -2.5], ['aonoina', 0, -2]] as const) add('crab', at(FRAMES[id], u, v))
 // Pink bougainvillea along the paths (petals burst).
 for (const p of [{ x: -9, z: -36 }, { x: -60, z: -48 }, { x: -120, z: 64 }, { x: -136, z: -44 }, { x: -86, z: 44 }]) add('bush', inland(p, 4))
-add('longtail', at(FRAMES.nadan, 4, 7))
+add('longtail', at(FRAMES.nadan, 5, 11))
 add('longtail', at(FRAMES.wongduan, -9, 7))
 add('speedboat', at(FRAMES.nadan, -7.5, 22))
 add('hammock', at(FRAMES.aonoina, 0, -9))

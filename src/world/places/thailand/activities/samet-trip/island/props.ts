@@ -8,6 +8,7 @@ import { Group, Mesh, SphereGeometry, Vector3, type BufferGeometry } from 'three
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid, type V3 } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
+import { longtail, SNORKEL_BOAT, speedboat, WOOD_BOAT } from './boats'
 import { groundAt } from './ground'
 import { at, bay, DECK, FRAMES, HUT, PIER, PLACES, POKES, STOPS, UMBRELLAS, type Frame, type PokeKind, type StopId, type XZ } from './layout'
 import { bushGeo, glowMaterial, palmGeo, palmTop, rng, sametGeo, stick, type Blockers, type Ground } from './scenery'
@@ -103,14 +104,21 @@ export function buildSaiKaew(bag: Bag, root: Group, block?: Blockers['add']): Sa
   return { bell, umbrellas, mermaid, tail }
 }
 
-/** A beach lounger (a sun bed with a raised back), facing `face` (toward the sea). */
+/** A beach lounger (a sun bed with a raised back), facing `face` (its foot toward the sea). Built in its own frame and
+ *  turned as one, so the back tips up behind the bed whichever way it faces. */
 function lounger(x: number, y: number, z: number, face: number, col: string): BufferGeometry[] {
-  const n = { x: Math.sin(face), z: Math.cos(face) }
+  const c = Math.cos(face)
+  const s = Math.sin(face)
+  const L = (lx: number, ly: number, lz: number): V3 => [x + c * lx + s * lz, y + ly, z - s * lx + c * lz]
+  const frame = '#D7CFC6'
   return [
-    P.rbox(0.6, 0.12, 1.7, 0.05, col, { at: [x, y + 0.36, z], rot: [0, face, 0] }),
-    P.rbox(0.6, 0.12, 0.7, 0.05, col, { at: [x - n.x * 0.95, y + 0.62, z - n.z * 0.95], rot: [-0.9, face, 0] }),
-    P.box(0.06, 0.3, 0.06, '#D7CFC6', { at: [x + n.x * 0.6, y + 0.15, z + n.z * 0.6] }),
-    P.box(0.06, 0.3, 0.06, '#D7CFC6', { at: [x - n.x * 0.6, y + 0.15, z - n.z * 0.6] }),
+    // The cushion on its frame, and the back tipped up at the head end (yaw first, then the tip: 'YXZ').
+    P.rbox(0.6, 0.1, 1.55, 0.04, col, { at: L(0, 0.4, 0.12), rot: [0, face, 0] }),
+    P.box(0.64, 0.05, 1.6, frame, { at: L(0, 0.33, 0.12), rot: [0, face, 0] }),
+    P.rbox(0.6, 0.1, 0.72, 0.04, col, { at: L(0, 0.64, -0.88), rot: [0.75, face, 0], order: 'YXZ' }),
+    // Four legs, and the prop under the back.
+    ...[-0.26, 0.26].flatMap((lx) => [0.82, -0.58].map((lz) => P.box(0.05, 0.32, 0.05, frame, { at: L(lx, 0.16, lz), rot: [0, face, 0] }))),
+    P.box(0.5, 0.04, 0.04, frame, { at: L(0, 0.52, -1.02), rot: [0, face, 0] }),
   ]
 }
 
@@ -257,10 +265,10 @@ export function buildProps(bag: Bag, root: Group, ground: Ground, blockers: Bloc
       const f = facing(p.at)
       g.rotation.y = f + Math.PI / 2
       if (p.kind === 'longtail') {
-        g.add(solid(merge([P.rbox(1.1, 0.5, 5.6, 0.2, '#9A6B44', { at: [0, 0.15, 0] }), P.box(1.12, 0.1, 5.62, '#4FA3C9', { at: [0, 0.36, 0] }), P.cone(0.2, 1.6, '#9A6B44', { at: [0, 0.95, 2.9], rot: [0.5, 0, 0] }, 6), P.sphere(0.22, PAL.hotpink, { at: [0, 1.5, 3.25] }, 8), P.sphere(0.18, PAL.butter, { at: [0.1, 1.35, 3.2] }, 8), P.rbox(0.9, 0.06, 2.2, 0.03, '#F6EEDD', { at: [0, 1.7, -0.6] }), ...[-1, 1].flatMap((s) => [P.cyl(0.03, 0.03, 1.3, '#C9B9A2', { at: [s * 0.4, 1.05, -1.6] }, 5), P.cyl(0.03, 0.03, 1.3, '#C9B9A2', { at: [s * 0.4, 1.05, 0.4] }, 5)]), P.box(0.18, 0.18, 1.5, '#5C5468', { at: [0, 0.5, -3.3], rot: [0.25, 0, 0] })]), bag, 2))
+        g.add(solid(merge(longtail(WOOD_BOAT, 5.8, 1.3)), bag, 2))
         add(p.id, p.kind, g, p.at, 0, 1.8)
       } else {
-        g.add(solid(merge([P.rbox(2.0, 0.7, 6.4, 0.3, '#FFFFFF', { at: [0, 0.2, 0] }), P.box(2.02, 0.14, 6.42, '#3F8FE8', { at: [0, 0.38, 0] }), P.cone(1.0, 1.4, '#FFFFFF', { at: [0, 0.2, 3.6], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 0.35] }, 10), P.rbox(1.6, 0.9, 2.0, 0.2, '#F6F3FA', { at: [0, 1.0, -0.3] }), P.rbox(1.62, 0.3, 1.0, 0.1, '#9FD5F2', { at: [0, 1.25, 0.65], rot: [-0.5, 0, 0] }), P.rbox(1.8, 0.08, 2.6, 0.04, '#3F8FE8', { at: [0, 1.55, -0.6] })]), bag, 2))
+        g.add(solid(merge(speedboat()), bag, 2))
         add(p.id, p.kind, g, p.at, 0, 2)
       }
     } else if (p.kind === 'hammock') {
@@ -388,7 +396,7 @@ export function buildProps(bag: Bag, root: Group, ground: Ground, blockers: Bloc
     place.push(P.rbox(w * 0.5, 1.3, 0.06, 0.03, '#7A5A44', { at: L(-w * 0.15, 0.85, d / 2 + 0.01), rot: [0, face, 0] }))
     place.push(P.rbox(w * 0.3, 0.8, 0.06, 0.03, '#BFE6F7', { at: L(w * 0.3, 1.2, d / 2 + 0.01), rot: [0, face, 0] }))
     // An awning over the front.
-    place.push(P.box(w + 0.6, 0.06, 1.4, roof === '#E3C27F' ? '#F6E6B4' : '#FFD0E2', { at: L(0, 2.0, d / 2 + 0.6), rot: [0.18, face, 0] }))
+    place.push(P.box(w + 0.6, 0.06, 1.4, roof === '#E3C27F' ? '#F6E6B4' : '#FFD0E2', { at: L(0, 2.0, d / 2 + 0.6), rot: [0.18, face, 0], order: 'YXZ' }))
     blockers.add(p.x, p.z, Math.max(w, d) * 0.55)
     if (lights) for (let k = 0; k < 7; k++) {
       const lx = -w / 2 - 0.2 + ((w + 0.4) * k) / 6
@@ -467,7 +475,7 @@ export function buildProps(bag: Bag, root: Group, ground: Ground, blockers: Bloc
     const b = STOPS.snorkel.at
     boat.position.set(b.x, 0, b.z)
     boat.rotation.y = yaw
-    boat.add(solid(merge([P.rbox(1.8, 0.7, 7.2, 0.3, '#FFFFFF', { at: [0, 0.2, 0] }), P.box(1.82, 0.16, 7.22, '#3F8FE8', { at: [0, 0.42, 0] }), P.cone(0.24, 1.8, '#FFFFFF', { at: [0, 1.0, 3.7], rot: [0.5, 0, 0] }, 6), P.sphere(0.24, PAL.hotpink, { at: [0, 1.7, 4.1] }, 8), P.rbox(1.7, 0.08, 4.4, 0.04, '#5FC4E0', { at: [0, 2.2, -0.6] }), ...[-1, 1].flatMap((s) => [P.cyl(0.04, 0.04, 1.8, '#E9E3D8', { at: [s * 0.75, 1.3, -2.6] }, 5), P.cyl(0.04, 0.04, 1.8, '#E9E3D8', { at: [s * 0.75, 1.3, 1.4] }, 5)]), P.box(0.6, 0.05, 1.2, '#E9E3D8', { at: [1.05, 0.1, -1], rot: [0, 0, 1.2] }), ...[0, 1, 2].map((k) => P.rbox(0.3, 0.14, 0.3, 0.05, [PAL.gold, PAL.mint, PAL.hotpink][k], { at: [-0.5 + k * 0.5, 0.7, -2.8] }))]), bag, 2))
+    boat.add(solid(merge(longtail(SNORKEL_BOAT)), bag, 2))
     root.add(boat)
     stops.snorkel = boat
   }
