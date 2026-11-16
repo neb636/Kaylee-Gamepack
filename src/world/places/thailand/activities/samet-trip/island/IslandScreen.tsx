@@ -1,13 +1,13 @@
 // The island between the stops, on screen (island.ts is the world; samet-story.md is the story): the 3D island with
 // its tap targets; the story's films over it (FilmOverlay: their words, the memory's storybook look, the hold-to-skip
 // ⏭); the pictures of the beaches (Board.tsx) that come up after the way-in film, after each firefly found, from the
-// top-right button and from a tap on the green taxi; the taxi's ride card (it drives across the screen while the
-// island moves her to the beach she picked); Tofu's thought bubble (a picture of the stop he's running to); and the
+// top-right button and from a tap on the green taxi; the ride (a little film on the island: the family hop into the
+// green taxi, it drives up the road and pulls in at the beach she picked, island.ts ride()); Tofu's thought bubble (a picture of the stop he's running to); and the
 // home picture at the end of Na Dan pier. Sparkle sits in the corner (trip/legs/Guide.tsx): she says what's new
 // (lines.ts L.samet.story, L.samet.island), the family and the islanders talk in their own voices. A hub: no idle
 // hints spoken (the top-right button glows instead).
 import { AnimatePresence } from 'motion/react'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import type { FilmState } from '../../../../../engine3d/film'
@@ -36,9 +36,6 @@ interface Props {
 }
 
 const S = L.samet.story
-/** Seconds the taxi takes to cross the screen; the island moves her under it this long in. */
-const RIDE_S = 1.75
-const RIDE_MOVE_S = 0.55
 
 export function IslandScreen({ start, onAt, onOpen, onHome, onLeave }: Props) {
   const [n, setN] = useState(0)
@@ -55,13 +52,8 @@ export function IslandScreen({ start, onAt, onOpen, onHome, onLeave }: Props) {
   const [board, setBoard] = useState(false)
   const [pics, setPics] = useState<Partial<Record<SpotId, string>>>({})
   const [nudge, setNudge] = useState(false)
-  // The taxi driving across the screen (the island moves her to `to` under it).
-  const [ride, setRide] = useState<{ to: SpotId; n: number } | null>(null)
   const rides = useRef(0)
   const here = useRef<SpotId>(start.at)
-  const timers = useRef<number[]>([])
-  const later = (ms: number, f: () => void) => timers.current.push(window.setTimeout(f, ms))
-  useEffect(() => () => timers.current.forEach((t) => clearTimeout(t)), [])
   const cb = useRef({ onAt, onOpen, onHome })
   cb.current = { onAt, onOpen, onHome }
   const all = start.flags.length === FIREFLY_IDS.length
@@ -96,7 +88,7 @@ export function IslandScreen({ start, onAt, onOpen, onHome, onLeave }: Props) {
    *  her there. */
   const pick = (id: BoardPick) => {
     const w = worldRef.current
-    if (!w || ride) return
+    if (!w || film) return
     const to: SpotId = id === 'sunset' ? 'prao' : STOP_SPOT[id]
     sfx.pop()
     setBoard(false)
@@ -104,18 +96,15 @@ export function IslandScreen({ start, onAt, onOpen, onHome, onLeave }: Props) {
     if (here.current === to || (to === 'prao' && here.current === 'deck')) return w.showStop(id === 'sunset' ? 'hideseek' : id)
     const lines = S.island.ride
     islandSfx.taxiToot()
-    speak(lines[rides.current++ % lines.length])
-    setRide({ to, n: rides.current })
-    later(RIDE_MOVE_S * 1000, () => worldRef.current?.travel(to, id === 'sunset' ? 'hideseek' : id))
-    later(RIDE_S * 1000, () => {
-      setRide(null)
-      // The driver names the beach as they pull in (never before they set off).
-      const name = to === 'hinkhok' ? S.island.hinkhok : L.samet.island.taxi.stop[to as keyof typeof L.samet.island.taxi.stop]
-      if (name) speak(name)
-      worldRef.current?.arrived()
-    })
+    // The driver names the beach as they pull in (never before they set off).
+    const name = to === 'hinkhok' ? S.island.hinkhok : L.samet.island.taxi.stop[to as keyof typeof L.samet.island.taxi.stop]
+    const n = rides.current++
+    const stop = id === 'sunset' ? 'hideseek' : id
+    // The ride is a little film on the island: into the green taxi, up the road, and in at the new beach.
+    const go = w.ride(to, stop, lines[n % lines.length], name, () => worldRef.current?.arrived())
+    if (!go) w.travel(to, stop)
   }
-  const busy = !!film || !!ride
+  const busy = !!film
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#D5EEFA', overflow: 'clip' }}>
@@ -164,22 +153,6 @@ export function IslandScreen({ start, onAt, onOpen, onHome, onLeave }: Props) {
       )}
       {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!film} />}
       {mode === 'webgl' && <FilmOverlay state={film} line={filmLine} speaker={(v) => WHO[v]} onSkip={() => worldRef.current?.skipFilm()} />}
-      {ride && (
-        <div className="isle-ride" key={ride.n} data-ride={ride.to} aria-hidden>
-          <span className="isle-ride-palm" style={{ animationDelay: '-.2s' }}>
-            🌴
-          </span>
-          <span className="isle-ride-palm" style={{ animationDelay: '-.95s', fontSize: 'clamp(44px, 11vmin, 110px)' }}>
-            🌴
-          </span>
-          <div className="isle-ride-road" />
-          <div className="isle-ride-taxi">
-            <div>
-              <TaxiPicture size="100%" />
-            </div>
-          </div>
-        </div>
-      )}
       {leave && !busy && !board && !all && (
         <button
           className="isle-home"

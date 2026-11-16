@@ -6,7 +6,7 @@
 //     P.rbox(0.9, 0.06, 1.9, 0.02, PAL.peach, { at: [0, 0.72, 0] }),
 //     ...legs.map((at) => P.cyl(0.04, 0.04, 0.7, PAL.ink, { at })),
 //   ]), bag, 2)
-import { BoxGeometry, BufferAttribute, CapsuleGeometry, Color, ConeGeometry, CylinderGeometry, Euler, ExtrudeGeometry, Group, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Shape, SphereGeometry, TorusGeometry, type Texture, Vector2, Vector3, BufferGeometry, type ColorRepresentation } from 'three'
+import { BoxGeometry, BufferAttribute, CapsuleGeometry, Color, ConeGeometry, CylinderGeometry, Euler, ExtrudeGeometry, Group, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Shape, SphereGeometry, TorusGeometry, type Texture, Vector2, Vector3, BufferGeometry, type ColorRepresentation, type EulerOrder } from 'three'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import type { Bag } from './dispose'
@@ -17,10 +17,17 @@ import { toon } from './toon'
 export type V3 = [number, number, number]
 export interface PartOpts {
   at?: V3
-  /** Euler angles in radians (XYZ). */
+  /** Euler angles in radians (XYZ unless `order` says otherwise). */
   rot?: V3
+  /** The Euler order. 'YXZ' turns the part to face a way (y) and then tips it in its own frame (x): a lounger's back,
+   *  an awning, a ramp. (In the default XYZ the tip happens about the world's x, so it twists on anything turned.) */
+  order?: EulerOrder
   scale?: V3
 }
+
+/** The matrix that places a part: `at`, `rot` (in `order`), `scale`. */
+export const placeMatrix = (o: PartOpts = {}) =>
+  new Matrix4().compose(new Vector3(...(o.at ?? [0, 0, 0])), new Quaternion().setFromEuler(new Euler(...(o.rot ?? [0, 0, 0]), o.order ?? 'XYZ')), new Vector3(...(o.scale ?? [1, 1, 1])))
 
 const color = new Color()
 /** A part with its color and place baked in. Plain triangles (no index), so a caller can paint it a triangle at a time;
@@ -29,8 +36,7 @@ export function bake(g: BufferGeometry, c: ColorRepresentation, o: PartOpts = {}
   const geo = g.index && !indexed ? g.toNonIndexed() : g
   if (geo !== g) g.dispose()
   for (const name of Object.keys(geo.attributes)) if (name !== 'position' && name !== 'normal') geo.deleteAttribute(name)
-  const m = new Matrix4().compose(new Vector3(...(o.at ?? [0, 0, 0])), new Quaternion().setFromEuler(new Euler(...(o.rot ?? [0, 0, 0]))), new Vector3(...(o.scale ?? [1, 1, 1])))
-  geo.applyMatrix4(m)
+  geo.applyMatrix4(placeMatrix(o))
   color.set(c)
   const n = geo.attributes.position.count
   const rgb = new Float32Array(n * 3)
@@ -55,6 +61,53 @@ export const P = {
     const shape = new Shape(pts.map(([x, y]) => new Vector2(x, y)))
     return bake(new ExtrudeGeometry(shape, { depth, bevelEnabled: false }).translate(0, 0, -depth / 2), c, o)
   },
+}
+
+/** A station of a `loft`: a closed outline [x, y][] (counter-clockwise seen from +z) standing at `z`. */
+export interface LoftRing {
+  z: number
+  pts: [number, number][]
+}
+
+/**
+ * A hull-like shape lofted through outlines standing along z (a boat's or a jet ski's sections, bow to stern), each
+ * with the same number of points, flat-shaded and capped at both ends. `cols` paints the band between point k and k+1
+ * all the way along (one color, or one per band: a colored bottom, a pinstripe, a white deck).
+ */
+export function loft(rings: LoftRing[], cols: ColorRepresentation | ColorRepresentation[], o?: PartOpts): BufferGeometry {
+  const rs = [...rings].sort((a, b) => a.z - b.z)
+  const n = rs[0].pts.length
+  const pos: number[] = []
+  const rgb: number[] = []
+  const c = new Color()
+  const tri = (a: V3, b: V3, d: V3, col: ColorRepresentation) => {
+    pos.push(...a, ...b, ...d)
+    c.set(col)
+    for (let i = 0; i < 3; i++) rgb.push(c.r, c.g, c.b)
+  }
+  const colOf = (k: number) => (Array.isArray(cols) ? cols[k % cols.length] : cols)
+  const P3 = (r: LoftRing, k: number): V3 => [r.pts[k % n][0], r.pts[k % n][1], r.z]
+  for (let i = 0; i + 1 < rs.length; i++) {
+    for (let k = 0; k < n; k++) {
+      const a = P3(rs[i], k), b = P3(rs[i], k + 1), cc = P3(rs[i + 1], k + 1), d = P3(rs[i + 1], k)
+      tri(a, b, cc, colOf(k))
+      tri(a, cc, d, colOf(k))
+    }
+  }
+  // The end caps: a fan from each end's middle, painted like the deck (the last band).
+  for (const [r, sign] of [[rs[0], -1], [rs[rs.length - 1], 1]] as const) {
+    const m: V3 = [r.pts.reduce((s, p) => s + p[0], 0) / n, r.pts.reduce((s, p) => s + p[1], 0) / n, r.z]
+    for (let k = 0; k < n; k++) {
+      if (sign > 0) tri(m, P3(r, k), P3(r, k + 1), colOf(k))
+      else tri(m, P3(r, k + 1), P3(r, k), colOf(k))
+    }
+  }
+  const g = new BufferGeometry()
+  g.setAttribute('position', new BufferAttribute(new Float32Array(pos), 3))
+  g.applyMatrix4(placeMatrix(o))
+  g.computeVertexNormals()
+  g.setAttribute('color', new BufferAttribute(new Float32Array(rgb), 3))
+  return g
 }
 
 export function merge(parts: BufferGeometry[]): BufferGeometry {

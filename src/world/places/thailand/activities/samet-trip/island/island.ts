@@ -4,7 +4,7 @@
 //
 // The story (story.ts, "The Lost Fireflies"): a new trip opens with the way-in film at Na Dan pier, then the pictures
 // of the four beaches come up (the screen's Board). She taps one and is put on that beach a few steps from its stop
-// (travel(), under the screen's taxi ride card). The fireflies she has found circle her horn; each one still to find
+// (ride(): a little film in the green taxi). The fireflies she has found circle her horn; each one still to find
 // waits at its beach; back from a stop its firefly swoops in to join the others and the pictures come up again; with
 // all four a short film sends her to the driftwood tree for the sunset.
 //
@@ -57,10 +57,10 @@ import { BeachClean, BIN_IDS, JUNK_IDS } from '../book/clean'
 import { WILD, Wildlife, type PalmInfo, type WildCtx } from '../book/creatures'
 import { PHOTO_SIZE, snap } from '../book/photo'
 import { buildSki, type Ski } from '../jetski/ski'
-import { at as atFrame, bay, DECK, FRAMES, LANDMARKS, PARKED, POKES, RING, SLIDE, spotStart, STOP_IDS, STOPS, SWIMMERS, WAVE_DIR, WAYS, type SpotId, type StopId, type XZ } from './layout'
+import { at as atFrame, bay, DECK, FRAMES, LANDMARKS, PARKED, POKES, RING, SLIDE, spotStart, STOP_IDS, STOPS, SWIMMERS, TAXI_STOPS, taxiRoad, WAVE_DIR, WAYS, type SpotId, type StopId, type XZ } from './layout'
 import { FINE } from './scenery'
 import { BEATS, Puppy, type Trick } from './puppy'
-import { Planner, pointAt, project, type Route } from './route'
+import { Planner, pointAt, project, route, type Route } from './route'
 import { Letterbox } from '../../../../../engine3d/cinema'
 import { FilmPlayer, type Film, type FilmState } from '../../../../../engine3d/film'
 import type { FireflyId } from '../story/firefly'
@@ -309,6 +309,8 @@ export class SametIsland implements World3D {
   private taxiGlow: Mesh
   private skis: { id: SpotId; ski: Ski; x: number; z: number; face: number }[] = []
   private riding = -1
+  /** The family are in the green taxi (the ride film). */
+  private riding3d = false
   private d: Driver
   private feel: Feel
   private skiGlow: Mesh
@@ -506,8 +508,8 @@ export class SametIsland implements World3D {
         const seg = Math.hypot(len / N, y1 - y0)
         const pitch = Math.atan2(y0 - y1, len / N)
         const at: [number, number, number] = [(x0 + x1) / 2, (y0 + y1) / 2 + 0.06, (z0 + z1) / 2]
-        parts.push(P.box(SLIDE.w, 0.08, seg + 0.05, '#FFF8EC', { at, rot: [pitch, yaw, 0] }))
-        for (const sd of [-1, 1]) parts.push(P.box(0.16, 0.2, seg + 0.05, i % 2 ? PAL.pink : '#FFFFFF', { at: [at[0] + Math.cos(yaw) * sd * (SLIDE.w / 2 + 0.06), at[1] + 0.08, at[2] - Math.sin(yaw) * sd * (SLIDE.w / 2 + 0.06)], rot: [pitch, yaw, 0] }))
+        parts.push(P.box(SLIDE.w, 0.08, seg + 0.05, '#FFF8EC', { at, rot: [pitch, yaw, 0], order: 'YXZ' }))
+        for (const sd of [-1, 1]) parts.push(P.box(0.16, 0.2, seg + 0.05, i % 2 ? PAL.pink : '#FFFFFF', { at: [at[0] + Math.cos(yaw) * sd * (SLIDE.w / 2 + 0.06), at[1] + 0.08, at[2] - Math.sin(yaw) * sd * (SLIDE.w / 2 + 0.06)], rot: [pitch, yaw, 0], order: 'YXZ' }))
       }
       const ty = Math.max(0.05, this.isl.ground.heightAt(SLIDE.top.x, SLIDE.top.z))
       for (const sd of [-1, 1]) {
@@ -804,7 +806,7 @@ export class SametIsland implements World3D {
       for (const f of [this.nick, this.ji]) {
         const r = f.m.root.position
         f.m.update(dt, t)
-        f.shadow.visible = true
+        f.shadow.visible = !this.riding3d
         f.shadow.position.set(r.x, r.y + 0.03, r.z)
       }
     } else {
@@ -990,10 +992,13 @@ export class SametIsland implements World3D {
     this.events.leaveAsk?.(false)
   }
 
-  /** The pictures: she picked beach `to`. The taxi's ride card is over the screen; she, Mom, Dad and Tofu are put
-   *  there, a few steps from its stop. */
+  /** The pictures: she picked beach `to`, and she's put there at once (no ride: a link, the QA). */
   travel(to: SpotId, stop?: StopId) {
     if (this.films.on) return
+    this.putAt(to, stop)
+  }
+  /** She, Mom, Dad and Tofu put on beach `to`, a few steps from the stop she came for. */
+  private putAt(to: SpotId, stop?: StopId) {
     let s = spotStart(to)
     if (stop) {
       // A few steps from the stop she came for, facing it: it's on the screen as she lands.
@@ -1006,7 +1011,10 @@ export class SametIsland implements World3D {
     const face = s.face * TO_DEG
     // Mom and Dad a step behind her, side by side.
     const back = (b: number, side: number) => ({ x: s.x - Math.sin(s.face) * b + Math.cos(s.face) * side, z: s.z - Math.cos(s.face) * b - Math.sin(s.face) * side, face })
+    if (this.kaylee.root.parent !== this.scene) this.scene.add(this.kaylee.root)
     this.stand({ x: s.x, z: s.z, face }, back(this.nick.back, this.nick.side), back(this.ji.back, this.ji.side))
+    if (this.pup.root.parent !== this.scene) this.scene.add(this.pup.root)
+    this.pup.root.rotation.set(0, 0, 0)
     this.pup.place(s.x + Math.sin(s.face) * 1.6 + Math.cos(s.face) * 0.8, s.z + Math.cos(s.face) * 1.6 - Math.sin(s.face) * 0.8, s.face + Math.PI)
     this.counts.taxiRides++
     if (stop) this.story.arrivedFor(stop)
@@ -1014,7 +1022,145 @@ export class SametIsland implements World3D {
     this.rig.setShot(this.shot(), true)
     this.familySettling = true
   }
-  /** The ride card has gone: a hop, a wave, Tofu barks the beach's name (a woof a beat). */
+
+  /** The ride to beach `to` (a picture picked), a little film: everyone hops into the green taxi at its stop, it pulls
+   *  away up the road with the camera running alongside, then (a page turn later) it pulls in at the stop by the new
+   *  beach, and they're on the sand. `say` is the driver's "off we go", `named` the beach's name as they pull in. A
+   *  held ⏭ skips it like any film; `then` runs either way. False if a film is already on. */
+  ride(to: SpotId, stop: StopId | undefined, say: Line, named: Line | undefined, then: () => void) {
+    if (this.films.on) return false
+    const near = (p: XZ) => {
+      let best = 0
+      for (let i = 1; i < TAXI_STOPS.length; i++) if (Math.hypot(TAXI_STOPS[i].at.x - p.x, TAXI_STOPS[i].at.z - p.z) < Math.hypot(TAXI_STOPS[best].at.x - p.x, TAXI_STOPS[best].at.z - p.z)) best = i
+      return best
+    }
+    const from = this.taxi.stop
+    const dest = near(spotStart(to))
+    const away = route(taxiRoad(from))
+    const home = route(taxiRoad(dest))
+    const ground = (x: number, z: number) => Math.max(0, this.isl.ground.heightAt(x, z))
+    const tx = this.taxi
+    const RUN = Math.min(26, away.len * 0.9, home.len * 0.9)
+    let s = 0
+    let dir: 1 | -1 = 1
+    let sp = 0
+    let landed = false
+    // The camera runs alongside, on the side the family face (the truck's local +z), a little ahead.
+    const side = () => {
+      const r = tx.root.rotation.y
+      return { x: Math.sin(r), z: Math.cos(r), fx: Math.cos(r), fz: -Math.sin(r) }
+    }
+    const eye = () => {
+      const p = tx.root.position
+      const d = side()
+      return new Vector3(p.x + d.x * 7.5 + d.fx * 3, p.y + 4.2, p.z + d.z * 7.5 + d.fz * 3)
+    }
+    const look = () => {
+      const p = tx.root.position
+      const d = side()
+      return new Vector3(p.x + d.fx * 0.4, p.y + 1.4, p.z + d.fz * 0.4)
+    }
+    const seat = () => {
+      const st = tx.st
+      st.seats.kaylee.add(this.kaylee.root)
+      this.kaylee.place(0, 0, 0, 0)
+      this.kaylee.setPose('sit')
+      for (const [f, g] of [[this.ji, st.seats.ji], [this.nick, st.seats.nick]] as const) {
+        g.add(f.m.root)
+        f.m.place(0, -0.1 * f.m.height, 0, 0, 'sit')
+        f.shadow.visible = false
+      }
+      st.luggage.add(this.pup.root)
+      this.pup.root.position.set(0, 0, 0)
+      this.pup.root.rotation.set(0, 0.5, 0)
+      this.ring.visible = false
+      this.riding3d = true
+    }
+    const roll = (dt: number, goal: number, k: number) => {
+      const last = s
+      s += (goal - s) * Math.min(1, dt * k)
+      sp = Math.abs(s - last) / Math.max(dt, 1e-3)
+      sfx.taxiEngine(clamp(sp / 9, 0, 1), 0.45)
+    }
+    const f: Film = {
+      id: 'ride',
+      beats: [
+        {
+          id: 'off',
+          turn: true,
+          start: () => {
+            seat()
+            s = 0
+            dir = 1
+            tx.drive(away, 0, 1, ground)
+          },
+          shot: { eye, look, fov: 42, sway: 0.03 },
+          say,
+          sayAt: 0.4,
+          dur: 3.2,
+          hold: 0.2,
+          tick: (_k, t, dt) => {
+            // Off from a standstill: slow, then away up the road.
+            const goal = RUN * Math.min(1, Math.max(0, t - 0.5) / 2.6) ** 1.6
+            roll(dt, goal, 9)
+            tx.drive(away, s, 1, ground)
+          },
+        },
+        {
+          id: 'in',
+          turn: true,
+          start: () => {
+            s = RUN
+            dir = -1
+            tx.stop = dest
+            tx.drive(home, s, -1, ground)
+          },
+          shot: { eye, look, fov: 42, sway: 0.03 },
+          say: named,
+          sayAt: 1.6,
+          dur: 3.0,
+          hold: 0.3,
+          tick: (_k, t, dt) => {
+            // Pulling in and slowing to a stop at the beach.
+            const e = Math.min(1, t / 2.4)
+            roll(dt, RUN * (1 - e) * (1 - e), 10)
+            tx.drive(home, s, dir, ground)
+          },
+        },
+        {
+          // Under a page turn they're on the sand, and the camera is where the game's will be: no long glide back.
+          id: 'out',
+          turn: true,
+          start: () => f.finish(),
+          shot: {
+            eye: () => {
+              const g = this.shot()
+              const y = g.yaw / TO_DEG
+              const p = g.pitch / TO_DEG
+              const D = 24
+              return new Vector3(g.center.x + Math.sin(y) * Math.cos(p) * D, g.center.y + Math.sin(p) * D, g.center.z + Math.cos(y) * Math.cos(p) * D)
+            },
+            look: () => this.shot().center.clone(),
+            sway: 0,
+          },
+          dur: 0.9,
+        },
+      ],
+      finish: () => {
+        if (landed) return
+        landed = true
+        this.riding3d = false
+        tx.park(dest, ground)
+        for (const w of tx.st.wheels) w.rotation.z = 0
+        for (const fl of [this.nick, this.ji]) fl.shadow.visible = true
+        this.ring.visible = true
+        this.putAt(to, stop)
+      },
+    }
+    this.play(f, then)
+    return true
+  }
+  /** The ride is over: a hop, a wave, Tofu barks the beach's name (a woof a beat). */
   arrived() {
     this.kaylee.react('hop')
     this.ji.m.react('wave')
@@ -1538,8 +1684,8 @@ export class SametIsland implements World3D {
 
   // ---------------------------------------------------------------- the green taxi
 
-  /** The green taxi waits by the road nearest the beach she's on. It doesn't drive her round any more: the pictures
-   *  are how it takes her anywhere (travel(), under the screen's ride card), and a tap on it brings them up. */
+  /** The green taxi waits by the road nearest the beach she's on. A picture picked on the board and it drives her
+   *  there (ride(): a little film); a tap on it brings the pictures up. */
   private taxiStep(dt: number) {
     const tx = this.taxi
     const k = this.kaylee.root.position

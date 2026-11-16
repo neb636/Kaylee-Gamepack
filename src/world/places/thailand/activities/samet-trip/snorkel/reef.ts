@@ -9,6 +9,7 @@ import type { Bag } from '../../../../../engine3d/dispose'
 import { bake, merge, P, solid, solidMix } from '../../../../../engine3d/geo'
 import { PAL, toon } from '../../../../../engine3d/toon'
 import { coralModel, urchinModel, type Model } from '../book/models'
+import { longtail, SNORKEL_BOAT } from '../island/boats'
 import { palmGeo, rng } from '../island/scenery'
 
 export interface XZ {
@@ -242,16 +243,8 @@ export function boat(bag: Bag) {
   body.add(
     solid(
       merge([
-        P.rbox(1.8, 0.8, 7.2, 0.3, '#FFFFFF', { at: [0, 0.15, 0] }),
-        P.box(1.82, 0.16, 7.22, '#3F8FE8', { at: [0, 0.42, 0] }),
-        P.cone(0.24, 1.8, '#FFFFFF', { at: [0, 0.95, -3.7], rot: [-0.5, 0, 0] }, 6),
-        P.sphere(0.24, PAL.hotpink, { at: [0, 1.65, -4.1] }, 8),
-        P.rbox(1.7, 0.08, 4.4, 0.04, '#5FC4E0', { at: [0, 2.2, 0.6] }),
-        ...[-1, 1].flatMap((s) => [P.cyl(0.04, 0.04, 1.8, '#E9E3D8', { at: [s * 0.75, 1.3, 2.6] }, 5), P.cyl(0.04, 0.04, 1.8, '#E9E3D8', { at: [s * 0.75, 1.3, -1.4] }, 5)]),
-        ...[0, 1, 2].map((k) => P.rbox(0.3, 0.14, 0.3, 0.05, [PAL.gold, PAL.mint, PAL.hotpink][k], { at: [-0.5 + k * 0.5, 0.62, 2.4] })),
-        // The long-tail motor at the back.
-        P.cyl(0.05, 0.05, 2.6, '#6A6A72', { at: [0, 0.7, 4.4], rot: [1.2, 0, 0] }, 6),
-        P.rbox(0.4, 0.4, 0.6, 0.08, '#E8E2D6', { at: [0, 1.1, 3.6] }),
+        // The blue-and-white longtail (island/boats.ts), turned so its bow points to −z.
+        ...longtail(SNORKEL_BOAT).map((g) => g.rotateY(Math.PI)),
       ]),
       bag,
       2,

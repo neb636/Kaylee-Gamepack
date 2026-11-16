@@ -1,6 +1,6 @@
 // The pictures: how she gets round Koh Samet (samet-story.md). Four round pictures of the beaches, drawn from the
 // island itself, each with its firefly (grey until she has found it). Tap one and the green taxi takes her straight
-// there (IslandScreen's ride card); the one she's standing on just closes the pictures. With all four found there is
+// there (a little film on the island: island.ts ride()); the one she's standing on just closes the pictures. With all four found there is
 // one picture left: the sunset at the driftwood tree. No words to read: the labels are for the grown-up.
 //
 // Also here: the firefly's little picture (the board's badges and the top-right button's row of four), and the green
@@ -121,8 +121,8 @@ export function FireflyIcon({ id, lit, size = 40 }: { id: FireflyId; lit: boolea
   )
 }
 
-/** The green taxi (a songthaew: a pickup with benches in the back), the sun bear at the wheel, for the ride card and
- *  the top-right button. */
+/** The green taxi (a songthaew: a pickup with benches in the back), the sun bear at the wheel, for the top-right
+ *  button. */
 export function TaxiPicture({ size = 220 }: { size?: number | string }) {
   return (
     <svg viewBox="0 0 220 130" width={size} aria-hidden style={{ display: 'block', overflow: 'visible' }}>
@@ -192,16 +192,6 @@ export const BOARD_CSS = `
 @keyframes isle-nudge { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.09); } }
 .isle-go-taxi { width: calc(var(--btn) * .78); }
 .isle-go-flies { display: grid; grid-template-columns: repeat(2, auto); gap: 1px 2px; }
-.isle-ride { position: absolute; inset: 0; z-index: 60; overflow: hidden; background: linear-gradient(#BDEBFF 0 46%, #8EE0D2 46% 62%, #FFF1D6 62% 100%); touch-action: none; }
-.isle-ride-road { position: absolute; left: 0; right: 0; bottom: 12%; height: 15%; background: #E9D9B8; border-top: 5px solid #D9C49A; }
-.isle-ride-road::after { content: ''; position: absolute; left: 0; right: 0; top: 46%; height: 8%; background: repeating-linear-gradient(90deg, #fff 0 44px, transparent 44px 96px); animation: isle-road .5s linear infinite; }
-@keyframes isle-road { to { transform: translateX(-96px); } }
-.isle-ride-palm { position: absolute; bottom: 26%; font-size: clamp(80px, 22vmin, 220px); line-height: 1; animation: isle-palm 1.5s linear infinite; }
-@keyframes isle-palm { from { transform: translateX(110vw); } to { transform: translateX(-30vw); } }
-.isle-ride-taxi { position: absolute; left: 0; bottom: 14%; width: clamp(260px, 54vmin, 600px); animation: isle-taxi 1.75s cubic-bezier(.3,.1,.6,1) both; }
-.isle-ride-taxi > div { animation: isle-bump .28s ease-in-out infinite; }
-@keyframes isle-taxi { from { transform: translateX(-60vmin); } to { transform: translateX(105vw); } }
-@keyframes isle-bump { 0%, 100% { transform: translateY(0) rotate(-.6deg); } 50% { transform: translateY(-5px) rotate(.6deg); } }
 .isle-wheel { animation: isle-spin .45s linear infinite; }
 @keyframes isle-spin { to { transform: rotate(360deg); } }
 `
