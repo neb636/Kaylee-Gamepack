@@ -1,8 +1,0 @@
-{
-  "title": "Koh Samet: the taxi no longer drives through the blue shop",
-  "checkIn": "fix",
-  "kaylee": "Leaving Na Dan pier, the green taxi drives up the road past the shops instead of through the blue one.",
-  "questions": [],
-  "pictures": [{ "title": "Leaving Na Dan pier", "before": "pics/before.png", "after": "pics/after.png", "caption": "The blue shop moved off the road, to the pier's side" }],
-  "links": [{ "label": "Ride the taxi from the pier", "hash": "#/world/thailand/samet-trip/island?at=nadan&board=1" }]
-}
