@@ -415,7 +415,9 @@ export function buildProps(bag: Bag, root: Group, ground: Ground, blockers: Bloc
     const f = FRAMES.nadan
     const out = ang(f)
     const a1 = at(f, -12, -16)
-    const a2 = at(f, 4, -17)
+    // (The blue one stood on the taxi's road up from the pier and the taxi drove through it (2026-11-16): it's on the
+    // pier's side of the road now, between the pink one and the road.)
+    const a2 = at(f, -4, -17)
     const a3 = at(f, 11, -14)
     shop(a1, out, '#FFE2EC', '#F0596B')
     shop(a2, out, '#E7F3FF', '#5FA2E0', 5)
