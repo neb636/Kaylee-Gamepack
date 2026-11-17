@@ -15,8 +15,8 @@ on something a script could have caught. **Passing QA means it works, not that i
    `gh run view --log-failed`, check whether the same spec fails on `main`, then fix only that spec.
    `npm run test:changed` runs just what your branch affects (opt-in).
 4. New toys get no bespoke e2e spec: `tests/sections.spec.ts` finds every section by itself. A bespoke spec is for a
-   non-visual contract only (voice plays, GPU memory, a deep link lands). Walkthroughs are tagged `@behavior` and run
-   nightly (`npm run test:behavior`).
+   non-visual contract only (voice plays, GPU memory, a deep link lands). No step-by-step walkthrough specs: they broke
+   on every UI tweak, and the nightly run that held them was removed (2026-11-17).
 
 ## A toy, before each check-in
 

@@ -107,7 +107,7 @@ Fixes go faster: you ask, the AI fixes it with a short before-and-after clip, yo
 - `art/STYLE.md`: the art style prompt. `art/source/`: full-size art (per-country originals are git-ignored scratch;
   the app uses small webp copies).
 - `.github/workflows/`:
-  - `ci.yml`: `npm run check` (verify + every Playwright spec), the analytics check, and the nightly `@behavior` run
+  - `ci.yml`: `npm run check` (verify + every Playwright spec) and the analytics check
   - `preview.yml`: PR previews, with the review page at `<preview>/review/`
   - `deploy.yml`: main → Pages
 

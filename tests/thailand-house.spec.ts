@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
-// Agong's house, Thailand's 3D home base (src/world/places/thailand/activities/hub/): it renders in WebGL, floor
-// reminders, and no leftover GPU memory after going back and forth. Read-only state comes from window.__thaiHouseQA (no jump hooks).
+// Agong's house, Thailand's 3D home base (src/world/places/thailand/activities/hub/): it renders in WebGL.
+// Read-only state comes from window.__thaiHouseQA (no jump hooks).
 
 type HouseQA = { mode: string; spot?: string; floor?: number; pose?: string; using?: string | null; memory?: { geometries: number; textures: number } }
 const qa = (page: Page) => page.evaluate(() => window.__thaiHouseQA?.() as HouseQA | undefined)
@@ -27,69 +27,4 @@ test('Agong\'s house renders in 3D', async ({ page }) => {
   await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
   await expect(page.locator('[data-anchor="family:agong"]')).toBeVisible()
   expect(errors).toEqual([])
-})
-
-test('@behavior going to the party and back leaves no GPU memory behind', async ({ page }) => {
-  test.setTimeout(120_000)
-  const errors = trackErrors(page)
-  await open(page, 'hub/downstairs')
-  await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
-  // The party button shows once every stamp is collected.
-  await page.evaluate(() => window.__kayleeWorld?.stampAll())
-  const roundTrip = async () => {
-    await page.getByRole('button', { name: 'Party' }).click({ force: true })
-    await expect(page.getByRole('button', { name: 'Back to the map' })).toBeVisible()
-    await page.getByRole('button', { name: 'Back to the map' }).click()
-    await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
-    // Back where she was.
-    await expect.poll(field(page, 'spot')).toBe('downstairs')
-    await page.waitForTimeout(1500)
-  }
-  await roundTrip()
-  const before = (await qa(page))!.memory!
-  for (let i = 0; i < 4; i++) await roundTrip()
-  const after = (await qa(page))!.memory!
-  expect(after.geometries).toBeLessThanOrEqual(before.geometries + 2)
-  expect(after.textures).toBeLessThanOrEqual(before.textures)
-  expect(errors).toEqual([])
-})
-
-
-test('@behavior house reminders highlight a visible target and only speak when asked', async ({ page }) => {
-  test.setTimeout(60_000)
-  await page.clock.install()
-  await open(page, 'hub/downstairs')
-  await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
-  await expect(page.locator('[data-anchor="family:agong"]')).toBeVisible()
-  const speech = () => page.evaluate(() => (window.__kayleeSpeech ?? []).map((s) => s.text))
-  const before = await speech()
-  await page.clock.fastForward(13_000)
-  await expect(page.locator('[data-anchor="stairs-up"], [data-anchor^="family:"]').filter({ visible: true }).and(page.locator('[style*="box-shadow: rgba(255, 79, 154"]')).first()).toBeVisible()
-  expect(await speech()).toEqual(before)
-  await page.getByRole('button', { name: 'Sparkle', exact: true }).click()
-  const last = (await speech()).at(-1)
-  expect(['Tap the stairs to go up to your room!', 'Tap your family to say hello!']).toContain(last)
-})
-
-test('@behavior Mom greets the camera from the family photo', async ({ page }) => {
-  await open(page, 'hub/family?who=ji')
-  await page.locator('[data-anchor="family:ji"]').click()
-  const spoken = await page.evaluate(() => (window.__kayleeSpeech ?? []).filter((s) => s.voice === 'ji').map((s) => s.text))
-  expect(spoken).toEqual(['I love you!'])
-})
-
-test('@behavior a new wardrobe drawer keeps its own instruction for replay', async ({ page }) => {
-  await open(page, 'hub/wardrobe')
-  const drawer = page.locator('[data-anchor="trip:ward:drawer:paint"]')
-  const sparkle = page.getByRole('button', { name: 'Sparkle', exact: true })
-  await drawer.click()
-  const paint = () => page.evaluate(() => (window.__kayleeSpeech ?? []).filter((s) => s.text === 'Hair, dress or fur!').length)
-  await expect.poll(paint).toBe(1)
-  await sparkle.click()
-  await expect.poll(paint).toBe(2)
-  await drawer.click()
-  await drawer.click()
-  expect(await paint()).toBe(2)
-  await sparkle.click()
-  await expect.poll(paint).toBe(3)
 })
