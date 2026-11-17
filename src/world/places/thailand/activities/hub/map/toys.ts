@@ -149,7 +149,7 @@ export function buildScenery(field: Field, bag: Bag): Scenery {
 
 // ------------------------------------------------------------------------------------------------ the places
 
-/** Bangkok: a row of pastel shophouses (the Thailand house is the pink one), a tall tower behind and the flag. */
+/** Bangkok: a row of pastel shophouses (Agong's is the pink one), a tall tower behind and the flag. */
 export function bangkokParts(): BufferGeometry[] {
   const parts: BufferGeometry[] = []
   const paint = ['#FBEA9A', '#FF9DC0', '#8FE3C8']

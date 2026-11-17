@@ -5,7 +5,7 @@ Thailand is the family's country. It is built in **3D with three.js** (the user 
 shadows, dark ink outlines like the 2D art, soft round shadows, no post-processing. iPad Safari first; desktop and
 iPhone must work.
 
-The home base is **the Thailand house** (it was Agong's house: Grandpa, Thai อากง; he passed away and left the game on 2026-11-15, and Aunty Jum now takes the gifts coming home from each trip; his desk and empty chair stay for now), a Thai shophouse (ตึกแถว *tuek thaeo*, "row
+The home base is **Agong's house** (Grandpa, Thai อากง, "a-gong"), a Thai shophouse (ตึกแถว *tuek thaeo*, "row
 building"). Kaylee walks around it as a unicorn that looks nothing like Sparkle. Every family member becomes an animal
 character, picked by the user from a lineup. The places the family loves become activities later, one per PR.
 
@@ -19,7 +19,7 @@ follow her finger) comes back later as a 3D activity reached from the house.
 | Kaylee | her | visiting | lilac unicorn, rainbow mane, gold horn, pink dress (nothing like Sparkle) |
 | Ji | Mom | visiting | cream unicorn, long lavender-pink hair, peach sundress, a little rounder (the user) |
 | Nick | Dad | visiting | mint unicorn, short sky-lavender mane, yellow polo, big grin |
-| ~~Agong (อากง)~~ | Grandpa (passed away; removed from the game 2026-11-15) | | ~~panda with round gold glasses, a moustache, a cream shirt and a cane~~ |
+| Agong (อากง) | Grandpa | yes | panda with round gold glasses, a moustache, a cream shirt and a cane |
 | Jum | aunt | yes | chubby pink elephant (the user's change from the bunny), mint blouse |
 | Joy | aunt | yes | fox with her own straight brown hair to the shoulders, parted in the middle, a big toothy smile, a white blouse with a pink lace collar (from the user's photo) |
 | Bird | uncle | yes | water buffalo with curved horns, his own short spiky black hair, a black party shirt with orange and red flowers (from the user's photo) |
@@ -60,7 +60,7 @@ Open questions for the user: Does Sparkle keep guiding here (2D, in the prompt b
 else), or does a family member (Mom, Agong) give the instructions? What is each person like (for their voices)?
 
 
-## The Thailand house (the hub)
+## Agong's house (the hub)
 
 Camera: a follow camera from the front-right, looking into the house like a dollhouse with its front, its right wall
 and its ceiling cut away. Inside it frames a box around Kaylee (`thailand/tune.ts`). On the street it is low and
@@ -130,7 +130,7 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
    the elephant map), then packing, the goodbye and Aunty Sri's white electric van (no car ride: it pulls away and
    they're at the airport), the airport and the window seat, each a section (`boat-trip/invite` ... `boat-trip/land`).
    The second family trip (user feedback, 2026-10-20) is a mall day at ICONSIAM: Mom drives the grey rental Veloz, Kaylee
-   plays in HarborLand's "Little Thailand" and shares a pizza at The Pizza Company, and the leftovers go home to Aunty Jum
+   plays in HarborLand's "Little Thailand" and shares a pizza at The Pizza Company, and the leftovers go home to Agong
    (plan since removed). Its first greybox, a small climbing toy, is built
    (PR #120), and rebuilt as the Big Frame at real scale (`#/world/thailand/mall-trip/frame`). The user's photos (2026-10-21) turned
    HarborLand into a hall of mini games: a vet clinic, a barber, a racing slide and more, each its own greybox.
@@ -161,7 +161,7 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
   sliding along walls; pushing into the stairs climbs them in the house; the user 2026-10-28: having to find the stick in
   the corner wasn't Roblox). A jump button bottom right hops her along, a drag on the right half swings the camera
   (at the same time as the stick, with another finger) and a pinch moves it in and out. Taps still poke and walk. On in
-  the Thailand house (inside and the street), the ICONSIAM hall and HarborLand's Big Frame (stick on the floor she's on;
+  Agong's house (inside and the street), the ICONSIAM hall and HarborLand's Big Frame (stick on the floor she's on;
   climbs and slides are still taps), and the airport (camera only, no stick). A world opts in with `roam()`, and each
   shot says how far it may be turned (`Shot.roam`: the house keeps to the cutaway's open side). Feel numbers are knobs
   (`?feel=1`, group "Roblox controls"). Next, if she likes it: the Nan stops she walks around in.

@@ -149,7 +149,7 @@ export interface IslandEvents {
   pictures?(p: Partial<Record<SpotId, string>>): void
   /** Something went in a bin (the beach clean's count). */
   cleaned?(n: number): void
-  /** All four pink flags up and she tapped the speedboat at Na Dan pier: Mom's photo of the island (for Aunty Jum's
+  /** All four pink flags up and she tapped the speedboat at Na Dan pier: Mom's photo of the island (for Agong's
    *  wall), and home. */
   home?(photo: string): void
   /** Someone says something (lines.ts L.samet.island): the screen's TripGuide speaks it. */

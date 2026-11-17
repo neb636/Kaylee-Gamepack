@@ -1,7 +1,7 @@
 // The flight home (the boat trip's `home`, plan: "Cut on purpose"): a 4-second picture, the plane over a pink sunset.
 // Their chubby pastel plane crosses the sky over the sea and its rock towers, a gold sun sinking behind them, pink
 // clouds and a trail of puffs. Built in the house's world, far under the street (the house's leg shows it first, then
-// cuts to Aunty Sri's van at the door behind a white flash), so no other world has to be built for 4 seconds.
+// cuts to Aunty Sri's van at Agong's door behind a white flash), so no other world has to be built for 4 seconds.
 // Looks toward -z.
 import { BackSide, BufferAttribute, Color, Group, Mesh, MeshBasicMaterial, SphereGeometry, Vector3 } from 'three'
 import { bell } from '../../../../../sdk'

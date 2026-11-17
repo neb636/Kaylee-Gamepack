@@ -49,7 +49,7 @@ export interface Pin {
 }
 export const PINS: Pin[] = [
   { id: 'nan', at: [100.85, 18.85], activity: 'nan-trip', label: 'Nan, the mountains' },
-  { id: 'bangkok', at: [100.75, 14.25], activity: 'mall-trip', label: "Bangkok, the Thailand house" },
+  { id: 'bangkok', at: [100.75, 14.25], activity: 'mall-trip', label: "Bangkok, Agong's house" },
   { id: 'krabi', at: [98.75, 8.2], activity: 'boat-trip', label: 'Krabi, the boat and the elephants' },
   { id: 'samet', at: SAMET, activity: 'samet-trip', label: 'Koh Samet, the island' },
 ]

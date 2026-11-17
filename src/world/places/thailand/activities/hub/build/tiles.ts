@@ -1,4 +1,4 @@
-// The terrazzo floors at the Thailand house, from Dad's photos (~/refs, 2026-10-18). Downstairs: warm golden terrazzo crossed by
+// The terrazzo floors at Agong's, from Dad's photos (~/refs, 2026-10-18). Downstairs: warm golden terrazzo crossed by
 // sage-green terrazzo bands with a thin dark edge, in a grid like the old shophouse floor. Upstairs: pale grey terrazzo
 // in big square tiles with dark seams. Each is one tile drawn on a canvas (chips and all) and repeated; the toon
 // material still gives it the house's light bands. Seeded, so screenshots are the same every time.

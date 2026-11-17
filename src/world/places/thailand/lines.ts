@@ -48,10 +48,10 @@ export const L = {
     left: 'Thai cars drive on the left!',
   },
 
-  // Sparkle, at the Thailand house: at most two lines before her hands are busy, then only when something is new or she
+  // Sparkle, at Agong's house: at most two lines before her hands are busy, then only when something is new or she
   // seems stuck.
   house: {
-    arrive: `We're at the Thailand house!`,
+    arrive: `We're at Agong's house in Thailand!`,
     door: onDevice('Tap the door to go inside!', 'Click the door to go inside!'),
     inside: onDevice('Tap your family to say hello!', 'Click your family to say hello!'),
     // The first time she rattles the closed bathroom door.
@@ -124,10 +124,11 @@ export const L = {
   },
 
   family: {
+    agong: hello('agong', `Sawasdee krub! Welcome home!`, ['Come, sit with Agong.', 'Ho ho! My little unicorn!']),
     ji: hello('ji', 'Hi sweetie! This is our room!', ['Bounce on the mattress!', `I love you!`]),
-    nick: hello('nick', "Hi! Welcome to the Thailand house!", ['High five!', "Let's go inside!"]),
+    nick: hello('nick', "Hi! Welcome to Agong's house!", ['High five!', "Let's go inside!"]),
     jum: hello('jum', `Sawasdee ka! Are you hungry?`, ['The rice is almost ready!', `So big now!`]),
-    joy: hello('joy', `Sawasdee ka! Look at all the treasures!`, ['The lucky cat says hi!', 'Hee hee! Hi again!']),
+    joy: hello('joy', `Sawasdee ka! Look at Agong's treasures!`, ['The lucky cat says hi!', 'Hee hee! Hi again!']),
     bird: hello('bird', `Sawasdee krub!`, ['Want to sit on my motorbike?', 'Beep beep!']),
     gan: hello('gan', 'Mm-hmm. Hi.', ["One sec, I'm winning!", 'Uh-huh...']),
     ken: hello('ken', 'Oh. Hi.', ['Look, a funny video!', 'Mm-hmm...']),
@@ -197,6 +198,7 @@ export const L = {
     notice: {
       ji: notice(ji, [`Ooh, what a pretty hat!`, `Ooh, fancy glasses!`, `Ooh, so pretty!`, `Ooh, what a pretty outfit!`, `Ooh, nice shoes!`, `Ooh, new colors!`]),
       nick: notice(nick, ['Wow, cool hat!', 'Cool shades!', 'Whoa, cool!', 'Whoa, what an outfit!', 'Cool shoes!', 'Whoa, new colors!']),
+      agong: notice(by('agong'), ['Ho ho! So pretty!', 'Ho ho! So fancy!', 'Ho ho! So pretty!', 'Ho ho! So pretty!', 'Ho ho! Nice shoes!', 'Ho ho! New colors!']),
       jum: notice(by('jum'), [`Oh! What a pretty hat!`, 'Oh! So fancy!', 'Oh! So pretty!', 'Oh! What a pretty outfit!', 'Oh! Nice shoes!', 'Oh! I love the colors!']),
       joy: notice(by('joy'), ['Wow! I love your hat!', 'Wow! Fancy glasses!', 'Wow! So cute!', 'Wow! What an outfit!', 'Wow! Cute shoes!', 'Wow! New colors!']),
       bird: notice(by('bird'), ['Nice hat!', 'Nice glasses!', 'Ho ho! Nice!', 'Nice outfit!', 'Nice shoes!', 'Ho ho! New colors!']),
@@ -253,6 +255,7 @@ export const L = {
       goodHat: ji('Good hat!'),
     },
     goodbye: {
+      agong: by('agong')('Bring Agong a photo of the Nail Island!'),
       jum: by('jum')('Snacks for the trip!'),
       // The big cousins, without looking up from their phones.
       gan: by('gan')('Bye...'),
@@ -429,22 +432,23 @@ export const L = {
     },
   },
 
-  // The way home (the boat trip's `home`): Aunty Sri's van brings them back to the Thailand house, she picks the photo for
-  // the photo wall, and even the big cousins look up from their phones. Then, in the house, the photo on the wall.
+  // The way home (the boat trip's `home`): Aunty Sri's van brings them back to Agong's house, she picks the photo for
+  // Agong's wall, and even the big cousins look up from their phones. Then, in the house, the photo on the wall.
   home: {
     sri: by('sri')("We're home!"),
-    ask: by('jum')('Did you bring my photo?'),
-    thanks: by('jum')('Beautiful! Thank you!'),
+    agong: by('agong')('Did you bring my photo?'),
+    thanks: by('agong')('Beautiful! Thank you!'),
     gan: by('gan')('Whoa! Cool!'),
     ken: by('ken')('Whoa!'),
     bb: by('bb')('So cool!'),
+    jum: by('jum')('So pretty!'),
     // The frame on the wall, tapped in the house.
     wall: ji('Our boat trip!'),
     // The stamp screen's sticker.
     sticker: 'Fiddler crabs wave hello!',
     // Sparkle, after a while with nothing done.
-    pick: 'Pick a photo for Aunty Jum!',
-    give: onDevice('Tap Aunty Jum to give it to her!', 'Click Aunty Jum to give it to her!'),
+    pick: 'Pick a photo for Agong!',
+    give: onDevice('Tap Agong to give it to him!', 'Click Agong to give it to him!'),
     // At the pier at sunset, nothing done for a while.
     fly: onDevice('Tap the plane to fly home!', 'Click the plane to fly home!'),
     // The boarding pass on a replay: the whole trip or straight to the boat.
@@ -723,7 +727,7 @@ export const L = {
       lift: [nick('Champion!'), ji('Smile, champion!')],
     },
     // The trip around the stops (activities/nan-trip/Loop.tsx, the trip kit): packing for the mountains, landing in Nan,
-    // the photo at the 3's viewpoint, and the photo on the photo wall. The rest of the way there and home is the boat
+    // the photo at the 3's viewpoint, and the photo on Agong's wall. The rest of the way there and home is the boat
     // trip's (L.trip, L.home).
     trip: {
       cool: ji("It's cool and rainy in the mountains!"),
@@ -775,7 +779,7 @@ export const L = {
         // Tied up at Na Dan pier.
         here: by('pelican')('Koh Samet! Here we are!'),
       },
-      // The photo on the photo wall, tapped in the house.
+      // The photo on Agong's wall, tapped in the house.
       wall: ji('Our trip to Koh Samet!'),
       // The stamp screen's sticker.
       sticker: 'Pink mermaid sticker! A mermaid sits on the rocks!',
@@ -1529,9 +1533,9 @@ export const L = {
       // Dad with more than anyone (in turn), the cheese tug on his nose.
       ham: [nick("Mom's hungry too!"), nick('Ho ho! More for Dad!')],
       nose: nick('My nose!'),
-      // Two each: the last two go in Aunty Jum's box; the lid closes; then Sparkle's fact once it's all shared.
-      aunty: ji('Those are for Aunty Jum!'),
-      closed: nick('Yay! Pizza for Aunty Jum!'),
+      // Two each: the last two go in Agong's box; the lid closes; then Sparkle's fact once it's all shared.
+      agong: ji('Those are for Agong!'),
+      closed: nick('Yay! Pizza for Agong!'),
       fair: 'Sharing fairly means everyone gets the same!',
       // The pokes: the server's bow, Dad's chili sneeze, Mom's onion-ring bracelets (three in turn, then she eats one).
       thanks: by('server')('Khob khun ka!'),
@@ -1542,7 +1546,7 @@ export const L = {
       hint: {
         menu: onDevice('Tap a pizza!', 'Click a pizza!'),
         slice: 'Pull a slice to a plate!',
-        box: "Put one in Aunty Jum's box!",
+        box: "Put one in Agong's box!",
       },
     },
 
@@ -1550,15 +1554,15 @@ export const L = {
     trip: {
       // Mom's card in the house, once there are two trips (🚤 or 🛝🍕).
       where: ji(`Where shall we go?`),
-      // The goodbye and home, at the Thailand house (TripHouse reads them from the TripDef: activities/mall-trip/words.ts).
-      wish: by('jum')('Bring me something yummy!'),
+      // The goodbye and home, at Agong's house (TripHouse reads them from the TripDef: activities/mall-trip/words.ts).
+      wish: by('agong')('Bring Agong something yummy!'),
       ready: nick(`Mom is driving! Hop in!`),
       home: ji("We're home!"),
-      ask: by('jum')(`Ooh! What is that?`),
-      thanks: by('jum')(`Pizza! Thank you!`),
+      agong: by('agong')(`Ho ho! What is that?`),
+      thanks: by('agong')(`Pizza! Thank you!`),
       pizza: { gan: by('gan')('Pizza?!'), ken: by('ken')('Pizza?!'), bb: by('bb')('Pizza?!') },
-      hair: by('jum')("Ha ha! Look at Dad's hair!"),
-      give: onDevice('Tap Aunty Jum to give her the box!', 'Click Aunty Jum to give her the box!'),
+      hair: by('agong')("Ho ho ho! Look at Dad's hair!"),
+      give: onDevice('Tap Agong to give him the box!', 'Click Agong to give him the box!'),
       wall: ji('Our mall day!'),
       // ICONSIAM: the glimpse, the lift and the HarborLand counter (arrive.ts).
       arrive: {

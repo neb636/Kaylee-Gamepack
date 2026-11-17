@@ -44,7 +44,7 @@ interface Props {
   onMap?: () => void
   /** The 3 road reached its viewpoint (section `three`). */
   onView?: () => void
-  /** On the trip: the bends have popped and Mom took the photo (it's one to pick for the photo wall). */
+  /** On the trip: the bends have popped and Mom took the photo (it's one to pick for Agong's wall). */
   onPhoto?: () => void
   /** ✈️🏠 on the end card at the viewpoint (from the airport: the trip's way home; not from the lookout). */
   onHome?: () => void

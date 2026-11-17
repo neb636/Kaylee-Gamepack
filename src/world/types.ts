@@ -61,7 +61,7 @@ export interface PlaceMeta {
    *  is the last chapter, and its stamp brings the trophy): that activity's id. The section index lists no `party`
    *  for the place, and the hub marks the finale's spot with `data-finale`. */
   finale?: string
-  /** A hub with more than one place in it (Thailand: the map, and the Thailand house): the hub section the top bar's back
+  /** A hub with more than one place in it (Thailand: the map, and Agong's house): the hub section the top bar's back
    *  button goes to from the others, before the world map. */
   hubHome?: string
   /** Passport page facts: weather, hello, food, fun fact... */

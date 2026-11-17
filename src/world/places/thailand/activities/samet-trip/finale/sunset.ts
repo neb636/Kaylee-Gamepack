@@ -4,12 +4,12 @@
 //
 // Kaylee, Mom and Dad stand by the big driftwood tree watching the sun go down over the sea, the fireflies she found
 // circling her horn (story/firefly.ts; they glow brighter as it gets dark, and line up over the three heads for Mom's
-// photo, so they are in the picture that goes on the photo wall). Two things to do, in any order (and everything pokes):
+// photo, so they are in the picture that goes on Agong's wall). Two things to do, in any order (and everything pokes):
 //   - the sun: she grabs it and pulls it down to the sea. The sky goes gold, then pink, then purple as it sinks; when
 //     it touches the water it plops in with a glint, the night falls by itself, the stars come out and the lanterns
 //     light up. Then Dad calls everyone to the fire show (the 🔥 button).
 //   - Mom's photo: tap Mom and the three of them turn round, squeeze together and smile for her phone, the sunset
-//     behind them (the photo for the photo wall; if she never takes it, Mom snaps one as the sun touches the sea).
+//     behind them (the photo for Agong's wall; if she never takes it, Mom snaps one as the sun touches the sea).
 // After dark, a tap on the sky makes a star twinkle (now and then a shooting star).
 //
 // Talk (lines.ts L.samet.finale.sunset): Dad as it opens, then Sparkle's one instruction; the fact the first time she

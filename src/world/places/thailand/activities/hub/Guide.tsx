@@ -1,4 +1,4 @@
-// Sparkle at the Thailand house: a small Sparkle in the corner who says the few things there are to say. She welcomes
+// Sparkle at Agong's house: a small Sparkle in the corner who says the few things there are to say. She welcomes
 // Kaylee when the tuk-tuk stops, says what to do the first time she's somewhere new, tells her something true about
 // Thailand the first time she pokes certain things, and highlights something after a pause. Tap Sparkle for a hint.
 // The house's family speak for themselves (house.ts).

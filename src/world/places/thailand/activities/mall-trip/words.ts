@@ -12,7 +12,7 @@ export const MALL_LINES: TripLines = {
   wish: W.trip.wish,
   bye: { gan: L.trip.goodbye.gan, ken: L.trip.goodbye.ken, bb: L.trip.goodbye.bb },
   home: W.trip.home,
-  ask: W.trip.ask,
+  agong: W.trip.agong,
   thanks: W.trip.thanks,
   cousins: W.trip.pizza,
   hair: W.trip.hair,

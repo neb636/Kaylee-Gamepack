@@ -19,10 +19,10 @@ export interface PinToy {
   update(t: number, pitch: number): void
 }
 
-/** Who's at each place: Aunty Jum at the Thailand house, the baby elephant at Baan Chang, Moon the honey seller in Nan, the jet ski
+/** Who's at each place: Agong at his house, the baby elephant at Baan Chang, Moon the honey seller in Nan, the jet ski
  *  man on Koh Samet. */
 const FRIENDS: Record<PinId, Look> = {
-  bangkok: LOOKS.jum,
+  bangkok: LOOKS.agong,
   krabi: PATIENT_LOOKS.elephant,
   nan: RIVAL_LOOKS.moon,
   samet: JETSKI_MAN,

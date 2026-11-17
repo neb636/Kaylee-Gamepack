@@ -1,4 +1,4 @@
-// Thailand's home base as deep-linkable spots: the Thailand map (map/, where she lands: tap Bangkok, Krabi or Nan) and the Thailand house in Bangkok: #/world/thailand/hub/<section>?at=<thing>.
+// Thailand's home base as deep-linkable spots: the Thailand map (map/, where she lands: tap Bangkok, Krabi or Nan) and Agong's house in Bangkok: #/world/thailand/hub/<section>?at=<thing>.
 // Loaded at startup by the section index (keep three.js out of this file).
 import { defineSections, HUB } from '../../../../kit/sections'
 
@@ -28,17 +28,17 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
     deck: { default: '', doc: 'Candy Land: the draw pile exactly, top first (green, blue2: a 2 is a double), picture cards: gumdrop, lollipop, icecream, chocolate; then the discards reshuffled' },
     who: {
       default: '',
-      doc: 'the family photo with one person alone, turning slowly: kaylee, ji, nick, jum, joy, bird, ja, sri, gan, ken, bb, putto, putter',
+      doc: 'the family photo with one person alone, turning slowly: kaylee, agong, ji, nick, jum, joy, bird, ja, sri, gan, ken, bb, putto, putter',
     },
   },
   sections: [
     { id: 'map', name: 'The Thailand map: tap a pin to go there', params: ['stamp'], group: 'The Thailand map', links: [{ label: 'The map', bare: true }, { label: 'Home from a trip: the stamp lands on Krabi', params: { stamp: 'boat-trip' } }] },
-    { id: 'arrive', name: 'Arrive by tuk-tuk', group: "The Thailand house" },
-    { id: 'street', name: "In front of the Thailand house", params: ['at'], group: "The Thailand house" },
-    { id: 'downstairs', name: 'Downstairs', params: ['at'], group: "The Thailand house" },
-    { id: 'upstairs', name: "Your room upstairs", params: ['at'], group: "The Thailand house", links: [{ label: "Your room upstairs", also: [{ label: 'in a look from her wardrobe', flags: { look: 'crown,hearts,fairy,dress-mint' } }] }] },
-    { id: 'wardrobe', name: "Your wardrobe", params: ['drawer', 'door'], group: "The Thailand house", links: [{ label: 'Her wardrobe: doors open (any link takes ?look=crown,hearts,fairy,tutu,sneakers,dress-mint,hair-pink,fur-sky)' }, { label: 'Her wardrobe: the hats drawer out', params: { drawer: 'head' }, also: [{ label: 'face', params: { drawer: 'face' } }, { label: 'back', params: { drawer: 'back' } }, { label: 'outfit', params: { drawer: 'outfit' } }, { label: 'feet', params: { drawer: 'feet' } }] }, { label: 'Her wardrobe: the paint drawer out', params: { drawer: 'paint' } }, { label: 'Her wardrobe: four pictures of looks on the door', params: { drawer: 'head', door: 'crown,hearts,tutu;bow,fairy,dress-mint;cap,stars,cape;overalls,boots,hair-pink,fur-sky' } }] },
-    { id: 'family', name: 'Family photo', params: ['who'], group: "The Thailand house" },
+    { id: 'arrive', name: 'Arrive by tuk-tuk', group: "Agong's house" },
+    { id: 'street', name: "In front of Agong's house", params: ['at'], group: "Agong's house" },
+    { id: 'downstairs', name: 'Downstairs', params: ['at'], group: "Agong's house" },
+    { id: 'upstairs', name: "Your room upstairs", params: ['at'], group: "Agong's house", links: [{ label: "Your room upstairs", also: [{ label: 'in a look from her wardrobe', flags: { look: 'crown,hearts,fairy,dress-mint' } }] }] },
+    { id: 'wardrobe', name: "Your wardrobe", params: ['drawer', 'door'], group: "Agong's house", links: [{ label: 'Her wardrobe: doors open (any link takes ?look=crown,hearts,fairy,tutu,sneakers,dress-mint,hair-pink,fur-sky)' }, { label: 'Her wardrobe: the hats drawer out', params: { drawer: 'head' }, also: [{ label: 'face', params: { drawer: 'face' } }, { label: 'back', params: { drawer: 'back' } }, { label: 'outfit', params: { drawer: 'outfit' } }, { label: 'feet', params: { drawer: 'feet' } }] }, { label: 'Her wardrobe: the paint drawer out', params: { drawer: 'paint' } }, { label: 'Her wardrobe: four pictures of looks on the door', params: { drawer: 'head', door: 'crown,hearts,tutu;bow,fairy,dress-mint;cap,stars,cape;overalls,boots,hair-pink,fur-sky' } }] },
+    { id: 'family', name: 'Family photo', params: ['who'], group: "Agong's house" },
     { id: 'table', name: 'The game table: pick a game and a cousin', params: ['vs', 'game'], group: 'The game table (in the works: its games open from these links only)', links: [{ label: 'Sitting at the table: pick a game and a cousin (BB ready)' }, { label: 'The picker with Gan picked', params: { vs: 'gan' } }] },
     { id: 'colors', name: 'The Unicorn Dice Game: pick your unicorn', params: ['vs', 'piece'], group: 'The game table (in the works: its games open from these links only)', links: [{ label: 'After ▶ in the Unicorn game: pick your unicorn\'s color (pink picked)' }, { label: 'Lavender picked, playing Gan', params: { vs: 'gan', piece: 'lavender' } }] },
     {

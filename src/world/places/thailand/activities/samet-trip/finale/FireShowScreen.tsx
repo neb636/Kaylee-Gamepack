@@ -1,7 +1,7 @@
 // The fire show, on screen (fireshow.ts is the world): Sai Kaew at night with its tap targets, the pressing finger
 // (drawing a circle before she starts, round the dots she still needs when she's stuck), Sparkle in the corner speaking
 // everyone's lines (trip/legs/Guide.tsx, the words for grown-ups too), and after the fireworks and the dancers' thank
-// you a 🔥 🏆 badge with the way home (Mom's photo goes on the photo wall, the stamp). The story's two films (story.ts:
+// you a 🔥 🏆 badge with the way home (Mom's photo goes on Agong's wall, the stamp). The story's two films (story.ts:
 // the way in, the thank you) play over it: FilmOverlay draws their words, who says them and the hold-to-skip ⏭, and
 // Sparkle's corner is away while one is on. With ?feel=1 there are round chips too (the play rounds, not the films).
 import { useEffect, useRef, useState } from 'react'
@@ -105,7 +105,7 @@ export function FireShowScreen({ round: first, flags, onRound, onHome }: Props) 
           <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }} transition={{ delay: 0.45 }} className="fin-over">
             <div className="fin-badge">🔥 🏆</div>
             {onHome && (
-              <BigButton color="mint" onClick={() => onHome(done)} ariaLabel="Home to the Thailand house">
+              <BigButton color="mint" onClick={() => onHome(done)} ariaLabel="Home to Agong's house">
                 🏠
               </BigButton>
             )}

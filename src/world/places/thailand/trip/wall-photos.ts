@@ -1,4 +1,4 @@
-// The trip photos on the photo wall: the one she picked for Aunty Jum at the end of each trip, saved on the iPad only (a
+// The trip photos on Agong's wall: the one she picked for Agong at the end of each trip, saved on the iPad only (a
 // small JPEG in useSaved; nothing is uploaded or committed). At most 8 are kept, newest first. The house hangs the
 // newest of each trip in its own frame downstairs, next to the old family photos (trip/wall.ts). No three.js here.
 import { useSaved } from '../../../../sdk'
@@ -8,7 +8,7 @@ export interface WallPhoto {
   trip: string
   /** A small JPEG data URL. */
   src: string
-  /** When she gave it to Aunty Jum (YYYY-MM-DD). */
+  /** When she gave it to Agong (YYYY-MM-DD). */
   at: string
 }
 

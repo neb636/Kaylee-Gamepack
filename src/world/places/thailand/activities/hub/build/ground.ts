@@ -1,4 +1,4 @@
-// Downstairs at the Thailand house: his desk against the right wall at the front (he sits there a lot), the long table on the
+// Downstairs at Agong's: his desk against the right wall at the front (he sits there a lot), the long table on the
 // left with red plastic stools, old photos on the left wall and on the back wall, a fan; the stairs
 // (stairs.ts, at the back left); the fridge against the right wall in the back room, just in front of the kitchen counter; and in the back room
 // the family altar, the little shrine and the kitchen counter with the rice cooker.
@@ -167,8 +167,8 @@ export function buildGround(kit: Kit): Ground {
     ),
   )
   room.add(desk)
-  // The slatted wooden easy chair with long flat arms (Agong's; kept empty by the desk for now, 2026-11-15).
-  room.add(armchair(kit, [2.025, 0, -4.2], 65 * deg))
+  // His chair: the slatted wooden easy chair with long flat arms he sits in (the family list puts him on it).
+  room.add(agongChair(kit, [2.025, 0, -4.2], 65 * deg))
 
   // ---- The family altar on the back wall, and the little shrine on the floor ----
   const altar = poke(
@@ -320,8 +320,8 @@ function photoWall(kit: Kit, id: string, at: V3, items: Framed[], rotY = 0) {
   return wall
 }
 
-/** The easy chair by the desk: dark wood, a slatted seat and a slatted back leaning way back, long flat arms. Faces +z. */
-function armchair(kit: Kit, at: V3, rotY: number) {
+/** Agong's easy chair: dark wood, a slatted seat and a slatted back leaning way back, long flat arms. Faces +z. */
+function agongChair(kit: Kit, at: V3, rotY: number) {
   const parts: BufferGeometry[] = []
   for (let i = 0; i < 4; i++) parts.push(P.box(0.5, 0.03, 0.1, ROSE_LIGHT, { at: [0, 0.42, 0.18 - i * 0.125] }))
   // The back: two rails leaning back and slats across them.

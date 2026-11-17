@@ -49,7 +49,7 @@ export const WORLD_LINES = {
     loved: 'Yay, a favorite!',
     favorites: 'Your favorites!',
     rows: {
-      house: 'The Thailand house!',
+      house: "Agong's house!",
       mall: 'Mall day!',
       krabi: 'Krabi!',
       nan: 'Nan!',
@@ -62,7 +62,7 @@ export const WORLD_LINES = {
       canada: 'Canada!',
     },
     games: {
-      'thailand/street': 'The Thailand house!',
+      'thailand/street': "Agong's house!",
       'thailand/upstairs': 'Your room!',
       'thailand/wardrobe': 'Your wardrobe!',
       'thailand/map': 'Where should we fly?',

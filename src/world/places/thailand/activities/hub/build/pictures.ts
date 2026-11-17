@@ -1,4 +1,4 @@
-// The pictures on the photo wall, from Dad's photo of his desk (~/refs, 2026-10-18): portraits in a white or pale blue
+// The pictures on Agong's walls, from Dad's photo of his desk (~/refs, 2026-10-18): portraits in a white or pale blue
 // dress uniform with a sash, in big gold frames (Thai homes hang royal portraits); a faded photo of a couple and an
 // old sepia family photo in dark wood; a framed certificate; and a tear-off calendar with a big red date. All drawn on
 // one small canvas (an atlas), so a whole wall of frames is one textured mesh.
