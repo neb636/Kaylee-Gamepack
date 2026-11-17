@@ -1,6 +1,0 @@
-{
-  "title": "No more nightly CI emails",
-  "checkIn": "fix",
-  "kaylee": "Nothing changes for her. You stop getting a failed-CI email every afternoon: the nightly walkthrough run and its five tests are gone.",
-  "questions": []
-}
