@@ -141,8 +141,7 @@ were handed plan pages, grey boxes and up to 40 PRs a day, they ended up merging
    tell the user instead of building it. (Wat Phumin was dropped from the Nan trip for this, 2026-10-25.)
 9. **Family and privacy.** The user decides the family: who each person is, which animal, who comes on a trip. Ask, don't
    invent family facts. Photos and recordings of Kaylee stay out of this public repo; describe them in words.
-   Thailand's house is the family's real home and its code is locked behind the family code: read
-   `docs/thailand-3d.md` before touching it.
+   Thailand's house is the family's real home: read `docs/thailand-3d.md` before touching it.
 
 ## Characters
 
@@ -160,7 +159,7 @@ and `docs/3d-characters.md`.
 | Designing a toy | `docs/play-design.md` (the eight principles and the fun check), `planning/around-the-world/ACTIVITY-TEMPLATE.md` |
 | Building anything | `docs/building.md` (where things live, packages, the SDK, adding an activity end to end, deep links, screens, offline, commands) |
 | Picking an interaction | `docs/interactions.md` |
-| Working in 3D or Thailand | `docs/thailand-3d.md` (engine, camera, cinema, labs, the family code) |
+| Working in 3D or Thailand | `docs/thailand-3d.md` (engine, camera, cinema, labs) |
 | Telling a story or a cutscene | `docs/films.md` (films: beats, shots, memories, skipping; Jip and the hat mix-up is the first) |
 | Writing or recording lines | `docs/voices.md` (the cast, `lines.ts`, recording, the table read) |
 | Making art | `docs/art.md` (style, one camera per scene, white patches) |

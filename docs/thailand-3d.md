@@ -1,8 +1,7 @@
 # Thailand: the 3D country
 
 Thailand is where the app is going: the family's own country, built in 3D with three.js. This is the builder's
-reference for it. The look, the engine, the hub, the trip kit and the labs are below; the family code that keeps the
-house private is at the end.
+reference for it. The look, the engine, the hub, the trip kit and the labs are below.
 
 Read `planning/around-the-world/thailand.md` (the family, the house), then the notes of the trip you're working on in
 `planning/around-the-world/thailand/` (`nan-trip.md` is the road trip and the road kit, `samet-story.md` the
@@ -11,7 +10,7 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
 
 - **The look:** flat pastel 3D. Toon shading in a few flat bands with lavender shadows, screen-space ink outlines like
   the 2D art, blob shadows, no post-processing (`engine3d/toon.ts`, `engine3d/outline.ts`).
-- **The engine** (`src/world/engine3d/`, outside the locked folder) is shared by every 3D country: one shared
+- **The engine** (`src/world/engine3d/`, outside `places/thailand/`) is shared by every 3D country: one shared
   renderer (we make the WebGL2 context ourselves, so no console error without one), the frame loop (60 fps cap; 30
   when nothing moves; slower in test browsers), a box-fitting follow camera, a walk grid with A*, the tap marker, the finger drive control for vehicles (`drive.ts`), water (`water.ts`, `lagoon.ts`, running water `flow.ts`), particles and floaters (`floaters.ts`: sparkles, puffs, crumbs, one draw call), and the instanced ink line (`instancedOutlineMaterial`). Use these before writing your own: a copy drifts (two hand-made outline shaders drew lines a third too thick). Number helpers (`clamp`, `damp`, `wrapAngle`, `DEG`) are `src/sdk/math.ts`. `View3D.tsx` mounts any 3D world with its DOM tap
   targets (`Anchors.tsx`): real buttons, at least 64 px, placed over the 3D things every frame, so VoiceOver and
@@ -71,18 +70,3 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
   what you create (`engine3d/dispose.ts`). Keep three.js out of `meta.ts` and `sections.ts`.
 - **The user decides the family:** who each person is, which animal, who comes on a trip. Ask, don't invent family facts.
   Photos of Kaylee stay out of this public repo; describe them in words in the plan.
-
-## Thailand is locked (the family code)
-
-Thailand's 3D house is the family's real home, and the site is public, so the deployed builds (main and every PR
-preview) encrypt Thailand's code: it opens only after a grown-up types the family code once on that device
-(`src/world/lock.ts`, `LockScreen.tsx`; the character lab asks too). The build does it (`scripts/vite-lock.ts`) when
-`LOCK_CODE` is set, which the deploy and preview workflows take from the `THAILAND_CODE` repository secret (they fail
-without it). `npm run dev`, CI tests and local builds lock nothing. Try the lock locally with
-`LOCK_CODE=test npm run build && npm run preview`.
-- Startup code stays readable (Thailand's `meta.ts`, `sections.ts`, `lines.ts`, voice clips, pictures). Never put the
-  house's layout or anything that describes the home in those files or in shared code outside `places/thailand/`.
-- The build fails if code that loads at startup imports a locked chunk: move the shared piece out of `places/thailand/`.
-- Code another country needs (the 3D engine, the rig, the labs) lives outside `places/thailand/` (`src/world/engine3d/`,
-  `src/world/labs/`), or that country would be locked too. The family's looks, the house and Kaylee stay inside.
-- This repo is public, so the source itself is still readable on GitHub until the repo goes private.
