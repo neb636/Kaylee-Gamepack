@@ -8,8 +8,8 @@
 //   (mushrooms/), the sky road to Kaylee's rice farm under Stop Time Cafe (rice/) or to Bo Kluea's salt wells (salt/),
 //   the city road through Nan town and back. Each stop's end card goes back to the map, where its stamp lands. After
 //   two stops the airport opens: the 3 road, and at its viewpoint the 3 from above (section three), Mom takes their
-//   photo and ✈️🏠 ends the trip (endTrip): the 3's photo goes on the photo wall by itself, then the stamp, and the plane
-//   flies home on the Thailand map (Dad, 2026-10-27; section home, the flight home and picking a photo for Aunty Jum, is
+//   photo and ✈️🏠 ends the trip (endTrip): the 3's photo goes on Agong's wall by itself, then the stamp, and the plane
+//   flies home on the Thailand map (Dad, 2026-10-27; section home, the flight home and picking a photo for Agong, is
 //   only reached by its link now). The lookout on the 3's top bend (map place `lookout`, open from the start, never a
 //   stop) drives the same 3 road to the same viewpoint (`three?to=lookout`): Mom's photo, then 🔁 or 🗺️ back to the
 //   map, no ✈️🏠. The trips start on the Thailand map: the first of a session packs and goes down
@@ -314,7 +314,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
   /** Back to the map from the race ground: with the Cup won, its stamp lands on Nan town. */
   const leaveCup = () => (cupDone(state.current.cup) ? done('cup')() : setAt({ section: 'map' }))
   const [, setWallPhotos] = useWallPhotos()
-  /** ✈️🏠 at the viewpoint: the 3's photo (or the newest) goes on the photo wall by itself, then the stamp. */
+  /** ✈️🏠 at the viewpoint: the 3's photo (or the newest) goes on Agong's wall by itself, then the stamp. */
   const ended = useRef(false)
   const endTrip = () => {
     if (ended.current) return

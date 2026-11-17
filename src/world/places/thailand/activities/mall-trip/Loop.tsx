@@ -1,10 +1,10 @@
 // The mall day's trip loop on screen (plan: thailand/mall-trip.md (retired; in git history), build plan step 7): the legs around HarborLand, in
 // two 3D worlds in one shared view.
 //
-//   invite, goodbye, home   the Thailand house (activities/hub/house.ts) with the trip kit's plugin
+//   invite, goodbye, home   Agong's own house (activities/hub/house.ts) with the trip kit's plugin
 //                           (trip/legs/house-plugin.ts, told by MALL_TRIP what the mall day is): Mom asks where to
 //                           (Ask.tsx with 🚤 / 🛝🍕); the goodbye at the shutter and Mom's grey Veloz; coming home,
-//                           the pizza box for Aunty Jum, the cousins' phones down, the photo of the day on his wall
+//                           the pizza box for Agong, the cousins' phones down, the photo of the day on his wall
 //   arrive                  ICONSIAM (arrive.ts): the glimpse, the lift (its floor number big, here), the counter
 //
 // Sparkle sits in the corner (trip/legs/Guide.tsx) and plays each recorded line (words.ts, `L.mall.trip`) with its

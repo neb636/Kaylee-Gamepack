@@ -1,6 +1,6 @@
 // The Nan road trip's photos, one for each place she went (plan: "Home"): drawn in code for the greybox, in the flat
 // outlined look (no words in them), 4:3 like the other trips' photos. Coming home, they fan out and she picks the one
-// for the photo wall. `deck`: Mom's photo on Stop Time Cafe's deck over the rice steps, a cloud on the ridge; `three`:
+// for Agong's wall. `deck`: Mom's photo on Stop Time Cafe's deck over the rice steps, a cloud on the ridge; `three`:
 // the family at the viewpoint with the giant 3 of the road behind them; `pizza`: the mushroom pizza with her pink
 // mushrooms; `salt`: the big pan in Bo Kluea, steaming, with her heap of white salt; `cup`: Kaylee on top of the
 // podium holding up the Nan Mountain Cup, with Mom and Dad cheering. (The look step may take real snapshots
@@ -16,7 +16,7 @@ export const PHOTO_OF: Record<Stop, PhotoId> = { rice: 'deck', mushrooms: 'pizza
 
 const W = 480
 const H = 360
-/** Kaylee's fur and mane: her look's when the photo is drawn (so a photo on the photo wall keeps that day's). */
+/** Kaylee's fur and mane: her look's when the photo is drawn (so a photo on Agong's wall keeps that day's). */
 let KAYLEE: [string, string] = ['#E5DBFF', '#FF8FB8']
 const MOMMY = ['#FFF0F6', '#FF8FB8'] as const
 const DADDY = ['#F4F1FF', '#7FD1B9'] as const

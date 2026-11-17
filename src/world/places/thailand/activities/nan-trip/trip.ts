@@ -1,6 +1,6 @@
 // The Nan road trip as a trip (trip/types.ts): Mom, Dad and Kaylee pack for the mountains, Aunty Sri's van to the
 // airport, a window seat north to Nan, then straight to the Nan map and the Pajero. Coming home, the photo she picks
-// goes on the photo wall (no gift this time, Dad). Pure data.
+// goes on Agong's wall (no gift this time, Dad). Pure data.
 import { L } from '../../lines'
 import { PLACES } from '../../trip/outline'
 import type { TripDef } from '../../trip/types'
@@ -18,13 +18,13 @@ export const NAN_TRIP: TripDef = {
   caps: { fly: 35, replayFly: 24 },
   arrive: 'map',
   goodbye: 'parents',
-  // (The photo she picks is all she brings: Aunty Jum asks for it as on the boat trip.)
+  // (The photo she picks is all she brings: Agong asks for it as on the boat trip.)
   gift: 'photo',
   lines: {
     ready: L.trip.goodbye.van,
     horn: L.trip.goodbye.horn,
     home: L.home.sri,
-    ask: L.home.ask,
+    agong: L.home.agong,
     thanks: L.home.thanks,
     cousins: { gan: L.home.gan, ken: L.home.ken, bb: L.home.bb },
     pick: L.home.pick,
@@ -36,7 +36,7 @@ export const NAN_TRIP: TripDef = {
 /** The trip's flight (the plane leg flies its route). */
 export const FLIGHT = NAN_TRIP.legs.find((l) => l.kind === 'fly') as { from: [number, number]; to: [number, number] }
 
-/** The trip's legs around the stops (Loop.tsx): the Thailand house, the airport and the window seat. */
+/** The trip's legs around the stops (Loop.tsx): Agong's house, the airport and the window seat. */
 export const LOOP = ['invite', 'pack', 'goodbye', 'airport', 'takeoff', 'fly', 'land', 'home'] as const
 export type LoopSection = (typeof LOOP)[number]
 export const isLoop = (s: string): s is LoopSection => (LOOP as readonly string[]).includes(s)

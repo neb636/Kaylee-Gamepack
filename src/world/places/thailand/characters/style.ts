@@ -1,4 +1,4 @@
-// Kaylee's own look (planning/around-the-world/thailand/wardrobe.md): what she picked in her wardrobe at the Thailand house, one
+// Kaylee's own look (planning/around-the-world/thailand/wardrobe.md): what she picked in her wardrobe at Agong's, one
 // thing per spot on her (a hat, glasses, wings or a cape, an outfit, shoes) and the color of her dress, her hair and her
 // fur. Saved on the iPad (the wardrobe writes it with useSaved('thailand-look')), and any link can set it with
 // `?look=crown,hearts,fairy,tutu,sneakers,dress-mint,hair-pink,fur-sky` (a sticky param, kit/sections.ts).
@@ -180,7 +180,7 @@ export function currentLook(): Style {
 }
 
 /** Her colors in a drawn photo (the mall day's, the Nan trip's: trip/postcard.ts unicorn()), from her look when the
- *  photo is taken, so a photo on the photo wall shows her as she was that day (it's saved as a picture, so changing her
+ *  photo is taken, so a photo on Agong's wall shows her as she was that day (it's saved as a picture, so changing her
  *  look later doesn't change it). Pastel like the rest of the drawing: her own lilac and pink unless she painted them. */
 export function photoColors(s: Style = currentLook()): { fur: string; mane: string; dress: string } {
   const soft = (hex: string, k: number) => {

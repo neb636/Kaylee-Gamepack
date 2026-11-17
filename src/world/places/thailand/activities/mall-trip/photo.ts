@@ -1,4 +1,4 @@
-// The photo of the mall day that goes on the photo wall (plan: "Home"): drawn in code for the greybox, in the flat
+// The photo of the mall day that goes on Agong's wall (plan: "Home"): drawn in code for the greybox, in the flat
 // outlined look (no words in it), 4:3 like the boat trip's photos. `dragon`: Kaylee whooshing down the twin-dragon
 // spiral in the Big Frame with her arms up, Mom and Dad cheering at the bottom; `cheese`: Dad at the pizza table
 // with the cheese stretched to his nose. (The art gate may take a real snapshot in the frame instead.) No three.js.
@@ -11,7 +11,7 @@ export const PHOTO_IDS: PhotoId[] = ['dragon', 'cheese']
 
 const W = 480
 const H = 360
-/** Kaylee's colors in the photo: her look's when it's drawn (so a photo on the photo wall keeps that day's). */
+/** Kaylee's colors in the photo: her look's when it's drawn (so a photo on Agong's wall keeps that day's). */
 let me = photoColors(BARE)
 
 /** A JPEG data URL of the photo (the same picture every time). */

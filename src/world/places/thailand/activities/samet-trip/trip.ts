@@ -1,6 +1,6 @@
 // The Koh Samet trip as a trip (trip/types.ts): Mom, Dad and Kaylee pack for the sea (the swimsuit, the sun hat,
 // the floaties, the bucket), Mom drives them to Ban Phe pier in her Veloz, and the speedboat takes them over to Na
-// Dan pier. Coming home, a photo of the island goes on the photo wall by itself (the trips end on the Thailand map). Pure
+// Dan pier. Coming home, a photo of the island goes on Agong's wall by itself (the trips end on the Thailand map). Pure
 // data, and what the trip saves (no three.js: sections.ts and the map read it).
 import { savedKey } from '../../../../../sdk/hooks'
 import { L } from '../../lines'
@@ -22,7 +22,7 @@ export const SAMET_TRIP: TripDef = {
     // (No goodbye at the shutter: the trips start on the Thailand map, so this is only for its link, if it gets one.)
     ready: L.trip.goodbye.van,
     home: L.home.sri,
-    ask: L.home.ask,
+    agong: L.home.agong,
     thanks: L.home.thanks,
     cousins: { gan: L.home.gan, ken: L.home.ken, bb: L.home.bb },
     pick: L.home.pick,

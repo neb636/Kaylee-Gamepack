@@ -26,7 +26,7 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
   from Natural Earth), a little model and a bobbing pin for each place, and animals, boats and clouds that answer a
   poke. A drag swings the board round, a pinch brings it closer. Tapping a pin opens that place. `field.ts` works out
   the ground once (distance to the coast); the terrain, its painted top and the sea's foam all read it. Bangkok opens the house; a trip somewhere else gets a pin, starts there and ends there
-  (the stamp lands on its pin, the trip's photo goes on the photo wall by itself). Tapping a pin goes straight
+  (the stamp lands on its pin, the trip's photo goes on Agong's wall by itself). Tapping a pin goes straight
   to the trip's landing spot: the map no longer packs or rides the window seat (2026-11-10; the pack, goodbye, airport
   and window-seat sections are still in each trip, for a place-picker inside the house to start later). The mall day, in Bangkok,
   still starts in the house (Mom or Dad asks) and ends there.

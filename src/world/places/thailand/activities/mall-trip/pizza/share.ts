@@ -1,6 +1,6 @@
 // What gets shared: the pizza's eight slices (each its own toy shape, with the toppings of the pizza she picked), the
 // pan on its stand, the three plates (a glow under the one that's behind, a pink ring under the one she's holding a
-// slice over) and the take-away box with its lid. Plus the sharing sums: who's behind, where a slice stacks.
+// slice over) and Agong's take-away box with its lid. Plus the sharing sums: who's behind, where a slice stacks.
 import { Group, Mesh, MeshBasicMaterial, Quaternion, Vector3, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../engine3d/geo'
@@ -159,7 +159,7 @@ export interface Box {
   at: Vector3
 }
 
-/** The take-away box for Aunty Jum: white with a green band and a little pink heart on the front; its lid hinged at the back. */
+/** Agong's take-away box: white with a green band and a little panda face (Agong) on the front; its lid hinged at the back. */
 export function buildBox(bag: Bag): Box {
   const root = new Group()
   const at = new Vector3(BOX.x, TABLE.top, BOX.z)
@@ -173,9 +173,10 @@ export function buildBox(bag: Bag): Box {
     P.box(t, h, w, '#FFFFFF', { at: [w / 2 - t / 2, h / 2, 0] }),
     P.box(t, h, w, '#FFFFFF', { at: [-w / 2 + t / 2, h / 2, 0] }),
     P.box(w + 0.002, 0.018, t + 0.004, '#4DB57A', { at: [0, h * 0.35, w / 2 - t / 2] }),
-    // A little pink heart sticker on the front.
-    ...[-1, 1].map((s) => P.sphere(0.016, '#FF6FAE', { at: [0.1 + s * 0.0120, h * 0.55 + 0.0056, w / 2 + 0.004], scale: [1, 1, 0.3] })),
-    P.box(0.028, 0.028, 0.006, '#FF6FAE', { at: [0.1, h * 0.55 - 0.0072, w / 2 + 0.002], rot: [0, 0, Math.PI / 4] }),
+    // Agong (a panda) on the front.
+    P.sphere(0.03, '#FFFFFF', { at: [0.1, h * 0.55, w / 2 + 0.004], scale: [1, 1, 0.3] }),
+    ...[-1, 1].map((s) => P.sphere(0.012, '#4A3F4F', { at: [0.1 + s * 0.024, h * 0.55 + 0.026, w / 2 + 0.006], scale: [1, 1, 0.4] })),
+    ...[-1, 1].map((s) => P.sphere(0.008, '#4A3F4F', { at: [0.1 + s * 0.011, h * 0.56, w / 2 + 0.014], scale: [1, 1.2, 0.4] })),
   ]), bag, 1.5))
   const lid = new Group()
   lid.position.set(0, h, -w / 2)

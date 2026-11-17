@@ -29,7 +29,7 @@ interface Props {
   onAt(at: SpotId): void
   /** She opened a stop. */
   onOpen(stop: StopId | 'lunch' | 'sunset'): void
-  /** All four fireflies and the speedboat home tapped: Mom's photo of the island (for the photo wall). */
+  /** All four fireflies and the speedboat home tapped: Mom's photo of the island (for Agong's wall). */
   onHome?(photo: string): void
   /** The home picture tapped at the end of Na Dan pier: off home on the speedboat (the trip is kept for next time). */
   onLeave?(): void

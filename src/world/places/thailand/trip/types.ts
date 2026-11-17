@@ -11,21 +11,21 @@ export interface TripLines {
   /** The goodbye: the car is here, hop in; a tap on the driver at the wheel (Aunty Sri). */
   ready: Line
   horn?: Line
-  /** The goodbye with the whole family at the shutter: Aunty Jum's wish (the trip's goal), and the big cousins' "Bye...". */
+  /** The goodbye with the whole family at the shutter: Agong's wish (the trip's goal), and the big cousins' "Bye...". */
   wish?: Line
   bye?: Partial<Record<'gan' | 'ken' | 'bb', Line>>
-  /** Coming home: the driver at the door, Aunty Jum asking for her gift and thanking her for it. */
+  /** Coming home: the driver at Agong's door, Agong asking for his gift and thanking her for it. */
   home: Line
-  ask: Line
+  agong: Line
   thanks: Line
   /** The big cousins putting their phones down, for the first time. */
   cousins: Record<'gan' | 'ken' | 'bb', Line>
-  /** Aunty Jum laughing at Dad's new hairdo (the mall's barber). */
+  /** Agong laughing at Dad's new hairdo (the mall's barber). */
   hair?: Line
-  /** Sparkle, after a while with nothing done: pick the photo, give Aunty Jum her gift. */
+  /** Sparkle, after a while with nothing done: pick the photo, give Agong his gift. */
   pick?: Line
   give: Line
-  /** The new photo on the photo wall, tapped (the mall day: Mom's "Our mall day!"). */
+  /** The new photo on Agong's wall, tapped (the mall day: Mom's "Our mall day!"). */
   wall?: Line
 }
 
@@ -50,7 +50,7 @@ export interface TripDef {
   /** Who sees them off at the shutter: just Mom, Dad and Kaylee wait there (the boat trip), or the whole family
    *  who live here gather to wave goodbye (the mall day). */
   goodbye: 'parents' | 'family'
-  /** What she brings Aunty Jum: a photo she picks (it goes on the wall), or a take-away box (and a photo of the day goes
+  /** What she brings Agong: a photo she picks (it goes on his wall), or a take-away box (and a photo of the day goes
    *  on the wall after). */
   gift: 'photo' | 'box'
   lines: TripLines

@@ -1,4 +1,4 @@
-// The Thailand house in Bangkok (tapping Bangkok on the Thailand map opens it). Kaylee arrives by tuk-tuk, then walks around the street, downstairs and her
+// Agong's house in Bangkok (tapping Bangkok on the Thailand map opens it). Kaylee arrives by tuk-tuk, then walks around the street, downstairs and her
 // room upstairs (deep-linkable spots, sections.ts). The 3D house is HouseView.
 // Sparkle (Guide) says the few things there are to say; the family say hello themselves.
 import { AnimatePresence, motion } from 'motion/react'
@@ -245,7 +245,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     if (house.view === 'street') return house.guideTarget('shutter', glow) ? L.house.stuck.street : null
     if (house.view === 'upstairs' && house.guideTarget('mattress', glow)) return L.house.stuck.upstairs
     if (house.view === 'downstairs' && house.guideTarget('stairs-up', glow)) return L.house.stuck.downstairs
-    const family = house.view === 'upstairs' ? ['ji', 'bb', 'gan', 'ken'] : ['jum', 'joy']
+    const family = house.view === 'upstairs' ? ['ji', 'bb', 'gan', 'ken'] : ['agong', 'jum', 'joy']
     return family.some((id) => house.guideTarget(`family:${id}`, glow)) ? L.house.inside : null
   }
   const yes = (trip = 'mall-trip') => {

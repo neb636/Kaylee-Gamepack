@@ -64,9 +64,9 @@ Code paths are under `src/world/places/thailand/`.
 
 ## The boat trip: the way home and the photo wall (step 5)
 
-- [ ] **On an iPhone held upright, her photo's frame on the photo wall is cut by the left edge.** `at=photos` starts with
+- [ ] **On an iPhone held upright, her photo's frame on Agong's wall is cut by the left edge.** `at=photos` starts with
   the camera on the wall, which fits the iPad; the narrow phone still shows only part of the frame (and the same at the
-  gather, where Aunty Jum is cut too). The frame still opens when tapped.
+  gather, where Agong is cut too). The frame still opens when tapped.
   - Check: `#/world/thailand/hub/downstairs?at=photos` at iPhone portrait size, after playing `home` once.
   - Code: `trip/wall.ts` (`WallPlugin.shot`), `trip/legs/house-plugin.ts` (`shot`, the gather's tall framing).
   - Ideas: aim further left on very narrow screens, or let the camera come further out.

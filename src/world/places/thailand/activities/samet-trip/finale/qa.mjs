@@ -181,7 +181,7 @@ export const motion = [
       await holdSkip(page)
       // The heart is whole in the sky, the dancers back at their places, the way home up.
       await page.waitForFunction(() => { const q = window.__thaiSametQA(); return !q.film && q.heart === 1 && !q.staged && q.home && q.films.skipped.includes('thanks') }, null, { timeout: 8000 })
-      await page.getByRole('button', { name: "Home to the Thailand house" }).waitFor({ timeout: 8000 })
+      await page.getByRole('button', { name: "Home to Agong's house" }).waitFor({ timeout: 8000 })
       await page.waitForTimeout(2500)
     },
   },
@@ -210,7 +210,7 @@ export const motion = [
       await page.waitForTimeout(2500)
       await page.mouse.click(300, 220)
       await filmDone('thanks')(page)
-      await page.getByRole('button', { name: "Home to the Thailand house" }).waitFor({ timeout: 10000 })
+      await page.getByRole('button', { name: "Home to Agong's house" }).waitFor({ timeout: 10000 })
       await page.waitForTimeout(3000)
     },
   },

@@ -34,7 +34,7 @@ export const PHUKET: LonLat[] = [[98.41, 7.9], [98.3, 7.78], [98.3, 8.14], [98.4
 
 /** Places on the trips. */
 export const PLACES = {
-  /** The Thailand house. */
+  /** Agong's house. */
   bangkok: [100.5, 13.75] as LonLat,
   /** Krabi airport (KBV), where the plane lands. */
   krabi: [98.99, 8.1] as LonLat,

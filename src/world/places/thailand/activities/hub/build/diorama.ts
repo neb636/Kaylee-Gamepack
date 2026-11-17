@@ -1,7 +1,7 @@
 // The house as a diorama. Inside, the neighbors and the roof go away so the camera can see in, and the house used to
 // float in flat blue sky (Dad, 2026-10-28: "this weird blue sky background"). Now it reads like a toy dollhouse:
 //
-// - the plinth: a chunky slab of earth under the Thailand house, cream footing on top and soft clay layers with pebbles
+// - the plinth: a chunky slab of earth under Agong's house, cream footing on top and soft clay layers with pebbles
 //   below, so the cut edge beside the right wall is the side of a toy base, not the end of the world;
 // - the backdrop: a warm glow (cream in the middle, peach, then the app's pink at the edges) behind the house while
 //   she's inside. Out on the street the sky stays the sky, and it fades between the two as she walks in and out.

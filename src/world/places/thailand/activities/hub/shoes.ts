@@ -1,4 +1,4 @@
-// Shoes off in the Thailand house (wardrobe plan, small rule 4, Dad's yes 2026-10-26): like a real Thai home, when Kaylee
+// Shoes off in Agong's house (wardrobe plan, small rule 4, Dad's yes 2026-10-26): like a real Thai home, when Kaylee
 // steps in from the street her shoes hop off her feet onto the shoe rack by the door (one, two), and when she goes back
 // out they hop back on. A culture fact she does with her feet, no words. In the wardrobe she can still try shoes on
 // (on the rug): while it's open her shoes stay on her. With no shoes on (her hooves), nothing hops.

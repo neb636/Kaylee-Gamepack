@@ -1,5 +1,5 @@
 // Photos taken inside the 3D world: a camera turned a little toward what the photo is of (Mom's sunset photo for
-// the photo wall), and a small JPEG of the scene from any camera (that photo; the island's pictures of its beaches).
+// Agong's wall), and a small JPEG of the scene from any camera (that photo; the island's pictures of its beaches).
 import { PerspectiveCamera, Vector2, Vector3, type Scene, type WebGLRenderer } from 'three'
 
 export const PHOTO_SIZE = { w: 480, h: 360 }

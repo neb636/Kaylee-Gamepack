@@ -5,7 +5,7 @@
 //
 //   back wall:   [ the window onto the waterfall ]          [ the green sign ]
 //   booth:            Mom         Kaylee         Dad
-//   table:  napkins  [plate]       [plate]        [plate]     [the box]
+//   table:  napkins  [plate]       [plate]        [plate]     [Agong's box]
 //   front:      soda   onion rings  (the pizza on its stand)  chili
 //   the server waits by the end of the booth.
 
@@ -37,7 +37,7 @@ export const SEATS: Record<EaterId, { x: number; seat: number }> = {
 export const SEAT_Z = -0.86
 export const EATER_NAMES: Record<EaterId, string> = { ji: 'Mom', kaylee: 'You', nick: 'Dad' }
 
-/** the take-away box, at the right end. Its lid stands open until two slices are in. */
+/** Agong's take-away box, at the right end. Its lid stands open until two slices are in. */
 export const BOX = { x: 1.3, z: -0.16, w: 0.4, h: 0.1 }
 export const BOX_HOLDS = 2
 

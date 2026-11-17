@@ -66,7 +66,7 @@ const CENTRAL = [
   },
   { name: 'puppet-lab', hash: '#/world/puppets', wait: 1200 },
   { name: 'character-lab', hash: '#/world/characters/kaylee', wait: 2500 },
-  { name: 'character-lab-lineup', hash: '#/world/characters/jum?lineup=jum,kaylee,putter', wait: 2500 },
+  { name: 'character-lab-lineup', hash: '#/world/characters/agong?lineup=agong,jum,kaylee,putter', wait: 2500 },
   { name: 'theater-world', hash: '#/world/theater', wait: 1200 },
   {
     name: 'theater-poster',

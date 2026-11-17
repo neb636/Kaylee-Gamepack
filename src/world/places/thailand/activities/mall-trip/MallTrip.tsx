@@ -9,8 +9,8 @@
 // share). Each mini game is a sticker on her sock band in the corner (`games`), and a big ↩️ takes her back out to the
 // hall. After every sticker (or fifteen minutes) Dad's tummy rumbles and Mom asks about pizza. The trip around it
 // (Loop.tsx): Mom asks where to (invite), the goodbye and Mom's grey Veloz (goodbye), ICONSIAM, the lift and
-// the counter where she picks her socks (arrive), and home once the box is shut at the table (home: the box for
-// Aunty Jum, the photo on the wall, then the stamp, onDone). A day pass covers the change between legs. The trip saves
+// the counter where she picks her socks (arrive), and home once Agong's box is shut at the table (home: the box for
+// Agong, the photo on his wall, then the stamp, onDone). A day pass covers the change between legs. The trip saves
 // after each leg; saying yes to the mall again offers to keep going, and after a whole day 🛝 or 🍕 straight there.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
@@ -66,7 +66,7 @@ interface Progress {
   socks: string
   games: string
   hair: string
-  /** Whole days done, Mom's question to the photo on the photo wall (after the first: 🛝 or 🍕 straight there). */
+  /** Whole days done, Mom's question to the photo on Agong's wall (after the first: 🛝 or 🍕 straight there). */
   trips?: number
 }
 
@@ -225,7 +225,7 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
     const t = timers.later(yes, 600)
     return () => clearTimeout(t)
   }, [])
-  // The box is shut at the pizza table: home to Aunty Jum.
+  // The box is shut at the pizza table: home to Agong.
   const allShared = () => timers.later(() => state.current.section === 'share' && go('home'), 2200)
   const finishedDay = () => {
     setSaved((p) => ({ at: null, socks: state.current.socks, games: '', hair: '', trips: (p.trips ?? 0) + 1 }))

@@ -1,4 +1,4 @@
-// The Thailand house, running: builds the world, then each frame moves Kaylee and the family, keeps the camera on her,
+// Agong's house, running: builds the world, then each frame moves Kaylee and the family, keeps the camera on her,
 // cuts the walls away so the camera can see in, and places the DOM tap targets (Anchors.tsx) over what they mark.
 //
 // What a tap does:
@@ -95,7 +95,7 @@ export interface HousePlugin {
   hides?(id: string): boolean
   /** Its own pickable objects, for the tap raycast. */
   readonly roots?: Object3D[]
-  /** Someone in the family glows ("tap me!"), e.g. Aunty Jum while she has the photo to give her. */
+  /** Someone in the family glows ("tap me!"), e.g. Agong while she has his photo to give him. */
   glows?(id: string): boolean
   readonly busy?: boolean
   qa?(): Record<string, unknown>
@@ -318,7 +318,7 @@ export class House implements World3D {
     this.rig.setShot(this.shot(), true)
   }
 
-  /** Everyone lined up in front of the Thailand house, smiling at the camera; or one of them alone, turning slowly. */
+  /** Everyone lined up in front of Agong's house, smiling at the camera; or one of them alone, turning slowly. */
   private beginPhoto(who?: string) {
     const one = who && (who === 'kaylee' || this.family.has(who)) ? who : null
     this.photo = { who: one }
@@ -943,7 +943,7 @@ export class House implements World3D {
         this.setSpot('street')
       }
     }
-    // Shoes off inside the Thailand house, back on in the street (not in the family photo out front).
+    // Shoes off inside Agong's house, back on in the street (not in the family photo out front).
     this.shoes.update(dt, this.mode !== 'street' && !this.photo, this.trying)
     // Walls glide down and up.
     for (const c of this.cuts) {
@@ -1061,7 +1061,7 @@ export class House implements World3D {
 
   // ---------------------------------------------------------------- the arrival
 
-  /** The tuk-tuk rolls in from the right and stops at the door; Kaylee hops out onto the sidewalk; it toots and
+  /** The tuk-tuk rolls in from the right and stops at Agong's door; Kaylee hops out onto the sidewalk; it toots and
    *  drives on to park. */
   private updateArrival(dt: number) {
     const a = this.arrival!

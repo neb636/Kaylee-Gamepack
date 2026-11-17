@@ -2,7 +2,7 @@
 // tap-to-walk and finger lead (a NavGrid per floor), plus links between the floors. A tap on another floor plans a
 // route through the links (tap the top deck from the ground: walk to the net, climb it, walk on). Climbs go both ways,
 // slides only down, and a slide costs little, so she takes one down whenever there is one. The world plays each link
-// (`run`): the walker only says when, and which way. the Thailand house keeps its own walking for now.
+// (`run`): the walker only says when, and which way. Agong's house keeps its own walking for now.
 import type { Ray } from 'three'
 import type { Avatar } from '../characters/avatar'
 import type { NavGrid, XZ } from '../../../engine3d/nav'

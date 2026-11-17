@@ -1,9 +1,9 @@
 // The Pizza Company (plan: planning/around-the-world/thailand/mall-trip.md (retired; in git history), "The Pizza Company"), greybox: shapes and
 // sounds, with voices (lines.ts `L.mall.pizza`): Sparkle's "Pick a pizza!" and "Pull a slice!", the server's "Pizza
 // time!" and "Khob khun ka!", Sparkle counting each plate's first and second slice round the table, Dad hamming it
-// up and his cheesy nose, Mom's "Those are for Aunty Jum!", the cheer as the lid closes, the fact once it's all shared,
+// up and his cheesy nose, Mom's "Those are for Agong!", the cheer as the lid closes, the fact once it's all shared,
 // the pokes' reactions (the chili, the onion rings), and Sparkle's hint when the finger shows. The camera looks across the table straight on; Mom, Kaylee (on her booster) and Dad sit in the
-// green booth on the far side with their plates, and the take-away box waits open at the right end.
+// green booth on the far side with their plates, and Agong's take-away box waits open at the right end.
 //
 // `menu`: she picks a pizza (the screen's three picture buttons); the server carries it over on its stand, sets it down
 // and bows. `share`, the toy: pull a slice. It follows her finger (a little above it, so she sees it), hanging from its
@@ -14,7 +14,7 @@
 // chomp, cheese on their chin. A tap on the pizza serves a slice for her (with its stretch), so taps alone can share it.
 //   1. The first pull: the stretch is the wow.
 //   2. Sharing fairly: 8 slices, 3 plates. The plate that's behind glows gold. Give Dad more than anyone else (his
-//      second while someone has one, a third) and he hams it up (points at Mom's plate, ho ho). With 2 each, the box glows: the last two go in, and the
+//      second while someone has one, a third) and he hams it up (points at Mom's plate, ho ho). With 2 each, Agong's box glows: the last two go in, and the
 //      lid closes, flup.
 //   3. The cheese tug (the first pull after one each): Dad grabs the other end, it stretches right across the table,
 //      and snaps onto his nose.
@@ -44,14 +44,14 @@ export interface PizzaEvents extends LegEvents {
   served(): void
   /** Slices handed out so far (on plates, eaten, in the box): the address bar follows. */
   shared(n: number): void
-  /** The pan is empty and the box is closed. */
+  /** The pan is empty and Agong's box is closed. */
   allDone(): void
 }
 
 export const PIZZA_ANCHORS: AnchorInfo[] = [
   { id: 'pan', label: 'Pizza', kind: 'thing' },
   ...EATERS.map((e): AnchorInfo => ({ id: `plate:${e}`, label: `${EATER_NAMES[e]}'s plate`, kind: 'thing' })),
-  { id: 'box', label: "The pizza box", kind: 'thing' },
+  { id: 'box', label: "Agong's box", kind: 'thing' },
   { id: 'soda', label: 'Soda', kind: 'thing' },
   { id: 'rings', label: 'Onion rings', kind: 'thing' },
   { id: 'chili', label: 'Chili shaker', kind: 'thing' },
@@ -173,8 +173,8 @@ export class PizzaTable extends Stage {
   /** When each speaker last talked (a quick run of taps gets one line), and whose turn it is in Dad's list. */
   private spoke = new Map<string, number>()
   private hams = 0
-  /** Mom has said the last two are for Aunty Jum; Sparkle has said the fact. */
-  private auntySaid = false
+  /** Mom has said the last two are for Agong; Sparkle has said the fact. */
+  private agongSaid = false
   private fairSaid = false
   /** The touch the last hint was for (one hint each time she's stuck). */
   private hintedAt = -1
@@ -200,7 +200,7 @@ export class PizzaTable extends Stage {
       scene.add(this.people[e].root)
       this.put(this.people[e], SEATS[e].x, SEATS[e].seat, SEAT_Z, 'sit', 0)
     }
-    // ---- The plates, the box, the pan and the cheese ----
+    // ---- The plates, Agong's box, the pan and the cheese ----
     this.plates = buildPlates(bag)
     for (const p of this.plates) scene.add(p.root)
     this.box = buildBox(bag)
@@ -624,14 +624,14 @@ export class PizzaTable extends Stage {
           this.after(0.2, () => sfx.giggle())
         } else who.react('wiggle')
       }
-      // Two each and the box still open: the last two are for Aunty Jum (the box glows and wiggles).
+      // Two each and the box still open: the last two are for Agong (the box glows and wiggles).
       if (!this.boxShut && EATERS.every((e) => c[e] >= 2) && this.panLeft > 0) this.after(0.5, () => {
         this.boxBounce = 0
         this.lid = { k: 0, from: BOX_OPEN + 0.6, to: BOX_OPEN }
         sfx.chime()
-        if (!this.auntySaid && !this.boxShut) {
-          this.auntySaid = true
-          this.pev.say(L.mall.pizza.aunty)
+        if (!this.agongSaid && !this.boxShut) {
+          this.agongSaid = true
+          this.pev.say(L.mall.pizza.agong)
         }
       })
     }
@@ -908,7 +908,7 @@ export class PizzaTable extends Stage {
       }
       if (this.band.gone && this.banded && this.banded.where !== 'held' && this.banded.where !== 'fly') this.banded = null
     }
-    // ---- Glows: the plate that's behind (gold), the one she's over (pink), the box when it's time ----
+    // ---- Glows: the plate that's behind (gold), the one she's over (pink), Agong's box when it's time ----
     const c = this.counts()
     const lagging = this.phase === 'share' ? behind(c) : []
     const pulse = 0.55 + Math.sin(t * 5) * 0.3
@@ -920,7 +920,7 @@ export class PizzaTable extends Stage {
     const boxTime = !this.boxShut && this.phase === 'share' && (EATERS.every((e) => c[e] >= 2) || this.panLeft === 0)
     fade(this.box.glow, boxTime ? pulse : 0, dt * 8)
     fade(this.box.hover, this.hover === 'box' ? 0.9 : 0, dt * 14)
-    // ---- the box: the lid, a happy bounce ----
+    // ---- Agong's box: the lid, a happy bounce ----
     this.lid.k = Math.min(1, this.lid.k + dt / 0.35)
     const lk = this.lid.k
     this.box.lid.rotation.x = this.lid.from + (this.lid.to - this.lid.from) * (this.lid.to === 0 ? lk * lk : 1 - (1 - lk) ** 2) + (this.lid.to !== 0 ? wobble(lk, 2) * 0.08 : 0)
@@ -1013,7 +1013,7 @@ export class PizzaTable extends Stage {
   // ---------------------------------------------------------------- camera, screen space
 
   protected shot(): Shot {
-    // The table with its plates, the pizza and the box, and the family's faces; on a tall screen more above.
+    // The table with its plates, the pizza and Agong's box, and the family's faces; on a tall screen more above.
     if (this.w < this.h) return { center: new Vector3(0.06, 1.0, -0.25), half: new Vector3(1.5, 0.7, 0.6), yaw: 0, pitch: 28, minDist: 4 }
     return { center: new Vector3(0.05, 1.08, -0.25), half: new Vector3(1.5, 0.4, 0.5), yaw: 0, pitch: 24, minDist: 4 }
   }
@@ -1106,7 +1106,7 @@ export class PizzaTable extends Stage {
     const inPan = this.slices.find((s) => s.where === 'pan')
     if (inPan) return inPan.root.getWorldPosition(new Vector3())
     if (this.boxShut) return null
-    // The pan is empty and the box is still open: a slice from the fullest plate.
+    // The pan is empty and Agong's box is still open: a slice from the fullest plate.
     const c = this.counts()
     const e = [...EATERS].sort((a, b) => c[b] - c[a])[0]
     return this.topOf(e)?.root.position.clone() ?? null

@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
 // Captain Kaylee's boat trip, greybox 1 (src/world/places/thailand/activities/boat-trip/): the bay in 3D with every
-// section link, and no leftover GPU memory going back and forth to the Thailand house.
+// section link, and no leftover GPU memory going back and forth to Agong's house.
 // Read-only state comes from window.__thaiBoatQA (no jump hooks: tests open section links).
 
 type BoatQA = {
@@ -52,7 +52,7 @@ test('the bay renders in 3D and every section link lands', async ({ page }) => {
   expect(errors).toEqual([])
 })
 
-test('@behavior going back and forth to Aunty Jum\'s house leaves no GPU memory behind', async ({ page }) => {
+test('@behavior going back and forth to Agong\'s house leaves no GPU memory behind', async ({ page }) => {
   test.setTimeout(120_000)
   const errors = trackErrors(page)
   await open(page, 'bay')
