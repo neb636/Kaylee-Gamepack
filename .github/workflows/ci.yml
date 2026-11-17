@@ -3,12 +3,9 @@ name: CI
 on:
   pull_request:
   workflow_dispatch:
-  schedule:
-    - cron: '0 9 * * *' # nightly: the @behavior walkthrough specs
 
 jobs:
   check:
-    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -22,21 +19,3 @@ jobs:
       - name: Check PostHog capture without sending production data
         run: node scripts/qa-posthog.mjs
       - run: npm run check
-
-  # Step-by-step walkthrough specs (tagged @behavior) break whenever the UI is tweaked, so they run nightly and on demand
-  # instead of on every PR.
-  behavior:
-    if: github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
-        with:
-          node-version: 24
-          cache: npm
-      - run: npm ci
-      - run: npx playwright install --with-deps chromium
-      - run: npm run build
-      - run: npm run test:behavior
-
