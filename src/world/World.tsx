@@ -6,8 +6,6 @@ import { PuzzleBook } from './PuzzleBook'
 import { ColoringBook } from './ColoringBook'
 import { Theater } from './kit/Theater'
 import { Passport } from './Passport'
-import { lockedPlace, needsCode } from './lock'
-import { LockScreen } from './LockScreen'
 import { PlaceFrame } from './PlaceFrame'
 import { PuppetLab } from './PuppetLab'
 import { DockGlyph, worldBack } from './HomeIcons'
@@ -31,15 +29,10 @@ export function World({ place, activity, section, params = {} }: { place?: strin
   // The screen always lives in the same element, so opening or closing the camera lab around it never restarts the game.
   const [host, setHost] = useState<HTMLDivElement | null>(null)
   const gameParams = useMemo(() => Object.fromEntries(Object.entries(params).filter(([k]) => !isLab(k))), [params])
-  const [, setUnlocked] = useState(0)
   let lab = false
   let feel = false
   let screen
-  // A locked country (lock.ts) asks for the family code first, and so does the character lab, which is built from its
-  // code. The camera and feel labs are shared (labs/), so they only ask on the locked country's own links.
-  if (lockedPlace && needsCode(lockedPlace) && (place === lockedPlace || place === 'characters'))
-    screen = <LockScreen place={lockedPlace} onUnlock={() => setUnlocked((n) => n + 1)} />
-  else if (place === 'passport') screen = <Passport />
+  if (place === 'passport') screen = <Passport />
   else if (place === 'puppets') screen = <PuppetLab only={activity} />
   else if (place === 'characters')
     screen = (

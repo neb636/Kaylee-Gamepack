@@ -54,6 +54,5 @@ One line each; the header comment at the top of every script says how to run it.
 
 | Script | What it does |
 |---|---|
-| `vite-lock.ts` | Locks Thailand behind the family code when `LOCK_CODE` is set (`docs/thailand-3d.md`) |
 | `vite-offline.ts` | Writes `dist/sw.js` so the app plays offline |
 | `vite-docs.ts` | Publishes the game-sections page and the gameplay report beside the app |
