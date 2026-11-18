@@ -12,6 +12,7 @@ import { buildBird, buildCat, buildCrab, buildLizard, buildMacaque, buildMudskip
 import { Avatar, SHOW_SECS } from '../characters/avatar'
 import { FAMILY } from '../characters/family'
 import { buildDadRig, dadModel } from '../characters/dad-model'
+import { buildDadCandidate } from '../characters/dad-candidates'
 import { Member } from '../characters/member'
 import type { Wearable } from '../characters/looks'
 import { parseLook, type ShowPose } from '../characters/style'
@@ -198,7 +199,9 @@ export class Studio implements World3D {
       // The family in their own toys (Mom is her vinyl toy, familyRig), everyone else in their look.
       const own = entry.group === 'family' ? FAMILY.find((m) => m.id === entry.id) : undefined
       const dad = FAMILY.find((m) => m.id === 'nick')!
-      char = entry.dadModel
+      char = entry.candidate
+        ? new Member({ ...dad, id: entry.id, spot: null }, bag, undefined, entry.voice, buildDadCandidate(entry.candidate, bag))
+        : entry.dadModel
         ? new Member({ ...dad, id: entry.id, spot: null }, bag, undefined, entry.voice, buildDadRig(dadModel(), bag))
         : own
         ? new Member({ ...own, spot: null }, bag, undefined, entry.voice)

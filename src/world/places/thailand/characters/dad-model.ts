@@ -36,11 +36,11 @@ export const DAD_SIZE = 1.95
 export const DAD_HAIR = ['#794321', '#874828', '#94532D']
 /** How far each arm's swing plane turns forward for a wave (mom-model.ts reachForward): his head is wider than his
  *  shoulders, so an arm raised straight out to the side would come up into his ear. */
-const ARM_TILT = 1.2
+export const ARM_TILT = 1.2
 /** His ink before TUNE.outline: the user's pick, the Outline slider at 0.35 (2026-11-15; Mom's is at 1). The lids' ink
  *  follows it. */
 const INK = 0.35 / 0.75
-const BODY_INK = 1.8 * INK
+export const BODY_INK = 1.8 * INK
 const FACE_INK = 1.2 * INK
 /** His mint, as split-nick.py's mint() painted it into the texture (the lids). */
 const SKIN = '#A8EAD5'
@@ -48,25 +48,83 @@ const SMILE = '#4A2A2A'
 const MOUTH = '#7A2745'
 const TONGUE = '#FF8FA8'
 
-// Where he was cut and what's on his face, measured in Blender (model meters, Blender axes: z up, the face toward -y).
-const NECK = 0.53
-/** The right eye dome's box (Blender axes: x across, y depth, z up): centre and half-sizes (the left is mirrored). */
-const EYE = { c: [0.0942, -0.1711, 0.6885] as V3, r: [0.0408, 0.02, 0.0405] as V3 }
-/** The bottom of his nose (the mouth goes under it). */
-const NOSE = 0.627
-/** The middle of the right hoof from the shoulder pivot (three.js axes; the left is mirrored). */
-const HOOF: V3 = [0.117, -0.15, 0.024]
-/** The left brow's middle and the horn's tip (Blender). */
-const BROW: V3 = [-0.104, -0.1809, 0.7548]
-const HORN: V3 = [-0.0081, -0.2209, 0.9995]
-/** The middle of his hair's height (the vet's suds puff it from there). */
-const HAIR_MID = 0.816
-/** Where each sleeve meets the shirt (model meters, three.js axes, the right side: the left is mirrored): a seam
- *  line through `x`, `y` running down toward the armpit, its normal `n` pointing out along the sleeve, and how wide
- *  (`band`) the shirt stretches from the body's hold to the arm's. Nothing below `low` (the tail curls out there). */
-const SEAM = { x: 0.13, y: 0.5, n: [0.945, 0.327] as const, band: 0.05, low: 0.37 }
-/** His left leg in its hip pivot's space (three.js axes, model meters): middle x and z, radius, sole and hem heights. */
-const SHIN = { x: -0.0125, z: 0.0096, r: 0.0758, sole: -0.1623, hem: -0.01 }
+/** Where a modelled Dad was cut and what's on his face, measured in Blender (model meters; Blender axes, z up and the
+ *  face toward -y, unless it says three.js). One per model: today's Dad below, the new Tripo Dads from the JSON that
+ *  scripts/blender/split-dad.py writes beside each GLB (dadShape). */
+export interface DadShape {
+  /** The level his head was cut off at (the neck pivot's height). */
+  neck: number
+  /** The right eye dome's box (x across, y depth, z up): centre and half-sizes (the left is mirrored). */
+  eye: { c: V3; r: V3 }
+  /** The bottom of his nose (the mouth goes under it). */
+  nose: number
+  /** The middle of the right hoof from the shoulder pivot (three.js axes; the left is mirrored). */
+  hoof: V3
+  /** The left brow's middle and the horn's tip. */
+  brow: V3
+  horn: V3
+  /** The middle of his hair's height (the vet's suds puff it from there). */
+  hairMid: number
+  /** Where each sleeve meets the shirt (three.js axes, the right side: the left is mirrored): a seam line through `x`,
+   *  `y` running down toward the armpit, its normal `n` pointing out along the sleeve, and how wide (`band`) the shirt
+   *  stretches from the body's hold to the arm's. Nothing below `low` (the tail curls out there). */
+  seam: { x: number; y: number; n: readonly [number, number]; band: number; low: number }
+  /** His left leg in its hip pivot's space (three.js axes): middle x and z, radius, sole and hem heights. */
+  shin: { x: number; z: number; r: number; sole: number; hem: number }
+  /** His hair's browns, dark to light (the barber's strands and its falling snips). */
+  hair: string[]
+}
+
+/** Today's Dad (regeneration 2, split by split-nick.py). */
+const DAD_SHAPE: DadShape = {
+  neck: 0.53,
+  eye: { c: [0.0942, -0.1711, 0.6885], r: [0.0408, 0.02, 0.0405] },
+  nose: 0.627,
+  hoof: [0.117, -0.15, 0.024],
+  brow: [-0.104, -0.1809, 0.7548],
+  horn: [-0.0081, -0.2209, 0.9995],
+  hairMid: 0.816,
+  seam: { x: 0.13, y: 0.5, n: [0.945, 0.327], band: 0.05, low: 0.37 },
+  shin: { x: -0.0125, z: 0.0096, r: 0.0758, sole: -0.1623, hem: -0.01 },
+  hair: DAD_HAIR,
+}
+
+/** What split-dad.py measured on a new Tripo Dad (its JSON). */
+export interface SplitMeta {
+  neck: number
+  eye: { c: number[]; r: number[] }
+  muzzle: number
+  hoof: number[]
+  brow: number[]
+  horn: number[]
+  hairMid: number
+  /** The right shoulder pivot (three.js axes). */
+  shoulder: number[]
+  /** Where the right sleeve's underside meets the shirt (three.js x, y). */
+  armpit: number[]
+  shin: DadShape['shin']
+  hair: string[]
+}
+
+/** A new Tripo Dad's shape from split-dad.py's measurements. His sleeve seam runs up from his armpit at today's Dad's
+ *  slant, a little in from it, so the whole sleeve goes with the arm (placed from the shoulder pivot instead, the seam
+ *  crossed these shorter, higher sleeves and left their undersides behind on the body, torn). */
+export function dadShape(m: SplitMeta): DadShape {
+  const v3 = (a: number[]): V3 => [a[0], a[1], a[2]]
+  return {
+    neck: m.neck,
+    eye: { c: v3(m.eye.c), r: v3(m.eye.r) },
+    // The muzzle's tip is the nose's middle: its bottom is just under it.
+    nose: m.muzzle - 0.012,
+    hoof: v3(m.hoof),
+    brow: v3(m.brow),
+    horn: v3(m.horn),
+    hairMid: m.hairMid,
+    seam: { x: m.armpit[0] - 0.012, y: m.armpit[1], n: DAD_SHAPE.seam.n, band: 0.045, low: m.armpit[1] - 0.02 },
+    shin: m.shin,
+    hair: m.hair,
+  }
+}
 
 let model: GLTF | null = null
 let ready: Promise<GLTF> | null = null
@@ -91,8 +149,9 @@ export function dadReady(): Promise<GLTF> {
 
 /** A rig like buildAnimal's, from his model. Like Mom's, every pivot sits where it is at full size and only the meshes
  *  are scaled up, so head-local, body-local and leg-local positions are in meters. */
-export function buildDadRig(gltf: GLTF, bag: Bag): Rig {
+export function buildDadRig(gltf: GLTF, bag: Bag, shape: DadShape = DAD_SHAPE): Rig {
   const S = DAD_SIZE
+  const { neck: NECK, hoof: HOOF, hairMid: HAIR_MID, shin: SHIN } = shape
   const scene = gltf.scene.clone(true)
   const node = (name: string): Group => {
     const n = scene.getObjectByName(name)
@@ -129,7 +188,7 @@ export function buildDadRig(gltf: GLTF, bag: Bag): Rig {
     arm.add(hand)
     return hand
   })
-  sleevesFollow(bodyMesh, [[armL, -1], [armR, 1]], bag)
+  sleevesFollow(bodyMesh, [[armL, -1], [armR, 1]], bag, shape.seam)
   const root = new Group()
   root.add(blobShadow(0.24 * S, bag), body)
 
@@ -145,6 +204,45 @@ export function buildDadRig(gltf: GLTF, bag: Bag): Rig {
   head.add(brows)
   brows.add(browL, browR)
 
+  const f = dadFace(head, neck, headMesh.geometry as BufferGeometry, shape, bag)
+
+  return {
+    root,
+    body,
+    head,
+    eyes,
+    mouth: f.mouth,
+    talk: f.talk,
+    open: false,
+    armL,
+    armR,
+    tail,
+    legL,
+    legR,
+    hands: [hands[0], hands[1]],
+    ears: [],
+    mane: null,
+    hair,
+    hairColors: shape.hair,
+    brows,
+    horn,
+    height: S,
+    radius: 0.2 * S,
+    phone: null,
+    face: f.face,
+    spots: f.spots,
+    shin: { x: SHIN.x * S, z: SHIN.z * S, r: SHIN.r * S, sole: SHIN.sole * S, hem: SHIN.hem * S },
+    blink: f.blink,
+  }
+}
+
+/** What the code draws on a modelled Dad's face (the smile, the talking mouth, the blink lids) and where things sit on
+ *  his head, from his shape. `head` is his head pivot (meters), `neck` where it is in model meters (three.js axes), and
+ *  `probe` a shape of his face in model meters, three.js axes (rays find his face on it). Shared by today's Dad and the
+ *  new Tripo Dads (dad-candidates.ts). */
+export function dadFace(head: Group, neck: Vector3, probeGeometry: BufferGeometry, shape: DadShape, bag: Bag) {
+  const S = DAD_SIZE
+  const { neck: NECK, eye: EYE, nose: NOSE, brow: BROW, horn: HORN } = shape
   // What the code draws on his face, in model meters (head-local) inside a group scaled to his size.
   const face = new Group()
   face.scale.setScalar(S)
@@ -153,7 +251,7 @@ export function buildDadRig(gltf: GLTF, bag: Bag): Rig {
   const onHead = (x: number, z: number, y: number): V3 => [x - neck.x, z - neck.y, -y - neck.z]
   const sc = (p: V3): V3 => [p[0] * S, p[1] * S, p[2] * S]
   // Points on his face: rays cast at the head mesh from in front (it's in model meters, three.js axes).
-  const probe = new Mesh(headMesh.geometry as BufferGeometry)
+  const probe = new Mesh(probeGeometry)
   const ray = new Raycaster()
   const back = new Vector3(0, 0, -1)
   const hitAt = (x: number, z: number) => {
@@ -201,29 +299,9 @@ export function buildDadRig(gltf: GLTF, bag: Bag): Rig {
   }
 
   return {
-    root,
-    body,
-    head,
-    eyes,
     mouth,
     talk,
-    open: false,
-    armL,
-    armR,
-    tail,
-    legL,
-    legR,
-    hands: [hands[0], hands[1]],
-    ears: [],
-    mane: null,
-    hair,
-    hairColors: DAD_HAIR,
-    brows,
-    horn,
-    height: S,
-    radius: 0.2 * S,
-    phone: null,
-    face: { R: 0.23 * S, headY: (0.7 - NECK) * S, mouth: sc(mouthAt) },
+    face: { R: 0.23 * S, headY: (EYE.c[2] + 0.012 - NECK) * S, mouth: sc(mouthAt) },
     // A hat goes round his head under the horn, about 0.2 round (model meters).
     spots: {
       crown: sc(onHead(0, 0.84, -0.02)),
@@ -233,7 +311,6 @@ export function buildDadRig(gltf: GLTF, bag: Bag): Rig {
       brow: sc(onHead(BROW[0], BROW[2], BROW[1])),
       horn: sc(onHead(HORN[0], HORN[2], HORN[1])),
     },
-    shin: { x: SHIN.x * S, z: SHIN.z * S, r: SHIN.r * S, sole: SHIN.sole * S, hem: SHIN.hem * S },
     blink(open: number) {
       const shut = (1 - open) / 0.9
       for (const lid of lids) {
@@ -249,7 +326,7 @@ export function buildDadRig(gltf: GLTF, bag: Bag): Rig {
  *  instead: the shirt's vertices past the seam (SEAM) turn with the arm, fading across the seam's band to the ones the
  *  body holds, so the shoulder stretches like cloth. Done on the CPU just before each draw, for the shirt and its ink
  *  hull alike (the hull is a welded copy, so it gets its own weights from the same seam). */
-function sleevesFollow(mesh: Mesh, arms: [Object3D, -1 | 1][], bag: Bag) {
+function sleevesFollow(mesh: Mesh, arms: [Object3D, -1 | 1][], bag: Bag, SEAM: DadShape['seam']) {
   const hull = mesh.children.find((c) => c.userData.hull) as Mesh | undefined
   // (His hull was made from his own copy of the shape, so it's his alone too.)
   if (hull) bag.add(hull.geometry)

@@ -10,6 +10,7 @@ import { stopSpeaking, useTimers } from '../../../../sdk'
 import type { Wearable } from '../characters/looks'
 import { kayleeReady } from '../characters/model'
 import { dadReady } from '../characters/dad-model'
+import { dadCandidatesReady } from '../characters/dad-candidates'
 import { momReady } from '../characters/mom-model'
 import type { Pose } from '../characters/types'
 import { View3D, type RenderMode } from '../../../engine3d/View3D'
@@ -108,6 +109,8 @@ export default function CharacterLab({ id, params = {} }: { id?: string; params?
   use(momReady())
   // The modelled Dad on trial (dad-model.ts).
   use(dadReady())
+  // The new Tripo Dads to pick from (dad-candidates.ts).
+  use(dadCandidatesReady())
   const [view, setView] = useState(() => fromLink(id, params))
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [film, setFilm] = useState<string[]>([])

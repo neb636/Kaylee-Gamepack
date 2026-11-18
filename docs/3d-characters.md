@@ -256,6 +256,27 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   `hairColors`, `spots.brow`/`horn`) and his legs (`shin`). The reverted PR #291 shows the scene changes: boat
   sunglasses, mall socks, barber, vet suds, HarborLand horn ball, rice straw. Then `qa-mom.mjs --who=nick`.
 
+## New Dads (2026-11-17: four auto-rigged candidates in the lab)
+
+- **Lab only:** `New Dad 1/2/3/5` in the Dads variations (`characters/dad-candidates.ts`, `models/candidates/`). The
+  user made six Tripo Dads from a new picture (4 and 6 were copies of 1 and 3), textured them, and auto-rigged four in
+  Tripo (a skinned Mixamo-style skeleton, no clips).
+- **Cut into stiff pieces first, and it didn't work:** `scripts/blender/split-dad.py` (headless) splits a textured
+  Tripo Dad into today's Dad's pivot rig and measures his face. Even with each Dad's own armpit seam, domed shoulder
+  plugs and the hidden arm tops painted pink, the short sleeves tore at the shoulder whenever an arm lifted: the
+  sleeve is part of the shirt and the arm a tube inside it. The user saw it at normal size, not just close up.
+- **Skinned instead, still driven by our code:** a pivot group (the Rig's head, armL/armR, legL/legR) sits at Tripo's
+  Head, Arm and UpLeg bones and each bone hangs under its pivot, so Member and every pose/action turn the bones and
+  Tripo's weights bend the shirt. Tripo's clips aren't used. Tripo's "Left" bones are on +x, the game's right. The
+  ink is a skinned hull (welded with its skin weights kept) with a skinning version of the outline shader. The face
+  (smile, talking mouth, lids, spots) is `dadFace` in `dad-model.ts`, shared with today's Dad; the skin is turned mint
+  in the texture at load.
+- **Where they stand:** Dad 5's shoulders are clean front and back mid-cheer; 1 has dark specks at the armpits, 2 mint
+  smudges, 3 a black patch where the inside of a sleeve shows. Tripo's weights let the arm slide part-way out of the
+  sleeve rather than carry it. No tail bone (the tail doesn't swing), no separate hair (the barber needs it), Tripo's
+  texture not flattened yet (issue #481).
+- **Next:** the user picks one; then flatten its texture, split its hair out by colour, and swap it in for today's Dad.
+
 ## Open questions
 
 - A GLB of a family member is OK in this repo (user feedback, 2026-10-25); photos never are.
