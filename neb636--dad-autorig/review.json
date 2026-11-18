@@ -1,0 +1,26 @@
+{
+  "title": "New Dad: four auto-rigged candidates",
+  "checkIn": "1 of 4: pick a Dad",
+  "kaylee": "Nothing yet: the four new Dads are only in the character lab, beside today's Dad, until you pick one.",
+  "questions": [
+    "Which Dad: 1, 2, 3 or 5?",
+    "Do Dad 5's shoulders look right when he waves and cheers?"
+  ],
+  "links": [
+    { "label": "All four beside today's Dad", "hash": "#/world/characters/dad-5?lineup=dad-model,dad-1,dad-2,dad-3,dad-5" },
+    { "label": "Dad 5 close up", "hash": "#/world/characters/dad-5?zoom=1.6" }
+  ],
+  "pictures": [
+    {
+      "title": "Shoulders mid-cheer",
+      "before": "pics/shoulders-pieces.jpg",
+      "after": "pics/shoulders-skinned.jpg",
+      "caption": "Before: cut into stiff pieces (Dads 1-3), the sleeves tore. After: Tripo's rig (Dads 1, 2, 3, 5), the shirt bends. Dad 5 is the cleanest."
+    },
+    {
+      "title": "All five moving",
+      "after": "pics/lineup.jpg",
+      "caption": "Today's Dad, then New Dads 1, 2, 3 and 5: standing, from behind, sitting, waving, cheering and Silly"
+    }
+  ]
+}
