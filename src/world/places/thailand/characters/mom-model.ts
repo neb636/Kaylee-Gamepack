@@ -17,8 +17,8 @@ import type { Rig } from '../../../engine3d/characters/animal'
 import { inkPieces } from './model'
 import url from './models/mom.glb?url'
 
-/** How tall she stands (meters; the 1 m model's top is her horn tip). 1.85 puts her horn tip level with Dad's (the
- *  code-built Dad, LOOKS.nick at 1.7, reaches 1.87 with his horn); at 1.55 she was barely taller than Kaylee (1.25). */
+/** How tall she stands (meters; the 1 m model's top is her horn tip). 1.85 put her horn tip level with the code-built
+ *  Dad's (1.87 with his horn), a little under the modelled Dad's 1.95; at 1.55 she was barely taller than Kaylee (1.25). */
 export const MOM_SIZE = 1.85
 /** How far each arm's swing plane turns forward (model.ts swingForward): her hair is about as wide as her reach. */
 const ARM_TILT = 2.0

@@ -1,7 +1,7 @@
 # Marks where Dad 5's ink is drawn: an `_INK` number per vertex (0 = no line, 1 = the full line), written into his GLB
-# in place. dad-candidates.ts's hull leaves out the triangles marked 0 and thins its line by the number elsewhere.
+# in place. dad-rig.ts's hull leaves out the triangles marked 0 and thins its line by the number elsewhere.
 #
-#   Blender -b --python scripts/blender/ink-dad.py -- src/world/places/thailand/characters/models/candidates/dad-5.glb
+#   Blender -b --python scripts/blender/ink-dad.py -- src/world/places/thailand/characters/models/dad.glb
 #
 # Why: the ink is an inverted hull of his whole mesh, so it shows wherever the mesh folds inward on his face. With the
 # Outline at 1 that drew a squiggle under his nose, rims round his eye domes and sockets and lines round his brows that

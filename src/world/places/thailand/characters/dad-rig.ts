@@ -1,4 +1,6 @@
-// Dad 5’s skinned rig for the character lab. His Blender wave uses the original arm chain.
+// Dad as a modelled vinyl toy (docs/3d-characters.md): Tripo's auto-rigged mint unicorn (Dad 5, the user's pick,
+// 2026-11-18), skinned, with the game's pivots on his bones and a Blender wave on his own arm chain. He is the game's
+// Dad: Member builds him for `nick` (familyRig), and Thailand's Place and the character lab wait for dadReady().
 import { AnimationMixer, BufferAttribute, CanvasTexture, Group, MeshToonMaterial, ShaderMaterial, SkinnedMesh, SRGBColorSpace, Vector3, type BufferGeometry, type Object3D, type Texture } from 'three'
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
@@ -11,45 +13,45 @@ import { outlineMaterial } from '../../../engine3d/outline'
 import { toonGradient } from '../../../engine3d/toon'
 import { ARM_TILT, BODY_INK, DAD_SIZE, dadFace, dadShape, type SplitMeta } from './dad-model'
 import { reachForward } from './mom-model'
-import five from './models/candidates/dad-5.glb?url'
-import m5 from './models/candidates/dad-5.json'
+import url from './models/dad.glb?url'
+import measured from './models/dad.json'
 
-const DADS = {
-  'dad-5': { url: five, meta: m5 as SplitMeta },
-} as const
-export type DadCandidate = keyof typeof DADS
+const META = measured as SplitMeta & { tailRoot?: number[] }
+
+/** His left shin below the shorts, in model meters (three.js axes; the right is mirrored): its middle and how round. */
+const SHIN = { x: 0.105, z: -0.008, r: 0.078 }
 
 /** Dad's mint (dad-model.ts SKIN), as HSV. */
 const MINT_HSV = hsv(0xa8 / 255, 0xea / 255, 0xd5 / 255)
 
-const loaded = new Map<DadCandidate, { gltf: GLTF; skin: MeshToonMaterial }>()
+let loaded: { gltf: GLTF; skin: MeshToonMaterial } | null = null
 let ready: Promise<unknown> | null = null
 
-/** Resolves once Dad 5 is loaded and his skin turned mint (the lab waits for it). */
-export function dadCandidatesReady(): Promise<unknown> {
-  ready ??= Promise.all(
-    (Object.keys(DADS) as DadCandidate[]).map((id) =>
-      new GLTFLoader().loadAsync(DADS[id].url).then((gltf) => {
-        let map: Texture | null = null
-        gltf.scene.traverse((o) => {
-          const m = (o as SkinnedMesh).material as { map?: Texture | null } | undefined
-          if ((o as SkinnedMesh).isSkinnedMesh && m?.map) map = m.map
-        })
-        if (!map) throw new Error(`${id} has no texture`)
-        loaded.set(id, { gltf, skin: new MeshToonMaterial({ map: minted(map), gradientMap: toonGradient() }) })
-      }),
-    ),
-  ).catch((e) => {
-    ready = null
-    throw e
-  })
+/** Resolves once he's loaded and his skin turned mint. Thailand's Place and the character lab wait for it before they
+ *  build anything. If the GLB can't be fetched it rejects, and the next call tries again. */
+export function dadReady(): Promise<unknown> {
+  ready ??= new GLTFLoader().loadAsync(url).then(
+    (gltf) => {
+      let map: Texture | null = null
+      gltf.scene.traverse((o) => {
+        const m = (o as SkinnedMesh).material as { map?: Texture | null } | undefined
+        if ((o as SkinnedMesh).isSkinnedMesh && m?.map) map = m.map
+      })
+      if (!map) throw new Error('dad.glb has no texture')
+      loaded = { gltf, skin: new MeshToonMaterial({ map: minted(map), gradientMap: toonGradient() }) }
+    },
+    (e) => {
+      ready = null
+      throw e
+    },
+  )
   return ready
 }
 
-/** One candidate's rig: Tripo's skinned model with the game's pivots on its bones. */
-export function buildDadCandidate(id: DadCandidate, bag: Bag): Rig {
-  const got = loaded.get(id)
-  if (!got) throw new Error(`${id} is not loaded yet: wait for dadCandidatesReady() first`)
+/** His rig: Tripo's skinned model with the game's pivots on its bones. */
+export function buildDadRig(bag: Bag): Rig {
+  const got = loaded
+  if (!got) throw new Error('dad.glb is not loaded yet: wait for dadReady() first')
   const S = DAD_SIZE
   const model = cloneSkinned(got.gltf.scene)
   model.scale.setScalar(S)
@@ -70,7 +72,7 @@ export function buildDadCandidate(id: DadCandidate, bag: Bag): Rig {
   // GLTFLoader drops the ":" from "mixamorig:Head".
   const bone = (name: string): Object3D => {
     const b = model.getObjectByName(`mixamorig${name}`) ?? model.getObjectByName(`mixamorig:${name}`)
-    if (!b) throw new Error(`${id} has no ${name} bone`)
+    if (!b) throw new Error(`dad.glb has no ${name} bone`)
     return b
   }
   const where = (o: Object3D) => o.getWorldPosition(new Vector3())
@@ -119,7 +121,7 @@ export function buildDadCandidate(id: DadCandidate, bag: Bag): Rig {
   reachForward(armL, -1, ARM_TILT)
   reachForward(armR, 1, ARM_TILT)
 
-  const meta = DADS[id].meta
+  const meta = META
   // The neck pivot in model meters (three.js axes): his Head bone.
   const neck = neckAt.clone().divideScalar(S)
   const shape = { ...dadShape(meta), neck: neck.y }
@@ -137,7 +139,7 @@ export function buildDadCandidate(id: DadCandidate, bag: Bag): Rig {
   horn.position.set(...f.spots.horn!)
   head.add(horn)
   const tail = new Group()
-  const t = (meta as SplitMeta & { tailRoot?: number[] }).tailRoot ?? [0, 0.29, -0.12]
+  const t = meta.tailRoot ?? [0, 0.29, -0.12]
   tail.position.set(t[0] * S, t[1] * S, t[2] * S)
   body.add(tail)
 
@@ -175,10 +177,13 @@ export function buildDadCandidate(id: DadCandidate, bag: Bag): Rig {
     horn,
     height: S,
     radius: 0.2 * S,
+    // His tummy at the top of his shorts (measured on dad.glb): the jet ski's life jacket goes round it.
+    waist: { y: 0.3 * S, z: -0.01 * S, rx: 0.16 * S, rz: 0.15 * S },
     phone: null,
     face: f.face,
     spots: f.spots,
-    shin: { x: 0, z: 0, r: shape.shin.r * S, sole: -hip * S, hem: (0.13 - hip) * S },
+    // His shin's middle sits 4 cm outside his hip pivot (measured on dad.glb: x ±0.105, z -0.008, 0.078 round).
+    shin: { x: -SHIN.x * S - legL.position.x, z: SHIN.z * S - legL.position.z, r: SHIN.r * S, sole: -hip * S, hem: (0.13 - hip) * S },
     blink: f.blink,
   }
 }

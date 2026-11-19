@@ -9,7 +9,7 @@ import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { stopSpeaking, useTimers } from '../../../../sdk'
 import type { Wearable } from '../characters/looks'
 import { kayleeReady } from '../characters/model'
-import { dadCandidatesReady } from '../characters/dad-candidates'
+import { dadReady } from '../characters/dad-rig'
 import { momReady } from '../characters/mom-model'
 import type { Pose } from '../characters/types'
 import { View3D, type RenderMode } from '../../../engine3d/View3D'
@@ -102,12 +102,11 @@ function toLink(v: StudioView) {
 const wide = () => typeof window === 'undefined' || window.matchMedia('(min-width: 901px)').matches
 
 export default function CharacterLab({ id, params = {} }: { id?: string; params?: Record<string, string> }) {
-  // Kaylee and Mom are modelled vinyl toys: their GLBs load before the studio builds anyone (World.tsx's Suspense).
+  // Kaylee, Mom and Dad are modelled vinyl toys: their GLBs load before the studio builds anyone (World.tsx's Suspense).
   const timers = useTimers()
   use(kayleeReady())
   use(momReady())
-  // Dad 5’s skinned model and Blender wave.
-  use(dadCandidatesReady())
+  use(dadReady())
   const [view, setView] = useState(() => fromLink(id, params))
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [film, setFilm] = useState<string[]>([])

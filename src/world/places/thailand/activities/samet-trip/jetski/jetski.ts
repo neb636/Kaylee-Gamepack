@@ -402,7 +402,13 @@ export class JetSki implements World3D {
     this.kaylee.rig.body.add(this.jacket)
     this.jacketFloat = loneVest(bag, PAL.hotpink)
     scene.add(this.jacketFloat)
-    this.nickJacket = lifeJacket(bag, this.nick.rig.radius * 1.12, this.nick.height * 0.3, this.nick.height * 0.2, '#FF8A2E', '#FFE07A')
+    // A modelled Dad says where his waist is (rig.waist): the jacket goes from just above it up under his arms.
+    const w = this.nick.rig.waist
+    const H = this.nick.height
+    this.nickJacket = w
+      ? lifeJacket(bag, Math.max(w.rx, w.rz) * 1.08, w.y + 0.08 * H, 0.17 * H, '#FF8A2E', '#FFE07A')
+      : lifeJacket(bag, this.nick.rig.radius * 1.12, H * 0.3, H * 0.2, '#FF8A2E', '#FFE07A')
+    if (w) this.nickJacket.position.z = w.z
     this.nick.rig.body.add(this.nickJacket)
     // (The way-in film ends at the life jacket: it isn't on yet.)
     this.jacket.visible = this.phase !== 'jacket' && this.filmRound !== 'story'

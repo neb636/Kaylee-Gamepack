@@ -19,7 +19,6 @@ import cast from '../cast.json'
 import { L } from '../lines'
 import { ATTENDANT } from '../trip/legs/plane'
 import { OFFICER } from '../trip/legs/airport'
-import type { DadCandidate } from '../characters/dad-candidates'
 
 export type CastGroup = 'family' | 'trip' | 'mall' | 'nan' | 'samet' | 'critters' | 'poles' | 'canada'
 export const GROUPS: { id: CastGroup; name: string }[] = [
@@ -59,21 +58,20 @@ export interface CastEntry {
   color: string
   /** Entries that are variations of each other share this. */
   set?: string
-  /** Dad 5’s skinned model and Blender wave. */
-  candidate?: DadCandidate
 }
 
 const family: CastEntry[] = [
-  // Kaylee and Mom are modelled vinyl toys from Tripo3D (characters/model.ts, characters/mom-model.ts), so they have no
-  // look of their own here.
+  // Kaylee, Mom and Dad are modelled vinyl toys from Tripo3D (characters/model.ts, mom-model.ts, dad-rig.ts), so they
+  // have no look of their own here. `nick-code` is the code-built Dad he replaced, to compare.
   { id: 'kaylee', name: 'Your unicorn', who: 'Her, a lilac unicorn (the vinyl toy, modelled in Tripo3D)', group: 'family', kind: 'kaylee', src: 'characters/model.ts', color: '#C9B6F0' },
   ...FAMILY.map((m): CastEntry =>
     m.id === 'ji'
       ? { id: m.id, name: m.name, who: 'Your mom, a cream unicorn (the vinyl toy, modelled in Tripo3D)', group: 'family', kind: 'member', voice: 'ji', src: 'characters/mom-model.ts', color: '#FACCA2' }
-
-      : { id: m.id, name: m.name, who: m.who, group: 'family', kind: 'member', look: LOOKS[m.id], voice: m.id, src: 'characters/looks.ts', color: LOOKS[m.id].fur, set: m.id === 'nick' ? 'dads' : undefined },
+      : m.id === 'nick'
+      ? { id: m.id, name: m.name, who: 'Your dad, a mint unicorn (the vinyl toy, modelled in Tripo3D)', group: 'family', kind: 'member', voice: 'nick', src: 'characters/dad-rig.ts', color: '#A9EBD6', set: 'dads' }
+      : { id: m.id, name: m.name, who: m.who, group: 'family', kind: 'member', look: LOOKS[m.id], voice: m.id, src: 'characters/looks.ts', color: LOOKS[m.id].fur },
   ),
-  { id: 'dad-5', name: 'New Dad 5', who: 'Mint unicorn with a Blender wave', group: 'family', kind: 'member', voice: 'nick', src: 'characters/dad-candidates.ts', color: '#A9EBD6', set: 'dads', candidate: 'dad-5' },
+  { id: 'nick-code', name: 'Old Dad', who: 'The code-built mint unicorn the vinyl toy replaced', group: 'family', kind: 'member', look: LOOKS.nick, voice: 'nick', src: 'characters/looks.ts', color: LOOKS.nick.fur, set: 'dads' },
 ]
 
 const person = (id: string, name: string, who: string, group: CastGroup, look: Look, src: string, voice?: string, set?: string): CastEntry => ({ id, name, who, group, kind: 'member', look, voice, src, color: look.fur, set })

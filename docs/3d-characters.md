@@ -222,10 +222,21 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   by `familyRig`), and saves a sheet per section: the screen with her outlined and three close-ups drawn from the
   game's own scene. `--who=nick` shoots anyone else, `--hashes=a|b` any links.
 
-## Dad 5 in the character lab
+## Dad (2026-11-18: Dad 5 picked; the game's Dad 2026-11-19)
 
-- You picked Dad 5. Compare him with the game’s code-built Dad in the character lab at
-  `#/world/characters/dad-5?lineup=nick,dad-5`. The game still uses `LOOKS.nick`.
+- **In the game:** he is the game's Dad everywhere. `characters/dad-rig.ts` builds him from `characters/models/dad.glb`
+  (and the measurements `split-dad.py` wrote, `dad.json`); `Member` builds every `nick` in his own look through
+  `familyRig` (the mall's `Racer('nick')` too), and Thailand's `Place.tsx` and the character lab wait for `dadReady()`
+  like they do for Kaylee and Mom. The lab's `nick` is him; `nick-code` is the code-built Dad he replaced, to compare
+  (`#/world/characters/nick?lineup=nick,nick-code`). `LOOKS.nick` stays for that and for the barber's strand shapes.
+- **What the scenes hang on him** goes through the rig like Mom's: `spots.eyes` (the boat's sunglasses), `spots.nose`
+  (the cafe's cream), `spots.horn` (HarborLand's ball on his horn, the barber's boing horn), `spots.crown` (the rice
+  straw), `spots.brow` and `hairColors` (the barber's brows and strands start where his are, in his browns),
+  `face.mouth` (the vet's treat), `waist` (the jet ski's life jacket, measured round his tummy) and `shin` (the mall's
+  grip socks, one on each leg: his shin's middle is 4 cm outside the hip pivot).
+- **Known gap: his hair is painted on.** It's part of his one skinned mesh, so the barber can't hide it the way it hid the
+  code-built mane: dyed strands go over it and some brown shows between them. Splitting the hair out in Blender (or
+  recolouring its texels for the barber, like `minted()`) would fix it. The tail has no joint of its own either.
 - Dad 5’s skinned GLB includes a 1.5-second Blender wave. The lab preserves the original arm hierarchy so the collarbone,
   upper arm and forearm move together. Other poses use the family controls. A small sleeve fold remains at the deepest bend.
 - The previous trials used rigid pieces, which pulled away at the shoulder on fused meshes. The current skin weights let
@@ -236,8 +247,7 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   in the head's inward folds) and `hullOf` drops the 0 triangles and thins the line by it. Rerun it on a new GLB.
   `minted()` blurs how green each texel is before moving it to mint, so the muzzle's cream fades into the mint at
   his chin instead of speckling.
-- Before an in-game swap, check the remaining gestures and fit the gear Dad uses in the trips. The barber needs separate
-  hair and the tail needs its own joint to swing. Issue #481 tracks the texture work.
+- Issue #481 tracks the texture work.
 
 ## Open questions
 
