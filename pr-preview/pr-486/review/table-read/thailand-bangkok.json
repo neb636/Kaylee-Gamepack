@@ -7,13 +7,13 @@
   "page": "thailand-bangkok.html",
   "audio": null,
   "lines": 14,
-  "seconds": 43,
+  "seconds": 45,
   "missing": 0,
   "names": 0,
   "flags": [
     {
       "key": "bangkok.hello.touch",
-      "text": "This is Bangkok! Tap a pin to go there.",
+      "text": "This is Bangkok! Tap the house or the mall!",
       "flags": [
         "long",
         "new"
@@ -21,7 +21,7 @@
     },
     {
       "key": "bangkok.hello.mouse",
-      "text": "This is Bangkok! Click a pin to go there.",
+      "text": "This is Bangkok! Click the house or the mall!",
       "flags": [
         "long",
         "new"
@@ -124,12 +124,12 @@
         "hello",
         "touch"
       ],
-      "text": "This is Bangkok! Tap a pin to go there.",
+      "text": "This is Bangkok! Tap the house or the mall!",
       "voice": "sparkle",
       "key": "bangkok.hello.touch",
       "part": "bangkok › hello",
       "when": "",
-      "ms": 4032,
+      "ms": 4416,
       "flags": [
         "long",
         "new"
@@ -141,12 +141,12 @@
         "hello",
         "mouse"
       ],
-      "text": "This is Bangkok! Click a pin to go there.",
+      "text": "This is Bangkok! Click the house or the mall!",
       "voice": "sparkle",
       "key": "bangkok.hello.mouse",
       "part": "bangkok › hello",
       "when": "",
-      "ms": 3432,
+      "ms": 4320,
       "flags": [
         "long",
         "new"
