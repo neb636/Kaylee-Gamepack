@@ -1,0 +1,130 @@
+{
+ "title": "Real sounds: the Bangkok map and the Poles",
+ "checkIn": "fix",
+ "kaylee": "Every poke on the Bangkok map (skytrain, boats, lizard, fountain...) and the Poles' huddle and ending now make real sounds, not blips.",
+ "questions": [],
+ "links": [
+  {
+   "label": "Bangkok map",
+   "hash": "#/world/thailand/hub/bangkok"
+  },
+  {
+   "label": "The Poles ending",
+   "hash": "#/world/poles/night"
+  }
+ ],
+ "listens": [
+  {
+   "title": "The Bangkok map",
+   "audio": "sfx/bangkok.mp3",
+   "items": [
+    {
+     "text": "The city by the river (the bed)",
+     "at": 0,
+     "end": 6
+    },
+    {
+     "text": "The skytrain zooms by",
+     "at": 6.7,
+     "end": 9.11
+    },
+    {
+     "text": "The skytrain's door chime",
+     "at": 9.81,
+     "end": 11.29
+    },
+    {
+     "text": "A river boat toots",
+     "at": 11.99,
+     "end": 13.75
+    },
+    {
+     "text": "Asiatique's big wheel spins",
+     "at": 14.45,
+     "end": 17.45
+    },
+    {
+     "text": "Chinatown's drum and cymbals",
+     "at": 18.15,
+     "end": 20.15
+    },
+    {
+     "text": "The monitor lizard plops into the lake",
+     "at": 20.85,
+     "end": 22.45
+    },
+    {
+     "text": "The port's crane lowers a box",
+     "at": 23.15,
+     "end": 25.35
+    },
+    {
+     "text": "The flower market puffs petals",
+     "at": 26.05,
+     "end": 27.25
+    },
+    {
+     "text": "ICONSIAM's fountain dances",
+     "at": 27.95,
+     "end": 30.95
+    },
+    {
+     "text": "Bang Krachao's birds fly up",
+     "at": 31.65,
+     "end": 33.62
+    },
+    {
+     "text": "The night market's tents hop",
+     "at": 34.32,
+     "end": 36.52
+    },
+    {
+     "text": "The floating market's boats bob",
+     "at": 37.22,
+     "end": 39.22
+    },
+    {
+     "text": "Oranges pop off the trees",
+     "at": 39.92,
+     "end": 41.38
+    }
+   ]
+  },
+  {
+   "title": "The Poles: huddle and ending",
+   "audio": "sfx/poles.mp3",
+   "items": [
+    {
+     "text": "A cold dad shivers",
+     "at": 0,
+     "end": 0.8
+    },
+    {
+     "text": "A frozen dad sneezes",
+     "at": 1.5,
+     "end": 2.36
+    },
+    {
+     "text": "Pebble's egg cracks",
+     "at": 3.06,
+     "end": 3.74
+    },
+    {
+     "text": "Pebble hiccups",
+     "at": 4.44,
+     "end": 5.04
+    },
+    {
+     "text": "Pebble squishes past a fluffy dad",
+     "at": 5.74,
+     "end": 6.42
+    },
+    {
+     "text": "The burner held on (loop)",
+     "at": 7.12,
+     "end": 11.12
+    }
+   ]
+  }
+ ]
+}
