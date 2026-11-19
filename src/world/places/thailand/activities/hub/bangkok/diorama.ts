@@ -5,7 +5,8 @@
 // golden diamonds), the skytrain on its pillars, rows of shophouses under terracotta roofs, coconut palms along the
 // banks, a hot pink taxi and a tuk-tuk on the roads, little cars in taxi colors on the big roads, and Bang Krachao's
 // jungle in the river's big loop. The corners have their own things: the night market's tents up by Rama 9, a
-// floating market and Bang Mot's orange orchards out south-west. The pins and the river are still what she sees first.
+// floating market and Bang Mot's orange orchard out south-west. Thonburi and the south are city too, leafier than the
+// middle (big trees standing here and there among the roofs). The pins and the river are still what she sees first.
 //
 // The places stand up like chunky toys: the Thailand house (a row of pastel shophouses, the pink one in the middle,
 // the flag, a tuk-tuk parked outside) and ICONSIAM (its folded glass front on the river, the gold roof, two towers
@@ -26,8 +27,8 @@ import { trayParts } from '../../../trip/sky'
 import type { Sea } from '../map/terrain'
 import * as T from '../map/toys'
 import { RIVER_LINE } from './geo'
-import { blockMid, blockOf, buildField, buildGround, buildSea, districtAt, LAKES, type Field } from './ground'
-import { BALLOON, BOARD, BOATS, BRIDGES, CANAL, CLOUDS, COMPASS, DEG_M, FRUIT_KHLONG, GROVES, KITES, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
+import { blockMid, blockOf, buildField, buildGround, buildSea, crowns, districtAt, inBlock, inOrchard, LAKES, leafy, outward, type Field } from './ground'
+import { BALLOON, BOARD, BOATS, BRIDGES, CANAL, CLOUDS, DEG_M, FRUIT_KHLONG, GROVES, KITES, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
 import { pathLL, reachOn, type Path } from './path'
 
 const CREAM = '#FFF7F0'
@@ -43,6 +44,8 @@ const WALLS = ['#FFF7F0', '#FFD9E6', '#FFF1B8', '#FFF7F0', '#CFEFE0', '#E7E0FF']
 const LEAF = ['#66C890', '#7CD49C', '#97DFAB']
 /** The spots stand this much bigger than the board's scale, like toys. */
 const SPOT_SCALE = 1.5
+/** How many of the leafy squares' big trees stand up off the paper out west and down south (the rest are painted). */
+const GARDEN_TREES = 56
 /** The top of the land everywhere (Bangkok is flat). */
 const G = LEVEL.land
 
@@ -163,8 +166,8 @@ export function buildDiorama(bag: Bag): Diorama {
   const plazas: [number, number, number][] = taken.filter(([x, z]) => !unpaved.some((u) => u[0] === x && u[1] === z)).map(([x, z, r]) => [x, z, r * 0.8])
   /** Water painted on the ground: the floating market's wide stretch of khlong ([x, z, radius east-west, north-south]). */
   const basins: [number, number, number, number][] = [[SPOTS.floating[0], SPOTS.floating[1] + 0.03, 0.26, 0.13]]
-  // (Nothing stands on the painted compass, or on Sanam Luang's open field.)
-  taken.push([...COMPASS.at, COMPASS.r * 1.2], [...SANAM_LUANG, 0.16])
+  // (Nothing stands on Sanam Luang's open field.)
+  taken.push([...SANAM_LUANG, 0.16])
 
   // ---- The bridges ----
   const bridges: XZ[] = []
@@ -242,22 +245,26 @@ export function buildDiorama(bag: Bag): Diorama {
 
   // ---- Rows of shophouses along the little streets: three or four pastel fronts under one long terracotta roof,
   // close together in the old town and Chinatown, few and far apart everywhere else: one low neighborhood and open
-  // paper (not confetti) ----
+  // paper (not confetti). Thonburi and the south get a few of their own (built up now, not orchards) ----
   {
     const parts: BufferGeometry[] = []
     const rnd = T.rng(41)
     const rows: XZ[] = []
-    for (let i = 0; i < 60000 && rows.length < 30; i++) {
+    const quota = { in: 30, out: 10 }
+    let outer = 0
+    for (let i = 0; i < 60000 && rows.length < quota.in + quota.out; i++) {
       const px = BOARD.x0 + 0.1 + rnd() * (W - 0.2)
       const pz = BOARD.z0 + 0.1 + rnd() * (D - 0.2)
       const count = 3 + Math.floor(rnd() * 2)
       const pick = rnd()
       const o = districtAt(px, pz)
-      if (o.orchard && pick > 0.3) continue
+      if (inOrchard(px, pz)) continue
       const b = blockOf(o, px, pz)
       const [mx, mz] = blockMid(o, b.iu, b.iv)
       // (Close together in the old town, far apart everywhere else.)
-      const apart = Math.hypot(mx - OLD_TOWN.at[0], mz - OLD_TOWN.at[1]) < OLD_TOWN.r ? 0.24 : 0.66
+      const out = outward(mx, mz) > 0.3
+      if (out ? outer >= quota.out : rows.length - outer >= quota.in) continue
+      const apart = Math.hypot(mx - OLD_TOWN.at[0], mz - OLD_TOWN.at[1]) < OLD_TOWN.r ? 0.24 : out ? 0.5 : 0.66
       if (rows.some(([rx, rz]) => Math.hypot(rx - mx, rz - mz) < apart)) continue
       // (The row runs along its district's streets.)
       const [ux, uz] = [Math.cos(o.turn), Math.sin(o.turn)]
@@ -266,6 +273,7 @@ export function buildDiorama(bag: Bag): Diorama {
       const ok = ([x, z]: XZ) => districtAt(x, z) === o && f.land(x, z) > 0.07 && !f.park(x, z) && !f.jungle(x, z) && free(x, z, 0.04) && f.clear(x, z) > 0.05 && rail.near(x, z).dist > 0.06
       if (![-0.7, ...Array.from({ length: count }, (_, j) => j), count - 0.3].every((j) => ok(spot(j)))) continue
       rows.push([mx, mz])
+      if (out) outer++
       const deep = 0.06
       const h = 0.066 + rnd() * 0.012
       for (let j = 0; j < count; j++) {
@@ -308,7 +316,28 @@ export function buildDiorama(bag: Bag): Diorama {
       else parts.push(...roundTree(x, G, z, s * 0.9, i))
       shadows.push([x, z, (jungle ? 0.09 : 0.05) * s + 0.015])
     }
-    // The orchards' groves: neat rows of little fruit trees, each standing on its painted row.
+    // Out west and down south, the big trees of the leafy squares stand up off the paper here and there (on their
+    // painted crowns): the green that's left among the roofs, thickest along the khlongs and toward the edges.
+    {
+      const rnd2 = T.rng(23)
+      const stood: XZ[] = []
+      for (let i = 0; i < 40000 && stood.length < GARDEN_TREES; i++) {
+        const px = BOARD.x0 + 0.08 + rnd2() * (W - 0.16)
+        const pz = BOARD.z0 + 0.08 + rnd2() * (D - 0.16)
+        const o = districtAt(px, pz)
+        const b = blockOf(o, px, pz)
+        if (leafy(o, b.iu, b.iv) < 0.5) continue
+        const [cu, cv, cr] = crowns(o, b.iu, b.iv)[0]
+        const [x, z] = inBlock(o, b.iu, b.iv, cu, cv)
+        if (f.land(x, z) < 0.07 || f.park(x, z) || f.jungle(x, z) || !free(x, z, 0.03) || f.clear(x, z) < 0.035 || rail.near(x, z).dist < 0.06) continue
+        if (stood.some(([sx, sz]) => Math.hypot(sx - x, sz - z) < 0.12)) continue
+        stood.push([x, z])
+        parts.push(...roundTree(x, G, z, 0.4 + cr * 0.6 + rnd2() * 0.08, i))
+        shadows.push([x, z, 0.035])
+        taken.push([x, z, 0.035])
+      }
+    }
+    // Bang Mot's orange orchard: neat rows of little fruit trees beside the orchard toy, each on its painted row.
     for (const [lon, lat, rowsN, n] of GROVES) {
       const [gx, gz] = ll(lon, lat)
       const o = districtAt(gx, gz)
@@ -316,7 +345,7 @@ export function buildDiorama(bag: Bag): Diorama {
       for (let r = 0; r < rowsN; r++)
         for (let j = 0; j < n; j++) {
           const [x, z] = blockMid(o, b.iu + r, b.iv + j)
-          if (f.land(x, z) < 0.06 || !free(x, z, 0.04) || f.clear(x, z) < 0.04 || f.jungle(x, z)) continue
+          if (f.land(x, z) < 0.06 || !free(x, z, 0.04) || f.clear(x, z) < 0.04 || f.jungle(x, z) || !inOrchard(x, z)) continue
           parts.push(...roundTree(x, G, z, 0.5 + ((r + j) % 3) * 0.05, r + j), P.sphere(0.008, '#FF9A4D', { at: [x + 0.016, G + 0.058, z + 0.022] }, 5), P.sphere(0.008, PAL.butter, { at: [x - 0.02, G + 0.05, z + 0.016] }, 5))
           shadows.push([x, z, 0.04])
           taken.push([x, z, 0.04])
