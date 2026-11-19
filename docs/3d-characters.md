@@ -230,8 +230,16 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   upper arm and forearm move together. Other poses use the family controls. A small sleeve fold remains at the deepest bend.
 - The previous trials used rigid pieces, which pulled away at the shoulder on fused meshes. The current skin weights let
   the sleeves bend with the arms. `scripts/blender/split-dad.py` produced the measurements used by the shared face code.
-- His skin is a pale peach in Mom's hue, `DAD_SKIN` (`#FCDCBC`, your pick 2026-11-18): `buildDadCandidate` moves every
-  green texel of Tripo's texture to it, and the blink lids match. His outline is at 1, like Mom's.
+- **His colours and texture are painted by `scripts/blender/paint-dad.py`** (headless Blender, about 20 s), not by
+  Tripo and not at load time. Tripo's texture was a 1k painting in hundreds of tiny islands with green skin: smeared
+  close up. The script unwraps him again, sorts every texel into a part (by loose piece, place and Tripo's colour) and
+  paints a 2k atlas flat from its `PAL`: light European skin (`#F4CCB2`, also `DAD_SKIN` for the blink lids: change
+  both together), a soft light muzzle, blush, the nose from its outline, the eyes (iris, pupil, shines), two days of
+  stubble (dots close up, a shadow from far), hooves that end at a clean ring. It also smooths the normals of his skin
+  and clothes, and copies the skeleton, weights and wave through untouched. Its input is the GLB before the script
+  first ran: `git show 642533832:src/world/places/thailand/characters/models/candidates/dad-5.glb > tripo.glb`.
+- **His ink leaves out his eyes, lashes, brows and nose** (`_INK` 0 on their vertices, read by `hullOf`): small pieces
+  sunk into his face, whose hulls drew broken lines. His outline is at 1, like Mom's.
 - Before an in-game swap, check the remaining gestures and fit the gear Dad uses in the trips. The barber needs separate
   hair and the tail needs its own joint to swing. Issue #481 tracks the texture work.
 
