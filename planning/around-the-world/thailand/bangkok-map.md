@@ -41,7 +41,7 @@ the districts are orchards. (The first try scattered thousands of little blocks 
   lands with a ka-chunk (`?stamp=mall-trip` plays that again).
 - **Sparkle's balloon** floats over the board's corner: tap it, the burner roars and it lifts off, back up to the
   Thailand map. (The top-left button goes there too.)
-- **Talk** (`lines.ts` `L.bangkok`, Sparkle): "This is Bangkok! Tap a pin to go there." once a visit; something true
+- **Talk** (`lines.ts` `L.bangkok`, Sparkle): "This is Bangkok! Tap the house or the mall!" once a visit; something true
   the first time she pokes a thing; after ~8 s with nothing done, "Tap the house or the mall!" (at most three times),
   the pins bounce and a 👆 points at one.
 - **Pokes:** Asiatique's wheel (it spins to a tune), Chinatown's gate (the lanterns swing, a lion drum), Lumphini

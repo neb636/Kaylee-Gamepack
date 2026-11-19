@@ -213,7 +213,7 @@ export function buildDiorama(bag: Bag): Diorama {
     const rnd = T.rng(41)
     const seen = new Set<string>()
     let n = 0
-    for (let i = 0; i < 60000 && n < 210; i++) {
+    for (let i = 0; i < 60000 && n < 140; i++) {
       const px = BOARD.x0 + 0.08 + rnd() * (W - 0.16)
       const pz = BOARD.z0 + 0.08 + rnd() * (D - 0.16)
       const pick = rnd()
@@ -452,8 +452,7 @@ function tower(x: number, y: number, z: number, h: number, w: number, look: numb
       P.rbox(w, h * 0.82, w * 0.86, 0.012, '#FFF1DC', { at: [x, y + h * 0.41, z], rot }),
       P.rbox(w * 1.12, 0.016, w * 0.98, 0.006, CREAM, { at: [x, y + h * 0.82, z], rot }),
       P.cyl(w * 0.36, w * 0.4, h * 0.08, '#FFF1DC', { at: [x, y + h * 0.87, z] }, 12),
-      P.sphere(w * 0.4, GOLD, { at: [x, y + h * 0.92, z], scale: [1, 0.85, 1] }, 12),
-      P.cone(0.01, 0.05, GOLD, { at: [x, y + h * 0.92 + w * 0.36, z] }, 6),
+      P.sphere(w * 0.4, GOLD, { at: [x, y + h * 0.92, z], scale: [1, 0.7, 1] }, 12),
     )
     floors(w, w * 0.86, y, y + h * 0.82, '#FFFDF6')
   } else if (look === 0) {
@@ -699,11 +698,11 @@ function chinatownParts(): BufferGeometry[] {
     ...[-0.06, 0.06].map((x) => P.rbox(0.03, 0.012, 0.03, 0.004, CREAM, { at: [x, 0.006, 0.07] })),
     P.box(0.17, 0.016, 0.022, RED, { at: [0, 0.128, 0.07] }),
     P.rbox(0.06, 0.022, 0.008, 0.003, GOLD, { at: [0, 0.112, 0.082] }),
-    P.prism([[-0.12, 0], [0.12, 0], [0.085, 0.03], [-0.085, 0.03]], 0.05, GOLD, { at: [0, 0.136, 0.07] }),
+    P.prism([[-0.12, 0], [0.12, 0], [0.085, 0.03], [-0.085, 0.03]], 0.05, RED, { at: [0, 0.136, 0.07] }),
     P.box(0.15, 0.008, 0.03, PAL.mint, { at: [0, 0.169, 0.07] }),
-    P.prism([[-0.075, 0], [0.075, 0], [0.045, 0.026], [-0.045, 0.026]], 0.04, GOLD, { at: [0, 0.173, 0.07] }),
+    P.prism([[-0.075, 0], [0.075, 0], [0.045, 0.026], [-0.045, 0.026]], 0.04, RED, { at: [0, 0.173, 0.07] }),
     ...[-1, 1].flatMap((s) => [P.cone(0.007, 0.03, GOLD, { at: [s * 0.123, 0.146, 0.07], rot: [0, 0, -s * 1.0] }, 5), P.cone(0.006, 0.024, GOLD, { at: [s * 0.078, 0.183, 0.07], rot: [0, 0, -s * 1.0] }, 5)]),
-    P.sphere(0.009, RED, { at: [0, 0.204, 0.07] }, 6),
+    P.sphere(0.009, GOLD, { at: [0, 0.204, 0.07] }, 6),
   ]
   // Shophouses behind, each with a sign hanging out.
   const paint = ['#FFE9D9', '#FFD9E6', '#FFF4CF', '#E7E0FF']
@@ -768,19 +767,16 @@ function lizardParts(): BufferGeometry[] {
   ]
 }
 
-/** Central Rama 3: a big cream mall with a round corner, a pink band, glass doors and a shopping bag on the roof. */
+/** Central Rama 3: a big cream building with a round corner, a lavender band and glass doors. (Kept plain on purpose:
+ *  "the mall" she goes to is ICONSIAM, and a shopping bag on this roof looked more like a mall than the mall did.) */
 function mallParts(): BufferGeometry[] {
   return [
     P.rbox(0.2, 0.085, 0.14, 0.012, CREAM, { at: [0, 0.0425, 0] }),
     P.cyl(0.05, 0.05, 0.1, '#FFE9DC', { at: [0.1, 0.05, 0.06] }, 14),
-    P.box(0.204, 0.014, 0.144, PAL.pink, { at: [0, 0.072, 0] }),
-    P.cyl(0.052, 0.052, 0.014, PAL.pink, { at: [0.1, 0.085, 0.06] }, 14),
+    P.box(0.204, 0.014, 0.144, PAL.lavender, { at: [0, 0.072, 0] }),
+    P.cyl(0.052, 0.052, 0.014, PAL.lavender, { at: [0.1, 0.085, 0.06] }, 14),
     P.rbox(0.07, 0.04, 0.008, 0.003, '#BFE2FA', { at: [-0.02, 0.022, 0.071] }),
     P.box(0.09, 0.006, 0.03, PAL.butter, { at: [-0.02, 0.048, 0.085], rot: [0.3, 0, 0] }),
-    // The shopping bag on the roof.
-    P.rbox(0.04, 0.045, 0.02, 0.004, PAL.hotpink, { at: [-0.04, 0.11, 0] }),
-    P.torus(0.011, 0.0025, '#FFFFFF', { at: [-0.04, 0.134, 0] }, Math.PI),
-    P.sphere(0.007, '#FFFFFF', { at: [-0.04, 0.11, 0.011], scale: [1, 1, 0.4] }, 5),
     // Cars parked outside.
     ...[0, 1, 2].map((i) => P.rbox(0.022, 0.012, 0.014, 0.004, [PAL.sky, PAL.mint, PAL.lavender][i], { at: [-0.085 + i * 0.03, 0.006, 0.11] })),
   ]
@@ -939,7 +935,7 @@ function palm(x: number, y: number, z: number, s: number, turn: number): BufferG
 // ---------------------------------------------------------------- pins
 
 /** How high a pin's head is over its point, and how wide. */
-export const PIN = { head: 0.2, r: 0.15, top: 0.5, size: 1.6 }
+export const PIN = { head: 0.2, r: 0.15, top: 0.5, size: 2.0 }
 
 /** A pin: a white point, a round pink head, and a toy of what she does at the place on top. */
 function buildPin(id: PinId, bag: Bag): Pin {
@@ -950,6 +946,8 @@ function buildPin(id: PinId, bag: Bag): Pin {
     P.cone(0.09, 0.19, c, { at: [0, 0.095, 0], rot: [Math.PI, 0, 0] }, 16),
     P.sphere(0.016, '#FFFFFF', { at: [0, 0.004, 0] }, 6),
     P.cyl(PIN.r, PIN.r * 0.8, 0.06, c, { at: [0, PIN.head, 0] }, 28),
+    // (A white rim: the city round it is full of pinks.)
+    P.torus(PIN.r, 0.014, '#FFFFFF', { at: [0, PIN.head + 0.03, 0], rot: [Math.PI / 2, 0, 0] }),
     P.cyl(PIN.r * 0.84, PIN.r * 0.84, 0.014, id === 'house' ? '#CDEFB0' : '#FFE9C7', { at: [0, top - 0.004, 0] }, 28),
   ]), bag, 2))
   const mini = new Group()

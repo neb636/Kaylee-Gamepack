@@ -64,7 +64,7 @@ export const PLACE_IDS = Object.keys(PLACES) as PlaceId[]
  *  house with a heart, a slide and a slice of pizza). The balloon needs none: it is its own picture. `lift`: how
  *  high over the ground the pin's point hangs (clear of the toy under it). */
 export const PINS = {
-  house: { at: PLACES.house.at, lift: 0.5, label: 'To the house', place: 'house' },
+  house: { at: PLACES.house.at, lift: 0.3, label: 'To the house', place: 'house' },
   // (In front of the mall, low: up over its towers it would hang in front of Chinatown's gate on the screen.)
   iconsiam: { at: [PLACES.iconsiam.at[0] - 0.06, PLACES.iconsiam.at[1] + 0.3], lift: 0.1, label: 'To the mall', place: 'iconsiam' },
 } satisfies Record<string, { at: XZ; lift: number; label: string; place: PlaceId }>

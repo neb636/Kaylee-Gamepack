@@ -126,7 +126,7 @@ export const L = {
   // Sparkle on the Bangkok map (activities/hub/bangkok/): the hello (once a visit), where she can go when she's stuck,
   // and something true the first time she pokes each thing.
   bangkok: {
-    hello: onDevice('This is Bangkok! Tap a pin to go there.', 'This is Bangkok! Click a pin to go there.'),
+    hello: onDevice('This is Bangkok! Tap the house or the mall!', 'This is Bangkok! Click the house or the mall!'),
     hint: onDevice('Tap the house or the mall!', 'Click the house or the mall!'),
     pokes: {
       asiatique: 'A giant wheel by the river! Round and round!',

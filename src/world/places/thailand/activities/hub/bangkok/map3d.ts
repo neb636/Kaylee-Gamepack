@@ -640,8 +640,8 @@ export class BangkokMap extends Stage {
 
   private buildSky() {
     const { scene, bag } = this
-    // Clouds drifting high over the board, each with its shadow on the city.
-    for (const [x, y, z, s] of [[-1.6, 1.55, -0.4, 0.55], [0.7, 1.7, 1.2, 0.48], [1.9, 1.6, -1.7, 0.42]]) {
+    // Clouds drifting high over the board's far edge (from her side they never cross the pins), each with its shadow.
+    for (const [x, y, z, s] of [[-1.6, 1.55, -2.0, 0.5], [1.9, 1.6, -2.4, 0.42]]) {
       const root = puffCloud(bag, s)
       root.position.set(x, y, z)
       const shadow = blobShadow(0.3 * s, bag)
