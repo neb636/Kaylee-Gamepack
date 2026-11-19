@@ -5,7 +5,7 @@
 //
 // A pin tapped (the camera has dived in): the house opens where she left it (the tuk-tuk ride the first time);
 // ICONSIAM opens the mall day, straight at the mall (a day half done, or after her first whole day: the day pass asks
-// where to start, as it does in the house); Sparkle's balloon goes back up to the Thailand map. The mall day's stamp
+// where to start, as it does in the house). Back up to the Thailand map is the top-left button. The mall day's stamp
 // floats beside ICONSIAM's pin once she has it: it lands the first time she sees this map with it (or `stamp=mall-trip`).
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
@@ -31,7 +31,7 @@ import { BANGKOK_CAM, BangkokMap as MapWorld, MAP_ANCHORS } from './map3d'
 let welcomed = false
 const told = new Set<string>()
 
-export function BangkokMap({ meta, stamps, openActivity, backToMap }: PlaceProps) {
+export function BangkokMap({ meta, stamps, openActivity }: PlaceProps) {
   const timers = useTimers()
   const { param, enter } = useSections(HUB_SECTIONS)
   const [mode, setMode] = useState<RenderMode>('webgl')
@@ -67,7 +67,6 @@ export function BangkokMap({ meta, stamps, openActivity, backToMap }: PlaceProps
   const guide = useRef<TripGuideHandle>(null)
 
   const go = (place: PlaceId) => {
-    if (place === 'balloon') return backToMap()
     if (place === 'house') return void (location.hash = worldLink(meta.id, 'hub', tripSession.house))
     // The mall day: straight to ICONSIAM. A day half done, or a whole one done before: the day pass asks where to start.
     if ((day.trips ?? 0) > 0 || (day.at && day.at !== 'goodbye')) {

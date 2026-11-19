@@ -1,7 +1,6 @@
 // The Bangkok map's shapes (layout.ts says where): a toy diorama of the middle of Bangkok floating in the sky, in the
 // same toy tray as the Thailand, Nan and Krabi maps. What makes it Bangkok: the wide teal Chao Phraya winding through
-// a flat city printed on warm paper (ground.ts paints the blocks, the roads, the khlongs and the parks), longtail boats
-// with striped roofs and ribbons on their noses, a skyline of candy-colored glass towers in three tight bunches where
+// a flat city printed on warm paper (ground.ts paints the blocks, the roads, the khlongs and the parks), a skyline of candy-colored glass towers in three tight bunches where
 // they really stand, the river's bridges (Rama VIII's one leaning tower and its fan of cables, the Bhumibol bridges'
 // golden diamonds), the skytrain on its pillars, rows of shophouses under terracotta roofs, coconut palms along the
 // banks, a hot pink taxi and a tuk-tuk on the roads, little cars in taxi colors on the big roads, and Bang Krachao's
@@ -11,12 +10,12 @@
 // The places stand up like chunky toys: the Thailand house (a row of pastel shophouses, the pink one in the middle,
 // the flag, a tuk-tuk parked outside) and ICONSIAM (its folded glass front on the river, the gold roof, two towers
 // behind, the fountain on its terrace). Over each floats a pink pin with a toy of what she does there on its head
-// (a little house with a heart; a slide and a slice of pizza). Sparkle's balloon floats over the board's corner: the
-// way back up to the Thailand map.
+// (a little house with a heart; a slide and a slice of pizza). Sparkle's balloon floats over the board's corner: a
+// toy to poke.
 //
 // To poke: Asiatique's big wheel, Chinatown's red gate and lanterns, Lumphini Park's swan boat and monitor lizard,
 // Mahanakhon (the tower made of blocks), Central Rama 3, the flower market, the port's crane, Bang Krachao's bird
-// tower, the night market's tents, the floating market's boats, the orange orchard. And what moves: the skytrain, an express boat, a string of rice barges and two longtails on the river, a
+// tower, the night market's tents, the floating market's boats, the orange orchard. And what moves: the skytrain, an express boat and a string of rice barges on the river, a
 // fruit seller's boat on Khlong Bangkok Yai, the fast boat on Khlong Saen Saep, a tuk-tuk on Rama IV Road, a pink
 // taxi on Rama III Road, the traffic, clouds.
 import { Color, Group, InstancedMesh, type BufferGeometry } from 'three'
@@ -28,7 +27,7 @@ import type { Sea } from '../map/terrain'
 import * as T from '../map/toys'
 import { RIVER_LINE } from './geo'
 import { blockMid, blockOf, buildField, buildGround, buildSea, districtAt, LAKES, type Field } from './ground'
-import { BOARD, BOATS, BRIDGES, CANAL, CLOUDS, COMPASS, DEG_M, FRUIT_KHLONG, GROVES, KITES, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
+import { BALLOON, BOARD, BOATS, BRIDGES, CANAL, CLOUDS, COMPASS, DEG_M, FRUIT_KHLONG, GROVES, KITES, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
 import { pathLL, reachOn, type Path } from './path'
 
 const CREAM = '#FFF7F0'
@@ -81,7 +80,9 @@ export interface Diorama {
   pins: Record<PinId, Pin>
   /** The mall day's stamp, beside ICONSIAM's pin (shown once she has it). */
   stamp: Group
+  /** Sparkle's balloon, and the group it floats in (map3d.ts bobs and lifts it). */
   balloon: T.Balloon
+  balloonAt: Group
   sea: Sea
   /** The river's middle line (the boats follow it), the skytrain's track, the tuk-tuk's road, the taxi's road and
    *  the fruit boat's khlong. */
@@ -150,7 +151,7 @@ export function buildDiorama(bag: Bag): Diorama {
 
   /** What stands where already (nothing else is put inside): [x, z, radius]. */
   const taken: [number, number, number][] = [
-    ...(Object.keys(PLACES) as PlaceId[]).filter((id) => id !== 'balloon').map((id) => [...PLACES[id].at, 0.36] as [number, number, number]),
+    ...(Object.keys(PLACES) as PlaceId[]).map((id) => [...PLACES[id].at, 0.36] as [number, number, number]),
     // (Mahanakhon is a tower among towers: its neighbors stand close.)
     ...(Object.keys(SPOTS) as SpotId[]).map((id) => [...SPOTS[id], id === 'mahanakhon' ? 0.15 : id === 'floating' || id === 'orchard' || id === 'tents' ? 0.34 : 0.26] as [number, number, number]),
   ]
@@ -383,10 +384,10 @@ export function buildDiorama(bag: Bag): Diorama {
   const balloon = T.balloon(bag)
   balloon.root.scale.setScalar(0.62)
   const balloonAt = new Group()
-  balloonAt.position.set(PLACES.balloon.at[0], G, PLACES.balloon.at[1])
+  balloonAt.position.set(BALLOON[0], G, BALLOON[1])
   balloonAt.add(balloon.root)
   root.add(balloonAt)
-  const places = { house, iconsiam, balloon: balloonAt } as Record<PlaceId, Group>
+  const places = { house, iconsiam } as Record<PlaceId, Group>
 
   const spots = {} as Record<SpotId, Group>
   // Asiatique: the big wheel by the river, the old warehouses under it.
@@ -455,12 +456,11 @@ export function buildDiorama(bag: Bag): Diorama {
     root.add(stamp)
   }
 
-  // ---- On the river: the express boat with its orange flag, a tug pulling rice barges, a longtail ----
+  // ---- On the river: the express boat with its orange flag, a tug pulling rice barges ----
   const boats = BOATS.map(({ kind }) => {
     const g = new Group()
     const tail: Group[] = []
     if (kind === 'express') g.add(solid(merge(expressParts()), bag, 1.5))
-    else if (kind === 'longtail') g.add(solid(merge(longtailParts()), bag, 1.5))
     else {
       g.add(solid(merge(tugParts()), bag, 1.5))
       for (let i = 0; i < 2; i++) {
@@ -533,7 +533,7 @@ export function buildDiorama(bag: Bag): Diorama {
   })
 
   root.add(buildGround(bag, { shadows, plazas, casts, basins }))
-  return { root, places, spots, pins, stamp, balloon, sea, river, rail, road, taxiRoad, khlong, canal, canalBoat, traffic, tentRows, marketBoats, boats, train, tuktuk, taxi, fruit, kites, clouds, wheel, lanterns, swan, lizard, craneBox, birds, fountain, towers, bridges }
+  return { root, places, spots, pins, stamp, balloon, balloonAt, sea, river, rail, road, taxiRoad, khlong, canal, canalBoat, traffic, tentRows, marketBoats, boats, train, tuktuk, taxi, fruit, kites, clouds, wheel, lanterns, swan, lizard, craneBox, birds, fountain, towers, bridges }
 }
 
 // ---------------------------------------------------------------- towers
@@ -1136,25 +1136,6 @@ function expressParts(): BufferGeometry[] {
     ...[0, 1, 2, 3].map((i) => P.sphere(0.006, [PAL.pink, PAL.butter, PAL.mint, PAL.lavender][i], { at: [0, 0.03, 0.04 - i * 0.03] }, 5)),
     P.cyl(0.002, 0.002, 0.05, '#FFFFFF', { at: [0, 0.075, -0.09] }, 4),
     P.prism([[0, 0], [0.03, 0.01], [0, 0.02]], 0.003, '#FF9A4D', { at: [0, 0.08, -0.09], rot: [0, Math.PI / 2, 0] }),
-  ]
-}
-
-/** A longtail boat, the river's own (sailing along +z): a long wooden hull with a pink stripe, the nose curving up
- *  with its ribbons, a roof striped in every color, the engine and its long propeller shaft out the back. */
-function longtailParts(): BufferGeometry[] {
-  const wood = '#E6A375'
-  const stripes = [PAL.hotpink, '#FFFFFF', PAL.butter, '#FFFFFF', PAL.mint, '#FFFFFF', PAL.sky]
-  return [
-    P.rbox(0.05, 0.022, 0.2, 0.01, wood, { at: [0, 0.01, 0] }),
-    P.box(0.052, 0.006, 0.18, PAL.hotpink, { at: [0, 0.019, 0] }),
-    P.box(0.02, 0.016, 0.09, wood, { at: [0, 0.036, 0.122], rot: [-0.7, 0, 0] }),
-    P.sphere(0.012, PAL.hotpink, { at: [0, 0.072, 0.152] }, 7),
-    P.sphere(0.01, PAL.butter, { at: [0, 0.056, 0.15] }, 7),
-    P.sphere(0.009, PAL.mint, { at: [0, 0.043, 0.143] }, 6),
-    ...stripes.map((c, i) => P.box(0.06, 0.006, 0.0165, c, { at: [0, 0.066, -0.06 + i * 0.016] })),
-    ...[[-1, 0.036], [1, 0.036], [-1, -0.06], [1, -0.06]].map(([sd, z]) => P.cyl(0.002, 0.002, 0.044, '#FFF7F0', { at: [sd * 0.024, 0.043, z] }, 4)),
-    P.box(0.022, 0.02, 0.026, '#A3AAC4', { at: [0, 0.034, -0.092] }),
-    P.cyl(0.003, 0.003, 0.13, '#5E5468', { at: [0, 0.024, -0.165], rot: [1.3, 0, 0] }, 5),
   ]
 }
 

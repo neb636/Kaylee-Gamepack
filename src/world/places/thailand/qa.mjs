@@ -924,7 +924,7 @@ motion.push(
 // The Bangkok map (3D, activities/hub/bangkok/): the city alive (the skytrain, the boats, the wheel), a few things
 // poked (the wheel spins, the lanterns swing, petals fly, the crane lowers its box, the birds fly up, the skytrain
 // zooms; the kites loop, the taxi zips, the fruit boat spins), the board swung round with a drag, ICONSIAM's pin tapped (the fountain dances, the camera dives, the mall
-// day opens), and Sparkle's balloon (up and away, back to the Thailand map).
+// day opens), and Sparkle's balloon (poked: it roars, climbs and spins).
 const bangkokMap = (name, seconds, act) => ({
   name,
   seconds,
@@ -953,7 +953,7 @@ motion.push(
   }),
   bangkokMap('bangkok-map-mall', 4, mapTaps([['pin:iconsiam', 3400]])),
   bangkokMap('bangkok-map-house', 4, mapTaps([['pin:house', 3400]])),
-  bangkokMap('bangkok-map-balloon', 4, mapTaps([['place:balloon', 3400]])),
+  bangkokMap('bangkok-map-balloon', 4, mapTaps([['balloon', 3400]])),
 )
 
 // Agong's house (Thailand, 3D): Kaylee's hop-trot across the floor, hopping up the stairs (the camera follows her to

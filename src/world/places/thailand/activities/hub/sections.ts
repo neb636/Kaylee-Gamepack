@@ -34,7 +34,7 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
   },
   sections: [
     { id: 'map', name: 'The Thailand map: tap a pin to go there', params: ['stamp'], group: 'The Thailand map', links: [{ label: 'The map', bare: true }, { label: 'Home from a trip: the stamp lands on Krabi', params: { stamp: 'boat-trip' } }] },
-    { id: 'bangkok', name: 'The Bangkok map: tap the house or ICONSIAM (or the balloon, back to the Thailand map)', params: ['stamp'], group: 'The Bangkok map', links: [{ label: 'The Bangkok map' }, { label: "Back from the mall day: the stamp lands beside ICONSIAM's pin", params: { stamp: 'mall-trip' } }] },
+    { id: 'bangkok', name: 'The Bangkok map: tap the house or ICONSIAM', params: ['stamp'], group: 'The Bangkok map', links: [{ label: 'The Bangkok map' }, { label: "Back from the mall day: the stamp lands beside ICONSIAM's pin", params: { stamp: 'mall-trip' } }] },
     { id: 'arrive', name: 'Arrive by tuk-tuk', group: "Agong's house" },
     { id: 'street', name: "In front of Agong's house", params: ['at'], group: "Agong's house" },
     { id: 'downstairs', name: 'Downstairs', params: ['at'], group: "Agong's house" },

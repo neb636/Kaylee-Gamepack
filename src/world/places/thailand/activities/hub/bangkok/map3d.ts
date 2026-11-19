@@ -9,7 +9,8 @@
 // under it): the pin hops and spins in a burst of sparkles, the camera dives in and that place opens (ICONSIAM: its
 // fountain dances). Both stay open for good: she can go back as often as she likes. Once she has the mall day's stamp
 // it floats beside ICONSIAM's pin (the first time she comes back with it, it lands with a ka-chunk). Sparkle's
-// balloon floats over the corner of the board: tap it and it lifts off, back up to the Thailand map.
+// balloon floats over the corner of the board: a toy, like the Thailand map's (poked, its burner roars, it climbs and
+// spins and sparkles fall). The way back up to the Thailand map is the top-left button.
 //
 // Things to poke: Asiatique's wheel (it spins to a fairground tune), Chinatown's gate (the lanterns swing, a lion
 // drum), Lumphini Park (the monitor lizard slides into the lake), the swan boat (it twirls), Mahanakhon (its blocks
@@ -35,12 +36,12 @@ import { boardShot, Entrance, mapCamKnobs, puffCloud, skyTexture, trayBox } from
 import { Floaters } from '../../nan-trip/mushrooms/fx'
 import { buildDiorama, CRANE_BOX_Y, PIN, type Diorama } from './diorama'
 import { buildField, LAKES, type Field } from './ground'
-import { BALLOON_Y, BOARD, BOATS, CLOUDS, DEG_M, KITES, LEVEL, ll, PIN_IDS, PINS, PLACE_IDS, PLACES, SPOTS, STAMP_OFF, TOWERS, TRACK_Y, type PinId, type PlaceId, type SpotId } from './layout'
+import { BALLOON, BALLOON_Y, BOARD, BOATS, CLOUDS, DEG_M, KITES, LEVEL, ll, PIN_IDS, PINS, PLACE_IDS, PLACES, SPOTS, STAMP_OFF, TOWERS, TRACK_Y, type PinId, type PlaceId, type SpotId } from './layout'
 import { reachOn } from './path'
 import { mapBed, mapSfx as sfx } from './sounds'
 
 export interface MapEvents extends LegEvents {
-  /** She picked a place and the camera has dived in (the balloon: it has floated off): that place opens. */
+  /** She picked a place and the camera has dived in: that place opens. */
   go(place: PlaceId): void
   /** The camera has been moving behind the loading cover long enough: it can fade (BANGKOK_CAM.cover). */
   revealed(): void
@@ -59,7 +60,7 @@ const SPOT_LABELS: Record<SpotId, string> = {
   chinatown: "Chinatown's gate",
   lumphini: 'Lumphini Park',
   mahanakhon: 'The tower made of blocks',
-  rama3: 'Central Rama 3, the mall by the house',
+  rama3: 'Central Rama 3',
   flowers: 'The flower market',
   port: "The port's crane",
   krachao: 'Bang Krachao, the jungle in the city',
@@ -74,7 +75,8 @@ export const MAP_ANCHORS: AnchorInfo[] = [
   ...SPOT_IDS.map((id): AnchorInfo => ({ id: `spot:${id}`, label: SPOT_LABELS[id], kind: 'thing' })),
   ...PIN_IDS.map((id): AnchorInfo => ({ id: `pin:${id}`, label: PINS[id].label, kind: 'thing' })),
   { id: 'train', label: 'The skytrain', kind: 'thing' },
-  ...BOATS.map((b, i): AnchorInfo => ({ id: `boat:${i}`, label: b.kind === 'express' ? 'Express boat' : b.kind === 'barge' ? 'Rice barges' : 'Longtail boat', kind: 'thing' })),
+  ...BOATS.map((b, i): AnchorInfo => ({ id: `boat:${i}`, label: b.kind === 'express' ? 'Express boat' : 'Rice barges', kind: 'thing' })),
+  { id: 'balloon', label: "Sparkle's balloon", kind: 'thing' },
   { id: 'tuktuk', label: 'Tuk-tuk', kind: 'thing' },
   { id: 'taxi', label: 'Pink taxi', kind: 'thing' },
   { id: 'fruit', label: 'Fruit boat', kind: 'thing' },
@@ -87,11 +89,9 @@ export const MAP_ANCHORS: AnchorInfo[] = [
 
 /** Nothing touched for this long: the pins glow. */
 const STUCK_S = 5
-/** A picked pin hops and spins this long before the camera dives; the dive lasts this long before the place opens
- *  (the balloon's climb a little longer). */
+/** A picked pin hops and spins this long before the camera dives; the dive lasts this long before the place opens. */
 const HOP_S = 0.4
 const DIVE_S = 1.5
-const DEPART_S = 2.4
 /** Nothing done for this long: Sparkle says what to do (again after SAY_EVERY, at most SAY_MAX times). */
 const SAY_S = 8
 const SAY_EVERY = 20
@@ -193,21 +193,14 @@ export class BangkokMap extends Stage {
 
   // ---------------------------------------------------------------- picking a place
 
-  /** She picked a place: its pin hops and spins in sparkles, then the camera dives in (ICONSIAM: the fountain dances;
-   *  the balloon: its burner roars and up it goes). */
+  /** She picked a place: its pin hops and spins in sparkles, then the camera dives in (ICONSIAM: the fountain
+   *  dances). */
   private choose(id: PlaceId) {
     if (this.arrived) return
     this.arrived = { id, t: this.time }
     sfx.zoom()
     sfx.chime()
     this.rig.lag = 0.75
-    if (id === 'balloon') {
-      sfx.burner()
-      const p = this.d.places.balloon.position
-      this.sparkles.burst(tmp.set(p.x, BALLOON_Y + 0.5, p.z), 24, 0.6, 0.6, 0.9, 0.03)
-      this.after(DEPART_S, () => this.ev.go('balloon'))
-      return
-    }
     this.poke(`pin:${id}`)
     const p = this.d.pins[id].root.position
     this.sparkles.burst(tmp.set(p.x, p.y + PIN.top * PIN.size * 0.6, p.z), 26, 0.6, 0.8, 0.8, 0.03)
@@ -345,15 +338,18 @@ export class BangkokMap extends Stage {
         if (this.stampT > 0.8) this.stampT = -1
       } else s.position.y = base + Math.sin(t * 2) * 0.02
     }
-    // ---- Sparkle's balloon bobs over its corner, the burner flickering; picked, it roars and climbs away ----
+    // ---- Sparkle's balloon bobs and drifts over its corner, the burner flickering; poked, the burner roars, it
+    // climbs and spins once round, and sparkles fall (the Thailand map's balloon does the same) ----
     {
-      const b = d.places.balloon
-      const up = this.arrived?.id === 'balloon' ? this.time - this.arrived.t : -1
-      const roar = up >= 0 ? 1 : bell(clamp(this.poked('balloon', 1) / 1, 0, 1))
-      b.position.y = BALLOON_Y + Math.sin(t * 0.9) * 0.04 + (up > 0 ? up * up * 0.5 : 0) + (hint ? Math.abs(Math.sin(t * 4)) * 0.04 : 0)
-      b.rotation.y = Math.sin(t * 0.4) * 0.3 + (up > 0 ? up * 1.4 : 0)
-      b.rotation.z = Math.sin(t * 0.7) * 0.04
+      const b = d.balloonAt
+      const k = this.poked('balloon', 3)
+      const lift = k >= 0 ? bell(clamp(k / 3, 0, 1)) : 0
+      b.position.set(BALLOON[0] + Math.sin(t * 0.22) * 0.06, BALLOON_Y + Math.sin(t * 0.9) * 0.04 + lift * 0.35, BALLOON[1] + Math.cos(t * 0.17) * 0.04)
+      const turn = clamp(k / 2.4, 0, 1)
+      b.rotation.set(Math.sin(t * 0.6) * 0.04, Math.sin(t * 0.4) * 0.3 + (k >= 0 ? turn * turn * (3 - 2 * turn) * Math.PI * 2 : 0), Math.sin(t * 0.7) * 0.04)
+      const roar = k >= 0 && k < 1.4 ? 1 : 0
       d.balloon.flame.scale.setScalar(0.45 + 0.1 * Math.sin(t * 20) + roar * (1.1 + 0.3 * Math.sin(t * 40)))
+      if (k >= 0 && k < 2.2 && Math.random() < dt * 24) this.sparkles.emit(tmp.set(b.position.x + (Math.random() - 0.5) * 0.3, b.position.y + 0.4 + Math.random() * 0.4, b.position.z + (Math.random() - 0.5) * 0.3), new Vector3((Math.random() - 0.5) * 0.3, 0.25, (Math.random() - 0.5) * 0.3), 1.1, 0.03)
     }
   }
 
@@ -406,7 +402,7 @@ export class BangkokMap extends Stage {
         g.scale.setScalar(base * (0.4 + 0.6 * edge * edge * (3 - 2 * edge)))
         g.visible = edge > 0.02
       }
-      at(0, b.root, info.kind === 'longtail' ? 1.6 : 1.3)
+      at(0, b.root, 1.3)
       b.tail.forEach((g, j) => at(0.13 + j * 0.15, g, 0.26))
       if (b.root.visible && Math.random() < dt * 9 * fast) {
         const yaw = b.root.rotation.y
@@ -684,6 +680,12 @@ export class BangkokMap extends Stage {
       return
     }
     switch (id) {
+      case 'balloon':
+        if (this.poked('balloon', 3) >= 0) return
+        this.poke('balloon')
+        sfx.burner()
+        this.after(0.5, () => sfx.chime())
+        return
       case 'train':
         if (this.poked('train', 2.6) >= 0) return
         this.poke('train')
@@ -735,11 +737,6 @@ export class BangkokMap extends Stage {
   protected shot(): Shot {
     if (this.arrived && this.time - this.arrived.t > HOP_S) {
       const id = this.arrived.id
-      // Up and away: the camera rises after the balloon.
-      if (id === 'balloon') {
-        const p = this.d.places.balloon.position
-        return { center: new Vector3(p.x, p.y + 0.4, p.z), half: new Vector3(0.6, 0.5, 0.6), yaw: BANGKOK_CAM.yaw, pitch: 24, minDist: 2 }
-      }
       // Diving in: the house's front door, or ICONSIAM's front on the river.
       const p = this.d.places[id].position
       return { center: new Vector3(p.x + (id === 'iconsiam' ? 0.1 : 0), p.y + 0.12, p.z), half: new Vector3(0.3, 0.14, 0.3), yaw: id === 'iconsiam' ? 38 : 0, pitch: 26, minDist: 0.8 }
@@ -821,7 +818,6 @@ export class BangkokMap extends Stage {
     if (id.startsWith('place:')) {
       const p = id.slice(6) as PlaceId
       const [x, z] = PLACES[p].at
-      if (p === 'balloon') return { at: d.places.balloon.position.clone().setY(d.places.balloon.position.y + 0.5), r: 0.3, prio: 5, max: 150, glow }
       return { at: new Vector3(x, G + 0.14, z), r: 0.28, prio: 3, max: 150 }
     }
     if (id.startsWith('pin:')) {
@@ -841,6 +837,9 @@ export class BangkokMap extends Stage {
       return b.visible ? { at: b.position.clone().setY(0.05), r: 0.11, prio: 4, max: 100 } : null
     }
     switch (id) {
+      // (No ring round the balloon: it's a toy, not somewhere to go.)
+      case 'balloon':
+        return { at: d.balloonAt.position.clone().setY(d.balloonAt.position.y + 0.5), r: 0.3, prio: 5, max: 150 }
       case 'train':
         return { at: d.train[1].position.clone().setY(G + TRACK_Y + 0.04), r: 0.14, prio: 4, max: 110 }
       case 'tuktuk':
@@ -892,7 +891,7 @@ export class BangkokMap extends Stage {
       arrived: this.arrived?.id ?? null,
       stamp: this.d.stamp.visible,
       touches: this.touches,
-      points: { pins, spots, balloon: pt(this.d.places.balloon.position.clone().setY(this.d.places.balloon.position.y + 0.5)), train: pt(this.d.train[1].position), tuktuk: pt(this.d.tuktuk.position) },
+      points: { pins, spots, balloon: pt(this.d.balloonAt.position.clone().setY(this.d.balloonAt.position.y + 0.5)), train: pt(this.d.train[1].position), tuktuk: pt(this.d.tuktuk.position) },
       /** Which way the camera faces (degrees): her drag swings it round. */
       yaw: Math.round(this.rig.yaw * 10) / 10,
       /** How many towers stand (of layout.ts TOWERS), and anything standing in the river (should be none). */

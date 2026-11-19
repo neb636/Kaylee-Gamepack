@@ -12,7 +12,7 @@
 //    Thonburi's khlongs     Chinatown's gate          Lumphini Park (the lake)     Benjakitti Park
 //                 ICONSIAM  ~river~  the skytrain    Mahanakhon
 //                         Asiatique's wheel                                        the port's cranes
-//                                           Central Rama 3, the Thailand house        ~ the river's big loop ~
+//   the Thailand house                      Central Rama 3                            ~ the river's big loop ~
 //                      Rama IX Bridge                                        Bang Krachao, the green lung
 //                                            the Bhumibol bridges
 import type { LonLat } from './geo'
@@ -48,21 +48,24 @@ export const RIVER_FAT = 0.03
 
 // ---------------------------------------------------------------- the places
 
-/** The places on the map she can go to. `house` is the Thailand house (near Central Rama 3, for now), `iconsiam` the
- *  mall day (activity `mall-trip`). `balloon` is Sparkle's balloon: back up to the Thailand map. */
-export type PlaceId = 'house' | 'iconsiam' | 'balloon'
+/** The places on the map she can go to. `house` is the Thailand house, `iconsiam` the mall day (activity
+ *  `mall-trip`). */
+export type PlaceId = 'house' | 'iconsiam'
 
 /** Where each place's toy stands. `scale`: how much bigger than the board the toy is. (ICONSIAM stands a little back
- *  from its real spot on the bank, so the whole toy is on dry land.) */
+ *  from its real spot on the bank, so the whole toy is on dry land. The house is really out in Bang Bon, a few
+ *  kilometers past the board's west edge: it stands at that edge, as far south as it really is. The one place on the
+ *  board that isn't where it really is: your call, 2026-11-19.) */
 export const PLACES: Record<PlaceId, { at: XZ; label: string; scale: number }> = {
-  house: { at: ll(100.5265, 13.6925), label: 'The Thailand house', scale: 1.7 },
+  house: { at: ll(100.4768, 13.6714), label: 'The Thailand house', scale: 1.7 },
   iconsiam: { at: ll(100.5046, 13.7272), label: 'ICONSIAM, the mall', scale: 1.9 },
-  balloon: { at: ll(100.5905, 13.7655), label: "Sparkle's balloon, back to the Thailand map", scale: 1 },
 }
+/** Sparkle's balloon floats over the board's north-east corner: a toy to poke, like the Thailand map's. */
+export const BALLOON: XZ = ll(100.5905, 13.7655)
 export const PLACE_IDS = Object.keys(PLACES) as PlaceId[]
 
 /** The pins: a pink pin floats over each place she can go to, a toy of what she does there on its head (a little
- *  house with a heart, a slide and a slice of pizza). The balloon needs none: it is its own picture. `lift`: how
+ *  house with a heart, a slide and a slice of pizza). `lift`: how
  *  high over the ground the pin's point hangs (clear of the toy under it). */
 export const PINS = {
   house: { at: PLACES.house.at, lift: 0.3, label: 'To the house', place: 'house' },
@@ -101,9 +104,9 @@ export const SPOTS = {
   /** The night market on Ratchadaphisek Road: rows of tents in every color. */
   tents: ll(100.5698, 13.7668),
   /** A floating market on Khlong Dao Khanong, out in Thonburi: boats heaped with fruit under big umbrellas. */
-  floating: ll(100.4772, 13.691),
+  floating: ll(100.4848, 13.6946),
   /** Bang Mot's orange orchards, south-west of the river. */
-  orchard: ll(100.4872, 13.6672),
+  orchard: ll(100.4968, 13.6648),
 } satisfies Record<string, XZ>
 export type SpotId = keyof typeof SPOTS
 
@@ -151,21 +154,17 @@ export const TRACK_Y = 0.13
 /** Rama IV Road, from the old station out past Lumphini Park: a tuk-tuk putters up and down it. */
 export const TUKTUK_ROAD: LonLat[] = [[100.5172, 13.7385], [100.53, 13.7325], [100.5375, 13.7275], [100.546, 13.7245], [100.559, 13.7195], [100.58, 13.7125]]
 
-/** Rama III Road, round the river's bend past Central Rama 3 and the house: a hot pink taxi drives up and down it. */
+/** Rama III Road, round the river's bend past Central Rama 3: a hot pink taxi drives up and down it. */
 export const TAXI_ROAD: LonLat[] = [[100.5457, 13.7008], [100.5475, 13.6922], [100.5481, 13.684], [100.5466, 13.6778], [100.5444, 13.6749], [100.5415, 13.6732], [100.539, 13.673], [100.5369, 13.6734], [100.5334, 13.6751], [100.5259, 13.6818], [100.5183, 13.6869], [100.5117, 13.6893], [100.5053, 13.6898]]
 
 /** Khlong Bangkok Yai, over in Thonburi: a fruit seller paddles her boat up and down it. */
 export const FRUIT_KHLONG: LonLat[] = [[100.471, 13.7227], [100.4733, 13.7225], [100.4763, 13.7224], [100.4794, 13.7229], [100.4844, 13.7249], [100.4854, 13.7273], [100.4863, 13.7325], [100.4875, 13.7357], [100.4893, 13.7393]]
 
 /** The boats on the river, each somewhere along its middle line (geo.ts RIVER_LINE): what it is, where it starts
- *  (0 north .. 1 south), how fast it goes (m/s; minus: upstream) and how far to one side it keeps (m). The longtails
- *  are the river's own boats: a striped roof, ribbons on the nose, a long propeller out the back. */
-export const BOATS: { kind: 'express' | 'barge' | 'longtail'; at: number; speed: number; side: number }[] = [
+ *  (0 north .. 1 south), how fast it goes (m/s; minus: upstream) and how far to one side it keeps (m). */
+export const BOATS: { kind: 'express' | 'barge'; at: number; speed: number; side: number }[] = [
   { kind: 'express', at: 0.2, speed: 0.11, side: 0.034 },
   { kind: 'barge', at: 0.62, speed: -0.045, side: -0.036 },
-  { kind: 'longtail', at: 0.84, speed: 0.15, side: 0.032 },
-  { kind: 'longtail', at: 0.42, speed: -0.13, side: -0.034 },
-  { kind: 'longtail', at: 0.06, speed: 0.17, side: -0.03 },
 ]
 
 /** Khlong Saen Saep, right across the city: its long fast boat runs up and down it (the khlong's own bus). */
@@ -189,8 +188,7 @@ export const TRAFFIC: [LonLat[], number][] = [
 /** Orchard groves: rows of little fruit trees standing in Thonburi's and the south's orchards ([lon, lat, rows,
  *  trees in a row]). */
 export const GROVES: [number, number, number, number][] = [
-  [100.4795, 13.6745, 2, 4],
-  [100.5005, 13.6605, 3, 4],
+  [100.4835, 13.6575, 3, 4],
   [100.4745, 13.7065, 2, 4],
   [100.4775, 13.7385, 2, 3],
   [100.5275, 13.6608, 2, 4],

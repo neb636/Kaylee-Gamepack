@@ -19,7 +19,10 @@ The board is about 14 km of city across (one meter of board is about 2.6 km), no
   flower market, the port at Khlong Toei, Sanam Luang's field, Bang Krachao in the loop. The towers stand in the
   districts they really stand in (Silom and Sathon, Siam and Pratunam, Sukhumvit), the seven bridges where they really
   cross, the skytrain runs through its real stations, and the taxi and the fruit boat keep to a real road and khlong.
-- **The house** stands near Central Rama 3, for now (your call, 2026-11-18): `PLACES.house` is one line to move.
+- **The house** is the one place that isn't where it really is: it's out in Bang Bon, a few kilometers past the
+  board's west edge, so it stands at that edge as far south as it really is (your call, 2026-11-19; it stood near
+  Central Rama 3 before). `PLACES.house` is one line to move. Widening the board to reach Bang Bon would make it half
+  as wide again and shrink everything on it.
 - Bangkok is flat, so the board is too: a low slab of city, the river cut through it. What gives it shape is the
   skyline, the bridges and Bang Krachao's jungle.
 - **No temples or Buddhas** (AGENTS.md rule 8): the old town is rooftops, streets and the flower market. No Grand
@@ -39,7 +42,7 @@ What the board took from them, in the app's toy look:
   each with a long afternoon shadow painted the same way. The rest of the city stays low.
 - **Shophouse rows under terracotta roofs:** about 30 rows of three or four pastel fronts, close together in the old
   town and Chinatown (`OLD_TOWN`), few and far apart elsewhere. (Before: 140 single houses and 230 trees scattered.)
-- **Bangkok's own things:** longtails with striped roofs and ribbons on their noses, a hot pink taxi on Rama III Road,
+- **Bangkok's own things:** a hot pink taxi on Rama III Road,
   a fruit seller's boat on Khlong Bangkok Yai, kites over Sanam Luang, street-food umbrellas by Chinatown's gate.
 - **Calm, but not empty.** The first look pass left the south-west and north-east corners bare, and you said so
   (2026-11-19). Each corner now has a real thing of its own, and the paper between has texture instead of props:
@@ -66,8 +69,9 @@ What the board took from them, in the app's toy look:
   the house too. The day still ends in the house, by her photo.
 - **The mall day's stamp** floats beside ICONSIAM's pin once she has it. The first time she sees this map with it, it
   lands with a ka-chunk (`?stamp=mall-trip` plays that again).
-- **Sparkle's balloon** floats over the board's corner: tap it, the burner roars and it lifts off, back up to the
-  Thailand map. (The top-left button goes there too.)
+- **Sparkle's balloon** floats over the board's corner: a toy to poke, like the Thailand map's (the burner roars, it
+  climbs and spins, sparkles fall). No ring round it. The top-left button is the way back up to the Thailand map.
+  (Until 2026-11-19 the balloon was the way back.)
 - **Talk** (`lines.ts` `L.bangkok`, Sparkle): "This is Bangkok! Tap the house or the mall!" once a visit; something true
   the first time she pokes a thing (15 of them: the kites, the taxi, the night market, the floating market and the
   orchard were added with the look); after ~8 s with nothing done, "Tap the house or the mall!" (at most three times),
@@ -75,7 +79,7 @@ What the board took from them, in the app's toy look:
 - **Pokes:** Asiatique's wheel (it spins to a tune), Chinatown's gate (the lanterns swing, a lion drum), Lumphini
   (the monitor lizard slides into the lake; the swan boat twirls), Mahanakhon (its blocks twinkle), Central Rama 3,
   the flower market (petals fly), the port (the crane lowers its box), Bang Krachao (the birds fly up), the skytrain
-  (ding-dong, off it zooms), the four river boats (toot toot), the tuk-tuk on Rama IV Road, the pink taxi on Rama III
+  (ding-dong, off it zooms), the two river boats (toot toot; the longtails came off the river, your call 2026-11-19), the tuk-tuk on Rama IV Road, the pink taxi on Rama III
   Road (beep beep, off it zips), the fruit seller's boat (it spins in a splash), the kites over Sanam Luang (they loop
   the loop one after another), the night market (its rows of tents hop one after another to a tune), the floating
   market (the boats bob and splash), the orange orchard (oranges fly), Khlong Saen Saep's boat (toot, off it races),
