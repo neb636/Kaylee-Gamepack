@@ -1,0 +1,24 @@
+{
+  "title": "The Bangkok map",
+  "checkIn": "ship",
+  "kaylee": "Tap Bangkok and the real city opens on a toy board: a pin for the house, a pin for ICONSIAM, and a skytrain, river boats, a big wheel and a lizard to poke.",
+  "questions": [
+    "Is the house in the right spot (just west of Central Rama 3)?",
+    "The mall day still ends in the house, by her photo. Keep that, or end on this map with the stamp landing on ICONSIAM?",
+    "Is the city busy in a good way, or too busy?"
+  ],
+  "reels": [{ "name": "bangkok-map", "moments": ["bangkok-map"] }],
+  "tableReads": [["thailand", "bangkok"]],
+  "pictures": [
+    { "title": "The whole board", "after": "pics/bangkok-board.jpg", "caption": "The real Chao Phraya and its big loop round Bang Krachao; every place where it really is" },
+    { "title": "Up close", "after": "pics/bangkok-close.jpg", "caption": "ICONSIAM's pin (a slide and pizza), the house's pin, Asiatique's wheel, the skytrain, Chinatown's gate" },
+    { "title": "Diving in to the house", "after": "pics/bangkok-dive.jpg", "caption": "Tap a pin and the camera dives in over the skyline" }
+  ],
+  "links": [
+    { "label": "Play the Bangkok map", "hash": "#/world/thailand/hub/bangkok" },
+    { "label": "From the Thailand map (tap Bangkok)", "hash": "#/world/thailand/hub/map" },
+    { "label": "Back from the mall: the stamp lands", "hash": "#/world/thailand/hub/bangkok?stamp=mall-trip" },
+    { "label": "Tune the camera", "hash": "#/world/thailand/hub/bangkok?feel=1" },
+    { "label": "On the Mac (click, not tap)", "hash": "#/world/thailand/hub/bangkok?device=mouse" }
+  ]
+}

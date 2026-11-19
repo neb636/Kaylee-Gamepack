@@ -1,0 +1,339 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "bangkok",
+  "title": "Thailand › Bangkok",
+  "intro": "Sparkle on the Bangkok map (activities/hub/bangkok/): the hello (once a visit), where she can go when she's stuck, and something true the first time she pokes each thing.",
+  "page": "thailand-bangkok.html",
+  "audio": null,
+  "lines": 14,
+  "seconds": 0,
+  "missing": 14,
+  "names": 0,
+  "flags": [
+    {
+      "key": "bangkok.hello.touch",
+      "text": "This is Bangkok! Tap a pin to go there.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "bangkok.hello.mouse",
+      "text": "This is Bangkok! Click a pin to go there.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "bangkok.hint.touch",
+      "text": "Tap the house or the mall!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "bangkok.hint.mouse",
+      "text": "Click the house or the mall!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.asiatique",
+      "text": "A giant wheel by the river! Round and round!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.chinatown",
+      "text": "Chinatown! Look at the red lanterns!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.lumphini",
+      "text": "A big lizard lives in this park!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.mahanakhon",
+      "text": "This tower looks like building blocks!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.flowers",
+      "text": "The flower market! So many flowers!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.port",
+      "text": "Big ships bring boxes from far away!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.krachao",
+      "text": "A jungle in the middle of the city!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.train",
+      "text": "The skytrain! It rides high above the street.",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.boat",
+      "text": "Boats are the buses of the river!",
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.river",
+      "text": "This river is the Chao Phraya!",
+      "flags": [
+        "not recorded"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "bangkok",
+        "hello",
+        "touch"
+      ],
+      "text": "This is Bangkok! Tap a pin to go there.",
+      "voice": "sparkle",
+      "key": "bangkok.hello.touch",
+      "part": "bangkok › hello",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "hello",
+        "mouse"
+      ],
+      "text": "This is Bangkok! Click a pin to go there.",
+      "voice": "sparkle",
+      "key": "bangkok.hello.mouse",
+      "part": "bangkok › hello",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "hint",
+        "touch"
+      ],
+      "text": "Tap the house or the mall!",
+      "voice": "sparkle",
+      "key": "bangkok.hint.touch",
+      "part": "bangkok › hint",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "hint",
+        "mouse"
+      ],
+      "text": "Click the house or the mall!",
+      "voice": "sparkle",
+      "key": "bangkok.hint.mouse",
+      "part": "bangkok › hint",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "asiatique"
+      ],
+      "text": "A giant wheel by the river! Round and round!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.asiatique",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "chinatown"
+      ],
+      "text": "Chinatown! Look at the red lanterns!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.chinatown",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "lumphini"
+      ],
+      "text": "A big lizard lives in this park!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.lumphini",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "mahanakhon"
+      ],
+      "text": "This tower looks like building blocks!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.mahanakhon",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "flowers"
+      ],
+      "text": "The flower market! So many flowers!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.flowers",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "port"
+      ],
+      "text": "Big ships bring boxes from far away!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.port",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "krachao"
+      ],
+      "text": "A jungle in the middle of the city!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.krachao",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "train"
+      ],
+      "text": "The skytrain! It rides high above the street.",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.train",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "boat"
+      ],
+      "text": "Boats are the buses of the river!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.boat",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "river"
+      ],
+      "text": "This river is the Chao Phraya!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.river",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 0,
+      "flags": [
+        "not recorded"
+      ]
+    }
+  ]
+}
