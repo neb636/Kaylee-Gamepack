@@ -67,5 +67,23 @@
   "label": "Bang Krachao's birds fly up",
   "prompt": "Three small songbirds flutter up from a tree with quick soft wing flaps and chirp happily. Bright, gentle, close, no music, no voices.",
   "seconds": 2
+ },
+ {
+  "id": "night-market",
+  "label": "The night market's tents hop",
+  "prompt": "A cheerful little night market moment: a few bright toy bell notes going up, a soft sizzle from a food stall, a happy bustle with no words. Warm, playful, toy-like, no voices.",
+  "seconds": 2.2
+ },
+ {
+  "id": "floating-market",
+  "label": "The floating market's boats bob",
+  "prompt": "Small wooden boats knock gently together and slap the water, a paddle dips and splashes twice. Soft, close, friendly, no music, no voices.",
+  "seconds": 2
+ },
+ {
+  "id": "oranges",
+  "label": "Oranges pop off the trees",
+  "prompt": "A handful of oranges pop off a tree and bounce softly on grass, four quick round plops with a rustle of leaves. Cute, toy-like, no music, no voices.",
+  "seconds": 1.5
  }
 ]

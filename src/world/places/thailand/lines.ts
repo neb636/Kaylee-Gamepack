@@ -139,6 +139,11 @@ export const L = {
       train: 'The skytrain! It rides high above the street.',
       boat: 'Boats are the buses of the river!',
       river: 'This river is the Chao Phraya!',
+      tents: 'The night market! Yummy snacks under every tent!',
+      floating: 'A floating market! The shops are boats!',
+      orchard: 'Sweet oranges grow here!',
+      kites: 'Kites! Up, up in the wind!',
+      taxi: 'A pink taxi! Beep beep!',
     } as Record<string, Line>,
   },
 

@@ -39,7 +39,7 @@ export const DEG_M = K
 export const BOARD = { x0: toX(EDGES.lon0), x1: toX(EDGES.lon1), z0: toZ(EDGES.lat1), z1: toZ(EDGES.lat0) }
 
 /** Heights: the river's top is 0. Bangkok is flat: the city stands a little way up out of the water on low banks. */
-export const LEVEL = { floor: -0.1, land: 0.05 }
+export const LEVEL = { floor: -0.1, land: 0.07 }
 /** How wide the bank's cut edge is (meters), from the water up to its top. */
 export const CLIFF_W = 0.022
 /** The river is drawn this much wider on each bank than it really is (meters): the Chao Phraya is what makes the
@@ -98,19 +98,28 @@ export const SPOTS = {
   port: ll(100.5775, 13.7065),
   /** Bang Krachao, the green lung in the river's loop: the bird tower in its park. */
   krachao: ll(100.566, 13.6795),
+  /** The night market on Ratchadaphisek Road: rows of tents in every color. */
+  tents: ll(100.5698, 13.7668),
+  /** A floating market on Khlong Dao Khanong, out in Thonburi: boats heaped with fruit under big umbrellas. */
+  floating: ll(100.4772, 13.691),
+  /** Bang Mot's orange orchards, south-west of the river. */
+  orchard: ll(100.4872, 13.6672),
 } satisfies Record<string, XZ>
 export type SpotId = keyof typeof SPOTS
 
 /** The tall towers, in the districts they really stand in: [lon, lat, height (m), look]. `look` picks the shape
  *  (diorama.ts tower()); a few are real ones: Baiyoke's tower with its round crown ('crown'), the riverside tower
- *  with the gold dome ('dome'). Three tight bunches make the skyline (Silom and Sathon round Mahanakhon, Siam,
- *  Sukhumvit): the rest of the city is left low, so the bunches read from across the board. (diorama.ts leaves out any that would stand on a place, a spot or the water.) */
+ *  with the gold dome ('dome'). Tight bunches make the skyline (Silom and Sathon round Mahanakhon, Siam, Sukhumvit,
+ *  and a little one at Rama 9): the rest of the city is left low, so the bunches read from across the board. (diorama.ts leaves out any that would stand on a place, a spot or the water.) */
 export const TOWERS: [number, number, number, number | 'crown' | 'dome'][] = [
   // Silom and Sathon, round Mahanakhon.
   [100.5345, 13.7243, 0.46, 0], [100.5318, 13.7188, 0.56, 1], [100.5382, 13.7202, 0.4, 2], [100.5228, 13.7183, 0.4, 3], [100.5445, 13.7226, 0.48, 4],
   [100.5178, 13.7228, 0.5, 'dome'],
   // Siam, Ratchaprasong and Pratunam.
   [100.5404, 13.7545, 0.86, 'crown'], [100.5349, 13.7475, 0.38, 2], [100.5412, 13.7472, 0.48, 0], [100.5468, 13.7436, 0.54, 1], [100.5486, 13.7505, 0.4, 4],
+  // Rama 9, where Ratchadaphisek Road meets Rama IX Road.
+  // (Either side of the night market, not in front of it: from her side a tower hides what's behind it.)
+  [100.5585, 13.7578, 0.48, 3], [100.5768, 13.7556, 0.4, 2],
   // Sukhumvit: Asok, Phrom Phong, Thong Lo, Ekkamai.
   [100.5604, 13.7382, 0.56, 1], [100.5655, 13.7338, 0.44, 0], [100.5702, 13.7318, 0.6, 4], [100.5745, 13.7268, 0.46, 2], [100.5798, 13.7252, 0.38, 3], [100.586, 13.72, 0.44, 1],
 ]
@@ -156,6 +165,35 @@ export const BOATS: { kind: 'express' | 'barge' | 'longtail'; at: number; speed:
   { kind: 'barge', at: 0.62, speed: -0.045, side: -0.036 },
   { kind: 'longtail', at: 0.84, speed: 0.15, side: 0.032 },
   { kind: 'longtail', at: 0.42, speed: -0.13, side: -0.034 },
+  { kind: 'longtail', at: 0.06, speed: 0.17, side: -0.03 },
+]
+
+/** Khlong Saen Saep, right across the city: its long fast boat runs up and down it (the khlong's own bus). */
+export const CANAL: LonLat[] = [[100.5975, 13.7413], [100.5594, 13.7484], [100.5479, 13.7483], [100.5372, 13.7496], [100.5337, 13.7491], [100.5275, 13.7496], [100.5253, 13.7492], [100.52, 13.7523], [100.5173, 13.7531]]
+
+/** The roads with traffic on them (real ones, out where the city is quiet): little cars in taxi colors drive up and
+ *  down each. [the road, how many cars]. */
+export const TRAFFIC: [LonLat[], number][] = [
+  // Rama IX Road and Ratchadaphisek Road, north-east.
+  [[[100.5648, 13.7561], [100.5852, 13.7542], [100.605, 13.7476]], 4],
+  [[[100.5649, 13.7562], [100.5664, 13.7613], [100.573, 13.7704], [100.574, 13.787]], 3],
+  // Phetchaburi Road, across the north.
+  [[[100.6009, 13.741], [100.5693, 13.7483], [100.5545, 13.75], [100.5448, 13.7495], [100.5411, 13.7499], [100.5203, 13.7571]], 5],
+  // Rama II Road and Suk Sawat Road, south-west.
+  [[[100.452, 13.6702], [100.4666, 13.6789], [100.4882, 13.6852]], 3],
+  [[[100.5279, 13.6363], [100.5155, 13.6668], [100.4953, 13.6799], [100.4822, 13.6892], [100.4811, 13.6911], [100.4818, 13.6938]], 5],
+  // Charan Sanit Wong Road, down the west.
+  [[[100.4843, 13.7764], [100.4694, 13.7582], [100.4711, 13.7362], [100.4734, 13.7309]], 4],
+]
+
+/** Orchard groves: rows of little fruit trees standing in Thonburi's and the south's orchards ([lon, lat, rows,
+ *  trees in a row]). */
+export const GROVES: [number, number, number, number][] = [
+  [100.4795, 13.6745, 2, 4],
+  [100.5005, 13.6605, 3, 4],
+  [100.4745, 13.7065, 2, 4],
+  [100.4775, 13.7385, 2, 3],
+  [100.5275, 13.6608, 2, 4],
 ]
 
 /** Sanam Luang, the big open field in the old town: kites fly over it. Where each kite's string is held, how high

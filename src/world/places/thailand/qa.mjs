@@ -940,6 +940,8 @@ motion.push(
   bangkokMap('bangkok-map-pokes', 13, mapTaps([['spot:asiatique', 3000], ['spot:chinatown', 1700], ['spot:flowers', 1600], ['spot:port', 2500], ['spot:krachao', 2600], ['train', 1600]])),
   // The city's own things: the kites over Sanam Luang loop the loop, the pink taxi zips, the fruit boat spins.
   bangkokMap('bangkok-map-thai', 7, mapTaps([['kites', 2600], ['taxi', 2000], ['fruit', 2000]])),
+  // The corners: the night market's tents hop, the floating market's boats bob, oranges fly, the khlong boat races.
+  bangkokMap('bangkok-map-corners', 10, mapTaps([['spot:tents', 2600], ['spot:floating', 2600], ['spot:orchard', 2400], ['canal', 2200]])),
   bangkokMap('bangkok-map-spin', 5, async (page) => {
     const y = vp.height * 0.3
     await page.mouse.move(vp.width * 0.9, y)

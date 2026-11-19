@@ -17,11 +17,13 @@
 // Krachao (the birds fly up), the skytrain (ding-dong, off it zooms), the river boats (toot toot), the tuk-tuk, the
 // pink taxi (beep beep, off it zips), the fruit seller's boat on the khlong (it spins and splashes), the clouds (a
 // little rain), every tower (its windows twinkle, a higher tune for a taller one), every bridge (beep beep) and the
-// river itself (a splash).
+// river itself (a splash). In the corners: the night market (its rows of tents hop one after another to a tune), the
+// floating market (the boats bob and splash), the orange orchard (oranges fly), Khlong Saen Saep's boat (it races
+// off). Little cars drive the big roads on their own.
 //
 // Talk (BangkokMap.tsx says the lines, lines.ts L.bangkok): Sparkle's hello the first time, something true the first
 // time she pokes each thing, and after ~8 s with nothing done, where she can go (at most three times).
-import { Group, IcosahedronGeometry, OctahedronGeometry, Vector3, type Mesh, type WebGLRenderer } from 'three'
+import { Group, IcosahedronGeometry, Object3D, OctahedronGeometry, Vector3, type Mesh, type WebGLRenderer } from 'three'
 import { bell, clamp } from '../../../../../../sdk'
 import { DEG } from '../../../../../../sdk/math'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
@@ -34,6 +36,7 @@ import { Floaters } from '../../nan-trip/mushrooms/fx'
 import { buildDiorama, CRANE_BOX_Y, PIN, type Diorama } from './diorama'
 import { buildField, LAKES, type Field } from './ground'
 import { BALLOON_Y, BOARD, BOATS, CLOUDS, DEG_M, KITES, LEVEL, ll, PIN_IDS, PINS, PLACE_IDS, PLACES, SPOTS, STAMP_OFF, TOWERS, TRACK_Y, type PinId, type PlaceId, type SpotId } from './layout'
+import { reachOn } from './path'
 import { mapBed, mapSfx as sfx } from './sounds'
 
 export interface MapEvents extends LegEvents {
@@ -60,6 +63,9 @@ const SPOT_LABELS: Record<SpotId, string> = {
   flowers: 'The flower market',
   port: "The port's crane",
   krachao: 'Bang Krachao, the jungle in the city',
+  tents: 'The night market',
+  floating: 'The floating market',
+  orchard: 'The orange orchard',
 }
 const SPOT_IDS = Object.keys(SPOTS) as SpotId[]
 
@@ -73,6 +79,7 @@ export const MAP_ANCHORS: AnchorInfo[] = [
   { id: 'taxi', label: 'Pink taxi', kind: 'thing' },
   { id: 'fruit', label: 'Fruit boat', kind: 'thing' },
   { id: 'kites', label: 'Kites', kind: 'thing' },
+  { id: 'canal', label: 'Khlong boat', kind: 'thing' },
   { id: 'swan', label: 'Swan boat', kind: 'thing' },
   { id: 'lizard', label: 'Monitor lizard', kind: 'thing' },
   ...CLOUDS.map((_, i): AnchorInfo => ({ id: `cloud:${i}`, label: 'Cloud', kind: 'thing' })),
@@ -92,6 +99,8 @@ const SAY_MAX = 3
 const G = LEVEL.land
 
 const tmp = new Vector3()
+/** The traffic's cars are placed one by one through this. */
+const car = new Object3D()
 
 export class BangkokMap extends Stage {
   private d: Diorama
@@ -121,6 +130,10 @@ export class BangkokMap extends Stage {
   private taxiDir = -1
   private fruitD = 0.4
   private fruitDir = 1
+  /** Khlong Saen Saep's boat: the stretch of the khlong on the board, how far along it, which way. */
+  private canalReach: [number, number]
+  private canalD: number
+  private canalDir = 1
   private wheelA = 0
   private fountainT = 4
   // ---- The sky round the board ----
@@ -156,7 +169,9 @@ export class BangkokMap extends Stage {
     this.petals = new Floaters(new OctahedronGeometry(0.5), [PAL.hotpink, PAL.butter, '#FFFFFF', PAL.lavenderDark, '#FF9A4D', PAL.pink], 90, bag, 0.5, 1.6)
     scene.add(this.sparkles.mesh, this.drops.mesh, this.foam.mesh, this.petals.mesh)
     // ---- The river's reach on the board: the boats sail it end to end, then start again ----
-    this.reach = this.riverReach()
+    this.reach = reachOn(this.d.river)
+    this.canalReach = reachOn(this.d.canal, 0.16)
+    this.canalD = this.canalReach[0] + 0.6
     this.boatD = BOATS.map((b) => b.at * (this.reach[1] - this.reach[0]))
     // ---- The mall day's stamp: there already, or (she's just come back with it) it lands once the cover has gone ----
     this.fresh = start.mall && start.fresh
@@ -164,28 +179,6 @@ export class BangkokMap extends Stage {
     if (this.fresh) this.onShow.push([0.7, () => this.landStamp()])
     // (Counted again from the reveal: the cover takes about BANGKOK_CAM.cover + fade.)
     this.quietFrom = 4.5 + BANGKOK_CAM.cover + BANGKOK_CAM.fade
-  }
-
-  /** The longest stretch of the river's middle line that's on the board (the line runs on a little past the edges). */
-  private riverReach(): [number, number] {
-    const r = this.d.river
-    const m = 0.12
-    let best: [number, number] = [0, r.len]
-    let from = -1
-    let span = 0
-    for (let d = 0; d <= r.len + 0.02; d += 0.02) {
-      const p = r.at(d)
-      const inside = d <= r.len && p.x > BOARD.x0 + m && p.x < BOARD.x1 - m && p.z > BOARD.z0 + m && p.z < BOARD.z1 - m
-      if (inside && from < 0) from = d
-      if (!inside && from >= 0) {
-        if (d - from > span) {
-          span = d - from
-          best = [from, d - 0.02]
-        }
-        from = -1
-      }
-    }
-    return best
   }
 
   // ---------------------------------------------------------------- talk
@@ -244,7 +237,7 @@ export class BangkokMap extends Stage {
 
   private pokeSpot(id: SpotId) {
     // (Something already busy finishes first: the wheel's tune, the crane's box.)
-    const busy: Partial<Record<SpotId, number>> = { asiatique: 3, port: 2.4, krachao: 2.6, lumphini: 3.4 }
+    const busy: Partial<Record<SpotId, number>> = { asiatique: 3, port: 2.4, krachao: 2.6, lumphini: 3.4, tents: 1.8, floating: 1.6, orchard: 1.2 }
     if (this.poked(`spot:${id}`, busy[id] ?? 0.4) >= 0) return
     this.poke(`spot:${id}`)
     this.ev.poked(id)
@@ -272,6 +265,16 @@ export class BangkokMap extends Stage {
         return sfx.crane()
       case 'krachao':
         return sfx.birds()
+      case 'tents':
+        for (let i = 0; i < 3; i++) this.after(i * 0.22, () => this.sparkles.burst(tmp.set(x, G + 0.2, z - 0.17 + i * 0.15), 7, 0.4, 0.5, 0.7, 0.022))
+        return sfx.market()
+      case 'floating':
+        for (let i = 0; i < 4; i++) this.after(i * 0.16 + 0.1, () => this.foam.burst(tmp.set(x - 0.17 + i * 0.12, G + 0.02, z + 0.09), 5, 0.25, 0.4, 0.45, 0.014))
+        return sfx.paddle()
+      case 'orchard':
+        // (Oranges fly up out of the trees.)
+        this.petals.burst(tmp.set(x - 0.06, G + 0.16, z), 22, 0.6, 1.0, 1.1, 0.03, 4)
+        return sfx.pop()
     }
   }
 
@@ -421,6 +424,37 @@ export class BangkokMap extends Stage {
       d.tuktuk.position.set(p.x, G + (k >= 0 ? bell(clamp(k / 0.4, 0, 1)) * 0.06 : Math.abs(Math.sin(t * 11)) * 0.003), p.z)
       d.tuktuk.rotation.y = p.yaw + (this.tukDir < 0 ? Math.PI : 0)
     }
+    // ---- Khlong Saen Saep's boat races up and down the khlong; poked, it toots and goes even faster ----
+    {
+      const k = this.poked('canal', 2)
+      const fast = k >= 0 ? 1 + 2 * bell(clamp(k / 2, 0, 1)) : 1
+      const [c0, c1] = this.canalReach
+      this.canalD += this.canalDir * dt * 0.16 * fast
+      if (this.canalD > c1) [this.canalD, this.canalDir] = [c1, -1]
+      if (this.canalD < c0) [this.canalD, this.canalDir] = [c0, 1]
+      const p = d.canal.at(this.canalD)
+      d.canalBoat.position.set(p.x, G + 0.003 + Math.sin(t * 6) * 0.002 + (k >= 0 ? bell(clamp(k / 0.5, 0, 1)) * 0.03 : 0), p.z)
+      d.canalBoat.rotation.set(0, p.yaw + (this.canalDir < 0 ? Math.PI : 0), Math.sin(t * 1.9) * 0.04)
+      d.canalBoat.scale.setScalar(1.25)
+      if (Math.random() < dt * 8 * fast) this.foam.emit(tmp.set(p.x, G + 0.01, p.z), new Vector3(0, 0.03, 0), 0.5, 0.009)
+    }
+    // ---- The traffic: little cars up and down the big roads, turning round at the board's edge ----
+    {
+      const { mesh, cars } = d.traffic
+      for (const [i, c] of cars.entries()) {
+        c.d += c.dir * c.speed * dt
+        if (c.d > c.to) [c.d, c.dir] = [c.to, -1]
+        if (c.d < c.from) [c.d, c.dir] = [c.from, 1]
+        // (Each keeps to its own side of the road.)
+        const p = c.path.at(c.d, 0.011 * c.dir)
+        car.position.set(p.x, G + 0.002, p.z)
+        car.rotation.y = p.yaw + (c.dir < 0 ? Math.PI : 0)
+        car.scale.setScalar(1.25)
+        car.updateMatrix()
+        mesh.setMatrixAt(i, car.matrix)
+      }
+      mesh.instanceMatrix.needsUpdate = true
+    }
     // ---- The pink taxi drives up and down Rama III Road; poked, it hops and zips ----
     {
       const k = this.poked('taxi', 2)
@@ -474,6 +508,24 @@ export class BangkokMap extends Stage {
         const a = loop * loop * (3 - 2 * loop) * Math.PI * 2
         const r = 0.09
         kite.swing.position.set(Math.sin(a) * r, (Math.cos(a) - 1) * r, 0)
+      })
+    }
+    // ---- The night market's rows of tents hop one after another when it's poked ----
+    {
+      const k = this.poked('spot:tents', 1.8)
+      d.tentRows.forEach((row, i) => {
+        const hop = k >= 0 ? bell(clamp((k - i * 0.22) / 0.5, 0, 1)) : 0
+        row.position.y = 0.008 + hop * 0.045
+        row.scale.set(1 + hop * 0.06, 1 - hop * 0.08, 1 + hop * 0.06)
+      })
+    }
+    // ---- The floating market's boats bob at their moorings; poked, they hop and rock one after another ----
+    {
+      const k = this.poked('spot:floating', 1.6)
+      d.marketBoats.forEach((b, i) => {
+        const hop = k >= 0 ? bell(clamp((k - i * 0.16) / 0.55, 0, 1)) : 0
+        b.position.y = 0.002 + Math.sin(t * 2.2 + i * 1.7) * 0.0025 + hop * 0.03
+        b.rotation.z = Math.sin(t * 1.6 + i * 2.3) * 0.06 + hop * Math.sin(t * 18) * 0.2
       })
     }
     // ---- Asiatique's wheel turns slowly; poked, it spins fast through its tune ----
@@ -644,15 +696,23 @@ export class BangkokMap extends Stage {
         sfx.tuktuk()
         this.ev.poked('tuktuk')
         return
+      case 'canal':
+        if (this.poked('canal', 2) >= 0) return
+        this.poke('canal')
+        sfx.horn()
+        this.ev.poked('boat')
+        return
       case 'taxi':
         if (this.poked('taxi', 0.8) >= 0) return
         this.poke('taxi')
+        this.ev.poked('taxi')
         sfx.honk()
         this.sparkles.burst(tmp.copy(this.d.taxi.position).setY(G + 0.12), 8, 0.35, 0.4, 0.6, 0.02)
         return
       case 'kites':
         if (this.poked('kites', 2) >= 0) return
         this.poke('kites')
+        this.ev.poked('kites')
         sfx.flutter()
         for (const [i, kite] of KITES.entries()) this.after(i * 0.25 + 0.3, () => this.sparkles.burst(tmp.set(kite.at[0], G + kite.high + 0.08, kite.at[1]), 6, 0.35, 0.3, 0.6, 0.02))
         return
@@ -789,6 +849,8 @@ export class BangkokMap extends Stage {
         return { at: d.taxi.position.clone().setY(G + 0.05), r: 0.1, prio: 4, max: 100 }
       case 'fruit':
         return { at: d.fruit.position.clone().setY(G + 0.04), r: 0.1, prio: 4, max: 100 }
+      case 'canal':
+        return { at: d.canalBoat.position.clone().setY(G + 0.04), r: 0.11, prio: 4, max: 100 }
       case 'kites':
         return { at: new Vector3(KITES[1].at[0], G + 0.36, KITES[1].at[1]), r: 0.22, prio: 3, max: 130 }
       case 'swan':

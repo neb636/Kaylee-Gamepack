@@ -1,7 +1,8 @@
 // The Bangkok map's sounds (the voices are lines.ts L.bangkok): the Nan map's toy-board sounds (the zoom, the dive,
 // the stamp, the rain), and the city's own recordings (sfx/, ElevenLabs) for what she pokes: the skytrain, the river
 // boats, Asiatique's wheel, Chinatown's drum, the lizard's plop, the port's crane, the flower market, ICONSIAM's
-// fountain, Bang Krachao's birds, all over the city humming by its river. Every recorded clip keeps its synthesized
+// fountain, Bang Krachao's birds, the night market, the floating market, the orchard, all over the city humming by
+// its river. Every recorded clip keeps its synthesized
 // fallback; the towers' note runs stay synthesized.
 import { bed, clip } from '../../../../../kit/clips'
 import { noise, tone } from '../../../../../kit/sfx'
@@ -33,6 +34,12 @@ export const mapSfx = {
   fountain: clip(c('fountain'), () => noise(1.4, 0.05, 'highpass', 2500, 4000, 0, 0.8), { vol: 0.5 }),
   /** Bang Krachao's birds fly up. */
   birds: clip(c('birds'), nanMap.flutter, { vol: 0.6 }),
+  /** The night market: a happy little tune as its tents hop. */
+  market: clip(c('night-market'), () => notes(587, [0, 4, 7, 4, 9, 7, 12], 0.1), { vol: 0.5, jitter: 0 }),
+  /** The floating market: paddles knock and the boats slap the water. */
+  paddle: clip(c('floating-market'), () => [0, 0.16, 0.32, 0.48].forEach((d) => noise(0.07, 0.05, 'lowpass', 700, 300, d, 1.2)), { vol: 0.6 }),
+  /** The orchard: oranges pop off the trees. */
+  pop: clip(c('oranges'), () => [0, 0.07, 0.15, 0.24].forEach((d, i) => tone(500 + i * 90, 760 + i * 90, 0.07, 0.05, 'sine', d)), { vol: 0.6 }),
   /** The tuk-tuk putters off; a bridge's cars beep hello. */
   tuktuk: clip(nanClip('drive-tuktuk'), sfx.putt, { vol: 0.5 }),
   honk: clip(nanClip('drive-honk-tune'), sfx.beep, { vol: 0.35 }),

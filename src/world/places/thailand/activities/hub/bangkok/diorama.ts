@@ -4,8 +4,9 @@
 // with striped roofs and ribbons on their noses, a skyline of candy-colored glass towers in three tight bunches where
 // they really stand, the river's bridges (Rama VIII's one leaning tower and its fan of cables, the Bhumibol bridges'
 // golden diamonds), the skytrain on its pillars, rows of shophouses under terracotta roofs, coconut palms along the
-// banks, a hot pink taxi and a tuk-tuk on the roads, and Bang Krachao's jungle in the river's big loop. Few big
-// shapes, the rest left as open paper: the pins and the river are what she sees first.
+// banks, a hot pink taxi and a tuk-tuk on the roads, little cars in taxi colors on the big roads, and Bang Krachao's
+// jungle in the river's big loop. The corners have their own things: the night market's tents up by Rama 9, a
+// floating market and Bang Mot's orange orchards out south-west. The pins and the river are still what she sees first.
 //
 // The places stand up like chunky toys: the Thailand house (a row of pastel shophouses, the pink one in the middle,
 // the flag, a tuk-tuk parked outside) and ICONSIAM (its folded glass front on the river, the gold roof, two towers
@@ -15,19 +16,20 @@
 //
 // To poke: Asiatique's big wheel, Chinatown's red gate and lanterns, Lumphini Park's swan boat and monitor lizard,
 // Mahanakhon (the tower made of blocks), Central Rama 3, the flower market, the port's crane, Bang Krachao's bird
-// tower. And what moves: the skytrain, an express boat, a string of rice barges and two longtails on the river, a
-// fruit seller's boat on Khlong Bangkok Yai, a tuk-tuk on Rama IV Road, a pink taxi on Rama III Road, clouds.
-import { Group, type BufferGeometry } from 'three'
+// tower, the night market's tents, the floating market's boats, the orange orchard. And what moves: the skytrain, an express boat, a string of rice barges and two longtails on the river, a
+// fruit seller's boat on Khlong Bangkok Yai, the fast boat on Khlong Saen Saep, a tuk-tuk on Rama IV Road, a pink
+// taxi on Rama III Road, the traffic, clouds.
+import { Color, Group, InstancedMesh, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid, solidMix, type V3 } from '../../../../../engine3d/geo'
-import { PAL } from '../../../../../engine3d/toon'
+import { PAL, toon } from '../../../../../engine3d/toon'
 import { trayParts } from '../../../trip/sky'
 import type { Sea } from '../map/terrain'
 import * as T from '../map/toys'
 import { RIVER_LINE } from './geo'
 import { blockMid, blockOf, buildField, buildGround, buildSea, districtAt, LAKES, type Field } from './ground'
-import { BOARD, BOATS, BRIDGES, CLOUDS, COMPASS, DEG_M, FRUIT_KHLONG, KITES, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TUKTUK_ROAD, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
-import { pathLL, type Path } from './path'
+import { BOARD, BOATS, BRIDGES, CANAL, CLOUDS, COMPASS, DEG_M, FRUIT_KHLONG, GROVES, KITES, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
+import { pathLL, reachOn, type Path } from './path'
 
 const CREAM = '#FFF7F0'
 const WOOD = '#C99A6E'
@@ -94,6 +96,15 @@ export interface Diorama {
   tuktuk: Group
   taxi: Group
   fruit: Group
+  /** Khlong Saen Saep and its fast boat. */
+  canal: Path
+  canalBoat: Group
+  /** The little cars on the big roads: one instanced mesh, each car with its road, the stretch of it on the board
+   *  ([from, to]), where it is along it, which way it's going and how fast. */
+  traffic: { mesh: InstancedMesh; cars: { path: Path; from: number; to: number; d: number; dir: number; speed: number }[] }
+  /** The night market's rows of tents, the floating market's boats (each bobs and hops by itself). */
+  tentRows: Group[]
+  marketBoats: Group[]
   /** The kites over Sanam Luang: `root` stands where the string is held (it turns to face her), `swing` sways the
    *  kite on its string. */
   kites: { root: Group; swing: Group }[]
@@ -135,17 +146,22 @@ export function buildDiorama(bag: Bag): Diorama {
   const road = pathLL(TUKTUK_ROAD, 2)
   const taxiRoad = pathLL(TAXI_ROAD, 2)
   const khlong = pathLL(FRUIT_KHLONG, 2)
+  const canal = pathLL(CANAL, 2)
 
   /** What stands where already (nothing else is put inside): [x, z, radius]. */
   const taken: [number, number, number][] = [
     ...(Object.keys(PLACES) as PlaceId[]).filter((id) => id !== 'balloon').map((id) => [...PLACES[id].at, 0.36] as [number, number, number]),
     // (Mahanakhon is a tower among towers: its neighbors stand close.)
-    ...(Object.keys(SPOTS) as SpotId[]).map((id) => [...SPOTS[id], id === 'mahanakhon' ? 0.15 : 0.26] as [number, number, number]),
+    ...(Object.keys(SPOTS) as SpotId[]).map((id) => [...SPOTS[id], id === 'mahanakhon' ? 0.15 : id === 'floating' || id === 'orchard' || id === 'tents' ? 0.34 : 0.26] as [number, number, number]),
   ]
   const free = (x: number, z: number, pad = 0) => taken.every(([px, pz, r]) => Math.hypot(px - x, pz - z) > r + pad)
   const shadows: [number, number, number][] = []
   const casts: [number, number, number, number][] = []
-  const plazas: [number, number, number][] = taken.map(([x, z, r]) => [x, z, r * 0.8])
+  // (The floating market stands in its own water and the orchard on its own grass: no paved square under them.)
+  const unpaved = [SPOTS.floating, SPOTS.orchard]
+  const plazas: [number, number, number][] = taken.filter(([x, z]) => !unpaved.some((u) => u[0] === x && u[1] === z)).map(([x, z, r]) => [x, z, r * 0.8])
+  /** Water painted on the ground: the floating market's wide stretch of khlong ([x, z, radius east-west, north-south]). */
+  const basins: [number, number, number, number][] = [[SPOTS.floating[0], SPOTS.floating[1] + 0.03, 0.26, 0.13]]
   // (Nothing stands on the painted compass, or on Sanam Luang's open field.)
   taken.push([...COMPASS.at, COMPASS.r * 1.2], [...SANAM_LUANG, 0.16])
 
@@ -291,9 +307,23 @@ export function buildDiorama(bag: Bag): Diorama {
       else parts.push(...roundTree(x, G, z, s * 0.9, i))
       shadows.push([x, z, (jungle ? 0.09 : 0.05) * s + 0.015])
     }
+    // The orchards' groves: neat rows of little fruit trees, each standing on its painted row.
+    for (const [lon, lat, rowsN, n] of GROVES) {
+      const [gx, gz] = ll(lon, lat)
+      const o = districtAt(gx, gz)
+      const b = blockOf(o, gx, gz)
+      for (let r = 0; r < rowsN; r++)
+        for (let j = 0; j < n; j++) {
+          const [x, z] = blockMid(o, b.iu + r, b.iv + j)
+          if (f.land(x, z) < 0.06 || !free(x, z, 0.04) || f.clear(x, z) < 0.04 || f.jungle(x, z)) continue
+          parts.push(...roundTree(x, G, z, 0.5 + ((r + j) % 3) * 0.05, r + j), P.sphere(0.008, '#FF9A4D', { at: [x + 0.016, G + 0.058, z + 0.022] }, 5), P.sphere(0.008, PAL.butter, { at: [x - 0.02, G + 0.05, z + 0.016] }, 5))
+          shadows.push([x, z, 0.04])
+          taken.push([x, z, 0.04])
+        }
+    }
     // The palms along the banks: one every so often, on one bank and then the other, leaning out over the water.
     let side = 1
-    for (let d = 0.5; d < river.len - 0.3; d += 0.62) {
+    for (let d = 0.5; d < river.len - 0.3; d += 0.46) {
       const p = river.at(d)
       const [ux, uz] = [Math.cos(p.yaw), -Math.sin(p.yaw)]
       side = -side
@@ -387,6 +417,18 @@ export function buildDiorama(bag: Bag): Diorama {
   const craneBox = sub(spots.port, [P.rbox(0.05, 0.026, 0.026, 0.004, PAL.pink, { at: [0, -0.013, 0] }), P.cyl(0.0015, 0.0015, 0.2, '#5E5468', { at: [0, 0.1, 0] }, 4)], [-0.02, CRANE_BOX_Y, 0.1])
   spots.krachao = toy(SPOTS.krachao, krachaoParts())
   const birds = [0, 1, 2].map((i) => sub(spots.krachao, birdParts(i), [0, 0.2, 0], 1))
+  // The night market: rows of tents in every color behind its gate of lights.
+  spots.tents = toy(SPOTS.tents, tentsParts(), 2)
+  const tentRows = [0, 1, 2].map((i) => sub(spots.tents, tentRowParts(i), [0, 0.008, -0.085 + i * 0.075], 1.2))
+  // The floating market: stilt houses and a jetty on the khlong, the sellers' boats moored in front.
+  spots.floating = toy(SPOTS.floating, floatingParts())
+  const marketBoats = MARKET_BOATS.map(([x, z, yaw], i) => {
+    const b = sub(spots.floating, marketBoatParts(i), [x, 0.002, z], 1.2)
+    b.rotation.y = yaw
+    return b
+  })
+  // Bang Mot's orange orchard: trees heavy with oranges, the farmer's house on its stilts, baskets out front.
+  spots.orchard = toy(SPOTS.orchard, orchardParts(), 1.6)
 
   // ---- The pins, and the mall day's stamp beside ICONSIAM's ----
   const pins = {} as Record<PinId, Pin>
@@ -442,6 +484,27 @@ export function buildDiorama(bag: Bag): Diorama {
   const fruit = new Group()
   fruit.add(solid(merge(fruitBoatParts()), bag, 1.5))
   root.add(fruit)
+  // ---- The fast boat on Khlong Saen Saep ----
+  const canalBoat = new Group()
+  canalBoat.add(solid(merge(canalBoatParts()), bag, 1.5))
+  root.add(canalBoat)
+  // ---- Traffic: little cars in taxi colors on the big roads (one instanced mesh, no outlines: they're specks) ----
+  const cars: Diorama['traffic']['cars'] = []
+  const rndCar = T.rng(23)
+  for (const [line, n] of TRAFFIC) {
+    const path = pathLL(line, 2)
+    const [from, to] = reachOn(path, 0.14)
+    if (to - from < 0.5) continue
+    for (let i = 0; i < n; i++) cars.push({ path, from, to, d: from + ((i + rndCar() * 0.6) / n) * (to - from), dir: i % 2 ? 1 : -1, speed: 0.07 + rndCar() * 0.05 })
+  }
+  const carMesh = new InstancedMesh(bag.add(merge(carParts())), toon('#ffffff', true), cars.length)
+  bag.add(carMesh)
+  carMesh.frustumCulled = false
+  const carCols = [PAL.hotpink, '#8FDB8A', '#FF9A4D', PAL.sky, PAL.butter, PAL.lavenderDark, '#FFFFFF', '#F0576B']
+  const col = new Color()
+  cars.forEach((_, i) => carMesh.setColorAt(i, col.set(carCols[i % carCols.length])))
+  root.add(carMesh)
+  const traffic = { mesh: carMesh, cars }
   // ---- Kites over Sanam Luang ----
   const kites = KITES.map(({ at, high, kind }, i) => {
     const g = new Group()
@@ -469,8 +532,8 @@ export function buildDiorama(bag: Bag): Diorama {
     return g
   })
 
-  root.add(buildGround(bag, { shadows, plazas, casts }))
-  return { root, places, spots, pins, stamp, balloon, sea, river, rail, road, taxiRoad, khlong, boats, train, tuktuk, taxi, fruit, kites, clouds, wheel, lanterns, swan, lizard, craneBox, birds, fountain, towers, bridges }
+  root.add(buildGround(bag, { shadows, plazas, casts, basins }))
+  return { root, places, spots, pins, stamp, balloon, sea, river, rail, road, taxiRoad, khlong, canal, canalBoat, traffic, tentRows, marketBoats, boats, train, tuktuk, taxi, fruit, kites, clouds, wheel, lanterns, swan, lizard, craneBox, birds, fountain, towers, bridges }
 }
 
 // ---------------------------------------------------------------- towers
@@ -922,7 +985,132 @@ function birdParts(i: number): BufferGeometry[] {
   ]
 }
 
+/** The night market's ground: a cream yard, its gate strung with lights, a food cart (the tents are tentRowParts). */
+function tentsParts(): BufferGeometry[] {
+  const lights = [PAL.hotpink, PAL.butter, PAL.mint, PAL.sky, PAL.lavenderDark]
+  return [
+    P.rbox(0.36, 0.008, 0.3, 0.004, '#FFFDF6', { at: [0, 0.004, 0] }),
+    // The gate: two posts, a sign across, a string of lights under it.
+    ...[-1, 1].map((s) => P.cyl(0.006, 0.007, 0.11, PAL.hotpink, { at: [s * 0.1, 0.055, 0.15] }, 6)),
+    P.rbox(0.23, 0.03, 0.012, 0.005, PAL.butter, { at: [0, 0.115, 0.15] }),
+    ...[0, 1, 2, 3, 4, 5, 6].map((i) => P.sphere(0.008, lights[i % lights.length], { at: [-0.084 + i * 0.028, 0.088 - Math.sin((i / 6) * Math.PI) * 0.012, 0.15] }, 6)),
+    // A cart by the gate, a pot steaming on it.
+    P.rbox(0.045, 0.026, 0.03, 0.004, PAL.sky, { at: [0.15, 0.02, 0.13] }),
+    P.cyl(0.011, 0.009, 0.014, '#C8BEDD', { at: [0.15, 0.04, 0.13] }, 7),
+    P.sphere(0.009, '#FFFFFF', { at: [0.152, 0.058, 0.128] }, 5),
+    ...[-1, 1].map((s) => P.cyl(0.008, 0.008, 0.005, '#5E5468', { at: [0.15 + s * 0.016, 0.008, 0.147], rot: [Math.PI / 2, 0, 0] }, 7)),
+  ]
+}
+
+/** One row of the night market's tents: four stalls, each under its own pointed roof, every roof another color. */
+function tentRowParts(row: number): BufferGeometry[] {
+  const cols = [PAL.hotpink, PAL.butter, PAL.mint, PAL.sky, PAL.lavenderDark, '#FF9A4D', PAL.pink]
+  const parts: BufferGeometry[] = []
+  for (let i = 0; i < 4; i++) {
+    const x = -0.117 + i * 0.078
+    parts.push(
+      P.rbox(0.05, 0.03, 0.044, 0.005, CREAM, { at: [x, 0.015, 0] }),
+      P.cone(0.05, 0.04, cols[(i + row * 3) % cols.length], { at: [x, 0.056, 0], rot: [0, Math.PI / 4, 0] }, 4),
+      P.sphere(0.006, '#FFFFFF', { at: [x, 0.079, 0] }, 5),
+    )
+  }
+  return parts
+}
+
+/** Where the floating market's boats are moored (in the toy's frame): [east, south, which way the nose points]. */
+const MARKET_BOATS: [number, number, number][] = [[-0.115, 0.035, 0.5], [-0.04, 0.07, -0.3], [0.045, 0.04, 0.35], [0.12, 0.075, -0.5]]
+
+/** A wooden house on stilts over the water: teak walls, a steep terracotta roof. */
+function stiltHouse(x: number, z: number, wall: string): BufferGeometry[] {
+  return [
+    ...[[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([a, b]) => P.cyl(0.004, 0.004, 0.03, WOOD_DARK, { at: [x + a * 0.03, 0.015, z + b * 0.022] }, 4)),
+    P.rbox(0.08, 0.006, 0.062, 0.002, WOOD, { at: [x, 0.032, z] }),
+    P.rbox(0.07, 0.04, 0.05, 0.004, wall, { at: [x, 0.055, z] }),
+    P.prism([[-0.044, 0], [0.044, 0], [0, 0.045]], 0.062, ROOFS[0], { at: [x, 0.073, z] }),
+    P.box(0.016, 0.022, 0.004, '#9A6B4F', { at: [x, 0.046, z + 0.026] }),
+  ]
+}
+
+/** The floating market's bank: two stilt houses, the jetty along the water, bunting, a banana tree. (The boats are
+ *  marketBoatParts; the water is painted: diorama `basins`.) */
+function floatingParts(): BufferGeometry[] {
+  return [
+    ...stiltHouse(-0.085, -0.07, '#E9B98A'),
+    ...stiltHouse(0.06, -0.08, '#F2CFA0'),
+    P.rbox(0.3, 0.008, 0.03, 0.003, WOOD, { at: [0, 0.02, -0.022] }),
+    ...[-0.13, -0.045, 0.045, 0.13].map((x) => P.cyl(0.004, 0.004, 0.024, WOOD_DARK, { at: [x, 0.01, -0.012] }, 4)),
+    ...[-0.15, 0.15].map((x) => P.cyl(0.003, 0.003, 0.085, CREAM, { at: [x, 0.062, -0.03] }, 4)),
+    ...[0, 1, 2, 3, 4, 5, 6, 7].map((i) => P.cone(0.009, 0.016, [PAL.pink, PAL.butter, PAL.mint, PAL.lavender][i % 4], { at: [-0.131 + i * 0.0375, 0.094 - Math.sin((i / 7) * Math.PI) * 0.014, -0.03], rot: [Math.PI, 0, 0] }, 4)),
+    ...palm(0.165, 0, -0.085, 0.36, 0.6),
+    ...palm(-0.175, 0, -0.06, 0.3, 2.4),
+  ]
+}
+
+/** One of the floating market's boats (its nose along +z): a little wooden sampan heaped with fruit or flowers, the
+ *  seller's straw hat at the back, a big round umbrella over it all. */
+function marketBoatParts(i: number): BufferGeometry[] {
+  const brolly = [PAL.hotpink, PAL.butter, PAL.mint, '#FF9A4D'][i % 4]
+  const loads = [['#FF9A4D', PAL.butter, '#FF9A4D'], [PAL.hotpink, '#FFFFFF', PAL.lavenderDark], ['#8FDB8A', PAL.butter, '#8FDB8A'], ['#F0576B', '#FF9A4D', PAL.butter]][i % 4]
+  return [
+    P.rbox(0.04, 0.015, 0.12, 0.007, '#D9A072', { at: [0, 0.008, 0] }),
+    P.box(0.042, 0.004, 0.1, '#B98A66', { at: [0, 0.014, 0] }),
+    ...[0, 1, 2, 3, 4].map((k) => P.sphere(0.01, loads[k % 3], { at: [(k % 2 ? 1 : -1) * 0.007, 0.022 + (k % 2 ? 0.006 : 0), 0.04 - k * 0.014] }, 6)),
+    P.sphere(0.011, PAL.pink, { at: [0, 0.026, -0.04], scale: [1, 1.2, 1] }, 7),
+    P.cone(0.019, 0.011, '#F2DCA6', { at: [0, 0.044, -0.04] }, 9),
+    P.cyl(0.0018, 0.0018, 0.06, CREAM, { at: [0, 0.045, 0.004] }, 4),
+    P.cone(0.042, 0.02, brolly, { at: [0, 0.082, 0.004] }, 10),
+    P.sphere(0.005, '#FFFFFF', { at: [0, 0.094, 0.004] }, 5),
+  ]
+}
+
+/** An orange tree: round and leafy, oranges all over it. */
+function orangeTree(x: number, z: number, s: number, k: number): BufferGeometry[] {
+  const dots: [number, number, number][] = [[0.03, 0.12, 0.045], [-0.035, 0.1, 0.04], [0.0, 0.085, 0.056], [0.045, 0.09, 0.02], [-0.01, 0.14, 0.04], [-0.05, 0.125, 0.01]]
+  return [...roundTree(x, 0, z, s, k), ...dots.map(([dx, dy, dz]) => P.sphere(0.011 * s, '#FF9A4D', { at: [x + dx * s, dy * s, z + dz * s] }, 6))]
+}
+
+/** Bang Mot's orange orchard: two rows of orange trees, the farmer's wooden house on stilts, baskets of oranges and
+ *  a wheelbarrow out front. */
+function orchardParts(): BufferGeometry[] {
+  const parts: BufferGeometry[] = []
+  for (let r = 0; r < 2; r++) for (let i = 0; i < 3; i++) parts.push(...orangeTree(-0.14 + i * 0.1, -0.075 + r * 0.095, 0.82 + ((i + r) % 2) * 0.1, i + r))
+  parts.push(...stiltHouse(0.16, -0.045, '#E9B98A'))
+  // Baskets heaped with oranges.
+  for (const [bx, bz] of [[0.12, 0.07], [0.165, 0.085]]) {
+    parts.push(P.cyl(0.017, 0.013, 0.016, '#E6C28A', { at: [bx, 0.008, bz] }, 8))
+    for (let k = 0; k < 4; k++) parts.push(P.sphere(0.008, '#FF9A4D', { at: [bx + Math.cos(k * 1.6) * 0.007, 0.02 + (k === 3 ? 0.008 : 0), bz + Math.sin(k * 1.6) * 0.007] }, 5))
+  }
+  // The wheelbarrow.
+  parts.push(P.rbox(0.034, 0.014, 0.024, 0.004, PAL.sky, { at: [0.06, 0.02, 0.1] }), P.cyl(0.009, 0.009, 0.005, '#5E5468', { at: [0.04, 0.009, 0.1], rot: [Math.PI / 2, 0, 0] }, 8), rod([0.075, 0.022, 0.092], [0.098, 0.03, 0.092], 0.003, WOOD_DARK), rod([0.075, 0.022, 0.108], [0.098, 0.03, 0.108], 0.003, WOOD_DARK))
+  parts.push(P.sphere(0.008, '#FF9A4D', { at: [0.056, 0.031, 0.098] }, 5), P.sphere(0.008, '#FF9A4D', { at: [0.066, 0.031, 0.103] }, 5))
+  return parts
+}
+
 // ---------------------------------------------------------------- what moves
+
+/** One of the traffic's little cars (driving along +z). White where a car's own color goes (the instance's color
+ *  tints it), dark wheels. */
+function carParts(): BufferGeometry[] {
+  return [
+    P.rbox(0.044, 0.02, 0.085, 0.008, '#FFFFFF', { at: [0, 0.02, 0] }),
+    P.rbox(0.038, 0.016, 0.042, 0.007, '#DDF3FF', { at: [0, 0.037, -0.004] }),
+    ...[[-1, 0.026], [1, 0.026], [-1, -0.028], [1, -0.028]].map(([sd, z]) => P.cyl(0.009, 0.009, 0.008, '#5E5468', { at: [sd * 0.021, 0.009, z], rot: [0, 0, Math.PI / 2] }, 7)),
+  ]
+}
+
+/** Khlong Saen Saep's boat (racing along +z): long, low and wooden, a pink stripe, blue covers down both sides, the
+ *  roof on its posts. */
+function canalBoatParts(): BufferGeometry[] {
+  return [
+    P.rbox(0.036, 0.02, 0.19, 0.009, '#E6A375', { at: [0, 0.01, 0] }),
+    P.box(0.038, 0.005, 0.17, PAL.hotpink, { at: [0, 0.016, 0] }),
+    P.cone(0.018, 0.036, '#E6A375', { at: [0, 0.011, 0.108], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 0.55] }, 6),
+    ...[-1, 1].map((s) => P.box(0.003, 0.016, 0.13, PAL.sky, { at: [s * 0.018, 0.03, -0.005] })),
+    P.rbox(0.04, 0.005, 0.14, 0.002, '#FFFFFF', { at: [0, 0.046, -0.005] }),
+    ...[[-1, 0.05], [1, 0.05], [-1, -0.06], [1, -0.06]].map(([s, z]) => P.cyl(0.002, 0.002, 0.026, '#FFFFFF', { at: [s * 0.016, 0.034, z] }, 4)),
+    ...[0, 1, 2].map((i) => P.sphere(0.006, [PAL.butter, PAL.mint, PAL.lavender][i], { at: [0, 0.028, 0.03 - i * 0.03] }, 5)),
+  ]
+}
 
 /** One car of the skytrain (driving along +z): white, a blue and pink stripe, windows down the sides. */
 function trainCar(front: boolean, back: boolean): BufferGeometry[] {

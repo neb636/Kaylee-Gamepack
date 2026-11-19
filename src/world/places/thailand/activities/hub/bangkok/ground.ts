@@ -259,6 +259,8 @@ export interface GroundInput {
   plazas: [number, number, number][]
   /** The long afternoon shadows the towers throw across the map: [x, z, how wide the tower is, how tall]. */
   casts: [number, number, number, number][]
+  /** Wide stretches of khlong (the floating market's): [x, z, radius east-west, radius north-south]. */
+  basins: [number, number, number, number][]
 }
 
 /** Which way the afternoon shadows fall on the board (east and a little south), and how long for a meter of tower. */
@@ -300,7 +302,7 @@ export function buildGround(bag: Bag, input: GroundInput) {
   geo.setAttribute('uv', new BufferAttribute(uv, 2))
   geo.setIndex(new BufferAttribute(index, 1))
   geo.computeVertexNormals()
-  const key = `${input.shadows.length}/${input.plazas.length}/${input.casts.length}`
+  const key = `${input.shadows.length}/${input.plazas.length}/${input.casts.length}/${input.basins.length}`
   if (!painted || paintedFor !== key) {
     painted = paint(f, input)
     paintedFor = key
@@ -314,9 +316,9 @@ export function buildGround(bag: Bag, input: GroundInput) {
 
 /** The districts' paper: creams and peaches close together (a map's print, not a quilt), and the orchards' greens. */
 const BLOCKS: [number, number, number][] = [[255, 244, 226], [255, 238, 220], [255, 246, 214], [255, 240, 230]]
-const ORCHARDS: [number, number, number][] = [[218, 241, 198], [226, 244, 206], [211, 238, 194]]
+const ORCHARDS: [number, number, number][] = [[206, 238, 182], [215, 242, 190], [198, 234, 176]]
 
-function paint(f: Field, { shadows, plazas, casts }: GroundInput) {
+function paint(f: Field, { shadows, plazas, casts, basins }: GroundInput) {
   const W = BOARD.x1 - BOARD.x0
   const D = BOARD.z1 - BOARD.z0
   const w = Math.round(W * TEX)
@@ -401,14 +403,26 @@ function paint(f: Field, { shadows, plazas, casts }: GroundInput) {
           // The orchards' rows: a soft stripe down every square (Thonburi's orchards are ditch after ditch).
           const off = Math.abs(fu - 0.5)
           if (off > 0.16) continue
-          od[i] = 168
-          od[i + 1] = 220
-          od[i + 2] = 158
-          od[i + 3] = off > 0.1 ? 45 : 90
+          od[i] = 150
+          od[i + 1] = 212
+          od[i + 2] = 146
+          od[i + 3] = off > 0.1 ? 55 : 110
         } else {
-          // The little streets: a thin warm print.
+          // The little streets: a thin warm print. And the map's own rooftops, printed tone on tone inside most
+          // squares (one roof, or two side by side): the city looks built up without a single thing standing on it.
           const edge = Math.min(fu, 1 - fu, fv, 1 - fv)
-          if (edge > 0.06) continue
+          if (edge > 0.06) {
+            const [iu, iv] = [Math.floor(u), Math.floor(v)]
+            const hash = Math.abs(Math.sin(iu * 12.9898 + iv * 78.233 + k * 37.7) * 43758.5453) % 1
+            if (hash < 0.3 || edge < 0.2) continue
+            if (hash > 0.72 && Math.abs(fu - 0.5) < 0.045) continue
+            const warm = hash > 0.55
+            od[i] = warm ? 244 : 236
+            od[i + 1] = warm ? 170 : 196
+            od[i + 2] = warm ? 140 : 176
+            od[i + 3] = edge < 0.235 ? 26 : warm ? 46 : 58
+            continue
+          }
           od[i] = 232
           od[i + 1] = 192
           od[i + 2] = 160
@@ -504,6 +518,17 @@ function paint(f: Field, { shadows, plazas, casts }: GroundInput) {
     g.strokeStyle = '#B4ECF6'
     g.lineWidth = TEX * 0.007
     g.stroke()
+  }
+
+  // ---- The floating market's wide water: pale banks, the khlong's blue, a brighter middle.
+  for (const [x, z, rx, rz] of basins) {
+    const [cx, cy] = P([x, z])
+    for (const [grow, col] of [[0.022, '#FFFDF4'], [0, '#7FD6EC'], [-0.05, '#A9E6F3']] as const) {
+      g.fillStyle = col
+      g.beginPath()
+      g.ellipse(cx, cy, (rx + grow) * TEX, (rz + grow * 0.8) * TEX, 0, 0, Math.PI * 2)
+      g.fill()
+    }
   }
 
   // ---- The main roads: a soft pink kerb, the cream road on it.

@@ -1,7 +1,7 @@
 // A line on the Bangkok board that something follows (the boats down the river's middle, the skytrain along its
 // stations, the tuk-tuk up Rama IV Road): where it is a given way along, and which way it's heading. Pure math.
 import type { LonLat } from './geo'
-import { ll, type XZ } from './layout'
+import { BOARD, ll, type XZ } from './layout'
 
 export interface Path {
   /** How long it is (m). */
@@ -58,6 +58,26 @@ export function pathOf(points: XZ[], smooth = 2): Path {
       return best
     },
   }
+}
+
+/** The longest stretch of a path that's on the board, `m` meters in from its edges: [from, to] (m along it). */
+export function reachOn(p: Path, m = 0.12): [number, number] {
+  let best: [number, number] = [0, p.len]
+  let from = -1
+  let span = 0
+  for (let d = 0; d <= p.len + 0.02; d += 0.02) {
+    const at = p.at(d)
+    const inside = d <= p.len && at.x > BOARD.x0 + m && at.x < BOARD.x1 - m && at.z > BOARD.z0 + m && at.z < BOARD.z1 - m
+    if (inside && from < 0) from = d
+    if (!inside && from >= 0) {
+      if (d - from > span) {
+        span = d - from
+        best = [from, d - 0.02]
+      }
+      from = -1
+    }
+  }
+  return best
 }
 
 /** A path through longitudes and latitudes. */
