@@ -1,0 +1,474 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "bangkok",
+  "title": "Thailand › Bangkok",
+  "intro": "Sparkle on the Bangkok map (activities/hub/bangkok/): the hello (once a visit), where she can go when she's stuck, and something true the first time she pokes each thing.",
+  "page": "thailand-bangkok.html",
+  "audio": null,
+  "lines": 19,
+  "seconds": 60,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "bangkok.hello.touch",
+      "text": "This is Bangkok! Tap the house or the mall!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.hello.mouse",
+      "text": "This is Bangkok! Click the house or the mall!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.hint.touch",
+      "text": "Tap the house or the mall!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.hint.mouse",
+      "text": "Click the house or the mall!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.asiatique",
+      "text": "A giant wheel by the river! Round and round!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.chinatown",
+      "text": "Chinatown! Look at the red lanterns!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.lumphini",
+      "text": "A big lizard lives in this park!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.mahanakhon",
+      "text": "This tower looks like building blocks!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.flowers",
+      "text": "The flower market! So many flowers!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.port",
+      "text": "Big ships bring boxes from far away!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.krachao",
+      "text": "A jungle in the middle of the city!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.train",
+      "text": "The skytrain! It rides high above the street.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.boat",
+      "text": "Boats are the buses of the river!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.river",
+      "text": "This river is the Chao Phraya!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.tents",
+      "text": "The night market! Yummy snacks under every tent!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.floating",
+      "text": "A floating market! The shops are boats!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.orchard",
+      "text": "Sweet oranges grow here!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.kites",
+      "text": "Kites! Up, up in the wind!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.taxi",
+      "text": "A pink taxi! Beep beep!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "bangkok",
+        "hello",
+        "touch"
+      ],
+      "text": "This is Bangkok! Tap the house or the mall!",
+      "voice": "sparkle",
+      "key": "bangkok.hello.touch",
+      "part": "bangkok › hello",
+      "when": "",
+      "ms": 4416,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "hello",
+        "mouse"
+      ],
+      "text": "This is Bangkok! Click the house or the mall!",
+      "voice": "sparkle",
+      "key": "bangkok.hello.mouse",
+      "part": "bangkok › hello",
+      "when": "",
+      "ms": 4320,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "hint",
+        "touch"
+      ],
+      "text": "Tap the house or the mall!",
+      "voice": "sparkle",
+      "key": "bangkok.hint.touch",
+      "part": "bangkok › hint",
+      "when": "",
+      "ms": 2016,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "hint",
+        "mouse"
+      ],
+      "text": "Click the house or the mall!",
+      "voice": "sparkle",
+      "key": "bangkok.hint.mouse",
+      "part": "bangkok › hint",
+      "when": "",
+      "ms": 2184,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "asiatique"
+      ],
+      "text": "A giant wheel by the river! Round and round!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.asiatique",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 4320,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "chinatown"
+      ],
+      "text": "Chinatown! Look at the red lanterns!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.chinatown",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 3120,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "lumphini"
+      ],
+      "text": "A big lizard lives in this park!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.lumphini",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 2976,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "mahanakhon"
+      ],
+      "text": "This tower looks like building blocks!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.mahanakhon",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 3408,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "flowers"
+      ],
+      "text": "The flower market! So many flowers!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.flowers",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 3960,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "port"
+      ],
+      "text": "Big ships bring boxes from far away!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.port",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 2904,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "krachao"
+      ],
+      "text": "A jungle in the middle of the city!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.krachao",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 2496,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "train"
+      ],
+      "text": "The skytrain! It rides high above the street.",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.train",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 3408,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "boat"
+      ],
+      "text": "Boats are the buses of the river!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.boat",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 2400,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "river"
+      ],
+      "text": "This river is the Chao Phraya!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.river",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 2832,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "tents"
+      ],
+      "text": "The night market! Yummy snacks under every tent!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.tents",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 3984,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "floating"
+      ],
+      "text": "A floating market! The shops are boats!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.floating",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 3456,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "orchard"
+      ],
+      "text": "Sweet oranges grow here!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.orchard",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 2232,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "kites"
+      ],
+      "text": "Kites! Up, up in the wind!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.kites",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 2688,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "taxi"
+      ],
+      "text": "A pink taxi! Beep beep!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.taxi",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 3120,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

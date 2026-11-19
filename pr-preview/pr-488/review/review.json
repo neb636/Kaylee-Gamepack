@@ -1,0 +1,23 @@
+{
+  "title": "The Bangkok map: fuller corners, more life",
+  "checkIn": "ship",
+  "kaylee": "Bangkok has more to find: a night market of rainbow tents, a floating market, an orange orchard, a racing khlong boat and little taxis driving all over town.",
+  "questions": [
+    "Better, or still not there?",
+    "Are the two corners full enough now?",
+    "Is the house in the right spot (just west of Central Rama 3)?"
+  ],
+  "reels": [{ "name": "bangkok-map-after", "moments": ["bangkok-map-alive", "bangkok-map-corners", "bangkok-map-thai", "bangkok-map-spin", "bangkok-map-mall"] }],
+  "tableReads": [["thailand", "bangkok"]],
+  "pictures": [
+    { "title": "The whole board", "before": "pics/board-before.jpg", "after": "pics/board-after.jpg", "caption": "Before is what you saw this morning. Now: set pieces in both corners, traffic, printed rooftops, greener orchards" },
+    { "title": "South-west (your first screenshot)", "before": "pics/sw-before.jpg", "after": "pics/sw-after.jpg", "caption": "A floating market on Khlong Dao Khanong, Bang Mot's orange orchard, groves, cars on Rama II Road" },
+    { "title": "North-east (your second screenshot)", "before": "pics/ne-before.jpg", "after": "pics/ne-after.jpg", "caption": "The night market's tents on Ratchadaphisek Road, two Rama 9 towers, the khlong boat, cars on Rama IX Road" }
+  ],
+  "links": [
+    { "label": "Play the Bangkok map", "hash": "#/world/thailand/hub/bangkok" },
+    { "label": "Back from the mall: the stamp lands", "hash": "#/world/thailand/hub/bangkok?stamp=mall-trip" },
+    { "label": "Tune the camera", "hash": "#/world/thailand/hub/bangkok?feel=1" },
+    { "label": "On the Mac (click, not tap)", "hash": "#/world/thailand/hub/bangkok?device=mouse" }
+  ]
+}
