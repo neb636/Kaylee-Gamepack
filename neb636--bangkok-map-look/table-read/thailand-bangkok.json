@@ -7,8 +7,8 @@
   "page": "thailand-bangkok.html",
   "audio": "thailand-bangkok.mp3",
   "lines": 19,
-  "seconds": 45,
-  "missing": 5,
+  "seconds": 60,
+  "missing": 0,
   "names": 0,
   "flags": [
     {
@@ -64,35 +64,21 @@
       "key": "bangkok.pokes.tents",
       "text": "The night market! Yummy snacks under every tent!",
       "flags": [
-        "not recorded"
+        "long"
       ]
     },
     {
       "key": "bangkok.pokes.floating",
       "text": "A floating market! The shops are boats!",
       "flags": [
-        "not recorded"
-      ]
-    },
-    {
-      "key": "bangkok.pokes.orchard",
-      "text": "Sweet oranges grow here!",
-      "flags": [
-        "not recorded"
-      ]
-    },
-    {
-      "key": "bangkok.pokes.kites",
-      "text": "Kites! Up, up in the wind!",
-      "flags": [
-        "not recorded"
+        "long"
       ]
     },
     {
       "key": "bangkok.pokes.taxi",
       "text": "A pink taxi! Beep beep!",
       "flags": [
-        "not recorded"
+        "long"
       ]
     }
   ],
@@ -374,11 +360,14 @@
       "key": "bangkok.pokes.tents",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 0,
+      "ms": 3984,
       "flags": [
-        "not recorded"
+        "long"
       ],
-      "span": null
+      "span": [
+        51.39,
+        55.31
+      ]
     },
     {
       "path": [
@@ -391,11 +380,14 @@
       "key": "bangkok.pokes.floating",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 0,
+      "ms": 3456,
       "flags": [
-        "not recorded"
+        "long"
       ],
-      "span": null
+      "span": [
+        55.66,
+        59.05
+      ]
     },
     {
       "path": [
@@ -408,11 +400,12 @@
       "key": "bangkok.pokes.orchard",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 0,
-      "flags": [
-        "not recorded"
-      ],
-      "span": null
+      "ms": 2232,
+      "flags": [],
+      "span": [
+        59.4,
+        61.57
+      ]
     },
     {
       "path": [
@@ -425,11 +418,12 @@
       "key": "bangkok.pokes.kites",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 0,
-      "flags": [
-        "not recorded"
-      ],
-      "span": null
+      "ms": 2688,
+      "flags": [],
+      "span": [
+        61.92,
+        64.55
+      ]
     },
     {
       "path": [
@@ -442,11 +436,14 @@
       "key": "bangkok.pokes.taxi",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 0,
+      "ms": 3120,
       "flags": [
-        "not recorded"
+        "long"
       ],
-      "span": null
+      "span": [
+        64.9,
+        67.95
+      ]
     }
   ]
 }
