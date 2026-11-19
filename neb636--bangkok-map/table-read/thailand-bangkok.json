@@ -5,108 +5,59 @@
   "title": "Thailand › Bangkok",
   "intro": "Sparkle on the Bangkok map (activities/hub/bangkok/): the hello (once a visit), where she can go when she's stuck, and something true the first time she pokes each thing.",
   "page": "thailand-bangkok.html",
-  "audio": null,
+  "audio": "thailand-bangkok.mp3",
   "lines": 14,
-  "seconds": 0,
-  "missing": 14,
+  "seconds": 45,
+  "missing": 0,
   "names": 0,
   "flags": [
     {
       "key": "bangkok.hello.touch",
       "text": "This is Bangkok! Tap the house or the mall!",
       "flags": [
-        "not recorded"
+        "long"
       ]
     },
     {
       "key": "bangkok.hello.mouse",
       "text": "This is Bangkok! Click the house or the mall!",
       "flags": [
-        "not recorded"
-      ]
-    },
-    {
-      "key": "bangkok.hint.touch",
-      "text": "Tap the house or the mall!",
-      "flags": [
-        "not recorded"
-      ]
-    },
-    {
-      "key": "bangkok.hint.mouse",
-      "text": "Click the house or the mall!",
-      "flags": [
-        "not recorded"
+        "long"
       ]
     },
     {
       "key": "bangkok.pokes.asiatique",
       "text": "A giant wheel by the river! Round and round!",
       "flags": [
-        "not recorded"
+        "long"
       ]
     },
     {
       "key": "bangkok.pokes.chinatown",
       "text": "Chinatown! Look at the red lanterns!",
       "flags": [
-        "not recorded"
-      ]
-    },
-    {
-      "key": "bangkok.pokes.lumphini",
-      "text": "A big lizard lives in this park!",
-      "flags": [
-        "not recorded"
+        "long"
       ]
     },
     {
       "key": "bangkok.pokes.mahanakhon",
       "text": "This tower looks like building blocks!",
       "flags": [
-        "not recorded"
+        "long"
       ]
     },
     {
       "key": "bangkok.pokes.flowers",
       "text": "The flower market! So many flowers!",
       "flags": [
-        "not recorded"
-      ]
-    },
-    {
-      "key": "bangkok.pokes.port",
-      "text": "Big ships bring boxes from far away!",
-      "flags": [
-        "not recorded"
-      ]
-    },
-    {
-      "key": "bangkok.pokes.krachao",
-      "text": "A jungle in the middle of the city!",
-      "flags": [
-        "not recorded"
+        "long"
       ]
     },
     {
       "key": "bangkok.pokes.train",
       "text": "The skytrain! It rides high above the street.",
       "flags": [
-        "not recorded"
-      ]
-    },
-    {
-      "key": "bangkok.pokes.boat",
-      "text": "Boats are the buses of the river!",
-      "flags": [
-        "not recorded"
-      ]
-    },
-    {
-      "key": "bangkok.pokes.river",
-      "text": "This river is the Chao Phraya!",
-      "flags": [
-        "not recorded"
+        "long"
       ]
     }
   ],
@@ -122,9 +73,13 @@
       "key": "bangkok.hello.touch",
       "part": "bangkok › hello",
       "when": "",
-      "ms": 0,
+      "ms": 4416,
       "flags": [
-        "not recorded"
+        "long"
+      ],
+      "span": [
+        0,
+        4.35
       ]
     },
     {
@@ -138,9 +93,13 @@
       "key": "bangkok.hello.mouse",
       "part": "bangkok › hello",
       "when": "",
-      "ms": 0,
+      "ms": 4320,
       "flags": [
-        "not recorded"
+        "long"
+      ],
+      "span": [
+        4.7,
+        8.95
       ]
     },
     {
@@ -154,9 +113,11 @@
       "key": "bangkok.hint.touch",
       "part": "bangkok › hint",
       "when": "",
-      "ms": 0,
-      "flags": [
-        "not recorded"
+      "ms": 2016,
+      "flags": [],
+      "span": [
+        10.57,
+        12.54
       ]
     },
     {
@@ -170,9 +131,11 @@
       "key": "bangkok.hint.mouse",
       "part": "bangkok › hint",
       "when": "",
-      "ms": 0,
-      "flags": [
-        "not recorded"
+      "ms": 2184,
+      "flags": [],
+      "span": [
+        12.89,
+        15.01
       ]
     },
     {
@@ -186,9 +149,13 @@
       "key": "bangkok.pokes.asiatique",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 0,
+      "ms": 4320,
       "flags": [
-        "not recorded"
+        "long"
+      ],
+      "span": [
+        16.63,
+        20.9
       ]
     },
     {
@@ -202,9 +169,13 @@
       "key": "bangkok.pokes.chinatown",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 0,
+      "ms": 3120,
       "flags": [
-        "not recorded"
+        "long"
+      ],
+      "span": [
+        21.25,
+        24.3
       ]
     },
     {
@@ -218,9 +189,11 @@
       "key": "bangkok.pokes.lumphini",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 0,
-      "flags": [
-        "not recorded"
+      "ms": 2976,
+      "flags": [],
+      "span": [
+        24.65,
+        27.56
       ]
     },
     {
@@ -234,9 +207,13 @@
       "key": "bangkok.pokes.mahanakhon",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 0,
+      "ms": 3408,
       "flags": [
-        "not recorded"
+        "long"
+      ],
+      "span": [
+        27.91,
+        31.26
       ]
     },
     {
@@ -250,9 +227,13 @@
       "key": "bangkok.pokes.flowers",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 0,
+      "ms": 3960,
       "flags": [
-        "not recorded"
+        "long"
+      ],
+      "span": [
+        31.61,
+        35.51
       ]
     },
     {
@@ -266,9 +247,11 @@
       "key": "bangkok.pokes.port",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 0,
-      "flags": [
-        "not recorded"
+      "ms": 2904,
+      "flags": [],
+      "span": [
+        35.86,
+        38.71
       ]
     },
     {
@@ -282,9 +265,11 @@
       "key": "bangkok.pokes.krachao",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 0,
-      "flags": [
-        "not recorded"
+      "ms": 2496,
+      "flags": [],
+      "span": [
+        39.06,
+        41.51
       ]
     },
     {
@@ -298,9 +283,13 @@
       "key": "bangkok.pokes.train",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 0,
+      "ms": 3408,
       "flags": [
-        "not recorded"
+        "long"
+      ],
+      "span": [
+        41.86,
+        45.2
       ]
     },
     {
@@ -314,9 +303,11 @@
       "key": "bangkok.pokes.boat",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 0,
-      "flags": [
-        "not recorded"
+      "ms": 2400,
+      "flags": [],
+      "span": [
+        45.55,
+        47.91
       ]
     },
     {
@@ -330,9 +321,11 @@
       "key": "bangkok.pokes.river",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 0,
-      "flags": [
-        "not recorded"
+      "ms": 2832,
+      "flags": [],
+      "span": [
+        48.26,
+        51.04
       ]
     }
   ]
