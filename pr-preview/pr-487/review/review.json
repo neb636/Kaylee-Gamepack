@@ -1,0 +1,20 @@
+{
+  "title": "Dad 5 is the game's Dad",
+  "checkIn": "fix",
+  "kaylee": "The new mint unicorn Dad (brown hair, pink tee, shorts) is her Dad everywhere in Thailand: the house, every trip, the games.",
+  "questions": [
+    "At the barber, a bit of his painted brown hair shows under dyed strands. OK for now, or fix it next?"
+  ],
+  "pictures": [
+    { "title": "Meeting the family", "before": "pics/family-old.jpg", "after": "pics/family-new.jpg", "caption": "The new Dad, outside the shophouse" },
+    { "title": "On the longtail boat", "before": "pics/bay-old.jpg", "after": "pics/bay-new.jpg", "caption": "His sunglasses sit on his eyes" },
+    { "title": "The jet ski", "before": "pics/jetski-old.jpg", "after": "pics/jetski-new.jpg", "caption": "His life jacket goes round his chest" },
+    { "title": "The barber", "before": "pics/barber-old.jpg", "after": "pics/barber-new.jpg", "caption": "The strands start out in his own brown" },
+    { "title": "The pizza table", "before": "pics/pizza-old.jpg", "after": "pics/pizza-new.jpg", "caption": "Sitting with the family" },
+    { "title": "The Nan road", "before": "pics/drive-old.jpg", "after": "pics/drive-new.jpg", "caption": "In the Pajero" }
+  ],
+  "links": [
+    { "label": "The family in a line", "hash": "#/world/thailand/hub/family" },
+    { "label": "New and old Dad side by side", "hash": "#/world/characters/nick?lineup=nick,nick-code" }
+  ]
+}
