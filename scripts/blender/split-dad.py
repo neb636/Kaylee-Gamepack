@@ -238,9 +238,9 @@ groups = {}
 for f, n in label.items():
     if f.is_valid:
         groups.setdefault(n, []).append(f)
+body_faces = groups.get('shirt', []) + groups.get('shorts', [])
 if not tail_separate:
-    pass
-body_faces = groups.get('shirt', []) + groups.get('shorts', []) + groups.get('tail', [] if tail_separate else [])
+    body_faces += groups.get('tail', [])
 objs = {
     'body_mesh': build('body_mesh', body_faces),
     'head_mesh': build('head_mesh', groups['headpiece']),
