@@ -8,14 +8,13 @@ export const DAD_SIZE = 1.95
 /** How far each arm's swing plane turns forward for a wave (mom-model.ts reachForward): his head is wider than his
  *  shoulders, so an arm raised straight out to the side would come up into his ear. */
 export const ARM_TILT = 1.2
-/** His ink before TUNE.outline: the user's pick, the Outline slider at 1 like Mom's (2026-11-18). The lids' ink follows
- *  it. */
-const INK = 1 / 0.75
+/** His ink before TUNE.outline: the user's pick, the Outline slider at 0.35 (2026-11-15; Mom's is at 1). The lids' ink
+ *  follows it. */
+const INK = 0.35 / 0.75
 export const BODY_INK = 1.8 * INK
 const FACE_INK = 1.2 * INK
-/** His skin: the user's pick, a pale peach in Mom's hue (2026-11-18). Dad 5's texture is recoloured to it, and the lids
- *  match. */
-export const DAD_SKIN = '#FCDCBC'
+/** His mint, as split-nick.py's mint() painted it into the texture (the lids). */
+const SKIN = '#A8EAD5'
 const SMILE = '#4A2A2A'
 const MOUTH = '#7A2745'
 const TONGUE = '#FF8FA8'
@@ -74,7 +73,7 @@ export function dadShape(m: SplitMeta): DadShape {
 /** What the code draws on a modelled Dad's face (the smile, the talking mouth, the blink lids) and where things sit on
  *  his head, from his shape. `head` is his head pivot (meters), `neck` where it is in model meters (three.js axes), and
  *  `probe` a shape of his face in model meters, three.js axes (rays find his face on it).  */
-export function dadFace(head: Group, neck: Vector3, probeGeometry: BufferGeometry, shape: DadShape, bag: Bag, skin = DAD_SKIN) {
+export function dadFace(head: Group, neck: Vector3, probeGeometry: BufferGeometry, shape: DadShape, bag: Bag) {
   const S = DAD_SIZE
   const { neck: NECK, eye: EYE, nose: NOSE, brow: BROW, horn: HORN } = shape
   // What the code draws on his face, in model meters (head-local) inside a group scaled to his size.
@@ -125,7 +124,7 @@ export function dadFace(head: Group, neck: Vector3, probeGeometry: BufferGeometr
   for (const s of [-1, 1] as const) {
     const lid = new Group()
     lid.position.set(...onHead(s * ex, ez + up + 0.005, ey))
-    lid.add(solid(P.sphere(1, skin, { at: [0, -(up + 0.005), 0], scale: [rx + 0.005, up + 0.005, depth + 0.005] }), bag, FACE_INK))
+    lid.add(solid(P.sphere(1, SKIN, { at: [0, -(up + 0.005), 0], scale: [rx + 0.005, up + 0.005, depth + 0.005] }), bag, FACE_INK))
     lid.scale.y = 0.001
     lid.visible = false
     face.add(lid)
