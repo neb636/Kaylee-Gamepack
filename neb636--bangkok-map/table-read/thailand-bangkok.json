@@ -13,14 +13,14 @@
   "flags": [
     {
       "key": "bangkok.hello.touch",
-      "text": "This is Bangkok! Tap a pin to go there.",
+      "text": "This is Bangkok! Tap the house or the mall!",
       "flags": [
         "not recorded"
       ]
     },
     {
       "key": "bangkok.hello.mouse",
-      "text": "This is Bangkok! Click a pin to go there.",
+      "text": "This is Bangkok! Click the house or the mall!",
       "flags": [
         "not recorded"
       ]
@@ -117,7 +117,7 @@
         "hello",
         "touch"
       ],
-      "text": "This is Bangkok! Tap a pin to go there.",
+      "text": "This is Bangkok! Tap the house or the mall!",
       "voice": "sparkle",
       "key": "bangkok.hello.touch",
       "part": "bangkok › hello",
@@ -133,7 +133,7 @@
         "hello",
         "mouse"
       ],
-      "text": "This is Bangkok! Click a pin to go there.",
+      "text": "This is Bangkok! Click the house or the mall!",
       "voice": "sparkle",
       "key": "bangkok.hello.mouse",
       "part": "bangkok › hello",
