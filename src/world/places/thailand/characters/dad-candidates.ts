@@ -1,5 +1,5 @@
 // Dad 5’s skinned rig for the character lab. His Blender wave uses the original arm chain.
-import { AnimationMixer, Group, MeshToonMaterial, ShaderMaterial, SkinnedMesh, Vector3, type BufferGeometry, type Object3D, type Texture } from 'three'
+import { AnimationMixer, CanvasTexture, Group, MeshToonMaterial, ShaderMaterial, SkinnedMesh, SRGBColorSpace, Vector3, type BufferGeometry, type Object3D, type Texture } from 'three'
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js'
@@ -8,7 +8,7 @@ import type { Rig } from '../../../engine3d/characters/animal'
 import { blobShadow } from '../../../engine3d/geo'
 import { outlineMaterial } from '../../../engine3d/outline'
 import { toonGradient } from '../../../engine3d/toon'
-import { ARM_TILT, BODY_INK, DAD_SIZE, dadFace, dadShape, type SplitMeta } from './dad-model'
+import { ARM_TILT, BODY_INK, DAD_SIZE, DAD_SKIN, dadFace, dadShape, type SplitMeta } from './dad-model'
 import { reachForward } from './mom-model'
 import five from './models/candidates/dad-5.glb?url'
 import m5 from './models/candidates/dad-5.json'
@@ -18,7 +18,7 @@ const DADS = {
 } as const
 export type DadCandidate = keyof typeof DADS
 
-const loaded = new Map<DadCandidate, { gltf: GLTF; material: MeshToonMaterial }>()
+const loaded = new Map<DadCandidate, { gltf: GLTF; map: Texture; skins: Map<string, MeshToonMaterial> }>()
 let ready: Promise<unknown> | null = null
 
 /** Resolves once Dad 5 is loaded (the lab waits for it). */
@@ -32,9 +32,7 @@ export function dadCandidatesReady(): Promise<unknown> {
           if ((o as SkinnedMesh).isSkinnedMesh && m?.map) map = m.map
         })
         if (!map) throw new Error(`${id} has no texture`)
-        // His texture is painted for the game by scripts/blender/paint-dad.py (skin, muzzle, eyes, stubble).
-        ;(map as Texture).anisotropy = 8
-        loaded.set(id, { gltf, material: new MeshToonMaterial({ map, gradientMap: toonGradient() }) })
+        loaded.set(id, { gltf, map, skins: new Map() })
       }),
     ),
   ).catch((e) => {
@@ -44,11 +42,15 @@ export function dadCandidatesReady(): Promise<unknown> {
   return ready
 }
 
-/** One candidate's rig: Tripo's skinned model with the game's pivots on its bones. */
-export function buildDadCandidate(id: DadCandidate, bag: Bag): Rig {
+/** One candidate's rig: Tripo's skinned model with the game's pivots on its bones, his skin painted `skin`. */
+export function buildDadCandidate(id: DadCandidate, bag: Bag, skin = DAD_SKIN): Rig {
   const got = loaded.get(id)
   if (!got) throw new Error(`${id} is not loaded yet: wait for dadCandidatesReady() first`)
-  const material = got.material
+  let material = got.skins.get(skin)
+  if (!material) {
+    material = new MeshToonMaterial({ map: reskinned(got.map, skin), gradientMap: toonGradient() })
+    got.skins.set(skin, material)
+  }
   const S = DAD_SIZE
   const model = cloneSkinned(got.gltf.scene)
   model.scale.setScalar(S)
@@ -122,7 +124,7 @@ export function buildDadCandidate(id: DadCandidate, bag: Bag): Rig {
   // The neck pivot in model meters (three.js axes): his Head bone.
   const neck = neckAt.clone().divideScalar(S)
   const shape = { ...dadShape(meta), neck: neck.y }
-  const f = dadFace(head, neck, mesh.geometry as BufferGeometry, shape, bag)
+  const f = dadFace(head, neck, mesh.geometry as BufferGeometry, shape, bag, skin)
 
   const eyes = new Group()
   eyes.position.set(0, (shape.eye.c[2] - neck.y) * S, (-shape.eye.c[1] - neck.z) * S)
@@ -198,20 +200,9 @@ function nativeArmPivot(bone: Object3D, body: Group): Group {
 }
 
 /** The welded copy of his shape the ink is drawn from, keeping what skins it (the weights are the same on both sides of
- *  a texture seam, so the seam's twin vertices weld). Pieces the model marks `_ink` 0 (his eyes, lashes and brows:
- *  small domes sunk into his face, whose ink came out as a broken line) are left out; their rims are painted. */
+ *  a texture seam, so the seam's twin vertices weld). */
 function hullOf(geometry: BufferGeometry) {
   const g = geometry.clone()
-  const ink = g.getAttribute('_ink')
-  const index = g.getIndex()
-  if (ink && index) {
-    const keep: number[] = []
-    for (let i = 0; i < index.count; i += 3) {
-      const [a, b, c] = [index.getX(i), index.getX(i + 1), index.getX(i + 2)]
-      if (ink.getX(a) + ink.getX(b) + ink.getX(c) > 0) keep.push(a, b, c)
-    }
-    g.setIndex(keep)
-  }
   for (const name of Object.keys(g.attributes)) if (!['position', 'skinIndex', 'skinWeight'].includes(name)) g.deleteAttribute(name)
   const welded = mergeVertices(g, 1e-4)
   g.dispose()
@@ -262,4 +253,80 @@ function skinnedOutline(px: number) {
     outlines.set(px, m)
   }
   return m
+}
+
+/** His texture with Tripo's green skin turned `skin` (every green texel moved to its hue, its saturation and brightness
+ *  scaled so the green's middle lands on it). */
+function reskinned(map: Texture, skin: string): Texture {
+  const n = parseInt(skin.slice(1), 16)
+  const target = hsv((n >> 16) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255)
+  const img = map.image as CanvasImageSource & { width: number; height: number }
+  const c = document.createElement('canvas')
+  c.width = img.width
+  c.height = img.height
+  const ctx = c.getContext('2d')!
+  ctx.drawImage(img, 0, 0)
+  const data = ctx.getImageData(0, 0, c.width, c.height)
+  const px = data.data
+  const greens: number[] = []
+  let sumS = 0
+  let sumV = 0
+  for (let i = 0; i < px.length; i += 4) {
+    const [h, s, v] = hsv(px[i] / 255, px[i + 1] / 255, px[i + 2] / 255)
+    if (h > 0.2 && h < 0.47 && s > 0.12) {
+      greens.push(i)
+      sumS += s
+      sumV += v
+    } else if (h > 0.11 && h < 0.47 && s > 0.02 && s < 0.3 && v > 0.55) {
+      // His muzzle's cream (and the greyed greens): Tripo painted it yellow-green, blended into the green skin. It turns
+      // to the skin's hue, keeping its own paleness and a touch brighter (it read grey beside the lifted skin), so it stays
+      // a cream that matches him. The khaki shorts (hue ~0.08), the orange horn and the brown hair are warmer or more
+      // saturated, so they're left alone.
+      const [r, g, b] = rgb(target[0], s * 0.85, Math.min(1, v * 1.1))
+      px[i] = r * 255
+      px[i + 1] = g * 255
+      px[i + 2] = b * 255
+    }
+  }
+  const kS = greens.length ? target[1] / (sumS / greens.length) : 1
+  const kV = greens.length ? target[2] / (sumV / greens.length) : 1
+  for (const i of greens) {
+    const [, s, v] = hsv(px[i] / 255, px[i + 1] / 255, px[i + 2] / 255)
+    const [r, g, b] = rgb(target[0], Math.min(1, s * kS), Math.min(1, v * kV))
+    px[i] = r * 255
+    px[i + 1] = g * 255
+    px[i + 2] = b * 255
+  }
+  ctx.putImageData(data, 0, 0)
+  const t = new CanvasTexture(c)
+  t.colorSpace = SRGBColorSpace
+  t.flipY = map.flipY
+  t.wrapS = map.wrapS
+  t.wrapT = map.wrapT
+  t.anisotropy = 4
+  return t
+}
+
+function hsv(r: number, g: number, b: number): [number, number, number] {
+  const max = Math.max(r, g, b)
+  const min = Math.min(r, g, b)
+  const d = max - min
+  let h = 0
+  if (d > 0) {
+    if (max === r) h = ((g - b) / d) % 6
+    else if (max === g) h = (b - r) / d + 2
+    else h = (r - g) / d + 4
+    h /= 6
+    if (h < 0) h += 1
+  }
+  return [h, max ? d / max : 0, max]
+}
+
+function rgb(h: number, s: number, v: number): [number, number, number] {
+  const i = Math.floor(h * 6)
+  const f = h * 6 - i
+  const p = v * (1 - s)
+  const q = v * (1 - f * s)
+  const t = v * (1 - (1 - f) * s)
+  return ([[v, t, p], [q, v, p], [p, v, t], [p, q, v], [t, p, v], [v, p, q]] as const)[i % 6] as unknown as [number, number, number]
 }

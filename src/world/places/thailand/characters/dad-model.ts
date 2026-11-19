@@ -13,9 +13,9 @@ export const ARM_TILT = 1.2
 const INK = 1 / 0.75
 export const BODY_INK = 1.8 * INK
 const FACE_INK = 1.2 * INK
-/** His skin, a light rosy beige: the blink lids' colour. It is PAL.skin in scripts/blender/paint-dad.py, which paints
- *  Dad 5's texture (change both together). */
-export const DAD_SKIN = '#F4CCB2'
+/** His skin: the user's pick, a pale peach in Mom's hue (2026-11-18). Dad 5's texture is recoloured to it, and the lids
+ *  match. */
+export const DAD_SKIN = '#FCDCBC'
 const SMILE = '#4A2A2A'
 const MOUTH = '#7A2745'
 const TONGUE = '#FF8FA8'
