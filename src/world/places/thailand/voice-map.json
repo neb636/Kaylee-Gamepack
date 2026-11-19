@@ -518,18 +518,18 @@
     "file": "667a35ed53a1.mp3"
   },
   {
-    "text": "This is Bangkok! Tap a pin to go there.",
+    "text": "This is Bangkok! Tap the house or the mall!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4032,
-    "file": "a0c0a83e4b99.mp3"
+    "ms": 4416,
+    "file": "d61eaf3f5254.mp3"
   },
   {
-    "text": "This is Bangkok! Click a pin to go there.",
+    "text": "This is Bangkok! Click the house or the mall!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3432,
-    "file": "9d45460f378b.mp3"
+    "ms": 4320,
+    "file": "e3372cc77092.mp3"
   },
   {
     "text": "Tap the house or the mall!",
