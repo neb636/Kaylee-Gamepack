@@ -1,9 +1,10 @@
 // The Bangkok map's ground. Bangkok is flat, so the board is one low slab of city with the Chao Phraya cut through it
 // (the real river, geo.ts): its long S past the old town and Chinatown, then the big loop round Bang Krachao. The top
-// is painted: a soft patchwork of city blocks in the app's pastels, the real main roads in cream, the khlongs in
-// blue, the parks and their lakes, Bang Krachao's jungle inside the loop, a pale promenade along both banks, and a soft
-// shadow under every tower and toy. The river is the Thailand map's Sea in the river's own blues, foaming a thin
-// white line along both banks.
+// is painted like a map printed on warm paper: the city in a few creams and peaches that sit close together, its
+// little streets a thin print, the real main roads in white, the khlongs in blue, the parks and their lakes, Thonburi's
+// orchards in soft striped green, Bang Krachao's jungle inside the loop, a pale promenade along both banks, a compass
+// in the quiet corner, a long afternoon shadow behind every tower and a soft one under every toy. The river is the
+// Thailand map's Sea in the Chao Phraya's own teal, foaming a thin white line along both banks.
 import { BufferAttribute, BufferGeometry, CanvasTexture, Mesh, MeshToonMaterial, SRGBColorSpace } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { toonGradient } from '../../../../../engine3d/toon'
@@ -11,7 +12,7 @@ import { smoothstep } from '../../../../../../sdk/math'
 import { distance } from '../map/field'
 import { Sea } from '../map/terrain'
 import { ISLANDS, KHLONGS, PARKS, ROADS, WATER, type LonLat } from './geo'
-import { BOARD, CLIFF_W, DEG_M, JUNGLE, LEVEL, ll, RIVER_FAT, SKYTRAIN, toX, toZ, type XZ } from './layout'
+import { BOARD, CLIFF_W, COMPASS, DEG_M, JUNGLE, LEVEL, ll, RIVER_FAT, SKYTRAIN, toX, toZ, type XZ } from './layout'
 
 /** Field cells per meter, ground mesh cells per meter, painted pixels per meter. */
 const RES = 64
@@ -21,21 +22,19 @@ const TEX = 300
 const PAD = 0.3
 
 const C = {
-  wet: [214, 236, 244],
-  quay: [255, 236, 214],
-  quayLow: [244, 206, 186],
-  walk: [255, 252, 244],
-  city: [255, 243, 226],
-  cityWarm: [255, 236, 222],
+  wet: [206, 238, 242],
+  quay: [255, 238, 212],
+  quayLow: [246, 212, 184],
+  walk: [255, 251, 240],
   park: [178, 234, 160],
-  jungle: [128, 212, 142],
-  jungleDeep: [100, 196, 132],
+  jungle: [158, 226, 160],
+  jungleDeep: [134, 212, 150],
 } satisfies Record<string, [number, number, number]>
 
-/** The Chao Phraya, as a toy: pale by the banks, a bright friendly blue down the middle. */
-const RIVER = { shallow: '#BFEFF5', mid: '#7FD3F0', deep: '#63C2EC', light: '#8EDCF4' }
+/** The Chao Phraya, as a toy: pale by the banks, a bright teal down the middle. */
+const RIVER = { shallow: '#B9EEF0', mid: '#62CDE6', deep: '#41BADF', light: '#93E6F4' }
 /** The Sea's bands are sized for a whole coast: the river is narrow, so its distances are stretched to fit them. */
-const SEA_STRETCH = 4.2
+const SEA_STRETCH = 5
 
 /** The lakes in the parks (painted): [lon, lat, east-west radius, north-south radius (degrees)]. Lumphini's lake, and
  *  Benjakitti's long one. */
@@ -258,7 +257,12 @@ export interface GroundInput {
   shadows: [number, number, number][]
   /** Paved squares painted under the places and the big toys: [x, z, radius]. */
   plazas: [number, number, number][]
+  /** The long afternoon shadows the towers throw across the map: [x, z, how wide the tower is, how tall]. */
+  casts: [number, number, number, number][]
 }
+
+/** Which way the afternoon shadows fall on the board (east and a little south), and how long for a meter of tower. */
+const SUN = { x: 0.86, z: 0.5, len: 0.8 }
 
 // The painted top, once a visit (the same every time).
 let painted: HTMLCanvasElement | null = null
@@ -296,7 +300,7 @@ export function buildGround(bag: Bag, input: GroundInput) {
   geo.setAttribute('uv', new BufferAttribute(uv, 2))
   geo.setIndex(new BufferAttribute(index, 1))
   geo.computeVertexNormals()
-  const key = `${input.shadows.length}/${input.plazas.length}`
+  const key = `${input.shadows.length}/${input.plazas.length}/${input.casts.length}`
   if (!painted || paintedFor !== key) {
     painted = paint(f, input)
     paintedFor = key
@@ -308,11 +312,11 @@ export function buildGround(bag: Bag, input: GroundInput) {
   return new Mesh(geo, mat)
 }
 
-/** The districts' pastels, and the orchards' greens. */
-const BLOCKS: [number, number, number][] = [[255, 226, 234], [255, 236, 208], [236, 230, 255], [224, 244, 232], [255, 243, 200], [255, 228, 214], [226, 240, 255]]
-const ORCHARDS: [number, number, number][] = [[214, 240, 190], [224, 244, 200], [204, 236, 186]]
+/** The districts' paper: creams and peaches close together (a map's print, not a quilt), and the orchards' greens. */
+const BLOCKS: [number, number, number][] = [[255, 244, 226], [255, 238, 220], [255, 246, 214], [255, 240, 230]]
+const ORCHARDS: [number, number, number][] = [[218, 241, 198], [226, 244, 206], [211, 238, 194]]
 
-function paint(f: Field, { shadows, plazas }: GroundInput) {
+function paint(f: Field, { shadows, plazas, casts }: GroundInput) {
   const W = BOARD.x1 - BOARD.x0
   const D = BOARD.z1 - BOARD.z0
   const w = Math.round(W * TEX)
@@ -342,7 +346,7 @@ function paint(f: Field, { shadows, plazas }: GroundInput) {
       let col: [number, number, number]
       if (d < -CLIFF_W * 0.8) col = C.wet
       else if (d < 0) col = d < -CLIFF_W * 0.4 ? C.quayLow : C.quay
-      else if (d < 0.02) col = C.walk
+      else if (d < 0.03) col = C.walk
       else if (f.jungle(x, z)) col = n > 0.25 ? C.jungleDeep : C.jungle
       else if (f.park(x, z)) col = C.park
       else {
@@ -394,19 +398,21 @@ function paint(f: Field, { shadows, plazas }: GroundInput) {
         const fv = v - Math.floor(v)
         const i = (py * w + px) * 4
         if (all[k].orchard) {
-          // A round tree in the middle of every square.
-          const r = Math.hypot(fu - 0.5, fv - 0.5)
-          if (r > 0.27) continue
-          od[i] = 150
-          od[i + 1] = 214
-          od[i + 2] = 150
-          od[i + 3] = r > 0.21 ? 90 : 150
+          // The orchards' rows: a soft stripe down every square (Thonburi's orchards are ditch after ditch).
+          const off = Math.abs(fu - 0.5)
+          if (off > 0.16) continue
+          od[i] = 168
+          od[i + 1] = 220
+          od[i + 2] = 158
+          od[i + 3] = off > 0.1 ? 45 : 90
         } else {
+          // The little streets: a thin warm print.
           const edge = Math.min(fu, 1 - fu, fv, 1 - fv)
-          if (edge > 0.07) continue
-          od[i] = od[i + 1] = 255
-          od[i + 2] = 250
-          od[i + 3] = edge > 0.045 ? 90 : 170
+          if (edge > 0.06) continue
+          od[i] = 232
+          od[i + 1] = 192
+          od[i + 2] = 160
+          od[i + 3] = edge > 0.035 ? 50 : 105
         }
       }
     }
@@ -443,6 +449,40 @@ function paint(f: Field, { shadows, plazas }: GroundInput) {
     g.fill()
   }
 
+  // ---- The compass, out in the quiet corner: a ring, four long points and four short ones, the north one pink.
+  {
+    const [cx, cy] = P(COMPASS.at)
+    const r = COMPASS.r * TEX
+    g.fillStyle = 'rgba(255,253,246,0.9)'
+    g.beginPath()
+    g.arc(cx, cy, r * 1.08, 0, Math.PI * 2)
+    g.fill()
+    g.strokeStyle = '#F6C6B4'
+    g.lineWidth = r * 0.06
+    g.beginPath()
+    g.arc(cx, cy, r * 0.86, 0, Math.PI * 2)
+    g.stroke()
+    const point = (a: number, len: number, wide: number, light: string, dark: string) => {
+      const [tx, ty] = [cx + Math.sin(a) * len, cy - Math.cos(a) * len]
+      for (const [side, col] of [[-1, light], [1, dark]] as const) {
+        g.fillStyle = col
+        g.beginPath()
+        g.moveTo(cx, cy)
+        g.lineTo(cx + Math.sin(a + side * Math.PI / 2) * wide, cy - Math.cos(a + side * Math.PI / 2) * wide)
+        g.lineTo(tx, ty)
+        g.closePath()
+        g.fill()
+      }
+    }
+    for (let i = 0; i < 4; i++) point(Math.PI / 4 + (i * Math.PI) / 2, r * 0.56, r * 0.13, '#FFE9A8', '#FFD36B')
+    for (let i = 1; i < 4; i++) point((i * Math.PI) / 2, r * 0.98, r * 0.17, '#DCCBFF', '#B9A6F5')
+    point(0, r * 1.02, r * 0.17, '#FF9DC0', '#FF5C9A')
+    g.fillStyle = '#FFFFFF'
+    g.beginPath()
+    g.arc(cx, cy, r * 0.1, 0, Math.PI * 2)
+    g.fill()
+  }
+
   // ---- Paved squares under the places and the big toys.
   for (const [x, z, r] of plazas) {
     const [cx, cy] = P([x, z])
@@ -458,10 +498,10 @@ function paint(f: Field, { shadows, plazas }: GroundInput) {
     g.strokeStyle = '#FFFDF4'
     g.lineWidth = TEX * 0.034
     g.stroke()
-    g.strokeStyle = '#8FD8F2'
-    g.lineWidth = TEX * 0.02
+    g.strokeStyle = '#7FD6EC'
+    g.lineWidth = TEX * 0.022
     g.stroke()
-    g.strokeStyle = '#BDEAFA'
+    g.strokeStyle = '#B4ECF6'
     g.lineWidth = TEX * 0.007
     g.stroke()
   }
@@ -469,8 +509,8 @@ function paint(f: Field, { shadows, plazas }: GroundInput) {
   // ---- The main roads: a soft pink kerb, the cream road on it.
   for (const r of ROADS) {
     line(r)
-    g.strokeStyle = 'rgba(238,186,188,0.85)'
-    g.lineWidth = TEX * 0.044
+    g.strokeStyle = 'rgba(240,188,168,0.8)'
+    g.lineWidth = TEX * 0.042
     g.stroke()
   }
   for (const r of ROADS) {
@@ -478,6 +518,24 @@ function paint(f: Field, { shadows, plazas }: GroundInput) {
     g.strokeStyle = '#FFFFFF'
     g.lineWidth = TEX * 0.028
     g.stroke()
+  }
+
+  // ---- The towers' long afternoon shadows, all falling the same way: the skyline stands up off the paper.
+  for (const [x, z, wide, tall] of casts) {
+    const len = tall * SUN.len
+    const [ax, ay] = P([x, z])
+    const [bx, by] = P([x + SUN.x * len, z + SUN.z * len])
+    const grad = g.createLinearGradient(ax, ay, bx, by)
+    grad.addColorStop(0, 'rgba(160,110,150,0.42)')
+    grad.addColorStop(1, 'rgba(168,120,150,0)')
+    g.strokeStyle = grad
+    g.lineWidth = wide * TEX * 0.9
+    g.lineCap = 'butt'
+    g.beginPath()
+    g.moveTo(ax, ay)
+    g.lineTo(bx, by)
+    g.stroke()
+    g.lineCap = 'round'
   }
 
   // ---- Soft shadows under the towers, the trees and the toys.

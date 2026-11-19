@@ -15,8 +15,9 @@
 // drum), Lumphini Park (the monitor lizard slides into the lake), the swan boat (it twirls), Mahanakhon (its blocks
 // twinkle), Central Rama 3 (it bounces), the flower market (petals fly), the port (the crane lowers its box), Bang
 // Krachao (the birds fly up), the skytrain (ding-dong, off it zooms), the river boats (toot toot), the tuk-tuk, the
-// clouds (a little rain), every tower (its windows twinkle, a higher tune for a taller one), every bridge (beep
-// beep) and the river itself (a splash).
+// pink taxi (beep beep, off it zips), the fruit seller's boat on the khlong (it spins and splashes), the clouds (a
+// little rain), every tower (its windows twinkle, a higher tune for a taller one), every bridge (beep beep) and the
+// river itself (a splash).
 //
 // Talk (BangkokMap.tsx says the lines, lines.ts L.bangkok): Sparkle's hello the first time, something true the first
 // time she pokes each thing, and after ~8 s with nothing done, where she can go (at most three times).
@@ -32,7 +33,7 @@ import { boardShot, Entrance, mapCamKnobs, puffCloud, skyTexture, trayBox } from
 import { Floaters } from '../../nan-trip/mushrooms/fx'
 import { buildDiorama, CRANE_BOX_Y, PIN, type Diorama } from './diorama'
 import { buildField, LAKES, type Field } from './ground'
-import { BALLOON_Y, BOARD, BOATS, CLOUDS, DEG_M, LEVEL, ll, PIN_IDS, PINS, PLACE_IDS, PLACES, SPOTS, STAMP_OFF, TOWERS, TRACK_Y, type PinId, type PlaceId, type SpotId } from './layout'
+import { BALLOON_Y, BOARD, BOATS, CLOUDS, DEG_M, KITES, LEVEL, ll, PIN_IDS, PINS, PLACE_IDS, PLACES, SPOTS, STAMP_OFF, TOWERS, TRACK_Y, type PinId, type PlaceId, type SpotId } from './layout'
 import { mapBed, mapSfx as sfx } from './sounds'
 
 export interface MapEvents extends LegEvents {
@@ -69,6 +70,9 @@ export const MAP_ANCHORS: AnchorInfo[] = [
   { id: 'train', label: 'The skytrain', kind: 'thing' },
   ...BOATS.map((b, i): AnchorInfo => ({ id: `boat:${i}`, label: b.kind === 'express' ? 'Express boat' : b.kind === 'barge' ? 'Rice barges' : 'Longtail boat', kind: 'thing' })),
   { id: 'tuktuk', label: 'Tuk-tuk', kind: 'thing' },
+  { id: 'taxi', label: 'Pink taxi', kind: 'thing' },
+  { id: 'fruit', label: 'Fruit boat', kind: 'thing' },
+  { id: 'kites', label: 'Kites', kind: 'thing' },
   { id: 'swan', label: 'Swan boat', kind: 'thing' },
   { id: 'lizard', label: 'Monitor lizard', kind: 'thing' },
   ...CLOUDS.map((_, i): AnchorInfo => ({ id: `cloud:${i}`, label: 'Cloud', kind: 'thing' })),
@@ -113,6 +117,10 @@ export class BangkokMap extends Stage {
   private reach: [number, number]
   private tukD = 0.3
   private tukDir = 1
+  private taxiD = 1.4
+  private taxiDir = -1
+  private fruitD = 0.4
+  private fruitDir = 1
   private wheelA = 0
   private fountainT = 4
   // ---- The sky round the board ----
@@ -349,7 +357,7 @@ export class BangkokMap extends Stage {
   /** The city glitters: the sun on the river now and then, a window catching the light on a tower. */
   private stepGlints(dt: number) {
     if (Math.random() < dt * 5) {
-      const p = this.d.river.at(this.reach[0] + Math.random() * (this.reach[1] - this.reach[0]), (Math.random() - 0.5) * 0.08)
+      const p = this.d.river.at(this.reach[0] + Math.random() * (this.reach[1] - this.reach[0]), (Math.random() - 0.5) * 0.12)
       this.sparkles.emit(tmp.set(p.x, 0.012, p.z), new Vector3(0, 0.02, 0), 0.5 + Math.random() * 0.4, 0.014, 2)
     }
     if (Math.random() < dt * 1.6 && this.d.towers.length) {
@@ -395,7 +403,7 @@ export class BangkokMap extends Stage {
         g.scale.setScalar(base * (0.4 + 0.6 * edge * edge * (3 - 2 * edge)))
         g.visible = edge > 0.02
       }
-      at(0, b.root, info.kind === 'longtail' ? 1 : 1.15)
+      at(0, b.root, info.kind === 'longtail' ? 1.6 : 1.3)
       b.tail.forEach((g, j) => at(0.13 + j * 0.15, g, 0.26))
       if (b.root.visible && Math.random() < dt * 9 * fast) {
         const yaw = b.root.rotation.y
@@ -412,6 +420,29 @@ export class BangkokMap extends Stage {
       const p = d.road.at(this.tukD, 0.012)
       d.tuktuk.position.set(p.x, G + (k >= 0 ? bell(clamp(k / 0.4, 0, 1)) * 0.06 : Math.abs(Math.sin(t * 11)) * 0.003), p.z)
       d.tuktuk.rotation.y = p.yaw + (this.tukDir < 0 ? Math.PI : 0)
+    }
+    // ---- The pink taxi drives up and down Rama III Road; poked, it hops and zips ----
+    {
+      const k = this.poked('taxi', 2)
+      const fast = k >= 0 ? 1 + 2.5 * bell(clamp(k / 2, 0, 1)) : 1
+      this.taxiD += this.taxiDir * dt * 0.13 * fast
+      if (this.taxiD > d.taxiRoad.len - 0.05) [this.taxiD, this.taxiDir] = [d.taxiRoad.len - 0.05, -1]
+      if (this.taxiD < 0.05) [this.taxiD, this.taxiDir] = [0.05, 1]
+      const p = d.taxiRoad.at(this.taxiD, 0.01)
+      d.taxi.position.set(p.x, G + 0.002 + (k >= 0 ? bell(clamp(k / 0.4, 0, 1)) * 0.06 : Math.abs(Math.sin(t * 13)) * 0.002), p.z)
+      d.taxi.rotation.y = p.yaw + (this.taxiDir < 0 ? Math.PI : 0)
+      d.taxi.scale.setScalar(1.8)
+    }
+    // ---- The fruit seller paddles up and down her khlong, rocking; poked, the boat spins round in a splash ----
+    {
+      const k = this.poked('fruit', 1.4)
+      this.fruitD += this.fruitDir * dt * 0.035
+      if (this.fruitD > d.khlong.len - 0.05) [this.fruitD, this.fruitDir] = [d.khlong.len - 0.05, -1]
+      if (this.fruitD < 0.05) [this.fruitD, this.fruitDir] = [0.05, 1]
+      const p = d.khlong.at(this.fruitD)
+      d.fruit.position.set(p.x, G + 0.003 + Math.sin(t * 3.1) * 0.002 + (k >= 0 ? bell(clamp(k / 0.5, 0, 1)) * 0.03 : 0), p.z)
+      d.fruit.rotation.set(0, p.yaw + (this.fruitDir < 0 ? Math.PI : 0) + (k >= 0 ? (k / 1.4) * (2 - k / 1.4) * Math.PI * 2 : 0), Math.sin(t * 2.3) * 0.07)
+      d.fruit.scale.setScalar(1.5)
     }
   }
 
@@ -430,6 +461,20 @@ export class BangkokMap extends Stage {
         if (k < 1.6 && Math.random() < dt * 40) this.drops.emit(tmp.set(c.position.x + (Math.random() - 0.5) * 0.4, c.position.y - 0.08, c.position.z + (Math.random() - 0.5) * 0.25), new Vector3(0, -0.6, 0), 0.5, 0.012)
         if (k > 1.6) this.rain[i] = -1
       }
+    }
+    // ---- The kites over Sanam Luang sway on their strings, facing her; poked, they loop the loop one after another ----
+    {
+      const k = this.poked('kites', 2)
+      d.kites.forEach((kite, i) => {
+        const loop = k >= 0 ? clamp((k - i * 0.25) / 1.2, 0, 1) : 0
+        kite.root.rotation.y = this.rig.yaw * DEG
+        kite.swing.rotation.z = Math.sin(t * 0.9 + i * 2.1) * 0.16 + Math.sin(t * 2.3 + i) * 0.04
+        kite.swing.rotation.x = -0.22 + Math.sin(t * 0.7 + i * 1.3) * 0.08
+        // (The loop: the kite turns once round a point a little way down its string.)
+        const a = loop * loop * (3 - 2 * loop) * Math.PI * 2
+        const r = 0.09
+        kite.swing.position.set(Math.sin(a) * r, (Math.cos(a) - 1) * r, 0)
+      })
     }
     // ---- Asiatique's wheel turns slowly; poked, it spins fast through its tune ----
     {
@@ -599,6 +644,24 @@ export class BangkokMap extends Stage {
         sfx.tuktuk()
         this.ev.poked('tuktuk')
         return
+      case 'taxi':
+        if (this.poked('taxi', 0.8) >= 0) return
+        this.poke('taxi')
+        sfx.honk()
+        this.sparkles.burst(tmp.copy(this.d.taxi.position).setY(G + 0.12), 8, 0.35, 0.4, 0.6, 0.02)
+        return
+      case 'kites':
+        if (this.poked('kites', 2) >= 0) return
+        this.poke('kites')
+        sfx.flutter()
+        for (const [i, kite] of KITES.entries()) this.after(i * 0.25 + 0.3, () => this.sparkles.burst(tmp.set(kite.at[0], G + kite.high + 0.08, kite.at[1]), 6, 0.35, 0.3, 0.6, 0.02))
+        return
+      case 'fruit':
+        if (this.poked('fruit', 1.4) >= 0) return
+        this.poke('fruit')
+        sfx.plip()
+        this.foam.burst(tmp.copy(this.d.fruit.position).setY(G + 0.02), 10, 0.3, 0.45, 0.5, 0.016)
+        return
       case 'swan':
         this.poke('swan')
         return sfx.plip()
@@ -721,7 +784,13 @@ export class BangkokMap extends Stage {
       case 'train':
         return { at: d.train[1].position.clone().setY(G + TRACK_Y + 0.04), r: 0.14, prio: 4, max: 110 }
       case 'tuktuk':
-        return { at: d.tuktuk.position.clone().setY(G + 0.05), r: 0.09, prio: 4, max: 100 }
+        return { at: d.tuktuk.position.clone().setY(G + 0.06), r: 0.1, prio: 4, max: 100 }
+      case 'taxi':
+        return { at: d.taxi.position.clone().setY(G + 0.05), r: 0.1, prio: 4, max: 100 }
+      case 'fruit':
+        return { at: d.fruit.position.clone().setY(G + 0.04), r: 0.1, prio: 4, max: 100 }
+      case 'kites':
+        return { at: new Vector3(KITES[1].at[0], G + 0.36, KITES[1].at[1]), r: 0.22, prio: 3, max: 130 }
       case 'swan':
         return { at: d.swan.position.clone().setY(G + 0.04), r: 0.06, prio: 4, max: 90 }
       case 'lizard':

@@ -12,21 +12,39 @@ The board is about 14 km of city across (one meter of board is about 2.6 km), no
 
 - **The Chao Phraya** is the real river (OpenStreetMap, `scripts/bangkok-map-land.mjs` writes `geo.ts`): its long S
   past the old town, Chinatown and ICONSIAM, then the big loop round Bang Krachao. So are the khlongs, the main roads
-  and the big parks. The river is drawn 1.4 cm wider on each bank so toy boats fit; its banks are smoothed a little.
+  and the big parks. The river is drawn 3 cm wider on each bank (`RIVER_FAT`): it's what makes the board Bangkok, so
+  it's the biggest shape on it. Its banks are smoothed a little.
 - **Every place is put down by its longitude and latitude** (`layout.ts`, `ll(lon, lat)`): ICONSIAM on the west bank,
   Asiatique downriver, Chinatown's gate at Odeon Circle, Lumphini Park and its lake, Mahanakhon, Central Rama 3, the
-  flower market, the port at Khlong Toei, Bang Krachao in the loop. The towers stand in the districts they really
-  stand in (Silom and Sathon, Siam and Pratunam, Sukhumvit, Rama III), the seven bridges where they really cross,
-  and the skytrain runs through its real stations.
+  flower market, the port at Khlong Toei, Sanam Luang's field, Bang Krachao in the loop. The towers stand in the
+  districts they really stand in (Silom and Sathon, Siam and Pratunam, Sukhumvit), the seven bridges where they really
+  cross, the skytrain runs through its real stations, and the taxi and the fruit boat keep to a real road and khlong.
 - **The house** stands near Central Rama 3, for now (your call, 2026-11-18): `PLACES.house` is one line to move.
 - Bangkok is flat, so the board is too: a low slab of city, the river cut through it. What gives it shape is the
   skyline, the bridges and Bang Krachao's jungle.
 - **No temples or Buddhas** (AGENTS.md rule 8): the old town is rooftops, streets and the flower market. No Grand
   Palace, no Wat Arun, no Giant Swing.
 
-The city floor is a patchwork of districts, each one pastel with its little streets leaning its own way; the houses
-stand in the squares of those streets, a roof color or two to a district. Out west (Thonburi) and south of the loop
-the districts are orchards. (The first try scattered thousands of little blocks and dots and looked like confetti.)
+## The look (2026-11-19, from your four pictures)
+
+Your pictures were a river city in gold light: the Chao Phraya as the biggest shape, landmarks standing up off a
+printed map, longtails, a tuk-tuk, a skyline. Their temples, golden chedis and guardian statue are left out (rule 8).
+What the board took from them, in the app's toy look:
+
+- **The river leads.** Wide, bright teal, a pale promenade down both banks, coconut palms leaning over it.
+- **A map printed on warm paper.** The city floor is a few creams and peaches that sit close together, the little
+  streets a thin tan print, Thonburi's and the south's orchards soft striped green, a compass in the quiet corner.
+  (Before: seven pastels, a white grid and dotted orchards. It read as a quilt.)
+- **A skyline in three bunches** (Silom and Sathon, Siam, Sukhumvit): 18 towers in stronger candy glass, each with a
+  long afternoon shadow painted the same way. The rest of the city stays low.
+- **Shophouse rows under terracotta roofs:** about 30 rows of three or four pastel fronts, close together in the old
+  town and Chinatown (`OLD_TOWN`), few and far apart elsewhere. (Before: 140 single houses and 230 trees scattered.)
+- **Bangkok's own things:** longtails with striped roofs and ribbons on their noses, a hot pink taxi on Rama III Road,
+  a fruit seller's boat on Khlong Bangkok Yai, kites over Sanam Luang, street-food umbrellas by Chinatown's gate.
+- **Calm on purpose** ([the Krabi map](krabi-map.md) taught this): few big shapes, open paper between them, so the
+  pins and the river are what she sees first. Add things back one at a time.
+
+(The very first try scattered thousands of little blocks and dots and looked like confetti.)
 
 ## How it plays
 
@@ -47,10 +65,13 @@ the districts are orchards. (The first try scattered thousands of little blocks 
 - **Pokes:** Asiatique's wheel (it spins to a tune), Chinatown's gate (the lanterns swing, a lion drum), Lumphini
   (the monitor lizard slides into the lake; the swan boat twirls), Mahanakhon (its blocks twinkle), Central Rama 3,
   the flower market (petals fly), the port (the crane lowers its box), Bang Krachao (the birds fly up), the skytrain
-  (ding-dong, off it zooms), the three river boats (toot toot), the tuk-tuk on Rama IV Road, the clouds (rain), every
-  tower (a higher tune for a taller one), every bridge (beep beep), the river (a splash).
-- **Always alive:** the skytrain runs back and forth, boats sail the river end to end, the wheel turns, ICONSIAM's
-  fountain dances every few seconds, the water and the towers glint.
+  (ding-dong, off it zooms), the four river boats (toot toot), the tuk-tuk on Rama IV Road, the pink taxi on Rama III
+  Road (beep beep, off it zips), the fruit seller's boat (it spins in a splash), the kites over Sanam Luang (they loop
+  the loop one after another), the clouds (rain), every tower (a higher tune for a taller one), every bridge (beep
+  beep), the river (a splash). The taxi, the fruit boat and the kites have no line of Sparkle's yet.
+- **Always alive:** the skytrain runs back and forth, boats sail the river end to end, the taxi and the tuk-tuk drive,
+  the fruit seller paddles, the kites sway on their strings, the wheel turns, ICONSIAM's fountain dances every few
+  seconds, the water and the towers glint.
 - She can swing the board round with a drag and pinch it closer, like every map (`boardShot()`, `trip/sky.ts`).
 
 ## Adding a place (Asiatique, Chinatown, more)
@@ -74,8 +95,9 @@ its towers, which put its tap target on top of Chinatown's gate on the screen: i
 
 `sounds.ts`. Eleven recorded clips are written up in `sfx/sfx.json` (the city by the river, the skytrain and its
 chime, a boat's horn, the wheel's tune, the lion drum, the lizard, the crane, the petals, the fountain, the birds):
-36 s. **None is made yet:** ElevenLabs refused them on 2026-11-19 (the account has an unpaid invoice). Until then
-every sound plays its synthesized fallback. Once that's sorted:
+36 s. **None is made yet:** ElevenLabs refused them twice on 2026-11-19 (the account has an unpaid invoice). Until
+then every sound plays its synthesized fallback. The taxi's beep, the fruit boat's splash and the kites' flutter reuse
+the Nan map's recorded clips. Once billing is sorted:
 `node scripts/generate-sfx.mjs src/world/places/thailand/activities/hub/bangkok/sfx`.
 
 ## Knobs and links
@@ -86,6 +108,7 @@ every sound plays its synthesized fallback. Once that's sorted:
 ## Next
 
 - Kaylee's playtest: does she find the pins among the city, and what does she poke?
+- A line of Sparkle's for the kites, the taxi and the fruit boat (they answer a tap, but she says nothing yet).
 - The real sounds (above).
 - Asiatique and Chinatown as places, when you pick what she does there.
 - The mall day could end back on this map (the stamp landing on ICONSIAM) instead of in the house: your call.

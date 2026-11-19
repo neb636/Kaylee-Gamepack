@@ -42,8 +42,9 @@ export const BOARD = { x0: toX(EDGES.lon0), x1: toX(EDGES.lon1), z0: toZ(EDGES.l
 export const LEVEL = { floor: -0.1, land: 0.05 }
 /** How wide the bank's cut edge is (meters), from the water up to its top. */
 export const CLIFF_W = 0.022
-/** The river is drawn this much wider on each bank than it really is (meters), so the toy boats fit. */
-export const RIVER_FAT = 0.014
+/** The river is drawn this much wider on each bank than it really is (meters): the Chao Phraya is what makes the
+ *  board Bangkok, so it's the biggest shape on it, with room for the toy boats. */
+export const RIVER_FAT = 0.03
 
 // ---------------------------------------------------------------- the places
 
@@ -102,21 +103,16 @@ export type SpotId = keyof typeof SPOTS
 
 /** The tall towers, in the districts they really stand in: [lon, lat, height (m), look]. `look` picks the shape
  *  (diorama.ts tower()); a few are real ones: Baiyoke's tower with its round crown ('crown'), the riverside tower
- *  with the gold dome ('dome'). (diorama.ts leaves out any that would stand on a place, a spot or the water.) */
+ *  with the gold dome ('dome'). Three tight bunches make the skyline (Silom and Sathon round Mahanakhon, Siam,
+ *  Sukhumvit): the rest of the city is left low, so the bunches read from across the board. (diorama.ts leaves out any that would stand on a place, a spot or the water.) */
 export const TOWERS: [number, number, number, number | 'crown' | 'dome'][] = [
   // Silom and Sathon, round Mahanakhon.
-  [100.5345, 13.7243, 0.42, 0], [100.5318, 13.7188, 0.5, 1], [100.5382, 13.7202, 0.36, 2], [100.5228, 13.7183, 0.36, 3], [100.5445, 13.7226, 0.44, 4],
-  [100.5168, 13.7225, 0.46, 'dome'],
+  [100.5345, 13.7243, 0.46, 0], [100.5318, 13.7188, 0.56, 1], [100.5382, 13.7202, 0.4, 2], [100.5228, 13.7183, 0.4, 3], [100.5445, 13.7226, 0.48, 4],
+  [100.5178, 13.7228, 0.5, 'dome'],
   // Siam, Ratchaprasong and Pratunam.
-  [100.5404, 13.7545, 0.8, 'crown'], [100.5349, 13.7475, 0.34, 2], [100.5412, 13.7472, 0.44, 0], [100.5468, 13.7436, 0.5, 1], [100.5322, 13.7528, 0.3, 3], [100.5486, 13.7505, 0.36, 4],
+  [100.5404, 13.7545, 0.86, 'crown'], [100.5349, 13.7475, 0.38, 2], [100.5412, 13.7472, 0.48, 0], [100.5468, 13.7436, 0.54, 1], [100.5486, 13.7505, 0.4, 4],
   // Sukhumvit: Asok, Phrom Phong, Thong Lo, Ekkamai.
-  [100.5604, 13.7382, 0.52, 1], [100.5655, 13.7338, 0.4, 0], [100.5702, 13.7318, 0.56, 4], [100.5745, 13.7268, 0.42, 2], [100.5556, 13.7425, 0.34, 3], [100.5798, 13.7252, 0.34, 0], [100.586, 13.72, 0.4, 1], [100.5935, 13.714, 0.34, 2],
-  // Rama III, along the river's bend.
-  [100.5462, 13.6938, 0.38, 0], [100.5492, 13.6998, 0.3, 3], [100.5312, 13.6842, 0.32, 4], [100.5128, 13.6925, 0.3, 2],
-  // Thonburi, across the river.
-  [100.4905, 13.7135, 0.3, 1], [100.4862, 13.7302, 0.26, 3], [100.4805, 13.756, 0.28, 0], [100.488, 13.701, 0.26, 2],
-  // North and east: Phaya Thai, Rama 9, Phetchaburi.
-  [100.5372, 13.7655, 0.36, 4], [100.5205, 13.7625, 0.26, 0], [100.5655, 13.7568, 0.48, 1], [100.5705, 13.7605, 0.34, 3], [100.5852, 13.7482, 0.3, 2],
+  [100.5604, 13.7382, 0.56, 1], [100.5655, 13.7338, 0.44, 0], [100.5702, 13.7318, 0.6, 4], [100.5745, 13.7268, 0.46, 2], [100.5798, 13.7252, 0.38, 3], [100.586, 13.72, 0.44, 1],
 ]
 
 /** The bridges over the river: [lon, lat, kind]. 'harp': Rama VIII's one tall leaning tower and its fan of cables.
@@ -146,12 +142,29 @@ export const TRACK_Y = 0.13
 /** Rama IV Road, from the old station out past Lumphini Park: a tuk-tuk putters up and down it. */
 export const TUKTUK_ROAD: LonLat[] = [[100.5172, 13.7385], [100.53, 13.7325], [100.5375, 13.7275], [100.546, 13.7245], [100.559, 13.7195], [100.58, 13.7125]]
 
+/** Rama III Road, round the river's bend past Central Rama 3 and the house: a hot pink taxi drives up and down it. */
+export const TAXI_ROAD: LonLat[] = [[100.5457, 13.7008], [100.5475, 13.6922], [100.5481, 13.684], [100.5466, 13.6778], [100.5444, 13.6749], [100.5415, 13.6732], [100.539, 13.673], [100.5369, 13.6734], [100.5334, 13.6751], [100.5259, 13.6818], [100.5183, 13.6869], [100.5117, 13.6893], [100.5053, 13.6898]]
+
+/** Khlong Bangkok Yai, over in Thonburi: a fruit seller paddles her boat up and down it. */
+export const FRUIT_KHLONG: LonLat[] = [[100.471, 13.7227], [100.4733, 13.7225], [100.4763, 13.7224], [100.4794, 13.7229], [100.4844, 13.7249], [100.4854, 13.7273], [100.4863, 13.7325], [100.4875, 13.7357], [100.4893, 13.7393]]
+
 /** The boats on the river, each somewhere along its middle line (geo.ts RIVER_LINE): what it is, where it starts
- *  (0 north .. 1 south), how fast it goes (m/s; minus: upstream) and how far to one side it keeps (m). */
+ *  (0 north .. 1 south), how fast it goes (m/s; minus: upstream) and how far to one side it keeps (m). The longtails
+ *  are the river's own boats: a striped roof, ribbons on the nose, a long propeller out the back. */
 export const BOATS: { kind: 'express' | 'barge' | 'longtail'; at: number; speed: number; side: number }[] = [
-  { kind: 'express', at: 0.2, speed: 0.11, side: 0.022 },
-  { kind: 'barge', at: 0.62, speed: -0.045, side: -0.024 },
-  { kind: 'longtail', at: 0.84, speed: 0.15, side: 0.02 },
+  { kind: 'express', at: 0.2, speed: 0.11, side: 0.034 },
+  { kind: 'barge', at: 0.62, speed: -0.045, side: -0.036 },
+  { kind: 'longtail', at: 0.84, speed: 0.15, side: 0.032 },
+  { kind: 'longtail', at: 0.42, speed: -0.13, side: -0.034 },
+]
+
+/** Sanam Luang, the big open field in the old town: kites fly over it. Where each kite's string is held, how high
+ *  the kite flies (m) and which kite it is ('star': the big chula; 'diamond': the little pakpao with its long tail). */
+export const SANAM_LUANG: XZ = ll(100.4931, 13.7551)
+export const KITES: { at: XZ; high: number; kind: 'star' | 'diamond' }[] = [
+  { at: [SANAM_LUANG[0] - 0.1, SANAM_LUANG[1] + 0.02], high: 0.3, kind: 'diamond' },
+  { at: [SANAM_LUANG[0] + 0.02, SANAM_LUANG[1] - 0.04], high: 0.44, kind: 'star' },
+  { at: [SANAM_LUANG[0] + 0.12, SANAM_LUANG[1] + 0.07], high: 0.24, kind: 'diamond' },
 ]
 
 /** Where the river's big loop holds Bang Krachao: the jungle is painted and planted inside these blobs
@@ -169,3 +182,10 @@ export const CLOUDS: [number, number, number][] = [
   [100.482, 13.742, 1.05],
   [100.574, 13.745, 1.2],
 ]
+
+/** The old town and Chinatown, inside the river's first bend: low and close-built, so its shophouse rows stand closer
+ *  together than anywhere else ([middle, how far out it reaches (m)]). */
+export const OLD_TOWN: { at: XZ; r: number } = { at: ll(100.503, 13.75), r: 0.75 }
+
+/** Where the map's compass is painted: the quiet corner out past the orchards, south-west. */
+export const COMPASS: { at: XZ; r: number } = { at: [BOARD.x0 + 0.4, BOARD.z1 - 0.4], r: 0.25 }

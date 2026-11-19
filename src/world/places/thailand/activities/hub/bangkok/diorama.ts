@@ -1,9 +1,11 @@
 // The Bangkok map's shapes (layout.ts says where): a toy diorama of the middle of Bangkok floating in the sky, in the
-// same toy tray as the Thailand, Nan and Krabi maps. What makes it Bangkok: the Chao Phraya winding through a flat
-// pastel city (ground.ts paints the blocks, the roads, the khlongs and the parks), a skyline of candy-colored glass
-// towers standing in the districts they really stand in, the river's bridges (Rama VIII's one leaning tower and its
-// fan of cables, the Bhumibol bridges' golden diamonds), the skytrain on its pillars, hundreds of tiny rooftops, and
-// Bang Krachao's jungle in the river's big loop.
+// same toy tray as the Thailand, Nan and Krabi maps. What makes it Bangkok: the wide teal Chao Phraya winding through
+// a flat city printed on warm paper (ground.ts paints the blocks, the roads, the khlongs and the parks), longtail boats
+// with striped roofs and ribbons on their noses, a skyline of candy-colored glass towers in three tight bunches where
+// they really stand, the river's bridges (Rama VIII's one leaning tower and its fan of cables, the Bhumibol bridges'
+// golden diamonds), the skytrain on its pillars, rows of shophouses under terracotta roofs, coconut palms along the
+// banks, a hot pink taxi and a tuk-tuk on the roads, and Bang Krachao's jungle in the river's big loop. Few big
+// shapes, the rest left as open paper: the pins and the river are what she sees first.
 //
 // The places stand up like chunky toys: the Thailand house (a row of pastel shophouses, the pink one in the middle,
 // the flag, a tuk-tuk parked outside) and ICONSIAM (its folded glass front on the river, the gold roof, two towers
@@ -13,8 +15,8 @@
 //
 // To poke: Asiatique's big wheel, Chinatown's red gate and lanterns, Lumphini Park's swan boat and monitor lizard,
 // Mahanakhon (the tower made of blocks), Central Rama 3, the flower market, the port's crane, Bang Krachao's bird
-// tower. And what moves: the skytrain, an express boat, a string of rice barges and a longtail on the river, a
-// tuk-tuk on Rama IV Road, clouds.
+// tower. And what moves: the skytrain, an express boat, a string of rice barges and two longtails on the river, a
+// fruit seller's boat on Khlong Bangkok Yai, a tuk-tuk on Rama IV Road, a pink taxi on Rama III Road, clouds.
 import { Group, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid, solidMix, type V3 } from '../../../../../engine3d/geo'
@@ -23,8 +25,8 @@ import { trayParts } from '../../../trip/sky'
 import type { Sea } from '../map/terrain'
 import * as T from '../map/toys'
 import { RIVER_LINE } from './geo'
-import { BLOCK, blockMid, blockOf, buildField, buildGround, buildSea, districtAt, LAKES, type Field } from './ground'
-import { BOARD, BOATS, BRIDGES, CLOUDS, DEG_M, LEVEL, ll, PIN_IDS, PINS, PLACES, SKYTRAIN, SPOTS, STAMP_OFF, TOWERS, TRACK_Y, TUKTUK_ROAD, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
+import { blockMid, blockOf, buildField, buildGround, buildSea, districtAt, LAKES, type Field } from './ground'
+import { BOARD, BOATS, BRIDGES, CLOUDS, COMPASS, DEG_M, FRUIT_KHLONG, KITES, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TUKTUK_ROAD, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
 import { pathLL, type Path } from './path'
 
 const CREAM = '#FFF7F0'
@@ -32,12 +34,12 @@ const WOOD = '#C99A6E'
 const WOOD_DARK = '#9C7250'
 const GOLD = '#FFD36B'
 const RED = '#F0576B'
-/** The towers' glass, in the app's pastels. */
-const GLASS = ['#BFE2FA', '#D9CCFF', '#FFD3E4', '#C9F1E4', '#FFE9B8', '#CFE0FF']
-/** The little houses' roofs. */
-const ROOFS = ['#FF9DC0', '#FFB38A', '#B9A6F5', '#8FE3C8', '#FBEA9A', '#F7A072', '#E88AA6', '#A8DCFF']
-const WALLS = ['#FFF7F0', '#FFEFE2', '#FFF4CF', '#F6F0FF']
-const LEAF = ['#52B881', '#67C78F', '#84D79C']
+/** The towers' glass: the app's pastels, strong enough to stand out against the paper. */
+const GLASS = ['#9CD3F7', '#C4B2FA', '#FFB5D0', '#A4E8D2', '#FFDC8A', '#AFC6FF']
+/** The shophouses' roofs: Bangkok's terracotta tiles, a coral and a pink row here and there. */
+const ROOFS = ['#F28B66', '#F7A072', '#F28B66', '#EE7F6E', '#F7A072', '#FF9DC0']
+const WALLS = ['#FFF7F0', '#FFD9E6', '#FFF1B8', '#FFF7F0', '#CFEFE0', '#E7E0FF']
+const LEAF = ['#66C890', '#7CD49C', '#97DFAB']
 /** The spots stand this much bigger than the board's scale, like toys. */
 const SPOT_SCALE = 1.5
 /** The top of the land everywhere (Bangkok is flat). */
@@ -79,14 +81,22 @@ export interface Diorama {
   stamp: Group
   balloon: T.Balloon
   sea: Sea
-  /** The river's middle line (the boats follow it), the skytrain's track and the tuk-tuk's road. */
+  /** The river's middle line (the boats follow it), the skytrain's track, the tuk-tuk's road, the taxi's road and
+   *  the fruit boat's khlong. */
   river: Path
   rail: Path
   road: Path
+  taxiRoad: Path
+  khlong: Path
   boats: Boat[]
   /** The skytrain's cars, front first. */
   train: Group[]
   tuktuk: Group
+  taxi: Group
+  fruit: Group
+  /** The kites over Sanam Luang: `root` stands where the string is held (it turns to face her), `swing` sways the
+   *  kite on its string. */
+  kites: { root: Group; swing: Group }[]
   clouds: Group[]
   /** Asiatique's wheel (it turns), Chinatown's lanterns (they swing), Lumphini's swan boat and monitor lizard, the
    *  port crane's box on its cable, Bang Krachao's birds, the fountain's bowl on ICONSIAM's terrace (world spot). */
@@ -123,15 +133,21 @@ export function buildDiorama(bag: Bag): Diorama {
   const river = pathLL(RIVER_LINE, 1)
   const rail = pathLL(SKYTRAIN, 2)
   const road = pathLL(TUKTUK_ROAD, 2)
+  const taxiRoad = pathLL(TAXI_ROAD, 2)
+  const khlong = pathLL(FRUIT_KHLONG, 2)
 
   /** What stands where already (nothing else is put inside): [x, z, radius]. */
   const taken: [number, number, number][] = [
     ...(Object.keys(PLACES) as PlaceId[]).filter((id) => id !== 'balloon').map((id) => [...PLACES[id].at, 0.36] as [number, number, number]),
-    ...(Object.keys(SPOTS) as SpotId[]).map((id) => [...SPOTS[id], 0.26] as [number, number, number]),
+    // (Mahanakhon is a tower among towers: its neighbors stand close.)
+    ...(Object.keys(SPOTS) as SpotId[]).map((id) => [...SPOTS[id], id === 'mahanakhon' ? 0.15 : 0.26] as [number, number, number]),
   ]
   const free = (x: number, z: number, pad = 0) => taken.every(([px, pz, r]) => Math.hypot(px - x, pz - z) > r + pad)
   const shadows: [number, number, number][] = []
+  const casts: [number, number, number, number][] = []
   const plazas: [number, number, number][] = taken.map(([x, z, r]) => [x, z, r * 0.8])
+  // (Nothing stands on the painted compass, or on Sanam Luang's open field.)
+  taken.push([...COMPASS.at, COMPASS.r * 1.2], [...SANAM_LUANG, 0.16])
 
   // ---- The bridges ----
   const bridges: XZ[] = []
@@ -185,7 +201,7 @@ export function buildDiorama(bag: Bag): Diorama {
     const plain: BufferGeometry[] = []
     TOWERS.forEach(([lon, lat, h, look], k) => {
       let [x, z] = ll(lon, lat)
-      const w = 0.085 + h * 0.07
+      const w = 0.1 + h * 0.075
       // (A tower by the skytrain steps back from the track.)
       const near = rail.near(x, z)
       const need = w * 0.62 + 0.03
@@ -195,52 +211,59 @@ export function buildDiorama(bag: Bag): Diorama {
         x = p.x + nx * need
         z = p.z + nz * need
       }
-      if (f.land(x, z) < w * 0.8 || !free(x, z, w * 0.5) || f.park(x, z)) return
+      if (f.land(x, z) < w * 0.6 || !free(x, z, w * 0.5) || f.park(x, z)) return
       const t = tower(x, G, z, h, w, look, k)
       lined.push(...t.lined)
       plain.push(...t.plain)
       towers.push([x, z, h])
       taken.push([x, z, w * 0.75])
-      shadows.push([x, z, w * 1.25])
+      shadows.push([x, z, w * 1.1])
+      casts.push([x, z, w, h])
     })
     root.add(solidMix(lined, plain, bag, 1.5))
   }
 
-  // ---- Little houses in the squares of each district's street grid: a few to a block, a roof color or two to a
-  // district, so the city reads as neighborhoods (not confetti) ----
+  // ---- Rows of shophouses along the little streets: three or four pastel fronts under one long terracotta roof,
+  // close together in the old town and Chinatown, few and far apart everywhere else: one low neighborhood and open
+  // paper (not confetti) ----
   {
     const parts: BufferGeometry[] = []
     const rnd = T.rng(41)
-    const seen = new Set<string>()
-    let n = 0
-    for (let i = 0; i < 60000 && n < 140; i++) {
-      const px = BOARD.x0 + 0.08 + rnd() * (W - 0.16)
-      const pz = BOARD.z0 + 0.08 + rnd() * (D - 0.16)
+    const rows: XZ[] = []
+    for (let i = 0; i < 60000 && rows.length < 30; i++) {
+      const px = BOARD.x0 + 0.1 + rnd() * (W - 0.2)
+      const pz = BOARD.z0 + 0.1 + rnd() * (D - 0.2)
+      const count = 3 + Math.floor(rnd() * 2)
       const pick = rnd()
       const o = districtAt(px, pz)
-      if (o.orchard && pick > 0.25) continue
+      if (o.orchard && pick > 0.3) continue
       const b = blockOf(o, px, pz)
-      const key = `${o.k}:${b.iu}:${b.iv}`
-      if (seen.has(key)) continue
-      seen.add(key)
-      const [x, z] = blockMid(o, b.iu, b.iv)
-      if (districtAt(x, z) !== o || f.land(x, z) < 0.06 || f.park(x, z) || f.jungle(x, z) || !free(x, z, 0.03) || f.clear(x, z) < 0.05 || rail.near(x, z).dist < 0.05) continue
-      n++
-      const w = BLOCK * (0.5 + rnd() * 0.12)
-      const d = BLOCK * (0.5 + rnd() * 0.12)
-      const h = 0.026 + rnd() * 0.03
-      const yaw = -o.turn + (pick > 0.5 ? Math.PI / 2 : 0)
-      const roof = ROOFS[(o.k * 3 + (pick > 0.7 ? 1 : 0)) % ROOFS.length]
-      parts.push(
-        P.box(w, h, d, WALLS[o.k % WALLS.length], { at: [x, G + h / 2, z], rot: [0, yaw, 0] }),
-        P.prism([[-w / 2 - 0.004, 0], [w / 2 + 0.004, 0], [0, w * 0.5]], d + 0.008, roof, { at: [x, G + h - 0.001, z], rot: [0, yaw, 0] }),
-      )
-      shadows.push([x, z, 0.035])
+      const [mx, mz] = blockMid(o, b.iu, b.iv)
+      // (Close together in the old town, far apart everywhere else.)
+      const apart = Math.hypot(mx - OLD_TOWN.at[0], mz - OLD_TOWN.at[1]) < OLD_TOWN.r ? 0.24 : 0.66
+      if (rows.some(([rx, rz]) => Math.hypot(rx - mx, rz - mz) < apart)) continue
+      // (The row runs along its district's streets.)
+      const [ux, uz] = [Math.cos(o.turn), Math.sin(o.turn)]
+      const wide = 0.06
+      const spot = (j: number): XZ => [mx + ux * (j - (count - 1) / 2) * wide, mz + uz * (j - (count - 1) / 2) * wide]
+      const ok = ([x, z]: XZ) => districtAt(x, z) === o && f.land(x, z) > 0.07 && !f.park(x, z) && !f.jungle(x, z) && free(x, z, 0.04) && f.clear(x, z) > 0.05 && rail.near(x, z).dist > 0.06
+      if (![-0.7, ...Array.from({ length: count }, (_, j) => j), count - 0.3].every((j) => ok(spot(j)))) continue
+      rows.push([mx, mz])
+      const deep = 0.06
+      const h = 0.066 + rnd() * 0.012
+      for (let j = 0; j < count; j++) {
+        const [x, z] = spot(j)
+        parts.push(P.box(wide - 0.003, h, deep, WALLS[(o.k + j + rows.length) % WALLS.length], { at: [x, G + h / 2, z], rot: [0, -o.turn, 0] }))
+      }
+      parts.push(P.prism([[-deep / 2 - 0.003, 0], [deep / 2 + 0.003, 0], [0, deep * 0.4]], count * wide + 0.006, ROOFS[(o.k + (pick > 0.8 ? 1 : 0)) % ROOFS.length], { at: [mx, G + h - 0.001, mz], rot: [0, Math.PI / 2 - o.turn, 0] }))
+      shadows.push([mx, mz, count * wide * 0.5])
+      taken.push([mx, mz, count * wide * 0.55])
     }
     root.add(solid(merge(parts), bag, 1))
   }
 
-  // ---- Trees: round ones in the parks and along the streets, jungle and palms on Bang Krachao ----
+  // ---- Trees: round ones in the parks, coconut palms along the river's banks, jungle and palms on Bang Krachao (big
+  // soft clumps, well apart: a green lung, not a dark thicket) ----
   {
     const parts: BufferGeometry[] = []
     const put: XZ[] = []
@@ -250,22 +273,40 @@ export function buildDiorama(bag: Bag): Diorama {
         const [lx, lz] = ll(lon, lat)
         return ((x - lx) / (rx * DEG_M + 0.03)) ** 2 + ((z - lz) / (ry * DEG_M + 0.03)) ** 2 < 1
       })
-    for (let i = 0; i < 30000 && put.length < 230; i++) {
+    for (let i = 0; i < 30000 && put.length < 110; i++) {
       const x = BOARD.x0 + 0.08 + rnd() * (W - 0.16)
       const z = BOARD.z0 + 0.08 + rnd() * (D - 0.16)
       const s = 0.36 + rnd() * 0.2
       const turn = rnd() * 6.28
-      if (f.land(x, z) < 0.04 || !free(x, z, 0.03) || inLake(x, z)) continue
+      if (f.land(x, z) < 0.05 || !free(x, z, 0.03) || inLake(x, z)) continue
       const jungle = f.jungle(x, z)
       const park = f.park(x, z)
-      // (The street trees are few: the orchards' own trees are painted on.)
-      if (!jungle && !park && (f.clear(x, z) < 0.03 || rnd() > 0.012)) continue
-      if (put.some(([px, pz]) => Math.hypot(px - x, pz - z) < (jungle ? 0.085 : park ? 0.07 : 0.13))) continue
+      if (!jungle && !park) continue
+      // (The jungle keeps back from the banks and off the taxi's road: its big clumps would hang over them.)
+      if (jungle && (f.land(x, z) < 0.1 || taxiRoad.near(x, z).dist < 0.12)) continue
+      if (put.some(([px, pz]) => Math.hypot(px - x, pz - z) < (jungle ? 0.15 : 0.085))) continue
       put.push([x, z])
-      if (jungle && i % 3 === 0) parts.push(...palm(x, G, z, s * 0.62, turn))
-      else if (jungle) parts.push(...clump(x, G, z, s * 1.35, i))
-      else parts.push(...roundTree(x, G, z, s * (park ? 0.9 : 0.75), i))
-      shadows.push([x, z, 0.05 * s + 0.015])
+      if (jungle && put.length % 4 === 0) parts.push(...palm(x, G, z, s * 0.7, turn))
+      else if (jungle) parts.push(...clump(x, G, z, s * 1.7, i))
+      else parts.push(...roundTree(x, G, z, s * 0.9, i))
+      shadows.push([x, z, (jungle ? 0.09 : 0.05) * s + 0.015])
+    }
+    // The palms along the banks: one every so often, on one bank and then the other, leaning out over the water.
+    let side = 1
+    for (let d = 0.5; d < river.len - 0.3; d += 0.62) {
+      const p = river.at(d)
+      const [ux, uz] = [Math.cos(p.yaw), -Math.sin(p.yaw)]
+      side = -side
+      for (let off = 0.04; off < 0.4; off += 0.008) {
+        const [x, z] = [p.x + ux * off * side, p.z + uz * off * side]
+        if (f.land(x, z) < 0.045) continue
+        if (x > BOARD.x0 + 0.1 && x < BOARD.x1 - 0.1 && z > BOARD.z0 + 0.1 && z < BOARD.z1 - 0.1 && free(x, z, 0.16) && !f.jungle(x, z) && f.clear(x, z) > 0.04 && rail.near(x, z).dist > 0.08) {
+          parts.push(...palm(x, G, z, 0.42 + rnd() * 0.1, Math.atan2(-uz * side, -ux * side)))
+          shadows.push([x, z, 0.05])
+          taken.push([x, z, 0.05])
+        }
+        break
+      }
     }
     root.add(solid(merge(parts), bag, 1.5))
   }
@@ -377,11 +418,8 @@ export function buildDiorama(bag: Bag): Diorama {
     const g = new Group()
     const tail: Group[] = []
     if (kind === 'express') g.add(solid(merge(expressParts()), bag, 1.5))
-    else if (kind === 'longtail') {
-      const b = T.longtail(bag)
-      b.scale.setScalar(0.3)
-      g.add(b)
-    } else {
+    else if (kind === 'longtail') g.add(solid(merge(longtailParts()), bag, 1.5))
+    else {
       g.add(solid(merge(tugParts()), bag, 1.5))
       for (let i = 0; i < 2; i++) {
         const b = T.barge(bag)
@@ -395,8 +433,26 @@ export function buildDiorama(bag: Bag): Diorama {
   })
   // ---- A tuk-tuk on Rama IV Road ----
   const tuktuk = T.tuktuk(bag)
-  tuktuk.scale.setScalar(0.3)
+  tuktuk.scale.setScalar(0.5)
   root.add(tuktuk)
+  // ---- A hot pink taxi on Rama III Road, a fruit seller's boat on Khlong Bangkok Yai ----
+  const taxi = new Group()
+  taxi.add(solid(merge(taxiParts()), bag, 1.5))
+  root.add(taxi)
+  const fruit = new Group()
+  fruit.add(solid(merge(fruitBoatParts()), bag, 1.5))
+  root.add(fruit)
+  // ---- Kites over Sanam Luang ----
+  const kites = KITES.map(({ at, high, kind }, i) => {
+    const g = new Group()
+    g.position.set(at[0], G, at[1])
+    const swing = new Group()
+    const k = kiteParts(kind, high, [PAL.hotpink, PAL.butter, PAL.sky][i % 3], [PAL.butter, PAL.hotpink, PAL.pink][i % 3])
+    swing.add(solidMix(k.lined, k.plain, bag, 1.5))
+    g.add(swing)
+    root.add(g)
+    return { root: g, swing }
+  })
 
   // ---- Clouds over the city ----
   const clouds = CLOUDS.map(([lon, lat, cy], i) => {
@@ -413,8 +469,8 @@ export function buildDiorama(bag: Bag): Diorama {
     return g
   })
 
-  root.add(buildGround(bag, { shadows, plazas }))
-  return { root, places, spots, pins, stamp, balloon, sea, river, rail, road, boats, train, tuktuk, clouds, wheel, lanterns, swan, lizard, craneBox, birds, fountain, towers, bridges }
+  root.add(buildGround(bag, { shadows, plazas, casts }))
+  return { root, places, spots, pins, stamp, balloon, sea, river, rail, road, taxiRoad, khlong, boats, train, tuktuk, taxi, fruit, kites, clouds, wheel, lanterns, swan, lizard, craneBox, birds, fountain, towers, bridges }
 }
 
 // ---------------------------------------------------------------- towers
@@ -713,6 +769,16 @@ function chinatownParts(): BufferGeometry[] {
     parts.push(P.rbox(0.064, h, 0.07, 0.006, paint[i], { at: [x, h / 2, -0.04] }), P.box(0.07, 0.008, 0.076, CREAM, { at: [x, h + 0.002, -0.04] }))
     parts.push(P.rbox(0.012, 0.05, 0.022, 0.003, signs[i], { at: [x + 0.024, h * 0.62, 0.008] }), ...[-0.014, 0.014].map((wx) => P.box(0.016, 0.02, 0.005, '#DDF3FF', { at: [x + wx - 0.008, h - 0.022, -0.003] })))
   }
+  // Street food out front: three carts under bright umbrellas.
+  const brollies: [number, number, string][] = [[-0.135, 0.125, PAL.butter], [0.135, 0.12, PAL.mint], [0.105, 0.17, PAL.hotpink]]
+  for (const [x, z, c] of brollies) {
+    parts.push(
+      P.rbox(0.03, 0.016, 0.02, 0.003, CREAM, { at: [x, 0.012, z] }),
+      P.cyl(0.0018, 0.0018, 0.05, CREAM, { at: [x, 0.03, z] }, 4),
+      P.cone(0.03, 0.016, c, { at: [x, 0.062, z] }, 8),
+      P.sphere(0.004, '#FFFFFF', { at: [x, 0.071, z] }, 5),
+    )
+  }
   return parts
 }
 
@@ -882,6 +948,77 @@ function expressParts(): BufferGeometry[] {
     ...[0, 1, 2, 3].map((i) => P.sphere(0.006, [PAL.pink, PAL.butter, PAL.mint, PAL.lavender][i], { at: [0, 0.03, 0.04 - i * 0.03] }, 5)),
     P.cyl(0.002, 0.002, 0.05, '#FFFFFF', { at: [0, 0.075, -0.09] }, 4),
     P.prism([[0, 0], [0.03, 0.01], [0, 0.02]], 0.003, '#FF9A4D', { at: [0, 0.08, -0.09], rot: [0, Math.PI / 2, 0] }),
+  ]
+}
+
+/** A longtail boat, the river's own (sailing along +z): a long wooden hull with a pink stripe, the nose curving up
+ *  with its ribbons, a roof striped in every color, the engine and its long propeller shaft out the back. */
+function longtailParts(): BufferGeometry[] {
+  const wood = '#E6A375'
+  const stripes = [PAL.hotpink, '#FFFFFF', PAL.butter, '#FFFFFF', PAL.mint, '#FFFFFF', PAL.sky]
+  return [
+    P.rbox(0.05, 0.022, 0.2, 0.01, wood, { at: [0, 0.01, 0] }),
+    P.box(0.052, 0.006, 0.18, PAL.hotpink, { at: [0, 0.019, 0] }),
+    P.box(0.02, 0.016, 0.09, wood, { at: [0, 0.036, 0.122], rot: [-0.7, 0, 0] }),
+    P.sphere(0.012, PAL.hotpink, { at: [0, 0.072, 0.152] }, 7),
+    P.sphere(0.01, PAL.butter, { at: [0, 0.056, 0.15] }, 7),
+    P.sphere(0.009, PAL.mint, { at: [0, 0.043, 0.143] }, 6),
+    ...stripes.map((c, i) => P.box(0.06, 0.006, 0.0165, c, { at: [0, 0.066, -0.06 + i * 0.016] })),
+    ...[[-1, 0.036], [1, 0.036], [-1, -0.06], [1, -0.06]].map(([sd, z]) => P.cyl(0.002, 0.002, 0.044, '#FFF7F0', { at: [sd * 0.024, 0.043, z] }, 4)),
+    P.box(0.022, 0.02, 0.026, '#A3AAC4', { at: [0, 0.034, -0.092] }),
+    P.cyl(0.003, 0.003, 0.13, '#5E5468', { at: [0, 0.024, -0.165], rot: [1.3, 0, 0] }, 5),
+  ]
+}
+
+/** A fruit seller's boat on the khlong (paddling along +z): a little wooden sampan heaped with fruit, the seller in
+ *  her wide straw hat at the back, a paddle over the side. */
+function fruitBoatParts(): BufferGeometry[] {
+  const fruit = ['#FF9A4D', PAL.butter, '#8FDB8A', PAL.hotpink, '#FF9A4D', PAL.butter]
+  return [
+    P.rbox(0.042, 0.016, 0.13, 0.008, '#D9A072', { at: [0, 0.008, 0] }),
+    P.box(0.044, 0.004, 0.11, '#B98A66', { at: [0, 0.015, 0] }),
+    ...fruit.map((c, i) => P.sphere(0.011, c, { at: [(i % 2 ? 1 : -1) * 0.008, 0.024 + (i % 3 === 1 ? 0.008 : 0), 0.044 - i * 0.012] }, 6)),
+    // The seller: a round pink body, a wide straw hat.
+    P.sphere(0.012, PAL.pink, { at: [0, 0.028, -0.042], scale: [1, 1.2, 1] }, 7),
+    P.cone(0.022, 0.012, '#F2DCA6', { at: [0, 0.048, -0.042] }, 10),
+    rod([0.014, 0.034, -0.04], [0.034, 0.002, -0.07], 0.003, '#B98A66', 0.006),
+  ]
+}
+
+/** How much bigger than life the kites are drawn. */
+const KITE_SIZE = 1.7
+
+/** A kite on its string (the string held at 0, the kite `high` up, its face to +z): the big five-pointed chula
+ *  ('star') or the little pakpao ('diamond') with its long tail of bows. */
+function kiteParts(kind: 'star' | 'diamond', high: number, c: string, trim: string): { lined: BufferGeometry[]; plain: BufferGeometry[] } {
+  const big: V3 = [KITE_SIZE, KITE_SIZE, KITE_SIZE]
+  const lined: BufferGeometry[] = []
+  const plain: BufferGeometry[] = [P.cyl(0.0012, 0.0012, high, '#C9B8F2', { at: [0, high / 2, 0] }, 4)]
+  if (kind === 'star') {
+    const pts: [number, number][] = []
+    for (let i = 0; i < 10; i++) {
+      const a = (i / 10) * Math.PI * 2
+      const r = i % 2 ? 0.034 : 0.085
+      pts.push([Math.sin(a) * r, Math.cos(a) * r])
+    }
+    lined.push(P.prism(pts, 0.008, c, { at: [0, high + 0.04 * KITE_SIZE, 0], rot: [-0.25, 0, 0], scale: big }), P.sphere(0.016 * KITE_SIZE, trim, { at: [0, high + 0.04 * KITE_SIZE, 0.008 * KITE_SIZE], scale: [1, 1, 0.4] }, 8))
+  } else {
+    lined.push(P.prism([[0, 0.07], [0.05, 0.01], [0, -0.075], [-0.05, 0.01]], 0.008, c, { at: [0, high + 0.07 * KITE_SIZE, 0], rot: [-0.25, 0, 0], scale: big }), P.box(0.1 * KITE_SIZE, 0.006 * KITE_SIZE, 0.004, trim, { at: [0, high + 0.08 * KITE_SIZE, 0.008 * KITE_SIZE] }))
+    // The tail: three little bows trailing down beside the string.
+    for (let i = 0; i < 3; i++) lined.push(P.prism([[-0.014, 0.008], [0, 0], [-0.014, -0.008]], 0.004, trim, { at: [0.016 + i * 0.012, high - 0.03 - i * 0.04, -0.012], scale: big }), P.prism([[0.014, 0.008], [0.014, -0.008], [0, 0]], 0.004, trim, { at: [0.016 + i * 0.012, high - 0.03 - i * 0.04, -0.012], scale: big }))
+  }
+  return { lined, plain }
+}
+
+/** A Bangkok taxi (driving along +z): hot pink all over, its sign on the roof. */
+function taxiParts(): BufferGeometry[] {
+  return [
+    P.rbox(0.05, 0.022, 0.1, 0.009, PAL.hotpink, { at: [0, 0.022, 0] }),
+    P.rbox(0.044, 0.02, 0.052, 0.008, '#DDF3FF', { at: [0, 0.042, -0.004] }),
+    P.rbox(0.046, 0.006, 0.05, 0.003, PAL.hotpink, { at: [0, 0.054, -0.004] }),
+    P.rbox(0.02, 0.008, 0.01, 0.002, PAL.butter, { at: [0, 0.061, -0.004] }),
+    ...[[-1, 0.03], [1, 0.03], [-1, -0.032], [1, -0.032]].map(([sd, z]) => P.cyl(0.011, 0.011, 0.008, '#5E5468', { at: [sd * 0.025, 0.011, z], rot: [0, 0, Math.PI / 2] }, 8)),
+    ...[-1, 1].map((sd) => P.sphere(0.004, '#FFF7C9', { at: [sd * 0.016, 0.024, 0.05] }, 5)),
   ]
 }
 
