@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dad 5 waves beside his cheek</title>
+<title>Dad 3 waves beside his cheek</title>
 <style>
 :root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a;--lav:#efe6ff;--warn:#b0124f}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}}
@@ -36,10 +36,12 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 @media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.pics{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}}
 </style></head><body><main>
 <span class="chip">Check-in Character lab</span>
-<h1>Dad 5 waves beside his cheek</h1>
-<p class="kaylee">Dad 5 lifts his elbow and waves his hoof beside his cheek. The sleeve still creases slightly at the deepest bend.</p>
+<h1>Dad 3 waves beside his cheek</h1>
+<p class="kaylee">Dad 3 bends his elbow and waves his hoof. His pink sleeve now follows the arm through the wave.</p>
 
-<h2>Watch</h2><figure><video src="reel/dad-wave.mp4" poster="" controls playsinline muted autoplay loop></video>
+<h2>Watch</h2><figure><video src="reel/dad-3-wave.mp4" poster="" controls playsinline muted autoplay loop></video>
+<figcaption>Dad 3 waves from the front and side, then with the outline off · 7.5 s</figcaption></figure>
+<figure><video src="reel/dad-wave.mp4" poster="" controls playsinline muted autoplay loop></video>
 <figcaption>Dad 5 waves from the front and side, then with the outline off · 5.6 s</figcaption></figure>
 <h2>Before and after</h2><div class="pics"><figure class="pair"><div><img src="pics/shoulders-pieces.jpg" alt="Before: Shoulders mid-cheer" loading="lazy"><span>Before</span></div><div><img src="pics/shoulders-skinned.jpg" alt="After: Shoulders mid-cheer" loading="lazy"><span>After</span></div>
 <figcaption><b>Shoulders mid-cheer</b>: Before: cut into stiff pieces (Dads 1-3), the sleeves tore. After: Tripo's rig (Dads 1, 2, 3, 5), the shirt bends. Dad 5 is the cleanest.</figcaption></figure>
@@ -47,11 +49,11 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 <figcaption><b>Earlier character lineup</b>: Today's Dad, then New Dads 1, 2, 3 and 5: standing, from behind, sitting, waving, cheering and Silly</figcaption></figure></div>
 
 
-<h2>Your call</h2><ol><li><p>Which wave feels more like Dad, original or Blender?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><a class="pill" href="https://github.com/neb636/Kaylee-Gamepack/pull/482">Open the PR to paste them</a><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
-<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/characters/dad-5?zoom=1.15">Try Wave on Dad 5</a> <a class="pill" href="../#/world/characters/dad-5?lineup=dad-model,dad-1,dad-2,dad-3,dad-5">All four beside today's Dad</a> <a class="pill" href="../review/dad-5-wave.blend">Download the Blender scene</a></p>
+
+<h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/characters/dad-3?zoom=1.15">Try Wave on Dad 3</a> <a class="pill" href="../#/world/characters/dad-3?lineup=dad-3,dad-5">Dad 3 and Dad 5 together</a> <a class="pill" href="../review/dad-3-wave.blend">Download Dad 3’s Blender scene</a> <a class="pill" href="../review/dad-5-wave.blend">Download Dad 5’s Blender scene</a></p>
 </main>
 <script>
-const qs=["Which wave feels more like Dad, original or Blender?"],titles=[]
+const qs=[],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})
