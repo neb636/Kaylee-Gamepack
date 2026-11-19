@@ -4,7 +4,7 @@
 // Adelies' honk, the humpback's low moan, Pola's growl. They're synthesized note by note (`voice`), so they all land
 // on the same beat and the chorus builds one voice at a time. Papa's gold answer is the finale's buzzy reed (`sing`).
 import { sounds } from '../../../../../sdk'
-import { bed, clip } from '../../../../kit/clips'
+import { bed, clip, held } from '../../../../kit/clips'
 import { audio, noise, sfx, tone } from '../../../../kit/sfx'
 import { url } from '../../sfx'
 
@@ -54,18 +54,26 @@ export const nightSfx = {
   /** The far ring goes over the hills and everything goes quiet: a soft swell. */
   far: clip(url('story-chime'), () => tone(523, 784, 1.2, 0.04, 'sine')),
   /** A hiccup (tap-tap-tap). */
-  hic: () => (tone(700, 1200, 0.08, 0.06, 'triangle'), tone(1200, 900, 0.06, 0.04, 'triangle', 0.08)),
+  hic: clip(url('night-hic'), () => (tone(700, 1200, 0.08, 0.06, 'triangle'), tone(1200, 900, 0.06, 0.04, 'triangle', 0.08))),
 }
 
-/** Hold to Fly (Act 1) and the goodbye flight: recorded clips from the Poles' folder (no new ones were made: the
- *  cloud session had no ElevenLabs key). */
+/** Until the held burner's loop loads: the old one-shot roar, at most once a second or so. */
+let burnerNext = 0
+const burnerPuff = () => {
+  const now = performance.now()
+  if (now < burnerNext) return
+  burnerNext = now + 1100
+  noise(0.7, 0.12, 'lowpass', 500, 900)
+}
+
+/** Hold to Fly (Act 1) and the goodbye flight: recorded clips from the Poles' folder. */
 export const flySfx = {
   /** The wind over the sea (until stopped). */
   wind: () => bed(url('story-wind'), 0.28),
   /** The blizzard at the end (until stopped). */
   blizzard: () => bed(url('party-blizzard'), 0.3),
-  /** The burner roars (again every second or so while she holds). */
-  burner: clip(url('party-burner'), () => noise(0.7, 0.12, 'lowpass', 500, 900), { vol: 0.7 }),
+  /** The burner roars while she holds: call it every frame she holds, and it fades out when she lets go. */
+  burner: held(url('night-burner-hold'), burnerPuff, () => ({ vol: 0.6 })),
   /** A gust in the storm. */
   gust: clip(url('party-gust'), () => noise(0.9, 0.1, 'bandpass', 400, 1600)),
   /** The balloon boings off a berg. */
@@ -99,6 +107,8 @@ export const huddleSfx3 = {
   step: clip(url('party-step'), () => sfx.thump(), { vol: 0.5 }),
   /** A dad squished aside honks. */
   honk: clip(url('slide-honk-papa'), () => tone(300, 260, 0.2, 0.05, 'square'), { vol: 0.6 }),
+  /** Pebble squishes past a fluffy dad. */
+  squish: clip(url('through-squish'), () => tone(260, 180, 0.15, 0.05, 'triangle'), { vol: 0.6 }),
   /** Pebble bounces off a tummy. */
   boing: clip(url('narwhal-bump'), () => sfx.boing()),
   /** A tummy slide. */

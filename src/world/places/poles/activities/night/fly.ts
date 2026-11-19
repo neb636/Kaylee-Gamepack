@@ -250,7 +250,6 @@ export class FlyWorld implements World3D {
   private holdT = 0
   private heldEver = false
   private lastHold = 0
-  private nextBurner = 0
   private inCloud = false
   private cloudSaid = -99
   private wet = false
@@ -699,10 +698,7 @@ export class FlyWorld implements World3D {
     this.wet = wet
     // The burner roars while she holds.
     const burning = this.held || (this.auto && !this.ended && want > 0.3)
-    if (burning && t >= this.nextBurner) {
-      this.nextBurner = t + 1.1
-      flySfx.burner()
-    }
+    if (burning) flySfx.burner()
     this.flame.visible = burning
     if (burning) this.flame.scale.set(1 + 0.15 * Math.sin(t * 31), 0.9 + 0.25 * Math.abs(Math.sin(t * 23)), 1 + 0.15 * Math.sin(t * 27))
     this.flameMat.color.set(Math.sin(t * 40) > 0 ? '#FFB347' : '#FFD45E')
@@ -899,7 +895,6 @@ export class FlyWorld implements World3D {
     this.holdT = 0
     this.lastHold = this.time
     this.counts.holds++
-    this.nextBurner = this.time
     if (!this.heldEver) {
       this.heldEver = true
       this.at(0.8, () => this.events.talk(F.hot, 'fact', 'hot'))
