@@ -518,6 +518,104 @@
     "file": "667a35ed53a1.mp3"
   },
   {
+    "text": "This is Bangkok! Tap a pin to go there.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4032,
+    "file": "a0c0a83e4b99.mp3"
+  },
+  {
+    "text": "This is Bangkok! Click a pin to go there.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3432,
+    "file": "9d45460f378b.mp3"
+  },
+  {
+    "text": "Tap the house or the mall!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2016,
+    "file": "6602e95e7248.mp3"
+  },
+  {
+    "text": "Click the house or the mall!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2184,
+    "file": "2264469d60b2.mp3"
+  },
+  {
+    "text": "A giant wheel by the river! Round and round!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4320,
+    "file": "d22e27a1a2c2.mp3"
+  },
+  {
+    "text": "Chinatown! Look at the red lanterns!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3120,
+    "file": "649f90e18620.mp3"
+  },
+  {
+    "text": "A big lizard lives in this park!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2976,
+    "file": "863fd74eea1c.mp3"
+  },
+  {
+    "text": "This tower looks like building blocks!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3408,
+    "file": "709563130bdb.mp3"
+  },
+  {
+    "text": "The flower market! So many flowers!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3960,
+    "file": "7a6dfcbcb3bc.mp3"
+  },
+  {
+    "text": "Big ships bring boxes from far away!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2904,
+    "file": "97602e1593e4.mp3"
+  },
+  {
+    "text": "A jungle in the middle of the city!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2496,
+    "file": "77522954d889.mp3"
+  },
+  {
+    "text": "The skytrain! It rides high above the street.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3408,
+    "file": "42831c7994c8.mp3"
+  },
+  {
+    "text": "Boats are the buses of the river!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2400,
+    "file": "e9d752852006.mp3"
+  },
+  {
+    "text": "This river is the Chao Phraya!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2832,
+    "file": "673885714b48.mp3"
+  },
+  {
     "text": "Sawasdee krub! Welcome home!",
     "voice": "agong",
     "sig": "0f90e139f5",
