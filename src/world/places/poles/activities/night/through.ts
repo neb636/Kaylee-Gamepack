@@ -547,7 +547,8 @@ export class ThroughWorld implements World3D {
           this.lastHonk = t
           s.hop = 0.35
           this.counts.squish++
-          sfx.honk()
+          sfx.squish()
+          this.at(0.12, () => sfx.honk())
         }
       }
     }

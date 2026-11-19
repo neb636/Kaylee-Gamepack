@@ -780,5 +780,24 @@
   "label": "Pebble's egg cracks",
   "prompt": "A small eggshell cracking: two or three tiny dry crisp ticks and a soft crunch, close and gentle. No music, no voice.",
   "seconds": 0.7
+ },
+ {
+  "id": "night-hic",
+  "label": "Pebble hiccups",
+  "prompt": "A tiny cute cartoon hiccup of a baby bird, one quick soft high hic with a little squeak, funny and sweet. Close, no music, no words.",
+  "seconds": 0.6
+ },
+ {
+  "id": "through-squish",
+  "label": "Pebble squishes past a fluffy dad",
+  "prompt": "A soft squishy cartoon squeeze, like a small toy pushing past a big fluffy feather pillow: a gentle fwump and a little rubbery squeak. Funny, soft, no music, no voices.",
+  "seconds": 0.7
+ },
+ {
+  "id": "night-burner-hold",
+  "label": "The burner held on (loop)",
+  "prompt": "A hot-air balloon burner held on: a steady soft warm whooshing roar of gas flame, breathy and even, gentle, not loud. Seamless loop, no music, no voices.",
+  "seconds": 4,
+  "loop": true
  }
 ]
