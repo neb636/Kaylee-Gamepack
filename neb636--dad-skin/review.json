@@ -1,0 +1,13 @@
+{
+  "title": "Dad 5: your skin tone",
+  "checkIn": "fix",
+  "kaylee": "The new Dad isn't mint any more: three skin tones taken from your photo, to pick one before he goes in the game.",
+  "questions": ["Which skin: A, B or C?"],
+  "pictures": [
+    { "title": "Mint, then A, B, C", "after": "pics/lineup.jpg", "caption": "Left to right: today's mint, A (tanned, the photo's cheeks), B (peach), C (fair)" },
+    { "title": "A, close up", "before": "pics/face-mint.jpg", "after": "pics/face-a.jpg", "caption": "Mint → A (tanned)" },
+    { "title": "B, close up", "before": "pics/face-mint.jpg", "after": "pics/face-b.jpg", "caption": "Mint → B (peach)" },
+    { "title": "C, close up", "before": "pics/face-mint.jpg", "after": "pics/face-c.jpg", "caption": "Mint → C (fair)" }
+  ],
+  "links": [{ "label": "Turn them round in the lab", "hash": "#/world/characters/dad-5?lineup=dad-5,dad-5-a,dad-5-b,dad-5-c" }]
+}
