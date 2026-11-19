@@ -4,7 +4,7 @@
   "title": "After",
   "video": "bangkok-map-after.mp4",
   "gif": "bangkok-map-after.gif",
-  "seconds": 40,
+  "seconds": 30,
   "browser": "webkit",
   "viewport": "ipad-landscape",
   "moments": [
@@ -12,35 +12,28 @@
       "name": "bangkok-map-alive",
       "where": "bangkok-map-alive",
       "seconds": 6,
-      "fps": 55,
+      "fps": 75.6,
+      "status": "ok"
+    },
+    {
+      "name": "bangkok-map-balloon",
+      "where": "bangkok-map-balloon",
+      "seconds": 4,
+      "fps": 72.6,
+      "status": "ok"
+    },
+    {
+      "name": "bangkok-map-house",
+      "where": "bangkok-map-house",
+      "seconds": 4,
+      "fps": 56.7,
       "status": "ok"
     },
     {
       "name": "bangkok-map-corners",
       "where": "bangkok-map-corners",
       "seconds": 10,
-      "fps": 53.8,
-      "status": "ok"
-    },
-    {
-      "name": "bangkok-map-thai",
-      "where": "bangkok-map-thai",
-      "seconds": 7,
-      "fps": 45.7,
-      "status": "ok"
-    },
-    {
-      "name": "bangkok-map-spin",
-      "where": "bangkok-map-spin",
-      "seconds": 5,
-      "fps": 52.4,
-      "status": "ok"
-    },
-    {
-      "name": "bangkok-map-mall",
-      "where": "bangkok-map-mall",
-      "seconds": 4,
-      "fps": 53.6,
+      "fps": 69.5,
       "status": "ok"
     }
   ]
