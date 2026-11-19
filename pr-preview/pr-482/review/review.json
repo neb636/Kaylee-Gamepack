@@ -1,37 +1,15 @@
 {
-  "title": "Dad 3 waves beside his cheek",
+  "title": "You picked Dad 5",
   "checkIn": "Character lab",
-  "kaylee": "Dad 3 bends his elbow and waves his hoof. His pink sleeve now follows the arm through the wave.",
-  "questions": [],
+  "kaylee": "Dad 5 is the finalist. You can compare his Blender wave with the original Dad in the lab.",
   "links": [
     {
-      "label": "Try Wave on Dad 3",
-      "hash": "#/world/characters/dad-3?zoom=1.15"
-    },
-    {
-      "label": "Dad 3 and Dad 5 together",
-      "hash": "#/world/characters/dad-3?lineup=dad-3,dad-5"
-    },
-    {
-      "label": "Download Dad 3\u2019s Blender scene",
-      "hash": "review/dad-3-wave.blend"
+      "label": "Compare Dad 5 with the original",
+      "hash": "#/world/characters/dad-5?lineup=nick,dad-5"
     },
     {
       "label": "Download Dad 5\u2019s Blender scene",
       "hash": "review/dad-5-wave.blend"
-    }
-  ],
-  "pictures": [
-    {
-      "title": "Shoulders mid-cheer",
-      "before": "pics/shoulders-pieces.jpg",
-      "after": "pics/shoulders-skinned.jpg",
-      "caption": "Before: cut into stiff pieces (Dads 1-3), the sleeves tore. After: Tripo's rig (Dads 1, 2, 3, 5), the shirt bends. Dad 5 is the cleanest."
-    },
-    {
-      "title": "Earlier character lineup",
-      "after": "pics/lineup.jpg",
-      "caption": "Today's Dad, then New Dads 1, 2, 3 and 5: standing, from behind, sitting, waving, cheering and Silly"
     }
   ]
 }
