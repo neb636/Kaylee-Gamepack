@@ -199,7 +199,7 @@ export class Studio implements World3D {
       const own = entry.group === 'family' ? FAMILY.find((m) => m.id === entry.id) : undefined
       const dad = FAMILY.find((m) => m.id === 'nick')!
       char = entry.candidate
-        ? new Member({ ...dad, id: entry.id, spot: null }, bag, undefined, entry.voice, buildDadCandidate(entry.candidate, bag, entry.skin))
+        ? new Member({ ...dad, id: entry.id, spot: null }, bag, undefined, entry.voice, buildDadCandidate(entry.candidate, bag))
         : own
         ? new Member({ ...own, spot: null }, bag, undefined, entry.voice)
         : new Member({ id: entry.id, name: entry.name, who: entry.who, height: entry.look!.height, spot: null, pitch: 300 }, bag, entry.look, entry.voice)

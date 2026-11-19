@@ -230,9 +230,8 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   upper arm and forearm move together. Other poses use the family controls. A small sleeve fold remains at the deepest bend.
 - The previous trials used rigid pieces, which pulled away at the shoulder on fused meshes. The current skin weights let
   the sleeves bend with the arms. `scripts/blender/split-dad.py` produced the measurements used by the shared face code.
-- His skin colour is a parameter: `buildDadCandidate(id, bag, skin)` moves every green texel of Tripo's texture to that
-  colour (and the blink lids match). The lab shows three tones from your photo next to the mint, at
-  `#/world/characters/dad-5?lineup=dad-5,dad-5-a,dad-5-b,dad-5-c` (2026-11-18, waiting on your pick).
+- His skin is a pale peach in Mom's hue, `DAD_SKIN` (`#FCDCBC`, your pick 2026-11-18): `buildDadCandidate` moves every
+  green texel of Tripo's texture to it, and the blink lids match. His outline is at 1, like Mom's.
 - Before an in-game swap, check the remaining gestures and fit the gear Dad uses in the trips. The barber needs separate
   hair and the tail needs its own joint to swing. Issue #481 tracks the texture work.
 

@@ -8,7 +8,7 @@ import type { Rig } from '../../../engine3d/characters/animal'
 import { blobShadow } from '../../../engine3d/geo'
 import { outlineMaterial } from '../../../engine3d/outline'
 import { toonGradient } from '../../../engine3d/toon'
-import { ARM_TILT, BODY_INK, DAD_SIZE, dadFace, dadShape, type SplitMeta } from './dad-model'
+import { ARM_TILT, BODY_INK, DAD_SIZE, DAD_SKIN, dadFace, dadShape, type SplitMeta } from './dad-model'
 import { reachForward } from './mom-model'
 import five from './models/candidates/dad-5.glb?url'
 import m5 from './models/candidates/dad-5.json'
@@ -17,9 +17,6 @@ const DADS = {
   'dad-5': { url: five, meta: m5 as SplitMeta },
 } as const
 export type DadCandidate = keyof typeof DADS
-
-/** Dad's mint (dad-model.ts SKIN): Dad 5's skin unless a tone is asked for. */
-export const DAD_MINT = '#A8EAD5'
 
 const loaded = new Map<DadCandidate, { gltf: GLTF; map: Texture; skins: Map<string, MeshToonMaterial> }>()
 let ready: Promise<unknown> | null = null
@@ -46,7 +43,7 @@ export function dadCandidatesReady(): Promise<unknown> {
 }
 
 /** One candidate's rig: Tripo's skinned model with the game's pivots on its bones, his skin painted `skin`. */
-export function buildDadCandidate(id: DadCandidate, bag: Bag, skin = DAD_MINT): Rig {
+export function buildDadCandidate(id: DadCandidate, bag: Bag, skin = DAD_SKIN): Rig {
   const got = loaded.get(id)
   if (!got) throw new Error(`${id} is not loaded yet: wait for dadCandidatesReady() first`)
   let material = got.skins.get(skin)
