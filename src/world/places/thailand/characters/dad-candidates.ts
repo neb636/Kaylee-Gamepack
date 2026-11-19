@@ -277,6 +277,15 @@ function reskinned(map: Texture, skin: string): Texture {
       greens.push(i)
       sumS += s
       sumV += v
+    } else if (h > 0.11 && h < 0.47 && s > 0.02 && s < 0.3 && v > 0.55) {
+      // His muzzle's cream (and the greyed greens): Tripo painted it yellow-green, blended into the green skin. It turns
+      // to the skin's hue, keeping its own paleness and a touch brighter (it read grey beside the lifted skin), so it stays
+      // a cream that matches him. The khaki shorts (hue ~0.08), the orange horn and the brown hair are warmer or more
+      // saturated, so they're left alone.
+      const [r, g, b] = rgb(target[0], s * 0.85, Math.min(1, v * 1.1))
+      px[i] = r * 255
+      px[i + 1] = g * 255
+      px[i + 2] = b * 255
     }
   }
   const kS = greens.length ? target[1] / (sumS / greens.length) : 1
