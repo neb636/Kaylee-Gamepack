@@ -36,8 +36,15 @@ What the board took from them, in the app's toy look:
 
 - **The river leads.** Wide, bright teal, a pale promenade down both banks, coconut palms leaning over it.
 - **A map printed on warm paper.** The city floor is a few creams and peaches that sit close together, the little
-  streets a thin tan print, Thonburi's and the south's orchards soft striped green, a compass in the quiet corner.
-  (Before: seven pastels, a white grid and dotted orchards. It read as a quilt.)
+  streets a thin tan print, a compass in the quiet corner. (Before: seven pastels, a white grid and dotted orchards.
+  It read as a quilt.)
+- **Thonburi and the south are city, only leafier** (your call, 2026-11-19, from the view from the air: they were
+  orchards once, built up now, still green here and there). They're the same paper, streets and printed rooftops as
+  the middle of town, a few more shophouse rows of their own, and gardens speckled through them: little patches of
+  lawn under round toon trees, a yard's tree among the roofs, thickest along the khlongs and toward the board's west
+  and south edges (`leafy()`, `lawnAt()`, `crowns()` in `ground.ts`). About 56 of those trees stand up off the paper
+  (`GARDEN_TREES`). The middle of town has none. Bang Mot's orange orchard is the one striped green patch left, round
+  the orchard toy (`inOrchard()`). (Until then the whole west strip and the south were striped farmland.)
 - **A skyline in bunches** (Silom and Sathon, Siam, Sukhumvit, a pair at Rama 9): 19 towers in stronger candy glass,
   each with a long afternoon shadow painted the same way. The rest of the city stays low.
 - **Shophouse rows under terracotta roofs:** about 30 rows of three or four pastel fronts, close together in the old
@@ -51,7 +58,7 @@ What the board took from them, in the app's toy look:
   - **South-west:** a floating market on Khlong Dao Khanong (stilt houses, a jetty, four boats under big umbrellas)
     and Bang Mot's orange orchard (trees heavy with oranges, the farmer's house, baskets).
   - **Everywhere:** rooftops printed tone on tone inside the street grid (the city looks built up with nothing standing
-    on it), neat groves of fruit trees on the orchards' painted rows (`GROVES`), and traffic: 24 little cars in taxi
+    on it), neat groves of fruit trees on the orchard's painted rows (`GROVES`), and traffic: 24 little cars in taxi
     colors on six real roads (`TRAFFIC`, one instanced mesh).
 - Still few big shapes ([the Krabi map](krabi-map.md) taught this): the pins and the river are what she sees first.
   A new thing should be a real place with a poke, not scatter.

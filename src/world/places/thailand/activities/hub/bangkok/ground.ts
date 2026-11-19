@@ -1,8 +1,10 @@
 // The Bangkok map's ground. Bangkok is flat, so the board is one low slab of city with the Chao Phraya cut through it
 // (the real river, geo.ts): its long S past the old town and Chinatown, then the big loop round Bang Krachao. The top
 // is painted like a map printed on warm paper: the city in a few creams and peaches that sit close together, its
-// little streets a thin print, the real main roads in white, the khlongs in blue, the parks and their lakes, Thonburi's
-// orchards in soft striped green, Bang Krachao's jungle inside the loop, a pale promenade along both banks, a compass
+// little streets a thin print, the real main roads in white, the khlongs in blue, the parks and their lakes, Thonburi
+// and the south built up too but leafy (gardens and trees speckled through their streets, thickest along the khlongs
+// and out toward the edges), Bang Mot's one orchard in soft striped green, Bang Krachao's jungle inside the loop, a
+// pale promenade along both banks, a compass
 // in the quiet corner, a long afternoon shadow behind every tower and a soft one under every toy. The river is the
 // Thailand map's Sea in the Chao Phraya's own teal, foaming a thin white line along both banks.
 import { BufferAttribute, BufferGeometry, CanvasTexture, Mesh, MeshToonMaterial, SRGBColorSpace } from 'three'
@@ -12,7 +14,7 @@ import { smoothstep } from '../../../../../../sdk/math'
 import { distance } from '../map/field'
 import { Sea } from '../map/terrain'
 import { ISLANDS, KHLONGS, PARKS, ROADS, WATER, type LonLat } from './geo'
-import { BOARD, CLIFF_W, COMPASS, DEG_M, JUNGLE, LEVEL, ll, RIVER_FAT, SKYTRAIN, toX, toZ, type XZ } from './layout'
+import { BOARD, CLIFF_W, COMPASS, DEG_M, JUNGLE, LEVEL, ll, RIVER_FAT, SKYTRAIN, SPOTS, toX, toZ, type XZ } from './layout'
 
 /** Field cells per meter, ground mesh cells per meter, painted pixels per meter. */
 const RES = 64
@@ -54,11 +56,14 @@ export interface Field {
   park(x: number, z: number): boolean
   /** In Bang Krachao's jungle (inside the river's loop)? */
   jungle(x: number, z: number): boolean
+  /** Meters to the nearest khlong (the trees crowd along them). */
+  khlong(x: number, z: number): number
 }
 
 /** The city is a patchwork of districts: each a big soft patch of one pastel, its little streets all leaning one way
  *  (like the real street grid does, part of town by part of town). Out west in Thonburi and south past the river's loop
- *  they are orchards: green, with rows of trees. */
+ *  they were orchards once; now they're built up too, only leafier (`leafy()`). Bang Mot's orange orchard is the one
+ *  patch still green with rows of trees (`inOrchard()`). */
 export interface District {
   x: number
   z: number
@@ -66,7 +71,6 @@ export interface District {
   turn: number
   /** Which pastel it is (an index: BLOCKS here, the roofs in diorama.ts). */
   k: number
-  orchard: boolean
 }
 /** How far apart a district's little streets are (m): the houses stand in the squares between them. */
 export const BLOCK = 0.085
@@ -84,7 +88,7 @@ function allDistricts() {
     const z = BOARD.z0 + rnd() * D
     const turn = (rnd() - 0.5) * 1.1
     if (out.some((o) => Math.hypot(o.x - x, o.z - z) < 0.62)) continue
-    out.push({ x, z, turn, k: out.length, orchard: x < toX(100.487) || z > toZ(13.668) })
+    out.push({ x, z, turn, k: out.length })
   }
   districts = out
   return out
@@ -117,8 +121,88 @@ export function blockMid(o: District, iu: number, iv: number): XZ {
   return [u * c - v * sn, u * sn + v * c]
 }
 
+/** A spot inside a square of a district's street grid, from the square's own 0..1 coordinates. */
+export function inBlock(o: District, iu: number, iv: number, fu: number, fv: number): XZ {
+  const [c, sn] = [Math.cos(o.turn), Math.sin(o.turn)]
+  const [u, v] = [(iu + fu) * BLOCK, (iv + fv) * BLOCK]
+  return [u * c - v * sn, u * sn + v * c]
+}
+
 /** A cheap wobble (about -1..1) so painted edges aren't ruler-straight. */
 const wobble = (x: number, z: number) => 0.5 * Math.sin(x * 7.3 + z * 3.1) + 0.3 * Math.sin(x * 3.7 - z * 5.9) + 0.2 * Math.sin(x * 13.1 + z * 11.3)
+/** Bang Mot's orange orchard: the one patch of the old orchards left on the board, round the orchard toy. Green, with
+ *  rows of trees. */
+export function inOrchard(x: number, z: number) {
+  const [dx, dz] = [x - SPOTS.orchard[0], z - SPOTS.orchard[1]]
+  return dx * dx + dz * dz < 0.25 && Math.hypot(dx, dz) < 0.42 + wobble(x * 1.6 + 0.3, z * 1.6 - 0.8) * 0.08
+}
+/** A square's own number (0..1), the same every visit. */
+const hashOf = (iu: number, iv: number, k: number, salt = 0) => Math.abs(Math.sin(iu * 12.9898 + iv * 78.233 + k * 37.7 + salt * 19.19) * 43758.5453) % 1
+
+/** How far out a spot is (0..1): 0 in the middle of town, 1 at the board's west edge or its south edge. Thonburi and the
+ *  south (orchards until not long ago) are built up now, but leafier the further out you go. */
+export const outward = (x: number, z: number) => Math.max(smoothstep(toX(100.503), BOARD.x0 + 0.15, x), smoothstep(toZ(13.68), BOARD.z1 - 0.12, z))
+
+/** How leafy a square must be to have a tree in its yard, or to be a garden of big trees. */
+const LEAF = { yard: 0.53, lawn: 0.62 }
+const leafCache = new Map<number, number>()
+/** Is this square of a district's street grid leafy (a garden, a few big trees, a patch of green between the roofs)?
+ *  0 if not, else how leafy (0..1). Leafy squares come in little clumps, more of them along the khlongs and further out
+ *  (the real Thonburi from the air: city, speckled with green). The middle of town stays built up. */
+export function leafy(o: District, iu: number, iv: number): number {
+  const key = (o.k * 4096 + (iu & 2047)) * 4096 + (iv & 2047)
+  const hit = leafCache.get(key)
+  if (hit !== undefined) return hit
+  const [x, z] = blockMid(o, iu, iv)
+  const out = outward(x, z)
+  // (Nearer the middle than this, no square can score high enough: paint() leans on that to skip the middle of town.)
+  if (out < 0.24 || inOrchard(x, z)) {
+    leafCache.set(key, 0)
+    return 0
+  }
+  const nearKhlong = 1 - smoothstep(0.03, 0.16, buildField().khlong(x, z))
+  // (Patches a few squares across, not one square here and one there: a map of confetti isn't a city.)
+  const clump = 0.6 * wobble(x * 2.6 + 1.7, z * 2.6 - 0.4) + 0.4 * wobble(x * 1.1 - 3.1, z * 1.1 + 2.3)
+  const score = out * 0.6 + (clump * 0.35 + nearKhlong * 0.3) * (0.25 + out * 0.75) + (hashOf(iu, iv, o.k, 1) - 0.5) * 0.2
+  const v = score < LEAF.yard ? 0 : score < LEAF.lawn ? 0.3 : 1
+  leafCache.set(key, v)
+  return v
+}
+/** Is this spot of a garden square (a leafy one with a lawn) on its lawn? The lawn fills the square with round corners,
+ *  short of the little streets round it, except where the next square is a garden too: there it runs on across the
+ *  street into the next garden, so gardens side by side make one patch of green. */
+export function lawnAt(o: District, iu: number, iv: number, fu: number, fv: number) {
+  const R = 0.2
+  const M = 0.065
+  const du = Math.min(fu, 1 - fu)
+  const dv = Math.min(fv, 1 - fv)
+  const nu = fu < 0.5 ? iu - 1 : iu + 1
+  const nv = fv < 0.5 ? iv - 1 : iv + 1
+  const mu = leafy(o, nu, iv) > 0.5 ? 0 : M
+  const mv = leafy(o, iu, nv) > 0.5 ? 0 : M
+  if (du < mu || dv < mv) return false
+  if (mu === 0 && mv === 0) return leafy(o, nu, nv) > 0.5 || du > M || dv > M || Math.hypot(M - du, M - dv) > M
+  if (mu === 0 || mv === 0) return true
+  return Math.hypot(Math.max(0, mu + R - du), Math.max(0, mv + R - dv)) < R
+}
+/** The big trees in a leafy square, in its own 0..1 coordinates: [u, v, radius] (one, two or three crowns). */
+const crownCache = new Map<number, [number, number, number][]>()
+export function crowns(o: District, iu: number, iv: number): [number, number, number][] {
+  const key = (o.k * 4096 + (iu & 2047)) * 4096 + (iv & 2047)
+  const hit = crownCache.get(key)
+  if (hit) return hit
+  const h = hashOf(iu, iv, o.k, 2)
+  const n = h < 0.3 ? 1 : h < 0.75 ? 2 : 3
+  const out: [number, number, number][] = []
+  for (let i = 0; i < n; i++) {
+    const a = hashOf(iu, iv, o.k, 3 + i)
+    const b = hashOf(iu, iv, o.k, 7 + i)
+    const r = n === 1 ? 0.27 : n === 2 ? 0.21 : 0.18
+    out.push([n === 1 ? 0.5 + (a - 0.5) * 0.12 : 0.3 + a * 0.4, n === 1 ? 0.5 + (b - 0.5) * 0.12 : 0.26 + ((i + b * 0.6) / n) * 0.62, r * (0.85 + a * 0.3)])
+  }
+  crownCache.set(key, out)
+  return out
+}
 
 const JUNGLE_M = JUNGLE.map(([lon, lat, r]) => [toX(lon), toZ(lat), r * DEG_M] as const)
 
@@ -197,6 +281,13 @@ function build() {
     g.stroke()
   }
   const toLine = distance(mask(), w, h)
+  // ---- The khlongs on their own (the trees crowd along them).
+  clearAll()
+  for (const l of KHLONGS) {
+    trace(l, false)
+    g.stroke()
+  }
+  const toKhlong = distance(mask(), w, h)
   // ---- The parks.
   clearAll()
   for (const ring of PARKS) {
@@ -226,6 +317,7 @@ function build() {
     clear: (x, z) => Math.sqrt(toLine[cell(x, z)]) / RES,
     park: (x, z) => park[cell(x, z)] === 1,
     jungle: (x, z) => at(land, x, z) > 0.02 && JUNGLE_M.some(([jx, jz, r]) => Math.hypot(x - jx, z - jz) < r + wobble(x * 3, z * 3) * 0.03),
+    khlong: (x, z) => Math.sqrt(toKhlong[cell(x, z)]) / RES,
   }
   // The river's own picture: how far out from the bank each spot is.
   const sea = new Float32Array(land.length)
@@ -314,7 +406,7 @@ export function buildGround(bag: Bag, input: GroundInput) {
   return new Mesh(geo, mat)
 }
 
-/** The districts' paper: creams and peaches close together (a map's print, not a quilt), and the orchards' greens. */
+/** The districts' paper: creams and peaches close together (a map's print, not a quilt), and the orchard's greens. */
 const BLOCKS: [number, number, number][] = [[255, 244, 226], [255, 238, 220], [255, 246, 214], [255, 240, 230]]
 const ORCHARDS: [number, number, number][] = [[206, 238, 182], [215, 242, 190], [198, 234, 176]]
 
@@ -354,7 +446,7 @@ function paint(f: Field, { shadows, plazas, casts, basins }: GroundInput) {
       else {
         // (A wobbly edge between one district and the next.)
         const dist = districtAt(x + n * 0.03, z + wobble(z * 2.2, x * 2.2) * 0.03)
-        col = dist.orchard ? ORCHARDS[dist.k % ORCHARDS.length] : BLOCKS[dist.k % BLOCKS.length]
+        col = inOrchard(x, z) ? ORCHARDS[dist.k % ORCHARDS.length] : BLOCKS[dist.k % BLOCKS.length]
         cells[py * bw + px] = dist.k
       }
       data[o] = col[0]
@@ -376,7 +468,8 @@ function paint(f: Field, { shadows, plazas, casts, basins }: GroundInput) {
   let seed = 11
   const rnd = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280)
 
-  // ---- Each district's little streets (pale lines, leaning its own way), and the orchards' rows of trees.
+  // ---- Each district's little streets (pale lines, leaning its own way), the leafy squares' gardens and big trees, and
+  // the orchard's rows of trees.
   {
     const over = document.createElement('canvas')
     over.width = w
@@ -387,6 +480,7 @@ function paint(f: Field, { shadows, plazas, casts, basins }: GroundInput) {
     const all = allDistricts()
     const cs = all.map((d) => Math.cos(d.turn))
     const sn = all.map((d) => Math.sin(d.turn))
+    const last = { k: -1, iu: 0, iv: 0, leaf: 0 }
     for (let py = 0; py < h; py++) {
       const z = BOARD.z0 + ((py + 0.5) / h) * D
       const row = Math.min(bh - 1, py >> 1) * bw
@@ -399,8 +493,10 @@ function paint(f: Field, { shadows, plazas, casts, basins }: GroundInput) {
         const fu = u - Math.floor(u)
         const fv = v - Math.floor(v)
         const i = (py * w + px) * 4
-        if (all[k].orchard) {
-          // The orchards' rows: a soft stripe down every square (Thonburi's orchards are ditch after ditch).
+        // (Only out west and down south can a square be leafy: see leafy(). Skipping the middle of town keeps this quick.)
+        const out = outward(x, z) > 0.15
+        if (inOrchard(x, z)) {
+          // The orchard's rows: a soft stripe down every square (Bang Mot's orchards are ditch after ditch).
           const off = Math.abs(fu - 0.5)
           if (off > 0.16) continue
           od[i] = 150
@@ -413,7 +509,31 @@ function paint(f: Field, { shadows, plazas, casts, basins }: GroundInput) {
           const edge = Math.min(fu, 1 - fu, fv, 1 - fv)
           if (edge > 0.06) {
             const [iu, iv] = [Math.floor(u), Math.floor(v)]
-            const hash = Math.abs(Math.sin(iu * 12.9898 + iv * 78.233 + k * 37.7) * 43758.5453) % 1
+            // A leafy square: big trees, round and toon-flat with a darker rim and a sunny top-left, standing on a
+            // garden's lawn (the leafiest) or among the roofs (a yard's one or two trees).
+            // (The pixels of one square come one after another: ask once a square.)
+            if (k !== last.k || iu !== last.iu || iv !== last.iv) Object.assign(last, { k, iu, iv, leaf: out ? leafy(all[k], iu, iv) : 0 })
+            const leaf = last.leaf
+            if (leaf > 0) {
+              const lawn = leaf > 0.5 && lawnAt(all[k], iu, iv, fu, fv)
+              let crown = -1
+              for (const [cu, cv, r] of crowns(all[k], iu, iv)) {
+                const d = Math.hypot(fu - cu, fv - cv) / r
+                if (d >= 1) continue
+                const lit = Math.hypot(fu - cu + r * 0.32, fv - cv + r * 0.34) / r < 0.42
+                crown = Math.max(crown, d > 0.8 ? 1 : lit ? 3 : 2)
+              }
+              // (A yard's square keeps its rooftops round its tree.)
+              if (lawn || crown >= 0) {
+                const [r0, g0, b0, a0] = crown === 1 ? [118, 190, 126, 235] : crown === 2 ? [156, 216, 146, 240] : crown === 3 ? [204, 242, 182, 240] : [204, 236, 176, 215]
+                od[i] = r0
+                od[i + 1] = g0
+                od[i + 2] = b0
+                od[i + 3] = a0
+                continue
+              }
+            }
+            const hash = hashOf(iu, iv, k)
             if (hash < 0.3 || edge < 0.2) continue
             if (hash > 0.72 && Math.abs(fu - 0.5) < 0.045) continue
             const warm = hash > 0.55
@@ -421,6 +541,15 @@ function paint(f: Field, { shadows, plazas, casts, basins }: GroundInput) {
             od[i + 1] = warm ? 170 : 196
             od[i + 2] = warm ? 140 : 176
             od[i + 3] = edge < 0.235 ? 26 : warm ? 46 : 58
+            continue
+          }
+          // (Where two gardens meet, the little street between them is under the trees too.)
+          const [iu, iv] = [Math.floor(u), Math.floor(v)]
+          if (out && leafy(all[k], iu, iv) > 0.5 && lawnAt(all[k], iu, iv, fu, fv)) {
+            od[i] = 204
+            od[i + 1] = 236
+            od[i + 2] = 176
+            od[i + 3] = 215
             continue
           }
           od[i] = 232

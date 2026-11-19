@@ -185,13 +185,11 @@ export const TRAFFIC: [LonLat[], number][] = [
   [[[100.4843, 13.7764], [100.4694, 13.7582], [100.4711, 13.7362], [100.4734, 13.7309]], 4],
 ]
 
-/** Orchard groves: rows of little fruit trees standing in Thonburi's and the south's orchards ([lon, lat, rows,
- *  trees in a row]). */
+/** Orchard groves: rows of little fruit trees in Bang Mot's orange orchard, beside the orchard toy ([lon, lat, rows,
+ *  trees in a row]). (Thonburi and the south were all orchards once; they're built up now, and leafy: ground.ts.) */
 export const GROVES: [number, number, number, number][] = [
-  [100.4835, 13.6575, 3, 4],
-  [100.4745, 13.7065, 2, 4],
-  [100.4775, 13.7385, 2, 3],
-  [100.5275, 13.6608, 2, 4],
+  [100.4858, 13.6672, 2, 3],
+  [100.503, 13.659, 2, 3],
 ]
 
 /** Sanam Luang, the big open field in the old town: kites fly over it. Where each kite's string is held, how high
@@ -223,5 +221,5 @@ export const CLOUDS: [number, number, number][] = [
  *  together than anywhere else ([middle, how far out it reaches (m)]). */
 export const OLD_TOWN: { at: XZ; r: number } = { at: ll(100.503, 13.75), r: 0.75 }
 
-/** Where the map's compass is painted: the quiet corner out past the orchards, south-west. */
+/** Where the map's compass is painted: the quiet corner out south-west. */
 export const COMPASS: { at: XZ; r: number } = { at: [BOARD.x0 + 0.4, BOARD.z1 - 0.4], r: 0.25 }
