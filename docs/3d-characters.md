@@ -271,15 +271,16 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   ink is a skinned hull (welded with its skin weights kept) with a skinning version of the outline shader. The face
   (smile, talking mouth, lids, spots) is `dadFace` in `dad-model.ts`, shared with today's Dad; the skin is turned mint
   in the texture at load.
-- **Dad 5's wave:** the candidate GLB now includes a 1.5-second Blender clip, `Dad wave`. Its three rotation tracks
+- **Dads 3 and 5 waving:** each candidate GLB includes its own 1.5-second Blender clip, `Dad wave`. Its three rotation tracks
   lift the collarbone and upper arm and swing the forearm beside the cheek. The lab preserves that chain and the
   bones' original local axes. Other gestures still use the family pose controls. The review reel compares the old
-  and new wave with ink on and off. A small crease remains under the sleeve at the deepest bend.
+  and new waves with ink on and off. Dad 3's waving cuff follows his upper arm so the sleeve and skin stay together.
+  A small fold remains under the raised sleeve.
 - **Where they stand:** Dad 5's shoulders are clean front and back mid-cheer; 1 has dark specks at the armpits, 2 mint
-  smudges, 3 a black patch where the inside of a sleeve shows. Tripo's weights let the arm slide part-way out of the
+  smudges, and 3 can show a dark patch behind the opposite sleeve in Cheer. Tripo's weights let the arm slide part-way out of the
   sleeve rather than carry it. No tail bone (the tail doesn't swing), no separate hair (the barber needs it), Tripo's
   texture not flattened yet (issue #481).
-- **Next:** the user picks one; then flatten its texture, split its hair out by colour, and swap it in for today's Dad.
+- **Next:** Dad 3 is your preferred look. Check his other arm gestures before any in-game swap.
 
 ## Open questions
 

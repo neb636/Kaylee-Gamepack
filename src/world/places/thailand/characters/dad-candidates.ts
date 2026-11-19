@@ -6,7 +6,7 @@
 // arm instead. The game still drives him the way it drives every family member: this file puts a pivot group (the
 // Rig's head, armL/armR, legL/legR) at Tripo's Head, Arm and UpLeg bones and hangs each bone under its pivot, so the
 // same code that turns today's Dad's pieces (Member, poses.ts, the actions) turns his bones, and his skin follows.
-// Dad 5 uses an authored three-bone clip for his wave. Tripo's "Left" bones are on +x, the game's right: arms and legs are matched by side.
+// Dads 3 and 5 each have an authored three-bone wave. Tripo's "Left" bones are on +x, the game's right: arms and legs are matched by side.
 //
 // Each candidate's face is drawn by the same code as today's Dad's (dad-model.ts dadFace), from what split-dad.py
 // measured on the textured model (the JSON beside each GLB; Dad 5's was measured in Blender by hand, his horn is fused
