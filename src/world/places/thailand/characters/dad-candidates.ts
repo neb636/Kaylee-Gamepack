@@ -19,13 +19,13 @@ const DADS = {
 } as const
 export type DadCandidate = keyof typeof DADS
 
-/** Dad's mint (dad-model.ts SKIN), as HSV. */
-const MINT_HSV = hsv(0xa8 / 255, 0xea / 255, 0xd5 / 255)
+/** Dad's skin: Mom's cream (dad-model.ts SKIN, mom-model.ts LID; the user's pick, 2026-11-19), as HSV. */
+const MINT_HSV = hsv(0xfa / 255, 0xcc / 255, 0xa2 / 255)
 
 const loaded = new Map<DadCandidate, { gltf: GLTF; skin: MeshToonMaterial }>()
 let ready: Promise<unknown> | null = null
 
-/** Resolves once Dad 5 is loaded and his skin turned mint (the lab waits for it). */
+/** Resolves once Dad 5 is loaded and his skin turned Mom's cream (the lab waits for it). */
 export function dadCandidatesReady(): Promise<unknown> {
   ready ??= Promise.all(
     (Object.keys(DADS) as DadCandidate[]).map((id) =>
@@ -268,8 +268,8 @@ function skinnedOutline(px: number) {
   return m
 }
 
-/** His texture with Tripo's green skin turned Dad's mint (every green texel moved to the mint's hue, its saturation and
- *  brightness scaled so the green's middle lands on the mint). Where his cream muzzle shades into the green (round his
+/** His texture with Tripo's green skin turned Dad's cream, like Mom's (every green texel moved to the cream's hue, its saturation and
+ *  brightness scaled so the green's middle lands on the cream). Where his cream muzzle shades into the green (round his
  *  chin) Tripo's paint is grainy, so a texel-by-texel cut-off broke into speckles: how green each texel is gets
  *  blurred over its neighbours first, and each texel moves that much of the way. */
 function minted(map: Texture): Texture {

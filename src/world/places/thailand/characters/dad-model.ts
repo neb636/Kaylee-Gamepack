@@ -13,8 +13,8 @@ export const ARM_TILT = 1.2
 const INK = 1 / 0.75
 export const BODY_INK = 1.8 * INK
 const FACE_INK = 1.2 * INK
-/** His mint, as split-nick.py's mint() painted it into the texture (the lids). */
-const SKIN = '#A8EAD5'
+/** His skin (the lids): Mom's cream, as dad-candidates.ts minted() paints it into the texture. */
+const SKIN = '#FACCA2'
 const SMILE = '#4A2A2A'
 const MOUTH = '#7A2745'
 const TONGUE = '#FF8FA8'
