@@ -76,8 +76,9 @@ const family: CastEntry[] = [
       : { id: m.id, name: m.name, who: m.who, group: 'family', kind: 'member', look: LOOKS[m.id], voice: m.id, src: 'characters/looks.ts', color: LOOKS[m.id].fur, set: m.id === 'nick' ? 'dads' : undefined },
   ),
   { id: 'dad-5', name: 'New Dad 5', who: 'Mint unicorn with a Blender wave', group: 'family', kind: 'member', voice: 'nick', src: 'characters/dad-candidates.ts', color: '#A9EBD6', set: 'dads', candidate: 'dad-5' },
-  // Skin tones to pick from, from your photo (2026-11-18): A is the photo's cheeks, B and C lighter.
-  ...([['a', 'tanned', '#D9997F'], ['b', 'peach', '#EBB49B'], ['c', 'fair', '#F4CDB8']] as const).map(([k, what, skin]): CastEntry => ({ id: `dad-5-${k}`, name: `Dad 5, skin ${k.toUpperCase()}`, who: `Dad 5 in a ${what} skin tone`, group: 'family', kind: 'member', voice: 'nick', src: 'characters/dad-candidates.ts', color: skin, set: 'dads', candidate: 'dad-5', skin })),
+  // Skin tones to pick from (2026-11-18): your photo's tones were too dark and too red, so these are lighter and more
+  // beige; A is the warmest, C the palest.
+  ...([['a', 'light beige', '#EFCDB4'], ['b', 'lighter beige', '#F3D7C2'], ['c', 'palest beige', '#F6E0CE']] as const).map(([k, what, skin]): CastEntry => ({ id: `dad-5-${k}`, name: `Dad 5, skin ${k.toUpperCase()}`, who: `Dad 5 in a ${what} skin tone`, group: 'family', kind: 'member', voice: 'nick', src: 'characters/dad-candidates.ts', color: skin, set: 'dads', candidate: 'dad-5', skin })),
 ]
 
 const person = (id: string, name: string, who: string, group: CastGroup, look: Look, src: string, voice?: string, set?: string): CastEntry => ({ id, name, who, group, kind: 'member', look, voice, src, color: look.fur, set })
