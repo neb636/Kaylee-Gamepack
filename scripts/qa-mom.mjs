@@ -24,7 +24,8 @@ rmSync(dir, { recursive: true, force: true })
 mkdirSync(dir, { recursive: true })
 
 let list
-if (flag('hashes')) list = flag('hashes').split('|').map((h, i) => ({ name: `link-${i}`, hash: h }))
+// (The whole flag after its first '=': a link's own query has '=' in it.)
+if (flag('hashes')) list = args.find((a) => a.startsWith('--hashes=')).slice(9).split('|').map((h, i) => ({ name: `link-${i}`, hash: h }))
 // --screens=a,b: Thailand's own QA scenarios (qa.mjs `screens`, by exact name) with their taps, for moments a link
 // alone doesn't reach.
 else if (flag('screens')) {

@@ -979,7 +979,7 @@ export class VetClinic extends Stage {
       g: this.treatMesh,
       t: 0,
       from,
-      to: () => (p ? p.zoneWorld(p.zones.find((z) => z.id === 'mouth')!, new Vector3()) : this.nick.rig.head.localToWorld(new Vector3(0, this.nick.rig.face.headY - 0.2, 0.3))),
+      to: () => (p ? p.zoneWorld(p.zones.find((z) => z.id === 'mouth')!, new Vector3()) : this.nick.rig.head.localToWorld(this.nick.rig.spots ? new Vector3(...this.nick.rig.face.mouth) : new Vector3(0, this.nick.rig.face.headY - 0.2, 0.3))),
       done: () => {
         sfx.munch()
         if (p) {
