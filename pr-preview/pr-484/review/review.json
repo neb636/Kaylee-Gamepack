@@ -1,0 +1,8 @@
+{
+  "title": "Dad 5: outline 1, like Mom",
+  "checkIn": "fix",
+  "kaylee": "The new Dad gets the same dark outline as Mom, so they look like a pair.",
+  "questions": [],
+  "pictures": [{ "title": "Mom and Dad 5 in the lab", "before": "pics/before.jpg", "after": "pics/after.jpg", "caption": "Dad's outline goes from 0.35 to 1, Mom's value" }],
+  "links": [{ "label": "Turn them round in the lab", "hash": "#/world/characters/ji?lineup=ji,dad-5" }]
+}
