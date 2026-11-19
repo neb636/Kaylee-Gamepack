@@ -1,10 +1,11 @@
-// Thailand's home base as deep-linkable spots: the Thailand map (map/, where she lands: tap Bangkok, Krabi or Nan) and Agong's house in Bangkok: #/world/thailand/hub/<section>?at=<thing>.
+// Thailand's home base as deep-linkable spots: the Thailand map (map/, where she lands: tap Bangkok, Krabi or Nan), the
+// Bangkok map (bangkok/: tap the house or ICONSIAM) and the Thailand house in Bangkok: #/world/thailand/hub/<section>?at=<thing>.
 // Loaded at startup by the section index (keep three.js out of this file).
 import { defineSections, HUB } from '../../../../kit/sections'
 
 const HUB_SECTIONS = defineSections('thailand', HUB, {
   params: {
-    stamp: { default: '', values: ['', 'boat-trip', 'nan-trip', 'mall-trip', 'samet-trip'], doc: "the map: this trip's stamp lands on its pin (the end of a trip: Krabi's for boat-trip, Nan's for nan-trip, Bangkok's for mall-trip, Koh Samet's for samet-trip)" },
+    stamp: { default: '', values: ['', 'boat-trip', 'nan-trip', 'mall-trip', 'samet-trip'], doc: "the map: this trip's stamp lands on its pin (the end of a trip: Krabi's for boat-trip, Nan's for nan-trip, Bangkok's for mall-trip, Koh Samet's for samet-trip). The Bangkok map: mall-trip lands the mall day's stamp beside ICONSIAM's pin" },
     at: {
       default: '',
       doc: 'start already using a thing on that floor: table, ground-couch, altar, desk, fridge, photos (downstairs); mattress, pillows, couch, suitcase, balcony, game-table (upstairs); motorbike, spirit-house, cat (street)',
@@ -33,6 +34,7 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
   },
   sections: [
     { id: 'map', name: 'The Thailand map: tap a pin to go there', params: ['stamp'], group: 'The Thailand map', links: [{ label: 'The map', bare: true }, { label: 'Home from a trip: the stamp lands on Krabi', params: { stamp: 'boat-trip' } }] },
+    { id: 'bangkok', name: 'The Bangkok map: tap the house or ICONSIAM (or the balloon, back to the Thailand map)', params: ['stamp'], group: 'The Bangkok map', links: [{ label: 'The Bangkok map' }, { label: "Back from the mall day: the stamp lands beside ICONSIAM's pin", params: { stamp: 'mall-trip' } }] },
     { id: 'arrive', name: 'Arrive by tuk-tuk', group: "Agong's house" },
     { id: 'street', name: "In front of Agong's house", params: ['at'], group: "Agong's house" },
     { id: 'downstairs', name: 'Downstairs', params: ['at'], group: "Agong's house" },
@@ -90,5 +92,5 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
   ],
 })
 export default HUB_SECTIONS
-/** The house's own spots (every hub section but the map). */
-export type HubSection = Exclude<(typeof HUB_SECTIONS)['sections'][number]['id'], 'map'>
+/** The house's own spots (every hub section but the two maps). */
+export type HubSection = Exclude<(typeof HUB_SECTIONS)['sections'][number]['id'], 'map' | 'bangkok'>

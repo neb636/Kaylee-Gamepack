@@ -123,6 +123,25 @@ export const L = {
     } as Record<string, Line>,
   },
 
+  // Sparkle on the Bangkok map (activities/hub/bangkok/): the hello (once a visit), where she can go when she's stuck,
+  // and something true the first time she pokes each thing.
+  bangkok: {
+    hello: onDevice('This is Bangkok! Tap a pin to go there.', 'This is Bangkok! Click a pin to go there.'),
+    hint: onDevice('Tap the house or the mall!', 'Click the house or the mall!'),
+    pokes: {
+      asiatique: 'A giant wheel by the river! Round and round!',
+      chinatown: 'Chinatown! Look at the red lanterns!',
+      lumphini: 'A big lizard lives in the park! It loves to swim.',
+      mahanakhon: 'This tower looks like building blocks!',
+      flowers: 'The flower market! So many flowers!',
+      port: 'Big ships bring boxes from far away!',
+      krachao: 'A jungle in the middle of the city!',
+      train: 'The skytrain! It rides high above the street.',
+      boat: 'Boats are the buses of the river!',
+      river: 'This river is the Chao Phraya!',
+    } as Record<string, Line>,
+  },
+
   family: {
     agong: hello('agong', `Sawasdee krub! Welcome home!`, ['Come, sit with Agong.', 'Ho ho! My little unicorn!']),
     ji: hello('ji', 'Hi sweetie! This is our room!', ['Bounce on the mattress!', `I love you!`]),

@@ -94,6 +94,8 @@ curl of incense rises, a soft bell rings, and she does a wai.
 
 **The Thailand map (built 2026-10-27, greybox).** Thailand has outgrown starting every trip in the house: Kaylee lands on a map of Thailand and taps Bangkok (the house), Krabi or Nan (since 2026-10-28 a plain tap map like Australia's: the user found flying the toy plane confusing), and the boat and Nan trips end back on the map. Only the mall day still starts in the house, so Mom and Dad only ask about the mall now. Plan: `thailand/thailand-map.md`.
 
+**The Bangkok map (built 2026-11-19).** Bangkok's pin opens a 3D map of the real city: the house (near Central Rama 3, for now) and ICONSIAM each have a pin, so the mall day has its own place; Asiatique and Chinatown are toys to poke until they become places. Notes: `thailand/bangkok-map.md`.
+
 **Trips from the house.** Mom asks in Kaylee's room (on her own the first time she comes up, then whenever she's
 tapped). Dad asks on the street too (user feedback, 2026-10-25): tap him where the tuk-tuk drops her off and he says "Where do
 you want to go, Kaylee?" with the same picture buttons (`trip/legs/Ask.tsx`, `who="nick"`), so a trip doesn't need the

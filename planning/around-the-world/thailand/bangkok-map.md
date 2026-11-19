@@ -1,0 +1,91 @@
+# 🏙️ The Bangkok map
+
+Built 2026-11-19 · what Bangkok's pin on the Thailand map opens (3D) · code: `src/world/places/thailand/activities/hub/bangkok/` · hub section `bangkok`
+
+Bangkok used to open straight into the house, and the mall day started inside it. Now Bangkok opens on a toy diorama
+of **the middle of Bangkok** floating in the sky, in the same tray as the Thailand, Nan and Krabi maps. The house and
+ICONSIAM each have their own place on it, and there's room for more (Asiatique, Chinatown).
+
+## Real places, real sizes
+
+The board is about 14 km of city across (one meter of board is about 2.6 km), north up. Nothing on it is drawn by hand:
+
+- **The Chao Phraya** is the real river (OpenStreetMap, `scripts/bangkok-map-land.mjs` writes `geo.ts`): its long S
+  past the old town, Chinatown and ICONSIAM, then the big loop round Bang Krachao. So are the khlongs, the main roads
+  and the big parks. The river is drawn 1.4 cm wider on each bank so toy boats fit; its banks are smoothed a little.
+- **Every place is put down by its longitude and latitude** (`layout.ts`, `ll(lon, lat)`): ICONSIAM on the west bank,
+  Asiatique downriver, Chinatown's gate at Odeon Circle, Lumphini Park and its lake, Mahanakhon, Central Rama 3, the
+  flower market, the port at Khlong Toei, Bang Krachao in the loop. The towers stand in the districts they really
+  stand in (Silom and Sathon, Siam and Pratunam, Sukhumvit, Rama III), the seven bridges where they really cross,
+  and the skytrain runs through its real stations.
+- **The house** stands near Central Rama 3, for now (your call, 2026-11-18): `PLACES.house` is one line to move.
+- Bangkok is flat, so the board is too: a low slab of city, the river cut through it. What gives it shape is the
+  skyline, the bridges and Bang Krachao's jungle.
+- **No temples or Buddhas** (AGENTS.md rule 8): the old town is rooftops, streets and the flower market. No Grand
+  Palace, no Wat Arun, no Giant Swing.
+
+The city floor is a patchwork of districts, each one pastel with its little streets leaning its own way; the houses
+stand in the squares of those streets, a roof color or two to a district. Out west (Thonburi) and south of the loop
+the districts are orchards. (The first try scattered thousands of little blocks and dots and looked like confetti.)
+
+## How it plays
+
+- **The toy: pins.** A pink pin floats over each place she can go to, with a toy of what she does there on its head:
+  🏠 a little house with a heart over the house, 🛝🍕 a slide and a slice of pizza in front of ICONSIAM. Tap the pin
+  (or the place): it hops and spins in sparkles, the camera dives in and the place opens. Both stay open for good.
+- **The house** opens where she left it (the tuk-tuk ride the first time). Its top-left button comes back to this map.
+- **ICONSIAM** opens the mall day straight at the mall (`mall-trip/arrive`). With a day half done, or after her first
+  whole day, the day pass asks where to start, as it does in the house. Mom and Dad still ask about the mall inside
+  the house too. The day still ends in the house, by her photo.
+- **The mall day's stamp** floats beside ICONSIAM's pin once she has it. The first time she sees this map with it, it
+  lands with a ka-chunk (`?stamp=mall-trip` plays that again).
+- **Sparkle's balloon** floats over the board's corner: tap it, the burner roars and it lifts off, back up to the
+  Thailand map. (The top-left button goes there too.)
+- **Talk** (`lines.ts` `L.bangkok`, Sparkle): "This is Bangkok! Tap a pin to go there." once a visit; something true
+  the first time she pokes a thing; after ~8 s with nothing done, "Tap the house or the mall!" (at most three times),
+  the pins bounce and a 👆 points at one.
+- **Pokes:** Asiatique's wheel (it spins to a tune), Chinatown's gate (the lanterns swing, a lion drum), Lumphini
+  (the monitor lizard slides into the lake; the swan boat twirls), Mahanakhon (its blocks twinkle), Central Rama 3,
+  the flower market (petals fly), the port (the crane lowers its box), Bang Krachao (the birds fly up), the skytrain
+  (ding-dong, off it zooms), the three river boats (toot toot), the tuk-tuk on Rama IV Road, the clouds (rain), every
+  tower (a higher tune for a taller one), every bridge (beep beep), the river (a splash).
+- **Always alive:** the skytrain runs back and forth, boats sail the river end to end, the wheel turns, ICONSIAM's
+  fountain dances every few seconds, the water and the towers glint.
+- She can swing the board round with a drag and pinch it closer, like every map (`boardShot()`, `trip/sky.ts`).
+
+## Adding a place (Asiatique, Chinatown, more)
+
+Everything is where it really is, so a new place needs no layout work:
+
+1. `layout.ts`: give it a `PLACES` entry (`at: ll(lon, lat)`) and a pin in `PINS`. If it's a toy to poke today
+   (Asiatique, Chinatown), take it out of `SPOTS`.
+2. `diorama.ts`: its toy becomes the place's toy (`places`), and `buildPin()` gets a little toy for its pin's head.
+3. `map3d.ts`: `choose()` already dives to any place; say what its dive sounds like. `BangkokMap.tsx` `go()` says
+   which activity opens.
+4. A place somewhere new: add its tower, park or landmark by longitude and latitude; `diorama.ts` leaves out any
+   tower that would stand on it. Past the board's edges (`EDGES`): widen them, and run
+   `node scripts/bangkok-map-land.mjs` again if they pass the data's box.
+
+The QA hook (`__thaiBangkokQA`) lists anything standing in the river (`wet`) and any toy whose middle sits under a
+pin's tap target (`covered`); `tests/thailand-maps.spec.ts` checks both are empty. (ICONSIAM's pin first floated over
+its towers, which put its tap target on top of Chinatown's gate on the screen: it floats in front of the mall now.)
+
+## Sounds
+
+`sounds.ts`. Eleven recorded clips are written up in `sfx/sfx.json` (the city by the river, the skytrain and its
+chime, a boat's horn, the wheel's tune, the lion drum, the lizard, the crane, the petals, the fountain, the birds):
+36 s. **None is made yet:** ElevenLabs refused them on 2026-11-19 (the account has an unpaid invoice). Until then
+every sound plays its synthesized fallback. Once that's sorted:
+`node scripts/generate-sfx.mjs src/world/places/thailand/activities/hub/bangkok/sfx`.
+
+## Knobs and links
+
+- `#/world/thailand/hub/bangkok` (the map), `?stamp=mall-trip` (the mall day's stamp lands).
+- `?feel=1`: the camera's entrance (`bangkok-map-cam`).
+
+## Next
+
+- Kaylee's playtest: does she find the pins among the city, and what does she poke?
+- The real sounds (above).
+- Asiatique and Chinatown as places, when you pick what she does there.
+- The mall day could end back on this map (the stamp landing on ICONSIAM) instead of in the house: your call.

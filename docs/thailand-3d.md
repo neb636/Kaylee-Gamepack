@@ -24,11 +24,16 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
   with Thailand standing up out of the sea (its real coastline, `land.ts`, written by `scripts/thailand-map-land.mjs`
   from Natural Earth), a little model and a bobbing pin for each place, and animals, boats and clouds that answer a
   poke. A drag swings the board round, a pinch brings it closer. Tapping a pin opens that place. `field.ts` works out
-  the ground once (distance to the coast); the terrain, its painted top and the sea's foam all read it. Bangkok opens the house; a trip somewhere else gets a pin, starts there and ends there
+  the ground once (distance to the coast); the terrain, its painted top and the sea's foam all read it. Bangkok opens the Bangkok map (below); a trip somewhere else gets a pin, starts there and ends there
   (the stamp lands on its pin, the trip's photo goes on Agong's wall by itself). Tapping a pin goes straight
   to the trip's landing spot: the map no longer packs or rides the window seat (2026-11-10; the pack, goodbye, airport
   and window-seat sections are still in each trip, for a place-picker inside the house to start later). The mall day, in Bangkok,
-  still starts in the house (Mom or Dad asks) and ends there.
+  starts at ICONSIAM's pin on the Bangkok map (or in the house: Mom or Dad asks) and ends in the house.
+- **The Bangkok map** (`activities/hub/bangkok/`, hub section `bangkok`, notes: `thailand/bangkok-map.md`) is what
+  Bangkok's pin opens: the middle of the real city on a board (the Chao Phraya, the khlongs, the main roads and the
+  parks are `geo.ts`, written by `scripts/bangkok-map-land.mjs` from OpenStreetMap; every place is put down by its
+  longitude and latitude in `layout.ts`). The house and ICONSIAM each have a pin, Sparkle's balloon goes back up to
+  the Thailand map, and the house's top-left button comes back here. A new Bangkok place is a `ll(lon, lat)` and a pin.
 - **A trip's own map** looks like the Thailand map: the board floats in the same sky and tray and opens with the same
   camera entrance behind the loading cover (`trip/sky.ts`: `skyTexture`, `puffCloud`, `trayParts`, `mapCamKnobs`,
   `Entrance`, `boardShot`; `trip/MapCover.tsx`). The Nan map (`activities/nan-trip/map/`) and the Krabi map
