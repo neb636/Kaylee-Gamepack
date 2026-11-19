@@ -31,6 +31,8 @@ export interface Rig {
   beak?: { top: Group; bottom: Group; open(k: number): void; k: number }
   armL: Group
   armR: Group
+  /** Sample a model-authored wave from rest (0) through its return to rest (1). */
+  wave?: (progress: number) => void
   tail: Group | null
   /** A unicorn's mane locks (down the back and sides), pivoting at the top of the back of the head: the wind swings
    *  them (Wind). */

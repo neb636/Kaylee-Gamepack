@@ -206,7 +206,8 @@ export class Member implements Character {
       this.waving += dt / 1.5
       const p = Math.min(1, this.waving)
       const up = span(p, 0, 0.15) * (1 - span(p, 0.8, 1))
-      armR.rotation.z = up * (2.5 + Math.sin(p * Math.PI * 7) * 0.35)
+      if (this.chibi.wave) this.chibi.wave(p)
+      else armR.rotation.z = up * (2.5 + Math.sin(p * Math.PI * 7) * 0.35)
       if (p >= 1) {
         armR.rotation.z = 0
         this.waving = -1
