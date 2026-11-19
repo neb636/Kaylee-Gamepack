@@ -28,7 +28,7 @@ import type { Sea } from '../map/terrain'
 import * as T from '../map/toys'
 import { RIVER_LINE } from './geo'
 import { blockMid, blockOf, buildField, buildGround, buildSea, crowns, districtAt, inBlock, inOrchard, LAKES, leafy, outward, type Field } from './ground'
-import { BALLOON, BOARD, BOATS, BRIDGES, CANAL, CLOUDS, COMPASS, DEG_M, FRUIT_KHLONG, GROVES, KITES, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
+import { BALLOON, BOARD, BOATS, BRIDGES, CANAL, CLOUDS, DEG_M, FRUIT_KHLONG, GROVES, KITES, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
 import { pathLL, reachOn, type Path } from './path'
 
 const CREAM = '#FFF7F0'
@@ -166,8 +166,8 @@ export function buildDiorama(bag: Bag): Diorama {
   const plazas: [number, number, number][] = taken.filter(([x, z]) => !unpaved.some((u) => u[0] === x && u[1] === z)).map(([x, z, r]) => [x, z, r * 0.8])
   /** Water painted on the ground: the floating market's wide stretch of khlong ([x, z, radius east-west, north-south]). */
   const basins: [number, number, number, number][] = [[SPOTS.floating[0], SPOTS.floating[1] + 0.03, 0.26, 0.13]]
-  // (Nothing stands on the painted compass, or on Sanam Luang's open field.)
-  taken.push([...COMPASS.at, COMPASS.r * 1.2], [...SANAM_LUANG, 0.16])
+  // (Nothing stands on Sanam Luang's open field.)
+  taken.push([...SANAM_LUANG, 0.16])
 
   // ---- The bridges ----
   const bridges: XZ[] = []

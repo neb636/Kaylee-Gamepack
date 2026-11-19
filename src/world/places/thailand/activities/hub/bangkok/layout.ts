@@ -220,6 +220,3 @@ export const CLOUDS: [number, number, number][] = [
 /** The old town and Chinatown, inside the river's first bend: low and close-built, so its shophouse rows stand closer
  *  together than anywhere else ([middle, how far out it reaches (m)]). */
 export const OLD_TOWN: { at: XZ; r: number } = { at: ll(100.503, 13.75), r: 0.75 }
-
-/** Where the map's compass is painted: the quiet corner out south-west. */
-export const COMPASS: { at: XZ; r: number } = { at: [BOARD.x0 + 0.4, BOARD.z1 - 0.4], r: 0.25 }

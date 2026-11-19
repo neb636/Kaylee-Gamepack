@@ -4,8 +4,7 @@
 // little streets a thin print, the real main roads in white, the khlongs in blue, the parks and their lakes, Thonburi
 // and the south built up too but leafy (gardens and trees speckled through their streets, thickest along the khlongs
 // and out toward the edges), Bang Mot's one orchard in soft striped green, Bang Krachao's jungle inside the loop, a
-// pale promenade along both banks, a compass
-// in the quiet corner, a long afternoon shadow behind every tower and a soft one under every toy. The river is the
+// pale promenade along both banks, a long afternoon shadow behind every tower and a soft one under every toy. The river is the
 // Thailand map's Sea in the Chao Phraya's own teal, foaming a thin white line along both banks.
 import { BufferAttribute, BufferGeometry, CanvasTexture, Mesh, MeshToonMaterial, SRGBColorSpace } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
@@ -14,7 +13,7 @@ import { smoothstep } from '../../../../../../sdk/math'
 import { distance } from '../map/field'
 import { Sea } from '../map/terrain'
 import { ISLANDS, KHLONGS, PARKS, ROADS, WATER, type LonLat } from './geo'
-import { BOARD, CLIFF_W, COMPASS, DEG_M, JUNGLE, LEVEL, ll, RIVER_FAT, SKYTRAIN, SPOTS, toX, toZ, type XZ } from './layout'
+import { BOARD, CLIFF_W, DEG_M, JUNGLE, LEVEL, ll, RIVER_FAT, SKYTRAIN, SPOTS, toX, toZ, type XZ } from './layout'
 
 /** Field cells per meter, ground mesh cells per meter, painted pixels per meter. */
 const RES = 64
@@ -589,40 +588,6 @@ function paint(f: Field, { shadows, plazas, casts, basins }: GroundInput) {
     g.fillStyle = '#BDEAFA'
     g.beginPath()
     g.ellipse(cx - 3, cy - 2, rx * DEG_M * TEX * 0.5, ry * DEG_M * TEX * 0.4, 0, 0, Math.PI * 2)
-    g.fill()
-  }
-
-  // ---- The compass, out in the quiet corner: a ring, four long points and four short ones, the north one pink.
-  {
-    const [cx, cy] = P(COMPASS.at)
-    const r = COMPASS.r * TEX
-    g.fillStyle = 'rgba(255,253,246,0.9)'
-    g.beginPath()
-    g.arc(cx, cy, r * 1.08, 0, Math.PI * 2)
-    g.fill()
-    g.strokeStyle = '#F6C6B4'
-    g.lineWidth = r * 0.06
-    g.beginPath()
-    g.arc(cx, cy, r * 0.86, 0, Math.PI * 2)
-    g.stroke()
-    const point = (a: number, len: number, wide: number, light: string, dark: string) => {
-      const [tx, ty] = [cx + Math.sin(a) * len, cy - Math.cos(a) * len]
-      for (const [side, col] of [[-1, light], [1, dark]] as const) {
-        g.fillStyle = col
-        g.beginPath()
-        g.moveTo(cx, cy)
-        g.lineTo(cx + Math.sin(a + side * Math.PI / 2) * wide, cy - Math.cos(a + side * Math.PI / 2) * wide)
-        g.lineTo(tx, ty)
-        g.closePath()
-        g.fill()
-      }
-    }
-    for (let i = 0; i < 4; i++) point(Math.PI / 4 + (i * Math.PI) / 2, r * 0.56, r * 0.13, '#FFE9A8', '#FFD36B')
-    for (let i = 1; i < 4; i++) point((i * Math.PI) / 2, r * 0.98, r * 0.17, '#DCCBFF', '#B9A6F5')
-    point(0, r * 1.02, r * 0.17, '#FF9DC0', '#FF5C9A')
-    g.fillStyle = '#FFFFFF'
-    g.beginPath()
-    g.arc(cx, cy, r * 0.1, 0, Math.PI * 2)
     g.fill()
   }
 

@@ -36,7 +36,7 @@ What the board took from them, in the app's toy look:
 
 - **The river leads.** Wide, bright teal, a pale promenade down both banks, coconut palms leaning over it.
 - **A map printed on warm paper.** The city floor is a few creams and peaches that sit close together, the little
-  streets a thin tan print, a compass in the quiet corner. (Before: seven pastels, a white grid and dotted orchards.
+  streets a thin tan print. (The compass in the south-west corner came off, your call 2026-11-19.) (Before: seven pastels, a white grid and dotted orchards.
   It read as a quilt.)
 - **Thonburi and the south are city, only leafier** (your call, 2026-11-19, from the view from the air: they were
   orchards once, built up now, still green here and there). They're the same paper, streets and printed rooftops as
