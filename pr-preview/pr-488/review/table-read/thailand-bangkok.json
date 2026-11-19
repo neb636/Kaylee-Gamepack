@@ -5,7 +5,7 @@
   "title": "Thailand › Bangkok",
   "intro": "Sparkle on the Bangkok map (activities/hub/bangkok/): the hello (once a visit), where she can go when she's stuck, and something true the first time she pokes each thing.",
   "page": "thailand-bangkok.html",
-  "audio": null,
+  "audio": "thailand-bangkok.mp3",
   "lines": 19,
   "seconds": 58,
   "missing": 0,
@@ -15,141 +15,56 @@
       "key": "bangkok.hello.touch",
       "text": "This is Bangkok! Tap the house or the mall!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "bangkok.hello.mouse",
       "text": "This is Bangkok! Click the house or the mall!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "bangkok.hint.touch",
-      "text": "Tap the house or the mall!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "bangkok.hint.mouse",
-      "text": "Click the house or the mall!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "bangkok.pokes.asiatique",
       "text": "A giant wheel by the river! Round and round!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "bangkok.pokes.chinatown",
       "text": "Chinatown! Look at the red lanterns!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "bangkok.pokes.lumphini",
-      "text": "A big lizard lives in this park!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "bangkok.pokes.mahanakhon",
       "text": "This tower looks like building blocks!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "bangkok.pokes.flowers",
       "text": "The flower market! So many flowers!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "bangkok.pokes.port",
-      "text": "Big ships bring boxes from far away!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "bangkok.pokes.krachao",
-      "text": "A jungle in the middle of the city!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "bangkok.pokes.train",
       "text": "The skytrain! It rides high above the street.",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "bangkok.pokes.boat",
-      "text": "Boats are the buses of the river!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "bangkok.pokes.river",
-      "text": "This river is the Chao Phraya!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "bangkok.pokes.tents",
-      "text": "Yummy snacks at the night market!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "bangkok.pokes.floating",
       "text": "At this market, the shops are boats!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "bangkok.pokes.orchard",
-      "text": "Sweet oranges grow here!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "bangkok.pokes.kites",
-      "text": "Kites! Up, up in the wind!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "bangkok.pokes.taxi",
-      "text": "Beep beep, pink taxi!",
-      "flags": [
-        "new"
+        "long"
       ]
     }
   ],
@@ -167,8 +82,11 @@
       "when": "",
       "ms": 4416,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        0,
+        4.35
       ]
     },
     {
@@ -184,8 +102,11 @@
       "when": "",
       "ms": 4320,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        4.7,
+        8.95
       ]
     },
     {
@@ -200,8 +121,10 @@
       "part": "bangkok › hint",
       "when": "",
       "ms": 2016,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        10.57,
+        12.54
       ]
     },
     {
@@ -216,8 +139,10 @@
       "part": "bangkok › hint",
       "when": "",
       "ms": 2184,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        12.89,
+        15.01
       ]
     },
     {
@@ -233,8 +158,11 @@
       "when": "",
       "ms": 4320,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        16.63,
+        20.9
       ]
     },
     {
@@ -250,8 +178,11 @@
       "when": "",
       "ms": 3120,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        21.25,
+        24.3
       ]
     },
     {
@@ -266,8 +197,10 @@
       "part": "bangkok › pokes",
       "when": "",
       "ms": 2976,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        24.65,
+        27.56
       ]
     },
     {
@@ -283,8 +216,11 @@
       "when": "",
       "ms": 3408,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        27.91,
+        31.26
       ]
     },
     {
@@ -300,8 +236,11 @@
       "when": "",
       "ms": 3960,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        31.61,
+        35.51
       ]
     },
     {
@@ -316,8 +255,10 @@
       "part": "bangkok › pokes",
       "when": "",
       "ms": 2904,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        35.86,
+        38.71
       ]
     },
     {
@@ -332,8 +273,10 @@
       "part": "bangkok › pokes",
       "when": "",
       "ms": 2496,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        39.06,
+        41.51
       ]
     },
     {
@@ -349,8 +292,11 @@
       "when": "",
       "ms": 3408,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        41.86,
+        45.2
       ]
     },
     {
@@ -365,8 +311,10 @@
       "part": "bangkok › pokes",
       "when": "",
       "ms": 2400,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        45.55,
+        47.91
       ]
     },
     {
@@ -381,8 +329,10 @@
       "part": "bangkok › pokes",
       "when": "",
       "ms": 2832,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        48.26,
+        51.04
       ]
     },
     {
@@ -397,8 +347,10 @@
       "part": "bangkok › pokes",
       "when": "",
       "ms": 2832,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        51.39,
+        54.16
       ]
     },
     {
@@ -414,8 +366,11 @@
       "when": "",
       "ms": 3048,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        54.51,
+        57.51
       ]
     },
     {
@@ -430,8 +385,10 @@
       "part": "bangkok › pokes",
       "when": "",
       "ms": 2232,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        57.86,
+        60.03
       ]
     },
     {
@@ -446,8 +403,10 @@
       "part": "bangkok › pokes",
       "when": "",
       "ms": 2688,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        60.38,
+        63
       ]
     },
     {
@@ -462,8 +421,10 @@
       "part": "bangkok › pokes",
       "when": "",
       "ms": 2160,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        63.35,
+        65.46
       ]
     }
   ]
