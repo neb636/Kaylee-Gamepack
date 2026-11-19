@@ -8,9 +8,9 @@ export const DAD_SIZE = 1.95
 /** How far each arm's swing plane turns forward for a wave (mom-model.ts reachForward): his head is wider than his
  *  shoulders, so an arm raised straight out to the side would come up into his ear. */
 export const ARM_TILT = 1.2
-/** His ink before TUNE.outline: the user's pick, the Outline slider at 0.35 (2026-11-15; Mom's is at 1). The lids' ink
+/** His ink before TUNE.outline: the Outline slider at 1, like Mom's (the user's pick, 2026-11-18). The lids' ink
  *  follows it. */
-const INK = 0.35 / 0.75
+const INK = 1 / 0.75
 export const BODY_INK = 1.8 * INK
 const FACE_INK = 1.2 * INK
 /** His mint, as split-nick.py's mint() painted it into the texture (the lids). */

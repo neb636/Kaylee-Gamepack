@@ -230,6 +230,12 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   upper arm and forearm move together. Other poses use the family controls. A small sleeve fold remains at the deepest bend.
 - The previous trials used rigid pieces, which pulled away at the shoulder on fused meshes. The current skin weights let
   the sleeves bend with the arms. `scripts/blender/split-dad.py` produced the measurements used by the shared face code.
+- **His ink follows his face** (2026-11-18): the hull is his whole skinned mesh, so where the face folds inward it drew
+  lines that didn't match it (a squiggle under the nose, rims round the eye sockets). `scripts/blender/ink-dad.py`
+  writes an `_INK` weight per vertex into the GLB (0 on the eye domes, lashes and brows; fading out round the nose and
+  in the head's inward folds) and `hullOf` drops the 0 triangles and thins the line by it. Rerun it on a new GLB.
+  `minted()` blurs how green each texel is before moving it to mint, so the muzzle's cream fades into the mint at
+  his chin instead of speckling.
 - Before an in-game swap, check the remaining gestures and fit the gear Dad uses in the trips. The barber needs separate
   hair and the tail needs its own joint to swing. Issue #481 tracks the texture work.
 

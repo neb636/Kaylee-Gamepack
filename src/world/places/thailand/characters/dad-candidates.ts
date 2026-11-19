@@ -1,8 +1,9 @@
 // Dad 5’s skinned rig for the character lab. His Blender wave uses the original arm chain.
-import { AnimationMixer, CanvasTexture, Group, MeshToonMaterial, ShaderMaterial, SkinnedMesh, SRGBColorSpace, Vector3, type BufferGeometry, type Object3D, type Texture } from 'three'
+import { AnimationMixer, BufferAttribute, CanvasTexture, Group, MeshToonMaterial, ShaderMaterial, SkinnedMesh, SRGBColorSpace, Vector3, type BufferGeometry, type Object3D, type Texture } from 'three'
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js'
+import { smoothstep } from '../../../../sdk/math'
 import type { Bag } from '../../../engine3d/dispose'
 import type { Rig } from '../../../engine3d/characters/animal'
 import { blobShadow } from '../../../engine3d/geo'
@@ -198,10 +199,23 @@ function nativeArmPivot(bone: Object3D, body: Group): Group {
 }
 
 /** The welded copy of his shape the ink is drawn from, keeping what skins it (the weights are the same on both sides of
- *  a texture seam, so the seam's twin vertices weld). */
+ *  a texture seam, so the seam's twin vertices weld). The GLB's `_INK` (scripts/blender/ink-dad.py) says how much line
+ *  each vertex gets: none on the eye domes, lashes and brows (their rims came out as broken lines; they're painted),
+ *  fading out round his nose (the hull showed through its fold as a squiggle). Triangles with none are left out. */
 function hullOf(geometry: BufferGeometry) {
   const g = geometry.clone()
-  for (const name of Object.keys(g.attributes)) if (!['position', 'skinIndex', 'skinWeight'].includes(name)) g.deleteAttribute(name)
+  const ink = g.getAttribute('_ink')
+  const index = g.getIndex()
+  if (ink && index) {
+    const keep: number[] = []
+    for (let i = 0; i < index.count; i += 3) {
+      const [a, b, c] = [index.getX(i), index.getX(i + 1), index.getX(i + 2)]
+      if (ink.getX(a) + ink.getX(b) + ink.getX(c) > 0) keep.push(a, b, c)
+    }
+    g.setIndex(keep)
+  }
+  g.setAttribute('ink', ink ?? new BufferAttribute(new Float32Array(g.getAttribute('position').count).fill(1), 1))
+  for (const name of Object.keys(g.attributes)) if (!['position', 'skinIndex', 'skinWeight', 'ink'].includes(name)) g.deleteAttribute(name)
   const welded = mergeVertices(g, 1e-4)
   g.dispose()
   welded.computeVertexNormals()
@@ -225,6 +239,7 @@ function skinnedOutline(px: number) {
         uniform float uPx;
         uniform float uScale;
         uniform float uBias;
+        attribute float ink;
         void main() {
           #include <skinbase_vertex>
           #include <beginnormal_vertex>
@@ -238,7 +253,7 @@ function skinnedOutline(px: number) {
           vec2 dir = (projectionMatrix * vec4(n, 0.0)).xy;
           float len = length(dir);
           dir = len > 1e-5 ? dir / len : vec2(0.0);
-          float w = uPx * uScale * clamp(14.0 / max(clip.w, 1.0), 0.55, 1.0);
+          float w = uPx * uScale * clamp(14.0 / max(clip.w, 1.0), 0.55, 1.0) * ink;
           clip.xy += dir * w * 2.0 / uRes * clip.w;
           gl_Position = clip;
           #include <fog_vertex>
@@ -254,35 +269,47 @@ function skinnedOutline(px: number) {
 }
 
 /** His texture with Tripo's green skin turned Dad's mint (every green texel moved to the mint's hue, its saturation and
- *  brightness scaled so the green's middle lands on the mint). */
+ *  brightness scaled so the green's middle lands on the mint). Where his cream muzzle shades into the green (round his
+ *  chin) Tripo's paint is grainy, so a texel-by-texel cut-off broke into speckles: how green each texel is gets
+ *  blurred over its neighbours first, and each texel moves that much of the way. */
 function minted(map: Texture): Texture {
   const img = map.image as CanvasImageSource & { width: number; height: number }
   const c = document.createElement('canvas')
-  c.width = img.width
-  c.height = img.height
+  const W = (c.width = img.width)
+  const H = (c.height = img.height)
   const ctx = c.getContext('2d')!
   ctx.drawImage(img, 0, 0)
-  const data = ctx.getImageData(0, 0, c.width, c.height)
+  const data = ctx.getImageData(0, 0, W, H)
   const px = data.data
-  const greens: number[] = []
+  // How green each texel is, and which ones may move at all: the greens and the pale cream between them (not the
+  // khaki shorts, the brown hair, the pink shirt or the purple hooves next to them in the atlas).
+  const green = new Float32Array(W * H)
+  const may = new Uint8Array(W * H)
   let sumS = 0
   let sumV = 0
-  for (let i = 0; i < px.length; i += 4) {
+  let sum = 0
+  for (let k = 0; k < W * H; k++) {
+    const i = k * 4
     const [h, s, v] = hsv(px[i] / 255, px[i + 1] / 255, px[i + 2] / 255)
-    if (h > 0.2 && h < 0.47 && s > 0.12) {
-      greens.push(i)
-      sumS += s
-      sumV += v
-    }
+    const g = smoothstep(0.17, 0.24, h) * smoothstep(0.5, 0.46, h) * smoothstep(0.08, 0.14, s)
+    green[k] = g
+    may[k] = h > 0.09 && h < 0.5 && (h > 0.2 || (s < 0.3 && v > 0.75)) ? 1 : 0
+    sumS += s * g
+    sumV += v * g
+    sum += g
   }
-  const kS = greens.length ? MINT_HSV[1] / (sumS / greens.length) : 1
-  const kV = greens.length ? MINT_HSV[2] / (sumV / greens.length) : 1
-  for (const i of greens) {
+  const kS = sum ? MINT_HSV[1] / (sumS / sum) : 1
+  const kV = sum ? MINT_HSV[2] / (sumV / sum) : 1
+  const amount = blur(blur(green, W, H, 3), W, H, 3)
+  for (let k = 0; k < W * H; k++) {
+    const a = may[k] ? Math.min(1, amount[k] * 1.15) : 0
+    if (a <= 0.002) continue
+    const i = k * 4
     const [, s, v] = hsv(px[i] / 255, px[i + 1] / 255, px[i + 2] / 255)
     const [r, g, b] = rgb(MINT_HSV[0], Math.min(1, s * kS), Math.min(1, v * kV))
-    px[i] = r * 255
-    px[i + 1] = g * 255
-    px[i + 2] = b * 255
+    px[i] += (r * 255 - px[i]) * a
+    px[i + 1] += (g * 255 - px[i + 1]) * a
+    px[i + 2] += (b * 255 - px[i + 2]) * a
   }
   ctx.putImageData(data, 0, 0)
   const t = new CanvasTexture(c)
@@ -292,6 +319,30 @@ function minted(map: Texture): Texture {
   t.wrapT = map.wrapT
   t.anisotropy = 4
   return t
+}
+
+/** A box blur of a W×H grid, `r` texels each way (across, then down). */
+function blur(src: Float32Array, W: number, H: number, r: number) {
+  const tmp = new Float32Array(W * H)
+  const out = new Float32Array(W * H)
+  const n = 2 * r + 1
+  for (let y = 0; y < H; y++) {
+    let acc = 0
+    for (let x = -r; x <= r; x++) acc += src[y * W + Math.min(W - 1, Math.max(0, x))]
+    for (let x = 0; x < W; x++) {
+      tmp[y * W + x] = acc / n
+      acc += src[y * W + Math.min(W - 1, x + r + 1)] - src[y * W + Math.max(0, x - r)]
+    }
+  }
+  for (let x = 0; x < W; x++) {
+    let acc = 0
+    for (let y = -r; y <= r; y++) acc += tmp[Math.min(H - 1, Math.max(0, y)) * W + x]
+    for (let y = 0; y < H; y++) {
+      out[y * W + x] = acc / n
+      acc += tmp[Math.min(H - 1, y + r + 1) * W + x] - tmp[Math.max(0, y - r) * W + x]
+    }
+  }
+  return out
 }
 
 function hsv(r: number, g: number, b: number): [number, number, number] {
