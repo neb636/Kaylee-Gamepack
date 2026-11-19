@@ -7,7 +7,7 @@
   "page": "thailand-bangkok.html",
   "audio": null,
   "lines": 19,
-  "seconds": 60,
+  "seconds": 58,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -118,15 +118,14 @@
     },
     {
       "key": "bangkok.pokes.tents",
-      "text": "The night market! Yummy snacks under every tent!",
+      "text": "Yummy snacks at the night market!",
       "flags": [
-        "long",
         "new"
       ]
     },
     {
       "key": "bangkok.pokes.floating",
-      "text": "A floating market! The shops are boats!",
+      "text": "At this market, the shops are boats!",
       "flags": [
         "long",
         "new"
@@ -148,9 +147,8 @@
     },
     {
       "key": "bangkok.pokes.taxi",
-      "text": "A pink taxi! Beep beep!",
+      "text": "Beep beep, pink taxi!",
       "flags": [
-        "long",
         "new"
       ]
     }
@@ -393,14 +391,13 @@
         "pokes",
         "tents"
       ],
-      "text": "The night market! Yummy snacks under every tent!",
+      "text": "Yummy snacks at the night market!",
       "voice": "sparkle",
       "key": "bangkok.pokes.tents",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 3984,
+      "ms": 2832,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -410,12 +407,12 @@
         "pokes",
         "floating"
       ],
-      "text": "A floating market! The shops are boats!",
+      "text": "At this market, the shops are boats!",
       "voice": "sparkle",
       "key": "bangkok.pokes.floating",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 3456,
+      "ms": 3048,
       "flags": [
         "long",
         "new"
@@ -459,14 +456,13 @@
         "pokes",
         "taxi"
       ],
-      "text": "A pink taxi! Beep beep!",
+      "text": "Beep beep, pink taxi!",
       "voice": "sparkle",
       "key": "bangkok.pokes.taxi",
       "part": "bangkok › pokes",
       "when": "",
-      "ms": 3120,
+      "ms": 2160,
       "flags": [
-        "long",
         "new"
       ]
     }
