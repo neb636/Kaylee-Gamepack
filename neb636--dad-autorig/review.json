@@ -1,21 +1,23 @@
 {
-  "title": "Dad 5 waves beside his cheek",
+  "title": "Dad 3 waves beside his cheek",
   "checkIn": "Character lab",
-  "kaylee": "Dad 5 lifts his elbow and waves his hoof beside his cheek. The sleeve still creases slightly at the deepest bend.",
-  "questions": [
-    "Which wave feels more like Dad, original or Blender?"
-  ],
+  "kaylee": "Dad 3 bends his elbow and waves his hoof. His pink sleeve now follows the arm through the wave.",
+  "questions": [],
   "links": [
     {
-      "label": "Try Wave on Dad 5",
-      "hash": "#/world/characters/dad-5?zoom=1.15"
+      "label": "Try Wave on Dad 3",
+      "hash": "#/world/characters/dad-3?zoom=1.15"
     },
     {
-      "label": "All four beside today's Dad",
-      "hash": "#/world/characters/dad-5?lineup=dad-model,dad-1,dad-2,dad-3,dad-5"
+      "label": "Dad 3 and Dad 5 together",
+      "hash": "#/world/characters/dad-3?lineup=dad-3,dad-5"
     },
     {
-      "label": "Download the Blender scene",
+      "label": "Download Dad 3\u2019s Blender scene",
+      "hash": "review/dad-3-wave.blend"
+    },
+    {
+      "label": "Download Dad 5\u2019s Blender scene",
       "hash": "review/dad-5-wave.blend"
     }
   ],
