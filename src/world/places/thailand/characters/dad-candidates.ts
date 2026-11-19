@@ -1,4 +1,4 @@
-// The user's new Tripo3D Dads (2026-11-17), auto-rigged in Tripo (a skinned Mixamo-style skeleton, no clips), so the
+// The user's new Tripo3D Dads (2026-11-17), auto-rigged in Tripo (a skinned Mixamo-style skeleton), so the
 // character lab can show all four moving before one replaces today's Dad (docs/3d-characters.md; issue #481).
 //
 // Why skinned: cut into stiff pieces (scripts/blender/split-dad.py, the first try), his short sleeves, which are part of
@@ -6,7 +6,7 @@
 // arm instead. The game still drives him the way it drives every family member: this file puts a pivot group (the
 // Rig's head, armL/armR, legL/legR) at Tripo's Head, Arm and UpLeg bones and hangs each bone under its pivot, so the
 // same code that turns today's Dad's pieces (Member, poses.ts, the actions) turns his bones, and his skin follows.
-// Tripo's clips aren't used. Tripo's "Left" bones are on +x, the game's right: arms and legs are matched by side.
+// Dad 5 uses an authored three-bone clip for his wave. Tripo's "Left" bones are on +x, the game's right: arms and legs are matched by side.
 //
 // Each candidate's face is drawn by the same code as today's Dad's (dad-model.ts dadFace), from what split-dad.py
 // measured on the textured model (the JSON beside each GLB; Dad 5's was measured in Blender by hand, his horn is fused
@@ -14,7 +14,7 @@
 // tail is skinned to his hips; the barber would need the hair split out): the rig's tail, hair, brows and horn are
 // empty groups at their places. The textures aren't flattened yet (issue #481, step 1). Lab only: nothing in the game
 // imports this.
-import { CanvasTexture, Group, MeshToonMaterial, ShaderMaterial, SkinnedMesh, SRGBColorSpace, Vector3, type BufferGeometry, type Object3D, type Texture } from 'three'
+import { AnimationMixer, CanvasTexture, Group, MeshToonMaterial, ShaderMaterial, SkinnedMesh, SRGBColorSpace, Vector3, type BufferGeometry, type Object3D, type Texture } from 'three'
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js'
@@ -121,7 +121,13 @@ export function buildDadCandidate(id: DadCandidate, bag: Bag): Rig {
 
   const head = pivot(headBone)
   const armL = pivot(armLBone)
-  const armR = pivot(armRBone)
+  const waveClip = got.gltf.animations.find((clip) => clip.name === 'Dad wave')
+  // Keep the waving chain under its collarbone. The socket and its inverse cancel at rest,
+  // so the GLB clip still sees the exact parent space in which each rotation was keyed.
+  // Other actions turn the middle group in the same body axes as the other family rigs.
+  const armR = waveClip ? nativeArmPivot(armRBone, body) : pivot(armRBone)
+  const mixer = waveClip ? new AnimationMixer(model) : null
+  if (mixer && waveClip) mixer.clipAction(waveClip).play()
   const legL = pivot(legLBone)
   const legR = pivot(legRBone)
   // Where a held thing goes: a group at each hoof (turned like the body), before the arm's swing plane turns forward.
@@ -130,7 +136,8 @@ export function buildDadCandidate(id: DadCandidate, bag: Bag): Rig {
     hand.position.copy(hoofAt[k])
     root.add(hand)
     hand.updateMatrixWorld(true)
-    arm.attach(hand)
+    const holder = k === 1 && waveClip ? handRBone : arm
+    holder.attach(hand)
     return hand
   })
   reachForward(armL, -1, ARM_TILT)
@@ -179,6 +186,7 @@ export function buildDadCandidate(id: DadCandidate, bag: Bag): Rig {
     open: false,
     armL,
     armR,
+    wave: mixer && waveClip ? (progress) => mixer.setTime(progress * waveClip.duration) : undefined,
     tail,
     legL,
     legR,
@@ -197,6 +205,21 @@ export function buildDadCandidate(id: DadCandidate, bag: Bag): Rig {
     shin: { x: 0, z: 0, r: shape.shin.r * S, sole: -hip * S, hem: (0.13 - hip) * S },
     blink: f.blink,
   }
+}
+
+function nativeArmPivot(bone: Object3D, body: Group): Group {
+  const parent = bone.parent!
+  const socket = new Group()
+  body.add(socket)
+  socket.position.copy(body.worldToLocal(bone.getWorldPosition(new Vector3())))
+  parent.attach(socket)
+  const pivot = new Group()
+  socket.add(pivot)
+  const originalSpace = new Group()
+  parent.add(originalSpace)
+  pivot.attach(originalSpace)
+  originalSpace.add(bone)
+  return pivot
 }
 
 /** The welded copy of his shape the ink is drawn from, keeping what skins it (the weights are the same on both sides of
