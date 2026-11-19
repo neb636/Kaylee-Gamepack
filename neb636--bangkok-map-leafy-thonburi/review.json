@@ -1,0 +1,11 @@
+{
+  "title": "The Bangkok map: Thonburi is city now, with green",
+  "checkIn": "fix",
+  "kaylee": "Out west and down south the board is city like the real Bangkok from the air: streets and roofs, with gardens and big trees speckled through them. The farmland is gone, except Bang Mot's one orange orchard.",
+  "questions": [],
+  "pictures": [
+    { "title": "Thonburi, the part you circled", "before": "pics/west-before.jpg", "after": "pics/west-after.jpg", "caption": "Striped fields become streets and rooftops, with gardens and trees thickest along the khlongs and toward the edge" },
+    { "title": "The whole board on an iPhone", "before": "pics/board-before.jpg", "after": "pics/board-after.jpg", "caption": "The middle of town is unchanged; the south past the river's loop got the same leafy-city look" }
+  ],
+  "links": [{ "label": "Open the Bangkok map", "hash": "#/world/thailand/hub/bangkok" }]
+}
