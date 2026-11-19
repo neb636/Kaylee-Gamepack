@@ -18,13 +18,13 @@ const DADS = {
 } as const
 export type DadCandidate = keyof typeof DADS
 
-/** Dad's mint (dad-model.ts SKIN), as HSV. */
-const MINT_HSV = hsv(0xa8 / 255, 0xea / 255, 0xd5 / 255)
+/** Dad's mint (dad-model.ts SKIN): Dad 5's skin unless a tone is asked for. */
+export const DAD_MINT = '#A8EAD5'
 
-const loaded = new Map<DadCandidate, { gltf: GLTF; skin: MeshToonMaterial }>()
+const loaded = new Map<DadCandidate, { gltf: GLTF; map: Texture; skins: Map<string, MeshToonMaterial> }>()
 let ready: Promise<unknown> | null = null
 
-/** Resolves once Dad 5 is loaded and his skin turned mint (the lab waits for it). */
+/** Resolves once Dad 5 is loaded (the lab waits for it). */
 export function dadCandidatesReady(): Promise<unknown> {
   ready ??= Promise.all(
     (Object.keys(DADS) as DadCandidate[]).map((id) =>
@@ -35,7 +35,7 @@ export function dadCandidatesReady(): Promise<unknown> {
           if ((o as SkinnedMesh).isSkinnedMesh && m?.map) map = m.map
         })
         if (!map) throw new Error(`${id} has no texture`)
-        loaded.set(id, { gltf, skin: new MeshToonMaterial({ map: minted(map), gradientMap: toonGradient() }) })
+        loaded.set(id, { gltf, map, skins: new Map() })
       }),
     ),
   ).catch((e) => {
@@ -45,10 +45,15 @@ export function dadCandidatesReady(): Promise<unknown> {
   return ready
 }
 
-/** One candidate's rig: Tripo's skinned model with the game's pivots on its bones. */
-export function buildDadCandidate(id: DadCandidate, bag: Bag): Rig {
+/** One candidate's rig: Tripo's skinned model with the game's pivots on its bones, his skin painted `skin`. */
+export function buildDadCandidate(id: DadCandidate, bag: Bag, skin = DAD_MINT): Rig {
   const got = loaded.get(id)
   if (!got) throw new Error(`${id} is not loaded yet: wait for dadCandidatesReady() first`)
+  let material = got.skins.get(skin)
+  if (!material) {
+    material = new MeshToonMaterial({ map: reskinned(got.map, skin), gradientMap: toonGradient() })
+    got.skins.set(skin, material)
+  }
   const S = DAD_SIZE
   const model = cloneSkinned(got.gltf.scene)
   model.scale.setScalar(S)
@@ -63,7 +68,7 @@ export function buildDadCandidate(id: DadCandidate, bag: Bag): Rig {
     if ((o as SkinnedMesh).isSkinnedMesh) skinned = o as SkinnedMesh
   })
   const mesh = skinned as unknown as SkinnedMesh
-  mesh.material = got.skin
+  mesh.material = material
   mesh.frustumCulled = false
 
   // GLTFLoader drops the ":" from "mixamorig:Head".
@@ -122,7 +127,7 @@ export function buildDadCandidate(id: DadCandidate, bag: Bag): Rig {
   // The neck pivot in model meters (three.js axes): his Head bone.
   const neck = neckAt.clone().divideScalar(S)
   const shape = { ...dadShape(meta), neck: neck.y }
-  const f = dadFace(head, neck, mesh.geometry as BufferGeometry, shape, bag)
+  const f = dadFace(head, neck, mesh.geometry as BufferGeometry, shape, bag, skin)
 
   const eyes = new Group()
   eyes.position.set(0, (shape.eye.c[2] - neck.y) * S, (-shape.eye.c[1] - neck.z) * S)
@@ -253,9 +258,11 @@ function skinnedOutline(px: number) {
   return m
 }
 
-/** His texture with Tripo's green skin turned Dad's mint (every green texel moved to the mint's hue, its saturation and
- *  brightness scaled so the green's middle lands on the mint). */
-function minted(map: Texture): Texture {
+/** His texture with Tripo's green skin turned `skin` (every green texel moved to its hue, its saturation and brightness
+ *  scaled so the green's middle lands on it). */
+function reskinned(map: Texture, skin: string): Texture {
+  const n = parseInt(skin.slice(1), 16)
+  const target = hsv((n >> 16) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255)
   const img = map.image as CanvasImageSource & { width: number; height: number }
   const c = document.createElement('canvas')
   c.width = img.width
@@ -275,11 +282,11 @@ function minted(map: Texture): Texture {
       sumV += v
     }
   }
-  const kS = greens.length ? MINT_HSV[1] / (sumS / greens.length) : 1
-  const kV = greens.length ? MINT_HSV[2] / (sumV / greens.length) : 1
+  const kS = greens.length ? target[1] / (sumS / greens.length) : 1
+  const kV = greens.length ? target[2] / (sumV / greens.length) : 1
   for (const i of greens) {
     const [, s, v] = hsv(px[i] / 255, px[i + 1] / 255, px[i + 2] / 255)
-    const [r, g, b] = rgb(MINT_HSV[0], Math.min(1, s * kS), Math.min(1, v * kV))
+    const [r, g, b] = rgb(target[0], Math.min(1, s * kS), Math.min(1, v * kV))
     px[i] = r * 255
     px[i + 1] = g * 255
     px[i + 2] = b * 255
