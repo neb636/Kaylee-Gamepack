@@ -1,5 +1,5 @@
-// What Thailand's toy maps share (the Thailand map, hub/map/, the Nan map, nan-trip/map/, and the Krabi map,
-// boat-trip/map/): the board floats in the sky Sparkle's balloon flies through. A soft blue-to-pink sky behind it,
+// What Thailand's toy maps share (the Thailand map, hub/map/, the Bangkok map, hub/bangkok/, the Nan map,
+// nan-trip/map/, and the Krabi map, boat-trip/map/): the board floats in the sky Sparkle's balloon flies through. A soft blue-to-pink sky behind it,
 // puffy clouds round and under it, the toy tray it sits in (a cream rim with a pink edge on a lavender base), and the
 // camera's entrance: when the board opens the camera is already moving behind the loading cover, then settles a
 // little lower and closer (MapCover.tsx is the cover).

@@ -1,6 +1,7 @@
 // Thailand: Kaylee's family's country, in 3D (plan: planning/around-the-world/thailand.md). She lands on the Thailand
 // map (activities/hub/map/, plan: thailand/thailand-map.md) and taps Bangkok, Krabi, Nan or Koh Samet. Bangkok
-// is Agong's shophouse (activities/hub/), where she walks around, meets her family and pokes everything. The places the family
+// opens the Bangkok map (activities/hub/bangkok/, notes: thailand/bangkok-map.md): the house (activities/hub/, where
+// she walks around, meets her family and pokes everything) and ICONSIAM (the mall day) each have a pin there. The places the family
 // loves become activities, four of them, all built and on for Kaylee: the boat trip in Krabi (activities/boat-trip/: the
 // bay, the stamp and the fiddler crab sticker); the mall day (activities/mall-trip/: Mom's question, the Veloz,
 // ICONSIAM, HarborLand's hall of mini games, the pizza table, home with the pizza box for Agong, the pizza slice
@@ -17,6 +18,7 @@ import { BoatTrip } from './activities/boat-trip/BoatTrip'
 import { kayleeReady } from './characters/model'
 import { momReady } from './characters/mom-model'
 import { Hub } from './activities/hub/Hub'
+import { BangkokMap } from './activities/hub/bangkok/BangkokMap'
 import { ThaiMap } from './activities/hub/map/ThaiMap'
 import HUB_SECTIONS from './activities/hub/sections'
 import { MallTrip } from './activities/mall-trip/MallTrip'
@@ -92,8 +94,10 @@ export default function Place(props: PlaceProps) {
   return <Home {...props} />
 }
 
-/** No activity: the Thailand map, or (a house link: arrive, street, downstairs, ...) Agong's house. */
+/** No activity: the Thailand map, the Bangkok map (its Bangkok pin), or (a house link: arrive, street, downstairs,
+ *  ...) the Thailand house. */
 function Home(props: PlaceProps) {
   const { start } = useSections(HUB_SECTIONS)
+  if (start === 'bangkok') return <BangkokMap {...props} />
   return start && start !== 'map' ? <Hub {...props} /> : <ThaiMap {...props} />
 }

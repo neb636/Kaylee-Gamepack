@@ -71,6 +71,7 @@ New: 🌍 World map → 🗺️ Thailand map (fly the plane) → 📍 Land on a 
 
 ## 📍 The pins
 
+- 🏙️ **Bangkok (since 2026-11-19)**: opens the **Bangkok map** ([its notes](bangkok-map.md)): a 3D diorama of the real city where she taps a pin to go to 🏠 the house or 🛝 ICONSIAM (the mall day). The mall's stamp still shows on this pin. What it was before:
 - 🏠 **Bangkok: Agong's house**: The plane's home. Landing here opens the house (the tuk-tuk ride, `hub/arrive`). The **mall day** starts inside: Mom or Dad asks. The mall's stamp shows on this pin.
 - 🚤 **Krabi: the boat and the elephants**: Opens the **Krabi map** (2026-11-13, [its notes](krabi-map.md)): a 3D diorama of Krabi and Phang Nga Bay where she taps a pin to go to 🐘 the elephants or 🚤 the boat. The boat trip's stamp lands here.
 - 🏔️ **Nan: the mountains**: Lands straight on the **Nan map**, the Pajero waiting at the airport (PR #228 already skips the rental desk). The Nan trip's stamp lands here.

@@ -5,6 +5,9 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { say, sounds, useSaved, type Line } from '../../../../../sdk'
 import { updateStickyParam, useSections } from '../../../../kit/sections'
+import { useTopLeft } from '../../../../kit/topLeft'
+import { MapIcon } from '../../../../HomeIcons'
+import { worldLink } from '../../../../../router'
 import type { PlaceProps } from '../../../../types'
 import { flag } from '../../../../engine3d/flags'
 import { L } from '../../lines'
@@ -41,8 +44,18 @@ const WALL_LABELS: Record<string, string> = {
 
 export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const { start, param, enter } = useSections(HUB_SECTIONS)
+  // The top-left button goes back out to the Bangkok map (where the house's pin is), not all the way up to Thailand's.
+  useTopLeft({
+    icon: (
+      <span style={{ width: '58%', height: '58%' }}>
+        <MapIcon color="var(--lavender-dark)" />
+      </span>
+    ),
+    label: 'Back to the Bangkok map',
+    onBack: () => (location.hash = worldLink(meta.id, 'hub', 'bangkok')),
+  })
   const [initial] = useState<Start>(() => {
-    const section = (start && start !== 'map' ? start : null) ?? (arrivedThisVisit ? lastSpot : 'arrive')
+    const section = (start && start !== 'map' && start !== 'bangkok' ? start : null) ?? (arrivedThisVisit ? lastSpot : 'arrive')
     // The game table's links start her already sitting on her stool.
     return { section, at: isTableSection(section) ? 'game-table' : param('at') || undefined, who: param('who') || undefined }
   })
