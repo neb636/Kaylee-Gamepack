@@ -1,19 +1,4 @@
-// The user's new Tripo3D Dads (2026-11-17), auto-rigged in Tripo (a skinned Mixamo-style skeleton), so the
-// character lab can show all four moving before one replaces today's Dad (docs/3d-characters.md; issue #481).
-//
-// Why skinned: cut into stiff pieces (scripts/blender/split-dad.py, the first try), his short sleeves, which are part of
-// the shirt, tore at the shoulders whenever an arm lifted. Tripo's skin weights bend the shirt between the body and the
-// arm instead. The game still drives him the way it drives every family member: this file puts a pivot group (the
-// Rig's head, armL/armR, legL/legR) at Tripo's Head, Arm and UpLeg bones and hangs each bone under its pivot, so the
-// same code that turns today's Dad's pieces (Member, poses.ts, the actions) turns his bones, and his skin follows.
-// Dads 3 and 5 each have an authored three-bone wave. Tripo's "Left" bones are on +x, the game's right: arms and legs are matched by side.
-//
-// Each candidate's face is drawn by the same code as today's Dad's (dad-model.ts dadFace), from what split-dad.py
-// measured on the textured model (the JSON beside each GLB; Dad 5's was measured in Blender by hand, his horn is fused
-// to his hair). His green skin is turned mint in the texture at load. He has no tail or hair pieces of his own (the
-// tail is skinned to his hips; the barber would need the hair split out): the rig's tail, hair, brows and horn are
-// empty groups at their places. The textures aren't flattened yet (issue #481, step 1). Lab only: nothing in the game
-// imports this.
+// Dad 5’s skinned rig for the character lab. His Blender wave uses the original arm chain.
 import { AnimationMixer, CanvasTexture, Group, MeshToonMaterial, ShaderMaterial, SkinnedMesh, SRGBColorSpace, Vector3, type BufferGeometry, type Object3D, type Texture } from 'three'
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
@@ -25,20 +10,10 @@ import { outlineMaterial } from '../../../engine3d/outline'
 import { toonGradient } from '../../../engine3d/toon'
 import { ARM_TILT, BODY_INK, DAD_SIZE, dadFace, dadShape, type SplitMeta } from './dad-model'
 import { reachForward } from './mom-model'
-import one from './models/candidates/dad-1.glb?url'
-import two from './models/candidates/dad-2.glb?url'
-import three from './models/candidates/dad-3.glb?url'
 import five from './models/candidates/dad-5.glb?url'
-import m1 from './models/candidates/dad-1.json'
-import m2 from './models/candidates/dad-2.json'
-import m3 from './models/candidates/dad-3.json'
 import m5 from './models/candidates/dad-5.json'
 
-/** Tripo's numbering in the planning repo's models/dad/ (4 and 6 were copies of 1 and 3). */
 const DADS = {
-  'dad-1': { url: one, meta: m1 as SplitMeta },
-  'dad-2': { url: two, meta: m2 as SplitMeta },
-  'dad-3': { url: three, meta: m3 as SplitMeta },
   'dad-5': { url: five, meta: m5 as SplitMeta },
 } as const
 export type DadCandidate = keyof typeof DADS
@@ -49,7 +24,7 @@ const MINT_HSV = hsv(0xa8 / 255, 0xea / 255, 0xd5 / 255)
 const loaded = new Map<DadCandidate, { gltf: GLTF; skin: MeshToonMaterial }>()
 let ready: Promise<unknown> | null = null
 
-/** Resolves once all four are loaded and their skin turned mint (the lab waits for it). */
+/** Resolves once Dad 5 is loaded and his skin turned mint (the lab waits for it). */
 export function dadCandidatesReady(): Promise<unknown> {
   ready ??= Promise.all(
     (Object.keys(DADS) as DadCandidate[]).map((id) =>

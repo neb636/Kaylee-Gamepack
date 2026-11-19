@@ -11,7 +11,6 @@ import { applyPose, clearPose } from '../activities/boat-trip/bay/poses'
 import { buildBird, buildCat, buildCrab, buildLizard, buildMacaque, buildMudskipper, buildNeedlefish, buildPorpoise, type Blink, type CritterId } from '../activities/boat-trip/bay/critters'
 import { Avatar, SHOW_SECS } from '../characters/avatar'
 import { FAMILY } from '../characters/family'
-import { buildDadRig, dadModel } from '../characters/dad-model'
 import { buildDadCandidate } from '../characters/dad-candidates'
 import { Member } from '../characters/member'
 import type { Wearable } from '../characters/looks'
@@ -201,8 +200,6 @@ export class Studio implements World3D {
       const dad = FAMILY.find((m) => m.id === 'nick')!
       char = entry.candidate
         ? new Member({ ...dad, id: entry.id, spot: null }, bag, undefined, entry.voice, buildDadCandidate(entry.candidate, bag))
-        : entry.dadModel
-        ? new Member({ ...dad, id: entry.id, spot: null }, bag, undefined, entry.voice, buildDadRig(dadModel(), bag))
         : own
         ? new Member({ ...own, spot: null }, bag, undefined, entry.voice)
         : new Member({ id: entry.id, name: entry.name, who: entry.who, height: entry.look!.height, spot: null, pitch: 300 }, bag, entry.look, entry.voice)

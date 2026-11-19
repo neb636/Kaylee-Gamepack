@@ -222,65 +222,16 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   by `familyRig`), and saves a sheet per section: the screen with her outlined and three close-ups drawn from the
   game's own scene. `--who=nick` shoots anyone else, `--hashes=a|b` any links.
 
-## Dad (2026-11-15: on trial in the character lab)
+## Dad 5 in the character lab
 
-- **Lab only so far:** `#/world/characters/dad-model` (`characters/dad-model.ts`, `models/dad.glb`). The game's Dad is
-  still the code-built `LOOKS.nick`; the user wants him right in the lab before he replaces it everywhere.
-- **Check Tripo's pieces before anything else.** In step 3, also count the loose parts: a model whose arms and legs are
-  their own pieces (Mom's, Dad's regeneration 2) animates; a fused one doesn't. The first four Dads were one fused
-  mesh with short sleeves, and no cut worked: at the sleeve's hem the arm looked like a tube sliding out of a fixed
-  sleeve; at the shoulder seam the raised sleeve folded into his cheek; through the sleeve it cut two layers (Tripo's
-  sleeve is a shell round an arm that carries on inside). Regenerating the same picture gave one with separate arms
-  and legs. Ask for a regeneration before cutting arms.
-- **His colour:** the picked model was green; the user wanted the code-built Dad's mint, so the texture's green skin
-  was shifted to it and its blotchy baked shading calmed (`mint()`, `calm()`), no new Tripo run.
-- **Blender:** `split-nick.py` next to `nick-rigs.blend` in the planning repo's `models/nick/` (the trial models and
-  the regenerations are there too). For regeneration 2: `split(..., legs_separate, arms_separate, tail_y=None)`, then
-  `split_hair`, `keep_normals`, `skin_arms`. What each fixes:
-  - Tripo's own arms end in an open tube up inside the sleeve: a ball-joint plug closes it round the shoulder pivot.
-  - The head is cut at the neck; shirt-collar faces above the cut stay on the body (on the head they poked out when
-    it tilted).
-  - Only holes the script cut are filled; Tripo's own open hems stay open.
-  - Rebuilt pieces lose Tripo's smooth normals (the folded-back shirt hem showed light jagged teeth): `keep_normals`
-    copies them back.
-  - Tripo painted shirt-pink on the top of each arm, which showed under the sleeve from behind: `skin_arms`.
-  - His tail joins the body right at the shirt's hem, so it stays on the body: `rig.tail` is an empty joint and the
-    tail doesn't stream in the wind.
-  - Hair and horn are split out by colour, with a mint scalp under the hair, for the barber.
-- **Code:** like Mom's (pivots in meters, only meshes scaled; `reachForward` arms at `ARM_TILT` 1.2; smile beads and a
-  talking mouth placed by rays at his face; mint lids for the blink, since his eye domes sit over sockets). His ink is
-  the user's pick, the Outline slider at 0.35. Silly now squints with a modelled toy's lids (`poses.ts`): squashing the
-  domes showed the socket and nothing unsquashed them (Mom too).
-- **For the swap into the game** (not done): `familyRig` builds him for `nick` and Place `use(dadReady())`, then fit
-  what the trips hang on Dad. The rig already says where his hair, brows and horn are (`hair`, `brows`, `horn`,
-  `hairColors`, `spots.brow`/`horn`) and his legs (`shin`). The reverted PR #291 shows the scene changes: boat
-  sunglasses, mall socks, barber, vet suds, HarborLand horn ball, rice straw. Then `qa-mom.mjs --who=nick`.
-
-## New Dads (2026-11-17: four auto-rigged candidates in the lab)
-
-- **Lab only:** `New Dad 1/2/3/5` in the Dads variations (`characters/dad-candidates.ts`, `models/candidates/`). The
-  user made six Tripo Dads from a new picture (4 and 6 were copies of 1 and 3), textured them, and auto-rigged four in
-  Tripo (a skinned Mixamo-style skeleton, no clips).
-- **Cut into stiff pieces first, and it didn't work:** `scripts/blender/split-dad.py` (headless) splits a textured
-  Tripo Dad into today's Dad's pivot rig and measures his face. Even with each Dad's own armpit seam, domed shoulder
-  plugs and the hidden arm tops painted pink, the short sleeves tore at the shoulder whenever an arm lifted: the
-  sleeve is part of the shirt and the arm a tube inside it. The user saw it at normal size, not just close up.
-- **Skinned instead, still driven by our code:** a pivot group (the Rig's head, armL/armR, legL/legR) sits at Tripo's
-  Head, Arm and UpLeg bones and each bone hangs under its pivot, so Member and every pose/action turn the bones and
-  Tripo's weights bend the shirt. Tripo's clips aren't used. Tripo's "Left" bones are on +x, the game's right. The
-  ink is a skinned hull (welded with its skin weights kept) with a skinning version of the outline shader. The face
-  (smile, talking mouth, lids, spots) is `dadFace` in `dad-model.ts`, shared with today's Dad; the skin is turned mint
-  in the texture at load.
-- **Dads 3 and 5 waving:** each candidate GLB includes its own 1.5-second Blender clip, `Dad wave`. Its three rotation tracks
-  lift the collarbone and upper arm and swing the forearm beside the cheek. The lab preserves that chain and the
-  bones' original local axes. Other gestures still use the family pose controls. The review reel compares the old
-  and new waves with ink on and off. Dad 3's waving cuff follows his upper arm so the sleeve and skin stay together.
-  A small fold remains under the raised sleeve.
-- **Where they stand:** Dad 5's shoulders are clean front and back mid-cheer; 1 has dark specks at the armpits, 2 mint
-  smudges, and 3 can show a dark patch behind the opposite sleeve in Cheer. Tripo's weights let the arm slide part-way out of the
-  sleeve rather than carry it. No tail bone (the tail doesn't swing), no separate hair (the barber needs it), Tripo's
-  texture not flattened yet (issue #481).
-- **Next:** Dad 3 is your preferred look. Check his other arm gestures before any in-game swap.
+- You picked Dad 5. Compare him with the game’s code-built Dad in the character lab at
+  `#/world/characters/dad-5?lineup=nick,dad-5`. The game still uses `LOOKS.nick`.
+- Dad 5’s skinned GLB includes a 1.5-second Blender wave. The lab preserves the original arm hierarchy so the collarbone,
+  upper arm and forearm move together. Other poses use the family controls. A small sleeve fold remains at the deepest bend.
+- The previous trials used rigid pieces, which pulled away at the shoulder on fused meshes. The current skin weights let
+  the sleeves bend with the arms. `scripts/blender/split-dad.py` produced the measurements used by the shared face code.
+- Before an in-game swap, check the remaining gestures and fit the gear Dad uses in the trips. The barber needs separate
+  hair and the tail needs its own joint to swing. Issue #481 tracks the texture work.
 
 ## Open questions
 

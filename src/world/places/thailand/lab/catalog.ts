@@ -59,9 +59,7 @@ export interface CastEntry {
   color: string
   /** Entries that are variations of each other share this. */
   set?: string
-  /** The modelled Dad on trial (characters/dad-model.ts), built from his GLB instead of `look`. */
-  dadModel?: boolean
-  /** One of the new Tripo Dads on trial (characters/dad-candidates.ts), built from his own GLB and measurements. */
+  /** Dad 5’s skinned model and Blender wave. */
   candidate?: DadCandidate
 }
 
@@ -75,10 +73,7 @@ const family: CastEntry[] = [
 
       : { id: m.id, name: m.name, who: m.who, group: 'family', kind: 'member', look: LOOKS[m.id], voice: m.id, src: 'characters/looks.ts', color: LOOKS[m.id].fur, set: m.id === 'nick' ? 'dads' : undefined },
   ),
-  // The modelled Dad on trial (Tripo3D, the user's pick): the code-built Dad above stays the game's until he's ready.
-  { id: 'dad-model', name: 'Dad: the new toy', who: 'Your dad, a mint unicorn (the vinyl toy, modelled in Tripo3D; on trial)', group: 'family', kind: 'member', voice: 'nick', src: 'characters/dad-model.ts', color: '#A9EBD6', set: 'dads', dadModel: true },
-  // The new Tripo Dads (2026-11-17), textured in Tripo, to pick one from (4 and 6 were copies of 1 and 3).
-  ...(['1', '2', '3', '5'] as const).map((n): CastEntry => ({ id: `dad-${n}`, name: `New Dad ${n}`, who: `Tripo's new Dad ${n}: auto-rigged in Tripo (skinned), mint, texture not flattened yet`, group: 'family', kind: 'member', voice: 'nick', src: 'characters/dad-candidates.ts', color: '#A9EBD6', set: 'dads', candidate: `dad-${n}` })),
+  { id: 'dad-5', name: 'New Dad 5', who: 'Mint unicorn with a Blender wave', group: 'family', kind: 'member', voice: 'nick', src: 'characters/dad-candidates.ts', color: '#A9EBD6', set: 'dads', candidate: 'dad-5' },
 ]
 
 const person = (id: string, name: string, who: string, group: CastGroup, look: Look, src: string, voice?: string, set?: string): CastEntry => ({ id, name, who, group, kind: 'member', look, voice, src, color: look.fur, set })
