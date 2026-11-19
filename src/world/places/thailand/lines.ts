@@ -131,7 +131,7 @@ export const L = {
     pokes: {
       asiatique: 'A giant wheel by the river! Round and round!',
       chinatown: 'Chinatown! Look at the red lanterns!',
-      lumphini: 'A big lizard lives in the park! It loves to swim.',
+      lumphini: 'A big lizard lives in this park!',
       mahanakhon: 'This tower looks like building blocks!',
       flowers: 'The flower market! So many flowers!',
       port: 'Big ships bring boxes from far away!',
