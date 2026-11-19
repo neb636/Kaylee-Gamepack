@@ -1,11 +1,31 @@
 {
   "title": "Dad 5: your skin tone",
   "checkIn": "fix",
-  "kaylee": "The new Dad is now a pale peach in Mom's hue (your pick, the middle one), with a thicker outline like hers.",
+  "kaylee": "The new Dad is a pale peach in Mom's hue (your pick), with an outline like hers, and no green left around his mouth.",
   "questions": [],
   "pictures": [
-    { "title": "Next to Mom", "after": "pics/final.jpg", "caption": "Mom and Dad 5: the same warm hue, his a little paler, both outlines at 1" },
-    { "title": "Close up", "before": "pics/face-mint.jpg", "after": "pics/face-final.jpg", "caption": "Mint, outline 0.35 → peach, outline 1" }
+    {
+      "title": "Next to Mom",
+      "after": "pics/final.jpg",
+      "caption": "Mom and Dad 5: the same warm hue, his a little paler, both outlines at 1"
+    },
+    {
+      "title": "Around his mouth",
+      "before": "pics/muzzle-before.jpg",
+      "after": "pics/muzzle-after.jpg",
+      "caption": "The green-tinged cream is now a warm cream that matches his skin"
+    },
+    {
+      "title": "Close up",
+      "before": "pics/face-mint.jpg",
+      "after": "pics/face-final.jpg",
+      "caption": "Mint, outline 0.35 \u2192 peach, outline 1"
+    }
   ],
-  "links": [{ "label": "Turn them round in the lab", "hash": "#/world/characters/dad-5?lineup=ji,dad-5" }]
+  "links": [
+    {
+      "label": "Turn them round in the lab",
+      "hash": "#/world/characters/dad-5?lineup=ji,dad-5"
+    }
+  ]
 }
