@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Bangkok map: Wat Arun and the Grand Palace</title>
+<title>Bangkok map: Wat Arun, the Grand Palace, smaller pins, and zoom on every map</title>
 <style>
 :root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a;--lav:#efe6ff;--warn:#b0124f}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}}
@@ -36,24 +36,28 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 @media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.pics{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}}
 </style></head><body><main>
 <span class="chip">Check-in fix</span>
-<h1>Bangkok map: Wat Arun and the Grand Palace</h1>
-<p class="kaylee">The Bangkok map now shows Wat Arun on the Thonburi bank and the Grand Palace across the river, so it looks like Bangkok at a glance. They're scenery only, so tapping them does nothing. The kites over Sanam Luang are gone, so the corner is calmer and you can see the Grand Palace.</p>
+<h1>Bangkok map: Wat Arun, the Grand Palace, smaller pins, and zoom on every map</h1>
+<p class="kaylee">The Bangkok map now shows Wat Arun on the Thonburi bank and the Grand Palace across the river, so it looks like Bangkok at a glance. They're scenery only, so tapping them does nothing. The kites are gone, which calms the old town, and the two place pins are 40% smaller. On every Thailand map she can pinch in (iPad and iPhone) or pinch on a Mac trackpad or scroll, up to 2.5 times closer, toward the spot under her fingers.</p>
 
 
 <h2>Before and after</h2><div class="pics"><figure class="pair"><div><img src="pics/oldtown-before.jpg" alt="Before: The old town" loading="lazy"><span>Before</span></div><div><img src="pics/oldtown-after.jpg" alt="After: The old town" loading="lazy"><span>After</span></div>
 <figcaption><b>The old town</b>: Wat Arun (left bank) and the Grand Palace (right bank), where they really are</figcaption></figure>
 <figure class="solo"><img src="pics/board-after.jpg" alt="The whole board" loading="lazy">
 <figcaption><b>The whole board</b>: iPad landscape</figcaption></figure>
-<figure class="solo"><img src="pics/board-portrait.jpg" alt="On an iPad held upright" loading="lazy">
-<figcaption><b>On an iPad held upright</b>: Portrait</figcaption></figure></div>
+<figure class="solo"><img src="pics/zoom-bangkok.jpg" alt="Zoomed in on the old town" loading="lazy">
+<figcaption><b>Zoomed in on the old town</b>: A scroll over Wat Arun closes in on it</figcaption></figure>
+<figure class="solo"><img src="pics/zoom-thailand.jpg" alt="Zoomed in on the Thailand map" loading="lazy">
+<figcaption><b>Zoomed in on the Thailand map</b>: Scrolled in over the elephant (the closest it goes)</figcaption></figure>
+<figure class="solo"><img src="pics/zoom-krabi.jpg" alt="Pinched in on the Krabi map" loading="lazy">
+<figcaption><b>Pinched in on the Krabi map</b>: A two-finger pinch over the bay</figcaption></figure></div>
 
 
-<h2>Your call</h2><ol><li><p>Do they look good enough, or should they be bigger?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
-<li><p>Should Wat Pho's chedis join them, or is two enough?</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><a class="pill" href="https://github.com/neb636/Kaylee-Gamepack/pull/492">Open the PR to paste them</a><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+<h2>Your call</h2><ol><li><p>Is 2.5x closer the right limit, or should it stop sooner?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
+<li><p>Do the landmarks look good enough, or should they be bigger?</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><a class="pill" href="https://github.com/neb636/Kaylee-Gamepack/pull/492">Open the PR to paste them</a><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
 <h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/thailand/hub/bangkok">Open the Bangkok map</a></p>
 </main>
 <script>
-const qs=["Do they look good enough, or should they be bigger?","Should Wat Pho's chedis join them, or is two enough?"],titles=[]
+const qs=["Is 2.5x closer the right limit, or should it stop sooner?","Do the landmarks look good enough, or should they be bigger?"],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})

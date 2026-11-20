@@ -1,10 +1,10 @@
 {
-  "title": "Bangkok map: Wat Arun and the Grand Palace",
+  "title": "Bangkok map: Wat Arun, the Grand Palace, smaller pins, and zoom on every map",
   "checkIn": "fix",
-  "kaylee": "The Bangkok map now shows Wat Arun on the Thonburi bank and the Grand Palace across the river, so it looks like Bangkok at a glance. They're scenery only, so tapping them does nothing. The kites over Sanam Luang are gone, so the corner is calmer and you can see the Grand Palace.",
+  "kaylee": "The Bangkok map now shows Wat Arun on the Thonburi bank and the Grand Palace across the river, so it looks like Bangkok at a glance. They're scenery only, so tapping them does nothing. The kites are gone, which calms the old town, and the two place pins are 40% smaller. On every Thailand map she can pinch in (iPad and iPhone) or pinch on a Mac trackpad or scroll, up to 2.5 times closer, toward the spot under her fingers.",
   "questions": [
-    "Do they look good enough, or should they be bigger?",
-    "Should Wat Pho's chedis join them, or is two enough?"
+    "Is 2.5x closer the right limit, or should it stop sooner?",
+    "Do the landmarks look good enough, or should they be bigger?"
   ],
   "pictures": [
     {
@@ -19,9 +19,19 @@
       "caption": "iPad landscape"
     },
     {
-      "title": "On an iPad held upright",
-      "after": "pics/board-portrait.jpg",
-      "caption": "Portrait"
+      "title": "Zoomed in on the old town",
+      "after": "pics/zoom-bangkok.jpg",
+      "caption": "A scroll over Wat Arun closes in on it"
+    },
+    {
+      "title": "Zoomed in on the Thailand map",
+      "after": "pics/zoom-thailand.jpg",
+      "caption": "Scrolled in over the elephant (the closest it goes)"
+    },
+    {
+      "title": "Pinched in on the Krabi map",
+      "after": "pics/zoom-krabi.jpg",
+      "caption": "A two-finger pinch over the bay"
     }
   ],
   "links": [
