@@ -1,8 +1,8 @@
 // The canal's little winter toys. Each moving part is a merged mesh, with ink on the silhouette
 // and smaller details painted into the same mesh.
-import { Group } from 'three'
+import { Group, Vector3 } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
-import { blobShadow, P, solidMix } from '../../../../engine3d/geo'
+import { blobShadow, one, P, solidMix } from '../../../../engine3d/geo'
 
 const OUTFITS = [
   { coat: '#EC6B9B', hat: '#8C59AA', scarf: '#FFD476', skin: '#F2B990', hair: '#5F3660' },
@@ -18,6 +18,8 @@ const PANTS = '#454264'
 const HALF_TURN = Math.PI
 const TURN = HALF_TURN * 2
 const SIDES = [-1, 1] as const
+const UP = new Vector3(0, 1, 0)
+const LEG_SPAN = 0.42
 
 export class CanalSkater {
   readonly root = new Group()
@@ -28,7 +30,8 @@ export class CanalSkater {
   private readonly head = new Group()
   private readonly scarf = new Group()
   private readonly arms: Group[]
-  private readonly legs: Group[]
+  private readonly legs: { pants: Group; skate: Group }[]
+  private readonly legAxis = new Vector3()
   private readonly lane: number
   private readonly phase: number
   private readonly pace: number
@@ -95,8 +98,8 @@ export class CanalSkater {
     })
 
     this.legs = SIDES.map(() => {
-      const leg = solidMix([
-        P.capsule(0.118, 0.34, PANTS, { at: [0, 0.43, -0.014] }),
+      const pants = one(P.capsule(0.112, LEG_SPAN, PANTS, { at: [0, -LEG_SPAN / 2, 0] }), bag, 1.05)
+      const skate = solidMix([
         P.rbox(0.234, 0.235, 0.365, 0.074, INK, { at: [0, 0.195, 0.063] }),
       ], [
         P.rbox(0.219, 0.052, 0.35, 0.024, '#8C839D', { at: [0, 0.104, 0.063] }),
@@ -106,8 +109,8 @@ export class CanalSkater {
           at: [0, 0.281 - i * 0.02, 0.189 + i * 0.025], rot: [-0.64, 0, 0],
         })),
       ], bag, 1.05)
-      this.pivot.add(leg)
-      return leg
+      this.pivot.add(pants, skate)
+      return { pants, skate }
     })
     this.pivot.add(this.torso)
     this.root.add(this.pivot, blobShadow(0.57, bag))
@@ -126,15 +129,26 @@ export class CanalSkater {
     this.pivot.rotation.y = this.spinT >= 0 ? (this.spinT / 0.9) * TURN * 2 : 0
 
     const stride = Math.sin(time * 4.1 + this.phase * 2.4)
-    this.torso.rotation.set(0.13, stride * -0.12, -stride * 0.19)
-    this.torso.position.set(stride * 0.095, 0.66 + (1 - Math.abs(stride)) * 0.035, -0.018)
+    this.torso.rotation.set(0.13, stride * -0.12, stride * 0.16)
+    this.torso.position.set(-stride * 0.065, 0.66 + (1 - Math.abs(stride)) * 0.035, -0.018)
     this.head.rotation.set(-0.08, 0.35 * Math.sin(time * 1.4 + this.phase), stride * 0.11)
     this.scarf.rotation.set(0.75 + stride * 0.22, 0, stride * -0.26)
     SIDES.forEach((side, i) => {
       const push = stride * side
       const reach = Math.max(0, push)
-      this.legs[i].position.set(side * (0.145 + reach * 0.15), reach * 0.10, -push * 0.23)
-      this.legs[i].rotation.set(-reach * 0.15, side * (0.11 + reach * 0.38), side * reach * 0.16)
+      const { pants, skate } = this.legs[i]
+      skate.position.set(side * (0.145 + reach * 0.145), reach * 0.085, -push * 0.21)
+      skate.rotation.set(-reach * 0.13, side * (0.11 + reach * 0.38), side * reach * 0.14)
+
+      // The upper end follows the hip inside the jacket. The lower end follows the
+      // ankle inside the boot, so the supporting blade can stay level on the ice.
+      pants.position.set(side * 0.115, 0.025, 0)
+        .applyQuaternion(this.torso.quaternion).add(this.torso.position)
+      this.legAxis.set(0, 0.26, -0.015)
+        .applyQuaternion(skate.quaternion).add(skate.position).sub(pants.position)
+        .negate()
+      pants.scale.y = this.legAxis.length() / LEG_SPAN
+      pants.quaternion.setFromUnitVectors(UP, this.legAxis.normalize())
       this.arms[i].rotation.set(push * 0.65 - 0.12, 0, side * (0.85 + stride * side * 0.22))
     })
   }
