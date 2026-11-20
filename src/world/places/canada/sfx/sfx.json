@@ -685,5 +685,86 @@
   "label": "The rink glows for the big game",
   "prompt": "A soft, warm magical chime swelling gently, a glowing twinkle like a light turning on, inviting and calm.",
   "seconds": 1.6
+ },
+ {
+  "id": "story-air-lake",
+  "label": "The mountain lake (bed)",
+  "prompt": "A still turquoise mountain lake on a calm morning: tiny ripples lapping, a very soft breeze, a far bird now and then, wide and peaceful. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "canoe-stroke-1",
+  "label": "A paddle stroke (1)",
+  "prompt": "One wooden canoe paddle stroke in a calm lake: the blade dips in softly and pulls back through the water with a gentle swoosh and a few drips. Close, clean, calm. No voices, no music.",
+  "seconds": 1
+ },
+ {
+  "id": "canoe-stroke-2",
+  "label": "A paddle stroke (2)",
+  "prompt": "A single gentle canoe paddle stroke: the blade slips into still water, a soft watery pull and a little trickle as it lifts out. Close, soft. No voices, no music.",
+  "seconds": 1
+ },
+ {
+  "id": "canoe-glide",
+  "label": "The canoe gliding",
+  "prompt": "A small wooden canoe gliding on a still lake: soft steady hiss and burble of water along the hull, gentle and smooth. Seamless loop, no voices, no music.",
+  "seconds": 2,
+  "loop": true
+ },
+ {
+  "id": "canoe-bump",
+  "label": "A gentle bump on the shore",
+  "prompt": "A small wooden canoe nudging gently onto a pebble beach: a soft hollow wooden bonk and a little crunch of pebbles. Soft, cute, not loud. No voices, no music.",
+  "seconds": 1
+ },
+ {
+  "id": "canoe-plop",
+  "label": "A little plop on the water",
+  "prompt": "A tiny pebble dropped into a calm lake: one small cute plop with a little ripple. Soft. No voices, no music.",
+  "seconds": 0.5
+ },
+ {
+  "id": "canoe-ducks",
+  "label": "The ducks quack",
+  "prompt": "A mother duck quacks twice and her ducklings peep softly, on a calm lake. Cute, gentle, close. No music.",
+  "seconds": 1.5
+ },
+ {
+  "id": "canoe-trout",
+  "label": "A trout jumps",
+  "prompt": "A small fish leaps out of a calm lake and splashes back in: a quick flip of water and a light plop. Soft, playful. No voices, no music.",
+  "seconds": 1
+ },
+ {
+  "id": "canoe-loon",
+  "label": "Lulu laughs",
+  "prompt": "A common loon's tremolo call, the quick wobbling laughing call, across a calm mountain lake with a soft echo. Gentle, one short call. No music.",
+  "seconds": 1.5
+ },
+ {
+  "id": "canoe-chick",
+  "label": "The chick's squeak",
+  "prompt": "A tiny fluffy baby water bird trying to sing: one small high squeaky peep, cute and a little wobbly. Very short, soft. No music.",
+  "seconds": 0.5
+ },
+ {
+  "id": "canoe-stream",
+  "label": "The glacier stream",
+  "prompt": "A small cold glacier stream tumbling over pebbles into a lake: bright bubbling, splashing water, gentle. No voices, no music.",
+  "seconds": 2
+ },
+ {
+  "id": "canoe-ice",
+  "label": "Ice falls off the glacier",
+  "prompt": "A small chunk of glacier ice cracks off and splashes down into a lake: a crisp crack, then a soft deep splash. Not scary, toy-like. No voices, no music.",
+  "seconds": 1.5
+ },
+ {
+  "id": "canoe-lake",
+  "label": "The still mountain lake (bed)",
+  "prompt": "A still mountain lake on a sunny morning: tiny lapping ripples at the shore, a soft breeze in the pine trees, a faraway bird now and then. Calm, peaceful. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
  }
 ]
