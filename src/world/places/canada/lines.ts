@@ -351,28 +351,28 @@ export const L = {
     // The film in (story/films/canoe.ts): the dock on the turquoise lake, Maple in the red canoe.
     filmIn: {
       song: maple('Every big game starts with a song.'),
-      // A loon calls, far across the water, and the mountains answer.
+      // A loon calls, far across the water, and the mountains answer (a beat with no line). Maple's ears go up.
       lulu: maple("That's Lulu the loon! Nobody sings like Lulu."),
       across: maple("She lives across the lake, by the glacier. Let's paddle!"),
     },
-    // The story: Maple at the dock, in the red canoe.
-    story: maple('Why is my lake so blue?'),
-    // Sparkle: how to paddle (one way or the other), and the hint when she hasn't paddled for a while.
-    go: { stroke: 'Pull the paddle back through the water!', pull: onDevice('Hold the water where the canoe should go!', 'Click and hold where the canoe should go!') },
-    hint: { stroke: onDevice('Drag your finger back, beside the canoe.', 'Click and drag back, beside the canoe.'), pull: onDevice('Press the water in front of the canoe.', 'Click the water in front of the canoe.') },
+    // The game's hello, from a link or a replay (after the film it starts on the water with Sparkle's line).
+    story: maple('Bonjour! Hop in, we go to find Lulu!'),
+    // Sparkle: how to paddle, and the hint when she hasn't paddled for a while (the hand shows it too).
+    go: onDevice('Hold your finger on the water, and Maple paddles there!', 'Click and hold on the water, and Maple paddles there!'),
+    hint: onDevice('Touch the water in front of the canoe!', 'Click the water in front of the canoe!'),
     // Where the blue comes from.
     stream: 'Paddle to the milky water by the glacier stream!',
     streamMaple: maple('Ooh! What is that milky water?'),
     streamHint: 'Follow the sparkles to the milky water.',
     found: 'Rock flour from the glacier makes the lake so blue!',
     foundMaple: maple('We found the blue!'),
-    // Follow the loon.
-    loon: 'Bubbles! Follow them to find the loon.',
+    // Follow Lulu: she dives and pops up nearer the glacier each time.
+    loon: 'Bubbles! Follow them to find Lulu.',
     loonHint: 'Paddle to the bubbles!',
-    loonFound: [maple('There she is!'), maple('Found you, loon!'), maple('Peekaboo, loon!')],
+    loonFound: [maple('There she is!'), maple('Found you, Lulu!'), maple('Peekaboo, Lulu!')],
     chick: maple('Look! A baby loon on her back!'),
-    family: maple('A whole loon family! Merci!'),
-    // Tap-to-hear facts (the first time she pokes the glacier, the second time the loon).
+    family: maple('Lulu and her baby! We found them!'),
+    // Tap-to-hear facts (the first time she pokes the glacier, the second time Lulu).
     glacier: 'A glacier is a river of ice. It moves very slowly.',
     loonie: "The loon is on Canada's dollar coin. It's called a loonie!",
     // Silly moments and pokes.
@@ -386,8 +386,10 @@ export const L = {
     filmOut: {
       ask: maple('Lulu! Will you sing at our big game?'),
       yes: lulu('A big game? I will sing my very best song.'),
-      // She calls, long and lovely. Her chick tries too: a tiny squeak.
+      // She calls, long and lovely, head thrown back. Her chick tries too: a tiny squeak (beats with no line).
       chick: maple('Hee hee! The littlest singer!'),
+      // The pink scarf goes round Lulu's neck.
+      team: maple("You're on the team!"),
     },
   },
   whales: {
