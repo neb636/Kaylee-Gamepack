@@ -1,0 +1,87 @@
+[
+ {
+  "id": "campfire-fire",
+  "label": "The campfire at night (bed)",
+  "prompt": "A small cozy campfire crackling and softly popping in a quiet forest clearing at night, gentle crickets chirping far off, calm and warm, no wind, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "campfire-owl",
+  "label": "An owl hoots",
+  "prompt": "A barred owl hooting softly in the night forest, a gentle 'hoo, hoo-hoo', round and friendly, a little far away, not spooky.",
+  "seconds": 1.8
+ },
+ {
+  "id": "campfire-frog",
+  "label": "A little frog peeps",
+  "prompt": "A tiny spring peeper frog by a pond at night, two bright little peeps, cute and clear.",
+  "seconds": 0.9
+ },
+ {
+  "id": "campfire-rustle",
+  "label": "A rustle in the bushes",
+  "prompt": "A small animal rustling quickly through a leafy bush, a short soft shake of leaves, playful and light, not scary.",
+  "seconds": 0.8
+ },
+ {
+  "id": "campfire-snatch",
+  "label": "A tiny paw snatches a marshmallow",
+  "prompt": "A tiny quick cartoon snatch: a little paw grabbing something soft, a fast airy swish and a small squishy pop, funny and light.",
+  "seconds": 0.5
+ },
+ {
+  "id": "campfire-chitter",
+  "label": "Raccoon chitter (Roxy giggles)",
+  "prompt": "A friendly raccoon chittering and chirping happily, short soft trills like a little giggle, cute, no growl.",
+  "seconds": 1.2
+ },
+ {
+  "id": "campfire-kits",
+  "label": "Baby raccoons squeak",
+  "prompt": "Three tiny baby raccoons squeaking and chirping excitedly together, high, happy little squeaks, cute and soft.",
+  "seconds": 1.4
+ },
+ {
+  "id": "campfire-sizzle",
+  "label": "A marshmallow sizzles",
+  "prompt": "A marshmallow toasting over a campfire, a soft gentle sizzle and a few tiny pops, warm and close.",
+  "seconds": 1.5
+ },
+ {
+  "id": "campfire-zip",
+  "label": "The tent zipper",
+  "prompt": "A tent zipper being pulled open in one quick smooth zip, nylon, soft and clear.",
+  "seconds": 0.8
+ },
+ {
+  "id": "campfire-sparks",
+  "label": "Sparks whoosh up from the fire",
+  "prompt": "A campfire flaring up with a soft whoosh and a crackle of little sparks flying up, warm and gentle.",
+  "seconds": 1
+ },
+ {
+  "id": "campfire-blow",
+  "label": "Blowing out a marshmallow",
+  "prompt": "One quick soft puff of breath blowing out a tiny flame, short and gentle, no voice.",
+  "seconds": 0.6
+ },
+ {
+  "id": "campfire-munch",
+  "label": "Munching marshmallows",
+  "prompt": "A small cartoon animal munching a marshmallow, three soft squishy chomps, cute and funny.",
+  "seconds": 0.9
+ },
+ {
+  "id": "campfire-slap",
+  "label": "A beaver's tail slaps the water",
+  "prompt": "A beaver slapping its flat tail on a quiet pond at night, one wet smack and a small splash, soft.",
+  "seconds": 0.8
+ },
+ {
+  "id": "campfire-thump",
+  "label": "A hare thumps its feet",
+  "prompt": "A snowshoe hare thumping its big back feet on soft ground, thump, thump-thump, muffled and cute.",
+  "seconds": 0.8
+ }
+]

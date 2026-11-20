@@ -10,9 +10,7 @@ export const screens = [
   ...['msa', 'quebec', 'ottawa', 'prairies', 'banff', 'rockies', 'bc'].map((at) => ({ name: `canada-map-${at}`, hash: `#/world/canada/hub/map?at=${at}`, reset: true, wait: 2200 })),
   // Mountain Bike: the gondola, each stretch from its link (berms: both ways), the waterfall at the end.
   ...['gondola', 'green', 'berms?trail=green', 'berms?trail=blue', 'creek', 'falls'].map((to) => ({ name: `canada-bike-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/bike/${to}`, reset: true, wait: to === 'falls' ? 14000 : to === 'gondola' ? 4000 : 3500 })),
-  // Campfire Night: the dark campsite under the flashlight; the last one with the darkness turned off (a
-  // feel-lab knob) to check where everything stands.
-  ...['eyes', 'sounds', 'bandit', 'marshmallow', 'stars', 'bandit?feel.campTorch.dark=0'].map((to) => ({ name: `canada-campfire-${to.replace(/[?=&,.]/g, '-')}`, hash: `#/world/canada/campfire/${to}`, reset: true, wait: 1800 })),
+  // (Campfire Night's are in activities/campfire/qa.mjs.)
   // Red Canoe: each part from its link (glide both ways to paddle), the loon family at the glacier.
   ...['glide', 'glide?paddle=pull', 'stream', 'loon', 'glacier'].map((to) => ({ name: `canada-canoe-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/canoe/${to}`, reset: true, wait: to.startsWith('glide') ? 4000 : 3000 })),
 ]
@@ -21,10 +19,6 @@ export const screens = [
 export const pacing = [
   { name: 'canada pin map', id: 'canada', hash: '#/world/canada', reset: true },
   { name: 'canada mountain bike', id: 'bike', hash: '#/world/canada/bike', reset: true },
-  // Campfire Night: a tap moves the flashlight there and a tap on eyes finds the animal at once,
-  // so the auto-player gets through the eyes; the sounds, the trail and the marshmallow need the light held and dragged
-  // (qa-motion's canada-campfire-light).
-  { name: 'canada campfire night', id: 'campfire', hash: '#/world/canada/campfire', reset: true },
   // Red Canoe: the core verb is a stroke (a drag beside the canoe), so the auto-player's taps only
   // splash, poke and make trout jump; the robot run that paddles is qa-motion's canada-canoe-stroke.
   { name: 'canada red canoe', id: 'canoe', hash: '#/world/canada/canoe', reset: true },
@@ -34,35 +28,7 @@ export const pacing = [
 export const motion = []
 
 
-// Campfire Night: her finger sweeps the flashlight across the dark campsite from the lake to the tent and
-// back up into the trees, resting on whatever eyes it finds (they come out), then up into the sky (stars come out).
-motion.push({
-  name: 'canada-campfire-light',
-  seconds: 9,
-  setup: async (page, base) => {
-    await page.goto(`${base}#/world/canada/campfire/eyes`)
-    await page.waitForFunction(() => window.__canadaCampfireQA?.().section, null, { timeout: 20000 })
-    await page.waitForTimeout(600)
-  },
-  act: async (page) => {
-    const at = (x, y) =>
-      page.evaluate(([x, y]) => {
-        const svg = document.querySelector('[aria-label="Shine the flashlight around the campsite"] svg')
-        const wide = svg.clientWidth / svg.clientHeight >= 1.05
-        const s = wide ? { w: 1600, h: 1000 } : { w: 1000, h: 1500 }
-        const p = new DOMPoint(s.w * x, s.h * y).matrixTransform(svg.getScreenCTM())
-        return [p.x, p.y]
-      }, [x, y])
-    const sweep = [[0.15, 0.85], [0.3, 0.75], [0.5, 0.65], [0.7, 0.62], [0.85, 0.7], [0.7, 0.45], [0.45, 0.35], [0.25, 0.4], [0.4, 0.2], [0.7, 0.15]]
-    await page.mouse.move(...(await at(...sweep[0])))
-    await page.mouse.down()
-    for (const p of sweep) {
-      await page.mouse.move(...(await at(...p)), { steps: 6 })
-      await page.waitForTimeout(500)
-    }
-    await page.mouse.up()
-  },
-})
+// (Campfire Night's are in activities/campfire/qa.mjs.)
 
 // Mountain Bike: Maple riding the blue way's berms with the wheel under her finger, pushed right up the
 // berm and held, then let go: she leans into the bends, bumps over the roots and drifts back to the middle of her way.
