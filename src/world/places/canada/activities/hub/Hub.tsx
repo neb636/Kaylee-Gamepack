@@ -37,7 +37,6 @@ const session = {
   stamps: null as number | null,
   said: new Set<string>(),
 }
-const once = (key: string) => (session.said.has(key) ? false : (session.said.add(key), true))
 
 export function Hub({ meta, openActivity, stamps }: PlaceProps) {
   const timers = useTimers()
@@ -69,7 +68,7 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
   const guide = useRef<GuideHandle>(null)
   const [sparkleLine, setSparkleLine] = useState<Line | null>(null)
   const [friendLine, setFriendLine] = useState<Line | null>(null)
-  const lastSparkle = useRef<Line>(L.hub.bubbles)
+  const lastSparkle = useRef<Line>(L.hub.first)
   const gen = useRef(0)
   const queue = useRef<Promise<void>>(Promise.resolve())
   const talk = (l: Line, now = false) => {
@@ -101,7 +100,7 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
     if (session.told) return
     const timer = timers.later(() => {
       session.told = true
-      void talk(L.hub.bubbles)
+      void talk(L.hub.first)
     }, 0)
     return () => window.clearTimeout(timer)
   }, [])
@@ -112,7 +111,7 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
 
   // ---- Back from an activity with a new stamp: a new friend on the team.
   useEffect(() => {
-    if (session.stamps !== null && stamps.length > session.stamps) timers.later(() => alive() && void talk(L.hub.newFriend), 900)
+    if (session.stamps !== null && stamps.length > session.stamps) timers.later(() => alive() && void talk(L.hub.all), 900)
     session.stamps = stamps.length
   }, [])
 
@@ -126,16 +125,14 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
       stopSpeaking()
       openActivity(id)
     },
-    soon: (act) => {
+    soon: () => {
       if (performance.now() - lastSoon.current < 2500) return
       lastSoon.current = performance.now()
-      void talk(act === 'party' ? L.hub.locked : L.hub.soon, true)
+      void talk(L.hub.locked, true)
     },
     poked: (id) => {
       const animal = MEETS[id.replace(/:off$/, '')]
       if (animal) meet(animal)
-      const fact = L.hub.pokes[id.slice(5) as keyof typeof L.hub.pokes]
-      if (id.startsWith('poke:') && fact && once(id)) void talk(fact, true)
       if (id.startsWith('team:')) {
         const cheer = L.hub.team[id.slice(5) as keyof typeof L.hub.team]
         if (cheer) void talk(cheer, true)

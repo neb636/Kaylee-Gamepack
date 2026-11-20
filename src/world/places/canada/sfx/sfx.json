@@ -1,0 +1,42 @@
+[
+ {
+  "id": "story-music-story",
+  "label": "The story being told (music)",
+  "prompt": "Gentle, wondering storybook music for a cartoon for five-year-olds about a little beaver who dreams of winning a hockey cup: soft glockenspiel like snowflakes, a warm clarinet melody, light pizzicato strings and a quiet accordion, a little wistful at first then hopeful and brave, cozy, ends softly. Instrumental, no vocals.",
+  "seconds": 60,
+  "music": true
+ },
+ {
+  "id": "story-music-happy",
+  "label": "A friend joins the team (music)",
+  "prompt": "Happy, bouncy, warm music for a cartoon for five-year-olds, a new friend joining the team: playful fiddle and ukulele, glockenspiel, spoons and hand claps, a skipping folk-dance rhythm, joyful and gentle, ends with a little flourish. Instrumental, no vocals.",
+  "seconds": 30,
+  "music": true
+ },
+ {
+  "id": "story-music-game",
+  "label": "The big game (music)",
+  "prompt": "Cheerful, proud music for the big game in a cartoon for five-year-olds: a friendly rink organ playing a bouncy tune, hand claps, a soft marching drum and glockenspiel, exciting but gentle, never loud or tense, ends with a happy ta-da. Instrumental, no vocals.",
+  "seconds": 40,
+  "music": true
+ },
+ { "id": "story-air-winter", "label": "The frozen canal (bed)", "prompt": "A calm winter afternoon on a frozen canal in a city park: soft cold breeze, faint distant skates gliding on ice, a few muffled happy sounds far away, snow-quiet. Gentle, cozy. Seamless loop, no music, no voices.", "seconds": 15, "loop": true },
+ { "id": "story-pop", "label": "A pop", "prompt": "A soft cartoon pop, like a toy cork, round and gentle.", "seconds": 0.5 },
+ { "id": "story-thump", "label": "A thump on snow", "prompt": "A soft muffled thump of something plush landing in deep snow, gentle and low.", "seconds": 0.6 },
+ { "id": "story-chime", "label": "A friend joins", "prompt": "A warm magical chime, a short rising sparkle on a soft celesta and bells, gentle and happy, not shrill.", "seconds": 1.4 },
+ { "id": "story-splash", "label": "A splash", "prompt": "A playful medium water splash, soft and round, a few drops after.", "seconds": 1 },
+ { "id": "story-whoosh", "label": "A whoosh", "prompt": "A soft quick whoosh of something zipping past, airy and light, cartoon.", "seconds": 0.6 },
+ { "id": "story-boing", "label": "Boing (a tummy)", "prompt": "A soft rubbery cartoon boing, something bouncing off a big round tummy, low and funny.", "seconds": 0.7 },
+ { "id": "story-bonk", "label": "Bonk (antlers)", "prompt": "A small hollow wooden bonk, like a pinecone bouncing off a wooden antler, soft and funny.", "seconds": 0.5 },
+ { "id": "story-honk", "label": "Gus honks", "prompt": "One Canada goose honk, cheeky and bright, short, cartoonish but real, not harsh.", "seconds": 0.7 },
+ { "id": "story-honks", "label": "The geese honk", "prompt": "A small flock of five Canada geese honking together, cheeky and bustling, a short burst, friendly not harsh.", "seconds": 1.8 },
+ { "id": "story-skate", "label": "Skates on ice", "prompt": "Ice skates carving and gliding on a frozen pond, two smooth strokes, crisp and soft.", "seconds": 1.4 },
+ { "id": "story-skid", "label": "A skid on ice", "prompt": "Ice skates skidding to a quick hockey stop, a spray of snow, short and crisp, soft.", "seconds": 0.8 },
+ { "id": "story-slap", "label": "A puck is slapped", "prompt": "A hockey stick slapping a puck on pond ice, a short woody crack, soft and toy-like.", "seconds": 0.5 },
+ { "id": "story-net", "label": "A puck in the net", "prompt": "A hockey puck thumping softly into a goal net, a muffled thud and a rattle of mesh.", "seconds": 0.7 },
+ { "id": "story-plop", "label": "Maple sits down", "prompt": "A small soft cartoon plop, a little animal sitting down on ice on its flat tail, with a tiny squeak.", "seconds": 0.6 },
+ { "id": "story-glint", "label": "The Cup glints", "prompt": "A bright soft glint of a golden trophy catching the light, a single shimmering ting with a gentle tail, warm not shrill.", "seconds": 1.2 },
+ { "id": "story-burner", "label": "Sparkle's balloon", "prompt": "A hot-air balloon burner, one soft whooshing roar, warm and gentle.", "seconds": 1.4 },
+ { "id": "story-cheer", "label": "The animals cheer", "prompt": "A small happy crowd of cartoon animals cheering at a pond hockey game: squeaks, hoots, soft claps and a few jingle bells, joyful and gentle.", "seconds": 2.4 },
+ { "id": "story-loon", "label": "Lulu's song", "prompt": "The call of a common loon across a still mountain lake, the long, rising, haunting wail, clear and beautiful, with a soft natural echo. One call.", "seconds": 4 }
+]

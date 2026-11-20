@@ -36,7 +36,7 @@ const LOOKS: Partial<Record<ActorId, Look>> = {
   maple: CANADA_LOOKS.maple,
   moose: CANADA_LOOKS.moose,
   raccoon: CANADA_LOOKS.raccoon,
-  beaver: CANADA_LOOKS.cousin,
+  beaver: { ...CANADA_LOOKS.maple, height: 0.62, extras: [] },
   squirrel: { species: 'fox', height: 0.6, chub: 1.05, fur: '#D9683A', light: '#FFE6CC', dark: '#5A3426', ear: '#F7A884', open: true },
   grizzly: { species: 'bear', height: 0.85, chub: 1.15, fur: '#9A6A44', light: '#D9B58C', dark: '#3A2A26', ear: '#E8B8A0', open: true },
   spirit: { species: 'bear', height: 1.15, chub: 1.18, fur: '#F4ECDA', light: '#FFF9EE', dark: '#4A3C38', ear: '#F8C8C0' },

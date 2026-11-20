@@ -144,9 +144,9 @@ export const SPIRAL_AFTER = 19
 export const STOPS: { id: Region; at: LL; acts: string[] }[] = [
   // (Mont-Sainte-Anne is really just down the road from Quebec City; on the toy map it sits a train's length away.)
   { id: 'msa', at: [-70.45, 47.9], acts: ['bike', 'campfire'] },
-  { id: 'quebec', at: [-71.6, 47.0], acts: ['taffy', 'snowman'] },
+  { id: 'quebec', at: [-71.6, 47.0], acts: ['snowman'] },
   { id: 'ottawa', at: [-75.7, 45.5], acts: ['party'] },
-  { id: 'banff', at: [-115.3, 51.18], acts: ['canoe', 'bridge'] },
+  { id: 'banff', at: [-115.3, 51.18], acts: ['canoe'] },
   { id: 'bc', at: [-122.7, 49.35], acts: ['whales', 'salmon'] },
 ]
 
