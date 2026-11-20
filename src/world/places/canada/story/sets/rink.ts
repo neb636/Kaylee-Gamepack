@@ -55,9 +55,19 @@ export const RINK_SET: FilmSet<RinkSet> = {
   },
 }
 
-/** The same canal in the evening, for the big game: a rosy dusk, the lamps lit, a little snow. */
+/** The same canal in the evening, for the big game: a rosy dusk, the lamps lit (as in the game, activities/party/
+ *  rink.ts), a little snow (the film sets `s.snow`). The Cup is in the game's films, not on its stand. */
 export const RINK_EVENING: FilmSet<RinkSet> = {
   ...RINK_SET,
   id: 'rink-evening',
   look: { sky: ['#6F6AB8', '#E7A6C8', '#FFD9B8'], fog: ['#F2D8E4', 50, 190], light: [0.92, 0.85], tint: '#FFE9E0', clouds: true },
+  build(s, root) {
+    const set = RINK_SET.build(s, root)
+    set.cup.visible = false
+    for (const l of set.canal.lamps) {
+      l.mat.color.setRGB(1, 0.86, 0.55)
+      l.glow.scale.setScalar(1.3)
+    }
+    return set
+  },
 }

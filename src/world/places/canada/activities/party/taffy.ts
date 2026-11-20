@@ -60,6 +60,14 @@ export function makeStream(bag: Bag) {
   return g
 }
 
+/** A little drift of clean snow to pour the syrup on, about `r` meters across its middle. Hidden. */
+export function makeSnowPatch(bag: Bag, r = 0.6) {
+  const g = new Group()
+  g.add(solid(merge([P.sphere(r, '#FFFFFF', { scale: [1.25, 0.28, 1] }, 18), P.sphere(r * 0.55, '#EEF3FB', { at: [r * 0.5, 0.04, -r * 0.3], scale: [1, 0.35, 1] }, 12)]), bag, 1.6))
+  g.visible = false
+  return g
+}
+
 /** Ribbons of syrup poured on the snow (lying flat, in a row along x), `n` of them. Hidden. */
 export function makeRibbons(bag: Bag, n = 6) {
   const g = new Group()

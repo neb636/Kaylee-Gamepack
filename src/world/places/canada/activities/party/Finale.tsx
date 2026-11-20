@@ -6,11 +6,12 @@
 // what's on screen (for a grown-up) with a button to hear it again.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { SayButton, type Line } from '../../../../../sdk'
+import { lineText, SayButton, type Line } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type QAKey, type RenderMode } from '../../../../engine3d/View3D'
 import { L } from '../../lines'
+import { filmSeen, seeFilm } from '../../story/chapters'
 import { StoryFilm } from '../../story/StoryFilm'
 import type { CanadaActivityProps } from '../props'
 import { RINK_ANCHORS, RinkWorld, type RinkEvents } from './rink'
@@ -32,7 +33,8 @@ export function Finale({ onDone, setProgress, stamps }: CanadaActivityProps) {
     return { section, score: Math.max(0, Math.min(GOALS - 1, Math.floor(+param('score')) || 0)), teamParam: param('team') }
   })
   const team = useState(() => teamFrom(initial.teamParam, stamps))[0]
-  const [part, setPart] = useState<Part>(initial.section === 'story' ? 'in' : initial.section === 'win' ? 'out' : 'hockey')
+  // (From the `game-in` film link the film has just played: straight on to the hockey.)
+  const [part, setPart] = useState<Part>(initial.section === 'story' && !(start === undefined && filmSeen('game-in')) ? 'in' : initial.section === 'win' ? 'out' : 'hockey')
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [engine, setEngine] = useState(0)
   const [line, setLine] = useState<{ text: string; say: Line }>({ text: '', say: '' })
@@ -63,15 +65,28 @@ export function Finale({ onDone, setProgress, stamps }: CanadaActivityProps) {
     },
     goal: (score) => {
       setGoals(score)
-      setLine({ text: '🎉 Goal!', say: L.party.goal[(score - 1) % L.party.goal.length] })
+      const say = score >= GOALS ? L.party.win : L.party.goal[(score - 1) % L.party.goal.length]
+      setLine({ text: `🎉 ${lineText(say)}`, say })
     },
-    against: (n) => setAgainst(n),
+    against: (n) => {
+      setAgainst(n)
+      setLine({ text: `🪿 ${lineText(L.party.against[1])}`, say: L.party.against[1] })
+    },
     hint: () => setLine({ text: `👆 ${L.party.rinkHint}`, say: L.party.rinkHint }),
     // The cheering on the ice is done: the Cup.
     win: () => setPart('out'),
   })
 
-  if (part === 'in') return <StoryFilm id="game-in" onDone={() => setPart('hockey')} />
+  if (part === 'in')
+    return (
+      <StoryFilm
+        id="game-in"
+        onDone={() => {
+          seeFilm('game-in')
+          setPart('hockey')
+        }}
+      />
+    )
   // (The film takes the game's place: two 3D worlds would share the one renderer and both keep drawing.)
   if (part === 'out') return <StoryFilm id="game-win" onDone={finish} />
   return (
