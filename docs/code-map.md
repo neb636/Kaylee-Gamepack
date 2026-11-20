@@ -118,7 +118,7 @@ pieces fit together is `docs/building.md` (2D) and `docs/thailand-3d.md` (3D). S
 | 🎶 The Longest Night (`night`) | live | [activities/night/](../src/world/places/poles/activities/night) | [activities/night/sections.ts](../src/world/places/poles/activities/night/sections.ts) (6) | [qa.mjs](../src/world/places/poles/activities/night/qa.mjs) |  |
 | 🥚 Emperor Huddle (`huddle`) | works | [activities/huddle/](../src/world/places/poles/activities/huddle) | [activities/huddle/sections.ts](../src/world/places/poles/activities/huddle/sections.ts) (4) | [qa.mjs](../src/world/places/poles/activities/huddle/qa.mjs) |  |
 
-## 🍁 Canada (`canada`)
+## 🫎 Canada (`canada`)
 
 - Code: [src/world/places/canada/](../src/world/places/canada): [meta.ts](../src/world/places/canada/meta.ts), [Place.tsx](../src/world/places/canada/Place.tsx), [lines.ts](../src/world/places/canada/lines.ts), [cast.json](../src/world/places/canada/cast.json), [qa.mjs](../src/world/places/canada/qa.mjs), [puppets/](../src/world/places/canada/puppets), [characters/](../src/world/places/canada/characters)
 - Notes: [planning/around-the-world/canada.md](../planning/around-the-world/canada.md)
