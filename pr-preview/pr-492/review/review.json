@@ -1,12 +1,33 @@
 {
   "title": "Bangkok map: Wat Arun and the Grand Palace",
   "checkIn": "fix",
-  "kaylee": "The Bangkok map now shows Wat Arun on the Thonburi bank and the Grand Palace across the river, so it looks like Bangkok at a glance. They're scenery only, so tapping them does nothing.",
-  "questions": ["Do they look good enough, or should they be bigger?", "Should Wat Pho's chedis join them, or is two enough?"],
-  "pictures": [
-    { "title": "The old town", "before": "pics/oldtown-before.jpg", "after": "pics/oldtown-after.jpg", "caption": "Wat Arun (left bank) and the Grand Palace (right bank), where they really are" },
-    { "title": "The whole board", "after": "pics/board-after.jpg", "caption": "iPad landscape" },
-    { "title": "On an iPad held upright", "after": "pics/board-portrait.jpg", "caption": "Portrait" }
+  "kaylee": "The Bangkok map now shows Wat Arun on the Thonburi bank and the Grand Palace across the river, so it looks like Bangkok at a glance. They're scenery only, so tapping them does nothing. The kites over Sanam Luang are gone, so the corner is calmer and you can see the Grand Palace.",
+  "questions": [
+    "Do they look good enough, or should they be bigger?",
+    "Should Wat Pho's chedis join them, or is two enough?"
   ],
-  "links": [{ "label": "Open the Bangkok map", "hash": "#/world/thailand/hub/bangkok" }]
+  "pictures": [
+    {
+      "title": "The old town",
+      "before": "pics/oldtown-before.jpg",
+      "after": "pics/oldtown-after.jpg",
+      "caption": "Wat Arun (left bank) and the Grand Palace (right bank), where they really are"
+    },
+    {
+      "title": "The whole board",
+      "after": "pics/board-after.jpg",
+      "caption": "iPad landscape"
+    },
+    {
+      "title": "On an iPad held upright",
+      "after": "pics/board-portrait.jpg",
+      "caption": "Portrait"
+    }
+  ],
+  "links": [
+    {
+      "label": "Open the Bangkok map",
+      "hash": "#/world/thailand/hub/bangkok"
+    }
+  ]
 }
