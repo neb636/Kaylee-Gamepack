@@ -110,9 +110,9 @@ export const SPOTS = {
 } satisfies Record<string, XZ>
 export type SpotId = keyof typeof SPOTS
 
-/** Bangkok's great landmark, for the look only: Wat Arun on the Thonburi bank. It's what anyone sees first when they
- *  look up Bangkok, so the board shows it, but it is scenery, never a toy: no poke, no pin, no line about it (the
- *  user, 2026-11-19: AGENTS.md rule 8 is about games; the map may show it, it just isn't played with). It stands
+/** Bangkok's great landmark: Wat Arun on the Thonburi bank. It's what anyone sees first when they look up Bangkok, so
+ *  the board shows it, but it is scenery, never a toy: no pin, and it never moves. A tap only names it: its gold
+ *  glints, a soft chime, and Sparkle says what it is (the user, 2026-11-19: AGENTS.md rule 8 is about games). It stands
  *  where it really is, a little bigger than life like every toy. [where, scale, how far it reaches (m), how tall]. */
 export const LANDMARKS = {
   /** Wat Arun, the Temple of Dawn: its tall central prang and four little ones, on the west bank. */

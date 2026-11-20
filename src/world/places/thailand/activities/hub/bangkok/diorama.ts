@@ -7,7 +7,8 @@
 // jungle in the river's big loop. The corners have their own things: the night market's tents up by Rama 9, a
 // floating market and Bang Mot's orange orchard out south-west. Thonburi and the south are city too, leafier than the
 // middle (big trees standing here and there among the roofs). The pins and the river are still what she sees first.
-// Bangkok's great landmark stands in the old town: Wat Arun's tall prang on the Thonburi bank. Scenery only, never a toy.
+// Bangkok's great landmark stands in the old town: Wat Arun's tall prang on the Thonburi bank. Scenery, never a toy
+// (a tap only names it).
 //
 // The places stand up like chunky toys: the Thailand house (a row of pastel shophouses, the pink one in the middle,
 // the flag, a tuk-tuk parked outside) and ICONSIAM (its folded glass front on the river, the gold roof, two towers
@@ -461,8 +462,8 @@ export function buildDiorama(bag: Bag): Diorama {
   // Bang Mot's orange orchard: trees heavy with oranges, the farmer's house on its stilts, baskets out front.
   spots.orchard = toy(SPOTS.orchard, orchardParts(), 1.6)
 
-  // ---- Bangkok's landmark: Wat Arun on the Thonburi bank. To look at, never a toy: nothing pokes it, no pin, no
-  // line (layout.ts LANDMARKS) ----
+  // ---- Bangkok's landmark: Wat Arun on the Thonburi bank. Scenery, not a toy: a tap only names it (its gold
+  // glints, Sparkle says what it is); it never moves (layout.ts LANDMARKS) ----
   const arun = arunParts()
   toy(LANDMARKS.arun.at, arun.lined, LANDMARKS.arun.scale, arun.plain)
   /** Where its gold catches the light (map3d.ts glints it): Wat Arun's tip. */
@@ -1240,7 +1241,7 @@ function palm(x: number, y: number, z: number, s: number, turn: number): BufferG
   return parts
 }
 
-// ---------------------------------------------------------------- landmarks (to look at, never toys)
+// ---------------------------------------------------------------- landmarks (scenery; a tap only names them)
 
 /** Wat Arun's stone: warm ivory, a shade for the steps. */
 const STONE = '#FFF4E6'
