@@ -37,11 +37,13 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 </style></head><body><main>
 <span class="chip">Check-in fix</span>
 <h1>Bangkok map: Wat Arun, smaller pins, and zoom on every map</h1>
-<p class="kaylee">The Bangkok map now shows Wat Arun on the Thonburi bank, so it looks like Bangkok at a glance. It's scenery only, so tapping it does nothing. The kites are gone and the old town is back the way it was, and the two place pins are 40% smaller. On every Thailand map she can pinch in (iPad and iPhone) or pinch on a Mac trackpad or scroll, up to 2.5 times closer, toward the spot under her fingers.</p>
+<p class="kaylee">The Bangkok map now shows Wat Arun on the Thonburi bank, smaller and more detailed than before: stepped terraces with red trim and little niches, pinnacles, slim corner prangs and a long gold needle. A tap names it: the light runs up its gold, a soft shimmer, and Sparkle says &quot;Wat Arun, the Temple of Dawn! It sparkles with tiny pieces of colorful china.&quot; Nothing moves it. The kites and the Grand Palace are gone, and the two place pins are 40% smaller. On every Thailand map she can pinch in (iPad and iPhone) or pinch on a Mac trackpad or scroll, up to 2.5 times closer, toward the spot under her fingers. New sound: 1.5 s (the shimmer).</p>
 
 
 <h2>Before and after</h2><div class="pics"><figure class="pair"><div><img src="pics/oldtown-before.jpg" alt="Before: The old town" loading="lazy"><span>Before</span></div><div><img src="pics/oldtown-after.jpg" alt="After: The old town" loading="lazy"><span>After</span></div>
 <figcaption><b>The old town</b>: Wat Arun on the left bank, where it really is</figcaption></figure>
+<figure class="solo"><img src="pics/arun-close.jpg" alt="Wat Arun up close" loading="lazy">
+<figcaption><b>Wat Arun up close</b>: Zoomed in: terraces, niches, pinnacles, corner prangs, its pier and a longtail</figcaption></figure>
 <figure class="solo"><img src="pics/board-after.jpg" alt="The whole board" loading="lazy">
 <figcaption><b>The whole board</b>: iPad landscape</figcaption></figure>
 <figure class="solo"><img src="pics/zoom-bangkok.jpg" alt="Zoomed in on the old town" loading="lazy">
@@ -50,14 +52,19 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 <figcaption><b>Zoomed in on the Thailand map</b>: Scrolled in over the elephant (the closest it goes)</figcaption></figure>
 <figure class="solo"><img src="pics/zoom-krabi.jpg" alt="Pinched in on the Krabi map" loading="lazy">
 <figcaption><b>Pinched in on the Krabi map</b>: A two-finger pinch over the bay</figcaption></figure></div>
+<h2>Hear the script</h2><div class="card"><h3>Thailand › Bangkok › Pokes</h3>
+<p class="meta">15 lines (1 new) · 49 s of talk · her name 0× · 7 flagged</p>
 
-
+<p><a href="table-read/thailand-bangkok-pokes.html">Read along: who says what, and when</a></p></div>
+<h2>Listen</h2><div class="card listen"><h3>Wat Arun</h3>
+<audio controls preload="metadata" src="sfx/arun.mp3"></audio>
+<ol class="meta"><li><button class="cue" data-at="0" data-end="1.48"><span class="t">0:00–0:01</span> Wat Arun's gold catches the light</button></li></ol></div>
 <h2>Your call</h2><ol><li><p>Is 2.5x closer the right limit, or should it stop sooner?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li>
-<li><p>Does Wat Arun look good enough, or should it be bigger?</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><a class="pill" href="https://github.com/neb636/Kaylee-Gamepack/pull/492">Open the PR to paste them</a><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+<li><p>Is Sparkle's Wat Arun line right, or would you word it differently?</p><textarea rows="2" data-q="1" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><a class="pill" href="https://github.com/neb636/Kaylee-Gamepack/pull/492">Open the PR to paste them</a><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
 <h2>Play it yourself (optional)</h2><p><a class="pill" href="../#/world/thailand/hub/bangkok">Open the Bangkok map</a></p>
 </main>
 <script>
-const qs=["Is 2.5x closer the right limit, or should it stop sooner?","Does Wat Arun look good enough, or should it be bigger?"],titles=[]
+const qs=["Is 2.5x closer the right limit, or should it stop sooner?","Is Sparkle's Wat Arun line right, or would you word it differently?"],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})

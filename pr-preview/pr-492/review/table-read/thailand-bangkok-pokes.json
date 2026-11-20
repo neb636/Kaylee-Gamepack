@@ -1,0 +1,294 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "bangkok.pokes",
+  "title": "Thailand › Bangkok › Pokes",
+  "intro": "",
+  "page": "thailand-bangkok-pokes.html",
+  "audio": null,
+  "lines": 15,
+  "seconds": 49,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "bangkok.pokes.asiatique",
+      "text": "A giant wheel by the river! Round and round!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.chinatown",
+      "text": "Chinatown! Look at the red lanterns!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.mahanakhon",
+      "text": "This tower looks like building blocks!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.flowers",
+      "text": "The flower market! So many flowers!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.train",
+      "text": "The skytrain! It rides high above the street.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.floating",
+      "text": "At this market, the shops are boats!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bangkok.pokes.arun",
+      "text": "Wat Arun, the Temple of Dawn! It sparkles with tiny pieces of colorful china.",
+      "flags": [
+        "long",
+        "rule 8",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "asiatique"
+      ],
+      "text": "A giant wheel by the river! Round and round!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.asiatique",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 4320,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "chinatown"
+      ],
+      "text": "Chinatown! Look at the red lanterns!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.chinatown",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 3120,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "lumphini"
+      ],
+      "text": "A big lizard lives in this park!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.lumphini",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 2976,
+      "flags": []
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "mahanakhon"
+      ],
+      "text": "This tower looks like building blocks!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.mahanakhon",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 3408,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "flowers"
+      ],
+      "text": "The flower market! So many flowers!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.flowers",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 3960,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "port"
+      ],
+      "text": "Big ships bring boxes from far away!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.port",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 2904,
+      "flags": []
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "krachao"
+      ],
+      "text": "A jungle in the middle of the city!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.krachao",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 2496,
+      "flags": []
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "train"
+      ],
+      "text": "The skytrain! It rides high above the street.",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.train",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 3408,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "boat"
+      ],
+      "text": "Boats are the buses of the river!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.boat",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 2400,
+      "flags": []
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "river"
+      ],
+      "text": "This river is the Chao Phraya!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.river",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 2832,
+      "flags": []
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "tents"
+      ],
+      "text": "Yummy snacks at the night market!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.tents",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 2832,
+      "flags": []
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "floating"
+      ],
+      "text": "At this market, the shops are boats!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.floating",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 3048,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "orchard"
+      ],
+      "text": "Sweet oranges grow here!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.orchard",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 2232,
+      "flags": []
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "taxi"
+      ],
+      "text": "Beep beep, pink taxi!",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.taxi",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 2160,
+      "flags": []
+    },
+    {
+      "path": [
+        "bangkok",
+        "pokes",
+        "arun"
+      ],
+      "text": "Wat Arun, the Temple of Dawn! It sparkles with tiny pieces of colorful china.",
+      "voice": "sparkle",
+      "key": "bangkok.pokes.arun",
+      "part": "bangkok › pokes",
+      "when": "",
+      "ms": 6912,
+      "flags": [
+        "long",
+        "rule 8",
+        "new"
+      ]
+    }
+  ]
+}
