@@ -1,0 +1,13 @@
+[
+  { "id": "snowman-crunch", "label": "A snowball rolling (crunch)", "prompt": "A soft snowball rolling over fresh powder snow, one gentle packed-snow crunch, close and cozy, toy-like.", "seconds": 0.8 },
+  { "id": "snowman-pat", "label": "Patting a snowball together", "prompt": "Mittened hands patting a small snowball together, three quick soft pats on snow, gentle.", "seconds": 0.8 },
+  { "id": "snowman-plop", "label": "A snowball plops on top (stack)", "prompt": "A snowball landing on top of a bigger snowball, a soft round plop of packed snow with a tiny cartoon pop, cute.", "seconds": 0.7 },
+  { "id": "snowman-hat-pop", "label": "The box pops open, a hat flies out", "prompt": "A cardboard box lid popping open with a cheerful cartoon pop and a soft fabric whoosh as a knitted hat flies out, playful.", "seconds": 1 },
+  { "id": "snowman-wake", "label": "A snowman wakes up", "prompt": "A gentle magical twinkle shimmer rising up, soft chimes and a tiny happy sparkle, a snowman coming to life, cute and warm.", "seconds": 1.5 },
+  { "id": "snowman-trumpet", "label": "The carnival trumpet", "prompt": "A friendly cartoon toy trumpet playing a short cheerful three-note fanfare, toot toot tooot, soft and bright, not loud.", "seconds": 1.5 },
+  { "id": "snowman-drum", "label": "The parade drum", "prompt": "One big soft bass drum hit at an outdoor winter parade, warm and round, a little boom, no other instruments.", "seconds": 0.8 },
+  { "id": "snowman-bells", "label": "Sleigh bells on the carriage", "prompt": "Sleigh bells jingling softly a few times as a horse trots, merry and light, winter.", "seconds": 1.5 },
+  { "id": "snowman-boing", "label": "A snowball boings off his tummy", "prompt": "A big funny rubbery cartoon boing, a snowball bouncing off a round jelly-like tummy, wobbly spring sound, silly and cute.", "seconds": 1 },
+  { "id": "snowman-snore", "label": "A snowman dozing", "prompt": "One tiny cute cartoon snore with a soft little whistle on the out breath, sleepy and gentle.", "seconds": 1.5 },
+  { "id": "snowman-bed", "label": "The carnival far off (bed)", "prompt": "A calm snowy winter park with a carnival far away: soft muffled happy crowd in the distance, faint sleigh bells now and then, gentle cold breeze, snow-quiet and cozy. Seamless loop, no music, no voices up close.", "seconds": 15, "loop": true }
+]

@@ -18,9 +18,6 @@ export const screens = [
   // Whale Watch: each part from its link (the harbour both ways to steer, the humpback that jumps), and
   // under the water listening.
   ...['harbour', 'harbour?steer=wheel', 'otters', 'spouts', 'spouts?found=3', 'orcas', 'listen'].map((to) => ({ name: `canada-whales-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/whales/${to}`, reset: true, wait: to === 'listen' ? 4500 : 3000 })),
-  // Carnival Snowballs: each part from its link (the stack with the huge ball and Maple on top; dressing
-  // with two already in the parade line), and the parade.
-  ...['roll', 'stack', 'stack?size=huge', 'dress', 'dress?snowmen=3', 'parade'].map((to) => ({ name: `canada-snowman-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/snowman/${to}`, reset: true, wait: to === 'roll' ? 4000 : to === 'parade' ? 6000 : 2500 })),
 ]
 
 /** Auto-played runs (scripts/qa-pacing.mjs): talk before the first touch, talk per touch, the play strip. */
@@ -37,9 +34,6 @@ export const pacing = [
   // Whale Watch: a tap on the water drives the boat there, so the auto-player's taps steer it about
   // and poke the animals; holding the water and steering out to the otters and the spouts is qa-motion's canada-whales-steer.
   { name: 'canada whale watch', id: 'whales', hash: '#/world/canada/whales', reset: true },
-  // Carnival Snowballs: the core verb is a push (a drag on the ball), so the auto-player's taps only
-  // pat the ball, shake trees and poke; the robot run that rolls, stacks and dresses is qa-motion's canada-snowman-roll.
-  { name: 'canada carnival snowballs', id: 'snowman', hash: '#/world/canada/snowman', reset: true },
 ]
 
 /** Filmed moments (scripts/qa-motion.mjs): the core verbs, driven the way a child would. */
@@ -152,45 +146,3 @@ motion.push({
   },
 })
 
-// Carnival Snowballs: the little ball pushed round in a big loop (it grows and leaves a green stripe, the
-// camera follows), then a fresh ball dragged out of bare snow and pushed into the big one (it hops on top).
-motion.push({
-  name: 'canada-snowman-roll',
-  seconds: 12,
-  setup: async (page, base) => {
-    await page.goto(`${base}#/world/canada/snowman/roll`)
-    await page.waitForFunction(() => window.__canadaSnowmanQA?.().section, null, { timeout: 20000 })
-    await page.waitForTimeout(3200)
-  },
-  act: async (page) => {
-    const step = Math.min(150, vp.width * 0.16)
-    for (const [dx, dy] of [
-      [1, 0],
-      [0, -0.6],
-      [-1, 0],
-      [-1, 0],
-      [0, 0.6],
-      [1, 0],
-    ]) {
-      const { ball } = await page.evaluate(() => window.__canadaSnowmanQA())
-      if (!ball) break
-      await page.mouse.move(ball.x, ball.y)
-      await page.mouse.down()
-      await page.mouse.move(ball.x + dx * step, ball.y + dy * step, { steps: 14 })
-      await page.waitForTimeout(250)
-      await page.mouse.up()
-      await page.waitForTimeout(250)
-    }
-    // A new ball out of the snow beside the big one, pushed into it.
-    const { loose } = await page.evaluate(() => window.__canadaSnowmanQA())
-    const big = loose[0]
-    if (!big) return
-    const sx = big.x + step * 1.4
-    await page.mouse.move(sx, big.y)
-    await page.mouse.down()
-    await page.mouse.move(sx - 20, big.y, { steps: 3 })
-    await page.mouse.move(big.x, big.y, { steps: 16 })
-    await page.waitForTimeout(600)
-    await page.mouse.up()
-  },
-})
