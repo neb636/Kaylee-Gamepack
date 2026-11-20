@@ -5,7 +5,7 @@
   "title": "Canada › Snowman",
   "intro": "",
   "page": "canada-snowman.html",
-  "audio": null,
+  "audio": "canada-snowman.mp3",
   "lines": 42,
   "seconds": 100,
   "missing": 0,
@@ -15,40 +15,15 @@
       "key": "snowman.filmIn.hello",
       "text": "Bonjour, Quebec City! It's the Winter Carnival!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "snowman.filmIn.none",
       "text": "But nobody here plays hockey. Only snow.",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
-    },
-    {
-      "key": "snowman.filmIn.idea",
-      "text": "Snow! That's it! Let's make a player!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "snowman.story.0",
-      "text": "Bonjour! Look at all this snow!",
-      "flags": [
-        "changed"
-      ],
-      "was": "Bonjour! It's the Winter Carnival!"
-    },
-    {
-      "key": "snowman.story.1",
-      "text": "Let's build a snowman for my team!",
-      "flags": [
-        "changed"
-      ],
-      "was": "Let's roll snowmen!"
     },
     {
       "key": "snowman.ready.touch",
@@ -107,13 +82,6 @@
       ]
     },
     {
-      "key": "snowman.tuque",
-      "text": "Bonjour! I am Tuque!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
       "key": "snowman.wake.0",
       "text": "Bonjour!",
       "flags": [
@@ -131,30 +99,14 @@
       "key": "snowman.filmOut.wake",
       "text": "Oh! Bonjour, Maple!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "snowman.filmOut.ask",
-      "text": "Tuque! Can you play hockey?",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "snowman.filmOut.tummy",
       "text": "Ho ho! Everything bounces off my tummy!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "snowman.filmOut.team",
-      "text": "You're on the team!",
-      "flags": [
-        "new"
+        "long"
       ]
     }
   ],
@@ -172,8 +124,11 @@
       "when": "The film in (story/films/snowman.ts): the snowy park under the castle hotel, flags and lanterns, nobody about.",
       "ms": 3600,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        0,
+        3.54
       ]
     },
     {
@@ -189,8 +144,11 @@
       "when": "She looks left and right: only snow.",
       "ms": 3768,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        3.89,
+        7.59
       ]
     },
     {
@@ -205,8 +163,10 @@
       "part": "snowman › filmIn",
       "when": "She pats a snowball; her eyes go wide.",
       "ms": 2952,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        7.94,
+        10.82
       ]
     },
     {
@@ -221,10 +181,11 @@
       "part": "snowman › story",
       "when": "The game's own hello (Maple, in the park below the castle), only from a link or a replay: after the film in, the game starts with Sparkle's instruction. Then Sparkle's one instruction per part.",
       "ms": 2616,
-      "flags": [
-        "changed"
-      ],
-      "was": "Bonjour! It's the Winter Carnival!"
+      "flags": [],
+      "span": [
+        12.44,
+        14.99
+      ]
     },
     {
       "path": [
@@ -238,10 +199,11 @@
       "part": "snowman › story",
       "when": "",
       "ms": 2040,
-      "flags": [
-        "changed"
-      ],
-      "was": "Let's roll snowmen!"
+      "flags": [],
+      "span": [
+        15.34,
+        17.31
+      ]
     },
     {
       "path": [
@@ -254,7 +216,11 @@
       "part": "snowman",
       "when": "",
       "ms": 2960,
-      "flags": []
+      "flags": [],
+      "span": [
+        18.93,
+        21.89
+      ]
     },
     {
       "path": [
@@ -267,7 +233,11 @@
       "part": "snowman",
       "when": "",
       "ms": 2943,
-      "flags": []
+      "flags": [],
+      "span": [
+        22.24,
+        25.18
+      ]
     },
     {
       "path": [
@@ -280,7 +250,11 @@
       "part": "snowman",
       "when": "",
       "ms": 2968,
-      "flags": []
+      "flags": [],
+      "span": [
+        25.53,
+        28.5
+      ]
     },
     {
       "path": [
@@ -296,6 +270,10 @@
       "ms": 4330,
       "flags": [
         "long"
+      ],
+      "span": [
+        30.12,
+        34.45
       ]
     },
     {
@@ -312,6 +290,10 @@
       "ms": 3984,
       "flags": [
         "long"
+      ],
+      "span": [
+        34.8,
+        38.72
       ]
     },
     {
@@ -329,6 +311,10 @@
       "ms": 3004,
       "flags": [
         "long"
+      ],
+      "span": [
+        40.34,
+        43.35
       ]
     },
     {
@@ -344,7 +330,11 @@
       "part": "snowman › hint › roll",
       "when": "",
       "ms": 2184,
-      "flags": []
+      "flags": [],
+      "span": [
+        43.7,
+        45.81
+      ]
     },
     {
       "path": [
@@ -360,6 +350,10 @@
       "ms": 3141,
       "flags": [
         "long"
+      ],
+      "span": [
+        47.43,
+        50.57
       ]
     },
     {
@@ -376,6 +370,10 @@
       "ms": 3290,
       "flags": [
         "long"
+      ],
+      "span": [
+        50.92,
+        54.21
       ]
     },
     {
@@ -392,6 +390,10 @@
       "ms": 3464,
       "flags": [
         "long"
+      ],
+      "span": [
+        54.56,
+        58.03
       ]
     },
     {
@@ -407,7 +409,11 @@
       "part": "snowman › hint › drum",
       "when": "Stuck for a while: Sparkle helps (the hand shows it too).",
       "ms": 1922,
-      "flags": []
+      "flags": [],
+      "span": [
+        59.65,
+        61.57
+      ]
     },
     {
       "path": [
@@ -422,7 +428,11 @@
       "part": "snowman › hint › drum",
       "when": "",
       "ms": 1848,
-      "flags": []
+      "flags": [],
+      "span": [
+        61.92,
+        63.71
+      ]
     },
     {
       "path": [
@@ -437,6 +447,10 @@
       "ms": 3325,
       "flags": [
         "long"
+      ],
+      "span": [
+        65.33,
+        68.66
       ]
     },
     {
@@ -450,7 +464,11 @@
       "part": "snowman",
       "when": "",
       "ms": 1970,
-      "flags": []
+      "flags": [],
+      "span": [
+        69.01,
+        70.98
+      ]
     },
     {
       "path": [
@@ -463,7 +481,11 @@
       "part": "snowman",
       "when": "Maple acting it out.",
       "ms": 1560,
-      "flags": []
+      "flags": [],
+      "span": [
+        71.33,
+        72.83
+      ]
     },
     {
       "path": [
@@ -477,7 +499,11 @@
       "part": "snowman › made",
       "when": "",
       "ms": 2208,
-      "flags": []
+      "flags": [],
+      "span": [
+        74.45,
+        76.6
+      ]
     },
     {
       "path": [
@@ -491,7 +517,11 @@
       "part": "snowman › made",
       "when": "",
       "ms": 1416,
-      "flags": []
+      "flags": [],
+      "span": [
+        76.95,
+        78.31
+      ]
     },
     {
       "path": [
@@ -505,7 +535,11 @@
       "part": "snowman › made",
       "when": "",
       "ms": 1512,
-      "flags": []
+      "flags": [],
+      "span": [
+        78.66,
+        80.12
+      ]
     },
     {
       "path": [
@@ -518,7 +552,11 @@
       "part": "snowman",
       "when": "",
       "ms": 2064,
-      "flags": []
+      "flags": [],
+      "span": [
+        81.74,
+        83.75
+      ]
     },
     {
       "path": [
@@ -531,7 +569,11 @@
       "part": "snowman",
       "when": "",
       "ms": 672,
-      "flags": []
+      "flags": [],
+      "span": [
+        84.1,
+        84.71
+      ]
     },
     {
       "path": [
@@ -544,7 +586,11 @@
       "part": "snowman",
       "when": "",
       "ms": 2880,
-      "flags": []
+      "flags": [],
+      "span": [
+        85.06,
+        87.89
+      ]
     },
     {
       "path": [
@@ -557,7 +603,11 @@
       "part": "snowman",
       "when": "",
       "ms": 1656,
-      "flags": []
+      "flags": [],
+      "span": [
+        88.24,
+        89.83
+      ]
     },
     {
       "path": [
@@ -571,7 +621,11 @@
       "part": "snowman › poke",
       "when": "",
       "ms": 744,
-      "flags": []
+      "flags": [],
+      "span": [
+        91.45,
+        92.13
+      ]
     },
     {
       "path": [
@@ -587,6 +641,10 @@
       "ms": 792,
       "flags": [
         "twice"
+      ],
+      "span": [
+        92.48,
+        93.21
       ]
     },
     {
@@ -600,7 +658,11 @@
       "part": "snowman",
       "when": "",
       "ms": 1536,
-      "flags": []
+      "flags": [],
+      "span": [
+        94.83,
+        96.3
+      ]
     },
     {
       "path": [
@@ -613,8 +675,10 @@
       "part": "snowman",
       "when": "",
       "ms": 2856,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        96.65,
+        99.44
       ]
     },
     {
@@ -631,6 +695,10 @@
       "ms": 1368,
       "flags": [
         "twice"
+      ],
+      "span": [
+        101.06,
+        102.36
       ]
     },
     {
@@ -645,7 +713,11 @@
       "part": "snowman › wake",
       "when": "",
       "ms": 1488,
-      "flags": []
+      "flags": [],
+      "span": [
+        102.71,
+        104.13
+      ]
     },
     {
       "path": [
@@ -659,7 +731,11 @@
       "part": "snowman › wake",
       "when": "",
       "ms": 1248,
-      "flags": []
+      "flags": [],
+      "span": [
+        104.48,
+        105.66
+      ]
     },
     {
       "path": [
@@ -674,6 +750,10 @@
       "ms": 3288,
       "flags": [
         "long"
+      ],
+      "span": [
+        107.28,
+        110.51
       ]
     },
     {
@@ -687,7 +767,11 @@
       "part": "snowman",
       "when": "",
       "ms": 2376,
-      "flags": []
+      "flags": [],
+      "span": [
+        110.86,
+        113.18
+      ]
     },
     {
       "path": [
@@ -700,7 +784,11 @@
       "part": "snowman",
       "when": "",
       "ms": 2328,
-      "flags": []
+      "flags": [],
+      "span": [
+        113.53,
+        115.79
+      ]
     },
     {
       "path": [
@@ -713,7 +801,11 @@
       "part": "snowman",
       "when": "",
       "ms": 1680,
-      "flags": []
+      "flags": [],
+      "span": [
+        116.14,
+        117.76
+      ]
     },
     {
       "path": [
@@ -728,8 +820,11 @@
       "when": "",
       "ms": 3192,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        119.38,
+        122.52
       ]
     },
     {
@@ -744,8 +839,10 @@
       "part": "snowman › filmOut",
       "when": "",
       "ms": 2256,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        122.87,
+        125.08
       ]
     },
     {
@@ -761,8 +858,11 @@
       "when": "",
       "ms": 3744,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        125.43,
+        129.11
       ]
     },
     {
@@ -777,8 +877,10 @@
       "part": "snowman › filmOut",
       "when": "",
       "ms": 1296,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        129.46,
+        130.69
       ]
     }
   ]

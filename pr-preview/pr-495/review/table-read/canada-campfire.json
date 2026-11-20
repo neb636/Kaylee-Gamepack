@@ -5,7 +5,7 @@
   "title": "Canada › Campfire",
   "intro": "",
   "page": "canada-campfire.html",
-  "audio": null,
+  "audio": "canada-campfire.mp3",
   "lines": 44,
   "seconds": 114,
   "missing": 0,
@@ -15,26 +15,22 @@
       "key": "campfire.filmIn.shh",
       "text": "Shh. Somebody sneaky lives in these woods.",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "campfire.filmIn.hey",
       "text": "Hey! My marshmallow! Who's out there?",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "campfire.story.0",
       "text": "Shh! Somebody is watching us from the dark.",
       "flags": [
-        "long",
-        "changed"
-      ],
-      "was": "Shh! Who's out there?"
+        "long"
+      ]
     },
     {
       "key": "campfire.story.1.touch",
@@ -72,14 +68,6 @@
       "flags": [
         "long"
       ]
-    },
-    {
-      "key": "campfire.banditGone",
-      "text": "Oh no! Now the whole bag is gone!",
-      "flags": [
-        "changed"
-      ],
-      "was": "Hey! Our marshmallows are gone!"
     },
     {
       "key": "campfire.banditHint",
@@ -131,33 +119,17 @@
       ]
     },
     {
-      "key": "campfire.filmOut.got",
-      "text": "Hee hee! Got your puck!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
       "key": "campfire.filmOut.ask",
       "text": "Roxy! Will you steal the puck from the geese?",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "campfire.filmOut.babies",
       "text": "Only if my babies can come and cheer!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "campfire.filmOut.team",
-      "text": "Deal! Go, team, go!",
-      "flags": [
-        "new"
+        "long"
       ]
     }
   ],
@@ -175,8 +147,11 @@
       "when": "The film in (story/films/campfire.ts): the campsite at night, Maple by the fire with her marshmallows.",
       "ms": 3264,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        0,
+        3.19
       ]
     },
     {
@@ -192,8 +167,11 @@
       "when": "A little grey paw comes out of the dark and takes a marshmallow. Then another.",
       "ms": 3168,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        3.54,
+        6.65
       ]
     },
     {
@@ -209,10 +187,12 @@
       "when": "The story (before the first touch, from a link or a replay; after the film the game starts at Sparkle's instruction): Maple's short hello, then Sparkle's one instruction.",
       "ms": 3336,
       "flags": [
-        "long",
-        "changed"
+        "long"
       ],
-      "was": "Shh! Who's out there?"
+      "span": [
+        8.27,
+        11.53
+      ]
     },
     {
       "path": [
@@ -229,6 +209,10 @@
       "ms": 2258,
       "flags": [
         "twice"
+      ],
+      "span": [
+        11.88,
+        14.14
       ]
     },
     {
@@ -247,6 +231,10 @@
       "flags": [
         "long",
         "twice"
+      ],
+      "span": [
+        14.49,
+        18.29
       ]
     },
     {
@@ -263,6 +251,10 @@
       "ms": 2258,
       "flags": [
         "twice"
+      ],
+      "span": [
+        19.91,
+        22.17
       ]
     },
     {
@@ -280,6 +272,10 @@
       "flags": [
         "long",
         "twice"
+      ],
+      "span": [
+        22.52,
+        26.32
       ]
     },
     {
@@ -293,7 +289,11 @@
       "part": "campfire",
       "when": "",
       "ms": 2218,
-      "flags": []
+      "flags": [],
+      "span": [
+        27.94,
+        30.16
+      ]
     },
     {
       "path": [
@@ -306,7 +306,11 @@
       "part": "campfire",
       "when": "",
       "ms": 1560,
-      "flags": []
+      "flags": [],
+      "span": [
+        30.51,
+        32.01
+      ]
     },
     {
       "path": [
@@ -319,7 +323,11 @@
       "part": "campfire",
       "when": "",
       "ms": 2547,
-      "flags": []
+      "flags": [],
+      "span": [
+        32.36,
+        34.91
+      ]
     },
     {
       "path": [
@@ -334,6 +342,10 @@
       "ms": 3179,
       "flags": [
         "long"
+      ],
+      "span": [
+        35.26,
+        38.44
       ]
     },
     {
@@ -347,7 +359,11 @@
       "part": "campfire",
       "when": "",
       "ms": 2160,
-      "flags": []
+      "flags": [],
+      "span": [
+        38.79,
+        40.89
+      ]
     },
     {
       "path": [
@@ -360,10 +376,11 @@
       "part": "campfire",
       "when": "",
       "ms": 2832,
-      "flags": [
-        "changed"
-      ],
-      "was": "Hey! Our marshmallows are gone!"
+      "flags": [],
+      "span": [
+        41.24,
+        44.02
+      ]
     },
     {
       "path": [
@@ -376,7 +393,11 @@
       "part": "campfire",
       "when": "",
       "ms": 2014,
-      "flags": []
+      "flags": [],
+      "span": [
+        44.37,
+        46.38
+      ]
     },
     {
       "path": [
@@ -391,6 +412,10 @@
       "ms": 3306,
       "flags": [
         "long"
+      ],
+      "span": [
+        46.73,
+        50.04
       ]
     },
     {
@@ -406,6 +431,10 @@
       "ms": 3072,
       "flags": [
         "long"
+      ],
+      "span": [
+        50.39,
+        53.4
       ]
     },
     {
@@ -419,7 +448,11 @@
       "part": "campfire",
       "when": "",
       "ms": 2808,
-      "flags": []
+      "flags": [],
+      "span": [
+        53.75,
+        56.5
+      ]
     },
     {
       "path": [
@@ -432,7 +465,11 @@
       "part": "campfire",
       "when": "",
       "ms": 1104,
-      "flags": []
+      "flags": [],
+      "span": [
+        56.85,
+        57.9
+      ]
     },
     {
       "path": [
@@ -446,7 +483,11 @@
       "part": "campfire › marshmallow",
       "when": "",
       "ms": 2743,
-      "flags": []
+      "flags": [],
+      "span": [
+        59.52,
+        62.26
+      ]
     },
     {
       "path": [
@@ -460,7 +501,11 @@
       "part": "campfire › marshmallow",
       "when": "",
       "ms": 2808,
-      "flags": []
+      "flags": [],
+      "span": [
+        62.61,
+        65.36
+      ]
     },
     {
       "path": [
@@ -475,6 +520,10 @@
       "ms": 3004,
       "flags": [
         "long"
+      ],
+      "span": [
+        66.98,
+        69.99
       ]
     },
     {
@@ -491,6 +540,10 @@
       "ms": 3916,
       "flags": [
         "long"
+      ],
+      "span": [
+        71.61,
+        75.52
       ]
     },
     {
@@ -507,6 +560,10 @@
       "ms": 3120,
       "flags": [
         "long"
+      ],
+      "span": [
+        75.87,
+        78.94
       ]
     },
     {
@@ -520,7 +577,11 @@
       "part": "campfire",
       "when": "",
       "ms": 1416,
-      "flags": []
+      "flags": [],
+      "span": [
+        80.56,
+        81.91
+      ]
     },
     {
       "path": [
@@ -533,7 +594,11 @@
       "part": "campfire",
       "when": "",
       "ms": 1968,
-      "flags": []
+      "flags": [],
+      "span": [
+        82.26,
+        84.16
+      ]
     },
     {
       "path": [
@@ -546,7 +611,11 @@
       "part": "campfire",
       "when": "",
       "ms": 1560,
-      "flags": []
+      "flags": [],
+      "span": [
+        84.51,
+        86.02
+      ]
     },
     {
       "path": [
@@ -559,7 +628,11 @@
       "part": "campfire",
       "when": "",
       "ms": 2208,
-      "flags": []
+      "flags": [],
+      "span": [
+        86.37,
+        88.51
+      ]
     },
     {
       "path": [
@@ -572,7 +645,11 @@
       "part": "campfire",
       "when": "",
       "ms": 1728,
-      "flags": []
+      "flags": [],
+      "span": [
+        88.86,
+        90.53
+      ]
     },
     {
       "path": [
@@ -587,6 +664,10 @@
       "ms": 3316,
       "flags": [
         "long"
+      ],
+      "span": [
+        90.88,
+        94.19
       ]
     },
     {
@@ -600,7 +681,11 @@
       "part": "campfire",
       "when": "",
       "ms": 2238,
-      "flags": []
+      "flags": [],
+      "span": [
+        94.54,
+        96.78
+      ]
     },
     {
       "path": [
@@ -613,7 +698,11 @@
       "part": "campfire",
       "when": "",
       "ms": 2376,
-      "flags": []
+      "flags": [],
+      "span": [
+        97.13,
+        99.46
+      ]
     },
     {
       "path": [
@@ -626,7 +715,11 @@
       "part": "campfire",
       "when": "",
       "ms": 1920,
-      "flags": []
+      "flags": [],
+      "span": [
+        99.81,
+        101.66
+      ]
     },
     {
       "path": [
@@ -639,7 +732,11 @@
       "part": "campfire",
       "when": "The friends, when she pokes them.",
       "ms": 2445,
-      "flags": []
+      "flags": [],
+      "span": [
+        102.01,
+        104.46
+      ]
     },
     {
       "path": [
@@ -652,7 +749,11 @@
       "part": "campfire",
       "when": "",
       "ms": 2424,
-      "flags": []
+      "flags": [],
+      "span": [
+        104.81,
+        107.16
+      ]
     },
     {
       "path": [
@@ -665,7 +766,11 @@
       "part": "campfire",
       "when": "",
       "ms": 1848,
-      "flags": []
+      "flags": [],
+      "span": [
+        107.51,
+        109.29
+      ]
     },
     {
       "path": [
@@ -678,7 +783,11 @@
       "part": "campfire",
       "when": "",
       "ms": 2088,
-      "flags": []
+      "flags": [],
+      "span": [
+        109.64,
+        111.68
+      ]
     },
     {
       "path": [
@@ -693,6 +802,10 @@
       "ms": 3864,
       "flags": [
         "long"
+      ],
+      "span": [
+        112.03,
+        115.83
       ]
     },
     {
@@ -706,7 +819,11 @@
       "part": "campfire",
       "when": "",
       "ms": 1872,
-      "flags": []
+      "flags": [],
+      "span": [
+        116.18,
+        117.99
+      ]
     },
     {
       "path": [
@@ -719,7 +836,11 @@
       "part": "campfire",
       "when": "",
       "ms": 2184,
-      "flags": []
+      "flags": [],
+      "span": [
+        118.34,
+        120.45
+      ]
     },
     {
       "path": [
@@ -732,7 +853,11 @@
       "part": "campfire",
       "when": "",
       "ms": 2496,
-      "flags": []
+      "flags": [],
+      "span": [
+        120.8,
+        123.23
+      ]
     },
     {
       "path": [
@@ -746,8 +871,10 @@
       "part": "campfire › filmOut",
       "when": "The film out: Roxy and her three kits at the fire, a marshmallow each. Maple holds up a puck: a blink, and Roxy has it (the quickest paws in Canada: the picture says it).",
       "ms": 2472,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        124.85,
+        127.27
       ]
     },
     {
@@ -763,8 +890,11 @@
       "when": "The film out: Roxy and her three kits at the fire, a marshmallow each. Maple holds up a puck: a blink, and Roxy has it (the quickest paws in Canada: the picture says it).",
       "ms": 3072,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        127.62,
+        130.64
       ]
     },
     {
@@ -780,8 +910,11 @@
       "when": "The film out: Roxy and her three kits at the fire, a marshmallow each. Maple holds up a puck: a blink, and Roxy has it (the quickest paws in Canada: the picture says it).",
       "ms": 3720,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        130.99,
+        134.65
       ]
     },
     {
@@ -796,8 +929,10 @@
       "part": "campfire › filmOut",
       "when": "The kits squeak and wave their marshmallow sticks.",
       "ms": 2184,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        135,
+        137.13
       ]
     }
   ]

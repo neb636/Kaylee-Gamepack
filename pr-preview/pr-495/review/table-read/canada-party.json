@@ -5,7 +5,7 @@
   "title": "Canada › Party",
   "intro": "The finale (activities/party/): the big game on the frozen canal, between story.gameIn and story.gameWin.",
   "page": "canada-party.html",
-  "audio": null,
+  "audio": "canada-party.mp3",
   "lines": 33,
   "seconds": 82,
   "missing": 0,
@@ -26,124 +26,17 @@
       ]
     },
     {
-      "key": "party.steal",
-      "text": "Got it!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
       "key": "party.roxy",
       "text": "Mine! I mean, yours!",
       "flags": [
-        "long",
-        "reused"
-      ]
-    },
-    {
-      "key": "party.tuque",
-      "text": "Boing! Not past my tummy!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "party.monty",
-      "text": "Bonk. Not today, geese.",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "party.ollie",
-      "text": "Wheee! I got it!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "party.wall",
-      "text": "Honk! The goose wall!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "party.misty",
-      "text": "Watch my big slap shot!",
-      "flags": [
-        "reused"
+        "long"
       ]
     },
     {
       "key": "party.open",
       "text": "The net is open! Shoot!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "party.against.0",
-      "text": "Oops. It went under me.",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "party.against.1",
-      "text": "Honk! A goose goal!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "party.poke.monty",
-      "text": "Hello. I am the goalie.",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "party.poke.roxy",
-      "text": "My kits are cheering!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "party.poke.tuque",
-      "text": "Brr! I love hockey!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "party.poke.ollie",
-      "text": "Wheee! Look, I spin!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "party.poke.misty",
-      "text": "After the game, supper?",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "party.poke.lulu",
-      "text": "I sing for every goal!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "party.poke.gus",
-      "text": "Honk! You can't catch me!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
@@ -181,7 +74,11 @@
       "part": "party › rink",
       "when": "Sparkle, as each round starts (the first goal, the geese in the way, the last goal).",
       "ms": 2861,
-      "flags": []
+      "flags": [],
+      "span": [
+        0,
+        2.86
+      ]
     },
     {
       "path": [
@@ -197,6 +94,10 @@
       "ms": 3576,
       "flags": [
         "long"
+      ],
+      "span": [
+        3.21,
+        6.73
       ]
     },
     {
@@ -211,7 +112,11 @@
       "part": "party › rinkHint",
       "when": "",
       "ms": 2330,
-      "flags": []
+      "flags": [],
+      "span": [
+        8.35,
+        10.68
+      ]
     },
     {
       "path": [
@@ -225,7 +130,11 @@
       "part": "party › rinkHint",
       "when": "",
       "ms": 2112,
-      "flags": []
+      "flags": [],
+      "span": [
+        11.03,
+        13.07
+      ]
     },
     {
       "path": [
@@ -240,6 +149,10 @@
       "ms": 3685,
       "flags": [
         "long"
+      ],
+      "span": [
+        14.69,
+        18.38
       ]
     },
     {
@@ -253,7 +166,11 @@
       "part": "party",
       "when": "",
       "ms": 2117,
-      "flags": []
+      "flags": [],
+      "span": [
+        18.73,
+        20.84
+      ]
     },
     {
       "path": [
@@ -267,7 +184,11 @@
       "part": "party › saved",
       "when": "The goose in goal saves one of her shots.",
       "ms": 2282,
-      "flags": []
+      "flags": [],
+      "span": [
+        22.46,
+        24.75
+      ]
     },
     {
       "path": [
@@ -281,7 +202,11 @@
       "part": "party › saved",
       "when": "",
       "ms": 2627,
-      "flags": []
+      "flags": [],
+      "span": [
+        25.1,
+        27.72
+      ]
     },
     {
       "path": [
@@ -295,7 +220,11 @@
       "part": "party › goal",
       "when": "",
       "ms": 624,
-      "flags": []
+      "flags": [],
+      "span": [
+        29.34,
+        29.9
+      ]
     },
     {
       "path": [
@@ -309,7 +238,11 @@
       "part": "party › goal",
       "when": "",
       "ms": 1392,
-      "flags": []
+      "flags": [],
+      "span": [
+        30.25,
+        31.57
+      ]
     },
     {
       "path": [
@@ -323,7 +256,11 @@
       "part": "party › goal",
       "when": "",
       "ms": 1752,
-      "flags": []
+      "flags": [],
+      "span": [
+        31.92,
+        33.61
+      ]
     },
     {
       "path": [
@@ -336,8 +273,10 @@
       "part": "party",
       "when": "She steals the puck off a goose herself (once).",
       "ms": 672,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        35.23,
+        35.84
       ]
     },
     {
@@ -352,8 +291,11 @@
       "when": "Each friend's big moment, the first time it happens: Roxy steals it off a goose and passes, a goose's shot boings off Tuque's tummy, another bonks off Monty's antlers, Ollie spins on her back to a loose puck.",
       "ms": 3120,
       "flags": [
-        "long",
-        "reused"
+        "long"
+      ],
+      "span": [
+        36.19,
+        39.25
       ]
     },
     {
@@ -367,8 +309,10 @@
       "part": "party",
       "when": "",
       "ms": 2880,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        39.6,
+        42.43
       ]
     },
     {
@@ -382,8 +326,10 @@
       "part": "party",
       "when": "",
       "ms": 2400,
-      "flags": [
-        "reused"
+      "flags": [],
+      "span": [
+        42.78,
+        45.12
       ]
     },
     {
@@ -397,8 +343,10 @@
       "part": "party",
       "when": "",
       "ms": 2232,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        45.47,
+        47.64
       ]
     },
     {
@@ -412,8 +360,10 @@
       "part": "party",
       "when": "The last goal: the geese make a wall, Misty's slap shot knocks it flat, the net is open.",
       "ms": 2400,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        47.99,
+        50.33
       ]
     },
     {
@@ -427,8 +377,10 @@
       "part": "party",
       "when": "",
       "ms": 2256,
-      "flags": [
-        "reused"
+      "flags": [],
+      "span": [
+        50.68,
+        52.87
       ]
     },
     {
@@ -443,8 +395,11 @@
       "when": "",
       "ms": 3072,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        53.22,
+        56.22
       ]
     },
     {
@@ -459,8 +414,10 @@
       "part": "party › against",
       "when": "A goose goal (at most two, never two in a row): short and funny, then the puck is hers again.",
       "ms": 1992,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        57.84,
+        59.76
       ]
     },
     {
@@ -475,8 +432,10 @@
       "part": "party › against",
       "when": "",
       "ms": 2160,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        60.11,
+        62.21
       ]
     },
     {
@@ -490,7 +449,11 @@
       "part": "party",
       "when": "",
       "ms": 2376,
-      "flags": []
+      "flags": [],
+      "span": [
+        63.83,
+        66.14
+      ]
     },
     {
       "path": [
@@ -504,7 +467,11 @@
       "part": "party › poke",
       "when": "Pokes on the canal.",
       "ms": 1680,
-      "flags": []
+      "flags": [],
+      "span": [
+        67.76,
+        69.38
+      ]
     },
     {
       "path": [
@@ -518,8 +485,10 @@
       "part": "party › poke",
       "when": "Pokes on the canal.",
       "ms": 1968,
-      "flags": [
-        "reused"
+      "flags": [],
+      "span": [
+        69.73,
+        71.64
       ]
     },
     {
@@ -534,8 +503,10 @@
       "part": "party › poke",
       "when": "Pokes on the canal.",
       "ms": 1944,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        71.99,
+        73.88
       ]
     },
     {
@@ -550,8 +521,10 @@
       "part": "party › poke",
       "when": "Pokes on the canal.",
       "ms": 2712,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        74.23,
+        76.87
       ]
     },
     {
@@ -566,8 +539,10 @@
       "part": "party › poke",
       "when": "Pokes on the canal.",
       "ms": 2976,
-      "flags": [
-        "reused"
+      "flags": [],
+      "span": [
+        77.22,
+        80.14
       ]
     },
     {
@@ -582,8 +557,10 @@
       "part": "party › poke",
       "when": "Pokes on the canal.",
       "ms": 2448,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        80.49,
+        82.87
       ]
     },
     {
@@ -598,8 +575,10 @@
       "part": "party › poke",
       "when": "Pokes on the canal.",
       "ms": 2016,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        83.22,
+        85.16
       ]
     },
     {
@@ -614,8 +593,10 @@
       "part": "party › poke",
       "when": "Pokes on the canal.",
       "ms": 2304,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        85.51,
+        87.75
       ]
     },
     {
@@ -631,6 +612,10 @@
       "ms": 4608,
       "flags": [
         "long"
+      ],
+      "span": [
+        89.37,
+        93.92
       ]
     },
     {
@@ -646,6 +631,10 @@
       "ms": 3815,
       "flags": [
         "long"
+      ],
+      "span": [
+        94.27,
+        98.09
       ]
     },
     {
@@ -661,6 +650,10 @@
       "ms": 4362,
       "flags": [
         "long"
+      ],
+      "span": [
+        98.44,
+        102.8
       ]
     }
   ]

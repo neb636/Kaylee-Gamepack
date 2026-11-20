@@ -4,29 +4,29 @@
   "title": "Canada friends",
   "video": "canada-friends.mp4",
   "gif": "canada-friends.gif",
-  "seconds": 40,
+  "seconds": 52,
   "browser": "webkit",
   "viewport": "ipad-landscape",
   "moments": [
     {
       "name": "Canada story bike out",
       "where": "#/world/canada/story/bike-out",
-      "seconds": 19,
-      "fps": 0.3,
-      "status": "too slow to film here (0.3 fps, no GPU?): film it on the Mac"
+      "seconds": 16,
+      "fps": 93.9,
+      "status": "ok"
     },
     {
       "name": "Canada story snowman out",
       "where": "#/world/canada/story/snowman-out",
-      "seconds": 18,
-      "fps": 16.1,
+      "seconds": 15,
+      "fps": 94.4,
       "status": "ok"
     },
     {
-      "name": "Canada story campfire out",
-      "where": "#/world/canada/story/campfire-out",
-      "seconds": 19,
-      "fps": 16.9,
+      "name": "Canada story salmon out",
+      "where": "#/world/canada/story/salmon-out",
+      "seconds": 16,
+      "fps": 101.3,
       "status": "ok"
     }
   ]

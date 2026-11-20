@@ -5,58 +5,32 @@
   "title": "Canada › Whales",
   "intro": "",
   "page": "canada-whales.html",
-  "audio": null,
+  "audio": "canada-whales.mp3",
   "lines": 42,
   "seconds": 100,
   "missing": 0,
   "names": 0,
   "flags": [
     {
-      "key": "whales.filmIn.ollie",
-      "text": "Ollie the sea otter spins faster than anybody!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "whales.filmIn.out",
-      "text": "She's out in the kelp, where the whales swim.",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "whales.story.0",
-      "text": "Bonjour! Off we go to find Ollie!",
-      "flags": [
-        "changed"
-      ],
-      "was": "I've never seen a whale!"
-    },
-    {
       "key": "whales.steer.touch",
       "text": "Hold the water where the boat should go!",
       "flags": [
-        "long",
-        "reused"
+        "long"
       ]
     },
     {
       "key": "whales.steer.mouse",
       "text": "Click and hold where the boat should go!",
       "flags": [
-        "long",
-        "reused"
+        "long"
       ]
     },
     {
       "key": "whales.otters",
       "text": "There is Ollie, fast asleep! Go gently.",
       "flags": [
-        "long",
-        "changed"
-      ],
-      "was": "A sleepy otter floated away. Go gently!"
+        "long"
+      ]
     },
     {
       "key": "whales.spouts",
@@ -80,68 +54,10 @@
       ]
     },
     {
-      "key": "whales.hint.otters",
-      "text": "Go slowly to Ollie.",
-      "flags": [
-        "changed"
-      ],
-      "was": "Go slowly to the sleepy otter."
-    },
-    {
       "key": "whales.hint.orcas",
       "text": "Go fast and turn. The baby copies you!",
       "flags": [
         "long"
-      ]
-    },
-    {
-      "key": "whales.otterHome",
-      "text": "Can I come too?",
-      "flags": [
-        "changed"
-      ],
-      "was": "Thank you!"
-    },
-    {
-      "key": "whales.never",
-      "text": "I've never seen a whale!",
-      "flags": [
-        "reused"
-      ]
-    },
-    {
-      "key": "whales.filmOut.ask",
-      "text": "Ollie! Come and play hockey with us!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "whales.filmOut.wet",
-      "text": "Hockey? Is it wet?",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "whales.filmOut.ice",
-      "text": "It's ice! You slide on it!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "whales.filmOut.spin",
-      "text": "Wheee! I love to slide!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "whales.filmOut.team",
-      "text": "Splash! You're on the team!",
-      "flags": [
-        "new"
       ]
     }
   ],
@@ -158,8 +74,10 @@
       "part": "whales › filmIn",
       "when": "The film in (story/films/whales.ts): the dock at Tofino, Maple at the wheel of the little boat.",
       "ms": 2520,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        0,
+        2.46
       ]
     },
     {
@@ -174,8 +92,10 @@
       "part": "whales › filmIn",
       "when": "Off she putters toward the camera, out to sea.",
       "ms": 2832,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        2.81,
+        5.6
       ]
     },
     {
@@ -190,10 +110,11 @@
       "part": "whales › story",
       "when": "The hello at the dock, from a link or a replay (after the film in, the game starts with her hands on the boat).",
       "ms": 2880,
-      "flags": [
-        "changed"
-      ],
-      "was": "I've never seen a whale!"
+      "flags": [],
+      "span": [
+        7.22,
+        10.04
+      ]
     },
     {
       "path": [
@@ -208,8 +129,11 @@
       "when": "Sparkle: how to steer (one line before her hands are busy), then only when something new appears.",
       "ms": 3362,
       "flags": [
-        "long",
-        "reused"
+        "long"
+      ],
+      "span": [
+        11.66,
+        15.02
       ]
     },
     {
@@ -225,8 +149,11 @@
       "when": "",
       "ms": 3552,
       "flags": [
-        "long",
-        "reused"
+        "long"
+      ],
+      "span": [
+        15.37,
+        18.87
       ]
     },
     {
@@ -241,10 +168,12 @@
       "when": "",
       "ms": 4392,
       "flags": [
-        "long",
-        "changed"
+        "long"
       ],
-      "was": "A sleepy otter floated away. Go gently!"
+      "span": [
+        20.49,
+        24.83
+      ]
     },
     {
       "path": [
@@ -259,6 +188,10 @@
       "ms": 3977,
       "flags": [
         "long"
+      ],
+      "span": [
+        25.18,
+        29.15
       ]
     },
     {
@@ -274,6 +207,10 @@
       "ms": 3724,
       "flags": [
         "long"
+      ],
+      "span": [
+        29.5,
+        33.23
       ]
     },
     {
@@ -289,6 +226,10 @@
       "ms": 3626,
       "flags": [
         "long"
+      ],
+      "span": [
+        33.58,
+        37.2
       ]
     },
     {
@@ -303,7 +244,11 @@
       "part": "whales › hint",
       "when": "Sparkle, when she's stuck (~8 s with no progress): help, never \"wrong\".",
       "ms": 2179,
-      "flags": []
+      "flags": [],
+      "span": [
+        38.82,
+        41
+      ]
     },
     {
       "path": [
@@ -317,10 +262,11 @@
       "part": "whales › hint",
       "when": "Sparkle, when she's stuck (~8 s with no progress): help, never \"wrong\".",
       "ms": 2184,
-      "flags": [
-        "changed"
-      ],
-      "was": "Go slowly to the sleepy otter."
+      "flags": [],
+      "span": [
+        41.35,
+        43.47
+      ]
     },
     {
       "path": [
@@ -334,7 +280,11 @@
       "part": "whales › hint",
       "when": "Sparkle, when she's stuck (~8 s with no progress): help, never \"wrong\".",
       "ms": 1887,
-      "flags": []
+      "flags": [],
+      "span": [
+        43.82,
+        45.7
+      ]
     },
     {
       "path": [
@@ -348,7 +298,11 @@
       "part": "whales › hint",
       "when": "Sparkle, when she's stuck (~8 s with no progress): help, never \"wrong\".",
       "ms": 2799,
-      "flags": []
+      "flags": [],
+      "span": [
+        46.05,
+        48.85
+      ]
     },
     {
       "path": [
@@ -364,6 +318,10 @@
       "ms": 3540,
       "flags": [
         "long"
+      ],
+      "span": [
+        49.2,
+        52.74
       ]
     },
     {
@@ -379,7 +337,11 @@
       "part": "whales › hint › mic",
       "when": "Sparkle, when she's stuck (~8 s with no progress): help, never \"wrong\".",
       "ms": 2456,
-      "flags": []
+      "flags": [],
+      "span": [
+        54.36,
+        56.82
+      ]
     },
     {
       "path": [
@@ -394,7 +356,11 @@
       "part": "whales › hint › mic",
       "when": "",
       "ms": 2112,
-      "flags": []
+      "flags": [],
+      "span": [
+        57.17,
+        59.22
+      ]
     },
     {
       "path": [
@@ -407,7 +373,11 @@
       "part": "whales",
       "when": "Ollie (the sleepy otter who floated away), then the other otters in the raft.",
       "ms": 1536,
-      "flags": []
+      "flags": [],
+      "span": [
+        60.84,
+        62.32
+      ]
     },
     {
       "path": [
@@ -420,7 +390,11 @@
       "part": "whales",
       "when": "",
       "ms": 2016,
-      "flags": []
+      "flags": [],
+      "span": [
+        62.67,
+        64.63
+      ]
     },
     {
       "path": [
@@ -433,10 +407,11 @@
       "part": "whales",
       "when": "Home with her friends... and straight back onto the boat's rope: she rides along for the rest of the trip.",
       "ms": 1320,
-      "flags": [
-        "changed"
-      ],
-      "was": "Thank you!"
+      "flags": [],
+      "span": [
+        64.98,
+        66.23
+      ]
     },
     {
       "path": [
@@ -449,7 +424,11 @@
       "part": "whales",
       "when": "",
       "ms": 2376,
-      "flags": []
+      "flags": [],
+      "span": [
+        66.58,
+        68.9
+      ]
     },
     {
       "path": [
@@ -462,7 +441,11 @@
       "part": "whales",
       "when": "",
       "ms": 1824,
-      "flags": []
+      "flags": [],
+      "span": [
+        69.25,
+        71.01
+      ]
     },
     {
       "path": [
@@ -475,7 +458,11 @@
       "part": "whales",
       "when": "",
       "ms": 912,
-      "flags": []
+      "flags": [],
+      "span": [
+        71.36,
+        72.2
+      ]
     },
     {
       "path": [
@@ -488,7 +475,11 @@
       "part": "whales",
       "when": "",
       "ms": 2232,
-      "flags": []
+      "flags": [],
+      "span": [
+        72.55,
+        74.72
+      ]
     },
     {
       "path": [
@@ -501,8 +492,10 @@
       "part": "whales",
       "when": "The whales (the first spout: she has never seen one).",
       "ms": 1344,
-      "flags": [
-        "reused"
+      "flags": [],
+      "span": [
+        75.07,
+        76.36
       ]
     },
     {
@@ -516,7 +509,11 @@
       "part": "whales",
       "when": "",
       "ms": 2352,
-      "flags": []
+      "flags": [],
+      "span": [
+        76.71,
+        79
+      ]
     },
     {
       "path": [
@@ -529,7 +526,11 @@
       "part": "whales",
       "when": "",
       "ms": 1824,
-      "flags": []
+      "flags": [],
+      "span": [
+        79.35,
+        81.12
+      ]
     },
     {
       "path": [
@@ -542,7 +543,11 @@
       "part": "whales",
       "when": "",
       "ms": 1224,
-      "flags": []
+      "flags": [],
+      "span": [
+        81.47,
+        82.63
+      ]
     },
     {
       "path": [
@@ -555,7 +560,11 @@
       "part": "whales",
       "when": "",
       "ms": 2184,
-      "flags": []
+      "flags": [],
+      "span": [
+        82.98,
+        85.12
+      ]
     },
     {
       "path": [
@@ -568,7 +577,11 @@
       "part": "whales",
       "when": "",
       "ms": 2208,
-      "flags": []
+      "flags": [],
+      "span": [
+        85.47,
+        87.63
+      ]
     },
     {
       "path": [
@@ -581,7 +594,11 @@
       "part": "whales",
       "when": "",
       "ms": 2256,
-      "flags": []
+      "flags": [],
+      "span": [
+        87.98,
+        90.17
+      ]
     },
     {
       "path": [
@@ -594,7 +611,11 @@
       "part": "whales",
       "when": "",
       "ms": 2352,
-      "flags": []
+      "flags": [],
+      "span": [
+        90.52,
+        92.81
+      ]
     },
     {
       "path": [
@@ -607,7 +628,11 @@
       "part": "whales",
       "when": "The orcas.",
       "ms": 2352,
-      "flags": []
+      "flags": [],
+      "span": [
+        93.16,
+        95.45
+      ]
     },
     {
       "path": [
@@ -620,7 +645,11 @@
       "part": "whales",
       "when": "",
       "ms": 1776,
-      "flags": []
+      "flags": [],
+      "span": [
+        95.8,
+        97.52
+      ]
     },
     {
       "path": [
@@ -633,7 +662,11 @@
       "part": "whales",
       "when": "",
       "ms": 1608,
-      "flags": []
+      "flags": [],
+      "span": [
+        97.87,
+        99.41
+      ]
     },
     {
       "path": [
@@ -646,7 +679,11 @@
       "part": "whales",
       "when": "The big finish, and Maple's taps on the boat.",
       "ms": 2976,
-      "flags": []
+      "flags": [],
+      "span": [
+        99.76,
+        102.68
+      ]
     },
     {
       "path": [
@@ -659,7 +696,11 @@
       "part": "whales",
       "when": "",
       "ms": 792,
-      "flags": []
+      "flags": [],
+      "span": [
+        103.03,
+        103.76
+      ]
     },
     {
       "path": [
@@ -672,7 +713,11 @@
       "part": "whales",
       "when": "",
       "ms": 1608,
-      "flags": []
+      "flags": [],
+      "span": [
+        104.11,
+        105.66
+      ]
     },
     {
       "path": [
@@ -686,8 +731,10 @@
       "part": "whales › filmOut",
       "when": "The film out: Ollie on her back in the kelp, a clam on her tummy.",
       "ms": 2736,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        107.28,
+        109.96
       ]
     },
     {
@@ -702,8 +749,10 @@
       "part": "whales › filmOut",
       "when": "The film out: Ollie on her back in the kelp, a clam on her tummy.",
       "ms": 2064,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        110.31,
+        112.32
       ]
     },
     {
@@ -718,8 +767,10 @@
       "part": "whales › filmOut",
       "when": "The film out: Ollie on her back in the kelp, a clam on her tummy.",
       "ms": 2400,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        112.67,
+        115.01
       ]
     },
     {
@@ -734,8 +785,10 @@
       "part": "whales › filmOut",
       "when": "She spins on her back like a top.",
       "ms": 2928,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        115.36,
+        118.22
       ]
     },
     {
@@ -750,8 +803,10 @@
       "part": "whales › filmOut",
       "when": "A whale spouts right behind them: everybody is soaked.",
       "ms": 2352,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        118.57,
+        120.87
       ]
     }
   ]

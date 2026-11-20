@@ -5,70 +5,31 @@
   "title": "Canada › Canoe",
   "intro": "",
   "page": "canada-canoe.html",
-  "audio": null,
+  "audio": "canada-canoe.mp3",
   "lines": 34,
   "seconds": 86,
   "missing": 0,
   "names": 0,
   "flags": [
     {
-      "key": "canoe.filmIn.song",
-      "text": "Every big game starts with a song.",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "canoe.filmIn.lulu",
-      "text": "That's Lulu the loon!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "canoe.filmIn.across",
-      "text": "She lives by the glacier. Let's paddle!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
       "key": "canoe.story",
       "text": "Bonjour! Hop in, we go to find Lulu!",
       "flags": [
-        "long",
-        "changed"
-      ],
-      "was": "Why is my lake so blue?"
+        "long"
+      ]
     },
     {
       "key": "canoe.go.touch",
       "text": "Hold the water, and Maple paddles there!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "canoe.go.mouse",
       "text": "Click and hold the water, and Maple paddles there!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "canoe.hint.touch",
-      "text": "Touch the water in front of the canoe!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "canoe.hint.mouse",
-      "text": "Click the water in front of the canoe!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
@@ -89,34 +50,8 @@
       "key": "canoe.loon",
       "text": "Bubbles! Follow them to find Lulu.",
       "flags": [
-        "long",
-        "changed"
-      ],
-      "was": "Bubbles! Follow them to find the loon."
-    },
-    {
-      "key": "canoe.loonFound.1",
-      "text": "Found you, Lulu!",
-      "flags": [
-        "changed"
-      ],
-      "was": "Found you, loon!"
-    },
-    {
-      "key": "canoe.loonFound.2",
-      "text": "Peekaboo, Lulu!",
-      "flags": [
-        "changed"
-      ],
-      "was": "Peekaboo, loon!"
-    },
-    {
-      "key": "canoe.family",
-      "text": "Lulu and her baby! We found them!",
-      "flags": [
-        "changed"
-      ],
-      "was": "A whole loon family! Merci!"
+        "long"
+      ]
     },
     {
       "key": "canoe.glacier",
@@ -133,32 +68,10 @@
       ]
     },
     {
-      "key": "canoe.filmOut.ask",
-      "text": "Lulu! Will you sing at our big game?",
-      "flags": [
-        "new"
-      ]
-    },
-    {
       "key": "canoe.filmOut.yes",
       "text": "A big game? I will sing my best song!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "canoe.filmOut.chick",
-      "text": "Hee hee! The littlest singer!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "canoe.filmOut.team",
-      "text": "You're on the team!",
-      "flags": [
-        "new"
+        "long"
       ]
     }
   ],
@@ -175,8 +88,10 @@
       "part": "canoe › filmIn",
       "when": "The film in (story/films/canoe.ts): the dock on the turquoise lake, Maple in the red canoe.",
       "ms": 2712,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        0,
+        2.65
       ]
     },
     {
@@ -191,8 +106,10 @@
       "part": "canoe › filmIn",
       "when": "A loon calls, far across the water, and the mountains answer (a beat with no line). Maple's ears go up.",
       "ms": 1896,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        3,
+        4.83
       ]
     },
     {
@@ -207,8 +124,10 @@
       "part": "canoe › filmIn",
       "when": "The film in (story/films/canoe.ts): the dock on the turquoise lake, Maple in the red canoe.",
       "ms": 2496,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        5.18,
+        7.61
       ]
     },
     {
@@ -223,10 +142,12 @@
       "when": "The game's hello, from a link or a replay (after the film it starts on the water with Sparkle's line).",
       "ms": 3696,
       "flags": [
-        "long",
-        "changed"
+        "long"
       ],
-      "was": "Why is my lake so blue?"
+      "span": [
+        9.23,
+        12.87
+      ]
     },
     {
       "path": [
@@ -241,8 +162,11 @@
       "when": "Sparkle: how to paddle, and the hint when she hasn't paddled for a while (the hand shows it too).",
       "ms": 3576,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        14.49,
+        18.02
       ]
     },
     {
@@ -258,8 +182,11 @@
       "when": "",
       "ms": 4392,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        18.37,
+        22.7
       ]
     },
     {
@@ -274,8 +201,10 @@
       "part": "canoe › hint",
       "when": "",
       "ms": 2376,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        24.32,
+        26.64
       ]
     },
     {
@@ -290,8 +219,10 @@
       "part": "canoe › hint",
       "when": "",
       "ms": 2424,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        26.99,
+        29.36
       ]
     },
     {
@@ -307,6 +238,10 @@
       "ms": 3479,
       "flags": [
         "long"
+      ],
+      "span": [
+        30.98,
+        34.46
       ]
     },
     {
@@ -320,7 +255,11 @@
       "part": "canoe",
       "when": "",
       "ms": 2664,
-      "flags": []
+      "flags": [],
+      "span": [
+        34.81,
+        37.41
+      ]
     },
     {
       "path": [
@@ -333,7 +272,11 @@
       "part": "canoe",
       "when": "",
       "ms": 2991,
-      "flags": []
+      "flags": [],
+      "span": [
+        37.76,
+        40.76
+      ]
     },
     {
       "path": [
@@ -348,6 +291,10 @@
       "ms": 3962,
       "flags": [
         "long"
+      ],
+      "span": [
+        41.11,
+        45.07
       ]
     },
     {
@@ -361,7 +308,11 @@
       "part": "canoe",
       "when": "",
       "ms": 1200,
-      "flags": []
+      "flags": [],
+      "span": [
+        45.42,
+        46.55
+      ]
     },
     {
       "path": [
@@ -375,10 +326,12 @@
       "when": "Follow Lulu: she dives and pops up nearer the glacier each time.",
       "ms": 3696,
       "flags": [
-        "long",
-        "changed"
+        "long"
       ],
-      "was": "Bubbles! Follow them to find the loon."
+      "span": [
+        46.9,
+        50.53
+      ]
     },
     {
       "path": [
@@ -391,7 +344,11 @@
       "part": "canoe",
       "when": "",
       "ms": 1927,
-      "flags": []
+      "flags": [],
+      "span": [
+        50.88,
+        52.81
+      ]
     },
     {
       "path": [
@@ -405,7 +362,11 @@
       "part": "canoe › loonFound",
       "when": "",
       "ms": 1128,
-      "flags": []
+      "flags": [],
+      "span": [
+        54.43,
+        55.5
+      ]
     },
     {
       "path": [
@@ -419,10 +380,11 @@
       "part": "canoe › loonFound",
       "when": "",
       "ms": 1608,
-      "flags": [
-        "changed"
-      ],
-      "was": "Found you, loon!"
+      "flags": [],
+      "span": [
+        55.85,
+        57.41
+      ]
     },
     {
       "path": [
@@ -436,10 +398,11 @@
       "part": "canoe › loonFound",
       "when": "",
       "ms": 1464,
-      "flags": [
-        "changed"
-      ],
-      "was": "Peekaboo, loon!"
+      "flags": [],
+      "span": [
+        57.76,
+        59.16
+      ]
     },
     {
       "path": [
@@ -452,7 +415,11 @@
       "part": "canoe",
       "when": "",
       "ms": 2736,
-      "flags": []
+      "flags": [],
+      "span": [
+        60.78,
+        63.44
+      ]
     },
     {
       "path": [
@@ -465,10 +432,11 @@
       "part": "canoe",
       "when": "",
       "ms": 2256,
-      "flags": [
-        "changed"
-      ],
-      "was": "A whole loon family! Merci!"
+      "flags": [],
+      "span": [
+        63.79,
+        65.99
+      ]
     },
     {
       "path": [
@@ -483,6 +451,10 @@
       "ms": 5630,
       "flags": [
         "long"
+      ],
+      "span": [
+        66.34,
+        71.97
       ]
     },
     {
@@ -498,6 +470,10 @@
       "ms": 4433,
       "flags": [
         "long"
+      ],
+      "span": [
+        72.32,
+        76.75
       ]
     },
     {
@@ -511,7 +487,11 @@
       "part": "canoe",
       "when": "Silly moments and pokes.",
       "ms": 2088,
-      "flags": []
+      "flags": [],
+      "span": [
+        77.1,
+        79.13
+      ]
     },
     {
       "path": [
@@ -524,7 +504,11 @@
       "part": "canoe",
       "when": "",
       "ms": 1176,
-      "flags": []
+      "flags": [],
+      "span": [
+        79.48,
+        80.6
+      ]
     },
     {
       "path": [
@@ -537,7 +521,11 @@
       "part": "canoe",
       "when": "",
       "ms": 1416,
-      "flags": []
+      "flags": [],
+      "span": [
+        80.95,
+        82.3
+      ]
     },
     {
       "path": [
@@ -551,7 +539,11 @@
       "part": "canoe › pokeMaple",
       "when": "",
       "ms": 1056,
-      "flags": []
+      "flags": [],
+      "span": [
+        83.92,
+        84.92
+      ]
     },
     {
       "path": [
@@ -565,7 +557,11 @@
       "part": "canoe › pokeMaple",
       "when": "",
       "ms": 1464,
-      "flags": []
+      "flags": [],
+      "span": [
+        85.27,
+        86.68
+      ]
     },
     {
       "path": [
@@ -579,7 +575,11 @@
       "part": "canoe › pokeMaple",
       "when": "",
       "ms": 2016,
-      "flags": []
+      "flags": [],
+      "span": [
+        87.03,
+        88.99
+      ]
     },
     {
       "path": [
@@ -592,7 +592,11 @@
       "part": "canoe",
       "when": "",
       "ms": 1656,
-      "flags": []
+      "flags": [],
+      "span": [
+        90.61,
+        92.2
+      ]
     },
     {
       "path": [
@@ -605,7 +609,11 @@
       "part": "canoe",
       "when": "",
       "ms": 2784,
-      "flags": []
+      "flags": [],
+      "span": [
+        92.55,
+        95.27
+      ]
     },
     {
       "path": [
@@ -619,8 +627,10 @@
       "part": "canoe › filmOut",
       "when": "The film out: under the glacier, Lulu with her chick on her back.",
       "ms": 2328,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        96.89,
+        99.15
       ]
     },
     {
@@ -636,8 +646,11 @@
       "when": "The film out: under the glacier, Lulu with her chick on her back.",
       "ms": 3504,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        99.5,
+        102.95
       ]
     },
     {
@@ -652,8 +665,10 @@
       "part": "canoe › filmOut",
       "when": "She calls, long and lovely, head thrown back. Her chick tries too: a tiny squeak (beats with no line).",
       "ms": 2496,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        103.3,
+        105.75
       ]
     },
     {
@@ -668,8 +683,10 @@
       "part": "canoe › filmOut",
       "when": "The pink scarf goes round Lulu's neck.",
       "ms": 1296,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        106.1,
+        107.33
       ]
     }
   ]

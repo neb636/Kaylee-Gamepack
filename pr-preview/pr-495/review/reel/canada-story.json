@@ -4,15 +4,15 @@
   "title": "Canada story",
   "video": "canada-story.mp4",
   "gif": "canada-story.gif",
-  "seconds": 64,
+  "seconds": 52,
   "browser": "webkit",
   "viewport": "ipad-landscape",
   "moments": [
     {
-      "name": "Canada story intro",
-      "where": "#/world/canada/story/intro",
-      "seconds": 62,
-      "fps": 16.4,
+      "name": "canada-film-intro",
+      "where": "canada-film-intro",
+      "seconds": 50,
+      "fps": 78.6,
       "status": "ok"
     }
   ]

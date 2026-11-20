@@ -5,7 +5,7 @@
   "title": "Canada › Salmon",
   "intro": "",
   "page": "canada-salmon.html",
-  "audio": null,
+  "audio": "canada-salmon.mp3",
   "lines": 40,
   "seconds": 104,
   "missing": 0,
@@ -15,24 +15,21 @@
       "key": "salmon.filmIn.white",
       "text": "In this rainforest lives a bear as white as snow.",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "salmon.filmIn.fishing",
       "text": "Shh. I'm fishing. No hockey till supper.",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "salmon.filmIn.help",
       "text": "Psst! Let's help the salmon jump past her!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
@@ -102,61 +99,28 @@
       "key": "salmon.spirit",
       "text": "I'm a spirit bear. I'm hungry!",
       "flags": [
-        "long",
-        "changed"
-      ],
-      "was": "I'm a spirit bear!"
-    },
-    {
-      "key": "salmon.miss",
-      "text": "Missed again!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "salmon.giveUp.black",
-      "text": "Okay, berries instead!",
-      "flags": [
-        "reused"
+        "long"
       ]
     },
     {
       "key": "salmon.giveUp.spirit",
       "text": "Too slippery! Berries, then.",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "salmon.filmOut.berries",
       "text": "Mmm. Berries are easier than fish.",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "salmon.filmOut.stick",
-      "text": "Misty! Try this hockey stick!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "salmon.filmOut.shot",
-      "text": "The biggest slap shot in Canada!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "salmon.filmOut.team",
       "text": "I like this game. I will come!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     }
   ],
@@ -174,8 +138,11 @@
       "when": "The film in (story/films/salmon.ts): the rainforest river, giant cedars, soft rain.",
       "ms": 3480,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        0,
+        3.41
       ]
     },
     {
@@ -191,8 +158,11 @@
       "when": "Misty swings a paw at a jumping salmon: an enormous splash, and no fish (a beat with no line). Then, dripping:",
       "ms": 4920,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        3.76,
+        8.63
       ]
     },
     {
@@ -208,8 +178,11 @@
       "when": "Maple, behind her paw, to the camera.",
       "ms": 3480,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        8.98,
+        12.39
       ]
     },
     {
@@ -224,7 +197,11 @@
       "part": "salmon › story",
       "when": "The story (Maple, at the river).",
       "ms": 1656,
-      "flags": []
+      "flags": [],
+      "span": [
+        14.01,
+        15.61
+      ]
     },
     {
       "path": [
@@ -238,7 +215,11 @@
       "part": "salmon › steps",
       "when": "Sparkle: once when each stretch of the river begins, and again when she's stuck.",
       "ms": 2397,
-      "flags": []
+      "flags": [],
+      "span": [
+        17.23,
+        19.63
+      ]
     },
     {
       "path": [
@@ -254,6 +235,10 @@
       "ms": 3288,
       "flags": [
         "long"
+      ],
+      "span": [
+        19.98,
+        23.2
       ]
     },
     {
@@ -269,6 +254,10 @@
       "ms": 3852,
       "flags": [
         "long"
+      ],
+      "span": [
+        24.82,
+        28.67
       ]
     },
     {
@@ -285,6 +274,10 @@
       "ms": 4401,
       "flags": [
         "long"
+      ],
+      "span": [
+        30.29,
+        34.69
       ]
     },
     {
@@ -301,6 +294,10 @@
       "ms": 4080,
       "flags": [
         "long"
+      ],
+      "span": [
+        35.04,
+        39.06
       ]
     },
     {
@@ -317,6 +314,10 @@
       "ms": 3362,
       "flags": [
         "long"
+      ],
+      "span": [
+        40.68,
+        44.04
       ]
     },
     {
@@ -333,6 +334,10 @@
       "ms": 3960,
       "flags": [
         "long"
+      ],
+      "span": [
+        44.39,
+        48.29
       ]
     },
     {
@@ -347,7 +352,11 @@
       "part": "salmon › hatch",
       "when": "",
       "ms": 2467,
-      "flags": []
+      "flags": [],
+      "span": [
+        49.91,
+        52.38
+      ]
     },
     {
       "path": [
@@ -361,7 +370,11 @@
       "part": "salmon › hatch",
       "when": "",
       "ms": 2376,
-      "flags": []
+      "flags": [],
+      "span": [
+        52.73,
+        55.04
+      ]
     },
     {
       "path": [
@@ -375,7 +388,11 @@
       "part": "salmon › bonk",
       "when": "",
       "ms": 2829,
-      "flags": []
+      "flags": [],
+      "span": [
+        56.66,
+        59.49
+      ]
     },
     {
       "path": [
@@ -391,6 +408,10 @@
       "ms": 3384,
       "flags": [
         "long"
+      ],
+      "span": [
+        59.84,
+        63.16
       ]
     },
     {
@@ -404,7 +425,11 @@
       "part": "salmon",
       "when": "",
       "ms": 2714,
-      "flags": []
+      "flags": [],
+      "span": [
+        64.78,
+        67.5
+      ]
     },
     {
       "path": [
@@ -417,7 +442,11 @@
       "part": "salmon",
       "when": "",
       "ms": 2950,
-      "flags": []
+      "flags": [],
+      "span": [
+        67.85,
+        70.8
+      ]
     },
     {
       "path": [
@@ -432,6 +461,10 @@
       "ms": 3319,
       "flags": [
         "long"
+      ],
+      "span": [
+        71.15,
+        74.47
       ]
     },
     {
@@ -446,7 +479,11 @@
       "part": "salmon › home",
       "when": "Maple, cheering on the bank (and catching the ones flicked too hard).",
       "ms": 648,
-      "flags": []
+      "flags": [],
+      "span": [
+        76.09,
+        76.68
+      ]
     },
     {
       "path": [
@@ -460,7 +497,11 @@
       "part": "salmon › home",
       "when": "",
       "ms": 576,
-      "flags": []
+      "flags": [],
+      "span": [
+        77.03,
+        77.54
+      ]
     },
     {
       "path": [
@@ -474,7 +515,11 @@
       "part": "salmon › home",
       "when": "",
       "ms": 552,
-      "flags": []
+      "flags": [],
+      "span": [
+        77.89,
+        78.38
+      ]
     },
     {
       "path": [
@@ -488,7 +533,11 @@
       "part": "salmon › home",
       "when": "",
       "ms": 672,
-      "flags": []
+      "flags": [],
+      "span": [
+        78.73,
+        79.34
+      ]
     },
     {
       "path": [
@@ -502,7 +551,11 @@
       "part": "salmon › lap",
       "when": "",
       "ms": 2448,
-      "flags": []
+      "flags": [],
+      "span": [
+        80.96,
+        83.36
+      ]
     },
     {
       "path": [
@@ -516,7 +569,11 @@
       "part": "salmon › lap",
       "when": "",
       "ms": 1776,
-      "flags": []
+      "flags": [],
+      "span": [
+        83.71,
+        85.42
+      ]
     },
     {
       "path": [
@@ -530,7 +587,11 @@
       "part": "salmon › poke",
       "when": "",
       "ms": 1344,
-      "flags": []
+      "flags": [],
+      "span": [
+        87.04,
+        88.32
+      ]
     },
     {
       "path": [
@@ -544,7 +605,11 @@
       "part": "salmon › poke",
       "when": "",
       "ms": 1128,
-      "flags": []
+      "flags": [],
+      "span": [
+        88.67,
+        89.75
+      ]
     },
     {
       "path": [
@@ -557,7 +622,11 @@
       "part": "salmon",
       "when": "",
       "ms": 2280,
-      "flags": []
+      "flags": [],
+      "span": [
+        91.37,
+        93.59
+      ]
     },
     {
       "path": [
@@ -572,6 +641,10 @@
       "ms": 3240,
       "flags": [
         "long"
+      ],
+      "span": [
+        93.94,
+        97.12
       ]
     },
     {
@@ -585,7 +658,11 @@
       "part": "salmon",
       "when": "",
       "ms": 1968,
-      "flags": []
+      "flags": [],
+      "span": [
+        97.47,
+        99.37
+      ]
     },
     {
       "path": [
@@ -598,7 +675,11 @@
       "part": "salmon",
       "when": "The bears (the same gentle bear voice for both). The white one is Misty: always thinking about supper.",
       "ms": 2208,
-      "flags": []
+      "flags": [],
+      "span": [
+        99.72,
+        101.88
+      ]
     },
     {
       "path": [
@@ -612,10 +693,12 @@
       "when": "",
       "ms": 3456,
       "flags": [
-        "long",
-        "changed"
+        "long"
       ],
-      "was": "I'm a spirit bear!"
+      "span": [
+        102.23,
+        105.63
+      ]
     },
     {
       "path": [
@@ -628,7 +711,11 @@
       "part": "salmon",
       "when": "",
       "ms": 2784,
-      "flags": []
+      "flags": [],
+      "span": [
+        105.98,
+        108.7
+      ]
     },
     {
       "path": [
@@ -641,8 +728,10 @@
       "part": "salmon",
       "when": "Misty swats at a salmon flying past, and misses (said once or twice a visit).",
       "ms": 1056,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        109.05,
+        110.05
       ]
     },
     {
@@ -657,8 +746,10 @@
       "part": "salmon › giveUp",
       "when": "",
       "ms": 2184,
-      "flags": [
-        "reused"
+      "flags": [],
+      "span": [
+        111.67,
+        113.78
       ]
     },
     {
@@ -674,8 +765,11 @@
       "when": "",
       "ms": 3792,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        114.13,
+        117.86
       ]
     },
     {
@@ -689,7 +783,11 @@
       "part": "salmon",
       "when": "",
       "ms": 1872,
-      "flags": []
+      "flags": [],
+      "span": [
+        119.48,
+        121.29
+      ]
     },
     {
       "path": [
@@ -704,8 +802,11 @@
       "when": "The film out: the salmon are home, Misty has a paw full of berries.",
       "ms": 3672,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        122.91,
+        126.52
       ]
     },
     {
@@ -720,8 +821,10 @@
       "part": "salmon › filmOut",
       "when": "The film out: the salmon are home, Misty has a paw full of berries.",
       "ms": 2376,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        126.87,
+        129.19
       ]
     },
     {
@@ -736,8 +839,10 @@
       "part": "salmon › filmOut",
       "when": "One swing: a pinecone sails over the tallest cedar.",
       "ms": 2232,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        129.54,
+        131.73
       ]
     },
     {
@@ -753,8 +858,11 @@
       "when": "The film out: the salmon are home, Misty has a paw full of berries.",
       "ms": 3240,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        132.08,
+        135.25
       ]
     }
   ]

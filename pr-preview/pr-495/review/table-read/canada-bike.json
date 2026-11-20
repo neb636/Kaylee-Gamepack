@@ -5,7 +5,7 @@
   "title": "Canada › Bike",
   "intro": "",
   "page": "canada-bike.html",
-  "audio": null,
+  "audio": "canada-bike.mp3",
   "lines": 36,
   "seconds": 79,
   "missing": 0,
@@ -15,33 +15,22 @@
       "key": "bike.filmIn.high",
       "text": "My friend Monty is the biggest moose in Canada!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "bike.filmIn.bath",
-      "text": "He's having his bath, way down there.",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "bike.filmIn.go",
       "text": "The fastest way down is my bike. Hold on!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "bike.story.0",
       "text": "Up we go! Then we ride down to Monty!",
       "flags": [
-        "long",
-        "changed"
-      ],
-      "was": "Bonjour! I want to ride all the way down to the waterfall!"
+        "long"
+      ]
     },
     {
       "key": "bike.steer.touch",
@@ -72,48 +61,17 @@
       ]
     },
     {
-      "key": "bike.falls",
-      "text": "There he is, in his bath!",
-      "flags": [
-        "changed"
-      ],
-      "was": "We made it! The waterfall!"
-    },
-    {
-      "key": "bike.filmOut.found",
-      "text": "Monty! Will you be our goalie?",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "bike.filmOut.what",
-      "text": "Mmm. What does a goalie do?",
-      "flags": [
-        "new"
-      ]
-    },
-    {
       "key": "bike.filmOut.stand",
       "text": "You stand in front of the net. Easy!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "bike.filmOut.good",
       "text": "Mmm. I am very good at standing.",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "bike.filmOut.team",
-      "text": "Nothing gets past Monty!",
-      "flags": [
-        "new"
+        "long"
       ]
     }
   ],
@@ -131,8 +89,11 @@
       "when": "The film in (story/films/bike.ts): the top of Mont-Sainte-Anne, the gondola behind, the forest far below.",
       "ms": 3312,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        0,
+        3.25
       ]
     },
     {
@@ -147,8 +108,10 @@
       "part": "bike › filmIn",
       "when": "The camera looks down the mountain: a tiny moose in a pond by the waterfall.",
       "ms": 2712,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        3.6,
+        6.25
       ]
     },
     {
@@ -164,8 +127,11 @@
       "when": "She hops on her bike.",
       "ms": 3288,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        6.6,
+        9.83
       ]
     },
     {
@@ -181,10 +147,12 @@
       "when": "From a link or a replay (no film in): a short hello in her gondola cabin at the bottom, then up they go.",
       "ms": 3120,
       "flags": [
-        "long",
-        "changed"
+        "long"
       ],
-      "was": "Bonjour! I want to ride all the way down to the waterfall!"
+      "span": [
+        11.45,
+        14.52
+      ]
     },
     {
       "path": [
@@ -200,6 +168,10 @@
       "ms": 3323,
       "flags": [
         "long"
+      ],
+      "span": [
+        16.14,
+        19.46
       ]
     },
     {
@@ -216,6 +188,10 @@
       "ms": 3192,
       "flags": [
         "long"
+      ],
+      "span": [
+        19.81,
+        22.94
       ]
     },
     {
@@ -229,7 +205,11 @@
       "part": "bike",
       "when": "",
       "ms": 2733,
-      "flags": []
+      "flags": [],
+      "span": [
+        24.56,
+        27.29
+      ]
     },
     {
       "path": [
@@ -242,7 +222,11 @@
       "part": "bike",
       "when": "",
       "ms": 2585,
-      "flags": []
+      "flags": [],
+      "span": [
+        27.64,
+        30.23
+      ]
     },
     {
       "path": [
@@ -258,6 +242,10 @@
       "ms": 4060,
       "flags": [
         "long"
+      ],
+      "span": [
+        31.85,
+        35.91
       ]
     },
     {
@@ -274,6 +262,10 @@
       "ms": 3168,
       "flags": [
         "long"
+      ],
+      "span": [
+        36.26,
+        39.38
       ]
     },
     {
@@ -287,7 +279,11 @@
       "part": "bike",
       "when": "Maple's whoops and her silly moments.",
       "ms": 2040,
-      "flags": []
+      "flags": [],
+      "span": [
+        41,
+        42.98
+      ]
     },
     {
       "path": [
@@ -300,7 +296,11 @@
       "part": "bike",
       "when": "",
       "ms": 1656,
-      "flags": []
+      "flags": [],
+      "span": [
+        43.33,
+        44.92
+      ]
     },
     {
       "path": [
@@ -313,7 +313,11 @@
       "part": "bike",
       "when": "",
       "ms": 1056,
-      "flags": []
+      "flags": [],
+      "span": [
+        45.27,
+        46.27
+      ]
     },
     {
       "path": [
@@ -327,7 +331,11 @@
       "part": "bike › whee",
       "when": "",
       "ms": 1008,
-      "flags": []
+      "flags": [],
+      "span": [
+        47.89,
+        48.84
+      ]
     },
     {
       "path": [
@@ -341,7 +349,11 @@
       "part": "bike › whee",
       "when": "",
       "ms": 936,
-      "flags": []
+      "flags": [],
+      "span": [
+        49.19,
+        50.07
+      ]
     },
     {
       "path": [
@@ -355,7 +367,11 @@
       "part": "bike › whee",
       "when": "",
       "ms": 936,
-      "flags": []
+      "flags": [],
+      "span": [
+        50.42,
+        51.29
+      ]
     },
     {
       "path": [
@@ -369,7 +385,11 @@
       "part": "bike › leaves",
       "when": "",
       "ms": 2640,
-      "flags": []
+      "flags": [],
+      "span": [
+        52.91,
+        55.5
+      ]
     },
     {
       "path": [
@@ -383,7 +403,11 @@
       "part": "bike › leaves",
       "when": "",
       "ms": 1008,
-      "flags": []
+      "flags": [],
+      "span": [
+        55.85,
+        56.8
+      ]
     },
     {
       "path": [
@@ -397,7 +421,11 @@
       "part": "bike › bell",
       "when": "",
       "ms": 1080,
-      "flags": []
+      "flags": [],
+      "span": [
+        58.42,
+        59.43
+      ]
     },
     {
       "path": [
@@ -411,7 +439,11 @@
       "part": "bike › bell",
       "when": "",
       "ms": 816,
-      "flags": []
+      "flags": [],
+      "span": [
+        59.78,
+        60.53
+      ]
     },
     {
       "path": [
@@ -424,7 +456,11 @@
       "part": "bike",
       "when": "",
       "ms": 2328,
-      "flags": []
+      "flags": [],
+      "span": [
+        62.15,
+        64.43
+      ]
     },
     {
       "path": [
@@ -437,7 +473,11 @@
       "part": "bike",
       "when": "",
       "ms": 2064,
-      "flags": []
+      "flags": [],
+      "span": [
+        64.78,
+        66.78
+      ]
     },
     {
       "path": [
@@ -450,7 +490,11 @@
       "part": "bike",
       "when": "",
       "ms": 1704,
-      "flags": []
+      "flags": [],
+      "span": [
+        67.13,
+        68.77
+      ]
     },
     {
       "path": [
@@ -463,7 +507,11 @@
       "part": "bike",
       "when": "",
       "ms": 1200,
-      "flags": []
+      "flags": [],
+      "span": [
+        69.12,
+        70.26
+      ]
     },
     {
       "path": [
@@ -476,7 +524,11 @@
       "part": "bike",
       "when": "",
       "ms": 1968,
-      "flags": []
+      "flags": [],
+      "span": [
+        70.61,
+        72.52
+      ]
     },
     {
       "path": [
@@ -489,7 +541,11 @@
       "part": "bike",
       "when": "",
       "ms": 1896,
-      "flags": []
+      "flags": [],
+      "span": [
+        72.87,
+        74.71
+      ]
     },
     {
       "path": [
@@ -502,10 +558,11 @@
       "part": "bike",
       "when": "At the bottom: she spots Monty in the pool (he says hello, `moose[0]`), and the film out picks up there.",
       "ms": 2016,
-      "flags": [
-        "changed"
-      ],
-      "was": "We made it! The waterfall!"
+      "flags": [],
+      "span": [
+        75.06,
+        77.02
+      ]
     },
     {
       "path": [
@@ -519,7 +576,11 @@
       "part": "bike › moose",
       "when": "The animals, in their own voices.",
       "ms": 2784,
-      "flags": []
+      "flags": [],
+      "span": [
+        78.64,
+        81.37
+      ]
     },
     {
       "path": [
@@ -533,7 +594,11 @@
       "part": "bike › moose",
       "when": "",
       "ms": 1776,
-      "flags": []
+      "flags": [],
+      "span": [
+        81.72,
+        83.44
+      ]
     },
     {
       "path": [
@@ -546,7 +611,11 @@
       "part": "bike",
       "when": "",
       "ms": 1497,
-      "flags": []
+      "flags": [],
+      "span": [
+        85.06,
+        86.56
+      ]
     },
     {
       "path": [
@@ -559,7 +628,11 @@
       "part": "bike",
       "when": "",
       "ms": 1872,
-      "flags": []
+      "flags": [],
+      "span": [
+        86.91,
+        88.72
+      ]
     },
     {
       "path": [
@@ -573,8 +646,10 @@
       "part": "bike › filmOut",
       "when": "The film out: the pond at the waterfall, Monty chewing, a lily pad on one antler.",
       "ms": 2088,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        90.34,
+        92.37
       ]
     },
     {
@@ -589,8 +664,10 @@
       "part": "bike › filmOut",
       "when": "The film out: the pond at the waterfall, Monty chewing, a lily pad on one antler.",
       "ms": 2280,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        92.72,
+        94.95
       ]
     },
     {
@@ -606,8 +683,11 @@
       "when": "The film out: the pond at the waterfall, Monty chewing, a lily pad on one antler.",
       "ms": 3192,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        95.3,
+        98.42
       ]
     },
     {
@@ -623,8 +703,11 @@
       "when": "The film out: the pond at the waterfall, Monty chewing, a lily pad on one antler.",
       "ms": 3360,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        98.77,
+        102.08
       ]
     },
     {
@@ -639,8 +722,10 @@
       "part": "bike › filmOut",
       "when": "A pinecone drops out of a tree and bonks off his antlers. He doesn't notice.",
       "ms": 1896,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        102.43,
+        104.27
       ]
     }
   ]

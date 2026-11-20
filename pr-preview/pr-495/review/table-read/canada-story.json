@@ -1,0 +1,440 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "story",
+  "title": "Canada › Story",
+  "intro": "---------------------------------------------------------------- the story's own films (story/films/)",
+  "page": "canada-story.html",
+  "audio": "canada-story.mp3",
+  "lines": 18,
+  "seconds": 58,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "story.intro.top",
+      "text": "This is Canada! In winter, the water turns to ice.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "story.intro.hello",
+      "text": "Bonjour! I am Maple. I love hockey!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "story.intro.cup",
+      "text": "That's the Maple Cup. I want to win it so much!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "story.intro.geese",
+      "text": "Honk honk! Geese win the Cup every year!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "story.intro.six",
+      "text": "Six geese, one beaver! Honk honk honk!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "story.intro.need",
+      "text": "I can't win alone. I need a team!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "story.intro.ask",
+      "text": "My friends live all across Canada. Will you help me find them?",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "story.gameIn.here",
+      "text": "The big game! The whole team is here.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "story.gameIn.gus",
+      "text": "A team? Honk! Beavers can't beat geese!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "story.gameWin.cup",
+      "text": "Maple's team wins the Maple Cup!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "story.gameWin.share",
+      "text": "Maple taffy for everybody. Geese too!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "story",
+        "intro",
+        "top"
+      ],
+      "text": "This is Canada! In winter, the water turns to ice.",
+      "voice": "sparkle",
+      "key": "story.intro.top",
+      "part": "story › intro",
+      "when": "The canal from high up, Maple skating alone with a puck.",
+      "ms": 4368,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        0,
+        4.3
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "hello"
+      ],
+      "text": "Bonjour! I am Maple. I love hockey!",
+      "voice": "maple",
+      "key": "story.intro.hello",
+      "part": "story › intro",
+      "when": "Maple, close: a wave and a twirl.",
+      "ms": 3336,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        4.65,
+        7.93
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "cup"
+      ],
+      "text": "That's the Maple Cup. I want to win it so much!",
+      "voice": "maple",
+      "key": "story.intro.cup",
+      "part": "story › intro",
+      "when": "The golden cup on its stand in the snow.",
+      "ms": 3528,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        8.28,
+        11.75
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "geese"
+      ],
+      "text": "Honk honk! Geese win the Cup every year!",
+      "voice": "gus",
+      "key": "story.intro.geese",
+      "part": "story › intro",
+      "when": "The geese skate in, in a V, Gus at the front.",
+      "ms": 3768,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        12.1,
+        15.81
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "last"
+      ],
+      "text": "Last winter, I played all by myself.",
+      "voice": "maple",
+      "key": "story.intro.last",
+      "part": "story › intro",
+      "when": "The memory (the storybook look): last winter, six geese round one little beaver.",
+      "ms": 2568,
+      "flags": [],
+      "span": [
+        16.16,
+        18.67
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "six"
+      ],
+      "text": "Six geese, one beaver! Honk honk honk!",
+      "voice": "gus",
+      "key": "story.intro.six",
+      "part": "story › intro",
+      "when": "Still the memory: pucks pile up in Maple's net, she sits down on her tail.",
+      "ms": 3672,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        19.02,
+        22.62
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "need"
+      ],
+      "text": "I can't win alone. I need a team!",
+      "voice": "maple",
+      "key": "story.intro.need",
+      "part": "story › intro",
+      "when": "Now again. Maple droops, then stands up straight.",
+      "ms": 3360,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        22.97,
+        26.26
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "ask"
+      ],
+      "text": "My friends live all across Canada. Will you help me find them?",
+      "voice": "maple",
+      "key": "story.intro.ask",
+      "part": "story › intro",
+      "when": "She points one way, then the other, then to the camera.",
+      "ms": 4176,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        26.61,
+        30.72
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "intro",
+        "go"
+      ],
+      "text": "Let's go and find Maple's team!",
+      "voice": "sparkle",
+      "key": "story.intro.go",
+      "part": "story › intro",
+      "when": "Sparkle's balloon comes down behind her.",
+      "ms": 2880,
+      "flags": [],
+      "span": [
+        31.07,
+        33.9
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "gameIn",
+        "here"
+      ],
+      "text": "The big game! The whole team is here.",
+      "voice": "sparkle",
+      "key": "story.gameIn.here",
+      "part": "story › gameIn",
+      "when": "The canal in the evening, lanterns lit, the team in a row in their pink scarves.",
+      "ms": 3264,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        35.52,
+        38.73
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "gameIn",
+        "gus"
+      ],
+      "text": "A team? Honk! Beavers can't beat geese!",
+      "voice": "gus",
+      "key": "story.gameIn.gus",
+      "part": "story › gameIn",
+      "when": "Gus and his geese across the ice.",
+      "ms": 4032,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        39.08,
+        43.06
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "gameIn",
+        "ready"
+      ],
+      "text": "We are ready, Gus. All of us!",
+      "voice": "maple",
+      "key": "story.gameIn.ready",
+      "part": "story › gameIn",
+      "when": "Maple, her friends behind her.",
+      "ms": 2184,
+      "flags": [],
+      "span": [
+        43.41,
+        45.54
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "gameIn",
+        "song"
+      ],
+      "text": "Shh. Lulu is singing.",
+      "voice": "sparkle",
+      "key": "story.gameIn.song",
+      "part": "story › gameIn",
+      "when": "Lulu the loon lifts her head and calls over the ice (her real call, no words).",
+      "ms": 2688,
+      "flags": [],
+      "span": [
+        45.89,
+        48.51
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "gameWin",
+        "cup"
+      ],
+      "text": "Maple's team wins the Maple Cup!",
+      "voice": "sparkle",
+      "key": "story.gameWin.cup",
+      "part": "story › gameWin",
+      "when": "The Cup, held up between them all.",
+      "ms": 3432,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        50.13,
+        53.5
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "gameWin",
+        "gus"
+      ],
+      "text": "Good game, little beaver. Honk.",
+      "voice": "gus",
+      "key": "story.gameWin.gus",
+      "part": "story › gameWin",
+      "when": "Gus skates over and bows his long neck.",
+      "ms": 2976,
+      "flags": [],
+      "span": [
+        53.85,
+        56.77
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "gameWin",
+        "syrup"
+      ],
+      "text": "Look! The Cup is full of maple syrup!",
+      "voice": "maple",
+      "key": "story.gameWin.syrup",
+      "part": "story › gameWin",
+      "when": "Maple looks into the Cup.",
+      "ms": 2664,
+      "flags": [],
+      "span": [
+        57.12,
+        59.72
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "gameWin",
+        "share"
+      ],
+      "text": "Maple taffy for everybody. Geese too!",
+      "voice": "maple",
+      "key": "story.gameWin.share",
+      "part": "story › gameWin",
+      "when": "She pours it on the snow: taffy on a stick for every player, both teams.",
+      "ms": 3432,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        60.07,
+        63.44
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "gameWin",
+        "together"
+      ],
+      "text": "We did it together!",
+      "voice": "maple",
+      "key": "story.gameWin.together",
+      "part": "story › gameWin",
+      "when": "Everybody crunches.",
+      "ms": 1320,
+      "flags": [],
+      "span": [
+        63.79,
+        65.05
+      ]
+    }
+  ]
+}
