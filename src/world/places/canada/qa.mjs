@@ -10,16 +10,11 @@ export const screens = [
   ...['msa', 'quebec', 'ottawa', 'prairies', 'banff', 'rockies', 'bc'].map((at) => ({ name: `canada-map-${at}`, hash: `#/world/canada/hub/map?at=${at}`, reset: true, wait: 2200 })),
   // Mountain Bike: the gondola, each stretch from its link (berms: both ways), the waterfall at the end.
   ...['gondola', 'green', 'berms?trail=green', 'berms?trail=blue', 'creek', 'falls'].map((to) => ({ name: `canada-bike-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/bike/${to}`, reset: true, wait: to === 'falls' ? 14000 : to === 'gondola' ? 4000 : 3500 })),
-  // Sugar Snow (2D): each part from its link (orders with the chipmunk fed; share: everyone's lollipop).
-  ...['pour', 'shapes', 'orders?fed=chipmunk', 'share'].map((to) => ({ name: `canada-taffy-${to.replace(/[?=&,]/g, '-')}`, hash: `#/world/canada/taffy/${to}`, reset: true, wait: to === 'share' ? 2400 : 1500 })),
   // Campfire Night: the dark campsite under the flashlight; the last one with the darkness turned off (a
   // feel-lab knob) to check where everything stands.
   ...['eyes', 'sounds', 'bandit', 'marshmallow', 'stars', 'bandit?feel.campTorch.dark=0'].map((to) => ({ name: `canada-campfire-${to.replace(/[?=&,.]/g, '-')}`, hash: `#/world/canada/campfire/${to}`, reset: true, wait: 1800 })),
   // Red Canoe: each part from its link (glide both ways to paddle), the loon family at the glacier.
   ...['glide', 'glide?paddle=pull', 'stream', 'loon', 'glacier'].map((to) => ({ name: `canada-canoe-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/canoe/${to}`, reset: true, wait: to.startsWith('glide') ? 4000 : 3000 })),
-  // Animal Bridge: each family from its link (the grizzlies at the bare bridge, then the bridge planted),
-  // and the camera's photos at the end.
-  ...['elk', 'sheep', 'bears', 'bears?green=1', 'album'].map((to) => ({ name: `canada-bridge-${to.replace(/[?=&,.]/g, '-')}`, hash: `#/world/canada/bridge/${to}`, reset: true, wait: to === 'album' ? 3200 : 1500 })),
   // Whale Watch: each part from its link (the harbour both ways to steer, the humpback that jumps), and
   // under the water listening.
   ...['harbour', 'harbour?steer=wheel', 'otters', 'spouts', 'spouts?found=3', 'orcas', 'listen'].map((to) => ({ name: `canada-whales-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/whales/${to}`, reset: true, wait: to === 'listen' ? 4500 : 3000 })),
@@ -35,7 +30,6 @@ export const screens = [
 export const pacing = [
   { name: 'canada pin map', id: 'canada', hash: '#/world/canada', reset: true },
   { name: 'canada mountain bike', id: 'bike', hash: '#/world/canada/bike', reset: true },
-  { name: 'canada sugar snow', id: 'taffy', hash: '#/world/canada/taffy', reset: true },
   // Campfire Night: a tap moves the flashlight there and a tap on eyes finds the animal at once,
   // so the auto-player gets through the eyes; the sounds, the trail and the marshmallow need the light held and dragged
   // (qa-motion's canada-campfire-light).
@@ -43,9 +37,6 @@ export const pacing = [
   // Red Canoe: the core verb is a stroke (a drag beside the canoe), so the auto-player's taps only
   // splash, poke and make trout jump; the robot run that paddles is qa-motion's canada-canoe-stroke.
   { name: 'canada red canoe', id: 'canoe', hash: '#/world/canada/canoe', reset: true },
-  // Animal Bridge: a tap on the ground walks the family she leads there and a tap pokes things, so
-  // the auto-player wanders the herd about; leading them over the bridge is a long drag (qa-motion's canada-bridge-lead).
-  { name: 'canada animal bridge', id: 'bridge', hash: '#/world/canada/bridge', reset: true },
   // Whale Watch: a tap on the water drives the boat there, so the auto-player's taps steer it about
   // and poke the animals; holding the water and steering out to the otters and the spouts is qa-motion's canada-whales-steer.
   { name: 'canada whale watch', id: 'whales', hash: '#/world/canada/whales', reset: true },
@@ -60,41 +51,6 @@ export const pacing = [
 /** Filmed moments (scripts/qa-motion.mjs): the core verbs, driven the way a child would. */
 export const motion = []
 
-// Sugar Snow: her finger tips the pot and pours a wave of syrup across the snow (thin where she moves,
-// a puddle where she stops), it steams and sets, then the stick rolls it back up into a lollipop that flies to Maple.
-motion.push({
-  name: 'canada-taffy-pour',
-  seconds: 9,
-  setup: async (page, base) => {
-    await page.goto(`${base}#/world/canada/taffy/pour`)
-    await page.waitForFunction(() => window.__canadaTaffyQA?.().section, null, { timeout: 20000 })
-    await page.waitForTimeout(600)
-  },
-  act: async (page) => {
-    const snow = (fx, fy) =>
-      page.evaluate(([fx, fy]) => {
-        const svg = document.querySelector('svg[aria-label="Pour maple syrup on the snow"]')
-        const wide = svg.clientWidth / svg.clientHeight >= 1.05
-        const s = wide ? { x: 330, y: 270, w: 940, h: 630 } : { x: 85, y: 440, w: 830, h: 730 }
-        const p = new DOMPoint(s.x + s.w * fx, s.y + s.h * fy).matrixTransform(svg.getScreenCTM())
-        return [p.x, p.y]
-      }, [fx, fy])
-    const wave = Array.from({ length: 24 }, (_, i) => [0.2 + (0.6 * i) / 23, 0.5 + 0.2 * Math.sin((i / 23) * Math.PI * 2)])
-    await page.mouse.move(...(await snow(...wave[0])))
-    await page.mouse.down()
-    for (const p of wave) {
-      await page.mouse.move(...(await snow(...p)), { steps: 3 })
-      await page.waitForTimeout(40)
-    }
-    await page.waitForTimeout(900)
-    await page.mouse.up()
-    await page.waitForTimeout(2800)
-    await page.mouse.move(...(await snow(...wave[0])))
-    await page.mouse.down()
-    for (const p of wave) await page.mouse.move(...(await snow(...p)), { steps: 3 })
-    await page.mouse.up()
-  },
-})
 
 // Campfire Night: her finger sweeps the flashlight across the dark campsite from the lake to the tent and
 // back up into the trees, resting on whatever eyes it finds (they come out), then up into the sky (stars come out).
@@ -126,29 +82,6 @@ motion.push({
   },
 })
 
-// Animal Bridge: her finger on mama elk, up the forest bank to the bridge, over it while the cars zoom
-// under, and down into the meadow; the calves follow in a wobbly line (and munch when they get there).
-motion.push({
-  name: 'canada-bridge-lead',
-  seconds: 9,
-  setup: async (page, base) => {
-    await page.goto(`${base}#/world/canada/bridge/elk`)
-    await page.waitForFunction(() => window.__canadaBridgeQA?.().section, null, { timeout: 20000 })
-    await page.waitForTimeout(600)
-  },
-  act: async (page) => {
-    const q = await page.evaluate(() => window.__canadaBridgeQA())
-    const way = [{ x: q.bridge.left.x - 40, y: q.bridge.left.y + 40 }, q.bridge.left, q.bridge.middle, q.bridge.right, q.meadow]
-    await page.mouse.move(q.fams.elk.x, q.fams.elk.y)
-    await page.mouse.down()
-    for (const p of way) {
-      await page.mouse.move(p.x, p.y, { steps: 18 })
-      await page.waitForTimeout(350)
-    }
-    await page.waitForTimeout(1200)
-    await page.mouse.up()
-  },
-})
 
 // Whale Watch: her finger held on the water out ahead and to the left of the boat out at sea (it speeds up
 // and swoops round, hopping off the waves), then swung across to the right (it turns back), then let go (it coasts).
