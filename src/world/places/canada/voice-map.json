@@ -462,13 +462,6 @@
     "file": "fa8069f6745a.mp3"
   },
   {
-    "text": "A polar bear! It lives up north.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3426,
-    "file": "130b8a392237.mp3"
-  },
-  {
     "text": "This is Canada! In winter, the water turns to ice.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -490,11 +483,11 @@
     "file": "981c4e8011b7.mp3"
   },
   {
-    "text": "Honk honk! The Cup is ours. Geese win every year!",
+    "text": "Honk honk! Geese win the Cup every year!",
     "voice": "gus",
     "sig": "64c136c98c",
-    "ms": 4512,
-    "file": "e87e8087a058.mp3"
+    "ms": 3768,
+    "file": "a68c7ab7b154.mp3"
   },
   {
     "text": "Last winter, I played all by myself.",
@@ -1078,17 +1071,17 @@
     "file": "302764c6a35a.mp3"
   },
   {
-    "text": "He's having his bath at the waterfall, way down there.",
+    "text": "He's having his bath, way down there.",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 3288,
-    "file": "436b66225999.mp3"
+    "ms": 2712,
+    "file": "25dbbae03dd0.mp3"
   },
   {
     "text": "The fastest way down is my bike. Hold on!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 360,
+    "ms": 3288,
     "file": "c1d010cd8a58.mp3"
   },
   {
@@ -1302,11 +1295,11 @@
     "file": "d7d676de23ff.mp3"
   },
   {
-    "text": "You stand in front of the net. That's all!",
+    "text": "You stand in front of the net. Easy!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 2616,
-    "file": "61b4437d108f.mp3"
+    "ms": 3192,
+    "file": "4bdf350ef886.mp3"
   },
   {
     "text": "Mmm. I am very good at standing.",
@@ -1323,11 +1316,11 @@
     "file": "00d6608c31fd.mp3"
   },
   {
-    "text": "Shh. Somebody quick and sneaky lives in these woods.",
+    "text": "Shh. Somebody sneaky lives in these woods.",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 3768,
-    "file": "5a459918a27a.mp3"
+    "ms": 3264,
+    "file": "184b60964f2c.mp3"
   },
   {
     "text": "Hey! My marshmallow! Who's out there?",
@@ -1589,13 +1582,6 @@
     "file": "b2d65f780989.mp3"
   },
   {
-    "text": "Roxy! You have the quickest paws in Canada!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 3168,
-    "file": "6103c324ff6a.mp3"
-  },
-  {
     "text": "Hee hee! Got your puck!",
     "voice": "raccoon",
     "sig": "124402ef75",
@@ -1603,11 +1589,11 @@
     "file": "4ed6f928c80e.mp3"
   },
   {
-    "text": "Will you steal the puck from the geese?",
+    "text": "Roxy! Will you steal the puck from the geese?",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 2448,
-    "file": "1b197a83fda0.mp3"
+    "ms": 3072,
+    "file": "76348a11e103.mp3"
   },
   {
     "text": "Only if my babies can come and cheer!",
@@ -1631,18 +1617,18 @@
     "file": "da6e53ef14f6.mp3"
   },
   {
-    "text": "That's Lulu the loon! Nobody sings like Lulu.",
+    "text": "That's Lulu the loon!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 3816,
-    "file": "3a4c9dee62fa.mp3"
+    "ms": 1896,
+    "file": "1e99e4f3c86d.mp3"
   },
   {
-    "text": "She lives across the lake, by the glacier. Let's paddle!",
+    "text": "She lives by the glacier. Let's paddle!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 3768,
-    "file": "b0b83b9897c5.mp3"
+    "ms": 2496,
+    "file": "ca09ead6c2d2.mp3"
   },
   {
     "text": "Bonjour! Hop in, we go to find Lulu!",
@@ -1652,18 +1638,18 @@
     "file": "f62543184f9d.mp3"
   },
   {
-    "text": "Hold your finger on the water, and Maple paddles there!",
+    "text": "Hold the water, and Maple paddles there!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4944,
-    "file": "18f5a66947f4.mp3"
+    "ms": 3576,
+    "file": "6a296591122f.mp3"
   },
   {
-    "text": "Click and hold on the water, and Maple paddles there!",
+    "text": "Click and hold the water, and Maple paddles there!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4368,
-    "file": "291aeed684ab.mp3"
+    "ms": 4392,
+    "file": "99682b92a628.mp3"
   },
   {
     "text": "Touch the water in front of the canoe!",
@@ -1841,11 +1827,11 @@
     "file": "83825b213584.mp3"
   },
   {
-    "text": "A big game? I will sing my very best song.",
+    "text": "A big game? I will sing my best song!",
     "voice": "loon",
     "sig": "668033dd1c",
-    "ms": 3384,
-    "file": "b70c01300ce0.mp3"
+    "ms": 3504,
+    "file": "6a688d679347.mp3"
   },
   {
     "text": "Hee hee! The littlest singer!",
@@ -2156,18 +2142,11 @@
     "file": "273e301e00af.mp3"
   },
   {
-    "text": "Wow! Look at that swing!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 2568,
-    "file": "7500ccfb2a5f.mp3"
-  },
-  {
-    "text": "Shh. I'm fishing. No hockey till I've had my supper.",
+    "text": "Shh. I'm fishing. No hockey till supper.",
     "voice": "bear",
     "sig": "ea36df2f33",
-    "ms": 5424,
-    "file": "d5b02076fe9c.mp3"
+    "ms": 4920,
+    "file": "9277b4580ee3.mp3"
   },
   {
     "text": "Psst! Let's help the salmon jump past her!",
