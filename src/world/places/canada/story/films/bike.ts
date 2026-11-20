@@ -282,10 +282,6 @@ export const BIKE_OUT: StoryFilm = {
             3.0,
             () => {
               monty.scarf(true)
-              // (Down round his neck, under that long muzzle: the team's scarf sits too high on a moose's big head.)
-              const scarf = monty.rig.body.children[monty.rig.body.children.length - 1]
-              scarf.scale.setScalar(1.12)
-              scarf.position.y = -0.175 * monty.height
               const p = monty.at(0.5, tmp)
               s.sparkle(p.x, p.y, p.z, 18)
               s.sfx.chime()
