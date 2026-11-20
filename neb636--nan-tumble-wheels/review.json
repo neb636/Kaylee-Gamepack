@@ -1,0 +1,7 @@
+{
+  "title": "Nan drive: the wheels stay on when the Pajero tumbles",
+  "checkIn": "fix",
+  "kaylee": "Steer the Pajero off the cliff and it tumbles down with all four wheels on, instead of leaving them floating on the road.",
+  "questions": [],
+  "links": [{ "label": "Drive it off the edge", "hash": "#/world/thailand/nan-trip/drive" }]
+}
