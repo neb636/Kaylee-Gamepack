@@ -181,7 +181,8 @@ export function WorldMap({ view: linked }: { view?: string }) {
             alt=""
             animate={{ y: [0, -10, 0], rotate: [-3, 3, -3] }}
             transition={{ repeat: Infinity, duration: 3 }}
-            style={{ position: 'absolute', left: `${HOME.x + 5}%`, top: `${HOME.y - 26}%`, width: '9%', zIndex: 2 }}
+            // (Out over the North Atlantic, clear of Canada's pin: at home's own corner the pin covered its basket.)
+            style={{ position: 'absolute', left: `${HOME.x + 15}%`, top: `${HOME.y - 25}%`, width: '9%', zIndex: 2 }}
           />
 
           {listed.map(({ meta }) => (

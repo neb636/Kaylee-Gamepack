@@ -23,7 +23,8 @@ import { L } from './lines'
 const meta: PlaceMeta = {
   id: 'canada',
   name: 'Canada',
-  emoji: '🍁',
+  // A moose on its world-map pin (the user asked for it instead of the maple leaf, 2026-11-20).
+  emoji: '🫎',
   flag: 'canada',
   // East of the bear on the world map, toward Quebec.
   mapPos: { x: 27, y: 25 },
