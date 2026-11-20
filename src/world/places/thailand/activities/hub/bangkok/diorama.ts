@@ -7,7 +7,8 @@
 // jungle in the river's big loop. The corners have their own things: the night market's tents up by Rama 9, a
 // floating market and Bang Mot's orange orchard out south-west. Thonburi and the south are city too, leafier than the
 // middle (big trees standing here and there among the roofs). The pins and the river are still what she sees first.
-// Bangkok's great landmark stands in the old town: Wat Arun's tall prang on the Thonburi bank. Scenery only, never a toy.
+// Bangkok's great landmark stands in the old town: Wat Arun's tall prang on the Thonburi bank. Scenery, never a toy
+// (a tap only names it).
 //
 // The places stand up like chunky toys: the Thailand house (a row of pastel shophouses, the pink one in the middle,
 // the flag, a tuk-tuk parked outside) and ICONSIAM (its folded glass front on the river, the gold roof, two towers
@@ -461,14 +462,12 @@ export function buildDiorama(bag: Bag): Diorama {
   // Bang Mot's orange orchard: trees heavy with oranges, the farmer's house on its stilts, baskets out front.
   spots.orchard = toy(SPOTS.orchard, orchardParts(), 1.6)
 
-  // ---- Bangkok's landmark: Wat Arun on the Thonburi bank. To look at, never a toy: nothing pokes it, no pin, no
-  // line (layout.ts LANDMARKS) ----
+  // ---- Bangkok's landmark: Wat Arun on the Thonburi bank. Scenery, not a toy: a tap only names it (its gold
+  // glints, Sparkle says what it is); it never moves (layout.ts LANDMARKS) ----
   const arun = arunParts()
   toy(LANDMARKS.arun.at, arun.lined, LANDMARKS.arun.scale, arun.plain)
-  /** Where its gold catches the light (map3d.ts glints it): Wat Arun's tip. */
-  const gold: V3[] = [
-    [LANDMARKS.arun.at[0], G + 0.36 * LANDMARKS.arun.scale, LANDMARKS.arun.at[1]],
-  ]
+  /** Where its gold catches the light (map3d.ts glints it): Wat Arun's needle. */
+  const gold: V3[] = [[LANDMARKS.arun.at[0], G + (arun.tip - 0.04) * LANDMARKS.arun.scale, LANDMARKS.arun.at[1]]]
 
   // ---- The pins, and the mall day's stamp beside ICONSIAM's ----
   const pins = {} as Record<PinId, Pin>
@@ -1240,11 +1239,16 @@ function palm(x: number, y: number, z: number, s: number, turn: number): BufferG
   return parts
 }
 
-// ---------------------------------------------------------------- landmarks (to look at, never toys)
+// ---------------------------------------------------------------- landmarks (scenery; a tap only names them)
 
 /** Wat Arun's stone: warm ivory, a shade for the steps. */
 const STONE = '#FFF4E6'
 const STONE_SHADE = '#F1E2D4'
+const STONE_WARM = '#F8E6D0'
+/** The red-brown trim along each terrace's top edge, a softer one between the prang's rings, and the dark niches. */
+const TRIM = '#D9876A'
+const TRIM_SOFT = '#F2B79B'
+const NICHE = '#8E7BA6'
 /** The porcelain set into Wat Arun's prangs: little flowers of broken china in every color (the app's pastels). */
 const CHINA = [PAL.pink, PAL.sky, PAL.mint, PAL.butter, PAL.lavenderDark, '#FFFFFF']
 const TEMPLE_GOLD = '#FFC94D'
@@ -1252,103 +1256,180 @@ const ROOF_ORANGE = '#F47B45'
 const ROOF_GREEN = '#3DB27F'
 const LAWN = '#A9DEA6'
 
-/** A prang, the tall corncob tower of Wat Arun: three stepped plinths, then a body in rings that swells and narrows
- *  to a point, each ring's lip set with dots of porcelain, a gold tip. Its foot at (x, y, z), about `h` tall.
- *  `stairs`: the steep stairs up its four sides (the big one). */
-function prang(x: number, y: number, z: number, h: number, k: number, stairs = false): { lined: BufferGeometry[]; plain: BufferGeometry[] } {
+/** A redented square (the stepped corners of every Thai prang's plan): two crossed boxes, `w` across, `t` thick. */
+function redent(x: number, y: number, z: number, w: number, t: number, c: string): BufferGeometry[] {
+  return [P.rbox(w * 0.74, t, w, Math.min(t, w) * 0.12, c, { at: [x, y + t / 2, z] }), P.rbox(w, t, w * 0.74, Math.min(t, w) * 0.12, c, { at: [x, y + t / 2, z] })]
+}
+
+/** A prang, the tall corncob tower of Wat Arun: stepped redented terraces (a red-brown trim along each top, little
+ *  dark niches in their walls), then a slim body in rings that narrows to a point, each ring's lip set with porcelain,
+ *  a stacked finial and a long gold needle. Its foot at (x, y, z), about `h` tall. `big`: the main one, with steep
+ *  stairs up its four sides, pinnacles round its shoulders and arched niches on the body. Returns how high its tip is. */
+function prang(x: number, y: number, z: number, h: number, k: number, big = false): { lined: BufferGeometry[]; plain: BufferGeometry[]; tip: number } {
   const lined: BufferGeometry[] = []
   const plain: BufferGeometry[] = []
-  const r0 = h * 0.135
+  const r0 = h * (big ? 0.118 : 0.11)
   let yy = y
-  for (let i = 0; i < 3; i++) {
-    const ph = h * 0.055
-    const r = r0 * (1.75 - i * 0.25)
-    lined.push(P.cyl(r * 0.94, r, ph, i % 2 ? STONE_SHADE : STONE, { at: [x, yy + ph / 2, z], rot: [0, Math.PI / 8, 0] }, 8))
-    // A band of porcelain round each step.
-    plain.push(P.cyl(r * 0.97, r * 0.99, ph * 0.28, CHINA[(i + k) % 5], { at: [x, yy + ph * 0.55, z], rot: [0, Math.PI / 8, 0] }, 8))
-    yy += ph
+  const tiers = big ? 3 : 2
+  const stairTop: number[] = []
+  for (let i = 0; i < tiers; i++) {
+    const w = r0 * 2 * (big ? 2.05 - i * 0.36 : 1.7 - i * 0.32)
+    const th = h * (big ? 0.068 : 0.06)
+    lined.push(...redent(x, yy, z, w, th, i % 2 ? STONE_WARM : STONE))
+    // The red-brown trim along the tier's top edge, porcelain set in it.
+    plain.push(...redent(x, yy + th * 0.8, z, w * 1.012, th * 0.16, TRIM))
+    // Niches in each wall: little dark doorways in a row.
+    const n = big ? 3 - i : 1
+    for (let side = 0; side < 4; side++) {
+      const [ux, uz] = [Math.sin((side * Math.PI) / 2), Math.cos((side * Math.PI) / 2)]
+      for (let j = 0; j < n; j++) {
+        const t = (j - (n - 1) / 2) * w * 0.22
+        const at: V3 = [x + ux * (w / 2 + 0.0008) + uz * t, yy + th * 0.42, z + uz * (w / 2 + 0.0008) - ux * t]
+        plain.push(P.rbox(uz ? th * 0.26 : 0.0016, th * 0.4, ux ? th * 0.26 : 0.0016, 0.0006, NICHE, { at }))
+      }
+      if (big || i === 0)
+        for (let j = 0; j < 3; j++) {
+          const t = (j - 1) * w * 0.3
+          plain.push(P.sphere(Math.max(0.0022, th * 0.09), CHINA[(j + side + k + i) % 5], { at: [x + ux * (w / 2 + 0.002) + uz * t, yy + th * 0.88, z + uz * (w / 2 + 0.002) - ux * t] }, 5))
+        }
+    }
+    yy += th
+    stairTop.push(yy)
   }
-  if (stairs)
+  if (big)
+    // The steep stairs up the middle of each side, up to the second terrace, red rails either side.
     for (let a = 0; a < 4; a++) {
       const [ux, uz] = [Math.sin((a * Math.PI) / 2), Math.cos((a * Math.PI) / 2)]
-      const foot = r0 * 1.9
-      const top = r0 * 0.9
-      lined.push(rod([x + ux * foot, y, z + uz * foot], [x + ux * top, yy + h * 0.12, z + uz * top], 0.006, STONE_SHADE, r0 * 0.4))
+      const foot = r0 * 2.35
+      const top = r0 * 1.32
+      const [px, pz] = [uz, -ux]
+      lined.push(rod([x + ux * foot, y, z + uz * foot], [x + ux * top, stairTop[1], z + uz * top], 0.0035, STONE_SHADE, r0 * 0.34))
+      for (const s of [-1, 1]) plain.push(rod([x + ux * foot + px * s * r0 * 0.19, y + 0.004, z + uz * foot + pz * s * r0 * 0.19], [x + ux * top + px * s * r0 * 0.19, stairTop[1] + 0.004, z + uz * top + pz * s * r0 * 0.19], 0.0016, TRIM))
     }
-  // The body: rings that swell a little, then narrow fast to the tip (the corncob). One turned shape, so its ink
-  // line only runs round the outside; each ring's lip is a pastel band set with dots of porcelain.
-  const n = 9
-  const body = h * 0.7
-  const rad = (t: number) => r0 * (0.06 + 0.98 * Math.pow(1 - Math.pow(t, 1.7), 0.6))
+  // The body: rings that narrow to the tip (the corncob). One turned shape, so its ink line only runs round the outside;
+  // each ring's lip is a thin pastel band set with dots of porcelain.
+  const n = big ? 13 : 8
+  const body = h * (big ? 0.6 : 0.62)
+  const rad = (t: number) => r0 * (0.07 + 0.95 * Math.pow(1 - Math.pow(t, 1.45), 0.72))
   const prof: Vector2[] = [new Vector2(0.0005, yy)]
   const lips: [number, number, number][] = []
   let by = yy
   for (let i = 0; i < n; i++) {
     const [t0, t1] = [i / n, (i + 1) / n]
-    const rh = (body * (1.25 - 0.5 * ((i + 0.5) / n))) / n
-    const lr = rad(t1) * 1.04
-    prof.push(new Vector2(rad(t0) * 0.97, by), new Vector2(rad(t1) * 0.94, by + rh * 0.78), new Vector2(lr, by + rh * 0.8), new Vector2(lr, by + rh))
-    lips.push([lr, by + rh * 0.9, rh])
+    const rh = (body * (1.3 - 0.6 * ((i + 0.5) / n))) / n
+    const lr = rad(t1) * 1.05
+    prof.push(new Vector2(rad(t0) * 0.96, by), new Vector2(rad(t1) * 0.93, by + rh * 0.8), new Vector2(lr, by + rh * 0.82), new Vector2(lr, by + rh))
+    lips.push([lr, by + rh * 0.91, rh])
     by += rh
   }
   prof.push(new Vector2(0.0005, by))
   lined.push(bake(new LatheGeometry(prof, 8, Math.PI / 8), STONE, { at: [x, 0, z] }, true))
   lips.forEach(([lr, ly, rh], i) => {
-    plain.push(P.cyl(lr * 1.01, lr * 1.01, rh * 0.16, i % 2 ? '#FFD3E2' : '#DCD3FA', { at: [x, ly, z], rot: [0, Math.PI / 8, 0] }, 8))
-    // (The little prangs get fewer, so they don't read as grey stripes from up above.)
-    const dots = !stairs ? (i % 2 ? 0 : 4) : i < 6 ? 8 : 4
+    plain.push(P.cyl(lr * 1.01, lr * 1.01, rh * 0.15, i % 3 === 0 ? TRIM_SOFT : i % 2 ? '#FFD3E2' : '#DCD3FA', { at: [x, ly, z], rot: [0, Math.PI / 8, 0] }, 8))
+    const dots = big ? (i < 9 ? (i % 2 ? 4 : 8) : 0) : i % 2 || i > 5 ? 0 : 4
     for (let j = 0; j < dots; j++) {
       const a = (j / dots) * Math.PI * 2 + (i % 2) * 0.4
-      plain.push(P.sphere(Math.max(0.0028, r0 * 0.08 * (1 - (i / n) * 0.6)), CHINA[(i + j + k) % CHINA.length], { at: [x + Math.cos(a) * lr * 0.93, ly - rh * 0.45, z + Math.sin(a) * lr * 0.93] }, 5))
+      plain.push(P.sphere(Math.max(0.0022, r0 * 0.065 * (1 - (i / n) * 0.5)), CHINA[(i + j + k) % CHINA.length], { at: [x + Math.cos(a) * lr * 0.93, ly - rh * 0.42, z + Math.sin(a) * lr * 0.93] }, 5))
     }
   })
-  // The tip: a gold bead and a thin gold point.
-  lined.push(P.cyl(r0 * 0.1, r0 * 0.14, h * 0.05, TEMPLE_GOLD, { at: [x, by + h * 0.025, z] }, 6), P.sphere(r0 * 0.13, TEMPLE_GOLD, { at: [x, by + h * 0.06, z] }, 7), P.cone(r0 * 0.07, h * 0.13, TEMPLE_GOLD, { at: [x, by + h * 0.13, z] }, 6))
-  return { lined, plain }
+  if (big) {
+    // Pinnacles round its shoulders (little prangs on the top terrace's corners), and an arched niche on each side of
+    // the body a little way up.
+    for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+      const [px, pz] = [x + sx * r0 * 1.02, z + sz * r0 * 1.02]
+      lined.push(P.cyl(r0 * 0.15, r0 * 0.19, h * 0.05, STONE_WARM, { at: [px, yy + h * 0.025, pz] }, 6), P.cone(r0 * 0.15, h * 0.1, STONE, { at: [px, yy + h * 0.1, pz] }, 6))
+      plain.push(P.sphere(r0 * 0.05, TEMPLE_GOLD, { at: [px, yy + h * 0.155, pz] }, 5))
+    }
+    const ny = yy + body * 0.3
+    const nr = rad(0.3) * 0.98
+    for (let a = 0; a < 4; a++) {
+      const [ux, uz] = [Math.sin((a * Math.PI) / 2), Math.cos((a * Math.PI) / 2)]
+      const at: V3 = [x + ux * nr, ny, z + uz * nr]
+      lined.push(P.rbox(ux ? r0 * 0.22 : r0 * 0.5, h * 0.075, uz ? r0 * 0.22 : r0 * 0.5, 0.002, STONE_WARM, { at }))
+      lined.push(P.cone(r0 * 0.3, h * 0.05, STONE_WARM, { at: [at[0], ny + h * 0.06, at[2]], rot: [0, Math.PI / 4, 0], scale: [ux ? 0.5 : 1, 1, uz ? 0.5 : 1] }, 4))
+      plain.push(P.rbox(ux ? 0.002 : r0 * 0.28, h * 0.05, uz ? 0.002 : r0 * 0.28, 0.001, NICHE, { at: [x + ux * (nr + r0 * 0.115), ny - h * 0.005, z + uz * (nr + r0 * 0.115)] }))
+    }
+  }
+  // The finial: three little rings, a gold bead, a long thin gold needle.
+  let fy = by
+  for (let i = 0; i < 3; i++) {
+    const fr = r0 * (0.13 - i * 0.025)
+    lined.push(P.cyl(fr * 0.85, fr, h * 0.022, i % 2 ? STONE_WARM : STONE, { at: [x, fy + h * 0.011, z] }, 8))
+    fy += h * 0.022
+  }
+  lined.push(P.sphere(r0 * 0.1, TEMPLE_GOLD, { at: [x, fy + r0 * 0.07, z] }, 7), P.cone(r0 * 0.055, h * 0.16, TEMPLE_GOLD, { at: [x, fy + r0 * 0.1 + h * 0.08, z] }, 6))
+  return { lined, plain, tip: fy + r0 * 0.1 + h * 0.16 }
+}
+
+/** A longtail boat moored at a pier (along +z): a slim wooden hull, its bow up and garlanded, a striped cloth roof. */
+function mooredLongtail(x: number, z: number): BufferGeometry[] {
+  return [
+    P.rbox(0.018, 0.01, 0.085, 0.005, WOOD_DARK, { at: [x, 0.006, z] }),
+    P.cone(0.009, 0.03, WOOD_DARK, { at: [x, 0.012, z + 0.052], rot: [Math.PI / 2 - 0.35, 0, 0], scale: [1, 1, 0.6] }, 5),
+    P.sphere(0.004, PAL.hotpink, { at: [x, 0.02, z + 0.06] }, 5),
+    P.rbox(0.02, 0.003, 0.04, 0.0015, '#FFFFFF', { at: [x, 0.024, z - 0.006] }),
+    P.box(0.0205, 0.0032, 0.012, PAL.sky, { at: [x, 0.0245, z - 0.006] }),
+  ]
 }
 
 /** Wat Arun, the Temple of Dawn, on the Thonburi bank (in its own frame, its foot at 0, the river to its east, +x):
- *  the tall prang on two square terraces, the four little prangs at the corners, a little pavilion on each side, a
- *  lawn with palms, and its pier on the river. */
-function arunParts(): { lined: BufferGeometry[]; plain: BufferGeometry[] } {
+ *  the tall prang on two redented terraces, the four slim prangs at the corners, a little pavilion on each side, gardens
+ *  of palms and trees round it, its stone embankment and pier on the river with a longtail moored. Returns how high
+ *  the main prang's tip is (its gold glints). */
+function arunParts(): { lined: BufferGeometry[]; plain: BufferGeometry[]; tip: number } {
   const lined: BufferGeometry[] = [
-    P.rbox(0.31, 0.008, 0.3, 0.004, LAWN, { at: [0, 0.004, 0] }),
-    P.rbox(0.27, 0.022, 0.27, 0.005, STONE, { at: [0, 0.019, 0] }),
-    P.rbox(0.19, 0.022, 0.19, 0.005, STONE_SHADE, { at: [0, 0.041, 0] }),
-    // The pier and its little roof on the river.
-    P.rbox(0.05, 0.008, 0.09, 0.003, WOOD, { at: [0.2, 0.004, 0.04] }),
+    P.rbox(0.29, 0.008, 0.29, 0.004, LAWN, { at: [0, 0.004, 0] }),
+    ...redent(0, 0.006, 0, 0.235, 0.016, STONE),
+    ...redent(0, 0.022, 0, 0.16, 0.016, STONE_SHADE),
+    // The embankment along the river, and the pier.
+    P.rbox(0.02, 0.014, 0.27, 0.003, STONE_SHADE, { at: [0.15, 0.007, 0] }),
+    P.rbox(0.06, 0.007, 0.032, 0.003, WOOD, { at: [0.185, 0.009, 0.06] }),
   ]
-  const plain: BufferGeometry[] = []
-  // White balustrades round the terraces, with porcelain set in them.
-  for (const [w, y] of [[0.27, 0.03], [0.19, 0.052]] as const)
+  const plain: BufferGeometry[] = [...redent(0, 0.019, 0, 0.237, 0.003, TRIM), ...redent(0, 0.035, 0, 0.162, 0.003, TRIM)]
+  // White balustrades round the terraces, porcelain set in them.
+  for (const [w, y] of [[0.235, 0.026], [0.16, 0.042]] as const)
     for (let side = 0; side < 4; side++) {
       const along = side % 2 === 0
       const off = (side < 2 ? 1 : -1) * (w / 2 + 0.001)
-      plain.push(P.box(along ? w : 0.004, 0.008, along ? 0.004 : w, '#FFFFFF', { at: [along ? 0 : off, y, along ? off : 0] }))
-      for (let j = 0; j < 5; j++) {
-        const t = (j - 2) * (w / 5.5)
-        plain.push(P.sphere(0.004, CHINA[(j + side) % 5], { at: [along ? t : off * 1.02, y, along ? off * 1.02 : t] }, 5))
+      plain.push(P.box(along ? w * 0.74 : 0.003, 0.007, along ? 0.003 : w * 0.74, '#FFFFFF', { at: [along ? 0 : off, y, along ? off : 0] }))
+      for (let j = 0; j < 4; j++) {
+        const t = (j - 1.5) * (w / 6)
+        plain.push(P.sphere(0.0032, CHINA[(j + side) % 5], { at: [along ? t : off * 1.02, y, along ? off * 1.02 : t] }, 5))
       }
     }
   const add = (b: { lined: BufferGeometry[]; plain: BufferGeometry[] }) => {
     lined.push(...b.lined)
     plain.push(...b.plain)
   }
-  add(prang(0, 0.052, 0, 0.38, 0, true))
-  for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) add(prang(sx * 0.105, 0.03, sz * 0.105, 0.15, sx + sz + 4))
+  const main = prang(0, 0.038, 0, 0.44, 0, true)
+  add(main)
+  for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) add(prang(sx * 0.09, 0.022, sz * 0.09, 0.19, sx + sz + 4))
   // The four little pavilions (mondops) between them: white, a stack of roofs, a gold point.
-  for (const [mx, mz] of [[0, 0.118], [0, -0.118], [0.118, 0], [-0.118, 0]]) {
+  for (const [mx, mz] of [[0, 0.098], [0, -0.098], [0.098, 0], [-0.098, 0]]) {
     lined.push(
-      P.rbox(0.03, 0.03, 0.03, 0.004, STONE, { at: [mx, 0.045, mz] }),
-      P.cone(0.026, 0.02, ROOF_GREEN, { at: [mx, 0.068, mz], rot: [0, Math.PI / 4, 0] }, 4),
-      P.cone(0.018, 0.02, ROOF_ORANGE, { at: [mx, 0.08, mz], rot: [0, Math.PI / 4, 0] }, 4),
-      P.cone(0.006, 0.03, TEMPLE_GOLD, { at: [mx, 0.1, mz] }, 5),
+      P.rbox(0.024, 0.026, 0.024, 0.003, STONE, { at: [mx, 0.035, mz] }),
+      P.cone(0.021, 0.016, ROOF_GREEN, { at: [mx, 0.055, mz], rot: [0, Math.PI / 4, 0] }, 4),
+      P.cone(0.015, 0.016, ROOF_ORANGE, { at: [mx, 0.065, mz], rot: [0, Math.PI / 4, 0] }, 4),
+      P.cone(0.005, 0.026, TEMPLE_GOLD, { at: [mx, 0.082, mz] }, 5),
     )
   }
-  lined.push(P.box(0.05, 0.004, 0.032, ROOF_ORANGE, { at: [0.21, 0.045, 0.07] }))
-  plain.push(...[-1, 1].map((s) => P.cyl(0.0025, 0.0025, 0.04, CREAM, { at: [0.21 + s * 0.02, 0.024, 0.07] }, 4)))
-  lined.push(...palm(-0.15, 0, 0.13, 0.32, 2.2), ...palm(0.15, 0, -0.14, 0.3, -0.6), ...roundTree(-0.155, 0, -0.13, 0.55, 1))
-  return { lined, plain }
+  // The pier's little roof, and a longtail tied up beside it.
+  lined.push(P.box(0.04, 0.003, 0.026, ROOF_ORANGE, { at: [0.195, 0.042, 0.06] }))
+  plain.push(...[-1, 1].map((s) => P.cyl(0.002, 0.002, 0.032, CREAM, { at: [0.195 + s * 0.016, 0.026, 0.06] }, 4)))
+  lined.push(...mooredLongtail(0.225, -0.02))
+  // Gardens round it: palms by the river and behind, round trees at the back, only low bushes in front (so nothing
+  // hides its terraces from the usual view, from the south).
+  lined.push(
+    ...palm(0.132, 0, -0.118, 0.28, -0.5),
+    ...palm(-0.128, 0, -0.03, 0.26, 3.4),
+    ...palm(0.138, 0, 0.0, 0.2, 2.4),
+    ...roundTree(-0.13, 0, -0.125, 0.48, 1),
+    ...roundTree(0.0, 0, -0.135, 0.4, 0),
+    ...roundTree(-0.06, 0, -0.138, 0.34, 2),
+    ...clump(-0.125, 0, 0.128, 0.16, 1),
+    ...clump(0.07, 0, 0.134, 0.13, 2),
+  )
+  return { lined, plain, tip: main.tip }
 }
 
 // ---------------------------------------------------------------- pins

@@ -78,7 +78,8 @@ export function BangkokMap({ meta, stamps, openActivity }: PlaceProps) {
   }
   const poked = (id: string) => {
     const fact: Line | undefined = L.bangkok.pokes[id] ?? (id === 'tuktuk' ? L.map.pokes.tuktuk : undefined)
-    if (!fact || told.has(id) || speakingVoice()) return
+    // (Wat Arun says its name every time she taps it; the rest tell their fact the first time.)
+    if (!fact || (told.has(id) && id !== 'arun') || speakingVoice()) return
     told.add(id)
     guide.current?.speak(fact)
   }

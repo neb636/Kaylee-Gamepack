@@ -143,6 +143,7 @@ export const L = {
       floating: 'At this market, the shops are boats!',
       orchard: 'Sweet oranges grow here!',
       taxi: 'Beep beep, pink taxi!',
+      arun: 'Wat Arun, the Temple of Dawn! It sparkles with tiny pieces of colorful china.',
     } as Record<string, Line>,
   },
 

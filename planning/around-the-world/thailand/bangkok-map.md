@@ -28,8 +28,12 @@ The board is about 14 km of city across (one meter of board is about 2.6 km), no
 - **Wat Arun stands on the board as scenery** (your call, 2026-11-19: it's what anyone sees first when they look up
   Bangkok, and rule 8 is about games). It's where it really is, a little bigger than life, on the Thonburi bank (the
   tall corncob prang in rings of porcelain dots, its four little prangs, the pavilions, a pier).
-  **Never a toy:** no pin, no poke (a tap on it does nothing at all), no spoken line, no fact; its gold just catches
-  the light now and then (`LANDMARKS` in `layout.ts`, `arunParts()` in `diorama.ts`). Still no Buddha image, no Giant
+  **Never a toy:** no pin, and nothing moves it. A tap only names it (your call, 2026-11-19): the light runs up its
+  gold, a soft shimmer (`dawn-shimmer`, ElevenLabs), and Sparkle says "Wat Arun, the Temple of Dawn! It sparkles
+  with tiny pieces of colorful china." every time (`LANDMARKS` in `layout.ts`, `arunParts()` in `diorama.ts`).
+  Rebuilt the same day smaller (scale 1.45) and more detailed from your reference picture: redented terraces with
+  red-brown trim and niches, steep stairs, shoulder pinnacles, arched niches on a slim 13-ring body, a long gold
+  needle, slim corner prangs, gardens behind and a longtail at its pier. Still no Buddha image, no Giant
   Swing, and no other temple. A cloud moved off the old town to make room. The Grand Palace was built across the
   river and then taken out (you, 2026-11-19: the old town got too busy); the kites over Sanam Luang went too.
 
