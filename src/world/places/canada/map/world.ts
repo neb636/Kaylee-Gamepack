@@ -73,7 +73,7 @@ export const MAP_ANCHORS: AnchorInfo[] = [
 ]
 
 /** The map camera's entrance, tuned in the feel lab (?feel=1). */
-export const MAP_CAM = mapCamKnobs('canada-map-cam', 'Canada map camera', 'src/world/places/canada/map/world.ts', { yaw: 0, pitch: -10, zoom: 0.9 })
+export const MAP_CAM = mapCamKnobs('canada-map-cam', 'Canada map camera', 'src/world/places/canada/map/world.ts', { yaw: 0, pitch: -4, zoom: 0.9 })
 
 /** Particle colors: water, white, pink, butter, leaf, dust. */
 const DROP = 0
@@ -322,7 +322,8 @@ export class CanadaMapWorld implements World3D {
 
   private buildSky() {
     // Clouds drifting high over the map, each with its shadow on the ground.
-    const spots: [number, number, number, number][] = [[-5.5, -1.8, 1.2, 2.3], [1.2, -3.0, 1.0, 2.1], [4.6, 3.2, 0.9, 2.2], [-2.8, 3.6, 1.1, 2.0], [6.4, -1.0, 0.8, 2.4]]
+    // (Over the far north and the paper land to the south only: a cloud drifting over a friend's place hides who she's looking for.)
+    const spots: [number, number, number, number][] = [[-5.5, -3.5, 1.0, 2.3], [1.2, -3.7, 0.9, 2.1], [4.6, 4.0, 0.9, 2.2], [-2.8, 4.1, 1.0, 2.0]]
     for (const [x, z, s, y] of spots) {
       const root = puffCloud(this.bag, s)
       root.position.set(x, y, z)

@@ -8,8 +8,8 @@ export const screens = [
   { name: 'canada-map', hash: '#/world/canada/hub/map', reset: true, wait: 4500 },
   { name: 'canada-map-team-none', hash: '#/world/canada/hub/map?team=none', reset: true, wait: 4500 },
   { name: 'canada-map-team-three', hash: '#/world/canada/hub/map?team=snowman,bike,canoe', reset: true, wait: 4500 },
-  { name: 'canada-map-team-all', hash: '#/world/canada/hub/map?team=all', reset: true, wait: 4500 },
-  { name: 'canada-map-arrival', hash: '#/world/canada/hub/map?team=snowman,bike&new=canoe', reset: true, wait: 2600 },
+  { name: 'canada-map-team-all', hash: '#/world/canada/hub/map?team=all', reset: true, wait: 9000 },
+  { name: 'canada-map-arrival', hash: '#/world/canada/hub/map?team=snowman,bike&new=canoe', reset: true, wait: 8000 },
   { name: 'canada-map-book', hash: '#/world/canada/hub/book', reset: true, wait: 1500 },
 ]
 
