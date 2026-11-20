@@ -5,9 +5,6 @@ import { vp } from '../../../../scripts/qa-lib.mjs'
 
 /** Screenshots (scripts/qa-screens.mjs): how to get to each screen from a fresh start. */
 export const screens = [
-  // Canada: all activity pins on the 3D country map, including older region links.
-  { name: 'canada-intro', hash: '#/world/canada', reset: true, wait: 900 },
-  ...['msa', 'quebec', 'ottawa', 'prairies', 'banff', 'rockies', 'bc'].map((at) => ({ name: `canada-map-${at}`, hash: `#/world/canada/hub/map?at=${at}`, reset: true, wait: 2200 })),
   // Mountain Bike: the gondola, each stretch from its link (berms: both ways), the waterfall at the end.
   ...['gondola', 'green', 'berms?trail=green', 'berms?trail=blue', 'creek', 'falls'].map((to) => ({ name: `canada-bike-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/bike/${to}`, reset: true, wait: to === 'falls' ? 14000 : to === 'gondola' ? 4000 : 3500 })),
   // Campfire Night: the dark campsite under the flashlight; the last one with the darkness turned off (a
@@ -28,7 +25,6 @@ export const screens = [
 
 /** Auto-played runs (scripts/qa-pacing.mjs): talk before the first touch, talk per touch, the play strip. */
 export const pacing = [
-  { name: 'canada pin map', id: 'canada', hash: '#/world/canada', reset: true },
   { name: 'canada mountain bike', id: 'bike', hash: '#/world/canada/bike', reset: true },
   // Campfire Night: a tap moves the flashlight there and a tap on eyes finds the animal at once,
   // so the auto-player gets through the eyes; the sounds, the trail and the marshmallow need the light held and dragged

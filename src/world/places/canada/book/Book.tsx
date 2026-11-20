@@ -1,4 +1,4 @@
-// Maple's animal book, opened from the 📒 button on the train map (and the hub's `book` section): one page per stop,
+// Maple's animal book, opened from the 📒 button on the map (and the hub's `book` section): one page per place,
 // every animal she's met in color, the ones still to find as grey shapes. Tap an animal to hear its fact again (a grey
 // one gets a wiggle and a hint of where it lives). Nothing here is required: it's the collection she fills by poking.
 import { motion } from 'motion/react'
