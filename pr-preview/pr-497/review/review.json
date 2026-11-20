@@ -1,0 +1,17 @@
+{
+  "title": "Canada’s Rideau Canal skaters",
+  "checkIn": "fix",
+  "kaylee": "Six skaters in colorful winter outfits lean, push off, and glide behind Maple.",
+  "questions": [],
+  "pictures": [
+    {
+      "title": "The opening shot",
+      "before": "pics/canal-before.jpg",
+      "after": "pics/canal-after.jpg"
+    }
+  ],
+  "links": [
+    { "label": "Watch the Canada intro", "hash": "#/world/canada/story/intro" },
+    { "label": "Open Pond Hockey", "hash": "#/world/canada/party/hockey?team=all" }
+  ]
+}
