@@ -3,8 +3,8 @@
 // unmounts. If the iPad takes the GPU back (a lost context), it tells the screen, which offers to wake it.
 //
 // A world that roams (roam.ts) also gets Roblox's iPad controls: the thumbstick and jump button (RoamPad.tsx), a
-// one-finger drag that swings the camera, a two-finger pinch that moves it in and out, and WASD / arrows / space on a
-// keyboard for Dad.
+// one-finger drag that swings the camera, a two-finger pinch that moves it in and out (toward the spot between the
+// fingers), and WASD / arrows / space on a keyboard for Dad. On a Mac the trackpad's pinch and a scroll zoom too.
 import { useEffect, useRef, type MutableRefObject, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
 import type { Camera, InstancedMesh, Mesh, Scene, WebGLRenderer } from 'three'
 import type { CameraRig } from './camera'
@@ -225,7 +225,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
 
     // ---- Taps and drags (the anchors call the same tracker) ----
     // In screen pixels of the world (the camera lab can show it scaled down, as an iPad inside a desktop window).
-    const local = (e: PointerEvent) => {
+    const local = (e: { clientX: number; clientY: number }) => {
       const r = el.getBoundingClientRect()
       const k = el.offsetWidth ? r.width / el.offsetWidth : 1
       return { x: (e.clientX - r.left) / k, y: (e.clientY - r.top) / k }
@@ -256,7 +256,9 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
       if (g?.kind === 'pinch') {
         if (e.pointerId === g.a || e.pointerId === g.b) {
           const d = spread(g.a, g.b)
-          if (d) world.rig.pinch((g.z0 * g.d0) / d)
+          const p = fingers.get(g.a)
+          const q = fingers.get(g.b)
+          if (d && p && q) world.rig.zoomAt((g.z0 * g.d0) / d, (p.x + q.x) / 2, (p.y + q.y) / 2)
         }
         return
       }
@@ -375,10 +377,41 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
     window.addEventListener('pointerup', onUp)
     window.addEventListener('pointercancel', onUp)
     downFromAnchor.current = (e, id) => onDown(e.nativeEvent, id)
-    // No pinch-zoom or double-tap zoom over the world (iPad Safari).
+    // No page zoom or double-tap zoom over the world (iPad Safari): a pinch zooms the world's camera instead.
     const stopGesture = (e: Event) => e.preventDefault()
-    el.addEventListener('gesturestart', stopGesture)
-    el.addEventListener('gesturechange', stopGesture)
+    // A Mac trackpad's pinch: Safari tells it as gesture events (scale: 1 when the fingers went down), the other
+    // browsers as a scroll with ctrl held. (On an iPad or iPhone the fingers' own pointers do the pinch above.)
+    const mac = navigator.maxTouchPoints === 0
+    let macPinch: number | null = null
+    const onGestureStart = (e: Event) => {
+      e.preventDefault()
+      if (mac && turnable()) macPinch = world.rig.user.zoom
+    }
+    const onGestureChange = (e: Event) => {
+      e.preventDefault()
+      const g = e as Event & { scale?: number; clientX?: number; clientY?: number }
+      if (macPinch === null || !g.scale || !turnable()) return
+      const p = g.clientX !== undefined && g.clientY !== undefined ? local({ clientX: g.clientX, clientY: g.clientY }) : { x: el.offsetWidth / 2, y: el.offsetHeight / 2 }
+      world.rig.zoomAt(macPinch / g.scale, p.x, p.y)
+    }
+    const onGestureEnd = (e: Event) => {
+      e.preventDefault()
+      macPinch = null
+    }
+    const onWheel = (e: WheelEvent) => {
+      if (!turnable()) return
+      e.preventDefault()
+      if (macPinch !== null) return
+      // (Lines or pages: about 16 px a line. A pinch scrolls in small steps, so it counts for more.)
+      const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 400 : 1)
+      const k = e.ctrlKey ? 0.01 : 0.002
+      const p = local(e)
+      world.rig.zoomAt(world.rig.user.zoom * Math.exp(Math.max(-60, Math.min(60, dy)) * k), p.x, p.y)
+    }
+    el.addEventListener('gesturestart', onGestureStart)
+    el.addEventListener('gesturechange', onGestureChange)
+    el.addEventListener('gestureend', onGestureEnd)
+    el.addEventListener('wheel', onWheel, { passive: false })
     el.addEventListener('dblclick', stopGesture)
 
     // ---- A lost GPU context (the iPad reclaims it in the background): the screen offers to wake it ----
@@ -418,8 +451,10 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
       window.removeEventListener('keyup', onKeyUp)
       window.removeEventListener('blur', onBlur)
       canvas.removeEventListener('webglcontextlost', onLost)
-      el.removeEventListener('gesturestart', stopGesture)
-      el.removeEventListener('gesturechange', stopGesture)
+      el.removeEventListener('gesturestart', onGestureStart)
+      el.removeEventListener('gesturechange', onGestureChange)
+      el.removeEventListener('gestureend', onGestureEnd)
+      el.removeEventListener('wheel', onWheel)
       el.removeEventListener('dblclick', stopGesture)
       downFromAnchor.current = null
       if (window[qaKey]) delete window[qaKey]

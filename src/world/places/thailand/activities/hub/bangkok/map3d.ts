@@ -21,6 +21,8 @@
 // river itself (a splash). In the corners: the night market (its rows of tents hop one after another to a tune), the
 // floating market (the boats bob and splash), the orange orchard (oranges fly), Khlong Saen Saep's boat (it races
 // off). Little cars drive the big roads on their own.
+// Wat Arun is scenery, not a toy: it never moves. A tap only names it: its gold glints up the prang, a soft chime,
+// and Sparkle says what it is (every time, not just the first).
 //
 // Talk (BangkokMap.tsx says the lines, lines.ts L.bangkok): Sparkle's hello the first time, something true the first
 // time she pokes each thing, and after ~8 s with nothing done, where she can go (at most three times).
@@ -36,7 +38,7 @@ import { boardShot, Entrance, mapCamKnobs, puffCloud, skyTexture, trayBox } from
 import { Floaters } from '../../nan-trip/mushrooms/fx'
 import { buildDiorama, CRANE_BOX_Y, PIN, type Diorama } from './diorama'
 import { buildField, LAKES, type Field } from './ground'
-import { BALLOON, BALLOON_Y, BOARD, BOATS, CLOUDS, DEG_M, KITES, LEVEL, ll, PIN_IDS, PINS, PLACE_IDS, PLACES, SPOTS, STAMP_OFF, TOWERS, TRACK_Y, type PinId, type PlaceId, type SpotId } from './layout'
+import { BALLOON, BALLOON_Y, BOARD, BOATS, CLOUDS, DEG_M, LANDMARKS, LEVEL, ll, PIN_IDS, PINS, PLACE_IDS, PLACES, SPOTS, STAMP_OFF, TOWERS, TRACK_Y, type PinId, type PlaceId, type SpotId } from './layout'
 import { reachOn } from './path'
 import { mapBed, mapSfx as sfx } from './sounds'
 
@@ -80,9 +82,9 @@ export const MAP_ANCHORS: AnchorInfo[] = [
   { id: 'tuktuk', label: 'Tuk-tuk', kind: 'thing' },
   { id: 'taxi', label: 'Pink taxi', kind: 'thing' },
   { id: 'fruit', label: 'Fruit boat', kind: 'thing' },
-  { id: 'kites', label: 'Kites', kind: 'thing' },
   { id: 'canal', label: 'Khlong boat', kind: 'thing' },
   { id: 'swan', label: 'Swan boat', kind: 'thing' },
+  { id: 'arun', label: 'Wat Arun', kind: 'thing' },
   { id: 'lizard', label: 'Monitor lizard', kind: 'thing' },
   ...CLOUDS.map((_, i): AnchorInfo => ({ id: `cloud:${i}`, label: 'Cloud', kind: 'thing' })),
 ]
@@ -363,6 +365,11 @@ export class BangkokMap extends Stage {
       const [x, z, h] = this.d.towers[Math.floor(Math.random() * this.d.towers.length)]
       this.sparkles.emit(tmp.set(x + (Math.random() - 0.5) * 0.06, G + h * (0.4 + Math.random() * 0.6), z + 0.05), new Vector3(0, 0.03, 0), 0.7, 0.022, Math.random() < 0.5 ? 0 : 2)
     }
+    // (Wat Arun's tip and the golden chedi catch the sun now and then.)
+    if (Math.random() < dt * 0.5) {
+      const [x, y, z] = this.d.gold[Math.floor(Math.random() * this.d.gold.length)]
+      this.sparkles.emit(tmp.set(x + (Math.random() - 0.5) * 0.04, y + (Math.random() - 0.5) * 0.06, z + 0.04), new Vector3(0, 0.02, 0), 0.8, 0.024, 2)
+    }
   }
 
   /** What rides the board: the skytrain, the boats, the tuk-tuk. */
@@ -492,20 +499,6 @@ export class BangkokMap extends Stage {
         if (k > 1.6) this.rain[i] = -1
       }
     }
-    // ---- The kites over Sanam Luang sway on their strings, facing her; poked, they loop the loop one after another ----
-    {
-      const k = this.poked('kites', 2)
-      d.kites.forEach((kite, i) => {
-        const loop = k >= 0 ? clamp((k - i * 0.25) / 1.2, 0, 1) : 0
-        kite.root.rotation.y = this.rig.yaw * DEG
-        kite.swing.rotation.z = Math.sin(t * 0.9 + i * 2.1) * 0.16 + Math.sin(t * 2.3 + i) * 0.04
-        kite.swing.rotation.x = -0.22 + Math.sin(t * 0.7 + i * 1.3) * 0.08
-        // (The loop: the kite turns once round a point a little way down its string.)
-        const a = loop * loop * (3 - 2 * loop) * Math.PI * 2
-        const r = 0.09
-        kite.swing.position.set(Math.sin(a) * r, (Math.cos(a) - 1) * r, 0)
-      })
-    }
     // ---- The night market's rows of tents hop one after another when it's poked ----
     {
       const k = this.poked('spot:tents', 1.8)
@@ -606,6 +599,20 @@ export class BangkokMap extends Stage {
     return near.clone().addScaledVector(dir, (G - near.y) / dir.y)
   }
 
+  /** Is a screen point on Wat Arun? (A tap there names it.) */
+  private onLandmark(x: number, y: number) {
+    const { near, dir } = this.ray(x, y)
+    return Object.values(LANDMARKS).some(({ at, scale, r, h }) => {
+      for (let k = 0; k <= 4; k++) {
+        tmp.set(at[0], G + (h * k) / 4, at[1]).sub(near)
+        const along = tmp.dot(dir)
+        const off = Math.sqrt(Math.max(0, tmp.lengthSq() - along * along))
+        if (off < (k ? r * 0.55 : r) * Math.min(1, scale)) return true
+      }
+      return false
+    })
+  }
+
   /** The tower under a screen point (the nearest one the ray passes through), or -1. */
   private towerAt(x: number, y: number) {
     const { near, dir } = this.ray(x, y)
@@ -633,6 +640,7 @@ export class BangkokMap extends Stage {
   protected onTap(id: string | null, x: number, y: number): void {
     if (this.arrived) return
     if (id === null) {
+      if (this.onLandmark(x, y)) return this.onTap('arun', x, y)
       // A tower: its windows twinkle up it, a higher tune for a taller one.
       const ti = this.towerAt(x, y)
       if (ti >= 0) {
@@ -711,13 +719,6 @@ export class BangkokMap extends Stage {
         sfx.honk()
         this.sparkles.burst(tmp.copy(this.d.taxi.position).setY(G + 0.12), 8, 0.35, 0.4, 0.6, 0.02)
         return
-      case 'kites':
-        if (this.poked('kites', 2) >= 0) return
-        this.poke('kites')
-        this.ev.poked('kites')
-        sfx.flutter()
-        for (const [i, kite] of KITES.entries()) this.after(i * 0.25 + 0.3, () => this.sparkles.burst(tmp.set(kite.at[0], G + kite.high + 0.08, kite.at[1]), 6, 0.35, 0.3, 0.6, 0.02))
-        return
       case 'fruit':
         if (this.poked('fruit', 1.4) >= 0) return
         this.poke('fruit')
@@ -727,6 +728,17 @@ export class BangkokMap extends Stage {
       case 'swan':
         this.poke('swan')
         return sfx.plip()
+      case 'arun': {
+        // (Scenery, not a toy: nothing moves. The light runs up its gold, a soft chime, and Sparkle names it.)
+        if (this.poked('arun', 1.6) >= 0) return
+        this.poke('arun')
+        this.ev.poked('arun')
+        sfx.arun()
+        const { at, scale } = LANDMARKS.arun
+        const tip = this.d.gold[0][1]
+        for (let i = 0; i < 5; i++) this.after(i * 0.12, () => this.sparkles.burst(tmp.set(at[0], G + 0.08 * scale + (tip - G - 0.08 * scale) * (i / 4), at[1]), 4, 0.25, 0.25, 0.6, 0.018))
+        return
+      }
       case 'lizard':
         return this.pokeSpot('lumphini')
     }
@@ -823,7 +835,7 @@ export class BangkokMap extends Stage {
     if (id.startsWith('pin:')) {
       const g = d.pins[id.slice(4) as PinId].root
       // (Over the toys under it: the pin is what she taps.)
-      return { at: g.position.clone().setY(g.position.y + PIN.top * PIN.size * 0.5), r: 0.22, prio: 6, max: 150, glow }
+      return { at: g.position.clone().setY(g.position.y + PIN.top * PIN.size * 0.5), r: 0.13, prio: 6, max: 150, glow }
     }
     if (id.startsWith('spot:')) {
       const s = id.slice(5) as SpotId
@@ -850,10 +862,10 @@ export class BangkokMap extends Stage {
         return { at: d.fruit.position.clone().setY(G + 0.04), r: 0.1, prio: 4, max: 100 }
       case 'canal':
         return { at: d.canalBoat.position.clone().setY(G + 0.04), r: 0.11, prio: 4, max: 100 }
-      case 'kites':
-        return { at: new Vector3(KITES[1].at[0], G + 0.36, KITES[1].at[1]), r: 0.22, prio: 3, max: 130 }
       case 'swan':
         return { at: d.swan.position.clone().setY(G + 0.04), r: 0.06, prio: 4, max: 90 }
+      case 'arun':
+        return { at: new Vector3(LANDMARKS.arun.at[0], G + LANDMARKS.arun.h * 0.32, LANDMARKS.arun.at[1]), r: 0.16, prio: 3, max: 130 }
       case 'lizard':
         return { at: d.lizard.position.clone().setY(G + 0.03), r: 0.07, prio: 4, max: 90 }
     }
@@ -874,6 +886,7 @@ export class BangkokMap extends Stage {
       ...(['house', 'iconsiam'] as const).filter((id) => this.f.land(...PLACES[id].at) < 0.1).map((id) => `place ${id}`),
       ...SPOT_IDS.filter((id) => this.f.land(...SPOTS[id]) < 0.06).map((id) => `spot ${id}`),
       ...this.d.towers.filter(([x, z]) => this.f.land(x, z) < 0.03).map(([x, z]) => `tower ${x.toFixed(2)},${z.toFixed(2)}`),
+      ...Object.entries(LANDMARKS).filter(([, l]) => this.f.land(...l.at) < 0.1).map(([id]) => `landmark ${id}`),
     ]
     // (A pin's tap target is on top: no toy's middle may sit under one, or a tap on the toy would open the place.)
     const covered: string[] = []

@@ -142,8 +142,8 @@ export const L = {
       tents: 'Yummy snacks at the night market!',
       floating: 'At this market, the shops are boats!',
       orchard: 'Sweet oranges grow here!',
-      kites: 'Kites! Up, up in the wind!',
       taxi: 'Beep beep, pink taxi!',
+      arun: 'Wat Arun, the Temple of Dawn! It sparkles with tiny pieces of colorful china.',
     } as Record<string, Line>,
   },
 

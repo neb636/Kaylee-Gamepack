@@ -7,6 +7,8 @@
 // jungle in the river's big loop. The corners have their own things: the night market's tents up by Rama 9, a
 // floating market and Bang Mot's orange orchard out south-west. Thonburi and the south are city too, leafier than the
 // middle (big trees standing here and there among the roofs). The pins and the river are still what she sees first.
+// Bangkok's great landmark stands in the old town: Wat Arun's tall prang on the Thonburi bank. Scenery, never a toy
+// (a tap only names it).
 //
 // The places stand up like chunky toys: the Thailand house (a row of pastel shophouses, the pink one in the middle,
 // the flag, a tuk-tuk parked outside) and ICONSIAM (its folded glass front on the river, the gold roof, two towers
@@ -19,16 +21,16 @@
 // tower, the night market's tents, the floating market's boats, the orange orchard. And what moves: the skytrain, an express boat and a string of rice barges on the river, a
 // fruit seller's boat on Khlong Bangkok Yai, the fast boat on Khlong Saen Saep, a tuk-tuk on Rama IV Road, a pink
 // taxi on Rama III Road, the traffic, clouds.
-import { Color, Group, InstancedMesh, type BufferGeometry } from 'three'
+import { Color, Group, InstancedMesh, LatheGeometry, Vector2, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
-import { merge, P, solid, solidMix, type V3 } from '../../../../../engine3d/geo'
+import { bake, merge, P, solid, solidMix, type V3 } from '../../../../../engine3d/geo'
 import { PAL, toon } from '../../../../../engine3d/toon'
 import { trayParts } from '../../../trip/sky'
 import type { Sea } from '../map/terrain'
 import * as T from '../map/toys'
 import { RIVER_LINE } from './geo'
 import { blockMid, blockOf, buildField, buildGround, buildSea, crowns, districtAt, inBlock, inOrchard, LAKES, leafy, outward, type Field } from './ground'
-import { BALLOON, BOARD, BOATS, BRIDGES, CANAL, CLOUDS, DEG_M, FRUIT_KHLONG, GROVES, KITES, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
+import { BALLOON, BOARD, BOATS, BRIDGES, CANAL, CLOUDS, DEG_M, FRUIT_KHLONG, GROVES, LANDMARKS, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type LandmarkId, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
 import { pathLL, reachOn, type Path } from './path'
 
 const CREAM = '#FFF7F0'
@@ -109,9 +111,6 @@ export interface Diorama {
   /** The night market's rows of tents, the floating market's boats (each bobs and hops by itself). */
   tentRows: Group[]
   marketBoats: Group[]
-  /** The kites over Sanam Luang: `root` stands where the string is held (it turns to face her), `swing` sways the
-   *  kite on its string. */
-  kites: { root: Group; swing: Group }[]
   clouds: Group[]
   /** Asiatique's wheel (it turns), Chinatown's lanterns (they swing), Lumphini's swan boat and monitor lizard, the
    *  port crane's box on its cable, Bang Krachao's birds, the fountain's bowl on ICONSIAM's terrace (world spot). */
@@ -126,6 +125,8 @@ export interface Diorama {
   towers: [number, number, number][]
   /** The bridges a tap pokes: [x, z]. */
   bridges: XZ[]
+  /** Where Wat Arun's and the golden chedi's gold glints now and then. */
+  gold: V3[]
 }
 
 export function buildDiorama(bag: Bag): Diorama {
@@ -156,6 +157,7 @@ export function buildDiorama(bag: Bag): Diorama {
   const taken: [number, number, number][] = [
     ...(Object.keys(PLACES) as PlaceId[]).map((id) => [...PLACES[id].at, 0.36] as [number, number, number]),
     // (Mahanakhon is a tower among towers: its neighbors stand close.)
+    ...(Object.keys(LANDMARKS) as LandmarkId[]).map((id) => [...LANDMARKS[id].at, LANDMARKS[id].r] as [number, number, number]),
     ...(Object.keys(SPOTS) as SpotId[]).map((id) => [...SPOTS[id], id === 'mahanakhon' ? 0.15 : id === 'floating' || id === 'orchard' || id === 'tents' ? 0.34 : 0.26] as [number, number, number]),
   ]
   const free = (x: number, z: number, pad = 0) => taken.every(([px, pz, r]) => Math.hypot(px - x, pz - z) > r + pad)
@@ -460,6 +462,15 @@ export function buildDiorama(bag: Bag): Diorama {
   // Bang Mot's orange orchard: trees heavy with oranges, the farmer's house on its stilts, baskets out front.
   spots.orchard = toy(SPOTS.orchard, orchardParts(), 1.6)
 
+  // ---- Bangkok's landmark: Wat Arun on the Thonburi bank. Scenery, not a toy: a tap only names it (its gold
+  // glints, Sparkle says what it is); it never moves (layout.ts LANDMARKS) ----
+  const arun = arunParts()
+  toy(LANDMARKS.arun.at, arun.lined, LANDMARKS.arun.scale, arun.plain)
+  /** Where its gold catches the light (map3d.ts glints it): Wat Arun's tip. */
+  const gold: V3[] = [
+    [LANDMARKS.arun.at[0], G + 0.36 * LANDMARKS.arun.scale, LANDMARKS.arun.at[1]],
+  ]
+
   // ---- The pins, and the mall day's stamp beside ICONSIAM's ----
   const pins = {} as Record<PinId, Pin>
   for (const id of PIN_IDS) {
@@ -534,18 +545,6 @@ export function buildDiorama(bag: Bag): Diorama {
   cars.forEach((_, i) => carMesh.setColorAt(i, col.set(carCols[i % carCols.length])))
   root.add(carMesh)
   const traffic = { mesh: carMesh, cars }
-  // ---- Kites over Sanam Luang ----
-  const kites = KITES.map(({ at, high, kind }, i) => {
-    const g = new Group()
-    g.position.set(at[0], G, at[1])
-    const swing = new Group()
-    const k = kiteParts(kind, high, [PAL.hotpink, PAL.butter, PAL.sky][i % 3], [PAL.butter, PAL.hotpink, PAL.pink][i % 3])
-    swing.add(solidMix(k.lined, k.plain, bag, 1.5))
-    g.add(swing)
-    root.add(g)
-    return { root: g, swing }
-  })
-
   // ---- Clouds over the city ----
   const clouds = CLOUDS.map(([lon, lat, cy], i) => {
     const g = new Group()
@@ -562,7 +561,7 @@ export function buildDiorama(bag: Bag): Diorama {
   })
 
   root.add(buildGround(bag, { shadows, plazas, casts, basins }))
-  return { root, places, spots, pins, stamp, balloon, balloonAt, sea, river, rail, road, taxiRoad, khlong, canal, canalBoat, traffic, tentRows, marketBoats, boats, train, tuktuk, taxi, fruit, kites, clouds, wheel, lanterns, swan, lizard, craneBox, birds, fountain, towers, bridges }
+  return { root, places, spots, pins, stamp, balloon, balloonAt, sea, river, rail, road, taxiRoad, khlong, canal, canalBoat, traffic, tentRows, marketBoats, boats, train, tuktuk, taxi, fruit, clouds, wheel, lanterns, swan, lizard, craneBox, birds, fountain, towers, bridges, gold }
 }
 
 // ---------------------------------------------------------------- towers
@@ -1183,31 +1182,6 @@ function fruitBoatParts(): BufferGeometry[] {
   ]
 }
 
-/** How much bigger than life the kites are drawn. */
-const KITE_SIZE = 1.7
-
-/** A kite on its string (the string held at 0, the kite `high` up, its face to +z): the big five-pointed chula
- *  ('star') or the little pakpao ('diamond') with its long tail of bows. */
-function kiteParts(kind: 'star' | 'diamond', high: number, c: string, trim: string): { lined: BufferGeometry[]; plain: BufferGeometry[] } {
-  const big: V3 = [KITE_SIZE, KITE_SIZE, KITE_SIZE]
-  const lined: BufferGeometry[] = []
-  const plain: BufferGeometry[] = [P.cyl(0.0012, 0.0012, high, '#C9B8F2', { at: [0, high / 2, 0] }, 4)]
-  if (kind === 'star') {
-    const pts: [number, number][] = []
-    for (let i = 0; i < 10; i++) {
-      const a = (i / 10) * Math.PI * 2
-      const r = i % 2 ? 0.034 : 0.085
-      pts.push([Math.sin(a) * r, Math.cos(a) * r])
-    }
-    lined.push(P.prism(pts, 0.008, c, { at: [0, high + 0.04 * KITE_SIZE, 0], rot: [-0.25, 0, 0], scale: big }), P.sphere(0.016 * KITE_SIZE, trim, { at: [0, high + 0.04 * KITE_SIZE, 0.008 * KITE_SIZE], scale: [1, 1, 0.4] }, 8))
-  } else {
-    lined.push(P.prism([[0, 0.07], [0.05, 0.01], [0, -0.075], [-0.05, 0.01]], 0.008, c, { at: [0, high + 0.07 * KITE_SIZE, 0], rot: [-0.25, 0, 0], scale: big }), P.box(0.1 * KITE_SIZE, 0.006 * KITE_SIZE, 0.004, trim, { at: [0, high + 0.08 * KITE_SIZE, 0.008 * KITE_SIZE] }))
-    // The tail: three little bows trailing down beside the string.
-    for (let i = 0; i < 3; i++) lined.push(P.prism([[-0.014, 0.008], [0, 0], [-0.014, -0.008]], 0.004, trim, { at: [0.016 + i * 0.012, high - 0.03 - i * 0.04, -0.012], scale: big }), P.prism([[0.014, 0.008], [0.014, -0.008], [0, 0]], 0.004, trim, { at: [0.016 + i * 0.012, high - 0.03 - i * 0.04, -0.012], scale: big }))
-  }
-  return { lined, plain }
-}
-
 /** A Bangkok taxi (driving along +z): hot pink all over, its sign on the roof. */
 function taxiParts(): BufferGeometry[] {
   return [
@@ -1267,10 +1241,121 @@ function palm(x: number, y: number, z: number, s: number, turn: number): BufferG
   return parts
 }
 
+// ---------------------------------------------------------------- landmarks (scenery; a tap only names them)
+
+/** Wat Arun's stone: warm ivory, a shade for the steps. */
+const STONE = '#FFF4E6'
+const STONE_SHADE = '#F1E2D4'
+/** The porcelain set into Wat Arun's prangs: little flowers of broken china in every color (the app's pastels). */
+const CHINA = [PAL.pink, PAL.sky, PAL.mint, PAL.butter, PAL.lavenderDark, '#FFFFFF']
+const TEMPLE_GOLD = '#FFC94D'
+const ROOF_ORANGE = '#F47B45'
+const ROOF_GREEN = '#3DB27F'
+const LAWN = '#A9DEA6'
+
+/** A prang, the tall corncob tower of Wat Arun: three stepped plinths, then a body in rings that swells and narrows
+ *  to a point, each ring's lip set with dots of porcelain, a gold tip. Its foot at (x, y, z), about `h` tall.
+ *  `stairs`: the steep stairs up its four sides (the big one). */
+function prang(x: number, y: number, z: number, h: number, k: number, stairs = false): { lined: BufferGeometry[]; plain: BufferGeometry[] } {
+  const lined: BufferGeometry[] = []
+  const plain: BufferGeometry[] = []
+  const r0 = h * 0.135
+  let yy = y
+  for (let i = 0; i < 3; i++) {
+    const ph = h * 0.055
+    const r = r0 * (1.75 - i * 0.25)
+    lined.push(P.cyl(r * 0.94, r, ph, i % 2 ? STONE_SHADE : STONE, { at: [x, yy + ph / 2, z], rot: [0, Math.PI / 8, 0] }, 8))
+    // A band of porcelain round each step.
+    plain.push(P.cyl(r * 0.97, r * 0.99, ph * 0.28, CHINA[(i + k) % 5], { at: [x, yy + ph * 0.55, z], rot: [0, Math.PI / 8, 0] }, 8))
+    yy += ph
+  }
+  if (stairs)
+    for (let a = 0; a < 4; a++) {
+      const [ux, uz] = [Math.sin((a * Math.PI) / 2), Math.cos((a * Math.PI) / 2)]
+      const foot = r0 * 1.9
+      const top = r0 * 0.9
+      lined.push(rod([x + ux * foot, y, z + uz * foot], [x + ux * top, yy + h * 0.12, z + uz * top], 0.006, STONE_SHADE, r0 * 0.4))
+    }
+  // The body: rings that swell a little, then narrow fast to the tip (the corncob). One turned shape, so its ink
+  // line only runs round the outside; each ring's lip is a pastel band set with dots of porcelain.
+  const n = 9
+  const body = h * 0.7
+  const rad = (t: number) => r0 * (0.06 + 0.98 * Math.pow(1 - Math.pow(t, 1.7), 0.6))
+  const prof: Vector2[] = [new Vector2(0.0005, yy)]
+  const lips: [number, number, number][] = []
+  let by = yy
+  for (let i = 0; i < n; i++) {
+    const [t0, t1] = [i / n, (i + 1) / n]
+    const rh = (body * (1.25 - 0.5 * ((i + 0.5) / n))) / n
+    const lr = rad(t1) * 1.04
+    prof.push(new Vector2(rad(t0) * 0.97, by), new Vector2(rad(t1) * 0.94, by + rh * 0.78), new Vector2(lr, by + rh * 0.8), new Vector2(lr, by + rh))
+    lips.push([lr, by + rh * 0.9, rh])
+    by += rh
+  }
+  prof.push(new Vector2(0.0005, by))
+  lined.push(bake(new LatheGeometry(prof, 8, Math.PI / 8), STONE, { at: [x, 0, z] }, true))
+  lips.forEach(([lr, ly, rh], i) => {
+    plain.push(P.cyl(lr * 1.01, lr * 1.01, rh * 0.16, i % 2 ? '#FFD3E2' : '#DCD3FA', { at: [x, ly, z], rot: [0, Math.PI / 8, 0] }, 8))
+    // (The little prangs get fewer, so they don't read as grey stripes from up above.)
+    const dots = !stairs ? (i % 2 ? 0 : 4) : i < 6 ? 8 : 4
+    for (let j = 0; j < dots; j++) {
+      const a = (j / dots) * Math.PI * 2 + (i % 2) * 0.4
+      plain.push(P.sphere(Math.max(0.0028, r0 * 0.08 * (1 - (i / n) * 0.6)), CHINA[(i + j + k) % CHINA.length], { at: [x + Math.cos(a) * lr * 0.93, ly - rh * 0.45, z + Math.sin(a) * lr * 0.93] }, 5))
+    }
+  })
+  // The tip: a gold bead and a thin gold point.
+  lined.push(P.cyl(r0 * 0.1, r0 * 0.14, h * 0.05, TEMPLE_GOLD, { at: [x, by + h * 0.025, z] }, 6), P.sphere(r0 * 0.13, TEMPLE_GOLD, { at: [x, by + h * 0.06, z] }, 7), P.cone(r0 * 0.07, h * 0.13, TEMPLE_GOLD, { at: [x, by + h * 0.13, z] }, 6))
+  return { lined, plain }
+}
+
+/** Wat Arun, the Temple of Dawn, on the Thonburi bank (in its own frame, its foot at 0, the river to its east, +x):
+ *  the tall prang on two square terraces, the four little prangs at the corners, a little pavilion on each side, a
+ *  lawn with palms, and its pier on the river. */
+function arunParts(): { lined: BufferGeometry[]; plain: BufferGeometry[] } {
+  const lined: BufferGeometry[] = [
+    P.rbox(0.31, 0.008, 0.3, 0.004, LAWN, { at: [0, 0.004, 0] }),
+    P.rbox(0.27, 0.022, 0.27, 0.005, STONE, { at: [0, 0.019, 0] }),
+    P.rbox(0.19, 0.022, 0.19, 0.005, STONE_SHADE, { at: [0, 0.041, 0] }),
+    // The pier and its little roof on the river.
+    P.rbox(0.05, 0.008, 0.09, 0.003, WOOD, { at: [0.2, 0.004, 0.04] }),
+  ]
+  const plain: BufferGeometry[] = []
+  // White balustrades round the terraces, with porcelain set in them.
+  for (const [w, y] of [[0.27, 0.03], [0.19, 0.052]] as const)
+    for (let side = 0; side < 4; side++) {
+      const along = side % 2 === 0
+      const off = (side < 2 ? 1 : -1) * (w / 2 + 0.001)
+      plain.push(P.box(along ? w : 0.004, 0.008, along ? 0.004 : w, '#FFFFFF', { at: [along ? 0 : off, y, along ? off : 0] }))
+      for (let j = 0; j < 5; j++) {
+        const t = (j - 2) * (w / 5.5)
+        plain.push(P.sphere(0.004, CHINA[(j + side) % 5], { at: [along ? t : off * 1.02, y, along ? off * 1.02 : t] }, 5))
+      }
+    }
+  const add = (b: { lined: BufferGeometry[]; plain: BufferGeometry[] }) => {
+    lined.push(...b.lined)
+    plain.push(...b.plain)
+  }
+  add(prang(0, 0.052, 0, 0.38, 0, true))
+  for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) add(prang(sx * 0.105, 0.03, sz * 0.105, 0.15, sx + sz + 4))
+  // The four little pavilions (mondops) between them: white, a stack of roofs, a gold point.
+  for (const [mx, mz] of [[0, 0.118], [0, -0.118], [0.118, 0], [-0.118, 0]]) {
+    lined.push(
+      P.rbox(0.03, 0.03, 0.03, 0.004, STONE, { at: [mx, 0.045, mz] }),
+      P.cone(0.026, 0.02, ROOF_GREEN, { at: [mx, 0.068, mz], rot: [0, Math.PI / 4, 0] }, 4),
+      P.cone(0.018, 0.02, ROOF_ORANGE, { at: [mx, 0.08, mz], rot: [0, Math.PI / 4, 0] }, 4),
+      P.cone(0.006, 0.03, TEMPLE_GOLD, { at: [mx, 0.1, mz] }, 5),
+    )
+  }
+  lined.push(P.box(0.05, 0.004, 0.032, ROOF_ORANGE, { at: [0.21, 0.045, 0.07] }))
+  plain.push(...[-1, 1].map((s) => P.cyl(0.0025, 0.0025, 0.04, CREAM, { at: [0.21 + s * 0.02, 0.024, 0.07] }, 4)))
+  lined.push(...palm(-0.15, 0, 0.13, 0.32, 2.2), ...palm(0.15, 0, -0.14, 0.3, -0.6), ...roundTree(-0.155, 0, -0.13, 0.55, 1))
+  return { lined, plain }
+}
+
 // ---------------------------------------------------------------- pins
 
 /** How high a pin's head is over its point, and how wide. */
-export const PIN = { head: 0.2, r: 0.15, top: 0.5, size: 2.0 }
+export const PIN = { head: 0.2, r: 0.15, top: 0.5, size: 1.2 }
 
 /** A pin: a white point, a round pink head, and a toy of what she does at the place on top. */
 function buildPin(id: PinId, bag: Bag): Pin {

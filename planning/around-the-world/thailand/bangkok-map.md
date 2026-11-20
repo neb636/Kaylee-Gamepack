@@ -25,13 +25,21 @@ The board is about 14 km of city across (one meter of board is about 2.6 km), no
   as wide again and shrink everything on it.
 - Bangkok is flat, so the board is too: a low slab of city, the river cut through it. What gives it shape is the
   skyline, the bridges and Bang Krachao's jungle.
-- **No temples or Buddhas** (AGENTS.md rule 8): the old town is rooftops, streets and the flower market. No Grand
-  Palace, no Wat Arun, no Giant Swing.
+- **Wat Arun stands on the board as scenery** (your call, 2026-11-19: it's what anyone sees first when they look up
+  Bangkok, and rule 8 is about games). It's where it really is, a little bigger than life, on the Thonburi bank (the
+  tall corncob prang in rings of porcelain dots, its four little prangs, the pavilions, a pier).
+  **Never a toy:** no pin, and nothing moves it. A tap only names it (your call, 2026-11-19): the light runs up its
+  gold, a soft shimmer (`dawn-shimmer`, ElevenLabs), and Sparkle says "Wat Arun, the Temple of Dawn! It sparkles
+  with tiny pieces of colorful china." every time (`LANDMARKS` in `layout.ts`, `arunParts()` in `diorama.ts`). A
+  smaller, more detailed rebuild was tried and reverted: you liked this size better. Still no Buddha image, no Giant
+  Swing, and no other temple. A cloud moved off the old town to make room. The Grand Palace was built across the
+  river and then taken out (you, 2026-11-19: the old town got too busy); the kites over Sanam Luang went too.
 
 ## The look (2026-11-19, from your four pictures)
 
 Your pictures were a river city in gold light: the Chao Phraya as the biggest shape, landmarks standing up off a
-printed map, longtails, a tuk-tuk, a skyline. Their temples, golden chedis and guardian statue are left out (rule 8).
+printed map, longtails, a tuk-tuk, a skyline. Their guardian statue is left out; Wat Arun came in later as
+scenery (above).
 What the board took from them, in the app's toy look:
 
 - **The river leads.** Wide, bright teal, a pale promenade down both banks, coconut palms leaning over it.

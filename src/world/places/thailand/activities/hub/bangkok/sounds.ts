@@ -34,6 +34,8 @@ export const mapSfx = {
   fountain: clip(c('fountain'), () => noise(1.4, 0.05, 'highpass', 2500, 4000, 0, 0.8), { vol: 0.5 }),
   /** Bang Krachao's birds fly up. */
   birds: clip(c('birds'), nanMap.flutter, { vol: 0.6 }),
+  /** Wat Arun's gold catches the light: a soft shimmer rising (a tap names it). */
+  arun: clip(c('dawn-shimmer'), sfx.chime, { vol: 0.5 }),
   /** The night market: a happy little tune as its tents hop. */
   market: clip(c('night-market'), () => notes(587, [0, 4, 7, 4, 9, 7, 12], 0.1), { vol: 0.5, jitter: 0 }),
   /** The floating market: paddles knock and the boats slap the water. */

@@ -76,7 +76,7 @@ export type PinId = keyof typeof PINS
 export const PIN_IDS = Object.keys(PINS) as PinId[]
 
 /** Where the mall day's stamp floats once she has it: beside ICONSIAM's pin, on its west ([east, up, south] of the pin's point, m). */
-export const STAMP_OFF: [number, number, number] = [-0.36, 0.5, 0.02]
+export const STAMP_OFF: [number, number, number] = [-0.3, 0.36, 0.02]
 /** How high Sparkle's balloon floats over the board. */
 export const BALLOON_Y = 0.55
 
@@ -109,6 +109,16 @@ export const SPOTS = {
   orchard: ll(100.4968, 13.6648),
 } satisfies Record<string, XZ>
 export type SpotId = keyof typeof SPOTS
+
+/** Bangkok's great landmark: Wat Arun on the Thonburi bank. It's what anyone sees first when they look up Bangkok, so
+ *  the board shows it, but it is scenery, never a toy: no pin, and it never moves. A tap only names it: its gold
+ *  glints, a soft chime, and Sparkle says what it is (the user, 2026-11-19: AGENTS.md rule 8 is about games). It stands
+ *  where it really is, a little bigger than life like every toy. [where, scale, how far it reaches (m), how tall]. */
+export const LANDMARKS = {
+  /** Wat Arun, the Temple of Dawn: its tall central prang and four little ones, on the west bank. */
+  arun: { at: ll(100.4811, 13.7465), scale: 1.7, r: 0.26, h: 0.72 },
+} satisfies Record<string, { at: XZ; scale: number; r: number; h: number }>
+export type LandmarkId = keyof typeof LANDMARKS
 
 /** The tall towers, in the districts they really stand in: [lon, lat, height (m), look]. `look` picks the shape
  *  (diorama.ts tower()); a few are real ones: Baiyoke's tower with its round crown ('crown'), the riverside tower
@@ -192,14 +202,8 @@ export const GROVES: [number, number, number, number][] = [
   [100.503, 13.659, 2, 3],
 ]
 
-/** Sanam Luang, the big open field in the old town: kites fly over it. Where each kite's string is held, how high
- *  the kite flies (m) and which kite it is ('star': the big chula; 'diamond': the little pakpao with its long tail). */
+/** Sanam Luang, the big open field in the old town: nothing stands on it. */
 export const SANAM_LUANG: XZ = ll(100.4931, 13.7551)
-export const KITES: { at: XZ; high: number; kind: 'star' | 'diamond' }[] = [
-  { at: [SANAM_LUANG[0] - 0.1, SANAM_LUANG[1] + 0.02], high: 0.3, kind: 'diamond' },
-  { at: [SANAM_LUANG[0] + 0.02, SANAM_LUANG[1] - 0.04], high: 0.44, kind: 'star' },
-  { at: [SANAM_LUANG[0] + 0.12, SANAM_LUANG[1] + 0.07], high: 0.24, kind: 'diamond' },
-]
 
 /** Where the river's big loop holds Bang Krachao: the jungle is painted and planted inside these blobs
  *  ([lon, lat, radius in degrees]). */
@@ -213,7 +217,8 @@ export const JUNGLE: [number, number, number][] = [
 
 /** The clouds over the city (tap: a little rain): [lon, lat, height]. */
 export const CLOUDS: [number, number, number][] = [
-  [100.482, 13.742, 1.05],
+  // (Not over the old town: it hid Wat Arun's prang.)
+  [100.5, 13.7745, 1.05],
   [100.574, 13.745, 1.2],
 ]
 
