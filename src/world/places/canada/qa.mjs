@@ -18,9 +18,6 @@ export const screens = [
   // Whale Watch: each part from its link (the harbour both ways to steer, the humpback that jumps), and
   // under the water listening.
   ...['harbour', 'harbour?steer=wheel', 'otters', 'spouts', 'spouts?found=3', 'orcas', 'listen'].map((to) => ({ name: `canada-whales-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/whales/${to}`, reset: true, wait: to === 'listen' ? 4500 : 3000 })),
-  // Salmon Leap: each stretch of the river from its link (the bears' falls with the spirit bear low too),
-  // and the stream where the eggs hatch.
-  ...['steps', 'falls', 'bears', 'bears?spirit=low', 'eggs'].map((to) => ({ name: `canada-salmon-${to.replace(/[?=&,.]/g, '-')}`, hash: `#/world/canada/salmon/${to}`, reset: true, wait: 1500 })),
   // Carnival Snowballs: each part from its link (the stack with the huge ball and Maple on top; dressing
   // with two already in the parade line), and the parade.
   ...['roll', 'stack', 'stack?size=huge', 'dress', 'dress?snowmen=3', 'parade'].map((to) => ({ name: `canada-snowman-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/snowman/${to}`, reset: true, wait: to === 'roll' ? 4000 : to === 'parade' ? 6000 : 2500 })),
@@ -40,9 +37,6 @@ export const pacing = [
   // Whale Watch: a tap on the water drives the boat there, so the auto-player's taps steer it about
   // and poke the animals; holding the water and steering out to the otters and the spouts is qa-motion's canada-whales-steer.
   { name: 'canada whale watch', id: 'whales', hash: '#/world/canada/whales', reset: true },
-  // Salmon Leap: a tap on a salmon makes it hop and a tap pokes things, so the auto-player hops
-  // them about and pokes; flicking them up the falls is a quick drag (qa-motion's canada-salmon-flick).
-  { name: 'canada salmon leap', id: 'salmon', hash: '#/world/canada/salmon', reset: true },
   // Carnival Snowballs: the core verb is a push (a drag on the ball), so the auto-player's taps only
   // pat the ball, shake trees and poke; the robot run that rolls, stacks and dresses is qa-motion's canada-snowman-roll.
   { name: 'canada carnival snowballs', id: 'snowman', hash: '#/world/canada/snowman', reset: true },
@@ -102,30 +96,6 @@ motion.push({
     await page.mouse.move(boat.x + vp.width * 0.25, boat.y - up, { steps: 14 })
     await page.waitForTimeout(2600)
     await page.mouse.up()
-  },
-})
-
-// Salmon Leap: in the bears' falls, the waiting salmon flicked up one pool at a time: the leap, the splash
-// and the happy wiggle, a bear lunging and the boop on its nose.
-motion.push({
-  name: 'canada-salmon-flick',
-  seconds: 9,
-  setup: async (page, base) => {
-    await page.goto(`${base}#/world/canada/salmon/bears`)
-    await page.waitForFunction(() => window.__canadaSalmonQA?.().section, null, { timeout: 20000 })
-    await page.waitForTimeout(600)
-  },
-  act: async (page) => {
-    for (let i = 0; i < 6; i++) {
-      const q = await page.evaluate(() => window.__canadaSalmonQA())
-      if (!q.waiting) break
-      await page.mouse.move(q.waiting.x, q.waiting.y)
-      await page.mouse.down()
-      await page.waitForTimeout(60)
-      await page.mouse.move(q.waiting.x + 70, q.waiting.y - 100, { steps: 5 })
-      await page.mouse.up()
-      await page.waitForTimeout(1300)
-    }
   },
 })
 

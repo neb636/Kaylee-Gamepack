@@ -164,6 +164,10 @@ class SalmonWorld {
   lastTouch = 0
   lastFlick = 0
   misses = 0
+  /** Taps on a salmon (no flick): the first hops on the spot, every one after it hops up a step. */
+  taps = 0
+  /** Times Misty has said she missed (once or twice a visit is plenty). */
+  missSaid = 0
   /** Her finger: the salmon it holds (if any), and its recent places for the flick's speed. */
   finger: { id: number; fish: Fish | null; x: number; y: number; sx: number; sy: number; moved: number; trail: [number, number, number][] } | null = null
   fingerSpeed = 0
@@ -426,8 +430,14 @@ class SalmonWorld {
     if (!s || s.mode !== 'held') return
     const [vx, vy] = this.fingerV(f)
     if (f.moved < 12) {
-      // A tap: a little hop straight up.
-      this.fly(s, 0, -FLICK.hop, false)
+      // A tap: a hop. The first one hops on the spot (and Sparkle's line says to flick); after that a tap hops it up
+      // the next step, so a child who only taps still gets every salmon home. A flick is quicker, higher and goes
+      // further.
+      if (this.taps++ < 1) this.fly(s, 0, -FLICK.hop, false)
+      else {
+        const [vx, vy] = launchTo(this.river, s.x, s.y, Math.min(this.river.pools.length - 1, s.pool + 1), this.st.maple)
+        this.fly(s, vx, vy, true)
+      }
     } else if (Math.hypot(vx, vy) * FLICK.power > 380) this.launch(s, false)
     else {
       s.mode = 'swim'
@@ -483,7 +493,7 @@ class SalmonWorld {
         } else if (b.state === 'berries') {
           void b.h.current?.play('munch')
           b.munchAt = this.now + 2.5
-          noises.grumble()
+          noises.munch()
           this.react(T.yum)
         }
         return true
@@ -816,6 +826,7 @@ class SalmonWorld {
     meet(b.spirit ? 'spirit-bear' : 'black-bear')
     this.play(b, 'sneeze')
     noises.boop()
+    this.later(() => noises.sneeze(), 380)
     this.later(() => this.react(T.achoo, 0.6), 250)
   }
 
@@ -831,10 +842,19 @@ class SalmonWorld {
         if (near && now - b.snapAt > 1.2) {
           b.snapAt = now
           this.play(b, 'snap')
+          noises.swipe()
+          // Misty swats and misses (she says so, once or twice a visit: never after every salmon).
+          if (b.spirit && this.missSaid < 2 && now > 4) this.later(() => {
+            if (b.state === 'fish' && !speakingVoice()) {
+              this.missSaid++
+              this.react(T.miss, 0.8)
+            }
+          }, 500)
         }
         if (!near && now > b.swipeAt) {
           b.swipeAt = now + 3 + this.r() * 3
           this.play(b, 'swipe')
+          this.later(() => noises.swipe(), 380)
           this.later(() => {
             if (b.state !== 'fish') return
             const py = this.river.pools[poolAt(this.river, b.x)].y
@@ -860,7 +880,7 @@ class SalmonWorld {
           b.state = 'roll'
           this.play(b, 'roll')
           noises.grumble()
-          this.react(T.giveUp[b.id % T.giveUp.length], 0.5)
+          this.react(b.spirit ? T.giveUp.spirit : T.giveUp.black, 0.5)
         } else b.state = 'fish'
       } else if (b.state === 'roll' && t > 1) {
         b.state = 'wade'
@@ -885,6 +905,7 @@ class SalmonWorld {
       } else if (b.state === 'berries' && now > b.munchAt) {
         b.munchAt = now + 2.4 + this.r() * 1.5
         this.play(b, 'munch')
+        noises.munch()
         this.bushes[b.id % this.bushes.length] = now
       }
     }
@@ -1167,10 +1188,13 @@ interface Run {
   n: number
 }
 
-/** The story first (Maple at the river), unless a link starts further up. */
+/** The story first (Maple at the river), unless a link starts further up or the way-in film has just played. */
 export function SalmonLeap(props: CanadaActivityProps) {
   const sec = useSections(SALMON_SECTIONS)
-  const [story, setStory] = useState(!sec.start || sec.start === 'story')
+  // (After the way-in film her hands go straight to the salmon: Sparkle's one instruction, no hello.)
+  const [story, setStory] = useState(!props.filmed && (!sec.start || sec.start === 'story'))
+  // The river, the falls and the rain on the leaves, the whole time she's here.
+  useEffect(() => noises.river(), [])
   useEffect(() => {
     if (story) sec.enter('story')
   }, [])
