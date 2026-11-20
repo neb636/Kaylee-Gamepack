@@ -151,7 +151,9 @@ function FilmLink({ openActivity, backToMap }: PlaceProps) {
         // A chapter's way-in film goes on into its game, the big game's into the hockey; the others back to the map.
         if (chapter) openActivity(chapter)
         else if (id === 'game-in') openActivity('party')
-        else backToMap()
+        // (Straight to the map, not the place's front door: on a fresh device that would play the way-in film next.)
+        else if (id === 'intro') backToMap()
+        else openActivity('hub')
       }}
     />
   )

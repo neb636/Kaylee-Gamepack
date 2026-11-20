@@ -21,10 +21,11 @@ async function flick(page) {
 const filmOver = (page, id, skipped = false) =>
   page.waitForFunction(
     ({ id, skipped }) => {
+      // (Its last readout is kept: the stage is thrown away as the game goes on, and another film may follow it.)
       const q = window.__canadaStoryQA?.()
-      if (q) window.__canadaFilmSeen = q
+      if (q?.film?.film === id || q?.films.done.includes(id) || q?.films.skipped.includes(id)) window.__canadaFilmSeen = q
       const last = window.__canadaFilmSeen
-      return !document.querySelector(`[data-story-film="${id}"]`) && !!last && (skipped ? last.films.skipped : last.films.done).includes(id)
+      return !document.querySelector(`[data-story-film="${id}"]`) && !!last && (skipped ? last.films.skipped.includes(id) : last.films.done.includes(id) || last.film?.film === id)
     },
     { id, skipped },
     { timeout: 60000 },
