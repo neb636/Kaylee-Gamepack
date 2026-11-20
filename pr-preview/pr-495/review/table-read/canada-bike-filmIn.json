@@ -7,7 +7,7 @@
   "page": "canada-bike-filmIn.html",
   "audio": null,
   "lines": 3,
-  "seconds": 7,
+  "seconds": 9,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -21,9 +21,8 @@
     },
     {
       "key": "bike.filmIn.bath",
-      "text": "He's having his bath at the waterfall, way down there.",
+      "text": "He's having his bath, way down there.",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -31,6 +30,7 @@
       "key": "bike.filmIn.go",
       "text": "The fastest way down is my bike. Hold on!",
       "flags": [
+        "long",
         "new"
       ]
     }
@@ -59,14 +59,13 @@
         "filmIn",
         "bath"
       ],
-      "text": "He's having his bath at the waterfall, way down there.",
+      "text": "He's having his bath, way down there.",
       "voice": "maple",
       "key": "bike.filmIn.bath",
       "part": "bike › filmIn",
       "when": "The camera looks down the mountain: a tiny moose in a pond by the waterfall.",
-      "ms": 3288,
+      "ms": 2712,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -81,8 +80,9 @@
       "key": "bike.filmIn.go",
       "part": "bike › filmIn",
       "when": "She hops on her bike.",
-      "ms": 360,
+      "ms": 3288,
       "flags": [
+        "long",
         "new"
       ]
     }

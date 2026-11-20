@@ -6,14 +6,14 @@
   "intro": "",
   "page": "canada-campfire.html",
   "audio": null,
-  "lines": 45,
-  "seconds": 117,
+  "lines": 44,
+  "seconds": 114,
   "missing": 0,
   "names": 0,
   "flags": [
     {
       "key": "campfire.filmIn.shh",
-      "text": "Shh. Somebody quick and sneaky lives in these woods.",
+      "text": "Shh. Somebody sneaky lives in these woods.",
       "flags": [
         "long",
         "new"
@@ -131,14 +131,6 @@
       ]
     },
     {
-      "key": "campfire.filmOut.quick",
-      "text": "Roxy! You have the quickest paws in Canada!",
-      "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
       "key": "campfire.filmOut.got",
       "text": "Hee hee! Got your puck!",
       "flags": [
@@ -147,8 +139,9 @@
     },
     {
       "key": "campfire.filmOut.ask",
-      "text": "Will you steal the puck from the geese?",
+      "text": "Roxy! Will you steal the puck from the geese?",
       "flags": [
+        "long",
         "new"
       ]
     },
@@ -175,12 +168,12 @@
         "filmIn",
         "shh"
       ],
-      "text": "Shh. Somebody quick and sneaky lives in these woods.",
+      "text": "Shh. Somebody sneaky lives in these woods.",
       "voice": "maple",
       "key": "campfire.filmIn.shh",
       "part": "campfire › filmIn",
       "when": "The film in (story/films/campfire.ts): the campsite at night, Maple by the fire with her marshmallows.",
-      "ms": 3768,
+      "ms": 3264,
       "flags": [
         "long",
         "new"
@@ -745,30 +738,13 @@
       "path": [
         "campfire",
         "filmOut",
-        "quick"
-      ],
-      "text": "Roxy! You have the quickest paws in Canada!",
-      "voice": "maple",
-      "key": "campfire.filmOut.quick",
-      "part": "campfire › filmOut",
-      "when": "The film out: Roxy and her three kits at the fire, a marshmallow each.",
-      "ms": 3168,
-      "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "filmOut",
         "got"
       ],
       "text": "Hee hee! Got your puck!",
       "voice": "raccoon",
       "key": "campfire.filmOut.got",
       "part": "campfire › filmOut",
-      "when": "Maple holds up a puck. A blink, and Roxy has it.",
+      "when": "The film out: Roxy and her three kits at the fire, a marshmallow each. Maple holds up a puck: a blink, and Roxy has it (the quickest paws in Canada: the picture says it).",
       "ms": 2472,
       "flags": [
         "new"
@@ -780,13 +756,14 @@
         "filmOut",
         "ask"
       ],
-      "text": "Will you steal the puck from the geese?",
+      "text": "Roxy! Will you steal the puck from the geese?",
       "voice": "maple",
       "key": "campfire.filmOut.ask",
       "part": "campfire › filmOut",
-      "when": "The film out: Roxy and her three kits at the fire, a marshmallow each.",
-      "ms": 2448,
+      "when": "The film out: Roxy and her three kits at the fire, a marshmallow each. Maple holds up a puck: a blink, and Roxy has it (the quickest paws in Canada: the picture says it).",
+      "ms": 3072,
       "flags": [
+        "long",
         "new"
       ]
     },
@@ -800,7 +777,7 @@
       "voice": "raccoon",
       "key": "campfire.filmOut.babies",
       "part": "campfire › filmOut",
-      "when": "The film out: Roxy and her three kits at the fire, a marshmallow each.",
+      "when": "The film out: Roxy and her three kits at the fire, a marshmallow each. Maple holds up a puck: a blink, and Roxy has it (the quickest paws in Canada: the picture says it).",
       "ms": 3720,
       "flags": [
         "long",

@@ -7,7 +7,7 @@
   "page": "canada-canoe.html",
   "audio": null,
   "lines": 34,
-  "seconds": 90,
+  "seconds": 86,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -20,17 +20,15 @@
     },
     {
       "key": "canoe.filmIn.lulu",
-      "text": "That's Lulu the loon! Nobody sings like Lulu.",
+      "text": "That's Lulu the loon!",
       "flags": [
-        "long",
         "new"
       ]
     },
     {
       "key": "canoe.filmIn.across",
-      "text": "She lives across the lake, by the glacier. Let's paddle!",
+      "text": "She lives by the glacier. Let's paddle!",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -45,7 +43,7 @@
     },
     {
       "key": "canoe.go.touch",
-      "text": "Hold your finger on the water, and Maple paddles there!",
+      "text": "Hold the water, and Maple paddles there!",
       "flags": [
         "long",
         "new"
@@ -53,7 +51,7 @@
     },
     {
       "key": "canoe.go.mouse",
-      "text": "Click and hold on the water, and Maple paddles there!",
+      "text": "Click and hold the water, and Maple paddles there!",
       "flags": [
         "long",
         "new"
@@ -143,7 +141,7 @@
     },
     {
       "key": "canoe.filmOut.yes",
-      "text": "A big game? I will sing my very best song.",
+      "text": "A big game? I will sing my best song!",
       "flags": [
         "long",
         "new"
@@ -187,14 +185,13 @@
         "filmIn",
         "lulu"
       ],
-      "text": "That's Lulu the loon! Nobody sings like Lulu.",
+      "text": "That's Lulu the loon!",
       "voice": "maple",
       "key": "canoe.filmIn.lulu",
       "part": "canoe › filmIn",
       "when": "A loon calls, far across the water, and the mountains answer (a beat with no line). Maple's ears go up.",
-      "ms": 3816,
+      "ms": 1896,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -204,14 +201,13 @@
         "filmIn",
         "across"
       ],
-      "text": "She lives across the lake, by the glacier. Let's paddle!",
+      "text": "She lives by the glacier. Let's paddle!",
       "voice": "maple",
       "key": "canoe.filmIn.across",
       "part": "canoe › filmIn",
       "when": "The film in (story/films/canoe.ts): the dock on the turquoise lake, Maple in the red canoe.",
-      "ms": 3768,
+      "ms": 2496,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -238,12 +234,12 @@
         "go",
         "touch"
       ],
-      "text": "Hold your finger on the water, and Maple paddles there!",
+      "text": "Hold the water, and Maple paddles there!",
       "voice": "sparkle",
       "key": "canoe.go.touch",
       "part": "canoe › go",
       "when": "Sparkle: how to paddle, and the hint when she hasn't paddled for a while (the hand shows it too).",
-      "ms": 4944,
+      "ms": 3576,
       "flags": [
         "long",
         "new"
@@ -255,12 +251,12 @@
         "go",
         "mouse"
       ],
-      "text": "Click and hold on the water, and Maple paddles there!",
+      "text": "Click and hold the water, and Maple paddles there!",
       "voice": "sparkle",
       "key": "canoe.go.mouse",
       "part": "canoe › go",
       "when": "",
-      "ms": 4368,
+      "ms": 4392,
       "flags": [
         "long",
         "new"
@@ -633,12 +629,12 @@
         "filmOut",
         "yes"
       ],
-      "text": "A big game? I will sing my very best song.",
+      "text": "A big game? I will sing my best song!",
       "voice": "loon",
       "key": "canoe.filmOut.yes",
       "part": "canoe › filmOut",
       "when": "The film out: under the glacier, Lulu with her chick on her back.",
-      "ms": 3384,
+      "ms": 3504,
       "flags": [
         "long",
         "new"

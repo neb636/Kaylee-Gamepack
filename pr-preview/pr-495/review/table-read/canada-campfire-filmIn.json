@@ -7,13 +7,13 @@
   "page": "canada-campfire-filmIn.html",
   "audio": null,
   "lines": 2,
-  "seconds": 7,
+  "seconds": 6,
   "missing": 0,
   "names": 0,
   "flags": [
     {
       "key": "campfire.filmIn.shh",
-      "text": "Shh. Somebody quick and sneaky lives in these woods.",
+      "text": "Shh. Somebody sneaky lives in these woods.",
       "flags": [
         "long",
         "new"
@@ -35,12 +35,12 @@
         "filmIn",
         "shh"
       ],
-      "text": "Shh. Somebody quick and sneaky lives in these woods.",
+      "text": "Shh. Somebody sneaky lives in these woods.",
       "voice": "maple",
       "key": "campfire.filmIn.shh",
       "part": "campfire › filmIn",
       "when": "The film in (story/films/campfire.ts): the campsite at night, Maple by the fire with her marshmallows.",
-      "ms": 3768,
+      "ms": 3264,
       "flags": [
         "long",
         "new"

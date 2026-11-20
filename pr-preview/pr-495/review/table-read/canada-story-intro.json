@@ -37,7 +37,7 @@
     },
     {
       "key": "story.intro.geese",
-      "text": "Honk honk! The Cup is ours. Geese win every year!",
+      "text": "Honk honk! Geese win the Cup every year!",
       "flags": [
         "long",
         "new"
@@ -140,12 +140,12 @@
         "intro",
         "geese"
       ],
-      "text": "Honk honk! The Cup is ours. Geese win every year!",
+      "text": "Honk honk! Geese win the Cup every year!",
       "voice": "gus",
       "key": "story.intro.geese",
       "part": "story › intro",
       "when": "The geese skate in, in a V, Gus at the front.",
-      "ms": 4512,
+      "ms": 3768,
       "flags": [
         "long",
         "new"

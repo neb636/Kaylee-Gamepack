@@ -7,7 +7,7 @@
   "page": "canada-bike.html",
   "audio": null,
   "lines": 36,
-  "seconds": 76,
+  "seconds": 79,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -21,9 +21,8 @@
     },
     {
       "key": "bike.filmIn.bath",
-      "text": "He's having his bath at the waterfall, way down there.",
+      "text": "He's having his bath, way down there.",
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -31,6 +30,7 @@
       "key": "bike.filmIn.go",
       "text": "The fastest way down is my bike. Hold on!",
       "flags": [
+        "long",
         "new"
       ]
     },
@@ -95,8 +95,9 @@
     },
     {
       "key": "bike.filmOut.stand",
-      "text": "You stand in front of the net. That's all!",
+      "text": "You stand in front of the net. Easy!",
       "flags": [
+        "long",
         "new"
       ]
     },
@@ -140,14 +141,13 @@
         "filmIn",
         "bath"
       ],
-      "text": "He's having his bath at the waterfall, way down there.",
+      "text": "He's having his bath, way down there.",
       "voice": "maple",
       "key": "bike.filmIn.bath",
       "part": "bike › filmIn",
       "when": "The camera looks down the mountain: a tiny moose in a pond by the waterfall.",
-      "ms": 3288,
+      "ms": 2712,
       "flags": [
-        "long",
         "new"
       ]
     },
@@ -162,8 +162,9 @@
       "key": "bike.filmIn.go",
       "part": "bike › filmIn",
       "when": "She hops on her bike.",
-      "ms": 360,
+      "ms": 3288,
       "flags": [
+        "long",
         "new"
       ]
     },
@@ -598,13 +599,14 @@
         "filmOut",
         "stand"
       ],
-      "text": "You stand in front of the net. That's all!",
+      "text": "You stand in front of the net. Easy!",
       "voice": "maple",
       "key": "bike.filmOut.stand",
       "part": "bike › filmOut",
       "when": "The film out: the pond at the waterfall, Monty chewing, a lily pad on one antler.",
-      "ms": 2616,
+      "ms": 3192,
       "flags": [
+        "long",
         "new"
       ]
     },

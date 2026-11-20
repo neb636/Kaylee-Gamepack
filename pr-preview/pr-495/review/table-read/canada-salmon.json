@@ -6,8 +6,8 @@
   "intro": "",
   "page": "canada-salmon.html",
   "audio": null,
-  "lines": 41,
-  "seconds": 107,
+  "lines": 40,
+  "seconds": 104,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -20,15 +20,8 @@
       ]
     },
     {
-      "key": "salmon.filmIn.swing",
-      "text": "Wow! Look at that swing!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
       "key": "salmon.filmIn.fishing",
-      "text": "Shh. I'm fishing. No hockey till I've had my supper.",
+      "text": "Shh. I'm fishing. No hockey till supper.",
       "flags": [
         "long",
         "new"
@@ -189,30 +182,14 @@
       "path": [
         "salmon",
         "filmIn",
-        "swing"
-      ],
-      "text": "Wow! Look at that swing!",
-      "voice": "maple",
-      "key": "salmon.filmIn.swing",
-      "part": "salmon › filmIn",
-      "when": "Misty swings a paw at a jumping salmon: an enormous splash, and no fish.",
-      "ms": 2568,
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "path": [
-        "salmon",
-        "filmIn",
         "fishing"
       ],
-      "text": "Shh. I'm fishing. No hockey till I've had my supper.",
+      "text": "Shh. I'm fishing. No hockey till supper.",
       "voice": "bear",
       "key": "salmon.filmIn.fishing",
       "part": "salmon › filmIn",
-      "when": "The film in (story/films/salmon.ts): the rainforest river, giant cedars, soft rain.",
-      "ms": 5424,
+      "when": "Misty swings a paw at a jumping salmon: an enormous splash, and no fish (a beat with no line). Then, dripping:",
+      "ms": 4920,
       "flags": [
         "long",
         "new"

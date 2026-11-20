@@ -27,16 +27,16 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
 <header>
 <h1>Table read: Canada › Campfire</h1>
 
-<p class="sum">45 lines · 1.9 min of talk · her name 0× · 21 flagged</p>
-<ul class="cast"><li style="--h:330"><b>Maple</b> 18 lines <small>nova voice</small></li><li style="--h:265"><b>Sparkle</b> 16 lines <small>coral voice</small></li><li style="--h:190"><b>Roxy</b> 7 lines <small>ash voice</small></li><li style="--h:25"><b>Owl</b> 1 lines <small>fable voice</small></li><li style="--h:140"><b>Monty</b> 3 lines <small>onyx voice</small></li></ul>
+<p class="sum">44 lines · 1.9 min of talk · her name 0× · 20 flagged</p>
+<ul class="cast"><li style="--h:330"><b>Maple</b> 17 lines <small>nova voice</small></li><li style="--h:265"><b>Sparkle</b> 16 lines <small>coral voice</small></li><li style="--h:190"><b>Roxy</b> 7 lines <small>ash voice</small></li><li style="--h:25"><b>Owl</b> 1 lines <small>fable voice</small></li><li style="--h:140"><b>Monty</b> 3 lines <small>onyx voice</small></li></ul>
 </header>
 <div class="player"><p class="sum">No audio yet (no recorded lines, or no ffmpeg).</p></div>
 <main>
 <h2>campfire › film In</h2><button class="line" data-i="0" style="--h:330">
   <span class="who">Maple</span>
-  <span class="text">Shh. Somebody quick and sneaky lives in these woods.</span>
+  <span class="text">Shh. Somebody sneaky lives in these woods.</span>
   <span class="when">The film in (story/films/campfire.ts): the campsite at night, Maple by the fire with her marshmallows.</span>
-  <span class="meta">3.8 s<b class="flag long">long</b><b class="flag new">new</b></span>
+  <span class="meta">3.3 s<b class="flag long">long</b><b class="flag new">new</b></span>
 </button>
 <button class="line" data-i="1" style="--h:330">
   <span class="who">Maple</span>
@@ -272,31 +272,25 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
   
   <span class="meta">2.5 s</span>
 </button>
-<h2>campfire › film Out</h2><button class="line" data-i="40" style="--h:330">
-  <span class="who">Maple</span>
-  <span class="text">Roxy! You have the quickest paws in Canada!</span>
-  <span class="when">The film out: Roxy and her three kits at the fire, a marshmallow each.</span>
-  <span class="meta">3.2 s<b class="flag long">long</b><b class="flag new">new</b></span>
-</button>
-<button class="line" data-i="41" style="--h:190">
+<h2>campfire › film Out</h2><button class="line" data-i="40" style="--h:190">
   <span class="who">Roxy</span>
   <span class="text">Hee hee! Got your puck!</span>
-  <span class="when">Maple holds up a puck. A blink, and Roxy has it.</span>
+  <span class="when">The film out: Roxy and her three kits at the fire, a marshmallow each. Maple holds up a puck: a blink, and Roxy has it (the quickest paws in Canada: the picture says it).</span>
   <span class="meta">2.5 s<b class="flag new">new</b></span>
 </button>
-<button class="line" data-i="42" style="--h:330">
+<button class="line" data-i="41" style="--h:330">
   <span class="who">Maple</span>
-  <span class="text">Will you steal the puck from the geese?</span>
-  <span class="when">The film out: Roxy and her three kits at the fire, a marshmallow each.</span>
-  <span class="meta">2.4 s<b class="flag new">new</b></span>
+  <span class="text">Roxy! Will you steal the puck from the geese?</span>
+  
+  <span class="meta">3.1 s<b class="flag long">long</b><b class="flag new">new</b></span>
 </button>
-<button class="line" data-i="43" style="--h:190">
+<button class="line" data-i="42" style="--h:190">
   <span class="who">Roxy</span>
   <span class="text">Only if my babies can come and cheer!</span>
   
   <span class="meta">3.7 s<b class="flag long">long</b><b class="flag new">new</b></span>
 </button>
-<button class="line" data-i="44" style="--h:330">
+<button class="line" data-i="43" style="--h:330">
   <span class="who">Maple</span>
   <span class="text">Deal! Go, team, go!</span>
   <span class="when">The kits squeak and wave their marshmallow sticks.</span>
@@ -304,7 +298,7 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
 </button>
 </main>
 <script>
-const spans=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];const a=document.querySelector('audio');let stop=null,cur=null
+const spans=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];const a=document.querySelector('audio');let stop=null,cur=null
 const mark=(el)=>{cur?.classList.remove('playing');cur=el;el?.classList.add('playing')}
 document.querySelectorAll('.line').forEach(el=>el.addEventListener('click',()=>{const s=spans[+el.dataset.i];if(!a||!s)return;a.currentTime=s[0];stop=s[1];mark(el);a.play()}))
 a?.addEventListener('timeupdate',()=>{if(stop!==null&&a.currentTime>=stop){a.pause();stop=null}
