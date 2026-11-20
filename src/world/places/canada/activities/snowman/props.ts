@@ -580,13 +580,35 @@ export class Drum {
 
 // ---------------------------------------------------------------- what the snowmen wear
 
-/** A red knitted tuque with a white pompom, sized for a head of radius 1 (it sits on top). */
-export function makeHat(bag: Bag) {
+/** What the parade's other snowmen wear (Tuque is the one in red, at the front): the carnival's colors and a top hat. */
+export const LOOKS = [
+  { hat: 'blue', scarf: '#4F7FD0', trim: PAL.butter },
+  { hat: 'yellow', scarf: PAL.butter, trim: '#4F7FD0' },
+  { hat: 'green', scarf: '#5FBF86', trim: '#FFFFFF' },
+  { hat: 'top', scarf: PAL.hotpink, trim: '#FFFFFF' },
+] as const
+export type HatStyle = 'red' | (typeof LOOKS)[number]['hat']
+const HAT_COLOR: Record<Exclude<HatStyle, 'top'>, string> = { red: RED, blue: '#4F7FD0', yellow: '#FFD86B', green: '#5FBF86' }
+
+/** A knitted tuque with a white pompom (red: the carnival's own), or a tall black top hat with a pink band, sized
+ *  for a head of radius 1 (it sits on top). */
+export function makeHat(bag: Bag, style: HatStyle = 'red') {
+  if (style === 'top')
+    return solid(
+      merge([
+        P.cyl(0.92, 0.92, 0.08, '#2B2330', { at: [0, 0.62, 0] }, 22),
+        P.cyl(0.56, 0.6, 0.95, '#2B2330', { at: [0, 1.12, 0] }, 18),
+        P.cyl(0.61, 0.61, 0.18, PAL.hotpink, { at: [0, 0.76, 0] }, 18),
+      ]),
+      bag,
+      2,
+    )
+  const c = HAT_COLOR[style]
   return solid(
     merge([
-      P.cyl(0.62, 0.72, 0.42, RED, { at: [0, 0.78, 0] }, 18),
+      P.cyl(0.62, 0.72, 0.42, c, { at: [0, 0.78, 0] }, 18),
       P.cyl(0.74, 0.74, 0.16, '#FFFFFF', { at: [0, 0.6, 0] }, 18),
-      P.cone(0.6, 0.75, RED, { at: [0, 1.36, 0] }, 18),
+      P.cone(0.6, 0.75, c, { at: [0, 1.36, 0] }, 18),
       P.sphere(0.24, '#FFFFFF', { at: [0, 1.76, 0] }, 12),
     ]),
     bag,
@@ -596,3 +618,17 @@ export function makeHat(bag: Bag) {
 
 /** The carnival's woven sash (characters/tuque.ts: the same one Tuque wears), round a ball of radius 1. */
 export const makeSash = (bag: Bag) => solid(merge(sashGeo()), bag, 2)
+
+/** A plain knitted scarf in one color with a striped end, round a ball of radius 1 (the parade's other snowmen). */
+export function makeScarf(bag: Bag, color: string, trim: string) {
+  return solid(
+    merge([
+      P.torus(1, 0.15, color, { at: [0, -0.22, 0], rot: [Math.PI / 2, 0, 0] }),
+      P.sphere(0.17, color, { at: [0.72, -0.25, 0.72] }),
+      P.rbox(0.24, 0.7, 0.07, 0.05, color, { at: [0.76, -0.64, 0.78], rot: [0, -0.78, 0.12] }),
+      P.rbox(0.25, 0.08, 0.075, 0.03, trim, { at: [0.78, -0.86, 0.78], rot: [0, -0.78, 0.12] }),
+    ]),
+    bag,
+    2,
+  )
+}

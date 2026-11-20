@@ -37,6 +37,7 @@ import { Particles } from '../../../../engine3d/particles'
 import { applyBands, makeLights, PAL } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
 import { swell, Water } from '../../../../engine3d/water'
+import { Beacon } from './beacon'
 import { Ollie } from './ollie'
 import { whaleSfx } from './sounds'
 import { Boat, BOAT_LEN } from './boat'
@@ -294,6 +295,10 @@ export class WhaleWatch implements World3D {
   private mist: Particles
   private sparkle: Particles
   private bubbles: Particles
+  /** Unmissable from far off: ripples and Zs over sleepy Ollie, ripples where the next whale will come up. */
+  private ollieBeacon: Beacon
+  private spotBeacon: Beacon
+  private trail: Particles
 
   private lastTouch = 0
   /** The story at the dock: Maple's little show (seconds since it began). */
@@ -429,6 +434,11 @@ export class WhaleWatch implements World3D {
     this.sparkle = new Particles({ kind: 'spray', count: 140, colors: ['#FFFFFF', '#FFE1F0', '#FFF6B8', '#C9F4FF'], gravity: -0.5 }, bag)
     this.bubbles = new Particles({ kind: 'spray', count: 140, color: '#E8FBFF', gravity: -2.2 }, bag)
     scene.add(this.foam.mesh, this.spray.mesh, this.mist.mesh, this.sparkle.mesh, this.bubbles.mesh)
+    // The way to go: a path of sparkles on the water from the boat toward Ollie, the raft or the next spout.
+    this.trail = new Particles({ kind: 'spray', count: 200, colors: ['#FFFFFF', '#FFF6B8', '#FFE1F0'], gravity: -0.3 }, bag)
+    this.ollieBeacon = new Beacon(bag, { color: '#FFB3D6', radius: 7, zs: true })
+    this.spotBeacon = new Beacon(bag, { color: '#FFFFFF', radius: 9 })
+    scene.add(this.trail.mesh, this.ollieBeacon.root, this.spotBeacon.root)
 
     // ---- Where the link starts.
     if (this.section === 'spouts') this.nextSpotT = 1.2
@@ -533,7 +543,8 @@ export class WhaleWatch implements World3D {
     this.updateAnimals(dt, t)
     this.updateListen(dt, t)
     this.placeBoat(dt)
-    for (const p of [this.foam, this.spray, this.mist, this.sparkle, this.bubbles]) p.update(dt)
+    this.updateWay(dt, t)
+    for (const p of [this.foam, this.spray, this.mist, this.sparkle, this.bubbles, this.trail]) p.update(dt)
 
     // Under the water once the camera dips below the surface: the sea floor, the kelp's stalks, teal all round.
     const below = this.rig.camera.position.y < -0.05
@@ -549,7 +560,12 @@ export class WhaleWatch implements World3D {
     }
 
     this.lights.follow(this.d.x, 0, this.d.z)
-    this.camYaw += wrapAngle(this.d.heading - this.camYaw) * damp(dt, 0.4 + HELM.camera * 4)
+    // (With somewhere to go, the camera looks from the boat toward it, so it's always up the screen, even right after
+    // she turns her back on it: the spout that blows behind her, the raft once Ollie's on the rope.)
+    const g0 = this.goal
+    const g = g0 && !this.whale?.up && Math.hypot(g0.x - this.d.x, g0.z - this.d.z) > 12 ? g0 : null
+    const camTo = g ? Math.atan2(g.x - this.d.x, g.z - this.d.z) : this.d.heading
+    this.camYaw += wrapAngle(camTo - this.camYaw) * damp(dt, g ? 1.2 : 0.4 + HELM.camera * 4)
     this.rig.lag = this.listening ? 0.7 : this.doneT >= 0 && this.doneT < 5 ? 0.8 : 0.35
     this.rig.setShot(this.shot())
     this.rig.update(dt)
@@ -799,6 +815,39 @@ export class WhaleWatch implements World3D {
     return this.section === 'otters' && this.drift.state === 'drift' ? this.ollie.root.position : null
   }
 
+  /** Where to head next, while there's somewhere to go: sleepy Ollie, the raft (towing her home) or the next spout. */
+  private get goal(): { x: number; z: number } | null {
+    if (this.section === 'otters' && this.drift.state === 'drift') return this.drift
+    if (this.section === 'otters' && this.drift.state === 'towed') return RAFT
+    if (this.section === 'spouts' && this.spot && !this.whale?.up) return this.spot
+    return null
+  }
+
+  /** There's always something on screen to steer toward: big sleepy Ollie with her Zs and ripples, the spout's
+   *  ripples, and a path of sparkles on the water from the boat to whichever it is. */
+  private updateWay(dt: number, _t: number) {
+    const d = this.d
+    const dr = this.drift
+    // Ollie is big while she's far off (easy to spot in the kelp) and her own size by the time the boat reaches her.
+    const far = dr.state === 'drift' ? clamp((Math.hypot(d.x - dr.x, d.z - dr.z) - 9) / 18) : 0
+    const root = this.ollie.root
+    root.scale.setScalar(root.scale.x + (1 + 1.4 * far - root.scale.x) * damp(dt, 3))
+    const cam = this.rig.camera
+    this.ollieBeacon.update(dt, this.section === 'otters' && dr.state === 'drift' && !this.below, dr.x, root.position.y, dr.z, cam, root.scale.x)
+    this.spotBeacon.update(dt, this.section === 'spouts' && !!this.spot && !this.below, this.spot?.x ?? 0, 0, this.spot?.z ?? 0, cam)
+    const g = this.below || this.listening ? null : this.goal
+    if (!g) return
+    const gx = g.x - d.x
+    const gz = g.z - d.z
+    const dist = Math.hypot(gx, gz)
+    if (dist < 10) return
+    for (let n = 0; n < 2; n++) {
+      if (Math.random() > dt * 9) continue
+      const k = 0.1 + Math.random() * (1 - 7 / dist) * 0.9
+      this.trail.emit(d.x + gx * k + (Math.random() - 0.5) * 1.2, 0.3, d.z + gz * k + (Math.random() - 0.5) * 1.2, 0, 0.3, 0, 1.4, (0.45 + Math.random() * 0.2) * (0.7 + 0.6 * k))
+    }
+  }
+
   private story(dt: number, t: number) {
     const d = this.d
     if (this.section === 'story') {
@@ -944,7 +993,8 @@ export class WhaleWatch implements World3D {
       this.talk(L.whales.otterHome, { once: 'come' })
     }, 2600)
     this.timers.later(() => this.enter('spouts'), 4600)
-    this.nextSpotT = 6
+    // (The first spout blows 2 s into the spouts part: open sea with nothing to head for is no fun.)
+    this.nextSpotT = 2
   }
 
   /** A link past the otters: she's riding along on the rope already. */
@@ -1012,12 +1062,15 @@ export class WhaleWatch implements World3D {
     if (Math.hypot(d.x - this.spot.x, d.z - this.spot.z) < near) this.raise()
   }
 
-  /** The next spout: 30-45 m ahead of the boat (off to one side), on open water in the whales' sea. */
+  /** The next spout: 28-40 m ahead of the boat (a little off to one side, so it's on screen), on open water in the
+   *  whales' sea. */
   private pickSpot() {
     const d = this.d
-    for (let i = 0; i < 30; i++) {
-      const a = d.heading + (Math.random() - 0.5) * 1.6
-      const r = 30 + Math.random() * 15
+    // (Facing the shore or the kelp, nothing ahead is open sea: then out toward the middle of the whales' sea.)
+    const out = Math.atan2((SPOUT_BOX.x0 + SPOUT_BOX.x1) / 2 - d.x, (SPOUT_BOX.z0 + SPOUT_BOX.z1) / 2 - d.z)
+    for (let i = 0; i < 50; i++) {
+      const a = (i < 30 ? d.heading : out) + (Math.random() - 0.5) * (i < 20 ? 0.9 : 1.6)
+      const r = 28 + Math.random() * 12
       const x = clamp(d.x + Math.sin(a) * r, SPOUT_BOX.x0, SPOUT_BOX.x1)
       const z = clamp(d.z + Math.cos(a) * r, SPOUT_BOX.z0, SPOUT_BOX.z1)
       if (open(x, z, 14) && Math.hypot(x - d.x, z - d.z) > 22) {
@@ -1347,26 +1400,43 @@ export class WhaleWatch implements World3D {
     const sp = clamp(Math.abs(d.speed) / Math.max(0.1, HELM.top), 0, 1.4)
     const sx = Math.sin(this.camYaw)
     const sz = Math.cos(this.camYaw)
-    let ahead = 2.5 + sp * 3
+    const ahead = 2.5 + sp * 3
     const half = tall ? new Vector3(4.6, 2, 7.5) : new Vector3(8.2, 2, 5.4)
     half.multiplyScalar(1 + 0.15 * sp)
-    // Something to see (a spout, a whale up, the sleepy otter, the orcas): frame it too.
-    const focus = this.whale?.up ? this.whale.root.position : this.spot ? tmp3.set(this.spot.x, 0, this.spot.z) : this.seeking
+    const center = new Vector3(d.x + sx * ahead, 1, d.z + sz * ahead)
+    let pitch = 22
+    // Something to head for or to see (sleepy Ollie, the raft, a spout, a whale up): the boat and it framed together,
+    // looking down a little more the further off it is, so it never shrinks to a dot on the horizon.
+    const g = this.goal
+    const focus = this.whale?.up ? this.whale.root.position : g ? tmp3.set(g.x, 0, g.z) : null
     if (focus) {
-      const fx = focus.x - d.x
-      const fz = focus.z - d.z
+      let fx = focus.x - d.x
+      let fz = focus.z - d.z
+      let dist = Math.hypot(fx, fz)
+      // (Far off, the way toward it is framed: the beacon and the sparkle path lead on.)
+      if (dist > 55) {
+        fx *= 55 / dist
+        fz *= 55 / dist
+        dist = 55
+      }
       const along = fx * sx + fz * sz
-      if (along > 0 && Math.hypot(fx, fz) < 50) {
-        ahead += along * 0.3
-        half.z += along * 0.25
+      const across = fx * sz - fz * sx
+      if (dist < 75 && along > -8) {
+        const lo = Math.min(0, along) - 3
+        const hi = Math.max(ahead, along) + 3
+        const mid = (lo + hi) / 2
+        center.set(d.x + sx * mid + sz * across * 0.5, 1, d.z + sz * mid - sx * across * 0.5)
+        half.z = Math.max(half.z, (hi - lo) / 2)
+        half.x = Math.max(half.x, Math.abs(across) / 2 + 4)
+        pitch = 22 + 12 * clamp((dist - 14) / 30)
       }
     }
     if (this.orcaIn) half.x = Math.max(half.x, tall ? 8 : 12)
     return {
-      center: new Vector3(d.x + sx * ahead, 1, d.z + sz * ahead),
+      center,
       half,
       yaw: chase,
-      pitch: 22,
+      pitch,
       follow: true,
       minDist: 8,
       maxDist: 110,
