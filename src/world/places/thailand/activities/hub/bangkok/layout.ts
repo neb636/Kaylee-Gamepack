@@ -96,7 +96,7 @@ export const SPOTS = {
   /** Central Rama 3: the mall near the house. */
   rama3: ll(100.5392, 13.6992),
   /** Pak Khlong Talat: the flower market by the river. */
-  flowers: ll(100.501, 13.7418),
+  flowers: ll(100.4985, 13.7438),
   /** Khlong Toei port: cranes and bright boxes. */
   port: ll(100.5775, 13.7065),
   /** Bang Krachao, the green lung in the river's loop: the bird tower in its park. */
@@ -110,16 +110,13 @@ export const SPOTS = {
 } satisfies Record<string, XZ>
 export type SpotId = keyof typeof SPOTS
 
-/** Bangkok's two great landmarks, for the look only: Wat Arun on the Thonburi bank and the Grand Palace across the
- *  river from it (with Wat Phra Kaew's golden chedi inside its walls). They're what anyone sees first when they look
- *  up Bangkok, so the board shows them, but they are scenery, never a toy: no poke, no pin, no line about them (the
- *  user, 2026-11-19: AGENTS.md rule 8 is about games; the map may show them, they just aren't played with). Each is
+/** Bangkok's great landmark, for the look only: Wat Arun on the Thonburi bank. It's what anyone sees first when they
+ *  look up Bangkok, so the board shows it, but it is scenery, never a toy: no poke, no pin, no line about it (the
+ *  user, 2026-11-19: AGENTS.md rule 8 is about games; the map may show it, it just isn't played with). It stands
  *  where it really is, a little bigger than life like every toy. [where, scale, how far it reaches (m), how tall]. */
 export const LANDMARKS = {
   /** Wat Arun, the Temple of Dawn: its tall central prang and four little ones, on the west bank. */
   arun: { at: ll(100.4811, 13.7465), scale: 1.7, r: 0.26, h: 0.72 },
-  /** The Grand Palace: white walls round a lawn, the Chakri hall's three spires, the golden chedi behind. */
-  palace: { at: ll(100.4958, 13.751), scale: 1.5, r: 0.22, h: 0.4 },
 } satisfies Record<string, { at: XZ; scale: number; r: number; h: number }>
 export type LandmarkId = keyof typeof LANDMARKS
 
@@ -205,7 +202,7 @@ export const GROVES: [number, number, number, number][] = [
   [100.503, 13.659, 2, 3],
 ]
 
-/** Sanam Luang, the big open field in the old town, kept open in front of the Grand Palace. */
+/** Sanam Luang, the big open field in the old town: nothing stands on it. */
 export const SANAM_LUANG: XZ = ll(100.4931, 13.7551)
 
 /** Where the river's big loop holds Bang Krachao: the jungle is painted and planted inside these blobs

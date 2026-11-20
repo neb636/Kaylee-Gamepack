@@ -21,7 +21,7 @@
 // river itself (a splash). In the corners: the night market (its rows of tents hop one after another to a tune), the
 // floating market (the boats bob and splash), the orange orchard (oranges fly), Khlong Saen Saep's boat (it races
 // off). Little cars drive the big roads on their own.
-// Wat Arun and the Grand Palace are to look at, not toys: a tap on them does nothing (their gold glints now and then).
+// Wat Arun is to look at, not a toy: a tap on it does nothing (its gold glints now and then).
 //
 // Talk (BangkokMap.tsx says the lines, lines.ts L.bangkok): Sparkle's hello the first time, something true the first
 // time she pokes each thing, and after ~8 s with nothing done, where she can go (at most three times).
@@ -597,7 +597,7 @@ export class BangkokMap extends Stage {
     return near.clone().addScaledVector(dir, (G - near.y) / dir.y)
   }
 
-  /** Is a screen point on Wat Arun or the Grand Palace? (They're to look at, not toys: a tap there does nothing.) */
+  /** Is a screen point on Wat Arun? (It's to look at, not toys: a tap there does nothing.) */
   private onLandmark(x: number, y: number) {
     const { near, dir } = this.ray(x, y)
     return Object.values(LANDMARKS).some(({ at, scale, r, h }) => {

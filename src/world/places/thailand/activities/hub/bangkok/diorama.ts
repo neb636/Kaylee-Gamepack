@@ -7,8 +7,7 @@
 // jungle in the river's big loop. The corners have their own things: the night market's tents up by Rama 9, a
 // floating market and Bang Mot's orange orchard out south-west. Thonburi and the south are city too, leafier than the
 // middle (big trees standing here and there among the roofs). The pins and the river are still what she sees first.
-// Bangkok's two great landmarks stand across the river from each other in the old town: Wat Arun's tall prang on the
-// Thonburi bank, the Grand Palace's white walls, tiered roofs and golden chedi opposite. Scenery only, never a toy.
+// Bangkok's great landmark stands in the old town: Wat Arun's tall prang on the Thonburi bank. Scenery only, never a toy.
 //
 // The places stand up like chunky toys: the Thailand house (a row of pastel shophouses, the pink one in the middle,
 // the flag, a tuk-tuk parked outside) and ICONSIAM (its folded glass front on the river, the gold roof, two towers
@@ -462,16 +461,13 @@ export function buildDiorama(bag: Bag): Diorama {
   // Bang Mot's orange orchard: trees heavy with oranges, the farmer's house on its stilts, baskets out front.
   spots.orchard = toy(SPOTS.orchard, orchardParts(), 1.6)
 
-  // ---- Bangkok's landmarks: Wat Arun on the Thonburi bank, the Grand Palace across the river. To look at, never
-  // toys: nothing pokes them, no pin, no line (layout.ts LANDMARKS) ----
+  // ---- Bangkok's landmark: Wat Arun on the Thonburi bank. To look at, never a toy: nothing pokes it, no pin, no
+  // line (layout.ts LANDMARKS) ----
   const arun = arunParts()
   toy(LANDMARKS.arun.at, arun.lined, LANDMARKS.arun.scale, arun.plain)
-  const palace = palaceParts()
-  toy(LANDMARKS.palace.at, palace.lined, LANDMARKS.palace.scale, palace.plain)
-  /** Where their gold catches the light (map3d.ts glints it): Wat Arun's tip, the golden chedi's bell. */
+  /** Where its gold catches the light (map3d.ts glints it): Wat Arun's tip. */
   const gold: V3[] = [
     [LANDMARKS.arun.at[0], G + 0.36 * LANDMARKS.arun.scale, LANDMARKS.arun.at[1]],
-    [LANDMARKS.palace.at[0] + 0.06 * LANDMARKS.palace.scale, G + 0.08 * LANDMARKS.palace.scale, LANDMARKS.palace.at[1] - 0.075 * LANDMARKS.palace.scale],
   ]
 
   // ---- The pins, and the mall day's stamp beside ICONSIAM's ----
@@ -1246,13 +1242,12 @@ function palm(x: number, y: number, z: number, s: number, turn: number): BufferG
 
 // ---------------------------------------------------------------- landmarks (to look at, never toys)
 
-/** Wat Arun's and the palace's stone: warm ivory, a shade for the steps. */
+/** Wat Arun's stone: warm ivory, a shade for the steps. */
 const STONE = '#FFF4E6'
 const STONE_SHADE = '#F1E2D4'
 /** The porcelain set into Wat Arun's prangs: little flowers of broken china in every color (the app's pastels). */
 const CHINA = [PAL.pink, PAL.sky, PAL.mint, PAL.butter, PAL.lavenderDark, '#FFFFFF']
 const TEMPLE_GOLD = '#FFC94D'
-const GOLD_DEEP = '#F2AE2E'
 const ROOF_ORANGE = '#F47B45'
 const ROOF_GREEN = '#3DB27F'
 const LAWN = '#A9DEA6'
@@ -1353,118 +1348,6 @@ function arunParts(): { lined: BufferGeometry[]; plain: BufferGeometry[] } {
   lined.push(P.box(0.05, 0.004, 0.032, ROOF_ORANGE, { at: [0.21, 0.045, 0.07] }))
   plain.push(...[-1, 1].map((s) => P.cyl(0.0025, 0.0025, 0.04, CREAM, { at: [0.21 + s * 0.02, 0.024, 0.07] }, 4)))
   lined.push(...palm(-0.15, 0, 0.13, 0.32, 2.2), ...palm(0.15, 0, -0.14, 0.3, -0.6), ...roundTree(-0.155, 0, -0.13, 0.55, 1))
-  return { lined, plain }
-}
-
-/** A Thai roof: tiers of steep orange gables trimmed in green, each tier shorter and higher than the one under it, a
- *  gold gable at both ends and a gold chofa (the curling horn) on each end of the top tier. The ridge runs along
- *  `yaw` (0: along z). */
-function thaiRoof(x: number, y: number, z: number, len: number, wide: number, h: number, tiers: number, yaw = 0): BufferGeometry[] {
-  const parts: BufferGeometry[] = []
-  const [sx, sz] = [Math.sin(yaw), Math.cos(yaw)]
-  const rot: V3 = [0, yaw, 0]
-  for (let i = 0; i < tiers; i++) {
-    const L = len * (1 - i * 0.2)
-    const yi = y + i * h * 0.3
-    const w = wide * (1 - i * 0.08)
-    parts.push(
-      P.prism([[-w / 2, 0], [w / 2, 0], [0, h]], L, ROOF_ORANGE, { at: [x, yi, z], rot }),
-      // The green trim along both eaves.
-      ...[-1, 1].map((e) => P.box(0.005, 0.005, L + 0.004, ROOF_GREEN, { at: [x + Math.cos(yaw) * e * (w / 2), yi + 0.001, z - Math.sin(yaw) * e * (w / 2)], rot })),
-    )
-    if (i === tiers - 1)
-      for (const e of [-1, 1]) {
-        const d = e * (L / 2 + 0.002)
-        parts.push(P.prism([[-w * 0.36, h * 0.12], [w * 0.36, h * 0.12], [0, h * 0.86]], 0.003, TEMPLE_GOLD, { at: [x + sx * d, yi, z + sz * d], rot }))
-        parts.push(P.cone(0.004, 0.022, TEMPLE_GOLD, { at: [x + sx * (d + e * 0.004), yi + h + 0.008, z + sz * (d + e * 0.004)], rot: [e * 0.5 * sz, 0, -e * 0.5 * sx] }, 5))
-      }
-  }
-  return parts
-}
-
-/** A gold spire on a palace roof: rings that narrow, a long needle. */
-function spire(x: number, y: number, z: number, h: number): BufferGeometry[] {
-  const parts: BufferGeometry[] = []
-  const n = 5
-  for (let i = 0; i < n; i++) {
-    const r = 0.016 * (1 - i / (n + 1)) * (h / 0.1)
-    parts.push(P.cyl(r * 0.8, r, h * 0.08, i % 2 ? GOLD_DEEP : TEMPLE_GOLD, { at: [x, y + h * (0.04 + i * 0.08), z], rot: [0, Math.PI / 4, 0] }, 4))
-  }
-  parts.push(P.cone(0.0045 * (h / 0.1), h * 0.6, TEMPLE_GOLD, { at: [x, y + h * 0.7, z] }, 6))
-  return parts
-}
-
-/** The Grand Palace (in its own frame, its foot at 0, the front gate looking south, +z): white crenellated walls round
- *  a lawn, the gate, the Chakri hall in front (a long ivory hall under three tiered roofs, a gold spire on each),
- *  and behind it, inside the walls, Wat Phra Kaew's golden bell chedi, a gold prang and a long hall under tiers of
- *  orange and green roofs. */
-function palaceParts(): { lined: BufferGeometry[]; plain: BufferGeometry[] } {
-  const [hx, hz] = [0.13, 0.135]
-  const lined: BufferGeometry[] = [P.rbox(hx * 2, 0.008, hz * 2, 0.004, LAWN, { at: [0, 0.004, 0] })]
-  const plain: BufferGeometry[] = []
-  // ---- The white walls, their battlements, the round bastions at the corners ----
-  const wallH = 0.032
-  for (const s of [-1, 1]) {
-    lined.push(P.box(hx * 2, wallH, 0.01, '#FFFFFF', { at: [0, wallH / 2, s * hz] }), P.box(0.01, wallH, hz * 2, '#FFFFFF', { at: [s * hx, wallH / 2, 0] }))
-    for (let t = -hx + 0.012; t < hx - 0.006; t += 0.019) plain.push(P.box(0.009, 0.008, 0.011, '#FFFFFF', { at: [t, wallH + 0.004, s * hz] }))
-    for (let t = -hz + 0.012; t < hz - 0.006; t += 0.019) plain.push(P.box(0.011, 0.008, 0.009, '#FFFFFF', { at: [s * hx, wallH + 0.004, t] }))
-    plain.push(P.box(hx * 2 + 0.002, 0.004, 0.012, '#F6D9A8', { at: [0, wallH * 0.3, s * hz] }), P.box(0.012, 0.004, hz * 2 + 0.002, '#F6D9A8', { at: [s * hx, wallH * 0.3, 0] }))
-  }
-  for (const [cx, cz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) lined.push(P.cyl(0.016, 0.018, 0.045, '#FFFFFF', { at: [cx * hx, 0.0225, cz * hz] }, 10), P.cone(0.013, 0.03, TEMPLE_GOLD, { at: [cx * hx, 0.06, cz * hz] }, 8))
-  // The gate in the south wall: a white gatehouse under a little Thai roof.
-  lined.push(P.rbox(0.05, 0.05, 0.026, 0.004, '#FFFFFF', { at: [0.04, 0.025, hz] }), ...thaiRoof(0.04, 0.05, hz, 0.06, 0.032, 0.024, 2, Math.PI / 2), ...spire(0.04, 0.072, hz, 0.06))
-  plain.push(P.rbox(0.018, 0.03, 0.004, 0.003, '#B7864F', { at: [0.04, 0.015, hz + 0.014] }))
-  // ---- The Chakri hall: long and ivory, columns and tall windows, three tiered roofs with gold spires ----
-  const cz = 0.06
-  lined.push(
-    P.rbox(0.2, 0.012, 0.07, 0.004, STONE_SHADE, { at: [0, 0.014, cz] }),
-    P.rbox(0.18, 0.05, 0.05, 0.005, STONE, { at: [0, 0.045, cz] }),
-    P.rbox(0.05, 0.065, 0.06, 0.005, STONE, { at: [0, 0.05, cz + 0.004] }),
-  )
-  for (let i = 0; i < 8; i++) {
-    const wx = -0.08 + i * 0.0229
-    if (Math.abs(wx) < 0.03) continue
-    plain.push(P.rbox(0.008, 0.02, 0.003, 0.003, '#9FCBEA', { at: [wx, 0.05, cz + 0.026] }), P.box(0.012, 0.003, 0.004, TEMPLE_GOLD, { at: [wx, 0.063, cz + 0.026] }))
-  }
-  plain.push(P.rbox(0.016, 0.03, 0.003, 0.004, '#B7864F', { at: [0, 0.035, cz + 0.035] }), P.box(0.05, 0.004, 0.004, TEMPLE_GOLD, { at: [0, 0.07, cz + 0.035] }))
-  for (const [rx, big] of [[-0.065, 0], [0, 1], [0.065, 0]] as const) {
-    const ry = big ? 0.082 : 0.07
-    lined.push(...thaiRoof(rx, ry, cz, big ? 0.07 : 0.05, big ? 0.06 : 0.048, 0.03, 3), ...thaiRoof(rx, ry, cz, big ? 0.07 : 0.05, big ? 0.06 : 0.048, 0.03, 3, Math.PI / 2))
-    lined.push(...spire(rx, ry + 0.045, cz, big ? 0.12 : 0.08))
-  }
-  // ---- Behind it: the golden bell chedi, the gold prang beside it, the long hall with its tiered roof ----
-  {
-    const [x, z] = [0.06, -0.075]
-    lined.push(
-      P.cyl(0.04, 0.045, 0.014, STONE, { at: [x, 0.015, z] }, 12),
-      P.cyl(0.032, 0.037, 0.014, TEMPLE_GOLD, { at: [x, 0.029, z] }, 14),
-      P.cyl(0.027, 0.031, 0.01, GOLD_DEEP, { at: [x, 0.041, z] }, 14),
-      P.sphere(0.034, TEMPLE_GOLD, { at: [x, 0.066, z], scale: [1, 1.05, 1] }, 16),
-      P.box(0.026, 0.014, 0.026, GOLD_DEEP, { at: [x, 0.104, z] }),
-    )
-    for (let i = 0; i < 6; i++) lined.push(P.cyl(0.011 * (1 - i * 0.14), 0.013 * (1 - i * 0.14), 0.011, i % 2 ? GOLD_DEEP : TEMPLE_GOLD, { at: [x, 0.116 + i * 0.011, z] }, 10))
-    lined.push(P.cone(0.005, 0.07, TEMPLE_GOLD, { at: [x, 0.218, z] }, 6), P.sphere(0.004, '#FFFFFF', { at: [x, 0.254, z] }, 5))
-  }
-  {
-    // The gold prang (with a little green and pink porcelain, like the real one's).
-    const [x, z] = [-0.005, -0.09]
-    lined.push(P.rbox(0.05, 0.03, 0.05, 0.004, STONE, { at: [x, 0.023, z] }), ...thaiRoof(x, 0.038, z, 0.055, 0.05, 0.022, 2), ...thaiRoof(x, 0.038, z, 0.055, 0.05, 0.022, 2, Math.PI / 2))
-    for (let i = 0; i < 6; i++) {
-      const t = i / 6
-      const r = 0.017 * (1 - Math.pow(t, 1.6)) + 0.003
-      lined.push(P.cyl(r * 0.88, r, 0.016, i % 2 ? '#8ED8B6' : TEMPLE_GOLD, { at: [x, 0.07 + i * 0.016, z], rot: [0, Math.PI / 8, 0] }, 8))
-    }
-    lined.push(P.cone(0.004, 0.04, TEMPLE_GOLD, { at: [x, 0.185, z] }, 6))
-  }
-  {
-    // The long hall, its ridge running east-west, gold-trimmed white walls.
-    const [x, z] = [-0.075, -0.05]
-    lined.push(P.rbox(0.05, 0.012, 0.11, 0.004, STONE_SHADE, { at: [x, 0.014, z] }), P.rbox(0.042, 0.034, 0.1, 0.004, '#FFFFFF', { at: [x, 0.037, z] }))
-    plain.push(P.box(0.044, 0.004, 0.102, TEMPLE_GOLD, { at: [x, 0.052, z] }))
-    lined.push(...thaiRoof(x, 0.054, z, 0.12, 0.06, 0.04, 3))
-  }
-  // Trees on the lawn by the walls.
-  lined.push(...roundTree(0.1, 0, 0.12, 0.42, 0), ...roundTree(-0.105, 0, 0.12, 0.4, 2), ...roundTree(0.105, 0, -0.125, 0.4, 1))
   return { lined, plain }
 }
 
