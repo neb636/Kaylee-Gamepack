@@ -195,6 +195,14 @@ export const L = {
       whales: ollie('Wheee! Hockey!'),
       salmon: misty('I brought my big swing.'),
     },
+    // Sparkle, the first time she pokes these on the map (once a visit). The animals' names come from Maple's book.
+    pokes: {
+      balloon: 'My balloon! It flies us everywhere.',
+      rockies: 'The Rocky Mountains! Big and snowy.',
+      north: 'Way up north, it is snowy all year.',
+      hudson: 'Hudson Bay! Its water gets icy.',
+      prairie: 'The prairie! Fields of wheat for bread.',
+    },
   },
   snowman: {
     // The film in (story/films/snowman.ts): the snowy park under the castle hotel, flags and lanterns, nobody about.

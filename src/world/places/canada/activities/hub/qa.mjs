@@ -1,24 +1,62 @@
-// Canada’s direct pin selection, animal book and skating team.
-const tap = (page, id) => page.locator(`[data-anchor="${id}"]`).click({ force: true, timeout: 3000 }).catch(() => {})
-const ready = (page) => page.waitForFunction(() => window.__canadaMapQA?.().mode, null, { timeout: 20000 })
+// The map of Canada (map/world.ts): its look in every screen shape, the team at the rink (none, three, all six), a new
+// friend arriving, and a tap that closes in and opens a chapter. window.__canadaMapQA() has `targets` (each tap
+// target's center and size on screen), `team`, `arriving`, `glowing`, `picked`.
+const ready = (page) => page.waitForFunction(() => window.__canadaMapQA?.().targets?.['go:party'], null, { timeout: 20000 })
+const at = async (page, id) => (await page.evaluate(() => window.__canadaMapQA())).targets[id]
 
 export const screens = [
-  { name: 'canada-map-pins', hash: '#/world/canada', reset: true, wait: 1500 },
-  { name: 'canada-map-team', hash: '#/world/canada/hub/map?at=ottawa&team=bike,campfire,canoe,whales,taffy,snowman,bridge,salmon', reset: true, wait: 3000 },
-  { name: 'canada-map-forest-polar', hash: '#/world/canada/hub/map?at=forest', reset: true, wait: 3500 },
+  { name: 'canada-map', hash: '#/world/canada/hub/map', reset: true, wait: 4500 },
+  { name: 'canada-map-team-none', hash: '#/world/canada/hub/map?team=none', reset: true, wait: 4500 },
+  { name: 'canada-map-team-three', hash: '#/world/canada/hub/map?team=snowman,bike,canoe', reset: true, wait: 4500 },
+  { name: 'canada-map-team-all', hash: '#/world/canada/hub/map?team=all', reset: true, wait: 4500 },
+  { name: 'canada-map-arrival', hash: '#/world/canada/hub/map?team=snowman,bike&new=canoe', reset: true, wait: 2600 },
+  { name: 'canada-map-book', hash: '#/world/canada/hub/book', reset: true, wait: 1500 },
 ]
 
+export const pacing = [{ name: 'canada map', id: 'canada', hash: '#/world/canada/hub/map', reset: true }]
+
 export const motion = [
+  // A tap on Ollie's bay: the bay hops, the camera closes in, and Whale Watch opens.
   {
-    name: 'canada-map-pins',
+    name: 'canada-map-tap',
     seconds: 4,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/canada/hub/map`)
+      await page.goto(`${base}#/world/canada/hub/map?team=snowman,bike`)
       await ready(page)
+      await page.waitForTimeout(3500)
     },
     act: async (page) => {
-      await tap(page, 'go:whales')
+      const t = await at(page, 'go:whales')
+      if (t) await page.mouse.click(t.x, t.y)
       await page.waitForTimeout(3000)
+    },
+  },
+  // Back from a chapter with a new friend: the camera starts on the rink, Lulu pops in, then the board.
+  {
+    name: 'canada-map-arrive',
+    seconds: 6,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/canada/hub/map?team=snowman,bike&new=canoe`)
+    },
+    act: async (page) => {
+      await page.waitForTimeout(5500)
+    },
+  },
+  // The rink before the team is whole (Maple: not yet; the places still to do bounce), then the geese and the polar bear.
+  {
+    name: 'canada-map-pokes',
+    seconds: 7,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/canada/hub/map?team=bike,campfire`)
+      await ready(page)
+      await page.waitForTimeout(3500)
+    },
+    act: async (page) => {
+      for (const id of ['go:party', 'poke:polar', 'poke:bison', 'poke:orca']) {
+        const t = await at(page, id)
+        if (t) await page.mouse.click(t.x, t.y)
+        await page.waitForTimeout(1600)
+      }
     },
   },
 ]

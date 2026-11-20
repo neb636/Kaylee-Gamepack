@@ -1,6 +1,6 @@
-// Sparkle in the corner of the 3D map: she waves as she says the few things there are to say (tap a
-// bubble, a landmark's name the first time she pokes it), with the words in a bubble beside her for Dad. Tap her to
-// hear the last line again. The hub (Hub.tsx) decides what she says and when.
+// Sparkle in the corner of the map of Canada: she waves as she says the few things there are to say (her one line on
+// the first look, the team's count, a thing's name the first time she pokes it), with the words in a bubble beside her
+// for you. Tap her to hear the last line again. The hub (Hub.tsx) decides what she says and when.
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { lineText, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'

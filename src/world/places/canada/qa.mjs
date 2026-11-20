@@ -5,16 +5,12 @@ import { vp } from '../../../../scripts/qa-lib.mjs'
 
 /** Screenshots (scripts/qa-screens.mjs): how to get to each screen from a fresh start. */
 export const screens = [
-  // Canada: all activity pins on the 3D country map, including older region links.
-  { name: 'canada-intro', hash: '#/world/canada', reset: true, wait: 900 },
-  ...['msa', 'quebec', 'ottawa', 'prairies', 'banff', 'rockies', 'bc'].map((at) => ({ name: `canada-map-${at}`, hash: `#/world/canada/hub/map?at=${at}`, reset: true, wait: 2200 })),
   // Red Canoe: each part from its link (glide both ways to paddle), the loon family at the glacier.
   ...['glide', 'glide?paddle=pull', 'stream', 'loon', 'glacier'].map((to) => ({ name: `canada-canoe-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/canoe/${to}`, reset: true, wait: to.startsWith('glide') ? 4000 : 3000 })),
 ]
 
 /** Auto-played runs (scripts/qa-pacing.mjs): talk before the first touch, talk per touch, the play strip. */
 export const pacing = [
-  { name: 'canada pin map', id: 'canada', hash: '#/world/canada', reset: true },
   // Red Canoe: the core verb is a stroke (a drag beside the canoe), so the auto-player's taps only
   // splash, poke and make trout jump; the robot run that paddles is qa-motion's canada-canoe-stroke.
   { name: 'canada red canoe', id: 'canoe', hash: '#/world/canada/canoe', reset: true },
