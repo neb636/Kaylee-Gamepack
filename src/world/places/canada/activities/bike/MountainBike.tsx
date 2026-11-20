@@ -54,7 +54,7 @@ export function MountainBike({ onDone, setProgress, filmed }: Partial<CanadaActi
   useEffect(() => enter(run.section, run.section === 'berms' ? { trail: run.trail } : {}), [run])
   useEffect(() => progress.current?.(Math.max(0, PARTS.indexOf(run.section)), PARTS.length), [])
 
-  // The story: Maple's two lines in her cabin, then up the gondola (a tap anywhere skips).
+  // The hello (a link or a replay): Maple's line in her cabin, then up the gondola (a tap anywhere skips).
   const [story, setStory] = useState(run.section === 'story')
   const endStory = () => {
     if (!story) return

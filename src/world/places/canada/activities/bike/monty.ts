@@ -15,7 +15,7 @@ const PAD_DARK = '#4A9C57'
 /** A lily pad stuck on his antler: a flat round leaf with its notch, and a pink flower. Added to his head. */
 export function lilyPad(rig: Rig, bag: Bag): Object3D {
   const { R, headY } = rig.face
-  const r = 0.42 * R
+  const r = 0.5 * R
   // The leaf, a disc with a wedge cut out of it.
   const pts: [number, number][] = []
   for (let i = 0; i <= 20; i++) {
