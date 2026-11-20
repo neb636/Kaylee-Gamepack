@@ -1,0 +1,33 @@
+{
+  "title": "The Bangkok map on a phone",
+  "checkIn": "fix",
+  "kaylee": "On her iPhone the Bangkok map now reads like Nan and Krabi: a river she can follow, little neighborhoods, a wheel that looks like a wheel, and the house and the mall big enough to spot.",
+  "questions": [
+    "Asiatique's wheel now leans back so its face shows from above. Fun, or does it look broken?",
+    "The house moved one small step in from the board's west edge so its pin fits a phone held upright. OK?",
+    "Busy or calm: is the city about right now?"
+  ],
+  "pictures": [
+    {
+      "title": "iPhone upright",
+      "before": "pics/up-before.jpg",
+      "after": "pics/up-after.jpg",
+      "caption": "The river is never thinner than a river now, in stronger teal. Shophouses stand in 13 little streets (two market lanes) instead of dotted about. Towers line the skytrain. Wat Arun stands on a lawn. The house and ICONSIAM are bigger, and the board fills more of the screen."
+    },
+    {
+      "title": "iPhone sideways",
+      "before": "pics/side-before.jpg",
+      "after": "pics/side-after.jpg",
+      "caption": "Same board, same camera as before when sideways. ICONSIAM, Asiatique, the flower market and Wat Arun each have a pier out into the river."
+    },
+    {
+      "title": "Nan, Bangkok, Krabi (upright, same phone)",
+      "after": "pics/three-maps.jpg",
+      "caption": "The house and the mall are now about as big on the screen as Nan's village and Krabi's elephant camp."
+    }
+  ],
+  "links": [
+    { "label": "The Bangkok map", "hash": "#/world/thailand/hub/bangkok" },
+    { "label": "The Bangkok map with the camera knobs", "hash": "#/world/thailand/hub/bangkok?feel=1" }
+  ]
+}

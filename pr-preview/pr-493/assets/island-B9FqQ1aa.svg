@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>The island</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0f2ff"/><stop offset="1" stop-color="#b3dbff"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="sea" x1="0" y1="70" x2="0" y2="120" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8fe3ea"/><stop offset="1" stop-color="#3fc1cf"/></linearGradient>
+    <!-- one palm frond, from the crown at 0,0 out to the right -->
+    <path id="frond" d="M0 0C8-8 20-10 30-4C24-4 16-2 12 2C18 2 24 6 26 12C18 8 10 4 0 0Z"/>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="52" r="50" fill="url(#glow)"/>
+  <!-- the sun and a cloud -->
+  <circle cx="92" cy="28" r="9" fill="#fff6cc"/>
+  <g fill="#fff" opacity="0.9"><circle cx="24" cy="30" r="6"/><circle cx="32" cy="26" r="8"/><circle cx="40" cy="30" r="5.5"/><rect x="18" y="30" width="28" height="6" rx="3"/></g>
+  <!-- the sea -->
+  <rect x="0" y="72" width="120" height="48" fill="url(#sea)"/>
+  <path d="M0 72H120V75H0Z" fill="#c9f4f6"/>
+  <g fill="#fff" opacity="0.6"><rect x="8" y="98" width="16" height="2.5" rx="1.25"/><rect x="92" y="104" width="18" height="2.5" rx="1.25"/><rect x="18" y="110" width="12" height="2.5" rx="1.25"/></g>
+  <!-- the turquoise shallows round the island -->
+  <ellipse cx="60" cy="82" rx="44" ry="11" fill="#8fe3ea"/>
+  <!-- the island: green hill, crystal sand -->
+  <path d="M26 82C30 66 44 58 58 58C74 58 88 66 94 82Z" fill="#73cf86"/>
+  <path d="M64 58.5C78 60 88 68 94 82H72C72 72 70 64 64 58.5Z" fill="#48a96c"/>
+  <path d="M34 68C40 62 48 60 54 60" fill="none" stroke="#aee8b7" stroke-width="3" stroke-linecap="round"/>
+  <path d="M18 84C24 76 40 74 60 74C80 74 96 76 102 84C96 90 80 92 60 92C40 92 24 90 18 84Z" fill="#fff7f0"/>
+  <path d="M60 74C80 74 96 76 102 84C96 90 80 92 60 92C74 88 80 82 60 74Z" fill="#efdccd"/>
+  <!-- the palm -->
+  <path d="M54 80C54 66 58 52 66 42L70 43C63 54 60 66 60 80Z" fill="#c99266"/>
+  <path d="M57 80C57 66 61 53 68 42.5L70 43C63 54 60 66 60 80Z" fill="#a46e4b"/>
+  <g transform="translate(68 42)">
+    <use href="#frond" fill="#48a96c" transform="rotate(30)"/>
+    <use href="#frond" fill="#48a96c" transform="scale(-1 1) rotate(30)"/>
+    <use href="#frond" fill="#73cf86" transform="rotate(-20)"/>
+    <use href="#frond" fill="#73cf86" transform="scale(-1 1) rotate(-20)"/>
+    <use href="#frond" fill="#73cf86" transform="rotate(-70) scale(0.8)"/>
+  </g>
+  <g fill="#8a5b3d"><circle cx="66" cy="45" r="3"/><circle cx="71" cy="46" r="3"/></g>
+  <!-- a pink umbrella on the sand -->
+  <path d="M38 88V74" stroke="#a46e4b" stroke-width="2" stroke-linecap="round"/>
+  <path d="M26 76C28 68 48 68 50 76Z" fill="#ff8fb8"/>
+  <path d="M38 69C44 69 49 72 50 76H40Z" fill="#e7699c"/>
+  <path d="M32 70C34 69 36 68.5 38 68.5" fill="none" stroke="#ffc4da" stroke-width="2" stroke-linecap="round"/>
+  <!-- a little gull -->
+  <path d="M84 52q4-4 8 0q4-4 8 0" fill="none" stroke="#8a86c4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
