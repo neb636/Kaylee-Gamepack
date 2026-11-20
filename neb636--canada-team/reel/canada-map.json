@@ -12,21 +12,21 @@
       "name": "canada-map-arrive",
       "where": "canada-map-arrive",
       "seconds": 6,
-      "fps": 8.1,
+      "fps": 67.9,
       "status": "ok"
     },
     {
       "name": "canada-map-tap",
       "where": "canada-map-tap",
       "seconds": 4,
-      "fps": 13.1,
+      "fps": 81.6,
       "status": "ok"
     },
     {
       "name": "canada-map-pokes",
       "where": "canada-map-pokes",
       "seconds": 7,
-      "fps": 10.8,
+      "fps": 57.9,
       "status": "ok"
     }
   ]

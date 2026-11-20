@@ -1,0 +1,887 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "snowman",
+  "title": "Canada › Snowman",
+  "intro": "",
+  "page": "canada-snowman.html",
+  "audio": "canada-snowman.mp3",
+  "lines": 42,
+  "seconds": 100,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "snowman.filmIn.hello",
+      "text": "Bonjour, Quebec City! It's the Winter Carnival!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.filmIn.none",
+      "text": "But nobody here plays hockey. Only snow.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.ready.touch",
+      "text": "Tap the drum for the parade, or make more snowmen!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.ready.mouse",
+      "text": "Click the drum for the parade, or make more snowmen!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.hint.roll.touch",
+      "text": "Put your finger on the snowball and push!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.hint.stack",
+      "text": "Push the little ball into the big one!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.hint.hat",
+      "text": "Roll a snowball into the hat box!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.hint.sash",
+      "text": "Roll a snowball into the sash box!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.castle",
+      "text": "This castle is really a big hotel!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.poke.1",
+      "text": "Bonjour!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "snowman.wake.0",
+      "text": "Bonjour!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "snowman.upside",
+      "text": "Hello! Why is the sky down there?",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.filmOut.wake",
+      "text": "Oh! Bonjour, Maple!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "snowman.filmOut.tummy",
+      "text": "Ho ho! Everything bounces off my tummy!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "snowman",
+        "filmIn",
+        "hello"
+      ],
+      "text": "Bonjour, Quebec City! It's the Winter Carnival!",
+      "voice": "maple",
+      "key": "snowman.filmIn.hello",
+      "part": "snowman › filmIn",
+      "when": "The film in (story/films/snowman.ts): the snowy park under the castle hotel, flags and lanterns, nobody about.",
+      "ms": 3600,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        0,
+        3.54
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "filmIn",
+        "none"
+      ],
+      "text": "But nobody here plays hockey. Only snow.",
+      "voice": "maple",
+      "key": "snowman.filmIn.none",
+      "part": "snowman › filmIn",
+      "when": "She looks left and right: only snow.",
+      "ms": 3768,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        3.89,
+        7.59
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "filmIn",
+        "idea"
+      ],
+      "text": "Snow! That's it! Let's make a player!",
+      "voice": "maple",
+      "key": "snowman.filmIn.idea",
+      "part": "snowman › filmIn",
+      "when": "She pats a snowball; her eyes go wide.",
+      "ms": 2952,
+      "flags": [],
+      "span": [
+        7.94,
+        10.82
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "story",
+        "0"
+      ],
+      "text": "Bonjour! Look at all this snow!",
+      "voice": "maple",
+      "key": "snowman.story.0",
+      "part": "snowman › story",
+      "when": "The game's own hello (Maple, in the park below the castle), only from a link or a replay: after the film in, the game starts with Sparkle's instruction. Then Sparkle's one instruction per part.",
+      "ms": 2616,
+      "flags": [],
+      "span": [
+        12.44,
+        14.99
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "story",
+        "1"
+      ],
+      "text": "Let's build a snowman for my team!",
+      "voice": "maple",
+      "key": "snowman.story.1",
+      "part": "snowman › story",
+      "when": "",
+      "ms": 2040,
+      "flags": [],
+      "span": [
+        15.34,
+        17.31
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "roll"
+      ],
+      "text": "Push the snowball! Watch it grow!",
+      "voice": "sparkle",
+      "key": "snowman.roll",
+      "part": "snowman",
+      "when": "",
+      "ms": 2960,
+      "flags": [],
+      "span": [
+        18.93,
+        21.89
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "stack"
+      ],
+      "text": "Now roll the little ball into the big one!",
+      "voice": "sparkle",
+      "key": "snowman.stack",
+      "part": "snowman",
+      "when": "",
+      "ms": 2943,
+      "flags": [],
+      "span": [
+        22.24,
+        25.18
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "dress"
+      ],
+      "text": "Roll a snowball into a box!",
+      "voice": "sparkle",
+      "key": "snowman.dress",
+      "part": "snowman",
+      "when": "",
+      "ms": 2968,
+      "flags": [],
+      "span": [
+        25.53,
+        28.5
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "ready",
+        "touch"
+      ],
+      "text": "Tap the drum for the parade, or make more snowmen!",
+      "voice": "sparkle",
+      "key": "snowman.ready.touch",
+      "part": "snowman › ready",
+      "when": "",
+      "ms": 4330,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        30.12,
+        34.45
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "ready",
+        "mouse"
+      ],
+      "text": "Click the drum for the parade, or make more snowmen!",
+      "voice": "sparkle",
+      "key": "snowman.ready.mouse",
+      "part": "snowman › ready",
+      "when": "",
+      "ms": 3984,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        34.8,
+        38.72
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "roll",
+        "touch"
+      ],
+      "text": "Put your finger on the snowball and push!",
+      "voice": "sparkle",
+      "key": "snowman.hint.roll.touch",
+      "part": "snowman › hint › roll",
+      "when": "Stuck for a while: Sparkle helps (the hand shows it too).",
+      "ms": 3004,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        40.34,
+        43.35
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "roll",
+        "mouse"
+      ],
+      "text": "Click the snowball and push it!",
+      "voice": "sparkle",
+      "key": "snowman.hint.roll.mouse",
+      "part": "snowman › hint › roll",
+      "when": "",
+      "ms": 2184,
+      "flags": [],
+      "span": [
+        43.7,
+        45.81
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "stack"
+      ],
+      "text": "Push the little ball into the big one!",
+      "voice": "sparkle",
+      "key": "snowman.hint.stack",
+      "part": "snowman › hint",
+      "when": "Stuck for a while: Sparkle helps (the hand shows it too).",
+      "ms": 3141,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        47.43,
+        50.57
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "hat"
+      ],
+      "text": "Roll a snowball into the hat box!",
+      "voice": "sparkle",
+      "key": "snowman.hint.hat",
+      "part": "snowman › hint",
+      "when": "Stuck for a while: Sparkle helps (the hand shows it too).",
+      "ms": 3290,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        50.92,
+        54.21
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "sash"
+      ],
+      "text": "Roll a snowball into the sash box!",
+      "voice": "sparkle",
+      "key": "snowman.hint.sash",
+      "part": "snowman › hint",
+      "when": "Stuck for a while: Sparkle helps (the hand shows it too).",
+      "ms": 3464,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        54.56,
+        58.03
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "drum",
+        "touch"
+      ],
+      "text": "Tap the big drum!",
+      "voice": "sparkle",
+      "key": "snowman.hint.drum.touch",
+      "part": "snowman › hint › drum",
+      "when": "Stuck for a while: Sparkle helps (the hand shows it too).",
+      "ms": 1922,
+      "flags": [],
+      "span": [
+        59.65,
+        61.57
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "hint",
+        "drum",
+        "mouse"
+      ],
+      "text": "Click the big drum!",
+      "voice": "sparkle",
+      "key": "snowman.hint.drum.mouse",
+      "part": "snowman › hint › drum",
+      "when": "",
+      "ms": 1848,
+      "flags": [],
+      "span": [
+        61.92,
+        63.71
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "castle"
+      ],
+      "text": "This castle is really a big hotel!",
+      "voice": "sparkle",
+      "key": "snowman.castle",
+      "part": "snowman",
+      "when": "Tap-to-hear facts, the first time she pokes them.",
+      "ms": 3325,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        65.33,
+        68.66
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "iceMoose"
+      ],
+      "text": "A moose made of ice!",
+      "voice": "sparkle",
+      "key": "snowman.iceMoose",
+      "part": "snowman",
+      "when": "",
+      "ms": 1970,
+      "flags": [],
+      "span": [
+        69.01,
+        70.98
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "big"
+      ],
+      "text": "Wow, a big one!",
+      "voice": "maple",
+      "key": "snowman.big",
+      "part": "snowman",
+      "when": "Maple acting it out.",
+      "ms": 1560,
+      "flags": [],
+      "span": [
+        71.33,
+        72.83
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "made",
+        "0"
+      ],
+      "text": "A snowman! Ta-da!",
+      "voice": "maple",
+      "key": "snowman.made.0",
+      "part": "snowman › made",
+      "when": "",
+      "ms": 2208,
+      "flags": [],
+      "span": [
+        74.45,
+        76.6
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "made",
+        "1"
+      ],
+      "text": "Another snowman!",
+      "voice": "maple",
+      "key": "snowman.made.1",
+      "part": "snowman › made",
+      "when": "",
+      "ms": 1416,
+      "flags": [],
+      "span": [
+        76.95,
+        78.31
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "made",
+        "2"
+      ],
+      "text": "He's so wobbly!",
+      "voice": "maple",
+      "key": "snowman.made.2",
+      "part": "snowman › made",
+      "when": "",
+      "ms": 1512,
+      "flags": [],
+      "span": [
+        78.66,
+        80.12
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "climb"
+      ],
+      "text": "Whee! I'm on top!",
+      "voice": "maple",
+      "key": "snowman.climb",
+      "part": "snowman",
+      "when": "",
+      "ms": 2064,
+      "flags": [],
+      "span": [
+        81.74,
+        83.75
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "ride"
+      ],
+      "text": "Look at me!",
+      "voice": "maple",
+      "key": "snowman.ride",
+      "part": "snowman",
+      "when": "",
+      "ms": 672,
+      "flags": [],
+      "span": [
+        84.1,
+        84.71
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "mapleHat"
+      ],
+      "text": "Hee hee! That's for a snowman!",
+      "voice": "maple",
+      "key": "snowman.mapleHat",
+      "part": "snowman",
+      "when": "",
+      "ms": 2880,
+      "flags": [],
+      "span": [
+        85.06,
+        87.89
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "dodge"
+      ],
+      "text": "Eek! Watch out!",
+      "voice": "maple",
+      "key": "snowman.dodge",
+      "part": "snowman",
+      "when": "",
+      "ms": 1656,
+      "flags": [],
+      "span": [
+        88.24,
+        89.83
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "poke",
+        "0"
+      ],
+      "text": "Hee hee!",
+      "voice": "maple",
+      "key": "snowman.poke.0",
+      "part": "snowman › poke",
+      "when": "",
+      "ms": 744,
+      "flags": [],
+      "span": [
+        91.45,
+        92.13
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "poke",
+        "1"
+      ],
+      "text": "Bonjour!",
+      "voice": "maple",
+      "key": "snowman.poke.1",
+      "part": "snowman › poke",
+      "when": "The other snowmen wake up and talk.",
+      "ms": 792,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        92.48,
+        93.21
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "parade"
+      ],
+      "text": "Here comes the parade!",
+      "voice": "maple",
+      "key": "snowman.parade",
+      "part": "snowman",
+      "when": "",
+      "ms": 1536,
+      "flags": [],
+      "span": [
+        94.83,
+        96.3
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "tuque"
+      ],
+      "text": "Bonjour! I am Tuque!",
+      "voice": "snowman",
+      "key": "snowman.tuque",
+      "part": "snowman",
+      "when": "",
+      "ms": 2856,
+      "flags": [],
+      "span": [
+        96.65,
+        99.44
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "wake",
+        "0"
+      ],
+      "text": "Bonjour!",
+      "voice": "snowman",
+      "key": "snowman.wake.0",
+      "part": "snowman › wake",
+      "when": "Maple's hello, anywhere she meets her.",
+      "ms": 1368,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        101.06,
+        102.36
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "wake",
+        "1"
+      ],
+      "text": "Hello, hello!",
+      "voice": "snowman",
+      "key": "snowman.wake.1",
+      "part": "snowman › wake",
+      "when": "",
+      "ms": 1488,
+      "flags": [],
+      "span": [
+        102.71,
+        104.13
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "wake",
+        "2"
+      ],
+      "text": "To the parade!",
+      "voice": "snowman",
+      "key": "snowman.wake.2",
+      "part": "snowman › wake",
+      "when": "",
+      "ms": 1248,
+      "flags": [],
+      "span": [
+        104.48,
+        105.66
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "upside"
+      ],
+      "text": "Hello! Why is the sky down there?",
+      "voice": "snowman",
+      "key": "snowman.upside",
+      "part": "snowman",
+      "when": "",
+      "ms": 3288,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        107.28,
+        110.51
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "tickle"
+      ],
+      "text": "Hee hee, that tickles!",
+      "voice": "snowman",
+      "key": "snowman.tickle",
+      "part": "snowman",
+      "when": "",
+      "ms": 2376,
+      "flags": [],
+      "span": [
+        110.86,
+        113.18
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "bye"
+      ],
+      "text": "Merci! Bye bye!",
+      "voice": "snowman",
+      "key": "snowman.bye",
+      "part": "snowman",
+      "when": "",
+      "ms": 2328,
+      "flags": [],
+      "span": [
+        113.53,
+        115.79
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "done"
+      ],
+      "text": "You made a whole parade!",
+      "voice": "maple",
+      "key": "snowman.done",
+      "part": "snowman",
+      "when": "",
+      "ms": 1680,
+      "flags": [],
+      "span": [
+        116.14,
+        117.76
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "filmOut",
+        "wake"
+      ],
+      "text": "Oh! Bonjour, Maple!",
+      "voice": "snowman",
+      "key": "snowman.filmOut.wake",
+      "part": "snowman › filmOut",
+      "when": "",
+      "ms": 3192,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        119.38,
+        122.52
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "filmOut",
+        "ask"
+      ],
+      "text": "Tuque! Can you play hockey?",
+      "voice": "maple",
+      "key": "snowman.filmOut.ask",
+      "part": "snowman › filmOut",
+      "when": "",
+      "ms": 2256,
+      "flags": [],
+      "span": [
+        122.87,
+        125.08
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "filmOut",
+        "tummy"
+      ],
+      "text": "Ho ho! Everything bounces off my tummy!",
+      "voice": "snowman",
+      "key": "snowman.filmOut.tummy",
+      "part": "snowman › filmOut",
+      "when": "",
+      "ms": 3744,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        125.43,
+        129.11
+      ]
+    },
+    {
+      "path": [
+        "snowman",
+        "filmOut",
+        "team"
+      ],
+      "text": "You're on the team!",
+      "voice": "maple",
+      "key": "snowman.filmOut.team",
+      "part": "snowman › filmOut",
+      "when": "",
+      "ms": 1296,
+      "flags": [],
+      "span": [
+        129.46,
+        130.69
+      ]
+    }
+  ]
+}

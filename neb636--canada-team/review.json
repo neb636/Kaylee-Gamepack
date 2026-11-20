@@ -11,7 +11,7 @@
     {
       "name": "canada-story",
       "moments": [
-        "#/world/canada/story/intro~62"
+        "canada-film-intro"
       ]
     },
     {
@@ -31,9 +31,9 @@
     {
       "name": "canada-friends",
       "moments": [
-        "#/world/canada/story/bike-out~19",
-        "#/world/canada/story/snowman-out~18",
-        "#/world/canada/story/campfire-out~19"
+        "#/world/canada/story/bike-out~16",
+        "#/world/canada/story/snowman-out~15",
+        "#/world/canada/story/salmon-out~16"
       ]
     },
     {
@@ -41,7 +41,7 @@
       "moments": [
         "canada-party-flick",
         "canada-party-rush",
-        "#/world/canada/story/game-win~23"
+        "#/world/canada/story/game-win~18"
       ]
     }
   ],
@@ -69,6 +69,11 @@
       "before": "pics/map-before.png",
       "after": "pics/map-after.png",
       "caption": "A toy tray of Canada in the sky, her friends standing where they live; the ones who have joined wait at the rink in pink scarves."
+    },
+    {
+      "title": "The world map",
+      "after": "pics/world-pin.png",
+      "caption": "Canada's pin is a moose, and Sparkle's balloon floats clear of it."
     }
   ],
   "listens": [
@@ -751,5 +756,43 @@
         }
       ]
     }
+  ],
+  "tableReads": [
+    [
+      "canada",
+      "story"
+    ],
+    [
+      "canada",
+      "hub"
+    ],
+    [
+      "canada",
+      "snowman"
+    ],
+    [
+      "canada",
+      "bike"
+    ],
+    [
+      "canada",
+      "campfire"
+    ],
+    [
+      "canada",
+      "canoe"
+    ],
+    [
+      "canada",
+      "salmon"
+    ],
+    [
+      "canada",
+      "whales"
+    ],
+    [
+      "canada",
+      "party"
+    ]
   ]
 }
