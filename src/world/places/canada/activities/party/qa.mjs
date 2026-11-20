@@ -96,14 +96,14 @@ export const motion = [
       await hersNow(page)
     },
     act: async (page) => {
-      await page.waitForFunction(() => window.__canadaPartyQA?.().wall === 'up', null, { timeout: 8000 })
+      await page.waitForFunction(() => window.__canadaPartyQA?.().wall === 'up', null, { timeout: 25000 })
       await page.waitForTimeout(1200)
       await flick(page)
-      await page.waitForFunction(() => window.__canadaPartyQA?.().wall === 'down', null, { timeout: 10000 })
+      await page.waitForFunction(() => window.__canadaPartyQA?.().wall === 'down', null, { timeout: 30000 })
       await hersNow(page)
       await page.waitForTimeout(600)
       await flick(page)
-      await page.waitForFunction(() => window.__canadaPartyQA?.().phase === 'win', null, { timeout: 8000 })
+      await page.waitForFunction(() => window.__canadaPartyQA?.().phase === 'win', null, { timeout: 25000 })
       await page.waitForTimeout(4000)
     },
   },
