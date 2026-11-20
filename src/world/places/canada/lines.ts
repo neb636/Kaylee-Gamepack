@@ -123,7 +123,7 @@ export const L = {
       // The golden cup on its stand in the snow.
       cup: maple("That's the Maple Cup. I want to win it so much!"),
       // The geese skate in, in a V, Gus at the front.
-      geese: gus('Honk honk! The Cup is ours. Geese win every year!'),
+      geese: gus('Honk honk! Geese win the Cup every year!'),
       // The memory (the storybook look): last winter, six geese round one little beaver.
       last: maple('Last winter, I played all by myself.'),
       // Still the memory: pucks pile up in Maple's net, she sits down on her tail.
@@ -360,7 +360,7 @@ export const L = {
     // The game's hello, from a link or a replay (after the film it starts on the water with Sparkle's line).
     story: maple('Bonjour! Hop in, we go to find Lulu!'),
     // Sparkle: how to paddle, and the hint when she hasn't paddled for a while (the hand shows it too).
-    go: onDevice('Hold your finger on the water, and Maple paddles there!', 'Click and hold on the water, and Maple paddles there!'),
+    go: onDevice('Hold the water, and Maple paddles there!', 'Click and hold the water, and Maple paddles there!'),
     hint: onDevice('Touch the water in front of the canoe!', 'Click the water in front of the canoe!'),
     // Where the blue comes from.
     stream: 'Paddle to the milky water by the glacier stream!',
