@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "canada-friends",
+  "title": "Canada friends",
+  "video": "canada-friends.mp4",
+  "gif": "canada-friends.gif",
+  "seconds": 40,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Canada story bike out",
+      "where": "#/world/canada/story/bike-out",
+      "seconds": 19,
+      "fps": 0.3,
+      "status": "too slow to film here (0.3 fps, no GPU?): film it on the Mac"
+    },
+    {
+      "name": "Canada story snowman out",
+      "where": "#/world/canada/story/snowman-out",
+      "seconds": 18,
+      "fps": 16.1,
+      "status": "ok"
+    },
+    {
+      "name": "Canada story campfire out",
+      "where": "#/world/canada/story/campfire-out",
+      "seconds": 19,
+      "fps": 16.9,
+      "status": "ok"
+    }
+  ]
+}

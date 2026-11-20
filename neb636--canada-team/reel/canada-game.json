@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "canada-game",
+  "title": "Canada game",
+  "video": "canada-game.mp4",
+  "gif": "canada-game.gif",
+  "seconds": 45,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "canada-party-flick",
+      "where": "canada-party-flick",
+      "seconds": 8,
+      "fps": 16.3,
+      "status": "ok"
+    },
+    {
+      "name": "canada-party-rush",
+      "where": "canada-party-rush",
+      "seconds": 9,
+      "fps": 45,
+      "status": "ok"
+    },
+    {
+      "name": "Canada story game win",
+      "where": "#/world/canada/story/game-win",
+      "seconds": 23,
+      "fps": 53.4,
+      "status": "ok"
+    }
+  ]
+}

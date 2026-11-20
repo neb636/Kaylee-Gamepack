@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "canada-story",
+  "title": "Canada story",
+  "video": "canada-story.mp4",
+  "gif": "canada-story.gif",
+  "seconds": 64,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Canada story intro",
+      "where": "#/world/canada/story/intro",
+      "seconds": 62,
+      "fps": 16.4,
+      "status": "ok"
+    }
+  ]
+}
