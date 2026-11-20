@@ -103,7 +103,7 @@ export const CANOE_OUT: StoryFilm = {
     const LX = -1.3
     const LZ = -37.2
     const lookLulu = new Vector3(LX, 0.4, LZ)
-    const two = cam([-0.5, 1.35, -32.2], [-0.55, 0.62, -38.3], { eye: [-0.5, 1.25, -32.8] }, { fov: 38, tall: { eye: [-0.5, 1.7, -30.4], fov: 46 } })
+    const two = cam([-0.75, 1.2, -33.4], [-0.6, 0.6, -38.2], { eye: [-0.7, 1.12, -33.9] }, { fov: 38, tall: { eye: [-0.7, 1.55, -31.6], fov: 46 } })
     let squeakT = -1
     return [
       {
@@ -116,7 +116,7 @@ export const CANOE_OUT: StoryFilm = {
           set.glow(1)
           Object.assign(b, { x: 0.5, z: -38, h: 25 * DEG, speed: 0, paddling: false, look: lookLulu })
           lulu.place(LX, 0, LZ, 50)
-          chick.ride(lulu.body, 0, 0.36 * lulu.height, -0.2 * lulu.height, 0)
+          chick.ride(lulu.body, 0, 0.4 * lulu.height, -0.22 * lulu.height, 0)
           set.canoe.wave()
         },
       },
@@ -128,24 +128,25 @@ export const CANOE_OUT: StoryFilm = {
         start: () => lulu.pull('happy'),
       },
       {
-        // The song: head thrown back, the long call echoing off the glacier. Her chick tries too: a tiny squeak.
+        // The song: head thrown back, the long call echoing off the glacier (from her side, so the head going back and
+        // the chick on her back both show). Her chick tries too: a tiny squeak.
         id: 'song',
-        shot: cam([LX + 0.6, 0.3, LZ + 1.7], [LX, 0.5, LZ], { eye: [LX + 0.5, 0.26, LZ + 1.35] }, { fov: 38, tall: { fov: 46 } }),
-        dur: 4.4,
+        shot: cam([LX - 0.75, 0.6, LZ + 1.6], [LX - 0.05, 0.4, LZ], { eye: [LX - 0.62, 0.52, LZ + 1.3] }, { fov: 38, tall: { fov: 48 } }),
+        dur: 4,
         start: () => {
           s.sfx.loon()
           s.sparkle(LX, 0.9, LZ, 6)
         },
-        tick: (_k, t) => {
-          lulu.calling = t < 2.8 ? Math.min(1, t * 2.5) : Math.max(0, 1 - (t - 2.8) * 4)
+        tick: (_k, t, dt) => {
+          lulu.calling = t < 2.5 ? Math.min(1, t * 2.5) : Math.max(0, 1 - (t - 2.5) * 4)
           if (squeakT >= 0) {
-            squeakT += 1 / 60
+            squeakT += dt
             chick.calling = Math.max(0, Math.sin(Math.min(1, squeakT / 0.7) * Math.PI))
           }
         },
         cues: [
           [1.4, () => s.sparkle(LX, 1.1, LZ, 6)],
-          [3.2, () => ((squeakT = 0), chick.hop(), snd.chick())],
+          [2.9, () => ((squeakT = 0), chick.hop(), snd.chick())],
         ],
       },
       {

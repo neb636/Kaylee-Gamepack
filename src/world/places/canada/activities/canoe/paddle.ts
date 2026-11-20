@@ -928,8 +928,9 @@ export class RedCanoe implements World3D {
     const reach = LOON_NEAR + (LOON_NEAR_MAX - LOON_NEAR) * clamp((this.loonT - 12) / 20)
     if (phase === 'bubbles') {
       // Bubbles where she'll come up; she comes up after a moment (at once if the canoe is already there).
-      if (Math.random() < dt * 14) this.bubbles.emit(this.loonAt.x + (Math.random() - 0.5) * 1.2, -0.3, this.loonAt.z + (Math.random() - 0.5) * 1.2, 0, 0.7, 0, 0.7, 0.1)
-      if (Math.random() < dt * 3) this.foam.emit(this.loonAt.x, 0.02, this.loonAt.z, 0, 0, 0, 1.2, 0.8)
+      // (Big enough to spot from across the water.)
+      if (Math.random() < dt * 18) this.bubbles.emit(this.loonAt.x + (Math.random() - 0.5) * 1.4, -0.2, this.loonAt.z + (Math.random() - 0.5) * 1.4, 0, 0.9, 0, 0.8, 0.2 + Math.random() * 0.1)
+      if (Math.random() < dt * 4) this.foam.emit(this.loonAt.x, 0.02, this.loonAt.z, 0, 0, 0, 1.4, 1.2)
       if (this.loonT > 3.2 || dist < reach) {
         this.loonPhase = 'float'
         this.loonT = 0
@@ -992,12 +993,18 @@ export class RedCanoe implements World3D {
         else this.pickLoonSpot(11, 16)
       }
     } else if (phase === 'family') {
-      // The payoff: Lulu, her chick on her back, swims slowly round the canoe, laughing now and then; the chick squeaks.
-      const r = 4.2
-      const b = t * 0.32 + 0.6
+      // The payoff: Lulu, her chick on her back, swims up beside the canoe on the camera's side, facing us (her face and
+      // her chick in the shot); then slowly round the canoe, laughing now and then, the chick squeaking.
       const l = this.mama
-      l.root.position.set(this.x + Math.cos(b) * r, 0, this.z + Math.sin(b) * r)
-      l.root.rotation.y = Math.atan2(-Math.sin(b), Math.cos(b))
+      const cam = this.rig.camera.position
+      const toCam = Math.atan2(cam.x - this.x, cam.z - this.z)
+      const b = toCam + 0.45 + Math.max(0, this.doneT - 6) * 0.3
+      const r = 3.4
+      const want = tmp.set(this.x + Math.sin(b) * r, 0, this.z + Math.cos(b) * r)
+      l.root.position.lerp(want, damp(dt, 2.5))
+      const faceCam = Math.atan2(cam.x - l.root.position.x, cam.z - l.root.position.z) - 0.5
+      const swim = b + Math.PI / 2
+      l.root.rotation.y += wrapAngle((this.doneT < 6 ? faceCam : swim) - l.root.rotation.y) * damp(dt, 3)
       if ((this.callT -= dt) < 0) {
         this.callT = 5 + Math.random() * 3
         if (Math.random() < 0.6) {
@@ -1019,6 +1026,8 @@ export class RedCanoe implements World3D {
     this.loonFinds = LOON_FINDS
     this.mama.root.visible = true
     this.mama.surface()
+    // (From the glacier link she starts beside the canoe; found on the water, she's already near it.)
+    if (this.mama.root.position.distanceTo(tmp.set(this.x, 0, this.z)) > 8) this.mama.root.position.set(this.x + Math.sin(this.head) * 4, 0, this.z + Math.cos(this.head) * 4)
     this.loon.root.visible = false
     this.mama.flap()
     this.glowGoal = 1
@@ -1257,7 +1266,7 @@ export class RedCanoe implements World3D {
     }
     if (this.doneT >= 0 && this.doneT < 5) {
       // The family round the canoe, the glacier and the Ten Peaks behind.
-      return { center: new Vector3(this.x, 1.3, this.z - 1.5), half: tall ? new Vector3(4.6, 2.2, 5.5) : new Vector3(6.5, 2.2, 4.5), yaw: near(24), pitch: 14 }
+      return { center: new Vector3(this.x, 0.9, this.z - 0.8), half: tall ? new Vector3(3.4, 1.8, 4.2) : new Vector3(4.6, 1.8, 3.4), yaw: near(24), pitch: 14 }
     }
     // Behind the canoe, a little above, with plenty of water ahead of it for her finger (the canoe low on the screen,
     // so her hand on the water never covers it).

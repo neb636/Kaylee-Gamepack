@@ -119,7 +119,7 @@ export class Lulu extends ToyActor {
     const happy = p.face?.kind === 'happy' ? p.face.k : 0
     const wow = p.face?.kind === 'wow' ? p.face.k : 0
     const call = this.calling
-    this.neck.rotation.set(p.nod + p.droop * 0.4 - call * 0.55 - wow * 0.12, p.headTurn + 0.25 * p.shake, 0.12 * p.wave - 0.2 * p.shake + happy * 0.12 * Math.sin(t * 9))
+    this.neck.rotation.set(p.nod + p.droop * 0.4 - call * 0.8 - wow * 0.12, p.headTurn + 0.25 * p.shake, 0.12 * p.wave - 0.2 * p.shake + happy * 0.12 * Math.sin(t * 9))
     this.eyes.scale.y = Math.min(p.lid, 1 - p.droop * 0.4 - happy * 0.6) * (1 + wow * 0.2)
     this.bill.rotation.x = Math.max(p.talk, call * (0.7 + 0.3 * Math.sin(t * 9)), wow * 0.5) * 0.6
     const beat = p.flap * 0.9
