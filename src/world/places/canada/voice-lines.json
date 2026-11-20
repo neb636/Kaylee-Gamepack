@@ -29,8 +29,6 @@
   "Maple's animal book! Tap an animal to hear about it.",
   "Maple's animal book! Click an animal to hear about it.",
   "A snowy owl! Quebec's bird.",
-  "A red squirrel! It loves sap.",
-  "A chickadee! Chick-a-dee-dee!",
   "Canada geese! They fly in a V.",
   "A beluga! A white whale that sings.",
   "A red fox! It hops into the snow.",
@@ -47,11 +45,7 @@
   "A firefly! Its tail lights up.",
   "A spring peeper! A tiny frog.",
   "A snowshoe hare! White in winter.",
-  "An elk! It squeaks like a whistle.",
-  "A grizzly bear! It sleeps all winter.",
-  "A bighorn sheep! Curly horns!",
   "A mountain goat! It climbs rocks.",
-  "A wolf! Wolves live in a pack.",
   "A pika! It says eep!",
   "A marmot! It whistles.",
   "A ground squirrel! It stands up tall.",
@@ -71,7 +65,6 @@
   "A banana slug! Slimy and yellow.",
   "A raven! A clever bird.",
   "A bison! It rolls in the dust.",
-  "A Mountie horse! Canada's police ride horses.",
   "A polar bear! It lives up north.",
   "This is Canada! In winter, the water turns to ice.",
   {
@@ -195,6 +188,11 @@
     "text": "I brought my big swing.",
     "voice": "bear"
   },
+  "My balloon! It flies us everywhere.",
+  "The Rocky Mountains! Big and snowy.",
+  "Way up north, it is snowy all year.",
+  "Hudson Bay! Its water gets icy.",
+  "The prairie! Fields of wheat for bread.",
   {
     "text": "Bonjour, Quebec City! It's the Winter Carnival!",
     "voice": "maple"
@@ -208,11 +206,11 @@
     "voice": "maple"
   },
   {
-    "text": "Bonjour! It's the Winter Carnival!",
+    "text": "Bonjour! Look at all this snow!",
     "voice": "maple"
   },
   {
-    "text": "Let's roll snowmen!",
+    "text": "Let's build a snowman for my team!",
     "voice": "maple"
   },
   "Push the snowball! Watch it grow!",
@@ -270,6 +268,10 @@
     "voice": "maple"
   },
   {
+    "text": "Bonjour! I am Tuque!",
+    "voice": "snowman"
+  },
+  {
     "text": "Bonjour!",
     "voice": "snowman"
   },
@@ -298,7 +300,7 @@
     "voice": "maple"
   },
   {
-    "text": "Bonjour! I am Tuque!",
+    "text": "Oh! Bonjour, Maple!",
     "voice": "snowman"
   },
   {
@@ -326,11 +328,7 @@
     "voice": "maple"
   },
   {
-    "text": "Bonjour! I want to ride all the way down to the waterfall!",
-    "voice": "maple"
-  },
-  {
-    "text": "Up we go!",
+    "text": "Up we go! Then we ride down to Monty!",
     "voice": "maple"
   },
   "Hold your finger down and steer the bike!",
@@ -404,11 +402,7 @@
     "voice": "maple"
   },
   {
-    "text": "We made it! The waterfall!",
-    "voice": "maple"
-  },
-  {
-    "text": "Thank you! What a ride!",
+    "text": "There he is, in his bath!",
     "voice": "maple"
   },
   {
@@ -456,7 +450,7 @@
     "voice": "maple"
   },
   {
-    "text": "Shh! Who's out there?",
+    "text": "Shh! Somebody is watching us from the dark.",
     "voice": "maple"
   },
   "Move your finger to shine the light!",
@@ -473,7 +467,7 @@
     "voice": "maple"
   },
   {
-    "text": "Hey! Our marshmallows are gone!",
+    "text": "Oh no! Now the whole bag is gone!",
     "voice": "maple"
   },
   "Follow the little paw prints!",
@@ -688,23 +682,17 @@
     "voice": "maple"
   },
   {
-    "text": "I've never seen a whale!",
-    "voice": "maple"
-  },
-  {
-    "text": "Let's find them!",
+    "text": "Bonjour! Off we go to find Ollie!",
     "voice": "maple"
   },
   "Hold the water where the boat should go!",
   "Click and hold where the boat should go!",
-  "Hold and push to steer the boat!",
-  "Click and hold, then push to steer the boat!",
-  "A sleepy otter floated away. Go gently!",
+  "There is Ollie, fast asleep! Go gently.",
   "A spout! Steer there to find the whale!",
   "The orca family! Go fast and turn!",
   "Shh! Listen to the whales sing.",
   "Steer out past the lighthouse!",
-  "Go slowly to the sleepy otter.",
+  "Go slowly to Ollie.",
   "Take her back to her friends!",
   "Look for the spout. Steer there!",
   "Go fast and turn. The baby copies you!",
@@ -719,7 +707,7 @@
     "voice": "otter"
   },
   {
-    "text": "Thank you!",
+    "text": "Can I come too?",
     "voice": "otter"
   },
   {
@@ -737,6 +725,10 @@
   {
     "text": "Yum, a clam!",
     "voice": "otter"
+  },
+  {
+    "text": "I've never seen a whale!",
+    "voice": "maple"
   },
   {
     "text": "A whale! A real whale!",
@@ -893,7 +885,7 @@
     "voice": "bear"
   },
   {
-    "text": "I'm a spirit bear!",
+    "text": "I'm a spirit bear. I'm hungry!",
     "voice": "bear"
   },
   {
@@ -901,11 +893,15 @@
     "voice": "bear"
   },
   {
+    "text": "Missed again!",
+    "voice": "bear"
+  },
+  {
     "text": "Okay, berries instead!",
     "voice": "bear"
   },
   {
-    "text": "Berries are easier!",
+    "text": "Too slippery! Berries, then.",
     "voice": "bear"
   },
   {
@@ -945,18 +941,46 @@
     "voice": "maple"
   },
   {
-    "text": "Mmm. Nice one.",
-    "voice": "moose"
+    "text": "Got it!",
+    "voice": "maple"
+  },
+  {
+    "text": "Mine! I mean, yours!",
+    "voice": "raccoon"
+  },
+  {
+    "text": "Boing! Not past my tummy!",
+    "voice": "snowman"
   },
   {
     "text": "Bonk. Not today, geese.",
     "voice": "moose"
   },
   {
+    "text": "Wheee! I got it!",
+    "voice": "otter"
+  },
+  {
+    "text": "Honk! The goose wall!",
+    "voice": "gus"
+  },
+  {
+    "text": "Watch my big slap shot!",
+    "voice": "bear"
+  },
+  "The net is open! Shoot!",
+  {
+    "text": "Oops. It went under me.",
+    "voice": "moose"
+  },
+  {
+    "text": "Honk! A goose goal!",
+    "voice": "gus"
+  },
+  {
     "text": "We won! We're the champions!",
     "voice": "maple"
   },
-  "Hockey is Canada's favorite winter sport!",
   {
     "text": "Pass me the puck!",
     "voice": "maple"
@@ -966,28 +990,28 @@
     "voice": "moose"
   },
   {
-    "text": "Hoo! Pass to me!",
-    "voice": "owl"
+    "text": "My kits are cheering!",
+    "voice": "raccoon"
   },
   {
-    "text": "Mine! I mean, yours!",
-    "voice": "raccoon"
+    "text": "Brr! I love hockey!",
+    "voice": "snowman"
   },
   {
     "text": "Wheee! Look, I spin!",
     "voice": "otter"
   },
   {
-    "text": "Grr! Go team!",
+    "text": "After the game, supper?",
     "voice": "bear"
   },
   {
-    "text": "Watch my big slap shot!",
-    "voice": "bear"
+    "text": "I sing for every goal!",
+    "voice": "loon"
   },
   {
-    "text": "Go, go, go!",
-    "voice": "chipmunk"
+    "text": "Honk! You can't catch me!",
+    "voice": "gus"
   },
   {
     "text": "Mmm, a BeaverTail! Sweet, like my tail!",

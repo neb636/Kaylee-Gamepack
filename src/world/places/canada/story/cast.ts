@@ -34,7 +34,7 @@ export class Friend extends FilmActor {
       // (A moose's long muzzle hangs over where the scarf sits on everyone else: his goes lower and a little wider.)
       if (this.look.species === 'moose') {
         this.team.scale.setScalar(1.12)
-        this.team.position.y = -0.175 * this.height
+        this.team.position.y = -0.14 * this.height
       }
       this.rig.body.add(this.team)
     }
