@@ -53,16 +53,17 @@ What the board took from them, in the app's toy look:
   and south edges (`leafy()`, `lawnAt()`, `crowns()` in `ground.ts`). About 56 of those trees stand up off the paper
   (`GARDEN_TREES`). The middle of town has none. Bang Mot's orange orchard is the one striped green patch left, round
   the orchard toy (`inOrchard()`). (Until then the whole west strip and the south were striped farmland.)
-- **A skyline in bunches** (Silom and Sathon, Siam, Sukhumvit, a pair at Rama 9): 19 towers in stronger candy glass,
-  each with a long afternoon shadow painted the same way. The rest of the city stays low.
-- **Shophouse rows under terracotta roofs:** about 30 rows of three or four pastel fronts, close together in the old
-  town and Chinatown (`OLD_TOWN`), few and far apart elsewhere. (Before: 140 single houses and 230 trees scattered.)
+- **A skyline in bunches** (Silom and Sathon, Siam, Sukhumvit, Phloen Chit and Nana): 19 towers in stronger candy
+  glass, each with a long afternoon shadow painted the same way, all lining the skytrain (see the phone pass below).
+  The rest of the city stays low.
+- **Shophouse rows under terracotta roofs,** in neighborhoods (see the phone pass below). (Before that: about 30 rows
+  dropped here and there, and before that 140 single houses and 230 trees scattered.)
 - **Bangkok's own things:** a hot pink taxi on Rama III Road,
   a fruit seller's boat on Khlong Bangkok Yai, kites over Sanam Luang, street-food umbrellas by Chinatown's gate.
 - **Calm, but not empty.** The first look pass left the south-west and north-east corners bare, and you said so
   (2026-11-19). Each corner now has a real thing of its own, and the paper between has texture instead of props:
   - **North-east:** the night market on Ratchadaphisek Road (twelve tents in every color behind a gate of lights),
-    the Rama 9 towers either side of it (never in front: a tower hides what's behind it), Khlong Saen Saep's fast boat.
+    a street of shophouses in Huai Khwang beside it, Khlong Saen Saep's fast boat.
   - **South-west:** a floating market on Khlong Dao Khanong (stilt houses, a jetty, four boats under big umbrellas)
     and Bang Mot's orange orchard (trees heavy with oranges, the farmer's house, baskets).
   - **Everywhere:** rooftops printed tone on tone inside the street grid (the city looks built up with nothing standing
@@ -72,6 +73,40 @@ What the board took from them, in the app's toy look:
   A new thing should be a real place with a poke, not scatter.
 
 (The very first try scattered thousands of little blocks and dots and looked like confetti.)
+
+## The phone pass (2026-11-20)
+
+On a phone the board read as busy and unfinished at once: lots of landmarks, but small and alone on the same pale
+paper, the river thin past the old town, the house and ICONSIAM small under their pins. Nan's village and Krabi's
+coast read before any single thing does; this pass gives Bangkok the same: the river, then neighborhoods, then the
+places.
+
+- **The river leads.** Never narrower than `RIVER_MIN` (0.105 m) either side of its middle line, a little wider
+  everywhere (`RIVER_FAT` 0.04), and stronger teal (`RIVER` in `ground.ts`), so it reads from end to end at phone size.
+  The bend round Bang Krachao is as it was.
+- **To the water:** ICONSIAM, Asiatique, the flower market and Wat Arun each have a pier out into the river and a paved
+  way down to it (`PIERS`).
+- **Neighborhoods, not scatter** (`STREETS`): 13 short streets, each a lane with rows of shophouses facing each other
+  across it and a row back to back behind each (doors and awnings on their own street), a street that doesn't fit
+  slides a little until it does. Two are market lanes (warm tiles, stalls under umbrellas): Sampeng Lane between the
+  flower market and Chinatown's gate, and Yaowarat behind the gate. The house has a street of its own neighbors.
+  Nothing else stands between them: the paper is quiet there. Thonburi's big trees line its khlongs instead of
+  standing anywhere (`GARDEN_TREES` 44).
+- **The towers line the skytrain** on a band of cool lilac paving (each steps in to the track's side, a little along it
+  if that spot is taken). The two at Rama 9 moved to Phloen Chit and Nana, where the track turns down Sukhumvit.
+- **Wat Arun** stands in a stone court with a lawn behind it: its white prang has green behind it on the screen, and
+  nothing stands up there. Still scale 1.7, still scenery.
+- **Asiatique's wheel** is bigger (2.1) and leans back on its stand (`WHEEL_TILT`) so its round face looks up at the
+  camera; it moved a little south along the bank so its top isn't under ICONSIAM's pin on a phone held sideways.
+- **The places she can go are the biggest toys:** the house at 2.4 (bright roofs, the pink one in the middle, a step
+  in from the board's edge so its pin can be tapped upright) and ICONSIAM at 2.3, about as big on screen as Nan's
+  village and Krabi's elephant camp. The house's pin floats over its roof; ICONSIAM's stays low in front of it (that
+  stretch of river is crowded on a phone: the flower market, Chinatown's gate and the wheel are all close by).
+- **Upright, the camera looks from a little higher, unturned, and a little closer** (`TALL` in `map3d.ts`): the square
+  board fills more of a phone's height (Nan's long board turns to fill it; a square board can't). Sideways is as it
+  was.
+- Known: on a phone held sideways ICONSIAM's pin still sits over Chinatown's gate (it did before too), and the top of
+  the wheel just under the pin; the wheel's lower half and the gate's left side still take a tap.
 
 ## How it plays
 
@@ -138,7 +173,7 @@ the Nan map's recorded clips; the night market, the floating market and the oran
 
 ## Next
 
-- Kaylee's playtest: does she find the pins among the city, and what does she poke?
+- Kaylee's playtest: does she find the pins among the city, and what does she poke? Does the river read to her?
 - The real sounds (above).
 - Asiatique and Chinatown as places, when you pick what she does there.
 - The mall day could end back on this map (the stamp landing on ICONSIAM) instead of in the house: your call.

@@ -12,8 +12,8 @@ import { toonGradient } from '../../../../../engine3d/toon'
 import { smoothstep } from '../../../../../../sdk/math'
 import { distance } from '../map/field'
 import { Sea } from '../map/terrain'
-import { ISLANDS, KHLONGS, PARKS, ROADS, WATER, type LonLat } from './geo'
-import { BOARD, CLIFF_W, DEG_M, JUNGLE, LEVEL, ll, RIVER_FAT, SKYTRAIN, SPOTS, toX, toZ, type XZ } from './layout'
+import { ISLANDS, KHLONGS, PARKS, RIVER_LINE, ROADS, WATER, type LonLat } from './geo'
+import { BOARD, CLIFF_W, DEG_M, JUNGLE, LEVEL, ll, RIVER_FAT, RIVER_MIN, SKYTRAIN, SPOTS, toX, toZ, type XZ } from './layout'
 
 /** Field cells per meter, ground mesh cells per meter, painted pixels per meter. */
 const RES = 64
@@ -33,9 +33,10 @@ const C = {
 } satisfies Record<string, [number, number, number]>
 
 /** The Chao Phraya, as a toy: pale by the banks, a bright teal down the middle. */
-const RIVER = { shallow: '#B9EEF0', mid: '#62CDE6', deep: '#41BADF', light: '#93E6F4' }
+// (Strong enough to read against the warm paper at phone size: the river is the shape she follows across the board.)
+const RIVER = { shallow: '#A3E5EE', mid: '#4CC3E3', deep: '#30AADB', light: '#5ACDEB' }
 /** The Sea's bands are sized for a whole coast: the river is narrow, so its distances are stretched to fit them. */
-const SEA_STRETCH = 5
+const SEA_STRETCH = 6
 
 /** The lakes in the parks (painted): [lon, lat, east-west radius, north-south radius (degrees)]. Lumphini's lake, and
  *  Benjakitti's long one. */
@@ -252,8 +253,14 @@ function build() {
   for (let i = 0; i < wet.length; i++) dry[i] = 1 - wet[i]
   const toWet = distance(wet, w, h)
   const toDry = distance(dry, w, h)
+  // (The river's middle line: no stretch of it is narrower than RIVER_MIN either side.)
+  clearAll()
+  g.lineWidth = 1.5
+  trace(RIVER_LINE, false)
+  g.stroke()
+  const toMiddle = distance(mask(), w, h)
   const raw = new Float32Array(wet.length)
-  for (let i = 0; i < raw.length; i++) raw[i] = (dry[i] ? Math.sqrt(toWet[i]) - 0.5 : 0.5 - Math.sqrt(toDry[i])) / RES - RIVER_FAT
+  for (let i = 0; i < raw.length; i++) raw[i] = Math.min((dry[i] ? Math.sqrt(toWet[i]) - 0.5 : 0.5 - Math.sqrt(toDry[i])) / RES - RIVER_FAT, Math.sqrt(toMiddle[i]) / RES - RIVER_MIN)
   // Smoothed a little (the real banks are frilly with piers and docks: a toy river's are soft).
   const land = new Float32Array(raw.length)
   const tmp = new Float32Array(raw.length)
@@ -352,6 +359,13 @@ export interface GroundInput {
   casts: [number, number, number, number][]
   /** Wide stretches of khlong (the floating market's): [x, z, radius east-west, radius north-south]. */
   basins: [number, number, number, number][]
+  /** Ground of its own under a neighborhood (the towers' cool paving along the skytrain): [x, z, radius, color]. */
+  paved: [number, number, number, string][]
+  /** Lanes painted on the paper (a street between its shophouse rows, a market lane, the way down to a pier):
+   *  [x, z, to x, to z, width, color]. */
+  lanes: [number, number, number, number, number, string][]
+  /** Square courtyards (Wat Arun's stone court and its lawn): [x, z, half width, half depth, color]. */
+  courts: [number, number, number, number, string][]
 }
 
 /** Which way the afternoon shadows fall on the board (east and a little south), and how long for a meter of tower. */
@@ -393,7 +407,7 @@ export function buildGround(bag: Bag, input: GroundInput) {
   geo.setAttribute('uv', new BufferAttribute(uv, 2))
   geo.setIndex(new BufferAttribute(index, 1))
   geo.computeVertexNormals()
-  const key = `${input.shadows.length}/${input.plazas.length}/${input.casts.length}/${input.basins.length}`
+  const key = `${input.shadows.length}/${input.plazas.length}/${input.casts.length}/${input.basins.length}/${input.paved.length}/${input.lanes.length}/${input.courts.length}`
   if (!painted || paintedFor !== key) {
     painted = paint(f, input)
     paintedFor = key
@@ -409,7 +423,7 @@ export function buildGround(bag: Bag, input: GroundInput) {
 const BLOCKS: [number, number, number][] = [[255, 244, 226], [255, 238, 220], [255, 246, 214], [255, 240, 230]]
 const ORCHARDS: [number, number, number][] = [[206, 238, 182], [215, 242, 190], [198, 234, 176]]
 
-function paint(f: Field, { shadows, plazas, casts, basins }: GroundInput) {
+function paint(f: Field, { shadows, plazas, casts, basins, paved, lanes, courts }: GroundInput) {
   const W = BOARD.x1 - BOARD.x0
   const D = BOARD.z1 - BOARD.z0
   const w = Math.round(W * TEX)
@@ -591,6 +605,27 @@ function paint(f: Field, { shadows, plazas, casts, basins }: GroundInput) {
     g.fill()
   }
 
+  // ---- The neighborhoods' own ground: the towers' cool paving (soft discs that run together into one district).
+  for (const [x, z, r, col] of paved) {
+    const [cx, cy] = P([x, z])
+    g.fillStyle = col
+    g.beginPath()
+    g.arc(cx, cy, r * TEX, 0, Math.PI * 2)
+    g.fill()
+  }
+  // ---- Courtyards: a pale rim, then the court.
+  for (const [x, z, hw, hd, col] of courts) {
+    const [cx, cy] = P([x, z])
+    g.fillStyle = '#FFFDF6'
+    g.beginPath()
+    g.roundRect(cx - hw * TEX - 4, cy - hd * TEX - 4, hw * TEX * 2 + 8, hd * TEX * 2 + 8, 10)
+    g.fill()
+    g.fillStyle = col
+    g.beginPath()
+    g.roundRect(cx - hw * TEX, cy - hd * TEX, hw * TEX * 2, hd * TEX * 2, 8)
+    g.fill()
+  }
+
   // ---- Paved squares under the places and the big toys.
   for (const [x, z, r] of plazas) {
     const [cx, cy] = P([x, z])
@@ -598,6 +633,19 @@ function paint(f: Field, { shadows, plazas, casts, basins }: GroundInput) {
     g.beginPath()
     g.ellipse(cx, cy, r * TEX, r * TEX * 0.86, 0, 0, Math.PI * 2)
     g.fill()
+  }
+
+  // ---- Lanes: a soft kerb, then the lane (a street between its rows, a market lane, the way down to a pier).
+  for (const [ax, az, bx, bz, wide, col] of lanes) {
+    g.beginPath()
+    g.moveTo(...P([ax, az]))
+    g.lineTo(...P([bx, bz]))
+    g.strokeStyle = 'rgba(232,184,160,0.55)'
+    g.lineWidth = (wide + 0.012) * TEX
+    g.stroke()
+    g.strokeStyle = col
+    g.lineWidth = wide * TEX
+    g.stroke()
   }
 
   // ---- The khlongs: pale banks, the water, a brighter middle.

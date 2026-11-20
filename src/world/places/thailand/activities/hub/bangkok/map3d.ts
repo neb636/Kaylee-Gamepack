@@ -57,6 +57,9 @@ export interface MapEvents extends LegEvents {
 const BOARD_BOX = trayBox(BOARD.x1 - BOARD.x0, BOARD.z1 - BOARD.z0, 0.07, 0.95, 0.2, 0.55)
 export const BANGKOK_CAM = mapCamKnobs('bangkok-map-cam', 'Bangkok map camera', 'src/world/places/thailand/activities/hub/bangkok/map3d.ts', { yaw: -6, pitch: -8, zoom: 0.9 })
 
+/** On an upright screen: how much of the turn, the tilt it starts from, how much closer. */
+const TALL = { turn: 0, pitch: 67, zoom: 0.96 }
+
 const SPOT_LABELS: Record<SpotId, string> = {
   asiatique: "Asiatique's big wheel",
   chinatown: "Chinatown's gate",
@@ -759,7 +762,9 @@ export class BangkokMap extends Stage {
     const k = this.entrance.k
     const tall = this.w < this.h
     const zoom = 1 + (BANGKOK_CAM.zoom - 1) * k
-    if (tall) return boardShot(BOARD_BOX, BANGKOK_CAM.yaw, 64 + BANGKOK_CAM.pitch * k * 0.6, zoom, { minDist: 3 })
+    // (Upright, Bangkok's square board is held by the screen's width: turned less and looked at from a little higher, and
+    // a little closer, it fills about as much of the screen's height as Nan's long board does.)
+    if (tall) return boardShot(BOARD_BOX, BANGKOK_CAM.yaw * TALL.turn, TALL.pitch + BANGKOK_CAM.pitch * k * 0.6, zoom * TALL.zoom, { minDist: 3 })
     return boardShot(BOARD_BOX, BANGKOK_CAM.yaw, 56 + BANGKOK_CAM.pitch * k, zoom, { minDist: 3 })
   }
 
@@ -840,7 +845,7 @@ export class BangkokMap extends Stage {
     if (id.startsWith('spot:')) {
       const s = id.slice(5) as SpotId
       const [x, z] = SPOTS[s]
-      const tall = s === 'mahanakhon' ? 0.4 : s === 'asiatique' ? 0.22 : 0.12
+      const tall = s === 'mahanakhon' ? 0.4 : s === 'asiatique' ? 0.3 : 0.12
       return { at: new Vector3(x, G + tall, z), r: 0.2, prio: 2, max: 130 }
     }
     if (id.startsWith('cloud:')) return { at: d.clouds[Number(id.slice(6))].position.clone(), r: 0.26, prio: 1, max: 140 }

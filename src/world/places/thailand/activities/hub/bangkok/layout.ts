@@ -44,7 +44,10 @@ export const LEVEL = { floor: -0.1, land: 0.07 }
 export const CLIFF_W = 0.022
 /** The river is drawn this much wider on each bank than it really is (meters): the Chao Phraya is what makes the
  *  board Bangkok, so it's the biggest shape on it, with room for the toy boats. */
-export const RIVER_FAT = 0.03
+export const RIVER_FAT = 0.04
+/** And never narrower than this either side of its middle line (m): at phone size the narrow stretches past the old
+ *  town read as a khlong otherwise, and the river is what she follows across the board. */
+export const RIVER_MIN = 0.105
 
 // ---------------------------------------------------------------- the places
 
@@ -54,11 +57,15 @@ export type PlaceId = 'house' | 'iconsiam'
 
 /** Where each place's toy stands. `scale`: how much bigger than the board the toy is. (ICONSIAM stands a little back
  *  from its real spot on the bank, so the whole toy is on dry land. The house is really out in Bang Bon, a few
- *  kilometers past the board's west edge: it stands at that edge, as far south as it really is. The one place on the
+ *  kilometers past the board's west edge: it stands by that edge, as far south as it really is. The one place on the
  *  board that isn't where it really is: your call, 2026-11-19.) */
 export const PLACES: Record<PlaceId, { at: XZ; label: string; scale: number }> = {
-  house: { at: ll(100.4768, 13.6714), label: 'The Thailand house', scale: 1.7 },
-  iconsiam: { at: ll(100.5046, 13.7272), label: 'ICONSIAM, the mall', scale: 1.9 },
+  // (As big on the screen as Nan's village or Krabi's elephant camp: the places she can go are the biggest toys on the
+  // board, the city round them quieter.)
+  // (A step in from the edge, now that it's bigger: on a phone held upright the board fills the screen's width, and
+  // its pin needs room to be tapped.)
+  house: { at: ll(100.4818, 13.6714), label: 'The Thailand house', scale: 2.4 },
+  iconsiam: { at: ll(100.5038, 13.7272), label: 'ICONSIAM, the mall', scale: 2.3 },
 }
 /** Sparkle's balloon floats over the board's north-east corner: a toy to poke, like the Thailand map's. */
 export const BALLOON: XZ = ll(100.5905, 13.7655)
@@ -68,9 +75,11 @@ export const PLACE_IDS = Object.keys(PLACES) as PlaceId[]
  *  house with a heart, a slide and a slice of pizza). `lift`: how
  *  high over the ground the pin's point hangs (clear of the toy under it). */
 export const PINS = {
-  house: { at: PLACES.house.at, lift: 0.3, label: 'To the house', place: 'house' },
-  // (In front of the mall, low: up over its towers it would hang in front of Chinatown's gate on the screen.)
-  iconsiam: { at: [PLACES.iconsiam.at[0] - 0.06, PLACES.iconsiam.at[1] + 0.3], lift: 0.1, label: 'To the mall', place: 'iconsiam' },
+  // (The house's floats up over its roof. ICONSIAM's floats low in front of the mall: up over its
+  // towers it would hang in front of the flower market and Chinatown's gate on the screen, and the riverside round it
+  // is crowded: the flower market, Chinatown's gate and Asiatique's wheel are all close by on a phone.)
+  house: { at: [PLACES.house.at[0] - 0.02, PLACES.house.at[1] + 0.14], lift: 0.32, label: 'To the house', place: 'house' },
+  iconsiam: { at: [PLACES.iconsiam.at[0] + 0.05, PLACES.iconsiam.at[1] + 0.36], lift: 0.1, label: 'To the mall', place: 'iconsiam' },
 } satisfies Record<string, { at: XZ; lift: number; label: string; place: PlaceId }>
 export type PinId = keyof typeof PINS
 export const PIN_IDS = Object.keys(PINS) as PinId[]
@@ -85,8 +94,9 @@ export const BALLOON_Y = 0.55
 /** What stands on the board to poke. Asiatique and Chinatown are the next places (making one a real place gives it a
  *  pin: see the notes); the rest are the city's landmarks. Each is where it really is. */
 export const SPOTS = {
-  /** Asiatique The Riverfront: its big wheel by the river. */
-  asiatique: ll(100.5062, 13.7018),
+  /** Asiatique The Riverfront: its big wheel by the river. (A little south of its real spot: up where it really is,
+   *  the big wheel's top would stand under ICONSIAM's pin on a phone held sideways.) */
+  asiatique: ll(100.5068, 13.6992),
   /** Chinatown (Yaowarat): the red gate at Odeon Circle and its lanterns. */
   chinatown: ll(100.5118, 13.7392),
   /** Lumphini Park: the lake, a swan boat and the big monitor lizard. */
@@ -123,18 +133,57 @@ export type LandmarkId = keyof typeof LANDMARKS
 /** The tall towers, in the districts they really stand in: [lon, lat, height (m), look]. `look` picks the shape
  *  (diorama.ts tower()); a few are real ones: Baiyoke's tower with its round crown ('crown'), the riverside tower
  *  with the gold dome ('dome'). Tight bunches make the skyline (Silom and Sathon round Mahanakhon, Siam, Sukhumvit,
- *  and a little one at Rama 9): the rest of the city is left low, so the bunches read from across the board. (diorama.ts leaves out any that would stand on a place, a spot or the water.) */
+ *  along Sukhumvit), every one of them along the skytrain's track (diorama.ts gathers each to the track's side, on a
+ *  paved district of its own): the rest of the city is left low, so the bunches read from across the board.
+ *  (diorama.ts leaves out any that would stand on a place, a spot or the water.) */
 export const TOWERS: [number, number, number, number | 'crown' | 'dome'][] = [
   // Silom and Sathon, round Mahanakhon.
   [100.5345, 13.7243, 0.46, 0], [100.5318, 13.7188, 0.56, 1], [100.5382, 13.7202, 0.4, 2], [100.5228, 13.7183, 0.4, 3], [100.5445, 13.7226, 0.48, 4],
   [100.5178, 13.7228, 0.5, 'dome'],
   // Siam, Ratchaprasong and Pratunam.
   [100.5404, 13.7545, 0.86, 'crown'], [100.5349, 13.7475, 0.38, 2], [100.5412, 13.7472, 0.48, 0], [100.5468, 13.7436, 0.54, 1], [100.5486, 13.7505, 0.4, 4],
-  // Rama 9, where Ratchadaphisek Road meets Rama IX Road.
-  // (Either side of the night market, not in front of it: from her side a tower hides what's behind it.)
-  [100.5585, 13.7578, 0.48, 3], [100.5768, 13.7556, 0.4, 2],
+  // Phloen Chit and Nana, where the skytrain turns down Sukhumvit.
+  [100.5508, 13.7452, 0.48, 3], [100.5562, 13.7372, 0.4, 2],
   // Sukhumvit: Asok, Phrom Phong, Thong Lo, Ekkamai.
   [100.5604, 13.7382, 0.56, 1], [100.5655, 13.7338, 0.44, 0], [100.5702, 13.7318, 0.6, 4], [100.5745, 13.7268, 0.46, 2], [100.5798, 13.7252, 0.38, 3], [100.586, 13.72, 0.44, 1],
+]
+
+/** The neighborhoods: short streets of shophouse rows, two rows facing each other across a lane (rows of three or
+ *  four pastel fronts under one terracotta roof), from one end of the lane to the other. `market`: a market lane
+ *  (warm tiles, umbrellas over stalls between the rows). The rest of the city is printed on the paper, quiet between
+ *  them. (diorama.ts leaves out a row that would stand in the water, on a road, a park or something else.) */
+export const STREETS: { from: LonLat; to: LonLat; market?: boolean }[] = [
+  // The old town, east of Sanam Luang: Banglamphu and the lanes by the Giant Swing.
+  { from: [100.4985, 13.7612], to: [100.5045, 13.7626] },
+  { from: [100.5012, 13.7535], to: [100.5022, 13.7478] },
+  // The market quarter: Sampeng Lane, from the flower market to Chinatown's gate, and Yaowarat's shophouses behind
+  // the gate. Market lanes.
+  { from: [100.5031, 13.7422], to: [100.5072, 13.7408], market: true },
+  { from: [100.513, 13.7448], to: [100.5056, 13.7486], market: true },
+  // Thonburi: along Khlong Bangkok Yai, and by Wongwian Yai.
+  { from: [100.4745, 13.7296], to: [100.4772, 13.7352] },
+  { from: [100.4846, 13.7135], to: [100.4914, 13.7108] },
+  // Bang Rak and Charoen Krung, on the river's east bank.
+  { from: [100.5155, 13.7322], to: [100.5205, 13.7348] },
+  // Yannawa, down Rama III Road.
+  { from: [100.5262, 13.6985], to: [100.5318, 13.6948] },
+  // Bang Bon: the Thailand house's own street (its neighbors).
+  { from: [100.4862, 13.6752], to: [100.4922, 13.6782] },
+  // Thonburi's south: Chom Thong, by Suk Sawat Road.
+  { from: [100.4925, 13.6872], to: [100.4985, 13.6905] },
+  // Huai Khwang, by the night market; a soi off Sukhumvit; Phra Khanong by the port.
+  { from: [100.5785, 13.7648], to: [100.5845, 13.7622] },
+  { from: [100.5868, 13.7368], to: [100.5915, 13.7412] },
+  { from: [100.5905, 13.7128], to: [100.5958, 13.7166] },
+]
+
+/** The places by the river that have a pier out into it (diorama.ts paves the way down to the water and builds the
+ *  pier where the bank is nearest): ICONSIAM's ferry pier, Asiatique's, the flower market's, Wat Arun's. */
+export const PIERS: XZ[] = [
+  [PLACES.iconsiam.at[0], PLACES.iconsiam.at[1]],
+  [SPOTS.asiatique[0], SPOTS.asiatique[1]],
+  [SPOTS.flowers[0], SPOTS.flowers[1]],
+  [LANDMARKS.arun.at[0], LANDMARKS.arun.at[1]],
 ]
 
 /** The bridges over the river: [lon, lat, kind]. 'harp': Rama VIII's one tall leaning tower and its fan of cables.
@@ -221,7 +270,3 @@ export const CLOUDS: [number, number, number][] = [
   [100.5, 13.7745, 1.05],
   [100.574, 13.745, 1.2],
 ]
-
-/** The old town and Chinatown, inside the river's first bend: low and close-built, so its shophouse rows stand closer
- *  together than anywhere else ([middle, how far out it reaches (m)]). */
-export const OLD_TOWN: { at: XZ; r: number } = { at: ll(100.503, 13.75), r: 0.75 }
