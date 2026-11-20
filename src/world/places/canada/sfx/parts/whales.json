@@ -1,0 +1,76 @@
+[
+ {
+  "id": "whales-putter",
+  "label": "The little boat's engine (loop)",
+  "prompt": "A small outboard motor on a little rubber boat puttering steadily on calm water, soft and toy-like, even putt-putt-putt rhythm, gentle, seamless loop.",
+  "seconds": 2,
+  "loop": true
+ },
+ {
+  "id": "whales-ocean",
+  "label": "The Pacific off Tofino (bed)",
+  "prompt": "Calm open ocean on a sunny day from a small boat: gentle waves lapping the hull, soft swell, a light sea breeze, a far-off gull now and then, peaceful, seamless loop.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "whales-blow",
+  "label": "A whale blows out of its blowhole",
+  "prompt": "A big whale surfacing and blowing out of its blowhole, one deep breathy whoosh of spray with a soft misty hiss after, real but gentle, not scary.",
+  "seconds": 1.6
+ },
+ {
+  "id": "whales-breach",
+  "label": "A humpback lands from a jump",
+  "prompt": "A huge whale crashing back into the sea after a jump, one big round splash with water raining down after, exciting but soft, cartoon-friendly.",
+  "seconds": 2
+ },
+ {
+  "id": "whales-squeak",
+  "label": "A sea otter squeaks",
+  "prompt": "A sea otter pup's two short high squeaks, cute and friendly, soft.",
+  "seconds": 0.6
+ },
+ {
+  "id": "whales-giggle",
+  "label": "Ollie the sea otter's giggle-chirp (she spins)",
+  "prompt": "A playful sea otter's quick giggly chirping trill, bright and happy, like a tiny laugh, soft and cute.",
+  "seconds": 0.9
+ },
+ {
+  "id": "whales-clack",
+  "label": "A clam knocked on a stone",
+  "prompt": "A sea otter knocking a clam shell on a small stone, three quick light clacks, crisp and soft.",
+  "seconds": 0.6
+ },
+ {
+  "id": "whales-sealions",
+  "label": "Sea lions bark on their rock",
+  "prompt": "Two friendly sea lions barking on a rock by the sea, a few short honky arf-arf barks, playful, not loud.",
+  "seconds": 1.2
+ },
+ {
+  "id": "whales-gulls",
+  "label": "Gulls call over the harbour",
+  "prompt": "Two seagulls calling over a little harbour, a couple of bright cries, soft and far, summery.",
+  "seconds": 1.4
+ },
+ {
+  "id": "whales-song",
+  "label": "The humpback's song under the water",
+  "prompt": "A humpback whale singing under the sea, slow soft rising and falling moans, dreamy and gentle, muffled by water.",
+  "seconds": 3
+ },
+ {
+  "id": "whales-orca",
+  "label": "The orcas call under the water",
+  "prompt": "Orcas calling to each other under water, a few soft rising whistles and a short burst of clicks, gentle and friendly.",
+  "seconds": 1.5
+ },
+ {
+  "id": "whales-horn",
+  "label": "The little boat's horn",
+  "prompt": "A small boat's toy-like double horn toot, cheerful and soft, two short notes.",
+  "seconds": 0.8
+ }
+]
