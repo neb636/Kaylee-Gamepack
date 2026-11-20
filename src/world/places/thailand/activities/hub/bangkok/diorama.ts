@@ -1,9 +1,10 @@
 // The Bangkok map's shapes (layout.ts says where): a toy diorama of the middle of Bangkok floating in the sky, in the
 // same toy tray as the Thailand, Nan and Krabi maps. What makes it Bangkok: the wide teal Chao Phraya winding through
-// a flat city printed on warm paper (ground.ts paints the blocks, the roads, the khlongs and the parks), a skyline of candy-colored glass towers in three tight bunches where
+// a flat city printed on warm paper (ground.ts paints the blocks, the roads, the khlongs and the parks), a skyline of candy-colored glass towers in tight bunches where
 // they really stand, the river's bridges (Rama VIII's one leaning tower and its fan of cables, the Bhumibol bridges'
-// golden diamonds), the skytrain on its pillars, rows of shophouses under terracotta roofs, coconut palms along the
-// banks, a hot pink taxi and a tuk-tuk on the roads, little cars in taxi colors on the big roads, and Bang Krachao's
+// golden diamonds), the skytrain on its pillars with the towers lining it on their lilac paving, little neighborhoods
+// of shophouse rows under terracotta roofs facing each other across their lanes (two of them market lanes), piers out
+// into the river where the riverside places meet it, coconut palms along the banks, a hot pink taxi and a tuk-tuk on the roads, little cars in taxi colors on the big roads, and Bang Krachao's
 // jungle in the river's big loop. The corners have their own things: the night market's tents up by Rama 9, a
 // floating market and Bang Mot's orange orchard out south-west. Thonburi and the south are city too, leafier than the
 // middle (big trees standing here and there among the roofs). The pins and the river are still what she sees first.
@@ -29,8 +30,8 @@ import { trayParts } from '../../../trip/sky'
 import type { Sea } from '../map/terrain'
 import * as T from '../map/toys'
 import { RIVER_LINE } from './geo'
-import { blockMid, blockOf, buildField, buildGround, buildSea, crowns, districtAt, inBlock, inOrchard, LAKES, leafy, outward, type Field } from './ground'
-import { BALLOON, BOARD, BOATS, BRIDGES, CANAL, CLOUDS, DEG_M, FRUIT_KHLONG, GROVES, LANDMARKS, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type LandmarkId, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
+import { blockMid, blockOf, buildField, buildGround, buildSea, crowns, districtAt, inBlock, inOrchard, LAKES, leafy, type Field, type GroundInput } from './ground'
+import { BALLOON, BOARD, BOATS, BRIDGES, CANAL, CLOUDS, DEG_M, FRUIT_KHLONG, GROVES, LANDMARKS, LEVEL, ll, PIERS, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, STREETS, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type LandmarkId, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
 import { pathLL, reachOn, type Path } from './path'
 
 const CREAM = '#FFF7F0'
@@ -46,8 +47,16 @@ const WALLS = ['#FFF7F0', '#FFD9E6', '#FFF1B8', '#FFF7F0', '#CFEFE0', '#E7E0FF']
 const LEAF = ['#66C890', '#7CD49C', '#97DFAB']
 /** The spots stand this much bigger than the board's scale, like toys. */
 const SPOT_SCALE = 1.5
-/** How many of the leafy squares' big trees stand up off the paper out west and down south (the rest are painted). */
-const GARDEN_TREES = 56
+/** Asiatique's toy is bigger (its wheel is the riverside's big round shape), and the wheel leans back on its stand
+ *  (radians) so its round face looks up at her camera instead of showing her a thin oval. */
+const ASIATIQUE_SCALE = 2.1
+const WHEEL_TILT = 0.52
+/** How many of the leafy squares' big trees stand up off the paper out west and down south, lining the khlongs (the
+ *  rest are painted). */
+const GARDEN_TREES = 44
+/** The ground under the neighborhoods: the towers' cool paving, a lane between shophouse rows, a market lane, the
+ *  way down to a pier, Wat Arun's stone court and its lawn. */
+const GROUND = { towers: '#EEE7F8', lane: '#FFF8EE', market: '#FAD0BE', quay: '#FFE6D2', court: '#F8EEDF', lawn: '#BFE6B0' }
 /** The top of the land everywhere (Bangkok is flat). */
 const G = LEVEL.land
 
@@ -155,21 +164,57 @@ export function buildDiorama(bag: Bag): Diorama {
 
   /** What stands where already (nothing else is put inside): [x, z, radius]. */
   const taken: [number, number, number][] = [
-    ...(Object.keys(PLACES) as PlaceId[]).map((id) => [...PLACES[id].at, 0.36] as [number, number, number]),
+    ...(Object.keys(PLACES) as PlaceId[]).map((id) => [...PLACES[id].at, 0.16 * PLACES[id].scale] as [number, number, number]),
     // (Mahanakhon is a tower among towers: its neighbors stand close.)
     ...(Object.keys(LANDMARKS) as LandmarkId[]).map((id) => [...LANDMARKS[id].at, LANDMARKS[id].r] as [number, number, number]),
-    ...(Object.keys(SPOTS) as SpotId[]).map((id) => [...SPOTS[id], id === 'mahanakhon' ? 0.15 : id === 'floating' || id === 'orchard' || id === 'tents' ? 0.34 : 0.26] as [number, number, number]),
+    ...(Object.keys(SPOTS) as SpotId[]).map((id) => [...SPOTS[id], id === 'mahanakhon' ? 0.15 : id === 'floating' || id === 'orchard' || id === 'tents' ? 0.34 : id === 'asiatique' ? 0.34 : id === 'chinatown' || id === 'flowers' ? 0.2 : 0.26] as [number, number, number]),
   ]
   const free = (x: number, z: number, pad = 0) => taken.every(([px, pz, r]) => Math.hypot(px - x, pz - z) > r + pad)
   const shadows: [number, number, number][] = []
   const casts: [number, number, number, number][] = []
   // (The floating market stands in its own water and the orchard on its own grass: no paved square under them.)
-  const unpaved = [SPOTS.floating, SPOTS.orchard]
+  const unpaved = [SPOTS.floating, SPOTS.orchard, LANDMARKS.arun.at]
   const plazas: [number, number, number][] = taken.filter(([x, z]) => !unpaved.some((u) => u[0] === x && u[1] === z)).map(([x, z, r]) => [x, z, r * 0.8])
   /** Water painted on the ground: the floating market's wide stretch of khlong ([x, z, radius east-west, north-south]). */
   const basins: [number, number, number, number][] = [[SPOTS.floating[0], SPOTS.floating[1] + 0.03, 0.26, 0.13]]
   // (Nothing stands on Sanam Luang's open field.)
   taken.push([...SANAM_LUANG, 0.16])
+  // Wat Arun stands in its own stone court, a lawn behind it: from her side the prang's white spire stands against the
+  // green, and nothing else stands up behind it on the screen.
+  const paved: GroundInput['paved'] = []
+  const lanes: GroundInput['lanes'] = []
+  const courts: GroundInput['courts'] = []
+  {
+    const [ax, az] = LANDMARKS.arun.at
+    const half = 0.165 * LANDMARKS.arun.scale + 0.04
+    courts.push([ax, az - half - 0.17, half + 0.02, 0.17, GROUND.lawn], [ax, az, half, half, GROUND.court])
+    taken.push([ax, az - half - 0.12, 0.2], [ax - 0.12, az - half - 0.2, 0.15], [ax + 0.12, az - half - 0.2, 0.15], [ax, az - half - 0.42, 0.18])
+  }
+  // The places on the river each have a pier out into it (layout.ts PIERS): a paved way down from the place to the
+  // bank, a wooden pier on posts, a little orange roof at its end where the boats call.
+  {
+    const parts: BufferGeometry[] = []
+    for (const [px, pz] of PIERS) {
+      const c = river.at(river.near(px, pz).d)
+      const L = Math.hypot(c.x - px, c.z - pz)
+      const [dx, dz] = [(c.x - px) / L, (c.z - pz) / L]
+      let t = 0
+      while (t < L && f.land(px + dx * t, pz + dz * t) > 0) t += 0.004
+      const [bx, bz] = [px + dx * t, pz + dz * t]
+      lanes.push([px, pz, bx - dx * 0.01, bz - dz * 0.01, 0.08, GROUND.quay])
+      const out = Math.min(0.085, Math.max(0.035, -f.land(c.x, c.z) - 0.045))
+      const [ex, ez] = [bx + dx * out, bz + dz * out]
+      const y = G * 0.55
+      parts.push(rod([bx - dx * 0.02, y, bz - dz * 0.02], [ex, y, ez], 0.01, WOOD, 0.05))
+      for (const s of [-1, 1]) {
+        const [sx, sz] = [-dz * s * 0.021, dx * s * 0.021]
+        parts.push(P.cyl(0.004, 0.004, y, WOOD_DARK, { at: [ex + sx, y / 2, ez + sz] }, 4), P.cyl(0.0025, 0.0025, 0.05, CREAM, { at: [ex + sx - dx * 0.016, y + 0.025, ez + sz - dz * 0.016] }, 4))
+      }
+      parts.push(P.prism([[-0.034, 0], [0.034, 0], [0, 0.022]], 0.05, '#F47B45', { at: [ex - dx * 0.016, y + 0.05, ez - dz * 0.016], rot: [0, Math.atan2(dx, dz), 0] }))
+      taken.push([bx, bz, 0.06])
+    }
+    root.add(solid(merge(parts), bag, 1.2))
+  }
 
   // ---- The bridges ----
   const bridges: XZ[] = []
@@ -222,18 +267,24 @@ export function buildDiorama(bag: Bag): Diorama {
     const lined: BufferGeometry[] = []
     const plain: BufferGeometry[] = []
     TOWERS.forEach(([lon, lat, h, look], k) => {
-      let [x, z] = ll(lon, lat)
+      const [x0, z0] = ll(lon, lat)
       const w = 0.1 + h * 0.075
-      // (A tower by the skytrain steps back from the track.)
-      const near = rail.near(x, z)
+      // (Every tower lines the skytrain: one right by it steps back from the track, one further off steps in to stand
+      // beside it, on the side it was on, a little along the track if that spot is taken; else it stays where it is.)
+      const near = rail.near(x0, z0)
       const need = w * 0.62 + 0.03
-      if (near.dist < need) {
-        const p = rail.at(near.d)
-        const [nx, nz] = near.dist > 1e-4 ? [(x - p.x) / near.dist, (z - p.z) / near.dist] : [Math.cos(p.yaw), -Math.sin(p.yaw)]
-        x = p.x + nx * need
-        z = p.z + nz * need
-      }
-      if (f.land(x, z) < w * 0.6 || !free(x, z, w * 0.5) || f.park(x, z)) return
+      const want = need + 0.02 + (k % 3) * 0.035
+      const p = rail.at(near.d)
+      const [nx, nz] = near.dist > 1e-4 ? [(x0 - p.x) / near.dist, (z0 - p.z) / near.dist] : [Math.cos(p.yaw), -Math.sin(p.yaw)]
+      const to = near.dist < need ? need : near.dist < 0.5 ? Math.min(near.dist, want) : near.dist
+      const tries: XZ[] = [0, 0.07, -0.07, 0.14, -0.14].map((slide) => {
+        const q = rail.at(near.d + slide)
+        return [q.x + nx * to, q.z + nz * to]
+      })
+      tries.push([x0, z0])
+      const at = tries.find(([tx, tz]) => f.land(tx, tz) >= w * 0.6 && free(tx, tz, w * 0.5) && !f.park(tx, tz) && rail.near(tx, tz).dist >= need * 0.98)
+      if (!at) return
+      const [x, z] = at
       const t = tower(x, G, z, h, w, look, k)
       lined.push(...t.lined)
       plain.push(...t.plain)
@@ -243,49 +294,111 @@ export function buildDiorama(bag: Bag): Diorama {
       casts.push([x, z, w, h])
     })
     root.add(solidMix(lined, plain, bag, 1.5))
+    // The towers' district: cool paving along the track wherever they stand by it.
+    for (let d = 0; d < rail.len; d += 0.035) {
+      const p = rail.at(d)
+      if (towers.some(([x, z]) => Math.hypot(x - p.x, z - p.z) < 0.24)) paved.push([p.x, p.z, 0.15, GROUND.towers])
+    }
   }
 
-  // ---- Rows of shophouses along the little streets: three or four pastel fronts under one long terracotta roof,
-  // close together in the old town and Chinatown, few and far apart everywhere else: one low neighborhood and open
-  // paper (not confetti). Thonburi and the south get a few of their own (built up now, not orchards) ----
+  // ---- The neighborhoods (layout.ts STREETS): short streets of shophouse rows facing each other across a lane, three
+  // or four pastel fronts under one long terracotta roof, doors and awnings on the lane; a market lane has stalls
+  // under umbrellas down its middle. Between them the city is printed on the paper: quiet, not confetti ----
   {
     const parts: BufferGeometry[] = []
     const rnd = T.rng(41)
-    const rows: XZ[] = []
-    const quota = { in: 30, out: 10 }
-    let outer = 0
-    for (let i = 0; i < 60000 && rows.length < quota.in + quota.out; i++) {
-      const px = BOARD.x0 + 0.1 + rnd() * (W - 0.2)
-      const pz = BOARD.z0 + 0.1 + rnd() * (D - 0.2)
-      const count = 3 + Math.floor(rnd() * 2)
-      const pick = rnd()
-      const o = districtAt(px, pz)
-      if (inOrchard(px, pz)) continue
-      const b = blockOf(o, px, pz)
-      const [mx, mz] = blockMid(o, b.iu, b.iv)
-      // (Close together in the old town, far apart everywhere else.)
-      const out = outward(mx, mz) > 0.3
-      if (out ? outer >= quota.out : rows.length - outer >= quota.in) continue
-      const apart = Math.hypot(mx - OLD_TOWN.at[0], mz - OLD_TOWN.at[1]) < OLD_TOWN.r ? 0.24 : out ? 0.5 : 0.66
-      if (rows.some(([rx, rz]) => Math.hypot(rx - mx, rz - mz) < apart)) continue
-      // (The row runs along its district's streets.)
-      const [ux, uz] = [Math.cos(o.turn), Math.sin(o.turn)]
-      const wide = 0.06
-      const spot = (j: number): XZ => [mx + ux * (j - (count - 1) / 2) * wide, mz + uz * (j - (count - 1) / 2) * wide]
-      const ok = ([x, z]: XZ) => districtAt(x, z) === o && f.land(x, z) > 0.07 && !f.park(x, z) && !f.jungle(x, z) && free(x, z, 0.04) && f.clear(x, z) > 0.05 && rail.near(x, z).dist > 0.06
-      if (![-0.7, ...Array.from({ length: count }, (_, j) => j), count - 0.3].every((j) => ok(spot(j)))) continue
-      rows.push([mx, mz])
-      if (out) outer++
-      const deep = 0.06
-      const h = 0.066 + rnd() * 0.012
-      for (let j = 0; j < count; j++) {
-        const [x, z] = spot(j)
-        parts.push(P.box(wide - 0.003, h, deep, WALLS[(o.k + j + rows.length) % WALLS.length], { at: [x, G + h / 2, z], rot: [0, -o.turn, 0] }))
+    const wide = 0.06
+    const deep = 0.06
+    const laneW = 0.052
+    const AWN = [PAL.pink, PAL.mint, PAL.butter, PAL.sky, PAL.lavender]
+    STREETS.forEach(({ from, to, market }, si) => {
+      const [fx0, fz0] = ll(...from)
+      const [tx0, tz0] = ll(...to)
+      const len = Math.hypot(tx0 - fx0, tz0 - fz0)
+      const [ux, uz] = [(tx0 - fx0) / len, (tz0 - fz0) / len]
+      const [nx, nz] = [-uz, ux]
+      const yaw = Math.atan2(-uz, ux)
+      const along = Math.atan2(ux, uz)
+      const ok = (x: number, z: number) => f.land(x, z) > 0.07 && !f.park(x, z) && !f.jungle(x, z) && !inOrchard(x, z) && free(x, z, 0.025) && f.clear(x, z) > 0.03 && rail.near(x, z).dist > 0.06
+      const counts = Array.from({ length: 12 }, () => 3 + Math.floor(rnd() * 2))
+      /** The rows down both sides of the lane, the lane shifted (s, t) from where layout.ts puts it: a row that would
+       *  stand on a road, in the water or on something else is shortened, or left out. */
+      const plan = (s: number, t: number) => {
+        const [ax, az] = [fx0 + ux * s + nx * t, fz0 + uz * s + nz * t]
+        const rows: { side: number; d: number; count: number; back: number }[] = []
+        let ci = 0
+        // (The rows on the lane, then a second row back to back behind each where it fits: a little block of town.)
+        for (const back of [0, 1])
+        for (const side of [-1, 1]) {
+          let d = side > 0 ? 0.015 : 0
+          while (d < len - 0.1) {
+            const off = side * (laneW / 2 + deep / 2 + back * (deep + 0.008))
+            const fits = (j: number) => {
+              const [x, z] = [ax + ux * (d + (j + 0.5) * wide) + nx * off, az + uz * (d + (j + 0.5) * wide) + nz * off]
+              return ok(x, z) && ok(x + nx * side * deep * 0.6, z + nz * side * deep * 0.6)
+            }
+            let count = Math.min(counts[ci++ % counts.length], Math.floor((len - d) / wide))
+            // (Starting where it fits, as long as it fits.)
+            if (count < 2 || !fits(0)) {
+              d += wide * 0.5
+              continue
+            }
+            let n = 1
+            while (n < count && fits(n)) n++
+            count = n
+            if (count >= 2) rows.push({ side, d, count, back })
+            d += count * wide + 0.035
+          }
+        }
+        const kept = rows.filter((r) => !r.back || rows.some((f) => !f.back && f.side === r.side && Math.abs(f.d - r.d) < wide * 1.5))
+        return { ax, az, rows: kept, score: kept.reduce((a, r) => a + r.count * (r.back ? 0.5 : 1), 0) - Math.hypot(s, t) * 2 }
       }
-      parts.push(P.prism([[-deep / 2 - 0.003, 0], [deep / 2 + 0.003, 0], [0, deep * 0.4]], count * wide + 0.006, ROOFS[(o.k + (pick > 0.8 ? 1 : 0)) % ROOFS.length], { at: [mx, G + h - 0.001, mz], rot: [0, Math.PI / 2 - o.turn, 0] }))
-      shadows.push([mx, mz, count * wide * 0.5])
-      taken.push([mx, mz, count * wide * 0.55])
-    }
+      let best = plan(0, 0)
+      for (let s = -0.12; s <= 0.121; s += 0.04)
+        for (let t = -0.12; t <= 0.121; t += 0.03) {
+          const p = plan(s, t)
+          if (p.score > best.score) best = p
+        }
+      const { ax, az } = best
+      let [lo, hi] = [Infinity, -Infinity]
+      for (const { side, d, count, back } of best.rows) {
+        const off = side * (laneW / 2 + deep / 2 + back * (deep + 0.008))
+        const spot = (j: number): XZ => [ax + ux * (d + (j + 0.5) * wide) + nx * off, az + uz * (d + (j + 0.5) * wide) + nz * off]
+        const mid = d + (count * wide) / 2
+        const [mx, mz] = [ax + ux * mid + nx * off, az + uz * mid + nz * off]
+        if (!back) {
+          lo = Math.min(lo, d)
+          hi = Math.max(hi, d + count * wide)
+        }
+        const h = 0.066 + rnd() * 0.014
+        for (let j = 0; j < count; j++) {
+          const [x, z] = spot(j)
+          const k = si + j + (side > 0 ? 2 : 0) + back * 3
+          // (The front looks onto the lane, its door and its awning on that side; a back row looks the other way, onto
+          // its own street.)
+          const face = back ? -side : side
+          const [fx, fz] = [x - nx * face * (deep / 2 + 0.002), z - nz * face * (deep / 2 + 0.002)]
+          parts.push(
+            P.box(wide - 0.004, h, deep, WALLS[k % WALLS.length], { at: [x, G + h / 2, z], rot: [0, yaw, 0] }),
+            P.box(0.018, 0.03, 0.004, '#B98A66', { at: [fx, G + 0.015, fz], rot: [0, yaw, 0] }),
+            P.box(wide - 0.014, 0.006, 0.022, AWN[(k + si) % AWN.length], { at: [x - nx * face * (deep / 2 + 0.01), G + 0.04, z - nz * face * (deep / 2 + 0.01)], rot: [0, yaw, 0] }),
+          )
+        }
+        parts.push(P.prism([[-deep / 2 - 0.004, 0], [deep / 2 + 0.004, 0], [0, deep * 0.42]], count * wide + 0.004, ROOFS[(si + (side > 0 ? 1 : 0) + back * 2) % ROOFS.length], { at: [mx, G + h - 0.001, mz], rot: [0, along, 0] }))
+        shadows.push([mx, mz, count * wide * 0.5])
+        taken.push([mx, mz, count * wide * 0.55])
+      }
+      if (lo > hi) return
+      const [l0, l1] = [Math.max(0, lo - 0.03), Math.min(len, hi + 0.03)]
+      lanes.push([ax + ux * l0, az + uz * l0, ax + ux * l1, az + uz * l1, laneW + 0.01, market ? GROUND.market : GROUND.lane])
+      // A market lane: stalls under umbrellas down its middle.
+      if (market)
+        for (let d = l0 + 0.04; d < l1 - 0.02; d += 0.075) {
+          const [x, z] = [ax + ux * d, az + uz * d]
+          const c = [PAL.hotpink, PAL.butter, PAL.mint, '#FF9A4D'][Math.round(d / 0.075) % 4]
+          parts.push(P.rbox(0.026, 0.014, 0.018, 0.003, CREAM, { at: [x, G + 0.007, z], rot: [0, yaw, 0] }), P.cyl(0.0016, 0.0016, 0.04, CREAM, { at: [x, G + 0.022, z] }, 4), P.cone(0.022, 0.014, c, { at: [x, G + 0.047, z] }, 8))
+        }
+    })
     root.add(solid(merge(parts), bag, 1))
   }
 
@@ -318,8 +431,8 @@ export function buildDiorama(bag: Bag): Diorama {
       else parts.push(...roundTree(x, G, z, s * 0.9, i))
       shadows.push([x, z, (jungle ? 0.09 : 0.05) * s + 0.015])
     }
-    // Out west and down south, the big trees of the leafy squares stand up off the paper here and there (on their
-    // painted crowns): the green that's left among the roofs, thickest along the khlongs and toward the edges.
+    // Out west and down south, the big trees of the leafy squares along the khlongs stand up off the paper (on their
+    // painted crowns): the green that's left among the roofs lines the water.
     {
       const rnd2 = T.rng(23)
       const stood: XZ[] = []
@@ -332,7 +445,9 @@ export function buildDiorama(bag: Bag): Diorama {
         const [cu, cv, cr] = crowns(o, b.iu, b.iv)[0]
         const [x, z] = inBlock(o, b.iu, b.iv, cu, cv)
         if (f.land(x, z) < 0.07 || f.park(x, z) || f.jungle(x, z) || !free(x, z, 0.03) || f.clear(x, z) < 0.035 || rail.near(x, z).dist < 0.06) continue
-        if (stood.some(([sx, sz]) => Math.hypot(sx - x, sz - z) < 0.12)) continue
+        // (Along the khlongs, where Thonburi's trees really crowd: a line of green, not trees dotted at random.)
+        if (f.khlong(x, z) > 0.075) continue
+        if (stood.some(([sx, sz]) => Math.hypot(sx - x, sz - z) < 0.1)) continue
         stood.push([x, z])
         parts.push(...roundTree(x, G, z, 0.4 + cr * 0.6 + rnd2() * 0.08, i))
         shadows.push([x, z, 0.035])
@@ -422,8 +537,14 @@ export function buildDiorama(bag: Bag): Diorama {
 
   const spots = {} as Record<SpotId, Group>
   // Asiatique: the big wheel by the river, the old warehouses under it.
-  spots.asiatique = toy(SPOTS.asiatique, asiatiqueParts())
-  const wheel = sub(spots.asiatique, wheelParts(), [0.02, 0.165, -0.02])
+  spots.asiatique = toy(SPOTS.asiatique, asiatiqueParts(), ASIATIQUE_SCALE)
+  // (The wheel and its legs lean back together on their feet, its face up toward her camera.)
+  const stand = new Group()
+  stand.position.set(0.02, 0, -0.045)
+  stand.rotation.x = -WHEEL_TILT
+  stand.add(solid(merge(wheelStandParts()), bag, 1.2))
+  spots.asiatique.add(stand)
+  const wheel = sub(stand, wheelParts(), [0, WHEEL_HUB, 0.012])
   // Chinatown: the red gate, shophouses with bright signs, a string of lanterns.
   spots.chinatown = toy(SPOTS.chinatown, chinatownParts())
   const lanterns = sub(spots.chinatown, lanternParts(), [0, 0.125, 0.07])
@@ -560,7 +681,7 @@ export function buildDiorama(bag: Bag): Diorama {
     return g
   })
 
-  root.add(buildGround(bag, { shadows, plazas, casts, basins }))
+  root.add(buildGround(bag, { shadows, plazas, casts, basins, paved, lanes, courts }))
   return { root, places, spots, pins, stamp, balloon, balloonAt, sea, river, rail, road, taxiRoad, khlong, canal, canalBoat, traffic, tentRows, marketBoats, boats, train, tuktuk, taxi, fruit, clouds, wheel, lanterns, swan, lizard, craneBox, birds, fountain, towers, bridges, gold }
 }
 
@@ -747,12 +868,14 @@ function houseParts(): BufferGeometry[] {
   const parts: BufferGeometry[] = []
   const paint = ['#FBEA9A', '#FF9DC0', '#8FE3C8']
   const awning = [PAL.pink, '#FFFFFF', PAL.gold]
+  const roofs = ['#FFC94D', PAL.hotpink, '#5FCFA8']
   for (let i = -1; i <= 1; i++) {
     const x = i * 0.078
     const h = i ? 0.115 : 0.145
     parts.push(
       P.rbox(0.074, h, 0.09, 0.008, paint[i + 1], { at: [x, h / 2, 0] }),
-      P.box(0.082, 0.011, 0.098, CREAM, { at: [x, h + 0.003, 0] }),
+      // (Bright roofs: from up on the map the house is what she sees of it, the pink one in the middle.)
+      P.box(0.082, 0.011, 0.098, roofs[i + 1], { at: [x, h + 0.003, 0] }),
       P.box(0.078, 0.007, 0.036, awning[i + 1], { at: [x, 0.058, 0.058], rot: [0.4, 0, 0] }),
       P.box(0.042, 0.042, 0.006, i ? '#C8BEDD' : '#9A6B4F', { at: [x, 0.021, 0.046] }),
       ...[-0.018, 0.018].map((wx) => P.box(0.02, 0.026, 0.006, '#DDF3FF', { at: [x + wx, h - 0.032, 0.046] })),
@@ -815,13 +938,22 @@ function asiatiqueParts(): BufferGeometry[] {
   return [
     ...[-0.1, -0.035, 0.03].flatMap((x, i) => shed(x + 0.03, 0.085, 0.058, 0.11, 0.045, CREAM, ['#F08A7A', '#F7A072', '#E88AA6'][i])),
     P.rbox(0.26, 0.008, 0.05, 0.003, WOOD, { at: [0, 0.004, 0.17] }),
-    // The wheel's legs and its hub.
-    rod([-0.05, 0, -0.02], [0.02, 0.165, -0.035], 0.012, CREAM),
-    rod([0.09, 0, -0.02], [0.02, 0.165, -0.035], 0.012, CREAM),
-    P.cyl(0.014, 0.014, 0.03, PAL.hotpink, { at: [0.02, 0.165, -0.02], rot: [Math.PI / 2, 0, 0] }, 10),
     // Bunting between two poles.
     ...[-0.13, 0.13].map((x) => P.cyl(0.003, 0.003, 0.08, CREAM, { at: [x, 0.04, 0.15] }, 4)),
     ...[0, 1, 2, 3, 4, 5, 6].map((i) => P.cone(0.009, 0.016, [PAL.pink, PAL.butter, PAL.mint, PAL.lavender][i % 4], { at: [-0.11 + i * 0.037, 0.068 - Math.sin((i / 6) * Math.PI) * 0.012, 0.15], rot: [Math.PI, 0, 0] }, 4)),
+  ]
+}
+
+/** How high the wheel's hub is on its stand. */
+const WHEEL_HUB = 0.17
+
+/** The wheel's stand (it leans back with the wheel): two legs either side meeting at the hub, a pink hub. */
+function wheelStandParts(): BufferGeometry[] {
+  return [
+    rod([-0.075, 0, 0], [0, WHEEL_HUB, 0], 0.012, CREAM),
+    rod([0.075, 0, 0], [0, WHEEL_HUB, 0], 0.012, CREAM),
+    P.rbox(0.18, 0.012, 0.03, 0.004, CREAM, { at: [0, 0.006, 0] }),
+    P.cyl(0.016, 0.016, 0.03, PAL.hotpink, { at: [0, WHEEL_HUB, 0.004], rot: [Math.PI / 2, 0, 0] }, 10),
   ]
 }
 
