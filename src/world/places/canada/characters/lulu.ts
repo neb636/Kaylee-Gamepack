@@ -1,6 +1,7 @@
-// Lulu the loon as a toy (characters/toy.ts ToyActor): the best singer in Canada, who sings before the big game. A
-// low black body speckled with white, a white tummy, a round black head with red eyes, a black dagger bill that opens
-// when she talks or calls, and the striped white necklace. `chick: true` builds her chick instead: a small grey-brown
+// Lulu the loon as a toy (characters/toy.ts ToyActor): the best singer in Canada, who sings before the big game, and a
+// proud mama. A low soft-charcoal body speckled with white, a white tummy and bib, a big round head with a deep green
+// sheen, big shiny dark eyes with a ruby rim (a real loon's red eye, made sweet), rosy cheeks, a short dark bill that
+// opens when she talks or calls, and the striped white necklace. `chick: true` builds her chick instead: a small grey-brown
 // ball of fluff that rides on her back (`chick.ride(lulu.body, ...)`). She sits low: on water, put her feet at the
 // surface; her body is made to look afloat.
 import { Group, Vector3 } from 'three'
@@ -9,9 +10,12 @@ import { merge, P, solid, solidMix } from '../../../engine3d/geo'
 import { CANADA_COLORS } from './looks'
 import { ToyActor, type ToyPose } from './toy'
 
-const BLACK = '#2B2330'
+const BLACK = '#2F3443'
+const HEAD = '#294A50'
 const WHITE = '#FFFFFF'
 const RED = '#E2384B'
+const INK = '#1C1820'
+const BLUSH = '#FF9DBB'
 const FLUFF = '#8E8478'
 const FLUFF_LIGHT = '#D9D0C4'
 
@@ -58,29 +62,33 @@ export class Lulu extends ToyActor {
     }
     // The neck and the head.
     this.neck.position.set(0, 0.36 * H, (chick ? 0.14 : 0.24) * H)
-    const R = (chick ? 0.3 : 0.21) * H
+    const R = (chick ? 0.3 : 0.25) * H
     const headY = (chick ? 0.22 : 0.3) * H
     this.headAt = new Vector3(0, headY, 0.02 * H)
-    const neck = [P.capsule(0.11 * H, 0.14 * H, dark, { at: [0, 0.1 * H, 0], rot: [0.15, 0, 0] }), P.sphere(R, dark, { at: [0, headY, 0.02 * H] }, 18)]
+    const neck = [P.capsule(0.11 * H, 0.14 * H, dark, { at: [0, 0.1 * H, 0], rot: [0.15, 0, 0] }), P.sphere(R, chick ? dark : HEAD, { at: [0, headY, 0.02 * H] }, 18)]
     if (chick) neck.push(P.sphere(R * 0.62, FLUFF_LIGHT, { at: [0, headY - R * 0.25, 0.02 * H + R * 0.55], scale: [1.1, 0.8, 0.6] }, 10))
     else {
-      // The necklace: short white stripes round the front of the neck.
+      // The necklace: short white stripes round the front of the neck, and her white bib under it.
       for (let i = -3; i <= 3; i++) neck.push(P.rbox(0.014 * H, 0.07 * H, 0.012 * H, 0.004 * H, WHITE, { at: [Math.sin(i * 0.36) * 0.118 * H, 0.1 * H, Math.cos(i * 0.36) * 0.118 * H + 0.012 * H], rot: [0.15, i * 0.36, 0] }))
-      neck.push(P.cone(R * 0.3, R * 1.25, BLACK, { at: [0, headY - R * 0.05, 0.02 * H + R * 1.35], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 0.6] }, 8))
+      neck.push(P.sphere(0.12 * H, WHITE, { at: [0, -0.02 * H, 0.06 * H], scale: [1, 0.9, 0.75] }, 12))
     }
+    // Rosy cheeks under the eyes.
+    for (const s of [-1, 1]) neck.push(P.sphere(R * 0.13, BLUSH, { at: [s * R * 0.6, headY - R * 0.18, 0.02 * H + R * 0.77], scale: [1.2, 0.7, 0.45] }, 8))
     this.neck.add(solid(merge(neck), bag, px))
     this.bill.position.set(0, headY - R * 0.16, 0.02 * H + R * 0.8)
-    this.bill.add(solid(P.cone(R * (chick ? 0.2 : 0.24), R * (chick ? 0.5 : 1.0), chick ? '#5A5048' : '#3A3140', { at: [0, -R * 0.03, R * (chick ? 0.3 : 0.5)], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 0.45] }, 8), bag, 1.2))
+    this.bill.add(solid(P.cone(R * (chick ? 0.2 : 0.22), R * (chick ? 0.5 : 0.8), chick ? '#5A5048' : '#3A3140', { at: [0, -R * 0.03, R * (chick ? 0.3 : 0.5)], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 0.45] }, 8), bag, 1.2))
     this.neck.add(this.bill)
     this.eyes = new Group()
     this.eyes.position.set(0, headY + R * 0.12, 0.02 * H)
+    // Big shiny eyes: a thin ruby rim round a big dark pupil, two sparkles in it; rosy cheeks under them.
     const eye = [-1, 1].flatMap((s) => {
-      const x = s * R * 0.48
+      const x = s * R * 0.44
       const z = Math.sqrt(R * R - x * x - (R * 0.12) ** 2)
       return [
-        P.sphere(R * 0.24, chick ? WHITE : RED, { at: [x, 0, z - R * 0.02], scale: [1, 1.15, 0.45] }, 10),
-        P.sphere(R * 0.15, BLACK, { at: [x, 0, z + R * 0.07], scale: [1, 1.15, 0.4] }, 8),
-        P.sphere(R * 0.06, WHITE, { at: [x + R * 0.05, R * 0.08, z + R * 0.13] }, 6),
+        P.sphere(R * 0.27, chick ? WHITE : RED, { at: [x, 0, z - R * 0.03], scale: [1, 1.12, 0.45] }, 12),
+        P.sphere(R * 0.21, INK, { at: [x, 0, z + R * 0.05], scale: [1, 1.12, 0.42] }, 10),
+        P.sphere(R * 0.075, WHITE, { at: [x + R * 0.07, R * 0.09, z + R * 0.13] }, 6),
+        P.sphere(R * 0.035, WHITE, { at: [x - R * 0.06, -R * 0.07, z + R * 0.12] }, 5),
       ]
     })
     this.eyes.add(solidMix([], eye, bag, 0))
@@ -111,7 +119,7 @@ export class Lulu extends ToyActor {
     const happy = p.face?.kind === 'happy' ? p.face.k : 0
     const wow = p.face?.kind === 'wow' ? p.face.k : 0
     const call = this.calling
-    this.neck.rotation.set(p.nod + p.droop * 0.4 - call * 0.55 - wow * 0.12, p.headTurn + 0.25 * p.shake, 0.12 * p.wave - 0.2 * p.shake + happy * 0.12 * Math.sin(t * 9))
+    this.neck.rotation.set(p.nod + p.droop * 0.4 - call * 0.8 - wow * 0.12, p.headTurn + 0.25 * p.shake, 0.12 * p.wave - 0.2 * p.shake + happy * 0.12 * Math.sin(t * 9))
     this.eyes.scale.y = Math.min(p.lid, 1 - p.droop * 0.4 - happy * 0.6) * (1 + wow * 0.2)
     this.bill.rotation.x = Math.max(p.talk, call * (0.7 + 0.3 * Math.sin(t * 9)), wow * 0.5) * 0.6
     const beat = p.flap * 0.9
