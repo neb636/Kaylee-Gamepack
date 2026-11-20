@@ -17,6 +17,8 @@ async function aim(page) {
   const g = s.goalAt
   const on = g && !g.behind && g.x > 30 && g.x < vp.width - 30 && g.y > 100 && g.y < vp.height - 80
   if (on) return { s, x: g.x, y: g.y }
+  // Behind: hold the water off to one side, and the canoe swings round in a happy arc.
+  if (g?.behind) return { s, x: vp.width * 0.88, y: s.canoe.y }
   const dx = g ? Math.max(-1, Math.min(1, (g.x - s.canoe.x) / 300)) : 0
   return { s, x: Math.max(30, Math.min(vp.width - 30, s.canoe.x + dx * vp.width * 0.3)), y: Math.max(110, s.canoe.y - vp.height * 0.32) }
 }

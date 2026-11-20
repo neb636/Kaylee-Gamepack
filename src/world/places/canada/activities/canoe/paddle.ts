@@ -901,13 +901,14 @@ export class RedCanoe implements World3D {
     this.mama.root.visible = false
   }
 
-  /** Somewhere between the canoe and the glacier, a little to one side, on open water: each time Lulu comes up she's
-   *  nearer home, so following her takes the canoe across the lake. */
+  /** Ahead of the canoe (where she can see the bubbles), turned toward the glacier as far as stays on the screen, on
+   *  open water: each time Lulu comes up she's nearer home, so following her takes the canoe across the lake. */
   private pickLoonSpot(near: number, far: number) {
     const home = Math.atan2(FAMILY.x - this.x, FAMILY.z - this.z)
     const left = Math.hypot(FAMILY.x - this.x, FAMILY.z - this.z)
+    const toward = this.head + clamp(wrapAngle(home - this.head), -0.65, 0.65)
     for (let i = 0; i < 40; i++) {
-      const a = home + (Math.random() - 0.5) * (i < 25 ? 1 : 2.4)
+      const a = toward + (Math.random() - 0.5) * (i < 25 ? 0.5 : 2)
       const d = Math.min(near + Math.random() * (far - near), Math.max(6, left - 8))
       const x = this.x + Math.sin(a) * d
       const z = this.z + Math.cos(a) * d
