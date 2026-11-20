@@ -5,7 +5,7 @@
  { "id": "hub-munch", "label": "Monty the moose munches", "prompt": "A big friendly moose slowly chewing a mouthful of leaves and water plants, three soft wet munches, gentle and funny.", "seconds": 1.2 },
  { "id": "hub-spout", "label": "The whale spouts", "prompt": "A whale breathing out through its blowhole: a soft, airy whoosh of spray going up and pattering back onto calm sea water.", "seconds": 1.5 },
  { "id": "hub-crackle", "label": "The campfire crackles", "prompt": "A small cozy campfire crackling and popping softly for a moment, warm and gentle.", "seconds": 1.2 },
- { "id": "hub-bear", "label": "The polar bear's happy huff", "prompt": "A friendly cartoonish polar bear's soft happy huff and little grumble, warm and cuddly, not scary at all.", "seconds": 0.9 },
+ { "id": "hub-hoot", "label": "The snowy owl hoots", "prompt": "A soft, round, friendly cartoon owl hooting twice, hoo hoo, gentle and cozy, a little sleepy and sweet.", "seconds": 1.2 },
  { "id": "hub-bison", "label": "The bison rolls in the dust", "prompt": "A big bison flopping over and rolling in dry dust: a soft heavy thump, a dusty scuffle, and a contented snort. Gentle and funny.", "seconds": 1.4 },
  { "id": "hub-beluga", "label": "The beluga chirps", "prompt": "A beluga whale's cheerful high chirps and whistles, two or three short squeaky calls, bright and cute, with a little splash.", "seconds": 1.2 },
  { "id": "hub-orca", "label": "The orca leaps", "prompt": "An orca leaping out of calm sea water and landing with a big friendly splash, short.", "seconds": 1.3 },

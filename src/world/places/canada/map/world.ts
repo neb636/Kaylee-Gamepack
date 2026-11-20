@@ -2,10 +2,12 @@
 // way the Thailand maps are. Seven places stand on it east to west, each a little diorama with its friend in it, big
 // and alive: tap a place (or its friend) and it hops, the camera closes in, and the chapter opens. Ottawa's rink is the
 // story's home: Maple and the Maple Cup, Gus's geese skating rings on the ice, and every friend she has brought home
-// standing in a row in the team's pink scarf (their home then wears a little pink flag). With the whole team there the
-// rink glows until she taps it: the big game. Everything else on the board answers a poke (the geese, a polar bear
-// who waves, an orca, a bison who rolls in the dust, a beluga, Sparkle's balloon, the clouds, the ice floes, the
-// Rockies, the snowy north, Hudson Bay). She can swing the board round with a drag and pinch it closer (board.ts).
+// standing in a row in the team's pink scarf (their home then wears a little pink flag). Every friend still to fetch
+// has a round pink heart pin bobbing over them from the first frame (pins.ts) and waves now and then. With the whole
+// team there the rink glows and wears the pin until she taps it: the big game. Everything else on the board is smaller
+// and quieter than the friends and answers a poke (the geese, a snowy owl who turns her head right round, an orca, a
+// bison who rolls in the dust, a beluga, Sparkle's balloon, the clouds, the ice floes, the Rockies, the snowy north,
+// Hudson Bay). She can swing the board round with a drag and pinch it closer (board.ts).
 //
 // shape.ts has the numbers (the country's shape, where everything stands), terrain.ts the still board, places.ts the
 // dioramas, critters.ts the animals to poke; this file brings them to life and listens to her finger. The page
@@ -30,7 +32,8 @@ import { Tuque } from '../characters/tuque'
 import { Friend } from '../story/cast'
 import { CHAPTERS, type ChapterId } from '../story/chapters'
 import { Balloon } from '../story/props'
-import { beluga, bison, floe, orca, polarBear, type Bison, type Swimmer } from './critters'
+import { beluga, bison, floe, orca, snowyOwl, type Bison, type Owl, type Swimmer } from './critters'
+import { heartPin, PIN_R } from './pins'
 import { buildBay, buildCamp, buildCastle, buildForest, buildLake, buildMountain, buildRink, type PlaceToy } from './places'
 import { buildField, FLOES, fromRockies, PLACES, POKES, type Field, type PlaceId, type PokeId } from './shape'
 import { hubSfx } from './sounds'
@@ -64,7 +67,7 @@ export const WHO: Record<ChapterId, string> = { snowman: 'Tuque', bike: 'Monty',
 /** The DOM targets the page lays over the animals and the team (the places' own targets are the page's). */
 export const MAP_ANCHORS: AnchorInfo[] = [
   { id: 'poke:geese', label: 'Gus and the geese', kind: 'thing' },
-  { id: 'poke:polar', label: 'The polar bear', kind: 'thing' },
+  { id: 'poke:owl', label: 'The snowy owl', kind: 'thing' },
   { id: 'poke:orca', label: 'The orca', kind: 'thing' },
   { id: 'poke:bison', label: 'The bison', kind: 'thing' },
   { id: 'poke:beluga', label: 'The beluga', kind: 'thing' },
@@ -92,6 +95,15 @@ interface Mate {
   /** Seconds since she popped in at the rink (-1: not arriving). */
   pop: number
   size: number
+  /** When she next waves from home (seconds of the map's clock). */
+  waveAt: number
+}
+
+/** A heart pin over a place still to do: where it floats (in the place's own space, so it rides the bounce). */
+interface Pin {
+  root: Group
+  at: Vector3
+  ph: number
 }
 
 interface Poke {
@@ -105,7 +117,12 @@ interface Poke {
 
 const tmp = new Vector3()
 const tmp2 = new Vector3()
+const tmp3 = new Vector3()
 const TAU = Math.PI * 2
+/** How much bigger the friends at home stand on a tall screen. */
+const HOME_TALL = 1.25
+/** The smallest a heart pin's badge gets across on screen (px), however small the screen. */
+const PIN_MIN_PX = 34
 
 export class CanadaMapWorld implements World3D {
   readonly scene = new Scene()
@@ -153,7 +170,10 @@ export class CanadaMapWorld implements World3D {
   private mates = new Map<ChapterId, Mate>()
   private geese: Goose[] = []
   private pokes = new Map<PokeId, Poke>()
-  private bear!: FilmActor
+  private pins = new Map<PlaceId, Pin>()
+  /** The friends at home stand bigger on a tall screen, where the far (Pacific) end of the board is small. */
+  private homeK = 1
+  private owl!: Owl
   private bisonToy!: Bison
   private belugaToy!: Swimmer
   private orcaToy!: Swimmer
@@ -202,9 +222,9 @@ export class CanadaMapWorld implements World3D {
     }
 
     // Maple by the Cup, always.
-    this.maple = new Friend('maple', this.bag, { height: 0.78, voice: 'maple' })
+    this.maple = new Friend('maple', this.bag, { height: 0.86, voice: 'maple' })
     this.mapleSpot.position.copy(this.rink.maple)
-    this.mapleSpot.add(this.maple.root, blobShadow(0.2, this.bag))
+    this.mapleSpot.add(this.maple.root, blobShadow(0.22, this.bag))
     this.maple.place(0, 0, 0, 0)
     this.rink.place.root.add(this.mapleSpot)
 
@@ -213,11 +233,11 @@ export class CanadaMapWorld implements World3D {
       snowman: () => new Tuque(this.bag, { height: 0.9 }),
       bike: () => new Friend('moose', this.bag, { height: 1.15, voice: 'moose' }),
       campfire: () => new Friend('raccoon', this.bag, { height: 0.72, voice: 'raccoon' }),
-      canoe: () => new Lulu(this.bag, { height: 0.6 }),
+      canoe: () => new Lulu(this.bag, { height: 0.85 }),
       salmon: () => new Friend('spirit', this.bag, { height: 1.05, voice: 'bear' }),
-      whales: () => new Friend('otter', this.bag, { height: 0.7, voice: 'otter' }),
+      whales: () => new Friend('otter', this.bag, { height: 0.75, voice: 'otter' }),
     }
-    const size: Record<ChapterId, number> = { snowman: 0.9, bike: 1.15, campfire: 0.72, canoe: 0.6, salmon: 1.05, whales: 0.7 }
+    const size: Record<ChapterId, number> = { snowman: 0.9, bike: 1.15, campfire: 0.72, canoe: 0.85, salmon: 1.05, whales: 0.75 }
     for (const id of CHAPTERS) {
       const onTeam = team.includes(id)
       // Tuque only exists once she has built him.
@@ -229,7 +249,7 @@ export class CanadaMapWorld implements World3D {
       tilt.add(actor.root)
       spot.add(blobShadow(size[id] * 0.28, this.bag))
       actor.place(0, 0, 0, 0)
-      const m: Mate = { id, actor, spot, tilt, team: onTeam, pop: -1, size: size[id] }
+      const m: Mate = { id, actor, spot, tilt, team: onTeam, pop: -1, size: size[id], waveAt: 1.5 + CHAPTERS.indexOf(id) * 1.3 }
       this.mates.set(id, m)
       this.seat(m)
     }
@@ -244,8 +264,39 @@ export class CanadaMapWorld implements World3D {
     }
 
     this.buildPokes()
+    this.buildPins()
     this.buildSky()
     this.buildMs = Math.round(performance.now() - began)
+  }
+
+  /** A heart pin over every place (shown while it's still to do; the rink's only once the whole team is home). Each
+   *  floats over its friend's head (or Tuque's snowballs, or Roxy's tent), in the place's own space. */
+  private buildPins() {
+    const over = (id: PlaceId): Vector3 => {
+      const top = (h: number) => h + 0.32
+      switch (id) {
+        case 'party':
+          return new Vector3(this.rink.maple.x - 0.1, top(0.95), this.rink.maple.z - 0.05)
+        case 'snowman':
+          return new Vector3(0.48, top(0.66), 0.35)
+        case 'campfire':
+          return new Vector3(this.camp.peek.out.x - 0.08, top(0.72), this.camp.peek.out.z - 0.1)
+        case 'canoe':
+          return new Vector3(this.lake.float.x, top(0.85), this.lake.float.z)
+        case 'whales':
+          return new Vector3(0, top(0.4), 0.2)
+        default: {
+          const home = this.places.get(id)!.home ?? new Vector3()
+          return new Vector3(home.x, top(this.mates.get(id as ChapterId)?.size ?? 1), home.z)
+        }
+      }
+    }
+    for (const id of this.places.keys()) {
+      const root = heartPin(this.bag)
+      root.visible = false
+      this.scene.add(root)
+      this.pins.set(id, { root, at: over(id), ph: (PLACES[id][0] + 8) * 0.9 })
+    }
   }
 
   // ---------------------------------------------------------------- building
@@ -289,24 +340,24 @@ export class CanadaMapWorld implements World3D {
     }
     this.pokes.set('geese', { id: 'geese', at: new Vector3(), size: 0.6, t: -1 })
 
-    this.bear = polarBear(this.bag, 0.85)
-    const bearSpot = new Group()
-    bearSpot.add(this.bear.root, blobShadow(0.2, this.bag))
-    this.bear.place(0, 0, 0, 0)
-    this.add('polar', bearSpot, 0.85)
+    // (Every animal here is smaller and quieter than the friends, so none is taken for one.)
+    this.owl = snowyOwl(this.bag)
+    this.owl.root.scale.setScalar(1.25)
+    this.owl.root.add(blobShadow(0.2, this.bag))
+    this.add('owl', this.owl.root, 0.7)
 
     this.bisonToy = bison(this.bag)
-    this.bisonToy.root.scale.setScalar(1.6)
-    this.bisonToy.root.add(blobShadow(0.3, this.bag))
-    this.add('bison', this.bisonToy.root, 0.85)
+    this.bisonToy.root.scale.setScalar(1.15)
+    this.bisonToy.root.add(blobShadow(0.28, this.bag))
+    this.add('bison', this.bisonToy.root, 0.7)
 
     this.belugaToy = beluga(this.bag)
-    this.belugaToy.root.scale.setScalar(1.6)
+    this.belugaToy.root.scale.setScalar(1.2)
     this.add('beluga', this.belugaToy.root, 0.6)
 
     this.orcaToy = orca(this.bag)
-    this.orcaToy.root.scale.setScalar(1.6)
-    this.add('orca', this.orcaToy.root, 0.65)
+    this.orcaToy.root.scale.setScalar(1.05)
+    this.add('orca', this.orcaToy.root, 0.6)
 
     this.balloon = new Balloon(this.bag, 0.22)
     this.balloon.root.visible = true
@@ -322,8 +373,9 @@ export class CanadaMapWorld implements World3D {
 
   private buildSky() {
     // Clouds drifting high over the map, each with its shadow on the ground.
-    // (Over the far north and the paper land to the south only: a cloud drifting over a friend's place hides who she's looking for.)
-    const spots: [number, number, number, number][] = [[-5.5, -3.5, 1.0, 2.3], [1.2, -3.7, 0.9, 2.1], [4.6, 4.0, 0.9, 2.2], [-2.8, 4.1, 1.0, 2.0]]
+    // (Over the far north and the paper land's far south edge only, and low there: from the camera a high cloud looks
+    // further north than it is, and one drifting over a friend's place hides who she's looking for.)
+    const spots: [number, number, number, number][] = [[-5.5, -3.5, 1.0, 2.3], [1.2, -3.7, 0.9, 2.1], [4.6, 4.7, 0.8, 1.2], [-2.8, 4.75, 0.85, 1.1]]
     for (const [x, z, s, y] of spots) {
       const root = puffCloud(this.bag, s)
       root.position.set(x, y, z)
@@ -379,6 +431,9 @@ export class CanadaMapWorld implements World3D {
     this.base.pitch = tall ? 60 : 58
     // Every place turns its front to the camera's side of the board (they're toys on a tray).
     for (const p of this.places.values()) p.root.rotation.y = (this.base.yaw * Math.PI) / 180
+    // On a tall screen the far (Pacific) end is small: the friends at home stand bigger, so each stays a big target.
+    this.homeK = tall ? HOME_TALL : 1
+    for (const m of this.mates.values()) if (!m.team) m.spot.scale.setScalar(this.homeK)
     this.frame()
     this.rig.setShot(this.shot(), true)
   }
@@ -446,6 +501,7 @@ export class CanadaMapWorld implements World3D {
     if (this.nudgeT >= 0 && (this.nudgeT += dt) > 2.6) this.nudgeT = -1
     this.updatePlaces(dt, t)
     this.updateMates(dt, t)
+    this.updatePins(t)
     this.updatePokes(dt, t)
     this.updateSky(dt, t)
     this.spray.update(dt)
@@ -544,8 +600,37 @@ export class CanadaMapWorld implements World3D {
         m.spot.scale.setScalar(Math.max(0.001, s))
         if (k > 1.5) m.pop = -1
       }
-      if (!m.team) this.homeLife(m, t)
+      if (!m.team) {
+        this.homeLife(m, t)
+        // Now and then she waves from home: over here!
+        if (t >= m.waveAt && !this.picked) {
+          m.actor.wave()
+          m.waveAt = t + 5.5 + Math.random() * 3
+        }
+      }
       m.actor.update(dt, t)
+    }
+  }
+
+  /** The heart pins: over each place still to do (and the rink once the team is whole), facing the camera, bobbing;
+   *  they bounce when she's idle or tapped the rink too soon, and never shrink below a thumbnail on a small screen. */
+  private updatePins(t: number) {
+    const arrivingNow = !!this.arriving && this.arrivalT < this.arriveEnd
+    for (const [id, pin] of this.pins) {
+      const p = this.places.get(id)!
+      const on = !this.picked && (id === 'party' ? this.glowing && !arrivingNow : this.todo(id))
+      pin.root.visible = on
+      if (!on) continue
+      const k = id === 'party' ? 1 : this.homeK
+      p.root.localToWorld(tmp3.set(pin.at.x, 0.05 + (pin.at.y - 0.05) * k, pin.at.z))
+      const nudge = this.nudgeT >= 0 ? bell(clamp(this.nudgeT / 0.6, 0, 1)) : 0
+      const hint = this.hint ? Math.max(0, Math.sin(t * 3 + pin.ph)) : 0
+      tmp3.y += 0.05 * Math.sin(t * 2.2 + pin.ph) + 0.12 * nudge + 0.08 * hint
+      pin.root.position.copy(tmp3)
+      pin.root.quaternion.copy(this.rig.camera.quaternion)
+      const px = this.ppu(tmp3) * PIN_R * 2
+      const s = Math.max(1, PIN_MIN_PX / Math.max(px, 1)) * (1 + 0.3 * nudge + 0.12 * hint)
+      pin.root.scale.setScalar(s)
     }
   }
 
@@ -613,14 +698,19 @@ export class CanadaMapWorld implements World3D {
       this.rink.place.root.localToWorld(p.at.set(L.x, 0.35, L.z))
     }
 
-    // The polar bear on his island: poked, he waves and hops.
+    // The snowy owl on her island looks about; poked, she turns her head right round (and back), flaps and hoots.
     {
-      const p = done('polar', 1.8)
-      const bear = this.bear.root.parent!
+      const p = done('owl', 1.8)
+      const o = this.owl
       const cam = this.rig.camera.position
-      bear.rotation.y = Math.atan2(cam.x - bear.position.x, cam.z - bear.position.z) + Math.sin(t * 0.6) * 0.2
-      this.bear.update(dt, t)
-      p.at.copy(bear.position).setY(bear.position.y + 0.32)
+      o.root.rotation.y = Math.atan2(cam.x - o.root.position.x, cam.z - o.root.position.z)
+      const k = p.t >= 0 ? clamp(p.t / 1.4, 0, 1) : 0
+      o.head.rotation.y = p.t >= 0 ? TAU * (k * k * (3 - 2 * k)) : Math.sin(t * 0.5) * 0.7 * Math.max(0, Math.sin(t * 0.23)) ** 2
+      o.head.rotation.z = p.t >= 0 ? Math.sin(k * Math.PI) * 0.25 : 0
+      const flap = p.t >= 0 && p.t < 0.8 ? Math.abs(Math.sin(p.t * 16)) * 0.9 : 0
+      o.wings.forEach((w, i) => (w.rotation.z = (i ? -1 : 1) * flap))
+      o.root.position.y = this.ground(...POKES.owl) + (p.t >= 0 ? 0.08 * bell(clamp(p.t / 0.5, 0, 1)) : 0)
+      p.at.copy(o.root.position).setY(o.root.position.y + 0.35)
     }
 
     // The bison grazes on the prairie; poked, it flops over and rolls in a puff of dust.
@@ -631,7 +721,9 @@ export class CanadaMapWorld implements World3D {
       b.head.rotation.x = p.t >= 0 ? 0 : 0.25 + 0.3 * Math.max(0, Math.sin(t * 0.6)) ** 4
       b.body.rotation.z = p.t >= 0 ? -TAU * (k * k * (3 - 2 * k)) : 0
       b.body.position.y = p.t >= 0 ? 0.12 * Math.sin(k * Math.PI) : 0
-      b.root.rotation.y = 0.5 + Math.sin(t * 0.15) * 0.3
+      // (Side on to the camera, so she sees a bison's shape: the hump, the low head, the horns.)
+      const cam = this.rig.camera.position
+      b.root.rotation.y = Math.atan2(cam.x - b.root.position.x, cam.z - b.root.position.z) + 1.25 + Math.sin(t * 0.15) * 0.2
       if (p.t >= 0 && p.t < 1.2 && Math.random() < dt * 30) this.spray.emit(b.root.position.x + (Math.random() - 0.5) * 0.5, b.root.position.y + 0.05, b.root.position.z + (Math.random() - 0.5) * 0.4, (Math.random() - 0.5) * 0.4, 0.5, (Math.random() - 0.5) * 0.4, 0.8, 0.07, DUST)
       p.at.copy(b.root.position).setY(b.root.position.y + 0.3)
     }
@@ -759,7 +851,10 @@ export class CanadaMapWorld implements World3D {
       this.spray.burst(cloud.point.x, cloud.point.y, cloud.point.z, 7, 0.5, 0.6, 0.1, WHITE)
       return
     }
-    // A place's model or a friend (outside its target box, from a steep angle): it opens.
+    // A heart pin, a place's model or a friend (outside its target box, from a steep angle): it opens.
+    for (const [id, pin] of this.pins) {
+      if (pin.root.visible && this.raycaster.intersectObject(pin.root, true).length) return this.pick(id)
+    }
     for (const p of this.places.values()) {
       if (this.raycaster.intersectObject(p.root, true).length) return this.pick(p.id)
     }
@@ -857,12 +952,8 @@ export class CanadaMapWorld implements World3D {
         hubSfx.honks()
         if (fresh) this.geese.forEach((g) => g.hop())
         break
-      case 'polar':
-        hubSfx.bear()
-        if (fresh) {
-          this.bear.wave()
-          this.bear.hop()
-        }
+      case 'owl':
+        hubSfx.hoot()
         break
       case 'bison':
         hubSfx.bison()
@@ -904,6 +995,13 @@ export class CanadaMapWorld implements World3D {
           spot = { x: s.x, y: s.y, w: d, h: d, z: id === 'poke:geese' ? 3000 : 6000 }
         }
       }
+      // Nothing reaches up under the top bar (its buttons win there): a box that does is cut off at the bar's edge.
+      if (spot && spot.y - spot.h / 2 < this.top) {
+        const bottom = spot.y + spot.h / 2
+        spot.h = bottom - this.top
+        spot.y = this.top + spot.h / 2
+        if (spot.h < min * 0.6) spot = null
+      }
       const show = !!spot && spot.x >= 0 && spot.x <= this.w && spot.y >= this.top && spot.y <= this.h
       if (show && spot) {
         el.style.transform = `translate3d(${spot.x - spot.w / 2}px, ${spot.y - spot.h / 2}px, 0)`
@@ -944,6 +1042,18 @@ export class CanadaMapWorld implements World3D {
       hh = 2 * Math.max(c.y - y0, y1 - c.y) * 0.8
       x = c.x
       y = c.y
+    } else {
+      // Its heart pin is part of it: the box reaches up to take it in.
+      const pin = this.pins.get(p.id)
+      if (pin?.root.visible) {
+        const s = pin.root.scale.x
+        const badge = this.toScreen(tmp.set(0, 0.2 + PIN_R * 0.9, 0).multiplyScalar(s).applyQuaternion(pin.root.quaternion).add(pin.root.position))
+        const r = this.ppu(pin.root.position) * PIN_R * s
+        const top = Math.min(y0, badge.y - r * 1.1)
+        hh = y1 - top
+        y = (top + y1) / 2
+        w = Math.max(w, r * 2.4)
+      }
     }
     return { x, y, w: Math.max(min, w * 0.92), h: Math.max(min, hh * 0.92), z: 5000 }
   }
@@ -964,6 +1074,22 @@ export class CanadaMapWorld implements World3D {
       poking: [...this.pokes.values()].filter((p) => p.t >= 0).map((p) => p.id),
       /** Where each tap target is on screen (center, size), for the robots. */
       targets: this.targets,
+      /** Each friend on screen: the middle of them and how tall they stand (px), at home or at the rink. */
+      friends: Object.fromEntries(
+        [...this.mates.values()].map((m) => {
+          const foot = this.toScreen(m.spot.getWorldPosition(tmp3))
+          const head = this.toScreen(m.actor.at(1, tmp3))
+          return [m.id, { x: Math.round(foot.x), y: Math.round((foot.y + head.y) / 2), h: Math.round(Math.hypot(head.x - foot.x, head.y - foot.y)), top: Math.round(head.y) }]
+        }),
+      ),
+      /** The heart pins showing: where each badge is (px) and how big across. */
+      pins: Object.fromEntries(
+        [...this.pins].filter(([, p]) => p.root.visible).map(([id, p]) => {
+          const s = this.toScreen(p.root.position)
+          return [id, { x: Math.round(s.x), y: Math.round(s.y), d: Math.round(this.ppu(p.root.position) * PIN_R * 2 * p.root.scale.x) }]
+        }),
+      ),
+      top: this.top,
     }
   }
 

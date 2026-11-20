@@ -26,7 +26,7 @@ import { Guide, type GuideHandle } from './Guide'
 import HUB_SECTIONS from './sections'
 
 /** Who goes into Maple's book when she pokes them on the map. */
-const MEETS: Partial<Record<PokeId, AnimalId>> = { geese: 'canada-goose', polar: 'polar-bear', orca: 'orca', bison: 'bison', beluga: 'beluga' }
+const MEETS: Partial<Record<PokeId, AnimalId>> = { geese: 'canada-goose', owl: 'snowy-owl', orca: 'orca', bison: 'bison', beluga: 'beluga' }
 
 /** The places, east to west, as the page lists their targets. */
 const PLACE_IDS: PlaceId[] = ['bike', 'snowman', 'party', 'campfire', 'canoe', 'salmon', 'whales']

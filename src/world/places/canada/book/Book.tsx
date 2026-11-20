@@ -27,7 +27,7 @@ export function Book({ onClose, page: first = 'quebec' }: { onClose: () => void;
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
           <div style={{ fontSize: 'clamp(20px, 3.4vmin, 30px)', fontWeight: 700, flex: '1 1 auto' }}>
-            📒 Maple's animals <span style={{ color: 'var(--lavender-dark)', fontSize: '0.75em' }}>{met.length} / {ANIMALS.length}</span>
+            📒 Maple's animals <span style={{ color: 'var(--lavender-dark)', fontSize: '0.75em' }}>{ANIMALS.filter((a) => met.includes(a.id)).length} / {ANIMALS.length}</span>
           </div>
           <button aria-label="Close the book" onClick={onClose} style={{ ...ROUND, background: 'var(--pink)' }}>
             ✖️

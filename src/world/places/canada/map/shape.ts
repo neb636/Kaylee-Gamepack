@@ -153,12 +153,14 @@ export const PLACES: Record<PlaceId, XZ> = {
   whales: [-7.1, 2.3],
 }
 
-export type PokeId = 'geese' | 'polar' | 'orca' | 'bison' | 'beluga' | 'balloon'
+export type PokeId = 'geese' | 'owl' | 'orca' | 'bison' | 'beluga' | 'balloon'
+/** Where the animals to poke stand. (The owl is on Baffin Island, clear of the top bar on a short screen; the bison
+ *  well away from Lulu's lake; the orca far out in the Pacific.) */
 export const POKES: Record<PokeId, XZ> = {
   geese: [1.45, 2.5],
-  polar: [-2.4, -3.25],
-  orca: [-7.2, 0.0],
-  bison: [-2.45, 2.45],
+  owl: [2.55, -2.95],
+  orca: [-7.35, -0.45],
+  bison: [-2.15, 1.75],
   beluga: [0.15, -0.6],
   balloon: [-1.6, -0.9],
 }

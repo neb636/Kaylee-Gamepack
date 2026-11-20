@@ -105,6 +105,8 @@ export function buildRink(bag: Bag): Rink {
   const parts = [
     // The snowy bank and the canal's ice running along it.
     P.cyl(1.0, 1.04, 0.07, '#F7F9FF', { at: [0.2, 0.03, -0.08], scale: [1.4, 1, 0.78] }, 32),
+    // (and a snowy strip behind it, where the team's back row stands)
+    P.cyl(1.0, 1.04, 0.07, '#F7F9FF', { at: [0.72, 0.03, -0.74], scale: [1.08, 1, 0.34] }, 28),
     // The frozen canal: a long ribbon of blue ice from the river, the rink on its widest stretch.
     P.cyl(1, 1, 0.03, '#BFE3F6', { at: [0.25, 0.06, 0.3], scale: [1.32, 1, 0.38] }, 32),
     P.rbox(1.3, 0.03, 0.22, 0.1, '#BFE3F6', { at: [1.55, 0.06, 0.12], rot: [0, 0.45, 0] }),
@@ -145,22 +147,24 @@ export function buildRink(bag: Bag): Rink {
   glow.visible = false
   place.root.add(glow)
   place.flag.visible = false
-  const maple = new Vector3(-0.62, 0.06, -0.3)
-  // The team stands on the far bank: the big ones (Monty, Misty, Tuque) at the back, the small ones in front.
-  // (In CHAPTERS order: snowman, bike, campfire, canoe, salmon, whales.)
+  // Maple, the captain, stands in front by the Cup, nearest the ice.
+  const maple = new Vector3(-0.6, 0.06, -0.08)
+  // The team stands on the far bank in two staggered rows, the back row in the front row's gaps so every face shows:
+  // the big ones (Monty, Misty, Tuque) at the back, the small ones in front. (In CHAPTERS order: snowman, bike,
+  // campfire, canoe, salmon, whales.)
   const row = [
-    [1.12, -0.62],
-    [0.12, -0.66],
-    [-0.18, -0.3],
-    [0.84, -0.3],
-    [0.62, -0.66],
-    [0.34, -0.3],
+    [1.42, -0.78],
+    [0.12, -0.8],
+    [-0.16, -0.3],
+    [1.16, -0.36],
+    [0.78, -0.8],
+    [0.47, -0.3],
   ].map(([x, z]) => new Vector3(x, 0.06, z))
   const rinkAt = new Vector3(0.25, 0.1, 0.28)
   place.update = (_dt, t) => {
     cup.rotation.y = Math.sin(t * 0.6) * 0.25
   }
-  return { place, aim: new Vector3(-0.1, 0.1, 0.28), maple, row, loop: { x: 0.68, z: 0.28, rx: 0.3, rz: 0.19 }, cup, glow, rinkAt }
+  return { place, aim: new Vector3(-0.1, 0.1, 0.28), maple, row, loop: { x: 0.62, z: 0.36, rx: 0.3, rz: 0.15 }, cup, glow, rinkAt }
 }
 
 // ---------------------------------------------------------------- Quebec City: the castle hotel
@@ -373,7 +377,8 @@ export function buildLake(bag: Bag): Lake {
     canoe.rotation.z = Math.sin(t * 1.3) * 0.06 + (place.t >= 0 ? Math.sin(place.t * 14) * 0.15 * (1 - clamp(place.t / 0.8, 0, 1)) : 0)
     flutter(place, t)
   }
-  return { place, canoe, float: new Vector3(0.3, 0.07, 0.3) }
+  // (Lulu floats on the near half of the lake, in front of the peaks, so the camera always sees her.)
+  return { place, canoe, float: new Vector3(0.24, 0.06, 0.44) }
 }
 
 // ---------------------------------------------------------------- the rainforest: cedars and the salmon's falls
@@ -466,16 +471,18 @@ export function buildBay(bag: Bag): Bay {
   const tail = solid(merge([P.sphere(0.12, '#4A5A7A', { at: [0.1, 0, 0], scale: [1, 0.2, 0.55] }, 8), P.sphere(0.12, '#4A5A7A', { at: [-0.1, 0, 0], scale: [1, 0.2, 0.55] }, 8)]), bag, 1.4)
   tail.position.set(0, 0.0, -0.5)
   whale.add(tail)
-  whale.position.set(0.45, -0.02, -0.38)
+  // (Out in the water behind Ollie, and smaller than her: only a back, a fin and a tail.)
+  whale.position.set(0.5, -0.02, -0.42)
   whale.rotation.y = -0.6
+  whale.scale.setScalar(0.62)
   place.root.add(whale)
   place.flag.position.set(0.6, 0.24, 0.1)
   place.update = (_dt, t) => {
     const k = place.t >= 0 ? bell(clamp(place.t / 1.2, 0, 1)) : 0
-    whale.position.y = -0.03 + Math.sin(t * 0.9) * 0.025 + k * 0.08
+    whale.position.y = -0.03 + Math.sin(t * 0.9) * 0.015 + k * 0.06
     tail.rotation.x = 0.4 + Math.sin(t * 0.9 + 1) * 0.3 + k * 0.6
     tail.position.y = 0.04 + Math.max(0, Math.sin(t * 0.45)) * 0.12
     flutter(place, t)
   }
-  return { place, whale, hole: new Vector3(0.45, 0.12, -0.3) }
+  return { place, whale, hole: new Vector3(0.53, 0.07, -0.37) }
 }

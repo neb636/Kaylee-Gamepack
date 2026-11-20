@@ -42,7 +42,7 @@ export const motion = [
       await page.waitForTimeout(5500)
     },
   },
-  // The rink before the team is whole (Maple: not yet; the places still to do bounce), then the geese and the polar bear.
+  // The rink before the team is whole (Maple: not yet; the places still to do bounce), then the geese, the owl, the bison and the orca.
   {
     name: 'canada-map-pokes',
     seconds: 7,
@@ -52,7 +52,7 @@ export const motion = [
       await page.waitForTimeout(3500)
     },
     act: async (page) => {
-      for (const id of ['go:party', 'poke:polar', 'poke:bison', 'poke:orca']) {
+      for (const id of ['go:party', 'poke:owl', 'poke:bison', 'poke:orca']) {
         const t = await at(page, id)
         if (t) await page.mouse.click(t.x, t.y)
         await page.waitForTimeout(1600)

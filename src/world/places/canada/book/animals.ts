@@ -72,7 +72,6 @@ export const ANIMALS: Animal[] = [
   ...a('map', [
     ['bison', 'Bison', '🦬'],
     ['beluga', 'Beluga whale', '🐳'],
-    ['polar-bear', 'Polar bear', '🐻‍❄️'],
   ]),
 ]
 

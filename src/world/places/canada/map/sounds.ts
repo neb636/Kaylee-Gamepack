@@ -12,7 +12,7 @@ export const hubSfx = {
   munch: clip(url('hub-munch'), () => [0, 0.28, 0.56].forEach((d) => noise(0.12, 0.07, 'lowpass', 700, 400, d))),
   spout: clip(url('hub-spout'), () => noise(0.9, 0.08, 'highpass', 1200, 2600, 0, 0.5)),
   crackle: clip(url('hub-crackle'), () => [0, 0.09, 0.2, 0.33, 0.5].forEach((d) => noise(0.04, 0.06, 'highpass', 2500, 2000, d))),
-  bear: clip(url('hub-bear'), () => tone(160, 120, 0.35, 0.1, 'sawtooth')),
+  hoot: clip(url('hub-hoot'), () => [0, 0.42].forEach((d) => tone(430, 380, 0.3, 0.07, 'sine', d))),
   bison: clip(url('hub-bison'), () => (sfx.thump(), noise(0.6, 0.06, 'bandpass', 500, 300, 0.15))),
   beluga: clip(url('hub-beluga'), () => [0, 0.16, 0.3].forEach((d, i) => tone(1300 + i * 250, 1900 + i * 200, 0.1, 0.05, 'sine', d))),
   orca: clip(url('hub-orca'), () => sfx.splash()),
