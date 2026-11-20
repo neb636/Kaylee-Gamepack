@@ -166,7 +166,8 @@ export const motion = [
       },
       act: async (page) => {
         await holdSkip(page)
-        await filmOver(page, id, true)
+        // (Skipped 5 s into a 16 s film: it must be gone at once, the game or the map in its place.)
+        await page.waitForFunction((id) => !document.querySelector(`[data-story-film="${id}"]`), id, { timeout: 4000 })
         await page.waitForTimeout(1500)
       },
     },
