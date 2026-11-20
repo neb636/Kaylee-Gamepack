@@ -341,8 +341,8 @@ export const SALMON_OUT: StoryFilm = {
         id: 'team',
         shot: cam([ME[0] - 0.45, 0.95, ME[1] + 3.7], [ME[0] - 0.45, 0.78, ME[1] + 0.2], { eye: [ME[0] - 0.45, 0.92, ME[1] + 3.35] }, { tall: { eye: [ME[0] - 0.45, 1.2, ME[1] + 5.6] } }),
         say: O.team,
-        sayAt: 0.5,
-        hold: 0.5,
+        sayAt: 0.3,
+        hold: 0.35,
         start: () => {
           misty.cheer()
           misty.place(ME[0], 0, ME[1], -25)

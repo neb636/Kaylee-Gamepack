@@ -256,8 +256,8 @@ export const BIKE_OUT: StoryFilm = {
         // punchline, and on goes the team's scarf.
         id: 'team',
         say: OUT.team,
-        sayAt: 1.0,
-        hold: 0.5,
+        sayAt: 0.85,
+        hold: 0.35,
         start: () => {
           // (It hangs right over his bare antler.)
           const a = monty.rig.head.localToWorld(tmp.set(1.12 * monty.rig.face.R, monty.rig.face.headY + 1.3 * monty.rig.face.R, 0))

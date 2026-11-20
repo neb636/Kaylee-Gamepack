@@ -210,7 +210,7 @@ export const WHALES_OUT: StoryFilm = {
         shot: cam([at.x + 1.1, 1.3, at.z + 6], [at.x - 0.15, 0.62, at.z + 2.2]),
         say: O.team,
         sayAt: 0.35,
-        hold: 0.45,
+        hold: 0.3,
         start: () => {
           ollie.cheer()
           ollie.shake()
