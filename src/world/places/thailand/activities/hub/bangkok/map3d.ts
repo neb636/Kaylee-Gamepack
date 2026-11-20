@@ -21,8 +21,7 @@
 // river itself (a splash). In the corners: the night market (its rows of tents hop one after another to a tune), the
 // floating market (the boats bob and splash), the orange orchard (oranges fly), Khlong Saen Saep's boat (it races
 // off). Little cars drive the big roads on their own.
-// Wat Arun is scenery, not a toy: it never moves. A tap only names it: its gold glints up the prang, a soft chime,
-// and Sparkle says what it is (every time, not just the first).
+// Wat Arun is to look at, not a toy: a tap on it does nothing (its gold glints now and then).
 //
 // Talk (BangkokMap.tsx says the lines, lines.ts L.bangkok): Sparkle's hello the first time, something true the first
 // time she pokes each thing, and after ~8 s with nothing done, where she can go (at most three times).
@@ -84,7 +83,6 @@ export const MAP_ANCHORS: AnchorInfo[] = [
   { id: 'fruit', label: 'Fruit boat', kind: 'thing' },
   { id: 'canal', label: 'Khlong boat', kind: 'thing' },
   { id: 'swan', label: 'Swan boat', kind: 'thing' },
-  { id: 'arun', label: 'Wat Arun', kind: 'thing' },
   { id: 'lizard', label: 'Monitor lizard', kind: 'thing' },
   ...CLOUDS.map((_, i): AnchorInfo => ({ id: `cloud:${i}`, label: 'Cloud', kind: 'thing' })),
 ]
@@ -599,7 +597,7 @@ export class BangkokMap extends Stage {
     return near.clone().addScaledVector(dir, (G - near.y) / dir.y)
   }
 
-  /** Is a screen point on Wat Arun? (A tap there names it.) */
+  /** Is a screen point on Wat Arun? (It's to look at, not toys: a tap there does nothing.) */
   private onLandmark(x: number, y: number) {
     const { near, dir } = this.ray(x, y)
     return Object.values(LANDMARKS).some(({ at, scale, r, h }) => {
@@ -640,7 +638,7 @@ export class BangkokMap extends Stage {
   protected onTap(id: string | null, x: number, y: number): void {
     if (this.arrived) return
     if (id === null) {
-      if (this.onLandmark(x, y)) return this.onTap('arun', x, y)
+      if (this.onLandmark(x, y)) return
       // A tower: its windows twinkle up it, a higher tune for a taller one.
       const ti = this.towerAt(x, y)
       if (ti >= 0) {
@@ -728,17 +726,6 @@ export class BangkokMap extends Stage {
       case 'swan':
         this.poke('swan')
         return sfx.plip()
-      case 'arun': {
-        // (Scenery, not a toy: nothing moves. The light runs up its gold, a soft chime, and Sparkle names it.)
-        if (this.poked('arun', 1.6) >= 0) return
-        this.poke('arun')
-        this.ev.poked('arun')
-        sfx.arun()
-        const { at, scale } = LANDMARKS.arun
-        const tip = this.d.gold[0][1]
-        for (let i = 0; i < 5; i++) this.after(i * 0.12, () => this.sparkles.burst(tmp.set(at[0], G + 0.08 * scale + (tip - G - 0.08 * scale) * (i / 4), at[1]), 4, 0.25, 0.25, 0.6, 0.018))
-        return
-      }
       case 'lizard':
         return this.pokeSpot('lumphini')
     }
@@ -864,8 +851,6 @@ export class BangkokMap extends Stage {
         return { at: d.canalBoat.position.clone().setY(G + 0.04), r: 0.11, prio: 4, max: 100 }
       case 'swan':
         return { at: d.swan.position.clone().setY(G + 0.04), r: 0.06, prio: 4, max: 90 }
-      case 'arun':
-        return { at: new Vector3(LANDMARKS.arun.at[0], G + LANDMARKS.arun.h * 0.32, LANDMARKS.arun.at[1]), r: 0.16, prio: 3, max: 130 }
       case 'lizard':
         return { at: d.lizard.position.clone().setY(G + 0.03), r: 0.07, prio: 4, max: 90 }
     }

@@ -140,9 +140,8 @@ were handed plan pages, grey boxes and up to 40 PRs a day, they ended up merging
    landmark on a map or road, or a fact. If a plan or a real place the family visited calls for one, leave it out and
    tell the user instead of building it. (Wat Phumin was dropped from the Nan trip for this, 2026-10-25.)
    The one exception is scenery on a map, when the user asks for it: Wat Arun stands on the Bangkok map so it
-   reads as Bangkok (2026-11-19). Scenery like that is never a toy: no pin, no activity, nothing that moves it or
-   plays with it, and still no Buddha image. A tap may name it, if the user asks: its gold glints, a soft chime,
-   and Sparkle says its name and one respectful fact (Wat Arun does, 2026-11-19).
+   reads as Bangkok (2026-11-19). Scenery like that is never a toy: no pin, no poke, no line, no
+   activity, and still no Buddha image.
 9. **Family and privacy.** The user decides the family: who each person is, which animal, who comes on a trip. Ask, don't
    invent family facts. Photos and recordings of Kaylee stay out of this public repo; describe them in words.
    Thailand's house is the family's real home: read `docs/thailand-3d.md` before touching it.
