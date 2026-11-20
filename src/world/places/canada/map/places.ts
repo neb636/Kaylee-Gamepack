@@ -160,7 +160,7 @@ export function buildRink(bag: Bag): Rink {
   place.update = (_dt, t) => {
     cup.rotation.y = Math.sin(t * 0.6) * 0.25
   }
-  return { place, aim: new Vector3(-0.1, 0.1, 0.28), maple, row, loop: { x: 0.74, z: 0.28, rx: 0.2, rz: 0.15 }, cup, glow, rinkAt }
+  return { place, aim: new Vector3(-0.1, 0.1, 0.28), maple, row, loop: { x: 0.68, z: 0.28, rx: 0.3, rz: 0.19 }, cup, glow, rinkAt }
 }
 
 // ---------------------------------------------------------------- Quebec City: the castle hotel

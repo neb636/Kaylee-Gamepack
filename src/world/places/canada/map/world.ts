@@ -282,7 +282,7 @@ export class CanadaMapWorld implements World3D {
 
   private buildPokes() {
     // Gus and two of his geese skate rings on the rink's ice.
-    this.geese = [new Goose(this.bag, { height: 0.62, voice: 'gus', captain: true, stick: true }), new Goose(this.bag, { height: 0.54 }), new Goose(this.bag, { height: 0.54 })]
+    this.geese = [new Goose(this.bag, { height: 0.58, voice: 'gus', captain: true, stick: true }), new Goose(this.bag, { height: 0.48 }), new Goose(this.bag, { height: 0.48 })]
     for (const g of this.geese) {
       this.rink.place.root.add(g.root)
       g.place(0, 0.1, 0, 0)
@@ -395,6 +395,12 @@ export class CanadaMapWorld implements World3D {
     this.close.pitch = o.pitch - 4
   }
 
+  /** The close-up's box, `across` the screen and `deep` into it, whichever way the board is turned. */
+  private closeHalf(across: number, up: number, deep: number) {
+    const side = Math.abs(Math.sin((this.base.yaw * Math.PI) / 180)) > 0.7
+    this.close.half.set(side ? deep : across, up, side ? across : deep)
+  }
+
   /** When a new friend's arrival at the rink ends (she pops in once the loading cover has gone). */
   private get arriveEnd() {
     return MAP_CAM.cover + 2.8
@@ -405,7 +411,7 @@ export class CanadaMapWorld implements World3D {
     if (this.picked) return this.close
     if (this.arriving && this.arrivalT < this.arriveEnd) {
       this.close.center.copy(this.rink.place.root.position).add(tmp.set(0.2, 0.35, -0.1))
-      this.close.half.set(1.9, 0.7, 1.2)
+      this.closeHalf(2.5, 0.9, 1.6)
       return this.close
     }
     return this.overview
@@ -594,7 +600,7 @@ export class CanadaMapWorld implements World3D {
       const p = done('geese', 1.6)
       const L = this.rink.loop
       this.geese.forEach((g, i) => {
-        const a = t * 0.9 - i * 0.75
+        const a = t * 0.8 - (i * TAU) / 3
         const x = L.x + Math.cos(a) * L.rx
         const z = L.z + Math.sin(a) * L.rz
         g.root.position.set(x, 0.1, z)
@@ -832,7 +838,7 @@ export class CanadaMapWorld implements World3D {
     this.setGlow(false)
     // The camera closes in on the place.
     this.close.center.copy(p.root.position).setY(p.root.position.y + 0.35)
-    this.close.half.set(1.5, 0.6, 1.1)
+    this.closeHalf(1.5, 0.6, 1.1)
     this.rig.lag = 0.28
     this.rig.resetTurn()
     hubSfx.zoom()
