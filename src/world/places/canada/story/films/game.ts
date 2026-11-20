@@ -68,7 +68,7 @@ const BUNCH: [Mate, number, number, number][] = [
   ['ollie', -0.95, 1.55, 15],
   ['tuque', -1.85, 0.85, 15],
   ['misty', 1.85, 0.7, -15],
-  ['monty', 0.15, -0.35, 0],
+  ['monty', 1.15, -0.45, -10],
   ['lulu', 2.95, 1.5, -25],
 ]
 const GEESE: [number, number][] = [

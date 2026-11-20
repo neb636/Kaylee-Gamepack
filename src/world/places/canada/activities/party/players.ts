@@ -175,7 +175,7 @@ export function makePlayer(bag: Bag, scene: Object3D, who: Who, i = 0): Player {
       p = withStick(new Friend('maple', bag, { height: 1.2, voice: 'maple' }))
       break
     case 'monty':
-      p = new Friend('moose', bag, { height: 2.05, voice: 'moose' }).scarf(true)
+      p = new Friend('moose', bag, { height: 1.85, voice: 'moose' }).scarf(true)
       break
     case 'roxy':
       p = withStick(new Friend('raccoon', bag, { height: 1.0, voice: 'raccoon' }).scarf(true))

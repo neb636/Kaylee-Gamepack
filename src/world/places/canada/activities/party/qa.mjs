@@ -16,8 +16,19 @@ async function flick(page) {
   await page.mouse.move(s.net.x, s.net.y + 60, { steps: 4 })
   await page.mouse.up()
 }
-/** Waits until a film has played to its end (or been skipped). */
-const filmOver = (page, id, skipped = false) => page.waitForFunction(({ id, skipped }) => { const q = window.__canadaStoryQA?.(); return q && (skipped ? q.films.skipped : q.films.done).includes(id) }, { id, skipped }, { timeout: 60000 })
+/** Waits until a film has played to its end (or been skipped) and its stage has gone (the stage is thrown away as the
+ *  game goes on, so the last readout it gave is kept on every poll). */
+const filmOver = (page, id, skipped = false) =>
+  page.waitForFunction(
+    ({ id, skipped }) => {
+      const q = window.__canadaStoryQA?.()
+      if (q) window.__canadaFilmSeen = q
+      const last = window.__canadaFilmSeen
+      return !document.querySelector(`[data-story-film="${id}"]`) && !!last && (skipped ? last.films.skipped : last.films.done).includes(id)
+    },
+    { id, skipped },
+    { timeout: 60000 },
+  )
 /** Holds the film's ⏭ until it skips. */
 async function holdSkip(page) {
   const b = await page.getByRole('button', { name: 'Hold to skip the story' }).boundingBox()

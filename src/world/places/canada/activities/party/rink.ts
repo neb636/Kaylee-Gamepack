@@ -115,9 +115,9 @@ export const RINK_ANCHORS: AnchorInfo[] = [
   ...[2, 3, 4, 5].map((i) => ({ id: `lamp${i}`, label: 'A lamp', kind: 'thing' as const })),
 ]
 
-const MAPLE_START = new Vector3(0, 0, 2.6)
+const MAPLE_START = new Vector3(0, 0, 1.5)
 /** Where each friend skates its lazy loops (her half, out of the shooting lane). */
-const SPOT: Record<Mate, [number, number]> = { tuque: [-1.5, 4.6], roxy: [2.9, 0.9], ollie: [-3.1, 0.5], misty: [2.7, -1.9] }
+const SPOT: Record<Mate, [number, number]> = { tuque: [-2.3, 4.3], roxy: [2.9, 0.9], ollie: [-3.1, 0.5], misty: [2.7, -1.9] }
 /** The geese loitering by their net in the first round (out of her shooting lane), and where they stand in the wall. */
 const GEESE_IDLE: [number, number][] = [[0, RINK.zG + 0.5], [-7, -5.4], [7, -3.2], [3.7, -6.4], [-3.9, -7.2]]
 const GUS_IDLE: [number, number] = [-3.6, -5.2]
@@ -1368,7 +1368,10 @@ export class RinkWorld extends Base3D implements World3D {
       this.chase = 2
       return
     }
-    if (id && id !== 'maple' && this.poke(id)) return
+    // With the puck, a tap on a goose (the one in goal, the wall) is a shot at it, not a poke.
+    const holding = this.p.state === 'held' && this.p.by === this.maple && this.phase === 'play'
+    const atGoose = !!id && (id === 'gus' || id.startsWith('goose'))
+    if (id && id !== 'maple' && !(holding && atGoose) && this.poke(id)) return
     if (id === 'maple') {
       this.counts.pokes++
       this.maple.wave()
