@@ -1,13 +1,12 @@
 // The bike chapter's two films (planning/around-the-world/canada.md), on Mont-Sainte-Anne (story/sets/bike.ts: the
 // game's own mountain). Lines: lines.ts `L.bike.filmIn` and `L.bike.filmOut`, in play order.
 //
-// In (about 17 s): at the top of the trail by the gondola, Maple with her bike tells us about Monty, the biggest moose
-// in Canada; the camera rises over the trees behind her, looks all the way down the mountain and zooms in on a tiny
-// moose in the pool at the bottom;
-// she hops on her bike (the helmet pops on), rings the bell and rolls off down the trail. The game starts right there.
+// In (about 12 s): at the top of the trail by the gondola, Maple with her bike tells us about Monty, the biggest moose
+// in Canada; the camera looks all the way down the mountain from the top and zooms in on a moose in the pool at the bottom
+// (splashes round him so he reads); she hops on her bike (the helmet pops on), rings the bell and rolls off down the trail.
 //
-// Out (about 16 s): the pool under the waterfall. Monty stands in his bath, a lily pad on one antler, chewing. "Will
-// you be our goalie?" "What does a goalie do?" "You stand in front of the net." "I am very good at standing." He does
+// Out (about 15 s): the pool under the waterfall. Monty stands in his bath, a lily pad on one antler, chewing. "Will
+// you be our goalie?" "What does a goalie do?" "You stand in front of the net. Easy!" "I am very good at standing." He does
 // not move. A pinecone drops out of the spruce and bonks off his antlers: he doesn't notice. "Nothing gets past
 // Monty!" On goes the team's pink scarf. The comedy is how little he moves: everyone else does the moving.
 import { Vector3 } from 'three'
@@ -30,6 +29,7 @@ function bath(monty: FilmActor, bag: Bag) {
 const IN = L.bike.filmIn
 const OUT = L.bike.filmOut
 const tmp = new Vector3()
+const tmp2 = new Vector3()
 
 /** A shot at a spot, in its own directions: the camera at `eye`, looking at `look` (each a point above the ground,
  *  or a function for someone moving), moving to `to` over the beat. */
@@ -69,13 +69,28 @@ export const BIKE_IN: StoryFilm = {
       bike.alone(true)
     }
     const montyHead = () => monty.head(tmp).clone()
+    /** Splashes round Monty in his pool (they read even from the top of the mountain). */
+    /** A point `fwd` meters ahead of where the bike was parked (down the trail) and `side` to its side, at eye height. */
+    const parked = new Vector3()
+    const ahead = (fwd: number, side: number) => {
+      if (!parked.lengthSq()) parked.copy(bike.root.position)
+      const yaw = bike.root.rotation.y
+      return tmp2.set(parked.x + Math.sin(yaw) * fwd + Math.cos(yaw) * side, parked.y + 1.0, parked.z + Math.cos(yaw) * fwd - Math.sin(yaw) * side)
+    }
+    const ripple = () => {
+      for (let i = 0; i < 6; i++) {
+        const a = (i / 6) * Math.PI * 2
+        s.splash(mx + Math.cos(a) * 0.9, set.course.poolY + 0.05, mz + Math.sin(a) * 0.9, 5)
+      }
+    }
     return [
       {
         // At the top, the mountain falling away behind her.
         id: 'high',
         shot: at(top, [1.5, 1.05, 3.6], [-0.15, 0.62, -0.2], { toEye: [1.15, 0.95, 3.0], tall: { eye: top.p(1.2, 1.25, 4.6), look: top.p(-0.2, 0.75, -0.2) } }),
         say: IN.high,
-        sayAt: 0.6,
+        sayAt: 0.4,
+        hold: 0.2,
         start: () => {
           s.sfx.air('forest')
           park()
@@ -84,51 +99,48 @@ export const BIKE_IN: StoryFilm = {
         },
         // (Her arms go wide on "the biggest moose".)
         cues: [
-          [1.9, () => ((maple.armsUp = 1), maple.hop(), maple.pull('wow'))],
-          [3.3, () => (maple.armsUp = 0)],
+          [1.7, () => ((maple.armsUp = 1), maple.hop(), maple.pull('wow'))],
+          [3.1, () => (maple.armsUp = 0)],
         ],
       },
       {
-        // Up over the trees behind her: the whole mountain, the forest in its fall colors, the river far below.
-        id: 'look',
-        shot: { eye: top.p(1.2, 1.3, 2.4), look: () => tmp.copy(set.poolAt).setY(set.lookout.y + 6), fov: 44, to: { eye: () => set.lookout, look: montyHead }, move: 2, ease: 'inOut', sway: 0, tall: { eye: top.p(1.4, 1.6, 3.6), fov: 58 } },
-        dur: 2.2,
-        hold: 0,
+        // From the top, way down the mountain to the waterfall's pool, and in, and in: a moose having his bath, a
+        // ring of ripples and splashes round him so he can't be missed.
+        id: 'bath',
+        shot: { eye: () => set.lookout, look: montyHead, fov: 9, to: { fov: 1.25 }, move: 1.5, ease: 'inOut', sway: 0, tall: { fov: 13, to: { fov: 1.9 } } },
+        say: IN.bath,
+        sayAt: 0.3,
+        hold: 0.3,
         start: () => {
           maple.cheer()
           maple.armsUp = 0
-          top.place(maple, 0.35, 0.1, 180)
+          s.sfx.whoosh()
         },
-        cues: [[0.4, () => s.sfx.whoosh()]],
-      },
-      {
-        // ...and in, and in, all the way down to the waterfall's pool: a tiny moose having his bath.
-        id: 'bath',
-        shot: { eye: () => set.lookout, look: montyHead, fov: 44, to: { fov: 2.2 }, move: 3.2, ease: 'inOut', sway: 0, tall: { fov: 58, to: { fov: 3.4 } } },
-        say: IN.bath,
-        sayAt: 0.4,
-        dur: 4.4,
-        hold: 0.5,
-        // (He dips his nose into the water, way down there.)
-        tick: (_k, t) => (monty.lean = t > 3.2 && t < 4.3 ? 0.6 : 0),
-        cues: [[3.3, () => bikeSfx.munch()]],
+        // (He dips his nose into the water, way down there, and splashes.)
+        tick: (_k, t) => (monty.lean = t > 1.7 && t < 2.6 ? 0.6 : 0),
+        cues: [
+          [0.6, () => ripple()],
+          [1.8, () => (ripple(), bikeSfx.munch())],
+          [2.6, () => ripple()],
+        ],
       },
       {
         // Back up top: she hops on, the helmet's on, ding ding, and off she rolls down the trail.
         id: 'go',
         // (The camera turns to keep her in as she rolls off.)
-        shot: { eye: top.p(3.8, 1.15, 2.2), look: () => bike.root.position.clone().add(tmp.set(0, 0.75, 0)), fov: 40, tall: { eye: top.p(4.6, 1.4, 3.4) } },
+        // (From in front of the bike, down the trail, so her face shows as she says it.)
+        shot: { eye: () => ahead(3.0, 1.0), look: () => bike.root.position.clone().add(tmp.set(0, 0.7, 0)), fov: 40, tall: { eye: () => ahead(4.3, 1.2) } },
         say: IN.go,
-        sayAt: 1.0,
-        hold: 0.5,
+        sayAt: 0.65,
+        hold: 0.3,
         start: () => {
           monty.lean = 0
           top.place(maple, 0.35, 0.1, -40)
         },
         cues: [
-          [0.25, () => maple.hopTo(bike.root.position.x, bike.root.position.y + 0.3, bike.root.position.z, 0.5, null, 0.5)],
+          [0.1, () => maple.hopTo(bike.root.position.x, bike.root.position.y + 0.3, bike.root.position.z, 0.5, null, 0.5)],
           [
-            0.78,
+            0.62,
             () => {
               maple.hide()
               bike.alone(false)
@@ -136,9 +148,9 @@ export const BIKE_IN: StoryFilm = {
               s.sfx.pop()
             },
           ],
-          [1.0, () => (bikeSfx.bell(), bike.ring())],
+          [0.8, () => (bikeSfx.bell(), bike.ring())],
           // (Off down the trail as she says "Hold on!")
-          [3.2, () => (set.ride = { s: parkS, v: 0.5, lat: parkLat })],
+          [2.6, () => (set.ride = { s: parkS, v: 0.5, lat: parkLat })],
         ],
         tick: (_k, _t, dt) => {
           if (set.ride) set.ride.v = Math.min(7, set.ride.v + dt * 3.2)
@@ -148,7 +160,7 @@ export const BIKE_IN: StoryFilm = {
         // She's off: the camera turns to watch her go, leaves swirling up behind her.
         id: 'off',
         shot: { eye: top.p(2.7, 0.9, 1.4), look: () => bike.root.position.clone().add(tmp.set(0, 0.7, 0)), fov: 40, sway: 0.03 },
-        dur: 1.4,
+        dur: 1.2,
         hold: 0,
         tick: (_k, _t, dt) => {
           if (set.ride) set.ride.v = Math.min(7, set.ride.v + dt * 3.2)
@@ -183,13 +195,14 @@ export const BIKE_OUT: StoryFilm = {
         id: 'found',
         shot: twoShot([2.3, 1.45, 18.6], [1.1, 1.15, 11.4], [1.8, 1.8, 22]),
         say: OUT.found,
-        sayAt: 0.4,
+        sayAt: 0.25,
+        hold: 0.2,
         start: () => {
           s.sfx.air('forest')
           bikeSfx.falls()
           standMonty()
           monty.headTurn = 0.35
-          pool.place(maple, Mp.x, Mp.z, -55)
+          pool.place(maple, Mp.x, Mp.z, -30)
           const [bx, bz] = pool.xz(Mp.x + 1.5, Mp.z - 0.2)
           bike.root.position.set(bx, set.course.land(bx, bz), bz)
           bike.root.rotation.y = pool.face(-150) * (Math.PI / 180)
@@ -204,8 +217,8 @@ export const BIKE_OUT: StoryFilm = {
         id: 'what',
         shot: { eye: near(pool, monty, 0.8, 3.3, -0.7), look: () => monty.head(tmp).clone().add(new Vector3(0, 0.2, 0)), fov: 36 },
         say: OUT.what,
-        sayAt: 0.45,
-        hold: 0.3,
+        sayAt: 0.3,
+        hold: 0.25,
         start: montyLook,
         // (A slow, slow tilt of his head as he thinks about it.)
         tick: (_k, t) => (monty.headTurn = -0.25 + Math.min(1, t / 2.4) * 0.15),
@@ -214,8 +227,8 @@ export const BIKE_OUT: StoryFilm = {
         id: 'stand',
         shot: { eye: near(pool, maple, -0.4, 2.5, 0.05), look: () => maple.head(tmp).clone().add(new Vector3(0, -0.12, 0)), fov: 34 },
         say: OUT.stand,
-        sayAt: 0.25,
-        hold: 0.3,
+        sayAt: 0.2,
+        hold: 0.2,
         start: () => {
           monty.headTurn = -0.25
           maple.cheer()
@@ -230,7 +243,7 @@ export const BIKE_OUT: StoryFilm = {
         id: 'good',
         shot: twoShot([2.2, 0.95, 16.8], [1.0, 1.3, 11.4], [1.9, 1.3, 20]),
         say: OUT.good,
-        sayAt: 0.5,
+        sayAt: 0.35,
         hold: 0.2,
         start: () => {
           maple.armsUp = 0
@@ -243,14 +256,16 @@ export const BIKE_OUT: StoryFilm = {
         // punchline, and on goes the team's scarf.
         id: 'team',
         say: OUT.team,
-        sayAt: 1.25,
-        hold: 1.0,
+        sayAt: 1.0,
+        hold: 0.5,
         start: () => {
           // (It hangs right over his bare antler.)
           const a = monty.rig.head.localToWorld(tmp.set(1.12 * monty.rig.face.R, monty.rig.face.headY + 1.3 * monty.rig.face.R, 0))
           set.cone.position.set(a.x, set.coneAt.y, a.z)
           set.cone.userData.hit = a.y
           bikeSfx.pinecone()
+          // (She turns to us for the punchline.)
+          pool.place(maple, Mp.x, Mp.z, -20)
         },
         tick: (_k, t, dt) => {
           const c = set.cone
@@ -279,7 +294,7 @@ export const BIKE_OUT: StoryFilm = {
           [1.0, () => (s.splash(set.cone.position.x, poolY + 0.05, set.cone.position.z, 10), s.sfx.splash(), (set.cone.visible = false))],
           [1.3, () => (maple.hop(), (maple.armsUp = 1))],
           [
-            3.0,
+            2.6,
             () => {
               monty.scarf(true)
               const p = monty.at(0.5, tmp)
@@ -287,8 +302,8 @@ export const BIKE_OUT: StoryFilm = {
               s.sfx.chime()
             },
           ],
-          [3.5, () => (maple.armsUp = 0)],
-          [3.9, () => monty.nod()],
+          [3.0, () => (maple.armsUp = 0)],
+          [3.3, () => monty.nod()],
         ],
       },
     ]
