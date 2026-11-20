@@ -270,7 +270,9 @@ export const GAME_WIN: StoryFilm = {
       maple.place(0, 0, 2.0, 0)
       for (const [w, x, z, f] of BUNCH) mates[w]?.place(x, 0, z, f)
       kits.forEach((k, i) => k.place([-2.7, -2.25, 2.5][i], 0, [2.0, 2.45, 2.2][i], i < 2 ? 20 : -20))
-      flock.forEach((g, i) => g.place(-2.6 + i * 1.05, 0, -1.2 - (i % 2) * 0.5, i < 3 ? 15 : -15))
+      // (The geese on the flanks, so "geese too!" can see them.)
+      const wings: [number, number, number][] = [[-3.1, 0.9, 25], [3.2, 0.6, -25], [-2.3, -0.3, 15], [2.5, -0.4, -15], [-3.3, -0.9, 20], [3.4, -1.0, -20]]
+      flock.forEach((g, i) => g.place(wings[i][0], 0, wings[i][1], wings[i][2]))
     }
     return [
       {
@@ -305,7 +307,7 @@ export const GAME_WIN: StoryFilm = {
       {
         // Gus skates over and bows his long neck to her. A good sport.
         id: 'gus',
-        shot: cam([1.75, 1.15, 5.7], [0.25, 0.72, 2.6], { eye: [1.6, 1.1, 5.2] }, { tall: { eye: [2.1, 1.4, 7] } }),
+        shot: cam([0.1, 1.3, 6.6], [0.25, 0.7, 2.6], { eye: [0.1, 1.2, 6.0] }, { tall: { eye: [0.2, 1.6, 8.2] } }),
         say: WIN.gus,
         sayAt: 1.4,
         start: () => {
@@ -344,7 +346,7 @@ export const GAME_WIN: StoryFilm = {
       {
         // She pours it on a drift of clean snow: golden ribbons... and taffy on a stick for everybody.
         id: 'share',
-        shot: cam([1.7, 1.3, 5.7], [0.45, 0.42, 2.85], { eye: [1.55, 1.2, 5.1] }, { tall: { eye: [2.1, 1.6, 7.2] } }),
+        shot: cam([1.9, 1.55, 6.6], [0.4, 0.45, 2.75], { eye: [1.75, 1.4, 6.0] }, { tall: { eye: [2.3, 1.9, 8.2] } }),
         say: WIN.share,
         sayAt: 2.3,
         dur: 5,
@@ -379,7 +381,7 @@ export const GAME_WIN: StoryFilm = {
       {
         // Everybody, geese too, crunching taffy together.
         id: 'together',
-        shot: cam([0, 1.7, 7.4], [0, 0.95, 1.0], { eye: [0, 1.55, 6.5] }, { tall: { eye: [0, 2.3, 10] } }),
+        shot: cam([0, 2.0, 9.0], [0, 0.95, 0.8], { eye: [0, 1.8, 8.0] }, { tall: { eye: [0, 2.6, 12] } }),
         say: WIN.together,
         sayAt: 1.2,
         dur: 4.2,

@@ -193,7 +193,7 @@ export function makePlayer(bag: Bag, scene: Object3D, who: Who, i = 0): Player {
       p = new Tuque(bag, { height: 1.45 }).scarf(true)
       break
     case 'lulu':
-      p = new Lulu(bag, { height: 0.75 }).scarf(true)
+      p = new Lulu(bag, { height: 0.95 }).scarf(true)
       break
     case 'gus':
       p = new Goose(bag, { height: 1.2, voice: 'gus', captain: true, stick: true })
