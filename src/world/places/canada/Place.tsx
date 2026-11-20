@@ -16,7 +16,7 @@ import { Hub } from './activities/hub/Hub'
 import type { CanadaActivityProps } from './activities/props'
 import STORY_SECTIONS, { type FilmId } from './activities/story/sections'
 import { MetCard } from './book/MetCard'
-import { CHAPTER_FILMS, filmSeen, forgetFilms, isChapter, seeFilm, type ChapterId } from './story/chapters'
+import { CHAPTER_FILMS, filmSeen, forgetFilms, isChapter, justSeen, seeFilm, type ChapterId } from './story/chapters'
 import { StoryFilm } from './story/StoryFilm'
 
 type Game = LazyExoticComponent<ComponentType<CanadaActivityProps>> | ComponentType<CanadaActivityProps>
@@ -106,7 +106,8 @@ function Chapter({ id, first, game, onDone }: { id: ChapterId; first: boolean; g
   // (A link to one of the game's sections has more after the activity's id.)
   const [linked] = useState(() => location.hash.split('?')[0].split('/').length > 4)
   const [phase, setPhase] = useState<'in' | 'play' | 'out'>(() => (first && !linked && !filmSeen(films.in) ? 'in' : 'play'))
-  const [filmed, setFilmed] = useState(false)
+  // (Opened by its way-in film's own link, the film has just played too.)
+  const [filmed, setFilmed] = useState(() => justSeen(films.in))
   const [wasFirst] = useState(first)
   if (phase === 'in')
     return (

@@ -41,8 +41,12 @@ export const filmSeen = (id: FilmId) => {
     return false
   }
 }
+/** The film that has just ended, and when: a chapter's game opened straight after its way-in film skips its hello. */
+let last: { id: FilmId; at: number } | null = null
+export const justSeen = (id: FilmId) => !!last && last.id === id && performance.now() - last.at < 4000
 export const seeFilm = (id: FilmId) => {
   seen.add(id)
+  last = { id, at: performance.now() }
   if (id !== 'intro') return
   try {
     localStorage.setItem(INTRO_KEY, '1')
