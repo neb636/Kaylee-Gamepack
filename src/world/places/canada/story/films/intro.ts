@@ -66,7 +66,7 @@ export const INTRO: StoryFilm = {
         sayAt: 0.7,
         start: () => {
           // (Beside it, turned three quarters to us, looking up at it.)
-          maple.place(cx + 1.25, 0, cz + 0.45, -32)
+          maple.place(cx + 1.05, 0, cz + 0.5, -32)
           maple.headTurn = -0.4
           maple.armsUp = 0.3
         },
@@ -223,7 +223,7 @@ export const INTRO: StoryFilm = {
       {
         // Sparkle's balloon comes down behind her.
         id: 'go',
-        shot: cam([1.9, 1.05, 6.6], [-0.7, 3.2, 0], { eye: [1.7, 1.1, 6.2], look: [-0.7, 2.2, 0.2] }),
+        shot: cam([1.9, 1.2, 7], [-0.8, 3.8, 0], { eye: [1.9, 1.3, 7], look: [-0.6, 1.8, 0.5] }, { fov: 50, move: 2.8 }),
         say: X.go,
         sayAt: 1.2,
         dur: 4.6,
