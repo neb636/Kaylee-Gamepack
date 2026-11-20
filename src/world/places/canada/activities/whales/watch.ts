@@ -560,7 +560,12 @@ export class WhaleWatch implements World3D {
     }
 
     this.lights.follow(this.d.x, 0, this.d.z)
-    this.camYaw += wrapAngle(this.d.heading - this.camYaw) * damp(dt, 0.4 + HELM.camera * 4)
+    // (With somewhere to go, the camera looks from the boat toward it, so it's always up the screen, even right after
+    // she turns her back on it: the spout that blows behind her, the raft once Ollie's on the rope.)
+    const g0 = this.goal
+    const g = g0 && !this.whale?.up && Math.hypot(g0.x - this.d.x, g0.z - this.d.z) > 12 ? g0 : null
+    const camTo = g ? Math.atan2(g.x - this.d.x, g.z - this.d.z) : this.d.heading
+    this.camYaw += wrapAngle(camTo - this.camYaw) * damp(dt, g ? 1.2 : 0.4 + HELM.camera * 4)
     this.rig.lag = this.listening ? 0.7 : this.doneT >= 0 && this.doneT < 5 ? 0.8 : 0.35
     this.rig.setShot(this.shot())
     this.rig.update(dt)
@@ -1061,8 +1066,10 @@ export class WhaleWatch implements World3D {
    *  whales' sea. */
   private pickSpot() {
     const d = this.d
-    for (let i = 0; i < 30; i++) {
-      const a = d.heading + (Math.random() - 0.5) * (i < 20 ? 0.9 : 1.6)
+    // (Facing the shore or the kelp, nothing ahead is open sea: then out toward the middle of the whales' sea.)
+    const out = Math.atan2((SPOUT_BOX.x0 + SPOUT_BOX.x1) / 2 - d.x, (SPOUT_BOX.z0 + SPOUT_BOX.z1) / 2 - d.z)
+    for (let i = 0; i < 50; i++) {
+      const a = (i < 30 ? d.heading : out) + (Math.random() - 0.5) * (i < 20 ? 0.9 : 1.6)
       const r = 28 + Math.random() * 12
       const x = clamp(d.x + Math.sin(a) * r, SPOUT_BOX.x0, SPOUT_BOX.x1)
       const z = clamp(d.z + Math.cos(a) * r, SPOUT_BOX.z0, SPOUT_BOX.z1)
@@ -1403,9 +1410,15 @@ export class WhaleWatch implements World3D {
     const g = this.goal
     const focus = this.whale?.up ? this.whale.root.position : g ? tmp3.set(g.x, 0, g.z) : null
     if (focus) {
-      const fx = focus.x - d.x
-      const fz = focus.z - d.z
-      const dist = Math.hypot(fx, fz)
+      let fx = focus.x - d.x
+      let fz = focus.z - d.z
+      let dist = Math.hypot(fx, fz)
+      // (Far off, the way toward it is framed: the beacon and the sparkle path lead on.)
+      if (dist > 55) {
+        fx *= 55 / dist
+        fz *= 55 / dist
+        dist = 55
+      }
       const along = fx * sx + fz * sz
       const across = fx * sz - fz * sx
       if (dist < 75 && along > -8) {

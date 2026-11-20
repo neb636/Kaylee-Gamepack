@@ -204,6 +204,8 @@ export class RinkWorld extends Base3D implements World3D {
   /** A friend's first big moment, lit up (`t`: seconds into it). */
   private star: { who: Player; t: number } | null = null
   private starRing: Mesh
+  /** On a short screen: where along the ice the camera looks (it slides with the play). */
+  private camZ: number | null = null
   private talkQ: Promise<void> = Promise.resolve()
   private dead = false
   private stopBed: () => void
@@ -1344,8 +1346,9 @@ export class RinkWorld extends Base3D implements World3D {
       const mine = p.state === 'held' && p.by === this.maple
       const threat = !!this.rush || (p.kind === 'goose' && p.state === 'free') || (!mine && p.z > 1.5)
       const at = threat ? home : mine ? far + hz + Math.max(0, p.z - 1) * 0.5 : p.z * 0.8
-      const cz = clamp(at, far + hz, home - hz)
-      center = new Vector3(0, 0.7, cz)
+      // (Still while her finger is down: a flick is measured on the ice under it, so the ice mustn't slide.)
+      if (!this.finger || this.camZ === null) this.camZ = clamp(at, far + hz, home - hz)
+      center = new Vector3(0, 0.7, this.camZ)
       half = new Vector3(RINK.x + 0.4, 1, hz)
       pitch = 48
     } else {
