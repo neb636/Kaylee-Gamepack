@@ -49,10 +49,10 @@ export const motion = [
   // he looks up with a mouthful of pond weed and says hello (then on into the film out).
   {
     name: 'canada-bike-cheer',
-    seconds: 9,
+    seconds: 10,
     setup: async (page, base) => {
       await page.goto(`${base}#/world/canada/bike/falls`)
-      await page.waitForFunction(() => window.__canadaBikeQA?.().mode === 'ride', null, { timeout: 40000 })
+      await page.waitForFunction(() => (window.__canadaBikeQA?.().s ?? 0) > 872, null, { timeout: 40000 })
     },
     act: async (page) => {
       await page.waitForFunction(() => window.__canadaBikeQA?.().done, null, { timeout: 40000 })
@@ -108,7 +108,8 @@ export const motion = [
       await page.mouse.down()
       await page.waitForTimeout(900)
       await page.mouse.up()
-      await page.waitForFunction(() => !document.querySelector('[data-story-film]'), null, { timeout: 5000 })
+      // (From a bare link the map's first visit may start the way-in film next: only this film has to be gone.)
+      await page.waitForFunction(() => !document.querySelector('[data-story-film="bike-out"]'), null, { timeout: 5000 })
     },
   },
 ]

@@ -155,7 +155,7 @@ const STUMPS: [number, number][] = [
 ]
 /** Monty in the waterfall's pool, where the ride ends: how far along and across, how tall (bigger than Maple on her
  *  bike, by a lot), and how deep in the water he stands. */
-const MONTY = { s: 896, lat: -0.6, h: 2.5, sink: 0.8 }
+const MONTY = { s: 892, lat: -4.4, h: 3.2, sink: 1 }
 const WOODPECKER = { s: 66, side: -1 }
 const PORCUPINE = { s: 352, side: -1 }
 
