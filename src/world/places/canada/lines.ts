@@ -115,7 +115,7 @@ export const L = {
   },
   // ---------------------------------------------------------------- the story's own films (story/films/)
   story: {
-    // The way in (story/films/intro.ts), on Ottawa's frozen canal. About 50 seconds, hold the button to skip.
+    // The way in (story/films/intro.ts), on Ottawa's frozen canal. About 40 seconds, hold the button to skip.
     intro: {
       // The canal from high up, Maple skating alone with a puck.
       top: 'This is Canada! In winter, the water turns to ice.',
@@ -131,10 +131,8 @@ export const L = {
       six: gus('Six geese, one beaver! Honk honk honk!'),
       // Now again. Maple droops, then stands up straight.
       need: maple("I can't win alone. I need a team!"),
-      // She points one way, then the other.
-      friends: maple('My friends live all across Canada, from ocean to ocean!'),
-      // To the camera.
-      ask: maple('Will you help me find them?'),
+      // She points one way, then the other, then to the camera.
+      ask: maple('My friends live all across Canada. Will you help me find them?'),
       // Sparkle's balloon comes down behind her.
       go: "Let's go and find Maple's team!",
     },
@@ -247,7 +245,7 @@ export const L = {
       wake: tuque('Oh! Bonjour, Maple!'),
       ask: maple('Tuque! Can you play hockey?'),
       // A snowball flies in and bounces off his round tummy: boing. Then:
-      tummy: tuque('Ho ho! Nothing gets past my tummy!'),
+      tummy: tuque('Ho ho! Everything bounces off my tummy!'),
       // Maple ties a pink team scarf round him.
       team: maple("You're on the team!"),
     },

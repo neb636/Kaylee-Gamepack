@@ -1,7 +1,7 @@
 // The way in to Maple's Team (planning/around-the-world/canada.md; docs/films.md, how films work): on Ottawa's
 // frozen canal Maple skates alone. There is the Maple Cup; here come the geese, who win it every year. Last winter
 // (the storybook look) she played all by herself: six geese, one beaver. She can't win alone. She needs a team, and
-// her friends live all across Canada. About 50 seconds. Lines: lines.ts `L.story.intro`, in this order.
+// her friends live all across Canada. About 40 seconds. Lines: lines.ts `L.story.intro`, in this order.
 //
 // The camera stands on +z looking toward -z (Parliament is at the far end), so an actor facing 0 degrees faces it.
 // This is the film to copy for a chapter's: a set, actors on their marks, one line a beat, funny pictures over words.
@@ -32,17 +32,17 @@ export const INTRO: StoryFilm = {
         id: 'top',
         shot: cam([7, 9.5, 21], [0, 0.4, -3], { eye: [3.4, 3.4, 11.5], look: [0.6, 0.7, 0.5] }, { ease: 'inOut' }),
         say: X.top,
-        sayAt: 1.2,
-        dur: 6.2,
+        sayAt: 1,
+        dur: 5,
         start: () => {
           s.sfx.air('winter')
           s.snow = 0.22
           maple.place(-3.6, 0, -2.6, 70)
-          maple.glideTo(2.6, 1.2, 5.6, 20)
+          maple.glideTo(2.6, 1.2, 4.5, 20)
           s.sfx.skate()
         },
         tick: () => puck.position.set(maple.pos.x + 0.5, 0, maple.pos.z + 0.45),
-        cues: [[0, () => (puck.visible = true)], [2.6, () => s.sfx.skate()], [5.5, () => s.sfx.skid()], [5.6, () => s.puff(2.9, 0.1, 1.5, 8)]],
+        cues: [[0, () => (puck.visible = true)], [2.3, () => s.sfx.skate()], [4.4, () => s.sfx.skid()], [4.5, () => s.puff(2.9, 0.1, 1.5, 8)]],
       },
       {
         id: 'hello',
@@ -106,8 +106,9 @@ export const INTRO: StoryFilm = {
         memory: true,
         shot: cam([0, 5.2, 7.4], [0, 0.5, -1.2], { eye: [0, 3.8, 6] }),
         say: X.last,
-        sayAt: 1.2,
-        dur: 5,
+        sayAt: 0.9,
+        dur: 4.2,
+        hold: 0.3,
         start: () => {
           maple.cheer()
           maple.place(0, 0, -1.2, 0)
@@ -136,7 +137,8 @@ export const INTRO: StoryFilm = {
         shot: cam([0.9, 1.8, 0.4], [-0.25, 0.7, RINK.zG + 1.2], { eye: [0.9, 1.4, -2.2] }),
         say: X.six,
         sayAt: 2.5,
-        dur: 5.6,
+        dur: 4.8,
+        hold: 0.3,
         start: () => {
           maple.cheer()
           maple.place(0, 0, RINK.zG + 1.3, 0)
@@ -199,35 +201,26 @@ export const INTRO: StoryFilm = {
         cues: [[2.6, () => (maple.cheer(), maple.hop(), (maple.armsUp = 1))], [3.5, () => (maple.armsUp = 0)]],
       },
       {
-        // One paw east, the other west.
-        id: 'friends',
-        shot: cam([0.4, 1.25, 6.4], [0.4, 0.8, 2.2], { eye: [0.4, 1.2, 5.8] }),
-        say: X.friends,
-        sayAt: 0.3,
-        tick: (_k, t) => {
-          maple.headTurn = t < 2 ? 0 : t < 3.1 ? 0.7 : 0.7 - Math.min(1, (t - 3.1) / 0.5) * 1.4
-          maple.armsUp = t > 2 ? 0.75 : 0
-        },
-      },
-      {
+        // One paw east, the other west, then straight to us.
         id: 'ask',
-        shot: close(maple, 0, 2.1, 0.08),
+        shot: cam([0.4, 1.25, 6.2], [0.4, 0.8, 2.2], { eye: [0.4, 1.12, 4.7], look: [0.4, 0.82, 2.2] }, { move: 3.4, ease: 'inOut' }),
         say: X.ask,
-        sayAt: 0.35,
-        start: () => {
-          maple.headTurn = 0
-          maple.armsUp = 0
-          maple.nod()
+        sayAt: 0.3,
+        hold: 0.3,
+        tick: (_k, t) => {
+          maple.headTurn = t < 0.5 ? 0 : t < 1.4 ? 0.7 : t < 2.3 ? -0.7 : 0
+          maple.armsUp = t > 0.5 && t < 2.3 ? 0.75 : 0
         },
+        cues: [[2.6, () => maple.nod()]],
       },
       {
         // Sparkle's balloon comes down behind her.
         id: 'go',
-        shot: cam([1.9, 1.2, 7], [-0.8, 3.8, 0], { eye: [1.9, 1.3, 7], look: [-0.6, 1.8, 0.5] }, { fov: 50, move: 2.8 }),
+        shot: cam([1.9, 1.3, 7], [-0.8, 3.8, 0], { eye: [1.9, 1.55, 7], look: [-0.6, 1.45, 0.5] }, { fov: 50, move: 2.6 }),
         say: X.go,
-        sayAt: 1.2,
-        dur: 4.6,
-        hold: 0.7,
+        sayAt: 1,
+        dur: 3.8,
+        hold: 0.5,
         start: () => {
           s.put(set.balloon.root, -1.8, 13, -1.6)
           s.sfx.burner()
