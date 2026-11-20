@@ -98,6 +98,38 @@ src/world/places/canada/
 game's films are `L.story`. Speaker ids are the animals (`moose` is Monty, `bear` is Misty, `snowman` is Tuque).
 New voices: `loon` (Lulu) and `gus`. The PR records every new line.
 
+## What changed in each game (2026-11-20)
+
+- **Red Canoe:** one control. A finger held on the water and Maple paddles there by herself, a stroke at a time (the
+  rhythm and the glide are the feel); a tap sends the canoe a short way. Built on `engine3d/drive.ts` like the whale
+  boat; feel knobs `canoe` and `canoeStroke` (`canoe/glide?feel=1`). The old drag-a-stroke control moved the canoe
+  5 m in a minute of robot play; a robot now crosses the lake in about 40 s without touching a shore, taps only
+  too. The loon in the game is Lulu (`characters/lulu.ts`), and her bubbles always come up toward the glacier.
+- **Whale Watch:** the sleepy otter is Ollie; towed home, she asks to come and rides along on the rope, spinning at
+  every whale. The wheel steering mode is gone.
+- **Carnival Snowballs:** the first snowman she finishes is Tuque himself (his cap, face and mittens on the balls she
+  rolled) and leads the parade; a lower camera shows the castle hotel; soft shadows and lanterns.
+- **Mountain Bike:** Monty waits in the waterfall pool at the bottom, big and unmissable; the ending hands to his film.
+- **Campfire Night:** Roxy has three kits; the hunt helps after 8 s; the goodnight is skipped when her film follows.
+- **Salmon Leap:** the white bear is Misty; taps alone now get every salmon home (a tap leaps one pool).
+- **The big game:** the story's team on the ice, each talent in play (Roxy steals from the rush, shots boing off
+  Tuque and bonk off Monty, Ollie fetches a loose puck, Misty flattens the goose wall for the last goal, Lulu calls on
+  every goal, the kits wave flags). The geese rush her net after each goal and may score once (never the winning
+  goal), so it is a contest she always wins.
+- **The map:** `map/shape.ts` (a caricature of Canada in curves), `terrain.ts`, `places.ts` (seven dioramas),
+  `critters.ts` (the polar bear, orca, bison, beluga), `world.ts`. Portrait looks along the country from the east.
+
+## Next
+
+- Kaylee plays it. Watch for: does she follow "tap a friend" on the map; does she sit through the films (hold ⏭
+  skips); the canoe (does she hold or tap); the big game's goose goal (fun, or upsetting?).
+- The films were timed against guessed line lengths (no voice clips on the build machine): once the PR has recorded
+  them, re-run `scripts/film-strip.mjs` and trim any film that runs long (the out films aim for 8-14 s; several are
+  16-18 s by the guess; `game-win` is about 22 s).
+- Small things seen and left: Misty's swat reads as a cheer (the rig lifts arms sideways); in the campfire's sound
+  hunt the panned sounds are still the synth ones (`kit/clips.ts` has no pan); the map's far (Pacific) end is small in
+  portrait; with the whole team the rink is a crowded team photo on a phone.
+
 ## Open (for the user, on the review page)
 
 - The names (Monty, Roxy, Tuque, Lulu, Misty, Ollie, Gus) are first picks.
