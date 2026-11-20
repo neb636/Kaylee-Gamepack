@@ -1,0 +1,90 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "canoe.filmIn",
+  "title": "Canada › Canoe › Film In",
+  "intro": "The film in (story/films/snowman.ts): the snowy park under the castle hotel, flags and lanterns, nobody about.",
+  "page": "canada-canoe-filmIn.html",
+  "audio": null,
+  "lines": 3,
+  "seconds": 10,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "canoe.filmIn.song",
+      "text": "Every big game starts with a song.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "canoe.filmIn.lulu",
+      "text": "That's Lulu the loon! Nobody sings like Lulu.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "canoe.filmIn.across",
+      "text": "She lives across the lake, by the glacier. Let's paddle!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "canoe",
+        "filmIn",
+        "song"
+      ],
+      "text": "Every big game starts with a song.",
+      "voice": "maple",
+      "key": "canoe.filmIn.song",
+      "part": "canoe › filmIn",
+      "when": "The film in (story/films/canoe.ts): the dock on the turquoise lake, Maple in the red canoe.",
+      "ms": 2712,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "filmIn",
+        "lulu"
+      ],
+      "text": "That's Lulu the loon! Nobody sings like Lulu.",
+      "voice": "maple",
+      "key": "canoe.filmIn.lulu",
+      "part": "canoe › filmIn",
+      "when": "A loon calls, far across the water, and the mountains answer (a beat with no line). Maple's ears go up.",
+      "ms": 3816,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "filmIn",
+        "across"
+      ],
+      "text": "She lives across the lake, by the glacier. Let's paddle!",
+      "voice": "maple",
+      "key": "canoe.filmIn.across",
+      "part": "canoe › filmIn",
+      "when": "The film in (story/films/canoe.ts): the dock on the turquoise lake, Maple in the red canoe.",
+      "ms": 3768,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

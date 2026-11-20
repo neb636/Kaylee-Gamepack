@@ -1,0 +1,680 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "canoe",
+  "title": "Canada › Canoe",
+  "intro": "",
+  "page": "canada-canoe.html",
+  "audio": null,
+  "lines": 34,
+  "seconds": 90,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "canoe.filmIn.song",
+      "text": "Every big game starts with a song.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "canoe.filmIn.lulu",
+      "text": "That's Lulu the loon! Nobody sings like Lulu.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "canoe.filmIn.across",
+      "text": "She lives across the lake, by the glacier. Let's paddle!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "canoe.story",
+      "text": "Bonjour! Hop in, we go to find Lulu!",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Why is my lake so blue?"
+    },
+    {
+      "key": "canoe.go.touch",
+      "text": "Hold your finger on the water, and Maple paddles there!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "canoe.go.mouse",
+      "text": "Click and hold on the water, and Maple paddles there!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "canoe.hint.touch",
+      "text": "Touch the water in front of the canoe!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "canoe.hint.mouse",
+      "text": "Click the water in front of the canoe!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "canoe.stream",
+      "text": "Paddle to the milky water by the glacier stream!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canoe.found",
+      "text": "Rock flour from the glacier makes the lake so blue!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canoe.loon",
+      "text": "Bubbles! Follow them to find Lulu.",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Bubbles! Follow them to find the loon."
+    },
+    {
+      "key": "canoe.loonFound.1",
+      "text": "Found you, Lulu!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Found you, loon!"
+    },
+    {
+      "key": "canoe.loonFound.2",
+      "text": "Peekaboo, Lulu!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Peekaboo, loon!"
+    },
+    {
+      "key": "canoe.family",
+      "text": "Lulu and her baby! We found them!",
+      "flags": [
+        "changed"
+      ],
+      "was": "A whole loon family! Merci!"
+    },
+    {
+      "key": "canoe.glacier",
+      "text": "A glacier is a river of ice. It moves very slowly.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canoe.loonie",
+      "text": "The loon is on Canada's dollar coin. It's called a loonie!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "canoe.filmOut.ask",
+      "text": "Lulu! Will you sing at our big game?",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "canoe.filmOut.yes",
+      "text": "A big game? I will sing my very best song.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "canoe.filmOut.chick",
+      "text": "Hee hee! The littlest singer!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "canoe.filmOut.team",
+      "text": "You're on the team!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "canoe",
+        "filmIn",
+        "song"
+      ],
+      "text": "Every big game starts with a song.",
+      "voice": "maple",
+      "key": "canoe.filmIn.song",
+      "part": "canoe › filmIn",
+      "when": "The film in (story/films/canoe.ts): the dock on the turquoise lake, Maple in the red canoe.",
+      "ms": 2712,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "filmIn",
+        "lulu"
+      ],
+      "text": "That's Lulu the loon! Nobody sings like Lulu.",
+      "voice": "maple",
+      "key": "canoe.filmIn.lulu",
+      "part": "canoe › filmIn",
+      "when": "A loon calls, far across the water, and the mountains answer (a beat with no line). Maple's ears go up.",
+      "ms": 3816,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "filmIn",
+        "across"
+      ],
+      "text": "She lives across the lake, by the glacier. Let's paddle!",
+      "voice": "maple",
+      "key": "canoe.filmIn.across",
+      "part": "canoe › filmIn",
+      "when": "The film in (story/films/canoe.ts): the dock on the turquoise lake, Maple in the red canoe.",
+      "ms": 3768,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "story"
+      ],
+      "text": "Bonjour! Hop in, we go to find Lulu!",
+      "voice": "maple",
+      "key": "canoe.story",
+      "part": "canoe",
+      "when": "The game's hello, from a link or a replay (after the film it starts on the water with Sparkle's line).",
+      "ms": 3696,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Why is my lake so blue?"
+    },
+    {
+      "path": [
+        "canoe",
+        "go",
+        "touch"
+      ],
+      "text": "Hold your finger on the water, and Maple paddles there!",
+      "voice": "sparkle",
+      "key": "canoe.go.touch",
+      "part": "canoe › go",
+      "when": "Sparkle: how to paddle, and the hint when she hasn't paddled for a while (the hand shows it too).",
+      "ms": 4944,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "go",
+        "mouse"
+      ],
+      "text": "Click and hold on the water, and Maple paddles there!",
+      "voice": "sparkle",
+      "key": "canoe.go.mouse",
+      "part": "canoe › go",
+      "when": "",
+      "ms": 4368,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "hint",
+        "touch"
+      ],
+      "text": "Touch the water in front of the canoe!",
+      "voice": "sparkle",
+      "key": "canoe.hint.touch",
+      "part": "canoe › hint",
+      "when": "",
+      "ms": 2376,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "hint",
+        "mouse"
+      ],
+      "text": "Click the water in front of the canoe!",
+      "voice": "sparkle",
+      "key": "canoe.hint.mouse",
+      "part": "canoe › hint",
+      "when": "",
+      "ms": 2424,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "stream"
+      ],
+      "text": "Paddle to the milky water by the glacier stream!",
+      "voice": "sparkle",
+      "key": "canoe.stream",
+      "part": "canoe",
+      "when": "Where the blue comes from.",
+      "ms": 3479,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "streamMaple"
+      ],
+      "text": "Ooh! What is that milky water?",
+      "voice": "maple",
+      "key": "canoe.streamMaple",
+      "part": "canoe",
+      "when": "",
+      "ms": 2664,
+      "flags": []
+    },
+    {
+      "path": [
+        "canoe",
+        "streamHint"
+      ],
+      "text": "Follow the sparkles to the milky water.",
+      "voice": "sparkle",
+      "key": "canoe.streamHint",
+      "part": "canoe",
+      "when": "",
+      "ms": 2991,
+      "flags": []
+    },
+    {
+      "path": [
+        "canoe",
+        "found"
+      ],
+      "text": "Rock flour from the glacier makes the lake so blue!",
+      "voice": "sparkle",
+      "key": "canoe.found",
+      "part": "canoe",
+      "when": "",
+      "ms": 3962,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "foundMaple"
+      ],
+      "text": "We found the blue!",
+      "voice": "maple",
+      "key": "canoe.foundMaple",
+      "part": "canoe",
+      "when": "",
+      "ms": 1200,
+      "flags": []
+    },
+    {
+      "path": [
+        "canoe",
+        "loon"
+      ],
+      "text": "Bubbles! Follow them to find Lulu.",
+      "voice": "sparkle",
+      "key": "canoe.loon",
+      "part": "canoe",
+      "when": "Follow Lulu: she dives and pops up nearer the glacier each time.",
+      "ms": 3696,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Bubbles! Follow them to find the loon."
+    },
+    {
+      "path": [
+        "canoe",
+        "loonHint"
+      ],
+      "text": "Paddle to the bubbles!",
+      "voice": "sparkle",
+      "key": "canoe.loonHint",
+      "part": "canoe",
+      "when": "",
+      "ms": 1927,
+      "flags": []
+    },
+    {
+      "path": [
+        "canoe",
+        "loonFound",
+        "0"
+      ],
+      "text": "There she is!",
+      "voice": "maple",
+      "key": "canoe.loonFound.0",
+      "part": "canoe › loonFound",
+      "when": "",
+      "ms": 1128,
+      "flags": []
+    },
+    {
+      "path": [
+        "canoe",
+        "loonFound",
+        "1"
+      ],
+      "text": "Found you, Lulu!",
+      "voice": "maple",
+      "key": "canoe.loonFound.1",
+      "part": "canoe › loonFound",
+      "when": "",
+      "ms": 1608,
+      "flags": [
+        "changed"
+      ],
+      "was": "Found you, loon!"
+    },
+    {
+      "path": [
+        "canoe",
+        "loonFound",
+        "2"
+      ],
+      "text": "Peekaboo, Lulu!",
+      "voice": "maple",
+      "key": "canoe.loonFound.2",
+      "part": "canoe › loonFound",
+      "when": "",
+      "ms": 1464,
+      "flags": [
+        "changed"
+      ],
+      "was": "Peekaboo, loon!"
+    },
+    {
+      "path": [
+        "canoe",
+        "chick"
+      ],
+      "text": "Look! A baby loon on her back!",
+      "voice": "maple",
+      "key": "canoe.chick",
+      "part": "canoe",
+      "when": "",
+      "ms": 2736,
+      "flags": []
+    },
+    {
+      "path": [
+        "canoe",
+        "family"
+      ],
+      "text": "Lulu and her baby! We found them!",
+      "voice": "maple",
+      "key": "canoe.family",
+      "part": "canoe",
+      "when": "",
+      "ms": 2256,
+      "flags": [
+        "changed"
+      ],
+      "was": "A whole loon family! Merci!"
+    },
+    {
+      "path": [
+        "canoe",
+        "glacier"
+      ],
+      "text": "A glacier is a river of ice. It moves very slowly.",
+      "voice": "sparkle",
+      "key": "canoe.glacier",
+      "part": "canoe",
+      "when": "Tap-to-hear facts (the first time she pokes the glacier, the second time Lulu).",
+      "ms": 5630,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "loonie"
+      ],
+      "text": "The loon is on Canada's dollar coin. It's called a loonie!",
+      "voice": "sparkle",
+      "key": "canoe.loonie",
+      "part": "canoe",
+      "when": "",
+      "ms": 4433,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "dizzy"
+      ],
+      "text": "Whoa! I'm dizzy!",
+      "voice": "maple",
+      "key": "canoe.dizzy",
+      "part": "canoe",
+      "when": "Silly moments and pokes.",
+      "ms": 2088,
+      "flags": []
+    },
+    {
+      "path": [
+        "canoe",
+        "parade"
+      ],
+      "text": "A duck parade!",
+      "voice": "maple",
+      "key": "canoe.parade",
+      "part": "canoe",
+      "when": "",
+      "ms": 1176,
+      "flags": []
+    },
+    {
+      "path": [
+        "canoe",
+        "bonk"
+      ],
+      "text": "Bonk! Hee hee!",
+      "voice": "maple",
+      "key": "canoe.bonk",
+      "part": "canoe",
+      "when": "",
+      "ms": 1416,
+      "flags": []
+    },
+    {
+      "path": [
+        "canoe",
+        "pokeMaple",
+        "0"
+      ],
+      "text": "Paddle, paddle!",
+      "voice": "maple",
+      "key": "canoe.pokeMaple.0",
+      "part": "canoe › pokeMaple",
+      "when": "",
+      "ms": 1056,
+      "flags": []
+    },
+    {
+      "path": [
+        "canoe",
+        "pokeMaple",
+        "1"
+      ],
+      "text": "Splish, splash!",
+      "voice": "maple",
+      "key": "canoe.pokeMaple.1",
+      "part": "canoe › pokeMaple",
+      "when": "",
+      "ms": 1464,
+      "flags": []
+    },
+    {
+      "path": [
+        "canoe",
+        "pokeMaple",
+        "2"
+      ],
+      "text": "I love my red canoe!",
+      "voice": "maple",
+      "key": "canoe.pokeMaple.2",
+      "part": "canoe › pokeMaple",
+      "when": "",
+      "ms": 2016,
+      "flags": []
+    },
+    {
+      "path": [
+        "canoe",
+        "beaver"
+      ],
+      "text": "Allo, cousin beaver!",
+      "voice": "maple",
+      "key": "canoe.beaver",
+      "part": "canoe",
+      "when": "",
+      "ms": 1656,
+      "flags": []
+    },
+    {
+      "path": [
+        "canoe",
+        "moose"
+      ],
+      "text": "Mmm. Tasty lake weeds.",
+      "voice": "moose",
+      "key": "canoe.moose",
+      "part": "canoe",
+      "when": "",
+      "ms": 2784,
+      "flags": []
+    },
+    {
+      "path": [
+        "canoe",
+        "filmOut",
+        "ask"
+      ],
+      "text": "Lulu! Will you sing at our big game?",
+      "voice": "maple",
+      "key": "canoe.filmOut.ask",
+      "part": "canoe › filmOut",
+      "when": "The film out: under the glacier, Lulu with her chick on her back.",
+      "ms": 2328,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "filmOut",
+        "yes"
+      ],
+      "text": "A big game? I will sing my very best song.",
+      "voice": "loon",
+      "key": "canoe.filmOut.yes",
+      "part": "canoe › filmOut",
+      "when": "The film out: under the glacier, Lulu with her chick on her back.",
+      "ms": 3384,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "filmOut",
+        "chick"
+      ],
+      "text": "Hee hee! The littlest singer!",
+      "voice": "maple",
+      "key": "canoe.filmOut.chick",
+      "part": "canoe › filmOut",
+      "when": "She calls, long and lovely, head thrown back. Her chick tries too: a tiny squeak (beats with no line).",
+      "ms": 2496,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "canoe",
+        "filmOut",
+        "team"
+      ],
+      "text": "You're on the team!",
+      "voice": "maple",
+      "key": "canoe.filmOut.team",
+      "part": "canoe › filmOut",
+      "when": "The pink scarf goes round Lulu's neck.",
+      "ms": 1296,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "story.gameWin",
+  "title": "Canada › Story › Game Win",
+  "intro": "After the last goal (story/films/game.ts), before the trophy.",
+  "page": "canada-story-gameWin.html",
+  "audio": null,
+  "lines": 5,
+  "seconds": 14,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "story.gameWin.cup",
+      "text": "Maple's team wins the Maple Cup!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "story.gameWin.gus",
+      "text": "Good game, little beaver. Honk.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "story.gameWin.syrup",
+      "text": "Look! The Cup is full of maple syrup!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "story.gameWin.share",
+      "text": "Maple taffy for everybody. Geese too!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "story.gameWin.together",
+      "text": "We did it together!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "story",
+        "gameWin",
+        "cup"
+      ],
+      "text": "Maple's team wins the Maple Cup!",
+      "voice": "sparkle",
+      "key": "story.gameWin.cup",
+      "part": "story › gameWin",
+      "when": "The Cup, held up between them all.",
+      "ms": 3432,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "gameWin",
+        "gus"
+      ],
+      "text": "Good game, little beaver. Honk.",
+      "voice": "gus",
+      "key": "story.gameWin.gus",
+      "part": "story › gameWin",
+      "when": "Gus skates over and bows his long neck.",
+      "ms": 2976,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "gameWin",
+        "syrup"
+      ],
+      "text": "Look! The Cup is full of maple syrup!",
+      "voice": "maple",
+      "key": "story.gameWin.syrup",
+      "part": "story › gameWin",
+      "when": "Maple looks into the Cup.",
+      "ms": 2664,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "gameWin",
+        "share"
+      ],
+      "text": "Maple taffy for everybody. Geese too!",
+      "voice": "maple",
+      "key": "story.gameWin.share",
+      "part": "story › gameWin",
+      "when": "She pours it on the snow: taffy on a stick for every player, both teams.",
+      "ms": 3432,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "gameWin",
+        "together"
+      ],
+      "text": "We did it together!",
+      "voice": "maple",
+      "key": "story.gameWin.together",
+      "part": "story › gameWin",
+      "when": "Everybody crunches.",
+      "ms": 1320,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

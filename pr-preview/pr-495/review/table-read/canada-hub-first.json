@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "hub.first",
+  "title": "Canada › Hub › First",
+  "intro": "Her first look at the map, once (Sparkle).",
+  "page": "canada-hub-first.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 5,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "hub.first.touch",
+      "text": "Tap a friend to go and get them!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "hub.first.mouse",
+      "text": "Click a friend to go and get them!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "hub",
+        "first",
+        "touch"
+      ],
+      "text": "Tap a friend to go and get them!",
+      "voice": "sparkle",
+      "key": "hub.first.touch",
+      "part": "hub › first",
+      "when": "Her first look at the map, once (Sparkle).",
+      "ms": 2496,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "first",
+        "mouse"
+      ],
+      "text": "Click a friend to go and get them!",
+      "voice": "sparkle",
+      "key": "hub.first.mouse",
+      "part": "hub › first",
+      "when": "",
+      "ms": 2592,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

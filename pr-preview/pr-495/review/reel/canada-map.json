@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "canada-map",
+  "title": "Canada map",
+  "video": "canada-map.mp4",
+  "gif": "canada-map.gif",
+  "seconds": 22,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "canada-map-arrive",
+      "where": "canada-map-arrive",
+      "seconds": 6,
+      "fps": 8.1,
+      "status": "ok"
+    },
+    {
+      "name": "canada-map-tap",
+      "where": "canada-map-tap",
+      "seconds": 4,
+      "fps": 13.1,
+      "status": "ok"
+    },
+    {
+      "name": "canada-map-pokes",
+      "where": "canada-map-pokes",
+      "seconds": 7,
+      "fps": 10.8,
+      "status": "ok"
+    }
+  ]
+}

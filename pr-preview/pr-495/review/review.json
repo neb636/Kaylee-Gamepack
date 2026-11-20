@@ -1,0 +1,755 @@
+{
+  "title": "Canada, rebuilt as one story: Maple's Team",
+  "checkIn": "ship (a salvage, built in one go at your request)",
+  "kaylee": "Maple the beaver has no hockey team. She flies across Canada, plays six games to bring six friends home, then plays the geese for the Maple Cup and wins the trophy.",
+  "questions": [
+    "Merging puts Canada back on her map (it was hidden). Put it back now, or keep it hidden until she has playtested it?",
+    "The friends' names are my picks: Monty the moose, Roxy the raccoon, Tuque the snowman, Lulu the loon, Misty the spirit bear, Ollie the otter, Gus the goose. Keep them?",
+    "In the big game the geese can now score a goal (she still always wins in the end). Right for her, or should the geese never score?"
+  ],
+  "reels": [
+    {
+      "name": "canada-story",
+      "moments": [
+        "#/world/canada/story/intro~62"
+      ]
+    },
+    {
+      "name": "canada-map",
+      "moments": [
+        "canada-map-arrive",
+        "canada-map-tap",
+        "canada-map-pokes"
+      ]
+    },
+    {
+      "name": "canada-canoe",
+      "moments": [
+        "canada-canoe-cross"
+      ]
+    },
+    {
+      "name": "canada-friends",
+      "moments": [
+        "#/world/canada/story/bike-out~19",
+        "#/world/canada/story/snowman-out~18",
+        "#/world/canada/story/campfire-out~19"
+      ]
+    },
+    {
+      "name": "canada-game",
+      "moments": [
+        "canada-party-flick",
+        "canada-party-rush",
+        "#/world/canada/story/game-win~23"
+      ]
+    }
+  ],
+  "links": [
+    {
+      "label": "Play it from the start (the way-in film, then the map)",
+      "hash": "#/world/canada"
+    },
+    {
+      "label": "The map with the whole team at the rink",
+      "hash": "#/world/canada/hub/map?team=all"
+    },
+    {
+      "label": "The canoe, with its feel knobs",
+      "hash": "#/world/canada/canoe/glide?feel=1"
+    },
+    {
+      "label": "The big game from the start",
+      "hash": "#/world/canada/party/story?stamps=all&team=all"
+    }
+  ],
+  "pictures": [
+    {
+      "title": "The map",
+      "before": "pics/map-before.png",
+      "after": "pics/map-after.png",
+      "caption": "A toy tray of Canada in the sky, her friends standing where they live; the ones who have joined wait at the rink in pink scarves."
+    }
+  ],
+  "listens": [
+    {
+      "title": "The films: music and shared sounds",
+      "audio": "sfx/story.mp3",
+      "items": [
+        {
+          "text": "The story being told (music)",
+          "at": 0,
+          "end": 60.08
+        },
+        {
+          "text": "A friend joins the team (music)",
+          "at": 60.78,
+          "end": 90.82
+        },
+        {
+          "text": "The big game (music)",
+          "at": 91.52,
+          "end": 131.54
+        },
+        {
+          "text": "The frozen canal (bed)",
+          "at": 132.24,
+          "end": 138.24
+        },
+        {
+          "text": "A pop",
+          "at": 138.94,
+          "end": 139.42
+        },
+        {
+          "text": "A thump on snow",
+          "at": 140.12,
+          "end": 140.72
+        },
+        {
+          "text": "A friend joins",
+          "at": 141.42,
+          "end": 142.78
+        },
+        {
+          "text": "A splash",
+          "at": 143.48,
+          "end": 144.48
+        },
+        {
+          "text": "A whoosh",
+          "at": 145.18,
+          "end": 145.78
+        },
+        {
+          "text": "Boing (a tummy)",
+          "at": 146.48,
+          "end": 147.16
+        },
+        {
+          "text": "Bonk (antlers)",
+          "at": 147.86,
+          "end": 148.34
+        },
+        {
+          "text": "Gus honks",
+          "at": 149.04,
+          "end": 149.72
+        },
+        {
+          "text": "The geese honk",
+          "at": 150.42,
+          "end": 152.18
+        },
+        {
+          "text": "Skates on ice",
+          "at": 152.88,
+          "end": 154.24
+        },
+        {
+          "text": "A skid on ice",
+          "at": 154.94,
+          "end": 155.74
+        },
+        {
+          "text": "A puck is slapped",
+          "at": 156.44,
+          "end": 156.92
+        },
+        {
+          "text": "A puck in the net",
+          "at": 157.62,
+          "end": 158.29
+        },
+        {
+          "text": "Maple sits down",
+          "at": 158.99,
+          "end": 159.59
+        },
+        {
+          "text": "The Cup glints",
+          "at": 160.29,
+          "end": 161.49
+        },
+        {
+          "text": "Sparkle's balloon",
+          "at": 162.19,
+          "end": 163.55
+        },
+        {
+          "text": "The animals cheer",
+          "at": 164.25,
+          "end": 166.65
+        },
+        {
+          "text": "Lulu's song",
+          "at": 167.35,
+          "end": 171.35
+        },
+        {
+          "text": "The forest (bed)",
+          "at": 172.05,
+          "end": 178.05
+        },
+        {
+          "text": "The coast (bed)",
+          "at": 178.75,
+          "end": 184.75
+        },
+        {
+          "text": "The mountain lake (bed)",
+          "at": 185.45,
+          "end": 191.45
+        }
+      ]
+    },
+    {
+      "title": "The map",
+      "audio": "sfx/map.mp3",
+      "items": [
+        {
+          "text": "The map in the sky (bed)",
+          "at": 0,
+          "end": 6
+        },
+        {
+          "text": "A friend hops when tapped",
+          "at": 6.7,
+          "end": 7.3
+        },
+        {
+          "text": "The camera swoops in to a place",
+          "at": 8,
+          "end": 8.88
+        },
+        {
+          "text": "Monty the moose munches",
+          "at": 9.58,
+          "end": 10.78
+        },
+        {
+          "text": "The whale spouts",
+          "at": 11.48,
+          "end": 12.96
+        },
+        {
+          "text": "The campfire crackles",
+          "at": 13.66,
+          "end": 14.68
+        },
+        {
+          "text": "The polar bear's happy huff",
+          "at": 15.38,
+          "end": 16.26
+        },
+        {
+          "text": "The bison rolls in the dust",
+          "at": 16.96,
+          "end": 18.32
+        },
+        {
+          "text": "The beluga chirps",
+          "at": 19.02,
+          "end": 20.22
+        },
+        {
+          "text": "The orca leaps",
+          "at": 20.92,
+          "end": 22.2
+        },
+        {
+          "text": "A cloud puffs",
+          "at": 22.9,
+          "end": 23.5
+        },
+        {
+          "text": "An ice floe bumps",
+          "at": 24.2,
+          "end": 24.88
+        },
+        {
+          "text": "A new friend joins the team at the rink",
+          "at": 25.58,
+          "end": 26.58
+        },
+        {
+          "text": "The rink glows for the big game",
+          "at": 27.28,
+          "end": 28.88
+        }
+      ]
+    },
+    {
+      "title": "Carnival Snowballs",
+      "audio": "sfx/snowman.mp3",
+      "items": [
+        {
+          "text": "A snowball rolling (crunch)",
+          "at": 0,
+          "end": 0.8
+        },
+        {
+          "text": "Patting a snowball together",
+          "at": 1.5,
+          "end": 2.3
+        },
+        {
+          "text": "A snowball plops on top (stack)",
+          "at": 3,
+          "end": 3.68
+        },
+        {
+          "text": "The box pops open, a hat flies out",
+          "at": 4.38,
+          "end": 5.38
+        },
+        {
+          "text": "A snowman wakes up",
+          "at": 6.08,
+          "end": 7.56
+        },
+        {
+          "text": "The carnival trumpet",
+          "at": 8.26,
+          "end": 9.74
+        },
+        {
+          "text": "The parade drum",
+          "at": 10.44,
+          "end": 11.24
+        },
+        {
+          "text": "Sleigh bells on the carriage",
+          "at": 11.94,
+          "end": 13.42
+        },
+        {
+          "text": "A snowball boings off his tummy",
+          "at": 14.12,
+          "end": 15.12
+        },
+        {
+          "text": "A snowman dozing",
+          "at": 15.82,
+          "end": 17.3
+        },
+        {
+          "text": "The carnival far off (bed)",
+          "at": 18,
+          "end": 24
+        }
+      ]
+    },
+    {
+      "title": "Mountain Bike",
+      "audio": "sfx/bike.mp3",
+      "items": [
+        {
+          "text": "The mountain forest (bed)",
+          "at": 0,
+          "end": 6
+        },
+        {
+          "text": "Wheels on the dirt trail (loop)",
+          "at": 6.7,
+          "end": 10.7
+        },
+        {
+          "text": "The bike bell",
+          "at": 11.4,
+          "end": 12.2
+        },
+        {
+          "text": "Through a leaf pile",
+          "at": 12.9,
+          "end": 14.1
+        },
+        {
+          "text": "Boing off a stump",
+          "at": 14.8,
+          "end": 15.4
+        },
+        {
+          "text": "Landing on the dirt",
+          "at": 16.1,
+          "end": 16.7
+        },
+        {
+          "text": "Splash through the creek",
+          "at": 17.4,
+          "end": 18.6
+        },
+        {
+          "text": "Over the wooden bridge",
+          "at": 19.3,
+          "end": 21.06
+        },
+        {
+          "text": "The gondola cabin swings",
+          "at": 21.76,
+          "end": 22.76
+        },
+        {
+          "text": "The chipmunk chirps",
+          "at": 23.46,
+          "end": 24.26
+        },
+        {
+          "text": "Monty snorts",
+          "at": 24.96,
+          "end": 26.14
+        },
+        {
+          "text": "Monty munches",
+          "at": 26.84,
+          "end": 28.2
+        },
+        {
+          "text": "The waterfall",
+          "at": 28.9,
+          "end": 31.38
+        },
+        {
+          "text": "A pinecone drops",
+          "at": 32.08,
+          "end": 32.88
+        }
+      ]
+    },
+    {
+      "title": "Campfire Night",
+      "audio": "sfx/campfire.mp3",
+      "items": [
+        {
+          "text": "The campfire at night (bed)",
+          "at": 0,
+          "end": 6
+        },
+        {
+          "text": "An owl hoots",
+          "at": 6.7,
+          "end": 8.46
+        },
+        {
+          "text": "A little frog peeps",
+          "at": 9.16,
+          "end": 10.04
+        },
+        {
+          "text": "A rustle in the bushes",
+          "at": 10.74,
+          "end": 11.54
+        },
+        {
+          "text": "A tiny paw snatches a marshmallow",
+          "at": 12.24,
+          "end": 12.69
+        },
+        {
+          "text": "Raccoon chitter (Roxy giggles)",
+          "at": 13.39,
+          "end": 14.59
+        },
+        {
+          "text": "Baby raccoons squeak",
+          "at": 15.29,
+          "end": 16.65
+        },
+        {
+          "text": "A marshmallow sizzles",
+          "at": 17.35,
+          "end": 18.83
+        },
+        {
+          "text": "The tent zipper",
+          "at": 19.53,
+          "end": 20.33
+        },
+        {
+          "text": "Sparks whoosh up from the fire",
+          "at": 21.03,
+          "end": 22.03
+        },
+        {
+          "text": "Blowing out a marshmallow",
+          "at": 22.73,
+          "end": 23.33
+        },
+        {
+          "text": "Munching marshmallows",
+          "at": 24.03,
+          "end": 24.91
+        },
+        {
+          "text": "A beaver's tail slaps the water",
+          "at": 25.61,
+          "end": 26.41
+        },
+        {
+          "text": "A hare thumps its feet",
+          "at": 27.11,
+          "end": 27.91
+        }
+      ]
+    },
+    {
+      "title": "Red Canoe",
+      "audio": "sfx/canoe.mp3",
+      "items": [
+        {
+          "text": "A paddle stroke (1)",
+          "at": 0,
+          "end": 1
+        },
+        {
+          "text": "A paddle stroke (2)",
+          "at": 1.7,
+          "end": 2.7
+        },
+        {
+          "text": "The canoe gliding",
+          "at": 3.4,
+          "end": 5.65
+        },
+        {
+          "text": "A gentle bump on the shore",
+          "at": 6.35,
+          "end": 7.25
+        },
+        {
+          "text": "A little plop on the water",
+          "at": 7.95,
+          "end": 8.43
+        },
+        {
+          "text": "The ducks quack",
+          "at": 9.13,
+          "end": 10.61
+        },
+        {
+          "text": "A trout jumps",
+          "at": 11.31,
+          "end": 12.31
+        },
+        {
+          "text": "Lulu laughs",
+          "at": 13.01,
+          "end": 14.49
+        },
+        {
+          "text": "The chick's squeak",
+          "at": 15.19,
+          "end": 15.67
+        },
+        {
+          "text": "The glacier stream",
+          "at": 16.37,
+          "end": 18.37
+        },
+        {
+          "text": "Ice falls off the glacier",
+          "at": 19.07,
+          "end": 20.55
+        },
+        {
+          "text": "The still mountain lake (bed)",
+          "at": 21.25,
+          "end": 27.25
+        }
+      ]
+    },
+    {
+      "title": "Salmon Leap",
+      "audio": "sfx/salmon.mp3",
+      "items": [
+        {
+          "text": "The rainforest river (bed)",
+          "at": 0,
+          "end": 6
+        },
+        {
+          "text": "A salmon leaps",
+          "at": 6.7,
+          "end": 7.3
+        },
+        {
+          "text": "A small splash",
+          "at": 8,
+          "end": 8.6
+        },
+        {
+          "text": "An enormous splash",
+          "at": 9.3,
+          "end": 10.9
+        },
+        {
+          "text": "A big swish",
+          "at": 11.6,
+          "end": 12.2
+        },
+        {
+          "text": "Stick hits a pinecone",
+          "at": 12.9,
+          "end": 13.38
+        },
+        {
+          "text": "Bonk on the rock",
+          "at": 14.08,
+          "end": 14.76
+        },
+        {
+          "text": "Boop on a bear's nose",
+          "at": 15.46,
+          "end": 15.94
+        },
+        {
+          "text": "A bear sneezes",
+          "at": 16.64,
+          "end": 17.64
+        },
+        {
+          "text": "A bear grumbles",
+          "at": 18.34,
+          "end": 19.54
+        },
+        {
+          "text": "Munching berries",
+          "at": 20.24,
+          "end": 21.24
+        },
+        {
+          "text": "A raven",
+          "at": 21.94,
+          "end": 23.14
+        }
+      ]
+    },
+    {
+      "title": "Whale Watch",
+      "audio": "sfx/whales.mp3",
+      "items": [
+        {
+          "text": "The little boat's engine (loop)",
+          "at": 0,
+          "end": 2.25
+        },
+        {
+          "text": "The Pacific off Tofino (bed)",
+          "at": 2.95,
+          "end": 8.95
+        },
+        {
+          "text": "A whale blows out of its blowhole",
+          "at": 9.65,
+          "end": 11.25
+        },
+        {
+          "text": "A humpback lands from a jump",
+          "at": 11.95,
+          "end": 13.95
+        },
+        {
+          "text": "A sea otter squeaks",
+          "at": 14.65,
+          "end": 15.25
+        },
+        {
+          "text": "Ollie the sea otter's giggle-chirp (she spins)",
+          "at": 15.95,
+          "end": 16.83
+        },
+        {
+          "text": "A clam knocked on a stone",
+          "at": 17.53,
+          "end": 18.13
+        },
+        {
+          "text": "Sea lions bark on their rock",
+          "at": 18.83,
+          "end": 20.03
+        },
+        {
+          "text": "Gulls call over the harbour",
+          "at": 20.73,
+          "end": 22.09
+        },
+        {
+          "text": "The humpback's song under the water",
+          "at": 22.79,
+          "end": 25.73
+        },
+        {
+          "text": "The orcas call under the water",
+          "at": 26.43,
+          "end": 27.91
+        },
+        {
+          "text": "The little boat's horn",
+          "at": 28.61,
+          "end": 29.41
+        }
+      ]
+    },
+    {
+      "title": "The big game",
+      "audio": "sfx/game.mp3",
+      "items": [
+        {
+          "text": "Puck into a snowbank",
+          "at": 0,
+          "end": 0.6
+        },
+        {
+          "text": "Raccoon kits cheering",
+          "at": 1.3,
+          "end": 2.78
+        },
+        {
+          "text": "Goal horn (soft, friendly)",
+          "at": 3.48,
+          "end": 4.96
+        },
+        {
+          "text": "The biggest slap shot",
+          "at": 5.66,
+          "end": 6.86
+        },
+        {
+          "text": "Geese wall topples over",
+          "at": 7.56,
+          "end": 9.16
+        },
+        {
+          "text": "Otter spinning on the ice",
+          "at": 9.86,
+          "end": 11.06
+        },
+        {
+          "text": "A quick paw steals the puck",
+          "at": 11.76,
+          "end": 12.24
+        },
+        {
+          "text": "Puck clangs off the goalpost",
+          "at": 12.94,
+          "end": 13.62
+        },
+        {
+          "text": "Maple syrup pouring on snow",
+          "at": 14.32,
+          "end": 16.32
+        },
+        {
+          "text": "Everybody crunching taffy",
+          "at": 17.02,
+          "end": 18.6
+        },
+        {
+          "text": "The evening rink (bed)",
+          "at": 19.3,
+          "end": 25.3
+        }
+      ]
+    }
+  ]
+}

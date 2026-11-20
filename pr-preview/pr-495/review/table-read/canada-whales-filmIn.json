@@ -1,0 +1,63 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "whales.filmIn",
+  "title": "Canada › Whales › Film In",
+  "intro": "The film in (story/films/snowman.ts): the snowy park under the castle hotel, flags and lanterns, nobody about.",
+  "page": "canada-whales-filmIn.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 5,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "whales.filmIn.ollie",
+      "text": "Ollie the sea otter spins faster than anybody!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "whales.filmIn.out",
+      "text": "She's out in the kelp, where the whales swim.",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "whales",
+        "filmIn",
+        "ollie"
+      ],
+      "text": "Ollie the sea otter spins faster than anybody!",
+      "voice": "maple",
+      "key": "whales.filmIn.ollie",
+      "part": "whales › filmIn",
+      "when": "The film in (story/films/whales.ts): the dock at Tofino, Maple at the wheel of the little boat.",
+      "ms": 2520,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "whales",
+        "filmIn",
+        "out"
+      ],
+      "text": "She's out in the kelp, where the whales swim.",
+      "voice": "maple",
+      "key": "whales.filmIn.out",
+      "part": "whales › filmIn",
+      "when": "The camera looks out to sea: kelp, and a spout far off.",
+      "ms": 2832,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}
