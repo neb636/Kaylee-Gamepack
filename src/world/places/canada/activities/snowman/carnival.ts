@@ -1,6 +1,7 @@
 // Carnival Snowballs (plan: planning/around-the-world/canada.md): a snowy park below Quebec City's castle hotel, at
 // the Winter Carnival. The carnival needs snowmen for its parade; Kaylee rolls snowballs that grow, stacks them
-// and dresses them in the carnival's red tuque and woven sash, and they march off in the parade.
+// and dresses them (the first is Tuque, in his red tuque and the carnival's woven sash; the others each get their own
+// hat and scarf: blue, yellow, green, a top hat), and they march off in the parade.
 //
 // The toy (core verb): push a snowball. Her finger lands on a ball and it rolls after her finger, growing with every
 // meter and leaving a green stripe of grass behind; let go and it rolls on a little. Big balls roll slower and squish
@@ -9,8 +10,8 @@
 //   stack  push a ball against another and the smaller one hops on top: three balls make a snowman (coal face, carrot
 //          nose, stick arms), every one different and wobbly. Head on the bottom: he stands on his head and says hello
 //          upside down. Whenever there's no little ball left, Maple pats a new one.
-//   dress  the carnival's hat box and sash box hop into the park: roll a snowball into one and out flies a red tuque or
-//          a woven sash, onto a snowman who needs it. Dressed, he wakes up, waves and hops off to the parade line.
+//   dress  the carnival's hat box and sash box hop into the park: roll a snowball into one and out flies a hat or a
+//          scarf, onto a snowman who needs it. Dressed, he wakes up, waves and hops off to the parade line.
 // The story: Maple waves from the park and asks for snowmen (tap anywhere skips). Then the parade: tap the drum (it asks, once someone's in the line; at five it starts by itself) and the snowmen march
 // past the castle while Maple drums, and the last one waves.
 // Silly moments: roll one ball forever and it gets bigger than Maple, so she climbs on top and rides it; balls chase her
@@ -38,7 +39,7 @@ import { L } from '../../lines'
 import { Carriage, Fox, Geese, honk, Trumpet, whinny, yip } from './critters'
 import { BIG_R, BOX_HALF, CASTLE, CLIFF_Y, CLIMB_R, DRUM, HAT_BOX, HUGE_R, keepIn, lineX, MAPLE_START, MOOSE, PARADE_END_X, PARK, PATH_Z, SASH_BOX, SNOWMAN_RS, START, TREE_R } from './park'
 import { Maple } from './maple'
-import { Box, buildPark, Drum, makeHat, makeSash, Owl, Sled, SKY, snowShadow, Trail, type Park } from './props'
+import { Box, buildPark, Drum, LOOKS, makeHat, makeSash, makeScarf, Owl, Sled, SKY, snowShadow, Trail, type Park } from './props'
 import { snowSfx } from './sounds'
 import { tuqueArm, tuqueCap, tuqueFace } from '../../characters/tuque'
 import type { BallSize, SnowmanSection } from './sections'
@@ -184,6 +185,8 @@ interface Pile {
   flipT: number
   /** Tuque: the first snowman she makes (the right way up) has his hat, face and mittens (characters/tuque.ts). */
   tuque: boolean
+  /** Everyone else: which of the parade's outfits (props.ts LOOKS) he wears, -1 until he's dressed. */
+  look: number
   /** His soft blue shadow on the snow. */
   shadow: Mesh
 }
@@ -223,6 +226,9 @@ export class CarnivalSnowballs implements World3D {
   private armTpl: Group
   private hatTpl: Group
   private sashTpl: Group
+  private lookTpls: { hat: Group; scarf: Group }[]
+  /** How many snowmen other than Tuque have been dressed (they take the outfits in turn). */
+  private others = 0
   private tuqueFaceTpl: Group
   private tuqueArmTpl: Group
   private tuqueCapTpl: Group
@@ -363,6 +369,7 @@ export class CarnivalSnowballs implements World3D {
     )
     this.hatTpl = makeHat(bag)
     this.sashTpl = makeSash(bag)
+    this.lookTpls = LOOKS.map((o) => ({ hat: makeHat(bag, o.hat), scarf: makeScarf(bag, o.scarf, o.trim) }))
     // Tuque's own hat, face and mittened arms, at the same sizes (a ball of radius 1).
     this.tuqueFaceTpl = tuqueFace(bag)
     this.tuqueArmTpl = tuqueArm(bag, 1.1, 1.4)
@@ -546,6 +553,7 @@ export class CarnivalSnowballs implements World3D {
       waveT: -1,
       flipT: -1,
       tuque: false,
+      look: -1,
       shadow: snowShadow(this.bag),
     }
     this.scene.add(p.shadow)
@@ -1096,7 +1104,7 @@ export class CarnivalSnowballs implements World3D {
     snowSfx.hatPop()
     // Out flies the hat (or sash), onto the first snowman waiting for one; nobody needs it? Onto Maple.
     const to = this.piles.find((o) => o.state === 'done' && o.wakeT < 0 && !(box.kind === 'hat' ? o.hat : o.sash) && !this.flights.some((f) => f.to === o && f.kind === box.kind)) ?? null
-    const g = (box.kind === 'hat' ? (to?.tuque ? this.tuqueCapTpl : this.hatTpl) : this.sashTpl).clone()
+    const g = this.outfit(to, box.kind).clone()
     g.scale.setScalar(0.4)
     this.scene.add(g)
     this.flights.push({ kind: box.kind, g, from: new Vector3(bp.x, BOX_HALF * 1.8, bp.z), to, t: 0 })
@@ -1141,13 +1149,23 @@ export class CarnivalSnowballs implements World3D {
     }
   }
 
+  /** What a snowman wears: Tuque his red cap and the carnival's sash; every other one his own hat and scarf (blue,
+   *  yellow, green, a top hat), so the parade is varied and Tuque is the one in red at the front. Nobody (Maple): red. */
+  private outfit(p: Pile | null, kind: 'hat' | 'sash') {
+    if (!p) return kind === 'hat' ? this.hatTpl : this.sashTpl
+    if (p.tuque) return kind === 'hat' ? this.tuqueCapTpl : this.sashTpl
+    if (p.look < 0) p.look = this.others++ % this.lookTpls.length
+    const o = this.lookTpls[p.look]
+    return kind === 'hat' ? o.hat : o.scarf
+  }
+
   private wear(p: Pile, kind: 'hat' | 'sash') {
     if (kind === 'hat') {
-      p.hat = (p.tuque ? this.tuqueCapTpl : this.hatTpl).clone()
+      p.hat = this.outfit(p, 'hat').clone()
       // On top of the head (the top ball), whichever way round he is.
       p.balls[2].root.add(p.hat)
     } else {
-      p.sash = this.sashTpl.clone()
+      p.sash = this.outfit(p, 'sash').clone()
       p.balls[1].root.add(p.sash)
     }
   }
