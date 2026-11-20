@@ -1,4 +1,5 @@
-// Mountain Bike's forest animals: the moose in his pond on the chibi rig (CANADA_LOOKS.moose, Canada's moose everywhere),
+// Mountain Bike's forest animals: Monty the moose in his bath in the waterfall's pool, on the chibi rig (CANADA_LOOKS.moose,
+// the films' Monty too),
 // and the rest built from shapes in the toon look: a chipmunk who runs alongside, a woodpecker drumming on a birch, a
 // porcupine up a maple who puffs his quills, a spring peeper by the creek who peeps and jumps when she splashes, a
 // white-tailed deer who flags her tail and bounds off, a black bear far off eating blueberries, and a snowshoe hare who
@@ -96,11 +97,12 @@ export class Chipmunk extends Critter {
   }
 }
 
-/** The moose on the chibi rig (CANADA_LOOKS.moose), standing in his pond up to his knees: he leans right down with his
+/** Monty on the chibi rig (CANADA_LOOKS.moose), standing in the waterfall's pool up to his tummy, a lily pad on one
+ *  antler (monty.ts): he leans right down with his
  *  nose in the water, chewing, then lifts his head with a dripping mouthful of pond weed and looks round, chewing. Poked,
  *  he lifts his head at once and looks at her (the world plays his word in his own voice). */
 export class Moose extends Critter {
-  readonly height = 1.9
+  readonly height: number
   readonly rig: Rig
   private life: FaceLife
   private weed: Group
@@ -110,9 +112,10 @@ export class Moose extends Critter {
   private nextLift = 3
   /** He looks at her (head yaw, rad) while his head is up. */
   look = 0
-  constructor(bag: Bag) {
+  constructor(bag: Bag, height = 1.8) {
     super()
-    this.rig = buildAnimal({ ...CANADA_LOOKS.moose, height: 1.8 }, bag)
+    this.height = height + 0.1
+    this.rig = buildAnimal({ ...CANADA_LOOKS.moose, height }, bag)
     this.life = new FaceLife(this.rig, 'moose')
     this.rig.root.children[0].visible = false
     this.root.add(this.rig.root)

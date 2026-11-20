@@ -8,9 +8,6 @@ export const screens = [
   // Canada: all activity pins on the 3D country map, including older region links.
   { name: 'canada-intro', hash: '#/world/canada', reset: true, wait: 900 },
   ...['msa', 'quebec', 'ottawa', 'prairies', 'banff', 'rockies', 'bc'].map((at) => ({ name: `canada-map-${at}`, hash: `#/world/canada/hub/map?at=${at}`, reset: true, wait: 2200 })),
-  // Mountain Bike: the gondola, each stretch from its link (berms: both ways), the waterfall at the end.
-  ...['gondola', 'green', 'berms?trail=green', 'berms?trail=blue', 'creek', 'falls'].map((to) => ({ name: `canada-bike-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/bike/${to}`, reset: true, wait: to === 'falls' ? 14000 : to === 'gondola' ? 4000 : 3500 })),
-  // (Campfire Night's are in activities/campfire/qa.mjs.)
   // Red Canoe: each part from its link (glide both ways to paddle), the loon family at the glacier.
   ...['glide', 'glide?paddle=pull', 'stream', 'loon', 'glacier'].map((to) => ({ name: `canada-canoe-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/canoe/${to}`, reset: true, wait: to.startsWith('glide') ? 4000 : 3000 })),
 ]
@@ -18,7 +15,6 @@ export const screens = [
 /** Auto-played runs (scripts/qa-pacing.mjs): talk before the first touch, talk per touch, the play strip. */
 export const pacing = [
   { name: 'canada pin map', id: 'canada', hash: '#/world/canada', reset: true },
-  { name: 'canada mountain bike', id: 'bike', hash: '#/world/canada/bike', reset: true },
   // Red Canoe: the core verb is a stroke (a drag beside the canoe), so the auto-player's taps only
   // splash, poke and make trout jump; the robot run that paddles is qa-motion's canada-canoe-stroke.
   { name: 'canada red canoe', id: 'canoe', hash: '#/world/canada/canoe', reset: true },
@@ -29,29 +25,6 @@ export const motion = []
 
 
 // (Campfire Night's are in activities/campfire/qa.mjs.)
-
-// Mountain Bike: Maple riding the blue way's berms with the wheel under her finger, pushed right up the
-// berm and held, then let go: she leans into the bends, bumps over the roots and drifts back to the middle of her way.
-motion.push({
-  name: 'canada-bike-steer',
-  seconds: 9,
-  setup: async (page, base) => {
-    await page.goto(`${base}#/world/canada/bike/berms?trail=blue`)
-    await page.waitForFunction(() => window.__canadaBikeQA?.().mode, null, { timeout: 20000 })
-    await page.waitForTimeout(1200)
-  },
-  act: async (page) => {
-    const x = vp.width / 2
-    const y = vp.height * 0.7
-    await page.mouse.move(x, y)
-    await page.mouse.down()
-    await page.mouse.move(x + Math.min(110, vp.width * 0.12), y, { steps: 8 })
-    await page.waitForTimeout(2500)
-    await page.mouse.move(x - Math.min(60, vp.width * 0.07), y, { steps: 8 })
-    await page.waitForTimeout(1500)
-    await page.mouse.up()
-  },
-})
 
 // Red Canoe: long paddle strokes from the dock, alternating left and right of the canoe (it glides off,
 // zigzagging gently), then two on the left only (it turns right) and the blade held still on the right (it brakes and

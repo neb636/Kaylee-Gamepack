@@ -1,0 +1,16 @@
+[
+ { "id": "bike-forest", "label": "The mountain forest (bed)", "prompt": "A calm autumn forest on a mountainside: a soft breeze in dry leaves, chickadees and little songbirds chirping here and there, a woodpecker tapping far away, a creek faintly in the distance. Gentle, sunny, cozy. Seamless loop, no music, no voices.", "seconds": 15, "loop": true },
+ { "id": "bike-roll", "label": "Wheels on the dirt trail (loop)", "prompt": "Knobbly kids' bike tires rolling steadily down a packed dirt forest trail, a soft crunch of gravel and dry leaves, a faint freewheel ticking. Even, gentle. Seamless loop, no music, no voices.", "seconds": 4, "loop": true },
+ { "id": "bike-bell", "label": "The bike bell", "prompt": "A bright little bicycle bell, two cheerful dings, clear and sweet, not shrill.", "seconds": 0.8 },
+ { "id": "bike-leaves", "label": "Through a leaf pile", "prompt": "A small bike bursting through a big pile of dry autumn leaves, a crunchy rustling whoosh, leaves fluttering down after. Soft and playful.", "seconds": 1.2 },
+ { "id": "bike-hop", "label": "Boing off a stump", "prompt": "A springy cartoon boing of a little bike bouncing up off a tree stump, light and funny.", "seconds": 0.6 },
+ { "id": "bike-land", "label": "Landing on the dirt", "prompt": "Bike tires landing softly on a dirt trail after a little jump, a gentle crunchy thump and a creak of springs.", "seconds": 0.6 },
+ { "id": "bike-splash", "label": "Splash through the creek", "prompt": "A little bike splashing through a shallow forest creek, a bright playful splash and a few drips, soft.", "seconds": 1.2 },
+ { "id": "bike-bridge", "label": "Over the wooden bridge", "prompt": "A small bike rolling quickly over a wooden plank footbridge, a quick rattling tock-tock-tock-tock of hollow planks, soft and toy-like.", "seconds": 1.8 },
+ { "id": "bike-creak", "label": "The gondola cabin swings", "prompt": "A small gondola cabin swinging gently on its cable, a soft metal creak and a little rocking squeak, gentle not scary.", "seconds": 1 },
+ { "id": "bike-chipmunk", "label": "The chipmunk chirps", "prompt": "A chipmunk's quick cheerful chirps, chip-chip-chip, tiny and cute.", "seconds": 0.8 },
+ { "id": "bike-snort", "label": "Monty snorts", "prompt": "A big gentle moose's soft, slow, friendly snort through its nose, low and warm, a little bubbly from pond water. Funny, never scary.", "seconds": 1.2 },
+ { "id": "bike-munch", "label": "Monty munches", "prompt": "Slow, contented munching of wet pond weed by a big gentle animal, soft chewy squelchy chews, calm and funny.", "seconds": 1.6 },
+ { "id": "bike-falls", "label": "The waterfall", "prompt": "A small waterfall pouring into a forest pool, a soft rushing swell of water that rises and fades, gentle and bright.", "seconds": 2.5 },
+ { "id": "bike-pinecone", "label": "A pinecone drops", "prompt": "A pinecone dropping from high in a spruce tree, a little rustle and patter through the branches as it falls. Soft, short.", "seconds": 0.8 }
+]

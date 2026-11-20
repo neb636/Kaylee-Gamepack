@@ -260,8 +260,8 @@ export const L = {
       // She hops on her bike.
       go: maple('The fastest way down is my bike. Hold on!'),
     },
-    // The story, in the gondola at the bottom (Maple, then up they go).
-    story: [maple('Bonjour! I want to ride all the way down to the waterfall!'), maple('Up we go!')],
+    // From a link or a replay (no film in): a short hello in her gondola cabin at the bottom, then up they go.
+    story: [maple('Up we go! Then we ride down to Monty!')],
     // Sparkle: the one instruction when the bike rolls out of the station, what's new on the way, the stuck hint.
     steer: onDevice('Hold your finger down and steer the bike!', 'Click and hold to steer the bike!'),
     split: 'Two trails! Green or blue?',
@@ -280,8 +280,8 @@ export const L = {
     green: maple('The green way!'),
     blue: maple('The blue way! Hold on!'),
     jump: maple('Up, up and away!'),
-    falls: maple('We made it! The waterfall!'),
-    thanks: maple('Thank you! What a ride!'),
+    // At the bottom: she spots Monty in the pool (he says hello, `moose[0]`), and the film out picks up there.
+    falls: maple('There he is, in his bath!'),
     // The animals, in their own voices.
     moose: [by('moose')('Mmm. Bonjour.'), by('moose')('Munch, munch.')],
     chipmunk: by('chipmunk')('Seeds! Seeds!'),
