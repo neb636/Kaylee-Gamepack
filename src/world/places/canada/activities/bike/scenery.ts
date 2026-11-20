@@ -196,7 +196,7 @@ export function buildTrail(course: Course, bag: Bag) {
       t.spot(s, lat, p)
       pos[k] = p.x
       // (The outermost edge tucks down under the land, so there's no step where they meet.)
-      pos[k + 1] = course.ground(s, lat) - (j === 0 || j === nc - 1 ? 0.75 : 0)
+      pos[k + 1] = course.ribbon(s, lat, p.x, p.z) - (j === 0 || j === nc - 1 ? 0.75 : 0)
       pos[k + 2] = p.z
       const a = Math.abs(lat)
       // Which way she's on, and where in it (0 = the middle of the way).

@@ -102,11 +102,12 @@ export const MOUNTAIN: FilmSet<MountainSet> = {
     s.rig.camera.far = 3200
     s.rig.camera.updateProjectionMatrix()
     const t = course.trail
-    const land = (x: number, z: number) => course.land(x, z)
+    // (What's drawn there: the trail's dirt runs right up to the pool's rim, a little above the land under it.)
+    const land = (x: number, z: number) => course.surface(x, z)
     const tp = t.spot(TOP_S, 0)
     const top = new Spot(new Vector3(tp.x, course.ground(TOP_S, 0), tp.z), POOL_YAW(TOP_S), (x, z) => {
       const l = t.locate(x, z)
-      return Math.abs(l.lat) < half(l.s) + 2 ? course.ground(l.s, l.lat) : course.land(x, z)
+      return Math.abs(l.lat) < half(l.s) + 2 ? course.ground(l.s, l.lat) : course.surface(x, z)
     })
     const pool = new Spot(new Vector3(course.pool.x, course.poolY, course.pool.z), POOL_YAW(POOL.s), land)
     const poolAt = new Vector3(course.pool.x, course.poolY + 1, course.pool.z)
