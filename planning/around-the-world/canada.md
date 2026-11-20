@@ -116,6 +116,11 @@ New voices: `loon` (Lulu) and `gus`. The PR records every new line.
   Tuque and bonk off Monty, Ollie fetches a loose puck, Misty flattens the goose wall for the last goal, Lulu calls on
   every goal, the kits wave flags). The geese rush her net after each goal and may score once (never the winning
   goal), so it is a contest she always wins.
+- **After the fresh-eyes review (the same day):** a pink heart pin over every place still to do on the map; the 2D
+  Maple wears her scarf and the 2D Roxy and Misty match their 3D selves; sleepy Ollie is big with floating Zs and a
+  sparkle path leads to her and to each spout; hockey shows the whole rink on an iPad and slides with the play on a
+  phone (still under her finger), each friend's first talent gets a gold ring; the canoe reads red from above; only
+  Tuque wears the red tuque in the parade.
 - **The map:** `map/shape.ts` (a caricature of Canada in curves), `terrain.ts`, `places.ts` (seven dioramas),
   `critters.ts` (the snowy owl, orca, bison, beluga), `pins.ts` (the pink heart pin over every place still to do), `world.ts`. Portrait looks along the country from the east.
 
