@@ -204,7 +204,7 @@ export const BIKE_OUT: StoryFilm = {
           monty.headTurn = 0.35
           pool.place(maple, Mp.x, Mp.z, -30)
           const [bx, bz] = pool.xz(Mp.x + 1.5, Mp.z - 0.2)
-          bike.root.position.set(bx, set.course.land(bx, bz), bz)
+          bike.root.position.set(bx, set.course.surface(bx, bz), bz)
           bike.root.rotation.y = pool.face(-150) * (Math.PI / 180)
           bike.root.visible = true
           bike.alone(true)
