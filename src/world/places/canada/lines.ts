@@ -254,7 +254,7 @@ export const L = {
     filmIn: {
       high: maple('My friend Monty is the biggest moose in Canada!'),
       // The camera looks down the mountain: a tiny moose in a pond by the waterfall.
-      bath: maple("He's having his bath at the waterfall, way down there."),
+      bath: maple("He's having his bath, way down there."),
       // She hops on her bike.
       go: maple('The fastest way down is my bike. Hold on!'),
     },
@@ -288,7 +288,7 @@ export const L = {
     filmOut: {
       found: maple('Monty! Will you be our goalie?'),
       what: monty('Mmm. What does a goalie do?'),
-      stand: maple("You stand in front of the net. That's all!"),
+      stand: maple('You stand in front of the net. Easy!'),
       good: monty('Mmm. I am very good at standing.'),
       // A pinecone drops out of a tree and bonks off his antlers. He doesn't notice.
       team: maple('Nothing gets past Monty!'),
@@ -297,7 +297,7 @@ export const L = {
   campfire: {
     // The film in (story/films/campfire.ts): the campsite at night, Maple by the fire with her marshmallows.
     filmIn: {
-      shh: maple('Shh. Somebody quick and sneaky lives in these woods.'),
+      shh: maple('Shh. Somebody sneaky lives in these woods.'),
       // A little grey paw comes out of the dark and takes a marshmallow. Then another.
       hey: maple("Hey! My marshmallow! Who's out there?"),
     },
@@ -338,12 +338,11 @@ export const L = {
     mooseHi: by('moose')('Mmm. Hello there.'),
     mapleHi: maple('Hee hee! That tickles!'),
     tent: maple('Shh! Someone is sleeping.'),
-    // The film out: Roxy and her three kits at the fire, a marshmallow each.
+    // The film out: Roxy and her three kits at the fire, a marshmallow each. Maple holds up a puck: a blink, and Roxy
+    // has it (the quickest paws in Canada: the picture says it).
     filmOut: {
-      quick: maple('Roxy! You have the quickest paws in Canada!'),
-      // Maple holds up a puck. A blink, and Roxy has it.
       got: roxy('Hee hee! Got your puck!'),
-      ask: maple('Will you steal the puck from the geese?'),
+      ask: maple('Roxy! Will you steal the puck from the geese?'),
       babies: roxy('Only if my babies can come and cheer!'),
       // The kits squeak and wave their marshmallow sticks.
       team: maple('Deal! Go, team, go!'),
@@ -354,8 +353,8 @@ export const L = {
     filmIn: {
       song: maple('Every big game starts with a song.'),
       // A loon calls, far across the water, and the mountains answer (a beat with no line). Maple's ears go up.
-      lulu: maple("That's Lulu the loon! Nobody sings like Lulu."),
-      across: maple("She lives across the lake, by the glacier. Let's paddle!"),
+      lulu: maple("That's Lulu the loon!"),
+      across: maple("She lives by the glacier. Let's paddle!"),
     },
     // The game's hello, from a link or a replay (after the film it starts on the water with Sparkle's line).
     story: maple('Bonjour! Hop in, we go to find Lulu!'),
@@ -387,7 +386,7 @@ export const L = {
     // The film out: under the glacier, Lulu with her chick on her back.
     filmOut: {
       ask: maple('Lulu! Will you sing at our big game?'),
-      yes: lulu('A big game? I will sing my very best song.'),
+      yes: lulu('A big game? I will sing my best song!'),
       // She calls, long and lovely, head thrown back. Her chick tries too: a tiny squeak (beats with no line).
       chick: maple('Hee hee! The littlest singer!'),
       // The pink scarf goes round Lulu's neck.
@@ -398,7 +397,7 @@ export const L = {
     // The film in (story/films/whales.ts): the dock at Tofino, Maple at the wheel of the little boat.
     filmIn: {
       ollie: maple('Ollie the sea otter spins faster than anybody!'),
-      // The camera looks out to sea: kelp, and a spout far off.
+      // Off she putters toward the camera, out to sea.
       out: maple("She's out in the kelp, where the whales swim."),
     },
     // The hello at the dock, from a link or a replay (after the film in, the game starts with her hands on the boat).
@@ -459,9 +458,8 @@ export const L = {
     // The film in (story/films/salmon.ts): the rainforest river, giant cedars, soft rain.
     filmIn: {
       white: maple('In this rainforest lives a bear as white as snow.'),
-      // Misty swings a paw at a jumping salmon: an enormous splash, and no fish.
-      swing: maple('Wow! Look at that swing!'),
-      fishing: misty("Shh. I'm fishing. No hockey till I've had my supper."),
+      // Misty swings a paw at a jumping salmon: an enormous splash, and no fish (a beat with no line). Then, dripping:
+      fishing: misty("Shh. I'm fishing. No hockey till supper."),
       // Maple, behind her paw, to the camera.
       help: maple("Psst! Let's help the salmon jump past her!"),
     },
