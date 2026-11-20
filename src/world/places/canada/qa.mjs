@@ -15,9 +15,6 @@ export const screens = [
   ...['eyes', 'sounds', 'bandit', 'marshmallow', 'stars', 'bandit?feel.campTorch.dark=0'].map((to) => ({ name: `canada-campfire-${to.replace(/[?=&,.]/g, '-')}`, hash: `#/world/canada/campfire/${to}`, reset: true, wait: 1800 })),
   // Red Canoe: each part from its link (glide both ways to paddle), the loon family at the glacier.
   ...['glide', 'glide?paddle=pull', 'stream', 'loon', 'glacier'].map((to) => ({ name: `canada-canoe-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/canoe/${to}`, reset: true, wait: to.startsWith('glide') ? 4000 : 3000 })),
-  // Whale Watch: each part from its link (the harbour both ways to steer, the humpback that jumps), and
-  // under the water listening.
-  ...['harbour', 'harbour?steer=wheel', 'otters', 'spouts', 'spouts?found=3', 'orcas', 'listen'].map((to) => ({ name: `canada-whales-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/whales/${to}`, reset: true, wait: to === 'listen' ? 4500 : 3000 })),
   // Salmon Leap: each stretch of the river from its link (the bears' falls with the spirit bear low too),
   // and the stream where the eggs hatch.
   ...['steps', 'falls', 'bears', 'bears?spirit=low', 'eggs'].map((to) => ({ name: `canada-salmon-${to.replace(/[?=&,.]/g, '-')}`, hash: `#/world/canada/salmon/${to}`, reset: true, wait: 1500 })),
@@ -37,9 +34,6 @@ export const pacing = [
   // Red Canoe: the core verb is a stroke (a drag beside the canoe), so the auto-player's taps only
   // splash, poke and make trout jump; the robot run that paddles is qa-motion's canada-canoe-stroke.
   { name: 'canada red canoe', id: 'canoe', hash: '#/world/canada/canoe', reset: true },
-  // Whale Watch: a tap on the water drives the boat there, so the auto-player's taps steer it about
-  // and poke the animals; holding the water and steering out to the otters and the spouts is qa-motion's canada-whales-steer.
-  { name: 'canada whale watch', id: 'whales', hash: '#/world/canada/whales', reset: true },
   // Salmon Leap: a tap on a salmon makes it hop and a tap pokes things, so the auto-player hops
   // them about and pokes; flicking them up the falls is a quick drag (qa-motion's canada-salmon-flick).
   { name: 'canada salmon leap', id: 'salmon', hash: '#/world/canada/salmon', reset: true },
@@ -82,28 +76,6 @@ motion.push({
   },
 })
 
-
-// Whale Watch: her finger held on the water out ahead and to the left of the boat out at sea (it speeds up
-// and swoops round, hopping off the waves), then swung across to the right (it turns back), then let go (it coasts).
-motion.push({
-  name: 'canada-whales-steer',
-  seconds: 9,
-  setup: async (page, base) => {
-    await page.goto(`${base}#/world/canada/whales/spouts`)
-    await page.waitForFunction(() => window.__canadaWhalesQA?.().section, null, { timeout: 20000 })
-    await page.waitForTimeout(1500)
-  },
-  act: async (page) => {
-    const { boat } = await page.evaluate(() => window.__canadaWhalesQA())
-    const up = Math.min(boat.y - vp.height * 0.2, vp.height * 0.4)
-    await page.mouse.move(boat.x - vp.width * 0.18, boat.y - up)
-    await page.mouse.down()
-    await page.waitForTimeout(2600)
-    await page.mouse.move(boat.x + vp.width * 0.25, boat.y - up, { steps: 14 })
-    await page.waitForTimeout(2600)
-    await page.mouse.up()
-  },
-})
 
 // Salmon Leap: in the bears' falls, the waiting salmon flicked up one pool at a time: the leap, the splash
 // and the happy wiggle, a bear lunging and the boop on its nose.
