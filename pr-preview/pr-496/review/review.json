@@ -1,0 +1,11 @@
+{
+  "title": "Canada: Monty's pool, feet on the ground",
+  "checkIn": "fix",
+  "kaylee": "In the bike film, Monty, Maple and her bike stand on the bank and in the pool instead of sinking into the dirt.",
+  "questions": [],
+  "pictures": [
+    { "title": "\"Will you be our goalie?\"", "before": "pics/before-found.jpg", "after": "pics/after-found.jpg", "caption": "The trail's dirt no longer lies over the pool's edge: Monty stands in the water, Maple and the bike on the bank" },
+    { "title": "\"I am very good at standing.\"", "before": "pics/before-good.jpg", "after": "pics/after-good.jpg", "caption": "The same in the close two-shot" }
+  ],
+  "links": [{ "label": "Watch the film", "hash": "#/world/canada/story/bike-out" }]
+}
