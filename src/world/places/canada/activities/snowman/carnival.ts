@@ -112,6 +112,8 @@ const PARADE_AUTO = 5
 const HOP_S = 0.5
 /** The camera's tilt down while she rolls and stacks (degrees). */
 const ROLL_PITCH = 17
+/** (A tall screen has room for the castle anyway, and a lower camera would look through the spruces at the front.) */
+const ROLL_PITCH_TALL = 24
 
 const tmp = new Vector3()
 const tmp2 = new Vector3()
@@ -1624,7 +1626,7 @@ export class CarnivalSnowballs implements World3D {
       center: new Vector3(f.x, 0.5 + this.focusR * 0.6, f.z - 0.3),
       half: tall ? new Vector3(3.4 + extra * 0.7, 1.6 + extra * 0.5, 4.6 + extra) : new Vector3(5 + extra, 1.4 + extra * 0.4, 3.4 + extra * 0.6),
       yaw: 0,
-      pitch: ROLL_PITCH,
+      pitch: tall ? ROLL_PITCH_TALL : ROLL_PITCH,
     }
   }
 

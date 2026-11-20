@@ -203,7 +203,7 @@ export function buildPark(bag: Bag): Park {
   }
   for (let i = 0; i < 12; i++) {
     const sz = 0.9 + rt() * 0.6
-    const at: [number, number, number] = [-22 + i * 4 + rt() * 2, 0, 11 + rt() * 5]
+    const at: [number, number, number] = [-22 + i * 4 + rt() * 2, 0, 14 + rt() * 5]
     edge.push(...spruce(sz, at))
     shade.push([at[0] + 0.5 * sz, at[2] + 0.4 * sz, 3.4 * sz, 2.6 * sz])
   }
