@@ -61,12 +61,13 @@ export const INTRO: StoryFilm = {
       {
         // The Cup on its stand: it glints, she can hardly look away.
         id: 'cup',
-        shot: cam([cx - 1.3, 1.25, cz + 4.6], [cx - 0.75, 0.95, cz], { eye: [cx - 1.1, 1.15, cz + 3.6] }),
+        shot: cam([cx + 0.1, 1.3, cz + 4.9], [cx + 0.45, 0.95, cz + 0.2], { eye: [cx + 0.3, 1.2, cz + 3.9] }),
         say: X.cup,
         sayAt: 0.7,
         start: () => {
-          maple.place(cx - 1.55, 0, cz + 0.35, 38)
-          maple.headTurn = 0.45
+          // (Beside it, turned three quarters to us, looking up at it.)
+          maple.place(cx + 1.05, 0, cz + 0.5, -32)
+          maple.headTurn = -0.4
           maple.armsUp = 0.3
         },
         cues: [[0.3, () => (s.sfx.glint(), s.sparkle(cx, 1.6, cz, 12))], [2.2, () => s.sparkle(cx, 1.7, cz, 8)]],
@@ -132,7 +133,7 @@ export const INTRO: StoryFilm = {
         // Still the memory: her net. In they go, one, two, three, and she sits down on her tail.
         id: 'six',
         memory: true,
-        shot: cam([0.5, 1.8, 0.2], [0, 0.7, RINK.zG + 1.2], { eye: [0.4, 1.45, -1.9] }),
+        shot: cam([0.9, 1.8, 0.4], [-0.25, 0.7, RINK.zG + 1.2], { eye: [0.9, 1.4, -2.2] }),
         say: X.six,
         sayAt: 2.5,
         dur: 5.6,
@@ -144,7 +145,7 @@ export const INTRO: StoryFilm = {
             g.lean = 0
             g.place(side * (1.9 + Math.floor(i / 2) * 0.8), 0, -6 - Math.floor(i / 2) * 0.45, side * -30)
           })
-          gus.place(-1.75, 0, -5.7, 28)
+          gus.place(-1.5, 0, -6.4, 30)
           puck.visible = false
         },
         tick: (_k, t) => {
@@ -158,14 +159,21 @@ export const INTRO: StoryFilm = {
           })
           maple.armsUp = t < 2.2 ? 0.5 + 0.5 * Math.sin(t * 9) : 0
           maple.headTurn = t < 2.2 ? Math.sin(t * 5) * 0.7 : 0
+          // The fourth puck: up in a high arc, down onto her head, where it stays.
+          const hat = pucks[3]
+          const h = Math.min(1, Math.max(0, (t - 2.3) / 0.6))
+          hat.visible = t > 2.3
+          maple.head(hat.position)
+          hat.position.y += 0.26 + (1 - h) * (1 - h) * 2.4
         },
         cues: [
           ...[0, 1, 2].flatMap((i): [number, () => void][] => [
             [0.4 + i * 0.62, () => s.sfx.slap()],
             [0.82 + i * 0.62, () => (s.sfx.net(), s.puff(i % 2 ? 0.55 : -0.55, 0.3, RINK.zG + 0.3, 5))],
           ]),
-          // (Flat on her tummy on the ice.)
-          [2.3, () => (maple.pull('sad', true), (maple.lean = 1.35), s.sfx.plop(), s.puff(0, 0.1, RINK.zG + 1.6, 8))],
+          // (She droops, and one last puck comes down on her head.)
+          [2.3, () => (maple.pull('sad', true), s.sfx.plop(), s.puff(0, 0.1, RINK.zG + 1.6, 6))],
+          [2.9, () => s.sfx.bonk()],
           [2.6, () => (gus.armsUp = 1)],
           [3.4, () => (s.sfx.honks(), geese.forEach((g) => g.hop()))],
           [5, () => (gus.armsUp = 0)],
@@ -215,7 +223,7 @@ export const INTRO: StoryFilm = {
       {
         // Sparkle's balloon comes down behind her.
         id: 'go',
-        shot: cam([1.8, 1.1, 9.6], [-0.6, 3.4, 0], { eye: [1.4, 1.2, 8.6], look: [-0.6, 2.4, 0.4] }),
+        shot: cam([1.9, 1.2, 7], [-0.8, 3.8, 0], { eye: [1.9, 1.3, 7], look: [-0.6, 1.8, 0.5] }, { fov: 50, move: 2.8 }),
         say: X.go,
         sayAt: 1.2,
         dur: 4.6,
