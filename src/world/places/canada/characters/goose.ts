@@ -2,7 +2,7 @@
 // neck, a black head with the white chinstrap and a black bill that opens when it talks or honks. Gus, the captain of
 // the geese, is one with a blue captain's band on his neck and a voice; his team are the same goose, silent (they
 // honk: the sound is the scene's). They carry little blue hockey sticks under a wing.
-import { Group, Vector3 } from 'three'
+import { Group, Vector3, type Object3D } from 'three'
 import type { Bag } from '../../../engine3d/dispose'
 import { merge, P, solid, solidMix } from '../../../engine3d/geo'
 import { CANADA_COLORS } from './looks'
@@ -104,6 +104,15 @@ export class Goose extends ToyActor {
     return this.neck.localToWorld(out.copy(this.headAt))
   }
 
+  /** The stick wing swung back (+) or through (-), radians: a slap shot (activities/party/players.ts). */
+  swing = 0
+  /** Holds something under the right wing tip (a taffy on a stick): put it at the wing's end, `H`-relative. */
+  hold(o: Object3D) {
+    const H = this.height
+    o.position.set(0.1 * H, -0.2 * H, 0.12 * H)
+    this.wingR.add(o)
+  }
+
   protected animate(p: ToyPose, _dt: number, t: number) {
     const sad = p.droop
     const happy = p.face?.kind === 'happy' ? p.face.k : 0
@@ -118,7 +127,7 @@ export class Goose extends ToyActor {
     const beat = p.flap * 0.9
     const up = p.armsUp * 2.1
     const flying = this.flying ? 1.25 : 0
-    this.wingR.rotation.set(0, 0, 0.05 + out + up + flying + beat + p.wave * (1.9 + 0.4 * Math.sin(t * 15)) + Math.abs(p.shake) * 0.5)
+    this.wingR.rotation.set(this.swing, 0, 0.05 + out + up + flying + beat + p.wave * (1.9 + 0.4 * Math.sin(t * 15)) + Math.abs(p.shake) * 0.5)
     this.wingL.rotation.set(0, 0, -(0.05 + out + up + flying + beat + Math.abs(p.shake) * 0.5))
   }
 }

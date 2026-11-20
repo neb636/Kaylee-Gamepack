@@ -503,27 +503,39 @@ export const L = {
   },
   // The finale (activities/party/): the big game on the frozen canal, between story.gameIn and story.gameWin.
   party: {
-    // The story, on the toy map in Ottawa.
+    // Sparkle, as each round starts (the first goal, the geese in the way, the last goal).
     rink: onDevice("Flick the puck into the geese's net!", "Drag the puck fast into the geese's net!"),
     rinkHint: onDevice('Swipe from the puck to the net!', 'Drag from the puck to the net!'),
     geese: 'The geese are in the way! Bounce it off the snow!',
     last: 'One more goal to win!',
+    // The goose in goal saves one of her shots.
     saved: ['The goose saved it! Again!', 'So close! Try again!'],
     goal: [maple('Goal!'), maple('Beauty, eh!'), maple('Youpi, a goal!')],
-    mooseGoal: by('moose')('Mmm. Nice one.'),
-    mooseBlock: by('moose')('Bonk. Not today, geese.'),
+    // She steals the puck off a goose herself (once).
+    steal: maple('Got it!'),
+    // Each friend's big moment, the first time it happens: Roxy steals it off a goose and passes, a goose's shot
+    // boings off Tuque's tummy, another bonks off Monty's antlers, Ollie spins on her back to a loose puck.
+    roxy: roxy('Mine! I mean, yours!'),
+    tuque: tuque('Boing! Not past my tummy!'),
+    monty: monty('Bonk. Not today, geese.'),
+    ollie: ollie('Wheee! I got it!'),
+    // The last goal: the geese make a wall, Misty's slap shot knocks it flat, the net is open.
+    wall: gus('Honk! The goose wall!'),
+    misty: misty('Watch my big slap shot!'),
+    open: 'The net is open! Shoot!',
+    // A goose goal (at most two, never two in a row): short and funny, then the puck is hers again.
+    against: [monty('Oops. It went under me.'), gus('Honk! A goose goal!')],
     win: maple("We won! We're the champions!"),
-    winFact: "Hockey is Canada's favorite winter sport!",
-    // Pokes on the canal (and her teammates' first pass back).
+    // Pokes on the canal.
     poke: {
       maple: maple('Pass me the puck!'),
-      moose: by('moose')('Hello. I am the goalie.'),
-      owl: by('owl')('Hoo! Pass to me!'),
-      raccoon: by('raccoon')('Mine! I mean, yours!'),
-      otter: by('otter')('Wheee! Look, I spin!'),
-      grizzly: by('bear')('Grr! Go team!'),
-      spirit: by('bear')('Watch my big slap shot!'),
-      squirrel: by('chipmunk')('Go, go, go!'),
+      monty: monty('Hello. I am the goalie.'),
+      roxy: roxy('My kits are cheering!'),
+      tuque: tuque('Brr! I love hockey!'),
+      ollie: ollie('Wheee! Look, I spin!'),
+      misty: misty('After the game, supper?'),
+      lulu: lulu('I sing for every goal!'),
+      gus: gus("Honk! You can't catch me!"),
     },
     stand: maple('Mmm, a BeaverTail! Sweet, like my tail!'),
     parliament: "That's Parliament, in Ottawa, Canada's capital!",
