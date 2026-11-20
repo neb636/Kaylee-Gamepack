@@ -1,17 +1,17 @@
 {
-  "title": "Bangkok map: Wat Arun, the Grand Palace, smaller pins, and zoom on every map",
+  "title": "Bangkok map: Wat Arun, smaller pins, and zoom on every map",
   "checkIn": "fix",
-  "kaylee": "The Bangkok map now shows Wat Arun on the Thonburi bank and the Grand Palace across the river, so it looks like Bangkok at a glance. They're scenery only, so tapping them does nothing. The kites are gone, which calms the old town, and the two place pins are 40% smaller. On every Thailand map she can pinch in (iPad and iPhone) or pinch on a Mac trackpad or scroll, up to 2.5 times closer, toward the spot under her fingers.",
+  "kaylee": "The Bangkok map now shows Wat Arun on the Thonburi bank, so it looks like Bangkok at a glance. It's scenery only, so tapping it does nothing. The kites are gone and the old town is back the way it was, and the two place pins are 40% smaller. On every Thailand map she can pinch in (iPad and iPhone) or pinch on a Mac trackpad or scroll, up to 2.5 times closer, toward the spot under her fingers.",
   "questions": [
     "Is 2.5x closer the right limit, or should it stop sooner?",
-    "Do the landmarks look good enough, or should they be bigger?"
+    "Does Wat Arun look good enough, or should it be bigger?"
   ],
   "pictures": [
     {
       "title": "The old town",
       "before": "pics/oldtown-before.jpg",
       "after": "pics/oldtown-after.jpg",
-      "caption": "Wat Arun (left bank) and the Grand Palace (right bank), where they really are"
+      "caption": "Wat Arun on the left bank, where it really is"
     },
     {
       "title": "The whole board",
