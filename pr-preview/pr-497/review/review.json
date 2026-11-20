@@ -7,11 +7,18 @@
     {
       "title": "The opening shot",
       "before": "pics/canal-before.jpg",
-      "after": "pics/canal-after.jpg"
+      "after": "pics/canal-after.jpg",
+      "caption": "Each skate follows the stride while the leg stays attached at the hip."
     }
   ],
   "links": [
-    { "label": "Watch the Canada intro", "hash": "#/world/canada/story/intro" },
-    { "label": "Open Pond Hockey", "hash": "#/world/canada/party/hockey?team=all" }
+    {
+      "label": "Watch the Canada intro",
+      "hash": "#/world/canada/story/intro"
+    },
+    {
+      "label": "Open Pond Hockey",
+      "hash": "#/world/canada/party/hockey?team=all"
+    }
   ]
 }
