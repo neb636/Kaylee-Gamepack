@@ -95,6 +95,10 @@ export interface RinkEvents {
 const MATES = ['tuque', 'roxy', 'ollie', 'misty'] as const
 type Mate = (typeof MATES)[number]
 type Talent = 'roxy' | 'tuque' | 'monty' | 'ollie' | 'misty' | 'lulu'
+/** How long a friend's first big moment is lit up (s). */
+const STAR_S = 1.6
+/** The row under the top bar the prompt keeps on taller screens (Finale.tsx puts it there), px. */
+export const PROMPT_ROW = 64
 /** What stops a goose's shot (or doesn't). */
 type Stop = 'roxy' | 'tuque' | 'monty' | 'post' | 'goal'
 
@@ -197,6 +201,9 @@ export class RinkWorld extends Base3D implements World3D {
   private callT = -1
   private saidOnce = new Set<string>()
   private shown = new Set<Talent>()
+  /** A friend's first big moment, lit up (`t`: seconds into it). */
+  private star: { who: Player; t: number } | null = null
+  private starRing: Mesh
   private talkQ: Promise<void> = Promise.resolve()
   private dead = false
   private stopBed: () => void
@@ -286,6 +293,11 @@ export class RinkWorld extends Base3D implements World3D {
     this.puckRing.position.y = 0.02
     this.puckRing.renderOrder = 3
     scene.add(this.puckRing)
+    this.starRing = new Mesh(bag.add(new TorusGeometry(1, 0.08, 6, 36)), bag.add(new MeshBasicMaterial({ color: PAL.butter, transparent: true, opacity: 0, depthWrite: false })))
+    this.starRing.rotation.x = -Math.PI / 2
+    this.starRing.renderOrder = 3
+    this.starRing.visible = false
+    scene.add(this.starRing)
 
     this.confetti = new Particles({ kind: 'spray', count: 320, colors: [PAL.hotpink, PAL.butter, PAL.mint, PAL.sky, '#E8443F', PAL.lavender], gravity: 3 }, bag)
     this.snow = new Particles({ kind: 'spray', count: 260, color: '#FFFFFF', gravity: 0.3 }, bag)
@@ -316,6 +328,8 @@ export class RinkWorld extends Base3D implements World3D {
     if (s) s.showOff()
     if (this.shown.has(t)) return
     this.shown.add(t)
+    // The first time: a ring of light round them, sparkles, and the camera pushes in for a moment.
+    if (s) this.star = { who: s, t: 0 }
     if (line) this.talk(line, 2.5)
   }
 
@@ -666,6 +680,7 @@ export class RinkWorld extends Base3D implements World3D {
     this.sparks.update(dt)
 
     this.place(dt, t)
+    this.updateStar(dt)
     this.lights.follow(0, 0, -1)
     this.lights.ambient.intensity *= 0.92
     this.lights.sun.intensity *= 0.85
@@ -1297,11 +1312,80 @@ export class RinkWorld extends Base3D implements World3D {
     }
   }
 
+  /** Short screens (a phone on its side): the prompt sits beside the rink, not over it, and the camera follows the
+   *  play up and down the ice. Taller ones keep a row under the top bar for the prompt, out of the rink. */
+  private get short() {
+    return this.h <= 560
+  }
+  setSize(w: number, h: number, top: number) {
+    this.h = h
+    super.setSize(w, h, h <= 560 ? top : top + PROMPT_ROW)
+  }
+
   protected shot(): Shot {
-    // Low, behind her goal, up the ice to the geese's net and Parliament beyond.
+    // From behind her goal, up the ice to the geese's net and Parliament beyond: the whole rink, both nets, framed
+    // like CSS object-fit 'contain' below the prompt on any screen shape.
     const tall = this.tall
     if (this.phase === 'win') return { center: new Vector3(0, 1.6, -1.6), half: tall ? new Vector3(3.6, 2.4, 2.6) : new Vector3(5.2, 2.2, 2.4), yaw: 0, pitch: 12 }
-    return { center: tall ? new Vector3(0, 1.6, -1.8) : new Vector3(0, 1.6, -1.2), half: tall ? new Vector3(RINK.x + 0.4, 1.2, 7.4) : new Vector3(RINK.x + 1.8, 1.2, 8.4), yaw: 0, pitch: 19 }
+    // (The ice from just behind the geese's net to just behind hers, Monty in it.)
+    const far = RINK.zG - 0.9
+    const near = RINK.zH + 1.1
+    let center: Vector3
+    let half: Vector3
+    let pitch: number
+    if (this.short) {
+      // A phone on its side can't show 18 m of ice big enough to play: about 11 m of it, sliding along with the play
+      // (to her net whenever the geese rush it, so her net and the rush are always whole on screen).
+      const hz = 6.2
+      const home = near + 0.6
+      // (With the puck on her stick it looks up the ice at the geese's net she's shooting at, and slides back only
+      // half as far as she drags Maple back, so the ice never runs away under her finger.)
+      const p = this.p
+      const mine = p.state === 'held' && p.by === this.maple
+      const threat = !!this.rush || (p.kind === 'goose' && p.state === 'free') || (!mine && p.z > 1.5)
+      const at = threat ? home : mine ? far + hz + Math.max(0, p.z - 1) * 0.5 : p.z * 0.8
+      const cz = clamp(at, far + hz, home - hz)
+      center = new Vector3(0, 0.7, cz)
+      half = new Vector3(RINK.x + 0.4, 1, hz)
+      pitch = 48
+    } else {
+      center = new Vector3(0, 0.6, (far + near) / 2)
+      half = new Vector3(RINK.x + 0.6, 0.8, (near - far) / 2)
+      pitch = tall ? 38 : 30
+    }
+    // A friend's big moment: a quick push-in toward them (play goes on).
+    const st = this.star
+    if (st && st.t < STAR_S) {
+      const k = Math.sin((st.t / STAR_S) * Math.PI)
+      center.lerp(new Vector3(st.who.x, 0.8, st.who.z), 0.2 * k)
+      half.multiplyScalar(1 - 0.12 * k)
+    }
+    return { center, half, yaw: 0, pitch, objectFit: 'contain' }
+  }
+
+  /** The ring of light round a friend showing their talent the first time. */
+  private updateStar(dt: number) {
+    const st = this.star
+    const ring = this.starRing
+    if (!st) {
+      ring.visible = false
+      return
+    }
+    st.t += dt
+    if (st.t > STAR_S + 0.4) {
+      this.star = null
+      ring.visible = false
+      return
+    }
+    const k = st.t / STAR_S
+    ring.visible = true
+    ring.position.set(st.who.x, st.who.y + 0.04, st.who.z)
+    ring.scale.setScalar(0.9 + 0.25 * Math.sin(st.t * 9) * (1 - Math.min(1, k)) + 0.2 * Math.min(1, k))
+    ;(ring.material as MeshBasicMaterial).opacity = 0.95 * Math.min(1, st.t * 6) * (1 - clamp((st.t - STAR_S) / 0.4))
+    if (st.t < STAR_S && Math.random() < dt * 30) {
+      const a = Math.random() * Math.PI * 2
+      this.sparks.emit(st.who.x + Math.cos(a) * 0.9, st.who.y + 0.1, st.who.z + Math.sin(a) * 0.9, 0, 2.5 + Math.random() * 2, 0, 0.7, 0.12)
+    }
   }
 
   // ---------------------------------------------------------------- her finger

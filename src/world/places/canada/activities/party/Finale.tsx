@@ -14,7 +14,7 @@ import { L } from '../../lines'
 import { filmSeen, seeFilm } from '../../story/chapters'
 import { StoryFilm } from '../../story/StoryFilm'
 import type { CanadaActivityProps } from '../props'
-import { RINK_ANCHORS, RinkWorld, type RinkEvents } from './rink'
+import { PROMPT_ROW, RINK_ANCHORS, RinkWorld, type RinkEvents } from './rink'
 import PARTY, { GOALS, teamFrom, type PartySection } from './sections'
 
 /** Read-only state for QA. */
@@ -128,10 +128,12 @@ export function Finale({ onDone, setProgress, stamps }: CanadaActivityProps) {
         <ScoreRow icon="🦫" n={goals} of={GOALS} color="#FF8FB8" />
         <ScoreRow icon="🪿" n={against} of={against} color="#6FA8FF" />
       </div>
-      <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
+      {/* The prompt, out of the rink: a row under the top bar (the camera leaves it free: PROMPT_ROW), or on a phone on
+          its side, beside the rink under the score. */}
+      <div className="party-prompt">
         <AnimatePresence mode="popLayout">
           {line.text && (
-            <motion.div key={line.text} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={{ display: 'flex', alignItems: 'center', gap: 10, maxWidth: '100%' }}>
+            <motion.div key={line.text} className="party-line" initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }}>
               <div style={PILL}>{line.text}</div>
               {line.say && (
                 <div style={{ pointerEvents: 'auto' }}>
@@ -178,6 +180,12 @@ const PILL = {
 
 /** The hint's hand: a drag from the puck toward where it should go (--dx, --dy). */
 const HINT_CSS = `
+.party-prompt { position: absolute; left: 16px; right: 200px; top: calc(var(--top-clear) + 6px); height: ${PROMPT_ROW - 8}px; display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; z-index: 20; }
+.party-line { display: flex; align-items: center; gap: 10px; max-width: 100%; }
+@media (max-height: 560px) {
+  .party-prompt { left: auto; right: 16px; width: min(200px, 22vw); height: auto; top: calc(var(--top-clear) + 84px); align-items: flex-end; }
+  .party-line { flex-direction: column; align-items: flex-end; gap: 6px; }
+}
 .party-hint { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: 5; --dx: 120px; --dy: 0px; }
 .party-hint span { position: absolute; left: -26px; top: -10px; font-size: 52px; line-height: 1; filter: drop-shadow(0 3px 4px rgba(43,35,48,.3)); }
 .party-hint[data-kind="drag"] span { animation: party-drag 1.8s ease-in-out infinite; }
