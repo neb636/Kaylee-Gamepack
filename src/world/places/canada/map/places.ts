@@ -102,8 +102,10 @@ export function buildRink(bag: Bag): Rink {
   place.k = 1.25
   const parts = [
     // The snowy bank and the canal's ice running along it.
-    P.cyl(1.0, 1.04, 0.07, '#F7F9FF', { at: [0.15, 0.03, -0.1], scale: [1.5, 1, 0.82] }, 32),
-    P.rbox(3.0, 0.03, 0.72, 0.3, '#BFE3F6', { at: [0.15, 0.06, 0.28] }),
+    P.cyl(1.0, 1.04, 0.07, '#F7F9FF', { at: [0.2, 0.03, -0.08], scale: [1.4, 1, 0.78] }, 32),
+    // The frozen canal: a long ribbon of blue ice from the river, the rink on its widest stretch.
+    P.cyl(1, 1, 0.03, '#BFE3F6', { at: [0.25, 0.06, 0.3], scale: [1.32, 1, 0.38] }, 32),
+    P.rbox(1.3, 0.03, 0.22, 0.1, '#BFE3F6', { at: [1.55, 0.06, 0.12], rot: [0, 0.45, 0] }),
     P.rbox(1.76, 0.02, 0.6, 0.05, '#F4FBFF', { at: [0.25, 0.08, 0.28] }),
     // The rink: low white boards with a pink rail, the red line and two blue lines, the faceoff circle.
     ...[-1, 1].map((s) => P.rbox(1.78, 0.07, 0.035, 0.012, SNOW, { at: [0.25, 0.13, 0.28 + s * 0.31] })),
@@ -142,7 +144,16 @@ export function buildRink(bag: Bag): Rink {
   place.root.add(glow)
   place.flag.visible = false
   const maple = new Vector3(-0.62, 0.06, -0.3)
-  const row = [-0.24, 0.13, 0.5, 0.87, 1.23, 1.56].map((x, i) => new Vector3(x, 0.06, -0.6 + (i % 2) * 0.08))
+  // The team stands on the far bank: the big ones (Monty, Misty, Tuque) at the back, the small ones in front.
+  // (In CHAPTERS order: snowman, bike, campfire, canoe, salmon, whales.)
+  const row = [
+    [1.12, -0.62],
+    [0.12, -0.66],
+    [-0.18, -0.3],
+    [0.84, -0.3],
+    [0.62, -0.66],
+    [0.34, -0.3],
+  ].map(([x, z]) => new Vector3(x, 0.06, z))
   const rinkAt = new Vector3(0.25, 0.1, 0.28)
   place.update = (_dt, t) => {
     cup.rotation.y = Math.sin(t * 0.6) * 0.25

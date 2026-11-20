@@ -193,6 +193,23 @@ function paint(field: Field) {
     g.fill()
   }
 
+  // Little hills doodled on the neighbours' paper, like an old picture map.
+  g.strokeStyle = '#EBCFAE'
+  g.lineWidth = TEX * 0.028
+  for (let i = 0; i < 200; i++) {
+    const x = BOARD.x0 + rnd() * (BOARD.x1 - BOARD.x0)
+    const z = BOARD.z0 + rnd() * (BOARD.z1 - BOARD.z0)
+    if (field.land(x, z) < 0.25 || field.canada(x, z) > -0.3) continue
+    const [cx, cy] = px([x, z])
+    const r = TEX * (0.1 + rnd() * 0.06)
+    g.beginPath()
+    g.arc(cx, cy, r, Math.PI * 1.12, Math.PI * 1.88)
+    g.stroke()
+    g.beginPath()
+    g.arc(cx + r * 1.25, cy + r * 0.15, r * 0.7, Math.PI * 1.15, Math.PI * 1.85)
+    g.stroke()
+  }
+
   // The border on the paper: a soft dashed lavender line along Canada's foot (the cut edge already shows it).
   g.save()
   g.strokeStyle = '#E3D3F4'

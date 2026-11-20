@@ -395,10 +395,15 @@ export class CanadaMapWorld implements World3D {
     this.close.pitch = o.pitch - 4
   }
 
+  /** When a new friend's arrival at the rink ends (she pops in once the loading cover has gone). */
+  private get arriveEnd() {
+    return MAP_CAM.cover + 2.8
+  }
+
   /** The shot right now: the place she picked, the rink while a new friend arrives, or the board. */
   private shot(): Shot {
     if (this.picked) return this.close
-    if (this.arriving && this.arrivalT < 3.2) {
+    if (this.arriving && this.arrivalT < this.arriveEnd) {
       this.close.center.copy(this.rink.place.root.position).add(tmp.set(0.2, 0.35, -0.1))
       this.close.half.set(1.9, 0.7, 1.2)
       return this.close
@@ -407,7 +412,7 @@ export class CanadaMapWorld implements World3D {
   }
 
   roam(): RoamState | null {
-    return this.picked || (this.arriving && this.arrivalT < 3.2) ? null : { walk: false, jump: false }
+    return this.picked || (this.arriving && this.arrivalT < this.arriveEnd) ? null : { walk: false, jump: false }
   }
 
   get calm() {
@@ -421,13 +426,14 @@ export class CanadaMapWorld implements World3D {
       this.pickedT += dt
       this.entrance.finish()
     }
-    const arrivingNow = !!this.arriving && this.arrivalT < 3.2
+    const arrivingNow = !!this.arriving && this.arrivalT < this.arriveEnd
     if (this.arriving && this.arrivalT >= 0) {
       this.arrivalT += dt
-      if (this.arrivalT >= 3.2 && this.arrivalT - dt < 3.2) {
+      if (this.arrivalT >= this.arriveEnd && this.arrivalT - dt < this.arriveEnd) {
         this.entrance.finish()
         this.rig.lag = 0.9
       }
+      if (this.arrivalT >= this.arriveEnd + 2.5 && this.arrivalT - dt < this.arriveEnd + 2.5 && !this.picked) this.rig.lag = 0.5
     }
     this.entrance.step(dt)
     if (this.nudgeT >= 0 && (this.nudgeT += dt) > 2.6) this.nudgeT = -1
@@ -517,7 +523,7 @@ export class CanadaMapWorld implements World3D {
       face(m.spot, m.size * 7)
       // Arriving at the rink: she pops in with sparkles and a chime.
       if (m.pop >= 0) {
-        const k = (m.pop += dt) - 0.5
+        const k = (m.pop += dt) - (MAP_CAM.cover + 0.3)
         if (k >= 0 && m.spot.scale.x < 0.01) {
           hubSfx.arrive()
           hubSfx.chime()
@@ -659,7 +665,7 @@ export class CanadaMapWorld implements World3D {
     const a = s.root.userData.a as number
     const k = p.t >= 0 ? clamp(p.t / 1.3, 0, 1) : 0
     const leap = p.t >= 0 ? bell(k) * (id === 'orca' ? 0.6 : 0.3) : 0
-    s.root.position.set(home[0] + Math.cos(a) * rx, (id === 'beluga' ? 0.02 : -0.04) + Math.sin(t * 1.3) * 0.02 + leap, home[1] + Math.sin(a) * rz)
+    s.root.position.set(home[0] + Math.cos(a) * rx, 0.02 + Math.sin(t * 1.3) * 0.02 + leap, home[1] + Math.sin(a) * rz)
     s.root.rotation.set(id === 'orca' && p.t >= 0 ? -1.0 + 2.0 * k : 0, Math.atan2(-Math.sin(a) * rx, Math.cos(a) * rz) + (id === 'beluga' && p.t >= 0 ? k * TAU : 0), 0)
     s.tail.rotation.x = Math.sin(t * (p.t >= 0 ? 10 : 3)) * 0.35
     if (p.t >= 0 && p.t - dt < 1.25 && p.t >= 1.25) {
@@ -715,9 +721,9 @@ export class CanadaMapWorld implements World3D {
     this.touches++
     this.events.touched()
     if (this.picked) return
-    if (this.arriving && this.arrivalT < 3.2) {
+    if (this.arriving && this.arrivalT < this.arriveEnd) {
       // A tap during the arrival skips to the board.
-      this.arrivalT = 3.2
+      this.arrivalT = this.arriveEnd
       this.entrance.finish()
       this.rig.lag = 0.5
     }
@@ -871,7 +877,7 @@ export class CanadaMapWorld implements World3D {
     this.targets = {}
     for (const [id, el] of this.anchorEls) {
       let spot: { x: number; y: number; w: number; h: number; z: number } | null = null
-      const free = !this.picked && !(this.arriving && this.arrivalT < 3.2)
+      const free = !this.picked && !(this.arriving && this.arrivalT < this.arriveEnd)
       if (id.startsWith('go:') && free) {
         const p = this.places.get(id.slice(3) as PlaceId)
         if (p) spot = this.placeBox(p, min)
@@ -944,7 +950,7 @@ export class CanadaMapWorld implements World3D {
       buildMs: this.buildMs,
       picked: this.picked?.id ?? null,
       team: [...this.mates.values()].filter((m) => m.team).map((m) => m.id),
-      arriving: this.arriving && this.arrivalT < 3.2 ? this.arriving.id : null,
+      arriving: this.arriving && this.arrivalT < this.arriveEnd ? this.arriving.id : null,
       glowing: this.glowing,
       hint: this.hint,
       entering: this.entrance.running,

@@ -30,10 +30,11 @@ const MAINLAND: XZ[] = [
   [1.6, -2.0],
   [2.6, -1.6],
   [3.5, -1.0],
-  [4.5, -0.35],
-  [5.35, 0.45],
-  [5.95, 1.25],
-  [6.35, 2.1],
+  [4.6, -0.55],
+  [5.7, -0.05],
+  [6.5, 0.7],
+  [6.75, 1.4],
+  [6.55, 2.1],
   [6.45, 2.75],
   [5.9, 3.15],
   [5.0, 3.05],
@@ -118,7 +119,7 @@ export const ISLANDS: [number, number, number, number, number][] = [
   [-4.05, -3.3, 0.48, 0.42, 0], // Banks
   [-6.35, 2.3, 0.27, 0.55, -0.5], // Vancouver Island
   [-6.65, 0.45, 0.18, 0.32, -0.25], // Haida Gwaii
-  [6.95, 1.0, 0.5, 0.45, 0.3], // Newfoundland
+  [7.4, 1.75, 0.38, 0.34, 0.3], // Newfoundland
 ]
 /** Greenland (paper), mostly off the board's top right corner. */
 const GREENLAND: [number, number, number, number, number] = [7.1, -3.7, 1.5, 1.3, 0.3]
@@ -143,8 +144,8 @@ export const PRAIRIE = [-3.2, 0.95, -1.85, 2.95] as const
 export type PlaceId = 'party' | 'snowman' | 'bike' | 'campfire' | 'canoe' | 'salmon' | 'whales'
 /** Each place's middle, east to west. */
 export const PLACES: Record<PlaceId, XZ> = {
-  bike: [5.75, 0.3],
-  snowman: [3.95, 1.45],
+  bike: [5.95, 0.4],
+  snowman: [4.1, 1.2],
   party: [1.45, 2.4],
   campfire: [-0.75, 1.15],
   canoe: [-3.85, 1.85],
