@@ -95,6 +95,8 @@ export interface Rink {
   cup: Group
   glow: Group
   rinkAt: Vector3
+  /** Where the rink's tap target is centered: the left half of the ice, away from the geese's ring. */
+  aim: Vector3
 }
 
 export function buildRink(bag: Bag): Rink {
@@ -158,7 +160,7 @@ export function buildRink(bag: Bag): Rink {
   place.update = (_dt, t) => {
     cup.rotation.y = Math.sin(t * 0.6) * 0.25
   }
-  return { place, maple, row, loop: { x: 0.62, z: 0.28, rx: 0.27, rz: 0.15 }, cup, glow, rinkAt }
+  return { place, aim: new Vector3(-0.1, 0.1, 0.28), maple, row, loop: { x: 0.74, z: 0.28, rx: 0.2, rz: 0.15 }, cup, glow, rinkAt }
 }
 
 // ---------------------------------------------------------------- Quebec City: the castle hotel

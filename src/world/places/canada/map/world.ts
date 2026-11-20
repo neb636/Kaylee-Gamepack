@@ -909,8 +909,8 @@ export class CanadaMapWorld implements World3D {
     }
   }
 
-  /** A place's target: the screen box round its diorama (and its friend at home). The rink's is centered on the ice,
-   *  so the middle of it is the rink itself, never a friend or a goose. */
+  /** A place's target: the screen box round its diorama (and its friend at home). The rink's is centered on the ice's
+   *  left half, so the middle of it is the rink itself, never a friend or a goose. */
   private placeBox(p: PlaceToy, min: number) {
     const { hw, hd, h } = p.size
     let x0 = Infinity
@@ -932,7 +932,7 @@ export class CanadaMapWorld implements World3D {
     let hh = y1 - y0
     if (p.id === 'party') {
       // Centered on the ice: as wide and tall as it needs to reach the box's edges from there.
-      const c = this.toScreen(p.root.localToWorld(tmp.copy(this.rink.rinkAt)))
+      const c = this.toScreen(p.root.localToWorld(tmp.copy(this.rink.aim)))
       w = 2 * Math.max(c.x - x0, x1 - c.x) * 0.85
       hh = 2 * Math.max(c.y - y0, y1 - c.y) * 0.8
       x = c.x
