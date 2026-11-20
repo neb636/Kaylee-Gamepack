@@ -11,8 +11,10 @@
 // The camera lab (?cam=1, lab/camera/) can change whatever shot the game asks for (`override`): the game keeps choosing
 // its shots, the rig frames the changed one.
 //
-// Kaylee can turn it herself, the way Roblox does on the iPad (`turn`, `pinch`, from View3D and roam.ts): a shot that
-// says how far (`roam`) lets a one-finger drag swing the camera around and a pinch move it in and out. Her turn stays
+// Kaylee can turn it herself, the way Roblox does on the iPad (`turn`, `zoomAt`, from View3D and roam.ts): a shot that
+// says how far (`roam`) lets a one-finger drag swing the camera around and a pinch move it in and out. A pinch (or a
+// Mac trackpad's pinch, or a scroll) closes in on the spot between her fingers (`zoomAt`), not only the middle: the
+// look-at point slides over the ground toward it, never further than keeps the box's edge on screen. Her turn stays
 // put between shots (like Roblox's), only clamped to whatever the new shot allows.
 //
 // A cutscene can take the camera outright (`setCine`, from cinema.ts's Director): an eye, a look-at point and a lens
@@ -58,6 +60,9 @@ export interface UserTurn {
   yaw: number
   pitch: number
   zoom: number
+  /** Meters the look-at point has slid over the ground (east, south) toward where she zoomed in. */
+  panX: number
+  panZ: number
 }
 
 /** The camera lab's change to the game's shots. */
@@ -107,7 +112,7 @@ export class CameraRig {
   /** Seconds left of a snappy glide after the lab moved a slider. */
   private quick = 0
   /** Her own turn (drag and pinch), clamped to each shot's `roam`. */
-  readonly user: UserTurn = { yaw: 0, pitch: 0, zoom: 1 }
+  readonly user: UserTurn = { yaw: 0, pitch: 0, zoom: 1, panX: 0, panZ: 0 }
   /** The cinema camera's pose this frame (null: the game's shots). */
   private cine: CineFrame | null = null
   /** Seconds left of the slow glide from the cinema camera back to the game's shot. */
@@ -212,19 +217,50 @@ export class CameraRig {
     return true
   }
 
-  /** Her pinch: `zoom` times the distance that fits (below 1: closer). */
-  pinch(zoom: number) {
-    const r = this.goal?.roam
-    if (!r) return false
-    this.user.zoom = clampTo(zoom, r.zoom)
+  /** Her pinch closing in on a spot on screen (px from the view's top left, like a tap): `zoom` times the distance
+   *  that fits, and the look-at point slides over the ground so that spot stays under her fingers. */
+  zoomAt(zoom: number, x: number, y: number) {
+    // (The view runs on up under the top bar: its middle is that much lower than the screen's.)
+    const nx = (x / this.w) * 2 - 1
+    const ny = 1 - (y / (this.h + this.top)) * 2
+    const g = this.goal
+    const r = g?.roam
+    if (!g || !r) return false
+    const u = this.user
+    const z0 = u.zoom
+    const z1 = clampTo(zoom, r.zoom)
+    if (z1 !== z0 && g.objectFit) {
+      // What that spot is from the look-at point now: across the view (the camera's right, flat on the ground) and up
+      // it (away from her over the ground, stretched by how flat the camera looks across it).
+      const hy = this.cur.dist * Math.tan((this.camera.fov * deg) / 2)
+      const hx = hy * this.camera.aspect
+      const yaw = this.cur.yaw * deg
+      const f = 1 - z1 / z0
+      const across = nx * hx * f
+      const away = (ny * hy * f) / Math.max(0.35, Math.sin(this.cur.pitch * deg))
+      u.panX += Math.cos(yaw) * across - Math.sin(yaw) * away
+      u.panZ += -Math.sin(yaw) * across - Math.cos(yaw) * away
+    }
+    u.zoom = z1
+    this.clampPan(g)
     this.quick = Math.max(this.quick, 0.12)
     return true
+  }
+
+  /** The slide stays within what keeps the box's edge on screen (none at all once she's zoomed back out). Only a
+   *  framed board slides (`objectFit`: the floating maps); a camera that follows her closes in on its middle. */
+  private clampPan(g: Shot) {
+    const u = this.user
+    const room = g.objectFit ? Math.max(g.half.x, g.half.z) * Math.max(0, 1 - u.zoom) : 0
+    u.panX = Math.max(-room, Math.min(room, u.panX))
+    u.panZ = Math.max(-room, Math.min(room, u.panZ))
   }
 
   /** Back to the game's own view (a new place, a deep link). */
   resetTurn() {
     this.user.yaw = this.user.pitch = 0
     this.user.zoom = 1
+    this.user.panX = this.user.panZ = 0
   }
 
   /** Can she turn the shot on screen now? */
@@ -283,18 +319,29 @@ export class CameraRig {
     const o = this.over
     // (Turning keeps the distance that fits the game's own view, like Roblox's camera on its stick: no refit per degree.)
     if (!o) {
-      const dist = this.fit(shot) * (g.zoom ?? 1)
-      return { center: this.centered(g, g.yaw, g.pitch, dist), yaw: g.yaw, pitch: g.pitch, dist }
+      // (Centered as seen from the distance that fits, then her pinch moves straight in: centered from close up, a
+      // big board's picture would swing off the screen.)
+      const fit = this.fit(shot)
+      return { center: this.panned(g, this.centered(g, g.yaw, g.pitch, fit)), yaw: g.yaw, pitch: g.pitch, dist: fit * (g.zoom ?? 1) }
     }
     const yaw = o.mode === 'lock' ? o.yaw : g.yaw + o.yaw
     const pitch = Math.max(-20, Math.min(89, o.mode === 'lock' ? o.pitch : g.pitch + o.pitch))
-    const dist = this.fit({ ...g, yaw, pitch }) * o.zoom * (g.zoom ?? 1)
+    const lab = this.fit({ ...g, yaw, pitch }) * o.zoom
+    const dist = lab * (g.zoom ?? 1)
     const y = yaw * deg
-    const center = this.centered(g, yaw, pitch, dist)
+    const center = this.panned(g, this.centered(g, yaw, pitch, lab))
     center.x += Math.cos(y) * o.px
     center.z -= Math.sin(y) * o.px
     center.y += o.py
     return { center, yaw, pitch, dist }
+  }
+
+  /** The look-at point slid where she zoomed in (only on a shot she may turn). */
+  private panned(g: Shot, c: Vector3) {
+    if (!g.roam || !g.objectFit) return c
+    c.x += this.user.panX
+    c.z += this.user.panZ
+    return c
   }
 
   /** The game's shot with her own turn on it (clamped to what it allows; the clamp sticks, so a turn never winds up
@@ -306,6 +353,7 @@ export class CameraRig {
     u.yaw = clampTo(u.yaw, r.yaw)
     u.pitch = clampTo(u.pitch, r.pitch)
     u.zoom = clampTo(u.zoom, r.zoom)
+    this.clampPan(g)
     if (!u.yaw && !u.pitch && u.zoom === 1) return g
     return { ...g, yaw: g.yaw + u.yaw, pitch: Math.max(-20, Math.min(85, g.pitch + u.pitch)), zoom: u.zoom }
   }

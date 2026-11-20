@@ -76,7 +76,7 @@ export type PinId = keyof typeof PINS
 export const PIN_IDS = Object.keys(PINS) as PinId[]
 
 /** Where the mall day's stamp floats once she has it: beside ICONSIAM's pin, on its west ([east, up, south] of the pin's point, m). */
-export const STAMP_OFF: [number, number, number] = [-0.36, 0.5, 0.02]
+export const STAMP_OFF: [number, number, number] = [-0.3, 0.36, 0.02]
 /** How high Sparkle's balloon floats over the board. */
 export const BALLOON_Y = 0.55
 

@@ -822,7 +822,7 @@ export class BangkokMap extends Stage {
     if (id.startsWith('pin:')) {
       const g = d.pins[id.slice(4) as PinId].root
       // (Over the toys under it: the pin is what she taps.)
-      return { at: g.position.clone().setY(g.position.y + PIN.top * PIN.size * 0.5), r: 0.22, prio: 6, max: 150, glow }
+      return { at: g.position.clone().setY(g.position.y + PIN.top * PIN.size * 0.5), r: 0.13, prio: 6, max: 150, glow }
     }
     if (id.startsWith('spot:')) {
       const s = id.slice(5) as SpotId

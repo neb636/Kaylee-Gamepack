@@ -76,9 +76,10 @@ export function trayBox(w: number, d: number, top: number, high: number, rim = 0
 }
 
 /** How far she may turn a floating map herself (engine3d/roam.ts, Roblox-style): degrees round either way and up or
- *  down from the map's own view, and how close a pinch brings it (times the distance that fits the board). The
- *  Thailand map's numbers, shared by every map. */
-export const MAP_ROAM: Roam = { yaw: [-38, 38], pitch: [-14, 22], zoom: [0.5, 1] }
+ *  down from the map's own view, and how close a pinch (a finger pinch, a Mac trackpad's pinch or a scroll) brings it:
+ *  times the distance that fits the board, so 0.4 is two and a half times closer at most. It closes in on the spot
+ *  between her fingers (camera.ts zoomAt). The Thailand map's numbers, shared by every map. */
+export const MAP_ROAM: Roam = { yaw: [-38, 38], pitch: [-14, 22], zoom: [0.4, 1] }
 
 /** A floating map's board view: its `trayBox`, framed object-fit: contain from `yaw` and `pitch` (`zoom` below 1:
  *  closer, as the entrance settles), and hers to swing round and pinch (MAP_ROAM). Use it for every map's overview,

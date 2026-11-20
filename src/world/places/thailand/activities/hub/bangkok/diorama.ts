@@ -1471,7 +1471,7 @@ function palaceParts(): { lined: BufferGeometry[]; plain: BufferGeometry[] } {
 // ---------------------------------------------------------------- pins
 
 /** How high a pin's head is over its point, and how wide. */
-export const PIN = { head: 0.2, r: 0.15, top: 0.5, size: 2.0 }
+export const PIN = { head: 0.2, r: 0.15, top: 0.5, size: 1.2 }
 
 /** A pin: a white point, a round pink head, and a toy of what she does at the place on top. */
 function buildPin(id: PinId, bag: Bag): Pin {

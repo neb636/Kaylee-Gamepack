@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
 // Thailand's floating 3D maps (the Thailand map, the Bangkok map, the Krabi map, the Nan map): every one turns like the
-// Thailand map (a drag swings the board round, trip/sky.ts boardShot), no rock on the Krabi map stands half on the
+// Thailand map (a drag swings the board round, trip/sky.ts boardShot) and zooms in with a scroll (a Mac trackpad), no rock on the Krabi map stands half on the
 // beach, and on the Bangkok map nothing stands in the river, no pin's tap target covers a toy, and a tap on a pin
 // opens its place.
 // Read-only state comes from each map's QA hook (no jump hooks: tests open section links).
@@ -46,6 +46,18 @@ for (const map of MAPS) {
     const before = (await qa(page, map.key))!.yaw!
     await drag(page, -220)
     await expect.poll(async () => Math.abs((await qa(page, map.key))!.yaw! - before), { timeout: 15_000 }).toBeGreaterThan(20)
+  })
+}
+
+for (const map of MAPS) {
+  test(`${map.name} zooms in with a scroll`, async ({ page }) => {
+    await open(page, map.link, map.key)
+    const far = () => page.evaluate(() => (window as unknown as { __kaylee3d?: { camera: { position: { y: number } } } }).__kaylee3d?.camera.position.y ?? 0)
+    const before = await far()
+    const { width, height } = page.viewportSize()!
+    await page.mouse.move(width / 2, height / 2)
+    for (let i = 0; i < 6; i++) await page.mouse.wheel(0, -120)
+    await expect.poll(far, { timeout: 15_000 }).toBeLessThan(before * 0.85)
   })
 }
 
