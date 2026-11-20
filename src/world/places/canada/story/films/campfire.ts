@@ -94,7 +94,7 @@ export const CAMPFIRE_IN: StoryFilm = {
       {
         // "Shh." She leans in to tell us. Behind her, the little grey paw takes a marshmallow.
         id: 'shh',
-        shot: cam([-0.75, 0.98, 2.55], [-1.05, 0.68, -0.15], { eye: [-0.82, 0.94, 2.3] }, { tall: { eye: [-0.85, 1.05, 3.3] } }),
+        shot: cam([-0.75, 0.98, 2.55], [-1.05, 0.68, -0.15], { eye: [-0.82, 0.94, 2.3] }, { tall: { eye: [-0.95, 1.1, 3.6], to: { eye: [-0.95, 1.08, 3.35] } } }),
         say: IN.shh,
         sayAt: 0.4,
         hold: 0.3,
@@ -109,7 +109,7 @@ export const CAMPFIRE_IN: StoryFilm = {
       {
         // Close on the bag: out it comes again. Grab. Gone.
         id: 'snatch',
-        shot: cam([-0.4, 0.98, 1.6], [-0.88, 0.58, -0.32], { eye: [-0.45, 0.94, 1.4] }, { sway: 0.01, tall: { eye: [-0.35, 1.05, 2.1] } }),
+        shot: cam([-0.4, 0.98, 1.6], [-0.88, 0.58, -0.32], { eye: [-0.45, 0.94, 1.4] }, { sway: 0.01, tall: { eye: [-0.45, 1.05, 2.3], to: { eye: [-0.48, 1.02, 2.1] } } }),
         dur: 2.4,
         start: () => {
           maple.lean = 0
@@ -121,7 +121,7 @@ export const CAMPFIRE_IN: StoryFilm = {
       {
         // She turns to her bag: two gone! "Hey!" A hop. "Who's out there?"
         id: 'hey',
-        shot: cam([-0.6, 1.05, 2.5], [-1.05, 0.72, -0.35], { eye: [-0.65, 1.02, 2.25] }, { tall: { eye: [-0.65, 1.15, 3.2] } }),
+        shot: cam([-0.6, 1.05, 2.5], [-1.05, 0.72, -0.35], { eye: [-0.65, 1.02, 2.25] }, { tall: { eye: [-0.8, 1.15, 3.5], to: { eye: [-0.82, 1.12, 3.3] } } }),
         say: IN.hey,
         sayAt: 0.55,
         hold: 0.2,
@@ -139,14 +139,14 @@ export const CAMPFIRE_IN: StoryFilm = {
       {
         // Two eyes in the dark bush... a blink... a giggle... and gone, with a rustle.
         id: 'eyes',
-        shot: cam([-0.52, 0.86, 1.5], CAMP.eyes, { eye: [-0.55, 0.8, 1.05] }, { tall: { eye: [-0.5, 0.92, 2.0] } }),
+        shot: cam([-0.52, 0.86, 1.5], CAMP.eyes, { eye: [-0.55, 0.8, 1.05] }, { tall: { eye: [-0.55, 0.92, 2.1], to: { eye: [-0.56, 0.86, 1.7] } } }),
         dur: 2.6,
         start: () => {
           maple.armsUp = 0
           set.eyes.root.visible = true
           set.eyes.open = 1
         },
-        cues: [[0.9, () => camp.chitter(0)], [1.9, () => ((set.eyes.root.visible = false), camp.rustle(0), s.puff(set.eyes.root.position.x, 0.6, set.eyes.root.position.z + 0.1, 5))]],
+        cues: [[0.9, () => camp.chitter(0)], [1.9, () => ((set.eyes.root.visible = false), camp.rustle(0))]],
       },
     ]
   },
@@ -180,7 +180,7 @@ export const CAMPFIRE_OUT: StoryFilm = {
       {
         // Round the fire, the bandit found: Roxy and her kits, a marshmallow each.
         id: 'quick',
-        shot: cam([0.2, 1.5, 5.3], [0.2, 0.5, -0.25], { eye: [0.15, 1.4, 4.8] }, { tall: { eye: [0.2, 1.8, 7.6], to: { eye: [0.2, 1.7, 7.0] } } }),
+        shot: cam([0.2, 1.5, 5.3], [0.2, 0.5, -0.25], { eye: [0.15, 1.4, 4.8] }, { tall: { eye: [0.2, 2.7, 9.4], look: [0.2, 0.85, -0.2], to: { eye: [0.2, 2.6, 8.8], look: [0.2, 0.85, -0.2] } } }),
         say: OUT.quick,
         sayAt: 0.5,
         start: () => {
@@ -194,7 +194,7 @@ export const CAMPFIRE_OUT: StoryFilm = {
       {
         // Maple holds up a puck. A blink: a whoosh, a puff, and the puck is in Roxy's paws. "Hee hee! Got your puck!"
         id: 'got',
-        shot: cam([-0.3, 1.2, 3.55], [-0.3, 0.68, -0.25], { eye: [-0.3, 1.15, 3.3] }, { tall: { eye: [-0.3, 1.45, 5.4] } }),
+        shot: cam([-0.3, 1.2, 3.55], [-0.3, 0.68, -0.25], { eye: [-0.3, 1.15, 3.3] }, { tall: { eye: [-0.28, 1.9, 6.6], look: [-0.28, 0.6, -0.25], to: { eye: [-0.28, 1.85, 6.2], look: [-0.28, 0.6, -0.25] } } }),
         say: OUT.got,
         sayAt: 1.55,
         hold: 0.4,
@@ -237,7 +237,7 @@ export const CAMPFIRE_OUT: StoryFilm = {
       {
         // "Only if my babies can come and cheer!" The kits squeak and wave their marshmallow sticks.
         id: 'babies',
-        shot: cam([1.05, 0.95, 3.05], [1.3, 0.48, -0.1], { eye: [1.05, 0.92, 2.8] }, { tall: { eye: [1.1, 1.05, 4.2] } }),
+        shot: cam([1.05, 0.95, 3.05], [1.3, 0.48, -0.1], { eye: [1.05, 0.92, 2.8] }, { tall: { eye: [1.3, 1.25, 4.6], look: [1.3, 0.45, 0.1], to: { eye: [1.3, 1.2, 4.3], look: [1.3, 0.45, 0.1] } } }),
         say: OUT.babies,
         sayAt: 0.3,
         hold: 1.0,
@@ -259,7 +259,7 @@ export const CAMPFIRE_OUT: StoryFilm = {
       {
         // The team's pink scarf for Roxy; everybody cheers. "Deal! Go, team, go!"
         id: 'team',
-        shot: cam([0.2, 1.4, 5.0], [0.2, 0.55, -0.25], { eye: [0.2, 1.35, 4.6] }, { tall: { eye: [0.2, 1.7, 7.2] } }),
+        shot: cam([0.2, 1.4, 5.0], [0.2, 0.55, -0.25], { eye: [0.2, 1.35, 4.6] }, { tall: { eye: [0.2, 2.6, 9.0], look: [0.2, 0.85, -0.2], to: { eye: [0.2, 2.55, 8.6], look: [0.2, 0.85, -0.2] } } }),
         say: OUT.team,
         sayAt: 0.8,
         hold: 0.8,

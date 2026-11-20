@@ -177,10 +177,10 @@ function tent(bag: Bag) {
   return g
 }
 
-/** The bag of marshmallows: a pink paper bag, rolled at the top, with a few white marshmallows peeking out. */
+/** The bag of marshmallows: a lavender paper bag (as in the game), rolled at the top, with a few white marshmallows peeking out. */
 function mallowBag(bag: Bag, root: Group) {
   const g = new Group()
-  g.add(solid(merge([P.rbox(0.26, 0.24, 0.18, 0.04, '#FFC2D6', { at: [0, 0.12, 0] }), P.rbox(0.27, 0.05, 0.19, 0.02, '#FF8FB8', { at: [0, 0.24, 0] }), P.box(0.12, 0.08, 0.005, '#FFF7F0', { at: [0, 0.13, 0.092] })]), bag, 1.8))
+  g.add(solid(merge([P.rbox(0.26, 0.24, 0.18, 0.04, '#D9CCFF', { at: [0, 0.12, 0] }), P.rbox(0.27, 0.05, 0.19, 0.02, '#B9A6F5', { at: [0, 0.24, 0] }), P.box(0.12, 0.08, 0.005, '#FFF7F0', { at: [0, 0.13, 0.092] })]), bag, 1.8))
   const mallows: Mesh[] = []
   const spots: V3[] = [
     [0.06, 0.28, 0.04],
