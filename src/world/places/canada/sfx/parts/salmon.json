@@ -1,0 +1,14 @@
+[
+ { "id": "salmon-river", "label": "The rainforest river (bed)", "prompt": "A calm rainforest river in soft rain: a small waterfall splashing gently into a pool, a burbling stream, light rain pattering on big leaves, a few far-off drips. Peaceful and cozy. Seamless loop, no music, no voices, no birds.", "seconds": 15, "loop": true },
+ { "id": "salmon-leap", "label": "A salmon leaps", "prompt": "A small fish flipping up out of a stream: a quick wet flick and a light watery whoosh, playful and cartoonish.", "seconds": 0.6 },
+ { "id": "salmon-splash", "label": "A small splash", "prompt": "A small fish landing in a stream: a light, round, plopping splash with a few droplets, soft and cute.", "seconds": 0.6 },
+ { "id": "salmon-splash-big", "label": "An enormous splash", "prompt": "A huge, funny cartoon splash: a big bear's paw slapping into a river pool, a deep whoomp of water and a shower of drops falling back down. Soft, not scary.", "seconds": 1.6 },
+ { "id": "salmon-swing", "label": "A big swish", "prompt": "A big soft swish of a furry paw swiping through the air, a gentle cartoon whoosh.", "seconds": 0.6 },
+ { "id": "salmon-thwack", "label": "Stick hits a pinecone", "prompt": "A wooden hockey stick smacking a pinecone: a crisp, hollow wooden thwock, toy-like and satisfying.", "seconds": 0.5 },
+ { "id": "salmon-bonk", "label": "Bonk on the rock", "prompt": "A soft rubbery cartoon bonk of a fish bumping into a mossy rock, then a little wet slide, funny and gentle.", "seconds": 0.7 },
+ { "id": "salmon-boop", "label": "Boop on a bear's nose", "prompt": "A tiny squishy cartoon boop, a soft bouncy poke on a big round nose, cute.", "seconds": 0.4 },
+ { "id": "salmon-sneeze", "label": "A bear sneezes", "prompt": "A big fluffy cartoon animal sneeze, a soft puffy achoo with a little snort after, funny and gentle, no words.", "seconds": 1 },
+ { "id": "salmon-grumble", "label": "A bear grumbles", "prompt": "A big friendly bear's soft, low, happy grumble, like a tummy rumble and a sleepy hum, gentle and funny, no words.", "seconds": 1.2 },
+ { "id": "salmon-munch", "label": "Munching berries", "prompt": "A big friendly animal happily munching juicy berries: soft squishy chomps and a little contented hum, no words.", "seconds": 1 },
+ { "id": "salmon-raven", "label": "A raven", "prompt": "A raven in a tall forest calling twice, a throaty croak, a little playful, softened and not spooky.", "seconds": 1.2 }
+]

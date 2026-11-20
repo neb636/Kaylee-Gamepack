@@ -478,11 +478,13 @@ export const L = {
     berries: maple('The bears went to eat berries!'),
     sea: maple('Bye, little salmon! Swim to the sea!'),
     win: maple('You brought the salmon home!'),
-    // The bears (the same gentle bear voice for both).
+    // The bears (the same gentle bear voice for both). The white one is Misty: always thinking about supper.
     achoo: by('bear')('Ah... choo!'),
-    spirit: by('bear')("I'm a spirit bear!"),
+    spirit: misty("I'm a spirit bear. I'm hungry!"),
     black: by('bear')("Shh, I'm fishing."),
-    giveUp: [by('bear')('Okay, berries instead!'), by('bear')('Berries are easier!')],
+    // Misty swats at a salmon flying past, and misses (said once or twice a visit).
+    miss: misty('Missed again!'),
+    giveUp: { black: by('bear')('Okay, berries instead!'), spirit: misty('Too slippery! Berries, then.') },
     yum: by('bear')('Mmm, berries!'),
     // The film out: the salmon are home, Misty has a paw full of berries.
     filmOut: {
