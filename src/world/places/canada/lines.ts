@@ -71,8 +71,6 @@ export const L = {
     open: onDevice('Maple\'s animal book! Tap an animal to hear about it.', 'Maple\'s animal book! Click an animal to hear about it.'),
     // Quebec City
     'snowy-owl': "A snowy owl! Quebec's bird.",
-    'red-squirrel': 'A red squirrel! It loves sap.',
-    chickadee: 'A chickadee! Chick-a-dee-dee!',
     'canada-goose': 'Canada geese! They fly in a V.',
     beluga: 'A beluga! A white whale that sings.',
     'red-fox': 'A red fox! It hops into the snow.',
@@ -91,11 +89,7 @@ export const L = {
     peeper: 'A spring peeper! A tiny frog.',
     hare: 'A snowshoe hare! White in winter.',
     // Banff and the Rockies
-    elk: 'An elk! It squeaks like a whistle.',
-    grizzly: 'A grizzly bear! It sleeps all winter.',
-    bighorn: 'A bighorn sheep! Curly horns!',
     'mountain-goat': 'A mountain goat! It climbs rocks.',
-    wolf: 'A wolf! Wolves live in a pack.',
     pika: 'A pika! It says eep!',
     marmot: 'A marmot! It whistles.',
     'ground-squirrel': 'A ground squirrel! It stands up tall.',
@@ -115,9 +109,8 @@ export const L = {
     'spirit-bear': 'A spirit bear! A white black bear.',
     'banana-slug': 'A banana slug! Slimy and yellow.',
     raven: 'A raven! A clever bird.',
-    // Along the train
+    // On the map
     bison: 'A bison! It rolls in the dust.',
-    'mountie-horse': "A Mountie horse! Canada's police ride horses.",
     'polar-bear': 'A polar bear! It lives up north.',
   },
   // ---------------------------------------------------------------- the story's own films (story/films/)
