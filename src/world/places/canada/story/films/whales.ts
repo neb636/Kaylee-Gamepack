@@ -88,7 +88,7 @@ export const WHALES_IN: StoryFilm = {
         // Off she goes: the boat putters away from the dock toward us, out toward the open Pacific, Maple at the wheel
         // telling us where Ollie is.
         id: 'go',
-        shot: cam([dock.x - 2.6, 1.7, dock.z - 9.5], [dock.x, 0.95, dock.z - 1.5], { look: [dock.x - 0.3, 0.95, dock.z - 5.5] }, { tall: { eye: [dock.x - 3.2, 2.1, dock.z - 11.5] } }),
+        shot: cam([dock.x - 2.2, 2.25, dock.z - 8.8], [dock.x, 1.0, dock.z - 1.5], { look: [dock.x - 0.3, 1.0, dock.z - 5.5] }, { tall: { eye: [dock.x - 2.8, 2.6, dock.z - 10.8] } }),
         say: I.out,
         sayAt: 0.3,
         hold: 0.3,

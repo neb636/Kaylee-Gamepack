@@ -317,7 +317,7 @@ export const SALMON_OUT: StoryFilm = {
       {
         // Down below, two faces looking up: the biggest slap shot in Canada!
         id: 'shot',
-        shot: cam([ME[0] - 0.55, 0.3, ME[1] + 3.5], [ME[0] - 0.55, 1.2, ME[1] - 0.2], { eye: [ME[0] - 0.55, 0.28, ME[1] + 3.2] }, { tall: { eye: [ME[0] - 0.55, 0.4, ME[1] + 4.6] } }),
+        shot: cam([ME[0] - 0.55, 0.3, ME[1] + 3.5], [ME[0] - 0.55, 1.2, ME[1] - 0.2], { eye: [ME[0] - 0.55, 0.28, ME[1] + 3.2] }, { tall: { eye: [ME[0] - 0.55, 0.5, ME[1] + 5.6] } }),
         say: O.shot,
         sayAt: 0.2,
         hold: 0.2,

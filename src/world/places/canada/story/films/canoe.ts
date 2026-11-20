@@ -78,9 +78,10 @@ export const CANOE_IN: StoryFilm = {
         },
       },
       {
-        // Off she paddles across the turquoise water, toward the glacier.
+        // Off she paddles across the turquoise water toward the glacier.
         id: 'across',
-        shot: cam([6.4, 3.3, 50.5], () => set.canoe.root.position.clone().add(new Vector3(-0.6, 0.6, -5)), { eye: [5.6, 3.5, 48.6] }, { tall: { eye: [6.8, 3.8, 53] } }),
+        // (From ahead of the bow, travelling with her, so her face shows as she says it, the glacier behind us.)
+        shot: { eye: () => set.canoe.root.position.clone().add(new Vector3(1.5, 1.25, -4.6)), look: () => set.canoe.root.position.clone().add(new Vector3(0, 0.55, 0)), fov: 40, sway: 0.015, tall: { eye: () => set.canoe.root.position.clone().add(new Vector3(1.8, 1.5, -6.2)) } },
         say: X.across,
         sayAt: 0.2,
         hold: 0.3,

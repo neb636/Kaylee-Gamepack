@@ -129,7 +129,7 @@ export const BIKE_IN: StoryFilm = {
         id: 'go',
         // (The camera turns to keep her in as she rolls off.)
         // (From in front of the bike, down the trail, so her face shows as she says it.)
-        shot: { eye: () => ahead(3.0, 1.0), look: () => bike.root.position.clone().add(tmp.set(0, 0.7, 0)), fov: 40, tall: { eye: () => ahead(4.3, 1.2) } },
+        shot: { eye: () => ahead(3.0, 1.2), look: () => bike.root.position.clone().add(tmp.set(0, 0.7, 0)), fov: 40, tall: { eye: () => ahead(4.3, 1.7) } },
         say: IN.go,
         sayAt: 0.65,
         hold: 0.3,
@@ -150,7 +150,7 @@ export const BIKE_IN: StoryFilm = {
           ],
           [0.8, () => (bikeSfx.bell(), bike.ring())],
           // (Off down the trail as she says "Hold on!")
-          [2.6, () => (set.ride = { s: parkS, v: 0.5, lat: parkLat })],
+          [3.1, () => (set.ride = { s: parkS, v: 0.5, lat: parkLat })],
         ],
         tick: (_k, _t, dt) => {
           if (set.ride) set.ride.v = Math.min(7, set.ride.v + dt * 3.2)

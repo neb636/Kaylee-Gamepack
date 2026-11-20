@@ -19,7 +19,7 @@ const IN = L.snowman.filmIn
 const OUT = L.snowman.filmOut
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v))
 /** Maple and Tuque side by side, close enough that the snowball reads: its throw, the boing, its flight home. */
-const SIDE = cam([-0.3, 0.98, 4.25], [-0.2, 0.8, 1.3], undefined, { sway: 0.012, tall: { eye: [-0.2, 1.15, 6.1] } })
+const SIDE = cam([-0.3, 0.98, 4.25], [-0.2, 0.8, 1.3], undefined, { sway: 0.012, tall: { eye: [-0.15, 1.2, 7.2] } })
 
 export const SNOWMAN_IN: StoryFilm = {
   id: 'snowman-in',
@@ -125,7 +125,7 @@ export const SNOWMAN_OUT: StoryFilm = {
       {
         // Tuque, dozing on his feet after the parade (a little whistling snore). Maple boops his carrot: awake!
         id: 'wake',
-        shot: cam([-0.45, 1.2, 4.7], [-0.05, 0.85, 1.2], { eye: [-0.4, 1.15, 4.3] }, { tall: { eye: [-0.3, 1.35, 6] } }),
+        shot: cam([-0.45, 1.2, 4.7], [-0.05, 0.85, 1.2], { eye: [-0.4, 1.15, 4.3] }, { tall: { eye: [-0.2, 1.4, 7.2] } }),
         say: OUT.wake,
         sayAt: 0.95,
         hold: 0.25,
