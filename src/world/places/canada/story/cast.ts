@@ -36,6 +36,11 @@ export class Friend extends FilmActor {
         this.team.scale.setScalar(1.12)
         this.team.position.y = -0.14 * this.height
       }
+      // (A bear's is snugger and higher: at full size it hangs across her chest like a bar.)
+      if (this.look.species === 'bear') {
+        this.team.scale.set(0.8, 0.8, 0.8)
+        this.team.position.y = 0.13 * this.height
+      }
       this.rig.body.add(this.team)
     }
     if (this.team) this.team.visible = on

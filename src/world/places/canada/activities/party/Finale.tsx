@@ -34,7 +34,7 @@ export function Finale({ onDone, setProgress, stamps }: CanadaActivityProps) {
   })
   const team = useState(() => teamFrom(initial.teamParam, stamps))[0]
   // (From the `game-in` film link the film has just played: straight on to the hockey.)
-  const [part, setPart] = useState<Part>(initial.section === 'story' && !(start === undefined && filmSeen('game-in')) ? 'in' : initial.section === 'win' ? 'out' : 'hockey')
+  const [part, setPart] = useState<Part>(initial.section === 'story' && !(start == null && filmSeen('game-in')) ? 'in' : initial.section === 'win' ? 'out' : 'hockey')
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [engine, setEngine] = useState(0)
   const [line, setLine] = useState<{ text: string; say: Line }>({ text: '', say: '' })
