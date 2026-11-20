@@ -44,7 +44,7 @@ export const LEVEL = { floor: -0.1, land: 0.07 }
 export const CLIFF_W = 0.022
 /** The river is drawn this much wider on each bank than it really is (meters): the Chao Phraya is what makes the
  *  board Bangkok, so it's the biggest shape on it, with room for the toy boats. */
-export const RIVER_FAT = 0.03
+export const RIVER_FAT = 0.055
 
 // ---------------------------------------------------------------- the places
 
@@ -70,7 +70,7 @@ export const PLACE_IDS = Object.keys(PLACES) as PlaceId[]
 export const PINS = {
   house: { at: PLACES.house.at, lift: 0.3, label: 'To the house', place: 'house' },
   // (In front of the mall, low: up over its towers it would hang in front of Chinatown's gate on the screen.)
-  iconsiam: { at: [PLACES.iconsiam.at[0] - 0.06, PLACES.iconsiam.at[1] + 0.3], lift: 0.1, label: 'To the mall', place: 'iconsiam' },
+  iconsiam: { at: [PLACES.iconsiam.at[0] - 0.34, PLACES.iconsiam.at[1] + 0.40], lift: 0.1, label: 'To the mall', place: 'iconsiam' },
 } satisfies Record<string, { at: XZ; lift: number; label: string; place: PlaceId }>
 export type PinId = keyof typeof PINS
 export const PIN_IDS = Object.keys(PINS) as PinId[]
@@ -116,7 +116,7 @@ export type SpotId = keyof typeof SPOTS
  *  where it really is, a little bigger than life like every toy. [where, scale, how far it reaches (m), how tall]. */
 export const LANDMARKS = {
   /** Wat Arun, the Temple of Dawn: its tall central prang and four little ones, on the west bank. */
-  arun: { at: ll(100.4811, 13.7465), scale: 1.7, r: 0.26, h: 0.72 },
+  arun: { at: ll(100.4811, 13.7465), scale: 2.05, r: 0.33, h: 0.87 },
 } satisfies Record<string, { at: XZ; scale: number; r: number; h: number }>
 export type LandmarkId = keyof typeof LANDMARKS
 
@@ -222,6 +222,18 @@ export const CLOUDS: [number, number, number][] = [
   [100.574, 13.745, 1.2],
 ]
 
-/** The old town and Chinatown, inside the river's first bend: low and close-built, so its shophouse rows stand closer
- *  together than anywhere else ([middle, how far out it reaches (m)]). */
-export const OLD_TOWN: { at: XZ; r: number } = { at: ll(100.503, 13.75), r: 0.75 }
+/** Short neighborhood streets, in board geography. Their centerlines drive both the paving and the
+ *  opposing shophouse fronts. The western lane links the house to the floating market. */
+export const SHOP_STREETS: LonLat[][] = [
+  [[100.4768, 13.6714], [100.4812, 13.6764], [100.4825, 13.6852], [100.4848, 13.6946]],
+  [[100.4780, 13.7600], [100.4792, 13.7519], [100.4811, 13.7465]],
+  [[100.4915, 13.7505], [100.5010, 13.7497], [100.5134, 13.7467], [100.5172, 13.7385]],
+  [[100.4993, 13.7438], [100.5044, 13.7424], [100.5118, 13.7392], [100.5172, 13.7385]],
+  [[100.5062, 13.7018], [100.5104, 13.7048], [100.5125, 13.7104], [100.5141, 13.7188]],
+  [[100.5150, 13.7085], [100.5228, 13.7056], [100.5335, 13.7028], [100.5392, 13.6992]],
+  [[100.5062, 13.7538], [100.5130, 13.7546], [100.5200, 13.7544], [100.5270, 13.7523]],
+  [[100.5546, 13.7102], [100.5635, 13.7082], [100.5730, 13.7090], [100.5775, 13.7065]],
+  [[100.5237, 13.7002], [100.5265, 13.7052], [100.5313, 13.7124], [100.5318, 13.7188]],
+  [[100.5536, 13.7395], [100.5575, 13.7466], [100.5693, 13.7483]],
+  [[100.5628, 13.7518], [100.5682, 13.7585], [100.5698, 13.7668], [100.575, 13.769]],
+]

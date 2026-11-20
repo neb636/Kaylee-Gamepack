@@ -8,11 +8,11 @@ ICONSIAM each have their own place on it, and there's room for more (Asiatique, 
 
 ## Real places, real sizes
 
-The board is about 14 km of city across (one meter of board is about 2.6 km), north up. Nothing on it is drawn by hand:
+The board is about 14 km of city across (one meter of board is about 2.6 km), north up. The major geography comes from mapped coordinates:
 
 - **The Chao Phraya** is the real river (OpenStreetMap, `scripts/bangkok-map-land.mjs` writes `geo.ts`): its long S
   past the old town, Chinatown and ICONSIAM, then the big loop round Bang Krachao. So are the khlongs, the main roads
-  and the big parks. The river is drawn 3 cm wider on each bank (`RIVER_FAT`): it's what makes the board Bangkok, so
+  and the big parks. The river is drawn 5.5 cm wider on each bank (`RIVER_FAT`): it's what makes the board Bangkok, so
   it's the biggest shape on it. Its banks are smoothed a little.
 - **Every place is put down by its longitude and latitude** (`layout.ts`, `ll(lon, lat)`): ICONSIAM on the west bank,
   Asiatique downriver, Chinatown's gate at Odeon Circle, Lumphini Park and its lake, Mahanakhon, Central Rama 3, the
@@ -55,8 +55,8 @@ What the board took from them, in the app's toy look:
   the orchard toy (`inOrchard()`). (Until then the whole west strip and the south were striped farmland.)
 - **A skyline in bunches** (Silom and Sathon, Siam, Sukhumvit, a pair at Rama 9): 19 towers in stronger candy glass,
   each with a long afternoon shadow painted the same way. The rest of the city stays low.
-- **Shophouse rows under terracotta roofs:** about 30 rows of three or four pastel fronts, close together in the old
-  town and Chinatown (`OLD_TOWN`), few and far apart elsewhere. (Before: 140 single houses and 230 trees scattered.)
+- **Shophouse streets.** Short blocks face a shared lane, with awnings over the pavement and gaps at crossings.
+  The shop footprints and the pavement both follow `SHOP_STREETS`.
 - **Bangkok's own things:** a hot pink taxi on Rama III Road,
   a fruit seller's boat on Khlong Bangkok Yai, kites over Sanam Luang, street-food umbrellas by Chinatown's gate.
 - **Calm, but not empty.** The first look pass left the south-west and north-east corners bare, and you said so
@@ -135,6 +135,13 @@ the Nan map's recorded clips; the night market, the floating market and the oran
 
 - `#/world/thailand/hub/bangkok` (the map), `?stamp=mall-trip` (the mall day's stamp lands).
 - `?feel=1`: the camera's entrance (`bangkok-map-cam`).
+
+## Phone overview
+
+Short illustrated shopping streets supplement the mapped roads. Their centerlines set both the paving and the facing
+shophouses, including a route from the house to the floating market. Asiatique has a larger pink wheel, Wat Arun
+has more space around its spire, and Siam has a longer station canopy alongside the train. The portrait camera looks
+down more steeply so the banks and streets have more room on screen.
 
 ## Next
 
