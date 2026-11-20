@@ -315,7 +315,7 @@
     "voice": "maple"
   },
   {
-    "text": "He's having his bath at the waterfall, way down there.",
+    "text": "He's having his bath, way down there.",
     "voice": "maple"
   },
   {
@@ -425,7 +425,7 @@
     "voice": "moose"
   },
   {
-    "text": "You stand in front of the net. That's all!",
+    "text": "You stand in front of the net. Easy!",
     "voice": "maple"
   },
   {
@@ -437,7 +437,7 @@
     "voice": "maple"
   },
   {
-    "text": "Shh. Somebody quick and sneaky lives in these woods.",
+    "text": "Shh. Somebody sneaky lives in these woods.",
     "voice": "maple"
   },
   {
@@ -547,15 +547,11 @@
     "voice": "maple"
   },
   {
-    "text": "Roxy! You have the quickest paws in Canada!",
-    "voice": "maple"
-  },
-  {
     "text": "Hee hee! Got your puck!",
     "voice": "raccoon"
   },
   {
-    "text": "Will you steal the puck from the geese?",
+    "text": "Roxy! Will you steal the puck from the geese?",
     "voice": "maple"
   },
   {
@@ -571,11 +567,11 @@
     "voice": "maple"
   },
   {
-    "text": "That's Lulu the loon! Nobody sings like Lulu.",
+    "text": "That's Lulu the loon!",
     "voice": "maple"
   },
   {
-    "text": "She lives across the lake, by the glacier. Let's paddle!",
+    "text": "She lives by the glacier. Let's paddle!",
     "voice": "maple"
   },
   {
@@ -658,7 +654,7 @@
     "voice": "maple"
   },
   {
-    "text": "A big game? I will sing my very best song.",
+    "text": "A big game? I will sing my best song!",
     "voice": "loon"
   },
   {
@@ -799,11 +795,7 @@
     "voice": "maple"
   },
   {
-    "text": "Wow! Look at that swing!",
-    "voice": "maple"
-  },
-  {
-    "text": "Shh. I'm fishing. No hockey till I've had my supper.",
+    "text": "Shh. I'm fishing. No hockey till supper.",
     "voice": "bear"
   },
   {

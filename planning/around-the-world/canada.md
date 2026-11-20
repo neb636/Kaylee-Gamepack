@@ -123,10 +123,11 @@ New voices: `loon` (Lulu) and `gus`. The PR records every new line.
 
 - Kaylee plays it. Watch for: does she follow "tap a friend" on the map; does she sit through the films (hold ⏭
   skips); the canoe (does she hold or tap); the big game's goose goal (fun, or upsetting?).
-- The films were timed against guessed line lengths (no voice clips on the build machine): once the PR has recorded
-  them, re-run `scripts/film-strip.mjs` and trim any film that runs long (the out films aim for 8-14 s; several are
-  16-18 s by the guess; `game-win` is about 22 s).
-- Small things seen and left: Misty's swat reads as a cheer (the rig lifts arms sideways); in the campfire's sound
+- The films by their recorded lines: the way in has about 32 s of talk (about 45 s in all); a chapter's film in has
+  5-10 s of talk and its film out 10-14 s; `game-win` about 14 s. If she skips them, shorten them: the jokes to keep
+  are "Let's make a player!", "I am very good at standing.", "Got your puck!", "Is it wet?", "Psst!", the loon's call
+  and the syrup in the Cup.
+- Small things seen and left: in the campfire's sound
   hunt the panned sounds are still the synth ones (`kit/clips.ts` has no pan); the map's far (Pacific) end is small in
   portrait; with the whole team the rink is a crowded team photo on a phone.
 
