@@ -96,7 +96,7 @@ export const SPOTS = {
   /** Central Rama 3: the mall near the house. */
   rama3: ll(100.5392, 13.6992),
   /** Pak Khlong Talat: the flower market by the river. */
-  flowers: ll(100.4985, 13.7438),
+  flowers: ll(100.501, 13.7418),
   /** Khlong Toei port: cranes and bright boxes. */
   port: ll(100.5775, 13.7065),
   /** Bang Krachao, the green lung in the river's loop: the bird tower in its park. */
@@ -109,6 +109,19 @@ export const SPOTS = {
   orchard: ll(100.4968, 13.6648),
 } satisfies Record<string, XZ>
 export type SpotId = keyof typeof SPOTS
+
+/** Bangkok's two great landmarks, for the look only: Wat Arun on the Thonburi bank and the Grand Palace across the
+ *  river from it (with Wat Phra Kaew's golden chedi inside its walls). They're what anyone sees first when they look
+ *  up Bangkok, so the board shows them, but they are scenery, never a toy: no poke, no pin, no line about them (the
+ *  user, 2026-11-19: AGENTS.md rule 8 is about games; the map may show them, they just aren't played with). Each is
+ *  where it really is, a little bigger than life like every toy. [where, scale, how far it reaches (m), how tall]. */
+export const LANDMARKS = {
+  /** Wat Arun, the Temple of Dawn: its tall central prang and four little ones, on the west bank. */
+  arun: { at: ll(100.4811, 13.7465), scale: 1.7, r: 0.26, h: 0.72 },
+  /** The Grand Palace: white walls round a lawn, the Chakri hall's three spires, the golden chedi behind. */
+  palace: { at: ll(100.4958, 13.751), scale: 1.5, r: 0.22, h: 0.4 },
+} satisfies Record<string, { at: XZ; scale: number; r: number; h: number }>
+export type LandmarkId = keyof typeof LANDMARKS
 
 /** The tall towers, in the districts they really stand in: [lon, lat, height (m), look]. `look` picks the shape
  *  (diorama.ts tower()); a few are real ones: Baiyoke's tower with its round crown ('crown'), the riverside tower
@@ -196,9 +209,10 @@ export const GROVES: [number, number, number, number][] = [
  *  the kite flies (m) and which kite it is ('star': the big chula; 'diamond': the little pakpao with its long tail). */
 export const SANAM_LUANG: XZ = ll(100.4931, 13.7551)
 export const KITES: { at: XZ; high: number; kind: 'star' | 'diamond' }[] = [
-  { at: [SANAM_LUANG[0] - 0.1, SANAM_LUANG[1] + 0.02], high: 0.3, kind: 'diamond' },
-  { at: [SANAM_LUANG[0] + 0.02, SANAM_LUANG[1] - 0.04], high: 0.44, kind: 'star' },
-  { at: [SANAM_LUANG[0] + 0.12, SANAM_LUANG[1] + 0.07], high: 0.24, kind: 'diamond' },
+  // (Up over the field's north end: lower down they'd hang in front of the Grand Palace.)
+  { at: [SANAM_LUANG[0] - 0.08, SANAM_LUANG[1] - 0.1], high: 0.3, kind: 'diamond' },
+  { at: [SANAM_LUANG[0] + 0.04, SANAM_LUANG[1] - 0.16], high: 0.44, kind: 'star' },
+  { at: [SANAM_LUANG[0] + 0.14, SANAM_LUANG[1] - 0.07], high: 0.24, kind: 'diamond' },
 ]
 
 /** Where the river's big loop holds Bang Krachao: the jungle is painted and planted inside these blobs
@@ -213,7 +227,8 @@ export const JUNGLE: [number, number, number][] = [
 
 /** The clouds over the city (tap: a little rain): [lon, lat, height]. */
 export const CLOUDS: [number, number, number][] = [
-  [100.482, 13.742, 1.05],
+  // (Not over the old town: it hid Wat Arun's prang.)
+  [100.5, 13.7745, 1.05],
   [100.574, 13.745, 1.2],
 ]
 

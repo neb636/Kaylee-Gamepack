@@ -21,6 +21,7 @@
 // river itself (a splash). In the corners: the night market (its rows of tents hop one after another to a tune), the
 // floating market (the boats bob and splash), the orange orchard (oranges fly), Khlong Saen Saep's boat (it races
 // off). Little cars drive the big roads on their own.
+// Wat Arun and the Grand Palace are to look at, not toys: a tap on them does nothing (their gold glints now and then).
 //
 // Talk (BangkokMap.tsx says the lines, lines.ts L.bangkok): Sparkle's hello the first time, something true the first
 // time she pokes each thing, and after ~8 s with nothing done, where she can go (at most three times).
@@ -36,7 +37,7 @@ import { boardShot, Entrance, mapCamKnobs, puffCloud, skyTexture, trayBox } from
 import { Floaters } from '../../nan-trip/mushrooms/fx'
 import { buildDiorama, CRANE_BOX_Y, PIN, type Diorama } from './diorama'
 import { buildField, LAKES, type Field } from './ground'
-import { BALLOON, BALLOON_Y, BOARD, BOATS, CLOUDS, DEG_M, KITES, LEVEL, ll, PIN_IDS, PINS, PLACE_IDS, PLACES, SPOTS, STAMP_OFF, TOWERS, TRACK_Y, type PinId, type PlaceId, type SpotId } from './layout'
+import { BALLOON, BALLOON_Y, BOARD, BOATS, CLOUDS, DEG_M, KITES, LANDMARKS, LEVEL, ll, PIN_IDS, PINS, PLACE_IDS, PLACES, SPOTS, STAMP_OFF, TOWERS, TRACK_Y, type PinId, type PlaceId, type SpotId } from './layout'
 import { reachOn } from './path'
 import { mapBed, mapSfx as sfx } from './sounds'
 
@@ -363,6 +364,11 @@ export class BangkokMap extends Stage {
       const [x, z, h] = this.d.towers[Math.floor(Math.random() * this.d.towers.length)]
       this.sparkles.emit(tmp.set(x + (Math.random() - 0.5) * 0.06, G + h * (0.4 + Math.random() * 0.6), z + 0.05), new Vector3(0, 0.03, 0), 0.7, 0.022, Math.random() < 0.5 ? 0 : 2)
     }
+    // (Wat Arun's tip and the golden chedi catch the sun now and then.)
+    if (Math.random() < dt * 0.5) {
+      const [x, y, z] = this.d.gold[Math.floor(Math.random() * this.d.gold.length)]
+      this.sparkles.emit(tmp.set(x + (Math.random() - 0.5) * 0.04, y + (Math.random() - 0.5) * 0.06, z + 0.04), new Vector3(0, 0.02, 0), 0.8, 0.024, 2)
+    }
   }
 
   /** What rides the board: the skytrain, the boats, the tuk-tuk. */
@@ -606,6 +612,20 @@ export class BangkokMap extends Stage {
     return near.clone().addScaledVector(dir, (G - near.y) / dir.y)
   }
 
+  /** Is a screen point on Wat Arun or the Grand Palace? (They're to look at, not toys: a tap there does nothing.) */
+  private onLandmark(x: number, y: number) {
+    const { near, dir } = this.ray(x, y)
+    return Object.values(LANDMARKS).some(({ at, scale, r, h }) => {
+      for (let k = 0; k <= 4; k++) {
+        tmp.set(at[0], G + (h * k) / 4, at[1]).sub(near)
+        const along = tmp.dot(dir)
+        const off = Math.sqrt(Math.max(0, tmp.lengthSq() - along * along))
+        if (off < (k ? r * 0.55 : r) * Math.min(1, scale)) return true
+      }
+      return false
+    })
+  }
+
   /** The tower under a screen point (the nearest one the ray passes through), or -1. */
   private towerAt(x: number, y: number) {
     const { near, dir } = this.ray(x, y)
@@ -633,6 +653,7 @@ export class BangkokMap extends Stage {
   protected onTap(id: string | null, x: number, y: number): void {
     if (this.arrived) return
     if (id === null) {
+      if (this.onLandmark(x, y)) return
       // A tower: its windows twinkle up it, a higher tune for a taller one.
       const ti = this.towerAt(x, y)
       if (ti >= 0) {
@@ -874,6 +895,7 @@ export class BangkokMap extends Stage {
       ...(['house', 'iconsiam'] as const).filter((id) => this.f.land(...PLACES[id].at) < 0.1).map((id) => `place ${id}`),
       ...SPOT_IDS.filter((id) => this.f.land(...SPOTS[id]) < 0.06).map((id) => `spot ${id}`),
       ...this.d.towers.filter(([x, z]) => this.f.land(x, z) < 0.03).map(([x, z]) => `tower ${x.toFixed(2)},${z.toFixed(2)}`),
+      ...Object.entries(LANDMARKS).filter(([, l]) => this.f.land(...l.at) < 0.1).map(([id]) => `landmark ${id}`),
     ]
     // (A pin's tap target is on top: no toy's middle may sit under one, or a tap on the toy would open the place.)
     const covered: string[] = []

@@ -25,13 +25,21 @@ The board is about 14 km of city across (one meter of board is about 2.6 km), no
   as wide again and shrink everything on it.
 - Bangkok is flat, so the board is too: a low slab of city, the river cut through it. What gives it shape is the
   skyline, the bridges and Bang Krachao's jungle.
-- **No temples or Buddhas** (AGENTS.md rule 8): the old town is rooftops, streets and the flower market. No Grand
-  Palace, no Wat Arun, no Giant Swing.
+- **Wat Arun and the Grand Palace stand on the board as scenery** (your call, 2026-11-19: they're what anyone sees
+  first when they look up Bangkok, and rule 8 is about games). They're where they really are, a little bigger than
+  life: Wat Arun on the Thonburi bank (the tall corncob prang in rings of porcelain dots, its four little prangs, the
+  pavilions, a pier), the Grand Palace across the river (white battlement walls round a lawn, the Chakri hall's three
+  tiered orange roofs and gold spires, Wat Phra Kaew's golden bell chedi, a gold prang and a long hall behind).
+  **Never a toy:** no pin, no poke (a tap on them does nothing at all), no spoken line, no fact; their gold just
+  catches the light now and then (`LANDMARKS` in `layout.ts`, `arunParts()` / `palaceParts()` in `diorama.ts`).
+  Still no Buddha image, no Giant Swing, and no other temple. To make room, the flower market moved a little south
+  along the bank, the kites fly over Sanam Luang's north end and a cloud moved off the old town.
 
 ## The look (2026-11-19, from your four pictures)
 
 Your pictures were a river city in gold light: the Chao Phraya as the biggest shape, landmarks standing up off a
-printed map, longtails, a tuk-tuk, a skyline. Their temples, golden chedis and guardian statue are left out (rule 8).
+printed map, longtails, a tuk-tuk, a skyline. Their guardian statue is left out; Wat Arun and the Grand Palace came
+in later as scenery (above).
 What the board took from them, in the app's toy look:
 
 - **The river leads.** Wide, bright teal, a pale promenade down both banks, coconut palms leaning over it.

@@ -7,6 +7,8 @@
 // jungle in the river's big loop. The corners have their own things: the night market's tents up by Rama 9, a
 // floating market and Bang Mot's orange orchard out south-west. Thonburi and the south are city too, leafier than the
 // middle (big trees standing here and there among the roofs). The pins and the river are still what she sees first.
+// Bangkok's two great landmarks stand across the river from each other in the old town: Wat Arun's tall prang on the
+// Thonburi bank, the Grand Palace's white walls, tiered roofs and golden chedi opposite. Scenery only, never a toy.
 //
 // The places stand up like chunky toys: the Thailand house (a row of pastel shophouses, the pink one in the middle,
 // the flag, a tuk-tuk parked outside) and ICONSIAM (its folded glass front on the river, the gold roof, two towers
@@ -19,16 +21,16 @@
 // tower, the night market's tents, the floating market's boats, the orange orchard. And what moves: the skytrain, an express boat and a string of rice barges on the river, a
 // fruit seller's boat on Khlong Bangkok Yai, the fast boat on Khlong Saen Saep, a tuk-tuk on Rama IV Road, a pink
 // taxi on Rama III Road, the traffic, clouds.
-import { Color, Group, InstancedMesh, type BufferGeometry } from 'three'
+import { Color, Group, InstancedMesh, LatheGeometry, Vector2, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
-import { merge, P, solid, solidMix, type V3 } from '../../../../../engine3d/geo'
+import { bake, merge, P, solid, solidMix, type V3 } from '../../../../../engine3d/geo'
 import { PAL, toon } from '../../../../../engine3d/toon'
 import { trayParts } from '../../../trip/sky'
 import type { Sea } from '../map/terrain'
 import * as T from '../map/toys'
 import { RIVER_LINE } from './geo'
 import { blockMid, blockOf, buildField, buildGround, buildSea, crowns, districtAt, inBlock, inOrchard, LAKES, leafy, outward, type Field } from './ground'
-import { BALLOON, BOARD, BOATS, BRIDGES, CANAL, CLOUDS, DEG_M, FRUIT_KHLONG, GROVES, KITES, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
+import { BALLOON, BOARD, BOATS, BRIDGES, CANAL, CLOUDS, DEG_M, FRUIT_KHLONG, GROVES, KITES, LANDMARKS, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type LandmarkId, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
 import { pathLL, reachOn, type Path } from './path'
 
 const CREAM = '#FFF7F0'
@@ -126,6 +128,8 @@ export interface Diorama {
   towers: [number, number, number][]
   /** The bridges a tap pokes: [x, z]. */
   bridges: XZ[]
+  /** Where Wat Arun's and the golden chedi's gold glints now and then. */
+  gold: V3[]
 }
 
 export function buildDiorama(bag: Bag): Diorama {
@@ -156,6 +160,7 @@ export function buildDiorama(bag: Bag): Diorama {
   const taken: [number, number, number][] = [
     ...(Object.keys(PLACES) as PlaceId[]).map((id) => [...PLACES[id].at, 0.36] as [number, number, number]),
     // (Mahanakhon is a tower among towers: its neighbors stand close.)
+    ...(Object.keys(LANDMARKS) as LandmarkId[]).map((id) => [...LANDMARKS[id].at, LANDMARKS[id].r] as [number, number, number]),
     ...(Object.keys(SPOTS) as SpotId[]).map((id) => [...SPOTS[id], id === 'mahanakhon' ? 0.15 : id === 'floating' || id === 'orchard' || id === 'tents' ? 0.34 : 0.26] as [number, number, number]),
   ]
   const free = (x: number, z: number, pad = 0) => taken.every(([px, pz, r]) => Math.hypot(px - x, pz - z) > r + pad)
@@ -460,6 +465,18 @@ export function buildDiorama(bag: Bag): Diorama {
   // Bang Mot's orange orchard: trees heavy with oranges, the farmer's house on its stilts, baskets out front.
   spots.orchard = toy(SPOTS.orchard, orchardParts(), 1.6)
 
+  // ---- Bangkok's landmarks: Wat Arun on the Thonburi bank, the Grand Palace across the river. To look at, never
+  // toys: nothing pokes them, no pin, no line (layout.ts LANDMARKS) ----
+  const arun = arunParts()
+  toy(LANDMARKS.arun.at, arun.lined, LANDMARKS.arun.scale, arun.plain)
+  const palace = palaceParts()
+  toy(LANDMARKS.palace.at, palace.lined, LANDMARKS.palace.scale, palace.plain)
+  /** Where their gold catches the light (map3d.ts glints it): Wat Arun's tip, the golden chedi's bell. */
+  const gold: V3[] = [
+    [LANDMARKS.arun.at[0], G + 0.36 * LANDMARKS.arun.scale, LANDMARKS.arun.at[1]],
+    [LANDMARKS.palace.at[0] + 0.06 * LANDMARKS.palace.scale, G + 0.08 * LANDMARKS.palace.scale, LANDMARKS.palace.at[1] - 0.075 * LANDMARKS.palace.scale],
+  ]
+
   // ---- The pins, and the mall day's stamp beside ICONSIAM's ----
   const pins = {} as Record<PinId, Pin>
   for (const id of PIN_IDS) {
@@ -562,7 +579,7 @@ export function buildDiorama(bag: Bag): Diorama {
   })
 
   root.add(buildGround(bag, { shadows, plazas, casts, basins }))
-  return { root, places, spots, pins, stamp, balloon, balloonAt, sea, river, rail, road, taxiRoad, khlong, canal, canalBoat, traffic, tentRows, marketBoats, boats, train, tuktuk, taxi, fruit, kites, clouds, wheel, lanterns, swan, lizard, craneBox, birds, fountain, towers, bridges }
+  return { root, places, spots, pins, stamp, balloon, balloonAt, sea, river, rail, road, taxiRoad, khlong, canal, canalBoat, traffic, tentRows, marketBoats, boats, train, tuktuk, taxi, fruit, kites, clouds, wheel, lanterns, swan, lizard, craneBox, birds, fountain, towers, bridges, gold }
 }
 
 // ---------------------------------------------------------------- towers
@@ -1265,6 +1282,230 @@ function palm(x: number, y: number, z: number, s: number, turn: number): BufferG
   }
   parts.push(P.sphere(0.045 * s, '#7FD496', { at: [tx, ty + 0.01 * s, tz] }, 5))
   return parts
+}
+
+// ---------------------------------------------------------------- landmarks (to look at, never toys)
+
+/** Wat Arun's and the palace's stone: warm ivory, a shade for the steps. */
+const STONE = '#FFF4E6'
+const STONE_SHADE = '#F1E2D4'
+/** The porcelain set into Wat Arun's prangs: little flowers of broken china in every color (the app's pastels). */
+const CHINA = [PAL.pink, PAL.sky, PAL.mint, PAL.butter, PAL.lavenderDark, '#FFFFFF']
+const TEMPLE_GOLD = '#FFC94D'
+const GOLD_DEEP = '#F2AE2E'
+const ROOF_ORANGE = '#F47B45'
+const ROOF_GREEN = '#3DB27F'
+const LAWN = '#A9DEA6'
+
+/** A prang, the tall corncob tower of Wat Arun: three stepped plinths, then a body in rings that swells and narrows
+ *  to a point, each ring's lip set with dots of porcelain, a gold tip. Its foot at (x, y, z), about `h` tall.
+ *  `stairs`: the steep stairs up its four sides (the big one). */
+function prang(x: number, y: number, z: number, h: number, k: number, stairs = false): { lined: BufferGeometry[]; plain: BufferGeometry[] } {
+  const lined: BufferGeometry[] = []
+  const plain: BufferGeometry[] = []
+  const r0 = h * 0.135
+  let yy = y
+  for (let i = 0; i < 3; i++) {
+    const ph = h * 0.055
+    const r = r0 * (1.75 - i * 0.25)
+    lined.push(P.cyl(r * 0.94, r, ph, i % 2 ? STONE_SHADE : STONE, { at: [x, yy + ph / 2, z], rot: [0, Math.PI / 8, 0] }, 8))
+    // A band of porcelain round each step.
+    plain.push(P.cyl(r * 0.97, r * 0.99, ph * 0.28, CHINA[(i + k) % 5], { at: [x, yy + ph * 0.55, z], rot: [0, Math.PI / 8, 0] }, 8))
+    yy += ph
+  }
+  if (stairs)
+    for (let a = 0; a < 4; a++) {
+      const [ux, uz] = [Math.sin((a * Math.PI) / 2), Math.cos((a * Math.PI) / 2)]
+      const foot = r0 * 1.9
+      const top = r0 * 0.9
+      lined.push(rod([x + ux * foot, y, z + uz * foot], [x + ux * top, yy + h * 0.12, z + uz * top], 0.006, STONE_SHADE, r0 * 0.4))
+    }
+  // The body: rings that swell a little, then narrow fast to the tip (the corncob). One turned shape, so its ink
+  // line only runs round the outside; each ring's lip is a pastel band set with dots of porcelain.
+  const n = 9
+  const body = h * 0.7
+  const rad = (t: number) => r0 * (0.06 + 0.98 * Math.pow(1 - Math.pow(t, 1.7), 0.6))
+  const prof: Vector2[] = [new Vector2(0.0005, yy)]
+  const lips: [number, number, number][] = []
+  let by = yy
+  for (let i = 0; i < n; i++) {
+    const [t0, t1] = [i / n, (i + 1) / n]
+    const rh = (body * (1.25 - 0.5 * ((i + 0.5) / n))) / n
+    const lr = rad(t1) * 1.04
+    prof.push(new Vector2(rad(t0) * 0.97, by), new Vector2(rad(t1) * 0.94, by + rh * 0.78), new Vector2(lr, by + rh * 0.8), new Vector2(lr, by + rh))
+    lips.push([lr, by + rh * 0.9, rh])
+    by += rh
+  }
+  prof.push(new Vector2(0.0005, by))
+  lined.push(bake(new LatheGeometry(prof, 8, Math.PI / 8), STONE, { at: [x, 0, z] }, true))
+  lips.forEach(([lr, ly, rh], i) => {
+    plain.push(P.cyl(lr * 1.01, lr * 1.01, rh * 0.16, i % 2 ? '#FFD3E2' : '#DCD3FA', { at: [x, ly, z], rot: [0, Math.PI / 8, 0] }, 8))
+    // (The little prangs get fewer, so they don't read as grey stripes from up above.)
+    const dots = !stairs ? (i % 2 ? 0 : 4) : i < 6 ? 8 : 4
+    for (let j = 0; j < dots; j++) {
+      const a = (j / dots) * Math.PI * 2 + (i % 2) * 0.4
+      plain.push(P.sphere(Math.max(0.0028, r0 * 0.08 * (1 - (i / n) * 0.6)), CHINA[(i + j + k) % CHINA.length], { at: [x + Math.cos(a) * lr * 0.93, ly - rh * 0.45, z + Math.sin(a) * lr * 0.93] }, 5))
+    }
+  })
+  // The tip: a gold bead and a thin gold point.
+  lined.push(P.cyl(r0 * 0.1, r0 * 0.14, h * 0.05, TEMPLE_GOLD, { at: [x, by + h * 0.025, z] }, 6), P.sphere(r0 * 0.13, TEMPLE_GOLD, { at: [x, by + h * 0.06, z] }, 7), P.cone(r0 * 0.07, h * 0.13, TEMPLE_GOLD, { at: [x, by + h * 0.13, z] }, 6))
+  return { lined, plain }
+}
+
+/** Wat Arun, the Temple of Dawn, on the Thonburi bank (in its own frame, its foot at 0, the river to its east, +x):
+ *  the tall prang on two square terraces, the four little prangs at the corners, a little pavilion on each side, a
+ *  lawn with palms, and its pier on the river. */
+function arunParts(): { lined: BufferGeometry[]; plain: BufferGeometry[] } {
+  const lined: BufferGeometry[] = [
+    P.rbox(0.31, 0.008, 0.3, 0.004, LAWN, { at: [0, 0.004, 0] }),
+    P.rbox(0.27, 0.022, 0.27, 0.005, STONE, { at: [0, 0.019, 0] }),
+    P.rbox(0.19, 0.022, 0.19, 0.005, STONE_SHADE, { at: [0, 0.041, 0] }),
+    // The pier and its little roof on the river.
+    P.rbox(0.05, 0.008, 0.09, 0.003, WOOD, { at: [0.2, 0.004, 0.04] }),
+  ]
+  const plain: BufferGeometry[] = []
+  // White balustrades round the terraces, with porcelain set in them.
+  for (const [w, y] of [[0.27, 0.03], [0.19, 0.052]] as const)
+    for (let side = 0; side < 4; side++) {
+      const along = side % 2 === 0
+      const off = (side < 2 ? 1 : -1) * (w / 2 + 0.001)
+      plain.push(P.box(along ? w : 0.004, 0.008, along ? 0.004 : w, '#FFFFFF', { at: [along ? 0 : off, y, along ? off : 0] }))
+      for (let j = 0; j < 5; j++) {
+        const t = (j - 2) * (w / 5.5)
+        plain.push(P.sphere(0.004, CHINA[(j + side) % 5], { at: [along ? t : off * 1.02, y, along ? off * 1.02 : t] }, 5))
+      }
+    }
+  const add = (b: { lined: BufferGeometry[]; plain: BufferGeometry[] }) => {
+    lined.push(...b.lined)
+    plain.push(...b.plain)
+  }
+  add(prang(0, 0.052, 0, 0.38, 0, true))
+  for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) add(prang(sx * 0.105, 0.03, sz * 0.105, 0.15, sx + sz + 4))
+  // The four little pavilions (mondops) between them: white, a stack of roofs, a gold point.
+  for (const [mx, mz] of [[0, 0.118], [0, -0.118], [0.118, 0], [-0.118, 0]]) {
+    lined.push(
+      P.rbox(0.03, 0.03, 0.03, 0.004, STONE, { at: [mx, 0.045, mz] }),
+      P.cone(0.026, 0.02, ROOF_GREEN, { at: [mx, 0.068, mz], rot: [0, Math.PI / 4, 0] }, 4),
+      P.cone(0.018, 0.02, ROOF_ORANGE, { at: [mx, 0.08, mz], rot: [0, Math.PI / 4, 0] }, 4),
+      P.cone(0.006, 0.03, TEMPLE_GOLD, { at: [mx, 0.1, mz] }, 5),
+    )
+  }
+  lined.push(P.box(0.05, 0.004, 0.032, ROOF_ORANGE, { at: [0.21, 0.045, 0.07] }))
+  plain.push(...[-1, 1].map((s) => P.cyl(0.0025, 0.0025, 0.04, CREAM, { at: [0.21 + s * 0.02, 0.024, 0.07] }, 4)))
+  lined.push(...palm(-0.15, 0, 0.13, 0.32, 2.2), ...palm(0.15, 0, -0.14, 0.3, -0.6), ...roundTree(-0.155, 0, -0.13, 0.55, 1))
+  return { lined, plain }
+}
+
+/** A Thai roof: tiers of steep orange gables trimmed in green, each tier shorter and higher than the one under it, a
+ *  gold gable at both ends and a gold chofa (the curling horn) on each end of the top tier. The ridge runs along
+ *  `yaw` (0: along z). */
+function thaiRoof(x: number, y: number, z: number, len: number, wide: number, h: number, tiers: number, yaw = 0): BufferGeometry[] {
+  const parts: BufferGeometry[] = []
+  const [sx, sz] = [Math.sin(yaw), Math.cos(yaw)]
+  const rot: V3 = [0, yaw, 0]
+  for (let i = 0; i < tiers; i++) {
+    const L = len * (1 - i * 0.2)
+    const yi = y + i * h * 0.3
+    const w = wide * (1 - i * 0.08)
+    parts.push(
+      P.prism([[-w / 2, 0], [w / 2, 0], [0, h]], L, ROOF_ORANGE, { at: [x, yi, z], rot }),
+      // The green trim along both eaves.
+      ...[-1, 1].map((e) => P.box(0.005, 0.005, L + 0.004, ROOF_GREEN, { at: [x + Math.cos(yaw) * e * (w / 2), yi + 0.001, z - Math.sin(yaw) * e * (w / 2)], rot })),
+    )
+    if (i === tiers - 1)
+      for (const e of [-1, 1]) {
+        const d = e * (L / 2 + 0.002)
+        parts.push(P.prism([[-w * 0.36, h * 0.12], [w * 0.36, h * 0.12], [0, h * 0.86]], 0.003, TEMPLE_GOLD, { at: [x + sx * d, yi, z + sz * d], rot }))
+        parts.push(P.cone(0.004, 0.022, TEMPLE_GOLD, { at: [x + sx * (d + e * 0.004), yi + h + 0.008, z + sz * (d + e * 0.004)], rot: [e * 0.5 * sz, 0, -e * 0.5 * sx] }, 5))
+      }
+  }
+  return parts
+}
+
+/** A gold spire on a palace roof: rings that narrow, a long needle. */
+function spire(x: number, y: number, z: number, h: number): BufferGeometry[] {
+  const parts: BufferGeometry[] = []
+  const n = 5
+  for (let i = 0; i < n; i++) {
+    const r = 0.016 * (1 - i / (n + 1)) * (h / 0.1)
+    parts.push(P.cyl(r * 0.8, r, h * 0.08, i % 2 ? GOLD_DEEP : TEMPLE_GOLD, { at: [x, y + h * (0.04 + i * 0.08), z], rot: [0, Math.PI / 4, 0] }, 4))
+  }
+  parts.push(P.cone(0.0045 * (h / 0.1), h * 0.6, TEMPLE_GOLD, { at: [x, y + h * 0.7, z] }, 6))
+  return parts
+}
+
+/** The Grand Palace (in its own frame, its foot at 0, the front gate looking south, +z): white crenellated walls round
+ *  a lawn, the gate, the Chakri hall in front (a long ivory hall under three tiered roofs, a gold spire on each),
+ *  and behind it, inside the walls, Wat Phra Kaew's golden bell chedi, a gold prang and a long hall under tiers of
+ *  orange and green roofs. */
+function palaceParts(): { lined: BufferGeometry[]; plain: BufferGeometry[] } {
+  const [hx, hz] = [0.13, 0.135]
+  const lined: BufferGeometry[] = [P.rbox(hx * 2, 0.008, hz * 2, 0.004, LAWN, { at: [0, 0.004, 0] })]
+  const plain: BufferGeometry[] = []
+  // ---- The white walls, their battlements, the round bastions at the corners ----
+  const wallH = 0.032
+  for (const s of [-1, 1]) {
+    lined.push(P.box(hx * 2, wallH, 0.01, '#FFFFFF', { at: [0, wallH / 2, s * hz] }), P.box(0.01, wallH, hz * 2, '#FFFFFF', { at: [s * hx, wallH / 2, 0] }))
+    for (let t = -hx + 0.012; t < hx - 0.006; t += 0.019) plain.push(P.box(0.009, 0.008, 0.011, '#FFFFFF', { at: [t, wallH + 0.004, s * hz] }))
+    for (let t = -hz + 0.012; t < hz - 0.006; t += 0.019) plain.push(P.box(0.011, 0.008, 0.009, '#FFFFFF', { at: [s * hx, wallH + 0.004, t] }))
+    plain.push(P.box(hx * 2 + 0.002, 0.004, 0.012, '#F6D9A8', { at: [0, wallH * 0.3, s * hz] }), P.box(0.012, 0.004, hz * 2 + 0.002, '#F6D9A8', { at: [s * hx, wallH * 0.3, 0] }))
+  }
+  for (const [cx, cz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) lined.push(P.cyl(0.016, 0.018, 0.045, '#FFFFFF', { at: [cx * hx, 0.0225, cz * hz] }, 10), P.cone(0.013, 0.03, TEMPLE_GOLD, { at: [cx * hx, 0.06, cz * hz] }, 8))
+  // The gate in the south wall: a white gatehouse under a little Thai roof.
+  lined.push(P.rbox(0.05, 0.05, 0.026, 0.004, '#FFFFFF', { at: [0.04, 0.025, hz] }), ...thaiRoof(0.04, 0.05, hz, 0.06, 0.032, 0.024, 2, Math.PI / 2), ...spire(0.04, 0.072, hz, 0.06))
+  plain.push(P.rbox(0.018, 0.03, 0.004, 0.003, '#B7864F', { at: [0.04, 0.015, hz + 0.014] }))
+  // ---- The Chakri hall: long and ivory, columns and tall windows, three tiered roofs with gold spires ----
+  const cz = 0.06
+  lined.push(
+    P.rbox(0.2, 0.012, 0.07, 0.004, STONE_SHADE, { at: [0, 0.014, cz] }),
+    P.rbox(0.18, 0.05, 0.05, 0.005, STONE, { at: [0, 0.045, cz] }),
+    P.rbox(0.05, 0.065, 0.06, 0.005, STONE, { at: [0, 0.05, cz + 0.004] }),
+  )
+  for (let i = 0; i < 8; i++) {
+    const wx = -0.08 + i * 0.0229
+    if (Math.abs(wx) < 0.03) continue
+    plain.push(P.rbox(0.008, 0.02, 0.003, 0.003, '#9FCBEA', { at: [wx, 0.05, cz + 0.026] }), P.box(0.012, 0.003, 0.004, TEMPLE_GOLD, { at: [wx, 0.063, cz + 0.026] }))
+  }
+  plain.push(P.rbox(0.016, 0.03, 0.003, 0.004, '#B7864F', { at: [0, 0.035, cz + 0.035] }), P.box(0.05, 0.004, 0.004, TEMPLE_GOLD, { at: [0, 0.07, cz + 0.035] }))
+  for (const [rx, big] of [[-0.065, 0], [0, 1], [0.065, 0]] as const) {
+    const ry = big ? 0.082 : 0.07
+    lined.push(...thaiRoof(rx, ry, cz, big ? 0.07 : 0.05, big ? 0.06 : 0.048, 0.03, 3), ...thaiRoof(rx, ry, cz, big ? 0.07 : 0.05, big ? 0.06 : 0.048, 0.03, 3, Math.PI / 2))
+    lined.push(...spire(rx, ry + 0.045, cz, big ? 0.12 : 0.08))
+  }
+  // ---- Behind it: the golden bell chedi, the gold prang beside it, the long hall with its tiered roof ----
+  {
+    const [x, z] = [0.06, -0.075]
+    lined.push(
+      P.cyl(0.04, 0.045, 0.014, STONE, { at: [x, 0.015, z] }, 12),
+      P.cyl(0.032, 0.037, 0.014, TEMPLE_GOLD, { at: [x, 0.029, z] }, 14),
+      P.cyl(0.027, 0.031, 0.01, GOLD_DEEP, { at: [x, 0.041, z] }, 14),
+      P.sphere(0.034, TEMPLE_GOLD, { at: [x, 0.066, z], scale: [1, 1.05, 1] }, 16),
+      P.box(0.026, 0.014, 0.026, GOLD_DEEP, { at: [x, 0.104, z] }),
+    )
+    for (let i = 0; i < 6; i++) lined.push(P.cyl(0.011 * (1 - i * 0.14), 0.013 * (1 - i * 0.14), 0.011, i % 2 ? GOLD_DEEP : TEMPLE_GOLD, { at: [x, 0.116 + i * 0.011, z] }, 10))
+    lined.push(P.cone(0.005, 0.07, TEMPLE_GOLD, { at: [x, 0.218, z] }, 6), P.sphere(0.004, '#FFFFFF', { at: [x, 0.254, z] }, 5))
+  }
+  {
+    // The gold prang (with a little green and pink porcelain, like the real one's).
+    const [x, z] = [-0.005, -0.09]
+    lined.push(P.rbox(0.05, 0.03, 0.05, 0.004, STONE, { at: [x, 0.023, z] }), ...thaiRoof(x, 0.038, z, 0.055, 0.05, 0.022, 2), ...thaiRoof(x, 0.038, z, 0.055, 0.05, 0.022, 2, Math.PI / 2))
+    for (let i = 0; i < 6; i++) {
+      const t = i / 6
+      const r = 0.017 * (1 - Math.pow(t, 1.6)) + 0.003
+      lined.push(P.cyl(r * 0.88, r, 0.016, i % 2 ? '#8ED8B6' : TEMPLE_GOLD, { at: [x, 0.07 + i * 0.016, z], rot: [0, Math.PI / 8, 0] }, 8))
+    }
+    lined.push(P.cone(0.004, 0.04, TEMPLE_GOLD, { at: [x, 0.185, z] }, 6))
+  }
+  {
+    // The long hall, its ridge running east-west, gold-trimmed white walls.
+    const [x, z] = [-0.075, -0.05]
+    lined.push(P.rbox(0.05, 0.012, 0.11, 0.004, STONE_SHADE, { at: [x, 0.014, z] }), P.rbox(0.042, 0.034, 0.1, 0.004, '#FFFFFF', { at: [x, 0.037, z] }))
+    plain.push(P.box(0.044, 0.004, 0.102, TEMPLE_GOLD, { at: [x, 0.052, z] }))
+    lined.push(...thaiRoof(x, 0.054, z, 0.12, 0.06, 0.04, 3))
+  }
+  // Trees on the lawn by the walls.
+  lined.push(...roundTree(0.1, 0, 0.12, 0.42, 0), ...roundTree(-0.105, 0, 0.12, 0.4, 2), ...roundTree(0.105, 0, -0.125, 0.4, 1))
+  return { lined, plain }
 }
 
 // ---------------------------------------------------------------- pins
