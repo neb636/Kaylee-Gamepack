@@ -400,32 +400,34 @@ export const L = {
       // The camera looks out to sea: kelp, and a spout far off.
       out: maple("She's out in the kelp, where the whales swim."),
     },
-    // The story, at the dock (Maple at the wheel of the little boat).
-    story: [maple("I've never seen a whale!"), maple("Let's find them!")],
+    // The hello at the dock, from a link or a replay (after the film in, the game starts with her hands on the boat).
+    story: [maple('Bonjour! Off we go to find Ollie!')],
     // Sparkle: how to steer (one line before her hands are busy), then only when something new appears.
-    steer: { finger: onDevice('Hold the water where the boat should go!', 'Click and hold where the boat should go!'), wheel: onDevice('Hold and push to steer the boat!', 'Click and hold, then push to steer the boat!') },
-    otters: 'A sleepy otter floated away. Go gently!',
+    steer: onDevice('Hold the water where the boat should go!', 'Click and hold where the boat should go!'),
+    otters: 'There is Ollie, fast asleep! Go gently.',
     spouts: 'A spout! Steer there to find the whale!',
     orcas: 'The orca family! Go fast and turn!',
     listen: 'Shh! Listen to the whales sing.',
     // Sparkle, when she's stuck (~8 s with no progress): help, never "wrong".
     hint: {
       harbour: 'Steer out past the lighthouse!',
-      otters: 'Go slowly to the sleepy otter.',
+      otters: 'Go slowly to Ollie.',
       tow: 'Take her back to her friends!',
       spouts: 'Look for the spout. Steer there!',
       orcas: 'Go fast and turn. The baby copies you!',
       mic: onDevice('Tap the yellow microphone to listen!', 'Click the yellow microphone to listen!'),
     },
-    // The sea otters.
-    otterWake: by('otter')('Oh! Hello!'),
-    otterTow: by('otter')('Wheee! Take me home!'),
-    otterHome: by('otter')('Thank you!'),
+    // Ollie (the sleepy otter who floated away), then the other otters in the raft.
+    otterWake: ollie('Oh! Hello!'),
+    otterTow: ollie('Wheee! Take me home!'),
+    // Home with her friends... and straight back onto the boat's rope: she rides along for the rest of the trip.
+    otterHome: ollie('Can I come too?'),
     otterHold: maple("They hold hands so they don't float away!"),
     otterGrumpy: by('otter')('Hey! Too fast!'),
     otterHi: by('otter')('Hi hi!'),
     otterClack: by('otter')('Yum, a clam!'),
-    // The whales.
+    // The whales (the first spout: she has never seen one).
+    never: maple("I've never seen a whale!"),
     whaleUp: maple('A whale! A real whale!'),
     whaleBlow: maple('It breathes out of its head!'),
     whaleTail: maple('Look at its tail!'),
