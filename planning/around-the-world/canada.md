@@ -117,7 +117,7 @@ New voices: `loon` (Lulu) and `gus`. The PR records every new line.
   every goal, the kits wave flags). The geese rush her net after each goal and may score once (never the winning
   goal), so it is a contest she always wins.
 - **The map:** `map/shape.ts` (a caricature of Canada in curves), `terrain.ts`, `places.ts` (seven dioramas),
-  `critters.ts` (the polar bear, orca, bison, beluga), `world.ts`. Portrait looks along the country from the east.
+  `critters.ts` (the snowy owl, orca, bison, beluga), `pins.ts` (the pink heart pin over every place still to do), `world.ts`. Portrait looks along the country from the east.
 
 ## Next
 

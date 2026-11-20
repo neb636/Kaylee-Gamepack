@@ -111,7 +111,6 @@ export const L = {
     raven: 'A raven! A clever bird.',
     // On the map
     bison: 'A bison! It rolls in the dust.',
-    'polar-bear': 'A polar bear! It lives up north.',
   },
   // ---------------------------------------------------------------- the story's own films (story/films/)
   story: {

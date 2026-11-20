@@ -639,12 +639,6 @@
   "seconds": 1.2
  },
  {
-  "id": "hub-bear",
-  "label": "The polar bear's happy huff",
-  "prompt": "A friendly cartoonish polar bear's soft happy huff and little grumble, warm and cuddly, not scary at all.",
-  "seconds": 0.9
- },
- {
   "id": "hub-bison",
   "label": "The bison rolls in the dust",
   "prompt": "A big bison flopping over and rolling in dry dust: a soft heavy thump, a dusty scuffle, and a contented snort. Gentle and funny.",
@@ -766,5 +760,11 @@
   "prompt": "A still mountain lake on a sunny morning: tiny lapping ripples at the shore, a soft breeze in the pine trees, a faraway bird now and then. Calm, peaceful. Seamless loop, no music, no voices.",
   "seconds": 15,
   "loop": true
+ },
+ {
+  "id": "hub-hoot",
+  "label": "The snowy owl hoots",
+  "prompt": "A soft, round, friendly cartoon owl hooting twice, hoo hoo, gentle and cozy, a little sleepy and sweet.",
+  "seconds": 1.2
  }
 ]
