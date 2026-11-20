@@ -205,8 +205,9 @@ export const L = {
       // She pats a snowball; her eyes go wide.
       idea: maple("Snow! That's it! Let's make a player!"),
     },
-    // The story (Maple, in the park below the castle), then Sparkle's one instruction per part.
-    story: [maple("Bonjour! It's the Winter Carnival!"), maple("Let's roll snowmen!")],
+    // The game's own hello (Maple, in the park below the castle), only from a link or a replay: after the film in, the
+    // game starts with Sparkle's instruction. Then Sparkle's one instruction per part.
+    story: [maple('Bonjour! Look at all this snow!'), maple("Let's build a snowman for my team!")],
     roll: 'Push the snowball! Watch it grow!',
     stack: 'Now roll the little ball into the big one!',
     dress: 'Roll a snowball into a box!',
@@ -231,16 +232,18 @@ export const L = {
     dodge: maple('Eek! Watch out!'),
     poke: [maple('Hee hee!'), maple('Bonjour!')],
     parade: maple('Here comes the parade!'),
-    // The snowmen wake up and talk.
+    // The first snowman she stacks and dresses is Tuque: he wakes up and says his name.
+    tuque: tuque('Bonjour! I am Tuque!'),
+    // The other snowmen wake up and talk.
     wake: [by('snowman')('Bonjour!'), by('snowman')('Hello, hello!'), by('snowman')('To the parade!')],
     upside: by('snowman')('Hello! Why is the sky down there?'),
     tickle: by('snowman')('Hee hee, that tickles!'),
     bye: by('snowman')('Merci! Bye bye!'),
     // The payoff (the stamp comes next).
     done: maple(`You made a whole parade!`),
-    // The film out: the snowman in the red tuque blinks awake.
+    // The film out: Tuque, the snowman she made, has dozed off after the parade. Maple boops his carrot; he blinks awake.
     filmOut: {
-      wake: tuque('Bonjour! I am Tuque!'),
+      wake: tuque('Oh! Bonjour, Maple!'),
       ask: maple('Tuque! Can you play hockey?'),
       // A snowball flies in and bounces off his round tummy: boing. Then:
       tummy: tuque('Ho ho! Nothing gets past my tummy!'),

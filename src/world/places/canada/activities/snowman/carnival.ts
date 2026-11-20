@@ -21,7 +21,7 @@
 // their own voices (lines.ts, L.snowman); Sparkle's instructions and hints come from the page (CarnivalSnowballs.tsx).
 // Built for engine3d/View3D.tsx; nothing here comes from Thailand. The push, the growth and the box's aim help are feel-lab knobs (?feel=1), with a graph of her finger
 // against the ball.
-import { Color, Fog, Group, Plane, Quaternion, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
+import { Color, Fog, Group, Mesh, Plane, Quaternion, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, burst, clamp, say, sounds, span, speakingVoice, speechLevel, stopSpeaking, wait, wobble, type Line, Timers } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { noise, sfx, tone } from '../../../../kit/sfx'
@@ -38,7 +38,9 @@ import { L } from '../../lines'
 import { Carriage, Fox, Geese, honk, Trumpet, whinny, yip } from './critters'
 import { BIG_R, BOX_HALF, CASTLE, CLIFF_Y, CLIMB_R, DRUM, HAT_BOX, HUGE_R, keepIn, lineX, MAPLE_START, MOOSE, PARADE_END_X, PARK, PATH_Z, SASH_BOX, SNOWMAN_RS, START, TREE_R } from './park'
 import { Maple } from './maple'
-import { Box, buildPark, Drum, makeHat, makeSash, Owl, Sled, SKY, Trail, type Park } from './props'
+import { Box, buildPark, Drum, makeHat, makeSash, Owl, Sled, SKY, snowShadow, Trail, type Park } from './props'
+import { snowSfx } from './sounds'
+import { tuqueArm, tuqueCap, tuqueFace } from '../../characters/tuque'
 import type { BallSize, SnowmanSection } from './sections'
 import { damp } from '../../../../../sdk/math'
 
@@ -108,6 +110,8 @@ const SINK = 0.14
 /** The parade starts by itself with this many in the line. */
 const PARADE_AUTO = 5
 const HOP_S = 0.5
+/** The camera's tilt down while she rolls and stacks (degrees). */
+const ROLL_PITCH = 17
 
 const tmp = new Vector3()
 const tmp2 = new Vector3()
@@ -116,19 +120,12 @@ const tmpPlane = new Plane()
 const q = new Quaternion()
 
 // ---- Sounds (synthesized; the voices are in lines.ts).
-const crunch = (r: number) => noise(0.16, 0.05 + r * 0.03, 'bandpass', 900 - r * 280, 500 - r * 120, 0, 1.3)
-const pat = () => [0, 0.11, 0.22].forEach((d) => noise(0.07, 0.12, 'bandpass', 1300, 700, d, 1.4))
+const crunch = snowSfx.crunch
+const pat = snowSfx.pat
 const hoo = () => [0, 0.45].forEach((d) => tone(420, 360, 0.32, 0.07, 'sine', d))
 const giggle = () => [0, 0.09, 0.18, 0.27].forEach((d, i) => tone(900 + i * 90, 1200 + i * 90, 0.07, 0.05, 'triangle', d))
-const boom = () => {
-  tone(110, 55, 0.35, 0.22, 'sine')
-  noise(0.18, 0.12, 'lowpass', 500, 120)
-}
-const toot = () => {
-  tone(523, 523, 0.18, 0.05, 'sawtooth')
-  tone(659, 659, 0.18, 0.05, 'sawtooth', 0.2)
-  tone(784, 784, 0.32, 0.05, 'sawtooth', 0.4)
-}
+const boom = snowSfx.drum
+const toot = snowSfx.trumpet
 const chime = () => [0, 0.08, 0.16].forEach((d, i) => tone(1600 + i * 400, 2200 + i * 400, 0.25, 0.03, 'sine', d))
 /** The parade's march, one note per beat (0: a rest). */
 const MARCH = [392, 523, 523, 659, 784, 0, 659, 523, 587, 494, 392, 494, 587, 0, 523, 0]
@@ -183,6 +180,10 @@ interface Pile {
   waveT: number
   /** Cartwheeling over onto his head (0..1). */
   flipT: number
+  /** Tuque: the first snowman she makes (the right way up) has his hat, face and mittens (characters/tuque.ts). */
+  tuque: boolean
+  /** His soft blue shadow on the snow. */
+  shadow: Mesh
 }
 interface Flight {
   kind: 'hat' | 'sash'
@@ -220,6 +221,12 @@ export class CarnivalSnowballs implements World3D {
   private armTpl: Group
   private hatTpl: Group
   private sashTpl: Group
+  private tuqueFaceTpl: Group
+  private tuqueArmTpl: Group
+  private tuqueCapTpl: Group
+  /** Tuque, once she has made him. */
+  private tuque: Pile | null = null
+  private stopBed: () => void
   private piles: Pile[] = []
   private flights: Flight[] = []
   private hatBox: Box
@@ -354,6 +361,10 @@ export class CarnivalSnowballs implements World3D {
     )
     this.hatTpl = makeHat(bag)
     this.sashTpl = makeSash(bag)
+    // Tuque's own hat, face and mittened arms, at the same sizes (a ball of radius 1).
+    this.tuqueFaceTpl = tuqueFace(bag)
+    this.tuqueArmTpl = tuqueArm(bag, 1.1, 1.4)
+    this.tuqueCapTpl = tuqueCap(bag, 2)
 
     this.hatBox = new Box(bag, 'hat')
     this.hatBox.root.position.set(HAT_BOX.x, 0, HAT_BOX.z)
@@ -367,6 +378,12 @@ export class CarnivalSnowballs implements World3D {
     this.mx = MAPLE_START.x
     this.mz = MAPLE_START.z
     scene.add(this.maple.root)
+    // Soft blue shadows on the snow under the boxes and the drum (the balls make their own; Maple has hers).
+    this.hatBox.root.add(snowShadow(bag, BOX_HALF * 3.4))
+    this.sashBox.root.add(snowShadow(bag, BOX_HALF * 3.4))
+    this.drum.root.add(snowShadow(bag, 2.2))
+    // The carnival far off behind the park.
+    this.stopBed = snowSfx.bed()
     this.owl = new Owl(bag)
     this.owl.root.position.set(this.park.lamp.position.x, 4.1, this.park.lamp.position.z)
     this.sled = new Sled(bag)
@@ -526,7 +543,10 @@ export class CarnivalSnowballs implements World3D {
       still: 0,
       waveT: -1,
       flipT: -1,
+      tuque: false,
+      shadow: snowShadow(this.bag),
     }
+    this.scene.add(p.shadow)
     p.balls.push(this.makeBall(r, p))
     this.piles.push(p)
     this.layout(p)
@@ -536,7 +556,7 @@ export class CarnivalSnowballs implements World3D {
 
   private removePile(p: Pile) {
     this.piles.splice(this.piles.indexOf(p), 1)
-    this.scene.remove(p.root)
+    this.scene.remove(p.root, p.shadow)
     if (this.grab?.pile === p) this.grab = null
     if (this.mOn === p) this.getOff()
   }
@@ -612,6 +632,7 @@ export class CarnivalSnowballs implements World3D {
     }
 
     for (const p of [...this.piles]) this.updatePile(p, dt, t)
+    for (const p of this.piles) this.placeShadow(p)
     this.updateFlights(dt)
     this.updateMaple(dt, t)
     this.story(dt, t)
@@ -644,8 +665,9 @@ export class CarnivalSnowballs implements World3D {
       this.lit += (this.litGoal - this.lit) * damp(dt, 4)
       this.park.setWindows(this.lit)
     }
-    // Snow falling gently all the time.
+    // Snow falling gently all the time, and the snow glinting here and there round what she's doing.
     if (Math.random() < dt * 30) this.dropFlake(0)
+    if (Math.random() < dt * 4) this.sparkle.emit(this.focus.x + (Math.random() - 0.5) * 12, 0.04, this.focus.z + (Math.random() - 0.5) * 8, 0, 0.12, 0, 0.7, 0.05 + Math.random() * 0.04)
     for (const p of [this.puff, this.snowfall, this.confetti, this.sparkle]) p.update(dt)
 
     this.lights.follow(this.focus.x, 0, this.focus.z)
@@ -679,6 +701,7 @@ export class CarnivalSnowballs implements World3D {
     if (live && !this.carriage.passing && (this.carriageT -= dt) < 0) {
       this.carriageT = 28 + Math.random() * 14
       this.carriage.go(this.carriageDir)
+      snowSfx.bells()
       this.carriageDir = this.carriageDir > 0 ? -1 : 1
     }
     this.trumpet.update(dt, t)
@@ -830,6 +853,17 @@ export class CarnivalSnowballs implements World3D {
     }
   }
 
+  /** A pile's shadow under its bottom ball (smaller while it's up in the air). */
+  private placeShadow(p: Pile) {
+    const b = p.balls[0]
+    const up = p.state === 'hop' ? Math.max(0, b.root.position.y - b.r) : p.root.position.y
+    const r = b.root.scale.x
+    const k = (r * 3) / (1 + up * 0.6)
+    // (The sun is high on the left: the shadow leans a little right and toward her.)
+    p.shadow.position.set(p.root.position.x + r * 0.3, 0.02, p.root.position.z + r * 0.25)
+    p.shadow.scale.set(k, k, 1)
+  }
+
   /** A loose ball's bumps (trees, the moose, the boxes, other balls and snowmen). Returns true if it's gone. */
   private bumps(p: Pile) {
     const b = p.balls[0]
@@ -977,14 +1011,13 @@ export class CarnivalSnowballs implements World3D {
     if (p.hopT < 1) return
     // Landed: the ball joins the pile.
     this.piles.splice(this.piles.indexOf(p), 1)
-    this.scene.remove(p.root)
+    this.scene.remove(p.root, p.shadow)
     b.root.add(ball.root)
     b.balls.push(ball)
     b.busy = false
     this.layout(b)
     b.wobV += 5
-    sfx.thump()
-    sounds.pop()
+    snowSfx.plop()
     this.puff.burst(b.x, this.topY(b) - ball.r, b.z, 16, 2, 1.6, 0.16)
     this.counts.stacks++
     if (b.state === 'loose') b.state = 'stack'
@@ -1004,16 +1037,22 @@ export class CarnivalSnowballs implements World3D {
       p.flipT = 0
       this.layout(p)
     }
-    const face = this.faceTpl.clone()
+    // The first snowman the right way up is Tuque.
+    if (!this.tuque && !p.upside) {
+      this.tuque = p
+      p.tuque = true
+    }
+    const face = (p.tuque ? this.tuqueFaceTpl : this.faceTpl).clone()
     if (p.upside) face.rotation.z = Math.PI
     p.balls[p.upside ? 0 : 2].root.add(face)
     p.face = face
     p.mouth = face.children[1] as Group
     const mid = p.balls[1].root
-    const armL = this.armTpl.clone()
+    const arm = p.tuque ? this.tuqueArmTpl : this.armTpl
+    const armL = arm.clone()
     armL.position.set(0.88, 0.1, 0)
     armL.rotation.z = -1.05
-    const armR = this.armTpl.clone()
+    const armR = arm.clone()
     armR.position.set(-0.88, 0.1, 0)
     armR.rotation.z = 1.05
     mid.add(armL, armR)
@@ -1052,11 +1091,10 @@ export class CarnivalSnowballs implements World3D {
     this.removePile(p)
     this.puff.burst(bp.x, BOX_HALF * 1.6, bp.z, 26, 2.5, 3, 0.2)
     box.pop()
-    sounds.pop()
-    sfx.fwip()
+    snowSfx.hatPop()
     // Out flies the hat (or sash), onto the first snowman waiting for one; nobody needs it? Onto Maple.
     const to = this.piles.find((o) => o.state === 'done' && o.wakeT < 0 && !(box.kind === 'hat' ? o.hat : o.sash) && !this.flights.some((f) => f.to === o && f.kind === box.kind)) ?? null
-    const g = (box.kind === 'hat' ? this.hatTpl : this.sashTpl).clone()
+    const g = (box.kind === 'hat' ? (to?.tuque ? this.tuqueCapTpl : this.hatTpl) : this.sashTpl).clone()
     g.scale.setScalar(0.4)
     this.scene.add(g)
     this.flights.push({ kind: box.kind, g, from: new Vector3(bp.x, BOX_HALF * 1.8, bp.z), to, t: 0 })
@@ -1103,7 +1141,7 @@ export class CarnivalSnowballs implements World3D {
 
   private wear(p: Pile, kind: 'hat' | 'sash') {
     if (kind === 'hat') {
-      p.hat = this.hatTpl.clone()
+      p.hat = (p.tuque ? this.tuqueCapTpl : this.hatTpl).clone()
       // On top of the head (the top ball), whichever way round he is.
       p.balls[2].root.add(p.hat)
     } else {
@@ -1119,8 +1157,12 @@ export class CarnivalSnowballs implements World3D {
     if (was < 0.5 && p.wakeT >= 0.5) {
       p.waveT = 0
       p.wobV += 4
-      sounds.sparkle()
-      this.talk(L.snowman.wake[(this.lineCount + this.made) % L.snowman.wake.length], p)
+      snowSfx.wake()
+      // Tuque says his name (it cuts in: it's his moment); the others say hello.
+      if (p.tuque) {
+        this.talk(L.snowman.tuque, p, true)
+        this.maple.cheer()
+      } else this.talk(L.snowman.wake[(this.lineCount + this.made) % L.snowman.wake.length], p)
       this.confetti.burst(p.x, this.topY(p), p.z, 24, 2, 3.5, 0.14)
     }
     if (p.wakeT > 1.8) {
@@ -1520,6 +1562,7 @@ export class CarnivalSnowballs implements World3D {
     else this.maple.look(0)
     if (this.mMode !== 'drum') this.maple.drumming = false
     this.maple.update(dt, t, this.mWalk, this.my > 0.15)
+
   }
 
   // ---------------------------------------------------------------- the camera
@@ -1576,11 +1619,12 @@ export class CarnivalSnowballs implements World3D {
       return { center: new Vector3(cx, 1.4, cz), half: tall ? new Vector3(5, 3, 8) : new Vector3(8.5, 2.2, 5.6), yaw: 0, pitch: 25 }
     }
     const extra = Math.max(0, this.focusR - 0.3) * 2.6
+    // (Low enough that the castle hotel shows on its cliff above the park, high enough to steer a ball about.)
     return {
       center: new Vector3(f.x, 0.5 + this.focusR * 0.6, f.z - 0.3),
       half: tall ? new Vector3(3.4 + extra * 0.7, 1.6 + extra * 0.5, 4.6 + extra) : new Vector3(5 + extra, 1.4 + extra * 0.4, 3.4 + extra * 0.6),
       yaw: 0,
-      pitch: 25,
+      pitch: ROLL_PITCH,
     }
   }
 
@@ -1736,6 +1780,7 @@ export class CarnivalSnowballs implements World3D {
     if (id === 'carriage') {
       this.carriage.poke()
       whinny()
+      snowSfx.bells()
       return
     }
     if (id === 'fox') {
@@ -1936,6 +1981,8 @@ export class CarnivalSnowballs implements World3D {
       grabbed: !!this.grab,
       gap: +this.gap.toFixed(2),
       states: this.piles.map((p) => `${p.state}${p.hat ? "H" : ""}${p.sash ? "S" : ""}${p.wakeT >= 0 ? "w" : ""}`).join(" "),
+      /** Tuque, once she's made him: his state, H with his hat on, S with his sash, w waking. */
+      tuque: (({ t }) => (t ? `${t.state}${t.hat ? 'H' : ''}${t.sash ? 'S' : ''}${t.wakeT >= 0 ? 'w' : ''}` : null))({ t: this.tuque }),
       hatBox: this.hatBox.shown ? scr(HAT_BOX.x, 0.5, HAT_BOX.z) : null,
       sashBox: this.sashBox.shown ? scr(SASH_BOX.x, 0.5, SASH_BOX.z) : null,
       drum: this.drum.root.visible ? scr(DRUM.x, 1.3, DRUM.z) : null,
@@ -1953,6 +2000,7 @@ export class CarnivalSnowballs implements World3D {
   }
 
   dispose() {
+    this.stopBed()
     this.timers.dispose()
     this.gone = true
     this.unwatch()
