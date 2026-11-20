@@ -30,7 +30,7 @@ import type { Sea } from '../map/terrain'
 import * as T from '../map/toys'
 import { RIVER_LINE } from './geo'
 import { blockMid, blockOf, buildField, buildGround, buildSea, crowns, districtAt, inBlock, inOrchard, LAKES, leafy, outward, type Field } from './ground'
-import { BALLOON, BOARD, BOATS, BRIDGES, CANAL, CLOUDS, DEG_M, FRUIT_KHLONG, GROVES, KITES, LANDMARKS, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type LandmarkId, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
+import { BALLOON, BOARD, BOATS, BRIDGES, CANAL, CLOUDS, DEG_M, FRUIT_KHLONG, GROVES, LANDMARKS, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type LandmarkId, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
 import { pathLL, reachOn, type Path } from './path'
 
 const CREAM = '#FFF7F0'
@@ -111,9 +111,6 @@ export interface Diorama {
   /** The night market's rows of tents, the floating market's boats (each bobs and hops by itself). */
   tentRows: Group[]
   marketBoats: Group[]
-  /** The kites over Sanam Luang: `root` stands where the string is held (it turns to face her), `swing` sways the
-   *  kite on its string. */
-  kites: { root: Group; swing: Group }[]
   clouds: Group[]
   /** Asiatique's wheel (it turns), Chinatown's lanterns (they swing), Lumphini's swan boat and monitor lizard, the
    *  port crane's box on its cable, Bang Krachao's birds, the fountain's bowl on ICONSIAM's terrace (world spot). */
@@ -551,18 +548,6 @@ export function buildDiorama(bag: Bag): Diorama {
   cars.forEach((_, i) => carMesh.setColorAt(i, col.set(carCols[i % carCols.length])))
   root.add(carMesh)
   const traffic = { mesh: carMesh, cars }
-  // ---- Kites over Sanam Luang ----
-  const kites = KITES.map(({ at, high, kind }, i) => {
-    const g = new Group()
-    g.position.set(at[0], G, at[1])
-    const swing = new Group()
-    const k = kiteParts(kind, high, [PAL.hotpink, PAL.butter, PAL.sky][i % 3], [PAL.butter, PAL.hotpink, PAL.pink][i % 3])
-    swing.add(solidMix(k.lined, k.plain, bag, 1.5))
-    g.add(swing)
-    root.add(g)
-    return { root: g, swing }
-  })
-
   // ---- Clouds over the city ----
   const clouds = CLOUDS.map(([lon, lat, cy], i) => {
     const g = new Group()
@@ -579,7 +564,7 @@ export function buildDiorama(bag: Bag): Diorama {
   })
 
   root.add(buildGround(bag, { shadows, plazas, casts, basins }))
-  return { root, places, spots, pins, stamp, balloon, balloonAt, sea, river, rail, road, taxiRoad, khlong, canal, canalBoat, traffic, tentRows, marketBoats, boats, train, tuktuk, taxi, fruit, kites, clouds, wheel, lanterns, swan, lizard, craneBox, birds, fountain, towers, bridges, gold }
+  return { root, places, spots, pins, stamp, balloon, balloonAt, sea, river, rail, road, taxiRoad, khlong, canal, canalBoat, traffic, tentRows, marketBoats, boats, train, tuktuk, taxi, fruit, clouds, wheel, lanterns, swan, lizard, craneBox, birds, fountain, towers, bridges, gold }
 }
 
 // ---------------------------------------------------------------- towers
@@ -1198,31 +1183,6 @@ function fruitBoatParts(): BufferGeometry[] {
     P.cone(0.022, 0.012, '#F2DCA6', { at: [0, 0.048, -0.042] }, 10),
     rod([0.014, 0.034, -0.04], [0.034, 0.002, -0.07], 0.003, '#B98A66', 0.006),
   ]
-}
-
-/** How much bigger than life the kites are drawn. */
-const KITE_SIZE = 1.7
-
-/** A kite on its string (the string held at 0, the kite `high` up, its face to +z): the big five-pointed chula
- *  ('star') or the little pakpao ('diamond') with its long tail of bows. */
-function kiteParts(kind: 'star' | 'diamond', high: number, c: string, trim: string): { lined: BufferGeometry[]; plain: BufferGeometry[] } {
-  const big: V3 = [KITE_SIZE, KITE_SIZE, KITE_SIZE]
-  const lined: BufferGeometry[] = []
-  const plain: BufferGeometry[] = [P.cyl(0.0012, 0.0012, high, '#C9B8F2', { at: [0, high / 2, 0] }, 4)]
-  if (kind === 'star') {
-    const pts: [number, number][] = []
-    for (let i = 0; i < 10; i++) {
-      const a = (i / 10) * Math.PI * 2
-      const r = i % 2 ? 0.034 : 0.085
-      pts.push([Math.sin(a) * r, Math.cos(a) * r])
-    }
-    lined.push(P.prism(pts, 0.008, c, { at: [0, high + 0.04 * KITE_SIZE, 0], rot: [-0.25, 0, 0], scale: big }), P.sphere(0.016 * KITE_SIZE, trim, { at: [0, high + 0.04 * KITE_SIZE, 0.008 * KITE_SIZE], scale: [1, 1, 0.4] }, 8))
-  } else {
-    lined.push(P.prism([[0, 0.07], [0.05, 0.01], [0, -0.075], [-0.05, 0.01]], 0.008, c, { at: [0, high + 0.07 * KITE_SIZE, 0], rot: [-0.25, 0, 0], scale: big }), P.box(0.1 * KITE_SIZE, 0.006 * KITE_SIZE, 0.004, trim, { at: [0, high + 0.08 * KITE_SIZE, 0.008 * KITE_SIZE] }))
-    // The tail: three little bows trailing down beside the string.
-    for (let i = 0; i < 3; i++) lined.push(P.prism([[-0.014, 0.008], [0, 0], [-0.014, -0.008]], 0.004, trim, { at: [0.016 + i * 0.012, high - 0.03 - i * 0.04, -0.012], scale: big }), P.prism([[0.014, 0.008], [0.014, -0.008], [0, 0]], 0.004, trim, { at: [0.016 + i * 0.012, high - 0.03 - i * 0.04, -0.012], scale: big }))
-  }
-  return { lined, plain }
 }
 
 /** A Bangkok taxi (driving along +z): hot pink all over, its sign on the roof. */

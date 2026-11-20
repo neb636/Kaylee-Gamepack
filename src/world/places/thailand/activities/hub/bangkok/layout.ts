@@ -205,15 +205,8 @@ export const GROVES: [number, number, number, number][] = [
   [100.503, 13.659, 2, 3],
 ]
 
-/** Sanam Luang, the big open field in the old town: kites fly over it. Where each kite's string is held, how high
- *  the kite flies (m) and which kite it is ('star': the big chula; 'diamond': the little pakpao with its long tail). */
+/** Sanam Luang, the big open field in the old town, kept open in front of the Grand Palace. */
 export const SANAM_LUANG: XZ = ll(100.4931, 13.7551)
-export const KITES: { at: XZ; high: number; kind: 'star' | 'diamond' }[] = [
-  // (Up over the field's north end: lower down they'd hang in front of the Grand Palace.)
-  { at: [SANAM_LUANG[0] - 0.08, SANAM_LUANG[1] - 0.1], high: 0.3, kind: 'diamond' },
-  { at: [SANAM_LUANG[0] + 0.04, SANAM_LUANG[1] - 0.16], high: 0.44, kind: 'star' },
-  { at: [SANAM_LUANG[0] + 0.14, SANAM_LUANG[1] - 0.07], high: 0.24, kind: 'diamond' },
-]
 
 /** Where the river's big loop holds Bang Krachao: the jungle is painted and planted inside these blobs
  *  ([lon, lat, radius in degrees]). */
