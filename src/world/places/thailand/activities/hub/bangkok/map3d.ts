@@ -759,7 +759,7 @@ export class BangkokMap extends Stage {
     const k = this.entrance.k
     const tall = this.w < this.h
     const zoom = 1 + (BANGKOK_CAM.zoom - 1) * k
-    if (tall) return boardShot(BOARD_BOX, BANGKOK_CAM.yaw, 64 + BANGKOK_CAM.pitch * k * 0.6, zoom, { minDist: 3 })
+    if (tall) return boardShot(BOARD_BOX, BANGKOK_CAM.yaw, 74 + BANGKOK_CAM.pitch * k * 0.6, zoom, { minDist: 3 })
     return boardShot(BOARD_BOX, BANGKOK_CAM.yaw, 56 + BANGKOK_CAM.pitch * k, zoom, { minDist: 3 })
   }
 
@@ -840,8 +840,8 @@ export class BangkokMap extends Stage {
     if (id.startsWith('spot:')) {
       const s = id.slice(5) as SpotId
       const [x, z] = SPOTS[s]
-      const tall = s === 'mahanakhon' ? 0.4 : s === 'asiatique' ? 0.22 : 0.12
-      return { at: new Vector3(x, G + tall, z), r: 0.2, prio: 2, max: 130 }
+      const tall = s === 'mahanakhon' ? 0.4 : s === 'asiatique' ? 0.35 : 0.12
+      return { at: new Vector3(x, G + tall, z), r: 0.2, prio: s === 'asiatique' ? 5 : 2, max: 130 }
     }
     if (id.startsWith('cloud:')) return { at: d.clouds[Number(id.slice(6))].position.clone(), r: 0.26, prio: 1, max: 140 }
     if (id.startsWith('boat:')) {

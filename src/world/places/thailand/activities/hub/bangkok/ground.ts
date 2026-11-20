@@ -13,7 +13,7 @@ import { smoothstep } from '../../../../../../sdk/math'
 import { distance } from '../map/field'
 import { Sea } from '../map/terrain'
 import { ISLANDS, KHLONGS, PARKS, ROADS, WATER, type LonLat } from './geo'
-import { BOARD, CLIFF_W, DEG_M, JUNGLE, LEVEL, ll, RIVER_FAT, SKYTRAIN, SPOTS, toX, toZ, type XZ } from './layout'
+import { BOARD, CLIFF_W, DEG_M, JUNGLE, LEVEL, ll, RIVER_FAT, SHOP_STREETS, SKYTRAIN, SPOTS, toX, toZ, type XZ } from './layout'
 
 /** Field cells per meter, ground mesh cells per meter, painted pixels per meter. */
 const RES = 64
@@ -33,7 +33,7 @@ const C = {
 } satisfies Record<string, [number, number, number]>
 
 /** The Chao Phraya, as a toy: pale by the banks, a bright teal down the middle. */
-const RIVER = { shallow: '#B9EEF0', mid: '#62CDE6', deep: '#41BADF', light: '#93E6F4' }
+const RIVER = { shallow: '#B9EEF0', mid: '#48BDCC', deep: '#339DB7', light: '#93E6F4' }
 /** The Sea's bands are sized for a whole coast: the river is narrow, so its distances are stretched to fit them. */
 const SEA_STRETCH = 5
 
@@ -275,7 +275,7 @@ function build() {
   // ---- The lines nothing stands on: the main roads, the khlongs, under the skytrain.
   clearAll()
   g.lineWidth = 1.5
-  for (const l of [...ROADS, ...KHLONGS, SKYTRAIN]) {
+  for (const l of [...ROADS, ...SHOP_STREETS, ...KHLONGS, SKYTRAIN]) {
     trace(l, false)
     g.stroke()
   }
@@ -406,7 +406,7 @@ export function buildGround(bag: Bag, input: GroundInput) {
 }
 
 /** The districts' paper: creams and peaches close together (a map's print, not a quilt), and the orchard's greens. */
-const BLOCKS: [number, number, number][] = [[255, 244, 226], [255, 238, 220], [255, 246, 214], [255, 240, 230]]
+const BLOCKS: [number, number, number][] = [[249, 226, 203], [248, 220, 195], [251, 232, 202], [246, 223, 204]]
 const ORCHARDS: [number, number, number][] = [[206, 238, 182], [215, 242, 190], [198, 234, 176]]
 
 function paint(f: Field, { shadows, plazas, casts, basins }: GroundInput) {
@@ -439,7 +439,7 @@ function paint(f: Field, { shadows, plazas, casts, basins }: GroundInput) {
       let col: [number, number, number]
       if (d < -CLIFF_W * 0.8) col = C.wet
       else if (d < 0) col = d < -CLIFF_W * 0.4 ? C.quayLow : C.quay
-      else if (d < 0.03) col = C.walk
+      else if (d < 0.045) col = C.walk
       else if (f.jungle(x, z)) col = n > 0.25 ? C.jungleDeep : C.jungle
       else if (f.park(x, z)) col = C.park
       else {
@@ -636,6 +636,17 @@ function paint(f: Field, { shadows, plazas, casts, basins }: GroundInput) {
     line(r)
     g.strokeStyle = '#FFFFFF'
     g.lineWidth = TEX * 0.028
+    g.stroke()
+  }
+
+  // Walkable lanes stitch the fronts into districts. The cream inset stays legible at overview scale.
+  for (const street of SHOP_STREETS) {
+    line(street)
+    g.strokeStyle = '#CB9985'
+    g.lineWidth = TEX * 0.078
+    g.stroke()
+    g.strokeStyle = '#FFF0D4'
+    g.lineWidth = TEX * 0.058
     g.stroke()
   }
 

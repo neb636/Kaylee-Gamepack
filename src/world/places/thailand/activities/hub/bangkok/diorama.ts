@@ -29,8 +29,8 @@ import { trayParts } from '../../../trip/sky'
 import type { Sea } from '../map/terrain'
 import * as T from '../map/toys'
 import { RIVER_LINE } from './geo'
-import { blockMid, blockOf, buildField, buildGround, buildSea, crowns, districtAt, inBlock, inOrchard, LAKES, leafy, outward, type Field } from './ground'
-import { BALLOON, BOARD, BOATS, BRIDGES, CANAL, CLOUDS, DEG_M, FRUIT_KHLONG, GROVES, LANDMARKS, LEVEL, ll, OLD_TOWN, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type LandmarkId, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
+import { blockMid, blockOf, buildField, buildGround, buildSea, crowns, districtAt, inBlock, inOrchard, LAKES, leafy, type Field } from './ground'
+import { BALLOON, BOARD, BOATS, BRIDGES, CANAL, CLOUDS, DEG_M, FRUIT_KHLONG, GROVES, LANDMARKS, LEVEL, ll, SHOP_STREETS, PIN_IDS, PINS, PLACES, SANAM_LUANG, SKYTRAIN, SPOTS, STAMP_OFF, TAXI_ROAD, TOWERS, TRACK_Y, TRAFFIC, TUKTUK_ROAD, type LandmarkId, type PinId, type PlaceId, type SpotId, type XZ } from './layout'
 import { pathLL, reachOn, type Path } from './path'
 
 const CREAM = '#FFF7F0'
@@ -158,7 +158,7 @@ export function buildDiorama(bag: Bag): Diorama {
     ...(Object.keys(PLACES) as PlaceId[]).map((id) => [...PLACES[id].at, 0.36] as [number, number, number]),
     // (Mahanakhon is a tower among towers: its neighbors stand close.)
     ...(Object.keys(LANDMARKS) as LandmarkId[]).map((id) => [...LANDMARKS[id].at, LANDMARKS[id].r] as [number, number, number]),
-    ...(Object.keys(SPOTS) as SpotId[]).map((id) => [...SPOTS[id], id === 'mahanakhon' ? 0.15 : id === 'floating' || id === 'orchard' || id === 'tents' ? 0.34 : 0.26] as [number, number, number]),
+    ...(Object.keys(SPOTS) as SpotId[]).map((id) => [...SPOTS[id], id === 'mahanakhon' ? 0.15 : id === 'asiatique' || id === 'floating' || id === 'orchard' || id === 'tents' ? 0.34 : 0.26] as [number, number, number]),
   ]
   const free = (x: number, z: number, pad = 0) => taken.every(([px, pz, r]) => Math.hypot(px - x, pz - z) > r + pad)
   const shadows: [number, number, number][] = []
@@ -200,12 +200,18 @@ export function buildDiorama(bag: Bag): Diorama {
       if (f.land(p.x, p.z) < 0.02) continue
       parts.push(P.cyl(0.007, 0.009, TRACK_Y, '#E6DEFA', { at: [p.x, G + TRACK_Y / 2, p.z] }, 6))
     }
-    for (const [lon, lat] of SKYTRAIN) {
+    for (const [station, [lon, lat]] of SKYTRAIN.entries()) {
       const [x, z] = ll(lon, lat)
       if (f.land(x, z) < 0.03 || x < BOARD.x0 + 0.1 || x > BOARD.x1 - 0.1) continue
-      const yaw = rail.at(rail.near(x, z).d).yaw - Math.PI / 2
-      parts.push(P.rbox(0.07, 0.012, 0.04, 0.004, CREAM, { at: [x, ty + 0.002, z], rot: [0, yaw, 0] }), P.rbox(0.062, 0.008, 0.046, 0.003, PAL.pink, { at: [x, ty + 0.05, z], rot: [0, yaw, 0] }))
-      for (const s of [-1, 1]) parts.push(P.cyl(0.003, 0.003, 0.045, CREAM, { at: [x + Math.cos(yaw) * s * 0.026, ty + 0.026, z - Math.sin(yaw) * s * 0.026] }, 4))
+      const siam = station === 9
+      const p = rail.at(rail.near(x, z).d, siam ? 0.067 : 0.045)
+      const yaw = p.yaw - Math.PI / 2
+      const length = siam ? 0.24 : 0.085
+      const width = siam ? 0.085 : 0.044
+      const at = (along: number, height: number): V3 => [p.x + Math.cos(yaw) * along, ty + height, p.z - Math.sin(yaw) * along]
+      parts.push(P.rbox(length, 0.015, width, 0.004, CREAM, { at: at(0, 0.01), rot: [0, yaw, 0] }))
+      parts.push(P.rbox(length, 0.014, width, 0.005, siam ? PAL.hotpink : PAL.pink, { at: at(0, 0.08), rot: [0, yaw, 0] }))
+      for (const end of [-1, 1]) parts.push(P.cyl(0.004, 0.004, 0.07, CREAM, { at: at(end * length * 0.38, 0.045) }, 6))
     }
     root.add(solid(merge(parts), bag, 1))
   }
@@ -245,48 +251,42 @@ export function buildDiorama(bag: Bag): Diorama {
     root.add(solidMix(lined, plain, bag, 1.5))
   }
 
-  // ---- Rows of shophouses along the little streets: three or four pastel fronts under one long terracotta roof,
-  // close together in the old town and Chinatown, few and far apart everywhere else: one low neighborhood and open
-  // paper (not confetti). Thonburi and the south get a few of their own (built up now, not orchards) ----
+  // Shophouses face each other across the same streets painted on the ground. Leave gaps for
+  // intersections, parks and the landmarks themselves. All neighborhoods share one mesh.
   {
     const parts: BufferGeometry[] = []
-    const rnd = T.rng(41)
-    const rows: XZ[] = []
-    const quota = { in: 30, out: 10 }
-    let outer = 0
-    for (let i = 0; i < 60000 && rows.length < quota.in + quota.out; i++) {
-      const px = BOARD.x0 + 0.1 + rnd() * (W - 0.2)
-      const pz = BOARD.z0 + 0.1 + rnd() * (D - 0.2)
-      const count = 3 + Math.floor(rnd() * 2)
-      const pick = rnd()
-      const o = districtAt(px, pz)
-      if (inOrchard(px, pz)) continue
-      const b = blockOf(o, px, pz)
-      const [mx, mz] = blockMid(o, b.iu, b.iv)
-      // (Close together in the old town, far apart everywhere else.)
-      const out = outward(mx, mz) > 0.3
-      if (out ? outer >= quota.out : rows.length - outer >= quota.in) continue
-      const apart = Math.hypot(mx - OLD_TOWN.at[0], mz - OLD_TOWN.at[1]) < OLD_TOWN.r ? 0.24 : out ? 0.5 : 0.66
-      if (rows.some(([rx, rz]) => Math.hypot(rx - mx, rz - mz) < apart)) continue
-      // (The row runs along its district's streets.)
-      const [ux, uz] = [Math.cos(o.turn), Math.sin(o.turn)]
-      const wide = 0.06
-      const spot = (j: number): XZ => [mx + ux * (j - (count - 1) / 2) * wide, mz + uz * (j - (count - 1) / 2) * wide]
-      const ok = ([x, z]: XZ) => districtAt(x, z) === o && f.land(x, z) > 0.07 && !f.park(x, z) && !f.jungle(x, z) && free(x, z, 0.04) && f.clear(x, z) > 0.05 && rail.near(x, z).dist > 0.06
-      if (![-0.7, ...Array.from({ length: count }, (_, j) => j), count - 0.3].every((j) => ok(spot(j)))) continue
-      rows.push([mx, mz])
-      if (out) outer++
-      const deep = 0.06
-      const h = 0.066 + rnd() * 0.012
-      for (let j = 0; j < count; j++) {
-        const [x, z] = spot(j)
-        parts.push(P.box(wide - 0.003, h, deep, WALLS[(o.k + j + rows.length) % WALLS.length], { at: [x, G + h / 2, z], rot: [0, -o.turn, 0] }))
+    const width = 0.082
+    const depth = 0.085
+    const awnings = [PAL.mint, PAL.butter, PAL.peach]
+    for (const [streetIndex, points] of SHOP_STREETS.entries()) {
+      const street = pathLL(points, 0)
+      for (const side of [-1, 1]) {
+        // A short frontage can stop at a corner or a landmark without losing its whole street.
+        for (let d = width; d < street.len - width / 2; d += width + 0.008) {
+          const row = street.at(d, side * 0.113)
+          const ux = Math.sin(row.yaw)
+          const uz = Math.cos(row.yaw)
+          const yaw = row.yaw - Math.PI / 2
+          const fits = [-1, 1].every(end => [-1, 1].every(edge => {
+            const x = row.x + ux * end * width / 2 + uz * edge * depth / 2
+            const z = row.z + uz * end * width / 2 - ux * edge * depth / 2
+            return free(x, z) && f.land(x, z) > 0.025 && f.clear(x, z) > 0.022 &&
+              !f.park(x, z) && !f.jungle(x, z) && !inOrchard(x, z)
+          }))
+          if (!fits) continue
+          const j = Math.round(d / (width + 0.008))
+          const h = 0.07 + ((j + streetIndex) % 3) * 0.012
+          const offset = side * (depth / 2 + 0.006)
+          const ax = row.x + uz * offset
+          const az = row.z - ux * offset
+          parts.push(P.box(width, h, depth, WALLS[(streetIndex + j) % WALLS.length], { at: [row.x, G + h / 2, row.z], rot: [0, yaw, 0] }))
+          parts.push(P.box(width, 0.009, 0.027, awnings[j % awnings.length], { at: [ax, G + h * 0.6, az], rot: [0, yaw, 0] }))
+          parts.push(P.prism([[-depth / 2, 0], [depth / 2, 0], [0, depth * 0.38]], width + 0.003, ROOFS[streetIndex % ROOFS.length], { at: [row.x, G + h, row.z], rot: [0, row.yaw, 0] }))
+          taken.push([row.x, row.z, width / 2])
+        }
       }
-      parts.push(P.prism([[-deep / 2 - 0.003, 0], [deep / 2 + 0.003, 0], [0, deep * 0.4]], count * wide + 0.006, ROOFS[(o.k + (pick > 0.8 ? 1 : 0)) % ROOFS.length], { at: [mx, G + h - 0.001, mz], rot: [0, Math.PI / 2 - o.turn, 0] }))
-      shadows.push([mx, mz, count * wide * 0.5])
-      taken.push([mx, mz, count * wide * 0.55])
     }
-    root.add(solid(merge(parts), bag, 1))
+    if (parts.length) root.add(solid(merge(parts), bag, 0.7))
   }
 
   // ---- Trees: round ones in the parks, coconut palms along the river's banks, jungle and palms on Bang Krachao (big
@@ -422,8 +422,9 @@ export function buildDiorama(bag: Bag): Diorama {
 
   const spots = {} as Record<SpotId, Group>
   // Asiatique: the big wheel by the river, the old warehouses under it.
-  spots.asiatique = toy(SPOTS.asiatique, asiatiqueParts())
+  spots.asiatique = toy(SPOTS.asiatique, asiatiqueParts(), 2.15)
   const wheel = sub(spots.asiatique, wheelParts(), [0.02, 0.165, -0.02])
+  wheel.rotation.x = -0.20 // A slight tilt keeps the rim legible from the overview camera.
   // Chinatown: the red gate, shophouses with bright signs, a string of lanterns.
   spots.chinatown = toy(SPOTS.chinatown, chinatownParts())
   const lanterns = sub(spots.chinatown, lanternParts(), [0, 0.125, 0.07])
@@ -828,11 +829,12 @@ function asiatiqueParts(): BufferGeometry[] {
 /** The big wheel: a white rim and spokes, a gondola in every color round it. It faces the south, turning about z. */
 function wheelParts(): BufferGeometry[] {
   const r = 0.125
-  const parts = [P.torus(r, 0.006, '#FFFFFF', {}), P.torus(r * 0.55, 0.004, '#F4E9FF', {})]
+  const parts = [P.torus(r, 0.008, PAL.hotpink, {})]
   const cols = [PAL.pink, PAL.butter, PAL.mint, PAL.lavender, PAL.sky, PAL.peach, PAL.hotpink, '#FFFFFF']
   for (let i = 0; i < 8; i++) {
     const a = (i / 8) * Math.PI * 2
-    parts.push(P.box(r * 2, 0.004, 0.004, '#FFFFFF', { rot: [0, 0, a / 2] }), P.sphere(0.018, cols[i], { at: [Math.cos(a) * r, Math.sin(a) * r, 0], scale: [1, 1, 0.8] }, 8))
+    if (i < 4) parts.push(P.box(r * 2, 0.005, 0.005, CREAM, { rot: [0, 0, a] }))
+    parts.push(P.rbox(0.038, 0.03, 0.035, 0.008, cols[i], { at: [Math.cos(a) * r, Math.sin(a) * r, 0] }))
   }
   return parts
 }
