@@ -124,6 +124,9 @@ New voices: `loon` (Lulu) and `gus`. The PR records every new line.
 - **The map:** `map/shape.ts` (a caricature of Canada in curves), `terrain.ts`, `places.ts` (seven dioramas),
   `critters.ts` (the snowy owl, orca, bison, beluga), `pins.ts` (the pink heart pin over every place still to do), `world.ts`. Portrait looks along the country from the east.
 
+- **Rideau Canal skaters:** six winter outfits, expressive faces and alternating skate pushes. The opening film and
+  hockey finale share the figures and their continuous loops, using the existing recorded canal ambience.
+
 ## Next
 
 - Kaylee plays it. Watch for: does she follow "tap a friend" on the map; does she sit through the films (hold ⏭

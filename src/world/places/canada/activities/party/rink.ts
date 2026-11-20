@@ -654,18 +654,7 @@ export class RinkWorld extends Base3D implements World3D {
       l.mat.color.setRGB(1, 0.86 + k * 0.1, 0.55 + k * 0.35)
       l.glow.scale.setScalar(1.3 + k * 0.5 + (l.t >= 0 ? wobble(l.t / 1.2, 3) * 0.2 : 0))
     }
-    for (const s of this.canal.skaters) {
-      const len = 30
-      const u = (((t * s.speed + s.phase) % (len * 2)) + len * 2) % (len * 2)
-      const fwd = u < len
-      const zz = -14 - (fwd ? u : len * 2 - u) * 0.75
-      const x = s.lane + Math.sin(t * 1.3 + s.phase) * 0.8 + (fwd ? -1 : 1) * 2.2
-      s.root.position.set(x, 0, zz)
-      s.root.rotation.y = fwd ? Math.PI : 0
-      s.body.rotation.z = Math.sin(t * 3 + s.phase) * 0.15
-      if (s.spinT >= 0 && (s.spinT += dt) > 0.9) s.spinT = -1
-      s.body.rotation.y = s.spinT >= 0 ? (s.spinT / 0.9) * Math.PI * 4 : 0
-    }
+    for (const skater of this.canal.skaters) skater.update(dt, t)
     if (this.standT >= 0) {
       this.standT += dt
       const k = this.standT
