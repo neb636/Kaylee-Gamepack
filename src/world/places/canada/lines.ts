@@ -355,8 +355,8 @@ export const L = {
     filmIn: {
       song: maple('Every big game starts with a song.'),
       // A loon calls, far across the water, and the mountains answer (a beat with no line). Maple's ears go up.
-      lulu: maple("That's Lulu the loon! Nobody sings like Lulu."),
-      across: maple("She lives across the lake, by the glacier. Let's paddle!"),
+      lulu: maple("That's Lulu the loon!"),
+      across: maple("She lives by the glacier. Let's paddle!"),
     },
     // The game's hello, from a link or a replay (after the film it starts on the water with Sparkle's line).
     story: maple('Bonjour! Hop in, we go to find Lulu!'),
@@ -388,7 +388,7 @@ export const L = {
     // The film out: under the glacier, Lulu with her chick on her back.
     filmOut: {
       ask: maple('Lulu! Will you sing at our big game?'),
-      yes: lulu('A big game? I will sing my very best song.'),
+      yes: lulu('A big game? I will sing my best song!'),
       // She calls, long and lovely, head thrown back. Her chick tries too: a tiny squeak (beats with no line).
       chick: maple('Hee hee! The littlest singer!'),
       // The pink scarf goes round Lulu's neck.
@@ -460,9 +460,8 @@ export const L = {
     // The film in (story/films/salmon.ts): the rainforest river, giant cedars, soft rain.
     filmIn: {
       white: maple('In this rainforest lives a bear as white as snow.'),
-      // Misty swings a paw at a jumping salmon: an enormous splash, and no fish.
-      swing: maple('Wow! Look at that swing!'),
-      fishing: misty("Shh. I'm fishing. No hockey till I've had my supper."),
+      // Misty swings a paw at a jumping salmon: an enormous splash, and no fish (a beat with no line). Then, dripping:
+      fishing: misty("Shh. I'm fishing. No hockey till supper."),
       // Maple, behind her paw, to the camera.
       help: maple("Psst! Let's help the salmon jump past her!"),
     },
