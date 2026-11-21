@@ -1,0 +1,61 @@
+{
+  "kind": "reel",
+  "name": "canada-map-moves",
+  "title": "Canada map moves",
+  "video": "canada-map-moves.mp4",
+  "gif": "canada-map-moves.gif",
+  "seconds": 70,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "canada-move-snowman",
+      "where": "canada-move-snowman",
+      "seconds": 9,
+      "fps": 18.1,
+      "status": "ok"
+    },
+    {
+      "name": "canada-move-bike",
+      "where": "canada-move-bike",
+      "seconds": 9,
+      "fps": 35.4,
+      "status": "ok"
+    },
+    {
+      "name": "canada-move-campfire",
+      "where": "canada-move-campfire",
+      "seconds": 9,
+      "fps": 44.3,
+      "status": "ok"
+    },
+    {
+      "name": "canada-move-canoe",
+      "where": "canada-move-canoe",
+      "seconds": 9,
+      "fps": 38.3,
+      "status": "ok"
+    },
+    {
+      "name": "canada-move-bath",
+      "where": "canada-move-bath",
+      "seconds": 9,
+      "fps": 41,
+      "status": "ok"
+    },
+    {
+      "name": "canada-move-whales",
+      "where": "canada-move-whales",
+      "seconds": 9,
+      "fps": 30.3,
+      "status": "ok"
+    },
+    {
+      "name": "canada-map-hut",
+      "where": "canada-map-hut",
+      "seconds": 5,
+      "fps": 127.3,
+      "status": "ok"
+    }
+  ]
+}

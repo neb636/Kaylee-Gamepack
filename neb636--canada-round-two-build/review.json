@@ -1,0 +1,423 @@
+{
+ "title": "Canada, round two: three chapters rebuilt, and a cabin to dress the team",
+ "checkIn": "ship",
+ "kaylee": "She gives a muddy bear a bubble bath and a new look, plays flashlight statues with a sneaky raccoon, plays peek-a-boo with whales, and dresses the whole hockey team. What she makes goes to the big game.",
+ "questions": [],
+ "reels": [
+  {
+   "name": "canada-bath",
+   "moments": []
+  },
+  {
+   "name": "campfire",
+   "moments": []
+  },
+  {
+   "name": "whales",
+   "moments": []
+  },
+  {
+   "name": "canada-cabin",
+   "moments": []
+  },
+  {
+   "name": "canada-map-moves",
+   "moments": []
+  },
+  {
+   "name": "canada-hockey-moves",
+   "moments": []
+  }
+ ],
+ "links": [
+  {
+   "label": "Misty's Bubble Bath",
+   "hash": "#/world/canada/bath"
+  },
+  {
+   "label": "Flashlight Statues",
+   "hash": "#/world/canada/campfire"
+  },
+  {
+   "label": "Whale Peek-a-Boo",
+   "hash": "#/world/canada/whales"
+  },
+  {
+   "label": "The Team Cabin, whole team",
+   "hash": "#/world/canada/cabin/dress?team=all"
+  },
+  {
+   "label": "The map: Misty comes home",
+   "hash": "#/world/canada/hub/map?team=snowman,bike,campfire,canoe&new=bath"
+  },
+  {
+   "label": "Feel lab: the bath",
+   "hash": "#/world/canada/bath/wash?feel=1"
+  },
+  {
+   "label": "Feel lab: the flashlight",
+   "hash": "#/world/canada/campfire/eyes?feel=1"
+  },
+  {
+   "label": "Feel lab: the humpback's jump",
+   "hash": "#/world/canada/whales/humpback?feel=1"
+  }
+ ],
+ "listens": [
+  {
+   "title": "Misty's Bubble Bath",
+   "audio": "sfx/bath.mp3",
+   "items": [
+    {
+     "text": "Sponge scrubbing suds (loop)",
+     "at": 0,
+     "end": 3
+    },
+    {
+     "text": "A sponge squeak",
+     "at": 3.7,
+     "end": 4.18
+    },
+    {
+     "text": "Bubbles popping",
+     "at": 4.88,
+     "end": 5.48
+    },
+    {
+     "text": "Little rain cloud (loop)",
+     "at": 6.18,
+     "end": 9.18
+    },
+    {
+     "text": "Towel rubbing (loop)",
+     "at": 9.88,
+     "end": 12.88
+    },
+    {
+     "text": "A comb through fur",
+     "at": 13.58,
+     "end": 14.06
+    },
+    {
+     "text": "A berry bush squashed",
+     "at": 14.76,
+     "end": 15.36
+    },
+    {
+     "text": "Berry juice dabbed on",
+     "at": 16.06,
+     "end": 16.54
+    },
+    {
+     "text": "A wet bear shakes",
+     "at": 17.24,
+     "end": 18.44
+    },
+    {
+     "text": "Paw print: THUMP",
+     "at": 19.14,
+     "end": 19.82
+    },
+    {
+     "text": "Back scratched on a tree",
+     "at": 20.52,
+     "end": 21.88
+    },
+    {
+     "text": "A banana slug stretches",
+     "at": 22.58,
+     "end": 23.26
+    },
+    {
+     "text": "The pool glows like a mirror",
+     "at": 23.96,
+     "end": 25.44
+    },
+    {
+     "text": "The sweater goes on",
+     "at": 26.14,
+     "end": 27.02
+    },
+    {
+     "text": "A decoration pops on",
+     "at": 27.72,
+     "end": 28.2
+    },
+    {
+     "text": "The soap slips out",
+     "at": 28.9,
+     "end": 29.5
+    }
+   ]
+  },
+  {
+   "title": "Flashlight Statues",
+   "audio": "sfx/campfire.mp3",
+   "items": [
+    {
+     "text": "Little giggles in the dark (a kit hiding)",
+     "at": 0,
+     "end": 1
+    },
+    {
+     "text": "The flashlight's switch",
+     "at": 1.7,
+     "end": 2.18
+    },
+    {
+     "text": "Freeze! (caught in the beam)",
+     "at": 2.88,
+     "end": 3.56
+    },
+    {
+     "text": "A statue wobbling",
+     "at": 4.26,
+     "end": 5.14
+    },
+    {
+     "text": "Falling over in the leaves",
+     "at": 5.84,
+     "end": 6.64
+    },
+    {
+     "text": "Yoink! (a marshmallow grabbed)",
+     "at": 7.34,
+     "end": 7.94
+    },
+    {
+     "text": "A porcupine puffs his quills",
+     "at": 8.64,
+     "end": 9.32
+    },
+    {
+     "text": "A deer stops mid-chew",
+     "at": 10.02,
+     "end": 10.82
+    },
+    {
+     "text": "A little bat squeaks (and yawns)",
+     "at": 11.52,
+     "end": 12.4
+    },
+    {
+     "text": "Monty's sunglasses go on",
+     "at": 13.1,
+     "end": 13.66
+    },
+    {
+     "text": "The northern lights shimmer",
+     "at": 14.36,
+     "end": 18.35
+    }
+   ]
+  },
+  {
+   "title": "Whale Peek-a-Boo",
+   "audio": "sfx/whales.mp3",
+   "items": [
+    {
+     "text": "Bubbles come up where a whale will peek out",
+     "at": 0,
+     "end": 1.36
+    },
+    {
+     "text": "One bubble pops at the surface",
+     "at": 2.06,
+     "end": 2.54
+    },
+    {
+     "text": "A whale pops up: peek-a-boo!",
+     "at": 3.24,
+     "end": 4.44
+    },
+    {
+     "text": "Spray rains down on the little boat",
+     "at": 5.14,
+     "end": 6.5
+    },
+    {
+     "text": "The grey whale rolls over in the water",
+     "at": 7.2,
+     "end": 8.68
+    },
+    {
+     "text": "The whale laughs bubbles",
+     "at": 9.38,
+     "end": 10.58
+    },
+    {
+     "text": "A tail slaps the water",
+     "at": 11.28,
+     "end": 12.28
+    },
+    {
+     "text": "Held down: the humpback sinks in a rush of bubbles (loop)",
+     "at": 12.98,
+     "end": 15.98
+    },
+    {
+     "text": "A whale rushes up out of the water",
+     "at": 16.68,
+     "end": 17.68
+    },
+    {
+     "text": "The jump's wave washes over the boat",
+     "at": 18.38,
+     "end": 19.74
+    },
+    {
+     "text": "A little splash",
+     "at": 20.44,
+     "end": 21.04
+    },
+    {
+     "text": "The baby orca giggles",
+     "at": 21.74,
+     "end": 22.74
+    },
+    {
+     "text": "The rock tossed up into the air",
+     "at": 23.44,
+     "end": 24.04
+    }
+   ]
+  },
+  {
+   "title": "The Team Cabin",
+   "audio": "sfx/cabin.mp3",
+   "items": [
+    {
+     "text": "A thing flies onto a friend",
+     "at": 0,
+     "end": 0.6
+    },
+    {
+     "text": "It lands on and is worn",
+     "at": 1.3,
+     "end": 1.9
+    },
+    {
+     "text": "A cheek stamp pressed on",
+     "at": 2.6,
+     "end": 3.08
+    },
+    {
+     "text": "Dropped in a silly place",
+     "at": 3.78,
+     "end": 4.46
+    },
+    {
+     "text": "A friend giggles",
+     "at": 5.16,
+     "end": 6.16
+    },
+    {
+     "text": "The mirror takes the team photo",
+     "at": 6.86,
+     "end": 8.06
+    },
+    {
+     "text": "The window swings open for Gus",
+     "at": 8.76,
+     "end": 9.56
+    },
+    {
+     "text": "A bin on the shelf opens",
+     "at": 10.26,
+     "end": 10.74
+    },
+    {
+     "text": "The stove poked",
+     "at": 11.44,
+     "end": 12.64
+    },
+    {
+     "text": "The skates on their pegs knock together",
+     "at": 13.34,
+     "end": 13.94
+    },
+    {
+     "text": "The hut (bed)",
+     "at": 14.64,
+     "end": 20.64
+    }
+   ]
+  },
+  {
+   "title": "The map: moves, the hut, Gus",
+   "audio": "sfx/map.mp3",
+   "items": [
+    {
+     "text": "Tuque tosses a puck up",
+     "at": 0,
+     "end": 0.48
+    },
+    {
+     "text": "A puck boings off Tuque's snowy tummy",
+     "at": 1.18,
+     "end": 1.98
+    },
+    {
+     "text": "The puck clacks down on the ice",
+     "at": 2.68,
+     "end": 3.32
+    },
+    {
+     "text": "Monty freezes like a statue",
+     "at": 4.02,
+     "end": 4.9
+    },
+    {
+     "text": "Two geese flap in and land on Monty's antlers",
+     "at": 5.6,
+     "end": 6.6
+    },
+    {
+     "text": "Roxy leaps over the boards",
+     "at": 7.3,
+     "end": 7.78
+    },
+    {
+     "text": "Roxy whisks the puck",
+     "at": 8.48,
+     "end": 9.08
+    },
+    {
+     "text": "Misty's slap shot",
+     "at": 9.78,
+     "end": 10.78
+    },
+    {
+     "text": "The pinecone lands on the ice",
+     "at": 11.48,
+     "end": 12.16
+    },
+    {
+     "text": "Ollie's rock lands in a paw",
+     "at": 12.86,
+     "end": 13.33
+    },
+    {
+     "text": "Ollie spins like a top",
+     "at": 14.03,
+     "end": 14.63
+    },
+    {
+     "text": "The rock is passed",
+     "at": 15.33,
+     "end": 15.81
+    },
+    {
+     "text": "The skate hut's door opens",
+     "at": 16.51,
+     "end": 17.51
+    },
+    {
+     "text": "Gus gulps (a whole team!)",
+     "at": 18.21,
+     "end": 18.81
+    }
+   ]
+  }
+ ]
+}

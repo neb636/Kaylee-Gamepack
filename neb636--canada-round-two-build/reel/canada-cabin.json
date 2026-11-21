@@ -1,0 +1,40 @@
+{
+  "kind": "reel",
+  "name": "canada-cabin",
+  "title": "Canada cabin",
+  "video": "canada-cabin.mp4",
+  "gif": "canada-cabin.gif",
+  "seconds": 48,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "canada-cabin-drag",
+      "where": "canada-cabin-drag",
+      "seconds": 16,
+      "fps": 31.5,
+      "status": "ok"
+    },
+    {
+      "name": "canada-cabin-silly",
+      "where": "canada-cabin-silly",
+      "seconds": 12,
+      "fps": 45.8,
+      "status": "ok"
+    },
+    {
+      "name": "canada-cabin-gus",
+      "where": "canada-cabin-gus",
+      "seconds": 8,
+      "fps": 57.3,
+      "status": "ok"
+    },
+    {
+      "name": "canada-cabin-photo",
+      "where": "canada-cabin-photo",
+      "seconds": 6,
+      "fps": 40.2,
+      "status": "ok"
+    }
+  ]
+}

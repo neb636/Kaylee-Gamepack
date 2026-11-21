@@ -1,0 +1,47 @@
+{
+  "kind": "reel",
+  "name": "whales",
+  "title": "Whales",
+  "video": "whales.mp4",
+  "gif": "whales.gif",
+  "seconds": 146,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Canada story whales in",
+      "where": "#/world/canada/story/whales-in",
+      "seconds": 16,
+      "fps": 52,
+      "status": "ok"
+    },
+    {
+      "name": "canada-whales-grey",
+      "where": "canada-whales-grey",
+      "seconds": 22,
+      "fps": 43.2,
+      "status": "ok"
+    },
+    {
+      "name": "canada-whales-soaked",
+      "where": "canada-whales-soaked",
+      "seconds": 16,
+      "fps": 57.5,
+      "status": "ok"
+    },
+    {
+      "name": "canada-whales-hold",
+      "where": "canada-whales-hold",
+      "seconds": 50,
+      "fps": 64,
+      "status": "ok"
+    },
+    {
+      "name": "canada-whales-orcas",
+      "where": "canada-whales-orcas",
+      "seconds": 34,
+      "fps": 65,
+      "status": "ok"
+    }
+  ]
+}
