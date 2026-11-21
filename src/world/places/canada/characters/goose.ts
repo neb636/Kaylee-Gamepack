@@ -2,7 +2,12 @@
 // neck, a black head with the white chinstrap and a black bill that opens when it talks or honks. Gus, the captain of
 // the geese, is one with a blue captain's band on his neck and a voice; his team are the same goose, silent (they
 // honk: the sound is the scene's). They carry little blue hockey sticks under a wing.
+//
+// A goose pulls the silly faces in its own style (ToyPose.silly, engine3d/characters/face.ts): its little side eyes go
+// huge with pin pupils (dazzled), ringed and turning (dizzy), crossed toward the bill, one up and one down with drips
+// (soaked), or one squeezed shut under pink foam (sudsy). Gus pulls them at the rink as the team grows.
 import { Group, Vector3, type Object3D } from 'three'
+import type { Silly } from '../../../engine3d/characters/face'
 import type { Bag } from '../../../engine3d/dispose'
 import { merge, P, solid, solidMix } from '../../../engine3d/geo'
 import { CANADA_COLORS } from './looks'
@@ -31,8 +36,14 @@ export class Goose extends ToyActor {
   private wingL = new Group()
   private wingR = new Group()
   private headAt: Vector3
+  /** The silly faces, built the first time each is pulled, and the one showing. */
+  private sillies = new Map<Silly, { root: Group; spin: Group[] }>()
+  private sillyOn: Silly | null = null
 
-  constructor(bag: Bag, o: GooseOpts = {}) {
+  constructor(
+    private bag: Bag,
+    o: GooseOpts = {},
+  ) {
     super(o.height ?? 0.95, o.voice)
     const H = this.height
     const px = 2.2
@@ -113,15 +124,83 @@ export class Goose extends ToyActor {
     this.wingR.add(o)
   }
 
-  protected animate(p: ToyPose, _dt: number, t: number) {
+  /** A silly pair of eyes in the goose's own style, in the eyes' own space (each eye's white sits where the usual one
+   *  does: on the side of the head, a little forward, facing +z). */
+  private buildSilly(kind: Silly) {
+    const H = this.height
+    const X = 0.075 * H
+    const Z = 0.118 * H
+    const W = 0.042 * H
+    const root = new Group()
+    const spin: Group[] = []
+    const white = (s: number, k: number) => P.sphere(W * k, WHITE, { at: [s * X, 0, Z - W * (k - 1) * 0.3], scale: [1, 1.12, 0.48] }, 12)
+    /** The front of an eye's white, `k` times the usual size. */
+    const front = (k: number) => Z - W * (k - 1) * 0.3 + W * k * 0.48
+    const pupil = (s: number, k: number, dx: number, dy: number, r: number) => [
+      P.sphere(W * r, BLACK, { at: [s * X + dx * W * k, dy * W * k, front(k) - W * r * 0.2], scale: [1, 1.1, 0.4] }, 10),
+      P.sphere(W * r * 0.38, WHITE, { at: [s * X + (dx - 0.15) * W * k + W * r * 0.25, (dy + 0.2) * W * k, front(k) + W * 0.02] }, 6),
+    ]
+    if (kind === 'dazzled') {
+      // Huge round eyes with tiny pin pupils: the brightest thing she ever saw.
+      root.add(solidMix([white(-1, 1.6), white(1, 1.6)], [...pupil(-1, 1.6, 0, 0, 0.22), ...pupil(1, 1.6, 0, 0, 0.22)], this.bag, 1.6))
+    } else if (kind === 'dizzy') {
+      // Two rings in each eye on a disc that turns.
+      root.add(solidMix([white(-1, 1.35), white(1, 1.35)], [], this.bag, 1.6))
+      for (const s of [-1, 1]) {
+        const g = solidMix([], [P.torus(W * 0.85, W * 0.13, BLACK, {}, Math.PI * 1.55), P.torus(W * 0.42, W * 0.13, BLACK, { rot: [0, 0, 2.2] }, Math.PI * 1.6), P.sphere(W * 0.14, BLACK, { scale: [1, 1, 0.4] }, 8)], this.bag, 0)
+        g.position.set(s * X, 0, front(1.35) + W * 0.02)
+        root.add(g)
+        spin.push(g)
+      }
+    } else if (kind === 'soaked') {
+      // One eye up and out, the other down and in, and three drips off the top of the head.
+      const drips = [-1, 0, 1].map((k, i) => P.sphere(W * 0.32, '#8FD3F7', { at: [k * X * 0.9, W * (2.1 - i * 0.25), Z - W * 0.6], scale: [0.75, 1.3, 0.75] }, 8))
+      root.add(solidMix([white(-1, 1.2), white(1, 1.2)], [...pupil(-1, 1.2, -0.35, 0.4, 0.5), ...pupil(1, 1.2, -0.25, -0.45, 0.5), ...drips], this.bag, 1.6))
+    } else if (kind === 'sudsy') {
+      // The right eye squeezed shut (a happy arc), the left one wide, pink foam over the shut one.
+      const shut = P.torus(W * 0.75, W * 0.16, BLACK, { at: [X, -W * 0.25, front(1) - W * 0.1] }, Math.PI)
+      const foam = [P.sphere(W * 0.95, '#FFE3F0', { at: [X * 1.15, W * 1.25, Z - W * 0.2] }, 10), P.sphere(W * 0.7, WHITE, { at: [X * 0.55, W * 1.5, Z - W * 0.1] }, 10), P.sphere(W * 0.6, '#FFD0E4', { at: [X * 1.6, W * 0.7, Z - W * 0.4] }, 10)]
+      root.add(solidMix([white(-1, 1.25), ...foam], [...pupil(-1, 1.25, 0.1, 0.1, 0.6), shut], this.bag, 1.6))
+    } else {
+      // Crossed: both pupils on the bill.
+      root.add(solidMix([white(-1, 1.2), white(1, 1.2)], [...pupil(-1, 1.2, 0.5, -0.3, 0.55), ...pupil(1, 1.2, -0.5, -0.3, 0.55)], this.bag, 1.6))
+    }
+    root.position.copy(this.eyes.position)
+    root.visible = false
+    this.neck.add(root)
+    return { root, spin }
+  }
+
+  /** The silly face showing now, if any. */
+  get sillyFace() {
+    return this.sillyOn
+  }
+
+  private showSilly(kind: Silly | null) {
+    if (kind === this.sillyOn) return
+    if (this.sillyOn) this.sillies.get(this.sillyOn)!.root.visible = false
+    this.sillyOn = kind
+    if (kind) {
+      let f = this.sillies.get(kind)
+      if (!f) this.sillies.set(kind, (f = this.buildSilly(kind)))
+      f.root.visible = true
+    }
+    this.eyes.visible = !kind
+  }
+
+  protected animate(p: ToyPose, dt: number, t: number) {
     const sad = p.droop
     const happy = p.face?.kind === 'happy' ? p.face.k : 0
     const wow = p.face?.kind === 'wow' ? p.face.k : 0
-    // The neck: up tall when surprised, forward when gliding, drooping when sad, bobbing as it honks.
-    this.neck.rotation.set(p.nod + sad * 0.5 - wow * 0.15 + (p.moving === 'glide' ? 0.25 : 0) + p.talk * 0.06 * Math.sin(t * 20), p.headTurn + 0.25 * p.shake, 0.12 * p.wave - 0.2 * p.shake + happy * 0.12 * Math.sin(t * 9))
-    this.neck.scale.y = 1 + wow * 0.12 + 0.01 * p.breath
+    this.showSilly(p.silly)
+    const silly = p.silly ? 1 : 0
+    if (p.silly === 'dizzy') for (const g of this.sillies.get('dizzy')!.spin) g.rotation.z -= dt * 7
+    // The neck: up tall when surprised, forward when gliding, drooping when sad, bobbing as it honks; a wobble while it
+    // pulls a silly face.
+    this.neck.rotation.set(p.nod + sad * 0.5 - wow * 0.15 - silly * 0.1 + (p.moving === 'glide' ? 0.25 : 0) + p.talk * 0.06 * Math.sin(t * 20), p.headTurn + 0.25 * p.shake, 0.12 * p.wave - 0.2 * p.shake + happy * 0.12 * Math.sin(t * 9) + silly * 0.09 * Math.sin(t * 16))
+    this.neck.scale.y = 1 + wow * 0.12 + silly * 0.06 + 0.01 * p.breath
     this.eyes.scale.y = Math.min(p.lid, 1 - sad * 0.4 - happy * 0.6) * (1 + wow * 0.25)
-    this.bill.rotation.x = Math.max(p.talk, wow * 0.6, happy * 0.4) * 0.7
+    this.bill.rotation.x = Math.max(p.talk, wow * 0.6, happy * 0.4, p.silly === 'dazzled' || p.silly === 'dizzy' ? 0.55 : 0) * 0.7
     // The wings: folded; up for a cheer, the right one for a wave, beating in the air, out a little while skating.
     const out = p.moving === 'glide' ? 0.35 : 0
     const beat = p.flap * 0.9
