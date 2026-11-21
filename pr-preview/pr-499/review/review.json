@@ -1,0 +1,18 @@
+{
+  "title": "Canada: no more shimmering snow, grass or wall",
+  "checkIn": "fix",
+  "kaylee": "The snow, the grass trail behind her snowballs, the cliff wall in the parade and the bike trail's fallen leaves stay still now instead of shimmering as the camera moves.",
+  "questions": [],
+  "reels": [
+    { "name": "shimmer-before", "moments": ["canada-snowman-roll", "#/world/canada/snowman/parade?snowmen=5", "canada-bike-steer"] },
+    { "name": "shimmer-after", "moments": ["canada-snowman-roll", "#/world/canada/snowman/parade?snowmen=5", "canada-bike-steer"] }
+  ],
+  "pictures": [
+    { "title": "The snow patches up close", "before": "pics/snow-before.jpg", "after": "pics/snow-after.jpg", "caption": "Before: overlapping patches flicker in stripes. After: smooth." }
+  ],
+  "links": [
+    { "label": "Roll snowballs", "hash": "#/world/canada/snowman/roll" },
+    { "label": "The parade", "hash": "#/world/canada/snowman/parade?snowmen=5" },
+    { "label": "Mountain bike", "hash": "#/world/canada/bike" }
+  ]
+}
