@@ -28,10 +28,6 @@ function read(): Trophy[] {
   return cache
 }
 
-export function getTrophies(): Trophy[] {
-  return read()
-}
-
 export function awardTrophy(t: Pick<Trophy, 'gameId' | 'gameTitle' | 'trophyTitle' | 'emoji'>): Trophy {
   const now = new Date().toISOString()
   const existing = read().find((x) => x.gameId === t.gameId)

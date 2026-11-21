@@ -149,16 +149,3 @@ export const STOPS: { id: Region; at: LL; acts: string[] }[] = [
   { id: 'banff', at: [-115.3, 51.18], acts: ['canoe', 'bridge'] },
   { id: 'bc', at: [-122.7, 49.35], acts: ['whales', 'salmon'] },
 ]
-
-/** Which region a longitude is in (along the track). */
-export function regionAt([lon]: LL): Region {
-  if (lon > -71.2) return 'msa'
-  if (lon > -73) return 'quebec'
-  if (lon > -77.5) return 'ottawa'
-  if (lon > -96) return 'forest'
-  if (lon > -113.5) return 'prairies'
-  if (lon > -114.8) return 'rockies'
-  if (lon > -116.8) return 'banff'
-  if (lon > -121.3) return 'rockies'
-  return 'bc'
-}

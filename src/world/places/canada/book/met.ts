@@ -17,9 +17,6 @@ function read(): AnimalId[] {
   }
 }
 
-/** Every animal she's met (in the order she met them). */
-export const metSoFar = (): AnimalId[] => read()
-
 /** She met this animal: true the first time (the card pops up and Sparkle names it), false after. */
 export function meet(id: AnimalId): boolean {
   const met = read()
