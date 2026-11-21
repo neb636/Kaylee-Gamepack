@@ -150,7 +150,7 @@ function frameOf(look: Look): Frame {
     headY,
     shoulder: penguin ? [0.3 * H, 0.5 * H, 0] : look.species === 'tern' ? [0.15 * H, 0.45 * H, -0.01 * H] : [0.155 * H * c, 0.47 * H, 0],
     eyeX: look.species === 'unicorn' || look.species === 'pony' ? 0.37 * R : look.species === 'hornbill' || look.species === 'gecko' ? 0.46 * R : bird ? 0.42 * R : 0.36 * R,
-    eyeY: look.species === 'gecko' ? 0.2 * R : look.species === 'unicorn' || look.species === 'pony' ? 0.12 * R : penguin ? 0.02 * R : bird ? 0.14 * R : 0.05 * R,
+    eyeY: look.species === 'beaver' ? 0.19 * R : look.species === 'gecko' ? 0.2 * R : look.species === 'unicorn' || look.species === 'pony' ? 0.12 * R : penguin ? 0.02 * R : bird ? 0.14 * R : 0.05 * R,
     eyeSize: (look.species === 'gecko' ? 0.3 : 0.21) * R,
     lift: penguin ? 0.12 * R : look.species === 'monkey' ? 0.07 * R : 0,
     on: (x, y, lift = 0) => [x, headY + y, Math.sqrt(Math.max(0, R * R - x * x - y * y)) + lift],
@@ -515,6 +515,16 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   // ---- The face: big shiny eyes, blush, a smile (or a big open happy mouth) ----
   for (const s of [-1, 1]) {
     const x = s * eyeX
+    if (look.species === 'beaver') {
+      // The whites, amber irises and catchlights blink together.
+      const y = eyeY
+      const rot = turnTo(x)
+      eyesPlain.push(P.sphere(0.20 * R, '#FFF2DA', { at: on(x, y), rot, scale: [0.93, 1.1, 0.52] }, 28))
+      eyesPlain.push(P.sphere(0.16 * R, '#855231', { at: on(x - s * 0.012 * R, y, 0.078 * R), rot, scale: [0.92, 1.06, 0.39] }, 24))
+      eyesPlain.push(P.sphere(0.121 * R, '#281B19', { at: on(x - s * 0.018 * R, y, 0.118 * R), rot, scale: [0.96, 1.1, 0.31] }, 24))
+      eyesPlain.push(P.sphere(0.042 * R, WHITE, { at: on(x - 0.035 * R, y + 0.045 * R, 0.158 * R), scale: [1, 1, 0.45] }))
+      continue
+    }
     eyes.push(P.sphere(eyeSize, INK, { at: on(x, eyeY, lift - 0.03 * R), rot: turnTo(x), scale: [0.78, 1, 0.42] }))
     eyesPlain.push(P.sphere(eyeSize * 0.3, WHITE, { at: on(x + s * 0.05 * R, eyeY + 0.08 * R, lift + 0.035 * R) }))
     eyesPlain.push(P.sphere(eyeSize * 0.14, WHITE, { at: on(x - s * 0.05 * R, eyeY - 0.07 * R, lift + 0.035 * R) }))
@@ -820,34 +830,45 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       break
     }
     case 'beaver': {
-      // A beaver: a round head that widens into chubby fur cheeks, small round ears, kind arched brows, a light muzzle
-      // of two puffy pads round a small shiny nose, and under them a big open grin with her two white front teeth
-      // hanging from the top lip inside it (Canada's beavers are proud of them). The flat paddle tail lies out behind,
-      // criss-crossed like scales.
-      head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1.08, 1, 1] }, 26))
-      for (const s of [-1, 1]) {
-        head.push(P.sphere(0.2 * R, look.fur, { at: [s * 0.72 * R, headY + 0.68 * R, -0.05 * R], scale: [1, 1, 0.7] }))
-        headPlain.push(P.sphere(0.11 * R, look.ear ?? look.light, { at: [s * 0.72 * R, headY + 0.67 * R, 0.06 * R], scale: [1, 1, 0.4] }))
-        // Chubby fur cheeks low on each side, so the face is widest at the bottom.
-        head.push(P.sphere(0.42 * R, look.fur, { at: [s * 0.5 * R, headY - 0.4 * R, 0.36 * R], scale: [1, 0.85, 0.9] }, 20))
-        // The muzzle pads either side of the nose.
-        head.push(P.sphere(0.29 * R, look.light, { at: [s * 0.17 * R, headY - 0.3 * R, 0.75 * R], scale: [1.05, 0.8, 0.72] }))
-        // Kind arched brows in the nose's color, a little way above each eye.
-        const bx = s * (eyeX + 0.02 * R)
-        headPlain.push(P.torus(0.12 * R, 0.024 * R, look.dark, { at: on(bx, eyeY + 0.27 * R, 0.01 * R), rot: [0, turnTo(bx)[1], Math.PI * 0.2 - s * 0.12] }, Math.PI * 0.6))
+      // One continuous cheek-to-temple contour. Widen the skull below the eyes and
+      // transform its normals along with the surface to keep the lighting smooth.
+      const skull = P.sphere(1, look.fur, {}, 48)
+      const pos = skull.attributes.position
+      const normal = skull.attributes.normal
+      const n = new Vector3()
+      for (let i = 0; i < pos.count; i++) {
+        const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i)
+        const cheek = Math.exp(-((y + 0.36) ** 2) / 0.18)
+        const width = 1 + 0.17 * cheek - 0.04 * y
+        const slope = -0.34 * (y + 0.36) * cheek / 0.18 - 0.04
+        pos.setXYZ(i, x * width, y, z)
+        n.set(x / width, y - x * x * slope / width, z).normalize()
+        normal.setXYZ(i, n.x, n.y, n.z)
       }
-      // The light chin under the grin.
-      head.push(P.sphere(0.3 * R, look.light, { at: [0, headY - 0.6 * R, 0.66 * R], scale: [1.15, 0.75, 0.7] }))
-      // A small round nose on top of the pads, with a shine.
-      head.push(P.sphere(0.12 * R, look.dark, { at: [0, headY - 0.16 * R, 1.0 * R], scale: [1.35, 0.85, 0.8] }))
-      headPlain.push(P.sphere(0.03 * R, WHITE, { at: [-0.05 * R, headY - 0.11 * R, 1.09 * R], scale: [1.3, 0.8, 0.5] }))
-      // The two front teeth, white and rounded, hanging from under the pads into the grin (on the head, so they stay
-      // put while the grin opens wider under them when she talks).
-      head.push(...[-1, 1].map((s) => P.rbox(0.105 * R, 0.15 * R, 0.05 * R, 0.035 * R, BEAVER_TEETH, { at: [s * 0.056 * R, headY - 0.56 * R, 0.94 * R], rot: [-0.2, 0, 0] })))
-      // The grin, built down from the top lip: a dark open mouth with a pink tongue, which stretches down to talk.
-      mouthAt = [0, headY - 0.47 * R, 0.87 * R]
-      rest.push(P.sphere(0.17 * R, MOUTH, { at: [0, -0.1 * R, 0], scale: [1.3, 0.78, 0.45] }, 20))
-      rest.push(P.sphere(0.09 * R, TONGUE, { at: [0, -0.17 * R, 0.04 * R], scale: [1.5, 0.55, 0.6] }))
+      head.push(skull.scale(R, R, R).translate(0, headY, 0))
+      for (const s of [-1, 1]) {
+        const ear: V3 = [s * 0.79 * R, headY + 0.67 * R, -0.04 * R]
+        head.push(P.sphere(0.21 * R, look.fur, { at: ear, scale: [1, 1.07, 0.65] }, 26))
+        headPlain.push(P.sphere(0.135 * R, '#87563E', { at: [ear[0], ear[1], 0.062 * R], scale: [1, 1.06, 0.32] }, 24))
+        const bx = s * eyeX
+        headPlain.push(P.torus(0.148 * R, 0.031 * R, look.dark, { at: on(bx, 0.39 * R, 0.035 * R), rot: [-0.46, turnTo(bx)[1], 0.52 - s * 0.18] }, Math.PI - 1.04))
+        headPlain.push(P.sphere(0.26 * R, look.light, { at: [s * 0.165 * R, headY - 0.175 * R, 0.97 * R], rot: [0, s * 0.23, s * 0.16], scale: [1.03, 0.85, 0.69] }, 32))
+      }
+      headPlain.push(P.sphere(0.175 * R, '#4D3329', { at: [0, headY - 0.036 * R, 1.115 * R], scale: [1.08, 0.78, 0.74] }, 30))
+      headPlain.push(P.sphere(0.032 * R, '#D7B79C', { at: [-0.055 * R, headY + 0.018 * R, 1.224 * R], scale: [1.45, 0.64, 0.38] }))
+      // Tilt the smile along the slope of the jaw. Its upper corners curl up under
+      // the muzzle, and the teeth stay fixed while the lower lip moves with speech.
+      mouthAt = [0, headY - 0.29 * R, 0.986 * R]
+      const smile = P.sphere(1, '#512B2A', {}, 36)
+      const lip = smile.attributes.position
+      for (let i = 0; i < lip.count; i++) {
+        const x = lip.getX(i), y = lip.getY(i)
+        lip.setXYZ(i, x * 0.34, y * 0.18 + x * x * 0.17 - 0.095, lip.getZ(i) * 0.085)
+      }
+      smile.computeVertexNormals()
+      rest.push(smile.scale(R, R, R).rotateX(0.4))
+      rest.push(P.sphere(0.09 * R, '#C67B71', { at: [0, -0.193 * R, -0.017 * R], rot: [0.4, 0, 0], scale: [1.45, 0.47, 0.34] }))
+      for (const s of [-1, 1]) headPlain.push(P.rbox(0.122 * R, 0.176 * R, 0.06 * R, 0.027 * R, BEAVER_TEETH, { at: [s * 0.064 * R, headY - 0.365 * R, 1.046 * R], rot: [0.30, s * 0.08, s * -0.035] }))
       tailRoot = [0, 0.13 * H, -0.15 * H * round[2]]
       tail.push(P.sphere(0.16 * H, look.dark, { at: [0, 0.07 * H, -0.3 * H * round[2]], rot: [0.12, 0, 0], scale: [0.72, 0.16, 1.15] }, 20))
       for (const a of [-0.5, 0.5]) for (const k of [-0.07, 0, 0.07]) tail.push(P.capsule(0.004 * H, 0.17 * H, '#4F3428', { at: [k * H, 0.095 * H, -0.3 * H * round[2]], rot: [Math.PI / 2 + 0.12, a, 0] }))
