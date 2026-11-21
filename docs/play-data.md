@@ -12,7 +12,7 @@ and local builds send nothing. Read it with the PostHog MCP (`execute-sql`, the 
 | Who | How it's tagged | What it sends |
 |---|---|---|
 | **Her** (the target audience) | `target_audience: true` on every event, and one identified person, `target-audience`, for all her devices | everything |
-| **The user** (a tester) | `?tester=1` once per browser (`?tester=0` undoes it); `tester: true` on its events | errors (`$exception`) and logs only |
+| **The user** (a tester) | `?tester=1` once per browser (`?tester=0` undoes it), before the `#` or after it (`…/#/world?tester=1`); `tester: true` on its events | errors (`$exception`) and logs only |
 | Anyone else on the public site | nothing | everything, untagged: leave it out |
 
 - **Her iPad** was found in the data on 2026-11-21: an 820×1180 screen that reports itself as "Mac OS X / Safari"
@@ -21,6 +21,9 @@ and local builds send nothing. Read it with the PostHog MCP (`execute-sql`, the 
   `distinct_id`:
   - `01a17bf5-be61-78c6-96d3-10f54e01ffb3`: Safari, 2026-10-27 to 2026-11-12
   - `01a1d15e-e84c-7f57-9643-727cd59f29e5`: the Home Screen app, since 2026-11-12
+- **A tester's browser goes quiet**: it sends no play at all, so it's absent from the data rather than tagged. Each
+  browser keeps its own tag: Safari, Chrome and an iPhone's Home Screen app each need `?tester=1` once. Before
+  2026-11-21 the tag existed only in builds from PR #502 on, and only before the `#`.
 - **A new device of hers** (or the iPad after iOS cleared its storage): open `…/Kaylee-Gamepack/?target_audience=1`
   on it once, inside the Home Screen app if it's one (that app's storage is separate from Safari's). If it can't be
   reached, find its anonymous id the same way (screen size, place, lots of `world_section_*`, no `tester`) and add

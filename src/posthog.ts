@@ -22,11 +22,17 @@ const TARGET_AUDIENCE_ID = 'target-audience'
 /** Which tags this launch's URL cleared (`?param=0`): PostHog's own copy of them is cleared after init too. */
 const cleared = new Set<string>()
 
-/** Reads (and, from `?param=1|0`, saves or clears) a per-browser tag. The param is taken off the URL. */
+/**
+ * Reads (and, from `?param=1|0`, saves or clears) a per-browser tag. The param is taken off the URL. It works before
+ * the `#` (`…/?tester=1#/world`) and inside the hash route's own query (`…/#/world/thailand?tester=1`), where every
+ * deep link keeps its state: until 2026-11-21 only the first worked, so a tag typed onto a game link did nothing.
+ */
 function tag(key: string, param: string): boolean {
   try {
     const url = new URL(location.href)
-    const value = url.searchParams.get(param)
+    const [route, routeQuery] = url.hash.split('?')
+    const hashParams = new URLSearchParams(routeQuery ?? '')
+    const value = url.searchParams.get(param) ?? hashParams.get(param)
     if (value === '1') localStorage.setItem(key, '1')
     if (value === '0') {
       localStorage.removeItem(key)
@@ -34,6 +40,9 @@ function tag(key: string, param: string): boolean {
     }
     if (value !== null) {
       url.searchParams.delete(param)
+      hashParams.delete(param)
+      const rest = hashParams.toString()
+      url.hash = rest ? `${route}?${rest}` : route
       history.replaceState(history.state, '', url)
     }
     return localStorage.getItem(key) === '1'

@@ -31,7 +31,7 @@ export class Taxi {
     this.st = buildSongthaew(bag, SAMET_GREEN)
     this.root = this.st.root
     this.driver = buildAnimal(DRIVER_LOOK, bag)
-    this.driver.root.position.set(this.st.length / 2 - 1.0, 0.3, 0.42)
+    this.driver.root.position.set(this.st.length / 2 - 1.15, 0.3, 0.42)
     this.driver.root.rotation.y = Math.PI / 2
     this.st.body.add(this.driver.root)
     this.life = new FaceLife(this.driver, 'sunbear')
