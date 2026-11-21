@@ -694,111 +694,6 @@
     "voice": "maple"
   },
   {
-    "text": "She's out in the kelp, where the whales swim.",
-    "voice": "maple"
-  },
-  {
-    "text": "Bonjour! Off we go to find Ollie!",
-    "voice": "maple"
-  },
-  "Hold the water where the boat should go!",
-  "Click and hold where the boat should go!",
-  "There is Ollie, fast asleep! Go gently.",
-  "A spout! Steer there to find the whale!",
-  "The orca family! Go fast and turn!",
-  "Shh! Listen to the whales sing.",
-  "Steer out past the lighthouse!",
-  "Go slowly to Ollie.",
-  "Take her back to her friends!",
-  "Look for the spout. Steer there!",
-  "Go fast and turn. The baby copies you!",
-  "Tap the yellow microphone to listen!",
-  "Click the yellow microphone to listen!",
-  {
-    "text": "Oh! Hello!",
-    "voice": "otter"
-  },
-  {
-    "text": "Wheee! Take me home!",
-    "voice": "otter"
-  },
-  {
-    "text": "Can I come too?",
-    "voice": "otter"
-  },
-  {
-    "text": "They hold hands so they don't float away!",
-    "voice": "maple"
-  },
-  {
-    "text": "Hey! Too fast!",
-    "voice": "otter"
-  },
-  {
-    "text": "Hi hi!",
-    "voice": "otter"
-  },
-  {
-    "text": "Yum, a clam!",
-    "voice": "otter"
-  },
-  {
-    "text": "I've never seen a whale!",
-    "voice": "maple"
-  },
-  {
-    "text": "A whale! A real whale!",
-    "voice": "maple"
-  },
-  {
-    "text": "It breathes out of its head!",
-    "voice": "maple"
-  },
-  {
-    "text": "Look at its tail!",
-    "voice": "maple"
-  },
-  {
-    "text": "Look at its long flippers!",
-    "voice": "maple"
-  },
-  {
-    "text": "Wow! It jumped right out!",
-    "voice": "maple"
-  },
-  {
-    "text": "Achoo! I am all wet!",
-    "voice": "maple"
-  },
-  {
-    "text": "Oops! Excuse us, whale!",
-    "voice": "maple"
-  },
-  {
-    "text": "Orcas! A whole family!",
-    "voice": "maple"
-  },
-  {
-    "text": "The grandma leads the family!",
-    "voice": "maple"
-  },
-  {
-    "text": "The baby copies you!",
-    "voice": "maple"
-  },
-  {
-    "text": "They all jumped together! Merci!",
-    "voice": "maple"
-  },
-  {
-    "text": "Toot toot!",
-    "voice": "maple"
-  },
-  {
-    "text": "The humpback is singing!",
-    "voice": "maple"
-  },
-  {
     "text": "Look! My lucky rock!",
     "voice": "otter"
   },
@@ -813,11 +708,27 @@
   "Bubbles! Tap them!",
   "Bubbles! Click them!",
   "Look for the bubbles!",
+  {
+    "text": "A whale! A real whale!",
+    "voice": "maple"
+  },
   "Tap the whale and see what it does!",
   "Click the whale and see what it does!",
   {
+    "text": "It breathes out of its head!",
+    "voice": "maple"
+  },
+  {
+    "text": "Achoo! I am all wet!",
+    "voice": "maple"
+  },
+  {
     "text": "Have you seen my rock?",
     "voice": "otter"
+  },
+  {
+    "text": "Look at its tail!",
+    "voice": "maple"
   },
   {
     "text": "That's a sea star, silly!",
@@ -826,7 +737,23 @@
   "Hold the whale down, then let go!",
   "Click and hold the whale, then let go!",
   {
+    "text": "Wow! It jumped right out!",
+    "voice": "maple"
+  },
+  {
+    "text": "Look at its long flippers!",
+    "voice": "maple"
+  },
+  {
     "text": "We're riding a whale!",
+    "voice": "maple"
+  },
+  {
+    "text": "The humpback is singing!",
+    "voice": "maple"
+  },
+  {
+    "text": "Orcas! A whole family!",
     "voice": "maple"
   },
   {
@@ -836,7 +763,27 @@
   "Peek-a-boo! Tap the baby orca!",
   "Peek-a-boo! Click the baby orca!",
   {
+    "text": "The grandma leads the family!",
+    "voice": "maple"
+  },
+  {
     "text": "Got it! Thank you, whales!",
+    "voice": "otter"
+  },
+  {
+    "text": "They all jumped together! Merci!",
+    "voice": "maple"
+  },
+  {
+    "text": "Toot toot!",
+    "voice": "maple"
+  },
+  {
+    "text": "Hi hi!",
+    "voice": "otter"
+  },
+  {
+    "text": "Yum, a clam!",
     "voice": "otter"
   },
   {

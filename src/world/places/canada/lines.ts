@@ -408,75 +408,52 @@ export const L = {
     },
   },
   whales: {
-    // The film in (story/films/whales.ts): the dock at Tofino, Maple at the wheel of the little boat.
+    // Whale Peek-a-Boo (activities/whales/; planning/around-the-world/canada-round-2.md, section 3): a whale's spout
+    // blew Ollie's lucky rock out to sea; bubbles come up by the boat, she touches them and a whale peeks out.
+    // The film in (story/films/whales.ts): the kelp off Tofino, Ollie juggling her lucky rock on her tummy.
     filmIn: {
       ollie: maple('Ollie the sea otter spins faster than anybody!'),
-      // Off she putters toward the camera, out to sea.
-      out: maple("She's out in the kelp, where the whales swim."),
-    },
-    // The hello at the dock, from a link or a replay (after the film in, the game starts with her hands on the boat).
-    story: [maple('Bonjour! Off we go to find Ollie!')],
-    // Sparkle: how to steer (one line before her hands are busy), then only when something new appears.
-    steer: onDevice('Hold the water where the boat should go!', 'Click and hold where the boat should go!'),
-    otters: 'There is Ollie, fast asleep! Go gently.',
-    spouts: 'A spout! Steer there to find the whale!',
-    orcas: 'The orca family! Go fast and turn!',
-    listen: 'Shh! Listen to the whales sing.',
-    // Sparkle, when she's stuck (~8 s with no progress): help, never "wrong".
-    hint: {
-      harbour: 'Steer out past the lighthouse!',
-      otters: 'Go slowly to Ollie.',
-      tow: 'Take her back to her friends!',
-      spouts: 'Look for the spout. Steer there!',
-      orcas: 'Go fast and turn. The baby copies you!',
-      mic: onDevice('Tap the yellow microphone to listen!', 'Click the yellow microphone to listen!'),
-    },
-    // Ollie (the sleepy otter who floated away), then the other otters in the raft.
-    otterWake: ollie('Oh! Hello!'),
-    otterTow: ollie('Wheee! Take me home!'),
-    // Home with her friends... and straight back onto the boat's rope: she rides along for the rest of the trip.
-    otterHome: ollie('Can I come too?'),
-    otterHold: maple("They hold hands so they don't float away!"),
-    otterGrumpy: by('otter')('Hey! Too fast!'),
-    otterHi: by('otter')('Hi hi!'),
-    otterClack: by('otter')('Yum, a clam!'),
-    // The whales (the first spout: she has never seen one).
-    never: maple("I've never seen a whale!"),
-    whaleUp: maple('A whale! A real whale!'),
-    whaleBlow: maple('It breathes out of its head!'),
-    whaleTail: maple('Look at its tail!'),
-    humpback: maple('Look at its long flippers!'),
-    breach: maple('Wow! It jumped right out!'),
-    sneeze: maple('Achoo! I am all wet!'),
-    bump: maple('Oops! Excuse us, whale!'),
-    // The orcas.
-    orcaHello: maple('Orcas! A whole family!'),
-    grandma: maple('The grandma leads the family!'),
-    babyCopy: maple('The baby copies you!'),
-    // The big finish, and Maple's taps on the boat.
-    finale: maple(`They all jumped together! Merci!`),
-    toot: maple('Toot toot!'),
-    song: maple('The humpback is singing!'),
-    // ---- Round two (Whale Peek-a-Boo, planning/around-the-world/canada-round-2.md). The new lines:
-    // The film in, rewritten: Ollie juggles her lucky rock until a whale comes up under it.
-    rockIn: {
-      ollie: maple('Ollie the sea otter spins faster than anybody!'),
       lucky: ollie('Look! My lucky rock!'),
-      // Higher, higher... a whale comes up under it. The spout shoots the rock into the sky and away.
+      // Higher, higher... a whale comes up under it. The spout shoots the rock into the sky and away. (Also Ollie's
+      // one line when the game opens from a link or a replay.)
       took: ollie('My rock! The whale took it!'),
       hop: maple("Hop on! We'll get it back!"),
     },
+    // The game opens (Sparkle): bubbles by the boat. Stuck about 8 s with the bubbles up: the hint.
     bubbles: onDevice('Bubbles! Tap them!', 'Bubbles! Click them!'),
     bubblesHint: 'Look for the bubbles!',
+    // The grey whale peeks out (Maple), then Sparkle, once (and again as the hint when she's stuck).
+    whaleUp: maple('A whale! A real whale!'),
     tapWhale: onDevice('Tap the whale and see what it does!', 'Click the whale and see what it does!'),
+    // The blowhole: the spout comes down on the boat (the second time, Maple's soaked face in close-up).
+    whaleBlow: maple('It breathes out of its head!'),
+    sneeze: maple('Achoo! I am all wet!'),
+    // The tail (a slap, or held: a push for the boat); after a while Ollie asks, and the tail shows a sea star.
     seenRock: ollie('Have you seen my rock?'),
+    whaleTail: maple('Look at its tail!'),
     seaStar: ollie("That's a sea star, silly!"),
+    // The humpback is up (Sparkle; and the hint).
     hold: onDevice('Hold the whale down, then let go!', 'Click and hold the whale, then let go!'),
+    // Its first jump, its second.
+    breach: maple('Wow! It jumped right out!'),
+    humpback: maple('Look at its long flippers!'),
+    // The biggest jump lands the boat on its back.
     ride: maple("We're riding a whale!"),
+    // The yellow microphone: the humpback sings into it.
+    song: maple('The humpback is singing!'),
+    // The orcas come; the baby pops up with the rock on its nose; Sparkle (and the hint on the last pop).
+    orcaHello: maple('Orcas! A whole family!'),
     babyHas: ollie('My rock! The baby has it!'),
     peek: onDevice('Peek-a-boo! Tap the baby orca!', 'Peek-a-boo! Click the baby orca!'),
+    // Grandma comes up; the baby flicks the rock to Ollie; everybody jumps.
+    grandma: maple('The grandma leads the family!'),
     gotIt: ollie('Got it! Thank you, whales!'),
-    // The film out: Ollie on her back in the kelp, a clam on her tummy.
+    finale: maple(`They all jumped together! Merci!`),
+    // Pokes: Maple's boat (its horn), Ollie on the rope.
+    toot: maple('Toot toot!'),
+    otterHi: by('otter')('Hi hi!'),
+    otterClack: by('otter')('Yum, a clam!'),
+    // The film out: Ollie on her back in the kelp, juggling her rock while they talk.
     filmOut: {
       ask: maple('Ollie! Come and play hockey with us!'),
       wet: ollie('Hockey? Is it wet?'),

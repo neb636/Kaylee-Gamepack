@@ -1,109 +1,163 @@
-// The whales chapter's two films (planning/around-the-world/canada.md, docs/films.md), on the coast at Tofino
-// (story/sets/whales.ts, the game's own sea). Lines: lines.ts `L.whales.filmIn` and `L.whales.filmOut`, in play order.
+// The whales chapter's two films (planning/around-the-world/canada-round-2.md, section 3; docs/films.md), out in the kelp
+// off Tofino (story/sets/whales.ts, the game's own sea). Lines: lines.ts `L.whales.filmIn` and `L.whales.filmOut`, in
+// play order.
 //
-//   whales-in   The dock at Tofino: Maple at the wheel of the little pink boat. "Ollie spins faster than anybody!"
-//               (she gives it a twirl herself), a look at Ollie spinning out in the kelp, and off she putters: "She's
-//               out in the kelp, where the whales swim." About 11 s.
-//   whales-out  Out in the kelp: Ollie on her back with a clam on her tummy, Maple leaning over the side. Is hockey wet?
-//               It's ice, you slide! Ollie spins like a top. A humpback comes up right behind them and its spout rains
-//               down on everybody; they shake it off, and Ollie gets the team's scarf. About 14 s.
+//   whales-in   Ollie floats on her back in the kelp juggling her lucky rock on her tummy (Maple watches from the
+//               little pink boat): "Ollie spins faster than anybody!", "Look! My lucky rock!". Higher and higher...
+//               a grey whale comes up right beside her and its spout shoots the rock into the sky and away. "My rock!
+//               The whale took it!" "Hop on! We'll get it back!": she grabs the boat's rope. About 14 s.
+//   whales-out  Out in the kelp, the rock back on Ollie's tummy, Maple leaning over the side. Is hockey wet? It's ice,
+//               you slide! Ollie juggles while they talk and tucks the rock under her arm on "I love to slide!", then
+//               spins like a top. A humpback comes up behind them and its spout rains down on everybody; they shake
+//               it off, and Ollie gets the team's scarf. About 14 s.
 //
-// The boat heads toward -z out of the harbour (the bow away from the town), so the film-in's shots of Maple's face are
-// from the sea side; in the kelp the boat lies side-on with its right side to the usual camera on +z.
+// In the kelp the boat lies side-on (its bow toward +x), the usual camera on +z.
 import { Vector3 } from 'three'
 import { cam, close } from '../../../../engine3d/shots'
 import { whaleSfx } from '../../activities/whales/sounds'
-import { KELP } from '../../activities/whales/sea'
 import { L } from '../../lines'
-import { AT_DOCK, AT_KELP, COAST } from '../sets/whales'
+import { AT_KELP, COAST } from '../sets/whales'
 import type { StoryFilm } from '../stage'
 
 const I = L.whales.filmIn
 const O = L.whales.filmOut
-const TAU = Math.PI * 2
 
 const tA = new Vector3()
 const tB = new Vector3()
-/** A shot of Maple's face from in front of her while she faces -z (the bow out to sea): `side` meters to her left. */
-const frontOf = (who: { head(out?: Vector3): Vector3 }, side: number, back: number, up = 0.15) => ({
-  eye: () => who.head(tA).add(tB.set(side, up, -back)),
-  look: () => who.head(tA),
-  fov: 34,
-})
+const ease = (k: number) => k * k * (3 - 2 * k)
 
 export const WHALES_IN: StoryFilm = {
   id: 'whales-in',
   set: COAST,
   beats(s) {
     const set = s.use(COAST)
-    const { boat } = set
+    const { boat, grey } = set
     const ollie = s.cast.ollie
-    // Ollie, far out in the kelp, for the look at her spinning.
-    const float = set.float(ollie, KELP.x + 3, KELP.z + 2, 0)
-    const [ox, oz] = [KELP.x + 3, KELP.z + 2]
-    const dock = AT_DOCK
+    const at = AT_KELP
+    // Ollie floats ahead of the boat's bow in the kelp, her toes to the camera, juggling her rock on her tummy.
+    const ox = at.x + 4.6
+    const oz = at.z + 3.6
+    const float = set.float(ollie, ox, oz, 0, false)
+    const juggle = set.juggle(ollie)
+    // The grey whale comes up right beside her: its blowhole just past her tummy, its face to the camera.
+    const hole = new Vector3(ox + 1.15, 0, oz - 1.1)
+    const heading = -0.55
+    const placeGrey = () => {
+      const fwd = 0.795 * grey.len - grey.len * 0.5
+      grey.root.position.set(hole.x - Math.sin(heading) * fwd, 0, hole.z - Math.cos(heading) * fwd)
+      grey.root.rotation.y = heading
+    }
+    const watchOllie = () => (set.look = ollie.head(tA).clone())
+    // The rock's flight: up off her tummy to over the blowhole, then the spout shoots it up into the sky and away.
+    const from = new Vector3()
+    const over = new Vector3()
+    const away = new Vector3()
+    const fly = (t: number) => {
+      const r = set.rock
+      if (t < 2.55) return
+      if (!r.visible) {
+        r.visible = true
+        juggle.gone = true
+        from.copy(juggle.rock.getWorldPosition(tB))
+        over.copy(hole).setY(1.3)
+        away.set(hole.x - 3, 7.5, hole.z - 18)
+      }
+      if (t < 3.0) {
+        const k = (t - 2.55) / 0.45
+        r.position.lerpVectors(from, over, k)
+        r.position.y += Math.sin(Math.PI * k) * 0.6
+      } else {
+        const k = Math.min(1, (t - 3.0) / 1.1)
+        r.position.lerpVectors(over, away, 1 - (1 - k) * (1 - k))
+        r.scale.setScalar(1 - 0.6 * k)
+      }
+      r.rotation.x += 0.4
+    }
     return [
       {
-        // Tofino from the sea: the town, the dock, the little pink boat with Maple at the wheel. She waves.
-        id: 'dock',
-        shot: cam([-4, 5, 56], [4.6, 1.2, 76], { eye: [-0.8, 3.4, 62.5] }, { ease: 'inOut' }),
-        dur: 1.6,
+        // The kelp off Tofino: Ollie on her back juggling, the little boat beside her, Maple watching. She spins.
+        id: 'kelp',
+        shot: cam([ox + 1.2, 2.2, oz + 7.6], [ox - 2.4, 0.7, oz - 1.6], { eye: [ox + 0.9, 2.0, oz + 7] }, { tall: { eye: [ox + 1.6, 2.8, oz + 9.5] } }),
+        say: I.ollie,
+        sayAt: 0.3,
+        hold: 0.2,
         start: () => {
           s.sfx.air('sea')
-          set.at = { ...dock }
-          set.look = null
-          whaleSfx.gulls()
+          set.at = { ...at }
+          juggle.on = true
+          juggle.height = 0.3
+          watchOllie()
         },
-        cues: [[0.5, () => boat.wave()]],
+        tick: watchOllie,
+        cues: [[1.7, () => (float.spin(), whaleSfx.giggle())]],
       },
       {
-        // Close, from the bow: Maple tells us about Ollie, and gives a twirl on "spins".
-        id: 'ollie',
-        shot: frontOf(set.maple, 0.5, 2.1, 0.62),
-        say: I.ollie,
-        sayAt: 0.25,
-        hold: 0.2,
-        tick: (_k, t) => {
-          const k = Math.min(1, Math.max(0, (t - 1.3) / 0.7))
-          boat.maple.rotation.y = k * k * (3 - 2 * k) * TAU
-        },
-        cues: [[1.3, () => s.sfx.whoosh()], [2.1, () => boat.cheer()]],
-      },
-      {
-        // There she is, out in the kelp: round and round on her back, spraying drops. (No line: the picture says where
-        // she lives.)
-        id: 'spin',
-        shot: { ...close(ollie, 0.7, 2.2, 0.55), to: { fov: 30 } },
-        dur: 2.2,
+        // Close: her lucky rock, up and down on her tummy.
+        id: 'lucky',
+        shot: { ...close(ollie, 0.35, 2.1, 0.75), to: { fov: 31 } },
+        say: I.lucky,
+        sayAt: 0.2,
+        hold: 0.3,
         start: () => {
-          boat.maple.rotation.y = 0
+          juggle.show = true
+          ollie.pull('happy')
+        },
+      },
+      {
+        // Higher, higher... a whale comes up right beside her, and its spout shoots the rock into the sky and away.
+        id: 'higher',
+        shot: cam([ox + 3.2, 2.3, oz + 7], [ox + 0.6, 1.2, oz - 1.2], { look: [ox + 0.3, 1.8, oz - 2] }, { tall: { eye: [ox + 3.6, 2.8, oz + 9.4] } }),
+        dur: 4.3,
+        start: () => {
+          juggle.show = false
+          placeGrey()
+          grey.look = ollie.head(tA).clone()
+        },
+        tick: (_k, t) => {
+          if (t < 2.55) juggle.height = 0.5 + t * 0.4
+          fly(t)
         },
         cues: [
-          [0.3, () => (float.spin(), whaleSfx.giggle())],
-          ...[0.55, 0.9, 1.25].map((at): [number, () => void] => [at, () => s.splash(ox + (Math.random() - 0.5), 0.15, oz + (Math.random() - 0.5), 10)]),
-          [1.6, () => whaleSfx.squeak()],
+          [0.9, () => (grey.rise(), whaleSfx.peek())],
+          [2.55, () => (grey.blow(), whaleSfx.toss())],
+          [3.0, () => (s.sfx.whoosh(), ollie.pull('wow'))],
         ],
       },
       {
-        // Off she goes: the boat putters away from the dock toward us, out toward the open Pacific, Maple at the wheel
-        // telling us where Ollie is.
-        id: 'go',
-        shot: cam([dock.x - 2.2, 2.25, dock.z - 8.8], [dock.x, 1.0, dock.z - 1.5], { look: [dock.x - 0.3, 1.0, dock.z - 5.5] }, { tall: { eye: [dock.x - 2.8, 2.6, dock.z - 10.8] } }),
-        say: I.out,
-        sayAt: 0.3,
+        // Ollie, close: her rock is gone.
+        id: 'took',
+        shot: close(ollie, -0.3, 2.0, 0.55),
+        say: I.took,
+        sayAt: 0.2,
         hold: 0.3,
         start: () => {
-          set.look = null
-          boat.cheer()
-          whaleSfx.horn()
+          set.rock.visible = false
+          juggle.gone = true
+          ollie.pull('sad', true)
+        },
+        cues: [[0.6, () => grey.dive()]],
+      },
+      {
+        // Maple at the wheel: hop on! Ollie paddles to the stern and grabs the rope.
+        id: 'hop',
+        shot: cam([at.x + 2.4, 2.5, at.z + 9.5], [at.x, 0.9, at.z + 1.2], undefined, { tall: { eye: [at.x + 2.8, 3.2, at.z + 12] } }),
+        say: I.hop,
+        sayAt: 0.25,
+        hold: 0.5,
+        start: () => {
+          set.look = new Vector3(at.x + 2, 1.5, at.z + 8)
+          boat.wave()
+          ollie.cheer()
         },
         tick: (_k, t) => {
-          const k = Math.min(1, t / 3.9)
-          set.at.z = dock.z - 6 * k * k
-          whaleSfx.engine(0.25 + 0.5 * k)
-          if (Math.random() < 0.25) s.splash(set.at.x + (Math.random() - 0.5) * 1.6, 0.1, set.at.z + 2.6, 2)
+          // (From her spot to just behind the stern, on the rope.)
+          const k = ease(Math.min(1, Math.max(0, (t - 0.8) / 1.4)))
+          ollie.pos.x = ox + (at.x - 4.4 - ox) * k
+          ollie.pos.z = oz + (at.z + 0.6 - oz) * k
+          float.face = -0.9 * k
+          boat.rope(k > 0.95 ? ollie.at(0.42, tB) : null)
         },
-        cues: [[1.3, () => boat.wave()]],
+        cues: [[2.1, () => (boat.cheer(), whaleSfx.squeak())]],
       },
     ]
   },
@@ -117,10 +171,12 @@ export const WHALES_OUT: StoryFilm = {
     const { boat, whale } = set
     const ollie = s.cast.ollie
     const at = AT_KELP
-    // Ollie floats off the boat's right side (toward the camera), her toes to us, a clam on her tummy.
+    // Ollie floats off the boat's right side (toward the camera), her toes to us, her lucky rock back on her tummy:
+    // she juggles it while they talk, and tucks it under her arm on "I love to slide!".
     const ox = at.x - 0.1
     const oz = at.z + 2.85
-    const float = set.float(ollie, ox, oz, 0)
+    const float = set.float(ollie, ox, oz, 0, false)
+    const juggle = set.juggle(ollie)
     const look = new Vector3()
     /** Maple leans over the right side of the boat, toward Ollie (the boat's frame: -x is its right). */
     const lean = (k: number) => {
@@ -142,9 +198,11 @@ export const WHALES_OUT: StoryFilm = {
           set.at = { ...at }
           lean(1)
           watchOllie()
+          juggle.on = true
+          juggle.height = 0.35
         },
         tick: watchOllie,
-        cues: [[0.3, () => boat.wave()], [1.6, () => whaleSfx.clack()]],
+        cues: [[0.3, () => boat.wave()]],
       },
       {
         // Ollie, close: hockey? She tips her head. Is it wet?
@@ -153,6 +211,7 @@ export const WHALES_OUT: StoryFilm = {
         say: O.wet,
         sayAt: 0.15,
         hold: 0.3,
+        start: () => (juggle.show = true),
         tick: (_k, t) => {
           watchOllie()
           ollie.headTurn = Math.sin(Math.min(1, t / 0.6) * Math.PI * 0.5) * 0.35
@@ -168,6 +227,7 @@ export const WHALES_OUT: StoryFilm = {
         hold: 0.3,
         start: () => {
           ollie.headTurn = 0
+          juggle.show = false
         },
         tick: watchOllie,
         cues: [[1.3, () => boat.cheer()]],
@@ -180,6 +240,11 @@ export const WHALES_OUT: StoryFilm = {
         sayAt: 0.15,
         hold: 0.3,
         tick: watchOllie,
+        start: () => {
+          // (In the pocket of skin under her arm, safe for the spin.)
+          juggle.tuck = true
+          whaleSfx.clack()
+        },
         cues: [
           [0.25, () => (float.spin(), whaleSfx.giggle())],
           ...[0.45, 0.75, 1.05, 1.35].map((t): [number, () => void] => [t, () => s.splash(ox + (Math.random() - 0.5) * 0.8, 0.15, oz + (Math.random() - 0.5) * 0.8, 12)]),
@@ -192,12 +257,14 @@ export const WHALES_OUT: StoryFilm = {
         shot: { ...cam([at.x + 4.5, 3.6, at.z + 13], [at.x - 1.5, 1.4, at.z - 6], { look: [at.x - 1.5, 2.4, at.z - 6] }), tall: cam([at.x + 3.4, 2.6, at.z + 15], [at.x - 1.5, 2.6, at.z - 6], { look: [at.x - 1.5, 3.6, at.z - 6] }) },
         dur: 2.6,
         start: () => {
-          whale.root.position.set(at.x - 4.6, 0, at.z - 8.5)
-          whale.root.rotation.y = Math.PI / 2
-          whale.surface()
+          whale.root.position.set(at.x - 2.6, 0, at.z - 8.5)
+          whale.root.rotation.y = Math.PI / 2 + 0.5
+          whale.look = new Vector3(at.x, 1, at.z)
+          whale.rise()
           set.look = new Vector3(at.x - 1.5, 2, at.z - 8)
         },
         cues: [
+          [0.5, () => whale.blow()],
           [0.7, () => (boat.pointAt(new Vector3(at.x - 1.5, 1.5, at.z - 8)), ollie.pull('wow'))],
           [0.95, () => whaleSfx.blow()],
           [1.5, () => (set.rain(at.x - 0.2, at.z + 1.4, 3.4, 160), s.sfx.splash())],
@@ -205,7 +272,7 @@ export const WHALES_OUT: StoryFilm = {
         ],
       },
       {
-        // Dripping, they shake it off; Ollie gets her pink scarf. You're on the team!
+        // Dripping, they shake it off (the humpback dives away); Ollie gets her pink scarf. You're on the team!
         id: 'team',
         shot: cam([at.x + 1.1, 1.3, at.z + 6], [at.x - 0.15, 0.62, at.z + 2.2]),
         say: O.team,
@@ -215,6 +282,7 @@ export const WHALES_OUT: StoryFilm = {
           ollie.cheer()
           ollie.shake()
           watchOllie()
+          whale.dive()
           set.rain(at.x - 0.2, at.z + 1.4, 2.6, 30)
         },
         tick: watchOllie,

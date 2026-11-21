@@ -1,6 +1,6 @@
-// Who's talking on the whale watch, out loud in their own recorded voices (lines.ts L.whales, cast.json): Sparkle in the
-// corner (the few instructions and hints; tap her to hear her last one again), Maple (her 3D mouth moves with her voice)
-// and the sea otters. A short bubble shows the words for Dad, with who said them. Bottom right, so it never sits under
+// Who's talking at Whale Peek-a-Boo, out loud in their own recorded voices (lines.ts L.whales, cast.json): Sparkle in
+// the corner (the few instructions and hints; tap her to hear her last one again), Maple (her 3D mouth moves with her
+// voice) and Ollie the sea otter. A short bubble shows the words for Dad, with who said them. Bottom right, so it never sits under
 // Maple's book card (bottom left).
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
@@ -13,9 +13,9 @@ export interface WhaleGuideHandle {
   show(line: Line): void
 }
 
-const WHO: Record<string, { name: string; icon: string; color: string }> = {
+export const WHO: Record<string, { name: string; icon: string; color: string }> = {
   maple: { name: 'Maple', icon: '🦫', color: '#FFC93C' },
-  otter: { name: 'Sea otter', icon: '🦦', color: '#C9B5F7' },
+  otter: { name: 'Ollie', icon: '🦦', color: '#C9B5F7' },
 }
 
 export const WhaleGuide = forwardRef<WhaleGuideHandle, { hidden?: boolean }>(function WhaleGuide({ hidden }, ref) {

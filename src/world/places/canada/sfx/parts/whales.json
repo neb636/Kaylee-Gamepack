@@ -72,5 +72,84 @@
   "label": "The little boat's horn",
   "prompt": "A small boat's toy-like double horn toot, cheerful and soft, two short notes.",
   "seconds": 0.8
+ },
+ {
+  "id": "whales-bubbles",
+  "label": "Bubbles come up where a whale will peek out",
+  "prompt": "A cluster of big round bubbles rising and popping at the surface of calm sea water, soft bubbly blub-blub-blub, playful and gentle, toy-like.",
+  "seconds": 1.4
+ },
+ {
+  "id": "whales-blub",
+  "label": "One bubble pops at the surface",
+  "prompt": "A single soft bubble popping at the surface of the water, one tiny round blup, cute and gentle.",
+  "seconds": 0.4
+ },
+ {
+  "id": "whales-peek",
+  "label": "A whale pops up: peek-a-boo!",
+  "prompt": "A friendly whale popping its head up out of the sea, a round watery whoosh up with a soft splash and a cheerful bloop, cartoon-like, gentle.",
+  "seconds": 1.2
+ },
+ {
+  "id": "whales-rain",
+  "label": "Spray rains down on the little boat",
+  "prompt": "Sea spray raining down onto a small rubber boat for a second, a soft pattering shower of droplets, light and playful.",
+  "seconds": 1.4
+ },
+ {
+  "id": "whales-roll",
+  "label": "The grey whale rolls over in the water",
+  "prompt": "A big gentle whale rolling over at the surface, a slow wet swishing slosh of water, soft and calm, not scary.",
+  "seconds": 1.5
+ },
+ {
+  "id": "whales-laugh",
+  "label": "The whale laughs bubbles",
+  "prompt": "A happy stream of bubbles burbling up out of the water like a bubbly giggle, quick rising blub-blub-blub, cute and silly, no voice.",
+  "seconds": 1.2
+ },
+ {
+  "id": "whales-slap",
+  "label": "A tail slaps the water",
+  "prompt": "A whale tail slapping the sea surface once, a round flat smack with a splash after, soft and cartoon-friendly.",
+  "seconds": 1
+ },
+ {
+  "id": "whales-sink",
+  "label": "Held down: the humpback sinks in a rush of bubbles (loop)",
+  "prompt": "A steady rush of bubbles rising from under the water, bubbling and fizzing, soft and smooth, seamless loop.",
+  "seconds": 3,
+  "loop": true
+ },
+ {
+  "id": "whales-whoosh",
+  "label": "A whale rushes up out of the water",
+  "prompt": "A big whale rushing up out of the sea, a fast rising watery whoosh, exciting but soft, cartoon-like.",
+  "seconds": 1
+ },
+ {
+  "id": "whales-wave",
+  "label": "The jump's wave washes over the boat",
+  "prompt": "A wave rolling under a little rubber boat and splashing over its side, a soft wash and slosh, playful.",
+  "seconds": 1.4
+ },
+ {
+  "id": "whales-splash",
+  "label": "A little splash",
+  "prompt": "A small soft splash in the sea, one quick plop of water, light and cute.",
+  "seconds": 0.6
+ },
+ {
+  "id": "whales-baby",
+  "label": "The baby orca giggles",
+  "prompt": "A baby orca's happy squeaky chirps and whistles, a quick giggly trill of clicks, cute and friendly, soft.",
+  "seconds": 1
+ },
+ {
+  "id": "whales-toss",
+  "label": "The rock tossed up into the air",
+  "prompt": "A small stone flicked up into the air, a quick light rising whoosh with a tiny sparkle chime, playful.",
+  "seconds": 0.6
  }
 ]
