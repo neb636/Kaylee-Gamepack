@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "bike-waterfall-before",
+  "title": "Bike waterfall before",
+  "video": "bike-waterfall-before.mp4",
+  "gif": "bike-waterfall-before.gif",
+  "seconds": 6,
+  "browser": "webkit",
+  "viewport": "ipad-portrait",
+  "moments": [
+    {
+      "name": "waterfall-pan",
+      "where": "waterfall-pan",
+      "seconds": 4,
+      "fps": 58.6,
+      "status": "ok"
+    }
+  ]
+}
