@@ -309,18 +309,6 @@
   "seconds": 0.9
  },
  {
-  "id": "campfire-slap",
-  "label": "A beaver's tail slaps the water",
-  "prompt": "A beaver slapping its flat tail on a quiet pond at night, one wet smack and a small splash, soft.",
-  "seconds": 0.8
- },
- {
-  "id": "campfire-thump",
-  "label": "A hare thumps its feet",
-  "prompt": "A snowshoe hare thumping its big back feet on soft ground, thump, thump-thump, muffled and cute.",
-  "seconds": 0.8
- },
- {
   "id": "party-boards",
   "label": "Puck into a snowbank",
   "prompt": "A hockey puck sliding fast and thudding softly into a bank of packed snow, a muffled thump and a little snow spray. Short, soft.",
@@ -766,5 +754,301 @@
   "label": "The snowy owl hoots",
   "prompt": "A soft, round, friendly cartoon owl hooting twice, hoo hoo, gentle and cozy, a little sleepy and sweet.",
   "seconds": 1.2
+ },
+ {
+  "id": "hub-move-toss",
+  "label": "Tuque tosses a puck up",
+  "prompt": "A light flick and a soft airy whoosh, like a little puck tossed up from a mitten, short and cute.",
+  "seconds": 0.5
+ },
+ {
+  "id": "hub-move-boing",
+  "label": "A puck boings off Tuque's snowy tummy",
+  "prompt": "A hockey puck bouncing off a big soft round snowman tummy: a springy jelly boing with a soft snowy thud, funny and gentle.",
+  "seconds": 0.8
+ },
+ {
+  "id": "hub-move-clack",
+  "label": "The puck clacks down on the ice",
+  "prompt": "A small rubber hockey puck dropping onto ice: one crisp little clack and a short slide, light and clean.",
+  "seconds": 0.7
+ },
+ {
+  "id": "hub-move-statue",
+  "label": "Monty freezes like a statue",
+  "prompt": "A cartoon freeze: a soft stony clunk as someone big strikes a perfectly still pose, with a tiny proud magical shimmer after it. Gentle and funny.",
+  "seconds": 0.9
+ },
+ {
+  "id": "hub-move-flap",
+  "label": "Two geese flap in and land on Monty's antlers",
+  "prompt": "Two small birds flapping their wings for a moment and landing softly, a quick feathery flutter, light and silly, no calls.",
+  "seconds": 1.0
+ },
+ {
+  "id": "hub-move-swish",
+  "label": "Roxy leaps over the boards",
+  "prompt": "A quick light cartoon swish of a small animal leaping, a soft fast whoosh, sneaky and playful.",
+  "seconds": 0.5
+ },
+ {
+  "id": "hub-move-snatch",
+  "label": "Roxy whisks the puck",
+  "prompt": "A tiny quick paw snatch: a fast little swipe and a soft pop, like something grabbed in a blink, cartoon and cute.",
+  "seconds": 0.6
+ },
+ {
+  "id": "hub-move-slap",
+  "label": "Misty's slap shot",
+  "prompt": "A big friendly hockey slap shot: a hearty wooden whack of a stick hitting a pinecone, then a whoosh as it flies far away.",
+  "seconds": 1.0
+ },
+ {
+  "id": "hub-move-cone",
+  "label": "The pinecone lands on the ice",
+  "prompt": "A pinecone landing on ice: a light woody tock and a little skittering slide, small and clear.",
+  "seconds": 0.7
+ },
+ {
+  "id": "hub-move-pat",
+  "label": "Ollie's rock lands in a paw",
+  "prompt": "A smooth little stone landing softly in a furry paw: one gentle muffled pat, tiny and cozy.",
+  "seconds": 0.4
+ },
+ {
+  "id": "hub-move-spin",
+  "label": "Ollie spins like a top",
+  "prompt": "A quick spinning whirr rising in pitch, like a toy top spun fast, airy and playful, short.",
+  "seconds": 0.6
+ },
+ {
+  "id": "hub-move-pass",
+  "label": "The rock is passed",
+  "prompt": "A quick airy whoosh of a small stone thrown in a fast pass, light and short.",
+  "seconds": 0.5
+ },
+ {
+  "id": "hub-hut-door",
+  "label": "The skate hut's door opens",
+  "prompt": "A little wooden cabin door creaking open softly, with a tiny jingle of a small bell on it and a warm cozy feel.",
+  "seconds": 1.0
+ },
+ {
+  "id": "hub-gus-gulp",
+  "label": "Gus gulps (a whole team!)",
+  "prompt": "A cartoon nervous gulp: one big funny bubbly swallow sound, short, no voice, no words.",
+  "seconds": 0.6
+ },
+ {
+  "id": "cabin-whoosh",
+  "label": "A thing flies onto a friend",
+  "prompt": "A soft quick cloth whoosh, a knitted sweater tossed through the air, gentle and airy, cute toy-like, no impact.",
+  "seconds": 0.6
+ },
+ {
+  "id": "cabin-pop",
+  "label": "It lands on and is worn",
+  "prompt": "A cheerful soft cartoon pop with a tiny bright sparkle, something cozy landing in place, cute and light.",
+  "seconds": 0.6
+ },
+ {
+  "id": "cabin-stamp",
+  "label": "A cheek stamp pressed on",
+  "prompt": "A small rubber stamp pressed onto paper, one soft muffled thump with a tiny squish, gentle and cute.",
+  "seconds": 0.5
+ },
+ {
+  "id": "cabin-boing",
+  "label": "Dropped in a silly place",
+  "prompt": "A short funny rubbery cartoon boing, a soft toy bouncing off something, silly and cute, not loud.",
+  "seconds": 0.7
+ },
+ {
+  "id": "cabin-giggle",
+  "label": "A friend giggles",
+  "prompt": "Tiny high cartoon critter giggles, a soft muffled squeaky tee-hee, cute plush toy, no words, short.",
+  "seconds": 1
+ },
+ {
+  "id": "cabin-shutter",
+  "label": "The mirror takes the team photo",
+  "prompt": "An old instant camera taking a photo: a crisp shutter click followed by a short soft motor whirr as the picture comes out, friendly.",
+  "seconds": 1.2
+ },
+ {
+  "id": "cabin-creak",
+  "label": "The window swings open for Gus",
+  "prompt": "A small wooden cabin window swinging open on old hinges, a short gentle wooden creak, cozy, not spooky.",
+  "seconds": 0.8
+ },
+ {
+  "id": "cabin-lid",
+  "label": "A bin on the shelf opens",
+  "prompt": "A small cardboard hat box lid lifted off, a soft papery pop and slide, gentle and tidy.",
+  "seconds": 0.5
+ },
+ {
+  "id": "cabin-stove",
+  "label": "The stove poked",
+  "prompt": "A small wood stove fire whumping up when its door is tapped, a soft whoosh of flame and a few crackling sparks, warm and cozy.",
+  "seconds": 1.2
+ },
+ {
+  "id": "cabin-jingle",
+  "label": "The skates on their pegs knock together",
+  "prompt": "Two ice skates hanging on a wooden peg knocking together, a light metallic clink and a soft leather bump, small and cute.",
+  "seconds": 0.6
+ },
+ {
+  "id": "cabin-bed",
+  "label": "The hut (bed)",
+  "prompt": "Inside a cozy wooden skating hut in winter: a small wood stove softly crackling and popping, a gentle snowy wind outside the walls, warm and quiet. Seamless loop, no music, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "campfire-giggle",
+  "label": "Little giggles in the dark (a kit hiding)",
+  "prompt": "Tiny muffled baby animal giggles from behind a bush at night, three quick high squeaky titters, cute and playful, no words.",
+  "seconds": 1.0
+ },
+ {
+  "id": "campfire-click",
+  "label": "The flashlight's switch",
+  "prompt": "A small plastic toy flashlight switch clicking, one chunky click, close and clear.",
+  "seconds": 0.4
+ },
+ {
+  "id": "campfire-freeze",
+  "label": "Freeze! (caught in the beam)",
+  "prompt": "A bright cartoon freeze sting: a quick sparkly glassy ting with a tiny whoosh that stops dead, magical and funny, soft.",
+  "seconds": 0.7
+ },
+ {
+  "id": "campfire-wobble",
+  "label": "A statue wobbling",
+  "prompt": "A springy cartoon wobble, a soft boing-oing-oing slowing down, toy-like and silly.",
+  "seconds": 0.9
+ },
+ {
+  "id": "campfire-tumble",
+  "label": "Falling over in the leaves",
+  "prompt": "A small soft cartoon flump of a little animal falling over onto a pile of dry leaves, a gentle thud and a crunchy rustle.",
+  "seconds": 0.8
+ },
+ {
+  "id": "campfire-yoink",
+  "label": "Yoink! (a marshmallow grabbed)",
+  "prompt": "A quick cartoon grab and zip-away: a rising slide whistle blip and a soft swish, sneaky and funny.",
+  "seconds": 0.6
+ },
+ {
+  "id": "campfire-quills",
+  "label": "A porcupine puffs his quills",
+  "prompt": "A dry soft rattle of many little quills puffing up at once, like a shake of thin twigs, cartoon, not scary.",
+  "seconds": 0.7
+ },
+ {
+  "id": "campfire-leaves",
+  "label": "A deer stops mid-chew",
+  "prompt": "A gentle crunch of leaves being chewed that stops suddenly, a tiny pause, soft and close, cute.",
+  "seconds": 0.8
+ },
+ {
+  "id": "campfire-squeak",
+  "label": "A little bat squeaks (and yawns)",
+  "prompt": "A tiny cute bat squeaking twice, high soft chirps, then a little sleepy sigh, friendly, not spooky.",
+  "seconds": 0.9
+ },
+ {
+  "id": "campfire-shades",
+  "label": "Monty's sunglasses go on",
+  "prompt": "A cool little cartoon click as sunglasses snap open and slide on, then a tiny bright sparkle ting.",
+  "seconds": 0.6
+ },
+ {
+  "id": "campfire-shimmer",
+  "label": "The northern lights shimmer",
+  "prompt": "A soft airy shimmering swell of glassy chimes and gentle wind high in the sky, magical and calm, slowly rising and fading, no melody.",
+  "seconds": 4
+ },
+ {
+  "id": "whales-bubbles",
+  "label": "Bubbles come up where a whale will peek out",
+  "prompt": "A cluster of big round bubbles rising and popping at the surface of calm sea water, soft bubbly blub-blub-blub, playful and gentle, toy-like.",
+  "seconds": 1.4
+ },
+ {
+  "id": "whales-blub",
+  "label": "One bubble pops at the surface",
+  "prompt": "A single soft bubble popping at the surface of the water, one tiny round blup, cute and gentle.",
+  "seconds": 0.4
+ },
+ {
+  "id": "whales-peek",
+  "label": "A whale pops up: peek-a-boo!",
+  "prompt": "A friendly whale popping its head up out of the sea, a round watery whoosh up with a soft splash and a cheerful bloop, cartoon-like, gentle.",
+  "seconds": 1.2
+ },
+ {
+  "id": "whales-rain",
+  "label": "Spray rains down on the little boat",
+  "prompt": "Sea spray raining down onto a small rubber boat for a second, a soft pattering shower of droplets, light and playful.",
+  "seconds": 1.4
+ },
+ {
+  "id": "whales-roll",
+  "label": "The grey whale rolls over in the water",
+  "prompt": "A big gentle whale rolling over at the surface, a slow wet swishing slosh of water, soft and calm, not scary.",
+  "seconds": 1.5
+ },
+ {
+  "id": "whales-laugh",
+  "label": "The whale laughs bubbles",
+  "prompt": "A happy stream of bubbles burbling up out of the water like a bubbly giggle, quick rising blub-blub-blub, cute and silly, no voice.",
+  "seconds": 1.2
+ },
+ {
+  "id": "whales-slap",
+  "label": "A tail slaps the water",
+  "prompt": "A whale tail slapping the sea surface once, a round flat smack with a splash after, soft and cartoon-friendly.",
+  "seconds": 1
+ },
+ {
+  "id": "whales-sink",
+  "label": "Held down: the humpback sinks in a rush of bubbles (loop)",
+  "prompt": "A steady rush of bubbles rising from under the water, bubbling and fizzing, soft and smooth, seamless loop.",
+  "seconds": 3,
+  "loop": true
+ },
+ {
+  "id": "whales-whoosh",
+  "label": "A whale rushes up out of the water",
+  "prompt": "A big whale rushing up out of the sea, a fast rising watery whoosh, exciting but soft, cartoon-like.",
+  "seconds": 1
+ },
+ {
+  "id": "whales-wave",
+  "label": "The jump's wave washes over the boat",
+  "prompt": "A wave rolling under a little rubber boat and splashing over its side, a soft wash and slosh, playful.",
+  "seconds": 1.4
+ },
+ {
+  "id": "whales-splash",
+  "label": "A little splash",
+  "prompt": "A small soft splash in the sea, one quick plop of water, light and cute.",
+  "seconds": 0.6
+ },
+ {
+  "id": "whales-baby",
+  "label": "The baby orca giggles",
+  "prompt": "A baby orca's happy squeaky chirps and whistles, a quick giggly trill of clicks, cute and friendly, soft.",
+  "seconds": 1
+ },
+ {
+  "id": "whales-toss",
+  "label": "The rock tossed up into the air",
+  "prompt": "A small stone flicked up into the air, a quick light rising whoosh with a tiny sparkle chime, playful.",
+  "seconds": 0.6
  }
 ]

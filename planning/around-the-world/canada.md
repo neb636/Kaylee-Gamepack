@@ -1,4 +1,4 @@
-# 🍁 Canada: Maple's Team (rebuilt 2026-11-20)
+# 🍁 Canada: Maple's Team (rebuilt 2026-11-20; round two built 2026-11-21)
 
 The first Canada (its plan and build log are in git history: this file before 2026-11-20) was eight unconnected
 mini-games round a flat map with emoji pins. Its one line of story ("Let's find a hockey team!") was never told, the
@@ -52,10 +52,10 @@ Champion** and Moraine Lake earlier.
 |---|---|---|---|---|---|
 | ⛄ | **Carnival Snowballs** `snowman` (3D) | Quebec City, the Winter Carnival | pushes snowballs that grow, stacks and dresses snowmen | nobody here plays hockey, only snow... "Let's make a player!" | her snowman in the red tuque wakes up; a snowball bounces off his tummy |
 | 🚵 | **Mountain Bike** `bike` (3D) | Mont-Sainte-Anne | steers the bike down the forest trail | Monty is having his bath at the waterfall, way down there | "What does a goalie do?" "You stand there." "I am very good at standing." Bonk |
-| ⛺ | **Campfire Night** `campfire` (2D) | the campsite | shines the flashlight round the dark forest | a little paw takes Maple's marshmallows | Roxy has the puck before Maple can blink; her kits come to cheer |
+| ⛺ | **Campfire Night: Flashlight Statues** `campfire` (3D) | the campsite | her finger is the flashlight: whoever it lands on freezes with a silly face (the night animals, Roxy's three kits, then Roxy sneaking to the marshmallows); roasts marshmallows; turns the light off for the stars and the northern lights | a little paw takes Maple's marshmallows | Roxy has the puck before Maple can blink; her kits come to cheer |
 | 🛶 | **Red Canoe** `canoe` (3D) | Banff, the turquoise lake | paddles across the lake to the glacier | a loon calls across the water: Lulu | she will sing her best song; her chick squeaks |
-| 🐟 | **Salmon Leap** `salmon` (2D) | the rainforest river | flicks the salmon up the falls, past the bears | Misty swings at a salmon: a huge splash, no fish | berries are easier; one swing of the hockey stick sends a pinecone over the cedars |
-| 🐋 | **Whale Watch** `whales` (3D) | Tofino, the Pacific | steers the little boat out to the whales | Ollie is out in the kelp, where the whales swim | "Hockey? Is it wet?" A whale soaks everybody |
+| 🛁 | **Misty's Bubble Bath** `bath` (3D) | the rainforest river | rubs a muddy spirit bear clean, fluffs her, paints her with berries and decorates her; the mirror pool; her paw print on a team sweater. The look stays | Misty swings at a salmon, misses and slides into the mud: a white bear, all brown | in her new look, one swing of the hockey stick sends a pinecone over the cedars |
+| 🐋 | **Whale Peek-a-Boo** `whales` (3D) | Tofino, the Pacific | touches the bubbles and a whale comes up right there: the grey whale (spout, roll, barnacles, tail), the humpback (hold it down, let go, it jumps; the longest hold is a ride), the baby orca with the rock on its nose | a whale's spout blows Ollie's lucky rock out to sea | "Hockey? Is it wet?" Ollie juggles her rock; a whale soaks everybody |
 
 - **Gone:** Sugar Snow (`taffy`), Animal Bridge (`bridge`), the finale's Animal Homes quiz, the old map and its train,
   bubbles and leader lines. The syrup is in the ending; the animal bridges are still a passport fact and a Theater
@@ -111,7 +111,6 @@ New voices: `loon` (Lulu) and `gus`. The PR records every new line.
   rolled) and leads the parade; a lower camera shows the castle hotel; soft shadows and lanterns.
 - **Mountain Bike:** Monty waits in the waterfall pool at the bottom, big and unmissable; the ending hands to his film.
 - **Campfire Night:** Roxy has three kits; the hunt helps after 8 s; the goodnight is skipped when her film follows.
-- **Salmon Leap:** the white bear is Misty; taps alone now get every salmon home (a tap leaps one pool).
 - **The big game:** the story's team on the ice, each talent in play (Roxy steals from the rush, shots boing off
   Tuque and bonk off Monty, Ollie fetches a loose puck, Misty flattens the goose wall for the last goal, Lulu calls on
   every goal, the kits wave flags). The geese rush her net after each goal and may score once (never the winning
@@ -127,21 +126,44 @@ New voices: `loon` (Lulu) and `gus`. The PR records every new line.
 - **Rideau Canal skaters:** six winter outfits, expressive faces and alternating skate pushes. The opening film and
   hockey finale share the figures and their continuous loops, using the existing recorded canal ambience.
 
+## Round two (built 2026-11-21; the plan and its log: `canada-round-2.md`)
+
+Three chapters were rebuilt on what she replays (her finger on a friend, nothing can be missed, what she makes stays,
+a silly face in close-up), and every chapter now has the same shape: the friend has a trouble, her play fixes it, the
+fix is what the team needs.
+
+- **Misty's Bubble Bath** (`activities/bath/`, replaces Salmon Leap): the river set is shared with its films
+  (`story/sets/bath.ts`). Her look (`looks.ts` `MistyLook`: zone colors, fluff, hairdo, decorations, the sweater's paw
+  print) is saved and put on by `characters/mistyLook.ts` `dressMisty` in the films, on the map and in the big game.
+  Sections `story`, `wash`, `fluff`, `colors`, `mirror`; `?look=` is sticky. Knobs `bath`.
+- **Flashlight Statues** (`activities/campfire/`, 3D): the clearing is built from the film set
+  (`story/sets/campfire.ts` `buildCamp`). `light.ts` (the beam), `shade.ts` (dark shapes with shining eyes),
+  `roast.ts`, `sky.ts`. The night critters live in `characters/critters.ts` (shared with the bike), the statue poses in
+  `characters/statues.ts`. Sections `story`, `eyes`, `peek`, `statues`, `roast`, `sky`. Knobs `torch`, `campRoast`.
+- **Whale Peek-a-Boo** (`activities/whales/`): the whales are characters (`whale.ts` on the modelling kit `body.ts`);
+  `?lab=grey|humpback|grandma|mama|baby&view=...` looks at one. Ollie's rock is `characters/rock.ts`. Sections `story`,
+  `grey`, `humpback`, `orcas`. Knobs `whales`. A do-nothing player still finishes (the baby boops the boat).
+- **The Team Cabin** (`activities/cabin/`, `#/world/canada/cabin`; the skate hut on the map opens it): she dresses the
+  friends who have joined (jerseys, hats, scarves, cheek stamps; `looks.ts` `Worn`, put on by `characters/worn.ts`
+  everywhere the team shows). No stamp, no end. `?fit=hat.crown` shows one thing on all eight. Knobs `cabin`.
+- **On the map**: each friend who comes home shows their move at the rink (`map/moves.ts`: a wind-up, then the
+  payoff), then Gus says one line by how many are on the team (`L.hub.gusCount`), bragging a little less each time. A
+  tap on a teammate plays their move again. The hut is `map/hut.ts`.
+- **Silly faces**: `engine3d/characters/face.ts` (crossed, soaked, dazzled, dizzy, sudsy), `silly()` on every actor,
+  and the close-up helper `characters/closeup.ts` (`docs/films.md`).
+- A finished Canada became unfinished: the `salmon` stamp is gone and `bath` is earned by playing it. The trophy stays.
+
 ## Next
 
-- **Round two is planned, not built: `canada-round-2.md`** (2026-11-20). Salmon Leap is replaced by Misty's Bubble
-  Bath, Campfire Night is rebuilt in 3D around the flashlight, Whale Watch gets a reason (Ollie's lucky rock) and
-  whales she plays with, and a Team Cabin at the rink is optional. Build from that file; update this one when it's
-  built.
-- Kaylee plays it. Watch for: does she follow "tap a friend" on the map; does she sit through the films (hold ⏭
-  skips); the canoe (does she hold or tap); the big game's goose goal (fun, or upsetting?).
+- Kaylee plays it. Watch for: which of the three she goes back to; whether she finds the hut; does she hold the
+  humpback or only tap (taps still grow the jump); is the campfire too dark on her iPad in a bright room; how long
+  Flashlight Statues really takes her (a perfect-aim robot does it in about 70 s; the plan wanted 2.5 min).
+- Mountain Bike and Red Canoe are still steering toys: rethink them only if her play data says so.
+- Small things seen and left: a second hat on Tuque sits over his red cap; she can swap a worn thing but not drag it
+  off; the statue poses have no props and the flamingo can't lift a leg (the code-built rig has no leg bones); on an
+  iPad held upright the whale scene has a lot of empty sea; some moves read small from the board's high camera.
 - The films by their recorded lines: the way in has about 32 s of talk (about 45 s in all); a chapter's film in has
-  5-10 s of talk and its film out 10-14 s; `game-win` about 14 s. If she skips them, shorten them: the jokes to keep
-  are "Let's make a player!", "I am very good at standing.", "Got your puck!", "Is it wet?", "Psst!", the loon's call
-  and the syrup in the Cup.
-- Small things seen and left: in the campfire's sound
-  hunt the panned sounds are still the synth ones (`kit/clips.ts` has no pan); the map's far (Pacific) end is small in
-  portrait; with the whole team the rink is a crowded team photo on a phone.
+  5-10 s of talk and its film out 10-14 s; `game-win` about 14 s. If she skips them, shorten them.
 
 ## Open (for the user, on the review page)
 
