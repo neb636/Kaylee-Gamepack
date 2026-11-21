@@ -117,7 +117,9 @@ function onSkin(o: Object3D, hull: Hull, s: number, a: number, push = 0) {
 export function seaStar(bag: Bag, r = 0.28, color = '#FF8A5C') {
   const arms = Array.from({ length: 5 }, (_, i) => {
     const a = (i * Math.PI * 2) / 5
-    return P.capsule(r * 0.24, r * 0.7, color, { at: [Math.sin(a) * r * 0.55, 0, Math.cos(a) * r * 0.55], rot: [Math.PI / 2, a, 0], scale: [1, 1, 0.7] })
+    // (Laid flat, then turned to its own direction: in the default XYZ order every arm lay the same way, five
+    // parallel sausages that read as an "H", not a star.)
+    return P.capsule(r * 0.24, r * 0.7, color, { at: [Math.sin(a) * r * 0.55, 0, Math.cos(a) * r * 0.55], rot: [Math.PI / 2, a, 0], order: 'YXZ', scale: [1, 1, 0.7] })
   })
   const dots = Array.from({ length: 10 }, (_, i) => {
     const a = (Math.floor(i / 2) * Math.PI * 2) / 5
@@ -192,6 +194,8 @@ export abstract class Whale {
   protected bag: Bag
   /** The flippers' resting angle, out from the body (a humpback holds its long ones out at the surface). */
   protected flipRest = 0
+  /** The flukes' resting lift (radians, + raises their tips): a grey whale floats with its flukes just awash. */
+  protected flukeRest = 0
   /** Where the eyes look (world), or null. */
   look: Vector3 | null = null
   /** 0 hidden under the water .. 1 up at the surface for play. */
@@ -258,11 +262,11 @@ export abstract class Whale {
     this.body.add(solidMix([], parts, this.bag, 0))
   }
 
-  /** A zone's middle in the world. */
-  zoneAt(id: string, out = new Vector3()) {
+  /** A zone's middle in the world (`side` -1: mirrored onto its right side). */
+  zoneAt(id: string, out = new Vector3(), side = 1) {
     const z = this.zones[id]
     this.body.updateWorldMatrix(true, false)
-    return this.body.localToWorld(this.hull.at(z.s, z.a, z.push ?? 0, out))
+    return this.body.localToWorld(this.hull.at(z.s, z.a * side, z.push ?? 0, out))
   }
 
   /** On screen at all (up, or doing something). */
@@ -342,7 +346,7 @@ export abstract class Whale {
     p.roll = Math.sin(t * 0.7 + this.phase) * 0.03
     p.flipL = this.flipRest * this.up + Math.sin(t * 1.4 + this.phase) * 0.12
     p.flipR = -this.flipRest * this.up - Math.sin(t * 1.4 + this.phase + 0.4) * 0.12
-    p.fluke = Math.sin(t * 1.6 + this.phase) * 0.18
+    p.fluke = this.flukeRest * this.up + Math.sin(t * 1.6 + this.phase) * 0.18
     p.fwd = 0
     p.scale = 1 + Math.sin(t * 1.1 + this.phase) * 0.012
     const m = this.move
@@ -447,13 +451,18 @@ const GREY_DARK = '#6C7589'
 const GREY_BELLY = '#A4ABBA'
 const BARNACLE = '#F1EADB'
 const LICE = '#F2A66A'
+/** How far the grey whale tips nose-down to lift its tail (radians, on top of floating). */
+const SHOW_PITCH = 0.95
 
 export class GreyWhale extends Whale {
   readonly kind = 'grey' as const
+  // (Spread out along the body so each is its own target even on a phone: the tail, the hump on its back, the
+  // barnacle crust on its flank, the blowhole. The barnacles' `a` is for its left side; the world mirrors it to the
+  // side the camera sees, `zoneAt(id, out, side)`.)
   readonly zones: Record<string, Zone> = {
     blowhole: { s: 0.79, a: 0, push: 0.3 },
-    back: { s: 0.45, a: 0, push: 0.1 },
-    barnacles: { s: 0.9, a: 1.0, push: 0.05 },
+    back: { s: 0.36, a: 0, push: 0.1 },
+    barnacles: { s: 0.6, a: 0.75, push: 0.05 },
     tail: { s: 0.02, a: 0, push: 0 },
   }
   /** The sea star on its fluke (shown by `tailUp(true)`). */
@@ -522,16 +531,18 @@ export class GreyWhale extends Whale {
         if (i % 3 === 0) plain.push(P.sphere(0.03, LICE, { at: [r * 1.4, r * 0.6, 0.02], scale: [1, 0.8, 0.5] }, 6).applyMatrix4(o.matrix))
       }
     }
-    crust(0.9, 1.0, 9, 0.6, 11)
-    crust(0.9, -1.0, 9, 0.6, 41)
-    crust(0.93, 0.5, 3, 0.3, 71)
-    crust(0.93, -0.5, 3, 0.3, 91)
+    // (On top of the head, clear of the eyes: a crust over an eye reads as a frown, or hides it.)
+    crust(0.91, 0.62, 9, 0.42, 11)
+    crust(0.91, -0.62, 9, 0.42, 41)
+    crust(0.95, 0.28, 3, 0.24, 71)
+    crust(0.95, -0.28, 3, 0.24, 91)
     crust(0.6, 0.7, 6, 0.5, 131)
     crust(0.6, -0.7, 6, 0.5, 151)
     crust(0.52, 1.3, 4, 0.4, 171)
     this.body.add(solidMix(bumps, [...plain, ...skin], bag, 2))
     this.addEyes(0.835, 1.36, 0.19, true)
     this.addSmile(0.99, 0.875, 1.86, 0.16, 0.026, { s: 0.855, a: 1.7, r: 0.12 })
+    this.flukeRest = 0.12
 
     // Flippers: short pointed paddles, low behind the head.
     for (const [g, side] of [
@@ -567,8 +578,9 @@ export class GreyWhale extends Whale {
   }
 
   protected floatPose() {
-    // Head up out of the water, its eyes and smile well above it; the tail stock under.
-    return { y: 0.22, pitch: -0.2 }
+    // Lying along the surface, the head a little up so its eyes and smile are well clear of the water, and the tail
+    // stock just under it, the flukes awash (she can see the tail she's to touch, not a body trailing off into the sea).
+    return { y: 0.3, pitch: -0.08 }
   }
 
   /** Rolls onto its side (`side` +1: its left side up, for a camera on its left) and waves the flipper on top. */
@@ -577,12 +589,25 @@ export class GreyWhale extends Whale {
     this.play('roll', 3.2)
   }
   /** Lifts its tail out of the water and holds it up for a look (with the sea star: `star`), or slaps the water with
-   *  it (star false). It rolls a little onto its side first, so the top of its flukes faces the camera on `side`
-   *  (+1: the camera sees its left side). */
-  tailUp(star: boolean, side = 1) {
+   *  it (star false). It rolls onto its side just as far as turns the top of its flukes (and the sea star) square to
+   *  `eye` (world: the camera), whichever way it lies to it; never edge-on. */
+  tailUp(star: boolean, eye: Vector3) {
     this.star.visible = this.star.visible || star
-    this.rollSide = side
+    this.tailEye = eye
     this.play(star ? 'show' : 'slap', star ? 4.2 : 2)
+  }
+  /** Where the flukes turn to (the camera's position, followed live). */
+  private tailEye: Vector3 | null = null
+  /** The roll that turns the top of the flukes square to `tailEye`. */
+  private tailRoll() {
+    if (!this.tailEye) return -1.2
+    // The way to the eye in the whale's own frame (before its pose): its left is +x, its head +z.
+    this.root.updateWorldMatrix(true, false)
+    const c = this.root.worldToLocal(tA.copy(this.tailEye)).normalize()
+    // The flukes' top (body +y) after a roll r and then the show's pitch p is (-sin r, cos r cos p, cos r sin p):
+    // the roll that points it most at the eye.
+    const p = this.floatPose().pitch + SHOW_PITCH
+    return clamp(Math.atan2(-c.x, Math.cos(p) * c.y + Math.sin(p) * c.z), -1.45, 1.45)
   }
   /** A sideways sweep of the flukes (a push for the boat). */
   push() {
@@ -613,9 +638,9 @@ export class GreyWhale extends Whale {
       // with a splash, a show holds it high for a look and gives it a little wave.
       const hold = m.kind === 'show'
       const up = ease(span(q, 0, hold ? 0.22 : 0.35)) * (1 - ease(span(q, hold ? 0.8 : 0.6, 1)))
-      p.pitch = p.pitch + 0.95 * up
+      p.pitch = p.pitch + SHOW_PITCH * up
       p.y = p.y + 0.55 * up
-      p.roll = -this.rollSide * 1.3 * up
+      p.roll = this.tailRoll() * up
       p.fluke = -0.35 * up + (hold ? Math.sin(m.t * 5) * 0.12 * up : 0.7 * bell(span(q, 0.5, 0.75)))
       if (!hold && m.t - dt < m.len * 0.68 && m.t >= m.len * 0.68) {
         this.splashed = true
@@ -645,6 +670,8 @@ const HUMP = '#3F4B66'
 const HUMP_DARK = '#323C55'
 const HUMP_WHITE = '#EEF1F8'
 const HUMP_GROOVE = '#B8C1D6'
+/** How high the top of its back is during the ride (m above the water). */
+const RIDE_TOP = 1.0
 
 export class Humpback extends Whale {
   readonly kind = 'humpback' as const
@@ -676,7 +703,10 @@ export class Humpback extends Whale {
         { s: 1, w: 0.72, h: 0.48, y: -0.2 },
       ],
     })
-    this.flipRest = 0.5
+    // (Its long white flippers lie out flat on the surface, a little swept back (update), their white tops to the sky
+    // where she can see them: from lower on its flanks only their knobbly front edge broke the water, like beads on a
+    // stick, and tipped up to show more they turned edge-on and the far one stood up past its back like a second fin.)
+    this.flipRest = 0.38
     const hull = this.hull
     // Blue-black on top; the white throat and belly with its grooves, from the chin to the middle (crisp patches).
     this.body.add(solid(hull.geometry(() => HUMP, 60, 40), bag, 2.5))
@@ -712,23 +742,23 @@ export class Humpback extends Whale {
       [this.flipL, 1],
       [this.flipR, -1],
     ] as const) {
-      g.position.copy(hull.at(0.66, side * 2.0, -0.1))
+      g.position.copy(hull.at(0.66, side * 1.62, -0.1))
       const span3 = new Vector3(side * 0.88, -0.3, -0.38).normalize()
       const fore = new Vector3(0, 0.1, 1)
       const len = 3.0
       const secs: FinSec[] = [
-        { t: 0, chord: 0.7, back: 0, thick: 0.2 },
-        { t: 0.3, chord: 0.62, back: 0.05, thick: 0.14 },
-        { t: 0.75, chord: 0.42, back: 0.12, thick: 0.08 },
+        { t: 0, chord: 0.9, back: 0, thick: 0.22 },
+        { t: 0.3, chord: 0.86, back: 0.06, thick: 0.16 },
+        { t: 0.75, chord: 0.6, back: 0.16, thick: 0.1 },
         { t: 1, chord: 0.06, back: 0.3, thick: 0.03 },
       ]
       const bumps = []
       for (let i = 0; i < 6; i++) {
         const t = 0.18 + i * 0.14
         const c = finEdge(secs, len, span3, fore, t).addScaledVector(fore, 0.015)
-        bumps.push(P.sphere(0.075 - i * 0.006, HUMP_WHITE, { at: c.toArray() }, 8))
+        bumps.push(P.sphere(0.055 - i * 0.004, HUMP_WHITE, { at: c.addScaledVector(fore, -0.02).toArray(), scale: [1, 0.7, 1] }, 8))
       }
-      g.add(solidMix([fin(secs, len, span3, fore, (t, top) => (top && t < 0.35 ? HUMP : HUMP_WHITE), 16, 18), ...bumps], [], bag, 2))
+      g.add(solidMix([fin(secs, len, span3, fore, (t, top) => (top && t < 0.12 ? HUMP : HUMP_WHITE), 16, 18), ...bumps], [], bag, 2))
     }
     // The flukes: dark on top, white underneath; a scalloped trailing edge.
     this.flukes.position.copy(this.stockAt(tA))
@@ -742,7 +772,8 @@ export class Humpback extends Whale {
   }
 
   protected floatPose() {
-    return { y: 0.02 - 2.1 * this.sink, pitch: -0.18 + 0.12 * this.sink }
+    // (High enough that the roots of its flippers, at its widest, are just out of the water.)
+    return { y: 0.22 - 2.3 * this.sink, pitch: -0.18 + 0.12 * this.sink }
   }
 
   /** Her finger holds it down (true) or lets go. */
@@ -777,8 +808,14 @@ export class Humpback extends Whale {
 
   update(dt: number, t: number) {
     this.sink += (this.sinkGoal - this.sink) * damp(dt, this.sinkGoal > this.sink ? 1.6 : 4)
+    this.sweep = 0.35 * this.up
     super.update(dt, t)
+    // (Swept back along its flanks as it twists over in the fall, so neither long flipper sticks up like a pole.)
+    this.flipL.rotation.y = this.sweep
+    this.flipR.rotation.y = -this.sweep
   }
+  /** How far both flippers sweep back toward the tail (radians). */
+  private sweep = 0
 
   protected act(m: Move, q: number, dt: number, t: number) {
     super.act(m, q, dt, t)
@@ -801,10 +838,13 @@ export class Humpback extends Whale {
       // Nose up, nearly straight (more for a big one), then over onto its back as it falls.
       const tip = -(0.95 + 0.4 * size)
       p.pitch = (air < upT ? tip : tip + (Math.abs(tip) + 0.25) * ((air - upT) / (1 - upT))) * (1 - back2) + f.pitch * back2
-      p.roll = (1.2 + 1.1 * size) * ease(span(air, upT * 0.7, 1)) * (1 - back2)
-      // (The long flippers spread out flat to the sides, like wings, not up like sticks.)
+      const twist = ease(span(air, upT * 0.7, 1)) * (1 - back2)
+      p.roll = (1.2 + 1.1 * size) * twist
+      // (The long flippers spread out flat to the sides like wings on the way up; as it twists over they sweep back
+      // along its flanks.)
       p.flipL = 0.25 + 0.2 * bell(span(air, 0, 1))
       p.flipR = -0.25 - 0.2 * bell(span(air, 0, 1))
+      this.sweep = 1.15 * twist
       p.fluke = -0.4 * bell(span(air, 0.4, 1))
       if (m.t - dt < m.len * 0.62 * 0.98 && m.t >= m.len * 0.62 * 0.98) {
         this.splashed = true
@@ -816,13 +856,14 @@ export class Humpback extends Whale {
         this.splashSize = 0.25
       }
     } else if (m.kind === 'carry' || m.kind === 'away') {
-      // Level under the boat, its back out of the water (rising from below first), swimming gently; then away down.
+      // Under the boat, its back well out of the water (rising from below first) and its head up a little so its
+      // face shows past the bow, swimming gently; then away down.
       const top = this.hull.at(0.55, 0).y
-      const ride = 0.62 - top
+      const ride = RIDE_TOP - top
       const k = m.kind === 'carry' ? ease(clamp(m.t / 1.4)) : 1 - ease(q)
       p.y = -this.len * 0.4 + (ride + this.len * 0.4) * k + Math.sin(t * 1.6) * 0.05 * k
-      p.pitch = 0.025 * Math.sin(t * 1.3)
-      p.roll = 0.035 * Math.sin(t * 0.9)
+      p.pitch = -0.07 * k + 0.02 * Math.sin(t * 1.3)
+      p.roll = 0.025 * Math.sin(t * 0.9)
       p.flipL = 0.25 * Math.sin(t * 1.5)
       p.flipR = -0.25 * Math.sin(t * 1.5)
       p.fluke = 0.35 * Math.sin(t * 2.2)
