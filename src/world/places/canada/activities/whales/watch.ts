@@ -837,8 +837,13 @@ export class WhaleWatch implements World3D {
     const b = this.baby
     // Up beside the baby, one look at it (and at the rock).
     const bp = b.root.position
-    const away = tA.set(bp.x - this.d.x, 0, bp.z - this.d.z).normalize()
-    g.root.position.set(bp.x + away.x * 2.6 - away.z * 2.2, 0, bp.z + away.z * 2.6 + away.x * 2.2)
+    // (A little further off and well to one side across the screen, away from the boat's side: straight behind, she
+    // stood in a column with the baby and hid behind it.)
+    const yaw = CAM_YAW * (Math.PI / 180)
+    const rx = Math.cos(yaw)
+    const rz = -Math.sin(yaw)
+    const out = (bp.x - this.d.x) * rx + (bp.z - this.d.z) * rz >= 0 ? 1 : -1
+    g.root.position.set(bp.x + rx * out * 3.4 - Math.sin(yaw) * 1.6, 0, bp.z + rz * out * 3.4 - Math.cos(yaw) * 1.6)
     g.root.rotation.y = Math.atan2(bp.x - g.root.position.x, bp.z - g.root.position.z)
     g.pop()
     whaleSfx.peek()
@@ -889,17 +894,19 @@ export class WhaleWatch implements World3D {
     // Everybody round the boat, out of the water together.
     const d = this.d
     // (Fanned wide round the far side of the boat from the camera, so nobody's behind it and no two arcs cross: the big
-    // two at the ends and furthest off, the baby in front, nearest.)
+    // two at the ends and furthest off, the baby in front, nearest. Not so wide the camera has to back off till
+    // they're small: on a tall screen narrower and deeper.)
     const who: [Whale, number, number][] = [
-      [this.grey, -1.3, 10.5],
-      [this.mama, -0.6, 8.5],
-      [this.grandma, 0.05, 9.5],
-      [this.baby, 0.55, 6.5],
-      [this.hump, 1.25, 11.5],
+      [this.grey, -0.95, 9],
+      [this.mama, -0.45, 7.5],
+      [this.grandma, 0.05, 8.5],
+      [this.baby, 0.45, 5.5],
+      [this.hump, 0.95, 10],
     ]
     const yaw = CAM_YAW * (Math.PI / 180)
-    for (const [w, a, r] of who) {
-      const ang = yaw + Math.PI + a
+    for (const [w, a, r0] of who) {
+      const ang = yaw + Math.PI + a * (this.tall ? 0.6 : 1)
+      const r = r0 + (this.tall ? 2 : 0)
       w.root.position.set(d.x + Math.sin(ang) * r, 0, d.z + Math.cos(ang) * r)
       // (Facing the boat, side by side like spokes: they jump toward it, and float there looking at everybody after.)
       w.root.rotation.y = ang + Math.PI

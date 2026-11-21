@@ -701,9 +701,10 @@ export class Humpback extends Whale {
         { s: 1, w: 0.72, h: 0.48, y: -0.2 },
       ],
     })
-    // (Its long white flippers held out at the surface, where she can see them: lower, only their knobbly front edge
-    // broke the water, like beads on a stick.)
-    this.flipRest = 0.7
+    // (Its long white flippers lie out flat on the surface, a little swept back (update), their white tops to the sky
+    // where she can see them: from lower on its flanks only their knobbly front edge broke the water, like beads on a
+    // stick, and tipped up to show more they turned edge-on and the far one stood up past its back like a second fin.)
+    this.flipRest = 0.38
     const hull = this.hull
     // Blue-black on top; the white throat and belly with its grooves, from the chin to the middle (crisp patches).
     this.body.add(solid(hull.geometry(() => HUMP, 60, 40), bag, 2.5))
@@ -739,7 +740,7 @@ export class Humpback extends Whale {
       [this.flipL, 1],
       [this.flipR, -1],
     ] as const) {
-      g.position.copy(hull.at(0.66, side * 2.0, -0.1))
+      g.position.copy(hull.at(0.66, side * 1.62, -0.1))
       const span3 = new Vector3(side * 0.88, -0.3, -0.38).normalize()
       const fore = new Vector3(0, 0.1, 1)
       const len = 3.0
@@ -769,7 +770,8 @@ export class Humpback extends Whale {
   }
 
   protected floatPose() {
-    return { y: 0.02 - 2.1 * this.sink, pitch: -0.18 + 0.12 * this.sink }
+    // (High enough that the roots of its flippers, at its widest, are just out of the water.)
+    return { y: 0.22 - 2.3 * this.sink, pitch: -0.18 + 0.12 * this.sink }
   }
 
   /** Her finger holds it down (true) or lets go. */
@@ -804,7 +806,7 @@ export class Humpback extends Whale {
 
   update(dt: number, t: number) {
     this.sink += (this.sinkGoal - this.sink) * damp(dt, this.sinkGoal > this.sink ? 1.6 : 4)
-    this.sweep = 0
+    this.sweep = 0.35 * this.up
     super.update(dt, t)
     // (Swept back along its flanks as it twists over in the fall, so neither long flipper sticks up like a pole.)
     this.flipL.rotation.y = this.sweep
