@@ -1,0 +1,735 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "hub",
+  "title": "Canada › Hub",
+  "intro": "---- One block per chapter (activities/<id>/): its film in, the game (Sparkle's instructions and hints, the friends' reactions), its film out. Keep each line under ~3 seconds; her name is never said. ----",
+  "page": "canada-hub.html",
+  "audio": "canada-hub.mp3",
+  "lines": 33,
+  "seconds": 92,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "hub.count.0",
+      "text": "One friend on the team! Five more to find.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.count.2",
+      "text": "Three friends! Three more to find.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.count.4",
+      "text": "Five friends! Just one more to find.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.all",
+      "text": "Our whole team is here! To the ice!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.locked",
+      "text": "We need our whole team first!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.gusCount.0",
+      "text": "One friend? Honk! Easy!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.gusCount.1",
+      "text": "Two? Ha! We are six geese!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.gusCount.2",
+      "text": "Three... honk. Still easy.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.gusCount.3",
+      "text": "Four? Geese! More practice!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.balloon",
+      "text": "My balloon! It flies us everywhere.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.rockies",
+      "text": "The Rocky Mountains! Big and snowy.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.north",
+      "text": "Way up north, it is snowy all year.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.hudson",
+      "text": "Hudson Bay! Its water gets icy.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.pokes.prairie",
+      "text": "The prairie! Fields of wheat for bread.",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "hub",
+        "first",
+        "touch"
+      ],
+      "text": "Tap a friend to go and get them!",
+      "voice": "sparkle",
+      "key": "hub.first.touch",
+      "part": "hub › first",
+      "when": "Her first look at the map, once (Sparkle).",
+      "ms": 2496,
+      "flags": [],
+      "span": [
+        0,
+        2.44
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "first",
+        "mouse"
+      ],
+      "text": "Click a friend to go and get them!",
+      "voice": "sparkle",
+      "key": "hub.first.mouse",
+      "part": "hub › first",
+      "when": "",
+      "ms": 2592,
+      "flags": [],
+      "span": [
+        2.79,
+        5.32
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "count",
+        "0"
+      ],
+      "text": "One friend on the team! Five more to find.",
+      "voice": "sparkle",
+      "key": "hub.count.0",
+      "part": "hub › count",
+      "when": "Back on the map with a new friend on the team (Sparkle counts; said once each).",
+      "ms": 3504,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        6.94,
+        10.38
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "count",
+        "1"
+      ],
+      "text": "Two friends! Four more to find.",
+      "voice": "sparkle",
+      "key": "hub.count.1",
+      "part": "hub › count",
+      "when": "",
+      "ms": 2400,
+      "flags": [],
+      "span": [
+        10.73,
+        13.07
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "count",
+        "2"
+      ],
+      "text": "Three friends! Three more to find.",
+      "voice": "sparkle",
+      "key": "hub.count.2",
+      "part": "hub › count",
+      "when": "",
+      "ms": 3024,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        13.42,
+        16.38
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "count",
+        "3"
+      ],
+      "text": "Four friends! Two more to find.",
+      "voice": "sparkle",
+      "key": "hub.count.3",
+      "part": "hub › count",
+      "when": "",
+      "ms": 2736,
+      "flags": [],
+      "span": [
+        16.73,
+        19.4
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "count",
+        "4"
+      ],
+      "text": "Five friends! Just one more to find.",
+      "voice": "sparkle",
+      "key": "hub.count.4",
+      "part": "hub › count",
+      "when": "",
+      "ms": 3672,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        19.75,
+        23.37
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "all"
+      ],
+      "text": "Our whole team is here! To the ice!",
+      "voice": "maple",
+      "key": "hub.all",
+      "part": "hub",
+      "when": "The sixth friend is home: the rink lights up.",
+      "ms": 3432,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        24.99,
+        28.37
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "rink",
+        "touch"
+      ],
+      "text": "Tap the ice rink for the big game!",
+      "voice": "sparkle",
+      "key": "hub.rink.touch",
+      "part": "hub › rink",
+      "when": "",
+      "ms": 2712,
+      "flags": [],
+      "span": [
+        29.99,
+        32.64
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "rink",
+        "mouse"
+      ],
+      "text": "Click the ice rink for the big game!",
+      "voice": "sparkle",
+      "key": "hub.rink.mouse",
+      "part": "hub › rink",
+      "when": "",
+      "ms": 2688,
+      "flags": [],
+      "span": [
+        32.99,
+        35.63
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "locked"
+      ],
+      "text": "We need our whole team first!",
+      "voice": "maple",
+      "key": "hub.locked",
+      "part": "hub",
+      "when": "She taps the rink before the team is whole.",
+      "ms": 3096,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        37.25,
+        40.29
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "maple",
+        "0"
+      ],
+      "text": "Bonjour!",
+      "voice": "maple",
+      "key": "hub.maple.0",
+      "part": "hub › maple",
+      "when": "Tap Maple on the rink.",
+      "ms": 792,
+      "flags": [],
+      "span": [
+        41.91,
+        42.64
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "maple",
+        "1"
+      ],
+      "text": "Let's find my team!",
+      "voice": "maple",
+      "key": "hub.maple.1",
+      "part": "hub › maple",
+      "when": "",
+      "ms": 1824,
+      "flags": [],
+      "span": [
+        42.99,
+        44.75
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "maple",
+        "2"
+      ],
+      "text": "Go, team, go!",
+      "voice": "maple",
+      "key": "hub.maple.2",
+      "part": "hub › maple",
+      "when": "",
+      "ms": 1344,
+      "flags": [],
+      "span": [
+        45.1,
+        46.38
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "gus",
+        "0"
+      ],
+      "text": "Honk! Nobody beats the geese!",
+      "voice": "gus",
+      "key": "hub.gus.0",
+      "part": "hub › gus",
+      "when": "Tap the geese skating circles on the canal.",
+      "ms": 2712,
+      "flags": [],
+      "span": [
+        48,
+        50.65
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "gus",
+        "1"
+      ],
+      "text": "Honk honk! See you on the ice!",
+      "voice": "gus",
+      "key": "hub.gus.1",
+      "part": "hub › gus",
+      "when": "",
+      "ms": 2688,
+      "flags": [],
+      "span": [
+        51,
+        53.62
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "gusCount",
+        "0"
+      ],
+      "text": "One friend? Honk! Easy!",
+      "voice": "gus",
+      "key": "hub.gusCount.0",
+      "part": "hub › gusCount",
+      "when": "Gus, at the rink, as she lands back with a new friend (after Sparkle's count and the friend's move): by how many are on the team now, 1..6. He brags a little less each time.",
+      "ms": 3120,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        55.24,
+        58.29
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "gusCount",
+        "1"
+      ],
+      "text": "Two? Ha! We are six geese!",
+      "voice": "gus",
+      "key": "hub.gusCount.1",
+      "part": "hub › gusCount",
+      "when": "",
+      "ms": 3456,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        58.64,
+        62.03
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "gusCount",
+        "2"
+      ],
+      "text": "Three... honk. Still easy.",
+      "voice": "gus",
+      "key": "hub.gusCount.2",
+      "part": "hub › gusCount",
+      "when": "",
+      "ms": 3720,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        62.38,
+        66.04
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "gusCount",
+        "3"
+      ],
+      "text": "Four? Geese! More practice!",
+      "voice": "gus",
+      "key": "hub.gusCount.3",
+      "part": "hub › gusCount",
+      "when": "",
+      "ms": 3696,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        66.39,
+        70.04
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "gusCount",
+        "4"
+      ],
+      "text": "Five?! Uh oh.",
+      "voice": "gus",
+      "key": "hub.gusCount.4",
+      "part": "hub › gusCount",
+      "when": "",
+      "ms": 1920,
+      "flags": [],
+      "span": [
+        70.39,
+        72.25
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "gusCount",
+        "5"
+      ],
+      "text": "A whole team? Honk... gulp.",
+      "voice": "gus",
+      "key": "hub.gusCount.5",
+      "part": "hub › gusCount",
+      "when": "",
+      "ms": 2880,
+      "flags": [],
+      "span": [
+        72.6,
+        75.42
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "team",
+        "snowman"
+      ],
+      "text": "Bonjour! I am ready!",
+      "voice": "snowman",
+      "key": "hub.team.snowman",
+      "part": "hub › team",
+      "when": "Tap a friend who is already on the team (they stand at the rink in their scarves).",
+      "ms": 2592,
+      "flags": [],
+      "span": [
+        77.04,
+        79.58
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "team",
+        "bike"
+      ],
+      "text": "Mmm. I am the goalie.",
+      "voice": "moose",
+      "key": "hub.team.bike",
+      "part": "hub › team",
+      "when": "Tap a friend who is already on the team (they stand at the rink in their scarves).",
+      "ms": 2904,
+      "flags": [],
+      "span": [
+        79.93,
+        82.77
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "team",
+        "campfire"
+      ],
+      "text": "Quick paws, ready!",
+      "voice": "raccoon",
+      "key": "hub.team.campfire",
+      "part": "hub › team",
+      "when": "Tap a friend who is already on the team (they stand at the rink in their scarves).",
+      "ms": 1728,
+      "flags": [],
+      "span": [
+        83.12,
+        84.8
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "team",
+        "canoe"
+      ],
+      "text": "I am warming up my song.",
+      "voice": "loon",
+      "key": "hub.team.canoe",
+      "part": "hub › team",
+      "when": "Tap a friend who is already on the team (they stand at the rink in their scarves).",
+      "ms": 2040,
+      "flags": [],
+      "span": [
+        85.15,
+        87.12
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "team",
+        "whales"
+      ],
+      "text": "Wheee! Hockey!",
+      "voice": "otter",
+      "key": "hub.team.whales",
+      "part": "hub › team",
+      "when": "Tap a friend who is already on the team (they stand at the rink in their scarves).",
+      "ms": 1752,
+      "flags": [],
+      "span": [
+        87.47,
+        89.16
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "team",
+        "bath"
+      ],
+      "text": "I brought my big swing.",
+      "voice": "bear",
+      "key": "hub.team.bath",
+      "part": "hub › team",
+      "when": "Tap a friend who is already on the team (they stand at the rink in their scarves).",
+      "ms": 2688,
+      "flags": [],
+      "span": [
+        89.51,
+        92.13
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "balloon"
+      ],
+      "text": "My balloon! It flies us everywhere.",
+      "voice": "sparkle",
+      "key": "hub.pokes.balloon",
+      "part": "hub › pokes",
+      "when": "Sparkle, the first time she pokes these on the map (once a visit). The animals' names come from Maple's book.",
+      "ms": 3120,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        93.75,
+        96.8
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "rockies"
+      ],
+      "text": "The Rocky Mountains! Big and snowy.",
+      "voice": "sparkle",
+      "key": "hub.pokes.rockies",
+      "part": "hub › pokes",
+      "when": "Sparkle, the first time she pokes these on the map (once a visit). The animals' names come from Maple's book.",
+      "ms": 3744,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        97.15,
+        100.85
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "north"
+      ],
+      "text": "Way up north, it is snowy all year.",
+      "voice": "sparkle",
+      "key": "hub.pokes.north",
+      "part": "hub › pokes",
+      "when": "Sparkle, the first time she pokes these on the map (once a visit). The animals' names come from Maple's book.",
+      "ms": 4272,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        101.2,
+        105.41
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "hudson"
+      ],
+      "text": "Hudson Bay! Its water gets icy.",
+      "voice": "sparkle",
+      "key": "hub.pokes.hudson",
+      "part": "hub › pokes",
+      "when": "Sparkle, the first time she pokes these on the map (once a visit). The animals' names come from Maple's book.",
+      "ms": 3432,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        105.76,
+        109.13
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "pokes",
+        "prairie"
+      ],
+      "text": "The prairie! Fields of wheat for bread.",
+      "voice": "sparkle",
+      "key": "hub.pokes.prairie",
+      "part": "hub › pokes",
+      "when": "Sparkle, the first time she pokes these on the map (once a visit). The animals' names come from Maple's book.",
+      "ms": 3648,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        109.48,
+        113.07
+      ]
+    }
+  ]
+}
