@@ -1,0 +1,13 @@
+[
+  { "id": "cabin-whoosh", "label": "A thing flies onto a friend", "prompt": "A soft quick cloth whoosh, a knitted sweater tossed through the air, gentle and airy, cute toy-like, no impact.", "seconds": 0.6 },
+  { "id": "cabin-pop", "label": "It lands on and is worn", "prompt": "A cheerful soft cartoon pop with a tiny bright sparkle, something cozy landing in place, cute and light.", "seconds": 0.6 },
+  { "id": "cabin-stamp", "label": "A cheek stamp pressed on", "prompt": "A small rubber stamp pressed onto paper, one soft muffled thump with a tiny squish, gentle and cute.", "seconds": 0.5 },
+  { "id": "cabin-boing", "label": "Dropped in a silly place", "prompt": "A short funny rubbery cartoon boing, a soft toy bouncing off something, silly and cute, not loud.", "seconds": 0.7 },
+  { "id": "cabin-giggle", "label": "A friend giggles", "prompt": "Tiny high cartoon critter giggles, a soft muffled squeaky tee-hee, cute plush toy, no words, short.", "seconds": 1 },
+  { "id": "cabin-shutter", "label": "The mirror takes the team photo", "prompt": "An old instant camera taking a photo: a crisp shutter click followed by a short soft motor whirr as the picture comes out, friendly.", "seconds": 1.2 },
+  { "id": "cabin-creak", "label": "The window swings open for Gus", "prompt": "A small wooden cabin window swinging open on old hinges, a short gentle wooden creak, cozy, not spooky.", "seconds": 0.8 },
+  { "id": "cabin-lid", "label": "A bin on the shelf opens", "prompt": "A small cardboard hat box lid lifted off, a soft papery pop and slide, gentle and tidy.", "seconds": 0.5 },
+  { "id": "cabin-stove", "label": "The stove poked", "prompt": "A small wood stove fire whumping up when its door is tapped, a soft whoosh of flame and a few crackling sparks, warm and cozy.", "seconds": 1.2 },
+  { "id": "cabin-jingle", "label": "The skates on their pegs knock together", "prompt": "Two ice skates hanging on a wooden peg knocking together, a light metallic clink and a soft leather bump, small and cute.", "seconds": 0.6 },
+  { "id": "cabin-bed", "label": "The hut (bed)", "prompt": "Inside a cozy wooden skating hut in winter: a small wood stove softly crackling and popping, a gentle snowy wind outside the walls, warm and quiet. Seamless loop, no music, no voices.", "seconds": 15, "loop": true }
+]

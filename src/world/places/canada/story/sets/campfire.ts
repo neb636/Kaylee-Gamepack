@@ -7,6 +7,10 @@
 //
 // The usual camera stands on +z looking toward -z (the fire at the middle, the tent back right, the bush back left).
 // `CAMP` has the marks: the fire, Maple's spot on the log, the bag, the bush, the tent.
+//
+// The game, Flashlight Statues (activities/campfire/), is played in this same campsite: it builds it with `buildCamp`
+// and keeps it alive with `updateCamp`, and adds its own things round the edge (the den, the owl's tree, the kits'
+// hiding places), so the game and its two films are one place.
 import { AdditiveBlending, Euler, Group, Quaternion, Vector3, Mesh, MeshBasicMaterial, PlaneGeometry, PointLight, Sprite, SpriteMaterial, type Object3D, type Texture } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
 import { blobShadow, merge, P, solid, type V3 } from '../../../../engine3d/geo'
@@ -52,26 +56,30 @@ export interface CampSet {
   flare: number
   fire: { flames: Group; light: PointLight; glow: Sprite; pool: Mesh }
   tent: Group
+  /** Maple's log, the bush behind it and the moon (the game's clearing pokes them). */
+  log: Group
+  bush: Group
+  moon: Mesh
 }
 
 // ---------------------------------------------------------------- pieces
 
 let glowTex: Texture | null = null
 /** A soft warm round glow (white in the middle, fading out): tint it with the material's color. */
-function glowTexture(bag: Bag) {
+export function glowTexture(bag: Bag) {
   glowTex ??= softTexture(64, 64, [255, 255, 255], (x, y) => radialAlpha(Math.hypot(x - 32, y - 32), 32, [[0, 1], [0.35, 0.5], [1, 0]]))
   bag.add({ dispose: () => ((glowTex as Texture | null)?.dispose(), (glowTex = null)) })
   return glowTex
 }
 
 /** Unlit parts (flames, the glow in the tent, the moon): they show at night without any light. */
-function unlit(parts: ReturnType<typeof P.box>[], bag: Bag, opts: { opacity?: number; fog?: boolean } = {}) {
+export function unlit(parts: ReturnType<typeof P.box>[], bag: Bag, opts: { opacity?: number; fog?: boolean } = {}) {
   const mat = bag.add(new MeshBasicMaterial({ vertexColors: true, transparent: opts.opacity !== undefined, opacity: opts.opacity ?? 1, fog: opts.fog ?? true }))
   return new Mesh(bag.add(merge(parts)), mat)
 }
 
 /** A spruce: four stacked cones on a short trunk, `h` tall. */
-function spruce(h: number, i: number) {
+export function spruce(h: number, i: number) {
   const col = SPRUCE[i % SPRUCE.length]
   const parts = [P.cyl(0.09 * h * 0.4, 0.12 * h * 0.4, h * 0.2, '#4A3328', { at: [0, h * 0.1, 0] }, 8)]
   for (let k = 0; k < 4; k++) {
@@ -83,7 +91,7 @@ function spruce(h: number, i: number) {
 }
 
 /** A red maple in the fall: a trunk and a round crown of leaf balls in reds and oranges, `h` tall. */
-function mapleTree(h: number, i: number) {
+export function mapleTree(h: number, i: number) {
   const parts = [P.cyl(0.07 * h * 0.5, 0.1 * h * 0.5, h * 0.55, '#5A3A2A', { at: [0, h * 0.27, 0] }, 8)]
   const balls: [number, number, number, number][] = [
     [0, 0.68, 0, 0.3],
@@ -274,170 +282,181 @@ function makeEyes(bag: Bag) {
 
 // ---------------------------------------------------------------- the set
 
+/** Builds the campsite in `root` (the film set's scenery, and the game's clearing: activities/campfire/). Returns what
+ *  moves. */
+export function buildCamp(bag: Bag, root: Group, opts: { nearTrees?: boolean } = {}): CampSet {
+  // The ground: the forest floor, the dirt of the clearing round the fire.
+  root.add(solid(merge([P.cyl(60, 60, 0.4, '#2E4A3E', { at: [0, -0.2, 0] }, 40), P.cyl(3.1, 3.2, 0.04, '#6E5A48', { at: [0, 0.02, -0.3] }, 32)]), bag, 0))
+
+  // The ring of tall trees: spruces and red maples all round, nearer at the sides, none where the camera stands.
+  const trees: ReturnType<typeof P.box>[] = []
+  for (let i = 0; i < 26; i++) {
+    const a = Math.PI * (0.72 + (i / 25) * 1.56) + Math.sin(i * 7.3) * 0.05
+    const r = 6.2 + (i % 4) * 1.4 + Math.sin(i * 3.1) * 0.6
+    const x = Math.cos(a) * r
+    const z = Math.sin(a) * r - 0.8
+    const maple = i % 3 === 1
+    const h = maple ? 2.8 + (i % 2) * 0.6 : 3.8 + ((i * 7) % 5) * 0.45
+    for (const p of maple ? mapleTree(h, i) : spruce(h, i)) trees.push(p.translate(x, 0, z))
+  }
+  // A few nearer, at the clearing's back edge (a maple each side of the tent, a spruce by the bush). (The game puts its
+  // own there, round its animals: `nearTrees: false`.)
+  for (const [x, z, h, maple] of opts.nearTrees === false ? [] : [
+    [3.6, -3.2, 3.2, true],
+    [-3.3, -2.6, 4.6, false],
+    [-1.9, -3.6, 3.0, true],
+    [0.9, -4.2, 5.2, false],
+  ] as [number, number, number, boolean][])
+    for (const p of maple ? mapleTree(h, Math.round(x)) : spruce(h, Math.round(z))) trees.push(p.translate(x, 0, z))
+  root.add(solid(merge(trees), bag, 2))
+
+  // The fire.
+  const [fx, , fz] = CAMP.fire
+  const pit = solid(merge(firePit()), bag, 1.6)
+  pit.position.set(fx, 0, fz)
+  root.add(pit)
+  const fl = flames(bag)
+  fl.position.set(fx, 0.06, fz)
+  fl.scale.setScalar(0.72)
+  root.add(fl)
+  // Its warm light (it reaches the faces round the fire; the moon does the rest).
+  const light = new PointLight('#FFB070', 2.6, 5.5, 1.1)
+  light.position.set(fx, 0.75, fz + 0.15)
+  root.add(light)
+  // A soft glow round the flames, and a warm pool of light on the ground.
+  const glow = new Sprite(bag.add(new SpriteMaterial({ map: glowTexture(bag), color: '#FF9A50', transparent: true, opacity: 0.55, blending: AdditiveBlending, depthWrite: false, fog: false })))
+  glow.scale.set(2, 2, 1)
+  glow.position.set(fx, 0.5, fz)
+  glow.renderOrder = 9
+  root.add(glow)
+  const pool = new Mesh(bag.add(new PlaneGeometry(4.2, 4.2)), bag.add(new MeshBasicMaterial({ map: glowTexture(bag), color: '#FF9440', transparent: true, opacity: 0.38, blending: AdditiveBlending, depthWrite: false })))
+  pool.rotation.x = -Math.PI / 2
+  pool.position.set(fx, 0.05, fz)
+  pool.renderOrder = 2
+  root.add(pool)
+
+  // Maple's log, with the bag of marshmallows on it.
+  const log = solid(
+    merge([
+      P.cyl(0.17, 0.17, 1.35, WOOD, { at: [0, 0.16, 0], rot: [0, 0, Math.PI / 2] }, 14),
+      ...[-1, 1].map((s) => P.cyl(0.15, 0.15, 0.02, WOOD_END, { at: [s * 0.676, 0.16, 0], rot: [0, 0, Math.PI / 2] }, 14)),
+      P.box(0.9, 0.012, 0.02, WOOD_DARK, { at: [-0.1, 0.3, 0.1] }),
+      P.box(0.7, 0.012, 0.02, WOOD_DARK, { at: [0.15, 0.24, 0.15] }),
+    ]),
+    bag,
+    2,
+  )
+  log.position.set(-1.2, 0, 0.02)
+  root.add(log, blobShadow(0.8, bag).translateX(-1.2))
+  const mb = mallowBag(bag, root)
+  // (A film can hide it: the marshmallows are all eaten by the film out.)
+  mb.group.position.set(...CAMP.bag)
+  mb.group.rotation.y = 0.3
+
+  // The bush behind it: big, round, dark green (with a few red leaves from the maple above).
+  const [bx, , bz] = CAMP.bush
+  const bush = solid(
+    merge([
+      P.sphere(0.55, '#2F5A45', { at: [0, 0.42, 0], scale: [1.25, 0.85, 1] }, 14),
+      P.sphere(0.4, '#386A50', { at: [-0.55, 0.32, 0.12] }, 12),
+      P.sphere(0.42, '#2B5240', { at: [0.58, 0.3, 0.05] }, 12),
+      P.sphere(0.34, '#386A50', { at: [0.1, 0.72, 0.1] }, 12),
+      ...[
+        [-0.3, 0.6, 0.45],
+        [0.42, 0.52, 0.38],
+        [0.05, 0.86, 0.35],
+      ].map(([x, y, z]) => P.sphere(0.06, '#E2603F', { at: [x, y, z], scale: [1, 0.5, 1] }, 8)),
+    ]),
+    bag,
+    2,
+  )
+  bush.position.set(bx, 0, bz)
+  root.add(bush)
+  // The paw comes out of the bush's front, toward the bag; the eyes peep from its right side.
+  const pw = makePaw(bag)
+  pw.root.position.set(CAMP.bag[0] + 0.02, CAMP.bag[1] + 0.56, bz + 0.25)
+  pw.root.rotation.x = 0.36
+  root.add(pw.root)
+  const eyes = makeEyes(bag)
+  eyes.position.set(...CAMP.eyes)
+  root.add(eyes)
+
+  // The tent.
+  const t = tent(bag)
+  t.position.set(...CAMP.tent)
+  t.rotation.y = -0.38
+  root.add(t, blobShadow(1.3, bag).translateX(CAMP.tent[0]).translateZ(CAMP.tent[2]))
+
+  // A stump and a lantern-ish rock or two, so the clearing isn't bare.
+  root.add(
+    solid(
+      merge([
+        P.cyl(0.24, 0.28, 0.32, WOOD, { at: [2.75, 0.16, -0.45] }, 12),
+        P.cyl(0.21, 0.21, 0.02, WOOD_END, { at: [2.75, 0.33, -0.45] }, 12),
+        P.sphere(0.22, STONE[0], { at: [-2.3, 0.1, 0.9], scale: [1.3, 0.7, 1] }, 10),
+        P.sphere(0.16, STONE[2], { at: [2.6, 0.08, 1.3], scale: [1.3, 0.7, 1] }, 10),
+      ]),
+      bag,
+      1.8,
+    ),
+  )
+
+  // The moon, big and round, over the trees (no fog: it's far beyond them).
+  const moon = unlit([P.sphere(2.2, '#FFF6DA', {}, 24)], bag, { fog: false })
+  moon.position.set(-11, 19, -42)
+  root.add(moon)
+  const halo = new Sprite(bag.add(new SpriteMaterial({ map: glowTexture(bag), color: '#FFF2C8', transparent: true, opacity: 0.32, blending: AdditiveBlending, depthWrite: false, fog: false })))
+  halo.scale.set(11, 11, 1)
+  halo.position.copy(moon.position)
+  root.add(halo)
+
+  return {
+    mallows: mb.mallows,
+    bag: mb.group,
+    paw: { ...pw, reach: 0 },
+    eyes: { root: eyes, open: 1 },
+    flare: 0,
+    fire: { flames: fl, light, glow, pool },
+    tent: t,
+    log,
+    bush,
+    moon,
+  }
+}
+
+/** The campsite's life every frame: the fire flickers (its light and glow with it; `cam` is where the camera is, so
+ *  the flames' gold core faces it), a spark now and then (`sparkle`), the paw's reach, the eyes' blink. */
+export function updateCamp(set: CampSet, dt: number, t: number, cam: Vector3, sparkle: (x: number, y: number, z: number, n: number) => void) {
+  // The fire flickers: each layer on its own beat, the light and the glow with it; a spark now and then.
+  set.flare = Math.max(0, set.flare - dt * 1.2)
+  const f = set.flare
+  set.fire.flames.children.forEach((m: Object3D) => {
+    const ph = m.userData.phase as number
+    const k = 1 + 0.12 * Math.sin(t * 11 + ph) + 0.07 * Math.sin(t * 23 + ph * 2) + 0.5 * f
+    m.scale.set(1 + 0.05 * Math.sin(t * 9 + ph) + 0.15 * f, k, 1)
+    // (Turned to the camera, so the gold core is always in front.)
+    m.position.x = 0.015 * Math.sin(t * 7 + ph)
+  })
+  const cp = cam
+  set.fire.flames.rotation.y = Math.atan2(cp.x - CAMP.fire[0], cp.z - CAMP.fire[2])
+  const flick = 0.85 + 0.1 * Math.sin(t * 13) + 0.06 * Math.sin(t * 29) + 0.6 * f
+  set.fire.light.intensity = 2.6 * flick
+  set.fire.glow.scale.setScalar(1.9 * (0.95 + 0.08 * Math.sin(t * 11)) * (1 + 0.4 * f))
+  ;(set.fire.pool.material as MeshBasicMaterial).opacity = 0.34 * flick
+  if (Math.random() < dt * (2.2 + 14 * f)) sparkle(CAMP.fire[0] + (Math.random() - 0.5) * 0.25, 0.6, CAMP.fire[2], 1 + Math.round(3 * f))
+  // The paw slides out of the bush (reach 0..1).
+  set.paw.slide.position.z = -0.3 + set.paw.reach * 0.98
+  set.paw.root.visible = set.paw.reach > 0.01
+  // The eyes blink now and then.
+  const blink = (t * 0.7) % 1 > 0.94 ? 0.1 : 1
+  set.eyes.root.scale.set(1, Math.max(0.05, blink * set.eyes.open), 1)
+}
+
 export const CAMP_SET: FilmSet<CampSet> = {
   id: 'campfire',
   // A deep blue-violet night, a little lighter than black so the trees read against it; the light is moonlight
   // (lavender) and the fire adds its own warm light to whoever is near it.
   look: { sky: ['#141238', '#2E2866', '#4A3F80'], fog: ['#231E4E', 12, 46], light: [0.8, 0.62], tint: '#CCD2FF', stars: true },
-  build(s, root) {
-    const { bag } = s
-    // The ground: the forest floor, the dirt of the clearing round the fire.
-    root.add(solid(merge([P.cyl(60, 60, 0.4, '#2E4A3E', { at: [0, -0.2, 0] }, 40), P.cyl(3.1, 3.2, 0.04, '#6E5A48', { at: [0, 0.02, -0.3] }, 32)]), bag, 0))
-
-    // The ring of tall trees: spruces and red maples all round, nearer at the sides, none where the camera stands.
-    const trees: ReturnType<typeof P.box>[] = []
-    for (let i = 0; i < 26; i++) {
-      const a = Math.PI * (0.72 + (i / 25) * 1.56) + Math.sin(i * 7.3) * 0.05
-      const r = 6.2 + (i % 4) * 1.4 + Math.sin(i * 3.1) * 0.6
-      const x = Math.cos(a) * r
-      const z = Math.sin(a) * r - 0.8
-      const maple = i % 3 === 1
-      const h = maple ? 2.8 + (i % 2) * 0.6 : 3.8 + ((i * 7) % 5) * 0.45
-      for (const p of maple ? mapleTree(h, i) : spruce(h, i)) trees.push(p.translate(x, 0, z))
-    }
-    // A few nearer, at the clearing's back edge (a maple each side of the tent, a spruce by the bush).
-    for (const [x, z, h, maple] of [
-      [3.6, -3.2, 3.2, true],
-      [-3.3, -2.6, 4.6, false],
-      [-1.9, -3.6, 3.0, true],
-      [0.9, -4.2, 5.2, false],
-    ] as [number, number, number, boolean][])
-      for (const p of maple ? mapleTree(h, Math.round(x)) : spruce(h, Math.round(z))) trees.push(p.translate(x, 0, z))
-    root.add(solid(merge(trees), bag, 2))
-
-    // The fire.
-    const [fx, , fz] = CAMP.fire
-    const pit = solid(merge(firePit()), bag, 1.6)
-    pit.position.set(fx, 0, fz)
-    root.add(pit)
-    const fl = flames(bag)
-    fl.position.set(fx, 0.06, fz)
-    fl.scale.setScalar(0.72)
-    root.add(fl)
-    // Its warm light (it reaches the faces round the fire; the moon does the rest).
-    const light = new PointLight('#FFB070', 2.6, 5.5, 1.1)
-    light.position.set(fx, 0.75, fz + 0.15)
-    root.add(light)
-    // A soft glow round the flames, and a warm pool of light on the ground.
-    const glow = new Sprite(bag.add(new SpriteMaterial({ map: glowTexture(bag), color: '#FF9A50', transparent: true, opacity: 0.55, blending: AdditiveBlending, depthWrite: false, fog: false })))
-    glow.scale.set(2, 2, 1)
-    glow.position.set(fx, 0.5, fz)
-    glow.renderOrder = 9
-    root.add(glow)
-    const pool = new Mesh(bag.add(new PlaneGeometry(4.2, 4.2)), bag.add(new MeshBasicMaterial({ map: glowTexture(bag), color: '#FF9440', transparent: true, opacity: 0.38, blending: AdditiveBlending, depthWrite: false })))
-    pool.rotation.x = -Math.PI / 2
-    pool.position.set(fx, 0.05, fz)
-    pool.renderOrder = 2
-    root.add(pool)
-
-    // Maple's log, with the bag of marshmallows on it.
-    const log = solid(
-      merge([
-        P.cyl(0.17, 0.17, 1.35, WOOD, { at: [0, 0.16, 0], rot: [0, 0, Math.PI / 2] }, 14),
-        ...[-1, 1].map((s) => P.cyl(0.15, 0.15, 0.02, WOOD_END, { at: [s * 0.676, 0.16, 0], rot: [0, 0, Math.PI / 2] }, 14)),
-        P.box(0.9, 0.012, 0.02, WOOD_DARK, { at: [-0.1, 0.3, 0.1] }),
-        P.box(0.7, 0.012, 0.02, WOOD_DARK, { at: [0.15, 0.24, 0.15] }),
-      ]),
-      bag,
-      2,
-    )
-    log.position.set(-1.2, 0, 0.02)
-    root.add(log, blobShadow(0.8, bag).translateX(-1.2))
-    const mb = mallowBag(bag, root)
-    // (A film can hide it: the marshmallows are all eaten by the film out.)
-    mb.group.position.set(...CAMP.bag)
-    mb.group.rotation.y = 0.3
-
-    // The bush behind it: big, round, dark green (with a few red leaves from the maple above).
-    const [bx, , bz] = CAMP.bush
-    const bush = solid(
-      merge([
-        P.sphere(0.55, '#2F5A45', { at: [0, 0.42, 0], scale: [1.25, 0.85, 1] }, 14),
-        P.sphere(0.4, '#386A50', { at: [-0.55, 0.32, 0.12] }, 12),
-        P.sphere(0.42, '#2B5240', { at: [0.58, 0.3, 0.05] }, 12),
-        P.sphere(0.34, '#386A50', { at: [0.1, 0.72, 0.1] }, 12),
-        ...[
-          [-0.3, 0.6, 0.45],
-          [0.42, 0.52, 0.38],
-          [0.05, 0.86, 0.35],
-        ].map(([x, y, z]) => P.sphere(0.06, '#E2603F', { at: [x, y, z], scale: [1, 0.5, 1] }, 8)),
-      ]),
-      bag,
-      2,
-    )
-    bush.position.set(bx, 0, bz)
-    root.add(bush)
-    // The paw comes out of the bush's front, toward the bag; the eyes peep from its right side.
-    const pw = makePaw(bag)
-    pw.root.position.set(CAMP.bag[0] + 0.02, CAMP.bag[1] + 0.56, bz + 0.25)
-    pw.root.rotation.x = 0.36
-    root.add(pw.root)
-    const eyes = makeEyes(bag)
-    eyes.position.set(...CAMP.eyes)
-    root.add(eyes)
-
-    // The tent.
-    const t = tent(bag)
-    t.position.set(...CAMP.tent)
-    t.rotation.y = -0.38
-    root.add(t, blobShadow(1.3, bag).translateX(CAMP.tent[0]).translateZ(CAMP.tent[2]))
-
-    // A stump and a lantern-ish rock or two, so the clearing isn't bare.
-    root.add(
-      solid(
-        merge([
-          P.cyl(0.24, 0.28, 0.32, WOOD, { at: [2.75, 0.16, -0.45] }, 12),
-          P.cyl(0.21, 0.21, 0.02, WOOD_END, { at: [2.75, 0.33, -0.45] }, 12),
-          P.sphere(0.22, STONE[0], { at: [-2.3, 0.1, 0.9], scale: [1.3, 0.7, 1] }, 10),
-          P.sphere(0.16, STONE[2], { at: [2.6, 0.08, 1.3], scale: [1.3, 0.7, 1] }, 10),
-        ]),
-        bag,
-        1.8,
-      ),
-    )
-
-    // The moon, big and round, over the trees (no fog: it's far beyond them).
-    const moon = unlit([P.sphere(2.2, '#FFF6DA', {}, 24)], bag, { fog: false })
-    moon.position.set(-11, 19, -42)
-    root.add(moon)
-    const halo = new Sprite(bag.add(new SpriteMaterial({ map: glowTexture(bag), color: '#FFF2C8', transparent: true, opacity: 0.32, blending: AdditiveBlending, depthWrite: false, fog: false })))
-    halo.scale.set(11, 11, 1)
-    halo.position.copy(moon.position)
-    root.add(halo)
-
-    return {
-      mallows: mb.mallows,
-      bag: mb.group,
-      paw: { ...pw, reach: 0 },
-      eyes: { root: eyes, open: 1 },
-      flare: 0,
-      fire: { flames: fl, light, glow, pool },
-      tent: t,
-    }
-  },
-  update(set, dt, t, s) {
-    // The fire flickers: each layer on its own beat, the light and the glow with it; a spark now and then.
-    set.flare = Math.max(0, set.flare - dt * 1.2)
-    const f = set.flare
-    set.fire.flames.children.forEach((m: Object3D) => {
-      const ph = m.userData.phase as number
-      const k = 1 + 0.12 * Math.sin(t * 11 + ph) + 0.07 * Math.sin(t * 23 + ph * 2) + 0.5 * f
-      m.scale.set(1 + 0.05 * Math.sin(t * 9 + ph) + 0.15 * f, k, 1)
-      // (Turned to the camera, so the gold core is always in front.)
-      m.position.x = 0.015 * Math.sin(t * 7 + ph)
-    })
-    const cp = s.rig.camera.position
-    set.fire.flames.rotation.y = Math.atan2(cp.x - CAMP.fire[0], cp.z - CAMP.fire[2])
-    const flick = 0.85 + 0.1 * Math.sin(t * 13) + 0.06 * Math.sin(t * 29) + 0.6 * f
-    set.fire.light.intensity = 2.6 * flick
-    set.fire.glow.scale.setScalar(1.9 * (0.95 + 0.08 * Math.sin(t * 11)) * (1 + 0.4 * f))
-    ;(set.fire.pool.material as MeshBasicMaterial).opacity = 0.34 * flick
-    if (Math.random() < dt * (2.2 + 14 * f)) s.sparkle(CAMP.fire[0] + (Math.random() - 0.5) * 0.25, 0.6, CAMP.fire[2], 1 + Math.round(3 * f))
-    // The paw slides out of the bush (reach 0..1).
-    set.paw.slide.position.z = -0.3 + set.paw.reach * 0.98
-    set.paw.root.visible = set.paw.reach > 0.01
-    // The eyes blink now and then.
-    const blink = (t * 0.7) % 1 > 0.94 ? 0.1 : 1
-    set.eyes.root.scale.set(1, Math.max(0.05, blink * set.eyes.open), 1)
-  },
+  build: (s, root) => buildCamp(s.bag, root),
+  update: (set, dt, t, s) => updateCamp(set, dt, t, s.rig.camera.position, (x, y, z, n) => s.sparkle(x, y, z, n)),
 }

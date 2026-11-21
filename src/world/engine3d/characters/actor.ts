@@ -7,7 +7,7 @@
 import { Group, Vector3, type Object3D } from 'three'
 import { bell, smooth as easeIO } from '../../../sdk'
 import { buildAnimal, type Rig } from './animal'
-import { FaceLife } from './face'
+import { FaceLife, sillyFaces, type Silly, type SillyFaces } from './face'
 import type { Bag } from '../dispose'
 import type { Look } from './look'
 
@@ -60,9 +60,9 @@ export class FilmActor {
 
   /** `look`: what they look like; `voice`: their speaker in cast.json (null or left out: a silent extra); `height`
    *  overrides the look's (film sizes are often a little bigger than life, so small faces read). */
-  constructor(readonly look: Look, bag: Bag, opts: { height?: number; voice?: string | null; flutter?: boolean } = {}) {
+  constructor(readonly look: Look, private faceBag: Bag, opts: { height?: number; voice?: string | null; flutter?: boolean } = {}) {
     this.height = opts.height ?? look.height
-    this.rig = buildAnimal({ ...look, height: this.height }, bag)
+    this.rig = buildAnimal({ ...look, height: this.height }, faceBag)
     this.pose.add(this.rig.root)
     this.root.add(this.pose)
     this.root.visible = false
@@ -95,6 +95,7 @@ export class FilmActor {
     this.lean = 0
     this.headTurn = 0
     this.cheer()
+    if (this.sillyT > 0) this.silly('crossed', 0)
   }
   /** Turns to look at a point on the ground. */
   turnTo(x: number, z: number) {
@@ -149,6 +150,19 @@ export class FilmActor {
   pull(kind: Face, hold = false) {
     this.face = { kind, t: 0, hold }
     this.droopGoal = kind === 'sad' ? 1 : 0
+  }
+  private sillies: SillyFaces | null = null
+  private sillyT = 0
+  /** Pulls a silly face (engine3d/characters/face.ts: crossed, soaked, dazzled, dizzy, sudsy) for `seconds`, their
+   *  own eyes swapped for it, with a wobble of the head. `seconds` 0 puts their own face back at once. */
+  silly(face: Silly, seconds = 1.6) {
+    this.sillies ??= sillyFaces(this.rig, this.faceBag)
+    this.sillyT = seconds
+    this.sillies.show(seconds > 0 ? face : null)
+  }
+  /** The silly face being pulled now, if any. */
+  get sillyNow() {
+    return this.sillyT > 0 ? (this.sillies?.face ?? null) : null
   }
   /** Back to their usual self. */
   cheer() {
@@ -293,6 +307,12 @@ export class FilmActor {
         this.face = null
         r.mouth.scale.set(1, 1, 1)
       }
+    }
+    if (this.sillyT > 0 && this.sillies) {
+      this.sillyT -= dt
+      this.sillies.update(dt)
+      if (this.sillyT <= 0) this.sillies.show(null)
+      else tilt += Math.sin(t * 16) * 0.07 * Math.min(1, this.sillyT * 3)
     }
     // (Flying flat, the head lifts to look where it's going.)
     r.head.rotation.set(nod - (this.flying ? 0.9 : 0) - (this.pose.rotation.x > 0.6 && !this.flying ? 0.8 : 0), this.headTurn, tilt)

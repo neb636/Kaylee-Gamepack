@@ -7,6 +7,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { lineText, SayButton, type Line } from '../../../../../sdk'
+import { onDevice } from '../../../../../sdk/device'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type QAKey, type RenderMode } from '../../../../engine3d/View3D'
@@ -120,7 +121,7 @@ export function Finale({ onDone, setProgress, stamps }: CanadaActivityProps) {
           }}
           style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(221,235,250,.9)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: 'var(--ink)' }}
         >
-          🏒 Tap to wake the ice
+          🏒 {onDevice('Tap to wake the ice', 'Click to wake the ice')}
         </button>
       )}
       {/* The score, no numbers: a pink puck for each of her goals (three win), a blue one for each goose goal. */}

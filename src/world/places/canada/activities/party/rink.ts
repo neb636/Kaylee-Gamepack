@@ -9,6 +9,10 @@
 //   Roxy steals the puck off a rushing goose in a blink, and passes. Ollie spins on her back to a loose puck, fastest.
 //   Misty's slap shot knocks the goose wall flat (the last goal).   Lulu sings at the boards when a goal goes in.
 //   Roxy's kits cheer on the snowbank.
+// Each friend's play starts with the same wind-up as their move on the map (map/moves.ts, players.ts `windUp`), a
+// moment before the play and overlapped with it so nobody waits: Roxy crouches and rubs her paws, Tuque puffs out his
+// tummy, Monty spreads his arms, Ollie flips the puck up off her stick and catches it before her pass, Misty twists
+// and lifts her stick right back, Lulu takes a big breath before she sings. A goose Roxy robs freezes like a statue.
 // A real contest she always wins (AGENTS.md rule 3): after each of her goals the geese take the faceoff and rush her
 // net (she can drag Maple into the goose to steal it; her friends stop it if she doesn't). The geese may score once in
 // a while (at most two, never two in a row, never after she has missed twice), short and funny, and the puck is hers
@@ -27,6 +31,7 @@ import type { World3D } from '../../../../engine3d/View3D'
 import { meet } from '../../book/met'
 import { Lulu } from '../../characters/lulu'
 import { L } from '../../lines'
+import { WINDUP_S } from '../../map/moves'
 import { TEAM, type ChapterId } from '../../story/chapters'
 import { storySfx as story } from '../../story/sounds'
 import { Base3D, ease, turn } from './base'
@@ -120,6 +125,9 @@ export const RINK_ANCHORS: AnchorInfo[] = [
 ]
 
 const MAPLE_START = new Vector3(0, 0, 1.5)
+/** When Roxy dashes at Gus in a rush (s after the faceoff), and how far up the ice Gus shoots from. */
+const ROXY_GO = 1.1
+const SHOT_Z = 1.6
 /** Where each friend skates its lazy loops (her half, out of the shooting lane). */
 const SPOT: Record<Mate, [number, number]> = { tuque: [-2.3, 4.3], roxy: [2.9, 0.9], ollie: [-3.1, 0.5], misty: [2.7, -1.9] }
 /** The geese loitering by their net in the first round (out of her shooting lane), and where they stand in the wall. */
@@ -131,7 +139,24 @@ const MID = (RINK.zG + RINK.zH) / 2
 /** Everyone in a bunch for the cheer at the end. */
 const WIN_AT: Record<string, [number, number]> = { maple: [0, -0.4], monty: [2.2, -2.6], tuque: [-2.2, -2.2], roxy: [1.2, -1.2], ollie: [-1.2, -1.1], misty: [0.2, -2.8] }
 const PUCK_R = 0.34
+/** How long a goose Roxy robs stands frozen like a statue (s). */
+const ROBBED_S = 1.05
+/** Ollie's flip of the puck before her pass: up off her stick at `up` s into her wind-up, back on it at `down`, how
+ *  high (m), and her pass at the end of the wind-up. */
+const JUGGLE = { up: 0.1, down: 0.62, high: 0.95 }
+/** Misty's slap shot: how long she holds the wind-up once she's all the way back (s), and how fast the puck flies. */
+const MISTY_HOLD = 0.12
+const MISTY_SHOT = 17
+/** QA: `closeup=misty.front` (also .back, .side, .top) frames one player close up, to check what they wear and hold (read
+ *  when the rink is built: the address loses it at the first round; or set `window.__canadaPartyCloseup`). */
+function readCam(v = new URLSearchParams(location.hash.split('?')[1] ?? '').get('closeup')) {
+  if (!v) return null
+  const [who, view = 'front'] = v.split('.')
+  return { who, view }
+}
 const GOOSE_R = 0.55
+/** How far apart two skaters keep (times the sum of their heights). */
+const APART = 0.27
 const HINT_S = 8
 const SKY = ['#6F6AB8', '#E7A6C8', '#FFD9B8'] as const
 
@@ -168,7 +193,7 @@ export class RinkWorld extends Base3D implements World3D {
     state: 'held' as 'held' | 'free' | 'net',
     by: null as Player | null,
     /** What it's doing: her shot at the geese's net, a goose's shot at hers, a pass to Maple (or a goose), loose. */
-    kind: 'loose' as 'shot' | 'goose' | 'pass' | 'loose',
+    kind: 'loose' as 'shot' | 'goose' | 'pass' | 'loose' | 'slap',
     /** A pass meant for this one. */
     to: null as Player | null,
     /** What stops a goose's shot. */
@@ -177,6 +202,8 @@ export class RinkWorld extends Base3D implements World3D {
     stillT: 0,
     freeT: 0,
     spin: 0,
+    /** Flipping end over end (Ollie's toss), radians. */
+    flip: 0,
   }
   /** The geese's rush at her net: who has the puck, who skates beside him, what stops each shot (in order). */
   private rush: { carrier: Player; wing: Player; plan: Stop[]; t: number; side: number; shot: number } | null = null
@@ -199,6 +226,8 @@ export class RinkWorld extends Base3D implements World3D {
   private fireT = 0
   private standT = -1
   private callT = -1
+  /** When Lulu's song starts (after her big breath), or -1. */
+  private callAt = -1
   private saidOnce = new Set<string>()
   private shown = new Set<Talent>()
   /** A friend's first big moment, lit up (`t`: seconds into it). */
@@ -211,6 +240,9 @@ export class RinkWorld extends Base3D implements World3D {
   private stopBed: () => void
   private unwatch: () => void
   private flick = 0
+  /** Ollie's flip has gone up (its sound played). */
+  private tossed = false
+  private cam = readCam()
   private counts = { drags: 0, shots: 0, flicks: 0, taps: 0, pokes: 0, saves: 0, goals: 0, bounces: 0, passes: 0, rushes: 0, steals: 0 }
 
   constructor(
@@ -346,10 +378,13 @@ export class RinkWorld extends Base3D implements World3D {
     p.y = 0
     p.kind = 'loose'
     p.to = null
+    p.flip = 0
     if (by !== this.maple) return
     this.rush = null
     this.chase = 0
     for (const s of this.matesList()) if (s.task !== 'idle') s.task = 'idle'
+    // (Whoever was winding up to stop a goose lets go: the puck is hers.)
+    for (const s of this.team()) if (s !== this.maple) s.letGo()
     if (this.roundLine) {
       this.talk(this.roundLine, 6)
       this.roundLine = null
@@ -380,6 +415,8 @@ export class RinkWorld extends Base3D implements World3D {
       }
     })
     for (const s of [...this.matesList(), this.gus, ...this.geese]) {
+      s.thaw()
+      s.letGo()
       if (s.task !== 'down') s.task = 'idle'
       if (s !== this.goalie() && s.spot) [s.x, s.z] = s.spot
     }
@@ -485,13 +522,20 @@ export class RinkWorld extends Base3D implements World3D {
     p.stop = stop
     p.freeT = 0
     p.stillT = 0
+    // (Whoever stops it winds up for it, if they haven't yet.)
+    this.defender(stop)?.windUp()
     from.slap()
     story.slap()
     story.honk()
   }
 
-  /** A pass along the ice to `to` (Maple, or a goose). */
-  private passTo(from: Player, to: Player, speed = 0) {
+  /** The friend who stops a goose's shot this way (Tuque's tummy, Monty's antlers). */
+  private defender(stop: Stop) {
+    return stop === 'tuque' ? (this.mates.tuque ?? null) : stop === 'monty' ? this.monty : null
+  }
+
+  /** A pass along the ice to `to` (Maple, or a goose), off `from`'s stick (null: it bounces off something). */
+  private passTo(from: Player | null, to: Player, speed = 0) {
     const p = this.p
     p.state = 'free'
     p.by = null
@@ -504,7 +548,7 @@ export class RinkWorld extends Base3D implements World3D {
     p.kind = 'pass'
     p.to = to
     p.freeT = 0
-    from.slap()
+    from?.slap()
     this.counts.passes++
     tone(1600, 1200, 0.05, 0.06, 'triangle')
   }
@@ -589,6 +633,7 @@ export class RinkWorld extends Base3D implements World3D {
     this.updateGoalie(dt)
     this.updateGeese(dt, t)
     this.updateMates(dt, t)
+    this.keepApart()
 
     // Monty sways in his goal, chewing, a step toward the puck.
     const mo = this.monty
@@ -597,6 +642,12 @@ export class RinkWorld extends Base3D implements World3D {
       mo.z = RINK.zH - 0.6
     }
     // Lulu sings when a goal goes in.
+    if (this.callAt >= 0 && this.time >= this.callAt) {
+      this.callAt = -1
+      this.callT = 0
+      story.loon()
+      this.lulu?.letGo()
+    }
     if (this.lulu?.p instanceof Lulu) {
       if (this.callT >= 0 && (this.callT += dt) > 1.8) this.callT = -1
       this.lulu.p.calling = this.callT >= 0 ? Math.min(1, this.callT * 4, (1.8 - this.callT) * 3) : 0
@@ -679,6 +730,39 @@ export class RinkWorld extends Base3D implements World3D {
     this.rig.update(dt)
   }
 
+  /** Skaters never stand inside each other (a goose frozen where Roxy robbed him, a bunch at the faceoff): each pair
+   *  that overlaps is eased apart. (The radii are under the steal distances, so a steal still reaches.) Monty stays in
+   *  his net and the goose in goal on its line; the others move. */
+  private keepApart() {
+    const on = [...this.team(), this.gus, ...this.geese].filter((s) => s.root.visible)
+    const fixed = (s: Player) => s === this.monty || s === this.goalie()
+    const moved = new Set<Player>()
+    for (let i = 0; i < on.length; i++) {
+      for (let j = i + 1; j < on.length; j++) {
+        const a = on[i]
+        const b = on[j]
+        const min = APART * (a.height + b.height)
+        const dx = b.x - a.x
+        const dz = b.z - a.z
+        const d = Math.hypot(dx, dz)
+        if (d >= min || (fixed(a) && fixed(b))) continue
+        const nx = d > 1e-3 ? dx / d : 1
+        const nz = d > 1e-3 ? dz / d : 0
+        const push = (min - d) * 0.5
+        const ka = fixed(a) ? 0 : fixed(b) ? 2 : 1
+        const kb = fixed(b) ? 0 : fixed(a) ? 2 : 1
+        a.x -= nx * push * ka
+        a.z -= nz * push * ka
+        b.x += nx * push * kb
+        b.z += nz * push * kb
+        if (ka) moved.add(a)
+        if (kb) moved.add(b)
+      }
+    }
+    // (Nobody pushed into the snowbanks.)
+    for (const s of moved) s.x = clamp(s.x, -RINK.x + 0.4, RINK.x - 0.4)
+  }
+
   /** Turns its speed toward a spot, at most `top` m/s, easing off as it gets there. */
   private steer(s: Player, x: number, z: number, top: number, dt: number) {
     let vx = (x - s.x) * 3
@@ -727,12 +811,17 @@ export class RinkWorld extends Base3D implements World3D {
         this.holdPuck()
         return
       }
-      // Roxy: in a blink, the puck is hers.
+      // Roxy: she crouches and rubs her paws (her wind-up), and in a blink the puck is hers.
       const roxy = this.mates.roxy
-      if (stop === 'roxy' && roxy && r.t > 1.1 && roxy.task !== 'dash') {
+      if (stop === 'roxy' && roxy && roxy.task === 'idle' && r.t > ROXY_GO - WINDUP_S.campfire) roxy.windUp()
+      if (stop === 'roxy' && roxy && r.t > ROXY_GO && roxy.task !== 'dash') {
         roxy.task = 'dash'
         roxy.taskT = 0
+        roxy.letGo()
+        party.steal()
       }
+      // Tuque or Monty winds up as Gus comes into range (about a second before his shot).
+      if (stop !== 'roxy' && c.z > SHOT_Z - 1.6) this.defender(stop)?.windUp()
       // Tuque slides into the lane.
       const tq = this.mates.tuque
       if (stop === 'tuque' && tq) {
@@ -741,7 +830,7 @@ export class RinkWorld extends Base3D implements World3D {
         this.skateTo(tq, c.x * (1 - k), 4.4, 4, dt)
       }
       // In shooting range: a wind-up and the shot.
-      if (stop !== 'roxy' && c.z > 1.6 && r.shot === 0) {
+      if (stop !== 'roxy' && c.z > SHOT_Z && r.shot === 0) {
         r.shot = r.t
         c.slap()
       }
@@ -772,6 +861,17 @@ export class RinkWorld extends Base3D implements World3D {
       p.x = s.x + Math.sin(s.yaw) * reach + Math.cos(s.yaw) * 0.25
       p.z = s.z + Math.cos(s.yaw) * reach - Math.sin(s.yaw) * 0.25
       p.y = 0
+      p.flip = 0
+      if (s.who === 'ollie' && s.task === 'carry') {
+        // Ollie's wind-up: she flips it up off her stick, end over end, and catches it on the blade again.
+        const u = clamp((s.taskT - JUGGLE.up) / (JUGGLE.down - JUGGLE.up))
+        p.y = JUGGLE.high * 4 * u * (1 - u)
+        p.flip = u * Math.PI * 2
+        // (It comes up in front of her middle, where her paws are, and back down to the blade.)
+        const inK = 0.55 * Math.sin(u * Math.PI)
+        p.x += (s.x + Math.sin(s.yaw) * 0.42 - p.x) * inK
+        p.z += (s.z + Math.cos(s.yaw) * 0.42 - p.z) * inK
+      }
       return
     }
     if (p.state === 'net') {
@@ -810,14 +910,29 @@ export class RinkWorld extends Base3D implements World3D {
       this.thud(p.x, p.z)
     }
 
+    // ---- Misty's slap shot reaching the goose wall: over they go.
+    if (p.kind === 'slap' && p.z < WALL_Z + 0.6) {
+      this.breakWall()
+      return
+    }
     // ---- Her shot at the geese's end: the wall, the goalie, the net.
     if (p.kind === 'shot') {
       if (this.wall === 'up' && p.z < WALL_Z + 0.5 && p.vz < 0 && Math.abs(p.x) < 2.3) {
-        // Off the goose wall: honk, and the puck pops back out (Misty will take it from here).
+        // Off the goose wall: honk, and the puck pops back out toward Misty, who goes for it at once (her slap shot is
+        // the way through; without her, it comes back to Maple).
         p.z = WALL_Z + 0.5
         p.vz = Math.abs(p.vz) * 0.35 + 1.2
         p.vx = (Math.random() - 0.5) * 2
         p.kind = 'loose'
+        p.freeT = 0
+        const misty = this.mates.misty
+        if (misty) {
+          const d = Math.hypot(misty.x - p.x, misty.z - p.z) || 1
+          const sp = clamp(d * 0.7, 2.5, 4.5)
+          p.vx = ((misty.x - p.x) / d) * sp
+          p.vz = ((misty.z - p.z) / d) * sp
+          this.fetch()
+        }
         for (const g of this.wallGeese()) if (Math.abs(g.x - p.x) < 1) g.hop()
         story.honks()
         this.missed()
@@ -856,6 +971,7 @@ export class RinkWorld extends Base3D implements World3D {
       if (p.stop === 'tuque' && tq && dist(p, tq) < 0.75) {
         story.boing()
         tq.p.shake()
+        tq.letGo()
         tq.task = 'idle'
         this.sparks.burst(p.x, 0.5, p.z, 12, 2, 2.4, 0.12)
         this.talent('tuque', tq, L.party.tuque)
@@ -867,6 +983,7 @@ export class RinkWorld extends Base3D implements World3D {
         // Bonk! Up off his antlers, and down in front of the net.
         story.bonk()
         mo.hop()
+        mo.letGo()
         p.z = mo.z - 0.8
         p.vy = 4.5
         p.vz = -3.5
@@ -888,6 +1005,7 @@ export class RinkWorld extends Base3D implements World3D {
         }
         // Clang, off the post.
         party.post()
+        this.defender(p.stop)?.letGo()
         p.z = RINK.zH - 0.1
         p.vz = -4
         p.vx = -Math.sign(p.x || 1) * 1.5
@@ -913,7 +1031,8 @@ export class RinkWorld extends Base3D implements World3D {
     const m = this.maple
     const mx = m.x + Math.sin(m.yaw) * 0.7
     const mz = m.z + Math.cos(m.yaw) * 0.7
-    if (this.phase === 'play' && p.kind !== 'goose' && (p.to === m || p.freeT > 0.6) && p.y < 0.3 && Math.hypot(p.x - mx, p.z - mz) < PUCK.catch) {
+    const forMisty = this.wall === 'up' && this.mates.misty?.task === 'fetch'
+    if (this.phase === 'play' && p.kind !== 'goose' && !forMisty && (p.to === m || p.freeT > 0.6) && p.y < 0.3 && Math.hypot(p.x - mx, p.z - mz) < PUCK.catch) {
       this.holdPuck()
       story.skid()
       return
@@ -939,7 +1058,8 @@ export class RinkWorld extends Base3D implements World3D {
     const r = this.rush
     if (r) r.plan.shift()
     if (r && r.plan.length && !up) {
-      // Straight out to his wing goose.
+      // Straight out to his wing goose (and whoever stops his shot winds up for it).
+      this.defender(r.plan[0])?.windUp()
       r.wing.taskT = 0
       this.passTo(off, r.wing, 6)
       return
@@ -1006,9 +1126,12 @@ export class RinkWorld extends Base3D implements World3D {
     this.phaseT = 0
     party.horn()
     story.net()
-    this.callT = 0
-    story.loon()
-    if (this.lulu) this.talent('lulu', this.lulu, null)
+    if (this.lulu) {
+      // Lulu takes her big breath (her wind-up), then sings.
+      this.lulu.windUp()
+      this.callAt = this.time + WINDUP_S.canoe
+      this.talent('lulu', this.lulu, null)
+    } else story.loon()
     if (this.kits.length) party.kits()
     this.canal.netG.position.z = RINK.zG - 0.12
     const g = this.goalie()
@@ -1120,6 +1243,14 @@ export class RinkWorld extends Base3D implements World3D {
         g.vx = g.vz = 0
         continue
       }
+      if (g.frozen) {
+        // A statue sliding on the ice: it glides to a stop in its pose.
+        g.vx *= Math.exp(-dt * 2.2)
+        g.vz *= Math.exp(-dt * 2.2)
+        g.x = clamp(g.x + g.vx * dt, -RINK.x + 0.5, RINK.x - 0.5)
+        g.z += g.vz * dt
+        continue
+      }
       const i = wall.indexOf(g)
       if (this.wall === 'up') {
         // Shoulder to shoulder across the net, bobbing.
@@ -1179,6 +1310,15 @@ export class RinkWorld extends Base3D implements World3D {
       if (this.phase === 'win') continue
       if (s.task === 'idle' || (s.task === 'block' && !this.rush)) {
         s.task = 'idle'
+        if (s.winding) {
+          // Winding up for a play: a stop on the spot, eyes on the puck.
+          s.vx *= Math.exp(-dt * 6)
+          s.vz *= Math.exp(-dt * 6)
+          s.x += s.vx * dt
+          s.z += s.vz * dt
+          s.yaw = turn(s.yaw, Math.atan2(p.x - s.x, p.z - s.z), ease(dt, 8))
+          continue
+        }
         // Lazy loops round its spot.
         const w = 0.6 + (s.phase % 1) * 0.3
         this.skateTo(s, s.spot[0] + Math.cos(t * w + s.phase) * 0.9, s.spot[1] + Math.sin(t * w + s.phase) * 0.55, 2.5, dt)
@@ -1194,9 +1334,11 @@ export class RinkWorld extends Base3D implements World3D {
         }
         this.skateTo(s, r.carrier.x, r.carrier.z, 11, dt)
         if (dist(s, r.carrier) < 0.8) {
-          r.carrier.spin()
+          // Robbed: the goose freezes like one of her statues, a silly face and all, then skates on.
+          r.carrier.freeze(ROBBED_S)
           story.honk()
-          party.steal()
+          party.freeze()
+          this.sparks.burst(r.carrier.x, r.carrier.height * 0.7, r.carrier.z, 10, 1.4, 1.2, 0.09)
           this.sparks.burst(r.carrier.x, 0.4, r.carrier.z, 12, 2, 2, 0.1)
           this.rush = null
           this.holdPuck(s)
@@ -1221,7 +1363,12 @@ export class RinkWorld extends Base3D implements World3D {
           this.holdPuck(s)
           s.task = s.who === 'misty' && this.wall === 'up' ? 'windup' : 'carry'
           s.taskT = 0
-          if (s.who === 'ollie') this.talent('ollie', s, L.party.ollie)
+          // Ollie's wind-up (a flip of the puck) before her pass; Misty's (the stick right back) before her slap shot.
+          if (s.who === 'ollie' || s.task === 'windup') s.windUp()
+          if (s.who === 'ollie') {
+            this.talent('ollie', s, L.party.ollie)
+            this.tossed = false
+          }
           if (s.task === 'windup') this.talk(L.party.misty, 3)
         }
       } else if (s.task === 'carry') {
@@ -1231,29 +1378,66 @@ export class RinkWorld extends Base3D implements World3D {
         s.x += s.vx * dt
         s.z += s.vz * dt
         s.yaw = turn(s.yaw, Math.atan2(m.x - s.x, m.z - s.z), ease(dt, 8))
-        if (s.taskT > (s.who === 'ollie' ? 0.6 : 0.35) && p.by === s) {
+        if (s.who === 'ollie' && p.by === s) {
+          if (!this.tossed && s.taskT > JUGGLE.up) {
+            this.tossed = true
+            party.toss()
+          }
+          if (s.taskT > JUGGLE.down && s.taskT - dt <= JUGGLE.down) {
+            story.skid()
+            this.sparks.burst(p.x, 0.15, p.z, 5, 1.2, 1.4, 0.07)
+          }
+        }
+        if (s.taskT > (s.who === 'ollie' ? WINDUP_S.whales : 0.35) && p.by === s) {
           s.task = 'idle'
+          s.letGo()
           this.passTo(s, m)
-        } else if (p.by !== s) s.task = 'idle'
+        } else if (p.by !== s) {
+          s.task = 'idle'
+          s.letGo()
+        }
       } else if (s.task === 'windup') {
-        // Misty winds up... and BOOM: the goose wall goes over like bowling pins.
+        // Misty winds up (her stick right back, as on the map)... and WHACK: the puck flies at the goose wall.
         s.vx *= Math.exp(-dt * 5)
         s.vz *= Math.exp(-dt * 5)
+        s.x += s.vx * dt
+        s.z += s.vz * dt
         s.yaw = turn(s.yaw, Math.atan2(-s.x, RINK.zG - s.z), ease(dt, 8))
-        if (s.taskT > 0.2 && s.taskT - dt <= 0.2) s.slap(2)
-        if (s.taskT > 1.25) {
+        if (p.by !== s) {
           s.task = 'idle'
-          this.breakWall(s)
+          s.letGo()
+        } else if (s.taskT > WINDUP_S.bath + MISTY_HOLD) {
+          s.task = 'idle'
+          s.letGo()
+          s.slap(2, true)
+          this.slapShot(s)
         }
       }
     }
   }
 
-  /** Misty's slap shot knocks the whole wall flat (and the goalie), and the puck comes back to Maple. */
-  private breakWall(misty: Player) {
+  /** Misty's slap shot: the puck off her stick, straight at the middle of the goose wall. */
+  private slapShot(misty: Player) {
     const p = this.p
-    this.wall = 'down'
+    const tx = clamp(p.x * 0.3, -1, 1)
+    const d = Math.hypot(tx - p.x, WALL_Z - p.z) || 1
+    p.state = 'free'
+    p.by = null
+    p.vx = ((tx - p.x) / d) * MISTY_SHOT
+    p.vz = ((WALL_Z - p.z) / d) * MISTY_SHOT
+    p.kind = 'slap'
+    p.freeT = 0
+    p.stillT = 0
     party.bigSlap()
+    this.sparks.burst(p.x, 0.15, p.z, 14, 2.5, 2, 0.1)
+    misty.p.pull('happy')
+  }
+
+  /** Misty's slap shot knocks the whole wall flat (and the goalie), and the puck comes back to Maple. */
+  private breakWall() {
+    const p = this.p
+    const misty = this.mates.misty ?? null
+    this.wall = 'down'
     party.topple()
     story.honks()
     for (const g of [...this.wallGeese(), this.goalie()]) {
@@ -1261,10 +1445,9 @@ export class RinkWorld extends Base3D implements World3D {
       g.task = 'down'
     }
     for (let i = 0; i < 40; i++) this.sparks.emit((Math.random() - 0.5) * 4, 0.4, WALL_Z, (Math.random() - 0.5) * 8, 3 + Math.random() * 3, (Math.random() - 0.5) * 3, 0.9, 0.14)
-    p.x = 0
     p.z = WALL_Z + 0.6
-    this.passTo(misty, this.maple, 9)
-    this.talent('misty', misty, null)
+    this.passTo(null, this.maple, 9)
+    if (misty) this.talent('misty', misty, null)
     this.talk(L.party.open, 4)
   }
 
@@ -1273,7 +1456,7 @@ export class RinkWorld extends Base3D implements World3D {
   private place(dt: number, t: number) {
     const p = this.p
     this.puck.position.set(p.x, p.y, p.z)
-    this.puck.rotation.y = p.spin
+    this.puck.rotation.set(p.flip, p.spin, 0)
     this.puck.visible = p.state !== 'net' || this.phase !== 'win'
     this.puckRing.position.set(p.x, 0.02, p.z)
     this.puckRing.visible = this.puck.visible && p.y < 0.2
@@ -1317,6 +1500,17 @@ export class RinkWorld extends Base3D implements World3D {
     // From behind her goal, up the ice to the geese's net and Parliament beyond: the whole rink, both nets, framed
     // like CSS object-fit 'contain' below the prompt on any screen shape.
     const tall = this.tall
+    // (A robot can switch it on and off mid-game, after aiming its taps with the game's own camera.)
+    const set = (window as { __canadaPartyCloseup?: string | null }).__canadaPartyCloseup
+    if (set !== undefined) this.cam = readCam(set)
+    this.rig.lag = this.cam ? 0.12 : 0.45
+    const view = this.cam?.view
+    const cam = this.cam && this.byId(this.cam.who)
+    if (cam) {
+      const H = cam.height
+      const yaw = view === 'back' ? 0 : view === 'side' ? 90 : view === 'top' ? 30 : 180
+      return { center: new Vector3(cam.x, cam.y + 0.55 * H, cam.z), half: new Vector3(0.95 * H, 0.75 * H, 0.95 * H), yaw, pitch: view === 'top' ? 62 : 24, objectFit: 'contain' }
+    }
     if (this.phase === 'win') return { center: new Vector3(0, 1.6, -1.6), half: tall ? new Vector3(3.6, 2.4, 2.6) : new Vector3(5.2, 2.2, 2.4), yaw: 0, pitch: 12 }
     // (The ice from just behind the geese's net to just behind hers, Monty in it.)
     const far = RINK.zG - 0.9
@@ -1601,6 +1795,10 @@ export class RinkWorld extends Base3D implements World3D {
       puck: { state: p.state, kind: p.kind, by: p.by?.who ?? null, ...scr(p.x, 0.1, p.z) },
       /** QA flicks from `puck` toward `net`. */
       net: scr(0, 0.5, RINK.zG),
+      /** QA taps here (with the puck) for a shot wide into the left boards: a loose puck Ollie fetches. */
+      wide: scr(-4.5, 0.1, -3.0),
+      winding: this.everyone().filter((s) => s.winding).map((s) => s.who),
+      frozen: this.everyone().filter((s) => s.frozen).map((s) => s.who),
       maple: scr(this.maple.x, 0.6, this.maple.z),
       rush: this.rush ? { plan: [...this.rush.plan], carrier: scr(this.rush.carrier.x, 0.5, this.rush.carrier.z) } : null,
       wall: this.wall,

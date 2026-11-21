@@ -7,17 +7,42 @@
 // character does by itself (breathing, blinking, talking) it plays the hockey moves the characters don't have: a sway
 // from skate to skate, a slap shot with the stick, a spin, a flop on the ice, Ollie's slide on her back, a cheer, and a
 // quick turn to the camera to show off after their big moment.
+//
+// Each friend's play starts with their WIND-UP, the same pose as their move on the map (map/moves.ts), so she knows who
+// is about to do what: `windUp()` starts it (the rink calls it a moment before the play, overlapped with the skating
+// so nobody waits), `letGo()` when the play goes. A goose Roxy robs freezes like one of her statues (`freeze`).
 import type { Object3D } from 'three'
 import { bell } from '../../../../../sdk'
 import type { Bag } from '../../../../engine3d/dispose'
+import { nextStatue, releaseStatue, strikeStatue, type StatueId, type Statuesque } from '../../characters/statues'
+import { WindUp } from '../../map/moves'
+import type { ChapterId } from '../../story/chapters'
 import { Goose } from '../../characters/goose'
 import { Lulu } from '../../characters/lulu'
 import type { Performer } from '../../characters/toy'
 import { Tuque } from '../../characters/tuque'
+import { dressToy } from '../../characters/dress'
+import { wornBy, type TeamId } from '../../looks'
+import type { ToyActor } from '../../characters/toy'
 import { Friend } from '../../story/cast'
 import { makeStick } from '../../story/props'
 
 export type Who = 'maple' | 'monty' | 'tuque' | 'roxy' | 'ollie' | 'misty' | 'lulu' | 'kit' | 'gus' | 'goose'
+
+/** A hand-built toy in what she chose for it in the Team Cabin (characters/dress.ts). */
+const dressed = <T extends ToyActor>(a: T, who: TeamId, bag: Bag): T => {
+  dressToy(a, who, wornBy(who), bag)
+  return a
+}
+
+/** Each friend's wind-up: the chapter whose move on the map it is (map/moves.ts WINDUP_S says how long it takes). */
+const WIND: Partial<Record<Who, ChapterId>> = { tuque: 'snowman', monty: 'bike', roxy: 'campfire', lulu: 'canoe', misty: 'bath', ollie: 'whales' }
+/** The longest a wind-up is held if nobody lets go of it (s): the rink always does, at the play. */
+const WIND_HOLD = 2.5
+/** The last statue a robbed goose struck (the next is a different one). */
+let lastStatue: StatueId | null = null
+/** A goose has no arms to pose: its wings go up for the statues that lift them (a tree's branches, a ballerina). */
+const STATUE_WINGS: Record<StatueId, number> = { tree: 1, ballerina: 0.85, flamingo: 0.65, rock: 0, whistling: 0 }
 
 const SPIN_S = 0.8
 const FLOP_S = 1.3
@@ -43,6 +68,7 @@ export class Player {
   private flopT = -1
   private slapT = -1
   private slapK = 1
+  private slapThrough = false
   private cheerT = -1
   private showT = -1
   private showS = 1
@@ -55,6 +81,11 @@ export class Player {
   private flat = 0
   private flatGoal = 0
   private flatSide = 1
+  private wind: WindUp | null
+  /** A hand-built toy's arms in its wind-up (they follow a frame later, through `armsUp`). */
+  private windArms = 0
+  private frozenT = 0
+  private frozenWings = 0
 
   constructor(
     readonly who: Who,
@@ -63,6 +94,8 @@ export class Player {
   ) {
     p.root.rotation.order = 'YXZ'
     p.place(0, 0, 0, 180)
+    const w = WIND[who]
+    this.wind = w ? new WindUp(w, p, WIND_HOLD) : null
   }
 
   get root() {
@@ -73,6 +106,14 @@ export class Player {
   }
   get busy() {
     return this.spinT >= 0 || this.flopT >= 0 || this.cheerT >= 0
+  }
+  /** Winding up (or wound up and holding it) for their play. */
+  get winding() {
+    return !!this.wind?.on
+  }
+  /** Frozen like a statue. */
+  get frozen() {
+    return this.frozenT > 0
   }
   /** Not flat on the ice or mid-flop. */
   get up() {
@@ -98,10 +139,36 @@ export class Player {
   flop() {
     this.flopT = 0
   }
-  /** A slap shot (`big`: Misty's, a huge wind-up). */
-  slap(big = 1) {
-    this.slapT = 0
+  /** A slap shot (`big`: Misty's, a huge wind-up). `through`: the stick is already back (their wind-up took it there),
+   *  so it's just the swing through and the follow-through. */
+  slap(big = 1, through = false) {
     this.slapK = big
+    this.slapThrough = through
+    this.slapT = through ? 0.45 * this.slapS : 0
+  }
+  private get slapS() {
+    return SLAP_S * (this.slapK > 1 ? 1.4 : 1)
+  }
+  /** Starts their wind-up (the same as their move on the map), held until `letGo()`. */
+  windUp() {
+    if (this.wind && !this.wind.on) this.wind.start()
+  }
+  /** The play goes: the wind-up eases out. */
+  letGo() {
+    this.wind?.release()
+  }
+  /** Freezes in one of Roxy's statue poses (with its silly face) for `s` seconds, then is itself again. */
+  freeze(s = 1) {
+    lastStatue = nextStatue(lastStatue)
+    strikeStatue(this.p as Statuesque, lastStatue)
+    this.frozenT = s
+    this.frozenWings = this.p instanceof Friend ? 0 : STATUE_WINGS[lastStatue]
+  }
+  /** Back to themselves at once (a new round). */
+  thaw() {
+    if (this.frozenT <= 0) return
+    this.frozenT = 0
+    releaseStatue(this.p as Statuesque)
   }
   /** Turns to the camera for a moment, pleased with itself. */
   showOff(s = 1.4) {
@@ -122,7 +189,8 @@ export class Player {
     const adv = (v: number, s: number) => (v < 0 ? -1 : v + dt > s ? -1 : v + dt)
     this.spinT = adv(this.spinT, SPIN_S)
     this.flopT = adv(this.flopT, FLOP_S)
-    this.slapT = adv(this.slapT, SLAP_S * (this.slapK > 1 ? 1.4 : 1))
+    this.slapT = adv(this.slapT, this.slapS)
+    if (this.frozenT > 0 && (this.frozenT -= dt) <= 0) releaseStatue(this.p as Statuesque)
     this.cheerT = adv(this.cheerT, CHEER_S)
     if (this.showT > 0) this.showT -= dt
     this.flat += (this.flatGoal - this.flat) * (1 - Math.exp(-dt * (this.flatGoal > this.flat ? 10 : 3)))
@@ -143,13 +211,26 @@ export class Player {
     r.rotation.z = Math.sin(t * 5.5 + this.phase) * 0.09 * skate + flop * 1.3 * (this.phase > 3 ? 1 : -1) + this.flat * 1.45 * this.flatSide
     r.position.set(this.x, this.y + this.back * 0.18 * H + this.flat * 0.12 * H, this.z)
     this.p.lean = 0.2 * skate + 0.25 * this.downK
-    this.p.armsUp = Math.max(cheer, this.flail, this.who === 'monty' ? 0.25 * this.downK : 0)
+    this.p.armsUp = Math.max(cheer, this.flail, this.who === 'monty' ? 0.25 * this.downK : 0, this.windArms, this.frozenT > 0 ? this.frozenWings : 0)
     this.p.update(dt, t)
-    // The stick: back for a wind-up, a quick swing through and a follow-through (Misty's goes way up).
-    const s = this.slapT >= 0 ? this.slapT / (SLAP_S * (this.slapK > 1 ? 1.4 : 1)) : -1
-    const swing = s < 0 ? 0 : s < 0.45 ? -1.1 * this.slapK * smooth(s / 0.45) : -1.1 * this.slapK + (1.1 * this.slapK + 0.9) * smooth(Math.min(1, (s - 0.45) / 0.2)) - 0.9 * Math.max(0, (s - 0.65) / 0.35)
+    // Their wind-up, over whatever they're doing (a hand-built toy's arms come through `armsUp` next frame).
+    this.windArms = 0
+    if (this.wind?.on) {
+      this.wind.update(dt, t)
+      if (!(this.p instanceof Friend)) this.windArms = this.p.armsUp
+    }
+    // The stick: back for a wind-up, a quick swing through the puck and a follow-through out in front (Misty's goes way
+    // up). `swing` is how far back (+) or through (-): a rig friend's arm swings back with +x (map/moves.ts), a goose's
+    // wing too. (Swung through from their own wind-up, the wind-up has taken it back already.)
+    const s = this.slapT >= 0 ? this.slapT / this.slapS : -1
+    let swing = 0
+    if (s >= 0) {
+      const back = this.slapThrough ? 0 : 1.1 * this.slapK
+      const out = 0.9 + 0.35 * (this.slapK - 1)
+      swing = s < 0.45 ? back * smooth(s / 0.45) : s < 0.65 ? back - (back + out) * smooth((s - 0.45) / 0.2) : -out * (1 - (s - 0.65) / 0.35)
+    }
     if (this.p instanceof Friend) this.p.rig.armR.rotation.x += swing
-    else if (this.p instanceof Goose) this.p.swing = -swing
+    else if (this.p instanceof Goose) this.p.swing = swing
     if (this.stick) this.stick.visible = cheer < 0.4 && this.back < 0.5
   }
 }
@@ -190,13 +271,13 @@ export function makePlayer(bag: Bag, scene: Object3D, who: Who, i = 0): Player {
       p = new Friend('kit', bag, { height: 0.5 + i * 0.04, voice: null }).scarf(true)
       break
     case 'tuque':
-      p = new Tuque(bag, { height: 1.45 }).scarf(true)
+      p = dressed(new Tuque(bag, { height: 1.45 }).scarf(true), 'tuque', bag)
       break
     case 'lulu':
-      p = new Lulu(bag, { height: 0.95 }).scarf(true)
+      p = dressed(new Lulu(bag, { height: 0.95 }).scarf(true), 'lulu', bag)
       break
     case 'gus':
-      p = new Goose(bag, { height: 1.2, voice: 'gus', captain: true, stick: true })
+      p = dressed(new Goose(bag, { height: 1.2, voice: 'gus', captain: true, stick: true }), 'gus', bag)
       break
     default:
       p = new Goose(bag, { height: 1.05 + (i % 3) * 0.04, stick: true })

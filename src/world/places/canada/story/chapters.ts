@@ -11,7 +11,7 @@ export const CHAPTER_FILMS: Record<ChapterId, { in: FilmId; out: FilmId }> = {
   bike: { in: 'bike-in', out: 'bike-out' },
   campfire: { in: 'campfire-in', out: 'campfire-out' },
   canoe: { in: 'canoe-in', out: 'canoe-out' },
-  salmon: { in: 'salmon-in', out: 'salmon-out' },
+  bath: { in: 'bath-in', out: 'bath-out' },
   whales: { in: 'whales-in', out: 'whales-out' },
 }
 export const isChapter = (id: string | undefined): id is ChapterId => !!id && (CHAPTERS as readonly string[]).includes(id)
@@ -22,7 +22,7 @@ export const TEAM: Record<ChapterId, { who: 'tuque' | 'monty' | 'roxy' | 'lulu' 
   bike: { who: 'monty', name: 'Monty the moose', icon: '🫎', role: 'the goalie: he fills the whole net' },
   campfire: { who: 'roxy', name: 'Roxy the raccoon', icon: '🦝', role: 'quick paws: she steals the puck' },
   canoe: { who: 'lulu', name: 'Lulu the loon', icon: '🎵', role: 'sings the song that starts the game' },
-  salmon: { who: 'misty', name: 'Misty the spirit bear', icon: '🐻‍❄️', role: 'the biggest slap shot' },
+  bath: { who: 'misty', name: 'Misty the spirit bear', icon: '🐻‍❄️', role: 'the biggest slap shot' },
   whales: { who: 'ollie', name: 'Ollie the sea otter', icon: '🦦', role: 'spins and slides: the fastest pass' },
 }
 /** The team so far: the chapters she has a stamp for, in map order. */

@@ -700,6 +700,48 @@
     "file": "955db05a0e02.mp3"
   },
   {
+    "text": "One friend? Honk! Easy!",
+    "voice": "gus",
+    "sig": "64c136c98c",
+    "ms": 3120,
+    "file": "213ee7394493.mp3"
+  },
+  {
+    "text": "Two? Ha! We are six geese!",
+    "voice": "gus",
+    "sig": "64c136c98c",
+    "ms": 3456,
+    "file": "1069d1ca23d9.mp3"
+  },
+  {
+    "text": "Three... honk. Still easy.",
+    "voice": "gus",
+    "sig": "64c136c98c",
+    "ms": 3720,
+    "file": "18b084f9da4f.mp3"
+  },
+  {
+    "text": "Four? Geese! More practice!",
+    "voice": "gus",
+    "sig": "64c136c98c",
+    "ms": 3696,
+    "file": "db2c14b99d7a.mp3"
+  },
+  {
+    "text": "Five?! Uh oh.",
+    "voice": "gus",
+    "sig": "64c136c98c",
+    "ms": 1920,
+    "file": "c495375bd7de.mp3"
+  },
+  {
+    "text": "A whole team? Honk... gulp.",
+    "voice": "gus",
+    "sig": "64c136c98c",
+    "ms": 2880,
+    "file": "c5f7214c3545.mp3"
+  },
+  {
     "text": "Bonjour! I am ready!",
     "voice": "snowman",
     "sig": "b2021cf5b6",
@@ -1358,60 +1400,109 @@
     "file": "a6d2e17470bf.mp3"
   },
   {
-    "text": "You found everybody!",
+    "text": "Who cooks for you? Hoo hoo!",
+    "voice": "owl",
+    "sig": "ea2e6e5659",
+    "ms": 2445,
+    "file": "bc1462fea14f.mp3"
+  },
+  {
+    "text": "Whoa! Too bright!",
+    "voice": "moose",
+    "sig": "d36b94299b",
+    "ms": 2088,
+    "file": "84ba9de56d92.mp3"
+  },
+  {
+    "text": "Ahh. Sunglasses. Much better.",
+    "voice": "moose",
+    "sig": "d36b94299b",
+    "ms": 3864,
+    "file": "3364f3805fe7.mp3"
+  },
+  {
+    "text": "Ouch! Prickly!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 1560,
-    "file": "19e26641dedd.mp3"
+    "ms": 1848,
+    "file": "322c439d7a22.mp3"
   },
   {
-    "text": "Listen! Who made that sound?",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2547,
-    "file": "945d328c636f.mp3"
-  },
-  {
-    "text": "Shine the light where the sound is.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3179,
-    "file": "54171938c0b9.mp3"
-  },
-  {
-    "text": "Wow, you found every sound!",
+    "text": "Hee hee! That tickles!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 2160,
-    "file": "779aedfc25a0.mp3"
+    "ms": 2184,
+    "file": "0a2e331ba67f.mp3"
   },
   {
-    "text": "Oh no! Now the whole bag is gone!",
+    "text": "It's already bright!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 2832,
-    "file": "e2e10cdf9d20.mp3"
+    "ms": 1488,
+    "file": "332eb982cf59.mp3"
   },
   {
-    "text": "Follow the little paw prints!",
+    "text": "Somebody is giggling! Catch them in the light!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2014,
-    "file": "79e7fb2d87e5.mp3"
+    "ms": 4536,
+    "file": "b179399db2d5.mp3"
   },
   {
-    "text": "Shine the light on the next paw print.",
+    "text": "Shine the light on the wiggly tail!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3306,
-    "file": "f9813b63e8a7.mp3"
+    "ms": 2976,
+    "file": "e3ea302f6d46.mp3"
   },
   {
-    "text": "Hee hee! Marshmallows for my babies!",
+    "text": "Three little raccoons! Where is your mama?",
+    "voice": "maple",
+    "sig": "cafd002559",
+    "ms": 2640,
+    "file": "d898af65d20b.mp3"
+  },
+  {
+    "text": "Roxy is sneaking! Shine the light and she stops!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5160,
+    "file": "880395765e6a.mp3"
+  },
+  {
+    "text": "I'm a tree.",
     "voice": "raccoon",
     "sig": "124402ef75",
-    "ms": 3072,
-    "file": "e7876562242e.mp3"
+    "ms": 1440,
+    "file": "d49f989833c1.mp3"
+  },
+  {
+    "text": "I'm a rock.",
+    "voice": "raccoon",
+    "sig": "124402ef75",
+    "ms": 1440,
+    "file": "246ac281e076.mp3"
+  },
+  {
+    "text": "Nobody here!",
+    "voice": "raccoon",
+    "sig": "124402ef75",
+    "ms": 1176,
+    "file": "4727562e089e.mp3"
+  },
+  {
+    "text": "Just stretching!",
+    "voice": "raccoon",
+    "sig": "124402ef75",
+    "ms": 1560,
+    "file": "8d10e02c531f.mp3"
+  },
+  {
+    "text": "Yoink!",
+    "voice": "raccoon",
+    "sig": "124402ef75",
+    "ms": 744,
+    "file": "35f8289012bd.mp3"
   },
   {
     "text": "Oops, sorry! Let's share.",
@@ -1442,13 +1533,6 @@
     "file": "5e41510429a8.mp3"
   },
   {
-    "text": "Give it to Maple or the raccoons.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3004,
-    "file": "ee0f223855b5.mp3"
-  },
-  {
     "text": "It's on fire! Tap it to blow it out!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1461,6 +1545,13 @@
     "sig": "ed7dbdac3d",
     "ms": 3120,
     "file": "73f9ff33d2be.mp3"
+  },
+  {
+    "text": "Give it to Maple or the raccoons.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3004,
+    "file": "ee0f223855b5.mp3"
   },
   {
     "text": "Golden! Yummy!",
@@ -1498,18 +1589,25 @@
     "file": "e0b0489833c6.mp3"
   },
   {
-    "text": "Now shine the light at the sky!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3316,
-    "file": "b3604b02b4ec.mp3"
+    "text": "Mmm. Crunchy stick.",
+    "voice": "moose",
+    "sig": "d36b94299b",
+    "ms": 3168,
+    "file": "3a2db3ba19bb.mp3"
   },
   {
-    "text": "Shine the light up high!",
+    "text": "Now tap the flashlight to turn it off!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2238,
-    "file": "ef909a789b58.mp3"
+    "ms": 3144,
+    "file": "1a9b2ea6ce64.mp3"
+  },
+  {
+    "text": "Now click the flashlight to turn it off!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3120,
+    "file": "346cd14c7d0d.mp3"
   },
   {
     "text": "Look! The sky is full of stars!",
@@ -1519,67 +1617,18 @@
     "file": "018a400e7457.mp3"
   },
   {
+    "text": "The northern lights! They dance over Canada.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3552,
+    "file": "bb561a0a1844.mp3"
+  },
+  {
     "text": "Goodnight, little campsite!",
     "voice": "maple",
     "sig": "cafd002559",
     "ms": 1920,
     "file": "4713d5637410.mp3"
-  },
-  {
-    "text": "Who cooks for you? Hoo hoo!",
-    "voice": "owl",
-    "sig": "ea2e6e5659",
-    "ms": 2445,
-    "file": "bc1462fea14f.mp3"
-  },
-  {
-    "text": "Hee hee! You found me!",
-    "voice": "raccoon",
-    "sig": "124402ef75",
-    "ms": 2424,
-    "file": "383a5399efb0.mp3"
-  },
-  {
-    "text": "Ouch! Prickly!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 1848,
-    "file": "322c439d7a22.mp3"
-  },
-  {
-    "text": "Whoa! Too bright!",
-    "voice": "moose",
-    "sig": "d36b94299b",
-    "ms": 2088,
-    "file": "84ba9de56d92.mp3"
-  },
-  {
-    "text": "Ahh. Sunglasses. Much better.",
-    "voice": "moose",
-    "sig": "d36b94299b",
-    "ms": 3864,
-    "file": "3364f3805fe7.mp3"
-  },
-  {
-    "text": "Mmm. Hello there.",
-    "voice": "moose",
-    "sig": "d36b94299b",
-    "ms": 1872,
-    "file": "505ac030aeab.mp3"
-  },
-  {
-    "text": "Hee hee! That tickles!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 2184,
-    "file": "0a2e331ba67f.mp3"
-  },
-  {
-    "text": "Shh! Someone is sleeping.",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 2496,
-    "file": "b2d65f780989.mp3"
   },
   {
     "text": "Hee hee! Got your puck!",
@@ -1848,165 +1897,46 @@
     "file": "1116841666de.mp3"
   },
   {
-    "text": "She's out in the kelp, where the whales swim.",
+    "text": "Look! My lucky rock!",
+    "voice": "otter",
+    "sig": "6c3e96c659",
+    "ms": 2304,
+    "file": "c27f2d9958be.mp3"
+  },
+  {
+    "text": "My rock! The whale took it!",
+    "voice": "otter",
+    "sig": "6c3e96c659",
+    "ms": 2688,
+    "file": "17ce9e4f5074.mp3"
+  },
+  {
+    "text": "Hop on! We'll get it back!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 2832,
-    "file": "3f4dfe06176a.mp3"
+    "ms": 2040,
+    "file": "3cb3fc19ebb7.mp3"
   },
   {
-    "text": "Bonjour! Off we go to find Ollie!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 2880,
-    "file": "bd67dfcaf291.mp3"
-  },
-  {
-    "text": "Hold the water where the boat should go!",
+    "text": "Bubbles! Tap them!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3362,
-    "file": "9835cbf4e151.mp3"
+    "ms": 2160,
+    "file": "b8485ab80109.mp3"
   },
   {
-    "text": "Click and hold where the boat should go!",
+    "text": "Bubbles! Click them!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3552,
-    "file": "054c3c5e4f58.mp3"
+    "ms": 2088,
+    "file": "6be468437be7.mp3"
   },
   {
-    "text": "There is Ollie, fast asleep! Go gently.",
+    "text": "Look for the bubbles!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4392,
-    "file": "fa627c7d3baf.mp3"
-  },
-  {
-    "text": "A spout! Steer there to find the whale!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3977,
-    "file": "c108fc7a72d5.mp3"
-  },
-  {
-    "text": "The orca family! Go fast and turn!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3724,
-    "file": "87b74181b87c.mp3"
-  },
-  {
-    "text": "Shh! Listen to the whales sing.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3626,
-    "file": "39967a33af68.mp3"
-  },
-  {
-    "text": "Steer out past the lighthouse!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2179,
-    "file": "fe5083954b4d.mp3"
-  },
-  {
-    "text": "Go slowly to Ollie.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2184,
-    "file": "24570251d8d4.mp3"
-  },
-  {
-    "text": "Take her back to her friends!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1887,
-    "file": "c318372ec425.mp3"
-  },
-  {
-    "text": "Look for the spout. Steer there!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2799,
-    "file": "00364ee546ff.mp3"
-  },
-  {
-    "text": "Go fast and turn. The baby copies you!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3540,
-    "file": "6769b062e257.mp3"
-  },
-  {
-    "text": "Tap the yellow microphone to listen!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2456,
-    "file": "bf64f88fa796.mp3"
-  },
-  {
-    "text": "Click the yellow microphone to listen!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2112,
-    "file": "59ae199ee0aa.mp3"
-  },
-  {
-    "text": "Oh! Hello!",
-    "voice": "otter",
-    "sig": "6c3e96c659",
-    "ms": 1536,
-    "file": "e6d1bd84466b.mp3"
-  },
-  {
-    "text": "Wheee! Take me home!",
-    "voice": "otter",
-    "sig": "6c3e96c659",
-    "ms": 2016,
-    "file": "70a9cc53455b.mp3"
-  },
-  {
-    "text": "Can I come too?",
-    "voice": "otter",
-    "sig": "6c3e96c659",
-    "ms": 1320,
-    "file": "e956766d20d7.mp3"
-  },
-  {
-    "text": "They hold hands so they don't float away!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 2376,
-    "file": "4d58d66607e5.mp3"
-  },
-  {
-    "text": "Hey! Too fast!",
-    "voice": "otter",
-    "sig": "6c3e96c659",
-    "ms": 1824,
-    "file": "c6fd219798a6.mp3"
-  },
-  {
-    "text": "Hi hi!",
-    "voice": "otter",
-    "sig": "6c3e96c659",
-    "ms": 912,
-    "file": "52f07ef207e2.mp3"
-  },
-  {
-    "text": "Yum, a clam!",
-    "voice": "otter",
-    "sig": "6c3e96c659",
-    "ms": 2232,
-    "file": "e0f4e823c8a0.mp3"
-  },
-  {
-    "text": "I've never seen a whale!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 1344,
-    "file": "57053c5a5487.mp3"
+    "ms": 1608,
+    "file": "863550e1d89d.mp3"
   },
   {
     "text": "A whale! A real whale!",
@@ -2016,32 +1946,25 @@
     "file": "ed54e010515e.mp3"
   },
   {
+    "text": "Tap the whale and see what it does!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3744,
+    "file": "eadbe9c2e7bf.mp3"
+  },
+  {
+    "text": "Click the whale and see what it does!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2856,
+    "file": "cef0667da5b0.mp3"
+  },
+  {
     "text": "It breathes out of its head!",
     "voice": "maple",
     "sig": "cafd002559",
     "ms": 1824,
     "file": "f7bd8c7cb878.mp3"
-  },
-  {
-    "text": "Look at its tail!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 1224,
-    "file": "30f60dc794ba.mp3"
-  },
-  {
-    "text": "Look at its long flippers!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 2184,
-    "file": "8a6beae6061b.mp3"
-  },
-  {
-    "text": "Wow! It jumped right out!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 2208,
-    "file": "475b8bcabf0d.mp3"
   },
   {
     "text": "Achoo! I am all wet!",
@@ -2051,11 +1974,67 @@
     "file": "11f522d060dd.mp3"
   },
   {
-    "text": "Oops! Excuse us, whale!",
+    "text": "Have you seen my rock?",
+    "voice": "otter",
+    "sig": "6c3e96c659",
+    "ms": 1752,
+    "file": "ad6e0ded9b42.mp3"
+  },
+  {
+    "text": "Look at its tail!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 2352,
-    "file": "2fbd656a0eaf.mp3"
+    "ms": 1224,
+    "file": "30f60dc794ba.mp3"
+  },
+  {
+    "text": "That's a sea star, silly!",
+    "voice": "otter",
+    "sig": "6c3e96c659",
+    "ms": 2568,
+    "file": "59722d671190.mp3"
+  },
+  {
+    "text": "Hold the whale down, then let go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2928,
+    "file": "9d23551f81b2.mp3"
+  },
+  {
+    "text": "Click and hold the whale, then let go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3336,
+    "file": "db832df57174.mp3"
+  },
+  {
+    "text": "Wow! It jumped right out!",
+    "voice": "maple",
+    "sig": "cafd002559",
+    "ms": 2208,
+    "file": "475b8bcabf0d.mp3"
+  },
+  {
+    "text": "Look at its long flippers!",
+    "voice": "maple",
+    "sig": "cafd002559",
+    "ms": 2184,
+    "file": "8a6beae6061b.mp3"
+  },
+  {
+    "text": "We're riding a whale!",
+    "voice": "maple",
+    "sig": "cafd002559",
+    "ms": 1560,
+    "file": "aeabc625cb33.mp3"
+  },
+  {
+    "text": "The humpback is singing!",
+    "voice": "maple",
+    "sig": "cafd002559",
+    "ms": 1608,
+    "file": "109f676a2366.mp3"
   },
   {
     "text": "Orcas! A whole family!",
@@ -2065,6 +2044,27 @@
     "file": "f98b4c564259.mp3"
   },
   {
+    "text": "My rock! The baby has it!",
+    "voice": "otter",
+    "sig": "6c3e96c659",
+    "ms": 2496,
+    "file": "805ecc3d28b2.mp3"
+  },
+  {
+    "text": "Peek-a-boo! Tap the baby orca!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2232,
+    "file": "16eb141f8463.mp3"
+  },
+  {
+    "text": "Peek-a-boo! Click the baby orca!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3216,
+    "file": "cca09f3a93dd.mp3"
+  },
+  {
     "text": "The grandma leads the family!",
     "voice": "maple",
     "sig": "cafd002559",
@@ -2072,11 +2072,11 @@
     "file": "dc63cda1039e.mp3"
   },
   {
-    "text": "The baby copies you!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 1608,
-    "file": "e093768b4275.mp3"
+    "text": "Got it! Thank you, whales!",
+    "voice": "otter",
+    "sig": "6c3e96c659",
+    "ms": 2352,
+    "file": "55ee1c383684.mp3"
   },
   {
     "text": "They all jumped together! Merci!",
@@ -2093,11 +2093,18 @@
     "file": "1c80695e6846.mp3"
   },
   {
-    "text": "The humpback is singing!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 1608,
-    "file": "109f676a2366.mp3"
+    "text": "Hi hi!",
+    "voice": "otter",
+    "sig": "6c3e96c659",
+    "ms": 912,
+    "file": "52f07ef207e2.mp3"
+  },
+  {
+    "text": "Yum, a clam!",
+    "voice": "otter",
+    "sig": "6c3e96c659",
+    "ms": 2232,
+    "file": "e0f4e823c8a0.mp3"
   },
   {
     "text": "Ollie! Come and play hockey with us!",
@@ -2142,109 +2149,228 @@
     "file": "273e301e00af.mp3"
   },
   {
-    "text": "Shh. I'm fishing. No hockey till supper.",
+    "text": "Missed again!",
     "voice": "bear",
     "sig": "ea36df2f33",
-    "ms": 4920,
-    "file": "9277b4580ee3.mp3"
+    "ms": 1056,
+    "file": "5ea397b84b26.mp3"
   },
   {
-    "text": "Psst! Let's help the salmon jump past her!",
+    "text": "A white bear? You're all brown!",
     "voice": "maple",
     "sig": "cafd002559",
+    "ms": 2688,
+    "file": "da01d2d09f6a.mp3"
+  },
+  {
+    "text": "It's only mud. Oh dear. I need a bath.",
+    "voice": "bear",
+    "sig": "ea36df2f33",
+    "ms": 4584,
+    "file": "36fe9bf3d3e9.mp3"
+  },
+  {
+    "text": "Bath time!",
+    "voice": "maple",
+    "sig": "cafd002559",
+    "ms": 936,
+    "file": "27e5b00476b7.mp3"
+  },
+  {
+    "text": "Rub the bear to make bubbles!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2904,
+    "file": "8afe19a00b02.mp3"
+  },
+  {
+    "text": "Click and wiggle on the bear to make bubbles!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3408,
+    "file": "164388605e75.mp3"
+  },
+  {
+    "text": "Rub the muddy spots!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2232,
+    "file": "857b3943a8cb.mp3"
+  },
+  {
+    "text": "Click and wiggle on the muddy spots!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3456,
+    "file": "f08ef16c7c6b.mp3"
+  },
+  {
+    "text": "Now the rain! Rub the bubbles away.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3360,
+    "file": "7baac30e11a8.mp3"
+  },
+  {
+    "text": "Now the rain! Click and wiggle the bubbles away.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4776,
+    "file": "ab6a977b2790.mp3"
+  },
+  {
+    "text": "I'm white again!",
+    "voice": "bear",
+    "sig": "ea36df2f33",
+    "ms": 2016,
+    "file": "d658b7565a49.mp3"
+  },
+  {
+    "text": "Now the towel! Rub her fluffy.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
     "ms": 3480,
-    "file": "093e7692864e.mp3"
+    "file": "f2becb248f39.mp3"
   },
   {
-    "text": "Help the salmon jump home!",
+    "text": "Now the towel! Click and wiggle her fluffy.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4584,
+    "file": "b6215187cc72.mp3"
+  },
+  {
+    "text": "I'm a cloud!",
+    "voice": "bear",
+    "sig": "ea36df2f33",
+    "ms": 1272,
+    "file": "2ba950ead60c.mp3"
+  },
+  {
+    "text": "Berries! Rub on a color.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2448,
+    "file": "69434c07ec4e.mp3"
+  },
+  {
+    "text": "Berries! Click and wiggle on a color.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2808,
+    "file": "6851f3cfe302.mp3"
+  },
+  {
+    "text": "Ooh, pink!",
+    "voice": "bear",
+    "sig": "ea36df2f33",
+    "ms": 1872,
+    "file": "02813ef7eef5.mp3"
+  },
+  {
+    "text": "Blue, like a blueberry!",
+    "voice": "bear",
+    "sig": "ea36df2f33",
+    "ms": 2544,
+    "file": "74a358e1e623.mp3"
+  },
+  {
+    "text": "Purple! Fancy!",
+    "voice": "bear",
+    "sig": "ea36df2f33",
+    "ms": 2040,
+    "file": "fe1c2ab460ce.mp3"
+  },
+  {
+    "text": "Tap the pool to show her!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1608,
+    "file": "5d7e7e7f2b4c.mp3"
+  },
+  {
+    "text": "Click the pool to show her!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2592,
+    "file": "57a2aaace354.mp3"
+  },
+  {
+    "text": "Is that me? I look like a champion!",
+    "voice": "bear",
+    "sig": "ea36df2f33",
+    "ms": 3840,
+    "file": "c7db1479dd76.mp3"
+  },
+  {
+    "text": "A team sweater! Tap it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2880,
+    "file": "b59d107b4a6d.mp3"
+  },
+  {
+    "text": "A team sweater! Click it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2616,
+    "file": "03c164abc774.mp3"
+  },
+  {
+    "text": "My paw! On a team sweater!",
+    "voice": "bear",
+    "sig": "ea36df2f33",
+    "ms": 2856,
+    "file": "ec59e7313d10.mp3"
+  },
+  {
+    "text": "Ah... choo!",
+    "voice": "bear",
+    "sig": "ea36df2f33",
+    "ms": 2208,
+    "file": "bc0f5eb1351e.mp3"
+  },
+  {
+    "text": "Hee hee! That tickles!",
+    "voice": "bear",
+    "sig": "ea36df2f33",
+    "ms": 2688,
+    "file": "97abdec87cc8.mp3"
+  },
+  {
+    "text": "I have a beard!",
     "voice": "maple",
     "sig": "cafd002559",
-    "ms": 1656,
-    "file": "aa63b8591630.mp3"
+    "ms": 1248,
+    "file": "cc52ab3cf196.mp3"
   },
   {
-    "text": "Grab a salmon, and flick it up!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2397,
-    "file": "3cc7e16269ec.mp3"
+    "text": "What a shot!",
+    "voice": "maple",
+    "sig": "cafd002559",
+    "ms": 1056,
+    "file": "89756f25db96.mp3"
   },
   {
-    "text": "Grab a salmon, and drag it up fast!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3288,
-    "file": "221551fb32c1.mp3"
+    "text": "Brrr! You got me!",
+    "voice": "maple",
+    "sig": "cafd002559",
+    "ms": 2232,
+    "file": "da8f20f553bb.mp3"
   },
   {
-    "text": "The big falls! Try the rock, or the log.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3852,
-    "file": "fb61e0c791b5.mp3"
+    "text": "Ahh. Scratchy tree.",
+    "voice": "bear",
+    "sig": "ea36df2f33",
+    "ms": 2424,
+    "file": "1fcf2707f15d.mp3"
   },
   {
-    "text": "The bears are fishing! Flick the salmon past them.",
+    "text": "Salmon jump up the river to go home.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4401,
-    "file": "340c5b451491.mp3"
-  },
-  {
-    "text": "The bears are fishing! Drag the salmon up past them.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4080,
-    "file": "ea21dce8630f.mp3"
-  },
-  {
-    "text": "Home! Tap each salmon to lay its eggs.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3362,
-    "file": "598e39e94c01.mp3"
-  },
-  {
-    "text": "Home! Click each salmon to lay its eggs.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3960,
-    "file": "bf92dafc05cd.mp3"
-  },
-  {
-    "text": "Spring! Tap the eggs.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2467,
-    "file": "7f7f137065f8.mp3"
-  },
-  {
-    "text": "Spring! Click the eggs.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2376,
-    "file": "80600036e9c9.mp3"
-  },
-  {
-    "text": "Bonk! Try a bigger flick.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2829,
-    "file": "054add384a1b.mp3"
-  },
-  {
-    "text": "Bonk! Try a bigger, faster drag.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3384,
-    "file": "81237a372711.mp3"
-  },
-  {
-    "text": "Rain! It's a rainforest.",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2714,
-    "file": "7f96e25c7b23.mp3"
+    "ms": 4152,
+    "file": "019e2621cb63.mp3"
   },
   {
     "text": "This cedar tree is taller than a house!",
@@ -2254,11 +2380,11 @@
     "file": "73a3270f297f.mp3"
   },
   {
-    "text": "Fall... winter... and spring!",
+    "text": "Rain! It's a rainforest.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3319,
-    "file": "1cdde232262d.mp3"
+    "ms": 2714,
+    "file": "7f96e25c7b23.mp3"
   },
   {
     "text": "Bravo!",
@@ -2266,13 +2392,6 @@
     "sig": "cafd002559",
     "ms": 648,
     "file": "fca1c3d44e56.mp3"
-  },
-  {
-    "text": "Home!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 576,
-    "file": "24646785b108.mp3"
   },
   {
     "text": "Youpi!",
@@ -2287,104 +2406,6 @@
     "sig": "cafd002559",
     "ms": 672,
     "file": "32d01173bc54.mp3"
-  },
-  {
-    "text": "Ooh! A salmon in my lap!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 2448,
-    "file": "7e71de7bb4d1.mp3"
-  },
-  {
-    "text": "Hee hee! Too high!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 1776,
-    "file": "3e638a235eb3.mp3"
-  },
-  {
-    "text": "Allez, salmon!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 1344,
-    "file": "7a0a803fda92.mp3"
-  },
-  {
-    "text": "Jump, jump!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 1128,
-    "file": "741b5036d043.mp3"
-  },
-  {
-    "text": "The bears went to eat berries!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 2280,
-    "file": "3368984800f6.mp3"
-  },
-  {
-    "text": "Bye, little salmon! Swim to the sea!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 3240,
-    "file": "8dcadb4f857e.mp3"
-  },
-  {
-    "text": "You brought the salmon home!",
-    "voice": "maple",
-    "sig": "cafd002559",
-    "ms": 1968,
-    "file": "c7daabf74076.mp3"
-  },
-  {
-    "text": "Ah... choo!",
-    "voice": "bear",
-    "sig": "ea36df2f33",
-    "ms": 2208,
-    "file": "bc0f5eb1351e.mp3"
-  },
-  {
-    "text": "I'm a spirit bear. I'm hungry!",
-    "voice": "bear",
-    "sig": "ea36df2f33",
-    "ms": 3456,
-    "file": "a5b40b45eefd.mp3"
-  },
-  {
-    "text": "Shh, I'm fishing.",
-    "voice": "bear",
-    "sig": "ea36df2f33",
-    "ms": 2784,
-    "file": "ef0f56ffff65.mp3"
-  },
-  {
-    "text": "Missed again!",
-    "voice": "bear",
-    "sig": "ea36df2f33",
-    "ms": 1056,
-    "file": "5ea397b84b26.mp3"
-  },
-  {
-    "text": "Okay, berries instead!",
-    "voice": "bear",
-    "sig": "ea36df2f33",
-    "ms": 2184,
-    "file": "5f0d63829eb6.mp3"
-  },
-  {
-    "text": "Too slippery! Berries, then.",
-    "voice": "bear",
-    "sig": "ea36df2f33",
-    "ms": 3792,
-    "file": "4f0380abbb87.mp3"
-  },
-  {
-    "text": "Mmm. Berries are easier than fish.",
-    "voice": "bear",
-    "sig": "ea36df2f33",
-    "ms": 3672,
-    "file": "43044926e7dc.mp3"
   },
   {
     "text": "Misty! Try this hockey stick!",
@@ -2406,6 +2427,76 @@
     "sig": "ea36df2f33",
     "ms": 3240,
     "file": "677b535a580f.mp3"
+  },
+  {
+    "text": "Dress the team! Drag something on.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3024,
+    "file": "a5ef2d14ca1f.mp3"
+  },
+  {
+    "text": "Dress the team! Click something to put it on.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3720,
+    "file": "5443282b5687.mp3"
+  },
+  {
+    "text": "Mmm. Fancy.",
+    "voice": "moose",
+    "sig": "d36b94299b",
+    "ms": 2040,
+    "file": "937fd3063b7c.mp3"
+  },
+  {
+    "text": "Ho ho! Two hats!",
+    "voice": "snowman",
+    "sig": "b2021cf5b6",
+    "ms": 2232,
+    "file": "728d769105c8.mp3"
+  },
+  {
+    "text": "Ooh, sneaky!",
+    "voice": "raccoon",
+    "sig": "124402ef75",
+    "ms": 2304,
+    "file": "b7207abf1fc2.mp3"
+  },
+  {
+    "text": "So soft.",
+    "voice": "bear",
+    "sig": "ea36df2f33",
+    "ms": 1608,
+    "file": "8c5f20dc80a0.mp3"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "otter",
+    "sig": "6c3e96c659",
+    "ms": 816,
+    "file": "7d77a48ddbc3.mp3"
+  },
+  {
+    "text": "Magnifique!",
+    "voice": "maple",
+    "sig": "cafd002559",
+    "ms": 1032,
+    "file": "1b771a19c911.mp3"
+  },
+  {
+    "text": "Honk! ...I look good.",
+    "voice": "gus",
+    "sig": "64c136c98c",
+    "ms": 2376,
+    "file": "63c4e6c256e8.mp3"
+  },
+  {
+    "text": "Team photo! Say maple syrup!",
+    "voice": "maple",
+    "sig": "cafd002559",
+    "ms": 2304,
+    "file": "1e079811b828.mp3"
   },
   {
     "text": "Flick the puck into the geese's net!",

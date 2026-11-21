@@ -13,6 +13,7 @@ import type { Bag } from '../../../engine3d/dispose'
 import { merge, P, solid, solidMix } from '../../../engine3d/geo'
 import { CANADA_COLORS } from './looks'
 import { ToyActor, type ToyPose } from './toy'
+import { TEAM_SCARF, type ToySpots } from './worn'
 
 const SNOW = '#FFFFFF'
 const SHADE = '#E9F0FB'
@@ -122,6 +123,9 @@ export class Tuque extends ToyActor {
   private boingT = -1
   /** Eyes shut, still as a snowman (until he wakes up). */
   asleep = false
+  /** Where the Team Cabin's things sit on him (characters/worn.ts): his head, the ring under his chin where the scarf
+   *  goes, his middle ball, and the floppy tip of his tuque (it droops to the side when another hat goes on top). */
+  readonly spots: ToySpots
 
   constructor(bag: Bag, o: { height?: number; voice?: string | null } = {}) {
     super(o.height ?? 1.25, o.voice === null ? undefined : (o.voice ?? 'snowman'))
@@ -149,6 +153,7 @@ export class Tuque extends ToyActor {
       2,
     )
     this.team.visible = false
+    this.team.name = TEAM_SCARF
     this.body.add(this.team)
     // The stick arms, pivoting at the shoulders, a red mitten on each.
     for (const [g, s] of [
@@ -167,7 +172,26 @@ export class Tuque extends ToyActor {
     this.top.position.set(0, 0.76 * H, 0)
     this.headAt = new Vector3(0, hy, 0)
     const n = noseGeo()
-    this.top.add(solidMix([...sized([P.sphere(1, SNOW, {}, 18), ...tuqueCapGeo()], R, hy), ...sized(n.lined, R, hy)], sized(n.plain, R, hy), bag, px))
+    const [cap, brim, tip, pom] = tuqueCapGeo()
+    this.top.add(solidMix([...sized([P.sphere(1, SNOW, {}, 18), cap, brim], R, hy), ...sized(n.lined, R, hy)], sized(n.plain, R, hy), bag, px))
+    // (The floppy tip on its own pivot at its root, so it can droop out from under a second hat.)
+    const flop = new Group()
+    flop.position.set(0.06 * R, hy + 0.95 * R, -0.05 * R)
+    flop.add(solid(merge(sized([tip, pom], R, hy).map((g) => g.translate(-flop.position.x, -flop.position.y, -flop.position.z))), bag, px))
+    this.top.add(flop)
+    const spot = (parent: Group, x: number, y: number, z: number, data: Record<string, number>) => {
+      const g = new Group()
+      g.position.set(x, y, z)
+      g.userData = data
+      parent.add(g)
+      return g
+    }
+    this.spots = {
+      hat: spot(this.top, 0, hy, 0, { R }),
+      neck: spot(this.body, 0, 0.74 * H, 0, { r: 0.15 * H }),
+      belly: spot(this.body, 0, 0.57 * H, 0, { r: MID, sx: 1.04, sy: 0.9 }),
+      flop,
+    }
     this.eyes = new Group()
     this.eyes.position.set(0, hy + EYE_Y * R, 0)
     const e = eyesGeo()

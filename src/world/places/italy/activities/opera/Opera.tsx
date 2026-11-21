@@ -8,7 +8,7 @@
 // the wand, and the picnic, where hugging Lupa calls onDone (the trophy ceremony). Nothing can fail: each step helps
 // her along if she's stuck. Stroke detection and its feel numbers are in conduct.ts (FEEL).
 // Where it stands (2026-11-14, PR #449): shipped. The user skipped the playtest (Kaylee already played the greybox
-// and enjoyed it), so her play diary is the playtest now: watch whether she finishes the opera or leaves it, and where.
+// and enjoyed it), so her play data decides now: watch whether she finishes the opera or leaves it, and where.
 // Open questions it can answer: do big and small swings read as different (only the band's bounce and the owl show
 // "forte"/"piano"), and does the hold-still solo fight the swing (a tap gives a solo too). Small things: Sparkle's
 // lines run 4-7 s (the owl's is the longest); the picnic pizza is a Margherita, not her own (the Pizzeria doesn't save it).

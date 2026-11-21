@@ -8,6 +8,7 @@
 import { Group, Vector3, type Object3D } from 'three'
 import { bell, smooth as easeIO, speechLevel } from '../../../../sdk'
 import type { Face, FilmActor } from '../../../engine3d/characters/actor'
+import type { Silly } from '../../../engine3d/characters/face'
 
 const DEG = Math.PI / 180
 
@@ -41,6 +42,8 @@ export interface Performer {
   /** Pulls a face for a moment (sad, wow, happy); `hold` keeps it until `cheer()`. */
   pull(kind: Face, hold?: boolean): void
   cheer(): void
+  /** Pulls a silly face (crossed, soaked, dazzled, dizzy, sudsy) for `seconds`: the laugh of each toy's big moment. */
+  silly(face: Silly, seconds?: number): void
   /** Rides on something (a canoe, a bike, someone's back) at this spot on it, until `release()`. */
   ride(on: Object3D, x: number, y: number, z: number, face?: number): void
   release(): void
@@ -86,6 +89,8 @@ export interface ToyPose {
   droop: number
   /** A face being pulled (its strength 0..1), or null. */
   face: { kind: Face; k: number } | null
+  /** A silly face being pulled (the subclass swaps its own eyes for it), or null. */
+  silly: Silly | null
   /** Moving this frame, and how. */
   moving: Move['kind'] | null
   /** Wings beating: -1..1 while flying, else 0. */
@@ -105,6 +110,8 @@ export abstract class ToyActor implements Performer {
   readonly body = new Group()
   private move: Move | null = null
   private faceNow: { kind: Face; t: number; hold: boolean } | null = null
+  private sillyNow: Silly | null = null
+  private sillyT = 0
   private droop = 0
   private droopGoal = 0
   private hopT = -1
@@ -203,6 +210,10 @@ export abstract class ToyActor implements Performer {
     this.faceNow = null
     this.droopGoal = 0
   }
+  silly(face: Silly, seconds = 1.6) {
+    this.sillyNow = seconds > 0 ? face : null
+    this.sillyT = seconds
+  }
   ride(on: Object3D, x: number, y: number, z: number, face = 0) {
     this.move = null
     this.home = this.root.parent
@@ -294,6 +305,7 @@ export abstract class ToyActor implements Performer {
       if (f.t >= 1 && !f.hold) this.faceNow = null
     }
 
+    if (this.sillyT > 0 && (this.sillyT -= dt) <= 0) this.sillyNow = null
     const breath = Math.sin(t * 2.6 + this.phase)
     this.body.position.y = lift
     this.body.scale.set(1 + squash * 0.6, 1 - squash + 0.022 * breath, 1 + squash * 0.6)
@@ -308,6 +320,7 @@ export abstract class ToyActor implements Performer {
         nod: this.droop * 0.38 + (this.nodT >= 0 ? 0.3 * Math.sin(this.nodT * Math.PI * 2) : 0),
         droop: this.droop,
         face,
+        silly: this.sillyNow,
         moving: m ? m.kind : null,
         flap: this.flying ? Math.sin(t * 13 + this.phase) : 0,
         armsUp: this.armsUp,

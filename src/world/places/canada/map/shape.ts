@@ -141,7 +141,7 @@ export const PRAIRIE = [-3.2, 0.95, -1.85, 2.95] as const
 
 // ---------------------------------------------------------------- where everything stands
 
-export type PlaceId = 'party' | 'snowman' | 'bike' | 'campfire' | 'canoe' | 'salmon' | 'whales'
+export type PlaceId = 'party' | 'snowman' | 'bike' | 'campfire' | 'canoe' | 'bath' | 'whales'
 /** Each place's middle, east to west. */
 export const PLACES: Record<PlaceId, XZ> = {
   bike: [5.95, 0.4],
@@ -149,7 +149,7 @@ export const PLACES: Record<PlaceId, XZ> = {
   party: [1.45, 2.4],
   campfire: [-0.75, 1.15],
   canoe: [-3.85, 1.85],
-  salmon: [-5.45, 0.05],
+  bath: [-5.45, 0.05],
   whales: [-7.1, 2.3],
 }
 

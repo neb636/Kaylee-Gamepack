@@ -36,8 +36,8 @@ const meta: PlaceMeta = {
     { id: 'bike', name: 'Mountain Bike', icon: '🚵', pos: { x: 90, y: 58 }, sticker: { name: 'Moose', img: moose, fact: L.stickers.moose } },
     { id: 'campfire', name: 'Campfire Night', icon: '⛺', pos: { x: 90, y: 62 }, sticker: { name: 'Raccoon', img: raccoon, fact: L.stickers.raccoon } },
     { id: 'canoe', name: 'Red Canoe', icon: '🛶', pos: { x: 25, y: 60 }, sticker: { name: 'Loon', img: loon, fact: L.stickers.loon } },
-    { id: 'salmon', name: 'Salmon Leap', icon: '🐟', pos: { x: 12, y: 55 }, sticker: { name: 'Spirit bear', img: spirit, fact: L.stickers.spirit } },
-    { id: 'whales', name: 'Whale Watch', icon: '🐋', pos: { x: 10, y: 62 }, sticker: { name: 'Sea otter', img: otter, fact: L.stickers.otter } },
+    { id: 'bath', name: "Misty's Bubble Bath", icon: '🛁', pos: { x: 12, y: 55 }, sticker: { name: 'Spirit bear', img: spirit, fact: L.stickers.spirit } },
+    { id: 'whales', name: 'Whale Peek-a-Boo', icon: '🐋', pos: { x: 10, y: 62 }, sticker: { name: 'Sea otter', img: otter, fact: L.stickers.otter } },
   ],
   facts: [
     { icon: '🍁', label: 'The flag', say: L.facts.flag },

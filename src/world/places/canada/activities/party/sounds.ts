@@ -22,6 +22,14 @@ export const partySfx = {
   spin: clip(url('party-spin'), () => noise(0.7, 0.07, 'bandpass', 2400, 900)),
   /** A quick paw: the puck stolen in a blink. */
   steal: clip(url('party-steal'), () => sounds.whoosh()),
+  /** A goose Roxy robs freezes like a statue (Campfire Night's sting: the same freeze). */
+  freeze: clip(url('campfire-freeze'), () => {
+    tone(1568, 1568, 0.12, 0.06, 'triangle')
+    tone(2093, 2093, 0.22, 0.05, 'triangle', 0.07)
+    noise(0.12, 0.05, 'highpass', 6000, 9000)
+  }),
+  /** Ollie flips the puck up off her stick (the toss of Tuque's move on the map). */
+  toss: clip(url('hub-move-toss'), () => sfx.fwip()),
   /** Clang: a goose's shot off the goalpost. */
   post: clip(url('party-post'), () => tone(1400, 1300, 0.4, 0.08, 'triangle')),
   // ---- The films (story/films/game.ts).
