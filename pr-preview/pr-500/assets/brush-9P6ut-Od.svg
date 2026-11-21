@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>The Magic Brush</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ece6ff"/><stop offset="1" stop-color="#cdbfff"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <clipPath id="hair"><path d="M0 0C-4-4.5-8-11-8-17C-8-22-5-25 0-25C5-25 8-22 8-17C8-11 4-4.5 0 0Z"/></clipPath>
+    <clipPath id="hairLit"><path d="M-3-1C-7-5.5-11-12-11-18C-11-23-8-26-3-26C2-26 5-23 5-18C5-12 1-5.5-3-1Z"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+  <ellipse cx="52" cy="101" rx="36" ry="5" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- the rainbow the brush is painting: every band starts at the brush tip -->
+  <path d="M70 90A25 35 0 0 0 20 90L24 90A23 32 0 0 1 70 90Z" fill="#ff8fb8"/>
+  <path d="M70 90A23 32 0 0 0 24 90L28 90A21 29.5 0 0 1 70 90Z" fill="#ff9c57"/>
+  <path d="M70 90A21 29.5 0 0 0 28 90L32 90A19 26.5 0 0 1 70 90Z" fill="#ffc83d"/>
+  <path d="M70 90A19 26.5 0 0 0 32 90L36 90A17 24 0 0 1 70 90Z" fill="#73cf86"/>
+  <path d="M70 90A17 24 0 0 0 36 90L40 90A15 21 0 0 1 70 90Z" fill="#8ccfff"/>
+  <path d="M23 76C24 67 30 61 38 58" fill="none" stroke="#ffc4da" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- where it lands, it blooms -->
+  <g fill="#48a96c">
+    <path d="M14 94c2-5 7-7 11-5c-2 4-7 6-11 5z"/>
+    <path d="M47 95c-1-5 2-9 7-9c0 4-3 8-7 9z"/>
+  </g>
+  <g fill="#ff8fb8"><circle cx="22" cy="83.5" r="3.6"/><circle cx="26" cy="86.5" r="3.6"/><circle cx="24.5" cy="91" r="3.6"/><circle cx="19.5" cy="91" r="3.6"/><circle cx="18" cy="86.5" r="3.6"/></g>
+  <circle cx="22" cy="87.5" r="2.5" fill="#ffc83d"/>
+  <g fill="#ffe189"><circle cx="33" cy="88" r="3.8"/><circle cx="37.2" cy="91" r="3.8"/><circle cx="35.6" cy="95.8" r="3.8"/><circle cx="30.4" cy="95.8" r="3.8"/><circle cx="28.8" cy="91" r="3.8"/></g>
+  <circle cx="33" cy="92.2" r="2.6" fill="#ff9c57"/>
+  <g fill="#c9e9ff"><circle cx="43" cy="84.5" r="3.2"/><circle cx="46.4" cy="87" r="3.2"/><circle cx="45.1" cy="91" r="3.2"/><circle cx="40.9" cy="91" r="3.2"/><circle cx="39.6" cy="87" r="3.2"/></g>
+  <circle cx="43" cy="88" r="2.2" fill="#ff8fb8"/>
+  <g fill="#fff"><circle cx="21.3" cy="86.8" r="0.9"/><circle cx="32.2" cy="91.4" r="0.9"/><circle cx="42.3" cy="87.3" r="0.8"/></g>
+
+  <!-- the brush: pink-dipped hair, a gold band, a jade-green handle, a tassel -->
+  <g transform="translate(70 90) rotate(20)">
+    <path d="M0-65C3-65 4-61 7-58" fill="none" stroke="#e7699c" stroke-width="2" stroke-linecap="round"/>
+    <rect x="-4.5" y="-60" width="9" height="30" rx="2" fill="#48a96c"/>
+    <rect x="-4.5" y="-60" width="6" height="30" rx="2" fill="#73cf86"/>
+    <rect x="-3" y="-58" width="2" height="26" rx="1" fill="#aee8b7"/>
+    <rect x="-5" y="-48" width="10" height="2.5" rx="1.25" fill="#3e9e78"/>
+    <rect x="-5.5" y="-65.5" width="11" height="6" rx="3" fill="#ffc83d"/>
+    <rect x="1.5" y="-65.5" width="4" height="6" rx="2" fill="#eba123"/>
+    <rect x="-8.5" y="-31.5" width="17" height="7" rx="2" fill="#ffc83d"/>
+    <rect x="3" y="-31.5" width="5.5" height="7" rx="2" fill="#eba123"/>
+    <rect x="-6.5" y="-30" width="7" height="2" rx="1" fill="#ffe189"/>
+    <g clip-path="url(#hair)">
+      <rect x="-10" y="-26" width="20" height="27" fill="#efdccd"/>
+      <path d="M-10-10C-5-13 4-11 10-14V2H-10Z" fill="#d8367f"/>
+      <g clip-path="url(#hairLit)">
+        <rect x="-12" y="-27" width="20" height="28" fill="#fff7f0"/>
+        <path d="M-12-10C-5-13 4-11 10-14V2H-12Z" fill="#ff4f9a"/>
+      </g>
+    </g>
+    <path d="M-4.5-21C-5.5-17-5-13-3.5-10" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(95.5 37)">
+    <path d="M-3 0H3L5 12H-5Z" fill="#ff8fb8"/>
+    <path d="M1 0H3L5 12H1Z" fill="#e7699c"/>
+    <rect x="-3.5" y="-1.5" width="7" height="3" rx="1.5" fill="#ffc83d"/>
+  </g>
+
+  <!-- sparkles -->
+  <path d="M30 41l2 4.5 4.5 2-4.5 2-2 4.5-2-4.5-4.5-2 4.5-2z" fill="#fff"/>
+  <path d="M60 31l1.5 3.5 3.5 1.5-3.5 1.5-1.5 3.5-1.5-3.5-3.5-1.5 3.5-1.5z" fill="#ffe189"/>
+  <path d="M86 92v5M83.5 94.5h5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

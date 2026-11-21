@@ -1,0 +1,113 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "story.gameIn",
+  "title": "Canada › Story › Game In",
+  "intro": "The big game's way in (story/films/game.ts): the whole team skates out. Played by the finale before the hockey.",
+  "page": "canada-story-gameIn.html",
+  "audio": null,
+  "lines": 4,
+  "seconds": 12,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "story.gameIn.here",
+      "text": "The big game! The whole team is here.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "story.gameIn.gus",
+      "text": "A team? Honk! Beavers can't beat geese!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "story.gameIn.ready",
+      "text": "We are ready, Gus. All of us!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "story.gameIn.song",
+      "text": "Shh. Lulu is singing.",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "story",
+        "gameIn",
+        "here"
+      ],
+      "text": "The big game! The whole team is here.",
+      "voice": "sparkle",
+      "key": "story.gameIn.here",
+      "part": "story › gameIn",
+      "when": "The canal in the evening, lanterns lit, the team in a row in their pink scarves.",
+      "ms": 3264,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "gameIn",
+        "gus"
+      ],
+      "text": "A team? Honk! Beavers can't beat geese!",
+      "voice": "gus",
+      "key": "story.gameIn.gus",
+      "part": "story › gameIn",
+      "when": "Gus and his geese across the ice.",
+      "ms": 4032,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "gameIn",
+        "ready"
+      ],
+      "text": "We are ready, Gus. All of us!",
+      "voice": "maple",
+      "key": "story.gameIn.ready",
+      "part": "story › gameIn",
+      "when": "Maple, her friends behind her.",
+      "ms": 2184,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "story",
+        "gameIn",
+        "song"
+      ],
+      "text": "Shh. Lulu is singing.",
+      "voice": "sparkle",
+      "key": "story.gameIn.song",
+      "part": "story › gameIn",
+      "when": "Lulu the loon lifts her head and calls over the ice (her real call, no words).",
+      "ms": 2688,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

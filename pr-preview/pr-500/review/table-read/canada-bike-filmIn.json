@@ -1,0 +1,90 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "bike.filmIn",
+  "title": "Canada › Bike › Film In",
+  "intro": "The film in (story/films/snowman.ts): the snowy park under the castle hotel, flags and lanterns, nobody about.",
+  "page": "canada-bike-filmIn.html",
+  "audio": null,
+  "lines": 3,
+  "seconds": 9,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "bike.filmIn.high",
+      "text": "My friend Monty is the biggest moose in Canada!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "bike.filmIn.bath",
+      "text": "He's having his bath, way down there.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "bike.filmIn.go",
+      "text": "The fastest way down is my bike. Hold on!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "bike",
+        "filmIn",
+        "high"
+      ],
+      "text": "My friend Monty is the biggest moose in Canada!",
+      "voice": "maple",
+      "key": "bike.filmIn.high",
+      "part": "bike › filmIn",
+      "when": "The film in (story/films/bike.ts): the top of Mont-Sainte-Anne, the gondola behind, the forest far below.",
+      "ms": 3312,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bike",
+        "filmIn",
+        "bath"
+      ],
+      "text": "He's having his bath, way down there.",
+      "voice": "maple",
+      "key": "bike.filmIn.bath",
+      "part": "bike › filmIn",
+      "when": "The camera looks down the mountain: a tiny moose in a pond by the waterfall.",
+      "ms": 2712,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bike",
+        "filmIn",
+        "go"
+      ],
+      "text": "The fastest way down is my bike. Hold on!",
+      "voice": "maple",
+      "key": "bike.filmIn.go",
+      "part": "bike › filmIn",
+      "when": "She hops on her bike.",
+      "ms": 3288,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

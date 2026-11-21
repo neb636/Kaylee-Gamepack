@@ -1,0 +1,804 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "campfire",
+  "title": "Canada › Campfire",
+  "intro": "",
+  "page": "canada-campfire.html",
+  "audio": null,
+  "lines": 44,
+  "seconds": 114,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "campfire.filmIn.shh",
+      "text": "Shh. Somebody sneaky lives in these woods.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "campfire.filmIn.hey",
+      "text": "Hey! My marshmallow! Who's out there?",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "campfire.story.0",
+      "text": "Shh! Somebody is watching us from the dark.",
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Shh! Who's out there?"
+    },
+    {
+      "key": "campfire.story.1.touch",
+      "text": "Move your finger to shine the light!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "campfire.story.1.mouse",
+      "text": "Click and hold, then move to shine the light!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "campfire.eyes.touch",
+      "text": "Move your finger to shine the light!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "campfire.eyes.mouse",
+      "text": "Click and hold, then move to shine the light!",
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "key": "campfire.soundsHint",
+      "text": "Shine the light where the sound is.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "campfire.banditGone",
+      "text": "Oh no! Now the whole bag is gone!",
+      "flags": [
+        "changed"
+      ],
+      "was": "Hey! Our marshmallows are gone!"
+    },
+    {
+      "key": "campfire.banditHint",
+      "text": "Shine the light on the next paw print.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "campfire.caught",
+      "text": "Hee hee! Marshmallows for my babies!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "campfire.marshmallowHint",
+      "text": "Give it to Maple or the raccoons.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "campfire.onFire.touch",
+      "text": "It's on fire! Tap it to blow it out!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "campfire.onFire.mouse",
+      "text": "It's on fire! Click it to blow it out!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "campfire.stars",
+      "text": "Now shine the light at the sky!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "campfire.mooseShades",
+      "text": "Ahh. Sunglasses. Much better.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "campfire.filmOut.got",
+      "text": "Hee hee! Got your puck!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "campfire.filmOut.ask",
+      "text": "Roxy! Will you steal the puck from the geese?",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "campfire.filmOut.babies",
+      "text": "Only if my babies can come and cheer!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "campfire.filmOut.team",
+      "text": "Deal! Go, team, go!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "campfire",
+        "filmIn",
+        "shh"
+      ],
+      "text": "Shh. Somebody sneaky lives in these woods.",
+      "voice": "maple",
+      "key": "campfire.filmIn.shh",
+      "part": "campfire › filmIn",
+      "when": "The film in (story/films/campfire.ts): the campsite at night, Maple by the fire with her marshmallows.",
+      "ms": 3264,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "filmIn",
+        "hey"
+      ],
+      "text": "Hey! My marshmallow! Who's out there?",
+      "voice": "maple",
+      "key": "campfire.filmIn.hey",
+      "part": "campfire › filmIn",
+      "when": "A little grey paw comes out of the dark and takes a marshmallow. Then another.",
+      "ms": 3168,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "story",
+        "0"
+      ],
+      "text": "Shh! Somebody is watching us from the dark.",
+      "voice": "maple",
+      "key": "campfire.story.0",
+      "part": "campfire › story",
+      "when": "The story (before the first touch, from a link or a replay; after the film the game starts at Sparkle's instruction): Maple's short hello, then Sparkle's one instruction.",
+      "ms": 3336,
+      "flags": [
+        "long",
+        "changed"
+      ],
+      "was": "Shh! Who's out there?"
+    },
+    {
+      "path": [
+        "campfire",
+        "story",
+        "1",
+        "touch"
+      ],
+      "text": "Move your finger to shine the light!",
+      "voice": "sparkle",
+      "key": "campfire.story.1.touch",
+      "part": "campfire › story",
+      "when": "Sparkle: each part's instruction (the prompt bubble plays it again), and her hints when Kaylee is stuck.",
+      "ms": 2258,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "story",
+        "1",
+        "mouse"
+      ],
+      "text": "Click and hold, then move to shine the light!",
+      "voice": "sparkle",
+      "key": "campfire.story.1.mouse",
+      "part": "campfire › story",
+      "when": "",
+      "ms": 3864,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "eyes",
+        "touch"
+      ],
+      "text": "Move your finger to shine the light!",
+      "voice": "sparkle",
+      "key": "campfire.eyes.touch",
+      "part": "campfire › eyes",
+      "when": "",
+      "ms": 2258,
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "eyes",
+        "mouse"
+      ],
+      "text": "Click and hold, then move to shine the light!",
+      "voice": "sparkle",
+      "key": "campfire.eyes.mouse",
+      "part": "campfire › eyes",
+      "when": "",
+      "ms": 3864,
+      "flags": [
+        "long",
+        "twice"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "eyesHint"
+      ],
+      "text": "Look for shiny eyes in the dark!",
+      "voice": "sparkle",
+      "key": "campfire.eyesHint",
+      "part": "campfire",
+      "when": "",
+      "ms": 2218,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "allOut"
+      ],
+      "text": "You found everybody!",
+      "voice": "maple",
+      "key": "campfire.allOut",
+      "part": "campfire",
+      "when": "",
+      "ms": 1560,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "sounds"
+      ],
+      "text": "Listen! Who made that sound?",
+      "voice": "sparkle",
+      "key": "campfire.sounds",
+      "part": "campfire",
+      "when": "",
+      "ms": 2547,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "soundsHint"
+      ],
+      "text": "Shine the light where the sound is.",
+      "voice": "sparkle",
+      "key": "campfire.soundsHint",
+      "part": "campfire",
+      "when": "",
+      "ms": 3179,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "allSounds"
+      ],
+      "text": "Wow, you found every sound!",
+      "voice": "maple",
+      "key": "campfire.allSounds",
+      "part": "campfire",
+      "when": "",
+      "ms": 2160,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "banditGone"
+      ],
+      "text": "Oh no! Now the whole bag is gone!",
+      "voice": "maple",
+      "key": "campfire.banditGone",
+      "part": "campfire",
+      "when": "",
+      "ms": 2832,
+      "flags": [
+        "changed"
+      ],
+      "was": "Hey! Our marshmallows are gone!"
+    },
+    {
+      "path": [
+        "campfire",
+        "bandit"
+      ],
+      "text": "Follow the little paw prints!",
+      "voice": "sparkle",
+      "key": "campfire.bandit",
+      "part": "campfire",
+      "when": "",
+      "ms": 2014,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "banditHint"
+      ],
+      "text": "Shine the light on the next paw print.",
+      "voice": "sparkle",
+      "key": "campfire.banditHint",
+      "part": "campfire",
+      "when": "",
+      "ms": 3306,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "caught"
+      ],
+      "text": "Hee hee! Marshmallows for my babies!",
+      "voice": "raccoon",
+      "key": "campfire.caught",
+      "part": "campfire",
+      "when": "",
+      "ms": 3072,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "sorry"
+      ],
+      "text": "Oops, sorry! Let's share.",
+      "voice": "raccoon",
+      "key": "campfire.sorry",
+      "part": "campfire",
+      "when": "",
+      "ms": 2808,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "roast"
+      ],
+      "text": "Let's roast more!",
+      "voice": "maple",
+      "key": "campfire.roast",
+      "part": "campfire",
+      "when": "",
+      "ms": 1104,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "marshmallow",
+        "touch"
+      ],
+      "text": "Hold the marshmallow near the fire.",
+      "voice": "sparkle",
+      "key": "campfire.marshmallow.touch",
+      "part": "campfire › marshmallow",
+      "when": "",
+      "ms": 2743,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "marshmallow",
+        "mouse"
+      ],
+      "text": "Click and hold the marshmallow near the fire.",
+      "voice": "sparkle",
+      "key": "campfire.marshmallow.mouse",
+      "part": "campfire › marshmallow",
+      "when": "",
+      "ms": 2808,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "marshmallowHint"
+      ],
+      "text": "Give it to Maple or the raccoons.",
+      "voice": "sparkle",
+      "key": "campfire.marshmallowHint",
+      "part": "campfire",
+      "when": "",
+      "ms": 3004,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "onFire",
+        "touch"
+      ],
+      "text": "It's on fire! Tap it to blow it out!",
+      "voice": "sparkle",
+      "key": "campfire.onFire.touch",
+      "part": "campfire › onFire",
+      "when": "",
+      "ms": 3916,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "onFire",
+        "mouse"
+      ],
+      "text": "It's on fire! Click it to blow it out!",
+      "voice": "sparkle",
+      "key": "campfire.onFire.mouse",
+      "part": "campfire › onFire",
+      "when": "",
+      "ms": 3120,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "golden"
+      ],
+      "text": "Golden! Yummy!",
+      "voice": "maple",
+      "key": "campfire.golden",
+      "part": "campfire",
+      "when": "",
+      "ms": 1416,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "squishy"
+      ],
+      "text": "Squishy! Yum anyway.",
+      "voice": "maple",
+      "key": "campfire.squishy",
+      "part": "campfire",
+      "when": "",
+      "ms": 1968,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "tooCrunchy"
+      ],
+      "text": "Too crunchy for me!",
+      "voice": "maple",
+      "key": "campfire.tooCrunchy",
+      "part": "campfire",
+      "when": "",
+      "ms": 1560,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "burntYum"
+      ],
+      "text": "Crunchy! My favorite!",
+      "voice": "raccoon",
+      "key": "campfire.burntYum",
+      "part": "campfire",
+      "when": "",
+      "ms": 2208,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "munch"
+      ],
+      "text": "Crunch, munch!",
+      "voice": "raccoon",
+      "key": "campfire.munch",
+      "part": "campfire",
+      "when": "",
+      "ms": 1728,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "stars"
+      ],
+      "text": "Now shine the light at the sky!",
+      "voice": "sparkle",
+      "key": "campfire.stars",
+      "part": "campfire",
+      "when": "",
+      "ms": 3316,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "starsHint"
+      ],
+      "text": "Shine the light up high!",
+      "voice": "sparkle",
+      "key": "campfire.starsHint",
+      "part": "campfire",
+      "when": "",
+      "ms": 2238,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "fullSky"
+      ],
+      "text": "Look! The sky is full of stars!",
+      "voice": "maple",
+      "key": "campfire.fullSky",
+      "part": "campfire",
+      "when": "",
+      "ms": 2376,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "goodnight"
+      ],
+      "text": "Goodnight, little campsite!",
+      "voice": "maple",
+      "key": "campfire.goodnight",
+      "part": "campfire",
+      "when": "",
+      "ms": 1920,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "owl"
+      ],
+      "text": "Who cooks for you? Hoo hoo!",
+      "voice": "owl",
+      "key": "campfire.owl",
+      "part": "campfire",
+      "when": "The friends, when she pokes them.",
+      "ms": 2445,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "raccoonHi"
+      ],
+      "text": "Hee hee! You found me!",
+      "voice": "raccoon",
+      "key": "campfire.raccoonHi",
+      "part": "campfire",
+      "when": "",
+      "ms": 2424,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "porcupine"
+      ],
+      "text": "Ouch! Prickly!",
+      "voice": "maple",
+      "key": "campfire.porcupine",
+      "part": "campfire",
+      "when": "",
+      "ms": 1848,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "mooseBright"
+      ],
+      "text": "Whoa! Too bright!",
+      "voice": "moose",
+      "key": "campfire.mooseBright",
+      "part": "campfire",
+      "when": "",
+      "ms": 2088,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "mooseShades"
+      ],
+      "text": "Ahh. Sunglasses. Much better.",
+      "voice": "moose",
+      "key": "campfire.mooseShades",
+      "part": "campfire",
+      "when": "",
+      "ms": 3864,
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "mooseHi"
+      ],
+      "text": "Mmm. Hello there.",
+      "voice": "moose",
+      "key": "campfire.mooseHi",
+      "part": "campfire",
+      "when": "",
+      "ms": 1872,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "mapleHi"
+      ],
+      "text": "Hee hee! That tickles!",
+      "voice": "maple",
+      "key": "campfire.mapleHi",
+      "part": "campfire",
+      "when": "",
+      "ms": 2184,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "tent"
+      ],
+      "text": "Shh! Someone is sleeping.",
+      "voice": "maple",
+      "key": "campfire.tent",
+      "part": "campfire",
+      "when": "",
+      "ms": 2496,
+      "flags": []
+    },
+    {
+      "path": [
+        "campfire",
+        "filmOut",
+        "got"
+      ],
+      "text": "Hee hee! Got your puck!",
+      "voice": "raccoon",
+      "key": "campfire.filmOut.got",
+      "part": "campfire › filmOut",
+      "when": "The film out: Roxy and her three kits at the fire, a marshmallow each. Maple holds up a puck: a blink, and Roxy has it (the quickest paws in Canada: the picture says it).",
+      "ms": 2472,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "filmOut",
+        "ask"
+      ],
+      "text": "Roxy! Will you steal the puck from the geese?",
+      "voice": "maple",
+      "key": "campfire.filmOut.ask",
+      "part": "campfire › filmOut",
+      "when": "The film out: Roxy and her three kits at the fire, a marshmallow each. Maple holds up a puck: a blink, and Roxy has it (the quickest paws in Canada: the picture says it).",
+      "ms": 3072,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "filmOut",
+        "babies"
+      ],
+      "text": "Only if my babies can come and cheer!",
+      "voice": "raccoon",
+      "key": "campfire.filmOut.babies",
+      "part": "campfire › filmOut",
+      "when": "The film out: Roxy and her three kits at the fire, a marshmallow each. Maple holds up a puck: a blink, and Roxy has it (the quickest paws in Canada: the picture says it).",
+      "ms": 3720,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "filmOut",
+        "team"
+      ],
+      "text": "Deal! Go, team, go!",
+      "voice": "maple",
+      "key": "campfire.filmOut.team",
+      "part": "campfire › filmOut",
+      "when": "The kits squeak and wave their marshmallow sticks.",
+      "ms": 2184,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

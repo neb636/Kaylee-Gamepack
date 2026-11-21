@@ -1,0 +1,92 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "salmon.filmIn",
+  "title": "Canada › Salmon › Film In",
+  "intro": "The film in (story/films/snowman.ts): the snowy park under the castle hotel, flags and lanterns, nobody about.",
+  "page": "canada-salmon-filmIn.html",
+  "audio": null,
+  "lines": 3,
+  "seconds": 12,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "salmon.filmIn.white",
+      "text": "In this rainforest lives a bear as white as snow.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "salmon.filmIn.fishing",
+      "text": "Shh. I'm fishing. No hockey till supper.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "salmon.filmIn.help",
+      "text": "Psst! Let's help the salmon jump past her!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "salmon",
+        "filmIn",
+        "white"
+      ],
+      "text": "In this rainforest lives a bear as white as snow.",
+      "voice": "maple",
+      "key": "salmon.filmIn.white",
+      "part": "salmon › filmIn",
+      "when": "The film in (story/films/salmon.ts): the rainforest river, giant cedars, soft rain.",
+      "ms": 3480,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "salmon",
+        "filmIn",
+        "fishing"
+      ],
+      "text": "Shh. I'm fishing. No hockey till supper.",
+      "voice": "bear",
+      "key": "salmon.filmIn.fishing",
+      "part": "salmon › filmIn",
+      "when": "Misty swings a paw at a jumping salmon: an enormous splash, and no fish (a beat with no line). Then, dripping:",
+      "ms": 4920,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "salmon",
+        "filmIn",
+        "help"
+      ],
+      "text": "Psst! Let's help the salmon jump past her!",
+      "voice": "maple",
+      "key": "salmon.filmIn.help",
+      "part": "salmon › filmIn",
+      "when": "Maple, behind her paw, to the camera.",
+      "ms": 3480,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}
