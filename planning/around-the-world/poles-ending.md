@@ -1,4 +1,4 @@
-# 🌅 The Poles' new ending: The Longest Night (playable end to end for Kaylee's playtest: see poles.md, Next)
+# 🌅 The Poles' new ending: The Longest Night (playable end to end for you to play: see poles.md, Next)
 
 **The pitch:** the last stretch of Pebble's story becomes one 3D finale with a real third act. She flies Sparkle's
 balloon down the world herself, a blizzard knocks it out of the sky, and Pebble remembers the song Papa taught him the
@@ -371,9 +371,9 @@ One toy, one branch (this one), check-ins as usual. Build the riskiest new verb 
    ring's shimmer, whale song, Weddell trill, tern call, leopard seal gurgle, colony honks and shuffles, a sunrise
    swell and the colony's hum (music cues). Reuse the Poles' recorded clips where they exist.
 7. **Lines:** add the 🆕 lines to `lines.ts` in play order; CI records them. Then the table read, the reel on the Mac,
-   and Kaylee's playtest.
+   and her play data.
 
-Watch for in her playtest: does she hold Pebble to sing without being shown twice; does the dark scare her (keep it
+Watch for in her play data: does she hold Pebble to sing without being shown twice; does the dark scare her (keep it
 starry and warm-colored, never black); does she sit through the storm film; does she get Pebble through the huddle
 without the pull; does she say "best friends" back at the end.
 

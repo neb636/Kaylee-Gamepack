@@ -125,7 +125,7 @@ hard by the pier's side, where parents can't stand, and her walk only ever looke
 
 ## Next
 
-Kaylee plays it. Watch for: does she follow the story (does she say "firefly"?), does she tap a picture without
+You play it, then her play data shows. Watch for: does she follow the story (does she say "firefly"?), does she tap a picture without
 help, which firefly she goes for first, and whether the films run long for her (the ⏭ count in her diary).
 
 Small things left: the 66 new lines are recorded by the PR's voices job (listen for Tuk and Kae); the films borrow

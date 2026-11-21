@@ -18,8 +18,8 @@ We keep our story, learning and stamps, but the minute-to-minute play should fee
 
 1. **A toy before a game.** Every activity has one *core verb* (row, pour, steer, spin, squish, stack) that is fun
    with no goal at all. Test: would she keep doing it for 30 seconds if nobody asked her to? If not, the rest of the
-   activity can't save it. Build this first and robot-play it yourself; then Kaylee plays it, and her hands answer
-   the question (`AGENTS.md`, check-in 3).
+   activity can't save it. Build this first and robot-play it yourself; then the user plays it (`AGENTS.md`, check-in 3), and once
+   it ships her play data answers the question (`docs/play-data.md`).
 2. **Deepen the verb; don't swap it.** The same verb, three ways harder or richer (new obstacles, new places, new
    combinations, a twist), not four different one-off verbs. At most one side verb per activity. Kids master a verb
    and then love showing off with it.
@@ -67,7 +67,7 @@ session without a playable prototype; and QA only checked layout and whether it 
 
 For each activity, answer honestly:
 
-- **Core verb:** what is it, and is it fun with no goal? (Only Kaylee's playtest can say; the reel shows it moving.)
+- **Core verb:** what is it, and is it fun with no goal? (Only playing it can say, and then her play data; the reel shows it moving.)
 - **Hands busy:** after the first 1-2 lines, what share of the time is she doing something rather than listening or
   waiting? Aim for most of it. `qa-pacing.mjs` reports talk per touch and seconds with nothing to touch.
 - **Touches:** about 20-40 in 1.5-3 minutes, nearly all of them *playing* (steering, pouring, building), not answering.
