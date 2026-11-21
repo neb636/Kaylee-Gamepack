@@ -1,0 +1,938 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "bath",
+  "title": "Canada › Bath",
+  "intro": "",
+  "page": "canada-bath.html",
+  "audio": "canada-bath.mp3",
+  "lines": 44,
+  "seconds": 109,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "bath.filmIn.white",
+      "text": "In this rainforest lives a bear as white as snow.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bath.filmIn.miss",
+      "text": "Missed again!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "bath.filmIn.mud",
+      "text": "It's only mud. Oh dear. I need a bath.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bath.filmIn.bathTime",
+      "text": "Bath time!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "bath.story.0",
+      "text": "Bath time!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "bath.rub.mouse",
+      "text": "Click and wiggle on the bear to make bubbles!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bath.rubHint.mouse",
+      "text": "Click and wiggle on the muddy spots!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bath.rain.touch",
+      "text": "Now the rain! Rub the bubbles away.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bath.rain.mouse",
+      "text": "Now the rain! Click and wiggle the bubbles away.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bath.spirit",
+      "text": "The spirit bear is a black bear with white fur.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bath.towel.touch",
+      "text": "Now the towel! Rub her fluffy.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bath.towel.mouse",
+      "text": "Now the towel! Click and wiggle her fluffy.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bath.mirror",
+      "text": "Is that me? I look like a champion!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bath.salmon",
+      "text": "Salmon jump up the river to go home.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "bath.miss",
+      "text": "Missed again!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "bath.filmOut.team",
+      "text": "I like this game. I will come!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "bath",
+        "filmIn",
+        "white"
+      ],
+      "text": "In this rainforest lives a bear as white as snow.",
+      "voice": "maple",
+      "key": "bath.filmIn.white",
+      "part": "bath › filmIn",
+      "when": "The film in (story/films/bath.ts): the rainforest river, giant cedars, soft rain.",
+      "ms": 3480,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        0,
+        3.41
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "filmIn",
+        "miss"
+      ],
+      "text": "Missed again!",
+      "voice": "bear",
+      "key": "bath.filmIn.miss",
+      "part": "bath › filmIn",
+      "when": "A brown, mossy lump on the bank swings a paw at a jumping salmon: an enormous splash, no fish, and she slides down the bank into the mud. Two eyes blink.",
+      "ms": 1056,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        3.76,
+        4.76
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "filmIn",
+        "brown"
+      ],
+      "text": "A white bear? You're all brown!",
+      "voice": "maple",
+      "key": "bath.filmIn.brown",
+      "part": "bath › filmIn",
+      "when": "The film in (story/films/bath.ts): the rainforest river, giant cedars, soft rain.",
+      "ms": 2688,
+      "flags": [],
+      "span": [
+        5.11,
+        7.73
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "filmIn",
+        "mud"
+      ],
+      "text": "It's only mud. Oh dear. I need a bath.",
+      "voice": "bear",
+      "key": "bath.filmIn.mud",
+      "part": "bath › filmIn",
+      "when": "The film in (story/films/bath.ts): the rainforest river, giant cedars, soft rain.",
+      "ms": 4584,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        8.08,
+        12.6
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "filmIn",
+        "bathTime"
+      ],
+      "text": "Bath time!",
+      "voice": "maple",
+      "key": "bath.filmIn.bathTime",
+      "part": "bath › filmIn",
+      "when": "Maple, to the camera.",
+      "ms": 936,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        12.95,
+        13.82
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "story",
+        "0"
+      ],
+      "text": "Bath time!",
+      "voice": "maple",
+      "key": "bath.story.0",
+      "part": "bath › story",
+      "when": "The hello from a link or a replay (after the film in, the game starts at Sparkle's one instruction).",
+      "ms": 936,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        15.44,
+        16.31
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "rub",
+        "touch"
+      ],
+      "text": "Rub the bear to make bubbles!",
+      "voice": "sparkle",
+      "key": "bath.rub.touch",
+      "part": "bath › rub",
+      "when": "Sparkle: one line as each tool arrives, and a hint when she's stuck for ~8 s.",
+      "ms": 2904,
+      "flags": [],
+      "span": [
+        17.93,
+        20.77
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "rub",
+        "mouse"
+      ],
+      "text": "Click and wiggle on the bear to make bubbles!",
+      "voice": "sparkle",
+      "key": "bath.rub.mouse",
+      "part": "bath › rub",
+      "when": "",
+      "ms": 3408,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        21.12,
+        24.48
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "rubHint",
+        "touch"
+      ],
+      "text": "Rub the muddy spots!",
+      "voice": "sparkle",
+      "key": "bath.rubHint.touch",
+      "part": "bath › rubHint",
+      "when": "Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.",
+      "ms": 2232,
+      "flags": [],
+      "span": [
+        26.1,
+        28.27
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "rubHint",
+        "mouse"
+      ],
+      "text": "Click and wiggle on the muddy spots!",
+      "voice": "sparkle",
+      "key": "bath.rubHint.mouse",
+      "part": "bath › rubHint",
+      "when": "",
+      "ms": 3456,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        28.62,
+        32.02
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "rain",
+        "touch"
+      ],
+      "text": "Now the rain! Rub the bubbles away.",
+      "voice": "sparkle",
+      "key": "bath.rain.touch",
+      "part": "bath › rain",
+      "when": "Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.",
+      "ms": 3360,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        33.64,
+        36.95
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "rain",
+        "mouse"
+      ],
+      "text": "Now the rain! Click and wiggle the bubbles away.",
+      "voice": "sparkle",
+      "key": "bath.rain.mouse",
+      "part": "bath › rain",
+      "when": "",
+      "ms": 4776,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        37.3,
+        42
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "spirit"
+      ],
+      "text": "The spirit bear is a black bear with white fur.",
+      "voice": "sparkle",
+      "key": "bath.spirit",
+      "part": "bath",
+      "when": "White shows through (once): the sticker's fact, then Misty.",
+      "ms": 3418,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        43.62,
+        47.04
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "whiteAgain"
+      ],
+      "text": "I'm white again!",
+      "voice": "bear",
+      "key": "bath.whiteAgain",
+      "part": "bath",
+      "when": "Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.",
+      "ms": 2016,
+      "flags": [],
+      "span": [
+        47.39,
+        49.35
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "towel",
+        "touch"
+      ],
+      "text": "Now the towel! Rub her fluffy.",
+      "voice": "sparkle",
+      "key": "bath.towel.touch",
+      "part": "bath › towel",
+      "when": "Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.",
+      "ms": 3480,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        50.97,
+        54.38
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "towel",
+        "mouse"
+      ],
+      "text": "Now the towel! Click and wiggle her fluffy.",
+      "voice": "sparkle",
+      "key": "bath.towel.mouse",
+      "part": "bath › towel",
+      "when": "",
+      "ms": 4584,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        54.73,
+        59.26
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "cloud"
+      ],
+      "text": "I'm a cloud!",
+      "voice": "bear",
+      "key": "bath.cloud",
+      "part": "bath",
+      "when": "Rubbed into a giant puffball.",
+      "ms": 1272,
+      "flags": [],
+      "span": [
+        60.88,
+        62.1
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "berries",
+        "touch"
+      ],
+      "text": "Berries! Rub on a color.",
+      "voice": "sparkle",
+      "key": "bath.berries.touch",
+      "part": "bath › berries",
+      "when": "Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.",
+      "ms": 2448,
+      "flags": [],
+      "span": [
+        63.72,
+        66.1
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "berries",
+        "mouse"
+      ],
+      "text": "Berries! Click and wiggle on a color.",
+      "voice": "sparkle",
+      "key": "bath.berries.mouse",
+      "part": "bath › berries",
+      "when": "",
+      "ms": 2808,
+      "flags": [],
+      "span": [
+        66.45,
+        69.19
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "color",
+        "pink"
+      ],
+      "text": "Ooh, pink!",
+      "voice": "bear",
+      "key": "bath.color.pink",
+      "part": "bath › color",
+      "when": "Her first go with each color.",
+      "ms": 1872,
+      "flags": [],
+      "span": [
+        70.81,
+        72.62
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "color",
+        "blue"
+      ],
+      "text": "Blue, like a blueberry!",
+      "voice": "bear",
+      "key": "bath.color.blue",
+      "part": "bath › color",
+      "when": "",
+      "ms": 2544,
+      "flags": [],
+      "span": [
+        72.97,
+        75.47
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "color",
+        "purple"
+      ],
+      "text": "Purple! Fancy!",
+      "voice": "bear",
+      "key": "bath.color.purple",
+      "part": "bath › color",
+      "when": "",
+      "ms": 2040,
+      "flags": [],
+      "span": [
+        75.82,
+        77.79
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "pool",
+        "touch"
+      ],
+      "text": "Tap the pool to show her!",
+      "voice": "sparkle",
+      "key": "bath.pool.touch",
+      "part": "bath › pool",
+      "when": "The still pool glows like a mirror.",
+      "ms": 1608,
+      "flags": [],
+      "span": [
+        79.41,
+        80.97
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "pool",
+        "mouse"
+      ],
+      "text": "Click the pool to show her!",
+      "voice": "sparkle",
+      "key": "bath.pool.mouse",
+      "part": "bath › pool",
+      "when": "",
+      "ms": 2592,
+      "flags": [],
+      "span": [
+        81.32,
+        83.85
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "mirror"
+      ],
+      "text": "Is that me? I look like a champion!",
+      "voice": "bear",
+      "key": "bath.mirror",
+      "part": "bath",
+      "when": "Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.",
+      "ms": 3840,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        85.47,
+        89.24
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "sweater",
+        "touch"
+      ],
+      "text": "A team sweater! Tap it!",
+      "voice": "sparkle",
+      "key": "bath.sweater.touch",
+      "part": "bath › sweater",
+      "when": "Maple holds up the white team sweater with the red maple leaf.",
+      "ms": 2880,
+      "flags": [],
+      "span": [
+        90.86,
+        93.68
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "sweater",
+        "mouse"
+      ],
+      "text": "A team sweater! Click it!",
+      "voice": "sparkle",
+      "key": "bath.sweater.mouse",
+      "part": "bath › sweater",
+      "when": "",
+      "ms": 2616,
+      "flags": [],
+      "span": [
+        94.03,
+        96.59
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "paw"
+      ],
+      "text": "My paw! On a team sweater!",
+      "voice": "bear",
+      "key": "bath.paw",
+      "part": "bath",
+      "when": "Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.",
+      "ms": 2856,
+      "flags": [],
+      "span": [
+        98.21,
+        101.01
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "achoo"
+      ],
+      "text": "Ah... choo!",
+      "voice": "bear",
+      "key": "bath.achoo",
+      "part": "bath",
+      "when": "Silly: her nose, her tummy, suds on Maple, the soap batted over the cedars, the wet-dog shake, the back scratch.",
+      "ms": 2208,
+      "flags": [],
+      "span": [
+        101.36,
+        103.52
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "tickle"
+      ],
+      "text": "Hee hee! That tickles!",
+      "voice": "bear",
+      "key": "bath.tickle",
+      "part": "bath",
+      "when": "Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.",
+      "ms": 2688,
+      "flags": [],
+      "span": [
+        103.87,
+        106.5
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "beard"
+      ],
+      "text": "I have a beard!",
+      "voice": "maple",
+      "key": "bath.beard",
+      "part": "bath",
+      "when": "Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.",
+      "ms": 1248,
+      "flags": [],
+      "span": [
+        106.85,
+        108.04
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "shot"
+      ],
+      "text": "What a shot!",
+      "voice": "maple",
+      "key": "bath.shot",
+      "part": "bath",
+      "when": "Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.",
+      "ms": 1056,
+      "flags": [],
+      "span": [
+        108.39,
+        109.39
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "brrr"
+      ],
+      "text": "Brrr! You got me!",
+      "voice": "maple",
+      "key": "bath.brrr",
+      "part": "bath",
+      "when": "Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.",
+      "ms": 2232,
+      "flags": [],
+      "span": [
+        109.74,
+        111.91
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "scratch"
+      ],
+      "text": "Ahh. Scratchy tree.",
+      "voice": "bear",
+      "key": "bath.scratch",
+      "part": "bath",
+      "when": "Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.",
+      "ms": 2424,
+      "flags": [],
+      "span": [
+        112.26,
+        114.63
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "salmon"
+      ],
+      "text": "Salmon jump up the river to go home.",
+      "voice": "sparkle",
+      "key": "bath.salmon",
+      "part": "bath",
+      "when": "Pokes (Sparkle, the first time; Misty swings at the salmon and misses).",
+      "ms": 4152,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        114.98,
+        119.06
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "miss"
+      ],
+      "text": "Missed again!",
+      "voice": "bear",
+      "key": "bath.miss",
+      "part": "bath",
+      "when": "Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.",
+      "ms": 1056,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        119.41,
+        120.41
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "cedar"
+      ],
+      "text": "This cedar tree is taller than a house!",
+      "voice": "sparkle",
+      "key": "bath.cedar",
+      "part": "bath",
+      "when": "Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.",
+      "ms": 2950,
+      "flags": [],
+      "span": [
+        120.76,
+        123.71
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "rainPoke"
+      ],
+      "text": "Rain! It's a rainforest.",
+      "voice": "sparkle",
+      "key": "bath.rainPoke",
+      "part": "bath",
+      "when": "Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.",
+      "ms": 2714,
+      "flags": [],
+      "span": [
+        124.06,
+        126.77
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "cheer",
+        "0"
+      ],
+      "text": "Bravo!",
+      "voice": "maple",
+      "key": "bath.cheer.0",
+      "part": "bath › cheer",
+      "when": "Maple, cheering on the bank.",
+      "ms": 648,
+      "flags": [],
+      "span": [
+        128.39,
+        128.98
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "cheer",
+        "1"
+      ],
+      "text": "Youpi!",
+      "voice": "maple",
+      "key": "bath.cheer.1",
+      "part": "bath › cheer",
+      "when": "",
+      "ms": 552,
+      "flags": [],
+      "span": [
+        129.33,
+        129.83
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "cheer",
+        "2"
+      ],
+      "text": "Allez, allez!",
+      "voice": "maple",
+      "key": "bath.cheer.2",
+      "part": "bath › cheer",
+      "when": "",
+      "ms": 672,
+      "flags": [],
+      "span": [
+        130.18,
+        130.79
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "filmOut",
+        "stick"
+      ],
+      "text": "Misty! Try this hockey stick!",
+      "voice": "maple",
+      "key": "bath.filmOut.stick",
+      "part": "bath › filmOut",
+      "when": "The film out: Misty in the look she was given.",
+      "ms": 2376,
+      "flags": [],
+      "span": [
+        132.41,
+        134.73
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "filmOut",
+        "shot"
+      ],
+      "text": "The biggest slap shot in Canada!",
+      "voice": "maple",
+      "key": "bath.filmOut.shot",
+      "part": "bath › filmOut",
+      "when": "One swing: a pinecone sails over the tallest cedar.",
+      "ms": 2232,
+      "flags": [],
+      "span": [
+        135.08,
+        137.27
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "filmOut",
+        "team"
+      ],
+      "text": "I like this game. I will come!",
+      "voice": "bear",
+      "key": "bath.filmOut.team",
+      "part": "bath › filmOut",
+      "when": "The film out: Misty in the look she was given.",
+      "ms": 3240,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        137.62,
+        140.79
+      ]
+    }
+  ]
+}

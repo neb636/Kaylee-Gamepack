@@ -6,8 +6,8 @@
   "intro": "",
   "page": "canada-campfire.html",
   "audio": "canada-campfire.mp3",
-  "lines": 44,
-  "seconds": 114,
+  "lines": 43,
+  "seconds": 111,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -26,66 +26,36 @@
       ]
     },
     {
-      "key": "campfire.story.0",
+      "key": "campfire.story",
       "text": "Shh! Somebody is watching us from the dark.",
       "flags": [
         "long"
       ]
     },
     {
-      "key": "campfire.story.1.touch",
-      "text": "Move your finger to shine the light!",
-      "flags": [
-        "twice"
-      ]
-    },
-    {
-      "key": "campfire.story.1.mouse",
-      "text": "Click and hold, then move to shine the light!",
-      "flags": [
-        "long",
-        "twice"
-      ]
-    },
-    {
-      "key": "campfire.eyes.touch",
-      "text": "Move your finger to shine the light!",
-      "flags": [
-        "twice"
-      ]
-    },
-    {
       "key": "campfire.eyes.mouse",
       "text": "Click and hold, then move to shine the light!",
       "flags": [
-        "long",
-        "twice"
+        "long"
       ]
     },
     {
-      "key": "campfire.soundsHint",
-      "text": "Shine the light where the sound is.",
+      "key": "campfire.mooseShades",
+      "text": "Ahh. Sunglasses. Much better.",
       "flags": [
         "long"
       ]
     },
     {
-      "key": "campfire.banditHint",
-      "text": "Shine the light on the next paw print.",
+      "key": "campfire.giggle",
+      "text": "Somebody is giggling! Catch them in the light!",
       "flags": [
         "long"
       ]
     },
     {
-      "key": "campfire.caught",
-      "text": "Hee hee! Marshmallows for my babies!",
-      "flags": [
-        "long"
-      ]
-    },
-    {
-      "key": "campfire.marshmallowHint",
-      "text": "Give it to Maple or the raccoons.",
+      "key": "campfire.sneak",
+      "text": "Roxy is sneaking! Shine the light and she stops!",
       "flags": [
         "long"
       ]
@@ -105,15 +75,36 @@
       ]
     },
     {
-      "key": "campfire.stars",
-      "text": "Now shine the light at the sky!",
+      "key": "campfire.marshmallowHint",
+      "text": "Give it to Maple or the raccoons.",
       "flags": [
         "long"
       ]
     },
     {
-      "key": "campfire.mooseShades",
-      "text": "Ahh. Sunglasses. Much better.",
+      "key": "campfire.montyStick",
+      "text": "Mmm. Crunchy stick.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "campfire.off.touch",
+      "text": "Now tap the flashlight to turn it off!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "campfire.off.mouse",
+      "text": "Now click the flashlight to turn it off!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "campfire.lights",
+      "text": "The northern lights! They dance over Canada.",
       "flags": [
         "long"
       ]
@@ -177,14 +168,13 @@
     {
       "path": [
         "campfire",
-        "story",
-        "0"
+        "story"
       ],
       "text": "Shh! Somebody is watching us from the dark.",
       "voice": "maple",
-      "key": "campfire.story.0",
-      "part": "campfire › story",
-      "when": "The story (before the first touch, from a link or a replay; after the film the game starts at Sparkle's instruction): Maple's short hello, then Sparkle's one instruction.",
+      "key": "campfire.story",
+      "part": "campfire",
+      "when": "---- The game, Flashlight Statues (planning/around-the-world/canada-round-2.md, part 2): her finger is the flashlight. From a link or a replay Maple says hello first; after the film it starts at Sparkle's instruction.",
       "ms": 3336,
       "flags": [
         "long"
@@ -197,49 +187,6 @@
     {
       "path": [
         "campfire",
-        "story",
-        "1",
-        "touch"
-      ],
-      "text": "Move your finger to shine the light!",
-      "voice": "sparkle",
-      "key": "campfire.story.1.touch",
-      "part": "campfire › story",
-      "when": "Sparkle: each part's instruction (the prompt bubble plays it again), and her hints when Kaylee is stuck.",
-      "ms": 2258,
-      "flags": [
-        "twice"
-      ],
-      "span": [
-        11.88,
-        14.14
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "story",
-        "1",
-        "mouse"
-      ],
-      "text": "Click and hold, then move to shine the light!",
-      "voice": "sparkle",
-      "key": "campfire.story.1.mouse",
-      "part": "campfire › story",
-      "when": "",
-      "ms": 3864,
-      "flags": [
-        "long",
-        "twice"
-      ],
-      "span": [
-        14.49,
-        18.29
-      ]
-    },
-    {
-      "path": [
-        "campfire",
         "eyes",
         "touch"
       ],
@@ -247,14 +194,12 @@
       "voice": "sparkle",
       "key": "campfire.eyes.touch",
       "part": "campfire › eyes",
-      "when": "",
+      "when": "Sparkle: the game opens (the line at the bottom plays it again), and her hint when nothing new has been lit for 8 s.",
       "ms": 2258,
-      "flags": [
-        "twice"
-      ],
+      "flags": [],
       "span": [
-        19.91,
-        22.17
+        13.15,
+        15.41
       ]
     },
     {
@@ -270,12 +215,11 @@
       "when": "",
       "ms": 3864,
       "flags": [
-        "long",
-        "twice"
+        "long"
       ],
       "span": [
-        22.52,
-        26.32
+        15.76,
+        19.56
       ]
     },
     {
@@ -291,150 +235,273 @@
       "ms": 2218,
       "flags": [],
       "span": [
-        27.94,
-        30.16
+        21.18,
+        23.4
       ]
     },
     {
       "path": [
         "campfire",
-        "allOut"
+        "owl"
       ],
-      "text": "You found everybody!",
-      "voice": "maple",
-      "key": "campfire.allOut",
+      "text": "Who cooks for you? Hoo hoo!",
+      "voice": "owl",
+      "key": "campfire.owl",
       "part": "campfire",
+      "when": "Who's out there: the light lands on them (each says it the first time).",
+      "ms": 2445,
+      "flags": [],
+      "span": [
+        23.75,
+        26.19
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "mooseBright"
+      ],
+      "text": "Whoa! Too bright!",
+      "voice": "moose",
+      "key": "campfire.mooseBright",
+      "part": "campfire",
+      "when": "Monty squints in the light; then on go his sunglasses.",
+      "ms": 2088,
+      "flags": [],
+      "span": [
+        26.54,
+        28.58
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "mooseShades"
+      ],
+      "text": "Ahh. Sunglasses. Much better.",
+      "voice": "moose",
+      "key": "campfire.mooseShades",
+      "part": "campfire",
+      "when": "",
+      "ms": 3864,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        28.93,
+        32.74
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "porcupine"
+      ],
+      "text": "Ouch! Prickly!",
+      "voice": "maple",
+      "key": "campfire.porcupine",
+      "part": "campfire",
+      "when": "The porcupine puffs into a prickly ball.",
+      "ms": 1848,
+      "flags": [],
+      "span": [
+        33.09,
+        34.86
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "mapleHi"
+      ],
+      "text": "Hee hee! That tickles!",
+      "voice": "maple",
+      "key": "campfire.mapleHi",
+      "part": "campfire",
+      "when": "Light on Maple: she makes shadow bunnies with her paws.",
+      "ms": 2184,
+      "flags": [],
+      "span": [
+        35.21,
+        37.33
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "fireBright"
+      ],
+      "text": "It's already bright!",
+      "voice": "maple",
+      "key": "campfire.fireBright",
+      "part": "campfire",
+      "when": "The light held on the fire: nothing happens.",
+      "ms": 1488,
+      "flags": [],
+      "span": [
+        37.68,
+        39.11
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "giggle"
+      ],
+      "text": "Somebody is giggling! Catch them in the light!",
+      "voice": "sparkle",
+      "key": "campfire.giggle",
+      "part": "campfire",
+      "when": "Giggling starts in the dark (Sparkle): peek-a-boo with Roxy's kits. A kit's tail sticks out after ~8 s.",
+      "ms": 4536,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        39.46,
+        43.95
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "kitHint"
+      ],
+      "text": "Shine the light on the wiggly tail!",
+      "voice": "sparkle",
+      "key": "campfire.kitHint",
+      "part": "campfire",
+      "when": "",
+      "ms": 2976,
+      "flags": [],
+      "span": [
+        44.3,
+        47.21
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "kits"
+      ],
+      "text": "Three little raccoons! Where is your mama?",
+      "voice": "maple",
+      "key": "campfire.kits",
+      "part": "campfire",
+      "when": "Three kits at the fire.",
+      "ms": 2640,
+      "flags": [],
+      "span": [
+        47.56,
+        50.13
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "sneak"
+      ],
+      "text": "Roxy is sneaking! Shine the light and she stops!",
+      "voice": "sparkle",
+      "key": "campfire.sneak",
+      "part": "campfire",
+      "when": "Statues: Roxy sneaks toward the marshmallow bag whenever the light is off her (Sparkle; and her hint).",
+      "ms": 5160,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        50.48,
+        55.58
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "statues",
+        "0"
+      ],
+      "text": "I'm a tree.",
+      "voice": "raccoon",
+      "key": "campfire.statues.0",
+      "part": "campfire › statues",
+      "when": "Her statues (one each time she's caught in the beam): the tree, the rock, the whistle, the stretch.",
+      "ms": 1440,
+      "flags": [],
+      "span": [
+        57.2,
+        58.58
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "statues",
+        "1"
+      ],
+      "text": "I'm a rock.",
+      "voice": "raccoon",
+      "key": "campfire.statues.1",
+      "part": "campfire › statues",
+      "when": "",
+      "ms": 1440,
+      "flags": [],
+      "span": [
+        58.93,
+        60.31
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "statues",
+        "2"
+      ],
+      "text": "Nobody here!",
+      "voice": "raccoon",
+      "key": "campfire.statues.2",
+      "part": "campfire › statues",
+      "when": "",
+      "ms": 1176,
+      "flags": [],
+      "span": [
+        60.66,
+        61.77
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "statues",
+        "3"
+      ],
+      "text": "Just stretching!",
+      "voice": "raccoon",
+      "key": "campfire.statues.3",
+      "part": "campfire › statues",
       "when": "",
       "ms": 1560,
       "flags": [],
       "span": [
-        30.51,
-        32.01
+        62.12,
+        63.62
       ]
     },
     {
       "path": [
         "campfire",
-        "sounds"
+        "yoink"
       ],
-      "text": "Listen! Who made that sound?",
-      "voice": "sparkle",
-      "key": "campfire.sounds",
-      "part": "campfire",
-      "when": "",
-      "ms": 2547,
-      "flags": [],
-      "span": [
-        32.36,
-        34.91
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "soundsHint"
-      ],
-      "text": "Shine the light where the sound is.",
-      "voice": "sparkle",
-      "key": "campfire.soundsHint",
-      "part": "campfire",
-      "when": "",
-      "ms": 3179,
-      "flags": [
-        "long"
-      ],
-      "span": [
-        35.26,
-        38.44
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "allSounds"
-      ],
-      "text": "Wow, you found every sound!",
-      "voice": "maple",
-      "key": "campfire.allSounds",
-      "part": "campfire",
-      "when": "",
-      "ms": 2160,
-      "flags": [],
-      "span": [
-        38.79,
-        40.89
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "banditGone"
-      ],
-      "text": "Oh no! Now the whole bag is gone!",
-      "voice": "maple",
-      "key": "campfire.banditGone",
-      "part": "campfire",
-      "when": "",
-      "ms": 2832,
-      "flags": [],
-      "span": [
-        41.24,
-        44.02
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "bandit"
-      ],
-      "text": "Follow the little paw prints!",
-      "voice": "sparkle",
-      "key": "campfire.bandit",
-      "part": "campfire",
-      "when": "",
-      "ms": 2014,
-      "flags": [],
-      "span": [
-        44.37,
-        46.38
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "banditHint"
-      ],
-      "text": "Shine the light on the next paw print.",
-      "voice": "sparkle",
-      "key": "campfire.banditHint",
-      "part": "campfire",
-      "when": "",
-      "ms": 3306,
-      "flags": [
-        "long"
-      ],
-      "span": [
-        46.73,
-        50.04
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "caught"
-      ],
-      "text": "Hee hee! Marshmallows for my babies!",
+      "text": "Yoink!",
       "voice": "raccoon",
-      "key": "campfire.caught",
+      "key": "campfire.yoink",
       "part": "campfire",
-      "when": "",
-      "ms": 3072,
-      "flags": [
-        "long"
-      ],
+      "when": "She reaches the bag.",
+      "ms": 744,
+      "flags": [],
       "span": [
-        50.39,
-        53.4
+        65.24,
+        65.93
       ]
     },
     {
@@ -446,12 +513,12 @@
       "voice": "raccoon",
       "key": "campfire.sorry",
       "part": "campfire",
-      "when": "",
+      "when": "She has fallen over laughing three times: she gives up.",
       "ms": 2808,
       "flags": [],
       "span": [
-        53.75,
-        56.5
+        66.28,
+        69.02
       ]
     },
     {
@@ -463,12 +530,12 @@
       "voice": "maple",
       "key": "campfire.roast",
       "part": "campfire",
-      "when": "",
+      "when": "The roast: Maple, then Sparkle; on fire (Sparkle); her hint with a toasted one in hand.",
       "ms": 1104,
       "flags": [],
       "span": [
-        56.85,
-        57.9
+        69.37,
+        70.43
       ]
     },
     {
@@ -485,8 +552,8 @@
       "ms": 2743,
       "flags": [],
       "span": [
-        59.52,
-        62.26
+        72.05,
+        74.79
       ]
     },
     {
@@ -503,27 +570,8 @@
       "ms": 2808,
       "flags": [],
       "span": [
-        62.61,
-        65.36
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "marshmallowHint"
-      ],
-      "text": "Give it to Maple or the raccoons.",
-      "voice": "sparkle",
-      "key": "campfire.marshmallowHint",
-      "part": "campfire",
-      "when": "",
-      "ms": 3004,
-      "flags": [
-        "long"
-      ],
-      "span": [
-        66.98,
-        69.99
+        75.14,
+        77.89
       ]
     },
     {
@@ -542,8 +590,8 @@
         "long"
       ],
       "span": [
-        71.61,
-        75.52
+        79.51,
+        83.43
       ]
     },
     {
@@ -562,8 +610,27 @@
         "long"
       ],
       "span": [
-        75.87,
-        78.94
+        83.78,
+        86.85
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "marshmallowHint"
+      ],
+      "text": "Give it to Maple or the raccoons.",
+      "voice": "sparkle",
+      "key": "campfire.marshmallowHint",
+      "part": "campfire",
+      "when": "",
+      "ms": 3004,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        88.47,
+        91.47
       ]
     },
     {
@@ -575,12 +642,12 @@
       "voice": "maple",
       "key": "campfire.golden",
       "part": "campfire",
-      "when": "",
+      "when": "Who gets it: Maple likes golden, Roxy and the kits love burnt, Monty eats the stick.",
       "ms": 1416,
       "flags": [],
       "span": [
-        80.56,
-        81.91
+        91.82,
+        93.17
       ]
     },
     {
@@ -596,8 +663,8 @@
       "ms": 1968,
       "flags": [],
       "span": [
-        82.26,
-        84.16
+        93.52,
+        95.42
       ]
     },
     {
@@ -613,8 +680,8 @@
       "ms": 1560,
       "flags": [],
       "span": [
-        84.51,
-        86.02
+        95.77,
+        97.28
       ]
     },
     {
@@ -630,8 +697,8 @@
       "ms": 2208,
       "flags": [],
       "span": [
-        86.37,
-        88.51
+        97.63,
+        99.77
       ]
     },
     {
@@ -647,44 +714,67 @@
       "ms": 1728,
       "flags": [],
       "span": [
-        88.86,
-        90.53
+        100.12,
+        101.78
       ]
     },
     {
       "path": [
         "campfire",
-        "stars"
+        "montyStick"
       ],
-      "text": "Now shine the light at the sky!",
-      "voice": "sparkle",
-      "key": "campfire.stars",
+      "text": "Mmm. Crunchy stick.",
+      "voice": "moose",
+      "key": "campfire.montyStick",
       "part": "campfire",
       "when": "",
-      "ms": 3316,
+      "ms": 3168,
       "flags": [
         "long"
       ],
       "span": [
-        90.88,
-        94.19
+        102.13,
+        105.24
       ]
     },
     {
       "path": [
         "campfire",
-        "starsHint"
+        "off",
+        "touch"
       ],
-      "text": "Shine the light up high!",
+      "text": "Now tap the flashlight to turn it off!",
       "voice": "sparkle",
-      "key": "campfire.starsHint",
-      "part": "campfire",
-      "when": "",
-      "ms": 2238,
-      "flags": [],
+      "key": "campfire.off.touch",
+      "part": "campfire › off",
+      "when": "The end (Sparkle): the flashlight goes off; the stars come out (Maple), then the northern lights (Sparkle).",
+      "ms": 3144,
+      "flags": [
+        "long"
+      ],
       "span": [
-        94.54,
-        96.78
+        106.86,
+        109.93
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "off",
+        "mouse"
+      ],
+      "text": "Now click the flashlight to turn it off!",
+      "voice": "sparkle",
+      "key": "campfire.off.mouse",
+      "part": "campfire › off",
+      "when": "",
+      "ms": 3120,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        110.28,
+        113.34
       ]
     },
     {
@@ -700,8 +790,27 @@
       "ms": 2376,
       "flags": [],
       "span": [
-        97.13,
-        99.46
+        114.96,
+        117.29
+      ]
+    },
+    {
+      "path": [
+        "campfire",
+        "lights"
+      ],
+      "text": "The northern lights! They dance over Canada.",
+      "voice": "sparkle",
+      "key": "campfire.lights",
+      "part": "campfire",
+      "when": "",
+      "ms": 3552,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        117.64,
+        121.14
       ]
     },
     {
@@ -713,150 +822,12 @@
       "voice": "maple",
       "key": "campfire.goodnight",
       "part": "campfire",
-      "when": "",
+      "when": "Only when no film follows (a replay).",
       "ms": 1920,
       "flags": [],
       "span": [
-        99.81,
-        101.66
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "owl"
-      ],
-      "text": "Who cooks for you? Hoo hoo!",
-      "voice": "owl",
-      "key": "campfire.owl",
-      "part": "campfire",
-      "when": "The friends, when she pokes them.",
-      "ms": 2445,
-      "flags": [],
-      "span": [
-        102.01,
-        104.46
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "raccoonHi"
-      ],
-      "text": "Hee hee! You found me!",
-      "voice": "raccoon",
-      "key": "campfire.raccoonHi",
-      "part": "campfire",
-      "when": "",
-      "ms": 2424,
-      "flags": [],
-      "span": [
-        104.81,
-        107.16
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "porcupine"
-      ],
-      "text": "Ouch! Prickly!",
-      "voice": "maple",
-      "key": "campfire.porcupine",
-      "part": "campfire",
-      "when": "",
-      "ms": 1848,
-      "flags": [],
-      "span": [
-        107.51,
-        109.29
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "mooseBright"
-      ],
-      "text": "Whoa! Too bright!",
-      "voice": "moose",
-      "key": "campfire.mooseBright",
-      "part": "campfire",
-      "when": "",
-      "ms": 2088,
-      "flags": [],
-      "span": [
-        109.64,
-        111.68
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "mooseShades"
-      ],
-      "text": "Ahh. Sunglasses. Much better.",
-      "voice": "moose",
-      "key": "campfire.mooseShades",
-      "part": "campfire",
-      "when": "",
-      "ms": 3864,
-      "flags": [
-        "long"
-      ],
-      "span": [
-        112.03,
-        115.83
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "mooseHi"
-      ],
-      "text": "Mmm. Hello there.",
-      "voice": "moose",
-      "key": "campfire.mooseHi",
-      "part": "campfire",
-      "when": "",
-      "ms": 1872,
-      "flags": [],
-      "span": [
-        116.18,
-        117.99
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "mapleHi"
-      ],
-      "text": "Hee hee! That tickles!",
-      "voice": "maple",
-      "key": "campfire.mapleHi",
-      "part": "campfire",
-      "when": "",
-      "ms": 2184,
-      "flags": [],
-      "span": [
-        118.34,
-        120.45
-      ]
-    },
-    {
-      "path": [
-        "campfire",
-        "tent"
-      ],
-      "text": "Shh! Someone is sleeping.",
-      "voice": "maple",
-      "key": "campfire.tent",
-      "part": "campfire",
-      "when": "",
-      "ms": 2496,
-      "flags": [],
-      "span": [
-        120.8,
-        123.23
+        121.49,
+        123.34
       ]
     },
     {
@@ -873,8 +844,8 @@
       "ms": 2472,
       "flags": [],
       "span": [
-        124.85,
-        127.27
+        124.96,
+        127.38
       ]
     },
     {
@@ -893,8 +864,8 @@
         "long"
       ],
       "span": [
-        127.62,
-        130.64
+        127.73,
+        130.75
       ]
     },
     {
@@ -913,8 +884,8 @@
         "long"
       ],
       "span": [
-        130.99,
-        134.65
+        131.1,
+        134.76
       ]
     },
     {
@@ -931,8 +902,8 @@
       "ms": 2184,
       "flags": [],
       "span": [
-        135,
-        137.13
+        135.11,
+        137.24
       ]
     }
   ]

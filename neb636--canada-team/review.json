@@ -29,12 +29,8 @@
       ]
     },
     {
-      "name": "canada-friends",
-      "moments": [
-        "#/world/canada/story/bike-out~16",
-        "#/world/canada/story/snowman-out~15",
-        "#/world/canada/story/salmon-out~16"
-      ]
+      "name": "canada-bath",
+      "moments": []
     },
     {
       "name": "canada-game",
@@ -564,68 +560,88 @@
       ]
     },
     {
-      "title": "Salmon Leap",
-      "audio": "sfx/salmon.mp3",
+      "title": "Misty's Bubble Bath",
+      "audio": "sfx/bath.mp3",
       "items": [
         {
-          "text": "The rainforest river (bed)",
+          "text": "Sponge scrubbing suds (loop)",
           "at": 0,
-          "end": 6
+          "end": 3
         },
         {
-          "text": "A salmon leaps",
-          "at": 6.7,
-          "end": 7.3
+          "text": "A sponge squeak",
+          "at": 3.7,
+          "end": 4.18
         },
         {
-          "text": "A small splash",
-          "at": 8,
-          "end": 8.6
+          "text": "Bubbles popping",
+          "at": 4.88,
+          "end": 5.48
         },
         {
-          "text": "An enormous splash",
-          "at": 9.3,
-          "end": 10.9
+          "text": "Little rain cloud (loop)",
+          "at": 6.18,
+          "end": 9.18
         },
         {
-          "text": "A big swish",
-          "at": 11.6,
-          "end": 12.2
+          "text": "Towel rubbing (loop)",
+          "at": 9.88,
+          "end": 12.88
         },
         {
-          "text": "Stick hits a pinecone",
-          "at": 12.9,
-          "end": 13.38
+          "text": "A comb through fur",
+          "at": 13.58,
+          "end": 14.06
         },
         {
-          "text": "Bonk on the rock",
-          "at": 14.08,
-          "end": 14.76
+          "text": "A berry bush squashed",
+          "at": 14.76,
+          "end": 15.36
         },
         {
-          "text": "Boop on a bear's nose",
-          "at": 15.46,
-          "end": 15.94
+          "text": "Berry juice dabbed on",
+          "at": 16.06,
+          "end": 16.54
         },
         {
-          "text": "A bear sneezes",
-          "at": 16.64,
-          "end": 17.64
+          "text": "A wet bear shakes",
+          "at": 17.24,
+          "end": 18.44
         },
         {
-          "text": "A bear grumbles",
-          "at": 18.34,
-          "end": 19.54
+          "text": "Paw print: THUMP",
+          "at": 19.14,
+          "end": 19.82
         },
         {
-          "text": "Munching berries",
-          "at": 20.24,
-          "end": 21.24
+          "text": "Back scratched on a tree",
+          "at": 20.52,
+          "end": 21.88
         },
         {
-          "text": "A raven",
-          "at": 21.94,
-          "end": 23.14
+          "text": "A banana slug stretches",
+          "at": 22.58,
+          "end": 23.26
+        },
+        {
+          "text": "The pool glows like a mirror",
+          "at": 23.96,
+          "end": 25.44
+        },
+        {
+          "text": "The sweater goes on",
+          "at": 26.14,
+          "end": 27.02
+        },
+        {
+          "text": "A decoration pops on",
+          "at": 27.72,
+          "end": 28.2
+        },
+        {
+          "text": "The soap slips out",
+          "at": 28.9,
+          "end": 29.5
         }
       ]
     },
@@ -784,7 +800,7 @@
     ],
     [
       "canada",
-      "salmon"
+      "bath"
     ],
     [
       "canada",
@@ -793,6 +809,10 @@
     [
       "canada",
       "party"
+    ],
+    [
+      "canada",
+      "cabin"
     ]
   ]
 }
