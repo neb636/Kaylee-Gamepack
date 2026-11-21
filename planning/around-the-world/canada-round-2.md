@@ -57,7 +57,7 @@ what the team needs.**
 | 🚵 | Monty | He's in his bath, way down the mountain | rides down to him | he stands very well | (as today) |
 | ⛺ | **Roxy** | Somebody keeps taking Maple's marshmallows | **flashlight statues** | the quickest paws in Canada: she *sees* how quick | a goose Roxy robs freezes like a statue |
 | 🛶 | Lulu | She lives across the lake | paddles over | the song | (as today) |
-| 🛁 | **Misty** | She swung at a fish, missed and landed in the mud: a white bear nobody can see | **bubble bath and a new look** | she bats the soap over the cedars: the biggest swing | **her fur color, her hairdo, her crown** |
+| 🛁 | **Misty** | She swung at a fish, missed and landed in the mud: a white bear nobody can see | **bubble bath and a new look** | she bats the soap over the cedars: the biggest swing | **her fur color, her hairdo, her crown, and her team sweater with her own berry paw print on it** |
 | 🐋 | **Ollie** | A whale's spout blew her lucky rock away | **peek-a-boo with the whales** | she juggles her rock: the fastest pass | the rock, in her paws on the ice |
 
 Three more threads tie it together:
@@ -70,8 +70,15 @@ Three more threads tie it together:
   he brags a little less each time ("One friend? Honk! Easy!" ... "A whole team? Honk... gulp."). It comes after
   Sparkle's count without holding her hands, works in any order (it goes by how many, not who), and makes the big
   game something that has been coming all along.
-- **What she makes stays.** Misty plays the big game in the look she was given. With the cabin (part 4), so does
-  everybody.
+- **The new friend shows their move.** When she lands back on the map with a new friend, the friend pops in at the
+  rink as today, then does their move once beside the ice, about 2 s, with no words: Tuque bounces a puck off his
+  tummy, Monty stands like a statue while two geese wobble past him, Roxy whisks a puck from a goose, Lulu sings a
+  few notes that drift up over the canal, Misty winds up and sends a pinecone over the boards, Ollie juggles her rock
+  and spin-passes it. Then Gus's line. Tapping any friend already on the team at the rink plays their move again. The
+  team she has brought home is something she can watch, not just count, and in the big game each friend's move starts
+  with the same wind-up, so she knows who is about to do what.
+- **What she makes stays.** Misty plays the big game in the look she was given, in a team sweater with her own paw
+  print on it. With the cabin (part 4), so does everybody.
 
 ## 1. Misty's Bubble Bath 🛁 (replaces Salmon Leap; 3D; the rainforest river)
 
@@ -92,7 +99,11 @@ and Misty goes to the big game looking like that.
      purple): squash one and rub, and the fur takes the color, as much or as little as she likes. Then ferns,
      flowers and bows from the mossy log go on wherever she drops them (the side verb).
 - **The end:** after enough strokes in part 3 the still pool glows like a mirror. She taps it: Misty sees herself,
-  the camera goes close, and she pulls the big face. Then the closing film, in her look.
+  the camera goes close, and she pulls the big face. Then Maple holds up a white team sweater with the red maple
+  leaf on it. One tap on the sweater and Misty presses her paw onto it, THUMP, leaving a print in whatever berry
+  colors are on that paw (a paw she didn't paint leaves a plain white one). Misty pulls the sweater on, and the
+  closing film plays in her look. (This idea came from the sweater shop pitch in PR #501. The sweater is one press,
+  not a fourth stage: the decorations are already the bath's one side verb.)
 - **Her choices:** which color where, how much fluff, which hairdo, what goes on her head. None is wrong.
 - **Silly:** tap Misty's nose and she sneezes suds over everything. Tickle her tummy and she kicks the water. Rub
   suds on Maple and Maple has a foam beard. Drop the soap near Misty and she bats it clean over the cedars (Maple:
@@ -105,10 +116,12 @@ and Misty goes to the big game looking like that.
   soap.
 - **Learns by doing:** a spirit bear is a black bear with white fur (she uncovers it); it rains a lot in a rainforest
   (the rain is her rinse); bears eat berries and salmon (the berries are her paint, the salmon are in the falls).
-- **Stays:** the look is saved. Misty wears it in her closing film, on the map, at the rink and in the big game.
+- **Stays:** the look and the sweater print are saved. Misty wears them in her closing film, on the map, at the
+  rink and in the big game.
   Next visit she is muddy again and gets a new one.
 - **Numbers:** about 2.5-3 min, 40-60 strokes and taps, 1 spoken line before her hands are busy.
-- **Sections:** `story`, `wash`, `fluff`, `colors`, `mirror`. The look rides in the link (`?look=`), with a default.
+- **Sections:** `story`, `wash`, `fluff`, `colors`, `mirror` (the mirror, then the sweater). The look rides in the
+  link (`?look=`), with a default.
 
 ## 2. Campfire Night, in 3D: Flashlight Statues ⛺
 
@@ -223,6 +236,8 @@ under about 3 seconds.
 | Her first go with each color | 🆕 **Misty:** Ooh, pink! · Blue, like a blueberry! · Purple! Fancy! |
 | The pool glows | 🆕 Tap the pool to show her! / Click the pool to show her! |
 | The mirror | 🆕 **Misty:** Is that me? I look like a champion! |
+| The sweater comes out (Sparkle) | 🆕 A team sweater! Tap it! / A team sweater! Click it! |
+| The paw print | 🆕 **Misty:** My paw! On a team sweater! |
 | Nose tapped | ♻️ **Misty:** Ah... choo! |
 | Tummy tickled | 🆕 **Misty:** Hee hee! That tickles! |
 | Suds on Maple | 🆕 **Maple:** I have a beard! |
@@ -309,6 +324,8 @@ Ollie juggles the rock while she talks and tucks it under her arm on "I love to 
 
 ### 🪿 Gus, at the rink (the map, as she lands back with a new friend, after Sparkle's count ♻️)
 
+Gus says it after the new friend's move (no line of their own: the move is a sound and a pose).
+
 | Friends on the team | Line |
 |---|---|
 | 1 | 🆕 **Gus:** One friend? Honk! Easy! |
@@ -327,7 +344,7 @@ Ollie juggles the rock while she talks and tucks it under her arm on "I love to 
 | Gus at the window | 🆕 **Gus:** Honk! ...I look good. |
 | The photo | 🆕 **Maple:** Team photo! Say maple syrup! |
 
-**New lines in all:** 53 short ones (bath 21, campfire 13, whales 13, Gus 6), plus 9 for the cabin. A similar number
+**New lines in all:** 55 short ones (bath 23, campfire 13, whales 13, Gus 6), plus 9 for the cabin. A similar number
 of recorded lines retire with the salmon game, the campfire's sounds and trail rounds, and the old whale trip.
 
 ---
@@ -360,6 +377,7 @@ first; this plan changes only what it names.
 | **Looks that stay** | A small store, no three.js: `useSaved('canada-looks')` → `{ misty?: MistyLook, team?: Record<friend, Worn> }`, read by the film cast (`story/cast.ts`), the map (`map/`), the rink set and the big game (`activities/party/`). Sticky `?look=` for links, with defaults. | `canada/looks.ts` |
 | **Ids** | `salmon` → `bath` in `CHAPTERS`, `CHAPTER_FILMS`, `TEAM`, `FILM_IDS` (`bath-in`, `bath-out`), `meta.ts` (name "Misty's Bubble Bath", icon 🛁, the spirit bear sticker stays), `Place.tsx`. `campfire` and `whales` keep their ids. `stamps.ts` already drops a retired id's stamp, so no migration: she earns `bath` by playing it. A finished Canada becomes unfinished until she does; the trophy stays hers. | `story/`, `meta.ts`, `Place.tsx` |
 | **Gus's lines** | A `gus` list of six in the map's block of `lines.ts`, said by the map when she lands back with a new friend, straight after Sparkle's count (`count`, already recorded); the map is tappable throughout. Gus at the rink turns to the newcomer and pulls a face. While in `Hub.tsx`: an arrival link (`?team=…&new=…`) rewrites its URL without `new` but keeps the old `team`, so a reload loses the friend who just arrived (QA links only; with real stamps the team comes from the stamps). Write the effective team back instead. | `lines.ts`, `activities/hub/`, `map/world.ts` |
+| **The friends' moves** | One `move(id)` per friend on the map's mates, about 2 s each, built from the rig's existing poses and a prop or two (a puck, Ollie's rock, a pinecone, music notes), with a sound from `sfx`. `world.ts` plays it once the newcomer's pop-in ends (`arriveEnd`), and Gus's line waits for it to finish. A tap on a friend already on the team (the `team(id)` callback) plays it again, with a short cooldown so a fast double tap doesn't restart it. The same wind-up is what the big game uses for that friend's play. Robot: an arrival link for each friend films the move; tap each teammate. | `map/world.ts`, `map/moves.ts` |
 
 Nothing in Canada imports from `places/thailand/`. No check enforces it; it's the convention in every Canada and
 Poles world header. Move what's worth sharing into `engine3d/` (the two candidates: `crossEyes`, and the barber's
@@ -386,7 +404,11 @@ strand hair, next section).
 - **Decorations** drop onto the nearest of the rig's `spots` (crown, hat, nose, ears) or stick where they land.
 - **Feel knobs** (`knobs('bath')`, `?feel=1`): suds per stroke, mud per stroke, puff per stroke, how far a tap's
   short go reaches, how long before the pool glows.
-- **The look:** `MistyLook = { fur: zone colors, puff, hair: style + color, worn: ids }`, saved through
+- **The sweater:** the team sweater is a prop from `story/props.ts` with the maple leaf, held by Maple. The print is
+  a decal of the paw-pad shape tinted with the paw zone's colors (two or three colors if she painted it in stripes),
+  put at a fixed spot on the chest so it reads at map size. Saved in `MistyLook.print`; the tap target is the whole
+  sweater (well over 88 px).
+- **The look:** `MistyLook = { fur: zone colors, puff, hair: style + color, worn: ids, print: paw colors }`, saved through
   `canada/looks.ts`, applied by one `dressMisty(rig, look)` used by the game, the film cast, the map and the rink.
 - **Pacing:** Sparkle speaks when a tool arrives and after 8 s stuck; Misty and Maple react at most every 12 s
   (the barber's `SILLY_GAP`), never after every stroke.
@@ -450,9 +472,10 @@ strand hair, next section).
 
 ## The big game picks things up
 
-`activities/party/`: Misty skates in her look; with the cabin, everybody does. Two small callbacks, each a few lines
-of code: a goose Roxy robs freezes in one of her statue poses for a second, and Ollie juggles the puck once before
-her pass.
+`activities/party/`: Misty skates in her look and her paw-print sweater; with the cabin, everybody does. Each
+friend's play starts with the same wind-up as their move on the map. Two small callbacks, each a few lines of code:
+a goose Roxy robs freezes in one of her statue poses for a second, and Ollie juggles the puck once before her
+pass.
 
 ## Every toy, before it's called done
 
