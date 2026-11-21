@@ -47,7 +47,7 @@ export const screens = [
   { name: 'canada-party-hockey-rush', hash: '#/world/canada/party/hockey?stamps=all&team=all&score=1', reset: true, wait: 2200 },
   { name: 'canada-party-hockey-geese', hash: '#/world/canada/party/hockey?stamps=all&team=all&score=1', reset: true, wait: 8000 },
   { name: 'canada-party-hockey-wall', hash: '#/world/canada/party/hockey?stamps=all&team=all&score=2', reset: true, wait: 9000 },
-  { name: 'canada-party-hockey-few', hash: '#/world/canada/party/hockey?stamps=all&team=snowman,canoe,salmon,whales&score=1', reset: true, wait: 6000 },
+  { name: 'canada-party-hockey-few', hash: '#/world/canada/party/hockey?stamps=all&team=snowman,canoe,bath,whales&score=1', reset: true, wait: 6000 },
   { name: 'canada-party-hockey-alone', hash: '#/world/canada/party/hockey?stamps=all&team=none&score=2', reset: true, wait: 6000 },
   { name: 'canada-party-win', hash: '#/world/canada/party/win?stamps=all&team=all', reset: true, wait: 6000 },
   ...['game-in', 'game-win'].map((id) => ({ name: `canada-film-${id}`, hash: `#/world/canada/story/${id}`, reset: true, wait: 8000 })),

@@ -4,15 +4,11 @@
 // carries a soft green cloud behind her and throws little sparkles when she twinkles, so she reads against Ao Prao's
 // pale sand in daylight (the firefly's own halo is made of light, which bright sand swallows). Her halo is drawn
 // behind her here, never over her face: in this stop's close shots it would wash out her eyes and cheeks, and Dad's
-// face when she sits on his nose. Also here: Dad's cross-eyed face for that moment.
-import { AdditiveBlending, BackSide, Box3, Color, Group, Mesh, MeshBasicMaterial, SphereGeometry, Vector3, type Camera, type Material, type Object3D } from 'three'
-import type { Rig } from '../../../../../engine3d/characters/animal'
+// face when she sits on his nose. (Dad's cross-eyed face for that moment is the shared silly-face kit's: engine3d/characters/face.ts crossEyes.)
+import { AdditiveBlending, BackSide, Color, Mesh, MeshBasicMaterial, SphereGeometry, Vector3, type Camera, type Material, type Object3D } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
-import { P, solidMix } from '../../../../../engine3d/geo'
 import { Particles } from '../../../../../engine3d/particles'
 import { FIREFLIES, Firefly } from '../story/firefly'
-
-const INK = '#2B2330'
 
 export class Peekaboo {
   readonly fly: Firefly
@@ -105,34 +101,3 @@ export class Peekaboo {
   }
 }
 const tmp = new Vector3()
-
-/** Dad's eyes crossed, both looking at the tip of his nose: two white eyes with their pupils pulled in and down, shown
- *  in place of his own while `on(true)`. Built from where his own eyes are, so it fits any look. */
-export function crossEyes(rig: Rig, bag: Bag) {
-  const box = new Box3()
-  rig.eyes.traverse((o) => {
-    const geo = (o as Mesh).geometry
-    if (!geo) return
-    geo.computeBoundingBox()
-    if (geo.boundingBox) box.union(geo.boundingBox)
-  })
-  const size = (box.max.y - box.min.y) / 2
-  const x = Math.max(size * 0.9, box.max.x - size * 0.78)
-  const z = box.max.z
-  const whites = [-1, 1].map((s) => P.sphere(size * 1.12, '#FFFFFF', { at: [s * x, 0, z - size * 0.42], scale: [0.86, 1, 0.42] }))
-  const pupils = [-1, 1].map((s) => P.sphere(size * 0.46, INK, { at: [s * (x - size * 0.44), -size * 0.3, z + size * 0.02], scale: [1, 1, 0.35] }, 12))
-  const shines = [-1, 1].map((s) => P.sphere(size * 0.14, '#FFFFFF', { at: [s * (x - size * 0.5), -size * 0.18, z + size * 0.16] }, 8))
-  const g: Group = solidMix(whites, [...pupils, ...shines], bag, 2)
-  g.position.copy(rig.eyes.position)
-  g.visible = false
-  rig.eyes.parent?.add(g)
-  return {
-    on(v: boolean) {
-      g.visible = v
-      rig.eyes.visible = !v
-    },
-    get crossed() {
-      return g.visible
-    },
-  }
-}

@@ -2,12 +2,12 @@
 // (one file a chapter), the big game's two.
 import type { FilmId } from '../../activities/story/sections'
 import type { StoryFilm } from '../stage'
+import { BATH_IN, BATH_OUT } from './bath'
 import { BIKE_IN, BIKE_OUT } from './bike'
 import { CAMPFIRE_IN, CAMPFIRE_OUT } from './campfire'
 import { CANOE_IN, CANOE_OUT } from './canoe'
 import { GAME_IN, GAME_WIN } from './game'
 import { INTRO } from './intro'
-import { SALMON_IN, SALMON_OUT } from './salmon'
 import { SNOWMAN_IN, SNOWMAN_OUT } from './snowman'
 import { WHALES_IN, WHALES_OUT } from './whales'
 
@@ -21,8 +21,8 @@ export const FILMS: Record<FilmId, StoryFilm> = {
   'campfire-out': CAMPFIRE_OUT,
   'canoe-in': CANOE_IN,
   'canoe-out': CANOE_OUT,
-  'salmon-in': SALMON_IN,
-  'salmon-out': SALMON_OUT,
+  'bath-in': BATH_IN,
+  'bath-out': BATH_OUT,
   'whales-in': WHALES_IN,
   'whales-out': WHALES_OUT,
   'game-in': GAME_IN,

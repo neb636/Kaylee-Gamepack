@@ -14,10 +14,19 @@ import { Goose } from '../../characters/goose'
 import { Lulu } from '../../characters/lulu'
 import type { Performer } from '../../characters/toy'
 import { Tuque } from '../../characters/tuque'
+import { dressToy } from '../../characters/dress'
+import { wornBy, type TeamId } from '../../looks'
+import type { ToyActor } from '../../characters/toy'
 import { Friend } from '../../story/cast'
 import { makeStick } from '../../story/props'
 
 export type Who = 'maple' | 'monty' | 'tuque' | 'roxy' | 'ollie' | 'misty' | 'lulu' | 'kit' | 'gus' | 'goose'
+
+/** A hand-built toy in what she chose for it in the Team Cabin (characters/dress.ts). */
+const dressed = <T extends ToyActor>(a: T, who: TeamId, bag: Bag): T => {
+  dressToy(a, who, wornBy(who), bag)
+  return a
+}
 
 const SPIN_S = 0.8
 const FLOP_S = 1.3
@@ -190,13 +199,13 @@ export function makePlayer(bag: Bag, scene: Object3D, who: Who, i = 0): Player {
       p = new Friend('kit', bag, { height: 0.5 + i * 0.04, voice: null }).scarf(true)
       break
     case 'tuque':
-      p = new Tuque(bag, { height: 1.45 }).scarf(true)
+      p = dressed(new Tuque(bag, { height: 1.45 }).scarf(true), 'tuque', bag)
       break
     case 'lulu':
-      p = new Lulu(bag, { height: 0.95 }).scarf(true)
+      p = dressed(new Lulu(bag, { height: 0.95 }).scarf(true), 'lulu', bag)
       break
     case 'gus':
-      p = new Goose(bag, { height: 1.2, voice: 'gus', captain: true, stick: true })
+      p = dressed(new Goose(bag, { height: 1.2, voice: 'gus', captain: true, stick: true }), 'gus', bag)
       break
     default:
       p = new Goose(bag, { height: 1.05 + (i % 3) * 0.04, stick: true })

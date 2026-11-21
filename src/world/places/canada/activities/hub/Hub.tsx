@@ -29,7 +29,7 @@ import HUB_SECTIONS from './sections'
 const MEETS: Partial<Record<PokeId, AnimalId>> = { geese: 'canada-goose', owl: 'snowy-owl', orca: 'orca', bison: 'bison', beluga: 'beluga' }
 
 /** The places, east to west, as the page lists their targets. */
-const PLACE_IDS: PlaceId[] = ['bike', 'snowman', 'party', 'campfire', 'canoe', 'salmon', 'whales']
+const PLACE_IDS: PlaceId[] = ['bike', 'snowman', 'party', 'campfire', 'canoe', 'bath', 'whales']
 
 // Once a visit to the app: Sparkle's first line, each count, the team's cheer, each fact; and the stamps she had when
 // she last looked at the map (a new one means a new friend arriving).

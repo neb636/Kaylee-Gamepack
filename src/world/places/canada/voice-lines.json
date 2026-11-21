@@ -160,6 +160,30 @@
     "voice": "gus"
   },
   {
+    "text": "One friend? Honk! Easy!",
+    "voice": "gus"
+  },
+  {
+    "text": "Two? Ha! We are six geese!",
+    "voice": "gus"
+  },
+  {
+    "text": "Three... honk. Still easy.",
+    "voice": "gus"
+  },
+  {
+    "text": "Four? Geese! More practice!",
+    "voice": "gus"
+  },
+  {
+    "text": "Five?! Uh oh.",
+    "voice": "gus"
+  },
+  {
+    "text": "A whole team? Honk... gulp.",
+    "voice": "gus"
+  },
+  {
     "text": "Bonjour! I am ready!",
     "voice": "snowman"
   },
@@ -546,6 +570,44 @@
     "text": "Shh! Someone is sleeping.",
     "voice": "maple"
   },
+  "Somebody is giggling! Catch them in the light!",
+  "Shine the light on the wiggly tail!",
+  {
+    "text": "Three little raccoons! Where is your mama?",
+    "voice": "maple"
+  },
+  "Roxy is sneaking! Shine the light and she stops!",
+  {
+    "text": "I'm a tree.",
+    "voice": "raccoon"
+  },
+  {
+    "text": "I'm a rock.",
+    "voice": "raccoon"
+  },
+  {
+    "text": "Nobody here!",
+    "voice": "raccoon"
+  },
+  {
+    "text": "Just stretching!",
+    "voice": "raccoon"
+  },
+  {
+    "text": "Yoink!",
+    "voice": "raccoon"
+  },
+  {
+    "text": "Mmm. Crunchy stick.",
+    "voice": "moose"
+  },
+  {
+    "text": "It's already bright!",
+    "voice": "maple"
+  },
+  "Now tap the flashlight to turn it off!",
+  "Now click the flashlight to turn it off!",
+  "The northern lights! They dance over Canada.",
   {
     "text": "Hee hee! Got your puck!",
     "voice": "raccoon"
@@ -771,6 +833,47 @@
     "voice": "maple"
   },
   {
+    "text": "Look! My lucky rock!",
+    "voice": "otter"
+  },
+  {
+    "text": "My rock! The whale took it!",
+    "voice": "otter"
+  },
+  {
+    "text": "Hop on! We'll get it back!",
+    "voice": "maple"
+  },
+  "Bubbles! Tap them!",
+  "Bubbles! Click them!",
+  "Look for the bubbles!",
+  "Tap the whale and see what it does!",
+  "Click the whale and see what it does!",
+  {
+    "text": "Have you seen my rock?",
+    "voice": "otter"
+  },
+  {
+    "text": "That's a sea star, silly!",
+    "voice": "otter"
+  },
+  "Hold the whale down, then let go!",
+  "Click and hold the whale, then let go!",
+  {
+    "text": "We're riding a whale!",
+    "voice": "maple"
+  },
+  {
+    "text": "My rock! The baby has it!",
+    "voice": "otter"
+  },
+  "Peek-a-boo! Tap the baby orca!",
+  "Peek-a-boo! Click the baby orca!",
+  {
+    "text": "Got it! Thank you, whales!",
+    "voice": "otter"
+  },
+  {
     "text": "Ollie! Come and play hockey with us!",
     "voice": "maple"
   },
@@ -795,37 +898,92 @@
     "voice": "maple"
   },
   {
-    "text": "Shh. I'm fishing. No hockey till supper.",
+    "text": "Missed again!",
     "voice": "bear"
   },
   {
-    "text": "Psst! Let's help the salmon jump past her!",
+    "text": "A white bear? You're all brown!",
     "voice": "maple"
   },
   {
-    "text": "Help the salmon jump home!",
+    "text": "It's only mud. Oh dear. I need a bath.",
+    "voice": "bear"
+  },
+  {
+    "text": "Bath time!",
     "voice": "maple"
   },
-  "Grab a salmon, and flick it up!",
-  "Grab a salmon, and drag it up fast!",
-  "The big falls! Try the rock, or the log.",
-  "The bears are fishing! Flick the salmon past them.",
-  "The bears are fishing! Drag the salmon up past them.",
-  "Home! Tap each salmon to lay its eggs.",
-  "Home! Click each salmon to lay its eggs.",
-  "Spring! Tap the eggs.",
-  "Spring! Click the eggs.",
-  "Bonk! Try a bigger flick.",
-  "Bonk! Try a bigger, faster drag.",
-  "Rain! It's a rainforest.",
+  "Rub the bear to make bubbles!",
+  "Click and wiggle on the bear to make bubbles!",
+  "Rub the muddy spots!",
+  "Click and wiggle on the muddy spots!",
+  "Now the rain! Rub the bubbles away.",
+  "Now the rain! Click and wiggle the bubbles away.",
+  {
+    "text": "I'm white again!",
+    "voice": "bear"
+  },
+  "Now the towel! Rub her fluffy.",
+  "Now the towel! Click and wiggle her fluffy.",
+  {
+    "text": "I'm a cloud!",
+    "voice": "bear"
+  },
+  "Berries! Rub on a color.",
+  "Berries! Click and wiggle on a color.",
+  {
+    "text": "Ooh, pink!",
+    "voice": "bear"
+  },
+  {
+    "text": "Blue, like a blueberry!",
+    "voice": "bear"
+  },
+  {
+    "text": "Purple! Fancy!",
+    "voice": "bear"
+  },
+  "Tap the pool to show her!",
+  "Click the pool to show her!",
+  {
+    "text": "Is that me? I look like a champion!",
+    "voice": "bear"
+  },
+  "A team sweater! Tap it!",
+  "A team sweater! Click it!",
+  {
+    "text": "My paw! On a team sweater!",
+    "voice": "bear"
+  },
+  {
+    "text": "Ah... choo!",
+    "voice": "bear"
+  },
+  {
+    "text": "Hee hee! That tickles!",
+    "voice": "bear"
+  },
+  {
+    "text": "I have a beard!",
+    "voice": "maple"
+  },
+  {
+    "text": "What a shot!",
+    "voice": "maple"
+  },
+  {
+    "text": "Brrr! You got me!",
+    "voice": "maple"
+  },
+  {
+    "text": "Ahh. Scratchy tree.",
+    "voice": "bear"
+  },
+  "Salmon jump up the river to go home.",
   "This cedar tree is taller than a house!",
-  "Fall... winter... and spring!",
+  "Rain! It's a rainforest.",
   {
     "text": "Bravo!",
-    "voice": "maple"
-  },
-  {
-    "text": "Home!",
     "voice": "maple"
   },
   {
@@ -835,62 +993,6 @@
   {
     "text": "Allez, allez!",
     "voice": "maple"
-  },
-  {
-    "text": "Ooh! A salmon in my lap!",
-    "voice": "maple"
-  },
-  {
-    "text": "Hee hee! Too high!",
-    "voice": "maple"
-  },
-  {
-    "text": "Allez, salmon!",
-    "voice": "maple"
-  },
-  {
-    "text": "Jump, jump!",
-    "voice": "maple"
-  },
-  {
-    "text": "The bears went to eat berries!",
-    "voice": "maple"
-  },
-  {
-    "text": "Bye, little salmon! Swim to the sea!",
-    "voice": "maple"
-  },
-  {
-    "text": "You brought the salmon home!",
-    "voice": "maple"
-  },
-  {
-    "text": "Ah... choo!",
-    "voice": "bear"
-  },
-  {
-    "text": "I'm a spirit bear. I'm hungry!",
-    "voice": "bear"
-  },
-  {
-    "text": "Shh, I'm fishing.",
-    "voice": "bear"
-  },
-  {
-    "text": "Missed again!",
-    "voice": "bear"
-  },
-  {
-    "text": "Okay, berries instead!",
-    "voice": "bear"
-  },
-  {
-    "text": "Too slippery! Berries, then.",
-    "voice": "bear"
-  },
-  {
-    "text": "Mmm. Berries are easier than fish.",
-    "voice": "bear"
   },
   {
     "text": "Misty! Try this hockey stick!",
@@ -903,6 +1005,40 @@
   {
     "text": "I like this game. I will come!",
     "voice": "bear"
+  },
+  "Dress the team! Drag something on.",
+  "Dress the team! Click something to put it on.",
+  {
+    "text": "Mmm. Fancy.",
+    "voice": "moose"
+  },
+  {
+    "text": "Ho ho! Two hats!",
+    "voice": "snowman"
+  },
+  {
+    "text": "Ooh, sneaky!",
+    "voice": "raccoon"
+  },
+  {
+    "text": "So soft.",
+    "voice": "bear"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "otter"
+  },
+  {
+    "text": "Magnifique!",
+    "voice": "maple"
+  },
+  {
+    "text": "Honk! ...I look good.",
+    "voice": "gus"
+  },
+  {
+    "text": "Team photo! Say maple syrup!",
+    "voice": "maple"
   },
   "Flick the puck into the geese's net!",
   "Drag the puck fast into the geese's net!",

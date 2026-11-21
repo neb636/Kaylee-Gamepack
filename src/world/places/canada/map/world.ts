@@ -27,8 +27,10 @@ import { makeLights } from '../../../engine3d/toon'
 import type { World3D } from '../../../engine3d/View3D'
 import { Goose } from '../characters/goose'
 import { Lulu } from '../characters/lulu'
-import type { Performer } from '../characters/toy'
+import { dressToy } from '../characters/dress'
+import type { Performer, ToyActor } from '../characters/toy'
 import { Tuque } from '../characters/tuque'
+import { wornBy, type TeamId } from '../looks'
 import { Friend } from '../story/cast'
 import { CHAPTERS, type ChapterId } from '../story/chapters'
 import { Balloon } from '../story/props'
@@ -62,7 +64,7 @@ export interface MapEvents {
 }
 
 /** Each friend's name (their target's label). */
-export const WHO: Record<ChapterId, string> = { snowman: 'Tuque', bike: 'Monty', campfire: 'Roxy', canoe: 'Lulu', salmon: 'Misty', whales: 'Ollie' }
+export const WHO: Record<ChapterId, string> = { snowman: 'Tuque', bike: 'Monty', campfire: 'Roxy', canoe: 'Lulu', bath: 'Misty', whales: 'Ollie' }
 
 /** The DOM targets the page lays over the animals and the team (the places' own targets are the page's). */
 export const MAP_ANCHORS: AnchorInfo[] = [
@@ -117,6 +119,11 @@ interface Poke {
 
 const tmp = new Vector3()
 const tmp2 = new Vector3()
+/** A hand-built toy in what she chose for it in the Team Cabin (characters/dress.ts). */
+const dressed = <T extends ToyActor>(a: T, who: TeamId, bag: Bag): T => {
+  dressToy(a, who, wornBy(who), bag)
+  return a
+}
 const tmp3 = new Vector3()
 const TAU = Math.PI * 2
 /** How much bigger the friends at home stand on a tall screen. */
@@ -230,14 +237,15 @@ export class CanadaMapWorld implements World3D {
 
     // The friends, at home or on the team.
     const make: Record<ChapterId, () => Mate['actor']> = {
-      snowman: () => new Tuque(this.bag, { height: 0.9 }),
+      snowman: () => dressed(new Tuque(this.bag, { height: 0.9 }), 'tuque', this.bag),
       bike: () => new Friend('moose', this.bag, { height: 1.15, voice: 'moose' }),
       campfire: () => new Friend('raccoon', this.bag, { height: 0.72, voice: 'raccoon' }),
-      canoe: () => new Lulu(this.bag, { height: 0.85 }),
-      salmon: () => new Friend('spirit', this.bag, { height: 1.05, voice: 'bear' }),
+      canoe: () => dressed(new Lulu(this.bag, { height: 0.85 }), 'lulu', this.bag),
+      // (At home she is the plain white bear; on the team she wears the look from her bath.)
+      bath: () => new Friend('spirit', this.bag, { height: 1.05, voice: 'bear', plain: !team.includes('bath') }),
       whales: () => new Friend('otter', this.bag, { height: 0.75, voice: 'otter' }),
     }
-    const size: Record<ChapterId, number> = { snowman: 0.9, bike: 1.15, campfire: 0.72, canoe: 0.85, salmon: 1.05, whales: 0.75 }
+    const size: Record<ChapterId, number> = { snowman: 0.9, bike: 1.15, campfire: 0.72, canoe: 0.85, bath: 1.05, whales: 0.75 }
     for (const id of CHAPTERS) {
       const onTeam = team.includes(id)
       // Tuque only exists once she has built him.
@@ -333,7 +341,7 @@ export class CanadaMapWorld implements World3D {
 
   private buildPokes() {
     // Gus and two of his geese skate rings on the rink's ice.
-    this.geese = [new Goose(this.bag, { height: 0.58, voice: 'gus', captain: true, stick: true }), new Goose(this.bag, { height: 0.48 }), new Goose(this.bag, { height: 0.48 })]
+    this.geese = [dressed(new Goose(this.bag, { height: 0.58, voice: 'gus', captain: true, stick: true }), 'gus', this.bag), new Goose(this.bag, { height: 0.48 }), new Goose(this.bag, { height: 0.48 })]
     for (const g of this.geese) {
       this.rink.place.root.add(g.root)
       g.place(0, 0.1, 0, 0)
@@ -664,7 +672,7 @@ export class CanadaMapWorld implements World3D {
         m.tilt.rotation.z = Math.sin(t * 0.9) * 0.15
         break
       }
-      case 'salmon': {
+      case 'bath': {
         m.actor.headTurn = Math.sin(t * 0.7) * 0.4
         break
       }
@@ -924,7 +932,7 @@ export class CanadaMapWorld implements World3D {
     if (id === 'campfire') hubSfx.crackle()
     if (id === 'canoe') hubSfx.loon()
     if (id === 'whales') hubSfx.spout()
-    if (id === 'salmon') hubSfx.splash()
+    if (id === 'bath') hubSfx.splash()
     if (id === 'party' && !this.glowing) {
       this.nudgeT = 0
       return this.events.locked()

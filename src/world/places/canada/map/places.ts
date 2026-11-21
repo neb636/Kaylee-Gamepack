@@ -391,7 +391,7 @@ export interface Forest {
 }
 
 export function buildForest(bag: Bag): Forest {
-  const place = base('salmon', bag, { hw: 0.75, hd: 0.6, h: 1.4 }, new Vector3(-0.35, 0.03, 0.4))
+  const place = base('bath', bag, { hw: 0.75, hd: 0.6, h: 1.4 }, new Vector3(-0.35, 0.03, 0.4))
   const cedar = (x: number, z: number, s: number) => [
     P.cyl(0.06 * s, 0.1 * s, 1.0 * s, '#B5654A', { at: [x, 0.5 * s, z] }, 8),
     P.cone(0.32 * s, 0.5 * s, '#2F7F58', { at: [x, 0.78 * s, z] }, 8),

@@ -176,6 +176,9 @@ export const L = {
     maple: [maple('Bonjour!'), maple("Let's find my team!"), maple('Go, team, go!')],
     // Tap the geese skating circles on the canal.
     gus: [gus('Honk! Nobody beats the geese!'), gus('Honk honk! See you on the ice!')],
+    // Gus, at the rink, as she lands back with a new friend (after Sparkle's count and the friend's move): by how
+    // many are on the team now, 1..6. He brags a little less each time.
+    gusCount: [gus('One friend? Honk! Easy!'), gus('Two? Ha! We are six geese!'), gus('Three... honk. Still easy.'), gus('Four? Geese! More practice!'), gus('Five?! Uh oh.'), gus('A whole team? Honk... gulp.')],
     // Tap a friend who is already on the team (they stand at the rink in their scarves).
     team: {
       snowman: tuque('Bonjour! I am ready!'),
@@ -183,7 +186,7 @@ export const L = {
       campfire: roxy('Quick paws, ready!'),
       canoe: lulu('I am warming up my song.'),
       whales: ollie('Wheee! Hockey!'),
-      salmon: misty('I brought my big swing.'),
+      bath: misty('I brought my big swing.'),
     },
     // Sparkle, the first time she pokes these on the map (once a visit). The animals' names come from Maple's book.
     pokes: {
@@ -338,6 +341,25 @@ export const L = {
     mooseHi: by('moose')('Mmm. Hello there.'),
     mapleHi: maple('Hee hee! That tickles!'),
     tent: maple('Shh! Someone is sleeping.'),
+    // ---- Round two (Flashlight Statues, planning/around-the-world/canada-round-2.md). The new lines:
+    // Giggling starts in the dark (Sparkle); a kit's tail sticks out after ~8 s.
+    giggle: 'Somebody is giggling! Catch them in the light!',
+    kitHint: 'Shine the light on the wiggly tail!',
+    // Three kits at the fire.
+    kits: maple('Three little raccoons! Where is your mama?'),
+    // Roxy sneaks toward the marshmallow bag whenever the light is off her.
+    sneak: 'Roxy is sneaking! Shine the light and she stops!',
+    // Her statues (one each time she's caught in the beam).
+    statues: [roxy("I'm a tree."), roxy("I'm a rock."), roxy('Nobody here!'), roxy('Just stretching!')],
+    // She reaches the bag.
+    yoink: roxy('Yoink!'),
+    // Monty gets a marshmallow: he eats the stick.
+    montyStick: monty('Mmm. Crunchy stick.'),
+    // The light held on the fire.
+    fireBright: maple("It's already bright!"),
+    // The end: the flashlight goes off, the stars come out, then the northern lights.
+    off: onDevice('Now tap the flashlight to turn it off!', 'Now click the flashlight to turn it off!'),
+    lights: 'The northern lights! They dance over Canada.',
     // The film out: Roxy and her three kits at the fire, a marshmallow each. Maple holds up a puck: a blink, and Roxy
     // has it (the quickest paws in Canada: the picture says it).
     filmOut: {
@@ -443,6 +465,25 @@ export const L = {
     finale: maple(`They all jumped together! Merci!`),
     toot: maple('Toot toot!'),
     song: maple('The humpback is singing!'),
+    // ---- Round two (Whale Peek-a-Boo, planning/around-the-world/canada-round-2.md). The new lines:
+    // The film in, rewritten: Ollie juggles her lucky rock until a whale comes up under it.
+    rockIn: {
+      ollie: maple('Ollie the sea otter spins faster than anybody!'),
+      lucky: ollie('Look! My lucky rock!'),
+      // Higher, higher... a whale comes up under it. The spout shoots the rock into the sky and away.
+      took: ollie('My rock! The whale took it!'),
+      hop: maple("Hop on! We'll get it back!"),
+    },
+    bubbles: onDevice('Bubbles! Tap them!', 'Bubbles! Click them!'),
+    bubblesHint: 'Look for the bubbles!',
+    tapWhale: onDevice('Tap the whale and see what it does!', 'Click the whale and see what it does!'),
+    seenRock: ollie('Have you seen my rock?'),
+    seaStar: ollie("That's a sea star, silly!"),
+    hold: onDevice('Hold the whale down, then let go!', 'Click and hold the whale, then let go!'),
+    ride: maple("We're riding a whale!"),
+    babyHas: ollie('My rock! The baby has it!'),
+    peek: onDevice('Peek-a-boo! Tap the baby orca!', 'Peek-a-boo! Click the baby orca!'),
+    gotIt: ollie('Got it! Thank you, whales!'),
     // The film out: Ollie on her back in the kelp, a clam on her tummy.
     filmOut: {
       ask: maple('Ollie! Come and play hockey with us!'),
@@ -454,50 +495,79 @@ export const L = {
       team: maple("Splash! You're on the team!"),
     },
   },
-  salmon: {
-    // The film in (story/films/salmon.ts): the rainforest river, giant cedars, soft rain.
+  // Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear
+  // clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.
+  bath: {
+    // The film in (story/films/bath.ts): the rainforest river, giant cedars, soft rain.
     filmIn: {
       white: maple('In this rainforest lives a bear as white as snow.'),
-      // Misty swings a paw at a jumping salmon: an enormous splash, and no fish (a beat with no line). Then, dripping:
-      fishing: misty("Shh. I'm fishing. No hockey till supper."),
-      // Maple, behind her paw, to the camera.
-      help: maple("Psst! Let's help the salmon jump past her!"),
+      // A brown, mossy lump on the bank swings a paw at a jumping salmon: an enormous splash, no fish, and she slides
+      // down the bank into the mud. Two eyes blink.
+      miss: misty('Missed again!'),
+      brown: maple("A white bear? You're all brown!"),
+      mud: misty("It's only mud. Oh dear. I need a bath."),
+      // Maple, to the camera.
+      bathTime: maple('Bath time!'),
     },
-    // The story (Maple, at the river).
-    story: [maple('Help the salmon jump home!')],
-    // Sparkle: once when each stretch of the river begins, and again when she's stuck.
-    steps: onDevice('Grab a salmon, and flick it up!', 'Grab a salmon, and drag it up fast!'),
-    falls: 'The big falls! Try the rock, or the log.',
-    bears: onDevice('The bears are fishing! Flick the salmon past them.', 'The bears are fishing! Drag the salmon up past them.'),
-    eggs: onDevice('Home! Tap each salmon to lay its eggs.', 'Home! Click each salmon to lay its eggs.'),
-    hatch: onDevice('Spring! Tap the eggs.', 'Spring! Click the eggs.'),
-    bonk: onDevice('Bonk! Try a bigger flick.', 'Bonk! Try a bigger, faster drag.'),
-    rain: "Rain! It's a rainforest.",
-    cedar: 'This cedar tree is taller than a house!',
-    seasons: 'Fall... winter... and spring!',
-    // Maple, cheering on the bank (and catching the ones flicked too hard).
-    home: [maple('Bravo!'), maple('Home!'), maple('Youpi!'), maple('Allez, allez!')],
-    lap: [maple('Ooh! A salmon in my lap!'), maple('Hee hee! Too high!')],
-    poke: [maple('Allez, salmon!'), maple('Jump, jump!')],
-    berries: maple('The bears went to eat berries!'),
-    sea: maple('Bye, little salmon! Swim to the sea!'),
-    win: maple('You brought the salmon home!'),
-    // The bears (the same gentle bear voice for both). The white one is Misty: always thinking about supper.
-    achoo: by('bear')('Ah... choo!'),
-    spirit: misty("I'm a spirit bear. I'm hungry!"),
-    black: by('bear')("Shh, I'm fishing."),
-    // Misty swats at a salmon flying past, and misses (said once or twice a visit).
+    // The hello from a link or a replay (after the film in, the game starts at Sparkle's one instruction).
+    story: [maple('Bath time!')],
+    // Sparkle: one line as each tool arrives, and a hint when she's stuck for ~8 s.
+    rub: onDevice('Rub the bear to make bubbles!', 'Click and wiggle on the bear to make bubbles!'),
+    rubHint: onDevice('Rub the muddy spots!', 'Click and wiggle on the muddy spots!'),
+    rain: onDevice('Now the rain! Rub the bubbles away.', 'Now the rain! Click and wiggle the bubbles away.'),
+    // White shows through (once): the sticker's fact, then Misty.
+    spirit: 'The spirit bear is a black bear with white fur.',
+    whiteAgain: misty("I'm white again!"),
+    towel: onDevice('Now the towel! Rub her fluffy.', 'Now the towel! Click and wiggle her fluffy.'),
+    // Rubbed into a giant puffball.
+    cloud: misty("I'm a cloud!"),
+    berries: onDevice('Berries! Rub on a color.', 'Berries! Click and wiggle on a color.'),
+    // Her first go with each color.
+    color: { pink: misty('Ooh, pink!'), blue: misty('Blue, like a blueberry!'), purple: misty('Purple! Fancy!') },
+    // The still pool glows like a mirror.
+    pool: onDevice('Tap the pool to show her!', 'Click the pool to show her!'),
+    mirror: misty('Is that me? I look like a champion!'),
+    // Maple holds up the white team sweater with the red maple leaf.
+    sweater: onDevice('A team sweater! Tap it!', 'A team sweater! Click it!'),
+    paw: misty('My paw! On a team sweater!'),
+    // Silly: her nose, her tummy, suds on Maple, the soap batted over the cedars, the wet-dog shake, the back scratch.
+    achoo: misty('Ah... choo!'),
+    tickle: misty('Hee hee! That tickles!'),
+    beard: maple('I have a beard!'),
+    shot: maple('What a shot!'),
+    brrr: maple('Brrr! You got me!'),
+    scratch: misty('Ahh. Scratchy tree.'),
+    // Pokes (Sparkle, the first time; Misty swings at the salmon and misses).
+    salmon: 'Salmon jump up the river to go home.',
     miss: misty('Missed again!'),
-    giveUp: { black: by('bear')('Okay, berries instead!'), spirit: misty('Too slippery! Berries, then.') },
-    yum: by('bear')('Mmm, berries!'),
-    // The film out: the salmon are home, Misty has a paw full of berries.
+    cedar: 'This cedar tree is taller than a house!',
+    rainPoke: "Rain! It's a rainforest.",
+    // Maple, cheering on the bank.
+    cheer: [maple('Bravo!'), maple('Youpi!'), maple('Allez, allez!')],
+    // The film out: Misty in the look she was given.
     filmOut: {
-      berries: misty('Mmm. Berries are easier than fish.'),
       stick: maple('Misty! Try this hockey stick!'),
       // One swing: a pinecone sails over the tallest cedar.
       shot: maple('The biggest slap shot in Canada!'),
       team: misty('I like this game. I will come!'),
     },
+  },
+  // The Team Cabin (activities/cabin/): the skate hut beside the canal, where she dresses the team. No stamp, no end.
+  cabin: {
+    first: onDevice('Dress the team! Drag something on.', 'Dress the team! Click something to put it on.'),
+    // A hat a friend loves.
+    love: {
+      monty: monty('Mmm. Fancy.'),
+      tuque: tuque('Ho ho! Two hats!'),
+      roxy: roxy('Ooh, sneaky!'),
+      misty: misty('So soft.'),
+      ollie: ollie('Wheee!'),
+      maple: maple('Magnifique!'),
+    },
+    // Gus pokes his head in at the window: he can have a hat too.
+    gus: gus('Honk! ...I look good.'),
+    // The mirror takes a team photo.
+    photo: maple('Team photo! Say maple syrup!'),
   },
   // The finale (activities/party/): the big game on the frozen canal, between story.gameIn and story.gameWin.
   party: {

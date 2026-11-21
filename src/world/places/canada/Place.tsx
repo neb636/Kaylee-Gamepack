@@ -28,8 +28,10 @@ const ACTIVITIES: Record<string, { C: Game; bg: string }> = {
   campfire: { C: lazyOf(() => import('./activities/campfire/CampfireNight').then((m) => m.CampfireNight)), bg: '#14102A' },
   canoe: { C: lazyOf(() => import('./activities/canoe/RedCanoe').then((m) => m.RedCanoe)), bg: '#C4E8FA' },
   whales: { C: lazyOf(() => import('./activities/whales/WhaleWatch').then((m) => m.WhaleWatch)), bg: '#CFEAF7' },
-  salmon: { C: lazyOf(() => import('./activities/salmon/SalmonLeap').then((m) => m.SalmonLeap)), bg: '#CFEDE6' },
+  bath: { C: lazyOf(() => import('./activities/bath/BubbleBath').then((m) => m.BubbleBath)), bg: '#CFEDE6' },
   snowman: { C: lazyOf(() => import('./activities/snowman/CarnivalSnowballs').then((m) => m.CarnivalSnowballs)), bg: '#DCE6F6' },
+  // The Team Cabin: a toy on the map (no stamp, no end): its way out is back to the map.
+  cabin: { C: lazyOf(() => import('./activities/cabin/TeamCabin').then((m) => m.TeamCabin)), bg: '#F6E3CF' },
   party: { C: lazyOf(() => import('./activities/party/Finale').then((m) => m.Finale)), bg: '#DDEBFA' },
 }
 
@@ -42,7 +44,7 @@ export default function Place(props: PlaceProps) {
   const all = [...meta.activities, ...(meta.inTheWorks ?? [])]
   const info = all.find((a) => a.id === activity)
   // The big game's payoff is the trophy; a chapter's is its stamp and sticker (and a new friend on the map).
-  const onDone = activity === 'party' ? onWin : info ? stamp.finishFor(info) : backToMap
+  const onDone = activity === 'party' ? onWin : info ? stamp.finishFor(info) : () => props.openActivity('hub')
   if (window.__kayleeWorld) window.__kayleeWorld.finish = onDone
   const { C, bg } = entry
   const game = (done: () => void, filmed: boolean) => (

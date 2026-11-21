@@ -127,8 +127,8 @@ export const WORLD_LINES = {
       'canada/bike': 'The mountain bike!',
       'canada/campfire': 'The campfire night!',
       'canada/canoe': 'The red canoe!',
-      'canada/whales': 'The whale watch!',
-      'canada/salmon': 'The salmon leap!',
+      'canada/whales': 'Whale peek-a-boo!',
+      'canada/bath': "Misty's bubble bath!",
     },
   },
 }
