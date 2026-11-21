@@ -12,6 +12,7 @@ import type { Bag } from '../../../engine3d/dispose'
 import { blobShadow, merge, P, solid } from '../../../engine3d/geo'
 import { CANADA_COLORS } from '../characters/looks'
 import { makeCup } from '../story/props'
+import { buildHut, type Hut } from './hut'
 import type { PlaceId } from './shape'
 import { peakParts, spruceParts } from './terrain'
 
@@ -97,6 +98,8 @@ export interface Rink {
   rinkAt: Vector3
   /** Where the rink's tap target is centered: the left half of the ice, away from the geese's ring. */
   aim: Vector3
+  /** The team's skate hut beside the canal (hut.ts): tap it for the Team Cabin. */
+  hut: Hut
 }
 
 export function buildRink(bag: Bag): Rink {
@@ -161,10 +164,17 @@ export function buildRink(bag: Bag): Rink {
     [0.47, -0.3],
   ].map(([x, z]) => new Vector3(x, 0.06, z))
   const rinkAt = new Vector3(0.25, 0.1, 0.28)
-  place.update = (_dt, t) => {
+  // The skate hut, on the snow at the rink's right end, beside the canal where it runs off to the river; turned a
+  // little toward the ice.
+  const hut = buildHut(bag)
+  hut.root.position.set(1.74, 0, 0.52)
+  hut.root.rotation.y = -0.35
+  place.root.add(hut.root)
+  place.update = (dt, t) => {
     cup.rotation.y = Math.sin(t * 0.6) * 0.25
+    hut.update(dt, t)
   }
-  return { place, aim: new Vector3(-0.1, 0.1, 0.28), maple, row, loop: { x: 0.62, z: 0.36, rx: 0.3, rz: 0.15 }, cup, glow, rinkAt }
+  return { place, aim: new Vector3(-0.1, 0.1, 0.28), maple, row, loop: { x: 0.62, z: 0.36, rx: 0.3, rz: 0.15 }, cup, glow, rinkAt, hut }
 }
 
 // ---------------------------------------------------------------- Quebec City: the castle hotel

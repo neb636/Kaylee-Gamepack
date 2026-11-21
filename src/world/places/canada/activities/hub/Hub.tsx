@@ -5,7 +5,9 @@
 //
 // A quiet hub (docs/voices.md): Sparkle says her one line once a visit on the first look, counts the team when a new
 // friend pops in at the rink (once each), and names a few things the first time she pokes them. It never talks when
-// she's idle: after ~8 s with no touch the places still to do pulse softly instead.
+// she's idle: after ~8 s with no touch the places still to do pulse softly instead. The new friend shows their move
+// (map/moves.ts) and then Gus, at the rink, has his say about how many they are now (by how many, not who), while the
+// map stays hers to tap. The team's skate hut by the canal opens the Team Cabin.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { lineText, lineVoice, say, sounds, stopSpeaking, useAlive, useTimers, wait, type Line } from '../../../../../sdk'
@@ -37,6 +39,7 @@ const session = {
   told: false,
   stamps: null as string[] | null,
   counted: new Set<number>(),
+  gus: new Set<number>(),
   facts: new Set<string>(),
 }
 
@@ -59,13 +62,16 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
     return { team, arriving, asked }
   })
   const whole = setup.team.length === CHAPTERS.length
-  useEffect(() => enter(book ? 'book' : 'map', setup.asked ? { team: setup.asked } : {}), [book])
+  // A link's team stays in the address bar as the team it made (the friend arriving included), so a reload keeps them.
+  // With real stamps the team comes from the stamps and the link stays bare.
+  const [linkTeam] = useState(() => (setup.asked || param('new') ? (whole ? 'all' : setup.team.length ? setup.team.join(',') : 'none') : null))
+  useEffect(() => enter(book ? 'book' : 'map', linkTeam ? { team: linkTeam } : {}), [book])
 
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [engine, setEngine] = useState(0)
   const worldRef = useRef<CanadaMapWorld | null>(null)
   const [revealed, setRevealed] = useState(false)
-  const [picked, setPicked] = useState<PlaceId | null>(null)
+  const [picked, setPicked] = useState<PlaceId | 'cabin' | null>(null)
   const lastTouch = useRef(performance.now() + 3000)
 
   // ---- Talking: one line at a time, Sparkle's words beside her, a friend's at the bottom.
@@ -75,7 +81,8 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
   const lastSparkle = useRef<Line>(L.hub.first)
   const gen = useRef(0)
   const queue = useRef<Promise<void>>(Promise.resolve())
-  const talk = (l: Line, now = false) => {
+  /** Says a line after whatever is being said (`now`: instead of it); `onStart` runs as it begins. */
+  const talk = (l: Line, now = false, onStart?: () => void) => {
     if (now) {
       gen.current++
       stopSpeaking()
@@ -87,6 +94,7 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
       const sparkle = lineVoice(l) === 'sparkle'
       const show = sparkle ? setSparkleLine : setFriendLine
       show(l)
+      onStart?.()
       if (sparkle) {
         lastSparkle.current = l
         guide.current?.wave()
@@ -125,17 +133,11 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
     lastTouch.current = Math.max(lastTouch.current, performance.now() + 3000)
     const n = setup.team.length
     if (setup.arriving) {
+      // (Gus's line, and with the whole team Sparkle's "tap the rink", come when the newcomer's move is done.)
       timers.later(() => {
-        if (n < CHAPTERS.length) {
-          if (!session.counted.has(n)) {
-            session.counted.add(n)
-            void talk(L.hub.count[n - 1])
-          }
-        } else if (!session.counted.has(n)) {
-          session.counted.add(n)
-          void talk(L.hub.all)
-          void talk(L.hub.rink)
-        }
+        if (session.counted.has(n)) return
+        session.counted.add(n)
+        void talk(n < CHAPTERS.length ? L.hub.count[n - 1] : L.hub.all)
       }, 1500)
     } else if (!session.told) {
       session.told = true
@@ -173,6 +175,23 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
       void talk(n % 2 === 0 ? L.hub.locked : L.hub.maple[(n >> 1) % L.hub.maple.length], true)
     },
     team: (id) => void talk(L.hub.team[id], true),
+    moved: (_id, arrival) => {
+      if (!arrival) return
+      // Gus, at the rink, after Sparkle's count and the newcomer's move: by how many are on the team now.
+      const n = setup.team.length
+      if (session.gus.has(n)) return worldRef.current?.release()
+      session.gus.add(n)
+      void talk(L.hub.gusCount[n - 1], false, () => worldRef.current?.gusSays(n))
+      if (n === CHAPTERS.length) void talk(L.hub.rink)
+    },
+    cabin: () => {
+      // The hut's door is open and the camera is closing in: the Team Cabin.
+      setPicked('cabin')
+      gen.current++
+      stopSpeaking()
+      timers.later(() => sounds.sparkle(), 120)
+      timers.later(() => openActivity('cabin'), 750)
+    },
     poked: (id) => {
       const animal = MEETS[id]
       if (animal) meet(animal)
@@ -202,6 +221,8 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
               team: (id) => events.current.team(id),
               poked: (id) => events.current.poked(id),
               spot: (id) => events.current.spot(id),
+              moved: (id, arrival) => events.current.moved(id, arrival),
+              cabin: () => events.current.cabin(),
               touched: () => events.current.touched(),
               revealed: () => events.current.revealed(),
             },
@@ -255,7 +276,7 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
 
 /** The places' tap targets: see-through buttons the world keeps over each diorama and its friend. The rink's is the
  *  big game's (`data-finale`). */
-function PlaceTargets({ input, els, label, picked }: { input: AnchorInput; els: Map<string, HTMLElement>; label: (id: PlaceId) => string; picked: PlaceId | null }) {
+function PlaceTargets({ input, els, label, picked }: { input: AnchorInput; els: Map<string, HTMLElement>; label: (id: PlaceId) => string; picked: PlaceId | 'cabin' | null }) {
   return (
     <>
       {PLACE_IDS.map((id) => (

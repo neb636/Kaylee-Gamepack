@@ -27,6 +27,35 @@ export const hubSfx = {
   burner: storySfx.burner,
   loon: storySfx.loon,
   pop: storySfx.pop,
+  /** The skate hut: its door creaks open (she tapped it); Gus gulps (a whole team!). */
+  door: clip(url('hub-hut-door'), () => (noise(0.5, 0.05, 'bandpass', 700, 380), tone(1500, 1500, 0.25, 0.04, 'sine', 0.35))),
+  gulp: clip(url('hub-gus-gulp'), () => tone(320, 140, 0.18, 0.1, 'sine')),
   /** The breeze under the map, until the map goes. */
   wind: () => bed(url('hub-wind'), 0.18),
+}
+
+/** The friends' moves at the rink (moves.ts): one sound for each thing that happens in them. */
+export const moveSfx = {
+  /** Tuque tosses the puck up; it boings off his tummy; it clacks down on the ice. */
+  toss: clip(url('hub-move-toss'), () => sfx.fwip()),
+  boing: clip(url('hub-move-boing'), () => sfx.boing()),
+  clack: clip(url('hub-move-clack'), () => tone(1200, 700, 0.06, 0.08, 'triangle')),
+  /** Monty freezes like a statue; two geese flap in, perch on his antlers and bump bills. */
+  statue: clip(url('hub-move-statue'), () => (tone(260, 200, 0.12, 0.08, 'triangle'), sounds.sparkle())),
+  flap: clip(url('hub-move-flap'), () => [0, 0.12, 0.24, 0.36].forEach((d) => noise(0.07, 0.05, 'lowpass', 1100, 700, d))),
+  bonk: storySfx.bonk,
+  honk: storySfx.honk,
+  /** Roxy leaps over the boards; her paw whisks the puck. */
+  swish: clip(url('hub-move-swish'), () => sounds.whoosh()),
+  snatch: clip(url('hub-move-snatch'), () => (noise(0.12, 0.06, 'highpass', 3000, 5000), sfx.pop())),
+  pop: storySfx.pop,
+  /** Lulu sings: her own long call over the ice. */
+  song: storySfx.loon,
+  /** Misty's slap shot; the pinecone lands on the ice. */
+  slap: clip(url('hub-move-slap'), () => (tone(900, 250, 0.08, 0.16, 'square'), sounds.whoosh())),
+  cone: clip(url('hub-move-cone'), () => tone(700, 500, 0.06, 0.08, 'triangle')),
+  /** Ollie's rock lands in a paw; she spins; she passes it. */
+  pat: clip(url('hub-move-pat'), () => noise(0.06, 0.06, 'lowpass', 800, 500)),
+  spin: clip(url('hub-move-spin'), () => tone(500, 1100, 0.4, 0.05, 'sine')),
+  pass: clip(url('hub-move-pass'), () => sounds.whoosh()),
 }

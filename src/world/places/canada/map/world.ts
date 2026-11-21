@@ -9,6 +9,11 @@
 // bison who rolls in the dust, a beluga, Sparkle's balloon, the clouds, the ice floes, the Rockies, the snowy north,
 // Hudson Bay). She can swing the board round with a drag and pinch it closer (board.ts).
 //
+// Round two (planning/around-the-world/canada-round-2.md): a new friend arriving at the rink shows their move once
+// their pop-in ends (moves.ts), and a tap on a friend already on the team plays it again; Gus, skating on the ice,
+// stops, turns to the newcomer and pulls a face while he says his line (the page says when). The team's skate hut
+// beside the canal (hut.ts) opens the Team Cabin.
+//
 // shape.ts has the numbers (the country's shape, where everything stands), terrain.ts the still board, places.ts the
 // dioramas, critters.ts the animals to poke; this file brings them to life and listens to her finger. The page
 // (activities/hub/Hub.tsx) decides what is said.
@@ -35,6 +40,7 @@ import { Friend } from '../story/cast'
 import { CHAPTERS, type ChapterId } from '../story/chapters'
 import { Balloon } from '../story/props'
 import { beluga, bison, floe, orca, snowyOwl, type Bison, type Owl, type Swimmer } from './critters'
+import { MapMoves, moveFocus, MOVE_S } from './moves'
 import { heartPin, PIN_R } from './pins'
 import { buildBay, buildCamp, buildCastle, buildForest, buildLake, buildMountain, buildRink, type PlaceToy } from './places'
 import { buildField, FLOES, fromRockies, PLACES, POKES, type Field, type PlaceId, type PokeId } from './shape'
@@ -57,6 +63,10 @@ export interface MapEvents {
   poked(id: PokeId): void
   /** She poked the land or the sea somewhere that has a fact. */
   spot(id: Spot): void
+  /** A friend's move has played to its end (`arrival`: the newcomer's, as she lands back; Gus's line is next). */
+  moved(id: ChapterId, arrival: boolean): void
+  /** She tapped the team's skate hut: its door is open, the camera is closing in (the page opens the cabin). */
+  cabin(): void
   /** Any touch at all (the idle glow waits again). */
   touched(): void
   /** The camera has moved behind the loading cover long enough: it can fade. */
@@ -74,6 +84,7 @@ export const MAP_ANCHORS: AnchorInfo[] = [
   { id: 'poke:bison', label: 'The bison', kind: 'thing' },
   { id: 'poke:beluga', label: 'The beluga', kind: 'thing' },
   { id: 'poke:balloon', label: "Sparkle's balloon", kind: 'thing' },
+  { id: 'hut', label: "The team's skate hut: the Team Cabin", kind: 'thing' },
   ...CHAPTERS.map((id) => ({ id: `team:${id}`, label: `On the team: ${WHO[id]}`, kind: 'thing' as const })),
 ]
 
@@ -126,6 +137,8 @@ const dressed = <T extends ToyActor>(a: T, who: TeamId, bag: Bag): T => {
 }
 const tmp3 = new Vector3()
 const TAU = Math.PI * 2
+/** From angle `a` toward `b` by `k` (0..1), the short way round. */
+const turn = (a: number, b: number, k: number) => a + Math.atan2(Math.sin(b - a), Math.cos(b - a)) * k
 /** How much bigger the friends at home stand on a tall screen. */
 const HOME_TALL = 1.25
 /** The smallest a heart pin's badge gets across on screen (px), however small the screen. */
@@ -163,6 +176,31 @@ export class CanadaMapWorld implements World3D {
   private glowing = false
   private arriving: Mate | null = null
   private arrivalT = -1
+  /** The arrival's clock marks: the newcomer's move starts, it ends, and the camera may leave the rink. */
+  private moveAt = Infinity
+  private moveEnd = Infinity
+  private holdUntil = Infinity
+  /** The camera has left the rink after an arrival (it held long enough, or she tapped). */
+  private leftRink = false
+  private lagBackAt = Infinity
+  /** The friends' moves (moves.ts), and the camera nudged in toward the rink while one plays from a tap. */
+  private moves: MapMoves
+  private peek: Shot = { center: new Vector3(), half: new Vector3(), yaw: 0, pitch: 50, maxDist: 200 }
+  private peekT = 0
+  private peekAt = new Vector3()
+  /** Gus reacting to the newcomer (seconds into it, -1: skating), how many are on the team, the face he pulls. */
+  private gusT = -1
+  private gusN = 0
+  private gusAt = new Vector3()
+  /** The geese's skating ring: how far round, and how fast (they stop while Gus reacts). */
+  private loopA = 0
+  private loopV = 1
+  private gusW = 0
+  /** She tapped the skate hut: the camera is closing in on it. */
+  private hutOpen = false
+  /** The move the arrival started (its end is Gus's cue), and the moves playing last frame. */
+  private arrivalRun: ChapterId | null = null
+  private wasPlaying = new Set<ChapterId>()
   private targets: Record<string, { x: number; y: number; w: number; h: number }> = {}
 
   private places = new Map<PlaceId, PlaceToy>()
@@ -263,12 +301,17 @@ export class CanadaMapWorld implements World3D {
     }
     this.castle.heap.visible = !team.includes('snowman')
     for (const id of CHAPTERS) this.places.get(id)!.flag.visible = team.includes(id)
+    this.moves = new MapMoves({ bag: this.bag, rink: this.rink.place.root, spray: this.spray, maple: this.maple })
     const fresh = arriving ? this.mates.get(arriving) : undefined
     if (fresh?.team) {
       this.arriving = fresh
       this.arrivalT = 0
       fresh.pop = 0
       fresh.spot.scale.setScalar(0.001)
+      // (The pop-in ends about 1.5 s after it starts: then the move, then the camera holds a moment for Gus.)
+      this.moveAt = MAP_CAM.cover + 2.0
+      this.moveEnd = this.moveAt + MOVE_S[fresh.id]
+      this.holdUntil = this.moveEnd + 3.2
     }
 
     this.buildPokes()
@@ -465,24 +508,84 @@ export class CanadaMapWorld implements World3D {
     this.close.half.set(side ? deep : across, up, side ? across : deep)
   }
 
-  /** When a new friend's arrival at the rink ends (she pops in once the loading cover has gone). */
-  private get arriveEnd() {
-    return MAP_CAM.cover + 2.8
+  /** The camera is on the rink for a new friend's arrival (their pop-in, their move, Gus's face). */
+  private get onRink() {
+    return !!this.arriving && this.arrivalT >= 0 && !this.leftRink
+  }
+  /** The newcomer is popping in or showing their move (the board's targets wait). */
+  private get showing() {
+    return this.onRink && this.arrivalT < this.moveEnd
+  }
+  /** The camera is closing in on something she tapped (a place, the hut). */
+  private get closing() {
+    return !!this.picked || this.hutOpen
+  }
+  /** The camera leaves the rink for the board (`lag`: how slowly). */
+  private leaveRink(lag: number) {
+    if (this.leftRink || !this.arriving) return
+    this.leftRink = true
+    this.entrance.finish()
+    if (!this.closing) this.rig.lag = lag
+    this.lagBackAt = this.arrivalT + 2.5
+  }
+
+  /** The page: Gus starts his line (how many are on the team now): he stops, turns to the newcomer and pulls a face,
+   *  and the camera stays on the rink while he says it. */
+  gusSays(n: number) {
+    this.gusT = 0
+    this.gusN = n
+    const gus = this.geese[0]
+    const who = this.arriving ?? [...this.mates.values()].filter((m) => m.team).pop()
+    this.gusAt.copy(who ? who.spot.position : this.rink.maple)
+    // Brags at first, then less sure with every friend: wide eyes, a dizzy spin, a nervous wobble, a gulp.
+    if (n <= 2) {
+      gus.pull('happy')
+      gus.hop()
+    } else if (n === 3) gus.silly('dazzled', 2.2)
+    else if (n === 4) gus.silly('dizzy', 2.4)
+    else if (n === 5) {
+      gus.silly('dazzled', 2.4)
+      gus.shake()
+    } else gus.silly('dazzled', 3.0)
+    hubSfx.honk()
+    if (this.onRink && this.arrivalT >= this.moveEnd) this.holdUntil = Math.max(this.moveEnd + 0.3, Math.min(this.holdUntil, this.arrivalT + 2.2))
+  }
+  /** The page: nobody says anything after the move (already said this visit): the camera can go. */
+  release() {
+    if (this.onRink) this.holdUntil = Math.max(this.arrivalT, this.moveEnd + 0.3)
   }
 
   /** The shot right now: the place she picked, the rink while a new friend arrives, or the board. */
   private shot(): Shot {
-    if (this.picked) return this.close
-    if (this.arriving && this.arrivalT < this.arriveEnd) {
-      this.close.center.copy(this.rink.place.root.position).add(tmp.set(0.2, 0.35, -0.1))
-      this.closeHalf(2.5, 0.9, 1.6)
+    if (this.closing) return this.close
+    if (this.onRink) {
+      // Close on the newcomer while they show their move, the whole rink round it (Gus too).
+      const a = this.arriving!
+      if (this.gusN && this.arrivalT >= this.moveEnd) {
+        // Gus has his say: him and the newcomer, close enough to see his face.
+        const g = this.geese[0].root.getWorldPosition(tmp2)
+        this.close.center.copy(a.spot.getWorldPosition(tmp)).lerp(g, 0.6).setY(g.y + 0.3)
+        const across = Math.max(1.3, tmp.distanceTo(g) * 0.8)
+        this.closeHalf(across, across * 0.45, across * 0.65)
+        this.close.pitch = this.overview.pitch - 10
+      } else if (this.arrivalT >= this.moveAt - 0.5) {
+        // The newcomer's move (and, after it, waiting for Gus).
+        const across = moveFocus(a.id, a.spot, this.maple, this.close.center)
+        this.closeHalf(across, across * 0.45, across * 0.65)
+        // (A little lower than the board's angle, so what flies stands out against the ground.)
+        this.close.pitch = this.overview.pitch - 12
+      } else {
+        this.close.center.copy(this.rink.place.root.position).add(tmp.set(0.2, 0.35, -0.1))
+        this.closeHalf(2.5, 0.9, 1.6)
+      }
       return this.close
     }
+    if (this.peekT > 0) return this.peek
     return this.overview
   }
 
   roam(): RoamState | null {
-    return this.picked || (this.arriving && this.arrivalT < this.arriveEnd) ? null : { walk: false, jump: false }
+    return this.closing || this.onRink ? null : { walk: false, jump: false }
   }
 
   get calm() {
@@ -492,23 +595,26 @@ export class CanadaMapWorld implements World3D {
   update(dt: number) {
     const t = (this.time += dt)
     this.sea.update(t)
-    if (this.picked) {
+    if (this.closing) {
       this.pickedT += dt
       this.entrance.finish()
     }
-    const arrivingNow = !!this.arriving && this.arrivalT < this.arriveEnd
+    const arrivingNow = this.onRink
     if (this.arriving && this.arrivalT >= 0) {
+      const was = this.arrivalT
       this.arrivalT += dt
-      if (this.arrivalT >= this.arriveEnd && this.arrivalT - dt < this.arriveEnd) {
-        this.entrance.finish()
-        this.rig.lag = 0.9
-      }
-      if (this.arrivalT >= this.arriveEnd + 2.5 && this.arrivalT - dt < this.arriveEnd + 2.5 && !this.picked) this.rig.lag = 0.5
+      const a = this.arriving
+      // The newcomer's pop-in has ended: their move. When it's done, the page has Gus say his line.
+      if (was < this.moveAt && this.arrivalT >= this.moveAt && this.moves.play(a)) this.arrivalRun = a.id
+      if (this.onRink && this.arrivalT >= this.holdUntil) this.leaveRink(0.9)
+      if (was < this.lagBackAt && this.arrivalT >= this.lagBackAt && !this.closing) this.rig.lag = 0.5
     }
+    if (this.peekT > 0 && (this.peekT -= dt) <= 0 && !this.closing) this.rig.lag = 0.5
     this.entrance.step(dt)
     if (this.nudgeT >= 0 && (this.nudgeT += dt) > 2.6) this.nudgeT = -1
     this.updatePlaces(dt, t)
     this.updateMates(dt, t)
+    this.updateMoves(dt, t)
     this.updatePins(t)
     this.updatePokes(dt, t)
     this.updateSky(dt, t)
@@ -516,7 +622,7 @@ export class CanadaMapWorld implements World3D {
     this.foam.update(dt)
     this.lights.follow(this.overview.center.x, 0.2, this.overview.center.z)
     this.frame()
-    this.rig.setShot(this.shot(), this.entrance.running && !this.picked && !arrivingNow)
+    this.rig.setShot(this.shot(), this.entrance.running && !this.closing && !arrivingNow)
     this.rig.update(dt)
   }
 
@@ -611,7 +717,7 @@ export class CanadaMapWorld implements World3D {
       if (!m.team) {
         this.homeLife(m, t)
         // Now and then she waves from home: over here!
-        if (t >= m.waveAt && !this.picked) {
+        if (t >= m.waveAt && !this.closing) {
           m.actor.wave()
           m.waveAt = t + 5.5 + Math.random() * 3
         }
@@ -620,13 +726,39 @@ export class CanadaMapWorld implements World3D {
     }
   }
 
+  /** The friends' moves (after their own update: a move adds to the pose), and the camera's nudge toward the rink
+   *  while one plays from a tap. A move that has ended tells the page (the arrival's is Gus's cue). */
+  private updateMoves(dt: number, t: number) {
+    this.moves.update(dt, t, this.rig.camera)
+    for (const id of this.wasPlaying) {
+      if (this.moves.playing(id)) continue
+      this.wasPlaying.delete(id)
+      const arrival = id === this.arrivalRun
+      if (arrival) this.arrivalRun = null
+      this.events.moved(id, arrival)
+    }
+    for (const m of this.mates.values()) if (this.moves.playing(m.id)) this.wasPlaying.add(m.id)
+    if (this.peekT > 0 && !this.closing) {
+      const o = this.overview
+      const K = 0.5
+      const m = [...this.mates.values()].find((x) => this.moves.playing(x.id))
+      if (m) {
+        const across = moveFocus(m.id, m.spot, this.maple, this.peekAt)
+        this.closeHalf(across * 1.6, across * 0.7, across)
+      }
+      this.peek.center.copy(this.peekAt).lerp(o.center, 1 - K)
+      this.peek.half.copy(o.half).lerp(this.close.half, K)
+      Object.assign(this.peek, { yaw: o.yaw, pitch: o.pitch, objectFit: o.objectFit, roam: o.roam, maxDist: o.maxDist, minDist: o.minDist })
+    }
+  }
+
   /** The heart pins: over each place still to do (and the rink once the team is whole), facing the camera, bobbing;
    *  they bounce when she's idle or tapped the rink too soon, and never shrink below a thumbnail on a small screen. */
   private updatePins(t: number) {
-    const arrivingNow = !!this.arriving && this.arrivalT < this.arriveEnd
+    const arrivingNow = this.onRink
     for (const [id, pin] of this.pins) {
       const p = this.places.get(id)!
-      const on = !this.picked && (id === 'party' ? this.glowing && !arrivingNow : this.todo(id))
+      const on = !this.closing && (id === 'party' ? this.glowing && !arrivingNow : this.todo(id))
       pin.root.visible = on
       if (!on) continue
       const k = id === 'party' ? 1 : this.homeK
@@ -689,20 +821,43 @@ export class CanadaMapWorld implements World3D {
       return p
     }
 
-    // The geese skate rings on the rink's ice, Gus in front; poked, they hop and flap.
+    // The geese skate rings on the rink's ice, Gus in front; poked, they hop and flap. While Gus has his say about the
+    // newcomer they glide to a stop and all turn to look; Roxy's move borrows the last one for a moment.
     {
       const p = done('geese', 1.6)
       const L = this.rink.loop
+      if (this.gusT >= 0 && (this.gusT += dt) > 3.4) this.gusT = -1
+      const react = this.gusT >= 0
+      this.loopV += ((react ? 0 : 1) - this.loopV) * Math.min(1, dt * (react ? 4 : 1.5))
+      this.loopA += dt * 0.8 * this.loopV
+      this.gusW += ((react && this.gusT < 3.0 ? 1 : 0) - this.gusW) * Math.min(1, dt * 5)
+      const lent = this.moves.lent
       this.geese.forEach((g, i) => {
-        const a = t * 0.8 - (i * TAU) / 3
-        const x = L.x + Math.cos(a) * L.rx
-        const z = L.z + Math.sin(a) * L.rz
+        const a = this.loopA - (i * TAU) / 3
+        let x = L.x + Math.cos(a) * L.rx
+        let z = L.z + Math.sin(a) * L.rz
+        let yaw = Math.atan2(-Math.sin(a) * L.rx, Math.cos(a) * L.rz)
+        // (Turned to the newcomer while Gus talks; Gus himself turns his face to the camera, glancing their way, so his
+        // face shows: the team stands behind the ice, the camera in front of it.)
+        if (this.gusW > 0.001) {
+          const to = Math.atan2(this.gusAt.x - x, this.gusAt.z - z)
+          yaw = turn(yaw, i === 0 ? turn(0, to, 0.3) : to, this.gusW)
+        }
+        g.headTurn = 0
+        if (lent && i === 2) {
+          x += (lent.at.x - x) * lent.w
+          z += (lent.at.z - z) * lent.w
+          yaw = turn(yaw, lent.yaw, lent.w)
+          g.headTurn = lent.headTurn
+        }
         g.root.position.set(x, 0.1, z)
-        g.root.rotation.y = Math.atan2(-Math.sin(a) * L.rx, Math.cos(a) * L.rz)
-        g.lean = 0.15
-        g.armsUp = p.t >= 0 ? bell(clamp((p.t - i * 0.12) / 0.9, 0, 1)) : 0
+        g.root.rotation.y = yaw
+        g.lean = 0.15 * this.loopV + (i === 0 ? 0 : 0.05)
+        g.armsUp = p.t >= 0 ? bell(clamp((p.t - i * 0.12) / 0.9, 0, 1)) : i === 0 && react && this.gusN <= 2 ? 0.45 * this.gusW : 0
         g.update(dt, t)
       })
+      // (A whole team: a gulp, after the honk.)
+      if (react && this.gusN >= 6 && this.gusT - dt < 1.5 && this.gusT >= 1.5) hubSfx.gulp()
       this.rink.place.root.localToWorld(p.at.set(L.x, 0.35, L.z))
     }
 
@@ -827,13 +982,9 @@ export class CanadaMapWorld implements World3D {
   tap(x: number, y: number, id?: string): void {
     this.touches++
     this.events.touched()
-    if (this.picked) return
-    if (this.arriving && this.arrivalT < this.arriveEnd) {
-      // A tap during the arrival skips to the board.
-      this.arrivalT = this.arriveEnd
-      this.entrance.finish()
-      this.rig.lag = 0.5
-    }
+    if (this.closing) return
+    // A tap during the arrival skips to the board (the move and Gus go on).
+    if (this.onRink) this.leaveRink(0.5)
     if (id?.startsWith('go:')) {
       // A place's target is big: if her finger is really on a friend at the rink or a goose, they answer instead.
       const near = id === 'go:party' && x + y > 0 ? this.thingUnder(x, y) : null
@@ -842,12 +993,18 @@ export class CanadaMapWorld implements World3D {
     }
     if (id?.startsWith('team:')) {
       const m = this.mates.get(id.slice(5) as ChapterId)
-      if (!m) return
-      m.actor.hop()
-      m.actor.wave()
+      if (!m?.team) return
+      // Their move again (not if it's still playing: a fast double tap doesn't restart it), with the camera nudged
+      // in toward the rink so it reads; the page says their line.
+      if (!this.moves.play(m)) return
       hubSfx.hop()
+      if (!this.onRink) {
+        this.peekT = MOVE_S[m.id] + 0.4
+        this.rig.lag = 0.6
+      }
       return this.events.team(m.id)
     }
+    if (id === 'hut') return this.openHut()
     if (id?.startsWith('poke:')) return this.poke(id.slice(5) as PokeId)
     // Anything else: whatever her finger lands on answers.
     this.raycaster.setFromCamera(new Vector2((x / this.w) * 2 - 1, -(y / this.h) * 2 + 1), this.rig.camera)
@@ -859,7 +1016,9 @@ export class CanadaMapWorld implements World3D {
       this.spray.burst(cloud.point.x, cloud.point.y, cloud.point.z, 7, 0.5, 0.6, 0.1, WHITE)
       return
     }
-    // A heart pin, a place's model or a friend (outside its target box, from a steep angle): it opens.
+    // The skate hut (it stands in the rink's diorama, so before the places), a heart pin, a place's model or a friend
+    // (outside its target box, from a steep angle): it opens.
+    if (this.raycaster.intersectObject(this.rink.hut.root, true).length) return this.openHut()
     for (const [id, pin] of this.pins) {
       if (pin.root.visible && this.raycaster.intersectObject(pin.root, true).length) return this.pick(id)
     }
@@ -915,7 +1074,35 @@ export class CanadaMapWorld implements World3D {
     }
     for (const m of this.mates.values()) if (m.team) check(`team:${m.id}`, m.actor.at(0.5, tmp.clone()), m.size * 0.7)
     this.geese.forEach((g) => check('poke:geese', g.at(0.5, tmp.clone()), 0.4))
+    check('hut', this.hutAt(tmp.clone()), 0.65)
     return best
+  }
+
+  /** The middle of the skate hut, in the world. */
+  private hutAt(out: Vector3) {
+    const h = this.rink.hut
+    return h.root.localToWorld(out.copy(h.aim))
+  }
+
+  /** She tapped the skate hut: it hops, its door swings open on the warm light, the camera closes in, and the page
+   *  opens the Team Cabin. */
+  private openHut() {
+    if (this.closing) return
+    const h = this.rink.hut
+    h.tap()
+    this.hutOpen = true
+    this.pickedT = 0
+    this.peekT = 0
+    hubSfx.door()
+    hubSfx.zoom()
+    this.setGlow(false)
+    const at = this.hutAt(new Vector3())
+    this.sparkleAt(at, 0.6, 10)
+    this.close.center.copy(at)
+    this.closeHalf(0.75, 0.45, 0.6)
+    this.rig.lag = 0.3
+    this.rig.resetTurn()
+    this.events.cabin()
   }
 
   private pick(id: PlaceId) {
@@ -939,6 +1126,7 @@ export class CanadaMapWorld implements World3D {
     }
     this.picked = p
     this.pickedT = 0
+    this.peekT = 0
     this.setGlow(false)
     // The camera closes in on the place.
     this.close.center.copy(p.root.position).setY(p.root.position.y + 0.35)
@@ -983,7 +1171,7 @@ export class CanadaMapWorld implements World3D {
     this.targets = {}
     for (const [id, el] of this.anchorEls) {
       let spot: { x: number; y: number; w: number; h: number; z: number } | null = null
-      const free = !this.picked && !(this.arriving && this.arrivalT < this.arriveEnd)
+      const free = !this.closing && !this.showing
       if (id.startsWith('go:') && free) {
         const p = this.places.get(id.slice(3) as PlaceId)
         if (p) spot = this.placeBox(p, min)
@@ -995,6 +1183,12 @@ export class CanadaMapWorld implements World3D {
           const d = Math.max(min * 0.8, this.ppu(at) * m.size * 0.8)
           spot = { x: s.x, y: s.y, w: d * 0.8, h: d, z: 4000 }
         }
+      } else if (id === 'hut' && free) {
+        // The hut's own box: its walls and roof, never much wider (it stands near Lulu and the canal).
+        const at = this.hutAt(tmp3)
+        const s = this.toScreen(at)
+        const d = this.ppu(at) * 0.75
+        spot = { x: s.x, y: s.y, w: Math.max(64, d), h: Math.max(64, d * 1.05), z: 4500 }
       } else if (id.startsWith('poke:') && free) {
         const p = this.pokes.get(id.slice(5) as PokeId)
         if (p) {
@@ -1075,7 +1269,17 @@ export class CanadaMapWorld implements World3D {
       buildMs: this.buildMs,
       picked: this.picked?.id ?? null,
       team: [...this.mates.values()].filter((m) => m.team).map((m) => m.id),
-      arriving: this.arriving && this.arrivalT < this.arriveEnd ? this.arriving.id : null,
+      arriving: this.onRink ? this.arriving!.id : null,
+      /** The friends' moves: playing now, and every one played this visit (in order). */
+      moves: this.moves.qa(),
+      /** Gus's reaction to the newcomer: how many on the team when he said his line (0: not yet), and his face now. */
+      gus: { n: this.gusN, reacting: this.gusT >= 0, face: this.geese[0]?.sillyFace ?? null },
+      hut: this.hutOpen,
+      peek: this.peekT > 0,
+      /** Where the hut, Maple and each friend stand in the world (x, y, z), for close-up checks from other angles. */
+      spots: Object.fromEntries(
+        [['hut', this.hutAt(tmp3)] as const, ['maple', this.mapleSpot.getWorldPosition(new Vector3())] as const, ['gus', this.geese[0].head(new Vector3())] as const, ...[...this.mates.values()].map((m) => [m.id, m.spot.getWorldPosition(new Vector3())] as const)].map(([k, v]) => [k, [v.x, v.y, v.z].map((n) => Math.round(n * 1000) / 1000)]),
+      ),
       glowing: this.glowing,
       hint: this.hint,
       entering: this.entrance.running,
