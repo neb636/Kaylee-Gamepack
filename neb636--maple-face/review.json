@@ -1,11 +1,8 @@
 {
-  "title": "Maple’s smile",
+  "title": "Maple in motion",
   "checkIn": "fix",
-  "kaylee": "Maple has soft, full cheeks, bright brown eyes and two front teeth that peek out when she talks.",
+  "kaylee": "Maple blinks with her original eyes, opens her mouth with each syllable, and wags her paddle tail from her hips.",
   "questions": [],
-  "pictures": [{ "title": "Maple up close", "before": "pics/face-before.png", "after": "pics/face-after.png", "caption": "Her cheeks now curve smoothly from her temples to her chin." }],
-  "links": [
-    { "label": "Turn Maple around", "hash": "#/world/characters/maple?shot=face&zoom=1.6" },
-    { "label": "Hear Maple at the bike trail", "hash": "#/world/canada/story/bike-in" }
-  ]
+  "pictures":[{"title":"Maple’s tail in profile","before":"pics/tail-before.png","after":"pics/tail-after.png"}],
+  "links":[{"label":"Pick a line for Maple to say","hash":"#/world/characters/maple?shot=face&zoom=1.45&yaw=12"},{"label":"Meet Maple at the bike trail","hash":"#/world/canada/story/bike-in"}]
 }
