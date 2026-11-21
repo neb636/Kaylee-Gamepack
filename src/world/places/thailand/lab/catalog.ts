@@ -132,10 +132,12 @@ const CRITTER_INFO: Record<CritterId, { name: string; color: string }> = {
 const critters: CastEntry[] = CRITTERS.map((id) => ({ id, name: CRITTER_INFO[id].name, who: 'Phang Nga Bay sticker', group: 'critters', kind: 'critter', critter: id, src: 'activities/boat-trip/bay/critters.ts', color: CRITTER_INFO[id].color }))
 
 const canada: CastEntry[] = [
-  person('maple', 'Maple', 'Canada: the beaver who travels ocean to ocean with your unicorn', 'canada', CANADA_LOOKS.maple, '../canada/characters/looks.ts', undefined, 'beavers'),
-  person('cousin', 'Maple\'s cousin', 'Canada: a little beaver at the sugar shack', 'canada', CANADA_LOOKS.cousin, '../canada/characters/looks.ts', undefined, 'beavers'),
-  person('moose', 'Moose', 'Canada: the gentle giant at every stop (the goalie)', 'canada', CANADA_LOOKS.moose, '../canada/characters/looks.ts'),
-  person('raccoon', 'Raccoon', 'Canada: the marshmallow bandit of the campsite', 'canada', CANADA_LOOKS.raccoon, '../canada/characters/looks.ts'),
+  person('maple', 'Maple', "Canada: the beaver who captains Maple's Team", 'canada', CANADA_LOOKS.maple, '../canada/characters/looks.ts', undefined, 'beavers'),
+  person('moose', 'Monty', 'Canada: the moose, the goalie who fills the whole net', 'canada', CANADA_LOOKS.moose, '../canada/characters/looks.ts'),
+  person('raccoon', 'Roxy', 'Canada: the raccoon with the quickest paws', 'canada', CANADA_LOOKS.raccoon, '../canada/characters/looks.ts', undefined, 'raccoons'),
+  person('kit', "Roxy's kit", "Canada: one of Roxy's three babies, the team's fans", 'canada', CANADA_LOOKS.kit, '../canada/characters/looks.ts', undefined, 'raccoons'),
+  person('otter', 'Ollie', 'Canada: the sea otter who spins like a top', 'canada', CANADA_LOOKS.otter, '../canada/characters/looks.ts'),
+  person('spirit', 'Misty', 'Canada: the spirit bear with the biggest slap shot', 'canada', CANADA_LOOKS.spirit, '../canada/characters/looks.ts'),
 ]
 
 export const CAST: CastEntry[] = [...family, ...trip, ...mall, ...nan, ...samet, ...critters, ...poles, ...canada]

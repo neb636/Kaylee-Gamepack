@@ -60,6 +60,22 @@ A `Film` is a list of `Beat`s and a `finish()`:
   `bars.update(dt, films.on)` at the end, `bars.render(...)` instead of `renderer.render(...)`. While a film is on,
   the world takes no taps, hides its tap targets, and Sparkle's hints and the 👆 wait.
 
+## A film stage beside the games (the Poles, Canada)
+
+When a place's games are separate worlds (or 2D), its films don't live inside them: they play on one **film stage**,
+a small 3D world that only plays films, and the place's `Place.tsx` plays a film before and after each game. The
+stage is thrown away when a film ends, so skipping needs no clean-up, and a chapter's films and set are files of their
+own (several builders can work side by side).
+
+- The Poles: `places/poles/story/` (`stage.ts`, `films.ts`). Canada: `places/canada/story/` (`stage.ts` with
+  `FilmSet` and `StoryFilm`, one file a chapter in `films/` and `sets/`, the cast in `cast.ts`).
+- Shared: `engine3d/characters/actor.ts` `FilmActor` (any rig Look as an actor: `place`, `walkTo`, `hopTo`, `glideTo`
+  on skates, `flyTo`, `wave`, `pull('sad' | 'wow' | 'happy')`, `ride`), `engine3d/shots.ts` (`cam`, `close`), and
+  `scripts/film-strip.mjs '#/world/<place>/story/<film>'` (a contact sheet of any film link).
+- A character the chibi rig has no shape for (a snowman, a goose, a loon) is a hand-built toy with the same
+  directions: Canada's `characters/toy.ts` `ToyActor`.
+- A game learns its way-in film has just played (Canada: the `filmed` prop) and skips its own hello.
+
 ## The screen (`src/world/engine3d/FilmOverlay.tsx`)
 
 - The words go low in the frame with the speaker's chip (`WHO` in `trip/legs/Guide.tsx`). Every line is spoken; the

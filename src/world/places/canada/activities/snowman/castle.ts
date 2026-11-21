@@ -59,18 +59,21 @@ export function buildOldTown(bag: Bag): OldTown {
   // ---------------------------------------------------------------- the cliff, the wall and the terrace
   const cliff: BufferGeometry[] = [
     P.box(110, CLIFF_Y, 50, ROCK, { at: [0, CLIFF_Y / 2, CLIFF_Z - 25] }),
-    P.box(110, 0.3, 50, SNOW, { at: [0, CLIFF_Y + 0.1, CLIFF_Z - 25] }),
+    // (A hair proud of the rock's face, so the two faces never share a depth and flicker.)
+    P.box(110, 0.3, 50, SNOW, { at: [0, CLIFF_Y + 0.1, CLIFF_Z - 25 + 0.04] }),
     // Snow banked against its foot.
     P.box(110, 0.9, 1.2, SNOW, { at: [0, 0.3, CLIFF_Z + 0.3], rot: [-0.5, 0, 0] }),
   ]
-  // Rocks sticking out of the cliff face, with snow on their ledges.
+  // Rocks sticking out of the cliff face, with snow on their ledges. Neighbors overlap, so every other one sticks out
+  // a little further: two faces at one depth flicker as the camera moves.
   for (let i = 0; i < 46; i++) {
     const x = -44 + i * 1.95 + rnd() * 0.8
     const y = 0.8 + rnd() * (CLIFF_Y - 1.4)
     const w = 1.2 + rnd() * 1.6
     const h = 0.5 + rnd() * 0.7
-    cliff.push(P.rbox(w, h, 0.5, 0.18, i % 3 ? ROCK_DARK : ROCK, { at: [x, y, CLIFF_Z + 0.05] }))
-    if (rnd() < 0.55) cliff.push(P.rbox(w * 0.85, 0.12, 0.42, 0.05, SNOW, { at: [x, y + h / 2 + 0.04, CLIFF_Z + 0.12] }))
+    const out = (i % 2) * 0.08
+    cliff.push(P.rbox(w, h, 0.5, 0.18, i % 3 ? ROCK_DARK : ROCK, { at: [x, y, CLIFF_Z + 0.05 + out] }))
+    if (rnd() < 0.55) cliff.push(P.rbox(w * 0.85, 0.12, 0.42, 0.05, SNOW, { at: [x, y + h / 2 + 0.04, CLIFF_Z + 0.12 + out] }))
   }
   // The old stone wall along the edge: two tones of blocks; battlements beyond the terrace, a green railing along it.
   const WALL_Z = CLIFF_Z - 0.6

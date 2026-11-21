@@ -29,12 +29,12 @@ const SECTIONS = [
   ['poles slide', '#/world/poles/slide/top'],
   ['poles narwhal', '#/world/poles/narwhal/bergs'],
   ['poles party', '#/world/poles/party/fly?stamps=all'],
-  ['canada map', '#/world/canada/hub/map?at=bc'],
+  ['canada map', '#/world/canada/hub/map'],
   ['canada bike', '#/world/canada/bike/green'],
   ['canada canoe', '#/world/canada/canoe/glide'],
   ['canada whales', '#/world/canada/whales/harbour'],
   ['canada snowman', '#/world/canada/snowman/roll'],
-  ['canada party', '#/world/canada/party/homes?stamps=all'],
+  ['canada party', '#/world/canada/party/hockey?stamps=all&team=all'],
 ]
 
 const only = flag('only')?.split(',')

@@ -27,6 +27,8 @@ const WHEEL = new Vector3(0, 0.92, -0.5)
 /** The microphone's reel (on the boat's left, by the stern) and where the cable goes over the side. */
 const REEL = new Vector3(0.78, 0.72, -1.7)
 const OVER = new Vector3(1.25, 0.62, -1.7)
+/** Where the tow rope is tied (the stern, by the motor). */
+const STERN = new Vector3(0.35, 0.7, -2.55)
 
 const Y = new Vector3(0, 1, 0)
 const tv = new Vector3()
@@ -72,6 +74,7 @@ export class Boat {
   private wheel = new Group()
   private flag = new Group()
   private cable: Bone
+  private towRope: Bone
 
   constructor(bag: Bag) {
     this.root.add(this.body)
@@ -143,6 +146,16 @@ export class Boat {
     this.mic.add(solid(merge([P.capsule(0.12, 0.22, MIC), P.sphere(0.1, '#4A4458', { at: [0, -0.22, 0] }), P.torus(0.13, 0.025, '#4A4458', { at: [0, 0.05, 0], rot: [Math.PI / 2, 0, 0] })]), bag, 2))
     this.body.add(this.mic)
     this.cable = new Bone(bag, 0.018, '#4A4458', this.body, 1)
+    this.towRope = new Bone(bag, 0.025, '#FFE9A8', this.body, 1)
+    this.towRope.g.visible = false
+  }
+
+  /** The tow rope from the stern to a point in the world (Ollie's paws), or none. Call after the boat has moved. */
+  rope(to: Vector3 | null) {
+    this.towRope.g.visible = !!to
+    if (!to) return
+    this.body.updateWorldMatrix(true, false)
+    this.towRope.set(STERN, this.body.worldToLocal(tv.copy(to)))
   }
 
   // ---- Maple's actions.

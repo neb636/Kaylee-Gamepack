@@ -1,14 +1,17 @@
 // Campfire Night (plan: planning/around-the-world/canada.md): a dark campsite at the foot of Mont-Sainte-Anne in the
 // fall. One verb, shine the flashlight: a circle of light follows her finger over the night forest, and it gets richer
 // three times:
-//   story        Maple, on her log by the fire with the flashlight: "Shh! Something is out there in the dark."
+//   story        Maple, on her log by the fire with the flashlight: "Shh! Somebody is watching us from the dark." (Only
+//                from a link or a replay: after the way-in film, where a little paw takes her marshmallows, the game
+//                starts at Sparkle's instruction, `filmed`.)
 //   eyes         pairs of eyes shine in the dark (a barred owl, the raccoon, a deer, a spring peeper); rest the light on
 //                them (or tap them) and the animal comes out to say hi.
 //   sounds       a hoot, a tail slap on the lake, a peep, a hare's thump-thump, each from one side (panned left or right,
 //                with faint ripples there); she sweeps the light that way to find who made it.
 //   bandit       the marshmallow bag by the fire is empty! Paw prints light up as the light finds them, round the tent
 //                and along the trees (a bush rustles ahead, a porcupine puffs up in one) to the hollow log, where the
-//                raccoon mama is sharing the marshmallows with her babies. She's sorry, and they share.
+//                bandit, Roxy the raccoon, is sharing the marshmallows with her three kits. She's sorry, and they share.
+//                (Then, the first time, the film out: Roxy joins the team.)
 //   marshmallow  the side verb: she holds a marshmallow on a stick near the flames. It puffs and goes golden, then
 //                brown, then catches fire (tap it to blow it out: a black crunchy one, the raccoons' favorite). She gives
 //                each one to Maple or the raccoons.
@@ -29,13 +32,15 @@ import { sfx } from '../../../../kit/sfx'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { meet } from '../../book/met'
 import { CANADA_COLORS } from '../../characters/looks'
+import { CHAPTER_FILMS, filmSeen } from '../../story/chapters'
 import { L } from '../../lines'
 import { Maple } from '../../puppets/Maple'
 import type { CanadaActivityProps } from '../props'
 import { night } from './night'
 import { Raccoon } from './Raccoon'
+import { camp } from './sounds'
 import CAMPFIRE_SECTIONS, { type CampSection } from './sections'
-import { BOOK, EMOJI, EYES, KIT_GAP, LOOKS, MOOSE_EYES, NAMES, ROSTER, SOUNDS, TALL, WIDE, rng, type CritterId, type Pt, type StageDef } from './stage'
+import { BOOK, EMOJI, EYES, KIT_SPOTS, LOOKS, MOOSE_EYES, NAMES, ROSTER, SOUNDS, TALL, WIDE, rng, type CritterId, type Pt, type StageDef } from './stage'
 import { clamp } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/canada/activities/campfire/CampfireNight.tsx'
@@ -53,7 +58,7 @@ const FIND = knobs('campFind', 'Finding things', FILE, {
   reach: { value: 0.6, min: 0.2, max: 1.2, step: 0.05, label: 'Lights it from', note: 'share of the light’s size: how close the middle of the light has to come' },
   dwell: { value: 0.35, min: 0, max: 2, step: 0.05, label: 'Hold the light', unit: 's', note: 'how long the light rests on it before it comes out (a tap on it is at once)' },
   shine: { value: 1, min: 0.3, max: 2.5, step: 0.05, label: 'Eye shine', note: 'how big and bright the eyes in the dark are' },
-  help: { value: 15, min: 4, max: 60, step: 1, label: 'Easier after', unit: 's', note: 'eyes, sounds and paw prints get easier to spot after this long without a find' },
+  help: { value: 8, min: 4, max: 60, step: 1, label: 'Easier after', unit: 's', note: 'eyes, sounds and paw prints get easier to spot (brighter, bigger) after this long without a find, and the 👆 shows the way' },
   every: { value: 3.2, min: 1, max: 8, step: 0.1, label: 'Sound every', unit: 's' },
   side: { value: 0.85, min: 0, max: 1, step: 0.05, label: 'Sound to one side', note: 'stereo: 1 = all in one ear, 0 = both' },
 })
@@ -261,10 +266,13 @@ class CampWorld {
   stick = { x: 0, y: 0, rx: 0, ry: 0, held: false, toast: 0, fire: false, fireT: 0, charred: false, eaten: 0, back: 0, pop: -9, heat: 0, golden: false, eat: null as null | { to: 'maple' | 'family'; t0: number } }
   maple = { anim: -9, kind: null as MapleAct | null, pokes: 0 }
   fireTap = -9
+  sizzleAt = -9
   glow: HTMLElement | null = null
   tentT = -9
   tentPokes = 0
   starsDone = false
+  /** Maple says goodnight at the end (not when the film out follows the game). */
+  goodnight = true
   /** Set when the scene goes away (a new section, or React trying the effect twice): its timers do nothing then. */
   dead = false
   private back: SVGSVGElement
@@ -445,7 +453,6 @@ class CampWorld {
     if (this.finger) return
     const [x, y] = this.toStage(e)
     this.lastTouch = this.now
-    this.hinted = false
     const f = { id: e.pointerId, x, y, sx: e.clientX, sy: e.clientY, t0: this.now, moved: 0, speed: 0, stick: false }
     this.finger = f
     // The marshmallow stick (marshmallow section): grab it near the marshmallow or along the stick.
@@ -550,7 +557,7 @@ class CampWorld {
     if (dist(mx, my, x, y) < 130) {
       this.maple.pokes++
       this.mapleDo(this.maple.pokes % 2 ? 'slap' : 'hop')
-      night.slap(pan, 0.2)
+      camp.slap(pan, 0.2)
       meet('beaver')
       if (this.maple.pokes % 3 === 1) this.ev.speak(T.mapleHi)
       return
@@ -571,7 +578,7 @@ class CampWorld {
     const [fx, fy] = st.fire
     if (dist(fx, fy - 40, x, y) < 110) {
       this.fireTap = this.now
-      night.whoosh()
+      camp.sparks()
       for (let i = 0; i < 16; i++) this.spark(fx + (Math.random() - 0.5) * 60, fy - 60, 1.6)
       return
     }
@@ -581,8 +588,8 @@ class CampWorld {
     if (y < ty + 10 && y > ty - th && Math.abs(x - tx) < tw + 20) {
       this.tentT = this.now
       this.tentPokes++
-      night.zip(pan)
-      this.later(() => night.snore(pan), 500)
+      camp.zip(pan)
+      this.later(() => night.snore(pan), 600)
       if (this.tentPokes % 3 === 2) this.later(() => this.ev.speak(T.tent), 1400)
       return
     }
@@ -607,7 +614,7 @@ class CampWorld {
       if (dist(bx, by, x, y) < br + 30) {
         this.trail.bush = st.bushes.findIndex((b) => b[0] === bx)
         this.trail.shake = this.now
-        night.rustle(pan)
+        camp.rustle(pan)
         return
       }
     }
@@ -622,13 +629,14 @@ class CampWorld {
   }
 
   private voice(id: CritterId, pan: number) {
-    if (id === 'owl') night.hoot(pan, 0.14)
-    else if (id === 'beaver') night.slap(pan)
-    else if (id === 'frog') night.peep(pan)
-    else if (id === 'hare') night.thump(pan, 0.24)
+    if (id === 'owl') camp.hoot(pan, 0.14)
+    else if (id === 'beaver') camp.slap(pan)
+    else if (id === 'frog') camp.peep(pan)
+    else if (id === 'hare') camp.thump(pan, 0.24)
     else if (id === 'porcupine') night.quills(pan)
     else if (id === 'deer') sfx.fwip()
-    else if (id === 'raccoon' || id === 'kits') night.munch(pan)
+    else if (id === 'raccoon') camp.chitter(pan)
+    else if (id === 'kits') camp.kits(pan)
     else sounds.pop()
   }
 
@@ -692,7 +700,8 @@ class CampWorld {
 
   private tickFinding(dt: number) {
     const R = TORCH.size
-    const reach = R * FIND.reach
+    // (Stuck a while: the light finds it from further off too.)
+    const reach = R * FIND.reach * (1 + 0.5 * clamp((this.now - this.lastFind - FIND.help) / 6, 0, 1))
     const lx = this.light.x
     const ly = this.light.y
     for (const c of this.crits.values()) {
@@ -796,7 +805,7 @@ class CampWorld {
         if (bi >= 0) {
           t.bush = bi
           t.shake = this.now
-          night.rustle(this.pan(this.stage.bushes[bi][0]))
+          camp.rustle(this.pan(this.stage.bushes[bi][0]))
         }
       }
       if (t.next >= pr.length && !t.den) this.denFound()
@@ -830,9 +839,10 @@ class CampWorld {
       this.act(kits, 'out')
       meet('raccoon')
       sounds.sparkle()
-      night.munch(this.pan(kits.x))
+      camp.chitter(this.pan(raccoon.x))
+      this.later(() => camp.kits(this.pan(kits.x)), 500)
       this.mapleDo('cheer')
-      this.say('🦝 The bandit! She’s sharing with her babies')
+      this.say('🦝 Roxy! She’s sharing with her three kits')
       this.ev.speak(T.caught, true)
       if (!was) this.ev.found(this.foundIds())
       burst()
@@ -888,7 +898,11 @@ class CampWorld {
     s.heat = s.charred || !s.held ? 0 : Math.pow(clamp(1 - d / ROAST.heat, 0, 1), 1.5)
     if (!s.fire && !s.charred) {
       s.toast += s.heat * dt
-      if (s.heat > 0.05 && Math.random() < dt * 6 * s.heat) night.sizzle(0.02 + 0.03 * s.heat)
+      // (A sizzle every so often while it's hot: the recorded one is a second and a half long.)
+      if (s.heat > 0.08 && this.now - this.sizzleAt > (camp.synthCrackle ? 0.15 : 1.3) / (0.4 + s.heat)) {
+        this.sizzleAt = this.now
+        camp.sizzle(0.02 + 0.03 * s.heat)
+      }
       if (!s.golden && s.toast >= ROAST.golden) {
         s.golden = true
         sounds.sparkle()
@@ -909,7 +923,7 @@ class CampWorld {
     if (!s.fire) return
     s.fire = false
     s.charred = true
-    night.blow()
+    camp.blow()
     for (let i = 0; i < 6; i++) this.spark(s.x, s.y - 10, 0.5)
     this.say('🖤 A black, crunchy one!')
   }
@@ -930,7 +944,7 @@ class CampWorld {
     const golden = s.toast >= g * 0.75 && !s.charred
     if (toMaple) {
       this.mapleDo('chomp')
-      night.munch(this.pan(mx))
+      camp.munch(this.pan(mx))
       if (s.charred) {
         this.later(() => this.mapleDo('wiggle'), 900)
         this.say('😅 Too crunchy for Maple!')
@@ -944,11 +958,15 @@ class CampWorld {
       const k = this.crits.get('kits')!
       this.act(r, s.charred ? 'cheer' : 'munch')
       this.act(k, s.charred ? 'cheer' : 'munch')
-      night.munch(this.pan(fx))
+      camp.munch(this.pan(fx))
+      const burnt = s.charred
+      this.later(() => (burnt ? camp.kits(this.pan(fx)) : camp.chitter(this.pan(fx))), 450)
       this.say(s.charred ? '🦝 The raccoons LOVE the burnt ones!' : '🦝 Crunch munch!')
       this.ev.speak(s.charred ? T.burntYum : T.munch)
     }
     s.eaten++
+    this.lastFind = this.now
+    this.hinted = false
     if (s.eaten === EATEN_TO_STARS) this.later(() => this.ev.section('stars', this.foundIds()), 2600)
   }
 
@@ -988,7 +1006,8 @@ class CampWorld {
       this.mapleDo('cheer')
       this.say('🌟 The sky is full of stars!')
       this.ev.speak(T.fullSky, true)
-      this.ev.speak(T.goodnight, true)
+      // (Not when the film out comes next: the night goes on round the fire with Roxy.)
+      if (this.goodnight) this.ev.speak(T.goodnight, true)
       this.ended = true
       this.ev.end()
     }, 600)
@@ -1099,9 +1118,9 @@ class CampWorld {
       put(front, 'opacity', c.frontA.toFixed(2))
       // The puppets (the raccoons) stand over the night at the same spot; they do their own hops.
       puppets.forEach((el, i) => {
-        const off = c.id === 'kits' ? (i ? KIT_GAP : -KIT_GAP) : 0
-        const px = (x + off - Lk.eye[0] * Lk.w - this.vb.x) * k
-        const py = (y + (c.id === 'kits' && i ? 6 : 0) - Lk.eye[1] * Lk.h - this.vb.y) * k
+        const [ox, oy] = c.id === 'kits' ? KIT_SPOTS[i] : [0, 0]
+        const px = (x + ox - Lk.eye[0] * Lk.w - this.vb.x) * k
+        const py = (y + oy - Lk.eye[1] * Lk.h - this.vb.y) * k
         put(el, 'style.transform', `translate(${px.toFixed(1)}px, ${py.toFixed(1)}px)`)
         put(el, 'style.width', `${(Lk.w * k).toFixed(1)}px`)
         put(el, 'style.height', `${(Lk.h * k).toFixed(1)}px`)
@@ -1227,7 +1246,7 @@ class CampWorld {
       this.glow.dataset.tap = tap > 0 ? '1' : '0'
     }
     if (Math.random() < 0.06) this.spark(fx + (Math.random() - 0.5) * 50, fy - 60, 0.8)
-    if (Math.random() < 0.04) night.crackle()
+    if (camp.synthCrackle && Math.random() < 0.04) night.crackle()
   }
 
   private drawFlies() {
@@ -1406,7 +1425,10 @@ class CampWorld {
   private tickHint() {
     const h = this.els.hint
     if (!h) return
-    const idle = !this.finger && this.now - this.lastTouch > 8 && this.now - this.lastFind > 8 && !this.ended
+    // Stuck: no touch for 8 s, or sweeping about for longer without finding anything (the 👆 then shows her where, and
+    // the eyes, ripples and prints have grown brighter since FIND.help).
+    const stuck = this.now - this.lastFind > 8 && (this.now - this.lastTouch > 8 || this.now - this.lastFind > 13)
+    const idle = stuck && !this.stick.held && !this.ended
     let at: Pt | null = null
     if (idle) {
       const st = this.stage
@@ -1433,6 +1455,14 @@ class CampWorld {
     if (at) put(h, 'transform', `translate(${at[0].toFixed(0)} ${(at[1] + 50).toFixed(0)})`)
   }
 
+  /** A stage point on the screen (CSS pixels), for the QA robots. */
+  private screenOf([x, y]: Pt) {
+    const m = this.back.getScreenCTM()
+    if (!m) return null
+    const p = new DOMPoint(x, y).matrixTransform(m)
+    return [Math.round(p.x), Math.round(p.y)]
+  }
+
   qa() {
     return {
       section: this.section,
@@ -1441,7 +1471,9 @@ class CampWorld {
       light: [Math.round(this.light.x), Math.round(this.light.y)],
       size: TORCH.size,
       sound: this.section === 'sounds' ? (this.snd.done ? 'done' : SOUNDS[this.snd.i]) : null,
-      prints: this.section === 'bandit' ? { next: this.trail.next, of: this.stage.prints.length } : null,
+      prints: this.section === 'bandit' ? { next: this.trail.next, of: this.stage.prints.length, at: this.screenOf(this.stage.prints[Math.min(this.trail.next, this.stage.prints.length - 1)]) } : null,
+      // (On screen: the marshmallow, the flames, Maple and the raccoons, for the roasting robot.)
+      spots: this.section === 'marshmallow' ? { mallow: this.screenOf([this.stick.x, this.stick.y]), fire: this.screenOf([this.stage.fire[0], this.stage.fire[1] - 90]), maple: this.screenOf(this.stage.maple), family: this.screenOf([this.stage.family[0] + 60, this.stage.family[1]]) } : null,
       stick: this.section === 'marshmallow' ? { x: Math.round(this.stick.x), y: Math.round(this.stick.y), held: this.stick.held, heat: +this.stick.heat.toFixed(2), toast: +this.stick.toast.toFixed(2), fire: this.stick.fire, charred: this.stick.charred, eaten: this.stick.eaten } : null,
       stars: this.stars.filter((s) => s.lit).length,
       shades: this.moose.shades > 0.5,
@@ -1477,16 +1509,16 @@ function CritterEl({ id, halo }: { id: CritterId; halo: string }) {
 /** Eyes shining in the dark (drawn over the darkness), around (0, 0). */
 function EyesEl({ id }: { id: CritterId }) {
   const Lk = LOOKS[id]
-  const twins = id === 'kits' ? [-KIT_GAP, KIT_GAP] : [0]
+  const pairs: Pt[] = id === 'kits' ? KIT_SPOTS : [[0, 0]]
   return (
     <g data-k={`e-${id}`} visibility="hidden" pointerEvents="none">
       <g data-k={`e-${id}-in`}>
-        {twins.flatMap((dx) =>
+        {pairs.flatMap(([dx, dy]) =>
           [-1, 1].map((s) => (
             <g key={`${dx}${s}`}>
-              <circle cx={dx + s * Lk.gap} cy={0} r={Lk.eyeR * 2.3} fill={Lk.shine} opacity={0.22} />
-              <circle cx={dx + s * Lk.gap} cy={0} r={Lk.eyeR} fill={Lk.shine} />
-              <circle cx={dx + s * Lk.gap + Lk.eyeR * 0.35} cy={-Lk.eyeR * 0.35} r={Lk.eyeR * 0.35} fill="#fff" />
+              <circle cx={dx + s * Lk.gap} cy={dy} r={Lk.eyeR * 2.3} fill={Lk.shine} opacity={0.22} />
+              <circle cx={dx + s * Lk.gap} cy={dy} r={Lk.eyeR} fill={Lk.shine} />
+              <circle cx={dx + s * Lk.gap + Lk.eyeR * 0.35} cy={dy - Lk.eyeR * 0.35} r={Lk.eyeR * 0.35} fill="#fff" />
             </g>
           )),
         )}
@@ -1691,10 +1723,12 @@ interface Run {
   told: boolean
 }
 
-export function CampfireNight({ onDone, setProgress }: CanadaActivityProps) {
+export function CampfireNight({ onDone, setProgress, filmed, stamps }: CanadaActivityProps) {
   const gameTimers = useTimers()
   const { start, param, enter } = useSections(CAMPFIRE_SECTIONS)
-  const [story, setStory] = useState(!start || start === 'story')
+  // The way-in film has just played (the paw, "Who's out there?"): straight to Sparkle's instruction and the light.
+  // From a link or a replay, Maple's short hello first.
+  const [story, setStory] = useState(!filmed && (!start || start === 'story'))
   const first = (start && start !== 'story' ? start : 'eyes') as CampSection
   const [run, setRun] = useState<Run>(() => ({ section: first, found: parseFound(param('found'), first), seed: (Math.random() * 1e9) | 0, n: 0, light: null, told: false }))
   const [pill, setPill] = useState(SAY[run.section])
@@ -1707,6 +1741,7 @@ export function CampfireNight({ onDone, setProgress }: CanadaActivityProps) {
   const raccoon = useRef<PuppetHandle>(null)
   const kitA = useRef<PuppetHandle>(null)
   const kitB = useRef<PuppetHandle>(null)
+  const kitC = useRef<PuppetHandle>(null)
   const done = useRef(false)
   const busy = useRef(false)
   const size = useElementSize(box)
@@ -1720,6 +1755,9 @@ export function CampfireNight({ onDone, setProgress }: CanadaActivityProps) {
   const vw = size.width ? size.width / k : stage.w
   const vh = size.height ? size.height / k : stage.h
   const vb = { x: (stage.w - vw) / 2, y: (stage.h - vh) / 2, w: vw, h: vh }
+
+  // The campfire crackling under the crickets the whole time she's here.
+  useEffect(() => camp.fireBed(0.28), [])
 
   useEffect(() => {
     if (story) {
@@ -1758,6 +1796,7 @@ export function CampfireNight({ onDone, setProgress }: CanadaActivityProps) {
         else {
           void kitA.current?.play(action)
           gameTimers.later(() => void kitB.current?.play(action), 120)
+          gameTimers.later(() => void kitC.current?.play(action), 240)
         }
       },
       light: (x, y) => lightAt.current?.(x, y),
@@ -1772,6 +1811,8 @@ export function CampfireNight({ onDone, setProgress }: CanadaActivityProps) {
       },
     })
     w.setVb(vb, k)
+    // (The first time it's finished, the film out comes next: Place.tsx's Chapter.)
+    w.goodnight = stamps.includes('campfire') || filmSeen(CHAPTER_FILMS.campfire.out)
     world.current = w
     ;(window as unknown as { __canadaCampfireQA?: () => unknown }).__canadaCampfireQA = () => w.qa()
     const unwatch = watch('campfire', () => {
@@ -2057,11 +2098,15 @@ export function CampfireNight({ onDone, setProgress }: CanadaActivityProps) {
       <div data-k="pp-raccoon" style={PUPPET}>
         <Raccoon ref={raccoon} height="100%" />
       </div>
+      {/* Her three kits: the middle one a step behind the other two (KIT_SPOTS). */}
       <div data-k="pp-kits" style={PUPPET}>
         <Raccoon ref={kitA} height="100%" baby />
       </div>
       <div data-k="pp-kits" style={PUPPET}>
-        <Raccoon ref={kitB} height="100%" baby flip={-1} />
+        <Raccoon ref={kitB} height="100%" baby />
+      </div>
+      <div data-k="pp-kits" style={PUPPET}>
+        <Raccoon ref={kitC} height="100%" baby flip={-1} />
       </div>
       {/* On top of everyone: the marshmallow on its stick, fireflies, ripples, snores and the hint. */}
       <svg key={`t${run.n}`} viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.h}`} style={layer(25)} aria-hidden>

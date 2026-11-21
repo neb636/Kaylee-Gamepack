@@ -1,6 +1,7 @@
 // Salmon Leap's bears: a layered SVG puppet drawn inside the river's SVG (<g>, feet at 0,0, in stage units), standing up
 // in the falls and facing left, down the river. Two looks: the black bear (charcoal fur, a tan muzzle, like a real black
-// bear) and the spirit bear (a Kermode bear: the same black bear, with creamy white fur; not a polar bear), and a
+// bear) and the spirit bear, Misty (a Kermode bear: the same black bear, with creamy white fur; not a polar bear; the
+// same colors as her 3D self in the films, CANADA_COLORS.spirit*), and a
 // little black bear cub on the bank. They breathe, blink, watch her finger and talk in the `bear` voice. The river
 // (SalmonLeap.tsx) moves them about and calls their actions:
 //   swipe   fishing: the paw goes up (anticipation), and SWIPES down into the water
@@ -16,6 +17,7 @@ import { forwardRef, useId, useRef } from 'react'
 import { bell, clamp, lerp, setA, setT, smooth, span, spring, usePuppet, wobble, type PuppetHandle } from '../../../../../sdk'
 import { inkPass as inkPassIn, line as lineIn, useInk } from '../../../../kit/ink'
 import { BLUSH, Eye, INK, updateEyes, type EyeKind, type EyePart } from '../../../poles/puppets/face'
+import { CANADA_COLORS as C, CANADA_LOOKS } from '../../characters/looks'
 
 export interface BearCtl {
   lunge: number
@@ -27,7 +29,8 @@ export type BearAction = keyof typeof BEAR_ACTIONS
 
 const LOOKS = {
   black: { fur: '#3B3442', dark: '#29232F', muzzle: '#C9A27A', belly: '#4A4252', ear: '#6A5A6E', nose: '#1E1A24', pad: '#7E6A74' },
-  spirit: { fur: '#F7EEDB', dark: '#E6D7BC', muzzle: '#E9CDA4', belly: '#FFF7E6', ear: '#F2B8B0', nose: '#3A2E36', pad: '#C9A98E' },
+  // (As on her 3D toy: cream fur, a white muzzle, a dark nose and dark paws, pink in her ears.)
+  spirit: { fur: C.spiritFur, dark: '#E6D9C2', muzzle: C.spiritLight, belly: C.spiritLight, ear: CANADA_LOOKS.spirit.ear!, nose: C.spiritDark, pad: C.spiritDark },
 }
 
 const inkPass = () => inkPassIn(4.5, INK)
@@ -176,6 +179,8 @@ export const Bear = forwardRef<PuppetHandle, { spirit?: boolean; cub?: boolean; 
         {/* The near arm gets its own line, so a dark paw reads against the dark body as it swipes. */}
         {!pass && name === 'armF' && <path d={ARM} {...line(3)} />}
         {!pass && arm && <ellipse cy={50} rx={9} ry={6} fill={c.pad} />}
+        {/* Misty's feet are dark, like her paws. */}
+        {!pass && !arm && spirit && <path d="M-15 6 C-16 10 -16 12 -12 16 C-6 22 6 22 12 16 C16 12 16 10 15 6 Z" fill={c.pad} />}
       </g>
     )
   }

@@ -32,15 +32,17 @@ import { setOutlineResolution } from '../../../../engine3d/outline'
 import { Particles } from '../../../../engine3d/particles'
 import { applyBands, makeLights } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
-import { Water } from '../../../../engine3d/water'
 import { FingerWheel } from '../../../../engine3d/wheel'
 import { meet } from '../../book/met'
 import { L } from '../../lines'
 import { Bear, Chipmunk, Deer, Hare, Moose, Peeper, Porcupine, Woodpecker } from './critters'
+import { lilyPad } from './monty'
+import { bikeSfx } from './sounds'
 import { Rider } from './rider'
-import { buildClouds, buildCreek, buildFallen, buildFalls, buildForest, buildHills, buildLand, buildProps, buildRainbow, buildSky, buildTrail, FALL, FlowMaterial, Gondola, HANG, onRun, roundWater, SKY } from './scenery'
+import { Mountain } from './mountain'
+import { buildSky, FALL, type Gondola, HANG, SKY } from './scenery'
 import type { BikeSection } from './sections'
-import { BERMS_END, BRIDGE_HALF, Course, CREEK, CREEK_END, curve, END, FALLS, GREEN_END, H0, half, inCreek, island, JUMP, lane, phi, POND, POOL, rattly, SHOULDER, SPLIT, START, way } from './trail'
+import { BERMS_END, BRIDGE_HALF, Course, CREEK, CREEK_END, curve, END, FALLS, GREEN_END, H0, half, inCreek, island, JUMP, lane, phi, POOL, rattly, SHOULDER, SPLIT, START, way } from './trail'
 import { TO_DEG, wrapAngle } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/canada/activities/bike/ride.ts'
@@ -96,7 +98,7 @@ export const BIKE_ANCHORS: AnchorInfo[] = [
   { id: 'cabin', label: "Maple's gondola", kind: 'thing' },
   ...Array.from({ length: CABS }, (_, i) => ({ id: `car:${i}`, label: 'A gondola', kind: 'thing' as const })),
   { id: 'chipmunk', label: 'The chipmunk', kind: 'thing' },
-  { id: 'moose', label: 'The moose', kind: 'thing' },
+  { id: 'moose', label: 'Monty the moose', kind: 'thing' },
   { id: 'woodpecker', label: 'The woodpecker', kind: 'thing' },
   { id: 'porcupine', label: 'The porcupine', kind: 'thing' },
   { id: 'frog', label: 'The spring peeper', kind: 'thing' },
@@ -151,26 +153,19 @@ const STUMPS: [number, number][] = [
   [742, -1],
   [790, 1],
 ]
+/** Monty in the waterfall's pool, where the ride ends: how far along and across, how tall (bigger than Maple on her
+ *  bike, by a lot), and how deep in the water he stands. */
+const MONTY = { s: 892, lat: -4.4, h: 3.2, sink: 1 }
 const WOODPECKER = { s: 66, side: -1 }
 const PORCUPINE = { s: 352, side: -1 }
 
 const tmp = new Vector3()
 const tmp2 = new Vector3()
 
-function bell() {
-  tone(2400, 2380, 0.35, 0.07, 'sine')
-  tone(3550, 3500, 0.25, 0.03, 'sine')
-  tone(2400, 2380, 0.35, 0.07, 'sine', 0.16)
-  tone(3550, 3500, 0.25, 0.03, 'sine', 0.16)
-}
+const bell = bikeSfx.bell
 const knock = () => noise(0.035, 0.18, 'bandpass', 950, 700, 0, 3)
-const plank = () => noise(0.03, 0.05, 'bandpass', 520, 420, 0, 2)
-const moo = () => {
-  tone(118, 96, 0.8, 0.14, 'sawtooth')
-  tone(236, 190, 0.8, 0.03, 'triangle')
-}
 const ribbit = () => [0, 0.13].forEach((d) => tone(330, 230, 0.1, 0.08, 'square', d))
-const creak = () => tone(520, 430, 0.35, 0.035, 'triangle')
+const creak = bikeSfx.creak
 /** A spring peeper's peep: a short rising whistle, twice. */
 const peep = () => [0, 0.55].forEach((d) => tone(2600, 3200, 0.14, 0.035, 'sine', d))
 /** A hare's thump of a back foot. */
@@ -203,19 +198,9 @@ export class MountainBike implements World3D {
   private bag = new Bag()
   private lights = makeLights(this.scene)
   private course = new Course()
+  private mountain: Mountain
   private gondola: Gondola
-  private ground: Mesh
-  private ribbon: Mesh
-  private forest: ReturnType<typeof buildForest>
-  private water: Water
-  private pond: Water
-  private pool: Water
-  private creekFlow: FlowMaterial
-  private fallsFlow: FlowMaterial
-  private topFlow: FlowMaterial
   private sky: Mesh
-  private clouds: Group[]
-  private rainbow: Group
   private wheel = new FingerWheel()
   private wheelEl: HTMLElement | null = null
   private hintEl: HTMLElement | null = null
@@ -262,7 +247,8 @@ export class MountainBike implements World3D {
   // ---- Everyone else.
   private chip: Chipmunk
   private chipS = 0
-  private moose: Moose
+  private monty: Moose
+  private stopBed: () => void
   private pecker: Woodpecker
   private peckSeen = 0
   private porky: Porcupine
@@ -308,64 +294,14 @@ export class MountainBike implements World3D {
     this.rig.lag = 0.3
     this.rig.camera.far = 3200
 
-    // ---- The mountain: the land, the trail, the gondola, the forest ----
-    this.gondola = new Gondola(course, bag)
-    const g0 = this.gondola.bottom
-    const g1 = this.gondola.top
-    const gondolaNear = (x: number, z: number, pad: number) => {
-      const dx = g1.x - g0.x
-      const dz = g1.z - g0.z
-      const k = clamp(((x - g0.x) * dx + (z - g0.z) * dz) / (dx * dx + dz * dz))
-      return Math.hypot(x - g0.x - dx * k, z - g0.z - dz * k) < 8 + pad
-    }
-    this.ground = buildLand(course, gondolaNear, bag)
-    scene.add(this.ground)
-    this.ribbon = buildTrail(course, bag)
-    scene.add(this.ribbon, buildFallen(course, bag))
-    scene.add(this.gondola.group)
-    const st = course.station
+    // ---- The mountain: the land, the trail, the gondola, the forest, the water, the hills (mountain.ts) ----
     const deerAt = t.spot(DEER.s, DEER.side * (half(DEER.s) + DEER.off))
     const bearAt = t.spot(BEAR.s, BEAR.side * (half(BEAR.s) + BEAR.off))
-    const keepOut = (x: number, z: number) =>
-      gondolaNear(x, z, 2) ||
-      onRun(x, z, 2) ||
-      Math.hypot(x - st.x, z - st.z) < 24 ||
-      Math.hypot(x - course.pond.x, z - course.pond.z) < POND.r + 2.5 ||
-      Math.hypot(x - course.pool.x, z - course.pool.z) < POOL.r + 7 ||
-      Math.hypot(x - g0.x, z - g0.z) < 14 ||
-      Math.hypot(x - deerAt.x, z - deerAt.z) < 4 ||
-      Math.hypot(x - bearAt.x, z - bearAt.z) < 6 ||
-      (course.gully(x, z).depth > 0.6 && Math.abs(course.gully(x, z).off) < 4)
-    this.forest = buildForest(course, keepOut, bag)
-    scene.add(this.forest.group)
-    scene.add(buildProps(course, bag))
-
-    // ---- Water: the river far below, the pond, the creek, the waterfall and its pool ----
-    this.water = new Water({ size: 7000, deep: '#6FA9D9', shallow: '#86BDE6', haze: SKY, hazeNear: 200, hazeFar: 1700 }, bag)
-    this.water.mesh.position.set(t.spot(END, 0).x, -0.5, course.riverZ)
-    scene.add(this.water.mesh)
-    this.pond = roundWater(POND.r, course.pondY, course.pond, bag)
-    this.pool = roundWater(POOL.r + 0.4, course.poolY, course.pool, bag)
-    scene.add(this.pond.mesh, this.pool.mesh)
-    this.creekFlow = new FlowMaterial(bag, { deep: '#5FA6DE', light: '#86C4EC', speed: 2.2, rows: 5 })
-    this.fallsFlow = new FlowMaterial(bag, { deep: '#7FBDEB', light: '#A9D8F6', speed: 7, rows: 14, along: 0.35 })
-    this.topFlow = new FlowMaterial(bag, { deep: '#5FA6DE', light: '#86C4EC', speed: 2.6, rows: 6 })
-    scene.add(buildCreek(course, this.creekFlow, bag))
-    scene.add(buildFalls(course, this.fallsFlow, this.topFlow, bag))
-    this.rainbow = buildRainbow(bag)
-    const rb = t.spot(FALLS - 6, POOL.lat - 1)
-    this.rainbow.position.set(rb.x, course.poolY - 1.5, rb.z)
-    this.rainbow.rotation.y = -phi(FALLS)
-    this.rainbow.visible = false
-    scene.add(this.rainbow)
-
-    // ---- The sky, the hills, the clouds ----
+    this.mountain = new Mountain(course, bag, (x, z) => Math.hypot(x - deerAt.x, z - deerAt.z) < 4 || Math.hypot(x - bearAt.x, z - bearAt.z) < 6)
+    this.gondola = this.mountain.gondola
+    scene.add(this.mountain.group)
     this.sky = buildSky(bag)
     scene.add(this.sky)
-    const mid = t.spot(500, 0)
-    scene.add(buildHills({ x: mid.x, z: mid.z - 300 }, bag))
-    this.clouds = buildClouds({ x: mid.x, z: mid.z - 200 }, bag)
-    scene.add(...this.clouds)
 
     // ---- Leaf piles and stumps by the trail ----
     PILES.forEach(([s, k], i) => {
@@ -395,11 +331,16 @@ export class MountainBike implements World3D {
     this.chip = new Chipmunk(bag)
     this.chip.root.visible = false
     scene.add(this.chip.root)
-    this.moose = new Moose(bag)
-    this.moose.root.position.set(course.pond.x + 0.6, course.pondY - 0.4, course.pond.z)
-    const tp = t.spot(POND.s, 0)
-    this.moose.root.rotation.y = Math.atan2(tp.x - course.pond.x, tp.z - course.pond.z) + 0.9
-    scene.add(this.moose.root)
+    // Monty, in his bath in the waterfall's pool: the ride ends with him (the closing film picks up there).
+    this.monty = new Moose(bag, MONTY.h)
+    lilyPad(this.monty.rig, bag)
+    {
+      const mp = t.spot(MONTY.s, MONTY.lat)
+      const end = t.spot(END, 0)
+      this.monty.root.position.set(mp.x, course.poolY - MONTY.sink, mp.z)
+      this.monty.root.rotation.y = Math.atan2(end.x - mp.x, end.z - mp.z)
+      scene.add(this.monty.root)
+    }
     // The woodpecker's birch and the porcupine's maple (with a branch to sit on).
     const wp = t.spot(WOODPECKER.s, WOODPECKER.side * (half(WOODPECKER.s) + 3))
     const wy = course.land(wp.x, wp.z)
@@ -510,6 +451,7 @@ export class MountainBike implements World3D {
     }
     this.placeRider(0)
 
+    this.stopBed = bikeSfx.forest()
     this.unwatch = watch('bike', () => ({
       'her push': [this.wheel.push, 1],
       steer: [this.wheel.k, 1],
@@ -603,18 +545,13 @@ export class MountainBike implements World3D {
     const t = (this.time += dt)
     this.modeT += dt
     this.bonkCool -= dt
-    for (const f of [this.creekFlow, this.fallsFlow, this.topFlow]) f.update(t)
-    this.water.update(t)
-    this.pond.update(t)
-    this.pool.update(t)
     const k = this.wheel.update(dt, t, STEER)
     if (this.mode === 'ride' && Math.abs(k) > 0.05) {
       this.counts.steered += dt
       this.lastSteer = t
     }
 
-    const cam = this.rig.camera.position
-    this.gondola.update(dt, t, cam)
+    this.mountain.update(dt, t, this.rig.camera.position)
     if (this.mode === 'story') {
       // Waiting at the bottom of the shot while Maple talks.
       const her = this.gondola.hers
@@ -647,11 +584,7 @@ export class MountainBike implements World3D {
     })
     for (const p of [this.leaves, this.drift, this.dust, this.spray, this.foam]) p.update(dt)
     // The rainbow fades in over the pool at the end.
-    if (this.doneT >= 0) {
-      this.rainbow.visible = true
-      const a = clamp((this.doneT - 0.6) / 1.6) * 0.7
-      for (const m of this.rainbow.children) ((m as Mesh).material as { opacity: number }).opacity = a
-    }
+    if (this.doneT >= 0) this.mountain.rainbow((this.doneT - 0.6) / 1.6)
     // The waterfall's mist.
     if (Math.random() < dt * 30 && Math.abs(this.s - FALLS) < 160) {
       const p = this.course.trail.spot(FALLS - 1.5, POOL.lat - 1 + (Math.random() - 0.5) * 6)
@@ -666,11 +599,6 @@ export class MountainBike implements World3D {
       const ahead = 6 + Math.random() * 18
       this.drift.emit(c.position.x + f.x * ahead + (Math.random() - 0.5) * 16, c.position.y + 3 + Math.random() * 5, c.position.z + f.z * ahead + (Math.random() - 0.5) * 16, 0.6 + Math.random() * 0.4, -0.4, (Math.random() - 0.5) * 0.6, 5, 0.16 + Math.random() * 0.06)
     }
-    for (const c of this.clouds) {
-      c.position.x += c.userData.v * dt
-      if (c.position.x > 900) c.position.x -= 1800
-    }
-
     const p = this.bikePos(tmp)
     this.lights.follow(p.x, p.y, p.z)
     this.sky.position.copy(this.rig.camera.position)
@@ -835,6 +763,7 @@ export class MountainBike implements World3D {
     this.sq = clamp(this.sq + this.sqV * dt, -0.12, 0.28)
 
     this.trailStuff(dt)
+    if (!this.air && v > 0.6 && !this.onBridge) bikeSfx.roll(v)
     // The stretches, and which way round the island she took.
     if (this.s >= GREEN_END - 4) this.enter('berms')
     const w = way(this.s, this.lat)
@@ -853,11 +782,12 @@ export class MountainBike implements World3D {
       this.mode = 'done'
       this.modeT = 0
       this.rider.cheer()
-      this.rider.look(0.5)
       bell()
+      bikeSfx.falls()
       sounds.fanfare()
       this.events.progress(PARTS.length)
-      this.chat(L.bike.falls, true)
+      // (Maple's line and Monty's hello come from the game's screen, then the closing film picks up at the pool.)
+      this.chatAt = this.time + 99
       this.events.done()
     }
   }
@@ -917,7 +847,7 @@ export class MountainBike implements World3D {
     this.counts.landings++
     const p = this.bikePos(tmp)
     this.dust.burst(p.x, p.y + 0.1, p.z, Math.round(clamp(impact * 3, 6, 26)), 2.4, 2.2, 0.16)
-    sfx.thump()
+    bikeSfx.land()
   }
 
   /** Dirt and leaves off the back wheel, splashes, planks, piles, stumps. */
@@ -929,7 +859,7 @@ export class MountainBike implements World3D {
     const wet = !this.onBridge && inCreek(this.s) && this.lat > -0.2
     if (wet && !this.wet) {
       this.counts.splashes++
-      sfx.splash()
+      bikeSfx.splash()
       this.spray.burst(p.x, c.creekY + 0.1, p.z, 34, 3.2, 5.5, 0.26)
       for (let i = 0; i < 3; i++) this.foam.emit(p.x, c.creekY + 0.02, p.z, 0, 0, 0, 1.3 + i * 0.3, 2 + i)
       this.frog.poke()
@@ -953,13 +883,11 @@ export class MountainBike implements World3D {
       this.chat(L.bike.bridge, true)
     }
     if (this.onBridge && !this.air) {
+      if (this.plankAt === 0) bikeSfx.bridge()
       this.plankAt += v * dt
-      if (this.plankAt > 0.55) {
-        this.plankAt = 0
-        plank()
-        this.sqV += 0.05 * RIDE.bounce
-      }
-    }
+      // (A little jolt on each plank.)
+      if (Math.floor(this.plankAt / 0.55) !== Math.floor((this.plankAt - v * dt) / 0.55)) this.sqV += 0.05 * RIDE.bounce
+    } else if (!this.onBridge) this.plankAt = 0
     // Leaf piles: right through them, and Maple comes out covered.
     for (const pile of this.piles) {
       if (pile.gone >= 0 || this.air) continue
@@ -976,7 +904,7 @@ export class MountainBike implements World3D {
         this.airT = 0
         this.vy = 5.2 * RIDE.pop
         this.y += 0.05
-        sfx.boing()
+        bikeSfx.hop()
         bell()
         this.rider.ring()
         this.chat(L.bike.bell)
@@ -989,8 +917,7 @@ export class MountainBike implements World3D {
     pile.g.visible = false
     const p = pile.g.position
     this.leaves.burst(p.x, p.y + 0.3, p.z, 46, 3.5, 6, 0.22)
-    sfx.fwip()
-    noise(0.4, 0.12, 'bandpass', 2400, 900, 0, 0.8)
+    bikeSfx.leaves()
     if (ridden) {
       this.counts.piles++
       this.rider.leafy()
@@ -1036,11 +963,7 @@ export class MountainBike implements World3D {
       if (this.s - this.chipS > 60) this.chip.root.visible = false
     }
     this.chip.update(dt, t)
-    this.moose.update(dt, t)
-    if (this.moose.up > 0.5 && Math.random() < dt * 14) {
-      const ch = this.moose.chin(tmp2)
-      this.spray.emit(ch.x + (Math.random() - 0.5) * 0.3, ch.y, ch.z + (Math.random() - 0.5) * 0.3, 0, -0.5, 0, 0.6, 0.09)
-    }
+    this.updateMonty(dt, t)
     this.pecker.update(dt, t)
     if (this.pecker.pecks !== this.peckSeen) {
       this.peckSeen = this.pecker.pecks
@@ -1052,10 +975,6 @@ export class MountainBike implements World3D {
       this.peepSeen = this.frog.peeps
       if (Math.abs(this.s - CREEK.at) < 40) peep()
     }
-    // The moose looks at her when his head is up.
-    const ml = this.moose.root.worldToLocal(this.bikePos(tmp2).clone())
-    this.moose.look = clamp(Math.atan2(ml.x, ml.z), -0.9, 0.9)
-
     // The deer bounds off away from the trail, and wanders back facing home.
     const dh = this.deerHome
     const da = this.deer.away
@@ -1084,7 +1003,6 @@ export class MountainBike implements World3D {
     // Maple looks at the animals as she rides past (once each).
     if (this.mode === 'ride')
       for (const [id, at, side] of [
-        ['moose', POND.s, 1],
         ['bear', BEAR.s, BEAR.side],
         ['deer', DEER.s, DEER.side],
         ['porcupine', PORCUPINE.s, PORCUPINE.side],
@@ -1093,6 +1011,25 @@ export class MountainBike implements World3D {
         this.looked.add(id)
         this.rider.look(-side * 0.9)
       }
+  }
+
+  /** Monty in his bath: nose in the water, chewing, now and then lifting his head with a dripping mouthful of pond
+   *  weed (critters.ts); when his head's up he looks at her. */
+  private updateMonty(dt: number, t: number) {
+    const m = this.monty
+    m.update(dt, t)
+    if (m.up > 0.5 && Math.random() < dt * 14) {
+      const ch = m.chin(tmp2)
+      this.spray.emit(ch.x + (Math.random() - 0.5) * 0.3, ch.y, ch.z + (Math.random() - 0.5) * 0.3, 0, -0.5, 0, 0.6, 0.09)
+    }
+    const ml = m.root.worldToLocal(this.bikePos(tmp2).clone())
+    m.look = clamp(Math.atan2(ml.x, ml.z), -0.9, 0.9)
+  }
+
+  /** At the bottom: Monty looks up from his bath and says hello (the closing film goes on from here). */
+  hello() {
+    this.monty.poke()
+    bikeSfx.munch()
   }
 
   /** The hare at the trail's edge, or partway across (hareK 0..1, left edge to right edge). */
@@ -1158,15 +1095,16 @@ export class MountainBike implements World3D {
       return { center: new Vector3(her.x, her.y - 2.4, her.z), half: tall ? new Vector3(2, 2.2, 2) : new Vector3(4.6, 2.4, 3.2), yaw: yaw * TO_DEG, pitch: tall ? 20 : 12, minDist: 7 }
     }
     if (this.mode === 'done') {
-      // Maple and the waterfall, the rainbow over the pool.
-      const wide = this.doneT > 3
-      const s = wide ? (END + FALLS) / 2 - 6 : END + 1
-      const p = t.spot(s, wide ? POOL.lat * 0.6 : 0)
+      // Maple on her bike and Monty in his bath, from beside the trail: the waterfall behind him, the rainbow coming
+      // out over the pool.
+      const s = (END + MONTY.s) / 2
+      const p = t.spot(s, MONTY.lat * 0.5)
       return {
-        center: new Vector3(p.x, c.meadowY + (wide ? 5 : 1.15), p.z),
-        half: wide ? (tall ? new Vector3(7, 5.5, 5) : new Vector3(10.5, 5.5, 5)) : tall ? new Vector3(1.3, 1, 1.3) : new Vector3(1.9, 1, 1.4),
-        yaw: -phi(s) * TO_DEG + (wide ? 22 : 150),
-        pitch: wide ? 10 : 12,
+        center: new Vector3(p.x, c.meadowY + 1.3, p.z),
+        half: new Vector3(4.6, 1.6, 6),
+        yaw: -phi(s) * TO_DEG + 38,
+        pitch: 9,
+        follow: true,
       }
     }
     // Low behind the bike, looking down the trail: further ahead the faster she goes, so what's coming shows.
@@ -1288,16 +1226,16 @@ export class MountainBike implements World3D {
     if (id === 'chipmunk') {
       this.counts.pokes++
       this.chip.poke()
-      sfx.chirp()
-      sfx.munch()
+      bikeSfx.chipmunk()
       this.chat(L.bike.chipmunk, true)
       meet('chipmunk')
       return
     }
     if (id === 'moose') {
       this.counts.pokes++
-      this.moose.poke()
-      moo()
+      // Up comes his head out of the water, dripping, with a mouthful of pond weed.
+      this.monty.poke()
+      bikeSfx.snort()
       this.chat(L.bike.moose[this.counts.pokes % 2], true)
       meet('moose')
       return
@@ -1346,8 +1284,9 @@ export class MountainBike implements World3D {
     }
     // A leaf pile bursts; a tree rustles and drops leaves; water splashes; the ground puffs.
     this.raycaster.setFromCamera(new Vector2((x / this.w) * 2 - 1, -(y / this.h) * 2 + 1), this.rig.camera)
+    const m = this.mountain
     const piles = this.piles.filter((p) => p.gone < 0).map((p) => p.g)
-    const hit = this.raycaster.intersectObjects([...piles, ...this.forest.meshes, this.pond.mesh, this.pool.mesh, this.ribbon, this.ground], true)[0]
+    const hit = this.raycaster.intersectObjects([...piles, ...m.forest.meshes, m.pond.mesh, m.pool.mesh, m.ribbon, m.ground], true)[0]
     if (!hit) return
     const pile = this.piles.find((p) => isIn(hit.object, p.g))
     if (pile) {
@@ -1356,16 +1295,17 @@ export class MountainBike implements World3D {
       return
     }
     const pt = hit.point
-    if (this.forest.meshes.some((m) => isIn(hit.object, m))) {
+    if (m.forest.meshes.some((m) => isIn(hit.object, m))) {
       this.counts.pokes++
       this.leaves.burst(pt.x, pt.y, pt.z, 22, 2, 1.5, 0.2)
       noise(0.35, 0.1, 'bandpass', 3000, 1500, 0, 0.7)
       return
     }
-    if (hit.object === this.pond.mesh || hit.object === this.pool.mesh) {
+    if (hit.object === m.pond.mesh || hit.object === m.pool.mesh) {
       this.spray.burst(pt.x, pt.y + 0.05, pt.z, 14, 1.8, 3.5, 0.18)
       this.foam.emit(pt.x, pt.y + 0.02, pt.z, 0, 0, 0, 1.2, 1.6)
-      sfx.splash()
+      bikeSfx.splash()
+      if (hit.object === m.pool.mesh) bikeSfx.falls()
       return
     }
     this.dust.burst(pt.x, pt.y + 0.1, pt.z, 10, 1.4, 2, 0.14)
@@ -1400,7 +1340,7 @@ export class MountainBike implements World3D {
         const show = cab && cab.root.visible && cab.root.position.distanceTo(this.rig.camera.position) < 90
         place(el, show ? cab.root : null, 2.6, 1.2, -HANG)
       } else if (id === 'chipmunk') place(el, this.chip.root.visible && this.mode === 'ride' ? this.chip.root : null, this.chip.height, 2)
-      else if (id === 'moose') place(el, near(POND.s, -4, 80) || this.mode === 'gondola' ? this.moose.root : null, this.moose.height, 1.1)
+      else if (id === 'moose') place(el, near(MONTY.s, -20, 110) || this.mode === 'done' ? this.monty.root : null, this.monty.height - MONTY.sink, 1, MONTY.sink)
       else if (id === 'woodpecker') place(el, near(WOODPECKER.s, -2, 60) ? this.pecker.root : null, this.pecker.height, 1.8)
       else if (id === 'porcupine') place(el, near(PORCUPINE.s, -2, 60) ? this.porky.root : null, this.porky.height, 1.8)
       else if (id === 'frog') place(el, near(CREEK.at, -3, 50) ? this.frog.root : null, this.frog.height, 2)
@@ -1447,6 +1387,7 @@ export class MountainBike implements World3D {
   }
 
   dispose() {
+    this.stopBed()
     this.unwatch()
     this.scene.clear()
     this.bag.dispose()

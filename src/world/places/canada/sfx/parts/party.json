@@ -1,0 +1,13 @@
+[
+ { "id": "party-boards", "label": "Puck into a snowbank", "prompt": "A hockey puck sliding fast and thudding softly into a bank of packed snow, a muffled thump and a little snow spray. Short, soft.", "seconds": 0.6 },
+ { "id": "party-kits", "label": "Raccoon kits cheering", "prompt": "Three tiny cartoon baby animals squeaking and cheering happily, high soft chirps and squeals, cute and gentle, no words.", "seconds": 1.5 },
+ { "id": "party-horn", "label": "Goal horn (soft, friendly)", "prompt": "A soft, friendly toy goal horn at a little outdoor ice rink, a warm short honk-toot with a happy bell ding, gentle, not loud, cheerful.", "seconds": 1.5 },
+ { "id": "party-big-slap", "label": "The biggest slap shot", "prompt": "A huge cartoon hockey slap shot: a big wooden crack of a stick hitting a puck and a soft whooshing boom, playful, toy-like, not scary.", "seconds": 1.2 },
+ { "id": "party-topple", "label": "Geese wall topples over", "prompt": "A row of soft rubber toys toppling over one after another like bowling pins onto snowy ice, soft thumps and a few surprised little goose honks, funny cartoon.", "seconds": 1.6 },
+ { "id": "party-spin", "label": "Otter spinning on the ice", "prompt": "A small cartoon animal spinning fast on its back across smooth ice, a whirring swishy slide with a little giggle-like squeak, playful.", "seconds": 1.2 },
+ { "id": "party-steal", "label": "A quick paw steals the puck", "prompt": "A very quick cartoon swipe: a tiny whoosh and a light tick of a hockey stick tapping a puck away, sneaky and playful.", "seconds": 0.5 },
+ { "id": "party-post", "label": "Puck clangs off the goalpost", "prompt": "A hockey puck pinging off a metal goalpost, a bright short clang ring, soft, cartoon.", "seconds": 0.7 },
+ { "id": "party-pour", "label": "Maple syrup pouring on snow", "prompt": "Thick warm maple syrup pouring slowly from a cup onto clean snow, a gentle glugging drizzle and a very soft sizzle-hiss as it meets the cold snow.", "seconds": 2 },
+ { "id": "party-crunch", "label": "Everybody crunching taffy", "prompt": "A few little cartoon animals happily crunching and chewing sticky maple taffy candy, soft crunchy munches and a happy mmm-like hum, no words.", "seconds": 1.6 },
+ { "id": "party-bed", "label": "The evening rink (bed)", "prompt": "An evening on a frozen canal in a snowy city park: skates gliding and carving on ice nearby and far off, a soft cold breeze, gentle muffled happy crowd far away, cozy, snow-quiet. Seamless loop, no music, no voices.", "seconds": 15, "loop": true }
+]

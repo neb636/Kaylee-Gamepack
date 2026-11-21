@@ -1,20 +1,40 @@
 // Every phrase that can be spoken in Canada. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
 // (This file is also read by Node, so it imports only sdk/device.ts, which imports nothing.) Plain strings are Sparkle, the guide;
-// the friends (Maple the beaver, the moose, the raccoon...) talk in their own voices from cast.json. Each activity has
-// its own block below (one per folder in activities/), so activities can be worked on side by side.
+// the friends talk in their own voices from cast.json.
+//
+// Canada is one story, "Maple's Team" (planning/around-the-world/canada.md): Maple the beaver wants to win the Maple
+// Cup, the hockey game on Ottawa's frozen canal that the geese win every year, and she can't win alone. Her friends
+// live all across Canada, and every chapter brings one home to the team. The films' lines are here in play order:
+// `story` (the way in, the big game's films), and each chapter's `filmIn` (before its game) and `filmOut` (after it,
+// before the stamp). One block per chapter (activities/<id>/), so chapters can be worked on side by side.
 // Straight apostrophes only: curly ones failed the transcription check in PR #63.
 import { onDevice } from '../../../sdk/device.ts'
 
 type Line = string | { text: string; voice: string }
 const by = (voice: string) => (text: string): Line => ({ text, voice })
+/** Maple the beaver, the captain. */
 const maple = by('maple')
+/** Monty the moose, the goalie (slow, deep, kind). */
+const monty = by('moose')
+/** Roxy the raccoon, the quickest paws in Canada. */
+const roxy = by('raccoon')
+/** Tuque the snowman she builds in Quebec City. */
+const tuque = by('snowman')
+/** Ollie the sea otter, the spinner. */
+const ollie = by('otter')
+/** Misty the spirit bear, the big slap shot. */
+const misty = by('bear')
+/** Lulu the loon, who sings before the big game. */
+const lulu = by('loon')
+/** Gus, the captain of the geese. */
+const gus = by('gus')
 
 export const L = {
   // The shell's trophy ceremony and the trophy room speak these.
   trophyWin: `You did it! You won the Canada Champion trophy!`,
   trophyRoom: `Canada Champion! From Canada.`,
   passport: 'This is Canada! It goes all the way from one ocean to the other.',
-  // The passport's tap-to-hear facts (planning/around-the-world/canada.md, "Passport facts").
+  // The passport's tap-to-hear facts.
   facts: {
     flag: "Canada's flag is red and white, with a red maple leaf in the middle.",
     bonjour: 'People in Canada speak English and French. In Quebec, hello is Bonjour!',
@@ -26,18 +46,16 @@ export const L = {
     hockey: "Hockey is Canada's favorite winter sport.",
     bridges: 'In Banff, animals cross the highway on their own bridges.',
   },
-  // One sticker per stamp (the plan's sticker table).
+  // One sticker per stamp.
   stickers: {
-    squirrel: 'Squirrels lick maple sap from the trees too!',
     owl: "The snowy owl is Quebec's bird.",
     moose: 'Moose are the biggest deer in the world.',
     raccoon: 'Raccoons wash their food with their little hands.',
     loon: "The loon's call sounds like laughing.",
-    grizzly: 'Grizzly bears sleep all winter in a den.',
     otter: "Sea otters hold hands so they don't float away.",
     spirit: 'The spirit bear is a black bear with white fur.',
   },
-  // The Theater's real videos (meta.videos), offered after each activity.
+  // The Theater's real videos (meta.videos). They wait in the Theater: none interrupts the story after a chapter.
   videos: {
     taffy: 'Real maple taffy on real snow!',
     snowman: 'The real Winter Carnival in Quebec City!',
@@ -49,14 +67,10 @@ export const L = {
     salmon: 'Real spirit bears catching salmon!',
     hockey: 'Skating on the real frozen canal!',
   },
-  // Maple's animal book (book/animals.ts): Sparkle names each animal the first time Kaylee pokes it, with one short fact.
-  // The same line plays again when she taps it in the book.
   book: {
     open: onDevice('Maple\'s animal book! Tap an animal to hear about it.', 'Maple\'s animal book! Click an animal to hear about it.'),
     // Quebec City
     'snowy-owl': "A snowy owl! Quebec's bird.",
-    'red-squirrel': 'A red squirrel! It loves sap.',
-    chickadee: 'A chickadee! Chick-a-dee-dee!',
     'canada-goose': 'Canada geese! They fly in a V.',
     beluga: 'A beluga! A white whale that sings.',
     'red-fox': 'A red fox! It hops into the snow.',
@@ -75,11 +89,7 @@ export const L = {
     peeper: 'A spring peeper! A tiny frog.',
     hare: 'A snowshoe hare! White in winter.',
     // Banff and the Rockies
-    elk: 'An elk! It squeaks like a whistle.',
-    grizzly: 'A grizzly bear! It sleeps all winter.',
-    bighorn: 'A bighorn sheep! Curly horns!',
     'mountain-goat': 'A mountain goat! It climbs rocks.',
-    wolf: 'A wolf! Wolves live in a pack.',
     pika: 'A pika! It says eep!',
     marmot: 'A marmot! It whistles.',
     'ground-squirrel': 'A ground squirrel! It stands up tall.',
@@ -99,112 +109,103 @@ export const L = {
     'spirit-bear': 'A spirit bear! A white black bear.',
     'banana-slug': 'A banana slug! Slimy and yellow.',
     raven: 'A raven! A clever bird.',
-    // Along the train
+    // On the map
     bison: 'A bison! It rolls in the dust.',
-    'mountie-horse': "A Mountie horse! Canada's police ride horses.",
-    'polar-bear': 'A polar bear! It lives up north.',
   },
-  // ---- One block per activity (activities/<id>/). Story lines, Sparkle's instructions and hints, the friends'
-  // reactions. Keep each line under ~3 seconds; no player name outside the landing page and the two name-writing activities. ----
+  // ---------------------------------------------------------------- the story's own films (story/films/)
+  story: {
+    // The way in (story/films/intro.ts), on Ottawa's frozen canal. About 40 seconds, hold the button to skip.
+    intro: {
+      // The canal from high up, Maple skating alone with a puck.
+      top: 'This is Canada! In winter, the water turns to ice.',
+      // Maple, close: a wave and a twirl.
+      hello: maple('Bonjour! I am Maple. I love hockey!'),
+      // The golden cup on its stand in the snow.
+      cup: maple("That's the Maple Cup. I want to win it so much!"),
+      // The geese skate in, in a V, Gus at the front.
+      geese: gus('Honk honk! Geese win the Cup every year!'),
+      // The memory (the storybook look): last winter, six geese round one little beaver.
+      last: maple('Last winter, I played all by myself.'),
+      // Still the memory: pucks pile up in Maple's net, she sits down on her tail.
+      six: gus('Six geese, one beaver! Honk honk honk!'),
+      // Now again. Maple droops, then stands up straight.
+      need: maple("I can't win alone. I need a team!"),
+      // She points one way, then the other, then to the camera.
+      ask: maple('My friends live all across Canada. Will you help me find them?'),
+      // Sparkle's balloon comes down behind her.
+      go: "Let's go and find Maple's team!",
+    },
+    // The big game's way in (story/films/game.ts): the whole team skates out. Played by the finale before the hockey.
+    gameIn: {
+      // The canal in the evening, lanterns lit, the team in a row in their pink scarves.
+      here: 'The big game! The whole team is here.',
+      // Gus and his geese across the ice.
+      gus: gus("A team? Honk! Beavers can't beat geese!"),
+      // Maple, her friends behind her.
+      ready: maple('We are ready, Gus. All of us!'),
+      // Lulu the loon lifts her head and calls over the ice (her real call, no words).
+      song: 'Shh. Lulu is singing.',
+    },
+    // After the last goal (story/films/game.ts), before the trophy.
+    gameWin: {
+      // The Cup, held up between them all.
+      cup: "Maple's team wins the Maple Cup!",
+      // Gus skates over and bows his long neck.
+      gus: gus('Good game, little beaver. Honk.'),
+      // Maple looks into the Cup.
+      syrup: maple('Look! The Cup is full of maple syrup!'),
+      // She pours it on the snow: taffy on a stick for every player, both teams.
+      share: maple('Maple taffy for everybody. Geese too!'),
+      // Everybody crunches.
+      together: maple('We did it together!'),
+    },
+  },
+  // ---- One block per chapter (activities/<id>/): its film in, the game (Sparkle's instructions and hints, the
+  // friends' reactions), its film out. Keep each line under ~3 seconds; her name is never said. ----
   hub: {
-    // The first visit: Maple on Quebec City's platform tells the story, then Sparkle says what to do.
-    story: [maple("Bonjour! Let's find a hockey team, all across Canada!")],
-    push: onDevice('Push the train with your finger!', 'Click and drag to push the train!'),
-    bubbles: onDevice('Tap a bubble to play!', 'Click a bubble to play!'),
-    soon: 'That one is coming soon!',
-    // Maple, when the train pulls in.
-    arrive: {
-      msa: maple('Bonjour, Mont-Sainte-Anne!'),
-      quebec: maple('Bonjour, Quebec!'),
-      ottawa: maple('Hello, Ottawa! Our hockey rink!'),
-      banff: maple('Hello, Banff! Look at the mountains!'),
-      bc: maple('Hello, Vancouver! The Pacific Ocean!'),
-    },
-    teamHere: maple('Look! Our hockey team!'),
-    teamAll: maple("Our whole team is here! Let's play!"),
+    // Her first look at the map, once (Sparkle).
+    first: onDevice('Tap a friend to go and get them!', 'Click a friend to go and get them!'),
+    // Back on the map with a new friend on the team (Sparkle counts; said once each).
+    count: ['One friend on the team! Five more to find.', 'Two friends! Four more to find.', 'Three friends! Three more to find.', 'Four friends! Two more to find.', 'Five friends! Just one more to find.'],
+    // The sixth friend is home: the rink lights up.
+    all: maple('Our whole team is here! To the ice!'),
+    rink: onDevice('Tap the ice rink for the big game!', 'Click the ice rink for the big game!'),
+    // She taps the rink before the team is whole.
     locked: maple('We need our whole team first!'),
-    newFriend: maple('A new friend for our team!'),
-    // Maple, riding through (once each).
-    ride: {
-      forest: maple('So many trees and lakes!'),
-      prairies: maple('The prairies! So flat!'),
-      rockies: maple('The Rocky Mountains!'),
-      tunnel: maple('Round and round, inside the mountain!'),
-    },
-    // Somebody on the track.
-    blocked: {
-      moose: maple('Oh! A moose on the track!'),
-      bison: maple('Oh! A bison on the track!'),
-      geese: maple('Oh! Geese on the track!'),
-    },
-    tapIt: onDevice('Tap it, so it can move!', 'Click it, so it can move!'),
-    sorry: by('moose')('Oops! Sorry!'),
-    // Tap Maple.
-    maple: [maple('Choo choo!'), maple("Let's go!"), maple('Bonjour!')],
-    // Sparkle, the first time she pokes a landmark.
-    pokes: {
-      cn: 'The CN Tower, in Toronto. It is very tall!',
-      niagara: 'Niagara Falls! Look, a rainbow!',
-      montmorency: 'Montmorency Falls. Even taller than Niagara Falls!',
-      ferry: 'A ferry. It takes people across the river.',
-    },
-    // Her hockey team, when she taps them (the loon just calls).
+    // Tap Maple on the rink.
+    maple: [maple('Bonjour!'), maple("Let's find my team!"), maple('Go, team, go!')],
+    // Tap the geese skating circles on the canal.
+    gus: [gus('Honk! Nobody beats the geese!'), gus('Honk honk! See you on the ice!')],
+    // Tap a friend who is already on the team (they stand at the rink in their scarves).
     team: {
-      taffy: by('chipmunk')('Go, team, go!'),
-      snowman: by('owl')('Hoo! Go team!'),
-      bike: by('moose')("I'm the goalie!"),
-      campfire: by('raccoon')("I'll get the puck!"),
-      bridge: by('bear')('Go team!'),
-      whales: by('otter')('Hockey! Yay!'),
-      salmon: by('bear')('I love to skate!'),
+      snowman: tuque('Bonjour! I am ready!'),
+      bike: monty('Mmm. I am the goalie.'),
+      campfire: roxy('Quick paws, ready!'),
+      canoe: lulu('I am warming up my song.'),
+      whales: ollie('Wheee! Hockey!'),
+      salmon: misty('I brought my big swing.'),
     },
-  },
-  taffy: {
-    // The story beat (Maple, then her little cousin).
-    story: [maple('Bonjour! My cousins want maple taffy!')],
-    // Sparkle: one line when something new starts, and the hints when she's stuck (~8 s).
-    pour: 'Tip the pot and pour syrup on the snow!',
-    set: "It's set! Roll it up on a stick.",
-    hot: 'Still hot! Let it set.',
-    rest: 'Roll up the rest!',
-    empty: onDevice('The pot is empty! Tap the maple tree.', 'The pot is empty! Click the maple tree.'),
-    tree: 'Sap from the maple tree makes the syrup!',
-    shapes: "Pour the shape on Maple's card!",
-    orders: 'Make each friend the size they want!',
-    give: 'Who gets this one?',
-    // Maple's cards (shapes), and her crunches.
-    card: {
-      heart: maple('A heart, please!'),
-      leaf: maple('A maple leaf!'),
-      loop: maple('A big loop!'),
-      k: maple('The letter K!'),
+    // Sparkle, the first time she pokes these on the map (once a visit). The animals' names come from Maple's book.
+    pokes: {
+      balloon: 'My balloon! It flies us everywhere.',
+      rockies: 'The Rocky Mountains! Big and snowy.',
+      north: 'Way up north, it is snowy all year.',
+      hudson: 'Hudson Bay! Its water gets icy.',
+      prairie: 'The prairie! Fields of wheat for bread.',
     },
-    pretty: maple('Ooh, so pretty!'),
-    crunch: [maple('Mmm, crunchy!'), maple('Miam miam!'), maple('So sweet!')],
-    tooBig: maple('Too big for me!'),
-    mapleHi: maple('Hee hee! That tickles!'),
-    // The friends at the table (orders), in their own voices.
-    cousinYum: by('cousin')('Yummy yummy!'),
-    cousinFull: by('cousin')('Merci! My tummy is full!'),
-    cousinHi: by('cousin')('Hi hi!'),
-    chipYum: by('chipmunk')('Ooh! More, please!'),
-    chipFull: by('chipmunk')('Tiny and perfect!'),
-    chipBig: by('chipmunk')('Whoa! Too big!'),
-    chipHi: by('chipmunk')('Hello hello!'),
-    owlYum: by('owl')('Hoo! I like swirls.'),
-    owlFull: by('owl')('Hoo hoo! A swirl!'),
-    owlHi: by('owl')('Whooo is that?'),
-    mooseYum: by('moose')('Mmm. Bigger, please.'),
-    mooseFull: by('moose')('Mmm. Giant. Thank you.'),
-    mooseGulp: by('moose')('Gulp! Yum.'),
-    mooseHi: by('moose')('Hello, little one.'),
-    // Everyone crunches (the stamp moment: her name once).
-    share: maple('Everybody, crunch!'),
-    thanks: maple(`Merci! Best taffy ever!`),
   },
   snowman: {
-    // The story (Maple, in the park below the castle), then Sparkle's one instruction per part.
-    story: [maple("Bonjour! It's the Winter Carnival!"), maple("Let's roll snowmen!")],
+    // The film in (story/films/snowman.ts): the snowy park under the castle hotel, flags and lanterns, nobody about.
+    filmIn: {
+      hello: maple("Bonjour, Quebec City! It's the Winter Carnival!"),
+      // She looks left and right: only snow.
+      none: maple('But nobody here plays hockey. Only snow.'),
+      // She pats a snowball; her eyes go wide.
+      idea: maple("Snow! That's it! Let's make a player!"),
+    },
+    // The game's own hello (Maple, in the park below the castle), only from a link or a replay: after the film in, the
+    // game starts with Sparkle's instruction. Then Sparkle's one instruction per part.
+    story: [maple('Bonjour! Look at all this snow!'), maple("Let's build a snowman for my team!")],
     roll: 'Push the snowball! Watch it grow!',
     stack: 'Now roll the little ball into the big one!',
     dress: 'Roll a snowball into a box!',
@@ -229,17 +230,36 @@ export const L = {
     dodge: maple('Eek! Watch out!'),
     poke: [maple('Hee hee!'), maple('Bonjour!')],
     parade: maple('Here comes the parade!'),
-    // The snowmen wake up and talk.
+    // The first snowman she stacks and dresses is Tuque: he wakes up and says his name.
+    tuque: tuque('Bonjour! I am Tuque!'),
+    // The other snowmen wake up and talk.
     wake: [by('snowman')('Bonjour!'), by('snowman')('Hello, hello!'), by('snowman')('To the parade!')],
     upside: by('snowman')('Hello! Why is the sky down there?'),
     tickle: by('snowman')('Hee hee, that tickles!'),
     bye: by('snowman')('Merci! Bye bye!'),
     // The payoff (the stamp comes next).
     done: maple(`You made a whole parade!`),
+    // The film out: Tuque, the snowman she made, has dozed off after the parade. Maple boops his carrot; he blinks awake.
+    filmOut: {
+      wake: tuque('Oh! Bonjour, Maple!'),
+      ask: maple('Tuque! Can you play hockey?'),
+      // A snowball flies in and bounces off his round tummy: boing. Then:
+      tummy: tuque('Ho ho! Everything bounces off my tummy!'),
+      // Maple ties a pink team scarf round him.
+      team: maple("You're on the team!"),
+    },
   },
   bike: {
-    // The story, in the gondola at the bottom (Maple, then up they go).
-    story: [maple('Bonjour! I want to ride all the way down to the waterfall!'), maple('Up we go!')],
+    // The film in (story/films/bike.ts): the top of Mont-Sainte-Anne, the gondola behind, the forest far below.
+    filmIn: {
+      high: maple('My friend Monty is the biggest moose in Canada!'),
+      // The camera looks down the mountain: a tiny moose in a pond by the waterfall.
+      bath: maple("He's having his bath, way down there."),
+      // She hops on her bike.
+      go: maple('The fastest way down is my bike. Hold on!'),
+    },
+    // From a link or a replay (no film in): a short hello in her gondola cabin at the bottom, then up they go.
+    story: [maple('Up we go! Then we ride down to Monty!')],
     // Sparkle: the one instruction when the bike rolls out of the station, what's new on the way, the stuck hint.
     steer: onDevice('Hold your finger down and steer the bike!', 'Click and hold to steer the bike!'),
     split: 'Two trails! Green or blue?',
@@ -258,16 +278,32 @@ export const L = {
     green: maple('The green way!'),
     blue: maple('The blue way! Hold on!'),
     jump: maple('Up, up and away!'),
-    falls: maple('We made it! The waterfall!'),
-    thanks: maple('Thank you! What a ride!'),
+    // At the bottom: she spots Monty in the pool (he says hello, `moose[0]`), and the film out picks up there.
+    falls: maple('There he is, in his bath!'),
     // The animals, in their own voices.
     moose: [by('moose')('Mmm. Bonjour.'), by('moose')('Munch, munch.')],
     chipmunk: by('chipmunk')('Seeds! Seeds!'),
     bear: by('bear')('Mmm, berries!'),
+    // The film out: the pond at the waterfall, Monty chewing, a lily pad on one antler.
+    filmOut: {
+      found: maple('Monty! Will you be our goalie?'),
+      what: monty('Mmm. What does a goalie do?'),
+      stand: maple('You stand in front of the net. Easy!'),
+      good: monty('Mmm. I am very good at standing.'),
+      // A pinecone drops out of a tree and bonks off his antlers. He doesn't notice.
+      team: maple('Nothing gets past Monty!'),
+    },
   },
   campfire: {
-    // The story (before the first touch): Maple, then Sparkle's one instruction.
-    story: [maple("Shh! Who's out there?"), onDevice('Move your finger to shine the light!', 'Click and hold, then move to shine the light!')],
+    // The film in (story/films/campfire.ts): the campsite at night, Maple by the fire with her marshmallows.
+    filmIn: {
+      shh: maple('Shh. Somebody sneaky lives in these woods.'),
+      // A little grey paw comes out of the dark and takes a marshmallow. Then another.
+      hey: maple("Hey! My marshmallow! Who's out there?"),
+    },
+    // The story (before the first touch, from a link or a replay; after the film the game starts at Sparkle's
+    // instruction): Maple's short hello, then Sparkle's one instruction.
+    story: [maple('Shh! Somebody is watching us from the dark.'), onDevice('Move your finger to shine the light!', 'Click and hold, then move to shine the light!')],
     // Sparkle: each part's instruction (the prompt bubble plays it again), and her hints when Kaylee is stuck.
     eyes: onDevice('Move your finger to shine the light!', 'Click and hold, then move to shine the light!'),
     eyesHint: 'Look for shiny eyes in the dark!',
@@ -275,7 +311,7 @@ export const L = {
     sounds: 'Listen! Who made that sound?',
     soundsHint: 'Shine the light where the sound is.',
     allSounds: maple('Wow, you found every sound!'),
-    banditGone: maple('Hey! Our marshmallows are gone!'),
+    banditGone: maple('Oh no! Now the whole bag is gone!'),
     bandit: 'Follow the little paw prints!',
     banditHint: 'Shine the light on the next paw print.',
     caught: by('raccoon')('Hee hee! Marshmallows for my babies!'),
@@ -302,26 +338,42 @@ export const L = {
     mooseHi: by('moose')('Mmm. Hello there.'),
     mapleHi: maple('Hee hee! That tickles!'),
     tent: maple('Shh! Someone is sleeping.'),
+    // The film out: Roxy and her three kits at the fire, a marshmallow each. Maple holds up a puck: a blink, and Roxy
+    // has it (the quickest paws in Canada: the picture says it).
+    filmOut: {
+      got: roxy('Hee hee! Got your puck!'),
+      ask: maple('Roxy! Will you steal the puck from the geese?'),
+      babies: roxy('Only if my babies can come and cheer!'),
+      // The kits squeak and wave their marshmallow sticks.
+      team: maple('Deal! Go, team, go!'),
+    },
   },
   canoe: {
-    // The story: Maple at the dock, in the red canoe.
-    story: maple('Why is my lake so blue?'),
-    // Sparkle: how to paddle (one way or the other), and the hint when she hasn't paddled for a while.
-    go: { stroke: 'Pull the paddle back through the water!', pull: onDevice('Hold the water where the canoe should go!', 'Click and hold where the canoe should go!') },
-    hint: { stroke: onDevice('Drag your finger back, beside the canoe.', 'Click and drag back, beside the canoe.'), pull: onDevice('Press the water in front of the canoe.', 'Click the water in front of the canoe.') },
+    // The film in (story/films/canoe.ts): the dock on the turquoise lake, Maple in the red canoe.
+    filmIn: {
+      song: maple('Every big game starts with a song.'),
+      // A loon calls, far across the water, and the mountains answer (a beat with no line). Maple's ears go up.
+      lulu: maple("That's Lulu the loon!"),
+      across: maple("She lives by the glacier. Let's paddle!"),
+    },
+    // The game's hello, from a link or a replay (after the film it starts on the water with Sparkle's line).
+    story: maple('Bonjour! Hop in, we go to find Lulu!'),
+    // Sparkle: how to paddle, and the hint when she hasn't paddled for a while (the hand shows it too).
+    go: onDevice('Hold the water, and Maple paddles there!', 'Click and hold the water, and Maple paddles there!'),
+    hint: onDevice('Touch the water in front of the canoe!', 'Click the water in front of the canoe!'),
     // Where the blue comes from.
     stream: 'Paddle to the milky water by the glacier stream!',
     streamMaple: maple('Ooh! What is that milky water?'),
     streamHint: 'Follow the sparkles to the milky water.',
     found: 'Rock flour from the glacier makes the lake so blue!',
     foundMaple: maple('We found the blue!'),
-    // Follow the loon.
-    loon: 'Bubbles! Follow them to find the loon.',
+    // Follow Lulu: she dives and pops up nearer the glacier each time.
+    loon: 'Bubbles! Follow them to find Lulu.',
     loonHint: 'Paddle to the bubbles!',
-    loonFound: [maple('There she is!'), maple('Found you, loon!'), maple('Peekaboo, loon!')],
+    loonFound: [maple('There she is!'), maple('Found you, Lulu!'), maple('Peekaboo, Lulu!')],
     chick: maple('Look! A baby loon on her back!'),
-    family: maple('A whole loon family! Merci!'),
-    // Tap-to-hear facts (the first time she pokes the glacier, the second time the loon).
+    family: maple('Lulu and her baby! We found them!'),
+    // Tap-to-hear facts (the first time she pokes the glacier, the second time Lulu).
     glacier: 'A glacier is a river of ice. It moves very slowly.',
     loonie: "The loon is on Canada's dollar coin. It's called a loonie!",
     // Silly moments and pokes.
@@ -331,68 +383,51 @@ export const L = {
     pokeMaple: [maple('Paddle, paddle!'), maple('Splish, splash!'), maple('I love my red canoe!')],
     beaver: maple('Allo, cousin beaver!'),
     moose: by('moose')('Mmm. Tasty lake weeds.'),
-  },
-  bridge: {
-    // The story (Maple, then Sparkle's one instruction).
-    story: [maple('The animals need to cross!'), 'Lead them over the animal bridge!'],
-    // Sparkle: whose turn it is (a link that starts there, the next family, and the hint when she's stuck).
-    lead: {
-      elk: 'Drag mama elk over the bridge.',
-      sheep: 'The sheep love the rocky way!',
-      bears: 'Lead the grizzlies over the bridge.',
+    // The film out: under the glacier, Lulu with her chick on her back.
+    filmOut: {
+      ask: maple('Lulu! Will you sing at our big game?'),
+      yes: lulu('A big game? I will sing my best song!'),
+      // She calls, long and lovely, head thrown back. Her chick tries too: a tiny squeak (beats with no line).
+      chick: maple('Hee hee! The littlest singer!'),
+      // The pink scarf goes round Lulu's neck.
+      team: maple("You're on the team!"),
     },
-    fence: 'Not on the road! Over the bridge.',
-    fenceTap: 'The fence keeps the animals off the road.',
-    camera: 'Click! The camera takes a photo of every animal.',
-    bonk: 'Bonk! The rams bump heads.',
-    lost: 'Oh! A baby stopped to smell a flower.',
-    fetch: 'Go get the little one!',
-    seeds: 'Walk the others over. They carry seeds!',
-    // Mama elk.
-    elkGo: by('elk')('Come along, babies!'),
-    elkHome: by('elk')('Mmm, yummy meadow!'),
-    elkFound: by('elk')('There you are, little one!'),
-    // Mama grizzly.
-    bareNo: by('bear')('Hmm. Too bare for me.'),
-    bearYes: by('bear')('Ooh! It looks like the forest!'),
-    bearHome: by('bear')('Thank you! Berries!'),
-    // Maple, watching from the meadow.
-    cheer: {
-      elk: maple('Bravo! The elk made it!'),
-      sheep: maple('Yay, the bighorn sheep!'),
-      bears: maple('The bears too! Bravo!'),
-    },
-    giggle: maple('Hee hee! That tickles!'),
-    album: maple('Look! Photos of everyone!'),
-    done: 'You helped them all cross!',
   },
   whales: {
-    // The story, at the dock (Maple at the wheel of the little boat).
-    story: [maple("I've never seen a whale!"), maple("Let's find them!")],
+    // The film in (story/films/whales.ts): the dock at Tofino, Maple at the wheel of the little boat.
+    filmIn: {
+      ollie: maple('Ollie the sea otter spins faster than anybody!'),
+      // Off she putters toward the camera, out to sea.
+      out: maple("She's out in the kelp, where the whales swim."),
+    },
+    // The hello at the dock, from a link or a replay (after the film in, the game starts with her hands on the boat).
+    story: [maple('Bonjour! Off we go to find Ollie!')],
     // Sparkle: how to steer (one line before her hands are busy), then only when something new appears.
-    steer: { finger: onDevice('Hold the water where the boat should go!', 'Click and hold where the boat should go!'), wheel: onDevice('Hold and push to steer the boat!', 'Click and hold, then push to steer the boat!') },
-    otters: 'A sleepy otter floated away. Go gently!',
+    steer: onDevice('Hold the water where the boat should go!', 'Click and hold where the boat should go!'),
+    otters: 'There is Ollie, fast asleep! Go gently.',
     spouts: 'A spout! Steer there to find the whale!',
     orcas: 'The orca family! Go fast and turn!',
     listen: 'Shh! Listen to the whales sing.',
     // Sparkle, when she's stuck (~8 s with no progress): help, never "wrong".
     hint: {
       harbour: 'Steer out past the lighthouse!',
-      otters: 'Go slowly to the sleepy otter.',
+      otters: 'Go slowly to Ollie.',
       tow: 'Take her back to her friends!',
       spouts: 'Look for the spout. Steer there!',
       orcas: 'Go fast and turn. The baby copies you!',
       mic: onDevice('Tap the yellow microphone to listen!', 'Click the yellow microphone to listen!'),
     },
-    // The sea otters.
-    otterWake: by('otter')('Oh! Hello!'),
-    otterTow: by('otter')('Wheee! Take me home!'),
-    otterHome: by('otter')('Thank you!'),
+    // Ollie (the sleepy otter who floated away), then the other otters in the raft.
+    otterWake: ollie('Oh! Hello!'),
+    otterTow: ollie('Wheee! Take me home!'),
+    // Home with her friends... and straight back onto the boat's rope: she rides along for the rest of the trip.
+    otterHome: ollie('Can I come too?'),
     otterHold: maple("They hold hands so they don't float away!"),
     otterGrumpy: by('otter')('Hey! Too fast!'),
     otterHi: by('otter')('Hi hi!'),
     otterClack: by('otter')('Yum, a clam!'),
-    // The whales.
+    // The whales (the first spout: she has never seen one).
+    never: maple("I've never seen a whale!"),
     whaleUp: maple('A whale! A real whale!'),
     whaleBlow: maple('It breathes out of its head!'),
     whaleTail: maple('Look at its tail!'),
@@ -408,8 +443,26 @@ export const L = {
     finale: maple(`They all jumped together! Merci!`),
     toot: maple('Toot toot!'),
     song: maple('The humpback is singing!'),
+    // The film out: Ollie on her back in the kelp, a clam on her tummy.
+    filmOut: {
+      ask: maple('Ollie! Come and play hockey with us!'),
+      wet: ollie('Hockey? Is it wet?'),
+      ice: maple("It's ice! You slide on it!"),
+      // She spins on her back like a top.
+      spin: ollie('Wheee! I love to slide!'),
+      // A whale spouts right behind them: everybody is soaked.
+      team: maple("Splash! You're on the team!"),
+    },
   },
   salmon: {
+    // The film in (story/films/salmon.ts): the rainforest river, giant cedars, soft rain.
+    filmIn: {
+      white: maple('In this rainforest lives a bear as white as snow.'),
+      // Misty swings a paw at a jumping salmon: an enormous splash, and no fish (a beat with no line). Then, dripping:
+      fishing: misty("Shh. I'm fishing. No hockey till supper."),
+      // Maple, behind her paw, to the camera.
+      help: maple("Psst! Let's help the salmon jump past her!"),
+    },
     // The story (Maple, at the river).
     story: [maple('Help the salmon jump home!')],
     // Sparkle: once when each stretch of the river begins, and again when she's stuck.
@@ -429,89 +482,63 @@ export const L = {
     berries: maple('The bears went to eat berries!'),
     sea: maple('Bye, little salmon! Swim to the sea!'),
     win: maple('You brought the salmon home!'),
-    // The bears (the same gentle bear voice for both).
+    // The bears (the same gentle bear voice for both). The white one is Misty: always thinking about supper.
     achoo: by('bear')('Ah... choo!'),
-    spirit: by('bear')("I'm a spirit bear!"),
+    spirit: misty("I'm a spirit bear. I'm hungry!"),
     black: by('bear')("Shh, I'm fishing."),
-    giveUp: [by('bear')('Okay, berries instead!'), by('bear')('Berries are easier!')],
+    // Misty swats at a salmon flying past, and misses (said once or twice a visit).
+    miss: misty('Missed again!'),
+    giveUp: { black: by('bear')('Okay, berries instead!'), spirit: misty('Too slippery! Berries, then.') },
     yum: by('bear')('Mmm, berries!'),
+    // The film out: the salmon are home, Misty has a paw full of berries.
+    filmOut: {
+      berries: misty('Mmm. Berries are easier than fish.'),
+      stick: maple('Misty! Try this hockey stick!'),
+      // One swing: a pinecone sails over the tallest cedar.
+      shot: maple('The biggest slap shot in Canada!'),
+      team: misty('I like this game. I will come!'),
+    },
   },
+  // The finale (activities/party/): the big game on the frozen canal, between story.gameIn and story.gameWin.
   party: {
-    // The story, on the toy map in Ottawa.
-    story: maple("Bonjour, Ottawa! First, let's help the animals get home!"),
-    // Animal Homes: Sparkle asks, one animal at a time (each answer is a drag onto the map).
-    ask: {
-      'polar-bear': 'Where does the polar bear live?',
-      orca: 'Where does the orca live?',
-      bison: 'Where does the bison live?',
-      moose: 'Where does the moose live?',
-      beaver: 'Where does the beaver live?',
-      loon: 'Where does the loon live?',
-      grizzly: 'Where does the grizzly bear live?',
-      'spirit-bear': 'Where does the spirit bear live?',
-      puffin: 'Where does the puffin live?',
-    },
-    // The answer half, after a miss or when she's stuck (with the glow).
-    where: {
-      'polar-bear': 'Way up north, on the ice!',
-      orca: 'In the Pacific Ocean!',
-      bison: 'On the yellow prairies!',
-      moose: 'In the big green forest!',
-      beaver: 'By the river!',
-      loon: 'On a forest lake!',
-      grizzly: 'In the Rocky Mountains!',
-      'spirit-bear': 'In the rainforest by the sea!',
-      puffin: 'By the Atlantic Ocean!',
-    },
-    // She got it: one fact about its home.
-    home: {
-      'polar-bear': 'Yes! Polar bears hunt on the sea ice.',
-      orca: 'Yes! Orcas swim in big families.',
-      bison: 'Yes! Bison munch the prairie grass.',
-      moose: 'Yes! Moose love forest ponds.',
-      beaver: 'Yes! Beavers build their lodge in the river.',
-      loon: 'Yes! Loons dive deep in the lake.',
-      grizzly: 'Yes! Grizzlies dig for roots in the mountains.',
-      'spirit-bear': 'Yes! Spirit bears catch salmon in the rainforest.',
-      puffin: 'Yes! Puffins dive for fish in the Atlantic.',
-    },
-    cheer: [maple('Oui! Home sweet home!'), maple('Bravo!'), maple('Youpi!')],
-    // A wrong home: a silly reaction, then the right home glows.
-    oops: {
-      flop: 'Flop, flop! It needs the water!',
-      splash: 'Splash! It lives on land!',
-      hot: 'Phew! Too hot for a polar bear!',
-      cold: 'Brrr! Too cold up there!',
-      nope: 'Hmm, not there! Look for the glow.',
-    },
-    ottawa: "Ottawa is Canada's capital city!",
-    allHome: maple("Everybody's home! Now, hockey!"),
-    // Pond Hockey on the frozen Rideau Canal.
+    // Sparkle, as each round starts (the first goal, the geese in the way, the last goal).
     rink: onDevice("Flick the puck into the geese's net!", "Drag the puck fast into the geese's net!"),
     rinkHint: onDevice('Swipe from the puck to the net!', 'Drag from the puck to the net!'),
     geese: 'The geese are in the way! Bounce it off the snow!',
     last: 'One more goal to win!',
+    // The goose in goal saves one of her shots.
     saved: ['The goose saved it! Again!', 'So close! Try again!'],
     goal: [maple('Goal!'), maple('Beauty, eh!'), maple('Youpi, a goal!')],
-    mooseGoal: by('moose')('Mmm. Nice one.'),
-    mooseBlock: by('moose')('Bonk. Not today, geese.'),
+    // She steals the puck off a goose herself (once).
+    steal: maple('Got it!'),
+    // Each friend's big moment, the first time it happens: Roxy steals it off a goose and passes, a goose's shot
+    // boings off Tuque's tummy, another bonks off Monty's antlers, Ollie spins on her back to a loose puck.
+    roxy: roxy('Mine! I mean, yours!'),
+    tuque: tuque('Boing! Not past my tummy!'),
+    monty: monty('Bonk. Not today, geese.'),
+    ollie: ollie('Wheee! I got it!'),
+    // The last goal: the geese make a wall, Misty's slap shot knocks it flat, the net is open.
+    wall: gus('Honk! The goose wall!'),
+    misty: misty('Watch my big slap shot!'),
+    open: 'The net is open! Shoot!',
+    // A goose goal (at most two, never two in a row): short and funny, then the puck is hers again.
+    against: [monty('Oops. It went under me.'), gus('Honk! A goose goal!')],
     win: maple("We won! We're the champions!"),
-    winFact: "Hockey is Canada's favorite winter sport!",
-    // Pokes on the canal (and her teammates' first pass back).
+    // Pokes on the canal.
     poke: {
       maple: maple('Pass me the puck!'),
-      moose: by('moose')('Hello. I am the goalie.'),
-      owl: by('owl')('Hoo! Pass to me!'),
-      raccoon: by('raccoon')('Mine! I mean, yours!'),
-      otter: by('otter')('Wheee! Look, I spin!'),
-      grizzly: by('bear')('Grr! Go team!'),
-      spirit: by('bear')('Watch my big slap shot!'),
-      squirrel: by('chipmunk')('Go, go, go!'),
+      monty: monty('Hello. I am the goalie.'),
+      roxy: roxy('My kits are cheering!'),
+      tuque: tuque('Brr! I love hockey!'),
+      ollie: ollie('Wheee! Look, I spin!'),
+      misty: misty('After the game, supper?'),
+      lulu: lulu('I sing for every goal!'),
+      gus: gus("Honk! You can't catch me!"),
     },
     stand: maple('Mmm, a BeaverTail! Sweet, like my tail!'),
     parliament: "That's Parliament, in Ottawa, Canada's capital!",
     canal: 'In winter, this canal freezes into a giant skating rink!',
   },
-  // Maple's hello, anywhere she meets Kaylee.
+  // Maple's hello, anywhere she meets her.
   bonjour: maple('Bonjour!'),
 }

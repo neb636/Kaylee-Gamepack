@@ -3,13 +3,15 @@
 // the terrace and the castle hotel), spruces with snow on them, the ice moose, the toboggan slide and its sled, the
 // carnival's hat box and sash box, the parade drum, and what the snowmen wear. Maple is maple.ts, the other animals
 // critters.ts; park.ts says where everything stands.
-import { Color, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Vector3, type BufferGeometry } from 'three'
+import { CircleGeometry, Color, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Vector3, type BufferGeometry } from 'three'
+import { radialAlpha, softTexture } from '../../../../engine3d/softTexture'
 import { bell, span, wobble } from '../../../../../sdk'
 import type { Bag } from '../../../../engine3d/dispose'
-import { merge, P, solid } from '../../../../engine3d/geo'
+import { bake, merge, P, solid } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
+import { sashGeo } from '../../characters/tuque'
 import { buildOldTown, mulberry } from './castle'
-import { BOX_HALF, CLIFF_Y, DRUM, LAMP, LAMPS, MOOSE, PATH_Z, SLIDE, TREES_IN } from './park'
+import { BOX_HALF, CLIFF_Y, CLIFF_Z, DRUM, LAMP, LAMPS, MOOSE, PATH_Z, SLIDE, TREES_IN } from './park'
 import { smooth } from '../../../../../sdk/math'
 
 export const SKY = '#DCE6F6'
@@ -42,6 +44,43 @@ export function spruce(s: number, at: [number, number, number] = [0, 0, 0], snow
   return parts
 }
 
+// ---------------------------------------------------------------- soft blue shadows on the snow
+
+/** Snow shadows are blue, not grey: the sky's color in the snow. */
+const SHADOW_RGB: [number, number, number] = [112, 136, 206]
+const shadowMats = new WeakMap<Bag, MeshBasicMaterial>()
+/** The shadow material (one per world: its texture is written by hand, see engine3d/softTexture). */
+function shadowMat(bag: Bag) {
+  let m = shadowMats.get(bag)
+  if (!m) {
+    const tex = bag.add(softTexture(64, 64, SHADOW_RGB, (x, y) => radialAlpha(Math.hypot(x - 32, y - 32), 32, [[0, 0.55], [0.5, 0.38], [1, 0]])))
+    m = bag.add(new MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4 }))
+    shadowMats.set(bag, m)
+  }
+  return m
+}
+/** A flat patch of colored snow lying on the ground at (x, z), `r` across, stretched `sx` by `sz`. */
+const snowDisc = (r: number, c: string, x: number, z: number, sx: number, sz: number, seg: number) =>
+  bake(new CircleGeometry(r, seg).rotateX(-Math.PI / 2), c, { at: [x, 0.012, z], scale: [sx, 1, sz] }, true)
+const unitPlanes = new WeakMap<Bag, PlaneGeometry>()
+/** A soft round blue shadow `size` meters across, lying on the snow (scale x and y to resize it). */
+export function snowShadow(bag: Bag, size = 1) {
+  let g = unitPlanes.get(bag)
+  if (!g) unitPlanes.set(bag, (g = bag.add(new PlaneGeometry(1, 1))))
+  const m = new Mesh(g, shadowMat(bag))
+  m.rotation.x = -Math.PI / 2
+  m.position.y = 0.02
+  m.scale.set(size, size, 1)
+  m.renderOrder = 2
+  return m
+}
+/** Many shadows that never move, as one mesh: [x, z, width, depth]. */
+function shadowField(bag: Bag, spots: [number, number, number, number][]) {
+  const m = new Mesh(bag.add(merge(spots.map(([x, z, w, d]) => new PlaneGeometry(w, d).rotateX(-Math.PI / 2).translate(x, 0.018, z)))), shadowMat(bag))
+  m.renderOrder = 2
+  return m
+}
+
 export interface Park {
   root: Group
   /** The park's trees, each on its own (a bump shakes it); `top` is where its snow falls from. */
@@ -67,7 +106,7 @@ export function buildPark(bag: Bag): Park {
     const a = rnd()
     // Round the park's front and sides (not on the path or in front of the cliff).
     const x = a < 0.4 ? -17 - rnd() * 8 : a < 0.8 ? 17 + rnd() * 8 : -20 + rnd() * 40
-    const z = a < 0.8 ? -8 + rnd() * 22 : 10.5 + rnd() * 8
+    const z = a < 0.8 ? -8 + rnd() * 22 : 16 + rnd() * 8
     const r = 1.2 + rnd() * 2.2
     drifts.push(P.sphere(r, i % 3 ? SNOW : SNOW_SHADE, { at: [x, -r * 0.62, z], scale: [1.6, 1, 1.2] }, 14))
   }
@@ -129,6 +168,18 @@ export function buildPark(bag: Bag): Park {
     }
   }
   root.add(solid(merge(bunt), bag, 1.2))
+  // Round paper lanterns hanging in the middle of each string, pink, red and gold.
+  const lanterns: BufferGeometry[] = []
+  const LANTERN = [PAL.hotpink, RED, PAL.butter]
+  for (let i = 0; i < posts.length - 1; i++) {
+    for (const u of [0.32, 0.5, 0.68]) {
+      const x = posts[i] + (posts[i + 1] - posts[i]) * u
+      const y = 3.55 - Math.sin(u * Math.PI) * 0.55 - 0.55
+      const c = LANTERN[(i + Math.round(u * 10)) % LANTERN.length]
+      lanterns.push(P.cyl(0.01, 0.01, 0.3, PAL.ink, { at: [x, y + 0.42, LAMP.z + 0.05] }, 4), P.sphere(0.3, c, { at: [x, y, LAMP.z + 0.05], scale: [1, 0.85, 1] }, 12), P.cyl(0.13, 0.13, 0.08, PAL.ink, { at: [x, y + 0.27, LAMP.z + 0.05] }, 8), P.cyl(0.12, 0.12, 0.07, PAL.ink, { at: [x, y - 0.27, LAMP.z + 0.05] }, 8))
+    }
+  }
+  root.add(solid(merge(lanterns), bag, 1.4))
 
   // ---- The snow isn't all one white: softer patches, and a line of footprints across it.
   const patches: BufferGeometry[] = []
@@ -137,20 +188,47 @@ export function buildPark(bag: Bag): Park {
     const x = -15 + rp() * 30
     const z = -8.5 + rp() * 17
     const r = 0.6 + rp() * 1.4
-    patches.push(P.cyl(r, r, 0.02, i % 4 ? SNOW_SHADE : '#E7EAF7', { at: [x, 0.006, z], scale: [1.6, 1, 1] }, 14))
+    patches.push(snowDisc(r, i % 4 ? SNOW_SHADE : '#E7EAF7', x, z, 1.6, 1, 14))
   }
-  for (let i = 0; i < 26; i++) patches.push(P.cyl(0.12, 0.12, 0.02, '#E2E5F4', { at: [-14 + i * 1.1, 0.012, 6.2 + Math.sin(i * 0.5) * 1.2 + (i % 2 ? 0.18 : -0.18)], scale: [1, 1, 1.5] }, 8))
-  root.add(new Mesh(bag.add(merge(patches)), bag.add(new MeshBasicMaterial({ vertexColors: true, polygonOffset: true, polygonOffsetFactor: -1 }))))
+  for (let i = 0; i < 26; i++) patches.push(snowDisc(0.12, '#E2E5F4', -14 + i * 1.1, 6.2 + Math.sin(i * 0.5) * 1.2 + (i % 2 ? 0.18 : -0.18), 1, 1.5, 8))
+  // Flat, and painted in order over the ground without writing depth: overlapping patches (and the footprints on
+  // them) used to sit at one height and fight over every pixel, so the snow shimmered whenever the camera moved.
+  const patchMesh = new Mesh(bag.add(merge(patches)), bag.add(new MeshBasicMaterial({ vertexColors: true, depthWrite: false })))
+  patchMesh.renderOrder = 1
+  root.add(patchMesh)
 
   // ---- Spruces round the park's edges (one mesh), and the park's own trees (each on its own, to shake).
   const edge: BufferGeometry[] = []
   const rt = mulberry(21)
+  const shade: [number, number, number, number][] = []
   for (let i = 0; i < 26; i++) {
     const side = i % 2 ? 1 : -1
-    edge.push(...spruce(0.9 + rt() * 0.7, [side * (15.5 + rt() * 6), 0, -9 + (i >> 1) * 1.9 + rt()]))
+    const sz = 0.9 + rt() * 0.7
+    const at: [number, number, number] = [side * (15.5 + rt() * 6), 0, -9 + (i >> 1) * 1.9 + rt()]
+    edge.push(...spruce(sz, at))
+    shade.push([at[0] + 0.5 * sz, at[2] + 0.4 * sz, 3.4 * sz, 2.6 * sz])
   }
-  for (let i = 0; i < 12; i++) edge.push(...spruce(0.9 + rt() * 0.6, [-22 + i * 4 + rt() * 2, 0, 11 + rt() * 5]))
+  for (let i = 0; i < 12; i++) {
+    const sz = 0.9 + rt() * 0.6
+    const at: [number, number, number] = [-22 + i * 4 + rt() * 2, 0, 14 + rt() * 5]
+    edge.push(...spruce(sz, at))
+    shade.push([at[0] + 0.5 * sz, at[2] + 0.4 * sz, 3.4 * sz, 2.6 * sz])
+  }
   root.add(solid(merge(edge), bag, 1.6))
+  // Their soft blue shadows (the sun is high on the left), the park's own trees', the lamps', the ice moose's.
+  for (const t of TREES_IN) shade.push([t.x + 0.45 * t.s, t.z + 0.35 * t.s, 3.3 * t.s, 2.5 * t.s])
+  for (const x of [...LAMPS, LAMP.x]) shade.push([x + 0.2, LAMP.z + 0.3, 1.1, 0.8])
+  shade.push([MOOSE.x + 0.3, MOOSE.z + 0.3, 3.6, 2.6])
+  root.add(shadowField(bag, shade))
+  // The cliff's own shade along its foot, fading out into the park.
+  const cliffShade = new Mesh(
+    bag.add(new PlaneGeometry(90, 8)),
+    bag.add(new MeshBasicMaterial({ map: bag.add(softTexture(4, 64, SHADOW_RGB, (_x, y) => 0.3 * (1 - y / 64) ** 1.6)), transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -3 })),
+  )
+  cliffShade.rotation.x = -Math.PI / 2
+  cliffShade.position.set(0, 0.016, CLIFF_Z + 4)
+  cliffShade.renderOrder = 1
+  root.add(cliffShade)
   const trees = TREES_IN.map((t) => {
     const g = solid(merge(spruce(t.s)), bag, 2)
     g.position.set(t.x, 0, t.z)
@@ -244,13 +322,15 @@ export class Trail {
   private p = new Vector3()
   constructor(bag: Bag, private count = 2400) {
     const geo = bag.add(new PlaneGeometry(1, 1))
-    const mat = bag.add(new MeshBasicMaterial({ color: '#FFFFFF', polygonOffset: true, polygonOffsetFactor: -2 }))
+    // No depth writes: overlapping dabs (and the snow patches under them) are painted in order, oldest first,
+    // instead of fighting over every pixel at one height and shimmering as the camera follows the ball.
+    const mat = bag.add(new MeshBasicMaterial({ color: '#FFFFFF', depthWrite: false }))
     this.mesh = bag.add(new InstancedMesh(geo, mat, count))
     this.mesh.frustumCulled = false
     this.mesh.count = 0
     const greens = [new Color('#A5D99B'), new Color('#97D195'), new Color('#ABDDA0')]
     for (let i = 0; i < count; i++) this.mesh.setColorAt(i, greens[i % 3])
-    this.mesh.renderOrder = 1
+    this.mesh.renderOrder = 2 // over the snow patches (1)
   }
   /** A dab at (x, z), `w` wide, turned to `yaw`, `len` long. */
   add(x: number, z: number, w: number, len: number, yaw: number) {
@@ -509,13 +589,35 @@ export class Drum {
 
 // ---------------------------------------------------------------- what the snowmen wear
 
-/** A red knitted tuque with a white pompom, sized for a head of radius 1 (it sits on top). */
-export function makeHat(bag: Bag) {
+/** What the parade's other snowmen wear (Tuque is the one in red, at the front): the carnival's colors and a top hat. */
+export const LOOKS = [
+  { hat: 'blue', scarf: '#4F7FD0', trim: PAL.butter },
+  { hat: 'yellow', scarf: PAL.butter, trim: '#4F7FD0' },
+  { hat: 'green', scarf: '#5FBF86', trim: '#FFFFFF' },
+  { hat: 'top', scarf: PAL.hotpink, trim: '#FFFFFF' },
+] as const
+export type HatStyle = 'red' | (typeof LOOKS)[number]['hat']
+const HAT_COLOR: Record<Exclude<HatStyle, 'top'>, string> = { red: RED, blue: '#4F7FD0', yellow: '#FFD86B', green: '#5FBF86' }
+
+/** A knitted tuque with a white pompom (red: the carnival's own), or a tall black top hat with a pink band, sized
+ *  for a head of radius 1 (it sits on top). */
+export function makeHat(bag: Bag, style: HatStyle = 'red') {
+  if (style === 'top')
+    return solid(
+      merge([
+        P.cyl(0.92, 0.92, 0.08, '#2B2330', { at: [0, 0.62, 0] }, 22),
+        P.cyl(0.56, 0.6, 0.95, '#2B2330', { at: [0, 1.12, 0] }, 18),
+        P.cyl(0.61, 0.61, 0.18, PAL.hotpink, { at: [0, 0.76, 0] }, 18),
+      ]),
+      bag,
+      2,
+    )
+  const c = HAT_COLOR[style]
   return solid(
     merge([
-      P.cyl(0.62, 0.72, 0.42, RED, { at: [0, 0.78, 0] }, 18),
+      P.cyl(0.62, 0.72, 0.42, c, { at: [0, 0.78, 0] }, 18),
       P.cyl(0.74, 0.74, 0.16, '#FFFFFF', { at: [0, 0.6, 0] }, 18),
-      P.cone(0.6, 0.75, RED, { at: [0, 1.36, 0] }, 18),
+      P.cone(0.6, 0.75, c, { at: [0, 1.36, 0] }, 18),
       P.sphere(0.24, '#FFFFFF', { at: [0, 1.76, 0] }, 12),
     ]),
     bag,
@@ -523,19 +625,19 @@ export function makeHat(bag: Bag) {
   )
 }
 
-/** The carnival's woven sash (red, with blue, gold and green stripes), tied round a ball of radius 1 with its ends
- *  hanging down the side. */
-export function makeSash(bag: Bag) {
-  const parts: BufferGeometry[] = [
-    P.torus(1, 0.11, RED, { at: [0, -0.22, 0], rot: [Math.PI / 2, 0, 0] }),
-    P.torus(1, 0.055, '#4F7FD0', { at: [0, -0.07, 0], rot: [Math.PI / 2, 0, 0] }),
-    P.torus(1, 0.055, PAL.butter, { at: [0, -0.37, 0], rot: [Math.PI / 2, 0, 0] }),
-    // The knot and the two tasselled ends.
-    P.sphere(0.16, RED, { at: [0.72, -0.25, 0.72] }),
-    P.rbox(0.18, 0.62, 0.06, 0.04, RED, { at: [0.76, -0.62, 0.78], rot: [0, -0.78, 0.15] }),
-    P.rbox(0.18, 0.5, 0.06, 0.04, '#4F7FD0', { at: [0.62, -0.58, 0.9], rot: [0, -0.78, -0.12] }),
-    P.cone(0.12, 0.2, PAL.butter, { at: [0.8, -1.0, 0.8], rot: [Math.PI, 0, 0] }, 8),
-    P.cone(0.12, 0.2, PAL.butter, { at: [0.58, -0.9, 0.94], rot: [Math.PI, 0, 0] }, 8),
-  ]
-  return solid(merge(parts), bag, 2)
+/** The carnival's woven sash (characters/tuque.ts: the same one Tuque wears), round a ball of radius 1. */
+export const makeSash = (bag: Bag) => solid(merge(sashGeo()), bag, 2)
+
+/** A plain knitted scarf in one color with a striped end, round a ball of radius 1 (the parade's other snowmen). */
+export function makeScarf(bag: Bag, color: string, trim: string) {
+  return solid(
+    merge([
+      P.torus(1, 0.15, color, { at: [0, -0.22, 0], rot: [Math.PI / 2, 0, 0] }),
+      P.sphere(0.17, color, { at: [0.72, -0.25, 0.72] }),
+      P.rbox(0.24, 0.7, 0.07, 0.05, color, { at: [0.76, -0.64, 0.78], rot: [0, -0.78, 0.12] }),
+      P.rbox(0.25, 0.08, 0.075, 0.03, trim, { at: [0.78, -0.86, 0.78], rot: [0, -0.78, 0.12] }),
+    ]),
+    bag,
+    2,
+  )
 }

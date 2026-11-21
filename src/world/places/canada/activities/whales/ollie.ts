@@ -1,0 +1,119 @@
+// Ollie the sea otter (planning/around-the-world/canada.md: giggly, cuddly, silly, spins like a top), floating on her
+// back the way sea otters do: the team's rig friend in her Canada look (characters/looks.ts `otter`), tipped onto her
+// back with her face to the sky and toward whoever is looking from her toes, a clam on her tummy, bobbing on the
+// swell. The game (watch.ts) has her drift off asleep, wake, hold the boat's rope and ride along behind it; the films
+// (story/films/whales.ts, story/sets/whales.ts) float the cast's Ollie in the kelp the same way (a Floater). `spin()`
+// is her trick: round and round on her back, fast.
+import { Group, Vector3 } from 'three'
+import { bell } from '../../../../../sdk'
+import { FilmActor } from '../../../../engine3d/characters/actor'
+import type { Bag } from '../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../engine3d/geo'
+import { CANADA_LOOKS } from '../../characters/looks'
+
+/** How far back she lies (radians): not flat, so her face looks up and out past her toes. */
+export const BACK = -1.12
+const SPIN_S = 1.4
+
+/** Puts a clam on a rig friend's tummy; returns it (hide it with `.visible`). */
+export function addClam(actor: FilmActor, bag: Bag) {
+  const H = actor.height
+  const c = CANADA_LOOKS.otter.chub ?? 1
+  const clam = solid(
+    merge([
+      P.sphere(0.075 * H, '#E9DDF2', { at: [0, 0.012 * H, 0], scale: [1, 0.42, 0.85] }, 12),
+      P.sphere(0.072 * H, '#CDB8E3', { at: [0, -0.012 * H, 0], scale: [1, 0.38, 0.82] }, 12),
+      P.box(0.11 * H, 0.008 * H, 0.012 * H, '#B49ACF', { at: [0, 0.03 * H, 0.02 * H] }),
+    ]),
+    bag,
+    1.5,
+  )
+  clam.position.set(0, 0.36 * H, 0.21 * H * c)
+  clam.rotation.x = 1.25
+  actor.rig.body.add(clam)
+  return clam
+}
+
+/** Floats a rig actor on her back: call `after()` each frame after the actor's own update. Her root keeps its x and z;
+ *  `y` is the water's surface there, `face` which way her toes point (radians, 0: toward +z). */
+export class Floater {
+  y = 0
+  face = 0
+  /** Fast asleep (eyes shut). */
+  sleepy = false
+  /** Paws on the tummy (holding a clam, or the boat's rope). */
+  paws = true
+  private spinT = -1
+  private phase = Math.random() * 6
+  constructor(readonly actor: FilmActor) {
+    actor.lean = BACK
+    // (No blob shadow on the water.)
+    actor.rig.root.children[0].visible = false
+  }
+  get spinning() {
+    return this.spinT >= 0
+  }
+  /** Round and round on her back, like a top (three turns, fast in the middle). */
+  spin() {
+    this.spinT = 0
+    this.sleepy = false
+    this.actor.pull('happy')
+  }
+  after(dt: number, t: number) {
+    const a = this.actor
+    a.lean = BACK
+    if (this.spinT >= 0 && (this.spinT += dt / SPIN_S) >= 1) this.spinT = -1
+    const k = Math.max(0, this.spinT)
+    const turn = k * k * (3 - 2 * k) * Math.PI * 6
+    a.root.rotation.set(0, this.face + turn, Math.sin(t * 0.9 + this.phase) * 0.07)
+    // Lying back in the water, a slow bob on the swell, lifted a little in the middle of a spin.
+    a.root.position.y = this.y - 0.2 * a.height + Math.sin(t * 1.6 + this.phase) * 0.03 + bell(k) * 0.08 * a.height
+    if (this.sleepy) a.rig.eyes.scale.y = 0.12
+    if (this.paws) {
+      a.rig.armR.rotation.x = -0.9
+      a.rig.armL.rotation.x = -0.9
+    }
+  }
+}
+
+/** The game's Ollie: her own rig actor, floating where `root` is put (the world moves it on the water). */
+export class Ollie {
+  readonly root = new Group()
+  readonly actor: FilmActor
+  readonly float: Floater
+  readonly clam: Group
+
+  constructor(
+    bag: Bag,
+    readonly height = 1.1,
+  ) {
+    this.actor = new FilmActor(CANADA_LOOKS.otter, bag, { height, voice: 'otter' })
+    this.root.add(this.actor.root)
+    this.actor.place(0, 0, 0, 0)
+    this.float = new Floater(this.actor)
+    this.clam = addClam(this.actor, bag)
+  }
+  get sleepy() {
+    return this.float.sleepy
+  }
+  set sleepy(v: boolean) {
+    this.float.sleepy = v
+  }
+  get spinning() {
+    return this.float.spinning
+  }
+  spin() {
+    this.float.spin()
+  }
+  wave() {
+    this.actor.wave()
+  }
+  /** Her face, in the world. */
+  head(out = new Vector3()) {
+    return this.actor.head(out)
+  }
+  update(dt: number, t: number) {
+    this.actor.update(dt, t)
+    this.float.after(dt, t)
+  }
+}

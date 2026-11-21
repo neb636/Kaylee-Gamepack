@@ -1,5 +1,5 @@
-// The raccoon mama of the campsite (the marshmallow bandit) and her babies: a layered SVG puppet in the colors of her 3D
-// look (characters/looks.ts, CANADA_LOOKS.raccoon): grey fur, a light face and belly, the dark bandit mask, pink-lined
+// Roxy, the raccoon mama of the campsite (the marshmallow bandit), and her three kits: a layered SVG puppet in the colors
+// of their 3D looks (characters/looks.ts, CANADA_LOOKS.raccoon and .kit, the same Roxy as in her films): grey fur, a light face and belly, the dark bandit mask, pink-lined
 // ears and a big ringed tail. She breathes, blinks, watches Kaylee's finger and talks in her own voice (`raccoon`), and
 // can hop, cheer, munch (paws up at her mouth), wash (rubbing her little hands together, like real raccoons do with
 // their food), sneak (crouched, looking left and right), say sorry (ears down, head tilted, paws together) and wave.
@@ -8,7 +8,7 @@ import { forwardRef, useId, useRef, type CSSProperties } from 'react'
 import { bell, clamp, lerp, setA, setT, smooth, span, spring, usePuppet, wobble, type PuppetHandle } from '../../../../../sdk'
 import { inkPass as inkPassIn, line as lineIn, useInk } from '../../../../kit/ink'
 import { blob, BLUSH, Eye, INK, MOUTH, mouthPath, TONGUE, updateEyes, type EyeKind, type EyePart } from '../../../poles/puppets/face'
-import { CANADA_COLORS as C } from '../../characters/looks'
+import { CANADA_COLORS as C, CANADA_LOOKS } from '../../characters/looks'
 
 export interface RaccoonProps {
   height: string
@@ -32,13 +32,14 @@ const BODY = blob(250, 372, 112, 98, 22, 0.035)
 const HEAD = blob(250, 196, 128, 104, 26, 0.04, (a) => (Math.sin(a) > 0.2 ? 1 : 0.2))
 const ARM = 'M-24 -14 C-24 -34 24 -34 24 -14 C24 20 24 40 20 54 C14 74 -14 74 -20 54 C-24 40 -24 20 -24 -14Z'
 const TAIL = 'M0 0 C30 -20 70 -60 92 -120 C108 -166 150 -196 180 -176 C206 -158 196 -112 176 -84 C140 -30 80 26 14 34 Z'
-const MASK = 'M120 184 C130 150 180 150 214 168 C236 178 264 178 286 168 C320 150 370 150 380 184 C384 214 352 226 320 214 C296 204 280 206 266 214 L234 214 C220 206 204 204 180 214 C148 226 116 214 120 184Z'
 
 type Part = 'root' | 'body' | 'head' | 'earL' | 'earR' | 'armL' | 'armR' | 'tail' | 'blushL' | 'blushR' | 'mouth' | 'mouthClip' | 'tongue' | 'snack' | EyePart
 
 /** Raccoon mama (or a baby). Actions: hop, cheer, munch, wash, sneak, sorry, wave. Voice: raccoon. */
 export const Raccoon = forwardRef<PuppetHandle, RaccoonProps>(function Raccoon({ height, style, flip = 1, baby = false, holding = null }, ref) {
   const id = useId().replace(/:/g, '')
+  // (A kit's fur is a shade lighter, as in her 3D look.)
+  const fur = baby ? CANADA_LOOKS.kit.fur : FUR
   const st = useRef({ headRot: 0, earL: spring(160, 8), earR: spring(160, 8), tail: spring(80, 6) }).current
   const ink = useInk<Part>()
   const { svg, part } = usePuppet<Part>(ref, {
@@ -171,7 +172,7 @@ export const Raccoon = forwardRef<PuppetHandle, RaccoonProps>(function Raccoon({
 
   const arm = (side: 'L' | 'R', pass: boolean) => (
     <g ref={r(side === 'L' ? 'armL' : 'armR', pass)} transform={side === 'L' ? 'translate(166 322) rotate(22)' : 'translate(334 322) rotate(-22)'}>
-      <path d={ARM} fill={FUR} />
+      <path d={ARM} fill={fur} />
       {/* Her little dark hands. */}
       <ellipse cy="56" rx="20" ry="17" fill={DARK} />
       {!pass && [-10, 0, 10].map((x) => <circle key={x} cx={x} cy="70" r="4.5" fill={DARK} />)}
@@ -180,7 +181,7 @@ export const Raccoon = forwardRef<PuppetHandle, RaccoonProps>(function Raccoon({
 
   const tail = (pass: boolean) => (
     <g ref={r('tail', pass)} transform="translate(320 430)">
-      <path d={TAIL} fill={FUR} />
+      <path d={TAIL} fill={fur} />
       {!pass && (
         <g clipPath={`url(#${id}-tail)`}>
           {[
@@ -201,7 +202,7 @@ export const Raccoon = forwardRef<PuppetHandle, RaccoonProps>(function Raccoon({
     <>
       {tail(pass)}
       <g ref={r('body', pass)}>
-        <path d={BODY} fill={FUR} />
+        <path d={BODY} fill={fur} />
       </g>
       {!pass && <ellipse cx="250" cy="392" rx="72" ry="62" fill={LIGHT} />}
       {([-1, 1] as const).map((s) => (
@@ -218,9 +219,8 @@ export const Raccoon = forwardRef<PuppetHandle, RaccoonProps>(function Raccoon({
     const s = side === 'L' ? -1 : 1
     return (
       <g ref={r(side === 'L' ? 'earL' : 'earR', pass)}>
-        <path d={`M${x - 34} 128 C${x - 34 + s * 4} 92 ${x + s * 4} 60 ${x + s * 10} 54 C${x + s * 24} 70 ${x + 36} 100 ${x + 34} 130 Z`} fill={FUR} />
+        <path d={`M${x - 34} 128 C${x - 34 + s * 4} 92 ${x + s * 4} 60 ${x + s * 10} 54 C${x + s * 24} 70 ${x + 36} 100 ${x + 34} 130 Z`} fill={fur} />
         {!pass && <path d={`M${x - 18} 122 C${x - 16} 98 ${x + s * 4} 78 ${x + s * 8} 74 C${x + s * 16} 88 ${x + 20} 104 ${x + 18} 124 Z`} fill={EAR} />}
-        {!pass && <path d={`M${x - 32} 126 C${x - 30} 112 ${x + 30} 112 ${x + 32} 128`} fill={LIGHT} />}
       </g>
     )
   }
@@ -229,19 +229,18 @@ export const Raccoon = forwardRef<PuppetHandle, RaccoonProps>(function Raccoon({
     <g ref={r('head', pass)}>
       {ear('L', pass)}
       {ear('R', pass)}
-      <path d={HEAD} fill={FUR} />
+      <path d={HEAD} fill={fur} />
       {!pass && (
         <>
-          {/* The light face: brows over the mask and the cheeks and muzzle under it. */}
-          <path d="M150 168 C160 130 214 124 236 150 C220 160 180 160 150 168Z M350 168 C340 130 286 124 264 150 C280 160 320 160 350 168Z" fill={LIGHT} />
-          <path d="M130 214 C150 270 200 296 250 296 C300 296 350 270 370 214 C340 232 300 222 280 214 L220 214 C200 222 160 232 130 214Z" fill={LIGHT} />
-          {/* The dark stripe down her forehead to the nose. */}
-          <path d="M240 112 C244 130 244 160 238 176 L262 176 C256 160 256 130 260 112 Z" fill={DARK} />
-          {/* The bandit mask. */}
-          <path d={MASK} fill={DARK} />
+          {/* As on her 3D toy: a grey-lilac face, a dark bandit patch round each eye with a little light brow over it,
+              and a round light muzzle. */}
           {([-1, 1] as const).map((s) => (
-            <circle key={s} cx={250 + s * 52} cy="186" r="21" fill="none" stroke={LIGHT} strokeWidth="3" opacity="0.7" />
+            <g key={s}>
+              <ellipse cx={250 + s * 54} cy="190" rx="46" ry="31" fill={DARK} transform={`rotate(${s * 14} ${250 + s * 54} 190)`} />
+              <ellipse cx={250 + s * 46} cy="146" rx="22" ry="9" fill={LIGHT} transform={`rotate(${s * 10} ${250 + s * 46} 146)`} />
+            </g>
           ))}
+          <ellipse cx="250" cy="250" rx="54" ry="38" fill={LIGHT} />
           <Eye id={id} side="L" x={198} y={186} skin={DARK} part={part} rx={15} ry={17} />
           <Eye id={id} side="R" x={302} y={186} skin={DARK} part={part} rx={15} ry={17} />
           <ellipse ref={part('blushL')} rx="20" ry="11" fill={BLUSH} opacity="0.9" transform="translate(166 238)" />

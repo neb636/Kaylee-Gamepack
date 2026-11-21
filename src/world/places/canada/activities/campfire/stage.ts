@@ -175,8 +175,13 @@ export const LOOKS: Record<CritterId, CritterLook> = {
   porcupine: { pic: 'porcupine', w: 127, h: 115, eye: [0.2, 0.5], foot: 0.97, gap: 6, eyeR: 7, shine: '#E8F06A' },
   kits: { w: 110, h: 110, eye: [0.5, 0.49], foot: 0.95, gap: 13, eyeR: 6, shine: '#E8F06A' },
 }
-/** The two babies stand side by side, this far either side of (x). */
-export const KIT_GAP = 46
+/** Roxy's three kits, from (x, y): the middle one a step behind (drawn first, so the other two stand in front), one
+ *  each side. The same three as in her films (story/cast.ts `kits`). */
+export const KIT_SPOTS: Pt[] = [
+  [0, -16],
+  [-54, 4],
+  [54, 6],
+]
 /** The moose's eyes (stage units from the middle of his head) and their shine. */
 export const MOOSE_EYES = { gap: 25, y: -15, r: 10, shine: '#FF8A5C' }
 
@@ -194,13 +199,13 @@ export const BOOK = {
 
 export const NAMES: Record<CritterId, string> = {
   owl: 'A barred owl',
-  raccoon: 'A raccoon',
+  raccoon: 'Roxy the raccoon',
   deer: 'A deer',
   frog: 'A spring peeper',
   beaver: 'A beaver',
   hare: 'A snowshoe hare',
   porcupine: 'A porcupine',
-  kits: 'Raccoon babies',
+  kits: 'Roxy’s three kits',
 }
 export const EMOJI: Record<CritterId, string> = { owl: '🦉', raccoon: '🦝', deer: '🦌', frog: '🐸', beaver: '🦫', hare: '🐇', porcupine: '🦔', kits: '🍼' }
 

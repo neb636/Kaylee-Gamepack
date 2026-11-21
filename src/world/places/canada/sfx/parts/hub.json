@@ -1,0 +1,16 @@
+[
+ { "id": "hub-wind", "label": "The map in the sky (bed)", "prompt": "A soft, calm breeze high up in the open sky above the clouds, airy and gentle, with the faintest far-off wind chime now and then. Cozy and quiet. Seamless loop, no music, no voices.", "seconds": 15, "loop": true },
+ { "id": "hub-hop", "label": "A friend hops when tapped", "prompt": "A soft, bouncy cartoon toy hop: a light springy boing with a tiny wooden tap as it lands, cute and gentle.", "seconds": 0.6 },
+ { "id": "hub-zoom", "label": "The camera swoops in to a place", "prompt": "A gentle, airy whoosh rising into a soft magical shimmer, like flying down closer, short and light.", "seconds": 0.9 },
+ { "id": "hub-munch", "label": "Monty the moose munches", "prompt": "A big friendly moose slowly chewing a mouthful of leaves and water plants, three soft wet munches, gentle and funny.", "seconds": 1.2 },
+ { "id": "hub-spout", "label": "The whale spouts", "prompt": "A whale breathing out through its blowhole: a soft, airy whoosh of spray going up and pattering back onto calm sea water.", "seconds": 1.5 },
+ { "id": "hub-crackle", "label": "The campfire crackles", "prompt": "A small cozy campfire crackling and popping softly for a moment, warm and gentle.", "seconds": 1.2 },
+ { "id": "hub-hoot", "label": "The snowy owl hoots", "prompt": "A soft, round, friendly cartoon owl hooting twice, hoo hoo, gentle and cozy, a little sleepy and sweet.", "seconds": 1.2 },
+ { "id": "hub-bison", "label": "The bison rolls in the dust", "prompt": "A big bison flopping over and rolling in dry dust: a soft heavy thump, a dusty scuffle, and a contented snort. Gentle and funny.", "seconds": 1.4 },
+ { "id": "hub-beluga", "label": "The beluga chirps", "prompt": "A beluga whale's cheerful high chirps and whistles, two or three short squeaky calls, bright and cute, with a little splash.", "seconds": 1.2 },
+ { "id": "hub-orca", "label": "The orca leaps", "prompt": "An orca leaping out of calm sea water and landing with a big friendly splash, short.", "seconds": 1.3 },
+ { "id": "hub-puff", "label": "A cloud puffs", "prompt": "A soft fluffy cotton puff, like poking a big pillow cloud: a gentle airy poof with a tiny sparkle.", "seconds": 0.6 },
+ { "id": "hub-ice", "label": "An ice floe bumps", "prompt": "A small ice floe gently bumping and clinking in cold water, a soft hollow knock and a little lap of water.", "seconds": 0.7 },
+ { "id": "hub-arrive", "label": "A new friend joins the team at the rink", "prompt": "A magical pop and a sweet rising sparkle shimmer, like a friend appearing with a puff of glitter, happy and short.", "seconds": 1.0 },
+ { "id": "hub-glow", "label": "The rink glows for the big game", "prompt": "A soft, warm magical chime swelling gently, a glowing twinkle like a light turning on, inviting and calm.", "seconds": 1.6 }
+]

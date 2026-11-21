@@ -1,5 +1,5 @@
 // Red Canoe's canoe and Maple: a red cedar-strip canoe (a real canoe's shape: long and narrow, pointed at both ends, the
-// ends sweeping up, wooden gunwales and thwarts, little decks at the tips), with Maple the beaver on the chibi rig
+// ends sweeping up, red gunwales and little red decks at the tips, wooden thwarts and floor), with Maple the beaver on the chibi rig
 // (engine3d/characters/animal.ts, CANADA_LOOKS.maple) sitting in the stern in a pink life jacket. Kaylee's finger moves
 // the paddle's blade (the world says where: paddle.ts); Maple's paws hold the shaft, one on the grip, one down low, and
 // her body leans into each stroke. She also waves, cheers (a little hop on her seat, with a crouch first), slaps her
@@ -19,7 +19,7 @@ import { CANADA_LOOKS } from '../../characters/looks'
 export const CANOE_LEN = 4.6
 const RED = '#E8443F'
 const RED_DARK = '#C23634'
-const CREAM = '#F6DCC0'
+const RED_IN = '#D9403D'
 const WOOD = '#D2A67E'
 const WOOD_DARK = '#A97A55'
 const VEST = PAL.hotpink
@@ -53,22 +53,22 @@ function hullAt(z: number) {
 
 /** One surface of the hull swept from bow to stern: a U across the canoe at each station, `inset` in from the outside
  *  (the inside surface is inset and shallower, and flat at the tips, where the little decks are). */
-function sweep(inset: number, inner: boolean) {
+function sweep(inset: number, inner: boolean, part: { j0: number; j1: number; uMax: number; lift: number } = { j0: 0, j1: 14, uMax: 1, lift: 0 }) {
   const S = 40
-  const M = 14
+  const M = part.j1 - part.j0
   const pos: number[] = []
   const idx: number[] = []
   for (let i = 0; i <= S; i++) {
-    const z = -CANOE_LEN / 2 + (CANOE_LEN * i) / S
+    const z = part.uMax * (-CANOE_LEN / 2 + (CANOE_LEN * i) / S)
     const { w, g, d } = hullAt(z)
     const u = Math.abs((2 * z) / CANOE_LEN)
     // (Inside, the floor rises to the gunwale near the tips: the decks.)
     const deck = inner ? span(u, 0.72, 0.84) : 0
     const wi = Math.max(0, w - inset)
     const di = Math.max(0, d - inset * 1.2) * (1 - deck)
-    for (let j = 0; j <= M; j++) {
-      const a = Math.PI + (Math.PI * j) / M
-      pos.push(Math.cos(a) * wi, g + Math.sin(a) * di - (inner ? 0.004 : 0), z)
+    for (let j = part.j0; j <= part.j1; j++) {
+      const a = Math.PI + (Math.PI * j) / 14
+      pos.push(Math.cos(a) * wi, g + Math.sin(a) * di - (inner ? 0.004 : 0) + part.lift, z)
     }
   }
   for (let i = 0; i < S; i++)
@@ -100,7 +100,7 @@ function gunwale(side: number) {
     const len = Math.hypot(x1 - x0, b.g - a.g, z1 - z0)
     const yaw = Math.atan2(x1 - x0, z1 - z0)
     const pitch = -Math.atan2(b.g - a.g, Math.hypot(x1 - x0, z1 - z0))
-    parts.push(P.box(0.07, 0.05, len + 0.02, WOOD, { at: [(x0 + x1) / 2, (a.g + b.g) / 2 + 0.01, (z0 + z1) / 2], rot: [pitch, yaw, 0] }))
+    parts.push(P.box(0.1, 0.06, len + 0.02, RED, { at: [(x0 + x1) / 2, (a.g + b.g) / 2 + 0.01, (z0 + z1) / 2], rot: [pitch, yaw, 0] }))
   }
   return parts
 }
@@ -144,7 +144,7 @@ export class Canoe {
   constructor(bag: Bag) {
     this.root.add(this.hull)
     const L = CANOE_LEN
-    // ---- The canoe: the red outside, the cream inside, wooden gunwales, thwarts and the two seats.
+    // ---- The canoe: red outside and in, red gunwales, a wooden floor, thwarts and the two seats.
     const thwart = (z: number, y: number, c: string, deep = 0.1) => {
       const { w } = hullAt(z)
       return P.box(w * 2 - 0.06, 0.05, deep, c, { at: [0, y, z] })
@@ -164,7 +164,10 @@ export class Canoe {
           P.cyl(0.08, 0.08, 0.44, PAL.mint, { at: [0, 0.62, 0.88], rot: [0, 0, Math.PI / 2] }, 12),
         ],
         [
-          bake(sweep(0.035, true), CREAM),
+          // Red inside too (it's the red canoe from above, as in the films and on the map): the walls and the decks at
+          // the tips; only the floor down the middle is wood.
+          bake(sweep(0.035, true), RED_IN),
+          bake(sweep(0.035, true, { j0: 4, j1: 10, uMax: 0.7, lift: 0.006 }), WOOD),
           // The white stripe along the outside under the gunwale, and the darker tips.
           ...[1, -1].map((s) => P.box(0.015, 0.05, L * 0.62, '#FFFFFF', { at: [s * (W + 0.004), GUN - 0.07, 0] })),
           ...[1, -1].map((s) => P.sphere(0.07, RED_DARK, { at: [0, GUN + SHEER - 0.02, s * (L / 2 - 0.05)], scale: [0.6, 1.2, 1] }, 10)),
