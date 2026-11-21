@@ -129,6 +129,10 @@ New voices: `loon` (Lulu) and `gus`. The PR records every new line.
 
 ## Next
 
+- **Round two is planned, not built: `canada-round-2.md`** (2026-11-20). Salmon Leap is replaced by Misty's Bubble
+  Bath, Campfire Night is rebuilt in 3D around the flashlight, Whale Watch gets a reason (Ollie's lucky rock) and
+  whales she plays with, and a Team Cabin at the rink is optional. Build from that file; update this one when it's
+  built.
 - Kaylee plays it. Watch for: does she follow "tap a friend" on the map; does she sit through the films (hold ⏭
   skips); the canoe (does she hold or tap); the big game's goose goal (fun, or upsetting?).
 - The films by their recorded lines: the way in has about 32 s of talk (about 45 s in all); a chapter's film in has
