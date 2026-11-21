@@ -325,6 +325,22 @@ export class Wind {
   }
 }
 
+/** How high a code-built toy's hips are: the bottom of its tummy, above its little legs. */
+export const hipsOf = (rig: Rig) => 0.135 * rig.height
+
+/** A code-built toy sitting back on a bench like a plush toy. It has no knees to bend, so sitting straight up its
+ *  legs went down into the cushion and it looked sunk in the seat: instead it tips back `lean` radians about its hips,
+ *  so its legs reach out over the seat's front edge, its head tips forward again to look ahead, and its tail tucks
+ *  away behind it. Put its root on the seat first, `hipsOf(rig)` below the cushion's top and a little forward of the
+ *  seat's middle. `lean` 0 undoes it. */
+export function sitBack(rig: Rig, lean = 0.6) {
+  const hip = hipsOf(rig)
+  rig.body.rotation.x = -lean
+  rig.body.position.set(0, hip * (1 - Math.cos(lean)), hip * Math.sin(lean))
+  rig.head.rotation.x = lean * 0.8
+  if (rig.tail) rig.tail.visible = lean === 0
+}
+
 export function buildAnimal(look: Look, bag: Bag): Rig {
   const f = frameOf(look)
   const { H, R, headY, shoulder, eyeX, eyeY, eyeSize, lift, on, turnTo } = f
