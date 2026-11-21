@@ -106,6 +106,8 @@ const INK = '#2E2233'
 const BLUSH = '#FF9DB8'
 const MOUTH = '#7A2745'
 const TONGUE = '#FF8FA8'
+/** A beaver's front teeth: warm white, not orange (2026-11-21). */
+const BEAVER_TEETH = '#FFF6E6'
 const WHITE = '#FFFFFF'
 /** A hen's comb and wattle. */
 const COMB = '#F2555F'
@@ -350,7 +352,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const tern = look.species === 'tern'
   const polar = look.species === 'polarbear'
   /** Paws and hooves in the dark color (a polar bear's are furry and light, like its fur). */
-  const darkPaws = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' || look.species === 'bear' || look.species === 'moose' || look.species === 'raccoon'
+  const darkPaws = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' || look.species === 'bear' || look.species === 'moose' || look.species === 'raccoon' || look.species === 'beaver'
 
   const torso: Parts = []
   const torsoPlain: Parts = []
@@ -416,6 +418,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     }
     torso.push(P.capsule(0.155 * H, 0.1 * H, look.fur, { at: [0, 0.34 * H, 0], scale: round }))
     if ((look.species === 'fox' || look.species === 'puppy' || look.species === 'otter') && !look.outfit?.lace) torso.push(P.sphere(0.075 * H, look.light, { at: [0, 0.5 * H, 0.11 * H * round[2]], scale: [1.1, 0.8, 0.7] }))
+    if (look.species === 'beaver') torso.push(P.sphere(0.12 * H, look.light, { at: [0, 0.3 * H, 0.1 * H * round[2]], scale: [1.05 * c, 1.2, 0.55] }))
     if (look.species === 'buffalo' && !look.outfit) torso.push(P.sphere(0.11 * H, look.light, { at: [0, 0.27 * H, 0.1 * H], scale: [1, 1.1, 0.55] }))
     if (look.species === 'tortoise') {
       // A big round shell on the back (like a backpack): a dome in the shell color with round plates sunk into it, a
@@ -817,18 +820,34 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       break
     }
     case 'beaver': {
-      // A beaver: small round ears, a big light muzzle with a dark nose, two big orange front teeth under it (Canada's
-      // beavers are proud of them), and the flat paddle tail lying out behind, criss-crossed like scales.
+      // A beaver: a round head that widens into chubby fur cheeks, small round ears, kind arched brows, a light muzzle
+      // of two puffy pads round a small shiny nose, and under them a big open grin with her two white front teeth
+      // hanging from the top lip inside it (Canada's beavers are proud of them). The flat paddle tail lies out behind,
+      // criss-crossed like scales.
       head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1.08, 1, 1] }, 26))
       for (const s of [-1, 1]) {
         head.push(P.sphere(0.2 * R, look.fur, { at: [s * 0.72 * R, headY + 0.68 * R, -0.05 * R], scale: [1, 1, 0.7] }))
         headPlain.push(P.sphere(0.11 * R, look.ear ?? look.light, { at: [s * 0.72 * R, headY + 0.67 * R, 0.06 * R], scale: [1, 1, 0.4] }))
-        head.push(P.sphere(0.32 * R, look.light, { at: [s * 0.2 * R, headY - 0.32 * R, 0.72 * R], scale: [1, 0.8, 0.75] }))
+        // Chubby fur cheeks low on each side, so the face is widest at the bottom.
+        head.push(P.sphere(0.42 * R, look.fur, { at: [s * 0.5 * R, headY - 0.4 * R, 0.36 * R], scale: [1, 0.85, 0.9] }, 20))
+        // The muzzle pads either side of the nose.
+        head.push(P.sphere(0.29 * R, look.light, { at: [s * 0.17 * R, headY - 0.3 * R, 0.75 * R], scale: [1.05, 0.8, 0.72] }))
+        // Kind arched brows in the nose's color, a little way above each eye.
+        const bx = s * (eyeX + 0.02 * R)
+        headPlain.push(P.torus(0.12 * R, 0.024 * R, look.dark, { at: on(bx, eyeY + 0.27 * R, 0.01 * R), rot: [0, turnTo(bx)[1], Math.PI * 0.2 - s * 0.12] }, Math.PI * 0.6))
       }
-      head.push(P.sphere(0.14 * R, look.dark, { at: [0, headY - 0.14 * R, 1.0 * R], scale: [1.4, 0.9, 0.8] }))
-      head.push(...[-1, 1].map((s) => P.rbox(0.19 * R, 0.3 * R, 0.08 * R, 0.05 * R, '#FF9A3C', { at: [s * 0.1 * R, headY - 0.62 * R, 0.86 * R], rot: [-0.3, 0, 0] })))
-      // (She talks between her cheeks, the teeth hanging from it: lower down, a scarf would hide it.)
-      mouth(mouthPoint(-0.44 * R, 0.97 * R))
+      // The light chin under the grin.
+      head.push(P.sphere(0.3 * R, look.light, { at: [0, headY - 0.6 * R, 0.66 * R], scale: [1.15, 0.75, 0.7] }))
+      // A small round nose on top of the pads, with a shine.
+      head.push(P.sphere(0.12 * R, look.dark, { at: [0, headY - 0.16 * R, 1.0 * R], scale: [1.35, 0.85, 0.8] }))
+      headPlain.push(P.sphere(0.03 * R, WHITE, { at: [-0.05 * R, headY - 0.11 * R, 1.09 * R], scale: [1.3, 0.8, 0.5] }))
+      // The two front teeth, white and rounded, hanging from under the pads into the grin (on the head, so they stay
+      // put while the grin opens wider under them when she talks).
+      head.push(...[-1, 1].map((s) => P.rbox(0.105 * R, 0.15 * R, 0.05 * R, 0.035 * R, BEAVER_TEETH, { at: [s * 0.056 * R, headY - 0.56 * R, 0.94 * R], rot: [-0.2, 0, 0] })))
+      // The grin, built down from the top lip: a dark open mouth with a pink tongue, which stretches down to talk.
+      mouthAt = [0, headY - 0.47 * R, 0.87 * R]
+      rest.push(P.sphere(0.17 * R, MOUTH, { at: [0, -0.1 * R, 0], scale: [1.3, 0.78, 0.45] }, 20))
+      rest.push(P.sphere(0.09 * R, TONGUE, { at: [0, -0.17 * R, 0.04 * R], scale: [1.5, 0.55, 0.6] }))
       tailRoot = [0, 0.13 * H, -0.15 * H * round[2]]
       tail.push(P.sphere(0.16 * H, look.dark, { at: [0, 0.07 * H, -0.3 * H * round[2]], rot: [0.12, 0, 0], scale: [0.72, 0.16, 1.15] }, 20))
       for (const a of [-0.5, 0.5]) for (const k of [-0.07, 0, 0.07]) tail.push(P.capsule(0.004 * H, 0.17 * H, '#4F3428', { at: [k * H, 0.095 * H, -0.3 * H * round[2]], rot: [Math.PI / 2 + 0.12, a, 0] }))
@@ -1121,7 +1140,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     tailGroup = pivoted(tail, look.species === 'unicorn' ? [0, 0.29 * H, -0.15 * H] : tailRoot, bag, px)
     body.add(tailGroup)
   }
-  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, open: (!!look.open || look.smile === 'teeth') && rest.length > 0, beak, armL, armR, tail: tailGroup, mane: maneGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
+  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, open: (!!look.open || look.smile === 'teeth' || look.species === 'beaver') && rest.length > 0, beak, armL, armR, tail: tailGroup, mane: maneGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
 }
 
 /** A five-petal flower (with two leaves behind it) printed on a surface at `at`, turned by `rot` to face out. */

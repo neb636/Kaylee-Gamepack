@@ -1,6 +1,6 @@
 // Maple the beaver: a layered SVG puppet drawn to match her 3D toy (characters/looks.ts, #/world/characters/maple), for
 // the 2D activities and the story beats. A round brown beaver girl in a pink scarf: small round ears, a big light muzzle
-// with a dark nose, two big orange front teeth, and her flat criss-crossed paddle tail behind her. She breathes, blinks,
+// with a dark nose, two big white front teeth, and her flat criss-crossed paddle tail behind her. She breathes, blinks,
 // watches Kaylee's finger and talks in her own voice (the mouth opens under the teeth), and can hop, wave, cheer,
 // wiggle, chomp (three quick bites: taffy, a stick) and slap her tail on the ground when she's excited.
 import { forwardRef, useId, useRef, type CSSProperties } from 'react'
@@ -216,6 +216,10 @@ export const Maple = forwardRef<PuppetHandle, MapleProps>(function Maple({ heigh
           {/* Lashes, like the 3D Maple. */}
           {([-1, 1] as const).map((s) => (
             <path key={s} d={`M${250 + s * 74} 142 l${s * 12} -10 M${250 + s * 80} 152 l${s * 14} -6`} {...line(3.4)} />
+          ))}
+          {/* Kind arched brows, like the 3D Maple. */}
+          {([-1, 1] as const).map((s) => (
+            <path key={`b${s}`} d={`M${250 + s * 40} 120 Q${250 + s * 60} 104 ${250 + s * 80} 116`} {...lineIn(7, C.beaverTail)} />
           ))}
           <ellipse ref={part('blushL')} rx="22" ry="12" fill={BLUSH} opacity="0.9" transform="translate(160 214)" />
           <ellipse ref={part('blushR')} rx="22" ry="12" fill={BLUSH} opacity="0.9" transform="translate(340 214)" />

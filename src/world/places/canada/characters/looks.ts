@@ -13,7 +13,8 @@ export const CANADA_COLORS = {
   beaverEar: '#F2A7A0',
   beaverTail: '#6E4B3B',
   beaverNose: '#4A2E26',
-  teeth: '#FF9A3C',
+  /** Maple's front teeth: warm white (orange looked unappealing, 2026-11-21). */
+  teeth: '#FFF6E6',
   /** Maple's scarf, and the team's: everybody on the team wears one. */
   scarf: '#FF8FB8',
   mooseFur: '#8A5A3C',
@@ -39,7 +40,7 @@ const C = CANADA_COLORS
 export type CanadaFriend = 'maple' | 'moose' | 'raccoon' | 'kit' | 'otter' | 'spirit'
 
 export const CANADA_LOOKS: Record<CanadaFriend, Look> = {
-  /** Maple: a round, busy beaver girl in a pink scarf, happy mouth open over her orange teeth. */
+  /** Maple: a round, busy beaver girl in a pink scarf, a big open grin with two white front teeth. */
   maple: { species: 'beaver', height: 0.85, chub: 1.12, fur: C.beaverFur, light: C.beaverLight, dark: C.beaverTail, ear: C.beaverEar, extras: ['scarf'], lashes: true },
   /** Monty the moose: a gentle giant, always chewing. He fills the whole net. */
   moose: { species: 'moose', height: 1.7, chub: 1.15, fur: C.mooseFur, light: C.mooseLight, dark: C.mooseDark, ear: C.mooseLight },
