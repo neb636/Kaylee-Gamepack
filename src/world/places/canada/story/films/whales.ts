@@ -77,7 +77,9 @@ export const WHALES_IN: StoryFilm = {
       {
         // The kelp off Tofino: Ollie on her back juggling, the little boat beside her, Maple watching. She spins.
         id: 'kelp',
-        shot: cam([ox + 1.2, 2.2, oz + 7.6], [ox - 2.4, 0.7, oz - 1.6], { eye: [ox + 0.9, 2.0, oz + 7] }, { tall: { eye: [ox + 1.6, 2.8, oz + 9.5] } }),
+        // (Tall: its own push-in too, from further back: without one it pushed in to the wide shot's end and cut Ollie
+        // off the right edge.)
+        shot: cam([ox + 1.2, 2.2, oz + 7.6], [ox - 2.4, 0.7, oz - 1.6], { eye: [ox + 0.9, 2.0, oz + 7] }, { tall: { eye: [ox + 1.8, 3.4, oz + 13], to: { eye: [ox + 1.6, 3.2, oz + 12] } } }),
         say: I.ollie,
         sayAt: 0.3,
         hold: 0.2,
@@ -205,9 +207,10 @@ export const WHALES_OUT: StoryFilm = {
         cues: [[0.3, () => boat.wave()]],
       },
       {
-        // Ollie, close: hockey? She tips her head. Is it wet?
+        // Ollie, close: hockey? She tips her head. Is it wet? (From high enough that the sea is behind her: from lower
+        // the boat's tube ran right across the top of the picture.)
         id: 'wet',
-        shot: close(ollie, 0.3, 1.8, 0.95),
+        shot: close(ollie, 0.3, 1.6, 1.55),
         say: O.wet,
         sayAt: 0.15,
         hold: 0.3,

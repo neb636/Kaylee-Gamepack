@@ -745,18 +745,18 @@ export class Humpback extends Whale {
       const fore = new Vector3(0, 0.1, 1)
       const len = 3.0
       const secs: FinSec[] = [
-        { t: 0, chord: 0.7, back: 0, thick: 0.2 },
-        { t: 0.3, chord: 0.62, back: 0.05, thick: 0.14 },
-        { t: 0.75, chord: 0.42, back: 0.12, thick: 0.08 },
+        { t: 0, chord: 0.9, back: 0, thick: 0.22 },
+        { t: 0.3, chord: 0.86, back: 0.06, thick: 0.16 },
+        { t: 0.75, chord: 0.6, back: 0.16, thick: 0.1 },
         { t: 1, chord: 0.06, back: 0.3, thick: 0.03 },
       ]
       const bumps = []
       for (let i = 0; i < 6; i++) {
         const t = 0.18 + i * 0.14
         const c = finEdge(secs, len, span3, fore, t).addScaledVector(fore, 0.015)
-        bumps.push(P.sphere(0.075 - i * 0.006, HUMP_WHITE, { at: c.toArray() }, 8))
+        bumps.push(P.sphere(0.055 - i * 0.004, HUMP_WHITE, { at: c.addScaledVector(fore, -0.02).toArray(), scale: [1, 0.7, 1] }, 8))
       }
-      g.add(solidMix([fin(secs, len, span3, fore, (t, top) => (top && t < 0.35 ? HUMP : HUMP_WHITE), 16, 18), ...bumps], [], bag, 2))
+      g.add(solidMix([fin(secs, len, span3, fore, (t, top) => (top && t < 0.12 ? HUMP : HUMP_WHITE), 16, 18), ...bumps], [], bag, 2))
     }
     // The flukes: dark on top, white underneath; a scalloped trailing edge.
     this.flukes.position.copy(this.stockAt(tA))

@@ -1063,6 +1063,13 @@ export class WhaleWatch implements World3D {
     }
     if (this.phase === 'hump') {
       const h = this.hump
+      // A finger that stays on the blowhole is holding the whale down too (on a phone the blowhole's target covers
+      // part of the whale: a press there did nothing but a spout). A quick tap there is still a spout.
+      const f = this.finger
+      if (f?.id === 'blowhole' && this.holdT < 0 && t - f.t > 0.22) {
+        f.id = 'hump'
+        this.holdHump(true)
+      }
       if (this.holdT >= 0) {
         this.holdT += dt
         // The bubbles grow while she holds it down.
