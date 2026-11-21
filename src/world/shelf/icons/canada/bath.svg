@@ -1,59 +1,79 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
-  <title>Salmon Leap</title>
+  <title>Misty's Bubble Bath</title>
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ddf7ee"/><stop offset="1" stop-color="#a9e8d2"/></linearGradient>
-    <radialGradient id="glow" cx="0.5" cy="0.4" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
-    <linearGradient id="pool" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#79c4f2"/><stop offset="1" stop-color="#4fa6de"/></linearGradient>
-    <clipPath id="rockL"><path d="M-2 48C8 42 22 42 34 48C40 60 40 80 38 102H-2Z"/></clipPath>
-    <clipPath id="rockR"><path d="M122 54C112 50 98 50 86 56C82 66 82 84 84 102H122Z"/></clipPath>
-    <clipPath id="fish"><path d="M-22 0C-14 -10 4 -12 16 -6C20 -4 24 -2 26 0C24 2 20 4 16 6C4 12 -14 10 -22 0Z"/></clipPath>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe1ee"/><stop offset="1" stop-color="#ffbcd8"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="pool" x1="0" y1="84" x2="0" y2="120" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8fe3ea"/><stop offset="1" stop-color="#3fc1cf"/></linearGradient>
+    <clipPath id="head"><circle cx="60" cy="58" r="24"/></clipPath>
+    <clipPath id="body"><ellipse cx="60" cy="96" rx="30" ry="20"/></clipPath>
   </defs>
   <rect width="120" height="120" fill="url(#bg)"/>
-  <circle cx="60" cy="44" r="52" fill="url(#glow)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
 
-  <!-- the river above the ledge, and the falls -->
-  <rect x="26" y="38" width="66" height="12" rx="5" fill="#79c4f2"/>
-  <path d="M30 46C30 64 33 80 36 96H84C87 80 90 64 90 46Z" fill="#a8dcff"/>
-  <g stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity="0.9">
-    <path d="M40 50V68M48 52V84M58 50V62M66 54V80M76 50V70M82 56V88"/>
-  </g>
-  <path d="M30 46C44 50 76 50 90 46" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-
-  <!-- rocks on both sides, mossy on top -->
-  <g clip-path="url(#rockL)">
-    <rect x="-2" y="40" width="44" height="64" fill="#9790ba"/>
-    <path d="M-2 48C8 42 22 42 34 48C33 66 30 84 26 104H-2Z" fill="#bcb6d6"/>
-    <path d="M-2 50C8 44 22 44 34 50L34 54C22 49 8 49 -2 55Z" fill="#73cf86"/>
-    <path d="M6 64C10 62 16 62 20 64" fill="none" stroke="#dedaf0" stroke-width="2.4" stroke-linecap="round"/>
-  </g>
-  <g clip-path="url(#rockR)">
-    <rect x="80" y="46" width="44" height="58" fill="#9790ba"/>
-    <path d="M122 54C112 50 98 50 86 56C88 70 90 86 92 104H122Z" fill="#bcb6d6"/>
-    <path d="M122 56C112 52 98 52 86 58L86 62C98 57 112 57 122 61Z" fill="#48a96c"/>
+  <!-- bubbles floating up -->
+  <g>
+    <circle cx="22" cy="42" r="6.5" fill="#fff" opacity="0.6"/><circle cx="20" cy="40" r="2" fill="#fff"/>
+    <circle cx="99" cy="30" r="5.5" fill="#fff" opacity="0.6"/><circle cx="97.5" cy="28.5" r="1.8" fill="#fff"/>
+    <circle cx="103" cy="58" r="4" fill="#ffc4da" opacity="0.8"/><circle cx="102" cy="57" r="1.3" fill="#fff"/>
+    <circle cx="16" cy="68" r="4" fill="#ffc4da" opacity="0.8"/><circle cx="15" cy="67" r="1.3" fill="#fff"/>
+    <circle cx="31" cy="20" r="3" fill="#fff" opacity="0.7"/>
   </g>
 
-  <!-- the pool, foaming where the falls land -->
-  <rect y="94" width="120" height="28" fill="url(#pool)"/>
-  <g fill="#fff"><ellipse cx="44" cy="96" rx="9" ry="3.4"/><ellipse cx="60" cy="97" rx="10" ry="3.6"/><ellipse cx="76" cy="96" rx="9" ry="3.4"/></g>
-  <g fill="#fff" opacity="0.55"><rect x="10" y="106" width="20" height="3" rx="1.5"/><rect x="86" y="110" width="22" height="3" rx="1.5"/></g>
+  <!-- the pool -->
+  <rect y="84" width="120" height="36" fill="url(#pool)"/>
+  <rect y="84" width="120" height="2.2" fill="#effcff" opacity="0.8"/>
+  <g fill="#fff" opacity="0.6"><rect x="6" y="104" width="14" height="2.4" rx="1.2"/><rect x="98" y="110" width="16" height="2.4" rx="1.2"/></g>
 
-  <!-- the salmon, leaping up the falls -->
-  <g transform="translate(60 64) rotate(-38)">
-    <path d="M-20 0L-33 -9.5C-30.5 -3 -30.5 3 -33 9.5Z" fill="#e7699c"/>
-    <path d="M-4 -9.5L2 -16L7 -8.5Z" fill="#e7699c"/>
-    <g clip-path="url(#fish)">
-      <rect x="-24" y="-14" width="52" height="28" fill="#ffd0dc"/>
-      <path d="M-24 -14H28V0C20 -1 10 -1 0 0C-10 1 -18 2 -24 2Z" fill="#ff8fb8"/>
-      <path d="M-24 -14H28V-5C18 -7 4 -7 -10 -4C-16 -3 -20 -2 -24 -1Z" fill="#e7699c"/>
-      <path d="M10 -9C12 -4 12 3 10 8" fill="none" stroke="#e7699c" stroke-width="1.6" stroke-linecap="round"/>
-    </g>
-    <path d="M-2 6L4 11L6 5Z" fill="#e7699c"/>
-    <g fill="#c4507f"><circle cx="-8" cy="-6" r="0.9"/><circle cx="-2" cy="-7.5" r="0.9"/><circle cx="4" cy="-7" r="0.9"/><circle cx="-12" cy="-3.5" r="0.9"/></g>
-    <ellipse cx="17" cy="-2" rx="2.2" ry="2.6" fill="#2b2330"/>
-    <circle cx="17.8" cy="-2.9" r="0.85" fill="#fff"/>
-    <path d="M20.5 2Q23 3.4 25 1.5" fill="none" stroke="#2b2330" stroke-width="1.4" stroke-linecap="round"/>
-    <ellipse cx="14.5" cy="2.8" rx="2.4" ry="1.4" fill="#ff4f9a" opacity="0.5"/>
+  <!-- Misty in the water, big: her shoulders, white fur, shaded on the right -->
+  <g transform="translate(-10.8 -15.5) scale(1.18)">
+  <g clip-path="url(#body)">
+    <rect x="28" y="74" width="64" height="12" fill="#fff"/>
+    <path d="M70 74H92V86H66Z" fill="#e4ddf6"/>
   </g>
-  <g fill="#fff"><circle cx="78" cy="84" r="1.8"/><circle cx="84" cy="78" r="1.4"/><circle cx="72" cy="90" r="1.2"/><circle cx="40" cy="38" r="1.3"/></g>
-  <path d="M100 22v5M97.5 24.5h5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+  <!-- her ears -->
+  <circle cx="40" cy="38" r="8.5" fill="#fff"/><circle cx="40" cy="38.5" r="4.5" fill="#ffc4da"/>
+  <circle cx="80" cy="38" r="8.5" fill="#fff"/><circle cx="80" cy="38.5" r="4.5" fill="#ffc4da"/>
+  <path d="M85 32.5A8.5 8.5 0 0 1 82 46.2A8 8 0 0 0 85 32.5Z" fill="#e4ddf6"/>
+  <!-- her head, lit from the top left -->
+  <g clip-path="url(#head)">
+    <rect x="34" y="32" width="52" height="52" fill="#fff"/>
+    <path d="M86 40C82 64 66 80 40 82H86Z" fill="#e4ddf6"/>
+  </g>
+  <!-- the muzzle, the nose, the eyes, blush and a smile -->
+  <ellipse cx="60" cy="67" rx="11.5" ry="8.5" fill="#fff7f0"/>
+  <path d="M71 66A11.5 8.5 0 0 1 56 75.3C64 74 69.5 71 71 66Z" fill="#efdccd"/>
+  <ellipse cx="60" cy="62" rx="4.6" ry="3.3" fill="#2b2330"/>
+  <ellipse cx="58.6" cy="61" rx="1.4" ry="0.9" fill="#fff" opacity="0.7"/>
+  <ellipse cx="50" cy="54" rx="3.1" ry="4" fill="#2b2330"/><circle cx="51.2" cy="52.4" r="1.2" fill="#fff"/>
+  <ellipse cx="70" cy="54" rx="3.1" ry="4" fill="#2b2330"/><circle cx="71.2" cy="52.4" r="1.2" fill="#fff"/>
+  <ellipse cx="43" cy="63" rx="4" ry="2.4" fill="#ff8fb8" opacity="0.55"/>
+  <ellipse cx="77" cy="63" rx="4" ry="2.4" fill="#ff8fb8" opacity="0.55"/>
+  <path d="M56 68.5Q60 72 64 68.5" fill="none" stroke="#2b2330" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- a pile of pink suds on her head: a bubbly mohawk -->
+  <g>
+    <circle cx="51" cy="36" r="6" fill="#ffc4da"/>
+    <circle cx="69" cy="36" r="6" fill="#ffc4da"/>
+    <circle cx="60" cy="33" r="8" fill="#fff"/>
+    <circle cx="60" cy="23" r="6" fill="#ffc4da"/>
+    <path d="M66 28A8 8 0 0 1 60 41A8 8 0 0 0 66 28Z" fill="#e4ddf6"/>
+    <circle cx="57" cy="30" r="2" fill="#fff" opacity="0.9"/>
+    <circle cx="58" cy="21" r="1.5" fill="#fff"/>
+  </g>
+
+  </g>
+
+  <!-- suds round her in the water -->
+  <g>
+    <circle cx="32" cy="86" r="5" fill="#fff"/><circle cx="39" cy="88" r="4" fill="#ffc4da"/><circle cx="26" cy="89" r="3.5" fill="#ffc4da"/>
+    <circle cx="82" cy="87" r="4" fill="#ffc4da"/><circle cx="89" cy="86" r="5" fill="#fff"/>
+  </g>
+
+  <!-- the pink sponge -->
+  <g transform="translate(94 98) rotate(-14)">
+    <rect x="-12" y="-7.5" width="24" height="15" rx="4.5" fill="#ff8fb8"/>
+    <rect x="-12" y="1.5" width="24" height="6" rx="3" fill="#e7699c"/>
+    <rect x="-9.5" y="-5.5" width="10" height="3" rx="1.5" fill="#ffc4da"/>
+    <circle cx="5" cy="-2" r="1.6" fill="#e7699c"/><circle cx="-4" cy="1" r="1.4" fill="#e7699c"/><circle cx="8" cy="3" r="1.3" fill="#d8367f"/>
+  </g>
 </svg>
