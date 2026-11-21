@@ -776,10 +776,9 @@ export class WhaleWatch implements World3D {
     whaleSfx.babyGiggle()
     this.splash(s.x, s.z, 0.3)
     this.ollieSpins()
-    if (this.pops === 1) {
-      this.timers.later(() => this.talk(L.whales.babyHas, { force: true }), 300)
-      this.timers.later(() => this.talk(L.whales.peek, { once: 'peek', force: true }), 2300)
-    }
+    // (Ollie sees her rock at the first pop; Sparkle says what to do as the second comes up, while it's there.)
+    if (this.pops === 1) this.timers.later(() => this.talk(L.whales.babyHas, { force: true }), 300)
+    if (this.pops === 2) this.talk(L.whales.peek, { once: 'peek', force: true })
   }
 
   /** She tapped the baby (or it booped the boat): it tosses the rock up and catches it; the third time, Grandma. */

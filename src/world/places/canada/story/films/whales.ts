@@ -94,12 +94,12 @@ export const WHALES_IN: StoryFilm = {
       {
         // Close: her lucky rock, up and down on her tummy.
         id: 'lucky',
-        shot: { ...close(ollie, 0.35, 1.9, 0.62), to: { fov: 31 } },
+        shot: { ...close(ollie, 0.35, 2.1, 0.75), to: { fov: 31 } },
         say: I.lucky,
         sayAt: 0.2,
         hold: 0.3,
         start: () => {
-          juggle.height = 0.45
+          juggle.height = 0.3
           ollie.pull('happy')
         },
       },
@@ -210,6 +210,7 @@ export const WHALES_OUT: StoryFilm = {
         say: O.wet,
         sayAt: 0.15,
         hold: 0.3,
+        start: () => (juggle.height = 0.28),
         tick: (_k, t) => {
           watchOllie()
           ollie.headTurn = Math.sin(Math.min(1, t / 0.6) * Math.PI * 0.5) * 0.35

@@ -546,7 +546,7 @@ export class GreyWhale extends Whale {
         { t: 0.82, chord: 0.42, back: 0.2, thick: 0.07 },
         { t: 1, chord: 0.12, back: 0.33, thick: 0.03 },
       ]
-      g.add(solid(fin(secs, 1.15, new Vector3(side * 0.85, -0.38, -0.2), new Vector3(0, 0.15, 1), (_t, top) => (top ? GREY : GREY_BELLY)), bag, 2))
+      g.add(solid(fin(secs, 1.15, new Vector3(side * 0.85, -0.38, -0.2), new Vector3(0, 0.15, 1), (t, top) => (top && t < 0.45 ? GREY : GREY_LIGHT)), bag, 2))
       g.rotation.order = 'XYZ'
     }
     // The flukes on the tail stock: wide, pointed tips, a notch in the middle.
@@ -571,7 +571,7 @@ export class GreyWhale extends Whale {
     return { y: 0.22, pitch: -0.2 }
   }
 
-  /** Rolls over onto its back (`side` +1: over its left side, toward a camera on its left) and waves its flippers. */
+  /** Rolls onto its side (`side` +1: its left side up, for a camera on its left) and waves the flipper on top. */
   roll(side = 1) {
     this.rollSide = side
     this.play('roll', 3.2)
@@ -593,16 +593,17 @@ export class GreyWhale extends Whale {
     super.act(m, q, dt, t)
     const p = this.pose
     if (m.kind === 'roll') {
-      // Over onto its back (rolling toward the camera's side), its pale belly up, both flippers out of the water
-      // waving; then back over. (On its side, a flipper up and the flukes on edge read as a shark: so all the way.)
+      // Over onto its side toward the camera, its pale belly showing, the flipper on top out of the water waving
+      // hello; then back. Its nose comes up and its tail goes down meanwhile (a tail on edge above the water and a
+      // dark flipper up read as a shark's fins).
       const k = ease(span(q, 0, 0.25)) * (1 - ease(span(q, 0.78, 1)))
-      p.roll = this.rollSide * 2.55 * k
-      p.pitch *= 1 - k * 0.7
-      p.y = p.y + 0.35 * k
-      const wave = Math.sin(m.t * 9) * 0.35 * bell(span(q, 0.25, 0.78))
-      p.flipL = -0.45 * k + wave
-      p.flipR = 0.45 * k - wave
-      p.fluke = 0.25 * Math.sin(m.t * 4) * k
+      p.roll = this.rollSide * 1.25 * k
+      p.pitch -= 0.3 * k
+      p.y = p.y + 0.3 * k
+      const wave = Math.sin(m.t * 8) * 0.55 * bell(span(q, 0.25, 0.78))
+      if (this.rollSide > 0) p.flipL = (0.9 + wave) * k
+      else p.flipR = -(0.9 + wave) * k
+      p.fluke = 0
       if (m.t - dt < 0.5 && m.t >= 0.5) {
         this.splashed = true
         this.splashSize = 0.3

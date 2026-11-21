@@ -5,7 +5,7 @@
 // answers on window.__canadaWhalesQA() (watch.ts `qa`: `at` has every tap target's middle on screen), the films on
 // window.__canadaStoryQA() (story/stage.ts).
 // Not part of the app: Node runs it, Vite never sees it.
-import { vp } from '../../../../../../scripts/qa-lib.mjs'
+import { openApp, vp } from '../../../../../../scripts/qa-lib.mjs'
 
 const whales = (page) => page.evaluate(() => window.__canadaWhalesQA?.())
 const ready = async (page, base, to, ms = 1500) => {
@@ -186,8 +186,9 @@ export const motion = [
     name: 'canada-whales-mouse',
     seconds: 170,
     setup: async (page, base) => {
+      // (A new page address: the splash again, then the game.)
+      await openApp(page, `${base}?device=mouse`)
       await page.goto(`${base}?device=mouse#/world/canada/whales/grey`)
-      await page.reload()
       await page.evaluate(() => (window.__kayleeSpeech = []))
       await page.waitForFunction(() => window.__canadaWhalesQA?.().section, null, { timeout: 30000 })
       await page.waitForTimeout(1200)
