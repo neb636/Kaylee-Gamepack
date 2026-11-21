@@ -767,11 +767,11 @@ export class CanadaMapWorld implements World3D {
       const o = this.overview
       // (Most of the way in, and a little lower, so a move replayed from the board reads: the props in their paws,
       // what flies.)
-      const K = 0.75
+      const K = 0.85
       const m = [...this.mates.values()].find((x) => this.moves.playing(x.id))
       if (m) {
         const across = moveFocus(m.id, m.spot, this.maple, this.peekAt)
-        this.closeHalf(across * 1.6, across * 0.7, across)
+        this.closeHalf(across * 1.2, across * 0.6, across * 0.9)
       }
       this.peek.center.copy(this.peekAt).lerp(o.center, 1 - K)
       this.peek.half.copy(o.half).lerp(this.close.half, K)
