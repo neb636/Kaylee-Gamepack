@@ -558,13 +558,15 @@ export class CanadaMapWorld implements World3D {
   /** The shot right now: the place she picked, the rink while a new friend arrives, or the board. */
   private shot(): Shot {
     if (this.closing) return this.close
+    this.close.objectFit = undefined
     if (this.onRink) {
-      // Close on the newcomer while they show their move, the whole rink round it (Gus too).
+      // Close on the newcomer while they show their move, the whole rink round it (Gus too), framed below the top bar.
       const a = this.arriving!
+      this.close.objectFit = 'contain'
       if (this.gusN && this.arrivalT >= this.moveEnd) {
         // Gus has his say: him and the newcomer, close enough to see his face.
         const g = this.geese[0].root.getWorldPosition(tmp2)
-        this.close.center.copy(a.spot.getWorldPosition(tmp)).lerp(g, 0.6).setY(g.y + 0.3)
+        this.close.center.copy(a.spot.getWorldPosition(tmp)).lerp(g, 0.5).setY(g.y + 0.4)
         const across = Math.max(1.3, tmp.distanceTo(g) * 0.8)
         this.closeHalf(across, across * 0.45, across * 0.65)
         this.close.pitch = this.overview.pitch - 10
@@ -1181,14 +1183,15 @@ export class CanadaMapWorld implements World3D {
           const at = m.actor.at(0.5, tmp.clone())
           const s = this.toScreen(at)
           const d = Math.max(min * 0.8, this.ppu(at) * m.size * 0.8)
-          spot = { x: s.x, y: s.y, w: d * 0.8, h: d, z: 4000 }
+          // (Above the places' boxes: Tuque stands in front of Quebec's castle, and her finger on him is for him.)
+          spot = { x: s.x, y: s.y, w: d * 0.8, h: d, z: 5500 }
         }
       } else if (id === 'hut' && free) {
         // The hut's own box: its walls and roof, never much wider (it stands near Lulu and the canal).
         const at = this.hutAt(tmp3)
         const s = this.toScreen(at)
         const d = this.ppu(at) * 0.75
-        spot = { x: s.x, y: s.y, w: Math.max(64, d), h: Math.max(64, d * 1.05), z: 4500 }
+        spot = { x: s.x, y: s.y, w: Math.max(64, d), h: Math.max(64, d * 1.05), z: 5400 }
       } else if (id.startsWith('poke:') && free) {
         const p = this.pokes.get(id.slice(5) as PokeId)
         if (p) {

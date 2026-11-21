@@ -41,7 +41,7 @@ const FOCUS: Record<ChapterId, { at: [number, number, number]; across: number }>
   bike: { at: [0, 0.45, 0.25], across: 1.15 },
   campfire: { at: [0.2, 0.2, 0.55], across: 1.3 },
   canoe: { at: [0, 0.6, 0.3], across: 1.05 },
-  bath: { at: [-0.2, 0.45, 0.65], across: 1.45 },
+  bath: { at: [-0.2, 0.6, 0.5], across: 1.45 },
   whales: { at: [0, 0.4, 0.15], across: 1.35 },
 }
 

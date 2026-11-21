@@ -181,6 +181,8 @@ export const motion = [
     act: async (page) => {
       await page.waitForFunction(() => /team=snowman(%2C|,)bike/.test(location.hash) && !/new=/.test(location.hash), null, { timeout: 5000 })
       await page.reload()
+      // (A reload starts the app again: past its splash.)
+      await page.getByRole('button', { name: /let's play/i }).click({ timeout: 5000 }).catch(() => {})
       await ready(page)
       const q = await qa(page)
       if (!q.team.includes('bike') || q.arriving) throw new Error(`after a reload: team ${q.team}, arriving ${q.arriving} (${await page.evaluate(() => location.hash)})`)
