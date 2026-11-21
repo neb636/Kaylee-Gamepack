@@ -110,6 +110,8 @@ New voices: `loon` (Lulu) and `gus`. The PR records every new line.
 - **Carnival Snowballs:** the first snowman she finishes is Tuque himself (his cap, face and mittens on the balls she
   rolled) and leads the parade; a lower camera shows the castle hotel; soft shadows and lanterns.
 - **Mountain Bike:** Monty waits in the waterfall pool at the bottom, big and unmissable; the ending hands to his film.
+  The intro's long zoom to his pool uses a farther near clipping plane to keep the distant outlines stable, then
+  restores the close-up plane when the film cuts back to Maple.
 - **Campfire Night:** Roxy has three kits; the hunt helps after 8 s; the goodnight is skipped when her film follows.
 - **The big game:** the story's team on the ice, each talent in play (Roxy steals from the rush, shots boing off
   Tuque and bonk off Monty, Ollie fetches a loose puck, Misty flattens the goose wall for the last goal, Lulu calls on
