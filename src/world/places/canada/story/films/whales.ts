@@ -210,7 +210,7 @@ export const WHALES_OUT: StoryFilm = {
         // Ollie, close: hockey? She tips her head. Is it wet? (From high enough that the sea is behind her: from lower
         // the boat's tube ran right across the top of the picture.)
         id: 'wet',
-        shot: close(ollie, 0.3, 1.6, 1.55),
+        shot: close(ollie, 0.3, 1.3, 2.1),
         say: O.wet,
         sayAt: 0.15,
         hold: 0.3,
