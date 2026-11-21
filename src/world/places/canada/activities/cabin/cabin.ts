@@ -912,15 +912,16 @@ export class TeamCabinWorld implements World3D {
   private snap() {
     const p = this.room.plan
     const row = this.seats.filter((s) => s.row === 0)
-    const half = Math.max(1.4, ...row.map((s) => Math.abs(s.x) + WIDTH[s.who] / 2)) + 0.2
+    const half = Math.max(1.4, ...row.map((s) => Math.abs(s.x) + WIDTH[s.who] / 2)) + 0.1
     const tall = p.back && this.seats.some((s) => s.row === 1)
     // From the bench seat up to the tallest head (and the back row's, on a tall screen).
     const span = tall ? 2.3 : 1.65
     const mid = p.bench.y + span / 2 - 0.05
     const fov = 36
     const t = Math.tan((fov * Math.PI) / 360)
-    // (A long row gets a wide photo, so the team fills it instead of a strip across a picture of the floor.)
-    const A = half > 2 && !tall ? 16 / 9 : 4 / 3
+    // (A long row gets a wide photo, two across to one up, so the team fills it instead of a strip across a picture
+    // of the floor.)
+    const A = half > 2 && !tall ? 2 : 4 / 3
     const dist = Math.max(half / (t * A), span / 2 / t) + 0.5
     const cam = photoCamera(fov, 0, mid + 0.25, p.bench.front + dist, 0, mid, p.bench.front - 0.45)
     cam.aspect = A
