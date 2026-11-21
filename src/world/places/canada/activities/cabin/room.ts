@@ -97,7 +97,7 @@ export function plan(layout: Layout, row = 3, narrow = false): RoomPlan {
     stove: [4.2, 0, -0.55],
     // (From the beam between the shelf and the mirror; with a short row the shelf is in the middle, so on an iron
     // bracket on the wall beside the mirror instead.)
-    lantern: wx < -2.4 ? [mx - 1.25, 3.4, 0.2] : [mx + 0.76, 2.7 + up, -1.04],
+    lantern: wx < -2.4 ? [mx - 1.55, 3.4, 0.2] : [mx + 0.76, 2.7 + up, -1.04],
   }
 }
 

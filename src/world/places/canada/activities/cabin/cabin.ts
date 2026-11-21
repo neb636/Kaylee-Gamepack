@@ -919,28 +919,34 @@ export class TeamCabinWorld implements World3D {
     const mid = p.bench.y + span / 2 - 0.05
     const fov = 36
     const t = Math.tan((fov * Math.PI) / 360)
-    const dist = Math.max(half / (t * (4 / 3)), span / 2 / t) + 0.5
+    // (A long row gets a wide photo, so the team fills it instead of a strip across a picture of the floor.)
+    const A = half > 2 && !tall ? 16 / 9 : 4 / 3
+    const dist = Math.max(half / (t * A), span / 2 / t) + 0.5
     const cam = photoCamera(fov, 0, mid + 0.25, p.bench.front + dist, 0, mid, p.bench.front - 0.45)
+    cam.aspect = A
+    cam.updateProjectionMatrix()
     this.tray.group.visible = false
     this.ring.visible = false
-    const url = snapPhoto(this.renderer, this.scene, cam)
+    const url = snapPhoto(this.renderer, this.scene, cam, { w: Math.round(360 * A), h: 360 })
     this.tray.group.visible = true
     this.ring.visible = true
-    this.pin(url)
+    this.pin(url, A)
     this.events.photo(url)
   }
 
   /** The photo, pinned on the wall by the mirror (the three newest). */
-  private pin(url: string) {
+  private pin(url: string, aspect = 4 / 3) {
     const slots = this.room.pins
     if (this.photos.length >= slots.length) this.photos.shift()?.removeFromParent()
     const at = slots[this.photos.length]
     const g = new Group()
     const tex = this.bag.add(new TextureLoader().load(url))
     tex.colorSpace = SRGBColorSpace
-    const pic = new Mesh(this.bag.add(new PlaneGeometry(0.48, 0.36)), this.bag.add(new MeshBasicMaterial({ map: tex })))
+    // (As wide as ever on the wall; a wide photo is a little less tall.)
+    const ph = 0.48 / aspect
+    const pic = new Mesh(this.bag.add(new PlaneGeometry(0.48, ph)), this.bag.add(new MeshBasicMaterial({ map: tex })))
     pic.position.set(0, 0.04, 0.012)
-    g.add(solid(merge([P.rbox(0.56, 0.52, 0.02, 0.01, '#FFFFFF')]), this.bag, 1.4), pic, solid(P.sphere(0.035, '#FF5C9A', { at: [0, 0.24, 0.02] }), this.bag, 1.2))
+    g.add(solid(merge([P.rbox(0.56, ph + 0.16, 0.02, 0.01, '#FFFFFF')]), this.bag, 1.4), pic, solid(P.sphere(0.035, '#FF5C9A', { at: [0, ph / 2 + 0.06, 0.02] }), this.bag, 1.2))
     g.position.set(...at)
     g.rotation.z = (Math.random() - 0.5) * 0.2
     g.scale.setScalar(0.01)
