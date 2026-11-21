@@ -1,46 +1,5 @@
-// The finale's sounds: recorded clips from the Poles' sfx folder (sfx/parts/party.json lists them) over synth
-// fallbacks (kit/clips.ts), and the penguins' songs, which are always synthesized: a song is a few notes, and the game
-// is telling them apart, so each papa's tune is played from its notes (a buzzy reed for a grown-up emperor, a peep an
-// octave up for a chick), a little to the left or right, where he stands.
-import { sounds } from '../../../../../sdk'
-import { bed, clip } from '../../../../kit/clips'
-import { audio, noise, sfx, tone } from '../../../../kit/sfx'
-import { url } from '../../sfx'
-
-export const partySfx = {
-  /** Terry gulps a fish. */
-  fish: clip(url('party-fish'), () => tone(520, 260, 0.12, 0.05, 'triangle')),
-  /** Through a cloud. */
-  cloud: clip(url('party-cloud'), () => tone(500, 900, 0.3, 0.06, 'triangle')),
-  /** A whale blows. */
-  whale: clip(url('party-whale'), () => (noise(0.7, 0.1, 'bandpass', 900, 2400, 0, 1.2), tone(240, 420, 0.5, 0.05, 'sine'))),
-  /** The albatross's creaky call. */
-  albatross: clip(url('party-albatross'), () => [0, 0.16].forEach((d) => tone(880, 620, 0.14, 0.05, 'sawtooth', d))),
-  /** The balloon's burner. */
-  burner: clip(url('party-burner'), () => noise(0.7, 0.12, 'lowpass', 500, 900)),
-  /** A gust of the southern wind. */
-  gust: clip(url('party-gust'), () => tone(300, 180, 0.6, 0.04, 'sawtooth')),
-  /** A new part of the world comes up. */
-  leg: clip(url('party-leg'), () => sounds.whoosh()),
-  /** A penguin steps forward on the snow. */
-  step: clip(url('party-step'), () => sfx.thump()),
-  /** A puff of kicked snow. */
-  snow: clip(url('party-snow'), () => noise(0.25, 0.07, 'highpass', 1800, 3200)),
-  /** A deep, polite bow. */
-  bow: clip(url('party-bow'), () => tone(520, 300, 0.3, 0.05, 'triangle')),
-  /** A chick pops out from under a papa. */
-  peek: clip(url('party-peek'), () => sfx.pop()),
-  /** The colony shuffles away from the polar bear. */
-  shuffle: clip(url('party-shuffle'), () => [0, 0.08, 0.16, 0.24].forEach((d) => noise(0.06, 0.05, 'highpass', 2400, 2400, d))),
-  /** Found: a hug. */
-  hug: clip(url('party-hug'), () => sounds.sparkle()),
-  /** The whole colony cheers. */
-  cheer: clip(url('party-cheer'), () => sounds.fanfare()),
-  /** The colony in the background (until stopped). */
-  colony: () => bed(url('party-colony'), 0.16),
-  /** The blizzard (until stopped). */
-  blizzard: () => bed(url('party-blizzard'), 0.34),
-}
+// Penguin songs for the Poles' story, ending, and Emperor Huddle.
+import { audio } from '../../../../kit/sfx'
 
 /** A song: its notes as [semitones above the singer's low note, beats]. */
 export type Tune = readonly (readonly [number, number])[]

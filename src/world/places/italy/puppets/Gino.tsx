@@ -377,26 +377,3 @@ export const Gino = forwardRef<PuppetHandle, GinoProps>(function Gino({ height, 
     </svg>
   )
 })
-
-/** Gino's hat on its own (when it has popped off and floats on the water). Same drawing as on his head. */
-export function GinoHat({ height }: { height: string }) {
-  const hat = (pass: boolean) => (
-    <>
-      <path fill={RIBBON} d="M282 84 C304 96 318 118 324 142 L308 136 L304 152 C296 130 286 112 270 98Z" />
-      <path fill={STRAW} d="M100 84 C100 72 330 72 330 84 C330 98 100 98 100 84Z" />
-      <path fill={STRAW} d="M146 82 L150 34 C150 22 280 22 282 34 L286 82Z" />
-      {!pass && (
-        <>
-          <path fill={STRAW_SHADE} d="M106 88 C140 96 290 96 324 88 C320 94 300 96 215 96 C130 96 110 94 106 88Z" />
-          <path fill={RIBBON} d="M148 58 L284 58 L286 80 L146 80Z" />
-        </>
-      )}
-    </>
-  )
-  return (
-    <svg viewBox="90 10 250 160" style={{ height, overflow: 'visible', display: 'block' }}>
-      <g {...inkPass()}>{hat(true)}</g>
-      {hat(false)}
-    </svg>
-  )
-}

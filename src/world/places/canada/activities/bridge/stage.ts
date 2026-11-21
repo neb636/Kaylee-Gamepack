@@ -159,7 +159,6 @@ export function walkable(st: StageDef, x: number, y: number, x0: number, x1: num
 export const onBridge = (st: StageDef, x: number, y: number, margin = 40) => onDeck(st, y) && Math.abs(x - st.road.x) < halfCut(st, y) + FENCE_GAP + margin
 /** The meadow, across the highway from the forest. */
 export const inMeadow = (st: StageDef, x: number, y: number) => x > st.road.x + halfCut(st, y) + FENCE_GAP + 30 && y > st.deck[1] + 6
-export const acrossOf = (st: StageDef, x: number) => x > st.road.x
 export function onRocks(st: StageDef, x: number, y: number) {
   const r = st.rocks
   return ((x - r.x) / r.rx) ** 2 + ((y - r.y) / r.ry) ** 2 < 1
