@@ -54,7 +54,7 @@ One toy at a time, and you never have to read a plan or play a grey box (`AGENTS
 1. **Pick:** the AI makes three one-page pitch cards; you pick one.
 2. **Hear:** the AI builds the toy and makes a **table read** (every line in the real voices, in play order); you
    listen and say what to change.
-3. **Watch Kaylee:** she plays it on the PR preview while you watch (and screen-record); the AI turns that into fixes.
+3. **Play it:** you play it on the PR preview and say what to change; the AI turns your notes into fixes.
 4. **Ship:** the PR's **review page** has a reel of the finished toy and at most three questions. **Merge** → it deploys.
 
 Fixes go faster: you ask, the AI fixes it with a short before-and-after clip, you merge.
@@ -64,11 +64,13 @@ Fixes go faster: you ask, the AI fixes it with a short before-and-after clip, yo
 1. **Variables** (Settings → Secrets and variables → Actions → *Variables*): set `VITE_POSTHOG_KEY` to the PostHog project token and `VITE_POSTHOG_HOST` to its ingestion URL
    (for a US project, `https://us.i.posthog.com`). Only the main Pages deployment enables PostHog;
    PR previews and local builds do not send events.
+   Open the main site once with `?tester=1` in each of your own browsers: they then send errors only, not play data
+   (`docs/play-data.md`).
    The project token is public and bundled into the website; do not use a PostHog personal API key here.
    Error tracking captures uncaught errors, unhandled promise rejections, `console.error` calls, and React root errors
    (including caught and recoverable render errors). Caught errors that are silently ignored still need an explicit
    `posthog.captureException(error)` where appropriate. Repeated clicks produce PostHog's `$rageclick` events;
-   in a game these can also be intentional rapid play, so use the replay and play diary to interpret them.
+   in a game these can also be intentional rapid play, so use the replay and her play data (`docs/play-data.md`) to interpret them.
    For readable stack traces, also add the secret
    `POSTHOG_API_KEY` (a PostHog personal API key with *Error tracking: write*) and the variable
    `POSTHOG_PROJECT_ID`: the main deploy then uploads source maps to PostHog and leaves them off the site.

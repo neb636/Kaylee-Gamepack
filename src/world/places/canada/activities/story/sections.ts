@@ -4,11 +4,11 @@
 import { defineSections } from '../../../../kit/sections'
 
 /** The chapters, east to west across the map: each brings one friend home to the team. */
-export const CHAPTERS = ['snowman', 'bike', 'campfire', 'canoe', 'salmon', 'whales'] as const
+export const CHAPTERS = ['snowman', 'bike', 'campfire', 'canoe', 'bath', 'whales'] as const
 export type ChapterId = (typeof CHAPTERS)[number]
 
 /** Every film, in story order: the way in, a film into and out of each chapter, then the big game's two. */
-export const FILM_IDS = ['intro', 'snowman-in', 'snowman-out', 'bike-in', 'bike-out', 'campfire-in', 'campfire-out', 'canoe-in', 'canoe-out', 'salmon-in', 'salmon-out', 'whales-in', 'whales-out', 'game-in', 'game-win'] as const
+export const FILM_IDS = ['intro', 'snowman-in', 'snowman-out', 'bike-in', 'bike-out', 'campfire-in', 'campfire-out', 'canoe-in', 'canoe-out', 'bath-in', 'bath-out', 'whales-in', 'whales-out', 'game-in', 'game-win'] as const
 export type FilmId = (typeof FILM_IDS)[number]
 
 const NAMES: Record<FilmId, string> = {
@@ -21,10 +21,10 @@ const NAMES: Record<FilmId, string> = {
   'campfire-out': 'Campfire Night, after: the quickest paws in Canada',
   'canoe-in': 'Red Canoe, before: every big game starts with a song',
   'canoe-out': 'Red Canoe, after: Lulu and the littlest singer',
-  'salmon-in': 'Salmon Leap, before: a bear as white as snow',
-  'salmon-out': 'Salmon Leap, after: the biggest slap shot',
-  'whales-in': 'Whale Watch, before: Ollie is out in the kelp',
-  'whales-out': 'Whale Watch, after: is hockey wet?',
+  'bath-in': "Misty's Bubble Bath, before: a white bear, all brown",
+  'bath-out': "Misty's Bubble Bath, after: the biggest slap shot",
+  'whales-in': "Whale Peek-a-Boo, before: Ollie's lucky rock",
+  'whales-out': 'Whale Peek-a-Boo, after: is hockey wet?',
   'game-in': 'The big game, before: the whole team skates out',
   'game-win': 'The big game, after: the Maple Cup',
 }
