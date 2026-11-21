@@ -56,6 +56,7 @@ async function dressEveryKind(page) {
     if (worn[kind] !== id) fail(`${friend} should wear the ${kind} ${id}, wears ${JSON.stringify(worn)}`)
   }
   await page.reload()
+  await page.getByRole('button', { name: /let's play/i }).click({ timeout: 3000 }).catch(() => {})
   await page.waitForFunction(() => window.__canadaCabinQA?.().friends, null, { timeout: 30000 })
   const q = await cabin(page)
   for (const [kind, id, friend] of plan) if (who(q, friend).worn[kind] !== id) fail(`after a reload ${friend} lost the ${kind}`)

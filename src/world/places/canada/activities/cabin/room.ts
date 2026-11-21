@@ -53,7 +53,9 @@ export interface RoomPlan {
   lantern: V3
 }
 
-export function plan(layout: Layout): RoomPlan {
+/** The room for a screen shape, the window and the mirror just beyond the ends of the row on the bench (`row`: half
+ *  its length), so a small team isn't lost on a long empty wall. */
+export function plan(layout: Layout, row = 3): RoomPlan {
   if (layout === 'tall')
     return {
       halfW: 2.9,
@@ -69,19 +71,22 @@ export function plan(layout: Layout): RoomPlan {
       stove: [2.4, 0, 0.55],
       lantern: [-0.95, 4.1, 0.3],
     }
+  const wx = -Math.min(2.9, Math.max(1.55, row + 0.9))
+  const mx = Math.min(2.95, Math.max(1.55, row + 0.85))
   return {
     halfW: 4.7,
     wallZ: -1.32,
     wallTop: 3.45,
-    window: { x: -2.9, y: 2.3, hw: 0.6, hh: 0.46 },
-    mirror: { x: 2.95, y: 2.22, hw: 0.44, hh: 0.58 },
+    window: { x: wx, y: 2.3, hw: 0.6, hh: 0.46 },
+    mirror: { x: mx, y: 2.22, hw: 0.44, hh: 0.58 },
     bench: { y: 0.42, front: -0.08, depth: 1.12, half: 3.7 },
     back: null,
-    shelf: [-0.95, 2.5, 0],
-    pegs: [-1.95, 2.45, 0],
-    bunting: 3.15,
-    stove: [4.1, 0, -0.55],
-    lantern: [1.6, 3.4, 0.2],
+    // (Over the middle of the row when it's long; above the window's height over a short one.)
+    shelf: wx < -2.4 ? [-0.95, 2.5, 0] : [0, 2.95, 0],
+    pegs: [wx + 1.05, 2.45, 0],
+    bunting: 3.2,
+    stove: [Math.min(4.1, mx + 1.2), 0, -0.55],
+    lantern: [mx - 1.25, 3.4, 0.2],
   }
 }
 
@@ -110,8 +115,8 @@ function log(parts: ReturnType<typeof P.box>[], x0: number, x1: number, y: numbe
   parts.push(P.capsule(r, Math.max(0.01, len - 2 * r), i % 2 ? LOG : LOG_DARK, { at: [(x0 + x1) / 2, y, z], rot: [0, 0, Math.PI / 2] }))
 }
 
-export function buildRoom(bag: Bag, layout: Layout): Room {
-  const p = plan(layout)
+export function buildRoom(bag: Bag, layout: Layout, row?: number): Room {
+  const p = plan(layout, row)
   const root = new Group()
   const W = p.halfW
   const wz = p.wallZ

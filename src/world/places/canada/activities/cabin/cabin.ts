@@ -159,6 +159,8 @@ export class TeamCabinWorld implements World3D {
   private gone = false
   private counts = { taps: 0, drags: 0, dressed: 0, silly: 0, floor: 0, photos: 0, gusCalls: 0, binsOpened: 0, pokes: 0 }
   private last = ''
+  /** Things sitting in a silly place, about to hop where they go. */
+  private perching = 0
 
   constructor(
     private renderer: WebGLRenderer,
@@ -217,9 +219,6 @@ export class TeamCabinWorld implements World3D {
       for (const p of this.photos) p.removeFromParent()
       this.photos = []
     }
-    this.room = buildRoom(this.bag, layout)
-    this.scene.add(this.room.root)
-    const p = this.room.plan
     const maple = this.seats[0]
     const rest = this.seats.slice(1)
     let rows: Seat[][]
@@ -227,20 +226,22 @@ export class TeamCabinWorld implements World3D {
       const big = [...rest].sort((a, b) => CABIN_H[b.who] - CABIN_H[a.who]).slice(0, this.seats.length - 4)
       rows = [this.order(maple, rest.filter((s) => !big.includes(s))), this.order(null, big)]
     } else rows = [this.order(maple, rest), []]
+    // Maple (or the middle one) at x = 0, the rest out to each side.
     for (const [r, row] of rows.entries()) {
       if (!row.length) continue
-      const bench = r === 0 ? p.bench : p.back!
-      // Maple (or the middle one) at x = 0, the rest out to each side.
-      const mid = Math.floor(row.length / 2)
-      const at = row.indexOf(maple) >= 0 ? row.indexOf(maple) : mid
+      const at = row.indexOf(maple) >= 0 ? row.indexOf(maple) : Math.floor(row.length / 2)
       let x = -WIDTH[row[at].who] / 2 - row.slice(0, at).reduce((s, q) => s + WIDTH[q.who], 0)
       for (const s of row) {
         s.row = r as 0 | 1
         s.x = x + WIDTH[s.who] / 2
         x += WIDTH[s.who]
-        this.sit(s, bench)
       }
     }
+    const half = Math.max(0.4, ...rows[0].map((s) => Math.abs(s.x) + WIDTH[s.who] / 2))
+    this.room = buildRoom(this.bag, layout, half)
+    this.scene.add(this.room.root)
+    const p = this.room.plan
+    for (const [r, row] of rows.entries()) for (const s of row) this.sit(s, r === 0 ? p.bench : p.back!)
     this.placeGus(true)
     this.lights.follow(0, 1, -0.5)
     this.frame()
@@ -499,7 +500,9 @@ export class TeamCabinWorld implements World3D {
       const inside = x > b.x0 - 14 && x < b.x1 + 14 && y > b.y0 - 14 && y < b.y1 + 10
       cands.push({ key: who, x: at.x, y: at.y, r: inside ? Math.max(b.x1 - b.x0, b.y1 - b.y0) : 0 })
     }
-    const near = nearestSlot(cands, x, y, FEEL.snap)
+    // (Let go over someone: them, whoever's slot is nearer. Otherwise the nearest slot within the snap.)
+    const over = cands.filter((c) => c.r > 0)
+    const near = nearestSlot(over.length ? over : cands, x, y, FEEL.snap)
     if (!near) return null
     const who = near.key
     const b = boxes.get(who)!
@@ -618,7 +621,9 @@ export class TeamCabinWorld implements World3D {
       then: () => {
         a.silly('crossed', FEEL.perch + 0.2)
         cabinSfx.giggle()
+        this.perching++
         this.timers.later(() => {
+          this.perching--
           if (this.gone) return
           const to = wp(a, d.item.kind, new Vector3())
           cabinSfx.whoosh()
@@ -774,10 +779,13 @@ export class TeamCabinWorld implements World3D {
     const row = this.seats.filter((s) => s.row === 0)
     const half = Math.max(1.4, ...row.map((s) => Math.abs(s.x) + WIDTH[s.who] / 2)) + 0.2
     const tall = p.back && this.seats.some((s) => s.row === 1)
-    const top = tall ? 2.7 : 1.9
+    // From the bench seat up to the tallest head (and the back row's, on a tall screen).
+    const span = tall ? 2.3 : 1.65
+    const mid = p.bench.y + span / 2 - 0.05
     const fov = 36
-    const dist = Math.max(half / (Math.tan((fov * Math.PI) / 360) * (4 / 3)), top / 2 / Math.tan((fov * Math.PI) / 360)) + 0.6
-    const cam = photoCamera(fov, 0, top / 2 + 0.35, p.bench.front + dist, 0, top / 2 - 0.05, p.bench.front - 0.4)
+    const t = Math.tan((fov * Math.PI) / 360)
+    const dist = Math.max(half / (t * (4 / 3)), span / 2 / t) + 0.5
+    const cam = photoCamera(fov, 0, mid + 0.25, p.bench.front + dist, 0, mid, p.bench.front - 0.45)
     this.tray.group.visible = false
     this.ring.visible = false
     const url = snapPhoto(this.renderer, this.scene, cam)
@@ -1043,7 +1051,7 @@ export class TeamCabinWorld implements World3D {
       window: scr(new Vector3(this.room.plan.window.x, this.room.plan.window.y, this.room.plan.wallZ)),
       mirror: scr(this.room.mirror.getWorldPosition(new Vector3())),
       dragging: !!this.drag,
-      flying: this.flights.busy,
+      flying: this.flights.busy || this.perching > 0,
       photo: this.photoT >= 0,
       pinned: this.photos.length,
       hints: this.hints,
