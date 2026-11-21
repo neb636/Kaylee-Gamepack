@@ -347,7 +347,8 @@ export class FlashlightStatues implements World3D {
     // Maple's shadow bunny on the bush behind her (her paws in the light), a stuck kit's tail, Roxy's eyes in her den,
     // the marshmallow she carries off.
     this.bunny = shadowBunny(bag)
-    this.bunny.position.set(-1.05, 0.62, -0.38)
+    this.bunny.position.set(-0.36, 0.46, -0.5)
+    this.bunny.scale.setScalar(1.25)
     scene.add(this.bunny)
     this.tail = kitTail(bag)
     scene.add(this.tail)
@@ -412,6 +413,7 @@ export class FlashlightStatues implements World3D {
     }))
   }
   private lightSpeed = 0
+  private aimed = false
   private lastAt = { x: 0, y: 0 }
 
   // ---------------------------------------------------------------- who the light lands on
@@ -1198,7 +1200,7 @@ export class FlashlightStatues implements World3D {
     this.rig.setSize(w, h, top)
     setOutlineResolution(w, h)
     this.rig.setShot(this.shot(), true)
-    this.light.corner = this.tall ? { x: 0.6, y: -0.78, d: 1.6 } : { x: 0.76, y: -0.7, d: 1.6 }
+    this.light.corner = this.tall ? { x: 0.62, y: -0.8, d: 2.3 } : { x: 0.76, y: -0.7, d: 1.6 }
     if (!this.finger) {
       // Where the light starts: on the empty ground in front of the fire.
       const p = this.toScreen(tmp.set(1.7, 0, 2.3))
@@ -1211,7 +1213,7 @@ export class FlashlightStatues implements World3D {
       center: new Vector3(0.45, 0.95, -1.55),
       half: this.tall ? new Vector3(3.3, 1.3, 2.4) : new Vector3(4.1, 1.25, 2.5),
       yaw: 0,
-      pitch: this.tall ? 17 : 14,
+      pitch: this.tall ? 23 : 14,
       objectFit: 'contain',
     }
   }
@@ -1239,7 +1241,8 @@ export class FlashlightStatues implements World3D {
     this.lightSpeed = Math.hypot(this.light.at.x - this.lastAt.x, this.light.at.y - this.lastAt.y) / Math.max(dt, 1e-3)
     this.lastAt.x = this.light.at.x
     this.lastAt.y = this.light.at.y
-    if (!this.films.on) this.lightSpots(dt)
+    // (Not before the light has been aimed once: until then it points at the middle of the world.)
+    if (!this.films.on && this.aimed) this.lightSpots(dt)
 
     // ---- The parts.
     if (this.section === 'eyes' || this.section === 'story') this.updateEyes()
@@ -1274,6 +1277,7 @@ export class FlashlightStatues implements World3D {
     this.rig.setCine(cine ?? this.skyFrame())
     this.rig.update(dt)
     this.light.update(dt, this.rig.camera, this.w, this.h)
+    this.aimed = true
     // (At the end the flashlight itself is what to tap: it bounces gently, asking.)
     this.light.toy.scale.setScalar(this.section === 'sky' && this.skyT < 0 ? 1 + 0.1 * Math.abs(Math.sin(t * 3.5)) : 1)
     this.bars.update(dt, this.films.on)
@@ -1390,9 +1394,9 @@ export class FlashlightStatues implements World3D {
     this.bunny.visible = b >= 0
     if (b >= 0) {
       const k = Math.min(1, b / 0.3) * (b > 2 ? 1 - (b - 2) / 0.4 : 1)
-      ;(this.bunny.material as MeshBasicMaterial).opacity = 0.6 * k
-      this.bunny.position.y = 0.62 + Math.abs(Math.sin(b * 6)) * 0.06
-      this.bunny.scale.set(1, 1 + Math.sin(b * 12) * 0.06, 1)
+      ;(this.bunny.material as MeshBasicMaterial).opacity = 0.72 * k
+      this.bunny.position.y = 0.46 + Math.abs(Math.sin(b * 6)) * 0.06
+      this.bunny.scale.set(1.25, 1.25 * (1 + Math.sin(b * 12) * 0.06), 1.25)
       this.maple.rig.armR.rotation.x = -0.9 + Math.sin(t * 12) * 0.12
       this.maple.rig.armL.rotation.x = -0.9 - Math.sin(t * 12) * 0.12
     }
