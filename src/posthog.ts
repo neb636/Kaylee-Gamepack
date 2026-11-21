@@ -19,13 +19,19 @@ const TARGET_AUDIENCE_IDS = new Set([
 ])
 const TARGET_AUDIENCE_ID = 'target-audience'
 
+/** Which tags this launch's URL cleared (`?param=0`): PostHog's own copy of them is cleared after init too. */
+const cleared = new Set<string>()
+
 /** Reads (and, from `?param=1|0`, saves or clears) a per-browser tag. The param is taken off the URL. */
 function tag(key: string, param: string): boolean {
   try {
     const url = new URL(location.href)
     const value = url.searchParams.get(param)
     if (value === '1') localStorage.setItem(key, '1')
-    if (value === '0') localStorage.removeItem(key)
+    if (value === '0') {
+      localStorage.removeItem(key)
+      cleared.add(param)
+    }
     if (value !== null) {
       url.searchParams.delete(param)
       history.replaceState(history.state, '', url)
@@ -52,7 +58,7 @@ const errorsOnlyForTesters: BeforeSendFn = (cr) => (!isTester || cr.event === '$
 
 /** Every event from her devices says so, from the very first pageview. */
 const markTargetAudience: BeforeSendFn = (cr) => {
-  if (!isTester && !isTargetAudience && TARGET_AUDIENCE_IDS.has(posthog.get_distinct_id())) isTargetAudience = true
+  if (!isTester && !isTargetAudience && !cleared.has('target_audience') && TARGET_AUDIENCE_IDS.has(posthog.get_distinct_id())) isTargetAudience = true
   if (isTargetAudience) cr.properties = { ...cr.properties, target_audience: true }
   if (isTester) cr.properties = { ...cr.properties, tester: true }
   return cr
@@ -83,16 +89,23 @@ if (enabledForBuild) {
       },
       before_send: [errorsOnlyForTesters, markTargetAudience, keepOffline],
     })
+    // An untagged browser forgets the tag everywhere: the saved property, and her shared identity (a fresh anonymous id).
+    if (cleared.has('tester')) posthog.unregister('tester')
+    if (cleared.has('target_audience')) {
+      posthog.unregister('target_audience')
+      if (posthog.get_distinct_id() === TARGET_AUDIENCE_ID) posthog.reset()
+    }
     if (isTester) {
       posthog.register({ tester: true })
-    } else if (isTargetAudience || TARGET_AUDIENCE_IDS.has(posthog.get_distinct_id())) {
+    } else if (isTargetAudience || (!cleared.has('target_audience') && TARGET_AUDIENCE_IDS.has(posthog.get_distinct_id()))) {
       // One person for all her devices, so a device whose storage iOS cleared joins her again once it's tagged.
       isTargetAudience = true
       saveTag('gamepack.target-audience')
       posthog.register({ target_audience: true })
       if (posthog.get_distinct_id() !== TARGET_AUDIENCE_ID) posthog.identify(TARGET_AUDIENCE_ID, { target_audience: true })
     }
-    startOutbox(apiHost, apiKey)
+    // Events saved offline before this browser became a tester's follow today's rule: errors only, marked as a tester's.
+    startOutbox(apiHost, apiKey, (e) => (!isTester ? e : e.event === '$exception' ? { ...e, properties: { ...e.properties, tester: true } } : null))
     void reportStorage((event, props) => posthog.capture(event, props))
   }
 }

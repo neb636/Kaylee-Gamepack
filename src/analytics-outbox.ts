@@ -9,7 +9,7 @@ const MAX_EVENTS = 2000
 const MAX_CHARS = 1_500_000
 const BATCH = 200
 
-interface Saved {
+export interface Saved {
   uuid: string
   event: string
   properties: Record<string, unknown>
@@ -65,18 +65,20 @@ let flushing: Promise<void> | null = null
 
 /** Sends what's waiting, oldest first. An event leaves the outbox only once PostHog has said it got it: a wifi login
  *  page answers 200 too, but not with PostHog's JSON. */
-function flush(host: string, token: string): Promise<void> {
+function flush(host: string, token: string, policy: Policy): Promise<void> {
   flushing ??= (async () => {
     for (;;) {
       if (navigator.onLine === false) return
       const batch = read().slice(0, BATCH)
       if (!batch.length) return
-      const ok = await fetch(`${host.replace(/\/+$/, '')}/batch/`, {
+      const send = batch.map(policy).filter((e): e is Saved => e !== null)
+      // A batch the rule drops whole needs no request: it just leaves the outbox.
+      const ok = !send.length || await fetch(`${host.replace(/\/+$/, '')}/batch/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           api_key: token,
-          batch: batch.map((e) => ({ ...e, properties: { ...e.properties, $replayed_offline: true } })),
+          batch: send.map((e) => ({ ...e, properties: { ...e.properties, $replayed_offline: true } })),
         }),
       })
         .then(async (res) => res.ok && /json/i.test(res.headers.get('content-type') ?? '') && (await res.json().catch(() => null)) !== null)
@@ -89,9 +91,12 @@ function flush(host: string, token: string): Promise<void> {
   return flushing
 }
 
+/** Today's rule for a saved event, applied when it's sent: the event to send, or null to drop it. */
+export type Policy = (e: Saved) => Saved | null
+
 /** Sends the outbox now and whenever the iPad comes back online or the app comes back to the front. */
-export function startOutbox(host: string, token: string) {
-  const go = () => void flush(host, token)
+export function startOutbox(host: string, token: string, policy: Policy = (e) => e) {
+  const go = () => void flush(host, token, policy)
   go()
   window.addEventListener('online', go)
   document.addEventListener('visibilitychange', () => document.visibilityState === 'visible' && go())

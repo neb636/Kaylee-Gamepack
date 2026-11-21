@@ -158,7 +158,19 @@ try {
   await context.close()
 
   // 3. A tester's browser sends errors only, and the tag survives the next launch.
-  const tester = await open('?tester=1')
+  // Play saved offline before the tag follows the tester rule too: errors go (marked), play is dropped.
+  const tester = await open()
+  await tester.page.evaluate(() => localStorage.setItem('gamepack.outbox', JSON.stringify([
+    { uuid: 'qa-old-play', event: 'world_section_entered', properties: { distinct_id: 'qa', token: 'phc_local_qa_only' }, timestamp: new Date().toISOString() },
+    { uuid: 'qa-old-error', event: '$exception', properties: { distinct_id: 'qa', token: 'phc_local_qa_only' }, timestamp: new Date().toISOString() },
+  ])))
+  const sentBefore = batches.length
+  await tester.page.goto(qaUrl + '?tester=1')
+  await tester.page.waitForFunction(() => window.qaReady && window.outbox().length === 0)
+  const replayed = batches.slice(sentBefore).flatMap(b => b.body.batch)
+  assert.deepEqual(replayed.map(e => e.uuid), ['qa-old-error'], 'tester: saved play dropped, saved error sent')
+  assert.equal(replayed[0].properties.tester, true, 'tester: the saved error is marked')
+  console.log('PASS play saved before ?tester=1 is dropped')
   assert.equal(new URL(tester.page.url()).searchParams.get('tester'), null, '?tester is taken off the URL')
   await tester.page.evaluate(() => {
     window.posthog.capture('world_section_entered', { place: 'qa', activity: 'tester', section: 'a' })
@@ -174,6 +186,12 @@ try {
   await tester.page.waitForFunction(() => window.qaReady)
   assert.equal(await tester.page.evaluate(() => localStorage.getItem('gamepack.tester')), '1', 'tester: remembered')
   console.log('PASS a tester sends errors only')
+  await tester.page.goto(qaUrl + '?tester=0')
+  await tester.page.waitForFunction(() => window.qaReady)
+  await tester.page.evaluate(() => window.posthog.capture('world_section_entered', { place: 'qa', activity: 'untester', section: 'a' }))
+  await tester.page.waitForFunction(() => window.events.some(e => e.event === 'world_section_entered'))
+  assert.ok(!(await tester.page.evaluate(() => window.events.some(e => e.properties.tester))), '?tester=0: no tester property left')
+  console.log('PASS ?tester=0 clears the tag')
   await tester.context.close()
 
   // 4. Her device: every event carries target_audience, and all her devices are one person.
@@ -184,6 +202,13 @@ try {
   assert.ok(targetEvents.every(e => e.properties.target_audience === true), 'target audience: every event marked')
   assert.equal(await target.page.evaluate(() => window.posthog.get_distinct_id()), 'target-audience')
   console.log('PASS her device is the target audience')
+  await target.page.goto(qaUrl + '?target_audience=0')
+  await target.page.waitForFunction(() => window.qaReady)
+  await target.page.evaluate(() => window.posthog.capture('world_section_entered', { place: 'qa', activity: 'untarget', section: 'a' }))
+  await target.page.waitForFunction(() => window.events.some(e => e.event === 'world_section_entered'))
+  assert.ok(!(await target.page.evaluate(() => window.events.some(e => e.properties.target_audience))), '?target_audience=0: no property left')
+  assert.notEqual(await target.page.evaluate(() => window.posthog.get_distinct_id()), 'target-audience', '?target_audience=0: her identity is reset')
+  console.log('PASS ?target_audience=0 clears the tag and her identity')
   await target.context.close()
 } finally {
   await browser?.close()
