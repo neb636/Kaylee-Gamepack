@@ -6,8 +6,8 @@
   "intro": "---- One block per chapter (activities/<id>/): its film in, the game (Sparkle's instructions and hints, the friends' reactions), its film out. Keep each line under ~3 seconds; her name is never said. ----",
   "page": "canada-hub.html",
   "audio": "canada-hub.mp3",
-  "lines": 27,
-  "seconds": 74,
+  "lines": 33,
+  "seconds": 92,
   "missing": 0,
   "names": 0,
   "flags": [
@@ -42,6 +42,34 @@
     {
       "key": "hub.locked",
       "text": "We need our whole team first!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.gusCount.0",
+      "text": "One friend? Honk! Easy!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.gusCount.1",
+      "text": "Two? Ha! We are six geese!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.gusCount.2",
+      "text": "Three... honk. Still easy.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "hub.gusCount.3",
+      "text": "Four? Geese! More practice!",
       "flags": [
         "long"
       ]
@@ -382,6 +410,122 @@
     {
       "path": [
         "hub",
+        "gusCount",
+        "0"
+      ],
+      "text": "One friend? Honk! Easy!",
+      "voice": "gus",
+      "key": "hub.gusCount.0",
+      "part": "hub › gusCount",
+      "when": "Gus, at the rink, as she lands back with a new friend (after Sparkle's count and the friend's move): by how many are on the team now, 1..6. He brags a little less each time.",
+      "ms": 3120,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        55.24,
+        58.29
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "gusCount",
+        "1"
+      ],
+      "text": "Two? Ha! We are six geese!",
+      "voice": "gus",
+      "key": "hub.gusCount.1",
+      "part": "hub › gusCount",
+      "when": "",
+      "ms": 3456,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        58.64,
+        62.03
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "gusCount",
+        "2"
+      ],
+      "text": "Three... honk. Still easy.",
+      "voice": "gus",
+      "key": "hub.gusCount.2",
+      "part": "hub › gusCount",
+      "when": "",
+      "ms": 3720,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        62.38,
+        66.04
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "gusCount",
+        "3"
+      ],
+      "text": "Four? Geese! More practice!",
+      "voice": "gus",
+      "key": "hub.gusCount.3",
+      "part": "hub › gusCount",
+      "when": "",
+      "ms": 3696,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        66.39,
+        70.04
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "gusCount",
+        "4"
+      ],
+      "text": "Five?! Uh oh.",
+      "voice": "gus",
+      "key": "hub.gusCount.4",
+      "part": "hub › gusCount",
+      "when": "",
+      "ms": 1920,
+      "flags": [],
+      "span": [
+        70.39,
+        72.25
+      ]
+    },
+    {
+      "path": [
+        "hub",
+        "gusCount",
+        "5"
+      ],
+      "text": "A whole team? Honk... gulp.",
+      "voice": "gus",
+      "key": "hub.gusCount.5",
+      "part": "hub › gusCount",
+      "when": "",
+      "ms": 2880,
+      "flags": [],
+      "span": [
+        72.6,
+        75.42
+      ]
+    },
+    {
+      "path": [
+        "hub",
         "team",
         "snowman"
       ],
@@ -393,8 +537,8 @@
       "ms": 2592,
       "flags": [],
       "span": [
-        55.24,
-        57.78
+        77.04,
+        79.58
       ]
     },
     {
@@ -411,8 +555,8 @@
       "ms": 2904,
       "flags": [],
       "span": [
-        58.13,
-        60.98
+        79.93,
+        82.77
       ]
     },
     {
@@ -429,8 +573,8 @@
       "ms": 1728,
       "flags": [],
       "span": [
-        61.33,
-        63
+        83.12,
+        84.8
       ]
     },
     {
@@ -447,8 +591,8 @@
       "ms": 2040,
       "flags": [],
       "span": [
-        63.35,
-        65.32
+        85.15,
+        87.12
       ]
     },
     {
@@ -465,26 +609,26 @@
       "ms": 1752,
       "flags": [],
       "span": [
-        65.67,
-        67.36
+        87.47,
+        89.16
       ]
     },
     {
       "path": [
         "hub",
         "team",
-        "salmon"
+        "bath"
       ],
       "text": "I brought my big swing.",
       "voice": "bear",
-      "key": "hub.team.salmon",
+      "key": "hub.team.bath",
       "part": "hub › team",
       "when": "Tap a friend who is already on the team (they stand at the rink in their scarves).",
       "ms": 2688,
       "flags": [],
       "span": [
-        67.71,
-        70.33
+        89.51,
+        92.13
       ]
     },
     {
@@ -503,8 +647,8 @@
         "long"
       ],
       "span": [
-        71.95,
-        75
+        93.75,
+        96.8
       ]
     },
     {
@@ -523,8 +667,8 @@
         "long"
       ],
       "span": [
-        75.35,
-        79.05
+        97.15,
+        100.85
       ]
     },
     {
@@ -543,8 +687,8 @@
         "long"
       ],
       "span": [
-        79.4,
-        83.61
+        101.2,
+        105.41
       ]
     },
     {
@@ -563,8 +707,8 @@
         "long"
       ],
       "span": [
-        83.96,
-        87.34
+        105.76,
+        109.13
       ]
     },
     {
@@ -583,8 +727,8 @@
         "long"
       ],
       "span": [
-        87.69,
-        91.28
+        109.48,
+        113.07
       ]
     }
   ]
