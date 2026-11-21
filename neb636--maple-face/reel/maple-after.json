@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "maple-after",
+  "title": "Maple after",
+  "video": "maple-after.mp4",
+  "gif": "maple-after.gif",
+  "seconds": 15,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Characters maple",
+      "where": "#/world/characters/maple?shot=face&zoom=1.6",
+      "seconds": 3,
+      "fps": 22.4,
+      "status": "ok"
+    },
+    {
+      "name": "Characters maple",
+      "where": "#/world/characters/maple?shot=face&zoom=1.6&yaw=28",
+      "seconds": 3,
+      "fps": 17.7,
+      "status": "ok"
+    },
+    {
+      "name": "Canada story bike in",
+      "where": "#/world/canada/story/bike-in",
+      "seconds": 4,
+      "fps": 54.7,
+      "status": "ok"
+    }
+  ]
+}
