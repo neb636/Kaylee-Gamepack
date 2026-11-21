@@ -67,6 +67,6 @@ replaces its poke toy rather than adding to it.
 
 ## Next
 
-- Kaylee's playtest: does she find the pins, and does she poke the sea toys? If the calm board feels too empty to her,
+- Her play data: does she find the pins, and does she poke the sea toys? If the calm board feels too empty to her,
   add back one thing at a time, not the lot.
 - Ao Nang or Koh Lanta as real places, when you pick one.

@@ -11,7 +11,7 @@ on their phone. Picking from three is easier, and more honest, than saying yes t
 ## 1. Know what Kaylee loves now
 
 Before you invent anything:
-- Her play diary, if it's set up (`kaylee-week` skill): what she replays, where she quits, what she never opens.
+- Her play data (`docs/play-data.md`, the PostHog MCP): what she replays, where she quits, what she never opens.
 - What the user told you about her lately, in this chat and in the country's notes (`planning/around-the-world/`).
 - `docs/play-design.md` (the eight principles) and "What Kaylee told us" in `AGENTS.md`.
 
