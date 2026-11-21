@@ -380,7 +380,8 @@ export class BubbleBathWorld implements World3D {
       this.skyCloud.visible = false
       this.go('towel', true)
     } else if (section === 'colors') {
-      coat.apply(look ? { ...look, sweater: false, worn: [], fur: {} } : null)
+      // (A link's look keeps its colors and decorations: only the sweater waits for the mirror.)
+      coat.apply(look ? { ...look, sweater: false } : null)
       if (!look) for (const z of MISTY_ZONES) if (z !== 'muzzle') coat.zones[z].puff = 0.5
       if (!look) coat.setHair('fluff', null)
       coat.refresh(true)
@@ -593,7 +594,9 @@ export class BubbleBathWorld implements World3D {
   private hitAt(x: number, y: number): Hit | null {
     ndc.set((x / this.w) * 2 - 1, -(y / this.h) * 2 + 1)
     this.ray.setFromCamera(ndc, this.rig.camera)
-    const mapleParts = [this.maple.rig.head.children[0], this.maple.rig.body.children[0]].filter(Boolean)
+    // (The rig's head and body are groups of meshes: the ray needs the meshes themselves.)
+    const mapleParts: Object3D[] = []
+    for (const g of [this.maple.rig.head.children[0], this.maple.rig.body.children[0]]) g?.traverse((o) => void ((o as Mesh).isMesh && mapleParts.push(o)))
     const hits = this.ray.intersectObjects([...this.coat.meshes, ...mapleParts], false)
     const h = hits[0]
     if (!h || !h.face) return null
