@@ -6,9 +6,10 @@
 // The world (watch.ts) adds the water, the boat and the animals.
 import { Color, DoubleSide, Group, Mesh, MeshBasicMaterial, PlaneGeometry, Vector3, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
-import { merge, P, solid } from '../../../../engine3d/geo'
+import { loft, merge, P, solid, type LoftRing, type PartOpts } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
 import { rng } from '../canoe/shore'
+import { cottage, fishingBoat } from './harbour'
 import { BIG_ISLE, DOCK, EAGLE_TREE, ISLES, KELP, LIGHTHOUSE, PUFFIN_ROCK, SEAL_ROCK, SEALION_ROCK, SHORE_Z, SURF, TIDE_SHELF, type Isle } from './sea'
 
 export const SKY = '#CFEAF7'
@@ -75,6 +76,21 @@ function isle(s: Isle, bag: Bag, seed: number) {
   return g
 }
 
+const KELP_BLADES = ['#9C8E38', '#8A8A3A', '#A89842', '#7E8237']
+
+/** One bull-kelp blade lying on the water: a long thin ribbon along +z from its float, wavy, wider in the middle and
+ *  tapering to a point. `ph` sets where its ripples fall. */
+function blade(len: number, w: number, ph: number, col: string, o: PartOpts) {
+  const rings: LoftRing[] = []
+  for (let k = 0; k <= 10; k++) {
+    const s = k / 10
+    const cx = Math.sin(s * Math.PI * 2.2 + ph) * 0.22 * s
+    const hw = w * Math.min(1, 0.35 + s * 4) * (1 - 0.85 * s ** 3)
+    rings.push({ z: s * len, pts: [[cx + hw, 0], [cx, 0.025], [cx - hw, 0], [cx, -0.025]] })
+  }
+  return loft(rings, col, o)
+}
+
 export function buildCoast(bag: Bag): Coast {
   const land = new Group()
   const under = new Group()
@@ -83,15 +99,14 @@ export function buildCoast(bag: Bag): Coast {
   // ---- The south shore: a strip of land with the town along it, rainforest behind, hills further back.
   const town: BufferGeometry[] = [P.box(420, 2.4, 60, GRASS, { at: [0, 0.6, SHORE_Z + 30] }), P.box(420, 0.8, 4, SAND, { at: [0, 0.1, SHORE_Z + 1.4] })]
   const houses = ['#FFD3E2', '#D9CCFF', '#FFF0B8', '#C8F0DF', '#FFD9C4', '#CDEBFF']
+  const roofs = ['#E87B8F', '#B9A6F5', '#F29E6B', '#7FA8D9']
   for (let i = 0; i < 14; i++) {
     const x = -70 + i * 11 + (rand() - 0.5) * 4
     if (Math.abs(x - DOCK.x) < 5) continue
     const w = 5 + rand() * 2.5
     const h = 3.5 + rand() * 2
     const z = SHORE_Z + 7 + rand() * 4
-    const c = houses[i % houses.length]
-    town.push(P.rbox(w, h, 5, 0.15, c, { at: [x, 1.8 + h / 2, z] }), P.prism([[-w / 2 - 0.4, 0], [w / 2 + 0.4, 0], [0, 2]], 5.6, i % 2 ? '#B9A6F5' : '#E87B8F', { at: [x, 1.8 + h, z] }))
-    town.push(P.box(1, 1.6, 0.2, '#8A6A58', { at: [x, 2.6, z - 2.55] }), P.box(1.1, 1, 0.2, '#BFE9F7', { at: [x + w * 0.28, 3.4 + h * 0.2, z - 2.55] }))
+    town.push(...cottage(x, z, w, h, houses[i % houses.length], roofs[(i * 3) % roofs.length], 1.8, rng(100 + i)))
   }
   for (let i = 0; i < 40; i++) {
     const x = -200 + rand() * 400
@@ -116,13 +131,8 @@ export function buildCoast(bag: Bag): Coast {
   const dockLen = DOCK.z0 - DOCK.z1
   const dock: BufferGeometry[] = [P.box(DOCK.w, 0.3, dockLen, '#C9A27E', { at: [DOCK.x, 0.9, DOCK.z1 + dockLen / 2] })]
   for (let z = DOCK.z1 + 1; z < DOCK.z0; z += 4) dock.push(P.cyl(0.18, 0.18, 2.6, '#8C6A55', { at: [DOCK.x - DOCK.w / 2 + 0.2, 0, z] }, 6), P.cyl(0.18, 0.18, 2.6, '#8C6A55', { at: [DOCK.x + DOCK.w / 2 - 0.2, 0, z] }, 6))
-  // (Fishing boats: a red and a navy hull with a yellow cabin, nothing like ice.)
-  for (const [x, z, c] of [
-    [DOCK.x + 4.2, 77, '#E8443F'],
-    [DOCK.x + 4.4, 83, '#4E6A9C'],
-  ] as const) {
-    dock.push(P.rbox(2.2, 1, 5.4, 0.4, c, { at: [x, 0.4, z] }), P.box(2.24, 0.16, 5.2, '#FFFFFF', { at: [x, 0.82, z] }), P.rbox(1.5, 1.3, 1.8, 0.15, PAL.butter, { at: [x, 1.5, z + 0.6] }), P.box(1.3, 0.4, 0.06, '#4A4458', { at: [x, 1.75, z - 0.32] }))
-  }
+  // (Fishing boats: a red and a navy hull, each with a butter wheelhouse, nothing like ice.)
+  dock.push(...fishingBoat(DOCK.x + 4.2, 77, '#E8443F', PAL.butter), ...fishingBoat(DOCK.x + 4.4, 83.2, '#4E6A9C', PAL.butter))
   land.add(solid(merge(dock), bag, 2))
 
   // ---- The islands and points.
@@ -192,24 +202,26 @@ export function buildCoast(bag: Bag): Coast {
   surf.position.set(SURF.x, 0.1, SURF.z)
   land.add(surf)
 
-  // ---- The kelp: bull kelp, a golden float with long ribbon blades lying on the water, and a long stalk down to the
-  // sea floor. In four clumps, so the whole bed is a handful of shapes (it was one shape per frond): each clump's
-  // fronds sway together on the water, its stalks lean together from the floor.
+  // ---- The kelp: bull kelp, a round golden float with a bunch of long ribbon blades streaming from it on the water,
+  // all trailing the same way in the current (like real bull kelp at the surface), and a long stalk down to the sea
+  // floor. In four clumps, so the whole bed is a handful of shapes: each clump's fronds sway together on the water,
+  // its stalks lean together from the floor.
   const kelp: Kelp[] = []
   const clumps: { tops: BufferGeometry[]; stalks: BufferGeometry[] }[] = Array.from({ length: 4 }, () => ({ tops: [], stalks: [] }))
-  for (let i = 0; i < 30; i++) {
+  const CURRENT = 0.9
+  for (let i = 0; i < 38; i++) {
     const a = rand() * Math.PI * 2
     const r = Math.sqrt(rand()) * KELP.r
     const x = Math.cos(a) * r
     const z = Math.sin(a) * r
     const c = clumps[Math.floor(((a + Math.PI * 2) % (Math.PI * 2)) / (Math.PI / 2)) % 4]
-    const b = rand() * Math.PI * 2
-    c.tops.push(
-      P.sphere(0.32, '#C7A646', { at: [x, 0.05, z], scale: [1, 0.55, 1] }, 8),
-      P.rbox(0.42, 0.04, 2.2, 0.1, '#9C8A3A', { at: [x + Math.sin(b) * 1.1, 0.02, z + Math.cos(b) * 1.1], rot: [0, b, 0] }),
-      P.rbox(0.38, 0.04, 1.8, 0.1, '#AE9A42', { at: [x + Math.sin(b + 2.2) * 0.9, 0.025, z + Math.cos(b + 2.2) * 0.9], rot: [0, b + 2.2, 0] }),
-      P.rbox(0.34, 0.04, 1.5, 0.1, '#8E7E36', { at: [x + Math.sin(b - 2) * 0.75, 0.02, z + Math.cos(b - 2) * 0.75], rot: [0, b - 2, 0] }),
-    )
+    const b = CURRENT + (rand() - 0.5) * 0.7
+    const n = 5 + Math.floor(rand() * 3)
+    c.tops.push(P.sphere(0.34, '#C9A24A', { at: [x, 0.08, z], scale: [1, 0.7, 1] }, 10), P.sphere(0.16, '#B08A3A', { at: [x - Math.sin(b) * 0.3, 0.05, z - Math.cos(b) * 0.3], scale: [1, 0.6, 1] }, 7))
+    for (let j = 0; j < n; j++) {
+      const t = n > 1 ? j / (n - 1) - 0.5 : 0
+      c.tops.push(blade(2 + rand() * 1.8, 0.16 + rand() * 0.06, rand() * 6, KELP_BLADES[(i + j) % KELP_BLADES.length], { at: [x + Math.sin(b) * 0.2, 0.03, z + Math.cos(b) * 0.2], rot: [0, b + t * 1.2 + (rand() - 0.5) * 0.2, 0] }))
+    }
     c.stalks.push(P.cyl(0.08, 0.1, -FLOOR_Y, '#8E7E36', { at: [x, FLOOR_Y / 2, z] }, 5), ...[0, 1, 2, 3].map((j) => P.rbox(0.35, 1.4, 0.04, 0.05, '#A39242', { at: [x + 0.25 * (j % 2 ? 1 : -1), FLOOR_Y * (0.2 + j * 0.2), z], rot: [0, j + b, (j % 2 ? -1 : 1) * 0.5] })))
   }
   clumps.forEach((c, i) => {
