@@ -31,7 +31,7 @@
 // reactions are said from here (lines.ts L.bath); the page (BubbleBath.tsx) shows them. Built for engine3d/View3D.tsx;
 // nothing here comes from Thailand. The feel numbers are knobs (`bath`, ?feel=1).
 import { BackSide, Box3, CanvasTexture, Color, Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, RingGeometry, Scene, SphereGeometry, SRGBColorSpace, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { bell, clamp, lineMs, say, spendHint, Timers, type Line } from '../../../../../sdk'
+import { bell, clamp, lineMs, say, smooth, spendHint, Timers, type Line } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { updateStickyParam } from '../../../../kit/sections'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -131,15 +131,15 @@ const LIFT_PX = 30
 const LOG_D = 1.6
 /** The order a tapped decoration takes the spots in. */
 /** Her paw out to the side and forward onto the sweater (radians round the shoulder: forward, out). */
-const PRESS = { x: -0.85, z: 1.05 }
+const PRESS = { x: -1.2, z: 0.8 }
 const SPOT_ORDER: DecoSpot[] = ['crown', 'earL', 'earR', 'chest', 'nose']
 /** The order a berry's short go paints the zones in (the ones the camera sees best first). */
 const PAINT_ORDER: MistyZone[] = ['tummy', 'earL', 'earR', 'armL', 'armR', 'head', 'chest', 'legL', 'legR', 'muzzle']
 /** Where Maple stands (wide screens, tall screens), and the soap's rock, the slug, the raven's branch, the rain cloud
  *  in the sky (before it's hers), the salmon's pool and the falls. */
 const MAPLE_WIDE: [number, number, number] = [-1.25, -0.06, -1.6]
-const MAPLE_TALL: [number, number, number] = [-0.74, -0.06, -1.55]
-const SOAP_ROCK = new Vector3(-0.92, -0.08, -0.95)
+const MAPLE_TALL: [number, number, number] = [-0.66, -0.06, -1.55]
+const SOAP_ROCK = new Vector3(-0.82, -0.08, -0.95)
 const SLUG_AT = new Vector3(-1.98, 0.34, -2.12)
 const RAVEN_AT = new Vector3(SCRATCH.x - SCRATCH.r - 0.36, 1.72, SCRATCH.z + 0.1)
 const SKY_CLOUD = new Vector3(-0.55, 1.72, -2.6)
@@ -298,9 +298,9 @@ export class BubbleBathWorld implements World3D {
     this.maple.place(...MAPLE_WIDE, 25)
     scene.add(this.misty.root, this.maple.root)
 
-    this.suds = new Suds(260, scene, bag)
+    this.suds = new Suds(380, scene, bag)
     this.bits = new Particles({ kind: 'spray', count: 260, colors: ['#FFFFFF', '#FFE3F0', '#FF8FB8', '#7FB2FF', '#B48CF2', '#FFD86B', '#8FD3F7', '#FFFAF0'], gravity: 4 }, bag)
-    this.drops = new Particles({ kind: 'spray', count: 220, color: '#8FD3F7', gravity: 9 }, bag)
+    this.drops = new Particles({ kind: 'spray', count: 220, colors: ['#8FD3F7', '#FFFFFF', '#C9ECFA'], gravity: 9 }, bag)
     scene.add(this.bits.mesh, this.drops.mesh)
 
     // The log and its things (each tool is built once; the log shows the ones in play).
@@ -517,8 +517,10 @@ export class BubbleBathWorld implements World3D {
   /** The camera: Misty big in the middle, Maple beside her, room for the log below her feet. */
   private shot(): Shot {
     const close = this.act?.kind === 'scratch'
-    if (this.tall) return { center: new Vector3(AT.x - 0.12 + (close ? 0.5 : 0), 0.62, AT.z), half: new Vector3(0.95, 1.12, 0.3), yaw: 0, pitch: 7, minDist: 2.5 }
-    return { center: new Vector3(AT.x - 0.38 + (close ? 0.6 : 0), 0.62, AT.z), half: new Vector3(1.45, 1.06, 0.3), yaw: 0, pitch: 7, minDist: 2.5 }
+    // (Held upright: wide enough for Maple on her left and the big cedar on her right, so both can be tapped.)
+    if (this.tall) return { center: new Vector3(AT.x + 0.08 + (close ? 0.3 : 0), 0.64, AT.z), half: new Vector3(1.25, 1.12, 0.3), yaw: 0, pitch: 7, minDist: 2.5 }
+    // (Room over her head for a hairdo and a crown, under the prompt on a phone.)
+    return { center: new Vector3(AT.x - 0.38 + (close ? 0.6 : 0), 0.66, AT.z), half: new Vector3(1.45, 1.12, 0.3), yaw: 0, pitch: 7, minDist: 2.5 }
   }
 
   update(dt: number) {
@@ -533,7 +535,13 @@ export class BubbleBathWorld implements World3D {
     this.maple.update(dt, t)
     this.pose(dt)
     // The sweater in the air beside Maple, bobbing a little as she holds it up.
-    if (this.sweater?.root.visible) this.sweater.root.position.copy(this.sweaterAt).add(tmp.set(0, Math.sin(t * 2.4) * 0.012, 0))
+    // (Held out clear of her, where all of it shows; Maple pushes it in to meet her paw at the press, then back out.)
+    if (this.sweater?.root.visible) {
+      const a = this.act
+      const u = a?.kind === 'press' ? a.t / a.dur : 0
+      const k = u < 0.35 ? smooth(u / 0.35) : u < 0.6 ? 1 : smooth(1 - (u - 0.6) / 0.4)
+      this.sweater.root.position.lerpVectors(this.sweaterHome, this.sweaterAt, k).add(tmp.set(0, Math.sin(t * 2.4) * 0.012 * (1 - k), 0))
+    }
     this.coat.update(dt, t)
     this.tools(dt)
     this.flyDecos(dt)
@@ -890,6 +898,8 @@ export class BubbleBathWorld implements World3D {
         const j = tmp2.set((Math.random() - 0.5) * 0.05, (Math.random() - 0.5) * 0.05, (Math.random() - 0.5) * 0.05)
         const size = (hit.who === 'maple' ? 0.026 : 0.036) + Math.random() * 0.016
         this.suds.add(hit.pivot, hit.local.clone().add(j), hit.normal, size)
+        // (A little bubble beside most big ones, so it reads as foam, not a row of marshmallows.)
+        if (Math.random() < 0.6) this.suds.add(hit.pivot, hit.local.clone().add(j.multiplyScalar(-1.4)), hit.normal, size * (0.4 + Math.random() * 0.2))
       }
       if (moved > 0.5 && this.beat('suds', 0.14)) fx.suds(Math.min(1, moved / 20))
       this.acc.squeak += moved
@@ -1127,7 +1137,7 @@ export class BubbleBathWorld implements World3D {
         id: 'mirror',
         say: B.mirror,
         side: 0.2,
-        back: 1.75,
+        back: 2.05,
         start: () => this.sparkleAt(this.misty.head(tmp3), 10),
         done: () => {
           this.misty.lean = 0
@@ -1167,11 +1177,16 @@ export class BubbleBathWorld implements World3D {
     const paw = arm.localToWorld(new Vector3(s * 0.05 * H, -0.14 * H, 0.005 * H))
     arm.rotation.set(rx, arm.rotation.y, rz)
     this.sweaterAt.copy(paw).sub(this.sweater.front).add(tmp.set(0, 0, -0.035))
-    // Maple stands just behind it, holding it up in front of her by the shoulders (she peeks round its side).
+    // Until then it's held up out at her side and a little in front, clear of her fluffy arm, so all of it shows.
+    this.sweaterHome.set(AT.x + s * (this.tall ? 0.55 : 0.74), this.sweaterAt.y, AT.z + 0.32)
+    // Maple stands just behind it, holding it up in front of her by the shoulders (out past its side, so her face isn't
+    // behind it; on screen when the iPad is held upright).
     this.maple.armsUp = 0.75
-    this.maple.hopTo(paw.x + s * 0.24, -0.06, paw.z - 0.32, 0.6, -s * 15, 0.5)
+    const mx = this.sweaterHome.x + s * 0.5
+    this.maple.hopTo(this.tall ? Math.max(-0.88, Math.min(1.3, mx)) : mx, -0.06, this.sweaterHome.z - 0.14, 0.6, -s * 20, 0.5)
   }
   private sweaterAt = new Vector3()
+  private sweaterHome = new Vector3()
 
   /** One tap on the sweater: Misty presses her paw on it, THUMP, and pulls it on. */
   private press() {
@@ -1261,7 +1276,7 @@ export class BubbleBathWorld implements World3D {
     }
     for (const f of [...this.flying]) {
       f.t += dt / 0.5
-      const sp = this.coat.spot(f.spot)
+      const sp = this.coat.spot(f.spot, f.deco)
       const to = sp.pivot.localToWorld(sp.p.clone())
       const k = Math.min(1, f.t)
       f.prop.root.visible = true
@@ -1411,7 +1426,13 @@ export class BubbleBathWorld implements World3D {
         this.timers.later(() => riverSfx.swing(), 350)
         this.timers.later(() => {
           riverSfx.bigSplash()
-          this.splash(AT.x - 0.4, 0.3, AT.z + 0.4, 30)
+          // (Where her paw hits the water, on the salmon's side: a fountain of drops, some raining back on her.)
+          for (let i = 0; i < 44; i++) {
+            const a = Math.random() * Math.PI * 2
+            const v = 0.3 + Math.random() * 1.3
+            this.drops.emit(AT.x + 0.55, 0.08, AT.z + 0.3, Math.cos(a) * v - 0.3, 2.6 + Math.random() * 2.2, Math.sin(a) * v * 0.5, 0.9, 0.045 + Math.random() * 0.03)
+          }
+          this.splash(AT.x, 1.1, AT.z + 0.2, 16)
           // The splash rinses her a little (in the wash), pops some suds.
           if (this.stage === 'sponge' || this.stage === 'rain') {
             this.coat.wash('any', null, 0, 0.1, this.stage === 'sponge' ? SPONGE_FLOOR : 0)

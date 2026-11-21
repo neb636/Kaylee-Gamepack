@@ -236,7 +236,8 @@ export function buildRiver(bag: Bag, root: Group): RiverSet {
     root.add(foam)
     // Little white lines of foam drifting down the pool toward the camera.
     for (let i = 0; i < 8; i++) {
-      const st = solid(P.rbox(0.4, 0.015, 0.05, 0.01, '#FFFFFF'), bag, 0)
+      // (A pale streak on the water, not a white plank lying on it.)
+      const st = solid(P.rbox(0.34, 0.008, 0.045, 0.02, '#D4EEF6'), bag, 0)
       st.position.set(-1.1 + ((i * 0.71) % 2.2), 0.04, FALLS_Z + 1 + i * 1.6)
       root.add(st)
       streaks.push(st)
@@ -432,7 +433,14 @@ export function updateRiver(set: RiverSet, dt: number, t: number, camera: Camera
       sp.t += dt
       const k = sp.t / 1.1
       if (k >= 1) sp.g.visible = false
-      else sp.g.scale.set(0.6 + k * 0.9, Math.sin(Math.min(1, k * 1.6) * Math.PI * 0.5) * (1 - Math.max(0, k - 0.45) / 0.55) * 2.2 + 0.01, 0.6 + k * 0.9)
+      else {
+        // (The column's height rises and falls, but its blobs stay round: they grow in at the start and shrink away at
+        // the end, never squashed into flat white plates on the water.)
+        const up = Math.sin(Math.min(1, k * 1.6) * Math.PI * 0.5) * (1 - Math.max(0, k - 0.45) / 0.55)
+        const f = Math.min(1, k / 0.12) * (k > 0.6 ? 1 - (k - 0.6) / 0.4 : 1)
+        const w = (0.6 + k * 0.9) * f
+        sp.g.scale.set(w, (0.9 + up * 1.4) * f, w)
+      }
     }
     // The twinkle faces the camera and pulses.
     if (set.twinkle.visible) {

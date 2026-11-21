@@ -104,7 +104,8 @@ export const BATH_IN: StoryFilm = {
       {
         // Two eyes blink in all that mud: missed again!
         id: 'miss',
-        shot: close(misty, 0.15, 1.8, -0.06),
+        // (Aimed at her face, under the middle of her big head, from far enough back that her eyes and mouth both show.)
+        shot: cam([BATH.x + 0.5, 1.0, BATH.z + 3.1], () => misty.head(tmp).add(off.set(0, -0.2, 0)), { eye: [BATH.x + 0.47, 0.97, BATH.z + 2.8] }, { fov: 34 }),
         say: X.miss,
         sayAt: 0.7,
         hold: 0.3,

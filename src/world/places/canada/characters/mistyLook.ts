@@ -17,12 +17,16 @@
 import { Color, DynamicDrawUsage, Euler, Group, IcosahedronGeometry, InstancedMesh, Matrix4, Mesh, Object3D, Quaternion, Vector3, type BufferAttribute, type BufferGeometry } from 'three'
 import type { FilmActor } from '../../../engine3d/characters/actor'
 import type { Bag } from '../../../engine3d/dispose'
+import { smoothstep } from '../../../../sdk/math'
 import { P, solidMix, type V3 } from '../../../engine3d/geo'
 import { hullGeometry, instancedOutlineMaterial } from '../../../engine3d/outline'
 import { toon } from '../../../engine3d/toon'
 import { BERRIES, DECO_SPOTS, MISTY_ZONES, type Berry, type Deco, type DecoSpot, type HairStyle, type MistyLook, type MistyZone } from '../looks'
 import { CANADA_COLORS } from './looks'
 
+/** How far (in head radii) above her head a crown sits in each hairdo, and anything else worn on the crown spot. */
+const CROWN_LIFT: Record<HairStyle, number> = { fluff: 0.2, spikes: 0, bangs: 0.06, swoop: 0.08 }
+const TOPKNOT: Record<HairStyle, number> = { fluff: 0.4, spikes: 0.34, bangs: 0.36, swoop: 0.32 }
 /** River mud, and the moss in it. */
 export const MUD = '#8A5E43'
 /** The mud on her fur goes from a dry tan to a wet dark brown in blotches; the dollops on her are darker still. */
@@ -120,6 +124,8 @@ export class MistyCoat {
   private hairs = new Map<string, Group>()
   private hairNow: Group | null = null
   private hairShown = true
+  /** The hairdos hang off this: it grows a little with the fluff on her head, so the hair sits on top of the puff. */
+  private hairRoot = new Group()
   private decos: Group[] = []
   private sweater: { body: Group; armL: Group; armR: Group } | null = null
   private sweaterPrint = ''
@@ -149,6 +155,7 @@ export class MistyCoat {
       const mesh = meshIn(group)
       if (mesh) this.parts.push(this.part(part, pivot, mesh))
     }
+    rig.head.add(this.hairRoot)
     add('body', rig.body, rig.body.children[0])
     add('head', rig.head, rig.head.children[0])
     add('armL', rig.armL, rig.armL.children[0])
@@ -421,12 +428,14 @@ export class MistyCoat {
     if (!g) {
       g = this.buildHair(style, color)
       g.visible = false
-      this.actor.rig.head.add(g)
+      this.hairRoot.add(g)
       this.hairs.set(key, g)
     }
     if (this.hairNow && this.hairNow !== g) this.hairNow.visible = false
     this.hairNow = g
     g.visible = this.hairShown
+    // (Whatever's on the crown spot moves to sit on the new hairdo.)
+    if (this.worn.some((w) => w.at === 'crown')) this.setWorn(this.worn)
   }
   /** Shows or hides the hairdo (a muddy Misty has none yet). */
   showHair(on: boolean) {
@@ -454,7 +463,7 @@ export class MistyCoat {
     return this.decos[this.worn.findIndex((w) => w.at === at)]
   }
   /** Where a spot is: its pivot, the point on her (pivot-local) and the way out of her there. */
-  spot(at: DecoSpot): { pivot: Object3D; p: Vector3; n: Vector3 } {
+  spot(at: DecoSpot, id?: Deco): { pivot: Object3D; p: Vector3; n: Vector3 } {
     const { H, R, headY } = this
     const rig = this.actor.rig
     const onHead = (x: number, y: number, lift = 0) => {
@@ -463,13 +472,21 @@ export class MistyCoat {
       const n = new Vector3(x / (1.08 * 1.08), y, z).normalize()
       return { pivot: rig.head, p: p.addScaledVector(n, lift * R), n }
     }
-    if (at === 'crown') return onHead(0, 0.97, -0.02)
-    if (at === 'earL') return onHead(-0.6, 0.62, -0.02)
-    if (at === 'earR') return onHead(0.6, 0.62, -0.02)
+    // (Out past her fluff, so a crown or a flower sits on top of a puffball instead of sinking into it.)
+    const out = (zone: MistyZone) => 0.15 * Math.pow(this.zones[zone].puff, 0.7)
+    if (at === 'crown') {
+      // With a hairdo on, a crown rides up round the topknot (a bun pokes out of its middle), and anything else sits on
+      // top of the topknot, where it shows from the front, instead of inside it.
+      const style = this.hairNow && this.hairShown ? this.hair.style : null
+      const hair = !style ? 0 : id === 'crown' ? CROWN_LIFT[style] : TOPKNOT[style]
+      return onHead(0, 0.97, -0.02 + out('head') + hair)
+    }
+    if (at === 'earL') return onHead(-0.6, 0.62, -0.02 + out('earL'))
+    if (at === 'earR') return onHead(0.6, 0.62, -0.02 + out('earR'))
     if (at === 'nose') return { pivot: rig.head, p: new Vector3(0, headY - 0.14 * R, 1.1 * R), n: new Vector3(0, 0.15, 1).normalize() }
     // The chest: on the sweater if she has it on, on her fur if not.
     const y = 0.47 * H
-    const z = this.frontZ(0.075 * H, y) + (this.sweaterOn ? 0.036 * H : 0)
+    const z = this.frontZ(0.075 * H, y) + (this.sweaterOn ? 0.036 * H : 0.045 * H * Math.pow(this.zones.chest.puff, 0.7))
     return { pivot: rig.body, p: new Vector3(0.075 * H, y, z), n: new Vector3(0.3, 0.15, 1).normalize() }
   }
   /** The nearest spot to a point in the world (a decoration she drops). */
@@ -558,6 +575,12 @@ export class MistyCoat {
       if (p.dirty) this.paintPart(p)
       this.placeDots(p, snap, dt, t)
     }
+    const hp = Math.pow(this.zones.head.puff, 0.7)
+    if (Math.abs(this.hairRoot.scale.x - (1 + 0.14 * hp)) > 0.002) {
+      const k = 1 + 0.14 * hp
+      this.hairRoot.scale.setScalar(k)
+      this.hairRoot.position.set(0, this.headY * (1 - k), 0)
+    }
     const pf = this.puff
     if (this.sweater && Math.abs(pf - this.sweaterPuff) > 0.01) {
       this.sweaterPuff = pf
@@ -577,7 +600,13 @@ export class MistyCoat {
     const s = this.zones[MISTY_ZONES[z]]
     if (s.color && s.k > 0) out.lerp(BERRY_COLORS[s.color], s.k * (p.kind[i] === 3 ? 0.7 : p.kind[i] === 2 ? 0.85 : 0.95))
     if (s.wet > 0) out.multiplyScalar(1 - 0.12 * s.wet)
-    if (mud && p.mud[i] > 0) out.lerp(mudC.copy(MUD_LIGHT).lerp(MUD_DARK, p.shade[i]), p.mud[i] * (p.kind[i] === 3 ? 0.4 : 0.92))
+    if (mud && p.mud[i] > 0) {
+      // Splats of thick wet mud, and between them a thin dirty coat her white shows through (so she reads as a white
+      // bear covered in mud, not a brown bear).
+      const blot = smoothstep(0.3, 0.7, p.shade[i])
+      const cover = p.kind[i] === 3 ? 0.4 : (p.kind[i] === 2 ? 0.48 : 0.58) + 0.38 * blot
+      out.lerp(mudC.copy(MUD_LIGHT).lerp(MUD_DARK, blot), p.mud[i] * cover)
+    }
     return out
   }
   private paintPart(p: PartMesh) {
@@ -719,7 +748,7 @@ export class MistyCoat {
    *  turned toward where her face looks. */
   private buildDeco(id: Deco, at: DecoSpot): Group {
     const g = decoModel(id, this.R * (at === 'nose' ? 0.8 : 1), this.bag, this.H >= 1 ? 2.2 : 1.8)
-    const sp = this.spot(at)
+    const sp = this.spot(at, id)
     // Up is the way out of her (a crown stands on her head); a flower and a bow turn their faces toward the camera.
     const up = id === 'flower' || id === 'bow' ? sp.n.clone().multiplyScalar(0.55).add(new Vector3(0, 0.2, 0.8)).normalize() : sp.n.clone()
     const fwd = new Vector3(0, 0, 1).addScaledVector(up, -up.z).normalize()
