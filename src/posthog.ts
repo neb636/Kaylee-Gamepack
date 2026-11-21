@@ -22,6 +22,7 @@ const TARGET_AUDIENCE_ID = 'target-audience'
 // Safari's, so `?tester=1` can't reach it: its anonymous id tags it on its next launch instead.
 const TESTER_IDS = new Set([
   '01a15e62-2191-7f6e-8f7f-de8eac4c1aec', // the user's iPhone (402×874), Home Screen app
+  '01a1cf62-d52a-7cf8-9a3d-8f43a75893b9', // the user's old iPhone 14 Pro (393×852), Home Screen app
 ])
 
 /** This browser's PostHog id from the last launch, read before init (posthog-js keeps it in localStorage). */
