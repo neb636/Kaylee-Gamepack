@@ -1,0 +1,15 @@
+{
+  "title": "Maple's new face",
+  "checkIn": "fix",
+  "kaylee": "Maple looks like a storybook beaver: a big happy grin with two white front teeth inside it, kind brows, a little shiny nose, chubby cheeks, a light tummy and dark paws.",
+  "questions": [],
+  "links": [
+    { "label": "Maple in the character lab", "hash": "#/world/characters/maple?shot=face&zoom=1.6" },
+    { "label": "Maple talking (the bike film)", "hash": "#/world/canada/story/bike-in" }
+  ],
+  "pictures": [
+    { "title": "Talking in a film", "before": "pics/film-before.png", "after": "pics/film-after.png", "caption": "The grin opens under her teeth now, not above them" },
+    { "title": "Her face", "before": "pics/face-before.png", "after": "pics/face-after.png", "caption": "White teeth in a pink-tongued grin, brows, a smaller shiny nose, chubby cheeks" },
+    { "title": "All of her", "before": "pics/body-before.png", "after": "pics/body-after.png", "caption": "A light tummy and dark brown paws, like the reference; no hat or vest" }
+  ]
+}
