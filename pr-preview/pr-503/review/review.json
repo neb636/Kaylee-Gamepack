@@ -1,9 +1,0 @@
-{
-  "title": "Your devices go quiet with ?tester=1",
-  "checkIn": "fix",
-  "kaylee": "Her play data stops mixing in your testing, so her favorites read true.",
-  "questions": [],
-  "links": [
-    { "label": "Tag this browser as yours (on a game link)", "hash": "#/world?tester=1" }
-  ]
-}
