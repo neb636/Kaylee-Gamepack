@@ -321,7 +321,7 @@ export class TeamCabinWorld implements World3D {
     const tall = !!p.back
     const wall = tall
       ? Math.max(-(p.window.x - p.window.hw * 0.45), p.mirror.x + p.mirror.hw * 0.45)
-      : Math.max(-(p.window.x - p.window.hw - 0.34), p.mirror.x + p.mirror.hw + 0.24)
+      : Math.max(-(p.window.x - p.window.hw - 0.34), p.mirror.x + p.mirror.hw + 0.24, Math.abs(p.lantern[0]) + 0.18)
     const row = this.seats.filter((s) => s.row === 0)
     const front = Math.max(tall ? 0.9 : 1.2, ...row.map((s) => Math.abs(s.x) + WIDTH[s.who] / 2 + 0.06))
     const yTop = Math.max(p.window.y + p.window.hh + 0.12, p.mirror.y + p.mirror.hh + 0.12)

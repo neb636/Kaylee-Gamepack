@@ -79,21 +79,25 @@ export function plan(layout: Layout, row = 3, narrow = false): RoomPlan {
   // (On a narrow screen they hang over the ends of the bench instead, so the team stays big.)
   const wx = narrow ? -Math.max(0.95, row + 0.3) : -Math.min(2.9, Math.max(1.55, row + 0.9))
   const mx = narrow ? Math.max(0.95, row + 0.3) : Math.min(2.95, Math.max(1.55, row + 0.85))
+  // (A short row has the window, the mirror and the shelf hung lower, so Maple alone isn't small under a tall wall.)
+  const up = narrow ? 0.32 : 0.32 * Math.min(1, Math.max(0, (row - 0.5) / 1.3))
   return {
     halfW: 4.7,
     wallZ: -1.32,
     wallTop: 3.45,
-    window: { x: wx, y: 2.3, hw: 0.6, hh: 0.46 },
-    mirror: { x: mx, y: 2.22, hw: 0.44, hh: 0.58 },
+    window: { x: wx, y: 1.98 + up, hw: 0.6, hh: 0.46 },
+    mirror: { x: mx, y: 1.9 + up, hw: 0.44, hh: 0.58 },
     bench: { y: 0.42, front: -0.08, depth: 1.12, half: 3.7 },
     back: null,
     // (Over the middle of the row when it's long; above the window's height over a short one.)
-    shelf: wx < -2.4 ? [-0.95, 2.5, 0] : [0, 2.95, 0],
-    pegs: [wx + 1.05, 2.45, 0],
+    shelf: wx < -2.4 ? [-0.95, 2.5, 0] : [0, 2.63 + up, 0],
+    pegs: [wx + 1.05, 2.13 + up, 0],
     bunting: 3.2,
     // (On the floor in front of the bench's right end; the cabin slides it fully onto the screen or fully off it.)
     stove: [Math.min(4.1, mx + 1.2), 0, 0.4],
-    lantern: [mx - 1.25, 3.4, 0.2],
+    // (From the beam between the shelf and the mirror; with a short row the shelf is in the middle, so beside the
+    // mirror instead.)
+    lantern: wx < -2.4 ? [mx - 1.25, 3.4, 0.2] : [mx + 0.76, 3.3, 0.2],
   }
 }
 

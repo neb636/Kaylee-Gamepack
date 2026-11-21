@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { lineText, say, spendHint, SparklePuppet, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { savedKey } from '../../../../../sdk/hooks'
+import { onDevice } from '../../../../../sdk/device'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type QAKey, type RenderMode, type World3D } from '../../../../engine3d/View3D'
@@ -128,7 +129,7 @@ function Cabin({ stamps }: { stamps: string[] }) {
           }}
           style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(246,227,207,.9)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: 'var(--ink)' }}
         >
-          🧣 Tap to wake the cabin
+          🧣 {onDevice('Tap to wake the cabin', 'Click to wake the cabin')}
         </button>
       )}
       {/* The camera's flash, and the team photo popping up before it goes on the wall. */}
