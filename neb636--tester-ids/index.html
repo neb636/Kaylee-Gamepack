@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Your iPhone's Home Screen app goes quiet</title>
+<title>Your iPhones' Home Screen apps go quiet</title>
 <style>
 :root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a;--lav:#efe6ff;--warn:#b0124f}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}}
@@ -36,18 +36,18 @@ button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-of
 @media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.pics{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}}
 </style></head><body><main>
 <span class="chip">Check-in fix</span>
-<h1>Your iPhone's Home Screen app goes quiet</h1>
+<h1>Your iPhones' Home Screen apps go quiet</h1>
 <p class="kaylee">Her play data stops mixing in your phone's play, so her favorites read true.</p>
 
 
 
 
 
-<h2>Your call</h2><ol><li><p>Is the other iPhone (414×896, Billerica) yours, or someone she plays with?</p><textarea rows="2" data-q="0" placeholder="Your answer (a word is fine)"></textarea></li></ol><button id="copy">Copy my answers</button><p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>
+
 
 </main>
 <script>
-const qs=["Is the other iPhone (414×896, Billerica) yours, or someone she plays with?"],titles=[]
+const qs=[],titles=[]
 let picked=''
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p];picked=t
   document.querySelectorAll('.pick').forEach(o=>{o.classList.toggle('on',o===b);o.textContent=o===b?'✓ Picked':'Pick this one'})
