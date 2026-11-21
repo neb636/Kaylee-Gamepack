@@ -12,6 +12,7 @@ import { CANADA_COLORS, CANADA_LOOKS, type CanadaFriend } from '../characters/lo
 import { Lulu } from '../characters/lulu'
 import type { Performer, ToyActor } from '../characters/toy'
 import { Tuque } from '../characters/tuque'
+import { TEAM_SCARF, tintTeamScarf } from '../characters/worn'
 import { mistyLook, wornBy, type MistyLook, type TeamId } from '../looks'
 
 /** The team's pink scarf for a rig friend `H` meters tall (the same shape the rig gives Maple): add it to `rig.body`. */
@@ -49,6 +50,9 @@ export class Friend extends FilmActor {
   scarf(on: boolean) {
     if (on && !this.team) {
       this.team = teamScarf(this.height, this.bag)
+      // (In the color she picked for them in the Team Cabin, if she did: characters/worn.ts.)
+      this.team.name = TEAM_SCARF
+      if (this.teamId) tintTeamScarf(this.team, wornBy(this.teamId))
       // (A moose's long muzzle hangs over where the scarf sits on everyone else: his goes lower and a little wider.)
       if (this.look.species === 'moose') {
         this.team.scale.setScalar(1.12)

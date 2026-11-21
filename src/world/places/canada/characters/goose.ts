@@ -7,6 +7,7 @@ import type { Bag } from '../../../engine3d/dispose'
 import { merge, P, solid, solidMix } from '../../../engine3d/geo'
 import { CANADA_COLORS } from './looks'
 import { ToyActor, type ToyPose } from './toy'
+import type { ToySpots } from './worn'
 
 const BODY = '#9A8672'
 const WING = '#7E6C5C'
@@ -31,6 +32,8 @@ export class Goose extends ToyActor {
   private wingL = new Group()
   private wingR = new Group()
   private headAt: Vector3
+  /** Where a hat and a scarf sit on Gus (the Team Cabin, characters/worn.ts): his head, and his neck under the band. */
+  readonly spots: ToySpots = { hat: new Group(), neck: new Group() }
 
   constructor(bag: Bag, o: GooseOpts = {}) {
     super(o.height ?? 0.95, o.voice)
@@ -98,6 +101,11 @@ export class Goose extends ToyActor {
     this.eyes.add(solidMix([], eye, bag, 0))
     this.neck.add(this.eyes)
     this.body.add(this.neck)
+    this.spots.hat.position.copy(this.headAt)
+    this.spots.hat.userData = { R }
+    this.spots.neck.position.set(0, 0.02 * H, 0)
+    this.spots.neck.userData = { r: 0.075 * H }
+    this.neck.add(this.spots.hat, this.spots.neck)
   }
 
   head(out = new Vector3()) {
