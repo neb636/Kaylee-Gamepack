@@ -134,7 +134,6 @@ export const screens = [
   { name: 'canada-party-hockey-wall', hash: '#/world/canada/party/hockey?stamps=all&team=all&score=2', reset: true, wait: 9000 },
   { name: 'canada-party-hockey-few', hash: '#/world/canada/party/hockey?stamps=all&team=snowman,canoe,bath,whales&score=1', reset: true, wait: 6000 },
   { name: 'canada-party-hockey-alone', hash: '#/world/canada/party/hockey?stamps=all&team=none&score=2', reset: true, wait: 6000 },
-  { name: 'canada-party-hockey-mouse', hash: '#/world/canada/party/hockey?stamps=all&team=all&device=mouse', reset: true, wait: 4000 },
   { name: 'canada-party-win', hash: '#/world/canada/party/win?stamps=all&team=all', reset: true, wait: 6000 },
   ...['game-in', 'game-win'].map((id) => ({ name: `canada-film-${id}`, hash: `#/world/canada/story/${id}`, reset: true, wait: 8000 })),
 ]
@@ -155,6 +154,19 @@ const dressedScreens = [
   wait: 300,
 }))
 screens.push(...dressedScreens)
+// On a Mac (the device is decided when the page loads: `?device=mouse` before the # loads it fresh with the mouse's words).
+const MOUSE = '#/world/canada/party/hockey?stamps=all&team=all'
+screens.push({
+  name: 'canada-party-hockey-mouse',
+  hash: MOUSE,
+  reset: true,
+  wait: 300,
+  act: async (page) => {
+    await page.goto(`${page.url().split('#')[0].split('?')[0]}?device=mouse${MOUSE}`)
+    await page.getByRole('button', { name: /let's play/i }).click({ timeout: 3000 }).catch(() => {})
+    await page.waitForTimeout(4000)
+  },
+})
 
 /** The whole finale auto-played: the auto-player's taps poke things and slap the puck at the net. */
 export const pacing = [{ name: 'canada finale', id: 'party', hash: '#/world/canada/party/hockey?stamps=all&team=all', reset: true }]

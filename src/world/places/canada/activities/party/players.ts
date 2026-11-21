@@ -111,10 +111,6 @@ export class Player {
   get winding() {
     return !!this.wind?.on
   }
-  /** Wound all the way up. */
-  get wound() {
-    return !!this.wind?.ready
-  }
   /** Frozen like a statue. */
   get frozen() {
     return this.frozenT > 0
