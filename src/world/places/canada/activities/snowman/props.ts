@@ -3,11 +3,11 @@
 // the terrace and the castle hotel), spruces with snow on them, the ice moose, the toboggan slide and its sled, the
 // carnival's hat box and sash box, the parade drum, and what the snowmen wear. Maple is maple.ts, the other animals
 // critters.ts; park.ts says where everything stands.
-import { Color, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Vector3, type BufferGeometry } from 'three'
+import { CircleGeometry, Color, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Vector3, type BufferGeometry } from 'three'
 import { radialAlpha, softTexture } from '../../../../engine3d/softTexture'
 import { bell, span, wobble } from '../../../../../sdk'
 import type { Bag } from '../../../../engine3d/dispose'
-import { merge, P, solid } from '../../../../engine3d/geo'
+import { bake, merge, P, solid } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
 import { sashGeo } from '../../characters/tuque'
 import { buildOldTown, mulberry } from './castle'
@@ -59,6 +59,9 @@ function shadowMat(bag: Bag) {
   }
   return m
 }
+/** A flat patch of colored snow lying on the ground at (x, z), `r` across, stretched `sx` by `sz`. */
+const snowDisc = (r: number, c: string, x: number, z: number, sx: number, sz: number, seg: number) =>
+  bake(new CircleGeometry(r, seg).rotateX(-Math.PI / 2), c, { at: [x, 0.012, z], scale: [sx, 1, sz] }, true)
 const unitPlanes = new WeakMap<Bag, PlaneGeometry>()
 /** A soft round blue shadow `size` meters across, lying on the snow (scale x and y to resize it). */
 export function snowShadow(bag: Bag, size = 1) {
@@ -185,10 +188,14 @@ export function buildPark(bag: Bag): Park {
     const x = -15 + rp() * 30
     const z = -8.5 + rp() * 17
     const r = 0.6 + rp() * 1.4
-    patches.push(P.cyl(r, r, 0.02, i % 4 ? SNOW_SHADE : '#E7EAF7', { at: [x, 0.006, z], scale: [1.6, 1, 1] }, 14))
+    patches.push(snowDisc(r, i % 4 ? SNOW_SHADE : '#E7EAF7', x, z, 1.6, 1, 14))
   }
-  for (let i = 0; i < 26; i++) patches.push(P.cyl(0.12, 0.12, 0.02, '#E2E5F4', { at: [-14 + i * 1.1, 0.012, 6.2 + Math.sin(i * 0.5) * 1.2 + (i % 2 ? 0.18 : -0.18)], scale: [1, 1, 1.5] }, 8))
-  root.add(new Mesh(bag.add(merge(patches)), bag.add(new MeshBasicMaterial({ vertexColors: true, polygonOffset: true, polygonOffsetFactor: -1 }))))
+  for (let i = 0; i < 26; i++) patches.push(snowDisc(0.12, '#E2E5F4', -14 + i * 1.1, 6.2 + Math.sin(i * 0.5) * 1.2 + (i % 2 ? 0.18 : -0.18), 1, 1.5, 8))
+  // Flat, and painted in order over the ground without writing depth: overlapping patches (and the footprints on
+  // them) used to sit at one height and fight over every pixel, so the snow shimmered whenever the camera moved.
+  const patchMesh = new Mesh(bag.add(merge(patches)), bag.add(new MeshBasicMaterial({ vertexColors: true, depthWrite: false })))
+  patchMesh.renderOrder = 1
+  root.add(patchMesh)
 
   // ---- Spruces round the park's edges (one mesh), and the park's own trees (each on its own, to shake).
   const edge: BufferGeometry[] = []
@@ -315,13 +322,15 @@ export class Trail {
   private p = new Vector3()
   constructor(bag: Bag, private count = 2400) {
     const geo = bag.add(new PlaneGeometry(1, 1))
-    const mat = bag.add(new MeshBasicMaterial({ color: '#FFFFFF', polygonOffset: true, polygonOffsetFactor: -2 }))
+    // No depth writes: overlapping dabs (and the snow patches under them) are painted in order, oldest first,
+    // instead of fighting over every pixel at one height and shimmering as the camera follows the ball.
+    const mat = bag.add(new MeshBasicMaterial({ color: '#FFFFFF', depthWrite: false }))
     this.mesh = bag.add(new InstancedMesh(geo, mat, count))
     this.mesh.frustumCulled = false
     this.mesh.count = 0
     const greens = [new Color('#A5D99B'), new Color('#97D195'), new Color('#ABDDA0')]
     for (let i = 0; i < count; i++) this.mesh.setColorAt(i, greens[i % 3])
-    this.mesh.renderOrder = 1
+    this.mesh.renderOrder = 2 // over the snow patches (1)
   }
   /** A dab at (x, z), `w` wide, turned to `yaw`, `len` long. */
   add(x: number, z: number, w: number, len: number, yaw: number) {
