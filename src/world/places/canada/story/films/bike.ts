@@ -53,6 +53,8 @@ export const BIKE_IN: StoryFilm = {
     const set = s.use(MOUNTAIN)
     const { top, pool, bike } = set
     const { maple, monty } = s.cast
+    const camera = s.rig.camera
+    const closeUpNear = camera.near
     bath(monty, s.bag)
     set.monty = { chew: (t) => chew(monty, t) }
     // Monty far below, in his bath in the pool (only just to be made out from up here).
@@ -112,6 +114,10 @@ export const BIKE_IN: StoryFilm = {
         sayAt: 0.3,
         hold: 0.3,
         start: () => {
+          // The zoom stays at the summit. Use a farther near plane so distant surfaces and their ink hulls
+          // have enough depth precision to draw in order.
+          camera.near = 50
+          camera.updateProjectionMatrix()
           maple.cheer()
           maple.armsUp = 0
           s.sfx.whoosh()
@@ -134,6 +140,8 @@ export const BIKE_IN: StoryFilm = {
         sayAt: 0.65,
         hold: 0.3,
         start: () => {
+          camera.near = closeUpNear
+          camera.updateProjectionMatrix()
           monty.lean = 0
           top.place(maple, 0.35, 0.1, -40)
         },
