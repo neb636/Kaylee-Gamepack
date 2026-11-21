@@ -5,7 +5,7 @@
   "title": "Canada › Cabin",
   "intro": "The Team Cabin (activities/cabin/): the skate hut beside the canal, where she dresses the team. No stamp, no end.",
   "page": "canada-cabin.html",
-  "audio": null,
+  "audio": "canada-cabin.mp3",
   "lines": 10,
   "seconds": 21,
   "missing": 0,
@@ -15,72 +15,14 @@
       "key": "cabin.first.touch",
       "text": "Dress the team! Drag something on.",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "cabin.first.mouse",
       "text": "Dress the team! Click something to put it on.",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "cabin.love.monty",
-      "text": "Mmm. Fancy.",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "cabin.love.tuque",
-      "text": "Ho ho! Two hats!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "cabin.love.roxy",
-      "text": "Ooh, sneaky!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "cabin.love.misty",
-      "text": "So soft.",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "cabin.love.ollie",
-      "text": "Wheee!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "cabin.love.maple",
-      "text": "Magnifique!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "cabin.gus",
-      "text": "Honk! ...I look good.",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "cabin.photo",
-      "text": "Team photo! Say maple syrup!",
-      "flags": [
-        "new"
+        "long"
       ]
     }
   ],
@@ -98,8 +40,11 @@
       "when": "",
       "ms": 3024,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        0,
+        2.96
       ]
     },
     {
@@ -115,8 +60,11 @@
       "when": "",
       "ms": 3720,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        3.31,
+        6.96
       ]
     },
     {
@@ -131,8 +79,10 @@
       "part": "cabin › love",
       "when": "A hat a friend loves.",
       "ms": 2040,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        8.58,
+        10.55
       ]
     },
     {
@@ -147,8 +97,10 @@
       "part": "cabin › love",
       "when": "A hat a friend loves.",
       "ms": 2232,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        10.9,
+        13.08
       ]
     },
     {
@@ -163,8 +115,10 @@
       "part": "cabin › love",
       "when": "A hat a friend loves.",
       "ms": 2304,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        13.43,
+        15.68
       ]
     },
     {
@@ -179,8 +133,10 @@
       "part": "cabin › love",
       "when": "A hat a friend loves.",
       "ms": 1608,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        16.03,
+        17.58
       ]
     },
     {
@@ -195,8 +151,10 @@
       "part": "cabin › love",
       "when": "A hat a friend loves.",
       "ms": 816,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        17.93,
+        18.69
       ]
     },
     {
@@ -211,8 +169,10 @@
       "part": "cabin › love",
       "when": "A hat a friend loves.",
       "ms": 1032,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        19.04,
+        20.03
       ]
     },
     {
@@ -226,8 +186,10 @@
       "part": "cabin",
       "when": "Gus pokes his head in at the window: he can have a hat too.",
       "ms": 2376,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        21.65,
+        23.96
       ]
     },
     {
@@ -241,8 +203,10 @@
       "part": "cabin",
       "when": "The mirror takes a team photo.",
       "ms": 2304,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        24.31,
+        26.56
       ]
     }
   ]

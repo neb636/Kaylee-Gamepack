@@ -5,132 +5,31 @@
   "title": "Canada › Whales",
   "intro": "",
   "page": "canada-whales.html",
-  "audio": null,
+  "audio": "canada-whales.mp3",
   "lines": 36,
   "seconds": 82,
   "missing": 0,
   "names": 0,
   "flags": [
     {
-      "key": "whales.filmIn.lucky",
-      "text": "Look! My lucky rock!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "whales.filmIn.took",
-      "text": "My rock! The whale took it!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "whales.filmIn.hop",
-      "text": "Hop on! We'll get it back!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "whales.bubbles.touch",
-      "text": "Bubbles! Tap them!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "whales.bubbles.mouse",
-      "text": "Bubbles! Click them!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "whales.bubblesHint",
-      "text": "Look for the bubbles!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
       "key": "whales.tapWhale.touch",
       "text": "Tap the whale and see what it does!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "whales.tapWhale.mouse",
-      "text": "Click the whale and see what it does!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "whales.seenRock",
-      "text": "Have you seen my rock?",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "whales.seaStar",
-      "text": "That's a sea star, silly!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "whales.hold.touch",
-      "text": "Hold the whale down, then let go!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "whales.hold.mouse",
       "text": "Click and hold the whale, then let go!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "whales.ride",
-      "text": "We're riding a whale!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "whales.babyHas",
-      "text": "My rock! The baby has it!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "whales.peek.touch",
-      "text": "Peek-a-boo! Tap the baby orca!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "whales.peek.mouse",
       "text": "Peek-a-boo! Click the baby orca!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "whales.gotIt",
-      "text": "Got it! Thank you, whales!",
-      "flags": [
-        "new"
+        "long"
       ]
     }
   ],
@@ -147,7 +46,11 @@
       "part": "whales › filmIn",
       "when": "Whale Peek-a-Boo (activities/whales/; planning/around-the-world/canada-round-2.md, section 3): a whale's spout blew Ollie's lucky rock out to sea; bubbles come up by the boat, she touches them and a whale peeks out. The film in (story/films/whales.ts): the kelp off Tofino, Ollie juggling her lucky rock on her tummy.",
       "ms": 2520,
-      "flags": []
+      "flags": [],
+      "span": [
+        0,
+        2.46
+      ]
     },
     {
       "path": [
@@ -161,8 +64,10 @@
       "part": "whales › filmIn",
       "when": "Whale Peek-a-Boo (activities/whales/; planning/around-the-world/canada-round-2.md, section 3): a whale's spout blew Ollie's lucky rock out to sea; bubbles come up by the boat, she touches them and a whale peeks out. The film in (story/films/whales.ts): the kelp off Tofino, Ollie juggling her lucky rock on her tummy.",
       "ms": 2304,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        2.81,
+        5.05
       ]
     },
     {
@@ -177,8 +82,10 @@
       "part": "whales › filmIn",
       "when": "Higher, higher... a whale comes up under it. The spout shoots the rock into the sky and away. (Also Ollie's one line when the game opens from a link or a replay.)",
       "ms": 2688,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        5.4,
+        8.03
       ]
     },
     {
@@ -193,8 +100,10 @@
       "part": "whales › filmIn",
       "when": "Whale Peek-a-Boo (activities/whales/; planning/around-the-world/canada-round-2.md, section 3): a whale's spout blew Ollie's lucky rock out to sea; bubbles come up by the boat, she touches them and a whale peeks out. The film in (story/films/whales.ts): the kelp off Tofino, Ollie juggling her lucky rock on her tummy.",
       "ms": 2040,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        8.38,
+        10.37
       ]
     },
     {
@@ -209,8 +118,10 @@
       "part": "whales › bubbles",
       "when": "The game opens (Sparkle): bubbles by the boat. Stuck about 8 s with the bubbles up: the hint.",
       "ms": 2160,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        11.99,
+        14.08
       ]
     },
     {
@@ -225,8 +136,10 @@
       "part": "whales › bubbles",
       "when": "",
       "ms": 2088,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        14.43,
+        16.45
       ]
     },
     {
@@ -240,8 +153,10 @@
       "part": "whales",
       "when": "",
       "ms": 1608,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        18.07,
+        19.62
       ]
     },
     {
@@ -255,7 +170,11 @@
       "part": "whales",
       "when": "The grey whale peeks out (Maple), then Sparkle, once (and again as the hint when she's stuck).",
       "ms": 2352,
-      "flags": []
+      "flags": [],
+      "span": [
+        19.97,
+        22.26
+      ]
     },
     {
       "path": [
@@ -270,8 +189,11 @@
       "when": "",
       "ms": 3744,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        23.88,
+        27.56
       ]
     },
     {
@@ -286,8 +208,10 @@
       "part": "whales › tapWhale",
       "when": "",
       "ms": 2856,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        27.91,
+        30.7
       ]
     },
     {
@@ -301,7 +225,11 @@
       "part": "whales",
       "when": "The blowhole: the spout comes down on the boat (the second time, Maple's soaked face in close-up).",
       "ms": 1824,
-      "flags": []
+      "flags": [],
+      "span": [
+        32.32,
+        34.09
+      ]
     },
     {
       "path": [
@@ -314,7 +242,11 @@
       "part": "whales",
       "when": "",
       "ms": 2256,
-      "flags": []
+      "flags": [],
+      "span": [
+        34.44,
+        36.63
+      ]
     },
     {
       "path": [
@@ -327,8 +259,10 @@
       "part": "whales",
       "when": "The tail (a slap, or held: a push for the boat); after a while Ollie asks, and the tail shows a sea star.",
       "ms": 1752,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        36.98,
+        38.67
       ]
     },
     {
@@ -342,7 +276,11 @@
       "part": "whales",
       "when": "",
       "ms": 1224,
-      "flags": []
+      "flags": [],
+      "span": [
+        39.02,
+        40.18
+      ]
     },
     {
       "path": [
@@ -355,8 +293,10 @@
       "part": "whales",
       "when": "",
       "ms": 2568,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        40.53,
+        43.03
       ]
     },
     {
@@ -371,8 +311,10 @@
       "part": "whales › hold",
       "when": "The humpback is up (Sparkle; and the hint).",
       "ms": 2928,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        44.65,
+        47.51
       ]
     },
     {
@@ -388,8 +330,11 @@
       "when": "",
       "ms": 3336,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        47.86,
+        51.14
       ]
     },
     {
@@ -403,7 +348,11 @@
       "part": "whales",
       "when": "Its first jump, its second.",
       "ms": 2208,
-      "flags": []
+      "flags": [],
+      "span": [
+        52.76,
+        54.92
+      ]
     },
     {
       "path": [
@@ -416,7 +365,11 @@
       "part": "whales",
       "when": "",
       "ms": 2184,
-      "flags": []
+      "flags": [],
+      "span": [
+        55.27,
+        57.41
+      ]
     },
     {
       "path": [
@@ -429,8 +382,10 @@
       "part": "whales",
       "when": "The biggest jump lands the boat on its back.",
       "ms": 1560,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        57.76,
+        59.26
       ]
     },
     {
@@ -444,7 +399,11 @@
       "part": "whales",
       "when": "The yellow microphone: the humpback sings into it.",
       "ms": 1608,
-      "flags": []
+      "flags": [],
+      "span": [
+        59.61,
+        61.17
+      ]
     },
     {
       "path": [
@@ -457,7 +416,11 @@
       "part": "whales",
       "when": "The orcas come; the baby pops up with the rock on its nose; Sparkle (and the hint on the last pop).",
       "ms": 2352,
-      "flags": []
+      "flags": [],
+      "span": [
+        61.52,
+        63.81
+      ]
     },
     {
       "path": [
@@ -470,8 +433,10 @@
       "part": "whales",
       "when": "",
       "ms": 2496,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        64.16,
+        66.59
       ]
     },
     {
@@ -486,8 +451,10 @@
       "part": "whales › peek",
       "when": "",
       "ms": 2232,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        68.21,
+        70.39
       ]
     },
     {
@@ -503,8 +470,11 @@
       "when": "",
       "ms": 3216,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        70.74,
+        73.9
       ]
     },
     {
@@ -518,7 +488,11 @@
       "part": "whales",
       "when": "Grandma comes up; the baby flicks the rock to Ollie; everybody jumps.",
       "ms": 1776,
-      "flags": []
+      "flags": [],
+      "span": [
+        75.52,
+        77.25
+      ]
     },
     {
       "path": [
@@ -531,8 +505,10 @@
       "part": "whales",
       "when": "",
       "ms": 2352,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        77.6,
+        79.9
       ]
     },
     {
@@ -546,7 +522,11 @@
       "part": "whales",
       "when": "",
       "ms": 2976,
-      "flags": []
+      "flags": [],
+      "span": [
+        80.25,
+        83.16
+      ]
     },
     {
       "path": [
@@ -559,7 +539,11 @@
       "part": "whales",
       "when": "Pokes: Maple's boat (its horn), Ollie on the rope.",
       "ms": 792,
-      "flags": []
+      "flags": [],
+      "span": [
+        83.51,
+        84.24
+      ]
     },
     {
       "path": [
@@ -572,7 +556,11 @@
       "part": "whales",
       "when": "",
       "ms": 912,
-      "flags": []
+      "flags": [],
+      "span": [
+        84.59,
+        85.43
+      ]
     },
     {
       "path": [
@@ -585,7 +573,11 @@
       "part": "whales",
       "when": "",
       "ms": 2232,
-      "flags": []
+      "flags": [],
+      "span": [
+        85.78,
+        87.95
+      ]
     },
     {
       "path": [
@@ -599,7 +591,11 @@
       "part": "whales › filmOut",
       "when": "The film out: Ollie on her back in the kelp, juggling her rock while they talk.",
       "ms": 2736,
-      "flags": []
+      "flags": [],
+      "span": [
+        89.57,
+        92.25
+      ]
     },
     {
       "path": [
@@ -613,7 +609,11 @@
       "part": "whales › filmOut",
       "when": "The film out: Ollie on her back in the kelp, juggling her rock while they talk.",
       "ms": 2064,
-      "flags": []
+      "flags": [],
+      "span": [
+        92.6,
+        94.61
+      ]
     },
     {
       "path": [
@@ -627,7 +627,11 @@
       "part": "whales › filmOut",
       "when": "The film out: Ollie on her back in the kelp, juggling her rock while they talk.",
       "ms": 2400,
-      "flags": []
+      "flags": [],
+      "span": [
+        94.96,
+        97.3
+      ]
     },
     {
       "path": [
@@ -641,7 +645,11 @@
       "part": "whales › filmOut",
       "when": "She spins on her back like a top.",
       "ms": 2928,
-      "flags": []
+      "flags": [],
+      "span": [
+        97.65,
+        100.51
+      ]
     },
     {
       "path": [
@@ -655,7 +663,11 @@
       "part": "whales › filmOut",
       "when": "A whale spouts right behind them: everybody is soaked.",
       "ms": 2352,
-      "flags": []
+      "flags": [],
+      "span": [
+        100.86,
+        103.16
+      ]
     }
   ]
 }

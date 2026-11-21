@@ -27,74 +27,74 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
 <header>
 <h1>Table read: Canada › Cabin</h1>
 <p class="intro">The Team Cabin (activities/cabin/): the skate hut beside the canal, where she dresses the team. No stamp, no end.</p>
-<p class="sum">10 lines · 0.4 min of talk · her name 0× · 10 flagged</p>
+<p class="sum">10 lines · 0.4 min of talk · her name 0× · 2 flagged</p>
 <ul class="cast"><li style="--h:330"><b>Sparkle</b> 2 lines <small>coral voice</small></li><li style="--h:265"><b>Monty</b> 1 lines <small>onyx voice</small></li><li style="--h:190"><b>Tuque</b> 1 lines <small>verse voice</small></li><li style="--h:25"><b>Roxy</b> 1 lines <small>ash voice</small></li><li style="--h:140"><b>Misty</b> 1 lines <small>sage voice</small></li><li style="--h:45"><b>Ollie</b> 1 lines <small>coral voice</small></li><li style="--h:300"><b>Maple</b> 2 lines <small>nova voice</small></li><li style="--h:210"><b>Gus</b> 1 lines <small>ballad voice</small></li></ul>
 </header>
-<div class="player"><p class="sum">No audio yet (no recorded lines, or no ffmpeg).</p></div>
+<div class="player"><audio controls preload="metadata" src="canada-cabin.mp3"></audio></div>
 <main>
 <h2>cabin › first</h2><button class="line" data-i="0" style="--h:330">
   <span class="who">Sparkle</span>
   <span class="text">Dress the team! Drag something on.</span>
   
-  <span class="meta">3.0 s<b class="flag long">long</b><b class="flag new">new</b></span>
+  <span class="meta">3.0 s<b class="flag long">long</b></span>
 </button>
 <button class="line" data-i="1" style="--h:330">
   <span class="who">Sparkle</span>
   <span class="text">Dress the team! Click something to put it on.</span>
   
-  <span class="meta">3.7 s<b class="flag long">long</b><b class="flag new">new</b></span>
+  <span class="meta">3.7 s<b class="flag long">long</b></span>
 </button>
 <h2>cabin › love</h2><button class="line" data-i="2" style="--h:265">
   <span class="who">Monty</span>
   <span class="text">Mmm. Fancy.</span>
   <span class="when">A hat a friend loves.</span>
-  <span class="meta">2.0 s<b class="flag new">new</b></span>
+  <span class="meta">2.0 s</span>
 </button>
 <button class="line" data-i="3" style="--h:190">
   <span class="who">Tuque</span>
   <span class="text">Ho ho! Two hats!</span>
   
-  <span class="meta">2.2 s<b class="flag new">new</b></span>
+  <span class="meta">2.2 s</span>
 </button>
 <button class="line" data-i="4" style="--h:25">
   <span class="who">Roxy</span>
   <span class="text">Ooh, sneaky!</span>
   
-  <span class="meta">2.3 s<b class="flag new">new</b></span>
+  <span class="meta">2.3 s</span>
 </button>
 <button class="line" data-i="5" style="--h:140">
   <span class="who">Misty</span>
   <span class="text">So soft.</span>
   
-  <span class="meta">1.6 s<b class="flag new">new</b></span>
+  <span class="meta">1.6 s</span>
 </button>
 <button class="line" data-i="6" style="--h:45">
   <span class="who">Ollie</span>
   <span class="text">Wheee!</span>
   
-  <span class="meta">0.8 s<b class="flag new">new</b></span>
+  <span class="meta">0.8 s</span>
 </button>
 <button class="line" data-i="7" style="--h:300">
   <span class="who">Maple</span>
   <span class="text">Magnifique!</span>
   
-  <span class="meta">1.0 s<b class="flag new">new</b></span>
+  <span class="meta">1.0 s</span>
 </button>
 <h2>cabin</h2><button class="line" data-i="8" style="--h:210">
   <span class="who">Gus</span>
   <span class="text">Honk! ...I look good.</span>
   <span class="when">Gus pokes his head in at the window: he can have a hat too.</span>
-  <span class="meta">2.4 s<b class="flag new">new</b></span>
+  <span class="meta">2.4 s</span>
 </button>
 <button class="line" data-i="9" style="--h:300">
   <span class="who">Maple</span>
   <span class="text">Team photo! Say maple syrup!</span>
   <span class="when">The mirror takes a team photo.</span>
-  <span class="meta">2.3 s<b class="flag new">new</b></span>
+  <span class="meta">2.3 s</span>
 </button>
 </main>
 <script>
-const spans=[null,null,null,null,null,null,null,null,null,null];const a=document.querySelector('audio');let stop=null,cur=null
+const spans=[[0,2.96],[3.31,6.96],[8.58,10.55],[10.9,13.08],[13.43,15.68],[16.03,17.58],[17.93,18.69],[19.04,20.03],[21.65,23.96],[24.31,26.56]];const a=document.querySelector('audio');let stop=null,cur=null
 const mark=(el)=>{cur?.classList.remove('playing');cur=el;el?.classList.add('playing')}
 document.querySelectorAll('.line').forEach(el=>el.addEventListener('click',()=>{const s=spans[+el.dataset.i];if(!a||!s)return;a.currentTime=s[0];stop=s[1];mark(el);a.play()}))
 a?.addEventListener('timeupdate',()=>{if(stop!==null&&a.currentTime>=stop){a.pause();stop=null}

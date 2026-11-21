@@ -4,7 +4,7 @@
   "title": "Campfire",
   "video": "campfire.mp4",
   "gif": "campfire.gif",
-  "seconds": 143,
+  "seconds": 155,
   "browser": "webkit",
   "viewport": "ipad-landscape",
   "moments": [
@@ -12,35 +12,35 @@
       "name": "canada-campfire-light",
       "where": "canada-campfire-light",
       "seconds": 12,
-      "fps": 14,
+      "fps": 39,
       "status": "ok"
     },
     {
       "name": "canada-campfire-peek",
       "where": "canada-campfire-peek",
       "seconds": 30,
-      "fps": 16.7,
+      "fps": 37.5,
       "status": "ok"
     },
     {
       "name": "canada-campfire-statues",
       "where": "canada-campfire-statues",
       "seconds": 45,
-      "fps": 25.1,
+      "fps": 41.6,
       "status": "ok"
     },
     {
       "name": "canada-campfire-roast",
       "where": "canada-campfire-roast",
-      "seconds": 34,
-      "fps": 20.7,
+      "seconds": 46,
+      "fps": 40.3,
       "status": "ok"
     },
     {
       "name": "canada-campfire-sky",
       "where": "canada-campfire-sky",
       "seconds": 14,
-      "fps": 20,
+      "fps": 45.9,
       "status": "ok"
     }
   ]

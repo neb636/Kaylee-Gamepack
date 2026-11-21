@@ -4,7 +4,7 @@
   "title": "Canada cabin",
   "video": "canada-cabin.mp4",
   "gif": "canada-cabin.gif",
-  "seconds": 48,
+  "seconds": 98,
   "browser": "webkit",
   "viewport": "ipad-landscape",
   "moments": [
@@ -12,28 +12,56 @@
       "name": "canada-cabin-drag",
       "where": "canada-cabin-drag",
       "seconds": 16,
-      "fps": 31.5,
+      "fps": 34.7,
+      "status": "ok"
+    },
+    {
+      "name": "canada-cabin-off",
+      "where": "canada-cabin-off",
+      "seconds": 10,
+      "fps": 42.2,
       "status": "ok"
     },
     {
       "name": "canada-cabin-silly",
       "where": "canada-cabin-silly",
       "seconds": 12,
-      "fps": 45.8,
+      "fps": 48.5,
       "status": "ok"
     },
     {
       "name": "canada-cabin-gus",
       "where": "canada-cabin-gus",
       "seconds": 8,
-      "fps": 57.3,
+      "fps": 55.7,
       "status": "ok"
     },
     {
       "name": "canada-cabin-photo",
       "where": "canada-cabin-photo",
       "seconds": 6,
-      "fps": 40.2,
+      "fps": 47.2,
+      "status": "ok"
+    },
+    {
+      "name": "canada-cabin-alone",
+      "where": "canada-cabin-alone",
+      "seconds": 5,
+      "fps": 58.3,
+      "status": "ok"
+    },
+    {
+      "name": "canada-cabin-mouse",
+      "where": "canada-cabin-mouse",
+      "seconds": 16,
+      "fps": 51.4,
+      "status": "ok"
+    },
+    {
+      "name": "canada-cabin-tap",
+      "where": "canada-cabin-tap",
+      "seconds": 12,
+      "fps": 44.8,
       "status": "ok"
     }
   ]

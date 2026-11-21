@@ -5,7 +5,7 @@
   "title": "Canada › Campfire",
   "intro": "",
   "page": "canada-campfire.html",
-  "audio": null,
+  "audio": "canada-campfire.mp3",
   "lines": 43,
   "seconds": 111,
   "missing": 0,
@@ -29,8 +29,7 @@
       "key": "campfire.story",
       "text": "Shh! Somebody is watching us from the dark.",
       "flags": [
-        "long",
-        "reused"
+        "long"
       ]
     },
     {
@@ -48,75 +47,17 @@
       ]
     },
     {
-      "key": "campfire.fireBright",
-      "text": "It's already bright!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
       "key": "campfire.giggle",
       "text": "Somebody is giggling! Catch them in the light!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "campfire.kitHint",
-      "text": "Shine the light on the wiggly tail!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "campfire.kits",
-      "text": "Three little raccoons! Where is your mama?",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
       "key": "campfire.sneak",
       "text": "Roxy is sneaking! Shine the light and she stops!",
       "flags": [
-        "long",
-        "new"
-      ]
-    },
-    {
-      "key": "campfire.statues.0",
-      "text": "I'm a tree.",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "campfire.statues.1",
-      "text": "I'm a rock.",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "campfire.statues.2",
-      "text": "Nobody here!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "campfire.statues.3",
-      "text": "Just stretching!",
-      "flags": [
-        "new"
-      ]
-    },
-    {
-      "key": "campfire.yoink",
-      "text": "Yoink!",
-      "flags": [
-        "new"
+        "long"
       ]
     },
     {
@@ -144,32 +85,28 @@
       "key": "campfire.montyStick",
       "text": "Mmm. Crunchy stick.",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "campfire.off.touch",
       "text": "Now tap the flashlight to turn it off!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "campfire.off.mouse",
       "text": "Now click the flashlight to turn it off!",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
       "key": "campfire.lights",
       "text": "The northern lights! They dance over Canada.",
       "flags": [
-        "long",
-        "new"
+        "long"
       ]
     },
     {
@@ -202,6 +139,10 @@
       "ms": 3264,
       "flags": [
         "long"
+      ],
+      "span": [
+        0,
+        3.19
       ]
     },
     {
@@ -218,6 +159,10 @@
       "ms": 3168,
       "flags": [
         "long"
+      ],
+      "span": [
+        3.54,
+        6.65
       ]
     },
     {
@@ -232,8 +177,11 @@
       "when": "---- The game, Flashlight Statues (planning/around-the-world/canada-round-2.md, part 2): her finger is the flashlight. From a link or a replay Maple says hello first; after the film it starts at Sparkle's instruction.",
       "ms": 3336,
       "flags": [
-        "long",
-        "reused"
+        "long"
+      ],
+      "span": [
+        8.27,
+        11.53
       ]
     },
     {
@@ -248,7 +196,11 @@
       "part": "campfire › eyes",
       "when": "Sparkle: the game opens (the line at the bottom plays it again), and her hint when nothing new has been lit for 8 s.",
       "ms": 2258,
-      "flags": []
+      "flags": [],
+      "span": [
+        13.15,
+        15.41
+      ]
     },
     {
       "path": [
@@ -264,6 +216,10 @@
       "ms": 3864,
       "flags": [
         "long"
+      ],
+      "span": [
+        15.76,
+        19.56
       ]
     },
     {
@@ -277,7 +233,11 @@
       "part": "campfire",
       "when": "",
       "ms": 2218,
-      "flags": []
+      "flags": [],
+      "span": [
+        21.18,
+        23.4
+      ]
     },
     {
       "path": [
@@ -290,7 +250,11 @@
       "part": "campfire",
       "when": "Who's out there: the light lands on them (each says it the first time).",
       "ms": 2445,
-      "flags": []
+      "flags": [],
+      "span": [
+        23.75,
+        26.19
+      ]
     },
     {
       "path": [
@@ -303,7 +267,11 @@
       "part": "campfire",
       "when": "Monty squints in the light; then on go his sunglasses.",
       "ms": 2088,
-      "flags": []
+      "flags": [],
+      "span": [
+        26.54,
+        28.58
+      ]
     },
     {
       "path": [
@@ -318,6 +286,10 @@
       "ms": 3864,
       "flags": [
         "long"
+      ],
+      "span": [
+        28.93,
+        32.74
       ]
     },
     {
@@ -331,7 +303,11 @@
       "part": "campfire",
       "when": "The porcupine puffs into a prickly ball.",
       "ms": 1848,
-      "flags": []
+      "flags": [],
+      "span": [
+        33.09,
+        34.86
+      ]
     },
     {
       "path": [
@@ -344,7 +320,11 @@
       "part": "campfire",
       "when": "Light on Maple: she makes shadow bunnies with her paws.",
       "ms": 2184,
-      "flags": []
+      "flags": [],
+      "span": [
+        35.21,
+        37.33
+      ]
     },
     {
       "path": [
@@ -357,8 +337,10 @@
       "part": "campfire",
       "when": "The light held on the fire: nothing happens.",
       "ms": 1488,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        37.68,
+        39.11
       ]
     },
     {
@@ -373,8 +355,11 @@
       "when": "Giggling starts in the dark (Sparkle): peek-a-boo with Roxy's kits. A kit's tail sticks out after ~8 s.",
       "ms": 4536,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        39.46,
+        43.95
       ]
     },
     {
@@ -388,8 +373,10 @@
       "part": "campfire",
       "when": "",
       "ms": 2976,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        44.3,
+        47.21
       ]
     },
     {
@@ -403,8 +390,10 @@
       "part": "campfire",
       "when": "Three kits at the fire.",
       "ms": 2640,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        47.56,
+        50.13
       ]
     },
     {
@@ -419,8 +408,11 @@
       "when": "Statues: Roxy sneaks toward the marshmallow bag whenever the light is off her (Sparkle; and her hint).",
       "ms": 5160,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        50.48,
+        55.58
       ]
     },
     {
@@ -435,8 +427,10 @@
       "part": "campfire › statues",
       "when": "Her statues (one each time she's caught in the beam): the tree, the rock, the whistle, the stretch.",
       "ms": 1440,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        57.2,
+        58.58
       ]
     },
     {
@@ -451,8 +445,10 @@
       "part": "campfire › statues",
       "when": "",
       "ms": 1440,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        58.93,
+        60.31
       ]
     },
     {
@@ -467,8 +463,10 @@
       "part": "campfire › statues",
       "when": "",
       "ms": 1176,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        60.66,
+        61.77
       ]
     },
     {
@@ -483,8 +481,10 @@
       "part": "campfire › statues",
       "when": "",
       "ms": 1560,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        62.12,
+        63.62
       ]
     },
     {
@@ -498,8 +498,10 @@
       "part": "campfire",
       "when": "She reaches the bag.",
       "ms": 744,
-      "flags": [
-        "new"
+      "flags": [],
+      "span": [
+        65.24,
+        65.93
       ]
     },
     {
@@ -513,7 +515,11 @@
       "part": "campfire",
       "when": "She has fallen over laughing three times: she gives up.",
       "ms": 2808,
-      "flags": []
+      "flags": [],
+      "span": [
+        66.28,
+        69.02
+      ]
     },
     {
       "path": [
@@ -526,7 +532,11 @@
       "part": "campfire",
       "when": "The roast: Maple, then Sparkle; on fire (Sparkle); her hint with a toasted one in hand.",
       "ms": 1104,
-      "flags": []
+      "flags": [],
+      "span": [
+        69.37,
+        70.43
+      ]
     },
     {
       "path": [
@@ -540,7 +550,11 @@
       "part": "campfire › marshmallow",
       "when": "",
       "ms": 2743,
-      "flags": []
+      "flags": [],
+      "span": [
+        72.05,
+        74.79
+      ]
     },
     {
       "path": [
@@ -554,7 +568,11 @@
       "part": "campfire › marshmallow",
       "when": "",
       "ms": 2808,
-      "flags": []
+      "flags": [],
+      "span": [
+        75.14,
+        77.89
+      ]
     },
     {
       "path": [
@@ -570,6 +588,10 @@
       "ms": 3916,
       "flags": [
         "long"
+      ],
+      "span": [
+        79.51,
+        83.43
       ]
     },
     {
@@ -586,6 +608,10 @@
       "ms": 3120,
       "flags": [
         "long"
+      ],
+      "span": [
+        83.78,
+        86.85
       ]
     },
     {
@@ -601,6 +627,10 @@
       "ms": 3004,
       "flags": [
         "long"
+      ],
+      "span": [
+        88.47,
+        91.47
       ]
     },
     {
@@ -614,7 +644,11 @@
       "part": "campfire",
       "when": "Who gets it: Maple likes golden, Roxy and the kits love burnt, Monty eats the stick.",
       "ms": 1416,
-      "flags": []
+      "flags": [],
+      "span": [
+        91.82,
+        93.17
+      ]
     },
     {
       "path": [
@@ -627,7 +661,11 @@
       "part": "campfire",
       "when": "",
       "ms": 1968,
-      "flags": []
+      "flags": [],
+      "span": [
+        93.52,
+        95.42
+      ]
     },
     {
       "path": [
@@ -640,7 +678,11 @@
       "part": "campfire",
       "when": "",
       "ms": 1560,
-      "flags": []
+      "flags": [],
+      "span": [
+        95.77,
+        97.28
+      ]
     },
     {
       "path": [
@@ -653,7 +695,11 @@
       "part": "campfire",
       "when": "",
       "ms": 2208,
-      "flags": []
+      "flags": [],
+      "span": [
+        97.63,
+        99.77
+      ]
     },
     {
       "path": [
@@ -666,7 +712,11 @@
       "part": "campfire",
       "when": "",
       "ms": 1728,
-      "flags": []
+      "flags": [],
+      "span": [
+        100.12,
+        101.78
+      ]
     },
     {
       "path": [
@@ -680,8 +730,11 @@
       "when": "",
       "ms": 3168,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        102.13,
+        105.24
       ]
     },
     {
@@ -697,8 +750,11 @@
       "when": "The end (Sparkle): the flashlight goes off; the stars come out (Maple), then the northern lights (Sparkle).",
       "ms": 3144,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        106.86,
+        109.93
       ]
     },
     {
@@ -714,8 +770,11 @@
       "when": "",
       "ms": 3120,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        110.28,
+        113.34
       ]
     },
     {
@@ -729,7 +788,11 @@
       "part": "campfire",
       "when": "",
       "ms": 2376,
-      "flags": []
+      "flags": [],
+      "span": [
+        114.96,
+        117.29
+      ]
     },
     {
       "path": [
@@ -743,8 +806,11 @@
       "when": "",
       "ms": 3552,
       "flags": [
-        "long",
-        "new"
+        "long"
+      ],
+      "span": [
+        117.64,
+        121.14
       ]
     },
     {
@@ -758,7 +824,11 @@
       "part": "campfire",
       "when": "Only when no film follows (a replay).",
       "ms": 1920,
-      "flags": []
+      "flags": [],
+      "span": [
+        121.49,
+        123.34
+      ]
     },
     {
       "path": [
@@ -772,7 +842,11 @@
       "part": "campfire › filmOut",
       "when": "The film out: Roxy and her three kits at the fire, a marshmallow each. Maple holds up a puck: a blink, and Roxy has it (the quickest paws in Canada: the picture says it).",
       "ms": 2472,
-      "flags": []
+      "flags": [],
+      "span": [
+        124.96,
+        127.38
+      ]
     },
     {
       "path": [
@@ -788,6 +862,10 @@
       "ms": 3072,
       "flags": [
         "long"
+      ],
+      "span": [
+        127.73,
+        130.75
       ]
     },
     {
@@ -804,6 +882,10 @@
       "ms": 3720,
       "flags": [
         "long"
+      ],
+      "span": [
+        131.1,
+        134.76
       ]
     },
     {
@@ -818,7 +900,11 @@
       "part": "campfire › filmOut",
       "when": "The kits squeak and wave their marshmallow sticks.",
       "ms": 2184,
-      "flags": []
+      "flags": [],
+      "span": [
+        135.11,
+        137.24
+      ]
     }
   ]
 }
