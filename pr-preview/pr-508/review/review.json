@@ -1,7 +1,15 @@
 {
-  "title": "Your iPhones' Home Screen apps go quiet",
+  "title": "Your iPhones go quiet, and show it",
   "checkIn": "fix",
-  "kaylee": "Her play data stops mixing in your phone's play, so her favorites read true.",
+  "kaylee": "Her play data stops mixing in your phones' play. Your devices show a small tester badge; hers never do.",
   "questions": [],
-  "links": []
+  "links": [],
+  "pictures": [
+    {
+      "title": "The landing page",
+      "before": "pics/before.png",
+      "after": "pics/after.png",
+      "caption": "Left: her iPad or any other device. Right: your phone, tagged."
+    }
+  ]
 }
