@@ -127,6 +127,7 @@ export class TeamCabinWorld implements World3D {
   private lights = makeLights(this.scene)
   private room!: Room
   private layoutNow: Layout | null = null
+  private narrow = false
   private seats: Seat[] = []
   private gus: Goose
   private gusAt = { state: 'away' as 'away' | 'up' | 'in' | 'down', t: 0, next: 9, stay: 10 }
@@ -209,8 +210,10 @@ export class TeamCabinWorld implements World3D {
   /** Seats everyone for the screen's shape: one long bench, or (a tall screen) the small ones in front and the big
    *  ones on the step behind, like a team photo. Builds the room for that shape. */
   private arrange(layout: Layout) {
-    if (this.layoutNow === layout) return
+    const narrow = layout === 'wide' && this.h > this.w * 1.05
+    if (this.layoutNow === layout && this.narrow === narrow) return
     this.layoutNow = layout
+    this.narrow = narrow
     if (this.room) {
       this.room.root.removeFromParent()
       this.room.root.traverse((o) => {
@@ -238,7 +241,7 @@ export class TeamCabinWorld implements World3D {
       }
     }
     const half = Math.max(0.4, ...rows[0].map((s) => Math.abs(s.x) + WIDTH[s.who] / 2))
-    this.room = buildRoom(this.bag, layout, half)
+    this.room = buildRoom(this.bag, layout, half, narrow)
     this.scene.add(this.room.root)
     const p = this.room.plan
     for (const [r, row] of rows.entries()) for (const s of row) this.sit(s, r === 0 ? p.bench : p.back!)
@@ -829,8 +832,9 @@ export class TeamCabinWorld implements World3D {
     this.rig.camera.updateProjectionMatrix()
     const sparkleW = Math.min(120, h * 0.16, w * 0.24) + 14
     this.tray.layout(w, h, this.rig.camera, sparkleW, 6)
-    const want: Layout = h > w * 1.05 ? 'tall' : 'wide'
-    if (want !== this.layoutNow) this.arrange(want)
+    // (Two rows only on a tall screen with more than four on the bench: four fit in one row anywhere.)
+    const want: Layout = h > w * 1.05 && this.seats.length > 4 ? 'tall' : 'wide'
+    if (want !== this.layoutNow || this.narrow !== (want === 'wide' && h > w * 1.05)) this.arrange(want)
     else this.frame()
   }
   setAnchorElements(els: Map<string, HTMLElement>) {

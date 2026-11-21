@@ -55,7 +55,7 @@ export interface RoomPlan {
 
 /** The room for a screen shape, the window and the mirror just beyond the ends of the row on the bench (`row`: half
  *  its length), so a small team isn't lost on a long empty wall. */
-export function plan(layout: Layout, row = 3): RoomPlan {
+export function plan(layout: Layout, row = 3, narrow = false): RoomPlan {
   if (layout === 'tall')
     return {
       halfW: 2.9,
@@ -71,8 +71,9 @@ export function plan(layout: Layout, row = 3): RoomPlan {
       stove: [2.4, 0, 0.55],
       lantern: [-0.95, 4.1, 0.3],
     }
-  const wx = -Math.min(2.9, Math.max(1.55, row + 0.9))
-  const mx = Math.min(2.95, Math.max(1.55, row + 0.85))
+  // (On a narrow screen they hang over the ends of the bench instead, so the team stays big.)
+  const wx = narrow ? -Math.max(0.95, row + 0.3) : -Math.min(2.9, Math.max(1.55, row + 0.9))
+  const mx = narrow ? Math.max(0.95, row + 0.3) : Math.min(2.95, Math.max(1.55, row + 0.85))
   return {
     halfW: 4.7,
     wallZ: -1.32,
@@ -115,8 +116,8 @@ function log(parts: ReturnType<typeof P.box>[], x0: number, x1: number, y: numbe
   parts.push(P.capsule(r, Math.max(0.01, len - 2 * r), i % 2 ? LOG : LOG_DARK, { at: [(x0 + x1) / 2, y, z], rot: [0, 0, Math.PI / 2] }))
 }
 
-export function buildRoom(bag: Bag, layout: Layout, row?: number): Room {
-  const p = plan(layout, row)
+export function buildRoom(bag: Bag, layout: Layout, row?: number, narrow = false): Room {
+  const p = plan(layout, row, narrow)
   const root = new Group()
   const W = p.halfW
   const wz = p.wallZ
