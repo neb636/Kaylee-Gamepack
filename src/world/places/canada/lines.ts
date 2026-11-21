@@ -304,62 +304,54 @@ export const L = {
       // A little grey paw comes out of the dark and takes a marshmallow. Then another.
       hey: maple("Hey! My marshmallow! Who's out there?"),
     },
-    // The story (before the first touch, from a link or a replay; after the film the game starts at Sparkle's
-    // instruction): Maple's short hello, then Sparkle's one instruction.
-    story: [maple('Shh! Somebody is watching us from the dark.'), onDevice('Move your finger to shine the light!', 'Click and hold, then move to shine the light!')],
-    // Sparkle: each part's instruction (the prompt bubble plays it again), and her hints when Kaylee is stuck.
+    // ---- The game, Flashlight Statues (planning/around-the-world/canada-round-2.md, part 2): her finger is the
+    // flashlight. From a link or a replay Maple says hello first; after the film it starts at Sparkle's instruction.
+    story: maple('Shh! Somebody is watching us from the dark.'),
+    // Sparkle: the game opens (the line at the bottom plays it again), and her hint when nothing new has been lit for 8 s.
     eyes: onDevice('Move your finger to shine the light!', 'Click and hold, then move to shine the light!'),
     eyesHint: 'Look for shiny eyes in the dark!',
-    allOut: maple('You found everybody!'),
-    sounds: 'Listen! Who made that sound?',
-    soundsHint: 'Shine the light where the sound is.',
-    allSounds: maple('Wow, you found every sound!'),
-    banditGone: maple('Oh no! Now the whole bag is gone!'),
-    bandit: 'Follow the little paw prints!',
-    banditHint: 'Shine the light on the next paw print.',
-    caught: by('raccoon')('Hee hee! Marshmallows for my babies!'),
-    sorry: by('raccoon')("Oops, sorry! Let's share."),
-    roast: maple("Let's roast more!"),
-    marshmallow: onDevice('Hold the marshmallow near the fire.', 'Click and hold the marshmallow near the fire.'),
-    marshmallowHint: 'Give it to Maple or the raccoons.',
-    onFire: onDevice("It's on fire! Tap it to blow it out!", "It's on fire! Click it to blow it out!"),
-    golden: maple('Golden! Yummy!'),
-    squishy: maple('Squishy! Yum anyway.'),
-    tooCrunchy: maple('Too crunchy for me!'),
-    burntYum: by('raccoon')('Crunchy! My favorite!'),
-    munch: by('raccoon')('Crunch, munch!'),
-    stars: 'Now shine the light at the sky!',
-    starsHint: 'Shine the light up high!',
-    fullSky: maple('Look! The sky is full of stars!'),
-    goodnight: maple('Goodnight, little campsite!'),
-    // The friends, when she pokes them.
+    // Who's out there: the light lands on them (each says it the first time).
     owl: by('owl')('Who cooks for you? Hoo hoo!'),
-    raccoonHi: by('raccoon')('Hee hee! You found me!'),
+    // Monty squints in the light; then on go his sunglasses.
+    mooseBright: monty('Whoa! Too bright!'),
+    mooseShades: monty('Ahh. Sunglasses. Much better.'),
+    // The porcupine puffs into a prickly ball.
     porcupine: maple('Ouch! Prickly!'),
-    mooseBright: by('moose')('Whoa! Too bright!'),
-    mooseShades: by('moose')('Ahh. Sunglasses. Much better.'),
-    mooseHi: by('moose')('Mmm. Hello there.'),
+    // Light on Maple: she makes shadow bunnies with her paws.
     mapleHi: maple('Hee hee! That tickles!'),
-    tent: maple('Shh! Someone is sleeping.'),
-    // ---- Round two (Flashlight Statues, planning/around-the-world/canada-round-2.md). The new lines:
-    // Giggling starts in the dark (Sparkle); a kit's tail sticks out after ~8 s.
+    // The light held on the fire: nothing happens.
+    fireBright: maple("It's already bright!"),
+    // Giggling starts in the dark (Sparkle): peek-a-boo with Roxy's kits. A kit's tail sticks out after ~8 s.
     giggle: 'Somebody is giggling! Catch them in the light!',
     kitHint: 'Shine the light on the wiggly tail!',
     // Three kits at the fire.
     kits: maple('Three little raccoons! Where is your mama?'),
-    // Roxy sneaks toward the marshmallow bag whenever the light is off her.
+    // Statues: Roxy sneaks toward the marshmallow bag whenever the light is off her (Sparkle; and her hint).
     sneak: 'Roxy is sneaking! Shine the light and she stops!',
-    // Her statues (one each time she's caught in the beam).
+    // Her statues (one each time she's caught in the beam): the tree, the rock, the whistle, the stretch.
     statues: [roxy("I'm a tree."), roxy("I'm a rock."), roxy('Nobody here!'), roxy('Just stretching!')],
     // She reaches the bag.
     yoink: roxy('Yoink!'),
-    // Monty gets a marshmallow: he eats the stick.
+    // She has fallen over laughing three times: she gives up.
+    sorry: roxy("Oops, sorry! Let's share."),
+    // The roast: Maple, then Sparkle; on fire (Sparkle); her hint with a toasted one in hand.
+    roast: maple("Let's roast more!"),
+    marshmallow: onDevice('Hold the marshmallow near the fire.', 'Click and hold the marshmallow near the fire.'),
+    onFire: onDevice("It's on fire! Tap it to blow it out!", "It's on fire! Click it to blow it out!"),
+    marshmallowHint: 'Give it to Maple or the raccoons.',
+    // Who gets it: Maple likes golden, Roxy and the kits love burnt, Monty eats the stick.
+    golden: maple('Golden! Yummy!'),
+    squishy: maple('Squishy! Yum anyway.'),
+    tooCrunchy: maple('Too crunchy for me!'),
+    burntYum: roxy('Crunchy! My favorite!'),
+    munch: roxy('Crunch, munch!'),
     montyStick: monty('Mmm. Crunchy stick.'),
-    // The light held on the fire.
-    fireBright: maple("It's already bright!"),
-    // The end: the flashlight goes off, the stars come out, then the northern lights.
+    // The end (Sparkle): the flashlight goes off; the stars come out (Maple), then the northern lights (Sparkle).
     off: onDevice('Now tap the flashlight to turn it off!', 'Now click the flashlight to turn it off!'),
+    fullSky: maple('Look! The sky is full of stars!'),
     lights: 'The northern lights! They dance over Canada.',
+    // Only when no film follows (a replay).
+    goodnight: maple('Goodnight, little campsite!'),
     // The film out: Roxy and her three kits at the fire, a marshmallow each. Maple holds up a puck: a blink, and Roxy
     // has it (the quickest paws in Canada: the picture says it).
     filmOut: {
