@@ -476,79 +476,8 @@
   "Click and hold, then move to shine the light!",
   "Look for shiny eyes in the dark!",
   {
-    "text": "You found everybody!",
-    "voice": "maple"
-  },
-  "Listen! Who made that sound?",
-  "Shine the light where the sound is.",
-  {
-    "text": "Wow, you found every sound!",
-    "voice": "maple"
-  },
-  {
-    "text": "Oh no! Now the whole bag is gone!",
-    "voice": "maple"
-  },
-  "Follow the little paw prints!",
-  "Shine the light on the next paw print.",
-  {
-    "text": "Hee hee! Marshmallows for my babies!",
-    "voice": "raccoon"
-  },
-  {
-    "text": "Oops, sorry! Let's share.",
-    "voice": "raccoon"
-  },
-  {
-    "text": "Let's roast more!",
-    "voice": "maple"
-  },
-  "Hold the marshmallow near the fire.",
-  "Click and hold the marshmallow near the fire.",
-  "Give it to Maple or the raccoons.",
-  "It's on fire! Tap it to blow it out!",
-  "It's on fire! Click it to blow it out!",
-  {
-    "text": "Golden! Yummy!",
-    "voice": "maple"
-  },
-  {
-    "text": "Squishy! Yum anyway.",
-    "voice": "maple"
-  },
-  {
-    "text": "Too crunchy for me!",
-    "voice": "maple"
-  },
-  {
-    "text": "Crunchy! My favorite!",
-    "voice": "raccoon"
-  },
-  {
-    "text": "Crunch, munch!",
-    "voice": "raccoon"
-  },
-  "Now shine the light at the sky!",
-  "Shine the light up high!",
-  {
-    "text": "Look! The sky is full of stars!",
-    "voice": "maple"
-  },
-  {
-    "text": "Goodnight, little campsite!",
-    "voice": "maple"
-  },
-  {
     "text": "Who cooks for you? Hoo hoo!",
     "voice": "owl"
-  },
-  {
-    "text": "Hee hee! You found me!",
-    "voice": "raccoon"
-  },
-  {
-    "text": "Ouch! Prickly!",
-    "voice": "maple"
   },
   {
     "text": "Whoa! Too bright!",
@@ -559,15 +488,15 @@
     "voice": "moose"
   },
   {
-    "text": "Mmm. Hello there.",
-    "voice": "moose"
+    "text": "Ouch! Prickly!",
+    "voice": "maple"
   },
   {
     "text": "Hee hee! That tickles!",
     "voice": "maple"
   },
   {
-    "text": "Shh! Someone is sleeping.",
+    "text": "It's already bright!",
     "voice": "maple"
   },
   "Somebody is giggling! Catch them in the light!",
@@ -598,16 +527,53 @@
     "voice": "raccoon"
   },
   {
+    "text": "Oops, sorry! Let's share.",
+    "voice": "raccoon"
+  },
+  {
+    "text": "Let's roast more!",
+    "voice": "maple"
+  },
+  "Hold the marshmallow near the fire.",
+  "Click and hold the marshmallow near the fire.",
+  "It's on fire! Tap it to blow it out!",
+  "It's on fire! Click it to blow it out!",
+  "Give it to Maple or the raccoons.",
+  {
+    "text": "Golden! Yummy!",
+    "voice": "maple"
+  },
+  {
+    "text": "Squishy! Yum anyway.",
+    "voice": "maple"
+  },
+  {
+    "text": "Too crunchy for me!",
+    "voice": "maple"
+  },
+  {
+    "text": "Crunchy! My favorite!",
+    "voice": "raccoon"
+  },
+  {
+    "text": "Crunch, munch!",
+    "voice": "raccoon"
+  },
+  {
     "text": "Mmm. Crunchy stick.",
     "voice": "moose"
   },
-  {
-    "text": "It's already bright!",
-    "voice": "maple"
-  },
   "Now tap the flashlight to turn it off!",
   "Now click the flashlight to turn it off!",
+  {
+    "text": "Look! The sky is full of stars!",
+    "voice": "maple"
+  },
   "The northern lights! They dance over Canada.",
+  {
+    "text": "Goodnight, little campsite!",
+    "voice": "maple"
+  },
   {
     "text": "Hee hee! Got your puck!",
     "voice": "raccoon"

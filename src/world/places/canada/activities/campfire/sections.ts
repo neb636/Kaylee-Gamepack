@@ -1,19 +1,23 @@
-// Campfire Night (plan: planning/around-the-world/canada.md): a dark campsite at the foot of Mont-Sainte-Anne, lit
-// only by the flashlight that follows her finger. #/world/canada/campfire/<section>?found=4
-// A section link sets the scene up as if she had played to there. Loaded at startup by the section index.
+// Campfire Night, in 3D: Flashlight Statues (plan: planning/around-the-world/canada-round-2.md, part 2). One clearing
+// at night; her finger is the flashlight, and whoever it lands on freezes with a silly face.
+// #/world/canada/campfire/<section>?kits=2. A section link sets the clearing up as if she had played to there (and
+// skips Maple's hello). ?feel=1 opens the feel lab on the light's knobs. Loaded at startup by the section index (keep
+// three.js out of this file).
 import { defineSections } from '../../../../kit/sections'
 
 const CAMPFIRE_SECTIONS = defineSections('canada', 'campfire', {
   params: {
-    found: { default: '', doc: 'the night animals she has met so far: a number for the first N of Maple’s book (owl, raccoon, deer, frog, beaver, hare, porcupine, kits), or a comma list of those ids when she met them out of order (empty = what that section starts with: 0, 4, 6 or 8)' },
+    kits: { default: '0', values: ['0', '1', '2'], doc: 'peek-a-boo: how many of the three kits are already at the fire' },
+    laughs: { default: '0', values: ['0', '1', '2'], doc: 'statues: how many times Roxy has already fallen over laughing (three and she gives up)' },
+    roasted: { default: '0', values: ['0', '1', '2'], doc: 'the roast: how many marshmallows she has already handed out (three and the flashlight goes off)' },
   },
   sections: [
-    { id: 'story', name: 'Something is out there (Maple)', params: [] },
-    { id: 'eyes', name: 'Find the eyes', params: ['found'] },
-    { id: 'sounds', name: 'Who’s that sound?', params: ['found'], links: [{ label: 'Who’s that sound?', params: { found: '4' } }] },
-    { id: 'bandit', name: 'The marshmallow bandit', params: ['found'], links: [{ label: 'The marshmallow bandit', params: { found: '6' } }] },
-    { id: 'marshmallow', name: 'Roast a marshmallow', params: ['found'] },
-    { id: 'stars', name: 'Around the fire', params: ['found'], links: [{ label: 'Around the fire', params: { found: '8' } }] },
+    { id: 'story', name: 'Somebody is watching (Maple)', params: [] },
+    { id: 'eyes', name: 'Who’s out there?', params: [], links: [{ label: 'Who’s out there?', also: [{ label: 'feel lab', flags: { feel: '1' } }] }] },
+    { id: 'peek', name: 'Peek-a-boo with the kits', params: ['kits'], links: [{ label: 'Peek-a-boo with the kits', also: [{ label: 'the last kit', params: { kits: '2' } }] }] },
+    { id: 'statues', name: 'Statues with Roxy', params: ['laughs'], links: [{ label: 'Statues with Roxy', also: [{ label: 'the last laugh', params: { laughs: '2' } }, { label: 'feel lab', flags: { feel: '1' } }] }] },
+    { id: 'roast', name: 'Roast a marshmallow', params: ['roasted'] },
+    { id: 'sky', name: 'Lights off: the stars and the northern lights', params: [] },
   ],
 })
 export default CAMPFIRE_SECTIONS
