@@ -40,7 +40,7 @@ export class Goose extends ToyActor {
   /** The silly faces, built the first time each is pulled, and the one showing. */
   private sillies = new Map<Silly, { root: Group; spin: Group[] }>()
   private sillyOn: Silly | null = null
-  /** Where a hat and a scarf sit on Gus (the Team Cabin, characters/worn.ts): his head, and his neck under the band. */
+  /** Where a hat and a scarf sit on Gus (the Team Cabin, characters/worn.ts): his head, and his neck above the band. */
   readonly spots: ToySpots = { hat: new Group(), neck: new Group() }
 
   constructor(
@@ -114,8 +114,10 @@ export class Goose extends ToyActor {
     this.body.add(this.neck)
     this.spots.hat.position.copy(this.headAt)
     this.spots.hat.userData = { R }
-    this.spots.neck.position.set(0, 0.02 * H, 0)
-    this.spots.neck.userData = { r: 0.075 * H }
+    // (A scarf goes round the middle of his long neck, above the captain's band: lower down it sinks into his chest.)
+    this.spots.neck.position.set(0, 0.2 * H, 0.012 * H)
+    this.spots.neck.rotation.x = 0.12
+    this.spots.neck.userData = { r: 0.066 * H }
     this.neck.add(this.spots.hat, this.spots.neck)
   }
 

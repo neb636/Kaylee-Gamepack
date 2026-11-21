@@ -9,12 +9,12 @@ import { Bag } from '../../../../engine3d/dispose'
 import { setOutlineResolution } from '../../../../engine3d/outline'
 import { makeLights } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
-import { dressToy, dressWorn } from '../../characters/dress'
+import { dressMisty, dressToy, dressWorn } from '../../characters/dress'
 import { Goose } from '../../characters/goose'
 import { Lulu } from '../../characters/lulu'
 import type { Performer, ToyActor } from '../../characters/toy'
 import { Tuque } from '../../characters/tuque'
-import { CHEEKS, HATS, JERSEYS, SCARVES, type TeamId, type Worn } from '../../looks'
+import { CHEEKS, HATS, JERSEYS, mistyLook, SCARVES, type TeamId, type Worn } from '../../looks'
 import { Friend } from '../../story/cast'
 
 const WHO: TeamId[] = ['maple', 'monty', 'roxy', 'misty', 'ollie', 'tuque', 'lulu', 'gus']
@@ -79,6 +79,8 @@ export class FittingWorld implements World3D {
     const species = { maple: 'maple', monty: 'moose', roxy: 'raccoon', misty: 'spirit', ollie: 'otter' } as const
     const f = new Friend(species[who as keyof typeof species], this.bag, { height: who === 'monty' ? 1.7 : who === 'misty' ? 1.35 : 1.0, plain: true })
     if (who !== 'maple') f.scarf(true)
+    // (With `&look=` Misty is in her bath look under it: a hat on her hairdo, a jersey over her sweater.)
+    if (who === 'misty' && mistyLook()) dressMisty(f, mistyLook(), this.bag)
     dressWorn(f, who, worn, this.bag)
     return f
   }

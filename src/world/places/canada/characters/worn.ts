@@ -16,12 +16,13 @@
 // it, with her paw print on its front in the berry colors of her look.
 //
 // Both dressers take off whatever they put on last time first, so they can be called again with a new Worn.
-import { Color, Euler, Group, Matrix4, Mesh, SphereGeometry, Vector3, type BufferAttribute, type BufferGeometry, type Object3D } from 'three'
+import { Color, Euler, Group, Matrix4, Mesh, SphereGeometry, Vector3, type BufferAttribute, type BufferGeometry, type Intersection, type Object3D } from 'three'
 import type { FilmActor } from '../../../engine3d/characters/actor'
 import { Bag } from '../../../engine3d/dispose'
 import { bake, loft, merge, P, solid, solidMix, type LoftRing, type V3 } from '../../../engine3d/geo'
 import { BERRIES, mistyLook, WEAR_COLORS, type TeamId, type Worn } from '../looks'
 import { CANADA_COLORS } from './looks'
+import { mistyCoat } from './mistyLook'
 import type { ToyActor } from './toy'
 import { cheekParts, crestGeo, hatParts, WHITE, type HatId } from './wear'
 
@@ -62,10 +63,10 @@ type Fit = { base: HatFit } & Partial<Record<HatId, Partial<HatFit>>>
 const HAT_FIT: Record<string, Fit> = {
   beaver: { base: { y: 0.56, tilt: -0.14 }, crown: { y: 0.64 }, chef: { y: 0.62 }, flowers: { y: 0.52 }, antlers: { y: 0.5 } },
   moose: { base: { y: 0.74, tilt: -0.1 }, crown: { y: 0.82 }, flowers: { y: 0.8 }, antlers: { y: 0.72 }, chef: { y: 0.8 } },
-  raccoon: { base: { y: 0.62, tilt: 0.22 }, crown: { y: 0.66 }, antlers: { y: 0.55, tilt: 0.1 } },
+  raccoon: { base: { y: 0.62, tilt: 0.08 }, crown: { y: 0.7 }, helmet: { y: 0.6, grow: 1.1 }, antlers: { y: 0.55, tilt: 0.05 } },
   otter: { base: { y: 0.52, tilt: -0.1 }, flowers: { y: 0.48 }, antlers: { y: 0.45 } },
   bear: { base: { y: 0.6, tilt: -0.12 }, crown: { y: 0.66 }, antlers: { y: 0.52 } },
-  tuque: { base: { y: 0.72, tilt: -0.08, roll: 0.14 } },
+  tuque: { base: { y: 0.64, tilt: -0.06, roll: -0.16 }, flowers: { y: 0.68 }, crown: { y: 0.68 } },
   lulu: { base: { y: 0.55, tilt: -0.16 } },
   gus: { base: { y: 0.58, tilt: -0.12 } },
 }
@@ -77,6 +78,8 @@ const HEAD_SCALE: Record<string, V3> = { beaver: [1.08, 1, 1], moose: [1.02, 1, 
 const CHEEK_AT: Record<string, [number, number]> = { beaver: [0.6, -0.2], moose: [0.72, -0.08], raccoon: [0.62, -0.34], otter: [0.64, -0.2], bear: [0.62, -0.22], tuque: [0.55, -0.2], lulu: [0.6, -0.16] }
 
 const fitOf = (key: string, hat: HatId): HatFit => ({ ...HAT_FIT[key].base, ...HAT_FIT[key][hat] })
+/** The hats that cover the top of the head (a hairdo goes under them). */
+const COVERS: HatId[] = ['pompom', 'helmet', 'chef']
 
 // ---------------------------------------------------------------- what was put on, to take off again
 
@@ -238,13 +241,32 @@ export function dressWorn(actor: FilmActor, who: TeamId, worn: Worn, bag: Bag): 
   const center = new Vector3(0, headY, 0)
 
   if (worn.hat && HAT_FIT[sp]) {
-    const hat = placeHat(worn.hat, center, R, squash, fitOf(sp, worn.hat), d.bag)
+    // Misty in her bath look: a hat she can't see through (a beanie, a helmet, a chef's hat) has her hairdo tucked
+    // under it, so the spikes and puffs don't poke through it; a crown, flowers or antlers sit round it. Whatever she
+    // wears on her crown from the mossy log comes off under any hat (it would stand inside it).
+    const look = who === 'misty' ? mistyLook() : null
+    // (Her fluff stands out from her head: the hat sits on a head that much bigger, a helmet's shell clear of it.)
+    const fluff = look ? 1 + (worn.hat === 'helmet' ? 0.16 : 0.07) * look.puff : 1
+    const hat = placeHat(worn.hat, center, R * fluff, squash, fitOf(sp, worn.hat), d.bag)
     hat.name = 'cabin-hat'
     rig.head.add(hat)
     d.added.push(hat)
+    if (look) {
+      const coat = mistyCoat(actor, bag)
+      if (COVERS.includes(worn.hat) && coat.hairGroup?.visible) {
+        coat.showHair(false)
+        d.undo.push(() => coat.showHair(true))
+      }
+      for (const o of rig.head.children)
+        if (o.userData.spot === 'crown' && o.visible) {
+          o.visible = false
+          d.undo.push(() => (o.visible = true))
+        }
+    }
   }
   if (worn.cheek && CHEEK_AT[sp]) {
     const cheek = placeCheek(worn.cheek, center, R, squash, CHEEK_AT[sp], d.bag)
+    cheek.name = 'cabin-cheek'
     rig.head.add(cheek)
     d.added.push(cheek)
   }
@@ -263,6 +285,7 @@ export function dressWorn(actor: FilmActor, who: TeamId, worn: Worn, bag: Bag): 
       const look = who === 'misty' ? mistyLook() : null
       const j = rigJersey(H, actor.look.chub ?? 1, color, look?.sweater ? look.print : null, d.bag)
       j.body.name = 'cabin-jersey'
+      for (const sl of j.sleeves) sl.name = 'cabin-jersey'
       rig.body.add(j.body)
       rig.armL.add(j.sleeves[0])
       rig.armR.add(j.sleeves[1])
@@ -296,11 +319,12 @@ export function dressToy(actor: ToyActor, who: TeamId, worn: Worn, bag: Bag): vo
   const d = dressing(actor, bag)
   const R = (spots.hat.userData.R as number) ?? 0.2
   if (worn.hat && HAT_FIT[who]) {
-    // Tuque's goes on top of his own tuque (a ball a little smaller than his red cap, sitting higher), and the floppy
-    // tip of his droops out from under it.
+    // Tuque's is perched on top of his own red tuque ("Two hats!"): it sits on the cap's dome, a ball whose top is a
+    // little above the cap's, so the second hat stands on the first instead of sinking into it, tipped jauntily away
+    // from the floppy tip, which droops out from under it.
     const tuque = who === 'tuque'
-    const center = tuque ? new Vector3(0, 0.42 * R, -0.02 * R) : new Vector3()
-    const hat = placeHat(worn.hat, center, tuque ? 0.95 * R : R, [1, 1, 1], fitOf(who, worn.hat), d.bag)
+    const center = tuque ? new Vector3(0, 0.65 * R, -0.02 * R) : new Vector3()
+    const hat = placeHat(worn.hat, center, tuque ? 0.86 * R : R, [1, 1, 1], fitOf(who, worn.hat), d.bag)
     hat.name = 'cabin-hat'
     spots.hat.add(hat)
     d.added.push(hat)
@@ -313,6 +337,7 @@ export function dressToy(actor: ToyActor, who: TeamId, worn: Worn, bag: Bag): vo
   }
   if (worn.cheek && CHEEK_AT[who]) {
     const cheek = placeCheek(worn.cheek, new Vector3(), R, [1, 1, 1], CHEEK_AT[who], d.bag)
+    cheek.name = 'cabin-cheek'
     spots.hat.add(cheek)
     d.added.push(cheek)
   }
@@ -328,7 +353,9 @@ export function dressToy(actor: ToyActor, who: TeamId, worn: Worn, bag: Bag): vo
     for (const [i, w] of (spots.wings ?? []).entries()) {
       const s = i ? 1 : -1
       const H = actor.height
-      const sleeve = solid(P.sphere(0.2 * H, color, { at: [s * 0.022 * H, -0.06 * H, -0.1 * H], scale: [0.31, 0.73, 1.43] }, 14), d.bag, 2)
+      // (A short sleeve over the front of the wing, from the shoulder: the wing's tip stays bare.)
+      const sleeve = solid(P.sphere(0.2 * H, color, { at: [s * 0.022 * H, -0.06 * H, -0.02 * H], scale: [0.31, 0.74, 0.78] }, 14), d.bag, 2)
+      sleeve.name = 'cabin-jersey'
       w.add(sleeve)
       d.added.push(sleeve)
     }
@@ -341,7 +368,24 @@ export function dressToy(actor: ToyActor, who: TeamId, worn: Worn, bag: Bag): vo
   } else if (worn.scarf) {
     const r = (spots.neck.userData.r as number) ?? 0.08
     const c = WEAR_COLORS[worn.scarf]
-    const scarf = solid(merge([P.torus(r * 1.3, r * 0.5, c, { rot: [Math.PI / 2, 0, 0] }), P.rbox(r * 0.8, r * 2.2, r * 0.32, r * 0.14, c, { at: [r * 0.55, -r * 1.0, r * 1.25], rot: [0.3, 0, -0.18] })]), d.bag, 2)
+    // (A knitted scarf: white stripes round it and across its two tails, so even a blue one never reads as more of
+    // his blue captain's band just above it.)
+    const tail = (x: number, len: number, rz: number) => {
+      const at: V3 = [x, -len / 2 + r * 0.1, r * 1.3]
+      const rot: V3 = [0.3, 0, rz]
+      return {
+        lined: P.rbox(r * 0.75, len, r * 0.3, r * 0.13, c, { at, rot }),
+        plain: [0.25, -0.05, -0.35].map((f) => P.box(r * 0.78, r * 0.16, r * 0.33, WHITE, { at: [at[0] - Math.sin(rz) * f * len, at[1] + f * len * Math.cos(rz), at[2] + f * len * 0.3], rot })),
+      }
+    }
+    const tails = [tail(r * 0.5, r * 2.4, -0.16), tail(r * -0.15, r * 2.0, 0.14)]
+    const scarf = solidMix(
+      [P.torus(r * 1.32, r * 0.52, c, { rot: [Math.PI / 2, 0, 0] }), ...tails.map((t) => t.lined)],
+      [P.torus(r * 1.68, r * 0.16, WHITE, { rot: [Math.PI / 2, 0, 0] }), ...tails.flatMap((t) => t.plain)],
+      d.bag,
+      2,
+    )
+    scarf.name = 'cabin-scarf'
     spots.neck.add(scarf)
     d.added.push(scarf)
   }
@@ -367,10 +411,11 @@ function tuqueJersey(u: Record<string, number>, color: string) {
 
 /** Lulu's jersey: a band round her long low body from behind her neck to before her tail, with a leaf on top. */
 function luluJersey(u: Record<string, number>, color: string) {
-  const k = 1.045
+  // (A snug band round her middle, not a shell over her whole back: her white checks show behind it and her tail.)
+  const k = 1.03
   const rings: LoftRing[] = []
   const N = 18
-  for (const f of [-0.62, -0.5, -0.3, -0.05, 0.2, 0.42, 0.52]) {
+  for (const f of [-0.42, -0.34, -0.18, 0, 0.18, 0.34, 0.44]) {
     const z = f * u.rz
     const w = Math.sqrt(Math.max(0.04, 1 - f * f))
     const pts: [number, number][] = []
@@ -382,7 +427,7 @@ function luluJersey(u: Record<string, number>, color: string) {
   }
   const lined = [loft(rings, color)]
   const plain: BufferGeometry[] = []
-  for (const f of [-0.6, 0.5]) {
+  for (const f of [-0.4, 0.42]) {
     const w = Math.sqrt(1 - f * f) * k
     plain.push(P.torus(1, 0.04, WHITE, { at: [0, 0, f * u.rz], scale: [u.rx * w + 0.002, u.ry * w + 0.002, 0.25 * u.ry] }))
   }
@@ -413,6 +458,27 @@ export function wearPoint(actor: FilmActor | ToyActor, kind: WearKind, out = new
   if (kind === 'cheek') return spots.hat.localToWorld(out.set(0.6 * R, -0.2 * R, 0.8 * R))
   if (kind === 'scarf') return spots.neck.localToWorld(out.set(0, 0, 0))
   return (spots.belly ?? spots.neck).localToWorld(out.set(0, 0, 0))
+}
+
+/** Which of the things she put on a friend a ray hit first (`hits`: a raycast against the friend), if any: a tap or a
+ *  drag that starts there takes it off. The team's own pink scarf only counts when she gave it a color. */
+export function wornAt(actor: FilmActor | ToyActor, worn: Worn, hits: Intersection[]): WearKind | null {
+  for (const hit of hits) {
+    if (hit.object.userData.hull !== undefined || !hit.object.visible) continue
+    for (let o: Object3D | null = hit.object; o && o !== actor.root; o = o.parent) {
+      if (o.name === 'cabin-hat') return worn.hat ? 'hat' : null
+      if (o.name === 'cabin-cheek') return worn.cheek ? 'cheek' : null
+      if (o.name === 'cabin-jersey' || o.name === 'misty-sweater') return worn.jersey ? 'jersey' : null
+      if (o.name === TEAM_SCARF || o.name === 'cabin-scarf') return worn.scarf ? 'scarf' : null
+    }
+    // Maple's own scarf is part of her body: its scarf-colored corners.
+    if (worn.scarf && 'rig' in actor && actor.look.extras?.includes('scarf') && hit.face) {
+      const b = bakedScarf(actor)
+      if (b && hit.object instanceof Mesh && hit.object.geometry === b.geo && b.idx.includes(hit.face.a)) return 'scarf'
+    }
+    return null
+  }
+  return null
 }
 
 /** What a friend can wear (Gus plays for the geese: a hat and a scarf, no jersey or stamp). */
