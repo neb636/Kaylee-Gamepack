@@ -1,0 +1,18 @@
+{
+  "title": "Koh Samet: nicer boats, fish and taxi",
+  "checkIn": "fix",
+  "kaylee": "The speedboat looks like a real boat, the ferry has toy-animal passengers who wave, the flying fish have big wing fins, and the taxi has a proper truck front with Dad sitting on the bench.",
+  "questions": [],
+  "reels": [{ "name": "samet-boats", "moments": ["thailand-samet-speedboat-ride", "thailand-samet-story-ride"] }],
+  "links": [
+    { "label": "The speedboat ride", "hash": "#/world/thailand/samet-trip/speedboat" },
+    { "label": "The taxi ride (tap the sandcastle)", "hash": "#/world/thailand/samet-trip/island?at=nadan&board=1" }
+  ],
+  "pictures": [
+    { "title": "The speedboat", "before": "pics/boat-before.png", "after": "pics/boat-after.png", "caption": "A real hull with a raked bow and a foredeck, not a cone on the front" },
+    { "title": "The ferry you pass", "before": "pics/ferry-before.png", "after": "pics/ferry-after.png", "caption": "A wooden ferry with a wheelhouse, a flag and tyre fenders; toy-animal passengers who wave as you go by" },
+    { "title": "Flying fish", "before": "pics/fish-before.png", "after": "pics/fish-after.png", "caption": "Big eyes, wing fins that open as they leap and fold as they dive, a beating tail" },
+    { "title": "The taxi's front", "before": "pics/taxi-before.png", "after": "pics/taxi-after.png", "caption": "Grille, round headlights, bumper, fenders, a windshield on pillars; the driver shows through the window" },
+    { "title": "Dad on the taxi bench", "before": "pics/taxiin-before.png", "after": "pics/taxiin-after.png", "caption": "He sits back on the bench with his feet out over the edge instead of sinking into it" }
+  ]
+}
