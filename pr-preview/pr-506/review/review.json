@@ -1,9 +1,0 @@
-{
-  "title": "Kaylee-Gamepack cleanup",
-  "checkIn": "maintenance",
-  "kaylee": "The offline download is about 449 KB smaller. You can open the shelf and Emperor Huddle to check the existing games.",
-  "links": [
-    { "label": "Open the game shelf", "hash": "#/world?view=list" },
-    { "label": "Open Emperor Huddle", "hash": "#/world/poles/huddle/small" }
-  ]
-}
