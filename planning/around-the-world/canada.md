@@ -159,9 +159,15 @@ fix is what the team needs.
   humpback or only tap (taps still grow the jump); is the campfire too dark on her iPad in a bright room; how long
   Flashlight Statues really takes her (a perfect-aim robot does it in about 70 s; the plan wanted 2.5 min).
 - Mountain Bike and Red Canoe are still steering toys: rethink them only if her play data says so.
-- Small things seen and left: a second hat on Tuque sits over his red cap; she can swap a worn thing but not drag it
-  off; the statue poses have no props and the flamingo can't lift a leg (the code-built rig has no leg bones); on an
-  iPad held upright the whale scene has a lot of empty sea; some moves read small from the board's high camera.
+- Small things seen and left: the flamingo statue can't lift a leg (the code-built rig has no leg bones); some moves
+  still read small from the board's high camera; in the film `campfire-in` Maple's face touches the left edge in the
+  snatch shot; the cabin's team photo is small per friend on a 4:3 screen; Maple alone in the cabin is about 55 px
+  on an iPhone on its side; the banana slug is off-screen in the bath on an upright iPad; the porcupine's new
+  always-on quills were checked in the campfire, not on the bike trail.
+- A fresh-eyes pass ran on the merged game the same day (four reviewers who hadn't built it, each fixing what they
+  found): the mud reads as mud on a white bear, the whales are big and lie broadside with separate tap zones, Roxy's
+  statues have props and a close-up that shows her whole pose, the cabin's bench reads as a bench and worn things come
+  off with a tap.
 - The films by their recorded lines: the way in has about 32 s of talk (about 45 s in all); a chapter's film in has
   5-10 s of talk and its film out 10-14 s; `game-win` about 14 s. If she skips them, shorten them.
 
