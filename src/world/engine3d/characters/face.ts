@@ -57,7 +57,7 @@ export class FaceLife {
 // Each face is built from where the rig's own eyes are, so it fits any look.
 
 /** A silly face: `crossed` (both eyes on the tip of the nose), `soaked` (eyes pointing different ways, tongue out,
- *  drips), `dazzled` (huge round eyes, pin pupils), `dizzy` (ringed eyes that turn), `sudsy` (one eye shut under a
+ *  drips), `dazzled` (huge round eyes, small pupils), `dizzy` (ringed eyes that turn), `sudsy` (one eye shut under a
  *  blob of foam). */
 export type Silly = 'crossed' | 'soaked' | 'dazzled' | 'dizzy' | 'sudsy'
 export const SILLIES: readonly Silly[] = ['crossed', 'soaked', 'dazzled', 'dizzy', 'sudsy']
@@ -85,11 +85,13 @@ function measure(rig: Rig): EyeBox {
 /** One silly eye: a white with a pupil at (dx, dy) of the eye's size from its middle, `r` times the usual pupil. */
 function eye(e: EyeBox, s: number, white: number, dx: number, dy: number, r = 1) {
   const { size, x, z } = e
+  // (A bigger white bulges further out: the pupil sits on its front, not buried inside it.)
+  const front = size * Math.max(0.02, 0.47 * white - 0.46)
   return {
     white: P.sphere(size * 1.12 * white, '#FFFFFF', { at: [s * x, 0, z - size * 0.42], scale: [0.86, 1, 0.42] }),
     dark: [
-      P.sphere(size * 0.46 * r, INK, { at: [s * x + dx * size, dy * size, z + size * 0.02], scale: [1, 1, 0.35] }, 12),
-      P.sphere(size * 0.14 * Math.max(0.5, r), '#FFFFFF', { at: [s * x + (dx - 0.06) * size, (dy + 0.12) * size, z + size * 0.16] }, 8),
+      P.sphere(size * 0.46 * r, INK, { at: [s * x + dx * size, dy * size, z + front], scale: [1, 1, 0.35] }, 12),
+      P.sphere(size * 0.14 * Math.max(0.5, r), '#FFFFFF', { at: [s * x + (dx - 0.06) * size, (dy + 0.12) * size, z + front + size * 0.14] }, 8),
     ],
   }
 }
@@ -108,7 +110,7 @@ function build(kind: Silly, rig: Rig, bag: Bag): { root: Group; spin: Object3D[]
     // One eye up and out, the other down and in; tongue out; three drips off the brow.
     const drips = [-1.5, 0.2, 1.6].map((k, i) => P.sphere(size * 0.2, '#8FD3F7', { at: [k * x * 0.8, size * (1.5 - i * 0.22), z - size * 0.3], scale: [0.75, 1.3, 0.75] }, 8))
     pair(eye(e, -1, 1.05, -0.4, 0.38, 0.8), eye(e, 1, 1.05, -0.3, -0.42, 0.8), drips, [tongue()])
-  } else if (kind === 'dazzled') pair(eye(e, -1, 1.38, 0, 0, 0.36), eye(e, 1, 1.38, 0, 0, 0.36))
+  } else if (kind === 'dazzled') pair(eye(e, -1, 1.38, 0, 0.04, 0.66), eye(e, 1, 1.38, 0, 0.04, 0.66))
   else if (kind === 'dizzy') {
     // Two rings in each eye, on a turning disc.
     const whites = [-1, 1].map((s) => P.sphere(size * 1.2, '#FFFFFF', { at: [s * x, 0, z - size * 0.42], scale: [0.86, 1, 0.42] }))

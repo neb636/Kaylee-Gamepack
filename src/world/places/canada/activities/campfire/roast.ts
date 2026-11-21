@@ -44,11 +44,12 @@ export class Stick {
   private popT = 9
 
   constructor(bag: Bag) {
-    this.rod = solid(merge([P.cyl(0.014, 0.018, 1, '#B88A5A', { at: [0, 0.5, 0] }, 6), P.cyl(0.0185, 0.0185, 0.1, '#8A5A3A', { at: [0, 0.05, 0] }, 6)]), bag, 1.6)
+    this.rod = solid(merge([P.cyl(0.019, 0.024, 1, '#B88A5A', { at: [0, 0.5, 0] }, 7), P.cyl(0.025, 0.025, 0.1, '#8A5A3A', { at: [0, 0.05, 0] }, 7)]), bag, 1.6)
     this.root.add(this.rod)
     // The marshmallow: its own toon color (it toasts), and an outline.
     this.mallowMat = bag.add(new MeshToonMaterial({ color: '#FFFDF8', gradientMap: toonGradient() }))
-    const geo = bag.add(P.cyl(0.06, 0.06, 0.1, '#ffffff', {}, 14))
+    // (Big: the thing she picks up has to be easy to see and to find.)
+    const geo = bag.add(P.cyl(0.085, 0.085, 0.14, '#ffffff', {}, 18))
     this.mallow = new Group()
     this.mallow.add(new Mesh(geo, this.mallowMat))
     const hull = makeHull(geo, 1.8)
@@ -68,6 +69,7 @@ export class Stick {
       this.flames.add(m)
     }
     this.flames.visible = false
+    this.flames.scale.setScalar(1.4)
     this.root.add(this.flames)
   }
 
@@ -130,7 +132,7 @@ export class Stick {
     this.mallow.scale.set(puff * pop * jig, puff * pop, puff * pop * jig)
     this.flames.visible = this.fire
     if (this.fire) {
-      this.flames.position.copy(this.tip).add(new Vector3(0, 0.05, 0))
+      this.flames.position.copy(this.tip).add(new Vector3(0, 0.07, 0))
       this.flames.children.forEach((m, i) => m.scale.set(1 + 0.12 * Math.sin(t * 19 + i), 1 + 0.25 * Math.sin(t * 23 + i * 2), 1))
     }
     return ev

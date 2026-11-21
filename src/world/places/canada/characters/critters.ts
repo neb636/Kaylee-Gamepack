@@ -6,7 +6,7 @@
 // Each one has idle life of its own and a reaction (`poke`, plus the campfire's own: `balloon`, `freeze`, `spin`,
 // `yawn`); the world places them and says when. `shine` is where their eyes are, so a night scene can make them shine
 // back at a flashlight (activities/campfire/shade.ts).
-import { Group, type Object3D } from 'three'
+import { Euler, Group, Quaternion, Vector3, type Object3D } from 'three'
 import { bell, clamp, span } from '../../../../sdk'
 import type { Bag } from '../../../engine3d/dispose'
 import { merge, P, solid, solidMix, type V3 } from '../../../engine3d/geo'
@@ -69,23 +69,36 @@ export class Porcupine extends Critter {
     super()
     this.root.add(this.body)
     this.body.add(solidMix([P.sphere(0.3, '#6E5A52', { at: [0, 0.28, 0], scale: [1, 0.9, 1.2] }), P.sphere(0.15, '#8C7468', { at: [0, 0.26, 0.32], scale: [1, 0.9, 0.9] })], [...eyes(0.07, 0.32, 0.43, 0.025), P.sphere(0.035, PAL.ink, { at: [0, 0.27, 0.47] }), ...cheeks(0.11, 0.24, 0.4, 0.035)], bag, 2))
+    // His quills: cones standing out of his back and sides (not his face), on a group at the middle of his body, so a
+    // puff pushes them straight out.
     const spikes = []
-    for (let i = 0; i < 28; i++) {
-      const a = (i / 28) * Math.PI * 2 * 3.7
-      const up = 0.3 + (i / 28) * 1.1
-      const dx = Math.cos(a) * Math.sin(up)
-      const dy = Math.cos(up)
-      const dz = -Math.abs(Math.sin(a) * Math.sin(up)) - 0.2
-      spikes.push(P.cone(0.025, 0.28, '#EADFD2', { at: [dx * 0.3, 0.28 + dy * 0.28, dz * 0.25], rot: [Math.atan2(-dz, dy), 0, Math.atan2(-dx, dy)] }, 5))
+    const up = new Vector3(0, 1, 0)
+    const d = new Vector3()
+    const e = new Euler()
+    const q = new Quaternion()
+    for (let i = 0; i < 34; i++) {
+      // Spread over the back half (a golden-angle spiral), the face side left bare.
+      const k = (i + 0.5) / 34
+      const a = i * 2.39996
+      const z = -k
+      const r = Math.sqrt(1 - z * z)
+      d.set(Math.cos(a) * r, Math.sin(a) * r, z - 0.15).normalize()
+      // (None pointing down into the ground.)
+      if (d.y < -0.35) d.y = -0.35 + (d.y + 0.35) * 0.2
+      d.normalize()
+      e.setFromQuaternion(q.setFromUnitVectors(up, d))
+      const len = 0.24 + (i % 3) * 0.03
+      spikes.push(P.cone(0.026, len, i % 4 ? '#EADFD2' : '#B8A898', { at: [d.x * (0.27 + len * 0.4), d.y * (0.24 + len * 0.4), d.z * (0.32 + len * 0.4)], rot: [e.x, e.y, e.z] }, 5))
     }
     this.quills = solid(merge(spikes), bag, 1)
+    this.quills.position.set(0, 0.28, 0)
     this.body.add(this.quills)
     this.shine = shineOf(this.body, 0.07, 0.32, 0.44, 0.03)
   }
   update(dt: number, t: number) {
     const k = this.tick(dt, 1.6)
     const puff = k < 0 ? 0 : bell(span(k, 0, 1)) ** 0.5
-    this.quills.scale.setScalar(0.75 + 0.55 * puff)
+    this.quills.scale.setScalar(1 + 0.4 * puff)
     this.body.scale.set(1 + puff * 0.1, 1 + puff * 0.15 + Math.sin(t * 1.8 + this.phase) * 0.02, 1 + puff * 0.1)
   }
 }
@@ -430,8 +443,8 @@ export class Bat extends Critter {
   readonly shine: Shine
   constructor(bag: Bag) {
     super()
-    const fur = '#7A5A4E'
-    const wing = '#4E3A40'
+    const fur = '#9A7464'
+    const wing = '#6A4E5C'
     const pink = '#F2A7B8'
     this.root.add(this.swing)
     this.swing.add(this.body)

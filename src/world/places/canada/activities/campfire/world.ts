@@ -12,16 +12,18 @@
 //             and runs to the fire. Each peek lasts longer than the one before; stuck for 8 s, a kit's tail sticks out
 //             and wiggles.
 //   statues   Roxy sneaks toward the marshmallow bag whenever the light is off her, and freezes whenever it's on her,
-//             in a new ridiculous pose each time (characters/statues.ts). The first time, the camera goes close on her
-//             silly face (characters/closeup.ts). Hold the light on her and she wobbles, then falls over laughing;
+//             in a new ridiculous pose each time, with its props (characters/statues.ts: leafy twigs held up for the
+//             tree, a boulder on her back for the rock, music notes for the whistle, a tutu for the stretch). The first
+//             time, the camera goes close on her silly face and her whole pose (`statueShot`). Hold the light on her and she wobbles, then falls over laughing;
 //             three of those and she gives up. Left alone she reaches the bag ("Yoink!") and scampers back to try
 //             again, a little slower each time.
 // The side verb is the roast (roast.ts): hold the marshmallow near the fire, hand it to anyone. And the end: tap the
 // flashlight to turn it off; the stars come out, then the northern lights (sky.ts).
 //
 // The clearing is the films' campsite (story/sets/campfire.ts) with the game's own things round it (clearing.ts). The
-// feel is knobs (?feel=1): the light's size and swing, Roxy's speed, how long the kits peek.
-import { Color, Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
+// feel is knobs (?feel=1): the light's size and swing, Roxy's speed, how long the kits peek. QA: `?statue=tree` stands
+// Roxy in a pose under the close-up's camera; `?look=owl&yaw=90` looks close at one thing from any side, all lit.
+import { Color, Euler, Fog, Group, Mesh, MeshBasicMaterial, Plane, Quaternion, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { say, sounds, spendHint, stopSpeaking, Timers, type Line } from '../../../../../sdk'
 import { clamp, damp, lerp, wrapAngle } from '../../../../../sdk/math'
 import { IS_MOUSE } from '../../../../../sdk/device'
@@ -32,7 +34,7 @@ import { flag } from '../../../../engine3d/flags'
 import type { FilmActor } from '../../../../engine3d/characters/actor'
 import { Letterbox, type CineFrame } from '../../../../engine3d/cinema'
 import { Bag } from '../../../../engine3d/dispose'
-import { FilmPlayer, lineSeconds, type FilmState } from '../../../../engine3d/film'
+import { FilmPlayer, lineSeconds, type FilmShot, type FilmState } from '../../../../engine3d/film'
 import { blobShadow, merge, P } from '../../../../engine3d/geo'
 import { setOutlineResolution } from '../../../../engine3d/outline'
 import { Particles } from '../../../../engine3d/particles'
@@ -46,7 +48,7 @@ import { nextStatue, releaseStatue, STATUES, statueOf, statueWobble, strikeStatu
 import { L } from '../../lines'
 import { Cast, type Friend } from '../../story/cast'
 import { buildCamp, CAMP, updateCamp, type CampSet } from '../../story/sets/campfire'
-import { buildClearing, CLEARING, kitTail } from './clearing'
+import { buildClearing, CLEARING, FALLEN, kitTail } from './clearing'
 import { Flashlight } from './light'
 import { Stick } from './roast'
 import { NightShade, RIM_FIRE, RIM_MOON } from './shade'
@@ -64,7 +66,7 @@ const TORCH = knobs('torch', 'The flashlight', FILE, {
   lift: { value: 34, min: 0, max: 120, step: 2, label: 'Light above finger', unit: 'px', note: 'on a touch screen, how far above her fingertip the light lands, so her finger doesn’t cover what she finds (a mouse: none)' },
   speed: { value: 0.45, min: 0.15, max: 1.5, step: 0.05, label: 'Roxy sneaks', unit: 'm/s', note: 'how fast Roxy creeps toward the bag while the light is off her' },
   slow: { value: 0.78, min: 0.4, max: 1, step: 0.02, label: 'Roxy slows after a grab', note: 'her speed is multiplied by this every time she gets a marshmallow (1 = never slows)' },
-  fall: { value: 2.2, min: 0.6, max: 6, step: 0.1, label: 'Hold to topple', unit: 's', note: 'how long the light holds Roxy before she wobbles over laughing' },
+  fall: { value: 2.6, min: 0.6, max: 6, step: 0.1, label: 'Hold to topple', unit: 's', note: 'how long the light holds Roxy before she wobbles over laughing' },
   peek: { value: 1.8, min: 0.6, max: 6, step: 0.1, label: 'A kit peeks for', unit: 's', note: 'how long the first kit stays out before ducking' },
   grow: { value: 0.8, min: 0, max: 3, step: 0.1, label: 'Each peek longer by', unit: 's' },
   react: { value: 0.55, min: 0.1, max: 2, step: 0.05, label: 'Kit ducks after', unit: 's', note: 'how long the light can hover beside a peeking kit before it ducks (a little longer each time)' },
@@ -131,12 +133,18 @@ const STATUE_GAP = 2.6
 /** Met this many night animals: the giggling starts. */
 const GIGGLE_AFTER = 4
 /** At least this long with the night animals before the giggles start (s). */
-const EYES_MIN_S = 16
+const EYES_MIN_S = 22
 const KITS = 3
 const LAUGHS = 3
-const ROASTS = 4
+const ROASTS = 5
+/** The kits a little bigger than in the films: they peek out from far across the clearing. */
+const KIT_SCALE = 1.5
 /** Her statue lines, by pose. */
 const STATUE_LINE: Record<StatueId, Line> = { tree: T.statues[0], rock: T.statues[1], whistling: T.statues[2], ballerina: T.statues[3], flamingo: T.statues[3] }
+/** Roxy's poses: the four she has lines for (the kits do the flamingo too). */
+const ROXY_POSES: StatueId[] = ['tree', 'rock', 'whistling', 'ballerina']
+/** Which way a statue faces (radians): to us, a little to our right, where the close-up's camera stands. */
+const STATUE_YAW = 0.28
 
 const tmp = new Vector3()
 const tmp2 = new Vector3()
@@ -320,7 +328,7 @@ export class FlashlightStatues implements World3D {
     this.roxy.hide()
     // (The kits a little bigger than in the films: they peek out from far across the clearing.)
     this.cast.kits.forEach((a, i) => {
-      a.root.scale.setScalar(1.4)
+      a.root.scale.setScalar(KIT_SCALE)
       this.kits.push({ a, hide: CLEARING.hides[i], state: 'hidden', out: 0, t: 0, near: 0, seat: i })
     })
     // (Maple stands on her log: no shadow on the ground under her.)
@@ -332,17 +340,18 @@ export class FlashlightStatues implements World3D {
     this.owl.root.scale.setScalar(1.5)
     this.bat.root.position.set(...CLEARING.bat)
     this.bat.root.rotation.y = -0.3
-    this.bat.root.scale.setScalar(1.55)
+    this.bat.root.scale.setScalar(2.1)
     const [dx, dz, df] = CLEARING.deer
     this.deer.root.position.set(dx, 0, dz)
     this.deer.root.rotation.y = (df * Math.PI) / 180
+    this.deer.root.scale.setScalar(1.12)
     this.porky.root.position.set(...CLEARING.porcupine)
     this.porky.root.rotation.y = -0.5
     this.porky.root.scale.setScalar(0.95)
     this.frog.root.position.set(...CLEARING.frog)
     this.frog.root.rotation.y = 0.4
     this.frog.root.scale.setScalar(1.45)
-    scene.add(this.owl.root, this.bat.root, this.deer.root, this.porky.root, this.frog.root, blobShadow(0.8, bag).translateX(dx).translateZ(dz))
+    scene.add(this.owl.root, this.bat.root, this.deer.root, this.porky.root, this.frog.root, blobShadow(0.9, bag).translateX(dx).translateZ(dz))
 
     // Maple's shadow bunny on the bush behind her (her paws in the light), a stuck kit's tail, Roxy's eyes in her den,
     // the marshmallow she carries off.
@@ -351,6 +360,8 @@ export class FlashlightStatues implements World3D {
     this.bunny.scale.setScalar(1.25)
     scene.add(this.bunny)
     this.tail = kitTail(bag)
+    // (Big enough to spot from across the clearing: it's the help.)
+    this.tail.scale.setScalar(1.7)
     scene.add(this.tail)
     this.denEyes = denEyes(bag)
     this.denEyes.position.set(...CLEARING.denEyes)
@@ -393,7 +404,8 @@ export class FlashlightStatues implements World3D {
     // (QA: ?statue=tree stands Roxy in that pose in the middle of the clearing, the light on her, to look at it.)
     const pose = flag('statue') as StatueId | null
     if (pose && STATUES.includes(pose)) {
-      this.roxy.place(0.35, 0, -1.0, 0)
+      this.roxy.place(0.35, 0, -1.0, (STATUE_YAW * 180) / Math.PI)
+      this.roxyPose = pose
       this.timers.later(() => {
         this.strike(this.roxy, pose)
         this.spotOf.get('roxy')!.floor = 1
@@ -431,7 +443,7 @@ export class FlashlightStatues implements World3D {
     const mid = (o: Object3D, y: number) => (out: Vector3) => o.localToWorld(out.set(0, y, 0))
     // The night animals.
     add({ id: 'owl', at: mid(this.owl.root, 0.3), r: 0.45, shade: new NightShade(this.owl.root, bag, this.owl.shine, { glow: '#FFC24A', blink: () => this.owl.blink }), live: () => true, on: () => this.critter('owl', 'barred-owl', () => this.owl.spin(), () => camp.hoot(0, 0.2), T.owl) })
-    add({ id: 'bat', at: mid(this.bat.root, -0.22), r: 0.35, shade: new NightShade(this.bat.root, bag, this.bat.shine, { glow: '#FF9FC0', blink: () => this.bat.blink }), live: () => true, on: () => this.critter('bat', 'bat', () => this.bat.yawn(), () => camp.squeak()) })
+    add({ id: 'bat', at: mid(this.bat.root, -0.22), r: 0.45, shade: new NightShade(this.bat.root, bag, this.bat.shine, { glow: '#FF9FC0', blink: () => this.bat.blink }), live: () => true, on: () => this.critter('bat', 'bat', () => this.bat.yawn(), () => camp.squeak()) })
     add({ id: 'deer', at: mid(this.deer.root, 1.0), r: 0.7, shade: new NightShade(this.deer.root, bag, this.deer.shine, { glow: '#D9F7B0' }), live: () => true, on: () => this.critter('deer', 'deer', () => this.deer.freeze(), () => camp.leaves()) })
     add({ id: 'porcupine', at: mid(this.porky.root, 0.3), r: 0.4, shade: new NightShade(this.porky.root, bag, this.porky.shine, { glow: '#FFD27A' }), live: () => true, on: () => this.critter('porcupine', 'porcupine', () => this.porky.poke(), () => camp.quills(), T.porcupine) })
     add({ id: 'frog', at: mid(this.frog.root, 0.15), r: 0.3, shade: new NightShade(this.frog.root, bag, this.frog.shine, { glow: '#FFE27A' }), live: () => true, on: () => this.critter('frog', 'peeper', () => this.frog.balloon(), () => camp.peep()) })
@@ -452,7 +464,7 @@ export class FlashlightStatues implements World3D {
       }),
     )
     // The stuck kit's tail (it catches the kit).
-    add({ id: 'tail', at: (o) => this.tail.localToWorld(o.set(0.22, 0, 0)), r: 0.35, shade: null, live: () => this.tail.visible, on: () => this.stuck && this.catchKit(this.stuck) })
+    add({ id: 'tail', at: (o) => this.tail.localToWorld(o.set(0.22, 0, 0)), r: 0.45, shade: null, live: () => this.tail.visible, on: () => this.stuck && this.catchKit(this.stuck) })
     // Things that aren't animals.
     add({ id: 'fire', at: (o) => o.set(CAMP.fire[0], 0.4, CAMP.fire[2]), r: 0.4, shade: null, live: () => true, hold: (s) => this.fireHeldFor(s) })
     add({ id: 'tent', at: (o) => o.set(CAMP.tent[0], 0.6, CAMP.tent[2]), r: 0.7, shade: null, live: () => true, on: () => this.tentLit() })
@@ -670,7 +682,10 @@ export class FlashlightStatues implements World3D {
     if (!this.peekKit && !this.stuck && this.peekAt >= 0 && this.time > this.peekAt && this.kitsHome < KITS) {
       const free = this.kits.filter((k) => k.state === 'hidden')
       const from = free.length > 1 ? free.filter((k) => k !== this.lastPeek) : free
-      const k = from[Math.floor(Math.random() * from.length)]
+      // (Mostly from the hiding place furthest from the light: she swings the light across the clearing to find it.)
+      const far = (h: Kit) => -Math.hypot(h.hide.peek[0] - this.light.target.x, h.hide.peek[2] - this.light.target.z)
+      const sorted = [...from].sort((p, q) => far(p) - far(q))
+      const k = sorted.length > 1 && Math.random() < 0.3 ? sorted[1] : sorted[0]
       if (k) {
         // Stuck a while (8 s since the last catch): this one's tail sticks out and wiggles instead, until she finds it.
         if (this.time - this.lastCatch > HINT_S - 1) {
@@ -848,7 +863,7 @@ export class FlashlightStatues implements World3D {
     this.roxy.waddle = 0
     this.roxy.lean = 0
     // (The first one is the tree: arms up, eyes huge, face to the camera, for the close-up.)
-    const pose = this.closeup ? nextStatue(this.roxyPose) : 'tree'
+    const pose = this.closeup ? nextStatue(this.roxyPose, ROXY_POSES) : 'tree'
     this.roxyPose = pose
     this.strike(this.roxy, pose)
     camp.freeze()
@@ -859,22 +874,20 @@ export class FlashlightStatues implements World3D {
     if (!this.closeup) {
       this.closeup = true
       this.statueAt = this.time
-      this.films.play(
-        sillyFilm(this.roxy, faceOf(pose), {
-          id: 'roxy-statue',
-          say: STATUE_LINE[pose],
-          // (From her right: the tent stands on her left near the den.)
-          side: 0.75,
-          back: 2.1,
-          sound: () => camp.freeze(),
-          done: () => {
-            // (The close-up takes its face back off: she's still a statue.)
-            if (this.roxyState === 'statue' && this.roxyPose) this.strike(this.roxy, this.roxyPose)
-          },
-        }),
-        undefined,
-        this.rig.camera,
-      )
+      // (Turned to us for it: a statue that faces the flashlight.)
+      this.roxy.root.rotation.y = STATUE_YAW
+      const film = sillyFilm(this.roxy, faceOf(pose), {
+        id: 'roxy-statue',
+        say: STATUE_LINE[pose],
+        sound: () => camp.freeze(),
+        done: () => {
+          // (The close-up takes its face back off: she's still a statue.)
+          if (this.roxyState === 'statue' && this.roxyPose) this.strike(this.roxy, this.roxyPose)
+        },
+      })
+      // Her whole pose in the frame (the tree's arms up to the sky), her face big in it.
+      film.beats[0] = { ...film.beats[0], shot: statueShot(this.roxy, pose) }
+      this.films.play(film, undefined, this.rig.camera)
       return
     }
     if (this.time - this.statueAt > STATUE_GAP && !this.talking) {
@@ -1200,7 +1213,7 @@ export class FlashlightStatues implements World3D {
     this.rig.setSize(w, h, top)
     setOutlineResolution(w, h)
     this.rig.setShot(this.shot(), true)
-    this.light.corner = this.tall ? { x: 0.62, y: -0.8, d: 2.3 } : { x: 0.76, y: -0.7, d: 1.6 }
+    this.light.corner = this.tall ? { x: 0.56, y: -0.76, d: 2.3 } : { x: 0.7, y: -0.64, d: 1.75 }
     if (!this.finger) {
       // Where the light starts: on the empty ground in front of the fire.
       const p = this.toScreen(tmp.set(1.7, 0, 2.3))
@@ -1242,7 +1255,9 @@ export class FlashlightStatues implements World3D {
     this.lastAt.x = this.light.at.x
     this.lastAt.y = this.light.at.y
     // (Not before the light has been aimed once: until then it points at the middle of the world.)
-    if (!this.films.on && this.aimed) this.lightSpots(dt)
+    if (!this.films.on && this.aimed && (!this.lookId || this.lookId === 'statue')) this.lightSpots(dt)
+    // (QA's close look: everyone in full color, nobody doing their bit.)
+    else if (this.lookId && this.lookId !== 'statue') for (const s of this.shades) s.goal = 1
 
     // ---- The parts.
     if (this.section === 'eyes' || this.section === 'story') this.updateEyes()
@@ -1266,15 +1281,15 @@ export class FlashlightStatues implements World3D {
     const off = this.skyT >= 0 ? clamp(this.skyT / 2) : 0
     this.lights.follow(0.5, 0.6, -1.5)
     this.lights.ambient.color.set('#7480E0')
-    this.lights.ambient.intensity *= 0.5 - 0.12 * off
+    this.lights.ambient.intensity *= 0.64 - 0.2 * off
     this.lights.sun.color.set('#A9B4FF')
-    this.lights.sun.intensity *= 0.55 - 0.15 * off
+    this.lights.sun.intensity *= 0.66 - 0.2 * off
     this.lights.sun.position.set(-5.5, 9, 1.5)
     this.sky.update(dt, t, this.rig.camera.position, this.h)
 
     // ---- The camera: the clearing, or (lights off) up at the sky.
     this.rig.setShot(this.shot())
-    this.rig.setCine(cine ?? this.skyFrame())
+    this.rig.setCine(cine ?? this.skyFrame() ?? this.lookFrame())
     this.rig.update(dt)
     this.light.update(dt, this.rig.camera, this.w, this.h)
     this.aimed = true
@@ -1299,6 +1314,54 @@ export class FlashlightStatues implements World3D {
     return cam
   }
   private skyCam: CineFrame = { eye: new Vector3(), look: new Vector3(), fov: 40, roll: 0 }
+
+  /** QA: `?look=owl&yaw=90` holds a close camera on one thing (from `yaw` degrees round it, 0 from the front, `tilt`
+   *  degrees up), everything lit, to see it from every side; `?statue=` holds the statue close-up's own camera. */
+  private lookFrame(): CineFrame | null {
+    const id = this.lookId
+    if (!id) return null
+    const f = this.lookCam
+    if (id === 'statue') {
+      const s = statueShotAt(this.roxy, this.roxyPose ?? 'tree', this.tall)
+      f.eye.copy(s.eye)
+      f.look.copy(s.look)
+      f.fov = s.fov
+      return f
+    }
+    const at: Record<string, [Object3D | Vector3, number, number]> = {
+      owl: [this.owl.root, 0.5, 2.6],
+      bat: [this.bat.root, -0.45, 2.6],
+      deer: [this.deer.root, 0.9, 5],
+      porcupine: [this.porky.root, 0.3, 2.4],
+      frog: [this.frog.root, 0.25, 1.9],
+      roxy: [this.roxy.root, 0.45, 3],
+      maple: [this.maple.root, 0.5, 3],
+      monty: [this.monty.root, 1.1, 6],
+      kit: [this.kits[0].a.root, 0.35, 2.4],
+      tent: [new Vector3(CAMP.tent[0], 0.6, CAMP.tent[2]), 0, 5.5],
+      fire: [new Vector3(CAMP.fire[0], 0.35, CAMP.fire[2]), 0, 3.4],
+      log: [new Vector3(FALLEN.x, 0.3, FALLEN.z), 0, 3.6],
+      den: [new Vector3(CLEARING.den[0], 0.4, CLEARING.den[1]), 0, 4],
+      stick: [this.stick.tip, 0, 2.2],
+    }
+    const a = at[id]
+    if (!a) return null
+    const [o, up, d] = a
+    const c = o instanceof Vector3 ? tmp.copy(o) : o.getWorldPosition(tmp)
+    c.y += up
+    const yaw = (this.lookYaw * Math.PI) / 180
+    const tilt = (this.lookTilt * Math.PI) / 180
+    const ang = (o instanceof Vector3 ? 0 : new Euler().setFromQuaternion(o.getWorldQuaternion(new Quaternion()), 'YXZ').y) + yaw
+    f.look.copy(c)
+    f.eye.set(c.x + Math.sin(ang) * Math.cos(tilt) * d, c.y + Math.sin(tilt) * d, c.z + Math.cos(ang) * Math.cos(tilt) * d)
+    f.fov = 34
+    return f
+  }
+  private lookId = flag('look') ?? (flag('statue') ? 'statue' : null)
+  // (Read once: the address bar loses them when the section's state is written into it.)
+  private lookYaw = Number(flag('yaw')) || 0
+  private lookTilt = Number(flag('tilt') ?? 15) || 0
+  private lookCam: CineFrame = { eye: new Vector3(), look: new Vector3(), fov: 34, roll: 0 }
   private skyFrom: { eye: Vector3; look: Vector3 } | null = null
 
   /** Who's in the light now: they come to color and do their bit the moment it lands. */
@@ -1406,7 +1469,7 @@ export class FlashlightStatues implements World3D {
 
   /** Strike a statue (and the night shading takes over the silly face it builds). */
   private strike(a: FilmActor, pose: StatueId) {
-    strikeStatue(a, pose)
+    strikeStatue(a, pose, { props: this.bag })
     for (const s of this.spots) if (s.id === 'roxy' || s.id.startsWith('kit')) s.shade?.refresh()
   }
 
@@ -1616,6 +1679,29 @@ export class FlashlightStatues implements World3D {
 }
 
 // ---------------------------------------------------------------- little things
+
+/** How each statue is framed in its close-up (in her heights): the middle of what to show and half its height. */
+const STATUE_FRAME: Record<StatueId, [mid: number, half: number]> = { tree: [0.74, 0.8], flamingo: [0.66, 0.7], ballerina: [0.6, 0.7], whistling: [0.62, 0.64], rock: [0.4, 0.52] }
+const STATUE_FOV = 30
+const statueTmp = new Vector3()
+/** The statue close-up's camera: from the clearing's side (where her flashlight is), a little to our right and above,
+ *  the whole pose in the frame with her face high and big in it, pushing slowly in. (On a tall screen the film backs
+ *  it off along the same line, so the raised arms stay in.) */
+function statueEye(who: FilmActor, pose: StatueId, push: number) {
+  const [mid, half] = STATUE_FRAME[pose]
+  const d = (half * who.height) / Math.tan(((STATUE_FOV / 2) * Math.PI) / 180) * push
+  const look = who.at(mid, new Vector3())
+  return { look, eye: look.clone().add(statueTmp.set(Math.sin(STATUE_YAW), 0.16, Math.cos(STATUE_YAW)).normalize().multiplyScalar(d)) }
+}
+function statueShot(who: FilmActor, pose: StatueId): FilmShot {
+  return { eye: () => statueEye(who, pose, 1).eye, look: () => statueEye(who, pose, 1).look, fov: STATUE_FOV, to: { eye: () => statueEye(who, pose, 0.88).eye }, ease: 'out', sway: 0.01 }
+}
+/** The same camera, still, for QA (?statue=): a tall screen backs off the way the film does. */
+function statueShotAt(who: FilmActor, pose: StatueId, tall: boolean) {
+  const { eye, look } = statueEye(who, pose, 0.94)
+  if (tall) eye.sub(look).multiplyScalar(1.55).add(look)
+  return { eye, look, fov: STATUE_FOV }
+}
 
 /** The silly face each pose pulls (characters/statues.ts has them; the close-up needs to know which). */
 function faceOf(p: StatueId) {

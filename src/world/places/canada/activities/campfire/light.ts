@@ -17,6 +17,8 @@ const FAR = 13
 
 const tmp = new Vector3()
 const tmp2 = new Vector3()
+const tmp3 = new Vector3()
+const tmp4 = new Vector3()
 const up = new Vector3(0, 1, 0)
 const q = new Quaternion()
 
@@ -148,7 +150,12 @@ export class Flashlight {
     // The toy, in the bottom corner, pointing at the light.
     const lens = tmp2.set(this.corner.x, this.corner.y, 0.5).unproject(camera).sub(cam).normalize().multiplyScalar(this.corner.d).add(cam)
     this.toy.position.copy(lens)
-    this.toy.lookAt(this.target)
+    // (It points at the light, turned a little across the screen toward where the light is on it, so she sees the
+    // flashlight from its side, pointing, rather than end on as a stack of rings.)
+    const sx = (this.at.x / w) * 2 - 1 - this.corner.x
+    const sy = -(this.at.y / h) * 2 + 1 - this.corner.y
+    const across = tmp3.set(sx, sy, 0).normalize().applyQuaternion(camera.quaternion)
+    this.toy.lookAt(tmp4.copy(this.target).sub(lens).normalize().addScaledVector(across, 1.1).add(lens))
     this.lensMat.color.set(this.power > 0.5 ? '#FFF4C8' : '#8E8AA8')
     const p = this.power
     const on = p > 0.02

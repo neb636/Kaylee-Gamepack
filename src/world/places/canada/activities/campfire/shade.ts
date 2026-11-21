@@ -16,7 +16,7 @@ import type { Shine } from '../../characters/critters'
 import { glowTexture } from '../../story/sets/campfire'
 
 /** An unlit animal's color (times its own). Dark, but blue rather than black, so the shape still reads. */
-const DARK = new Color('#26244A')
+const DARK = new Color('#36346A')
 /** The outline round an unlit animal: moonlight, or the fire's glow when it's near the fire. */
 export const RIM_MOON = '#8D86DA'
 export const RIM_FIRE = '#F29A62'

@@ -51,7 +51,7 @@ const UNMET = ['owl', 'porcupine', 'deer', 'frog', 'bat', 'monty', 'maple']
 const GIVE_TO = ['maple', 'roxy', 'monty', 'kit1']
 
 /** Plays the toy from wherever it is to the northern lights, the way a child would: the light swept from animal to
- *  animal, onto each kit as it peeks, held on Roxy until she topples over, then four marshmallows roasted and handed
+ *  animal, onto each kit as it peeks, held on Roxy until she topples over, then five marshmallows roasted and handed
  *  out, then the flashlight clicked off. */
 async function playThrough(page, ms) {
   const f = finger(page)
@@ -163,7 +163,13 @@ export const screens = [
       await page.waitForTimeout(3200)
     },
   },
-  ...['tree', 'whistling'].map((p) => ({ name: `canada-campfire-statue-${p}`, hash: `#/world/canada/campfire/roast?statue=${p}`, reset: true, wait: 2500 })),
+  // (?statue= also holds the close-up's own camera on her, so the screen is what the close-up shows.)
+  ...['tree', 'rock', 'whistling', 'ballerina'].map((p) => ({ name: `canada-campfire-statue-${p}`, hash: `#/world/canada/campfire/roast?statue=${p}`, reset: true, wait: 2500 })),
+  // Each thing close, from the front, the side and behind (?look=<thing>&yaw=<degrees round it>, everyone lit), to
+  // check it's put together right from every side.
+  ...['owl', 'bat', 'deer', 'porcupine', 'frog', 'tent', 'fire', 'log', 'den', 'stick'].flatMap((id) =>
+    [0, 90, 180].map((yaw) => ({ name: `canada-campfire-look-${id}-${yaw}`, hash: `#/world/canada/campfire/${id === 'stick' ? 'roast' : 'eyes'}?look=${id}&yaw=${yaw}`, reset: true, wait: 2200 })),
+  ),
   // The films: the paw at the bag (in), Roxy with the puck (out).
   { name: 'canada-film-campfire-in', hash: '#/world/canada/story/campfire-in', reset: true, wait: 9000 },
   { name: 'canada-film-campfire-out', hash: '#/world/canada/story/campfire-out', reset: true, wait: 7500 },
@@ -300,15 +306,15 @@ export const motion = [
     // The roast: held in the flames until golden, given to Maple; held until it catches fire, clicked out, given to
     // Roxy (burnt is her favorite); one for Monty (he eats the stick).
     name: 'canada-campfire-roast',
-    seconds: 34,
+    seconds: 46,
     setup: async (page, base) => {
       await ready(page, base, '#/world/canada/campfire/roast')
       await page.waitForTimeout(2500)
     },
     act: async (page) => {
-      await playThrough(page, 32000)
+      await playThrough(page, 44000)
       const q = await Q(page)
-      if (q.section !== 'sky') fail('four marshmallows were not handed out', q)
+      if (q.section !== 'sky') fail('five marshmallows were not handed out', q)
     },
   },
   {
