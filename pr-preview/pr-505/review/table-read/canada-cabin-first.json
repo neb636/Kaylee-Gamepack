@@ -1,0 +1,67 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "cabin.first",
+  "title": "Canada › Cabin › First",
+  "intro": "",
+  "page": "canada-cabin-first.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 7,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "cabin.first.touch",
+      "text": "Dress the team! Drag something on.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "cabin.first.mouse",
+      "text": "Dress the team! Click something to put it on.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "cabin",
+        "first",
+        "touch"
+      ],
+      "text": "Dress the team! Drag something on.",
+      "voice": "sparkle",
+      "key": "cabin.first.touch",
+      "part": "cabin › first",
+      "when": "The Team Cabin (activities/cabin/): the skate hut beside the canal, where she dresses the team. No stamp, no end.",
+      "ms": 3024,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "cabin",
+        "first",
+        "mouse"
+      ],
+      "text": "Dress the team! Click something to put it on.",
+      "voice": "sparkle",
+      "key": "cabin.first.mouse",
+      "part": "cabin › first",
+      "when": "",
+      "ms": 3720,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

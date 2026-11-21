@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "canada-bath",
+  "title": "Canada bath",
+  "video": "canada-bath.mp4",
+  "gif": "canada-bath.gif",
+  "seconds": 51,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "canada-bath-suds",
+      "where": "canada-bath-suds",
+      "seconds": 14,
+      "fps": 34.3,
+      "status": "ok"
+    },
+    {
+      "name": "canada-bath-mirror",
+      "where": "canada-bath-mirror",
+      "seconds": 16,
+      "fps": 45.6,
+      "status": "ok"
+    },
+    {
+      "name": "canada-bath-pokes",
+      "where": "canada-bath-pokes",
+      "seconds": 16,
+      "fps": 23.6,
+      "status": "ok"
+    }
+  ]
+}

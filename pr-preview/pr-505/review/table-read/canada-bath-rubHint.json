@@ -1,0 +1,65 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "bath.rubHint",
+  "title": "Canada › Bath › Rub Hint",
+  "intro": "",
+  "page": "canada-bath-rubHint.html",
+  "audio": null,
+  "lines": 2,
+  "seconds": 6,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "bath.rubHint.touch",
+      "text": "Rub the muddy spots!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "bath.rubHint.mouse",
+      "text": "Click and wiggle on the muddy spots!",
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "bath",
+        "rubHint",
+        "touch"
+      ],
+      "text": "Rub the muddy spots!",
+      "voice": "sparkle",
+      "key": "bath.rubHint.touch",
+      "part": "bath › rubHint",
+      "when": "Misty's Bubble Bath (activities/bath/; planning/around-the-world/canada-round-2.md): she rubs a muddy spirit bear clean, fluffs her up and paints her with berries, and Misty goes to the big game looking like that.",
+      "ms": 2232,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "bath",
+        "rubHint",
+        "mouse"
+      ],
+      "text": "Click and wiggle on the muddy spots!",
+      "voice": "sparkle",
+      "key": "bath.rubHint.mouse",
+      "part": "bath › rubHint",
+      "when": "",
+      "ms": 3456,
+      "flags": [
+        "long",
+        "new"
+      ]
+    }
+  ]
+}

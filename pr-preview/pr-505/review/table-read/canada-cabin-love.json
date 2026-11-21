@@ -1,0 +1,155 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "cabin.love",
+  "title": "Canada › Cabin › Love",
+  "intro": "A hat a friend loves.",
+  "page": "canada-cabin-love.html",
+  "audio": null,
+  "lines": 6,
+  "seconds": 10,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "cabin.love.monty",
+      "text": "Mmm. Fancy.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "cabin.love.tuque",
+      "text": "Ho ho! Two hats!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "cabin.love.roxy",
+      "text": "Ooh, sneaky!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "cabin.love.misty",
+      "text": "So soft.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "cabin.love.ollie",
+      "text": "Wheee!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "cabin.love.maple",
+      "text": "Magnifique!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "cabin",
+        "love",
+        "monty"
+      ],
+      "text": "Mmm. Fancy.",
+      "voice": "moose",
+      "key": "cabin.love.monty",
+      "part": "cabin › love",
+      "when": "",
+      "ms": 2040,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "cabin",
+        "love",
+        "tuque"
+      ],
+      "text": "Ho ho! Two hats!",
+      "voice": "snowman",
+      "key": "cabin.love.tuque",
+      "part": "cabin › love",
+      "when": "",
+      "ms": 2232,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "cabin",
+        "love",
+        "roxy"
+      ],
+      "text": "Ooh, sneaky!",
+      "voice": "raccoon",
+      "key": "cabin.love.roxy",
+      "part": "cabin › love",
+      "when": "",
+      "ms": 2304,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "cabin",
+        "love",
+        "misty"
+      ],
+      "text": "So soft.",
+      "voice": "bear",
+      "key": "cabin.love.misty",
+      "part": "cabin › love",
+      "when": "",
+      "ms": 1608,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "cabin",
+        "love",
+        "ollie"
+      ],
+      "text": "Wheee!",
+      "voice": "otter",
+      "key": "cabin.love.ollie",
+      "part": "cabin › love",
+      "when": "",
+      "ms": 816,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "cabin",
+        "love",
+        "maple"
+      ],
+      "text": "Magnifique!",
+      "voice": "maple",
+      "key": "cabin.love.maple",
+      "part": "cabin › love",
+      "when": "",
+      "ms": 1032,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

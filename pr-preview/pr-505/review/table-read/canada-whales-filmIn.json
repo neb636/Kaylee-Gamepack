@@ -1,0 +1,100 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "whales.filmIn",
+  "title": "Canada › Whales › Film In",
+  "intro": "The film in (story/films/snowman.ts): the snowy park under the castle hotel, flags and lanterns, nobody about.",
+  "page": "canada-whales-filmIn.html",
+  "audio": null,
+  "lines": 4,
+  "seconds": 10,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "whales.filmIn.lucky",
+      "text": "Look! My lucky rock!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "whales.filmIn.took",
+      "text": "My rock! The whale took it!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "whales.filmIn.hop",
+      "text": "Hop on! We'll get it back!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "whales",
+        "filmIn",
+        "ollie"
+      ],
+      "text": "Ollie the sea otter spins faster than anybody!",
+      "voice": "maple",
+      "key": "whales.filmIn.ollie",
+      "part": "whales › filmIn",
+      "when": "Whale Peek-a-Boo (activities/whales/; planning/around-the-world/canada-round-2.md, section 3): a whale's spout blew Ollie's lucky rock out to sea; bubbles come up by the boat, she touches them and a whale peeks out. The film in (story/films/whales.ts): the kelp off Tofino, Ollie juggling her lucky rock on her tummy.",
+      "ms": 2520,
+      "flags": []
+    },
+    {
+      "path": [
+        "whales",
+        "filmIn",
+        "lucky"
+      ],
+      "text": "Look! My lucky rock!",
+      "voice": "otter",
+      "key": "whales.filmIn.lucky",
+      "part": "whales › filmIn",
+      "when": "Whale Peek-a-Boo (activities/whales/; planning/around-the-world/canada-round-2.md, section 3): a whale's spout blew Ollie's lucky rock out to sea; bubbles come up by the boat, she touches them and a whale peeks out. The film in (story/films/whales.ts): the kelp off Tofino, Ollie juggling her lucky rock on her tummy.",
+      "ms": 2304,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "whales",
+        "filmIn",
+        "took"
+      ],
+      "text": "My rock! The whale took it!",
+      "voice": "otter",
+      "key": "whales.filmIn.took",
+      "part": "whales › filmIn",
+      "when": "Higher, higher... a whale comes up under it. The spout shoots the rock into the sky and away. (Also Ollie's one line when the game opens from a link or a replay.)",
+      "ms": 2688,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "whales",
+        "filmIn",
+        "hop"
+      ],
+      "text": "Hop on! We'll get it back!",
+      "voice": "maple",
+      "key": "whales.filmIn.hop",
+      "part": "whales › filmIn",
+      "when": "Whale Peek-a-Boo (activities/whales/; planning/around-the-world/canada-round-2.md, section 3): a whale's spout blew Ollie's lucky rock out to sea; bubbles come up by the boat, she touches them and a whale peeks out. The film in (story/films/whales.ts): the kelp off Tofino, Ollie juggling her lucky rock on her tummy.",
+      "ms": 2040,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}

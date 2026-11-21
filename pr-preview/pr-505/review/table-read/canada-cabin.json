@@ -1,0 +1,249 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "cabin",
+  "title": "Canada › Cabin",
+  "intro": "The Team Cabin (activities/cabin/): the skate hut beside the canal, where she dresses the team. No stamp, no end.",
+  "page": "canada-cabin.html",
+  "audio": null,
+  "lines": 10,
+  "seconds": 21,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "cabin.first.touch",
+      "text": "Dress the team! Drag something on.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "cabin.first.mouse",
+      "text": "Dress the team! Click something to put it on.",
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "key": "cabin.love.monty",
+      "text": "Mmm. Fancy.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "cabin.love.tuque",
+      "text": "Ho ho! Two hats!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "cabin.love.roxy",
+      "text": "Ooh, sneaky!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "cabin.love.misty",
+      "text": "So soft.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "cabin.love.ollie",
+      "text": "Wheee!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "cabin.love.maple",
+      "text": "Magnifique!",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "cabin.gus",
+      "text": "Honk! ...I look good.",
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "key": "cabin.photo",
+      "text": "Team photo! Say maple syrup!",
+      "flags": [
+        "new"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "cabin",
+        "first",
+        "touch"
+      ],
+      "text": "Dress the team! Drag something on.",
+      "voice": "sparkle",
+      "key": "cabin.first.touch",
+      "part": "cabin › first",
+      "when": "",
+      "ms": 3024,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "cabin",
+        "first",
+        "mouse"
+      ],
+      "text": "Dress the team! Click something to put it on.",
+      "voice": "sparkle",
+      "key": "cabin.first.mouse",
+      "part": "cabin › first",
+      "when": "",
+      "ms": 3720,
+      "flags": [
+        "long",
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "cabin",
+        "love",
+        "monty"
+      ],
+      "text": "Mmm. Fancy.",
+      "voice": "moose",
+      "key": "cabin.love.monty",
+      "part": "cabin › love",
+      "when": "A hat a friend loves.",
+      "ms": 2040,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "cabin",
+        "love",
+        "tuque"
+      ],
+      "text": "Ho ho! Two hats!",
+      "voice": "snowman",
+      "key": "cabin.love.tuque",
+      "part": "cabin › love",
+      "when": "A hat a friend loves.",
+      "ms": 2232,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "cabin",
+        "love",
+        "roxy"
+      ],
+      "text": "Ooh, sneaky!",
+      "voice": "raccoon",
+      "key": "cabin.love.roxy",
+      "part": "cabin › love",
+      "when": "A hat a friend loves.",
+      "ms": 2304,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "cabin",
+        "love",
+        "misty"
+      ],
+      "text": "So soft.",
+      "voice": "bear",
+      "key": "cabin.love.misty",
+      "part": "cabin › love",
+      "when": "A hat a friend loves.",
+      "ms": 1608,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "cabin",
+        "love",
+        "ollie"
+      ],
+      "text": "Wheee!",
+      "voice": "otter",
+      "key": "cabin.love.ollie",
+      "part": "cabin › love",
+      "when": "A hat a friend loves.",
+      "ms": 816,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "cabin",
+        "love",
+        "maple"
+      ],
+      "text": "Magnifique!",
+      "voice": "maple",
+      "key": "cabin.love.maple",
+      "part": "cabin › love",
+      "when": "A hat a friend loves.",
+      "ms": 1032,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "cabin",
+        "gus"
+      ],
+      "text": "Honk! ...I look good.",
+      "voice": "gus",
+      "key": "cabin.gus",
+      "part": "cabin",
+      "when": "Gus pokes his head in at the window: he can have a hat too.",
+      "ms": 2376,
+      "flags": [
+        "new"
+      ]
+    },
+    {
+      "path": [
+        "cabin",
+        "photo"
+      ],
+      "text": "Team photo! Say maple syrup!",
+      "voice": "maple",
+      "key": "cabin.photo",
+      "part": "cabin",
+      "when": "The mirror takes a team photo.",
+      "ms": 2304,
+      "flags": [
+        "new"
+      ]
+    }
+  ]
+}
