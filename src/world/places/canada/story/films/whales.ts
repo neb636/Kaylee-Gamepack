@@ -60,7 +60,7 @@ export const WHALES_IN: StoryFilm = {
         juggle.gone = true
         from.copy(juggle.rock.getWorldPosition(tB))
         over.copy(hole).setY(1.3)
-        away.set(hole.x - 4, 11, hole.z - 14)
+        away.set(hole.x - 3, 7.5, hole.z - 18)
       }
       if (t < 3.0) {
         const k = (t - 2.55) / 0.45
@@ -99,16 +99,17 @@ export const WHALES_IN: StoryFilm = {
         sayAt: 0.2,
         hold: 0.3,
         start: () => {
-          juggle.height = 0.3
+          juggle.show = true
           ollie.pull('happy')
         },
       },
       {
         // Higher, higher... a whale comes up right beside her, and its spout shoots the rock into the sky and away.
         id: 'higher',
-        shot: cam([ox + 3.2, 1.9, oz + 6.4], [ox + 0.6, 1.3, oz - 1.2], { look: [ox + 0.2, 2.6, oz - 2] }, { tall: { eye: [ox + 3.6, 2.4, oz + 8.6] } }),
+        shot: cam([ox + 3.2, 2.3, oz + 7], [ox + 0.6, 1.2, oz - 1.2], { look: [ox + 0.3, 1.8, oz - 2] }, { tall: { eye: [ox + 3.6, 2.8, oz + 9.4] } }),
         dur: 4.3,
         start: () => {
+          juggle.show = false
           placeGrey()
           grey.look = ollie.head(tA).clone()
         },
@@ -139,7 +140,7 @@ export const WHALES_IN: StoryFilm = {
       {
         // Maple at the wheel: hop on! Ollie paddles to the stern and grabs the rope.
         id: 'hop',
-        shot: cam([at.x + 1.6, 1.9, at.z + 6.4], [at.x + 0.6, 1.0, at.z + 0.4]),
+        shot: cam([at.x + 2.4, 2.5, at.z + 9.5], [at.x, 0.9, at.z + 1.2], undefined, { tall: { eye: [at.x + 2.8, 3.2, at.z + 12] } }),
         say: I.hop,
         sayAt: 0.25,
         hold: 0.5,
@@ -210,7 +211,7 @@ export const WHALES_OUT: StoryFilm = {
         say: O.wet,
         sayAt: 0.15,
         hold: 0.3,
-        start: () => (juggle.height = 0.28),
+        start: () => (juggle.show = true),
         tick: (_k, t) => {
           watchOllie()
           ollie.headTurn = Math.sin(Math.min(1, t / 0.6) * Math.PI * 0.5) * 0.35
@@ -226,6 +227,7 @@ export const WHALES_OUT: StoryFilm = {
         hold: 0.3,
         start: () => {
           ollie.headTurn = 0
+          juggle.show = false
         },
         tick: watchOllie,
         cues: [[1.3, () => boat.cheer()]],

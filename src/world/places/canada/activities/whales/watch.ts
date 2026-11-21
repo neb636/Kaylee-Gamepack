@@ -512,7 +512,7 @@ export class WhaleWatch implements World3D {
     for (let i = 0; i < 12; i++) {
       const side = i % 2 ? -this.side : this.side
       const across = this.tall ? side * 2.5 : side * dist
-      const deep = this.tall ? dist : 1.5 + len * 0.1
+      const deep = this.tall ? dist * 0.75 : 1.5 + len * 0.1
       const x = d.x + right.x * across + into.x * deep
       const z = d.z + right.z * across + into.z * deep
       if (open(x, z, len * 0.6 + 2) && Math.hypot(x - HOME.x, z - HOME.z) < ARENA + 6) {
@@ -1571,7 +1571,7 @@ export class WhaleWatch implements World3D {
     const hz = Math.abs(Math.sin(yaw)) * (box.x1 - box.x0) / 2 + Math.abs(Math.cos(yaw)) * (box.z1 - box.z0) / 2
     // (The depth counts for little: what's further off looks smaller anyway, and a deep box would back the camera off.)
     // (On a tall screen the camera looks down more, so the whale beyond the boat fills the height.)
-    const half = new Vector3(Math.max(tall ? 3.2 : 4.5, hx), box.y1 / 2 + 0.2, Math.max(1.2, hz * (tall ? 0.7 : 0.3)))
+    const half = new Vector3(Math.max(tall ? 2.9 : 4.5, hx), box.y1 / 2 + 0.2, Math.max(1.2, hz * (tall ? 0.6 : 0.3)))
     return { center: new Vector3(cx, box.y1 * 0.3, cz), half, yaw: CAM_YAW, pitch: tall ? 32 : 24, follow: true, minDist: 6, maxDist: 90 }
   }
 

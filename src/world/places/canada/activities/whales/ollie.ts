@@ -132,6 +132,8 @@ export class Juggle {
   on = false
   height = 0.35
   tuck = false
+  /** Held up beside her face in her paw, to show it off ("Look! My lucky rock!"). */
+  show = false
   /** Hidden (the whale took it). */
   gone = false
   /** A toss left her paws this frame / landed back (the world plays a soft clack). */
@@ -160,7 +162,11 @@ export class Juggle {
     this.tossed = this.caught = false
     this.rock.visible = !this.gone
     if (this.gone) return
-    if (this.tuck) {
+    if (this.show) {
+      // Up in her left paw, beside her cheek (never in front of her face).
+      this.rock.position.set(0.36 * H, 0.66 * H, 0.2 * H * c)
+      a.rig.armR.rotation.set(-0.5, 0, 1.25 + Math.sin(t * 5) * 0.06)
+    } else if (this.tuck) {
       // Tucked in the pocket of skin under her left arm, the arm down over it.
       this.rock.position.set(0.25 * H, 0.42 * H, 0.1 * H * c)
       a.rig.armR.rotation.set(-0.2, 0, 0.35)
