@@ -22,7 +22,9 @@ and local builds send nothing. Read it with the PostHog MCP (`execute-sql`, the 
   - `01a17bf5-be61-78c6-96d3-10f54e01ffb3`: Safari, 2026-10-27 to 2026-11-12
   - `01a1d15e-e84c-7f57-9643-727cd59f29e5`: the Home Screen app, since 2026-11-12
 - **A tester's browser goes quiet**: it sends no play at all, so it's absent from the data rather than tagged. Each
-  browser keeps its own tag: Safari, Chrome and an iPhone's Home Screen app each need `?tester=1` once. Before
+  browser keeps its own tag: Safari and Chrome each need `?tester=1` once. A Home Screen app has no address bar and
+  its own storage, so the link can't reach it: find its anonymous id (`standalone: true` on `app_storage`, the screen
+  size) and add it to `TESTER_IDS` in `src/posthog.ts`, which tags it on its next launch (`?tester=0` lasts one launch). Before
   2026-11-21 the tag existed only in builds from PR #502 on, and only before the `#`.
 - **A new device of hers** (or the iPad after iOS cleared its storage): open `…/Kaylee-Gamepack/?target_audience=1`
   on it once, inside the Home Screen app if it's one (that app's storage is separate from Safari's). If it can't be
