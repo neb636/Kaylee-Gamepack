@@ -117,7 +117,9 @@ function onSkin(o: Object3D, hull: Hull, s: number, a: number, push = 0) {
 export function seaStar(bag: Bag, r = 0.28, color = '#FF8A5C') {
   const arms = Array.from({ length: 5 }, (_, i) => {
     const a = (i * Math.PI * 2) / 5
-    return P.capsule(r * 0.24, r * 0.7, color, { at: [Math.sin(a) * r * 0.55, 0, Math.cos(a) * r * 0.55], rot: [Math.PI / 2, a, 0], scale: [1, 1, 0.7] })
+    // (Laid flat, then turned to its own direction: in the default XYZ order every arm lay the same way, five
+    // parallel sausages that read as an "H", not a star.)
+    return P.capsule(r * 0.24, r * 0.7, color, { at: [Math.sin(a) * r * 0.55, 0, Math.cos(a) * r * 0.55], rot: [Math.PI / 2, a, 0], order: 'YXZ', scale: [1, 1, 0.7] })
   })
   const dots = Array.from({ length: 10 }, (_, i) => {
     const a = (Math.floor(i / 2) * Math.PI * 2) / 5
