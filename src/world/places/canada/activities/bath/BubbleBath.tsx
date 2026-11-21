@@ -130,7 +130,7 @@ export function BubbleBath({ onDone, setProgress, filmed }: CanadaActivityProps)
       >
         <SparklePuppet ref={sparkle} height="100%" lookToward={0.6} />
       </button>
-      <div style={{ position: 'absolute', left: 16, right: 16, top: 'calc(var(--safe-top) + 84px)', display: 'flex', flexDirection: 'column-reverse', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
+      <div style={{ position: 'absolute', left: 'min(300px, 36vw)', right: 12, top: 'calc(var(--safe-top) + 12px)', display: 'flex', flexDirection: 'column-reverse', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
         {done && (
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 4, type: 'spring' }} style={{ pointerEvents: 'auto' }}>
             <BigButton onClick={restart} ariaLabel="Another bath">

@@ -124,6 +124,8 @@ export class MistyCoat {
   private sweater: { body: Group; armL: Group; armR: Group } | null = null
   private sweaterPrint = ''
   private sweaterPuff = -1
+  /** The color a Team Cabin jersey gives the sweater (null: its own white). */
+  private sweaterTint: string | null = null
   private fur: Color
   private light: Color
   private dark: Color
@@ -467,7 +469,7 @@ export class MistyCoat {
     if (at === 'nose') return { pivot: rig.head, p: new Vector3(0, headY - 0.14 * R, 1.1 * R), n: new Vector3(0, 0.15, 1).normalize() }
     // The chest: on the sweater if she has it on, on her fur if not.
     const y = 0.47 * H
-    const z = this.frontZ(0.075 * H, y) + (this.sweaterOn ? 0.012 * H : 0)
+    const z = this.frontZ(0.075 * H, y) + (this.sweaterOn ? 0.036 * H : 0)
     return { pivot: rig.body, p: new Vector3(0.075 * H, y, z), n: new Vector3(0.3, 0.15, 1).normalize() }
   }
   /** The nearest spot to a point in the world (a decoration she drops). */
@@ -491,6 +493,7 @@ export class MistyCoat {
     if (on && (!this.sweater || key !== this.sweaterPrint)) {
       this.dropSweater()
       this.sweater = this.buildSweater(this.print)
+      if (this.sweaterTint) this.tintSweater(this.sweaterTint)
       this.sweaterPrint = key
     }
     if (this.sweater) for (const g of Object.values(this.sweater)) g.visible = on
@@ -735,7 +738,9 @@ export class MistyCoat {
   private buildSweater(print: Berry[]) {
     const { H } = this
     const c = this.c
-    const round: V3 = [c, 1, this.rz]
+    // (A chunky sweater, a little deeper than she is, so nothing on her chest pokes through it.)
+    const rz = this.rz * 1.1
+    const round: V3 = [c, 1, rz]
     const r = 0.171 * H
     const top = 0.34 * H
     const lined: BufferGeometry[] = [P.capsule(r, 0.1 * H, SWEATER, { at: [0, top, 0], scale: round })]
@@ -747,7 +752,7 @@ export class MistyCoat {
     }
     const front = (x: number, y: number) => {
       const rr = rAt(y)
-      return this.rz * Math.sqrt(Math.max(0, rr * rr - (x / c) ** 2))
+      return rz * Math.sqrt(Math.max(0, rr * rr - (x / c) ** 2))
     }
     // Red stripes round the hem: a band hugging the curve of the bottom.
     for (const [y0, y1] of [[0.165, 0.195], [0.21, 0.225]] as const) {
@@ -756,7 +761,7 @@ export class MistyCoat {
       plain.push(P.cyl(a, b, (y1 - y0) * H, SWEATER_RED, { at: [0, ((y0 + y1) / 2) * H, 0], scale: round }, 28))
     }
     // The collar.
-    lined.push(P.torus(0.105 * H, 0.022 * H, SWEATER_RED, { at: [0, 0.525 * H, 0.012 * H], rot: [Math.PI / 2 + 0.15, 0, 0], scale: [c, this.rz, 1] }))
+    lined.push(P.torus(0.105 * H, 0.022 * H, SWEATER_RED, { at: [0, 0.525 * H, 0.012 * H], rot: [Math.PI / 2 + 0.15, 0, 0], scale: [c, rz, 1] }))
     // The maple leaf (red, on the chest) and the paw print (the tummy), wrapped onto the front.
     const wrap = (pts: [number, number][], cx: number, cy: number, color: string, lift: number) => {
       const g = P.prism(pts, 0.004 * H, color)
@@ -799,7 +804,33 @@ export class MistyCoat {
     const armR = sleeve(1)
     this.actor.rig.armL.add(armL)
     this.actor.rig.armR.add(armR)
+    // The Team Cabin's jersey tints it through this hook (characters/worn.ts): the body and sleeves take the color, the
+    // red stripes, collar, maple leaf and her paw print stay as they are.
+    body.name = 'misty-sweater'
+    body.userData.tint = (color: string | null) => this.tintSweater(color)
     return { body, armL, armR }
+  }
+
+  /** Recolors the sweater's white (body and sleeves) to `color`, or back to white (null). */
+  tintSweater(color: string | null) {
+    this.sweaterTint = color
+    if (!this.sweater) return
+    const white = new Color(SWEATER)
+    const to = new Color(color ?? SWEATER)
+    for (const g of Object.values(this.sweater)) {
+      const mesh = g.children[0] as Mesh
+      const attr = mesh.geometry.attributes.color as BufferAttribute
+      const a = attr.array as Float32Array
+      // (Which corners were white is remembered the first time, so a second tint finds them again.)
+      let was = mesh.userData.white as Uint8Array | undefined
+      if (!was) {
+        was = new Uint8Array(attr.count)
+        for (let i = 0; i < attr.count; i++) was[i] = Math.abs(a[i * 3] - white.r) + Math.abs(a[i * 3 + 1] - white.g) + Math.abs(a[i * 3 + 2] - white.b) < 0.004 ? 1 : 0
+        mesh.userData.white = was
+      }
+      for (let i = 0; i < attr.count; i++) if (was[i]) a.set([to.r, to.g, to.b], i * 3)
+      attr.needsUpdate = true
+    }
   }
 }
 

@@ -31,9 +31,9 @@ export const TALLEST = { x: 2.6, z: -10, h: 19 }
 /** Where Misty has her bath (in the pool, the water round her ankles), facing the camera. */
 export const BATH = { x: 0.15, y: -0.12, z: -1.7 }
 /** The still water in front of her that glows like a mirror at the end. */
-export const MIRROR = { x: 1.05, z: -1.3, r: 0.4 }
+export const MIRROR = { x: 0.92, z: -1.3, r: 0.4 }
 /** The big cedar on the right bank she scratches her back on (its trunk's radius at the foot). */
-export const SCRATCH = { x: 2.1, z: -1.95, r: 0.46, h: 17 }
+export const SCRATCH = { x: 1.78, z: -2.25, r: 0.42, h: 17 }
 
 // The river's colors.
 const WATER = '#6BBBD9'

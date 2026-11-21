@@ -142,7 +142,7 @@ const MAPLE_TALL: [number, number, number] = [-0.74, -0.06, -1.55]
 const SOAP_ROCK = new Vector3(-0.92, -0.08, -0.95)
 const SLUG_AT = new Vector3(-1.98, 0.34, -2.12)
 const RAVEN_AT = new Vector3(SCRATCH.x - SCRATCH.r - 0.36, 1.72, SCRATCH.z + 0.1)
-const SKY_CLOUD = new Vector3(-0.95, 1.85, -2.6)
+const SKY_CLOUD = new Vector3(-0.55, 1.72, -2.6)
 const SALMON_POOL = new Vector3(0.95, 0.05, FALLS_Z + 0.8)
 const FALLS_AT = new Vector3(-0.55, 1.05, FALLS_Z + 0.2)
 
@@ -1411,7 +1411,6 @@ export class BubbleBathWorld implements World3D {
         this.timers.later(() => riverSfx.swing(), 350)
         this.timers.later(() => {
           riverSfx.bigSplash()
-          this.river.bigSplash(AT.x - 0.55, AT.z + 0.35)
           this.splash(AT.x - 0.4, 0.3, AT.z + 0.4, 30)
           // The splash rinses her a little (in the wash), pops some suds.
           if (this.stage === 'sponge' || this.stage === 'rain') {
@@ -1671,7 +1670,7 @@ export class BubbleBathWorld implements World3D {
       else if (id === 'sweater') place(el, this.stage === 'sweater' && this.sweater?.root.visible ? this.sweater.root.localToWorld(tmp.set(0, -0.2, 0)) : null, px(this.sweater?.root.getWorldPosition(tmp) ?? tmp.set(0, 0, 0), 0.55))
       else if (id === 'maple') place(el, this.maple.at(0.5, tmp), px(this.maple.at(0.5, tmp2), 0.7))
       else if (id === 'soap') place(el, this.soap.state === 'rock' ? this.soap.g.position.clone() : null, 0)
-      else if (id === 'cedar') place(el, tmp.set(SCRATCH.x, 1.1, SCRATCH.z + 0.2), px(tmp2.set(SCRATCH.x, 1.1, SCRATCH.z), SCRATCH.r * 1.6))
+      else if (id === 'cedar') place(el, tmp.set(SCRATCH.x - SCRATCH.r * 0.7, 1.1, SCRATCH.z + 0.25), px(tmp2.set(SCRATCH.x, 1.1, SCRATCH.z), SCRATCH.r * 1.6))
       else if (id === 'salmon') place(el, tmp.set(SALMON_POOL.x, 0.25, SALMON_POOL.z), 0)
       else if (id === 'falls') place(el, FALLS_AT.clone(), 0)
       else if (id === 'slug') place(el, SLUG_AT.clone().setY(SLUG_AT.y + 0.06), 0)

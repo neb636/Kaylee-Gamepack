@@ -173,7 +173,7 @@ export const screens = [
 export const pacing = [
   // The auto-player's taps pick tools up (each does a short go on her), tap her, the pokeables and the pool: a tap is
   // a whole go, so taps alone finish the bath. The drag robot is qa-motion's canada-bath-rub.
-  { name: 'canada bubble bath', id: 'bath', hash: '#/world/canada/bath', reset: true },
+  { name: 'canada bubble bath', id: 'bath', hash: '#/world/canada/bath/wash', reset: true },
 ]
 
 export const motion = [
@@ -185,6 +185,16 @@ export const motion = [
     act: async (page) => {
       await rubRobot(page, 145000)
       finished('the rub robot')
+    },
+  },
+  {
+    // On a Mac (`?device=mouse`: "Click and wiggle"): the same rub with the mouse, all the way to the sweater.
+    name: 'canada-bath-mouse',
+    seconds: 150,
+    setup: (page, base) => ready(page, base, '#/world/canada/bath/wash?device=mouse', 1500),
+    act: async (page) => {
+      await rubRobot(page, 145000)
+      finished('the mouse robot')
     },
   },
   {
