@@ -10,6 +10,7 @@ import type { Bag } from '../../../engine3d/dispose'
 import { merge, P, solid, solidMix } from '../../../engine3d/geo'
 import { CANADA_COLORS } from './looks'
 import { ToyActor, type ToyPose } from './toy'
+import { TEAM_SCARF, type ToySpots } from './worn'
 
 const BLACK = '#2F3443'
 const HEAD = '#294A50'
@@ -47,6 +48,9 @@ export class Lulu extends ToyActor {
   private wingR = new Group()
   private team: Group | null = null
   private headAt = new Vector3()
+  /** Where the Team Cabin's things sit on her (characters/worn.ts): her head, the bottom of her neck where the scarf
+   *  goes, her body and her wings (a jersey's sleeves). The chick has none. */
+  spots: ToySpots | null = null
 
   constructor(bag: Bag, o: { height?: number; voice?: string | null; chick?: boolean } = {}) {
     super(o.height ?? (o.chick ? 0.26 : 0.62), o.chick || o.voice === null ? undefined : (o.voice ?? 'loon'))
@@ -96,7 +100,22 @@ export class Lulu extends ToyActor {
     // The team's pink scarf (hidden until she joins): a ring at the bottom of her neck with a short tail.
     this.team = solid(merge([P.torus(0.14 * H, 0.04 * H, CANADA_COLORS.scarf, { at: [0, 0.03 * H, 0.0], rot: [Math.PI / 2 - 0.15, 0, 0] }), P.rbox(0.07 * H, 0.16 * H, 0.03 * H, 0.012 * H, CANADA_COLORS.scarf, { at: [0.09 * H, -0.03 * H, 0.15 * H], rot: [0.5, 0, -0.2] })]), bag, 1.8)
     this.team.visible = false
+    this.team.name = TEAM_SCARF
     this.neck.add(this.team)
+    const spot = (parent: Group, x: number, y: number, z: number, data: Record<string, number>, tilt = 0) => {
+      const g = new Group()
+      g.position.set(x, y, z)
+      g.rotation.x = tilt
+      g.userData = data
+      parent.add(g)
+      return g
+    }
+    this.spots = {
+      hat: spot(this.neck, 0, headY, 0.02 * H, { R }),
+      neck: spot(this.neck, 0, 0.03 * H, 0, { r: 0.14 * H }, -0.15),
+      belly: spot(this.body, 0, 0.27 * H, -0.08 * H, { rx: 0.285 * H, ry: 0.216 * H, rz: 0.45 * H }),
+      wings: [this.wingL, this.wingR],
+    }
   }
 
   /** The chick: a round ball of light grey fluff, most of it head (that's what makes a baby read as a baby), a pale
