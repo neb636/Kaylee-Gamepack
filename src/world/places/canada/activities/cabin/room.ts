@@ -77,8 +77,8 @@ export function plan(layout: Layout, row = 3, narrow = false): RoomPlan {
       lantern: [0.5, 4.3, 0.3],
     }
   // (On a narrow screen they hang over the ends of the bench instead, so the team stays big.)
-  const wx = narrow ? -Math.max(0.95, row + 0.3) : -Math.min(2.9, Math.max(1.55, row + 0.9))
-  const mx = narrow ? Math.max(0.95, row + 0.3) : Math.min(2.95, Math.max(1.55, row + 0.85))
+  const wx = narrow ? -Math.max(0.95, row + 0.3) : -Math.min(2.9, Math.max(1.2, row + 0.9))
+  const mx = narrow ? Math.max(0.95, row + 0.3) : Math.min(2.95, Math.max(1.2, row + 0.85))
   // (A short row has the window, the mirror and the shelf hung lower, so Maple alone isn't small under a tall wall.)
   const up = narrow ? 0.32 : 0.32 * Math.min(1, Math.max(0, (row - 0.5) / 1.3))
   return {

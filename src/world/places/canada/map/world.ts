@@ -584,9 +584,11 @@ export class CanadaMapWorld implements World3D {
       if (this.gusN && this.arrivalT >= this.moveEnd) {
         // Gus has his say: him and the newcomer, close enough to see his face.
         const g = this.geese[0].root.getWorldPosition(tmp2)
-        this.close.center.copy(a.spot.getWorldPosition(tmp)).lerp(g, 0.5).setY(g.y + 0.4)
+        // (From Gus's feet up to the top of the newcomer's head, so a tall friend's face stays in the shot too.)
+        const top = a.actor.at(1.08, tmp3).y
+        this.close.center.copy(a.spot.getWorldPosition(tmp)).lerp(g, 0.5).setY(Math.max(g.y + 0.4, (g.y + top) / 2))
         const across = Math.max(1.3, tmp.distanceTo(g) * 0.8)
-        this.closeHalf(across, across * 0.45, across * 0.65)
+        this.closeHalf(across, Math.max(across * 0.45, (top - g.y) / 2 + 0.12), across * 0.65)
         this.close.pitch = this.overview.pitch - 10
       } else if (this.arrivalT >= this.moveAt - 0.5) {
         // The newcomer's move (and, after it, waiting for Gus).

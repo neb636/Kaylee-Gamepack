@@ -24,7 +24,7 @@ import { Lulu } from '../characters/lulu'
 import { ToyActor, type Performer } from '../characters/toy'
 import { Tuque } from '../characters/tuque'
 import type { ChapterId } from '../story/chapters'
-import { makePuck, makeStick } from '../story/props'
+import { makePuck } from '../story/props'
 import { moveSfx } from './sounds'
 
 const TAU = Math.PI * 2
@@ -38,10 +38,10 @@ export const MOVE_S: Record<ChapterId, number> = { snowman: 2.5, bike: 2.6, camp
  *  the shot is (half across, in the rink's units): enough to hold the friend and whatever flies. */
 const FOCUS: Record<ChapterId, { at: [number, number, number]; across: number }> = {
   snowman: { at: [0, 0.45, 0.3], across: 1.05 },
-  bike: { at: [0, 0.45, 0.25], across: 1.15 },
+  bike: { at: [0, 0.8, 0.15], across: 1.3 },
   campfire: { at: [0.2, 0.2, 0.55], across: 1.3 },
   canoe: { at: [0, 0.6, 0.3], across: 1.05 },
-  bath: { at: [-0.2, 0.6, 0.5], across: 1.45 },
+  bath: { at: [-0.15, 0.6, 0.42], across: 1.22 },
   whales: { at: [0, 0.4, 0.15], across: 1.35 },
 }
 
@@ -190,6 +190,19 @@ const PINE_DARK = '#7C4630'
 
 function rock(bag: Bag) {
   return solid(merge([P.sphere(0.055, ROCK, { scale: [1, 0.78, 0.92] }, 12), P.sphere(0.02, '#CBC8D8', { at: [0.022, 0.022, 0.032] }, 6), P.sphere(0.012, '#8E8AA0', { at: [-0.025, -0.005, 0.038] }, 6)]), bag, 1.4)
+}
+
+/** Misty's stick on the map: the game's hockey stick (story/props.ts makeStick), but twice as thick, in a darker wood
+ *  and with a bigger pink blade, so it reads from the board's high camera against the snow. */
+function mapStick(H: number, bag: Bag) {
+  return solid(
+    merge([
+      P.cyl(0.032 * H, 0.032 * H, 0.52 * H, '#C99A6E', { at: [0.09 * H, -0.25 * H, 0.1 * H], rot: [0.42, 0, 0] }, 8),
+      P.rbox(0.07 * H, 0.05 * H, 0.24 * H, 0.016 * H, CANADA_COLORS.scarf, { at: [0.09 * H, -0.46 * H, 0.28 * H] }),
+    ]),
+    bag,
+    2.2,
+  )
 }
 
 /** A pinecone about 0.15 long, lying along z: a brown egg with three rings of scales and a stalk. */
@@ -433,7 +446,8 @@ export class MapMoves {
       const side = i ? 1 : -1
       const t0 = 0.6 + i * 0.2
       const from = new Vector3(side * 3.6 * R, hy + 2.8 * R, 0.4 * R)
-      const perch = new Vector3(side * 1.12 * R, hy + 1.42 * R, -0.08 * R)
+      // (On the inner half of the antler's palm, which tips up toward his head, clear of the tines along its rim.)
+      const perch = new Vector3(side * 0.84 * R, hy + 1.47 * R, -0.08 * R)
       const top = new Vector3(side * 0.3 * R, hy + 0.97 * R, 0.05 * R)
       const away = new Vector3(side * 3.4 * R, hy + 3.8 * R, -1.2 * R)
       const p = g.root.position
@@ -482,7 +496,8 @@ export class MapMoves {
     const a = r.m.actor
     const spot = r.m.spot
     const rink = this.host.rink
-    const puck = (this.puckR ??= this.prop(makePuck(this.host.bag, 0.06)))
+    // (A big puck: it ends up on her head, and from the board's camera a small one is lost in her ears.)
+    const puck = (this.puckR ??= this.prop(makePuck(this.host.bag, 0.085)))
     const k = Math.min(span(s, 0, 0.55), 1 - span(s, 0.6, 0.7), 1)
     if (s < 0.7) windUp('campfire', a, k, t)
     // The goose's way along the ice in front of her (rink space): in from the right, past her, slowing to a stop.
@@ -591,7 +606,7 @@ export class MapMoves {
       if (!on) return
       // (Out to her side and up, a little back: from the board's high camera they float clear of her face.)
       n.position.set(bill.x + 0.12 + u * (0.55 + (i % 2) * 0.15) + Math.sin(u * 5 + i * 1.7) * 0.06, bill.y + 0.05 + u * 0.8, bill.z - u * 0.3)
-      n.scale.setScalar(Math.max(0.001, Math.min(1, u / 0.12) * (1 - smooth(span(u, 0.7, 1))) * (1.0 + 0.1 * Math.sin(t * 9 + i))))
+      n.scale.setScalar(Math.max(0.001, 1.35 * Math.min(1, u / 0.12) * (1 - smooth(span(u, 0.7, 1))) * (1.0 + 0.1 * Math.sin(t * 9 + i))))
       // Turned to face the camera, with a little sway.
       n.parent!.getWorldQuaternion(q).invert()
       n.quaternion.copy(q.multiply(camera.quaternion))
@@ -613,7 +628,7 @@ export class MapMoves {
     const H = a.height
     const { armR, armL, body, head } = parts(a)
     if (!this.stick && armR) {
-      this.stick = makeStick(H, this.host.bag, CANADA_COLORS.scarf)
+      this.stick = mapStick(H, this.host.bag)
       this.stick.visible = false
       armR.add(this.stick)
     }
@@ -635,8 +650,9 @@ export class MapMoves {
     })
     // The pinecone: on the snow by her stick's blade, then away in a big arc over the boards, a skitter, a pop.
     const rest = new Vector3(0.3 * H, 0.04, 0.42 * H)
-    const land = new Vector3(-0.5, 0.035, 1.12)
-    const slide = new Vector3(-0.62, 0.035, 1.25)
+    // (Close enough in front of her that the shot keeps her big while it flies.)
+    const land = new Vector3(-0.42, 0.035, 0.94)
+    const slide = new Vector3(-0.53, 0.035, 1.04)
     const p = cone.position
     cone.visible = !done && s < 2.3
     if (s < 0.9) {
@@ -707,7 +723,8 @@ export class MapMoves {
     else if (s < 2.4) arcAt(mp, paws, span(s, 1.9, 2.4), 0.45, p)
     else p.lerpVectors(paws, tmp2.set(0.22 * H, 0.38 * H, 0.05 * H), span(s, 2.4, 2.6))
     stone.rotation.set(s * 8, s * 5, 0)
-    stone.scale.setScalar(Math.max(0.001, s > 2.4 ? 1 - span(s, 2.45, 2.62) : Math.min(1, s / 0.1)))
+    // (Half as big again as life: from the board's camera a real-sized pebble is a speck.)
+    stone.scale.setScalar(1.5 * Math.max(0.001, s > 2.4 ? 1 - span(s, 2.45, 2.62) : Math.min(1, s / 0.1)))
     once('j1', 0.0, () => moveSfx.pat())
     once('j2', 0.4, () => moveSfx.pat())
     once('j3', 0.8, () => moveSfx.pat())
