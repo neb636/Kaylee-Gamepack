@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "maple-before",
+  "title": "Maple before",
+  "video": "maple-before.mp4",
+  "gif": "maple-before.gif",
+  "seconds": 5,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Characters maple",
+      "where": "#/world/characters/maple?shot=face&zoom=1.6",
+      "seconds": 3,
+      "fps": 32,
+      "status": "ok"
+    }
+  ]
+}
