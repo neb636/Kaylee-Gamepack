@@ -38,7 +38,7 @@ export const SCRATCH = { x: 2.1, z: -1.95, r: 0.46, h: 17 }
 // The river's colors.
 const WATER = '#6BBBD9'
 const WATER_DEEP = '#4E97BC'
-const FALLS = '#BFE6F5'
+const FALLS = '#9DD3EC'
 const MOSS = '#7DB563'
 const MOSS_DARK = '#5E9A4E'
 const ROCK = '#9A93A3'

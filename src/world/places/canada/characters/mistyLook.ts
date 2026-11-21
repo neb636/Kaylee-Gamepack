@@ -28,7 +28,7 @@ export const MUD = '#8A5E43'
 /** The mud on her fur goes from a dry tan to a wet dark brown in blotches; the dollops on her are darker still. */
 const MUD_LIGHT = new Color('#B08A66')
 const MUD_DARK = new Color('#5E3D2A')
-const MUD_SHADES = ['#5E3F2C', '#6B4A33', '#553826', '#704C34']
+const MUD_SHADES = ['#6E4B35', '#76513A', '#694530', '#7A563D']
 const MOSS = '#6FA35A'
 const INK = '#2E2233'
 /** The sweater's white and red. */
@@ -240,8 +240,8 @@ export class MistyCoat {
       // Mud everywhere she's muddy (not on the muzzle's middle, so her smile still shows).
       const onFace = p.part === 'head' && v.z > 0.45 * R && Math.abs(v.x) < 0.55 * R && v.y < headY + 0.3 * R
       // (A clump here and there, not a spot on every patch: a third of the places get one, a few of them moss.)
-      if (!onFace && rnd() < 0.16) {
-        const s = (p.part === 'head' ? 0.14 * R : 0.03 * H) * (0.8 + rnd() * 0.5)
+      if (!onFace && rnd() < 0.12) {
+        const s = (p.part === 'head' ? 0.11 * R : 0.026 * H) * (0.8 + rnd() * 0.5)
         const q = new Quaternion().setFromUnitVectors(new Vector3(0, 0, 1), nn).multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), rnd() * 6))
         const moss = rnd() < 0.12
         p.blobs.push({ v: i, p: v.clone().addScaledVector(nn, s * 0.06), q, size: s, color: new Color(moss ? MOSS : MUD_SHADES[Math.floor(rnd() * MUD_SHADES.length)]), zone: z, k: 1 })
@@ -602,7 +602,7 @@ export class MistyCoat {
         const k = Math.min(1, p.mud[b.v] * 1.25)
         b.k += snap ? k - b.k : (k - b.k) * Math.min(1, dt * 10)
         if (b.k < 0.04) continue
-        sclV.set(b.size * b.k, b.size * b.k * 0.8, b.size * 0.42 * b.k)
+        sclV.set(b.size * b.k * 1.3, b.size * b.k * 0.7, b.size * 0.4 * b.k)
         p.blobMesh.setMatrixAt(n, m4.compose(b.p, b.q, sclV))
         p.blobMesh.setColorAt(n, b.color)
         n++

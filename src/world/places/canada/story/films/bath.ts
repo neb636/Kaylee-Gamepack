@@ -104,14 +104,14 @@ export const BATH_IN: StoryFilm = {
       {
         // Two eyes blink in all that mud: missed again!
         id: 'miss',
-        shot: close(misty, 0.15, 1.45, 0.05),
+        shot: close(misty, 0.15, 1.8, -0.06),
         say: X.miss,
         sayAt: 0.7,
         hold: 0.3,
         start: () => {
           misty.place(BATH.x + 0.3, BATH.y, BATH.z + 0.1, -10)
-          misty.lean = 0.1
-          misty.pull('sad', true)
+          misty.lean = 0
+          misty.pull('sad')
           misty.shake()
         },
         cues: [[0.25, () => s.splash(BATH.x + 0.3, 1.2, BATH.z + 0.3, 8)]],
@@ -136,15 +136,15 @@ export const BATH_IN: StoryFilm = {
       {
         // Misty looks down at herself: it's only mud. Oh dear. I need a bath.
         id: 'mud',
-        shot: cam([BATH.x + 0.1, 1.25, BATH.z + 2.9], () => misty.head(tmp).add(off.set(0, -0.25, 0)), { eye: [BATH.x + 0.1, 1.2, BATH.z + 2.6] }),
+        shot: cam([BATH.x + 0.1, 0.95, BATH.z + 2.9], () => misty.head(tmp).add(off.set(0, -0.12, 0)), { eye: [BATH.x + 0.1, 0.92, BATH.z + 2.6] }),
         say: X.mud,
         sayAt: 0.3,
         hold: 0.3,
         start: () => {
           maple.armsUp = 0
           misty.turnTo(BATH.x + 0.3, BATH.z + 5)
-          misty.lean = 0.25
-          misty.pull('sad', true)
+          misty.lean = 0.1
+          misty.pull('sad')
         },
         tick: (_k, t) => (misty.headTurn = t < 1.5 ? Math.sin(t * 3) * 0.25 : 0),
         cues: [[1.6, () => ((misty.lean = 0), misty.nod())]],

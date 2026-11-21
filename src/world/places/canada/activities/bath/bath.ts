@@ -62,7 +62,7 @@ const FILE = 'src/world/places/canada/activities/bath/bath.ts'
 /** How the bath feels: Dad tunes these by hand in the feel lab (?feel=1). */
 export const FEEL = knobs('bath', "Misty's bubble bath", FILE, {
   suds: { value: 1, min: 0.2, max: 3, step: 0.1, label: 'Suds per stroke', unit: '×', note: 'how many bubbles the sponge leaves as she rubs' },
-  mud: { value: 0.55, min: 0.05, max: 2, step: 0.05, label: 'Mud per stroke', note: 'how much mud the sponge loosens per 100 px of rubbing (it leaves a little for the rain)' },
+  mud: { value: 0.4, min: 0.05, max: 2, step: 0.05, label: 'Mud per stroke', note: 'how much mud the sponge loosens per 100 px of rubbing (it leaves a little for the rain)' },
   rinse: { value: 1.4, min: 0.2, max: 4, step: 0.1, label: 'Rain rinse', unit: '/s', note: 'how fast the rain washes the mud off under the cloud' },
   puff: { value: 0.25, min: 0.02, max: 0.5, step: 0.01, label: 'Puff per stroke', note: 'how much fluffier the towel makes her per 100 px of rubbing' },
   paint: { value: 0.3, min: 0.05, max: 1, step: 0.05, label: 'Color per stroke', note: 'how much berry color goes on per 100 px of rubbing' },
@@ -112,7 +112,7 @@ export const BATH_ANCHORS: AnchorInfo[] = [
 ]
 
 /** Px a finger rubs for one stroke (the plan's counts: about 40-60 strokes and taps in all). */
-const STROKE_PX = 120
+const STROKE_PX = 360
 /** Strokes with the towel, and with the comb, before the next tool comes (the barber's ENOUGH). */
 const ENOUGH = 8
 /** The sponge part is done enough when her front's mud is down to this (it never goes below SPONGE_FLOOR). */
@@ -212,7 +212,7 @@ export class BubbleBathWorld implements World3D {
   /** A tap's short go: the tool works round a point by itself. */
   private auto: { t: number; dur: number; x: number; y: number; dir: Vector2 } | null = null
   /** Where the tool is (world), easing to her finger and back to the log. */
-  private acc = { suds: 0, stroke: 0, comb: new Vector2(), combPx: 0, paint: 0, squeak: 0 }
+  private acc = { suds: 0, stroke: 0, comb: new Vector2(), combPx: 0, combLen: 0, paint: 0, squeak: 0 }
   private flying: { prop: Prop; from: Vector3; t: number; deco: Deco; spot: DecoSpot }[] = []
 
   // ---- progress
@@ -658,7 +658,7 @@ export class BubbleBathWorld implements World3D {
     // Each prop: on the log where it is, the tool in hand under her finger (tools() put it there).
     for (const [id, p] of this.props) {
       const slot = this.slots.get(id)
-      const inHand = this.isTool(id) && id === this.tool && (this.rubbing || this.auto)
+      const inHand = (this.isTool(id) && id === this.tool && (this.rubbing || this.auto)) || (id === 'cloud' && !!this.autoRain)
       const held = this.held?.prop === p
       const flying = this.flying.some((f) => f.prop === p)
       if (inHand || held || flying) continue
@@ -882,7 +882,7 @@ export class BubbleBathWorld implements World3D {
       return this.rain(dt, hit)
     }
     if (!hit) return
-    if (onMisty) this.stroke(moved)
+    if (onMisty && tool !== 'comb') this.stroke(moved)
     if (tool === 'sponge') {
       this.acc.suds += moved * FEEL.suds
       while (this.acc.suds >= 16) {
@@ -927,11 +927,15 @@ export class BubbleBathWorld implements World3D {
       this.acc.comb.x += dx
       this.acc.comb.y += dy
       this.acc.combPx += moved
+      this.acc.combLen += moved
       if (this.acc.combPx > 70) ((this.acc.combPx = 0), fx.comb())
       const a = this.acc.comb
-      if (a.length() > 64) {
-        const style: HairStyle = Math.abs(a.y) > Math.abs(a.x) * 0.8 ? (a.y < 0 ? 'spikes' : 'bangs') : 'swoop'
+      // A stroke one way: up for spikes, down for bangs, sideways for a swoop. Round and round: all fluffy.
+      if (a.length() > 64 || this.acc.combLen > 220) {
+        const style: HairStyle = a.length() <= 64 ? 'fluff' : Math.abs(a.y) > Math.abs(a.x) * 0.8 ? (a.y < 0 ? 'spikes' : 'bangs') : 'swoop'
+        this.acc.combLen = 0
         a.set(0, 0)
+        this.stroke(STROKE_PX)
         if (coat.hair.style !== style || !coat.hairGroup) {
           coat.setHair(style, coat.hair.color)
           this.bounceHair()
@@ -993,7 +997,8 @@ export class BubbleBathWorld implements World3D {
     const coat = this.coat
     if (this.beat('rain', 0.16)) fx.rain()
     // Drops falling out of the cloud's bottom.
-    for (let i = 0; i < 3; i++) this.drops.emit(cloud.position.x + (Math.random() - 0.5) * 0.4, cloud.position.y - 0.12, cloud.position.z + (Math.random() - 0.5) * 0.15, 0, -3.5, 0, 0.18 + Math.random() * 0.1, 0.022)
+    const fall = clamp((cloud.position.y - AT.y - 0.3) / 4, 0.1, 0.4)
+    for (let i = 0; i < 3; i++) this.drops.emit(cloud.position.x + (Math.random() - 0.5) * 0.4, cloud.position.y - 0.12, cloud.position.z + (Math.random() - 0.5) * 0.15, 0, -3.5, 0, fall * (0.8 + Math.random() * 0.4), 0.022)
     const cx = cloud.position.x
     const top = cloud.position.y
     const r = FEEL.reach * 1.6
@@ -1016,9 +1021,10 @@ export class BubbleBathWorld implements World3D {
     a.t += dt
     const cloud = this.props.get('cloud')!
     cloud.root.visible = true
-    const x = AT.x + Math.sin(a.t * 1.1) * 0.55
-    const y = AT.y + 1.25 - Math.min(1, a.t / 3) * 0.35
-    cloud.root.position.lerp(tmp.set(x, y, AT.z + 0.45), Math.min(1, dt * 3))
+    // (Above her head, back and forth across her: the rain falls on all of her.)
+    const x = AT.x + Math.sin(a.t * 1.3) * 0.5
+    const y = AT.y + 1.62 + Math.sin(a.t * 2.1) * 0.03
+    cloud.root.position.lerp(tmp.set(x, y, AT.z + 0.25), Math.min(1, dt * 3))
     cloud.root.quaternion.copy(this.rig.camera.quaternion)
     cloud.root.scale.setScalar(this.toolScale(cloud, 0.17))
     this.rain(dt, null)
@@ -1036,7 +1042,7 @@ export class BubbleBathWorld implements World3D {
       return
     }
     if (st === 'sponge') {
-      if (coat.mudOf() <= SPONGE_DONE || this.stageStrokes >= 16 || this.idle > FEEL.idle) this.go('rain')
+      if (coat.mudOf() <= SPONGE_DONE || this.stageStrokes >= 14 || this.idle > FEEL.idle) this.go('rain')
     } else if (st === 'rain') {
       if (this.whiteT < 0 && coat.mudOf() <= WHITE_AT) {
         // White shows through: Sparkle's fact, Misty pleased; the rain finishes the last bits.
@@ -1117,7 +1123,7 @@ export class BubbleBathWorld implements World3D {
     this.sparkleAt(s, 14)
     fx.shimmer()
     this.films.play(
-      sillyFilm(this.misty, 'dazzled', {
+      sillyFilm(this.misty, 'crossed', {
         id: 'mirror',
         say: B.mirror,
         side: 0.2,
@@ -1326,7 +1332,7 @@ export class BubbleBathWorld implements World3D {
       // Over to the cedar, her back to it, a shimmy, back to her bath.
       const t = a.t
       const toX = SCRATCH.x - SCRATCH.r - 0.27
-      if (t < 0.05 && !m.busy) m.walkTo(toX, SCRATCH.z + 0.05, 1.0, -90)
+      if (a.t <= dt && !m.busy) m.walkTo(toX, SCRATCH.z + 0.05, 1.0, -90)
       if (t > 1.05 && t < 3.3) {
         m.root.rotation.y = -Math.PI / 2
         m.rig.body.rotation.z = Math.sin(t * 12) * 0.12
@@ -1395,7 +1401,6 @@ export class BubbleBathWorld implements World3D {
     }
     if (id === 'salmon') {
       this.fact('salmon', B.salmon)
-      meet('salmon')
       this.river.leap(Math.floor(Math.random() * this.river.salmon.length), [SALMON_POOL.x, 0, SALMON_POOL.z + 0.6], [SALMON_POOL.x + 0.25, TOP, FALLS_Z - 1.3], 1.1, 0.7)
       riverSfx.leap()
       this.splash(SALMON_POOL.x, 0.05, SALMON_POOL.z + 0.6, 10)

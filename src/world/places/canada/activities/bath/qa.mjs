@@ -68,17 +68,20 @@ async function dropDeco(page, q) {
 }
 
 const ZONES = ['tummy', 'chest', 'head', 'armL', 'armR', 'legL', 'legR', 'earL', 'earR', 'muzzle']
-const finished = async (page, name) => {
-  const q = await game(page)
-  if (!q?.done) throw new Error(`${name} did not finish (stage ${q?.stage}, ${q?.strokes} strokes)`)
+/** The bath's last state a robot saw (it ends when Misty has her sweater on: then the film out takes the screen). */
+let last = null
+const finished = (name) => {
+  if (!last?.done) throw new Error(`${name} did not finish (stage ${last?.stage}, ${last?.strokes} strokes)`)
 }
 
 /** The rub robot: a finger rubbing her all over, the way a child would, through every part to the sweater. */
 async function rubRobot(page, ms) {
+  last = null
   const t0 = Date.now()
   let i = 0
   while (Date.now() - t0 < ms) {
     const q = await game(page)
+    if (q) last = q
     if (!q || q.done) break
     i++
     const z = q.zones[ZONES[i % ZONES.length]]
@@ -102,10 +105,12 @@ async function rubRobot(page, ms) {
 /** The taps-only robot: never drags. A tap on her does a short go with the tool in hand; a tap on a tool on the log
  *  picks it up and does a short go where it's needed. */
 async function tapRobot(page, ms) {
+  last = null
   const t0 = Date.now()
   let i = 0
   while (Date.now() - t0 < ms) {
     const q = await game(page)
+    if (q) last = q
     if (!q || q.done) break
     i++
     if (q.film || q.act === 'press') await page.waitForTimeout(400)
@@ -124,10 +129,12 @@ async function tapRobot(page, ms) {
 
 /** The do-little robot: the pointer drifts (so a test browser doesn't throttle the page) and nothing is pressed. */
 async function idleRobot(page, ms) {
+  last = null
   const t0 = Date.now()
   let i = 0
   while (Date.now() - t0 < ms) {
     const q = await game(page)
+    if (q) last = q
     if (!q || q.done) break
     await page.mouse.move(200 + (i++ % 7) * 30, 200)
     await page.waitForTimeout(1500)
@@ -177,7 +184,7 @@ export const motion = [
     setup: (page, base) => ready(page, base, '#/world/canada/bath/wash', 1500),
     act: async (page) => {
       await rubRobot(page, 145000)
-      await finished(page, 'the rub robot')
+      finished('the rub robot')
     },
   },
   {
@@ -187,7 +194,7 @@ export const motion = [
     setup: (page, base) => ready(page, base, '#/world/canada/bath/wash', 1500),
     act: async (page) => {
       await tapRobot(page, 165000)
-      await finished(page, 'the taps robot')
+      finished('the taps robot')
     },
   },
   {
@@ -198,7 +205,7 @@ export const motion = [
     setup: (page, base) => ready(page, base, '#/world/canada/bath/wash', 500),
     act: async (page) => {
       await idleRobot(page, 170000)
-      await finished(page, 'the do-little robot')
+      finished('the do-little robot')
     },
   },
   {
@@ -255,7 +262,7 @@ export const motion = [
   {
     name: 'canada-bath-film-out',
     seconds: 18,
-    setup: (page, base) => film(page, base, 'bath-out'),
+    setup: (page, base) => film(page, base, 'bath-out?look=head.purple.6,earL.pink.9,earR.pink.9,tummy.blue.7,armL.pink.9,armR.purple.8~8~swoop.purple~crown.crown,flower.earL~pink.purple~1'),
     act: (page) => filmOver(page, 'bath-out'),
   },
   {
