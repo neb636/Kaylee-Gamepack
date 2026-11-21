@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "shimmer-before",
+  "title": "Shimmer before",
+  "video": "shimmer-before.mp4",
+  "gif": "shimmer-before.gif",
+  "seconds": 31,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "canada-snowman-roll",
+      "where": "canada-snowman-roll",
+      "seconds": 12,
+      "fps": 36,
+      "status": "ok"
+    },
+    {
+      "name": "Canada snowman parade",
+      "where": "#/world/canada/snowman/parade?snowmen=5",
+      "seconds": 5,
+      "fps": 37.3,
+      "status": "ok"
+    },
+    {
+      "name": "canada-bike-steer",
+      "where": "canada-bike-steer",
+      "seconds": 9,
+      "fps": 34.9,
+      "status": "ok"
+    }
+  ]
+}
