@@ -296,6 +296,16 @@ export class Tray {
     return ys.length ? Math.min(...ys) : this.h
   }
 
+  /** One thing's shelf entry (whichever bin is open). */
+  itemOf(kind: WearKind, id: string) {
+    return this.all.get(`${kind}.${id}`) ?? null
+  }
+
+  /** How big a thing on the shelf is when it has popped in (its holder's scale then). */
+  restScale(it: TrayItem) {
+    return this.px(it.slot.size) * 0.9
+  }
+
   /** Where a thing on the shelf is in the world, and how big it is there. */
   worldOf(it: TrayItem, out = new Vector3()) {
     return it.holder.getWorldPosition(out)

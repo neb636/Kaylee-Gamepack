@@ -35,7 +35,7 @@ import { Lulu } from '../characters/lulu'
 import { dressToy } from '../characters/dress'
 import type { Performer, ToyActor } from '../characters/toy'
 import { Tuque } from '../characters/tuque'
-import { wornBy, type TeamId } from '../looks'
+import { DRESSABLE, wornBy, type TeamId } from '../looks'
 import { Friend } from '../story/cast'
 import { CHAPTERS, type ChapterId } from '../story/chapters'
 import { Balloon } from '../story/props'
@@ -185,6 +185,7 @@ export class CanadaMapWorld implements World3D {
   private lagBackAt = Infinity
   /** The friends' moves (moves.ts), and the camera nudged in toward the rink while one plays from a tap. */
   private moves: MapMoves
+  private qaShot: Shot = { center: new Vector3(), half: new Vector3(), yaw: 0, pitch: 30, maxDist: 200, objectFit: 'contain' }
   private peek: Shot = { center: new Vector3(), half: new Vector3(), yaw: 0, pitch: 50, maxDist: 200 }
   private peekT = 0
   private peekAt = new Vector3()
@@ -198,6 +199,8 @@ export class CanadaMapWorld implements World3D {
   private gusW = 0
   /** She tapped the skate hut: the camera is closing in on it. */
   private hutOpen = false
+  /** She has put something on somebody in the Team Cabin (the hut stops asking). */
+  private dressedAny = DRESSABLE.some((who) => Object.keys(wornBy(who)).length > 0)
   /** The move the arrival started (its end is Gus's cue), and the moves playing last frame. */
   private arrivalRun: ChapterId | null = null
   private wasPlaying = new Set<ChapterId>()
@@ -557,6 +560,21 @@ export class CanadaMapWorld implements World3D {
 
   /** The shot right now: the place she picked, the rink while a new friend arrives, or the board. */
   private shot(): Shot {
+    // QA: `window.__canadaMapCloseup = 'hut:<yaw>:<pitch>:<size>'` (or a friend's chapter id, or 'maple') looks at
+    // one thing on the board from any side, to check how it's built.
+    const qaLook = (window as { __canadaMapCloseup?: string | null }).__canadaMapCloseup
+    if (qaLook) {
+      const [who, yaw = '0', pitch = '30', size = '0.6'] = qaLook.split(':')
+      const at = who === 'hut' ? this.hutAt(tmp3) : who === 'maple' ? this.mapleSpot.getWorldPosition(tmp3) : this.mates.get(who as ChapterId)?.spot.getWorldPosition(tmp3)
+      if (at) {
+        const k = +size
+        this.qaShot.center.copy(at).y += who === 'hut' ? 0 : 0.4 * k
+        this.qaShot.half.set(k, k * 0.75, k)
+        this.qaShot.yaw = +yaw
+        this.qaShot.pitch = +pitch
+        return this.qaShot
+      }
+    }
     if (this.closing) return this.close
     this.close.objectFit = undefined
     if (this.onRink) {
@@ -566,9 +584,11 @@ export class CanadaMapWorld implements World3D {
       if (this.gusN && this.arrivalT >= this.moveEnd) {
         // Gus has his say: him and the newcomer, close enough to see his face.
         const g = this.geese[0].root.getWorldPosition(tmp2)
-        this.close.center.copy(a.spot.getWorldPosition(tmp)).lerp(g, 0.5).setY(g.y + 0.4)
+        // (From Gus's feet up to the top of the newcomer's head, so a tall friend's face stays in the shot too.)
+        const top = a.actor.at(1.08, tmp3).y
+        this.close.center.copy(a.spot.getWorldPosition(tmp)).lerp(g, 0.5).setY(Math.max(g.y + 0.4, (g.y + top) / 2))
         const across = Math.max(1.3, tmp.distanceTo(g) * 0.8)
-        this.closeHalf(across, across * 0.45, across * 0.65)
+        this.closeHalf(across, Math.max(across * 0.45, (top - g.y) / 2 + 0.12), across * 0.65)
         this.close.pitch = this.overview.pitch - 10
       } else if (this.arrivalT >= this.moveAt - 0.5) {
         // The newcomer's move (and, after it, waiting for Gus).
@@ -614,6 +634,9 @@ export class CanadaMapWorld implements World3D {
     if (this.peekT > 0 && (this.peekT -= dt) <= 0 && !this.closing) this.rig.lag = 0.5
     this.entrance.step(dt)
     if (this.nudgeT >= 0 && (this.nudgeT += dt) > 2.6) this.nudgeT = -1
+    // The skate hut asks to be tapped (a hop, its door peeking open) until she has dressed somebody, and whenever the
+    // board's hint is on.
+    this.rink.hut.invite = !this.closing && !this.onRink && (this.hint || !this.dressedAny)
     this.updatePlaces(dt, t)
     this.updateMates(dt, t)
     this.updateMoves(dt, t)
@@ -742,15 +765,17 @@ export class CanadaMapWorld implements World3D {
     for (const m of this.mates.values()) if (this.moves.playing(m.id)) this.wasPlaying.add(m.id)
     if (this.peekT > 0 && !this.closing) {
       const o = this.overview
-      const K = 0.5
+      // (Most of the way in, and a little lower, so a move replayed from the board reads: the props in their paws,
+      // what flies.)
+      const K = 0.85
       const m = [...this.mates.values()].find((x) => this.moves.playing(x.id))
       if (m) {
         const across = moveFocus(m.id, m.spot, this.maple, this.peekAt)
-        this.closeHalf(across * 1.6, across * 0.7, across)
+        this.closeHalf(across * 1.2, across * 0.6, across * 0.9)
       }
       this.peek.center.copy(this.peekAt).lerp(o.center, 1 - K)
       this.peek.half.copy(o.half).lerp(this.close.half, K)
-      Object.assign(this.peek, { yaw: o.yaw, pitch: o.pitch, objectFit: o.objectFit, roam: o.roam, maxDist: o.maxDist, minDist: o.minDist })
+      Object.assign(this.peek, { yaw: o.yaw, pitch: o.pitch - 8 * K, objectFit: o.objectFit, roam: o.roam, maxDist: o.maxDist, minDist: o.minDist })
     }
   }
 

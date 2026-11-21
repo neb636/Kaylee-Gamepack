@@ -148,6 +148,42 @@ export const motion = [
     },
   },
   {
+    // Taking things off: a tap on Maple's crown takes it off (back to the hat box), and her jersey dragged off her and
+    // let go on the floor goes back to the shelf. Both are saved at once.
+    name: 'canada-cabin-off',
+    seconds: 10,
+    setup: (page, base) => ready(page, base, '#/world/canada/cabin/dress?team=all'),
+    act: async (page) => {
+      for (const [kind, id] of [
+        ['hat', 'crown'],
+        ['jersey', 'pink'],
+      ]) {
+        await openBin(page, kind)
+        const it = item(await cabin(page), id)
+        await page.mouse.click(it.x, it.y)
+        await settle(page)
+      }
+      let maple = who(await cabin(page), 'maple')
+      if (maple.worn.hat !== 'crown' || maple.worn.jersey !== 'pink') fail(`Maple should wear the crown and the pink jersey: ${JSON.stringify(maple.worn)}`)
+      await openBin(page, 'scarf')
+      await page.waitForTimeout(400)
+      await page.mouse.click(maple.hat.x, maple.hat.y + 6)
+      await page.waitForTimeout(300)
+      let q = await cabin(page)
+      if (!/^off:maple:hat/.test(q.last) || who(q, 'maple').worn.hat) fail(`a tap on her crown should take it off (${q.last}, ${JSON.stringify(who(q, 'maple').worn)})`)
+      if (q.open !== 'hat') fail('the hat box should open for the crown going back')
+      await settle(page)
+      maple = who(await cabin(page), 'maple')
+      // (Let go on the floor at the end of the bench, away from everyone: near a friend it would go on them.)
+      await drag(page, { x: maple.chest.x, y: maple.chest.y + 8 }, { x: vp.width - 30, y: (await cabin(page)).trayTop - 12 })
+      q = await cabin(page)
+      if (who(q, 'maple').worn.jersey) fail(`the jersey dragged off her should be off (${q.last}, ${JSON.stringify(who(q, 'maple').worn)})`)
+      if (q.last !== 'floor') fail(`dropped on the floor, it should go back to the shelf (${q.last})`)
+      await settle(page)
+      if (!(await cabin(page)).items.some((i) => i.id === 'pink')) fail('the pink jersey is gone from the shelf')
+    },
+  },
+  {
     // The mirror: everybody cheers, click, the photo pops up and is pinned on the wall.
     name: 'canada-cabin-photo',
     seconds: 6,

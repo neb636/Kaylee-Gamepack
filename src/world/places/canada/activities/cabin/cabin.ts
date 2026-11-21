@@ -21,7 +21,7 @@ import type { AnchorInfo } from '../../../../engine3d/Anchors'
 import { CameraRig } from '../../../../engine3d/camera'
 import { Bag } from '../../../../engine3d/dispose'
 import { DragPlane, Flights, nearestSlot, toScreen } from '../../../../engine3d/drag'
-import { merge, P, solid, solidMix } from '../../../../engine3d/geo'
+import { blobShadow, merge, P, solid, solidMix } from '../../../../engine3d/geo'
 import { setOutlineResolution } from '../../../../engine3d/outline'
 import { Particles } from '../../../../engine3d/particles'
 import { photoCamera, snapPhoto } from '../../../../engine3d/photo'
@@ -34,7 +34,7 @@ import type { CanadaFriend } from '../../characters/looks'
 import { Lulu } from '../../characters/lulu'
 import type { Performer, ToyActor } from '../../characters/toy'
 import { Tuque } from '../../characters/tuque'
-import { canWear, wearPoint, type WearKind } from '../../characters/worn'
+import { canWear, wearPoint, wornAt, type WearKind } from '../../characters/worn'
 import { L } from '../../lines'
 import { saveWorn, wornBy, type TeamId, type Worn } from '../../looks'
 import { Friend } from '../../story/cast'
@@ -81,7 +81,7 @@ const HINT_S = 8
 /** The camera's lens (degrees, top to bottom). */
 const FOV = 40
 /** The camera looks down this much (degrees). */
-const PITCH = 9
+const PITCH = 15
 
 export const CABIN_ANCHORS: AnchorInfo[] = [
   ...(['maple', 'tuque', 'monty', 'roxy', 'lulu', 'misty', 'ollie'] as TeamId[]).map((id) => ({ id: `f:${id}`, label: NAMES[id], kind: 'thing' as const })),
@@ -101,6 +101,8 @@ interface Seat {
   /** A rig friend's sitting legs (sitLegs), and the bench top they sit on. */
   legs: Group | null
   seatY: number
+  /** Their soft shadow on the seat. */
+  shadow?: Mesh
   /** When they last said something (s of the cabin's clock). */
   spoke: number
 }
@@ -163,7 +165,7 @@ export class TeamCabinWorld implements World3D {
   private anchorEls = new Map<string, HTMLElement>()
   private hintEl: HTMLElement | null = null
   private gone = false
-  private counts = { taps: 0, drags: 0, dressed: 0, silly: 0, floor: 0, photos: 0, gusCalls: 0, binsOpened: 0, pokes: 0 }
+  private counts = { taps: 0, drags: 0, dressed: 0, silly: 0, floor: 0, photos: 0, gusCalls: 0, binsOpened: 0, pokes: 0, off: 0 }
   private last = ''
   /** Things sitting in a silly place, about to hop where they go. */
   private perching = 0
@@ -296,6 +298,12 @@ export class TeamCabinWorld implements World3D {
     s.seatY = b.y
     // The ones at the ends turn in a little, toward the middle.
     a.place(s.x, y, z, clamp(-s.x * 4, -10, 10))
+    // A soft shadow on the seat under each of them: they sit on the bench, not stand in front of it.
+    s.shadow ??= blobShadow(1, this.bag)
+    const k = s.who === 'lulu' ? 0.42 : s.who === 'tuque' ? 0.36 : 0.3
+    s.shadow.scale.set(k * H * (WIDTH[s.who] / Math.max(0.5, H * 0.8)), k * H * 1.25, 1)
+    s.shadow.position.set(s.x, b.y + 0.004, s.who === 'lulu' ? z + 0.02 * H : z + 0.13 * H)
+    this.scene.add(s.shadow)
   }
 
   // ---------------------------------------------------------------- the camera
@@ -308,15 +316,25 @@ export class TeamCabinWorld implements World3D {
     cam.aspect = this.w / this.h
     cam.updateProjectionMatrix()
     // The back wall from the window to the mirror, and the front row from end to end (it's nearer, so it looks wider).
-    const wall = Math.max(-(p.window.x - p.window.hw - 0.34), p.mirror.x + p.mirror.hw + 0.24)
+    // (On a tall screen the team is what has to be big: the window and the mirror may tuck a little past the edges,
+    // their middles always on screen; the back row counts too.)
+    const tall = !!p.back
+    const wall = tall
+      ? Math.max(-(p.window.x - p.window.hw * 0.45), p.mirror.x + p.mirror.hw * 0.45)
+      : Math.max(-(p.window.x - p.window.hw - 0.34), p.mirror.x + p.mirror.hw + 0.24, Math.abs(p.lantern[0]) + 0.18)
     const row = this.seats.filter((s) => s.row === 0)
-    const front = Math.max(1.2, ...row.map((s) => Math.abs(s.x) + WIDTH[s.who] / 2 + 0.06))
+    const front = Math.max(tall ? 0.9 : 1.2, ...row.map((s) => Math.abs(s.x) + WIDTH[s.who] / 2 + 0.06))
     const yTop = Math.max(p.window.y + p.window.hh + 0.12, p.mirror.y + p.mirror.hh + 0.12)
     const zBack = p.wallZ
     const zFront = p.bench.front + 0.15
     const corners: Vector3[] = []
     for (const x of [-wall, wall]) for (const y of [p.bench.y, yTop]) corners.push(new Vector3(x, y, zBack))
     for (const x of [-front, front]) for (const y of [p.bench.y * 0.55, p.bench.y + 1.0]) corners.push(new Vector3(x, y, zFront))
+    const back = this.seats.filter((s) => s.row === 1)
+    if (p.back && back.length) {
+      const bx = Math.max(...back.map((s) => Math.abs(s.x) + WIDTH[s.who] / 2 + 0.04))
+      for (const x of [-bx, bx]) corners.push(new Vector3(x, p.back.y + 1.2, p.back.front))
+    }
     const ndcTop = 1 - (2 * (this.top + 6)) / this.h
     const ndcBottom = 1 - (2 * (this.tray.top - 10)) / this.h
     const margin = 0.96
@@ -357,6 +375,22 @@ export class TeamCabinWorld implements World3D {
     }
     fits(hi)
     cam.updateMatrixWorld()
+    this.fitStove()
+  }
+
+  /** The stove in the corner shows only when it's whole on the screen (a very wide one): never cut in half by the
+   *  screen's edge. */
+  private fitStove() {
+    const s = this.room.stove
+    s.updateMatrixWorld(true)
+    const b = new Box3().setFromObject(s)
+    let whole = true
+    // (Its body: the pipe goes on up into the roof, off the top of the picture.)
+    for (const x of [b.min.x, b.max.x]) for (const y of [b.min.y, 0.9]) for (const z of [b.min.z, b.max.z]) {
+      const v = tmp.set(x, y, z).project(this.rig.camera)
+      if (Math.abs(v.x) > 0.98 || Math.abs(v.y) > 1) whole = false
+    }
+    s.visible = whole
   }
 
   // ---------------------------------------------------------------- Gus at the window
@@ -547,16 +581,99 @@ export class TeamCabinWorld implements World3D {
     return this.plane.at(this.rig.camera, x, y - FEEL.lift, this.w, this.h)
   }
 
-  pointerDown(x: number, y: number) {
+  pointerDown(x: number, y: number, id?: string) {
     this.idle = 0
     this.pending = null
+    this.pendingOff = null
     const hit = this.tray.pick(x, y)
     if (hit && 'item' in hit) this.pending = { item: hit.item, x, y }
+    else if (!hit) {
+      // On something a friend wears: a drag from here takes it off them.
+      const off = this.wornHit(x, y, id)
+      if (off) this.pendingOff = { ...off, x, y }
+    }
+  }
+  private pendingOff: { who: TeamId; kind: WearKind; x: number; y: number } | null = null
+
+  /** The friend under a screen point (their anchor's id, or their box) and which thing she put on them is there. */
+  private wornHit(x: number, y: number, id?: string): { who: TeamId; kind: WearKind } | null {
+    const what = id ?? this.thingAt(x, y)
+    const who = what === 'gus' ? (this.gusAt.state === 'in' ? 'gus' : null) : what?.startsWith('f:') ? (what.slice(2) as TeamId) : null
+    if (!who) return null
+    const a = this.actorOf(who)
+    if (!a) return null
+    this.ray.setFromCamera(new Vector2((x / this.w) * 2 - 1, -(y / this.h) * 2 + 1), this.rig.camera)
+    const worn = wornBy(who)
+    let kind = wornAt(a as FilmActor | ToyActor, worn, this.ray.intersectObject(a.root, true))
+    // (Small or open things are generous: a tap inside a crown's ring or near a cheek stamp counts.)
+    if (!kind)
+      a.root.traverse((o) => {
+        if (kind || !o.visible) return
+        const k = o.name === 'cabin-hat' && worn.hat ? 'hat' : o.name === 'cabin-cheek' && worn.cheek ? 'cheek' : null
+        if (!k) return
+        const b = this.boxOnScreen(o, k === 'cheek' ? 16 : 4)
+        if (x > b.x0 && x < b.x1 && y > b.y0 && y < b.y1) kind = k
+      })
+    return kind ? { who, kind } : null
+  }
+
+  /** Something's box on screen (px), padded. */
+  private boxOnScreen(o: Object3D, pad = 0) {
+    const b = new Box3().setFromObject(o)
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity
+    for (const px of [b.min.x, b.max.x]) for (const py of [b.min.y, b.max.y]) for (const pz of [b.min.z, b.max.z]) {
+      const s = toScreen(tmp.set(px, py, pz), this.rig.camera, this.w, this.h)
+      x0 = Math.min(x0, s.x)
+      x1 = Math.max(x1, s.x)
+      y0 = Math.min(y0, s.y)
+      y1 = Math.max(y1, s.y)
+    }
+    return { x0: x0 - pad, x1: x1 + pad, y0: y0 - pad, y1: y1 + pad }
+  }
+
+  /** Takes a thing off a friend (saved at once): it pops off where it was, as a copy of its shelf icon, and its bin
+   *  opens so she sees where it goes back. Returns the flyer (a drag carries it; a tap sends it home). */
+  private takeOff(who: TeamId, kind: WearKind, at: Vector3): Flyer | null {
+    const a = this.actorOf(who)
+    const worn: Worn = { ...wornBy(who) }
+    const id = worn[kind]
+    const item = id ? this.tray.itemOf(kind, id) : null
+    if (!a || !id || !item) return null
+    delete worn[kind]
+    saveWorn(who, worn)
+    if (a instanceof Friend) dressWorn(a, who, worn, this.bag)
+    else dressToy(a as ToyActor, who, worn, this.bag)
+    if (this.tray.open !== kind) {
+      this.tray.setOpen(kind)
+      cabinSfx.lid()
+    }
+    const f = this.flyerOf(item)
+    // (Its bin may only just be popping open: its size on the shelf once it's in.)
+    f.base = this.tray.restScale(item)
+    f.obj.position.copy(at)
+    f.obj.scale.setScalar(this.screenScale(f, at, 0.7))
+    this.sparkle.burst(at.x, at.y, at.z, 10, 0.9, 1.2, 0.05)
+    cabinSfx.pop()
+    a.pull('wow')
+    if (who !== 'gus') this.setFocus(who)
+    this.counts.off++
+    this.last = `off:${who}:${kind}.${id}`
+    return f
   }
 
   pointerMove(x: number, y: number, _dx: number, _dy: number, held: boolean) {
     if (!held) return
     this.idle = 0
+    const po = this.pendingOff
+    if (po && !this.drag && Math.hypot(x - po.x, y - po.y) > 10) {
+      this.pendingOff = null
+      const at = this.planeAt(x, y)
+      this.drag = at ? this.takeOff(po.who, po.kind, at) : null
+      if (this.drag) {
+        this.counts.drags++
+        cabinSfx.whoosh()
+      }
+    }
     const pd = this.pending
     if (pd && !this.drag && Math.hypot(x - pd.x, y - pd.y) > 10) {
       this.drag = this.flyerOf(pd.item)
@@ -577,6 +694,7 @@ export class TeamCabinWorld implements World3D {
 
   pointerUp() {
     this.pending = null
+    this.pendingOff = null
     const d = this.drag
     this.drag = null
     this.hover = null
@@ -688,6 +806,14 @@ export class TeamCabinWorld implements World3D {
       return
     }
     if (hit && 'item' in hit) return this.flyOn(hit.item)
+    // A tap on something she put on a friend takes it off, and back to the shelf it goes.
+    const off = this.wornHit(x, y, id)
+    if (off) {
+      const a = this.actorOf(off.who)!
+      const f = this.takeOff(off.who, off.kind, wp(a, off.kind, new Vector3()))
+      if (f) this.home(f, 0.12)
+      return
+    }
     const what = id ?? this.thingAt(x, y)
     if (!what) return
     this.counts.pokes++
@@ -786,35 +912,42 @@ export class TeamCabinWorld implements World3D {
   private snap() {
     const p = this.room.plan
     const row = this.seats.filter((s) => s.row === 0)
-    const half = Math.max(1.4, ...row.map((s) => Math.abs(s.x) + WIDTH[s.who] / 2)) + 0.2
+    const half = Math.max(1.4, ...row.map((s) => Math.abs(s.x) + WIDTH[s.who] / 2)) + 0.1
     const tall = p.back && this.seats.some((s) => s.row === 1)
     // From the bench seat up to the tallest head (and the back row's, on a tall screen).
     const span = tall ? 2.3 : 1.65
     const mid = p.bench.y + span / 2 - 0.05
     const fov = 36
     const t = Math.tan((fov * Math.PI) / 360)
-    const dist = Math.max(half / (t * (4 / 3)), span / 2 / t) + 0.5
+    // (A long row gets a wide photo, two across to one up, so the team fills it instead of a strip across a picture
+    // of the floor.)
+    const A = half > 2 && !tall ? 2 : 4 / 3
+    const dist = Math.max(half / (t * A), span / 2 / t) + 0.5
     const cam = photoCamera(fov, 0, mid + 0.25, p.bench.front + dist, 0, mid, p.bench.front - 0.45)
+    cam.aspect = A
+    cam.updateProjectionMatrix()
     this.tray.group.visible = false
     this.ring.visible = false
-    const url = snapPhoto(this.renderer, this.scene, cam)
+    const url = snapPhoto(this.renderer, this.scene, cam, { w: Math.round(360 * A), h: 360 })
     this.tray.group.visible = true
     this.ring.visible = true
-    this.pin(url)
+    this.pin(url, A)
     this.events.photo(url)
   }
 
   /** The photo, pinned on the wall by the mirror (the three newest). */
-  private pin(url: string) {
+  private pin(url: string, aspect = 4 / 3) {
     const slots = this.room.pins
     if (this.photos.length >= slots.length) this.photos.shift()?.removeFromParent()
     const at = slots[this.photos.length]
     const g = new Group()
     const tex = this.bag.add(new TextureLoader().load(url))
     tex.colorSpace = SRGBColorSpace
-    const pic = new Mesh(this.bag.add(new PlaneGeometry(0.48, 0.36)), this.bag.add(new MeshBasicMaterial({ map: tex })))
+    // (As wide as ever on the wall; a wide photo is a little less tall.)
+    const ph = 0.48 / aspect
+    const pic = new Mesh(this.bag.add(new PlaneGeometry(0.48, ph)), this.bag.add(new MeshBasicMaterial({ map: tex })))
     pic.position.set(0, 0.04, 0.012)
-    g.add(solid(merge([P.rbox(0.56, 0.52, 0.02, 0.01, '#FFFFFF')]), this.bag, 1.4), pic, solid(P.sphere(0.035, '#FF5C9A', { at: [0, 0.24, 0.02] }), this.bag, 1.2))
+    g.add(solid(merge([P.rbox(0.56, ph + 0.16, 0.02, 0.01, '#FFFFFF')]), this.bag, 1.4), pic, solid(P.sphere(0.035, '#FF5C9A', { at: [0, ph / 2 + 0.06, 0.02] }), this.bag, 1.2))
     g.position.set(...at)
     g.rotation.z = (Math.random() - 0.5) * 0.2
     g.scale.setScalar(0.01)
@@ -1033,7 +1166,7 @@ export class TeamCabinWorld implements World3D {
         const e = toScreen(tmp2.set(win.x + win.hw, win.y + win.hh, this.room.plan.wallZ), this.rig.camera, this.w, this.h)
         put(el, this.gusAt.state === 'in' ? null : { x0: c.x - (e.x - c.x), x1: e.x, y0: e.y, y1: c.y + (c.y - e.y) })
       } else if (id === 'mirror') put(el, boxOf(this.room.mirror))
-      else if (id === 'stove') put(el, boxOf(this.room.stove, 0))
+      else if (id === 'stove') put(el, this.room.stove.visible ? boxOf(this.room.stove, 0) : null)
       else if (id === 'lantern') put(el, boxOf(this.room.lantern))
       else if (id === 'skates') put(el, boxOf(this.room.skates))
       el.style.zIndex = id.startsWith('f:') ? '3' : id === 'gus' ? '4' : '1'

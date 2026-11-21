@@ -21,6 +21,11 @@ const LOG_END = '#E9C08F'
 const PLANK = '#DDA770'
 const PLANK_DARK = '#CC955F'
 const BENCH = '#B07A4A'
+/** The team's bench: painted lavender, with a honey-wood seat board. */
+const BENCH_PAINT = '#B9A6F5'
+const BENCH_LINE = '#9C86E4'
+const SEAT = '#EDBE85'
+const SEAT_EDGE = '#D49A5E'
 const CREAM = '#FFF7F0'
 const PINK = '#FF8FB8'
 const LAV = '#B9A6F5'
@@ -69,25 +74,30 @@ export function plan(layout: Layout, row = 3, narrow = false): RoomPlan {
       pegs: [0.05, 3.5, 0],
       bunting: 4.2,
       stove: [2.4, 0, 0.55],
-      lantern: [-0.95, 4.1, 0.3],
+      lantern: [0.5, 4.3, 0.3],
     }
   // (On a narrow screen they hang over the ends of the bench instead, so the team stays big.)
-  const wx = narrow ? -Math.max(0.95, row + 0.3) : -Math.min(2.9, Math.max(1.55, row + 0.9))
-  const mx = narrow ? Math.max(0.95, row + 0.3) : Math.min(2.95, Math.max(1.55, row + 0.85))
+  const wx = narrow ? -Math.max(0.95, row + 0.3) : -Math.min(2.9, Math.max(1.2, row + 0.9))
+  const mx = narrow ? Math.max(0.95, row + 0.3) : Math.min(2.95, Math.max(1.2, row + 0.85))
+  // (A short row has the window, the mirror and the shelf hung lower, so Maple alone isn't small under a tall wall.)
+  const up = narrow ? 0.32 : 0.32 * Math.min(1, Math.max(0, (row - 0.5) / 1.3))
   return {
     halfW: 4.7,
     wallZ: -1.32,
     wallTop: 3.45,
-    window: { x: wx, y: 2.3, hw: 0.6, hh: 0.46 },
-    mirror: { x: mx, y: 2.22, hw: 0.44, hh: 0.58 },
+    window: { x: wx, y: 1.98 + up, hw: 0.6, hh: 0.46 },
+    mirror: { x: mx, y: 1.9 + up, hw: 0.44, hh: 0.58 },
     bench: { y: 0.42, front: -0.08, depth: 1.12, half: 3.7 },
     back: null,
     // (Over the middle of the row when it's long; above the window's height over a short one.)
-    shelf: wx < -2.4 ? [-0.95, 2.5, 0] : [0, 2.95, 0],
-    pegs: [wx + 1.05, 2.45, 0],
+    shelf: wx < -2.4 ? [-0.95, 2.5, 0] : [0, 2.63 + up, 0],
+    pegs: [wx + 1.05, 2.13 + up, 0],
     bunting: 3.2,
-    stove: [Math.min(4.1, mx + 1.2), 0, -0.55],
-    lantern: [mx - 1.25, 3.4, 0.2],
+    // (In the corner past the bench's right end; the cabin shows it only when it's whole on the screen.)
+    stove: [4.2, 0, -0.55],
+    // (From the beam between the shelf and the mirror; with a short row the shelf is in the middle, so on an iron
+    // bracket on the wall beside the mirror instead.)
+    lantern: wx < -2.4 ? [mx - 1.85, 3.4, 0.2] : [mx + 0.76, 2.7 + up, -1.04],
   }
 }
 
@@ -262,19 +272,21 @@ export function buildRoom(bag: Bag, layout: Layout, row?: number, narrow = false
   skates.add(solid(merge(sk), bag, 1.6))
   root.add(skates)
 
-  // ---- The benches: built-in boxes of planks with a rounded seat board on top (and, on a tall screen, a higher one
-  // behind for the back row).
-  const bench = (b: { y: number; front: number; depth: number; half: number }, color: string) => {
-    const t = 0.08
+  // ---- The benches: built-in boxes painted lavender, with a thick honey-wood seat board on top that overhangs the
+  // front (and, on a tall screen, a higher one behind for the back row). Painted, so the bench stands out from the log
+  // wall behind it and the team reads as sitting on it, not standing in front of the wall.
+  const bench = (b: { y: number; front: number; depth: number; half: number }, color: string, board: string) => {
+    const t = 0.1
     const cz = b.front - b.depth / 2
-    lined.push(P.rbox(b.half * 2, b.y - t, b.depth - 0.04, 0.02, color, { at: [0, (b.y - t) / 2, cz - 0.02] }))
-    lined.push(P.rbox(b.half * 2 + 0.08, t, b.depth + 0.04, 0.035, BENCH, { at: [0, b.y - t / 2, cz] }))
-    // The front's boards and a kick strip at the bottom.
-    for (let x = -b.half + 0.3; x < b.half - 0.1; x += 0.6) plain.push(P.box(0.018, b.y - t - 0.04, 0.01, LOG_DARK, { at: [x, (b.y - t) / 2, b.front - 0.035] }))
-    plain.push(P.box(b.half * 2, 0.05, 0.012, LOG_DARK, { at: [0, 0.025, b.front - 0.035] }))
+    lined.push(P.rbox(b.half * 2, b.y - t, b.depth - 0.06, 0.02, color, { at: [0, (b.y - t) / 2, cz - 0.03] }))
+    lined.push(P.rbox(b.half * 2 + 0.12, t, b.depth + 0.06, 0.04, board, { at: [0, b.y - t / 2, cz] }))
+    // The seat board's front edge, a shade darker, and the painted front's boards and kick strip.
+    plain.push(P.box(b.half * 2 + 0.1, 0.022, 0.012, SEAT_EDGE, { at: [0, b.y - t + 0.012, b.front + 0.032] }))
+    for (let x = -b.half + 0.3; x < b.half - 0.1; x += 0.6) plain.push(P.box(0.02, b.y - t - 0.06, 0.01, BENCH_LINE, { at: [x, (b.y - t) / 2, b.front - 0.055] }))
+    plain.push(P.box(b.half * 2, 0.05, 0.012, BENCH_LINE, { at: [0, 0.025, b.front - 0.055] }))
   }
-  bench(p.bench, PLANK_DARK)
-  if (p.back) bench(p.back, LOG)
+  bench(p.bench, BENCH_PAINT, SEAT)
+  if (p.back) bench(p.back, BENCH_PAINT, SEAT)
 
   // ---- The stove: a little round iron stove on legs, a glowing window in its door, its pipe up into the roof.
   const stove = new Group()
@@ -292,13 +304,20 @@ export function buildRoom(bag: Bag, layout: Layout, row?: number, narrow = false
   flames.add(solidMix([], [P.cone(0.09, 0.2, GLOW, { at: [0, 0.07, 0], scale: [1, 1, 0.3] }, 10), P.cone(0.06, 0.14, '#FFD86B', { at: [0.05, 0.05, 0.01], scale: [1, 1, 0.3] }, 8), P.cone(0.05, 0.12, '#FFD86B', { at: [-0.06, 0.04, 0.01], scale: [1, 1, 0.3] }, 8)], bag, 0))
   stove.add(flames)
   root.add(stove)
-  // A stack of split logs beside it.
-  for (const [i, [dx, dy]] of [
-    [-0.55, 0.08],
-    [-0.75, 0.08],
-    [-0.65, 0.24],
-  ].entries())
-    lined.push(P.cyl(0.08, 0.08, 0.5, i % 2 ? LOG : LOG_DARK, { at: [p.stove[0] + dx, dy, p.stove[2] + 0.1], rot: [Math.PI / 2, 0, 0] }, 10))
+  // A stack of split logs beside it (they move with it).
+  stove.add(
+    solid(
+      merge(
+        [
+          [-0.1, 0.08],
+          [0.1, 0.08],
+          [0, 0.24],
+        ].map(([dx, dy], i) => P.cyl(0.08, 0.08, 0.5, i % 2 ? LOG : LOG_DARK, { at: [dx, dy, 0.62], rot: [0, Math.PI / 2, 0] }, 10)),
+      ),
+      bag,
+      2,
+    ),
+  )
 
   // ---- The lantern, hanging from the beam.
   const lantern = new Group()
@@ -312,6 +331,9 @@ export function buildRoom(bag: Bag, layout: Layout, row?: number, narrow = false
     ),
   )
   root.add(lantern)
+  // Hung near the wall, it hangs from an iron bracket on it.
+  const [lx, ly, lz] = p.lantern
+  if (lz < wz + 0.6) lined.push(P.cyl(0.018, 0.018, lz - wz, IRON, { at: [lx, ly, (lz + wz) / 2], rot: [Math.PI / 2, 0, 0] }, 6), P.rbox(0.1, 0.16, 0.03, 0.01, IRON, { at: [lx, ly - 0.03, wz + 0.02] }))
 
   root.add(solidMix(lined, plain, bag, 2))
 

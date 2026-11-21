@@ -30,6 +30,8 @@ const D = 0.44
 const H = 0.36
 const R = 0.24
 const B = 0.1
+/** How often the hut invites her (s). */
+const INVITE_S = 4
 
 export interface Hut {
   root: Group
@@ -39,6 +41,9 @@ export interface Hut {
   t: number
   /** She tapped it: it hops, the door swings open, the chimney puffs. */
   tap(): void
+  /** Nobody has been dressed yet (or she's been still a while): every few seconds the hut gives a little hop and its
+   *  door peeks open on the warm light inside, so the first time she sees it, it asks to be tapped. */
+  invite: boolean
   update(dt: number, t: number): void
 }
 
@@ -62,6 +67,8 @@ export function buildHut(bag: Bag): Hut {
     const y = B + (H * i) / 5
     for (const s of [-1, 1]) parts.push(P.box(0.006, 0.012, D - 0.01, LOG_DARK, { at: [s * (W / 2 + 0.002), y, 0] }))
     parts.push(P.box(0.06, 0.012, 0.006, LOG_DARK, { at: [-W / 2 + 0.03, y, D / 2 + 0.002] }), P.box(0.06, 0.012, 0.006, LOG_DARK, { at: [W / 2 - 0.03, y, D / 2 + 0.002] }))
+    // (The back wall is logs all the way across: seen from behind it's a log cabin too, not a flat board.)
+    parts.push(P.box(W - 0.01, 0.012, 0.006, LOG_DARK, { at: [0, y, -D / 2 - 0.002] }))
   }
   for (let i = 0; i < 5; i++) {
     const y = B + (H * (i + 0.5)) / 5
@@ -175,27 +182,33 @@ export function buildHut(bag: Bag): Hut {
 
   let flick = 0
   let next = 0
+  let inviteT = 0
   const hut: Hut = {
     root,
     aim: new Vector3(0, B + 0.25, 0),
     t: -1,
+    invite: false,
     tap() {
       hut.t = 0
     },
     update(dt, time) {
       // A tap: a squashy hop, the door swings out and stays open on the warm light, the chimney puffs fast.
       if (hut.t >= 0) hut.t += dt
-      const hop = hut.t >= 0 ? bell(clamp(hut.t / 0.45)) : 0
-      body.scale.set(1 + hop * 0.1, 1 - hop * 0.08 + (hut.t >= 0 && hut.t < 0.12 ? 0 : 0), 1 + hop * 0.1)
+      // Inviting: every 4 s a small hop, and the door peeks open and shut.
+      if (hut.invite && hut.t < 0) inviteT = (inviteT + dt) % INVITE_S
+      else inviteT = 0
+      const peek = hut.t < 0 && hut.invite ? bell(clamp((inviteT - 0.2) / 1.1)) : 0
+      const hop = hut.t >= 0 ? bell(clamp(hut.t / 0.45)) : hut.invite ? 0.55 * bell(clamp(inviteT / 0.4)) : 0
+      body.scale.set(1 + hop * 0.1, 1 - hop * 0.08, 1 + hop * 0.1)
       body.position.y = hop * 0.05
       const open = hut.t >= 0 ? clamp((hut.t - 0.05) / 0.35) : 0
-      door.rotation.y = -1.75 * (open * open * (3 - 2 * open)) + (hut.t >= 0 ? Math.sin(hut.t * 18) * 0.06 * (1 - clamp(hut.t / 0.8)) : 0)
+      door.rotation.y = -1.75 * (open * open * (3 - 2 * open)) - 0.75 * peek + (hut.t >= 0 ? Math.sin(hut.t * 18) * 0.06 * (1 - clamp(hut.t / 0.8)) : 0)
       // The firelight flickers.
       if (time >= next) {
         flick = Math.random()
         next = time + 0.08 + Math.random() * 0.22
       }
-      bright.visible = flick > 0.3 || open > 0.5
+      bright.visible = flick > 0.3 || open > 0.5 || peek > 0.3
       scarf.rotation.z = Math.sin(time * 1.6) * 0.08 + Math.sin(time * 3.1) * 0.03
       // Smoke: each puff goes up from the chimney top in turn, drifting with the breeze.
       const speed = hut.t >= 0 && hut.t < 1.2 ? 2.6 : 1
