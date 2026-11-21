@@ -378,20 +378,19 @@ export class TeamCabinWorld implements World3D {
     this.fitStove()
   }
 
-  /** The stove stands where it's whole on screen past the mirror's end, or (no room there) off the screen: never cut
-   *  in half by the screen's edge. */
+  /** The stove in the corner shows only when it's whole on the screen (a very wide one): never cut in half by the
+   *  screen's edge. */
   private fitStove() {
-    const p = this.room.plan
     const s = this.room.stove
-    const cam = this.rig.camera
-    // The screen's right edge, in the world, at the stove's depth (half way up it).
-    const v = new Vector3(1, 0, 0.5).unproject(cam).sub(cam.position).normalize()
-    const z = p.stove[2]
-    const k = (z - cam.position.z) / v.z
-    const edge = cam.position.x + v.x * k
-    const want = edge - 0.42
-    const from = p.mirror.x + p.mirror.hw + 0.95
-    s.position.x = want >= from ? Math.min(want, p.halfW - 0.4) : Math.max(p.stove[0], edge + 0.95)
+    s.updateMatrixWorld(true)
+    const b = new Box3().setFromObject(s)
+    let whole = true
+    // (Its body: the pipe goes on up into the roof, off the top of the picture.)
+    for (const x of [b.min.x, b.max.x]) for (const y of [b.min.y, 0.9]) for (const z of [b.min.z, b.max.z]) {
+      const v = tmp.set(x, y, z).project(this.rig.camera)
+      if (Math.abs(v.x) > 0.98 || Math.abs(v.y) > 1) whole = false
+    }
+    s.visible = whole
   }
 
   // ---------------------------------------------------------------- Gus at the window
@@ -1160,7 +1159,7 @@ export class TeamCabinWorld implements World3D {
         const e = toScreen(tmp2.set(win.x + win.hw, win.y + win.hh, this.room.plan.wallZ), this.rig.camera, this.w, this.h)
         put(el, this.gusAt.state === 'in' ? null : { x0: c.x - (e.x - c.x), x1: e.x, y0: e.y, y1: c.y + (c.y - e.y) })
       } else if (id === 'mirror') put(el, boxOf(this.room.mirror))
-      else if (id === 'stove') put(el, boxOf(this.room.stove, 0))
+      else if (id === 'stove') put(el, this.room.stove.visible ? boxOf(this.room.stove, 0) : null)
       else if (id === 'lantern') put(el, boxOf(this.room.lantern))
       else if (id === 'skates') put(el, boxOf(this.room.skates))
       el.style.zIndex = id.startsWith('f:') ? '3' : id === 'gus' ? '4' : '1'

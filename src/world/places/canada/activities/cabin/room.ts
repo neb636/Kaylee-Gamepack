@@ -93,11 +93,11 @@ export function plan(layout: Layout, row = 3, narrow = false): RoomPlan {
     shelf: wx < -2.4 ? [-0.95, 2.5, 0] : [0, 2.63 + up, 0],
     pegs: [wx + 1.05, 2.13 + up, 0],
     bunting: 3.2,
-    // (On the floor in front of the bench's right end; the cabin slides it fully onto the screen or fully off it.)
-    stove: [Math.min(4.1, mx + 1.2), 0, 0.4],
-    // (From the beam between the shelf and the mirror; with a short row the shelf is in the middle, so beside the
-    // mirror instead.)
-    lantern: wx < -2.4 ? [mx - 1.25, 3.4, 0.2] : [mx + 0.76, 3.3, 0.2],
+    // (In the corner past the bench's right end; the cabin shows it only when it's whole on the screen.)
+    stove: [4.2, 0, -0.55],
+    // (From the beam between the shelf and the mirror; with a short row the shelf is in the middle, so on an iron
+    // bracket on the wall beside the mirror instead.)
+    lantern: wx < -2.4 ? [mx - 1.25, 3.4, 0.2] : [mx + 0.76, 2.7 + up, -1.04],
   }
 }
 
@@ -309,10 +309,10 @@ export function buildRoom(bag: Bag, layout: Layout, row?: number, narrow = false
     solid(
       merge(
         [
-          [-0.55, 0.08],
-          [-0.75, 0.08],
-          [-0.65, 0.24],
-        ].map(([dx, dy], i) => P.cyl(0.08, 0.08, 0.5, i % 2 ? LOG : LOG_DARK, { at: [dx, dy, 0.1], rot: [Math.PI / 2, 0, 0] }, 10)),
+          [-0.1, 0.08],
+          [0.1, 0.08],
+          [0, 0.24],
+        ].map(([dx, dy], i) => P.cyl(0.08, 0.08, 0.5, i % 2 ? LOG : LOG_DARK, { at: [dx, dy, 0.62], rot: [0, Math.PI / 2, 0] }, 10)),
       ),
       bag,
       2,
@@ -331,6 +331,9 @@ export function buildRoom(bag: Bag, layout: Layout, row?: number, narrow = false
     ),
   )
   root.add(lantern)
+  // Hung near the wall, it hangs from an iron bracket on it.
+  const [lx, ly, lz] = p.lantern
+  if (lz < wz + 0.6) lined.push(P.cyl(0.018, 0.018, lz - wz, IRON, { at: [lx, ly, (lz + wz) / 2], rot: [Math.PI / 2, 0, 0] }, 6), P.rbox(0.1, 0.16, 0.03, 0.01, IRON, { at: [lx, ly - 0.03, wz + 0.02] }))
 
   root.add(solidMix(lined, plain, bag, 2))
 
