@@ -12,10 +12,10 @@
 //   camera, each swinging on its grip)
 // - running water (the creek across the trail, the waterfall at the bottom) with its own little shader
 // - the sky dome, clouds, and three layers of far hills
-import { BackSide, BufferAttribute, BufferGeometry, CircleGeometry, Color, DynamicDrawUsage, Euler, InstancedMesh, Matrix4, Quaternion, Float32BufferAttribute, Group, Mesh, MeshBasicMaterial, SphereGeometry, TorusGeometry, Vector3 } from 'three'
+import { BackSide, BufferAttribute, BufferGeometry, CircleGeometry, Color, DynamicDrawUsage, Euler, InstancedMesh, Matrix4, Quaternion, Float32BufferAttribute, Group, Mesh, MeshBasicMaterial, MeshToonMaterial, SphereGeometry, TorusGeometry, Vector3 } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid, type V3 } from '../../../../engine3d/geo'
-import { PAL, toon } from '../../../../engine3d/toon'
+import { PAL, toon, toonGradient } from '../../../../engine3d/toon'
 import { Water } from '../../../../engine3d/water'
 import { BRIDGE_HALF, CLIFF, Course, CREEK, CREEK_END, END, FALLS, GREEN_END, half, inCreek, island, JUMP, onKicker, POOL, RIB, ROCKS, ROOTS, SPLIT, START, STATION } from './trail'
 import { smooth } from '../../../../../sdk/math'
@@ -246,8 +246,11 @@ export function buildFallen(course: Course, bag: Bag) {
   const r = rng(19)
   const N = 5200
   const geo = bag.add(new CircleGeometry(0.13, 4).rotateX(-Math.PI / 2).scale(1, 1, 1.6))
-  const mat = toon('#ffffff')
+  // Its own toon material, without depth writes, drawn after the ground and everything standing on it: leaves that
+  // overlap lie at one height, and with depth writes they fought over every pixel and shimmered as the camera moved.
+  const mat = bag.add(new MeshToonMaterial({ color: '#ffffff', gradientMap: toonGradient(), depthWrite: false }))
   const m = bag.add(new InstancedMesh(geo, mat, N))
+  m.renderOrder = 1
   m.instanceMatrix.setUsage(DynamicDrawUsage)
   const mtx = new Matrix4()
   const q = new Quaternion()
