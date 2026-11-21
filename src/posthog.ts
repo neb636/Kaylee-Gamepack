@@ -18,6 +18,21 @@ const TARGET_AUDIENCE_IDS = new Set([
   '01a17bf5-be61-78c6-96d3-10f54e01ffb3', // her iPad in Safari, 2026-10-27 to 2026-11-12
 ])
 const TARGET_AUDIENCE_ID = 'target-audience'
+// The user's devices, found the same way. A Home Screen app has no address bar and keeps its own storage apart from
+// Safari's, so `?tester=1` can't reach it: its anonymous id tags it on its next launch instead.
+const TESTER_IDS = new Set([
+  '01a15e62-2191-7f6e-8f7f-de8eac4c1aec', // the user's iPhone (402×874), Home Screen app
+])
+
+/** This browser's PostHog id from the last launch, read before init (posthog-js keeps it in localStorage). */
+function savedDistinctId(): string | undefined {
+  try {
+    const saved = JSON.parse(localStorage.getItem(`ph_${apiKey}_posthog`) ?? '{}') as { distinct_id?: unknown }
+    return typeof saved.distinct_id === 'string' ? saved.distinct_id : undefined
+  } catch {
+    return undefined
+  }
+}
 
 /** Which tags this launch's URL cleared (`?param=0`): PostHog's own copy of them is cleared after init too. */
 const cleared = new Set<string>()
@@ -59,7 +74,10 @@ const saveTag = (key: string) => {
   }
 }
 
-export const isTester = isPostHogEnabled && tag('gamepack.tester', 'tester')
+const taggedTester = isPostHogEnabled && tag('gamepack.tester', 'tester')
+const knownTester = isPostHogEnabled && !taggedTester && !cleared.has('tester') && TESTER_IDS.has(savedDistinctId() ?? '')
+if (knownTester) saveTag('gamepack.tester')
+export const isTester = taggedTester || knownTester
 let isTargetAudience = isPostHogEnabled && !isTester && tag('gamepack.target-audience', 'target_audience')
 
 /** Testers send nothing but errors. */
