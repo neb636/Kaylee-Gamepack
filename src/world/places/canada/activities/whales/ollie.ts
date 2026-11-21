@@ -3,13 +3,16 @@
 // back with her face to the sky and toward whoever is looking from her toes, a clam on her tummy, bobbing on the
 // swell. The game (watch.ts) has her drift off asleep, wake, hold the boat's rope and ride along behind it; the films
 // (story/films/whales.ts, story/sets/whales.ts) float the cast's Ollie in the kelp the same way (a Floater). `spin()`
-// is her trick: round and round on her back, fast.
-import { Group, Vector3 } from 'three'
+// is her trick: round and round on her back, fast. Her lucky rock (characters/rock.ts) goes on her tummy with a Juggle:
+// tossed up and caught, higher and higher (the films, and once the baby orca gives it back), or tucked under her arm
+// (sea otters keep their favorite stone in a pocket of skin there).
+import { Group, Vector3, type Camera } from 'three'
 import { bell } from '../../../../../sdk'
 import { FilmActor } from '../../../../engine3d/characters/actor'
 import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../engine3d/geo'
 import { CANADA_LOOKS } from '../../characters/looks'
+import { makeRock, twinkle } from '../../characters/rock'
 
 /** How far back she lies (radians): not flat, so her face looks up and out past her toes. */
 export const BACK = -1.12
@@ -115,5 +118,68 @@ export class Ollie {
   update(dt: number, t: number) {
     this.actor.update(dt, t)
     this.float.after(dt, t)
+  }
+}
+
+/** Her lucky rock on her tummy, juggled: tossed up from her paws and caught (`height`: how high, in her heights; 0 just
+ *  held), or tucked under her arm (`tuck`). Call `update()` after the Floater's `after()` (it moves her paws). */
+export class Juggle {
+  readonly rock: Group
+  /** Juggling (false: the rock rests in her paws, or under her arm with `tuck`). */
+  on = false
+  height = 0.35
+  tuck = false
+  /** Hidden (the whale took it). */
+  gone = false
+  /** A toss left her paws this frame / landed back (the world plays a soft clack). */
+  tossed = false
+  caught = false
+  private t = 0
+  private last = 0
+  constructor(
+    readonly actor: FilmActor,
+    bag: Bag,
+  ) {
+    this.rock = makeRock(bag, 0.11 * (actor.height / 0.8))
+    actor.rig.body.add(this.rock)
+  }
+  /** Where a toss is up to: 0 in her paws .. 1 at the top (the world can follow the rock). */
+  get air() {
+    return this.on && !this.tuck ? Math.sin(Math.PI * ((this.t % this.period) / this.period)) : 0
+  }
+  private get period() {
+    return 0.45 + this.height * 0.9
+  }
+  update(dt: number, t: number, cam?: Camera) {
+    const a = this.actor
+    const H = a.height
+    const c = CANADA_LOOKS.otter.chub ?? 1
+    this.tossed = this.caught = false
+    this.rock.visible = !this.gone
+    if (this.gone) return
+    if (this.tuck) {
+      // Tucked in the pocket of skin under her left arm, the arm down over it.
+      this.rock.position.set(0.25 * H, 0.42 * H, 0.1 * H * c)
+      a.rig.armR.rotation.set(-0.2, 0, 0.35)
+    } else {
+      this.t += this.on ? dt : 0
+      const p = this.period
+      const k = (this.t % p) / p
+      const n = Math.floor(this.t / p)
+      if (this.on && n !== this.last) {
+        this.last = n
+        this.caught = true
+        this.tossed = true
+      }
+      const up = this.on ? Math.sin(Math.PI * k) * this.height * H : 0
+      // (Lying back, her tummy faces up: the rock flies out along it, a little wobble to one side.)
+      this.rock.position.set(Math.sin(this.t * 3) * 0.03 * H, 0.36 * H, 0.27 * H * c + up)
+      this.rock.rotation.set(this.t * 7, this.t * 4, 0)
+      // Her paws flick up as it leaves them and reach for it as it comes down.
+      const flick = this.on ? Math.max(0, 1 - Math.min(k, 1 - k) * 6) : 0
+      a.rig.armR.rotation.x = -0.9 - 0.5 * flick
+      a.rig.armL.rotation.x = -0.9 - 0.5 * flick
+    }
+    twinkle(this.rock, t, cam)
   }
 }
