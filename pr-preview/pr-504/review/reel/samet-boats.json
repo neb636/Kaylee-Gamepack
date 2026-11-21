@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "samet-boats",
+  "title": "Samet boats",
+  "video": "samet-boats.mp4",
+  "gif": "samet-boats.gif",
+  "seconds": 42,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "thailand-samet-speedboat-ride",
+      "where": "thailand-samet-speedboat-ride",
+      "seconds": 19,
+      "fps": 56.3,
+      "status": "ok"
+    },
+    {
+      "name": "thailand-samet-story-ride",
+      "where": "thailand-samet-story-ride",
+      "seconds": 20,
+      "fps": 35,
+      "status": "ok"
+    }
+  ]
+}
