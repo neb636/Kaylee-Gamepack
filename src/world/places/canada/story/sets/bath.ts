@@ -1,19 +1,23 @@
-// The film set for the salmon chapter (story/films/salmon.ts): the rainforest river in British Columbia, in the same
-// colors as the game (activities/salmon/). The river comes toward the camera down a rocky step in the forest floor: the
-// falls, a pool at its foot where Misty fishes, mossy banks with ferns and berry bushes, giant cedars going up out of the
-// frame (the tallest one, `TALLEST`, for the pinecone to sail over), mist round the falls and a soft rain.
+// The rainforest river in British Columbia, where Misty the spirit bear lives: the set of Misty's Bubble Bath (the
+// game, activities/bath/) and of its two films (story/films/bath.ts), so the game and its films are one place. The river
+// comes toward the camera down a rocky step in the forest floor: the falls, a pool at its foot where Misty has her bath,
+// mossy banks with ferns and berry bushes, giant cedars going up out of the frame (the tallest one, `TALLEST`, for the
+// pinecone to sail over; a near one on the right bank, `SCRATCH`, for her back), mist round the falls and a soft rain.
+// In front of her the pool is still (`MIRROR`): at the end of her bath it glows like a mirror.
 //
 // The usual camera stands on +z looking toward -z, so the falls face it: the lower pool runs from the falls' foot
-// (z = FALLS_Z) toward the camera, the upper river goes back into the forest at y = TOP. Misty stands in the pool (her
-// feet under the water: put her at y = WADE). Maple's bank is on the left (x < -1.6).
-import { AdditiveBlending, BufferGeometry, Float32BufferAttribute, Group, LineBasicMaterial, LineSegments, Sprite, SpriteMaterial, Vector3, type Object3D } from 'three'
+// (z = FALLS_Z) toward the camera, the upper river goes back into the forest at y = TOP. Misty has her bath at `BATH`
+// (her feet under the water). Maple's bank is on the left (x < -1.6).
+//
+// `buildRiver` makes it (the film stage and the game both call it), `updateRiver` keeps it moving.
+import { AdditiveBlending, BufferGeometry, CircleGeometry, Float32BufferAttribute, Group, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, RingGeometry, Sprite, SpriteMaterial, Vector3, type Camera, type Object3D } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid, type V3 } from '../../../../engine3d/geo'
 import { radialAlpha, softTexture } from '../../../../engine3d/softTexture'
 import { bed, clip } from '../../../../kit/clips'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import { url } from '../../sfx'
-import type { FilmSet } from '../stage'
+import type { FilmSet, SetLook } from '../stage'
 
 /** The falls' face (z) and how high the upper river is. */
 export const FALLS_Z = -3
@@ -24,11 +28,17 @@ export const WADE = -0.38
 const RW = 1.6
 /** The tallest cedar: its foot and its height (the pinecone goes over its top). */
 export const TALLEST = { x: 2.6, z: -10, h: 19 }
+/** Where Misty has her bath (in the pool, the water round her ankles), facing the camera. */
+export const BATH = { x: 0.15, y: -0.12, z: -1.7 }
+/** The still water in front of her that glows like a mirror at the end. */
+export const MIRROR = { x: 0.92, z: -1.3, r: 0.4 }
+/** The big cedar on the right bank she scratches her back on (its trunk's radius at the foot). */
+export const SCRATCH = { x: 1.78, z: -2.25, r: 0.42, h: 17 }
 
-// The game's colors (activities/salmon/SalmonLeap.tsx).
+// The river's colors.
 const WATER = '#6BBBD9'
 const WATER_DEEP = '#4E97BC'
-const FALLS = '#BFE6F5'
+const FALLS = '#9DD3EC'
 const MOSS = '#7DB563'
 const MOSS_DARK = '#5E9A4E'
 const ROCK = '#9A93A3'
@@ -79,6 +89,8 @@ interface Leap {
 }
 
 export interface RiverSet {
+  /** The still water in front of her bath: `goal` 1 makes it glow like a mirror. */
+  mirror: { root: Group; glow: Mesh; shine: Mesh; k: number; goal: number }
   /** Salmon to leap with `leap()` (hidden until then). */
   salmon: ReturnType<typeof makeSalmon>[]
   /** Throws salmon `i` from `from` to `to` (a parabola `arc` meters over the higher end) in `dur` seconds. */
@@ -149,12 +161,12 @@ function bush(x: number, z: number, s = 1, y = 0) {
   return parts
 }
 
-export const RIVER: FilmSet<RiverSet> = {
-  id: 'salmon',
-  // A soft grey-green rainforest day, misty far off.
-  look: { sky: ['#9DBFCB', '#C6DCD6', '#DCEBE1'], fog: ['#CFE1D8', 16, 75], light: [1.02, 0.86], tint: '#F2FBF4', clouds: false },
-  build(s, root) {
-    const { bag } = s
+/** A soft grey-green rainforest day, misty far off (the films' stage and the game's sky). */
+export const RIVER_LOOK: SetLook = { sky: ['#9DBFCB', '#C6DCD6', '#DCEBE1'], fog: ['#CFE1D8', 16, 75], light: [1.02, 0.86], tint: '#F2FBF4', clouds: false }
+
+/** Builds the river in `root`: everything the films and the game see. */
+export function buildRiver(bag: Bag, root: Group): RiverSet {
+  {
     // ---- The ground: the lower forest floor, the rocky step (the falls' ledge) and the upper floor behind it.
     const ground = [
       P.cyl(70, 70, 0.4, MOSS, { at: [0, -0.2, 20] }, 40),
@@ -193,6 +205,21 @@ export const RIVER: FilmSet<RiverSet> = {
         1.6,
       ),
     )
+    // The still water in front of her bath: a calm round of pool that glows like a mirror when it's time.
+    const mirror = new Group()
+    const still = solid(merge([P.cyl(MIRROR.r, MIRROR.r, 0.012, '#8FD0E8', {}, 40), P.cyl(MIRROR.r * 0.72, MIRROR.r * 0.72, 0.014, '#A8DCF0', { at: [0, 0.002, 0] }, 40)]), bag, 0)
+    const glowMat = bag.add(new MeshBasicMaterial({ color: '#FFF3B8', transparent: true, opacity: 0, depthWrite: false, fog: false }))
+    const glow = new Mesh(bag.add(new RingGeometry(MIRROR.r * 0.88, MIRROR.r * 1.05, 48)), glowMat)
+    glow.rotation.x = -Math.PI / 2
+    glow.position.y = 0.02
+    const shine = new Mesh(bag.add(new CircleGeometry(MIRROR.r * 0.86, 48)), bag.add(new MeshBasicMaterial({ color: '#FFFFFF', transparent: true, opacity: 0, depthWrite: false, fog: false })))
+    shine.rotation.x = -Math.PI / 2
+    shine.position.y = 0.018
+    mirror.add(still, shine, glow)
+    mirror.position.set(MIRROR.x, 0.028, MIRROR.z)
+    mirror.scale.z = 0.7
+    root.add(mirror)
+
     // White streaks running down the falls (they loop), and the foam at its foot.
     const streaks: Object3D[] = []
     for (let i = 0; i < 16; i++) {
@@ -227,6 +254,7 @@ export const RIVER: FilmSet<RiverSet> = {
       ...cedar(8.5, TOP, -8, 20, 0.9),
       ...cedar(-1, TOP, -17, 18, 0.8),
       ...cedar(12, TOP, -16, 20, 0.9),
+      ...cedar(SCRATCH.x, 0, SCRATCH.z, SCRATCH.h, SCRATCH.r),
     ]
     root.add(solid(merge(trees), bag, 1.8))
     const plants = [
@@ -324,6 +352,7 @@ export const RIVER: FilmSet<RiverSet> = {
     bag.add({ dispose: bed(url('salmon-river'), 0.3) })
 
     const live: RiverSet = {
+      mirror: { root: mirror, glow, shine, k: 0, goal: 0 },
       salmon,
       leaps: [],
       leap(i, from, to, dur, arc = 0.9) {
@@ -352,8 +381,12 @@ export const RIVER: FilmSet<RiverSet> = {
       splash: { g: splashG, t: 9 },
     }
     return live
-  },
-  update(set, dt, t, s) {
+  }
+}
+
+/** Keeps the river moving: the falls, the foam, the mist, the leaping salmon, the splash, the rain round the camera. */
+export function updateRiver(set: RiverSet, dt: number, t: number, camera: Camera, splash: (x: number, y: number, z: number, n: number) => void) {
+  {
     set.now = t
     // The falls run, the foam heaves, the mist drifts.
     for (const [i, st] of set.streaks.entries()) {
@@ -389,8 +422,8 @@ export const RIVER: FilmSet<RiverSet> = {
       if (k >= 1) {
         l.on = false
         l.fish.root.visible = false
-        s.splash(l.to.x, l.to.y + 0.05, l.to.z, 8)
-        sfxSplash()
+        splash(l.to.x, l.to.y + 0.05, l.to.z, 8)
+        riverSfx.splash()
       }
     }
     // The big splash: up fast, then falling back.
@@ -403,12 +436,12 @@ export const RIVER: FilmSet<RiverSet> = {
     }
     // The twinkle faces the camera and pulses.
     if (set.twinkle.visible) {
-      set.twinkle.quaternion.copy(s.rig.camera.quaternion)
+      set.twinkle.quaternion.copy(camera.quaternion)
       const k = 1 + 0.25 * Math.sin(t * 14)
       set.twinkle.scale.setScalar(k)
     }
     // Rain: streaks falling round where the camera looks.
-    const cam = s.rig.camera
+    const cam = camera
     cam.getWorldDirection(dir)
     const cx = cam.position.x + dir.x * 5
     const cy = cam.position.y + dir.y * 5
@@ -430,14 +463,28 @@ export const RIVER: FilmSet<RiverSet> = {
       a[i + 5] = a[i + 2]
     }
     pos.needsUpdate = true
+    // The mirror: its glow eases in and shimmers.
+    const mr = set.mirror
+    mr.k += (mr.goal - mr.k) * Math.min(1, dt * 2.5)
+    ;(mr.glow.material as MeshBasicMaterial).opacity = mr.k * (0.75 + 0.25 * Math.sin(t * 4))
+    ;(mr.shine.material as MeshBasicMaterial).opacity = mr.k * (0.32 + 0.1 * Math.sin(t * 2.3))
+    mr.glow.scale.setScalar(1 + mr.k * 0.04 * Math.sin(t * 3))
     set.pose?.()
-  },
+  }
 }
 const dir = new Vector3()
 
-// The set's own sounds (prompts: sfx/parts/salmon.json), over synth fallbacks until they're made.
+/** The films' set: the river, built on the film stage. */
+export const RIVER: FilmSet<RiverSet> = {
+  id: 'bath',
+  look: RIVER_LOOK,
+  build: (s, root) => buildRiver(s.bag, root),
+  update: (set, dt, t, s) => updateRiver(set, dt, t, s.rig.camera, (x, y, z, n) => s.splash(x, y, z, n)),
+}
+
+// The river's own sounds (prompts: sfx/parts/bath.json; the clips kept their salmon names), over synth fallbacks.
 /** A salmon leaping out of the water; a small splash as one lands; the enormous one from Misty's swing. */
-export const salmonFilmSfx = {
+export const riverSfx = {
   leap: clip(url('salmon-leap'), () => noise(0.22, 0.08, 'bandpass', 1500, 3400, 0, 1.5)),
   splash: clip(url('salmon-splash'), () => noise(0.25, 0.1, 'bandpass', 2000, 700, 0, 1)),
   bigSplash: clip(url('salmon-splash-big'), () => (sfx.splash(), tone(120, 60, 0.3, 0.2, 'sine'))),
@@ -445,9 +492,6 @@ export const salmonFilmSfx = {
   swing: clip(url('salmon-swing'), () => noise(0.3, 0.12, 'bandpass', 600, 2400, 0, 1)),
   /** The stick hitting the pinecone: thwock. */
   thwack: clip(url('salmon-thwack'), () => tone(700, 260, 0.08, 0.16, 'square')),
-  /** Misty munching berries. */
-  munch: clip(url('salmon-munch'), () => [0, 0.16, 0.32].forEach((d) => noise(0.08, 0.08, 'lowpass', 900, 500, d, 2))),
   /** A raven in the cedars: kraa. */
   raven: clip(url('salmon-raven'), () => [0, 0.3].forEach((d) => tone(520, 380, 0.22, 0.06, 'sawtooth', d))),
 }
-const sfxSplash = () => salmonFilmSfx.splash()
