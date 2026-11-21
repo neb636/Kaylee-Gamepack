@@ -43,15 +43,7 @@ export const RINK_SET: FilmSet<RinkSet> = {
   },
   update(set, dt, t) {
     set.balloon.update(dt, t)
-    // The skaters far down the canal keep going round (as they do in the game, activities/party/rink.ts).
-    for (const k of set.canal.skaters) {
-      const len = 30
-      const u = (((t * k.speed + k.phase) % (len * 2)) + len * 2) % (len * 2)
-      const fwd = u < len
-      k.root.position.set(k.lane + Math.sin(t * 1.3 + k.phase) * 0.8 + (fwd ? -1 : 1) * 2.2, 0, -14 - (fwd ? u : len * 2 - u) * 0.75)
-      k.root.rotation.y = fwd ? Math.PI : 0
-      k.body.rotation.z = Math.sin(t * 3 + k.phase) * 0.15
-    }
+    for (const skater of set.canal.skaters) skater.update(dt, t)
   },
 }
 
