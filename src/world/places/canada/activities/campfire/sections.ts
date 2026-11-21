@@ -9,7 +9,7 @@ const CAMPFIRE_SECTIONS = defineSections('canada', 'campfire', {
   params: {
     kits: { default: '0', values: ['0', '1', '2'], doc: 'peek-a-boo: how many of the three kits are already at the fire' },
     laughs: { default: '0', values: ['0', '1', '2'], doc: 'statues: how many times Roxy has already fallen over laughing (three and she gives up)' },
-    roasted: { default: '0', values: ['0', '1', '2'], doc: 'the roast: how many marshmallows she has already handed out (three and the flashlight goes off)' },
+    roasted: { default: '0', values: ['0', '1', '2', '3'], doc: 'the roast: how many marshmallows she has already handed out (four and the flashlight goes off)' },
   },
   sections: [
     { id: 'story', name: 'Somebody is watching (Maple)', params: [] },

@@ -12,6 +12,11 @@ import { vp } from '../../../../../../scripts/qa-lib.mjs'
 const Q = (page) => page.evaluate(() => window.__canadaCampfireQA())
 const ready = async (page, base, hash) => {
   await page.goto(`${base}${hash}`)
+  // (The device is read when the app loads: a ?device= link needs a fresh load.)
+  if (hash.includes('device=')) {
+    await page.reload()
+    await page.getByRole('button', { name: /let's play/i }).click({ timeout: 5000 }).catch(() => {})
+  }
   await page.waitForFunction(() => window.__canadaCampfireQA?.().section, null, { timeout: 30000 })
 }
 const fail = (why, q) => {
@@ -43,10 +48,10 @@ function finger(page) {
 }
 
 const UNMET = ['owl', 'porcupine', 'deer', 'frog', 'bat', 'monty', 'maple']
-const GIVE_TO = ['maple', 'roxy', 'monty']
+const GIVE_TO = ['maple', 'roxy', 'monty', 'kit1']
 
 /** Plays the toy from wherever it is to the northern lights, the way a child would: the light swept from animal to
- *  animal, onto each kit as it peeks, held on Roxy until she topples over, then three marshmallows roasted and handed
+ *  animal, onto each kit as it peeks, held on Roxy until she topples over, then four marshmallows roasted and handed
  *  out, then the flashlight clicked off. */
 async function playThrough(page, ms) {
   const f = finger(page)
@@ -303,7 +308,7 @@ export const motion = [
     act: async (page) => {
       await playThrough(page, 32000)
       const q = await Q(page)
-      if (q.section !== 'sky') fail('three marshmallows were not handed out', q)
+      if (q.section !== 'sky') fail('four marshmallows were not handed out', q)
     },
   },
   {
@@ -346,6 +351,7 @@ export const motion = [
       // Click and hold, then move: it follows.
       await page.mouse.move(q0.at.frog.x, q0.at.frog.y)
       await page.mouse.down()
+      await page.waitForTimeout(600)
       await page.mouse.move(q0.at.porcupine.x, q0.at.porcupine.y, { steps: 20 })
       await page.waitForTimeout(800)
       await page.mouse.up()

@@ -23,7 +23,7 @@
 // feel is knobs (?feel=1): the light's size and swing, Roxy's speed, how long the kits peek.
 import { Color, Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { say, sounds, spendHint, stopSpeaking, Timers, type Line } from '../../../../../sdk'
-import { clamp, damp, lerp } from '../../../../../sdk/math'
+import { clamp, damp, lerp, wrapAngle } from '../../../../../sdk/math'
 import { IS_MOUSE } from '../../../../../sdk/device'
 import { knobs, watch } from '../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -129,10 +129,12 @@ const FRIEND_GAP = 3.2
 /** Statue lines: one per catch, but not sooner than this. */
 const STATUE_GAP = 2.6
 /** Met this many night animals: the giggling starts. */
-const GIGGLE_AFTER = 3
+const GIGGLE_AFTER = 4
+/** At least this long with the night animals before the giggles start (s). */
+const EYES_MIN_S = 16
 const KITS = 3
 const LAUGHS = 3
-const ROASTS = 3
+const ROASTS = 4
 /** Her statue lines, by pose. */
 const STATUE_LINE: Record<StatueId, Line> = { tree: T.statues[0], rock: T.statues[1], whistling: T.statues[2], ballerina: T.statues[3], flamingo: T.statues[3] }
 
@@ -436,7 +438,7 @@ export class FlashlightStatues implements World3D {
     // Maple by the fire (the fire lights her a little): shadow bunnies.
     add({ id: 'maple', at: (o) => this.maple.at(0.55, o), r: 0.4, floor: 0.82, shade: shadeRig(this.maple, '#FFE9A0'), live: () => true, on: () => this.mapleLit() })
     // Roxy, and her kits.
-    add({ id: 'roxy', at: (o) => this.roxy.at(0.5, o), r: 0.38, shade: shadeRig(this.roxy, '#E8F06A'), live: () => this.roxy.root.visible, on: () => this.roxyLit(), hold: (s) => this.roxyHeld(s) })
+    add({ id: 'roxy', at: (o) => this.roxy.at(0.5, o), r: 0.38, shade: shadeRig(this.roxy, '#E8F06A'), live: () => this.roxy.root.visible, on: () => this.roxyLit() })
     this.kits.forEach((k, i) =>
       add({
         id: `kit${i}`,
@@ -471,7 +473,8 @@ export class FlashlightStatues implements World3D {
     if (line && first) this.friend(line)
   }
   private metOne() {
-    if (this.section === 'eyes' && this.met.size >= GIGGLE_AFTER && this.giggleAt < 0) this.giggleAt = this.time + 2.2
+    // (Not before she's had a little while to play with the light: the giggles come after the fourth, or a bit later.)
+    if (this.section === 'eyes' && this.met.size >= GIGGLE_AFTER && this.giggleAt < 0) this.giggleAt = Math.max(this.time + 2.2, this.time - this.sectionT + EYES_MIN_S)
   }
   private giggleAt = -1
 
@@ -561,7 +564,7 @@ export class FlashlightStatues implements World3D {
   private state(s: CampSection): Record<string, string> {
     if (s === 'peek') return { kits: String(Math.min(2, this.kitsHome)) }
     if (s === 'statues') return { laughs: String(Math.min(2, this.laughs)) }
-    if (s === 'roast') return { roasted: String(Math.min(2, this.roasted)) }
+    if (s === 'roast') return { roasted: String(Math.min(3, this.roasted)) }
     return {}
   }
   private progress(n: number) {
@@ -692,6 +695,11 @@ export class FlashlightStatues implements World3D {
         const stay = TORCH.peek + this.peekN * TORCH.grow
         if (k.state === 'out') {
           k.out = Math.min(1, k.out + dt / 0.28)
+          // (Out into the light that was already there: caught all the same.)
+          if (k.out > 0.5 && this.spotOf.get(`kit${k.seat}`)!.lit) {
+            this.catchKit(k)
+            continue
+          }
           // The light hovering beside it (not on it): it ducks, after a moment (a little longer each time).
           const n = this.light.near(this.rig.camera, k.a.at(0.62, tmp))
           k.near = n < 1 ? k.near + dt : Math.max(0, k.near - dt)
@@ -714,6 +722,7 @@ export class FlashlightStatues implements World3D {
         this.poseKit(k)
       }
     }
+    if (this.tail.visible && this.stuck && this.spotOf.get('tail')!.lit) this.catchKit(this.stuck)
     if (this.tail.visible) {
       // The tail wiggles (and so does the bush of it).
       this.tail.rotation.z = Math.sin(this.time * 9) * 0.35
@@ -871,9 +880,8 @@ export class FlashlightStatues implements World3D {
       void this.talk(STATUE_LINE[pose])
     }
   }
+  /** The light holds her (seconds so far): she wobbles, then topples over laughing. */
   private roxyHeld(s: number) {
-    if (this.roxyState !== 'statue') return
-    this.roxyHold = s
     const w = clamp((s - 0.6) / Math.max(0.2, TORCH.fall - 0.6))
     statueWobble(this.roxy, w)
     if (w > 0.25 && (this.wobbleCool -= 1 / 60) < 0) {
@@ -913,6 +921,9 @@ export class FlashlightStatues implements World3D {
   private updateRoxy(dt: number) {
     const r = this.roxy
     this.roxyT += dt
+    // (The light on her freezes her whenever it's on her, not only the moment it lands: she may walk into it.)
+    const lit = this.spotOf.get('roxy')!.lit
+    if (lit && !this.films.on && (this.roxyState === 'sneak' || this.roxyState === 'home')) this.freezeRoxy()
     if (this.roxyState === 'sneak') {
       // Tiptoe: on her toes, leaning in, paws up in front, glancing at the light.
       const speed = TORCH.speed * this.roxySpeed
@@ -929,7 +940,10 @@ export class FlashlightStatues implements World3D {
       // Not caught for a while: Sparkle says how again.
       if (this.time - this.lastNew > HINT_S + 2) this.hint(T.sneak)
     } else if (this.roxyState === 'statue') {
-      const lit = this.spotOf.get('roxy')!.lit
+      if (lit && !this.films.on) {
+        this.roxyHold += dt
+        this.roxyHeld(this.roxyHold)
+      }
       if (!lit && !this.films.on) {
         // (A flicker of the light off her doesn't count: a moment's grace, then she sneaks on.)
         this.roxyUnlit += dt
@@ -987,7 +1001,7 @@ export class FlashlightStatues implements World3D {
     camp.yoink()
     this.yoinks++
     this.counts.yoinks++
-    this.roxySpeed *= TORCH.slow
+    this.roxySpeed = Math.max(0.35, this.roxySpeed * TORCH.slow)
     const left = this.set.mallows.filter((m) => m.visible)
     if (left.length <= 1) this.set.mallows.forEach((m) => (m.visible = true))
     const m = this.set.mallows.find((x) => x.visible)
@@ -1050,12 +1064,14 @@ export class FlashlightStatues implements World3D {
       const who = this.receiverNear()
       for (const [id, a] of this.receivers()) {
         if (id === who) {
-          if (!a.busy) a.turnTo(this.stick.tip.x, this.stick.tip.z)
+          // (A look toward it, not a turn: their faces stay to us.)
+          a.headTurn = clamp(wrapAngle(Math.atan2(this.stick.tip.x - a.pos.x, this.stick.tip.z - a.pos.z) - a.root.rotation.y), -0.6, 0.6)
           a.pull('wow', true)
           a.lean = 0.15
         } else if (this.mouthOpen.has(id)) {
           a.cheer()
           a.lean = 0
+          a.headTurn = 0
         }
       }
       this.mouthOpen = new Set(who ? [who] : [])
@@ -1106,6 +1122,7 @@ export class FlashlightStatues implements World3D {
     const a = this.receivers().find(([r]) => r === who)![1]
     a.cheer()
     a.lean = 0
+    a.headTurn = 0
     a.hop()
     camp.munch(0)
     this.burst(a.head(tmp), 10)
@@ -1152,7 +1169,11 @@ export class FlashlightStatues implements World3D {
       this.sky.setFull(true)
       for (let i = 0; i < 8; i++) this.timers.later(() => camp.twinkle(), 300 + i * 260)
     }, 500)
-    this.timers.later(() => !this.dead && void this.talk(T.fullSky), 2200)
+    this.timers.later(() => {
+      if (this.dead) return
+      this.events.line(T.fullSky)
+      void this.talk(T.fullSky)
+    }, 2200)
     this.timers.later(() => {
       if (this.dead) return
       this.sky.setLights(true)
@@ -1180,7 +1201,7 @@ export class FlashlightStatues implements World3D {
     this.light.corner = this.tall ? { x: 0.6, y: -0.78, d: 1.6 } : { x: 0.76, y: -0.7, d: 1.6 }
     if (!this.finger) {
       // Where the light starts: on the empty ground in front of the fire.
-      const p = this.toScreen(tmp.set(0.1, 0, 1.7))
+      const p = this.toScreen(tmp.set(1.7, 0, 2.3))
       this.light.point(p.x, p.y, false)
       this.light.snap()
     }
@@ -1253,6 +1274,8 @@ export class FlashlightStatues implements World3D {
     this.rig.setCine(cine ?? this.skyFrame())
     this.rig.update(dt)
     this.light.update(dt, this.rig.camera, this.w, this.h)
+    // (At the end the flashlight itself is what to tap: it bounces gently, asking.)
+    this.light.toy.scale.setScalar(this.section === 'sky' && this.skyT < 0 ? 1 + 0.1 * Math.abs(Math.sin(t * 3.5)) : 1)
     this.bars.update(dt, this.films.on)
     this.drawHint()
   }
