@@ -69,6 +69,11 @@ iPad's free space; `offline_save_failed` is the real "out of space" signal.
 
 ## Asking it
 
+**The dashboard:** [Kaylee's play](https://us.posthog.com/project/627364/dashboard/2393804) (time per day, favorites, every
+section, where she stops, games opened). Each tile filters to her devices with one HogQL property; a new device of hers
+goes into that filter on every tile (or tag it with `?target_audience=1`).
+
+
 Every query needs a time range. Hers:
 
 ```sql
