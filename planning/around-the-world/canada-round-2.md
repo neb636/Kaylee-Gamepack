@@ -1,5 +1,9 @@
 # 🍁 Canada, round two: three chapters rebuilt on what she replays (a plan, not built)
 
+**Art direction.** Use the released Maple's Team activities and films as the visual reference. Build with Canada's
+existing 3D rigs, sets, and toon shading. The generated JPGs in `canada-round-2/` are archived pitch illustrations.
+Ignore them when designing scenes, characters, and gameplay visuals.
+
 **The pitch:** Maple's Team keeps its story, its map, its films and its big game. Three of its six chapters are
 rebuilt as the kind of toy she goes back to: she gives a muddy bear a **bubble bath and a new look**, plays
 **flashlight statues** with a sneaky raccoon, and plays **peek-a-boo with whales** to get an otter's lucky rock back.
@@ -7,12 +11,10 @@ Each friend now has a small trouble that her play fixes, the fix is the talent t
 goes with the team to the big game. A fourth, optional piece puts her favorite toy of all, the wardrobe, at the
 rink: a cabin where she dresses the team.
 
-|  |  |
-|---|---|
-| ![Misty's Bubble Bath](canada-round-2/bath.jpg) **1. Misty's Bubble Bath** (replaces Salmon Leap) | ![Flashlight Statues](canada-round-2/flashlight.jpg) **2. Campfire Night, in 3D: Flashlight Statues** |
-| ![Whale Peek-a-Boo](canada-round-2/whales.jpg) **3. Whale Peek-a-Boo** (Whale Watch with a reason) | ![The Team Cabin](canada-round-2/cabin.jpg) **4. The Team Cabin** (optional, after the three) |
-
-The pictures are concept art for the idea, not screenshots. The toys are built in the game's own 3D look.
+1. **Misty's Bubble Bath** (replaces Salmon Leap)
+2. **Campfire Night, in 3D: Flashlight Statues**
+3. **Whale Peek-a-Boo** (Whale Watch with a reason)
+4. **The Team Cabin** (optional, after the three)
 
 ## What her play says
 
