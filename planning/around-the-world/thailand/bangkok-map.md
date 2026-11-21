@@ -138,7 +138,7 @@ the Nan map's recorded clips; the night market, the floating market and the oran
 
 ## Next
 
-- Kaylee's playtest: does she find the pins among the city, and what does she poke?
+- Her play data: does she find the pins among the city, and what does she poke?
 - The real sounds (above).
 - Asiatique and Chinatown as places, when you pick what she does there.
 - The mall day could end back on this map (the stamp landing on ICONSIAM) instead of in the house: your call.

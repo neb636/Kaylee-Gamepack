@@ -4,7 +4,7 @@ The full loop built · Toy in Agong's house · updated 2026-10-31
 
 Kaylee loves the avatar maker in Roblox, so she gets one in Thailand. In her room at Agong's she opens her wardrobe and dresses her unicorn herself: she drags a crown, heart sunglasses, fairy wings or light-up shoes onto herself and they pop on, and she drops paint on her dress, her hair or her fur to change its color. What she picks is saved on the iPad, and she wears it **everywhere in Thailand**: the house, every trip, every mini game and the photos on Agong's wall. When a game needs its own hat (the chef's hat, the vet's cap), the game's hat wins for that game and hers comes back afterwards.
 
-**Next:** nothing waiting. Her play diary says whether it needs more.
+**Next:** nothing waiting. Her play data says whether it needs more.
 
 - drawers: hats, glasses, wings, outfits, shoes, paint: 6
 - things to wear (10 hats), plus 3 colors to paint: 25

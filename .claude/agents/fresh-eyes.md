@@ -42,5 +42,5 @@ At most about 30 images in all. Spend your effort on judgment, not on re-checkin
 At most ten findings, ranked, each one line plus where to see it (the reel's second, the sheet tile, the line key):
 `**blocker**` (she can't play on, or it breaks a rule), `**major**` (she'll be confused, bored or stuck), `**minor**`.
 Then one line: would a five-year-old want to play it again tomorrow, and why. No praise padding, no restating the
-evidence. If something can only be judged by Kaylee's hands (is the steering fun?), say "for the playtest" instead of
+evidence. If something can only be judged by playing it (is the steering fun?), say "for the user to play" instead of
 guessing.

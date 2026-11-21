@@ -133,7 +133,7 @@ the finale's emperor (story/actor.ts) as every dad and Pebble.
   tuck and the song all run from their links. Not yet: a reel on a real GPU, `qa-pacing` touches and minutes, an
   iPhone check.
 - Next for the huddle: film the reel on the Mac (`poles-huddle-carry`, `-hatch`, `-tuck`, `-song` in its qa.mjs), make
-  the three new sounds, then Kaylee plays it. Watch for: does she find Papa by his glow, does she carry Pebble back
+  the three new sounds, then You play it, then her play data shows. Watch for: does she find Papa by his glow, does she carry Pebble back
   without the hint, does she sit through the song. `assets/bg-huddle-night.webp` (the 2D game's painting) is unused now.
 
 ## North and south at a glance (the facts the place is built on)
@@ -173,7 +173,7 @@ trail ends in the movie ticket.
 - **Milestone 1 (2026-11-16): Act 2 and the whole script.** Every line of the ending is in `lines.ts` as `L.night`, in
   play order. Act 2, Sing in the Dark (`chorus.ts`): `#/world/poles/night/whiteout`, `/edge`, `/together`, knobs
   `chorus`.
-- **Milestone 2 (2026-11-16): the whole chapter, for Kaylee's playtest.** `Night.tsx` runs it as one chapter
+- **Milestone 2 (2026-11-16): the whole chapter, for you to play.** `Night.tsx` runs it as one chapter
   (`steps.ts`): film → act → film … → the stamp, and remembers where she left off between acts.
   - **Act 1, Hold to Fly** (`fly.ts`, `#/world/poles/night/fly?leg=north|warm|south`): a side view, the balloon
     flying left (north) to right (south). Hold anywhere: the burner roars and it rises; let go: it sinks. The pink
@@ -213,11 +213,11 @@ trail ends in the movie ticket.
     (READY = false); its links still open it.
   - **Sounds:** no ElevenLabs key in the cloud session again, so everything reuses the Poles' recorded clips
     (`night/sounds.ts` `flySfx`, `huddleSfx3`; `story/sounds.ts` crack, cheer, gust, blizzard, colony).
-- **Next:** Kaylee's playtest (check-in 3). Then: ElevenLabs sounds on a session with a key (burner roar, wind
+- **Next:** you play it (check-in 3). Then: ElevenLabs sounds on a session with a key (burner roar, wind
   ribbons, the ring shimmer, the sunrise swell, the colony's hum); the woolly hat on Pebble in the last films; a
   walrus in the Arctic; the smooth reel on the Mac (`poles-night-*` motion runs in `activities/night/qa.mjs`).
 
-Kaylee plays it. Watch for: does she find Papa by his glow, does she carry Pebble back
+You play it, then her play data shows. Watch for: does she find Papa by his glow, does she carry Pebble back
   without the hint, does she sit through the song. `assets/bg-huddle-night.webp` (the 2D game's painting) is unused now.
 
 ## North and south at a glance (the facts the place is built on)
@@ -270,7 +270,7 @@ READY = false), so Emperor Huddle and the finale still play for her until it's d
   retiring their lines. Make the ring shimmer and a sunrise swell with ElevenLabs on a session with a key. Film the
   reel on the Mac (`poles-night-*` in `activities/night/qa.mjs`).
 
-Kaylee plays it. Watch for: does she say "penguin" and "home"; does she tap the next picture without help; does she sit
+You play it, then her play data shows. Watch for: does she say "penguin" and "home"; does she tap the next picture without help; does she sit
 through the way-in film or hold ⏭ (her diary counts both); which chapter she replays; whether Papa's song is too hard
 or too easy by ear.
 
