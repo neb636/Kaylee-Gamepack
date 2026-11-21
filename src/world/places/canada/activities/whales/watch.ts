@@ -67,8 +67,8 @@ const PLAY = knobs('whales', 'Whale Peek-a-Boo', FILE, {
   pop1: { value: 1.5, min: 0.5, max: 5, step: 0.1, label: 'Baby\'s first pop', unit: 's', note: 'how long the baby orca stays up the first time' },
   pop2: { value: 3, min: 1, max: 8, step: 0.1, label: 'Baby\'s second pop', unit: 's', note: 'the second time (the third stays until she taps it)' },
   boop: { value: 16, min: 6, max: 40, step: 1, label: 'Baby helps after', unit: 's', note: 'the last pop left alone this long: the baby swims to the boat and boops it' },
-  near: { value: 6, min: 4, max: 12, step: 0.25, label: 'Bubbles from', unit: 'm', note: 'the nearest the bubbles come up to the boat' },
-  far: { value: 7.5, min: 5, max: 16, step: 0.25, label: 'Bubbles up to', unit: 'm', note: 'the furthest' },
+  near: { value: 4.75, min: 3.5, max: 12, step: 0.25, label: 'Bubbles from', unit: 'm', note: 'the nearest the bubbles come up to the boat' },
+  far: { value: 5.75, min: 4, max: 16, step: 0.25, label: 'Bubbles up to', unit: 'm', note: 'the furthest' },
   come: { value: 6, min: 2, max: 20, step: 0.5, label: 'Whale comes by itself', unit: 's', note: 'bubbles left alone this long: the whale comes up anyway' },
 })
 /** The boat on the drive control (her finger holds the water where it should go). */
@@ -128,6 +128,8 @@ const CAM_YAW = 196
 const SECTIONS: WhaleSection[] = ['story', 'grey', 'humpback', 'orcas']
 /** Sparkle's spoken hint: after this long with nothing touched (and at most this often). */
 const STUCK_S = 8
+/** How far the boat sits down into the round of the humpback's back on the ride (m below the ridge). */
+const SADDLE_SINK = 0.3
 const HINT_EVERY_S = 20
 /** Grey whale touches (or seconds) before Ollie asks about her rock. */
 const GREY_TOUCHES = 7
@@ -229,6 +231,8 @@ export class WhaleWatch implements World3D {
   private micT = 0
   private micDown = 0
   private doneT = -1
+  /** A spout is on its way down onto the boat until then (its soaking, maybe a close-up, follows). */
+  private soakUntil = 0
 
   // ---- Everyone else, and the water's bits.
   private lion: SeaLion
@@ -401,6 +405,8 @@ export class WhaleWatch implements World3D {
 
   /** A line, unless one was said a moment ago (`once`: only ever once). */
   private talk(line: Line, opts: { once?: string; cool?: number; force?: boolean } = {}) {
+    // (A close-up has its own line: nobody talks over it.)
+    if (this.films.on && !opts.force) return
     if (opts.once) {
       if (this.said.has(opts.once)) return
       this.said.add(opts.once)
@@ -500,6 +506,8 @@ export class WhaleWatch implements World3D {
     this.bubbles.busy = 1
     this.bubbles.show(true)
     whaleSfx.bubbles()
+    // (New bubbles are something new to do: the stuck hint waits its full time from now, not from her last touch.)
+    this.lastTouch = this.time
   }
 
   /** A spot `dist` meters from the boat on the side the camera sees best (beside it on a wide screen, beyond it on a
@@ -511,8 +519,11 @@ export class WhaleWatch implements World3D {
     const d = this.d
     for (let i = 0; i < 12; i++) {
       const side = i % 2 ? -this.side : this.side
-      const across = this.tall ? side * 2.5 : side * dist
-      const deep = this.tall ? dist * 0.75 : 1.5 + len * 0.1
+      // (Beyond the boat and off to one side, a diagonal: the boat low on the screen, the whale up beside it, so the
+      // pair fill the screen's height as well as its width and the camera can come in close.)
+      // (On a tall screen its middle sits right beyond the boat, its head to one side: the two stack up the screen.)
+      const across = this.tall ? side * len * 0.3 : side * dist * 0.5
+      const deep = this.tall ? dist * 0.8 : dist * 0.8 + len * 0.05
       const x = d.x + right.x * across + into.x * deep
       const z = d.z + right.z * across + into.z * deep
       if (open(x, z, len * 0.6 + 2) && Math.hypot(x - HOME.x, z - HOME.z) < ARENA + 6) {
@@ -533,16 +544,26 @@ export class WhaleWatch implements World3D {
     f()
   }
 
-  /** Puts a whale up at the spot (its head where the bubbles were), facing between the boat and the camera, so its
-   *  face shows and it looks at them. */
+  /** Which way a whale lies to play: broadside to the camera with its head to the right of the screen (`lie` +1) or
+   *  the left, turned a little toward the camera (a three-quarter view: its face shows, and its tail, back, barnacles
+   *  and blowhole spread out along it instead of stacking up end-on). */
+  private faceFor(lie: number) {
+    const yaw = CAM_YAW * (Math.PI / 180)
+    return Math.atan2(Math.cos(yaw) * lie + Math.sin(yaw) * 0.45, -Math.sin(yaw) * lie + Math.cos(yaw) * 0.45)
+  }
+  /** Which way the whale that's up lies (see faceFor). */
+  private lie = 1
+
+  /** Puts a whale up at the spot (its head where the bubbles were), lying for play (`faceFor`), looking at the boat:
+   *  on a wide screen its head toward the boat beside it; on a tall one, lying right across beyond the boat, its head
+   *  where the bubbles were. */
   private raise(w: Whale) {
     const s = this.spot ?? { x: this.d.x + 7, z: this.d.z }
     const yaw = CAM_YAW * (Math.PI / 180)
-    const cam = tB.set(Math.sin(yaw), 0, Math.cos(yaw))
-    const toBoat = tA.set(this.d.x - s.x, 0, this.d.z - s.z).normalize()
-    const face = toBoat.multiplyScalar(0.65).addScaledVector(cam, 0.55).normalize()
-    w.root.position.set(s.x - face.x * w.len * 0.3, 0, s.z - face.z * w.len * 0.3)
-    w.root.rotation.y = Math.atan2(face.x, face.z)
+    this.lie = this.tall ? this.side : (this.d.x - s.x) * Math.cos(yaw) - (this.d.z - s.z) * Math.sin(yaw) >= 0 ? 1 : -1
+    const h = this.faceFor(this.lie)
+    w.root.position.set(s.x - Math.sin(h) * w.len * 0.3, 0, s.z - Math.cos(h) * w.len * 0.3)
+    w.root.rotation.y = h
     w.rise()
     this.whale = w
     this.spot = null
@@ -588,10 +609,10 @@ export class WhaleWatch implements World3D {
       g.laugh(1.8)
       this.counts.laughs++
       whaleSfx.laugh()
-      const m = g.zoneAt('barnacles', tA)
+      const m = g.zoneAt('barnacles', tA, this.camSide(g))
       for (let i = 0; i < 26; i++) this.fizz.emit(m.x + (Math.random() - 0.5) * 1.4, Math.random() * 0.3, m.z + (Math.random() - 0.5) * 1.4, (Math.random() - 0.5) * 0.6, 1.5 + Math.random() * 2, (Math.random() - 0.5) * 0.6, 1.1, 0.1 + Math.random() * 0.12)
     } else {
-      g.tailUp(false, this.camSide(g))
+      g.tailUp(false, this.rig.camera.position)
       this.counts.slaps++
       this.timers.later(() => this.talk(L.whales.whaleTail, { once: 'tail' }), 600)
     }
@@ -623,7 +644,7 @@ export class WhaleWatch implements World3D {
     this.talk(L.whales.seenRock, { force: true })
     this.grey.look = this.ollie.root.position
     this.timers.later(() => {
-      this.grey.tailUp(true, this.camSide(this.grey))
+      this.grey.tailUp(true, this.rig.camera.position)
       whaleSfx.roll()
     }, 2000)
     this.timers.later(() => this.talk(L.whales.whaleTail, { force: true }), 2700)
@@ -673,7 +694,8 @@ export class WhaleWatch implements World3D {
   private jump(size: number) {
     const h = this.hump
     h.hold(false)
-    h.jump(clamp(size * PLAY.height, 0.1, 1))
+    this.jumpSize = clamp(size * PLAY.height, 0.1, 1)
+    h.jump(this.jumpSize)
     this.bubbles.show(false)
     whaleSfx.whoosh()
     this.jumps++
@@ -686,6 +708,8 @@ export class WhaleWatch implements World3D {
     else if (this.jumps === 2) this.timers.later(() => this.talk(L.whales.humpback), 700)
   }
   private pendingTier: 1 | 2 | 3 = 1
+  /** The humpback's jump now (0..1, for the camera). */
+  private jumpSize = 0
   private sinkT = 0
 
   /** The jump's wave reached the boat: it rocks, the spray comes down on everybody, Maple's face for the size. */
@@ -748,7 +772,8 @@ export class WhaleWatch implements World3D {
     this.pops++
     this.setPhase('bubbles')
     this.side = -this.side
-    const p = this.spotFor(PLAY.near - 1, 3)
+    // (Close, but clear of the boat's bow: nearer, the bow hid half the baby.)
+    const p = this.spotFor(PLAY.near + 0.25, 3)
     this.spot = p
     this.bubbles.at(p.x, p.z)
     this.bubbles.radius = 1
@@ -863,17 +888,18 @@ export class WhaleWatch implements World3D {
     this.events.progress(3)
     // Everybody round the boat, out of the water together.
     const d = this.d
+    // (Fanned wide round the far side of the boat from the camera, so nobody's behind it and no two arcs cross: the big
+    // two at the ends and furthest off, the baby in front, nearest.)
     const who: [Whale, number, number][] = [
-      [this.grey, -1.6, 8.5],
-      [this.hump, 1.7, 9.5],
-      [this.grandma, 0.45, 7.5],
-      [this.mama, -0.5, 8],
-      [this.baby, 2.6, 6],
+      [this.grey, -1.3, 10.5],
+      [this.mama, -0.6, 8.5],
+      [this.grandma, 0.05, 9.5],
+      [this.baby, 0.55, 6.5],
+      [this.hump, 1.25, 11.5],
     ]
     const yaw = CAM_YAW * (Math.PI / 180)
     for (const [w, a, r] of who) {
-      // (Spread round the far side of the boat from the camera, so nobody's behind it.)
-      const ang = yaw + Math.PI + a * 0.55
+      const ang = yaw + Math.PI + a
       w.root.position.set(d.x + Math.sin(ang) * r, 0, d.z + Math.cos(ang) * r)
       // (Facing the boat, side by side like spokes: they jump toward it, and float there looking at everybody after.)
       w.root.rotation.y = ang + Math.PI
@@ -917,11 +943,11 @@ export class WhaleWatch implements World3D {
     const shot: FilmShot = {
       eye: () => m.head(tB).addScaledVector(dir, dist).addScaledVector(across, 0.25).add(UP.clone().multiplyScalar(0.06)),
       look: head,
-      fov: 28,
+      fov: 31,
       to: { eye: () => m.head(tB).addScaledVector(dir, dist * 0.82).addScaledVector(across, 0.2).add(UP.clone().multiplyScalar(0.04)) },
       ease: 'out',
       sway: 0.012,
-      tall: { fov: 34 },
+      tall: { fov: 37 },
     }
     const star = { silly: (_f: unknown, s?: number) => m.soakedFace(size, s ?? 2), shake: () => m.shake(), head: (o?: Vector3) => m.head(o), height: m.height }
     const beat = { ...sillyBeat(star, 'soaked', { say, dur: 1.9 }), shot }
@@ -992,12 +1018,14 @@ export class WhaleWatch implements World3D {
         const pick = Math.floor(this.phaseT) % 3
         if (pick === 0) this.greyBlow()
         else if (pick === 1) g.roll(this.camSide(g))
-        else g.tailUp(false, this.camSide(g))
+        else g.tailUp(false, this.rig.camera.position)
         this.lastTouch = t - 2.5
       }
-      if (!g.busy && (this.greyTouches >= GREY_TOUCHES || this.phaseT > GREY_SECONDS)) this.greyAsk()
+      // (Never while a spout is still coming down on Maple or her close-up is on: Ollie would talk over it.)
+      if (!g.busy && !this.films.on && t > this.soakUntil && (this.greyTouches >= GREY_TOUCHES || this.phaseT > GREY_SECONDS)) this.greyAsk()
       // The blowhole's spout comes down on the boat: Maple soaked (a different face each time, the second close up).
       if (g.blew) {
+        this.soakUntil = t + 1.6
         const hole = g.holeAt(tA)
         this.spout(hole, 1, true)
         this.timers.later(() => {
@@ -1166,7 +1194,11 @@ export class WhaleWatch implements World3D {
         p.x += (dx / dist) * Math.min(2.5, dist - want) * dt
         p.z += (dz / dist) * Math.min(2.5, dist - want) * dt
       }
-      w.root.rotation.y += wrapAngle(Math.atan2(dx, dz) - w.root.rotation.y) * damp(dt, 0.8)
+      // (On a wide screen it keeps its head toward the boat: she drove well round to its other side, it turns round.)
+      const yaw = CAM_YAW * (Math.PI / 180)
+      if (!this.tall && (dx * Math.cos(yaw) - dz * Math.sin(yaw)) * this.lie < -3) this.lie = -this.lie
+      const h = w.root.rotation.y
+      w.root.rotation.y += wrapAngle(this.faceFor(this.lie) - h) * damp(dt, 0.8)
     }
     // The rock on the baby's nose (a toss flies up and back down), or flying to Ollie.
     this.flyRock(dt)
@@ -1209,7 +1241,7 @@ export class WhaleWatch implements World3D {
   }
 
   /** A whale's spout: a V (a grey whale has two blowholes) or one bush of mist, drifting toward the boat. */
-  private spout(at: Vector3, k: number, v: boolean, reach = 1) {
+  private spout(at: Vector3, k: number, v: boolean, reach = 1, high = 5) {
     const toBoat = tB.set(this.d.x - at.x, 0, this.d.z - at.z)
     const dist = toBoat.length()
     toBoat.normalize()
@@ -1218,10 +1250,10 @@ export class WhaleWatch implements World3D {
     // (Up about 3 m and over in an arc: it comes down on the boat, the way a fountain would.)
     for (const s of sides)
       for (let i = 0; i < 70 * k; i++) {
-        const up = 5 + Math.random() * 1.6
+        const up = high + Math.random() * high * 0.32
         const flight = (2 * up) / 6
         const over = (dist / flight) * (0.75 + Math.random() * 0.4) * reach
-        const fan = v ? 0.9 : 0.35
+        const fan = v ? 0.9 : high < 4 ? 0.7 : 0.35
         this.mist.emit(at.x, at.y + 0.1, at.z, toBoat.x * over + across.x * s * fan + (Math.random() - 0.5) * 0.5, up, toBoat.z * over + across.z * s * fan + (Math.random() - 0.5) * 0.5, flight + 0.3, 0.14 + Math.random() * 0.16)
       }
     whaleSfx.blow()
@@ -1411,9 +1443,11 @@ export class WhaleWatch implements World3D {
       d.x = s.x
       d.z = s.z
       d.heading = h.root.rotation.y
-      b.root.position.set(s.x, Math.max(swell(s.x, s.z, t) * 0.6, s.y), s.z)
+      // (Settled down onto the round of its back: the floor over the ridge of its spine, the tubes on its flanks, not
+      // perched on the very top with the tubes in the air.)
+      b.root.position.set(s.x, Math.max(swell(s.x, s.z, t) * 0.6, s.y - SADDLE_SINK), s.z)
       b.root.rotation.set(0, d.heading, 0)
-      b.body.rotation.set(h.body.rotation.x + clamp(r.pitch, -0.3, 0.3), 0, h.body.rotation.z + clamp(r.roll, -0.3, 0.3))
+      b.body.rotation.set(h.body.rotation.x + clamp(r.pitch, -0.12, 0.12), 0, h.body.rotation.z + clamp(r.roll, -0.12, 0.12))
     } else {
       b.root.position.set(d.x, swell(d.x, d.z, t) * 0.6 + lift, d.z)
       b.root.rotation.set(0, d.heading, 0)
@@ -1507,7 +1541,8 @@ export class WhaleWatch implements World3D {
       p.x += dx * damp(dt, 0.8)
       p.z += dz * damp(dt, 0.8)
       if (Math.hypot(dx, dz) > 0.05) o.root.rotation.y += wrapAngle(Math.atan2(dx, dz) - o.root.rotation.y) * damp(dt, 2)
-      if (Math.random() < dt * 0.3) this.spout(o.body.localToWorld(o.hull.at(0.85, 0, 0, tA)), 0.25, false, 0.05)
+      // (A short bushy puff, not a tall plume: from out here a tall thin one reads as a trail of dots in the sky.)
+      if (Math.random() < dt * 0.3) this.spout(o.body.localToWorld(o.hull.at(0.85, 0, 0, tA)), 0.5, false, 0.05, 3.4)
     }
   }
 
@@ -1533,46 +1568,56 @@ export class WhaleWatch implements World3D {
     const d = this.d
     const tall = this.tall
     if (this.phase === 'lab' && this.lab) return this.labShot()
-    // The box: the boat and Ollie behind it, and whatever's up (the whale, the bubbles, the orcas).
-    const box = { x0: d.x - 2.6, x1: d.x + 2.6, z0: d.z - 2.6, z1: d.z + 2.6, y1: 1.6 }
-    const add = (x: number, z: number, r: number, y = 2) => {
-      box.x0 = Math.min(box.x0, x - r)
-      box.x1 = Math.max(box.x1, x + r)
-      box.z0 = Math.min(box.z0, z - r)
-      box.z1 = Math.max(box.z1, z + r)
+    // The box, in the camera's own terms (across the screen and away into it, so it fits snugly whichever way things
+    // lie): the boat, Ollie on her rope, and whatever's up (the whale from nose to flukes, the bubbles, the orcas).
+    const yaw = CAM_YAW * (Math.PI / 180)
+    const rx = Math.cos(yaw)
+    const rz = -Math.sin(yaw)
+    const fx = -Math.sin(yaw)
+    const fz = -Math.cos(yaw)
+    const box = { a0: Infinity, a1: -Infinity, f0: Infinity, f1: -Infinity, y1: 1.4 }
+    const add = (x: number, z: number, r: number, y = 1.4) => {
+      const a = x * rx + z * rz
+      const f = x * fx + z * fz
+      box.a0 = Math.min(box.a0, a - r)
+      box.a1 = Math.max(box.a1, a + r)
+      box.f0 = Math.min(box.f0, f - r)
+      box.f1 = Math.max(box.f1, f + r)
       box.y1 = Math.max(box.y1, y)
     }
+    // (The boat end to end, whichever way it points.)
+    const bx = Math.sin(d.heading) * BOAT_LEN * 0.45
+    const bz = Math.cos(d.heading) * BOAT_LEN * 0.45
+    add(d.x + bx, d.z + bz, 1.3, 1.9)
+    add(d.x - bx, d.z - bz, 1.3, 1.9)
     const o = this.ollie.root.position
-    add(o.x, o.z, 0.5)
-    const w = this.whale
-    if (w?.visible) {
+    add(o.x, o.z, 1.2)
+    const whole = (w: Whale, y: number) => {
+      const h = w.root.rotation.y
       const p = w.root.position
-      const jump = this.hump.jumping ? 3 + 3.5 * PLAY.height : w === this.grey && w.busy ? 2.6 : 1.8
-      add(p.x, p.z, w.len * 0.3, jump)
-    } else if (this.spot) add(this.spot.x, this.spot.z, 2)
-    if (this.phase === 'pass') add(this.grandma.root.position.x, this.grandma.root.position.z, 3)
-    if (this.phase === 'finale') add(d.x, d.z, 8.5, 4)
+      const l = w.len * 0.5
+      add(p.x + Math.sin(h) * l, p.z + Math.cos(h) * l, w.len * 0.1, y)
+      add(p.x - Math.sin(h) * l, p.z - Math.cos(h) * l, w.len * 0.15, y)
+    }
+    const w = this.whale
+    // (A breach whole, nose to flukes at the top of it: its middle goes up to 0.8 + 4.2 × the jump's size, nose-up.)
+    if (w?.visible) whole(w, this.hump.jumping ? 0.8 + 4.2 * this.jumpSize + 3.4 : w === this.grey && w.busy ? 2.6 : w === this.baby ? 2.4 : 1.8)
+    else if (this.spot) add(this.spot.x, this.spot.z, 2.2)
+    if (this.phase === 'pass') whole(this.grandma, 2.4)
+    if (this.phase === 'finale') for (const f of this.all) whole(f, f === this.hump ? 6.5 : 4.5)
     if (this.phase === 'orcaIn' && this.section === 'orcas') {
-      add(this.grandma.root.position.x, this.grandma.root.position.z, 2)
-      add(this.mama.root.position.x, this.mama.root.position.z, 2)
+      whole(this.grandma, 1.4)
+      whole(this.mama, 1.4)
     }
-    if (this.phase === 'ride') add(this.hump.root.position.x, this.hump.root.position.z, 4.2, 2.5)
-    let cx = (box.x0 + box.x1) / 2
-    let cz = (box.z0 + box.z1) / 2
-    if (tall) {
-      // (A little further off, so it all sits lower, clear of the top bar, with less empty sea at the bottom.)
-      const into = (CAM_YAW * Math.PI) / 180
-      cx -= Math.sin(into) * 1.5
-      cz -= Math.cos(into) * 1.5
-    }
-    // (In camera terms: across the screen and into it.)
-    const yaw = CAM_YAW * (Math.PI / 180)
-    const hx = Math.abs(Math.cos(yaw)) * (box.x1 - box.x0) / 2 + Math.abs(Math.sin(yaw)) * (box.z1 - box.z0) / 2
-    const hz = Math.abs(Math.sin(yaw)) * (box.x1 - box.x0) / 2 + Math.abs(Math.cos(yaw)) * (box.z1 - box.z0) / 2
-    // (The depth counts for little: what's further off looks smaller anyway, and a deep box would back the camera off.)
-    // (On a tall screen the camera looks down more, so the whale beyond the boat fills the height.)
-    const half = new Vector3(Math.max(tall ? 2.9 : 4.5, hx), box.y1 / 2 + 0.2, Math.max(1.2, hz * (tall ? 0.6 : 0.3)))
-    return { center: new Vector3(cx, box.y1 * 0.3, cz), half, yaw: CAM_YAW, pitch: tall ? 32 : 24, follow: true, minDist: 6, maxDist: 90 }
+    if (this.phase === 'ride') whole(this.hump, 2.5)
+    // (The far end counts for less than the near one: what's further off looks smaller and sits higher anyway, and a
+    // deep box would back the camera off. The near edge stays exact, so nothing near the camera is cut off.)
+    box.f1 = box.f0 + (box.f1 - box.f0) * (tall ? 0.8 : 0.65)
+    const a = (box.a0 + box.a1) / 2
+    const f = (box.f0 + box.f1) / 2
+    const center = new Vector3(rx * a + fx * f, box.y1 / 2, rz * a + fz * f)
+    const half = new Vector3(Math.max(tall ? 3 : 4, (box.a1 - box.a0) / 2), box.y1 / 2 + 0.1, Math.max(1.2, (box.f1 - box.f0) / 2))
+    return { center, half, yaw: CAM_YAW, pitch: tall ? 36 : 28, follow: true, minDist: 6, maxDist: 90 }
   }
 
   render() {
@@ -1605,8 +1650,8 @@ export class WhaleWatch implements World3D {
     if (w instanceof GreyWhale) {
       if (m === 'blow') w.blow()
       if (m === 'roll') w.roll(1)
-      if (m === 'show') w.tailUp(true, 1)
-      if (m === 'slap') w.tailUp(false, 1)
+      if (m === 'show') w.tailUp(true, this.rig.camera.position)
+      if (m === 'slap') w.tailUp(false, this.rig.camera.position)
       if (m === 'laugh') w.laugh(2)
       if (m === 'dive') w.dive()
       if (m === 'rise') (w.hide(), w.rise())
@@ -1812,16 +1857,29 @@ export class WhaleWatch implements World3D {
     const greyUp = this.whale === g && g.isUp && (this.phase === 'grey' || this.phase === 'ask')
     const h = this.hump
     const humpUp = this.whale === h && h.visible && this.phase === 'hump'
+    // The grey whale's four zones, each no bigger than the gap to its nearest neighbour (never under the minimum), so
+    // they stay four separate targets.
+    const zones = new Map<string, { at: Vector3; size: number }>()
+    if (greyUp) {
+      const side = this.camSide(g)
+      for (const id of ['tail', 'back', 'barnacles', 'blowhole']) {
+        const at = id === 'tail' ? g.flukes.getWorldPosition(new Vector3()).setY(Math.max(0.3, g.flukes.getWorldPosition(tA).y)) : g.zoneAt(id, new Vector3(), side)
+        zones.set(id, { at, size: px(at, id === 'back' ? 2.4 : id === 'tail' ? 2 : 1.4) })
+      }
+      const on = [...zones.values()].map((z) => this.toScreen(z.at))
+      ;[...zones.values()].forEach((z, i) => {
+        const gap = Math.min(...on.filter((_, j) => j !== i).map((o) => Math.hypot(o.x - on[i].x, o.y - on[i].y)))
+        z.size = Math.min(z.size, Math.max(min, gap))
+      })
+    }
     for (const [id, el] of this.anchorEls) {
       let at: Vector3 | null = null
       let size = 0
       if (id === 'bubbles' && this.phase === 'bubbles' && this.spot) {
         at = new Vector3(this.spot.x, 0.2, this.spot.z)
         size = px(at, this.bubbles.radius * 2.6)
-      } else if (greyUp && (id === 'blowhole' || id === 'barnacles' || id === 'tail' || id === 'back')) {
-        at = g.zoneAt(id, new Vector3())
-        if (id === 'tail') at = g.flukes.getWorldPosition(new Vector3()).setY(Math.max(0.3, g.flukes.getWorldPosition(tA).y))
-        size = px(at, id === 'back' ? 2.4 : id === 'tail' ? 2 : 1.3)
+      } else if (zones.has(id)) {
+        ;({ at, size } = zones.get(id)!)
       } else if (id === 'blowhole' && humpUp && !h.busy) {
         at = h.zoneAt('blowhole', new Vector3())
         size = px(at, 1.3)

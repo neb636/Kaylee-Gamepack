@@ -185,7 +185,9 @@ export class Juggle {
       // it goes up beside her face, not in front of it.
       a.rig.body.updateWorldMatrix(true, false)
       const toUp = UP.clone().applyQuaternion(a.rig.body.getWorldQuaternion(Q).invert())
-      const side = (n % 2 ? 1 : -1) * Math.cos(Math.PI * k) * 0.17 * H
+      // (The arc bows out to her left as it rises: straight up from the middle of her tummy it hid her face from the
+      // camera at her toes at the top of every toss.)
+      const side = (n % 2 ? 1 : -1) * Math.cos(Math.PI * k) * 0.17 * H + Math.sin(Math.PI * k) * Math.min(1, up / (0.2 * H)) * 0.34 * H
       this.rock.position.set(side, 0.3 * H, 0.26 * H * c).addScaledVector(toUp, up)
       this.rock.rotation.set(this.t * 7, this.t * 4, 0)
       // Her paws flick up as it leaves them and reach for it as it comes down.
