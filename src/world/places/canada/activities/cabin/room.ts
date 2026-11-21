@@ -142,8 +142,7 @@ export function buildRoom(bag: Bag, layout: Layout, row?: number, narrow = false
       plain.push(P.cyl(r * 0.8, r * 0.8, 0.02, LOG_END, { at: [s * (W + r * 0.4), y, wz + 1.7 + 1.7 + r + 0.005], rot: [Math.PI / 2, 0, 0] }, 12))
     }
   }
-  // The ceiling's planks, and two beams under it.
-  lined.push(P.box(W * 2 + 0.6, 0.08, 6, LOG_DARK, { at: [0, p.wallTop + 0.3, wz + 3] }))
+  // Two beams overhead (the roof above is in the dark: the scene's background).
   for (const bz of [wz + 0.55, wz + 2.4]) lined.push(P.rbox(W * 2 + 0.4, 0.22, 0.24, 0.04, LOG_DARK, { at: [0, p.wallTop + 0.15, bz] }))
 
   // ---- The floor: planks running toward you, and a braided rug.

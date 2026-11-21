@@ -128,6 +128,11 @@ export class TeamCabinWorld implements World3D {
   private room!: Room
   private layoutNow: Layout | null = null
   private narrow = false
+  private fronted = 0
+  /** How many fit in the front row: four, or on a phone held upright half the team (the rest on the back bench). */
+  private get frontMax() {
+    return this.h > this.w * 1.6 ? Math.max(2, Math.ceil(this.seats.length / 2)) : 4
+  }
   private seats: Seat[] = []
   private gus: Goose
   private gusAt = { state: 'away' as 'away' | 'up' | 'in' | 'down', t: 0, next: 9, stay: 10 }
@@ -211,9 +216,10 @@ export class TeamCabinWorld implements World3D {
    *  ones on the step behind, like a team photo. Builds the room for that shape. */
   private arrange(layout: Layout) {
     const narrow = layout === 'wide' && this.h > this.w * 1.05
-    if (this.layoutNow === layout && this.narrow === narrow) return
+    if (this.layoutNow === layout && this.narrow === narrow && this.fronted === this.frontMax) return
     this.layoutNow = layout
     this.narrow = narrow
+    this.fronted = this.frontMax
     if (this.room) {
       this.room.root.removeFromParent()
       this.room.root.traverse((o) => {
@@ -225,8 +231,8 @@ export class TeamCabinWorld implements World3D {
     const maple = this.seats[0]
     const rest = this.seats.slice(1)
     let rows: Seat[][]
-    if (layout === 'tall' && this.seats.length > 4) {
-      const big = [...rest].sort((a, b) => CABIN_H[b.who] - CABIN_H[a.who]).slice(0, this.seats.length - 4)
+    if (layout === 'tall' && this.seats.length > this.frontMax) {
+      const big = [...rest].sort((a, b) => CABIN_H[b.who] - CABIN_H[a.who]).slice(0, this.seats.length - this.frontMax)
       rows = [this.order(maple, rest.filter((s) => !big.includes(s))), this.order(null, big)]
     } else rows = [this.order(maple, rest), []]
     // Maple (or the middle one) at x = 0, the rest out to each side.
@@ -833,8 +839,8 @@ export class TeamCabinWorld implements World3D {
     const sparkleW = Math.min(120, h * 0.16, w * 0.24) + 14
     this.tray.layout(w, h, this.rig.camera, sparkleW, 6)
     // (Two rows only on a tall screen with more than four on the bench: four fit in one row anywhere.)
-    const want: Layout = h > w * 1.05 && this.seats.length > 4 ? 'tall' : 'wide'
-    if (want !== this.layoutNow || this.narrow !== (want === 'wide' && h > w * 1.05)) this.arrange(want)
+    const want: Layout = h > w * 1.05 && this.seats.length > this.frontMax ? 'tall' : 'wide'
+    if (want !== this.layoutNow || this.narrow !== (want === 'wide' && h > w * 1.05) || this.fronted !== this.frontMax) this.arrange(want)
     else this.frame()
   }
   setAnchorElements(els: Map<string, HTMLElement>) {
