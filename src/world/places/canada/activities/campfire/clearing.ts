@@ -18,10 +18,10 @@ export type Mark = [x: number, z: number, face: number]
 
 export const CLEARING = {
   /** The owl on his branch (where his feet grip it). */
-  owl: [-1.9, 1.98, -1.99] as V3,
+  owl: [-1.9, 1.66, -1.99] as V3,
   /** The bat hanging under the maple's branch (where his feet hold it). */
   bat: [2.98, 1.42, -2.86] as V3,
-  deer: [5.3, -4.9, -40] as Mark,
+  deer: [3.95, -2.05, -20] as Mark,
   /** The porcupine on the stump. */
   porcupine: [2.75, 0.33, -0.45] as V3,
   /** The frog on the stone at the front. */
@@ -87,8 +87,8 @@ export function buildClearing(bag: Bag, root: Group) {
         // Roots spreading at the foot.
         ...[0, 1, 2, 3].map((i) => P.sphere(sr * 0.55, bark, { at: [sx + Math.cos(i * 1.7 + 0.4) * sr * 0.95, 0.06, sz + Math.sin(i * 1.7 + 0.4) * sr * 0.95], scale: [1.4, 0.5, 0.9], rot: [0, -(i * 1.7 + 0.4), 0] })),
         // The owl's branch, sloping up a little to its tip, and a stub.
-        P.capsule(0.055, 0.62, bark, { at: [sx + 0.28, 1.93, sz + 0.06], rot: [0, 0, -1.42] }),
-        P.capsule(0.045, 0.3, bark, { at: [sx - 0.25, 1.4, sz + 0.02], rot: [0, 0, 1.0] }),
+        P.capsule(0.055, 0.62, bark, { at: [sx + 0.28, 1.61, sz + 0.06], rot: [0, 0, -1.42] }),
+        P.capsule(0.045, 0.3, bark, { at: [sx - 0.25, 1.15, sz + 0.02], rot: [0, 0, 1.0] }),
         // The broken top.
         ...[0, 1, 2].map((i) => P.cone(sr * 0.32, 0.26 - i * 0.05, bark, { at: [sx + Math.cos(i * 2.1) * sr * 0.4, sh + 0.08, sz + Math.sin(i * 2.1) * sr * 0.4], rot: [Math.sin(i * 2.1) * 0.3, 0, -Math.cos(i * 2.1) * 0.3] }, 6)),
       ],

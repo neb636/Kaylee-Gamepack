@@ -91,7 +91,7 @@ const auroraFrag = /* glsl */ `
     float foot = smoothstep(0.0, 0.07, vUv.y) * pow(1.0 - vUv.y, 1.7);
     float wob = sin(vX * 0.05 + uTime * 0.3) * 2.5;
     float rays = 0.6 + 0.28 * sin(vX * 0.16 + uTime * 0.7 + wob) + 0.12 * sin(vX * 0.47 - uTime * 1.3);
-    float bright = 0.6 + 0.4 * sin(vX * 0.014 + uTime * 0.21 + 1.3);
+    float bright = 0.74 + 0.26 * sin(vX * 0.014 + uTime * 0.21 + 1.3);
     float ends = smoothstep(0.0, 0.25, vUv.x) * smoothstep(1.0, 0.75, vUv.x);
     vec3 col = mix(uLow, uHigh, smoothstep(0.1, 0.8, vUv.y));
     float a = clamp(foot * rays * bright * ends * 2.2, 0.0, 1.0) * uOn;
@@ -122,14 +122,14 @@ export class NightSky {
     const size: number[] = []
     const phase: number[] = []
     const late: number[] = []
-    for (let i = 0; i < 650; i++) {
+    for (let i = 0; i < 1100; i++) {
       // (Mostly over the back of the clearing, where the camera looks up.)
       const a = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.6
       const el = 0.12 + Math.pow(Math.random(), 0.8) * 1.3
       const r = 300
       pos.push(Math.cos(a) * Math.cos(el) * r, Math.sin(el) * r, Math.sin(a) * Math.cos(el) * r)
       const early = i < 70
-      size.push(early ? 5 + Math.random() * 4 : 2.6 + Math.random() * Math.random() * 5)
+      size.push(early ? 5 + Math.random() * 4 : 3.2 + Math.random() * Math.random() * 6)
       phase.push(Math.random())
       late.push(early ? 0 : 0.6 + Math.random() * 0.4)
     }
@@ -143,17 +143,18 @@ export class NightSky {
     this.stars.frustumCulled = false
     this.stars.renderOrder = -9
     this.root.add(this.stars)
-    // The northern lights: three long curtains far over the trees, behind each other.
-    const bands: [number, number, number, number, string, string][] = [
-      // [y, z, width, height, foot color, top color]
-      [34, -150, 380, 62, '#5CF2B0', '#D58CFF'],
-      [52, -200, 460, 80, '#8AF7C8', '#FF8FD0'],
+    // The northern lights: three long curtains far over the trees, behind each other, offset across the sky.
+    const bands: [number, number, number, number, number, string, string][] = [
+      // [x, y, z, width, height, foot color, top color] (across the whole sky the camera tilts up to, over the moon too)
+      [-40, 34, -150, 380, 62, '#5CF2B0', '#D58CFF'],
+      [60, 46, -175, 400, 70, '#6CF5C0', '#B98CFF'],
+      [10, 58, -210, 480, 82, '#8AF7C8', '#FF8FD0'],
     ]
-    for (const [y, z, w, hgt, lo, hi] of bands) {
+    for (const [x, y, z, w, hgt, lo, hi] of bands) {
       const geo = bag.add(new PlaneGeometry(w, hgt, 64, 6))
       const mat = bag.add(new ShaderMaterial({ uniforms: { uTime: { value: 0 }, uOn: { value: 0 }, uLow: { value: new Color(lo) }, uHigh: { value: new Color(hi) } }, vertexShader: auroraVert, fragmentShader: auroraFrag, transparent: true, depthWrite: false, blending: AdditiveBlending, side: DoubleSide, fog: false }))
       const m = new Mesh(geo, mat)
-      m.position.set(30 + z * 0.1, y + hgt / 2, z)
+      m.position.set(x, y + hgt / 2, z)
       m.rotation.x = 0.12
       m.frustumCulled = false
       m.renderOrder = -8
