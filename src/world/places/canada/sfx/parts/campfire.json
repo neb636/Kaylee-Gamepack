@@ -82,7 +82,7 @@
   "id": "campfire-click",
   "label": "The flashlight's switch",
   "prompt": "A small plastic toy flashlight switch clicking, one chunky click, close and clear.",
-  "seconds": 0.4
+  "seconds": 0.5
  },
  {
   "id": "campfire-freeze",

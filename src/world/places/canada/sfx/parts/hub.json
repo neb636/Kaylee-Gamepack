@@ -22,7 +22,7 @@
  { "id": "hub-move-snatch", "label": "Roxy whisks the puck", "prompt": "A tiny quick paw snatch: a fast little swipe and a soft pop, like something grabbed in a blink, cartoon and cute.", "seconds": 0.6 },
  { "id": "hub-move-slap", "label": "Misty's slap shot", "prompt": "A big friendly hockey slap shot: a hearty wooden whack of a stick hitting a pinecone, then a whoosh as it flies far away.", "seconds": 1.0 },
  { "id": "hub-move-cone", "label": "The pinecone lands on the ice", "prompt": "A pinecone landing on ice: a light woody tock and a little skittering slide, small and clear.", "seconds": 0.7 },
- { "id": "hub-move-pat", "label": "Ollie's rock lands in a paw", "prompt": "A smooth little stone landing softly in a furry paw: one gentle muffled pat, tiny and cozy.", "seconds": 0.4 },
+ { "id": "hub-move-pat", "label": "Ollie's rock lands in a paw", "prompt": "A smooth little stone landing softly in a furry paw: one gentle muffled pat, tiny and cozy.", "seconds": 0.5 },
  { "id": "hub-move-spin", "label": "Ollie spins like a top", "prompt": "A quick spinning whirr rising in pitch, like a toy top spun fast, airy and playful, short.", "seconds": 0.6 },
  { "id": "hub-move-pass", "label": "The rock is passed", "prompt": "A quick airy whoosh of a small stone thrown in a fast pass, light and short.", "seconds": 0.5 },
  { "id": "hub-hut-door", "label": "The skate hut's door opens", "prompt": "A little wooden cabin door creaking open softly, with a tiny jingle of a small bell on it and a warm cozy feel.", "seconds": 1.0 },
