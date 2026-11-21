@@ -361,6 +361,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const eyes: Parts = []
   const eyesPlain: Parts = []
   const rest: Parts = []
+  const talking: Parts = []
   /** A unicorn's locks, which swing in the wind (their own group on the head). */
   const locks: Parts = []
   /** Where the mouth is (head-local): the resting mouth and the talking one are built around it. */
@@ -515,16 +516,6 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   // ---- The face: big shiny eyes, blush, a smile (or a big open happy mouth) ----
   for (const s of [-1, 1]) {
     const x = s * eyeX
-    if (look.species === 'beaver') {
-      // The whites, amber irises and catchlights blink together.
-      const y = eyeY
-      const rot = turnTo(x)
-      eyesPlain.push(P.sphere(0.20 * R, '#FFF2DA', { at: on(x, y), rot, scale: [0.93, 1.1, 0.52] }, 28))
-      eyesPlain.push(P.sphere(0.16 * R, '#855231', { at: on(x - s * 0.012 * R, y, 0.078 * R), rot, scale: [0.92, 1.06, 0.39] }, 24))
-      eyesPlain.push(P.sphere(0.121 * R, '#281B19', { at: on(x - s * 0.018 * R, y, 0.118 * R), rot, scale: [0.96, 1.1, 0.31] }, 24))
-      eyesPlain.push(P.sphere(0.042 * R, WHITE, { at: on(x - 0.035 * R, y + 0.045 * R, 0.158 * R), scale: [1, 1, 0.45] }))
-      continue
-    }
     eyes.push(P.sphere(eyeSize, INK, { at: on(x, eyeY, lift - 0.03 * R), rot: turnTo(x), scale: [0.78, 1, 0.42] }))
     eyesPlain.push(P.sphere(eyeSize * 0.3, WHITE, { at: on(x + s * 0.05 * R, eyeY + 0.08 * R, lift + 0.035 * R) }))
     eyesPlain.push(P.sphere(eyeSize * 0.14, WHITE, { at: on(x - s * 0.05 * R, eyeY - 0.07 * R, lift + 0.035 * R) }))
@@ -869,7 +860,13 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       rest.push(smile.scale(R, R, R).rotateX(0.4))
       rest.push(P.sphere(0.09 * R, '#C67B71', { at: [0, -0.193 * R, -0.017 * R], rot: [0.4, 0, 0], scale: [1.45, 0.47, 0.34] }))
       for (const s of [-1, 1]) headPlain.push(P.rbox(0.122 * R, 0.176 * R, 0.06 * R, 0.027 * R, BEAVER_TEETH, { at: [s * 0.064 * R, headY - 0.365 * R, 1.046 * R], rot: [0.30, s * 0.08, s * -0.035] }))
-      tailRoot = [0, 0.13 * H, -0.15 * H * round[2]]
+      // During speech the upper edge stays behind the incisors while the tongue and
+      // lower lip drop on stressed syllables. FaceLife drives this from the recording.
+      talking.push(P.sphere(0.23 * R, '#512B2A', { at: [0, -0.205 * R, -0.012 * R], rot: [0.28, 0, 0], scale: [1.02, 1.1, 0.30] }, 24))
+      talking.push(P.sphere(0.11 * R, '#C67B71', { at: [0, -0.34 * R, -0.008 * R], rot: [0.28, 0, 0], scale: [1.15, 0.51, 0.25] }))
+      // Wag from inside the rump. The tapered base overlaps both the hip and paddle.
+      tailRoot = [0, 0.22 * H, -0.095 * H * round[2]]
+      tail.push(P.sphere(0.14 * H, look.dark, { at: [0, 0.147 * H, -0.18 * H * round[2]], rot: [-0.64, 0, 0], scale: [0.47, 0.34, 1.05] }, 24))
       tail.push(P.sphere(0.16 * H, look.dark, { at: [0, 0.07 * H, -0.3 * H * round[2]], rot: [0.12, 0, 0], scale: [0.72, 0.16, 1.15] }, 20))
       for (const a of [-0.5, 0.5]) for (const k of [-0.07, 0, 0.07]) tail.push(P.capsule(0.004 * H, 0.17 * H, '#4F3428', { at: [k * H, 0.095 * H, -0.3 * H * round[2]], rot: [Math.PI / 2 + 0.12, a, 0] }))
       break
@@ -1124,7 +1121,8 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const talk = new Group()
   for (const m of [mouthGroup, talk]) m.position.set(...mouthAt)
   if (rest.length) mouthGroup.add(solidMix([], rest, bag, 0))
-  talk.add(solidMix([], [P.sphere(0.17 * R, MOUTH, { scale: [1.1, 0.9, 0.35] }), P.sphere(0.09 * R, TONGUE, { at: [0, -0.06 * R, 0.03 * R], scale: [1.3, 0.6, 0.5] })], bag, 0))
+  if (!talking.length) talking.push(P.sphere(0.17 * R, MOUTH, { scale: [1.1, 0.9, 0.35] }), P.sphere(0.09 * R, TONGUE, { at: [0, -0.06 * R, 0.03 * R], scale: [1.3, 0.6, 0.5] }))
+  talk.add(solidMix([], talking, bag, 0))
   talk.scale.setScalar(0.001)
   talk.visible = false
   headPivot.add(eyeGroup, mouthGroup, talk)
@@ -1161,7 +1159,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     tailGroup = pivoted(tail, look.species === 'unicorn' ? [0, 0.29 * H, -0.15 * H] : tailRoot, bag, px)
     body.add(tailGroup)
   }
-  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, open: (!!look.open || look.smile === 'teeth' || look.species === 'beaver') && rest.length > 0, beak, armL, armR, tail: tailGroup, mane: maneGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
+  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, open: (!!look.open || look.smile === 'teeth') && rest.length > 0, beak, armL, armR, tail: tailGroup, mane: maneGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
 }
 
 /** A five-petal flower (with two leaves behind it) printed on a surface at `at`, turned by `rot` to face out. */
