@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "bike-carve-a",
+  "title": "Bike carve a",
+  "video": "bike-carve-a.mp4",
+  "gif": "bike-carve-a.gif",
+  "seconds": 11,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "canada-bike-steer",
+      "where": "canada-bike-steer",
+      "seconds": 9,
+      "fps": 57.8,
+      "status": "ok"
+    }
+  ]
+}
