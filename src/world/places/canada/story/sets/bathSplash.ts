@@ -1,116 +1,102 @@
-// The river's big splash (story/sets/bath.ts `bigSplash`): what a bear landing in the pool throws up, drawn the toon
-// way. A crown of water petals bursts up round the spot and opens out like a flower, a jet shoots up the middle and
-// breaks into drops, fat drops fly out on arcs and fall back (stretched along the way they fly), foam churns on the
-// water and two rings spread out and fade. Everything is set each frame from the splash's clock, so a second splash
-// simply starts it again.
-import { Color, DoubleSide, Group, Mesh, MeshBasicMaterial, RingGeometry, Vector3 } from 'three'
+// Misty's impact pushes up a thin sheet of river water. The uneven lip throws off spray,
+// then the sheet collapses and its wake spreads across the pool.
+import { BufferGeometry, Color, DoubleSide, Float32BufferAttribute, Group, Mesh, MeshBasicMaterial, MeshPhongMaterial, RingGeometry, SphereGeometry, Vector3 } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
-import { merge, P, solid } from '../../../../engine3d/geo'
 import { rng } from './bathWater'
 
-const WHITE = '#FFFFFF'
-const PALE = '#E4F6FD'
-const BLUE = '#AEDFF3'
-/** Seconds the whole splash lasts. */
 const LIFE = 1.9
-const G = 9.5
+const GRAVITY = 9.5
+const UP = new Vector3(0, 1, 0)
+const velocity = new Vector3()
 
-/** A petal of the crown: a soft rounded tongue of water (blue at the foot, paler up it) with a round drop on its tip,
- *  never a sharp point (that reads as ice). `h` tall, `w` wide, thin across. */
-function petal(h: number, w: number) {
-  return merge([
-    P.sphere(w, BLUE, { at: [0, h * 0.3, 0], scale: [0.45, (h * 0.34) / w, 1] }, 12),
-    P.sphere(w * 0.8, PALE, { at: [0, h * 0.62, 0], scale: [0.45, (h * 0.26) / (w * 0.8), 1] }, 12),
-    P.sphere(w * 0.58, WHITE, { at: [0, h * 0.97, 0] }, 10),
-  ])
+function crest(angle: number) {
+  return 0.68 + 0.22 * Math.sin(7 * angle) + 0.13 * Math.sin(11 * angle + 1) + 0.09 * Math.cos(3 * angle)
+}
+
+function waterSheet() {
+  const segments = 96
+  const positions: number[] = []
+  const colors: number[] = []
+  const indices: number[] = []
+  // Cross-section from the submerged foot through the flared wall and over its pale lip.
+  const profile = [[0.28, -0.06, '#52b5cd'], [0.46, 0.16, '#70cbdc'], [0.64, 0.62, '#a3e3ec'], [0.82, 1, '#edfaff'], [0.86, 0.96, '#c9eff5']] as const
+  for (const [row, [radius, height, tint]] of profile.entries()) {
+    const color = new Color(tint)
+    for (let i = 0; i < segments; i++) {
+      const a = i * Math.PI * 2 / segments
+      const r = radius * (1 + 0.07 * Math.sin(5 * a + height) + 0.05 * Math.cos(3 * a))
+      positions.push(r * Math.cos(a), height * crest(a), r * Math.sin(a))
+      colors.push(color.r, color.g, color.b)
+      if (!row) continue
+      const lower = (row - 1) * segments
+      const j = (i + 1) % segments
+      indices.push(lower + i, lower + segments + i, lower + j, lower + j, lower + segments + i, lower + segments + j)
+    }
+  }
+  const geometry = new BufferGeometry()
+  geometry.setAttribute('position', new Float32BufferAttribute(positions, 3))
+  geometry.setAttribute('color', new Float32BufferAttribute(colors, 3))
+  geometry.setIndex(indices)
+  geometry.computeVertexNormals()
+  return geometry
 }
 
 interface Drop {
-  g: Group
-  p: Vector3
-  v: Vector3
-  t0: number
-  r: number
+  mesh: Mesh
+  origin: Vector3
+  launch: Vector3
+  delay: number
+  radius: number
 }
 
 export class BigSplash {
   readonly root = new Group()
-  private t = 99
-  private petals: Group[] = []
-  private ring: { g: Group; a: number; tilt: number; h: number }[] = []
-  private jet: Group
-  private jetTop: Group
-  private foam: Group
+  private t = LIFE
+  private sheet: Mesh<BufferGeometry, MeshPhongMaterial>
   private drops: Drop[] = []
-  private waves: Mesh[] = []
+  private waves: Mesh<RingGeometry, MeshBasicMaterial>[] = []
   private random = rng(5)
 
   constructor(bag: Bag, private waterY = 0.04) {
     this.root.visible = false
-    // The crown: two rings of petals, a tall inner one and a short outer one.
-    const r = this.random
-    for (let i = 0; i < 22; i++) {
-      const inner = i < 14
-      const n = inner ? 14 : 8
-      const k = inner ? i : i - 14
-      const a = (k / n) * Math.PI * 2 + (inner ? 0 : 0.4) + (r() - 0.5) * 0.2
-      const h = inner ? 0.75 + r() * 0.35 : 0.45 + r() * 0.2
-      const pivot = new Group()
-      const mesh = solid(petal(1, inner ? 0.12 : 0.1), bag, 1.4)
-      pivot.add(mesh)
-      this.root.add(pivot)
-      this.petals.push(pivot)
-      this.ring.push({ g: pivot, a, tilt: inner ? 0.28 + r() * 0.12 : 0.7 + r() * 0.15, h })
+    this.sheet = new Mesh(bag.add(waterSheet()), bag.add(new MeshPhongMaterial({
+      vertexColors: true, specular: '#ceeef5', shininess: 75, side: DoubleSide, transparent: true, depthWrite: false,
+    })))
+    this.root.add(this.sheet)
+    const bead = bag.add(new SphereGeometry(1, 10, 8))
+    const water = bag.add(new MeshPhongMaterial({ color: '#a7e1ec', specular: '#ffffff', shininess: 90, transparent: true, opacity: 0.85, depthWrite: false }))
+    for (let i = 0; i < 36; i++) {
+      const mesh = new Mesh(bead, water)
+      this.root.add(mesh)
+      this.drops.push({ mesh, origin: new Vector3(), launch: new Vector3(), delay: 0, radius: 0 })
     }
-    // The jet up the middle, a fat drop riding on top.
-    this.jet = solid(merge([P.cyl(0.07, 0.17, 1, PALE, { at: [0, 0.5, 0] }, 10), P.cyl(0.17, 0.26, 0.2, BLUE, { at: [0, 0.1, 0] }, 12)]), bag, 1.4)
-    this.jetTop = solid(P.sphere(0.13, WHITE, { scale: [1, 1.25, 1] }, 12), bag, 1.4)
-    // Foam churning where it went in: white lumps on the water.
-    this.foam = solid(
-      merge(
-        Array.from({ length: 11 }, (_, i) => {
-          const a = i * 2.4
-          const d = i === 0 ? 0 : 0.18 + (i % 3) * 0.12
-          return P.sphere(0.16 + (i % 2) * 0.06, i % 3 ? WHITE : PALE, { at: [Math.cos(a) * d, 0, Math.sin(a) * d], scale: [1, 0.42, 1] }, 10)
-        }),
-      ),
-      bag,
-      1.2,
-    )
-    this.root.add(this.jet, this.jetTop, this.foam)
-    // Drops: round, inked, stretched along the way they fly.
-    for (let i = 0; i < 26; i++) {
-      const rr = 0.04 + r() * 0.045
-      const g = solid(P.sphere(1, i % 4 ? WHITE : PALE, {}, 8), bag, 1)
-      g.visible = false
-      this.root.add(g)
-      this.drops.push({ g, p: new Vector3(), v: new Vector3(), t0: 0, r: rr })
-    }
-    // Rings spreading on the water.
+    const ring = bag.add(new RingGeometry(0.974, 1, 80))
     for (let i = 0; i < 2; i++) {
-      const m = new Mesh(bag.add(new RingGeometry(0.82, 1, 48)), bag.add(new MeshBasicMaterial({ color: new Color(WHITE), transparent: true, opacity: 0, depthWrite: false, side: DoubleSide })))
-      m.rotation.x = -Math.PI / 2
-      m.position.y = 0.012
-      this.root.add(m)
-      this.waves.push(m)
+      const wave = new Mesh(ring, bag.add(new MeshBasicMaterial({ color: '#d9f5fa', transparent: true, depthWrite: false })))
+      wave.rotation.x = -Math.PI / 2
+      wave.position.y = 0.012
+      this.root.add(wave)
+      this.waves.push(wave)
     }
   }
 
-  /** Starts a splash at x, z on the water; `size` 1 is a bear landing. */
   start(x: number, z: number, size = 1) {
     this.t = 0
     this.root.position.set(x, this.waterY, z)
     this.root.scale.setScalar(size)
+    this.root.rotation.y = this.random() * Math.PI * 2
     this.root.visible = true
-    const r = this.random
     for (const [i, d] of this.drops.entries()) {
-      const a = (i / this.drops.length) * Math.PI * 2 + r() * 0.4
-      const out = 1.1 + r() * 1.6
-      d.p.set(Math.cos(a) * 0.3, 0.3 + r() * 0.3, Math.sin(a) * 0.3)
-      d.v.set(Math.cos(a) * out, 3.2 + r() * 2.6, Math.sin(a) * out)
-      d.t0 = 0.04 + r() * 0.22
-      d.g.visible = false
+      const angle = (i + this.random()) * Math.PI * 2 / this.drops.length
+      const dx = Math.cos(angle)
+      const dz = Math.sin(angle)
+      const outward = 0.7 + this.random() * 1.7
+      d.delay = 0.07 + this.random() * 0.12
+      d.origin.set(dx * 0.46, crest(angle) * 0.5, dz * 0.46)
+      d.launch.set(dx * outward, 2.1 + crest(angle) + this.random() * 2, dz * outward)
+      d.radius = 0.016 + this.random() ** 2 * 0.051
     }
+    this.update(0)
   }
 
   get on() {
@@ -125,67 +111,32 @@ export class BigSplash {
       this.root.visible = false
       return
     }
-    // The crown: bursts up fast (an overshoot), opens out, then slumps back into the pool.
-    const up = t < 0.16 ? easeOut(t / 0.16) * 1.12 : t < 0.32 ? 1.12 - 0.12 * ((t - 0.16) / 0.16) : t < 0.7 ? 1 : Math.max(0, 1 - (t - 0.7) / 0.55)
-    const open = Math.min(1, t / 0.6)
-    for (const c of this.ring) {
-      const tilt = c.tilt + open * 0.45 + (t > 0.7 ? (t - 0.7) * 0.6 : 0)
-      const rad = 0.28 + open * 0.32
-      c.g.position.set(Math.cos(c.a) * rad, 0, Math.sin(c.a) * rad)
-      // (The pivot turns its +x outward; the petal tips round its z, toward +x.)
-      c.g.rotation.set(0, -c.a, 0)
-      c.g.children[0].rotation.set(0, 0, -tilt)
-      const hh = Math.max(0.001, c.h * up)
-      c.g.children[0].scale.set(Math.max(0.2, up) * (1 + open * 0.25), hh, Math.max(0.2, up))
-    }
-    // The jet: shoots up behind the crown, its top drop flies on and falls; the column falls back.
-    const jt = t - 0.08
-    const jh = jt < 0 ? 0 : jt < 0.28 ? easeOut(jt / 0.28) * 1.9 : Math.max(0, 1.9 - (jt - 0.28) * 3.2)
-    this.jet.visible = jh > 0.02
-    this.jet.scale.set(1 + (jt > 0.28 ? (jt - 0.28) * 0.8 : 0), Math.max(0.001, jh), 1 + (jt > 0.28 ? (jt - 0.28) * 0.8 : 0))
-    const topY = jt < 0.28 ? jh + 0.08 : 1.98 + 2.6 * (jt - 0.28) - 0.5 * G * (jt - 0.28) ** 2
-    this.jetTop.visible = jt > 0 && topY > 0
-    this.jetTop.position.set(0, Math.max(0, topY), 0)
-    const ts = Math.min(1, jt * 6) * (topY < 0.3 && jt > 0.5 ? topY / 0.3 : 1)
-    this.jetTop.scale.set(ts, ts * (jt < 0.28 ? 1.4 : 1), ts)
-    // The foam: grows in, churns, melts away.
-    const fk = t < 0.2 ? easeOut(t / 0.2) : t > 1.2 ? Math.max(0, 1 - (t - 1.2) / 0.6) : 1
-    const churn = 1 + 0.06 * Math.sin(t * 18)
-    this.foam.scale.set(Math.max(0.001, fk * (1 + t * 0.5) * churn), Math.max(0.001, fk * (1.2 - t * 0.3)), Math.max(0.001, fk * (1 + t * 0.5) / churn))
-    this.foam.rotation.y = t * 0.8
-    // Drops on their arcs, stretched along the way they fly; gone when they fall back in.
+    const lift = Math.max(0, 5.6 * t - 6.5 * t * t)
+    this.sheet.visible = lift > 0.01
+    const spread = 0.55 + 1.15 * t
+    this.sheet.scale.set(spread, lift, spread)
+    this.sheet.material.opacity = 0.76 * Math.min(1, lift * 2.5)
     for (const d of this.drops) {
-      const dtt = t - d.t0
-      if (dtt < 0) continue
-      if (!d.g.visible && d.p.y > 0) d.g.visible = true
-      d.v.y -= G * dt
-      d.p.addScaledVector(d.v, dt)
-      if (d.p.y < 0) {
-        d.g.visible = false
-        continue
-      }
-      d.g.position.copy(d.p)
-      const sp = d.v.length()
-      const stretch = 1 + Math.min(1.4, sp * 0.18)
-      d.g.scale.set(d.r / Math.sqrt(stretch), d.r * stretch, d.r / Math.sqrt(stretch))
-      // (Long axis along the velocity: turn y toward it.)
-      d.g.quaternion.setFromUnitVectors(Y, tmp.copy(d.v).normalize())
+      const age = t - d.delay
+      const y = d.origin.y + d.launch.y * age - 0.5 * GRAVITY * age * age
+      d.mesh.visible = age >= 0 && y > 0
+      if (!d.mesh.visible) continue
+      d.mesh.position.copy(d.origin).addScaledVector(d.launch, age)
+      d.mesh.position.y = y
+      velocity.copy(d.launch)
+      velocity.y -= GRAVITY * age
+      const stretch = 1 + velocity.length() * 0.15
+      const width = d.radius / Math.sqrt(stretch)
+      d.mesh.scale.set(width, d.radius * stretch, width)
+      d.mesh.quaternion.setFromUnitVectors(UP, velocity.normalize())
     }
-    // Two rings spread out on the water and fade.
-    for (const [i, w] of this.waves.entries()) {
-      const k = (t - 0.1 - i * 0.28) / 1.4
-      const m = w.material as MeshBasicMaterial
-      if (k < 0 || k > 1) {
-        m.opacity = 0
-        continue
-      }
-      const s = 0.45 + easeOut(k) * (1.9 - i * 0.4)
-      w.scale.set(s, s, 1)
-      m.opacity = 0.75 * (1 - k)
+    for (const [i, wave] of this.waves.entries()) {
+      const age = (t - 0.09 - i * 0.34) / 1.45
+      wave.visible = age > 0 && age < 1
+      if (!wave.visible) continue
+      const radius = 0.42 + 2.05 * age * (1.6 - 0.6 * age)
+      wave.scale.set(radius, radius * 0.96, 1)
+      wave.material.opacity = Math.min(1, age * 10) * (1 - age) ** 2 * 0.7
     }
   }
 }
-
-const Y = new Vector3(0, 1, 0)
-const tmp = new Vector3()
-const easeOut = (k: number) => 1 - (1 - Math.min(1, Math.max(0, k))) ** 3

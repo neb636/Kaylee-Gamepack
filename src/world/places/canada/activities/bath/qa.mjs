@@ -205,6 +205,11 @@ export const motion = [
     act: async (page) => {
       await tapRobot(page, 165000)
       finished('the taps robot')
+      const spoken = await page.evaluate(() => window.__kayleeSpeech.map((line) => line.text))
+      for (const line of ["Look! White fur under all that mud!", "I'm white again!"]) {
+        const count = spoken.filter((text) => text === line).length
+        if (count !== 1) throw new Error(`Expected the rinse reveal once, heard "${line}" ${count} times`)
+      }
     },
   },
   {

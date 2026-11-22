@@ -245,9 +245,11 @@ export class BubbleBathWorld implements World3D {
   private hintT = 0
   private lastReact = -Infinity
   private said = new Set<string>()
+  private reactionsSaid = new Set<Line>()
   private colorsSaid = new Set<Berry>()
   private paintI = 0
-  private whiteT = -1
+  private revealTime: number | null = null
+  private shakeStarted = false
   private puffball = false
   private styleI = 0
   private autoRain: { t: number } | null = null
@@ -492,7 +494,8 @@ export class BubbleBathWorld implements World3D {
   }
   /** Misty or Maple says something (at most every SILLY_GAP s, unless `always`). */
   private talk(l: Line, always = false) {
-    if (!always && this.t - this.lastReact < SILLY_GAP) return false
+    if (this.reactionsSaid.has(l) || (!always && this.t - this.lastReact < SILLY_GAP)) return false
+    this.reactionsSaid.add(l)
     this.lastReact = this.t
     void say(l, { interrupt: false })
     return true
@@ -504,9 +507,12 @@ export class BubbleBathWorld implements World3D {
     this.guide(l)
     return true
   }
+  private talkCheer() {
+    const remaining = B.cheer.filter((line) => !this.reactionsSaid.has(line))
+    return remaining.length > 0 && this.talk(remaining[Math.floor(Math.random() * remaining.length)])
+  }
   private cheer() {
-    const lines = B.cheer
-    if (this.talk(lines[Math.floor(Math.random() * lines.length)])) {
+    if (this.talkCheer()) {
       this.maple.hop()
       this.maple.armsUp = 1
       this.timers.later(() => (this.maple.armsUp = 0), 900)
@@ -1106,24 +1112,25 @@ export class BubbleBathWorld implements World3D {
     if (st === 'sponge') {
       if (coat.mudOf() <= SPONGE_DONE || this.stageStrokes >= 14 || this.idle > FEEL.idle) this.go('rain')
     } else if (st === 'rain') {
-      if (this.whiteT < 0 && coat.mudOf() <= WHITE_AT) {
+      if (this.shakeStarted) return
+      if (this.revealTime === null && coat.mudOf() <= WHITE_AT) {
         // White shows through: Sparkle's fact, Misty pleased; the rain finishes the last bits.
-        this.whiteT = 0
+        this.revealTime = 0
         this.sparkleAt(this.misty.at(0.6, tmp), 20)
         storySfx.chime()
         this.guide(B.spirit)
         this.misty.pull('happy')
         this.timers.later(() => this.talk(B.whiteAgain, true), lineMs(B.spirit) + 300)
       }
-      if (this.whiteT >= 0) {
-        this.whiteT += dt
+      if (this.revealTime !== null) {
+        this.revealTime += dt
         coat.wash('any', null, 0, dt * 0.6, 0)
         this.suds.pop(() => Math.random() < dt * 3)
-        if (this.whiteT > 3.4 && !this.act && coat.mudOf() < 0.02) {
+        if (this.revealTime > 3.4 && !this.act && coat.mudOf() < 0.02) {
           // All clean, all wet: she shakes like a dog and soaks Maple.
           this.shake()
           this.timers.later(() => this.go('towel'), 1700)
-          this.whiteT = -100
+          this.shakeStarted = true
         }
       } else if (this.idle > 6 && !this.autoRain && !this.rubbing) this.autoRain = { t: 0 }
     } else if (st === 'towel') {
@@ -1458,7 +1465,7 @@ export class BubbleBathWorld implements World3D {
       } else {
         this.maple.hop()
         this.maple.wave()
-        if (!this.talk(B.cheer[Math.floor(Math.random() * B.cheer.length)])) this.maple.pull('happy')
+        if (!this.talkCheer()) this.maple.pull('happy')
       }
       return true
     }
@@ -1483,13 +1490,7 @@ export class BubbleBathWorld implements World3D {
         this.timers.later(() => riverSfx.swing(), 350)
         this.timers.later(() => {
           riverSfx.bigSplash()
-          // (Where her paw hits the water, on the salmon's side: a fountain of drops, some raining back on her.)
-          for (let i = 0; i < 44; i++) {
-            const a = Math.random() * Math.PI * 2
-            const v = 0.3 + Math.random() * 1.3
-            this.drops.emit(AT.x + 0.55, 0.08, AT.z + 0.3, Math.cos(a) * v - 0.3, 2.6 + Math.random() * 2.2, Math.sin(a) * v * 0.5, 0.9, 0.045 + Math.random() * 0.03)
-          }
-          this.splash(AT.x, 1.1, AT.z + 0.2, 16)
+          this.river.bigSplash(AT.x + 0.55, AT.z + 0.3, 0.72)
           // The splash rinses her a little (in the wash), pops some suds.
           if (this.stage === 'sponge' || this.stage === 'rain') {
             this.coat.wash('any', null, 0, 0.1, this.stage === 'sponge' ? SPONGE_FLOOR : 0)

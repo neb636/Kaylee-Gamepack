@@ -93,8 +93,8 @@ and Misty goes to the big game looking like that.
   beard), and the bear giggles.
 - **Grows three times, same verb:**
   1. 🧽 **Wash.** The sponge leaves pink suds and the mud comes off under them. Then the rain cloud is in her hand:
-     rain falls where her finger is and rinses. White shows through. Sparkle, at that moment: "A spirit bear! A
-     black bear with white fur."
+     rain falls where her finger is and rinses. Sparkle spots the white fur and Misty answers once before she
+     shakes off the water. Swatting the salmon throws up the same rippling sheet of water as her landing in the film.
   2. 🌬️ **Fluff.** The towel: where she rubs, the fur puffs. Rub a lot and Misty is a giant puffball ("I'm a
      cloud!"). The comb: stroke up for spikes, down for bangs, sideways for a swoop.
   3. 🎨 **Colors.** A white bear is a blank page. Three berry bushes (salmonberry pink, blueberry blue, huckleberry
