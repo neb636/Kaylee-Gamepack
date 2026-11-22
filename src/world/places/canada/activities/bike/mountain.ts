@@ -94,12 +94,12 @@ export class Mountain {
     return out.set(p.x, Math.abs(lat) < half(s) + 3 ? this.course.ground(s, lat) : this.course.land(p.x, p.z, s), p.z)
   }
 
-  update(dt: number, t: number, cam: Vector3) {
+  update(dt: number, t: number, rideDistance?: number) {
     for (const f of this.flows) f.update(t)
     this.water.update(t)
     this.pond.update(t)
     this.pool.update(t)
-    this.gondola.update(dt, t, cam)
+    this.gondola.update(dt, t, rideDistance)
     for (const c of this.clouds) {
       c.position.x += c.userData.v * dt
       if (c.position.x > 900) c.position.x -= 1800
