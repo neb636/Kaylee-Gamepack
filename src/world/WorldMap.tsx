@@ -10,6 +10,7 @@ import { firstTime as firstTimeHere, lineText, Mascot, say, sounds, useOnline, u
 import balloon from './assets/balloon.webp'
 import mapArt from './assets/bg-world-map.webp'
 import { DOCK, MapIcon, ShelfIcon } from './HomeIcons'
+import { hasPinArt, PinArt } from './MapPins'
 import { FitBox } from './kit/Chrome'
 import { WORLD_LINES } from './lines'
 import { places, useListed, type PlaceEntry } from './registry'
@@ -71,7 +72,9 @@ function Pin({ x, y, children, label, onTap, glow, dim }: { x: number; y: number
           aspectRatio: '1',
           borderRadius: '50%',
           background: dim ? 'rgba(255,255,255,0.75)' : '#fff',
-          border: `4px solid ${glow ? 'var(--gold)' : '#fff'}`,
+          // The country's picture (MapPins.tsx) fills the circle, so the ring is a white rim with gold around it.
+          border: '3px solid #fff',
+          outline: glow ? '3px solid var(--gold)' : undefined,
           boxShadow: 'var(--shadow)',
           display: 'grid',
           placeItems: 'center',
@@ -198,12 +201,12 @@ export function WorldMap({ view: linked }: { view?: string }) {
                 setTravelTo(places.find((p) => p.meta.id === meta.id) ?? null)
               }}
             >
-              {meta.emoji}
+              {hasPinArt(meta.id) ? <PinArt id={meta.id} /> : meta.emoji}
             </Pin>
           ))}
           {COMING_SOON.filter((c) => !places.some((p) => p.meta.id === c.id)).map((c) => (
             <Pin key={c.id} x={c.x} y={c.y} label={`${c.id} coming soon`} dim onTap={() => show(WORLD_LINES.soon[c.id], c.x, c.y)}>
-              <span style={{ opacity: 0.55 }}>{c.emoji}</span>
+              <span style={{ opacity: 0.55 }}>{hasPinArt(c.id) ? <PinArt id={c.id} /> : c.emoji}</span>
               <span style={{ position: 'absolute', right: '-14%', bottom: '-14%', fontSize: '55%' }}>☁️</span>
             </Pin>
           ))}
