@@ -61,24 +61,24 @@ const T = L.campfire
 
 /** Her flashlight, and the games played with it. */
 const TORCH = knobs('torch', 'The flashlight', FILE, {
-  radius: { value: 0.6, min: 0.3, max: 2, step: 0.05, label: 'Light size', unit: 'm', note: 'the disc of light’s radius in the middle of the clearing (smaller far off, bigger near)' },
-  follow: { value: 16, min: 2, max: 60, step: 1, label: 'Follows her finger', unit: '/s', note: 'how tightly the light keeps up (lower = it swings behind like a heavy flashlight)' },
-  lift: { value: 34, min: 0, max: 120, step: 2, label: 'Light above finger', unit: 'px', note: 'on a touch screen, how far above her fingertip the light lands, so her finger doesn’t cover what she finds (a mouse: none)' },
-  speed: { value: 0.45, min: 0.15, max: 1.5, step: 0.05, label: 'Roxy sneaks', unit: 'm/s', note: 'how fast Roxy creeps toward the bag while the light is off her' },
+  radius: { value: 0.6, min: 0.3, max: 2, step: 0.05, label: 'Light size', unit: 'm', note: 'the disc of light’s radius in the middle of the clearing (smaller far off, bigger near)', main: true },
+  follow: { value: 16, min: 2, max: 60, step: 1, label: 'Follows her finger', unit: '/s', note: 'how tightly the light keeps up (lower = it swings behind like a heavy flashlight)', main: true },
+  lift: { value: 34, min: 0, max: 120, step: 2, label: 'Light above finger', unit: 'px', note: 'on a touch screen, how far above her fingertip the light lands, so her finger doesn’t cover what she finds (a mouse: none)', main: true },
+  speed: { value: 0.45, min: 0.15, max: 1.5, step: 0.05, label: 'Roxy sneaks', unit: 'm/s', note: 'how fast Roxy creeps toward the bag while the light is off her', main: true },
   slow: { value: 0.78, min: 0.4, max: 1, step: 0.02, label: 'Roxy slows after a grab', note: 'her speed is multiplied by this every time she gets a marshmallow (1 = never slows)' },
-  fall: { value: 2.6, min: 0.6, max: 6, step: 0.1, label: 'Hold to topple', unit: 's', note: 'how long the light holds Roxy before she wobbles over laughing' },
-  peek: { value: 1.8, min: 0.6, max: 6, step: 0.1, label: 'A kit peeks for', unit: 's', note: 'how long the first kit stays out before ducking' },
+  fall: { value: 2.6, min: 0.6, max: 6, step: 0.1, label: 'Hold to topple', unit: 's', note: 'how long the light holds Roxy before she wobbles over laughing', main: true },
+  peek: { value: 1.8, min: 0.6, max: 6, step: 0.1, label: 'A kit peeks for', unit: 's', note: 'how long the first kit stays out before ducking', main: true },
   grow: { value: 0.8, min: 0, max: 3, step: 0.1, label: 'Each peek longer by', unit: 's' },
   react: { value: 0.55, min: 0.1, max: 2, step: 0.05, label: 'Kit ducks after', unit: 's', note: 'how long the light can hover beside a peeking kit before it ducks (a little longer each time)' },
-})
+}, { sections: ['eyes', 'peek', 'statues'] })
 /** The roast. */
 const ROAST = knobs('campRoast', 'Roast a marshmallow', FILE, {
-  heat: { value: 0.6, min: 0.2, max: 2, step: 0.05, label: 'Heat reaches', unit: 'm', note: 'how far to the side of the flames (or above them) it still toasts' },
-  golden: { value: 3.2, min: 0.5, max: 12, step: 0.25, label: 'Golden in', unit: 's', note: 'held right over the flames' },
-  burn: { value: 2.5, min: 0.5, max: 10, step: 0.25, label: 'Catches fire after golden', unit: 's' },
+  heat: { value: 0.6, min: 0.2, max: 2, step: 0.05, label: 'Heat reaches', unit: 'm', note: 'how far to the side of the flames (or above them) it still toasts', main: true },
+  golden: { value: 3.2, min: 0.5, max: 12, step: 0.25, label: 'Golden in', unit: 's', note: 'held right over the flames', main: true },
+  burn: { value: 2.5, min: 0.5, max: 10, step: 0.25, label: 'Catches fire after golden', unit: 's', main: true },
   out: { value: 4, min: 1, max: 12, step: 0.5, label: 'Goes out by itself', unit: 's' },
-  grab: { value: 90, min: 40, max: 200, step: 5, label: 'Grab reach', unit: 'px', note: 'how near the marshmallow her finger has to land to pick the stick up' },
-})
+  grab: { value: 90, min: 40, max: 200, step: 5, label: 'Grab reach', unit: 'px', note: 'how near the marshmallow her finger has to land to pick the stick up', main: true },
+}, { sections: ['roast'] })
 
 export interface CampStart {
   section: CampSection

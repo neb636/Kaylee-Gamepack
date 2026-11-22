@@ -43,40 +43,42 @@ import { makeFlag } from './taffy'
 import { Friend } from '../../story/cast'
 
 const FILE = 'src/world/places/canada/activities/party/rink.ts'
+/** Where she plays hockey: the sections these knobs tune. */
+const PLAYING = ['hockey']
 /** Her flick (?feel=1 on the hockey link). */
 const FLICK = knobs('hockeyFlick', 'Flicking the puck', FILE, {
   min: { value: 2.5, min: 0.5, max: 10, step: 0.25, label: 'A flick from', unit: 'm/s', note: 'a finger moving at least this fast when she lets go is a shot (slower: Maple just stops there)' },
-  gain: { value: 0.9, min: 0.2, max: 3, step: 0.05, label: 'Power', unit: '×', note: 'shot speed = her finger’s speed × this' },
+  gain: { value: 0.9, min: 0.2, max: 3, step: 0.05, label: 'Power', unit: '×', note: 'shot speed = her finger’s speed × this', main: true },
   slow: { value: 7, min: 2, max: 14, step: 0.5, label: 'Softest shot', unit: 'm/s' },
   fast: { value: 15, min: 6, max: 30, step: 0.5, label: 'Hardest shot', unit: 'm/s' },
   tap: { value: 11, min: 4, max: 20, step: 0.5, label: 'A tap shot', unit: 'm/s', note: 'how hard a tap on the ice or the net slaps it there' },
   window: { value: 0.09, min: 0.03, max: 0.3, step: 0.01, label: 'Flick measured over', unit: 's', note: 'the last bit of her finger’s move that sets the flick’s speed and direction' },
-  aim: { value: 0.35, min: 0, max: 1, step: 0.05, label: 'Aim help', note: 'how much a shot roughly at the net is turned toward it (more after misses)' },
+  aim: { value: 0.35, min: 0, max: 1, step: 0.05, label: 'Aim help', note: 'how much a shot roughly at the net is turned toward it (more after misses)', main: true },
   cone: { value: 35, min: 0, max: 90, step: 1, label: 'Aim help within', unit: '°', note: 'shots this close to the net’s direction get the help' },
-})
+}, { sections: PLAYING })
 const PUCK = knobs('hockeyPuck', 'The puck on the ice', FILE, {
-  friction: { value: 0.55, min: 0.05, max: 3, step: 0.05, label: 'Ice friction', unit: '/s', note: 'how fast a sliding puck slows down (lower = slides further)' },
+  friction: { value: 0.55, min: 0.05, max: 3, step: 0.05, label: 'Ice friction', unit: '/s', note: 'how fast a sliding puck slows down (lower = slides further)', main: true },
   bounce: { value: 0.75, min: 0.2, max: 1, step: 0.05, label: 'Snowbank bounce', note: 'how much speed a puck keeps bouncing off the snow' },
   catch: { value: 1.1, min: 0.4, max: 2.5, step: 0.05, label: 'Maple catches within', unit: 'm', note: 'a pass this close to her stick sticks to it' },
-})
+}, { sections: PLAYING })
 const GOALIE = knobs('hockeyGoalie', 'The goose in goal', FILE, {
-  save: { value: 0.6, min: 0, max: 1, step: 0.05, label: 'Tries to save', note: 'the chance the goose goes for a shot (the first goal: half this)' },
+  save: { value: 0.6, min: 0, max: 1, step: 0.05, label: 'Tries to save', note: 'the chance the goose goes for a shot (the first goal: half this)', main: true },
   ease: { value: 0.5, min: 0, max: 1, step: 0.05, label: 'Eases off after a miss', note: 'each miss in a row takes this much off the chance (2 misses at 0.5: never saves)' },
   speed: { value: 3.2, min: 0.5, max: 8, step: 0.1, label: 'Goalie speed', unit: 'm/s' },
   reach: { value: 0.75, min: 0.2, max: 2, step: 0.05, label: 'Goalie reach', unit: 'm' },
   geese: { value: 1.8, min: 0.3, max: 5, step: 0.1, label: 'Geese in the way', unit: 'm/s', note: 'how fast the two geese skate back and forth (from the second goal)' },
-})
+}, { sections: PLAYING })
 const RUSH = knobs('hockeyRush', 'The geese rush her net', FILE, {
   speed: { value: 2.4, min: 0.8, max: 6, step: 0.1, label: 'Rush speed', unit: 'm/s', note: 'how fast Gus skates at her net with the puck (time for her to catch him)' },
   shot: { value: 8, min: 3, max: 16, step: 0.5, label: 'Their shot', unit: 'm/s' },
   steal: { value: 0.95, min: 0.4, max: 2, step: 0.05, label: 'Maple steals within', unit: 'm', note: 'how close she must skate to the goose with the puck' },
   goal: { value: 0.6, min: 0, max: 1, step: 0.05, label: 'A goose goal', note: 'the chance the last rush goes in (never more than two, never two in a row, never after two misses)' },
-})
+}, { sections: PLAYING })
 const SKATE = knobs('hockeySkate', 'Maple skating with the puck', FILE, {
-  speed: { value: 6, min: 1, max: 14, step: 0.25, label: 'Top speed', unit: 'm/s' },
-  follow: { value: 6, min: 1, max: 20, step: 0.5, label: 'Follows her finger', unit: '/s', note: 'her speed = this × how far her finger is ahead' },
+  speed: { value: 6, min: 1, max: 14, step: 0.25, label: 'Top speed', unit: 'm/s', main: true },
+  follow: { value: 6, min: 1, max: 20, step: 0.5, label: 'Follows her finger', unit: '/s', note: 'her speed = this × how far her finger is ahead', main: true },
   ahead: { value: 0.8, min: 0, max: 3, step: 0.1, label: 'Skates below her finger', unit: 'm', note: 'Maple stays this far behind her fingertip, so the finger doesn’t hide her' },
-})
+}, { sections: PLAYING })
 
 export interface RinkStart {
   /** Goals already scored. */

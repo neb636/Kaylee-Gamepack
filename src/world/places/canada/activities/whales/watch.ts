@@ -57,30 +57,32 @@ import { whaleSfx } from './sounds'
 import { GreyWhale, Humpback, noteMesh, Orca, type Whale } from './whale'
 
 const FILE = 'src/world/places/canada/activities/whales/watch.ts'
+/** Where she watches the whales: the sections these knobs tune. */
+const WATCHING = ['grey', 'humpback', 'orcas']
 /** The play: the feel lab's sliders (?feel=1). */
 const PLAY = knobs('whales', 'Whale Peek-a-Boo', FILE, {
-  holdFull: { value: 2.2, min: 0.6, max: 5, step: 0.1, label: 'Hold for the biggest jump', unit: 's', note: 'how long she holds the humpback down for its biggest jump (and the ride)' },
-  easier: { value: 0.4, min: 0, max: 1.5, step: 0.05, label: 'Easier after each jump', unit: 's', note: 'the biggest jump needs this much less holding after every jump' },
+  holdFull: { value: 2.2, min: 0.6, max: 5, step: 0.1, label: 'Hold for the biggest jump', unit: 's', note: 'how long she holds the humpback down for its biggest jump (and the ride)', main: true },
+  easier: { value: 0.4, min: 0, max: 1.5, step: 0.05, label: 'Easier after each jump', unit: 's', note: 'the biggest jump needs this much less holding after every jump', main: true },
   grow: { value: 0.22, min: 0, max: 0.6, step: 0.02, label: 'Taps grow too', note: 'each jump after the first is this much bigger anyway (0..1 of the biggest), so taps alone reach the ride' },
-  height: { value: 1, min: 0.3, max: 2, step: 0.05, label: 'Jump height', unit: '×', note: 'how high the humpback jumps for the same hold' },
+  height: { value: 1, min: 0.3, max: 2, step: 0.05, label: 'Jump height', unit: '×', note: 'how high the humpback jumps for the same hold', main: true },
   wave: { value: 1, min: 0, max: 2.5, step: 0.05, label: 'Wave size', unit: '×', note: 'how hard the jump\'s wave rocks the boat' },
-  pop1: { value: 1.5, min: 0.5, max: 5, step: 0.1, label: 'Baby\'s first pop', unit: 's', note: 'how long the baby orca stays up the first time' },
-  pop2: { value: 3, min: 1, max: 8, step: 0.1, label: 'Baby\'s second pop', unit: 's', note: 'the second time (the third stays until she taps it)' },
+  pop1: { value: 1.5, min: 0.5, max: 5, step: 0.1, label: 'Baby\'s first pop', unit: 's', note: 'how long the baby orca stays up the first time', main: true },
+  pop2: { value: 3, min: 1, max: 8, step: 0.1, label: 'Baby\'s second pop', unit: 's', note: 'the second time (the third stays until she taps it)', main: true },
   boop: { value: 16, min: 6, max: 40, step: 1, label: 'Baby helps after', unit: 's', note: 'the last pop left alone this long: the baby swims to the boat and boops it' },
   near: { value: 4.75, min: 3.5, max: 12, step: 0.25, label: 'Bubbles from', unit: 'm', note: 'the nearest the bubbles come up to the boat' },
   far: { value: 5.75, min: 4, max: 16, step: 0.25, label: 'Bubbles up to', unit: 'm', note: 'the furthest' },
   come: { value: 6, min: 2, max: 20, step: 0.5, label: 'Whale comes by itself', unit: 's', note: 'bubbles left alone this long: the whale comes up anyway' },
-})
+}, { sections: WATCHING })
 /** The boat on the drive control (her finger holds the water where it should go). */
 const HELM = knobs('whaleHelm', 'The little boat', FILE, {
-  top: { value: 5, min: 2, max: 12, step: 0.25, label: 'Top speed', unit: 'm/s', note: 'with her finger far ahead' },
+  top: { value: 5, min: 2, max: 12, step: 0.25, label: 'Top speed', unit: 'm/s', note: 'with her finger far ahead', main: true },
   accel: { value: 3.5, min: 1, max: 12, step: 0.25, label: 'Speeding up', unit: 'm/s²' },
   coast: { value: 0.6, min: 0.05, max: 2, step: 0.05, label: 'Coasting drag', unit: '/s', note: 'how fast it slows when she lets go' },
   turn: { value: 1.4, min: 0.4, max: 3, step: 0.05, label: 'Turn rate', unit: 'rad/s' },
   grip: { value: 2.4, min: 0.5, max: 10, step: 0.1, label: 'Grip' },
   near: { value: 2.5, min: 1, max: 8, step: 0.25, label: 'Crawl when this close', unit: 'm' },
   far: { value: 14, min: 6, max: 40, step: 0.5, label: 'Full speed from', unit: 'm' },
-})
+}, { sections: WATCHING })
 
 export interface WhaleStart {
   section: WhaleSection

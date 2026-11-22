@@ -45,9 +45,9 @@ import { Tray, type TrayItem } from './tray'
 const FILE = 'src/world/places/canada/activities/cabin/cabin.ts'
 /** How a thing feels in her finger (the feel lab, ?feel=1). */
 export const FEEL = knobs('cabin', 'The Team Cabin', FILE, {
-  lift: { value: 26, min: 0, max: 90, step: 2, label: 'Held above her finger', unit: 'px', note: 'a dragged thing rides this far above her finger, so she can see what she carries' },
-  snap: { value: 95, min: 30, max: 220, step: 5, label: 'Snaps onto a friend from', unit: 'px', note: 'let go this close to where it goes on a friend (or anywhere on them) and it goes on' },
-  fly: { value: 0.42, min: 0.15, max: 1.2, step: 0.01, label: 'Fly-on time', unit: 's', note: 'a tapped thing’s flight from the shelf onto the friend in focus' },
+  lift: { value: 26, min: 0, max: 90, step: 2, label: 'Held above her finger', unit: 'px', note: 'a dragged thing rides this far above her finger, so she can see what she carries', main: true },
+  snap: { value: 95, min: 30, max: 220, step: 5, label: 'Snaps onto a friend from', unit: 'px', note: 'let go this close to where it goes on a friend (or anywhere on them) and it goes on', main: true },
+  fly: { value: 0.42, min: 0.15, max: 1.2, step: 0.01, label: 'Fly-on time', unit: 's', note: 'a tapped thing’s flight from the shelf onto the friend in focus', main: true },
   arc: { value: 0.5, min: 0, max: 1.6, step: 0.05, label: 'Fly-on arc', unit: 'm', note: 'how high the middle of that flight lifts' },
   perch: { value: 0.9, min: 0.3, max: 2.5, step: 0.05, label: 'Silly perch', unit: 's', note: 'how long a thing dropped in a silly place (a hat on a tummy) sits there before it hops to where it goes' },
 })

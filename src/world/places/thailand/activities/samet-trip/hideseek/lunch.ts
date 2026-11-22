@@ -42,16 +42,16 @@ import { TO_DEG, damp } from '../../../../../../sdk/math'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/hideseek/lunch.ts'
 const LUNCH = knobs('lunchDeck', 'Lunch on the deck', FILE, {
-  sip: { value: 0.16, min: 0.03, max: 0.6, step: 0.01, label: 'Sips the coconut at', unit: '/s', note: '1 = the whole coconut: 0.16 ≈ 6 s of holding her finger on it' },
-  rollBites: { value: 3, min: 1, max: 6, step: 1, label: 'Bites in a roll' },
-  riceBites: { value: 5, min: 2, max: 8, step: 1, label: 'Bites of mango sticky rice' },
+  sip: { value: 0.16, min: 0.03, max: 0.6, step: 0.01, label: 'Sips the coconut at', unit: '/s', note: '1 = the whole coconut: 0.16 ≈ 6 s of holding her finger on it', main: true },
+  rollBites: { value: 3, min: 1, max: 6, step: 1, label: 'Bites in a roll', main: true },
+  riceBites: { value: 5, min: 2, max: 8, step: 1, label: 'Bites of mango sticky rice', main: true },
   toss: { value: 0.6, min: 0.2, max: 1.5, step: 0.05, label: 'A roll flies over in', unit: 's' },
   coconutAt: { value: 5, min: 0, max: 30, step: 0.5, label: 'The coconut comes after', unit: 's', note: 'or as soon as she finishes her first roll' },
   riceAt: { value: 14, min: 0, max: 60, step: 0.5, label: 'The rice comes after', unit: 's', note: 'or once the coconut is half gone' },
   pitch: { value: 36, min: 5, max: 60, step: 1, label: 'Camera looks down', unit: '°' },
   box: { value: 2.3, min: 1, max: 5, step: 0.05, label: 'Shows round the table', unit: 'm', note: 'half the width across the screen' },
   tallBox: { value: 1.6, min: 0.8, max: 4, step: 0.05, label: '…on a tall screen', unit: 'm' },
-})
+}, { sections: ['deck'] })
 
 export interface LunchStart {
   time?: TimeOfDay
