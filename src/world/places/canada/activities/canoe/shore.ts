@@ -567,7 +567,7 @@ export function buildShore(bag: Bag): Shore {
   land.add(ground)
   // The pebbles under the water: not mirrored (the mirror would stand them up above the water as a pale band round the
   // lake), and drawn under the reflection, which lies on the water's surface right up to the shoreline.
-  const underwater = underTheReflection(buildLand(bag, 0, 1))
+  const underwater = underTheReflection(buildLand(bag, 0, 1), bag)
   const { group: peakGroup, peaks } = buildPeaks(bag)
   land.add(peakGroup, buildForest(bag))
   const glacier = buildGlacier(bag)
@@ -597,7 +597,7 @@ export function buildShore(bag: Bag): Shore {
   sh.computeVertexNormals()
   const shallows = new Mesh(bag.add(sh), toon('#BFE8DC'))
   shallows.add(underwater)
-  underTheReflection(shallows)
+  underTheReflection(shallows, bag)
   // The rock flour.
   const flour = new Group()
   const d1 = softDisc(FLOUR.r, 'rgba(196,238,232,0.72)', 'rgba(196,238,232,0)', bag)
@@ -610,8 +610,8 @@ export function buildShore(bag: Bag): Shore {
 
 /** Something under the water (the pebbles, the pale shallows): drawn first and hiding nothing, so the reflection,
  *  which lies on the water's surface, shows over it right up to the shoreline instead of starting out in the lake. */
-function underTheReflection(m: Mesh) {
-  const mat = (m.material as MeshToonMaterial).clone()
+function underTheReflection(m: Mesh, bag: Bag) {
+  const mat = bag.add((m.material as MeshToonMaterial).clone())
   mat.depthWrite = false
   m.material = mat
   m.renderOrder = -5
