@@ -1,34 +1,28 @@
 // Red Canoe's lake: Moraine Lake in Banff, in the toon look. The pebble beach, the meadow and the spruce forest round
 // the water; across from the dock the Valley of the Ten Peaks, a wall of jagged grey summits with snow in their gullies,
-// and the glacier coming down from them to the water at the north end; lower forested mountains round the rest. The
-// glacier stream tumbles into the north-west corner with its milky rock flour spreading on the lake. By the dock, the
-// famous rock pile at the outlet (the pika's and the marmot's home) with the log jam in front of it; the beaver lodge on
-// the west shore; a crag for the mountain goat on the north-east shore; the sky and its clouds. The world (paddle.ts)
-// adds the water, the canoe and the animals.
+// and the glacier flowing down between two of them to the water at the north end (glacier.ts); lower forested mountains
+// round the rest. The glacier creek tumbles down into the north-west corner with its milky rock flour spreading on the
+// lake. By the dock, the famous rock pile at the outlet (the pika's and the marmot's home) with the log jam in front of
+// it; the beaver lodge on the west shore; a crag for the mountain goat on the north-east shore; the sky and its clouds.
+// The trees, rocks and mountains come from nature.ts (the Nan forest's level of detail). The world (paddle.ts) adds the
+// water, the canoe and the animals.
 //
 // Everything above the water goes in `land`, so the world can mirror it under the see-through lake as its reflection.
-import { BackSide, BufferGeometry, CanvasTexture, CircleGeometry, Color, Float32BufferAttribute, Group, Mesh, MeshBasicMaterial, SphereGeometry, Vector3, type Object3D } from 'three'
+import { BackSide, BufferGeometry, CanvasTexture, CatmullRomCurve3, CircleGeometry, Color, Float32BufferAttribute, Group, Mesh, MeshBasicMaterial, SphereGeometry, Vector3, type Object3D } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../engine3d/geo'
 import { toon } from '../../../../engine3d/toon'
-import { FlowMaterial } from './flow'
-import { CLIFF, DOCK, FLOUR, GLACIER, LAND, landY, LODGE, LOGJAM, MOUTH, ringPoint, ROCKPILE, SQUIRREL } from './lake'
+import { RiverMaterial } from './flow'
+import { buildGlacier, onGlacier } from './glacier'
+import { CLIFF, DOCK, FLOUR, LAND, landY, LODGE, LOGJAM, MOOSE, MOUTH, ringPoint, ROCKPILE, SQUIRREL } from './lake'
+import { bumps, cragPart, Grove, rng, rockPart, SPRUCE_GREENS, type CragLook } from './nature'
 
+export { rng }
 export const SKY = '#C4E8FA'
-const SPRUCE = ['#3F8E6E', '#4C9E78', '#357F63']
+const SPRUCE = SPRUCE_GREENS
 const ROCK = '#A9A1BA'
 const ROCK_DARK = '#8C83A0'
 const SNOW = '#FBFDFF'
-const ICE_BLUE = '#9FD8EE'
-
-/** A tiny repeatable random (the same lake every time). */
-export function rng(seed: number) {
-  let s = seed >>> 0
-  return () => {
-    s = (s * 1664525 + 1013904223) >>> 0
-    return s / 4294967296
-  }
-}
 
 /** The ground round the lake: rings out from the shoreline, rising into the mountains (vertex colors, no outline). */
 function buildLand(bag: Bag) {
@@ -47,7 +41,10 @@ function buildLand(bag: Bag) {
     const th = ((i % N) / N) * Math.PI * 2
     const [k, y, color] = LAND[j]
     const p = ringPoint(th, k)
-    return { p: [p.x, y + jitter[j][i % N], p.z], c: c(color) }
+    const calm = onGlacier(p.x, p.z, 4) || nearCreek(p.x, p.z, 7) ? 0 : 1
+    // (A little light and shade in patches, so the meadow and the slopes aren't one flat color.)
+    const n = 1 + 0.07 * bumps(p.x * 0.09, j, p.z * 0.09, 5)
+    return { p: [p.x, y + jitter[j][i % N] * calm, p.z], c: c(color).map((v) => v * n) }
   }
   for (let j = 0; j < LAND.length - 1; j++)
     for (let i = 0; i < N; i++) {
@@ -68,35 +65,25 @@ function buildLand(bag: Bag) {
 }
 
 /** The mountains. Across the lake from the dock, the Valley of the Ten Peaks: a wall of ten jagged grey summits in a
- *  row, each a sharp faceted spire with a smaller one at its shoulder, snow on the tops and in the gullies, little
- *  hanging glaciers between them and the big glacier coming down from the middle. Round the rest of the lake, lower
+ *  row, each a crag with ridges and buttresses and a smaller one at its shoulder, snow on the tops, in the gullies and
+ *  on the ledges, the glacier flowing down from the col between two of them. Round the rest of the lake, lower
  *  mountains with forest up their sides and only a little snow. Returns each peak (for taps and snow puffs). */
 function buildPeaks(bag: Bag) {
   const rand = rng(7)
   const group = new Group()
   const peaks: { mesh: Object3D; top: Vector3 }[] = []
-  /** One jagged peak: a faceted spire (few sides, turned at random), a shoulder spire, darker rock on one face,
-   *  a snow cap and streaks of snow down the gullies. */
-  const spire = (th: number, k: number, r: number, h: number, snowy: number, rock: string, dark: string) => {
+  const grey: CragLook = { rock: ROCK, dark: ROCK_DARK, snow: SNOW, snowLine: 0.62 }
+  /** One peak: the main crag, a shoulder crag beside it and two lower buttresses at its foot. */
+  const spire = (th: number, k: number, r: number, h: number, look: CragLook) => {
     const p = ringPoint(th, k)
     const y = landY(p.x, p.z) - 4
-    const seg = 4 + Math.floor(rand() * 2)
-    const lean = (rand() - 0.5) * 0.12
+    const seed = rand() * 100
     const parts = [
-      P.cone(r, h, rock, { at: [0, h / 2, 0], rot: [0, 0, lean] }, seg),
-      P.cone(r * 0.66, h * 0.72, rock, { at: [r * 0.62, h * 0.36, r * 0.1], rot: [0, rand() * 2, -0.08] }, seg),
-      P.cone(r * 0.58, h * 0.5, dark, { at: [-r * 0.35, h * 0.25, r * 0.38], rot: [0, rand() * 2, 0] }, 5),
-      P.cone(r * 0.5, h * 0.42, dark, { at: [-r * 0.5, h * 0.21, -r * 0.3], rot: [0, rand() * 2, 0] }, 4),
+      cragPart(r, h, seed, look, { at: [0, h / 2, 0] }),
+      cragPart(r * 0.7, h * 0.72, seed + 3, { ...look, snowLine: look.snowLine + 0.06 }, { at: [r * 0.62, h * 0.36, r * 0.1], rot: [0, rand() * 2, -0.06] }),
+      cragPart(r * 0.6, h * 0.45, seed + 6, { ...look, snowLine: look.snowLine + 0.15 }, { at: [-r * 0.4, h * 0.22, r * 0.38], rot: [0, rand() * 2, 0] }, 7),
+      cragPart(r * 0.5, h * 0.4, seed + 9, { ...look, snowLine: look.snowLine + 0.15 }, { at: [-r * 0.5, h * 0.2, -r * 0.3], rot: [0, rand() * 2, 0] }, 7),
     ]
-    if (snowy > 0) {
-      const cap = h * 0.3 * snowy
-      parts.push(P.cone(r * (cap / h) * 1.06, cap, SNOW, { at: [Math.sin(lean) * -(h - cap / 2) * 0, h - cap / 2 + 0.1, 0], rot: [0, 0, lean] }, seg))
-      const cap2 = h * 0.72 * 0.26 * snowy
-      parts.push(P.cone(r * 0.66 * (cap2 / (h * 0.72)) * 1.06, cap2, SNOW, { at: [r * 0.62, h * 0.72 - cap2 / 2 + 0.1, r * 0.1] }, seg))
-      // A band of snow lower down, where a ledge holds it (a thin ring hugging the spire).
-      const yy = h * (0.42 + rand() * 0.1)
-      parts.push(P.cyl(r * (1 - (yy + 1.2) / h) * 1.04, r * (1 - yy / h) * 1.05, 1.2, SNOW, { at: [0, yy + 0.6, 0], rot: [0, 0, lean] }, seg))
-    }
     const g = solid(merge(parts), bag, 2)
     g.position.set(p.x, y, p.z)
     g.rotation.y = rand() * Math.PI * 2
@@ -109,27 +96,25 @@ function buildPeaks(bag: Bag) {
   for (let i = 0; i < 10; i++) {
     const th = -2.3 + (i / 9) * 2.75
     const big = i === 4 || i === 5 ? 12 : 0
-    ten.push(spire(th, 2.3 + 0.12 * Math.sin(i * 1.7), 13 + rand() * 4, (52 + 12 * Math.sin(i * 2.3 + 0.5) + big + rand() * 5) * 0.9, 1, ROCK, ROCK_DARK))
+    ten.push(spire(th, 2.3 + 0.12 * Math.sin(i * 1.7), 14 + rand() * 4, (52 + 12 * Math.sin(i * 2.3 + 0.5) + big + rand() * 5) * 0.9, { ...grey, snowLine: 0.55 + rand() * 0.12 }))
   }
-  // The wall between them (a long low ridge under the summits).
+  // The wall between them: a long jagged ridge under the summits (lower where the glacier comes through).
   const wall = []
   for (let i = 0; i < 9; i++) {
     const a = ten[i]
     const b = ten[i + 1]
-    const mx = (a.x + b.x) / 2
-    const mz = (a.z + b.z) / 2
-    const my = (a.y + b.y) / 2
     const d = Math.hypot(b.x - a.x, b.z - a.z)
-    wall.push(P.cone(d * 0.75, 30, ROCK_DARK, { at: [mx, my + 15, mz], scale: [1, 1, 0.55], rot: [0, Math.atan2(b.x - a.x, b.z - a.z) + Math.PI / 2, 0] }, 6))
+    const col = i === 2 ? 0.7 : 1
+    wall.push(cragPart(d * 0.62, 30 * col, i * 7.7, { ...grey, snowLine: 0.5 }, { at: [(a.x + b.x) / 2, (a.y + b.y) / 2 + 15 * col, (a.z + b.z) / 2], scale: [1, 1, 0.5], rot: [0, Math.atan2(b.x - a.x, b.z - a.z) + Math.PI / 2, 0] }, 10))
   }
   group.add(solid(merge(wall), bag, 2))
-  // The forested mountains round the south and west: lower, greener, a little snow on the highest.
+  // The forested mountains round the south and west: lower, green up their sides, a little snow on the highest.
   const n = 11
   for (let i = 0; i < n; i++) {
     const th = 0.78 + (i / (n - 1)) * 3.1
     const south = Math.max(0, Math.sin(th))
     const h = (34 + rand() * 26) * (1 - south * 0.3)
-    spire(th, 2.15 + rand() * 0.7, 18 + rand() * 10, h, h > 42 ? 0.6 : 0, i % 2 ? '#8FA59A' : '#97A9A4', '#738C84')
+    spire(th, 2.15 + rand() * 0.7, 18 + rand() * 10, h, { rock: i % 2 ? '#9FB0AA' : '#A7B5B2', dark: '#82968F', snow: SNOW, snowLine: h > 42 ? 0.8 : 1.5, forest: 0.42 + rand() * 0.15, green: i % 2 ? '#5E9C7C' : '#6AA684' })
   }
   return { group, peaks }
 }
@@ -169,86 +154,67 @@ export function buildClouds(bag: Bag) {
   return solid(merge(parts), bag, 2.5)
 }
 
-/** Spruces round the lake on the meadow and the forest band (never on the beach, the glacier or the stream). */
-function buildSpruces(bag: Bag) {
-  const rand = rng(23)
-  const parts = []
-  for (let i = 0; i < 640; i++) {
-    const th = rand() * Math.PI * 2
-    const k = 1.09 + rand() ** 1.6 * 0.75
-    const p = ringPoint(th, k)
-    // Not on the glacier, its stream, the dock, the rock pile, the cliff or the squirrel's rock.
-    if (Math.abs(p.x - GLACIER.x) < GLACIER.halfWidth + 4 && p.z < -40) continue
-    if (Math.hypot(p.x - MOUTH.x, p.z - MOUTH.z) < 7 || (p.x < MOUTH.x + 4 && p.x > MOUTH.x - 16 && p.z < MOUTH.z + 2 && p.z > MOUTH.z - 30)) continue
-    if (Math.hypot(p.x - DOCK.x, p.z - DOCK.z) < 7 || Math.hypot(p.x - ROCKPILE.x, p.z - ROCKPILE.z) < ROCKPILE.r + 1 || Math.hypot(p.x - SQUIRREL.x, p.z - SQUIRREL.z) < 4) continue
-    if (Math.hypot(p.x - CLIFF.x, p.z - CLIFF.z) < 6) continue
-    const y = landY(p.x, p.z)
-    // Tall narrow spruces in three tiers, a few smaller ones among them.
-    const h = (rand() < 0.2 ? 2.4 : 4) + rand() * 3.6
-    const r = h * 0.24
-    const c = SPRUCE[i % 3]
-    parts.push(
-      P.cyl(0.1, 0.14, 0.8, '#7E553E', { at: [p.x, y + 0.3, p.z] }, 5),
-      P.cone(r, h * 0.48, c, { at: [p.x, y + 0.55 + h * 0.24, p.z] }, 7),
-      P.cone(r * 0.78, h * 0.42, c, { at: [p.x, y + 0.55 + h * 0.5, p.z] }, 7),
-      P.cone(r * 0.52, h * 0.36, c, { at: [p.x, y + 0.55 + h * 0.76, p.z] }, 7),
-    )
-  }
-  return solid(merge(parts), bag, 1.4)
+/** Is (x, z) kept clear of plants: the glacier, its creek, the dock, the rock pile, the cliff, the squirrel's rock. */
+function clearOf(x: number, z: number, pad = 0) {
+  if (onGlacier(x, z, pad)) return false
+  if (nearCreek(x, z, 2.5 + pad)) return false
+  if (Math.hypot(x - DOCK.x, z - DOCK.z) < 7 + pad || Math.hypot(x - ROCKPILE.x, z - ROCKPILE.z) < ROCKPILE.r + 1 + pad || Math.hypot(x - SQUIRREL.x, z - SQUIRREL.z) < 4 + pad) return false
+  if (Math.hypot(x - CLIFF.x, z - CLIFF.z) < 6 + pad || Math.hypot(x - MOOSE.x, z - MOOSE.z) < 3) return false
+  return true
 }
 
-/** The glacier: a wide white ramp of ice from the big peak down to the water (narrowing as it climbs), cracked across
- *  with blue, ending in a blue ice cliff at the lake. */
-function buildGlacier(bag: Bag) {
-  const g = GLACIER
-  // Side profiles (x: meters north of the cliff, y: up), pushed out across the lake's width, then turned to face south.
-  const ramp = (w: number, lift: number, from: number, c: string) =>
-    P.prism(
-      [
-        [from, 0],
-        [from, 3.4 + lift],
-        [46, 33 + lift],
-        [58, 35 + lift],
-        [58, 0],
-      ],
-      w,
-      c,
-      { at: [g.x, -0.6, g.z], rot: [0, Math.PI / 2, 0] },
-    )
-  const parts = [ramp(g.halfWidth * 2, 0, 0, '#D6EEF8'), ramp(g.halfWidth * 1.35, 0.6, 7, '#E9F6FB'), ramp(g.halfWidth * 0.7, 1.2, 17, SNOW)]
-  // Blue cracks across it, lying on the slope; rocky ridges (moraines) down both sides.
-  const slope = Math.atan2(29.6, 46)
-  // (Crevasses bow downhill in the middle, the way the ice flows faster there: short tilted dashes in a curve.)
-  const rand = rng(83)
-  for (let i = 0; i < 6; i++) {
-    const d = 6 + i * 6.4
-    const w = g.halfWidth * 2 * (0.7 - i * 0.06)
-    const lift = d > 17 ? 1.2 : d > 7 ? 0.6 : 0
-    for (let j = 0; j < 5; j++) {
-      const u = (j - 2) / 2.4
-      const x = g.x + u * w * 0.5 + (rand() - 0.5) * 0.8
-      const dd = d + (1 - u * u) * 2.2
-      parts.push(P.rbox(w * (0.12 + rand() * 0.06), 0.14, 0.34, 0.06, ICE_BLUE, { at: [x, 2.8 + dd * Math.tan(slope) + lift + 0.05, g.z - dd], rot: [-slope, -u * 0.5, 0] }))
+/** The forest and the meadow round the lake (the Nan forest's way: every plant one shape drawn many times, each its
+ *  own green): on the beach, pebbles and boulders; on the meadow, grass, fireweed, bushes and aspens; then the spruce
+ *  forest with a subalpine fir poking up here and there, thinning up the slopes into the far forest, a golden larch
+ *  now and then high up. Near plants have the ink line. */
+function buildForest(bag: Bag) {
+  const rand = rng(23)
+  const grove = new Grove(rand)
+  // The beach: pebbles, and a few big boulders at the water's edge.
+  for (let i = 0; i < 520; i++) {
+    const th = rand() * Math.PI * 2
+    const k = 0.985 + rand() * 0.07
+    const p = ringPoint(th, k)
+    if (!clearOf(p.x, p.z, -1.5)) continue
+    const y = landY(p.x, p.z)
+    if (rand() < 0.09) grove.add('boulder', p.x, y, p.z, 0.9 + rand() * 1.3)
+    else grove.add('pebble', p.x, y, p.z, 0.18 + rand() * 0.3, { sy: 0.6 + rand() * 0.5 })
+  }
+  // The meadow and the forest, out from the beach.
+  for (let i = 0; i < 2600; i++) {
+    const th = rand() * Math.PI * 2
+    const k = 1.05 + rand() ** 1.35 * 1.15
+    const p = ringPoint(th, k)
+    if (!clearOf(p.x, p.z)) continue
+    const y = landY(p.x, p.z)
+    // (Patches: the meadow comes and goes, the forest has clearings.)
+    const patch = bumps(p.x * 0.08, 0, p.z * 0.08, 17)
+    const near = k < 1.55
+    if (k < 1.2) {
+      const r = rand()
+      if (r < 0.34) grove.add('tuft', p.x, y, p.z, 0.8 + rand() * 0.7)
+      else if (r < 0.5 && patch > 0) grove.add('fireweed', p.x, y, p.z, 0.8 + rand() * 0.5)
+      else if (r < 0.6) grove.add('shrub', p.x, y, p.z, 0.7 + rand() * 0.6)
+      else if (r < 0.68 && patch < 0.1) grove.add('aspen', p.x, y, p.z, 0.75 + rand() * 0.4)
+      else if (r < 0.86) grove.add(rand() < 0.2 ? 'fir' : 'spruce', p.x, y, p.z, 0.5 + rand() * 0.5)
+      else if (rand() < 0.5) grove.add('boulder', p.x, y, p.z, 0.8 + rand() * 1.2)
+      continue
     }
-  }
-  // Seracs: jagged blocks of ice along the top of the cliff at the water.
-  for (let i = 0; i < 9; i++) {
-    const x = g.x + (i / 8 - 0.5) * g.halfWidth * 1.8
-    const h = 1.4 + rand() * 1.6
-    parts.push(P.cone(1.3 + rand() * 0.6, h, i % 2 ? '#E9F6FB' : '#CDEBF6', { at: [x, 3 + h / 2, g.z - 1.2 - rand()], rot: [0, rand() * 2, (rand() - 0.5) * 0.3] }, 4))
-  }
-  for (const side of [-1, 1])
-    for (let i = 0; i < 8; i++) {
-      const d = 2 + i * 6
-      parts.push(P.sphere(2 + (i % 3) * 0.6, ROCK_DARK, { at: [g.x + side * (g.halfWidth + 0.6 - i * 0.35), 1 + d * Math.tan(slope) * 0.95, g.z - d], scale: [1, 0.6, 1.4] }, 7))
+    if (patch < -0.45 && rand() < 0.7) {
+      // A clearing: grass and a rock.
+      if (rand() < 0.5) grove.add('tuft', p.x, y, p.z, 1 + rand() * 0.5, { ink: false })
+      else if (rand() < 0.3) grove.add('boulder', p.x, y, p.z, 1 + rand() * 1.4, { ink: near })
+      continue
     }
-  // The ice cliff at the water's edge: blocks of different heights, blue and pale.
-  for (let i = 0; i < 7; i++) {
-    const w = (g.halfWidth * 2.05) / 7
-    const h = 3.2 + rand() * 1.4
-    parts.push(P.rbox(w + 0.3, h, 2.4 + rand() * 0.6, 0.35, i % 2 ? ICE_BLUE : '#B7E3F3', { at: [g.x - g.halfWidth * 1.025 + w * (i + 0.5), h / 2 - 0.9, g.z + 0.4 + rand() * 0.4] }))
+    const r = rand()
+    const high = k > 1.75
+    if (high && r < 0.07) grove.add('larch', p.x, y, p.z, 0.8 + rand() * 0.4, { ink: near })
+    else if (!near && r < 0.55) grove.add('far', p.x, y, p.z, 0.7 + rand() * 0.6)
+    else if (r < 0.75) grove.add('spruce', p.x, y, p.z, 0.6 + rand() * 0.6, { ink: near })
+    else if (r < 0.92) grove.add('fir', p.x, y, p.z, 0.6 + rand() * 0.55, { ink: near })
+    else if (near) grove.add('shrub', p.x, y, p.z, 0.8 + rand() * 0.5)
   }
-  return solid(merge(parts), bag, 2)
+  return grove.build(bag)
 }
 
 /** The dock at the south end, the canoe's start. */
@@ -282,15 +248,15 @@ function buildLodge(bag: Bag) {
   return g
 }
 
-/** A pile of rounded rocks (the pika's home; the squirrel's lookout). */
+/** A pile of boulders (the squirrel's lookout). */
 function rocks(at: { x: number; z: number }, n: number, size: number, seed: number, bag: Bag) {
   const rand = rng(seed)
   const parts = []
   for (let i = 0; i < n; i++) {
     const a = rand() * Math.PI * 2
     const r = rand() * size
-    const s = size * (0.45 + rand() * 0.4)
-    parts.push(P.sphere(s, i % 3 ? ROCK : ROCK_DARK, { at: [Math.cos(a) * r, s * 0.55 + (i > n * 0.6 ? s * 0.7 : 0), Math.sin(a) * r], scale: [1.2, 0.75, 1] }, 8))
+    const s = size * (0.9 + rand() * 0.8)
+    parts.push(rockPart(s * 1.8, i % 3 ? ROCK : ROCK_DARK, seed + i, { at: [Math.cos(a) * r, i > n * 0.6 ? s * 0.5 : -0.1, Math.sin(a) * r], rot: [0, rand() * 3, 0] }, i % 2 === 0))
   }
   const g = solid(merge(parts), bag, 2)
   g.position.set(at.x, landY(at.x, at.z) - 0.2, at.z)
@@ -314,7 +280,7 @@ function buildRockPile(bag: Bag) {
     const x = ROCKPILE.x + Math.cos(a) * d
     const z = ROCKPILE.z + Math.sin(a) * d
     const s = 0.7 + rand() * 1.1
-    parts.push(P.sphere(s, i % 4 === 0 ? ROCK_DARK : i % 4 === 1 ? '#B8B1C6' : ROCK, { at: [x, pileY(x, z) - s * 0.35, z], rot: [rand(), rand() * 3, rand()], scale: [1.25, 0.7, 1] }, 6))
+    parts.push(rockPart(s * 2.2, i % 4 === 0 ? ROCK_DARK : i % 4 === 1 ? '#B8B1C6' : ROCK, 700 + i, { at: [x, pileY(x, z) - s * 0.55, z], rot: [rand() * 0.3, rand() * 3, rand() * 0.3] }, i % 3 === 0))
   }
   for (let i = 0; i < 5; i++) {
     const a = i * 1.3 + 0.4
@@ -323,7 +289,8 @@ function buildRockPile(bag: Bag) {
     const z = ROCKPILE.z + Math.sin(a) * d - 1.5
     const y = pileY(x, z) - 0.2
     const h = 3 + rand() * 2.5
-    parts.push(P.cyl(0.1, 0.14, 0.7, '#7E553E', { at: [x, y + 0.3, z] }, 5), P.cone(h * 0.24, h * 0.5, SPRUCE[i % 3], { at: [x, y + 0.5 + h * 0.25, z] }, 7), P.cone(h * 0.17, h * 0.42, SPRUCE[(i + 1) % 3], { at: [x, y + 0.5 + h * 0.6, z] }, 7))
+    parts.push(P.cyl(0.1, 0.14, 0.7, '#7E553E', { at: [x, y + 0.3, z] }, 5))
+    for (let t = 0; t < 4; t++) parts.push(P.cone(h * (0.26 - t * 0.05), h * 0.34, SPRUCE[(i + t) % SPRUCE.length], { at: [x, y + 0.5 + h * (0.17 + t * 0.2), z], rot: [0, t, 0] }, 8))
   }
   return solid(merge(parts), bag, 2)
 }
@@ -356,14 +323,16 @@ function buildCliff(bag: Bag) {
   const y = landY(CLIFF.x, CLIFF.z) - 1
   const h = CLIFF.h
   const parts = [
-    P.cone(6, h + 6, ROCK, { at: [1.5, (h + 6) / 2, -1.5] }, 5),
-    P.cone(4.5, h * 0.85, ROCK_DARK, { at: [-2.5, (h * 0.85) / 2, 1.5] }, 4),
-    P.cone(3.5, h * 0.7, ROCK, { at: [3, (h * 0.7) / 2, 2.8] }, 5),
+    cragPart(6, h + 6, 3, { rock: ROCK, dark: ROCK_DARK, snow: SNOW, snowLine: 0.85 }, { at: [1.5, (h + 6) / 2, -1.5] }, 7),
+    cragPart(4.5, h * 0.85, 5, { rock: ROCK, dark: ROCK_DARK, snow: SNOW, snowLine: 1.5, forest: 0.2, green: '#6AA684' }, { at: [-2.5, (h * 0.85) / 2, 1.5] }, 7),
+    cragPart(3.5, h * 0.7, 8, { rock: ROCK, dark: ROCK_DARK, snow: SNOW, snowLine: 1.5 }, { at: [3, (h * 0.7) / 2, 2.8] }, 7),
     // The ledge, facing the lake, and the layers of rock across the face.
     P.rbox(3.2, 0.5, 2.2, 0.2, '#B8B1C6', { at: [-1.6, h, 2.2] }),
     P.rbox(5, 0.35, 0.8, 0.12, ROCK_DARK, { at: [0.5, h * 0.55, 3.2], rot: [0, -0.3, 0] }),
     P.rbox(4, 0.3, 0.7, 0.1, ROCK_DARK, { at: [1.2, h * 0.3, 3.6], rot: [0, 0.2, 0] }),
-    P.cone(1.2, 3.2, SPRUCE[0], { at: [1.6, h + 2.4, 1], rot: [0, 0, 0.1] }, 7),
+    P.cone(1.3, 1.6, SPRUCE[0], { at: [1.6, h + 1.5, 1] }, 8),
+    P.cone(1, 1.5, SPRUCE[4], { at: [1.6, h + 2.4, 1], rot: [0, 1, 0] }, 8),
+    P.cone(0.7, 1.3, SPRUCE[1], { at: [1.6, h + 3.2, 1], rot: [0, 2, 0] }, 8),
   ]
   const g = solid(merge(parts), bag, 2)
   g.position.set(CLIFF.x, y, CLIFF.z)
@@ -380,52 +349,163 @@ export function goatSpot() {
   return { x: CLIFF.x + Math.cos(r) * lx + Math.sin(r) * lz, y, z: CLIFF.z - Math.sin(r) * lx + Math.cos(r) * lz, h: r + 0.9 }
 }
 
-/** The glacier stream: down the mountainside from beside the glacier to its mouth in the lake. */
-function buildStream(flow: FlowMaterial, bag: Bag) {
-  const path = [
-    { x: -34, z: -78 },
-    { x: -31, z: -66 },
-    { x: -29.5, z: -56 },
-    { x: -26, z: -47 },
-    { x: MOUTH.x, z: MOUTH.z },
-    { x: MOUTH.x + 2.6, z: MOUTH.z + 3.2 },
-  ]
+/** The glacier creek's line, from the waterfall at its top down to where it spills into the lake (x, z). */
+const CREEK = [
+  { x: -35.5, z: -83 },
+  { x: -33.5, z: -75 },
+  { x: -31, z: -67 },
+  { x: -29.5, z: -59 },
+  { x: -26.5, z: -51 },
+  { x: -23.8, z: -44 },
+  { x: MOUTH.x, z: MOUTH.z },
+  { x: MOUTH.x + 2.4, z: MOUTH.z + 3 },
+]
+/** How tall the waterfall at the creek's top is (m). */
+const FALL = 6
+
+interface CreekPoint {
+  x: number
+  z: number
+  y: number
+  /** Unit sideways (to the creek's right going downstream), its half width, meters along, how fast it tumbles. */
+  sx: number
+  sz: number
+  w: number
+  along: number
+  rush: number
+}
+let creekPts: CreekPoint[] | null = null
+/** The creek sampled every meter or so: smooth (a curve through CREEK), always running downhill. */
+function creek() {
+  if (creekPts) return creekPts
+  const curve = new CatmullRomCurve3(CREEK.map((p) => new Vector3(p.x, 0, p.z)))
+  const n = 90
+  const pts: CreekPoint[] = []
+  let along = 0
+  let prevY = Infinity
+  for (let i = 0; i <= n; i++) {
+    const u = i / n
+    const p = curve.getPointAt(u)
+    const t = curve.getTangentAt(u)
+    if (i) along += p.distanceTo(curve.getPointAt((i - 1) / n))
+    const ground = landY(p.x, p.z)
+    const y = Math.max(0.07, Math.min(prevY, ground + 0.32))
+    const ds = i ? p.distanceTo(curve.getPointAt((i - 1) / n)) : 1
+    const drop = i ? (prevY - y) / ds : 0
+    prevY = y
+    // Wider as it nears the lake, fanning out at the mouth.
+    const w = 0.9 + u * 1.1 + (u > 0.88 ? (u - 0.88) * 16 : 0) + 0.15 * Math.sin(u * 23)
+    pts.push({ x: p.x, z: p.z, y, sx: -t.z, sz: t.x, w, along, rush: Math.min(1, Math.max(0, drop * 1.3 - 0.3)) })
+  }
+  return (creekPts = pts)
+}
+/** Is (x, z) within `pad` meters of the creek's water? */
+export function nearCreek(x: number, z: number, pad = 0) {
+  for (const p of creek()) if (Math.hypot(x - p.x, z - p.z) < p.w + pad) return true
+  return false
+}
+
+/** The glacier creek: a waterfall off a rock ledge at the top, then down the mountainside in a pebbly bed, tumbling
+ *  white over the steep steps, past boulders, fanning out into the lake at its mouth. */
+function buildStream(flow: RiverMaterial, bag: Bag) {
+  const pts = creek()
+  // The water: a strip down the bed, `flow` (meters along, 0..1 across) and `rush` for the shader.
   const pos: number[] = []
   const fl: number[] = []
-  let along = 0
-  for (let i = 0; i < path.length; i++) {
-    const a = path[Math.max(0, i - 1)]
-    const b = path[Math.min(path.length - 1, i + 1)]
-    const dx = b.x - a.x
-    const dz = b.z - a.z
-    const l = Math.hypot(dx, dz)
-    const w = i === path.length - 1 ? 3.2 : 1.4 + i * 0.25
-    const nx = (-dz / l) * w
-    const nz = (dx / l) * w
-    const p = path[i]
-    if (i) along += Math.hypot(p.x - path[i - 1].x, p.z - path[i - 1].z)
-    const y = Math.max(0.06, landY(p.x, p.z) + 0.25)
-    pos.push(p.x - nx, y, p.z - nz, p.x + nx, y, p.z + nz)
-    fl.push(along, 0, along, 1)
-  }
+  const rush: number[] = []
   const idx: number[] = []
-  for (let i = 0; i < path.length - 1; i++) idx.push(i * 2, i * 2 + 1, i * 2 + 2, i * 2 + 1, i * 2 + 3, i * 2 + 2)
+  const strip = (rows: { l: number[]; r: number[]; along: number; rush: number }[]) => {
+    const o = pos.length / 3
+    for (const row of rows) {
+      pos.push(...row.l, ...row.r)
+      fl.push(row.along, 0, row.along, 1)
+      rush.push(row.rush, row.rush)
+    }
+    for (let i = 0; i < rows.length - 1; i++) {
+      const a = o + i * 2
+      idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2)
+    }
+  }
+  strip(pts.map((p) => ({ l: [p.x - p.sx * p.w, p.y, p.z - p.sz * p.w], r: [p.x + p.sx * p.w, p.y, p.z + p.sz * p.w], along: p.along, rush: p.rush })))
+  // The waterfall: a sheet pouring off the ledge into the top of the creek (flowing down it, all whitewater).
+  const top = pts[0]
+  const back = pts[1]
+  const bx = top.x - (back.x - top.x) * 0.9
+  const bz = top.z - (back.z - top.z) * 0.9
+  const fall = []
+  for (let i = 0; i <= 6; i++) {
+    const t = i / 6
+    // (Out over the lip, then straight down.)
+    const out = Math.sin(t * Math.PI * 0.5) * 0.5
+    const x = bx + (top.x - bx) * (0.15 + out)
+    const z = bz + (top.z - bz) * (0.15 + out)
+    const w = top.w * (0.75 + t * 0.25)
+    fall.push({ l: [x - top.sx * w, top.y + FALL * (1 - t), z - top.sz * w], r: [x + top.sx * w, top.y + FALL * (1 - t), z + top.sz * w], along: -FALL * (1 - t), rush: 1 })
+  }
+  strip(fall)
   const g = new BufferGeometry()
   g.setAttribute('position', new Float32BufferAttribute(pos, 3))
   g.setAttribute('flow', new Float32BufferAttribute(fl, 2))
+  g.setAttribute('rush', new Float32BufferAttribute(rush, 1))
   g.setIndex(idx)
-  const m = new Mesh(bag.add(g), flow.mat)
-  // Boulders along it.
+  const water = new Mesh(bag.add(g), flow.mat)
+  // The bed: grey pebbles either side of the water, a little lower, over the grass.
+  const bed: number[] = []
+  const bedC: number[] = []
+  const wet = new Color('#B9B0C8')
+  const dry = new Color('#D6CFDE')
+  for (const side of [-1, 1])
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = pts[i]
+      const b = pts[i + 1]
+      const ring = (p: CreekPoint, k: number) => [p.x + side * p.sx * p.w * k, Math.max(p.y - 0.08, landY(p.x + side * p.sx * p.w * k, p.z + side * p.sz * p.w * k) + 0.2) - (k < 1.2 ? 0.06 : 0), p.z + side * p.sz * p.w * k]
+      const quad = [ring(a, 0.8), ring(b, 0.8), ring(a, 1.75), ring(b, 0.8), ring(b, 1.75), ring(a, 1.75)]
+      const cols = [wet, wet, dry, wet, dry, dry]
+      quad.forEach((q, j) => {
+        bed.push(...(side > 0 ? q : quad[[0, 2, 1, 3, 5, 4][j]]))
+        const c = side > 0 ? cols[j] : cols[[0, 2, 1, 3, 5, 4][j]]
+        bedC.push(c.r, c.g, c.b)
+      })
+    }
+  const bg = new BufferGeometry()
+  bg.setAttribute('position', new Float32BufferAttribute(bed, 3))
+  bg.setAttribute('color', new Float32BufferAttribute(bedC, 3))
+  bg.computeVertexNormals()
+  const bedMesh = new Mesh(bag.add(bg), toon('#ffffff', true))
+  // Boulders: in the water where it tumbles (the whitewater pours round them), along the banks, and the ledge the
+  // waterfall pours off, a crag with its feet in the plunge pool.
   const rand = rng(41)
   const parts = []
-  for (let i = 0; i < 14; i++) {
-    const p = path[1 + Math.floor(rand() * (path.length - 2))]
-    const s = 0.5 + rand() * 0.8
-    const side = rand() < 0.5 ? -1 : 1
-    parts.push(P.sphere(s, ROCK, { at: [p.x + side * (2 + rand() * 1.5), landY(p.x, p.z) + s * 0.3, p.z + (rand() - 0.5) * 6], scale: [1.2, 0.7, 1] }, 7))
+  for (let i = 2; i < pts.length - 6; i += 2) {
+    const p = pts[i]
+    if (p.rush > 0.3 && rand() < 0.7) {
+      const k = (rand() - 0.5) * 1.2
+      parts.push(rockPart(0.7 + rand() * 0.7, ROCK, 800 + i, { at: [p.x + p.sx * p.w * k, p.y - 0.25, p.z + p.sz * p.w * k], rot: [0, rand() * 3, 0] }))
+    }
+    if (rand() < 0.55) {
+      const side = rand() < 0.5 ? -1 : 1
+      const k = p.w * 1.5 + rand() * 1.4
+      const x = p.x + side * p.sx * k
+      const z = p.z + side * p.sz * k
+      parts.push(rockPart(1 + rand() * 1.6, rand() < 0.3 ? ROCK_DARK : ROCK, 900 + i, { at: [x, landY(x, z) - 0.1, z], rot: [0, rand() * 3, 0] }, rand() < 0.5))
+    }
+  }
+  parts.push(
+    cragPart(4.5, FALL + 3, 21, { rock: ROCK, dark: ROCK_DARK, snow: SNOW, snowLine: 0.86 }, { at: [bx - top.sx * 3.2 + (bx - top.x) * 1.2, top.y + (FALL + 3) / 2 - 1.5, bz - top.sz * 3.2 + (bz - top.z) * 1.2] }, 7),
+    cragPart(4.5, FALL + 2, 22, { rock: ROCK, dark: ROCK_DARK, snow: SNOW, snowLine: 0.86 }, { at: [bx + top.sx * 3.2 + (bx - top.x) * 1.2, top.y + (FALL + 2) / 2 - 1.5, bz + top.sz * 3.2 + (bz - top.z) * 1.2] }, 7),
+    rockPart(4.2, ROCK_DARK, 23, { at: [bx + (bx - top.x) * 1.6, top.y + FALL - 2.4, bz + (bz - top.z) * 1.6], scale: [1.3, 1.1, 1] }),
+  )
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2
+    parts.push(rockPart(0.8 + rand() * 0.6, ROCK, 950 + i, { at: [top.x + Math.cos(a) * (top.w + 0.6), top.y - 0.2, top.z + Math.sin(a) * (top.w + 0.6)], rot: [0, rand() * 3, 0] }, i % 2 === 0))
   }
   const g2 = new Group()
-  g2.add(m, solid(merge(parts), bag, 1.8))
+  g2.add(water, bedMesh, solid(merge(parts), bag, 1.6))
+  // White foam where it spills into the lake.
+  const end = pts[pts.length - 1]
+  const foam = softDisc(3.2, 'rgba(255,255,255,0.7)', 'rgba(255,255,255,0)', bag)
+  foam.position.set(end.x, 0.05, end.z)
+  g2.add(foam)
   return g2
 }
 
@@ -466,7 +546,7 @@ export interface Shore {
   lodge: Group
   /** The log jam in the outlet (it bobs when she pokes it). */
   logs: Group
-  stream: FlowMaterial
+  stream: RiverMaterial
   /** The milky patch at the stream's mouth (two discs that turn slowly). */
   flour: Group
 }
@@ -476,10 +556,10 @@ export function buildShore(bag: Bag): Shore {
   const ground = buildLand(bag)
   land.add(ground)
   const { group: peakGroup, peaks } = buildPeaks(bag)
-  land.add(peakGroup, buildSpruces(bag))
+  land.add(peakGroup, buildForest(bag))
   const glacier = buildGlacier(bag)
   land.add(glacier)
-  const stream = new FlowMaterial(bag, { deep: '#9EDCDA', light: '#D3F2EF', speed: 3.2, rows: 5 })
+  const stream = new RiverMaterial(bag, { deep: '#6FCFD3', light: '#A9E6E4', speed: 2.6 })
   land.add(buildStream(stream, bag))
   land.add(buildDock(bag))
   const lodge = buildLodge(bag)
