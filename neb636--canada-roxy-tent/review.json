@@ -1,0 +1,11 @@
+{
+  "title": "Canada map: Roxy beside her tent",
+  "checkIn": "fix",
+  "kaylee": "Roxy the raccoon stands on the grass beside her tent instead of sinking into it.",
+  "questions": [],
+  "pictures": [
+    { "title": "iPad upright", "before": "pics/before-tall-5.png", "after": "pics/after-tall-5.png", "caption": "She stands beside the tent; two spruces moved back to make room" },
+    { "title": "iPad sideways", "before": "pics/before-wide-5.png", "after": "pics/after-wide-5.png", "caption": "Clear of the tent, the fire and the trees all the way through her sidle" }
+  ],
+  "links": [{ "label": "The Canada map", "hash": "#/world/canada/hub/map?team=none" }]
+}
