@@ -1,10 +1,10 @@
 {
   "title": "Monty the moose",
   "checkIn": "Fix",
-  "kaylee": "Monty has softer, level eyebrows and a clear neckline. You can hear all 13 of his lines in the character lab.",
+  "kaylee": "Monty has a muted rosy blush and smaller ears. As he turns, the ink follows the rounded edges of his antlers.",
   "pictures": [
     {
-      "title": "Brows and neckline",
+      "title": "Cheeks, ears and antlers",
       "before": "pics/front-before.jpg",
       "after": "pics/front-after.jpg"
     },
