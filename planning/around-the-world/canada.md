@@ -105,6 +105,13 @@ New voices: `loon` (Lulu) and `gus`. The PR records every new line.
   boat; feel knobs `canoe` and `canoeStroke` (`canoe/glide?feel=1`). The old drag-a-stroke control moved the canoe
   5 m in a minute of robot play; a robot now crosses the lake in about 40 s without touching a shore, taps only
   too. The loon in the game is Lulu (`characters/lulu.ts`), and her bubbles always come up toward the glacier.
+  **The look (2026-11-21, at the Nan forest's level of detail):** `canoe/nature.ts` has the plants (layered spruce,
+  subalpine fir, a golden larch high up, aspens, pink fireweed, bushes, grass; instanced and tinted per plant like
+  Nan's forest, whose helpers moved to `engine3d/plants.ts`), faceted mossy boulders and jagged crags with snow by
+  height and in the gullies. `canoe/glacier.ts` is a valley glacier (snowfield, icefall with seracs and crevasses,
+  ogives, moraines, a fluted ice cliff with a cave). The creek is a smooth channel with a pebble bed, a waterfall at
+  its top and its own shader (`canoe/flow.ts`), and its own sound (`canoe-creek`, louder near it). The reflection
+  draws plainer trees and leaves out grass, pebbles and bushes: the scene is about 424k triangles (Samet 396k).
 - **Whale Watch:** the sleepy otter is Ollie; towed home, she asks to come and rides along on the rope, spinning at
   every whale. The wheel steering mode is gone.
 - **Carnival Snowballs:** the first snowman she finishes is Tuque himself (his cap, face and mittens on the balls she

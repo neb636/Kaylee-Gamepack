@@ -40,6 +40,9 @@ export const snd = {
   chick: clip(url('canoe-chick'), () => [0, 0.13].forEach((d, i) => tone(2600 + i * 400, 3300 + i * 300, 0.08, 0.05, 'sine', d))),
   /** The glacier stream tumbling into the lake (when she finds the milky water). */
   stream: clip(url('canoe-stream'), () => noise(1.2, 0.06, 'bandpass', 1400, 900, 0, 0.8)),
+  /** The creek and its waterfall, louder the nearer the canoe is (call it every frame while it can be heard: 0 far,
+   *  1 right by the mouth). No synth: it's only ambience. */
+  creek: held(url('canoe-creek'), (_near: number) => {}, (near: number) => ({ vol: 0.05 + near * near * 0.45 }), { linger: 0.4, fade: 1 }),
   /** An ice chunk cracks off the glacier and splashes down. */
   ice: clip(url('canoe-ice'), () => {
     noise(0.14, 0.25, 'highpass', 2400, 900)

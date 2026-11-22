@@ -40,7 +40,7 @@ import { Beaver, Duck, Eagle, Goat, Loon, Marmot, Pika, Squirrel, Trout } from '
 import { DUCKS, EAGLE_Y, FAMILY, FLOUR, GLACIER, GLIDE_M, inward, keepOn, LAKE_DULL, LAKE_GLOW, landY, LODGE, MARMOT, MOOSE, PADDLE_K, PIKA, shoreK, SQUIRREL, STARTS } from './lake'
 import { Moose } from './moose'
 import type { CanoeSection } from './sections'
-import { buildClouds, buildShore, buildSky, goatSpot, mirror, pileY, SKY, type Shore } from './shore'
+import { buildClouds, buildShore, buildSky, creekDistance, goatSpot, mirror, pileY, SKY, type Shore } from './shore'
 import { TO_DEG, damp, wrapAngle } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/canada/activities/canoe/paddle.ts'
@@ -812,6 +812,9 @@ export class RedCanoe implements World3D {
       ;(this.found && Math.random() < 0.7 ? this.glowFoam : this.foam).emit(this.x + ox, 0.02, this.z + oz, -this.vx * 0.1, 0, -this.vz * 0.1, 1.4 + sp * 0.3, 0.35 + sp * 0.08)
     }
     if (sp > 1.6) snd.glide(sp)
+    // The creek splashing down into the lake, louder as she paddles toward it.
+    const creekNear = 1 - creekDistance(this.x, this.z) / 40
+    if (creekNear > 0) snd.creek(creekNear)
   }
 
   private placeCanoe(dt: number) {
