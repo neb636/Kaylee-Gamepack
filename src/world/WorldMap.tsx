@@ -50,7 +50,8 @@ function Pin({ x, y, children, label, onTap, glow, dim }: { x: number; y: number
       }}
       style={{
         // The button is the tap target and keeps its full size; the circle drawn inside it is smaller (82%,
-        // 2026-10-27), so the map looks less crowded without making the pins harder to hit.
+        // 2026-10-27; 74% since the pins got pictures, 2026-11-22), so the map looks less crowded without making
+        // the pins harder to hit.
         position: 'absolute',
         left: `${x}%`,
         top: `${y}%`,
@@ -68,7 +69,7 @@ function Pin({ x, y, children, label, onTap, glow, dim }: { x: number; y: number
         className={glow ? 'world-glow' : undefined}
         style={{
           position: 'relative',
-          width: '82%',
+          width: '74%',
           aspectRatio: '1',
           borderRadius: '50%',
           background: dim ? 'rgba(255,255,255,0.75)' : '#fff',
