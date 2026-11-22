@@ -49,19 +49,19 @@ import { TO_DEG, wrapAngle } from '../../../../../sdk/math'
 const FILE = 'src/world/places/canada/activities/bike/ride.ts'
 /** The feel lab shows the bike's knobs while she rides (not in the story or the gondola). */
 const RIDING = ['green', 'berms', 'creek', 'falls']
-/** The finger wheel and the handlebars: Dad's numbers from the Nan drive's feel lab (2026-10-27) as the start. */
+/** The finger wheel and the handlebars: started from the Nan drive's numbers (2026-10-27); retuned 2026-11-22 so small pushes count at once and the bike chases sooner (it fishtailed: slow to answer, then too far). */
 const STEER = knobs('bars', 'Steering', FILE, {
   slide: { value: 6.5, min: 1, max: 12, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides where she steers across the trail', main: true },
   reach: { value: 1.2, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)', main: true },
-  dead: { value: 0.15, min: 0, max: 0.4, step: 0.01, label: 'Dead middle', note: 'share of the wheel near the middle that counts as straight' },
-  curve: { value: 1.3, min: 1, max: 3, step: 0.05, label: 'Gentle small pushes', note: '1 = even all the way; higher = a small push barely steers' },
-  ease: { value: 0.08, min: 0, max: 0.6, step: 0.01, label: 'Smoothing', unit: 's', note: 'how long a quick flick takes to count in full (0 = none)' },
-  aim: { value: 7, min: 3, max: 20, step: 0.5, label: 'Aim ahead', unit: 'm', note: 'the nearest point the bike steers toward: closer = sharper, but it wobbles' },
-  pull: { value: 1.2, min: 0, max: 4, step: 0.1, label: 'Aim closer when far off', note: 'per meter it is from where she steers: a full push swerves more' },
-  turn: { value: 2.4, min: 0.5, max: 5, step: 0.05, label: 'Turn rate', unit: 'rad/s', note: 'how fast the bike can swing its front wheel round', main: true },
-  grip: { value: 11, min: 1, max: 16, step: 0.5, label: 'Grip', note: 'how quickly a sideways skid dies out (low = drifty)', main: true },
+  dead: { value: 0.06, min: 0, max: 0.4, step: 0.01, label: 'Dead middle', note: 'share of the wheel near the middle that counts as straight' },
+  curve: { value: 1, min: 1, max: 3, step: 0.05, label: 'Gentle small pushes', note: '1 = even all the way; higher = a small push barely steers' },
+  ease: { value: 0.03, min: 0, max: 0.6, step: 0.01, label: 'Smoothing', unit: 's', note: 'how long a quick flick takes to count in full (0 = none)' },
+  aim: { value: 4, min: 3, max: 20, step: 0.5, label: 'Aim ahead', unit: 'm', note: 'the nearest point the bike steers toward: closer = sharper, but it wobbles' },
+  pull: { value: 2.5, min: 0, max: 4, step: 0.1, label: 'Aim closer when far off', note: 'per meter it is from where she steers: a full push swerves more' },
+  turn: { value: 3.2, min: 0.5, max: 5, step: 0.05, label: 'Turn rate', unit: 'rad/s', note: 'how fast the bike can swing its front wheel round', main: true },
+  grip: { value: 14, min: 1, max: 16, step: 0.5, label: 'Grip', note: 'how quickly a sideways skid dies out (low = drifty)', main: true },
   back: { value: 1.2, min: 0.3, max: 4, step: 0.1, label: 'Back to the middle', unit: 's', note: 'how slowly it drifts back to the middle of the trail (or its way) after she lets go' },
-  camera: { value: 0.35, min: 0, max: 1, step: 0.05, label: 'Camera follows the bike', note: '0 = the camera looks down the trail; 1 = it turns with the bike' },
+  camera: { value: 0.15, min: 0, max: 1, step: 0.05, label: 'Camera follows the bike', note: '0 = the camera looks down the trail; 1 = it turns with the bike' },
 }, { sections: RIDING })
 /** The ride down the mountain. */
 const RIDE = knobs('bike', 'The ride', FILE, {
