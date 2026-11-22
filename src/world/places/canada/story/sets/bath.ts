@@ -2,7 +2,9 @@
 // game, activities/bath/) and of its two films (story/films/bath.ts), so the game and its films are one place. The river
 // comes toward the camera down a rocky step in the forest floor: the falls, a pool at its foot where Misty has her bath,
 // mossy banks with ferns and berry bushes, giant cedars going up out of the frame (the tallest one, `TALLEST`, for the
-// pinecone to sail over; a near one on the right bank, `SCRATCH`, for her back), mist round the falls and a soft rain.
+// pinecone to sail over; a near one on the right bank, `SCRATCH`, for her back), mist round the falls, sunbeams through
+// the trees and a light sparkly drizzle. The moving water (the pool's shader, the falls' curtain, the foam and spray) is
+// made in bathWater.ts.
 // In front of her the pool is still (`MIRROR`): at the end of her bath it glows like a mirror.
 //
 // The usual camera stands on +z looking toward -z, so the falls face it: the lower pool runs from the falls' foot
@@ -10,22 +12,21 @@
 // (her feet under the water). Maple's bank is on the left (x < -1.6).
 //
 // `buildRiver` makes it (the film stage and the game both call it), `updateRiver` keeps it moving.
-import { AdditiveBlending, BufferGeometry, CircleGeometry, Float32BufferAttribute, Group, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, RingGeometry, Sprite, SpriteMaterial, Vector3, type Camera, type Object3D } from 'three'
+import { AdditiveBlending, BufferGeometry, CircleGeometry, CylinderGeometry, Float32BufferAttribute, Group, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, RingGeometry, Sprite, SpriteMaterial, Vector3, type Camera, type Object3D } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
-import { merge, P, solid, type V3 } from '../../../../engine3d/geo'
+import { bake, merge, P, solid, type V3 } from '../../../../engine3d/geo'
 import { radialAlpha, softTexture } from '../../../../engine3d/softTexture'
 import { bed, clip } from '../../../../kit/clips'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import { url } from '../../sfx'
 import type { FilmSet, SetLook } from '../stage'
+import { edgePoints, lowSdf, makeBeams, makeFalls, makePuffs, makeWater, outward, rng, upSdf, type Puff } from './bathWater'
 
 /** The falls' face (z) and how high the upper river is. */
 export const FALLS_Z = -3
 export const TOP = 1.5
 /** How deep Misty stands in the pool (her feet are this far under the water). */
 export const WADE = -0.38
-/** The river's half width. */
-const RW = 1.6
 /** The tallest cedar: its foot and its height (the pinecone goes over its top). */
 export const TALLEST = { x: 2.6, z: -10, h: 19 }
 /** Where Misty has her bath (in the pool, the water round her ankles), facing the camera. */
@@ -35,18 +36,31 @@ export const MIRROR = { x: 0.92, z: -1.3, r: 0.4 }
 /** The big cedar on the right bank she scratches her back on (its trunk's radius at the foot). */
 export const SCRATCH = { x: 1.78, z: -2.25, r: 0.42, h: 17 }
 
+/** The water's top (Misty's feet are under it). */
+const WATER_Y = 0.04
+/** Half the gap in the step where the falls pour (its face is set back there). */
+const STEP_GAP = 1.7
+
 // The river's colors.
-const WATER = '#6BBBD9'
-const WATER_DEEP = '#4E97BC'
-const FALLS = '#9DD3EC'
-const MOSS = '#7DB563'
-const MOSS_DARK = '#5E9A4E'
-const ROCK = '#9A93A3'
-const ROCK_DARK = '#7F788A'
+const MOSS = '#86C268'
+const MOSS_DARK = '#68A955'
+const ROCK = '#ABA4B8'
+const ROCK_DARK = '#918AA0'
+const STONES = ['#B9B2C6', '#A79FB5', '#CCC5D6', '#C2B6A8', '#9E97AE']
+const LEAF = '#7ACB5C'
+const LEAF_DARK = '#62B44E'
+const FLOWERS = ['#FF9EC4', '#FFFFFF', '#FFB8D4', '#FF86B5', '#FFF4FA']
+/** Lily pads: x, z, radius, which way the notch faces. */
+const LILIES: [number, number, number, number][] = [
+  [-1.88, -1.08, 0.13, 0.4],
+  [1.52, -0.82, 0.15, 2.2],
+  [1.32, -0.55, 0.1, 4],
+  [-2.02, -1.38, 0.09, 1.3],
+]
 const BARK = '#9A5A44'
 const BARK_DARK = '#7A4434'
-const CEDAR = ['#3F7F4C', '#4C9457', '#5AA562']
-const FERN = '#5FA552'
+const CEDAR = ['#47895A', '#55A063', '#66B470']
+const FERN = '#6AB45A'
 const BERRY = '#7B5BC4'
 const SALMONBERRY = '#FF8A5C'
 /** Sockeye on their way home: a bright red body, an olive-green head (the game's SOCKEYE). */
@@ -116,6 +130,10 @@ export interface RiverSet {
   mist: Sprite[]
   rain: LineSegments
   splash: { g: Group; t: number }
+  /** Where the rings round her legs spread from on the pool, and how strong they are (0: none, when she's out). */
+  wade: { x: number; z: number; k: number }
+  /** The shaders' clocks (the water, the falls, the spray, the sunbeams). */
+  fx: { update(t: number): void; wade(x: number, z: number, k: number): void }
 }
 
 /** A cedar `h` meters tall at (x, y, z): a red-brown trunk with a flared foot and moss on it, drooping green tiers. */
@@ -161,8 +179,43 @@ function bush(x: number, z: number, s = 1, y = 0) {
   return parts
 }
 
-/** A soft grey-green rainforest day, misty far off (the films' stage and the game's sky). */
-export const RIVER_LOOK: SetLook = { sky: ['#9DBFCB', '#C6DCD6', '#DCEBE1'], fog: ['#CFE1D8', 16, 75], light: [1.02, 0.86], tint: '#F2FBF4', clouds: false }
+/** A skunk cabbage: big bright leaves standing up round a yellow hood. */
+function skunk(x: number, z: number, s = 1, y = 0) {
+  const parts = []
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2 + x
+    const tilt = 0.35 + (i % 2) * 0.15
+    const hh = 0.34 * s * (1 - (i % 2) * 0.15)
+    const out = 0.08 * s + Math.sin(tilt) * hh
+    parts.push(P.sphere(hh, i % 2 ? LEAF : LEAF_DARK, { at: [x + Math.cos(a) * out, y + Math.cos(tilt) * hh, z + Math.sin(a) * out], rot: [tilt, Math.PI / 2 - a, 0], order: 'YXZ', scale: [0.42, 1, 0.1] }, 10))
+  }
+  parts.push(P.sphere(0.09 * s, '#FFD95A', { at: [x, y + 0.17 * s, z + 0.04 * s], scale: [0.75, 1.6, 0.7] }, 10))
+  return parts
+}
+
+/** A clump of little wildflowers (pink and white), each on a stem. */
+function flowers(x: number, z: number, n: number, y = 0, seed = 1) {
+  const r = rng(seed)
+  const parts = []
+  for (let i = 0; i < n; i++) {
+    const a = r() * Math.PI * 2
+    const d = 0.05 + r() * 0.16
+    const fx = x + Math.cos(a) * d
+    const fz = z + Math.sin(a) * d
+    const h = 0.12 + r() * 0.12
+    const c = FLOWERS[i % FLOWERS.length]
+    parts.push(P.cyl(0.006, 0.008, h, MOSS_DARK, { at: [fx, y + h / 2, fz] }, 5))
+    for (let k = 0; k < 5; k++) {
+      const pa = (k / 5) * Math.PI * 2
+      parts.push(P.sphere(0.026, c, { at: [fx + Math.cos(pa) * 0.028, y + h + 0.004, fz + Math.sin(pa) * 0.028], scale: [1, 0.4, 1] }, 6))
+    }
+    parts.push(P.sphere(0.017, '#FFD95A', { at: [fx, y + h + 0.012, fz] }, 6))
+  }
+  return parts
+}
+
+/** A sunny rainforest morning: a pastel sky, warm light, a soft haze far off (the films' stage and the game's sky). */
+export const RIVER_LOOK: SetLook = { sky: ['#94CEF2', '#BEE3F5', '#E6F4EE'], fog: ['#DEEFE6', 20, 85], light: [1.14, 1.12], tint: '#FFF6E8', clouds: false }
 
 /** Builds the river in `root`: everything the films and the game see. */
 export function buildRiver(bag: Bag, root: Group): RiverSet {
@@ -171,43 +224,67 @@ export function buildRiver(bag: Bag, root: Group): RiverSet {
     const ground = [
       P.cyl(70, 70, 0.4, MOSS, { at: [0, -0.2, 20] }, 40),
       ...[[-5, 2, 2.2], [5.5, 1, 2.6], [-8, -1, 3], [7, 6, 2], [-6, 7, 2.4]].map(([x, z, r]) => P.cyl(r, r * 1.1, 0.06, MOSS_DARK, { at: [x, 0.01, z] }, 14)),
-      // The step: rock, mossy on top, the whole way across the forest.
-      P.box(90, TOP - 0.15, 60, ROCK, { at: [0, (TOP - 0.15) / 2, FALLS_Z - 30.15] }),
-      P.box(90, 0.2, 60, MOSS, { at: [0, TOP - 0.1, FALLS_Z - 30.25] }),
+      // The step: rock, mossy on top, the whole way across the forest. Behind the falls its face is set back, so the
+      // water bends over a rounded lip in front of it.
+      ...[-1, 1].map((sd) => P.box(44, TOP - 0.15, 60, ROCK, { at: [sd * (STEP_GAP + 22), (TOP - 0.15) / 2, FALLS_Z - 30.15] })),
+      ...[-1, 1].map((sd) => P.box(44, 0.2, 60, MOSS, { at: [sd * (STEP_GAP + 22), TOP - 0.1, FALLS_Z - 30.25] })),
+      P.box(STEP_GAP * 2 + 0.02, TOP - 0.15, 60, ROCK_DARK, { at: [0, (TOP - 0.15) / 2, FALLS_Z - 30.5] }),
+      P.box(STEP_GAP * 2 + 0.02, 0.2, 60, MOSS, { at: [0, TOP - 0.1, FALLS_Z - 30.5] }),
     ]
-    // Boulders along the face and round the pool, mossy caps.
+    // Boulders along the face, lumpy and mossy-capped; rounder stones along the shore.
     const rocks: BufferGeometry[] = []
-    const boulder = (x: number, y: number, z: number, w: number, h: number) => {
-      rocks.push(P.rbox(w, h, w * 0.8, Math.min(w, h) * 0.3, (x * 7) % 2 > 1 ? ROCK : ROCK_DARK, { at: [x, y, z] }))
-      rocks.push(P.sphere(w * 0.42, MOSS, { at: [x, y + h * 0.42, z], scale: [1.05, 0.3, 0.85] }, 10))
+    const boulder = (x: number, z: number, w: number, h: number, i: number) => {
+      rocks.push(P.sphere(w * 0.5, i % 2 ? ROCK : ROCK_DARK, { at: [x, h * 0.45, z], scale: [1, h / w, 0.72] }, 14))
+      rocks.push(P.sphere(w * 0.32, i % 2 ? ROCK_DARK : ROCK, { at: [x + (i % 2 ? 0.34 : -0.34) * w, h * 0.22, z + 0.18 * w], scale: [1, 0.85, 0.85] }, 12))
+      rocks.push(P.sphere(w * 0.4, i % 3 ? MOSS : MOSS_DARK, { at: [x, h * 0.88, z], scale: [1.08, 0.3, 0.78] }, 12))
     }
-    for (const [x, w, h] of [[-2.3, 1.3, 1.6], [-3.6, 1.6, 1.3], [-5.4, 1.4, 1.5], [2.3, 1.3, 1.7], [3.7, 1.7, 1.4], [5.6, 1.3, 1.5], [-7.4, 1.6, 1.4], [7.5, 1.5, 1.5]]) boulder(x, h / 2 - 0.05, FALLS_Z + 0.25, w, h)
-    for (const [x, z, w] of [[-1.9, -2.2, 0.6], [1.85, -1.4, 0.55], [-1.75, 1.4, 0.5], [1.8, 2.6, 0.62], [-1.85, 4.6, 0.5], [1.75, 6.5, 0.55]]) boulder(x, 0.12, z, w, w * 0.65)
+    const face: [number, number, number][] = [[-2.38, 1.45, 1.75], [-3.75, 1.65, 1.45], [-5.45, 1.45, 1.6], [2.4, 1.4, 1.8], [3.8, 1.7, 1.5], [5.65, 1.35, 1.55], [-7.4, 1.6, 1.45], [7.5, 1.5, 1.55]]
+    face.forEach(([x, w, h], i) => boulder(x, FALLS_Z + 0.2, w, h, i))
+    // The small ones round the pool (the banana slug sleeps on the one at the back left).
+    const stone = (x: number, y: number, z: number, r: number, c: string, yaw: number, moss: boolean) => {
+      rocks.push(P.sphere(r, c, { at: [x, y, z], rot: [0, yaw, 0], scale: [1, 0.6, 0.82] }, 10))
+      if (moss) rocks.push(P.sphere(r * 0.78, MOSS, { at: [x, y + r * 0.42, z], rot: [0, yaw, 0], scale: [1, 0.32, 0.8] }, 9))
+    }
+    stone(-1.9, 0.12, -2.2, 0.36, ROCK_DARK, 0.3, true)
+    stone(1.95, 0.08, -1.35, 0.3, ROCK, 0.8, true)
+    // Stones along the pool's shore (never in the falls' foot, the cedar's roots or on the bigger rocks).
+    const r = rng(7)
+    const keep = (x: number, z: number) =>
+      !(Math.abs(x) < 1.8 && z < FALLS_Z + 0.55) && Math.hypot(x - SCRATCH.x, z - SCRATCH.z) > 0.8 && Math.hypot(x + 1.9, z + 2.2) > 0.5 && Math.hypot(x - 1.95, z + 1.35) > 0.4
+    for (const [x, z] of edgePoints(lowSdf, -4, 4, FALLS_Z, 4, 0.34, keep)) {
+      // (Smaller toward the camera: big stones there would crowd the bottom of the picture.)
+      const rr = (0.07 + r() * 0.08) * (z > -0.8 ? 0.6 : 1)
+      const [ox, oz] = outward(lowSdf, x, z)
+      stone(x + ox * rr * 0.35, 0.025, z + oz * rr * 0.35, rr, STONES[Math.floor(r() * STONES.length)], r() * 3, rr > 0.12 && r() > 0.6)
+    }
+    for (const [x, z] of edgePoints(upSdf, -7, 7, -14, FALLS_Z - 0.8, 0.42)) {
+      const rr = 0.1 + r() * 0.12
+      const [ox, oz] = outward(upSdf, x, z)
+      stone(x + ox * rr * 0.35, TOP + 0.02, z + oz * rr * 0.35, rr, STONES[Math.floor(r() * STONES.length)], r() * 3, r() > 0.6)
+    }
     // Moss hanging over the lip.
     for (let i = 0; i < 12; i++) {
       const x = -8 + i * 1.45 + ((i * 37) % 5) * 0.08
-      if (Math.abs(x) < RW + 0.1) continue
+      if (Math.abs(x) < STEP_GAP + 0.6) continue
       rocks.push(P.sphere(0.4, i % 2 ? MOSS : MOSS_DARK, { at: [x, TOP - 0.15, FALLS_Z + 0.05], scale: [1.2, 0.7, 0.5] }, 8))
     }
-    root.add(solid(merge(ground), bag, 0), solid(merge(rocks), bag, 1.6))
+    root.add(solid(merge(ground), bag, 0), solid(merge(rocks), bag, 1.5))
+    // Pebbles on the shore (too small for an ink line).
+    const pebbles: BufferGeometry[] = []
+    for (const [x, z] of edgePoints(lowSdf, -4, 4, FALLS_Z + 0.4, 4, 0.16, keep)) {
+      const [ox, oz] = outward(lowSdf, x, z)
+      const off = 0.06 + r() * 0.1
+      pebbles.push(P.sphere(0.025 + r() * 0.025, STONES[Math.floor(r() * STONES.length)], { at: [x + ox * off, 0.045, z + oz * off], scale: [1, 0.55, 0.8] }, 7))
+    }
+    root.add(solid(merge(pebbles), bag, 0))
 
-    // ---- The water: the pool and the river going off toward the camera, the upper river, the falls between.
-    root.add(
-      solid(
-        merge([
-          P.box(RW * 2, 0.6, 40, WATER, { at: [0, -0.28, FALLS_Z + 20] }),
-          P.box(RW * 2 - 0.4, 0.02, 3.2, WATER_DEEP, { at: [0, 0.03, FALLS_Z + 2] }),
-          P.box(RW * 2, 0.5, 40, WATER, { at: [0, TOP - 0.23, FALLS_Z - 20.05] }),
-          P.box(RW * 2, TOP + 0.02, 0.16, FALLS, { at: [0, TOP / 2, FALLS_Z + 0.12] }),
-          P.cyl(RW * 1.02, RW * 1.02, 0.05, FALLS, { at: [0, TOP - 0.03, FALLS_Z + 0.08], scale: [1, 1, 0.12] }, 16),
-        ]),
-        bag,
-        1.6,
-      ),
-    )
-    // The still water in front of her bath: a calm round of pool that glows like a mirror when it's time.
+    // ---- The water: the pool and the river (one shader), the falls over the lip, the foam at its foot.
+    const water = makeWater(bag, WATER_Y, TOP + 0.03, MIRROR)
+    root.add(...water.meshes)
+    const falls = makeFalls(bag, [{ x: 0, half: 1.52, zStart: FALLS_Z - 0.7, y: TOP + 0.045, zLip: FALLS_Z - 0.46, r: 0.2, yEnd: 0, bow: 0.32 }])
+    root.add(falls.mesh)
+    // The still water in front of her bath (the shader draws it calm): it glows like a mirror when it's time.
     const mirror = new Group()
-    const still = solid(merge([P.cyl(MIRROR.r, MIRROR.r, 0.012, '#8FD0E8', {}, 40), P.cyl(MIRROR.r * 0.72, MIRROR.r * 0.72, 0.014, '#A8DCF0', { at: [0, 0.002, 0] }, 40)]), bag, 0)
     const glowMat = bag.add(new MeshBasicMaterial({ color: '#FFF3B8', transparent: true, opacity: 0, depthWrite: false, fog: false }))
     const glow = new Mesh(bag.add(new RingGeometry(MIRROR.r * 0.88, MIRROR.r * 1.05, 48)), glowMat)
     glow.rotation.x = -Math.PI / 2
@@ -215,35 +292,40 @@ export function buildRiver(bag: Bag, root: Group): RiverSet {
     const shine = new Mesh(bag.add(new CircleGeometry(MIRROR.r * 0.86, 48)), bag.add(new MeshBasicMaterial({ color: '#FFFFFF', transparent: true, opacity: 0, depthWrite: false, fog: false })))
     shine.rotation.x = -Math.PI / 2
     shine.position.y = 0.018
-    mirror.add(still, shine, glow)
+    mirror.add(shine, glow)
     mirror.position.set(MIRROR.x, 0.028, MIRROR.z)
     mirror.scale.z = 0.7
     root.add(mirror)
 
-    // White streaks running down the falls (they loop), and the foam at its foot.
-    const streaks: Object3D[] = []
-    for (let i = 0; i < 16; i++) {
-      const st = solid(P.rbox(0.07, 0.42 + (i % 3) * 0.12, 0.03, 0.03, '#FFFFFF'), bag, 0)
-      st.position.set(-RW + 0.15 + ((i * 0.53) % (RW * 2 - 0.3)), (i * 0.37) % TOP, FALLS_Z + 0.22)
-      root.add(st)
-      streaks.push(st)
+    // Foam churning at the falls' foot, sparkles in its spray, dust motes floating in the sunbeams.
+    const pr = rng(11)
+    const puffs: Puff[] = []
+    for (let i = 0; i < 30; i++) {
+      const sz = 0.27 + pr() * 0.22
+      puffs.push([-1.38 + (i / 29) * 2.76 + (pr() - 0.5) * 0.08, 0.04 + sz * 0.15, FALLS_Z + 0.14 + pr() * 0.1, pr(), sz, 0, 0.35 + pr() * 0.25])
     }
-    const foam = solid(
-      merge(Array.from({ length: 11 }, (_, i) => P.sphere(0.24 + (i % 3) * 0.06, '#FFFFFF', { at: [-RW + 0.2 + i * 0.3, 0.04, FALLS_Z + 0.35 + (i % 2) * 0.18], scale: [1, 0.45, 0.8] }, 10))),
-      bag,
-      1.2,
-    )
+    for (let i = 0; i < 12; i++) puffs.push([-1.3 + pr() * 2.6, 0.08, FALLS_Z + 0.45 + pr() * 0.2, pr(), 0.15 + pr() * 0.1, 0, 0.4])
+    for (let i = 0; i < 22; i++) puffs.push([-1.5 + pr() * 3, 0.15 + pr() * 0.3, FALLS_Z + 0.3 + pr() * 0.3, pr(), 0.09 + pr() * 0.07, 1, 1 + pr() * 0.8])
+    for (let i = 0; i < 34; i++) puffs.push([-4 + pr() * 8, 0.7 + pr() * 3.2, -6 + pr() * 3.6, pr(), 0.035 + pr() * 0.035, 2, 0])
+    const spray = makePuffs(bag, puffs)
+    const foam = new Group()
+    foam.add(spray.mesh)
     root.add(foam)
-    // Little white lines of foam drifting down the pool toward the camera.
-    for (let i = 0; i < 8; i++) {
-      // (A pale streak on the water, not a white plank lying on it.)
-      const st = solid(P.rbox(0.34, 0.008, 0.045, 0.02, '#D4EEF6'), bag, 0)
-      st.position.set(-1.1 + ((i * 0.71) % 2.2), 0.04, FALLS_Z + 1 + i * 1.6)
-      root.add(st)
-      streaks.push(st)
-    }
+    // Soft sunbeams slanting down through the cedars.
+    const beams = makeBeams(
+      bag,
+      [
+        [-1.5, TOP, -5.8, 0.9, 2.4, 15],
+        [0.9, TOP, -7.4, 1.3, 3, 16],
+        [3.1, TOP, -5.2, 0.7, 2, 14],
+        [-3.7, 0, -2.4, 0.8, 2.2, 14],
+      ],
+      [-0.42, 1, -0.3],
+    )
+    root.add(beams.mesh)
+    const streaks: Object3D[] = []
 
-    // ---- The forest: giant cedars, ferns, berry bushes, a mossy log.
+    // ---- The forest: giant cedars, ferns, berry bushes, skunk cabbages, wildflowers, lily pads, a mossy log.
     const trees = [
       ...cedar(-6.2, 0, -0.5, 26, 0.95),
       ...cedar(6.4, 0, 0.6, 24, 1.05),
@@ -262,7 +344,7 @@ export function buildRiver(bag: Bag, root: Group): RiverSet {
       ...fern(-2.4, 2.2, 1.1),
       ...fern(-4.8, 0.8),
       ...fern(-3.2, 4.6, 1.2),
-      ...fern(2.5, 0.4, 1.1),
+      ...fern(2.6, 0.5, 1.1),
       ...fern(3.4, 3.4),
       ...fern(-6.3, 3.2, 1.3),
       ...fern(5.6, 5),
@@ -273,27 +355,49 @@ export function buildRiver(bag: Bag, root: Group): RiverSet {
       ...bush(-4.4, -1.4, 1.1),
       ...bush(-5.6, 1.8, 0.9),
       ...bush(4.3, -1.6, 0.95),
+      ...skunk(-2.85, -1.25, 1.1),
+      ...skunk(2.75, -1.05, 0.95),
+      ...skunk(-3.35, -0.1, 1.2),
+      ...skunk(2.1, -3.75, 0.9, TOP),
       // The mossy log on the right bank.
       P.cyl(0.28, 0.28, 3, BARK_DARK, { at: [4.4, 0.25, 2], rot: [0, 0.5, Math.PI / 2] }, 10),
       P.sphere(0.6, MOSS, { at: [4.4, 0.48, 2], rot: [0, 0.5, 0], scale: [2.2, 0.35, 0.6] }, 10),
+      // Lily pads at the pool's quiet edges, a pink water lily on one.
+      ...LILIES.map(([x, z, rr, a]) => bake(new CylinderGeometry(rr, rr, 0.012, 20, 1, false, a, Math.PI * 2 - 0.55), LEAF, { at: [x, WATER_Y + 0.008, z] }, true)),
+      ...[0, 1, 2, 3, 4, 5].map((k) => P.sphere(0.04, k % 2 ? '#FF9EC4' : '#FFC2DA', { at: [LILIES[1][0] + Math.cos(k * 1.05) * 0.035, WATER_Y + 0.04, LILIES[1][1] + Math.sin(k * 1.05) * 0.035], rot: [0, -k * 1.05, 0.7], order: 'YZX', scale: [1, 0.45, 0.6] }, 7)),
+      P.sphere(0.025, '#FFD95A', { at: [LILIES[1][0], WATER_Y + 0.05, LILIES[1][1]] }, 6),
     ]
     root.add(solid(merge(plants), bag, 1.4))
+    root.add(
+      solid(
+        merge([
+          ...flowers(-2.35, -0.75, 6, 0, 1),
+          ...flowers(-2.95, -2.0, 5, 0, 2),
+          ...flowers(2.35, -0.6, 6, 0, 3),
+          ...flowers(-2.3, -3.85, 5, TOP, 4),
+          ...flowers(2.85, -3.7, 5, TOP, 5),
+          ...flowers(-3.9, -0.9, 4, 0, 6),
+        ]),
+        bag,
+        1,
+      ),
+    )
 
-    // ---- Mist round the falls, rain all about.
+    // ---- Mist round the falls, a light sparkly drizzle.
     const puff = bag.add(softTexture(64, 64, [255, 255, 255], (x, y) => radialAlpha(Math.hypot(x - 32, y - 32), 32, [[0, 0.75], [0.55, 0.35], [1, 0]])))
     const mist: Sprite[] = []
     for (let i = 0; i < 9; i++) {
-      const sp = new Sprite(bag.add(new SpriteMaterial({ map: puff, transparent: true, opacity: 0.32, depthWrite: false, fog: false })))
+      const sp = new Sprite(bag.add(new SpriteMaterial({ map: puff, transparent: true, opacity: 0.2, depthWrite: false, fog: false })))
       const sz = 2.2 + (i % 3) * 0.8
       sp.scale.set(sz * 1.5, sz, 1)
       sp.position.set(-2.4 + i * 0.6, 0.4 + (i % 3) * 0.35, FALLS_Z + 0.5 + (i % 4) * 0.5)
       root.add(sp)
       mist.push(sp)
     }
-    const N = 260
+    const N = 60
     const rg = bag.add(new BufferGeometry())
     rg.setAttribute('position', new Float32BufferAttribute(new Float32Array(N * 6), 3))
-    const rain = new LineSegments(rg, bag.add(new LineBasicMaterial({ color: '#E8F4FF', transparent: true, opacity: 0.4, depthWrite: false, blending: AdditiveBlending, fog: false })))
+    const rain = new LineSegments(rg, bag.add(new LineBasicMaterial({ color: '#FFFFFF', transparent: true, opacity: 0.22, depthWrite: false, blending: AdditiveBlending, fog: false })))
     rain.frustumCulled = false
     root.add(rain)
 
@@ -380,6 +484,16 @@ export function buildRiver(bag: Bag, root: Group): RiverSet {
       mist,
       rain,
       splash: { g: splashG, t: 9 },
+      wade: { x: BATH.x, z: BATH.z, k: 1 },
+      fx: {
+        update(t) {
+          water.update(t)
+          falls.update(t)
+          spray.update(t)
+          beams.update(t)
+        },
+        wade: (x, z, k) => water.wade(x, z, k),
+      },
     }
     return live
   }
@@ -389,17 +503,9 @@ export function buildRiver(bag: Bag, root: Group): RiverSet {
 export function updateRiver(set: RiverSet, dt: number, t: number, camera: Camera, splash: (x: number, y: number, z: number, n: number) => void) {
   {
     set.now = t
-    // The falls run, the foam heaves, the mist drifts.
-    for (const [i, st] of set.streaks.entries()) {
-      if (i < 16) {
-        st.position.y -= dt * (2.4 + (i % 4) * 0.4)
-        if (st.position.y < 0.15) st.position.y = TOP - 0.1
-      } else {
-        st.position.z += dt * 0.9
-        if (st.position.z > FALLS_Z + 14) st.position.z = FALLS_Z + 1
-      }
-    }
-    set.foam.scale.set(1, 1 + Math.sin(t * 7) * 0.12, 1)
+    // The water, the falls, the foam and the light move in their shaders; the mist drifts.
+    set.fx.update(t)
+    set.fx.wade(set.wade.x, set.wade.z, set.wade.k)
     for (const [i, m] of set.mist.entries()) {
       m.position.x += Math.sin(t * 0.3 + i) * dt * 0.15
       m.position.y = 0.4 + (i % 3) * 0.35 + Math.sin(t * 0.5 + i * 1.3) * 0.12
@@ -457,7 +563,7 @@ export function updateRiver(set: RiverSet, dt: number, t: number, camera: Camera
     const pos = set.rain.geometry.attributes.position as Float32BufferAttribute
     const a = pos.array as Float32Array
     for (let i = 0; i < a.length; i += 6) {
-      let y = a[i + 1] - dt * 9
+      let y = a[i + 1] - dt * 6
       if (y < cy - 5 || Math.abs(a[i] - cx) > 7 || Math.abs(a[i + 2] - cz) > 7 || a[i + 1] === 0) {
         a[i] = cx + (Math.random() - 0.5) * 13
         a[i + 2] = cz + (Math.random() - 0.5) * 13
@@ -467,7 +573,7 @@ export function updateRiver(set: RiverSet, dt: number, t: number, camera: Camera
       }
       a[i + 1] = y
       a[i + 3] = a[i] - 0.03
-      a[i + 4] = y + 0.24
+      a[i + 4] = y + 0.16
       a[i + 5] = a[i + 2]
     }
     pos.needsUpdate = true
