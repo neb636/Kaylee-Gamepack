@@ -469,9 +469,10 @@ function buildStream(flow: RiverMaterial, bag: Bag) {
       const ring = (p: CreekPoint, k: number) => [p.x + side * p.sx * p.w * k, Math.max(p.y - 0.08, landY(p.x + side * p.sx * p.w * k, p.z + side * p.sz * p.w * k) + 0.2) - (k < 1.2 ? 0.06 : 0), p.z + side * p.sz * p.w * k]
       const quad = [ring(a, 0.8), ring(b, 0.8), ring(a, 1.75), ring(b, 0.8), ring(b, 1.75), ring(a, 1.75)]
       const cols = [wet, wet, dry, wet, dry, dry]
+      // (Wound to face up: the sideways vector is (-t.z, t.x), so the left bank keeps this order and the right flips it.)
       quad.forEach((q, j) => {
-        bed.push(...(side > 0 ? q : quad[[0, 2, 1, 3, 5, 4][j]]))
-        const c = side > 0 ? cols[j] : cols[[0, 2, 1, 3, 5, 4][j]]
+        bed.push(...(side < 0 ? q : quad[[0, 2, 1, 3, 5, 4][j]]))
+        const c = side < 0 ? cols[j] : cols[[0, 2, 1, 3, 5, 4][j]]
         bedC.push(c.r, c.g, c.b)
       })
     }
