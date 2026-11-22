@@ -1,7 +1,7 @@
 {
   "title": "Monty the moose",
   "checkIn": "Fix",
-  "kaylee": "Monty has broad, swept-back antlers, soft ears and a long smiling muzzle when he looks up from his bath.",
+  "kaylee": "Monty has broad, swept-back antlers, soft ears and a shorter, gently rounded muzzle when he looks up from his bath.",
   "pictures": [
     {"title":"Face to face","before":"pics/front-before.jpg","after":"pics/front-after.jpg"},
     {"title":"In profile","before":"pics/profile-before.jpg","after":"pics/profile-after.jpg"}
