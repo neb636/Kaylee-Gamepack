@@ -55,7 +55,7 @@ export interface MapEvents extends LegEvents {
 
 /** The box the map's camera frames: the board, its tray (as diorama.ts builds it) and the towers on it. */
 const BOARD_BOX = trayBox(BOARD.x1 - BOARD.x0, BOARD.z1 - BOARD.z0, 0.07, 0.95, 0.2, 0.55)
-export const BANGKOK_CAM = mapCamKnobs('bangkok-map-cam', 'Bangkok map camera', 'src/world/places/thailand/activities/hub/bangkok/map3d.ts', { yaw: -6, pitch: -8, zoom: 0.9 })
+export const BANGKOK_CAM = mapCamKnobs('bangkok-map-cam', 'Bangkok map camera', 'src/world/places/thailand/activities/hub/bangkok/map3d.ts', { yaw: -6, pitch: -8, zoom: 0.9 }, { sections: ['bangkok'] })
 
 const SPOT_LABELS: Record<SpotId, string> = {
   asiatique: "Asiatique's big wheel",

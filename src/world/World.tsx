@@ -61,7 +61,7 @@ export function World({ place, activity, section, params = {} }: { place?: strin
       )}
       {feel && (
         <Suspense fallback={null}>
-          <FeelLab />
+          <FeelLab place={place!} />
         </Suspense>
       )}
     </div>
