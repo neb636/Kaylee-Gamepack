@@ -86,7 +86,7 @@ const PAJERO_FEEL: Feel = { top: 9.5 * ZOOM, boost: 1.2, accel: 4 * ZOOM, coast:
  *  trackpad, then 4.2 m/s with 0.3 s smoothing too sluggish (2026-10-26). These are his, tuned by hand in the lab after
  *  five setups (2026-10-27): quick and direct (6.5 m/s, 0.08 s), a wider dead middle and a bigger wheel to forgive
  *  her, a planted car (grip 13) and a faster road. */
-const STEER = knobs('steer', 'Steering', 'src/world/places/thailand/activities/nan-trip/drive/mountain.ts', {
+const STEER = knobs('driveSteer', 'Steering', 'src/world/places/thailand/activities/nan-trip/drive/mountain.ts', {
   slide: { value: 6.5, min: 1, max: 12, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides the car across the road' },
   reach: { value: 1.2, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)' },
   dead: { value: 0.15, min: 0, max: 0.4, step: 0.01, label: 'Dead middle', note: 'share of the wheel near the middle that counts as straight' },

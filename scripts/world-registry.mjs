@@ -42,7 +42,8 @@ export async function loadWorld() {
         ...(meta.inTheWorks ?? []).map((a) => ({ ...a, kind: 'works' })),
         { id: FINALE, name: 'Finale', icon: '🎉', kind: 'finale' },
       ].map((a) => ({ id: a.id, name: a.name, icon: a.icon, kind: a.kind, sections: find(a.id) }))
-      places.push({ id, name: meta.name, emoji: meta.emoji, createdAt: meta.createdAt, activities })
+      // `defs`: every activity's sections, also the toys that aren't in meta (the Team Cabin opens from the map).
+      places.push({ id, name: meta.name, emoji: meta.emoji, createdAt: meta.createdAt, activities, defs: defs.filter((d) => d.place === id) })
     }
     return places.sort((a, b) => a.createdAt.localeCompare(b.createdAt))
   } finally {

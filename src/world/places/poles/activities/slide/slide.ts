@@ -46,7 +46,7 @@ import { TO_DEG } from '../../../../../sdk/math'
 
 const FILE = 'src/world/places/poles/activities/slide/slide.ts'
 /** The finger wheel: Dad's numbers from the Nan drive's feel lab (2026-10-27), as the start for a penguin on ice. */
-const STEER = knobs('steer', 'Steering', FILE, {
+const STEER = knobs('slideSteer', 'Steering', FILE, {
   slide: { value: 6.5, min: 1, max: 12, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides him across the slope' },
   reach: { value: 1.2, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)' },
   dead: { value: 0.15, min: 0, max: 0.4, step: 0.01, label: 'Dead middle', note: 'share of the wheel near the middle that counts as straight' },

@@ -43,13 +43,13 @@ const SPIN = knobs('globe', 'Spin the globe', FILE, {
   settle: { value: 7, min: 1, max: 20, step: 0.5, label: 'Settle speed', unit: '/s', note: 'how quickly it settles on a pole or back to the middle after she lets go' },
   stretch: { value: 0.3, min: 0, max: 1, step: 0.05, label: 'Past the pole', note: 'how far she can pull past straight down on a pole (a rubber band)' },
   idle: { value: 0.06, min: 0, max: 0.5, step: 0.01, label: 'Idle spin', unit: 'rad/s', note: 'the Earth turning by itself when nobody holds it' },
-})
+}, { activity: 'hub', sections: ['globe'] })
 /** How the sun feels. */
 const SUN = knobs('sun', 'Drag the sun', FILE, {
   tilt: { value: 23.4, min: 10, max: 45, step: 0.1, label: "Earth's tilt", unit: '°', note: 'how far up or down the sun goes (the real Earth: 23.4°)' },
   follow: { value: 0.08, min: 0, max: 0.5, step: 0.01, label: 'Sun smoothing', unit: 's', note: 'how closely the sun follows her finger (0 = stuck to it)' },
   season: { value: 1, min: 0.2, max: 4, step: 0.1, label: 'Season change', unit: 's', note: 'how long the ice, the snow and the night take to catch up with the sun' },
-})
+}, { activity: 'hub', sections: ['sun'] })
 
 export type Side = 'middle' | 'north' | 'south'
 export interface GlobeStart {
