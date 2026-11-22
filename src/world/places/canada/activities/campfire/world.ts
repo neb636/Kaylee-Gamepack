@@ -1116,6 +1116,8 @@ export class FlashlightStatues implements World3D {
       }, i * 450),
     )
     this.lastNew = this.time
+    // (The line at the bottom goes back to what to do: not "It's on fire!" from the last one.)
+    this.events.line(T.marshmallow)
     this.events.stars({ done: this.starCount(), of: this.orders.length })
   }
   private starCount() {
