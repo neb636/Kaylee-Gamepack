@@ -365,7 +365,6 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const eyesPlain: Parts = []
   const rest: Parts = []
   const beaverBrows: Group[] = []
-  const muzzle: Parts = []
   /** A unicorn's locks, which swing in the wind (their own group on the head). */
   const locks: Parts = []
   /** Where the mouth is (head-local): the resting mouth and the talking one are built around it. */
@@ -851,7 +850,8 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
         brow.position.set(...on(bx, 0.39 * R, 0.035 * R))
         brow.add(solidMix([], [P.torus(0.148 * R, 0.033 * R, look.dark, { rot: [-0.46, turnTo(bx)[1], 0.52 - s * 0.18] }, Math.PI - 1.04)], bag, 0))
         beaverBrows.push(brow)
-        muzzle.push(P.sphere(0.26 * R, look.light, { at: [s * 0.165 * R, headY - 0.175 * R, 0.97 * R], rot: [0, s * 0.23, s * 0.16], scale: [1.03, 0.85, 0.69] }, 32))
+        // The muzzle pads stay put on the face (only the grin and, a little, the brows move when she talks).
+        headPlain.push(P.sphere(0.26 * R, look.light, { at: [s * 0.165 * R, headY - 0.175 * R, 0.97 * R], rot: [0, s * 0.23, s * 0.16], scale: [1.03, 0.85, 0.69] }, 32))
       }
       headPlain.push(P.sphere(0.175 * R, '#4D3329', { at: [0, headY - 0.036 * R, 1.115 * R], scale: [1.08, 0.78, 0.74] }, 30))
       headPlain.push(P.sphere(0.032 * R, '#D7B79C', { at: [-0.055 * R, headY + 0.018 * R, 1.224 * R], scale: [1.45, 0.64, 0.38] }))
@@ -1135,22 +1135,20 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   headPivot.add(eyeGroup, mouthGroup, talk)
   let expression: Rig['expression']
   if (beaverBrows.length) {
-    const pads = solidMix([], muzzle, bag, 0)
-    headPivot.add(pads, ...beaverBrows)
+    headPivot.add(...beaverBrows)
     const browHeight = beaverBrows[0].position.y
     expression = (level) => {
-      // One smile, anchored at the upper lip. The cheeks lift and the brows
-      // lead the expression on accented vowels and when she raises a paw.
+      // One smile, anchored at the upper lip: it opens only a little (wide open read as yelling, 2026-11-21). The
+      // muzzle stays still; the brows lift just a touch on accented vowels and when she raises a paw.
       const accent = Math.sqrt(level)
-      mouthGroup.scale.set(1 - 0.22 * level, 0.86 + 1.12 * level, 1)
-      pads.position.y = 0.044 * R * accent
+      mouthGroup.scale.set(1 - 0.08 * level, 0.86 + 0.38 * level, 1)
       for (let i = 0; i < beaverBrows.length; i++) {
         const side = i === 0 ? -1 : 1
         const gesture = Math.min(1, Math.abs((i === 0 ? armL : armR).rotation.z) / 2.3)
-        const lift = accent * (i === 0 ? 0.076 : 0.052) + gesture * 0.10
+        const lift = accent * (i === 0 ? 0.022 : 0.016) + gesture * 0.04
         beaverBrows[i].position.y = browHeight + lift * R
         beaverBrows[i].position.z = on(side * eyeX, 0.39 * R + lift * R, 0.035 * R)[2]
-        beaverBrows[i].rotation.z = side * (-0.15 * accent - 0.23 * gesture)
+        beaverBrows[i].rotation.z = side * (-0.04 * accent - 0.08 * gesture)
       }
     }
   }

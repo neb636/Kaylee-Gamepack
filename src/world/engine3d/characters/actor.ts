@@ -291,16 +291,18 @@ export class FilmActor {
     if (f) {
       f.t += dt / 1.5
       const k = f.hold ? Math.min(1, f.t * 3) : bell(Math.min(1, f.t * 1.25))
+      // A sculpted face (Maple's grin under her teeth) changes its mouth only a little: stretched wide it reads as a yell.
+      const m = r.expression ? 0.3 * k : k
       if (f.kind === 'sad') {
         r.eyes.scale.y = Math.min(r.eyes.scale.y, 1 - k * 0.5)
-        r.mouth.scale.set(1 - k * 0.35, 1 - k * 0.55, 1)
+        r.mouth.scale.set(1 - m * 0.35, 1 - m * 0.55, 1)
       } else if (f.kind === 'wow') {
         r.eyes.scale.y = 1 + k * 0.28
-        r.mouth.scale.set(1 - k * 0.3, 1 + k * 0.7, 1)
+        r.mouth.scale.set(1 - m * 0.3, 1 + m * 0.7, 1)
         nod -= k * 0.16
       } else {
         r.eyes.scale.y = Math.max(0.2, 1 - k * 0.75)
-        r.mouth.scale.setScalar(1 + k * 0.45)
+        r.mouth.scale.setScalar(1 + m * 0.45)
         tilt += Math.sin(f.t * 9) * 0.12 * k
       }
       if (f.t >= 1 && !f.hold) {
