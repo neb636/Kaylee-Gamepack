@@ -1,0 +1,14 @@
+{
+  "title": "Campfire Night: the flashlight fits the phone",
+  "checkIn": "fix",
+  "kaylee": "On a phone, the flashlight now lights one animal at a time, like on the Mac, instead of half the clearing.",
+  "questions": [],
+  "pictures": [
+    { "title": "iPhone, light on the owl", "before": "pics/phone-before.jpg", "after": "pics/phone-after.jpg", "caption": "Before, one spot lit the owl, moose, frog and beaver together. Now it lights just the owl." },
+    { "title": "Mac, the same spot", "before": "pics/mac-before.jpg", "after": "pics/mac-after.jpg", "caption": "The Mac's light is the same size as before." }
+  ],
+  "links": [
+    { "label": "Who's out there? (try it on your phone)", "hash": "#/world/canada/campfire/eyes" },
+    { "label": "Feel lab: Light size", "hash": "#/world/canada/campfire/statues?feel=1" }
+  ]
+}
