@@ -3,10 +3,10 @@
 // green rainforest coast beyond them), with little lakes and rivers, spruce woods, a ridge of chunky snow-capped toy
 // peaks, the neighbours as low cream paper, the sea that foams softly along every shore, and the toy tray it sits in.
 // world.ts makes things move. (The sea's shader is the Thailand map's idea, kept here so Canada stands on its own.)
-import { BufferAttribute, BufferGeometry, CanvasTexture, Color, DataTexture, DataUtils, Group, HalfFloatType, LinearFilter, Mesh, MeshToonMaterial, PlaneGeometry, RedFormat, ShaderMaterial, SRGBColorSpace } from 'three'
+import { BufferAttribute, BufferGeometry, CanvasTexture, Color, ConeGeometry, DataTexture, DataUtils, Group, HalfFloatType, LinearFilter, Mesh, MeshToonMaterial, PlaneGeometry, RedFormat, ShaderMaterial, SRGBColorSpace } from 'three'
 import { trayParts } from '../../../engine3d/board'
 import type { Bag } from '../../../engine3d/dispose'
-import { merge, P, solid } from '../../../engine3d/geo'
+import { bake, merge, P, solid } from '../../../engine3d/geo'
 import { toonGradient } from '../../../engine3d/toon'
 import { BOARD, fromRockies, LEVEL, PLACES, PRAIRIE, wobble, type Field, type XZ } from './shape'
 
@@ -320,23 +320,64 @@ export function buildTray(bag: Bag): Group {
   return solid(merge(trayParts(TRAY.w, TRAY.d, TRAY.top, TRAY.rim, TRAY.k)), bag, 2)
 }
 
-/** A chunky spruce, `s` tall, standing on (x, y, z). */
-export function spruceParts(x: number, y: number, z: number, s: number, dark = false) {
-  const a = dark ? '#3F8F66' : '#4FA673'
-  const b = dark ? '#357E5A' : '#418F64'
+/** A chunky spruce, `s` tall, standing on (x, y, z): three drooping tiers, each a shade lighter going up; `snow` dusts
+ *  each tier's tip white (the snowy places: Quebec's cliff, Ottawa's bank). `turn` spins it so a wood isn't all alike. */
+export function spruceParts(x: number, y: number, z: number, s: number, dark = false, snow = false, turn = 0) {
+  const [a, b, c] = dark ? ['#2F7A57', '#37865F', '#409269'] : ['#3E8F62', '#48A06C', '#55AE78']
+  const at = (h: number): [number, number, number] => [x, y + s * h, z]
+  const rot: [number, number, number] = [0, turn, 0]
+  const parts = [
+    P.cyl(s * 0.045, s * 0.06, s * 0.18, '#8A6248', { at: at(0.09) }, 6),
+    P.cone(s * 0.34, s * 0.4, a, { at: at(0.36), rot }, 8),
+    P.cone(s * 0.27, s * 0.36, b, { at: at(0.58), rot }, 8),
+    P.cone(s * 0.19, s * 0.32, c, { at: at(0.8), rot }, 8),
+  ]
+  if (snow) parts.push(P.cone(s * 0.1, s * 0.17, '#FFFFFF', { at: at(0.885), rot }, 8))
+  return parts
+}
+
+/** A round maple, `s` tall, its crown a cluster of three puffs in fall colours (red, orange or gold by `tone`). */
+export function mapleParts(x: number, y: number, z: number, s: number, tone: number) {
+  const [a, b] = [['#EE6A55', '#F5826A'], ['#F28C45', '#F7A35E'], ['#F2B93F', '#F7CB62']][((tone % 3) + 3) % 3]
   return [
-    P.cyl(s * 0.05, s * 0.06, s * 0.2, '#8A6248', { at: [x, y + s * 0.1, z] }, 5),
-    P.cone(s * 0.3, s * 0.5, b, { at: [x, y + s * 0.42, z] }, 7),
-    P.cone(s * 0.22, s * 0.42, a, { at: [x, y + s * 0.72, z] }, 7),
+    P.cyl(s * 0.05, s * 0.07, s * 0.42, '#8A6248', { at: [x, y + s * 0.21, z] }, 6),
+    P.sphere(s * 0.26, a, { at: [x, y + s * 0.58, z] }, 8),
+    P.sphere(s * 0.19, b, { at: [x + s * 0.17, y + s * 0.5, z + s * 0.08] }, 7),
+    P.sphere(s * 0.18, b, { at: [x - s * 0.14, y + s * 0.72, z - s * 0.06] }, 7),
   ]
 }
 
-/** The rocky peak: a chunky lavender-grey cone with a white snowcap. */
+/** A snowcap that sits over a cone r wide and h tall (its top `k` of the height): `seg` is twice the rock's, so every
+ *  rock edge gets a long drip of snow and the faces between get short ones, like icing down a cake. */
+export function snowCap(r: number, h: number, k: number, seg: number, color: string, at: [number, number, number], turn: number) {
+  const hc = h * k
+  const g = new ConeGeometry(r * k * 1.07, hc * 1.04, seg, 1, true)
+  const pos = g.attributes.position
+  for (let i = 0; i < pos.count; i++) {
+    const y = pos.getY(i)
+    if (y > 0) continue
+    const x = pos.getX(i)
+    const z = pos.getZ(i)
+    const j = Math.round(((Math.atan2(x, z) / (Math.PI * 2) + 1) % 1) * seg) % seg
+    // Toward the top by f: the short drips between the long ones, each a little different.
+    const f = j % 2 ? 0.32 + 0.14 * Math.abs(Math.sin(j * 12.9 + turn * 7)) : 0.04 * Math.abs(Math.sin(j * 3.1 + turn))
+    pos.setXYZ(i, x * (1 - f), y + hc * 1.04 * f, z * (1 - f))
+  }
+  g.computeVertexNormals()
+  return bake(g, color, { at: [at[0], at[1] + h - (hc * 1.04) / 2 + 0.004, at[2]], rot: [0, turn, 0] }, true)
+}
+
+/** The rocky peak: a chunky lavender cone, a lower shoulder beside it, and a white snowcap that drips down its edges. */
 export function peakParts(x: number, y: number, z: number, r: number, h: number, turn = 0) {
+  const side = Math.sin(turn * 5.3) > 0 ? 1 : -1
+  const sx = x + Math.cos(turn) * r * 0.62 * side
+  const sz = z + Math.sin(turn) * r * 0.3 + r * 0.12
   return [
     P.cone(r, h, '#BBAFDB', { at: [x, y + h / 2, z], rot: [0, turn, 0] }, 6),
-    P.cone(r * 0.48, h * 0.48, '#FFFFFF', { at: [x, y + h * 0.765, z], rot: [0, turn, 0] }, 6),
-    P.cone(r * 0.6, h * 0.12, '#F3F1FF', { at: [x, y + h * 0.53, z], rot: [0, turn, 0] }, 6),
+    snowCap(r, h, 0.5, 12, '#FFFFFF', [x, y, z], turn),
+    // The shoulder: a smaller peak leaning on the big one, with its own little cap.
+    P.cone(r * 0.62, h * 0.56, '#C8BEE4', { at: [sx, y + h * 0.28, sz], rot: [0, turn + 0.5, 0] }, 6),
+    snowCap(r * 0.62, h * 0.56, 0.36, 12, '#F7F6FF', [sx, y, sz], turn + 0.5),
   ]
 }
 
@@ -360,12 +401,22 @@ export function buildScenery(field: Field, bag: Bag) {
     const big = i % 3 !== 1
     const r = big ? 0.36 : 0.27
     const h = big ? 0.85 + rnd() * 0.15 : 0.6
-    if (!clear(x, z, 1.1)) continue
+    // A smaller foothill beside each one, off the ridge's east side, so the range is two peaks deep.
+    const fx = x + 0.42
+    const fz = z - 0.2 + (i % 2) * 0.1
+    const turn = rnd()
+    if (clear(fx, fz, 0.95) && fz < 2.2 && field.canada(fx, fz) > 0.2) {
+      peaks.push({ x: fx, z: fz, r: 0.24, h: 0.5 })
+      parts.push(...peakParts(fx, field.height(fx, fz) - 0.02, fz, 0.24, 0.5, turn + 2))
+    }
+    // (None at the ridge's south end, where it would stand in front of Lulu's lake.)
+    if (!clear(x, z, 0.9) || z > 2.2) continue
     peaks.push({ x, z, r, h })
-    parts.push(...peakParts(x, field.height(x, z) - 0.02, z, r, h, rnd()))
+    parts.push(...peakParts(x, field.height(x, z) - 0.02, z, r, h, turn))
   }
   // The trees: a dark spruce wood over the forest band, a deeper green one on the coast.
-  for (let i = 0; i < 520 && parts.length < 1100; i++) {
+  let trees = 0
+  for (let i = 0; i < 1000 && trees < 520; i++) {
     const x = BOARD.x0 + rnd() * (BOARD.x1 - BOARD.x0)
     const z = BOARD.z0 + rnd() * (BOARD.z1 - BOARD.z0)
     const sc = field.canada(x, z)
@@ -375,8 +426,12 @@ export function buildScenery(field: Field, bag: Bag) {
     if (!clear(x, z, 1.3)) continue
     // Clumps, not an even sprinkle: more where a slow wave says so.
     if (Math.sin(x * 1.7) * Math.sin(z * 2.3 + 1) + wobble(x, z) * 0.4 < -0.1) continue
-    const s = 0.24 + rnd() * 0.12
-    parts.push(...spruceParts(x, field.height(x, z) - 0.01, z, s, rk.side < 0))
+    const s = 0.27 + rnd() * 0.13
+    const y = field.height(x, z) - 0.01
+    trees++
+    // East of the prairie the woods are mixed: now and then a maple in its fall reds and golds.
+    if (x > 0.4 && rnd() < 0.22) parts.push(...mapleParts(x, y, z, s, Math.floor(rnd() * 3)))
+    else parts.push(...spruceParts(x, y, z, s, rk.side < 0, z < snowLine(x, z) + 0.8, rnd() * 6))
   }
   group.add(solid(merge(parts), bag, 1.2))
   return { group, peaks }
