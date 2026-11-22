@@ -16,8 +16,10 @@ any 3D country's friends use it too), and `engine3d/characters/face.ts` blinks, 
 mouth with the character's voice. They wave, hop, sit, lie down, do a wai: ease into each pose (lean, settle), never
 jump between poses in one frame. See them all at `#/world/thailand/hub/family` (`?who=<id>` for one on a turntable), or inspect any of them in the
 **character lab** `#/world/characters/<id>` (`thailand/lab/`): poses, actions in slow motion with a filmstrip, every line
-in their voice, Kaylee's outfits, lineups, light, lens and a PNG export, all kept in the URL. A new 3D character or
-Look goes in `lab/catalog.ts` so it shows up there.
+in their voice, Kaylee's outfits, lineups, light, lens and a PNG export, all kept in the URL. It holds every 3D country
+(a country switcher at the top of the cast, `?country=thailand|poles|canada`, All by default). A new 3D character or
+Look goes in `lab/catalog.ts` so it shows up there; a hand-built one (no `Look`: an elephant, a goose, a snowman) gets a
+small wrapper in `lab/toys.ts`.
 
 **In 2D:** a character is a **puppet**: layered SVG whose parts (ears, eyes, mouth, arms, tail) are separate `<g>` groups
 that `usePuppet` moves every frame:
