@@ -1146,7 +1146,6 @@ export class FlashlightStatues implements World3D {
     // Heat: in the flames or just over them is hottest (the column of hot air over the fire).
     const d = Math.hypot(tip.x - CAMP.fire[0], Math.max(0, tip.y - 1.0) * 0.7 + Math.max(0, 0.3 - tip.y) * 2, (tip.z - CAMP.fire[2]) * 0.6)
     const heat = this.held ? Math.pow(clamp(1 - d / ROAST.heat), 1.2) : 0
-    this.heatNow = heat
     const ev = this.stick.update(dt, this.time, heat, ROAST)
     if (heat > 0.08 && this.time - this.sizzleAt > (camp.synthCrackle ? 0.15 : 1.3) / (0.4 + heat)) {
       this.sizzleAt = this.time
@@ -1187,8 +1186,6 @@ export class FlashlightStatues implements World3D {
     if (!this.held && this.time - this.lastTouch > HINT_S && this.sectionT > 6) this.hint(T.marshmallow)
   }
   private mouthOpen = new Set<string>()
-  /** How hot the marshmallow is just now (0..1): in the fire, it's toasting, not being handed to anybody. */
-  private heatNow = 0
   /** The wish bubbles: over their heads, glowing while the marshmallow she holds is the kind they want (a chime the
    *  moment it is); a star floating up from one just given right. */
   private updateBubbles(dt: number) {
@@ -1221,8 +1218,10 @@ export class FlashlightStatues implements World3D {
   private receiverNear(): string | null {
     let best: string | null = null
     let bd = Infinity
-    // (Over the flames it's toasting: letting go there isn't giving it to Monty behind them.)
-    if (this.heatNow > 0.25) return null
+    // (Down in the flames it's toasting: letting go there isn't giving it to Monty behind them. Higher up, over the
+    // fire, it's on Monty.)
+    const t = this.stick.tip
+    if (Math.hypot(t.x - CAMP.fire[0], Math.max(0, t.y - 0.35), t.z - CAMP.fire[2]) < 0.5) return null
     const tip = this.toScreen(this.stick.tip)
     const want = new Set(this.active().map((o) => o.who))
     for (const [id, a] of this.receivers()) {

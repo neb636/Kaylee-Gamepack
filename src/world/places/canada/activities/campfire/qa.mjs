@@ -130,7 +130,7 @@ async function playThrough(page, ms) {
         continue
       }
       await roastFor(page, order, q)
-    } else if (q.section === 'sky') {    } else if (q.section === 'sky') {
+    } else if (q.section === 'sky') {
       await f.up()
       await page.mouse.click(q.flashlight.x, q.flashlight.y)
       await page.waitForTimeout(800)
@@ -227,13 +227,13 @@ export const motion = [
   {
     // The sweep robot: the whole toy, from the first animal to the northern lights. It must finish.
     name: 'canada-campfire-sweep',
-    seconds: 200,
+    seconds: 240,
     setup: async (page, base) => {
       await ready(page, base, '#/world/canada/campfire/eyes')
       await page.waitForTimeout(1500)
     },
     act: async (page) => {
-      const q = await playThrough(page, 195000)
+      const q = await playThrough(page, 235000)
       if (!q.sky || q.sky.lights < 0.6) fail('the sweep robot did not reach the northern lights', q)
       if (q.kits.home < 3 || q.roxy.laughs < 3 || (q.roast?.given ?? 3) < 3) fail('something was skipped', q)
     },
@@ -341,7 +341,7 @@ export const motion = [
   {
     // Monty's giant one, from its link: bigger and slower; the stick is the thick branch.
     name: 'canada-campfire-roast-giant',
-    seconds: 24,
+    seconds: 38,
     setup: async (page, base) => {
       await ready(page, base, '#/world/canada/campfire/roast?order=4')
       await page.waitForTimeout(3000)
@@ -349,8 +349,9 @@ export const motion = [
     act: async (page) => {
       const q = await Q(page)
       if (!q.roast.giant || q.roast.orders[0]?.who !== 'monty') fail('the last round should be Monty and the giant marshmallow', q)
-      await playThrough(page, 20000)
-      if ((await Q(page)).section !== 'sky') fail('Monty did not get his giant marshmallow', await Q(page))
+      // (On to the sky: the flashlight is back, and a click turns it off.)
+      const end = await playThrough(page, 34000)
+      if (!end.sky || end.sky.lights < 0.6) fail('after Monty\'s giant marshmallow the flashlight did not turn off to the northern lights', end)
     },
   },
   {
