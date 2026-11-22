@@ -45,11 +45,10 @@ export function lilyPad(rig: Rig, bag: Bag): Object3D {
   return g
 }
 
-/** A shallow, slow chew between lines. FaceLife drives this same jaw during speech. */
+/** A small nod as he chews between lines. */
 export function chew(monty: FilmActor, t: number, k = 1) {
   if (!monty.root.visible || speakingVoice() === 'moose') return
   const cycle = (1 - Math.cos(t * 5.2)) / 2
-  monty.rig.chew?.(cycle * k)
   monty.rig.head.rotation.x += cycle * 0.025 * k
 }
 

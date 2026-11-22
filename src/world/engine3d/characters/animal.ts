@@ -38,8 +38,6 @@ export interface Rig {
   wave?: (progress: number) => void
   /** A sculpted face can pose its features together from the filtered voice level. */
   expression?: (level: number) => void
-  /** Idle jaw opening (0..1) for a grazing animal. */
-  chew?: (amount: number) => void
   tail: Group | null
   /** A unicorn's mane locks (down the back and sides), pivoting at the top of the back of the head: the wind swings
    *  them (Wind). */
@@ -371,7 +369,6 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const eyesPlain: Parts = []
   const rest: Parts = []
   const beaverBrows: Group[] = []
-  let mooseJaw: Group | undefined
   /** A unicorn's locks, which swing in the wind (their own group on the head). */
   const locks: Parts = []
   /** Where the mouth is (head-local): the resting mouth and the talking one are built around it. */
@@ -884,16 +881,11 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       break
     }
     case 'moose': {
-      // The high brow leads down a sloping bridge to a heavy, soft nose and a smaller lower lip.
+      // The high brow leads down a sloping bridge to a soft nose with room for his smile.
       head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [0.94, 1.04, 1] }, 26))
       head.push(P.sphere(R, look.fur, { at: [0, headY - 0.20 * R, 0.71 * R], rot: [0.46, 0, 0], scale: [0.48, 0.43, 0.51] }, 24))
-      // The lower lip pivots behind the cheek, uncovering the mouth beneath the fixed muzzle.
-      mooseJaw = pivoted([
-        P.sphere(R, look.light, { at: [0, headY - 0.64 * R, 0.81 * R], scale: [0.45, 0.22, 0.48] }, 40),
-      ], [0, headY - 0.56 * R, 0.45 * R], bag, px)
-      headPlain.push(P.sphere(R, MOUTH, { at: [0, headY - 0.62 * R, 0.84 * R], scale: [0.41, 0.19, 0.42] }, 40))
       head.push(P.sphere(R, look.light, { at: [0, headY - 0.34 * R, 0.87 * R], rot: [0.20, 0, 0], scale: [0.60, 0.42, 0.55] }, 40))
-      mouthAt = mouthPoint(-0.67 * R, 1.23 * R)
+      mouth(mouthPoint(-0.50 * R, 1.392 * R))
 
       head.push(P.sphere(0.19 * R, look.dark, { at: [0, headY - 0.96 * R, 0.38 * R], rot: [-0.25, 0, 0], scale: [0.82, 1.55, 0.82] }))
       for (const s of [-1, 1]) {
@@ -1156,22 +1148,10 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   talk.add(solidMix([], [P.sphere(0.17 * R, MOUTH, { scale: [1.1, 0.9, 0.35] }), P.sphere(0.09 * R, TONGUE, { at: [0, -0.06 * R, 0.03 * R], scale: [1.3, 0.6, 0.5] })], bag, 0))
   talk.scale.setScalar(0.001)
   talk.visible = false
+  // Lay both mouth poses along the slope below the moose's nostrils.
+  if (look.species === 'moose') mouthGroup.rotation.x = talk.rotation.x = 0.36
   headPivot.add(eyeGroup, mouthGroup, talk)
   let expression: Rig['expression']
-  let chew: Rig['chew']
-  if (mooseJaw) {
-    const jaw = mooseJaw
-    jaw.position.sub(mouthGroup.position)
-    mouthGroup.add(jaw)
-    let speechAngle = 0
-    expression = (level) => {
-      speechAngle = 0.32 * level
-      jaw.rotation.x = speechAngle
-    }
-    chew = (amount) => {
-      jaw.rotation.x = Math.max(speechAngle, 0.13 * amount)
-    }
-  }
   if (beaverBrows.length) {
     headPivot.add(...beaverBrows)
     const browHeight = beaverBrows[0].position.y
@@ -1223,7 +1203,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     tailGroup = pivoted(tail, look.species === 'unicorn' ? [0, 0.29 * H, -0.15 * H] : tailRoot, bag, px, tailPlain)
     body.add(tailGroup)
   }
-  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, expression, chew, open: (!!look.open || look.smile === 'teeth') && rest.length > 0, beak, armL, armR, tail: tailGroup, mane: maneGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
+  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, expression, open: (!!look.open || look.smile === 'teeth') && rest.length > 0, beak, armL, armR, tail: tailGroup, mane: maneGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
 }
 
 /** A five-petal flower (with two leaves behind it) printed on a surface at `at`, turned by `rot` to face out. */
