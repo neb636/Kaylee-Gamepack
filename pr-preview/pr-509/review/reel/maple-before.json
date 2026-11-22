@@ -4,22 +4,15 @@
   "title": "Maple before",
   "video": "maple-before.mp4",
   "gif": "maple-before.gif",
-  "seconds": 8,
+  "seconds": 7,
   "browser": "webkit",
   "viewport": "ipad-landscape",
   "moments": [
     {
-      "name": "Canada story bike in",
-      "where": "#/world/canada/story/bike-in",
-      "seconds": 3,
-      "fps": 76.9,
-      "status": "ok"
-    },
-    {
       "name": "Characters maple",
-      "where": "#/world/characters/maple?yaw=95&shot=body&zoom=1.5",
-      "seconds": 2,
-      "fps": 35.3,
+      "where": "#/world/characters/maple?spin=1&secs=5&zoom=1.18",
+      "seconds": 5,
+      "fps": 36.5,
       "status": "ok"
     }
   ]
