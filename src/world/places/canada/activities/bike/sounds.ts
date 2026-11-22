@@ -34,6 +34,8 @@ export const bikeSfx = {
     (_hard: number) => {},
     (hard: number) => ({ rate: 0.85 + Math.min(1, hard) * 0.3, vol: Math.min(1, Math.max(0, hard - 0.12) * 1.3) * 0.55 }),
   ),
+  /** Skrrt! Maple's foot out, the back wheel skidding sideways in the dirt. */
+  skid: clip(url('bike-skid'), () => noise(0.45, 0.12, 'bandpass', 1800, 700, 0, 1.2)),
   bell: clip(url('bike-bell'), ding),
   leaves: clip(url('bike-leaves'), () => (sfx.fwip(), noise(0.4, 0.12, 'bandpass', 2400, 900, 0, 0.8))),
   /** Boing! Up off a stump. */

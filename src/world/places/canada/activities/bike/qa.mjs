@@ -23,8 +23,9 @@ export const pacing = [
 ]
 
 export const motion = [
-  // Maple riding the blue way's berms with the wheel under her finger, pushed right up the berm and held, then let go:
-  // she leans into the bends, bumps over the roots and drifts back to the middle of her way.
+  // Maple riding the blue way's berms, the bike grabbed and tipped right all the way up the berm (her foot comes out,
+  // the back wheel skids) and held, then a gentle tip left, then let go: the bike rights itself and points down the
+  // trail again, bumping over the roots.
   {
     name: 'canada-bike-steer',
     seconds: 9,
@@ -34,13 +35,13 @@ export const motion = [
       await page.waitForTimeout(1200)
     },
     act: async (page) => {
-      const x = vp.width / 2
-      const y = vp.height * 0.7
-      await page.mouse.move(x, y)
+      // (On the bike: a full tip is ~17% of the screen's width.)
+      const { x, y } = await page.evaluate(() => window.__canadaBikeQA().bike)
+      await page.mouse.move(x, y - 20)
       await page.mouse.down()
-      await page.mouse.move(x + Math.min(110, vp.width * 0.12), y, { steps: 8 })
+      await page.mouse.move(x + vp.width * 0.2, y - 20, { steps: 8 })
       await page.waitForTimeout(2500)
-      await page.mouse.move(x - Math.min(60, vp.width * 0.07), y, { steps: 8 })
+      await page.mouse.move(x - vp.width * 0.08, y - 20, { steps: 8 })
       await page.waitForTimeout(1500)
       await page.mouse.up()
     },

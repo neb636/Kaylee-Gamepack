@@ -44,6 +44,8 @@ const CHEER_S = 1.8
 const LEAVES_S = 3.4
 const SHAKE_S = 1.2
 const WOBBLE_S = 0.9
+/** Where a foot stuck out to skid goes (bike-local, x for her left side): out wide and down by the ground. */
+const FOOT_OUT: V3 = [0.42, 0.14, 0.2]
 
 const Y = new Vector3(0, 1, 0)
 const tv = new Vector3()
@@ -123,6 +125,9 @@ export interface RiderPose {
   air: number
   /** Steering (-1..1): the front wheel turns that way (+ = toward her left, +x in the model). */
   steer: number
+  /** A foot out to skid (-1..1, + = her left foot, +x in the model; 0 = both on the pedals): the leg straightens out
+   *  to the side and down toward the ground. */
+  foot?: number
 }
 
 export class Rider {
@@ -523,14 +528,18 @@ export class Rider {
       if (this.ringT > 0.5) this.ringT = -1
     }
 
-    // ---- Legs: hip to pedal, the knee bending out in front ----
+    // ---- Legs: hip to pedal, the knee bending out in front (or one leg stuck out to the side for a skid) ----
     this.bike.updateMatrixWorld(true)
+    const out = pose.foot ?? 0
     this.pedals.forEach((p, i) => {
       const side = i === 0 ? 1 : -1
       const hip = this.hipAt(i, tv).clone()
       const foot = p.getWorldPosition(tv3)
       this.bike.worldToLocal(foot)
       foot.y += 0.03
+      // Her foot off the pedal, out to the side and down by the ground, a little ahead of her hip.
+      const k = Math.sign(out) === side ? Math.abs(out) : 0
+      if (k > 0) foot.lerp(tv2.set(side * FOOT_OUT[0], FOOT_OUT[1], FOOT_OUT[2]), k)
       // In the air she stands a little on the pedals: the feet stay, the hips rise (the legs straighten).
       const d = tv2.subVectors(foot, hip)
       const len = Math.min(d.length(), this.thigh + this.shin - 0.005)

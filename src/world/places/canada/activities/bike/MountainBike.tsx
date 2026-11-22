@@ -2,9 +2,9 @@
 // bath (she wants him for her team's goalie). After the chapter's film in (story/films/bike.ts: at the top, the look
 // down the mountain, she hops on) the game starts with her hands on the bike at the top. From a link or a replay, a
 // short hello plays in her gondola cabin at the bottom of the line (tap anywhere skips) and the gondola carries her and
-// the bike up. Then Kaylee steers the bike down the forest trail (ride.ts is the world). The address bar follows her from
-// stretch to stretch (sections.ts), and to whichever way round the island she takes. The steering circle appears where
-// her finger goes down, a dot following it (engine3d/SteerWheel.tsx, the Nan drive's). Sparkle gives the one instruction from the corner (and a hint
+// the bike up. Then Kaylee tips the bike down the forest trail (ride.ts is the world; tip.ts her finger on the bike). The
+// address bar follows her from stretch to stretch (sections.ts), and to whichever way round the island she takes. No
+// wheel on screen: only a small half-see-through dot where her finger holds the bike (<Grab>). Sparkle gives the one instruction from the corner (and a hint
 // when she's stuck, and says what's new: the two trails, the creek); Maple whoops and giggles in her own voice. At the
 // waterfall: Maple cheers and spots Monty in the pool, he says hello, and on it goes (onDone): the closing film picks
 // up right there, at the pool.
@@ -14,7 +14,7 @@ import type { WebGLRenderer } from 'three'
 import { burst, lineText, say, SayButton, SparklePuppet, speakingVoice, stopSpeaking, useAlive, wait, type Line, type PuppetHandle, useTimers } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
-import { SteerHint, SteerWheel } from '../../../../engine3d/SteerWheel'
+import { SteerHint } from '../../../../engine3d/SteerWheel'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
 import { L } from '../../lines'
 import type { CanadaActivityProps } from '../props'
@@ -42,7 +42,7 @@ export function MountainBike({ onDone, setProgress, filmed }: Partial<CanadaActi
   /** What Sparkle just said (shown for Dad, with 🔊 to hear it again), or a story line. */
   const [said, setSaid] = useState<{ line: Line; sparkle: boolean; n: number } | null>(null)
   const worldRef = useRef<World | null>(null)
-  const wheelRef = useRef<HTMLDivElement>(null)
+  const grabRef = useRef<HTMLDivElement>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const sparkle = useRef<PuppetHandle>(null)
   const trail = useRef(run.trail)
@@ -127,7 +127,7 @@ export function MountainBike({ onDone, setProgress, filmed }: Partial<CanadaActi
 
   const make = (renderer: WebGLRenderer) => {
     const w = new World(renderer, run, events.current)
-    w.setWheelElement(wheelRef.current)
+    w.setGrabElement(grabRef.current)
     w.setHintElement(hintRef.current)
     return w
   }
@@ -144,7 +144,7 @@ export function MountainBike({ onDone, setProgress, filmed }: Partial<CanadaActi
         anchors={(input, els) => (
           <>
             <Anchors list={BIKE_ANCHORS} els={els} {...input} />
-            <SteerWheel ref={wheelRef} />
+            <div ref={grabRef} aria-hidden style={GRAB} />
             <SteerHint ref={hintRef} />
           </>
         )}
@@ -193,6 +193,22 @@ export function MountainBike({ onDone, setProgress, filmed }: Partial<CanadaActi
     </div>
   )
 }
+
+/** Where her finger holds the bike: a small, half-see-through pink dot (the world places it). */
+const GRAB = {
+  position: 'absolute',
+  left: -18,
+  top: -18,
+  width: 36,
+  height: 36,
+  borderRadius: '50%',
+  background: '#FF4F9A',
+  outline: '3px solid #FFFFFF',
+  opacity: 0.5,
+  display: 'none',
+  pointerEvents: 'none',
+  zIndex: 19000,
+} as const
 
 const PILL = {
   background: 'rgba(255,255,255,.92)',

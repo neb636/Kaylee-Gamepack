@@ -6,12 +6,14 @@
 // for Maple's animal book. Sparkle says the one instruction, what's new (the two trails, the creek) and a hint when
 // she's stuck; Maple whoops in her own voice at the silly moments (leaves, the bell, the splash, the jump).
 //
-// The toy (core verb): carve the bike. Her finger goes down anywhere and the shared finger wheel appears under it
-// (engine3d/wheel.ts, the Nan drive's). The handling is after Bottomless (GameCrew's powder snowboard game, the feel the
-// user asked for, 2026-11-22): how far she pushes is how far across the trail the bike points, and it answers at once
-// (no spot to steer toward, no turn-rate wait). Maple leans and crouches into the push the moment it starts, leaves
-// spray off the back wheel and the wheel leaves a line in the dirt. Let go and the bike points down the trail again
-// and keeps her line (the trail's bends turn her by themselves). The camera swings round behind her and widens at
+// The toy (core verb): tip the bike and carve (card C). Her finger grabs the bike itself (pressing anywhere grabs it
+// too) and tips it left or right: how far it tips is how hard it carves (tip.ts; no wheel on screen, just the bike).
+// The bike and Maple roll toward her finger at once, before the turn builds; a full tip at speed and Maple sticks her
+// inside foot out and the back wheel skids (more spray, a skrrt). The handling is after Bottomless (GameCrew's powder
+// snowboard game, the feel the user asked for, 2026-11-22): how far she tips is how far across the trail the bike
+// points, and it answers at once (no spot to steer toward, no turn-rate wait). Maple crouches into the tip, leaves
+// spray off the back wheel and the wheel leaves a line in the dirt. Let go and the bike rights itself, points down the
+// trail again and keeps her line (the trail's bends turn her by themselves). The camera swings round behind her and widens at
 // speed. The mountain does the going: steeper is faster, and a carve across the trail costs a little speed. The verb deepens three ways down one course (trail.ts): the green trail (wide and gentle,
 // leaf piles that burst, stumps that boing, a chipmunk running alongside), berms and bumps (two ways round an island
 // of trees: the green way's gentle rollers or the blue way's steep berms, roots, rock hops and doubles), then the creek
@@ -34,7 +36,6 @@ import { setOutlineResolution } from '../../../../engine3d/outline'
 import { Particles } from '../../../../engine3d/particles'
 import { applyBands, makeLights } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
-import { FingerWheel } from '../../../../engine3d/wheel'
 import { meet } from '../../book/met'
 import { L } from '../../lines'
 import { Deer, Peeper, Porcupine } from '../../characters/critters'
@@ -42,6 +43,7 @@ import { Bear, Chipmunk, Hare, Moose, Woodpecker } from './critters'
 import { lilyPad } from './monty'
 import { bikeSfx } from './sounds'
 import { Rider } from './rider'
+import { BikeTip } from './tip'
 import { TireLine } from './tracks'
 import { Mountain } from './mountain'
 import { buildSky, FALL, type Gondola, GONDOLA_CABINS, HANG, SKY } from './scenery'
@@ -54,17 +56,18 @@ const FILE = 'src/world/places/canada/activities/bike/ride.ts'
 const TURN = 2.4
 /** The feel lab shows the bike's knobs while she rides (not in the story or the gondola). */
 const RIDING = ['green', 'berms', 'creek', 'falls']
-/** The finger wheel and the carve. The carve's numbers start from Bottomless's own tuning (carve 72°, edge 6/s), a
- *  little gentler for a narrow trail; the wheel's are Dad's from the Nan drive's feel lab (2026-10-27). */
+/** Tipping the bike and the carve. The carve's numbers start from Bottomless's own tuning (carve 72°, edge 6/s), a
+ *  little gentler for a narrow trail. */
 const STEER = knobs('bars', 'Steering', FILE, {
   carve: { value: 58, min: 20, max: 85, step: 1, label: 'Carve', unit: '°', note: 'how far across the trail a full push points the bike (Bottomless: 72)', main: true },
   edge: { value: 8, min: 2, max: 20, step: 0.5, label: 'Snap', unit: '/s', note: 'how quickly the bike answers a push (Bottomless: 6; higher = snappier)', main: true },
   settle: { value: 3, min: 0.5, max: 10, step: 0.25, label: 'Straighten up', unit: '/s', note: 'how quickly she points down the trail again after she lets go' },
-  cost: { value: 0.25, min: 0, max: 0.6, step: 0.01, label: 'Turns cost speed', note: 'share of her speed a full carve across the trail takes (0 = none)', main: true },
-  reach: { value: 1.2, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)' },
-  dead: { value: 0.12, min: 0, max: 0.4, step: 0.01, label: 'Dead middle', note: 'share of the wheel near the middle that counts as straight' },
-  curve: { value: 1.2, min: 1, max: 3, step: 0.05, label: 'Gentle small pushes', note: '1 = even all the way; higher = a small push barely steers' },
-  ease: { value: 0.04, min: 0, max: 0.6, step: 0.01, label: 'Smoothing', unit: 's', note: 'how long a quick flick takes to count in full (0 = none)' },
+  cost: { value: 0.25, min: 0, max: 0.6, step: 0.01, label: 'Turns cost speed', note: 'share of her speed a full carve across the trail takes (0 = none)' },
+  reach: { value: 0.17, min: 0.06, max: 0.4, step: 0.01, label: 'Full tip', unit: '× width', note: 'how far her finger slides sideways for a full tip, as a share of the screen (a little less on a phone; smaller = touchier)', main: true },
+  dead: { value: 0.08, min: 0, max: 0.4, step: 0.01, label: 'Dead middle', note: 'share of a full tip near the middle that counts as straight' },
+  ease: { value: 0.06, min: 0, max: 0.6, step: 0.01, label: 'Smoothing', unit: 's', note: 'how long a quick flick takes to count in full (0 = none); letting go rights the bike this fast too' },
+  from: { value: 0, min: 0, max: 1, step: 0.05, label: 'Tip from the bike', note: '0 = the tip counts from where she pressed; 1 = from where the bike is on screen (when she pressed on it)' },
+  foot: { value: 0.88, min: 0.5, max: 1, step: 0.01, label: 'Foot out at', note: 'how far she tips (at speed) before Maple sticks a foot out and the back wheel skids' },
   grip: { value: 9, min: 1, max: 16, step: 0.5, label: 'Grip', note: 'how quickly a sideways skid dies out (low = drifty)' },
   chase: { value: 0.65, min: 0, max: 1, step: 0.05, label: 'Camera swings behind her', note: '0 = the camera looks down the trail; 1 = right behind the bike', main: true },
   swing: { value: 5, min: 1, max: 14, step: 0.5, label: 'Camera swing speed', unit: '/s', note: 'how quickly the camera comes round behind her' },
@@ -75,7 +78,8 @@ const RIDE = knobs('bike', 'The ride', FILE, {
   speed: { value: 8, min: 3, max: 16, step: 0.25, label: 'Speed', unit: 'm/s', note: 'how fast she rolls on the green trail', main: true },
   steep: { value: 2.6, min: 0, max: 6, step: 0.1, label: 'Steeper is faster', note: 'how much the steep bits (the berms) speed her up' },
   accel: { value: 3, min: 0.5, max: 10, step: 0.25, label: 'Speeding up', unit: 'm/s²', note: 'how fast she gets rolling' },
-  lean: { value: 0.62, min: 0, max: 1.2, step: 0.02, label: 'Lean', unit: 'rad', note: 'how far Maple and the bike lean into a push at full speed', main: true },
+  tip: { value: 0.6, min: 0, max: 0.8, step: 0.02, label: 'Tip', unit: 'rad', note: 'how far the bike and Maple roll toward her finger on a full tip, at once (any speed)', main: true },
+  lean: { value: 0.25, min: 0, max: 1.2, step: 0.02, label: 'Lean into the turn', unit: 'rad', note: 'how much more they lean with the turn the bike is making, at full speed' },
   crouch: { value: 0.07, min: 0, max: 0.2, step: 0.01, label: 'Crouch into a carve', unit: 'm', note: 'how low Maple gets on a full push' },
   bank: { value: 1, min: 0, max: 1.5, step: 0.05, label: 'Lean with the berm', note: 'how much she also tips with the banked turns (1 = square to the berm)' },
   pop: { value: 1.15, min: 0.5, max: 2.5, step: 0.05, label: 'Hops off the bumps', unit: '×', note: 'how high the rollers, rocks and the kicker throw her' },
@@ -211,8 +215,8 @@ export class MountainBike implements World3D {
   private mountain: Mountain
   private gondola: Gondola
   private sky: Mesh
-  private wheel = new FingerWheel()
-  private wheelEl: HTMLElement | null = null
+  private tipper = new BikeTip()
+  private grabEl: HTMLElement | null = null
   private hintEl: HTMLElement | null = null
   private anchorEls = new Map<string, HTMLElement>()
   private raycaster = new Raycaster()
@@ -246,6 +250,9 @@ export class MountainBike implements World3D {
    *  straight down it (rad, + = toward the left). */
   private push = 0
   private carve = 0
+  /** Maple's foot out (0..1): a full tip at speed. */
+  private foot = 0
+  private skidCool = 0
   /** The camera's little dip after a landing (m). */
   private camDip = 0
   private line: TireLine
@@ -294,7 +301,7 @@ export class MountainBike implements World3D {
   private lastTouch = 0
   private lastSteer = -99
   private lastX = 0
-  private counts = { steered: 0, hops: 0, bigAir: 0, landings: 0, piles: 0, stumps: 0, splashes: 0, bridge: 0, jumps: 0, bonks: 0, rocks: 0, swings: 0, taps: 0, pokes: 0 }
+  private counts = { steered: 0, hops: 0, bigAir: 0, landings: 0, piles: 0, stumps: 0, splashes: 0, bridge: 0, jumps: 0, bonks: 0, rocks: 0, skids: 0, swings: 0, taps: 0, pokes: 0 }
 
   constructor(
     private renderer: WebGLRenderer,
@@ -471,8 +478,9 @@ export class MountainBike implements World3D {
 
     this.stopBed = bikeSfx.forest()
     this.unwatch = watch('bike', () => ({
-      'her push': [this.wheel.push, 1],
-      steer: [this.wheel.k, 1],
+      'her tip': [this.tipper.raw, 1],
+      steer: [this.tipper.k, 1],
+      'foot out': [this.foot, 1],
       'carve (°)': [this.carve * TO_DEG, 90],
       'across (m)': [this.lat, 6],
       'lean (rad)': [this.roll, 1],
@@ -506,7 +514,7 @@ export class MountainBike implements World3D {
     this.w = w
     this.h = h
     this.tall = h > w
-    this.wheel.setSize(w, h)
+    this.tipper.setSize(w, h)
     this.rig.setSize(w, h, top)
     setOutlineResolution(w, h)
     this.camYaw = this.camWant()
@@ -515,8 +523,8 @@ export class MountainBike implements World3D {
   setAnchorElements(els: Map<string, HTMLElement>) {
     this.anchorEls = els
   }
-  setWheelElement(el: HTMLElement | null) {
-    this.wheelEl = el
+  setGrabElement(el: HTMLElement | null) {
+    this.grabEl = el
   }
   setHintElement(el: HTMLElement | null) {
     this.hintEl = el
@@ -571,7 +579,8 @@ export class MountainBike implements World3D {
     const t = (this.time += dt)
     this.modeT += dt
     this.bonkCool -= dt
-    const k = this.wheel.update(dt, t, STEER)
+    this.skidCool -= dt
+    const k = this.tipper.update(dt, STEER, this.bikeScreen().x)
     if (this.mode === 'ride' && Math.abs(k) > 0.05) {
       this.counts.steered += dt
       this.lastSteer = t
@@ -605,6 +614,8 @@ export class MountainBike implements World3D {
       air: this.air ? Math.min(1, this.airT * 4) : 0,
       // (The bars and her head turn with the push at once, then with the turn.)
       steer: clamp(this.d.yawRate / TURN - this.push * 0.5, -1, 1),
+      // (Her inside foot: tipping right (+ push) is her right, -x in the model.)
+      foot: -Math.sign(this.push) * this.foot,
     })
     for (const p of [this.leaves, this.drift, this.dust, this.spray, this.foam]) p.update(dt)
     // The rainbow fades in over the pool at the end.
@@ -637,11 +648,11 @@ export class MountainBike implements World3D {
     this.rig.setShot(this.shot())
     this.rig.update(dt)
     this.clearTerrain()
-    this.wheel.draw(this.wheelEl, this.mode === 'ride', STEER.reach)
+    this.tipper.draw(this.grabEl, this.mode === 'ride')
     const idle = t - Math.max(this.lastTouch, this.lastSteer)
     const steering = this.mode === 'ride' && this.s < END - 30
-    const stuck = steering && !this.wheel.finger && ((this.counts.steered < 1 && t > 2.5 && idle > 2.5) || idle > HINT_S)
-    this.wheel.hint(this.hintEl, stuck, t, STEER.reach)
+    const stuck = steering && !this.tipper.held && ((this.counts.steered < 1 && t > 2.5 && idle > 2.5) || idle > HINT_S)
+    this.tipper.hint(this.hintEl, stuck, t, this.bikeScreen(), STEER)
     // Sparkle's one instruction as the bike rolls (a section link that starts on the trail hears it too); stuck for
     // a while, her hint (and the hand shows how).
     if (this.mode === 'ride' && this.modeT > 1.6) this.tell('steer')
@@ -650,6 +661,14 @@ export class MountainBike implements World3D {
       this.chatAt = t
       this.events.say(L.bike.hint, false, spendHint(L.bike.hint))
     }
+  }
+
+  /** Where the bike is on screen (its middle, a little above the wheels) and how big (px). */
+  private bikeScreen() {
+    const p = this.bikePos(tmp2)
+    const c = this.toScreen(tmp2.set(p.x, p.y + 0.55, p.z))
+    const top = this.toScreen(tmp2.set(p.x, p.y + 1.2, p.z))
+    return { x: c.x, y: c.y, size: Math.abs(c.y - top.y) * 2.4 }
   }
 
   /** Where the bike is in the world. */
@@ -738,6 +757,8 @@ export class MountainBike implements World3D {
     const steep = (t.base(s0 - 3) - t.base(s0 + 3)) / 6
     let top = RIDE.speed * (0.72 + RIDE.steep * steep) * (1 - STEER.cost * Math.abs(Math.sin(carve)))
     if (r > 0 && lat0 < 0) top *= 0.94
+    // (A foot-out skid scrubs off a little more.)
+    top *= 1 - 0.08 * this.foot
     let cap = this.wet ? 0.72 : 1
     if (s0 > END - 24) cap = Math.min(cap, clamp((END - s0) / 20, 0.16, 1))
     d.feel.top = top
@@ -816,6 +837,7 @@ export class MountainBike implements World3D {
     this.sq = clamp(this.sq + this.sqV * dt, -0.12, 0.28)
 
     this.trailStuff(dt)
+    this.footOut(dt, v)
     this.carveStuff(dt, v)
     if (!this.air && v > 0.6 && !this.onBridge) bikeSfx.roll(v)
     // The stretches, and which way round the island she took.
@@ -927,19 +949,44 @@ export class MountainBike implements World3D {
     const g = this.course.ride(this.s, this.lat, this.onBridge)
     if (this.air || this.wet) this.line.lift()
     else this.line.add(bx, g + (this.onBridge ? 0.012 : 0.025), bz, d.heading)
-    const hard = this.air ? 0 : Math.abs(this.push) * clamp(v / RIDE.speed, 0, 1.3)
+    const hard = this.air ? 0 : Math.abs(this.push) * clamp(v / RIDE.speed, 0, 1.3) + this.foot * 0.8
     bikeSfx.carve(hard)
+    if (this.wet && this.foot > 0.3) {
+      // Skidding through the creek: a fan of water off the back wheel.
+      const out = -Math.sign(this.push)
+      const a = phi(this.s)
+      for (let i = 0; i < Math.floor(this.foot * 40 * dt + Math.random()); i++)
+        this.spray.emit(bx, this.course.creekY + 0.15, bz, Math.cos(a) * out * (2.5 + Math.random() * 2), 2.5 + Math.random() * 2.5, Math.sin(a) * out * (2.5 + Math.random() * 2), 0.7, 0.16)
+    }
     if (hard < 0.15 || this.onBridge || this.wet) return
     // To the outside of the turn: pushing right (+lat) throws them toward -lat, and a little back.
     const a = phi(this.s)
     const out = -Math.sign(this.push)
-    const n = Math.min(6, Math.floor(hard * 60 * dt + Math.random()))
+    const n = Math.min(10, Math.floor(hard * 60 * dt + Math.random()))
     for (let i = 0; i < n; i++) {
       const sp = 1.6 + hard * 2.4 + Math.random() * 1.2
       const vx = Math.cos(a) * out * sp - Math.sin(d.heading) * (0.6 + Math.random())
       const vz = Math.sin(a) * out * sp - Math.cos(d.heading) * (0.6 + Math.random())
       const p = Math.random() < 0.6 ? this.leaves : this.dust
       p.emit(bx, g + 0.15, bz, vx, 1.6 + hard * 2.2 + Math.random() * 1.4, vz, 0.7 + Math.random() * 0.4, p === this.leaves ? 0.13 + Math.random() * 0.06 : 0.1 + hard * 0.06)
+    }
+  }
+
+  /** A full tip at speed: Maple sticks her inside foot out and the back wheel skids (a skrrt, a puff of dirt). */
+  private footOut(dt: number, v: number) {
+    const want = !this.air && !this.onBridge && v > RIDE.speed * 0.55 && Math.abs(this.push) >= STEER.foot ? 1 : 0
+    const was = this.foot
+    this.foot += (want - this.foot) * (1 - Math.exp(-dt * (want ? 9 : 6)))
+    if (was < 0.5 && this.foot >= 0.5 && this.skidCool <= 0) {
+      this.skidCool = 0.9
+      this.counts.skids++
+      bikeSfx.skid()
+      const d = this.d
+      const bx = d.x - Math.sin(d.heading) * 0.55
+      const bz = d.z - Math.cos(d.heading) * 0.55
+      if (!this.wet) this.dust.burst(bx, this.course.ride(this.s, this.lat, false) + 0.1, bz, 14, 2.2, 2, 0.15)
+      // (The first one in a ride: Maple's "Whoa, wobbly!")
+      if (this.counts.skids === 1) this.chat(L.bike.rock)
     }
   }
 
@@ -1161,7 +1208,8 @@ export class MountainBike implements World3D {
     }
     const c = this.course
     root.position.set(this.d.x, this.y, this.d.z)
-    root.rotation.y = this.d.heading
+    // (Skidding, the back wheel steps out: the bike's nose points further into the turn.)
+    root.rotation.y = this.d.heading - Math.sign(this.push) * this.foot * 0.32
     // Nose down the slope (or the way she's flying), and leaning into the turns and with the berms.
     const fwd = 0.6
     const ga = c.ride(this.s - fwd, this.lat, this.onBridge)
@@ -1171,10 +1219,13 @@ export class MountainBike implements World3D {
     const across = c.ground(this.s, this.lat + 0.4) - c.ground(this.s, this.lat - 0.4)
     // (The ground's tilt: square to a berm, but never more than a little on the trail's sloped shoulders.)
     const tilt = this.air ? 0 : clamp(Math.atan(across / 0.8) * RIDE.bank, -0.6, 0.6)
-    // Into her push at once (+ = right), then into the turn the bike is making; more the faster she goes.
-    const into = this.air ? 0 : clamp(0.6 * this.push - 0.4 * (this.d.yawRate / TURN), -1, 1)
-    const roll = clamp(into * clamp(this.d.speed / RIDE.speed, 0, 1.4) * RIDE.lean - tilt, -0.8, 0.8)
-    this.roll += (roll - this.roll) * k(12)
+    // Tipped toward her finger at once (+ = right), whatever the speed: she's tipping it. Then a little more into the
+    // turn the bike is making, the faster she goes. (Never more than 0.8 in all: she never lies flat.)
+    const spd = clamp(this.d.speed / RIDE.speed, 0, 1.4)
+    const turn = this.air ? 0 : clamp(-this.d.yawRate / TURN, -1, 1) * spd * RIDE.lean
+    const tipped = (this.air ? 0.4 : 1) * this.push * RIDE.tip
+    const roll = clamp(tipped + turn - tilt, -0.8, 0.8)
+    this.roll += (roll - this.roll) * k(18)
     this.rider.lean.rotation.set(this.pitch, 0, this.roll)
     const g = c.ride(this.s, this.lat, this.onBridge)
     this.shadow.position.set(this.d.x, g + 0.03, this.d.z)
@@ -1282,15 +1333,13 @@ export class MountainBike implements World3D {
     return { x: ((p.x + 1) / 2) * this.w, y: ((1 - p.y) / 2) * this.h, z: p.z }
   }
 
-  pointerDown(x: number, y: number, id?: string) {
+  pointerDown(x: number, y: number, _id?: string) {
     this.lastTouch = this.time
     this.lastX = x
-    if (this.mode === 'ride') {
-      this.wheel.down(x, y, this.time, id)
-    }
+    if (this.mode === 'ride') this.tipper.down(x, y, this.bikeScreen())
   }
-  pointerMove(x: number, y: number, downX: number, downY: number, held: boolean) {
-    if (this.mode === 'ride') this.wheel.move(x, y, downX, downY, held)
+  pointerMove(x: number, y: number, _downX: number, _downY: number, held: boolean) {
+    if (this.mode === 'ride') this.tipper.move(x, y, held)
     else if (this.mode === 'gondola' && held) {
       // Rocking her cabin with a finger.
       this.gondola.push(this.gondola.hers, 0, (x - this.lastX) * 0.004)
@@ -1298,7 +1347,7 @@ export class MountainBike implements World3D {
     }
   }
   pointerUp() {
-    this.wheel.up()
+    this.tipper.up()
   }
 
   tap(x: number, y: number, id?: string) {
@@ -1471,7 +1520,9 @@ export class MountainBike implements World3D {
       air: this.air,
       speed: +this.d.speed.toFixed(1),
       carve: Math.round(this.carve * TO_DEG),
-      push: +this.wheel.push.toFixed(2),
+      push: +this.tipper.raw.toFixed(2),
+      tip: +this.tipper.k.toFixed(2),
+      foot: +this.foot.toFixed(2),
       way: way(this.s, this.lat) ?? this.picked,
       onBridge: this.onBridge,
       wet: this.wet,

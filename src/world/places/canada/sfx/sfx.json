@@ -171,6 +171,12 @@
   "loop": true
  },
  {
+  "id": "bike-skid",
+  "label": "The back wheel skids (foot out)",
+  "prompt": "A kids' mountain bike's back tire skidding sideways on a dirt forest trail: a quick crunchy skrrrt of sliding knobbly rubber, loose dirt and dry leaves scattering, a little foot scuffing the ground. Playful, cartoony, soft, not harsh. No music, no voices.",
+  "seconds": 1.4
+ },
+ {
   "id": "bike-bell",
   "label": "The bike bell",
   "prompt": "A bright little bicycle bell, two cheerful dings, clear and sweet, not shrill.",
