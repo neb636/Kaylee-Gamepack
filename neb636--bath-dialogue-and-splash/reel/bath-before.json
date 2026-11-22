@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "bath-before",
+  "title": "Bath before",
+  "video": "bath-before.mp4",
+  "gif": "bath-before.gif",
+  "seconds": 22,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "canada-bath-film-in",
+      "where": "canada-bath-film-in",
+      "seconds": 20,
+      "fps": 30,
+      "status": "ok"
+    }
+  ]
+}

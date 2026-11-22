@@ -1,0 +1,19 @@
+{
+  "kind": "reel",
+  "name": "bath-after",
+  "title": "Bath after",
+  "video": "bath-after.mp4",
+  "gif": "bath-after.gif",
+  "seconds": 22,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "canada-bath-film-in",
+      "where": "canada-bath-film-in",
+      "seconds": 20,
+      "fps": 35.8,
+      "status": "ok"
+    }
+  ]
+}
