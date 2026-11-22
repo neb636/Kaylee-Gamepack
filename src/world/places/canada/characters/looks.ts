@@ -21,9 +21,9 @@ export const CANADA_COLORS = {
   mooseLight: '#C79A72',
   mooseDark: '#4A3328',
   antler: '#E9D3A6',
-  raccoonFur: '#9C97A8',
-  raccoonLight: '#ECE8F0',
-  raccoonDark: '#4A4458',
+  raccoonFur: '#998E85',
+  raccoonLight: '#FAEDDA',
+  raccoonDark: '#443C3B',
   otterFur: '#6E5A58',
   otterLight: '#F6E8D4',
   otterDark: '#3A2E30',
@@ -45,9 +45,9 @@ export const CANADA_LOOKS: Record<CanadaFriend, Look> = {
   /** Monty the moose: a gentle giant, always chewing. He fills the whole net. */
   moose: { species: 'moose', height: 1.7, chub: 1.15, fur: C.mooseFur, light: C.mooseLight, dark: C.mooseDark, ear: C.mooseLight },
   /** Roxy the raccoon: a little bandit in a mask, a mama. */
-  raccoon: { species: 'raccoon', height: 0.75, chub: 1.1, fur: C.raccoonFur, light: C.raccoonLight, dark: C.raccoonDark, ear: '#FFB8CC', open: true, lashes: true },
+  raccoon: { species: 'raccoon', height: 0.75, chub: 1.1, fur: C.raccoonFur, light: C.raccoonLight, dark: C.raccoonDark, open: true, lashes: true },
   /** One of Roxy's three kits: the team's fans. */
-  kit: { species: 'raccoon', height: 0.42, chub: 1.15, fur: '#A9A4B6', light: C.raccoonLight, dark: C.raccoonDark, ear: '#FFB8CC', open: true },
+  kit: { species: 'raccoon', height: 0.42, chub: 1.15, fur: '#B1A59B', light: C.raccoonLight, dark: C.raccoonDark, open: true },
   /** Ollie the sea otter: floats on her back, spins like a top. */
   otter: { species: 'sea-otter', height: 0.8, chub: 1.1, fur: C.otterFur, light: C.otterLight, dark: C.otterDark, ear: '#65504C' },
   /** Misty the spirit bear: a black bear born with cream-white fur, big and soft and a little shy. */
