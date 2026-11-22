@@ -1,0 +1,18 @@
+{
+  "title": "Campfire Night: marshmallow orders",
+  "checkIn": "fix",
+  "kaylee": "The roast is now a close-up at the fire. Everyone shows the marshmallow they want in a picture bubble (golden, squishy, burnt, Monty's giant one); she toasts it until it matches, and each right one earns a gold star.",
+  "questions": [
+    "Is Monty's giant marshmallow on a thick branch funny enough to end on?",
+    "Six orders: too many, or about right?"
+  ],
+  "tableReads": [["canada", "campfire"]],
+  "reels": [
+    { "name": "roast-after", "moments": ["canada-campfire-roast", "canada-campfire-roast-giant"] }
+  ],
+  "links": [
+    { "label": "Play the marshmallow orders", "hash": "#/world/canada/campfire/roast" },
+    { "label": "Monty's giant one", "hash": "#/world/canada/campfire/roast?order=4" },
+    { "label": "Feel lab (heat, toast times, hand-over reach)", "hash": "#/world/canada/campfire/roast?feel=1" }
+  ]
+}
