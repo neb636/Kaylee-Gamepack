@@ -16,6 +16,7 @@ import { blobShadow, P, solidMix, type PartOpts, type V3 } from '../geo'
 import { mooseAntler } from './moose'
 import { bellyPatch, beaverTail } from './beaver'
 import { seaOtterBody, seaOtterHead, seaOtterTail } from './seaOtter'
+import { raccoonHead, raccoonTail } from './raccoon'
 import { WEARABLES, type Look, type PaintColor, type PaintPart, type Wearable } from './look'
 
 export interface Rig {
@@ -429,7 +430,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     }
     torso.push(P.capsule(0.155 * H, 0.1 * H, look.fur, { at: [0, 0.34 * H, 0], scale: round }))
     if ((look.species === 'fox' || look.species === 'puppy' || look.species === 'otter') && !look.outfit?.lace) torso.push(P.sphere(0.075 * H, look.light, { at: [0, 0.5 * H, 0.11 * H * round[2]], scale: [1.1, 0.8, 0.7] }))
-    if (look.species === 'beaver') torsoPlain.push(bellyPatch(H, c, round[2], look.light))
+    if (look.species === 'beaver' || look.species === 'raccoon') torsoPlain.push(bellyPatch(H, c, round[2], look.light))
     if (look.species === 'buffalo' && !look.outfit) torso.push(P.sphere(0.11 * H, look.light, { at: [0, 0.27 * H, 0.1 * H], scale: [1, 1.1, 0.55] }))
     if (look.species === 'tortoise') {
       // A big round shell on the back (like a backpack): a dome in the shell color with round plates sunk into it, a
@@ -538,7 +539,8 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     if (look.extras?.includes('eye-ring')) headPlain.push(P.sphere(eyeSize * 1.55, WHITE, { at: on(x, eyeY, lift - 0.06 * R), rot: turnTo(x), scale: [0.9, 1.05, 0.3] }, 16))
     if (look.lashes) for (const k of [0, 1]) eyesPlain.push(P.capsule(0.012 * R, 0.07 * R, INK, { at: on(x + s * (0.16 + k * 0.05) * R, eyeY + (0.17 - k * 0.07) * R, lift + 0.01 * R), rot: [0, 0, s * (-0.9 - k * 0.5)] }))
     const blushY = look.species === 'unicorn' || look.species === 'pony' ? -0.08 * R : -0.2 * R
-    if (!seaOtter) headPlain.push(P.sphere(0.12 * R, look.species === 'moose' ? '#B77865' : BLUSH, { at: on(s * 0.58 * R, blushY, lift * 0.6 - 0.02 * R), rot: turnTo(s * 0.58 * R), scale: [1.25, 0.65, 0.3] }))
+    // (A raccoon's cheeks are its mask and white ruffs: no blush peeking out under the mask.)
+    if (!seaOtter && look.species !== 'raccoon') headPlain.push(P.sphere(0.12 * R, look.species === 'moose' ? '#B77865' : BLUSH, { at: on(s * 0.58 * R, blushY, lift * 0.6 - 0.02 * R), rot: turnTo(s * 0.58 * R), scale: [1.25, 0.65, 0.3] }))
   }
   const mouthPoint = (y: number, z?: number): V3 => (z === undefined ? on(0, y, 0.005 * R) : [0, headY + y, z])
   /** The resting mouth, built around the origin (its group sits at `mouthAt`). */
@@ -904,20 +906,15 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       break
     }
     case 'raccoon': {
-      // A raccoon: pointy round-tipped ears with light rims, a light muzzle and brows, the dark bandit mask across the
-      // eyes, a dark nose, and the big ringed tail.
-      head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1.1, 0.98, 1] }, 26))
-      for (const s of [-1, 1]) {
-        head.push(P.cone(0.3 * R, 0.55 * R, look.fur, { at: [s * 0.62 * R, headY + 0.84 * R, -0.08 * R], rot: [-0.1, 0, -s * 0.45] }))
-        headPlain.push(P.cone(0.18 * R, 0.34 * R, look.ear ?? look.light, { at: [s * 0.6 * R, headY + 0.8 * R, 0.04 * R], rot: [-0.1, 0, -s * 0.45] }))
-        head.push(P.sphere(0.36 * R, look.dark, { at: on(s * eyeX, eyeY - 0.02 * R, -0.17 * R), rot: [0, s * 0.5, s * 0.3], scale: [1.35, 0.8, 0.5] }))
-        head.push(P.sphere(0.16 * R, look.light, { at: on(s * 0.3 * R, eyeY + 0.36 * R, -0.04 * R), rot: [0, s * 0.3, 0], scale: [1.4, 0.55, 0.5] }))
-      }
-      head.push(P.sphere(0.4 * R, look.light, { at: [0, headY - 0.38 * R, 0.66 * R], scale: [1.2, 0.72, 0.8] }))
-      head.push(P.sphere(0.11 * R, INK, { at: [0, headY - 0.22 * R, 1.01 * R], scale: [1.35, 0.9, 0.8] }))
-      mouth(mouthPoint(-0.5 * R, 0.96 * R))
-      tailRoot = [0, 0.18 * H, -0.15 * H * round[2]]
-      for (let i = 0; i < 6; i++) tail.push(P.sphere((0.075 - i * 0.004) * H, i % 2 ? look.dark : look.fur, { at: [0, (0.17 + i * 0.055) * H, (-0.22 - i * 0.03) * H * round[2]], rot: [-0.5, 0, 0], scale: [1, 0.75, 1] }))
+      // A raccoon (raccoon.ts): white cheek ruffs, the drooping bandit mask with white brows and eye rings, a pointed
+      // white snout, round white-rimmed ears and the big bushy ringed tail.
+      const face = raccoonHead(look, f)
+      head.push(...face.outlined)
+      headPlain.push(...face.plain)
+      eyes.unshift(...face.eyes)
+      mouth(face.mouth)
+      tailRoot = [0, 0.17 * H, -0.14 * H * round[2]]
+      tail.push(raccoonTail(H, tailRoot, look.fur, look.dark))
       break
     }
     case 'sea-otter': {
