@@ -12,7 +12,7 @@ import mapArt from './assets/bg-world-map.webp'
 import { DOCK, MapIcon, ShelfIcon } from './HomeIcons'
 import { FitBox } from './kit/Chrome'
 import { WORLD_LINES } from './lines'
-import { listed, places, type PlaceEntry } from './registry'
+import { places, useListed, type PlaceEntry } from './registry'
 import { FROM_SHELF, Shelf } from './Shelf'
 import { totalStamps, usePassport } from './stamps'
 import { useHalloween } from '../shell/seasonal/season'
@@ -89,6 +89,7 @@ export function WorldMap({ view: linked }: { view?: string }) {
   const halloween = useHalloween()
   const passport = usePassport()
   const online = useOnline() // the Theater needs the internet
+  const listed = useListed()
   const [label, setLabel] = useState<{ text: string; x: number; y: number } | null>(null)
   const [travelTo, setTravelTo] = useState<PlaceEntry | null>(null)
   const [saved, setView] = useSaved<View>('world:view', 'map')

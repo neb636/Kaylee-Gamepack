@@ -1,3 +1,4 @@
+import { FLAGS } from '../../../flags'
 import colorMaple from './assets/bg-color-maple.webp'
 import colorMoose from './assets/bg-color-moose.webp'
 import colorParade from './assets/bg-color-parade.webp'
@@ -77,5 +78,7 @@ const meta: PlaceMeta = {
   ],
   passportLine: L.passport,
   createdAt: '2026-10-27',
+  // Maple's Team is on her map only when this PostHog flag is on: testers only until it's played (src/flags.ts).
+  featureFlag: FLAGS.newCanadaPin,
 }
 export default meta
