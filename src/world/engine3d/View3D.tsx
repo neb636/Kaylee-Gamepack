@@ -199,8 +199,10 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
           world.placeAnchors()
           const roaming = world.roam?.() ?? null
           pad.current?.show(roaming)
-          if (roaming && !unclaimRoam) unclaimRoam = feelLab.claim(ROAM_ID)
-          else if (!roaming && unclaimRoam) {
+          // (A map that only turns isn't walking: its turning is the board's, not Roblox's.)
+          const walking = !!roaming && (roaming.walk || roaming.jump)
+          if (walking && !unclaimRoam) unclaimRoam = feelLab.claim(ROAM_ID)
+          else if (!walking && unclaimRoam) {
             unclaimRoam()
             unclaimRoam = null
           }

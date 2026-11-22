@@ -12,7 +12,8 @@ import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } fr
 import { worldLink } from '../../../router'
 import { feelLab, isFeelParam, type KnobGroup, type KnobSpec } from '../../kit/knobs'
 import { sectionsFor } from '../../registry'
-import { ScenePicker } from '../ScenePicker'
+import { ScenePicker, sceneHere } from '../ScenePicker'
+import { TUNED } from './tuned.gen'
 import { IconButton, Section } from '../ui'
 import '../lab.css'
 
@@ -41,9 +42,8 @@ export default function FeelLab({ place }: { place: string }) {
     const id = setInterval(() => tick((n) => n + 1), 250)
     return () => clearInterval(id)
   }, [])
-  const here = window.__kayleeSection
-  const activity = here?.activity ?? location.hash.split('?')[0].match(/^#\/world\/[^/]+\/([^/]+)/)?.[1]
-  const groups = feelLab.groupsFor(place, activity, here?.id)
+  const { activity, section } = sceneHere(place)
+  const groups = feelLab.groupsFor(place, activity, section)
   const watchers = feelLab.watchers()
   const [open, setOpen] = useState(true)
   const [notes, setNotes] = useState(true)
@@ -55,31 +55,31 @@ export default function FeelLab({ place }: { place: string }) {
     toastTimer.current = window.setTimeout(() => setToast(null), 1800)
   }
 
-  // Opened by a link over a game that's already running (its knobs were read when it loaded): the link's numbers first,
-  // before the address bar is written from the knobs below. (Layout effects run before effects.)
-  useLayoutEffect(() => feelLab.applyLink(), [])
+  // A link the lab didn't write (opened by a link over a game that's already running, pasted, or another feel link):
+  // its numbers first, before the address bar is written from the knobs below. (Layout effects run before effects; the
+  // route re-renders on a hashchange before any listener of ours would hear it.)
+  const written = useRef<string | null>(null)
+  useLayoutEffect(() => {
+    if (location.hash !== written.current) feelLab.applyLink()
+  })
   // The address bar follows the knobs (replaceState: no hashchange, so the game doesn't restart).
   useEffect(() => {
     const hash = withFeel(location.hash, { feel: '1', ...feelLab.params() })
     if (location.hash !== hash) history.replaceState(history.state, '', hash)
+    written.current = location.hash
   })
-  // A link opened by hand while the lab is up: its numbers.
-  useEffect(() => {
-    const onHash = () => feelLab.applyLink()
-    window.addEventListener('hashchange', onHash)
-    return () => window.removeEventListener('hashchange', onHash)
-  }, [])
 
   // Another scene keeps what you changed (the bike's steering comes along from the green trail to the berms).
   const go = (act: string, sec: string | undefined) => {
     location.hash = worldLink(place, act, sec, { feel: '1', ...feelLab.params() })
   }
-  // The pickers mark where the tuning is (for the games whose code has loaded).
+  // The pickers mark where the tuning is (from the source: a game's knobs register only once its code loads).
   const tuned = (act: string, sec?: string) => {
-    if (sec) return feelLab.groupsFor(place, act, sec).some((g) => !g.shared)
-    return feelLab.groups().some((g) => !g.shared && g.place === place && g.activity === act)
+    const t = TUNED[`${place}/${act}`]
+    return !!t && (!sec || t === '*' || t.includes(sec))
   }
-  const mark = (act: string, sec?: string) => (tuned(act, sec) ? '🎛️ ' : '')
+  // (Only sections: nearly every game has some.)
+  const mark = (act: string, sec?: string) => (sec && tuned(act, sec) ? '🎛️ ' : '')
   const elsewhere = activity && groups.length === 0 ? (sectionsFor(place, activity)?.sections ?? []).filter((s) => tuned(activity, s.id)) : []
 
   const copy = (text: string, label: string) => {
@@ -146,7 +146,7 @@ export default function FeelLab({ place }: { place: string }) {
                 </div>
               </>
             ) : (
-              <div className="cl-sub">This game has no feel numbers yet. Pick another one above (🎛️ marks the ones that do).</div>
+              <div className="cl-sub">This game has no feel numbers yet. Pick another one above (🎛️ marks the sections that do).</div>
             )}
           </Section>
         )}
