@@ -1,4 +1,4 @@
-// What the finale's two 3D worlds (the toy map of Animal Homes, the frozen canal of Pond Hockey) share: the scene, the
+// What the finale's 3D world (the frozen canal of Pond Hockey, rink.ts) is built on: the scene, the
 // camera, the lights, the bag of things to dispose, screen <-> world math and the tap targets laid over things.
 import { Plane, Raycaster, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { CameraRig } from '../../../../engine3d/camera'

@@ -10,7 +10,8 @@ import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 
 import posthog, { isPostHogEnabled } from '../posthog'
 import { worldLink } from '../router'
 import { burst, Mascot, say, sounds, useElementSize, useSaved, useTimers } from '../sdk'
-import { ALL_GAMES, banner, nameLine, SHELF, SURPRISE_ICON, type ShelfGame } from './cards'
+import { banner, nameLine, shelfRows, SURPRISE_ICON, type ShelfGame } from './cards'
+import { useListed } from './registry'
 import { Flag } from './kit/Flag'
 import { WORLD_LINES } from './lines'
 import { usePassport } from './stamps'
@@ -34,6 +35,8 @@ export function Shelf() {
   const [played, setPlayed] = useSaved<string[]>('world:played', [])
   const [open, setOpen] = useState<ShelfGame | null>(null)
   const [spinning, setSpinning] = useState(false)
+  const SHELF = shelfRows(useListed())
+  const ALL_GAMES = SHELF.flatMap((r) => r.games)
 
   const stamped = (g: ShelfGame) => !g.section && !!g.place && !!g.activity && (passport.stamps[g.place] ?? []).includes(g.activity)
   const fav = ALL_GAMES.filter((g) => favorites.includes(g.key)).sort((a, b) => favorites.indexOf(b.key) - favorites.indexOf(a.key))
@@ -102,6 +105,7 @@ export function Shelf() {
         {spinning && (
           <Spinner
             key="spin"
+            games={ALL_GAMES}
             played={played}
             onLand={(g) => {
               setSpinning(false)
@@ -264,7 +268,7 @@ function GamePage({ game, loved, onLove, onPlay, onClose }: { game: ShelfGame; l
 
 /** The surprise: the icons flick past in a window, fast then slower, each with a rising note, and land on one (a game
  *  she hasn't tried yet, most of the time). A tap lands it at once. */
-function Spinner({ played, onLand, onCancel }: { played: string[]; onLand: (g: ShelfGame) => void; onCancel: () => void }) {
+function Spinner({ games: ALL_GAMES, played, onLand, onCancel }: { games: ShelfGame[]; played: string[]; onLand: (g: ShelfGame) => void; onCancel: () => void }) {
   const timers = useTimers()
   const random = () => ALL_GAMES[Math.floor(Math.random() * ALL_GAMES.length)]
   const [shown, setShown] = useState(random)

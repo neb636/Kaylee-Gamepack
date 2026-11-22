@@ -118,7 +118,7 @@ pieces fit together is `docs/building.md` (2D) and `docs/thailand-3d.md` (3D). S
 | 🎶 The Longest Night (`night`) | live | [activities/night/](../src/world/places/poles/activities/night) | [activities/night/sections.ts](../src/world/places/poles/activities/night/sections.ts) (6) | [qa.mjs](../src/world/places/poles/activities/night/qa.mjs) |  |
 | 🥚 Emperor Huddle (`huddle`) | works | [activities/huddle/](../src/world/places/poles/activities/huddle) | [activities/huddle/sections.ts](../src/world/places/poles/activities/huddle/sections.ts) (4) | [qa.mjs](../src/world/places/poles/activities/huddle/qa.mjs) |  |
 
-## 🍁 Canada (`canada`)
+## 🫎 Canada (`canada`)
 
 - Code: [src/world/places/canada/](../src/world/places/canada): [meta.ts](../src/world/places/canada/meta.ts), [Place.tsx](../src/world/places/canada/Place.tsx), [lines.ts](../src/world/places/canada/lines.ts), [cast.json](../src/world/places/canada/cast.json), [qa.mjs](../src/world/places/canada/qa.mjs), [puppets/](../src/world/places/canada/puppets), [characters/](../src/world/places/canada/characters)
 - Notes: [planning/around-the-world/canada.md](../planning/around-the-world/canada.md)
@@ -126,12 +126,10 @@ pieces fit together is `docs/building.md` (2D) and `docs/thailand-3d.md` (3D). S
 | Activity | Kind | Code | Sections | QA | Notes |
 |---|---|---|---|---|---|
 | 🏠 Home base (`hub`) | hub | [activities/hub/](../src/world/places/canada/activities/hub) | [activities/hub/sections.ts](../src/world/places/canada/activities/hub/sections.ts) (2) | [qa.mjs](../src/world/places/canada/activities/hub/qa.mjs) |  |
-| 🍁 Sugar Snow (`taffy`) | live | [activities/taffy/](../src/world/places/canada/activities/taffy) | [activities/taffy/sections.ts](../src/world/places/canada/activities/taffy/sections.ts) (5) | [qa.mjs](../src/world/places/canada/activities/taffy/qa.mjs) |  |
 | ⛄ Carnival Snowballs (`snowman`) | live | [activities/snowman/](../src/world/places/canada/activities/snowman) | [activities/snowman/sections.ts](../src/world/places/canada/activities/snowman/sections.ts) (5) | [qa.mjs](../src/world/places/canada/activities/snowman/qa.mjs) |  |
 | 🚵 Mountain Bike (`bike`) | live | [activities/bike/](../src/world/places/canada/activities/bike) | [activities/bike/sections.ts](../src/world/places/canada/activities/bike/sections.ts) (6) | [qa.mjs](../src/world/places/canada/activities/bike/qa.mjs) |  |
-| ⛺ Campfire Night (`campfire`) | live | [activities/campfire/](../src/world/places/canada/activities/campfire) | [activities/campfire/sections.ts](../src/world/places/canada/activities/campfire/sections.ts) (6) | country qa.mjs |  |
+| ⛺ Campfire Night (`campfire`) | live | [activities/campfire/](../src/world/places/canada/activities/campfire) | [activities/campfire/sections.ts](../src/world/places/canada/activities/campfire/sections.ts) (6) | [qa.mjs](../src/world/places/canada/activities/campfire/qa.mjs) |  |
 | 🛶 Red Canoe (`canoe`) | live | [activities/canoe/](../src/world/places/canada/activities/canoe) | [activities/canoe/sections.ts](../src/world/places/canada/activities/canoe/sections.ts) (5) | [qa.mjs](../src/world/places/canada/activities/canoe/qa.mjs) |  |
-| 🦌 Animal Bridge (`bridge`) | live | [activities/bridge/](../src/world/places/canada/activities/bridge) | [activities/bridge/sections.ts](../src/world/places/canada/activities/bridge/sections.ts) (5) | [qa.mjs](../src/world/places/canada/activities/bridge/qa.mjs) |  |
-| 🐋 Whale Watch (`whales`) | live | [activities/whales/](../src/world/places/canada/activities/whales) | [activities/whales/sections.ts](../src/world/places/canada/activities/whales/sections.ts) (6) | [qa.mjs](../src/world/places/canada/activities/whales/qa.mjs) |  |
-| 🐟 Salmon Leap (`salmon`) | live | [activities/salmon/](../src/world/places/canada/activities/salmon) | [activities/salmon/sections.ts](../src/world/places/canada/activities/salmon/sections.ts) (5) | [qa.mjs](../src/world/places/canada/activities/salmon/qa.mjs) |  |
-| 🎉 Finale (`party`) | finale | [activities/party/](../src/world/places/canada/activities/party) | [activities/party/sections.ts](../src/world/places/canada/activities/party/sections.ts) (4) | [qa.mjs](../src/world/places/canada/activities/party/qa.mjs) |  |
+| 🛁 Misty's Bubble Bath (`bath`) | live | [activities/bath/](../src/world/places/canada/activities/bath) | [activities/bath/sections.ts](../src/world/places/canada/activities/bath/sections.ts) (5) | [qa.mjs](../src/world/places/canada/activities/bath/qa.mjs) |  |
+| 🐋 Whale Peek-a-Boo (`whales`) | live | [activities/whales/](../src/world/places/canada/activities/whales) | [activities/whales/sections.ts](../src/world/places/canada/activities/whales/sections.ts) (4) | [qa.mjs](../src/world/places/canada/activities/whales/qa.mjs) |  |
+| 🎉 Finale (`party`) | finale | [activities/party/](../src/world/places/canada/activities/party) | [activities/party/sections.ts](../src/world/places/canada/activities/party/sections.ts) (3) | [qa.mjs](../src/world/places/canada/activities/party/qa.mjs) |  |

@@ -7,6 +7,7 @@ import { CanvasTexture, Group, Mesh, MeshBasicMaterial, MeshToonMaterial, PlaneG
 import type { Bag } from '../../../../engine3d/dispose'
 import { blobShadow, merge, P, solid, solidMix } from '../../../../engine3d/geo'
 import { PAL, toonGradient } from '../../../../engine3d/toon'
+import { CanalSkater } from './skater'
 
 /** The rink, in meters: half its width, the geese's goal line (far, -z) and hers (near, +z). */
 export const RINK = { x: 5, zG: -9, zH: 7.2, netHalf: 1.35 }
@@ -96,7 +97,7 @@ export interface Canal {
   /** The pastry stand, its BeaverTail that pops up, and the clock tower's top (for taps). */
   stand: { root: Group; pastry: Group; at: [number, number, number] }
   tower: [number, number, number]
-  skaters: { root: Group; body: Group; lane: number; speed: number; phase: number; spinT: number }[]
+  skaters: CanalSkater[]
   /** The two nets: the frame groups (they shake when the puck hits). */
   netG: Group
   netH: Group
@@ -285,35 +286,9 @@ export function buildCanal(bag: Bag): Canal {
   stand.add(pastry)
   root.add(stand)
 
-  // ---- Skaters gliding on the far canal, beyond the rink (little round toy people in tuques and scarves).
-  const skaters: Canal['skaters'] = []
-  const coats = ['#FF8FB8', '#8FE3C8', '#A8DCFF', '#FBEA9A', '#D9CCFF', '#FFC2A8']
-  for (let i = 0; i < 6; i++) {
-    const s = new Group()
-    const body = new Group()
-    const coat = coats[i % coats.length]
-    const hat = coats[(i + 3) % coats.length]
-    body.add(
-      solid(
-        merge([
-          P.capsule(0.32, 0.5, coat, { at: [0, 0.75, 0] }),
-          P.sphere(0.3, '#FFDCC2', { at: [0, 1.5, 0] }, 14),
-          P.sphere(0.31, hat, { at: [0, 1.6, -0.02], scale: [1, 0.7, 1] }, 14),
-          P.sphere(0.1, '#FFFFFF', { at: [0, 1.88, -0.02] }, 8),
-          P.torus(0.24, 0.07, i % 2 ? '#E8443F' : '#FFFFFF', { at: [0, 1.22, 0], rot: [Math.PI / 2, 0, 0] }),
-          P.capsule(0.1, 0.32, '#5A5470', { at: [0.13, 0.22, 0] }),
-          P.capsule(0.1, 0.32, '#5A5470', { at: [-0.13, 0.22, 0] }),
-          P.box(0.06, 0.04, 0.42, '#C9D2E0', { at: [0.13, 0.02, 0] }),
-          P.box(0.06, 0.04, 0.42, '#C9D2E0', { at: [-0.13, 0.02, 0] }),
-        ]),
-        bag,
-        2,
-      ),
-    )
-    s.add(body, blobShadow(0.5, bag))
-    root.add(s)
-    skaters.push({ root: s, body, lane: (i % 3) * 3.6 - 3.6 + (r() - 0.5), speed: 1.6 + r() * 1.4, phase: r() * 30, spinT: -1 })
-  }
+  // ---- Skaters gliding on the far canal, beyond the rink.
+  const skaters = Array.from({ length: 6 }, (_, index) => new CanalSkater(index, bag))
+  root.add(...skaters.map((skater) => skater.root))
 
   // ---- The nets.
   const netG = net(bag)

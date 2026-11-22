@@ -27,8 +27,6 @@ Installed and pre-approved for hands-on play that plain React can't do well (see
 - **three** (0.180): 3D, for a country the user wants in 3D (Thailand). Keep the flat look: toon bands, ink outlines, blob
   shadows, no post-processing (see `src/world/engine3d/`). React draws the buttons and the tap targets
   over the canvas.
-- **phaser** (v4): real-time arcade or physics play (bouncing, stacking, many moving sprites). Canvas, so keep
-  puppets, speech bubbles and buttons in React on top of it.
 - **perfect-freehand**: smooth finger strokes, for tracing and drawing.
 
 Import these **only from inside a country folder** (`src/world/places/<id>/`) or the shared 3D engine (`src/world/engine3d/`, which only countries import), and never from a file that loads at startup:

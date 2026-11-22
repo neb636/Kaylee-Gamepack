@@ -427,6 +427,12 @@ export class Rider {
   wobble() {
     this.wobbleT = 0
   }
+  /** Just the bike, parked, with nobody on it (in a film Maple stands beside it, then hops on): hides her. */
+  alone(on: boolean) {
+    this.seat.visible = !on
+    for (const b of [...this.thighs, ...this.shins]) b.g.visible = !on
+    for (const o of [...this.knees, ...this.feet]) o.visible = !on
+  }
   /** She looks this way (rad, + = her left) for a moment: at an animal she's passing. */
   look(yaw: number) {
     this.lookY = yaw

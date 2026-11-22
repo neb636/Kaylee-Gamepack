@@ -18,7 +18,7 @@ let lastSpoken = -Infinity
 
 /** True when this hint may be said out loud now (and counts it); false: show it without a voice. */
 export function spendHint(line: Line): boolean {
-  // The play diary (src/world/diary.ts) counts the hints she was given.
+  // Her play data (src/world/diary.ts) counts the hints she was given.
   dispatchEvent(new Event('kaylee:hint'))
   const key = lineText(line)
   const n = seen.get(key) ?? 0

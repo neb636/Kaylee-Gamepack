@@ -1,6 +1,6 @@
 // Maple the beaver: a layered SVG puppet drawn to match her 3D toy (characters/looks.ts, #/world/characters/maple), for
 // the 2D activities and the story beats. A round brown beaver girl in a pink scarf: small round ears, a big light muzzle
-// with a dark nose, two big orange front teeth, and her flat criss-crossed paddle tail behind her. She breathes, blinks,
+// with a dark nose, two big white front teeth, and her flat criss-crossed paddle tail behind her. She breathes, blinks,
 // watches Kaylee's finger and talks in her own voice (the mouth opens under the teeth), and can hop, wave, cheer,
 // wiggle, chomp (three quick bites: taffy, a stick) and slap her tail on the ground when she's excited.
 import { forwardRef, useId, useRef, type CSSProperties } from 'react'
@@ -24,6 +24,9 @@ const line = (width?: number) => lineIn(width, INK)
 const HEAD = blob(250, 186, 132, 116, 18, 0.03)
 const BODY = blob(250, 372, 118, 100, 20, 0.025)
 const ARM = 'M-26 -16 C-26 -36 26 -36 26 -16 C26 20 26 40 22 56 C16 78 -16 78 -22 56 C-26 40 -26 20 -26 -16Z'
+/** The scarf's ring: its top edge tucks under her chin, its bottom rounds over her chest. */
+const SCARF_RING = 'M144 292 C144 270 166 266 180 274 C214 294 286 294 320 274 C334 266 356 270 356 292 C356 318 318 338 250 340 C182 338 144 318 144 292 Z'
+const SCARF_END = 'M264 316 L298 316 C300 346 302 372 300 394 C288 400 274 400 262 394 C260 372 262 346 264 316 Z'
 const TAIL = 'M0 0 C40 -26 120 -44 168 -20 C196 -6 196 22 168 34 C120 54 40 38 0 12 Z'
 
 type Part = 'root' | 'body' | 'head' | 'earL' | 'earR' | 'armL' | 'armR' | 'tail' | 'blushL' | 'blushR' | 'mouth' | 'mouthClip' | 'tongue' | 'teeth' | 'scarfEnd' | EyePart
@@ -118,7 +121,7 @@ export const Maple = forwardRef<PuppetHandle, MapleProps>(function Maple({ heigh
       setT(p.armL, `translate(152 318) rotate(${armL})`)
       setT(p.armR, `translate(348 318) rotate(${armR})`)
       setT(p.tail, `translate(318 432) rotate(${-tailNow})`)
-      setT(p.scarfEnd, `rotate(${scarf} 300 300)`)
+      setT(p.scarfEnd, `rotate(${scarf * 0.6} 281 320)`)
       setT(p.blushL, `translate(160 214) scale(${blush})`)
       setT(p.blushR, `translate(340 214) scale(${blush})`)
       updateEyes(p, eye, eye === 'open' ? 1 - f.blink : 0, look)
@@ -172,13 +175,19 @@ export const Maple = forwardRef<PuppetHandle, MapleProps>(function Maple({ heigh
           {!pass && [-16, 0, 16].map((x) => <circle key={x} cx={x} cy="-12" r="5" fill="#6E4B3B" />)}
         </g>
       ))}
-      {/* The pink scarf round her neck, one end hanging down and swinging. */}
-      <path d="M150 292 C190 318 310 318 350 292 L352 318 C310 344 190 344 148 318 Z" fill={C.scarf} />
+    </>
+  )
+
+  // The team's pink scarf, as on her 3D toy: a fat ring round her neck that her chin rests on, and one end hanging
+  // straight down her front (it swings when she hops).
+  const scarf = (pass: boolean) => (
+    <>
       <g ref={r('scarfEnd', pass)}>
-        <path d="M300 312 L336 312 L344 392 L304 388 Z" fill={C.scarf} />
-        {!pass && <path d="M306 386 L306 400 M318 388 L318 402 M330 389 L330 403 M342 390 L342 402" {...line(3)} stroke="#FF4F9A" />}
+        <path d={SCARF_END} fill={C.scarf} />
+        {!pass && <path d="M268 340 L294 340 M267 362 L295 362" {...line(2.4)} stroke="#FF6FA6" />}
       </g>
-      {!pass && <path d="M170 302 C200 320 300 320 330 302 M200 318 L200 330 M240 322 L240 334 M280 322 L280 334" {...line(2.4)} stroke="#FF4F9A" />}
+      <path d={SCARF_RING} fill={C.scarf} />
+      {!pass && <path d="M178 302 C212 320 288 320 322 302" {...line(2.4)} stroke="#FFC2DA" />}
     </>
   )
 
@@ -207,6 +216,10 @@ export const Maple = forwardRef<PuppetHandle, MapleProps>(function Maple({ heigh
           {/* Lashes, like the 3D Maple. */}
           {([-1, 1] as const).map((s) => (
             <path key={s} d={`M${250 + s * 74} 142 l${s * 12} -10 M${250 + s * 80} 152 l${s * 14} -6`} {...line(3.4)} />
+          ))}
+          {/* Kind arched brows, like the 3D Maple. */}
+          {([-1, 1] as const).map((s) => (
+            <path key={`b${s}`} d={`M${250 + s * 40} 120 Q${250 + s * 60} 104 ${250 + s * 80} 116`} {...lineIn(7, C.beaverTail)} />
           ))}
           <ellipse ref={part('blushL')} rx="22" ry="12" fill={BLUSH} opacity="0.9" transform="translate(160 214)" />
           <ellipse ref={part('blushR')} rx="22" ry="12" fill={BLUSH} opacity="0.9" transform="translate(340 214)" />
@@ -241,6 +254,8 @@ export const Maple = forwardRef<PuppetHandle, MapleProps>(function Maple({ heigh
         {lower(false)}
         <g {...inkPass()}>{head(true)}</g>
         {head(false)}
+        <g {...inkPass()}>{scarf(true)}</g>
+        {scarf(false)}
         {(['L', 'R'] as const).map((s) => (
           <g key={s}>
             <g {...inkPass()}>{arm(s, true)}</g>

@@ -68,7 +68,7 @@ What changed and where, decisions you made on your own (and why), `npm run verif
 ```
 
 The first PR of a toy has no preview yet: write the body, then edit in the links once the number exists. At check-in 4
-the top line says what changed since Kaylee's playtest. A fix's top line is the before and after, one line.
+the top line says what changed since the user played it (check-in 3). A fix's top line is the before and after, one line.
 
 ## 4. Codex's review (handle it; the user never sees it)
 

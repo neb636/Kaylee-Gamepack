@@ -13,13 +13,11 @@ import bgReef from './assets/bg-reef.webp'
 import clownfish from './assets/clownfish.webp'
 import gumLeaf from './assets/gum-leaf.webp'
 import koalaAwake from './assets/koala-awake.webp'
-import koalaSleep from './assets/koala-sleep.webp'
 import crocEgg from './assets/croc-egg.webp'
 import croc from './assets/croc-mama.webp'
 import kookaburra from './assets/kookaburra.webp'
 import mama from './assets/mama-kangaroo.webp'
 import octopus from './assets/octopus.webp'
-import pipHop from './assets/pip-hop.webp'
 import pip from './assets/pip.webp'
 import platypus from './assets/platypus.webp'
 import map from './assets/scene-australia-map.webp'
@@ -47,13 +45,11 @@ export const art = {
   crocEgg,
   gumLeaf,
   koalaAwake,
-  koalaSleep,
   kookaburra,
   mama,
   map,
   octopus,
   pip,
-  pipHop,
   platypus,
   star,
   starfish,

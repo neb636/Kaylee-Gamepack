@@ -1,0 +1,141 @@
+[
+ {
+  "id": "campfire-fire",
+  "label": "The campfire at night (bed)",
+  "prompt": "A small cozy campfire crackling and softly popping in a quiet forest clearing at night, gentle crickets chirping far off, calm and warm, no wind, no voices.",
+  "seconds": 15,
+  "loop": true
+ },
+ {
+  "id": "campfire-owl",
+  "label": "An owl hoots",
+  "prompt": "A barred owl hooting softly in the night forest, a gentle 'hoo, hoo-hoo', round and friendly, a little far away, not spooky.",
+  "seconds": 1.8
+ },
+ {
+  "id": "campfire-frog",
+  "label": "A little frog peeps",
+  "prompt": "A tiny spring peeper frog by a pond at night, two bright little peeps, cute and clear.",
+  "seconds": 0.9
+ },
+ {
+  "id": "campfire-rustle",
+  "label": "A rustle in the bushes",
+  "prompt": "A small animal rustling quickly through a leafy bush, a short soft shake of leaves, playful and light, not scary.",
+  "seconds": 0.8
+ },
+ {
+  "id": "campfire-snatch",
+  "label": "A tiny paw snatches a marshmallow",
+  "prompt": "A tiny quick cartoon snatch: a little paw grabbing something soft, a fast airy swish and a small squishy pop, funny and light.",
+  "seconds": 0.5
+ },
+ {
+  "id": "campfire-chitter",
+  "label": "Raccoon chitter (Roxy giggles)",
+  "prompt": "A friendly raccoon chittering and chirping happily, short soft trills like a little giggle, cute, no growl.",
+  "seconds": 1.2
+ },
+ {
+  "id": "campfire-kits",
+  "label": "Baby raccoons squeak",
+  "prompt": "Three tiny baby raccoons squeaking and chirping excitedly together, high, happy little squeaks, cute and soft.",
+  "seconds": 1.4
+ },
+ {
+  "id": "campfire-sizzle",
+  "label": "A marshmallow sizzles",
+  "prompt": "A marshmallow toasting over a campfire, a soft gentle sizzle and a few tiny pops, warm and close.",
+  "seconds": 1.5
+ },
+ {
+  "id": "campfire-zip",
+  "label": "The tent zipper",
+  "prompt": "A tent zipper being pulled open in one quick smooth zip, nylon, soft and clear.",
+  "seconds": 0.8
+ },
+ {
+  "id": "campfire-sparks",
+  "label": "Sparks whoosh up from the fire",
+  "prompt": "A campfire flaring up with a soft whoosh and a crackle of little sparks flying up, warm and gentle.",
+  "seconds": 1
+ },
+ {
+  "id": "campfire-blow",
+  "label": "Blowing out a marshmallow",
+  "prompt": "One quick soft puff of breath blowing out a tiny flame, short and gentle, no voice.",
+  "seconds": 0.6
+ },
+ {
+  "id": "campfire-munch",
+  "label": "Munching marshmallows",
+  "prompt": "A small cartoon animal munching a marshmallow, three soft squishy chomps, cute and funny.",
+  "seconds": 0.9
+ },
+ {
+  "id": "campfire-giggle",
+  "label": "Little giggles in the dark (a kit hiding)",
+  "prompt": "Tiny muffled baby animal giggles from behind a bush at night, three quick high squeaky titters, cute and playful, no words.",
+  "seconds": 1.0
+ },
+ {
+  "id": "campfire-click",
+  "label": "The flashlight's switch",
+  "prompt": "A small plastic toy flashlight switch clicking, one chunky click, close and clear.",
+  "seconds": 0.5
+ },
+ {
+  "id": "campfire-freeze",
+  "label": "Freeze! (caught in the beam)",
+  "prompt": "A bright cartoon freeze sting: a quick sparkly glassy ting with a tiny whoosh that stops dead, magical and funny, soft.",
+  "seconds": 0.7
+ },
+ {
+  "id": "campfire-wobble",
+  "label": "A statue wobbling",
+  "prompt": "A springy cartoon wobble, a soft boing-oing-oing slowing down, toy-like and silly.",
+  "seconds": 0.9
+ },
+ {
+  "id": "campfire-tumble",
+  "label": "Falling over in the leaves",
+  "prompt": "A small soft cartoon flump of a little animal falling over onto a pile of dry leaves, a gentle thud and a crunchy rustle.",
+  "seconds": 0.8
+ },
+ {
+  "id": "campfire-yoink",
+  "label": "Yoink! (a marshmallow grabbed)",
+  "prompt": "A quick cartoon grab and zip-away: a rising slide whistle blip and a soft swish, sneaky and funny.",
+  "seconds": 0.6
+ },
+ {
+  "id": "campfire-quills",
+  "label": "A porcupine puffs his quills",
+  "prompt": "A dry soft rattle of many little quills puffing up at once, like a shake of thin twigs, cartoon, not scary.",
+  "seconds": 0.7
+ },
+ {
+  "id": "campfire-leaves",
+  "label": "A deer stops mid-chew",
+  "prompt": "A gentle crunch of leaves being chewed that stops suddenly, a tiny pause, soft and close, cute.",
+  "seconds": 0.8
+ },
+ {
+  "id": "campfire-squeak",
+  "label": "A little bat squeaks (and yawns)",
+  "prompt": "A tiny cute bat squeaking twice, high soft chirps, then a little sleepy sigh, friendly, not spooky.",
+  "seconds": 0.9
+ },
+ {
+  "id": "campfire-shades",
+  "label": "Monty's sunglasses go on",
+  "prompt": "A cool little cartoon click as sunglasses snap open and slide on, then a tiny bright sparkle ting.",
+  "seconds": 0.6
+ },
+ {
+  "id": "campfire-shimmer",
+  "label": "The northern lights shimmer",
+  "prompt": "A soft airy shimmering swell of glassy chimes and gentle wind high in the sky, magical and calm, slowly rising and fading, no melody.",
+  "seconds": 4
+ }
+]

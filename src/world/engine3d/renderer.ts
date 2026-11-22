@@ -74,12 +74,6 @@ function revealForCompile(root: Object3D): () => void {
   }
 }
 
-/** Compiles the shaders of something added after the world's warm-up (a picture frame, the flight home) before it
- *  shows, so it doesn't stutter the frame it first appears in. */
-export function warmLate(renderer: WebGLRenderer, root: Object3D, camera: Camera, scene: Scene): Promise<void> {
-  return warmUp(renderer, root, camera, scene)
-}
-
 /**
  * `renderer.compileAsync`, minus its crash. three.js polls every material of the scene until its shader program is
  * ready, and throws inside that poll ("reading 'isReady'", uncaught: the promise never settles and the world is never

@@ -1,17 +1,17 @@
-// Maple's animal book: every animal Kaylee can meet in Canada, by stop (the plan's "Every animal, by stop"). The first
+// Maple's animal book: every animal Kaylee can meet in Canada, by place (the games' and the map's). The first
 // time she pokes one anywhere, the activity calls meet(id) (met.ts): Sparkle names it with one short fact and it pops
 // into the book. Its picture comes from assets/animal-<id>.webp; the emoji is a fallback and the grey shape. No
 // three.js, so the 2D activities and the hub can all import it.
 import { L } from '../lines'
 
-export type Stop = 'quebec' | 'msa' | 'banff' | 'bc' | 'train'
+export type Stop = 'quebec' | 'msa' | 'banff' | 'bc' | 'map'
 
 export const STOP_PAGES: { id: Stop; name: string; icon: string }[] = [
   { id: 'quebec', name: 'Quebec City', icon: '🏰' },
   { id: 'msa', name: 'Mont-Sainte-Anne', icon: '⛰️' },
   { id: 'banff', name: 'Banff', icon: '🏔️' },
   { id: 'bc', name: 'British Columbia', icon: '🌊' },
-  { id: 'train', name: 'Along the train', icon: '🚂' },
+  { id: 'map', name: 'On the map', icon: '🗺️' },
 ]
 
 export type AnimalId = Exclude<keyof typeof L.book, 'open'>
@@ -28,10 +28,7 @@ const a = (stop: Stop, list: [AnimalId, string, string][]): Animal[] => list.map
 export const ANIMALS: Animal[] = [
   ...a('quebec', [
     ['snowy-owl', 'Snowy owl', '🦉'],
-    ['red-squirrel', 'Red squirrel', '🐿️'],
-    ['chickadee', 'Chickadee', '🐦'],
     ['canada-goose', 'Canada goose', '🪿'],
-    ['beluga', 'Beluga whale', '🐳'],
     ['red-fox', 'Red fox', '🦊'],
   ]),
   ...a('msa', [
@@ -50,11 +47,7 @@ export const ANIMALS: Animal[] = [
     ['hare', 'Snowshoe hare', '🐇'],
   ]),
   ...a('banff', [
-    ['elk', 'Elk', '🦌'],
-    ['grizzly', 'Grizzly bear', '🐻'],
-    ['bighorn', 'Bighorn sheep', '🐏'],
     ['mountain-goat', 'Mountain goat', '🐐'],
-    ['wolf', 'Wolf', '🐺'],
     ['pika', 'Pika', '🐭'],
     ['marmot', 'Marmot', '🦫'],
     ['ground-squirrel', 'Ground squirrel', '🐿️'],
@@ -76,10 +69,9 @@ export const ANIMALS: Animal[] = [
     ['banana-slug', 'Banana slug', '🐌'],
     ['raven', 'Raven', '🐦‍⬛'],
   ]),
-  ...a('train', [
+  ...a('map', [
     ['bison', 'Bison', '🦬'],
-    ['mountie-horse', 'Mountie horse', '🐴'],
-    ['polar-bear', 'Polar bear', '🐻‍❄️'],
+    ['beluga', 'Beluga whale', '🐳'],
   ]),
 ]
 

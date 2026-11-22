@@ -35,8 +35,8 @@ island). The finished boat and mall trips (and Baan Chang) have no notes left; r
   longitude and latitude in `layout.ts`). The house and ICONSIAM each have a pin, Sparkle's balloon goes back up to
   the Thailand map, and the house's top-left button comes back here. A new Bangkok place is a `ll(lon, lat)` and a pin.
 - **A trip's own map** looks like the Thailand map: the board floats in the same sky and tray and opens with the same
-  camera entrance behind the loading cover (`trip/sky.ts`: `skyTexture`, `puffCloud`, `trayParts`, `mapCamKnobs`,
-  `Entrance`, `boardShot`; `trip/MapCover.tsx`). The Nan map (`activities/nan-trip/map/`) and the Krabi map
+  camera entrance behind the loading cover (`engine3d/board.ts`, shared with every country's map: `skyTexture`, `puffCloud`, `trayParts`, `mapCamKnobs`,
+  `Entrance`, `boardShot`; `engine3d/MapCover.tsx`). The Nan map (`activities/nan-trip/map/`) and the Krabi map
   (`activities/boat-trip/map/`) use them; a new trip's map should too.
   Its camera frames the board like CSS `object-fit: contain`: the shot's box is the board and its tray (`trayBox`)
   with `objectFit: 'contain'`, and the rig centers that box's picture below the top bar and fits it, on any screen

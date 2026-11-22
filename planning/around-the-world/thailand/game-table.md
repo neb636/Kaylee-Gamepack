@@ -4,7 +4,7 @@ All three games built, voiced and on in her room (draft PR, check-in 2) · Toy i
 
 A little game table stands on the right side of Kaylee's room upstairs, past the couch, with a pink unicorn bag sitting beside it. She taps the table, sits down, picks a game from three big pictures and a cousin from three faces (BB is ready by default), and that cousin really comes and sits across from her. Then they play: **Kaylee's Unicorn Dice Game** (her own rules), **Candy Land** and **Chutes and Ladders**, on boards made for this house, taking turns until someone wins and it's “Again!”.
 
-**Next:** Check-in 2 (hear): you listen to the table read and watch the reel on the draft PR's review page. Then check-in 3: Kaylee plays all three at the table in her room (they're on in her own house on the branch) and her playtest decides what stays, gets fixed or goes. Under the new studio loop (AGENTS.md, PR #351) the look and the voices were built together on one branch instead of a greybox for you to play first.
+**Next:** Check-in 2 (hear): you listen to the table read and watch the reel on the draft PR's review page. Then check-in 3: you play all three at the table in her room (they're on in her own house on the branch) and her play data decides what stays, gets fixed or goes. Under the new studio loop (AGENTS.md, PR #351) the look and the voices were built together on one branch instead of a greybox for you to play first.
 
 - games: Unicorn Dice, Candy Land, Chutes and Ladders: 3
 - the cousin across the table (BB first): BB, Gan, Ken
@@ -290,8 +290,8 @@ One PR each; stop for the user after each. A game is only on for Kaylee (open fr
    The 6 by 6 board, the three ladders and three slides drawn on it, climbing and sliding. Section `chutes` and its cases. Rules tests (the snake numbering, ladders and slides, no chaining, the finish).
 4. **The look and the voices, on for Kaylee** [done] · 2026-11-11 · one draft PR (check-ins 2-4)
    The picker's three picture cards (SVG, the shelf's style), the faces as pictures of their real 3D selves, bigger pieces, a closer camera, the cousin hopping over, the bag's jingle and twinkle, a small win party; Sparkle's how-to per game and the cousins' lines in cheerful table voices; all three games `ready`. See the log below.
-5. **Kaylee's playtest and the fixes it brings** [next]
-   Her playtest (check-in 3), then the ship check-in. Boards' art beyond the greybox shapes (a sparklier castle, the candy world's scenery) only if her playtest says the boards need it.
+5. **You play it, and the fixes it brings** [next]
+   You play it (check-in 3), then the ship check-in. Boards' art beyond the greybox shapes (a sparklier castle, the candy world's scenery) only if playing it says the boards need it.
 
 
 ### Greybox 1: the table, a cousin, and the Unicorn Dice Game ([done] · 2026-11-06 · PR #348)
@@ -376,7 +376,7 @@ Built in one go on one branch (the new studio loop: no greybox for you to play f
 
 #### Known small things
 
-- The boards themselves are still the greybox shapes (bright, readable); fancier board art waits on her playtest.
+- The boards themselves are still the greybox shapes (bright, readable); fancier board art waits on playing it.
 - On a phone in landscape the board is small but every space reads.
 
 ### The floating board ([done] · 2026-11-11)
@@ -525,7 +525,7 @@ Your direction: replace the checkerboard with a miniature candy world, use more 
 
 Built: a larger strawberry-and-vanilla cake base, winding raised candy tiles with bridge piers, gumdrop garden, chocolate stream and falls, lollipop grove, ice-cream peaks and a three-tower candy castle. Picture cards and destination tiles use the same illustration; each landmark responds to a poke. The 28-card deck has the existing 24 color cards plus four picture cards (gumdrop 6, chocolate 14, lollipop 23, icecream 30). A picture always sends either player to that landmark, forward, backward or staying there. No skipped turns. Backward movement animates every space and preserves cancellation/turn guards. Family choices are unchanged. Sparkle adds one short line, once per visit when the first picture card appears: “Match the sweet—even backwards!” The recording and table read are included for your listening review; this new line is not yet heard/locked.
 
-Review: before/after reel, special-card forward/backward demos and the existing win ceremony. Deep links for both directions are in hub sections. Next: your visual feedback and Kaylee's playtest; Chutes and Ladders can get its own distinct rebuild after this one.
+Review: before/after reel, special-card forward/backward demos and the existing win ceremony. Deep links for both directions are in hub sections. Next: your visual feedback and her play data; Chutes and Ladders can get its own distinct rebuild after this one.
 
 Validation: `npm run verify` passes with the recorded picture line (2.7 s). Real deck clicks resolve forward/backward/same-landmark/win on iPad Safari and desktop. Safari portrait/landscape layouts on iPad and iPhone have no overflow or console errors; deck targets are 82–170 px. Fresh-eyes obstruction fix lowers chocolate falls without hiding a trail tile. Review includes the before/after reel and the game-table table read with the new line marked. The existing ffmpeg setup now has a bounded download and Ubuntu fallback after the static host failed on the recording runner.
 
@@ -536,6 +536,6 @@ Your direction: give Chutes and Ladders the same depth and visual rebuild as Can
 
 Built: six rising playground balconies with cream edging, round numbered pads, direction chevrons and little connecting stairs; golden raised ladders; pink and lavender open slide channels; a star lookout at 36. Ladders and chutes use the same 3D paths for their geometry and travelling pawns. Both ends pulse during a ride; poking a ladder or chute highlights its connected pads. Cancellation clears those highlights. The 36-space rules and all recorded lines stay unchanged. No new packages.
 
-QA: each of the three ladders and three slides has a direct section link and robot motion scenario. Before/after reel includes the first climb and purple slide, plus the final star. Next: your visual feedback and Kaylee's playtest of the raised playground.
+QA: each of the three ladders and three slides has a direct section link and robot motion scenario. Before/after reel includes the first climb and purple slide, plus the final star. Next: your visual feedback and her play data on the raised playground.
 
 Validation completed: all six equipment routes plus the finish pass real die clicks on iPad Safari and desktop. Sampled paths meet their exact numbered-pad endpoints and stay above each terrace and pad. Both phone orientations and both iPad orientations remain readable, with a visible large die target. The final polish moves 27 away from the purple slide. No spoken lines changed.

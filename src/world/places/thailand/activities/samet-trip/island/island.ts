@@ -1183,7 +1183,12 @@ export class SametIsland implements World3D {
       this.kaylee.setPose('sit')
       for (const [f, g] of [[this.ji, st.seats.ji], [this.nick, st.seats.nick]] as const) {
         g.add(f.m.root)
-        f.m.place(0, -0.1 * f.m.height, 0, 0, 'sit')
+        // (Mom, a modelled toy, sits on her own legs; Dad sits back against the bench, legs out over its edge.)
+        if (f.m.rig.legL) f.m.place(0, -0.1 * f.m.height, 0, 0, 'sit')
+        else {
+          f.m.place(0, -f.m.hips(), 0.12, 0, 'sit')
+          f.m.sitBack()
+        }
         f.shadow.visible = false
       }
       st.luggage.add(this.pup.root)

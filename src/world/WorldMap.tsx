@@ -12,7 +12,7 @@ import mapArt from './assets/bg-world-map.webp'
 import { DOCK, MapIcon, ShelfIcon } from './HomeIcons'
 import { FitBox } from './kit/Chrome'
 import { WORLD_LINES } from './lines'
-import { listed, places, type PlaceEntry } from './registry'
+import { places, useListed, type PlaceEntry } from './registry'
 import { FROM_SHELF, Shelf } from './Shelf'
 import { totalStamps, usePassport } from './stamps'
 import { useHalloween } from '../shell/seasonal/season'
@@ -89,6 +89,7 @@ export function WorldMap({ view: linked }: { view?: string }) {
   const halloween = useHalloween()
   const passport = usePassport()
   const online = useOnline() // the Theater needs the internet
+  const listed = useListed()
   const [label, setLabel] = useState<{ text: string; x: number; y: number } | null>(null)
   const [travelTo, setTravelTo] = useState<PlaceEntry | null>(null)
   const [saved, setView] = useSaved<View>('world:view', 'map')
@@ -181,7 +182,8 @@ export function WorldMap({ view: linked }: { view?: string }) {
             alt=""
             animate={{ y: [0, -10, 0], rotate: [-3, 3, -3] }}
             transition={{ repeat: Infinity, duration: 3 }}
-            style={{ position: 'absolute', left: `${HOME.x + 5}%`, top: `${HOME.y - 26}%`, width: '9%', zIndex: 2 }}
+            // (Out over the North Atlantic, clear of Canada's pin: at home's own corner the pin covered its basket.)
+            style={{ position: 'absolute', left: `${HOME.x + 15}%`, top: `${HOME.y - 25}%`, width: '9%', zIndex: 2 }}
           />
 
           {listed.map(({ meta }) => (

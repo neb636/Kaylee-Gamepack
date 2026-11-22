@@ -89,6 +89,10 @@ export const CLIFF = { x: 28.5, z: -31, h: 9 }
 /** The bald eagle circles this high over the lake. */
 export const EAGLE_Y = 16
 
+/** The lake's colors (deep, shallow): before she finds the rock flour, and glowing turquoise at the end. */
+export const LAKE_DULL = ['#3B97B0', '#57B2C4'] as const
+export const LAKE_GLOW = ['#16C2CB', '#6BE6DE'] as const
+
 /** Glide becomes "where the blue comes from" after she has paddled this far (m), or reached the milky water. */
 export const GLIDE_M = 32
 
