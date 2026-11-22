@@ -1,0 +1,14 @@
+{
+  "title": "Mountain Bike: steadier steering",
+  "checkIn": "fix",
+  "kaylee": "The bike answers her finger at once, so it stops swinging side to side when she corrects.",
+  "questions": [],
+  "reels": [
+    { "name": "bike-steer-before", "moments": ["canada-bike-steer"] },
+    { "name": "bike-steer-after", "moments": ["canada-bike-steer"] }
+  ],
+  "links": [
+    { "label": "Ride it with the knobs", "hash": "#/world/canada/bike/green?feel=1" },
+    { "label": "Ride it", "hash": "#/world/canada/bike/green" }
+  ]
+}
