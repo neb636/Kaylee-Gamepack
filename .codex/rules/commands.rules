@@ -54,8 +54,8 @@ prefix_rule(
 )
 prefix_rule(
     pattern = ["gh", "pr", "create"],
-    decision = "forbidden",
-    justification = "Codex doesn't open PRs here. Claude's ship skill does that. Stop once the work is pushed.",
+    decision = "prompt",
+    justification = "The agent opens the pull request using the ship workflow.",
 )
 
 # --- Node, npm and project tools ---

@@ -13,6 +13,7 @@
 import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry, type Object3D } from 'three'
 import type { Bag } from '../dispose'
 import { blobShadow, P, solidMix, type PartOpts, type V3 } from '../geo'
+import { mooseAntler } from './moose'
 import { bellyPatch, beaverTail } from './beaver'
 import { seaOtterBody, seaOtterHead, seaOtterTail } from './seaOtter'
 import { WEARABLES, type Look, type PaintColor, type PaintPart, type Wearable } from './look'
@@ -155,7 +156,7 @@ function frameOf(look: Look): Frame {
     headY,
     shoulder: penguin ? [0.3 * H, 0.5 * H, 0] : look.species === 'tern' ? [0.15 * H, 0.45 * H, -0.01 * H] : [0.155 * H * c, 0.47 * H, 0],
     eyeX: seaOtter ? 0.47 * R : look.species === 'unicorn' || look.species === 'pony' ? 0.37 * R : look.species === 'hornbill' || look.species === 'gecko' ? 0.46 * R : bird ? 0.42 * R : 0.36 * R,
-    eyeY: seaOtter ? 0.16 * R : look.species === 'beaver' ? 0.19 * R : look.species === 'gecko' ? 0.2 * R : look.species === 'unicorn' || look.species === 'pony' ? 0.12 * R : penguin ? 0.02 * R : bird ? 0.14 * R : 0.05 * R,
+    eyeY: look.species === 'moose' ? 0.18 * R : seaOtter ? 0.16 * R : look.species === 'beaver' ? 0.19 * R : look.species === 'gecko' ? 0.2 * R : look.species === 'unicorn' || look.species === 'pony' ? 0.12 * R : penguin ? 0.02 * R : bird ? 0.14 * R : 0.05 * R,
     eyeSize: (look.species === 'gecko' ? 0.3 : 0.21) * R,
     lift: penguin ? 0.12 * R : seaOtter ? 0.045 * R : look.species === 'monkey' ? 0.07 * R : 0,
     on: (x, y, lift = 0) => [x, headY + y, Math.sqrt(Math.max(0, R * R - x * x - y * y)) + lift],
@@ -537,7 +538,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     if (look.extras?.includes('eye-ring')) headPlain.push(P.sphere(eyeSize * 1.55, WHITE, { at: on(x, eyeY, lift - 0.06 * R), rot: turnTo(x), scale: [0.9, 1.05, 0.3] }, 16))
     if (look.lashes) for (const k of [0, 1]) eyesPlain.push(P.capsule(0.012 * R, 0.07 * R, INK, { at: on(x + s * (0.16 + k * 0.05) * R, eyeY + (0.17 - k * 0.07) * R, lift + 0.01 * R), rot: [0, 0, s * (-0.9 - k * 0.5)] }))
     const blushY = look.species === 'unicorn' || look.species === 'pony' ? -0.08 * R : -0.2 * R
-    if (!seaOtter) headPlain.push(P.sphere(0.12 * R, BLUSH, { at: on(s * 0.58 * R, blushY, lift * 0.6 - 0.02 * R), rot: turnTo(s * 0.58 * R), scale: [1.25, 0.65, 0.3] }))
+    if (!seaOtter) headPlain.push(P.sphere(0.12 * R, look.species === 'moose' ? '#B77865' : BLUSH, { at: on(s * 0.58 * R, blushY, lift * 0.6 - 0.02 * R), rot: turnTo(s * 0.58 * R), scale: [1.25, 0.65, 0.3] }))
   }
   const mouthPoint = (y: number, z?: number): V3 => (z === undefined ? on(0, y, 0.005 * R) : [0, headY + y, z])
   /** The resting mouth, built around the origin (its group sits at `mouthAt`). */
@@ -880,24 +881,23 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       break
     }
     case 'moose': {
-      // A moose: a long droopy muzzle with big nostrils, ears out to the sides, wide flat antlers like open hands (a
-      // few points round the rim), and the little beard (the bell) under the chin.
-      head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1.02, 1, 1] }, 26))
-      head.push(P.sphere(0.58 * R, look.light, { at: [0, headY - 0.38 * R, 0.66 * R], scale: [1.0, 0.75, 1.0] }))
-      head.push(P.sphere(0.3 * R, look.light, { at: [0, headY - 0.42 * R, 1.08 * R], scale: [1.2, 0.85, 0.7] }))
-      headPlain.push(...[-1, 1].map((s) => P.sphere(0.06 * R, INK, { at: [s * 0.15 * R, headY - 0.34 * R, 1.27 * R], scale: [1, 1.3, 0.6] })))
-      mouth(mouthPoint(-0.62 * R, 1.12 * R))
-      head.push(P.sphere(0.13 * R, look.fur, { at: [0, headY - 0.98 * R, 0.42 * R], scale: [0.8, 1.6, 0.8] }))
+      // The high brow leads down a sloping bridge to a soft nose with room for his smile.
+      head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [0.94, 1.04, 1] }, 26))
+      head.push(P.sphere(R, look.fur, { at: [0, headY - 0.20 * R, 0.71 * R], rot: [0.46, 0, 0], scale: [0.48, 0.43, 0.51] }, 24))
+      head.push(P.sphere(R, look.light, { at: [0, headY - 0.34 * R, 0.87 * R], rot: [0.20, 0, 0], scale: [0.60, 0.42, 0.55] }, 40))
+      mouth(mouthPoint(-0.50 * R, 1.392 * R))
+
       for (const s of [-1, 1]) {
-        head.push(P.cone(0.18 * R, 0.5 * R, look.fur, { at: [s * 0.9 * R, headY + 0.42 * R, -0.12 * R], rot: [0, 0, -s * 1.1] }))
-        headPlain.push(P.cone(0.1 * R, 0.32 * R, look.ear ?? look.light, { at: [s * 0.9 * R, headY + 0.42 * R, -0.04 * R], rot: [0, 0, -s * 1.1] }))
-        const antler = '#E9D3A6'
-        head.push(P.capsule(0.07 * R, 0.25 * R, antler, { at: [s * 0.62 * R, headY + 0.86 * R, -0.05 * R], rot: [0, 0, -s * 1.0] }))
-        head.push(P.sphere(0.5 * R, antler, { at: [s * 1.12 * R, headY + 1.12 * R, -0.08 * R], rot: [0.15, 0, -s * 0.35], scale: [1.15, 0.62, 0.2] }))
-        for (let i = 0; i < 4; i++) {
-          const a = 0.35 + i * 0.42
-          head.push(P.cone(0.09 * R, 0.3 * R, antler, { at: [s * (1.12 + Math.cos(a) * 0.55) * R, headY + (1.12 + Math.sin(a) * 0.36) * R, -0.08 * R], rot: [0, 0, -s * (Math.PI / 2 - a)] }))
-        }
+        headPlain.push(P.sphere(0.085 * R, look.dark, { at: [s * 0.255 * R, headY - 0.26 * R, 1.34 * R], rot: [-0.15, s * 0.52, -s * 0.20], scale: [0.78, 1.28, 0.36] }))
+        headPlain.push(P.sphere(0.15 * R, '#70482F', { at: on(s * eyeX, eyeY + 0.35 * R), rot: turnTo(s * eyeX), scale: [1, 0.25, 0.35] }))
+        const earRotation: V3 = [0, -s * 0.18, -s * 1.22]
+        head.push(P.sphere(R, look.fur, { at: [s * 0.93 * R, headY + 0.47 * R, -0.10 * R], rot: earRotation, scale: [0.17, 0.33, 0.13] }))
+        headPlain.push(P.sphere(R, look.ear ?? look.light, { at: [s * 0.96 * R, headY + 0.48 * R, 0.01 * R], rot: earRotation, scale: [0.10, 0.22, 0.055] }))
+        head.push(mooseAntler(s, R, headY))
+      }
+      // Three overlapping locks break up the crown between the antler roots.
+      for (const [x, tilt] of [[-0.19, 0.85], [0, 0.46], [0.15, -0.14]]) {
+        head.push(P.sphere(0.20 * R, look.fur, { at: [x * R, headY + 0.98 * R, 0.27 * R], rot: [0.60, 0, tilt], scale: [0.45, 1.42, 0.60] }))
       }
       tailRoot = [0, 0.24 * H, -0.15 * H * round[2]]
       tail.push(P.sphere(0.04 * H, look.fur, { at: [0, 0.24 * H, -0.17 * H * round[2]] }))
@@ -1147,6 +1147,8 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   talk.add(solidMix([], [P.sphere(0.17 * R, MOUTH, { scale: [1.1, 0.9, 0.35] }), P.sphere(0.09 * R, TONGUE, { at: [0, -0.06 * R, 0.03 * R], scale: [1.3, 0.6, 0.5] })], bag, 0))
   talk.scale.setScalar(0.001)
   talk.visible = false
+  // Lay both mouth poses along the slope below the moose's nostrils.
+  if (look.species === 'moose') mouthGroup.rotation.x = talk.rotation.x = 0.36
   headPivot.add(eyeGroup, mouthGroup, talk)
   let expression: Rig['expression']
   if (beaverBrows.length) {

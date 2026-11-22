@@ -72,7 +72,7 @@ const HAT_FIT: Record<string, Fit> = {
 }
 
 /** How a rig species' head ball is squashed (engine3d/characters/animal.ts builds it this way). */
-const HEAD_SCALE: Record<string, V3> = { beaver: [1.08, 1, 1], moose: [1.02, 1, 1], raccoon: [1.1, 0.98, 1], 'sea-otter': [1.12, 0.96, 1], bear: [1.08, 1, 1] }
+const HEAD_SCALE: Record<string, V3> = { beaver: [1.08, 1, 1], moose: [0.94, 1.04, 1], raccoon: [1.1, 0.98, 1], 'sea-otter': [1.12, 0.96, 1], bear: [1.08, 1, 1] }
 
 /** Where a cheek stamp goes on each head (across, up, on the unit head ball before it's squashed). */
 const CHEEK_AT: Record<string, [number, number]> = { beaver: [0.6, -0.2], moose: [0.72, -0.08], raccoon: [0.62, -0.34], 'sea-otter': [0.69, -0.14], bear: [0.62, -0.22], tuque: [0.55, -0.2], lulu: [0.6, -0.16] }
