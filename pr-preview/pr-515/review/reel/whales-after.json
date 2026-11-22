@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "whales-after",
+  "title": "Whales after",
+  "video": "whales-after.mp4",
+  "gif": "whales-after.gif",
+  "seconds": 18,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "Canada story whales in",
+      "where": "#/world/canada/story/whales-in",
+      "seconds": 10,
+      "fps": 91.2,
+      "status": "ok"
+    },
+    {
+      "name": "Canada whales story",
+      "where": "#/world/canada/whales/story",
+      "seconds": 5,
+      "fps": 68.4,
+      "status": "ok"
+    }
+  ]
+}
