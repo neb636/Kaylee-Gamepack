@@ -105,9 +105,10 @@ function questionsFor(facts) {
 async function fitForJev(file) {
   const { width: w, height: h, format } = await sharp(file).metadata()
   const s = Math.min(1, 1568 / Math.max(w, h)) * Math.max(1, 280 / Math.min(w, h))
-  if (Math.max(w, h) * s > 1568 || Math.min(w, h) * s < 280) throw new Error(`${w}x${h} is too long and thin for Jev (280-1568 px a side)`)
-  if (s === 1 && (format === 'png' || format === 'jpeg')) return { buffer: readFileSync(file), type: format === 'png' ? 'image/png' : 'image/jpeg' }
-  return { buffer: await sharp(file).resize(Math.round(w * s), Math.round(h * s)).png().toBuffer(), type: 'image/png' }
+  const [tw, th] = [Math.round(w * s), Math.round(h * s)] // check the sizes really sent, not the float products
+  if (Math.max(tw, th) > 1568 || Math.min(tw, th) < 280) throw new Error(`${w}x${h} is too long and thin for Jev (280-1568 px a side)`)
+  if (tw === w && th === h && (format === 'png' || format === 'jpeg')) return { buffer: readFileSync(file), type: format === 'png' ? 'image/png' : 'image/jpeg' }
+  return { buffer: await sharp(file).resize(tw, th).png().toBuffer(), type: 'image/png' }
 }
 
 async function ask(frame, facts) {
@@ -198,30 +199,43 @@ for (const f of ['results.json', 'requests.jsonl', 'summary.md']) rmSync(path.jo
 for (const f of readdirSync(dir).filter((n) => /^sheet-\d+\.png$/.test(n))) rmSync(path.join(dir, f))
 rmSync(path.join(dir, 'boxed'), { recursive: true, force: true })
 
+// The budget: every call's tokens count once it answers (even when another sample of its frame failed), and a frame
+// reserves its estimated cost before it sends, so calls in flight can't carry a run past --max-dollars.
 let tokens = 0
+let reserved = 0
+let calls = 0
 let stopped = 0
+const perCall = () => (calls ? tokens / calls : 5000) // a guess until the first answer: a big frame with every question
 const results = []
 const errors = []
 const queue = [...list]
 const t0 = Date.now()
 await Promise.all(Array.from({ length: parallel }, async () => {
   for (let frame = queue.shift(); frame; frame = queue.shift()) {
-    if (tokens * DOLLARS_PER_INPUT_TOKEN >= maxDollars) {
+    const cost = perCall() * samples
+    if ((tokens + reserved + cost) * DOLLARS_PER_INPUT_TOKEN > maxDollars) {
       stopped++
       continue
     }
+    reserved += cost
     const f = facts[frame.screen]
-    try {
-      // Jev's answers drift a little between identical calls (typically 0.02, up to 0.13), so each frame is asked
-      // --samples times (default 3) and the yes/no answers averaged; boxes come from the first call.
-      const runs = await Promise.all(Array.from({ length: samples }, () => ask(frame, f)))
-      tokens += runs.reduce((t, r) => t + (r.usage?.input_tokens ?? 0), 0)
-      const answers = structuredClone(runs[0].answers)
-      for (const [k, a] of Object.entries(answers)) if (a.noul !== undefined) a.noul = runs.reduce((t, r) => t + r.answers[k].noul, 0) / runs.length
-      results.push({ ...frame, file: path.relative(root, frame.file), model: runs[0].model, answers, ...judge(answers, f) })
-    } catch (e) {
-      errors.push(`${frame.set}/${frame.name}: ${e.message}`)
+    // Jev's answers drift a little between identical calls (typically 0.02, up to 0.13), so each frame is asked
+    // --samples times (default 3) and the yes/no answers averaged; boxes come from the first call.
+    const settled = await Promise.allSettled(Array.from({ length: samples }, () => ask(frame, f)))
+    reserved -= cost
+    for (const r of settled) if (r.status === 'fulfilled') {
+      tokens += r.value.usage?.input_tokens ?? 0
+      calls++
     }
+    const failed = settled.find((r) => r.status === 'rejected')
+    if (failed) {
+      errors.push(`${frame.set}/${frame.name}: ${failed.reason.message}`)
+      continue
+    }
+    const runs = settled.map((r) => r.value)
+    const answers = structuredClone(runs[0].answers)
+    for (const [k, a] of Object.entries(answers)) if (a.noul !== undefined) a.noul = runs.reduce((t, r) => t + r.answers[k].noul, 0) / runs.length
+    results.push({ ...frame, file: path.relative(root, frame.file), model: runs[0].model, answers, ...judge(answers, f) })
   }
 }))
 results.sort((a, b) => `${a.set}/${a.name}`.localeCompare(`${b.set}/${b.name}`))
