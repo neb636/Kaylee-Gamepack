@@ -167,7 +167,8 @@ export const screens = [
   { name: 'canada-bath-look-hockey', hash: '#/world/canada/party/hockey?stamps=all&team=all&look=', reset: true, wait: 6000 },
   // The films: the muddy lump in the rain; Misty in her look with the hockey stick.
   { name: 'canada-film-bath-in', hash: '#/world/canada/story/bath-in', reset: true, wait: 7000 },
-  { name: 'canada-film-bath-out', hash: '#/world/canada/story/bath-out?look=', reset: true, wait: 6000 },
+  // `oddities`: scene facts for the opt-in Jev visual QA (scripts/qa-oddities.mjs): her stick came loose once (#512).
+  { name: 'canada-film-bath-out', hash: '#/world/canada/story/bath-out?look=', reset: true, wait: 6000, oddities: { held: [{ holder: 'the white bear', prop: 'hockey stick' }] } },
 ]
 
 export const pacing = [
