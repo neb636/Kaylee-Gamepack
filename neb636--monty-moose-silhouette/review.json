@@ -1,17 +1,11 @@
 {
   "title": "Monty the moose",
   "checkIn": "Fix",
-  "kaylee": "Monty\u2019s ears are a little shorter, and his lower jaw moves with his voice. Choose any of his 13 recordings in the character lab.",
+  "kaylee": "Monty smiles between words and opens a little round mouth with a pink tongue as he talks. You can try all 13 of his lines in the character lab.",
   "pictures": [
     {
-      "title": "Shorter ears",
-      "before": "pics/front-before.jpg",
-      "after": "pics/front-after.jpg"
-    },
-    {
-      "title": "Jaw and muzzle in profile",
-      "before": "pics/profile-before.jpg",
-      "after": "pics/profile-after.jpg"
+      "title": "Asking about his goalie job at the waterfall",
+      "after": "pics/waterfall-speaking.jpg"
     }
   ],
   "links": [
