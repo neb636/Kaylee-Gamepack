@@ -9,6 +9,7 @@ import { go } from '../router'
 import { firstTime as firstTimeHere, lineText, Mascot, say, sounds, useOnline, useSaved } from '../sdk'
 import balloon from './assets/balloon.webp'
 import mapArt from './assets/bg-world-map.webp'
+import { MapPinArt } from './MapPinArt'
 import { DOCK, MapIcon, ShelfIcon } from './HomeIcons'
 import { FitBox } from './kit/Chrome'
 import { WORLD_LINES } from './lines'
@@ -198,12 +199,12 @@ export function WorldMap({ view: linked }: { view?: string }) {
                 setTravelTo(places.find((p) => p.meta.id === meta.id) ?? null)
               }}
             >
-              {meta.emoji}
+              <MapPinArt id={meta.id} fallback={meta.emoji} />
             </Pin>
           ))}
           {COMING_SOON.filter((c) => !places.some((p) => p.meta.id === c.id)).map((c) => (
             <Pin key={c.id} x={c.x} y={c.y} label={`${c.id} coming soon`} dim onTap={() => show(WORLD_LINES.soon[c.id], c.x, c.y)}>
-              <span style={{ opacity: 0.55 }}>{c.emoji}</span>
+              <span style={{ opacity: 0.55 }}><MapPinArt id={c.id} fallback={c.emoji} /></span>
               <span style={{ position: 'absolute', right: '-14%', bottom: '-14%', fontSize: '55%' }}>☁️</span>
             </Pin>
           ))}

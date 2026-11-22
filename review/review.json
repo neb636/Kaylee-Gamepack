@@ -1,0 +1,16 @@
+{
+  "title": "World map: hand-drawn vector pin art",
+  "checkIn": "fix",
+  "kaylee": "Each country has its own colorful hand-drawn friend on the world map.",
+  "questions": [
+    "Which do you prefer: Fable’s earlier map art or these vector drawings?"
+  ],
+  "tableReads": [],
+  "reels": [],
+  "links": [
+    {
+      "label": "Play the world map",
+      "hash": "#/world"
+    }
+  ]
+}
