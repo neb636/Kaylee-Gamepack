@@ -4,8 +4,9 @@ import posthog, { isPostHogEnabled } from './posthog'
 /**
  * Feature flags (PostHog). Unfinished work merges behind a flag so the live site doesn't show it yet.
  *
- * Every flag is OFF unless PostHog says it's on, right now, for this browser:
- * - off in builds without PostHog (PR previews, local builds: `?all=1` still shows hidden places there),
+ * In the live site every flag is OFF unless PostHog says it's on, right now, for this browser:
+ * - builds without PostHog (PR previews, local builds) have no live site to protect: every flag is ON there, so a
+ *   preview shows the work it's for,
  * - off while offline, and until this launch's flags have come back from PostHog (a saved copy isn't trusted),
  * - off if loading them failed (a hotel wifi login page).
  * So her iPad, which is often offline, never sees something half-built. Testers (`?tester=1`, `docs/play-data.md`)
@@ -38,9 +39,10 @@ if (isPostHogEnabled) {
 
 const online = () => typeof navigator === 'undefined' || navigator.onLine !== false
 
-/** Is this flag on right now? False unless PostHog loaded it this launch, we're online, and it's on. */
+/** Is this flag on right now? Always, in builds without PostHog (previews). Live: only if PostHog loaded it this launch, we're online, and it's on. */
 export function flagOn(flag: FeatureFlag): boolean {
-  if (!isPostHogEnabled || !loaded || !online()) return false
+  if (!isPostHogEnabled) return true
+  if (!loaded || !online()) return false
   return posthog.isFeatureEnabled(flag, { send_event: false }) === true
 }
 
