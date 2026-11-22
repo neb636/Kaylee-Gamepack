@@ -164,8 +164,8 @@ export const MOUNTAIN: FilmSet<MountainSet> = {
 
     return { mtn, course, top, pool, bike, ride: null, cone, coneAt, lookout, poolAt, monty: null }
   },
-  update(set, dt, t, s) {
-    set.mtn.update(dt, t, s.rig.camera.position)
+  update(set, dt, t) {
+    set.mtn.update(dt, t)
     const r = set.ride
     const b = set.bike
     if (r && b.root.visible) {

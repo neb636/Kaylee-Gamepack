@@ -8,8 +8,7 @@
 // - the trail: a ribbon of packed dirt with a worn middle line, leaves fallen on it, banked berms, roots, rocks, the
 //   wooden kicker, grassy shoulders and the mossy island between the two ways
 // - the forest: thousands of spruces, maples and birches, outlined near the trail; ferns, mushrooms and boulders
-// - the gondola: towers, cables, both stations and the cabins going up and down (a pool of cabins placed nearest the
-//   camera, each swinging on its grip)
+// - the gondola: towers, cables, both stations and the cabins circling the lift, each swinging on its grip
 // - running water (the creek across the trail, the waterfall at the bottom) with its own little shader
 // - the sky dome, clouds, and three layers of far hills
 import { BackSide, BufferAttribute, BufferGeometry, CircleGeometry, Color, DynamicDrawUsage, Euler, InstancedMesh, Matrix4, Quaternion, Float32BufferAttribute, Group, Mesh, MeshBasicMaterial, MeshToonMaterial, SphereGeometry, TorusGeometry, Vector3 } from 'three'
@@ -526,18 +525,20 @@ export function roundWater(r: number, y: number, at: { x: number; z: number }, b
 const CAB_COLORS = [PAL.pink, PAL.mint, PAL.lavender, PAL.butter, PAL.sky, PAL.peach]
 /** From the cable down to the cabin's floor (m). */
 export const HANG = 3.7
-const SPACING = 46
+const WHEEL_RADIUS = 2.4
+const TURN_LENGTH = Math.PI * WHEEL_RADIUS
 const SPEED = 5
-const POOL_N = 12
+export const GONDOLA_CABINS = 36
 
-export interface Cabin {
+interface Cabin {
   /** At the grip on the cable. */
   root: Group
   /** Swings round the grip. */
   swing: Group
-  color: number
-  /** Which slot it's showing (-1: none). */
-  slot: number
+  a: number
+  v: number
+  b: number
+  bv: number
 }
 
 /** A cabin: the grip and hanger, an open cabin with a roof, its color's lower half. */
@@ -580,13 +581,14 @@ export class Gondola {
   private upLen: number[] = [0]
   private downLen: number[] = [0]
   readonly length: number
+  private loopLength: number
+  private distance = 0
+  private heading: number
   readonly cabins: Cabin[] = []
-  /** Maple's own cabin (in the gondola ride). */
+  /** The hot pink cabin Maple rides in. It keeps circling after she gets off. */
   readonly hers: Cabin
-  private swings: { a: number; v: number; b: number; bv: number }[] = []
   readonly top: Vector3
   readonly bottom: Vector3
-  private tmp = new Vector3()
 
   constructor(
     private course: Course,
@@ -605,6 +607,7 @@ export class Gondola {
     const dir = new Vector3().subVectors(this.top, this.bottom)
     const flat = Math.hypot(dir.x, dir.z)
     const side = new Vector3(dir.z / flat, 0, -dir.x / flat)
+    this.heading = Math.atan2(dir.x, dir.z)
     const N = Math.round(flat / 70)
     const tops: Vector3[] = [this.bottom.clone()]
     const towerParts: BufferGeometry[] = []
@@ -629,8 +632,8 @@ export class Gondola {
     tops.push(this.top.clone())
     // The two lines, a little sag between towers.
     for (const [line, lens, off] of [
-      [this.up, this.upLen, 2.4],
-      [this.down, this.downLen, -2.4],
+      [this.up, this.upLen, WHEEL_RADIUS],
+      [this.down, this.downLen, -WHEEL_RADIUS],
     ] as const) {
       for (let i = 0; i < tops.length - 1; i++) {
         const a0 = tops[i]
@@ -647,6 +650,7 @@ export class Gondola {
       for (let i = 1; i < line.length; i++) lens.push(lens[i - 1] + line[i].distanceTo(line[i - 1]))
     }
     this.length = this.upLen[this.upLen.length - 1]
+    this.loopLength = this.length * 2 + TURN_LENGTH * 2
     const cable: BufferGeometry[] = []
     for (const line of [this.up, this.down])
       for (let i = 0; i < line.length - 1; i++) {
@@ -661,24 +665,17 @@ export class Gondola {
     this.group.add(solid(merge(cable), bag, 0))
     this.group.add(solid(merge(towerParts), bag, 2))
     this.group.add(this.stations(side, bag))
-    for (let i = 0; i < POOL_N; i++) {
-      const color = i % CAB_COLORS.length
+    const shapes = [PAL.hotpink, ...CAB_COLORS].map((color) => cabinShape(color, bag))
+    for (let i = 0; i < GONDOLA_CABINS; i++) {
       const root = new Group()
       const swing = new Group()
       root.add(swing)
-      swing.add(cabinShape(CAB_COLORS[color], bag))
-      root.visible = false
+      swing.add(shapes[i === 0 ? 0 : 1 + (i - 1) % CAB_COLORS.length].clone())
       this.group.add(root)
-      this.cabins.push({ root, swing, color, slot: -1 })
+      this.cabins.push({ root, swing, a: 0, v: 0, b: 0, bv: 0 })
     }
-    const root = new Group()
-    const swing = new Group()
-    root.add(swing)
-    swing.add(cabinShape(PAL.hotpink, bag))
-    this.group.add(root)
-    this.hers = { root, swing, color: -1, slot: -1 }
-    const slots = Math.floor(this.length / SPACING) * 2
-    for (let i = 0; i < slots; i++) this.swings.push({ a: 0, v: 0, b: 0, bv: 0 })
+    this.hers = this.cabins[0]
+    this.update(0, 0)
   }
 
   /** Both stations: a lavender building with a pink roof and the big wheel the cable turns round. */
@@ -714,7 +711,7 @@ export class Gondola {
       parts.push(P.rbox(2.2, 1.5, 0.2, 0.2, PAL.sky, { at: [p.x, y0 + h * 0.6, p.z], rot: [0, yaw, 0] }))
     }
     // The bullwheels.
-    for (const p of [this.top, this.bottom]) parts.push(P.torus(2.4, 0.18, '#9A93B5', { at: [p.x, p.y + 0.2, p.z], rot: [Math.PI / 2, 0, 0] }))
+    for (const p of [this.top, this.bottom]) parts.push(P.torus(WHEEL_RADIUS, 0.18, '#9A93B5', { at: [p.x, p.y + 0.2, p.z], rot: [Math.PI / 2, 0, 0] }))
     // The bottom station, smaller.
     const b = this.bottom
     const by = this.course.land(b.x, b.z)
@@ -747,68 +744,37 @@ export class Gondola {
     const k = (v - lens[i - 1]) / Math.max(1e-6, lens[i] - lens[i - 1])
     return out.copy(pts[i - 1]).lerp(pts[i], k)
   }
-  /** Which way a line climbs at u (yaw, radians). */
-  yawAt(u: number) {
-    const a = this.at('up', u - 1, new Vector3())
-    const b = this.at('up', u + 1, this.tmp)
-    return Math.atan2(b.x - a.x, b.z - a.z)
+  /** Pushes a cabin swinging: `a` along the line, `b` sideways. */
+  push(cabin: Cabin, a: number, b: number) {
+    cabin.v += a
+    cabin.bv += b
   }
 
-  /** Pushes the cabin in a slot (or hers, slot -1) swinging: `a` along the line, `b` sideways. */
-  push(slot: number, a: number, b: number) {
-    const sw = slot < 0 ? this.her : this.swings[slot]
-    if (!sw) return
-    sw.v += a
-    sw.bv += b
-  }
-  private her = { a: 0, v: 0, b: 0, bv: 0 }
-
-  /** Moves the cabins along (each pooled cabin shows the slot nearest the camera) and lets them swing. */
-  update(dt: number, t: number, cam: Vector3) {
-    const hers = this.hers.root.visible ? this.hers.root.position : null
-    const L = this.length
-    const n = this.swings.length / 2
-    const spots: { slot: number; p: Vector3; yaw: number; d: number }[] = []
-    for (let i = 0; i < n * 2; i++) {
-      const line = i < n ? 'up' : 'down'
-      const base = ((i % n) * SPACING + t * SPEED) % (n * SPACING)
-      const u = line === 'up' ? base : L - base
-      if (base > L - 4 || base < 4) continue
-      const p = this.at(line, u)
-      // (None where Maple's own cabin is riding.)
-      if (hers && line === 'up' && p.distanceToSquared(hers) < 100) continue
-      const d = p.distanceToSquared(cam)
-      spots.push({ slot: i, p, yaw: this.yawAt(u) + (line === 'down' ? Math.PI : 0), d })
+  /** All cabins share one lift speed. During the cinematic, Maple's position drives the whole loop. */
+  update(dt: number, t: number, rideDistance?: number) {
+    const length = this.length
+    this.distance = (rideDistance ?? this.distance + SPEED * dt) % this.loopLength
+    for (const [i, cabin] of this.cabins.entries()) {
+      const u = (this.distance + (i * this.loopLength) / GONDOLA_CABINS) % this.loopLength
+      const down = u >= length + TURN_LENGTH
+      const straight = down ? u - length - TURN_LENGTH : u
+      const yaw = down ? this.heading + Math.PI : this.heading
+      if (straight < length) {
+        this.at(down ? 'down' : 'up', down ? length - straight : straight, cabin.root.position)
+        cabin.root.rotation.y = yaw
+      } else {
+        // The cable rounds the bullwheel inside each station and joins the opposite line.
+        const center = down ? this.bottom : this.top
+        const angle = yaw - (straight - length) / WHEEL_RADIUS
+        cabin.root.position.set(center.x + WHEEL_RADIUS * Math.cos(angle), center.y, center.z - WHEEL_RADIUS * Math.sin(angle))
+        cabin.root.rotation.y = angle
+      }
+      cabin.v += (-3.5 * cabin.a - 0.5 * cabin.v) * dt
+      cabin.a += cabin.v * dt
+      cabin.bv += (-3.5 * cabin.b - 0.5 * cabin.bv) * dt
+      cabin.b += cabin.bv * dt
+      cabin.swing.rotation.set(cabin.a + Math.sin(t * 1.1 + i) * 0.015, 0, cabin.b)
     }
-    spots.sort((a, b) => a.d - b.d)
-    const used = new Set(spots.slice(0, POOL_N).map((s) => s.slot))
-    // Keep each cabin on its slot while it's still among the nearest, so it doesn't jump.
-    const free: Cabin[] = []
-    for (const c of this.cabins) if (!used.has(c.slot)) free.push(c)
-    else used.delete(c.slot)
-    for (const s of spots.slice(0, POOL_N)) {
-      if (!used.has(s.slot)) continue
-      const c = free.pop()
-      if (c) c.slot = s.slot
-    }
-    for (const c of free) c.slot = -1
-    const bySlot = new Map(spots.map((s) => [s.slot, s]))
-    for (const c of this.cabins) {
-      const s = bySlot.get(c.slot)
-      c.root.visible = !!s
-      if (!s) continue
-      c.root.position.copy(s.p)
-      c.root.rotation.y = s.yaw
-      const sw = this.swings[c.slot]
-      c.swing.rotation.set(sw.a + Math.sin(t * 1.1 + c.slot) * 0.015, 0, sw.b)
-    }
-    for (const sw of [...this.swings, this.her]) {
-      sw.v += (-3.5 * sw.a - 0.5 * sw.v) * dt
-      sw.a += sw.v * dt
-      sw.bv += (-3.5 * sw.b - 0.5 * sw.bv) * dt
-      sw.b += sw.bv * dt
-    }
-    this.hers.swing.rotation.set(this.her.a, 0, this.her.b)
   }
 }
 

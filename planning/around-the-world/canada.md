@@ -117,6 +117,7 @@ New voices: `loon` (Lulu) and `gus`. The PR records every new line.
 - **Carnival Snowballs:** the first snowman she finishes is Tuque himself (his cap, face and mittens on the balls she
   rolled) and leads the parade; a lower camera shows the castle hotel; soft shadows and lanterns.
 - **Mountain Bike:** Monty waits in the waterfall pool at the bottom, big and unmissable; the ending hands to his film.
+  In the gondola opening, the cabins share a continuous cable loop around the two station wheels.
   The intro's long zoom to his pool uses a farther near clipping plane to keep the distant outlines stable, then
   restores the close-up plane when the film cuts back to Maple.
 - **Campfire Night:** Roxy has three kits; the hunt helps after 8 s; the goodnight is skipped when her film follows.

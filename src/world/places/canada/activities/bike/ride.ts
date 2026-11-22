@@ -41,7 +41,7 @@ import { lilyPad } from './monty'
 import { bikeSfx } from './sounds'
 import { Rider } from './rider'
 import { Mountain } from './mountain'
-import { buildSky, FALL, type Gondola, HANG, SKY } from './scenery'
+import { buildSky, FALL, type Gondola, GONDOLA_CABINS, HANG, SKY } from './scenery'
 import type { BikeSection } from './sections'
 import { BERMS_END, BRIDGE_HALF, Course, CREEK, CREEK_END, curve, END, FALLS, GREEN_END, H0, half, inCreek, island, JUMP, lane, phi, POOL, rattly, SHOULDER, SPLIT, START, way } from './trail'
 import { TO_DEG, wrapAngle } from '../../../../../sdk/math'
@@ -95,11 +95,10 @@ export interface BikeEvents {
   progress(done: number): void
 }
 
-const CABS = 12
 export const BIKE_ANCHORS: AnchorInfo[] = [
   { id: 'bike', label: "Maple's bike", kind: 'thing' },
   { id: 'cabin', label: "Maple's gondola", kind: 'thing' },
-  ...Array.from({ length: CABS }, (_, i) => ({ id: `car:${i}`, label: 'A gondola', kind: 'thing' as const })),
+  ...Array.from({ length: GONDOLA_CABINS }, (_, i) => ({ id: `car:${i}`, label: 'A gondola', kind: 'thing' as const })),
   { id: 'chipmunk', label: 'The chipmunk', kind: 'thing' },
   { id: 'moose', label: 'Monty the moose', kind: 'thing' },
   { id: 'woodpecker', label: 'The woodpecker', kind: 'thing' },
@@ -439,6 +438,7 @@ export class MountainBike implements World3D {
       // (The story: her cabin waits at the bottom of the shot while Maple tells Kaylee where she's going.)
       this.mode = start.section
       this.gondU = this.gondola.length - GOND_FROM
+      this.gondola.update(0, 0, this.gondU)
       this.gondola.hers.swing.add(this.rider.root)
       // On the cabin's floor, small enough to fit under the roof.
       this.rider.root.position.set(0, -HANG + 0.88, 0)
@@ -446,7 +446,6 @@ export class MountainBike implements World3D {
       this.rider.root.scale.setScalar(0.64)
       this.shadow.visible = false
     } else {
-      this.gondola.hers.root.visible = false
       const s = { green: START - 5, berms: GREEN_END - 6, creek: BERMS_END + 2, falls: CREEK_END + 6 }[start.section as 'green']
       this.prefer = start.section === 'berms' ? (start.trail === 'blue' ? 1 : -1) : 0
       this.lat = this.steerLat = this.prefer * 1.6
@@ -554,13 +553,8 @@ export class MountainBike implements World3D {
       this.lastSteer = t
     }
 
-    this.mountain.update(dt, t, this.rig.camera.position)
+    const inCabin = this.inCabin
     if (this.mode === 'story') {
-      // Waiting at the bottom of the shot while Maple talks.
-      const her = this.gondola.hers
-      this.gondU = this.gondola.length - GOND_FROM
-      this.gondola.at('up', this.gondU, her.root.position)
-      her.root.rotation.y = this.gondola.yawAt(this.gondU)
       // She waves hello, then rings her bell when they're about to go.
       if (this.modeT > 0.9 && !this.told.has('hello')) {
         this.told.add('hello')
@@ -573,6 +567,7 @@ export class MountainBike implements World3D {
     } else if (this.mode === 'gondola') this.upTheGondola()
     else if (this.mode === 'ride') this.ride(dt, k)
     else this.d.stop()
+    this.mountain.update(dt, t, inCabin ? this.gondU : undefined)
     if (this.doneT >= 0) this.doneT += dt
 
     this.updateAnimals(dt, t)
@@ -648,15 +643,11 @@ export class MountainBike implements World3D {
       this.told.add('high')
       this.chat(this.counts.swings ? L.bike.rock : L.bike.high, true)
     }
-    const her = this.gondola.hers
-    this.gondola.at('up', this.gondU, her.root.position)
-    her.root.rotation.y = this.gondola.yawAt(this.gondU)
     if (q >= 1) {
       // Into the station: out she rolls through the door, down the mountain.
       this.rider.root.removeFromParent()
       this.scene.add(this.rider.root)
       this.rider.root.scale.setScalar(1)
-      this.gondola.hers.root.visible = false
       this.shadow.visible = true
       this.place(START - 5, 0, 0)
       this.enter('green')
@@ -1087,14 +1078,14 @@ export class MountainBike implements World3D {
     const t = c.trail
     if (this.mode === 'story') {
       // Close on Maple in her cabin, from in front of her.
-      const her = this.gondola.hers.root.position
-      const yaw = this.gondola.yawAt(this.gondU) + STORY_YAW
+      const { position: her, rotation } = this.gondola.hers.root
+      const yaw = rotation.y + STORY_YAW
       return { center: new Vector3(her.x, her.y - HANG + 1.35, her.z), half: tall ? new Vector3(0.9, 0.8, 0.9) : new Vector3(1.3, 0.8, 1.0), yaw: yaw * TO_DEG, pitch: 12, minDist: 2.2 }
     }
     if (this.mode === 'gondola') {
       // Uphill of her cabin and off to the side, looking back down at it: the trail, the valley and the river behind.
-      const her = this.gondola.hers.root.position
-      const yaw = this.gondola.yawAt(this.gondU) + 1.25 - this.modeT * 0.03
+      const { position: her, rotation } = this.gondola.hers.root
+      const yaw = rotation.y + 1.25 - this.modeT * 0.03
       return { center: new Vector3(her.x, her.y - 2.4, her.z), half: tall ? new Vector3(2, 2.2, 2) : new Vector3(4.6, 2.4, 3.2), yaw: yaw * TO_DEG, pitch: tall ? 20 : 12, minDist: 7 }
     }
     if (this.mode === 'done') {
@@ -1189,7 +1180,7 @@ export class MountainBike implements World3D {
     if (this.mode === 'ride') this.wheel.move(x, y, downX, downY, held)
     else if (this.mode === 'gondola' && held) {
       // Rocking her cabin with a finger.
-      this.gondola.push(-1, 0, (x - this.lastX) * 0.004)
+      this.gondola.push(this.gondola.hers, 0, (x - this.lastX) * 0.004)
       this.lastX = x
     }
   }
@@ -1211,7 +1202,7 @@ export class MountainBike implements World3D {
     if (id === 'cabin') {
       this.counts.pokes++
       this.counts.swings++
-      this.gondola.push(-1, 0.5, 0.25)
+      this.gondola.push(this.gondola.hers, 0.5, 0.25)
       this.rider.wave()
       creak()
       this.chat(this.counts.swings > 2 ? L.bike.rock : L.bike.high)
@@ -1219,10 +1210,10 @@ export class MountainBike implements World3D {
     }
     if (id?.startsWith('car:')) {
       const cab = this.gondola.cabins[+id.slice(4)]
-      if (!cab || cab.slot < 0) return
+      if (!cab) return
       this.counts.pokes++
       this.counts.swings++
-      this.gondola.push(cab.slot, 0.6, 0.3)
+      this.gondola.push(cab, 0.6, 0.3)
       creak()
       return
     }
@@ -1340,7 +1331,7 @@ export class MountainBike implements World3D {
       else if (id === 'cabin') place(el, this.mode === 'gondola' ? this.gondola.hers.root : null, 2.6, 1.3, -HANG)
       else if (id.startsWith('car:')) {
         const cab = this.gondola.cabins[+id.slice(4)]
-        const show = cab && cab.root.visible && cab.root.position.distanceTo(this.rig.camera.position) < 90
+        const show = cab && !(this.inCabin && cab === this.gondola.hers) && cab.root.position.distanceTo(this.rig.camera.position) < 90
         place(el, show ? cab.root : null, 2.6, 1.2, -HANG)
       } else if (id === 'chipmunk') place(el, this.chip.root.visible && this.mode === 'ride' ? this.chip.root : null, this.chip.height, 2)
       else if (id === 'moose') place(el, near(MONTY.s, -20, 110) || this.mode === 'done' ? this.monty.root : null, this.monty.height - MONTY.sink, 1, MONTY.sink)
