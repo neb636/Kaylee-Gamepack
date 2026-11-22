@@ -1,0 +1,33 @@
+{
+  "kind": "reel",
+  "name": "bath-after",
+  "title": "Bath after",
+  "video": "bath-after.mp4",
+  "gif": "bath-after.gif",
+  "seconds": 53,
+  "browser": "webkit",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "canada-bath-suds",
+      "where": "canada-bath-suds",
+      "seconds": 14,
+      "fps": 50.7,
+      "status": "ok"
+    },
+    {
+      "name": "canada-bath-bubbles",
+      "where": "canada-bath-bubbles",
+      "seconds": 18,
+      "fps": 54,
+      "status": "ok"
+    },
+    {
+      "name": "canada-bath-pokes",
+      "where": "canada-bath-pokes",
+      "seconds": 16,
+      "fps": 57.1,
+      "status": "ok"
+    }
+  ]
+}
