@@ -97,15 +97,22 @@ if (enabledForBuild) {
         environment: import.meta.env.MODE,
       },
       before_send: [errorsOnlyForTesters, markTargetAudience, keepOffline],
+      // A tester's flags wait for `tester: true` below, so the first request already carries it (src/flags.ts).
+      advanced_disable_feature_flags_on_first_load: isTester,
     })
     // An untagged browser forgets the tag everywhere: the saved property, and her shared identity (a fresh anonymous id).
-    if (cleared.has('tester')) posthog.unregister('tester')
+    if (cleared.has('tester')) {
+      posthog.unregister('tester')
+      posthog.resetPersonPropertiesForFlags()
+    }
     if (cleared.has('target_audience')) {
       posthog.unregister('target_audience')
       if (posthog.get_distinct_id() === TARGET_AUDIENCE_ID) posthog.reset()
     }
     if (isTester) {
       posthog.register({ tester: true })
+      // Testers send no events, so PostHog never stores this on a person: it goes with each flags request instead.
+      posthog.setPersonPropertiesForFlags({ tester: true })
     } else if (isTargetAudience || (!cleared.has('target_audience') && TARGET_AUDIENCE_IDS.has(posthog.get_distinct_id()))) {
       // One person for all her devices, so a device whose storage iOS cleared joins her again once it's tagged.
       isTargetAudience = true

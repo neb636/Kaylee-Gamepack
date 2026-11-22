@@ -6,7 +6,7 @@
 import { HUB } from './kit/sections'
 import type { FlagId } from './kit/Flag'
 import { WORLD_LINES } from './lines'
-import { listed, places } from './registry'
+import { places, type PlaceEntry } from './registry'
 
 /** A card's or a row's spoken name (a new country's or activity's line is added to lines.ts with its card). */
 export const nameLine = (key: string): string | undefined => (WORLD_LINES.shelf.games as Record<string, string>)[key] ?? (WORLD_LINES.shelf.rows as Record<string, string>)[key]
@@ -127,9 +127,10 @@ const THAILAND: ShelfRow[] = [
   },
 ]
 
-/** Every row in order: Thailand first (the family's country), then the others as they were added. A country's row
- *  is its ready activities (not `inTheWorks`), each with its icon, or the activity's emoji until it has one. */
-export const SHELF: ShelfRow[] = [
+/** Every row in order: Thailand first (the family's country), then the others as they were added (`listed`, from
+ *  `useListed()`). A country's row is its ready activities (not `inTheWorks`), each with its icon, or the activity's
+ *  emoji until it has one. */
+export const shelfRows = (listed: PlaceEntry[]): ShelfRow[] => [
   ...THAILAND.filter(() => places.some((p) => p.meta.id === 'thailand')),
   ...listed
     .filter(({ meta }) => meta.id !== 'thailand' && meta.activities.length > 0)
@@ -141,5 +142,3 @@ export const SHELF: ShelfRow[] = [
       games: meta.activities.map((a) => ({ key: `${meta.id}/${a.id}`, name: a.name, icon: icon(`${meta.id}/${a.id}`), emoji: a.icon, place: meta.id, activity: a.id })),
     })),
 ]
-
-export const ALL_GAMES: ShelfGame[] = SHELF.flatMap((r) => r.games)
