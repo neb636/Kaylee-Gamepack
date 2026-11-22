@@ -1,22 +1,22 @@
 {
   "title": "Monty the moose",
   "checkIn": "Fix",
-  "kaylee": "Monty has a little upturned smile, one curious eyebrow, and pancake-shaped antlers with three stubby points on each side.",
+  "kaylee": "Monty\u2019s ears are a little shorter, and his lower jaw moves with his voice. Choose any of his 13 recordings in the character lab.",
   "pictures": [
     {
-      "title": "From the original Monty to today",
-      "before": "pics/front-original.jpg",
+      "title": "Shorter ears",
+      "before": "pics/front-before.jpg",
       "after": "pics/front-after.jpg"
     },
     {
-      "title": "The shorter muzzle, compared with the last version",
+      "title": "Jaw and muzzle in profile",
       "before": "pics/profile-before.jpg",
       "after": "pics/profile-after.jpg"
     }
   ],
   "links": [
     {
-      "label": "Turn Monty around",
+      "label": "Hear Monty\u2019s 13 lines",
       "hash": "#/world/characters/moose"
     },
     {
