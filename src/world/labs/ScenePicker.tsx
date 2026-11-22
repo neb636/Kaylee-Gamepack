@@ -2,7 +2,7 @@
 // in the camera lab and the feel lab. Picking opens that section's link with the lab's own params (`open`).
 import type { ReactNode } from 'react'
 import { HUB } from '../kit/sections'
-import { findPlace, sectionsFor } from '../registry'
+import { findPlace, places, sectionsFor } from '../registry'
 import { Field, Section, Select } from './ui'
 
 /** The Game list's map entries: `map:<activity>` (an activity id never has a colon). */
@@ -35,6 +35,7 @@ export function ScenePicker({
   place,
   open,
   mark,
+  openPlace,
   children,
 }: {
   place: string
@@ -42,6 +43,8 @@ export function ScenePicker({
   open: (activity: string, section: string | undefined) => void
   /** A label to put before a game or a section in the lists (the feel lab marks where its knobs are). */
   mark?: (activity: string, section?: string) => string
+  /** Opens another country's map (or its first game): the Country list shows only when this is given. */
+  openPlace?: (place: string, activity: string, section: string | undefined) => void
   children?: ReactNode
 }) {
   const here = sceneHere(place)
@@ -60,8 +63,27 @@ export function ScenePicker({
     ...activities.map((a) => ({ id: a.id, label: `${tag(a.id)}${a.icon ?? ''} ${a.name}` })),
   ]
   const sections = activity ? (sectionsFor(place, activity)?.sections ?? []) : []
+  // Other countries with games to open (Canada, the Poles...), the way the Game list starts with a country's maps.
+  const countries = openPlace ? places.filter((p) => gamesOf(p.meta.id).length > 0) : []
+  const pickCountry = (id: string) => {
+    const list = gamesOf(id)
+    const withMap = list.find((a) => sectionsFor(id, a.id)?.sections.some((x) => x.id === 'map'))
+    if (withMap) openPlace?.(id, withMap.id, 'map')
+    else if (list[0]) openPlace?.(id, list[0].id, undefined)
+  }
   return (
     <Section title="Scene">
+      {countries.length > 1 && (
+        <Field label={<span className="cl-sub">Country</span>}>
+          <Select
+            value={place}
+            options={countries.map((p) => ({ id: p.meta.id, label: p.meta.name }))}
+            label={<span className="cm-ellipsis">{findPlace(place)?.meta.name ?? place}</span>}
+            align="right"
+            onChange={pickCountry}
+          />
+        </Field>
+      )}
       <Field label={<span className="cl-sub">Game</span>}>
         <Select
           value={onMap?.id ?? activity ?? ''}

@@ -124,7 +124,7 @@ export default function FeelLab({ place }: { place: string }) {
         <IconButton icon="x" label="Close the feel lab" small onClick={() => (location.hash = withFeel(location.hash, {}))} />
       </div>
       <div className="cl-panel-scroll">
-        <ScenePicker place={place} open={go} mark={mark} />
+        <ScenePicker place={place} open={go} mark={mark} openPlace={(pl, act, sec) => (location.hash = worldLink(pl, act, sec, { feel: '1', ...feelLab.params() }))} />
         {watchers.length > 0 && groups.length > 0 && (
           <Section title="Live">
             {watchers.map(([id, read]) => (
