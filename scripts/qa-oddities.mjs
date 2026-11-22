@@ -1,6 +1,6 @@
 // Asks Jev (TypeSafe's decision model) to look at every QA screenshot for 3D visual oddities (clipping, detached props,
 // hard-edged mist, ghost rings, dither, the camera inside scenery, floating things) and draws a red box round each.
-// Opt-in: it runs only when someone asks for it (the "Jev visual QA" toggle in DimSum's Instructions menu), never as
+// Opt-in: it runs only when someone asks for it (the "Jev 3D glitch check" toggle in DimSum's Instructions menu), never as
 // part of verify or CI. Issue #521.
 //
 //   node scripts/qa-screens.mjs --routes=<activity> && node scripts/qa-oddities.mjs [--routes=<activity>] [--only=ipad-landscape]
