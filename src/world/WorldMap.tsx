@@ -34,6 +34,14 @@ const COMING_SOON: { id: keyof typeof WORLD_LINES.soon; emoji: string; x: number
   { id: 'egypt', emoji: '🐪', x: 53, y: 42 },
   { id: 'thailand', emoji: '🐘', x: 74, y: 49 },
 ]
+const mapPins = import.meta.glob<string>('./assets/map-pins/*.svg', { eager: true, import: 'default' })
+
+function DestinationIcon({ id, fallback }: { id: string; fallback: string }) {
+  const src = mapPins[`./assets/map-pins/${id}.svg`]
+  if (!src) return <>{fallback}</>
+  return <img src={src} alt="" draggable={false} style={{ display: 'block', width: '100%', borderRadius: '50%' }} />
+}
+
 const HOME = { x: 19, y: 33 }
 
 function Pin({ x, y, children, label, onTap, glow, dim }: { x: number; y: number; children: ReactNode; label: string; onTap: () => void; glow?: boolean; dim?: boolean }) {
@@ -71,7 +79,7 @@ function Pin({ x, y, children, label, onTap, glow, dim }: { x: number; y: number
           aspectRatio: '1',
           borderRadius: '50%',
           background: dim ? 'rgba(255,255,255,0.75)' : '#fff',
-          border: `4px solid ${glow ? 'var(--gold)' : '#fff'}`,
+          border: '2px solid #fff9eb',
           boxShadow: 'var(--shadow)',
           display: 'grid',
           placeItems: 'center',
@@ -198,12 +206,12 @@ export function WorldMap({ view: linked }: { view?: string }) {
                 setTravelTo(places.find((p) => p.meta.id === meta.id) ?? null)
               }}
             >
-              {meta.emoji}
+              <DestinationIcon id={meta.id} fallback={meta.emoji} />
             </Pin>
           ))}
           {COMING_SOON.filter((c) => !places.some((p) => p.meta.id === c.id)).map((c) => (
             <Pin key={c.id} x={c.x} y={c.y} label={`${c.id} coming soon`} dim onTap={() => show(WORLD_LINES.soon[c.id], c.x, c.y)}>
-              <span style={{ opacity: 0.55 }}>{c.emoji}</span>
+              <span style={{ width: '100%', opacity: 0.55 }}><DestinationIcon id={c.id} fallback={c.emoji} /></span>
               <span style={{ position: 'absolute', right: '-14%', bottom: '-14%', fontSize: '55%' }}>☁️</span>
             </Pin>
           ))}
