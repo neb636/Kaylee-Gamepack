@@ -8,7 +8,7 @@
 // water, the canoe and the animals.
 //
 // Everything above the water goes in `land`, so the world can mirror it under the see-through lake as its reflection.
-import { BackSide, BufferGeometry, CanvasTexture, CatmullRomCurve3, CircleGeometry, Color, Float32BufferAttribute, Group, Mesh, MeshBasicMaterial, SphereGeometry, Vector3, type Object3D } from 'three'
+import { BackSide, BufferGeometry, type Material, MeshToonMaterial, Plane, CanvasTexture, CatmullRomCurve3, CircleGeometry, Color, Float32BufferAttribute, Group, Mesh, MeshBasicMaterial, SphereGeometry, Vector3, type Object3D } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../engine3d/geo'
 import { toon } from '../../../../engine3d/toon'
@@ -24,8 +24,9 @@ const ROCK = '#A9A1BA'
 const ROCK_DARK = '#8C83A0'
 const SNOW = '#FBFDFF'
 
-/** The ground round the lake: rings out from the shoreline, rising into the mountains (vertex colors, no outline). */
-function buildLand(bag: Bag) {
+/** The ground round the lake: rings out from the shoreline, rising into the mountains (vertex colors, no outline).
+ *  Rings `from` to `to` of LAND: the first ring is the pebbles under the water, the rest the land above it. */
+function buildLand(bag: Bag, from = 1, to = LAND.length - 1) {
   const N = 120
   const pos: number[] = []
   const col: number[] = []
@@ -46,7 +47,7 @@ function buildLand(bag: Bag) {
     const n = 1 + 0.07 * bumps(p.x * 0.09, j, p.z * 0.09, 5)
     return { p: [p.x, y + jitter[j][i % N] * calm, p.z], c: c(color).map((v) => v * n) }
   }
-  for (let j = 0; j < LAND.length - 1; j++)
+  for (let j = from; j < to; j++)
     for (let i = 0; i < N; i++) {
       const a = vert(i, j)
       const b = vert(i + 1, j)
@@ -564,6 +565,9 @@ export function buildShore(bag: Bag): Shore {
   const land = new Group()
   const ground = buildLand(bag)
   land.add(ground)
+  // The pebbles under the water: not mirrored (the mirror would stand them up above the water as a pale band round the
+  // lake), and drawn under the reflection, which lies on the water's surface right up to the shoreline.
+  const underwater = underTheReflection(buildLand(bag, 0, 1), bag)
   const { group: peakGroup, peaks } = buildPeaks(bag)
   land.add(peakGroup, buildForest(bag))
   const glacier = buildGlacier(bag)
@@ -592,6 +596,8 @@ export function buildShore(bag: Bag): Shore {
   sh.setAttribute('position', new Float32BufferAttribute(pos, 3))
   sh.computeVertexNormals()
   const shallows = new Mesh(bag.add(sh), toon('#BFE8DC'))
+  shallows.add(underwater)
+  underTheReflection(shallows, bag)
   // The rock flour.
   const flour = new Group()
   const d1 = softDisc(FLOUR.r, 'rgba(196,238,232,0.72)', 'rgba(196,238,232,0)', bag)
@@ -602,9 +608,23 @@ export function buildShore(bag: Bag): Shore {
   return { land, shallows, peaks, glacier, lodge, logs, stream, flour }
 }
 
+/** Something under the water (the pebbles, the pale shallows): drawn first and hiding nothing, so the reflection,
+ *  which lies on the water's surface, shows over it right up to the shoreline instead of starting out in the lake. */
+function underTheReflection(m: Mesh, bag: Bag) {
+  const mat = bag.add((m.material as MeshToonMaterial).clone())
+  mat.depthWrite = false
+  m.material = mat
+  m.renderOrder = -5
+  return m
+}
+
+/** Keeps what's under the water (y ≤ 0): the mirror cuts off any part of its copy that would stick up out of the lake
+ *  (the dock's posts, the boulders' bottoms, the mountains' roots); engine3d/renderer.ts turns local clipping on. */
+export const UNDER_WATER = new Plane(new Vector3(0, -1, 0), 0)
+
 /** A mirror image of `src` under the water (no ink lines: a reflection is soft; no grass, pebbles or bushes: too small
- *  to see in it). */
-export function mirror(src: Group) {
+ *  to see in it), cut off at the water's surface. Its materials are copies (with the clipping) that go in `bag`. */
+export function mirror(src: Group, bag: Bag) {
   const m = src.clone(true)
   m.scale.y = -1
   const drop: Object3D[] = []
@@ -612,10 +632,23 @@ export function mirror(src: Group) {
     if (o.userData.hull !== undefined || o.userData.noMirror) drop.push(o)
   })
   for (const o of drop) o.removeFromParent()
-  // (The forest's trees reflect as their plainer shapes.)
+  const clipped = new Map<Material, Material>()
+  const clip = (mat: Material) => {
+    let c = clipped.get(mat)
+    if (!c) {
+      c = bag.add(mat.clone())
+      c.clippingPlanes = [UNDER_WATER]
+      clipped.set(mat, c)
+    }
+    return c
+  }
   m.traverse((o) => {
+    const mesh = o as Mesh
+    if (!mesh.isMesh) return
+    // (The forest's trees reflect as their plainer shapes.)
     const lite = typeof o.userData.mirrorGeo === 'string' ? mirrorShape(o.userData.mirrorGeo) : undefined
-    if (lite) (o as Mesh).geometry = lite
+    if (lite) mesh.geometry = lite
+    mesh.material = Array.isArray(mesh.material) ? mesh.material.map(clip) : clip(mesh.material)
   })
   return m
 }
